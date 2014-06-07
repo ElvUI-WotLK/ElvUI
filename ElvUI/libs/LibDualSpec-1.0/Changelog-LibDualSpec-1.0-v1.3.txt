@@ -1,0 +1,13 @@
+tag v1.3
+a061bdafb2214d0692d008a0c8261a66260462e5
+Adirelle <adirelle@tagada-team.net>
+2010-04-05 01:43:54 +0200
+
+Tagging as v1.3.
+
+
+--------------------
+
+Adirelle:
+	- Added zhCN locale.
+	- TOC bump.

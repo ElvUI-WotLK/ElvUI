@@ -1,0 +1,14 @@
+<Bindings>
+   <Binding name="Farm Mode" runOnUp="false">
+    FarmMode()
+  </Binding> 
+   <Binding name="Toggle Chat (Left)" runOnUp="false">
+    HideLeftChat()
+  </Binding> 
+   <Binding name="Toggle Chat (Right)" runOnUp="false">
+    HideRightChat()
+  </Binding> 
+   <Binding name="Toggle Chat (Both)" runOnUp="false">
+    HideBothChat()
+  </Binding>   
+</Bindings>
