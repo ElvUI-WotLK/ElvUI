@@ -1,8 +1,7 @@
 local E, L, DF = unpack(select(2, ...)) -- Import Functions/Constants, Config, Locales
 
-
 local _, ns = ...
-local oUF = ns.oUF or oUF or ElvUF
+local oUF = ns.oUF or oUF
 
 local addon = {}
 ns.oUF_RaidDebuffs = addon
@@ -32,8 +31,16 @@ end
 
 function addon:RegisterDebuffs(t)
 	for spell, value in pairs(t) do
-		if t[spell].enable then
-			add(spell, t[spell].priority)
+		if type(t[spell]) == 'boolean' then
+			local oldValue = t[spell]
+			t[spell] = {
+				['enable'] = oldValue,
+				['priority'] = 0
+			}
+		else
+			if t[spell].enable then
+				add(spell, t[spell].priority)
+			end
 		end
 	end
 end
@@ -65,19 +72,19 @@ do
 			['Disease'] = true,
 		},
 		['SHAMAN'] = {
-			['Magic'] = false,
+			['Poison'] = true,
+			['Disease'] = true,
 			['Curse'] = true,
 		},
 		['PALADIN'] = {
 			['Poison'] = true,
-			['Magic'] = false,
+			['Magic'] = true,
 			['Disease'] = true,
 		},
 		['MAGE'] = {
 			['Curse'] = true,
 		},
 		['DRUID'] = {
-			['Magic'] = false,
 			['Curse'] = true,
 			['Poison'] = true,
 		},
@@ -85,58 +92,6 @@ do
 	
 	DispellFilter = dispellClasses[select(2, UnitClass('player'))] or {}
 end
-
--- Return true if the talent matching the name of the spell given by (Credit Pitbull4)
--- spellid has at least one point spent in it or false otherwise
-local function CheckForKnownTalent(spellid)
-	local wanted_name = GetSpellInfo(spellid)
-	if not wanted_name then return nil end
-	local num_tabs = GetNumTalentTabs()
-	for t=1, num_tabs do
-		local num_talents = GetNumTalents(t)
-		for i=1, num_talents do
-			local name_talent, _, _, _, current_rank = GetTalentInfo(t,i)
-			if name_talent and (name_talent == wanted_name) then
-				if current_rank and (current_rank > 0) then
-					return true
-				else
-					return false
-				end
-			end
-		end
-	end
-	return false
-end
-
-local function CheckSpec(self, event, levels)
-	-- Not interested in gained points from leveling	
-	if event == "CHARACTER_POINTS_CHANGED" and levels > 0 then return end
-	
-	--Check for certain talents to see if we can dispel magic or not
-	if select(2, UnitClass('player')) == "PALADIN" then
-		--Check to see if we have the 'Sacred Cleansing' talent.
-		if CheckForKnownTalent(53551) then
-			DispellFilter.Magic = true
-		else
-			DispellFilter.Magic = false	
-		end
-	elseif select(2, UnitClass('player')) == "SHAMAN" then
-		--Check to see if we have the 'Improved Cleanse Spirit' talent.
-		if CheckForKnownTalent(77130) then
-			DispellFilter.Magic = true
-		else
-			DispellFilter.Magic = false	
-		end
-	elseif select(2, UnitClass('player')) == "DRUID" then
-		--Check to see if we have the 'Nature's Cure' talent.
-		if CheckForKnownTalent(88423) then
-			DispellFilter.Magic = true
-		else
-			DispellFilter.Magic = false	
-		end
-	end
-end
-
 
 local function formatTime(s)
 	if s > 60 then
@@ -168,12 +123,6 @@ end
 local function UpdateDebuff(self, name, icon, count, debuffType, duration, endTime, spellId)
 	local f = self.RaidDebuffs
 
-	if self.isForced and self:GetID() and unpack(ElvUI):IsEvenNumber(self:GetID()) then
-		spellId = 47540
-		name, _, icon = GetSpellInfo(spellId)
-		count, debuffType, duration, timeLeft = 5, 'Magic', 0, 60
-	end
-	
 	if name then
 		f.icon:SetTexture(icon)
 		f.icon:Show()
@@ -225,20 +174,25 @@ local function UpdateDebuff(self, name, icon, count, debuffType, duration, endTi
 	end
 end
 
-local blackList = {
-	[105171] = true, -- Deep Corruption
-}
-
 local function Update(self, event, unit)
 	if unit ~= self.unit then return end
 	local _name, _icon, _count, _dtype, _duration, _endTime, _spellId
 	local _priority, priority = 0, 0
+	
+	--store if the unit its charmed, mind controlled units (Imperial Vizier Zor'lok: Convert)
+	local isCharmed = UnitIsCharmed(unit)		
+	
+	--store if we cand attack that unit, if its so the unit its hostile (Amber-Shaper Un'sok: Reshape Life)
+	local canAttack = UnitCanAttack("player", unit)
+	
 	for i = 1, 40 do
 		local name, rank, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, shouldConsolidate, spellId = UnitAura(unit, i, 'HARMFUL')
 		if (not name) then break end
-
-		if addon.ShowDispelableDebuff and debuffType then
-			if addon.FilterDispellableDebuff then
+		
+		--we coudln't dispell if the unit its charmed, or its not friendly
+		if addon.ShowDispelableDebuff and debuffType and (not isCharmed) and (not canAttack) then
+		
+			if addon.FilterDispellableDebuff then						
 				DispellPriority[debuffType] = (DispellPriority[debuffType] or 0) + addon.priority --Make Dispell buffs on top of Boss Debuffs
 				priority = DispellFilter[debuffType] and DispellPriority[debuffType] or 0
 				if priority == 0 then
@@ -246,7 +200,7 @@ local function Update(self, event, unit)
 				end
 			else
 				priority = DispellPriority[debuffType] or 0
-			end
+			end			
 
 			if priority > _priority then
 				_priority, _name, _icon, _count, _dtype, _duration, _endTime, _spellId = priority, name, icon, count, debuffType, duration, expirationTime, spellId
@@ -254,7 +208,7 @@ local function Update(self, event, unit)
 		end
 		
 		priority = debuff_data[addon.MatchBySpellName and name or spellId]
-		if priority and not blackList[spellId] and (priority > _priority) then
+		if priority and (priority > _priority) then
 			_priority, _name, _icon, _count, _dtype, _duration, _endTime, _spellId = priority, name, icon, count, debuffType, duration, expirationTime, spellId
 		end
 	end
@@ -270,14 +224,12 @@ local function Update(self, event, unit)
 	}	
 end
 
+
 local function Enable(self)
 	if self.RaidDebuffs then
 		self:RegisterEvent('UNIT_AURA', Update)
 		return true
 	end
-	--Need to run these always
-	self:RegisterEvent("PLAYER_TALENT_UPDATE", CheckSpec)
-	self:RegisterEvent("CHARACTER_POINTS_CHANGED", CheckSpec)
 end
 
 local function Disable(self)
@@ -285,8 +237,6 @@ local function Disable(self)
 		self:UnregisterEvent('UNIT_AURA', Update)
 		self.RaidDebuffs:Hide()
 	end
-	self:UnregisterEvent("PLAYER_TALENT_UPDATE", CheckSpec)
-	self:UnregisterEvent("CHARACTER_POINTS_CHANGED", CheckSpec)
 end
 
 oUF:AddElement('RaidDebuffs', Update, Enable, Disable)
