@@ -1,87 +1,94 @@
 local E, L, P, G = unpack(select(2, ...));
-local S = E:GetModule('Skins')
+local S = E:GetModule('Skins');
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.pvp ~= true then return end
+	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.pvp ~= true then return; end
+	-- BattlefieldFrame
+	BattlefieldFrame:StripTextures(true);
+	BattlefieldFrame:CreateBackdrop('Transparent');
+	BattlefieldFrame.backdrop:Point('TOPLEFT', 12, -12);
+	BattlefieldFrame.backdrop:Point('BOTTOMRIGHT', -34, 76);
 	
-	S:HandleCloseButton(PVPParentFrameCloseButton)
+	BattlefieldFrameInfoScrollFrameChildFrameDescription:SetTextColor(1, 1, 1);
+	BattlefieldFrameInfoScrollFrameChildFrameRewardsInfoDescription:SetTextColor(1, 1, 1);
 	
-	for i=1, 2 do
-		S:HandleTab(_G['PVPParentFrameTab'..i])
-	end	
+	S:HandleButton(BattlefieldFrameCancelButton);
+	S:HandleButton(BattlefieldFrameJoinButton);
+	BattlefieldFrameGroupJoinButton:SetPoint('RIGHT', BattlefieldFrameJoinButton, 'LEFT', -1, 0);
+	S:HandleButton(BattlefieldFrameGroupJoinButton);
 	
-	for i=1, MAX_ARENA_TEAMS do
-		_G['PVPTeam'..i]:StripTextures()
-		_G['PVPTeam'..i]:CreateBackdrop('Transparent')
-		_G['PVPTeam'..i].backdrop:Point('TOPLEFT', 9, -6)
-		_G['PVPTeam'..i].backdrop:Point('BOTTOMRIGHT', -24, 5)
-		_G['PVPTeam'..i..'StandardBar']:Kill()
-		_G['PVPTeam'..i..'Highlight']:Kill()
+	S:HandleCloseButton(BattlefieldFrameCloseButton);
+	-- PVPBattlegroundFrame
+	PVPBattlegroundFrame:StripTextures(true);
+	
+	PVPBattlegroundFrameTypeScrollFrame:StripTextures();
+	S:HandleScrollBar(PVPBattlegroundFrameTypeScrollFrameScrollBar);
+	
+	S:HandleButton(PVPBattlegroundFrameCancelButton);
+	
+	PVPBattlegroundFrameInfoScrollFrame:StripTextures();
+	S:HandleScrollBar(PVPBattlegroundFrameInfoScrollFrameScrollBar);
+	
+	PVPBattlegroundFrameInfoScrollFrameChildFrameDescription:SetTextColor(1, 1, 1);
+	PVPBattlegroundFrameInfoScrollFrameChildFrameRewardsInfo.description:SetTextColor(1, 1, 1);
+	
+	S:HandleButton(PVPBattlegroundFrameJoinButton);
+	PVPBattlegroundFrameGroupJoinButton:SetPoint('RIGHT', PVPBattlegroundFrameJoinButton, 'LEFT', -1, 0);
+	S:HandleButton(PVPBattlegroundFrameGroupJoinButton);
+	-- PVPFrame
+	PVPParentFrame:CreateBackdrop('Transparent');
+	PVPParentFrame.backdrop:Point('TOPLEFT', 13, -13);
+	PVPParentFrame.backdrop:Point('BOTTOMRIGHT', -32, 76);
+	
+	S:HandleCloseButton(PVPParentFrameCloseButton);
+	
+	PVPFrame:StripTextures(true);
+	
+	do
+		local Team;
+		local TeamHighlight;
 		
-		local Highlight = _G['PVPTeam'..i]:CreateTexture(nil, 'HIGHLIGHT')
-		Highlight:SetTexture(1, 1, 1, .3)
-		Highlight:SetInside(_G['PVPTeam'..i].backdrop)
-	end	
-	
-	PVPFrame:StripTextures(true)
-	PVPFrame:CreateBackdrop('Transparent')
-	PVPFrame.backdrop:Point('TOPLEFT', 10, -12)
-	PVPFrame.backdrop:Point('BOTTOMRIGHT', -32, 76)
-	
-	PVPTeamDetails:StripTextures()
-	PVPTeamDetails:CreateBackdrop('Transparent')
-	PVPTeamDetails.backdrop:Point('TOPLEFT', 8, -2)
-	PVPTeamDetails.backdrop:Point('BOTTOMRIGHT', -2, 12)
-	
-	S:HandleCloseButton(PVPTeamDetailsCloseButton)
-	
-	for i=1, 5 do
-		_G['PVPTeamDetailsFrameColumnHeader'..i]:StripTextures()
-	end
-	S:HandleButton(PVPTeamDetailsAddTeamMember)
-	
-	S:HandleNextPrevButton(PVPTeamDetailsToggleButton)
-	
-	PVPBattlegroundFrame:StripTextures(true)
-	PVPBattlegroundFrame:CreateBackdrop('Transparent')
-	PVPBattlegroundFrame.backdrop:Point('TOPLEFT', 8, -11)
-	PVPBattlegroundFrame.backdrop:Point('BOTTOMRIGHT', -34, 77)
-	
-	-- WintergraspTimer:SetTemplate('Default')
-	
-	for i=1, BATTLEFIELD_ZONES_DISPLAYED do
-		_G['BattlegroundType'..i..'Highlight']:SetTexture(E['media'].normTex)
+		for i = 1, MAX_ARENA_TEAMS do
+			Team = _G['PVPTeam'..i];
+			TeamHighlight = _G['PVPTeam'..i..'Highlight'];
+			
+			Team:StripTextures();
+			Team:CreateBackdrop('Transparent');
+			Team.backdrop:Point('TOPLEFT', 9, -4);
+			Team.backdrop:Point('BOTTOMRIGHT', -24, 3);
+			
+			TeamHighlight:Kill();
+		end
 	end
 	
-	PVPBattlegroundFrameTypeScrollFrame:StripTextures()
-	S:HandleScrollBar(PVPBattlegroundFrameTypeScrollFrameScrollBar)
+	PVPTeamDetails:StripTextures();
+	PVPTeamDetails:SetTemplate('Transparent');
 	
-	PVPBattlegroundFrameInfoScrollFrameChildFrameDescription:SetTextColor(1, 1, 0)
-	PVPBattlegroundFrameInfoScrollFrameChildFrameRewardsInfo.description:SetTextColor(1, 1, 1)
-
-	S:HandleButton(PVPBattlegroundFrameGroupJoinButton)
-	S:HandleButton(PVPBattlegroundFrameJoinButton)
-	S:HandleButton(PVPBattlegroundFrameCancelButton)
-	PVPBattlegroundFrameCancelButton:Point('CENTER', BattlefieldFrame, 'TOPLEFT', 304, -420)
+	S:HandleCloseButton(PVPTeamDetailsCloseButton);
 	
-	BattlefieldFrame:StripTextures(true)
-	BattlefieldFrame:CreateBackdrop('Transparent')
-	BattlefieldFrame.backdrop:Point('TOPLEFT', 10, -12)
-	BattlefieldFrame.backdrop:Point('BOTTOMRIGHT', -32, 76)
-	
-	S:HandleCloseButton(BattlefieldFrameCloseButton)
-	
-	for i=1, NUM_DISPLAYED_BATTLEGROUNDS do
-		_G['BattlefieldZone'..i..'Highlight']:SetTexture(E['media'].normTex)
+	do
+		local Header;
+		
+		for i = 1, 5 do
+			Header = _G['PVPTeamDetailsFrameColumnHeader'..i];
+			
+			Header:StripTextures();
+		end
 	end
 	
-	BattlefieldFrameInfoScrollFrameChildFrameDescription:SetTextColor(1, 1, 1)
-	BattlefieldFrameInfoScrollFrameChildFrameRewardsInfo.description:SetTextColor(1, 1, 1)
+	S:HandleButton(PVPTeamDetailsAddTeamMember);
 	
-	S:HandleButton(BattlefieldFrameGroupJoinButton)
-	S:HandleButton(BattlefieldFrameJoinButton)
-	S:HandleButton(BattlefieldFrameCancelButton)
-	BattlefieldFrameCancelButton:Point('CENTER', BattlefieldFrame, 'TOPLEFT', 304, -420)
+	S:HandleNextPrevButton(PVPTeamDetailsToggleButton);
+	
+	do
+		local Tab;
+		
+		for i = 1, 2 do
+			Tab = _G['PVPParentFrameTab'..i];
+			
+			S:HandleTab(Tab);
+		end
+	end
 end
 
-S:RegisterSkin('ElvUI', LoadSkin)
+S:RegisterSkin('ElvUI', LoadSkin);
