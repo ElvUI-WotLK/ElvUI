@@ -1,73 +1,82 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local S = E:GetModule('Skins')
+local E, L, V, P, G = unpack(select(2, ...));
+local S = E:GetModule('Skins');
+
+local _G = _G;
+
+local TexCoords = E.TexCoords;
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.talent ~= true then return end
+	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.talent ~= true then return; end
 	
-	local TalentUIStrip = {'PlayerTalentFrame', 'PlayerTalentFrameStatusFrame', 'PlayerTalentFrameScrollFrame', 'PlayerTalentFramePointsBar', 'PlayerTalentFramePreviewBar', 'PlayerTalentFramePreviewBarFiller'}
-	for _, object in pairs(TalentUIStrip) do
-		_G[object]:StripTextures()
-	end
+	PlayerTalentFrame:StripTextures(true);
+	PlayerTalentFrame:CreateBackdrop('Transparent');
+	PlayerTalentFrame.backdrop:Point('TOPLEFT', 13, -12);
+	PlayerTalentFrame.backdrop:Point('BOTTOMRIGHT', -31, 76);
 	
-	local TalentUIKill = {'PlayerTalentFramePortrait'}
-	for _, texture in pairs(TalentUIKill) do
-		_G[texture]:Kill()
-	end
-
-	local TalentUIButtons = {'PlayerTalentFrameActivateButton','PlayerTalentFrameLearnButton','PlayerTalentFrameResetButton'}
-	for i = 1, #TalentUIButtons do
-		_G[TalentUIButtons[i]]:StripTextures()
-		S:HandleButton(_G[TalentUIButtons[i]], true)
-	end
-
-	for i=1, MAX_TALENT_TABS do
-		local tab = _G['PlayerSpecTab'..i]
-		if tab then
-			local a = tab:GetRegions()
-			a:Hide()
-			tab:StripTextures()
-			tab:GetNormalTexture():SetTexCoord(unpack(E.TexCoords))
-			
-			tab:GetNormalTexture():ClearAllPoints()
-			tab:GetNormalTexture():SetInside()
-
-			tab:CreateBackdrop('Default')
-			tab.backdrop:SetAllPoints()
-			tab:StyleButton(nil, true)
-		end
-	end
-
-	for i=1, 4 do
-		S:HandleTab(_G['PlayerTalentFrameTab'..i])
-	end
-
-	for i=1, MAX_NUM_TALENTS do
-		button = _G['PlayerTalentFrameTalent'..i]
-		icon = _G['PlayerTalentFrameTalent'..i..'IconTexture']
-		rank = _G['PlayerTalentFrameTalent'..i..'Rank']
+	S:HandleCloseButton(PlayerTalentFrameCloseButton);
+	
+	PlayerTalentFrameStatusFrame:StripTextures();
+	
+	S:HandleButton(PlayerTalentFrameActivateButton, true);
+	
+	PlayerTalentFramePointsBar:StripTextures();
+	PlayerTalentFramePreviewBar:StripTextures();
+	
+	S:HandleButton(PlayerTalentFrameResetButton);
+	PlayerTalentFrameLearnButton:Point('RIGHT', PlayerTalentFrameResetButton, 'LEFT', -1, 0);
+	S:HandleButton(PlayerTalentFrameLearnButton);
+	
+	PlayerTalentFramePreviewBarFiller:StripTextures();
+	
+	PlayerTalentFrameScrollFrame:StripTextures();
+	PlayerTalentFrameScrollFrame:CreateBackdrop('Default');
+	S:HandleScrollBar(PlayerTalentFrameScrollFrameScrollBar);
+	
+	do
+		local talent, talentIcon;
 		
-		if ( button ) then
-			button:StripTextures()
-			button:SetTemplate('Default', true)
-			button:StyleButton()
+		for i = 1, MAX_NUM_TALENTS do
+			talent = _G['PlayerTalentFrameTalent'..i];
+			talentIcon = _G['PlayerTalentFrameTalent'..i..'IconTexture'];
 			
-			icon:SetTexCoord(unpack(E.TexCoords))
-			icon:SetDrawLayer("ARTWORK")
-			icon:ClearAllPoints()
-			icon:SetInside()
+			talent:StripTextures();
+			talent:StyleButton();
+			talent:SetTemplate('Default');
 			
-			rank:SetFont(E.LSM:Fetch("font", E.db['general'].font), 12, 'OUTLINE')
-			rank:Point('BOTTOMRIGHT', -1, 1)
+			talentIcon:SetInside();
+			talentIcon:SetTexCoord(unpack(TexCoords));
 		end
 	end
 	
-	PlayerTalentFrame:CreateBackdrop('Transparent')
-	PlayerTalentFrame.backdrop:Point('TOPLEFT', 10, -12)
-	PlayerTalentFrame.backdrop:Point('BOTTOMRIGHT', -31, 76)
+	do
+		local tab;
+		
+		for i = 1, 4 do
+			tab = _G['PlayerTalentFrameTab'..i];
+			
+			S:HandleTab(tab);
+		end
+	end
 	
-	S:HandleCloseButton(PlayerTalentFrameCloseButton)
-	PlayerTalentFrameScrollFrame:CreateBackdrop('Default')
-	S:HandleScrollBar(PlayerTalentFrameScrollFrameScrollBar)
+	do
+		local tab;
+		local tabRegions;
+		
+		for i = 1, MAX_TALENT_TABS do
+			tab = _G['PlayerSpecTab'..i];
+			
+			if(tab) then
+				tabRegions = tab:GetRegions();
+				tabRegions:Hide();
+				
+				tab:SetTemplate('Default');
+				tab:StyleButton(nil, true);
+				
+				tab:GetNormalTexture():SetInside();
+				tab:GetNormalTexture():SetTexCoord(unpack(TexCoords));
+			end
+		end
+	end
 end
 
-S:RegisterSkin("Blizzard_TalentUI", LoadSkin)
+S:RegisterSkin('Blizzard_TalentUI', LoadSkin);

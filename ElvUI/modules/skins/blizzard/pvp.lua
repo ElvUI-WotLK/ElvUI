@@ -1,6 +1,8 @@
 local E, L, P, G = unpack(select(2, ...));
 local S = E:GetModule('Skins');
 
+local _G = _G;
+
 local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.pvp ~= true then return; end
 	-- BattlefieldFrame
@@ -14,7 +16,7 @@ local function LoadSkin()
 	
 	S:HandleButton(BattlefieldFrameCancelButton);
 	S:HandleButton(BattlefieldFrameJoinButton);
-	BattlefieldFrameGroupJoinButton:SetPoint('RIGHT', BattlefieldFrameJoinButton, 'LEFT', -1, 0);
+	BattlefieldFrameGroupJoinButton:Point('RIGHT', BattlefieldFrameJoinButton, 'LEFT', -1, 0);
 	S:HandleButton(BattlefieldFrameGroupJoinButton);
 	
 	S:HandleCloseButton(BattlefieldFrameCloseButton);
@@ -33,7 +35,7 @@ local function LoadSkin()
 	PVPBattlegroundFrameInfoScrollFrameChildFrameRewardsInfo.description:SetTextColor(1, 1, 1);
 	
 	S:HandleButton(PVPBattlegroundFrameJoinButton);
-	PVPBattlegroundFrameGroupJoinButton:SetPoint('RIGHT', PVPBattlegroundFrameJoinButton, 'LEFT', -1, 0);
+	PVPBattlegroundFrameGroupJoinButton:Point('RIGHT', PVPBattlegroundFrameJoinButton, 'LEFT', -1, 0);
 	S:HandleButton(PVPBattlegroundFrameGroupJoinButton);
 	-- PVPFrame
 	PVPParentFrame:CreateBackdrop('Transparent');
@@ -45,19 +47,19 @@ local function LoadSkin()
 	PVPFrame:StripTextures(true);
 	
 	do
-		local Team;
-		local TeamHighlight;
+		local team;
+		local teamHighlight;
 		
 		for i = 1, MAX_ARENA_TEAMS do
-			Team = _G['PVPTeam'..i];
-			TeamHighlight = _G['PVPTeam'..i..'Highlight'];
+			team = _G['PVPTeam'..i];
+			teamHighlight = _G['PVPTeam'..i..'Highlight'];
 			
-			Team:StripTextures();
-			Team:CreateBackdrop('Transparent');
-			Team.backdrop:Point('TOPLEFT', 9, -4);
-			Team.backdrop:Point('BOTTOMRIGHT', -24, 3);
+			team:StripTextures();
+			team:CreateBackdrop('Transparent');
+			team.backdrop:Point('TOPLEFT', 9, -4);
+			team.backdrop:Point('BOTTOMRIGHT', -24, 3);
 			
-			TeamHighlight:Kill();
+			teamHighlight:Kill();
 		end
 	end
 	
@@ -67,12 +69,12 @@ local function LoadSkin()
 	S:HandleCloseButton(PVPTeamDetailsCloseButton);
 	
 	do
-		local Header;
+		local header;
 		
 		for i = 1, 5 do
-			Header = _G['PVPTeamDetailsFrameColumnHeader'..i];
+			header = _G['PVPTeamDetailsFrameColumnHeader'..i];
 			
-			Header:StripTextures();
+			header:StripTextures();
 		end
 	end
 	
@@ -81,12 +83,12 @@ local function LoadSkin()
 	S:HandleNextPrevButton(PVPTeamDetailsToggleButton);
 	
 	do
-		local Tab;
+		local tab;
 		
 		for i = 1, 2 do
-			Tab = _G['PVPParentFrameTab'..i];
+			tab = _G['PVPParentFrameTab'..i];
 			
-			S:HandleTab(Tab);
+			S:HandleTab(tab);
 		end
 	end
 end
