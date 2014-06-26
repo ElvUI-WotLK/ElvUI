@@ -117,7 +117,7 @@ function UF:Update_ArenaFrames(frame, db)
 		end
 		
 		health:ClearAllPoints(); --Позиция
-		health:Point("TOPRIGHT", frame, "TOPRIGHT", -(PVPINFO_WIDTH + BORDER), -BORDER)
+		health:Point('TOPRIGHT', frame, 'TOPRIGHT', -BORDER, -BORDER)
 		if USE_POWERBAR_OFFSET then			
 			health:Point('BOTTOMLEFT', frame, 'BOTTOMLEFT', BORDER+POWERBAR_OFFSET, BORDER+POWERBAR_OFFSET);
 		elseif USE_MINI_POWERBAR then
@@ -180,7 +180,7 @@ function UF:Update_ArenaFrames(frame, db)
 				power:SetFrameLevel(frame:GetFrameLevel() + 3)
 			else
 				power:Point('TOPLEFT', frame.Health.backdrop, 'BOTTOMLEFT', BORDER, -(E.PixelMode and 0 or (BORDER + SPACING)));
-				power:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -(BORDER + PVPINFO_WIDTH), BORDER)
+				power:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -BORDER, BORDER)
 			end
 		elseif frame:IsElementEnabled('Power') then
 			frame:DisableElement('Power');
