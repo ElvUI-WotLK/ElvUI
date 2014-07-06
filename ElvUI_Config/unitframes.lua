@@ -712,6 +712,7 @@ local function GetOptionsTable_Castbar(hasTicks, updateFunc, groupName, numUnits
 							if not castbar.oldHide then
 								castbar.oldHide = castbar.Hide
 								castbar.Hide = castbar.Show
+								castbar:SetAlpha(1);
 								castbar:Show()
 							else
 								castbar.Hide = castbar.oldHide
@@ -724,6 +725,7 @@ local function GetOptionsTable_Castbar(hasTicks, updateFunc, groupName, numUnits
 						if not castbar.oldHide then
 							castbar.oldHide = castbar.Hide
 							castbar.Hide = castbar.Show
+							castbar:SetAlpha(1);
 							castbar:Show()
 						else
 							castbar.Hide = castbar.oldHide
@@ -1696,7 +1698,17 @@ E.Options.args.unitframe = { -- Рамки юнитов
 									order = 4,
 									name = L['Non-Interruptable'],
 									type = 'color',
-								},								
+								},
+								castCompleteColor = {
+									order = 5,
+									name = L['Complete'],
+									type = 'color',
+								},
+								castFailColor = {
+									order = 6,
+									name = L['Fail'],
+									type = 'color',
+								},
 							},
 						},
 						auraBars = { -- Полосы аур
