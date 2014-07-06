@@ -8,7 +8,6 @@
 	<Script file='portrait.lua'/>
 	<Script file='castbar.lua'/>
 	<Script file='classbars.lua'/>
-	<Script file='healprediction.lua'/>
 	<Script file='raidicon.lua'/>
 	<Script file='misc.lua'/>
 </Ui>

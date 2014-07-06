@@ -9,20 +9,23 @@ local ArenaHeader = CreateFrame('Frame', 'ArenaHeader', UIParent);
 
 function UF:Construct_ArenaFrames(frame)	
 	frame.Health = self:Construct_HealthBar(frame, true, true, 'RIGHT'); -- Здоровье
-	frame.Power = self:Construct_PowerBar(frame, true, true, 'LEFT', false); -- Мана
 	frame.Name = self:Construct_NameText(frame); -- Имя
-	frame.Buffs = self:Construct_Buffs(frame); -- Баффы
-	frame.Debuffs = self:Construct_Debuffs(frame); -- Дебаффы
-	frame.Castbar = self:Construct_Castbar(frame, 'RIGHT'); -- Полоса заклинаний
-	frame.Trinket = self:Construct_Trinket(frame); -- ПвП Аксессуар
-	frame.Range = UF:Construct_Range(frame); -- Проверка дистанции
-	frame:SetAttribute('type2', 'focus');
 	
-	frame.TargetGlow = UF:Construct_TargetGlow(frame);
-	tinsert(frame.__elements, UF.UpdateTargetGlow);
-	frame:RegisterEvent('PLAYER_TARGET_CHANGED', UF.UpdateTargetGlow);
-	frame:RegisterEvent('PLAYER_ENTERING_WORLD', UF.UpdateTargetGlow);
-	frame:RegisterEvent('GROUP_ROSTER_UPDATE', UF.UpdateTargetGlow);
+	if(not frame.isChild) then
+		frame.Power = self:Construct_PowerBar(frame, true, true, 'LEFT', false); -- Мана
+		frame.Buffs = self:Construct_Buffs(frame); -- Баффы
+		frame.Debuffs = self:Construct_Debuffs(frame); -- Дебаффы
+		frame.Castbar = self:Construct_Castbar(frame, 'RIGHT'); -- Полоса заклинаний
+		frame.Trinket = self:Construct_Trinket(frame); -- ПвП Аксессуар
+		frame.Range = UF:Construct_Range(frame); -- Проверка дистанции
+		frame:SetAttribute('type2', 'focus');
+		
+		frame.TargetGlow = UF:Construct_TargetGlow(frame);
+		tinsert(frame.__elements, UF.UpdateTargetGlow);
+		frame:RegisterEvent('PLAYER_TARGET_CHANGED', UF.UpdateTargetGlow);
+		frame:RegisterEvent('PLAYER_ENTERING_WORLD', UF.UpdateTargetGlow);
+		frame:RegisterEvent('GROUP_ROSTER_UPDATE', UF.UpdateTargetGlow);
+	end
 	
 	ArenaHeader:Point('BOTTOMRIGHT', E.UIParent, 'RIGHT', -105, -165); -- Позиция
 	E:CreateMover(ArenaHeader, ArenaHeader:GetName()..'Mover', L['Arena Frames'], nil, nil, nil, 'ALL,ARENA');
@@ -407,4 +410,4 @@ function UF:Update_ArenaFrames(frame, db)
 	frame:UpdateAllElements();
 end
 
-UF['unitgroupstoload']['arena'] = 5;
+UF['unitgroupstoload']['arena'] = { 5, 'ELVUI_UNITTARGET' }

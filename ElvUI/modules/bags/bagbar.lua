@@ -4,7 +4,7 @@ local B = E:GetModule('Bags');
 local TOTAL_BAGS = NUM_BAG_FRAMES + 2
 local tinsert = table.insert
 
-local ElvUIKeyRing = CreateFrame('CheckButton', 'ElvUIKeyRingButton', UIParent, 'ItemButtonTemplate');
+local ElvUIKeyRing = CreateFrame('Button', 'ElvUIKeyRingButton', UIParent, 'ItemButtonTemplate');
 ElvUIKeyRing:RegisterForClicks('anyUp');
 ElvUIKeyRing:StripTextures();
 ElvUIKeyRing:SetScript('OnClick', function() if CursorHasItem() then PutKeyInKeyRing(); else ToggleKeyRing(); end end)
@@ -132,6 +132,8 @@ function B:LoadBagBar()
 		tinsert(ElvUIBags.buttons, b);
 	end
 	
+	ElvUIKeyRingButton:CreateBackdrop();
+	ElvUIKeyRingButton.backdrop:SetAllPoints();
 	ElvUIKeyRingButton:SetParent(ElvUIBags);
 	ElvUIKeyRingButton.SetParent = E.dummy;
 	ElvUIKeyRingButton:HookScript('OnEnter', OnEnter);

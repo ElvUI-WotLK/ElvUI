@@ -370,7 +370,7 @@ function UF:Update_AllFrames()
 	self:UpdateAllHeaders()
 end
 
-function UF:CreateAndUpdateUFGroup(group, numGroup)
+function UF:CreateAndUpdateUFGroup(group, numGroup, template)
 	for i=1, numGroup do
 		local unit = group..i
 		local frameName = E:StringTitle(unit)
@@ -749,8 +749,9 @@ function UF:LoadUnits()
 	end	
 	self['unitstoload'] = nil
 	
-	for group, numGroup in pairs(self['unitgroupstoload']) do
-		self:CreateAndUpdateUFGroup(group, numGroup)
+	for group, groupOptions in pairs(self['unitgroupstoload']) do
+		local numGroup, template = unpack(groupOptions);
+		self:CreateAndUpdateUFGroup(group, numGroup, template);
 	end
 	self['unitgroupstoload'] = nil
 	

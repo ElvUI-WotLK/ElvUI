@@ -99,7 +99,15 @@ function UF:ForceShow(frame)
 	frame:Show()
 	if frame:IsVisible() and frame.Update then
 		frame:Update()
-	end		
+	end
+	
+	if(_G[frame:GetName()..'Target']) then
+		self:ForceShow(_G[frame:GetName()..'Target']);
+	end
+
+	if(_G[frame:GetName()..'Pet']) then
+		self:ForceShow(_G[frame:GetName()..'Pet']);
+	end
 end
 
 function UF:UnforceShow(frame)
@@ -124,7 +132,15 @@ function UF:UnforceShow(frame)
 	-- non-config mode state
 	if frame:IsVisible() and frame.Update then
 		frame:Update()
-	end	
+	end
+	
+	if(_G[frame:GetName()..'Target']) then
+		self:UnforceShow(_G[frame:GetName()..'Target'])
+	end
+
+	if(_G[frame:GetName()..'Pet']) then
+		self:UnforceShow(_G[frame:GetName()..'Pet'])
+	end
 end
 
 function UF:ShowChildUnits(header, ...)
