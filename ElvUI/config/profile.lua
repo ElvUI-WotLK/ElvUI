@@ -1722,15 +1722,6 @@ P['auras'] = {
 	['countXOffset'] = 0,
 	['timeYOffset'] = 0,
 	['timeXOffset'] = 0,
-
-	['consolidatedBuffs'] = {
-		['enable'] = true,
-		['filter'] = true,
-		['durations'] = true,
-		['font'] = 'ElvUI Pixel',
-		['fontSize'] = 10,
-		['fontOutline'] = 'MONOCHROMEOUTLINE',
-	},
 	
 	['fadeThreshold'] = 5,
 	['buffs'] = {

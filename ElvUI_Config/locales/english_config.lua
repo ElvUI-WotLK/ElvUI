@@ -132,23 +132,18 @@ L['You must be at a bank.'] = true;
 
 --Buffs and Debuffs
 L['Begin a new row or column after this many auras.'] = true;
-L['Consolidated Buffs'] = true;
 L['Count xOffset'] = true;
 L['Count yOffset'] = true;
 L['Defines how the group is sorted.'] = true;
 L['Defines the sort order of the selected sort method.'] = true;
 L['Disabled Blizzard'] = true;
-L['Display the consolidated buffs bar.'] = true;
 L["Fade Threshold"] = true;
-L['Filter Consolidated'] = true;
 L['Index'] = true;
 L['Indicate whether buffs you cast yourself should be separated before or after.'] = true;
 L['Limit the number of rows or columns.'] = true;
 L['Max Wraps'] = true;
 L['No Sorting'] = true;
-L['Only show consolidated icons on the consolidated bar that your class/spec is interested in. This is useful for raid leading.'] = true;
 L["Other's First"] = true;
-L['Remaining Time'] = true;
 L['Seperate'] = true;
 L['Set the size of the individual auras.'] = true;
 L['Sort Method'] = true;
