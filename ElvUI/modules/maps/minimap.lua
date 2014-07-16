@@ -169,19 +169,6 @@ function M:UpdateSettings()
 	if MinimapMover then
 		MinimapMover:Size(MMHolder:GetSize())
 	end
-
-	if AurasHolder then
-		AurasHolder:Height(E.MinimapHeight)
-		if AurasMover and not E:HasMoverBeenMoved('AurasMover') and not E:HasMoverBeenMoved('MinimapMover') then
-			AurasMover:ClearAllPoints()
-			AurasMover:Point("TOPRIGHT", E.UIParent, "TOPRIGHT", -((E.MinimapSize + 4) + E.RBRWidth + (E.PixelMode and 3 or 8)), -3)
-			E:SaveMoverDefaultPosition('AurasMover')
-		end
-		
-		if AurasMover then
-			AurasMover:Height(E.MinimapHeight)
-		end
-	end
 	
 	if ElvConfigToggle then
 		if E.db.general.raidReminder and E.db.datatexts.minimapPanels and E.private.general.minimap.enable then
@@ -316,10 +303,16 @@ function M:Initialize()
 	E.FrameLocks['FarmModeMap'] = true;
 	
 	FarmModeMap:SetScript('OnShow', function() 	
-		if not E:HasMoverBeenMoved('AurasMover') then
-			AurasMover:ClearAllPoints()
-			AurasMover:Point("TOPRIGHT", E.UIParent, "TOPRIGHT", -3, -3)
+		if(not E:HasMoverBeenMoved('BuffsMover')) then
+			BuffsMover:ClearAllPoints();
+			BuffsMover:Point('TOPRIGHT', E.UIParent, 'TOPRIGHT', -3, -3);
 		end
+		
+		if(not E:HasMoverBeenMoved('DebuffsMover')) then
+			DebuffsMover:ClearAllPoints();
+			DebuffsMover:Point('TOPRIGHT', ElvUIPlayerBuffs, 'BOTTOMRIGHT', 0, -3);
+		end
+		
 		MinimapCluster:ClearAllPoints()
 		MinimapCluster:SetAllPoints(FarmModeMap)
 		if IsAddOnLoaded('Routes') then
@@ -332,9 +325,14 @@ function M:Initialize()
 	end)
 	
 	FarmModeMap:SetScript('OnHide', function() 
-		if not E:HasMoverBeenMoved('AurasMover') then
-			E:ResetMovers(L['Auras Frame'])
+		if(not E:HasMoverBeenMoved('BuffsMover')) then
+			E:ResetMovers(L['Player Buffs']);
+		end	
+		
+		if(not E:HasMoverBeenMoved('DebuffsMover')) then
+			E:ResetMovers(L['Player Debuffs']);
 		end
+		
 		MinimapCluster:ClearAllPoints()
 		MinimapCluster:SetAllPoints(Minimap)	
 		if IsAddOnLoaded('Routes') then

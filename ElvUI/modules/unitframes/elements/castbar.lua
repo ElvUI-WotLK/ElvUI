@@ -69,14 +69,14 @@ function UF:Construct_Castbar(self, direction, moverName)
 	if(moverName ) then
 		E:CreateMover(castbar.Holder, self:GetName()..'CastbarMover', moverName, nil, -6, nil, 'ALL,SOLO');
 	end
-
+	
 	local icon = button:CreateTexture(nil, 'ARTWORK');
 	icon:SetInside();
 	icon:SetTexCoord(unpack(E.TexCoords));
 	icon.bg = button;
 	
 	castbar.ButtonIcon = icon;
-
+	
 	return castbar;
 end
 

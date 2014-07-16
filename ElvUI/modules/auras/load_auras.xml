@@ -1,3 +1,6 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/">	
-	<Script file='auras.lua'/>
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file='core.lua'/>
+	<Script file='buffs.lua'/>
+	<Script file='debuffs.lua'/>
+	<Script file='enchants.lua'/>
 </Ui>

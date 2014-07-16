@@ -1714,14 +1714,47 @@ P['unitframe'] = {
 	},
 }
 
-P['auras'] = { -- Ауры
+P['auras'] = {
 	['font'] = 'ElvUI Pixel',
 	['fontSize'] = 10,
 	['fontOutline'] = 'MONOCHROMEOUTLINE',
-	['Size'] = 30,
-	['perRow'] = 14,
-	['spacing'] = 1,
+	['countYOffset'] = 0,
+	['countXOffset'] = 0,
+	['timeYOffset'] = 0,
+	['timeXOffset'] = 0,
+
+	['consolidatedBuffs'] = {
+		['enable'] = true,
+		['filter'] = true,
+		['durations'] = true,
+		['font'] = 'ElvUI Pixel',
+		['fontSize'] = 10,
+		['fontOutline'] = 'MONOCHROMEOUTLINE',
+	},
+	
 	['fadeThreshold'] = 5,
+	['buffs'] = {
+		['growthDirection'] = 'LEFT_DOWN',
+		['wrapAfter'] = 12,
+		['maxWraps'] = 3,
+		['horizontalSpacing'] = 6,
+		['verticalSpacing'] = 16,
+		['sortMethod'] = "TIME",
+		['sortDir'] = '-',
+		['seperateOwn'] = 1,
+		['size'] = 32,
+	},
+	['debuffs'] = {
+		['growthDirection'] = 'LEFT_DOWN',
+		['wrapAfter'] = 12,
+		['maxWraps'] = 1,
+		['horizontalSpacing'] = 6,
+		['verticalSpacing'] = 16,		
+		['sortMethod'] = "TIME",
+		['sortDir'] = '-',
+		['seperateOwn'] = 1,
+		['size'] = 32,
+	},
 }
 
 P['chat'] = { -- Чат
