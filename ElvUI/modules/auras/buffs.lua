@@ -10,6 +10,13 @@ local floor = math.floor;
 
 local buffs = {};
 
+local inversePoints = {
+	TOP = 'BOTTOM',
+	BOTTOM = 'TOP',
+	LEFT = 'RIGHT',
+	RIGHT = 'LEFT'
+};
+
 local BuffFrame = CreateFrame('Frame', 'ElvUIPlayerBuffs', E.UIParent);
 
 local function OnEnter(self)
@@ -69,6 +76,13 @@ local buttons = setmetatable({ }, { __index = function(t, i)
 	button.highlight:SetTexture(1, 1, 1, 0.45);
 	button.highlight:SetInside();
 	
+	button.holder = CreateFrame('Frame', 'ElvUIPlayerBuffs'..i..'ButtonHolder', button);
+	button.holder:SetTemplate('Default');
+	
+	button.bar = CreateFrame('StatusBar', 'ElvUIPlayerBuffs'..i..'ButtonStatusBar', button.holder);
+	button.bar:SetInside(button.holder);
+	button.bar:SetStatusBarTexture(E['media'].glossTex);
+	
 	E:SetUpAnimGroup(button)
 	
 	t[i] = button;
@@ -123,9 +137,9 @@ function BuffFrame:UpdateLayout()
 	for i, button in ipairs(buttons) do
 		local j = i --+ numEnchants
 		
-		button:ClearAllPoints()
-		button:SetWidth(size)
-		button:SetHeight(size)
+		button:ClearAllPoints();
+		button:SetWidth(size);
+		button:SetHeight(size);
 		
 		local wrapAfter = wrapAfter or j;
 		local tick, cycle = floor((j - 1) % wrapAfter), floor((j - 1) / wrapAfter);
@@ -137,11 +151,29 @@ function BuffFrame:UpdateLayout()
 		top = max(top, button:GetTop() or -math.huge);
 		bottom = min(bottom, button:GetBottom() or math.huge);
 		
-		button.count:SetPoint('BOTTOMRIGHT', -1 + A.db.countXOffset, 1 + A.db.countYOffset)
+		button.count:SetPoint('BOTTOMRIGHT', -1 + A.db.countXOffset, 1 + A.db.countYOffset);
 		button.count:FontTemplate(font, A.db.fontSize, A.db.fontOutline)
 		
-		button.timer:SetPoint('TOP', button, 'BOTTOM', 1 + A.db.timeXOffset, 0 + A.db.timeYOffset)
-		button.timer:FontTemplate(font, A.db.fontSize, A.db.fontOutline)
+		button.timer:SetPoint('TOP', button, 'BOTTOM', 1 + A.db.timeXOffset, 0 + A.db.timeYOffset);
+		button.timer:FontTemplate(font, A.db.fontSize, A.db.fontOutline);
+		
+		local pos = db.barPosition;
+		local spacing = db.barSpacing;
+		local isOnTop = pos == 'TOP' and true or false;
+		local isOnBottom = pos == 'BOTTOM' and true or false;
+		local isOnLeft = pos == 'LEFT' and true or false;
+		local isOnRight = pos == 'RIGHT' and true or false;
+		
+		button.holder:ClearAllPoints();
+		button.holder:Width((isOnTop or isOnBottom) and size or (db.barWidth + (E.PixelMode and 0 or 2)))
+		button.holder:Height((isOnLeft or isOnRight) and size or (db.barHeight + (E.PixelMode and 0 or 2)))
+		button.holder:Point(inversePoints[pos], button, pos, (isOnTop or isOnBottom) and 0 or ((isOnLeft and -((E.PixelMode and 1 or 3) + spacing)) or ((E.PixelMode and 1 or 3) + spacing)), (isOnLeft or isOnRight) and 0 or ((isOnTop and ((E.PixelMode and 1 or 3) + spacing) or -((E.PixelMode and 1 or 3) + spacing))))
+		
+		if(isOnLeft or isOnRight) then
+			button.bar:SetOrientation('VERTICAL');
+		else
+			button.bar:SetOrientation('HORIZONTAL');
+		end
 	end
 	
 	if(display >= 1) then
@@ -317,7 +349,7 @@ local dirty;
 local timerGroup = BuffFrame:CreateAnimationGroup();
 local timer = timerGroup:CreateAnimation();
 timer:SetOrder(1);
-timer:SetDuration(.5);
+timer:SetDuration(.1);
 timerGroup:SetScript('OnFinished', function(self, requested)
 	if(dirty) then
 		BuffFrame:Update();
@@ -349,6 +381,33 @@ timerGroup:SetScript('OnFinished', function(self, requested)
 				button.timeLeft = nil;
 				button.timer:SetText('');
 				button:SetScript('OnUpdate', nil);
+			end
+			
+			if(button.bar and buff.duration > 0 and buff.expires) then
+				button.bar:SetMinMaxValues(0, buff.duration);
+			else
+				local min, max  = button.bar:GetMinMaxValues();
+				button.bar:SetValue(max);
+				button.bar:SetStatusBarColor(0, 0.8, 0);
+			end
+			
+			local timeLeft = button.timeLeft;
+			
+			if(not timeLeft) then
+				button.holder:Hide();
+			else
+				if(timeLeft <= A.db.fadeThreshold and buff.duration > 0) then
+					button.holder:Hide();
+					button.timer:Show();
+				else
+					button.holder:Show();
+					button.timer:Hide();
+				end
+				
+				button.bar:SetValue(timeLeft);
+				
+				local r, g, b = ElvUF.ColorGradient(timeLeft, buff.duration or 0, 0.8, 0, 0, 0.8, 0.8, 0, 0, 0.8, 0);
+				button.bar:SetStatusBarColor(r, g, b);
 			end
 		end
 	end

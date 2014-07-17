@@ -83,6 +83,46 @@ local auraOptions = {
 			[1] = L['Your Auras First'],
 		},
 	},
+	barPosition = {
+		type = 'select',
+		order = 10,
+		name = L['Statusbar Position'],
+		desc = L['Choose where you want the statusbar to be positioned. If you position it on the left or right side of the icon I advice you to increase Horizontal Spacing for Buffs and Debuffs'],
+		values = {
+			['TOP'] = L['Above Icons'],
+			['BOTTOM'] = L['Below Icons'],
+			['LEFT'] = L['Left Side of Icons'],
+			['RIGHT'] = L['Right Side of Icons'],
+		},
+	},
+	barSpacing = {
+		order = 11,
+		type = 'range',
+		name = L['Statusbar Spacing'],
+		desc = L['Additional spacing between icon and statusbar. If a negative value is chosen then the statusbar is shown inside the icon'],
+		min = -25, max = 25, step = 1,
+	},
+	spacer1 = {
+		type = 'description',
+		order = 12,
+		name = '',
+	},
+	barHeight = {
+		type = 'range',
+		order = 13,
+		name = L['Statusbar Height'],
+		desc = L['Height of the statusbar frame'],
+		min = 5, max = 15, step = 1,
+		-- disabled = function() return end,
+	},
+	barWidth = {
+		type = 'range',
+		order = 14,
+		name = L['Statusbar Width'],
+		desc = L['Width of the statusbar frame'],
+		min = 5, max = 15, step = 1,
+		-- disabled = function() return end,
+	},
 }
 
 E.Options.args.auras = {

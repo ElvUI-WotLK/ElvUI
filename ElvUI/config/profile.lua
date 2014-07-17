@@ -1734,6 +1734,10 @@ P['auras'] = {
 		['sortDir'] = '-',
 		['seperateOwn'] = 1,
 		['size'] = 32,
+		['barPosition'] = 'BOTTOM',
+		['barSpacing'] = 0,
+		['barHeight'] = 6,
+		['barWidth'] = 6,
 	},
 	['debuffs'] = {
 		['growthDirection'] = 'LEFT_DOWN',
@@ -1745,6 +1749,10 @@ P['auras'] = {
 		['sortDir'] = '-',
 		['seperateOwn'] = 1,
 		['size'] = 32,
+		['barPosition'] = 'BOTTOM',
+		['barSpacing'] = 0,
+		['barHeight'] = 6,
+		['barWidth'] = 6,
 	},
 }
 
