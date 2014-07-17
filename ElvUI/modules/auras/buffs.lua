@@ -75,7 +75,7 @@ local buttons = setmetatable({ }, { __index = function(t, i)
 
 	button.count = button:CreateFontString(nil, 'OVERLAY');
 	
-	button.timer = button:CreateFontString(nil, 'OVERLAY')
+	button.time = button:CreateFontString(nil, 'OVERLAY')
 	
 	button.highlight = button:CreateTexture(nil, 'HIGHLIGHT');
 	button.highlight:SetTexture(1, 1, 1, 0.45);
@@ -159,8 +159,8 @@ function BuffFrame:UpdateLayout()
 		button.count:SetPoint('BOTTOMRIGHT', -1 + A.db.countXOffset, 1 + A.db.countYOffset);
 		button.count:FontTemplate(font, A.db.fontSize, A.db.fontOutline)
 		
-		button.timer:SetPoint('TOP', button, 'BOTTOM', 1 + A.db.timeXOffset, 0 + A.db.timeYOffset);
-		button.timer:FontTemplate(font, A.db.fontSize, A.db.fontOutline);
+		button.time:SetPoint('TOP', button, 'BOTTOM', 1 + A.db.timeXOffset, 0 + A.db.timeYOffset);
+		button.time:FontTemplate(font, A.db.fontSize, A.db.fontOutline);
 		
 		local pos = db.barPosition;
 		local spacing = db.barSpacing;
@@ -384,7 +384,7 @@ timerGroup:SetScript('OnFinished', function(self, requested)
 				A.UpdateTime(button, 0);
 			else
 				button.timeLeft = nil;
-				button.timer:SetText('');
+				button.time:SetText('');
 				button:SetScript('OnUpdate', nil);
 			end
 			
@@ -398,15 +398,43 @@ timerGroup:SetScript('OnFinished', function(self, requested)
 			
 			local timeLeft = button.timeLeft;
 			
+			local statusbar = A.db.buffs.statusbar;
+			local noduration = A.db.buffs.noduration;
+			local enableThreshold = A.db.buffs.tenable;
+			local showText = A.db.buffs.showText;
+			
 			if(not timeLeft) then
-				button.holder:Hide();
-			else
-				if(timeLeft <= A.db.fadeThreshold and buff.duration > 0) then
-					button.holder:Hide();
-					button.timer:Show();
+				if(statusbar) then
+					if(not noduration) then
+						button.holder:Hide();
+					else
+						button.holder:Show();
+					end
 				else
+					button.holder:Hide();
+				end
+			else
+				if(statusbar) then
 					button.holder:Show();
-					button.timer:Hide();
+					
+					if(showText) then
+						button.time:Show();
+					else
+						button.time:Hide();
+						
+						if(enableThreshold) then
+							if(timeLeft <= A.db.fadeThreshold and buff.duration > 0) then
+								button.holder:Hide();
+								button.time:Show();
+							else
+								button.holder:Show();
+								button.time:Hide();
+							end
+						end
+					end
+				else
+					button.holder:Hide();
+					button.time:Show();
 				end
 				
 				button.bar:SetValue(timeLeft);
