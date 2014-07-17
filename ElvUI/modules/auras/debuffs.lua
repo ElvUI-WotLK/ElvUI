@@ -17,15 +17,19 @@ local inversePoints = {
 
 local DebuffFrame = CreateFrame('Frame', 'ElvUIPlayerDebuffs', E.UIParent);
 
-local function OnEnter(self)
+local UpdateTooltip = function(self)
 	local debuff = debuffs[self:GetID()];
 	
 	if(not debuff) then
 		return;
 	end
+	
+	GameTooltip:SetUnitAura(debuffUnit, debuff.index, 'HARMFUL')
+end
 
+local function OnEnter(self)
 	GameTooltip:SetOwner(self, 'ANCHOR_BOTTOMLEFT', -5, -5);
-	GameTooltip:SetUnitAura(debuffUnit, debuff.index, 'HARMFUL');
+	self:UpdateTooltip();
 end
 
 local function OnLeave()
@@ -46,6 +50,7 @@ local buttons = setmetatable({ }, { __index = function(t, i)
 	button:SetTemplate('Default');
 	
 	button:EnableMouse(true);
+	button.UpdateTooltip = UpdateTooltip;
 	button:SetScript('OnEnter', OnEnter);
 	button:SetScript('OnLeave', OnLeave);
 

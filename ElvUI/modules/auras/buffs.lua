@@ -19,15 +19,19 @@ local inversePoints = {
 
 local BuffFrame = CreateFrame('Frame', 'ElvUIPlayerBuffs', E.UIParent);
 
-local function OnEnter(self)
+local UpdateTooltip = function(self)
 	local buff = buffs[self:GetID()];
 	
 	if(not buff) then
 		return;
 	end
+	
+	GameTooltip:SetUnitAura(buffUnit, buff.index, 'HELPFUL')
+end
 
+local function OnEnter(self)
 	GameTooltip:SetOwner(self, 'ANCHOR_BOTTOMLEFT', -5, -5);
-	GameTooltip:SetUnitAura(buffUnit, buff.index, 'HELPFUL');
+	self:UpdateTooltip();
 end
 
 local function OnLeave()
@@ -58,6 +62,7 @@ local buttons = setmetatable({ }, { __index = function(t, i)
 	button:SetTemplate('Default');
 	
 	button:EnableMouse(true);
+	button.UpdateTooltip = UpdateTooltip;
 	button:SetScript('OnEnter', OnEnter);
 	button:SetScript('OnLeave', OnLeave);
 
