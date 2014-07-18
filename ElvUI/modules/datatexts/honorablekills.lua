@@ -9,7 +9,7 @@ local displayNumberString = '';
 local function OnEvent(self, event)
 	local hk = GetPVPLifetimeStats();
 	
-	self.text:SetFormattedText(displayNumberString, 'Поч. побед', hk);
+	self.text:SetFormattedText(displayNumberString, HONORABLE_KILLS, hk);
 
 	lastPanel = self;
 end
@@ -17,10 +17,10 @@ end
 local function ValueColorUpdate(hex, r, g, b)
 	displayNumberString = join('', '%s: ', hex, '%d|r');
 	
-	if ( lastPanel ~= nil ) then
+	if(lastPanel ~= nil) then
 		OnEvent(lastPanel);
 	end
 end
 E['valueColorUpdateFuncs'][ValueColorUpdate] = true;
 
-DT:RegisterDatatext('Поч. побед', nil, OnEvent);
+DT:RegisterDatatext(HONORABLE_KILLS, nil, OnEvent);

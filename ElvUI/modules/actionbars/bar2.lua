@@ -188,8 +188,8 @@ function AB:CreateBar2()
 		else
 			self:Show();
 		end	
-	]])
+	]]);
 	
-	E:CreateMover(bar, 'ElvBar_2', L['Bar 2'], nil, nil, nil,'ALL,ACTIONBARS');
+	E:CreateMover(bar, 'ElvBar_2', L['Bar 2'], nil, nil, nil, 'ALL,ACTIONBARS');
 	self:PositionAndSizeBar2();
 end

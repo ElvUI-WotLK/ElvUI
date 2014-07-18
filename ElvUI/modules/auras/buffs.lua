@@ -156,22 +156,22 @@ function BuffFrame:UpdateLayout()
 		top = max(top, button:GetTop() or -math.huge);
 		bottom = min(bottom, button:GetBottom() or math.huge);
 		
-		button.count:SetPoint('BOTTOMRIGHT', -1 + A.db.countXOffset, 1 + A.db.countYOffset);
+		button.count:SetPoint('BOTTOMRIGHT', -1 + db.count.xOffset, 1 + db.count.yOffset);
 		button.count:FontTemplate(font, A.db.fontSize, A.db.fontOutline)
 		
-		button.time:SetPoint('TOP', button, 'BOTTOM', 1 + A.db.timeXOffset, 0 + A.db.timeYOffset);
+		button.time:SetPoint('TOP', button, 'BOTTOM', 1 + db.time.xOffset, 0 + db.time.yOffset);
 		button.time:FontTemplate(font, A.db.fontSize, A.db.fontOutline);
 		
-		local pos = db.barPosition;
-		local spacing = db.barSpacing;
+		local pos = db.timeBar.position;
+		local spacing = db.timeBar.spacing;
 		local isOnTop = pos == 'TOP' and true or false;
 		local isOnBottom = pos == 'BOTTOM' and true or false;
 		local isOnLeft = pos == 'LEFT' and true or false;
 		local isOnRight = pos == 'RIGHT' and true or false;
 		
 		button.holder:ClearAllPoints();
-		button.holder:Width((isOnTop or isOnBottom) and size or (db.barWidth + (E.PixelMode and 0 or 2)))
-		button.holder:Height((isOnLeft or isOnRight) and size or (db.barHeight + (E.PixelMode and 0 or 2)))
+		button.holder:Width((isOnTop or isOnBottom) and size or (db.timeBar.width + (E.PixelMode and 0 or 2)))
+		button.holder:Height((isOnLeft or isOnRight) and size or (db.timeBar.height + (E.PixelMode and 0 or 2)))
 		button.holder:Point(inversePoints[pos], button, pos, (isOnTop or isOnBottom) and 0 or ((isOnLeft and -((E.PixelMode and 1 or 3) + spacing)) or ((E.PixelMode and 1 or 3) + spacing)), (isOnLeft or isOnRight) and 0 or ((isOnTop and ((E.PixelMode and 1 or 3) + spacing) or -((E.PixelMode and 1 or 3) + spacing))))
 		
 		if(isOnLeft or isOnRight) then
@@ -398,14 +398,14 @@ timerGroup:SetScript('OnFinished', function(self, requested)
 			
 			local timeLeft = button.timeLeft;
 			
-			local statusbar = A.db.buffs.statusbar;
-			local noduration = A.db.buffs.noduration;
-			local enableThreshold = A.db.buffs.tenable;
-			local showText = A.db.buffs.showText;
+			local timeBar = A.db.buffs.timeBar.enable;
+			local noDuration = A.db.buffs.timeBar.noDuration;
+			local enableThreshold = A.db.buffs.time.tenable;
+			local showText = A.db.buffs.time.showText;
 			
 			if(not timeLeft) then
-				if(statusbar) then
-					if(not noduration) then
+				if(timeBar) then
+					if(not noDuration) then
 						button.holder:Hide();
 					else
 						button.holder:Show();
@@ -414,7 +414,7 @@ timerGroup:SetScript('OnFinished', function(self, requested)
 					button.holder:Hide();
 				end
 			else
-				if(statusbar) then
+				if(timeBar) then
 					button.holder:Show();
 					
 					if(showText) then
