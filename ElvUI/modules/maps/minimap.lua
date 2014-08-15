@@ -123,8 +123,8 @@ function M:UpdateSettings()
 	end
 	E.MinimapSize = E.private.general.minimap.enable and E.db.general.minimap.size or Minimap:GetWidth() + 10
 	
-	if E.db.general.raidReminder then
-		E.RBRWidth = ((E.MinimapSize - 6) / 6) + (E.PixelMode and 3 or 4)
+	if(E.db.general.reminder.enable) then
+		E.RBRWidth = ((E.MinimapSize - 6) / 6) + (E.PixelMode and 3 or 4);
 	else
 		E.RBRWidth = 0;
 	end
@@ -170,26 +170,17 @@ function M:UpdateSettings()
 		MinimapMover:Size(MMHolder:GetSize())
 	end
 	
-	if ElvConfigToggle then
-		if E.db.general.raidReminder and E.db.datatexts.minimapPanels and E.private.general.minimap.enable then
-			ElvConfigToggle:Show()
-			ElvConfigToggle:Width(E.RBRWidth)
+	if(ElvConfigToggle) then
+		if(E.db.general.reminder.enable and E.db.datatexts.minimapPanels and E.private.general.minimap.enable) then
+			ElvConfigToggle:Show();
+			ElvConfigToggle:Width(E.RBRWidth);
 		else
-			ElvConfigToggle:Hide()
+			ElvConfigToggle:Hide();
 		end
 	end
 	
-	if RaidBuffReminder then
-		RaidBuffReminder:Width(E.RBRWidth)
-		for i=1, 6 do
-			RaidBuffReminder['spell'..i]:Size(E.RBRWidth - (E.PixelMode and 0 or 4))
-		end
-		
-		if E.db.general.raidReminder then
-			E:GetModule('RaidBuffReminder'):EnableRBR()
-		else
-			E:GetModule('RaidBuffReminder'):DisableRBR()
-		end
+	if(ElvUI_ReminderBuffs) then
+		E:GetModule('ReminderBuffs'):Update_ReminderBuffsSettings();
 	end
 end
 

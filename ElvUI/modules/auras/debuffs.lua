@@ -154,10 +154,12 @@ function DebuffFrame:UpdateLayout()
 		local isOnLeft = pos == 'LEFT' and true or false;
 		local isOnRight = pos == 'RIGHT' and true or false;
 		
+		local x, y = E:GetXYOffset(pos, spacing);
+		
 		button.holder:ClearAllPoints();
 		button.holder:Width((isOnTop or isOnBottom) and size or (db.timeBar.width + (E.PixelMode and 0 or 2)))
 		button.holder:Height((isOnLeft or isOnRight) and size or (db.timeBar.height + (E.PixelMode and 0 or 2)))
-		button.holder:Point(inversePoints[pos], button, pos, (isOnTop or isOnBottom) and 0 or ((isOnLeft and -((E.PixelMode and 1 or 3) + spacing)) or ((E.PixelMode and 1 or 3) + spacing)), (isOnLeft or isOnRight) and 0 or ((isOnTop and ((E.PixelMode and 1 or 3) + spacing) or -((E.PixelMode and 1 or 3) + spacing))))
+		button.holder:Point(E.InversePoints[pos], button, pos, x, y);
 		
 		if(isOnLeft or isOnRight) then
 			button.bar:SetOrientation('VERTICAL');

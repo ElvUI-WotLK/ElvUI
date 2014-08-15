@@ -297,6 +297,7 @@ L["Loot Roll"] = "Раздел добычи"
 L["Loot"] = "Добыча"
 L["Map Alpha While Moving"] = "Прозрачность карты в движении"
 L["Name Font"] = "Шрифт имени"
+L['Remaining Time'] = 'Оставшееся время';
 L['Remove Backdrop'] = "Скрыть фон"
 L["Reset all frames to their original positions."] = "Установить все фреймы на позиции по умолчанию"
 L["Reset Anchors"] = "Сбросить позиции"

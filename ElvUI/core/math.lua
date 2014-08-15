@@ -283,36 +283,3 @@ function E:GetTimeInfo(s, threshhold)
 		return ceil(s / DAY), 0,  days > 1 and (s - (days*DAY - HALFDAYISH)) or (s - DAYISH)
 	end
 end
-
-local ninetyDegreeAngleInRadians = (3.141592653589793 / 2) 
-local function GetPosition(unit, mapScan)
-	local m, f, x, y
-	if unit == "player" or UnitIsUnit("player", unit) then
-		m, f, x, y = Astrolabe:GetCurrentPlayerPosition()
-	else
-		m, f, x, y = Astrolabe:GetUnitPosition(unit, mapScan or WorldMapFrame:IsVisible())
-	end
-
-	if not (m and y) then
-		return false
-	else
-		return true, m, f, x, y
-	end
-end
-
-function E:GetDistance(unit1, unit2, mapScan)
-	local canCalculate, m1, f1, x1, y1 = GetPosition(unit1, mapScan)
-
-	if not canCalculate then return end
-
-	local canCalculate, m2, f2, x2, y2 = GetPosition(unit2, mapScan)
-
-	if not canCalculate then return end
-
-	local distance, xDelta, yDelta = Astrolabe:ComputeDistance(m1, f1, x1, y1, m2, f2, x2, y2)
-	if distance and xDelta and yDelta then
-		return distance, -ninetyDegreeAngleInRadians -GetPlayerFacing() - atan2(yDelta, xDelta) 
-	elseif distance then
-		return distance
-	end
-end

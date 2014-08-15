@@ -14,7 +14,6 @@ P['general'] = {
 	['autoAcceptInvite'] = false,
 	['bottomPanel'] = true,
 	['hideErrorFrame'] = true,
-	['raidReminder'] = true,
 	
 	['fontsize'] = 12, -- Медия\Шрифты
 	['font'] = 'ElvUI Font',
@@ -66,6 +65,13 @@ P['general'] = {
 		['sortDirection'] = 'ASCENDING',
 		['size'] = 40,
 		['spacing'] = 4,
+	},
+	['reminder'] = {
+		['enable'] = true,
+		['durations'] = true,
+		['font'] = 'ElvUI Pixel',
+		['fontSize'] = 10,
+		['fontOutline'] = 'MONOCHROMEOUTLINE'
 	},
 	['kittys'] = false
 };

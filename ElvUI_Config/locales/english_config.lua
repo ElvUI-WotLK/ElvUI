@@ -291,6 +291,7 @@ L["Loot Roll"] = true;
 L["Loot"] = true;
 L["Map Alpha While Moving"] = true;
 L["Name Font"] = true;
+L['Remaining Time'] = true;
 L['Remove Backdrop'] = true;
 L["Reset all frames to their original positions."] = true;
 L["Reset Anchors"] = true;

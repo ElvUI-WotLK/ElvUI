@@ -172,18 +172,8 @@ E.Options.args.general = {
 					desc = L["Hides the red error text at the top of the screen while in combat."],
 					type = "toggle"
 				},
-				raidReminder = {
-					order = 13,
-					name = L['Raid Reminder'],
-					desc = L['Display raid reminder bar on the minimap.'],
-					type = 'toggle',
-					set = function(info, value) 
-						E.db.general[ info[#info] ] = value
-						E:GetModule('Minimap'):UpdateSettings()
-					end,					
-				},
 				eyefinity = {
-					order = 14,
+					order = 13,
 					name = L["Multi-Monitor Support"],
 					desc = L["Attempt to support eyefinity/nvidia surround."],
 					type = "toggle",
@@ -191,13 +181,13 @@ E.Options.args.general = {
 					set = function(info, value) E.global.general[ info[#info] ] = value; E:StaticPopup_Show("GLOBAL_RL") end
 				},
 				taintLog = {
-					order = 15,
+					order = 14,
 					type = "toggle",
 					name = L["Log Taints"],
 					desc = L["Send ADDON_ACTION_BLOCKED errors to the Lua Error frame. These errors are less important in most cases and will not effect your game performance. Also a lot of these errors cannot be fixed. Please only report these errors if you notice a Defect in gameplay."],
 				},
 				tinyWorldMap = {
-					order = 16,
+					order = 15,
 					type = "toggle",
 					name = L["Tiny Map"],
 					desc = L["Don't scale the large world map to block out sides of the screen."],
@@ -205,7 +195,7 @@ E.Options.args.general = {
 					set = function(info, value) E.db.general.tinyWorldMap = value; E:GetModule('WorldMap'):ToggleTinyWorldMapSetting() end,
 				},	
 				bottomPanel = {
-					order = 17,
+					order = 16,
 					type = 'toggle',
 					name = L['Bottom Panel'],
 					desc = L['Display a panel across the bottom of the screen. This is for cosmetic only.'],
@@ -213,7 +203,7 @@ E.Options.args.general = {
 					set = function(info, value) E.db.general.bottomPanel = value; E:GetModule('Layout'):BottomPanelVisibility() end						
 				},
 				topPanel = {
-					order = 18,
+					order = 17,
 					type = 'toggle',
 					name = L['Top Panel'],
 					desc = L['Display a panel across the top of the screen. This is for cosmetic only.'],
@@ -667,6 +657,70 @@ E.Options.args.general = {
 					name = L['Days'],
 					desc = L['Color when the text is in the days format.'],			
 				},				
+			},
+		},
+		reminder = {
+			type = 'group',
+			order = 11,
+			name = L['Reminder'],
+			get = function(info) return E.db.general.reminder[ info[#info] ] end,
+			set = function(info, value) E.db.general.reminder[ info[#info] ] = value; E:GetModule('ReminderBuffs'):Update_ReminderBuffsSettings(); end,
+			args = {
+				enable = {
+					order = 1,
+					name = L['Enable'],
+					desc = L['Display reminder bar on the minimap.'],
+					type = 'toggle',
+					set = function(info, value) E.db.general.reminder[ info[#info] ] = value; E:GetModule('Minimap'):UpdateSettings(); end
+				},
+				generalGroup = {
+					order = 2,
+					type = 'group',
+					guiInline = true,
+					name = L['General'],
+					disabled = function() return not E.db.general.reminder.enable end,
+					args = {
+						durations = {
+							order = 1,
+							name = L['Remaining Time'],
+							type = 'toggle'
+						},
+					},
+				},
+				fontGroup = {
+					order = 3,
+					type = 'group',
+					guiInline = true,
+					name = L['Font'],
+					disabled = function() return not E.db.general.reminder.enable or not E.db.general.reminder.durations end,
+					args = {
+						font = {
+							type = 'select', dialogControl = 'LSM30_Font',
+							order = 1,
+							name = L['Font'],
+							values = AceGUIWidgetLSMlists.font
+						},
+						fontSize = {
+							order = 2,
+							name = L['Font Size'],
+							type = 'range',
+							min = 6, max = 22, step = 1
+						},
+						fontOutline = {
+							order = 3,
+							name = L['Font Outline'],
+							desc = L['Set the font outline.'],
+							type = 'select',
+							values = {
+								['NONE'] = L['None'],
+								['OUTLINE'] = 'OUTLINE',
+								['MONOCHROME'] = (not E.isMacClient) and 'MONOCHROME' or nil,
+								['MONOCHROMEOUTLINE'] = 'MONOCROMEOUTLINE',
+								['THICKOUTLINE'] = 'THICKOUTLINE'
+							},
+						},
+					},
+				},
 			},
 		},
 	},

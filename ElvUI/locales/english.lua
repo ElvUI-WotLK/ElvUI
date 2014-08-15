@@ -213,6 +213,7 @@ L["You may need to further alter these settings depending how low you resolution
 L["Your current resolution is %s, this is considered a %s resolution."] = true;
 
 --Misc
+L['Average Group iLvl:'] = true;
 L['Bars'] = true; --Also used in UnitFrames
 L['Calendar'] = true;
 L["Can't Roll"] = true;
@@ -220,8 +221,11 @@ L['Disband Group'] = true;
 L['Empty Slot'] = true;
 L["Enable"] = true; --Doesn't fit a section since it's used a lot of places
 L['Experience'] = true;
+L["Farm Mode"] = true; -- Minimap middle click menu
 L['Fishy Loot'] = true;
+L['Important Group Members:'] = true;
 L['Left Click:'] = true; --layout\layout.lua
+L["Raid Browser"] = true; -- Minimap middle click menu
 L['Raid Menu'] = true;
 L['Remaining:'] = true;
 L['Rested:'] = true;
@@ -229,6 +233,7 @@ L['Right Click:'] = true; --layout\layout.lua
 L['Show BG Texts'] = true; --layout\layout.lua
 L['Toggle Chat Frame'] = true; --layout\layout.lua
 L['Toggle Configuration'] = true; --layout\layout.lua
+L['Toggle Embedded Addon'] = true; --layout\layout.lua
 L['XP:'] = true;
 L["You don't have permission to mark targets."] = true;
 L['ABOVE_THREAT_FORMAT'] = '%s: %.0f%% [%.0f%% above |cff%02x%02x%02x%s|r]'
@@ -254,6 +259,7 @@ L["GM Ticket Frame"] = true;
 L["Left Chat"] = true;
 L["Loot / Alert Frames"] = true;
 L["Loot Frame"] = true;
+L['Loss Control Icon'] = true;
 L['MA Frames'] = true;
 L['Micro Bar'] = true;
 L['Minimap'] = true;

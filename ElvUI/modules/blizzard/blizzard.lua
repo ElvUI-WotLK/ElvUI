@@ -11,13 +11,7 @@ function B:Initialize()
 	self:PositionDurabilityFrame();
 	self:PositionGMFrames();
 	self:PositionVehicleFrame();
-	self:MoveWatchFrame();
-	
-	CreateFrame("Frame"):SetScript("OnUpdate", function(self, elapsed)
-		if LFRBrowseFrame.timeToClear then
-			LFRBrowseFrame.timeToClear = nil
-		end
-	end)	
+	self:MoveWatchFrame();	
 end
 
 E:RegisterModule(B:GetName());
