@@ -251,11 +251,7 @@ function UF:GetAuraAnchorFrame(frame, attachTo, isConflict)
 	if isConflict or attachTo == 'FRAME' then
 		return frame
 	elseif attachTo == 'TRINKET' then
-		if select(2, IsInInstance()) == "arena" then
-			return frame.Trinket
-		else
-			return frame.PVPSpecIcon
-		end	
+		return frame.Trinket
 	elseif attachTo == 'BUFFS' then
 		return frame.Buffs
 	elseif attachTo == 'DEBUFFS' then

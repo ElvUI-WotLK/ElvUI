@@ -149,14 +149,14 @@ function RB:UpdateReminder(event, unit)
 			--	button.t:SetAlpha(0.3);
 				button:SetScript('OnUpdate', nil);
 				button.timer:SetText(nil);
-				--CooldownFrame_SetTimer(button.cd, 0, 0, 0);
+				CooldownFrame_SetTimer(button.cd, 0, 0, 0);
 			else
 				button.t:SetAlpha(1)
 				CooldownFrame_SetTimer(button.cd, expirationTime - duration, duration, 1);
 				button:SetScript('OnUpdate', self.UpdateReminderTime);
 			end
 		else
-			--CooldownFrame_SetTimer(button.cd, 0, 0, 0);
+			CooldownFrame_SetTimer(button.cd, 0, 0, 0);
 			button.t:SetAlpha(0.3);
 			button:SetScript('OnUpdate', nil);
 			button.timer:SetText(nil);

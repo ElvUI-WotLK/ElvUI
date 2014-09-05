@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...));
 local UF = E:GetModule('UnitFrames');
 
 local random, floor, ceil = math.random, math.floor, math.ceil
@@ -7,17 +7,20 @@ local format = string.format
 local LSM = LibStub("LibSharedMedia-3.0");
 
 function UF:SpawnMenu()
-	local unit = E:StringTitle(self.unit)
-	if self.unit:find("targettarget") then return; end
-	if _G[unit.."FrameDropDown"] then
-		ToggleDropDownMenu(1, nil, _G[unit.."FrameDropDown"], "cursor")
-	elseif (self.unit:match("party")) then
-		ToggleDropDownMenu(1, nil, _G["PartyMemberFrame"..self.id.."DropDown"], "cursor")
+	local unit = E:StringTitle(self.unit);
+	if(self.unit:find('targettarget')) then
+		return;
+	end
+	
+	if(_G[unit..'FrameDropDown']) then
+		ToggleDropDownMenu(1, nil, _G[unit..'FrameDropDown'], 'cursor');
+	elseif (self.unit:match('party')) then
+		ToggleDropDownMenu(1, nil, _G['PartyMemberFrame'..self.id..'DropDown'], 'cursor');
 	else
-		FriendsDropDown.unit = self.unit
-		FriendsDropDown.id = self.id
-		FriendsDropDown.initialize = RaidFrameDropDown_Initialize
-		ToggleDropDownMenu(1, nil, FriendsDropDown, "cursor")
+		FriendsDropDown.unit = self.unit;
+		FriendsDropDown.id = self.id;
+		FriendsDropDown.initialize = RaidFrameDropDown_Initialize;
+		ToggleDropDownMenu(1, nil, FriendsDropDown, 'cursor');
 	end
 end
 
@@ -416,29 +419,30 @@ function UF:UpdateAuraWatch(frame)
 					icon.count = icon:CreateFontString(nil, "OVERLAY");
 				end
 				
-				icon.count:ClearAllPoints()
-				if icon.displayText then
-					local point, anchorPoint, x, y = unpack(textCounterOffsets[buffs[i].point])
-					icon.count:SetPoint(point, icon.text, anchorPoint, x, y)
+				icon.count:ClearAllPoints();
+				if(icon.displayText) then
+					local point, anchorPoint, x, y = unpack(textCounterOffsets[buffs[i].point]);
+					icon.count:SetPoint(point, icon.text, anchorPoint, x, y);
 				else
 					icon.count:SetPoint("CENTER", unpack(counterOffsets[buffs[i].point]));
 				end
 				
 				icon.count:FontTemplate(unitframeFont, db.fontSize, 'OUTLINE');
 				icon.text:FontTemplate(unitframeFont, db.fontSize, 'OUTLINE');
-				icon.text:ClearAllPoints()
-				icon.text:SetPoint(buffs[i].point, icon, buffs[i].point)
+				icon.text:ClearAllPoints();
+				icon.text:SetPoint(buffs[i].point, icon, buffs[i].point);
 				
-				if buffs[i].enabled then
+				if(buffs[i].enabled) then
 					auras.icons[buffs[i].id] = icon;
 					if auras.watched then
 						auras.watched[buffs[i].id] = icon;
 					end
 				else	
 					auras.icons[buffs[i].id] = nil;
-					if auras.watched then
+					if(auras.watched) then
 						auras.watched[buffs[i].id] = nil;
 					end
+					
 					icon:Hide();
 					icon = nil;
 				end
@@ -446,46 +450,48 @@ function UF:UpdateAuraWatch(frame)
 		end
 	end
 	
-	if frame.AuraWatch.Update then
-		frame.AuraWatch.Update(frame)
+	if(frame.AuraWatch.Update) then
+		frame.AuraWatch.Update(frame);
 	end
-		
+	
 	buffs = nil;
 end
 
 function UF:Construct_RoleIcon(frame)
-	local f = CreateFrame('Frame', nil, frame)
+	local f = CreateFrame('Frame', nil, frame);
 	
-	local tex = f:CreateTexture(nil, "ARTWORK")
-	tex:Size(17)
-	tex:Point("BOTTOM", frame.Health, "BOTTOM", 0, 2)
+	local tex = f:CreateTexture(nil, 'ARTWORK');
+	tex:Size(17);
+	tex:Point('BOTTOM', frame.Health, 'BOTTOM', 0, 2);
 	
-	return tex
+	return tex;
 end
 
 function UF:RaidRoleUpdate()
 	local anchor = self:GetParent();
 	local Leader = anchor:GetParent().Leader;
 	local MasterLooter = anchor:GetParent().MasterLooter;
-
-	if not Leader or not MasterLooter then return; end
-
-	local unit = anchor:GetParent().unit
-	local db = anchor:GetParent().db
-	local isLeader = Leader:IsShown()
-	local isMasterLooter = MasterLooter:IsShown()
+	
+	if(not Leader or not MasterLooter) then
+		return;
+	end
+	
+	local unit = anchor:GetParent().unit;
+	local db = anchor:GetParent().db;
+	local isLeader = Leader:IsShown();
+	local isMasterLooter = MasterLooter:IsShown();
 	
 	Leader:ClearAllPoints();
 	MasterLooter:ClearAllPoints();
 	
-	if((db) and (db.raidRoleIcons)) then
-		if((isLeader) and (db.raidRoleIcons.position == 'TOPLEFT')) then
+	if(db and db.raidRoleIcons) then
+		if(isLeader and db.raidRoleIcons.position == 'TOPLEFT') then
 			Leader:Point('LEFT', anchor, 'LEFT');
 			MasterLooter:Point('RIGHT', anchor, 'RIGHT');
-		elseif((isLeader) and (db.raidRoleIcons.position == 'TOPRIGHT')) then
+		elseif(isLeader and db.raidRoleIcons.position == 'TOPRIGHT') then
 			Leader:Point('RIGHT', anchor, 'RIGHT');
 			MasterLooter:Point('LEFT', anchor, 'LEFT');
-		elseif((isMasterLooter) and (db.raidRoleIcons.position == 'TOPLEFT')) then
+		elseif(isMasterLooter and db.raidRoleIcons.position == 'TOPLEFT') then
 			MasterLooter:Point('LEFT', anchor, 'LEFT');
 		else
 			MasterLooter:Point('RIGHT', anchor, 'RIGHT');
