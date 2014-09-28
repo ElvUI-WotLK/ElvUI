@@ -1,52 +1,32 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local S = E:GetModule('Skins')
+local S = E:GetModule('Skins');
 
-local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.barber ~= true then return end
-	local buttons = {
-		"BarberShopFrameOkayButton",
-		"BarberShopFrameCancelButton",
-		"BarberShopFrameResetButton",
-	}
-	BarberShopFrameOkayButton:Point("RIGHT", BarberShopFrameSelector4, "BOTTOM", 2, -50)
-	
-	for i = 1, #buttons do
-		_G[buttons[i]]:StripTextures()
-		S:HandleButton(_G[buttons[i]])
+S:RegisterSkin('Blizzard_BarbershopUI', function()
+	if(E.private.skins.blizzard.enable ~= true
+		or E.private.skins.blizzard.barber ~= true)
+	then
+		return;
 	end
 	
+	BarberShopFrame:CreateBackdrop('Transparent');
+	BarberShopFrame.backdrop:Point('TOPLEFT', 44, -70);
+	BarberShopFrame.backdrop:Point('BOTTOMRIGHT', -38, 42);
+	
+	BarberShopFrameBackground:Kill();
+	
+	local selectorPrev, selectorNext;
 	for i = 1, 4 do
-		local f = _G["BarberShopFrameSelector"..i]
-		local f2 = _G["BarberShopFrameSelector"..i-1]
-		S:HandleNextPrevButton(_G["BarberShopFrameSelector"..i.."Prev"])
-		S:HandleNextPrevButton(_G["BarberShopFrameSelector"..i.."Next"])
+		selectorPrev = _G['BarberShopFrameSelector'..i..'Prev'];
+		selectorNext = _G['BarberShopFrameSelector'..i..'Next'];
 		
-		if i ~= 1 then
-			f:ClearAllPoints()
-			f:Point("TOP", f2, "BOTTOM", 0, -3)			
-		end
-		
-		if f then
-			f:StripTextures()
-		end
+		S:HandleNextPrevButton(selectorPrev, 'Left');
+		S:HandleNextPrevButton(selectorNext, 'Right');
 	end
 	
-	BarberShopFrameSelector1:ClearAllPoints()
-	BarberShopFrameSelector1:Point("TOP", 0, -12)
+	BarberShopFrameMoneyFrame:StripTextures();
+	BarberShopFrameMoneyFrame:CreateBackdrop();
 	
-	BarberShopFrameResetButton:ClearAllPoints()
-	BarberShopFrameResetButton:Point("BOTTOM", 0, 12)
-
-	BarberShopFrame:StripTextures()
-	BarberShopFrame:SetTemplate("Transparent")
-	BarberShopFrame:Size(BarberShopFrame:GetWidth() - 30, BarberShopFrame:GetHeight() - 56)
-	
-	BarberShopFrameMoneyFrame:StripTextures()
-	BarberShopFrameMoneyFrame:CreateBackdrop()
-	BarberShopFrameBackground:Kill()
-	
-	BarberShopBannerFrameBGTexture:Kill()
-	BarberShopBannerFrame:Kill()
-end
-
-S:RegisterSkin("Blizzard_BarbershopUI", LoadSkin)
+	S:HandleButton(BarberShopFrameOkayButton);
+	S:HandleButton(BarberShopFrameCancelButton);
+	S:HandleButton(BarberShopFrameResetButton);
+end);

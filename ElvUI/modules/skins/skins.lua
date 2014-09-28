@@ -10,6 +10,23 @@ S.EmbeddableAddons = {
 	['Omen'] = true,
 }
 
+S.SQUARE_BUTTON_TEXCOORDS = {
+	["UP"] = {     0.45312500,    0.64062500,     0.01562500,     0.20312500};
+	["DOWN"] = {   0.45312500,    0.64062500,     0.20312500,     0.01562500};
+	["LEFT"] = {   0.23437500,    0.42187500,     0.01562500,     0.20312500};
+	["RIGHT"] = {  0.42187500,    0.23437500,     0.01562500,     0.20312500};
+	["DELETE"] = { 0.01562500,    0.20312500,     0.01562500,     0.20312500};
+};
+
+local find = string.find
+
+function S:SquareButton_SetIcon(self, name)
+	local coords = S.SQUARE_BUTTON_TEXCOORDS[strupper(name)];
+	if (coords) then
+		self.icon:SetTexCoord(coords[1], coords[2], coords[3], coords[4]);
+	end
+end
+
 local function SetModifiedBackdrop(self)
 	if self.backdrop then self = self.backdrop end
 	self:SetBackdropBorderColor(unpack(E["media"].rgbvaluecolor))	
@@ -21,19 +38,28 @@ local function SetOriginalBackdrop(self)
 end
 
 function S:HandleButton(f, strip)
-	if f.Left then f.Left:SetAlpha(0) end
-	if f.Middle then f.Middle:SetAlpha(0) end
-	if f.Right then f.Right:SetAlpha(0) end
+	local name = f:GetName();
+	
+	if(name) then
+		local left = _G[name..'Left'];
+		local middle = _G[name..'Middle'];
+		local right = _G[name..'Right'];
+		
+		if(left) then left:Kill(); end
+		if(middle) then middle:Kill(); end
+		if(right) then right:Kill(); end
+	end
+	
+	if(f.Left) then f.Left:Kill(); end
+	if(f.Middle) then f.Middle:Kill(); end
+	if(f.Right) then f.Right:Kill(); end
 	
 	if f.SetNormalTexture then f:SetNormalTexture("") end
-	
 	if f.SetHighlightTexture then f:SetHighlightTexture("") end
-	
 	if f.SetPushedTexture then f:SetPushedTexture("") end
-	
 	if f.SetDisabledTexture then f:SetDisabledTexture("") end
 	
-	if strip then f:StripTextures(true) end
+	--if strip then f:StripTextures(true) end
 	
 	f:SetTemplate("Default", true)
 	f:HookScript("OnEnter", SetModifiedBackdrop)
@@ -41,8 +67,6 @@ function S:HandleButton(f, strip)
 end
 
 function S:HandleScrollBar(frame, thumbTrim)
-	local buttonColor = E.PixelMode and {0.31, 0.31, 0.31} or E.media.bordercolor
-	
 	if _G[frame:GetName().."BG"] then _G[frame:GetName().."BG"]:SetTexture(nil) end
 	if _G[frame:GetName().."Track"] then _G[frame:GetName().."Track"]:SetTexture(nil) end
 	
@@ -60,41 +84,18 @@ function S:HandleScrollBar(frame, thumbTrim)
 
 	if _G[frame:GetName().."ScrollUpButton"] and _G[frame:GetName().."ScrollDownButton"] then
 		_G[frame:GetName().."ScrollUpButton"]:StripTextures()
-		_G[frame:GetName().."ScrollUpButton"]:SetTemplate("Default", true)
-		if not _G[frame:GetName().."ScrollUpButton"].texture then
-			_G[frame:GetName().."ScrollUpButton"].texture = _G[frame:GetName().."ScrollUpButton"]:CreateTexture(nil, 'OVERLAY')
-			_G[frame:GetName().."ScrollUpButton"].texture:SetInside()
-			_G[frame:GetName().."ScrollUpButton"].texture:SetTexture([[Interface\AddOns\ElvUI\media\textures\arrowup.tga]])
-			_G[frame:GetName().."ScrollUpButton"].texture:SetVertexColor(unpack(buttonColor))
+		if not _G[frame:GetName().."ScrollUpButton"].icon then
+			S:HandleNextPrevButton(_G[frame:GetName().."ScrollUpButton"])
+			S:SquareButton_SetIcon(_G[frame:GetName().."ScrollUpButton"], 'UP')
+			_G[frame:GetName().."ScrollUpButton"]:Size(_G[frame:GetName().."ScrollUpButton"]:GetWidth() + 7, _G[frame:GetName().."ScrollUpButton"]:GetHeight() + 7)	
 		end
-		_G[frame:GetName().."ScrollUpButton"]:HookScript('OnEnter', function(self)
-			SetModifiedBackdrop(self)
-			self.texture:SetVertexColor(unpack(E["media"].rgbvaluecolor))			
-		end)	
-		_G[frame:GetName().."ScrollUpButton"]:HookScript('OnLeave', function(self)
-			SetOriginalBackdrop(self)
-			self.texture:SetVertexColor(unpack(buttonColor))	
-		end)		
 		
 		_G[frame:GetName().."ScrollDownButton"]:StripTextures()
-		_G[frame:GetName().."ScrollDownButton"]:SetTemplate("Default", true)
-		_G[frame:GetName().."ScrollDownButton"]:HookScript('OnEnter', SetModifiedBackdrop)
-		_G[frame:GetName().."ScrollDownButton"]:HookScript('OnLeave', SetOriginalBackdrop)		
-		if not _G[frame:GetName().."ScrollDownButton"].texture then
-			_G[frame:GetName().."ScrollDownButton"].texture = _G[frame:GetName().."ScrollDownButton"]:CreateTexture(nil, 'OVERLAY')
-			_G[frame:GetName().."ScrollDownButton"].texture:SetInside()
-			_G[frame:GetName().."ScrollDownButton"].texture:SetTexture([[Interface\AddOns\ElvUI\media\textures\arrowdown.tga]])
-			_G[frame:GetName().."ScrollDownButton"].texture:SetVertexColor(unpack(buttonColor))
-		end
-		
-		_G[frame:GetName().."ScrollDownButton"]:HookScript('OnEnter', function(self)
-			SetModifiedBackdrop(self)
-			self.texture:SetVertexColor(unpack(E["media"].rgbvaluecolor))			
-		end)	
-		_G[frame:GetName().."ScrollDownButton"]:HookScript('OnLeave', function(self)
-			SetOriginalBackdrop(self)
-			self.texture:SetVertexColor(unpack(buttonColor))	
-		end)				
+		if not _G[frame:GetName().."ScrollDownButton"].icon then
+			S:HandleNextPrevButton(_G[frame:GetName().."ScrollDownButton"])
+			S:SquareButton_SetIcon(_G[frame:GetName().."ScrollDownButton"], 'DOWN')
+			_G[frame:GetName().."ScrollDownButton"]:Size(_G[frame:GetName().."ScrollDownButton"]:GetWidth() + 7, _G[frame:GetName().."ScrollDownButton"]:GetHeight() + 7)	
+		end		
 		
 		if not frame.trackbg then
 			frame.trackbg = CreateFrame("Frame", nil, frame)
@@ -116,7 +117,7 @@ function S:HandleScrollBar(frame, thumbTrim)
 				end
 			end
 		end	
-	end	
+	end		
 end
 
 local tabs = {
@@ -150,70 +151,64 @@ function S:HandleTab(tab)
 	tab.backdrop:Point("BOTTOMRIGHT", -10, 3)
 end
 
-function S:HandleNextPrevButton(btn, horizonal)
+function S:HandleNextPrevButton(btn, buttonOverride)
 	local norm, pushed, disabled
-	if btn:GetNormalTexture() then
-		norm = btn:GetNormalTexture():GetTexture()
-	end
-
-	if btn:GetPushedTexture() then
-		pushed = btn:GetPushedTexture():GetTexture()
-	end
-	
-	if btn:GetDisabledTexture() then
-		disabled = btn:GetDisabledTexture():GetTexture()
-	end	
+	local inverseDirection = btn:GetName() and (find(btn:GetName():lower(), 'left') or find(btn:GetName():lower(), 'prev'))
 	
 	btn:StripTextures()
+	btn:SetNormalTexture(nil)
+	btn:SetPushedTexture(nil)
+	btn:SetHighlightTexture(nil)
+	btn:SetDisabledTexture(nil)
 
-	if not norm then
-		norm = "Interface\\Buttons\\UI-SpellbookIcon-NextPage-Up"
+	if not btn.icon then
+		btn.icon = btn:CreateTexture(nil, 'ARTWORK')
+		btn.icon:Size(13)
+		btn.icon:SetPoint('CENTER')
+		btn.icon:SetTexture([[Interface\AddOns\ElvUI\media\textures\SquareButtonTextures.blp]])
+		btn.icon:SetTexCoord(0.01562500, 0.20312500, 0.01562500, 0.20312500)
+		
+		btn:SetScript('OnMouseDown', function(self)
+			if self:IsEnabled() then
+				self.icon:SetPoint("CENTER", -1, -1);
+			end		
+		end)
+		
+		btn:SetScript('OnMouseUp', function(self)
+			self.icon:SetPoint("CENTER", 0, 0);
+		end)
+		
+		btn:SetScript('OnDisable', function(self)
+			SetDesaturation(self.icon, true);
+			self.icon:SetAlpha(0.5);		
+		end)
+		
+		btn:SetScript('OnEnable', function(self)
+			SetDesaturation(self.icon, false);
+			self.icon:SetAlpha(1.0);		
+		end)
+		
+		if not btn:IsEnabled() then
+			btn:GetScript('OnDisable')(btn)
+		end
 	end
 
-	if not pushed then
-		pushed = "Interface\\Buttons\\UI-SpellbookIcon-NextPage-Down"
-	end
-	
-	if not disabled then
-		disabled = "Interface\\Buttons\\UI-SpellbookIcon-NextPage-Disabled"
-	end	
-	
-	btn:SetNormalTexture(norm)
-	btn:SetPushedTexture(pushed)
-	btn:SetDisabledTexture(disabled)
-	
-	btn:SetTemplate("Default")
-	btn:Size(btn:GetWidth() - 7, btn:GetHeight() - 7)	
-	
-	if norm and pushed and disabled then
-		if horizonal then
-			btn:GetNormalTexture():SetTexCoord(0.3, 0.29, 0.3, 0.72, 0.65, 0.29, 0.65, 0.72)
-			btn:GetPushedTexture():SetTexCoord(0.3, 0.35, 0.3, 0.8, 0.65, 0.35, 0.65, 0.8)
-			btn:GetDisabledTexture():SetTexCoord(0.3, 0.29, 0.3, 0.75, 0.65, 0.29, 0.65, 0.75)	
+	if buttonOverride then
+		if inverseDirection then
+			S:SquareButton_SetIcon(btn, 'UP')
 		else
-			btn:GetNormalTexture():SetTexCoord(0.3, 0.29, 0.3, 0.81, 0.65, 0.29, 0.65, 0.81)
-			
-			if btn:GetPushedTexture() then
-				btn:GetPushedTexture():SetTexCoord(0.3, 0.35, 0.3, 0.81, 0.65, 0.35, 0.65, 0.81)
-			end
-			if btn:GetDisabledTexture() then
-				btn:GetDisabledTexture():SetTexCoord(0.3, 0.29, 0.3, 0.75, 0.65, 0.29, 0.65, 0.75)
-			end
+			S:SquareButton_SetIcon(btn, 'DOWN')
 		end
-		
-		btn:GetNormalTexture():ClearAllPoints()
-		btn:GetNormalTexture():SetInside()
-		if btn:GetDisabledTexture() then
-			btn:GetDisabledTexture():SetAllPoints(btn:GetNormalTexture())
-		end
-		
-		if btn:GetPushedTexture() then
-			btn:GetPushedTexture():SetAllPoints(btn:GetNormalTexture())
-		end
-		
-		btn:GetHighlightTexture():SetTexture(1, 1, 1, 0.3)
-		btn:GetHighlightTexture():SetAllPoints(btn:GetNormalTexture())
+	else
+		if inverseDirection then
+			S:SquareButton_SetIcon(btn, 'LEFT')
+		else
+			S:SquareButton_SetIcon(btn, 'RIGHT')
+		end	
 	end
+	
+	S:HandleButton(btn)
+	btn:Size(btn:GetWidth() - 7, btn:GetHeight() - 7)
 end
 
 function S:HandleRotateButton(btn)
@@ -256,12 +251,17 @@ function S:HandleDropDownBox(frame, width)
 	
 	button:ClearAllPoints()
 	button:Point("RIGHT", frame, "RIGHT", -10, 3)
-	button.SetPoint = E.noop
+	hooksecurefunc(button, "SetPoint", function(self, point, attachTo, anchorPoint, xOffset, yOffset, noReset)
+		if not noReset then
+			button:ClearAllPoints()
+			button:SetPoint("RIGHT", frame, "RIGHT", -10, 3, true)		
+		end
+	end)
 	
 	self:HandleNextPrevButton(button, true)
 	
 	frame:CreateBackdrop("Default")
-	frame.backdrop:Point("TOPLEFT", 20, -3)
+	frame.backdrop:Point("TOPLEFT", 20, -2)
 	frame.backdrop:Point("BOTTOMRIGHT", button, "BOTTOMRIGHT", 2, -2)
 end
 

@@ -1,18 +1,26 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local S = E:GetModule('Skins')
+local S = E:GetModule('Skins');
 
-local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.dressingroom ~= true then return end
-	DressUpFrame:StripTextures(true)
-	DressUpFrame:CreateBackdrop("Transparent")
-	DressUpFrame.backdrop:Point("TOPLEFT", 10, -12)
-	DressUpFrame.backdrop:Point("BOTTOMRIGHT", -33, 73)
+S:RegisterSkin('ElvUI', function()
+	if(E.private.skins.blizzard.enable ~= true
+		or E.private.skins.blizzard.dressingroom ~= true)
+	then
+		return;
+	end
 	
-	S:HandleButton(DressUpFrameResetButton)
-	S:HandleButton(DressUpFrameCancelButton)
-	S:HandleCloseButton(DressUpFrameCloseButton, DressUpFrame.backdrop)
+	DressUpFrame:CreateBackdrop('Transparent');
+	DressUpFrame.backdrop:Point('TOPLEFT', 10, -12);
+	DressUpFrame.backdrop:Point('BOTTOMRIGHT', -33, 73);
 	
-	DressUpFrameResetButton:Point("RIGHT", DressUpFrameCancelButton, "LEFT", -2, 0)
-end
-
-S:RegisterSkin('ElvUI', LoadSkin)
+	DressUpFrame:StripTextures(true);
+	
+	S:HandleCloseButton(DressUpFrameCloseButton);
+	
+	S:HandleRotateButton(DressUpModelRotateLeftButton);
+	DressUpModelRotateRightButton:SetPoint('TOPLEFT', DressUpModelRotateLeftButton, 'TOPRIGHT', 3, 0);
+	S:HandleRotateButton(DressUpModelRotateRightButton);
+	
+	S:HandleButton(DressUpFrameCancelButton);
+	DressUpFrameResetButton:SetPoint('RIGHT', DressUpFrameCancelButton, 'LEFT', -3, 0);
+	S:HandleButton(DressUpFrameResetButton);
+end);

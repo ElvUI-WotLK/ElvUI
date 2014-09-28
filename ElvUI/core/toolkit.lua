@@ -81,24 +81,21 @@ local function SetTemplate(f, t, glossTex, ignoreUpdates)
 	f.glossTex = glossTex;
 	f.ignoreUpdates = ignoreUpdates;
 	
-	local texture;
-	
-	if glossTex then
-		texture = E["media"].glossTex;
-	else
-		texture = E["media"].blankTex;
+	local bgFile = E.media.blankTex;
+	if(glossTex) then
+		bgFile = E.media.glossTex;
 	end
 	
 	if E.private.general.pixelPerfect then
 		f:SetBackdrop({
-		  bgFile = texture, 
+		  bgFile = bgFile, 
 		  edgeFile = E["media"].blankTex, 
 		  tile = false, tileSize = 0, edgeSize = E.mult, 
 		  insets = { left = 0, right = 0, top = 0, bottom = 0}
 		})	
 	else
 		f:SetBackdrop({
-		  bgFile = texture, 
+		  bgFile = bgFile, 
 		  edgeFile = E["media"].blankTex, 
 		  tile = false, tileSize = 0, edgeSize = E.mult, 
 		  insets = { left = -E.mult, right = -E.mult, top = -E.mult, bottom = -E.mult}

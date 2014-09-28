@@ -66,11 +66,11 @@ local function ChatButton_OnEnter(self, ...)
 	end
 
 	if self == LeftChatToggleButton then
-		GameTooltip:SetOwner(self, 'ANCHOR_TOPLEFT', 0, 4)
+		GameTooltip:SetOwner(self, 'ANCHOR_TOPLEFT', 0, (E.PixelMode and 1 or 3))
 		GameTooltip:ClearLines()
 		GameTooltip:AddDoubleLine(L['Left Click:'], L['Toggle Chat Frame'], 1, 1, 1)
 	else
-		GameTooltip:SetOwner(self, 'ANCHOR_TOPRIGHT', 0, 4)
+		GameTooltip:SetOwner(self, 'ANCHOR_TOPRIGHT', 0, (E.PixelMode and 1 or 3))
 		GameTooltip:ClearLines()
 		GameTooltip:AddDoubleLine(L['Left Click:'], L['Toggle Chat Frame'], 1, 1, 1)
 		GameTooltip:AddDoubleLine(L['Right Click:'], L['Toggle Embedded Addon'], 1, 1, 1)
