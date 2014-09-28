@@ -412,6 +412,70 @@ end
 frame_metatable.__index.ColorGradient = ColorGradient
 oUF.ColorGradient = ColorGradient
 
+local secureDropdown
+local InitializeSecureMenu = function(self)
+	local unit = self.unit;
+	if( not unit ) then return end
+
+	local unitType = string.match(unit, "^([a-z]+)[0-9]+$") or unit;
+
+	-- Mimic the default UI and prefer the relevant units menu when possible
+	local menu;
+	if( unitType == "party" ) then
+		menu = "PARTY";
+	elseif( unitType == "boss" ) then
+		menu = "BOSS";
+	elseif( unitType == "focus" ) then
+		menu = "FOCUS";
+	elseif( unitType == "arenapet" or unitType == "arena" ) then
+		menu = "ARENAENEMY";
+	-- Then try and detect the unit type and show the most relevant menu we can find
+	elseif( UnitIsUnit(unit, "player") ) then
+		menu = "SELF";
+	elseif( UnitIsUnit(unit, "vehicle") ) then
+		menu = "VEHICLE";
+	elseif( UnitIsUnit(unit, "pet") ) then
+		menu = "PET";
+	elseif( UnitIsPlayer(unit) ) then
+		if( UnitInRaid(unit) ) then
+			menu = "RAID_PLAYER";
+		elseif( UnitInParty(unit) ) then
+			menu = "PARTY";
+		else
+			menu = "PLAYER";
+		end
+	elseif( UnitIsUnit(unit, "target") ) then
+		menu = "TARGET";
+	end
+
+	if( menu ) then
+		UnitPopup_ShowMenu(self, menu, unit);
+	end
+end
+
+local togglemenu = function(self, unit, button)
+	-- Load the dropdown
+	if( not secureDropdown ) then
+		secureDropdown = CreateFrame("Frame", "SecureTemplatesDropdown", nil, "UIDropDownMenuTemplate");
+		secureDropdown:SetID(1);
+
+		table.insert(UnitPopupFrames, secureDropdown:GetName());
+		UIDropDownMenu_Initialize(secureDropdown, InitializeSecureMenu, "MENU");
+	end
+
+	-- Since we use one dropdown menu for all secure menu actions, if we open a menu on A then click B
+	-- it will close the menu rather than closing A and opening it on B.
+	-- This fixes that so it opens it on B while still preserving toggling to close.
+	if( secureDropdown.openedFor and secureDropdown.openedFor ~= self ) then
+		CloseDropDownMenus();
+	end
+
+	secureDropdown.unit = string.lower(unit);
+	secureDropdown.openedFor = self;
+
+	ToggleDropDownMenu(1, nil, secureDropdown, "cursor");
+end
+
 local initObject = function(unit, style, styleFunc, ...)
 	local num = select('#', ...)
 	for i=1, num do
@@ -432,6 +496,8 @@ local initObject = function(unit, style, styleFunc, ...)
 			
 		-- Run it before the style function so they can override it.
 		object:SetAttribute("*type1", "target")
+		object.menu = togglemenu
+		object:SetAttribute("*type2", "menu")
 		object.style = style
 
 		if(num > 1) then

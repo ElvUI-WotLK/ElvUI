@@ -137,7 +137,7 @@ function UF:OnCastUpdate(elapsed)
 					self.Time:SetText(('%.1f |cffaf5050%.1f|r'):format(abs(duration - self.max), self.delay));
 				elseif(db.castbar.format == 'CURRENTMAX') then
 					self.Time:SetText(('%.1f / %.1f |cffaf5050%.1f|r'):format(duration, self.max, self.delay));
-				elseif(db.CastBar.format == 'REMAINING') then
+				elseif(db.castbar.format == 'REMAINING') then
 					self.Time:SetText(('%.1f |cffaf5050%.1f|r'):format(duration, self.delay));
 				end
 			else

@@ -182,10 +182,7 @@ end
 
 function UF:Construct_UF(frame, unit)
 	frame:SetScript('OnEnter', UnitFrame_OnEnter)
-	frame:SetScript('OnLeave', UnitFrame_OnLeave)	
-	
-	frame.menu = self.SpawnMenu
-	frame:SetAttribute("*type2", "menu")
+	frame:SetScript('OnLeave', UnitFrame_OnLeave)
 	
 	frame:SetFrameLevel(5)
 	

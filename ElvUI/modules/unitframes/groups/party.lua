@@ -9,9 +9,6 @@ function UF:Construct_PartyFrames(unitGroup)
 	self:SetScript('OnEnter', UnitFrame_OnEnter)
 	self:SetScript('OnLeave', UnitFrame_OnLeave)
 	
-	self:SetAttribute('type2', 'menu')
-	self.menu = UF.SpawnMenu
-	
 	self.RaisedElementParent = CreateFrame('Frame', nil, self)
 	self.RaisedElementParent:SetFrameStrata("MEDIUM")
 	self.RaisedElementParent:SetFrameLevel(self:GetFrameLevel() + 10)
