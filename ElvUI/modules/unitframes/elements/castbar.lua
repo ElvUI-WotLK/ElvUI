@@ -16,7 +16,6 @@ function UF:Construct_Castbar(self, direction, moverName)
 	castbar.PostCastStart = UF.PostCastStart
 	castbar.PostChannelStart = UF.PostCastStart
 	castbar.PostCastStop = UF.PostCastStop;
-	castbar.PostChannelStop = UF.PostChannelStop;
 	castbar.PostChannelUpdate = UF.PostChannelUpdate;
 	castbar.PostCastFailed = UF.PostCastFailed;
 	castbar.PostCastInterrupted = UF.PostCastFailed;
@@ -89,10 +88,12 @@ function UF:OnCastUpdate(elapsed)
 	
 	if(self.casting) then
 		local duration = self.duration + elapsed;
-		
 		if(duration >= self.max) then
-			self.casting = nil;
+			self:SetValue(self.max);
 			
+			self.holdTime = 0;
+			self.fadeOut = 1;
+			self.casting = nil;
 			return;
 		end
 		
@@ -124,10 +125,10 @@ function UF:OnCastUpdate(elapsed)
 		end
 	elseif(self.channeling) then
 		local duration = self.duration - elapsed
-
 		if(duration <= 0) then
+			self.fadeOut = 1
 			self.channeling = nil
-			
+			self.holdTime = 0
 			return;
 		end
 		
@@ -155,20 +156,18 @@ function UF:OnCastUpdate(elapsed)
 		self.duration = duration;
 		self:SetValue(duration);
 		
-		if (self.Spark) then
+		if(self.Spark) then
 			self.Spark:SetPoint('CENTER', self, 'LEFT', (duration / self.max) * self:GetWidth(), 0);
 		end
-	elseif(self.fadeOut) then
-		if(self.Spark) then
-			self.Spark:Hide();
-		end
-		
-		local alpha = self:GetAlpha() - CASTING_BAR_ALPHA_STEP;
-		
-		if(alpha > 0) then
+	elseif(GetTime() < self.holdTime) then
+		return;
+	elseif (self.fadeOut) then
+		local alpha = self:GetAlpha() - CASTING_BAR_ALPHA_STEP
+		if(alpha > 0.05) then
 			self:SetAlpha(alpha);
 		else
 			self.fadeOut = nil;
+			if(self.Spark) then self.Spark:Hide(); end
 			self:Hide();
 		end
 	end
@@ -181,8 +180,7 @@ function UF:HideTicks()
 	end		
 end
 
-function UF:SetCastTicks(frame, numTicks, extraTickRatio)
-	extraTickRatio = extraTickRatio or 0;
+function UF:SetCastTicks(frame, numTicks)
 	UF:HideTicks();
 	
 	if(numTicks and numTicks <= 0) then
@@ -190,7 +188,7 @@ function UF:SetCastTicks(frame, numTicks, extraTickRatio)
 	end;
 	
 	local w = frame:GetWidth();
-	local d = w / (numTicks + extraTickRatio);
+	local d = w / numTicks;
 	
 	for i = 1, numTicks do
 		if(not ticks[i]) then
@@ -209,8 +207,7 @@ end
 
 function UF:PostCastStart(unit, name, rank, castid)
 	local db = self:GetParent().db;
-	
-	if not db or not db.castbar then
+	if(not db or not db.castbar) then
 		return;
 	end
 	
@@ -220,36 +217,31 @@ function UF:PostCastStart(unit, name, rank, castid)
 	
 	if(self.Spark and db.castbar.spark) then
 		self.Spark:Show();
+		self.Spark:Height(self:GetHeight() * 2);
 	end
-	
-	self:SetAlpha(1)
 	
 	if(db.castbar.displayTarget and self.curTarget) then
-		self.Text:SetText(name..' --> '..self.curTarget)
+		self.Text:SetText(name..' --> '..self.curTarget);
 	else
-		self.Text:SetText(name)
+		self.Text:SetText(name);
 	end
 	
-	self.Spark:Height(self:GetHeight() * 2);
-	
-	self.unit = unit
+	self.unit = unit;
 
 	if(db.castbar.ticks and unit == 'player') then
-		if E.global.unitframe.ChannelTicks[name] then
+		if(E.global.unitframe.ChannelTicks[name]) then
 			UF:SetCastTicks(self, E.global.unitframe.ChannelTicks[name])
 		else
-			UF:HideTicks()
+			UF:HideTicks();
 		end
 	elseif(unit == 'player') then
-		UF:HideTicks()
+		UF:HideTicks();
 	end
 	
-	local colors = ElvUF.colors
+	local colors = ElvUF.colors;
 	local r, g, b = colors.castColor[1], colors.castColor[2], colors.castColor[3];
-	
 	if(UF.db.colors.castClassColor) then
 		local t;
-		
 		if(UnitIsPlayer(unit)) then
 			local _, Class = UnitClass(unit);
 			t = ElvUF.colors.class[Class];
@@ -265,10 +257,7 @@ function UF:PostCastStart(unit, name, rank, castid)
 	if(self.interrupt and unit ~= 'player' and UnitCanAttack('player', unit)) then
 		r, g, b = colors.castNoInterrupt[1], colors.castNoInterrupt[2], colors.castNoInterrupt[3];
 	end
-	
 	self:SetStatusBarColor(r, g, b);
-	
-	self.fadeOut = nil;
 	
 	UF:ToggleTransparentStatusBar(UF.db.colors.transparentCastbar, self, self.bg, nil, true);
 	if(self.bg:IsShown() ) then
@@ -280,27 +269,21 @@ function UF:PostCastStart(unit, name, rank, castid)
 end
 
 function UF:PostCastStop(unit, name, rank, castid)
-	if(not self.fadeOut) then 
-		local colors = ElvUF.colors;
-		local r, g, b = colors.castCompleteColor[1], colors.castCompleteColor[2], colors.castCompleteColor[3];
-		
-		if(UF.db.colors.transparentCastbar and self.bg:IsShown()) then
-			local _, _, _, alpha = self.backdrop:GetBackdropColor();
-			self.backdrop:SetBackdropColor(r * 0.58, g * 0.58, b * 0.58, alpha);
-		else
-			self:SetStatusBarColor(r, g, b);
-		end
-		
-		self.fadeOut = 1;
-	end
+	if(self.isTradeSkill) then return; end
 	
-	self:SetValue(self.max);
-	self:Show();
+	local colors = ElvUF.colors;
+	local r, g, b = colors.castCompleteColor[1], colors.castCompleteColor[2], colors.castCompleteColor[3];
+	
+	if(UF.db.colors.transparentCastbar and self.bg:IsShown()) then
+		local _, _, _, alpha = self.backdrop:GetBackdropColor();
+		self.backdrop:SetBackdropColor(r * 0.58, g * 0.58, b * 0.58, alpha);
+	else
+		self:SetStatusBarColor(r, g, b);
+	end
 end
 
 function UF:PostChannelUpdate(unit, name)
 	local db = self:GetParent().db;
-	
 	if(not db) then
 		return;
 	end
@@ -320,16 +303,9 @@ function UF:PostChannelUpdate(unit, name)
 	end
 end
 
-function UF:PostChannelStop(unit, name, rank)
-	self.fadeOut = 1;
-	self:SetValue(0);
-	self:Show();
-end
-
 function UF:PostCastFailed(event, unit, name, rank, castid)
 	local colors = ElvUF.colors;
 	local r, g, b = colors.castFailColor[1], colors.castFailColor[2], colors.castFailColor[3];
-	
 	if(UF.db.colors.transparentCastbar and self.bg:IsShown()) then
 		local _, _, _, alpha = self.backdrop:GetBackdropColor();
 		self.backdrop:SetBackdropColor(r * 0.58, g * 0.58, b * 0.58, alpha);
@@ -338,12 +314,6 @@ function UF:PostCastFailed(event, unit, name, rank, castid)
 	end
 	
 	self:SetValue(self.max);
-	
-	if(not self.fadeOut) then
-		self.fadeOut = 1
-	end
-	
-	self:Show();
 end
 
 function UF:PostCastNotInterruptible(unit)
@@ -386,4 +356,6 @@ function UF:PostCastInterruptible(unit)
 		local _, _, _, alpha = self.backdrop:GetBackdropColor();
 		self.backdrop:SetBackdropColor(r * 0.58, g * 0.58, b * 0.58, alpha);
 	end
+	
+	self:SetValue(self.max);
 end
