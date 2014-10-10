@@ -52,7 +52,7 @@ local function Enable(self, unit)
 		masterlooter.ForceUpdate = ForceUpdate;
 
 		self:RegisterEvent('PARTY_LOOT_METHOD_CHANGED', Path, true);
-		self:RegisterEvent('GROUP_ROSTER_UPDATE', Path, true);
+		self:RegisterEvent('PARTY_MEMBERS_CHANGED', Path, true);
 
 		if(masterlooter:IsObjectType('Texture') and not masterlooter:GetTexture()) then
 			masterlooter:SetTexture([[Interface\GroupFrame\UI-Group-MasterLooter]]);
@@ -65,7 +65,7 @@ end
 local function Disable(self)
 	if(self.MasterLooter) then
 		self:UnregisterEvent('PARTY_LOOT_METHOD_CHANGED', Path);
-		self:UnregisterEvent('GROUP_ROSTER_UPDATE', Path);
+		self:UnregisterEvent('PARTY_MEMBERS_CHANGED', Path);
 	end
 end
 
