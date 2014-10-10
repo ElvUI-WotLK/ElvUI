@@ -2,8 +2,6 @@ local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, Private
 local _, ns = ...
 local ElvUF = ns.oUF
 assert(ElvUF, "ElvUI was unable to locate oUF.")
-local twipe = table.wipe
-local ceil, sqrt = math.ceil, math.sqrt
 ------------------------------------------------------------------------
 --	Tags
 ------------------------------------------------------------------------

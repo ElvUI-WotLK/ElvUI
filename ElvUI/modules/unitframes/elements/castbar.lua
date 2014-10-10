@@ -81,7 +81,6 @@ end
 
 function UF:OnCastUpdate(elapsed)
 	local db = self:GetParent().db;
-	
 	if(not db) then
 		return;
 	end
@@ -90,10 +89,14 @@ function UF:OnCastUpdate(elapsed)
 		local duration = self.duration + elapsed;
 		if(duration >= self.max) then
 			self:SetValue(self.max);
+			if(self.Spark) then
+				self.Spark:Hide();
+			end
 			
-			self.holdTime = 0;
 			self.fadeOut = 1;
 			self.casting = nil;
+			self.channeling = nil;
+			
 			return;
 		end
 		
@@ -124,11 +127,16 @@ function UF:OnCastUpdate(elapsed)
 			self.Spark:SetPoint('CENTER', self, 'LEFT', (duration / self.max) * self:GetWidth(), 0);
 		end
 	elseif(self.channeling) then
-		local duration = self.duration - elapsed
+		local duration = self.duration - elapsed;
 		if(duration <= 0) then
-			self.fadeOut = 1
-			self.channeling = nil
-			self.holdTime = 0
+			if(self.Spark) then
+				self.Spark:Hide();
+			end
+			
+			self.fadeOut = 1;
+			self.casting = nil;
+			self.channeling = nil;
+			
 			return;
 		end
 		
@@ -161,13 +169,12 @@ function UF:OnCastUpdate(elapsed)
 		end
 	elseif(GetTime() < self.holdTime) then
 		return;
-	elseif (self.fadeOut) then
-		local alpha = self:GetAlpha() - CASTING_BAR_ALPHA_STEP
-		if(alpha > 0.05) then
+	elseif(self.fadeOut) then
+		local alpha = self:GetAlpha() - CASTING_BAR_ALPHA_STEP;
+		if(alpha > 0) then
 			self:SetAlpha(alpha);
 		else
 			self.fadeOut = nil;
-			if(self.Spark) then self.Spark:Hide(); end
 			self:Hide();
 		end
 	end
@@ -312,8 +319,6 @@ function UF:PostCastFailed(event, unit, name, rank, castid)
 	else
 		self:SetStatusBarColor(r, g, b);
 	end
-	
-	self:SetValue(self.max);
 end
 
 function UF:PostCastNotInterruptible(unit)
@@ -356,6 +361,4 @@ function UF:PostCastInterruptible(unit)
 		local _, _, _, alpha = self.backdrop:GetBackdropColor();
 		self.backdrop:SetBackdropColor(r * 0.58, g * 0.58, b * 0.58, alpha);
 	end
-	
-	self:SetValue(self.max);
 end

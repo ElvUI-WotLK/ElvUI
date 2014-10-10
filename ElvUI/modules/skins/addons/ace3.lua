@@ -14,7 +14,6 @@ local function SetOriginalBackdrop(self)
 end
 
 local function SkinScrollBar(frame, thumbTrim)
-	local buttonColor = E.PixelMode and {0.31, 0.31, 0.31} or E.media.bordercolor
 	if _G[frame:GetName().."BG"] then _G[frame:GetName().."BG"]:SetTexture(nil) end
 	if _G[frame:GetName().."Track"] then _G[frame:GetName().."Track"]:SetTexture(nil) end
 	
@@ -26,41 +25,18 @@ local function SkinScrollBar(frame, thumbTrim)
 
 	if _G[frame:GetName().."ScrollUpButton"] and _G[frame:GetName().."ScrollDownButton"] then
 		_G[frame:GetName().."ScrollUpButton"]:StripTextures()
-		_G[frame:GetName().."ScrollUpButton"]:SetTemplate("Default", true)
-		if not _G[frame:GetName().."ScrollUpButton"].texture then
-			_G[frame:GetName().."ScrollUpButton"].texture = _G[frame:GetName().."ScrollUpButton"]:CreateTexture(nil, 'OVERLAY')
-			_G[frame:GetName().."ScrollUpButton"].texture:SetInside()
-			_G[frame:GetName().."ScrollUpButton"].texture:SetTexture([[Interface\AddOns\ElvUI\media\textures\arrowup.tga]])
-			_G[frame:GetName().."ScrollUpButton"].texture:SetVertexColor(unpack(buttonColor))
+		if not _G[frame:GetName().."ScrollUpButton"].icon then
+			S:HandleNextPrevButton(_G[frame:GetName().."ScrollUpButton"])
+			S:SquareButton_SetIcon(_G[frame:GetName().."ScrollUpButton"], 'UP')
+			_G[frame:GetName().."ScrollUpButton"]:Size(_G[frame:GetName().."ScrollUpButton"]:GetWidth() + 7, _G[frame:GetName().."ScrollUpButton"]:GetHeight() + 7)	
 		end
-		_G[frame:GetName().."ScrollUpButton"]:HookScript('OnEnter', function(self)
-			SetModifiedBackdrop(self)
-			self.texture:SetVertexColor(unpack(E["media"].rgbvaluecolor))			
-		end)	
-		_G[frame:GetName().."ScrollUpButton"]:HookScript('OnLeave', function(self)
-			SetOriginalBackdrop(self)
-			self.texture:SetVertexColor(unpack(buttonColor))	
-		end)			
 		
 		_G[frame:GetName().."ScrollDownButton"]:StripTextures()
-		_G[frame:GetName().."ScrollDownButton"]:SetTemplate("Default", true)
-		_G[frame:GetName().."ScrollDownButton"]:HookScript('OnEnter', SetModifiedBackdrop)
-		_G[frame:GetName().."ScrollDownButton"]:HookScript('OnLeave', SetOriginalBackdrop)		
-		if not _G[frame:GetName().."ScrollDownButton"].texture then
-			_G[frame:GetName().."ScrollDownButton"].texture = _G[frame:GetName().."ScrollDownButton"]:CreateTexture(nil, 'OVERLAY')
-			_G[frame:GetName().."ScrollDownButton"].texture:SetInside()
-			_G[frame:GetName().."ScrollDownButton"].texture:SetTexture([[Interface\AddOns\ElvUI\media\textures\arrowdown.tga]])
-			_G[frame:GetName().."ScrollDownButton"].texture:SetVertexColor(unpack(buttonColor))
-		end
-		
-		_G[frame:GetName().."ScrollDownButton"]:HookScript('OnEnter', function(self)
-			SetModifiedBackdrop(self)
-			self.texture:SetVertexColor(unpack(E["media"].rgbvaluecolor))			
-		end)	
-		_G[frame:GetName().."ScrollDownButton"]:HookScript('OnLeave', function(self)
-			SetOriginalBackdrop(self)
-			self.texture:SetVertexColor(unpack(buttonColor))	
-		end)
+		if not _G[frame:GetName().."ScrollDownButton"].icon then
+			S:HandleNextPrevButton(_G[frame:GetName().."ScrollDownButton"])
+			S:SquareButton_SetIcon(_G[frame:GetName().."ScrollDownButton"], 'DOWN')
+			_G[frame:GetName().."ScrollDownButton"]:Size(_G[frame:GetName().."ScrollDownButton"]:GetWidth() + 7, _G[frame:GetName().."ScrollDownButton"]:GetHeight() + 7)	
+		end			
 		
 		if not frame.trackbg then
 			frame.trackbg = CreateFrame("Frame", nil, frame)
@@ -82,23 +58,30 @@ local function SkinScrollBar(frame, thumbTrim)
 				end
 			end
 		end	
-	end		
+	end	
 end
 
-local function SkinButton(f, strip, noTemplate)
-	if f.Left then f.Left:SetAlpha(0)  end
-	if f.Middle then f.Middle:SetAlpha(0)  end
-	if f.Right then f.Right:SetAlpha(0) end
-
+local function SkinButton(f, noTemplate)
+	local name = f:GetName();
+	
+	if(name) then
+		local left = _G[name..'Left'];
+		local middle = _G[name..'Middle'];
+		local right = _G[name..'Right'];
+		
+		if(left) then left:Kill(); end
+		if(middle) then middle:Kill(); end
+		if(right) then right:Kill(); end
+	end
+	
+	if(f.Left) then f.Left:Kill(); end
+	if(f.Middle) then f.Middle:Kill(); end
+	if(f.Right) then f.Right:Kill(); end
+	
 	if f.SetNormalTexture then f:SetNormalTexture("") end
-	
 	if f.SetHighlightTexture then f:SetHighlightTexture("") end
-	
 	if f.SetPushedTexture then f:SetPushedTexture("") end
-	
 	if f.SetDisabledTexture then f:SetDisabledTexture("") end
-	
-	if strip then f:StripTextures(true) end
 	
 	if not f.template and not noTemplate then
 		f:SetTemplate("Default", true)
@@ -129,7 +112,7 @@ function S:SkinAce3()
 				widget.scrollBG:SetTemplate('Default')
 			end
 
-			SkinButton(widget.button, true)
+			SkinButton(widget.button)
 			SkinScrollBar(widget.scrollBar)
 			widget.scrollBar:SetPoint("RIGHT", frame, "RIGHT", 0 -4)
 			widget.scrollBG:SetPoint("TOPRIGHT", widget.scrollBar, "TOPLEFT", -2, 19)
@@ -224,7 +207,7 @@ function S:SkinAce3()
 			SkinButton(button)
 		elseif TYPE == "Button" then
 			local frame = widget.frame
-			SkinButton(frame, true, true)
+			SkinButton(frame, true)
 			frame:StripTextures()
 			frame:CreateBackdrop('Default', true)
 			frame.backdrop:SetInside()

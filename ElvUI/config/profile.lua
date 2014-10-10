@@ -1,4 +1,4 @@
-﻿local E, L, V, P, G = unpack(select(2, ...));
+local E, L, V, P, G = unpack(select(2, ...));
 
 P.gridSize = 64
 P.farmSize = 340
@@ -18,10 +18,10 @@ P['general'] = {
 	['fontsize'] = 12, -- Медия\Шрифты
 	['font'] = 'ElvUI Font',
 
-	['bordercolor'] = { r = .31,g = .31,b = .31 }, -- Медиа\Цвета
-	['backdropcolor'] = { r = .1,g = .1,b = .1 },
-	['backdropfadecolor'] = { r = .06,g = .06,b = .06, a = 0.9 },
-	['valuecolor'] = {r = 23/255,g = 132/255,b = 209/255},
+	["bordercolor"] = { r = 0.1, g = 0.1, b = 0.1 },
+	["backdropcolor"] = { r = 0.1, g = 0.1, b = 0.1 },
+	["backdropfadecolor"] = { r = .06, g = .06, b = .06, a = 0.8 },
+	["valuecolor"] = { r = 23/255, g = 132/255, b = 209/255 },
 	
 	['mapAlpha'] = 1,
 	['tinyWorldMap'] = true,
@@ -180,8 +180,8 @@ P['bags'] = { -- Сумки
 };
 
 P['unitframe'] = {
-	['smoothbars'] = true,
-	['statusbar'] = "Minimalist",
+	['smoothbars'] = false,
+	['statusbar'] = "ElvUI Norm",
 	['font'] = 'ElvUI Pixel',
 	['fontSize'] = 10,
 	['fontOutline'] = 'MONOCHROMEOUTLINE',
@@ -1808,7 +1808,7 @@ P['chat'] = { -- Чат
 	['panelBackdropNameLeft'] = '',
 	['panelBackdropNameRight'] = '',
 	['panelBackdrop'] = 'SHOWBOTH',
-	['panelTabBackdrop'] = true,
+	['panelTabBackdrop'] = false,
 	['panelTabTransparency'] = false,
 	['editBoxPosition'] = 'BELOW_CHAT',
 
