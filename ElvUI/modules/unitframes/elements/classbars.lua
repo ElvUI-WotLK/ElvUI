@@ -31,20 +31,20 @@ function UF:Construct_MageResourceBar(frame)
 	local bars = CreateFrame('Frame', nil, frame);
 	bars:CreateBackdrop('Default');
 
-	for i = 1, self['classMaxResourceBar'][E.myclass] do
+	for i = 1, UF['classMaxResourceBar'][E.myclass] do
 		bars[i] = CreateFrame("StatusBar", nil, bars);
 		bars[i]:SetStatusBarTexture(E['media'].blankTex);
 		bars[i]:GetStatusBarTexture():SetHorizTile(false);
 		
 		bars[i].bg = bars[i]:CreateTexture(nil, 'ARTWORK');
 		
-		self['statusbars'][bars[i]] = true;
+		UF['statusbars'][bars[i]] = true;
 
 		bars[i]:CreateBackdrop('Default');
 		bars[i].backdrop:SetParent(bars);
 	end
 	
-	bars.PostUpdate = self.UpdateArcaneCharges;
+	bars.PostUpdate = UF.UpdateArcaneCharges;
 	
 	return bars;
 end
@@ -64,5 +64,5 @@ function UF:UpdateArcaneCharges(event, unit, arcaneCharges, maxCharges)
 		frame.Health:SetPoint(point, frame, anchorPoint, x, -2);
 	end
 	
-	self:UpdatePlayerFrameAnchors(frame, self:IsShown());
+	UF:UpdatePlayerFrameAnchors(frame, self:IsShown());
 end
