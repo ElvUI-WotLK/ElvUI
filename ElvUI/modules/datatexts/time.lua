@@ -1,101 +1,58 @@
 local E, L, P, G = unpack(select(2, ...));
 local DT = E:GetModule('DataTexts');
 
+local format = string.format;
+local join = string.join;
+
 local APM = { TIMEMANAGER_PM, TIMEMANAGER_AM };
 local europeDisplayFormat = '';
 local ukDisplayFormat = '';
-local europeDisplayFormat_nocolor = string.join("", "%02d", ":|r%02d");
-local ukDisplayFormat_nocolor = string.join("", "", "%d", ":|r%02d", " %s|r");
+local europeDisplayFormat_nocolor = join("", "%02d", ":|r%02d");
+local ukDisplayFormat_nocolor = join("", "", "%d", ":|r%02d", " %s|r");
 local timerLongFormat = "%d:%02d:%02d";
 local timerShortFormat = "%d:%02d";
-local lockoutInfoFormat = "%s |cfff04000(%s%s)";
-local lockoutColorExtended, lockoutColorNormal = { r = 0.3, g = 1, b = 0.3 }, { r = .8,g = .8,b = .8 };
+local lockoutInfoFormatNoEnc = "%s%s |cffaaaaaa(%s)";
 local difficultyInfo = { "N", "N", "H", "H" };
-local lockoutFormatString = { "%dd %02dh %02dm", "%dd %dh %02dm", "%02dh %02dm", "%dh %02dm", "%dh %02dm", "%dm" };
+local lockoutColorExtended, lockoutColorNormal = { r = 0.3, g = 1, b = 0.3 }, { r = .8, g = .8, b = .8 };
 local curHr, curMin, curAmPm;
+local enteredFrame = false;
 
-local Update, lastPanel;
+local Update, lastPanel; -- UpValue
+local name, instanceID, reset, difficultyId, locked, extended, isRaid, maxPlayers, difficulty;
+
 local function ValueColorUpdate(hex, r, g, b)
-	europeDisplayFormat = string.join("", "%02d", hex, ":|r%02d ", format("%s", date(hex.."%x|r")));
-	ukDisplayFormat = string.join("", "", "%d", hex, ":|r%02d", hex, " %s|r ", format("%s", date(hex.."%x|r")));
+	europeDisplayFormat = join("", "%02d", hex, ":|r%02d ", format("%s", date(hex.."%x|r")));
+	ukDisplayFormat = join("", "", "%d", hex, ":|r%02d", hex, " %s|r ", format("%s", date(hex.."%x|r")));
 	
-	if lastPanel ~= nil then
+	if(lastPanel ~= nil) then
 		Update(lastPanel, 20000);
 	end
 end
-E['valueColorUpdateFuncs'][ValueColorUpdate] = true
+E['valueColorUpdateFuncs'][ValueColorUpdate] = true;
 
-local function CalculateTimeValues(tt)
-	local Hr, Min, AmPm;
-	if tt and tt == true then
-		if E.db.datatexts.localtime == true then
-			Hr, Min = GetGameTime();
-			if E.db.datatexts.time24 == true then
-				return Hr, Min, -1;
-			else
-				if Hr>=12 then
-					if Hr>12 then Hr = Hr - 12; end
-					AmPm = 1;
-				else
-					if Hr == 0 then Hr = 12; end
-					AmPm = 2;
-				end
-				return Hr, Min, AmPm;
-			end			
-		else
-			local Hr24 = tonumber(date("%H"))
-			Hr = tonumber(date("%I"));
-			Min = tonumber(date("%M"));
-			if E.db.datatexts.time24 == true then
-				return Hr24, Min, -1;
-			else
-				if Hr24>=12 then AmPm = 1; else AmPm = 2; end
-				return Hr, Min, AmPm;
-			end
-		end
+local function ConvertTime(h, m)
+	local AmPm;
+	if(E.db.datatexts.time24 == true) then
+		return h, m, -1;
 	else
-		if E.db.datatexts.localtime == true then
-			local Hr24 = tonumber(date("%H"));
-			Hr = tonumber(date("%I"));
-			Min = tonumber(date("%M"));
-			if E.db.datatexts.time24 == true then
-				return Hr24, Min, -1;
-			else
-				if Hr24>=12 then AmPm = 1; else AmPm = 2; end
-				return Hr, Min, AmPm;
-			end
+		if(h >= 12) then
+			if(h > 12) then h = h - 12; end
+			AmPm = 1;
 		else
-			Hr, Min = GetGameTime();
-			if E.db.datatexts.time24 == true then
-				return Hr, Min, -1;
-			else
-				if Hr>=12 then
-					if Hr>12 then Hr = Hr - 12; end
-					AmPm = 1;
-				else
-					if Hr == 0 then Hr = 12; end
-					AmPm = 2;
-				end
-				return Hr, Min, AmPm;
-			end
-		end	
+			if(h == 0) then h = 12; end
+			AmPm = 2;
+		end
 	end
+	return h, m, AmPm;
 end
 
-local function CalculateTimeLeft(time)
-	local hour = floor(time / 3600);
-	local min = floor(time / 60 - (hour*60));
-	local sec = time - (hour * 3600) - (min * 60);
-	
-	return hour, min, sec;
-end
-
-local function formatResetTime(sec)
-	local table = table or {};
-	local d,h,m,s = ChatFrame_TimeBreakDown(floor(sec));
-	local string = gsub(gsub(format(" %dd %dh %dm "..((d==0 and h==0) and "%ds" or ""),d,h,m,s)," 0[dhms]"," "),"%s+"," ");
-	local string = strtrim(gsub(string, "([dhms])", {d=table.days or "d",h=table.hours or "h",m=table.minutes or "m",s=table.seconds or "s"})," ");
-	return strmatch(string,"^%s*$") and "0"..(table.seconds or L"s") or string;
+local function CalculateTimeValues(tooltip)
+	if(tooltip and E.db.datatexts.localtime) or (not tooltip and not E.db.datatexts.localtime) then
+		return ConvertTime(GetGameTime());
+	else
+		local dateTable = date("*t");
+		return ConvertTime(dateTable["hour"], dateTable["min"]);
+	end
 end
 
 local function Click()
@@ -107,74 +64,85 @@ local function OnLeave(self)
 	enteredFrame = false;
 end
 
+local function OnEvent()
+	if(event == "UPDATE_INSTANCE_INFO" and enteredFrame) then
+		RequestRaidInfo();
+	end
+end
+
 local function OnEnter(self)
-	DT:SetupTooltip(self);
-	enteredFrame = true;
+	DT:SetupTooltip(self)
+
+	if(not enteredFrame) then
+		enteredFrame = true;
+		RequestRaidInfo();
+	end
 	
 	local wgtime = GetWintergraspWaitTime() or nil;
 	inInstance, instanceType = IsInInstance();
-	if not ( instanceType == "none" ) then
+	if not(instanceType == "none") then
 		wgtime = QUEUE_TIME_UNAVAILABLE;
-	elseif wgtime == nil then
+	elseif(wgtime == nil) then
 		wgtime = WINTERGRASP_IN_PROGRESS;
 	else
-		local h, m, s = CalculateTimeLeft(wgtime);
-		if h > 0 then 
-			wgtime = format(timerLongFormat, h, m, s);
-		else 
-			wgtime = format(timerShortFormat, m, s);
-		end
+		wgtime = SecondsToTime(wgtime, false, nil, 3);
 	end
 	DT.tooltip:AddDoubleLine(L['Wintergrasp'], wgtime, 1, 1, 1, lockoutColorNormal.r, lockoutColorNormal.g, lockoutColorNormal.b);
-	DT.tooltip:AddLine(' ');
 	
-	local timeText;
-	local Hr, Min, AmPm = CalculateTimeValues(true);
-
-	timeText = E.db.datatexts.localtime == true and TIMEMANAGER_TOOLTIP_REALMTIME or TIMEMANAGER_TOOLTIP_LOCALTIME;
-	if AmPm == -1 then
-		DT.tooltip:AddDoubleLine(timeText, string.format(europeDisplayFormat_nocolor, Hr, Min), 1, 1, 1, lockoutColorNormal.r, lockoutColorNormal.g, lockoutColorNormal.b);
-	else
-		DT.tooltip:AddDoubleLine(timeText, string.format(ukDisplayFormat_nocolor, Hr, Min, APM[AmPm]), 1, 1, 1, lockoutColorNormal.r, lockoutColorNormal.g, lockoutColorNormal.b);
-	end
-
-	local oneraid, lockoutColor;
+	local oneraid, lockoutColor
 	for i = 1, GetNumSavedInstances() do
-		local name, _, reset, difficulty, locked, extended, _, isRaid, maxPlayers  = GetSavedInstanceInfo(i);
-		if isRaid and (locked or extended) then
-			local tr,tg,tb,diff;
-			if not oneraid then
+		name, _, reset, difficultyId, locked, extended, _, isRaid, maxPlayers, difficulty = GetSavedInstanceInfo(i);
+		if(isRaid and (locked or extended) and name) then
+			if(not oneraid) then
 				DT.tooltip:AddLine(" ");
 				DT.tooltip:AddLine(L["Saved Raid(s)"]);
 				oneraid = true;
 			end
-			if extended then lockoutColor = lockoutColorExtended; else lockoutColor = lockoutColorNormal; end
-			DT.tooltip:AddDoubleLine(format(lockoutInfoFormat,name, maxPlayers, difficultyInfo[difficulty] ), formatResetTime(reset), 1,1,1, lockoutColor.r,lockoutColor.g,lockoutColor.b);
+			if(extended) then 
+				lockoutColor = lockoutColorExtended;
+			else
+				lockoutColor = lockoutColorNormal;
+			end
+			
+			DT.tooltip:AddDoubleLine(format(lockoutInfoFormatNoEnc, maxPlayers, difficultyInfo[difficultyId], name), SecondsToTime(reset, false, nil, 3), 1, 1, 1, lockoutColor.r, lockoutColor.g, lockoutColor.b);		
 		end
 	end
+	
+	local timeText;
+	local Hr, Min, AmPm = CalculateTimeValues(true);
+	
+	DT.tooltip:AddLine(" ");
+	if(AmPm == -1) then
+		DT.tooltip:AddDoubleLine(E.db.datatexts.localtime and TIMEMANAGER_TOOLTIP_REALMTIME or TIMEMANAGER_TOOLTIP_LOCALTIME, 
+			format(europeDisplayFormat_nocolor, Hr, Min), 1, 1, 1, lockoutColorNormal.r, lockoutColorNormal.g, lockoutColorNormal.b);
+	else
+		DT.tooltip:AddDoubleLine(E.db.datatexts.localtime and TIMEMANAGER_TOOLTIP_REALMTIME or TIMEMANAGER_TOOLTIP_LOCALTIME,
+			format(ukDisplayFormat_nocolor, Hr, Min, APM[AmPm]), 1, 1, 1, lockoutColorNormal.r, lockoutColorNormal.g, lockoutColorNormal.b);
+	end
+	
 	DT.tooltip:Show();
 end
 
-local int = 1;
+local int = 3;
 function Update(self, t)
 	int = int - t;
 	
-	if enteredFrame then
-		OnEnter(self);
-	end
+	if(int > 0) then return; end
 	
-	if GameTimeFrame.flashInvite then
+	if(GameTimeFrame.flashInvite) then
 		E:Flash(self, 0.53);
 	else
 		E:StopFlash(self);
 	end
 	
-	if int > 0 then return end
+	if(enteredFrame) then
+		OnEnter(self)
+	end
 	
 	local Hr, Min, AmPm = CalculateTimeValues(false);
 
-	if (Hr == curHr and Min == curMin and AmPm == curAmPm) and not (int < -15000) then
-		int = 2;
+	if(Hr == curHr and Min == curMin and AmPm == curAmPm) and not (int < -15000) then
+		int = 5;
 		return;
 	end
 	
@@ -182,13 +150,13 @@ function Update(self, t)
 	curMin = Min;
 	curAmPm = AmPm;
 	
-	if AmPm == -1 then
+	if(AmPm == -1) then
 		self.text:SetFormattedText(europeDisplayFormat, Hr, Min);
 	else
 		self.text:SetFormattedText(ukDisplayFormat, Hr, Min, APM[AmPm]);
 	end
 	lastPanel = self;
-	int = 2;
+	int = 5;
 end
 
-DT:RegisterDatatext(L['Time'], nil, nil, Update, Click, OnEnter, OnLeave)
+DT:RegisterDatatext(L['Time'], {"UPDATE_INSTANCE_INFO"}, OnEvent, Update, Click, OnEnter, OnLeave);
