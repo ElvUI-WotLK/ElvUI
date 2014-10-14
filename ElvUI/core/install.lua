@@ -1,7 +1,7 @@
 local E, L, V, P, G, _ = unpack(select(2, ...));
 
-local CURRENT_PAGE = 0
-local MAX_PAGE = 9
+local CURRENT_PAGE = 0;
+local MAX_PAGE = 8;
 
 local function SetupChat()
 	InstallStepComplete.message = L["Chat Set"]
@@ -166,59 +166,12 @@ function E:GetColor(r, b, g, a)
 	return { r = r, b = b, g = g, a = a }
 end
 
-function E:SetupPixelPerfect(enabled, noMsg)
-	E.private.general.pixelPerfect = enabled;
-	
-	if (E.PixelMode ~= enabled) then
-		E:StaticPopup_Show('PIXELPERFECT_CHANGED')
-	end
-	
-	if not noMsg then
-		E.db.general.bottomPanel = enabled
-		E:GetModule('Layout'):BottomPanelVisibility()
-	end
-
-	if noMsg then
-		if enabled then
-			if not E.db.movers then E.db.movers = {}; end
-			
-			E.db.actionbar.bar1.backdrop = false;
-			E.db.actionbar.bar3.backdrop = false;
-			E.db.actionbar.bar5.backdrop = false;			
-			E.db.actionbar.bar1.buttonspacing = 2;
-			E.db.actionbar.bar2.buttonspacing = 2;
-			E.db.actionbar.bar3.buttonspacing = 2;
-			E.db.actionbar.bar4.buttonspacing = 2;
-			E.db.actionbar.bar5.buttonspacing = 2;
-			E.db.actionbar.barPet.buttonspacing = 2;
-			E.db.actionbar.barShapeShift.buttonspacing = 2;		
-		else
-			E.db.actionbar.bar1.backdrop = true;
-			E.db.actionbar.bar3.backdrop = true;
-			E.db.actionbar.bar5.backdrop = true;
-			E.db.actionbar.bar1.buttonspacing = 4;
-			E.db.actionbar.bar2.buttonspacing = 4;
-			E.db.actionbar.bar3.buttonspacing = 4;
-			E.db.actionbar.bar4.buttonspacing = 4;
-			E.db.actionbar.bar5.buttonspacing = 4;
-			E.db.actionbar.barPet.buttonspacing = 4;
-			E.db.actionbar.barShapeShift.buttonspacing = 4;
-		end
-	end	
-	
-	if InstallStepComplete and not noMsg then
-		InstallStepComplete.message = L["Pixel Perfect Set"]
-		InstallStepComplete:Show()	
-		E:UpdateAll(true)		
-	end
-	
-	E.PixelMode = enabled
-end
-
 function E:SetupTheme(theme, noDisplayMsg)
-	local classColor = RAID_CLASS_COLORS[E.myclass]
+	local classColor = E.myclass == 'PRIEST' and E.PriestColors or RAID_CLASS_COLORS[E.myclass]
 	E.private.theme = theme
 
+
+	--Set colors
 	if theme == "classic" then
 		E.db.general.bordercolor = E:GetColor(.31, .31, .31)
 		E.db.general.backdropcolor = E:GetColor(.1, .1, .1)
@@ -229,7 +182,6 @@ function E:SetupTheme(theme, noDisplayMsg)
 		E.db.unitframe.colors.auraBarBuff = E:GetColor(.31, .31, .31)
 		E.db.unitframe.colors.castColor = E:GetColor(.31, .31, .31)
 		E.db.unitframe.colors.castClassColor = false
-		
 	elseif theme == "class" then
 		E.db.general.bordercolor = E:GetColor(.31, .31, .31)
 		E.db.general.backdropcolor = E:GetColor(.1, .1, .1)
@@ -248,6 +200,7 @@ function E:SetupTheme(theme, noDisplayMsg)
 		E.db.unitframe.colors.castClassColor = false
 	end
 	
+	--Value Color
 	if theme == "class" then
 		E.db.general.valuecolor = E:GetColor(classColor.r, classColor.b, classColor.g)
 	else
@@ -275,9 +228,8 @@ function E:SetupResolution(noDataReset)
 	
 	if self == 'low' then
 		if not E.db.movers then E.db.movers = {}; end
-		
 		if not noDataReset then
-			E.db.chat.panelWidth = 380
+			E.db.chat.panelWidth = 400
 			E.db.chat.panelHeight = 180
 			
 			E:CopyTable(E.db.actionbar, P.actionbar)
@@ -288,8 +240,10 @@ function E:SetupResolution(noDataReset)
 			E.db.actionbar.bar5.enabled = false;
 		end
 		
-		E.db.general.reputation.width = 400
-		E.db.general.experience.width = 400
+		if not noDataReset then
+			E.db.auras.wrapAfter = 10;
+		end
+		
 		E.db.movers.ElvBar_2 = "CENTERElvUIParentBOTTOM056.18"
 		
 		if not noDataReset then
@@ -339,9 +293,7 @@ function E:SetupResolution(noDataReset)
 		
 		E:CopyTable(E.db.actionbar, P.actionbar)
 		E:CopyTable(E.db.unitframe.units, P.unitframe.units)
-		E:SetupPixelPerfect(E.PixelMode, true)
-		E.db.general.reputation.width = P.general.reputation.width
-		E.db.general.experience.width = P.general.experience.width
+		E.db.auras.wrapAfter = P.auras.wrapAfter;
 		
 		E.db.lowresolutionset = nil;
 	end
@@ -350,22 +302,22 @@ function E:SetupResolution(noDataReset)
 		E:SetupTheme(E.private.theme, true)
 	end
 	
-	E:UpdateAll()
+	E:UpdateAll(true)
 	
-	if InstallStepComplete then
+	if InstallStepComplete and not noDataReset then
 		InstallStepComplete.message = L["Resolution Style Set"]
-		InstallStepComplete:Show()		
+		InstallStepComplete:Show()
 	end
 end
 
 function E:SetupLayout(layout, noDataReset)
+	--Unitframes
 	if not noDataReset then
 		E:CopyTable(E.db.unitframe.units, P.unitframe.units)
 	end
 	
 	if not noDataReset then
 		E:ResetMovers('')
-		E:SetupPixelPerfect(E.PixelMode, true)
 		if not E.db.movers then E.db.movers = {} end
 		
 		E.db.actionbar.bar2.enabled = E.db.lowresolutionset
@@ -383,54 +335,31 @@ function E:SetupLayout(layout, noDataReset)
 	
 	if layout == 'healer' then
 		if not IsAddOnLoaded('Clique') then
-			E:Print(L['Using the healer layout it is highly recommended you download the addon Clique to work side by side with ElvUI.'])
+			E:StaticPopup_Show("CLIQUE_ADVERT")
 		end
 		
 		if not noDataReset then
-			E.db.unitframe.units.raid10.horizontalSpacing = 9;
-			E.db.unitframe.units.raid10.rdebuffs.enable = false;
-			E.db.unitframe.units.raid10.verticalSpacing = 9;
-			E.db.unitframe.units.raid10.debuffs.sizeOverride = 16;
-			E.db.unitframe.units.raid10.debuffs.enable = true
-			E.db.unitframe.units.raid10.debuffs.anchorPoint = "TOPRIGHT";
-			E.db.unitframe.units.raid10.debuffs.xOffset = -4;
-			E.db.unitframe.units.raid10.debuffs.yOffset = -7;
-			E.db.unitframe.units.raid10.positionOverride = "BOTTOMRIGHT";
-			E.db.unitframe.units.raid10.height = 45;
-			E.db.unitframe.units.raid10.buffs.noConsolidated = false
-			E.db.unitframe.units.raid10.buffs.xOffset = 50;
-			E.db.unitframe.units.raid10.buffs.yOffset = -6;
-			E.db.unitframe.units.raid10.buffs.clickThrough = true
-			E.db.unitframe.units.raid10.buffs.noDuration = false
-			E.db.unitframe.units.raid10.buffs.playerOnly = false;
-			E.db.unitframe.units.raid10.buffs.perrow = 1
-			E.db.unitframe.units.raid10.buffs.useFilter = "TurtleBuffs"
-			E.db.unitframe.units.raid10.buffs.sizeOverride = 22
-			E.db.unitframe.units.raid10.buffs.useBlacklist = false
-			E.db.unitframe.units.raid10.buffs.enable = true
-			E.db.unitframe.units.raid10.growthDirection = "LEFT_UP"
-			
-			E.db.unitframe.units.raid25.horizontalSpacing = 9;
-			E.db.unitframe.units.raid25.rdebuffs.enable = false;
-			E.db.unitframe.units.raid25.verticalSpacing = 9;
-			E.db.unitframe.units.raid25.debuffs.sizeOverride = 16;
-			E.db.unitframe.units.raid25.debuffs.enable = true
-			E.db.unitframe.units.raid25.debuffs.anchorPoint = "TOPRIGHT";
-			E.db.unitframe.units.raid25.debuffs.xOffset = -4;
-			E.db.unitframe.units.raid25.debuffs.yOffset = -7;
-			E.db.unitframe.units.raid25.height = 45;
-			E.db.unitframe.units.raid25.buffs.noConsolidated = false
-			E.db.unitframe.units.raid25.buffs.xOffset = 50;
-			E.db.unitframe.units.raid25.buffs.yOffset = -6;
-			E.db.unitframe.units.raid25.buffs.clickThrough = true
-			E.db.unitframe.units.raid25.buffs.noDuration = false
-			E.db.unitframe.units.raid25.buffs.playerOnly = false;
-			E.db.unitframe.units.raid25.buffs.perrow = 1
-			E.db.unitframe.units.raid25.buffs.useFilter = "TurtleBuffs"
-			E.db.unitframe.units.raid25.buffs.sizeOverride = 22
-			E.db.unitframe.units.raid25.buffs.useBlacklist = false
-			E.db.unitframe.units.raid25.buffs.enable = true			
-			E.db.unitframe.units.raid25.growthDirection = "LEFT_UP"
+			E.db.unitframe.units.raid.horizontalSpacing = 9;
+			E.db.unitframe.units.raid.rdebuffs.enable = false;
+			E.db.unitframe.units.raid.verticalSpacing = 9;
+			E.db.unitframe.units.raid.debuffs.sizeOverride = 16;
+			E.db.unitframe.units.raid.debuffs.enable = true
+			E.db.unitframe.units.raid.debuffs.anchorPoint = "TOPRIGHT";
+			E.db.unitframe.units.raid.debuffs.xOffset = -4;
+			E.db.unitframe.units.raid.debuffs.yOffset = -7;
+			E.db.unitframe.units.raid.height = 45;
+			E.db.unitframe.units.raid.buffs.noConsolidated = false
+			E.db.unitframe.units.raid.buffs.xOffset = 50;
+			E.db.unitframe.units.raid.buffs.yOffset = -6;
+			E.db.unitframe.units.raid.buffs.clickThrough = true
+			E.db.unitframe.units.raid.buffs.noDuration = false
+			E.db.unitframe.units.raid.buffs.playerOnly = false;
+			E.db.unitframe.units.raid.buffs.perrow = 1
+			E.db.unitframe.units.raid.buffs.useFilter = "TurtleBuffs"
+			E.db.unitframe.units.raid.buffs.sizeOverride = 22
+			E.db.unitframe.units.raid.buffs.useBlacklist = false
+			E.db.unitframe.units.raid.buffs.enable = true			
+			E.db.unitframe.units.raid.growthDirection = "LEFT_UP"
 			
 			E.db.unitframe.units.party.growthDirection = "LEFT_UP"
 			E.db.unitframe.units.party.horizontalSpacing = 9;
@@ -455,24 +384,15 @@ function E:SetupLayout(layout, noDataReset)
 			E.db.unitframe.units.party.roleIcon.position = "BOTTOMRIGHT"
 			E.db.unitframe.units.party.health.text_format = "[healthcolor][health:deficit]"
 			E.db.unitframe.units.party.health.position = "BOTTOM"
+			E.db.unitframe.units.party.GPSArrow.size = 40
 			E.db.unitframe.units.party.width = 80
 			E.db.unitframe.units.party.height = 45
 			E.db.unitframe.units.party.name.text_format = "[namecolor][name:short]"
 			E.db.unitframe.units.party.name.position = "TOP"
 			E.db.unitframe.units.party.power.text_format = ""
 			
-			E.db.unitframe.units.raid40.height = 30
-			E.db.unitframe.units.raid40.growthDirection = "LEFT_UP"
-			
 			E.db.unitframe.units.party.health.frequentUpdates = true
-			E.db.unitframe.units.raid10.health.frequentUpdates = true
-			E.db.unitframe.units.raid25.health.frequentUpdates = true
-			E.db.unitframe.units.raid40.health.frequentUpdates = true
-			
-			E.db.unitframe.units.party.healPrediction = true;
-			E.db.unitframe.units.raid10.healPrediction = true;
-			E.db.unitframe.units.raid25.healPrediction = true;
-			E.db.unitframe.units.raid40.healPrediction = true;	
+			E.db.unitframe.units.raid.health.frequentUpdates = true
 			
 			E.db.actionbar.bar2.enabled = true
 			if not E.db.lowresolutionset then
@@ -492,9 +412,7 @@ function E:SetupLayout(layout, noDataReset)
 			E.db.movers.ElvAB_3 = "BOTTOMElvUIParentBOTTOM3124"
 			E.db.movers.ElvAB_5 = "BOTTOMElvUIParentBOTTOM-3124"
 			E.db.movers.ElvUF_PartyMover = "BOTTOMRIGHTElvUIParentBOTTOMLEFT"..xOffset.."450"
-			E.db.movers.ElvUF_Raid10Mover = "BOTTOMRIGHTElvUIParentBOTTOMLEFT"..xOffset.."450"
-			E.db.movers.ElvUF_Raid25Mover = "BOTTOMRIGHTElvUIParentBOTTOMLEFT"..xOffset.."450"
-			E.db.movers.ElvUF_Raid40Mover = "BOTTOMRIGHTElvUIParentBOTTOMLEFT"..xOffset.."450"
+			E.db.movers.ElvUF_RaidMover = "BOTTOMRIGHTElvUIParentBOTTOMLEFT"..xOffset.."450"
 			
 			if not E.db.lowresolutionset then
 				E.db.movers.ElvUF_TargetMover = "BOTTOMElvUIParentBOTTOM278132"
@@ -513,9 +431,7 @@ function E:SetupLayout(layout, noDataReset)
 			E.db.movers.ElvAB_3 = "BOTTOMElvUIParentBOTTOM3324"
 			E.db.movers.ElvAB_5 = "BOTTOMElvUIParentBOTTOM-3324"
 			E.db.movers.ElvUF_PartyMover = "BOTTOMRIGHTElvUIParentBOTTOMLEFT"..xOffset.."450"
-			E.db.movers.ElvUF_Raid10Mover = "BOTTOMRIGHTElvUIParentBOTTOMLEFT"..xOffset.."450"
-			E.db.movers.ElvUF_Raid25Mover = "BOTTOMRIGHTElvUIParentBOTTOMLEFT"..xOffset.."450"
-			E.db.movers.ElvUF_Raid40Mover = "BOTTOMRIGHTElvUIParentBOTTOMLEFT"..xOffset.."450"
+			E.db.movers.ElvUF_RaidMover = "BOTTOMRIGHTElvUIParentBOTTOMLEFT"..xOffset.."450"
 			
 			if not E.db.lowresolutionset then
 				E.db.movers.ElvUF_TargetMover = "BOTTOMElvUIParentBOTTOM307145"
@@ -654,8 +570,6 @@ function E:SetupLayout(layout, noDataReset)
 	end	
 	
 	E:UpdateAll(true)
-	local DT = E:GetModule('DataTexts')
-	DT:LoadDataTexts()
 end
 
 local function SetupAuras(style)
@@ -687,12 +601,6 @@ local function SetupAuras(style)
 		E.db.unitframe.units.target.smartAuraDisplay = 'DISABLED';
 		E.db.unitframe.units.target.debuffs.enable = true;
 		E.db.unitframe.units.target.aurabar.enable = false;
-	elseif style == 'integrated' then
-		--seriosly is this fucking hard??
-		E.db.unitframe.units.target.smartAuraDisplay = 'SHOW_DEBUFFS_ON_FRIENDLIES';
-		E.db.unitframe.units.target.buffs.playerOnly = {friendly = true, enemy = false};
-		E.db.unitframe.units.target.debuffs.enable = false;
-		E.db.unitframe.units.target.aurabar.attachTo = 'BUFFS';
 	end
 
 	E:GetModule('UnitFrames'):Update_AllFrames()	
@@ -704,10 +612,6 @@ end
 
 local function InstallComplete()
 	E.private.install_complete = E.version
-	
-	if GetCVarBool("Sound_EnableMusic") then
-		StopMusic()
-	end
 	
 	ReloadUI()
 end
@@ -779,18 +683,6 @@ local function SetPage(PageNum)
 		InstallOption1Button:SetScript("OnClick", SetupChat)
 		InstallOption1Button:SetText(L["Setup Chat"])
 	elseif PageNum == 4 then
-		f.SubTitle:SetText(L["Pixel Perfect"])
-		f.Desc1:SetText(L['The Pixel Perfect option will change the overall apperance of your UI. Using Pixel Perfect is a slight performance increase over the traditional layout.'])
-		f.Desc2:SetText(L['Using this option will cause your borders around frames to be 1 pixel wide instead of 3 pixel. You may have to finish the installation to notice a differance. By default this is enabled.'])
-		f.Desc3:SetText(L["Importance: |cffFF0000Low|r"])
-		
-		InstallOption1Button:Show()
-		InstallOption1Button:SetScript('OnClick', function() E:SetupPixelPerfect(true) end)
-		InstallOption1Button:SetText(L["Enable"])	
-		InstallOption2Button:Show()
-		InstallOption2Button:SetScript('OnClick', function() E:SetupPixelPerfect(false) end)
-		InstallOption2Button:SetText(L['Disable'])
-	elseif PageNum == 5 then
 		f.SubTitle:SetText(L['Theme Setup'])
 		f.Desc1:SetText(L['Choose a theme layout you wish to use for your initial setup.'])
 		f.Desc2:SetText(L['You can always change fonts and colors of any element of elvui from the in-game configuration.'])
@@ -805,7 +697,7 @@ local function SetPage(PageNum)
 		InstallOption3Button:Show()
 		InstallOption3Button:SetScript('OnClick', function() E:SetupTheme('class') end)
 		InstallOption3Button:SetText(CLASS)		
-	elseif PageNum == 6 then
+	elseif PageNum == 5 then
 		f.SubTitle:SetText(L["Resolution"])
 		f.Desc1:SetText(format(L["Your current resolution is %s, this is considered a %s resolution."], E.resolution, E.lowversion == true and L["low"] or L["high"]))
 		if E.lowversion then
@@ -822,10 +714,10 @@ local function SetPage(PageNum)
 		InstallOption2Button:Show()
 		InstallOption2Button:SetScript('OnClick', function() E.SetupResolution('low') end)
 		InstallOption2Button:SetText(L['Low Resolution'])
-	elseif PageNum == 7 then
+	elseif PageNum == 6 then
 		f.SubTitle:SetText(L["Layout"])
 		f.Desc1:SetText(L["You can now choose what layout you wish to use based on your combat role."])
-		f.Desc2:SetText(L["This will change the layout of your unitframes, raidframes, and datatexts."])
+		f.Desc2:SetText(L["This will change the layout of your unitframes and actionbars."])
 		f.Desc3:SetText(L["Importance: |cffD3CF00Medium|r"])
 		InstallOption1Button:Show()
 		InstallOption1Button:SetScript('OnClick', function() E.db.layoutSet = nil; E:SetupLayout('tank') end)
@@ -839,21 +731,18 @@ local function SetPage(PageNum)
 		InstallOption4Button:Show()
 		InstallOption4Button:SetScript('OnClick', function() E.db.layoutSet = nil; E:SetupLayout('dpsCaster') end)
 		InstallOption4Button:SetText(L['Caster DPS'])
-	elseif PageNum == 8 then
-		f.SubTitle:SetText(L["Auras System"])
-		f.Desc1:SetText(L["Select the type of aura system you want to use with ElvUI's unitframes. The integrated system utilizes both aura-bars and aura-icons. The icons only system will display only icons and aurabars won't be used. The classic system will configure your auras to be default."])
+	elseif PageNum == 7 then
+		f.SubTitle:SetText(L["Auras"])
+		f.Desc1:SetText(L["Select the type of aura system you want to use with ElvUI's unitframes. Set to Aura Bar & Icons to use both aura bars and icons, set to icons only to only see icons."])
 		f.Desc2:SetText(L["If you have an icon or aurabar that you don't want to display simply hold down shift and right click the icon for it to disapear."])
 		f.Desc3:SetText(L["Importance: |cffD3CF00Medium|r"])
 		InstallOption1Button:Show()
-		InstallOption1Button:SetScript('OnClick', function() SetupAuras('classic') end)
-		InstallOption1Button:SetText(L['Classic'])
+		InstallOption1Button:SetScript('OnClick', function() SetupAuras(true) end)
+		InstallOption1Button:SetText(L['Aura Bars & Icons'])
 		InstallOption2Button:Show()
 		InstallOption2Button:SetScript('OnClick', function() SetupAuras() end)
 		InstallOption2Button:SetText(L['Icons Only'])
-		InstallOption3Button:Show()
-		InstallOption3Button:SetScript('OnClick', function() SetupAuras('integrated') end)
-		InstallOption3Button:SetText(L['Integrated'])
-	elseif PageNum == 9 then
+	elseif PageNum == 8 then
 		f.SubTitle:SetText(L["Installation Complete"])
 		f.Desc1:SetText(L["You are now finished with the installation process. If you are in need of technical support please visit us at http://www.tukui.org."])
 		f.Desc2:SetText(L["Please click the button below so you can setup variables and ReloadUI."])			
@@ -892,13 +781,6 @@ function E:Install()
 				UIFrameFadeOut(self, 3.5, 1, 0)
 				E:Delay(4, function() self:Hide() end)	
 				self.message = nil
-				
-				if imsg.firstShow == false then
-					if GetCVarBool("Sound_EnableMusic") then
-						PlayMusic([[Sound\Music\ZoneMusic\DMF_L70ETC01.mp3]])
-					end					
-					imsg.firstShow = true
-				end
 			else
 				self:Hide()
 			end
@@ -915,6 +797,7 @@ function E:Install()
 
 	if not ElvUIInstallFrame then
 		local f = CreateFrame("Button", "ElvUIInstallFrame", E.UIParent)
+		f.SetPage = SetPage
 		f:Size(550, 400)
 		f:SetTemplate("Transparent")
 		f:SetPoint("CENTER")
@@ -1035,6 +918,7 @@ function E:Install()
 		
 		f.tutorialImage = f:CreateTexture('InstallTutorialImage', 'OVERLAY')
 		f.tutorialImage:Size(250)
+		f.tutorialImage:SetTexture('Interface\\AddOns\\ElvUI\\media\\textures\\logo_elvui.tga')
 		f.tutorialImage:Point('BOTTOM', 0, 70)
 
 	end

@@ -288,7 +288,7 @@ function UF:Update_PetFrame(frame, db)
 	end
 	
 	do -- Скрытие
-		if ElvUF_Player and not InCombatLockdown() then
+		if E.db.unitframe.units.player.enable and E.db.unitframe.units.player.combatfade and ElvUF_Player and not InCombatLockdown() then
 			frame:SetParent(ElvUF_Player)
 		end
 	end	

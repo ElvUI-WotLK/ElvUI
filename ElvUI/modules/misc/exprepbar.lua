@@ -6,24 +6,6 @@ FACTION_STANDING_LABEL100 = UNKNOWN
 local format = string.format
 local min, max = math.min, math.max
 
-function M:UpdateExpRepAnchors()
-	local repBar = ReputationBarMover
-	local expBar = ExperienceBarMover
-
-	if (E:HasMoverBeenMoved('ExperienceBarMover') or E:HasMoverBeenMoved('ReputationBarMover')) or not repBar or not expBar then return; end
-	repBar:ClearAllPoints()
-	expBar:ClearAllPoints()
-	
-	if self.expBar:IsShown() and self.repBar:IsShown() then
-		expBar:Point('TOP', E.UIParent, 'TOP', 0, -1)
-		repBar:Point('TOP', self.expBar, 'BOTTOM', 0, -1)
-	elseif self.expBar:IsShown() then
-		expBar:Point('TOP', E.UIParent, 'TOP', 0, -1)
-	else
-		repBar:Point('TOP', E.UIParent, 'TOP', 0, -1)
-	end
-end
-
 function M:GetXP(unit)
 	if(unit == 'pet') then
 		return GetPetExperience()
@@ -75,8 +57,6 @@ function M:UpdateExperience(event)
 		
 		bar.text:SetText(text)
 	end
-	
-	self:UpdateExpRepAnchors()
 end
 
 function M:UpdateReputation(event)
@@ -118,8 +98,6 @@ function M:UpdateReputation(event)
 		
 		bar.text:SetText(text)		
 	end
-	
-	self:UpdateExpRepAnchors()
 end
 
 local function ExperienceBar_OnEnter(self)
@@ -127,7 +105,7 @@ local function ExperienceBar_OnEnter(self)
 		E:UIFrameFadeIn(self, 0.4, self:GetAlpha(), 1)
 	end
 	GameTooltip:ClearLines()
-	GameTooltip:SetOwner(self, 'ANCHOR_BOTTOM', 0, -4)
+	GameTooltip:SetOwner(self, 'ANCHOR_CURSOR', 0, -4)
 	
 	local cur, max = M:GetXP('player')
 	local rested = GetXPExhaustion()
@@ -175,7 +153,7 @@ function M:CreateBar(name, onEnter, ...)
 	bar:SetScript('OnEnter', onEnter)
 	bar:SetScript('OnLeave', OnLeave)
 	bar:SetFrameStrata('LOW')
-	bar:SetTemplate('Default')
+	bar:SetTemplate('Transparent')
 	bar:Hide()
 	
 	bar.statusBar = CreateFrame('StatusBar', nil, bar)
@@ -233,8 +211,6 @@ function M:EnableDisable_ExperienceBar()
 		self:UnregisterEvent('UPDATE_EXHAUSTION')
 		self.expBar:Hide()
 	end
-	
-	self:UpdateExpRepAnchors()
 end
 
 function M:EnableDisable_ReputationBar()
@@ -248,14 +224,14 @@ function M:EnableDisable_ReputationBar()
 end
 
 function M:LoadExpRepBar()
-	self.expBar = self:CreateBar('ElvUI_ExperienceBar', ExperienceBar_OnEnter, 'TOP', E.UIParent, 'TOP', 0, -1)
+	self.expBar = self:CreateBar('ElvUI_ExperienceBar', ExperienceBar_OnEnter, 'LEFT', LeftChatPanel, 'RIGHT', E.PixelMode and -1 or 1, 0)
 	self.expBar.statusBar:SetStatusBarColor(0, 0.4, 1, .8)
 	self.expBar.rested = CreateFrame('StatusBar', nil, self.expBar)
 	self.expBar.rested:SetInside()
 	self.expBar.rested:SetStatusBarTexture(E.media.normTex)
 	self.expBar.rested:SetStatusBarColor(1, 0, 1, 0.2)
 
-	self.repBar = self:CreateBar('ElvUI_ReputationBar', ReputationBar_OnEnter, 'TOP', self.expBar, 'BOTTOM', 0, -1)
+	self.repBar = self:CreateBar('ElvUI_ReputationBar', ReputationBar_OnEnter, 'RIGHT', RightChatPanel, 'LEFT', E.PixelMode and 1 or -1, 0)
 
 	self:UpdateExpRepDimensions()
 	
@@ -264,6 +240,4 @@ function M:LoadExpRepBar()
 
 	E:CreateMover(self.expBar, "ExperienceBarMover", L["Experience Bar"])
 	E:CreateMover(self.repBar, "ReputationBarMover", L["Reputation Bar"])
-	
-	self:UpdateExpRepAnchors()
 end

@@ -417,7 +417,21 @@ function UF.groupPrototype:Configure_Groups()
 	local width, height, newCols, newRows = 0, 0, 0, 0
 	local direction = db.growthDirection
 	local xMult, yMult = DIRECTION_TO_HORIZONTAL_SPACING_MULTIPLIER[direction], DIRECTION_TO_VERTICAL_SPACING_MULTIPLIER[direction]
-	for i=1, db.numGroups do
+	local raidFilter = UF.db.smartRaidFilter
+	local numGroups = db.numGroups
+	if(raidFilter) then
+		local inInstance, instanceType = IsInInstance()
+		if(inInstance and instanceType == 'raid') then
+			local maxPlayers = select(5, GetInstanceInfo())
+			if(maxPlayers) then
+				numGroups = E:Round(maxPlayers/5)
+			end
+		end
+	end
+
+	self.numGroups = numGroups
+	
+	for i=1, numGroups do
 		local group = self.groups[i]
 		
 		point = DIRECTION_TO_POINT[direction]
@@ -436,7 +450,7 @@ function UF.groupPrototype:Configure_Groups()
 			
 			--[[if not group.isForced then
 				if not group.initialized then
-					group:SetAttribute("startingIndex", db.raidWideSorting and (-min(db.numGroups * (db.groupsPerRowCol * 5), MAX_RAID_MEMBERS) + 1) or -4)
+					group:SetAttribute("startingIndex", db.raidWideSorting and (-min(numGroups * (db.groupsPerRowCol * 5), MAX_RAID_MEMBERS) + 1) or -4)
 					group:Show()
 					group.initialized = true
 				end

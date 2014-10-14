@@ -6,32 +6,96 @@ local ElvUF = ns.oUF
 assert(ElvUF, "ElvUI was unable to locate oUF.")
 local tinsert = table.insert
 
-function UF:Construct_FocusFrame(frame)	
-	frame.Health = self:Construct_HealthBar(frame, true, true, 'RIGHT') -- Здоровье
-	frame.Health.frequentUpdates = true;
-	frame.Power = self:Construct_PowerBar(frame, true, true, 'LEFT', false) -- Мана
-	frame.Name = self:Construct_NameText(frame) -- Имя
-	frame.Castbar = self:Construct_Castbar(frame, 'LEFT', L['Focus Castbar']) -- Полоса заклинаний
-	frame.Castbar.SafeZone = nil
-	frame.Castbar.LatencyTexture:Hide()
-	frame.Buffs = self:Construct_Buffs(frame) -- Баффы
-	frame.Debuffs = self:Construct_Debuffs(frame) -- Дебаффы
-	frame.AuraBars = self:Construct_AuraBarHeader(frame) -- Полоса аур
-	frame.RaidIcon = UF:Construct_RaidIcon(frame) -- Рейдовая иконка
-	frame.Range = UF:Construct_Range(frame) -- Проверка дистанции
-	frame.Threat = UF:Construct_Threat(frame) -- Угроза
+function UF:Construct_Raid40Frames(unitGroup)
+	self:SetScript('OnEnter', UnitFrame_OnEnter)
+	self:SetScript('OnLeave', UnitFrame_OnLeave)
 	
-	frame:Point('BOTTOMRIGHT', ElvUF_Target, 'TOPRIGHT', 0, 220) -- Позиция
-	E:CreateMover(frame, frame:GetName()..'Mover', L['Focus Frame'], nil, nil, nil, 'ALL,SOLO')
+	self.RaisedElementParent = CreateFrame('Frame', nil, self)
+	self.RaisedElementParent:SetFrameStrata("MEDIUM")
+	self.RaisedElementParent:SetFrameLevel(self:GetFrameLevel() + 10)		
+	
+	self.Health = UF:Construct_HealthBar(self, true, true, 'RIGHT')
+	
+	self.Power = UF:Construct_PowerBar(self, true, true, 'LEFT', false)
+	self.Power.frequentUpdates = false;
+	
+	self.Name = UF:Construct_NameText(self)
+	self.Buffs = UF:Construct_Buffs(self)
+	self.Debuffs = UF:Construct_Debuffs(self)
+	self.AuraWatch = UF:Construct_AuraWatch(self)
+	self.RaidDebuffs = UF:Construct_RaidDebuffs(self)
+	self.DebuffHighlight = UF:Construct_DebuffHighlight(self)
+	self.RaidRoleFramesAnchor = UF:Construct_RaidRoleFrames(self)
+	self.TargetGlow = UF:Construct_TargetGlow(self)
+	tinsert(self.__elements, UF.UpdateTargetGlow)
+	self:RegisterEvent('PLAYER_TARGET_CHANGED', UF.UpdateTargetGlow)
+	self:RegisterEvent('PLAYER_ENTERING_WORLD', UF.UpdateTargetGlow)		
+	
+	self.Threat = UF:Construct_Threat(self)
+	self.RaidIcon = UF:Construct_RaidIcon(self)
+	self.ReadyCheck = UF:Construct_ReadyCheckIcon(self)
+	self.Range = UF:Construct_Range(self)
+
+	UF:Update_StatusBars()
+	UF:Update_FontStrings()	
+	
+	return self
 end
 
-function UF:Update_FocusFrame(frame, db)
+
+function UF:Raid40SmartVisibility(event)
+	if not self.db or (self.db and not self.db.enable) or (UF.db and not UF.db.smartRaidFilter) or self.isForced then return; end
+	local inInstance, instanceType = IsInInstance()
+	
+	if event == "PLAYER_REGEN_ENABLED" then self:UnregisterEvent("PLAYER_REGEN_ENABLED") end
+
+	if not InCombatLockdown() then		
+		if(inInstance and instanceType == 'raid') then
+			local maxPlayers = select(5, GetInstanceInfo())
+			UnregisterStateDriver(self, "visibility")
+			self:Show()	
+
+			if(maxPlayers and ElvUF_Raid40.numGroups ~= E:Round(maxPlayers/5)) then
+				ElvUF_Raid40:Configure_Groups()		
+			end
+		elseif self.db.visibility then
+			RegisterStateDriver(self, "visibility", self.db.visibility)
+		end
+	else
+		self:RegisterEvent("PLAYER_REGEN_ENABLED")
+		return
+	end
+end
+
+function UF:Update_Raid40Header(header, db)
+	header:GetParent().db = db
+
+	local headerHolder = header:GetParent()
+	headerHolder.db = db
+
+	if not headerHolder.positioned then
+		headerHolder:ClearAllPoints()
+		headerHolder:Point("BOTTOMLEFT", E.UIParent, "BOTTOMLEFT", 4, 195)	
+
+		E:CreateMover(headerHolder, headerHolder:GetName()..'Mover', L['Raid-40 Frames'], nil, nil, nil, 'ALL,RAID')
+
+		headerHolder:RegisterEvent("PLAYER_ENTERING_WORLD")
+		headerHolder:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+		headerHolder:SetScript("OnEvent", UF['Raid40SmartVisibility'])
+		headerHolder.positioned = true;
+	end
+	
+	UF.Raid40SmartVisibility(headerHolder)
+end
+
+function UF:Update_Raid40Frames(frame, db)
 	frame.db = db
 	local BORDER = E.Border;
 	local SPACING = E.Spacing;
+	local SHADOW_SPACING = E.PixelMode and 3 or 4
 	local UNIT_WIDTH = db.width
 	local UNIT_HEIGHT = db.height
-	local SHADOW_SPACING = E.PixelMode and 3 or 4
+	
 	local USE_POWERBAR = db.power.enable
 	local USE_MINI_POWERBAR = db.power.width == 'spaced' and USE_POWERBAR
 	local USE_INSET_POWERBAR = db.power.width == 'inset' and USE_POWERBAR
@@ -40,103 +104,104 @@ function UF:Update_FocusFrame(frame, db)
 	local POWERBAR_HEIGHT = db.power.height
 	local POWERBAR_WIDTH = db.width - (BORDER*2)
 	
-	local unit = self.unit
-	frame:RegisterForClicks(self.db.targetOnMouseDown and 'AnyDown' or 'AnyUp')
+	frame.db = db
 	frame.colors = ElvUF.colors
-	frame:Size(UNIT_WIDTH, UNIT_HEIGHT)
-	_G[frame:GetName()..'Mover']:Size(frame:GetSize())
+	frame:RegisterForClicks(self.db.targetOnMouseDown and 'AnyDown' or 'AnyUp')
 	
-	frame:SetAttribute("type3", "macro")
-	frame:SetAttribute("macrotext", "/clearfocus")
+	if not InCombatLockdown() then
+		frame:Size(UNIT_WIDTH, UNIT_HEIGHT)
+	end
+	frame.Range = {insideAlpha = 1, outsideAlpha = E.db.unitframe.OORAlpha}
+	if not frame:IsElementEnabled('Range') then
+		frame:EnableElement('Range')
+	end		
+	
 	
 	--Adjust some variables
 	do
 		if not USE_POWERBAR then
 			POWERBAR_HEIGHT = 0
 		end	
-		
+	
 		if USE_MINI_POWERBAR then
 			POWERBAR_WIDTH = POWERBAR_WIDTH / 2
 		end
 	end
 	
-	do -- Входящие исцеление
-		frame.HealCommBar = CreateFrame('StatusBar', nil, frame.Health)
-		
-		local c = UF.db.colors.healPrediction
-		
-		if db.healPrediction then
-			if not frame:IsElementEnabled('HealComm4') then
-				frame:EnableElement('HealComm4')
-			end
-			
-			frame.HealCommBar:SetStatusBarTexture(E["media"].blankTex)
-			frame.HealCommBar:SetFrameLevel(frame.Health:GetFrameLevel())
-			frame.HealCommBar:SetParent(frame.Health)
-			frame.HealCommBar:SetStatusBarColor(c.personal.r, c.personal.g, c.personal.b, c.personal.a)
-		else
-			if frame:IsElementEnabled('HealComm4') then
-				frame:DisableElement('HealComm4')
-			end
-		end
-	end
-	
-	do -- Здоровье
+	--Health
+	do
 		local health = frame.Health
 		health.Smooth = self.db.smoothbars
+		health.frequentUpdates = db.health.frequentUpdates
 
-		local x, y = self:GetPositionOffset(db.health.position) -- Текст
+		--Position this even if disabled because resurrection icon depends on the position
+		local x, y = self:GetPositionOffset(db.health.position)
 		health.value:ClearAllPoints()
 		health.value:Point(db.health.position, health, db.health.position, x + db.health.xOffset, y + db.health.yOffset)
 		frame:Tag(health.value, db.health.text_format)
 		
-		health.colorSmooth = nil -- Цвет
+		--Colors
+		health.colorSmooth = nil
 		health.colorHealth = nil
 		health.colorClass = nil
 		health.colorReaction = nil
-		if self.db['colors'].healthclass ~= true then
+		
+		if db.colorOverride == "FORCE_ON" then
+			health.colorClass = true
+			health.colorReaction = true
+		elseif db.colorOverride == "FORCE_OFF" then
 			if self.db['colors'].colorhealthbyvalue == true then
 				health.colorSmooth = true
 			else
 				health.colorHealth = true
 			end		
 		else
-			health.colorClass = true
-			health.colorReaction = true
-		end	
+			if self.db['colors'].healthclass ~= true then
+				if self.db['colors'].colorhealthbyvalue == true then
+					health.colorSmooth = true
+				else
+					health.colorHealth = true
+				end		
+			else
+				health.colorClass = true
+				health.colorReaction = true
+			end				
+		end
 		
-		health:ClearAllPoints() -- Позиция
+		--Position
+		health:ClearAllPoints()
 		health:Point("TOPRIGHT", frame, "TOPRIGHT", -BORDER, -BORDER)
 		if USE_POWERBAR_OFFSET then			
-			health:Point("TOPRIGHT", frame, "TOPRIGHT", -(BORDER+POWERBAR_OFFSET), -BORDER)
 			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER+POWERBAR_OFFSET, BORDER+POWERBAR_OFFSET)
 		elseif USE_MINI_POWERBAR then
 			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER, BORDER + (POWERBAR_HEIGHT/2))
 		elseif USE_INSET_POWERBAR then
-			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER, BORDER)			
+			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER, BORDER)				
 		else
 			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER, BORDER + POWERBAR_HEIGHT)
 		end
+		
+		health:SetOrientation(db.health.orientation)
 	end
 	
-	UF:UpdateNameSettings(frame) -- Имя
+	--Name
+	UF:UpdateNameSettings(frame)
 	
-	do -- Мана
+	--Power
+	do
 		local power = frame.Power
 		if USE_POWERBAR then
-			if not frame:IsElementEnabled('Power') then
-				frame:EnableElement('Power')
-				power:Show()
-			end		
-			
+			frame:EnableElement('Power')
 			power.Smooth = self.db.smoothbars
-			
-			local x, y = self:GetPositionOffset(db.power.position) -- Текст
+			power:Show()	
+			--Text
+			local x, y = self:GetPositionOffset(db.power.position)
 			power.value:ClearAllPoints()
 			power.value:Point(db.power.position, frame.Health, db.power.position, x + db.power.xOffset, y + db.power.yOffset)		
 			frame:Tag(power.value, db.power.text_format)
 			
-			power.colorClass = nil -- Цвет
+			--Colors
+			power.colorClass = nil
 			power.colorReaction = nil	
 			power.colorPower = nil
 			if self.db['colors'].powerclass then
@@ -146,35 +211,37 @@ function UF:Update_FocusFrame(frame, db)
 				power.colorPower = true
 			end		
 			
-			power:ClearAllPoints() -- Позиция
+			--Position
+			power:ClearAllPoints()
 			if USE_POWERBAR_OFFSET then
-				power:Point("TOPLEFT", frame, "TOPLEFT", BORDER, -POWERBAR_OFFSET)
-				power:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -BORDER, BORDER)
-				power:SetFrameStrata("LOW");
-				power:SetFrameLevel(2);
+				power:Point("TOPLEFT", frame.Health, "TOPLEFT", -POWERBAR_OFFSET, -POWERBAR_OFFSET)
+				power:Point("BOTTOMRIGHT", frame.Health, "BOTTOMRIGHT", -POWERBAR_OFFSET, -POWERBAR_OFFSET)
+				power:SetFrameStrata("LOW")
+				power:SetFrameLevel(2)
 			elseif USE_MINI_POWERBAR then
 				power:Width(POWERBAR_WIDTH - BORDER*2)
 				power:Height(POWERBAR_HEIGHT - BORDER*2)
 				power:Point("LEFT", frame, "BOTTOMLEFT", (BORDER*2 + 4), BORDER + (POWERBAR_HEIGHT/2))
-				power:SetFrameStrata("MEDIUM");
-				power:SetFrameLevel(frame:GetFrameLevel() + 3);
+				power:SetFrameStrata("MEDIUM")
+				power:SetFrameLevel(frame:GetFrameLevel() + 3)
 			elseif USE_INSET_POWERBAR then
 				power:Height(POWERBAR_HEIGHT - BORDER*2)
 				power:Point("BOTTOMLEFT", frame.Health, "BOTTOMLEFT", BORDER + (BORDER*2), BORDER + (BORDER*2))
 				power:Point("BOTTOMRIGHT", frame.Health, "BOTTOMRIGHT", -(BORDER + (BORDER*2)), BORDER + (BORDER*2))
-				power:SetFrameStrata("MEDIUM");
-				power:SetFrameLevel(frame:GetFrameLevel() + 3);
+				power:SetFrameStrata("MEDIUM")
+				power:SetFrameLevel(frame:GetFrameLevel() + 3)							
 			else
 				power:Point("TOPLEFT", frame.Health.backdrop, "BOTTOMLEFT", BORDER, -(E.PixelMode and 0 or (BORDER + SPACING)))
-				power:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -BORDER, BORDER)
+				power:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -(BORDER), BORDER)
 			end
-		elseif frame:IsElementEnabled('Power') then
+		else
 			frame:DisableElement('Power')
-			power:Hide()	
+			power:Hide()
 		end
 	end
 	
-	do -- Угроза
+	--Threat
+	do
 		local threat = frame.Threat
 
 		if db.threatStyle ~= 'NONE' and db.threatStyle ~= nil then
@@ -195,6 +262,11 @@ function UF:Update_FocusFrame(frame, db)
 					threat.glow:Point("BOTTOMLEFT", frame.Health.backdrop, "BOTTOMLEFT", -SHADOW_SPACING, -SHADOW_SPACING)
 					threat.glow:Point("BOTTOMRIGHT", frame.Health.backdrop, "BOTTOMRIGHT", SHADOW_SPACING, -SHADOW_SPACING)	
 				end
+				
+				if USE_PORTRAIT and not USE_PORTRAIT_OVERLAY then
+					threat.glow:Point("TOPRIGHT", frame.Portrait.backdrop, "TOPRIGHT", SHADOW_SPACING, -SHADOW_SPACING)
+					threat.glow:Point("BOTTOMRIGHT", frame.Portrait.backdrop, "BOTTOMRIGHT", SHADOW_SPACING, -SHADOW_SPACING)
+				end
 			elseif db.threatStyle == "ICONTOPLEFT" or db.threatStyle == "ICONTOPRIGHT" or db.threatStyle == "ICONBOTTOMLEFT" or db.threatStyle == "ICONBOTTOMRIGHT" or db.threatStyle == "ICONTOP" or db.threatStyle == "ICONBOTTOM" or db.threatStyle == "ICONLEFT" or db.threatStyle == "ICONRIGHT" then
 				threat:SetFrameStrata('HIGH')
 				local point = db.threatStyle
@@ -206,24 +278,46 @@ function UF:Update_FocusFrame(frame, db)
 		elseif frame:IsElementEnabled('Threat') then
 			frame:DisableElement('Threat')
 		end
-	end	
+	end		
 	
+	--Target Glow
+	do
+		local tGlow = frame.TargetGlow
+		tGlow:ClearAllPoints()
+		tGlow:Point("TOPLEFT", -SHADOW_SPACING, SHADOW_SPACING)
+		tGlow:Point("TOPRIGHT", SHADOW_SPACING, SHADOW_SPACING)
+		
+		if USE_MINI_POWERBAR then
+			tGlow:Point("BOTTOMLEFT", -SHADOW_SPACING, -SHADOW_SPACING + (POWERBAR_HEIGHT/2))
+			tGlow:Point("BOTTOMRIGHT", SHADOW_SPACING, -SHADOW_SPACING + (POWERBAR_HEIGHT/2))		
+		else
+			tGlow:Point("BOTTOMLEFT", -SHADOW_SPACING, -SHADOW_SPACING)
+			tGlow:Point("BOTTOMRIGHT", SHADOW_SPACING, -SHADOW_SPACING)
+		end
+		
+		if USE_POWERBAR_OFFSET then
+			tGlow:Point("TOPLEFT", -SHADOW_SPACING+POWERBAR_OFFSET, SHADOW_SPACING)
+			tGlow:Point("TOPRIGHT", SHADOW_SPACING, SHADOW_SPACING)
+			tGlow:Point("BOTTOMLEFT", -SHADOW_SPACING+POWERBAR_OFFSET, -SHADOW_SPACING+POWERBAR_OFFSET)
+			tGlow:Point("BOTTOMRIGHT", SHADOW_SPACING, -SHADOW_SPACING+POWERBAR_OFFSET)				
+		end				
+	end			
+
+	--Auras Disable/Enable
+	--Only do if both debuffs and buffs aren't being used.
 	do
 		if db.debuffs.enable or db.buffs.enable then
-			if not frame:IsElementEnabled('Aura') then
-				frame:EnableElement('Aura')
-			end	
+			frame:EnableElement('Aura')
 		else
-			if frame:IsElementEnabled('Aura') then
-				frame:DisableElement('Aura')
-			end			
+			frame:DisableElement('Aura')		
 		end
 		
 		frame.Buffs:ClearAllPoints()
 		frame.Debuffs:ClearAllPoints()
 	end
 	
-	do -- Баффы
+	--Buffs
+	do
 		local buffs = frame.Buffs
 		local rows = db.buffs.numrows
 		
@@ -258,7 +352,8 @@ function UF:Update_FocusFrame(frame, db)
 		end
 	end
 	
-	do -- Дебаффы
+	--Debuffs
+	do
 		local debuffs = frame.Debuffs
 		local rows = db.debuffs.numrows
 		
@@ -293,48 +388,24 @@ function UF:Update_FocusFrame(frame, db)
 		end
 	end	
 	
-	do -- Полоса заклинаний
-		local castbar = frame.Castbar
-		castbar:Width(db.castbar.width - (BORDER * 2))
-		castbar:Height(db.castbar.height)
-		castbar.Holder:Width(db.castbar.width)
-		castbar.Holder:Height(db.castbar.height + (E.PixelMode and 2 or (BORDER * 2)))
-		castbar.Holder:GetScript('OnSizeChanged')(castbar.Holder)
-		
-		if db.castbar.latency then -- ЗАдержка
-			castbar.SafeZone = castbar.LatencyTexture
-			castbar.LatencyTexture:Show()
-		else
-			castbar.SafeZone = nil
-			castbar.LatencyTexture:Hide()
-		end
-		
-		if db.castbar.icon then -- Иконка
-			castbar.Icon = castbar.ButtonIcon
-			castbar.Icon.bg:Width(db.castbar.height + (E.Border * 2))
-			castbar.Icon.bg:Height(db.castbar.height + (E.Border * 2))
-			
-			castbar:Width(db.castbar.width - castbar.Icon.bg:GetWidth() - (E.PixelMode and 1 or 5))
-			castbar.Icon.bg:Show()
-		else
-			castbar.ButtonIcon.bg:Hide()
-			castbar.Icon = nil
-		end
+	--RaidDebuffs
+	do
+		local rdebuffs = frame.RaidDebuffs
+		if db.rdebuffs.enable then
+			frame:EnableElement('RaidDebuffs')				
 
-		if db.castbar.spark then -- Искра
-			castbar.Spark:Show()
+			rdebuffs:Size(db.rdebuffs.size)
+			rdebuffs:Point('BOTTOM', frame, 'BOTTOM', db.rdebuffs.xOffset, db.rdebuffs.yOffset)
+			rdebuffs.count:FontTemplate(nil, db.rdebuffs.fontSize, 'OUTLINE')
+			rdebuffs.time:FontTemplate(nil, db.rdebuffs.fontSize, 'OUTLINE')
 		else
-			castbar.Spark:Hide()
+			frame:DisableElement('RaidDebuffs')
+			rdebuffs:Hide()				
 		end
-
-		if db.castbar.enable and not frame:IsElementEnabled('Castbar') then
-			frame:EnableElement('Castbar')
-		elseif not db.castbar.enable and frame:IsElementEnabled('Castbar') then
-			frame:DisableElement('Castbar')	
-		end			
 	end
-	
-	do -- Рейдовая иконка
+
+	--Raid Icon
+	do
 		local RI = frame.RaidIcon
 		if db.raidicon.enable then
 			frame:EnableElement('RaidIcon')
@@ -348,86 +419,42 @@ function UF:Update_FocusFrame(frame, db)
 			frame:DisableElement('RaidIcon')	
 			RI:Hide()
 		end
-	end
+	end			
 	
-	do -- Полоса аур
-		local auraBars = frame.AuraBars
-		
-		if db.aurabar.enable then
-			if not frame:IsElementEnabled('AuraBars') then
-				frame:EnableElement('AuraBars')
-			end
-			auraBars:Show()
-			auraBars.friendlyAuraType = db.aurabar.friendlyAuraType
-			auraBars.enemyAuraType = db.aurabar.enemyAuraType
-			
-			local buffColor = UF.db.colors.auraBarBuff
-			local debuffColor = UF.db.colors.auraBarDebuff
-			
-			local attachTo = frame
-			
-			if db.aurabar.attachTo == 'BUFFS' then
-				attachTo = frame.Buffs
-			elseif db.aurabar.attachTo == 'DEBUFFS' then
-				attachTo = frame.Debuffs
-			end
-			
-			local anchorPoint, anchorTo = 'BOTTOM', 'TOP'
-			if db.aurabar.anchorPoint == 'BELOW' then
-				anchorPoint, anchorTo = 'TOP', 'BOTTOM'
-			end
-			
-			local yOffset = 0;
-			if E.PixelMode then
-				if db.aurabar.anchorPoint == 'BELOW' then
-					yOffset = 1;
-				else
-					yOffset = -1;
-				end
-			end
-			
-			auraBars.auraBarHeight = db.aurabar.height
-
-			auraBars:ClearAllPoints()
-			auraBars:SetPoint(anchorPoint..'LEFT', attachTo, anchorTo..'LEFT', POWERBAR_OFFSET, yOffset)
-			auraBars:SetPoint(anchorPoint..'RIGHT', attachTo, anchorTo..'RIGHT', -POWERBAR_OFFSET, yOffset)
-
-			auraBars.buffColor = {buffColor.r, buffColor.g, buffColor.b}
-			if UF.db.colors.auraBarByType then
-				auraBars.debuffColor = nil;
-				auraBars.defaultDebuffColor = {debuffColor.r, debuffColor.g, debuffColor.b}
-			else
-				auraBars.debuffColor = {debuffColor.r, debuffColor.g, debuffColor.b}
-				auraBars.defaultDebuffColor = nil;
-			end
-			
-			if db.aurabar.sort == 'TIME_REMAINING' then
-				auraBars.sort = true --default function
-			elseif db.aurabar.sort == 'TIME_REMAINING_REVERSE' then
-				auraBars.sort = UF.SortAuraBarReverse
-			elseif db.aurabar.sort == 'TIME_DURATION' then
-				auraBars.sort = UF.SortAuraBarDuration
-			elseif db.aurabar.sort == 'TIME_DURATION_REVERSE' then
-				auraBars.sort = UF.SortAuraBarDurationReverse
-			elseif db.aurabar.sort == 'NAME' then
-				auraBars.sort = UF.SortAuraBarName
-			else
-				auraBars.sort = nil
-			end			
-			
-			auraBars.down = db.aurabar.anchorPoint == 'BELOW'
-			auraBars.maxBars = db.aurabar.maxBars
-			auraBars.forceShow = frame.forceShowAuras
-			auraBars:SetAnchors()
+	--Debuff Highlight
+	do
+		local dbh = frame.DebuffHighlight
+		if E.db.unitframe.debuffHighlighting then
+			frame:EnableElement('DebuffHighlight')
 		else
-			if frame:IsElementEnabled('AuraBars') then
-				frame:DisableElement('AuraBars')
-				auraBars:Hide()
-			end		
+			frame:DisableElement('DebuffHighlight')
 		end
 	end
 	
-	do -- Проверка дистанции
+	--Raid Roles
+	do
+		local raidRoleFrameAnchor = frame.RaidRoleFramesAnchor
+		
+		if db.raidRoleIcons.enable then
+			raidRoleFrameAnchor:Show()
+			frame:EnableElement('Leader')
+			frame:EnableElement('MasterLooter')
+			
+			raidRoleFrameAnchor:ClearAllPoints()
+			if db.raidRoleIcons.position == 'TOPLEFT' then
+				raidRoleFrameAnchor:Point('LEFT', frame, 'TOPLEFT', 2, 0)
+			else
+				raidRoleFrameAnchor:Point('RIGHT', frame, 'TOPRIGHT', -2, 0)
+			end
+		else
+			raidRoleFrameAnchor:Hide()
+			frame:DisableElement('Leader')
+			frame:DisableElement('MasterLooter')
+		end
+	end		
+	
+	--Range
+	do
 		local range = frame.Range
 		if db.rangeCheck then
 			if not frame:IsElementEnabled('Range') then
@@ -442,7 +469,11 @@ function UF:Update_FocusFrame(frame, db)
 		end
 	end		
 	
-	if db.customTexts then -- Свой текст
+	UF:UpdateAuraWatch(frame)
+	
+	frame:EnableElement('ReadyCheck')		
+
+	if db.customTexts then
 		local customFont = UF.LSM:Fetch("font", UF.db.font)
 		for objectName, _ in pairs(db.customTexts) do
 			if not frame[objectName] then
@@ -454,19 +485,19 @@ function UF:Update_FocusFrame(frame, db)
 			if objectDB.font then
 				customFont = UF.LSM:Fetch("font", objectDB.font)
 			end
-			
+						
 			frame[objectName]:FontTemplate(customFont, objectDB.size or UF.db.fontSize, objectDB.fontOutline or UF.db.fontOutline)
 			frame:Tag(frame[objectName], objectDB.text_format or '')
 			frame[objectName]:SetJustifyH(objectDB.justifyH or 'CENTER')
 			frame[objectName]:ClearAllPoints()
-			frame[objectName]:SetPoint(objectDB.justifyH or 'CENTER', frame, objectDB.justifyH or 'CENTER', objectDB.xOffset, objectDB.yOffset);
+			frame[objectName]:SetPoint(objectDB.justifyH or 'CENTER', frame, objectDB.justifyH or 'CENTER', objectDB.xOffset, objectDB.yOffset)
 		end
-	end
-	
-	UF:ToggleTransparentStatusBar(UF.db.colors.transparentHealth, frame.Health, frame.Health.bg, true);
-	UF:ToggleTransparentStatusBar(UF.db.colors.transparentPower, frame.Power, frame.Power.bg);
+	end		
+
+	UF:ToggleTransparentStatusBar(UF.db.colors.transparentHealth, frame.Health, frame.Health.bg, true)
+	UF:ToggleTransparentStatusBar(UF.db.colors.transparentPower, frame.Power, frame.Power.bg)	
 	
 	frame:UpdateAllElements()
 end
 
-tinsert(UF['unitstoload'], 'focus')
+UF['headerstoload']['raid40'] = true

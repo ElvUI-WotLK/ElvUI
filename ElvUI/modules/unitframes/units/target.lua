@@ -26,9 +26,6 @@ function UF:Construct_TargetFrame(frame)
 	frame.CPoints = self:Construct_Combobar(frame) -- Полоса серии (Разбойник)
 	frame.DebuffHighlight = self:Construct_DebuffHighlight(frame) -- ???
 	
-	tinsert(frame.__elements, UF.SmartAuraDisplay)
-	frame:RegisterEvent('PLAYER_TARGET_CHANGED', UF.SmartAuraDisplay) -- Умные ауры
-	
 	frame.AuraBars = self:Construct_AuraBarHeader(frame) -- Полоса аур
 	frame.Range = UF:Construct_Range(frame) -- Проверка дистанции
 
@@ -652,8 +649,10 @@ function UF:Update_TargetFrame(frame, db)
 				auraBars.sort = UF.SortAuraBarName
 			else
 				auraBars.sort = nil
-			end			
+			end
 			
+			auraBars.maxBars = db.aurabar.maxBars
+			auraBars.forceShow = frame.forceShowAuras
 			auraBars:SetAnchors()
 		else
 			if frame:IsElementEnabled('AuraBars') then
