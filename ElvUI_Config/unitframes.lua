@@ -3412,7 +3412,7 @@ E.Options.args.unitframe.args.party = { -- Группа
 E.Options.args.unitframe.args['raid'] = {
 	name = L['Raid Frames'],
 	type = 'group',
-	order = 1100,
+	order = 1300,
 	childGroups = "select",
 	get = function(info) return E.db.unitframe.units['raid'][ info[#info] ] end,
 	set = function(info, value) E.db.unitframe.units['raid'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('raid') end,
@@ -3744,7 +3744,7 @@ E.Options.args.unitframe.args['raid'] = {
 E.Options.args.unitframe.args['raid40'] = {
 	name = L['Raid-40 Frames'],
 	type = 'group',
-	order = 1100,
+	order = 1350,
 	childGroups = "select",
 	get = function(info) return E.db.unitframe.units['raid40'][ info[#info] ] end,
 	set = function(info, value) E.db.unitframe.units['raid40'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('raid40') end,

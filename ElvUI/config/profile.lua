@@ -80,7 +80,6 @@ P["nameplate"] = {
 	['font'] = 'ElvUI Pixel',
 	['fontSize'] = 8,
 	['fontOutline'] = 'MONOCHROMEOUTLINE',
-	["comboPoints"] = true,
 	['nonTargetAlpha'] = 0.6,
 	['combatHide'] = false,
 	['colorNameByValue'] =  true,

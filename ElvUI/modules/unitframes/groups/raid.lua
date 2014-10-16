@@ -51,10 +51,15 @@ function UF:RaidSmartVisibility(event)
 		if(inInstance and instanceType == 'raid') then
 			local maxPlayers = select(5, GetInstanceInfo())
 			UnregisterStateDriver(self, "visibility")
-			self:Show()	
-
-			if(maxPlayers and ElvUF_Raid.numGroups ~= E:Round(maxPlayers/5)) then
-				ElvUF_Raid:Configure_Groups()		
+			
+			if(maxPlayers < 40) then
+				self:Show()	
+				
+				if(maxPlayers and ElvUF_Raid.numGroups ~= E:Round(maxPlayers/5)) then
+					ElvUF_Raid:Configure_Groups()		
+				end				
+			else
+				self:Hide()
 			end
 		elseif self.db.visibility then
 			RegisterStateDriver(self, "visibility", self.db.visibility)
