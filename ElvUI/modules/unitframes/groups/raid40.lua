@@ -37,8 +37,8 @@ function UF:Construct_Raid40Frames(unitGroup)
 	self.Range = UF:Construct_Range(self)
 
 	UF:Update_StatusBars()
-	UF:Update_FontStrings()	
-	
+	UF:Update_FontStrings()
+	UF:Update_Raid40Frames(self, UF.db['units']['raid40'])
 	return self
 end
 
@@ -50,7 +50,7 @@ function UF:Raid40SmartVisibility(event)
 	if event == "PLAYER_REGEN_ENABLED" then self:UnregisterEvent("PLAYER_REGEN_ENABLED") end
 
 	if not InCombatLockdown() then		
-		if(inInstance and instanceType == 'raid') then
+		if(inInstance and (instanceType == "raid" or instanceType == "pvp")) then
 			local maxPlayers = select(5, GetInstanceInfo())
 			UnregisterStateDriver(self, "visibility")
 			
