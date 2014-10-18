@@ -417,13 +417,15 @@ function UF.groupPrototype:Configure_Groups()
 	local width, height, newCols, newRows = 0, 0, 0, 0
 	local direction = db.growthDirection
 	local xMult, yMult = DIRECTION_TO_HORIZONTAL_SPACING_MULTIPLIER[direction], DIRECTION_TO_VERTICAL_SPACING_MULTIPLIER[direction]
+	
 	local raidFilter = UF.db.smartRaidFilter
 	local numGroups = db.numGroups
 	if(raidFilter) then
 		local inInstance, instanceType = IsInInstance()
-		if(inInstance and instanceType == 'raid') then
+		if(inInstance and (instanceType == 'raid')) then
 			local maxPlayers = select(5, GetInstanceInfo())
-			if(maxPlayers) then
+
+			if(maxPlayers > 0) then
 				numGroups = E:Round(maxPlayers/5)
 			end
 		end
@@ -540,7 +542,7 @@ end
 function UF.groupPrototype:AdjustVisibility()
 	if not self.isForced then
 		for i=1, #self.groups do
-			if (i <= self.db.numGroups) then
+			if(i <= self.db.numGroups) then
 				self.groups[i]:Show()
 			else
 				if self.groups[i].forceShow then
@@ -800,12 +802,9 @@ function UF:UpdateAllHeaders(event)
 	end
 end
 
-function UF:ADDON_LOADED(event, addon)
-	if addon ~= 'Blizzard_ArenaUI' then return; end
-	ElvUF:DisableBlizzard('arena')
-	self:UnregisterEvent("ADDON_LOADED");
+function UF:PLAYER_ENTERING_WORLD(event)
+	self:Update_AllFrames()
 end
-
 
 function UF:Initialize()	
 	self.db = E.db["unitframe"]
@@ -819,7 +818,7 @@ function UF:Initialize()
 	end)
 	
 	self:LoadUnits()
-	self:RegisterEvent('PLAYER_ENTERING_WORLD', 'UpdateAllHeaders')
+	self:RegisterEvent('PLAYER_ENTERING_WORLD')
 	
 	local ORD = ns.oUF_RaidDebuffs or oUF_RaidDebuffs
 	if not ORD then return end

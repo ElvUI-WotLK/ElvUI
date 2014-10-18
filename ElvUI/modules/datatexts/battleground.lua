@@ -29,17 +29,20 @@ local dataStrings = {
 	[12] = SHOW_COMBAT_HEALING
 }
 
+local WSG = 444;
+local AV = 402;
+local SOTA = 513;
+local IOC = 541;
+local EOTS = 483;
+local AB = 462;
 local name;
 
 function DT:UPDATE_BATTLEFIELD_SCORE()
+	lastPanel = self;
 	local pointIndex = dataLayout[self:GetParent():GetName()][self.pointIndex];
-	
-	RequestBattlefieldScoreData();
-	
 	for i = 1, GetNumBattlefieldScores() do
 		name = GetBattlefieldScore(i);
-		
-		if ( name == E.myname ) then
+		if(name == E.myname) then
 			self.text:SetFormattedText(displayString, dataStrings[pointIndex], select(pointIndex, GetBattlefieldScore(i)));
 			break	
 		end
@@ -50,28 +53,27 @@ end
 
 function DT:BattlegroundStats()
 	DT:SetupTooltip(self);
-	
+	local CurrentMapID = GetCurrentMapAreaID();
 	for index = 1, GetNumBattlefieldScores() do
 		name = GetBattlefieldScore(index);
-		
-		if ( name and name == E.myname ) then
+		if(name and name == E.myname) then
 			DT.tooltip:AddDoubleLine(L['Stats For:'], name, 1, 1, 1, classColor.r, classColor.g, classColor.b);
 			DT.tooltip:AddLine(' ');
-			
-			if ( GetRealZoneText() == L['Warsong Gulch'] ) then
+			print(CurrentMapID)
+			if(CurrentMapID == WSG) then 
 				DT.tooltip:AddDoubleLine(L['Flags Captured'], GetBattlefieldStatData(index, 1), 1, 1, 1);
 				DT.tooltip:AddDoubleLine(L['Flags Returned'], GetBattlefieldStatData(index, 2), 1, 1, 1);
-			elseif ( GetRealZoneText() == L['Eye of the Storm'] ) then
+			elseif(CurrentMapID == EOTS) then
 				DT.tooltip:AddDoubleLine(L['Flags Captured'], GetBattlefieldStatData(index, 1), 1, 1, 1);
-			elseif ( GetRealZoneText() == L['Alterac Valley'] ) then
+			elseif(CurrentMapID == AV) then
 				DT.tooltip:AddDoubleLine(L['Graveyards Assaulted'], GetBattlefieldStatData(index, 1), 1, 1, 1);
 				DT.tooltip:AddDoubleLine(L['Graveyards Defended'], GetBattlefieldStatData(index, 2), 1, 1, 1);
 				DT.tooltip:AddDoubleLine(L['Towers Assaulted'], GetBattlefieldStatData(index, 3), 1, 1, 1);
 				DT.tooltip:AddDoubleLine(L['Towers Defended'], GetBattlefieldStatData(index, 4), 1, 1, 1);
-			elseif ( GetRealZoneText() == L['Strand of the Ancients'] ) then
+			elseif(CurrentMapID == SOTA) then
 				DT.tooltip:AddDoubleLine(L['Demolishers Destroyed'], GetBattlefieldStatData(index, 1), 1, 1, 1);
 				DT.tooltip:AddDoubleLine(L['Gates Destroyed'], GetBattlefieldStatData(index, 2), 1, 1, 1);
-			elseif ( GetRealZoneText() == L['Arathi Basin'] or GetRealZoneText() == L['Isle of Conquest'] ) then
+			elseif(CurrentMapID == IOC or CurrentMapID == AB) then
 				DT.tooltip:AddDoubleLine(L['Bases Assaulted'], GetBattlefieldStatData(index, 1), 1, 1, 1);
 				DT.tooltip:AddDoubleLine(L['Bases Defended'], GetBattlefieldStatData(index, 2), 1, 1, 1);
 			end
@@ -92,7 +94,7 @@ end
 local function ValueColorUpdate(hex, r, g, b)
 	displayString = join('', '%s: ', hex, '%s|r');
 
-	if ( lastPanel ~= nil ) then
+	if(lastPanel ~= nil) then
 		DT.UPDATE_BATTLEFIELD_SCORE(lastPanel);
 	end
 end

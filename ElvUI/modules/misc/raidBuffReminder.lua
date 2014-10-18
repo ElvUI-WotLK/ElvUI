@@ -219,12 +219,12 @@ function RB:Update_ReminderBuffsSettings(isCallback)
 	for i = 1, 6 do
 		local button = frame[i];
 		button:ClearAllPoints();
-		button:Size(E.RBRWidth - (E.PixelMode and 1 or 4));
+		button:Size(E.RBRWidth - (E.PixelMode and 0 or 4));
 		
 		if(i == 1) then
 			button:Point('TOP', ElvUI_ReminderBuffs, 'TOP', 0, -(E.PixelMode and 0 or 2));
 		else
-			button:Point('TOP', frame[i - 1], 'BOTTOM', 0, (E.PixelMode and 1 or -1));
+			button:Point('TOP', frame[i - 1], 'BOTTOM', 0, (E.PixelMode and 2 or -1));
 		end
 		
 		if(i == 6) then

@@ -48,7 +48,7 @@ function UF:RaidSmartVisibility(event)
 	if event == "PLAYER_REGEN_ENABLED" then self:UnregisterEvent("PLAYER_REGEN_ENABLED") end
 
 	if not InCombatLockdown() then		
-		if(inInstance and (instanceType == "raid" or instanceType == "pvp")) then
+		if(inInstance and (instanceType == 'raid')) then
 			local maxPlayers = select(5, GetInstanceInfo())
 			UnregisterStateDriver(self, "visibility")
 			
@@ -56,13 +56,16 @@ function UF:RaidSmartVisibility(event)
 				self:Show()	
 				
 				if(maxPlayers and ElvUF_Raid.numGroups ~= E:Round(maxPlayers/5)) then
-					ElvUF_Raid:Configure_Groups()		
+					ElvUF_Raid:Configure_Groups()
 				end				
 			else
 				self:Hide()
 			end
 		elseif self.db.visibility then
 			RegisterStateDriver(self, "visibility", self.db.visibility)
+			if(ElvUF_Raid.numGroups ~= self.db.numGroups) then
+				ElvUF_Raid:Configure_Groups()
+			end
 		end
 	else
 		self:RegisterEvent("PLAYER_REGEN_ENABLED")
