@@ -1614,6 +1614,10 @@ P['auras'] = {
 	['font'] = 'ElvUI Pixel',
 	['fontSize'] = 10,
 	['fontOutline'] = 'MONOCHROMEOUTLINE',
+	['countYOffset'] = 0,
+	['countXOffset'] = 0,
+	['timeYOffset'] = 0,
+	['timeXOffset'] = 0,
 	
 	['fadeThreshold'] = 5,
 	['buffs'] = {
@@ -1625,25 +1629,7 @@ P['auras'] = {
 		['sortMethod'] = "TIME",
 		['sortDir'] = '-',
 		['seperateOwn'] = 1,
-		['size'] = 32,
-		['timeBar'] = {
-			['enable'] = false,
-			['noDuration'] = false,
-			['position'] = 'BOTTOM',
-			['spacing'] = 0,
-			['height'] = 6,
-			['width'] = 6,
-		},
-		['time'] = {
-			['showText'] = false,
-			['tenable'] = true,
-			['yOffset'] = 0,
-			['xOffset'] = 0,
-		},
-		['count'] = {
-			['yOffset'] = 0,
-			['xOffset'] = 0,
-		},
+		['size'] = 32
 	},
 	['debuffs'] = {
 		['growthDirection'] = 'LEFT_DOWN',
@@ -1654,25 +1640,7 @@ P['auras'] = {
 		['sortMethod'] = "TIME",
 		['sortDir'] = '-',
 		['seperateOwn'] = 1,
-		['size'] = 32,
-		['timeBar'] = {
-			['enable'] = false,
-			['noduration'] = false,
-			['position'] = 'BOTTOM',
-			['spacing'] = 0,
-			['height'] = 6,
-			['width'] = 6,
-		},
-		['time'] = {
-			['showText'] = false,
-			['tenable'] = true,
-			['yOffset'] = 0,
-			['xOffset'] = 0,
-		},
-		['count'] = {
-			['yOffset'] = 0,
-			['xOffset'] = 0,
-		},
+		['size'] = 32
 	},
 }
 
