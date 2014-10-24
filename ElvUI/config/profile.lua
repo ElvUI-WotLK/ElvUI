@@ -15,6 +15,8 @@ P['general'] = {
 	['bottomPanel'] = true,
 	['hideErrorFrame'] = true,
 	
+	['afk'] = true,
+	
 	['fontsize'] = 12, -- Медия\Шрифты
 	['font'] = 'ElvUI Font',
 
@@ -161,6 +163,8 @@ P['bags'] = { -- Сумки
     ['sortInverted'] = true,
 	['xOffset'] = 0,
 	['yOffset'] = 0,
+	['xOffsetBank'] = 0,
+	['yOffsetBank'] = 0,
 	['bagSize'] = 34,
 	['bankSize'] = 34,
 	['alignToChat'] = true,
@@ -1880,15 +1884,16 @@ P['actionbar'] = { -- Панели команд
 	},
 	['barShapeShift'] = { -- Панель стоек
 		['enabled'] = true,
+		['style'] = 'darkenInactive',
 		['mouseover'] = false,
 		['buttonsPerRow'] = NUM_SHAPESHIFT_SLOTS,
 		['buttons'] = NUM_SHAPESHIFT_SLOTS,
-		['buttonsize'] = 28,
-		['buttonspacing'] = 2,
 		['point'] = 'TOPLEFT',
 		['backdrop'] = false,
 		['heightMult'] = 1,
 		['widthMult'] = 1,
+		["buttonsize"] = 32,
+		["buttonspacing"] = 2,
 		['alpha'] = 1,
 	},
 	['barTotem'] = {

@@ -482,11 +482,11 @@ function E:UpdateAll(ignoreInstall)
 	self:GetModule('Tooltip').db = self.db.tooltip
 	
 	if(ElvUIPlayerBuffs) then
-		E:GetModule('Auras').BuffFrame:UpdateLayout();
+		E:GetModule('Auras'):UpdateHeader(ElvUIPlayerBuffs);
 	end
-
+	
 	if(ElvUIPlayerDebuffs) then
-		E:GetModule('Auras').DebuffFrame:UpdateLayout();
+		E:GetModule('Auras'):UpdateHeader(ElvUIPlayerDebuffs);
 	end
 	
 	if self.private.install_complete == nil or (self.private.install_complete and type(self.private.install_complete) == 'boolean') or (self.private.install_complete and type(tonumber(self.private.install_complete)) == 'number' and tonumber(self.private.install_complete) <= 3.83) then

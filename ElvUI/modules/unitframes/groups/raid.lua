@@ -56,7 +56,7 @@ function UF:RaidSmartVisibility(event)
 				self:Show()	
 				
 				if(maxPlayers and ElvUF_Raid.numGroups ~= E:Round(maxPlayers/5)) then
-					ElvUF_Raid:Configure_Groups()
+					ElvUF_Raid:Configure_Groups()		
 				end				
 			else
 				self:Hide()

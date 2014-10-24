@@ -123,8 +123,10 @@ L['The size of the individual buttons on the bag frame.'] = "Размер каж
 L['The size of the individual buttons on the bank frame.'] = "Размер каждого слота в банке"
 L["The spacing between buttons."] = "Расстояние между кнопками"
 L["Top to Bottom"] = "Сверху вниз"
-L["X Offset"] = "Отступ по Х"
-L["Y Offset"] = "Отступ по Y"
+L["X Offset Bags"] = "Отступ сумок по X";
+L["X Offset Bank"] = "Отступ банка по X";
+L["Y Offset Bags"] = "Отступ сумок по Y";
+L["Y Offset Bank"] = "Отступ банка по Y";
 L['You must be at a bank.'] = "Вы должны быть в банке"
 
 --Buffs and Debuffs

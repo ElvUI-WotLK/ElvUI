@@ -210,6 +210,14 @@ E.Options.args.general = {
 					get = function(info) return E.db.general.topPanel end,
 					set = function(info, value) E.db.general.topPanel = value; E:GetModule('Layout'):TopPanelVisibility() end						
 				},
+				afk = {
+					order = 18,
+					type = 'toggle',
+					name = L['AFK Mode'],
+					desc = L['When you go AFK display the AFK screen.'],
+					get = function(info) return E.db.general.afk end,
+					set = function(info, value) E.db.general.afk = value; E:GetModule('AFK'):Toggle() end
+				},
 			},
 		},
 		minimap = { -- Мини-карта
