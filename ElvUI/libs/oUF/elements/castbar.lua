@@ -51,7 +51,7 @@ local UNIT_SPELLCAST_START = function(self, event, unit, spell)
 	
 	if(mergeTradeskill and isTradeSkill and UnitIsUnit(unit, "player")) then
 		castbar.duration = castbar.duration + (castbar.max * tradeskillCurrent);
-		castbar.max = max * tradeskillTotal;
+		castbar.max = castbar.max * tradeskillTotal;
 		
 		if(unit == "player") then
 			tradeskillCurrent = tradeskillCurrent + 1;
