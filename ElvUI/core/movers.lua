@@ -175,12 +175,29 @@ local function CreateMover(parent, name, text, overlay, snapOffset, postdrag)
 		end
 		
 		if self.positionOverride then
+			if(self.positionOverride == "TOPLEFT") then
+				x = self:GetLeft()
+				y = self:GetTop()
+			elseif(self.positionOverride == "TOPRIGHT") then
+				x = self:GetRight()
+				y = self:GetTop()
+			elseif(self.positionOverride == "BOTTOMLEFT") then
+				x = self:GetLeft()
+				y = self:GetBottom()
+			elseif(self.positionOverride == "BOTTOMRIGHT") then
+				x = self:GetRight()
+				y = self:GetBottom()
+			end
+
 			self.parent:ClearAllPoints()
 			self.parent:Point(self.positionOverride, self, self.positionOverride)
+			
+			self:ClearAllPoints()
+			self:Point(self.positionOverride, E.UIParent, "BOTTOMLEFT", x, y)
+		else
+			self:ClearAllPoints()
+			self:Point(point, E.UIParent, point, x, y)
 		end
-		
-		self:ClearAllPoints()
-		self:Point(point, E.UIParent, point, x, y)
 		
 		E:SaveMoverPosition(name)
 

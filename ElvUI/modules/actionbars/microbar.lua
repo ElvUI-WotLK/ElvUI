@@ -1,27 +1,28 @@
 ﻿local E, L, V, P, G = unpack(select(2, ...));
 local AB = E:GetModule('ActionBars');
 
-local MICRO_BUTTONS = {'CharacterMicroButton', 'SpellbookMicroButton', 'TalentMicroButton', 'AchievementMicroButton', 'QuestLogMicroButton', 'SocialsMicroButton', 'PVPMicroButton', 'LFDMicroButton', 'MainMenuMicroButton', 'HelpMicroButton'};
+local MICRO_BUTTONS = {
+	'CharacterMicroButton',
+	'SpellbookMicroButton',
+	'TalentMicroButton',
+	'AchievementMicroButton',
+	'QuestLogMicroButton',
+	'SocialsMicroButton',
+	'PVPMicroButton',
+	'LFDMicroButton',
+	'MainMenuMicroButton',
+	'HelpMicroButton'
+};
 
 local function Button_OnEnter(self)
-	if ( AB.db.microbar.mouseover ) then
-		E:UIFrameFadeIn(ElvUI_MicroBar, AB.db.microbar.animSpeed, ElvUI_MicroBar:GetAlpha(), AB.db.microbar.alpha);
-		if ( AB.db.microbar.Shake ) then
-			for i=1, #MICRO_BUTTONS do
-				E:Shake(_G[MICRO_BUTTONS[i]]);
-			end
-		end
+	if(AB.db.microbar.mouseover) then
+		E:UIFrameFadeIn(ElvUI_MicroBar, .2, ElvUI_MicroBar:GetAlpha(), AB.db.microbar.alpha);
 	end
 end
 
 local function Button_OnLeave(self)
-	if ( AB.db.microbar.mouseover ) then
-		E:UIFrameFadeOut(ElvUI_MicroBar, AB.db.microbar.animSpeed, ElvUI_MicroBar:GetAlpha(), 0);
-		if ( AB.db.microbar.Shake ) then
-			for i=1, #MICRO_BUTTONS do
-				E:StopShake(_G[MICRO_BUTTONS[i]]);
-			end
-		end
+	if(AB.db.microbar.mouseover) then
+		E:UIFrameFadeOut(ElvUI_MicroBar, .2, ElvUI_MicroBar:GetAlpha(), 0);
 	end
 end
 
@@ -34,18 +35,16 @@ function AB:MainMenuMicroButton_SetPushed()
 end
 
 function AB:HandleMicroButton(button)
-	assert(button, 'Invalid micro button name.');
-
 	local pushed = button:GetPushedTexture();
 	local normal = button:GetNormalTexture();
 	local disabled = button:GetDisabledTexture();
 	
 	button:SetParent(ElvUI_MicroBar);
-
+	
 	button:GetHighlightTexture():Kill();
 	button:HookScript('OnEnter', Button_OnEnter);
 	button:HookScript('OnLeave', Button_OnLeave);
-
+	
 	local f = CreateFrame('Frame', nil, button);
 	f:SetFrameLevel(1);
 	f:SetFrameStrata('BACKGROUND');
@@ -56,41 +55,38 @@ function AB:HandleMicroButton(button)
 	
 	pushed:SetTexCoord(0.17, 0.87, 0.5, 0.908);
 	pushed:SetInside(f);
-
+	
 	normal:SetTexCoord(0.17, 0.87, 0.5, 0.908);
 	normal:SetInside(f);
 	
-	if ( disabled ) then
+	if(disabled) then
 		disabled:SetTexCoord(0.17, 0.87, 0.5, 0.908);
 		disabled:SetInside(f);
 	end
 end
 
 function AB:UpdateMicroButtonsParent(parent)
-	if ( parent ~= ElvUI_MicroBar ) then parent = ElvUI_MicroBar; end
+	if(parent ~= ElvUI_MicroBar) then parent = ElvUI_MicroBar; end
 	
-	for i=1, #MICRO_BUTTONS do
+	for i = 1, #MICRO_BUTTONS do
 		_G[MICRO_BUTTONS[i]]:SetParent(ElvUI_MicroBar);
 	end
 end
 
 function AB:UpdateMicroPositionDimensions()
-	if ( not ElvUI_MicroBar ) then return; end
+	if(not ElvUI_MicroBar) then return; end
 	
 	local numRows = 1;
-	for i=1, #MICRO_BUTTONS do
+	for i = 1, #MICRO_BUTTONS do
 		local button = _G[MICRO_BUTTONS[i]];
 		local prevButton = _G[MICRO_BUTTONS[i-1]] or ElvUI_MicroBar;
 		local lastColumnButton = _G[MICRO_BUTTONS[i-self.db.microbar.buttonsPerRow]];
 		
-		button:Width(self.db.microbar.Width);
-		button:Height(self.db.microbar.Height);
-		button:SetScale(self.db.microbar.Scale);
 		button:ClearAllPoints();
 
-		if ( prevButton == ElvUI_MicroBar ) then
+		if(prevButton == ElvUI_MicroBar) then
 			button:SetPoint('TOPLEFT', prevButton, 'TOPLEFT', -2, 28);
-		elseif ( (i - 1) % self.db.microbar.buttonsPerRow == 0 ) then
+		elseif((i - 1) % self.db.microbar.buttonsPerRow == 0) then
 			button:Point('TOP', lastColumnButton, 'BOTTOM', 0, 28 - self.db.microbar.yOffset);	
 			numRows = numRows + 1;
 		else
@@ -98,16 +94,16 @@ function AB:UpdateMicroPositionDimensions()
 		end
 	end
 
-	if ( AB.db.microbar.mouseover ) then
+	if(AB.db.microbar.mouseover) then
 		ElvUI_MicroBar:SetAlpha(0);
 	else
 		ElvUI_MicroBar:SetAlpha(self.db.microbar.alpha);
 	end
 	
 	ElvUI_MicroBar:SetWidth(((CharacterMicroButton:GetWidth()) * (#MICRO_BUTTONS - 1) - 3) / numRows);
-	ElvUI_MicroBar:Height((CharacterMicroButton:GetHeight() - 27) * numRows);
+	ElvUI_MicroBar:SetHeight((CharacterMicroButton:GetHeight() - 27) * numRows);
 
-	if ( self.db.microbar.enabled ) then
+	if(self.db.microbar.enabled) then
 		ElvUI_MicroBar:Show();
 	else
 		ElvUI_MicroBar:Hide();

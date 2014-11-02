@@ -476,69 +476,38 @@ E.Options.args.actionbar = { -- Панели команд
 					guiInline = true,
 					disabled = function() return not E.db.actionbar.microbar.enabled end,
 					args = {
-						Height = { -- Высота
+						buttonsPerRow = {
 							order = 1,
-							type = 'range',
-							name = L['Height'],
-							min = 58, max = 174, step = 1,					
-						},
-						Width = { -- Ширина
-							order = 2,
-							type = 'range',
-							name = L['Width'],
-							min = 28, max = 84, step = 1,					
-						},
-						Scale = { -- Масштаб
-							order = 3,
-							type = 'range',
-							name = L['Scale'],
-							min = 0.3, max = 5, step = 0.1,					
-						},
-						buttonsPerRow = { -- Кнопок в ряду
-							order = 4,
 							type = 'range',
 							name = L['Buttons Per Row'],
 							desc = L['The amount of buttons to display per row.'],
 							min = 1, max = 10, step = 1,					
 						},
-						xOffset = { -- Отступ оп X
-							order = 5,
+						xOffset = {
+							order = 2,
 							type = 'range',
 							name = L['xOffset'],
 							min = 0, max = 60, step = 1,					
 						},
-						yOffset = { -- Отступ оп Y
-							order = 6,
+						yOffset = {
+							order = 3,
 							type = 'range',
 							name = L['yOffset'],
 							min = 0, max = 60, step = 1,					
 						},
-						alpha = { -- Прозрачность
-							order = 7,
+						alpha = {
+							order = 4,
 							type = 'range',
 							name = L['Alpha'],
 							desc = L['Change the alpha level of the frame.'],
 							min = 0, max = 1, step = 0.1,					
 						},
-						mouseover = { -- При наведении
-							order = 8,
+						mouseover = {
+							order = 5,
 							name = L['Mouse Over'],
 							desc = L['The frame is not shown unless you mouse over the frame.'],
-							type = "toggle",
-						},
-						animSpeed = { -- Скорость анимации при наведении
-							order = 9,
-							type = 'range',
-							name = L['Speed of the animation when you hover'],
-							disabled = function() return not E.db.actionbar.microbar.mouseover end,
-							min = 0.1, max = 5, step = 0.05,	
-						},
-						Shake = { -- Анимация змея :D
-							order = 10,
-							type = "toggle",
-							name = L['Animation snake :D'],
-							disabled = function() return not E.db.actionbar.microbar.mouseover end,
-						},
+							type = "toggle"
+						}
 					},
 				},
 			},

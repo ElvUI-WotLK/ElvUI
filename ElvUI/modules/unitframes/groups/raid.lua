@@ -48,15 +48,21 @@ function UF:RaidSmartVisibility(event)
 	if event == "PLAYER_REGEN_ENABLED" then self:UnregisterEvent("PLAYER_REGEN_ENABLED") end
 
 	if not InCombatLockdown() then		
-		if(inInstance and (instanceType == 'raid')) then
-			local maxPlayers = select(5, GetInstanceInfo())
+		if(inInstance and (instanceType == 'raid' or instanceType == 'pvp')) then
+			local _, _, _, _, maxPlayers = GetInstanceInfo()
+			local mapID = GetCurrentMapAreaID();
+
+			if mapID and UF.mapIDs[mapID] then
+				maxPlayers = UF.mapIDs[mapID]
+			end
+
 			UnregisterStateDriver(self, "visibility")
 			
 			if(maxPlayers < 40) then
 				self:Show()	
 				
-				if(maxPlayers and ElvUF_Raid.numGroups ~= E:Round(maxPlayers/5)) then
-					ElvUF_Raid:Configure_Groups()		
+				if(maxPlayers and ElvUF_Raid.numGroups ~= E:Round(maxPlayers/5) and event) then	
+					UF:CreateAndUpdateHeaderGroup('raid')
 				end				
 			else
 				self:Hide()
@@ -64,7 +70,7 @@ function UF:RaidSmartVisibility(event)
 		elseif self.db.visibility then
 			RegisterStateDriver(self, "visibility", self.db.visibility)
 			if(ElvUF_Raid.numGroups ~= self.db.numGroups) then
-				ElvUF_Raid:Configure_Groups()
+				UF:CreateAndUpdateHeaderGroup('raid')
 			end
 		end
 	else
@@ -73,7 +79,7 @@ function UF:RaidSmartVisibility(event)
 	end
 end
 
-function UF:Update_RaidHeader(header, db)
+function UF:Update_RaidHeader(header, db, isForced)
 	header:GetParent().db = db
 
 	local headerHolder = header:GetParent()
@@ -90,7 +96,7 @@ function UF:Update_RaidHeader(header, db)
 		headerHolder:SetScript("OnEvent", UF['RaidSmartVisibility'])
 		headerHolder.positioned = true;
 	end
-	
+
 	UF.RaidSmartVisibility(headerHolder)
 end
 

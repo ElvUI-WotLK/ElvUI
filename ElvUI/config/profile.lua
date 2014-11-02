@@ -634,7 +634,7 @@ P['unitframe'] = {
 				['yOffset'] = 10,
 			},
 		},
-		['focus'] = { -- Фокус
+		['focus'] = {
 			['enable'] = true,
 			['rangeCheck'] = true,
 			['threatStyle'] = 'GLOW',
@@ -643,35 +643,41 @@ P['unitframe'] = {
 			['height'] = 36,
 			['healPrediction'] = true,
 			['smartAuraDisplay'] = 'DISABLED',
-			['health'] = { -- Здоровье
+			['health'] = {
 				['text_format'] = '',
 				['position'] = 'RIGHT',
 				['xOffset'] = 0,
-				['yOffset'] = 0,				
+				['yOffset'] = 0
 			},
-			['power'] = { -- Мана
+			['power'] = {
 				['enable'] = true,
-				['text_format'] = '',	
+				['text_format'] = '',
 				['width'] = 'fill',
 				['height'] = 7,
 				['offset'] = 0,
 				['position'] = 'LEFT',
-				['hideonnpc'] = false,			
+				['hideonnpc'] = false,
 				['xOffset'] = 0,
-				['yOffset'] = 0,				
+				['yOffset'] = 0
 			},
-			['name'] = { -- Имя
+			['name'] = {
 				['position'] = 'CENTER',
 				['text_format'] = '[namecolor][name:medium]',
 				['xOffset'] = 0,
-				['yOffset'] = 0,			
+				['yOffset'] = 0
 			},
-			['buffs'] = { -- Баффы
+			['portrait'] = {
+				['enable'] = false,
+				['width'] = 35,
+				['overlay'] = false,
+				['style'] = '3D'
+			},
+			['buffs'] = {
 				['enable'] = false,
 				['perrow'] = 7,
 				['numrows'] = 1,
 				['attachTo'] = 'FRAME',
-				['anchorPoint'] = 'BOTTOMLEFT',					
+				['anchorPoint'] = 'BOTTOMLEFT',
 				['fontSize'] = 10,
 				['clickThrough'] = false,
 				['playerOnly'] = {friendly = true, enemy = false},
@@ -682,14 +688,14 @@ P['unitframe'] = {
 				['onlyDispellable'] = {friendly = false, enemy = false},
 				['useFilter'] = '',
 				['xOffset'] = 0,
-				['yOffset'] = 0,
+				['yOffset'] = 0
 			},
-			['debuffs'] = { -- Дебаффы
+			['debuffs'] = {
 				['enable'] = true,
 				['perrow'] = 5,
 				['numrows'] = 1,
 				['attachTo'] = 'FRAME',
-				['anchorPoint'] = 'TOPRIGHT',					
+				['anchorPoint'] = 'TOPRIGHT',
 				['fontSize'] = 10,
 				['clickThrough'] = false,
 				['playerOnly'] = {friendly = false, enemy = true},
@@ -699,17 +705,17 @@ P['unitframe'] = {
 				['onlyDispellable'] = {friendly = false, enemy = false},
 				['useFilter'] = '',
 				['xOffset'] = 0,
-				['yOffset'] = 0,
-			},	
-			['castbar'] = { -- Полоса заклинаний
+				['yOffset'] = 0
+			},
+			['castbar'] = {
 				['enable'] = true,
 				['width'] = 190,
 				['height'] = 18,
 				['icon'] = true,
 				['format'] = 'REMAINING',
-				['spark'] = true,
-			},	
-			['aurabar'] = { -- Полоса аур
+				['spark'] = true
+			},
+			['aurabar'] = {
 				['enable'] = false,
 				['anchorPoint'] = 'ABOVE',
 				['attachTo'] = 'FRAME',
@@ -725,15 +731,15 @@ P['unitframe'] = {
 				['enemyAuraType'] = 'HARMFUL',
 				['height'] = 20,
 				['sort'] = 'TIME_REMAINING'
-			},	
-			['raidicon'] = { -- РЕйдовая иконка
+			},
+			['raidicon'] = {
 				['enable'] = true,
 				['size'] = 18,
 				['attachTo'] = 'TOP',
 				['xOffset'] = 0,
-				['yOffset'] = 10,
-			},			
-		},	
+				['yOffset'] = 10
+			},
+		},
 		['focustarget'] = { -- Цель фокуса
 			['enable'] = false,
 			['rangeCheck'] = true,
@@ -973,8 +979,6 @@ P['unitframe'] = {
 				['enable'] = false,
 				['width'] = 35,
 				['overlay'] = false,
-				['rotation'] = 0,
-				['camDistanceScale'] = 1,
 				['style'] = '3D'
 			},
 			['name'] = { -- Имя
@@ -1036,7 +1040,7 @@ P['unitframe'] = {
 				['yOffset'] = 10,
 			},			
 		},	
-		['arena'] = { -- Арена
+		['arena'] = {
 			['enable'] = true,
 			['rangeCheck'] = true,
 			['healPrediction'] = true,
@@ -1046,35 +1050,41 @@ P['unitframe'] = {
 			['factionIcon'] = true,
 			['healPrediction'] = true,
 			['colorOverride'] = 'USE_DEFAULT',
-			['health'] = { -- Здороье
+			['health'] = {
 				['text_format'] = '[healthcolor][health:current]',
 				['position'] = 'TOPRIGHT',
-				['yOffset'] = 0,				
-				['xOffset'] = 0,
+				['yOffset'] = 0,
+				['xOffset'] = 0
 			},
-			['power'] = { -- Мана
+			['power'] = {
 				['enable'] = true,
-				['text_format'] = '[powercolor][power:current]',	
+				['text_format'] = '[powercolor][power:current]',
 				['width'] = 'fill',
 				['height'] = 7,
 				['offset'] = 0,
 				['position'] = 'BOTTOMRIGHT',
-				['hideonnpc'] = false,			
-				['yOffset'] = 0,				
-				['xOffset'] = 0,				
-			},			
-			['name'] = { -- Имя
+				['hideonnpc'] = false,
+				['yOffset'] = 0,
+				['xOffset'] = 0
+			},
+			['name'] = {
 				['position'] = 'LEFT',
 				['text_format'] = '[namecolor][name:medium]',
-				['yOffset'] = 0,				
-				['xOffset'] = 0,				
+				['yOffset'] = 0,
+				['xOffset'] = 0
 			},
-			['buffs'] = { -- Баффы
+			['portrait'] = {
+				['enable'] = false,
+				['width'] = 35,
+				['overlay'] = false,
+				['style'] = '3D'
+			},
+			['buffs'] = {
 				['enable'] = true,
 				['perrow'] = 3,
 				['numrows'] = 1,
 				['attachTo'] = 'FRAME',
-				['anchorPoint'] = 'LEFT',					
+				['anchorPoint'] = 'LEFT',
 				['fontSize'] = 10,
 				['clickThrough'] = false,
 				['playerOnly'] = {friendly = false, enemy = false},
@@ -1088,12 +1098,12 @@ P['unitframe'] = {
 				['xOffset'] = 0,
 				['yOffset'] = 12
 			},
-			['debuffs'] = { -- Дебаффы
+			['debuffs'] = {
 				['enable'] = true,
 				['perrow'] = 3,
 				['numrows'] = 1,
 				['attachTo'] = 'FRAME',
-				['anchorPoint'] = 'LEFT',					
+				['anchorPoint'] = 'LEFT',
 				['fontSize'] = 10,
 				['clickThrough'] = false,
 				['playerOnly'] = {friendly = false, enemy = false},
@@ -1104,22 +1114,22 @@ P['unitframe'] = {
 				['onlyDispellable'] = {friendly = false, enemy = false},
 				['sizeOverride'] = 22,
 				['xOffset'] = 0,
-				['yOffset'] = -13,				
-			},	
-			['castbar'] = { -- Полоса заклинаний
+				['yOffset'] = -13
+			},
+			['castbar'] = {
 				['enable'] = true,
 				['width'] = 240,
 				['height'] = 18,
 				['icon'] = true,
 				['format'] = 'REMAINING',
-				['spark'] = true,
+				['spark'] = true
 			},	
-			['pvpTrinket'] = { -- ПвП Аксессуар
+			['pvpTrinket'] = {
 				['enable'] = true,
 				['position'] = 'RIGHT',
 				['size'] = 46,
 				['xOffset'] = 1,
-				['yOffset'] = 0,
+				['yOffset'] = 0
 			},			
 		},
 		['party'] = { -- Группа
@@ -1163,6 +1173,12 @@ P['unitframe'] = {
 				['text_format'] = '[namecolor][name:medium] [difficultycolor][smartlevel]',
 				['yOffset'] = 0,				
 				['xOffset'] = 0,				
+			},
+			['portrait'] = {
+				['enable'] = false,
+				['width'] = 35,
+				['overlay'] = false,
+				['style'] = '3D'
 			},
 			['buffs'] = { -- Баффы
 				['enable'] = false,
@@ -1755,23 +1771,14 @@ P['actionbar'] = { -- Панели команд
 	
 	['enablecd'] = true,
 	['treshold'] = 3,
-	['expiringcolor'] = { r = 1, g = 0, b = 0 },
-	['secondscolor'] = { r = 1, g = 1, b = 0 },
-	['minutescolor'] = { r = 1, g = 1, b = 1 },
-	['hourscolor'] = { r = 0.4, g = 1, b = 1 },
-	['dayscolor'] = { r = 0.4, g = 0.4, b = 1 },
-	['microbar'] = { -- Микроменю
-		['enabled'] = false, -- Включить
-		['Height'] = 58, -- Ширина
-		['Width'] = 28, -- Высота
-		['Scale'] = 1, -- Масштаб
-		['xOffset'] = 1, -- Отступ по X
-		['yOffset'] = 1, -- Отступ по Y
-		['buttonsPerRow'] = 10, -- Кнопок в ряду
-		['alpha'] = 1, -- Прозрачность
-		['mouseover'] = false, -- При наведении
-		['animSpeed'] = 0.2, -- Скорость анимации при наведении
-		['Shake'] = 0.2, -- Анимация змея :D
+	['microbar'] = {
+		['enabled'] = false,
+		['Scale'] = 1,
+		['xOffset'] = 1,
+		['yOffset'] = 1,
+		['buttonsPerRow'] = 10,
+		['alpha'] = 1,
+		['mouseover'] = false
 	},
 	['bar1'] = { -- Панель 1
 		['enabled'] = true,
