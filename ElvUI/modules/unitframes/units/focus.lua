@@ -90,6 +90,12 @@ function UF:Update_FocusFrame(frame, db)
 			
 			frame.HealCommBar:Show();
 			frame.HealCommBar:SetStatusBarColor(c.personal.r, c.personal.g, c.personal.b, c.personal.a);
+			
+			if(not USE_PORTRAIT_OVERLAY) then
+				frame.HealCommBar:SetParent(frame.Health);
+			else	
+				frame.HealCommBar:SetParent(frame.Portrait.overlay);
+			end
 		else
 			if(frame:IsElementEnabled('HealComm4')) then
 				frame:DisableElement('HealComm4');

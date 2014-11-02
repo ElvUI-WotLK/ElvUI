@@ -51,27 +51,6 @@ function UF:Update_TargetTargetFrame(frame, db)
 		end
 	end
 	
-	do -- Входящие исцеление
-		frame.HealCommBar = CreateFrame('StatusBar', nil, frame.Health)
-		
-		local c = UF.db.colors.healPrediction
-		
-		if db.healPrediction then
-			if not frame:IsElementEnabled('HealComm4') then
-				frame:EnableElement('HealComm4')
-			end
-			
-			frame.HealCommBar:SetStatusBarTexture(E["media"].blankTex)
-			frame.HealCommBar:SetFrameLevel(frame.Health:GetFrameLevel())
-			frame.HealCommBar:SetParent(frame.Health)
-			frame.HealCommBar:SetStatusBarColor(c.personal.r, c.personal.g, c.personal.b, c.personal.a)
-		else
-			if frame:IsElementEnabled('HealComm4') then
-				frame:DisableElement('HealComm4')
-			end
-		end
-	end
-	
 	do -- Здоровье
 		local health = frame.Health
 		health.Smooth = self.db.smoothbars

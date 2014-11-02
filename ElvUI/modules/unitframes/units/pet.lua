@@ -17,6 +17,11 @@ function UF:Construct_PetFrame(frame)
 	frame.AuraWatch = UF:Construct_AuraWatch(frame) -- Индикатор баффов
 	frame.Range = UF:Construct_Range(frame) -- Проверка дистанции
 	
+	frame.HealCommBar = CreateFrame('StatusBar', nil, frame.Health);
+	frame.HealCommBar:SetStatusBarTexture(E['media'].blankTex);
+	frame.HealCommBar:SetFrameLevel(frame.Health:GetFrameLevel());
+	frame.HealCommBar:SetParent(frame.Health);
+	
 	frame:Point('BOTTOM', E.UIParent, 'BOTTOM', 0, 118) -- Позиция
 	E:CreateMover(frame, frame:GetName()..'Mover', L['Pet Frame'], nil, nil, nil, 'ALL,SOLO')
 end
@@ -54,24 +59,21 @@ function UF:Update_PetFrame(frame, db)
 		end
 	end
 	
-	do -- Входящие исцеление
-		frame.HealCommBar = CreateFrame('StatusBar', nil, frame.Health)
-		
-		local c = UF.db.colors.healPrediction
-		
-		if db.healPrediction then
-			if not frame:IsElementEnabled('HealComm4') then
-				frame:EnableElement('HealComm4')
+	do
+		local c = UF.db.colors.healPrediction;
+		if(db.healPrediction) then
+			if(not frame:IsElementEnabled('HealComm4')) then
+				frame:EnableElement('HealComm4');
 			end
 			
-			frame.HealCommBar:SetStatusBarTexture(E["media"].blankTex)
-			frame.HealCommBar:SetFrameLevel(frame.Health:GetFrameLevel())
-			frame.HealCommBar:SetParent(frame.Health)
-			frame.HealCommBar:SetStatusBarColor(c.personal.r, c.personal.g, c.personal.b, c.personal.a)
+			frame.HealCommBar:Show();
+			frame.HealCommBar:SetStatusBarColor(c.personal.r, c.personal.g, c.personal.b, c.personal.a);
 		else
-			if frame:IsElementEnabled('HealComm4') then
-				frame:DisableElement('HealComm4')
+			if(frame:IsElementEnabled('HealComm4')) then
+				frame:DisableElement('HealComm4');
 			end
+			
+			frame.HealCommBar:Hide();
 		end
 	end
 	
