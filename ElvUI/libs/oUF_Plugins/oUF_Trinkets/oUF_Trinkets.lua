@@ -48,9 +48,9 @@ end
 
 local Enable = function(self)
 	if self.Trinket then
-		self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", Update, true)
-		self:RegisterEvent("ARENA_OPPONENT_UPDATE", Update, true)
-		self:RegisterEvent("PLAYER_ENTERING_WORLD", Update, true)
+		self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", Update)
+		self:RegisterEvent("ARENA_OPPONENT_UPDATE", Update)
+		self:RegisterEvent("PLAYER_ENTERING_WORLD", Update)
 		
 		if not self.Trinket.cooldownFrame then
 			self.Trinket.cooldownFrame = CreateFrame("Cooldown", nil, self.Trinket)
