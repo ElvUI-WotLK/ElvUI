@@ -10,7 +10,9 @@ local Update = function(self, event, unit)
 	if(portrait:IsObjectType'Model') then
 		local guid = UnitGUID(unit)
 		if(not UnitExists(unit) or not UnitIsConnected(unit) or not UnitIsVisible(unit)) then
-			portrait:SetCamera(0)
+			portrait:SetModelScale(4.25)
+			portrait:SetPosition(0, 0, -1.5)
+			portrait:SetModel"Interface\\Buttons\\talktomequestionmark.mdx"
 		elseif(portrait.guid ~= guid or event == 'UNIT_MODEL_CHANGED') then
 			portrait:SetUnit(unit)
 			portrait:SetCamera(0)
