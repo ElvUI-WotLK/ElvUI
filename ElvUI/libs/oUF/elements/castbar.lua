@@ -47,7 +47,6 @@ local UNIT_SPELLCAST_START = function(self, event, unit, spell)
 	
 	castbar.duration = GetTime() - (startTime/1000);
 	castbar.max = (endTime - startTime) / 1000;
-	castbar:SetMinMaxValues(0, castbar.max);
 	
 	if(mergeTradeskill and isTradeSkill and UnitIsUnit(unit, "player")) then
 		castbar.duration = castbar.duration + (castbar.max * tradeskillCurrent);
@@ -60,6 +59,8 @@ local UNIT_SPELLCAST_START = function(self, event, unit, spell)
 	else
 		castbar:SetValue(0);
 	end
+	
+	castbar:SetMinMaxValues(0, castbar.max);
 	
 	castbar:SetAlpha(1.0);
 	castbar.holdTime = 0;
