@@ -173,7 +173,7 @@ local function OnAttributeChanged(self, name, value)
 	local db = self.db or self:GetParent().db
 	local maxUnits = MAX_RAID_MEMBERS
 
-	local startingIndex = -4
+	local startingIndex = db.raidWideSorting and -(min(db.numGroups * (db.groupsPerRowCol * 5), maxUnits) + 1) or -4
 	if self:GetAttribute("startingIndex") ~= startingIndex then
 		self:SetAttribute("startingIndex", startingIndex)
 		UF:ShowChildUnits(self, self:GetChildren())

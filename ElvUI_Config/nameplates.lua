@@ -111,6 +111,12 @@ E.Options.args.nameplate = {
 					desc = L["Toggle the nameplates to be visible outside of combat and visible inside combat."],
 					set = function(info, value) E.db.nameplate[ info[#info] ] = value; NP:CombatToggle() end,
 				},
+				comboPoints = {
+					type = "toggle",
+					order = 3,
+					name = L["Combo Points"],
+					desc = L["Display combo points on nameplates."],
+				},
 				nonTargetAlpha = {
 					type = 'range',
 					order = 3,

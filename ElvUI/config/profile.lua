@@ -82,6 +82,7 @@ P["nameplate"] = {
 	['font'] = 'ElvUI Pixel',
 	['fontSize'] = 8,
 	['fontOutline'] = 'MONOCHROMEOUTLINE',
+	["comboPoints"] = true,
 	['nonTargetAlpha'] = 0.6,
 	['combatHide'] = false,
 	['colorNameByValue'] =  true,
@@ -246,7 +247,7 @@ P['unitframe'] = {
 	},
 
 	['units'] = {
-		['player'] = { -- Игрок
+		['player'] = {
 			['enable'] = true,
 			['width'] = 270,
 			['height'] = 54,
@@ -256,13 +257,13 @@ P['unitframe'] = {
 			['restIcon'] = true,
 			['healPrediction'] = true,
 			['threatStyle'] = 'GLOW',
-			['health'] = { -- Здоровье
+			['health'] = {
 				['text_format'] = '[healthcolor][health:current-percent]',
 				['position'] = 'LEFT',
 				['xOffset'] = 0,
-				['yOffset'] = 0,
+				['yOffset'] = 0
 			},
-			['power'] = { -- Мана
+			['power'] = {
 				['enable'] = true,
 				['text_format'] = '[powercolor][power:current]',	
 				['width'] = 'fill',
@@ -274,27 +275,27 @@ P['unitframe'] = {
 				['yOffset'] = 0,
 				['detachFromFrame'] = false,
 				['detachedWidth'] = 250,
-				['attachTextToPower'] = false,						
+				['attachTextToPower'] = false
 			},
-			['name'] = { -- Имя
+			['name'] = {
 				['position'] = 'CENTER',
 				['text_format'] = '',
 				['xOffset'] = 0,
-				['yOffset'] = 0,				
+				['yOffset'] = 0
 			},
-			['pvp'] = { -- PvP
+			['pvp'] = {
 				['position'] = 'BOTTOM',
 				['text_format'] = '||cFFB04F4F[pvptimer][mouseover]||r',
 				['xOffset'] = 0,
-				['yOffset'] = 0,				
+				['yOffset'] = 0
 			},
-			['portrait'] = { -- Портрет
+			['portrait'] = {
 				['enable'] = false,
 				['width'] = 45,
 				['overlay'] = false,
 				['style'] = '3D',
 			},
-			['buffs'] = { -- Баффы
+			['buffs'] = {
 				['enable'] = false,
 				['perrow'] = 8,
 				['numrows'] = 1,
@@ -310,14 +311,14 @@ P['unitframe'] = {
 				['onlyDispellable'] = false,
 				['useFilter'] = '',
 				['xOffset'] = 0,
-				['yOffset'] = 0,
+				['yOffset'] = 0
 			},
-			['debuffs'] = { -- Дебаффы
+			['debuffs'] = {
 				['enable'] = true,
 				['perrow'] = 8,
 				['numrows'] = 1,
 				['attachTo'] = 'FRAME',
-				['anchorPoint'] = 'TOPLEFT',					
+				['anchorPoint'] = 'TOPLEFT',
 				['fontSize'] = 10,
 				['clickThrough'] = false,
 				['playerOnly'] = false,
@@ -327,9 +328,9 @@ P['unitframe'] = {
 				['onlyDispellable'] = false,
 				['useFilter'] = '',
 				['xOffset'] = 0,
-				['yOffset'] = 0,
+				['yOffset'] = 0
 			},
-			['castbar'] = { -- Полоса заклинаний
+			['castbar'] = {
 				['enable'] = true,
 				['width'] = 270,
 				['height'] = 18,
@@ -338,16 +339,16 @@ P['unitframe'] = {
 				['format'] = 'REMAINING',
 				["ticks"] = true,
 				['spark'] = true,
-				['displayTarget'] = false,
+				['displayTarget'] = false
 			},
-			['classbar'] = { -- Полоса класса
+			['classbar'] = {
 				['enable'] = true,
 				['fill'] = 'fill',
 				['height'] = 10,
 				['detachFromFrame'] = false,
-				['detachedWidth'] = 250,
+				['detachedWidth'] = 250
 			},
-			['aurabar'] = { -- Полоса аур
+			['aurabar'] = {
 				['enable'] = true,
 				['anchorPoint'] = 'ABOVE',
 				['attachTo'] = 'DEBUFFS',
@@ -364,13 +365,13 @@ P['unitframe'] = {
 				['height'] = 20,
 				['sort'] = 'TIME_REMAINING'
 			},
-			['raidicon'] = { -- Рейдовая иконка
+			['raidicon'] = {
 				['enable'] = true,
 				['size'] = 18,
 				['attachTo'] = 'TOP',
 				['xOffset'] = 0,
-				['yOffset'] = 10,
-			},
+				['yOffset'] = 10
+			}
 		},	
 		['target'] = { -- Цель
 			['enable'] = true,
@@ -489,20 +490,20 @@ P['unitframe'] = {
 				['yOffset'] = 10,
 			},			
 		},
-		['targettarget'] = { -- Цель цели
+		['targettarget'] = {
 			['enable'] = true,
 			['rangeCheck'] = true,
 			['threatStyle'] = 'NONE',
 			['healPrediction'] = true,
 			['width'] = 130,
 			['height'] = 36,
-			['health'] = { -- Здоровье
+			['health'] = {
 				['text_format'] = '',
 				['position'] = 'RIGHT',
 				['xOffset'] = 0,
-				['yOffset'] = 0,				
+				['yOffset'] = 0
 			},
-			['power'] = { -- Мана
+			['power'] = {
 				['enable'] = true,
 				['text_format'] = '',	
 				['width'] = 'fill',
@@ -511,7 +512,7 @@ P['unitframe'] = {
 				['position'] = 'LEFT',
 				['hideonnpc'] = false,
 				['xOffset'] = 0,
-				['yOffset'] = 0,				
+				['yOffset'] = 0
 			},
 			['name'] = { -- Имя
 				['position'] = 'CENTER',

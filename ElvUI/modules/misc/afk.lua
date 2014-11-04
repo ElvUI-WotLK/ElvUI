@@ -1,8 +1,16 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local AFKString = _G["AFK"]
 local AFK = E:NewModule('AFK', 'AceEvent-3.0', 'AceTimer-3.0');
+local CH = E:GetModule("Chat")
 
 local CAMERA_SPEED = 0.035
-local format = string.format
+local format, strsub = string.format, string.sub
+
+local ignoreKeys = {
+	LALT = true,
+	LSHIFT = true,
+	RSHIFT = true
+}
 
 function AFK:UpdateTimer()
 	local time = GetTime() - self.startTime
@@ -33,17 +41,25 @@ function AFK:SetAFK(status)
 		self.AFKMode.bottom.model.idleDuration = 40
 		self.startTime = GetTime()
 		self.timer = self:ScheduleRepeatingTimer('UpdateTimer', 1)
-
+		
+		self.AFKMode.chat:RegisterEvent("CHAT_MSG_CHANNEL")
+		self.AFKMode.chat:RegisterEvent("CHAT_MSG_WHISPER")
+		self.AFKMode.chat:RegisterEvent("CHAT_MSG_BN_WHISPER")
+		self.AFKMode.chat:RegisterEvent("CHAT_MSG_BN_CONVERSATION")
+		self.AFKMode.chat:RegisterEvent("CHAT_MSG_GUILD")
+		
 		self.isAFK = true
 	elseif(self.isAFK) then
 		UIParent:Show()
 		self.AFKMode:Hide()
 		MoveViewLeftStop();
-		--ResetView(5);
+		
 		self:CancelTimer(self.timer)
 		self:CancelTimer(self.animTimer)
 		self.AFKMode.bottom.time:SetText("00:00")
-
+		
+		self.AFKMode.chat:UnregisterAllEvents()
+		self.AFKMode.chat:Clear()
 		self.isAFK = false
 	end
 end
@@ -91,9 +107,66 @@ function AFK:Toggle()
 end
 
 local function OnKeyDown(self, key)
-	if(key == 'LALT') then return end
+	if(ignoreKeys[key]) then return end
 	AFK:SetAFK(false)
 	AFK:ScheduleTimer('OnEvent', 60)
+end
+
+local function Chat_OnMouseWheel(self, delta)
+	if(delta == 1 and IsShiftKeyDown()) then
+		self:ScrollToTop()
+	elseif(delta == -1 and IsShiftKeyDown()) then
+		self:ScrollToBottom()
+	elseif(delta == -1) then
+		self:ScrollDown()
+	else
+		self:ScrollUp()
+	end
+end
+
+local function Chat_OnEvent(self, event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14)
+	local coloredName = GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
+	
+	local type = strsub(event, 10);
+	local info = ChatTypeInfo[type];
+	
+	local chatGroup = Chat_GetChatCategory(type);
+	local chatTarget;
+	if ( chatGroup == "CHANNEL" or chatGroup == "BN_CONVERSATION" ) then
+		chatTarget = tostring(arg8);
+	elseif ( chatGroup == "WHISPER" or chatGroup == "BN_WHISPER" ) then
+		if(not(strsub(arg2, 1, 2) == "|K")) then
+			chatTarget = arg2:upper()
+		else
+			chatTarget = arg2;
+		end
+	end
+
+	local playerLink
+	if ( type ~= "BN_WHISPER" and type ~= "BN_CONVERSATION" ) then
+		playerLink = "|Hplayer:"..arg2..":"..arg11..":"..chatGroup..(chatTarget and ":"..chatTarget or "").."|h";
+	else
+		playerLink = "|HBNplayer:"..arg2..":"..arg13..":"..arg11..":"..chatGroup..(chatTarget and ":"..chatTarget or "").."|h";
+	end
+
+	local message = arg1;
+	body = format(_G["CHAT_"..type.."_GET"]..message, playerLink.."["..coloredName.."]".."|h");
+
+	local accessID = ChatHistory_GetAccessID(chatGroup, chatTarget);
+	local typeID = ChatHistory_GetAccessID(type, chatTarget);
+	if CH.db.shortChannels and type ~= "EMOTE" and type ~= "TEXT_EMOTE" then
+		body = body:gsub("|Hchannel:(.-)|h%[(.-)%]|h", CH.ShortChannel)
+		body = body:gsub('CHANNEL:', '')
+		body = body:gsub("^(.-|h) "..L['whispers'], "%1")
+		body = body:gsub("^(.-|h) "..L['says'], "%1")
+		body = body:gsub("^(.-|h) "..L['yells'], "%1")
+		body = body:gsub("<"..AFKString..">", "[|cffFF0000"..L['AFK'].."|r] ")
+		body = body:gsub("<"..DND..">", "[|cffE7E716"..L['DND'].."|r] ")
+		body = body:gsub("%[BN_CONVERSATION:", '%['.."")
+		body = body:gsub("^%["..RAID_WARNING.."%]", '['..L['RW']..']')
+	end
+
+	self:AddMessage(CH:ConcatenateTimeStamp(body), info.r, info.g, info.b, info.id, false, accessID, typeID);
 end
 
 function AFK:LoopAnimations()
@@ -116,7 +189,18 @@ function AFK:Initialize()
 	self.AFKMode:Hide()
 	self.AFKMode:EnableKeyboard(true)
 	self.AFKMode:SetScript("OnKeyDown", OnKeyDown)
-
+	
+	self.AFKMode.chat = CreateFrame("ScrollingMessageFrame", nil, self.AFKMode)
+	self.AFKMode.chat:SetSize(500, 200)
+	self.AFKMode.chat:SetPoint("TOPLEFT", self.AFKMode, "TOPLEFT", 4, -4)
+	self.AFKMode.chat:FontTemplate()
+	self.AFKMode.chat:SetJustifyH("LEFT")
+	self.AFKMode.chat:SetMaxLines(500)
+	self.AFKMode.chat:EnableMouseWheel(true)
+	self.AFKMode.chat:SetFading(false)
+	self.AFKMode.chat:SetScript("OnMouseWheel", Chat_OnMouseWheel)
+	self.AFKMode.chat:SetScript("OnEvent", Chat_OnEvent)
+	
 	self.AFKMode.bottom = CreateFrame("Frame", nil, self.AFKMode)
 	self.AFKMode.bottom:SetTemplate("Transparent")
 	self.AFKMode.bottom:SetPoint("BOTTOM", self.AFKMode, "BOTTOM", 0, -2)

@@ -3220,7 +3220,33 @@ E.Options.args.unitframe.args.party = { -- Группа
 								['ASC'] = L['Ascending'],
 								['DESC'] = L['Descending']
 							},
-						},						
+						},
+						spacer = {
+							order = 3,
+							type = 'description',
+							width = 'full',
+							name = ' '
+						},
+						raidWideSorting = {
+							order = 4,
+							name = L['Raid-Wide Sorting'],
+							desc = L['Enabling this allows raid-wide sorting however you will not be able to distinguish between groups.'],
+							type = 'toggle',
+						},
+						invertGroupingOrder = {
+							order = 5,
+							name = L['Invert Grouping Order'],
+							desc = L['Enabling this inverts the grouping order when the raid is not full, this will reverse the direction it starts from.'],
+							disabled = function() return not E.db.unitframe.units['party'].raidWideSorting end,
+							type = 'toggle',
+						},	
+						startFromCenter = {
+							order = 6,
+							name = L['Start Near Center'],
+							desc = L['The initial group will start near the center and grow out.'],
+							disabled = function() return not E.db.unitframe.units['party'].raidWideSorting end,
+							type = 'toggle',
+						},
 					},
 				},							
 			},
@@ -3630,6 +3656,32 @@ E.Options.args.unitframe.args['raid'] = {
 								['DESC'] = L['Descending']
 							},
 						},
+						spacer = {
+							order = 3,
+							type = 'description',
+							width = 'full',
+							name = ' '
+						},
+						raidWideSorting = {
+							order = 4,
+							name = L['Raid-Wide Sorting'],
+							desc = L['Enabling this allows raid-wide sorting however you will not be able to distinguish between groups.'],
+							type = 'toggle',
+						},
+						invertGroupingOrder = {
+							order = 5,
+							name = L['Invert Grouping Order'],
+							desc = L['Enabling this inverts the grouping order when the raid is not full, this will reverse the direction it starts from.'],
+							disabled = function() return not E.db.unitframe.units['raid'].raidWideSorting end,
+							type = 'toggle',
+						},	
+						startFromCenter = {
+							order = 6,
+							name = L['Start Near Center'],
+							desc = L['The initial group will start near the center and grow out.'],
+							disabled = function() return not E.db.unitframe.units['raid'].raidWideSorting end,
+							type = 'toggle',
+						},
 					},
 				},							
 			},
@@ -3962,6 +4014,32 @@ E.Options.args.unitframe.args['raid40'] = {
 								['DESC'] = L['Descending']
 							},
 						},
+						spacer = {
+							order = 3,
+							type = 'description',
+							width = 'full',
+							name = ' '
+						},
+						raidWideSorting = {
+							order = 4,
+							name = L['Raid-Wide Sorting'],
+							desc = L['Enabling this allows raid-wide sorting however you will not be able to distinguish between groups.'],
+							type = 'toggle',
+						},
+						invertGroupingOrder = {
+							order = 5,
+							name = L['Invert Grouping Order'],
+							desc = L['Enabling this inverts the grouping order when the raid is not full, this will reverse the direction it starts from.'],
+							disabled = function() return not E.db.unitframe.units['raid40'].raidWideSorting end,
+							type = 'toggle',
+						},	
+						startFromCenter = {
+							order = 6,
+							name = L['Start Near Center'],
+							desc = L['The initial group will start near the center and grow out.'],
+							disabled = function() return not E.db.unitframe.units['raid40'].raidWideSorting end,
+							type = 'toggle',
+						},
 					},
 				},							
 			},
@@ -4281,6 +4359,32 @@ E.Options.args.unitframe.args.raidpet = {
 								['ASC'] = L['Ascending'],
 								['DESC'] = L['Descending']
 							},
+						},
+						spacer = {
+							order = 3,
+							type = 'description',
+							width = 'full',
+							name = ' '
+						},
+						raidWideSorting = {
+							order = 4,
+							name = L['Raid-Wide Sorting'],
+							desc = L['Enabling this allows raid-wide sorting however you will not be able to distinguish between groups.'],
+							type = 'toggle',
+						},
+						invertGroupingOrder = {
+							order = 5,
+							name = L['Invert Grouping Order'],
+							desc = L['Enabling this inverts the grouping order when the raid is not full, this will reverse the direction it starts from.'],
+							disabled = function() return not E.db.unitframe.units['raidpet'].raidWideSorting end,
+							type = 'toggle',
+						},	
+						startFromCenter = {
+							order = 6,
+							name = L['Start Near Center'],
+							desc = L['The initial group will start near the center and grow out.'],
+							disabled = function() return not E.db.unitframe.units['raidpet'].raidWideSorting end,
+							type = 'toggle',
 						},
 					},
 				},							
