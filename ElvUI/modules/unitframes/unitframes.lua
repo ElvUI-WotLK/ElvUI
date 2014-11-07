@@ -300,6 +300,13 @@ function UF:UpdateColors()
 	
 	ElvUF.colors.ArcaneChargeBar = E:GetColorTable(db.classResources.MAGE);
 	
+	ElvUF.colors.ComboPoints = {};
+	ElvUF.colors.ComboPoints[1] = E:GetColorTable(db.classResources.comboPoints[1]);
+	ElvUF.colors.ComboPoints[2] = E:GetColorTable(db.classResources.comboPoints[2]);
+	ElvUF.colors.ComboPoints[3] = E:GetColorTable(db.classResources.comboPoints[3]);
+	ElvUF.colors.ComboPoints[4] = E:GetColorTable(db.classResources.comboPoints[4]);
+	ElvUF.colors.ComboPoints[5] = E:GetColorTable(db.classResources.comboPoints[5]);
+	
 	ElvUF.colors.reaction[1] = bad;
 	ElvUF.colors.reaction[2] = bad;
 	ElvUF.colors.reaction[3] = bad;

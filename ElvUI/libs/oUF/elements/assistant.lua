@@ -2,11 +2,15 @@ local parent, ns = ...
 local oUF = ns.oUF
 
 local Update = function(self, event)
+	if not self.unit then return; end
+	
+	local assistant = self.Assistant
+	
 	local unit = self.unit
 	if(UnitInRaid(unit) and UnitIsRaidOfficer(unit) and not UnitIsPartyLeader(unit)) then
-		self.Assistant:Show()
+		assistant:Show()
 	else
-		self.Assistant:Hide()
+		assistant:Hide()
 	end
 end
 

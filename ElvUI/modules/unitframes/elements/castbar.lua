@@ -276,8 +276,6 @@ function UF:PostCastStart(unit, name, rank, castid)
 end
 
 function UF:PostCastStop(unit, name, rank, castid)
-	if(self.isTradeSkill) then return; end
-	
 	local colors = ElvUF.colors;
 	local r, g, b = colors.castCompleteColor[1], colors.castCompleteColor[2], colors.castCompleteColor[3];
 	

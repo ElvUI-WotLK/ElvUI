@@ -517,6 +517,7 @@ function UF:Update_TargetFrame(frame, db)
 		CPoints:Height(COMBOBAR_HEIGHT - (BORDER*2))			
 		
 		for i = 1, MAX_COMBO_POINTS do
+			CPoints[i]:SetStatusBarColor(unpack(ElvUF.colors.ComboPoints[i]))
 			CPoints[i]:SetHeight(CPoints:GetHeight())
 			CPoints[i]:SetWidth(E:Scale(CPoints:GetWidth() - (MAX_COMBO_POINTS - 1)) / MAX_COMBO_POINTS)	
 			if db.combobar.fill == "spaced" then
