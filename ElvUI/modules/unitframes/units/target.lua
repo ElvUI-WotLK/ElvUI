@@ -470,92 +470,99 @@ function UF:Update_TargetFrame(frame, db)
 		end			
 	end
 	
-	do -- Полоса серии (Разбойник)
-		local CPoints = frame.CPoints
-		CPoints:ClearAllPoints()
-
-		if db.combobar.autoHide then
-			CPoints:SetParent(frame)
+	do
+		local CPoints = frame.CPoints;
+		CPoints:ClearAllPoints();
+		
+		if(not db.combobar.detachFromFrame) then
+			CPoints:SetParent(frame);
 		else
-			CPoints:SetParent(E.UIParent)	
+			CPoints:SetParent(E.UIParent);
 		end
-
-		if USE_MINI_COMBOBAR and not db.combobar.detachFromFrame then
-			CPoints:Point("CENTER", frame.Health.backdrop, "TOP", -(BORDER*3 + 6), -SPACING)
-			CPoints:SetFrameStrata("MEDIUM")
-			if CPoints.mover then
-				CPoints.mover:SetScale(0.000001)
-				CPoints.mover:SetAlpha(0)
-			end					
-		elseif not db.combobar.detachFromFrame then
-			CPoints:Point("BOTTOMLEFT", frame.Health.backdrop, "TOPLEFT", BORDER, (E.PixelMode and 0 or (BORDER + SPACING)))
-			CPoints:SetFrameStrata("LOW")
-			if CPoints.mover then
-				CPoints.mover:SetScale(0.000001)
-				CPoints.mover:SetAlpha(0)
-			end				
+		
+		if(CPoints[1]:GetAlpha() == 1 or not db.combobar.autoHide) then
+			CPoints:Show();
 		else
-			COMBOBAR_WIDTH = db.combobar.detachedWidth
-
-			if not CPoints.mover then
-				CPoints:Width(COMBOBAR_WIDTH)
-				CPoints:Height(COMBOBAR_HEIGHT - (BORDER*2))					
-				CPoints:ClearAllPoints()
-				CPoints:Point("BOTTOM", E.UIParent, "BOTTOM", 0, 150)
-				E:CreateMover(CPoints, 'ComboBarMover', L['Combobar'], nil, nil, nil, 'ALL,SOLO')
-			else
-				CPoints:ClearAllPoints()
-				CPoints:SetPoint("BOTTOMLEFT", CPoints.mover, "BOTTOMLEFT")
-				CPoints.mover:SetScale(1)
-				CPoints.mover:SetAlpha(1)		
+			CPoints:Hide();
+		end
+		
+		if(USE_MINI_COMBOBAR and not db.combobar.detachFromFrame) then
+			CPoints:Point("CENTER", frame.Health.backdrop, "TOP", -(BORDER*3 + 6), -SPACING);
+			CPoints:SetFrameStrata("MEDIUM");
+			if(CPoints.mover) then
+				CPoints.mover:SetScale(0.000001);
+				CPoints.mover:SetAlpha(0);
 			end
-
-			CPoints:SetFrameStrata("LOW")			
+		elseif(not db.combobar.detachFromFrame) then
+			CPoints:Point("BOTTOMLEFT", frame.Health.backdrop, "TOPLEFT", BORDER, (E.PixelMode and 0 or (BORDER + SPACING)));
+			CPoints:SetFrameStrata("LOW");
+			if(CPoints.mover) then
+				CPoints.mover:SetScale(0.000001);
+				CPoints.mover:SetAlpha(0);
+			end
+		else
+			COMBOBAR_WIDTH = db.combobar.detachedWidth - (BORDER*2);
+			
+			if(not CPoints.mover) then
+				CPoints:Width(COMBOBAR_WIDTH);
+				CPoints:Height(COMBOBAR_HEIGHT - (E.PixelMode and 1 or 4));
+				CPoints:ClearAllPoints();
+				CPoints:Point("BOTTOM", E.UIParent, "BOTTOM", 0, 150);
+				E:CreateMover(CPoints, 'ComboBarMover', L['Combobar'], nil, nil, nil, 'ALL,SOLO');
+			else
+				CPoints:ClearAllPoints();
+				CPoints:SetPoint("BOTTOMLEFT", CPoints.mover, "BOTTOMLEFT");
+				CPoints.mover:SetScale(1);
+				CPoints.mover:SetAlpha(1);
+			end
+			
+			CPoints:SetFrameStrata("LOW");
 		end
-
-		CPoints:Width(COMBOBAR_WIDTH)
-		CPoints:Height(COMBOBAR_HEIGHT - (BORDER*2))			
+		
+		CPoints:Width(COMBOBAR_WIDTH);
+		CPoints:Height(COMBOBAR_HEIGHT - (E.PixelMode and 1 or 4));
 		
 		for i = 1, MAX_COMBO_POINTS do
-			CPoints[i]:SetStatusBarColor(unpack(ElvUF.colors.ComboPoints[i]))
-			CPoints[i]:SetHeight(CPoints:GetHeight())
-			CPoints[i]:SetWidth(E:Scale(CPoints:GetWidth() - (MAX_COMBO_POINTS - 1)) / MAX_COMBO_POINTS)	
-			if db.combobar.fill == "spaced" then
-				CPoints[i].backdrop:Show()
+			CPoints[i]:SetStatusBarColor(unpack(ElvUF.colors.ComboPoints[i]));
+			CPoints[i]:SetHeight(CPoints:GetHeight());
+			if(db.combobar.fill == "spaced") then
+				CPoints[i]:SetWidth(E:Scale(CPoints:GetWidth() - ((SPACING+(BORDER*2)+2) * (MAX_COMBO_POINTS - 1))) / MAX_COMBO_POINTS);
+				CPoints[i].backdrop:Show();
 			else
-				CPoints[i].backdrop:Hide()	
+				CPoints[i]:SetWidth(E:Scale(CPoints:GetWidth() - (MAX_COMBO_POINTS - 1)) / MAX_COMBO_POINTS);
+				CPoints[i].backdrop:Hide();
 			end
 			
-			CPoints[i]:ClearAllPoints()
-			if i == 1 then
-				CPoints[i]:SetPoint("LEFT", CPoints)
+			CPoints[i]:ClearAllPoints();
+			if(i == 1) then
+				CPoints[i]:SetPoint("LEFT", CPoints);
 			else
-				if db.combobar.fill == "spaced" then
-					CPoints[i]:Point("LEFT", CPoints[i-1], "RIGHT", SPACING+(BORDER*2)+2, 0)
+				if(db.combobar.fill == "spaced") then
+					CPoints[i]:Point("LEFT", CPoints[i-1], "RIGHT", SPACING+(BORDER*2)+2, 0);
 				else
-					CPoints[i]:Point("LEFT", CPoints[i-1], "RIGHT", 1, 0)
+					CPoints[i]:Point("LEFT", CPoints[i-1], "RIGHT", 1, 0);
 				end
-			end	
+			end
 			
-			if db.combobar.fill ~= "spaced" then
-				CPoints[i].backdrop:Hide()
+			if(db.combobar.fill ~= "spaced") then
+				CPoints[i].backdrop:Hide();
 			else
-				CPoints[i].backdrop:Show()
-			end					
+				CPoints[i].backdrop:Show();
+			end
 		end
 		
-		if db.combobar.fill ~= "spaced" then
-			CPoints.backdrop:Show()
+		if(db.combobar.fill ~= "spaced") then
+			CPoints.backdrop:Show();
 		else
-			CPoints.backdrop:Hide()
-		end		
-
-		if USE_COMBOBAR and not frame:IsElementEnabled('CPoints') then
-			frame:EnableElement('CPoints')
-		elseif not USE_COMBOBAR and frame:IsElementEnabled('CPoints') then
-			frame:DisableElement('CPoints')	
-			CPoints:Hide()
-		end				
+			CPoints.backdrop:Hide();
+		end
+		
+		if(USE_COMBOBAR and not frame:IsElementEnabled('CPoints')) then
+			frame:EnableElement('CPoints');
+		elseif(not USE_COMBOBAR and frame:IsElementEnabled('CPoints')) then
+			frame:DisableElement('CPoints');
+			CPoints:Hide();
+		end
 	end
 	
 	do -- ???

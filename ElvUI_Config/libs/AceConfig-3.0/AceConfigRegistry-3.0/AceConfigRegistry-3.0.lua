@@ -163,6 +163,7 @@ local typedkeys={
 	},
 	color={
 		hasAlpha=optmethodbool,
+		reset=opttable,
 	},
 	keybinding={
 		-- TODO

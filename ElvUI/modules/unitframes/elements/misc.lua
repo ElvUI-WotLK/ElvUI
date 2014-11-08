@@ -205,7 +205,9 @@ function UF:UpdateComboDisplay(event, unit)
 	local USE_PORTRAIT = db.portrait.enable
 	local USE_PORTRAIT_OVERLAY = db.portrait.overlay and USE_PORTRAIT
 	local PORTRAIT_WIDTH = db.portrait.width
-	
+	if not self.Portrait then
+		self.Portrait = db.portrait.style == '2D' and self.Portrait2D or self.Portrait3D
+	end
 
 	if USE_PORTRAIT_OVERLAY or not USE_PORTRAIT then
 		PORTRAIT_WIDTH = 0

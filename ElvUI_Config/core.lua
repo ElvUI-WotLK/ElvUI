@@ -595,7 +595,8 @@ E.Options.args.general = {
 			name = L['Cooldown Text'],
 			get = function(info)
 				local t = E.db.cooldown[ info[#info] ]
-				return t.r, t.g, t.b, t.a
+				local d = P.cooldown[info[#info]]
+				return t.r, t.g, t.b, t.a, d.r, d.g, d.b
 			end,
 			set = function(info, r, g, b)
 				E.db.cooldown[ info[#info] ] = {}
@@ -825,7 +826,8 @@ E.Options.args.media = {
 					hasAlpha = false,
 					get = function(info)
 						local t = E.db.general[ info[#info] ]
-						return t.r, t.g, t.b, t.a
+						local d = P.general[info[#info]]
+						return t.r, t.g, t.b, t.a, d.r, d.g, d.b
 					end,
 					set = function(info, r, g, b)
 						E.db.general[ info[#info] ] = {}
@@ -844,7 +846,8 @@ E.Options.args.media = {
 					hasAlpha = false,
 					get = function(info)
 						local t = E.db.general[ info[#info] ]
-						return t.r, t.g, t.b, t.a
+						local d = P.general[info[#info]]
+						return t.r, t.g, t.b, t.a, d.r, d.g, d.b
 					end,
 					set = function(info, r, g, b)
 						E.db.general[ info[#info] ] = {}
@@ -862,7 +865,8 @@ E.Options.args.media = {
 					hasAlpha = true,
 					get = function(info)
 						local t = E.db.general[ info[#info] ]
-						return t.r, t.g, t.b, t.a
+						local d = P.general[info[#info]]
+						return t.r, t.g, t.b, t.a, d.r, d.g, d.b, d.a
 					end,
 					set = function(info, r, g, b, a)
 						E.db.general[ info[#info] ] = {}
@@ -880,7 +884,8 @@ E.Options.args.media = {
 					hasAlpha = false,
 					get = function(info)
 						local t = E.db.general[ info[#info] ]
-						return t.r, t.g, t.b, t.a
+						local d = P.general[info[#info]]
+						return t.r, t.g, t.b, t.a, d.r, d.g, d.b
 					end,
 					set = function(info, r, g, b, a)
 						E.db.general[ info[#info] ] = {}
@@ -888,19 +893,6 @@ E.Options.args.media = {
 						t.r, t.g, t.b, t.a = r, g, b, a
 						E:UpdateMedia()
 					end,						
-				},						
-				resetbutton = {
-					type = "execute",
-					order = 5,
-					name = L["Restore Defaults"],
-					func = function() 
-						E.db.general.backdropcolor = P.general.backdropcolor
-						E.db.general.backdropfadecolor = P.general.backdropfadecolor
-						E.db.general.bordercolor = P.general.bordercolor
-						E.db.general.valuecolor = P.general.valuecolor
-						E:UpdateMedia()
-						E:UpdateFrameTemplates()								
-					end,
 				},
 			},
 		},
