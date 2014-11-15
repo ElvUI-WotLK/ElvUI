@@ -48,10 +48,10 @@ L['Vendor Grays'] = true;
 
 --Chat
 L['AFK'] = true; --Also used in datatexts and tooltip
+L['BG'] = true;
+L['BGL'] = true;
 L['DND'] = true; --Also used in datatexts and tooltip
 L['G'] = true;
-L['I'] = true;
-L['IL'] = true;
 L['Invalid Target'] = true;
 L['O'] = true;
 L['P'] = true;

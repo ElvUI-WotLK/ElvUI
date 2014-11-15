@@ -14,6 +14,9 @@ function UF:Construct_Raid40Frames(unitGroup)
 	self.RaisedElementParent:SetFrameStrata("MEDIUM")
 	self.RaisedElementParent:SetFrameLevel(self:GetFrameLevel() + 10)		
 	
+	self:SetAttribute('initial-height', UF.db['units']['raid40'].height);
+	self:SetAttribute('initial-width', UF.db['units']['raid40'].width);
+	
 	self.Health = UF:Construct_HealthBar(self, true, true, 'RIGHT')
 	
 	self.Power = UF:Construct_PowerBar(self, true, true, 'LEFT', false)
@@ -53,7 +56,6 @@ function UF:Raid40SmartVisibility(event)
 		if(inInstance and (instanceType == 'raid' or instanceType == 'pvp')) then
 			local _, _, _, _, maxPlayers = GetInstanceInfo()
 			local mapID = GetCurrentMapAreaID();
-
 			if mapID and UF.mapIDs[mapID] then
 				maxPlayers = UF.mapIDs[mapID]
 			end
@@ -121,9 +123,6 @@ function UF:Update_Raid40Frames(frame, db)
 	frame.colors = ElvUF.colors
 	frame:RegisterForClicks(self.db.targetOnMouseDown and 'AnyDown' or 'AnyUp')
 	
-	if not InCombatLockdown() then
-		frame:Size(UNIT_WIDTH, UNIT_HEIGHT)
-	end
 	frame.Range = {insideAlpha = 1, outsideAlpha = E.db.unitframe.OORAlpha}
 	if not frame:IsElementEnabled('Range') then
 		frame:EnableElement('Range')

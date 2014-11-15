@@ -18,14 +18,14 @@ local tinsert, tremove, tsort, twipe, tconcat = table.insert, table.remove, tabl
 
 local TIMESTAMP_FORMAT
 local DEFAULT_STRINGS = {
+	BATTLEGROUND = L['BG'],
 	GUILD = L['G'],
 	PARTY = L['P'],
 	RAID = L['R'],
 	OFFICER = L['O'],
+	BATTLEGROUND_LEADER = L['BGL'],
 	PARTY_LEADER = L['PL'],
 	RAID_LEADER = L['RL'],	
-	INSTANCE_CHAT = L['I'],
-	INSTANCE_CHAT_LEADER = L['IL'],
 }
 
 local hyperlinkTypes = {
@@ -1449,8 +1449,8 @@ function CH:Initialize()
 	self:SetupChat()
 	self:UpdateAnchors()
 
-	self:RegisterEvent('CHAT_MSG_INSTANCE_CHAT', 'SaveChatHistory')
-	self:RegisterEvent('CHAT_MSG_INSTANCE_CHAT_LEADER', 'SaveChatHistory')
+	self:RegisterEvent("CHAT_MSG_BATTLEGROUND", 'SaveChatHistory')
+	self:RegisterEvent("CHAT_MSG_BATTLEGROUND_LEADER", 'SaveChatHistory')
 	self:RegisterEvent("CHAT_MSG_BN_WHISPER", 'SaveChatHistory')
 	self:RegisterEvent("CHAT_MSG_BN_WHISPER_INFORM", 'SaveChatHistory')
 	self:RegisterEvent("CHAT_MSG_CHANNEL", 'SaveChatHistory')
@@ -1513,8 +1513,8 @@ function CH:Initialize()
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_PARTY_LEADER", CH.FindURL)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID", CH.FindURL)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID_LEADER", CH.FindURL)
-	ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT", CH.FindURL)
-	ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT_LEADER", CH.FindURL)
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_BATTLEGROUND", CH.FindURL)
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_BATTLEGROUND_LEADER", CH.FindURL)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_BN_CONVERSATION", CH.FindURL)	
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_BN_WHISPER", CH.FindURL)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_BN_WHISPER_INFORM", CH.FindURL)

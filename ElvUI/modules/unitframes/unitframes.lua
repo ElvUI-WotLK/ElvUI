@@ -606,7 +606,10 @@ function UF.headerPrototype:Update(isForced)
 		if(_G[child:GetName()..'Target']) then
 			UF['Update_'..E:StringTitle(group)..'Frames'](UF, _G[child:GetName()..'Target'], db);
 		end
-
+		
+		child:SetHeight(db.height);
+		child:SetWidth(db.width);
+		
 		i = i + 1;
 		child = self:GetAttribute('child' .. i);
 	end

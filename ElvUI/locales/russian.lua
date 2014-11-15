@@ -47,10 +47,10 @@ L['Vendor Grays'] = "Продавать серые предметы";
 
 --Chat
 L['AFK'] = "АФК"; -- Also used in datatexts and tooltip
+L['BG'] = "ПБ";
+L['BGL'] = "Лидер ПБ";
 L['DND'] = "ДНД"; -- Also used in datatexts and tooltip
 L['G'] = "Г";
-L['I'] = "П";
-L['IL'] = "ЛП";
 L['Invalid Target'] = "Неверная цель";
 L['O'] = "Оф";
 L['P'] = "Гр";
