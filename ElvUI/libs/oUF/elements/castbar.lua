@@ -69,7 +69,8 @@ local UNIT_SPELLCAST_START = function(self, event, unit, spell)
 	castbar.delay = 0;
 	castbar.channeling = nil;
 	castbar.fadeOut = nil;
-	castbar.isTradeSkill = isTradeSkill
+	castbar.interrupt = interrupt;
+	castbar.isTradeSkill = isTradeSkill;
 	
 	if(castbar.Text) then
 		castbar.Text:SetText(text);
@@ -113,6 +114,7 @@ local UNIT_SPELLCAST_FAILED = function(self, event, unit, spellname, _, castid)
 	
 	castbar.casting = nil;
 	castbar.channeling = nil;
+	castbar.interrupt = nil;
 	castbar.fadeOut = 1;
 	castbar.holdTime = GetTime() + CASTING_BAR_HOLD_TIME;
 	
@@ -221,6 +223,7 @@ local UNIT_SPELLCAST_STOP = function(self, event, unit, spellname, _, castid)
 			castbar:SetValue(castbar.max);
 			
 			castbar.casting = nil;
+			castbar.interrupt = nil;
 			castbar.fadeOut = 1;
 			castbar.holdTime = 0;
 		end
@@ -265,6 +268,7 @@ local UNIT_SPELLCAST_CHANNEL_START = function(self, event, unit, spellname)
 	castbar.holdTime = 0;
 	castbar.casting = nil;
 	castbar.channeling = 1;
+	castbar.interrupt = notInterruptible;
 	castbar.fadeOut = nil;
 	
 	local sf = castbar.SafeZone;

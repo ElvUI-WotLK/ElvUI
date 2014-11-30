@@ -89,6 +89,17 @@ function UF:OnCastUpdate(elapsed)
 		local duration = self.duration + elapsed;
 		if(duration >= self.max) then
 			self:SetValue(self.max);
+			
+			local colors = ElvUF.colors;
+			local r, g, b = colors.castCompleteColor[1], colors.castCompleteColor[2], colors.castCompleteColor[3];
+			
+			if(UF.db.colors.transparentCastbar and self.bg:IsShown()) then
+				local _, _, _, alpha = self.backdrop:GetBackdropColor();
+				self.backdrop:SetBackdropColor(r * 0.58, g * 0.58, b * 0.58, alpha);
+			else
+				self:SetStatusBarColor(r, g, b);
+			end
+			
 			if(self.Spark) then
 				self.Spark:Hide();
 			end
