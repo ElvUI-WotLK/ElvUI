@@ -6,6 +6,8 @@
 
 --[[ locals and speed ]]--
 
+local E, L, V, P, G = unpack(select(2, ...));
+
 local _G = _G
 local UPDATE_DELAY = 0.1
 local ATTACK_BUTTON_FLASH_TIME = ATTACK_BUTTON_FLASH_TIME
@@ -210,8 +212,8 @@ end
 
 function tullaRange:LoadDefaults()
 	TULLARANGE_COLORS = {
-		['OOR'] = {0.8, 0.1, 0.1},
-		['OOM'] = {0.1, 0.3, 1.0},
+		['OOR'] = E:GetColorTable(E.db.actionbar.noRangeColor),
+		['OOM'] = E:GetColorTable(E.db.actionbar.noPowerColor),
 		['NORMAL'] = {1.0, 1.0, 1.0},
 		['UNUSABLE'] = {0.2, 0.2, 0.2},
 	}

@@ -30,10 +30,12 @@ L['KEY_SPACE'] = "SpB"
 L["No bindings set."] = "Нет назначений"
 
 --Bags
+L['Bank'] = "Банк";
 L['Delete Grays'] = "Удалить предметы серого качества";
 L['Hold Control + Right Click:'] = "Зажать control + ПКМ:";
 L['Hold Shift + Drag:'] = "Зажать shift и перетаскивать:";
 L['Hold Shift:'] = "С зажатым shift'ом:";
+L['Purchase Bags'] = "Приобрести слот";
 L['Purchase'] = "Приобрести слот";
 L['Reset Position'] = "Сбросить позицию";
 L['Sort Bags'] = "Сортировать";

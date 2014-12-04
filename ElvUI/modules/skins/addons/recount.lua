@@ -12,8 +12,8 @@ local function LoadSkin()
 	
 	local backdrop = CreateFrame('Frame', nil, Recount_MainWindow);
 	backdrop:SetFrameLevel(Recount_MainWindow:GetFrameLevel() - 1);
-	backdrop:Point('BOTTOMLEFT', Recount_MainWindow, 1, 1);
-	backdrop:Point('TOPRIGHT', Recount_MainWindow, -1, -11);
+	backdrop:Point('BOTTOMLEFT', Recount_MainWindow, 0, 0);
+	backdrop:Point('TOPRIGHT', Recount_MainWindow, 0, -9);
 	backdrop:SetTemplate('Default');
 	
 	local header = CreateFrame('Frame', nil, backdrop);

@@ -31,10 +31,12 @@ L['KEY_SPACE'] = "SpB"
 L["No bindings set."] = true;
 
 --Bags
+L['Bank'] = true;
 L['Delete Grays'] = true;
 L['Hold Control + Right Click:'] = true;
 L['Hold Shift + Drag:'] = true;
 L['Hold Shift:'] = true;
+L['Purchase Bags'] = true;
 L['Purchase'] = true;
 L['Reset Position'] = true;
 L['Sort Bags'] = true;
