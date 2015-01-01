@@ -73,7 +73,12 @@ local function SetTip(frame)
 	GameTooltip:SetOwner(frame, "ANCHOR_RIGHT")
 	GameTooltip:SetText(frame.tiptext)
 	if frame:IsEnabled() == 0 then GameTooltip:AddLine("|cffff3333"..L["Can't Roll"]) end
-	for name,roll in pairs(frame.parent.rolls) do if rolltypes[roll] == rolltypes[frame.rolltype] then GameTooltip:AddLine(name, 1, 1, 1) end end
+	for name, tbl in pairs(frame.parent.rolls) do
+		if rolltypes[tbl[1]] == rolltypes[frame.rolltype] then
+			local classColor = RAID_CLASS_COLORS[tbl[2]]
+			GameTooltip:AddLine(name, classColor.r, classColor.g, classColor.b)
+		end
+	end
 	GameTooltip:Show()
 end
 
@@ -295,7 +300,7 @@ function M:CHAT_MSG_LOOT(event, msg)
 	if playername and itemname and rolltype then
 		for _, f in ipairs(M.RollBars) do
 			if f.rollID and f.button.link == itemname and not f.rolls[playername] then
-				f.rolls[playername] = rolltype
+				f.rolls[playername] = {rollType, class}
 				f[rolltype]:SetText(tonumber(f[rolltype]:GetText()) + 1)
 				return
 			end
