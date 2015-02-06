@@ -307,7 +307,7 @@ local function GetOptionsTable_Name(updateFunc, groupName, numUnits) -- Имя
 	return config
 end
 -- 400
-local function GetOptionsTable_Portrait(updateFunc, groupName, numUnits) -- Портрет
+local function GetOptionsTable_Portrait(updateFunc, groupName, numUnits, hasDetatchOption) -- Портрет
 	local config = {
 		order = 400,
 		type = 'group',
@@ -347,6 +347,29 @@ local function GetOptionsTable_Portrait(updateFunc, groupName, numUnits) -- По
 			},
 		},
 	}
+	
+	if(hasDetatchOption) then
+		config.args.detachFromFrame = {
+			type = 'toggle',
+			order = 5,
+			name = L['Detach From Frame'],
+			disabled = function() return not E.db.unitframe.units[groupName]['portrait']['enable'] end,
+		};
+		config.args.detachedWidth = {
+			type = 'range',
+			order = 6,
+			name = L['Detached Width'],
+			min = 15, max = 450, step = 1,
+			disabled = function() return not E.db.unitframe.units[groupName]['portrait']['detachFromFrame'] end,
+		};
+		config.args.detachedHeight = {
+			type = 'range',
+			order = 7,
+			name = L['Detached Height'],
+			min = 15, max = 450, step = 1,
+			disabled = function() return not E.db.unitframe.units[groupName]['portrait']['detachFromFrame'] end,
+		};
+	end
 	
 	return config
 end
@@ -1526,6 +1549,14 @@ E.Options.args.unitframe = { -- Рамки юнитов
 									get = function(info) return E.db.unitframe.colors[ info[#info] ] end,
 									set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames() end,											
 								},	
+								forcehealthreaction = {
+									order = 2,
+									type = 'toggle',
+									name = L['Force Reaction Color'],
+									desc = L['Forces reaction color instead of class color on units controlled by players.'],
+									get = function(info) return E.db.unitframe.colors[ info[#info] ] end,
+									set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames() end,
+									},
 								colorhealthbyvalue = { -- Здоровье по значению
 									order = 3,
 									type = 'toggle',
@@ -1957,7 +1988,7 @@ E.Options.args.unitframe.args.player = { -- Игрок
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, 'player'), -- Здоровье
 		power = GetOptionsTable_Power(true, UF.CreateAndUpdateUF, 'player'), -- Мана	
 		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, 'player'), -- Имя
-		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUF, 'player'), -- Портрет
+		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUF, 'player', nil, true), -- Портрет
 		buffs = GetOptionsTable_Auras(true, 'buffs', false, UF.CreateAndUpdateUF, 'player'), -- Баффы
 		debuffs = GetOptionsTable_Auras(true, 'debuffs', false, UF.CreateAndUpdateUF, 'player'), -- Дебаффы
 		castbar = GetOptionsTable_Castbar(true, UF.CreateAndUpdateUF, 'player'), -- Полоса заклинаний
@@ -2129,7 +2160,7 @@ E.Options.args.unitframe.args.target = { -- Цель
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, 'target'), -- Здоровье
 		power = GetOptionsTable_Power(true, UF.CreateAndUpdateUF, 'target'), -- Мана
 		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, 'target'), -- Имя
-		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUF, 'target'), -- Портрет
+		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUF, 'target', nil, true), -- Портрет
 		buffs = GetOptionsTable_Auras(false, 'buffs', false, UF.CreateAndUpdateUF, 'target'), -- Баффы
 		debuffs = GetOptionsTable_Auras(false, 'debuffs', false, UF.CreateAndUpdateUF, 'target'), -- Дебаффы
 		castbar = GetOptionsTable_Castbar(false, UF.CreateAndUpdateUF, 'target'), -- Полоса заклинаний

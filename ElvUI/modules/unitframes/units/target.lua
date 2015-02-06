@@ -70,6 +70,7 @@ function UF:Update_TargetFrame(frame, db)
 	local USE_PORTRAIT = db.portrait.enable
 	local USE_PORTRAIT_OVERLAY = db.portrait.overlay and USE_PORTRAIT
 	local PORTRAIT_WIDTH = db.portrait.width
+	local PORTRAIT_DETACHED = db.portrait.detachFromFrame;
 	
 	local unit = self.unit
 	
@@ -91,7 +92,7 @@ function UF:Update_TargetFrame(frame, db)
 			POWERBAR_HEIGHT = 0
 		end	
 	
-		if USE_PORTRAIT_OVERLAY or not USE_PORTRAIT then
+		if(USE_PORTRAIT_OVERLAY or PORTRAIT_DETACHED or not USE_PORTRAIT) then
 			PORTRAIT_WIDTH = 0
 			if USE_POWERBAR_OFFSET then
 				COMBOBAR_WIDTH = COMBOBAR_WIDTH - POWERBAR_OFFSET
@@ -161,19 +162,26 @@ function UF:Update_TargetFrame(frame, db)
 		else
 			health.colorClass = true
 			health.colorReaction = true
-		end	
+		end
+		
+		if(self.db['colors'].forcehealthreaction == true) then
+			health.colorClass = false;
+			health.colorReaction = true;
+		end
 		
 		health:ClearAllPoints() -- Позиция
 		health:Point("TOPRIGHT", frame, "TOPRIGHT", -BORDER, -BORDER)
 		
-		if USE_POWERBAR_OFFSET then			
-			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER+POWERBAR_OFFSET, BORDER+POWERBAR_OFFSET)
-		elseif USE_MINI_POWERBAR then
-			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER, BORDER + (POWERBAR_HEIGHT/2))
-		elseif USE_INSET_POWERBAR or POWERBAR_DETACHED then
-			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER, BORDER)
-		else
-			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER, BORDER + POWERBAR_HEIGHT)
+		if(POWERBAR_DETACHED) then
+ 			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER, BORDER);
+ 		elseif(USE_POWERBAR_OFFSET) then
+ 			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER+POWERBAR_OFFSET, BORDER+POWERBAR_OFFSET);
+		elseif(USE_INSET_POWERBAR) then
+			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER, BORDER);
+ 		elseif(USE_MINI_POWERBAR) then
+ 			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER, BORDER + (POWERBAR_HEIGHT/2));
+ 		else
+			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER, BORDER + POWERBAR_HEIGHT);
 		end
 
 		health.bg:ClearAllPoints()
@@ -284,31 +292,64 @@ function UF:Update_TargetFrame(frame, db)
 				portrait:SetAlpha(0.3)
 				portrait:Show()		
 				portrait.backdrop:Hide()
+				
+				if(portrait.mover) then
+					portrait.mover:SetScale(0.000001);
+					portrait.mover:SetAlpha(0);
+				end
 			else
 				portrait:SetAlpha(1)
 				portrait:Show()
 				portrait.backdrop:Show()
-				portrait.backdrop:ClearAllPoints()
-				portrait.backdrop:SetPoint("TOPRIGHT", frame, "TOPRIGHT", E.PixelMode and -1 or 0, 0)
-					
-				if db.portrait.style == '3D' then
-					portrait:SetFrameLevel(frame:GetFrameLevel() + 5)
-				end		
 				
-				if USE_MINI_POWERBAR or USE_POWERBAR_OFFSET or not USE_POWERBAR or USE_INSET_POWERBAR or POWERBAR_DETACHED then
-					portrait.backdrop:Point("BOTTOMLEFT", frame.Health.backdrop, "BOTTOMRIGHT", E.PixelMode and -1 or SPACING, 0)
+				if(PORTRAIT_DETACHED and db.portrait.style == '3D') then
+					portrait:Width(db.portrait.detachedWidth);
+					portrait:Height(db.portrait.detachedHeight);
+					portrait.backdrop:SetOutside();
+					
+					if(not portrait.mover) then
+						portrait:ClearAllPoints();
+						portrait:Point('BOTTOM', frame, 'BOTTOM', 0, -20);
+						E:CreateMover(portrait, 'TargetPortraitMover', 'Target Portrait', nil, nil, nil, 'ALL,SOLO');
+					else
+						portrait:ClearAllPoints();
+						portrait:SetPoint('BOTTOMLEFT', portrait.mover, 'BOTTOMLEFT');
+						portrait.mover:SetScale(1);
+						portrait.mover:SetAlpha(1);
+					end
 				else
-					portrait.backdrop:Point("BOTTOMLEFT", frame.Power.backdrop, "BOTTOMRIGHT", E.PixelMode and -1 or SPACING, 0)
-				end	
-							
-				portrait:Point('BOTTOMLEFT', portrait.backdrop, 'BOTTOMLEFT', BORDER, BORDER)		
-				portrait:Point('TOPRIGHT', portrait.backdrop, 'TOPRIGHT', -BORDER, -BORDER)				
+					portrait.backdrop:ClearAllPoints()
+					portrait.backdrop:SetPoint("TOPRIGHT", frame, "TOPRIGHT", E.PixelMode and -1 or 0, 0)
+					
+					if db.portrait.style == '3D' then
+						portrait:SetFrameLevel(frame:GetFrameLevel() + 5)
+					end		
+					
+					if USE_MINI_POWERBAR or USE_POWERBAR_OFFSET or not USE_POWERBAR or USE_INSET_POWERBAR or POWERBAR_DETACHED then
+						portrait.backdrop:Point("BOTTOMLEFT", frame.Health.backdrop, "BOTTOMRIGHT", E.PixelMode and -1 or SPACING, 0)
+					else
+						portrait.backdrop:Point("BOTTOMLEFT", frame.Power.backdrop, "BOTTOMRIGHT", E.PixelMode and -1 or SPACING, 0)
+					end
+					
+					portrait:Point('BOTTOMLEFT', portrait.backdrop, 'BOTTOMLEFT', BORDER, BORDER)
+					portrait:Point('TOPRIGHT', portrait.backdrop, 'TOPRIGHT', -BORDER, -BORDER)
+					
+					if(portrait.mover) then
+						portrait.mover:SetScale(0.000001);
+						portrait.mover:SetAlpha(0);
+					end
+				end
 			end
 		else
 			if frame:IsElementEnabled('Portrait') then
 				frame:DisableElement('Portrait')
 				portrait:Hide()
 				portrait.backdrop:Hide()
+				
+				if(portrait.mover) then
+					portrait.mover:SetScale(0.000001);
+					portrait.mover:SetAlpha(0);
+				end
 			end		
 		end
 	end
@@ -335,7 +376,7 @@ function UF:Update_TargetFrame(frame, db)
 					threat.glow:Point("BOTTOMRIGHT", frame.Health.backdrop, "BOTTOMRIGHT", SHADOW_SPACING, -SHADOW_SPACING)	
 				end
 				
-				if USE_PORTRAIT and not USE_PORTRAIT_OVERLAY then
+				if(USE_PORTRAIT and not USE_PORTRAIT_OVERLAY and not PORTRAIT_DETACHED) then
 					threat.glow:Point("TOPRIGHT", frame.Portrait.backdrop, "TOPRIGHT", SHADOW_SPACING, -SHADOW_SPACING)
 					threat.glow:Point("BOTTOMRIGHT", frame.Portrait.backdrop, "BOTTOMRIGHT", SHADOW_SPACING, -SHADOW_SPACING)
 				end

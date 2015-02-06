@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local TT = E:NewModule('Tooltip', 'AceTimer-3.0', 'AceHook-3.0', 'AceEvent-3.0');
+local TT = E:NewModule('Tooltip', 'AceHook-3.0', 'AceEvent-3.0');
 
 local _G = getfenv(0)
 local GameTooltip, GameTooltipStatusBar = _G["GameTooltip"], _G["GameTooltipStatusBar"]
@@ -355,7 +355,7 @@ function TT:GameTooltip_OnTooltipSetUnit(tt)
 		if(UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit)) then
 			color = TAPPED_COLOR
 		else
-			color = FACTION_BAR_COLORS[UnitReaction(unit, "player")]
+			color = E.db.tooltip.useCustomFactionColors and E.db.tooltip.factionColors[""..UnitReaction(unit, "player")] or FACTION_BAR_COLORS[UnitReaction(unit, "player")]
 		end
 
 		local levelLine = self:GetLevelLine(tt, 2)
@@ -379,9 +379,9 @@ function TT:GameTooltip_OnTooltipSetUnit(tt)
 		if(UnitIsPlayer(unitTarget) and not UnitHasVehicleUI(unitTarget)) then
 			targetColor = RAID_CLASS_COLORS[select(2, UnitClass(unitTarget))]
 		else
-			targetColor = FACTION_BAR_COLORS[UnitReaction(unitTarget, "player")]	
+			targetColor = E.db.tooltip.useCustomFactionColors and E.db.tooltip.factionColors[""..UnitReaction(unitTarget, "player")] or FACTION_BAR_COLORS[UnitReaction(unitTarget, "player")]	
 		end
-
+		
 		GameTooltip:AddDoubleLine(format("%s:", TARGET), format("|cff%02x%02x%02x%s|r", targetColor.r * 255, targetColor.g * 255, targetColor.b * 255, UnitName(unitTarget)))
 	end
 	

@@ -129,6 +129,11 @@ function UF:Update_FocusFrame(frame, db)
 			health.colorReaction = true;
 		end
 		
+		if(self.db['colors'].forcehealthreaction == true) then
+			health.colorClass = false;
+			health.colorReaction = true;
+		end
+		
 		health:ClearAllPoints();
 		health:Point('TOPRIGHT', frame, 'TOPRIGHT', -BORDER, -BORDER);
 		

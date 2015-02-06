@@ -78,6 +78,28 @@ E.Options.args.tooltip = {
 						[3] = '../../..',
 					},				
 				},
+				useCustomFactionColors = {
+					order = 9,
+					type = 'toggle',
+					name = L['Custom Faction Colors'],
+				},
+				factionColors = {
+					order = 10,
+					type = 'group',
+					name = L['Custom Faction Colors'],
+					guiInline = true,
+					args = {},
+					get = function(info)
+						local t = E.db.tooltip.factionColors[ info[#info] ]
+						local d = P.tooltip.factionColors[ info[#info] ]
+						return t.r, t.g, t.b, t.a, d.r, d.g, d.b
+					end,
+					set = function(info, r, g, b)
+						E.db.tooltip.factionColors[ info[#info] ] = {}
+						local t = E.db.tooltip.factionColors[ info[#info] ]
+						t.r, t.g, t.b = r, g, b
+					end,
+				},
 			},
 		},
 		visibility = {
@@ -160,3 +182,13 @@ E.Options.args.tooltip = {
 		},		
 	},
 }
+
+for i = 1, 8 do
+	E.Options.args.tooltip.args.general.args.factionColors.args[''..i] = {
+		order = i,
+		type = 'color',
+		hasAlpha = false,
+		name = _G['FACTION_STANDING_LABEL'..i],
+		disabled = function() return not E.Tooltip or not E.db.tooltip.useCustomFactionColors end,
+	}
+end

@@ -421,7 +421,8 @@ function NP:SetUnitInfo(myPlate)
 			self.allowCheck = nil
 		end
 		self.guid = UnitGUID('mouseover')
-		self.unit = 'mouseover'		
+		self.unit = 'mouseover'
+		NP:UpdateAurasByUnitID('mouseover');
 	else
 		myPlate:SetFrameLevel(0)
 		myPlate.overlay:Hide()
@@ -706,7 +707,7 @@ function NP:CastBar_OnValueChanged(value)
 	myPlate.castBar.time:SetFormattedText('%.1f ', value)
 
 	local color
-	if(self.shield:IsShown()) then
+	if(self.border:IsShown()) then
 		color = NP.db.castBar.noInterrupt
 	else
 		--Color the castbar green slightly before it ends cast.

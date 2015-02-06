@@ -133,7 +133,12 @@ function UF:Update_RaidpetFrames(frame, db)
 			else
 				health.colorClass = true
 				health.colorReaction = true
-			end				
+			end
+			
+			if(self.db['colors'].forcehealthreaction == true) then
+				health.colorClass = false;
+				health.colorReaction = true;
+			end
 		end
 		
 		--Position

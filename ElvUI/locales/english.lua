@@ -1,10 +1,8 @@
-﻿-- English localization file for enUS and enGB.
-local AceLocale = LibStub:GetLibrary("AceLocale-3.0");
-local L = AceLocale:NewLocale("ElvUI", "enUS", true, true);
-if not L then return; end
-
---TEMP
-L["A taint has occured that is preventing you from using the queue system. Please reload your user interface and try again."] = true;
+﻿local AceLocale = LibStub:GetLibrary('AceLocale-3.0');
+local L = AceLocale:NewLocale('ElvUI', 'enUS', true, true);
+if(not L) then
+	return;
+end
 
 --*_ADDON locales
 L["INCOMPATIBLE_ADDON"] = "The addon %s is not compatible with ElvUI's %s module. Please select either the addon or the ElvUI module to disable."
@@ -30,7 +28,7 @@ L['KEY_SHIFT'] = "S"
 L['KEY_SPACE'] = "SpB"
 L["No bindings set."] = true;
 
---Bags
+-- Bags
 L['Bank'] = true;
 L['Delete Grays'] = true;
 L['Hold Control + Right Click:'] = true;
@@ -40,7 +38,7 @@ L['Purchase Bags'] = true;
 L['Purchase'] = true;
 L['Reset Position'] = true;
 L['Sort Bags'] = true;
-L['Sort Tab'] = true; --Not used, yet?
+L['Sort Tab'] = true; -- Not used, yet?
 L['Stack Bags to Bank'] = true;
 L['Stack Bank to Bags'] = true;
 L['Stack Items'] = true;
@@ -48,11 +46,11 @@ L['Temporary Move'] = true;
 L['Toggle Bags'] = true;
 L['Vendor Grays'] = true;
 
---Chat
-L['AFK'] = true; --Also used in datatexts and tooltip
+-- Chat
+L['AFK'] = true; -- Also used in datatexts and tooltip
 L['BG'] = true;
 L['BGL'] = true;
-L['DND'] = true; --Also used in datatexts and tooltip
+L['DND'] = true; -- Also used in datatexts and tooltip
 L['G'] = true;
 L['Invalid Target'] = true;
 L['O'] = true;
@@ -65,68 +63,48 @@ L['says'] = true;
 L['whispers'] = true;
 L['yells'] = true;
 
---DataTexts
+-- DataTexts
 L['(Hold Shift) Memory Usage'] = true;
-L['Alterac Valley'] = true;
-L['Arathi Basin'] = true;
-L["Avoidance Breakdown"] = true;
+L['24-Hour Time'] = true;
+L['Always Display'] = true;
+L['Avoidance Breakdown'] = true;
 L['Bandwidth'] = true;
-L['Bases Assaulted'] = true;
-L['Bases Defended'] = true;
-L["Battleground datatexts temporarily hidden, to show type /bgstats or right click the 'C' icon near the minimap."] = true;
-L['Carts Controlled'] = true;
 L['Character: '] = true;
 L['Combat Time'] = true;
 L['copperabbrev'] = '|cffeda55fc|r'; -- Also used in Bags
+L['Datatext Panel (Left)'] = true;
+L['Datatext Panel (Right)'] = true;
 L['Defeated'] = true;
 L['Deficit:'] = true;
-L['Demolishers Destroyed'] = true;
-L["DPS"] = true;
+L['DPS'] = true;
 L['Earned:'] = true;
-L['Feet'] = true;
-L['Eye of the Storm'] = true;
-L['Flags Captured'] = true;
-L['Flags Returned'] = true;
 L['Friends List'] = true;
 L['Friends'] = true; -- Also in Skins
-L['Gates Destroyed'] = true;
 L['goldabbrev'] = '|cffffd700g|r'; -- Also used in Bags
 L['Gold'] = true;
-L['Graveyards Assaulted'] = true;
-L['Graveyards Defended'] = true;
 L['Hit'] = true;
 L['Home Latency:'] = true;
 L['HP'] = true;
-L["HPS"] = true;
-L['Legs'] = true;
+L['HPS'] = true;
 L['lvl'] = true;
-L['Isle of Conquest'] = true;
-L['MISS_CHANCE'] = 'Miss Chance';
 L['Mitigation By Level: '] = true;
-L['Nalak'] = true;
 L['No Guild'] = true;
-L['Oondasta'] = true;
-L['Orb Possessions'] = true;
 L['Profit:'] = true;
 L['Reset Data: Hold Shift + Right Click'] = true;
-L["Saved Raid(s)"] = true;
+L['Saved Raid(s)'] = true;
 L['Server: '] = true;
 L['Session:'] = true;
-L['Sha of Anger'] = true;
-L['Shoulder'] = true;
-L['silverabbrev'] = '|cffc7c7cfs|r'; --Also used in Bags
+L['silverabbrev'] = '|cffc7c7cfs|r'; -- Also used in Bags
 L['SP'] = true;
-L["Spent:"] = true;
+L['Spell/Heal Power'] = true;
+L['Spent:'] = true;
 L['Stats For:'] = true;
-L['Strand of the Ancients'] = true;
 L['System'] = true;
+L['Time'] = true;
 L['Total CPU:'] = true;
 L['Total Memory:'] = true;
 L['Total: '] = true;
-L['Towers Assaulted'] = true;
-L['Towers Defended'] = true;
 L['Unhittable:'] = true;
-L['Warsong Gulch'] = true;
 L['Wintergrasp'] = true;
 
 --DebugTools

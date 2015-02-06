@@ -129,6 +129,11 @@ function UF:Update_BossFrames(frame, db)
 			health.colorReaction = true
 		end	
 		
+		if(self.db['colors'].forcehealthreaction == true) then
+			health.colorClass = false;
+			health.colorReaction = true;
+		end
+		
 		health:ClearAllPoints() -- Позиция
 		health:Point('TOPRIGHT', frame, 'TOPRIGHT', -BORDER, -BORDER)
 		if USE_POWERBAR_OFFSET then			

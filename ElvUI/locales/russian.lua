@@ -1,9 +1,8 @@
-﻿local AceLocale = LibStub:GetLibrary("AceLocale-3.0")
-local L = AceLocale:NewLocale("ElvUI", "ruRU")
-if not L then return; end
-
---TEMP
-L["A taint has occured that is preventing you from using your talents/glyphs. Please reload your user interface and try again."] = "Произошла ошибка, которая не позволит поменять таланты/символы. Пожалуйста, перезагрузите интерфейс и попробуйте снова"
+﻿local AceLocale = LibStub:GetLibrary('AceLocale-3.0');
+local L = AceLocale:NewLocale('ElvUI', 'ruRU');
+if(not L) then
+	return;
+end
 
 --*_ADDON locales
 L["INCOMPATIBLE_ADDON"] = "Аддон %s не совместим с модулем %s ElvUI. Пожалуйста, выберите отключить ли не совместимый аддон или модуль."
@@ -29,7 +28,7 @@ L['KEY_SHIFT'] = "S"
 L['KEY_SPACE'] = "SpB"
 L["No bindings set."] = "Нет назначений"
 
---Bags
+-- Сумки
 L['Bank'] = "Банк";
 L['Delete Grays'] = "Удалить предметы серого качества";
 L['Hold Control + Right Click:'] = "Зажать control + ПКМ:";
@@ -47,106 +46,65 @@ L['Temporary Move'] = "Временное перемещение";
 L['Toggle Bags'] = "Показать сумки";
 L['Vendor Grays'] = "Продавать серые предметы";
 
---Chat
-L['AFK'] = "АФК"; -- Also used in datatexts and tooltip
-L['BG'] = "ПБ";
-L['BGL'] = "Лидер ПБ";
-L['DND'] = "ДНД"; -- Also used in datatexts and tooltip
-L['G'] = "Г";
-L['Invalid Target'] = "Неверная цель";
-L['O'] = "Оф";
-L['P'] = "Гр";
-L['PL'] = "Лидер гр.";
-L['R'] = "Р";
-L['RL'] = "РЛ";
-L['RW'] = "Объявление";
-L['says'] = "говорит";
-L['whispers'] = "шепчет";
-L['yells'] = "кричит";
+-- Чат
+L['AFK'] = 'АФК'; -- Также используется в Инфо-текстах и Подсказках
+L['BG'] = 'ПБ';
+L['BGL'] = 'Лидер ПБ';
+L['DND'] = 'ДНД'; -- Также используется в Инфо-текстах и Подсказках
+L['G'] = 'Г';
+L['Invalid Target'] = 'Неверная цель';
+L['O'] = 'Оф';
+L['P'] = 'Гр';
+L['PL'] = 'Лидер гр.';
+L['R'] = 'Р';
+L['RL'] = 'РЛ';
+L['RW'] = 'Объявление';
+L['says'] = 'говорит';
+L['whispers'] = 'шепчет';
+L['yells'] = 'кричит';
 
---DataTexts
+-- Инфо-тексты
 L['(Hold Shift) Memory Usage'] = '(Зажать Shift) Использование памяти';
-L["24-Hour Time"] = "24х часовой формат"
-L['Alterac Valley'] = 'Альтеракская долина';
-L['Always Display'] = "Всегда отображать"
-L['Arathi Basin'] = 'Низина Арати';
-L["Avoidance Breakdown"] = "Распределение защиты"
-L["Bandwidth"] = "Канал"
-L['Bases Assaulted'] = 'Штурмы баз';
-L['Bases Defended'] = 'Оборона баз';
-L['Battleground datatexts temporarily hidden, to show type /bgstats or right click the "C" icon near the minimap.'] = "Информация поля боя временно скрыта. Для отображения введите /bgstat или ПКМ на иконке 'С' у миникарты.";
-L['Battleground datatexts will now show again if you are inside a battleground.'] = "Информация поля боя снова будет отображаться, если Вы находитесь на них."
-L['Battleground Texts'] = "Текст ПБ"
-L['Change settings for the display of the location text that is on the minimap.'] = "Изменяет опции отображения названия локации на миникарте"
+L['24-Hour Time'] = '24х часовой формат';
+L['Always Display'] = 'Всегда отображать';
+L['Avoidance Breakdown'] = 'Распределение защиты';
+L['Bandwidth'] = 'Канал';
 L['Character: '] = 'Персонаж: ';
 L['Combat Time'] = 'В бою';
 L['copperabbrev'] = '|cffeda55fм|r'; -- Также используется в Сумках
-L['Datatext Panel (Left)'] = "Панель информации (левая)"
-L['Datatext Panel (Right)'] = "Панель информации (правая)"
-L["DataTexts"] = "Инфо-тексты"
-L["DATATEXT_DESC"] = "Установка отображения информационных текстов."
-L['Defeated'] = "Убит"
+L['Datatext Panel (Left)'] = 'Панель информации (левая)';
+L['Datatext Panel (Right)'] = 'Панель информации (правая)';
+L['Defeated'] = 'Убит';
 L['Deficit:'] = 'Убыток:';
-L['Demolishers Destroyed'] = 'Разрушителей уничтожено';
-L['Display data panels below the chat, used for datatexts.'] = "Отображать панели под чатом, используется для инфо-текстов"
-L['Display minimap panels below the minimap, used for datatexts.'] = "Отображать панели информационных текстов под миникартой."
-L["DPS"] = "УВС"
-L["Earned:"] = 'Заработано';
-L['Eye of the Storm'] = 'Око Бури';
-L['Flags Captured'] = 'Захваты флага';
-L['Flags Returned'] = 'Возвраты флага';
-L["Friends List"] = "Список друзей"
-L['Friends'] = "Друзья" -- Также используется в Скинах
-L['Gates Destroyed'] = 'Врат разрушено';
+L['DPS'] = 'УВС';
+L['Earned:'] = 'Заработано';
+L['Friends List'] = 'Список друзей';
+L['Friends'] = 'Друзья'; -- Также используется в Скинах
 L['goldabbrev'] = '|cffffd700з|r'; -- Также используется в Сумках
 L['Gold'] = 'Золото';
-L['Graveyards Assaulted'] = 'Штурмы кладбищ';
-L['Graveyards Defended'] = 'Оборона кладбищ';
 L['Hit'] = 'Меткость';
 L['Home Latency:'] = 'Локальная задержка:';
 L['HP'] = '+ Исцел.';
-L["HPS"] = "ИВС"
-L["If not set to true then the server time will be displayed instead."] = "Если отключено, будет отображаться серверное время."
-L["left"] = "Слева"
-L["LeftChatDataPanel"] = "Левая панель чата"
-L["LeftMiniPanel"] = "Миникарта, слева"
-L["Local Time"] = "Местное время"
-L['Location Text'] = "Текст локации"
-L["lvl"] = "ур."
-L['Isle of Conquest'] = 'Остров Завоеваний';
-L["middle"] = "В центре"
-L['Minimap Mouseover'] = "При наведении мыши"
-L['Minimap Panels'] = "Информация у миникарты"
-L['MISS_CHANCE'] = 'Вероятность промаха';
-L['Mitigation By Level: '] = "Снижение на уровне: ";
-L['No Guild'] = "Нет гильдии";
-L["Panels"] = "Панели"
+L['HPS'] = 'ИВС';
+L['lvl'] = 'ур.';
+L['Mitigation By Level: '] = 'Снижение на уровне: ';
+L['No Guild'] = 'Нет гильдии';
 L['Profit:'] = 'Прибыль:';
 L['Reset Data: Hold Shift + Right Click'] = 'Сбросить данные: Shift + ПКМ';
-L["right"] = "Справа"
-L["RightChatDataPanel"] = "Правая панель чата"
-L["RightMiniPanel"] = "Миникарта, справа"
-L["Saved Raid(s)"] = "Сохраненные рейды"
+L['Saved Raid(s)'] = 'Сохраненные рейды';
 L['Server: '] = 'На сервере: ';
 L['Session:'] = 'За сеанс:';
-L['Show BG Texts'] = "Показать текст ПБ"
 L['silverabbrev'] = '|cffc7c7cfс|r'; -- Также используется в Сумках
 L['SP'] = '+ Закл.';
-L['Spell/Heal Power'] = 'Закл./Исцел.'
+L['Spell/Heal Power'] = 'Закл./Исцел.';
 L['Spent:'] = 'Потрачено:';
-L['Stats For:'] = "Статистика для:"
-L['Strand of the Ancients'] = 'Берег Древних';
+L['Stats For:'] = 'Статистика для:';
 L['System'] = 'FPS/MS';
-L['Time'] = 'Время'
-L["Toggle 24-hour mode for the time datatext."] = "Включить 24х часовой формат отображения времени."
+L['Time'] = 'Время';
 L['Total CPU:'] = 'Использование процессора:';
 L['Total Memory:'] = 'Всего памяти:'
 L['Total: '] = 'Всего: ';
-L['Towers Assaulted'] = 'Штурмы башен';
-L['Towers Defended'] = 'Оборона башен';
 L['Unhittable:'] = 'Полная защита от ударов';
-L['Warsong Gulch'] = 'Ущелье Песни Войны';
-L['When inside a battleground display personal scoreboard information on the main datatext bars.'] = "На полях боя отображать личную информацию на основных полосах инфо-текстов";
 L['Wintergrasp'] = 'Озеро Ледяных Оков';
 
 --DebugTools

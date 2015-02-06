@@ -846,7 +846,7 @@ function B:ToggleBags(id)
 	if id and GetContainerNumSlots(id) == 0 then return; end --Closes a bag when inserting a new container..
 	
 	if self.BagFrame:IsShown() then
-		self:CloseBags();
+	--	self:CloseBags();
 	else
 		self:OpenBags();
 	end
@@ -915,12 +915,19 @@ function B:Initialize()
 	self.BagFrame = self:ContructContainerFrame('ElvUI_ContainerFrame');
 	
 	--Hook onto Blizzard Functions
-	self:SecureHook('OpenAllBags', 'OpenBags');
-	self:SecureHook('CloseAllBags', 'CloseBags');
+	self:SecureHook('ToggleBackpack', 'ToggleBackpack');
 	self:SecureHook('ToggleBag', 'ToggleBags');
+	self:SecureHook('OpenAllBags', 'ToggleBackpack');
+	self:SecureHook('OpenBackpack', 'OpenBags');
+	self:SecureHook('CloseAllBags', 'CloseBags');
+	self:SecureHook('CloseBackpack', 'CloseBags');
+	
+	-- self:SecureHook('OpenAllBags', 'OpenBags');
+	-- self:SecureHook('CloseAllBags', 'CloseBags');
+	-- self:SecureHook('ToggleBag', 'ToggleBags');
 	--self:SecureHook('OpenAllBags', 'ToggleBackpack');
-	self:SecureHook('ToggleBackpack')
-	self:SecureHook('BackpackTokenFrame_Update', 'UpdateTokens');
+	-- self:SecureHook('ToggleBackpack')
+	-- self:SecureHook('BackpackTokenFrame_Update', 'UpdateTokens');
 
 	self:PositionBagFrames();
 	self:Layout();

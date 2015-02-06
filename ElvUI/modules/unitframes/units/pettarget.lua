@@ -72,7 +72,12 @@ function UF:Update_PetTargetFrame(frame, db)
 		else
 			health.colorClass = true
 			health.colorReaction = true
-		end	
+		end
+		
+		if(self.db['colors'].forcehealthreaction == true) then
+			health.colorClass = false;
+			health.colorReaction = true;
+		end
 		
 		health:ClearAllPoints() -- Позиция
 		health:Point("TOPRIGHT", frame, "TOPRIGHT", -BORDER, -BORDER)

@@ -277,4 +277,4 @@ function RB:Initialize()
 	self:Update_ReminderBuffsSettings();
 end
 
-E:RegisterModule(RB:GetName());
+E:RegisterInitialModule(RB:GetName());

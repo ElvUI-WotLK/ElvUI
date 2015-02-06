@@ -38,7 +38,7 @@ function AB:StyleShapeShift(event)
 				texture = "Interface\\Icons\\Spell_Nature_WispSplode"
 			end
 
-			if (type(texture) == "string" and (lower(texture) == "interface\\icons\\spell_nature_wispsplode" or lower(texture) == "interface\\icons\\ability_rogue_envelopingshadows")) and self.db.stanceBar.style == 'darkenInactive' then
+			if (type(texture) == "string" and (lower(texture) == "interface\\icons\\spell_nature_wispsplode" or lower(texture) == "interface\\icons\\ability_rogue_envelopingshadows")) and self.db.barShapeShift.style == 'darkenInactive' then
 				_, _, texture = GetSpellInfo(name)
 			end
 			
@@ -90,6 +90,10 @@ function AB:PositionAndSizeBarShapeShift()
 	local point = self.db['barShapeShift'].point;
 	local widthMult = self.db['barShapeShift'].widthMult;
 	local heightMult = self.db['barShapeShift'].heightMult;
+	if bar.mover then
+		bar.mover.positionOverride = point;
+		E:UpdatePositionOverride(bar.mover:GetName())
+	end
 	bar.db = self.db['barShapeShift']
 	bar.db.position = nil; --Depreciated
 	if bar.LastButton and numButtons > bar.LastButton then	

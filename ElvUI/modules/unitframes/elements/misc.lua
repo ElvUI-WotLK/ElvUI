@@ -204,6 +204,7 @@ function UF:UpdateComboDisplay(event, unit)
 	local COMBOBAR_HEIGHT = db.combobar.height
 	local USE_PORTRAIT = db.portrait.enable
 	local USE_PORTRAIT_OVERLAY = db.portrait.overlay and USE_PORTRAIT
+	local PORTRAIT_DETACHED = db.portrait.detachFromFrame;
 	local PORTRAIT_WIDTH = db.portrait.width
 	local PORTRAIT_OFFSET_Y = ((COMBOBAR_HEIGHT/2) + SPACING - BORDER)
 	local HEALTH_OFFSET_Y
@@ -213,7 +214,7 @@ function UF:UpdateComboDisplay(event, unit)
 		self.Portrait = db.portrait.style == '2D' and self.Portrait2D or self.Portrait3D
 	end
 
-	if USE_PORTRAIT_OVERLAY or not USE_PORTRAIT then
+	if(USE_PORTRAIT_OVERLAY or PORTRAIT_DETACHED or not USE_PORTRAIT) then
 		PORTRAIT_WIDTH = 0
 	end
 
@@ -225,11 +226,15 @@ function UF:UpdateComboDisplay(event, unit)
 		cpoints:Show()
 		if USE_MINI_COMBOBAR then
 			HEALTH_OFFSET_Y = DETACHED and 0 or (SPACING + (COMBOBAR_HEIGHT/2))
-			self.Portrait.backdrop:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, -PORTRAIT_OFFSET_Y)
+			if(not PORTRAIT_DETACHED) then
+				self.Portrait.backdrop:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, -PORTRAIT_OFFSET_Y)
+			end
 			self.Health:Point("TOPRIGHT", self, "TOPRIGHT", -(BORDER+PORTRAIT_WIDTH), -HEALTH_OFFSET_Y)
 		else
 			HEALTH_OFFSET_Y = DETACHED and 0 or (SPACING + COMBOBAR_HEIGHT)
-			self.Portrait.backdrop:SetPoint("TOPRIGHT", self, "TOPRIGHT")
+			if(not PORTRAIT_DETACHED) then
+				self.Portrait.backdrop:SetPoint("TOPRIGHT", self, "TOPRIGHT")
+			end
 			self.Health:Point("TOPRIGHT", self, "TOPRIGHT", -(BORDER+PORTRAIT_WIDTH), -(BORDER + HEALTH_OFFSET_Y))
 		end
 	else
