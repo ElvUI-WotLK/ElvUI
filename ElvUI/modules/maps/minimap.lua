@@ -156,6 +156,12 @@ function M:UpdateSettings()
 	end
 end
 
+function M:ADDON_LOADED(event, addon)
+	if(addon == 'Blizzard_TimeManager') then
+		TimeManagerClockButton:Kill();
+	end
+end
+
 function M:Initialize()	
 	menuFrame:SetTemplate('Transparent', true);
 	
@@ -248,6 +254,7 @@ function M:Initialize()
 	self:RegisterEvent('ZONE_CHANGED', 'Minimap_Update');
 	self:RegisterEvent('ZONE_CHANGED_INDOORS', 'Minimap_Update');
 	self:RegisterEvent('ZONE_CHANGED_NEW_AREA', 'Minimap_Update');
+	self:RegisterEvent('ADDON_LOADED');
 	
 	local fm = CreateFrame('Minimap', 'FarmModeMap', E.UIParent);
 	fm:Size(E.db.farmSize);
