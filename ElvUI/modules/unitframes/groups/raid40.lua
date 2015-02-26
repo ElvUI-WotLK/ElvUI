@@ -39,11 +39,6 @@ function UF:Construct_Raid40Frames(unitGroup)
 	self.ReadyCheck = UF:Construct_ReadyCheckIcon(self)
 	self.Range = UF:Construct_Range(self)
 	
-	self.HealCommBar = CreateFrame('StatusBar', nil, self.Health);
-	self.HealCommBar:SetStatusBarTexture(E['media'].blankTex);
-	self.HealCommBar:SetFrameLevel(self.Health:GetFrameLevel());
-	self.HealCommBar:SetParent(self.Health);
-	
 	UF:Update_StatusBars()
 	UF:Update_FontStrings()
 	UF:Update_Raid40Frames(self, UF.db['units']['raid40'])
@@ -145,24 +140,6 @@ function UF:Update_Raid40Frames(frame, db)
 	
 		if USE_MINI_POWERBAR then
 			POWERBAR_WIDTH = POWERBAR_WIDTH / 2
-		end
-	end
-	
-	do
-		local c = UF.db.colors.healPrediction;
-		if(db.healPrediction) then
-			if(not frame:IsElementEnabled('HealComm4')) then
-				frame:EnableElement('HealComm4');
-			end
-			
-			frame.HealCommBar:Show();
-			frame.HealCommBar:SetStatusBarColor(c.personal.r, c.personal.g, c.personal.b, c.personal.a);
-		else
-			if(frame:IsElementEnabled('HealComm4')) then
-				frame:DisableElement('HealComm4');
-			end
-			
-			frame.HealCommBar:Hide();
 		end
 	end
 	

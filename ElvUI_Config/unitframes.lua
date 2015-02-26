@@ -1843,29 +1843,6 @@ E.Options.args.unitframe = { -- Рамки юнитов
 								},								
 							},
 						},
-						healPrediction = { -- Входящие исцеление
-							order = 10,
-							name = L['Heal Prediction'],
-							type = 'group',
-							get = function(info)
-								local t = E.db.unitframe.colors.healPrediction[ info[#info] ]
-								local d = P.unitframe.colors.healPrediction[ info[#info] ]
-								return t.r, t.g, t.b, t.a, d.r, d.g, d.b, d.a
-							end,
-							set = function(info, r, g, b, a)
-								local t = E.db.unitframe.colors.healPrediction[ info[#info] ]
-								t.r, t.g, t.b, t.a = r, g, b, a
-								UF:Update_AllFrames()
-							end,	
-							args = {
-								personal = { -- Чужое
-									order = 1,
-									name = L["Personal"],
-									type = 'color',
-									hasAlpha = true,
-								},
-							},
-						},
 					},
 				},
 			},
@@ -1958,12 +1935,6 @@ E.Options.args.unitframe.args.player = { -- Игрок
 					ElvUF_Pet:SetParent(ElvUF_Parent) 
 				end 
 			end,
-		},
-		healPrediction = { -- Входящие исцеление
-			order = 9,
-			name = L['Heal Prediction'],
-			desc = L['Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals.'],
-			type = 'toggle',
 		},
 		restIcon = { -- Иконка отдыха
 			order = 10,
@@ -2130,12 +2101,6 @@ E.Options.args.unitframe.args.target = { -- Цель
 			desc = L["Check if you are in range to cast spells on this specific unit."],
 			type = "toggle",
 		},
-		healPrediction = { -- Входящие исцеление
-			order = 8,
-			name = L['Heal Prediction'],
-			desc = L['Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals.'],
-			type = 'toggle',
-		},
 		middleClickFocus = { -- Средний клик - фокус
 			order = 9,
 			name = L['Middle Click - Set Focus'],
@@ -2276,12 +2241,6 @@ E.Options.args.unitframe.args.targettarget = { -- Цуль цели
 			name = L["Range Check"],
 			desc = L["Check if you are in range to cast spells on this specific unit."],
 			type = "toggle",
-		},
-		healPrediction = { -- Входящие исцеление
-			order = 8,
-			name = L['Heal Prediction'],
-			desc = L['Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals.'],
-			type = 'toggle',
 		},
 		hideonnpc = { -- Переключение Текста для НИП
 			type = 'toggle',
@@ -2455,12 +2414,6 @@ E.Options.args.unitframe.args.focus = { -- Фокус
 			desc = L["Check if you are in range to cast spells on this specific unit."],
 			type = "toggle",
 		},
-		healPrediction = { -- Входящие исцеление
-			order = 8,
-			name = L['Heal Prediction'],
-			desc = L['Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals.'],
-			type = 'toggle',
-		},
 		hideonnpc = { -- Переключение текста для НИП
 			type = 'toggle',
 			order = 9,
@@ -2549,12 +2502,6 @@ E.Options.args.unitframe.args.focustarget = { -- Цель фокуса
 			desc = L["Check if you are in range to cast spells on this specific unit."],
 			type = "toggle",
 		},
-		healPrediction = { -- Входящие исцеление
-			order = 8,
-			name = L['Heal Prediction'],
-			desc = L['Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals.'],
-			type = 'toggle',
-		},
 		hideonnpc = { -- Переключение текста для НИП
 			type = 'toggle',
 			order = 9,
@@ -2639,12 +2586,6 @@ E.Options.args.unitframe.args.pet = { -- Питомец
 			name = L["Range Check"],
 			desc = L["Check if you are in range to cast spells on this specific unit."],
 			type = "toggle",
-		},
-		healPrediction = { -- Входящие исцеление
-			order = 8,
-			name = L['Heal Prediction'],
-			desc = L['Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals.'],
-			type = 'toggle',
 		},
 		hideonnpc = { -- Переключения текста для НИП
 			type = 'toggle',
@@ -2757,12 +2698,6 @@ E.Options.args.unitframe.args.pettarget = { -- Цель питомца
 			desc = L["Check if you are in range to cast spells on this specific unit."],
 			type = "toggle",
 		},
-		healPrediction = { -- Входящие исцеление
-			order = 8,
-			name = L['Heal Prediction'],
-			desc = L['Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals.'],
-			type = 'toggle',
-		},
 		hideonnpc = { -- Переключения текста для НИП
 			type = 'toggle',
 			order = 9,
@@ -2849,12 +2784,6 @@ E.Options.args.unitframe.args.boss = { -- Боссы
 			name = L["Range Check"],
 			desc = L["Check if you are in range to cast spells on this specific unit."],
 			type = "toggle",
-		},
-		healPrediction = { -- Входящие исцеление
-			order = 8,
-			name = L['Heal Prediction'],
-			desc = L['Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals.'],
-			type = 'toggle',
 		},
 		hideonnpc = { -- Переключения текста для НИП
 			type = 'toggle',
@@ -2954,12 +2883,6 @@ E.Options.args.unitframe.args.arena = { -- Арена
 			name = L["Range Check"],
 			desc = L["Check if you are in range to cast spells on this specific unit."],
 			type = "toggle",
-		},
-		healPrediction = { -- Входящие исцеление
-			order = 8,
-			name = L['Heal Prediction'],
-			desc = L['Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals.'],
-			type = 'toggle',
 		},
 		hideonnpc = { -- Переключения текста для НИП
 			type = 'toggle',
@@ -3099,12 +3022,6 @@ E.Options.args.unitframe.args.party = { -- Группа
 					name = L["Range Check"],
 					desc = L["Check if you are in range to cast spells on this specific unit."],
 					type = "toggle",
-				},
-				healPrediction = { -- Входящие исцеление
-					order = 4,
-					name = L['Heal Prediction'],
-					desc = L['Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals.'],
-					type = 'toggle',
 				},
 				threatStyle = { -- Режим отображения угрозы
 					type = 'select',
@@ -3534,13 +3451,7 @@ E.Options.args.unitframe.args['raid'] = {
 					name = L["Range Check"],
 					desc = L["Check if you are in range to cast spells on this specific unit."],
 					type = "toggle",
-				},						
-				healPrediction = {
-					order = 4,
-					name = L['Heal Prediction'],
-					desc = L['Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals.'],
-					type = 'toggle',
-				},		
+				},
 				threatStyle = {
 					type = 'select',
 					order = 5,
@@ -3892,13 +3803,7 @@ E.Options.args.unitframe.args['raid40'] = {
 					name = L["Range Check"],
 					desc = L["Check if you are in range to cast spells on this specific unit."],
 					type = "toggle",
-				},						
-				healPrediction = {
-					order = 4,
-					name = L['Heal Prediction'],
-					desc = L['Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals.'],
-					type = 'toggle',
-				},		
+				},
 				threatStyle = {
 					type = 'select',
 					order = 5,
@@ -4245,13 +4150,7 @@ E.Options.args.unitframe.args.raidpet = {
 					name = L["Range Check"],
 					desc = L["Check if you are in range to cast spells on this specific unit."],
 					type = "toggle",
-				},						
-				healPrediction = {
-					order = 4,
-					name = L['Heal Prediction'],
-					desc = L['Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals.'],
-					type = 'toggle',
-				},		
+				},
 				threatStyle = {
 					type = 'select',
 					order = 5,

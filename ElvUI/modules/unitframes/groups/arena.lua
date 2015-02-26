@@ -27,11 +27,6 @@ function UF:Construct_ArenaFrames(frame)
 		frame:RegisterEvent('PLAYER_TARGET_CHANGED', UF.UpdateTargetGlow);
 		frame:RegisterEvent('PLAYER_ENTERING_WORLD', UF.UpdateTargetGlow);
 		frame:RegisterEvent('GROUP_ROSTER_UPDATE', UF.UpdateTargetGlow);
-		
-		frame.HealCommBar = CreateFrame('StatusBar', nil, frame.Health);
-		frame.HealCommBar:SetStatusBarTexture(E['media'].blankTex);
-		frame.HealCommBar:SetFrameLevel(frame.Health:GetFrameLevel());
-		frame.HealCommBar:SetParent(frame.Health);
 	end
 	
 	ArenaHeader:Point('BOTTOMRIGHT', E.UIParent, 'RIGHT', -105, -165);
@@ -81,30 +76,6 @@ function UF:Update_ArenaFrames(frame, db)
 		
 		if(USE_MINI_POWERBAR) then
 			POWERBAR_WIDTH = POWERBAR_WIDTH / 2;
-		end
-	end
-	
-	do
-		local c = UF.db.colors.healPrediction;
-		if(db.healPrediction) then
-			if(not frame:IsElementEnabled('HealComm4')) then
-				frame:EnableElement('HealComm4');
-			end
-			
-			frame.HealCommBar:Show();
-			frame.HealCommBar:SetStatusBarColor(c.personal.r, c.personal.g, c.personal.b, c.personal.a);
-			
-			if(not USE_PORTRAIT_OVERLAY) then
-				frame.HealCommBar:SetParent(frame.Health);
-			else
-				frame.HealCommBar:SetParent(frame.Portrait.overlay);
-			end
-		else
-			if(frame:IsElementEnabled('HealComm4')) then
-				frame:DisableElement('HealComm4');
-			end
-			
-			frame.HealCommBar:Hide();
 		end
 	end
 	
