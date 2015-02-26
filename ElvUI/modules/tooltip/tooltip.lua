@@ -220,17 +220,13 @@ function TT:GameTooltip_SetDefaultAnchor(tt, parent)
 end
 
 function TT:RemoveTrashLines(tt)
-	for i=3, tt:NumLines() do
-		local tiptext = _G[("GameTooltipTextLeft%d"):format(i)]
-		while tiptext and tiptext:GetText() and (tiptext:GetText() == PVP_ENABLED or tiptext:GetText() == FACTION_HORDE or tiptext:GetText() == FACTION_ALLIANCE) do
-			if tiptext:GetText() == PVP_ENABLED then
-				local text = _G[("GameTooltipTextLeft%d"):format(i - 1)]:GetText()
-				if text then
-					_G[("GameTooltipTextLeft%d"):format(i - 1)]:SetText(("%s (%s)"):format(text, PVP_ENABLED))
-				end
-			end 		
-			tiptext:SetText()
-			break
+	for i = 3, tt:NumLines() do
+		local tiptext = _G["GameTooltipTextLeft"..i];
+		local linetext = tiptext:GetText();
+		
+		if(linetext:find(PVP) or linetext:find(FACTION_ALLIANCE) or linetext:find(FACTION_HORDE)) then
+			tiptext:SetText(nil);
+			tiptext:Hide();
 		end
 	end
 end
@@ -244,7 +240,7 @@ function TT:GetLevelLine(tt, offset)
 	end
 end
 
-function TT:GatherTalents(isInspect)
+function TT:GatherTalents(isInspect, r, g, b)
 	local group = GetActiveTalentGroup(isInspect);
 	local maxTree, _ = 1;
 	
@@ -267,13 +263,13 @@ function TT:GatherTalents(isInspect)
 		current.format = current[1].."/"..current[2].."/"..current[3];
 	end
 	
-	if (not isInspect) then
-		GameTooltip:AddLine(TALENTS_PREFIX..current.format);
-	elseif (GameTooltip:GetUnit()) then
+	if(not isInspect) then
+		GameTooltip:AddDoubleLine(TALENTS_PREFIX, current.format, nil, nil, nil, r, g, b);
+	elseif(GameTooltip:GetUnit()) then
 		for i = 2, GameTooltip:NumLines() do
-			if ((_G["GameTooltipTextLeft"..i]:GetText() or ""):match("^"..TALENTS_PREFIX)) then
-				_G["GameTooltipTextLeft"..i]:SetFormattedText("%s%s",TALENTS_PREFIX,current.format);
-				if (not GameTooltip.fadeOut) then
+			if((_G["GameTooltipTextRight"..i]:GetText() or ""):match("^"..L["Loading..."])) then
+				_G["GameTooltipTextRight"..i]:SetFormattedText("%s", current.format);
+				if(not GameTooltip.fadeOut) then
 					GameTooltip:Show();
 				end
 				break;
@@ -314,13 +310,17 @@ function TT:GameTooltip_OnTooltipSetUnit(tt)
 		local guildName, guildRankName, _, guildRealm = GetGuildInfo(unit)
 		local pvpName = UnitPVPName(unit)
 		color = RAID_CLASS_COLORS[class]
-
+		
 		if(self.db.playerTitles and pvpName) then
 			name = pvpName
 		end
 		
 		if(realm and realm ~= "") then
-			name = name.."-"..realm
+			if(isShiftKeyDown) then
+				name = name.."-"..realm;
+			else
+				name = name..FOREIGN_SERVER_LABEL;
+			end
 		end
 		
 		if(UnitIsAFK(unit)) then
@@ -350,7 +350,38 @@ function TT:GameTooltip_OnTooltipSetUnit(tt)
 			local diffColor = GetQuestDifficultyColor(level)
 			local race = UnitRace(unit)		
 			levelLine:SetFormattedText("|cff%02x%02x%02x%s|r %s %s%s|r", diffColor.r * 255, diffColor.g * 255, diffColor.b * 255, level > 0 and level or "??", race, E:RGBToHex(color.r, color.g, color.b), localeClass)
-		end	
+		end
+		
+		if(self.db.Talent and isShiftKeyDown) then
+			if((UnitLevel(unit) > 9 or UnitLevel(unit) == -1) and CanInspect(unit)) then
+				twipe(current);
+				current.name = UnitName(unit);
+				
+				if(UnitIsUnit(unit, "player")) then
+					TT:GatherTalents(nil, color.r, color.g, color.b);
+				else
+					local allowInspect = (not InspectFrame or not InspectFrame:IsShown()) and (not Examiner or not Examiner:IsShown());
+					if(allowInspect) then
+						self:RegisterEvent("INSPECT_TALENT_READY");
+						NotifyInspect(unit);
+					end
+					
+					for _, entry in ipairs(inspectCache) do
+						if(current.name == entry.name) then
+							tt:AddDoubleLine(TALENTS_PREFIX, current.format, nil, nil, nil, color.r, color.g, color.b);
+							current.tree = entry.tree;
+							current.format = entry.format;
+							current[1], current[2], current[3] = entry[1], entry[2], entry[3];
+							return;
+						end
+					end
+					
+					if(allowInspect) then
+						tt:AddDoubleLine(TALENTS_PREFIX, L["Loading..."], nil, nil, nil, color.r, color.g, color.b);
+					end
+				end
+			end
+		end
 	else
 		if(UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit)) then
 			color = TAPPED_COLOR
@@ -405,42 +436,6 @@ function TT:GameTooltip_OnTooltipSetUnit(tt)
 		GameTooltipStatusBar:SetStatusBarColor(color.r, color.g, color.b)
 	else
 		GameTooltipStatusBar:SetStatusBarColor(0.6, 0.6, 0.6)
-	end
-	
-	if unit and self.db.Talent and isShiftKeyDown then
-		if (not unit) then
-			local mFocus = GetMouseFocus();
-			if (mFocus) and (mFocus.unit) then
-				unit = mFocus.unit;
-			end
-		end
-		
-		if (UnitIsPlayer(unit)) and (UnitLevel(unit) > 9 or UnitLevel(unit) == -1) and (CanInspect(unit)) then
-			twipe(current);
-			current.name = UnitName(unit);
-			
-			if (UnitIsUnit(unit,"player")) then
-				TT:GatherTalents();
-			else
-				local allowInspect = (not InspectFrame or not InspectFrame:IsShown()) and (not Examiner or not Examiner:IsShown());
-				if (allowInspect) then
-					self:RegisterEvent("INSPECT_TALENT_READY");
-					NotifyInspect(unit);
-				end
-				for _, entry in ipairs(inspectCache) do
-					if (current.name == entry.name) then
-						GameTooltip:AddLine(TALENTS_PREFIX..entry.format);
-						current.tree = entry.tree;
-						current.format = entry.format;
-						current[1], current[2], current[3] = entry[1], entry[2], entry[3];
-						return;
-					end
-				end
-				if (allowInspect) then
-					GameTooltip:AddLine(TALENTS_PREFIX..L["Loading..."]);
-				end
-			end
-		end
 	end
 end
 
