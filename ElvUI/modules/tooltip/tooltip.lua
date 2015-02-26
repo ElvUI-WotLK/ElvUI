@@ -7,8 +7,9 @@ local find, format = string.find, string.format
 local floor = math.floor
 local twipe, tinsert, tconcat = table.wipe, table.insert, table.concat
 
+local S_ITEM_LEVEL = ITEM_LEVEL:gsub( "%%d", "(%%d+)" )
 local playerGUID = UnitGUID("player")
-local targetList, inspectCache, current = {}, {}, {}
+local targetList, inspectCache = {}, {}
 local NIL_COLOR = { r=1, g=1, b=1 }
 local TAPPED_COLOR = { r=.6, g=.6, b=.6 }
 local AFK_LABEL = " |cffFFFFFF[|r|cffE7E716"..L["AFK"].."|r|cffFFFFFF]|r"
@@ -47,7 +48,7 @@ local classification = {
 local SlotName = {
 	"Head","Neck","Shoulder","Back","Chest","Wrist",
 	"Hands","Waist","Legs","Feet","Finger0","Finger1",
-	"Trinket0","Trinket1","MainHand","SecondaryHand"
+	"Trinket0","Trinket1","MainHand","SecondaryHand","Ranged"
 }
 
 --All this does is increase the spacing between tooltips when you compare items
@@ -219,6 +220,55 @@ function TT:GameTooltip_SetDefaultAnchor(tt, parent)
 	end
 end
 
+function TT:GetAvailableTooltip()
+	for i=1, #GameTooltip.shoppingTooltips do
+		if(not GameTooltip.shoppingTooltips[i]:IsShown()) then
+			return GameTooltip.shoppingTooltips[i]
+		end
+	end
+end
+
+function TT:ScanForItemLevel(itemLink)
+	local tooltip = self:GetAvailableTooltip();
+	tooltip:SetOwner(UIParent, "ANCHOR_NONE");
+	tooltip:SetHyperlink(itemLink);
+	tooltip:Show();
+
+	local itemLevel = 0;
+	for i = 2, tooltip:NumLines() do
+		local text = _G[ tooltip:GetName() .."TextLeft"..i]:GetText();
+		if(text and text ~= "") then
+			local value = tonumber(text:match(S_ITEM_LEVEL));
+			if(value) then
+				itemLevel = value;
+			end
+		end
+	end
+
+	tooltip:Hide();
+	return itemLevel
+end
+
+function TT:GetItemLvL(unit)
+	local total, item = 0, 0;
+	for i = 1, #SlotName do
+		local itemLink = GetInventoryItemLink(unit, GetInventorySlotInfo(("%sSlot"):format(SlotName[i])));
+		if (itemLink ~= nil) then
+			local itemLevel = self:ScanForItemLevel(itemLink);
+			if(itemLevel and itemLevel > 0) then
+				item = item + 1;
+				total = total + itemLevel;
+			end
+		end
+	end
+
+	if(total < 1) then
+		return
+	end
+
+	return floor(total / item)
+end
+
 function TT:RemoveTrashLines(tt)
 	for i = 3, tt:NumLines() do
 		local tiptext = _G["GameTooltipTextLeft"..i];
@@ -237,6 +287,72 @@ function TT:GetLevelLine(tt, offset)
 		if(tipText:GetText() and tipText:GetText():find(LEVEL)) then
 			return tipText
 		end
+	end
+end
+
+local tree = {};
+function TT:GetTalentSpec(unit, isInspect)
+	local group = GetActiveTalentGroup(isInspect);
+	local maxTree, _ = 1;
+	for i = 1, 3 do
+		_, _, tree[i] = GetTalentTabInfo(i, isInspect, nil, group);
+		if(tree[i] > tree[maxTree]) then
+			maxTree = i;
+		end
+	end
+	local name = GetTalentTabInfo(maxTree, isInspect, nil, group);
+	
+	return name;
+end
+
+function TT:INSPECT_TALENT_READY(event, ...)
+	local GUID = UnitGUID("mouseover");
+	if(self.lastGUID ~= GUID) then return end
+
+	local unit = "mouseover"
+	if(UnitExists(unit)) then
+		local itemLevel = self:GetItemLvL(unit)
+		local talentName = self:GetTalentSpec(unit, 1)
+		inspectCache[GUID] = {time = GetTime()}
+
+		if(talentName) then
+			inspectCache[GUID].talent = talentName
+		end
+
+		if(itemLevel) then
+			inspectCache[GUID].itemLevel = itemLevel
+		end
+
+		GameTooltip:SetUnit(unit)
+	end
+	self:UnregisterEvent("INSPECT_TALENT_READY")
+end
+
+function TT:ShowInspectInfo(tt, unit, level, r, g, b, numTries)
+	local canInspect = CanInspect(unit)
+	if(not canInspect or level < 10 or numTries > 1) then return end
+
+	local GUID = UnitGUID(unit)
+	if(GUID == playerGUID) then
+		tt:AddDoubleLine(L["Talent Specialization:"], self:GetTalentSpec(unit), nil, nil, nil, r, g, b)
+		tt:AddDoubleLine(L["Item Level:"], self:GetItemLvL("player"), nil, nil, nil, 1, 1, 1)
+	elseif(inspectCache[GUID]) then
+		local talent = inspectCache[GUID].talent
+		local itemLevel = inspectCache[GUID].itemLevel
+
+		if(((GetTime() - inspectCache[GUID].time) > 900) or not talent or not itemLevel) then
+			inspectCache[GUID] = nil
+
+			return self:ShowInspectInfo(tt, unit, level, r, g, b, numTries + 1)
+		end
+
+		tt:AddDoubleLine(L["Talent Specialization:"], talent, nil, nil, nil, r, g, b)
+		tt:AddDoubleLine(L["Item Level:"], itemLevel, nil, nil, nil, 1, 1, 1)
+	else
+		if(not canInspect) or (InspectFrame and InspectFrame:IsShown()) then return end
+		self.lastGUID = GUID
+		NotifyInspect(unit)
+		self:RegisterEvent("INSPECT_TALENT_READY")
 	end
 end
 
@@ -265,6 +381,7 @@ function TT:GatherTalents(isInspect, r, g, b)
 	
 	if(not isInspect) then
 		GameTooltip:AddDoubleLine(TALENTS_PREFIX, current.format, nil, nil, nil, r, g, b);
+		GameTooltip:AddDoubleLine(L["Item Level:"], self:GetItemLvL("player"), nil, nil, nil, 1, 1, 1);
 	elseif(GameTooltip:GetUnit()) then
 		for i = 2, GameTooltip:NumLines() do
 			if((_G["GameTooltipTextRight"..i]:GetText() or ""):match("^"..L["Loading..."])) then
@@ -352,35 +469,9 @@ function TT:GameTooltip_OnTooltipSetUnit(tt)
 			levelLine:SetFormattedText("|cff%02x%02x%02x%s|r %s %s%s|r", diffColor.r * 255, diffColor.g * 255, diffColor.b * 255, level > 0 and level or "??", race, E:RGBToHex(color.r, color.g, color.b), localeClass)
 		end
 		
-		if(self.db.Talent and isShiftKeyDown) then
-			if((UnitLevel(unit) > 9 or UnitLevel(unit) == -1) and CanInspect(unit)) then
-				twipe(current);
-				current.name = UnitName(unit);
-				
-				if(UnitIsUnit(unit, "player")) then
-					TT:GatherTalents(nil, color.r, color.g, color.b);
-				else
-					local allowInspect = (not InspectFrame or not InspectFrame:IsShown()) and (not Examiner or not Examiner:IsShown());
-					if(allowInspect) then
-						self:RegisterEvent("INSPECT_TALENT_READY");
-						NotifyInspect(unit);
-					end
-					
-					for _, entry in ipairs(inspectCache) do
-						if(current.name == entry.name) then
-							tt:AddDoubleLine(TALENTS_PREFIX, current.format, nil, nil, nil, color.r, color.g, color.b);
-							current.tree = entry.tree;
-							current.format = entry.format;
-							current[1], current[2], current[3] = entry[1], entry[2], entry[3];
-							return;
-						end
-					end
-					
-					if(allowInspect) then
-						tt:AddDoubleLine(TALENTS_PREFIX, L["Loading..."], nil, nil, nil, color.r, color.g, color.b);
-					end
-				end
-			end
+		if(self.db.inspectInfo and isShiftKeyDown) then
+			twipe(tree);
+			self:ShowInspectInfo(tt, unit, level, color.r, color.g, color.b, 0)
 		end
 	else
 		if(UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit)) then
@@ -439,13 +530,6 @@ function TT:GameTooltip_OnTooltipSetUnit(tt)
 	end
 end
 
-function TT:INSPECT_TALENT_READY(event, ...)
-	self:UnregisterEvent("INSPECT_TALENT_READY");
-	if (GameTooltip:GetUnit() == current.name) then
-		TT:GatherTalents(1);
-	end
-end
-
 function TT:GameTooltipStatusBar_OnValueChanged(tt, value)
 	if not value or not self.db.healthBar.text or not tt.text then return end
 	local unit = select(2, tt:GetParent():GetUnit())
@@ -475,22 +559,32 @@ function TT:GameTooltip_OnTooltipSetItem(tt)
 	if not tt.itemCleared then
 		local item, link = tt:GetItem()
 		local num = GetItemCount(link)
-		local left = ""
-		local right = ""
-		
+		local numall = GetItemCount(link, true)
+		local left = " "
+		local right = " "
+		local bankCount = " "
+
 		if link ~= nil and self.db.spellID then
 			left = (("|cFFCA3C3C%s|r %s"):format(ID, link)):match(":(%w+)")
 		end
-		
-		if num > 1 and self.db.itemCount then
+
+		if self.db.itemCount == "BAGS_ONLY" then
 			right = ("|cFFCA3C3C%s|r %d"):format(L['Count'], num)
+		elseif self.db.itemCount == "BANK_ONLY" then
+			bankCount = ("|cFFCA3C3C%s|r %d"):format(L['Bank'],(numall - num))
+		elseif self.db.itemCount == "BOTH" then
+			right = ("|cFFCA3C3C%s|r %d"):format(L['Count'], num)
+			bankCount = ("|cFFCA3C3C%s|r %d"):format(L['Bank'],(numall - num))
 		end
-		
-		if left ~= "" or right ~= "" then
+
+		if left ~= " " or right ~= " " then
 			tt:AddLine(" ")
 			tt:AddDoubleLine(left, right)
 		end
-		
+		if bankCount ~= " " then
+			tt:AddDoubleLine(" ", bankCount)
+		end
+
 		tt.itemCleared = true
 	end
 end
@@ -621,7 +715,6 @@ function TT:Initialize()
 	
 	self:HookScript(GameTooltipStatusBar, 'OnValueChanged', 'GameTooltipStatusBar_OnValueChanged')
 	
-	self:RegisterEvent("INSPECT_TALENT_READY")
 	self:RegisterEvent("MODIFIER_STATE_CHANGED")
 	self:RegisterEvent("CURSOR_UPDATE", "CheckBackdropColor")
 	E.Skins:HandleCloseButton(ItemRefCloseButton)

@@ -51,11 +51,11 @@ E.Options.args.tooltip = {
 					name = L['Guild Ranks'],
 					desc = L['Display guild ranks if a unit is guilded.'],
 				},
-				itemCount = {
+				inspectInfo = {
 					order = 5,
 					type = 'toggle',
-					name = L['Item Count'],
-					desc = L['Display how many of a certain item you have in your possession.'],				
+					name = L['Inspect Info'],
+					desc = L['Display the players talent spec and item level in the tooltip, this may not immediately update when mousing over a unit.'],
 				},
 				spellID = {
 					order = 6,
@@ -63,28 +63,25 @@ E.Options.args.tooltip = {
 					name = L['Spell/Item IDs'],
 					desc = L['Display the spell or item ID when mousing over a spell or item tooltip.'],				
 				},
-				Talent = {
+				itemCount = {
 					order = 7,
-					type = 'toggle',
-					name = TALENTS,			
-				},
-				talentFormat = {
-					order = 8,
-					name = L["Text Format"],
 					type = 'select',
+					name = L['Item Count'],
+					desc = L['Display how many of a certain item you have in your possession.'],
 					values = {
-						[1] = TALENTS..' (../../..)',
-						[2] = TALENTS,
-						[3] = '../../..',
-					},				
+						["BAGS_ONLY"] = L["Bags Only"],
+						["BANK_ONLY"] = L["Bank Only"],
+						["BOTH"] = L["Both"],
+						["NONE"] = L["None"],
+					},
 				},
 				useCustomFactionColors = {
-					order = 9,
+					order = 8,
 					type = 'toggle',
 					name = L['Custom Faction Colors'],
 				},
 				factionColors = {
-					order = 10,
+					order = 9,
 					type = 'group',
 					name = L['Custom Faction Colors'],
 					guiInline = true,
