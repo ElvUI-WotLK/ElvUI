@@ -135,6 +135,22 @@ E.Options.args.nameplate = {
 					guiInline = true,
 					name = L['Fonts'],
 					args = {
+						showName = {
+							type = 'toggle',
+							order = 1,
+							name = L['Show Name'],
+						},
+						showLevel = {
+							type = 'toggle',
+							order = 2,
+							name = L['Show Level'],
+						},
+						wrapName = {
+							type = 'toggle',
+							order = 3,
+							name = L["Wrap Name"],
+							desc = L["Wraps name instead of truncating it."],
+						},
 						font = {
 							type = "select", dialogControl = 'LSM30_Font',
 							order = 4,

@@ -1,41 +1,41 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local UF = E:GetModule('UnitFrames');
+local UF = E:GetModule("UnitFrames");
 
 local tsort = table.sort
 local LSM = LibStub("LibSharedMedia-3.0");
 
 function UF:Construct_Buffs(frame)
-	local buffs = CreateFrame('Frame', nil, frame)
+	local buffs = CreateFrame("Frame", nil, frame)
 	buffs.spacing = E.Spacing
 	--buffs.PreSetPosition = (not frame:GetScript("OnUpdate")) and self.SortAuras or nil
 	buffs.PostCreateIcon = self.Construct_AuraIcon
 	buffs.PostUpdateIcon = self.PostUpdateAura
 	buffs.CustomFilter = self.AuraFilter
 	buffs:SetFrameLevel(10)
-	buffs.type = 'buffs'
+	buffs.type = "buffs"
 	
 	return buffs
 end
 
 function UF:Construct_Debuffs(frame)
-	local debuffs = CreateFrame('Frame', nil, frame)
+	local debuffs = CreateFrame("Frame", nil, frame)
 	debuffs.spacing = E.Spacing
 	--debuffs.PreSetPosition = (not frame:GetScript("OnUpdate")) and self.SortAuras or nil
 	debuffs.PostCreateIcon = self.Construct_AuraIcon
 	debuffs.PostUpdateIcon = self.PostUpdateAura
 	debuffs.CustomFilter = self.AuraFilter
-	debuffs.type = 'debuffs'
+	debuffs.type = "debuffs"
 	debuffs:SetFrameLevel(10)
 	
 	return debuffs
 end
 
 function UF:Construct_AuraIcon(button)
-	button.text = button.cd:CreateFontString(nil, 'OVERLAY')
-	button.text:Point('CENTER', 1, 1)
-	button.text:SetJustifyH('CENTER')
+	button.text = button.cd:CreateFontString(nil, "OVERLAY")
+	button.text:Point("CENTER", 1, 1)
+	button.text:SetJustifyH("CENTER")
 	
-	button:SetTemplate('Default')
+	button:SetTemplate("Default")
 
 	button.cd.noOCC = true
 	button.cd.noCooldownCount = true
@@ -44,25 +44,25 @@ function UF:Construct_AuraIcon(button)
 	
 	button.icon:SetInside()
 	button.icon:SetTexCoord(unpack(E.TexCoords))
-	button.icon:SetDrawLayer('ARTWORK')
+	button.icon:SetDrawLayer("ARTWORK")
 	
 	button.count:ClearAllPoints()
-	button.count:Point('BOTTOMRIGHT', 1, 1)
-	button.count:SetJustifyH('RIGHT')
+	button.count:Point("BOTTOMRIGHT", 1, 1)
+	button.count:SetJustifyH("RIGHT")
 
 	button.overlay:SetTexture(nil)
 	button.stealable:SetTexture(nil)
 
-	button:RegisterForClicks('RightButtonUp')
-	button:SetScript('OnClick', function(self)
+	button:RegisterForClicks("RightButtonUp")
+	button:SetScript("OnClick", function(self)
 		if not IsShiftKeyDown() then return; end
 		local auraName = self.name
 		
 		if auraName then
-			E:Print(format(L['The spell "%s" has been added to the Blacklist unitframe aura filter.'], auraName))
-			E.global['unitframe']['aurafilters']['Blacklist']['spells'][auraName] = {
-				['enable'] = true,
-				['priority'] = 0,			
+			E:Print(format(L["The spell "%s" has been added to the Blacklist unitframe aura filter."], auraName))
+			E.global["unitframe"]["aurafilters"]["Blacklist"]["spells"][auraName] = {
+				["enable"] = true,
+				["priority"] = 0,			
 			}
 			
 			UF:Update_AllFrames()
@@ -100,14 +100,14 @@ function UF:UpdateAuraIconSettings(auras, noCycle)
 	if(not frame.db) then return end
 	
 	local db = frame.db[type]
-	local unitframeFont = LSM:Fetch("font", E.db['unitframe'].font)
+	local unitframeFont = LSM:Fetch("font", E.db["unitframe"].font)
 	local index = 1
 	if(db) then
 		if(not noCycle) then
 			while(auras[index]) do
 				local button = auras[index]
-				button.text:FontTemplate(unitframeFont, db.fontSize, 'OUTLINE')
-				button.count:FontTemplate(unitframeFont, db.countFontSize or db.fontSize, 'OUTLINE')
+				button.text:FontTemplate(unitframeFont, db.fontSize, "OUTLINE")
+				button.count:FontTemplate(unitframeFont, db.countFontSize or db.fontSize, "OUTLINE")
 
 				if db.clickThrough and button:IsMouseEnabled() then
 					button:EnableMouse(false)
@@ -117,8 +117,8 @@ function UF:UpdateAuraIconSettings(auras, noCycle)
 				index = index + 1
 			end
 		else
-			auras.text:FontTemplate(unitframeFont, db.fontSize, 'OUTLINE')
-			auras.count:FontTemplate(unitframeFont, db.countFontSize or db.fontSize, 'OUTLINE')
+			auras.text:FontTemplate(unitframeFont, db.fontSize, "OUTLINE")
+			auras.count:FontTemplate(unitframeFont, db.countFontSize or db.fontSize, "OUTLINE")
 
 			if db.clickThrough and auras:IsMouseEnabled() then
 				auras:EnableMouse(false)
@@ -130,17 +130,17 @@ function UF:UpdateAuraIconSettings(auras, noCycle)
 end
 
 function UF:PostUpdateAura(unit, button, index, offset, filter, isDebuff, duration, timeLeft)
-	local name, _, _, _, dtype, duration, expiration, _, isStealable = UnitAura(unit, index, button.filter)
+	local name, _, _, _, dtype, duration, expiration, _, isStealable, id = UnitAura(unit, index, button.filter)
 
 	
-	local isFriend = UnitIsFriend('player', unit) == 1 and true or false
+	local isFriend = UnitIsFriend("player", unit) == 1 and true or false
 	if button.isDebuff then
 		if(not isFriend and button.owner ~= "player" and button.owner ~= "vehicle") --[[and (not E.isDebuffWhiteList[name])]] then
 			button:SetBackdropBorderColor(0.9, 0.1, 0.1)
-			button.icon:SetDesaturated((unit and not unit:find('arena%d')) and true or false)
+			button.icon:SetDesaturated((unit and not unit:find("arena%d")) and true or false)
 		else
 			local color = DebuffTypeColor[dtype] or DebuffTypeColor.none
-			if (name == "Unstable Affliction" or name == "Vampiric Touch") and E.myclass ~= "WARLOCK" then
+			if (id == 30108 or id == 34914) and E.myclass ~= "WARLOCK" then
 				button:SetBackdropBorderColor(0.05, 0.85, 0.94)
 			else
 				button:SetBackdropBorderColor(color.r * 0.6, color.g * 0.6, color.b * 0.6)
@@ -163,11 +163,11 @@ function UF:PostUpdateAura(unit, button, index, offset, filter, isDebuff, durati
 	button.spell = name
 	button.isStealable = isStealable
 	if expiration and duration ~= 0 then
-		if not button:GetScript('OnUpdate') then
+		if not button:GetScript("OnUpdate") then
 			button.expirationTime = expiration
 			button.expiration = expiration - GetTime()
 			button.nextupdate = -1
-			button:SetScript('OnUpdate', UF.UpdateAuraTimer)
+			button:SetScript("OnUpdate", UF.UpdateAuraTimer)
 		end
 		if button.expirationTime ~= expiration  then
 			button.expirationTime = expiration
@@ -176,9 +176,9 @@ function UF:PostUpdateAura(unit, button, index, offset, filter, isDebuff, durati
 		end
 	end	
 	if duration == 0 or expiration == 0 then
-		button:SetScript('OnUpdate', nil)
+		button:SetScript("OnUpdate", nil)
 		if(button.text:GetFont()) then
-			button.text:SetText('')
+			button.text:SetText("")
 		end
 	end
 end
@@ -191,10 +191,10 @@ function UF:UpdateAuraTimer(elapsed)
 	end
 	
 	if(self.expiration <= 0) then
-		self:SetScript('OnUpdate', nil)
+		self:SetScript("OnUpdate", nil)
 		
 		if(self.text:GetFont()) then
-			self.text:SetText('')
+			self.text:SetText("")
 		end
 		
 		return
@@ -205,16 +205,16 @@ function UF:UpdateAuraTimer(elapsed)
 	if self.text:GetFont() then
 		self.text:SetFormattedText(("%s%s|r"):format(E.TimeColors[formatid], E.TimeFormats[formatid][2]), timervalue)
 	elseif self:GetParent():GetParent().db then
-		self.text:FontTemplate(LSM:Fetch("font", E.db['unitframe'].font), self:GetParent():GetParent().db[self:GetParent().type].fontSize, 'OUTLINE')
+		self.text:FontTemplate(LSM:Fetch("font", E.db["unitframe"].font), self:GetParent():GetParent().db[self:GetParent().type].fontSize, "OUTLINE")
 		self.text:SetFormattedText(("%s%s|r"):format(E.TimeColors[formatid], E.TimeFormats[formatid][2]), timervalue)
 	end
 end
 
 function UF:CheckFilter(filterType, isFriend)
 	local FRIENDLY_CHECK, ENEMY_CHECK = false, false
-	if type(filterType) == 'string' then
-		error('Database conversion failed! Report to Elv.')
-	elseif type(filterType) == 'boolean' then
+	if type(filterType) == "string" then
+		error("Database conversion failed! Report to Elv.")
+	elseif type(filterType) == "boolean" then
 		FRIENDLY_CHECK = filterType
 		ENEMY_CHECK = filterType
 	elseif filterType then
@@ -243,8 +243,8 @@ function UF:AuraFilter(unit, icon, name, rank, texture, count, dtype, duration, 
 	local returnValue = true
 	local passPlayerOnlyCheck = true
 	local anotherFilterExists = false
-	local isPlayer = unitCaster == 'player' or unitCaster == 'vehicle'
-	local isFriend = UnitIsFriend('player', unit) == 1 and true or false
+	local isPlayer = unitCaster == "player" or unitCaster == "vehicle"
+	local isFriend = UnitIsFriend("player", unit) == 1 and true or false
 	local auraType = isFriend and db.friendlyAuraType or db.enemyAuraType
 	
 	icon.isPlayer = isPlayer
@@ -252,7 +252,7 @@ function UF:AuraFilter(unit, icon, name, rank, texture, count, dtype, duration, 
 	icon.name = name
 	icon.priority = 0
 
-	local turtleBuff = E.global['unitframe']['aurafilters']['TurtleBuffs'].spells[name]
+	local turtleBuff = E.global["unitframe"]["aurafilters"]["TurtleBuffs"].spells[name]
 	if turtleBuff and turtleBuff.enable then
 		icon.priority = turtleBuff.priority
 	end
@@ -269,7 +269,7 @@ function UF:AuraFilter(unit, icon, name, rank, texture, count, dtype, duration, 
 	end
 	
 	if UF:CheckFilter(db.onlyDispellable, isFriend) then
-		if (self.type == 'buffs' and not isStealable) or (self.type == 'debuffs' and dtype and  not E:IsDispellableByMe(dtype)) or dtype == nil then
+		if (self.type == "buffs" and not isStealable) or (self.type == "debuffs" and dtype and  not E:IsDispellableByMe(dtype)) or dtype == nil then
 			returnValue = false;
 		end
 		anotherFilterExists = true
@@ -292,7 +292,7 @@ function UF:AuraFilter(unit, icon, name, rank, texture, count, dtype, duration, 
 	end
 
 	if UF:CheckFilter(db.useBlacklist, isFriend) then
-		local blackList = E.global['unitframe']['aurafilters']['Blacklist'].spells[name]
+		local blackList = E.global["unitframe"]["aurafilters"]["Blacklist"].spells[name]
 		if blackList and blackList.enable then
 			returnValue = false;
 		end
@@ -301,7 +301,7 @@ function UF:AuraFilter(unit, icon, name, rank, texture, count, dtype, duration, 
 	end
 	
 	if UF:CheckFilter(db.useWhitelist, isFriend) then
-		local whiteList = E.global['unitframe']['aurafilters']['Whitelist'].spells[name]
+		local whiteList = E.global["unitframe"]["aurafilters"]["Whitelist"].spells[name]
 		if whiteList and whiteList.enable then
 			returnValue = true;
 			icon.priority = whiteList.priority
@@ -312,23 +312,23 @@ function UF:AuraFilter(unit, icon, name, rank, texture, count, dtype, duration, 
 		anotherFilterExists = true
 	end	
 
-	if db.useFilter and E.global['unitframe']['aurafilters'][db.useFilter] then
-		local type = E.global['unitframe']['aurafilters'][db.useFilter].type
-		local spellList = E.global['unitframe']['aurafilters'][db.useFilter].spells
+	if db.useFilter and E.global["unitframe"]["aurafilters"][db.useFilter] then
+		local type = E.global["unitframe"]["aurafilters"][db.useFilter].type
+		local spellList = E.global["unitframe"]["aurafilters"][db.useFilter].spells
 
-		if type == 'Whitelist' then
+		if type == "Whitelist" then
 			if spellList[name] and spellList[name].enable and passPlayerOnlyCheck then
 				returnValue = true
 				icon.priority = spellList[name].priority
 				
 				--bit hackish fix to this
-				if db.useFilter == 'TurtleBuffs' and (spellID == 86698 or spellID == 86669) then
+				if db.useFilter == "TurtleBuffs" and (spellID == 86698 or spellID == 86669) then
 					returnValue = false
 				end
 			elseif not anotherFilterExists then
 				returnValue = false
 			end
-		elseif type == 'Blacklist' and spellList[name] and spellList[name].enable then
+		elseif type == "Blacklist" and spellList[name] and spellList[name].enable then
 			returnValue = false				
 		end
 	end		

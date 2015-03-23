@@ -294,6 +294,9 @@ L["Loot Roll"] = true;
 L["Loot"] = true;
 L["Map Alpha While Moving"] = true;
 L["Name Font"] = true;
+L["Party / Raid"] = true;
+L["Party Only"] = true;
+L["Raid Only"] = true;
 L['Remaining Time'] = true;
 L['Remove Backdrop'] = true;
 L["Reset all frames to their original positions."] = true;
@@ -405,6 +408,8 @@ L["This is displayed when you have threat as a tank, if you don't have threat it
 L["Threat"] = true;
 L["Toggles the nameplates off when not in combat."] = true;
 L["Use this filter."] = true;
+L["Wrap Name"] = true;
+L["Wraps name instead of truncating it."] = true;
 L["You can't remove a default name from the filter, disabling the name."] = true;
 
 --Skins

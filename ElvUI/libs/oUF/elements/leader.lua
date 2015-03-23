@@ -8,7 +8,7 @@ local Update = function(self, event)
 	end
 
 	local unit = self.unit;
-	local isLeader = (UnitInParty(unit) or UnitInRaid(unit)) and UnitIsPartyLeader(unit);
+	local isLeader = UnitIsPartyLeader(unit);
 	if(isLeader) then
 		leader:Show();
 	else
@@ -34,8 +34,7 @@ local Enable = function(self)
 		leader.__owner = self;
 		leader.ForceUpdate = ForceUpdate;
 
-		self:RegisterEvent('PARTY_LEADER_CHANGED', Path, true);
-		self:RegisterEvent('PARTY_MEMBERS_CHANGED', Path, true);
+		self:RegisterEvent('PARTY_LEADER_CHANGED', Path);
 
 		if(leader:IsObjectType"Texture" and not leader:GetTexture()) then
 			leader:SetTexture[[Interface\GroupFrame\UI-Group-LeaderIcon]];
@@ -49,7 +48,6 @@ local Disable = function(self)
 	local leader = self.Leader;
 	if(leader) then
 		self:UnregisterEvent('PARTY_LEADER_CHANGED', Path);
-		self:UnregisterEvent('PARTY_MEMBERS_CHANGED', Path);
 	end
 end
 

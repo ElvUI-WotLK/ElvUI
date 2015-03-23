@@ -1,11 +1,11 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local UF = E:GetModule('UnitFrames');
+local UF = E:GetModule("UnitFrames");
 
 function UF:Construct_NameText(frame)
 	local parent = frame.RaisedElementParent or frame;
-	local name = parent:CreateFontString(nil, 'OVERLAY');
+	local name = parent:CreateFontString(nil, "OVERLAY");
 	self:Configure_FontString(name);
-	name:SetPoint('CENTER', frame.Health);
+	name:SetPoint("CENTER", frame.Health);
 	
 	return name;
 end

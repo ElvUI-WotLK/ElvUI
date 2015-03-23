@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local UF = E:GetModule('UnitFrames');
+local UF = E:GetModule("UnitFrames");
 
 local _, ns = ...
 local ElvUF = ns.oUF
@@ -7,18 +7,18 @@ assert(ElvUF, "ElvUI was unable to locate oUF.")
 local tinsert = table.insert
 
 function UF:Construct_RaidFrames(unitGroup)
-	self:SetScript('OnEnter', UnitFrame_OnEnter)
-	self:SetScript('OnLeave', UnitFrame_OnLeave)
+	self:SetScript("OnEnter", UnitFrame_OnEnter)
+	self:SetScript("OnLeave", UnitFrame_OnLeave)
 	
-	self.RaisedElementParent = CreateFrame('Frame', nil, self)
+	self.RaisedElementParent = CreateFrame("Frame", nil, self)
 	self.RaisedElementParent:SetFrameStrata("MEDIUM")
 	self.RaisedElementParent:SetFrameLevel(self:GetFrameLevel() + 10)		
 	
-	self:SetAttribute('initial-height', UF.db['units']['raid'].height);
-	self:SetAttribute('initial-width', UF.db['units']['raid'].width);
+	self:SetAttribute("initial-height", UF.db["units"]["raid"].height);
+	self:SetAttribute("initial-width", UF.db["units"]["raid"].width);
 	
-	self.Health = UF:Construct_HealthBar(self, true, true, 'RIGHT') -- Здоровье
-	self.Power = UF:Construct_PowerBar(self, true, true, 'LEFT', false) -- Мана
+	self.Health = UF:Construct_HealthBar(self, true, true, "RIGHT") -- Здоровье
+	self.Power = UF:Construct_PowerBar(self, true, true, "LEFT", false) -- Мана
 	self.Power.frequentUpdates = false;
 	self.Name = UF:Construct_NameText(self) -- Имя
 	self.Buffs = UF:Construct_Buffs(self) -- Баффы
@@ -29,8 +29,8 @@ function UF:Construct_RaidFrames(unitGroup)
 	self.RaidRoleFramesAnchor = UF:Construct_RaidRoleFrames(self) -- Иконка Лидера / Ответственного за добычу
 	self.TargetGlow = UF:Construct_TargetGlow(self) -- 
 	tinsert(self.__elements, UF.UpdateTargetGlow)
-	self:RegisterEvent('PLAYER_TARGET_CHANGED', UF.UpdateTargetGlow)
-	self:RegisterEvent('PLAYER_ENTERING_WORLD', UF.UpdateTargetGlow)		
+	self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetGlow)
+	self:RegisterEvent("PLAYER_ENTERING_WORLD", UF.UpdateTargetGlow)		
 	
 	self.Threat = UF:Construct_Threat(self) -- Угроза
 	self.RaidIcon = UF:Construct_RaidIcon(self) -- Рейдовая иконка
@@ -39,23 +39,23 @@ function UF:Construct_RaidFrames(unitGroup)
 	
 	UF:Update_StatusBars()
 	UF:Update_FontStrings()	
-	UF:Update_RaidFrames(self, UF.db['units']['raid'])
+	UF:Update_RaidFrames(self, UF.db["units"]["raid"])
 	return self
 end
 
 
 function UF:RaidSmartVisibility(event)
 	if not self.db or (self.db and not self.db.enable) or (UF.db and not UF.db.smartRaidFilter) or self.isForced then return; end
-	local inInstance, instanceType = IsInInstance()
 	
 	if event == "PLAYER_REGEN_ENABLED" then self:UnregisterEvent("PLAYER_REGEN_ENABLED") end
 
 	if not InCombatLockdown() then	
 		self.isInstanceForced = nil;
-		if(inInstance and (instanceType == 'raid' or instanceType == 'pvp')) then
+		local inInstance, instanceType = IsInInstance();
+		if(inInstance and (instanceType == "raid" or instanceType == "pvp")) then
 			local _, _, _, _, maxPlayers = GetInstanceInfo()
 			local mapID = GetCurrentMapAreaID();
-			if mapID and UF.mapIDs[mapID] then
+			if(UF.mapIDs[mapID]) then
 				maxPlayers = UF.mapIDs[mapID]
 			end
 
@@ -65,8 +65,8 @@ function UF:RaidSmartVisibility(event)
 				self:Show()	
 				
 				self.isInstanceForced = true;
-				if(maxPlayers and ElvUF_Raid.numGroups ~= E:Round(maxPlayers/5) and event) then	
-					UF:CreateAndUpdateHeaderGroup('raid')
+				if(ElvUF_Raid.numGroups ~= E:Round(maxPlayers/5) and event) then
+					UF:CreateAndUpdateHeaderGroup("raid")
 				end				
 			else
 				self:Hide()
@@ -74,7 +74,7 @@ function UF:RaidSmartVisibility(event)
 		elseif self.db.visibility then
 			RegisterStateDriver(self, "visibility", self.db.visibility)
 			if(ElvUF_Raid.numGroups ~= self.db.numGroups) then
-				UF:CreateAndUpdateHeaderGroup('raid')
+				UF:CreateAndUpdateHeaderGroup("raid")
 			end
 		end
 	else
@@ -93,11 +93,11 @@ function UF:Update_RaidHeader(header, db, isForced)
 		headerHolder:ClearAllPoints()
 		headerHolder:Point("BOTTOMLEFT", E.UIParent, "BOTTOMLEFT", 4, 195)	
 
-		E:CreateMover(headerHolder, headerHolder:GetName()..'Mover', L['Raid Frames'], nil, nil, nil, 'ALL,RAID')
+		E:CreateMover(headerHolder, headerHolder:GetName().."Mover", L["Raid Frames"], nil, nil, nil, "ALL,RAID")
 
 		headerHolder:RegisterEvent("PLAYER_ENTERING_WORLD")
 		headerHolder:RegisterEvent("ZONE_CHANGED_NEW_AREA")
-		headerHolder:SetScript("OnEvent", UF['RaidSmartVisibility'])
+		headerHolder:SetScript("OnEvent", UF["RaidSmartVisibility"])
 		headerHolder.positioned = true;
 	end
 
@@ -113,8 +113,8 @@ function UF:Update_RaidFrames(frame, db)
 	local UNIT_HEIGHT = db.height
 	
 	local USE_POWERBAR = db.power.enable
-	local USE_MINI_POWERBAR = db.power.width == 'spaced' and USE_POWERBAR
-	local USE_INSET_POWERBAR = db.power.width == 'inset' and USE_POWERBAR
+	local USE_MINI_POWERBAR = db.power.width == "spaced" and USE_POWERBAR
+	local USE_INSET_POWERBAR = db.power.width == "inset" and USE_POWERBAR
 	local USE_POWERBAR_OFFSET = db.power.offset ~= 0 and USE_POWERBAR
 	local POWERBAR_OFFSET = db.power.offset
 	local POWERBAR_HEIGHT = db.power.height
@@ -122,11 +122,11 @@ function UF:Update_RaidFrames(frame, db)
 	
 	frame.db = db
 	frame.colors = ElvUF.colors
-	frame:RegisterForClicks(self.db.targetOnMouseDown and 'AnyDown' or 'AnyUp')
+	frame:RegisterForClicks(self.db.targetOnMouseDown and "AnyDown" or "AnyUp")
 	
 	frame.Range = {insideAlpha = 1, outsideAlpha = E.db.unitframe.OORAlpha}
-	if not frame:IsElementEnabled('Range') then
-		frame:EnableElement('Range')
+	if not frame:IsElementEnabled("Range") then
+		frame:EnableElement("Range")
 	end		
 	
 	
@@ -163,14 +163,14 @@ function UF:Update_RaidFrames(frame, db)
 			health.colorClass = true
 			health.colorReaction = true
 		elseif db.colorOverride == "FORCE_OFF" then
-			if self.db['colors'].colorhealthbyvalue == true then
+			if self.db["colors"].colorhealthbyvalue == true then
 				health.colorSmooth = true
 			else
 				health.colorHealth = true
 			end		
 		else
-			if self.db['colors'].healthclass ~= true then
-				if self.db['colors'].colorhealthbyvalue == true then
+			if self.db["colors"].healthclass ~= true then
+				if self.db["colors"].colorhealthbyvalue == true then
 					health.colorSmooth = true
 				else
 					health.colorHealth = true
@@ -180,7 +180,7 @@ function UF:Update_RaidFrames(frame, db)
 				health.colorReaction = true
 			end
 			
-			if(self.db['colors'].forcehealthreaction == true) then
+			if(self.db["colors"].forcehealthreaction == true) then
 				health.colorClass = false;
 				health.colorReaction = true;
 			end
@@ -209,7 +209,7 @@ function UF:Update_RaidFrames(frame, db)
 	do
 		local power = frame.Power
 		if USE_POWERBAR then
-			frame:EnableElement('Power')
+			frame:EnableElement("Power")
 			power.Smooth = self.db.smoothbars
 			power:Show()	
 			--Text
@@ -222,7 +222,7 @@ function UF:Update_RaidFrames(frame, db)
 			power.colorClass = nil
 			power.colorReaction = nil	
 			power.colorPower = nil
-			if self.db['colors'].powerclass then
+			if self.db["colors"].powerclass then
 				power.colorClass = true
 				power.colorReaction = true
 			else
@@ -253,7 +253,7 @@ function UF:Update_RaidFrames(frame, db)
 				power:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -(BORDER), BORDER)
 			end
 		else
-			frame:DisableElement('Power')
+			frame:DisableElement("Power")
 			power:Hide()
 		end
 	end
@@ -262,13 +262,13 @@ function UF:Update_RaidFrames(frame, db)
 	do
 		local threat = frame.Threat
 
-		if db.threatStyle ~= 'NONE' and db.threatStyle ~= nil then
-			if not frame:IsElementEnabled('Threat') then
-				frame:EnableElement('Threat')
+		if db.threatStyle ~= "NONE" and db.threatStyle ~= nil then
+			if not frame:IsElementEnabled("Threat") then
+				frame:EnableElement("Threat")
 			end
 
 			if db.threatStyle == "GLOW" then
-				threat:SetFrameStrata('BACKGROUND')
+				threat:SetFrameStrata("BACKGROUND")
 				threat.glow:ClearAllPoints()
 				threat.glow:SetBackdropBorderColor(0, 0, 0, 0)
 				threat.glow:Point("TOPLEFT", frame.Health.backdrop, "TOPLEFT", -SHADOW_SPACING, SHADOW_SPACING)
@@ -286,15 +286,15 @@ function UF:Update_RaidFrames(frame, db)
 					threat.glow:Point("BOTTOMRIGHT", frame.Portrait.backdrop, "BOTTOMRIGHT", SHADOW_SPACING, -SHADOW_SPACING)
 				end
 			elseif db.threatStyle == "ICONTOPLEFT" or db.threatStyle == "ICONTOPRIGHT" or db.threatStyle == "ICONBOTTOMLEFT" or db.threatStyle == "ICONBOTTOMRIGHT" or db.threatStyle == "ICONTOP" or db.threatStyle == "ICONBOTTOM" or db.threatStyle == "ICONLEFT" or db.threatStyle == "ICONRIGHT" then
-				threat:SetFrameStrata('HIGH')
+				threat:SetFrameStrata("HIGH")
 				local point = db.threatStyle
 				point = point:gsub("ICON", "")
 				
 				threat.texIcon:ClearAllPoints()
 				threat.texIcon:SetPoint(point, frame.Health, point)
 			end
-		elseif frame:IsElementEnabled('Threat') then
-			frame:DisableElement('Threat')
+		elseif frame:IsElementEnabled("Threat") then
+			frame:DisableElement("Threat")
 		end
 	end		
 	
@@ -322,12 +322,12 @@ function UF:Update_RaidFrames(frame, db)
 	end			
 
 	--Auras Disable/Enable
-	--Only do if both debuffs and buffs aren't being used.
+	--Only do if both debuffs and buffs aren"t being used.
 	do
 		if db.debuffs.enable or db.buffs.enable then
-			frame:EnableElement('Aura')
+			frame:EnableElement("Aura")
 		else
-			frame:DisableElement('Aura')		
+			frame:DisableElement("Aura")		
 		end
 		
 		frame.Buffs:ClearAllPoints()
@@ -356,10 +356,10 @@ function UF:Update_RaidFrames(frame, db)
 		local x, y = E:GetXYOffset(db.buffs.anchorPoint)
 		local attachTo = self:GetAuraAnchorFrame(frame, db.buffs.attachTo)
 		
-		buffs:Point(E.InversePoints[db.buffs.anchorPoint], attachTo, db.buffs.anchorPoint, x + db.buffs.xOffset, y + db.buffs.yOffset + (E.PixelMode and (db.buffs.anchorPoint:find('TOP') and -1 or 1) or 0))
+		buffs:Point(E.InversePoints[db.buffs.anchorPoint], attachTo, db.buffs.anchorPoint, x + db.buffs.xOffset, y + db.buffs.yOffset + (E.PixelMode and (db.buffs.anchorPoint:find("TOP") and -1 or 1) or 0))
 		buffs:Height(buffs.size * rows)
-		buffs["growth-y"] = db.buffs.anchorPoint:find('TOP') and 'UP' or 'DOWN'
-		buffs["growth-x"] = db.buffs.anchorPoint == 'LEFT' and 'LEFT' or  db.buffs.anchorPoint == 'RIGHT' and 'RIGHT' or (db.buffs.anchorPoint:find('LEFT') and 'RIGHT' or 'LEFT')
+		buffs["growth-y"] = db.buffs.anchorPoint:find("TOP") and "UP" or "DOWN"
+		buffs["growth-x"] = db.buffs.anchorPoint == "LEFT" and "LEFT" or  db.buffs.anchorPoint == "RIGHT" and "RIGHT" or (db.buffs.anchorPoint:find("LEFT") and "RIGHT" or "LEFT")
 		buffs.initialAnchor = E.InversePoints[db.buffs.anchorPoint]
 
 		if db.buffs.enable then			
@@ -390,12 +390,12 @@ function UF:Update_RaidFrames(frame, db)
 		end
 		
 		local x, y = E:GetXYOffset(db.debuffs.anchorPoint)
-		local attachTo = self:GetAuraAnchorFrame(frame, db.debuffs.attachTo, db.debuffs.attachTo == 'BUFFS' and db.buffs.attachTo == 'DEBUFFS')
+		local attachTo = self:GetAuraAnchorFrame(frame, db.debuffs.attachTo, db.debuffs.attachTo == "BUFFS" and db.buffs.attachTo == "DEBUFFS")
 		
 		debuffs:Point(E.InversePoints[db.debuffs.anchorPoint], attachTo, db.debuffs.anchorPoint, x + db.debuffs.xOffset, y + db.debuffs.yOffset)
 		debuffs:Height(debuffs.size * rows)
-		debuffs["growth-y"] = db.debuffs.anchorPoint:find('TOP') and 'UP' or 'DOWN'
-		debuffs["growth-x"] = db.debuffs.anchorPoint == 'LEFT' and 'LEFT' or  db.debuffs.anchorPoint == 'RIGHT' and 'RIGHT' or (db.debuffs.anchorPoint:find('LEFT') and 'RIGHT' or 'LEFT')
+		debuffs["growth-y"] = db.debuffs.anchorPoint:find("TOP") and "UP" or "DOWN"
+		debuffs["growth-x"] = db.debuffs.anchorPoint == "LEFT" and "LEFT" or  db.debuffs.anchorPoint == "RIGHT" and "RIGHT" or (db.debuffs.anchorPoint:find("LEFT") and "RIGHT" or "LEFT")
 		debuffs.initialAnchor = E.InversePoints[db.debuffs.anchorPoint]
 
 		if db.debuffs.enable then			
@@ -410,14 +410,14 @@ function UF:Update_RaidFrames(frame, db)
 	do
 		local rdebuffs = frame.RaidDebuffs
 		if db.rdebuffs.enable then
-			frame:EnableElement('RaidDebuffs')				
+			frame:EnableElement("RaidDebuffs")				
 
 			rdebuffs:Size(db.rdebuffs.size)
-			rdebuffs:Point('BOTTOM', frame, 'BOTTOM', db.rdebuffs.xOffset, db.rdebuffs.yOffset)
-			rdebuffs.count:FontTemplate(nil, db.rdebuffs.fontSize, 'OUTLINE')
-			rdebuffs.time:FontTemplate(nil, db.rdebuffs.fontSize, 'OUTLINE')
+			rdebuffs:Point("BOTTOM", frame, "BOTTOM", db.rdebuffs.xOffset, db.rdebuffs.yOffset)
+			rdebuffs.count:FontTemplate(nil, db.rdebuffs.fontSize, "OUTLINE")
+			rdebuffs.time:FontTemplate(nil, db.rdebuffs.fontSize, "OUTLINE")
 		else
-			frame:DisableElement('RaidDebuffs')
+			frame:DisableElement("RaidDebuffs")
 			rdebuffs:Hide()				
 		end
 	end
@@ -426,7 +426,7 @@ function UF:Update_RaidFrames(frame, db)
 	do
 		local RI = frame.RaidIcon
 		if db.raidicon.enable then
-			frame:EnableElement('RaidIcon')
+			frame:EnableElement("RaidIcon")
 			RI:Show()
 			RI:Size(db.raidicon.size)
 			
@@ -434,7 +434,7 @@ function UF:Update_RaidFrames(frame, db)
 			RI:ClearAllPoints()
 			RI:Point(db.raidicon.attachTo, frame, db.raidicon.attachTo, x + db.raidicon.xOffset, y + db.raidicon.yOffset)	
 		else
-			frame:DisableElement('RaidIcon')	
+			frame:DisableElement("RaidIcon")	
 			RI:Hide()
 		end
 	end			
@@ -443,9 +443,9 @@ function UF:Update_RaidFrames(frame, db)
 	do
 		local dbh = frame.DebuffHighlight
 		if E.db.unitframe.debuffHighlighting then
-			frame:EnableElement('DebuffHighlight')
+			frame:EnableElement("DebuffHighlight")
 		else
-			frame:DisableElement('DebuffHighlight')
+			frame:DisableElement("DebuffHighlight")
 		end
 	end
 	
@@ -455,19 +455,19 @@ function UF:Update_RaidFrames(frame, db)
 		
 		if db.raidRoleIcons.enable then
 			raidRoleFrameAnchor:Show()
-			frame:EnableElement('Leader')
-			frame:EnableElement('MasterLooter')
+			frame:EnableElement("Leader")
+			frame:EnableElement("MasterLooter")
 			
 			raidRoleFrameAnchor:ClearAllPoints()
-			if db.raidRoleIcons.position == 'TOPLEFT' then
-				raidRoleFrameAnchor:Point('LEFT', frame, 'TOPLEFT', 2, 0)
+			if db.raidRoleIcons.position == "TOPLEFT" then
+				raidRoleFrameAnchor:Point("LEFT", frame, "TOPLEFT", 2, 0)
 			else
-				raidRoleFrameAnchor:Point('RIGHT', frame, 'TOPRIGHT', -2, 0)
+				raidRoleFrameAnchor:Point("RIGHT", frame, "TOPRIGHT", -2, 0)
 			end
 		else
 			raidRoleFrameAnchor:Hide()
-			frame:DisableElement('Leader')
-			frame:DisableElement('MasterLooter')
+			frame:DisableElement("Leader")
+			frame:DisableElement("MasterLooter")
 		end
 	end		
 	
@@ -475,27 +475,27 @@ function UF:Update_RaidFrames(frame, db)
 	do
 		local range = frame.Range
 		if db.rangeCheck then
-			if not frame:IsElementEnabled('Range') then
-				frame:EnableElement('Range')
+			if not frame:IsElementEnabled("Range") then
+				frame:EnableElement("Range")
 			end
 
 			range.outsideAlpha = E.db.unitframe.OORAlpha
 		else
-			if frame:IsElementEnabled('Range') then
-				frame:DisableElement('Range')
+			if frame:IsElementEnabled("Range") then
+				frame:DisableElement("Range")
 			end				
 		end
 	end		
 	
 	UF:UpdateAuraWatch(frame)
 	
-	frame:EnableElement('ReadyCheck')		
+	frame:EnableElement("ReadyCheck")		
 
 	if db.customTexts then
 		local customFont = UF.LSM:Fetch("font", UF.db.font)
 		for objectName, _ in pairs(db.customTexts) do
 			if not frame[objectName] then
-				frame[objectName] = frame.RaisedElementParent:CreateFontString(nil, 'OVERLAY')
+				frame[objectName] = frame.RaisedElementParent:CreateFontString(nil, "OVERLAY")
 			end
 			
 			local objectDB = db.customTexts[objectName]
@@ -505,10 +505,10 @@ function UF:Update_RaidFrames(frame, db)
 			end
 						
 			frame[objectName]:FontTemplate(customFont, objectDB.size or UF.db.fontSize, objectDB.fontOutline or UF.db.fontOutline)
-			frame:Tag(frame[objectName], objectDB.text_format or '')
-			frame[objectName]:SetJustifyH(objectDB.justifyH or 'CENTER')
+			frame:Tag(frame[objectName], objectDB.text_format or "")
+			frame[objectName]:SetJustifyH(objectDB.justifyH or "CENTER")
 			frame[objectName]:ClearAllPoints()
-			frame[objectName]:SetPoint(objectDB.justifyH or 'CENTER', frame, objectDB.justifyH or 'CENTER', objectDB.xOffset, objectDB.yOffset)
+			frame[objectName]:SetPoint(objectDB.justifyH or "CENTER", frame, objectDB.justifyH or "CENTER", objectDB.xOffset, objectDB.yOffset)
 		end
 	end		
 
@@ -518,4 +518,4 @@ function UF:Update_RaidFrames(frame, db)
 	frame:UpdateAllElements()
 end
 
-UF['headerstoload']['raid'] = true
+UF["headerstoload"]["raid"] = true

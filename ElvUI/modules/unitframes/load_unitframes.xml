@@ -39,10 +39,10 @@
 		</Frames>
 	</Button>
 	
-	<Script file='unitframes.lua'/>
-	<Script file='config_enviroment.lua'/>
-	<Script file='tags.lua'/>
-	<Include file='elements\load_elements.xml'/>
-	<Include file='units\load_units.xml'/>
-	<Include file='groups\load_groups.xml'/>
+	<Script file="unitframes.lua"/>
+	<Script file="config_enviroment.lua"/>
+	<Script file="tags.lua"/>
+	<Include file="elements\load_elements.xml"/>
+	<Include file="units\load_units.xml"/>
+	<Include file="groups\load_groups.xml"/>
 </Ui>

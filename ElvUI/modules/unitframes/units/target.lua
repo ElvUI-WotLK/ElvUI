@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local UF = E:GetModule('UnitFrames');
+local UF = E:GetModule("UnitFrames");
 
 local _, ns = ...
 local ElvUF = ns.oUF
@@ -10,16 +10,16 @@ local tinsert = table.insert
 
 function UF:Construct_TargetFrame(frame)	
 	frame.Threat = self:Construct_Threat(frame) -- Угроза
-	frame.Health = self:Construct_HealthBar(frame, true, true, 'RIGHT') -- Здоровье
+	frame.Health = self:Construct_HealthBar(frame, true, true, "RIGHT") -- Здоровье
 	frame.Health.frequentUpdates = true;
-	frame.Power = self:Construct_PowerBar(frame, true, true, 'LEFT', false) -- Мана
+	frame.Power = self:Construct_PowerBar(frame, true, true, "LEFT", false) -- Мана
 	frame.Power.frequentUpdates = true;
 	frame.Name = self:Construct_NameText(frame) -- Имя
-	frame.Portrait3D = self:Construct_Portrait(frame, 'model') -- 3D Портрет
-	frame.Portrait2D = self:Construct_Portrait(frame, 'texture') -- 2D Портрет
+	frame.Portrait3D = self:Construct_Portrait(frame, "model") -- 3D Портрет
+	frame.Portrait2D = self:Construct_Portrait(frame, "texture") -- 2D Портрет
 	frame.Buffs = self:Construct_Buffs(frame) -- Баффы
 	frame.Debuffs = self:Construct_Debuffs(frame) -- Дебаффы
-	frame.Castbar = self:Construct_Castbar(frame, 'RIGHT', L['Target Castbar']) -- Полоса заклинаия
+	frame.Castbar = self:Construct_Castbar(frame, "RIGHT", L["Target Castbar"]) -- Полоса заклинаия
 	frame.Castbar.SafeZone = nil
 	frame.Castbar.LatencyTexture:Hide()
 	frame.RaidIcon = UF:Construct_RaidIcon(frame) -- Рейдовая иконка
@@ -29,8 +29,8 @@ function UF:Construct_TargetFrame(frame)
 	frame.AuraBars = self:Construct_AuraBarHeader(frame) -- Полоса аур
 	frame.Range = UF:Construct_Range(frame) -- Проверка дистанции
 	
-	frame:Point('BOTTOMRIGHT', E.UIParent, 'BOTTOM', 413, 68) -- Позиция
-	E:CreateMover(frame, frame:GetName()..'Mover', L['Target Frame'], nil, nil, nil, 'ALL,SOLO')
+	frame:Point("BOTTOMRIGHT", E.UIParent, "BOTTOM", 413, 68) -- Позиция
+	E:CreateMover(frame, frame:GetName().."Mover", L["Target Frame"], nil, nil, nil, "ALL,SOLO")
 end
 
 function UF:Update_TargetFrame(frame, db)
@@ -41,16 +41,16 @@ function UF:Update_TargetFrame(frame, db)
 		frame.Portrait:ClearAllPoints()
 		frame.Portrait.backdrop:Hide()
 	end
-	frame.Portrait = db.portrait.style == '2D' and frame.Portrait2D or frame.Portrait3D	
-	frame:RegisterForClicks(self.db.targetOnMouseDown and 'AnyDown' or 'AnyUp')
+	frame.Portrait = db.portrait.style == "2D" and frame.Portrait2D or frame.Portrait3D	
+	frame:RegisterForClicks(self.db.targetOnMouseDown and "AnyDown" or "AnyUp")
 	local BORDER = E.Border;
 	local SPACING = E.Spacing;	
 	local UNIT_WIDTH = db.width
 	local UNIT_HEIGHT = db.height
 	local SHADOW_SPACING = E.PixelMode and 3 or 4
 	local USE_POWERBAR = db.power.enable
-	local USE_INSET_POWERBAR = db.power.width == 'inset' and USE_POWERBAR
-	local USE_MINI_POWERBAR = db.power.width == 'spaced' and USE_POWERBAR
+	local USE_INSET_POWERBAR = db.power.width == "inset" and USE_POWERBAR
+	local USE_MINI_POWERBAR = db.power.width == "spaced" and USE_POWERBAR
 	local USE_POWERBAR_OFFSET = db.power.offset ~= 0 and USE_POWERBAR
 	local POWERBAR_DETACHED = db.power.detachFromFrame
 	local POWERBAR_OFFSET = db.power.offset
@@ -71,7 +71,7 @@ function UF:Update_TargetFrame(frame, db)
 	
 	frame.colors = ElvUF.colors
 	frame:Size(UNIT_WIDTH, UNIT_HEIGHT)
-	_G[frame:GetName()..'Mover']:Size(frame:GetSize())
+	_G[frame:GetName().."Mover"]:Size(frame:GetSize())
 	
 	if not IsAddOnLoaded("Clique") then
 		if db.middleClickFocus then
@@ -124,8 +124,8 @@ function UF:Update_TargetFrame(frame, db)
 		health.colorHealth = nil
 		health.colorClass = nil
 		health.colorReaction = nil
-		if self.db['colors'].healthclass ~= true then
-			if self.db['colors'].colorhealthbyvalue == true then
+		if self.db["colors"].healthclass ~= true then
+			if self.db["colors"].colorhealthbyvalue == true then
 				health.colorSmooth = true
 			else
 				health.colorHealth = true
@@ -135,7 +135,7 @@ function UF:Update_TargetFrame(frame, db)
 			health.colorReaction = true
 		end
 		
-		if(self.db['colors'].forcehealthreaction == true) then
+		if(self.db["colors"].forcehealthreaction == true) then
 			health.colorClass = false;
 			health.colorReaction = true;
 		end
@@ -161,8 +161,8 @@ function UF:Update_TargetFrame(frame, db)
 			health.bg:SetParent(health)
 			health.bg:SetAllPoints()
 		else
-			health.bg:Point('BOTTOMLEFT', health:GetStatusBarTexture(), 'BOTTOMRIGHT')
-			health.bg:Point('TOPRIGHT', health)
+			health.bg:Point("BOTTOMLEFT", health:GetStatusBarTexture(), "BOTTOMRIGHT")
+			health.bg:Point("TOPRIGHT", health)
 			health.bg:SetParent(frame.Portrait.overlay)		
 		end
 	end
@@ -173,8 +173,8 @@ function UF:Update_TargetFrame(frame, db)
 		local power = frame.Power
 		
 		if USE_POWERBAR then
-			if not frame:IsElementEnabled('Power') then
-				frame:EnableElement('Power')
+			if not frame:IsElementEnabled("Power") then
+				frame:EnableElement("Power")
 				power:Show()
 			end				
 			power.Smooth = self.db.smoothbars
@@ -193,7 +193,7 @@ function UF:Update_TargetFrame(frame, db)
 			power.colorClass = nil -- Цвет
 			power.colorReaction = nil	
 			power.colorPower = nil
-			if self.db['colors'].powerclass then
+			if self.db["colors"].powerclass then
 				power.colorClass = true
 				power.colorReaction = true
 			else
@@ -208,7 +208,7 @@ function UF:Update_TargetFrame(frame, db)
 				if not power.mover then
 					power:ClearAllPoints()
 					power:Point("BOTTOM", frame, "BOTTOM", 0, -20)
-					E:CreateMover(power, 'TargetPowerBarMover', 'Target Powerbar', nil, nil, nil, 'ALL,SOLO')
+					E:CreateMover(power, "TargetPowerBarMover", "Target Powerbar", nil, nil, nil, "ALL,SOLO")
 				else
 					power:ClearAllPoints()
 					power:SetPoint("BOTTOMLEFT", power.mover, "BOTTOMLEFT")
@@ -239,8 +239,8 @@ function UF:Update_TargetFrame(frame, db)
 				power:Point("TOPLEFT", frame.Health.backdrop, "BOTTOMLEFT", BORDER, -(E.PixelMode and 0 or (BORDER + SPACING)))
 				power:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -(BORDER + PORTRAIT_WIDTH), BORDER)
 			end
-		elseif frame:IsElementEnabled('Power') then
-			frame:DisableElement('Power')
+		elseif frame:IsElementEnabled("Power") then
+			frame:DisableElement("Power")
 			power:Hide()
 		end
 	end
@@ -249,14 +249,14 @@ function UF:Update_TargetFrame(frame, db)
 		local portrait = frame.Portrait
 		
 		if USE_PORTRAIT then -- Позиция
-			if not frame:IsElementEnabled('Portrait') then
-				frame:EnableElement('Portrait')
+			if not frame:IsElementEnabled("Portrait") then
+				frame:EnableElement("Portrait")
 			end
 			
 			portrait:ClearAllPoints()
 			
 			if USE_PORTRAIT_OVERLAY then
-				if db.portrait.style == '3D' then
+				if db.portrait.style == "3D" then
 					portrait:SetFrameLevel(frame.Health:GetFrameLevel() + 1)
 				end
 				portrait:SetAllPoints(frame.Health)
@@ -273,18 +273,18 @@ function UF:Update_TargetFrame(frame, db)
 				portrait:Show()
 				portrait.backdrop:Show()
 				
-				if(PORTRAIT_DETACHED and db.portrait.style == '3D') then
+				if(PORTRAIT_DETACHED and db.portrait.style == "3D") then
 					portrait:Width(db.portrait.detachedWidth);
 					portrait:Height(db.portrait.detachedHeight);
 					portrait.backdrop:SetOutside();
 					
 					if(not portrait.mover) then
 						portrait:ClearAllPoints();
-						portrait:Point('BOTTOM', frame, 'BOTTOM', 0, -20);
-						E:CreateMover(portrait, 'TargetPortraitMover', 'Target Portrait', nil, nil, nil, 'ALL,SOLO');
+						portrait:Point("BOTTOM", frame, "BOTTOM", 0, -20);
+						E:CreateMover(portrait, "TargetPortraitMover", "Target Portrait", nil, nil, nil, "ALL,SOLO");
 					else
 						portrait:ClearAllPoints();
-						portrait:SetPoint('BOTTOMLEFT', portrait.mover, 'BOTTOMLEFT');
+						portrait:SetPoint("BOTTOMLEFT", portrait.mover, "BOTTOMLEFT");
 						portrait.mover:SetScale(1);
 						portrait.mover:SetAlpha(1);
 					end
@@ -292,7 +292,7 @@ function UF:Update_TargetFrame(frame, db)
 					portrait.backdrop:ClearAllPoints()
 					portrait.backdrop:SetPoint("TOPRIGHT", frame, "TOPRIGHT", E.PixelMode and -1 or 0, 0)
 					
-					if db.portrait.style == '3D' then
+					if db.portrait.style == "3D" then
 						portrait:SetFrameLevel(frame:GetFrameLevel() + 5)
 					end		
 					
@@ -302,8 +302,8 @@ function UF:Update_TargetFrame(frame, db)
 						portrait.backdrop:Point("BOTTOMLEFT", frame.Power.backdrop, "BOTTOMRIGHT", E.PixelMode and -1 or SPACING, 0)
 					end
 					
-					portrait:Point('BOTTOMLEFT', portrait.backdrop, 'BOTTOMLEFT', BORDER, BORDER)
-					portrait:Point('TOPRIGHT', portrait.backdrop, 'TOPRIGHT', -BORDER, -BORDER)
+					portrait:Point("BOTTOMLEFT", portrait.backdrop, "BOTTOMLEFT", BORDER, BORDER)
+					portrait:Point("TOPRIGHT", portrait.backdrop, "TOPRIGHT", -BORDER, -BORDER)
 					
 					if(portrait.mover) then
 						portrait.mover:SetScale(0.000001);
@@ -312,8 +312,8 @@ function UF:Update_TargetFrame(frame, db)
 				end
 			end
 		else
-			if frame:IsElementEnabled('Portrait') then
-				frame:DisableElement('Portrait')
+			if frame:IsElementEnabled("Portrait") then
+				frame:DisableElement("Portrait")
 				portrait:Hide()
 				portrait.backdrop:Hide()
 				
@@ -328,13 +328,13 @@ function UF:Update_TargetFrame(frame, db)
 	do -- Угроза
 		local threat = frame.Threat
 
-		if db.threatStyle ~= 'NONE' and db.threatStyle ~= nil then
-			if not frame:IsElementEnabled('Threat') then
-				frame:EnableElement('Threat')
+		if db.threatStyle ~= "NONE" and db.threatStyle ~= nil then
+			if not frame:IsElementEnabled("Threat") then
+				frame:EnableElement("Threat")
 			end
 
 			if db.threatStyle == "GLOW" then
-				threat:SetFrameStrata('BACKGROUND')
+				threat:SetFrameStrata("BACKGROUND")
 				threat.glow:ClearAllPoints()
 				threat.glow:SetBackdropBorderColor(0, 0, 0, 0)
 				threat.glow:Point("TOPLEFT", frame.Health.backdrop, "TOPLEFT", -SHADOW_SPACING, SHADOW_SPACING)
@@ -352,26 +352,26 @@ function UF:Update_TargetFrame(frame, db)
 					threat.glow:Point("BOTTOMRIGHT", frame.Portrait.backdrop, "BOTTOMRIGHT", SHADOW_SPACING, -SHADOW_SPACING)
 				end
 			elseif db.threatStyle == "ICONTOPLEFT" or db.threatStyle == "ICONTOPRIGHT" or db.threatStyle == "ICONBOTTOMLEFT" or db.threatStyle == "ICONBOTTOMRIGHT" or db.threatStyle == "ICONTOP" or db.threatStyle == "ICONBOTTOM" or db.threatStyle == "ICONLEFT" or db.threatStyle == "ICONRIGHT" then
-				threat:SetFrameStrata('HIGH')
+				threat:SetFrameStrata("HIGH")
 				local point = db.threatStyle
 				point = point:gsub("ICON", "")
 				
 				threat.texIcon:ClearAllPoints()
 				threat.texIcon:SetPoint(point, frame.Health, point)
 			end
-		elseif frame:IsElementEnabled('Threat') then
-			frame:DisableElement('Threat')
+		elseif frame:IsElementEnabled("Threat") then
+			frame:DisableElement("Threat")
 		end
 	end
 	
 	do
 		if db.debuffs.enable or db.buffs.enable then
-			if not frame:IsElementEnabled('Aura') then
-				frame:EnableElement('Aura')
+			if not frame:IsElementEnabled("Aura") then
+				frame:EnableElement("Aura")
 			end	
 		else
-			if frame:IsElementEnabled('Aura') then
-				frame:DisableElement('Aura')
+			if frame:IsElementEnabled("Aura") then
+				frame:DisableElement("Aura")
 			end			
 		end
 		
@@ -400,10 +400,10 @@ function UF:Update_TargetFrame(frame, db)
 		local x, y = E:GetXYOffset(db.buffs.anchorPoint)
 		local attachTo = self:GetAuraAnchorFrame(frame, db.buffs.attachTo)
 		
-		buffs:Point(E.InversePoints[db.buffs.anchorPoint], attachTo, db.buffs.anchorPoint, x + db.buffs.xOffset, y + db.buffs.yOffset + (E.PixelMode and (db.buffs.anchorPoint:find('TOP') and -1 or 1) or 0))
+		buffs:Point(E.InversePoints[db.buffs.anchorPoint], attachTo, db.buffs.anchorPoint, x + db.buffs.xOffset, y + db.buffs.yOffset + (E.PixelMode and (db.buffs.anchorPoint:find("TOP") and -1 or 1) or 0))
 		buffs:Height(buffs.size * rows)
-		buffs["growth-y"] = db.buffs.anchorPoint:find('TOP') and 'UP' or 'DOWN'
-		buffs["growth-x"] = db.buffs.anchorPoint == 'LEFT' and 'LEFT' or  db.buffs.anchorPoint == 'RIGHT' and 'RIGHT' or (db.buffs.anchorPoint:find('LEFT') and 'RIGHT' or 'LEFT')
+		buffs["growth-y"] = db.buffs.anchorPoint:find("TOP") and "UP" or "DOWN"
+		buffs["growth-x"] = db.buffs.anchorPoint == "LEFT" and "LEFT" or  db.buffs.anchorPoint == "RIGHT" and "RIGHT" or (db.buffs.anchorPoint:find("LEFT") and "RIGHT" or "LEFT")
 		buffs.initialAnchor = E.InversePoints[db.buffs.anchorPoint]
 
 		if db.buffs.enable then
@@ -433,12 +433,12 @@ function UF:Update_TargetFrame(frame, db)
 		end
 		
 		local x, y = E:GetXYOffset(db.debuffs.anchorPoint)
-		local attachTo = self:GetAuraAnchorFrame(frame, db.debuffs.attachTo, db.debuffs.attachTo == 'BUFFS' and db.buffs.attachTo == 'DEBUFFS')
+		local attachTo = self:GetAuraAnchorFrame(frame, db.debuffs.attachTo, db.debuffs.attachTo == "BUFFS" and db.buffs.attachTo == "DEBUFFS")
 		
 		debuffs:Point(E.InversePoints[db.debuffs.anchorPoint], attachTo, db.debuffs.anchorPoint, x + db.debuffs.xOffset, y + db.debuffs.yOffset)
 		debuffs:Height(debuffs.size * rows)
-		debuffs["growth-y"] = db.debuffs.anchorPoint:find('TOP') and 'UP' or 'DOWN'
-		debuffs["growth-x"] = db.debuffs.anchorPoint == 'LEFT' and 'LEFT' or  db.debuffs.anchorPoint == 'RIGHT' and 'RIGHT' or (db.debuffs.anchorPoint:find('LEFT') and 'RIGHT' or 'LEFT')
+		debuffs["growth-y"] = db.debuffs.anchorPoint:find("TOP") and "UP" or "DOWN"
+		debuffs["growth-x"] = db.debuffs.anchorPoint == "LEFT" and "LEFT" or  db.debuffs.anchorPoint == "RIGHT" and "RIGHT" or (db.debuffs.anchorPoint:find("LEFT") and "RIGHT" or "LEFT")
 		debuffs.initialAnchor = E.InversePoints[db.debuffs.anchorPoint]
 
 		if db.debuffs.enable then			
@@ -455,7 +455,7 @@ function UF:Update_TargetFrame(frame, db)
 		castbar:Height(db.castbar.height)
 		castbar.Holder:Width(db.castbar.width)
 		castbar.Holder:Height(db.castbar.height + (E.PixelMode and 2 or (BORDER * 2)))
-		castbar.Holder:GetScript('OnSizeChanged')(castbar.Holder)
+		castbar.Holder:GetScript("OnSizeChanged")(castbar.Holder)
 		
 		if db.castbar.icon then -- Иконка
 			castbar.Icon = castbar.ButtonIcon
@@ -475,10 +475,10 @@ function UF:Update_TargetFrame(frame, db)
 			castbar.Spark:Hide()
 		end
 
-		if db.castbar.enable and not frame:IsElementEnabled('Castbar') then
-			frame:EnableElement('Castbar')
-		elseif not db.castbar.enable and frame:IsElementEnabled('Castbar') then
-			frame:DisableElement('Castbar')	
+		if db.castbar.enable and not frame:IsElementEnabled("Castbar") then
+			frame:EnableElement("Castbar")
+		elseif not db.castbar.enable and frame:IsElementEnabled("Castbar") then
+			frame:DisableElement("Castbar")	
 		end			
 	end
 	
@@ -518,7 +518,7 @@ function UF:Update_TargetFrame(frame, db)
 				CPoints:Height(COMBOBAR_HEIGHT - (E.PixelMode and 1 or 4));
 				CPoints:ClearAllPoints();
 				CPoints:Point("BOTTOM", E.UIParent, "BOTTOM", 0, 150);
-				E:CreateMover(CPoints, 'ComboBarMover', L['Combobar'], nil, nil, nil, 'ALL,SOLO');
+				E:CreateMover(CPoints, "ComboBarMover", L["Combobar"], nil, nil, nil, "ALL,SOLO");
 			else
 				CPoints:ClearAllPoints();
 				CPoints:SetPoint("BOTTOMLEFT", CPoints.mover, "BOTTOMLEFT");
@@ -567,10 +567,10 @@ function UF:Update_TargetFrame(frame, db)
 			CPoints.backdrop:Hide();
 		end
 		
-		if(USE_COMBOBAR and not frame:IsElementEnabled('CPoints')) then
-			frame:EnableElement('CPoints');
-		elseif(not USE_COMBOBAR and frame:IsElementEnabled('CPoints')) then
-			frame:DisableElement('CPoints');
+		if(USE_COMBOBAR and not frame:IsElementEnabled("CPoints")) then
+			frame:EnableElement("CPoints");
+		elseif(not USE_COMBOBAR and frame:IsElementEnabled("CPoints")) then
+			frame:DisableElement("CPoints");
 			CPoints:Hide();
 		end
 	end
@@ -578,12 +578,12 @@ function UF:Update_TargetFrame(frame, db)
 	do -- ???
 		local dbh = frame.DebuffHighlight
 		if E.db.unitframe.debuffHighlighting then
-			if not frame:IsElementEnabled('DebuffHighlight') then
-				frame:EnableElement('DebuffHighlight')
+			if not frame:IsElementEnabled("DebuffHighlight") then
+				frame:EnableElement("DebuffHighlight")
 			end
 		else
-			if frame:IsElementEnabled('DebuffHighlight') then
-				frame:DisableElement('DebuffHighlight')
+			if frame:IsElementEnabled("DebuffHighlight") then
+				frame:DisableElement("DebuffHighlight")
 			end		
 		end
 	end
@@ -591,7 +591,7 @@ function UF:Update_TargetFrame(frame, db)
 	do -- Рейдовая иконка
 		local RI = frame.RaidIcon
 		if db.raidicon.enable then
-			frame:EnableElement('RaidIcon')
+			frame:EnableElement("RaidIcon")
 			RI:Show()
 			RI:Size(db.raidicon.size)
 			
@@ -599,7 +599,7 @@ function UF:Update_TargetFrame(frame, db)
 			RI:ClearAllPoints()
 			RI:Point(db.raidicon.attachTo, frame, db.raidicon.attachTo, x + db.raidicon.xOffset, y + db.raidicon.yOffset)	
 		else
-			frame:DisableElement('RaidIcon')	
+			frame:DisableElement("RaidIcon")	
 			RI:Hide()
 		end
 	end		
@@ -608,8 +608,8 @@ function UF:Update_TargetFrame(frame, db)
 		local auraBars = frame.AuraBars
 		
 		if db.aurabar.enable then
-			if not frame:IsElementEnabled('AuraBars') then
-				frame:EnableElement('AuraBars')
+			if not frame:IsElementEnabled("AuraBars") then
+				frame:EnableElement("AuraBars")
 			end
 			auraBars:Show()
 			auraBars.friendlyAuraType = db.aurabar.friendlyAuraType
@@ -619,24 +619,24 @@ function UF:Update_TargetFrame(frame, db)
 			local debuffColor = UF.db.colors.auraBarDebuff
 			local attachTo = frame
 			
-			if db.aurabar.attachTo == 'BUFFS' then
+			if db.aurabar.attachTo == "BUFFS" then
 				attachTo = frame.Buffs
-			elseif db.aurabar.attachTo == 'DEBUFFS' then
+			elseif db.aurabar.attachTo == "DEBUFFS" then
 				attachTo = frame.Debuffs
-			elseif db.aurabar.attachTo == 'PLAYER_AURABARS' and ElvUF_Player then
+			elseif db.aurabar.attachTo == "PLAYER_AURABARS" and ElvUF_Player then
 				attachTo = ElvUF_Player.AuraBars
 			end
 			
-			local anchorPoint, anchorTo = 'BOTTOM', 'TOP'
-			if db.aurabar.anchorPoint == 'BELOW' then
-				anchorPoint, anchorTo = 'TOP', 'BOTTOM'
+			local anchorPoint, anchorTo = "BOTTOM", "TOP"
+			if db.aurabar.anchorPoint == "BELOW" then
+				anchorPoint, anchorTo = "TOP", "BOTTOM"
 			end
 			
 			auraBars.auraBarHeight = db.aurabar.height
 			
 			local yOffset = 0;
 			if E.PixelMode then
-				if db.aurabar.anchorPoint == 'BELOW' then
+				if db.aurabar.anchorPoint == "BELOW" then
 					yOffset = 1;
 				else
 					yOffset = -1;
@@ -644,8 +644,8 @@ function UF:Update_TargetFrame(frame, db)
 			end			
 			
 			auraBars:ClearAllPoints()
-			auraBars:SetPoint(anchorPoint..'LEFT', attachTo, anchorTo..'LEFT', attachTo == frame and -POWERBAR_OFFSET * (anchorTo == 'BOTTOM' and 0 or -1) or 0, db.aurabar.attachTo == 'PLAYER_AURABARS' and 5 or yOffset)
-			auraBars:SetPoint(anchorPoint..'RIGHT', attachTo, anchorTo..'RIGHT', (attachTo == frame and anchorTo == 'BOTTOM') and -POWERBAR_OFFSET or 0, db.aurabar.attachTo == 'PLAYER_AURABARS' and 5 or yOffset)			
+			auraBars:SetPoint(anchorPoint.."LEFT", attachTo, anchorTo.."LEFT", attachTo == frame and -POWERBAR_OFFSET * (anchorTo == "BOTTOM" and 0 or -1) or 0, db.aurabar.attachTo == "PLAYER_AURABARS" and 5 or yOffset)
+			auraBars:SetPoint(anchorPoint.."RIGHT", attachTo, anchorTo.."RIGHT", (attachTo == frame and anchorTo == "BOTTOM") and -POWERBAR_OFFSET or 0, db.aurabar.attachTo == "PLAYER_AURABARS" and 5 or yOffset)			
 
 			auraBars.buffColor = {buffColor.r, buffColor.g, buffColor.b}
 			if UF.db.colors.auraBarByType then
@@ -655,17 +655,17 @@ function UF:Update_TargetFrame(frame, db)
 				auraBars.debuffColor = {debuffColor.r, debuffColor.g, debuffColor.b}
 				auraBars.defaultDebuffColor = nil;
 			end
-			auraBars.down = db.aurabar.anchorPoint == 'BELOW'
+			auraBars.down = db.aurabar.anchorPoint == "BELOW"
 			
-			if db.aurabar.sort == 'TIME_REMAINING' then
+			if db.aurabar.sort == "TIME_REMAINING" then
 				auraBars.sort = true --default function
-			elseif db.aurabar.sort == 'TIME_REMAINING_REVERSE' then
+			elseif db.aurabar.sort == "TIME_REMAINING_REVERSE" then
 				auraBars.sort = UF.SortAuraBarReverse
-			elseif db.aurabar.sort == 'TIME_DURATION' then
+			elseif db.aurabar.sort == "TIME_DURATION" then
 				auraBars.sort = UF.SortAuraBarDuration
-			elseif db.aurabar.sort == 'TIME_DURATION_REVERSE' then
+			elseif db.aurabar.sort == "TIME_DURATION_REVERSE" then
 				auraBars.sort = UF.SortAuraBarDurationReverse
-			elseif db.aurabar.sort == 'NAME' then
+			elseif db.aurabar.sort == "NAME" then
 				auraBars.sort = UF.SortAuraBarName
 			else
 				auraBars.sort = nil
@@ -675,8 +675,8 @@ function UF:Update_TargetFrame(frame, db)
 			auraBars.forceShow = frame.forceShowAuras
 			auraBars:SetAnchors()
 		else
-			if frame:IsElementEnabled('AuraBars') then
-				frame:DisableElement('AuraBars')
+			if frame:IsElementEnabled("AuraBars") then
+				frame:DisableElement("AuraBars")
 				auraBars:Hide()
 			end		
 		end
@@ -685,14 +685,14 @@ function UF:Update_TargetFrame(frame, db)
 	do -- Проверка дистанции
 		local range = frame.Range
 		if db.rangeCheck then
-			if not frame:IsElementEnabled('Range') then
-				frame:EnableElement('Range')
+			if not frame:IsElementEnabled("Range") then
+				frame:EnableElement("Range")
 			end
 
 			range.outsideAlpha = E.db.unitframe.OORAlpha
 		else
-			if frame:IsElementEnabled('Range') then
-				frame:DisableElement('Range')
+			if frame:IsElementEnabled("Range") then
+				frame:DisableElement("Range")
 			end				
 		end
 	end		
@@ -701,7 +701,7 @@ function UF:Update_TargetFrame(frame, db)
 		local customFont = UF.LSM:Fetch("font", UF.db.font)
 		for objectName, _ in pairs(db.customTexts) do
 			if not frame[objectName] then
-				frame[objectName] = frame.RaisedElementParent:CreateFontString(nil, 'OVERLAY')
+				frame[objectName] = frame.RaisedElementParent:CreateFontString(nil, "OVERLAY")
 			end
 			
 			local objectDB = db.customTexts[objectName]
@@ -711,10 +711,10 @@ function UF:Update_TargetFrame(frame, db)
 			end
 			
 			frame[objectName]:FontTemplate(customFont, objectDB.size or UF.db.fontSize, objectDB.fontOutline or UF.db.fontOutline)
-			frame:Tag(frame[objectName], objectDB.text_format or '')
-			frame[objectName]:SetJustifyH(objectDB.justifyH or 'CENTER')
+			frame:Tag(frame[objectName], objectDB.text_format or "")
+			frame[objectName]:SetJustifyH(objectDB.justifyH or "CENTER")
 			frame[objectName]:ClearAllPoints()
-			frame[objectName]:SetPoint(objectDB.justifyH or 'CENTER', frame, objectDB.justifyH or 'CENTER', objectDB.xOffset, objectDB.yOffset);
+			frame[objectName]:SetPoint(objectDB.justifyH or "CENTER", frame, objectDB.justifyH or "CENTER", objectDB.xOffset, objectDB.yOffset);
 		end
 	end
 	
@@ -726,8 +726,8 @@ function UF:Update_TargetFrame(frame, db)
 	
 	UF:ToggleTransparentStatusBar(UF.db.colors.transparentPower, frame.Power, frame.Power.bg);
 	
-	E:SetMoverSnapOffset(frame:GetName()..'Mover', -(12 + db.castbar.height))
+	E:SetMoverSnapOffset(frame:GetName().."Mover", -(12 + db.castbar.height))
 	frame:UpdateAllElements()
 end
 
-tinsert(UF['unitstoload'], 'target')
+tinsert(UF["unitstoload"], "target")

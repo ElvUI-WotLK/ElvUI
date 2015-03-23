@@ -132,14 +132,14 @@ local function configureAuras(header, auraTable)
 	
 	local size = db.size;
 	local point = DIRECTION_TO_POINT[db.growthDirection];
-	local xOffset;
-	local yOffset;
-	local wrapXOffset;
-	local wrapYOffset;
+	local xOffset = 0;
+	local yOffset = 0;
+	local wrapXOffset = 0;
+	local wrapYOffset = 0;
 	local wrapAfter = db.wrapAfter;
 	local maxWraps = db.maxWraps;
-	local minWidth;
-	local minHeight;
+	local minWidth = 0;
+	local minHeight = 0;
 	
 	if(IS_HORIZONTAL_GROWTH[db.growthDirection]) then
 		minWidth = ((wrapAfter == 1 and 0 or db.horizontalSpacing) + size) * wrapAfter;

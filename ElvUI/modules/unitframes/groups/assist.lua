@@ -1,20 +1,20 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local UF = E:GetModule('UnitFrames');
+local UF = E:GetModule("UnitFrames");
 
 local _, ns = ...
 local ElvUF = ns.oUF
 assert(ElvUF, "ElvUI was unable to locate oUF.")
 
 function UF:Construct_AssistFrames(unitGroup)
-	self:SetScript('OnEnter', UnitFrame_OnEnter)
-	self:SetScript('OnLeave', UnitFrame_OnLeave)	
+	self:SetScript("OnEnter", UnitFrame_OnEnter)
+	self:SetScript("OnLeave", UnitFrame_OnLeave)	
 	
 	self.Health = UF:Construct_HealthBar(self, true)
 	self.Name = UF:Construct_NameText(self)
 	self.Threat = UF:Construct_Threat(self)
 	self.RaidIcon = UF:Construct_RaidIcon(self)
 	self.Range = UF:Construct_Range(self)
-	UF:Update_AssistFrames(self, E.db['unitframe']['units']['assist'])
+	UF:Update_AssistFrames(self, E.db["unitframe"]["units"]["assist"])
 	UF:Update_StatusBars()
 	UF:Update_FontStrings()	
 	
@@ -30,13 +30,13 @@ function UF:Update_AssistHeader(header, db)
 	UF:ClearChildPoints(header:GetChildren())
 	
 	header:SetAttribute("startingIndex", -1)
-	RegisterStateDriver(header, 'visibility', 'show')	
+	RegisterStateDriver(header, "visibility", "show")	
 	header.dirtyWidth, header.dirtyHeight = header:GetSize()	
-	RegisterStateDriver(header, 'visibility', '[@raid1,exists] show;hide')
+	RegisterStateDriver(header, "visibility", "[@raid1,exists] show;hide")
 	header:SetAttribute("startingIndex", 1)
 	
-	header:SetAttribute('point', 'BOTTOM')
-	header:SetAttribute('columnAnchorPoint', 'LEFT')
+	header:SetAttribute("point", "BOTTOM")
+	header:SetAttribute("columnAnchorPoint", "LEFT")
 	
 	UF:ClearChildPoints(header:GetChildren())
 	header:SetAttribute("yOffset", 7)
@@ -45,10 +45,10 @@ function UF:Update_AssistHeader(header, db)
 		header:ClearAllPoints()
 		header:Point("TOPLEFT", E.UIParent, "TOPLEFT", 4, -248)
 
-		E:CreateMover(header, header:GetName()..'Mover', L['MA Frames'], nil, nil, nil, 'ALL,RAID10,RAID25,RAID40')
+		E:CreateMover(header, header:GetName().."Mover", L["MA Frames"], nil, nil, nil, "ALL,RAID10,RAID25,RAID40")
 		header.mover.positionOverride = "TOPLEFT"
-		header:SetAttribute('minHeight', header.dirtyHeight)
-		header:SetAttribute('minWidth', header.dirtyWidth)
+		header:SetAttribute("minHeight", header.dirtyHeight)
+		header:SetAttribute("minWidth", header.dirtyWidth)
 		header.positioned = true;
 	end
 end
@@ -59,7 +59,7 @@ function UF:Update_AssistFrames(frame, db)
 	local SHADOW_SPACING = E.PixelMode and 3 or 4
 	frame.colors = ElvUF.colors
 	frame.Range.outsideAlpha = E.db.unitframe.OORAlpha
-	frame:RegisterForClicks(self.db.targetOnMouseDown and 'AnyDown' or 'AnyUp')
+	frame:RegisterForClicks(self.db.targetOnMouseDown and "AnyDown" or "AnyUp")
 	if frame.isChild and frame.originalParent then
 		local childDB = db.targetsGroup
 		frame.db = db.targetsGroup
@@ -80,8 +80,8 @@ function UF:Update_AssistFrames(frame, db)
 		end	
 	elseif not InCombatLockdown() then
 		frame.db = db;
-		frame:SetAttribute('initial-height', db.height)
-		frame:SetAttribute('initial-width', db.width)
+		frame:SetAttribute("initial-height", db.height)
+		frame:SetAttribute("initial-width", db.width)
 	end
 	
 	--Health
@@ -94,8 +94,8 @@ function UF:Update_AssistFrames(frame, db)
 		health.colorHealth = nil
 		health.colorClass = nil
 		health.colorReaction = nil
-		if self.db['colors'].healthclass ~= true then
-			if self.db['colors'].colorhealthbyvalue == true then
+		if self.db["colors"].healthclass ~= true then
+			if self.db["colors"].colorhealthbyvalue == true then
 				health.colorSmooth = true
 			else
 				health.colorHealth = true
@@ -115,13 +115,13 @@ function UF:Update_AssistFrames(frame, db)
 	do
 		local threat = frame.Threat
 
-		if db.threatStyle ~= 'NONE' and db.threatStyle ~= nil then
-			if not frame:IsElementEnabled('Threat') then
-				frame:EnableElement('Threat')
+		if db.threatStyle ~= "NONE" and db.threatStyle ~= nil then
+			if not frame:IsElementEnabled("Threat") then
+				frame:EnableElement("Threat")
 			end
 
 			if db.threatStyle == "GLOW" then
-				threat:SetFrameStrata('BACKGROUND')
+				threat:SetFrameStrata("BACKGROUND")
 				threat.glow:ClearAllPoints()
 				threat.glow:SetBackdropBorderColor(0, 0, 0, 0)
 				threat.glow:Point("TOPLEFT", frame.Health.backdrop, "TOPLEFT", -SHADOW_SPACING, SHADOW_SPACING)
@@ -129,33 +129,33 @@ function UF:Update_AssistFrames(frame, db)
 				threat.glow:Point("BOTTOMLEFT", frame.Health.backdrop, "BOTTOMLEFT", -SHADOW_SPACING, -SHADOW_SPACING)
 				threat.glow:Point("BOTTOMRIGHT", frame.Health.backdrop, "BOTTOMRIGHT", SHADOW_SPACING, -SHADOW_SPACING)	
 			elseif db.threatStyle == "ICONTOPLEFT" or db.threatStyle == "ICONTOPRIGHT" or db.threatStyle == "ICONBOTTOMLEFT" or db.threatStyle == "ICONBOTTOMRIGHT" or db.threatStyle == "ICONTOP" or db.threatStyle == "ICONBOTTOM" or db.threatStyle == "ICONLEFT" or db.threatStyle == "ICONRIGHT" then
-				threat:SetFrameStrata('HIGH')
+				threat:SetFrameStrata("HIGH")
 				local point = db.threatStyle
 				point = point:gsub("ICON", "")
 				
 				threat.texIcon:ClearAllPoints()
 				threat.texIcon:SetPoint(point, frame.Health, point)
 			end
-		elseif frame:IsElementEnabled('Threat') then
-			frame:DisableElement('Threat')
+		elseif frame:IsElementEnabled("Threat") then
+			frame:DisableElement("Threat")
 		end
 	end		
 	
 	--Name
 	do
 		local name = frame.Name
-		name:Point('CENTER', frame.Health, 'CENTER')
+		name:Point("CENTER", frame.Health, "CENTER")
 		if UF.db.colors.healthclass then
-			frame:Tag(name, '[name:medium]')
+			frame:Tag(name, "[name:medium]")
 		else
-			frame:Tag(name, '[namecolor][name:medium]')
+			frame:Tag(name, "[namecolor][name:medium]")
 		end
 	end	
 	
 	do -- Рейдовая иконка
 		local RI = frame.RaidIcon;
 		if db.raidicon.enable then
-			frame:EnableElement('RaidIcon');
+			frame:EnableElement("RaidIcon");
 			RI:Show();
 			RI:Size(db.raidicon.size);
 			
@@ -163,7 +163,7 @@ function UF:Update_AssistFrames(frame, db)
 			RI:ClearAllPoints();
 			RI:Point(db.raidicon.attachTo, frame, db.raidicon.attachTo, x + db.raidicon.xOffset, y + db.raidicon.yOffset);
 		else
-			frame:DisableElement('RaidIcon');
+			frame:DisableElement("RaidIcon");
 			RI:Hide();
 		end
 	end
@@ -172,14 +172,14 @@ function UF:Update_AssistFrames(frame, db)
 	do
 		local range = frame.Range
 		if db.rangeCheck then
-			if not frame:IsElementEnabled('Range') then
-				frame:EnableElement('Range')
+			if not frame:IsElementEnabled("Range") then
+				frame:EnableElement("Range")
 			end
 
 			range.outsideAlpha = E.db.unitframe.OORAlpha
 		else
-			if frame:IsElementEnabled('Range') then
-				frame:DisableElement('Range')
+			if frame:IsElementEnabled("Range") then
+				frame:DisableElement("Range")
 			end				
 		end
 	end		
@@ -189,4 +189,4 @@ function UF:Update_AssistFrames(frame, db)
 	frame:UpdateAllElements()
 end
 
-UF['headerstoload']['assist'] = {'MAINASSIST', 'ELVUI_UNITTARGET'}
+UF["headerstoload"]["assist"] = {"MAINASSIST", "ELVUI_UNITTARGET"}

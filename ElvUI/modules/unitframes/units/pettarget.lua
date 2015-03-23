@@ -1,21 +1,21 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local UF = E:GetModule('UnitFrames');
+local UF = E:GetModule("UnitFrames");
 
 local _, ns = ...
 local ElvUF = ns.oUF
 assert(ElvUF, "ElvUI was unable to locate oUF.")
 
 function UF:Construct_PetTargetFrame(frame)	
-	frame.Health = self:Construct_HealthBar(frame, true, true, 'RIGHT') -- Здоровье
-	frame.Power = self:Construct_PowerBar(frame, true, true, 'LEFT', false) -- Мана
+	frame.Health = self:Construct_HealthBar(frame, true, true, "RIGHT") -- Здоровье
+	frame.Power = self:Construct_PowerBar(frame, true, true, "LEFT", false) -- Мана
 	frame.Name = self:Construct_NameText(frame) -- Имя
 	frame.Buffs = self:Construct_Buffs(frame) -- Баффы
 	frame.Debuffs = self:Construct_Debuffs(frame) -- Дебаффы
 	frame.Threat = self:Construct_Threat(frame) -- Угроза
 	frame.Range = UF:Construct_Range(frame) -- Проверка дистанции
 	
-	frame:Point('BOTTOM', ElvUF_Pet, 'TOP', 0, 7) -- Позиция
-	E:CreateMover(frame, frame:GetName()..'Mover', L['PetTarget Frame'], nil, -7, nil, 'ALL,SOLO')
+	frame:Point("BOTTOM", ElvUF_Pet, "TOP", 0, 7) -- Позиция
+	E:CreateMover(frame, frame:GetName().."Mover", L["PetTarget Frame"], nil, -7, nil, "ALL,SOLO")
 end
 
 function UF:Update_PetTargetFrame(frame, db)
@@ -26,18 +26,18 @@ function UF:Update_PetTargetFrame(frame, db)
 	local UNIT_HEIGHT = db.height
 	local SHADOW_SPACING = E.PixelMode and 3 or 4
 	local USE_POWERBAR = db.power.enable
-	local USE_MINI_POWERBAR = db.power.width == 'spaced' and USE_POWERBAR
-	local USE_INSET_POWERBAR = db.power.width == 'inset' and USE_POWERBAR
+	local USE_MINI_POWERBAR = db.power.width == "spaced" and USE_POWERBAR
+	local USE_INSET_POWERBAR = db.power.width == "inset" and USE_POWERBAR
 	local USE_POWERBAR_OFFSET = db.power.offset ~= 0 and USE_POWERBAR
 	local POWERBAR_OFFSET = db.power.offset
 	local POWERBAR_HEIGHT = db.power.height
 	local POWERBAR_WIDTH = db.width - (BORDER*2)
 	
 	local unit = self.unit
-	frame:RegisterForClicks(self.db.targetOnMouseDown and 'AnyDown' or 'AnyUp')
+	frame:RegisterForClicks(self.db.targetOnMouseDown and "AnyDown" or "AnyUp")
 	frame.colors = ElvUF.colors
 	frame:Size(UNIT_WIDTH, UNIT_HEIGHT)
-	_G[frame:GetName()..'Mover']:Size(frame:GetSize())
+	_G[frame:GetName().."Mover"]:Size(frame:GetSize())
 	
 	--Adjust some variables
 	do
@@ -63,8 +63,8 @@ function UF:Update_PetTargetFrame(frame, db)
 		health.colorHealth = nil
 		health.colorClass = nil
 		health.colorReaction = nil
-		if self.db['colors'].healthclass ~= true then
-			if self.db['colors'].colorhealthbyvalue == true then
+		if self.db["colors"].healthclass ~= true then
+			if self.db["colors"].colorhealthbyvalue == true then
 				health.colorSmooth = true
 			else
 				health.colorHealth = true
@@ -74,7 +74,7 @@ function UF:Update_PetTargetFrame(frame, db)
 			health.colorReaction = true
 		end
 		
-		if(self.db['colors'].forcehealthreaction == true) then
+		if(self.db["colors"].forcehealthreaction == true) then
 			health.colorClass = false;
 			health.colorReaction = true;
 		end
@@ -98,8 +98,8 @@ function UF:Update_PetTargetFrame(frame, db)
 	do -- Мана
 		local power = frame.Power
 		if USE_POWERBAR then
-			if not frame:IsElementEnabled('Power') then
-				frame:EnableElement('Power')
+			if not frame:IsElementEnabled("Power") then
+				frame:EnableElement("Power")
 				power:Show()
 			end		
 			
@@ -113,7 +113,7 @@ function UF:Update_PetTargetFrame(frame, db)
 			power.colorClass = nil -- Цвет
 			power.colorReaction = nil	
 			power.colorPower = nil
-			if self.db['colors'].powerclass then
+			if self.db["colors"].powerclass then
 				power.colorClass = true
 				power.colorReaction = true
 			else
@@ -142,8 +142,8 @@ function UF:Update_PetTargetFrame(frame, db)
 				power:Point("TOPLEFT", frame.Health.backdrop, "BOTTOMLEFT", BORDER, -(E.PixelMode and 0 or (BORDER + SPACING)))
 				power:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -BORDER, BORDER)
 			end
-		elseif frame:IsElementEnabled('Power') then
-			frame:DisableElement('Power')
+		elseif frame:IsElementEnabled("Power") then
+			frame:DisableElement("Power")
 			power:Hide()	
 		end
 	end
@@ -151,13 +151,13 @@ function UF:Update_PetTargetFrame(frame, db)
 	do -- Угроза
 		local threat = frame.Threat
 
-		if db.threatStyle ~= 'NONE' and db.threatStyle ~= nil then
-			if not frame:IsElementEnabled('Threat') then
-				frame:EnableElement('Threat')
+		if db.threatStyle ~= "NONE" and db.threatStyle ~= nil then
+			if not frame:IsElementEnabled("Threat") then
+				frame:EnableElement("Threat")
 			end
 
 			if db.threatStyle == "GLOW" then
-				threat:SetFrameStrata('BACKGROUND')
+				threat:SetFrameStrata("BACKGROUND")
 				threat.glow:ClearAllPoints()
 				threat.glow:SetBackdropBorderColor(0, 0, 0, 0)
 				threat.glow:Point("TOPLEFT", frame.Health.backdrop, "TOPLEFT", -SHADOW_SPACING, SHADOW_SPACING)
@@ -170,26 +170,26 @@ function UF:Update_PetTargetFrame(frame, db)
 					threat.glow:Point("BOTTOMRIGHT", frame.Health.backdrop, "BOTTOMRIGHT", SHADOW_SPACING, -SHADOW_SPACING)	
 				end
 			elseif db.threatStyle == "ICONTOPLEFT" or db.threatStyle == "ICONTOPRIGHT" or db.threatStyle == "ICONBOTTOMLEFT" or db.threatStyle == "ICONBOTTOMRIGHT" or db.threatStyle == "ICONTOP" or db.threatStyle == "ICONBOTTOM" or db.threatStyle == "ICONLEFT" or db.threatStyle == "ICONRIGHT" then
-				threat:SetFrameStrata('HIGH')
+				threat:SetFrameStrata("HIGH")
 				local point = db.threatStyle
 				point = point:gsub("ICON", "")
 				
 				threat.texIcon:ClearAllPoints()
 				threat.texIcon:SetPoint(point, frame.Health, point)
 			end
-		elseif frame:IsElementEnabled('Threat') then
-			frame:DisableElement('Threat')
+		elseif frame:IsElementEnabled("Threat") then
+			frame:DisableElement("Threat")
 		end
 	end	
 	
 	do
 		if db.debuffs.enable or db.buffs.enable then
-			if not frame:IsElementEnabled('Aura') then
-				frame:EnableElement('Aura')
+			if not frame:IsElementEnabled("Aura") then
+				frame:EnableElement("Aura")
 			end	
 		else
-			if frame:IsElementEnabled('Aura') then
-				frame:DisableElement('Aura')
+			if frame:IsElementEnabled("Aura") then
+				frame:DisableElement("Aura")
 			end			
 		end
 		
@@ -218,10 +218,10 @@ function UF:Update_PetTargetFrame(frame, db)
 		local x, y = E:GetXYOffset(db.buffs.anchorPoint)
 		local attachTo = self:GetAuraAnchorFrame(frame, db.buffs.attachTo)
 		
-		buffs:Point(E.InversePoints[db.buffs.anchorPoint], attachTo, db.buffs.anchorPoint, x + db.buffs.xOffset, y + db.buffs.yOffset + (E.PixelMode and (db.buffs.anchorPoint:find('TOP') and -1 or 1) or 0))
+		buffs:Point(E.InversePoints[db.buffs.anchorPoint], attachTo, db.buffs.anchorPoint, x + db.buffs.xOffset, y + db.buffs.yOffset + (E.PixelMode and (db.buffs.anchorPoint:find("TOP") and -1 or 1) or 0))
 		buffs:Height(buffs.size * rows)
-		buffs["growth-y"] = db.buffs.anchorPoint:find('TOP') and 'UP' or 'DOWN'
-		buffs["growth-x"] = db.buffs.anchorPoint == 'LEFT' and 'LEFT' or  db.buffs.anchorPoint == 'RIGHT' and 'RIGHT' or (db.buffs.anchorPoint:find('LEFT') and 'RIGHT' or 'LEFT')
+		buffs["growth-y"] = db.buffs.anchorPoint:find("TOP") and "UP" or "DOWN"
+		buffs["growth-x"] = db.buffs.anchorPoint == "LEFT" and "LEFT" or  db.buffs.anchorPoint == "RIGHT" and "RIGHT" or (db.buffs.anchorPoint:find("LEFT") and "RIGHT" or "LEFT")
 		buffs.initialAnchor = E.InversePoints[db.buffs.anchorPoint]
 
 		if db.buffs.enable then			
@@ -251,12 +251,12 @@ function UF:Update_PetTargetFrame(frame, db)
 		end
 		
 		local x, y = E:GetXYOffset(db.debuffs.anchorPoint)
-		local attachTo = self:GetAuraAnchorFrame(frame, db.debuffs.attachTo, db.debuffs.attachTo == 'BUFFS' and db.buffs.attachTo == 'DEBUFFS')
+		local attachTo = self:GetAuraAnchorFrame(frame, db.debuffs.attachTo, db.debuffs.attachTo == "BUFFS" and db.buffs.attachTo == "DEBUFFS")
 		
 		debuffs:Point(E.InversePoints[db.debuffs.anchorPoint], attachTo, db.debuffs.anchorPoint, x + db.debuffs.xOffset, y + db.debuffs.yOffset)
 		debuffs:Height(debuffs.size * rows)
-		debuffs["growth-y"] = db.debuffs.anchorPoint:find('TOP') and 'UP' or 'DOWN'
-		debuffs["growth-x"] = db.debuffs.anchorPoint == 'LEFT' and 'LEFT' or  db.debuffs.anchorPoint == 'RIGHT' and 'RIGHT' or (db.debuffs.anchorPoint:find('LEFT') and 'RIGHT' or 'LEFT')
+		debuffs["growth-y"] = db.debuffs.anchorPoint:find("TOP") and "UP" or "DOWN"
+		debuffs["growth-x"] = db.debuffs.anchorPoint == "LEFT" and "LEFT" or  db.debuffs.anchorPoint == "RIGHT" and "RIGHT" or (db.debuffs.anchorPoint:find("LEFT") and "RIGHT" or "LEFT")
 		debuffs.initialAnchor = E.InversePoints[db.debuffs.anchorPoint]
 
 		if db.debuffs.enable then			
@@ -270,14 +270,14 @@ function UF:Update_PetTargetFrame(frame, db)
 	do -- Проверка дистанции
 		local range = frame.Range
 		if db.rangeCheck then
-			if not frame:IsElementEnabled('Range') then
-				frame:EnableElement('Range')
+			if not frame:IsElementEnabled("Range") then
+				frame:EnableElement("Range")
 			end
 
 			range.outsideAlpha = E.db.unitframe.OORAlpha
 		else
-			if frame:IsElementEnabled('Range') then
-				frame:DisableElement('Range')
+			if frame:IsElementEnabled("Range") then
+				frame:DisableElement("Range")
 			end				
 		end
 	end		
@@ -286,7 +286,7 @@ function UF:Update_PetTargetFrame(frame, db)
 		local customFont = UF.LSM:Fetch("font", UF.db.font)
 		for objectName, _ in pairs(db.customTexts) do
 			if not frame[objectName] then
-				frame[objectName] = frame.RaisedElementParent:CreateFontString(nil, 'OVERLAY')
+				frame[objectName] = frame.RaisedElementParent:CreateFontString(nil, "OVERLAY")
 			end
 			
 			local objectDB = db.customTexts[objectName]
@@ -296,10 +296,10 @@ function UF:Update_PetTargetFrame(frame, db)
 			end
 			
 			frame[objectName]:FontTemplate(customFont, objectDB.size or UF.db.fontSize, objectDB.fontOutline or UF.db.fontOutline)
-			frame:Tag(frame[objectName], objectDB.text_format or '')
-			frame[objectName]:SetJustifyH(objectDB.justifyH or 'CENTER')
+			frame:Tag(frame[objectName], objectDB.text_format or "")
+			frame[objectName]:SetJustifyH(objectDB.justifyH or "CENTER")
 			frame[objectName]:ClearAllPoints()
-			frame[objectName]:SetPoint(objectDB.justifyH or 'CENTER', frame, objectDB.justifyH or 'CENTER', objectDB.xOffset, objectDB.yOffset);
+			frame[objectName]:SetPoint(objectDB.justifyH or "CENTER", frame, objectDB.justifyH or "CENTER", objectDB.xOffset, objectDB.yOffset);
 		end
 	end
 	
@@ -309,4 +309,4 @@ function UF:Update_PetTargetFrame(frame, db)
 	frame:UpdateAllElements()
 end
 
-tinsert(UF['unitstoload'], 'pettarget')
+tinsert(UF["unitstoload"], "pettarget")

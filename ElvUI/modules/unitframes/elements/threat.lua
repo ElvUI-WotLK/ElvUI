@@ -1,18 +1,18 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local UF = E:GetModule('UnitFrames');
+local UF = E:GetModule("UnitFrames");
 
 function UF:Construct_Threat(frame, glow)
-	local threat = CreateFrame('Frame', nil, frame);
+	local threat = CreateFrame("Frame", nil, frame);
 	
-	frame:CreateShadow('Default');
+	frame:CreateShadow("Default");
 	threat.glow = frame.shadow;
 	threat.glow:SetParent(frame);
 	threat.glow:Hide();
 	frame.shadow = nil;
 	
-	threat.texIcon = threat:CreateTexture(nil, 'OVERLAY');
+	threat.texIcon = threat:CreateTexture(nil, "OVERLAY");
 	threat.texIcon:Size(8);
-	threat.texIcon:SetTexture(E['media'].blankTex);
+	threat.texIcon:SetTexture(E["media"].blankTex);
 	threat.texIcon:Hide();
 	
 	threat.PostUpdate = self.UpdateThreat;
@@ -32,10 +32,10 @@ function UF:UpdateThreat(unit, status, r, g, b)
 	end
 	
 	if(status and status > 1) then
-		if(db.threatStyle == 'GLOW') then
+		if(db.threatStyle == "GLOW") then
 			self.glow:Show();
 			self.glow:SetBackdropBorderColor(r, g, b);
-		elseif(db.threatStyle == 'BORDERS') then
+		elseif(db.threatStyle == "BORDERS") then
 			parent.Health.backdrop:SetBackdropBorderColor(r, g, b);
 			
 			if(parent.Power and parent.Power.backdrop) then
@@ -45,18 +45,18 @@ function UF:UpdateThreat(unit, status, r, g, b)
 			if(parent.ClassBar and parent.ClassBar.backdrop) then
 				parent.ClassBar.backdrop:SetBackdropBorderColor(r, g, b);
 			end
-		elseif(db.threatStyle == 'HEALTHBORDER') then
+		elseif(db.threatStyle == "HEALTHBORDER") then
 			parent.Health.backdrop:SetBackdropBorderColor(r, g, b);
-		elseif(db.threatStyle ~= 'NONE' and self.texIcon) then
+		elseif(db.threatStyle ~= "NONE" and self.texIcon) then
 			self.texIcon:Show();
 			self.texIcon:SetVertexColor(r, g, b);
 		end
 	else
 		r, g, b = unpack(E.media.bordercolor);
 		
-		if(db.threatStyle == 'GLOW') then
+		if(db.threatStyle == "GLOW") then
 			self.glow:Hide();
-		elseif(db.threatStyle == 'BORDERS') then
+		elseif(db.threatStyle == "BORDERS") then
 			parent.Health.backdrop:SetBackdropBorderColor(r, g, b);
 			
 			if(parent.Power and parent.Power.backdrop) then
@@ -66,9 +66,9 @@ function UF:UpdateThreat(unit, status, r, g, b)
 			if(parent.ClassBar and parent.ClassBar.backdrop) then
 				parent.ClassBar.backdrop:SetBackdropBorderColor(r, g, b);
 			end	
-		elseif(db.threatStyle == 'HEALTHBORDER') then
+		elseif(db.threatStyle == "HEALTHBORDER") then
 			parent.Health.backdrop:SetBackdropBorderColor(r, g, b);
-		elseif(db.threatStyle ~= 'NONE' and self.texIcon) then
+		elseif(db.threatStyle ~= "NONE" and self.texIcon) then
 			self.texIcon:Hide();
 		end
 	end

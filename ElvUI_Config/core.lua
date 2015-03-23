@@ -87,8 +87,9 @@ E.Options.args.general = {
 					values = {
 						['NONE'] = NONE,
 						['SAY'] = SAY,
-						['PARTY'] = PARTY,
-						['RAID'] = RAID,
+						['PARTY'] = L["Party Only"],
+						['RAID'] = L["Party / Raid"],
+						['RAID_ONLY'] = L["Raid Only"],
 					},
 				},
 				autoRepair = {

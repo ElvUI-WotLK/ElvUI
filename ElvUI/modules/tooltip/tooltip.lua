@@ -261,11 +261,11 @@ function TT:GetItemLvL(unit)
 			end
 		end
 	end
-
+	
 	if(total < 1) then
 		return
 	end
-
+	
 	return floor(total / item)
 end
 
@@ -356,45 +356,6 @@ function TT:ShowInspectInfo(tt, unit, level, r, g, b, numTries)
 	end
 end
 
-function TT:GatherTalents(isInspect, r, g, b)
-	local group = GetActiveTalentGroup(isInspect);
-	local maxTree, _ = 1;
-	
-	for i = 1, 3 do
-		_, _, current[i] = GetTalentTabInfo(i, isInspect, nil, group);
-		if (current[i] > current[maxTree]) then
-			maxTree = i;
-		end
-	end
-	current.tree = GetTalentTabInfo(maxTree, isInspect, nil, group);
-	
-	local talentFormat = self.db.talentFormat or 1;
-	if (current[maxTree] == 0) then
-		current.format = L["No Talents"];
-	elseif (talentFormat == 1) then
-		current.format = current.tree.." ("..current[1].."/"..current[2].."/"..current[3]..")";
-	elseif (talentFormat == 2) then
-		current.format = current.tree;
-	elseif (talentFormat == 3) then
-		current.format = current[1].."/"..current[2].."/"..current[3];
-	end
-	
-	if(not isInspect) then
-		GameTooltip:AddDoubleLine(TALENTS_PREFIX, current.format, nil, nil, nil, r, g, b);
-		GameTooltip:AddDoubleLine(L["Item Level:"], self:GetItemLvL("player"), nil, nil, nil, 1, 1, 1);
-	elseif(GameTooltip:GetUnit()) then
-		for i = 2, GameTooltip:NumLines() do
-			if((_G["GameTooltipTextRight"..i]:GetText() or ""):match("^"..L["Loading..."])) then
-				_G["GameTooltipTextRight"..i]:SetFormattedText("%s", current.format);
-				if(not GameTooltip.fadeOut) then
-					GameTooltip:Show();
-				end
-				break;
-			end
-		end
-	end
-end
-
 function TT:GameTooltip_OnTooltipSetUnit(tt)
 	local unit = select(2, tt:GetUnit())
 	if((tt:GetOwner() ~= UIParent) and self.db.visibility.unitFrames ~= 'NONE') then 
@@ -426,7 +387,11 @@ function TT:GameTooltip_OnTooltipSetUnit(tt)
 		local name, realm = UnitName(unit)
 		local guildName, guildRankName, _, guildRealm = GetGuildInfo(unit)
 		local pvpName = UnitPVPName(unit)
-		color = RAID_CLASS_COLORS[class]
+		if(not localeClass or not class) then
+			return;
+		end
+		
+		color = RAID_CLASS_COLORS[class];
 		
 		if(self.db.playerTitles and pvpName) then
 			name = pvpName

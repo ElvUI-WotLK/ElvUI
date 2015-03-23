@@ -1,32 +1,32 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local UF = E:GetModule('UnitFrames');
+local UF = E:GetModule("UnitFrames");
 
 local _, ns = ...
 local ElvUF = ns.oUF
 assert(ElvUF, "ElvUI was unable to locate oUF.")
 
 function UF:Construct_HealthBar(frame, bg, text, textPos)
-	local health = CreateFrame('StatusBar', nil, frame)	
-	UF['statusbars'][health] = true
+	local health = CreateFrame("StatusBar", nil, frame)	
+	UF["statusbars"][health] = true
 	
 	health:SetFrameStrata("LOW")
 	health.PostUpdate = self.PostUpdateHealth
 	
 	if bg then
-		health.bg = health:CreateTexture(nil, 'BORDER')
+		health.bg = health:CreateTexture(nil, "BORDER")
 		health.bg:SetAllPoints()
 		health.bg:SetTexture(E["media"].blankTex)
 		health.bg.multiplier = 0.25
 	end
 	
 	if text then
-		health.value = frame.RaisedElementParent:CreateFontString(nil, 'OVERLAY')
+		health.value = frame.RaisedElementParent:CreateFontString(nil, "OVERLAY")
 		UF:Configure_FontString(health.value)
 		
 		health.value:SetParent(frame)
 		
 		local x = -2
-		if textPos == 'LEFT' then
+		if textPos == "LEFT" then
 			x = 2
 		end
 		
@@ -35,7 +35,7 @@ function UF:Construct_HealthBar(frame, bg, text, textPos)
 	
 	health.colorTapping = true	
 	health.colorDisconnected = true
-	health:CreateBackdrop('Default')	
+	health:CreateBackdrop("Default")	
 
 	return health
 end
@@ -48,7 +48,7 @@ function UF:PostUpdateHealth(unit, min, max)
 	end
 	
 	local r, g, b = self:GetStatusBarColor()
-	local colors = E.db['unitframe']['colors'];
+	local colors = E.db["unitframe"]["colors"];
 	if (colors.healthclass == true and colors.colorhealthbyvalue == true) or (colors.colorhealthbyvalue and parent.isForced) and not (UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit)) then
 		local newr, newg, newb = ElvUF.ColorGradient(min, max, 1, 0, 0, 1, 1, 0, r, g, b)
 
@@ -60,7 +60,7 @@ function UF:PostUpdateHealth(unit, min, max)
 	end
 
 	if colors.classbackdrop then
-		local reaction = UnitReaction(unit, 'player')
+		local reaction = UnitReaction(unit, "player")
 		local t
 		if UnitIsPlayer(unit) then
 			local _, class = UnitClass(unit)

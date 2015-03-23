@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local UF = E:GetModule('UnitFrames');
+local UF = E:GetModule("UnitFrames");
 
 local random, floor, ceil = math.random, math.floor, math.ceil
 local format = string.format
@@ -7,7 +7,7 @@ local format = string.format
 local LSM = LibStub("LibSharedMedia-3.0");
 
 function UF:Construct_TargetGlow(frame)
-	frame:CreateShadow('Default')
+	frame:CreateShadow("Default")
 	local x = frame.shadow
 	frame.shadow = nil
 	x:Hide();
@@ -33,7 +33,7 @@ function UF:Construct_CombatIndicator(frame)
 end
 
 function UF:Construct_PvPIndicator(frame)
-	local pvp = frame.RaisedElementParent:CreateFontString(nil, 'OVERLAY')
+	local pvp = frame.RaisedElementParent:CreateFontString(nil, "OVERLAY")
 	UF:Configure_FontString(pvp)
 
 	return pvp
@@ -41,16 +41,16 @@ end
 
 function UF:Construct_Combobar(frame)
 	local CPoints = CreateFrame("Frame", nil, frame)
-	CPoints:CreateBackdrop('Default')
+	CPoints:CreateBackdrop("Default")
 	CPoints.Override = UF.UpdateComboDisplay
 
 	for i = 1, MAX_COMBO_POINTS do
 		CPoints[i] = CreateFrame("StatusBar", nil, CPoints)
-		UF['statusbars'][CPoints[i]] = true
-		CPoints[i]:SetStatusBarTexture(E['media'].blankTex)
+		UF["statusbars"][CPoints[i]] = true
+		CPoints[i]:SetStatusBarTexture(E["media"].blankTex)
 		CPoints[i]:GetStatusBarTexture():SetHorizTile(false)
 		CPoints[i]:SetAlpha(0.15)
-		CPoints[i]:CreateBackdrop('Default')
+		CPoints[i]:CreateBackdrop("Default")
 		CPoints[i].backdrop:SetParent(CPoints)
 	end
 
@@ -70,7 +70,7 @@ function UF:Construct_AuraWatch(frame)
 end
 
 function UF:Construct_RaidDebuffs(frame)
-	local rdebuff = CreateFrame('Frame', nil, frame.RaisedElementParent)
+	local rdebuff = CreateFrame("Frame", nil, frame.RaisedElementParent)
 	rdebuff:SetTemplate("Default")
 	
 	if E.PixelMode then
@@ -81,18 +81,18 @@ function UF:Construct_RaidDebuffs(frame)
 		rdebuff.border:SetVertexColor(0, 0, 0);
 	end	
 	
-	rdebuff.icon = rdebuff:CreateTexture(nil, 'OVERLAY')
+	rdebuff.icon = rdebuff:CreateTexture(nil, "OVERLAY")
 	rdebuff.icon:SetTexCoord(unpack(E.TexCoords))
 	rdebuff.icon:SetInside()
 	
-	rdebuff.count = rdebuff:CreateFontString(nil, 'OVERLAY')
-	rdebuff.count:FontTemplate(nil, 10, 'OUTLINE')
-	rdebuff.count:SetPoint('BOTTOMRIGHT', 0, 2)
+	rdebuff.count = rdebuff:CreateFontString(nil, "OVERLAY")
+	rdebuff.count:FontTemplate(nil, 10, "OUTLINE")
+	rdebuff.count:SetPoint("BOTTOMRIGHT", 0, 2)
 	rdebuff.count:SetTextColor(1, .9, 0)
 	
-	rdebuff.time = rdebuff:CreateFontString(nil, 'OVERLAY')
-	rdebuff.time:FontTemplate(nil, 10, 'OUTLINE')
-	rdebuff.time:SetPoint('CENTER')
+	rdebuff.time = rdebuff:CreateFontString(nil, "OVERLAY")
+	rdebuff.time:FontTemplate(nil, 10, "OUTLINE")
+	rdebuff.time:SetPoint("CENTER")
 	rdebuff.time:SetTextColor(1, .9, 0)
 	
 	return rdebuff
@@ -101,7 +101,7 @@ end
 function UF:Construct_DebuffHighlight(frame)
 	local dbh = frame:CreateTexture(nil, "OVERLAY")
 	dbh:SetInside(frame.Health.backdrop)
-	dbh:SetTexture(E['media'].blankTex)
+	dbh:SetTexture(E["media"].blankTex)
 	dbh:SetVertexColor(0, 0, 0, 0)
 	dbh:SetBlendMode("ADD")
 	frame.DebuffHighlightFilter = true
@@ -137,9 +137,9 @@ function UF:Construct_Trinket(frame)
 end
 
 function UF:Construct_RaidRoleFrames(frame)
-	local anchor = CreateFrame('Frame', nil, frame)
-	frame.Leader = anchor:CreateTexture(nil, 'OVERLAY')
-	frame.MasterLooter = anchor:CreateTexture(nil, 'OVERLAY')
+	local anchor = CreateFrame("Frame", nil, frame)
+	frame.Leader = anchor:CreateTexture(nil, "OVERLAY")
+	frame.MasterLooter = anchor:CreateTexture(nil, "OVERLAY")
 	
 	anchor:Size(24, 12)
 	frame.Leader:Size(12)
@@ -159,9 +159,9 @@ function UF:UpdateTargetGlow(event)
 	if not self.unit then return; end
 	local unit = self.unit
 	
-	if UnitIsUnit(unit, 'target') then
+	if UnitIsUnit(unit, "target") then
 		self.TargetGlow:Show()
-		local reaction = UnitReaction(unit, 'player')
+		local reaction = UnitReaction(unit, "player")
 		
 		if UnitIsPlayer(unit) then
 			local _, class = UnitClass(unit)
@@ -183,10 +183,10 @@ function UF:UpdateTargetGlow(event)
 end
 
 function UF:UpdateComboDisplay(event, unit)
-	if (unit == 'pet') then return end
+	if (unit == "pet") then return end
 	local db = UF.player.db
 	local cpoints = self.CPoints
-	local cp = (UnitHasVehicleUI("player") or UnitHasVehicleUI("vehicle")) and GetComboPoints('vehicle', 'target') or GetComboPoints('player', 'target')
+	local cp = (UnitHasVehicleUI("player") or UnitHasVehicleUI("vehicle")) and GetComboPoints("vehicle", "target") or GetComboPoints("player", "target")
 
 	for i=1, MAX_COMBO_POINTS do
 		if(i <= cp) then
@@ -198,7 +198,7 @@ function UF:UpdateComboDisplay(event, unit)
 	
 	local BORDER = E.Border;
 	local SPACING = E.Spacing;
-	local db = E.db['unitframe']['units'].target
+	local db = E.db["unitframe"]["units"].target
 	local USE_COMBOBAR = db.combobar.enable
 	local USE_MINI_COMBOBAR = db.combobar.fill == "spaced" and USE_COMBOBAR and not db.combobar.detachFromFrame
 	local COMBOBAR_HEIGHT = db.combobar.height
@@ -211,7 +211,7 @@ function UF:UpdateComboDisplay(event, unit)
 	local DETACHED = db.combobar.detachFromFrame
 	
 	if not self.Portrait then
-		self.Portrait = db.portrait.style == '2D' and self.Portrait2D or self.Portrait3D
+		self.Portrait = db.portrait.style == "2D" and self.Portrait2D or self.Portrait3D
 	end
 
 	if(USE_PORTRAIT_OVERLAY or PORTRAIT_DETACHED or not USE_PORTRAIT) then
@@ -245,25 +245,25 @@ function UF:UpdateComboDisplay(event, unit)
 end
 
 local counterOffsets = {
-	['TOPLEFT'] = {6, 1},
-	['TOPRIGHT'] = {-6, 1},
-	['BOTTOMLEFT'] = {6, 1},
-	['BOTTOMRIGHT'] = {-6, 1},
-	['LEFT'] = {6, 1},
-	['RIGHT'] = {-6, 1},
-	['TOP'] = {0, 0},
-	['BOTTOM'] = {0, 0},
+	["TOPLEFT"] = {6, 1},
+	["TOPRIGHT"] = {-6, 1},
+	["BOTTOMLEFT"] = {6, 1},
+	["BOTTOMRIGHT"] = {-6, 1},
+	["LEFT"] = {6, 1},
+	["RIGHT"] = {-6, 1},
+	["TOP"] = {0, 0},
+	["BOTTOM"] = {0, 0},
 }
 
 local textCounterOffsets = {
-	['TOPLEFT'] = {"LEFT", "RIGHT", -2, 0},
-	['TOPRIGHT'] = {"RIGHT", "LEFT", 2, 0},
-	['BOTTOMLEFT'] = {"LEFT", "RIGHT", -2, 0},
-	['BOTTOMRIGHT'] = {"RIGHT", "LEFT", 2, 0},
-	['LEFT'] = {"LEFT", "RIGHT", -2, 0},
-	['RIGHT'] = {"RIGHT", "LEFT", 2, 0},
-	['TOP'] = {"RIGHT", "LEFT", 2, 0},
-	['BOTTOM'] = {"RIGHT", "LEFT", 2, 0},
+	["TOPLEFT"] = {"LEFT", "RIGHT", -2, 0},
+	["TOPRIGHT"] = {"RIGHT", "LEFT", 2, 0},
+	["BOTTOMLEFT"] = {"LEFT", "RIGHT", -2, 0},
+	["BOTTOMRIGHT"] = {"RIGHT", "LEFT", 2, 0},
+	["LEFT"] = {"LEFT", "RIGHT", -2, 0},
+	["RIGHT"] = {"RIGHT", "LEFT", 2, 0},
+	["TOP"] = {"RIGHT", "LEFT", 2, 0},
+	["BOTTOM"] = {"RIGHT", "LEFT", 2, 0},
 }
 
 function UF:UpdateAuraWatchFromHeader(group)
@@ -288,9 +288,9 @@ function UF:UpdateAuraWatch(frame)
 		auras:Show()
 	end
 	
-	local buffWatch = E.global['unitframe'].buffwatch[E.myclass] or {}
+	local buffWatch = E.global["unitframe"].buffwatch[E.myclass] or {}
 	for _, value in pairs(buffWatch) do
-		if value.style == 'text' then value.style = 'NONE' end --depreciated
+		if value.style == "text" then value.style = "NONE" end --depreciated
 		tinsert(buffs, value);
 	end
 	
@@ -312,7 +312,7 @@ function UF:UpdateAuraWatch(frame)
 		end
 	end
 	
-	local unitframeFont = LSM:Fetch("font", E.db['unitframe'].font)
+	local unitframeFont = LSM:Fetch("font", E.db["unitframe"].font)
 	
 	for i=1, #buffs do
 		if buffs[i].id then
@@ -347,9 +347,9 @@ function UF:UpdateAuraWatch(frame)
 				end
 				
 				if not icon.text then
-					local f = CreateFrame('Frame', nil, icon)
+					local f = CreateFrame("Frame", nil, icon)
 					f:SetFrameLevel(icon:GetFrameLevel() + 50)
-					icon.text = f:CreateFontString(nil, 'BORDER');
+					icon.text = f:CreateFontString(nil, "BORDER");
 				end
 				
 				if not icon.border then
@@ -367,7 +367,7 @@ function UF:UpdateAuraWatch(frame)
 					icon.cd:SetFrameLevel(icon:GetFrameLevel())
 				end			
 
-				if icon.style == 'coloredIcon' then
+				if icon.style == "coloredIcon" then
 					icon.icon:SetTexture(E["media"].blankTex);
 					
 					if (buffs[i]["color"]) then
@@ -378,7 +378,7 @@ function UF:UpdateAuraWatch(frame)
 					icon.icon:Show()
 					icon.border:Show()
 					icon.cd:SetAlpha(1)
-				elseif icon.style == 'texturedIcon' then
+				elseif icon.style == "texturedIcon" then
 					icon.icon:SetVertexColor(1, 1, 1)
 					icon.icon:SetTexCoord(.18, .82, .18, .82);
 					icon.icon:SetTexture(icon.image);
@@ -415,8 +415,8 @@ function UF:UpdateAuraWatch(frame)
 					icon.count:SetPoint("CENTER", unpack(counterOffsets[buffs[i].point]));
 				end
 				
-				icon.count:FontTemplate(unitframeFont, db.fontSize, 'OUTLINE');
-				icon.text:FontTemplate(unitframeFont, db.fontSize, 'OUTLINE');
+				icon.count:FontTemplate(unitframeFont, db.fontSize, "OUTLINE");
+				icon.text:FontTemplate(unitframeFont, db.fontSize, "OUTLINE");
 				icon.text:ClearAllPoints();
 				icon.text:SetPoint(buffs[i].point, icon, buffs[i].point);
 				
@@ -446,11 +446,11 @@ function UF:UpdateAuraWatch(frame)
 end
 
 function UF:Construct_RoleIcon(frame)
-	local f = CreateFrame('Frame', nil, frame);
+	local f = CreateFrame("Frame", nil, frame);
 	
-	local tex = f:CreateTexture(nil, 'ARTWORK');
+	local tex = f:CreateTexture(nil, "ARTWORK");
 	tex:Size(17);
-	tex:Point('BOTTOM', frame.Health, 'BOTTOM', 0, 2);
+	tex:Point("BOTTOM", frame.Health, "BOTTOM", 0, 2);
 	
 	return tex;
 end
@@ -473,16 +473,16 @@ function UF:RaidRoleUpdate()
 	MasterLooter:ClearAllPoints();
 	
 	if(db and db.raidRoleIcons) then
-		if(isLeader and db.raidRoleIcons.position == 'TOPLEFT') then
-			Leader:Point('LEFT', anchor, 'LEFT');
-			MasterLooter:Point('RIGHT', anchor, 'RIGHT');
-		elseif(isLeader and db.raidRoleIcons.position == 'TOPRIGHT') then
-			Leader:Point('RIGHT', anchor, 'RIGHT');
-			MasterLooter:Point('LEFT', anchor, 'LEFT');
-		elseif(isMasterLooter and db.raidRoleIcons.position == 'TOPLEFT') then
-			MasterLooter:Point('LEFT', anchor, 'LEFT');
+		if(isLeader and db.raidRoleIcons.position == "TOPLEFT") then
+			Leader:Point("LEFT", anchor, "LEFT");
+			MasterLooter:Point("RIGHT", anchor, "RIGHT");
+		elseif(isLeader and db.raidRoleIcons.position == "TOPRIGHT") then
+			Leader:Point("RIGHT", anchor, "RIGHT");
+			MasterLooter:Point("LEFT", anchor, "LEFT");
+		elseif(isMasterLooter and db.raidRoleIcons.position == "TOPLEFT") then
+			MasterLooter:Point("LEFT", anchor, "LEFT");
 		else
-			MasterLooter:Point('RIGHT', anchor, 'RIGHT');
+			MasterLooter:Point("RIGHT", anchor, "RIGHT");
 		end
 	end
 end

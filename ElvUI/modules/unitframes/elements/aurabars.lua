@@ -1,13 +1,13 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local UF = E:GetModule('UnitFrames');
+local UF = E:GetModule("UnitFrames");
 
 function UF:Construct_AuraBars()
 	local bar = self.statusBar
 	
-	self:SetTemplate('Default')
+	self:SetTemplate("Default")
 
 	bar:SetInside(self)
-	UF['statusbars'][bar] = true
+	UF["statusbars"][bar] = true
 	UF:Update_StatusBar(bar)
 	
 	UF:Configure_FontString(bar.spelltime)
@@ -16,27 +16,27 @@ function UF:Construct_AuraBars()
 	UF:Update_FontString(bar.spellname)
 	
 	bar.spellname:ClearAllPoints()
-	bar.spellname:SetPoint('LEFT', bar, 'LEFT', 2, 0)
-	bar.spellname:SetPoint('RIGHT', bar.spelltime, 'LEFT', -4, 0)
+	bar.spellname:SetPoint("LEFT", bar, "LEFT", 2, 0)
+	bar.spellname:SetPoint("RIGHT", bar.spelltime, "LEFT", -4, 0)
 	
-	bar.iconHolder:SetTemplate('Default')
+	bar.iconHolder:SetTemplate("Default")
 	bar.icon:SetInside(bar.iconHolder)
-	bar.icon:SetDrawLayer('OVERLAY')
+	bar.icon:SetDrawLayer("OVERLAY")
 	
-	bar.bg = bar:CreateTexture(nil, 'BORDER')
+	bar.bg = bar:CreateTexture(nil, "BORDER")
 	bar.bg:Hide()
 	
 	
-	bar.iconHolder:RegisterForClicks('RightButtonUp')
-	bar.iconHolder:SetScript('OnClick', function(self)
+	bar.iconHolder:RegisterForClicks("RightButtonUp")
+	bar.iconHolder:SetScript("OnClick", function(self)
 		if not IsShiftKeyDown() then return; end
 		local auraName = self:GetParent().aura.name
 		
 		if auraName then
-			E:Print(format(L['The spell "%s" has been added to the Blacklist unitframe aura filter.'], auraName))
-			E.global['unitframe']['aurafilters']['Blacklist']['spells'][auraName] = {
-				['enable'] = true,
-				['priority'] = 0,			
+			E:Print(format(L["The spell '%s' has been added to the Blacklist unitframe aura filter."], auraName))
+			E.global["unitframe"]["aurafilters"]["Blacklist"]["spells"][auraName] = {
+				["enable"] = true,
+				["priority"] = 0,			
 			}
 			UF:Update_AllFrames()
 		end
@@ -44,7 +44,7 @@ function UF:Construct_AuraBars()
 end
 
 function UF:Construct_AuraBarHeader(frame)
-	local auraBar = CreateFrame('Frame', nil, frame)
+	local auraBar = CreateFrame("Frame", nil, frame)
 	auraBar.PostCreateBar = UF.Construct_AuraBars
 	auraBar.gap = (E.PixelMode and -1 or 1)
 	auraBar.spacing = (E.PixelMode and -1 or 1)
@@ -87,8 +87,8 @@ function UF:AuraBarFilter(unit, name, rank, icon, count, debuffType, duration, e
 	local returnValue = true
 	local passPlayerOnlyCheck = true
 	local anotherFilterExists = false
-	local isPlayer = unitCaster == 'player' or unitCaster == 'vehicle'
-	local isFriend = UnitIsFriend('player', unit) == 1 and true or false
+	local isPlayer = unitCaster == "player" or unitCaster == "vehicle"
+	local isFriend = UnitIsFriend("player", unit) == 1 and true or false
 	local auraType = isFriend and db.friendlyAuraType or db.enemyAuraType
 	
 	if UF:CheckFilter(db.playerOnly, isFriend) then
@@ -103,7 +103,7 @@ function UF:AuraBarFilter(unit, name, rank, icon, count, debuffType, duration, e
 	end
 	
 	if UF:CheckFilter(db.onlyDispellable, isFriend) then
-		if (self.type == 'buffs' and not isStealable) or (self.type == 'debuffs' and dtype and  not E:IsDispellableByMe(dtype)) or dtype == nil then
+		if (self.type == "buffs" and not isStealable) or (self.type == "debuffs" and dtype and  not E:IsDispellableByMe(dtype)) or dtype == nil then
 			returnValue = false;
 		end
 		anotherFilterExists = true
@@ -126,7 +126,7 @@ function UF:AuraBarFilter(unit, name, rank, icon, count, debuffType, duration, e
 	end
 
 	if UF:CheckFilter(db.useBlacklist, isFriend) then
-		local blackList = E.global['unitframe']['aurafilters']['Blacklist'].spells[name]
+		local blackList = E.global["unitframe"]["aurafilters"]["Blacklist"].spells[name]
 		if blackList and blackList.enable then
 			returnValue = false;
 		end
@@ -135,7 +135,7 @@ function UF:AuraBarFilter(unit, name, rank, icon, count, debuffType, duration, e
 	end
 	
 	if UF:CheckFilter(db.useWhitelist, isFriend) then
-		local whiteList = E.global['unitframe']['aurafilters']['Whitelist'].spells[name]
+		local whiteList = E.global["unitframe"]["aurafilters"]["Whitelist"].spells[name]
 		if whiteList and whiteList.enable then
 			returnValue = true;
 		elseif not anotherFilterExists then
@@ -145,17 +145,17 @@ function UF:AuraBarFilter(unit, name, rank, icon, count, debuffType, duration, e
 		anotherFilterExists = true
 	end	
 
-	if db.useFilter and E.global['unitframe']['aurafilters'][db.useFilter] then
-		local type = E.global['unitframe']['aurafilters'][db.useFilter].type
-		local spellList = E.global['unitframe']['aurafilters'][db.useFilter].spells
+	if db.useFilter and E.global["unitframe"]["aurafilters"][db.useFilter] then
+		local type = E.global["unitframe"]["aurafilters"][db.useFilter].type
+		local spellList = E.global["unitframe"]["aurafilters"][db.useFilter].spells
 
-		if type == 'Whitelist' then
+		if type == "Whitelist" then
 			if spellList[name] and spellList[name].enable and passPlayerOnlyCheck then
 				returnValue = true
 			elseif not anotherFilterExists then
 				returnValue = false
 			end
-		elseif type == 'Blacklist' and spellList[name] and spellList[name].enable then
+		elseif type == "Blacklist" and spellList[name] and spellList[name].enable then
 			returnValue = false				
 		end
 	end		

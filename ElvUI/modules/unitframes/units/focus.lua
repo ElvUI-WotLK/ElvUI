@@ -1,19 +1,19 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local UF = E:GetModule('UnitFrames');
+local UF = E:GetModule("UnitFrames");
 
 local _, ns = ...;
 local ElvUF = ns.oUF;
-assert(ElvUF, 'ElvUI was unable to locate oUF.');
+assert(ElvUF, "ElvUI was unable to locate oUF.");
 local tinsert = table.insert;
 
 function UF:Construct_FocusFrame(frame)	
-	frame.Health = self:Construct_HealthBar(frame, true, true, 'RIGHT');
+	frame.Health = self:Construct_HealthBar(frame, true, true, "RIGHT");
 	frame.Health.frequentUpdates = true;
-	frame.Power = self:Construct_PowerBar(frame, true, true, 'LEFT', false);
+	frame.Power = self:Construct_PowerBar(frame, true, true, "LEFT", false);
 	frame.Name = self:Construct_NameText(frame);
-	frame.Portrait3D = self:Construct_Portrait(frame, 'model');
-	frame.Portrait2D = self:Construct_Portrait(frame, 'texture');
-	frame.Castbar = self:Construct_Castbar(frame, 'LEFT', L['Focus Castbar']);
+	frame.Portrait3D = self:Construct_Portrait(frame, "model");
+	frame.Portrait2D = self:Construct_Portrait(frame, "texture");
+	frame.Castbar = self:Construct_Castbar(frame, "LEFT", L["Focus Castbar"]);
 	frame.Castbar.SafeZone = nil;
 	frame.Castbar.LatencyTexture:Hide();
 	frame.Buffs = self:Construct_Buffs(frame);
@@ -23,8 +23,8 @@ function UF:Construct_FocusFrame(frame)
 	frame.Range = UF:Construct_Range(frame);
 	frame.Threat = UF:Construct_Threat(frame);
 	
-	frame:Point('BOTTOMRIGHT', ElvUF_Target, 'TOPRIGHT', 0, 220);
-	E:CreateMover(frame, frame:GetName()..'Mover', L['Focus Frame'], nil, nil, nil, 'ALL,SOLO');
+	frame:Point("BOTTOMRIGHT", ElvUF_Target, "TOPRIGHT", 0, 220);
+	E:CreateMover(frame, frame:GetName().."Mover", L["Focus Frame"], nil, nil, nil, "ALL,SOLO");
 end
 
 function UF:Update_FocusFrame(frame, db)
@@ -35,15 +35,15 @@ function UF:Update_FocusFrame(frame, db)
 		frame.Portrait.backdrop:Hide();
 	end
 	
-	frame.Portrait = db.portrait.style == '2D' and frame.Portrait2D or frame.Portrait3D;
+	frame.Portrait = db.portrait.style == "2D" and frame.Portrait2D or frame.Portrait3D;
 	local BORDER = E.Border;
 	local SPACING = E.Spacing;
 	local UNIT_WIDTH = db.width;
 	local UNIT_HEIGHT = db.height;
 	local SHADOW_SPACING = E.PixelMode and 3 or 4;
 	local USE_POWERBAR = db.power.enable;
-	local USE_MINI_POWERBAR = db.power.width == 'spaced' and USE_POWERBAR;
-	local USE_INSET_POWERBAR = db.power.width == 'inset' and USE_POWERBAR;
+	local USE_MINI_POWERBAR = db.power.width == "spaced" and USE_POWERBAR;
+	local USE_INSET_POWERBAR = db.power.width == "inset" and USE_POWERBAR;
 	local USE_POWERBAR_OFFSET = db.power.offset ~= 0 and USE_POWERBAR;
 	local POWERBAR_OFFSET = db.power.offset;
 	local POWERBAR_HEIGHT = db.power.height;
@@ -54,13 +54,13 @@ function UF:Update_FocusFrame(frame, db)
 	local PORTRAIT_WIDTH = db.portrait.width;
 	
 	local unit = self.unit;
-	frame:RegisterForClicks(self.db.targetOnMouseDown and 'AnyDown' or 'AnyUp');
+	frame:RegisterForClicks(self.db.targetOnMouseDown and "AnyDown" or "AnyUp");
 	frame.colors = ElvUF.colors;
 	frame:Size(UNIT_WIDTH, UNIT_HEIGHT);
-	_G[frame:GetName()..'Mover']:Size(frame:GetSize());
+	_G[frame:GetName().."Mover"]:Size(frame:GetSize());
 	
-	frame:SetAttribute('type3', 'macro');
-	frame:SetAttribute('macrotext', '/clearfocus');
+	frame:SetAttribute("type3", "macro");
+	frame:SetAttribute("macrotext", "/clearfocus");
 	
 	do
 		if(not USE_POWERBAR) then
@@ -89,8 +89,8 @@ function UF:Update_FocusFrame(frame, db)
 		health.colorHealth = nil;
 		health.colorClass = nil;
 		health.colorReaction = nil;
-		if(self.db['colors'].healthclass ~= true) then
-			if(self.db['colors'].colorhealthbyvalue == true) then
+		if(self.db["colors"].healthclass ~= true) then
+			if(self.db["colors"].colorhealthbyvalue == true) then
 				health.colorSmooth = true;
 			else
 				health.colorHealth = true;
@@ -100,33 +100,33 @@ function UF:Update_FocusFrame(frame, db)
 			health.colorReaction = true;
 		end
 		
-		if(self.db['colors'].forcehealthreaction == true) then
+		if(self.db["colors"].forcehealthreaction == true) then
 			health.colorClass = false;
 			health.colorReaction = true;
 		end
 		
 		health:ClearAllPoints();
-		health:Point('TOPRIGHT', frame, 'TOPRIGHT', -BORDER, -BORDER);
+		health:Point("TOPRIGHT", frame, "TOPRIGHT", -BORDER, -BORDER);
 		
 		if(USE_POWERBAR_OFFSET) then
-			health:Point('TOPRIGHT', frame, 'TOPRIGHT', -(BORDER+POWERBAR_OFFSET), -BORDER);
-			health:Point('BOTTOMLEFT', frame, 'BOTTOMLEFT', BORDER, BORDER+POWERBAR_OFFSET);
+			health:Point("TOPRIGHT", frame, "TOPRIGHT", -(BORDER+POWERBAR_OFFSET), -BORDER);
+			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER, BORDER+POWERBAR_OFFSET);
 		elseif(USE_INSET_POWERBAR or POWERBAR_DETACHED) then
-			health:Point('BOTTOMLEFT', frame, 'BOTTOMLEFT', BORDER, BORDER);
+			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER, BORDER);
 		elseif(USE_MINI_POWERBAR) then
-			health:Point('BOTTOMLEFT', frame, 'BOTTOMLEFT', BORDER, BORDER + (POWERBAR_HEIGHT/2));
+			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER, BORDER + (POWERBAR_HEIGHT/2));
 		else
-			health:Point('BOTTOMLEFT', frame, 'BOTTOMLEFT', BORDER, BORDER + POWERBAR_HEIGHT);
+			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER, BORDER + POWERBAR_HEIGHT);
 		end
 		
 		health.bg:ClearAllPoints();
 		if(not USE_PORTRAIT_OVERLAY) then
-			health:Point('TOPLEFT', PORTRAIT_WIDTH+BORDER, -BORDER);
+			health:Point("TOPLEFT", PORTRAIT_WIDTH+BORDER, -BORDER);
 			health.bg:SetParent(health);
 			health.bg:SetAllPoints();
 		else
-			health.bg:Point('BOTTOMLEFT', health:GetStatusBarTexture(), 'BOTTOMRIGHT');
-			health.bg:Point('TOPRIGHT', health);
+			health.bg:Point("BOTTOMLEFT", health:GetStatusBarTexture(), "BOTTOMRIGHT");
+			health.bg:Point("TOPRIGHT", health);
 			health.bg:SetParent(frame.Portrait.overlay);
 		end
 	end
@@ -136,8 +136,8 @@ function UF:Update_FocusFrame(frame, db)
 	do
 		local power = frame.Power;
 		if(USE_POWERBAR) then
-			if(not frame:IsElementEnabled('Power')) then
-				frame:EnableElement('Power');
+			if(not frame:IsElementEnabled("Power")) then
+				frame:EnableElement("Power");
 				power:Show();
 			end
 			
@@ -151,7 +151,7 @@ function UF:Update_FocusFrame(frame, db)
 			power.colorClass = nil;
 			power.colorReaction = nil;
 			power.colorPower = nil;
-			if(self.db['colors'].powerclass) then
+			if(self.db["colors"].powerclass) then
 				power.colorClass = true;
 				power.colorReaction = true;
 			else
@@ -160,75 +160,75 @@ function UF:Update_FocusFrame(frame, db)
 			
 			power:ClearAllPoints();
 			if(USE_POWERBAR_OFFSET) then
-				power:Point('TOPRIGHT', frame.Health, 'TOPRIGHT', POWERBAR_OFFSET, -POWERBAR_OFFSET);
-				power:Point('BOTTOMLEFT', frame.Health, 'BOTTOMLEFT', POWERBAR_OFFSET, -POWERBAR_OFFSET);
-				power:SetFrameStrata('LOW');
+				power:Point("TOPRIGHT", frame.Health, "TOPRIGHT", POWERBAR_OFFSET, -POWERBAR_OFFSET);
+				power:Point("BOTTOMLEFT", frame.Health, "BOTTOMLEFT", POWERBAR_OFFSET, -POWERBAR_OFFSET);
+				power:SetFrameStrata("LOW");
 				power:SetFrameLevel(2);
 			elseif(USE_INSET_POWERBAR) then
 				power:Height(POWERBAR_HEIGHT - BORDER*2);
-				power:Point('BOTTOMLEFT', frame.Health, 'BOTTOMLEFT', BORDER + (BORDER*2), BORDER + (BORDER*2));
-				power:Point('BOTTOMRIGHT', frame.Health, 'BOTTOMRIGHT', -(BORDER + (BORDER*2)), BORDER + (BORDER*2));
-				power:SetFrameStrata('MEDIUM');
+				power:Point("BOTTOMLEFT", frame.Health, "BOTTOMLEFT", BORDER + (BORDER*2), BORDER + (BORDER*2));
+				power:Point("BOTTOMRIGHT", frame.Health, "BOTTOMRIGHT", -(BORDER + (BORDER*2)), BORDER + (BORDER*2));
+				power:SetFrameStrata("MEDIUM");
 				power:SetFrameLevel(frame:GetFrameLevel() + 3);
 			elseif(USE_MINI_POWERBAR) then
 				power:Width(POWERBAR_WIDTH - BORDER*2);
 				power:Height(POWERBAR_HEIGHT - BORDER*2);
-				power:Point('RIGHT', frame, 'BOTTOMRIGHT', -(BORDER*2 + 4), BORDER + (POWERBAR_HEIGHT/2));
-				power:SetFrameStrata('MEDIUM');
+				power:Point("RIGHT", frame, "BOTTOMRIGHT", -(BORDER*2 + 4), BORDER + (POWERBAR_HEIGHT/2));
+				power:SetFrameStrata("MEDIUM");
 				power:SetFrameLevel(frame:GetFrameLevel() + 3);
 			else
-				power:Point('TOPLEFT', frame.Health.backdrop, 'BOTTOMLEFT', BORDER, -(E.PixelMode and 0 or (BORDER + SPACING)));
-				power:Point('BOTTOMRIGHT', frame, 'BOTTOMRIGHT', -BORDER, BORDER);
+				power:Point("TOPLEFT", frame.Health.backdrop, "BOTTOMLEFT", BORDER, -(E.PixelMode and 0 or (BORDER + SPACING)));
+				power:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -BORDER, BORDER);
 			end
-		elseif(frame:IsElementEnabled('Power')) then
-			frame:DisableElement('Power');
+		elseif(frame:IsElementEnabled("Power")) then
+			frame:DisableElement("Power");
 			power:Hide();
 		end
 	end
 	
 	do
 		local threat = frame.Threat;
-		if(db.threatStyle ~= 'NONE' and db.threatStyle ~= nil) then
-			if(not frame:IsElementEnabled('Threat')) then
-				frame:EnableElement('Threat');
+		if(db.threatStyle ~= "NONE" and db.threatStyle ~= nil) then
+			if(not frame:IsElementEnabled("Threat")) then
+				frame:EnableElement("Threat");
 			end
 			
-			if(db.threatStyle == 'GLOW') then
-				threat:SetFrameStrata('BACKGROUND');
+			if(db.threatStyle == "GLOW") then
+				threat:SetFrameStrata("BACKGROUND");
 				threat.glow:ClearAllPoints();
 				threat.glow:SetBackdropBorderColor(0, 0, 0, 0);
-				threat.glow:Point('TOPLEFT', frame.Health.backdrop, 'TOPLEFT', -SHADOW_SPACING, SHADOW_SPACING);
-				threat.glow:Point('TOPRIGHT', frame.Health.backdrop, 'TOPRIGHT', SHADOW_SPACING, SHADOW_SPACING);
-				threat.glow:Point('BOTTOMLEFT', frame.Power.backdrop, 'BOTTOMLEFT', -SHADOW_SPACING, -SHADOW_SPACING);
-				threat.glow:Point('BOTTOMRIGHT', frame.Power.backdrop, 'BOTTOMRIGHT', SHADOW_SPACING, -SHADOW_SPACING);
+				threat.glow:Point("TOPLEFT", frame.Health.backdrop, "TOPLEFT", -SHADOW_SPACING, SHADOW_SPACING);
+				threat.glow:Point("TOPRIGHT", frame.Health.backdrop, "TOPRIGHT", SHADOW_SPACING, SHADOW_SPACING);
+				threat.glow:Point("BOTTOMLEFT", frame.Power.backdrop, "BOTTOMLEFT", -SHADOW_SPACING, -SHADOW_SPACING);
+				threat.glow:Point("BOTTOMRIGHT", frame.Power.backdrop, "BOTTOMRIGHT", SHADOW_SPACING, -SHADOW_SPACING);
 				
 				if(USE_MINI_POWERBAR or USE_POWERBAR_OFFSET or USE_INSET_POWERBAR) then
-					threat.glow:Point('BOTTOMLEFT', frame.Health.backdrop, 'BOTTOMLEFT', -SHADOW_SPACING, -SHADOW_SPACING);
-					threat.glow:Point('BOTTOMRIGHT', frame.Health.backdrop, 'BOTTOMRIGHT', SHADOW_SPACING, -SHADOW_SPACING);
+					threat.glow:Point("BOTTOMLEFT", frame.Health.backdrop, "BOTTOMLEFT", -SHADOW_SPACING, -SHADOW_SPACING);
+					threat.glow:Point("BOTTOMRIGHT", frame.Health.backdrop, "BOTTOMRIGHT", SHADOW_SPACING, -SHADOW_SPACING);
 				end
-			elseif(db.threatStyle == 'ICONTOPLEFT' or db.threatStyle == 'ICONTOPRIGHT' or db.threatStyle == 'ICONBOTTOMLEFT' or db.threatStyle == 'ICONBOTTOMRIGHT' or db.threatStyle == 'ICONTOP' or db.threatStyle == 'ICONBOTTOM' or db.threatStyle == 'ICONLEFT' or db.threatStyle == 'ICONRIGHT') then
-				threat:SetFrameStrata('HIGH');
+			elseif(db.threatStyle == "ICONTOPLEFT" or db.threatStyle == "ICONTOPRIGHT" or db.threatStyle == "ICONBOTTOMLEFT" or db.threatStyle == "ICONBOTTOMRIGHT" or db.threatStyle == "ICONTOP" or db.threatStyle == "ICONBOTTOM" or db.threatStyle == "ICONLEFT" or db.threatStyle == "ICONRIGHT") then
+				threat:SetFrameStrata("HIGH");
 				local point = db.threatStyle;
-				point = point:gsub('ICON', '');
+				point = point:gsub("ICON", "");
 				
 				threat.texIcon:ClearAllPoints();
 				threat.texIcon:SetPoint(point, frame.Health, point);
 			end
-		elseif(frame:IsElementEnabled('Threat')) then
-			frame:DisableElement('Threat');
+		elseif(frame:IsElementEnabled("Threat")) then
+			frame:DisableElement("Threat");
 		end
 	end
 	
 	do
 		local portrait = frame.Portrait;
 		if(USE_PORTRAIT) then
-			if(not frame:IsElementEnabled('Portrait')) then
-				frame:EnableElement('Portrait');
+			if(not frame:IsElementEnabled("Portrait")) then
+				frame:EnableElement("Portrait");
 			end
 			
 			portrait:ClearAllPoints();
 			if(USE_PORTRAIT_OVERLAY) then
-				if(db.portrait.style == '3D') then
+				if(db.portrait.style == "3D") then
 					portrait:SetFrameLevel(frame.Health:GetFrameLevel() + 1);
 				end
 				
@@ -240,24 +240,24 @@ function UF:Update_FocusFrame(frame, db)
 				portrait:SetAlpha(1);
 				portrait:Show();
 				portrait.backdrop:Show();
-				portrait.backdrop:SetPoint('TOPLEFT', frame, 'TOPLEFT');
+				portrait.backdrop:SetPoint("TOPLEFT", frame, "TOPLEFT");
 				
-				if(db.portrait.style == '3D') then
+				if(db.portrait.style == "3D") then
 					portrait:SetFrameLevel(frame:GetFrameLevel() + 5);
 				end
 				
 				if(USE_MINI_POWERBAR or USE_POWERBAR_OFFSET or not USE_POWERBAR or USE_INSET_POWERBAR or POWERBAR_DETACHED) then
-					portrait.backdrop:Point('BOTTOMRIGHT', frame.Health.backdrop, 'BOTTOMLEFT', E.PixelMode and 1 or -SPACING, 0);
+					portrait.backdrop:Point("BOTTOMRIGHT", frame.Health.backdrop, "BOTTOMLEFT", E.PixelMode and 1 or -SPACING, 0);
 				else
-					portrait.backdrop:Point('BOTTOMRIGHT', frame.Power.backdrop, 'BOTTOMLEFT', E.PixelMode and 1 or -SPACING, 0);
+					portrait.backdrop:Point("BOTTOMRIGHT", frame.Power.backdrop, "BOTTOMLEFT", E.PixelMode and 1 or -SPACING, 0);
 				end
 				
-				portrait:Point('BOTTOMLEFT', portrait.backdrop, 'BOTTOMLEFT', BORDER, BORDER);
-				portrait:Point('TOPRIGHT', portrait.backdrop, 'TOPRIGHT', -BORDER, -BORDER);			
+				portrait:Point("BOTTOMLEFT", portrait.backdrop, "BOTTOMLEFT", BORDER, BORDER);
+				portrait:Point("TOPRIGHT", portrait.backdrop, "TOPRIGHT", -BORDER, -BORDER);			
 			end
 		else
-			if(frame:IsElementEnabled('Portrait')) then
-				frame:DisableElement('Portrait');
+			if(frame:IsElementEnabled("Portrait")) then
+				frame:DisableElement("Portrait");
 				portrait:Hide();
 				portrait.backdrop:Hide();
 			end
@@ -266,12 +266,12 @@ function UF:Update_FocusFrame(frame, db)
 	
 	do
 		if(db.debuffs.enable or db.buffs.enable) then
-			if(not frame:IsElementEnabled('Aura')) then
-				frame:EnableElement('Aura');
+			if(not frame:IsElementEnabled("Aura")) then
+				frame:EnableElement("Aura");
 			end	
 		else
-			if(frame:IsElementEnabled('Aura')) then
-				frame:DisableElement('Aura');
+			if(frame:IsElementEnabled("Aura")) then
+				frame:DisableElement("Aura");
 			end			
 		end
 		
@@ -300,10 +300,10 @@ function UF:Update_FocusFrame(frame, db)
 		local x, y = E:GetXYOffset(db.buffs.anchorPoint);
 		local attachTo = self:GetAuraAnchorFrame(frame, db.buffs.attachTo);
 		
-		buffs:Point(E.InversePoints[db.buffs.anchorPoint], attachTo, db.buffs.anchorPoint, x + db.buffs.xOffset, y + db.buffs.yOffset + (E.PixelMode and (db.buffs.anchorPoint:find('TOP') and -1 or 1) or 0));
+		buffs:Point(E.InversePoints[db.buffs.anchorPoint], attachTo, db.buffs.anchorPoint, x + db.buffs.xOffset, y + db.buffs.yOffset + (E.PixelMode and (db.buffs.anchorPoint:find("TOP") and -1 or 1) or 0));
 		buffs:Height(buffs.size * rows);
-		buffs['growth-y'] = db.buffs.anchorPoint:find('TOP') and 'UP' or 'DOWN';
-		buffs['growth-x'] = db.buffs.anchorPoint == 'LEFT' and 'LEFT' or  db.buffs.anchorPoint == 'RIGHT' and 'RIGHT' or (db.buffs.anchorPoint:find('LEFT') and 'RIGHT' or 'LEFT');
+		buffs["growth-y"] = db.buffs.anchorPoint:find("TOP") and "UP" or "DOWN";
+		buffs["growth-x"] = db.buffs.anchorPoint == "LEFT" and "LEFT" or  db.buffs.anchorPoint == "RIGHT" and "RIGHT" or (db.buffs.anchorPoint:find("LEFT") and "RIGHT" or "LEFT");
 		buffs.initialAnchor = E.InversePoints[db.buffs.anchorPoint];
 
 		if(db.buffs.enable) then			
@@ -333,12 +333,12 @@ function UF:Update_FocusFrame(frame, db)
 		end
 		
 		local x, y = E:GetXYOffset(db.debuffs.anchorPoint);
-		local attachTo = self:GetAuraAnchorFrame(frame, db.debuffs.attachTo, db.debuffs.attachTo == 'BUFFS' and db.buffs.attachTo == 'DEBUFFS');
+		local attachTo = self:GetAuraAnchorFrame(frame, db.debuffs.attachTo, db.debuffs.attachTo == "BUFFS" and db.buffs.attachTo == "DEBUFFS");
 		
 		debuffs:Point(E.InversePoints[db.debuffs.anchorPoint], attachTo, db.debuffs.anchorPoint, x + db.debuffs.xOffset, y + db.debuffs.yOffset);
 		debuffs:Height(debuffs.size * rows);
-		debuffs['growth-y'] = db.debuffs.anchorPoint:find('TOP') and 'UP' or 'DOWN';
-		debuffs['growth-x'] = db.debuffs.anchorPoint == 'LEFT' and 'LEFT' or  db.debuffs.anchorPoint == 'RIGHT' and 'RIGHT' or (db.debuffs.anchorPoint:find('LEFT') and 'RIGHT' or 'LEFT');
+		debuffs["growth-y"] = db.debuffs.anchorPoint:find("TOP") and "UP" or "DOWN";
+		debuffs["growth-x"] = db.debuffs.anchorPoint == "LEFT" and "LEFT" or  db.debuffs.anchorPoint == "RIGHT" and "RIGHT" or (db.debuffs.anchorPoint:find("LEFT") and "RIGHT" or "LEFT");
 		debuffs.initialAnchor = E.InversePoints[db.debuffs.anchorPoint];
 
 		if(db.debuffs.enable) then			
@@ -355,7 +355,7 @@ function UF:Update_FocusFrame(frame, db)
 		castbar:Height(db.castbar.height);
 		castbar.Holder:Width(db.castbar.width);
 		castbar.Holder:Height(db.castbar.height + (E.PixelMode and 2 or (BORDER * 2)));
-		castbar.Holder:GetScript('OnSizeChanged')(castbar.Holder);
+		castbar.Holder:GetScript("OnSizeChanged")(castbar.Holder);
 		
 		if(db.castbar.icon) then
 			castbar.Icon = castbar.ButtonIcon;
@@ -375,17 +375,17 @@ function UF:Update_FocusFrame(frame, db)
 			castbar.Spark:Hide();
 		end
 
-		if(db.castbar.enable and not frame:IsElementEnabled('Castbar')) then
-			frame:EnableElement('Castbar');
-		elseif(not db.castbar.enable and frame:IsElementEnabled('Castbar')) then
-			frame:DisableElement('Castbar');
+		if(db.castbar.enable and not frame:IsElementEnabled("Castbar")) then
+			frame:EnableElement("Castbar");
+		elseif(not db.castbar.enable and frame:IsElementEnabled("Castbar")) then
+			frame:DisableElement("Castbar");
 		end			
 	end
 	
 	do
 		local RI = frame.RaidIcon;
 		if(db.raidicon.enable) then
-			frame:EnableElement('RaidIcon');
+			frame:EnableElement("RaidIcon");
 			RI:Show();
 			RI:Size(db.raidicon.size);
 			
@@ -393,7 +393,7 @@ function UF:Update_FocusFrame(frame, db)
 			RI:ClearAllPoints();
 			RI:Point(db.raidicon.attachTo, frame, db.raidicon.attachTo, x + db.raidicon.xOffset, y + db.raidicon.yOffset);
 		else
-			frame:DisableElement('RaidIcon');
+			frame:DisableElement("RaidIcon");
 			RI:Hide();
 		end
 	end
@@ -401,8 +401,8 @@ function UF:Update_FocusFrame(frame, db)
 	do
 		local auraBars = frame.AuraBars;
 		if(db.aurabar.enable) then
-			if(not frame:IsElementEnabled('AuraBars')) then
-				frame:EnableElement('AuraBars');
+			if(not frame:IsElementEnabled("AuraBars")) then
+				frame:EnableElement("AuraBars");
 			end
 			auraBars:Show();
 			auraBars.friendlyAuraType = db.aurabar.friendlyAuraType;
@@ -413,20 +413,20 @@ function UF:Update_FocusFrame(frame, db)
 			
 			local attachTo = frame;
 			
-			if(db.aurabar.attachTo == 'BUFFS') then
+			if(db.aurabar.attachTo == "BUFFS") then
 				attachTo = frame.Buffs;
-			elseif(db.aurabar.attachTo == 'DEBUFFS') then
+			elseif(db.aurabar.attachTo == "DEBUFFS") then
 				attachTo = frame.Debuffs;
 			end
 			
-			local anchorPoint, anchorTo = 'BOTTOM', 'TOP';
-			if(db.aurabar.anchorPoint == 'BELOW') then
-				anchorPoint, anchorTo = 'TOP', 'BOTTOM';
+			local anchorPoint, anchorTo = "BOTTOM", "TOP";
+			if(db.aurabar.anchorPoint == "BELOW") then
+				anchorPoint, anchorTo = "TOP", "BOTTOM";
 			end
 			
 			local yOffset = 0;
 			if(E.PixelMode) then
-				if(db.aurabar.anchorPoint == 'BELOW') then
+				if(db.aurabar.anchorPoint == "BELOW") then
 					yOffset = 1;
 				else
 					yOffset = -1;
@@ -436,8 +436,8 @@ function UF:Update_FocusFrame(frame, db)
 			auraBars.auraBarHeight = db.aurabar.height;
 			
 			auraBars:ClearAllPoints();
-			auraBars:SetPoint(anchorPoint..'LEFT', attachTo, anchorTo..'LEFT', POWERBAR_OFFSET, yOffset);
-			auraBars:SetPoint(anchorPoint..'RIGHT', attachTo, anchorTo..'RIGHT', -POWERBAR_OFFSET, yOffset);
+			auraBars:SetPoint(anchorPoint.."LEFT", attachTo, anchorTo.."LEFT", POWERBAR_OFFSET, yOffset);
+			auraBars:SetPoint(anchorPoint.."RIGHT", attachTo, anchorTo.."RIGHT", -POWERBAR_OFFSET, yOffset);
 
 			auraBars.buffColor = {buffColor.r, buffColor.g, buffColor.b};
 			if(UF.db.colors.auraBarByType) then
@@ -448,27 +448,27 @@ function UF:Update_FocusFrame(frame, db)
 				auraBars.defaultDebuffColor = nil;
 			end
 			
-			if(db.aurabar.sort == 'TIME_REMAINING') then
+			if(db.aurabar.sort == "TIME_REMAINING") then
 				auraBars.sort = true;
-			elseif(db.aurabar.sort == 'TIME_REMAINING_REVERSE') then
+			elseif(db.aurabar.sort == "TIME_REMAINING_REVERSE") then
 				auraBars.sort = UF.SortAuraBarReverse;
-			elseif(db.aurabar.sort == 'TIME_DURATION') then
+			elseif(db.aurabar.sort == "TIME_DURATION") then
 				auraBars.sort = UF.SortAuraBarDuration;
-			elseif(db.aurabar.sort == 'TIME_DURATION_REVERSE') then
+			elseif(db.aurabar.sort == "TIME_DURATION_REVERSE") then
 				auraBars.sort = UF.SortAuraBarDurationReverse;
-			elseif(db.aurabar.sort == 'NAME') then
+			elseif(db.aurabar.sort == "NAME") then
 				auraBars.sort = UF.SortAuraBarName;
 			else
 				auraBars.sort = nil;
 			end
 			
-			auraBars.down = db.aurabar.anchorPoint == 'BELOW';
+			auraBars.down = db.aurabar.anchorPoint == "BELOW";
 			auraBars.maxBars = db.aurabar.maxBars;
 			auraBars.forceShow = frame.forceShowAuras;
 			auraBars:SetAnchors();
 		else
-			if(frame:IsElementEnabled('AuraBars')) then
-				frame:DisableElement('AuraBars');
+			if(frame:IsElementEnabled("AuraBars")) then
+				frame:DisableElement("AuraBars");
 				auraBars:Hide();
 			end
 		end
@@ -477,35 +477,35 @@ function UF:Update_FocusFrame(frame, db)
 	do
 		local range = frame.Range;
 		if(db.rangeCheck) then
-			if(not frame:IsElementEnabled('Range')) then
-				frame:EnableElement('Range');
+			if(not frame:IsElementEnabled("Range")) then
+				frame:EnableElement("Range");
 			end
 
 			range.outsideAlpha = E.db.unitframe.OORAlpha;
 		else
-			if(frame:IsElementEnabled('Range')) then
-				frame:DisableElement('Range');
+			if(frame:IsElementEnabled("Range")) then
+				frame:DisableElement("Range");
 			end				
 		end
 	end		
 	
 	if(db.customTexts) then
-		local customFont = UF.LSM:Fetch('font', UF.db.font);
+		local customFont = UF.LSM:Fetch("font", UF.db.font);
 		for objectName, _ in pairs(db.customTexts) do
 			if(not frame[objectName]) then
-				frame[objectName] = frame.RaisedElementParent:CreateFontString(nil, 'OVERLAY');
+				frame[objectName] = frame.RaisedElementParent:CreateFontString(nil, "OVERLAY");
 			end
 			
 			local objectDB = db.customTexts[objectName];
 			if(objectDB.font) then
-				customFont = UF.LSM:Fetch('font', objectDB.font);
+				customFont = UF.LSM:Fetch("font", objectDB.font);
 			end
 			
 			frame[objectName]:FontTemplate(customFont, objectDB.size or UF.db.fontSize, objectDB.fontOutline or UF.db.fontOutline);
-			frame:Tag(frame[objectName], objectDB.text_format or '');
-			frame[objectName]:SetJustifyH(objectDB.justifyH or 'CENTER');
+			frame:Tag(frame[objectName], objectDB.text_format or "");
+			frame[objectName]:SetJustifyH(objectDB.justifyH or "CENTER");
 			frame[objectName]:ClearAllPoints();
-			frame[objectName]:SetPoint(objectDB.justifyH or 'CENTER', frame, objectDB.justifyH or 'CENTER', objectDB.xOffset, objectDB.yOffset);
+			frame[objectName]:SetPoint(objectDB.justifyH or "CENTER", frame, objectDB.justifyH or "CENTER", objectDB.xOffset, objectDB.yOffset);
 		end
 	end
 	
@@ -515,4 +515,4 @@ function UF:Update_FocusFrame(frame, db)
 	frame:UpdateAllElements();
 end
 
-tinsert(UF['unitstoload'], 'focus');
+tinsert(UF["unitstoload"], "focus");

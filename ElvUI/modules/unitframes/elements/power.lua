@@ -1,32 +1,32 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local UF = E:GetModule('UnitFrames');
+local UF = E:GetModule("UnitFrames");
 
 local _, ns = ...
 local ElvUF = ns.oUF
 assert(ElvUF, "ElvUI was unable to locate oUF.")
 
 function UF:Construct_PowerBar(frame, bg, text, textPos, lowtext)
-	local power = CreateFrame('StatusBar', nil, frame)
-	UF['statusbars'][power] = true
+	local power = CreateFrame("StatusBar", nil, frame)
+	UF["statusbars"][power] = true
 
-	power:SetFrameStrata('LOW');
+	power:SetFrameStrata("LOW");
 	power.PostUpdate = self.PostUpdatePower;
 	
 	if bg then
-		power.bg = power:CreateTexture(nil, 'BORDER')
+		power.bg = power:CreateTexture(nil, "BORDER")
 		power.bg:SetAllPoints()
 		power.bg:SetTexture(E["media"].blankTex)
 		power.bg.multiplier = 0.2
 	end
 	
 	if text then
-		power.value = frame.RaisedElementParent:CreateFontString(nil, 'OVERLAY')	
+		power.value = frame.RaisedElementParent:CreateFontString(nil, "OVERLAY")	
 		UF:Configure_FontString(power.value)
 		
 		power.value:SetParent(frame)
 		
 		local x = -2
-		if textPos == 'LEFT' then
+		if textPos == "LEFT" then
 			x = 2
 		end
 		
@@ -34,7 +34,7 @@ function UF:Construct_PowerBar(frame, bg, text, textPos, lowtext)
 	end
 	
 	if lowtext then
-		power.LowManaText = power:CreateFontString(nil, 'OVERLAY')
+		power.LowManaText = power:CreateFontString(nil, "OVERLAY")
 		UF:Configure_FontString(power.LowManaText)
 		power.LowManaText:SetParent(frame.RaisedElementParent)
 		power.LowManaText:Point("BOTTOM", frame.Health, "BOTTOM", 0, 7)
@@ -43,7 +43,7 @@ function UF:Construct_PowerBar(frame, bg, text, textPos, lowtext)
 	
 	power.colorDisconnected = false
 	power.colorTapping = false
-	power:CreateBackdrop('Default')
+	power:CreateBackdrop("Default")
 
 	return power
 end	
@@ -57,7 +57,7 @@ function UF:PostUpdatePower(unit, min, max)
 		min = random(1, max)
 		pType = random(0, 4)
 		self:SetValue(min)
-		local color = ElvUF['colors'].power[tokens[pType]]
+		local color = ElvUF["colors"].power[tokens[pType]]
 		
 		if not self.colorClass then
 			self:SetStatusBarColor(color[1], color[2], color[3])
@@ -70,7 +70,7 @@ function UF:PostUpdatePower(unit, min, max)
 	if self.LowManaText and db then
 		if pType == 0 and not UnitIsDeadOrGhost(unit)
 		and (max == 0 and 0 or floor(min / max * 100)) <= db.lowmana then
-			self.LowManaText:SetText(LOW..' '..MANA)
+			self.LowManaText:SetText(LOW.." "..MANA)
 			E:Flash(self.LowManaText, 0.6)
 		else
 			self.LowManaText:SetText()

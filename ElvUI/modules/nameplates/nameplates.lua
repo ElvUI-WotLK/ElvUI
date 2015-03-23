@@ -7,6 +7,11 @@ local OVERLAY = [=[Interface\TargetingFrame\UI-TargetingFrame-Flash]=]
 
 local twipe, tsort, tinsert, band, gsub, tolower = table.wipe, table.sort, table.insert, bit.band, string.gsub, string.lower
 local targetIndicator;
+local _G = _G;
+
+--Pattern to remove cross realm label added to the end of plate names
+--Taken from http://www.wowace.com/addons/libnameplateregistry-1-0/
+local FSPAT = "%s*"..((_G.FOREIGN_SERVER_LABEL:gsub("^%s", "")):gsub("[%*()]", "%%%1")).."$";
 
 NP.NumTargetChecks = -1;
 NP.CreatedPlates = {};
@@ -216,26 +221,40 @@ function NP:UpdateLevelAndName(myPlate)
 	if region and region:GetObjectType() == 'FontString' then
 		self.level = region
 	end
-
-	if self.level:IsShown() then
-		local level, elite, boss, mylevel = self.level:GetObjectType() == 'FontString' and tonumber(self.level:GetText()) or nil, self.eliteIcon:IsShown(), self.bossIcon:IsShown(), UnitLevel('player')
-		if boss then
+	
+	if not NP.db.showLevel then
+		myPlate.level:SetText("")
+		myPlate.level:Hide()
+	else
+		if self.level:IsShown() then
+			local level, elite, boss, mylevel = self.level:GetObjectType() == 'FontString' and tonumber(self.level:GetText()) or nil, self.eliteIcon:IsShown(), self.bossIcon:IsShown(), UnitLevel('player')
+			if boss then
+				myPlate.level:SetText('??')
+				myPlate.level:SetTextColor(0.8, 0.05, 0)
+			elseif level then
+				myPlate.level:SetText(level..(elite and '+' or ''))
+				myPlate.level:SetTextColor(self.level:GetTextColor())
+			end
+		elseif self.bossIcon:IsShown() and myPlate.level:GetText() ~= '??' then
 			myPlate.level:SetText('??')
 			myPlate.level:SetTextColor(0.8, 0.05, 0)
-		elseif level then
-			myPlate.level:SetText(level..(elite and '+' or ''))
-			myPlate.level:SetTextColor(self.level:GetTextColor())
 		end
-	elseif self.bossIcon:IsShown() and myPlate.level:GetText() ~= '??' then
-		myPlate.level:SetText('??')
-		myPlate.level:SetTextColor(0.8, 0.05, 0)
-	end
 
-	if not myPlate.level:IsShown() then
-		myPlate.level:Show()
+		if(not myPlate.level:IsShown()) then
+			myPlate.level:Show();
+		end
 	end
-
-	myPlate.name:SetText(self.name:GetText())
+	
+	if(not NP.db.showName) then
+		myPlate.name:SetText("");
+		myPlate.name:Hide();
+	else
+		myPlate.name:SetText(self.name:GetText());
+		
+		if(not myPlate.name:IsShown()) then
+			myPlate.name:Show();
+		end
+	end
 end
 
 function NP:GetReaction(frame)
@@ -735,9 +754,12 @@ function NP:UpdateSettings()
 	local myPlate = NP.CreatedPlates[self]
 	local font = LSM:Fetch('font', NP.db.font)
 	local fontSize, fontOutline = NP.db.fontSize, NP.db.fontOutline
+	local wrapName = NP.db.wrapName;
 	
 	myPlate.name:FontTemplate(font, fontSize, fontOutline)
 	myPlate.name:SetTextColor(1, 1, 1)
+	myPlate.name:SetWordWrap(wrapName == true and true or false);
+	
 	myPlate.level:FontTemplate(font, fontSize, fontOutline)
 
 	myPlate.healthBar:SetSize(NP.db.healthBar.width, NP.db.healthBar.height)
