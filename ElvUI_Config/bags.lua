@@ -244,6 +244,23 @@ E.Options.args.bags = {
 					},
 				},				
 			},
-		},			
+		},
+		search_syntax = {
+			order = 6,
+			type = "group",
+			name = L["Search Syntax"],
+			disabled = function() return not E.bags end,
+			args = {
+				text = {
+					order = 1,
+					type = "input",
+					multiline = 30,
+					width = "full",
+					name = L["Search Syntax"],
+					get = function(info) return L["SEARCH_SYNTAX_DESC"]; end,
+					set = function(info, value) value = L["SEARCH_SYNTAX_DESC"]; end,
+				},
+			},
+		},
 	},
 }
