@@ -1,8 +1,12 @@
 ﻿local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local B = E:NewModule('Bags', 'AceHook-3.0', 'AceEvent-3.0', 'AceTimer-3.0');
 
+local Search = LibStub("LibItemSearch-1.2");
+
 local len, sub, find, format, floor, lower = string.len, string.sub, string.find, string.format, math.floor, string.lower
 local tinsert = table.insert
+
+local SEARCH_STRING = ""
 
 B.ProfessionColors = {
 	[0x0008] = {224/255, 187/255, 74/255}, -- Leatherworking
@@ -57,37 +61,39 @@ function B:DisableBlizzard()
 end
 
 function B:SearchReset()
-	for _, bagFrame in pairs(self.BagFrames) do
-		for _, bagID in ipairs(bagFrame.BagIDs) do
-			for slotID = 1, GetContainerNumSlots(bagID) do
-				local button = bagFrame.Bags[bagID][slotID];
-				SetItemButtonDesaturated(button, 0, 1, 1, 1);
-				button:SetAlpha(1);
+	SEARCH_STRING = ""
+end
+
+function B:UpdateSearch()
+	if self.Instructions then self.Instructions:SetShown(self:GetText() == "") end
+	local MIN_REPEAT_CHARACTERS = 3;
+	local searchString = self:GetText();
+	local prevSearchString = SEARCH_STRING;
+	if (len(searchString) > MIN_REPEAT_CHARACTERS) then
+		local repeatChar = true;
+		for i=1, MIN_REPEAT_CHARACTERS, 1 do
+			if ( sub(searchString,(0-i), (0-i)) ~= sub(searchString,(-1-i),(-1-i)) ) then
+				repeatChar = false;
+				break;
 			end
 		end
+		if ( repeatChar ) then
+			B.ResetAndClear(self);
+			return;
+		end
 	end
-end
 
-function B:UpdateSearch(str)
-	str = lower(str)
-	for _, bagFrame in pairs(self.BagFrames) do
-		for _, bagID in ipairs(bagFrame.BagIDs) do
-			for slotID = 1, GetContainerNumSlots(bagID) do
-				local button = bagFrame.Bags[bagID][slotID];
-				if button.name then
-					if not find(lower(button.name), str) then
-						SetItemButtonDesaturated(button, 1, 1, 1, 1);
-						button:SetAlpha(0.4);
-					else
-						SetItemButtonDesaturated(button, 0, 1, 1, 1);
-						button:SetAlpha(1);
-					end
-				end
-			end
-		end	
+	--Keep active search term when switching between bank and reagent bank
+	if searchString == SEARCH and prevSearchString ~= "" then
+		searchString = prevSearchString
+	elseif searchString == SEARCH then
+		searchString = ''
 	end
-end
+	
+	SEARCH_STRING = searchString
 
+	B:SetSearch(SEARCH_STRING);
+end
 function B:OpenEditbox()
 	self.BagFrame.detail:Hide();
 	self.BagFrame.editBox:Show();
@@ -96,10 +102,47 @@ function B:OpenEditbox()
 end
 
 function B:ResetAndClear()
-	self:GetParent().editBox:SetText(SEARCH);
-	
+	local editbox = self:GetParent().editBox or self
+	if editbox then editbox:SetText(SEARCH) end
+
 	self:ClearFocus();
 	B:SearchReset();
+end
+
+function B:SetSearch(query)
+	local empty = len(query:gsub(' ', '')) == 0
+	for _, bagFrame in pairs(self.BagFrames) do
+		for _, bagID in ipairs(bagFrame.BagIDs) do
+			for slotID = 1, GetContainerNumSlots(bagID) do
+				local _, _, _, _, _, _, link = GetContainerItemInfo(bagID, slotID);
+				local button = bagFrame.Bags[bagID][slotID];
+				if(empty or Search:Matches(link, query)) then
+					SetItemButtonDesaturated(button);
+					button:SetAlpha(1);
+				else
+					SetItemButtonDesaturated(button, 1);
+					button:SetAlpha(0.4);
+				end
+			end
+		end
+	end
+end
+
+function B:UpdateItemLevelDisplay()
+	for _, bagFrame in pairs(self.BagFrames) do
+		for _, bagID in ipairs(bagFrame.BagIDs) do
+			for slotID = 1, GetContainerNumSlots(bagID) do
+				local slot = bagFrame.Bags[bagID][slotID];
+				if(slot and slot.itemLevel) then
+					slot.itemLevel:FontTemplate(E.LSM:Fetch("font", E.db.bags.itemLevelFont), E.db.bags.itemLevelFontSize, E.db.bags.itemLevelFontOutline);
+				end
+			end
+		end
+		
+		if(bagFrame.UpdateAllSlots) then
+			bagFrame:UpdateAllSlots();
+		end
+	end
 end
 
 function B:UpdateSlot(bagID, slotID)
@@ -122,23 +165,34 @@ function B:UpdateSlot(bagID, slotID)
 		SetItemButtonTextureVertexColor(slot, 0.4, 0.4, 0.4);
 	else
 		SetItemButtonTextureVertexColor(slot, 1, 1, 1);
-	end				
+	end		
 	
-	if B.ProfessionColors[bagType] then
+	slot.itemLevel:SetText("")
+	if(B.ProfessionColors[bagType]) then
 		slot:SetBackdropBorderColor(unpack(B.ProfessionColors[bagType]))
-	elseif (clink) then
-		local iType;
-		slot.name, _, slot.rarity, _, _, iType = GetItemInfo(clink);
+	elseif(clink) then
+		local iLvl, itemEquipLoc;
+		slot.name, _, slot.rarity, iLvl, _, _, _, _, itemEquipLoc = GetItemInfo(clink);
 		
 		local isQuestItem, questId, isActiveQuest = GetContainerItemQuestInfo(bagID, slotID);
-	
+		local r, g, b;
+		
+		if(slot.rarity) then
+			r, g, b = GetItemQualityColor(slot.rarity);
+		end
+		
+		--Item Level
+		if((iLvl and iLvl >= E.db.bags.itemLevelThreshold) and (itemEquipLoc ~= nil and itemEquipLoc ~= "" and itemEquipLoc ~= "INVTYPE_BAG" and itemEquipLoc ~= "INVTYPE_QUIVER" and itemEquipLoc ~= "INVTYPE_TABARD") and (slot.rarity and slot.rarity > 1) and B.db.itemLevel) then
+			slot.itemLevel:SetText(iLvl);
+			slot.itemLevel:SetTextColor(r, g, b);
+		end
+		
 		-- color slot according to item quality
 		if questId and not isActive then
 			slot:SetBackdropBorderColor(1.0, 0.3, 0.3);
 		elseif questId or isQuestItem then
 			slot:SetBackdropBorderColor(1.0, 0.3, 0.3);
 		elseif slot.rarity and slot.rarity > 1 then
-			local r, g, b = GetItemQualityColor(slot.rarity);
 			slot:SetBackdropBorderColor(r, g, b);
 		else
 			slot:SetBackdropBorderColor(unpack(E.media.bordercolor));
@@ -322,6 +376,10 @@ function B:Layout(isBank)
 					E:RegisterCooldown(f.Bags[bagID][slotID].cooldown)
 					f.Bags[bagID][slotID].bagID = bagID
 					f.Bags[bagID][slotID].slotID = slotID
+					
+					f.Bags[bagID][slotID].itemLevel = f.Bags[bagID][slotID]:CreateFontString(nil, 'OVERLAY');
+					f.Bags[bagID][slotID].itemLevel:SetPoint("BOTTOMRIGHT", 0, 2);
+					f.Bags[bagID][slotID].itemLevel:FontTemplate(E.LSM:Fetch("font", E.db.bags.itemLevelFont), E.db.bags.itemLevelFontSize, E.db.bags.itemLevelFontOutline);
 				end
 				
 				f.Bags[bagID][slotID]:SetID(slotID);
@@ -691,15 +749,8 @@ function B:ContructContainerFrame(name, isBank)
 		f.editBox:SetScript('OnEnterPressed', self.ResetAndClear);
 		f.editBox:SetScript('OnEditFocusLost', self.ResetAndClear);
 		f.editBox:SetScript('OnEditFocusGained', f.editBox.HighlightText);
-		
-		local updateSearch = function(self, t)
-			if(t == true) then
-				B:UpdateSearch(self:GetText());
-			end
-		end
-		
-		f.editBox:SetScript('OnTextChanged', updateSearch);
-		f.editBox:SetScript('OnChar', updateSearch);
+		f.editBox:SetScript('OnTextChanged', self.UpdateSearch);
+		f.editBox:SetScript('OnChar', self.UpdateSearch);
 		f.editBox:SetText(SEARCH);
 		f.editBox:FontTemplate();
 
@@ -773,15 +824,8 @@ function B:ContructContainerFrame(name, isBank)
 		f.editBox:SetScript('OnEnterPressed', self.ResetAndClear);
 		f.editBox:SetScript('OnEditFocusLost', self.ResetAndClear);
 		f.editBox:SetScript('OnEditFocusGained', f.editBox.HighlightText);
-		
-		local updateSearch = function(self, t)
-			if(t == true) then
-				B:UpdateSearch(self:GetText());
-			end
-		end
-		
-		f.editBox:SetScript('OnTextChanged', updateSearch);
-		f.editBox:SetScript('OnChar', updateSearch);
+		f.editBox:SetScript('OnTextChanged', self.UpdateSearch);
+		f.editBox:SetScript('OnChar', self.UpdateSearch);
 		f.editBox:SetText(SEARCH);
 		f.editBox:FontTemplate();
 		

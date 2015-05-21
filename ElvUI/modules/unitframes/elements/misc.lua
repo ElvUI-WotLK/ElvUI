@@ -139,13 +139,16 @@ end
 function UF:Construct_RaidRoleFrames(frame)
 	local anchor = CreateFrame("Frame", nil, frame)
 	frame.Leader = anchor:CreateTexture(nil, "OVERLAY")
+	frame.Assistant = anchor:CreateTexture(nil, 'OVERLAY')
 	frame.MasterLooter = anchor:CreateTexture(nil, "OVERLAY")
 	
 	anchor:Size(24, 12)
 	frame.Leader:Size(12)
+	frame.Assistant:Size(12)
 	frame.MasterLooter:Size(11)
 	
 	frame.Leader.PostUpdate = UF.RaidRoleUpdate
+	frame.Assistant.PostUpdate = UF.RaidRoleUpdate
 	frame.MasterLooter.PostUpdate = UF.RaidRoleUpdate
 	
 	return anchor
@@ -272,6 +275,13 @@ function UF:UpdateAuraWatchFromHeader(group)
 		local frame = select(i, self[group]:GetChildren())
 		if frame and frame.Health then
 			UF:UpdateAuraWatch(frame)
+		elseif frame then
+			for n = 1, frame:GetNumChildren() do
+				local child = select(n, frame:GetChildren())
+				if child and child.Health then
+					UF:UpdateAuraWatch(child, petOverride)
+				end
+			end
 		end
 	end
 end
@@ -457,32 +467,41 @@ end
 
 function UF:RaidRoleUpdate()
 	local anchor = self:GetParent();
-	local Leader = anchor:GetParent().Leader;
-	local MasterLooter = anchor:GetParent().MasterLooter;
+	local leader = anchor:GetParent().Leader;
+	local assistant = anchor:GetParent().Assistant;
+	local masterLooter = anchor:GetParent().MasterLooter;
 	
-	if(not Leader or not MasterLooter) then
+	if(not leader or not masterLooter or not assistant) then
 		return;
 	end
 	
 	local unit = anchor:GetParent().unit;
 	local db = anchor:GetParent().db;
-	local isLeader = Leader:IsShown();
-	local isMasterLooter = MasterLooter:IsShown();
+	local isLeader = leader:IsShown();
+	local isMasterLooter = masterLooter:IsShown();
+	local isAssist = assistant:IsShown();
 	
-	Leader:ClearAllPoints();
-	MasterLooter:ClearAllPoints();
+	leader:ClearAllPoints();
+	assistant:ClearAllPoints();
+	masterLooter:ClearAllPoints();
 	
 	if(db and db.raidRoleIcons) then
 		if(isLeader and db.raidRoleIcons.position == "TOPLEFT") then
-			Leader:Point("LEFT", anchor, "LEFT");
-			MasterLooter:Point("RIGHT", anchor, "RIGHT");
+			leader:Point("LEFT", anchor, "LEFT");
+			masterLooter:Point("RIGHT", anchor, "RIGHT");
 		elseif(isLeader and db.raidRoleIcons.position == "TOPRIGHT") then
-			Leader:Point("RIGHT", anchor, "RIGHT");
-			MasterLooter:Point("LEFT", anchor, "LEFT");
+			leader:Point("RIGHT", anchor, "RIGHT");
+			masterLooter:Point("LEFT", anchor, "LEFT");
+		elseif(isAssist and db.raidRoleIcons.position == "TOPLEFT") then
+			assistant:Point("LEFT", anchor, "LEFT");
+			masterLooter:Point("RIGHT", anchor, "RIGHT");
+		elseif(isAssist and db.raidRoleIcons.position == "TOPRIGHT") then
+			assistant:Point("RIGHT", anchor, "RIGHT");
+			masterLooter:Point("LEFT", anchor, "LEFT");
 		elseif(isMasterLooter and db.raidRoleIcons.position == "TOPLEFT") then
-			MasterLooter:Point("LEFT", anchor, "LEFT");
+			masterLooter:Point("LEFT", anchor, "LEFT");
 		else
-			MasterLooter:Point("RIGHT", anchor, "RIGHT");
+			masterLooter:Point("RIGHT", anchor, "RIGHT");
 		end
 	end
 end
