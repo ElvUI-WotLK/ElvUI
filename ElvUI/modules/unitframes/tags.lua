@@ -2,6 +2,7 @@ local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, Private
 local _, ns = ...
 local ElvUF = ns.oUF
 assert(ElvUF, "ElvUI was unable to locate oUF.")
+local format = string.format
 ------------------------------------------------------------------------
 --	Tags
 ------------------------------------------------------------------------
@@ -104,6 +105,36 @@ ElvUF.Tags["health:percent"] = function(unit)
 	else
 		return E:GetFormattedText("PERCENT", UnitHealth(unit), UnitHealthMax(unit))
 	end
+end
+
+ElvUF.TagEvents["health:current-nostatus"] = "UNIT_HEALTH UNIT_MAXHEALTH";
+ElvUF.Tags["health:current-nostatus"] = function(unit)
+	return E:GetFormattedText("CURRENT", UnitHealth(unit), UnitHealthMax(unit));
+end
+
+ElvUF.TagEvents["health:deficit-nostatus"] = "UNIT_HEALTH UNIT_MAXHEALTH";
+ElvUF.Tags["health:deficit-nostatus"] = function(unit)
+	return E:GetFormattedText("DEFICIT", UnitHealth(unit), UnitHealthMax(unit));
+end
+
+ElvUF.TagEvents["health:current-percent-nostatus"] = "UNIT_HEALTH UNIT_MAXHEALTH";
+ElvUF.Tags["health:current-percent-nostatus"] = function(unit)
+	return E:GetFormattedText("CURRENT_PERCENT", UnitHealth(unit), UnitHealthMax(unit));
+end
+
+ElvUF.TagEvents["health:current-max-nostatus"] = "UNIT_HEALTH UNIT_MAXHEALTH";
+ElvUF.Tags["health:current-max-nostatus"] = function(unit)
+	return E:GetFormattedText("CURRENT_MAX", UnitHealth(unit), UnitHealthMax(unit));
+end
+
+ElvUF.TagEvents["health:current-max-percent-nostatus"] = "UNIT_HEALTH UNIT_MAXHEALTH";
+ElvUF.Tags["health:current-max-percent-nostatus"] = function(unit)
+	return E:GetFormattedText("CURRENT_MAX_PERCENT", UnitHealth(unit), UnitHealthMax(unit));
+end
+
+ElvUF.TagEvents["health:percent-nostatus"] = "UNIT_HEALTH UNIT_MAXHEALTH";
+ElvUF.Tags["health:percent-nostatus"] = function(unit)
+	return E:GetFormattedText("PERCENT", UnitHealth(unit), UnitHealthMax(unit));
 end
 
 ElvUF.TagEvents["powercolor"] = "UNIT_ENERGY UNIT_FOCUS UNIT_MANA UNIT_RAGE UNIT_RUNIC_POWER UNIT_MAXPOWER"
@@ -334,5 +365,86 @@ ElvUF.Tags["pvptimer"] = function(unit)
 		end
 	else
 		return ""
+	end
+end
+
+local baseSpeed = 7;
+local speedText = SPEED;
+
+ElvUF.OnUpdateThrottle["speed:percent"] = 0.1;
+ElvUF.Tags["speed:percent"] = function(unit)
+	local currentSpeedInYards = GetUnitSpeed(unit);
+	local currentSpeedInPercent = (currentSpeedInYards / baseSpeed) * 100;
+	
+	return format("%s: %d%%", speedText, currentSpeedInPercent);
+end
+
+ElvUF.OnUpdateThrottle["speed:percent-moving"] = 0.1;
+ElvUF.Tags["speed:percent-moving"] = function(unit)
+	local currentSpeedInYards = GetUnitSpeed(unit);
+	local currentSpeedInPercent = currentSpeedInYards > 0 and ((currentSpeedInYards / baseSpeed) * 100);
+	
+	if(currentSpeedInPercent) then
+		currentSpeedInPercent = format("%s: %d%%", speedText, currentSpeedInPercent);
+	end
+	
+	return currentSpeedInPercent or "";
+end
+
+ElvUF.OnUpdateThrottle["speed:percent-raw"] = 0.1;
+ElvUF.Tags["speed:percent-raw"] = function(unit)
+	local currentSpeedInYards = GetUnitSpeed(unit);
+	local currentSpeedInPercent = (currentSpeedInYards / baseSpeed) * 100;
+	
+	return format("%d%%", currentSpeedInPercent);
+end
+
+ElvUF.OnUpdateThrottle["speed:percent-moving-raw"] = 0.1;
+ElvUF.Tags["speed:percent-moving-raw"] = function(unit)
+	local currentSpeedInYards = GetUnitSpeed(unit);
+	local currentSpeedInPercent = currentSpeedInYards > 0 and ((currentSpeedInYards / baseSpeed) * 100);
+	
+	if(currentSpeedInPercent) then
+		currentSpeedInPercent = format("%d%%", currentSpeedInPercent);
+	end
+	
+	return currentSpeedInPercent or "";
+end
+
+ElvUF.OnUpdateThrottle["speed:yardspersec"] = 0.1;
+ElvUF.Tags["speed:yardspersec"] = function(unit)
+	local currentSpeedInYards = GetUnitSpeed(unit);
+	
+	return format("%s: %.1f", speedText, currentSpeedInYards);
+end
+
+ElvUF.OnUpdateThrottle["speed:yardspersec-moving"] = 0.1;
+ElvUF.Tags["speed:yardspersec-moving"] = function(unit)
+	local currentSpeedInYards = GetUnitSpeed(unit);
+	
+	return currentSpeedInYards > 0 and format("%s: %.1f", speedText, currentSpeedInYards) or "";
+end
+
+ElvUF.OnUpdateThrottle["speed:yardspersec-raw"] = 0.1;
+ElvUF.Tags["speed:yardspersec-raw"] = function(unit)
+	local currentSpeedInYards = GetUnitSpeed(unit);
+	
+	return format("%.1f", currentSpeedInYards);
+end
+
+ElvUF.OnUpdateThrottle["speed:yardspersec-moving-raw"] = 0.1;
+ElvUF.Tags["speed:yardspersec-moving-raw"] = function(unit)
+	local currentSpeedInYards = GetUnitSpeed(unit);
+	
+	return currentSpeedInYards > 0 and format("%.1f", currentSpeedInYards) or "";
+end
+
+ElvUF.TagEvents["classificationcolor"] = "UNIT_CLASSIFICATION_CHANGED";
+ElvUF.Tags["classificationcolor"] = function(unit)
+	local c = UnitClassification(unit);
+	if(c == "rare" or c == "elite") then
+		return Hex(1, 0.5, 0.25); -- Orange
+	elseif(c == "rareelite" or c == "worldboss") then
+		return Hex(1, 0, 0); -- Red
 	end
 end
