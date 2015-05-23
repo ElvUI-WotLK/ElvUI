@@ -11,23 +11,21 @@ function UF:Construct_ArenaFrames(frame)
 	frame.Health = self:Construct_HealthBar(frame, true, true, "RIGHT");
 	frame.Name = self:Construct_NameText(frame);
 	
-	if(not frame.isChild) then
-		frame.Power = self:Construct_PowerBar(frame, true, true, "LEFT", false);
-		frame.Portrait3D = self:Construct_Portrait(frame, "model");
-		frame.Portrait2D = self:Construct_Portrait(frame, "texture");
-		frame.Buffs = self:Construct_Buffs(frame);
-		frame.Debuffs = self:Construct_Debuffs(frame);
-		frame.Castbar = self:Construct_Castbar(frame, "RIGHT");
-		frame.Trinket = self:Construct_Trinket(frame);
-		frame.Range = UF:Construct_Range(frame);
-		frame:SetAttribute("type2", "focus");
-		
-		frame.TargetGlow = UF:Construct_TargetGlow(frame);
-		tinsert(frame.__elements, UF.UpdateTargetGlow);
-		frame:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetGlow);
-		frame:RegisterEvent("PLAYER_ENTERING_WORLD", UF.UpdateTargetGlow);
-		frame:RegisterEvent("GROUP_ROSTER_UPDATE", UF.UpdateTargetGlow);
-	end
+	frame.Power = self:Construct_PowerBar(frame, true, true, "LEFT", false);
+	frame.Portrait3D = self:Construct_Portrait(frame, "model");
+	frame.Portrait2D = self:Construct_Portrait(frame, "texture");
+	frame.Buffs = self:Construct_Buffs(frame);
+	frame.Debuffs = self:Construct_Debuffs(frame);
+	frame.Castbar = self:Construct_Castbar(frame, "RIGHT");
+	frame.Trinket = self:Construct_Trinket(frame);
+	frame.Range = UF:Construct_Range(frame);
+	frame:SetAttribute("type2", "focus");
+	
+	frame.TargetGlow = UF:Construct_TargetGlow(frame);
+	tinsert(frame.__elements, UF.UpdateTargetGlow);
+	frame:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetGlow);
+	frame:RegisterEvent("PLAYER_ENTERING_WORLD", UF.UpdateTargetGlow);
+	frame:RegisterEvent("GROUP_ROSTER_UPDATE", UF.UpdateTargetGlow);
 	
 	ArenaHeader:Point("BOTTOMRIGHT", E.UIParent, "RIGHT", -105, -165);
 	E:CreateMover(ArenaHeader, ArenaHeader:GetName().."Mover", L["Arena Frames"], nil, nil, nil, "ALL,ARENA");
@@ -130,7 +128,7 @@ function UF:Update_ArenaFrames(frame, db)
 		elseif(USE_MINI_POWERBAR) then
 			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER, BORDER + (POWERBAR_HEIGHT/2));
 		else
-			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER, BORDER + POWERBAR_HEIGHT);
+			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER, (USE_POWERBAR and ((BORDER + SPACING)*2) or BORDER) + POWERBAR_HEIGHT);
 		end
 		
 		health.bg:ClearAllPoints();
@@ -179,12 +177,12 @@ function UF:Update_ArenaFrames(frame, db)
 				power:SetFrameLevel(2);
 			elseif(USE_MINI_POWERBAR) then
 				power:Width(POWERBAR_WIDTH - BORDER*2);
-				power:Height(POWERBAR_HEIGHT - BORDER*2);
+				power:Height(POWERBAR_HEIGHT);
 				power:Point("RIGHT", frame, "BOTTOMRIGHT", -(BORDER*2 + 4), BORDER + (POWERBAR_HEIGHT/2));
 				power:SetFrameStrata("MEDIUM");
 				power:SetFrameLevel(frame:GetFrameLevel() + 3);
 			elseif(USE_INSET_POWERBAR) then
-				power:Height(POWERBAR_HEIGHT - BORDER*2);
+				power:Height(POWERBAR_HEIGHT);
 				power:Point("BOTTOMLEFT", frame.Health, "BOTTOMLEFT", BORDER + (BORDER*2), BORDER + (BORDER*2));
 				power:Point("BOTTOMRIGHT", frame.Health, "BOTTOMRIGHT", -(BORDER + (BORDER*2)), BORDER + (BORDER*2));
 				power:SetFrameStrata("MEDIUM");
@@ -462,4 +460,4 @@ function UF:Update_ArenaFrames(frame, db)
 	frame:UpdateAllElements();
 end
 
-UF["unitgroupstoload"]["arena"] = { 5, "ELVUI_UNITTARGET" };
+UF["unitgroupstoload"]["arena"] = { 5 };

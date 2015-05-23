@@ -196,11 +196,11 @@ local function GetOptionsTable_Power(hasDetatchOption, updateFunc, groupName, nu
 					updateFunc(UF, groupName, numUnits)
 				end,
 			},
-			height = { -- Высота
+			height = {
 				type = 'range',
 				name = L['Height'],
 				order = 2,
-				min = 3, max = 50, step = 1,
+				min = 1, max = 50, step = 1,
 			},
 			offset = { -- Смещение
 				type = 'range',
