@@ -206,6 +206,7 @@ L['Raid Menu'] = "Рейдовое меню"
 L['Remaining:'] = "Осталось:"
 L['Rested:'] = "Бодрость:"
 L['Right Click:'] = "ПКМ:" --layout\layout.lua
+L["seconds"] = "секунд";
 L['Show BG Texts'] = "Показать текст ПБ" --layout\layout.lua
 L['Toggle Chat Frame'] = "Показать/скрыть чат" --layout\layout.lua
 L['Toggle Configuration'] = "Конфигурация" --layout\layout.lua

@@ -219,6 +219,13 @@ E.Options.args.general = {
 					get = function(info) return E.db.general.afk end,
 					set = function(info, value) E.db.general.afk = value; E:GetModule('AFK'):Toggle() end
 				},
+				lossControl = {
+					order = 19,
+					type = "toggle",
+					name = L['Loss Control Icon'],
+					get = function(info) return E.private.general.lossControl end,
+					set = function(info, value) E.private.general.lossControl = value; E:StaticPopup_Show("PRIVATE_RL") end
+				},
 			},
 		},
 		minimap = { -- Мини-карта

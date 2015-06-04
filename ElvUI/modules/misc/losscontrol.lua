@@ -218,6 +218,8 @@ function LOS:UNIT_AURA()
 end
 
 function LOS:Initialize()
+	if(E.private["general"].lossControl ~= true) then return; end
+	
 	self.frame = CreateFrame('Frame', 'ElvUI_LoseOfControlFrame', UIParent);
 	self.frame:Point('CENTER', 0, 0);
 	self.frame:Size(54);
@@ -244,7 +246,7 @@ function LOS:Initialize()
 	self.SecondsText = self.frame:CreateFontString(nil, 'OVERLAY');
 	self.SecondsText:FontTemplate(E['media'].normFont, 20, 'OUTLINE');
 	self.SecondsText:SetPoint("BOTTOM", self.frame, 0, -80);
-	self.SecondsText:SetText('секунд');
+	self.SecondsText:SetText(L['seconds']);
 	
 	self:RegisterEvent('UNIT_AURA');
 end

@@ -132,8 +132,6 @@ local function SetTemplate(f, t, glossTex, ignoreUpdates)
 	if not ignoreUpdates then
 		E["frames"][f] = true
 	end
-	
-	frame = nil;
 end
 
 local function CreateBackdrop(f, t, tex)

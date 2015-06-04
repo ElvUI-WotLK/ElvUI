@@ -4,7 +4,7 @@ local DT = E:GetModule('DataTexts');
 local join = string.join;
 
 local lastPanel;
-local displayModifierString = '';
+local displayNumberString = '';
 
 local function OnEvent(self, event, unit)
 	local spellDamage = GetSpellBonusDamage(7);

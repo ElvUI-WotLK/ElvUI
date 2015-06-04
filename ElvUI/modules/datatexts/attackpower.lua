@@ -4,7 +4,7 @@ local DT = E:GetModule('DataTexts');
 local join = string.join;
 
 local lastPanel;
-local displayModifierString = '';
+local displayNumberString = '';
 local base, posBuff, negBuff, effective, Rbase, RposBuff, RnegBuff, Reffective, pwr;
 
 local function OnEvent(self, event, unit)

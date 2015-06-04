@@ -971,7 +971,7 @@ function B:Initialize()
 	-- self:SecureHook('ToggleBag', 'ToggleBags');
 	--self:SecureHook('OpenAllBags', 'ToggleBackpack');
 	-- self:SecureHook('ToggleBackpack')
-	-- self:SecureHook('BackpackTokenFrame_Update', 'UpdateTokens');
+	self:SecureHook('BackpackTokenFrame_Update', 'UpdateTokens');
 
 	self:PositionBagFrames();
 	self:Layout();

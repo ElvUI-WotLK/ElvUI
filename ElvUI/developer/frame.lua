@@ -49,6 +49,36 @@ SlashCmdList["FRAME"] = function(arg)
 	end
 end
 
+CreateFrame("Frame", "FrameStackHighlight");
+FrameStackHighlight:SetFrameStrata("TOOLTIP");
+local t = FrameStackHighlight:CreateTexture(nil, "BORDER");
+t:SetAllPoints();
+t:SetTexture(0, 1, 0, 0.5);
+
+hooksecurefunc("FrameStackTooltip_Toggle", function(showHidden)
+	local tooltip = _G["FrameStackTooltip"];
+	if(not tooltip:IsVisible()) then
+		FrameStackHighlight:Hide();
+	end
+end);
+
+local _timeSinceLast = 0
+FrameStackTooltip:HookScript("OnUpdate", function(self, elapsed)
+	_timeSinceLast = _timeSinceLast - elapsed;
+	if(_timeSinceLast <= 0) then
+		_timeSinceLast = FRAMESTACK_UPDATE_TIME;
+		local highlightFrame = GetMouseFocus();
+
+		FrameStackHighlight:ClearAllPoints();
+		if(highlightFrame) then
+			FrameStackHighlight:SetPoint("BOTTOMLEFT", highlightFrame);
+			FrameStackHighlight:SetPoint("TOPRIGHT", highlightFrame);
+			FrameStackHighlight:Show();
+		else
+			FrameStackHighlight:Hide();
+		end
+	end
+end);
 
 SLASH_FRAMELIST1 = "/framelist"
 SlashCmdList["FRAMELIST"] = function(msg)
