@@ -29,7 +29,7 @@ local function LoadSkin()
 			if(skada.bgframe.backdrop) then
 				if(win.db.reversegrowth) then
 					skada.bgframe.backdrop:Point('TOPLEFT', -E.Border, E.Border);
-					skada.bgframe.backdrop:Point('BOTTOMRIGHT', E.Border, -9);
+					skada.bgframe.backdrop:Point('BOTTOMRIGHT', E.Border, -(E.PixelMode and 7 or 9));
 				else
 					skada.bgframe.backdrop:Point('TOPLEFT', -E.Border, E.PixelMode and 7 or 9);
 					skada.bgframe.backdrop:Point('BOTTOMRIGHT', E.Border, -E.Border);

@@ -21,7 +21,7 @@ function S:EmbedSkadaWindow(window, width, height, point, relativeFrame, relativ
 	window.db.barslocked = true;
 	window.bargroup:ClearAllPoints();
 	window.bargroup:SetPoint(point, relativeFrame, relativePoint, ofsx, ofsy);
-	window.bargroup:SetFrameLevel(relativeFrame:GetFrameLevel() + 10);
+	window.bargroup:SetFrameLevel(relativeFrame:GetFrameLevel() + 30);
 	
 	Skada.displays["bar"].ApplySettings(Skada.displays["bar"], window);
 end
@@ -87,7 +87,7 @@ function S:EmbedSkada()
 	end
 
 	for _, window in pairs(skadaWindows) do
-		window.bargroup:SetParent(RightChatPanel);
+		window.bargroup:SetParent(RightChatToggleButton);
 	end
 	
 	local panelWidthRight = E.db.chat.separateSizes and E.db.chat.panelWidthRight or E.db.chat.panelWidth;
@@ -219,7 +219,7 @@ function S:SetEmbedRight(addon)
 				tinsert(skadaWindows, window);
 			end	
 			
-			--if S.db.embedRight == 'Skada' then
+			--if(S.db.embedRight == "Skada") then
 				S:EmbedSkada();
 			--end
 		end
@@ -232,9 +232,9 @@ function S:SetEmbedRight(addon)
 				tinsert(skadaWindows, window);
 			end	
 			
-		--	if S.db.embedRight == 'Skada' then
+			--if(S.db.embedRight == "Skada") then
 				S:EmbedSkada();
-		--	end
+			--end
 		end
 		
 		self:EmbedSkada();
