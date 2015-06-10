@@ -5,7 +5,26 @@ skadaWindows = {}
 S.AddonPoints = {
 	['Recount'] = {},
 	['Omen'] = {},
+	["Skada"] = {}
 }
+
+function S:EmbedSkadaWindow(window, width, height, point, relativeFrame, relativePoint, ofsx, ofsy)
+	local barheight = 22;
+	window.db.barwidth = width;
+	window.db.barheight = 12;
+	if(window.db.enabletitle) then 
+		height = height - barheight;
+	end
+	window.db.background.height = height;
+	window.db.enablebackground = true;
+	window.db.spark = false
+	window.db.barslocked = true;
+	window.bargroup:ClearAllPoints();
+	window.bargroup:SetPoint(point, relativeFrame, relativePoint, ofsx, ofsy);
+	window.bargroup:SetFrameLevel(relativeFrame:GetFrameLevel() + 10);
+	
+	Skada.displays["bar"].ApplySettings(Skada.displays["bar"], window);
+end
 
 function S:SaveEmbeddedAddonPoints(addon)
 	if not IsAddOnLoaded(addon) then return; end
@@ -45,7 +64,41 @@ function S:RemovePrevious(current)
 				Omen.VGrip2:Hide()
 			end			
 		end
+	elseif(lastAddon == "Skada") then
+		if not Skada.CreateWindow_ then
+			Skada.CreateWindow_ = Skada.CreateWindow;
+			Skada.DeleteWindow_ = Skada.DeleteWindow;
+		end
+		
+		for _, window in pairs(skadaWindows) do
+			window.bargroup:SetParent(UIParent);
+		end		
 	end
+end
+
+function S:EmbedSkada()
+	local borderWidth = E.PixelMode and 1 or 2;
+	local widthOffset = E.PixelMode and 8 or 14;
+	local heightOffset = E.PixelMode and 13 or 19;
+	
+	if(E.db.chat.panelBackdrop == "'SHOWBOTH" or E.db.chat.panelBackdrop == "SHOWRIGHT") then
+		widthOffset = E.PixelMode and 8 or 14;
+		heightOffset = E.PixelMode and 16 or 24;
+	end
+
+	for _, window in pairs(skadaWindows) do
+		window.bargroup:SetParent(RightChatPanel);
+	end
+	
+	local panelWidthRight = E.db.chat.separateSizes and E.db.chat.panelWidthRight or E.db.chat.panelWidth;
+	local panelHeightRight = E.db.chat.separateSizes and E.db.chat.panelHeightRight or E.db.chat.panelHeight;
+	
+	if(#skadaWindows == 1) then
+		self:EmbedSkadaWindow(skadaWindows[1], panelWidthRight - widthOffset, panelHeightRight - heightOffset, "TOPLEFT", RightChatPanel, "TOPLEFT", E.PixelMode and 4 or 7, -(E.PixelMode and 4 or 7));
+	elseif(#skadaWindows == 2) then
+		self:EmbedSkadaWindow(skadaWindows[1], ((panelWidthRight - widthOffset) / 2) - (borderWidth + E.mult) + 1, panelHeightRight - heightOffset,  "TOPLEFT", RightChatPanel, "TOPLEFT", E.PixelMode and 4 or 6, -(E.PixelMode and 4 or 6));
+		self:EmbedSkadaWindow(skadaWindows[2], ((panelWidthRight - widthOffset) / 2) - (borderWidth + E.mult), panelHeightRight - heightOffset,  "LEFT", skadaWindows[1].bargroup, "RIGHT", E.PixelMode and 3 or 7, 0);
+	end	
 end
 
 function S:SetEmbedRight(addon)
@@ -149,5 +202,42 @@ function S:SetEmbedRight(addon)
 		end)				
 		
 		self.lastAddon = addon
+	elseif(addon == "Skada") then
+		table.wipe(skadaWindows);
+		for _, window in ipairs(Skada:GetWindows()) do
+			window:UpdateDisplay()
+			tinsert(skadaWindows, window);
+		end
+		
+		self:RemovePrevious(addon);
+
+		function Skada:CreateWindow(name, db)
+			Skada:CreateWindow_(name, db);
+			
+			table.wipe(skadaWindows);
+			for _, window in ipairs(Skada:GetWindows()) do
+				tinsert(skadaWindows, window);
+			end	
+			
+			--if S.db.embedRight == 'Skada' then
+				S:EmbedSkada();
+			--end
+		end
+		
+		function Skada:DeleteWindow(name)
+			Skada:DeleteWindow_(name);
+			
+			table.wipe(skadaWindows);
+			for _, window in ipairs(Skada:GetWindows()) do
+				tinsert(skadaWindows, window);
+			end	
+			
+		--	if S.db.embedRight == 'Skada' then
+				S:EmbedSkada();
+		--	end
+		end
+		
+		self:EmbedSkada();
+		self.lastAddon = addon;
 	end
 end
