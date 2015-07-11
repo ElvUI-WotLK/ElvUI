@@ -466,6 +466,8 @@ function UF:Update_PartyFrames(frame, db)
 			buffs:Height(buffs.size * rows);
 			buffs["growth-y"] = db.buffs.anchorPoint:find("TOP") and "UP" or "DOWN";
 			buffs["growth-x"] = db.buffs.anchorPoint == "LEFT" and "LEFT" or  db.buffs.anchorPoint == "RIGHT" and "RIGHT" or (db.buffs.anchorPoint:find("LEFT") and "RIGHT" or "LEFT");
+			buffs["spacing-x"] = db.buffs.xSpacing;
+			buffs["spacing-y"] = db.buffs.ySpacing;
 			buffs.initialAnchor = E.InversePoints[db.buffs.anchorPoint];
 			
 			if(db.buffs.enable) then
@@ -501,6 +503,8 @@ function UF:Update_PartyFrames(frame, db)
 			debuffs:Height(debuffs.size * rows);
 			debuffs["growth-y"] = db.debuffs.anchorPoint:find("TOP") and "UP" or "DOWN";
 			debuffs["growth-x"] = db.debuffs.anchorPoint == "LEFT" and "LEFT" or  db.debuffs.anchorPoint == "RIGHT" and "RIGHT" or (db.debuffs.anchorPoint:find("LEFT") and "RIGHT" or "LEFT");
+			debuffs["spacing-x"] = db.debuffs.xSpacing;
+			debuffs["spacing-y"] = db.debuffs.ySpacing;
 			debuffs.initialAnchor = E.InversePoints[db.debuffs.anchorPoint];
 			
 			if(db.debuffs.enable) then

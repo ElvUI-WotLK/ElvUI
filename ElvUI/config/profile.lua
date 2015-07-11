@@ -325,7 +325,9 @@ P['unitframe'] = {
 				['onlyDispellable'] = false,
 				['useFilter'] = '',
 				['xOffset'] = 0,
-				['yOffset'] = 0
+				['yOffset'] = 0,
+				['xSpacing'] = 0,
+				['ySpacing'] = 0,
 			},
 			['debuffs'] = {
 				['enable'] = true,
@@ -342,7 +344,9 @@ P['unitframe'] = {
 				['onlyDispellable'] = false,
 				['useFilter'] = '',
 				['xOffset'] = 0,
-				['yOffset'] = 0
+				['yOffset'] = 0,
+				['xSpacing'] = 0,
+				['ySpacing'] = 0,
 			},
 			['castbar'] = {
 				['enable'] = true,
@@ -447,6 +451,8 @@ P['unitframe'] = {
 				['useFilter'] = '',
 				['xOffset'] = 0,
 				['yOffset'] = 0,
+				['xSpacing'] = 0,
+				['ySpacing'] = 0,
 			},
 			['debuffs'] = { -- Дебаффы
 				['enable'] = true,
@@ -464,6 +470,8 @@ P['unitframe'] = {
 				['useFilter'] = '',
 				['xOffset'] = 0,
 				['yOffset'] = 0,
+				['xSpacing'] = 0,
+				['ySpacing'] = 0,
 			},
 			['castbar'] = { -- Полоса заклинаний
 				['enable'] = true,
@@ -624,6 +632,8 @@ P['unitframe'] = {
 				['useFilter'] = '',
 				['xOffset'] = 0,
 				['yOffset'] = 0,
+				['xSpacing'] = 0,
+				['ySpacing'] = 0,
 			},
 			['debuffs'] = {
 				['enable'] = true,
@@ -641,6 +651,8 @@ P['unitframe'] = {
 				['useFilter'] = '',
 				['xOffset'] = 0,
 				['yOffset'] = 0,
+				['xSpacing'] = 0,
+				['ySpacing'] = 0,
 			},
 			['raidicon'] = {
 				['enable'] = true,
@@ -702,7 +714,9 @@ P['unitframe'] = {
 				['onlyDispellable'] = {friendly = false, enemy = false},
 				['useFilter'] = '',
 				['xOffset'] = 0,
-				['yOffset'] = 0
+				['yOffset'] = 0,
+				['xSpacing'] = 0,
+				['ySpacing'] = 0,
 			},
 			['debuffs'] = {
 				['enable'] = true,
@@ -719,7 +733,9 @@ P['unitframe'] = {
 				['onlyDispellable'] = {friendly = false, enemy = false},
 				['useFilter'] = '',
 				['xOffset'] = 0,
-				['yOffset'] = 0
+				['yOffset'] = 0,
+				['xSpacing'] = 0,
+				['ySpacing'] = 0,
 			},
 			['castbar'] = {
 				['enable'] = true,
@@ -872,6 +888,8 @@ P['unitframe'] = {
 				['useFilter'] = '',
 				['xOffset'] = 0,
 				['yOffset'] = 0,
+				['xSpacing'] = 0,
+				['ySpacing'] = 0,
 			},
 			['debuffs'] = { -- Дебаффы
 				['enable'] = false,
@@ -889,6 +907,8 @@ P['unitframe'] = {
 				['useFilter'] = '',
 				['xOffset'] = 0,
 				['yOffset'] = 0,
+				['xSpacing'] = 0,
+				['ySpacing'] = 0,
 			},	
 			['buffIndicator'] = { -- Индикатор баффов
 				['enable'] = true,
@@ -942,6 +962,8 @@ P['unitframe'] = {
 				['useFilter'] = '',
 				['xOffset'] = 0,
 				['yOffset'] = 0,
+				['xSpacing'] = 0,
+				['ySpacing'] = 0,
 			},
 			['debuffs'] = { -- Дебаффы
 				['enable'] = false,
@@ -959,6 +981,8 @@ P['unitframe'] = {
 				['useFilter'] = '',
 				['xOffset'] = 0,
 				['yOffset'] = 0,
+				['xSpacing'] = 0,
+				['ySpacing'] = 0,
 			},			
 		},	
 		['boss'] = { -- Боссы
@@ -1013,6 +1037,8 @@ P['unitframe'] = {
 				['useFilter'] = '',
 				['xOffset'] = 0,
 				['yOffset'] = 11,
+				['xSpacing'] = 0,
+				['ySpacing'] = 0,
 				['sizeOverride'] = 22,
 			},
 			['debuffs'] = { -- Дебаффы
@@ -1031,6 +1057,8 @@ P['unitframe'] = {
 				['useFilter'] = '',
 				['xOffset'] = 0,
 				['yOffset'] = -11,
+				['xSpacing'] = 0,
+				['ySpacing'] = 0,
 				['sizeOverride'] = 22,
 			},	
 			['castbar'] = { -- Полоса заклинаний
@@ -1103,7 +1131,9 @@ P['unitframe'] = {
 				['onlyDispellable'] = {friendly = false, enemy = false},
 				['sizeOverride'] = 22,
 				['xOffset'] = 0,
-				['yOffset'] = 12
+				['yOffset'] = 12,
+				['xSpacing'] = 0,
+				['ySpacing'] = 0,
 			},
 			['debuffs'] = {
 				['enable'] = true,
@@ -1121,7 +1151,9 @@ P['unitframe'] = {
 				['onlyDispellable'] = {friendly = false, enemy = false},
 				['sizeOverride'] = 22,
 				['xOffset'] = 0,
-				['yOffset'] = -13
+				['yOffset'] = -13,
+				['xSpacing'] = 0,
+				['ySpacing'] = 0,
 			},
 			['castbar'] = {
 				['enable'] = true,
@@ -1204,6 +1236,8 @@ P['unitframe'] = {
 				['useFilter'] = '',
 				['xOffset'] = 0,
 				['yOffset'] = 0,
+				['xSpacing'] = 0,
+				['ySpacing'] = 0,
 			},
 			['debuffs'] = { -- Дебаффы
 				['enable'] = true,
@@ -1222,6 +1256,8 @@ P['unitframe'] = {
 				['useFilter'] = '',
 				['xOffset'] = 0,
 				['yOffset'] = 0,
+				['xSpacing'] = 0,
+				['ySpacing'] = 0,
 				['sizeOverride'] = 44,
 			},	
 			['buffIndicator'] = { -- Индикатор баффов
@@ -1330,6 +1366,8 @@ P['unitframe'] = {
 				['useFilter'] = '',
 				['xOffset'] = 0,
 				['yOffset'] = 0,
+				['xSpacing'] = 0,
+				['ySpacing'] = 0,
 			},
 			['debuffs'] = {
 				['enable'] = false,
@@ -1349,6 +1387,8 @@ P['unitframe'] = {
 				['useFilter'] = '',
 				['xOffset'] = 0,
 				['yOffset'] = 0,
+				['xSpacing'] = 0,
+				['ySpacing'] = 0,
 			},	
 			['buffIndicator'] = {
 				['enable'] = true,
@@ -1444,6 +1484,8 @@ P['unitframe'] = {
 				['useFilter'] = '',
 				['xOffset'] = 0,
 				['yOffset'] = 0,
+				['xSpacing'] = 0,
+				['ySpacing'] = 0,
 			},
 			['debuffs'] = { -- Дебаффы
 				['enable'] = false,
@@ -1462,6 +1504,8 @@ P['unitframe'] = {
 				['useFilter'] = '',
 				['xOffset'] = 0,
 				['yOffset'] = 0,
+				['xSpacing'] = 0,
+				['ySpacing'] = 0,
 			},	
 			['rdebuffs'] = { -- Рейдовая иконка
 				['enable'] = false,
@@ -1547,6 +1591,8 @@ P['unitframe'] = {
 				['useFilter'] = '',
 				['xOffset'] = 0,
 				['yOffset'] = 0,
+				['xSpacing'] = 0,
+				['ySpacing'] = 0,
 			},
 			['debuffs'] = {
 				['enable'] = false,
@@ -1565,6 +1611,8 @@ P['unitframe'] = {
 				['useFilter'] = '',
 				['xOffset'] = 0,
 				['yOffset'] = 0,
+				['xSpacing'] = 0,
+				['ySpacing'] = 0,
 			},	
 			['buffIndicator'] = {
 				['enable'] = true,
