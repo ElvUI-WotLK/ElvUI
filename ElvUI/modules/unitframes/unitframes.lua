@@ -34,6 +34,7 @@ UF["badHeaderPoints"] = {
 
 UF["classMaxResourceBar"] = {
 	["DEATHKNIGHT"] = 6,
+	["DRUID"] = 1,
 	["MAGE"] = 4
 };
 

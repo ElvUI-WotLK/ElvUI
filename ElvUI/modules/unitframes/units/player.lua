@@ -5,7 +5,7 @@ local _, ns = ...;
 local ElvUF = ns.oUF;
 assert(ElvUF, "ElvUI was unable to locate oUF.");
 
-local CAN_HAVE_CLASSBAR = (E.myclass == "DEATHKNIGHT" or E.myclass == "MAGE");
+local CAN_HAVE_CLASSBAR = (E.myclass == "DEATHKNIGHT" or E.myclass == "DRUID" or E.myclass == "MAGE");
 
 function UF:Construct_PlayerFrame(frame)
 	frame.Threat = self:Construct_Threat(frame, true); -- Угроза
@@ -23,6 +23,9 @@ function UF:Construct_PlayerFrame(frame)
 	if(E.myclass == "DEATHKNIGHT") then
 		frame.Runes = self:Construct_DeathKnightResourceBar(frame); -- Руны
 		frame.ClassBar = "Runes";
+	elseif(E.myclass == "DRUID") then
+		frame.DruidAltMana = self:Construct_DruidAltManaBar(frame);
+		frame.ClassBar = "DruidAltMana";
 	elseif(E.myclass == "MAGE") then
 		frame.ArcaneChargeBar = self:Construct_MageResourceBar(frame);
 		frame.ClassBar = "ArcaneChargeBar";
@@ -458,8 +461,12 @@ function UF:Update_PlayerFrame(frame, db)
 		elseif(frame:IsElementEnabled("Power")) then
 			frame:DisableElement("Power");
 			power:Hide();
-			
-			if(frame.DruidAltMana) then
+		end
+		
+		if(frame.DruidAltMana) then
+			if(true) then
+				frame:EnableElement("DruidAltMana");
+			else
 				frame:DisableElement("DruidAltMana");
 				frame.DruidAltMana:Hide();
 			end
@@ -688,6 +695,12 @@ function UF:Update_PlayerFrame(frame, db)
 			local MAX_CLASS_BAR = UF.classMaxResourceBar[E.myclass];
 			if(USE_MINI_CLASSBAR and not db.classbar.detachFromFrame) then
 				bars:ClearAllPoints();
+				if(E.myclass == 'DRUID') then
+					CLASSBAR_WIDTH = CLASSBAR_WIDTH * 2/3
+				else
+					CLASSBAR_WIDTH = CLASSBAR_WIDTH * (MAX_CLASS_BAR - 1) / MAX_CLASS_BAR
+				end
+				
 				CLASSBAR_WIDTH = CLASSBAR_WIDTH * (MAX_CLASS_BAR - 1) / MAX_CLASS_BAR;
 				bars:Point("CENTER", frame.Health.backdrop, "TOP", -(BORDER*3 + 6), 0);
 				bars:SetFrameStrata("MEDIUM");
@@ -727,41 +740,45 @@ function UF:Update_PlayerFrame(frame, db)
 			bars:Width(CLASSBAR_WIDTH);
 			bars:Height(CLASSBAR_HEIGHT - (E.PixelMode and 1 or 4));
 			
-			for i = 1, MAX_CLASS_BAR do
-				bars[i]:SetHeight(bars:GetHeight());
-				bars[i]:SetWidth(E:Scale(bars:GetWidth() - (MAX_CLASS_BAR - 1))/MAX_CLASS_BAR);
-				bars[i]:GetStatusBarTexture():SetHorizTile(false);
-				bars[i]:ClearAllPoints();
-				
-				if(i == 1) then
-					bars[i]:SetPoint("LEFT", bars);
-				else
-					if(db.classbar.fill == "spaced") then
-						bars[i]:Point("LEFT", bars[i-1], "RIGHT", SPACING + (BORDER*2) + 2, 0);
-					else
-						bars[i]:Point("LEFT", bars[i-1], "RIGHT", 1, 0);
-					end
-				end
-				
-				if(db.classbar.fill ~= "spaced") then
-					bars[i].backdrop:Hide();
-				else
-					bars[i].backdrop:Show();
-				end
-				
-				if(E.myclass ~= "DEATHKNIGHT") then
-					bars[i]:SetStatusBarColor(unpack(ElvUF.colors[frame.ClassBar]));
+			if(E.myclass ~= 'DRUID') then
+				for i = 1, MAX_CLASS_BAR do
+					bars[i]:SetHeight(bars:GetHeight());
+					bars[i]:SetWidth(E:Scale(bars:GetWidth() - (MAX_CLASS_BAR - 1))/MAX_CLASS_BAR);
+					bars[i]:GetStatusBarTexture():SetHorizTile(false);
+					bars[i]:ClearAllPoints();
 					
-					if bars[i].bg then
-						bars[i].bg:SetTexture(unpack(ElvUF.colors[frame.ClassBar]));
+					if(i == 1) then
+						bars[i]:SetPoint("LEFT", bars);
+					else
+						if(db.classbar.fill == "spaced") then
+							bars[i]:Point("LEFT", bars[i-1], "RIGHT", SPACING + (BORDER*2) + 2, 0);
+						else
+							bars[i]:Point("LEFT", bars[i-1], "RIGHT", 1, 0);
+						end
+					end
+					
+					if(db.classbar.fill ~= "spaced") then
+						bars[i].backdrop:Hide();
+					else
+						bars[i].backdrop:Show();
+					end
+					
+					if(E.myclass ~= "DEATHKNIGHT") then
+						bars[i]:SetStatusBarColor(unpack(ElvUF.colors[frame.ClassBar]));
+						
+						if bars[i].bg then
+							bars[i].bg:SetTexture(unpack(ElvUF.colors[frame.ClassBar]));
+						end
 					end
 				end
 			end
 			
-			if(db.classbar.fill ~= "spaced") then
-				bars.backdrop:Show();
-			else
-				bars.backdrop:Hide();
+			if(E.myclass ~= 'DRUID') then
+				if(db.classbar.fill ~= "spaced") then
+					bars.backdrop:Show();
+				else
+					bars.backdrop:Hide();
+				end
 			end
 			
 			if(USE_CLASSBAR and not frame:IsElementEnabled(frame.ClassBar)) then
