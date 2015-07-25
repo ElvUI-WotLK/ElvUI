@@ -279,7 +279,7 @@ function UF:UpdateAuraWatchFromHeader(group)
 			for n = 1, frame:GetNumChildren() do
 				local child = select(n, frame:GetChildren())
 				if child and child.Health then
-					UF:UpdateAuraWatch(child, petOverride)
+					UF:UpdateAuraWatch(child)
 				end
 			end
 		end
@@ -344,6 +344,7 @@ function UF:UpdateAuraWatch(frame)
 				icon.missingAlpha = icon.onlyShowMissing and 1 or 0;
 				icon.textThreshold = buffs[i].textThreshold or -1
 				icon.displayText = buffs[i].displayText
+				icon.decimalThreshold = buffs[i].decimalThreshold
 				
 				icon:Width(db.size);
 				icon:Height(db.size);
@@ -371,7 +372,7 @@ function UF:UpdateAuraWatch(frame)
 				end
 				
 				if not icon.cd then
-					icon.cd = CreateFrame("Cooldown", nil, icon)
+					icon.cd = CreateFrame("Cooldown", nil, icon, "CooldownFrameTemplate")
 					icon.cd:SetAllPoints(icon)
 					icon.cd:SetReverse(true)
 					icon.cd:SetFrameLevel(icon:GetFrameLevel())

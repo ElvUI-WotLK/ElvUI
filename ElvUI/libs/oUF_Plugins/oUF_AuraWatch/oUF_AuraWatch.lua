@@ -148,14 +148,14 @@ do
 end
 
 local day, hour, minute, second = 86400, 3600, 60, 1
-function formatTime(s)
+local function formatTime(s, threshold)
 	if s >= day then
 		return format("%dd", ceil(s / hour))
 	elseif s >= hour then
 		return format("%dh", ceil(s / hour))
 	elseif s >= minute then
 		return format("%dm", ceil(s / minute))
-	elseif s >= minute / 12 then
+	elseif s >= threshold then
 		return floor(s)
 	end
 	
@@ -172,9 +172,13 @@ local function updateText(self, elapsed)
 				self.timeLeft = self.timeLeft - GetTime()
 				self.first = false
 			end
-			if self.timeLeft > 0 and ((self.timeLeft <= self.textThreshold) or self.textThreshold == -1) then
-				local time = formatTime(self.timeLeft)
-				self.text:SetText(time)
+			if self.timeLeft > 0 then
+				if ((self.timeLeft <= self.textThreshold) or self.textThreshold == -1) then
+					local time = formatTime(self.timeLeft, self.decimalThreshold or 5)
+					self.text:SetText(time)
+				else
+					self.text:SetText('')
+				end
 			else
 				self.text:SetText('')
 				self:SetScript("OnUpdate", nil)
@@ -297,7 +301,7 @@ local function setupIcons(self)
 			icon.name = name
 		
 			if not icon.cd and not (watch.hideCooldown or icon.hideCooldown) then
-				local cd = CreateFrame("Cooldown", nil, icon)
+				local cd = CreateFrame("Cooldown", nil, icon, "CooldownFrameTemplate")
 				cd:SetAllPoints(icon)
 				icon.cd = cd
 			end
