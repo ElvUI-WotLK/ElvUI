@@ -372,10 +372,10 @@ G.unitframe.buffwatch = { -- Индикатор баффов
 		ClassBuff(48113, 'TOPRIGHT', {0.2, 0.7, 0.2}), -- Молитва восстановления
 	},
 	DRUID = {
-		ClassBuff(48440, 'TOPRIGHT', {0.8, 0.4, 0.8}), -- Омоложение
+		ClassBuff(48441, 'TOPRIGHT', {0.8, 0.4, 0.8}), -- Омоложение
 		ClassBuff(48443, 'BOTTOMLEFT', {0.2, 0.8, 0.2}), -- Востановление
-		ClassBuff(48450, 'TOPLEFT', {0.4, 0.8, 0.2}), -- Жизнецвет
-		ClassBuff(53249, 'BOTTOMRIGHT', {0.8, 0.4, 0}), -- Буйный рост
+		ClassBuff(48451, 'TOPLEFT', {0.4, 0.8, 0.2}), -- Жизнецвет
+		ClassBuff(53251, 'BOTTOMRIGHT', {0.8, 0.4, 0}), -- Буйный рост
 	},
 	PALADIN = {
 		ClassBuff(1038, 'BOTTOMRIGHT', {238/255, 201/255, 0}, true), -- Длань спасения
