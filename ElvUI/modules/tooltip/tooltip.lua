@@ -209,13 +209,13 @@ function TT:GameTooltip_SetDefaultAnchor(tt, parent)
 	else
 		local point = E:GetScreenQuadrant(TooltipMover)
 		if point == "TOPLEFT" then
-			tt:SetPoint("TOPLEFT", TooltipMover, "BOTTOMLEFT", 1, -4)
+			tt:SetPoint("TOPLEFT", TooltipMover, "BOTTOMLEFT")
 		elseif point == "TOPRIGHT" then
-			tt:SetPoint("TOPRIGHT", TooltipMover, "BOTTOMRIGHT", -1, -4)
+			tt:SetPoint("TOPRIGHT", TooltipMover, "BOTTOMRIGHT")
 		elseif point == "BOTTOMLEFT" or point == "LEFT" then
-			tt:SetPoint("BOTTOMLEFT", TooltipMover, "TOPLEFT", 1, 18)
+			tt:SetPoint("BOTTOMLEFT", TooltipMover, "TOPLEFT")
 		else
-			tt:SetPoint("BOTTOMRIGHT", TooltipMover, "TOPRIGHT", -1, 18)
+			tt:SetPoint("BOTTOMRIGHT", TooltipMover, "TOPRIGHT")
 		end
 	end
 end
