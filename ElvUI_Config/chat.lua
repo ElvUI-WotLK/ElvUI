@@ -152,8 +152,13 @@ E.Options.args.chat = {
 					values = AceGUIWidgetLSMlists.sound,
 					set = function(info, value) E.db.chat.keywordSound = value; end,
 				},
+				noAlertInCombat = {
+ 					order = 3,
+					type = "toggle",
+					name = L["No Alert In Combat"],
+				},
 				keywords = {
-					order = 3,
+					order = 4,
 					name = L['Keywords'],
 					desc = L['List of words to color in chat if found in a message. If you wish to add multiple words you must seperate the word with a comma. To search for your current name you can use %MYNAME%.\n\nExample:\n%MYNAME%, ElvUI, RBGs, Tank'],
 					type = 'input',

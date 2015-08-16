@@ -77,5 +77,10 @@ function UF:PostUpdateHealth(unit, min, max)
 	if colors.customhealthbackdrop then
 		local backdrop = colors.health_backdrop
 		self.bg:SetVertexColor(backdrop.r, backdrop.g, backdrop.b)		
-	end	
+	end
+	
+	if colors.useDeadBackdrop and UnitIsDeadOrGhost(unit) then
+		local backdrop = colors.health_backdrop_dead
+		self.bg:SetVertexColor(backdrop.r, backdrop.g, backdrop.b)
+	end
 end

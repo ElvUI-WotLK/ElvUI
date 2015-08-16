@@ -208,6 +208,7 @@ P['unitframe'] = {
 		['powerclass'] = false,
 		['colorhealthbyvalue'] = true,
 		['customhealthbackdrop'] = false,
+		['useDeadBackdrop'] = false,
 		['classbackdrop'] = false,
 		['auraBarByType'] = true,
 		['auraBarTurtle'] = true,
@@ -225,6 +226,7 @@ P['unitframe'] = {
 		
 		['health'] = { r = .31,g = .31,b = .31 },
 		['health_backdrop'] = { r = .8,g = .01,b = .01 },
+		['health_backdrop_dead'] = { r = .8,g = .01,b = .01 },
 		['tapped'] = { r = 0.55, g = 0.57, b = 0.61},
 		['disconnected'] = { r = 0.84, g = 0.75, b = 0.65},
 		['auraBarBuff'] = { r = .31,g = .31,b = .31 },
@@ -377,11 +379,13 @@ P['unitframe'] = {
 				['useWhitelist'] = true,
 				['noDuration'] = true,
 				['onlyDispellable'] = false,
+				['maxDuration'] = 120,
 				['useFilter'] = '',
 				['friendlyAuraType'] = 'HELPFUL',
 				['enemyAuraType'] = 'HARMFUL',
 				['height'] = 20,
-				['sort'] = 'TIME_REMAINING'
+				['sort'] = 'TIME_REMAINING',
+				["uniformThreshold"] = 0,
 			},
 			['raidicon'] = {
 				['enable'] = true,
@@ -500,11 +504,13 @@ P['unitframe'] = {
 				['noDuration'] = {friendly = true, enemy = true},
 				['noConsolidated'] = {friendly = true, enemy = true},
 				['onlyDispellable'] = {friendly = false, enemy = false},
+				['maxDuration'] = 120,
 				['useFilter'] = '',
 				['friendlyAuraType'] = 'HELPFUL',
 				['enemyAuraType'] = 'HARMFUL',		
 				['height'] = 20,
-				['sort'] = 'TIME_REMAINING'
+				['sort'] = 'TIME_REMAINING',
+				["uniformThreshold"] = 0,
 			},	
 			['raidicon'] = { -- Рейдовая иконка
 				['enable'] = true,
@@ -756,11 +762,13 @@ P['unitframe'] = {
 				['noDuration'] = {friendly = false, enemy = false},
 				['onlyDispellable'] = {friendly = false, enemy = false},
 				['noConsolidated'] = {friendly = true, enemy = true},
+				['maxDuration'] = 120,
 				['useFilter'] = '',
 				['friendlyAuraType'] = 'HELPFUL',
 				['enemyAuraType'] = 'HARMFUL',
 				['height'] = 20,
-				['sort'] = 'TIME_REMAINING'
+				['sort'] = 'TIME_REMAINING',
+				["uniformThreshold"] = 0,
 			},
 			['raidicon'] = {
 				['enable'] = true,
@@ -1731,6 +1739,7 @@ P['chat'] = { -- Чат
 	['emotionIcons'] = true,
 	['keywordSound'] = 'None',
 	['whisperSound'] = 'ElvUI Aska',
+	["noAlertInCombat"] = false,
 	['chatHistory'] = true,
 	['timeStampFormat'] = 'NONE',
 	['keywords'] = '%MYNAME%, ElvUI',
@@ -1793,6 +1802,8 @@ P['tooltip'] = {
 	['spellID'] = true,
 	['visibility'] = {
 		['unitFrames'] = 'NONE',
+		["bags"] = "NONE",
+		["actionbars"] = "NONE",
 		['combat'] = false
 	},
 	['healthBar'] = {

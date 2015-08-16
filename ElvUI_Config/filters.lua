@@ -5,8 +5,13 @@ local selectedSpell;
 local selectedFilter;
 local filters;
 local tinsert = table.insert
+local tonumber = tonumber
 
 local function UpdateFilterGroup()
+	--Prevent errors when choosing a new filter, by doing a reset of the groups
+	E.Options.args.filters.args.filterGroup = nil
+	E.Options.args.filters.args.spellGroup = nil
+
 	if selectedFilter == 'AuraBar Colors' then
 		if not selectedFilter then
 			E.Options.args.filters.args.filterGroup = nil
@@ -22,7 +27,7 @@ local function UpdateFilterGroup()
 			args = {
 				addSpell = {
 					order = 1,
-					name = L['Add Spell'],
+					name = L["Add Spell or spellID"],
 					desc = L['Add a spell to the filter.'],
 					type = 'input',
 					get = function(info) return "" end,
@@ -38,7 +43,7 @@ local function UpdateFilterGroup()
 				},
 				removeSpell = {
 					order = 1,
-					name = L['Remove Spell'],
+					name = L["Remove Spell or spellID"],
 					desc = L['Remove a spell from the filter.'],
 					type = 'input',
 					get = function(info) return "" end,
@@ -67,7 +72,12 @@ local function UpdateFilterGroup()
 						local filters = {}
 						filters[''] = NONE
 						for filter in pairs(E.global.unitframe.AuraBarColors) do
-							filters[filter] = filter
+							local spellString
+							local spellID = tonumber(filter)
+							if spellID then
+								spellString = filter.." ("..(GetSpellInfo(spellID))..")"
+							end
+							filters[filter] = spellString or filter
 						end
 
 						return filters
@@ -81,9 +91,13 @@ local function UpdateFilterGroup()
 			return
 		end
 		
+		local nameString
+		if tonumber(selectedSpell) then
+			nameString = selectedSpell.." ("..(GetSpellInfo(selectedSpell))..")"
+		end
 		E.Options.args.filters.args.spellGroup = {
 			type = "group",
-			name = selectedSpell,
+			name = nameString or selectedSpell,
 			order = 15,
 			guiInline = true,
 			args = {
@@ -548,22 +562,39 @@ local function UpdateFilterGroup()
 					end,
 					set = function(info, value) E.global.unitframe['aurafilters'][selectedFilter]['spells'][selectedSpell].enable = value; UpdateFilterGroup(); UF:Update_AllFrames(); end
 				},
-				priority = {
-					name = L["Priority"],
-					type = "range",
-					get = function() 
-						if selectedFolder or not selectedSpell then
-							return 0
-						else
-							return E.global.unitframe['aurafilters'][selectedFilter]['spells'][selectedSpell].priority
-						end
-					end,
-					set = function(info, value) E.global.unitframe['aurafilters'][selectedFilter]['spells'][selectedSpell].priority = value; UpdateFilterGroup(); UF:Update_AllFrames(); end,
-					min = 0, max = 99, step = 1,
-					desc = L["Set the priority order of the spell, please note that prioritys are only used for the raid debuff module, not the standard buff/debuff module. If you want to disable set to zero."],
-				},			
 			},
 		}
+		
+		if selectedFilter == "RaidDebuffs" then
+			E.Options.args.filters.args.spellGroup.args.priority = {
+				name = L["Priority"],
+				type = "range",
+				get = function()
+					if selectedFolder or not selectedSpell then
+						return 0
+					else
+						return E.global.unitframe['aurafilters'][selectedFilter]['spells'][selectedSpell].priority
+					end
+				end,
+				set = function(info, value) E.global.unitframe['aurafilters'][selectedFilter]['spells'][selectedSpell].priority = value; UpdateFilterGroup(); UF:Update_AllFrames(); end,
+				min = 0, max = 99, step = 1,
+				desc = L["Set the priority order of the spell, please note that prioritys are only used for the raid debuff module, not the standard buff/debuff module. If you want to disable set to zero."],
+			}
+			E.Options.args.filters.args.spellGroup.args.stackThreshold = {
+				name = L["Stack Threshold"],
+				type = "range",
+				get = function()
+					if selectedFolder or not selectedSpell then
+						return 0
+					else
+						return E.global.unitframe['aurafilters'][selectedFilter]['spells'][selectedSpell].stackThreshold
+					end
+				end,
+				set = function(info, value) E.global.unitframe['aurafilters'][selectedFilter]['spells'][selectedSpell].stackThreshold = value; UpdateFilterGroup(); UF:Update_AllFrames(); end,
+				min = 0, max = 99, step = 1,
+				desc = L["The debuff needs to reach this amount of stacks before it is shown. Set to 0 to always show the debuff."],
+			}
+		end
 		
 	end
 	

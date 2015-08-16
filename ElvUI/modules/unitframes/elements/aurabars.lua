@@ -1,6 +1,8 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local UF = E:GetModule("UnitFrames");
 
+local tostring = tostring
+
 function UF:Construct_AuraBars()
 	local bar = self.statusBar
 	
@@ -29,7 +31,7 @@ function UF:Construct_AuraBars()
 	
 	bar.iconHolder:RegisterForClicks("RightButtonUp")
 	bar.iconHolder:SetScript("OnClick", function(self)
-		if not IsShiftKeyDown() then return; end
+		if E.db.unitframe.auraBlacklistModifier == "NONE" or not ((E.db.unitframe.auraBlacklistModifier == "SHIFT" and IsShiftKeyDown()) or (E.db.unitframe.auraBlacklistModifier == "ALT" and IsAltKeyDown()) or (E.db.unitframe.auraBlacklistModifier == "CTRL" and IsControlKeyDown())) then return; end
 		local auraName = self:GetParent().aura.name
 		
 		if auraName then
@@ -87,6 +89,7 @@ function UF:AuraBarFilter(unit, name, rank, icon, count, debuffType, duration, e
 	local returnValue = true
 	local passPlayerOnlyCheck = true
 	local anotherFilterExists = false
+	local playerOnlyFilter = false
 	local isPlayer = unitCaster == "player" or unitCaster == "vehicle"
 	local isFriend = UnitIsFriend("player", unit) == 1 and true or false
 	local auraType = isFriend and db.friendlyAuraType or db.enemyAuraType
@@ -99,7 +102,7 @@ function UF:AuraBarFilter(unit, name, rank, icon, count, debuffType, duration, e
 		end
 		
 		passPlayerOnlyCheck = returnValue
-		anotherFilterExists = true
+		playerOnlyFilter = true
 	end
 	
 	if UF:CheckFilter(db.onlyDispellable, isFriend) then
@@ -124,7 +127,15 @@ function UF:AuraBarFilter(unit, name, rank, icon, count, debuffType, duration, e
 		
 		anotherFilterExists = true
 	end
-
+	
+	if db.maxDuration > 0 then
+		if(duration and (duration > db.maxDuration)) then
+			returnValue = false;
+		end
+		
+		anotherFilterExists = true
+	end
+	
 	if UF:CheckFilter(db.useBlacklist, isFriend) then
 		local blackList = E.global["unitframe"]["aurafilters"]["Blacklist"].spells[name]
 		if blackList and blackList.enable then
@@ -138,7 +149,7 @@ function UF:AuraBarFilter(unit, name, rank, icon, count, debuffType, duration, e
 		local whiteList = E.global["unitframe"]["aurafilters"]["Whitelist"].spells[name]
 		if whiteList and whiteList.enable then
 			returnValue = true;
-		elseif not anotherFilterExists then
+		elseif not anotherFilterExists and not playerOnlyFilter then
 			returnValue = false
 		end
 		
@@ -170,7 +181,7 @@ function UF:ColorizeAuraBars(event, unit)
 		if not frame:IsVisible() then break end
 		local spellName = frame.statusBar.aura.name
 		local spellID = frame.statusBar.aura.spellID
-		local colors = E.global.unitframe.AuraBarColors[spellName]
+		local colors = E.global.unitframe.AuraBarColors[tostring(spellID)] or E.global.unitframe.AuraBarColors[spellName]
 
 		if E.db.unitframe.colors.auraBarTurtle and E.global.unitframe.aurafilters.TurtleBuffs.spells[spellName] and not colors then
 			colors = E.db.unitframe.colors.auraBarTurtleColor

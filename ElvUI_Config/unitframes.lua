@@ -921,6 +921,13 @@ local function GetOptionsTable_AuraBars(friendlyOnly, updateFunc, groupName)
 					['HELPFUL'] = L['Buffs'],
 				},						
 			},
+			uniformThreshold = {
+				order = 18,
+				type = "range",
+				name = L["Uniform Threshold"],
+				desc = L["Seconds remaining on the aura duration before the bar starts moving. Set to 0 to disable."],
+				min = 0, max = 3600, step = 1,
+			},
 			filters = { -- Дополнительный фильтр
 				name = L["Filters"],
 				guiInline = true,
@@ -930,6 +937,10 @@ local function GetOptionsTable_AuraBars(friendlyOnly, updateFunc, groupName)
 			},
 		},
 	}		
+	
+	if groupName == "target" then
+		config.args.attachTo.values['PLAYER_AURABARS'] = L["Player Frame Aura Bars"]
+	end
 	
 	if friendlyOnly then -- Игрок
 		config.args.filters.args.playerOnly = { -- Блокировать чужие ауры
@@ -1142,6 +1153,14 @@ local function GetOptionsTable_AuraBars(friendlyOnly, updateFunc, groupName)
 			end,
 		}										
 	end
+	
+	config.args.filters.args.maxDuration = {
+		order = 17,
+		type = 'range',
+		name = L["Maximum Duration"],
+		desc = L["Don't display auras that are longer than this duration (in seconds). Set to zero to disable."],
+		min = 0, max = 3600, step = 1,
+	}
 	
 	return config
 end
@@ -1602,6 +1621,13 @@ E.Options.args.unitframe = { -- Рамки юнитов
 									get = function(info) return E.db.unitframe.colors[ info[#info] ] end,
 									set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames() end,										
 								},
+								useDeadBackdrop = {
+									order = 7,
+									type = "toggle",
+									name = L["Use Dead Backdrop"],
+									get = function(info) return E.db.unitframe.colors[ info[#info] ] end,
+									set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames() end,
+								},
 								health = { -- Здоровье 
 									order = 10,
 									type = 'color',
@@ -1621,7 +1647,13 @@ E.Options.args.unitframe = { -- Рамки юнитов
 									order = 13,
 									type = 'color',
 									name = L['Disconnected'],
-								},	
+								},
+								health_backdrop_dead = {
+									order = 14,
+									type = "color",
+									name = L["Custom Dead Backdrop"],
+									desc = L["Use this backdrop color for units that are dead or ghosts."],
+								},
 							},
 						},
 						powerGroup = { -- Ресурсы
@@ -2808,19 +2840,19 @@ E.Options.args.unitframe.args.boss = { -- Боссы
 		},
 		growthDirection = { -- Направление роста
 			order = 9,
-			name = L['Growth Direction'],
-			type = 'select',
+			name = L["Growth Direction"],
+			type = "select",
 			values = {
-				['UP'] = L['Bottom To Top'],
-				['DOWN'] = L['Top To Bottom'],
-				['LEFT'] = L['Right to Left'],
-				['RIGHT'] = L['Left to Right'],
+				['UP'] = L["Bottom to Top"],
+				['DOWN'] = L["Top to Bottom"],
+				['LEFT'] = L["Right to Left"],
+				['RIGHT'] = L["Left to Right"],
 			},
 		},
 		spacing = {
 			order = 10,
-			type = 'range',
-			name = L['Spacing'],
+			type = "range",
+			name = L["Spacing"],
 			min = 0, max = 400, step = 1,
 		},
 		threatStyle = { -- РЕжим отображения угрозы
@@ -2915,19 +2947,19 @@ E.Options.args.unitframe.args.arena = { -- Арена
 		},
 		growthDirection = { -- Направление роста
 			order = 10,
-			name = L['Growth Direction'],
-			type = 'select',
+			name = L["Growth Direction"],
+			type = "select",
 			values = {
-				['UP'] = L['Bottom To Top'],
-				['DOWN'] = L['Top To Bottom'],
-				['LEFT'] = L['Right to Left'],
-				['RIGHT'] = L['Left to Right'],
+				["UP"] = L["Bottom to Top"],
+				["DOWN"] = L["Top to Bottom"],
+				["LEFT"] = L["Right to Left"],
+				["RIGHT"] = L["Left to Right"],
 			},
 		},
 		spacing = {
  			order = 11,
-			type = 'range',
-			name = L['Spacing'],
+			type = "range",
+			name = L["Spacing"],
 			min = 0, max = 400, step = 1,
 		},
 		colorOverride = {
