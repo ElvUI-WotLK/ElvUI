@@ -100,7 +100,7 @@ local Enable = function(self, unit)
 		power.__owner = self
 		power.ForceUpdate = ForceUpdate
 
-		if(power.frequentUpdates and (unit == 'player' or unit == 'pet')) then
+		if(power.frequentUpdates) then
 			power:SetScript("OnUpdate", OnPowerUpdate)
 		else
 			self:RegisterEvent("UNIT_MANA", Path)
