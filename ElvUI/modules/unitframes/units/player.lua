@@ -12,7 +12,7 @@ function UF:Construct_PlayerFrame(frame)
 	frame.Health = self:Construct_HealthBar(frame, true, true, "RIGHT"); -- Здоровье
 	frame.Health.frequentUpdates = true;
 	frame.Power = self:Construct_PowerBar(frame, true, true, "LEFT", true); --  Мана
-	
+	frame.Power.frequentUpdates = true;
 	frame.Name = self:Construct_NameText(frame); -- Имя
 	frame.Portrait3D = self:Construct_Portrait(frame, "model"); -- 3D Портрет
 	frame.Portrait2D = self:Construct_Portrait(frame, "texture"); -- 2D Портрет
