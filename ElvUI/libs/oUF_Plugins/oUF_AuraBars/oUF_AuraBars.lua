@@ -167,7 +167,11 @@ local function UpdateBars(auraBars)
 			bar:SetValue(timeleft)
 			bar.spelltime:SetText(FormatTime(timeleft))
 			if auraBars.spark == true then
-				bar.spark:Show()
+				if (auraBars.scaleTime and ((auraBars.scaleTime <= 0) or (auraBars.scaleTime > 0 and timeleft < auraBars.scaleTime))) then
+					bar.spark:Show()
+				else
+					bar.spark:Hide()
+				end
 			end
 		end
 	end
@@ -300,7 +304,7 @@ local function Update(self, event, unit)
 			bar:SetMinMaxValues(0, 1)
 			bar:SetValue(1)
 		else
-			if auraBars.scaleTime then
+			if auraBars.scaleTime and auraBars.scaleTime > 0 then
 				local maxvalue = min(auraBars.scaleTime, bar.aura.duration)
 				bar:SetMinMaxValues(0, maxvalue)
 				bar:SetWidth(
