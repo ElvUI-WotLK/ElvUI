@@ -6,6 +6,7 @@ V['general'] = {
 	['loot'] = true,
 	['lootRoll'] = true,
 	['lossControl'] = true,
+	['addonList'] = true,
 	["normTex"] = "ElvUI Norm",
 	["glossTex"] = "ElvUI Norm",	
 	["dmgfont"] = "ElvUI Pixel",

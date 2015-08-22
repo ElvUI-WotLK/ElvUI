@@ -226,6 +226,13 @@ E.Options.args.general = {
 					get = function(info) return E.private.general.lossControl end,
 					set = function(info, value) E.private.general.lossControl = value; E:StaticPopup_Show("PRIVATE_RL") end
 				},
+				addonList = {
+					order = 20,
+					type = "toggle",
+					name = ADDONS,
+					get = function(info) return E.private.general.addonList end,
+					set = function(info, value) E.private.general.addonList = value; E:StaticPopup_Show("PRIVATE_RL") end
+				},
 			},
 		},
 		minimap = { -- Мини-карта
