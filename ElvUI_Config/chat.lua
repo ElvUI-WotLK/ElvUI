@@ -78,20 +78,40 @@ E.Options.args.chat = {
 					set = function(info, value)
 						E.db.chat[ info[#info] ] = value 
 					end,
-				},	
-				chatHistory = {
+				},
+				fadeUndockedTabs = {
 					order = 6,
+					type = 'toggle',
+					name = L["Fade Undocked Tabs"],
+					desc = L["Fades the text on chat tabs that are not docked at the left or right chat panel."],
+					set = function(self, value)
+						E.db.chat.fadeUndockedTabs = value;
+						CH:UpdateChatTabs()
+					end,
+				},
+				fadeTabsNoBackdrop = {
+					order = 7,
+					type = 'toggle',
+					name = L["Fade Tabs No Backdrop"],
+					desc = L["Fades the text on chat tabs that are docked in a panel where the backdrop is disabled."],
+					set = function(self, value)
+						E.db.chat.fadeTabsNoBackdrop = value;
+						CH:UpdateChatTabs()
+					end,
+				},
+				chatHistory = {
+					order = 8,
 					type = 'toggle',
 					name = L['Chat History'],
 					desc = L['Log the main chat frames history. So when you reloadui or log in and out you see the history from your last session.'],
 				},
 				spacer = {
-					order = 7,
+					order = 9,
 					type = 'description',
 					name = '',
 				},				
 				throttleInterval = {
-					order = 8,
+					order = 10,
 					type = 'range',
 					name = L['Spam Interval'],
 					desc = L['Prevent the same messages from displaying in chat more than once within this set amount of seconds, set to zero to disable.'],
@@ -104,7 +124,7 @@ E.Options.args.chat = {
 					end,					
 				},
 				scrollDownInterval = {
-					order = 9,
+					order = 11,
 					type = 'range',
 					name = L['Scroll Interval'],
 					desc = L['Number of time in seconds to scroll down to the bottom of the chat window if you are not scrolled down completely.'],
@@ -114,7 +134,7 @@ E.Options.args.chat = {
 					end,					
 				},					
 				timeStampFormat = {
-					order = 10,
+					order = 12,
 					type = 'select',
 					name = TIMESTAMPS_LABEL,
 					desc = OPTION_TOOLTIP_TIMESTAMPS,

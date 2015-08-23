@@ -1,4 +1,4 @@
-﻿local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local CH = E:NewModule('Chat', 'AceTimer-3.0', 'AceHook-3.0', 'AceEvent-3.0')
 local LSM = LibStub("LibSharedMedia-3.0")
 local CreatedFrames = 0;
@@ -360,7 +360,7 @@ end
 
 function CH:OnEnter(frame)
 	_G[frame:GetName().."Text"]:Show()
-	
+
 	if frame.conversationIcon then
 		frame.conversationIcon:Show()
 	end
@@ -368,11 +368,7 @@ end
 
 function CH:OnLeave(frame)
 	_G[frame:GetName().."Text"]:Hide()
-	
-	if frame.alerting then
-		_G[frame:GetName().."Text"]:Show()
-	end
-	
+
 	if frame.conversationIcon then
 		frame.conversationIcon:Hide()
 	end
@@ -385,12 +381,12 @@ function CH:SetupChatTabs(frame, hook)
 		self:HookScript(frame, 'OnLeave')
 	elseif not hook and self.hooks and self.hooks[frame] and self.hooks[frame].OnEnter then
 		self:Unhook(frame, 'OnEnter')
-		self:Unhook(frame, 'OnLeave')	
+		self:Unhook(frame, 'OnLeave')
 	end
-	
+
 	if not hook then
 		_G[frame:GetName().."Text"]:Show()
-		
+
 		if frame.owner and frame.owner.button and GetMouseFocus() ~= frame.owner.button then
 			frame.owner.button:SetAlpha(0.35)
 		end
@@ -399,16 +395,12 @@ function CH:SetupChatTabs(frame, hook)
 		end
 	elseif GetMouseFocus() ~= frame then
 		_G[frame:GetName().."Text"]:Hide()
-		
-		if frame.alerting then
-			_G[frame:GetName().."Text"]:Show()
-		end
-		
+
 		if frame.owner and frame.owner.button and GetMouseFocus() ~= frame.owner.button then
 			frame.owner.button:SetAlpha(0)
 		end
-		
-		if frame.conversationIcon then 
+
+		if frame.conversationIcon then
 			frame.conversationIcon:Hide()
 		end
 	end
@@ -426,6 +418,22 @@ function CH:UpdateAnchors()
 	end
 	
 	CH:PositionChat(true)
+end
+
+local function FindRightChatID()
+	local rightChatID
+	
+	for _, frameName in pairs(CHAT_FRAMES) do
+		local chat = _G[frameName]
+		local id = chat:GetID()
+
+		if E:FramesOverlap(chat, RightChatPanel) then
+			rightChatID = id
+			break
+		end
+	end
+	
+	return rightChatID
 end
 
 function CH:UpdateChatTabs()
@@ -447,7 +455,7 @@ function CH:UpdateChatTabs()
 			end
 		end
 
-		if chat:IsShown() and not (id > NUM_CHAT_WINDOWS) and id == self.RightChatWindowID then
+		if chat:IsShown() and not (id > NUM_CHAT_WINDOWS) and (id == self.RightChatWindowID) then
 			if E.db.chat.panelBackdrop == 'HIDEBOTH' or E.db.chat.panelBackdrop == 'LEFT' then
 				CH:SetupChatTabs(tab, fadeTabsNoBackdrop and true or false)
 			else
@@ -471,25 +479,14 @@ function CH:PositionChat(override, noSave)
 	RightChatPanel:SetSize(E.db.chat.separateSizes and E.db.chat.panelWidthRight or E.db.chat.panelWidth, E.db.chat.separateSizes and E.db.chat.panelHeightRight or E.db.chat.panelHeight)
 	LeftChatPanel:SetSize(E.db.chat.panelWidth, E.db.chat.panelHeight)	
 	
+	self.RightChatWindowID = FindRightChatID()
+	
 	if not self.db.lockPositions or E.private.chat.enable ~= true then return end
 	
-	local chat, chatbg, tab, id, point, button, isDocked, chatFound
-	for _, frameName in pairs(CHAT_FRAMES) do
-		chat = _G[frameName]
-		id = chat:GetID()
-		
-		if E:FramesOverlap(chat, RightChatPanel) then
-			chatFound = true
-			break
-		end
-	end	
-
-	if chatFound then
-		self.RightChatWindowID = id
-	else
-		self.RightChatWindowID = nil
-	end
-
+	local chat, chatbg, tab, id, point, button, isDocked
+	local fadeUndockedTabs = E.db["chat"].fadeUndockedTabs
+	local fadeTabsNoBackdrop = E.db["chat"].fadeTabsNoBackdrop
+	
 	for i=1, CreatedFrames do
 		local BASE_OFFSET = 60
 		if E.PixelMode then
@@ -511,8 +508,7 @@ function CH:PositionChat(override, noSave)
 			else
 				isDocked = false
 			end	
-		end	
-
+		end
 		
 		if chat:IsShown() and not (id > NUM_CHAT_WINDOWS) and id == self.RightChatWindowID then
 			chat:ClearAllPoints()
@@ -530,7 +526,7 @@ function CH:PositionChat(override, noSave)
 			
 			--Don't run when triggered by FCF_SavePositionAndDimensions, otherwise we get infinite loop
 			if not noSave then FCF_SavePositionAndDimensions(chat) end
-
+			
 			tab:SetParent(RightChatPanel)
 			chat:SetParent(RightChatPanel)
 			
@@ -538,15 +534,14 @@ function CH:PositionChat(override, noSave)
 				chat:SetUserPlaced(true)
 			end
 			if E.db.chat.panelBackdrop == 'HIDEBOTH' or E.db.chat.panelBackdrop == 'LEFT' then
-				CH:SetupChatTabs(tab, true)
+				CH:SetupChatTabs(tab, fadeTabsNoBackdrop and true or false)
 			else
 				CH:SetupChatTabs(tab, false)
 			end
 		elseif not isDocked and chat:IsShown() then
 			tab:SetParent(UIParent)
 			chat:SetParent(UIParent)
-			
-			CH:SetupChatTabs(tab, true)
+			CH:SetupChatTabs(tab, fadeUndockedTabs and true or false)
 		else
 			if id ~= 2 and not (id > NUM_CHAT_WINDOWS) then
 				chat:ClearAllPoints()
@@ -557,6 +552,7 @@ function CH:PositionChat(override, noSave)
 					chat:SetPoint("BOTTOMLEFT", LeftChatToggleButton, "BOTTOMLEFT", 1, 1)
 				end
 				chat:SetSize(E.db.chat.panelWidth - 11, (E.db.chat.panelHeight - BASE_OFFSET))
+				
 				--Don't run when triggered by FCF_SavePositionAndDimensions, otherwise we get infinite loop
 				if not noSave then FCF_SavePositionAndDimensions(chat) end
 			end
@@ -571,10 +567,10 @@ function CH:PositionChat(override, noSave)
 			end
 			
 			if E.db.chat.panelBackdrop == 'HIDEBOTH' or E.db.chat.panelBackdrop == 'RIGHT' then
-				CH:SetupChatTabs(tab, true)
+				CH:SetupChatTabs(tab, fadeTabsNoBackdrop and true or false)
 			else
 				CH:SetupChatTabs(tab, false)
-			end			
+			end		
 		end		
 	end
 	
@@ -1082,6 +1078,7 @@ function CH:FloatingChatFrame_OnEvent(event, ...)
 end
 
 function CH:SetupChat(event, ...)
+	if E.private.chat.enable ~= true then return end
 	for _, frameName in pairs(CHAT_FRAMES) do
 		local frame = _G[frameName]
 		local id = frame:GetID();
@@ -1098,20 +1095,22 @@ function CH:SetupChat(event, ...)
 		frame:SetShadowOffset((E.mult or 1), -(E.mult or 1))	
 		frame:SetFading(self.db.fade)
 		
-		frame:SetScript("OnHyperlinkClick", URLChatFrame_OnHyperlinkShow)
-		frame:SetScript("OnMouseWheel", ChatFrame_OnMouseScroll)
-		
-		if id > NUM_CHAT_WINDOWS then
-			frame:SetScript("OnEvent", CH.FloatingChatFrame_OnEvent)
-		elseif id ~= 2 then
-			frame:SetScript("OnEvent", CH.ChatFrame_OnEvent)
-		end
-		
-		hooksecurefunc(frame, "SetScript", function(f, script, func)
-			if script == "OnMouseWheel" and func ~= ChatFrame_OnMouseScroll then
-				f:SetScript(script, ChatFrame_OnMouseScroll)
+		if not frame.scriptsSet then
+			frame:SetScript("OnMouseWheel", ChatFrame_OnMouseScroll)
+
+			if id > NUM_CHAT_WINDOWS then
+				frame:SetScript("OnEvent", CH.FloatingChatFrame_OnEvent)
+			elseif id ~= 2 then
+				frame:SetScript("OnEvent", CH.ChatFrame_OnEvent)
 			end
-		end)
+
+			hooksecurefunc(frame, "SetScript", function(f, script, func)
+				if script == "OnMouseWheel" and func ~= ChatFrame_OnMouseScroll then
+					f:SetScript(script, ChatFrame_OnMouseScroll)
+				end
+			end)
+			frame.scriptsSet = true
+		end
 	end	
 	
 	if self.db.hyperlinkHover then
@@ -1119,7 +1118,7 @@ function CH:SetupChat(event, ...)
 	end
 
 	GeneralDockManager:SetParent(LeftChatPanel)
-	--self:ScheduleRepeatingTimer('PositionChat', 1)
+	-- self:ScheduleRepeatingTimer('PositionChat', 1)
 	self:PositionChat(true)
 	
 	if not self.HookSecured then
@@ -1425,13 +1424,6 @@ function CH:FCF_SetWindowAlpha(frame, alpha, doNotSave)
 	frame.oldAlpha = alpha or 1;
 end
 
-function CH:FCF_StartAlertFlash(chatFrame)	
-	local chatTab = _G[chatFrame:GetName().."Tab"];
-	if chatTab.alerting then
-		CH:SetupChatTabs(chatTab, false)
-	end
-end
-
 local stopScript = false
 hooksecurefunc(DEFAULT_CHAT_FRAME, "RegisterEvent", function(self, event)
 	if event == "GUILD_MOTD" and not stopScript then
@@ -1512,7 +1504,10 @@ function CH:Initialize()
 
 	self:SetupChat()
 	self:UpdateAnchors()
-
+	if not E.db.chat.lockPositions then
+		CH:UpdateChatTabs() --It was not done in PositionChat, so do it now
+	end
+	
 	self:RegisterEvent("CHAT_MSG_BATTLEGROUND", 'SaveChatHistory')
 	self:RegisterEvent("CHAT_MSG_BATTLEGROUND_LEADER", 'SaveChatHistory')
 	self:RegisterEvent("CHAT_MSG_BN_WHISPER", 'SaveChatHistory')
@@ -1563,8 +1558,6 @@ function CH:Initialize()
 	self:SecureHook("ChatFrame_RemoveMessageEventFilter");
 	
 	self:SecureHook("FCF_SetWindowAlpha")
-	self:SecureHook("FCF_StartAlertFlash")
-	
 	
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", CH.CHAT_MSG_CHANNEL)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_YELL", CH.CHAT_MSG_YELL)
@@ -1609,7 +1602,26 @@ function CH:Initialize()
 	frame:Size(700, 200)
 	frame:Point('BOTTOM', E.UIParent, 'BOTTOM', 0, 3)
 	frame:Hide()
+	frame:SetMovable(true)
 	frame:EnableMouse(true)
+	frame:SetScript("OnMouseDown", function(self, button)
+		if button == "LeftButton" and not self.isMoving then
+			self:StartMoving();
+			self.isMoving = true;
+		end
+	end)
+	frame:SetScript("OnMouseUp", function(self, button)
+		if button == "LeftButton" and self.isMoving then
+			self:StopMovingOrSizing();
+			self.isMoving = false;
+		end
+	end)
+	frame:SetScript("OnHide", function(self)
+		if ( self.isMoving ) then
+			self:StopMovingOrSizing();
+			self.isMoving = false;
+		end
+	end)
 	frame:SetFrameStrata("DIALOG")
 
 

@@ -1754,7 +1754,9 @@ P['chat'] = { -- Чат
 	['panelTabBackdrop'] = false,
 	['panelTabTransparency'] = false,
 	['editBoxPosition'] = 'BELOW_CHAT',
-
+	['fadeUndockedTabs'] = true,
+	['fadeTabsNoBackdrop'] = true,
+	
 	['tabFont'] = 'ElvUI Font',
 	['tabFontSize'] = 12,
 	['tabFontOutline'] = 'NONE',
