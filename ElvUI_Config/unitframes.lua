@@ -5,7 +5,7 @@ local ElvUF = ns.oUF
 
 SHOW = "Показать"
 
-local ACD = LibStub("AceConfigDialog-3.0")
+local ACD = LibStub("AceConfigDialog-3.0-ElvUI")
 local fillValues = {
 	['fill'] = L['Filled'],
 	['spaced'] = L['Spaced'],

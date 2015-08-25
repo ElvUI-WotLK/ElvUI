@@ -2,7 +2,7 @@
 TreeGroup Container
 Container that uses a tree control to switch between groups.
 -------------------------------------------------------------------------------]]
-local Type, Version = "TreeGroup", 34
+local Type, Version = "TreeGroup", 38
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
@@ -212,7 +212,7 @@ local function Button_OnEnter(frame)
 	if self.enabletooltips then
 		GameTooltip:SetOwner(frame, "ANCHOR_NONE")
 		GameTooltip:SetPoint("LEFT",frame,"RIGHT")
-		GameTooltip:SetText(frame.text:GetText() or "", 1, .82, 0, 1)
+		GameTooltip:SetText(frame.text:GetText() or "", 1, .82, 0, true)
 
 		GameTooltip:Show()
 	end
@@ -231,7 +231,7 @@ local function OnScrollValueChanged(frame, value)
 	if frame.obj.noupdate then return end
 	local self = frame.obj
 	local status = self.status or self.localstatus
-	status.scrollvalue = value
+	status.scrollvalue = floor(value + 0.5)
 	self:RefreshTree()
 	AceGUI:ClearFocus()
 end
@@ -334,6 +334,8 @@ local methods = {
 
 		button.toggle.button = button
 		button.toggle:SetScript("OnClick",Expand_OnClick)
+
+		button.text:SetHeight(14) -- Prevents text wrapping
 
 		return button
 	end,

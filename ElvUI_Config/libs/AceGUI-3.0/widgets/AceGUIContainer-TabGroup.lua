@@ -39,7 +39,7 @@ end
 local function Tab_SetText(frame, text)
 	frame:_SetText(text)
 	local width = frame.obj.frame.width or frame.obj.frame:GetWidth() or 0
-	PanelTemplates_TabResize(frame, 0, nil, nil, width, frame:GetFontString():GetStringWidth())
+	PanelTemplates_TabResize(frame, 0, nil, width, frame:GetFontString():GetStringWidth())
 end
 
 local function Tab_SetSelected(frame, selected)
@@ -256,7 +256,7 @@ local methods = {
 			end
 			
 			for i = starttab, endtab do
-				PanelTemplates_TabResize(tabs[i], padding + 4, nil, nil, width, tabs[i]:GetFontString():GetStringWidth())
+				PanelTemplates_TabResize(tabs[i], padding + 4, nil, width, tabs[i]:GetFontString():GetStringWidth())
 			end
 			starttab = endtab + 1
 		end

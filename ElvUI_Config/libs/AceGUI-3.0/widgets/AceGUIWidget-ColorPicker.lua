@@ -1,7 +1,7 @@
 --[[-----------------------------------------------------------------------------
 ColorPicker Widget
 -------------------------------------------------------------------------------]]
-local Type, Version = "ColorPicker", 21
+local Type, Version = "ColorPicker-ElvUI", 1
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
@@ -51,6 +51,7 @@ local function ColorSwatch_OnClick(frame)
 	local self = frame.obj
 	if not self.disabled then
 		ColorPickerFrame:SetFrameStrata("FULLSCREEN_DIALOG")
+		ColorPickerFrame:SetFrameLevel(frame:GetFrameLevel() + 10)
 		ColorPickerFrame:SetClampedToScreen(true)
 
 		ColorPickerFrame.func = function()
@@ -71,7 +72,7 @@ local function ColorSwatch_OnClick(frame)
 			ColorPickerFrame.opacity = 1 - (a or 0)
 		end
 		ColorPickerFrame:SetColorRGB(r, g, b)
-		
+
 		if(ColorPPDefault and self.dR and self.dG and self.dB) then
 			local alpha = 1
 			if(self.dA) then
@@ -79,7 +80,7 @@ local function ColorSwatch_OnClick(frame)
 			end
 			ColorPPDefault.colors = {r = self.dR, g = self.dG, b = self.dB, a = alpha}
 		end
-		
+
 		ColorPickerFrame.cancelFunc = function()
 			ColorCallback(self, r, g, b, a, true)
 		end

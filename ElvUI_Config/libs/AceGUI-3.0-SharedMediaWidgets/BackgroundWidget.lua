@@ -8,7 +8,7 @@ local AGSMW = LibStub("AceGUISharedMediaWidgets-1.0")
 
 do
 	local widgetType = "LSM30_Background"
-	local widgetVersion = 9
+	local widgetVersion = 11
 
 	local contentFrameCache = {}
 	local function ReturnSelf(self)
@@ -44,6 +44,7 @@ do
 				frame:SetHighlightTexture([[Interface\QuestFrame\UI-QuestTitleHighlight]], "ADD")
 				frame:SetScript("OnClick", ContentOnClick)
 				frame:SetScript("OnEnter", ContentOnEnter)
+
 			local check = frame:CreateTexture("OVERLAY")
 				check:SetWidth(16)
 				check:SetHeight(16)
@@ -51,16 +52,17 @@ do
 				check:SetTexture("Interface\\Buttons\\UI-CheckBox-Check")
 				check:Hide()
 			frame.check = check
-			local text = frame:CreateFontString(nil,"OVERLAY","GameFontWhite")
 
+			local text = frame:CreateFontString(nil,"OVERLAY","GameFontWhite")
 				local font, size = text:GetFont()
 				text:SetFont(font,size,"OUTLINE")
 
-				text:SetPoint("LEFT", check, "RIGHT", 1, 0)
-				text:SetPoint("RIGHT", frame, "RIGHT", -2, 0)
+				text:SetPoint("TOPLEFT", check, "TOPRIGHT", 1, 0)
+				text:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -2, 0)
 				text:SetJustifyH("LEFT")
 				text:SetText("Test Test Test Test Test Test Test")
 			frame.text = text
+
 			frame.ReturnSelf = ReturnSelf
 		end
 		frame:Show()
@@ -150,7 +152,9 @@ do
 		else
 			AceGUI:SetFocus(self)
 			self.dropdown = AGSMW:GetDropDownFrame()
+			local width = self.frame:GetWidth()
 			self.dropdown:SetPoint("TOPLEFT", self.frame, "BOTTOMLEFT")
+			self.dropdown:SetPoint("TOPRIGHT", self.frame, "BOTTOMRIGHT", width < 160 and (160 - width) or 0, 0)
 			for k, v in pairs(self.list) do
 				sortedlist[#sortedlist+1] = k
 			end

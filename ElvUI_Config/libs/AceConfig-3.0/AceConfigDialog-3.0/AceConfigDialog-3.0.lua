@@ -1,10 +1,10 @@
 --- AceConfigDialog-3.0 generates AceGUI-3.0 based windows based on option tables.
 -- @class file
 -- @name AceConfigDialog-3.0
--- @release $Id: AceConfigDialog-3.0.lua 1049 2012-04-02 13:22:10Z mikk $
+-- @release $Id: AceConfigDialog-3.0.lua 1126 2014-11-10 06:38:01Z nevcairiel $
 
 local LibStub = LibStub
-local MAJOR, MINOR = "AceConfigDialog-3.0", 57
+local MAJOR, MINOR = "AceConfigDialog-3.0-ElvUI", 1
 local AceConfigDialog, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
 
 if not AceConfigDialog then return end
@@ -18,7 +18,7 @@ AceConfigDialog.frame.closing = AceConfigDialog.frame.closing or {}
 AceConfigDialog.frame.closeAllOverride = AceConfigDialog.frame.closeAllOverride or {}
 
 local gui = LibStub("AceGUI-3.0")
-local reg = LibStub("AceConfigRegistry-3.0")
+local reg = LibStub("AceConfigRegistry-3.0-ElvUI")
 
 -- Lua APIs
 local tconcat, tinsert, tsort, tremove, tsort = table.concat, table.insert, table.sort, table.remove, table.sort
@@ -250,7 +250,7 @@ local function GetOptionsMemberValue(membername, option, options, path, appName,
 		else
 			--Call the method
 			if handler and handler[member] then
-				a,b,c,d = handler[member](handler, info, ...)
+				a,b,c,d,e, f, g, h = handler[member](handler, info, ...)
 			else
 				error(format("Method %s doesn't exist in handler for type %s", member, membername))
 			end
@@ -542,16 +542,16 @@ local function OptionOnMouseOver(widget, event)
 	
 	if descStyle and descStyle ~= "tooltip" then return end
 	
-	GameTooltip:SetText(name, 1, .82, 0, 1)
+	GameTooltip:SetText(name, 1, .82, 0, true)
 	
 	if opt.type == "multiselect" then
-		GameTooltip:AddLine(user.text,0.5, 0.5, 0.8, 1)
+		GameTooltip:AddLine(user.text, 0.5, 0.5, 0.8, true)
 	end	
 	if type(desc) == "string" then
-		GameTooltip:AddLine(desc, 1, 1, 1, 1)
+		GameTooltip:AddLine(desc, 1, 1, 1, true)
 	end
 	if type(usage) == "string" then
-		GameTooltip:AddLine("Usage: "..usage, NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b, 1)
+		GameTooltip:AddLine("Usage: "..usage, NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b, true)
 	end
 
 	GameTooltip:Show()
@@ -580,7 +580,7 @@ local function confirmPopup(appName, rootframe, basepath, info, message, func, .
 	t.text = message
 	t.button1 = ACCEPT
 	t.button2 = CANCEL
-	t.preferredIndex = 3
+	t.preferredIndex = STATICPOPUP_NUMDIALOGS
 	local dialog, oldstrata
 	t.OnAccept = function()
 		safecall(func, unpack(t))
@@ -1320,7 +1320,7 @@ local function FeedOptions(appName, options,container,rootframe,path,group,inlin
 					del(valuesort)
 
 				elseif v.type == "color" then
-					control = gui:Create("ColorPicker")
+					control = gui:Create("ColorPicker-ElvUI")
 					control:SetLabel(name)
 					control:SetHasAlpha(GetOptionsMemberValue("hasAlpha",v, options, path, appName))
 					control:SetColor(GetOptionsMemberValue("get",v, options, path, appName))
@@ -1441,17 +1441,17 @@ local function TreeOnButtonEnter(widget, event, uniquevalue, button)
 	local name = GetOptionsMemberValue("name", group, options, feedpath, appName)
 	local desc = GetOptionsMemberValue("desc", group, options, feedpath, appName)
 	
-	GameTooltip:SetOwner(button, "ANCHOR_NONE")
+	GameTooltip:SetOwner(button, "ANCHOR_CURSOR")
 	if widget.type == "TabGroup" then
 		GameTooltip:SetPoint("BOTTOM",button,"TOP")
 	else
 		GameTooltip:SetPoint("LEFT",button,"RIGHT")
 	end
 
-	GameTooltip:SetText(name, 1, .82, 0, 1)
+	GameTooltip:SetText(name, 1, .82, 0, true)
 	
 	if type(desc) == "string" then
-		GameTooltip:AddLine(desc, 1, 1, 1, 1)
+		GameTooltip:AddLine(desc, 1, 1, 1, true)
 	end
 	
 	GameTooltip:Show()
@@ -1817,6 +1817,13 @@ function AceConfigDialog:Open(appName, container, ...)
 		tinsert(path, (select(n, ...)))
 	end
 	
+	local option = options
+	if type(container) == "table" and container.type == "BlizOptionsGroup" and #path > 0 then
+		for i = 1, #path do
+			option = options.args[path[i]]
+		end
+		name = format("%s - %s", name, GetOptionsMemberValue("name", option, options, path, appName))
+	end
 	--if a container is given feed into that
 	if container then
 		f = container

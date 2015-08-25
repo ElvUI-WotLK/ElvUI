@@ -21,7 +21,7 @@ function S:EmbedSkadaWindow(window, width, height, point, relativeFrame, relativ
 	window.db.barslocked = true;
 	window.bargroup:ClearAllPoints();
 	window.bargroup:SetPoint(point, relativeFrame, relativePoint, ofsx, ofsy);
-	window.bargroup:SetFrameLevel(relativeFrame:GetFrameLevel() + 30);
+	window.bargroup:SetFrameStrata("MEDIUM");
 	
 	Skada.displays["bar"].ApplySettings(Skada.displays["bar"], window);
 end
