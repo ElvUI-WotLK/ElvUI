@@ -149,7 +149,12 @@ function DT:RegisterPanel(panel, numPoints, anchor, xOff, yOff)
 	DT.UpdateAllDimensions(panel)
 end
 
-function DT:AssignPanelToDataText(panel, data)	
+function DT:AssignPanelToDataText(panel, data)
+	panel.name = ""
+	if data['name'] then
+		panel.name = data['name']
+	end
+
 	if data['events'] then
 		for _, event in pairs(data['events']) do
 			panel:RegisterEvent(event)
@@ -189,6 +194,9 @@ function DT:LoadDataTexts()
 
 	local inInstance, instanceType = IsInInstance()
 	local fontTemplate = LSM:Fetch("font", self.db.font)
+	if ElvConfigToggle then
+		ElvConfigToggle.text:FontTemplate(fontTemplate, self.db.fontSize, self.db.fontOutline)
+	end
 	for panelName, panel in pairs(DT.RegisteredPanels) do
 		--Restore Panels
 		for i=1, panel.numPoints do
@@ -251,6 +259,8 @@ function DT:RegisterDatatext(name, events, eventFunc, updateFunc, clickFunc, onE
 	else
 		error('Cannot register datatext no name was provided.')
 	end
+	
+	DT.RegisteredDataTexts[name]['name'] = name
 	
 	if type(events) ~= 'table' and events ~= nil then
 		error('Events must be registered as a table.')

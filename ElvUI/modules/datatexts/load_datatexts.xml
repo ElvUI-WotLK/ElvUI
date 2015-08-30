@@ -22,4 +22,5 @@
 	<Script file='battleground.lua'/>
 	<Script file='resilience.lua'/>
 	<Script file='achievement.lua'/>
+	<Script file='elvuiconfig.lua'/>
 </Ui>

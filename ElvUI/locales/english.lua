@@ -83,6 +83,7 @@ L['Friends'] = true; -- Also in Skins
 L['goldabbrev'] = '|cffffd700g|r'; -- Also used in Bags
 L['Gold'] = true;
 L['Hit'] = true;
+L["Hold Shift + Right Click:"] = true;
 L['Home Latency:'] = true;
 L['HP'] = true;
 L['HPS'] = true;
