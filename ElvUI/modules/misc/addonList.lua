@@ -388,7 +388,11 @@ function AL:Initialize()
 	
 	GameMenuButtonLogout:SetPoint("TOP", ElvUI_ButtonAddons, "BOTTOM", 0, -16);
 	
-	GameMenuFrame:SetHeight(270);
+	if(IsMacClient()) then
+		GameMenuFrame:SetHeight(292);
+	else
+		GameMenuFrame:SetHeight(266);
+	end
 end
 
 E:RegisterModule(AL:GetName());

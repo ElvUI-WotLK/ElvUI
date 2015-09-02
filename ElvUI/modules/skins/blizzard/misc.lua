@@ -178,12 +178,24 @@ local function LoadSkin()
 	
 	-- mac menu/option panel, made by affli.
 	if IsMacClient() then
+		S:HandleButton(GameMenuButtonMacOptions);
+		
 		-- Skin main frame and reposition the header
 		MacOptionsFrame:SetTemplate("Default", true)
 		MacOptionsFrameHeader:SetTexture("")
 		MacOptionsFrameHeader:ClearAllPoints()
 		MacOptionsFrameHeader:SetPoint("TOP", MacOptionsFrame, 0, 0)
- 
+		
+		S:HandleDropDownBox(MacOptionsFrameResolutionDropDown);
+		S:HandleDropDownBox(MacOptionsFrameFramerateDropDown);
+		S:HandleDropDownBox(MacOptionsFrameCodecDropDown);
+		
+		S:HandleSliderFrame(MacOptionsFrameQualitySlider);
+		
+		for i = 1, 8 do
+			S:HandleCheckBox(_G["MacOptionsFrameCheckButton"..i]);
+		end
+		
 		--Skin internal frames
 		MacOptionsFrameMovieRecording:SetTemplate("Default", true)
 		MacOptionsITunesRemote:SetTemplate("Default", true)
@@ -219,7 +231,25 @@ local function LoadSkin()
  
 		MacOptionsFrameDefaults:SetWidth(96)
 		MacOptionsFrameDefaults:SetHeight(22)
-
+		
+		MacOptionsCompressFrame:SetTemplate("Default", true);
+		
+		MacOptionsCompressFrameHeader:SetTexture("")
+		MacOptionsCompressFrameHeader:ClearAllPoints();
+		MacOptionsCompressFrameHeader:SetPoint("TOP", MacOptionsCompressFrame, 0, 0);
+		
+		S:HandleButton(MacOptionsCompressFrameDelete);
+		S:HandleButton(MacOptionsCompressFrameSkip);
+		S:HandleButton(MacOptionsCompressFrameCompress);
+		
+		MacOptionsCancelFrame:SetTemplate("Default", true);
+		
+		MacOptionsCancelFrameHeader:SetTexture("");
+		MacOptionsCancelFrameHeader:ClearAllPoints();
+		MacOptionsCancelFrameHeader:SetPoint("TOP", MacOptionsCancelFrame, 0, 0);
+		
+		S:HandleButton(MacOptionsCancelFrameNo);
+		S:HandleButton(MacOptionsCancelFrameYes);
 	end
 	
 	OpacityFrame:StripTextures()
