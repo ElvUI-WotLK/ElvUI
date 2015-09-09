@@ -473,7 +473,7 @@ function CH:UpdateChatTabs()
 	end
 end
 
-function CH:PositionChat(override, noSave)
+function CH:PositionChat(override)
 	if ((InCombatLockdown() and not override and self.initialMove) or (IsMouseButtonDown("LeftButton") and not override)) then return end
 	if not RightChatPanel or not LeftChatPanel then return; end
 	RightChatPanel:SetSize(E.db.chat.separateSizes and E.db.chat.panelWidthRight or E.db.chat.panelWidth, E.db.chat.separateSizes and E.db.chat.panelHeightRight or E.db.chat.panelHeight)
@@ -524,8 +524,7 @@ function CH:PositionChat(override, noSave)
 				chat:SetSize(E.db.chat.panelWidth - 11, (E.db.chat.panelHeight - BASE_OFFSET) - CombatLogQuickButtonFrame_Custom:GetHeight())				
 			end
 			
-			--Don't run when triggered by FCF_SavePositionAndDimensions, otherwise we get infinite loop
-			if not noSave then FCF_SavePositionAndDimensions(chat) end
+			FCF_SavePositionAndDimensions(chat, true);
 			
 			tab:SetParent(RightChatPanel)
 			chat:SetParent(RightChatPanel)
@@ -553,8 +552,7 @@ function CH:PositionChat(override, noSave)
 				end
 				chat:SetSize(E.db.chat.panelWidth - 11, (E.db.chat.panelHeight - BASE_OFFSET))
 				
-				--Don't run when triggered by FCF_SavePositionAndDimensions, otherwise we get infinite loop
-				if not noSave then FCF_SavePositionAndDimensions(chat) end
+				FCF_SavePositionAndDimensions(chat, true);
 			end
 			chat:SetParent(LeftChatPanel)
 			if i > 2 then
@@ -1445,8 +1443,10 @@ function CH:DelayGMOTD()
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 end
 
-function CH:ON_FCF_SavePositionAndDimensions()
-	CH:PositionChat(nil, true) --2nd argument is to prevent infinite loop
+function CH:ON_FCF_SavePositionAndDimensions(_, noLoop)
+	if not noLoop then
+		CH:PositionChat()
+	end
 	
 	if not E.db.chat.lockPositions then
 		CH:UpdateChatTabs() --It was not done in PositionChat, so do it now
