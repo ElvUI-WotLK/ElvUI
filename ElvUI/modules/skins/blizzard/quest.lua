@@ -56,6 +56,13 @@ local function LoadSkin()
 		QuestInfoItemHighlight:ClearAllPoints();
 		QuestInfoItemHighlight:SetOutside(self:GetName().."IconTexture");
 		_G[self:GetName().."Name"]:SetTextColor(1, 1, 0);
+		
+		for i=1, MAX_NUM_ITEMS do
+			local questItem = _G['QuestInfoItem'..i];
+			if(questItem ~= self) then
+				_G[questItem:GetName().."Name"]:SetTextColor(1, 1, 1);
+			end
+		end
 	end);
 	
 	
