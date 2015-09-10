@@ -873,6 +873,7 @@ L["Show For DPS"] = "Zeige für Schadensklassen"
 L["Show For Healers"] = "Zeige für Heiler"
 L["Show For Tanks"] = "Zeige für Tanks"
 L["Show When Not Active"] = "Zeige, wenn nicht aktiv"
+L["Show"] = true;
 L["Size and Positions"] = "Größe und Positionen"
 L["Size of the indicator icon."] = "Größe des Anzeigesymbole."
 L["Size Override"] = "Größe überschreiben"

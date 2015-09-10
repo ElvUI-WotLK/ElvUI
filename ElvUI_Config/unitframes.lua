@@ -3,8 +3,6 @@ local UF = E:GetModule('UnitFrames');
 local _, ns = ...
 local ElvUF = ns.oUF
 
-SHOW = "Показать"
-
 local ACD = LibStub("AceConfigDialog-3.0-ElvUI")
 local fillValues = {
 	['fill'] = L['Filled'],
@@ -735,7 +733,7 @@ local function GetOptionsTable_Castbar(hasTicks, updateFunc, groupName, numUnits
 			},			
 			forceshow = { -- Показать/Скрыть
 				order = 3,
-				name = SHOW..' / '..HIDE,
+				name = L["Show"]..' / '..HIDE,
 				func = function() 
 					local frameName = E:StringTitle(groupName)
 					frameName = "ElvUF_"..frameName

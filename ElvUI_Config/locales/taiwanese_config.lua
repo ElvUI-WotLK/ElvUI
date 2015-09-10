@@ -875,6 +875,7 @@ L["Show For DPS"] = true;
 L["Show For Healers"] = true;
 L["Show For Tanks"] = true;
 L["Show When Not Active"] = "顯示當前無效的光環"
+L["Show"] = true;
 L["Size and Positions"] = true;
 L["Size of the indicator icon."] = "提示圖示尺寸"
 L["Size Override"] = "尺寸覆蓋"

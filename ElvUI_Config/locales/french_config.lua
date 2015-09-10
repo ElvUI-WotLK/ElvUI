@@ -874,6 +874,7 @@ L["Show For DPS"] = true;
 L["Show For Healers"] = true;
 L["Show For Tanks"] = true;
 L["Show When Not Active"] = "Afficher les manquants"
+L["Show"] = true;
 L["Size and Positions"] = "Taille et positions";
 L["Size of the indicator icon."] = "Taille de l'indicateur de l'icône."
 L["Size Override"] = "Forcer la taille"

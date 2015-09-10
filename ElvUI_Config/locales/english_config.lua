@@ -788,6 +788,7 @@ L["Show a incomming heal prediction bar on the unitframe. Also display a slightl
 L["Show Aura From Other Players"] = true;
 L['Show Auras'] = true;
 L["Show When Not Active"] = true;
+L["Show"] = true;
 L["Size of the indicator icon."] = true;
 L['Size Override'] = true;
 L["Size"] = true;
