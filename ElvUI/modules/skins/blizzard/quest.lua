@@ -46,7 +46,17 @@ local function LoadSkin()
 		_G['QuestInfoItem'..i..'Count']:SetDrawLayer('OVERLAY')
 	end
 	
+	QuestInfoItemHighlight:StripTextures();
+	QuestInfoItemHighlight:SetTemplate("Default", nil, true);
+	QuestInfoItemHighlight:SetBackdropBorderColor(1, 1, 0);
+	QuestInfoItemHighlight:SetBackdropColor(0, 0, 0, 0);
+	QuestInfoItemHighlight:Size(142, 40);
 	
+	hooksecurefunc("QuestInfoItem_OnClick", function(self)
+		QuestInfoItemHighlight:ClearAllPoints();
+		QuestInfoItemHighlight:SetOutside(self:GetName().."IconTexture");
+		_G[self:GetName().."Name"]:SetTextColor(1, 1, 0);
+	end);
 	
 	
 	
