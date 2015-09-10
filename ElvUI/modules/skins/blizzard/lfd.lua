@@ -11,6 +11,13 @@ local function LoadSkin()
 	
 	LFDParentFramePortrait:Kill();
 	
+	for i = 1, LFDParentFrame:GetNumChildren() do
+		local child = select(i, LFDParentFrame:GetChildren());
+		if(child.GetPushedTexture and child:GetPushedTexture() and not child:GetName()) then
+			S:HandleCloseButton(child);
+		end
+	end
+	
 	S:HandleCheckBox(LFDQueueFrameRoleButtonTank.checkButton);
 	LFDQueueFrameRoleButtonTank.checkButton:SetFrameLevel(LFDQueueFrameRoleButtonTank.checkButton:GetFrameLevel() + 2);
 	S:HandleCheckBox(LFDQueueFrameRoleButtonHealer.checkButton);
