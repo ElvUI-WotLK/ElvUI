@@ -62,6 +62,14 @@ local function LoadSkin()
 	S:HandleButton(HelpFrameStuckStuck, true); -- Персонаж застрял
 	S:HandleButton(HelpFrameStuckOpenTicket, true);
 	S:HandleButton(HelpFrameStuckCancel);
+	
+	KnowledgeBaseFrame:HookScript("OnShow", function()
+		select(11, HelpFrame:GetRegions()):Hide();
+	end);
+	
+	KnowledgeBaseFrame:SetScript("OnHide", function()
+		select(11, HelpFrame:GetRegions()):Show();
+	end);
 end
 
 S:RegisterSkin('ElvUI', LoadSkin);
