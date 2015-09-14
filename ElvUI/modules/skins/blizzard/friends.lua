@@ -140,27 +140,36 @@ local function LoadSkin()
 	S:HandleCheckBox(GuildControlPopupAcceptButton);
 	S:HandleCheckBox(GuildControlPopupFrameCancelButton);
 	-- Channel Frame
-	for i = 1, MAX_DISPLAY_CHANNEL_BUTTONS do
-		_G['ChannelButton'..i]:StripTextures();
-		_G['ChannelButton'..i]:StyleButton();
-	end
-	
 	ChannelFrameVerticalBar:Kill();
+	
+	S:HandleCheckBox(ChannelFrameAutoJoinParty);
+	S:HandleCheckBox(ChannelFrameAutoJoinBattleground);
+	
+	S:HandleButton(ChannelFrameNewButton);
+	
+	ChannelListScrollFrame:StripTextures();
+	S:HandleScrollBar(ChannelListScrollFrameScrollBar);
+	
+	for i = 1, MAX_DISPLAY_CHANNEL_BUTTONS do
+		_G["ChannelButton"..i]:StripTextures();
+		_G["ChannelButton"..i]:StyleButton();
+		
+		_G["ChannelButton"..i.."Collapsed"]:SetTextColor(1, 1, 1);
+	end
 	
 	ChannelRosterScrollFrame:StripTextures();
 	S:HandleScrollBar(ChannelRosterScrollFrameScrollBar);
 	
-	S:HandleButton(ChannelFrameNewButton);
-	
-	ChannelFrameDaughterFrame:StripTextures(); -- Daughter Frame
+	ChannelFrameDaughterFrame:StripTextures();
 	ChannelFrameDaughterFrame:SetTemplate("Transparent");
+	
+	S:HandleEditBox(ChannelFrameDaughterFrameChannelName);
+	S:HandleEditBox(ChannelFrameDaughterFrameChannelPassword);
 	
 	S:HandleCloseButton(ChannelFrameDaughterFrameDetailCloseButton);
 	
-	
-	
-	S:HandleButton(ChannelFrameDaughterFrameOkayButton);
 	S:HandleButton(ChannelFrameDaughterFrameCancelButton);
+	S:HandleButton(ChannelFrameDaughterFrameOkayButton);
 	-- Raid Frame
 	S:HandleButton(RaidFrameConvertToRaidButton);
 	S:HandleButton(RaidFrameRaidInfoButton);
