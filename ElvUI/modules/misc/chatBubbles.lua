@@ -107,13 +107,13 @@ function M:SkinBubble(frame)
 		end
 
 		
-		frame.text:FontTemplate()
+		frame.text:FontTemplate(E.LSM:Fetch("font", E.private.general.chatBubbleFont), E.private.general.chatBubbleFontSize)
 
 		frame:SetClampedToScreen(false)
 		frame:HookScript('OnShow', M.UpdateBubbleBorder)
 	elseif E.private.general.chatBubbles == 'nobackdrop' then
 		frame:SetBackdrop(nil)
-		frame.text:FontTemplate()
+		frame.text:FontTemplate(E.LSM:Fetch("font", E.private.general.chatBubbleFont), E.private.general.chatBubbleFontSize)
 		frame:SetClampedToScreen(false)
 	end
 	frame.isBubblePowered = true

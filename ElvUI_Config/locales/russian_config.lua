@@ -323,7 +323,6 @@ L["Controls what the transparency of the worldmap will be set to when you are mo
 L['Display a panel across the bottom of the screen. This is for cosmetic only.'] = "Отображать панель на нижней границе экрана. Это косметический элемент."
 L['Display a panel across the top of the screen. This is for cosmetic only.'] = "Отображать панель на верхней границе экрана. Это косметический элемент."
 L['Display emotion icons in chat.'] = "Показывать смайлы в чате"
-L["Don't scale the large world map to block out sides of the screen."] = "Не масштабировать карту мира до размеров экрана."
 L['Emotion Icons'] = "Иконки эмоций"
 L["Enable/Disable the loot frame."] = "Включить/выключить окно добычи ElvUI."
 L["Enable/Disable the loot roll frame."] = "Включить/выключить фрейм распределения добычи ElvUI."
@@ -336,6 +335,7 @@ L["Log Taints"] = "Отслеживать недочеты"
 L["Login Message"] = "Сообщение загрузки"
 L["Loot Roll"] = "Раздел добычи"
 L["Loot"] = "Добыча"
+L["Make the world map smaller."] = "Сделать карту мира меньше. Она больше не будет занимать весь экран в увеличенном варианте.";
 L["Map Alpha While Moving"] = "Прозрачность карты в движении"
 L["Multi-Monitor Support"] = "Поддержка нескольких мониторов"
 L["Name Font"] = "Шрифт имени"
@@ -346,14 +346,14 @@ L['Remaining Time'] = 'Оставшееся время';
 L['Remove Backdrop'] = "Скрыть фон"
 L["Reset all frames to their original positions."] = "Установить все фреймы на позиции по умолчанию"
 L["Reset Anchors"] = "Сбросить позиции"
-L['Right'] = "Правый"
 L["Send ADDON_ACTION_BLOCKED errors to the Lua Error frame. These errors are less important in most cases and will not effect your game performance. Also a lot of these errors cannot be fixed. Please only report these errors if you notice a Defect in gameplay."] = "Отображать ошибки типа ADDON_ACTION_BLOCKED в фрейме ошибок lua. Эти ошибки в большинстве случаев не сильно важны и не влияют на производительность. Также многие из этих ошибок не могут быть исправлены. Пожалуйста, сообщайте об этих ошибках только если Вы заметите дефект в игре."
 L['Skin Backdrop'] = "Стилизовать фон"
 L["Skin the blizzard chat bubbles."] = "Стилизовать облачка сообщения Blizzard"
+L["Smaller World Map"] = "Маленькая карта мира";
 L["The font that appears on the text above players heads. |cffFF0000WARNING: This requires a game restart or re-log for this change to take effect.|r"] = "Шрифт, которым будет написан текст над головами игроков. |cffFF0000ВНИМАНИЕ: Необходим перезапуск игры или релог для начала действия этой настройки.|r"
-L["Tiny Map"] = "Маленькая карта"
 L['Toggle Tutorials'] = "Показать помощь"
 L['Top Panel'] = "Верхняя панель"
+L["When you go AFK display the AFK screen."] = "Отображать специальный экран, когда вы переходите в состояние \"Отсутствует\".";
 
 --Media
 L["Backdrop color of transparent frames"] = "Цвет фона прозрачных фреймов"

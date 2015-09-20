@@ -858,6 +858,9 @@ function NP:CreatePlate(frame)
 	frame.threat, frame.border, frame.castBar.shield, frame.castBar.border, frame.castBar.icon, frame.highlight, frame.name, frame.level, frame.bossIcon, frame.raidIcon, frame.eliteIcon = frame:GetRegions();
 	local myPlate = CreateFrame("Frame", nil, self.PlateParent);
 	
+	myPlate.hiddenFrame = CreateFrame("Frame", nil, myPlate);
+	myPlate.hiddenFrame:Hide();
+	
 	myPlate.healthBar = CreateFrame("StatusBar", nil, myPlate);
 	myPlate.healthBar:SetPoint("BOTTOM", myPlate, "BOTTOM", 0, 5);
 	myPlate.healthBar:SetFrameStrata("BACKGROUND");
@@ -880,6 +883,7 @@ function NP:CreatePlate(frame)
 	myPlate.castBar.time:SetPoint("TOPRIGHT", myPlate.castBar, "BOTTOMRIGHT", 6, -2);
 	myPlate.castBar.time:SetJustifyH("RIGHT");
 	
+	frame.castBar.icon:SetParent(myPlate.hiddenFrame);
 	myPlate.castBar.icon = myPlate.castBar:CreateTexture(nil, "OVERLAY");
 	myPlate.castBar.icon:SetTexCoord(.07, .93, .07, .93);
 	myPlate.castBar.icon:SetDrawLayer("OVERLAY");

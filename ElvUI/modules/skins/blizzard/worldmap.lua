@@ -55,7 +55,9 @@ local function LoadSkin()
 		if not WorldMapQuestDetailScrollFrame.backdrop then
 			WorldMapQuestDetailScrollFrame:CreateBackdrop("Default")
 			WorldMapQuestDetailScrollFrame.backdrop:Point("TOPLEFT", -22, 2)
-			WorldMapQuestDetailScrollFrame.backdrop:Point("BOTTOMRIGHT", 23, -4)		
+			WorldMapQuestDetailScrollFrame.backdrop:Point("BOTTOMRIGHT", 23, -4)
+			WorldMapQuestDetailScrollFrameTrack:Hide();
+			WorldMapQuestDetailScrollFrameTrack.Show = E.noop;
 		end
 		
 		if not WorldMapQuestRewardScrollFrame.backdrop then
@@ -71,10 +73,7 @@ local function LoadSkin()
 	end			
 	
 	local function FixSkin()
-		WorldMapFrame:StripTextures()
-		if not E.db.general.tinyWorldMap then
-			BlackoutWorld:SetTexture(0, 0, 0, 1)
-		end
+		WorldMapFrame:StripTextures();
 		
 		if WORLDMAP_SETTINGS.size == WORLDMAP_FULLMAP_SIZE then
 			LargeSkin()
@@ -104,7 +103,6 @@ local function LoadSkin()
 	hooksecurefunc("WorldMapFrame_SetFullMapView", LargeSkin)
 	hooksecurefunc("WorldMapFrame_SetQuestMapView", QuestSkin)
 	hooksecurefunc("WorldMap_ToggleSizeUp", FixSkin)
-	BlackoutWorld:SetParent(WorldMapFrame.backdrop)
 end
 
 S:RegisterSkin('ElvUI', LoadSkin)

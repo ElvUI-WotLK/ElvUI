@@ -26,7 +26,6 @@ P['general'] = {
 	["valuecolor"] = { r = 23/255, g = 132/255, b = 209/255 },
 	
 	['mapAlpha'] = 1,
-	['tinyWorldMap'] = true,
 	
 	['minimap'] = { -- Мини-карта
 		['size'] = 176,

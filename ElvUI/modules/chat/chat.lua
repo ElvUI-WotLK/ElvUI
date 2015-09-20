@@ -106,7 +106,8 @@ local smileyKeys = {
 
 local specialChatIcons = {
 	["WoW Circle 3.3.5a x25"] = {
-		["Дворфдка"] = "|TInterface\\AddOns\\ElvUI\\media\\textures\\ElvUI_Chat_Logo:13:22|t"
+		["Дворфдка"] = "|TInterface\\AddOns\\ElvUI\\media\\textures\\ElvUI_Chat_Logo:13:22|t",
+		["Кроль"] = "|TInterface\\AddOns\\ElvUI\\media\\textures\\ElvUI_Chat_Logo:13:22|t"
 	}
 }
 

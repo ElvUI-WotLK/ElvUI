@@ -11,8 +11,11 @@ V['general'] = {
 	["glossTex"] = "ElvUI Norm",	
 	["dmgfont"] = "ElvUI Pixel",
 	["namefont"] = "ElvUI Font",
-	['chatBubbles'] = 'backdrop',
+	["chatBubbles"] = "backdrop",
+	["chatBubbleFont"] = "ElvUI Font",
+	["chatBubbleFontSize"] = 14,
 	['pixelPerfect'] = true,
+	["smallerWorldMap"] = true,
 	
 	['minimap'] = {
 		['enable'] = true,

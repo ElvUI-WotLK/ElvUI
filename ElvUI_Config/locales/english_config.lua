@@ -314,7 +314,6 @@ L["Controls what the transparency of the worldmap will be set to when you are mo
 L['Display a panel across the bottom of the screen. This is for cosmetic only.'] = true;
 L['Display a panel across the top of the screen. This is for cosmetic only.'] = true;
 L['Display emotion icons in chat.'] = true;
-L["Don't scale the large world map to block out sides of the screen."] = true;
 L['Emotion Icons'] = true;
 L["Enable/Disable the loot frame."] = true;
 L["Enable/Disable the loot roll frame."] = true;
@@ -327,6 +326,7 @@ L["Log Taints"] = true;
 L["Login Message"] = true;
 L["Loot Roll"] = true;
 L["Loot"] = true;
+L["Make the world map smaller."] = true;
 L["Map Alpha While Moving"] = true;
 L["Name Font"] = true;
 L["Party / Raid"] = true;
@@ -336,14 +336,14 @@ L['Remaining Time'] = true;
 L['Remove Backdrop'] = true;
 L["Reset all frames to their original positions."] = true;
 L["Reset Anchors"] = true;
-L['Right'] = true;
 L["Send ADDON_ACTION_BLOCKED errors to the Lua Error frame. These errors are less important in most cases and will not effect your game performance. Also a lot of these errors cannot be fixed. Please only report these errors if you notice a Defect in gameplay."] = true;
 L['Skin Backdrop'] = true;
 L["Skin the blizzard chat bubbles."] = true;
+L["Smaller World Map"] = true;
 L["The font that appears on the text above players heads. |cffFF0000WARNING: This requires a game restart or re-log for this change to take effect.|r"] = true;
-L["Tiny Map"] = true;
 L['Toggle Tutorials'] = true;
 L['Top Panel'] = true;
+L["When you go AFK display the AFK screen."] = true;
 
 --Media
 L["Backdrop color of transparent frames"] = true;
