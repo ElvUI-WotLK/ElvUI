@@ -12,7 +12,9 @@ local function LoadSkin()
 	for i = 1, 3 do
 		local Tab = _G['SpellBookFrameTabButton'..i];
 		
-		Tab:StripTextures(true);
+		Tab:GetNormalTexture():SetTexture(nil);
+		Tab:GetDisabledTexture():SetTexture(nil);
+		
 		S:HandleTab(Tab);
 		Tab:SetHeight(32);
 	end
