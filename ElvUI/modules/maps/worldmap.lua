@@ -100,6 +100,12 @@ function M:Initialize()
 		elseif(WORLDMAP_SETTINGS.size == WORLDMAP_QUESTLIST_SIZE) then
 			self:SetLargeWorldMap();
 		end
+		
+		DropDownList1:HookScript("OnShow", function(self)
+			if(DropDownList1:GetScale() ~= UIParent:GetScale()) then
+				DropDownList1:SetScale(UIParent:GetScale());
+			end		
+		end)
 	end
 end
 
