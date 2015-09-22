@@ -10,6 +10,5 @@
 	<Script file='threat.lua'/>
 	<Script file='totemBar.lua'/>
 	<Script file='raidUtility.lua'/>
-	<Script file='losscontrol.lua'/>
 	<Script file='afk.lua'/>
 </Ui>
