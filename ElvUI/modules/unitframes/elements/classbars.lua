@@ -95,9 +95,8 @@ end
 
 function UF:DruidResourceBarVisibilityUpdate(unit)
 	local parent = self:GetParent();
-	local druidAltMana = parent.DruidAltMana;
-
-	UF:UpdatePlayerFrameAnchors(parent, druidAltMana:IsShown());
+	
+	UF:UpdatePlayerFrameAnchors(parent, self:IsShown());
 end
 
 function UF:DruidPostUpdateAltPower(unit, min, max)

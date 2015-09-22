@@ -242,7 +242,9 @@ function UF:UpdateComboDisplay(event, unit)
 		end
 	else
 		cpoints:Hide()
-		self.Portrait.backdrop:SetPoint("TOPRIGHT", self, "TOPRIGHT")
+		if(not PORTRAIT_DETACHED) then
+			self.Portrait.backdrop:SetPoint("TOPRIGHT", self, "TOPRIGHT")
+		end
 		self.Health:Point("TOPRIGHT", self, "TOPRIGHT", -(BORDER+PORTRAIT_WIDTH), -BORDER)
 	end
 end

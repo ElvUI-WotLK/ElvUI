@@ -52,7 +52,7 @@ function UF:UpdatePlayerFrameAnchors(frame, isShown)
 	local PORTRAIT_WIDTH = db.portrait.width;
 	local USE_PORTRAIT = db.portrait.enable;
 	local USE_PORTRAIT_OVERLAY = db.portrait.overlay and USE_PORTRAIT;
-	local PORTRAIT_DETACHED = db.portrait.detachedFromFrame;
+	local PORTRAIT_DETACHED = db.portrait.detachFromFrame;
 	local CLASSBAR_HEIGHT = db.classbar.height;
 	local USE_CLASSBAR = db.classbar.enable;
 	local USE_MINI_CLASSBAR = db.classbar.fill == "spaced" and USE_CLASSBAR;
@@ -71,7 +71,7 @@ function UF:UpdatePlayerFrameAnchors(frame, isShown)
 		POWERBAR_HEIGHT = 0;
 	end
 	
-	if(USE_PORTRAIT_OVERLAY or not USE_PORTRAIT) then
+	if(USE_PORTRAIT_OVERLAY or PORTRAIT_DETACHED or not USE_PORTRAIT) then
 		PORTRAIT_WIDTH = 0;
 	end
 	
