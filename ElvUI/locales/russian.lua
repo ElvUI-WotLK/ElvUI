@@ -243,7 +243,6 @@ L["GM Ticket Frame"] = "Запрос ГМу"
 L["Left Chat"] = "Левый чат"
 L["Loot / Alert Frames"] = "Розыгрыш/оповещения"
 L["Loot Frame"] = "Окно добычи"
-L['Loss Control Icon'] = 'Иконка потери контроля';
 L['MA Frames'] = "Помощники"
 L['Micro Bar'] = "Микроменю"
 L['Minimap'] = "Миникарта"

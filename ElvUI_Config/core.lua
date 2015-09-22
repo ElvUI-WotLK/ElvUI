@@ -207,20 +207,6 @@ E.Options.args.general = {
 					get = function(info) return E.private.general.smallerWorldMap; end,
 					set = function(info, value) E.private.general.smallerWorldMap = value; E:StaticPopup_Show("PRIVATE_RL"); end
 				},
-				lossControl = {
-					order = 18,
-					type = "toggle",
-					name = L['Loss Control Icon'],
-					get = function(info) return E.private.general.lossControl end,
-					set = function(info, value) E.private.general.lossControl = value; E:StaticPopup_Show("PRIVATE_RL") end
-				},
-				addonList = {
-					order = 19,
-					type = "toggle",
-					name = ADDONS,
-					get = function(info) return E.private.general.addonList end,
-					set = function(info, value) E.private.general.addonList = value; E:StaticPopup_Show("PRIVATE_RL") end
-				},
 				chatBubbles = {
 					order = 30,
 					type = "group",

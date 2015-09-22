@@ -248,7 +248,6 @@ L["GM Ticket Frame"] = true;
 L["Left Chat"] = true;
 L["Loot / Alert Frames"] = true;
 L["Loot Frame"] = true;
-L['Loss Control Icon'] = true;
 L['MA Frames'] = true;
 L['Micro Bar'] = true;
 L['Minimap'] = true;
