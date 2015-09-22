@@ -16,7 +16,9 @@ local function LoadSkin()
 		Tab:GetDisabledTexture():SetTexture(nil);
 		
 		S:HandleTab(Tab);
-		Tab:SetHeight(32);
+		
+		Tab.backdrop:Point("TOPLEFT", 14, E.PixelMode and -17 or -19);
+		Tab.backdrop:Point("BOTTOMRIGHT", -14, 19);
 	end
 	
 	S:HandleNextPrevButton(SpellBookPrevPageButton);
