@@ -12,5 +12,4 @@
 	<Script file='raidUtility.lua'/>
 	<Script file='losscontrol.lua'/>
 	<Script file='afk.lua'/>
-	<Script file='addonList.lua'/>
 </Ui>

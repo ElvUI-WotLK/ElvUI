@@ -126,6 +126,8 @@ local function LoadSkin()
 		slot.backdrop:SetAllPoints()
 		icon:SetTexCoord(unpack(E.TexCoords))
 		icon:SetInside()
+		
+		slot:SetFrameLevel(PaperDollFrame:GetFrameLevel() + 2);
 	end	
 	
 	local function ColorItemBorder()
@@ -197,6 +199,11 @@ local function LoadSkin()
 	PetPaperDollFrameExpBar:StripTextures()
 	PetPaperDollFrameExpBar:SetStatusBarTexture(E["media"].normTex)
 	PetPaperDollFrameExpBar:CreateBackdrop("Default")
+	
+	--[[local xtex = PetPaperDollPetInfo:GetRegions();
+	xtex:SetTexCoord(.12, .63, .15, .55);
+	PetPaperDollPetInfo:CreateBackdrop("Default");
+	PetPaperDollPetInfo:Size(24, 24);]]
 	
 	PetPaperDollFrameCompanionFrame:StripTextures()
 	
