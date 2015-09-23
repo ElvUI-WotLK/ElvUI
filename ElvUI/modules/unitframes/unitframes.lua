@@ -687,7 +687,7 @@ function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdat
 			end
 			
 			if(maxPlayers > 0) then
-				numGroups = E:Round(maxPlayers/5);
+				numGroups = tonumber(E:Round(maxPlayers/5));
 				E:Print("Forcing maxGroups to: "..numGroups.." because maxPlayers is: "..maxPlayers);
 			end
 		end

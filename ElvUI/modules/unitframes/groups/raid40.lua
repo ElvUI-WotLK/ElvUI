@@ -67,7 +67,7 @@ function UF:Raid40SmartVisibility(event)
 				self:Show()
 				
 				self.isInstanceForced = true;
-				if(ElvUF_Raid40.numGroups ~= E:Round(maxPlayers/5) and event) then
+				if(ElvUF_Raid40.numGroups ~= tonumber(E:Round(maxPlayers/5)) and event) then
 					UF:CreateAndUpdateHeaderGroup("raid40")	
 				end					
 			else

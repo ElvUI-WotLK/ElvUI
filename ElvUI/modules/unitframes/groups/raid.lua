@@ -62,10 +62,8 @@ function UF:RaidSmartVisibility(event)
 			UnregisterStateDriver(self, "visibility")
 			
 			if(maxPlayers < 40) then
-				self:Show()	
-				
-				self.isInstanceForced = true;
-				if(ElvUF_Raid.numGroups ~= E:Round(maxPlayers/5) and event) then
+				self:Show()
+				if(ElvUF_Raid.numGroups ~= tonumber(E:Round(maxPlayers/5)) and event) then
 					UF:CreateAndUpdateHeaderGroup("raid")
 				end				
 			else
