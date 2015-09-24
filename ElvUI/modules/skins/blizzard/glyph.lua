@@ -8,9 +8,27 @@ S:RegisterSkin('Blizzard_GlyphUI', function()
 		return;
 	end
 	
-	GlyphFrame:CreateBackdrop('Default');
-	GlyphFrame.backdrop:Point('TOPLEFT', 13, -12);
-	GlyphFrame.backdrop:Point('BOTTOMRIGHT', -31, 76);
-	
 	GlyphFrame:StripTextures();
+	
+	GlyphFrame:HookScript("OnShow", function()
+		PlayerTalentFrameTitleText:Hide();
+		PlayerTalentFramePointsBar:Hide();
+		PlayerTalentFrameScrollFrame:Hide();
+		
+		local preview = GetCVarBool("previewTalents");
+		if(preview) then
+			PlayerTalentFramePreviewBar:Hide();
+		end
+	end);
+	
+	GlyphFrame:SetScript("OnHide", function()
+		PlayerTalentFrameTitleText:Show();
+		PlayerTalentFramePointsBar:Show();
+		PlayerTalentFrameScrollFrame:Show();
+		
+		local preview = GetCVarBool("previewTalents");
+		if(preview) then
+			PlayerTalentFramePreviewBar:Show();
+		end
+	end);
 end);
