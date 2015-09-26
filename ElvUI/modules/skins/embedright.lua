@@ -9,19 +9,18 @@ S.AddonPoints = {
 }
 
 function S:EmbedSkadaWindow(window, width, height, point, relativeFrame, relativePoint, ofsx, ofsy)
-	local barheight = 22;
 	window.db.barwidth = width;
-	--window.db.barheight = 12;
 	if(window.db.enabletitle) then 
-		height = height - barheight;
+		height = height - window.db.barheight;
 	end
 	window.db.background.height = height;
 	window.db.enablebackground = true;
-	window.db.spark = false
+	window.db.spark = false;
 	window.db.barslocked = true;
 	window.bargroup:ClearAllPoints();
 	window.bargroup:SetPoint(point, relativeFrame, relativePoint, ofsx, ofsy);
 	window.bargroup:SetFrameStrata("MEDIUM");
+	window.bargroup.bgframe:SetFrameStrata("MEDIUM");
 	
 	Skada.displays["bar"].ApplySettings(Skada.displays["bar"], window);
 end
@@ -77,15 +76,16 @@ function S:RemovePrevious(current)
 end
 
 function S:EmbedSkada()
-	local borderWidth = E.PixelMode and 1 or 2;
+	local borderWidth = E.PixelMode and 4 or 7;
 	local widthOffset = E.PixelMode and 8 or 14;
-	local heightOffset = E.PixelMode and 13 or 19;
+	local heightOffset = E.PixelMode and 31 or 41;
 	
-	if(E.db.chat.panelBackdrop == "'SHOWBOTH" or E.db.chat.panelBackdrop == "SHOWRIGHT") then
-		widthOffset = E.PixelMode and 8 or 14;
-		heightOffset = E.PixelMode and 16 or 24;
+	if(E.db.chat.panelBackdrop == "HIDEBOTH" or E.db.chat.panelBackdrop == "LEFT") then
+		borderWidth = E.PixelMode and 1 or 2;
+		widthOffset = E.PixelMode and 2 or 4;
+		heightOffset = E.PixelMode and 25 or 31;
 	end
-
+	
 	for _, window in pairs(skadaWindows) do
 		window.bargroup:SetParent(RightChatToggleButton);
 	end
@@ -94,10 +94,10 @@ function S:EmbedSkada()
 	local panelHeightRight = E.db.chat.separateSizes and E.db.chat.panelHeightRight or E.db.chat.panelHeight;
 	
 	if(#skadaWindows == 1) then
-		self:EmbedSkadaWindow(skadaWindows[1], panelWidthRight - widthOffset, panelHeightRight - heightOffset, "TOPLEFT", RightChatPanel, "TOPLEFT", E.PixelMode and 4 or 7, -(E.PixelMode and 4 or 7));
+		self:EmbedSkadaWindow(skadaWindows[1], panelWidthRight - widthOffset, panelHeightRight - heightOffset, "TOPLEFT", RightChatPanel, "TOPLEFT", borderWidth, -borderWidth);
 	elseif(#skadaWindows == 2) then
-		self:EmbedSkadaWindow(skadaWindows[1], ((panelWidthRight - widthOffset) / 2) - (borderWidth + E.mult) + 1, panelHeightRight - heightOffset,  "TOPLEFT", RightChatPanel, "TOPLEFT", E.PixelMode and 4 or 6, -(E.PixelMode and 4 or 6));
-		self:EmbedSkadaWindow(skadaWindows[2], ((panelWidthRight - widthOffset) / 2) - (borderWidth + E.mult), panelHeightRight - heightOffset,  "LEFT", skadaWindows[1].bargroup, "RIGHT", E.PixelMode and 3 or 7, 0);
+		self:EmbedSkadaWindow(skadaWindows[1], (panelWidthRight - widthOffset) / 2 - (E.PixelMode and 1.5 or 3.5), panelHeightRight - heightOffset, "TOPLEFT", RightChatPanel, "TOPLEFT", borderWidth, -borderWidth);
+		self:EmbedSkadaWindow(skadaWindows[2], (panelWidthRight - widthOffset) / 2 - (E.PixelMode and 1.5 or 3.5), panelHeightRight - heightOffset, "LEFT", skadaWindows[1].bargroup, "RIGHT", E.PixelMode and 3 or 7, 0);
 	end	
 end
 
@@ -129,7 +129,7 @@ function S:SetEmbedRight(addon)
 		end
 		Omen.UpdateGrips = function(...)
 			local db = Omen.db.profile
-			if S.db.embedRight == 'Omen' then
+			if E.db.skins.embedRight == 'Omen' then
 				Omen.VGrip1:ClearAllPoints()
 				Omen.VGrip1:SetPoint("TOPLEFT", Omen.BarList, "TOPLEFT", db.VGrip1, 0)
 				Omen.VGrip1:SetPoint("BOTTOMLEFT", Omen.BarList, "BOTTOMLEFT", db.VGrip1, 0)
@@ -157,7 +157,7 @@ function S:SetEmbedRight(addon)
 			Omen.oldSetAnchors = Omen.SetAnchors
 		end
 		Omen.SetAnchors = function(...)
-			if S.db.embedRight == 'Omen' then return; end
+			if E.db.skins.embedRight == 'Omen' then return; end
 			Omen.oldSetAnchors(...)
 		end
 		
@@ -182,22 +182,22 @@ function S:SetEmbedRight(addon)
 		local StartMoving = Omen.Title:GetScript('OnMouseDown')
 		local StopMoving = Omen.Title:GetScript('OnMouseUp')
 		Omen.Title:SetScript("OnMouseDown", function()
-			if S.db.embedRight == 'Omen' then return end
+			if E.db.skins.embedRight == 'Omen' then return end
 			StartMoving()
 		end)
 		
 		Omen.Title:SetScript("OnMouseUp", function()
-			if S.db.embedRight == 'Omen' then return end
+			if E.db.skins.embedRight == 'Omen' then return end
 			StopMoving()
 		end)	
 
 		Omen.BarList:SetScript("OnMouseDown", function()
-			if S.db.embedRight == 'Omen' then return end
+			if E.db.skins.embedRight == 'Omen' then return end
 			StartMoving()
 		end)
 		
 		Omen.BarList:SetScript("OnMouseUp", function()
-			if S.db.embedRight == 'Omen' then return end
+			if E.db.skins.embedRight == 'Omen' then return end
 			StopMoving()
 		end)				
 		
@@ -210,7 +210,7 @@ function S:SetEmbedRight(addon)
 		end
 		
 		self:RemovePrevious(addon);
-
+		
 		function Skada:CreateWindow(name, db)
 			Skada:CreateWindow_(name, db);
 			
@@ -219,9 +219,9 @@ function S:SetEmbedRight(addon)
 				tinsert(skadaWindows, window);
 			end	
 			
-			--if(S.db.embedRight == "Skada") then
+			if(E.db.skins.embedRight == "Skada") then
 				S:EmbedSkada();
-			--end
+			end
 		end
 		
 		function Skada:DeleteWindow(name)
@@ -232,9 +232,9 @@ function S:SetEmbedRight(addon)
 				tinsert(skadaWindows, window);
 			end	
 			
-			--if(S.db.embedRight == "Skada") then
+			if(E.db.skins.embedRight == "Skada") then
 				S:EmbedSkada();
-			--end
+			end
 		end
 		
 		self:EmbedSkada();

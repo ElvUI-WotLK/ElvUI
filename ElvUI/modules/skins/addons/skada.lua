@@ -4,13 +4,10 @@ local S = E:GetModule("Skins");
 local function LoadSkin()
 	if(E.private.skins.addons.enable ~= true or E.private.skins.addons.skada ~= true) then return; end
 	local Skada = Skada;
-	local barmod = Skada.displays["bar"];
-
-	barmod.ApplySettings_ = barmod.ApplySettings
-	barmod.ApplySettings = function(self, win)
-		barmod.ApplySettings_(self, win);
+	local displayBar = Skada.displays["bar"];
+	
+	S:SecureHook(displayBar, "ApplySettings", function(self, win)
 		local skada = win.bargroup;
-		
 		if(win.db.enabletitle) then
 			skada.button:SetBackdrop(nil);
 			
@@ -27,21 +24,28 @@ local function LoadSkin()
 			end
 			
 			if(skada.bgframe.backdrop) then
-				if(win.db.reversegrowth) then
-					skada.bgframe.backdrop:Point('TOPLEFT', -E.Border, E.Border);
-					skada.bgframe.backdrop:Point('BOTTOMRIGHT', E.Border, -(E.PixelMode and 7 or 9));
+				skada.bgframe.backdrop:ClearAllPoints();
+				if(win.db.enabletitle) then
+					skada.bgframe.backdrop:SetPoint("TOPLEFT", -E.Border, E.Border);
+					skada.bgframe.backdrop:SetPoint("BOTTOMRIGHT", E.Border, -(E.PixelMode and 6 or 8));
 				else
-					skada.bgframe.backdrop:Point('TOPLEFT', -E.Border, E.PixelMode and 7 or 9);
-					skada.bgframe.backdrop:Point('BOTTOMRIGHT', E.Border, -E.Border);
+					skada.bgframe.backdrop:SetPoint("TOPLEFT", -E.Border, E.PixelMode and 16 or 18);
+					skada.bgframe.backdrop:SetPoint("BOTTOMRIGHT", E.Border, E.PixelMode and 14 or 16);
+				end
+				
+				
+				if(E.db.chat.panelBackdrop == "HIDEBOTH" or E.db.chat.panelBackdrop == "LEFT") then
+					skada.bgframe.backdrop:Show();
+				else
+					skada.bgframe.backdrop:Hide();
 				end
 			end
 		end
-	end	
+	end);
 	
-	-- Update pre-existing displays
 	for _, window in ipairs(Skada:GetWindows()) do
-		window:UpdateDisplay()
-	end	
+		window:UpdateDisplay();
+	end
 end
 
-S:RegisterSkin("Skada", LoadSkin)
+S:RegisterSkin("Skada", LoadSkin);
