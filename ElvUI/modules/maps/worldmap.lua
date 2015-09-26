@@ -110,11 +110,11 @@ function M:Initialize()
 		self:RegisterEvent("PLAYER_REGEN_DISABLED");
 		
 		if(WORLDMAP_SETTINGS.size == WORLDMAP_FULLMAP_SIZE) then
-			self:SetLargeWorldMap();
+			WorldMap_ToggleSizeDown();
 		elseif(WORLDMAP_SETTINGS.size == WORLDMAP_WINDOWED_SIZE) then
 			self:SetSmallWorldMap();
 		elseif(WORLDMAP_SETTINGS.size == WORLDMAP_QUESTLIST_SIZE) then
-			self:SetLargeWorldMap();
+			WorldMap_ToggleSizeDown();
 		end
 		
 		DropDownList1:HookScript("OnShow", function(self)
