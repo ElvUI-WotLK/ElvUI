@@ -12,7 +12,8 @@ local function LoadSkin()
 	S:HandleCloseButton(CharacterFrameCloseButton)
 	
 	for i = 1, #CHARACTERFRAME_SUBFRAMES do
-		S:HandleTab(_G['CharacterFrameTab'..i])
+		local tab = _G["CharacterFrameTab"..i];
+		S:HandleTab(tab);
 	end
 	
 		GearManagerDialog:StripTextures()
@@ -200,10 +201,10 @@ local function LoadSkin()
 	PetPaperDollFrameExpBar:SetStatusBarTexture(E["media"].normTex)
 	PetPaperDollFrameExpBar:CreateBackdrop("Default")
 	
-	--[[local xtex = PetPaperDollPetInfo:GetRegions();
-	xtex:SetTexCoord(.12, .63, .15, .55);
+	PetPaperDollPetInfo:GetRegions():SetTexCoord(0.04, 0.1475, 0.05, 0.309375);
+	PetPaperDollPetInfo:SetFrameLevel(PetModelFrame:GetFrameLevel() + 2);
 	PetPaperDollPetInfo:CreateBackdrop("Default");
-	PetPaperDollPetInfo:Size(24, 24);]]
+	PetPaperDollPetInfo:Size(24, 24);
 	
 	PetPaperDollFrameCompanionFrame:StripTextures()
 	
