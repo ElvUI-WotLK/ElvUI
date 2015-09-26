@@ -1,10 +1,33 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule('Skins')
 
---Credit Tomkuzyno
-
 local function LoadSkin()
 	if E.private.skins.addons.enable ~= true or E.private.skins.addons.auctionator ~= true then return end
+	
+	hooksecurefunc("Atr_SetTextureButton", function(elementName, count, itemlink)
+		local texture = GetItemIcon(itemlink);
+		local textureElement = getglobal(elementName);
+		
+		if(not textureElement.backdrop) then
+			textureElement:StyleButton(nil, true);
+			textureElement:SetTemplate("Default", true);
+			
+			textureElement.backdrop = true;
+		end
+		
+		if(texture) then
+			textureElement:GetNormalTexture():SetTexCoord(unpack(E.TexCoords));
+			textureElement:GetNormalTexture():SetInside();
+		end
+	end);
+	
+	Atr_Error_Frame:SetTemplate("Transparent");
+	S:HandleButton(select(1, Atr_Error_Frame:GetChildren()));
+	
+	Atr_Confirm_Frame:SetTemplate("Transparent");
+	S:HandleButton(Atr_Confirm_Cancel);
+	S:HandleButton(select(2, Atr_Confirm_Frame:GetChildren()));
+	
 	-- Options skinning
 	Atr_BasicOptionsFrame:StripTextures()
 	Atr_BasicOptionsFrame:SetTemplate("Transparent")
@@ -51,56 +74,89 @@ local function LoadSkin()
 	end
 	S:HandleEditBox(Atr_Starting_Discount)
 	
-	S:HandleButton(Atr_UCConfigFrame_Reset, true)
-	S:HandleButton(Atr_StackingOptionsFrame_Edit, true)
-	S:HandleButton(Atr_StackingOptionsFrame_New, true)
+	S:HandleButton(Atr_UCConfigFrame_Reset)
+	S:HandleButton(Atr_StackingOptionsFrame_Edit)
+	S:HandleButton(Atr_StackingOptionsFrame_New)
 	
 	-- Main window skinning
 	local AtrSkin = CreateFrame('Frame')
 	AtrSkin:RegisterEvent('AUCTION_HOUSE_SHOW')
 	AtrSkin:SetScript('OnEvent', function(self)
-		S:HandleDropDownBox(Atr_Duration)
-		S:HandleDropDownBox(Atr_DropDownSL)
+		S:HandleDropDownBox(Atr_DropDown1);
+		S:HandleDropDownBox(Atr_DropDownSL);
+		
+		Atr_CheckActiveButton:SetWidth(195);
+		S:HandleButton(Atr_CheckActiveButton);
+		
+		S:HandleEditBox(Atr_Search_Box);
+		S:HandleButton(Atr_Search_Button);
+		S:HandleButton(Atr_Adv_Search_Button);
+		S:HandleButton(Auctionator1Button);
+		S:HandleButton(Atr_FullScanButton);
+		S:HandleScrollBar(Atr_Hlist_ScrollFrameScrollBar);
+		
+		Atr_Hlist:StripTextures();
+		Atr_Hlist:SetTemplate("Default");
+		Atr_Hlist:SetWidth(195);
+		Atr_Hlist:ClearAllPoints()
+		Atr_Hlist:Point("TOPLEFT", -195, -75);
+		
+		S:HandleEditBox(Atr_StackPriceGold);
+		S:HandleEditBox(Atr_StackPriceSilver);
+		S:HandleEditBox(Atr_StackPriceCopper);
+		S:HandleEditBox(Atr_ItemPriceGold);
+		S:HandleEditBox(Atr_ItemPriceSilver);
+		S:HandleEditBox(Atr_ItemPriceCopper);
+		S:HandleEditBox(Atr_StartingPriceGold);
+		S:HandleEditBox(Atr_StartingPriceSilver);
+		S:HandleEditBox(Atr_StartingPriceCopper);
+		S:HandleEditBox(Atr_Batch_NumAuctions);
+		S:HandleEditBox(Atr_Batch_Stacksize);
+		
+		S:HandleButton(Atr_CreateAuctionButton);
+		S:HandleDropDownBox(Atr_Duration);
+		
+		S:HandleButton(Atr_AddToSListButton);
+		Atr_RemFromSListButton:SetPoint("TOPLEFT", -195, -350);
+		S:HandleButton(Atr_RemFromSListButton);
+		Atr_DelSListButton:SetPoint("TOPLEFT", -195, -371);
+		S:HandleButton(Atr_DelSListButton);
+		Atr_NewSListButton:SetPoint("TOPLEFT", -195, -392);
+		S:HandleButton(Atr_NewSListButton);
+		
+		S:HandleButton(AuctionatorCloseButton);
+		S:HandleButton(Atr_CancelSelectionButton);
+		S:HandleButton(Atr_Buy1_Button);
+		
+		S:HandleScrollBar(AuctionatorScrollFrameScrollBar);
+		
+		Atr_HeadingsBar:StripTextures();
+		Atr_HeadingsBar:SetTemplate("Default");
+		Atr_HeadingsBar:SetHeight(20);
+		
+		
+		for i = 1, 3 do
+			local tab = _G["Atr_ListTabsTab"..i];
+			tab:StripTextures();
+			S:HandleButton(tab);
+		end
+		
+		Atr_Hilite1:SetTemplate("Default", true, true);
+		Atr_Hilite1:SetBackdropColor(0, 0, 0, 0);
+		
 		S:HandleDropDownBox(Atr_ASDD_Class)
 		S:HandleDropDownBox(Atr_ASDD_Subclass)
-
-		S:HandleButton(Atr_Search_Button, true)
-		S:HandleButton(Atr_Back_Button, true)
-		S:HandleButton(Atr_Buy1_Button, true)
-		S:HandleButton(Atr_Adv_Search_Button, true)
-		S:HandleButton(Atr_FullScanButton, true)
-		S:HandleButton(Auctionator1Button, true)
-		S:HandleButton(Atr_ListTabsTab1, true)
-		S:HandleButton(Atr_ListTabsTab2, true)
-		S:HandleButton(Atr_ListTabsTab3, true)
-		S:HandleButton(Atr_CreateAuctionButton, true)
-		S:HandleButton(Atr_RemFromSListButton, true)
-		S:HandleButton(Atr_DelSListButton, true)
-		S:HandleButton(Atr_AddToSListButton, true)
-		S:HandleButton(Atr_NewSListButton, true)
-		S:HandleButton(Atr_CheckActiveButton, true)
-		S:HandleButton(AuctionatorCloseButton, true)
-		S:HandleButton(Atr_CancelSelectionButton, true)
-		S:HandleButton(Atr_FullScanStartButton, true)
-		S:HandleButton(Atr_FullScanDone, true)
-		S:HandleButton(Atr_Adv_Search_ResetBut, true)
-		S:HandleButton(Atr_Adv_Search_OKBut, true)
-		S:HandleButton(Atr_Adv_Search_CancelBut, true)
-		S:HandleButton(Atr_Buy_Confirm_OKBut, true)
-		S:HandleButton(Atr_Buy_Confirm_CancelBut, true)
-
-		S:HandleEditBox(Atr_StackPriceGold)
-		S:HandleEditBox(Atr_StackPriceSilver)
-		S:HandleEditBox(Atr_StackPriceCopper)
-		S:HandleEditBox(Atr_StartingPriceGold)
-		S:HandleEditBox(Atr_StartingPriceSilver)
-		S:HandleEditBox(Atr_StartingPriceCopper)
-		S:HandleEditBox(Atr_ItemPriceGold)
-		S:HandleEditBox(Atr_ItemPriceSilver)
-		S:HandleEditBox(Atr_ItemPriceCopper)
-		S:HandleEditBox(Atr_Batch_NumAuctions)
-		S:HandleEditBox(Atr_Batch_Stacksize)
-		S:HandleEditBox(Atr_Search_Box)
+		
+		S:HandleButton(Atr_Back_Button)
+		
+		S:HandleButton(Atr_FullScanStartButton)
+		S:HandleButton(Atr_FullScanDone)
+		S:HandleButton(Atr_Adv_Search_ResetBut)
+		S:HandleButton(Atr_Adv_Search_OKBut)
+		S:HandleButton(Atr_Adv_Search_CancelBut)
+		S:HandleButton(Atr_Buy_Confirm_OKBut)
+		S:HandleButton(Atr_Buy_Confirm_CancelBut)
+	
 		S:HandleEditBox(Atr_AS_Searchtext)
 		S:HandleEditBox(Atr_AS_Minlevel)
 		S:HandleEditBox(Atr_AS_Maxlevel)
@@ -111,33 +167,14 @@ local function LoadSkin()
 		Atr_Adv_Search_Dialog:SetTemplate("Transparent")
 		Atr_FullScanFrame:StripTextures()
 		Atr_FullScanFrame:SetTemplate("Transparent")
-		Atr_HeadingsBar:StripTextures()
-		Atr_HeadingsBar:SetTemplate("Default")
-		Atr_HeadingsBar:Height(19)
-		Atr_Error_Frame:StripTextures()
-		Atr_Error_Frame:SetTemplate("Transparent")
-		Atr_Hlist:StripTextures()
-		Atr_Hlist:SetTemplate("Default")
-		Atr_Hlist:Width(196)
-		Atr_Hlist:ClearAllPoints()
-		Atr_Hlist:Point("TOPLEFT", -195, -75)
 		Atr_Buy_Confirm_Frame:StripTextures()
 		Atr_Buy_Confirm_Frame:SetTemplate("Default")
 		Atr_CheckActives_Frame:StripTextures()
 		Atr_CheckActives_Frame:SetTemplate("Default")
-
-		-- resize some buttons to fit
-		Atr_NewSListButton:Width(196)
-		Atr_CheckActiveButton:Width(196)
-
+		
 		-- Button Positions
-		AuctionatorCloseButton:ClearAllPoints()
-		AuctionatorCloseButton:Point("BOTTOMLEFT", Atr_Main_Panel, "BOTTOMRIGHT", -17, 10)
 		Atr_Buy1_Button:Point("RIGHT", AuctionatorCloseButton, "LEFT", -5, 0)
 		Atr_CancelSelectionButton:Point("RIGHT", Atr_Buy1_Button, "LEFT", -5, 0)
-		Atr_SellControls_Tex:StripTextures()
-		Atr_SellControls_Tex:StyleButton()
-		Atr_SellControls_Tex:SetTemplate("Default", true)
 
 		for i = 1, AuctionFrame.numTabs do
 			S:HandleTab(_G["AuctionFrameTab"..i])
