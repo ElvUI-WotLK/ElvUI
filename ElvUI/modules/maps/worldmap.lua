@@ -2,6 +2,22 @@ local E, L, V, P, G = unpack(select(2, ...));
 local M = E:NewModule("WorldMap", "AceHook-3.0", "AceEvent-3.0", "AceTimer-3.0");
 E.WorldMap = M;
 
+function SetUIPanelAttribute(frame, name, value)
+	local info = UIPanelWindows[frame:GetName()];
+	if(not info) then
+		return;
+	end
+	
+	if(not frame:GetAttribute("UIPanelLayout-defined")) then
+		frame:SetAttribute("UIPanelLayout-defined", true);
+		for name,value in pairs(info) do
+			frame:SetAttribute("UIPanelLayout-"..name, value);
+		end
+	end
+	
+	frame:SetAttribute("UIPanelLayout-"..name, value);
+end
+
 function M:SetLargeWorldMap()
 	if(InCombatLockdown()) then return; end
 	
@@ -10,12 +26,12 @@ function M:SetLargeWorldMap()
 	WorldMapFrame:SetScale(1);
 	WorldMapFrame:EnableMouse(false);
 	
-	if(not WorldMapFrame:GetAttribute("UIPanelLayout-defined")) then
-		UIPanelWindows["WorldMapFrame"].area = "center";
-		UIPanelWindows["WorldMapFrame"].allowOtherPanels = true;
-	else
-		WorldMapFrame:SetAttribute("UIPanelLayout-area", "center");
-		WorldMapFrame:SetAttribute("UIPanelLayout-allowOtherPanels", true);
+	if(WorldMapFrame:GetAttribute('UIPanelLayout-area') ~= 'center') then
+		SetUIPanelAttribute(WorldMapFrame, "area", "center");
+	end
+	
+	if(WorldMapFrame:GetAttribute('UIPanelLayout-allowOtherPanels') ~= true) then
+		SetUIPanelAttribute(WorldMapFrame, "allowOtherPanels", true);
 	end
 	
 	WorldMapFrameSizeUpButton:Hide();
