@@ -201,10 +201,32 @@ local function LoadSkin()
 	PetPaperDollFrameExpBar:SetStatusBarTexture(E["media"].normTex)
 	PetPaperDollFrameExpBar:CreateBackdrop("Default")
 	
+	local function updHappiness(self)
+		local happiness, damagePercentage = GetPetHappiness();
+		local hasPetUI, isHunterPet = HasPetUI();
+		if(not happiness or not isHunterPet) then
+			return;	
+		end
+		local texture = self:GetRegions();
+		if(happiness == 1) then
+			texture:SetTexCoord(0.335, 0.5225, 0.05, 0.309375);
+		elseif( happiness == 2) then
+			texture:SetTexCoord(0.1475, 0.335, 0.05, 0.309375);
+		elseif(happiness == 3) then
+			texture:SetTexCoord(0.04, 0.1475, 0.05, 0.309375);
+		end
+	end
+	
 	PetPaperDollPetInfo:GetRegions():SetTexCoord(0.04, 0.1475, 0.05, 0.309375);
 	PetPaperDollPetInfo:SetFrameLevel(PetModelFrame:GetFrameLevel() + 2);
 	PetPaperDollPetInfo:CreateBackdrop("Default");
 	PetPaperDollPetInfo:Size(24, 24);
+	updHappiness(PetPaperDollPetInfo);
+	
+	PetPaperDollPetInfo:RegisterEvent("UNIT_HAPPINESS");
+	PetPaperDollPetInfo:SetScript("OnEvent", function(self, event, ...)
+		updHappiness(self);
+	end);
 	
 	PetPaperDollFrameCompanionFrame:StripTextures()
 	
