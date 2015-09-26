@@ -678,6 +678,7 @@ local function LoadSkin()
         "SocialPanelGuildMemberAlert",
 		"SocialPanelGuildRecruitment",
         "SocialPanelChatMouseScroll",
+        "SocialPanelWholeChatWindowClickable",
         "ActionBarsPanelLockActionBars",
         "ActionBarsPanelSecureAbilityToggle",
         "ActionBarsPanelAlwaysShowActionBars",
