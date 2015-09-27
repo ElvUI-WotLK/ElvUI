@@ -271,6 +271,7 @@ function AB:Initialize()
 	
 	self:SecureHook('ActionButton_Update', 'StyleButton')
 	self:SecureHook('PetActionBar_Update', 'UpdatePet')
+	self:SecureHook("ActionButton_UpdateHotkeys", "FixKeybindText");
 	
 	if not GetCVarBool('lockActionBars') then
 		SetCVar('lockActionBars', 1)
