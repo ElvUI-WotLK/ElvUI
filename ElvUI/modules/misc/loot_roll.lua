@@ -74,7 +74,7 @@ local function SetTip(frame)
 	GameTooltip:SetOwner(frame, "ANCHOR_RIGHT");
 	GameTooltip:SetText(frame.tiptext);
 	if(frame:IsEnabled() == 0) then
-		GameTooltip:AddLine("|cffff3333"..L["Can"t Roll"]);
+		GameTooltip:AddLine("|cffff3333"..L["Can't Roll"]);
 	end
 	
 	for name, tbl in pairs(frame.parent.rolls) do
