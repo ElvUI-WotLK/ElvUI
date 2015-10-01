@@ -222,7 +222,7 @@ function M:Initialize()
 
 	MinimapZoneTextButton:Hide();
 
-	MiniMapTracking:Hide();
+	MiniMapTracking:Kill();
 
 	MiniMapMailFrame:ClearAllPoints();
 	MiniMapMailFrame:Point('TOPRIGHT', Minimap, 3, 4);

@@ -173,17 +173,20 @@ local function LoadSkin()
 	-- Raid Frame
 	S:HandleButton(RaidFrameConvertToRaidButton);
 	S:HandleButton(RaidFrameRaidInfoButton);
-	S:HandleButton(RaidFrameNotInRaidRaidBrowserButton, true);
+	S:HandleButton(RaidFrameNotInRaidRaidBrowserButton);
 	
 	RaidInfoFrame:StripTextures(true); -- Raid Info Frame
 	RaidInfoFrame:SetTemplate("Transparent");
 	
+	RaidInfoInstanceLabel:StripTextures();
+	RaidInfoIDLabel:StripTextures();
+	
 	S:HandleCloseButton(RaidInfoCloseButton);
 	
+	S:HandleScrollBar(RaidInfoScrollFrameScrollBar);
 	
-	
-	S:HandleButton(RaidInfoExtendButton, true);
-	S:HandleButton(RaidInfoCancelButton, true);
+	S:HandleButton(RaidInfoExtendButton);
+	S:HandleButton(RaidInfoCancelButton);
 end
 
 S:RegisterSkin('ElvUI', LoadSkin)

@@ -147,7 +147,7 @@ local function SetupCVars()
 	SetCVar("ShowClassColorInNameplate", 1)
 	SetCVar("screenshotQuality", 10)
 	SetCVar("chatMouseScroll", 1)
-	SetCVar("chatStyle", "classic")
+	SetCVar("chatStyle", "classic", "chatStyle");
 	SetCVar("WholeChatWindowClickable", 0)
 	SetCVar("ConversationMode", "inline")
 	SetCVar("showTutorials", 0)
