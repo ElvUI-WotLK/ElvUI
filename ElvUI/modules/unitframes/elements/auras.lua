@@ -129,8 +129,10 @@ function UF:UpdateAuraIconSettings(auras, noCycle)
 	end
 end
 
+local unstableAffliction = GetSpellInfo(30108);
+local vampiricTouch = GetSpellInfo(34914);
 function UF:PostUpdateAura(unit, button, index, offset, filter, isDebuff, duration, timeLeft)
-	local name, _, _, _, dtype, duration, expiration, _, isStealable, id = UnitAura(unit, index, button.filter)
+	local name, _, _, _, dtype, duration, expiration, _, isStealable = UnitAura(unit, index, button.filter)
 
 	
 	local isFriend = UnitIsFriend("player", unit) == 1 and true or false
@@ -140,7 +142,7 @@ function UF:PostUpdateAura(unit, button, index, offset, filter, isDebuff, durati
 			button.icon:SetDesaturated((unit and not unit:find("arena%d")) and true or false)
 		else
 			local color = DebuffTypeColor[dtype] or DebuffTypeColor.none
-			if (id == 30108 or id == 34914) and E.myclass ~= "WARLOCK" then
+			if((name == unstableAffliction or name == vampiricTouch) and E.myclass ~= "WARLOCK") then
 				button:SetBackdropBorderColor(0.05, 0.85, 0.94)
 			else
 				button:SetBackdropBorderColor(color.r * 0.6, color.g * 0.6, color.b * 0.6)
