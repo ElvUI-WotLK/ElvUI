@@ -53,7 +53,8 @@ function lib:RegisterPlugin(name,callback)
 	if not lib.vcframe then
 
 		local f = CreateFrame('Frame')
-		f:RegisterEvent("GROUP_ROSTER_UPDATE")
+		f:RegisterEvent("RAID_ROSTER_UPDATE");
+		f:RegisterEvent("PARTY_MEMBERS_CHANGED");
 		f:RegisterEvent("CHAT_MSG_ADDON")
 		f:SetScript('OnEvent', lib.VersionCheck)
 		lib.vcframe = f
@@ -181,22 +182,22 @@ function lib:SendPluginVersionCheck(message)
 		if(#(m .. p .. ";") < 230) then
 			m = m .. p .. ";"
 		else
-			local _, instanceType = IsInInstance()
-			if IsInRaid() then
-				E:Delay(delay,SendAddonMessage(lib.prefix, m, (not IsInRaid(LE_PARTY_CATEGORY_HOME) and IsInRaid(LE_PARTY_CATEGORY_INSTANCE)) and "INSTANCE_CHAT" or "RAID"))
-			elseif IsInGroup() then
-				E:Delay(delay,SendAddonMessage(lib.prefix, m, (not IsInGroup(LE_PARTY_CATEGORY_HOME) and IsInGroup(LE_PARTY_CATEGORY_INSTANCE)) and "INSTANCE_CHAT" or "PARTY"))
+			local numParty, numRaid = GetNumPartyMembers(), GetNumRaidMembers();
+			if(numRaid > 0) then
+				E:Delay(delay, SendAddonMessage(lib.prefix, m, "RAID"))
+			elseif(numParty > 0) then
+				E:Delay(delay, SendAddonMessage(lib.prefix, m, "PARTY"))
 			end
 			m = p .. ";"
 			delay = delay + 1
 		end
 	end
 	-- Send the last message
-	local _, instanceType = IsInInstance()
-	if IsInRaid() then
-		E:Delay(delay+1,SendAddonMessage(lib.prefix, m, (not IsInRaid(LE_PARTY_CATEGORY_HOME) and IsInRaid(LE_PARTY_CATEGORY_INSTANCE)) and "INSTANCE_CHAT" or "RAID"))
-	elseif IsInGroup() then
-		E:Delay(delay+1,SendAddonMessage(lib.prefix, m, (not IsInGroup(LE_PARTY_CATEGORY_HOME) and IsInGroup(LE_PARTY_CATEGORY_INSTANCE)) and "INSTANCE_CHAT" or "PARTY"))
+	local numParty, numRaid = GetNumPartyMembers(), GetNumRaidMembers();
+	if(numRaid > 0) then
+		E:Delay(delay+1, SendAddonMessage(lib.prefix, m, "RAID"))
+	elseif(numParty > 0) then
+		E:Delay(delay+1, SendAddonMessage(lib.prefix, m, "PARTY"))
 	end
 end
 

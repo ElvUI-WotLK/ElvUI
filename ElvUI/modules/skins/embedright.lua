@@ -20,7 +20,7 @@ function S:EmbedSkadaWindow(window, width, height, point, relativeFrame, relativ
 	window.bargroup:ClearAllPoints();
 	window.bargroup:SetPoint(point, relativeFrame, relativePoint, ofsx, ofsy);
 	window.bargroup:SetFrameStrata("MEDIUM");
-	window.bargroup.bgframe:SetFrameStrata("MEDIUM");
+	--window.bargroup.bgframe:SetFrameStrata("MEDIUM");
 	
 	Skada.displays["bar"].ApplySettings(Skada.displays["bar"], window);
 end
@@ -87,17 +87,21 @@ function S:EmbedSkada()
 	end
 	
 	for _, window in pairs(skadaWindows) do
-		window.bargroup:SetParent(RightChatToggleButton);
+		if(E.db.datatexts.rightChatPanel) then
+			window.bargroup:SetParent(RightChatToggleButton);
+		else
+			window.bargroup:SetParent(UIParent);
+		end
 	end
 	
 	local panelWidthRight = E.db.chat.separateSizes and E.db.chat.panelWidthRight or E.db.chat.panelWidth;
 	local panelHeightRight = E.db.chat.separateSizes and E.db.chat.panelHeightRight or E.db.chat.panelHeight;
 	
 	if(#skadaWindows == 1) then
-		self:EmbedSkadaWindow(skadaWindows[1], panelWidthRight - widthOffset, panelHeightRight - heightOffset, "TOPLEFT", RightChatPanel, "TOPLEFT", borderWidth, -borderWidth);
+		self:EmbedSkadaWindow(skadaWindows[1], panelWidthRight - widthOffset, panelHeightRight - (E.db.datatexts.rightChatPanel and heightOffset or widthOffset), "TOPLEFT", RightChatPanel, "TOPLEFT", borderWidth, -borderWidth);
 	elseif(#skadaWindows == 2) then
-		self:EmbedSkadaWindow(skadaWindows[1], (panelWidthRight - widthOffset) / 2 - (E.PixelMode and 1.5 or 3.5), panelHeightRight - heightOffset, "TOPLEFT", RightChatPanel, "TOPLEFT", borderWidth, -borderWidth);
-		self:EmbedSkadaWindow(skadaWindows[2], (panelWidthRight - widthOffset) / 2 - (E.PixelMode and 1.5 or 3.5), panelHeightRight - heightOffset, "LEFT", skadaWindows[1].bargroup, "RIGHT", E.PixelMode and 3 or 7, 0);
+		self:EmbedSkadaWindow(skadaWindows[1], (panelWidthRight - widthOffset) / 2 - (E.PixelMode and 1.5 or 3.5), panelHeightRight - (E.db.datatexts.rightChatPanel and heightOffset or widthOffset), "TOPLEFT", RightChatPanel, "TOPLEFT", borderWidth, -borderWidth);
+		self:EmbedSkadaWindow(skadaWindows[2], (panelWidthRight - widthOffset) / 2 - (E.PixelMode and 1.5 or 3.5), panelHeightRight - (E.db.datatexts.rightChatPanel and heightOffset or widthOffset), "LEFT", skadaWindows[1].bargroup, "RIGHT", E.PixelMode and 3 or 7, 0);
 	end	
 end
 
@@ -109,8 +113,12 @@ function S:SetEmbedRight(addon)
 	if addon == 'Recount' then
 		Recount:LockWindows(true)
 		
-		Recount_MainWindow:ClearAllPoints()
-		Recount_MainWindow:SetPoint("BOTTOMLEFT", RightChatDataPanel, "TOPLEFT", 0, (E.PixelMode and 1 or 3))
+		Recount_MainWindow:ClearAllPoints();
+		if(E.db.datatexts.rightChatPanel) then
+			Recount_MainWindow:SetPoint("BOTTOMLEFT", RightChatDataPanel, "TOPLEFT", 0, (E.PixelMode and 1 or 3))
+		else
+			Recount_MainWindow:SetPoint("BOTTOMLEFT", RightChatPanel, "BOTTOMLEFT", 0, (E.PixelMode and 1 or 3))
+		end
 
 		if E.db.chat.panelBackdrop == 'SHOWBOTH' or E.db.chat.panelBackdrop == 'SHOWRIGHT' then
 			Recount_MainWindow:SetWidth(E.db.chat.panelWidth - (E.PixelMode and 6 or 10))

@@ -117,18 +117,28 @@ local function LoadSkin()
 	GearManagerToggleButton:GetHighlightTexture():SetTexture(1, 1, 1, 0.3);
 	GearManagerToggleButton:GetHighlightTexture():SetAllPoints();
 	
-	local slots = {'HeadSlot', 'NeckSlot', 'ShoulderSlot', 'BackSlot', 'ChestSlot', 'ShirtSlot', 'TabardSlot', 'WristSlot', 'HandsSlot', 'WaistSlot', 'LegsSlot', 'FeetSlot', 'Finger0Slot', 'Finger1Slot', 'Trinket0Slot', 'Trinket1Slot', 'MainHandSlot', 'SecondaryHandSlot', 'RangedSlot', 'AmmoSlot'}
+	local slots = {"HeadSlot", "NeckSlot", "ShoulderSlot", "BackSlot", "ChestSlot", "ShirtSlot", "TabardSlot", "WristSlot",
+		"HandsSlot", "WaistSlot", "LegsSlot", "FeetSlot", "Finger0Slot", "Finger1Slot", "Trinket0Slot", "Trinket1Slot",
+		"MainHandSlot", "SecondaryHandSlot", "RangedSlot", "AmmoSlot"
+	};
+	
 	for _, slot in pairs(slots) do
-		local icon = _G['Character'..slot..'IconTexture']
-		local slot = _G['Character'..slot]
-		slot:StripTextures()
-		slot:StyleButton()
-		slot:CreateBackdrop('Default')
-		slot.backdrop:SetAllPoints()
-		icon:SetTexCoord(unpack(E.TexCoords))
-		icon:SetInside()
+		local icon = _G["Character"..slot.."IconTexture"];
+		local cooldown = _G["Character"..slot.."Cooldown"];
+		
+		slot = _G["Character"..slot];
+		slot:StripTextures();
+		slot:StyleButton(false);
+		slot:SetTemplate("Default", true, true);
+		
+		icon:SetTexCoord(unpack(E.TexCoords));
+		icon:SetInside();
 		
 		slot:SetFrameLevel(PaperDollFrame:GetFrameLevel() + 2);
+		
+		if(cooldown) then
+			E:RegisterCooldown(cooldown);
+		end
 	end	
 	
 	local function ColorItemBorder()
@@ -138,14 +148,14 @@ local function LoadSkin()
 			local itemId = GetInventoryItemID('player', slotId)
 
 			if itemId then
-				local _, _, rarity, _, _, _, _, _, _, _, _ = GetItemInfo(itemId)
+				local rarity = GetInventoryItemQuality("player", slotId);
 				if rarity and rarity > 1 then
-					target.backdrop:SetBackdropBorderColor(GetItemQualityColor(rarity))
+					target:SetBackdropBorderColor(GetItemQualityColor(rarity))
 				else
-					target.backdrop:SetBackdropBorderColor(unpack(E['media'].bordercolor))
+					target:SetBackdropBorderColor(unpack(E['media'].bordercolor))
 				end
 			else
-				target.backdrop:SetBackdropBorderColor(unpack(E['media'].bordercolor))
+				target:SetBackdropBorderColor(unpack(E['media'].bordercolor))
 			end
 		end
 	end
@@ -224,9 +234,8 @@ local function LoadSkin()
 	updHappiness(PetPaperDollPetInfo);
 	
 	PetPaperDollPetInfo:RegisterEvent("UNIT_HAPPINESS");
-	PetPaperDollPetInfo:SetScript("OnEvent", function(self, event, ...)
-		updHappiness(self);
-	end);
+	PetPaperDollPetInfo:SetScript("OnEvent", updHappiness);
+	PetPaperDollPetInfo:SetScript("OnShow", updHappiness);
 	
 	PetPaperDollFrameCompanionFrame:StripTextures()
 	
