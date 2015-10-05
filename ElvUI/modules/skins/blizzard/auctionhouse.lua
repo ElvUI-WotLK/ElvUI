@@ -168,13 +168,27 @@ local function LoadSkin()
 	for i=1, NUM_BROWSE_TO_DISPLAY do
 		local button = _G["BrowseButton"..i]
 		local icon = _G["BrowseButton"..i.."Item"]
+		local name = _G["BrowseButton"..i.."Name"];
 		
 		_G["BrowseButton"..i.."ItemIconTexture"]:SetTexCoord(unpack(E.TexCoords));
 		_G["BrowseButton"..i.."ItemIconTexture"]:SetInside();
 		
-		icon:StyleButton();
-		icon:GetNormalTexture():SetTexture("");
-		icon:SetTemplate("Default");
+		if(icon) then
+			icon:StyleButton();
+			icon:GetNormalTexture():SetTexture("");
+			icon:SetTemplate("Default");
+			
+			hooksecurefunc(name, "SetVertexColor", function(self, r, g, b)
+				if(r == 1 and g == 1 and b == 1) then
+					icon:SetBackdropBorderColor(unpack(E["media"].bordercolor));
+				else
+					icon:SetBackdropBorderColor(r, g, b);
+				end
+			end);
+			hooksecurefunc(name, "Hide", function(self, r, g, b)
+				icon:SetBackdropBorderColor(unpack(E["media"].bordercolor));
+			end);
+		end
 		
 		button:StripTextures();
 		button:StyleButton();
@@ -188,6 +202,7 @@ local function LoadSkin()
 	for i=1, NUM_AUCTIONS_TO_DISPLAY do
 		local button = _G["AuctionsButton"..i]
 		local icon = _G["AuctionsButton"..i.."Item"]
+		local name = _G["AuctionsButton"..i.."Name"];
 		
 		_G["AuctionsButton"..i.."ItemIconTexture"]:SetTexCoord(unpack(E.TexCoords))
 		_G["AuctionsButton"..i.."ItemIconTexture"]:SetInside()
@@ -195,7 +210,18 @@ local function LoadSkin()
 		icon:StyleButton();
 		icon:GetNormalTexture():SetTexture("");
 		icon:SetTemplate("Default");
-
+		
+		hooksecurefunc(name, "SetVertexColor", function(self, r, g, b)
+			if(r == 1 and g == 1 and b == 1) then
+				icon:SetBackdropBorderColor(unpack(E["media"].bordercolor));
+			else
+				icon:SetBackdropBorderColor(r, g, b);
+			end
+		end);
+		hooksecurefunc(name, "Hide", function(self, r, g, b)
+			icon:SetBackdropBorderColor(unpack(E["media"].bordercolor));
+		end);
+		
 		button:StripTextures()
 		button:StyleButton()
 		_G["AuctionsButton"..i.."Highlight"] = button:GetHighlightTexture()
@@ -208,6 +234,7 @@ local function LoadSkin()
 	for i=1, NUM_BIDS_TO_DISPLAY do
 		local button = _G["BidButton"..i]
 		local icon = _G["BidButton"..i.."Item"]
+		local name = _G["BidButton"..i.."Name"];
 		
 		_G["BidButton"..i.."ItemIconTexture"]:SetTexCoord(unpack(E.TexCoords))
 		_G["BidButton"..i.."ItemIconTexture"]:SetInside()
@@ -218,7 +245,18 @@ local function LoadSkin()
 		
 		icon:CreateBackdrop("Default")
 		icon.backdrop:SetAllPoints()
-
+		
+		hooksecurefunc(name, "SetVertexColor", function(self, r, g, b)
+			if(r == 1 and g == 1 and b == 1) then
+				icon:SetBackdropBorderColor(unpack(E["media"].bordercolor));
+			else
+				icon:SetBackdropBorderColor(r, g, b);
+			end
+		end);
+		hooksecurefunc(name, "Hide", function(self, r, g, b)
+			icon:SetBackdropBorderColor(unpack(E["media"].bordercolor));
+		end);
+		
 		button:StripTextures()
 		button:StyleButton()
 		_G["BidButton"..i.."Highlight"] = button:GetHighlightTexture()
