@@ -69,6 +69,71 @@ local function LoadSkin()
 	for i= 1, 2 do
 		S:HandleTab(_G['MerchantFrameTab'..i]);
 	end
+	
+	hooksecurefunc("MerchantFrame_UpdateMerchantInfo", function()
+		local numMerchantItems = GetMerchantNumItems();
+		local index;
+		local itemButton, itemName;
+		local name, texture, price, quantity, numAvailable, isUsable, extendedCost;
+		for i = 1, BUYBACK_ITEMS_PER_PAGE do
+			index = (((MerchantFrame.page - 1) * MERCHANT_ITEMS_PER_PAGE) + i);
+			itemButton = _G["MerchantItem"..i.."ItemButton"];
+			itemName = _G["MerchantItem"..i.."Name"];
+			
+			if(index <= numMerchantItems) then
+				if(itemButton.link) then
+					local _, _, quality = GetItemInfo(itemButton.link);
+					local r, g, b = GetItemQualityColor(quality);
+					
+					itemName:SetTextColor(r, g, b);
+					if(quality > 1) then
+						itemButton:SetBackdropBorderColor(r, g, b);
+					else
+						itemButton:SetBackdropBorderColor(unpack(E["media"].bordercolor));
+					end
+				end
+			end
+			
+			local buybackName = GetBuybackItemInfo(GetNumBuybackItems());
+			if(buybackName) then
+				local _, _, quality = GetItemInfo(buybackName);
+				local r, g, b = GetItemQualityColor(quality);
+				
+				MerchantBuyBackItemName:SetTextColor(r, g, b);
+				if(quality > 1) then
+					MerchantBuyBackItemItemButton:SetBackdropBorderColor(r, g, b);
+				else
+					MerchantBuyBackItemItemButton:SetBackdropBorderColor(unpack(E["media"].bordercolor));
+				end
+			else
+				MerchantBuyBackItemItemButton:SetBackdropBorderColor(unpack(E["media"].bordercolor));
+			end
+		end
+	end);
+	
+	hooksecurefunc("MerchantFrame_UpdateBuybackInfo", function()
+		local numBuybackItems = GetNumBuybackItems();
+		local itemButton, itemName;
+		for i = 1, BUYBACK_ITEMS_PER_PAGE do
+			itemButton = _G["MerchantItem"..i.."ItemButton"];
+			itemName = _G["MerchantItem"..i.."Name"];
+			
+			if(i <= numBuybackItems) then
+				local buybackName = GetBuybackItemInfo(i);
+				if(buybackName) then
+					local _, _, quality = GetItemInfo(buybackName);
+					local r, g, b = GetItemQualityColor(quality);
+					
+					itemName:SetTextColor(r, g, b);
+					if(quality > 1) then
+						itemButton:SetBackdropBorderColor(r, g, b);
+					else
+						itemButton:SetBackdropBorderColor(unpack(E["media"].bordercolor));
+					end
+				end
+			end
+		end
+	end);
 end
 
 S:RegisterSkin('ElvUI', LoadSkin);
