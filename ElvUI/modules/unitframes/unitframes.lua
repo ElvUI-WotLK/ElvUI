@@ -863,10 +863,112 @@ function UF:UpdateAllHeaders(event)
 			header:Configure_Groups();
 		end
 	end
+	
+	if(E.private["unitframe"]["disabledBlizzardFrames"].party) then
+		ElvUF:DisableBlizzard("party");
+	end
+end
+
+local hiddenParent = CreateFrame("Frame");
+hiddenParent:Hide();
+
+local HandleFrame = function(baseName)
+	local frame;
+	if(type(baseName) == "string") then
+		frame = _G[baseName];
+	else
+		frame = baseName;
+	end
+	
+	if(frame) then
+		frame:UnregisterAllEvents();
+		frame:Hide();
+		
+		frame:SetParent(hiddenParent);
+		
+		local health = frame.healthbar;
+		if(health) then
+			health:UnregisterAllEvents();
+		end
+		
+		local power = frame.manabar;
+		if(power) then
+			power:UnregisterAllEvents();
+		end
+		
+		local spell = frame.spellbar;
+		if(spell) then
+			spell:UnregisterAllEvents();
+		end
+	end
+end
+
+function ElvUF:DisableBlizzard(unit)
+	if((not unit) or InCombatLockdown()) then return; end
+	
+	if((unit == "player") and E.private["unitframe"]["disabledBlizzardFrames"].player) then
+		HandleFrame(PlayerFrame);
+		
+		PlayerFrame:RegisterEvent("UNIT_ENTERING_VEHICLE");
+		PlayerFrame:RegisterEvent("UNIT_ENTERED_VEHICLE");
+		PlayerFrame:RegisterEvent("UNIT_EXITING_VEHICLE");
+		PlayerFrame:RegisterEvent("UNIT_EXITED_VEHICLE");
+		
+		RuneFrame:SetParent(PlayerFrame)
+	elseif((unit == "pet") and E.private["unitframe"]["disabledBlizzardFrames"].player) then
+		HandleFrame(PetFrame)
+	elseif((unit == "target") and E.private["unitframe"]["disabledBlizzardFrames"].target) then
+		HandleFrame(TargetFrame);
+		HandleFrame(ComboFrame);
+	elseif((unit == "focus") and E.private["unitframe"]["disabledBlizzardFrames"].focus) then
+		HandleFrame(FocusFrame);
+		HandleFrame(FocusFrameToT);
+	elseif((unit == "targettarget") and E.private["unitframe"]["disabledBlizzardFrames"].target) then
+		HandleFrame(TargetFrameToT);
+	elseif((unit:match"(boss)%d?$" == "boss") and E.private["unitframe"]["disabledBlizzardFrames"].boss) then
+		local id = unit:match"boss(%d)";
+		if(id) then
+			HandleFrame("Boss"..id.."TargetFrame");
+		else
+			for i = 1, MAX_BOSS_FRAMES do
+				HandleFrame(("Boss%dTargetFrame"):format(i));
+			end
+		end
+	elseif((unit:match"(party)%d?$" == "party") and E.private["unitframe"]["disabledBlizzardFrames"].party) then
+		local id = unit:match"party(%d)";
+		if(id) then
+			HandleFrame("PartyMemberFrame"..id);
+		else
+			for i = 1, 4 do
+				HandleFrame(("PartyMemberFrame%d"):format(i));
+			end
+		end
+	elseif((unit:match"(arena)%d?$" == "arena") and E.private["unitframe"]["disabledBlizzardFrames"].arena) then
+		local id = unit:match"arena(%d)";
+		if(id) then
+			HandleFrame("ArenaEnemyFrame"..id);
+			HandleFrame("ArenaEnemyFrame"..id..'PetFrame');
+		else
+			for i = 1, 5 do
+				HandleFrame(("ArenaEnemyFrame%d"):format(i));
+				HandleFrame(("ArenaEnemyFrame%dPetFrame"):format(i));
+			end
+		end
+	end
+end
+
+function UF:ADDON_LOADED(event, addon)
+	if(addon ~= "Blizzard_ArenaUI") then return; end
+	ElvUF:DisableBlizzard("arena");
+	self:UnregisterEvent("ADDON_LOADED");
 end
 
 function UF:PLAYER_ENTERING_WORLD(event)
 	self:Update_AllFrames()
+end
+
+function UF:UnitFrameThreatIndicator_Initialize(_, unitFrame)
+	unitFrame:UnregisterAllEvents();
 end
 
 function UF:Initialize()	
@@ -882,6 +984,49 @@ function UF:Initialize()
 	
 	self:LoadUnits();
 	self:RegisterEvent("PLAYER_ENTERING_WORLD");
+	
+	if(E.private["unitframe"]["disabledBlizzardFrames"].arena and E.private["unitframe"]["disabledBlizzardFrames"].focus and E.private["unitframe"]["disabledBlizzardFrames"].party) then
+		InterfaceOptionsFrameCategoriesButton10:SetScale(0.0001);
+	end
+	
+	if(E.private["unitframe"]["disabledBlizzardFrames"].player) then
+		InterfaceOptionsStatusTextPanelPlayer:SetScale(0.0001);
+		InterfaceOptionsStatusTextPanelPlayer:SetAlpha(0);
+		InterfaceOptionsStatusTextPanelPet:SetScale(0.0001);
+		InterfaceOptionsStatusTextPanelPet:SetAlpha(0);
+	end
+	
+	if(E.private["unitframe"]["disabledBlizzardFrames"].target) then
+		InterfaceOptionsStatusTextPanelTarget:SetScale(0.0001);
+		InterfaceOptionsStatusTextPanelTarget:SetAlpha(0);
+		InterfaceOptionsCombatPanelEnemyCastBarsOnPortrait:SetAlpha(0);
+		InterfaceOptionsCombatPanelEnemyCastBarsOnPortrait:EnableMouse(false);
+		InterfaceOptionsCombatPanelEnemyCastBarsOnNameplates:ClearAllPoints();
+		InterfaceOptionsCombatPanelEnemyCastBarsOnNameplates:SetPoint(InterfaceOptionsCombatPanelEnemyCastBarsOnPortrait:GetPoint());
+		InterfaceOptionsCombatPanelTargetOfTarget:SetScale(0.0001);
+		InterfaceOptionsCombatPanelTargetOfTarget:SetAlpha(0);
+		InterfaceOptionsDisplayPanelShowAggroPercentage:SetScale(0.0001);
+		InterfaceOptionsDisplayPanelShowAggroPercentage:SetAlpha(0);
+	end
+	
+	if(E.private["unitframe"]["disabledBlizzardFrames"].party) then
+		InterfaceOptionsStatusTextPanelParty:SetScale(0.0001);
+		InterfaceOptionsStatusTextPanelParty:SetAlpha(0);
+	end
+	
+	if(E.private["unitframe"]["disabledBlizzardFrames"].party) then
+		InterfaceOptionsFrameCategoriesButton11:SetScale(0.0001);
+	end
+	
+	if(E.private["unitframe"]["disabledBlizzardFrames"].arena) then
+		self:SecureHook("UnitFrameThreatIndicator_Initialize");
+		
+		if(not IsAddOnLoaded("Blizzard_ArenaUI")) then
+			self:RegisterEvent("ADDON_LOADED");
+		else
+			ElvUF:DisableBlizzard("arena");
+		end
+	end
 	
 	local ORD = ns.oUF_RaidDebuffs or oUF_RaidDebuffs;
 	if(not ORD) then return; end

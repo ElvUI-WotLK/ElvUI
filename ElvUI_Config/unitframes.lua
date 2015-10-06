@@ -1443,42 +1443,77 @@ E.Options.args.unitframe = { -- Рамки юнитов
 			disabled = function() return not E.private.unitframe.enable end,
 			set = function(info, value) E.db.unitframe[ info[#info] ] = value; UF:Update_AllFrames() end,
 			args = {
-				generalGroup = { -- Общие
+				disabledBlizzardFrames = {
 					order = 1,
+					type = "group",
+					guiInline = true,
+					name = L["Disabled Blizzard Frames"],
+					get = function(info) return E.private.unitframe.disabledBlizzardFrames[ info[#info] ] end,
+					set = function(info, value) E.private["unitframe"].disabledBlizzardFrames[ info[#info] ] = value; E:StaticPopup_Show("PRIVATE_RL") end,
+					args = {
+						player = {
+							order = 1,
+							type = 'toggle',
+							name = L["Player Frame"],
+							desc = L["Disables the player and pet unitframes."],
+						},
+						target = {
+							order = 2,
+							type = 'toggle',
+							name = L["Target Frame"],
+							desc = L["Disables the target and target of target unitframes."],
+						},
+						focus = {
+							order = 3,
+							type = 'toggle',
+							name = L["Focus Frame"],
+							desc = L["Disables the focus and target of focus unitframes."],
+						},
+						boss = {
+							order = 4,
+							type = 'toggle',
+							name = L["Boss Frames"],
+						},
+						arena = {
+							order = 5,
+							type = 'toggle',
+							name = L["Arena Frames"],
+						},
+						party = {
+							order = 6,
+							type = 'toggle',
+							name = L["Party Frames"],
+						},
+					},
+				},
+				generalGroup = { -- Общие
+					order = 2,
 					type = 'group',
 					guiInline = true,
 					name = L['General'],
 					args = {
-						disableBlizzard = { -- Отключить фреймы Blizzard
-							order = 1,
-							name = L['Disable Blizzard'],
-							desc = L['Disables the blizzard party/raid frames.'],
-							type = 'toggle',
-							get = function(info) return E.private.unitframe[ info[#info] ] end,
-							set = function(info, value) E.private["unitframe"][ info[#info] ] = value; E:StaticPopup_Show("PRIVATE_RL") end
-						},
 						OORAlpha = { -- Прозрачность в не радиуса
-							order = 2,
+							order = 1,
 							name = L['OOR Alpha'],
 							desc = L['The alpha to set units that are out of range to.'],
 							type = 'range',
 							min = 0, max = 1, step = 0.01,
 						},
 						debuffHighlighting = { -- Подсветка дебаффов
-							order = 3,
+							order = 2,
 							name = L['Debuff Highlighting'],
 							desc = L['Color the unit healthbar if there is a debuff that can be dispelled by you.'],
 							type = 'toggle',
 						},
 						smartRaidFilter = { -- Умный фильтр рейда
-							order = 4,
+							order = 3,
 							name = L['Smart Raid Filter'],
 							desc = L['Override any custom visibility setting in certain situations, EX: Only show groups 1 and 2 inside a 10 man instance.'],
 							type = 'toggle',
 							set = function(info, value) E.db.unitframe[ info[#info] ] = value; UF:UpdateAllHeaders() end
 						},
 						targetOnMouseDown = { -- Выделение при нажатии
-							order = 5,
+							order = 4,
 							name = L["Target On Mouse-Down"],
 							desc = L["Target units on mouse down rather than mouse up. \n\n|cffFF0000Warning: If you are using the addon 'Clique' you may have to adjust your clique settings when changing this."],
 							type = "toggle",
@@ -1486,7 +1521,7 @@ E.Options.args.unitframe = { -- Рамки юнитов
 					},
 				},
 				barGroup = { -- Полосы
-					order = 2,
+					order = 3,
 					type = 'group',
 					guiInline = true,
 					name = L['Bars'],
@@ -1509,7 +1544,7 @@ E.Options.args.unitframe = { -- Рамки юнитов
 					},
 				},
 				fontGroup = { -- Шрифты
-					order = 3,
+					order = 4,
 					type = 'group',
 					guiInline = true,
 					name = L['Fonts'],
@@ -1547,7 +1582,7 @@ E.Options.args.unitframe = { -- Рамки юнитов
 					},
 				},
 				allColorsGroup = { -- Цвета
-					order = 4,
+					order = 5,
 					type = 'group',
 					guiInline = true,
 					name = L['Colors'],
