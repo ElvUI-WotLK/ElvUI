@@ -534,18 +534,23 @@ local initObject = function(unit, style, styleFunc, ...)
 			object:SetAttribute("initial-scale", scale)
 			if(not combat) then object:SetScale(scale) end
 		end
-
-		local showPlayer
-		if(i == 1) then
-			showPlayer = parent:GetAttribute'showPlayer' or parent:GetAttribute'showSolo'
-		end
-
-		if(suffix and suffix:match'target' and (i ~= 1 and not showPlayer)) then
-			enableTargetUpdate(object)
+		
+		if(suffix == "target") then
+			enableTargetUpdate(object);
 		else
-			object:SetScript("OnEvent", OnEvent)
+			object:SetScript("OnEvent", OnEvent);
+			
+			if(unit == "target") then
+				object:RegisterEvent("PLAYER_TARGET_CHANGED", object.UpdateAllElements);
+			elseif(unit == "mouseover") then
+				object:RegisterEvent("UPDATE_MOUSEOVER_UNIT", object.UpdateAllElements);
+			elseif(unit == "focus") then
+				object:RegisterEvent("PLAYER_FOCUS_CHANGED", object.UpdateAllElements);
+			elseif(unit:match"%w+target" or unit:match"(boss)%d?$" == "boss") then
+				enableTargetUpdate(object);
+			end
 		end
-
+		
 		object:SetScript("OnAttributeChanged", OnAttributeChanged)
 		object:SetScript("OnShow", object.UpdateAllElements)
 		activeElements[object] = {}
