@@ -723,7 +723,7 @@ function UF:Update_TargetFrame(frame, db)
 		end
 	end
 	
-	if UF.db.colors.transparentHealth then
+	if(UF.db.colors.transparentHealth) then
 		UF:ToggleTransparentStatusBar(true, frame.Health, frame.Health.bg);
 	else
 		UF:ToggleTransparentStatusBar(false, frame.Health, frame.Health.bg, (USE_PORTRAIT and USE_PORTRAIT_OVERLAY) ~= true);

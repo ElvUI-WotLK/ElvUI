@@ -903,7 +903,7 @@ local HandleFrame = function(baseName)
 	end
 end
 
-function ElvUF:DisableBlizzard(unit)
+function ElvUF:DisableBlizzard(unit, object)
 	if((not unit) or InCombatLockdown()) then return; end
 	
 	if((unit == "player") and E.private["unitframe"]["disabledBlizzardFrames"].player) then
@@ -920,9 +920,21 @@ function ElvUF:DisableBlizzard(unit)
 	elseif((unit == "target") and E.private["unitframe"]["disabledBlizzardFrames"].target) then
 		HandleFrame(TargetFrame);
 		HandleFrame(ComboFrame);
+		
+		if(object) then
+			object:RegisterEvent("PLAYER_TARGET_CHANGED", object.UpdateAllElements);
+		end
+	elseif(unit == "mouseover") then
+		if(object) then
+			return object:RegisterEvent("UPDATE_MOUSEOVER_UNIT", object.UpdateAllElements);
+		end
 	elseif((unit == "focus") and E.private["unitframe"]["disabledBlizzardFrames"].focus) then
 		HandleFrame(FocusFrame);
 		HandleFrame(FocusFrameToT);
+		
+		if(object) then
+			object:RegisterEvent("PLAYER_FOCUS_CHANGED", object.UpdateAllElements);
+		end
 	elseif((unit == "targettarget") and E.private["unitframe"]["disabledBlizzardFrames"].target) then
 		HandleFrame(TargetFrameToT);
 	elseif((unit:match"(boss)%d?$" == "boss") and E.private["unitframe"]["disabledBlizzardFrames"].boss) then
