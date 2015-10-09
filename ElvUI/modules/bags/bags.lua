@@ -438,7 +438,7 @@ function B:Layout(isBank)
 			
 			if(not f.keyFrame.slots[i]) then
 				f.keyFrame.slots[i] = CreateFrame("CheckButton", "ElvUIKeyFrameItem"..i, f.keyFrame, "ContainerFrameItemButtonTemplate");
-				f.keyFrame.slots[i]:StyleButton();
+				f.keyFrame.slots[i]:StyleButton(nil, nil, true);
 				f.keyFrame.slots[i]:SetTemplate("Default", true);
 				f.keyFrame.slots[i]:SetNormalTexture(nil);
 				f.keyFrame.slots[i]:SetID(i);
@@ -459,10 +459,10 @@ function B:Layout(isBank)
 					lastRowButton = f.keyFrame.slots[i];
 					numKeyRows = numKeyRows + 1;
 				else
-					f.keyFrame.slots[i]:Point('LEFT', f.keyFrame.slots[i-1], 'RIGHT', buttonSpacing, 0);
+					f.keyFrame.slots[i]:Point("RIGHT", f.keyFrame.slots[i-1], "LEFT", -buttonSpacing, 0);
 				end
 			else
-				f.keyFrame.slots[i]:Point('TOPLEFT', f.keyFrame, 'TOPLEFT', buttonSpacing, -buttonSpacing);
+				f.keyFrame.slots[i]:Point("TOPRIGHT", f.keyFrame, "TOPRIGHT", -buttonSpacing, -buttonSpacing);
 				lastRowButton = f.keyFrame.slots[i]
 			end
 
