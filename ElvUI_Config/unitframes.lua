@@ -57,6 +57,18 @@ local auraBarsSortValues = {
 	['NONE'] = NONE,
 }
 
+local auraSortValues = {
+	["TIME_REMAINING"] = L["Time Remaining"],
+	["DURATION"] = L["Duration"],
+	["NAME"] = NAME,
+	["INDEX"] = L["Index"],
+};
+
+local auraSortMethodValues = {
+	["ASCENDING"] = L["Ascending"],
+	["DESCENDING"] = L["Descending"]
+};
+
 -----------------------------------------------------------------------
 -- OPTIONS TABLES
 -----------------------------------------------------------------------
@@ -446,6 +458,20 @@ local function GetOptionsTable_Auras(friendlyUnitOnly, auraType, isGroupFrame, u
 				name = L['Click Through'],
 				desc = L['Ignore mouse events.'],
 				type = 'toggle',
+			},
+			sortMethod = {
+				order = 12,
+				name = L["Sort By"],
+				desc = L["Method to sort by."],
+				type = 'select',
+				values = auraSortValues,
+			},
+			sortDirection = {
+				order = 13,
+				name = L["Sort Direction"],
+				desc = L["Ascending or Descending order."],
+				type = 'select',
+				values = auraSortMethodValues,
 			},
 			filters = { -- Фильтры
 				name = L["Filters"],

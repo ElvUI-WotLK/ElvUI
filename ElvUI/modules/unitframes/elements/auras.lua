@@ -7,7 +7,7 @@ local LSM = LibStub("LibSharedMedia-3.0");
 function UF:Construct_Buffs(frame)
 	local buffs = CreateFrame("Frame", nil, frame)
 	buffs.spacing = E.Spacing
-	--buffs.PreSetPosition = (not frame:GetScript("OnUpdate")) and self.SortAuras or nil
+	buffs.PreSetPosition = (not frame:GetScript("OnUpdate")) and self.SortAuras or nil
 	buffs.PostCreateIcon = self.Construct_AuraIcon
 	buffs.PostUpdateIcon = self.PostUpdateAura
 	buffs.CustomFilter = self.AuraFilter
@@ -20,7 +20,7 @@ end
 function UF:Construct_Debuffs(frame)
 	local debuffs = CreateFrame("Frame", nil, frame)
 	debuffs.spacing = E.Spacing
-	--debuffs.PreSetPosition = (not frame:GetScript("OnUpdate")) and self.SortAuras or nil
+	debuffs.PreSetPosition = (not frame:GetScript("OnUpdate")) and self.SortAuras or nil
 	debuffs.PostCreateIcon = self.Construct_AuraIcon
 	debuffs.PostUpdateIcon = self.PostUpdateAura
 	debuffs.CustomFilter = self.AuraFilter
@@ -86,8 +86,61 @@ local function SortAurasByPriority(a, b)
     end
 end
 
+local function SortAurasByTime(a, b)
+	if(a and b and a:GetParent().db) then
+		local sortDirection = a:GetParent().db.sortDirection;
+		local aTime = a.expiration or -1;
+		local bTime = b.expiration or -1;
+		if(aTime and bTime) then
+			if(sortDirection == "DESCENDING") then
+				return aTime < bTime;
+			else
+				return aTime > bTime;
+			end
+		end
+	end
+end
+
+local function SortAurasByName(a, b)
+	if(a and b and a:GetParent().db) then
+		local sortDirection = a:GetParent().db.sortDirection;
+		local aName = a.spell or "";
+		local bName = b.spell or "";
+		if(aName and bName) then
+			if(sortDirection == "DESCENDING") then
+				return aName < bName;
+			else
+				return aName > bName;
+			end
+		end
+	end
+end
+
+local function SortAurasByDuration(a, b)
+	if(a and b and a:GetParent().db) then
+		local sortDirection = a:GetParent().db.sortDirection;
+		local aTime = a.duration or -1;
+		local bTime = b.duration or -1;
+		if(aTime and bTime) then
+			if(sortDirection == "DESCENDING") then
+				return aTime < bTime;
+			else
+				return aTime > bTime;
+			end
+		end
+	end
+end
+
 function UF:SortAuras()
-	tsort(self, SortAurasByPriority)
+	if(not self.db) then return; end
+	
+	if(self.db.sortMethod == "TIME_REMAINING") then
+		tsort(self, SortAurasByTime);
+	elseif(self.db.sortMethod == "NAME") then
+		tsort(self, SortAurasByName);
+	elseif(self.db.sortMethod == "DURATION") then
+		tsort(self, SortAurasByDuration);
+	end
 end
 
 function UF:UpdateAuraIconSettings(auras, noCycle)
@@ -102,6 +155,7 @@ function UF:UpdateAuraIconSettings(auras, noCycle)
 	local db = frame.db[type]
 	local unitframeFont = LSM:Fetch("font", E.db["unitframe"].font)
 	local index = 1
+	auras.db = db;
 	if(db) then
 		if(not noCycle) then
 			while(auras[index]) do
@@ -164,6 +218,8 @@ function UF:PostUpdateAura(unit, button, index, offset, filter, isDebuff, durati
 	
 	button.spell = name
 	button.isStealable = isStealable
+	button.duration = duration;
+	
 	if expiration and duration ~= 0 then
 		if not button:GetScript("OnUpdate") then
 			button.expirationTime = expiration
@@ -178,6 +234,10 @@ function UF:PostUpdateAura(unit, button, index, offset, filter, isDebuff, durati
 		end
 	end	
 	if duration == 0 or expiration == 0 then
+		button.expirationTime = nil;
+		button.expiration = nil;
+		button.priority = nil;
+		button.duration = nil;
 		button:SetScript("OnUpdate", nil)
 		if(button.text:GetFont()) then
 			button.text:SetText("")
