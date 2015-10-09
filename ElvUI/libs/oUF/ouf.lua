@@ -483,17 +483,28 @@ local initObject = function(unit, style, styleFunc, ...)
 
 		object.__elements = {}
 		object = setmetatable(object, frame_metatable)
-
-		-- Attempt to guess what the header is set to spawn.
+		
 		local parent = object:GetParent()
 		if(not unit) then
-			if(parent:GetAttribute'showRaid') then
-				unit = 'raid'
-			elseif(parent:GetAttribute'showParty') then
-				unit = 'party'
+			local groupFilter = parent:GetAttribute("groupFilter");
+			if(type(groupFilter) == "string" and groupFilter:match("MAIN[AT]")) then
+				local role = groupFilter:match("MAIN([AT])");
+				if(role == "T") then
+					unit = "maintank";
+				else
+					unit = "mainassist";
+				end
+			elseif(parent:GetAttribute("showRaid")) then
+				unit = "raid";
+			elseif(parent:GetAttribute("showParty")) then
+				unit = "party";
 			end
-		end
 			
+			object:SetAttribute("toggleForVehicle", true);
+			
+			object:RegisterEvent("RAID_ROSTER_UPDATE", object.UpdateAllElements);
+		end
+		
 		-- Run it before the style function so they can override it.
 		object:SetAttribute("*type1", "target")
 		object.menu = togglemenu
@@ -533,6 +544,10 @@ local initObject = function(unit, style, styleFunc, ...)
 		if(scale) then
 			object:SetAttribute("initial-scale", scale)
 			if(not combat) then object:SetScale(scale) end
+		end
+		
+		if(not (unit:match"target" or suffix == "target")) then
+			object:SetAttribute("toggleForVehicle", true);
 		end
 		
 		if(suffix == "target") then
