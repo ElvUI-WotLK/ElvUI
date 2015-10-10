@@ -1529,7 +1529,12 @@ E.Options.args.unitframe = { -- Рамки юнитов
 							order = 2,
 							name = L['Debuff Highlighting'],
 							desc = L['Color the unit healthbar if there is a debuff that can be dispelled by you.'],
-							type = 'toggle',
+							type = "select",
+							values = {
+								["NONE"] = NONE,
+								["GLOW"] = L["Glow"],
+								["FILL"] = L["Fill"]
+							},
 						},
 						smartRaidFilter = { -- Умный фильтр рейда
 							order = 3,

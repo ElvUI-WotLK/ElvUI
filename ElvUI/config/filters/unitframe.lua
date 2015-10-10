@@ -434,3 +434,7 @@ G.unitframe.AuraBarColors = {
 G.unitframe.InvalidSpells = {
 
 }
+
+G.unitframe.DebuffHighlightColors = {
+	[SpellName(25771)] = { enable = false, style = "FILL", color = { r = 0.85, g = 0, b = 0, a = 0.85 } }
+};

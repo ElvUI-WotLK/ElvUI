@@ -199,7 +199,7 @@ P['unitframe'] = {
 	['fontSize'] = 10,
 	['fontOutline'] = 'MONOCHROMEOUTLINE',
 	['OORAlpha'] = 0.35,
-	['debuffHighlighting'] = true,
+	["debuffHighlighting"] = "FILL",
 	["smartRaidFilter"] = false,
 	['targetOnMouseDown'] = false,
 	
