@@ -13,7 +13,7 @@ function UF:Construct_HealComm(frame)
 	mhpb:Hide();
 	
 	if(frame.Health) then
-	--	mhpb:SetParent(frame.Health);
+		mhpb:SetParent(frame.Health);
 	end
 	
 	
