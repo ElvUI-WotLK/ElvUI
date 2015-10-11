@@ -88,8 +88,8 @@ function E:UIScale(event)
 			--self.UIParent:SetSize(UIParent:GetWidth() - 250, UIParent:GetHeight() - 250);
 
 			self.UIParent:SetSize(UIParent:GetSize());
-		end		
-			
+		end
+		
 		self.UIParent:ClearAllPoints();
 		self.UIParent:SetPoint("CENTER");	
 		

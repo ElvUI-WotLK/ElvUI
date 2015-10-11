@@ -397,7 +397,7 @@ function E:SetMoversPositions()
 			point, anchor, secondaryPoint, x, y = split('\031', E.CreatedMovers[name]['point'])
 			f:ClearAllPoints()
 			f:SetPoint(point, anchor, secondaryPoint, x, y)
-		end		
+		end
 	end
 end
 

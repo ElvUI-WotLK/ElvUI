@@ -71,19 +71,19 @@ function B:SizeAndPositionBagBar()
 				button:SetPoint('TOP', ElvUIBags, 'TOP', 0, -E.db.bags.bagBar.spacing);
 			elseif prevButton then
 				button:SetPoint('TOP', prevButton, 'BOTTOM', 0, -E.db.bags.bagBar.spacing);
-			end		
+			end
 		elseif E.db.bags.bagBar.growthDirection == 'HORIZONTAL' and E.db.bags.bagBar.sortDirection == 'DESCENDING' then	
 			if i == 1 then
 				button:SetPoint('RIGHT', ElvUIBags, 'RIGHT', -E.db.bags.bagBar.spacing, 0);
 			elseif prevButton then
 				button:SetPoint('RIGHT', prevButton, 'LEFT', -E.db.bags.bagBar.spacing, 0);
-			end		
+			end
 		else
 			if i == 1 then
 				button:SetPoint('BOTTOM', ElvUIBags, 'BOTTOM', 0, E.db.bags.bagBar.spacing);
 			elseif prevButton then
 				button:SetPoint('BOTTOM', prevButton, 'TOP', 0, E.db.bags.bagBar.spacing);
-			end			
+			end
 		end
 	end
 	

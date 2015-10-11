@@ -198,7 +198,7 @@ function AB:RegisterButton(b, override)
 		elseif script==pet then
 			b:HookScript("OnEnter", function(b) self:BindUpdate(b, "PET"); end);
 		end
-	end		
+	end
 end
 
 local elapsed = 0;

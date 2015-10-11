@@ -336,7 +336,7 @@ function LO:CreateChatPanels()
 	if E.db['RightChatPanelFaded'] then
 		RightChatToggleButton:SetAlpha(0)
 		RightChatPanel:Hide()
-	end		
+	end
 	
 	self:ToggleChatPanels()
 end

@@ -49,8 +49,8 @@ local Update = function(self, arg1, arg2)
 		E:UIFrameFadeIn(self, 0.35)
 		self.fadeInfo.reset = true
 		return
-	end		
-		
+	end
+	
 	local combat = InCombatLockdown()
 	local cur, max = UnitHealth("player"), UnitHealthMax("player")
 	local cast, channel = UnitCastingInfo("player"), UnitChannelInfo("player")
@@ -99,7 +99,7 @@ local Enable = function(self, unit)
 			self:HookScript("OnEnter", function(self) Update(self, true) end)
 			self:HookScript("OnLeave", function(self) Update(self, false) end)	
 			self.CombatFadeHooked = true
-		end		
+		end
 		return true
 	end
 end

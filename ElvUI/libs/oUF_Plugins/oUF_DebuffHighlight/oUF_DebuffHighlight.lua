@@ -42,7 +42,7 @@ local function Update(object, event, unit)
 		else
 			object.DBHGlow:Hide();
 			object.DebuffHighlight:SetVertexColor(color.r, color.g, color.b, color.a or object.DebuffHighlightAlpha or .5);
-		end		
+		end
 	elseif(debuffType) then
 		color = DebuffTypeColor[debuffType];
 		if(object.DebuffHighlightBackdrop) then

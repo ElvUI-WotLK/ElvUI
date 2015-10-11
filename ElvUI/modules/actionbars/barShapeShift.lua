@@ -262,7 +262,7 @@ function AB:UpdateStanceBindings()
 			self:FixKeybindText(_G["ElvUI_StanceBarButton"..i])
 		else
 			_G["ElvUI_StanceBarButton"..i.."HotKey"]:Hide()
-		end		
+		end
 	end
 end
 

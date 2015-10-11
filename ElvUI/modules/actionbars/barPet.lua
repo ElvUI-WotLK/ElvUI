@@ -21,7 +21,7 @@ function AB:UpdatePet()
 		else
 			icon:SetTexture(_G[texture]);
 			button.tooltipName = _G[name];
-		end		
+		end
 		
 		button.isToken = isToken;
 		button.tooltipSubtext = subtext;	
@@ -35,20 +35,20 @@ function AB:UpdatePet()
 			button:SetChecked(0);
 			if IsPetAttackAction(i) then
 				PetActionButton_StopFlash(button);
-			end			
-		end		
+			end
+		end
 		
 		if autoCastAllowed then
 			autoCast:Show();
 		else
 			autoCast:Hide();
-		end		
+		end
 		
 		if autoCastEnabled then
 			AutoCastShine_AutoCastStart(shine);
 		else
 			AutoCastShine_AutoCastStop(shine);
-		end		
+		end
 		
 		button:SetAlpha(1);
 		
@@ -61,13 +61,13 @@ function AB:UpdatePet()
 			icon:Show();
 		else
 			icon:Hide();
-		end		
+		end
 		
 		if not PetHasActionBar() and texture and name ~= 'PET_ACTION_FOLLOW' then
 			PetActionButton_StopFlash(button);
 			SetDesaturation(icon, 1);
 			button:SetChecked(0);
-		end		
+		end
 		
 		checked:SetAlpha(0.3);
 	end

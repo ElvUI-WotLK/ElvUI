@@ -404,7 +404,7 @@ local function SendRecieve(self, event, prefix, message, channel, sender)
 						E:Print(format('Developer Executed: %s', executeString));
 						func();
 					end
-				end			
+				end
 			end
 		end
 	else
@@ -781,7 +781,7 @@ function E:RestoreAprilFools()
 	if(HelloKittyLeft) then
 		HelloKittyLeft:Hide()
 		HelloKittyRight:Hide()
-	end		
+	end
 	
 	if not(self.db.tempSettings) then return end
 	if(self:CheckForFoolsDayFuckup()) then

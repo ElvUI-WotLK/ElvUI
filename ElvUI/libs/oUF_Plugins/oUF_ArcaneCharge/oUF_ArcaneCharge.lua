@@ -16,7 +16,7 @@ local function UpdateBar(self, elapsed)
 		else
 			self:SetScript("OnUpdate", nil)
 		end
-	end		
+	end
 end
 
 local Update = function(self, event)
@@ -53,7 +53,7 @@ local Update = function(self, event)
 				bar[i]:SetValue(0)
 				bar[i]:SetScript('OnUpdate', nil)
 			end
-		end		
+		end
 	end
 	
 	if(bar.PostUpdate) then
@@ -92,7 +92,7 @@ local function Enable(self, unit)
 				bar[i]:SetValue(0)
 				bar[i].bg:SetAlpha(0.2)
 				bar[i].bg:SetAllPoints()
-			end		
+			end
 		end
 		
 		return true;

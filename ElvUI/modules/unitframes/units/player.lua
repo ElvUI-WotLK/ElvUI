@@ -4,24 +4,25 @@ local UF = E:GetModule("UnitFrames");
 local _, ns = ...;
 local ElvUF = ns.oUF;
 assert(ElvUF, "ElvUI was unable to locate oUF.");
+local tinsert = table.insert;
 
 local CAN_HAVE_CLASSBAR = (E.myclass == "DEATHKNIGHT" or E.myclass == "DRUID" or E.myclass == "MAGE");
 
 function UF:Construct_PlayerFrame(frame)
-	frame.Threat = self:Construct_Threat(frame, true); -- Угроза
-	frame.Health = self:Construct_HealthBar(frame, true, true, "RIGHT"); -- Здоровье
+	frame.Threat = self:Construct_Threat(frame, true);
+	frame.Health = self:Construct_HealthBar(frame, true, true, "RIGHT");
 	frame.Health.frequentUpdates = true;
-	frame.Power = self:Construct_PowerBar(frame, true, true, "LEFT", true); --  Мана
+	frame.Power = self:Construct_PowerBar(frame, true, true, "LEFT", true);
 	frame.Power.frequentUpdates = true;
-	frame.Name = self:Construct_NameText(frame); -- Имя
-	frame.Portrait3D = self:Construct_Portrait(frame, "model"); -- 3D Портрет
-	frame.Portrait2D = self:Construct_Portrait(frame, "texture"); -- 2D Портрет
-	frame.Buffs = self:Construct_Buffs(frame); -- Баффы
-	frame.Debuffs = self:Construct_Debuffs(frame); -- Дебаффы
-	frame.Castbar = self:Construct_Castbar(frame, "LEFT", L["Player Castbar"]); --Полоса заклинания
+	frame.Name = self:Construct_NameText(frame);
+	frame.Portrait3D = self:Construct_Portrait(frame, "model");
+	frame.Portrait2D = self:Construct_Portrait(frame, "texture");
+	frame.Buffs = self:Construct_Buffs(frame);
+	frame.Debuffs = self:Construct_Debuffs(frame);
+	frame.Castbar = self:Construct_Castbar(frame, "LEFT", L["Player Castbar"]);
 	
 	if(E.myclass == "DEATHKNIGHT") then
-		frame.Runes = self:Construct_DeathKnightResourceBar(frame); -- Руны
+		frame.Runes = self:Construct_DeathKnightResourceBar(frame);
 		frame.ClassBar = "Runes";
 	elseif(E.myclass == "DRUID") then
 		frame.DruidAltMana = self:Construct_DruidAltManaBar(frame);
@@ -31,15 +32,16 @@ function UF:Construct_PlayerFrame(frame)
 		frame.ClassBar = "ArcaneChargeBar";
 	end
 	
-	frame.Resting = self:Construct_RestingIndicator(frame); -- Иконка отдыха
-	frame.RaidIcon = UF:Construct_RaidIcon(frame); -- Рейдовая иконка
-	frame.Combat = self:Construct_CombatIndicator(frame); -- Иконка боя
-	frame.PvPText = self:Construct_PvPIndicator(frame); -- PvP
+	frame.Resting = self:Construct_RestingIndicator(frame);
+	frame.RaidIcon = UF:Construct_RaidIcon(frame);
+	frame.Combat = self:Construct_CombatIndicator(frame);
+	frame.PvPText = self:Construct_PvPIndicator(frame);
 	frame.DebuffHighlight = self:Construct_DebuffHighlight(frame);
-	frame.AuraBars = self:Construct_AuraBarHeader(frame); -- Полоса аур
-	frame.CombatFade = true; -- Скрытие
+	frame.AuraBars = self:Construct_AuraBarHeader(frame);
+	frame.CombatFade = true;
 	
-	frame:Point("BOTTOMLEFT", E.UIParent, "BOTTOM", -413, 68); -- Позиция
+	frame.customTexts = {};
+	frame:Point("BOTTOMLEFT", E.UIParent, "BOTTOM", -413, 68);
 	E:CreateMover(frame, frame:GetName().."Mover", L["Player Frame"], nil, nil, nil, "ALL,SOLO");
 end
 
@@ -78,7 +80,7 @@ function UF:UpdatePlayerFrameAnchors(frame, isShown)
 	if(USE_MINI_CLASSBAR) then
 		CLASSBAR_HEIGHT = CLASSBAR_HEIGHT / 2;
 	end
-
+	
 	if(db.classbar.detachFromFrame) then
 		CLASSBAR_HEIGHT = 0;
 	end
@@ -153,7 +155,7 @@ function UF:UpdatePlayerFrameAnchors(frame, isShown)
 			else
 				threat.glow:Point("BOTTOMLEFT", -SHADOW_SPACING, -SHADOW_SPACING);
 				threat.glow:Point("BOTTOMRIGHT", SHADOW_SPACING, -SHADOW_SPACING);
-			end		
+			end
 			
 			if(USE_POWERBAR_OFFSET) then
 				threat.glow:Point("TOPRIGHT", SHADOW_SPACING-POWERBAR_OFFSET, SHADOW_SPACING);
@@ -177,7 +179,6 @@ end
 
 function UF:Update_PlayerFrame(frame, db)
 	frame.db = db;
-	
 	if(frame.Portrait) then
 		frame.Portrait:Hide();
 		frame.Portrait:ClearAllPoints();
@@ -201,7 +202,7 @@ function UF:Update_PlayerFrame(frame, db)
 	local POWERBAR_OFFSET = db.power.offset;
 	local POWERBAR_HEIGHT = db.power.height;
 	local POWERBAR_WIDTH = POWERBAR_DETACHED and db.power.detachedWidth or (db.width - (BORDER*2));
-
+	
 	local USE_CLASSBAR = db.classbar.enable and CAN_HAVE_CLASSBAR;
 	local USE_MINI_CLASSBAR = db.classbar.fill == "spaced" and USE_CLASSBAR and db.classbar.detachFromFrame ~= true;
 	local CLASSBAR_HEIGHT = db.classbar.height;
@@ -245,7 +246,7 @@ function UF:Update_PlayerFrame(frame, db)
 		mini_classbarY = -(SPACING+(CLASSBAR_HEIGHT/2));
 	end
 	
-	do -- Угроза
+	do
 		local threat = frame.Threat;
 		if(db.threatStyle ~= "NONE" and db.threatStyle ~= nil) then
 			if(not frame:IsElementEnabled("Threat")) then
@@ -291,28 +292,28 @@ function UF:Update_PlayerFrame(frame, db)
 		end
 	end
 	
-	do -- Иконка отдыха
+	do
 		local rIcon = frame.Resting;
 		if(db.restIcon) then
 			if(not frame:IsElementEnabled("Resting")) then
-				frame:EnableElement("Resting")
-			end				
+				frame:EnableElement("Resting");
+			end
 		elseif(frame:IsElementEnabled("Resting")) then
 			frame:DisableElement("Resting");
 			rIcon:Hide();
 		end
 	end
 	
-	do -- Здоровье
+	do
 		local health = frame.Health;
 		health.Smooth = self.db.smoothbars;
 		
-		local x, y = self:GetPositionOffset(db.health.position); -- Текст
+		local x, y = self:GetPositionOffset(db.health.position);
 		health.value:ClearAllPoints();
 		health.value:Point(db.health.position, health, db.health.position, x + db.health.xOffset, y + db.health.yOffset);
 		frame:Tag(health.value, db.health.text_format);
 		
-		health.colorSmooth = nil; -- Цвет
+		health.colorSmooth = nil;
 		health.colorHealth = nil;
 		health.colorClass = nil;
 		health.colorReaction = nil;
@@ -321,7 +322,7 @@ function UF:Update_PlayerFrame(frame, db)
 				health.colorSmooth = true;
 			else
 				health.colorHealth = true;
-			end		
+			end
 		else
 			health.colorClass = true;
 			health.colorReaction = true;
@@ -332,7 +333,7 @@ function UF:Update_PlayerFrame(frame, db)
 			health.colorReaction = true;
 		end
 		
-		health:ClearAllPoints(); -- Позиция
+		health:ClearAllPoints();
 		health:Point("TOPRIGHT", frame, "TOPRIGHT", -BORDER, -BORDER);
 		
 		if(POWERBAR_DETACHED) then
@@ -377,9 +378,9 @@ function UF:Update_PlayerFrame(frame, db)
 		end
 	end
 	
-	UF:UpdateNameSettings(frame); -- Имя
+	UF:UpdateNameSettings(frame);
 	
-	do -- PvP
+	do
 		local pvp = frame.PvPText;
 		local x, y = self:GetPositionOffset(db.pvp.position);
 		pvp:ClearAllPoints();
@@ -388,17 +389,17 @@ function UF:Update_PlayerFrame(frame, db)
 		frame:Tag(pvp, db.pvp.text_format);
 	end
 	
-	do -- Мана
+	do
 		local power = frame.Power;
 		if(USE_POWERBAR) then
 			if(not frame:IsElementEnabled("Power")) then
 				frame:EnableElement("Power");
 				power:Show();
-			end		
-		
+			end
+			
 			power.Smooth = self.db.smoothbars;
 			
-			local x, y = self:GetPositionOffset(db.power.position); -- Текст
+			local x, y = self:GetPositionOffset(db.power.position);
 			power.value:ClearAllPoints();
 			power.value:Point(db.power.position, db.power.attachTextToPower and power or frame.Health, db.power.position, x + db.power.xOffset, y + db.power.yOffset);
 			frame:Tag(power.value, db.power.text_format);
@@ -409,7 +410,7 @@ function UF:Update_PlayerFrame(frame, db)
 				power.value:SetParent(frame.RaisedElementParent);
 			end
 			
-			power.colorClass = nil; -- Цвет
+			power.colorClass = nil;
 			power.colorReaction = nil;
 			power.colorPower = nil;
 			if(self.db["colors"].powerclass) then
@@ -419,7 +420,7 @@ function UF:Update_PlayerFrame(frame, db)
 				power.colorPower = true;
 			end
 			
-			power:ClearAllPoints(); -- Позиция
+			power:ClearAllPoints();
 			if(POWERBAR_DETACHED) then
 				power:Width(POWERBAR_WIDTH);
 				power:Height(POWERBAR_HEIGHT);
@@ -458,6 +459,14 @@ function UF:Update_PlayerFrame(frame, db)
 				power:Point("TOPLEFT", frame.Health.backdrop, "BOTTOMLEFT", BORDER, -(E.PixelMode and 0 or (BORDER + SPACING)));
 				power:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -BORDER, BORDER);
 			end
+			
+			if(db.power.strataAndLevel.useCustomStrata) then
+				power:SetFrameStrata(db.power.strataAndLevel.frameStrata);
+			end
+			
+			if(db.power.strataAndLevel.useCustomLevel) then
+				power:SetFrameLevel(db.power.strataAndLevel.frameLevel);
+			end
 		elseif(frame:IsElementEnabled("Power")) then
 			frame:DisableElement("Power");
 			power:Hide();
@@ -472,10 +481,10 @@ function UF:Update_PlayerFrame(frame, db)
 			end
 		end
 	end
-
-	do -- Портрет
+	
+	do
 		local portrait = frame.Portrait;
-		if(USE_PORTRAIT) then -- Позиция
+		if(USE_PORTRAIT) then
 			if(not frame:IsElementEnabled("Portrait")) then
 				frame:EnableElement("Portrait")
 			end
@@ -559,22 +568,22 @@ function UF:Update_PlayerFrame(frame, db)
 		if(db.debuffs.enable or db.buffs.enable) then
 			if not frame:IsElementEnabled("Aura") then
 				frame:EnableElement("Aura");
-			end	
+			end
 		else
 			if(frame:IsElementEnabled("Aura")) then
 				frame:DisableElement("Aura");
-			end			
+			end
 		end
 		
 		frame.Buffs:ClearAllPoints();
 		frame.Debuffs:ClearAllPoints();
 	end
 	
-	do -- Баффы
+	do
 		local buffs = frame.Buffs;
 		local rows = db.buffs.numrows;
 		
-		if USE_POWERBAR_OFFSET then
+		if(USE_POWERBAR_OFFSET) then
 			buffs:SetWidth(UNIT_WIDTH - POWERBAR_OFFSET);
 		else
 			buffs:SetWidth(UNIT_WIDTH);
@@ -583,7 +592,7 @@ function UF:Update_PlayerFrame(frame, db)
 		buffs.forceShow = frame.forceShowAuras;
 		buffs.num = db.buffs.perrow * rows;
 		buffs.size = db.buffs.sizeOverride ~= 0 and db.buffs.sizeOverride or ((((buffs:GetWidth() - (buffs.spacing*(buffs.num/rows - 1))) / buffs.num)) * rows);
-
+		
 		if(db.buffs.sizeOverride and db.buffs.sizeOverride > 0) then
 			buffs:SetWidth(db.buffs.perrow * db.buffs.sizeOverride);
 		end
@@ -599,7 +608,13 @@ function UF:Update_PlayerFrame(frame, db)
 		buffs["spacing-y"] = db.buffs.ySpacing;
 		buffs.initialAnchor = E.InversePoints[db.buffs.anchorPoint];
 		
-		if(db.buffs.enable) then			
+		buffs.attachTo = attachTo;
+		buffs.point = E.InversePoints[db.buffs.anchorPoint];
+		buffs.anchorPoint = db.buffs.anchorPoint;
+		buffs.xOffset = x + db.buffs.xOffset;
+		buffs.yOffset = y + db.buffs.yOffset + (E.PixelMode and (db.buffs.anchorPoint:find("TOP") and -1 or 1) or 0);
+		
+		if(db.buffs.enable) then
 			buffs:Show();
 			UF:UpdateAuraIconSettings(buffs);
 		else
@@ -607,7 +622,7 @@ function UF:Update_PlayerFrame(frame, db)
 		end
 	end
 	
-	do -- Дебаффы
+	do
 		local debuffs = frame.Debuffs;
 		local rows = db.debuffs.numrows;
 		
@@ -636,7 +651,13 @@ function UF:Update_PlayerFrame(frame, db)
 		debuffs["spacing-y"] = db.debuffs.ySpacing;
 		debuffs.initialAnchor = E.InversePoints[db.debuffs.anchorPoint];
 		
-		if(db.debuffs.enable) then			
+		debuffs.attachTo = attachTo;
+		debuffs.point = E.InversePoints[db.debuffs.anchorPoint];
+		debuffs.anchorPoint = db.debuffs.anchorPoint;
+		debuffs.xOffset = x + db.debuffs.xOffset;
+		debuffs.yOffset = y + db.debuffs.yOffset;
+		
+		if(db.debuffs.enable) then
 			debuffs:Show();
 			UF:UpdateAuraIconSettings(debuffs);
 		else
@@ -644,7 +665,33 @@ function UF:Update_PlayerFrame(frame, db)
 		end
 	end
 	
-	do -- Полоса заклинаний
+	do
+		local position = db.smartAuraPosition;
+		if(position == "BUFFS_ON_DEBUFFS") then
+			if(db.debuffs.attachTo == "BUFFS") then
+				E:Print(format(L["This setting caused a conflicting anchor point, where '%s' would be attached to itself. Please check your anchor points. Setting '%s' to be attached to '%s'."], L["Buffs"], L["Debuffs"], L["Frame"]));
+				db.debuffs.attachTo = "FRAME";
+				frame.Debuffs.attachTo = frame;
+			end
+			
+			frame.Buffs.PostUpdate = nil;
+			frame.Debuffs.PostUpdate = UF.UpdateBuffsHeaderPosition;
+		elseif(position == "DEBUFFS_ON_BUFFS") then
+			if(db.buffs.attachTo == "DEBUFFS") then
+				E:Print(format(L["This setting caused a conflicting anchor point, where '%s' would be attached to itself. Please check your anchor points. Setting '%s' to be attached to '%s'."], L["Debuffs"], L["Buffs"], L["Frame"]));
+				db.buffs.attachTo = "FRAME";
+				frame.Buffs.attachTo = frame;
+			end
+			
+			frame.Buffs.PostUpdate = UF.UpdateDebuffsHeaderPosition;
+			frame.Debuffs.PostUpdate = nil;
+		else
+			frame.Buffs.PostUpdate = nil;
+			frame.Debuffs.PostUpdate = nil;
+		end
+	end
+	
+	do
 		local castbar = frame.Castbar;
 		castbar:Width(db.castbar.width - (BORDER * 2));
 		castbar:Height(db.castbar.height);
@@ -652,7 +699,7 @@ function UF:Update_PlayerFrame(frame, db)
 		castbar.Holder:Height(db.castbar.height + (E.PixelMode and 2 or (BORDER * 2)));
 		castbar.Holder:GetScript("OnSizeChanged")(castbar.Holder);
 		
-		if(db.castbar.latency) then -- Задержка
+		if(db.castbar.latency) then
 			castbar.SafeZone = castbar.LatencyTexture;
 			castbar.LatencyTexture:Show();
 		else
@@ -660,7 +707,7 @@ function UF:Update_PlayerFrame(frame, db)
 			castbar.LatencyTexture:Hide();
 		end
 		
-		if(db.castbar.icon) then -- Иконка
+		if(db.castbar.icon) then
 			castbar.Icon = castbar.ButtonIcon
 			castbar.Icon.bg:Width(db.castbar.height + (E.Border * 2));
 			castbar.Icon.bg:Height(db.castbar.height + (E.Border * 2));
@@ -672,7 +719,7 @@ function UF:Update_PlayerFrame(frame, db)
 			castbar.Icon = nil;
 		end
 		
-		if(db.castbar.spark) then -- Искра
+		if(db.castbar.spark) then
 			castbar.Spark:Show();
 		else
 			castbar.Spark:Hide();
@@ -685,7 +732,7 @@ function UF:Update_PlayerFrame(frame, db)
 		end
 	end
 	
-	do -- Полоса класса
+	do
 		local bars = frame[frame.ClassBar];
 		if(bars) then
 			if(bars.UpdateAllRuneTypes) then
@@ -695,7 +742,7 @@ function UF:Update_PlayerFrame(frame, db)
 			local MAX_CLASS_BAR = UF.classMaxResourceBar[E.myclass];
 			if(USE_MINI_CLASSBAR and not db.classbar.detachFromFrame) then
 				bars:ClearAllPoints();
-				if(E.myclass == 'DRUID') then
+				if(E.myclass == "DRUID") then
 					CLASSBAR_WIDTH = CLASSBAR_WIDTH * 2/3
 				else
 					CLASSBAR_WIDTH = CLASSBAR_WIDTH * (MAX_CLASS_BAR - 1) / MAX_CLASS_BAR
@@ -740,7 +787,7 @@ function UF:Update_PlayerFrame(frame, db)
 			bars:Width(CLASSBAR_WIDTH);
 			bars:Height(CLASSBAR_HEIGHT - (E.PixelMode and 1 or 4));
 			
-			if(E.myclass ~= 'DRUID') then
+			if(E.myclass ~= "DRUID") then
 				for i = 1, MAX_CLASS_BAR do
 					bars[i]:SetHeight(bars:GetHeight());
 					bars[i]:SetWidth(E:Scale(bars:GetWidth() - (MAX_CLASS_BAR - 1))/MAX_CLASS_BAR);
@@ -773,7 +820,7 @@ function UF:Update_PlayerFrame(frame, db)
 				end
 			end
 			
-			if(E.myclass ~= 'DRUID') then
+			if(E.myclass ~= "DRUID") then
 				if(db.classbar.fill ~= "spaced") then
 					bars.backdrop:Show();
 				else
@@ -791,7 +838,7 @@ function UF:Update_PlayerFrame(frame, db)
 		end
 	end
 	
-	do -- Скрытие
+	do
 		if(db.combatfade and not frame:IsElementEnabled("CombatFade")) then
 			frame:EnableElement("CombatFade");
 		elseif(not db.combatfade and frame:IsElementEnabled("CombatFade")) then
@@ -799,7 +846,7 @@ function UF:Update_PlayerFrame(frame, db)
 		end
 	end
 	
-	do -- Подсветка дебаффов
+	do
 		local dbh = frame.DebuffHighlight;
 		if(E.db.unitframe.debuffHighlighting) then
 			frame:EnableElement("DebuffHighlight");
@@ -815,8 +862,8 @@ function UF:Update_PlayerFrame(frame, db)
 		end
 	end
 	
-	do -- Рейдовая иконка
-		local RI = frame.RaidIcon
+	do
+		local RI = frame.RaidIcon;
 		if(db.raidicon.enable) then
 			frame:EnableElement("RaidIcon");
 			RI:Show();
@@ -831,7 +878,7 @@ function UF:Update_PlayerFrame(frame, db)
 		end
 	end
 	
-	do -- Полоса аур
+	do
 		local auraBars = frame.AuraBars;
 		if(db.aurabar.enable) then
 			if(not frame:IsElementEnabled("AuraBars")) then
@@ -906,11 +953,18 @@ function UF:Update_PlayerFrame(frame, db)
 		end
 	end
 	
-	if(db.customTexts) then -- Свой текст
+	for objectName, object in pairs(frame.customTexts) do
+		if((not db.customTexts) or (db.customTexts and not db.customTexts[objectName])) then
+			object:Hide();
+			frame.customTexts[objectName] = nil;
+		end
+	end
+	
+	if(db.customTexts) then
 		local customFont = UF.LSM:Fetch("font", UF.db.font);
 		for objectName, _ in pairs(db.customTexts) do
-			if(not frame[objectName]) then
-				frame[objectName] = frame.RaisedElementParent:CreateFontString(nil, "OVERLAY");
+			if(not frame.customTexts[objectName]) then
+				frame.customTexts[objectName] = frame.RaisedElementParent:CreateFontString(nil, "OVERLAY");
 			end
 			
 			local objectDB = db.customTexts[objectName];
@@ -918,11 +972,11 @@ function UF:Update_PlayerFrame(frame, db)
 				customFont = UF.LSM:Fetch("font", objectDB.font);
 			end
 			
-			frame[objectName]:FontTemplate(customFont, objectDB.size or UF.db.fontSize, objectDB.fontOutline or UF.db.fontOutline);
-			frame:Tag(frame[objectName], objectDB.text_format or "");
-			frame[objectName]:SetJustifyH(objectDB.justifyH or "CENTER");
-			frame[objectName]:ClearAllPoints();
-			frame[objectName]:SetPoint(objectDB.justifyH or "CENTER", frame, objectDB.justifyH or "CENTER", objectDB.xOffset, objectDB.yOffset);
+			frame.customTexts[objectName]:FontTemplate(customFont, objectDB.size or UF.db.fontSize, objectDB.fontOutline or UF.db.fontOutline);
+			frame:Tag(frame.customTexts[objectName], objectDB.text_format or "");
+			frame.customTexts[objectName]:SetJustifyH(objectDB.justifyH or "CENTER");
+			frame.customTexts[objectName]:ClearAllPoints();
+			frame.customTexts[objectName]:SetPoint(objectDB.justifyH or "CENTER", frame, objectDB.justifyH or "CENTER", objectDB.xOffset, objectDB.yOffset);
 		end
 	end
 	
@@ -933,7 +987,7 @@ function UF:Update_PlayerFrame(frame, db)
 	end
 	
 	UF:ToggleTransparentStatusBar(UF.db.colors.transparentPower, frame.Power, frame.Power.bg);
-
+	
 	E:SetMoverSnapOffset(frame:GetName().."Mover", -(12 + db.castbar.height));
 	
 	frame:UpdateAllElements();

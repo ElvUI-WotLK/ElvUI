@@ -138,7 +138,7 @@ local function SetupChat()
 		
 		if E.db['LeftChatPanelFaded'] then
 			LeftChatToggleButton:Click()
-		end		
+		end
 	end
 end
 
@@ -330,8 +330,8 @@ function E:SetupLayout(layout, noDataReset)
 			E.db.actionbar.bar3.buttons = 6
 			E.db.actionbar.bar5.buttons = 6
 			E.db.actionbar.bar4.enabled = true
-		end			
-	end		
+		end
+	end
 	
 	if layout == 'healer' then
 		if not IsAddOnLoaded('Clique') then
@@ -406,10 +406,10 @@ function E:SetupLayout(layout, noDataReset)
 				E.db.actionbar.bar4.enabled = false
 				if not E.PixelMode then
 					E.db.actionbar.bar1.heightMult = 2
-				end				
+				end
 			end
 		end
-			
+		
 		if not E.db.movers then E.db.movers = {}; end
 		local xOffset = GetScreenWidth() * 0.34375
 		
@@ -453,7 +453,7 @@ function E:SetupLayout(layout, noDataReset)
 				E.db.movers.ElvUF_TargetTargetMover = "BOTTOMElvUIParentBOTTOM118120"
 				E.db.movers.ElvUF_PetMover = "BOTTOMElvUIParentBOTTOM-118120"
 				E.db.movers.ElvUF_FocusMover = "BOTTOMElvUIParentBOTTOM310332"
-			end		
+			end
 		end
 	elseif E.db.lowresolutionset then
 		if not E.db.movers then E.db.movers = {}; end

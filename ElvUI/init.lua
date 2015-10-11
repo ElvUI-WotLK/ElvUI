@@ -116,8 +116,8 @@ function AddOn:PLAYER_REGEN_DISABLED()
 	end
 	
 	if err == true then
-		self:Print(ERR_NOT_IN_COMBAT);		
-	end		
+		self:Print(ERR_NOT_IN_COMBAT);
+	end
 end
 
 function AddOn:ResetProfile()

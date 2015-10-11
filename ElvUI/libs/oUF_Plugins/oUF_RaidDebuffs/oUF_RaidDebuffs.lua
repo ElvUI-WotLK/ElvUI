@@ -200,8 +200,8 @@ local function Update(self, event, unit)
 				end
 			else
 				priority = DispellPriority[debuffType] or 0
-			end			
-
+			end
+			
 			if priority > _priority then
 				_priority, _name, _icon, _count, _dtype, _duration, _endTime, _spellId = priority, name, icon, count, debuffType, duration, expirationTime, spellId
 			end
