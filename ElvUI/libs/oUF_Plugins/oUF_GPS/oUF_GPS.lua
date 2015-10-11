@@ -58,7 +58,6 @@ local Update = function(self, elapsed)
 							if(cell ~= nil) then
 								local startX = (cell % 9) * 0.109375;
 								local startY = floor(cell / 9) * 0.08203125;
-								print(direction, cell, startX, startY)
 								GPS.Texture:SetTexCoord(startX, startX + 0.109375, startY, startY + 0.08203125);
 							end
 							
