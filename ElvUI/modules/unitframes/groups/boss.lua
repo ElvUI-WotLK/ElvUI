@@ -65,7 +65,7 @@ function UF:Update_BossFrames(frame, db)
 	frame:Size(UNIT_WIDTH, UNIT_HEIGHT);
 	
 	do
-		if(not USE_POWERBAR then
+		if(not USE_POWERBAR) then
 			POWERBAR_HEIGHT = 0;
 		end
 		
