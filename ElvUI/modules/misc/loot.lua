@@ -302,6 +302,6 @@ function M:LoadLoot()
 
 	StaticPopupDialogs['CONFIRM_LOOT_DISTRIBUTION'].OnAccept = function(self, data)
 		GiveMasterLoot(ss, data)
-	end	
+	end
 	StaticPopupDialogs['CONFIRM_LOOT_DISTRIBUTION'].preferredIndex = 3;
 end

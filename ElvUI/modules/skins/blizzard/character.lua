@@ -53,7 +53,7 @@ local function LoadSkin()
 				icon:SetDrawLayer("OVERLAY")
 				icon:SetInside()
 			end
-		end	
+		end
 	end
 	
 	PaperDollFrameItemFlyout:HookScript('OnShow', SkinItemFlyouts)
@@ -139,7 +139,7 @@ local function LoadSkin()
 		if(cooldown) then
 			E:RegisterCooldown(cooldown);
 		end
-	end	
+	end
 	
 	local function ColorItemBorder()
 		for _, slot in pairs(slots) do

@@ -37,7 +37,7 @@ local function LoadSkin()
 					_G['AchievementAlertFrame'..i..'IconTexture'].b:SetOutside(_G['AchievementAlertFrame'..i..'IconTexture']);
 				end
 			end
-		end	
+		end
 	end)
 
 	hooksecurefunc('DungeonCompletionAlertFrame_FixAnchors', function()

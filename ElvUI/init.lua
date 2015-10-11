@@ -64,11 +64,11 @@ function AddOn:OnInitialize()
 			profileKey = ElvPrivateDB.profileKeys[self.myname..' - '..self.myrealm]
 		end
 				
-		if profileKey and ElvPrivateDB.profiles and ElvPrivateDB.profiles[profileKey] then		
+		if profileKey and ElvPrivateDB.profiles and ElvPrivateDB.profiles[profileKey] then
 			self:CopyTable(self.private, ElvPrivateDB.profiles[profileKey])
 		end
-	end	
-
+	end
+	
 	if self.private.general.pixelPerfect then
 		self.Border = 1;
 		self.Spacing = 0;
@@ -85,7 +85,7 @@ function AddOn:OnInitialize()
 	
 	if IsAddOnLoaded("Tukui") then
 		self:StaticPopup_Show("TUKUI_ELVUI_INCOMPATIBLE")
-	end	
+	end
 end
 
 function AddOn:PLAYER_REGEN_ENABLED()
@@ -116,8 +116,8 @@ function AddOn:PLAYER_REGEN_DISABLED()
 	end
 	
 	if err == true then
-		self:Print(ERR_NOT_IN_COMBAT);		
-	end		
+		self:Print(ERR_NOT_IN_COMBAT);
+	end
 end
 
 function AddOn:ResetProfile()
@@ -128,8 +128,8 @@ function AddOn:ResetProfile()
 	
 	if profileKey and ElvPrivateDB.profiles and ElvPrivateDB.profiles[profileKey] then
 		ElvPrivateDB.profiles[profileKey] = nil;
-	end	
-		
+	end
+	
 	ElvCharacterDB = nil;
 	ReloadUI()
 end

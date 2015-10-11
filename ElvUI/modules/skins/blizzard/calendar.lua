@@ -204,7 +204,7 @@ local function LoadSkin()
 
 	for _, button in pairs(buttons) do
 		S:HandleButton(_G[button])
-	end	
+	end
 	
 	--Event Picker Frame
 	CalendarEventPickerFrame:StripTextures()

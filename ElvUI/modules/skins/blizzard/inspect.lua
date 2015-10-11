@@ -50,14 +50,14 @@ local function LoadSkin()
 			else
 				target.backdrop:SetBackdropBorderColor(unpack(E.media.bordercolor))
 			end
-		end	
+		end
 		
 		if notFound == true then
 			return false
 		else
 			CheckItemBorderColor:SetScript('OnUpdate', nil) --Stop updating
 			return true
-		end		
+		end
 	end
 	
 	local function ColorItemBorder(self)

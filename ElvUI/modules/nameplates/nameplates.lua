@@ -206,7 +206,7 @@ function NP:OnUpdate(elapsed)
 		self.elapsed = 0;
 	else
 		self.elapsed = (self.elapsed or 0) + elapsed;
-	end	
+	end
 end
 
 function NP:CheckFilter(myPlate)
@@ -340,7 +340,7 @@ function NP:ColorizeAndScale(myPlate)
 				color = NP.db.reactions.neutral;
 			else
 				color = NP.db.reactions.enemy;
-			end			
+			end
 		elseif(threatReaction == "FULL_THREAT") then
 			if(classRole == "Tank") then
 				color = NP.db.threat.goodColor;
@@ -622,7 +622,7 @@ function NP:OnShow()
 	
 	if(not NP.db.targetIndicator.colorMatchHealthBar) then
 		NP:ColorTargetIndicator(NP.db.targetIndicator.color.r, NP.db.targetIndicator.color.g, NP.db.targetIndicator.color.b);
-	end	
+	end
 end
 
 function NP:OnHide()
@@ -649,13 +649,13 @@ function NP:OnHide()
 	if(myPlate.BuffWidget) then
 		for index = 1, #myPlate.BuffWidget.icons do 
 			NP.PolledHideIn(myPlate.BuffWidget.icons[index], 0);
-		end		
+		end
 	end
 	
 	if(myPlate.DebuffWidget) then
 		for index = 1, #myPlate.DebuffWidget.icons do 
 			NP.PolledHideIn(myPlate.DebuffWidget.icons[index], 0);
-		end		
+		end
 	end
 	
 	for i = 1, MAX_COMBO_POINTS do
@@ -1232,7 +1232,7 @@ function NP:CreateAuraIcon(frame, parent, dbTable)
 			button.Icon:SetTexCoord(.07, 0.93, .23, 0.77)
 		else
 			button.Icon:SetTexCoord(.07, .93, .07, .93)
-		end			
+		end
 	else
 		button.bg = button:CreateTexture(nil, "BACKGROUND")
 		button.bg:SetTexture(0, 0, 0, 1)
@@ -1257,7 +1257,7 @@ function NP:CreateAuraIcon(frame, parent, dbTable)
 			button.Icon:SetTexCoord(.07, 0.93, .23, 0.77)
 		else
 			button.Icon:SetTexCoord(.07, .93, .07, .93)
-		end			
+		end
 	end
 	
 	local font = LSM:Fetch("font", db.font)
@@ -1381,7 +1381,7 @@ end
 function NP:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, ...)
 	local sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags, spellID, spellName, _, auraType, stackCount  = ...
 	
-	if event == "SPELL_AURA_APPLIED" or event == "SPELL_AURA_REFRESH" or event == "SPELL_AURA_APPLIED_DOSE" or event == "SPELL_AURA_REMOVED_DOSE" or event == "SPELL_AURA_BROKEN" or event == "SPELL_AURA_BROKEN_SPELL" or event == "SPELL_AURA_REMOVED" then	
+	if event == "SPELL_AURA_APPLIED" or event == "SPELL_AURA_REFRESH" or event == "SPELL_AURA_APPLIED_DOSE" or event == "SPELL_AURA_REMOVED_DOSE" or event == "SPELL_AURA_BROKEN" or event == "SPELL_AURA_BROKEN_SPELL" or event == "SPELL_AURA_REMOVED" then
 		if event == "SPELL_AURA_APPLIED" or event == "SPELL_AURA_REFRESH" then
 			local duration = NP:GetSpellDuration(spellID)
 			local texture = GetSpellTexture(spellID)
@@ -1392,8 +1392,8 @@ function NP:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, ...)
 			NP:SetAuraInstance(destGUID, spellID, GetTime() + (duration or 0), stackCount, sourceGUID, duration, texture, auraType, AURA_TARGET_HOSTILE)
 		elseif event == "SPELL_AURA_BROKEN" or event == "SPELL_AURA_BROKEN_SPELL" or event == "SPELL_AURA_REMOVED" then
 			NP:RemoveAuraInstance(destGUID, spellID, sourceGUID)
-		end	
-
+		end
+		
 		local name, raidIcon
 		if band(destFlags, COMBATLOG_OBJECT_CONTROL_PLAYER) > 0 and destName then 
 			local rawName = strsplit("-", destName)			-- Strip server name from players
@@ -1454,7 +1454,7 @@ function NP:UpdateAurasByUnitID(unit)
 		NP:SetAuraInstance(guid, spellID, expirationTime, count, UnitGUID(unitCaster or ""), duration, texture, AURA_TYPE_BUFF)
 		index = index + 1
 		name, _, texture, count, _, duration, expirationTime, unitCaster, _, _, spellID = UnitBuff(unit, index);
-	end	
+	end
 	
 	local raidIcon, name
 	if UnitPlayerControlled(unit) then name = UnitName(unit) end
@@ -1547,9 +1547,8 @@ function NP:UpdateIconGrid(frame, guid)
 		if(DebuffSlotIndex > NP.db.debuffs.numAuras) then 
 			break 
 		end
-	end		
-
-	-- Clear Extra Slots
+	end
+	
 	if buffs.icons[BuffSlotIndex] then
 		NP.PolledHideIn(buffs.icons[BuffSlotIndex], 0)
 	end
@@ -1629,12 +1628,13 @@ function NP:SearchNameplateByIconName(raidIcon)
 		if frame and frame:IsShown() and frame.raidIcon:IsShown() and (frame.raidIconType == raidIcon) then
 			return frame
 		end
-	end		
+	end
 end
 
 function NP:SearchForFrame(guid, raidIcon, name)
 	local frame
-
+	
+	
 	if guid then frame = self:SearchNameplateByGUID(guid) end
 	if (not frame) and name then frame = self:SearchNameplateByName(name) end
 	if (not frame) and raidIcon then frame = self:SearchNameplateByIconName(raidIcon) end

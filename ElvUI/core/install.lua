@@ -138,7 +138,7 @@ local function SetupChat()
 		
 		if E.db['LeftChatPanelFaded'] then
 			LeftChatToggleButton:Click()
-		end		
+		end
 	end
 end
 
@@ -159,8 +159,8 @@ local function SetupCVars()
 	SetCVar('lockActionBars', 1)
 	
 	InstallStepComplete.message = L["CVars Set"]
-	InstallStepComplete:Show()					
-end	
+	InstallStepComplete:Show()
+end
 
 function E:GetColor(r, b, g, a)	
 	return { r = r, b = b, g = g, a = a }
@@ -216,8 +216,8 @@ function E:SetupTheme(theme, noDisplayMsg)
 		
 		if InstallStepComplete and not noDisplayMsg then
 			InstallStepComplete.message = L["Theme Set"]
-			InstallStepComplete:Show()		
-		end	
+			InstallStepComplete:Show()
+		end
 	end
 end
 
@@ -330,8 +330,8 @@ function E:SetupLayout(layout, noDataReset)
 			E.db.actionbar.bar3.buttons = 6
 			E.db.actionbar.bar5.buttons = 6
 			E.db.actionbar.bar4.enabled = true
-		end			
-	end		
+		end
+	end
 	
 	if layout == 'healer' then
 		if not IsAddOnLoaded('Clique') then
@@ -406,10 +406,10 @@ function E:SetupLayout(layout, noDataReset)
 				E.db.actionbar.bar4.enabled = false
 				if not E.PixelMode then
 					E.db.actionbar.bar1.heightMult = 2
-				end				
+				end
 			end
 		end
-			
+		
 		if not E.db.movers then E.db.movers = {}; end
 		local xOffset = GetScreenWidth() * 0.34375
 		
@@ -453,7 +453,7 @@ function E:SetupLayout(layout, noDataReset)
 				E.db.movers.ElvUF_TargetTargetMover = "BOTTOMElvUIParentBOTTOM118120"
 				E.db.movers.ElvUF_PetMover = "BOTTOMElvUIParentBOTTOM-118120"
 				E.db.movers.ElvUF_FocusMover = "BOTTOMElvUIParentBOTTOM310332"
-			end		
+			end
 		end
 	elseif E.db.lowresolutionset then
 		if not E.db.movers then E.db.movers = {}; end
@@ -567,15 +567,15 @@ function E:SetupLayout(layout, noDataReset)
 
 		if InstallStepComplete then
 			InstallStepComplete.message = L["Layout Set"]
-			InstallStepComplete:Show()	
-		end		
+			InstallStepComplete:Show()
+		end
 	end
 	
 	E.db.layoutSet = layout
 	
 	if not noDataReset and E.private.theme then
 		E:SetupTheme(E.private.theme, true)
-	end	
+	end
 	
 	E:UpdateAll(true)
 end
@@ -614,8 +614,8 @@ local function SetupAuras(style)
 	E:GetModule('UnitFrames'):Update_AllFrames()	
 	if InstallStepComplete then
 		InstallStepComplete.message = L["Auras Set"]
-		InstallStepComplete:Show()		
-	end	
+		InstallStepComplete:Show()
+	end
 end
 
 local function InstallComplete()

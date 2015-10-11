@@ -107,7 +107,7 @@ function AB:UpdateMicroPositionDimensions()
 		ElvUI_MicroBar:Show();
 	else
 		ElvUI_MicroBar:Hide();
-	end		
+	end
 end
 
 function AB:SetupMicroBar()

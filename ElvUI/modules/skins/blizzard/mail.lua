@@ -122,7 +122,7 @@ local function LoadSkin()
 			it:SetInside()
 			
 			c:SetDrawLayer("OVERLAY")
-		end				
+		end
 	end
 	
 	OpenMailReplyButton:Point("RIGHT", OpenMailDeleteButton, "LEFT", -2, 0)

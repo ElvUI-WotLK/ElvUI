@@ -85,7 +85,7 @@ end
 function AceConsole:RegisterChatCommand( command, func, persist )
 	if type(command)~="string" then error([[Usage: AceConsole:RegisterChatCommand( "command", func[, persist ]): 'command' - expected a string]], 2) end
 	
-	if persist==nil then persist=true end	-- I'd rather have my addon's "/addon enable" around if the author screws up. Having some extra slash regged when it shouldnt be isn't as destructive. True is a better default. /Mikk
+	if persist==nil then persist=true end -- I'd rather have my addon's "/addon enable" around if the author screws up. Having some extra slash regged when it shouldnt be isn't as destructive. True is a better default. /Mikk
 	
 	local name = "ACECONSOLE_"..command:upper()
 	

@@ -6,7 +6,7 @@ local ElvUF = ns.oUF
 assert(ElvUF, "ElvUI was unable to locate oUF.")
 
 function UF:Construct_HealthBar(frame, bg, text, textPos)
-	local health = CreateFrame("StatusBar", nil, frame)	
+	local health = CreateFrame("StatusBar", nil, frame)
 	UF["statusbars"][health] = true
 	
 	health:SetFrameStrata("LOW")
@@ -30,12 +30,12 @@ function UF:Construct_HealthBar(frame, bg, text, textPos)
 			x = 2
 		end
 		
-		health.value:Point(textPos, health, textPos, x, 0)		
+		health.value:Point(textPos, health, textPos, x, 0)
 	end
 	
 	health.colorTapping = true	
 	health.colorDisconnected = true
-	health:CreateBackdrop("Default")	
+	health:CreateBackdrop("Default")
 
 	return health
 end
@@ -76,7 +76,7 @@ function UF:PostUpdateHealth(unit, min, max)
 	
 	if colors.customhealthbackdrop then
 		local backdrop = colors.health_backdrop
-		self.bg:SetVertexColor(backdrop.r, backdrop.g, backdrop.b)		
+		self.bg:SetVertexColor(backdrop.r, backdrop.g, backdrop.b)
 	end
 	
 	if colors.useDeadBackdrop and UnitIsDeadOrGhost(unit) then

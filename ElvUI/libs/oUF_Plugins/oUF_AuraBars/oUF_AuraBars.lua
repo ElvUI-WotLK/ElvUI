@@ -326,7 +326,7 @@ local function Update(self, event, unit)
 		local r, g, b = .2, .6, 1 -- Colour for buffs
 		if auraBars.buffColor then
 			r, g, b = unpack(auraBars.buffColor)
-		end		
+		end
 		
 		if helpOrHarm == 'HARMFUL' then
 			local debuffType = bar.aura.debuffType and bar.aura.debuffType or 'none'
@@ -338,7 +338,7 @@ local function Update(self, event, unit)
 				if debuffType == 'none' and auraBars.defaultDebuffColor then
 					r, g, b = unpack(auraBars.defaultDebuffColor)
 				end
-			end			
+			end
 		end
 		bar:SetStatusBarColor(r, g, b)
 		frame:Show()

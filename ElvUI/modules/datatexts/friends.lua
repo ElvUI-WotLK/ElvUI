@@ -218,7 +218,7 @@ local function OnEnter(self)
 				end
 			end
 		end
-	end	
+	end
 	
 	DT.tooltip:Show();
 end

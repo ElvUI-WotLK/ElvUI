@@ -195,7 +195,7 @@ local ticks = {};
 function UF:HideTicks()
 	for i = 1, #ticks do
 		ticks[i]:Hide();
-	end		
+	end
 end
 
 function UF:SetCastTicks(frame, numTicks)
@@ -269,7 +269,7 @@ function UF:PostCastStart(unit, name, rank, castid)
 		
 		if(t) then
 			r, g, b = t[1], t[2], t[3];
-		end		
+		end
 	end
 	
 	if(self.interrupt and unit ~= "player" and UnitCanAttack("player", unit)) then
@@ -355,7 +355,7 @@ function UF:PostCastInterruptible(unit)
 		
 		if(t) then
 			r, g, b = t[1], t[2], t[3];
-		end		
+		end
 	end
 	
 	if(UnitCanAttack("player", unit)) then

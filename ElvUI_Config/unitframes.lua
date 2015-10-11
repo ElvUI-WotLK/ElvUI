@@ -1,67 +1,71 @@
-﻿local E, L, V, P, G = unpack(ElvUI); -- Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+﻿local E, L, V, P, G = unpack(ElvUI);
 local UF = E:GetModule('UnitFrames');
-local _, ns = ...
-local ElvUF = ns.oUF
 
-local ACD = LibStub("AceConfigDialog-3.0-ElvUI")
+local _, ns = ...;
+local ElvUF = ns.oUF;
+
+local tinsert = table.insert;
+local twipe = table.wipe;
+
+local ACD = LibStub("AceConfigDialog-3.0-ElvUI");
 local fillValues = {
-	['fill'] = L['Filled'],
-	['spaced'] = L['Spaced'],
-	['inset'] = L['Inset']
+	["fill"] = L["Filled"],
+	["spaced"] = L["Spaced"],
+	["inset"] = L["Inset"]
 };
 
 local positionValues = {
-	TOPLEFT = 'TOPLEFT',
-	LEFT = 'LEFT',
-	BOTTOMLEFT = 'BOTTOMLEFT',
-	RIGHT = 'RIGHT',
-	TOPRIGHT = 'TOPRIGHT',
-	BOTTOMRIGHT = 'BOTTOMRIGHT',
-	CENTER = 'CENTER',
-	TOP = 'TOP',
-	BOTTOM = 'BOTTOM',
+	TOPLEFT = "TOPLEFT",
+	LEFT = "LEFT",
+	BOTTOMLEFT = "BOTTOMLEFT",
+	RIGHT = "RIGHT",
+	TOPRIGHT = "TOPRIGHT",
+	BOTTOMRIGHT = "BOTTOMRIGHT",
+	CENTER = "CENTER",
+	TOP = "TOP",
+	BOTTOM = "BOTTOM"
 };
 
 local threatValues = {
-	['GLOW'] = L['Glow'],
-	['BORDERS'] = L['Borders'],
-	['HEALTHBORDER'] = L['Health Border'],
-	['ICONTOPLEFT'] = L['Icon: TOPLEFT'],
-	['ICONTOPRIGHT'] = L['Icon: TOPRIGHT'],
-	['ICONBOTTOMLEFT'] = L['Icon: BOTTOMLEFT'],
-	['ICONBOTTOMRIGHT'] = L['Icon: BOTTOMRIGHT'],
-	['ICONLEFT'] = L['Icon: LEFT'],
-	['ICONRIGHT'] = L['Icon: RIGHT'],
-	['ICONTOP'] = L['Icon: TOP'],
-	['ICONBOTTOM'] = L['Icon: BOTTOM'],
-	['NONE'] = NONE
-}
+	["GLOW"] = L["Glow"],
+	["BORDERS"] = L["Borders"],
+	["HEALTHBORDER"] = L["Health Border"],
+	["ICONTOPLEFT"] = L["Icon: TOPLEFT"],
+	["ICONTOPRIGHT"] = L["Icon: TOPRIGHT"],
+	["ICONBOTTOMLEFT"] = L["Icon: BOTTOMLEFT"],
+	["ICONBOTTOMRIGHT"] = L["Icon: BOTTOMRIGHT"],
+	["ICONLEFT"] = L["Icon: LEFT"],
+	["ICONRIGHT"] = L["Icon: RIGHT"],
+	["ICONTOP"] = L["Icon: TOP"],
+	["ICONBOTTOM"] = L["Icon: BOTTOM"],
+	["NONE"] = NONE
+};
 
 local petAnchors = {
-	TOPLEFT = 'TOPLEFT',
-	LEFT = 'LEFT',
-	BOTTOMLEFT = 'BOTTOMLEFT',
-	RIGHT = 'RIGHT',
-	TOPRIGHT = 'TOPRIGHT',
-	BOTTOMRIGHT = 'BOTTOMRIGHT',
-	TOP = 'TOP',
-	BOTTOM = 'BOTTOM',
+	TOPLEFT = "TOPLEFT",
+	LEFT = "LEFT",
+	BOTTOMLEFT = "BOTTOMLEFT",
+	RIGHT = "RIGHT",
+	TOPRIGHT = "TOPRIGHT",
+	BOTTOMRIGHT = "BOTTOMRIGHT",
+	TOP = "TOP",
+	BOTTOM = "BOTTOM"
 };
 
 local auraBarsSortValues = {
-	['TIME_REMAINING'] = L['Time Remaining'],
-	['TIME_REMAINING_REVERSE'] = L['Time Remaining Reverse'],
-	['TIME_DURATION'] = L['Duration'],
-	['TIME_DURATION_REVERSE'] = L['Duration Reverse'],
-	['NAME'] = NAME,
-	['NONE'] = NONE,
-}
+	["TIME_REMAINING"] = L["Time Remaining"],
+	["TIME_REMAINING_REVERSE"] = L["Time Remaining Reverse"],
+	["TIME_DURATION"] = L["Duration"],
+	["TIME_DURATION_REVERSE"] = L["Duration Reverse"],
+	["NAME"] = NAME,
+	["NONE"] = NONE
+};
 
 local auraSortValues = {
 	["TIME_REMAINING"] = L["Time Remaining"],
 	["DURATION"] = L["Duration"],
 	["NAME"] = NAME,
-	["INDEX"] = L["Index"],
+	["INDEX"] = L["Index"]
 };
 
 local auraSortMethodValues = {
@@ -69,211 +73,256 @@ local auraSortMethodValues = {
 	["DESCENDING"] = L["Descending"]
 };
 
------------------------------------------------------------------------
--- OPTIONS TABLES
------------------------------------------------------------------------
--- 100
-local function GetOptionsTable_Health(isGroupFrame, updateFunc, groupName, numUnits) -- Здоровье
+local CUSTOMTEXT_CONFIGS = {};
+
+local function GetOptionsTable_Health(isGroupFrame, updateFunc, groupName, numUnits)
 	local config = {
 		order = 100,
-		type = 'group',
-		name = L['Health'],
-		get = function(info) return E.db.unitframe.units[groupName]['health'][ info[#info] ] end,
-		set = function(info, value) E.db.unitframe.units[groupName]['health'][ info[#info] ] = value; updateFunc(UF, groupName, numUnits) end,
+		type = "group",
+		name = L["Health"],
+		get = function(info) return E.db.unitframe.units[groupName]["health"][ info[#info] ]; end,
+		set = function(info, value) E.db.unitframe.units[groupName]["health"][ info[#info] ] = value; updateFunc(UF, groupName, numUnits); end,
 		args = {
-			position = { -- Позиция текста
-				type = 'select',
+			position = {
+				type = "select",
 				order = 1,
-				name = L['Text Position'],
-				values = positionValues,
+				name = L["Text Position"],
+				values = positionValues
 			},
-			xOffset = { -- Отступ текста оп X
+			xOffset = {
 				order = 2,
-				type = 'range',
-				name = L['Text xOffset'],
-				desc = L['Offset position for text.'],
-				min = -300, max = 300, step = 1,
+				type = "range",
+				name = L["Text xOffset"],
+				desc = L["Offset position for text."],
+				min = -300, max = 300, step = 1
 			},
-			yOffset = { -- Отступ текста оп Y
+			yOffset = {
 				order = 3,
-				type = 'range',
-				name = L['Text yOffset'],
-				desc = L['Offset position for text.'],
-				min = -300, max = 300, step = 1,
+				type = "range",
+				name = L["Text yOffset"],
+				desc = L["Offset position for text."],
+				min = -300, max = 300, step = 1
 			},
-			configureButton = { -- Окрашивание
+			configureButton = {
 				order = 6,
-				name = L['Coloring'],
-				type = 'execute',
-				func = function() ACD:SelectGroup("ElvUI", "unitframe", "general", "allColorsGroup", "healthGroup") end,
+				name = L["Coloring"],
+				type = "execute",
+				func = function() ACD:SelectGroup("ElvUI", "unitframe", "general", "allColorsGroup", "healthGroup"); end,
 			},
-			text_format = { -- Формат текста
+			text_format = {
 				order = 100,
-				name = L['Text Format'],
-				type = 'input',
-				width = 'full',
-				desc = L['TEXT_FORMAT_DESC'],
-			},
-		},
-	}
+				name = L["Text Format"],
+				type = "input",
+				width = "full",
+				desc = L["TEXT_FORMAT_DESC"]
+			}
+		}
+	};
 	
-	if isGroupFrame then -- Группа, Рейд 10,25,40
-		config.args.frequentUpdates = { -- Частое обновление
-			type = 'toggle',
+	if isGroupFrame then
+		config.args.frequentUpdates = {
+			type = "toggle",
 			order = 4,
-			name = L['Frequent Updates'],
-			desc = L['Rapidly update the health, uses more memory and cpu. Only recommended for healing.'],
-		}
-
-		config.args.orientation = { -- Ориентация
-			type = 'select',
+			name = L["Frequent Updates"],
+			desc = L["Rapidly update the health, uses more memory and cpu. Only recommended for healing."]
+		};
+		
+		config.args.orientation = {
+			type = "select",
 			order = 5,
-			name = L['Orientation'],
-			desc = L['Direction the health bar moves when gaining/losing health.'],
+			name = L["Orientation"],
+			desc = L["Direction the health bar moves when gaining/losing health."],
 			values = {
-				['HORIZONTAL'] = L['Horizontal'],
-				['VERTICAL'] = L['Vertical'],
-			},
-		}
+				["HORIZONTAL"] = L["Horizontal"],
+				["VERTICAL"] = L["Vertical"]
+			}
+		};
 	end
 	
-	return config
+	return config;
 end
--- 200
-local function GetOptionsTable_Power(hasDetatchOption, updateFunc, groupName, numUnits) -- Ресурс
+
+local function GetOptionsTable_Power(hasDetatchOption, updateFunc, groupName, numUnits, hasStrataLevel)
 	local config = {
 		order = 200,
-		type = 'group',
-		name = L['Power'],
-		get = function(info) return E.db.unitframe.units[groupName]['power'][ info[#info] ] end,
-		set = function(info, value) E.db.unitframe.units[groupName]['power'][ info[#info] ] = value; updateFunc(UF, groupName, numUnits) end,
+		type = "group",
+		name = L["Power"],
+		get = function(info) return E.db.unitframe.units[groupName]["power"][ info[#info] ]; end,
+		set = function(info, value) E.db.unitframe.units[groupName]["power"][ info[#info] ] = value; updateFunc(UF, groupName, numUnits); end,
 		args = {
-			enable = { -- Включить
-				type = 'toggle',
+			enable = {
+				type = "toggle",
 				order = 1,
-				name = L['Enable'],
-			},				
-			text_format = { -- Формат текста
+				name = L["Enable"]
+			},
+			text_format = {
 				order = 100,
-				name = L['Text Format'],
-				type = 'input',
-				width = 'full',
-				desc = L['TEXT_FORMAT_DESC'],
-			},	
-			width = { -- Стиль
-				type = 'select',
-				order = 1,
-				name = L['Style'],
+				name = L["Text Format"],
+				type = "input",
+				width = "full",
+				desc = L["TEXT_FORMAT_DESC"]
+			},
+			width = {
+				type = "select",
+				order = 2,
+				name = L["Style"],
 				values = fillValues,
-				set = function(info, value) 
-					E.db.unitframe.units[groupName]['power'][ info[#info] ] = value;
-
-					local frameName = E:StringTitle(groupName)
-					frameName = "ElvUF_"..frameName
-					frameName = frameName:gsub('t(arget)', 'T%1')
-
-					if numUnits then
-						for i=1, numUnits do
-							if _G[frameName..i] then
-								local v = _G[frameName..i].Power:GetValue()
-								local min, max = _G[frameName..i].Power:GetMinMaxValues()
-								_G[frameName..i].Power:SetMinMaxValues(min, max + 500)
-								_G[frameName..i].Power:SetValue(1)
-								_G[frameName..i].Power:SetValue(0)
+				set = function(info, value)
+					E.db.unitframe.units[groupName]["power"][ info[#info] ] = value;
+					
+					local frameName = E:StringTitle(groupName);
+					frameName = "ElvUF_"..frameName;
+					frameName = frameName:gsub("t(arget)", "T%1");
+					
+					if(numUnits) then
+						for i = 1, numUnits do
+							if(_G[frameName..i]) then
+								local v = _G[frameName..i].Power:GetValue();
+								local min, max = _G[frameName..i].Power:GetMinMaxValues();
+								_G[frameName..i].Power:SetMinMaxValues(min, max + 500);
+								_G[frameName..i].Power:SetValue(1);
+								_G[frameName..i].Power:SetValue(0);
 							end
 						end
 					else
-						if _G[frameName] and _G[frameName].Power then
-							local v = _G[frameName].Power:GetValue()
-							local min, max = _G[frameName].Power:GetMinMaxValues()
-							_G[frameName].Power:SetMinMaxValues(min, max + 500)							
-							_G[frameName].Power:SetValue(1)	
-							_G[frameName].Power:SetValue(0)
+						if(_G[frameName] and _G[frameName].Power) then
+							local v = _G[frameName].Power:GetValue();
+							local min, max = _G[frameName].Power:GetMinMaxValues();
+							_G[frameName].Power:SetMinMaxValues(min, max + 500)	;
+							_G[frameName].Power:SetValue(1);
+							_G[frameName].Power:SetValue(0);
 						else
-							for i=1, _G[frameName]:GetNumChildren() do
-								local child = select(i, _G[frameName]:GetChildren())
-								if child and child.Power then
-									local v = child.Power:GetValue()
-									local min, max = child.Power:GetMinMaxValues()
-									child.Power:SetMinMaxValues(min, max + 500)											
-									child.Power:SetValue(1)
-									child.Power:SetValue(0)
+							for i = 1, _G[frameName]:GetNumChildren() do
+								local child = select(i, _G[frameName]:GetChildren());
+								if(child and child.Power) then
+									local v = child.Power:GetValue();
+									local min, max = child.Power:GetMinMaxValues();
+									child.Power:SetMinMaxValues(min, max + 500);										
+									child.Power:SetValue(1);
+									child.Power:SetValue(0);
 								end
 							end
 						end
-					end		
+					end
 					
-					updateFunc(UF, groupName, numUnits)
+					updateFunc(UF, groupName, numUnits);
 				end,
 			},
 			height = {
-				type = 'range',
-				name = L['Height'],
-				order = 2,
-				min = 1, max = 50, step = 1,
-			},
-			offset = { -- Смещение
-				type = 'range',
-				name = L['Offset'],
-				desc = L['Offset of the powerbar to the healthbar, set to 0 to disable.'],
+				type = "range",
+				name = L["Height"],
 				order = 3,
-				min = 0, max = 20, step = 1,
+				min = 1, max = 50, step = 1
 			},
-			configureButton = { -- Окрашивать
+			offset = {
+				type = "range",
+				name = L["Offset"],
+				desc = L["Offset of the powerbar to the healthbar, set to 0 to disable."],
 				order = 4,
-				name = L['Coloring'],
-				type = 'execute',
-				func = function() ACD:SelectGroup("ElvUI", "unitframe", "general", "allColorsGroup", "powerGroup") end,
-			},				
-			spacer = { -- Пробел
-				type = 'description',
-				name = '',
-				order = 5,
+				min = 0, max = 20, step = 1
 			},
-			xOffset = { -- Отступ текста по X
-				order = 6,
-				type = 'range',
-				name = L['Text xOffset'],
-				desc = L['Offset position for text.'],
-				min = -300, max = 300, step = 1,
-			},		
-			yOffset = { -- Отступ текста по Y
+			configureButton = {
+				order = 5,
+				name = L["Coloring"],
+				type = "execute",
+				func = function() ACD:SelectGroup("ElvUI", "unitframe", "general", "allColorsGroup", "powerGroup"); end,
+			},
+			spacer = {
+				type = "description",
+				name = "",
+				order = 6
+			},
+			xOffset = {
 				order = 7,
-				type = 'range',
-				name = L['Text yOffset'],
-				desc = L['Offset position for text.'],
-				min = -300, max = 300, step = 1,
-			},			
-			position = { -- Позиция текста
-				type = 'select',
+				type = "range",
+				name = L["Text xOffset"],
+				desc = L["Offset position for text."],
+				min = -300, max = 300, step = 1
+			},
+			yOffset = {
 				order = 8,
-				name = L['Text Position'],
-				values = positionValues,
-			},		
-		},
-	}
+				type = "range",
+				name = L["Text yOffset"],
+				desc = L["Offset position for text."],
+				min = -300, max = 300, step = 1
+			},
+			position = {
+				type = "select",
+				order = 9,
+				name = L["Text Position"],
+				values = positionValues
+			}
+		}
+	};
 
-	if hasDetatchOption then -- Игрок, Цель
-		config.args.attachTextToPower = { -- Attach Text to Power
-			type = 'toggle',
-			order = 9,
-			name = L['Attach Text to Power'],
-		}		
-		config.args.detachFromFrame = { -- Открепить от рамки
-			type = 'toggle',
+	if(hasDetatchOption) then
+		config.args.attachTextToPower = {
+			type = "toggle",
 			order = 10,
-			name = L['Detach From Frame'],
-		}
-		config.args.detachedWidth = { -- Ширина при откриплении
-			type = 'range',
+			name = L["Attach Text to Power"]
+		};
+		config.args.detachFromFrame = {
+			type = "toggle",
 			order = 11,
-			name = L['Detached Width'],
-			disabled = function() return not E.db.unitframe.units[groupName].power.detachFromFrame end,
-			min = 15, max = 450, step = 1,
-		}
+			name = L["Detach From Frame"]
+		};
+		config.args.detachedWidth = {
+			type = "range",
+			order = 12,
+			name = L["Detached Width"],
+			disabled = function() return not E.db.unitframe.units[groupName].power.detachFromFrame; end,
+			min = 15, max = 450, step = 1
+		};
 	end
 	
-	return config
+	if(hasStrataLevel) then
+		config.args.strataAndLevel = {
+			order = 101,
+			type = "group",
+			name = L["Strata and Level"],
+			get = function(info) return E.db.unitframe.units[groupName]["power"]["strataAndLevel"][ info[#info] ]; end,
+			set = function(info, value) E.db.unitframe.units[groupName]["power"]["strataAndLevel"][ info[#info] ] = value; updateFunc(UF, groupName, numUnits); end,
+			guiInline = true,
+			args = {
+				useCustomStrata = {
+					order = 1,
+					type = "toggle",
+					name = L["Use Custom Strata"]
+				},
+				frameStrata = {
+					order = 2,
+					type = "select",
+					name = L["Frame Strata"],
+					values = {
+						["BACKGROUND"] = "BACKGROUND",
+						["LOW"] = "LOW",
+						["MEDIUM"] = "MEDIUM",
+						["HIGH"] = "HIGH",
+						["DIALOG"] = "DIALOG",
+						["TOOLTIP"] = "TOOLTIP"
+					}
+				},
+				spacer = {
+					order = 3,
+					type = "description",
+					name = ""
+				},
+				useCustomLevel = {
+					order = 4,
+					type = "toggle",
+					name = L["Use Custom Level"]
+				},
+				frameLevel = {
+					order = 5,
+					type = "range",
+					name = L["Frame Level"],
+					min = 0, max = 128, step = 1
+				}
+			}
+		};
+	end
+	
+	return config;
 end
 -- 300
 local function GetOptionsTable_Name(updateFunc, groupName, numUnits) -- Имя
@@ -1236,166 +1285,174 @@ local function GetOptionsTable_RaidIcon(updateFunc, groupName, numUnits) -- Ре
 	return config
 end
 
-function UF:CreateCustomTextGroup(unit, objectName) -- Свой текст
-	if E.Options.args.unitframe.args[unit].args[objectName] or not E.Options.args.unitframe.args[unit] then return end
+function UF:CreateCustomTextGroup(unit, objectName)
+	if(not E.Options.args.unitframe.args[unit]) then
+		return;
+	elseif(E.Options.args.unitframe.args[unit].args[objectName]) then
+		E.Options.args.unitframe.args[unit].args[objectName].hidden = false;
+		tinsert(CUSTOMTEXT_CONFIGS, E.Options.args.unitframe.args[unit].args[objectName]);
+		return;
+	end
 	
 	E.Options.args.unitframe.args[unit].args[objectName] = {
 		order = -1,
-		type = 'group',
+		type = "group",
 		name = objectName,
 		get = function(info) return E.db.unitframe.units[unit].customTexts[objectName][ info[#info] ] end,
 		set = function(info, value) 
 			E.db.unitframe.units[unit].customTexts[objectName][ info[#info] ] = value; 
 			
-			if unit == 'party' or unit:find('raid') then
-				UF:CreateAndUpdateHeaderGroup(unit)
-			elseif unit == 'boss' then
-				UF:CreateAndUpdateUFGroup('boss', MAX_BOSS_FRAMES)
-			elseif unit == 'arena' then
-				UF:CreateAndUpdateUFGroup('arena', 5)
+			if(unit == "party" or unit:find("raid")) then
+				UF:CreateAndUpdateHeaderGroup(unit);
+			elseif(unit == "boss") then
+				UF:CreateAndUpdateUFGroup("boss", MAX_BOSS_FRAMES);
+			elseif(unit == "arena") then
+				UF:CreateAndUpdateUFGroup("arena", 5);
 			else
-				UF:CreateAndUpdateUF(unit) 
+				UF:CreateAndUpdateUF(unit);
 			end
 		end,
 		args = {
-			delete = { -- Удалить
-				type = 'execute',
+			delete = {
+				type = "execute",
 				order = 1,
 				name = DELETE,
 				func = function() 
 					E.Options.args.unitframe.args[unit].args[objectName] = nil; 
 					E.db.unitframe.units[unit].customTexts[objectName] = nil; 
 					
-					if unit == 'boss' or unit == 'arena' then
-						for i=1, 5 do
-							if UF[unit..i] then
-								UF[unit..i]:Tag(UF[unit..i][objectName], ''); 
-								UF[unit..i][objectName]:Hide();
+					if(unit == "boss" or unit == "arena") then
+						for i = 1, 5 do
+							if(UF[unit..i]) then
+								UF[unit..i]:Tag(UF[unit..i]["customTexts"][objectName], "");
+								UF[unit..i]["customTexts"][objectName]:Hide();
 							end
 						end
-					elseif unit == 'party' or unit:find('raid') then
-						for i=1, UF[unit]:GetNumChildren() do
-							local child = select(i, UF[unit]:GetChildren())
-							if child.Tag then
-								child:Tag(child[objectName], ''); 
-								child[objectName]:Hide();
+					elseif(unit == "party" or unit:find("raid")) then
+						for i = 1, UF[unit]:GetNumChildren() do
+							local child = select(i, UF[unit]:GetChildren());
+							if(child.Tag) then
+								child:Tag(child["customTexts"][objectName], "");
+								child["customTexts"][objectName]:Hide();
 							else
-								for x=1, child:GetNumChildren() do
-									local c2 = select(x, child:GetChildren())
+								for x = 1, child:GetNumChildren() do
+									local c2 = select(x, child:GetChildren());
 									if(c2.Tag) then
-										c2:Tag(c2[objectName], '');
-										c2[objectName]:Hide();
+										c2:Tag(c2["customTexts"][objectName], "");
+										c2["customTexts"][objectName]:Hide();
 									end
 								end
 							end
 						end
-					elseif UF[unit] then
-						UF[unit]:Tag(UF[unit][objectName], ''); 
-						UF[unit][objectName]:Hide(); 
+					elseif(UF[unit]) then
+						UF[unit]:Tag(UF[unit]["customTexts"][objectName], "");
+						UF[unit]["customTexts"][objectName]:Hide();
 					end
-				end,	
+				end
 			},
-			font = { -- Шрифт
-				type = "select", dialogControl = 'LSM30_Font',
+			font = {
+				type = "select", dialogControl = "LSM30_Font",
 				order = 2,
 				name = L["Font"],
-				values = AceGUIWidgetLSMlists.font,
+				values = AceGUIWidgetLSMlists.font
 			},
-			size = { -- Размер шрифта
+			size = {
 				order = 3,
 				name = L["Font Size"],
 				type = "range",
-				min = 6, max = 32, step = 1,
+				min = 6, max = 32, step = 1
 			},
-			fontOutline = { -- Граница шрифта
+			fontOutline = {
 				order = 4,
 				name = L["Font Outline"],
 				desc = L["Set the font outline."],
 				type = "select",
 				values = {
-					['NONE'] = L['None'],
-					['OUTLINE'] = 'OUTLINE',
-					['MONOCHROME'] = (not E.isMacClient) and 'MONOCHROME' or nil,
-					['MONOCHROMEOUTLINE'] = 'MONOCROMEOUTLINE',
-					['THICKOUTLINE'] = 'THICKOUTLINE',
-				},	
+					["NONE"] = L["None"],
+					["OUTLINE"] = "OUTLINE",
+					["MONOCHROME"] = (not E.isMacClient) and "MONOCHROME" or nil,
+					["MONOCHROMEOUTLINE"] = "MONOCROMEOUTLINE",
+					["THICKOUTLINE"] = "THICKOUTLINE"
+				}
 			},
-			justifyH = { -- Выравнивание
+			justifyH = {
 				order = 5,
-				type = 'select',
-				name = L['JustifyH'],
+				type = "select",
+				name = L["JustifyH"],
 				desc = L["Sets the font instance's horizontal text alignment style."],
 				values = {
-					['CENTER'] = L['Center'],
-					['LEFT'] = L['Left'],
-					['RIGHT'] = L['Right'],
-				},
+					["CENTER"] = L["Center"],
+					["LEFT"] = L["Left"],
+					["RIGHT"] = L["Right"]
+				}
 			},
-			xOffset = { -- Отступ по X
+			xOffset = {
 				order = 6,
-				type = 'range',
-				name = L['xOffset'],
-				min = -400, max = 400, step = 1,		
+				type = "range",
+				name = L["xOffset"],
+				min = -400, max = 400, step = 1
 			},
-			yOffset = { -- Отступ по Y
+			yOffset = {
 				order = 7,
-				type = 'range',
-				name = L['yOffset'],
-				min = -400, max = 400, step = 1,		
-			},						
-			text_format = { -- Формат текста
+				type = "range",
+				name = L["yOffset"],
+				min = -400, max = 400, step = 1
+			},
+			text_format = {
 				order = 100,
-				name = L['Text Format'],
-				type = 'input',
-				width = 'full',
-				desc = L['TEXT_FORMAT_DESC'],
-			},		
-		},
-	}		
+				name = L["Text Format"],
+				type = "input",
+				width = "full",
+				desc = L["TEXT_FORMAT_DESC"]
+			}
+		}
+	};
+	
+	tinsert(CUSTOMTEXT_CONFIGS, E.Options.args.unitframe.args[unit].args[objectName]);
 end
 
 local function GetOptionsTable_CustomText(updateFunc, groupName, numUnits, orderOverride)
 	local config = {
 		order = orderOverride or 50,
-		name = L['Custom Texts'],
-		type = 'input',
-		width = 'full',
-		desc = L['Create a custom fontstring. Once you enter a name you will be able to select it from the elements dropdown list.'],
-		get = function() return '' end,
+		name = L["Custom Texts"],
+		type = "input",
+		width = "full",
+		desc = L["Create a custom fontstring. Once you enter a name you will be able to select it from the elements dropdown list."],
+		get = function() return "" end,
 		set = function(info, textName)
 			for object, _ in pairs(E.db.unitframe.units[groupName]) do
-				if object:lower() == textName:lower() then
-					E:Print(L['The name you have selected is already in use by another element.'])
-					return
+				if(object:lower() == textName:lower()) then
+					E:Print(L["The name you have selected is already in use by another element."]);
+					return;
 				end
 			end
 			
-			if not E.db.unitframe.units[groupName].customTexts then
+			if(not E.db.unitframe.units[groupName].customTexts) then
 				E.db.unitframe.units[groupName].customTexts = {};
 			end
 			
 			local frameName = "ElvUF_"..E:StringTitle(groupName)
-			if(E.db.unitframe.units[groupName].customTexts[textName] or (_G[frameName] and _G[frameName][textName] or _G[frameName.."Group1UnitButton1"] and _G[frameName.."Group1UnitButton1"][textName])) then
-				E:Print(L['The name you have selected is already in use by another element.'])
+			if(E.db.unitframe.units[groupName].customTexts[textName] or (_G[frameName] and _G[frameName]["customTexts"] and _G[frameName]["customTexts"][textName] or _G[frameName.."Group1UnitButton1"] and _G[frameName.."Group1UnitButton1"]["customTexts"] and _G[frameName.."Group1UnitButton1"][textName])) then
+				E:Print(L["The name you have selected is already in use by another element."]);
 				return;
 			end
 			
 			E.db.unitframe.units[groupName].customTexts[textName] = {
-				['text_format'] = '',
-				['size'] = E.db.unitframe.fontSize,
-				['font'] = E.db.unitframe.font,
-				['xOffset'] = 0,
-				['yOffset'] = 0,
-				['justifyH'] = 'CENTER',
-				['fontOutline'] = E.db.unitframe.fontOutline
+				["text_format"] = "",
+				["size"] = E.db.unitframe.fontSize,
+				["font"] = E.db.unitframe.font,
+				["xOffset"] = 0,
+				["yOffset"] = 0,
+				["justifyH"] = "CENTER",
+				["fontOutline"] = E.db.unitframe.fontOutline
 			};
+			
+			UF:CreateCustomTextGroup(groupName, textName);
+			updateFunc(UF, groupName, numUnits);
+		end
+	};
 
-			UF:CreateCustomTextGroup(groupName, textName)
-			updateFunc(UF, groupName, numUnits)
-		end,
-	}
-	
-	return config
+	return config;
 end
 
 local function GetOptionsTable_GPS(groupName)
@@ -2065,8 +2122,19 @@ E.Options.args.unitframe.args.player = { -- Игрок
 			name = L['Threat Display Mode'],
 			values = threatValues,
 		},
+		smartAuraPosition = {
+			order = 13,
+			type = "select",
+			name = L["Smart Aura Position"],
+			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
+			values = {
+				["DISABLED"] = L["Disabled"],
+				["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
+				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
+			},
+		},
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, 'player'), -- Здоровье
-		power = GetOptionsTable_Power(true, UF.CreateAndUpdateUF, 'player'), -- Мана	
+		power = GetOptionsTable_Power(true, UF.CreateAndUpdateUF, 'player', nil, true),
 		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, 'player'), -- Имя
 		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUF, 'player', nil, true), -- Портрет
 		buffs = GetOptionsTable_Auras(true, 'buffs', false, UF.CreateAndUpdateUF, 'player'), -- Баффы
@@ -2231,8 +2299,19 @@ E.Options.args.unitframe.args.target = { -- Цель
 			name = L['Threat Display Mode'],
 			values = threatValues,
 		},
+		smartAuraPosition = {
+			order = 13,
+			type = "select",
+			name = L["Smart Aura Position"],
+			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
+			values = {
+				["DISABLED"] = L["Disabled"],
+				["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
+				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
+			},
+		},
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, 'target'), -- Здоровье
-		power = GetOptionsTable_Power(true, UF.CreateAndUpdateUF, 'target'), -- Мана
+		power = GetOptionsTable_Power(true, UF.CreateAndUpdateUF, 'target', nil, true),
 		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, 'target'), -- Имя
 		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUF, 'target', nil, true), -- Портрет
 		buffs = GetOptionsTable_Auras(false, 'buffs', false, UF.CreateAndUpdateUF, 'target'), -- Баффы
@@ -2365,6 +2444,17 @@ E.Options.args.unitframe.args.targettarget = { -- Цуль цели
 			name = L['Threat Display Mode'],
 			values = threatValues,
 		},
+		smartAuraPosition = {
+			order = 11,
+			type = "select",
+			name = L["Smart Aura Position"],
+			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
+			values = {
+				["DISABLED"] = L["Disabled"],
+				["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
+				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
+			},
+		},
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, 'targettarget'), -- Здоровье
 		power = GetOptionsTable_Power(nil, UF.CreateAndUpdateUF, 'targettarget'), -- Мана
 		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, 'targettarget'), --Имя
@@ -2451,6 +2541,17 @@ E.Options.args.unitframe.args.targettargettarget = { -- TargetTargetTarget
 			name = L['Threat Display Mode'],
 			values = threatValues,
 		},
+		smartAuraPosition = {
+			order = 12,
+			type = "select",
+			name = L["Smart Aura Position"],
+			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
+			values = {
+				["DISABLED"] = L["Disabled"],
+				["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
+				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
+			},
+		},
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, 'targettargettarget'), -- Здоровье
 		power = GetOptionsTable_Power(nil, UF.CreateAndUpdateUF, 'targettargettarget'), -- Мана
 		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, 'targettargettarget'), -- Имя
@@ -2536,7 +2637,18 @@ E.Options.args.unitframe.args.focus = { -- Фокус
 			order = 10,
 			name = L['Threat Display Mode'],
 			values = threatValues,
-		},		
+		},
+		smartAuraPosition = {
+			order = 11,
+			type = "select",
+			name = L["Smart Aura Position"],
+			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
+			values = {
+				["DISABLED"] = L["Disabled"],
+				["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
+				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
+			},
+		},
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, 'focus'), -- Здоровье
 		power = GetOptionsTable_Power(nil, UF.CreateAndUpdateUF, 'focus'), -- Мана
 		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, 'focus'), -- Имя
@@ -2624,7 +2736,18 @@ E.Options.args.unitframe.args.focustarget = { -- Цель фокуса
 			order = 10,
 			name = L['Threat Display Mode'],
 			values = threatValues,
-		},		
+		},
+		smartAuraPosition = {
+			order = 11,
+			type = "select",
+			name = L["Smart Aura Position"],
+			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
+			values = {
+				["DISABLED"] = L["Disabled"],
+				["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
+				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
+			},
+		},
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, 'focustarget'), -- Здоровье
 		power = GetOptionsTable_Power(false, UF.CreateAndUpdateUF, 'focustarget'), -- Мана
 		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, 'focustarget'), -- Имя
@@ -2709,6 +2832,17 @@ E.Options.args.unitframe.args.pet = { -- Питомец
 			order = 10,
 			name = L['Threat Display Mode'],
 			values = threatValues,
+		},
+		smartAuraPosition = {
+			order = 11,
+			type = "select",
+			name = L["Smart Aura Position"],
+			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
+			values = {
+				["DISABLED"] = L["Disabled"],
+				["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
+				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
+			},
 		},
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, 'pet'), -- Здоровье
 		power = GetOptionsTable_Power(false, UF.CreateAndUpdateUF, 'pet'), -- Мана
@@ -2820,7 +2954,18 @@ E.Options.args.unitframe.args.pettarget = { -- Цель питомца
 			order = 10,
 			name = L['Threat Display Mode'],
 			values = threatValues,
-		},			
+		},
+		smartAuraPosition = {
+			order = 11,
+			type = "select",
+			name = L["Smart Aura Position"],
+			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
+			values = {
+				["DISABLED"] = L["Disabled"],
+				["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
+				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
+			},
+		},
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, 'pettarget'), -- Здоровье
 		power = GetOptionsTable_Power(false, UF.CreateAndUpdateUF, 'pettarget'), -- Мана
 		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, 'pettarget'), -- Имя
@@ -2924,6 +3069,17 @@ E.Options.args.unitframe.args.boss = { -- Боссы
 			order = 11,
 			name = L['Threat Display Mode'],
 			values = threatValues,
+		},
+		smartAuraPosition = {
+			order = 12,
+			type = "select",
+			name = L["Smart Aura Position"],
+			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
+			values = {
+				["DISABLED"] = L["Disabled"],
+				["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
+				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
+			},
 		},
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUFGroup, 'boss', MAX_BOSS_FRAMES), -- Здоровье
 		power = GetOptionsTable_Power(false, UF.CreateAndUpdateUFGroup, 'boss', MAX_BOSS_FRAMES), -- Мана
@@ -3035,6 +3191,17 @@ E.Options.args.unitframe.args.arena = { -- Арена
 				['USE_DEFAULT'] = L['Use Default'],
 				['FORCE_ON'] = L['Force On'],
 				['FORCE_OFF'] = L['Force Off'],
+			},
+		},
+		smartAuraPosition = {
+			order = 14,
+			type = "select",
+			name = L["Smart Aura Position"],
+			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
+			values = {
+				["DISABLED"] = L["Disabled"],
+				["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
+				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
 			},
 		},
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUFGroup, 'arena', 5), -- Здоровье
@@ -4806,10 +4973,18 @@ if(P.unitframe.colors.classResources[E.myclass]) then
 	end
 end
 
-for unit, _ in pairs(E.db.unitframe.units) do -- Свой текст
-	if E.db.unitframe.units[unit].customTexts then
-		for objectName, _ in pairs(E.db.unitframe.units[unit].customTexts) do
-			UF:CreateCustomTextGroup(unit, objectName)
+function E:RefreshCustomTextsConfigs()
+	for _, customText in pairs(CUSTOMTEXT_CONFIGS) do
+		customText.hidden = true;
+	end
+	twipe(CUSTOMTEXT_CONFIGS);
+
+	for unit, _ in pairs(E.db.unitframe.units) do
+		if(E.db.unitframe.units[unit].customTexts) then
+			for objectName, _ in pairs(E.db.unitframe.units[unit].customTexts) do
+				UF:CreateCustomTextGroup(unit, objectName);
+			end
 		end
 	end
 end
+E:RefreshCustomTextsConfigs();

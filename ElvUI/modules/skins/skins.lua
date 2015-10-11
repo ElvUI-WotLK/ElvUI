@@ -94,8 +94,8 @@ function S:HandleScrollBar(frame, thumbTrim)
 		if not _G[frame:GetName().."ScrollDownButton"].icon then
 			S:HandleNextPrevButton(_G[frame:GetName().."ScrollDownButton"])
 			S:SquareButton_SetIcon(_G[frame:GetName().."ScrollDownButton"], 'DOWN')
-			_G[frame:GetName().."ScrollDownButton"]:Size(_G[frame:GetName().."ScrollDownButton"]:GetWidth() + 7, _G[frame:GetName().."ScrollDownButton"]:GetHeight() + 7)	
-		end		
+			_G[frame:GetName().."ScrollDownButton"]:Size(_G[frame:GetName().."ScrollDownButton"]:GetWidth() + 7, _G[frame:GetName().."ScrollDownButton"]:GetHeight() + 7)
+		end
 		
 		if not frame.trackbg then
 			frame.trackbg = CreateFrame("Frame", nil, frame)
@@ -116,8 +116,8 @@ function S:HandleScrollBar(frame, thumbTrim)
 					frame.thumbbg:SetFrameLevel(frame.trackbg:GetFrameLevel())
 				end
 			end
-		end	
-	end		
+		end
+	end
 end
 
 local tabs = {
@@ -171,7 +171,7 @@ function S:HandleNextPrevButton(btn, buttonOverride)
 		btn:SetScript('OnMouseDown', function(self)
 			if self:IsEnabled() then
 				self.icon:SetPoint("CENTER", -1, -1);
-			end		
+			end
 		end)
 		
 		btn:SetScript('OnMouseUp', function(self)
@@ -204,9 +204,8 @@ function S:HandleNextPrevButton(btn, buttonOverride)
 			S:SquareButton_SetIcon(btn, 'LEFT')
 		else
 			S:SquareButton_SetIcon(btn, 'RIGHT')
-		end	
+		end
 	end
-	
 	S:HandleButton(btn)
 	btn:Size(btn:GetWidth() - 7, btn:GetHeight() - 7)
 end
@@ -365,7 +364,7 @@ function S:HandleSliderFrame(frame)
 					region:Point(point, anchor, anchorPoint, x, y - 4)
 				end
 			end
-		end		
+		end
 	end
 end
 

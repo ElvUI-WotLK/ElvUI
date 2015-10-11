@@ -40,11 +40,11 @@ local function LoadSkin()
 	
 	for i=1, ScriptErrorsFrame:GetNumChildren() do
 		local child = select(i, ScriptErrorsFrame:GetChildren())
-		if child:GetObjectType() == "Button" and not child:GetName() then	
+		if child:GetObjectType() == "Button" and not child:GetName() then
 			S:HandleButton(child)
 		end
-	end	
-
+	end
+	
 	FrameStackTooltip:HookScript("OnShow", function(self)
 		local noscalemult = E.mult * GetCVar('uiScale')
 		self:SetBackdrop({

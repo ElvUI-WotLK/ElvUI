@@ -70,7 +70,7 @@ local function LoadSkin()
 			WorldMapQuestScrollFrame.backdrop:Point("TOPLEFT", 0, 2)
 			WorldMapQuestScrollFrame.backdrop:Point("BOTTOMRIGHT", 25, -3)					
 		end
-	end			
+	end
 	
 	local function FixSkin()
 		WorldMapFrame:StripTextures();

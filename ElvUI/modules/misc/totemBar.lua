@@ -18,7 +18,7 @@ function TOTEMS:Update(event)
 					_G['TotemFrameTotem'..d]:ClearAllPoints();
 					_G['TotemFrameTotem'..d]:SetParent(self.bar[i].holder);
 					_G['TotemFrameTotem'..d]:SetAllPoints(self.bar[i].holder);		
-				end		
+				end
 			end
 		else
 			self.bar[i]:Hide()
@@ -56,22 +56,22 @@ function TOTEMS:PositionAndSize()
 				button:SetPoint('TOP', self.bar, 'TOP', 0, -self.db.spacing)
 			elseif prevButton then
 				button:SetPoint('TOP', prevButton, 'BOTTOM', 0, -self.db.spacing)
-			end		
-		elseif self.db.growthDirection == 'HORIZONTAL' and self.db.sortDirection == 'DESCENDING' then	
+			end
+		elseif self.db.growthDirection == 'HORIZONTAL' and self.db.sortDirection == 'DESCENDING' then
 			if i == 1 then
 				button:SetPoint('RIGHT', self.bar, 'RIGHT', -self.db.spacing, 0)
 			elseif prevButton then
 				button:SetPoint('RIGHT', prevButton, 'LEFT', -self.db.spacing, 0)
-			end		
+			end
 		else
 			if i == 1 then
 				button:SetPoint('BOTTOM', self.bar, 'BOTTOM', 0, self.db.spacing)
 			elseif prevButton then
 				button:SetPoint('BOTTOM', prevButton, 'TOP', 0, self.db.spacing)
-			end			
+			end
 		end
 	end
-
+	
 	if self.db.growthDirection == 'HORIZONTAL' then
 		self.bar:Width(self.db.size*(MAX_TOTEMS) + self.db.spacing*(MAX_TOTEMS) + self.db.spacing)
 		self.bar:Height(self.db.size + self.db.spacing*2)	

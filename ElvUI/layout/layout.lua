@@ -135,8 +135,8 @@ function LO:ToggleChatTabPanels(rightOverride, leftOverride)
 	if rightOverride or not E.db.chat.panelTabBackdrop then
 		RightChatTab:Hide()
 	else
-		RightChatTab:Show()	
-	end	
+		RightChatTab:Show()
+	end
 end
 
 function LO:SetChatTabStyle()
@@ -188,7 +188,7 @@ function LO:ToggleChatPanels()
 	else
 		RightChatDataPanel:Hide()
 		RightChatToggleButton:Hide()
-	end	
+	end
 	
 	if E.db.chat.panelBackdrop == 'SHOWBOTH' then
 		LeftChatPanel.backdrop:Show()
@@ -331,12 +331,12 @@ function LO:CreateChatPanels()
 	if E.db['LeftChatPanelFaded'] then
 		LeftChatToggleButton:SetAlpha(0)
 		LeftChatPanel:Hide()
-	end	
+	end
 	
 	if E.db['RightChatPanelFaded'] then
 		RightChatToggleButton:SetAlpha(0)
 		RightChatPanel:Hide()
-	end		
+	end
 	
 	self:ToggleChatPanels()
 end

@@ -39,8 +39,8 @@ local function OnEnter(self)
 		local armorReduction = PaperDollFrame_GetArmorReduction(effectiveArmor, targetLevel);
 		
 		DT.tooltip:AddDoubleLine(targetLevel, format('%.2f%%', armorReduction), 1, 1, 1);
-	end	
-
+	end
+	
 	DT.tooltip:Show();
 end
 

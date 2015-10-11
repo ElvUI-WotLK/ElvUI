@@ -65,7 +65,7 @@ function D:Distribute(target, otherServer, isGlobal)
 		else
 			E:Print(L["Must be in group with the player if he isn't on the same server as you."])
 			return
-		end		
+		end
 	else
 		self:SendCommMessage(REQUEST_PREFIX, message, "WHISPER", target)
 	end

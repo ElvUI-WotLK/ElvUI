@@ -6,8 +6,8 @@ function E:EnableAddon(addon)
 		EnableAddOn(addon) 
 		ReloadUI() 
 	else 
-		print("|cffff0000Error, Addon '"..addon.."' not found.|r") 
-	end	
+		print("|cffff0000Error, Addon '"..addon.."' not found.|r")
+	end
 end
 
 function E:DisableAddon(addon)
@@ -79,7 +79,7 @@ function E:Grid(msg)
 		E.db.gridSize = msg
 		E:Grid_Show()
 	else 
-		if EGrid then		
+		if EGrid then
 			E:Grid_Hide()
 		else 
 			E:Grid_Show()

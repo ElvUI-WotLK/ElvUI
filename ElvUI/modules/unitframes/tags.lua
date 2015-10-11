@@ -140,7 +140,7 @@ end
 ElvUF.TagEvents["powercolor"] = "UNIT_ENERGY UNIT_FOCUS UNIT_MANA UNIT_RAGE UNIT_RUNIC_POWER UNIT_MAXPOWER"
 ElvUF.Tags["powercolor"] = function(unit)
 	if not unit then return end
-	local pType, pToken, altR, altG, altB = UnitPowerType(unit)	
+	local pType, pToken, altR, altG, altB = UnitPowerType(unit)
 	local color = ElvUF["colors"].power[pToken]
 	if color then
 		return Hex(color[1], color[2], color[3])
@@ -356,7 +356,7 @@ ElvUF.Tags["pvptimer"] = function(unit)
 	if (UnitIsPVPFreeForAll(unit) or UnitIsPVP(unit)) then
 		local timer = GetPVPTimer()
 
-		if timer ~= 301000 and timer ~= -1 then	
+		if timer ~= 301000 and timer ~= -1 then
 			local mins = floor((timer / 1000) / 60)
 			local secs = floor((timer / 1000) - (mins * 60))
 			return ("%s (%01.f:%02.f)"):format(PVP, mins, secs)

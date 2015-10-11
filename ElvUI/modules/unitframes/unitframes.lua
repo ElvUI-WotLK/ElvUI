@@ -187,7 +187,7 @@ function UF:ConvertGroupDB(group)
 
 	if(db.growthDirection == "DOWN") then
 		db.growthDirection = "DOWN_RIGHT";
-	end	
+	end
 end
 
 function UF:Construct_UF(frame, unit)
@@ -222,7 +222,7 @@ function UF:GetPositionOffset(position, offset)
 		x = offset;
 	elseif(find(position, "RIGHT")) then
 		x = -offset;
-	end					
+	end
 	
 	if(find(position, "TOP")) then
 		y = -offset;
@@ -260,7 +260,7 @@ function UF:GetAuraAnchorFrame(frame, attachTo, isConflict)
 	elseif(attachTo == "TRINKET") then
 		if(select(2, IsInInstance()) == "arena") then
 			return frame.Trinket;
-		end	
+		end
 	elseif(attachTo == "BUFFS") then
 		return frame.Buffs;
 	elseif(attachTo == "DEBUFFS") then
@@ -704,7 +704,7 @@ function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdat
 			self[group].groupName = group;
 			for k, v in pairs(self.groupPrototype) do
 				self[group][k] = v;
-			end			
+			end
 		else
 			self[group] = self:CreateHeader(E.UIParent, groupFilter, "ElvUF_"..E:StringTitle(group), template, group, headerTemplate);
 		end
@@ -772,15 +772,15 @@ function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdat
 				
 				if(_G[child:GetName().."Pet"]) then
 					UF["Update_"..E:StringTitle(group).."Frames"](self, _G[child:GetName().."Pet"], self.db["units"][group]);
-				end						
-			end			
+				end
+			end
 		end
 		
 		if(headerUpdate) then
 			UF["Update_"..E:StringTitle(group).."Header"](self, self[group], db);
 		else
 			self[group].Update();
-		end			
+		end
 	end
 end
 
@@ -815,7 +815,7 @@ end
 function UF:LoadUnits()
 	for _, unit in pairs(self["unitstoload"]) do
 		self:CreateAndUpdateUF(unit);
-	end	
+	end
 	self["unitstoload"] = nil;
 	
 	for group, groupOptions in pairs(self["unitgroupstoload"]) do
@@ -835,12 +835,12 @@ function UF:LoadUnits()
 	self["headerstoload"] = nil;
 end
 
-function UF:UpdateAllHeaders(event)	
+function UF:UpdateAllHeaders(event)
 	if(InCombatLockdown()) then
 		self:RegisterEvent("PLAYER_REGEN_ENABLED", "UpdateAllHeaders");
 		return;
-	end	
-
+	end
+	
 	if(event == "PLAYER_REGEN_ENABLED") then
 		self:UnregisterEvent("PLAYER_REGEN_ENABLED");
 	end
@@ -971,7 +971,7 @@ function UF:UnitFrameThreatIndicator_Initialize(_, unitFrame)
 	unitFrame:UnregisterAllEvents();
 end
 
-function UF:Initialize()	
+function UF:Initialize()
 	self.db = E.db["unitframe"];
 	
 	if(E.private["unitframe"].enable ~= true) then return; end
@@ -1097,7 +1097,7 @@ function UF:MergeUnitSettings(fromUnit, toUnit, isGroupUnit)
 						if(type(val) ~= "table" and not filter[opt]) then
 							if(db[toUnit][option] ~= nil and (db[toUnit][option][opt] ~= nil or allowPass[opt])) then
 								db[toUnit][option][opt] = val;
-							end				
+							end
 						elseif(not filter[opt]) then
 							if(type(val) == "table") then
 								for o, v in pairs(db[fromUnit][option][opt]) do
@@ -1106,7 +1106,7 @@ function UF:MergeUnitSettings(fromUnit, toUnit, isGroupUnit)
 											db[toUnit][option][opt][o] = v;
 										end
 									end
-								end		
+								end
 							end
 						end
 					end

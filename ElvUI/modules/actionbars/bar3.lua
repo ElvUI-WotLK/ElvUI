@@ -189,7 +189,7 @@ function AB:CreateBar3()
 			self:Hide();
 		else
 			self:Show();
-		end	
+		end
 	]])
 	
 	E:CreateMover(bar, 'ElvBar_3', L['Bar 3'], nil, nil, nil, 'ALL,ACTIONBARS');

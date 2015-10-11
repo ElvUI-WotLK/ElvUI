@@ -34,7 +34,7 @@ function S:SaveEmbeddedAddonPoints(addon)
 	elseif addon == 'Omen' then
 		local point, _, anchor, x, y = OmenAnchor:GetPoint()
 		S.AddonPoints[addon] = {point, UIParent, anchor, x, y}
-	end	
+	end
 end
 
 --Reset points of previous addon
@@ -61,7 +61,7 @@ function S:RemovePrevious(current)
 				Omen.VGrip2:Show()
 			else
 				Omen.VGrip2:Hide()
-			end			
+			end
 		end
 	elseif(lastAddon == "Skada") then
 		if not Skada.CreateWindow_ then
@@ -71,7 +71,7 @@ function S:RemovePrevious(current)
 		
 		for _, window in pairs(skadaWindows) do
 			window.bargroup:SetParent(UIParent);
-		end		
+		end
 	end
 end
 
@@ -102,7 +102,7 @@ function S:EmbedSkada()
 	elseif(#skadaWindows == 2) then
 		self:EmbedSkadaWindow(skadaWindows[1], (panelWidthRight - widthOffset) / 2 - (E.PixelMode and 1.5 or 3.5), panelHeightRight - (E.db.datatexts.rightChatPanel and heightOffset or widthOffset), "TOPLEFT", RightChatPanel, "TOPLEFT", borderWidth, -borderWidth);
 		self:EmbedSkadaWindow(skadaWindows[2], (panelWidthRight - widthOffset) / 2 - (E.PixelMode and 1.5 or 3.5), panelHeightRight - (E.db.datatexts.rightChatPanel and heightOffset or widthOffset), "LEFT", skadaWindows[1].bargroup, "RIGHT", E.PixelMode and 3 or 7, 0);
-	end	
+	end
 end
 
 function S:SetEmbedRight(addon)
@@ -125,9 +125,10 @@ function S:SetEmbedRight(addon)
 			Recount_MainWindow:SetHeight(E.db.chat.panelHeight - (E.PixelMode and 20 or 26))
 		else
 			Recount_MainWindow:SetWidth(E.db.chat.panelWidth)
-			Recount_MainWindow:SetHeight(E.db.chat.panelHeight - 20)		
-		end		
-		Recount_MainWindow:SetParent(RightChatPanel)	
+			Recount_MainWindow:SetHeight(E.db.chat.panelHeight - 20)
+		end
+		
+		Recount_MainWindow:SetParent(RightChatPanel)
 		self.lastAddon = addon
 	elseif addon == 'Omen' then
 		Omen.db.profile.Locked = true
@@ -155,7 +156,7 @@ function S:SetEmbedRight(addon)
 					else
 						Omen.VGrip2:Hide()
 					end
-				end			
+				end
 			else
 				Omen.oldUpdateGrips(...)
 			end
@@ -225,7 +226,7 @@ function S:SetEmbedRight(addon)
 			table.wipe(skadaWindows);
 			for _, window in ipairs(Skada:GetWindows()) do
 				tinsert(skadaWindows, window);
-			end	
+			end
 			
 			if(E.db.skins.embedRight == "Skada") then
 				S:EmbedSkada();
@@ -238,7 +239,7 @@ function S:SetEmbedRight(addon)
 			table.wipe(skadaWindows);
 			for _, window in ipairs(Skada:GetWindows()) do
 				tinsert(skadaWindows, window);
-			end	
+			end
 			
 			if(E.db.skins.embedRight == "Skada") then
 				S:EmbedSkada();

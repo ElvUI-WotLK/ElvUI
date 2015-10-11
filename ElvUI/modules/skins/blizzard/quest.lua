@@ -83,7 +83,7 @@ local function LoadSkin()
 					objective:SetTextColor(0.6, 0.6, 0.6)
 				end
 			end
-		end			
+		end
 	end
 	
 	hooksecurefunc('QuestInfo_Display', function(template, parentFrame, acceptButton, material)								

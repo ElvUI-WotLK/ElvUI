@@ -15,8 +15,8 @@ local function CaptureUpdate()
 				else
 					captureBar:Point('TOPLEFT', _G['WorldStateCaptureBar' .. i - 1], 'TOPLEFT', 0, -45);
 				end
-			end	
-		end	
+			end
+		end
 	end
 end
 

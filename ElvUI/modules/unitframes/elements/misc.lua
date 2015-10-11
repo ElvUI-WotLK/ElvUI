@@ -79,7 +79,7 @@ function UF:Construct_RaidDebuffs(frame)
 		rdebuff.border:Point("BOTTOMRIGHT", E.mult, -E.mult);
 		rdebuff.border:SetTexture(E["media"].blankTex);
 		rdebuff.border:SetVertexColor(0, 0, 0);
-	end	
+	end
 	
 	rdebuff.icon = rdebuff:CreateTexture(nil, "OVERLAY")
 	rdebuff.icon:SetTexCoord(unpack(E.TexCoords))
@@ -204,8 +204,8 @@ function UF:UpdateComboDisplay(event, unit)
 		if(i <= cp) then
 			cpoints[i]:SetAlpha(1)
 		else
-			cpoints[i]:SetAlpha(.15)	
-		end	
+			cpoints[i]:SetAlpha(.15);
+		end
 	end
 	
 	local BORDER = E.Border;
@@ -387,8 +387,8 @@ function UF:UpdateAuraWatch(frame)
 					icon.cd:SetAllPoints(icon)
 					icon.cd:SetReverse(true)
 					icon.cd:SetFrameLevel(icon:GetFrameLevel())
-				end			
-
+				end
+				
 				if icon.style == "coloredIcon" then
 					icon.icon:SetTexture(E["media"].blankTex);
 					
@@ -396,7 +396,7 @@ function UF:UpdateAuraWatch(frame)
 						icon.icon:SetVertexColor(buffs[i]["color"].r, buffs[i]["color"].g, buffs[i]["color"].b);
 					else
 						icon.icon:SetVertexColor(0.8, 0.8, 0.8);
-					end		
+					end
 					icon.icon:Show()
 					icon.border:Show()
 					icon.cd:SetAlpha(1)

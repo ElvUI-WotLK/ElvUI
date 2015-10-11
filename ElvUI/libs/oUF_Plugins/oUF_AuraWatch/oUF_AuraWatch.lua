@@ -339,7 +339,7 @@ local function setupIcons(self)
 			end
 			if icon.missingAlpha == nil then
 				icon.missingAlpha = watch.missingAlpha
-			end		
+			end
 			if icon.fromUnits == nil then
 				icon.fromUnits = watch.fromUnits or PLAYER_UNITS
 			end

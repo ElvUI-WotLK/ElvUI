@@ -173,9 +173,8 @@ local function DefaultSort(a, b)
 		if aName and bName and aName ~= bName then
 			return aName < bName
 		end
-	end		
-
-		
+	end
+	
 	local aOrder, bOrder = initialOrder[a], initialOrder[b]
 
 	if aID == bID then
@@ -197,7 +196,7 @@ local function DefaultSort(a, b)
 	
 	if bagPetIDs[b] then
 		bRarity = 1
-	end	
+	end
 	
 	if aRarity ~= bRarity and aRarity and bRarity then
 		return aRarity > bRarity
@@ -530,7 +529,7 @@ function B.Sort(bags, sorter, invertDirection)
 			initialOrder[bagSlot] = i
 			tinsert(bagSorted, bagSlot)
 		end
-	end	
+	end
 	
 	tsort(bagSorted, sorter)
 
@@ -607,8 +606,8 @@ function B.SortBags(...)
 			if bagType == false then bagType = 'Normal' end
 			if not bagCache[bagType] then bagCache[bagType] = {} end
 			tinsert(bagCache[bagType], slotNum)
-		end	
-
+		end
+		
 		for bagType, sortedBags in pairs(bagCache) do
 			if bagType ~= 'Normal' then
 				B.Stack(sortedBags, sortedBags, B.IsPartial)
@@ -690,8 +689,8 @@ function B:DoMove(move)
 	
 	if GetCursorInfo() == "item" then
 		B:PickupItem(targetBag, targetSlot)
-	end	
-
+	end
+	
 	local sourceGuild = IsGuildBankBag(sourceBag)
 	local targetGuild = IsGuildBankBag(targetBag)
 
@@ -700,7 +699,7 @@ function B:DoMove(move)
 	end
 	if targetGuild then
 		QueryGuildBankTab(targetBag - 50)
-	end	
+	end
 	
 	return true, sourceItemID, source, targetItemID, target, sourceGuild or targetGuild
 end
@@ -726,7 +725,7 @@ function B:DoMoves()
 				moveRetries = moveRetries + 1
 				return
 			end
-		end		
+		end
 	end
 	
 	if lockStop then

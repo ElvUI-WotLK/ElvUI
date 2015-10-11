@@ -46,7 +46,7 @@ local function LoadSkin()
 		_G[button.."Left"]:Kill()
 		_G[button.."Middle"]:Kill()
 		_G[button.."Right"]:Kill()
-	end		
+	end
 	
 	for i=1, NUM_LFR_CHOICE_BUTTONS do
 		local button = _G["LFRQueueFrameSpecificListButton"..i]
@@ -110,11 +110,10 @@ local function LoadSkin()
 				
 				if count then
 					count:SetParent(button.backdrop)
-				end					
+				end
 			end
 		end
-	end			
-	
+	end
 end
 
 S:RegisterSkin('ElvUI', LoadSkin)

@@ -44,6 +44,8 @@ function UF:Construct_PartyFrames(unitGroup)
 		self.Threat = UF:Construct_Threat(self);
 		self.RaidIcon = UF:Construct_RaidIcon(self);
 		self.ReadyCheck = UF:Construct_ReadyCheckIcon(self);
+		
+		self.customTexts = {};
 	end
 	
 	self.Range = UF:Construct_Range(self);
@@ -54,7 +56,7 @@ function UF:Construct_PartyFrames(unitGroup)
 	return self;
 end
 
-function UF:Update_PartyHeader(header, db)	
+function UF:Update_PartyHeader(header, db)
 	header.db = db;
 	
 	local headerHolder = header:GetParent();
@@ -80,7 +82,7 @@ function UF:PartySmartVisibility(event)
 	local inInstance, instanceType = IsInInstance();
 	if(event == "PLAYER_REGEN_ENABLED") then self:UnregisterEvent("PLAYER_REGEN_ENABLED"); end
 
-	if(not InCombatLockdown()) then		
+	if(not InCombatLockdown()) then
 		if(inInstance and (instanceType == "raid" or instanceType == "pvp")) then
 			UnregisterStateDriver(self, "visibility");
 			self:Hide();
@@ -143,7 +145,7 @@ function UF:Update_PartyFrames(frame, db)
 		
 		if(not frame.originalParent.childList) then
 			frame.originalParent.childList = {};
-		end	
+		end
 		frame.originalParent.childList[frame] = true;
 		
 		if(not InCombatLockdown()) then
@@ -204,7 +206,7 @@ function UF:Update_PartyFrames(frame, db)
 			name:ClearAllPoints();
 			name:SetPoint("CENTER", frame.Health, "CENTER");
 			frame:Tag(name, "[namecolor][name:short]");
-		end			
+		end
 	else
 		frame:SetAttribute("initial-height", UNIT_HEIGHT);
 		frame:SetAttribute("initial-width", UNIT_WIDTH);
@@ -432,9 +434,13 @@ function UF:Update_PartyFrames(frame, db)
 		
 		do
 			if(db.debuffs.enable or db.buffs.enable) then
-				frame:EnableElement("Aura");
+				if(not frame:IsElementEnabled("Aura")) then
+					frame:EnableElement("Aura");
+				end
 			else
-				frame:DisableElement("Aura");
+				if(frame:IsElementEnabled("Aura")) then
+					frame:DisableElement("Aura");
+				end
 			end
 			
 			frame.Buffs:ClearAllPoints();
@@ -464,7 +470,7 @@ function UF:Update_PartyFrames(frame, db)
 			
 			buffs:Point(E.InversePoints[db.buffs.anchorPoint], attachTo, db.buffs.anchorPoint, x + db.buffs.xOffset, y + db.buffs.yOffset + (E.PixelMode and (db.buffs.anchorPoint:find("TOP") and -1 or 1) or 0));
 			buffs:Height(buffs.size * rows);
-			buffs["growth-y"] = db.buffs.anchorPoint:find("TOP") and "UP" or "DOWN";
+			buffs["growth-y"] = db.buffs.anchorPoint:find("TOP") and "UP" or "DOWN"
 			buffs["growth-x"] = db.buffs.anchorPoint == "LEFT" and "LEFT" or  db.buffs.anchorPoint == "RIGHT" and "RIGHT" or (db.buffs.anchorPoint:find("LEFT") and "RIGHT" or "LEFT");
 			buffs["spacing-x"] = db.buffs.xSpacing;
 			buffs["spacing-y"] = db.buffs.ySpacing;
@@ -586,23 +592,30 @@ function UF:Update_PartyFrames(frame, db)
 		
 		frame:EnableElement("ReadyCheck");
 		
+		for objectName, object in pairs(frame.customTexts) do
+			if((not db.customTexts) or (db.customTexts and not db.customTexts[objectName])) then
+				object:Hide();
+				frame.customTexts[objectName] = nil;
+			end
+		end
+		
 		if(db.customTexts) then
 			local customFont = UF.LSM:Fetch("font", UF.db.font);
 			for objectName, _ in pairs(db.customTexts) do
-				if(not frame[objectName]) then
-					frame[objectName] = frame.RaisedElementParent:CreateFontString(nil, "OVERLAY");
+				if(not frame.customTexts[objectName]) then
+					frame.customTexts[objectName] = frame.RaisedElementParent:CreateFontString(nil, "OVERLAY");
 				end
 				
 				local objectDB = db.customTexts[objectName];
-				if objectDB.font then
+				if(objectDB.font) then
 					customFont = UF.LSM:Fetch("font", objectDB.font);
 				end
 				
-				frame[objectName]:FontTemplate(customFont, objectDB.size or UF.db.fontSize, objectDB.fontOutline or UF.db.fontOutline);
-				frame:Tag(frame[objectName], objectDB.text_format or "");
-				frame[objectName]:SetJustifyH(objectDB.justifyH or "CENTER");
-				frame[objectName]:ClearAllPoints();
-				frame[objectName]:SetPoint(objectDB.justifyH or "CENTER", frame, objectDB.justifyH or "CENTER", objectDB.xOffset, objectDB.yOffset);
+				frame.customTexts[objectName]:FontTemplate(customFont, objectDB.size or UF.db.fontSize, objectDB.fontOutline or UF.db.fontOutline);
+				frame:Tag(frame.customTexts[objectName], objectDB.text_format or "");
+				frame.customTexts[objectName]:SetJustifyH(objectDB.justifyH or "CENTER");
+				frame.customTexts[objectName]:ClearAllPoints();
+				frame.customTexts[objectName]:SetPoint(objectDB.justifyH or "CENTER", frame, objectDB.justifyH or "CENTER", objectDB.xOffset, objectDB.yOffset);
 			end
 		end
 	end

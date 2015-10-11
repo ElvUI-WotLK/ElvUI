@@ -192,7 +192,7 @@ local function Update(self, event, unit)
 		--we coudln't dispell if the unit its charmed, or its not friendly
 		if addon.ShowDispelableDebuff and debuffType and (not isCharmed) and (not canAttack) then
 		
-			if addon.FilterDispellableDebuff then						
+			if addon.FilterDispellableDebuff then
 				DispellPriority[debuffType] = (DispellPriority[debuffType] or 0) + addon.priority --Make Dispell buffs on top of Boss Debuffs
 				priority = DispellFilter[debuffType] and DispellPriority[debuffType] or 0
 				if priority == 0 then
@@ -200,8 +200,8 @@ local function Update(self, event, unit)
 				end
 			else
 				priority = DispellPriority[debuffType] or 0
-			end			
-
+			end
+			
 			if priority > _priority then
 				_priority, _name, _icon, _count, _dtype, _duration, _endTime, _spellId = priority, name, icon, count, debuffType, duration, expirationTime, spellId
 			end

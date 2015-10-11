@@ -315,10 +315,10 @@ local function LoadSkin()
 		"CombatConfigSettingsSaveButton",
 		"ChatConfigFrameCancelButton",
 	}
-			
+	
 	for i = 1, #chatbuttons do
 		S:HandleButton(_G[chatbuttons[i]], true)
-	end	
+	end
 	
 	ChatConfigFrameOkayButton:Point("RIGHT", ChatConfigFrameCancelButton, "RIGHT", -11, -1)
 	ChatConfigCombatSettingsFiltersDeleteButton:Point("TOPRIGHT", ChatConfigCombatSettingsFilters, "BOTTOMRIGHT", 0, -1)
@@ -582,7 +582,7 @@ local function LoadSkin()
 				E:RegisterCooldown(_G["WatchFrameItem"..i.."Cooldown"])
 				button.skinned = true
 			end
-		end	
+		end
 	end
 	
 	WatchFrame:HookScript("OnEvent", SkinWatchFrameItems)
@@ -867,7 +867,7 @@ local function LoadSkin()
 
 	for _, slider in pairs(sliders) do
 		S:HandleSliderFrame(_G[slider])
-	end	
+	end
 end
 
 S:RegisterSkin('ElvUI', LoadSkin)

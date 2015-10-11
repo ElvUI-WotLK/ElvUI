@@ -69,7 +69,7 @@ function E:ToggleConfigMode(override, configType)
 	else
 		if ElvUIMoverPopupWindow then
 			ElvUIMoverPopupWindow:Hide()
-		end	
+		end
 		
 		if grid then
 			grid:Hide()

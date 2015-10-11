@@ -73,7 +73,7 @@ local function UpdateSpellList()
 		AddSpell(enemySpells, 11578) -- Рывок
 		AddSpell(longEnemySpells, 355) -- Провокация
 		AddSpell(friendlySpells, 3411) -- Вмешательство
-	end	
+	end
 end
 
 local function getUnit(unit)

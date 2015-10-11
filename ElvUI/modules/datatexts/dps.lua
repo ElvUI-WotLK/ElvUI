@@ -15,7 +15,7 @@ local function Reset()
 	combatTime = 0
 	DMGTotal = 0
 	lastDMGAmount = 0
-end	
+end
 
 local function GetDPS(self)
 	if DMGTotal == 0 or combatTime == 0 then

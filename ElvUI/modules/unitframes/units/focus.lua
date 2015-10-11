@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...));
 local UF = E:GetModule("UnitFrames");
 
 local _, ns = ...;
@@ -6,7 +6,7 @@ local ElvUF = ns.oUF;
 assert(ElvUF, "ElvUI was unable to locate oUF.");
 local tinsert = table.insert;
 
-function UF:Construct_FocusFrame(frame)	
+function UF:Construct_FocusFrame(frame)
 	frame.Health = self:Construct_HealthBar(frame, true, true, "RIGHT");
 	frame.Health.frequentUpdates = true;
 	frame.Power = self:Construct_PowerBar(frame, true, true, "LEFT", false);
@@ -23,6 +23,7 @@ function UF:Construct_FocusFrame(frame)
 	frame.Range = UF:Construct_Range(frame);
 	frame.Threat = UF:Construct_Threat(frame);
 	
+	frame.customTexts = {};
 	frame:Point("BOTTOMRIGHT", ElvUF_Target, "TOPRIGHT", 0, 220);
 	E:CreateMover(frame, frame:GetName().."Mover", L["Focus Frame"], nil, nil, nil, "ALL,SOLO");
 end
@@ -65,7 +66,7 @@ function UF:Update_FocusFrame(frame, db)
 	do
 		if(not USE_POWERBAR) then
 			POWERBAR_HEIGHT = 0;
-		end	
+		end
 		
 		if(USE_PORTRAIT_OVERLAY or not USE_PORTRAIT) then
 			PORTRAIT_WIDTH = 0;	
@@ -94,7 +95,7 @@ function UF:Update_FocusFrame(frame, db)
 				health.colorSmooth = true;
 			else
 				health.colorHealth = true;
-			end		
+			end
 		else
 			health.colorClass = true;
 			health.colorReaction = true;
@@ -110,11 +111,11 @@ function UF:Update_FocusFrame(frame, db)
 		
 		if(USE_POWERBAR_OFFSET) then
 			health:Point("TOPRIGHT", frame, "TOPRIGHT", -(BORDER+POWERBAR_OFFSET), -BORDER);
-			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER, BORDER+POWERBAR_OFFSET);
-		elseif(USE_INSET_POWERBAR or POWERBAR_DETACHED) then
-			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER, BORDER);
+			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER+POWERBAR_OFFSET, BORDER+POWERBAR_OFFSET);
 		elseif(USE_MINI_POWERBAR) then
-			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER, BORDER + (POWERBAR_HEIGHT/2));
+			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER, BORDER + (POWERBAR_HEIGHT/2));	
+		elseif(USE_INSET_POWERBAR) then
+			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER, BORDER);
 		else
 			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER, (USE_POWERBAR and ((BORDER + SPACING)*2) or BORDER) + POWERBAR_HEIGHT);
 		end
@@ -160,20 +161,20 @@ function UF:Update_FocusFrame(frame, db)
 			
 			power:ClearAllPoints();
 			if(USE_POWERBAR_OFFSET) then
-				power:Point("TOPRIGHT", frame.Health, "TOPRIGHT", POWERBAR_OFFSET, -POWERBAR_OFFSET);
-				power:Point("BOTTOMLEFT", frame.Health, "BOTTOMLEFT", POWERBAR_OFFSET, -POWERBAR_OFFSET);
+				power:Point("TOPLEFT", frame, "TOPLEFT", BORDER, -POWERBAR_OFFSET);
+				power:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", BORDER, -BORDER);
 				power:SetFrameStrata("LOW");
 				power:SetFrameLevel(2);
+			elseif(USE_MINI_POWERBAR) then
+				power:Width(POWERBAR_WIDTH - BORDER*2);
+				power:Height(POWERBAR_HEIGHT);
+				power:Point("LEFT", frame, "BOTTOMLEFT", (BORDER*2 + 4), BORDER + (POWERBAR_HEIGHT/2));
+				power:SetFrameStrata("MEDIUM");
+				power:SetFrameLevel(frame:GetFrameLevel() + 3);
 			elseif(USE_INSET_POWERBAR) then
 				power:Height(POWERBAR_HEIGHT);
 				power:Point("BOTTOMLEFT", frame.Health, "BOTTOMLEFT", BORDER + (BORDER*2), BORDER + (BORDER*2));
 				power:Point("BOTTOMRIGHT", frame.Health, "BOTTOMRIGHT", -(BORDER + (BORDER*2)), BORDER + (BORDER*2));
-				power:SetFrameStrata("MEDIUM");
-				power:SetFrameLevel(frame:GetFrameLevel() + 3);
-			elseif(USE_MINI_POWERBAR) then
-				power:Width(POWERBAR_WIDTH - BORDER*2);
-				power:Height(POWERBAR_HEIGHT);
-				power:Point("RIGHT", frame, "BOTTOMRIGHT", -(BORDER*2 + 4), BORDER + (POWERBAR_HEIGHT/2));
 				power:SetFrameStrata("MEDIUM");
 				power:SetFrameLevel(frame:GetFrameLevel() + 3);
 			else
@@ -268,11 +269,11 @@ function UF:Update_FocusFrame(frame, db)
 		if(db.debuffs.enable or db.buffs.enable) then
 			if(not frame:IsElementEnabled("Aura")) then
 				frame:EnableElement("Aura");
-			end	
+			end
 		else
 			if(frame:IsElementEnabled("Aura")) then
 				frame:DisableElement("Aura");
-			end			
+			end
 		end
 		
 		frame.Buffs:ClearAllPoints();
@@ -307,8 +308,14 @@ function UF:Update_FocusFrame(frame, db)
 		buffs["spacing-x"] = db.buffs.xSpacing;
 		buffs["spacing-y"] = db.buffs.ySpacing;
 		buffs.initialAnchor = E.InversePoints[db.buffs.anchorPoint];
-
-		if(db.buffs.enable) then			
+		
+		buffs.attachTo = attachTo;
+		buffs.point = E.InversePoints[db.buffs.anchorPoint];
+		buffs.anchorPoint = db.buffs.anchorPoint;
+		buffs.xOffset = x + db.buffs.xOffset;
+		buffs.yOffset = y + db.buffs.yOffset + (E.PixelMode and (db.buffs.anchorPoint:find("TOP") and -1 or 1) or 0);
+		
+		if(db.buffs.enable) then
 			buffs:Show();
 			UF:UpdateAuraIconSettings(buffs);
 		else
@@ -344,14 +351,46 @@ function UF:Update_FocusFrame(frame, db)
 		debuffs["spacing-x"] = db.debuffs.xSpacing;
 		debuffs["spacing-y"] = db.debuffs.ySpacing;
 		debuffs.initialAnchor = E.InversePoints[db.debuffs.anchorPoint];
-
-		if(db.debuffs.enable) then			
+		
+		debuffs.attachTo = attachTo;
+		debuffs.point = E.InversePoints[db.debuffs.anchorPoint];
+		debuffs.anchorPoint = db.debuffs.anchorPoint;
+		debuffs.xOffset = x + db.debuffs.xOffset;
+		debuffs.yOffset = y + db.debuffs.yOffset;
+		
+		if(db.debuffs.enable) then
 			debuffs:Show();
 			UF:UpdateAuraIconSettings(debuffs);
 		else
 			debuffs:Hide();
 		end
-	end	
+	end
+	
+	do
+		local position = db.smartAuraPosition;
+		if(position == "BUFFS_ON_DEBUFFS") then
+			if(db.debuffs.attachTo == "BUFFS") then
+				E:Print(format(L["This setting caused a conflicting anchor point, where '%s' would be attached to itself. Please check your anchor points. Setting '%s' to be attached to '%s'."], L["Buffs"], L["Debuffs"], L["Frame"]));
+				db.debuffs.attachTo = "FRAME";
+				frame.Debuffs.attachTo = frame;
+			end
+			
+			frame.Buffs.PostUpdate = nil;
+			frame.Debuffs.PostUpdate = UF.UpdateBuffsHeaderPosition;
+		elseif(position == "DEBUFFS_ON_BUFFS") then
+			if(db.buffs.attachTo == "DEBUFFS") then
+				E:Print(format(L["This setting caused a conflicting anchor point, where '%s' would be attached to itself. Please check your anchor points. Setting '%s' to be attached to '%s'."], L["Debuffs"], L["Buffs"], L["Frame"]));
+				db.buffs.attachTo = "FRAME";
+				frame.Buffs.attachTo = frame;
+			end
+			
+			frame.Buffs.PostUpdate = UF.UpdateDebuffsHeaderPosition;
+			frame.Debuffs.PostUpdate = nil;
+		else
+			frame.Buffs.PostUpdate = nil;
+			frame.Debuffs.PostUpdate = nil;
+		end
+	end
 	
 	do
 		local castbar = frame.Castbar;
@@ -372,18 +411,18 @@ function UF:Update_FocusFrame(frame, db)
 			castbar.ButtonIcon.bg:Hide();
 			castbar.Icon = nil;
 		end
-
+		
 		if(db.castbar.spark) then
 			castbar.Spark:Show();
 		else
 			castbar.Spark:Hide();
 		end
-
+		
 		if(db.castbar.enable and not frame:IsElementEnabled("Castbar")) then
 			frame:EnableElement("Castbar");
 		elseif(not db.castbar.enable and frame:IsElementEnabled("Castbar")) then
 			frame:DisableElement("Castbar");
-		end			
+		end
 	end
 	
 	do
@@ -416,6 +455,14 @@ function UF:Update_FocusFrame(frame, db)
 			local buffColor = UF.db.colors.auraBarBuff;
 			local debuffColor = UF.db.colors.auraBarDebuff;
 			
+			if(E:CheckClassColor(buffColor.r, buffColor.g, buffColor.b)) then
+				buffColor = E.myclass == "PRIEST" and E.PriestColors or RAID_CLASS_COLORS[E.myclass];
+			end
+			
+			if(E:CheckClassColor(debuffColor.r, debuffColor.g, debuffColor.b)) then
+				debuffColor = E.myclass == "PRIEST" and E.PriestColors or RAID_CLASS_COLORS[E.myclass];
+			end
+			
 			local attachTo = frame;
 			
 			if(db.aurabar.attachTo == "BUFFS") then
@@ -443,7 +490,7 @@ function UF:Update_FocusFrame(frame, db)
 			auraBars:ClearAllPoints();
 			auraBars:SetPoint(anchorPoint.."LEFT", attachTo, anchorTo.."LEFT", POWERBAR_OFFSET, yOffset);
 			auraBars:SetPoint(anchorPoint.."RIGHT", attachTo, anchorTo.."RIGHT", -POWERBAR_OFFSET, yOffset);
-
+			
 			auraBars.buffColor = {buffColor.r, buffColor.g, buffColor.b};
 			if(UF.db.colors.auraBarByType) then
 				auraBars.debuffColor = nil;
@@ -485,20 +532,27 @@ function UF:Update_FocusFrame(frame, db)
 			if(not frame:IsElementEnabled("Range")) then
 				frame:EnableElement("Range");
 			end
-
+			
 			range.outsideAlpha = E.db.unitframe.OORAlpha;
 		else
 			if(frame:IsElementEnabled("Range")) then
 				frame:DisableElement("Range");
-			end				
+			end
 		end
-	end		
+	end
+	
+	for objectName, object in pairs(frame.customTexts) do
+		if((not db.customTexts) or (db.customTexts and not db.customTexts[objectName])) then
+			object:Hide();
+			frame.customTexts[objectName] = nil;
+		end
+	end
 	
 	if(db.customTexts) then
 		local customFont = UF.LSM:Fetch("font", UF.db.font);
 		for objectName, _ in pairs(db.customTexts) do
-			if(not frame[objectName]) then
-				frame[objectName] = frame.RaisedElementParent:CreateFontString(nil, "OVERLAY");
+			if(not frame.customTexts[objectName]) then
+				frame.customTexts[objectName] = frame.RaisedElementParent:CreateFontString(nil, "OVERLAY");
 			end
 			
 			local objectDB = db.customTexts[objectName];
@@ -506,11 +560,11 @@ function UF:Update_FocusFrame(frame, db)
 				customFont = UF.LSM:Fetch("font", objectDB.font);
 			end
 			
-			frame[objectName]:FontTemplate(customFont, objectDB.size or UF.db.fontSize, objectDB.fontOutline or UF.db.fontOutline);
-			frame:Tag(frame[objectName], objectDB.text_format or "");
-			frame[objectName]:SetJustifyH(objectDB.justifyH or "CENTER");
-			frame[objectName]:ClearAllPoints();
-			frame[objectName]:SetPoint(objectDB.justifyH or "CENTER", frame, objectDB.justifyH or "CENTER", objectDB.xOffset, objectDB.yOffset);
+			frame.customTexts[objectName]:FontTemplate(customFont, objectDB.size or UF.db.fontSize, objectDB.fontOutline or UF.db.fontOutline);
+			frame:Tag(frame.customTexts[objectName], objectDB.text_format or "");
+			frame.customTexts[objectName]:SetJustifyH(objectDB.justifyH or "CENTER");
+			frame.customTexts[objectName]:ClearAllPoints();
+			frame.customTexts[objectName]:SetPoint(objectDB.justifyH or "CENTER", frame, objectDB.justifyH or "CENTER", objectDB.xOffset, objectDB.yOffset);
 		end
 	end
 	

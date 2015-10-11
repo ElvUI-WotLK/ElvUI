@@ -96,11 +96,11 @@ function AB:PositionAndSizeBarShapeShift()
 	end
 	bar.db = self.db['barShapeShift']
 	bar.db.position = nil; --Depreciated
-	if bar.LastButton and numButtons > bar.LastButton then	
+	if bar.LastButton and numButtons > bar.LastButton then
 		numButtons = bar.LastButton;
 	end
 
-	if bar.LastButton and buttonsPerRow > bar.LastButton then	
+	if bar.LastButton and buttonsPerRow > bar.LastButton then
 		buttonsPerRow = bar.LastButton;
 	end
 	
@@ -262,7 +262,7 @@ function AB:UpdateStanceBindings()
 			self:FixKeybindText(_G["ElvUI_StanceBarButton"..i])
 		else
 			_G["ElvUI_StanceBarButton"..i.."HotKey"]:Hide()
-		end		
+		end
 	end
 end
 
@@ -277,7 +277,7 @@ function AB:CreateBarShapeShift()
 			self:Hide();
 		else
 			self:Show();
-		end	
+		end
 	]]);
 	
 	self:RegisterEvent('UPDATE_SHAPESHIFT_FORMS', 'AdjustMaxStanceButtons');
