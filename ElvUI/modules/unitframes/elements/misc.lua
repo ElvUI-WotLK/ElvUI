@@ -177,6 +177,20 @@ function UF:Construct_RaidRoleFrames(frame)
 	return anchor
 end
 
+function UF:Construct_GPS(frame)
+	local gps = CreateFrame("Frame", nil, frame);
+	gps:SetFrameLevel(frame:GetFrameLevel() + 50);
+	gps:Hide();
+	
+	gps.Texture = gps:CreateTexture("OVERLAY");
+	gps.Texture:SetTexture([[Interface\AddOns\ElvUI\media\textures\Arrow.blp]]);
+	gps.Texture:SetBlendMode("BLEND");
+	gps.Texture:SetVertexColor(214/255, 41/255, 41/255);
+	gps.Texture:SetAllPoints();
+	
+	return gps;
+end
+
 function UF:Construct_Range(frame)
 	return {insideAlpha = 1, outsideAlpha = E.db.unitframe.OORAlpha}
 end

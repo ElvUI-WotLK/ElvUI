@@ -1458,50 +1458,99 @@ end
 local function GetOptionsTable_GPS(groupName)
 	local config = {
 		order = 3000,
-		type = 'group',
-		name = L['GPS Arrow'],
-		get = function(info) return E.db.unitframe.units[groupName]['GPSArrow'][ info[#info] ] end,
-		set = function(info, value) E.db.unitframe.units[groupName]['GPSArrow'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup(groupName) end,
+		type = "group",
+		name = L["GPS Arrow"],
+		get = function(info) return E.db.unitframe.units[groupName]["GPSArrow"][ info[#info] ]; end,
+		set = function(info, value) E.db.unitframe.units[groupName]["GPSArrow"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup(groupName); end,
 		args = {
 			enable = {
-				type = 'toggle',
 				order = 1,
-				name = L['Enable'],
+				type = "toggle",
+				name = L["Enable"]
 			},	
 			onMouseOver = {
-				type = 'toggle',
 				order = 2,
-				name = L['Mouseover'],
-				desc = L['Only show when you are mousing over a frame.'],
+				type = "toggle",
+				name = L["Mouseover"],
+				desc = L["Only show when you are mousing over a frame."]
 			},
 			outOfRange = {
-				type = 'toggle',
 				order = 3,
-				name = L['Out of Range'],
-				desc = L['Only show when the unit is not in range.'],
-			},				
+				type = "toggle",
+				name = L["Out of Range"],
+				desc = L["Only show when the unit is not in range."]
+			},
 			size = {
-				type = 'range',
-				name = L['Size'],
 				order = 4,
-				min = 8, max = 60, step = 1,
-			},				
+				type = "range",
+				name = L["Size"],
+				min = 8, max = 60, step = 1
+			},
 			xOffset = {
 				order = 5,
-				type = 'range',
-				name = L['xOffset'],
-				min = -300, max = 300, step = 1,
+				type = "range",
+				name = L["xOffset"],
+				min = -300, max = 300, step = 1
 			},
 			yOffset = {
 				order = 6,
-				type = 'range',
-				name = L['yOffset'],
-				min = -300, max = 300, step = 1,
-			},			
+				type = "range",
+				name = L["yOffset"],
+				min = -300, max = 300, step = 1
+			}
 		}	
-	}
+	};
 	
-	return config
+	return config;
+end
+
+local function GetOptionsTableForNonGroup_GPS(unit)
+	local config = {
+		order = 3000,
+		type = "group",
+		name = L["GPS Arrow"],
+		get = function(info) return E.db.unitframe.units[unit]["GPSArrow"][ info[#info] ] end,
+		set = function(info, value) E.db.unitframe.units[unit]["GPSArrow"][ info[#info] ] = value; UF:CreateAndUpdateUF(unit); end,
+		args = {
+			enable = {
+				order = 1,
+				type = "toggle",
+				name = L["Enable"],
+			},
+			onMouseOver = {
+				order = 2,
+				type = "toggle",
+				name = L["Mouseover"],
+				desc = L["Only show when you are mousing over a frame."]
+			},
+			outOfRange = {
+				order = 3,
+				type = "toggle",
+				name = L["Out of Range"],
+				desc = L["Only show when the unit is not in range."]
+			},
+			size = {
+				order = 4,
+				type = "range",
+				name = L["Size"],
+				min = 8, max = 60, step = 1
+			},
+			xOffset = {
+				order = 5,
+				type = "range",
+				name = L["xOffset"],
+				min = -300, max = 300, step = 1
+			},
+			yOffset = {
+				order = 6,
+				type = "range",
+				name = L["yOffset"],
+				min = -300, max = 300, step = 1
+			}
+		}
+	};
+	
+	return config;
 end
 
 E.Options.args.unitframe = { -- Рамки юнитов
@@ -2387,7 +2436,8 @@ E.Options.args.unitframe.args.target = { -- Цель
 		},
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUF, 'target'), -- Рейдовая иконка
 		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, 'target'), -- Свой текст
-	},
+		GPSArrow = GetOptionsTableForNonGroup_GPS("target")
+	}
 }
 
 E.Options.args.unitframe.args.targettarget = { -- Цуль цели
@@ -2686,7 +2736,8 @@ E.Options.args.unitframe.args.focus = { -- Фокус
 		aurabar = GetOptionsTable_AuraBars(false, UF.CreateAndUpdateUF, 'focus'), -- Полоса аур
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUF, 'focus'), -- Рейдовая иконка
 		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, 'focus'), -- Свой текст
-	},
+		GPSArrow = GetOptionsTableForNonGroup_GPS("focus")
+	}
 }
 
 E.Options.args.unitframe.args.focustarget = { -- Цель фокуса
@@ -3728,7 +3779,8 @@ E.Options.args.unitframe.args.party = { -- Группа
 		},
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateHeaderGroup, 'party'), -- Рейдовая иконка
 		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateHeaderGroup, 'party', nil, 4), -- Свой текст
-	},
+		GPSArrow = GetOptionsTable_GPS("party")
+	}
 }
 --Raid Frames
 E.Options.args.unitframe.args['raid'] = {
@@ -4085,7 +4137,8 @@ E.Options.args.unitframe.args['raid'] = {
 			},
 		},
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateHeaderGroup, 'raid'),
-	},
+		GPSArrow = GetOptionsTable_GPS("raid")
+	}
 }
 
 --Raid Frames
@@ -4443,7 +4496,8 @@ E.Options.args.unitframe.args['raid40'] = {
 			},
 		},
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateHeaderGroup, 'raid40'),
-	},
+		GPSArrow = GetOptionsTable_GPS("raid40")
+	}
 }
 
 E.Options.args.unitframe.args.raidpet = {

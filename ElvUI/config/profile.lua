@@ -545,6 +545,14 @@ P["unitframe"] = {
 				["attachTo"] = "TOP",
 				["xOffset"] = 0,
 				["yOffset"] = 10
+			},
+			["GPSArrow"] = {
+				["enable"] = false,
+				["size"] = 45,
+				["xOffset"] = 0,
+				["yOffset"] = 0,
+				["onMouseOver"] = true,
+				["outOfRange"] = true
 			}
 		},
 		["targettarget"] = {
@@ -818,6 +826,14 @@ P["unitframe"] = {
 				["attachTo"] = "TOP",
 				["xOffset"] = 0,
 				["yOffset"] = 10
+			},
+			["GPSArrow"] = {
+				["enable"] = false,
+				["size"] = 45,
+				["xOffset"] = 0,
+				["yOffset"] = 0,
+				["onMouseOver"] = true,
+				["outOfRange"] = true
 			}
 		},
 		["focustarget"] = {
@@ -1387,13 +1403,13 @@ P["unitframe"] = {
 				["yOffset"] = 10,
 			},
 			["GPSArrow"] = {
-				["enable"] = true,
-				["size"] = 40,
+				["enable"] = false,
+				["size"] = 45,
 				["xOffset"] = 0,
 				["yOffset"] = 0,
 				["onMouseOver"] = true,
 				["outOfRange"] = true
-			},
+			}
 		},
 		["raid"] = {
 			["enable"] = true,
@@ -1511,13 +1527,13 @@ P["unitframe"] = {
 				["yOffset"] = 10,
 			},
 			["GPSArrow"] = {
-				["enable"] = true,
+				["enable"] = false,
 				["size"] = 40,
 				["xOffset"] = 0,
 				["yOffset"] = 0,
 				["onMouseOver"] = true,
 				["outOfRange"] = true
-			},
+			}
 		},
 		["raid40"] = {
 			["enable"] = true,
@@ -1638,7 +1654,7 @@ P["unitframe"] = {
 				["yOffset"] = 0,
 				["onMouseOver"] = true,
 				["outOfRange"] = true
-			},
+			}
 		},
 		["raidpet"] = {
 			["enable"] = false,

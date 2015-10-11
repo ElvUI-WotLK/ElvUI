@@ -45,6 +45,7 @@ function UF:Construct_PartyFrames(unitGroup)
 		self.RaidIcon = UF:Construct_RaidIcon(self);
 		self.ReadyCheck = UF:Construct_ReadyCheckIcon(self);
 		self.HealCommBar = UF:Construct_HealComm(self);
+		self.GPS = UF:Construct_GPS(self);
 		
 		self.customTexts = {};
 	end
@@ -612,6 +613,25 @@ function UF:Update_PartyFrames(frame, db)
 			else
 				if(frame:IsElementEnabled("HealComm4")) then
 					frame:DisableElement("HealComm4");
+				end
+			end
+		end
+		
+		do
+			local GPS = frame.GPS;
+			if(db.GPSArrow.enable) then
+				if not frame:IsElementEnabled("GPS") then
+					frame:EnableElement("GPS");
+				end
+				
+				GPS:Size(db.GPSArrow.size);
+				GPS.onMouseOver = db.GPSArrow.onMouseOver;
+				GPS.outOfRange = db.GPSArrow.outOfRange;
+				
+				GPS:SetPoint("CENTER", frame, "CENTER", db.GPSArrow.xOffset, db.GPSArrow.yOffset);
+			else
+				if(frame:IsElementEnabled("GPS")) then
+					frame:DisableElement("GPS");
 				end
 			end
 		end

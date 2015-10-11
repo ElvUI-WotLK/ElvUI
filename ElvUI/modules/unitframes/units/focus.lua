@@ -23,6 +23,7 @@ function UF:Construct_FocusFrame(frame)
 	frame.Range = UF:Construct_Range(frame);
 	frame.Threat = UF:Construct_Threat(frame);
 	frame.HealCommBar = UF:Construct_HealComm(frame);
+	frame.GPS = UF:Construct_GPS(frame);
 	
 	frame.customTexts = {};
 	frame:Point("BOTTOMRIGHT", ElvUF_Target, "TOPRIGHT", 0, 220);
@@ -559,6 +560,25 @@ function UF:Update_FocusFrame(frame, db)
 		else
 			if(frame:IsElementEnabled("HealComm4")) then
 				frame:DisableElement("HealComm4");
+			end
+		end
+	end
+	
+	do
+		local GPS = frame.GPS;
+		if(db.GPSArrow.enable) then
+			if not frame:IsElementEnabled("GPS") then
+				frame:EnableElement("GPS");
+			end
+			
+			GPS:Size(db.GPSArrow.size);
+			GPS.onMouseOver = db.GPSArrow.onMouseOver;
+			GPS.outOfRange = db.GPSArrow.outOfRange;
+			
+			GPS:SetPoint("CENTER", frame, "CENTER", db.GPSArrow.xOffset, db.GPSArrow.yOffset);
+		else
+			if(frame:IsElementEnabled("GPS")) then
+				frame:DisableElement("GPS");
 			end
 		end
 	end

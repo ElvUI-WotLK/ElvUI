@@ -28,6 +28,7 @@ function UF:Construct_TargetFrame(frame)
 	frame.AuraBars = self:Construct_AuraBarHeader(frame);
 	frame.Range = UF:Construct_Range(frame);
 	frame.HealCommBar = UF:Construct_HealComm(frame);
+	frame.GPS = UF:Construct_GPS(frame);
 	
 	frame.customTexts = {};
 	frame:Point("BOTTOMRIGHT", E.UIParent, "BOTTOM", 413, 68);
@@ -762,6 +763,25 @@ function UF:Update_TargetFrame(frame, db)
 		else
 			if(frame:IsElementEnabled("HealComm4")) then
 				frame:DisableElement("HealComm4");
+			end
+		end
+	end
+	
+	do
+		local GPS = frame.GPS;
+		if(db.GPSArrow.enable) then
+			if not frame:IsElementEnabled("GPS") then
+				frame:EnableElement("GPS");
+			end
+			
+			GPS:Size(db.GPSArrow.size);
+			GPS.onMouseOver = db.GPSArrow.onMouseOver;
+			GPS.outOfRange = db.GPSArrow.outOfRange;
+			
+			GPS:SetPoint("CENTER", frame, "CENTER", db.GPSArrow.xOffset, db.GPSArrow.yOffset);
+		else
+			if(frame:IsElementEnabled("GPS")) then
+				frame:DisableElement("GPS");
 			end
 		end
 	end
