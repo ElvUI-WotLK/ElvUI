@@ -67,7 +67,7 @@ end
 local function MultiUpdate(...)
 	for i = 1, select("#", ...) do
 		for _, frame in ipairs(oUF.objects) do
-			if frame.unit and (frame.HealCommBar and frame:IsElementEnabled("HealComm4")) and UnitGUID(frame.unit) == select(i, ...) then
+			if frame.unit and (frame.HealCommBar and frame:IsElementEnabled("HealComm4")) and UnitGUID(frame.unit) == select(i, ...) and frame:IsVisible() then
 				Update(frame)
 			end
 		end
@@ -84,23 +84,17 @@ end
 
 local function Enable(self)
 	local healCommBar = self.HealCommBar;
-	if(not healCommBar) then return; end
-
 	if(healCommBar) then
+		healCommBar.__owner = self;
+		healCommBar.ForceUpdate = ForceUpdate;
+		
 		self:RegisterEvent("UNIT_HEALTH", Path);
 		self:RegisterEvent("UNIT_MAXHEALTH", Path);
-
+		
 		if(not healCommBar:GetStatusBarTexture()) then healCommBar:SetStatusBarTexture([=[Interface\TargetingFrame\UI-StatusBar]=]); end
 		
-		healcomm.RegisterCallback(self, "HealComm_HealStarted", HealComm_Heal_Update);
-		healcomm.RegisterCallback(self, "HealComm_HealUpdated", HealComm_Heal_Update);
-		healcomm.RegisterCallback(self, "HealComm_HealDelayed", HealComm_Heal_Update);
-		healcomm.RegisterCallback(self, "HealComm_HealStopped", HealComm_Heal_Update);
-		healcomm.RegisterCallback(self, "HealComm_ModifierChanged", HealComm_Modified);
-		healcomm.RegisterCallback(self, "HealComm_GUIDDisappeared", HealComm_Modified);
+		return true;
 	end
-
-	return true;
 end
 
 local function Disable(self)
@@ -109,15 +103,15 @@ local function Disable(self)
 		self:UnregisterEvent("UNIT_HEALTH", Path);
 		self:UnregisterEvent("UNIT_MAXHEALTH", Path);
 		
-		healcomm.UnregisterCallback(self, "HealComm_HealStarted");
-		healcomm.UnregisterCallback(self, "HealComm_HealUpdated");
-		healcomm.UnregisterCallback(self, "HealComm_HealDelayed");
-		healcomm.UnregisterCallback(self, "HealComm_HealStopped");
-		healcomm.UnregisterCallback(self, "HealComm_ModifierChanged");
-		healcomm.UnregisterCallback(self, "HealComm_GUIDDisappeared");
-		
 		healCommBar:Hide();
 	end
 end
 
 oUF:AddElement("HealComm4", Path, Enable, Disable);
+
+healcomm.RegisterCallback("HealComm4", "HealComm_HealStarted", HealComm_Heal_Update);
+healcomm.RegisterCallback("HealComm4", "HealComm_HealUpdated", HealComm_Heal_Update);
+healcomm.RegisterCallback("HealComm4", "HealComm_HealDelayed", HealComm_Heal_Update);
+healcomm.RegisterCallback("HealComm4", "HealComm_HealStopped", HealComm_Heal_Update);
+healcomm.RegisterCallback("HealComm4", "HealComm_ModifierChanged", HealComm_Modified);
+healcomm.RegisterCallback("HealComm4", "HealComm_GUIDDisappeared", HealComm_Modified);
