@@ -6,6 +6,20 @@ local format = string.format
 
 local LSM = LibStub("LibSharedMedia-3.0");
 
+function UF:Construct_HealComm(frame)
+	local mhpb = CreateFrame("StatusBar", nil, frame);
+	mhpb:SetStatusBarTexture(E["media"].blankTex);
+	mhpb:SetFrameLevel(frame.Health:GetFrameLevel() - 2);
+	mhpb:Hide();
+	
+	if(frame.Health) then
+	--	mhpb:SetParent(frame.Health);
+	end
+	
+	
+	return mhpb;
+end
+
 function UF:Construct_TargetGlow(frame)
 	frame:CreateShadow("Default")
 	local x = frame.shadow

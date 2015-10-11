@@ -1,120 +1,123 @@
+local _, ns = ...;
+local oUF = ns.oUF or oUF;
+assert(oUF, "oUF_HealComm4 was unable to locate oUF install");
 
---[[
-	oUF-HealComm bindings
-	Credits: Krage (original oUF_HealComm)
-
-	Elements handled: .HealCommBar, .HealCommText
-
-	Options
-
-	Optional:
-	.HealCommOthersOnly: (boolean)       Ignore the player's outbound heals
-	.HealCommTimeframe: (integer)        Only show heals that land in the next x seconds
-	.allowHealCommOverflow: (boolean)    Allow the HealComm bar to flow beyond the end of the Health bar
-
-	Functions that can be overridden from within a layout:
-	:HealCommTextFormat(value)         Formats the heal amount passed for display on .HealCommText
-]]
-local _, ns = ...
-local oUF = ns.oUF or oUF
-assert(oUF, 'oUF_HealComm4 was unable to locate oUF install')
-
-local healcomm = LibStub('LibHealComm-4.0')
-local format = string.format
-local min = math.min
+local healcomm = LibStub("LibHealComm-4.0");
+local format = string.format;
+local min = math.min;
 
 local function Hide(self)
-	if self.HealCommBar then self.HealCommBar:Hide() end
-	if self.HealCommText then self.HealCommText:SetText(nil) end
+	if(self.HealCommBar) then self.HealCommBar:Hide(); end
 end
 
+local function Update(self, event, unit)
+	if(not self.unit or UnitIsDeadOrGhost(self.unit) or not UnitIsConnected(self.unit)) then return Hide(self); end
+	
+	local health, maxHealth = UnitHealth(self.unit), UnitHealthMax(self.unit);
+	if(maxHealth == 0 or maxHealth == 100) then return Hide(self); end
 
-local function Update(self)
-	if not self.unit or UnitIsDeadOrGhost(self.unit) or not UnitIsConnected(self.unit) then return Hide(self) end
-
-	local maxHP = UnitHealthMax(self.unit) or 0
-	if maxHP == 0 or maxHP == 100 then return Hide(self) end
-
-	local guid = UnitGUID(self.unit)
-	local timeFrame = self.HealCommTimeframe and GetTime() + self.HealCommTimeframe or nil
-	local incHeals = self.HealCommOthersOnly and healcomm:GetOthersHealAmount(guid, healcomm.ALL_HEALS, timeFrame) or not self.HealCommOthersOnly and healcomm:GetHealAmount(guid, healcomm.ALL_HEALS, timeFrame) or 0
-	if incHeals == 0 then return Hide(self) end
-
-	incHeals = incHeals * healcomm:GetHealModifier(guid)
-
-	if self.HealCommText then self.HealCommText:SetText(self.HealCommTextFormat and self.HealCommTextFormat(incHeals) or format('%d', incHeals)) end
-
-	if self.HealCommBar then
-		local curHP = UnitHealth(self.unit)
-		local percHP = curHP / maxHP
-		local percInc = (self.allowHealCommOverflow and incHeals or min(incHeals, maxHP - curHP)) / maxHP
-
-		if percInc == 0 then return self.HealCommBar:Hide() end
-
-		self.HealCommBar:ClearAllPoints()
-
-		if self.Health:GetOrientation() == 'VERTICAL' then
-			self.HealCommBar:SetHeight(percInc * self.Health:GetHeight())
-			self.HealCommBar:SetWidth(self.Health:GetWidth())
-			self.HealCommBar:SetPoint('BOTTOM', self.Health, 'BOTTOM', 0, self.Health:GetHeight() * percHP)
+	local guid = UnitGUID(self.unit);
+	local timeFrame = self.HealCommTimeframe and GetTime() + self.HealCommTimeframe or nil;
+	local incHeals = self.HealCommOthersOnly and healcomm:GetOthersHealAmount(guid, healcomm.ALL_HEALS, timeFrame) or not self.HealCommOthersOnly and healcomm:GetHealAmount(guid, healcomm.ALL_HEALS, timeFrame) or 0;
+	if(incHeals == 0) then return Hide(self); end
+	
+	incHeals = incHeals * healcomm:GetHealModifier(guid);
+	
+	local healCommBar = self.HealCommBar;
+	if(healCommBar) then
+		local curHealth = UnitHealth(self.unit);
+		local inc = self.allowHealCommOverflow and incHeals or min(incHeals, maxHealth - health);
+		if(inc == 0) then return healCommBar:Hide(); end
+		
+		local orientation = self.Health:GetOrientation();
+		healCommBar:ClearAllPoints();
+		if(orientation == "HORIZONTAL") then
+			healCommBar:SetPoint("TOPLEFT", self.Health:GetStatusBarTexture(), "TOPRIGHT");
+			healCommBar:SetPoint("BOTTOMLEFT", self.Health:GetStatusBarTexture(), "BOTTOMRIGHT");
 		else
-			self.HealCommBar:SetHeight(self.Health:GetHeight())
-			self.HealCommBar:SetWidth(percInc * self.Health:GetWidth())
-			self.HealCommBar:SetPoint('LEFT', self.Health, 'LEFT', self.Health:GetWidth() * percHP, 0)
+			healCommBar:SetPoint("BOTTOMRIGHT", self.Health:GetStatusBarTexture(), "TOPRIGHT");
+			healCommBar:SetPoint("BOTTOMLEFT", self.Health:GetStatusBarTexture(), "TOPLEFT");
 		end
-
-		self.HealCommBar:Show()
+		
+		local totalWidth, totalHeight = self.Health:GetSize();
+		if(orientation == "HORIZONTAL") then
+			healCommBar:SetWidth(totalWidth);
+		else
+			healCommBar:SetHeight(totalHeight);
+		end
+		
+		healCommBar:SetMinMaxValues(0, maxHealth);
+		healCommBar:SetValue(inc);
+		healCommBar:Show();
+		
+		if(healCommBar.PostUpdate) then
+			return healCommBar:PostUpdate(inc);
+		end
 	end
 end
 
-
-local function Enable(self)
-	local hcb, hct = self.HealCommBar, self.HealCommText
-	if not hcb and not hct then return end
-
-	if hcb then
-		self:RegisterEvent('UNIT_HEALTH', Update)
-		self:RegisterEvent('UNIT_MAXHEALTH', Update)
-
-		if not hcb:GetStatusBarTexture() then hcb:SetStatusBarTexture([=[Interface\TargetingFrame\UI-StatusBar]=]) end
-	end
-
-	return true
+local function Path(self, ...)
+	return (self.HealCommBar.Override or Update) (self, ...)
 end
 
-
-local function Disable(self)
-	if self.HealCommBar or self.HealCommText then
-		self:UnregisterEvent('UNIT_HEALTH', Update)
-		self:UnregisterEvent('UNIT_MAXHEALTH', Update)
-	end
+local ForceUpdate = function(element)
+	return Path(element.__owner, "ForceUpdate", element.__owner.unit)
 end
-
-
-oUF:AddElement('HealComm4', Update, Enable, Disable)
-
 
 local function MultiUpdate(...)
-	for i = 1, select('#', ...) do
+	for i = 1, select("#", ...) do
 		for _, frame in ipairs(oUF.objects) do
-			if frame.unit and (frame.HealCommBar or frame.HealCommText) and UnitGUID(frame.unit) == select(i, ...) then Update(frame) end
+			if frame.unit and (frame.HealCommBar and frame:IsElementEnabled("HealComm4")) and UnitGUID(frame.unit) == select(i, ...) then
+				Update(frame)
+			end
 		end
 	end
 end
 
-
 local function HealComm_Heal_Update(event, casterGUID, spellID, healType, _, ...)
-	MultiUpdate(...)
+	MultiUpdate(...);
 end
-
 
 local function HealComm_Modified(event, guid)
-	MultiUpdate(guid)
+	MultiUpdate(guid);
 end
 
-healcomm.RegisterCallback('oUF_HealComm4', 'HealComm_HealStarted', HealComm_Heal_Update)
-healcomm.RegisterCallback('oUF_HealComm4', 'HealComm_HealUpdated', HealComm_Heal_Update)
-healcomm.RegisterCallback('oUF_HealComm4', 'HealComm_HealDelayed', HealComm_Heal_Update)
-healcomm.RegisterCallback('oUF_HealComm4', 'HealComm_HealStopped', HealComm_Heal_Update)
-healcomm.RegisterCallback('oUF_HealComm4', 'HealComm_ModifierChanged', HealComm_Modified)
-healcomm.RegisterCallback('oUF_HealComm4', 'HealComm_GUIDDisappeared', HealComm_Modified)
+local function Enable(self)
+	local healCommBar = self.HealCommBar;
+	if(not healCommBar) then return; end
+
+	if(healCommBar) then
+		self:RegisterEvent("UNIT_HEALTH", Path);
+		self:RegisterEvent("UNIT_MAXHEALTH", Path);
+
+		if(not healCommBar:GetStatusBarTexture()) then healCommBar:SetStatusBarTexture([=[Interface\TargetingFrame\UI-StatusBar]=]); end
+		
+		healcomm.RegisterCallback(self, "HealComm_HealStarted", HealComm_Heal_Update);
+		healcomm.RegisterCallback(self, "HealComm_HealUpdated", HealComm_Heal_Update);
+		healcomm.RegisterCallback(self, "HealComm_HealDelayed", HealComm_Heal_Update);
+		healcomm.RegisterCallback(self, "HealComm_HealStopped", HealComm_Heal_Update);
+		healcomm.RegisterCallback(self, "HealComm_ModifierChanged", HealComm_Modified);
+		healcomm.RegisterCallback(self, "HealComm_GUIDDisappeared", HealComm_Modified);
+	end
+
+	return true;
+end
+
+local function Disable(self)
+	local healCommBar = self.HealCommBar;
+	if(healCommBar) then
+		self:UnregisterEvent("UNIT_HEALTH", Path);
+		self:UnregisterEvent("UNIT_MAXHEALTH", Path);
+		
+		healcomm.UnregisterCallback(self, "HealComm_HealStarted");
+		healcomm.UnregisterCallback(self, "HealComm_HealUpdated");
+		healcomm.UnregisterCallback(self, "HealComm_HealDelayed");
+		healcomm.UnregisterCallback(self, "HealComm_HealStopped");
+		healcomm.UnregisterCallback(self, "HealComm_ModifierChanged");
+		healcomm.UnregisterCallback(self, "HealComm_GUIDDisappeared");
+		
+		healCommBar:Hide();
+	end
+end
+
+oUF:AddElement("HealComm4", Path, Enable, Disable);

@@ -233,6 +233,7 @@ P["unitframe"] = {
 		["disconnected"] = { r = 0.84, g = 0.75, b = 0.65},
 		["auraBarBuff"] = { r = .31,g = .31,b = .31 },
 		["auraBarDebuff"] = {r = 0.8, g = 0.1, b = 0.1},
+		["healPrediction"] = {r = 0, g = 1, b = 0, a = 0.25},
 		["power"] = {
 			["MANA"] = {r = 0.31, g = 0.45, b = 0.63},
 			["RAGE"] = {r = 0.78, g = 0.25, b = 0.25},
@@ -417,6 +418,7 @@ P["unitframe"] = {
 			["threatStyle"] = "GLOW",
 			["smartAuraPosition"] = "DISABLED",
 			["rangeCheck"] = true,
+			["healPrediction"] = true,
 			["middleClickFocus"] = true,
 			["health"] = {
 				["text_format"] = "[healthcolor][health:current-percent]",
@@ -710,6 +712,7 @@ P["unitframe"] = {
 			["smartAuraPosition"] = "DISABLED",
 			["width"] = 190,
 			["height"] = 36,
+			["healPrediction"] = true,
 			["health"] = {
 				["text_format"] = "",
 				["position"] = "RIGHT",
@@ -901,6 +904,7 @@ P["unitframe"] = {
 			["smartAuraPosition"] = "DISABLED",
 			["width"] = 130,
 			["height"] = 36,
+			["healPrediction"] = true,
 			["health"] = {
 				["text_format"] = "",
 				["position"] = "RIGHT",
@@ -1159,7 +1163,7 @@ P["unitframe"] = {
 			["spacing"] = 25,
 			["width"] = 240,
 			["height"] = 47,
-			["factionIcon"] = true,
+			["healPrediction"] = true,
 			["colorOverride"] = "USE_DEFAULT",
 			["health"] = {
 				["text_format"] = "[healthcolor][health:current]",
@@ -1264,6 +1268,7 @@ P["unitframe"] = {
 			["groupBy"] = "GROUP",
 			["sortDir"] = "ASC",
 			["showPlayer"] = true,
+			["healPrediction"] = false,
 			["colorOverride"] = "USE_DEFAULT",
 			["width"] = 180,
 			["height"] = 44,
@@ -1390,7 +1395,7 @@ P["unitframe"] = {
 				["outOfRange"] = true
 			},
 		},
-		["raid"] = { -- Рейд 25
+		["raid"] = {
 			["enable"] = true,
 			["rangeCheck"] = true,
 			["threatStyle"] = "GLOW",
@@ -1403,6 +1408,7 @@ P["unitframe"] = {
 			["groupBy"] = "GROUP",
 			["sortDir"] = "ASC",
 			["showPlayer"] = true,
+			["healPrediction"] = false,
 			["colorOverride"] = "USE_DEFAULT",
 			["width"] = 80,
 			["height"] = 44,
@@ -1526,6 +1532,7 @@ P["unitframe"] = {
 			["groupBy"] = "GROUP",
 			["sortDir"] = "ASC",
 			["showPlayer"] = true,
+			["healPrediction"] = false,
 			["colorOverride"] = "USE_DEFAULT",
 			["width"] = 80,
 			["height"] = 26,
@@ -1648,6 +1655,7 @@ P["unitframe"] = {
 			["raidWideSorting"] = true,
 			["invertGroupingOrder"] = false,
 			["startFromCenter"] = false,
+			["healPrediction"] = false,
 			["colorOverride"] = "USE_DEFAULT",
 			["width"] = 80,
 			["height"] = 30,

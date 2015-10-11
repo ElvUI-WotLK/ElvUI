@@ -1,6 +1,5 @@
-
 local major = "LibHealComm-4.0"
-local minor = 64
+local minor = 66
 assert(LibStub, string.format("%s requires LibStub.", major))
 
 local HealComm = LibStub:NewLibrary(major, minor)
@@ -2306,9 +2305,12 @@ function HealComm:UNIT_SPELLCAST_SENT(unit, spellName, spellRank, castOn)
 end
 
 function HealComm:UNIT_SPELLCAST_START(unit, spellName, spellRank, id)
-	if( unit ~= "player" or not spellData[spellName] or not averageHeal[spellName][spellRank] ) then return end
+	if( unit ~= "player" or not spellData[spellName] or not averageHeal[spellName][spellRank] or UnitIsCharmed("player") or not UnitPlayerControlled("player") ) then return end
 	local nameID = spellName .. spellRank
 	local castGUID = castGUIDs[nameID]
+	if( not castGUID ) then
+		return
+	end
 	
 	castID = id
 
@@ -2357,7 +2359,10 @@ end
 function HealComm:UNIT_SPELLCAST_INTERRUPTED(unit, spellName, spellRank, id)
 	if( unit ~= "player" or not spellData[spellName] or castID ~= id ) then return end
 	
-	ResetChargeData(castGUIDs[spellName .. spellRank], spellName, spellRank)
+	local guid = castGUIDs[spellName .. spellRank]
+	if( guid ) then
+		ResetChargeData(guid, spellName, spellRank)
+	end
 end
 
 -- It's faster to do heal delays locally rather than through syncing, as it only has to go from WoW -> Player instead of Caster -> WoW -> Player

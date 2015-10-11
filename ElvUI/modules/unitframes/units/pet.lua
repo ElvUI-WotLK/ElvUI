@@ -19,6 +19,7 @@ function UF:Construct_PetFrame(frame)
 	frame.Threat = self:Construct_Threat(frame);
 	frame.AuraWatch = UF:Construct_AuraWatch(frame);
 	frame.Range = UF:Construct_Range(frame);
+	frame.HealCommBar = UF:Construct_HealComm(frame);
 	
 	frame.customTexts = {};
 	frame:Point("BOTTOM", E.UIParent, "BOTTOM", 0, 118);
@@ -365,6 +366,22 @@ function UF:Update_PetFrame(frame, db)
 		else
 			if(frame:IsElementEnabled("Range")) then
 				frame:DisableElement("Range");
+			end
+		end
+	end
+	
+	do
+		local healCommBar = frame.HealCommBar;
+		local color = UF.db.colors.healPrediction;
+		if(db.healPrediction) then
+			if(not frame:IsElementEnabled("HealComm4")) then
+				frame:EnableElement("HealComm4");
+			end
+			
+			healCommBar:SetStatusBarColor(color.r, color.g, color.b, color.a);
+		else
+			if(frame:IsElementEnabled("HealComm4")) then
+				frame:DisableElement("HealComm4");
 			end
 		end
 	end

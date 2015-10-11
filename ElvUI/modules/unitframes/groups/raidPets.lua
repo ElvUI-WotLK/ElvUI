@@ -29,6 +29,7 @@ function UF:Construct_RaidpetFrames(unitGroup)
 	self.Threat = UF:Construct_Threat(self);
 	self.RaidIcon = UF:Construct_RaidIcon(self);
 	self.Range = UF:Construct_Range(self);
+	self.HealCommBar = UF:Construct_HealComm(self);
 	
 	self.customTexts = {};
 	UF:Update_RaidpetFrames(self, UF.db["units"]["raidpet"]);
@@ -335,6 +336,23 @@ function UF:Update_RaidpetFrames(frame, db)
 	end
 	
 	UF:UpdateAuraWatch(frame, true);
+	
+	do
+		local healCommBar = frame.HealCommBar;
+		local color = UF.db.colors.healPrediction;
+		if(db.healPrediction) then
+			if(not frame:IsElementEnabled("HealComm4")) then
+				frame:EnableElement("HealComm4");
+			end
+			
+			healCommBar:SetOrientation(db.health.orientation);
+			healCommBar:SetStatusBarColor(color.r, color.g, color.b, color.a);
+		else
+			if(frame:IsElementEnabled("HealComm4")) then
+				frame:DisableElement("HealComm4");
+			end
+		end
+	end
 	
 	for objectName, object in pairs(frame.customTexts) do
 		if((not db.customTexts) or (db.customTexts and not db.customTexts[objectName])) then

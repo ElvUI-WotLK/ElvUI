@@ -38,6 +38,7 @@ function UF:Construct_Raid40Frames(unitGroup)
 	self.RaidIcon = UF:Construct_RaidIcon(self);
 	self.ReadyCheck = UF:Construct_ReadyCheckIcon(self);
 	self.Range = UF:Construct_Range(self);
+	self.HealCommBar = UF:Construct_HealComm(self);
 	
 	self.customTexts = {};
 	UF:Update_StatusBars();
@@ -480,6 +481,23 @@ function UF:Update_Raid40Frames(frame, db)
 	UF:UpdateAuraWatch(frame);
 	
 	frame:EnableElement("ReadyCheck");
+	
+	do
+		local healCommBar = frame.HealCommBar;
+		local color = UF.db.colors.healPrediction;
+		if(db.healPrediction) then
+			if(not frame:IsElementEnabled("HealComm4")) then
+				frame:EnableElement("HealComm4");
+			end
+			
+			healCommBar:SetOrientation(db.health.orientation);
+			healCommBar:SetStatusBarColor(color.r, color.g, color.b, color.a);
+		else
+			if(frame:IsElementEnabled("HealComm4")) then
+				frame:DisableElement("HealComm4");
+			end
+		end
+	end
 	
 	for objectName, object in pairs(frame.customTexts) do
 		if((not db.customTexts) or (db.customTexts and not db.customTexts[objectName])) then

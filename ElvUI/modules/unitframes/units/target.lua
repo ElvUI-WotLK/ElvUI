@@ -27,6 +27,7 @@ function UF:Construct_TargetFrame(frame)
 	
 	frame.AuraBars = self:Construct_AuraBarHeader(frame);
 	frame.Range = UF:Construct_Range(frame);
+	frame.HealCommBar = UF:Construct_HealComm(frame);
 	
 	frame.customTexts = {};
 	frame:Point("BOTTOMRIGHT", E.UIParent, "BOTTOM", 413, 68);
@@ -743,7 +744,28 @@ function UF:Update_TargetFrame(frame, db)
 			end
 		end
 	end
-
+	
+	do
+		local healCommBar = frame.HealCommBar;
+		local color = UF.db.colors.healPrediction;
+		if(db.healPrediction) then
+			if(not frame:IsElementEnabled("HealComm4")) then
+				frame:EnableElement("HealComm4");
+			end
+			
+			if(not USE_PORTRAIT_OVERLAY) then
+				healCommBar:SetParent(frame);
+			else
+				healCommBar:SetParent(frame.Portrait.overlay);
+			end
+			healCommBar:SetStatusBarColor(color.r, color.g, color.b, color.a);
+		else
+			if(frame:IsElementEnabled("HealComm4")) then
+				frame:DisableElement("HealComm4");
+			end
+		end
+	end
+	
 	for objectName, object in pairs(frame.customTexts) do
 		if((not db.customTexts) or (db.customTexts and not db.customTexts[objectName])) then
 			object:Hide();

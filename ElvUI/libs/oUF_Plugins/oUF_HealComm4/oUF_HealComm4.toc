@@ -2,7 +2,7 @@
 ## Title: oUF HealComm4
 ## Notes: Adds incoming healing bars to oUF frames.
 ## Author: EvilPaul, Tekkub
-## Version: 2.2.1
+## Version: 2.2.2
 ## X-Category: UnitFrame
 ## Dependencies: oUF
 ## DefaultState: enabled

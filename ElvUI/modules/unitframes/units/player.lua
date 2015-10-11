@@ -40,6 +40,8 @@ function UF:Construct_PlayerFrame(frame)
 	frame.AuraBars = self:Construct_AuraBarHeader(frame);
 	frame.CombatFade = true;
 	
+	frame.HealCommBar = UF:Construct_HealComm(frame);
+	
 	frame.customTexts = {};
 	frame:Point("BOTTOMLEFT", E.UIParent, "BOTTOM", -413, 68);
 	E:CreateMover(frame, frame:GetName().."Mover", L["Player Frame"], nil, nil, nil, "ALL,SOLO");
@@ -949,6 +951,27 @@ function UF:Update_PlayerFrame(frame, db)
 			if(frame:IsElementEnabled("AuraBars")) then
 				frame:DisableElement("AuraBars");
 				auraBars:Hide();
+			end
+		end
+	end
+	
+	do
+		local healCommBar = frame.HealCommBar;
+		local color = UF.db.colors.healPrediction;
+		if(db.healPrediction) then
+			if(not frame:IsElementEnabled("HealComm4")) then
+				frame:EnableElement("HealComm4");
+			end
+			
+			if(not USE_PORTRAIT_OVERLAY) then
+				healCommBar:SetParent(frame);
+			else
+				healCommBar:SetParent(frame.Portrait.overlay);
+			end
+			healCommBar:SetStatusBarColor(color.r, color.g, color.b, color.a);
+		else
+			if(frame:IsElementEnabled("HealComm4")) then
+				frame:DisableElement("HealComm4");
 			end
 		end
 	end

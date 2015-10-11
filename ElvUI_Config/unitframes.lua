@@ -2009,6 +2009,22 @@ E.Options.args.unitframe = { -- Рамки юнитов
 								},								
 							},
 						},
+						healPrediction = {
+							order = 12,
+							name = L["Heal Prediction"],
+							type = "color",
+							hasAlpha = true,
+							get = function(info)
+								local t = E.db.unitframe.colors[ info[#info] ]
+								local d = P.unitframe.colors[ info[#info] ]
+								return t.r, t.g, t.b, t.a, d.r, d.g, d.b, d.a
+							end,
+							set = function(info, r, g, b, a)
+								local t = E.db.unitframe.colors[ info[#info] ]
+								t.r, t.g, t.b, t.a = r, g, b, a
+								UF:Update_AllFrames()
+							end,
+						},
 					},
 				},
 			},
@@ -2045,7 +2061,7 @@ E.Options.args.unitframe.args.player = { -- Игрок
 			func = function(info, value) UF:ResetUnitSettings('player'); E:ResetMovers(L['Player Frame']) end,
 		},
 		showAuras = { -- Показать ауры
-			order = 5,
+			order = 4,
 			type = 'execute',
 			name = L['Show Auras'],
 			func = function() 
@@ -2073,21 +2089,14 @@ E.Options.args.unitframe.args.player = { -- Игрок
 				UF:CreateAndUpdateUF('player');
 			end,
 		},
-		height = { -- Высота
+		height = {
 			order = 6,
 			name = L['Height'],
 			type = 'range',
 			min = 10, max = 250, step = 1,
-		},	
-		lowmana = { -- Низкое значение маны
-			order = 7,
-			name = L['Low Mana Threshold'],
-			desc = L['When you mana falls below this point, text will flash on the player frame.'],
-			type = 'range',
-			min = 0, max = 100, step = 1,
 		},
-		combatfade = { -- Скрытие
-			order = 8,
+		combatfade = {
+			order = 7,
 			name = L['Combat Fade'],
 			desc = L['Fade the unitframe when out of combat, not casting, no target exists.'],
 			type = 'toggle',
@@ -2101,6 +2110,12 @@ E.Options.args.unitframe.args.player = { -- Игрок
 					ElvUF_Pet:SetParent(ElvUF_Parent) 
 				end 
 			end,
+		},
+		healPrediction = {
+			order = 8,
+			type = "toggle",
+			name = L["Heal Prediction"],
+			desc = L["Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
 		},
 		restIcon = { -- Иконка отдыха
 			order = 10,
@@ -2277,6 +2292,12 @@ E.Options.args.unitframe.args.target = { -- Цель
 			name = L["Range Check"],
 			desc = L["Check if you are in range to cast spells on this specific unit."],
 			type = "toggle",
+		},
+		healPrediction = {
+			order = 8,
+			type = "toggle",
+			name = L["Heal Prediction"],
+			desc = L["Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
 		},
 		middleClickFocus = { -- Средний клик - фокус
 			order = 9,
@@ -2624,6 +2645,12 @@ E.Options.args.unitframe.args.focus = { -- Фокус
 			desc = L["Check if you are in range to cast spells on this specific unit."],
 			type = "toggle",
 		},
+		healPrediction = {
+			order = 8,
+			type = "toggle",
+			name = L["Heal Prediction"],
+			desc = L["Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
+		},
 		hideonnpc = { -- Переключение текста для НИП
 			type = 'toggle',
 			order = 9,
@@ -2818,6 +2845,12 @@ E.Options.args.unitframe.args.pet = { -- Питомец
 			name = L["Range Check"],
 			desc = L["Check if you are in range to cast spells on this specific unit."],
 			type = "toggle",
+		},
+		healPrediction = {
+			order = 8,
+			type = "toggle",
+			name = L["Heal Prediction"],
+			desc = L["Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
 		},
 		hideonnpc = { -- Переключения текста для НИП
 			type = 'toggle',
@@ -3157,6 +3190,12 @@ E.Options.args.unitframe.args.arena = { -- Арена
 			desc = L["Check if you are in range to cast spells on this specific unit."],
 			type = "toggle",
 		},
+		healPrediction = {
+			order = 8,
+			type = "toggle",
+			name = L["Heal Prediction"],
+			desc = L["Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
+		},
 		hideonnpc = { -- Переключения текста для НИП
 			type = 'toggle',
 			order = 9,
@@ -3314,6 +3353,12 @@ E.Options.args.unitframe.args.party = { -- Группа
 					name = L["Range Check"],
 					desc = L["Check if you are in range to cast spells on this specific unit."],
 					type = "toggle",
+				},
+				healPrediction = {
+					order = 8,
+					type = "toggle",
+					name = L["Heal Prediction"],
+					desc = L["Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
 				},
 				threatStyle = { -- Режим отображения угрозы
 					type = 'select',
@@ -3744,6 +3789,12 @@ E.Options.args.unitframe.args['raid'] = {
 					desc = L["Check if you are in range to cast spells on this specific unit."],
 					type = "toggle",
 				},
+				healPrediction = {
+					order = 8,
+					type = "toggle",
+					name = L["Heal Prediction"],
+					desc = L["Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
+				},
 				threatStyle = {
 					type = 'select',
 					order = 5,
@@ -4096,6 +4147,12 @@ E.Options.args.unitframe.args['raid40'] = {
 					desc = L["Check if you are in range to cast spells on this specific unit."],
 					type = "toggle",
 				},
+				healPrediction = {
+					order = 8,
+					type = "toggle",
+					name = L["Heal Prediction"],
+					desc = L["Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
+				},
 				threatStyle = {
 					type = 'select',
 					order = 5,
@@ -4442,6 +4499,12 @@ E.Options.args.unitframe.args.raidpet = {
 					name = L["Range Check"],
 					desc = L["Check if you are in range to cast spells on this specific unit."],
 					type = "toggle",
+				},
+				healPrediction = {
+					order = 8,
+					type = "toggle",
+					name = L["Heal Prediction"],
+					desc = L["Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
 				},
 				threatStyle = {
 					type = 'select',
