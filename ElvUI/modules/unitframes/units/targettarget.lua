@@ -6,7 +6,7 @@ local ElvUF = ns.oUF;
 assert(ElvUF, "ElvUI was unable to locate oUF.");
 local tinsert = table.insert;
 
-function UF:Construct_TargetTargetFrame(frame)	
+function UF:Construct_TargetTargetFrame(frame)
 	frame.Health = self:Construct_HealthBar(frame, true, true, "RIGHT");
 	frame.Power = self:Construct_PowerBar(frame, true, true, "LEFT", false);
 	frame.Name = self:Construct_NameText(frame);

@@ -64,7 +64,7 @@ function AddOn:OnInitialize()
 			profileKey = ElvPrivateDB.profileKeys[self.myname..' - '..self.myrealm]
 		end
 				
-		if profileKey and ElvPrivateDB.profiles and ElvPrivateDB.profiles[profileKey] then		
+		if profileKey and ElvPrivateDB.profiles and ElvPrivateDB.profiles[profileKey] then
 			self:CopyTable(self.private, ElvPrivateDB.profiles[profileKey])
 		end
 	end

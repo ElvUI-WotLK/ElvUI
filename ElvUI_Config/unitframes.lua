@@ -2300,7 +2300,7 @@ E.Options.args.unitframe.args.target = { -- Цель
 			values = threatValues,
 		},
 		smartAuraPosition = {
-			order = 12,
+			order = 13,
 			type = "select",
 			name = L["Smart Aura Position"],
 			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
@@ -2444,6 +2444,17 @@ E.Options.args.unitframe.args.targettarget = { -- Цуль цели
 			name = L['Threat Display Mode'],
 			values = threatValues,
 		},
+		smartAuraPosition = {
+			order = 11,
+			type = "select",
+			name = L["Smart Aura Position"],
+			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
+			values = {
+				["DISABLED"] = L["Disabled"],
+				["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
+				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
+			},
+		},
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, 'targettarget'), -- Здоровье
 		power = GetOptionsTable_Power(nil, UF.CreateAndUpdateUF, 'targettarget'), -- Мана
 		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, 'targettarget'), --Имя
@@ -2530,6 +2541,17 @@ E.Options.args.unitframe.args.targettargettarget = { -- TargetTargetTarget
 			name = L['Threat Display Mode'],
 			values = threatValues,
 		},
+		smartAuraPosition = {
+			order = 12,
+			type = "select",
+			name = L["Smart Aura Position"],
+			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
+			values = {
+				["DISABLED"] = L["Disabled"],
+				["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
+				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
+			},
+		},
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, 'targettargettarget'), -- Здоровье
 		power = GetOptionsTable_Power(nil, UF.CreateAndUpdateUF, 'targettargettarget'), -- Мана
 		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, 'targettargettarget'), -- Имя
@@ -2615,7 +2637,18 @@ E.Options.args.unitframe.args.focus = { -- Фокус
 			order = 10,
 			name = L['Threat Display Mode'],
 			values = threatValues,
-		},		
+		},
+		smartAuraPosition = {
+			order = 11,
+			type = "select",
+			name = L["Smart Aura Position"],
+			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
+			values = {
+				["DISABLED"] = L["Disabled"],
+				["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
+				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
+			},
+		},
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, 'focus'), -- Здоровье
 		power = GetOptionsTable_Power(nil, UF.CreateAndUpdateUF, 'focus'), -- Мана
 		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, 'focus'), -- Имя
@@ -2703,7 +2736,18 @@ E.Options.args.unitframe.args.focustarget = { -- Цель фокуса
 			order = 10,
 			name = L['Threat Display Mode'],
 			values = threatValues,
-		},		
+		},
+		smartAuraPosition = {
+			order = 11,
+			type = "select",
+			name = L["Smart Aura Position"],
+			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
+			values = {
+				["DISABLED"] = L["Disabled"],
+				["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
+				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
+			},
+		},
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, 'focustarget'), -- Здоровье
 		power = GetOptionsTable_Power(false, UF.CreateAndUpdateUF, 'focustarget'), -- Мана
 		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, 'focustarget'), -- Имя
@@ -2788,6 +2832,17 @@ E.Options.args.unitframe.args.pet = { -- Питомец
 			order = 10,
 			name = L['Threat Display Mode'],
 			values = threatValues,
+		},
+		smartAuraPosition = {
+			order = 11,
+			type = "select",
+			name = L["Smart Aura Position"],
+			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
+			values = {
+				["DISABLED"] = L["Disabled"],
+				["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
+				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
+			},
 		},
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, 'pet'), -- Здоровье
 		power = GetOptionsTable_Power(false, UF.CreateAndUpdateUF, 'pet'), -- Мана
@@ -2899,7 +2954,18 @@ E.Options.args.unitframe.args.pettarget = { -- Цель питомца
 			order = 10,
 			name = L['Threat Display Mode'],
 			values = threatValues,
-		},			
+		},
+		smartAuraPosition = {
+			order = 11,
+			type = "select",
+			name = L["Smart Aura Position"],
+			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
+			values = {
+				["DISABLED"] = L["Disabled"],
+				["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
+				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
+			},
+		},
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, 'pettarget'), -- Здоровье
 		power = GetOptionsTable_Power(false, UF.CreateAndUpdateUF, 'pettarget'), -- Мана
 		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, 'pettarget'), -- Имя
@@ -3003,6 +3069,17 @@ E.Options.args.unitframe.args.boss = { -- Боссы
 			order = 11,
 			name = L['Threat Display Mode'],
 			values = threatValues,
+		},
+		smartAuraPosition = {
+			order = 12,
+			type = "select",
+			name = L["Smart Aura Position"],
+			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
+			values = {
+				["DISABLED"] = L["Disabled"],
+				["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
+				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
+			},
 		},
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUFGroup, 'boss', MAX_BOSS_FRAMES), -- Здоровье
 		power = GetOptionsTable_Power(false, UF.CreateAndUpdateUFGroup, 'boss', MAX_BOSS_FRAMES), -- Мана
@@ -3114,6 +3191,17 @@ E.Options.args.unitframe.args.arena = { -- Арена
 				['USE_DEFAULT'] = L['Use Default'],
 				['FORCE_ON'] = L['Force On'],
 				['FORCE_OFF'] = L['Force Off'],
+			},
+		},
+		smartAuraPosition = {
+			order = 14,
+			type = "select",
+			name = L["Smart Aura Position"],
+			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
+			values = {
+				["DISABLED"] = L["Disabled"],
+				["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
+				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
 			},
 		},
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUFGroup, 'arena', 5), -- Здоровье

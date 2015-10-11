@@ -131,7 +131,7 @@ function M:HookBubbles(...)
 	for index = 1, select('#', ...) do
 		local frame = select(index, ...)
 
-		if M:IsChatBubble(frame) and not frame.isBubblePowered then	M:SkinBubble(frame) end
+		if M:IsChatBubble(frame) and not frame.isBubblePowered then M:SkinBubble(frame) end
 	end
 end
 

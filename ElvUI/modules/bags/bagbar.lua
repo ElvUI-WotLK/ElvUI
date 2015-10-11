@@ -72,7 +72,7 @@ function B:SizeAndPositionBagBar()
 			elseif prevButton then
 				button:SetPoint('TOP', prevButton, 'BOTTOM', 0, -E.db.bags.bagBar.spacing);
 			end
-		elseif E.db.bags.bagBar.growthDirection == 'HORIZONTAL' and E.db.bags.bagBar.sortDirection == 'DESCENDING' then	
+		elseif E.db.bags.bagBar.growthDirection == 'HORIZONTAL' and E.db.bags.bagBar.sortDirection == 'DESCENDING' then
 			if i == 1 then
 				button:SetPoint('RIGHT', ElvUIBags, 'RIGHT', -E.db.bags.bagBar.spacing, 0);
 			elseif prevButton then

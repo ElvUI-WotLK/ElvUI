@@ -84,10 +84,10 @@ end
 
 --From http://wow.gamepedia.com/UI_coordinates
 function E:FramesOverlap(frameA, frameB)
-	if not frameA or not frameB then return	end
+	if not frameA or not frameB then return end
 
 	local sA, sB = frameA:GetEffectiveScale(), frameB:GetEffectiveScale();
-	if not sA or not sB then return	end
+	if not sA or not sB then return end
 
 	local frameALeft = frameA:GetLeft()
 	local frameARight = frameA:GetRight()

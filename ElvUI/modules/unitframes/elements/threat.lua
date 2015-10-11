@@ -65,7 +65,7 @@ function UF:UpdateThreat(unit, status, r, g, b)
 			
 			if(parent.ClassBar and parent.ClassBar.backdrop) then
 				parent.ClassBar.backdrop:SetBackdropBorderColor(r, g, b);
-			end	
+			end
 		elseif(db.threatStyle == "HEALTHBORDER") then
 			parent.Health.backdrop:SetBackdropBorderColor(r, g, b);
 		elseif(db.threatStyle ~= "NONE" and self.texIcon) then

@@ -146,7 +146,7 @@ function B:UpdateItemLevelDisplay()
 end
 
 function B:UpdateSlot(bagID, slotID)
-	if (self.Bags[bagID] and self.Bags[bagID].numSlots ~= GetContainerNumSlots(bagID)) or not self.Bags[bagID] or not self.Bags[bagID][slotID] then		
+	if (self.Bags[bagID] and self.Bags[bagID].numSlots ~= GetContainerNumSlots(bagID)) or not self.Bags[bagID] or not self.Bags[bagID][slotID] then
 		return; 
 	end
 

@@ -1381,7 +1381,7 @@ end
 function NP:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, ...)
 	local sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags, spellID, spellName, _, auraType, stackCount  = ...
 	
-	if event == "SPELL_AURA_APPLIED" or event == "SPELL_AURA_REFRESH" or event == "SPELL_AURA_APPLIED_DOSE" or event == "SPELL_AURA_REMOVED_DOSE" or event == "SPELL_AURA_BROKEN" or event == "SPELL_AURA_BROKEN_SPELL" or event == "SPELL_AURA_REMOVED" then	
+	if event == "SPELL_AURA_APPLIED" or event == "SPELL_AURA_REFRESH" or event == "SPELL_AURA_APPLIED_DOSE" or event == "SPELL_AURA_REMOVED_DOSE" or event == "SPELL_AURA_BROKEN" or event == "SPELL_AURA_BROKEN_SPELL" or event == "SPELL_AURA_REMOVED" then
 		if event == "SPELL_AURA_APPLIED" or event == "SPELL_AURA_REFRESH" then
 			local duration = NP:GetSpellDuration(spellID)
 			local texture = GetSpellTexture(spellID)

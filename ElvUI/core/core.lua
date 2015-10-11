@@ -932,7 +932,7 @@ function E:Initialize()
 		self:Install()
 	end
 	
-	if not find(date(), '04/01/') then	
+	if not find(date(), '04/01/') then
 		E.global.aprilFools = nil;
 	end
 	

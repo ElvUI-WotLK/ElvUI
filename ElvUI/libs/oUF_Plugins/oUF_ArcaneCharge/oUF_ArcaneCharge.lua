@@ -9,7 +9,7 @@ local ARCANE_DEBUFF = GetSpellInfo(36032)
 local function UpdateBar(self, elapsed)
 	if not self.expirationTime then return end
 	self.elapsed = (self.elapsed or 0) + elapsed
-	if self.elapsed >= 0.5 then	
+	if self.elapsed >= 0.5 then
 		local timeLeft = self.expirationTime - GetTime()
 		if timeLeft > 0 then
 			self:SetValue(timeLeft)

@@ -79,7 +79,7 @@ function E:Grid(msg)
 		E.db.gridSize = msg
 		E:Grid_Show()
 	else 
-		if EGrid then		
+		if EGrid then
 			E:Grid_Hide()
 		else 
 			E:Grid_Show()

@@ -40,8 +40,8 @@ local function createConfigEnv()
 		UnitClass = function(unit)
 			if (unit == "target") or (unit == "focus") then
 				return UnitClass(unit)
-			end		
-		
+			end
+			
 			local classToken = CLASS_SORT_ORDER[random(1, #(CLASS_SORT_ORDER))]
 			return LOCALIZED_CLASS_NAMES_MALE[classToken], classToken
 		end,
@@ -84,7 +84,7 @@ end
 
 function UF:ForceShow(frame)
 	if InCombatLockdown() then return; end
-	if not frame.isForced then		
+	if not frame.isForced then
 		frame.oldUnit = frame.unit
 		frame.unit = "player"
 		frame.isForced = true;
@@ -94,7 +94,7 @@ function UF:ForceShow(frame)
 	frame:SetScript("OnUpdate", nil)
 	frame.forceShowAuras = true
 	UnregisterUnitWatch(frame)
-	RegisterUnitWatch(frame, true)	
+	RegisterUnitWatch(frame, true)
 	
 	frame:Show()
 	if frame:IsVisible() and frame.Update then
@@ -188,12 +188,12 @@ function UF:HeaderConfig(header, configMode)
 	header.forceShowAuras = configMode
 	header.isForced = configMode
 
-	if configMode then	
+	if configMode then
 		for _, func in pairs(overrideFuncs) do
 			if type(func) == "function" then
 				if not originalEnvs[func] then
 					originalEnvs[func] = getfenv(func)
-					setfenv(func, configEnv)		
+					setfenv(func, configEnv)
 				end
 			end
 		end
@@ -203,13 +203,13 @@ function UF:HeaderConfig(header, configMode)
 		for func, env in pairs(originalEnvs) do
 			setfenv(func, env)
 			originalEnvs[func] = nil
-		end		
-
+		end
+		
 		RegisterStateDriver(header, "visibility", header.db.visibility)
 
 		header:GetScript("OnEvent")(header, "PLAYER_ENTERING_WORLD")
-	end	
-
+	end
+	
 	for i=1, #header.groups do
 		local group = header.groups[i]
 		local db = group.db
@@ -218,7 +218,7 @@ function UF:HeaderConfig(header, configMode)
 			group.forceShow = header.forceShow
 			group.forceShowAuras = header.forceShowAuras
 			group:HookScript("OnAttributeChanged", OnAttributeChanged)
-			if configMode then		
+			if configMode then
 				for key in pairs(attributeBlacklist) do
 					group:SetAttribute(key, nil)
 				end
@@ -226,12 +226,11 @@ function UF:HeaderConfig(header, configMode)
 				OnAttributeChanged(group)
 
 
-				group:Update()	
+				group:Update()
 			else
 				for key in pairs(attributeBlacklist) do
 					group:SetAttribute(key, true)
-				end	
-
+				end
 				
 				UF:UnshowChildUnits(group, group:GetChildren())
 				group:SetAttribute("startingIndex", 1)
@@ -255,7 +254,7 @@ function UF:PLAYER_REGEN_DISABLED()
 		local frame = self[unit]
 		if frame and frame.forceShow then
 			self:UnforceShow(frame)
-		end	
+		end
 	end
 	
 	for i=1, 5 do
@@ -274,7 +273,7 @@ function UF:PLAYER_REGEN_DISABLED()
 		if self["party"..i] and self["party"..i].isForced then
 			self:UnforceShow(self["party"..i])
 		end
-	end	
+	end
 end
 
 UF:RegisterEvent("PLAYER_REGEN_DISABLED")

@@ -20,7 +20,7 @@ function UF:Construct_PowerBar(frame, bg, text, textPos, lowtext)
 	end
 	
 	if text then
-		power.value = frame.RaisedElementParent:CreateFontString(nil, "OVERLAY")	
+		power.value = frame.RaisedElementParent:CreateFontString(nil, "OVERLAY")
 		UF:Configure_FontString(power.value)
 		
 		power.value:SetParent(frame)
@@ -46,7 +46,7 @@ function UF:Construct_PowerBar(frame, bg, text, textPos, lowtext)
 	power:CreateBackdrop("Default")
 
 	return power
-end	
+end
 
 local tokens = { [0] = "MANA", "RAGE", "FOCUS", "ENERGY", "RUNIC_POWER" }
 function UF:PostUpdatePower(unit, min, max)
@@ -64,7 +64,7 @@ function UF:PostUpdatePower(unit, min, max)
 			local mu = self.bg.multiplier or 1
 			self.bg:SetVertexColor(color[1] * mu, color[2] * mu, color[3] * mu)
 		end
-	end	
+	end
 	
 	local db = parent.db
 	if self.LowManaText and db then
@@ -80,5 +80,5 @@ function UF:PostUpdatePower(unit, min, max)
 	
 	if db and db.power and db.power.hideonnpc then
 		UF:PostNamePosition(parent, unit)
-	end	
+	end
 end

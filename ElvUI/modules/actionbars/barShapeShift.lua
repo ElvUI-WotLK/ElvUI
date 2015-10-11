@@ -96,11 +96,11 @@ function AB:PositionAndSizeBarShapeShift()
 	end
 	bar.db = self.db['barShapeShift']
 	bar.db.position = nil; --Depreciated
-	if bar.LastButton and numButtons > bar.LastButton then	
+	if bar.LastButton and numButtons > bar.LastButton then
 		numButtons = bar.LastButton;
 	end
 
-	if bar.LastButton and buttonsPerRow > bar.LastButton then	
+	if bar.LastButton and buttonsPerRow > bar.LastButton then
 		buttonsPerRow = bar.LastButton;
 	end
 	

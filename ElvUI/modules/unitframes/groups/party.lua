@@ -56,7 +56,7 @@ function UF:Construct_PartyFrames(unitGroup)
 	return self;
 end
 
-function UF:Update_PartyHeader(header, db)	
+function UF:Update_PartyHeader(header, db)
 	header.db = db;
 	
 	local headerHolder = header:GetParent();
@@ -82,7 +82,7 @@ function UF:PartySmartVisibility(event)
 	local inInstance, instanceType = IsInInstance();
 	if(event == "PLAYER_REGEN_ENABLED") then self:UnregisterEvent("PLAYER_REGEN_ENABLED"); end
 
-	if(not InCombatLockdown()) then		
+	if(not InCombatLockdown()) then
 		if(inInstance and (instanceType == "raid" or instanceType == "pvp")) then
 			UnregisterStateDriver(self, "visibility");
 			self:Hide();
@@ -145,7 +145,7 @@ function UF:Update_PartyFrames(frame, db)
 		
 		if(not frame.originalParent.childList) then
 			frame.originalParent.childList = {};
-		end	
+		end
 		frame.originalParent.childList[frame] = true;
 		
 		if(not InCombatLockdown()) then
@@ -206,7 +206,7 @@ function UF:Update_PartyFrames(frame, db)
 			name:ClearAllPoints();
 			name:SetPoint("CENTER", frame.Health, "CENTER");
 			frame:Tag(name, "[namecolor][name:short]");
-		end			
+		end
 	else
 		frame:SetAttribute("initial-height", UNIT_HEIGHT);
 		frame:SetAttribute("initial-width", UNIT_WIDTH);
@@ -434,9 +434,13 @@ function UF:Update_PartyFrames(frame, db)
 		
 		do
 			if(db.debuffs.enable or db.buffs.enable) then
-				frame:EnableElement("Aura");
+				if(not frame:IsElementEnabled("Aura")) then
+					frame:EnableElement("Aura");
+				end
 			else
-				frame:DisableElement("Aura");
+				if(frame:IsElementEnabled("Aura")) then
+					frame:DisableElement("Aura");
+				end
 			end
 			
 			frame.Buffs:ClearAllPoints();
@@ -466,7 +470,7 @@ function UF:Update_PartyFrames(frame, db)
 			
 			buffs:Point(E.InversePoints[db.buffs.anchorPoint], attachTo, db.buffs.anchorPoint, x + db.buffs.xOffset, y + db.buffs.yOffset + (E.PixelMode and (db.buffs.anchorPoint:find("TOP") and -1 or 1) or 0));
 			buffs:Height(buffs.size * rows);
-			buffs["growth-y"] = db.buffs.anchorPoint:find("TOP") and "UP" or "DOWN";
+			buffs["growth-y"] = db.buffs.anchorPoint:find("TOP") and "UP" or "DOWN"
 			buffs["growth-x"] = db.buffs.anchorPoint == "LEFT" and "LEFT" or  db.buffs.anchorPoint == "RIGHT" and "RIGHT" or (db.buffs.anchorPoint:find("LEFT") and "RIGHT" or "LEFT");
 			buffs["spacing-x"] = db.buffs.xSpacing;
 			buffs["spacing-y"] = db.buffs.ySpacing;

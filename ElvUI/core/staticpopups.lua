@@ -337,7 +337,7 @@ end
 function E:StaticPopup_SetUpPosition(dialog)
 	if ( not tContains(E.StaticPopup_DisplayedFrames, dialog) ) then
 		local lastFrame = E.StaticPopup_DisplayedFrames[#E.StaticPopup_DisplayedFrames];
-		if ( lastFrame ) then	
+		if ( lastFrame ) then
 			dialog:SetPoint("TOP", lastFrame, "BOTTOM", 0, -4);
 		else
 			dialog:SetPoint("TOP", E.UIParent, "TOP", 0, -100);
@@ -875,7 +875,7 @@ end
 function E:StaticPopup_CombineTables()
 	if ( not tContains(E.StaticPopup_DisplayedFrames, dialog) ) then
 		local lastFrame = E.StaticPopup_DisplayedFrames[#StaticPopup_DisplayedFrames];
-		if ( lastFrame ) then	
+		if ( lastFrame ) then
 			dialog:SetPoint("TOP", lastFrame, "BOTTOM", 0, -4);
 		else
 			dialog:SetPoint("TOP", E.UIParent, "TOP", 0, -135);

@@ -7,7 +7,7 @@ assert(ElvUF, "ElvUI was unable to locate oUF.");
 
 local ArenaHeader = CreateFrame("Frame", "ArenaHeader", UIParent);
 
-function UF:Construct_ArenaFrames(frame)	
+function UF:Construct_ArenaFrames(frame)
 	frame.Health = self:Construct_HealthBar(frame, true, true, "RIGHT");
 	frame.Name = self:Construct_NameText(frame);
 	
@@ -99,14 +99,14 @@ function UF:Update_ArenaFrames(frame, db)
 				health.colorSmooth = true;
 			else
 				health.colorHealth = true;
-			end		
+			end
 		else
 			if(self.db["colors"].healthclass ~= true) then
 				if(self.db["colors"].colorhealthbyvalue == true) then
 					health.colorSmooth = true;
 				else
 					health.colorHealth = true;
-				end		
+				end
 			else
 				health.colorClass = true;
 				health.colorReaction = true;
@@ -270,11 +270,11 @@ function UF:Update_ArenaFrames(frame, db)
 		if(db.debuffs.enable or db.buffs.enable) then
 			if(not frame:IsElementEnabled("Aura")) then
 				frame:EnableElement("Aura");
-			end	
+			end
 		else
 			if(frame:IsElementEnabled("Aura")) then
 				frame:DisableElement("Aura");
-			end			
+			end
 		end
 		
 		frame.Buffs:ClearAllPoints();
@@ -304,13 +304,19 @@ function UF:Update_ArenaFrames(frame, db)
 		
 		buffs:Point(E.InversePoints[db.buffs.anchorPoint], attachTo, db.buffs.anchorPoint, x + db.buffs.xOffset, y + db.buffs.yOffset + (E.PixelMode and (db.buffs.anchorPoint:find("TOP") and -1 or 1) or 0));
 		buffs:Height(buffs.size * rows);
-		buffs["growth-y"] = db.buffs.anchorPoint:find("TOP") and "UP" or "DOWN";
+		buffs["growth-y"] = db.buffs.anchorPoint:find("TOP") and "UP" or "DOWN"
 		buffs["growth-x"] = db.buffs.anchorPoint == "LEFT" and "LEFT" or  db.buffs.anchorPoint == "RIGHT" and "RIGHT" or (db.buffs.anchorPoint:find("LEFT") and "RIGHT" or "LEFT");
 		buffs["spacing-x"] = db.buffs.xSpacing;
 		buffs["spacing-y"] = db.buffs.ySpacing;
 		buffs.initialAnchor = E.InversePoints[db.buffs.anchorPoint];
 		
-		if(db.buffs.enable) then			
+		buffs.attachTo = attachTo;
+		buffs.point = E.InversePoints[db.buffs.anchorPoint];
+		buffs.anchorPoint = db.buffs.anchorPoint;
+		buffs.xOffset = x + db.buffs.xOffset;
+		buffs.yOffset = y + db.buffs.yOffset + (E.PixelMode and (db.buffs.anchorPoint:find("TOP") and -1 or 1) or 0);
+		
+		if(db.buffs.enable) then
 			buffs:Show();
 			UF:UpdateAuraIconSettings(buffs);
 		else
@@ -332,7 +338,7 @@ function UF:Update_ArenaFrames(frame, db)
 		debuffs.num = db.debuffs.perrow * rows;
 		debuffs.size = db.debuffs.sizeOverride ~= 0 and db.debuffs.sizeOverride or ((((debuffs:GetWidth() - (debuffs.spacing*(debuffs.num/rows - 1))) / debuffs.num)) * rows);
 		
-		if db.debuffs.sizeOverride and db.debuffs.sizeOverride > 0 then
+		if(db.debuffs.sizeOverride and db.debuffs.sizeOverride > 0) then
 			debuffs:SetWidth(db.debuffs.perrow * db.debuffs.sizeOverride);
 		end
 		
@@ -347,11 +353,43 @@ function UF:Update_ArenaFrames(frame, db)
 		debuffs["spacing-y"] = db.debuffs.ySpacing;
 		debuffs.initialAnchor = E.InversePoints[db.debuffs.anchorPoint];
 		
-		if(db.debuffs.enable) then			
+		debuffs.attachTo = attachTo;
+		debuffs.point = E.InversePoints[db.debuffs.anchorPoint];
+		debuffs.anchorPoint = db.debuffs.anchorPoint;
+		debuffs.xOffset = x + db.debuffs.xOffset;
+		debuffs.yOffset = y + db.debuffs.yOffset;
+		
+		if(db.debuffs.enable) then
 			debuffs:Show();
 			UF:UpdateAuraIconSettings(debuffs);
 		else
 			debuffs:Hide();
+		end
+	end
+	
+	do
+		local position = db.smartAuraPosition;
+		if(position == "BUFFS_ON_DEBUFFS") then
+			if(db.debuffs.attachTo == "BUFFS") then
+				E:Print(format(L["This setting caused a conflicting anchor point, where '%s' would be attached to itself. Please check your anchor points. Setting '%s' to be attached to '%s'."], L["Buffs"], L["Debuffs"], L["Frame"]));
+				db.debuffs.attachTo = "FRAME";
+				frame.Debuffs.attachTo = frame;
+			end
+			
+			frame.Buffs.PostUpdate = nil;
+			frame.Debuffs.PostUpdate = UF.UpdateBuffsHeaderPosition;
+		elseif(position == "DEBUFFS_ON_BUFFS") then
+			if(db.buffs.attachTo == "DEBUFFS") then
+				E:Print(format(L["This setting caused a conflicting anchor point, where '%s' would be attached to itself. Please check your anchor points. Setting '%s' to be attached to '%s'."], L["Debuffs"], L["Buffs"], L["Frame"]));
+				db.buffs.attachTo = "FRAME";
+				frame.Buffs.attachTo = frame;
+			end
+			
+			frame.Buffs.PostUpdate = UF.UpdateDebuffsHeaderPosition;
+			frame.Debuffs.PostUpdate = nil;
+		else
+			frame.Buffs.PostUpdate = nil;
+			frame.Debuffs.PostUpdate = nil;
 		end
 	end
 	
@@ -376,7 +414,7 @@ function UF:Update_ArenaFrames(frame, db)
 			castbar.Spark:Show();
 		else
 			castbar.Spark:Hide();
-		end		
+		end
 		
 		castbar:ClearAllPoints();
 		castbar:Point("TOPLEFT", frame, "BOTTOMLEFT", BORDER, -(BORDER*2+BORDER));

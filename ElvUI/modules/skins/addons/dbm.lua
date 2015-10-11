@@ -105,7 +105,7 @@ local function SkinBars(self)
 					name.styled = true
 				end
 				
-				if not timer.styled then	
+				if not timer.styled then
 					timer:ClearAllPoints()
 					timer:Point("RIGHT", frame, "RIGHT", -4, 0)
 					timer:FontTemplate(nil, 12, 'OUTLINE')

@@ -57,7 +57,7 @@ function TOTEMS:PositionAndSize()
 			elseif prevButton then
 				button:SetPoint('TOP', prevButton, 'BOTTOM', 0, -self.db.spacing)
 			end
-		elseif self.db.growthDirection == 'HORIZONTAL' and self.db.sortDirection == 'DESCENDING' then	
+		elseif self.db.growthDirection == 'HORIZONTAL' and self.db.sortDirection == 'DESCENDING' then
 			if i == 1 then
 				button:SetPoint('RIGHT', self.bar, 'RIGHT', -self.db.spacing, 0)
 			elseif prevButton then

@@ -1050,7 +1050,7 @@ function CH:ChatFrame_MessageEventHandler(event, ...)
 		
 		if ( not self:IsShown() ) then
 			if ( (self == DEFAULT_CHAT_FRAME and info.flashTabOnGeneral) or (self ~= DEFAULT_CHAT_FRAME and info.flashTab) ) then
-				if ( not CHAT_OPTIONS.HIDE_FRAME_ALERTS or type == "WHISPER" or type == "BN_WHISPER" ) then	--BN_WHISPER FIXME
+				if ( not CHAT_OPTIONS.HIDE_FRAME_ALERTS or type == "WHISPER" or type == "BN_WHISPER" ) then
 					FCF_StartAlertFlash(self);
 				end
 			end
@@ -1351,8 +1351,8 @@ local function GetTimeForSavedMessage()
 end
 
 function CH:SaveChatHistory(event, ...)
-	if self.db.throttleInterval ~= 0 and (event == 'CHAT_MESSAGE_SAY' or event == 'CHAT_MESSAGE_YELL' or event == 'CHAT_MSG_CHANNEL') then	
-		self:ChatThrottleHandler(event, ...)		
+	if self.db.throttleInterval ~= 0 and (event == 'CHAT_MESSAGE_SAY' or event == 'CHAT_MESSAGE_YELL' or event == 'CHAT_MSG_CHANNEL') then
+		self:ChatThrottleHandler(event, ...)
 		
 		local message, author = ...
 		local msg = PrepareMessage(author, message)

@@ -207,8 +207,8 @@ function UF:PostUpdateAura(unit, button, index, offset, filter, isDebuff, durati
 		if (isStealable) and not isFriend then
 			button:SetBackdropBorderColor(237/255, 234/255, 142/255)
 		else
-			button:SetBackdropBorderColor(unpack(E["media"].bordercolor))		
-		end	
+			button:SetBackdropBorderColor(unpack(E["media"].bordercolor));
+		end
 	end
 
 	local size = button:GetParent().size
@@ -232,7 +232,7 @@ function UF:PostUpdateAura(unit, button, index, offset, filter, isDebuff, durati
 			button.expiration = expiration - GetTime()
 			button.nextupdate = -1
 		end
-	end	
+	end
 	if duration == 0 or expiration == 0 then
 		button.expirationTime = nil;
 		button.expiration = nil;
@@ -245,7 +245,7 @@ function UF:PostUpdateAura(unit, button, index, offset, filter, isDebuff, durati
 	end
 end
 
-function UF:UpdateAuraTimer(elapsed)	
+function UF:UpdateAuraTimer(elapsed)
 	self.expiration = self.expiration - elapsed
 	if self.nextupdate > 0 then
 		self.nextupdate = self.nextupdate - elapsed
@@ -291,7 +291,7 @@ function UF:CheckFilter(filterType, isFriend)
 	return false
 end
 
-function UF:AuraFilter(unit, icon, name, rank, texture, count, dtype, duration, timeLeft, unitCaster, isStealable, shouldConsolidate, spellID)	
+function UF:AuraFilter(unit, icon, name, rank, texture, count, dtype, duration, timeLeft, unitCaster, isStealable, shouldConsolidate, spellID)
 	if E.global.unitframe.InvalidSpells[spellID] then
 		return false;
 	end
@@ -372,8 +372,8 @@ function UF:AuraFilter(unit, icon, name, rank, texture, count, dtype, duration, 
 		end
 		
 		anotherFilterExists = true
-	end	
-
+	end
+	
 	if db.useFilter and E.global["unitframe"]["aurafilters"][db.useFilter] then
 		local type = E.global["unitframe"]["aurafilters"][db.useFilter].type
 		local spellList = E.global["unitframe"]["aurafilters"][db.useFilter].spells
@@ -393,9 +393,9 @@ function UF:AuraFilter(unit, icon, name, rank, texture, count, dtype, duration, 
 		elseif type == "Blacklist" and spellList[name] and spellList[name].enable then
 			returnValue = false				
 		end
-	end		
+	end
 	
-	return returnValue	
+	return returnValue
 end
 
 function UF:UpdateBuffsHeaderPosition()
