@@ -20,7 +20,7 @@ local UPDATE_VISIBILITY = function(self, event)
 	
 	if(druidmana.PostUpdateVisibility) then
 		return druidmana:PostUpdateVisibility(self.unit);
-	end	
+	end
 end
 
 local UNIT_MANA = function(self, event, unit, powerType)

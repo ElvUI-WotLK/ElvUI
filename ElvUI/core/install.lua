@@ -159,8 +159,8 @@ local function SetupCVars()
 	SetCVar('lockActionBars', 1)
 	
 	InstallStepComplete.message = L["CVars Set"]
-	InstallStepComplete:Show()					
-end	
+	InstallStepComplete:Show()
+end
 
 function E:GetColor(r, b, g, a)	
 	return { r = r, b = b, g = g, a = a }
@@ -216,8 +216,8 @@ function E:SetupTheme(theme, noDisplayMsg)
 		
 		if InstallStepComplete and not noDisplayMsg then
 			InstallStepComplete.message = L["Theme Set"]
-			InstallStepComplete:Show()		
-		end	
+			InstallStepComplete:Show()
+		end
 	end
 end
 
@@ -567,15 +567,15 @@ function E:SetupLayout(layout, noDataReset)
 
 		if InstallStepComplete then
 			InstallStepComplete.message = L["Layout Set"]
-			InstallStepComplete:Show()	
-		end		
+			InstallStepComplete:Show()
+		end
 	end
 	
 	E.db.layoutSet = layout
 	
 	if not noDataReset and E.private.theme then
 		E:SetupTheme(E.private.theme, true)
-	end	
+	end
 	
 	E:UpdateAll(true)
 end
@@ -614,8 +614,8 @@ local function SetupAuras(style)
 	E:GetModule('UnitFrames'):Update_AllFrames()	
 	if InstallStepComplete then
 		InstallStepComplete.message = L["Auras Set"]
-		InstallStepComplete:Show()		
-	end	
+		InstallStepComplete:Show()
+	end
 end
 
 local function InstallComplete()

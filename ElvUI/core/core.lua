@@ -187,7 +187,7 @@ function E:UpdateBorderColors()
 			self["frames"][frame] = nil;
 		end
 	end
-end	
+end
 
 function E:UpdateBackdropColors()
 	for frame, _ in pairs(self["frames"]) do
@@ -205,7 +205,7 @@ function E:UpdateBackdropColors()
 			self["frames"][frame] = nil;
 		end
 	end
-end	
+end
 
 function E:UpdateFontTemplates()
 	for text, _ in pairs(self["texts"]) do
@@ -314,11 +314,11 @@ function E:CheckIncompatible()
 	
 	if IsAddOnLoaded('Dominos') and E.private.actionbar.enable then
 		E:IncompatibleAddOn('Dominos', 'ActionBar')
-	end	
+	end
 	
 	if IsAddOnLoaded('TidyPlates') and E.private.nameplate.enable then
 		E:IncompatibleAddOn('TidyPlates', 'NamePlate')
-	end	
+	end
 	
 	if IsAddOnLoaded('ArkInventory') and E.private.general.bags then
 		E:IncompatibleAddOn('ArkInventory', 'Bags')
@@ -513,8 +513,8 @@ function E:ResetAllUI()
 
 	if E.db.lowresolutionset then
 		E:SetupResolution(true)
-	end	
-
+	end
+	
 	if E.db.layoutSet then
 		E:SetupLayout(E.db.layoutSet, true)
 	end
@@ -603,7 +603,7 @@ function E:BeginFoolsDayEvent()
 	
 	for _, header in pairs(UF['headers']) do
 		tinsert(self.massiveShakeObjects, header)
-	end	
+	end
 	
 	for i=1, NUM_PET_ACTION_SLOTS do
 		if _G["PetActionButton"..i] then
@@ -694,7 +694,7 @@ function E:AprilFoolsFuckupFix()
 		HelloKittyLeft:Hide()
 		HelloKittyRight:Hide()
 		return
-	end	
+	end
 	
 	self.db.tempSettings = nil	
 	self:UpdateAll()
@@ -858,7 +858,7 @@ local function OnUpdate(self, elapsed)
 		self.elapsed = 0
 	else
 		self.elapsed = (self.elapsed or 0) + elapsed
-	end	
+	end
 end
 
 function E:CreateKittys()

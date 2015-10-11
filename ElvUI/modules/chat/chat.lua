@@ -137,7 +137,7 @@ local function ChatFrame_OnMouseScroll(frame, delta)
 			end
 
 			frame.ScrollTimer = CH:ScheduleTimer('ScrollToBottom', CH.db.scrollDownInterval, frame)
-		end		
+		end
 	end
 end
 
@@ -274,7 +274,7 @@ function CH:StyleChat(frame)
 	
 	for i, text in pairs(ElvCharacterDB.ChatEditHistory) do
 		editbox:AddHistoryLine(text)
-	end	
+	end
 	
 	hooksecurefunc("ChatEdit_UpdateHeader", function()
 		local type = editbox:GetAttribute("chatType")
@@ -492,7 +492,8 @@ function CH:PositionChat(override)
 		local BASE_OFFSET = 60
 		if E.PixelMode then
 			BASE_OFFSET = BASE_OFFSET - 3
-		end	
+		end
+		
 		chat = _G[format("ChatFrame%d", i)]
 		chatbg = format("ChatFrame%dBackground", i)
 		button = _G[format("ButtonCF%d", i)]
@@ -508,7 +509,7 @@ function CH:PositionChat(override)
 				isDocked = true
 			else
 				isDocked = false
-			end	
+			end
 		end
 		
 		if chat:IsShown() and not (id > NUM_CHAT_WINDOWS) and id == self.RightChatWindowID then
@@ -569,8 +570,8 @@ function CH:PositionChat(override)
 				CH:SetupChatTabs(tab, fadeTabsNoBackdrop and true or false)
 			else
 				CH:SetupChatTabs(tab, false)
-			end		
-		end		
+			end
+		end
 	end
 	
 	self.initialMove = true;
@@ -944,15 +945,15 @@ function CH:ChatFrame_MessageEventHandler(event, ...)
 						for character, texture in pairs(specialChatIcons[realm]) do
 							if arg2 == character then
 								pflag = texture
-							end		
+							end
 						end
-					end		
+					end
 				end
 				
 				if(pflag == true) then
 					pflag = nil
 				end
-
+				
 				pflag = pflag or ""
 			end
 			if ( type == "WHISPER_INFORM" and GMChatFrame_IsGM and GMChatFrame_IsGM(arg2) ) then
@@ -1110,7 +1111,7 @@ function CH:SetupChat(event, ...)
 			end)
 			frame.scriptsSet = true
 		end
-	end	
+	end
 	
 	if self.db.hyperlinkHover then
 		self:EnableHyperlink()
@@ -1231,8 +1232,8 @@ function CH:CheckKeyword(message)
 						PlaySoundFile(LSM:Fetch("sound", self.db.keywordSound), "Master")
 					end
 					self.SoundPlayed = true
-					self.SoundTimer = CH:ScheduleTimer('ThrottleSound', 1)			
-				end				
+					self.SoundTimer = CH:ScheduleTimer('ThrottleSound', 1);
+				end
 			end
 		end
 
@@ -1359,7 +1360,7 @@ function CH:SaveChatHistory(event, ...)
 			if difftime(time(), msgTime[msg]) <= CH.db.throttleInterval then
 				return;
 			end
-		end		
+		end
 	end
 	
 	local temp = {}
@@ -1382,7 +1383,7 @@ function CH:SaveChatHistory(event, ...)
 		
 		if c > 128 then
 			ElvCharacterDB.ChatLog[k] = nil
-		end	  
+		end
 	end
 end
 
@@ -1466,7 +1467,7 @@ function CH:Initialize()
 		DEFAULT_CHAT_FRAME:RegisterEvent("GUILD_MOTD")
 
 		local msg = GetGuildRosterMOTD()
-		if msg == "" then msg = nil end		
+		if msg == "" then msg = nil end
 		if msg then
 			ChatFrame_SystemEventHandler(DEFAULT_CHAT_FRAME, "GUILD_MOTD", msg)
 		end

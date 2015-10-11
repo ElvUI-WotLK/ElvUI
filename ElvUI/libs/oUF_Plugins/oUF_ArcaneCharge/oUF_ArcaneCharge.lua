@@ -96,7 +96,7 @@ local function Enable(self, unit)
 		end
 		
 		return true;
-	end	
+	end
 end
 
 local function Disable(self,unit)

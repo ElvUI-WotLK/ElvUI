@@ -43,7 +43,7 @@ function E:UpdateBlizzardFonts()
 		-- set an invisible font for xp, honor kill, etc
 		local INVISIBLE = [=[Interface\Addons\ElvUI\media\fonts\Invisible.ttf]=]
 		COMBAT = INVISIBLE
-	end	
+	end
 	
 	-- Base fonts
 	SetFont(GameTooltipHeader,                  NORMAL, self.db.general.fontsize)

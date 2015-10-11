@@ -277,7 +277,7 @@ function AB:CreateBarShapeShift()
 			self:Hide();
 		else
 			self:Show();
-		end	
+		end
 	]]);
 	
 	self:RegisterEvent('UPDATE_SHAPESHIFT_FORMS', 'AdjustMaxStanceButtons');

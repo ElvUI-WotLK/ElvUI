@@ -162,7 +162,7 @@ local Disable = function(self)
 		self:UnregisterEvent("RUNE_POWER_UPDATE", UpdateRune)
 		self:UnregisterEvent("RUNE_TYPE_UPDATE", UpdateType)
 		self:UnregisterEvent("PLAYER_ENTERING_WORLD", UpdateAllRuneTypes)
-	end	
+	end
 end
 
 oUF:AddElement("Runes", Update, Enable, Disable)

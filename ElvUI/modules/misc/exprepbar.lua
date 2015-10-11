@@ -52,7 +52,7 @@ function M:UpdateExperience(event)
 				text = format('%s - %s', E:ShortValue(cur), E:ShortValue(max))
 			elseif textFormat == 'CURPERC' then
 				text = format('%s - %d%%', E:ShortValue(cur), cur / max * 100)
-			end			
+			end
 		end
 		
 		bar.text:SetText(text)
@@ -94,7 +94,7 @@ function M:UpdateReputation(event)
 			text = format('%s: %s - %s [%s]', name, E:ShortValue(value - min), E:ShortValue(max - min), _G['FACTION_STANDING_LABEL'..ID])
 		elseif textFormat == 'CURPERC' then
 			text = format('%s: %s - %d%% [%s]', name, E:ShortValue(value - min), ((value - min) / (max - min) * 100), _G['FACTION_STANDING_LABEL'..ID])
-		end					
+		end
 		
 		bar.text:SetText(text)		
 	end

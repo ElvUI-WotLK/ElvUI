@@ -15,7 +15,7 @@ local function Reset()
 	combatTime = 0
 	healTotal = 0
 	lastHealAmount = 0
-end	
+end
 
 local function GetHPS(self)
 	local hps

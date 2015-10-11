@@ -1,41 +1,41 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...));
 local UF = E:GetModule("UnitFrames");
 
-local _, ns = ...
-local ElvUF = ns.oUF
-assert(ElvUF, "ElvUI was unable to locate oUF.")
-local tinsert = table.insert
+local _, ns = ...;
+local ElvUF = ns.oUF;
+assert(ElvUF, "ElvUI was unable to locate oUF.");
+local tinsert = table.insert;
 
 function UF:Construct_RaidpetFrames(unitGroup)
-	self:SetScript("OnEnter", UnitFrame_OnEnter)
-	self:SetScript("OnLeave", UnitFrame_OnLeave)
+	self:SetScript("OnEnter", UnitFrame_OnEnter);
+	self:SetScript("OnLeave", UnitFrame_OnLeave);
 	
-	self.RaisedElementParent = CreateFrame("Frame", nil, self)
-	self.RaisedElementParent:SetFrameStrata("MEDIUM")
-	self.RaisedElementParent:SetFrameLevel(self:GetFrameLevel() + 10)
+	self.RaisedElementParent = CreateFrame("Frame", nil, self);
+	self.RaisedElementParent:SetFrameStrata("MEDIUM");
+	self.RaisedElementParent:SetFrameLevel(self:GetFrameLevel() + 10);
 	
-	self.Health = UF:Construct_HealthBar(self, true, true, "RIGHT")
-	self.Name = UF:Construct_NameText(self)
-	self.Buffs = UF:Construct_Buffs(self)
-	self.Debuffs = UF:Construct_Debuffs(self)
-	self.AuraWatch = UF:Construct_AuraWatch(self)
-	self.RaidDebuffs = UF:Construct_RaidDebuffs(self)
-	self.DebuffHighlight = UF:Construct_DebuffHighlight(self)
-	self.TargetGlow = UF:Construct_TargetGlow(self)
-	tinsert(self.__elements, UF.UpdateTargetGlow)
-	self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetGlow)
-	self:RegisterEvent("PLAYER_ENTERING_WORLD", UF.UpdateTargetGlow)
+	self.Health = UF:Construct_HealthBar(self, true, true, "RIGHT");
+	self.Name = UF:Construct_NameText(self);
+	self.Buffs = UF:Construct_Buffs(self);
+	self.Debuffs = UF:Construct_Debuffs(self);
+	self.AuraWatch = UF:Construct_AuraWatch(self);
+	self.RaidDebuffs = UF:Construct_RaidDebuffs(self);
+	self.DebuffHighlight = UF:Construct_DebuffHighlight(self);
+	self.TargetGlow = UF:Construct_TargetGlow(self);
+	tinsert(self.__elements, UF.UpdateTargetGlow);
+	self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetGlow);
+	self:RegisterEvent("PLAYER_ENTERING_WORLD", UF.UpdateTargetGlow);
 	
-	self.Threat = UF:Construct_Threat(self)
-	self.RaidIcon = UF:Construct_RaidIcon(self)
-	self.Range = UF:Construct_Range(self)
+	self.Threat = UF:Construct_Threat(self);
+	self.RaidIcon = UF:Construct_RaidIcon(self);
+	self.Range = UF:Construct_Range(self);
 	
 	self.customTexts = {};
-	UF:Update_RaidpetFrames(self, UF.db["units"]["raidpet"])
-	UF:Update_StatusBars()
-	UF:Update_FontStrings()
-
-	return self
+	UF:Update_RaidpetFrames(self, UF.db["units"]["raidpet"]);
+	UF:Update_StatusBars();
+	UF:Update_FontStrings();
+	
+	return self;
 end
 
 --I don"t know if this function is needed or not? But the error I pm"ed you about was because of the missing OnEvent so I just added it.

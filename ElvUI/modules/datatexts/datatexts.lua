@@ -45,16 +45,16 @@ function DT:RegisterLDB()
 				DT:SetupTooltip(self)
 				obj.OnEnter(self)
 				DT.tooltip:Show()
-			end		
+			end
 		end
 
 		if obj.OnLeave then
 			function OnLeave(self)
 				obj.OnLeave(self)
 				DT.tooltip:Hide()
-			end		
+			end
 		end
-
+		
 		local function OnClick(self, button)
 			obj.OnClick(self, button)
 		end
@@ -75,7 +75,7 @@ function DT:RegisterLDB()
 		end
 
 		self:RegisterDatatext(name, {'PLAYER_ENTER_WORLD'}, OnEvent, nil, OnClick, OnEnter, OnLeave)
-	end	
+	end
 end
 
 local function ValueColorUpdate(newHex)
@@ -183,15 +183,15 @@ function DT:AssignPanelToDataText(panel, data)
 		panel:SetScript('OnLeave', data['onLeave'])
 	else
 		panel:SetScript('OnLeave', DT.Data_OnLeave)
-	end	
+	end
 end
 
 function DT:LoadDataTexts()
 	self.db = E.db.datatexts
 	for name, obj in LDB:DataObjectIterator() do
 		LDB:UnregisterAllCallbacks(self)
-	end	
-
+	end
+	
 	local inInstance, instanceType = IsInInstance()
 	local fontTemplate = LSM:Fetch("font", self.db.font)
 	if ElvConfigToggle then
@@ -283,7 +283,7 @@ function DT:RegisterDatatext(name, events, eventFunc, updateFunc, clickFunc, onE
 	
 	if onLeaveFunc and type(onLeaveFunc) == 'function' then
 		DT.RegisteredDataTexts[name]['onLeave'] = onLeaveFunc
-	end	
+	end
 end
 
 E:RegisterModule(DT:GetName())

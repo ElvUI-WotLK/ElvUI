@@ -66,7 +66,7 @@ function M:Minimap_OnMouseUp(btn)
 			EasyMenu(menuList, menuFrame, 'cursor', 0, 0, 'MENU', 2);
 		else
 			EasyMenu(menuList, menuFrame, 'cursor', -160, 0, 'MENU', 2);
-		end	
+		end
 	elseif(btn == 'RightButton') then
 		local xoff = -1;
 		if(position:match('RIGHT')) then
@@ -312,7 +312,7 @@ function M:Initialize()
 		
 		if(IsAddOnLoaded('GatherMate2')) then
 			LibStub('AceAddon-3.0'):GetAddon('GatherMate2'):GetModule('Display'):ReparentMinimapPins(Minimap);
-		end	
+		end
 	end);
 	
 	UIParent:HookScript('OnShow', function()

@@ -87,8 +87,8 @@ function AB:BindUpdate(button, spellmacro)
 	
 	if not bind:IsMouseEnabled() then
 		bind:EnableMouse(true)
-	end	
-
+	end
+	
 	if spellmacro == "MACRO" then
 		bind.button.id = bind.button:GetID();
 		
@@ -221,7 +221,7 @@ function AB:RegisterMacro(addon)
 		for i=1, 36 do
 			local b = _G["MacroButton"..i];
 			b:HookScript("OnEnter", function(b) AB:BindUpdate(b, "MACRO"); end);
-		end	
+		end
 	end
 end
 
@@ -263,14 +263,14 @@ function AB:LoadKeyBinder()
 	
 	for b, _ in pairs(self["handledbuttons"]) do
 		self:RegisterButton(b, true);
-	end	
-
+	end
+	
 	if not IsAddOnLoaded("Blizzard_MacroUI") then
 		self:SecureHook("LoadAddOn", "RegisterMacro");
 	else
 		self:RegisterMacro("Blizzard_MacroUI");
-	end	
-
+	end
+	
 	--Special Popup
 	local f = CreateFrame("Frame", "ElvUIBindPopupWindow", UIParent)
 	f:SetFrameStrata("DIALOG")

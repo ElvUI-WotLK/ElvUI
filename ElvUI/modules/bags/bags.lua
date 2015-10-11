@@ -165,7 +165,7 @@ function B:UpdateSlot(bagID, slotID)
 		SetItemButtonTextureVertexColor(slot, 0.4, 0.4, 0.4);
 	else
 		SetItemButtonTextureVertexColor(slot, 1, 1, 1);
-	end		
+	end
 	
 	slot.itemLevel:SetText("")
 	if(B.ProfessionColors[bagType]) then
@@ -225,7 +225,7 @@ function B:UpdateCooldowns()
 				SetItemButtonTextureVertexColor(self.Bags[bagID][slotID], 0.4, 0.4, 0.4);
 			else
 				SetItemButtonTextureVertexColor(self.Bags[bagID][slotID], 1, 1, 1);
-			end					
+			end
 		end
 	end
 end
@@ -313,7 +313,7 @@ function B:Layout(isBank)
 					f.ContainerHolder[i]:SetID(bagID)
 					if not f.ContainerHolder[i].tooltipText then
 						f.ContainerHolder[i].tooltipText = ""
-					end			
+					end
 				end
 				
 				f.ContainerHolder[i].iconTexture = _G[f.ContainerHolder[i]:GetName()..'IconTexture'];
@@ -357,7 +357,7 @@ function B:Layout(isBank)
 				if f.Bags[bagID][i] then
 					f.Bags[bagID][i]:Hide();
 				end
-			end			
+			end
 			
 			for slotID = 1, numSlots do
 				f.totalSlots = f.totalSlots + 1;
@@ -406,14 +406,13 @@ function B:Layout(isBank)
 				end
 				
 				lastButton = f.Bags[bagID][slotID];
-			end		
+			end
 		else
-			--Hide unused slots
 			for i = 1, MAX_CONTAINER_ITEMS do
 				if f.Bags[bagID] and f.Bags[bagID][i] then
 					f.Bags[bagID][i]:Hide();
 				end
-			end		
+			end
 			
 			if f.Bags[bagID] then
 				f.Bags[bagID].numSlots = numSlots;
@@ -424,7 +423,7 @@ function B:Layout(isBank)
 					BankFrameItemButton_Update(self.ContainerHolder[i])
 					BankFrameItemButton_UpdateLocked(self.ContainerHolder[i])
 				end
-			end					
+			end
 		end
 	end
 	
@@ -492,7 +491,7 @@ function B:UpdateKeySlot(slotID)
 		SetItemButtonTextureVertexColor(slot, 0.4, 0.4, 0.4);
 	else
 		SetItemButtonTextureVertexColor(slot, 1, 1, 1);
-	end		
+	end
 	
 	if(clink) then
 		local itemEquipLoc;
@@ -984,7 +983,7 @@ function B:ContructContainerFrame(name, isBank)
 			f.currencyButton[i]:SetScript('OnLeave', function() GameTooltip:Hide() end);
 			f.currencyButton[i]:SetScript('OnClick', B.Token_OnClick);
 			f.currencyButton[i]:Hide();
-		end	
+		end
 		
 		f:SetScript('OnHide', CloseAllBags)
 	end

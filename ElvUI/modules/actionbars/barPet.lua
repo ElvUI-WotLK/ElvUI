@@ -243,7 +243,7 @@ function AB:CreateBarPet()
 			self:Hide();
 		else
 			self:Show();
-		end	
+		end
 	]]);
 	
 	PetActionBarFrame.showgrid = 1;

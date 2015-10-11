@@ -107,9 +107,9 @@ local function CreateMover(parent, name, text, overlay, snapOffset, postdrag)
 	end
 	f:SetTemplate("Transparent", nil, nil, true)
 	f:RegisterForDrag("LeftButton", "RightButton")
-	f:SetScript("OnDragStart", function(self) 
-		if InCombatLockdown() then E:Print(ERR_NOT_IN_COMBAT) return end	
-
+	f:SetScript("OnDragStart", function(self)
+		if InCombatLockdown() then E:Print(ERR_NOT_IN_COMBAT) return end
+		
 		if E.db['general'].stickyFrames then
 			Sticky:StartMoving(self, E['snapBars'], f.snapOffset, f.snapOffset, f.snapOffset, f.snapOffset)
 		else
@@ -267,7 +267,7 @@ local function CreateMover(parent, name, text, overlay, snapOffset, postdrag)
 			postdrag(f, E:GetScreenQuadrant(f))
 			self:UnregisterAllEvents()
 		end)
-	end	
+	end
 	
 	E.CreatedMovers[name].Created = true;
 end
@@ -325,7 +325,7 @@ function E:CreateMover(parent, name, text, overlay, snapoffset, postdrag, moverT
 			local moverType = types[i]
 			E.CreatedMovers[name]["type"][moverType] = true
 		end
-	end	
+	end
 	
 	CreateMover(parent, name, text, overlay, snapoffset, postdrag)
 end
@@ -357,7 +357,7 @@ function E:ResetMovers(arg)
 					value(f, E:GetScreenQuadrant(f))
 				end
 			end
-		end	
+		end
 		self.db.movers = nil
 	else
 		for name, _ in pairs(E.CreatedMovers) do
@@ -379,7 +379,7 @@ function E:ResetMovers(arg)
 						end
 					end
 				end
-			end	
+			end
 		end
 	end
 end

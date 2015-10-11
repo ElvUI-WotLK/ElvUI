@@ -36,7 +36,7 @@ local function OnEnter(self)
 		end
 		
 		if ( name and count ) then DT.tooltip:AddDoubleLine(name, count, 1, 1, 1); end
-	end	
+	end
 	
 	DT.tooltip:Show();
 end

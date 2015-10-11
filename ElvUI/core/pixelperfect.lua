@@ -56,7 +56,7 @@ function E:UIScale(event)
 		SetCVar("useUiScale", 1);
 		SetCVar("uiScale", scale);	
 		WorldMapFrame.hasTaint = true;
-	end	
+	end
 	
 	if (event == 'PLAYER_LOGIN' or event == 'UPDATE_FLOATING_CHAT_WINDOWS') then
 		if IsMacClient() then

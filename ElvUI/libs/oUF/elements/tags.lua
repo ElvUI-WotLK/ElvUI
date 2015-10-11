@@ -510,13 +510,13 @@ local Tag = function(self, fs, tagstr)
 				fs:SetAlpha(1)
 			end
 		end
-	end	
+	end
 	
 	local containsOnUpdate
 	for tag in tagstr:gmatch(_PATTERN) do
 		if not tagEvents[tag:sub(2, -2)] then
 			containsOnUpdate = onUpdateDelay[tag:sub(2, -2)] or 0.15;
-		end	
+		end
 	end
 	
 	local func = tagPool[tagstr]

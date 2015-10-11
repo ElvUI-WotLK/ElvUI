@@ -204,7 +204,7 @@ function TT:GameTooltip_SetDefaultAnchor(tt, parent)
 				GameTooltipStatusBar:SetPoint("TOPRIGHT", GameTooltip, "BOTTOMRIGHT", -E.Border, -(E.Spacing * 3))
 				GameTooltipStatusBar.text:Point("CENTER", GameTooltipStatusBar, 0, -3)
 				GameTooltipStatusBar.anchoredToTop = nil
-			end			
+			end
 		end
 	end
 
@@ -495,9 +495,9 @@ function TT:GameTooltip_OnTooltipSetUnit(tt)
 		if (numList > 0) then
 			GameTooltip:AddLine(format("%s (|cffffffff%d|r): %s", L['Targeted By:'], numList, tconcat(targetList, ", ")), nil, nil, nil, true);
 			twipe(targetList);
-		end	
+		end
 	end
-
+	
 	if(color) then
 		GameTooltipStatusBar:SetStatusBarColor(color.r, color.g, color.b)
 	else
@@ -608,7 +608,7 @@ function TT:SetUnitAura(tt, ...)
 		end
 
 		tt:Show()
-	end	
+	end
 end
 
 function TT:GameTooltip_OnTooltipSetSpell(tt)

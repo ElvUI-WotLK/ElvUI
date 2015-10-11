@@ -71,7 +71,7 @@ function THREAT:Update()
 				for i=1, 4 do
 					if UnitExists('party'..i) then
 						self.list['party'..i] = select(3, UnitDetailedThreatSituation('party'..i, 'target'))
-					end			
+					end
 				end
 			end
 			

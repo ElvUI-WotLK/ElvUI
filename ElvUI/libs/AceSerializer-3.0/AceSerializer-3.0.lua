@@ -171,8 +171,8 @@ local function DeserializeValue(iter,single,ctl,data)
 
 	if not ctl then 
 		error("Supplied data misses AceSerializer terminator ('^^')")
-	end	
-
+	end
+	
 	if ctl=="^^" then
 		-- ignore extraneous data
 		return
@@ -210,7 +210,7 @@ local function DeserializeValue(iter,single,ctl,data)
 		local k,v
 		while true do
 			ctl,data = iter()
-			if ctl=="^t" then break end	-- ignore ^t's data
+			if ctl=="^t" then break end -- ignore ^t's data
 			k = DeserializeValue(iter,true,ctl,data)
 			if k==nil then 
 				error("Invalid AceSerializer table format (no table end marker)")

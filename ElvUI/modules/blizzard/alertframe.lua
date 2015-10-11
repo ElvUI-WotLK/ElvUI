@@ -34,7 +34,7 @@ function E:PostAlertMove(screenQuadrant)
 					frame:Point('TOP', lastframe, 'BOTTOM', 0, -4);
 				else
 					frame:Point('BOTTOM', lastframe, 'TOP', 0, 4);
-				end	
+				end
 			else
 				if POSITION == 'TOP' then
 					frame:Point('TOP', AlertFrameHolder, 'BOTTOM', 0, -4);
@@ -77,7 +77,7 @@ function B:AchievementAlertFrame_FixAnchors()
 				frame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET);
 			else
 				frame:SetPoint(POSITION, AlertFrame, ANCHOR_POINT);
-			end		
+			end
 			
 			alertAnchor = frame;
 		end

@@ -115,7 +115,7 @@ local function OnEnter(self)
 				local Green = 1 - Red;
 				
 				DT.tooltip:AddDoubleLine(MemoryTable[i][2], FormatMem(MemoryTable[i][3]), 1, 1, 1, Red, Green + .5, 0);
-			end						
+			end
 		end
 	end
 	
@@ -128,7 +128,7 @@ local function OnEnter(self)
 				local Green = 1 - Red;
 				
 				DT.tooltip:AddDoubleLine(CPUTable[i][2], format(HomeLatencyString, CPUTable[i][3]), 1, 1, 1, Red, Green + .5, 0);
-			end						
+			end
 		end
 		
 		DT.tooltip:AddLine(' ');
@@ -181,7 +181,7 @@ local function Update(self, t)
 		
 		if ( EnteredFrame ) then
 			OnEnter(self);
-		end		
+		end
 	end
 end
 

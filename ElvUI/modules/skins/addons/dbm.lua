@@ -176,12 +176,12 @@ local SkinBoss = function()
 			bar:SetTemplate("Transparent")
 			background:SetNormalTexture(nil)
 			bar.styled=true
-		end	
+		end
 		
 		if not progress.styled then
 			progress:SetStatusBarTexture(E["media"].normTex)
 			progress.styled=true
-		end				
+		end
 		progress:ClearAllPoints()
 		progress:SetInside(bar)
 

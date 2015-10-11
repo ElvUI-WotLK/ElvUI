@@ -70,7 +70,7 @@ local Update = function(self, arg1, arg2)
 		elseif not target and not combat and not focus and (cur == max) and not (cast or channel) then
 			FadeFramesInOut(false, frames[self])
 		end
-	end	
+	end
 end
 
 local Enable = function(self, unit)

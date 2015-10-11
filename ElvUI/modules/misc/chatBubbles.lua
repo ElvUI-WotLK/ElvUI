@@ -155,6 +155,6 @@ function M:LoadChatBubbles()
 		if(count ~= numChildren) then
 			numChildren = count
 			M:HookBubbles(WorldFrame:GetChildren())
-		end	
+		end
 	end)
 end

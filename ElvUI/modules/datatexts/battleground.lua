@@ -78,7 +78,7 @@ function DT:BattlegroundStats()
 			end
 			break
 		end
-	end	
+	end
 	
 	DT.tooltip:Show();
 end

@@ -120,8 +120,8 @@ function M:Initialize()
 		DropDownList1:HookScript("OnShow", function(self)
 			if(DropDownList1:GetScale() ~= UIParent:GetScale()) then
 				DropDownList1:SetScale(UIParent:GetScale());
-			end		
-		end)
+			end
+		end);
 	end
 end
 

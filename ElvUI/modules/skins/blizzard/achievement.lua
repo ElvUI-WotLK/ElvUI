@@ -117,7 +117,7 @@ local function LoadSkin()
 			
 			frame:StripTextures()
 			frame:StyleButton()				
-		end	
+		end
 		self.containerSkined = true
 	end)
 	
@@ -126,7 +126,7 @@ local function LoadSkin()
 			frame.bg3:SetTexture(ACHIEVEMENTUI_BLUEBORDER_R, ACHIEVEMENTUI_BLUEBORDER_G, ACHIEVEMENTUI_BLUEBORDER_B)
 		elseif frame.bg3 then
 			frame.bg3:SetTexture(unpack(E.media.bordercolor))
-		end			
+		end
 	end)
 	
 	hooksecurefunc("AchievementFrameSummary_UpdateAchievements", function()
@@ -162,10 +162,10 @@ local function LoadSkin()
 				frame.backdrop:SetBackdropBorderColor(ACHIEVEMENTUI_BLUEBORDER_R, ACHIEVEMENTUI_BLUEBORDER_G, ACHIEVEMENTUI_BLUEBORDER_B)
 			else
 				frame.backdrop:SetBackdropBorderColor(unpack(E.media.bordercolor))
-			end					
-		end				
+			end
+		end
 	end)
-
+	
 	for i=1, 7 do
 		local frame = _G["AchievementFrameAchievementsContainerButton"..i]
 		_G["AchievementFrameAchievementsContainerButton"..i.."Highlight"]:Kill()
@@ -388,7 +388,7 @@ local function LoadSkin()
 				else
 					metaCriteria.label:SetShadowOffset(1, -1)
 					metaCriteria.label:SetTextColor(.6, .6, .6, 1);
-				end				
+				end
 			elseif criteriaType ~= 1 then
 				textStrings = textStrings + 1;
 				local criteria = AchievementButton_GetCriteria(textStrings);				
@@ -401,7 +401,7 @@ local function LoadSkin()
 				else
 					criteria.name:SetTextColor(.6, .6, .6, 1);
 					criteria.name:SetShadowOffset(1, -1);
-				end		
+				end
 			end
 		end
 	end)

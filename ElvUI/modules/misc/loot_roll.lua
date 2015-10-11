@@ -295,8 +295,8 @@ function M:START_LOOT_ROLL(event, rollID, time)
 			RollOnLoot(rollID, 3);
 		else
 			RollOnLoot(rollID, 2);
-		end		
-	end	
+		end
+	end
 end
 
 function M:ParseRollChoice(msg)

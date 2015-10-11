@@ -36,7 +36,7 @@ local function SkinScrollBar(frame, thumbTrim)
 			S:HandleNextPrevButton(_G[frame:GetName().."ScrollDownButton"])
 			S:SquareButton_SetIcon(_G[frame:GetName().."ScrollDownButton"], 'DOWN')
 			_G[frame:GetName().."ScrollDownButton"]:Size(_G[frame:GetName().."ScrollDownButton"]:GetWidth() + 7, _G[frame:GetName().."ScrollDownButton"]:GetHeight() + 7)	
-		end			
+		end
 		
 		if not frame.trackbg then
 			frame.trackbg = CreateFrame("Frame", nil, frame)
@@ -57,8 +57,8 @@ local function SkinScrollBar(frame, thumbTrim)
 					frame.thumbbg:SetFrameLevel(frame.trackbg:GetFrameLevel())
 				end
 			end
-		end	
-	end	
+		end
+	end
 end
 
 local function SkinButton(f, noTemplate)
@@ -247,7 +247,7 @@ function S:SkinAce3()
 	RegisterAsContainer = function(self, widget)
 		if not E.private.skins.ace3.enable then
 			return oldRegisterAsContainer(self, widget)
-		end	
+		end
 		local TYPE = widget.type
 		if TYPE == "ScrollFrame" then
 			local frame = widget.scrollbar
@@ -264,7 +264,7 @@ function S:SkinAce3()
 						child:StripTextures()
 					end
 				end
-			end	
+			end
 			frame:SetTemplate('Transparent')
 			
 			if widget.treeframe then
@@ -299,8 +299,8 @@ function S:SkinAce3()
 							button.toggleText:SetText('-')
 						elseif button then
 							button.toggleText:SetText('+')
-						end						
-					end			
+						end
+					end
 				end
 			end
 			
