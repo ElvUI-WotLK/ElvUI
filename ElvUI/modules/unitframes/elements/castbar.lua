@@ -21,6 +21,7 @@ function UF:Construct_Castbar(self, direction, moverName)
 	castbar.PostCastInterrupted = UF.PostCastFailed;
 	castbar.PostCastInterruptible = UF.PostCastInterruptible;
 	castbar.PostCastNotInterruptible = UF.PostCastNotInterruptible;
+	castbar.PostChannelStop = UF.PostChannelStop;
 	
 	castbar:SetClampedToScreen(true);
 	castbar:CreateBackdrop("Default");
@@ -100,7 +101,7 @@ function UF:OnCastUpdate(elapsed)
 				self:SetStatusBarColor(r, g, b);
 			end
 			
-			if(self.Spark) then
+			if(self.Spark and db.castbar.spark) then
 				self.Spark:Hide();
 			end
 			
@@ -134,13 +135,13 @@ function UF:OnCastUpdate(elapsed)
 		self.duration = duration;
 		self:SetValue(duration);
 		
-		if(self.Spark) then
+		if(self.Spark and db.castbar.spark) then
 			self.Spark:SetPoint("CENTER", self, "LEFT", (duration / self.max) * self:GetWidth(), 0);
 		end
 	elseif(self.channeling) then
 		local duration = self.duration - elapsed;
 		if(duration <= 0) then
-			if(self.Spark) then
+			if(self.Spark and db.castbar.spark) then
 				self.Spark:Hide();
 			end
 			
@@ -175,7 +176,7 @@ function UF:OnCastUpdate(elapsed)
 		self.duration = duration;
 		self:SetValue(duration);
 		
-		if(self.Spark) then
+		if(self.Spark and db.castbar.spark) then
 			self.Spark:SetPoint("CENTER", self, "LEFT", (duration / self.max) * self:GetWidth(), 0);
 		end
 	elseif(GetTime() < self.holdTime) then
@@ -186,6 +187,7 @@ function UF:OnCastUpdate(elapsed)
 			self:SetAlpha(alpha);
 		else
 			self.fadeOut = nil;
+			if(self.Spark and db.castbar.spark) then self.Spark:Hide(); end
 			self:Hide();
 		end
 	end
@@ -287,6 +289,11 @@ function UF:PostCastStart(unit, name, rank, castid)
 end
 
 function UF:PostCastStop(unit, name, rank, castid)
+	local db = self:GetParent().db;
+	if(not db) then
+		return;
+	end
+	
 	local colors = ElvUF.colors;
 	local r, g, b = colors.castCompleteColor[1], colors.castCompleteColor[2], colors.castCompleteColor[3];
 	
@@ -295,6 +302,10 @@ function UF:PostCastStop(unit, name, rank, castid)
 		self.backdrop:SetBackdropColor(r * 0.58, g * 0.58, b * 0.58, alpha);
 	else
 		self:SetStatusBarColor(r, g, b);
+	end
+	
+	if(self.Spark and db.castbar.spark) then
+		self.Spark:Hide();
 	end
 end
 
@@ -320,6 +331,11 @@ function UF:PostChannelUpdate(unit, name)
 end
 
 function UF:PostCastFailed(event, unit, name, rank, castid)
+	local db = self:GetParent().db;
+	if(not db) then
+		return;
+	end
+	
 	local colors = ElvUF.colors;
 	local r, g, b = colors.castFailColor[1], colors.castFailColor[2], colors.castFailColor[3];
 	if(UF.db.colors.transparentCastbar and self.bg:IsShown()) then
@@ -327,6 +343,10 @@ function UF:PostCastFailed(event, unit, name, rank, castid)
 		self.backdrop:SetBackdropColor(r * 0.58, g * 0.58, b * 0.58, alpha);
 	else
 		self:SetStatusBarColor(r, g, b);
+	end
+	
+	if(self.Spark and db.castbar.spark) then
+		self.Spark:Hide();
 	end
 end
 
@@ -369,5 +389,16 @@ function UF:PostCastInterruptible(unit)
 		
 		local _, _, _, alpha = self.backdrop:GetBackdropColor();
 		self.backdrop:SetBackdropColor(r * 0.58, g * 0.58, b * 0.58, alpha);
+	end
+end
+
+function UF:PostChannelStop(unit, spellname)
+	local db = self:GetParent().db;
+	if(not db) then
+		return;
+	end
+	
+	if(self.Spark and db.castbar.spark) then
+		self.Spark:Hide();
 	end
 end

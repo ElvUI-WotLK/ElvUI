@@ -108,9 +108,6 @@ local UNIT_SPELLCAST_FAILED = function(self, event, unit, spellname, _, castid)
 		return;
 	end
 	castbar:SetValue(castbar.max);
-	if(castbar.Spark) then
-		castbar.Spark:Hide();
-	end
 	
 	castbar.casting = nil;
 	castbar.channeling = nil;
@@ -133,9 +130,6 @@ local UNIT_SPELLCAST_INTERRUPTED = function(self, event, unit, spellname, _, cas
 		return;
 	end
 	castbar:SetValue(castbar.max);
-	if(castbar.Spark) then
-		castbar.Spark:Hide();
-	end
 	
 	castbar.casting = nil;
 	castbar.channeling = nil;
@@ -190,9 +184,6 @@ local UNIT_SPELLCAST_DELAYED = function(self, event, unit, spellname, _, castid)
 		castbar:SetValue(duration);
 		
 		if(not castbar.casting) then
-			if(castbar.Spark) then
-				castbar.Spark:Show();
-			end
 			castbar.casting = 1;
 			castbar.channeling = nil;
 			castbar.fadeOut = 0;
@@ -216,10 +207,6 @@ local UNIT_SPELLCAST_STOP = function(self, event, unit, spellname, _, castid)
 				mergeTradeskill = false;
 			end
 		else
-			if(castbar.Spark) then
-				castbar.Spark:Hide();
-			end
-			
 			castbar:SetValue(castbar.max);
 			
 			castbar.casting = nil;
@@ -259,9 +246,6 @@ local UNIT_SPELLCAST_CHANNEL_START = function(self, event, unit, spellname)
 	end
 	if(castbar.Time) then
 		castbar.Time:SetText();
-	end
-	if(castbar.Spark)then
-		castbar.Spark:Show();
 	end
 	
 	castbar:SetAlpha(1.0);
@@ -318,11 +302,7 @@ local UNIT_SPELLCAST_CHANNEL_STOP = function(self, event, unit, spellname)
 	end
 	
 	local castbar = self.Castbar;
-	if(castbar:IsShown() or castbar.channeling)  then
-		if(castbar.Spark) then
-			castbar.Spark:Hide();
-		end
-		
+	if(castbar:IsShown() or castbar.channeling) then
 		castbar:SetValue(castbar.max);
 		
 		castbar.channeling = nil;
@@ -398,7 +378,6 @@ local onUpdate = function(self, elapsed)
 			self:SetAlpha(alpha);
 		else
 			self.fadeOut = nil;
-			if (self.Spark) then self.Spark:Hide() end
 			self:Hide();
 		end
 	end
