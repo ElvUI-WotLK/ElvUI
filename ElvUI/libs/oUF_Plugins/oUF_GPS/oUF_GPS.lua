@@ -67,6 +67,8 @@ local Update = function(self, elapsed)
 						else
 							GPS:Show();
 							RotateTexture(GPS.Texture, angle);
+							
+							numArrows = numArrows + 1;
 						end
 					end
 				else
