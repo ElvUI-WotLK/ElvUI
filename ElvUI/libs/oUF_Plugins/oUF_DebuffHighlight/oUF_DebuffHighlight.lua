@@ -34,22 +34,18 @@ local function Update(object, event, unit)
 	
 	local debuffType, texture, wasFiltered, style, color = GetDebuffType(unit, object.DebuffHighlightFilter, object.DebuffHighlightFilterTable);
 	if(wasFiltered) then
-		if(style == "GLOW") then
+		if(style == "GLOW" and object.DBHGlow) then
 			object.DBHGlow:Show();
 			object.DBHGlow:SetBackdropBorderColor(color.r, color.g, color.b);
-			color = origColors[object];
-			object.DebuffHighlight:SetVertexColor(color.r, color.g, color.b, color.a);
-		else
+		elseif(object.DBHGlow) then
 			object.DBHGlow:Hide();
 			object.DebuffHighlight:SetVertexColor(color.r, color.g, color.b, color.a or object.DebuffHighlightAlpha or .5);
 		end
 	elseif(debuffType) then
 		color = DebuffTypeColor[debuffType];
-		if(object.DebuffHighlightBackdrop) then
+		if(object.DebuffHighlightBackdrop and object.DBHGlow) then
 			object.DBHGlow:Show();
 			object.DBHGlow:SetBackdropBorderColor(color.r, color.g, color.b);
-			color = origColors[object];
-			object.DebuffHighlight:SetVertexColor(color.r, color.g, color.b, color.a);
 		elseif(object.DebuffHighlightUseTexture) then
 			object.DebuffHighlight:SetTexture(texture);
 		else
@@ -63,15 +59,14 @@ local function Update(object, event, unit)
 		if(object.DebuffHighlightUseTexture) then
 			object.DebuffHighlight:SetTexture(nil);
 		else
-			color = origColors[object];
-			object.DebuffHighlight:SetVertexColor(color.r, color.g, color.b, color.a);
+			object.DebuffHighlight:SetVertexColor(0, 0, 0, 0);
 		end
 	end
 end
 
 local function Enable(object)
 	-- if we're not highlighting this unit return
-	if not object.DebuffHighlightBackdrop and not object.DebuffHighlight then
+	if not object.DebuffHighlightBackdrop and not object.DebuffHighlight and not object.DBHGlow then
 		return
 	end
 	-- if we're filtering highlights and we're not of the dispelling type, return
@@ -81,24 +76,24 @@ local function Enable(object)
 	
 	-- make sure aura scanning is active for this object
 	object:RegisterEvent("UNIT_AURA", Update)
-	
-	if object.DebuffHighlightBackdrop then
-		local r, g, b, a = object:GetBackdropColor()
-		origColors[object] = { r = r, g = g, b = b, a = a}
-		r, g, b, a = object:GetBackdropBorderColor()
-		origBorderColors[object] = { r = r, g = g, b = b, a = a}
-	elseif not object.DebuffHighlightUseTexture then -- color debuffs
-		-- object.DebuffHighlight
-		local r, g, b, a = object.DebuffHighlight:GetVertexColor()
-		origColors[object] = { r = r, g = g, b = b, a = a}
-	end
 
 	return true
 end
 
 local function Disable(object)
-	if object.DebuffHighlightBackdrop or object.DebuffHighlight then
+	if object.DebuffHighlightBackdrop or object.DebuffHighlight or object.DBHGlow then
 		object:UnregisterEvent("UNIT_AURA", Update)
+		
+		if(object.DBHGlow) then
+			object.DBHGlow:Hide();
+		end
+		
+		if(object.DebuffHighlight) then
+			local color = origColors[object];
+			if(color) then
+				object.DebuffHighlight:SetVertexColor(color.r, color.g, color.b, color.a);
+			end
+		end
 	end
 end
 

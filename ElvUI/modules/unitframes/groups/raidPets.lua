@@ -306,7 +306,7 @@ function UF:Update_RaidpetFrames(frame, db)
 	
 	do
 		local dbh = frame.DebuffHighlight;
-		if(E.db.unitframe.debuffHighlighting) then
+		if(E.db.unitframe.debuffHighlighting ~= "NONE") then
 			frame:EnableElement("DebuffHighlight");
 			frame.DebuffHighlightFilterTable = E.global.unitframe.DebuffHighlightColors;
 			if(E.db.unitframe.debuffHighlighting == "GLOW") then

@@ -622,7 +622,7 @@ function UF:Update_TargetFrame(frame, db)
 	
 	do
 		local dbh = frame.DebuffHighlight;
-		if(E.db.unitframe.debuffHighlighting) then
+		if(E.db.unitframe.debuffHighlighting ~= "NONE") then
 			if(not frame:IsElementEnabled("DebuffHighlight")) then
 				frame:EnableElement("DebuffHighlight");
 				frame.DebuffHighlightFilterTable = E.global.unitframe.DebuffHighlightColors;
