@@ -183,7 +183,7 @@ function UF:Construct_GPS(frame)
 	gps:Hide();
 	
 	gps.Texture = gps:CreateTexture("OVERLAY");
-	gps.Texture:SetTexture([[Interface\AddOns\ElvUI\media\textures\Arrow.blp]]);
+	gps.Texture:SetTexture([[Interface\AddOns\ElvUI\media\textures\arrow.tga]]);
 	gps.Texture:SetBlendMode("BLEND");
 	gps.Texture:SetVertexColor(214/255, 41/255, 41/255);
 	gps.Texture:SetAllPoints();

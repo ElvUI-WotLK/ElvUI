@@ -2,13 +2,25 @@ local _, ns = ...;
 local oUF = ns.oUF or oUF;
 assert(oUF, "oUF not loaded");
 
-local max = math.max;
+local cos, sin, sqrt2, max = math.cos, math.sin, math.sqrt(2), math.max;
 local _FRAMES, OnUpdateFrame = {};
 local tinsert, tremove = table.insert, table.remove;
-local pi, pi2 = math.pi, math.pi * 2;
 local atan2 = math.atan2;
 
-local function GetUnitDirection(unit)
+local function CalculateCorner(r)
+	return 0.5 + cos(r) / sqrt2, 0.5 + sin(r) / sqrt2;
+end
+
+local function RotateTexture(texture, angle)
+	local LRx, LRy = CalculateCorner(angle + 0.785398163);
+	local LLx, LLy = CalculateCorner(angle + 2.35619449);
+	local ULx, ULy = CalculateCorner(angle + 3.92699082);
+	local URx, URy = CalculateCorner(angle - 0.785398163);
+	
+	texture:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
+end
+
+local function GetUnitAngle(unit)
 	if((WorldMapFrame ~= nil and WorldMapFrame:IsShown()) or (GetMouseFocus() ~= nil and GetMouseFocus():GetName() == nil)) then
 		return nil;
 	end
@@ -27,7 +39,9 @@ local function GetUnitDirection(unit)
 		return nil;
 	end
 	
-	return pi - atan2(x1 - x2, y2 - y1) - GetPlayerFacing();
+	local angle = - GetPlayerFacing() - atan2(x2 - x1, y1 - y2);
+	
+	return angle;
 end
 
 local minThrottle = 0.02
@@ -47,23 +61,14 @@ local Update = function(self, elapsed)
 					if(not unit or not (UnitInParty(unit) or UnitInRaid(unit)) or UnitIsUnit(unit, "player") or not UnitIsConnected(unit) or (GPS.onMouseOver and (GetMouseFocus() ~= object)) or (GPS.outOfRange and inRange)) then
 						GPS:Hide()
 					else
-						
-						local direction = GetUnitDirection(unit);
-						if(direction == nil) then
-							GPS:Hide();
+						local angle = GetUnitAngle(unit);
+						if(not angle) then
+							GPS:Hide()
 						else
 							GPS:Show();
-							
-							local cell = floor(direction / pi2 * 108 + 0.5) % 108;
-							if(cell ~= nil) then
-								local startX = (cell % 9) * 0.109375;
-								local startY = floor(cell / 9) * 0.08203125;
-								GPS.Texture:SetTexCoord(startX, startX + 0.109375, startY, startY + 0.08203125);
-							end
-							
-							numArrows = numArrows + 1;
+							RotateTexture(GPS.Texture, angle);
 						end
-					end				
+					end
 				else
 					GPS:Hide();
 				end
