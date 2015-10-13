@@ -7,7 +7,7 @@ local format = string.format;
 local min = math.min;
 
 local function Update(self, event, unit)
-	if(not self.unit or UnitIsDeadOrGhost(self.unit) or not UnitIsConnected(self.unit)) then return Hide(self); end
+	if(not self.unit or UnitIsDeadOrGhost(self.unit) or not UnitIsConnected(self.unit)) then return; end
 	
 	local health, maxHealth = UnitHealth(self.unit), UnitHealthMax(self.unit);
 	local guid = UnitGUID(self.unit);
@@ -19,7 +19,7 @@ local function Update(self, event, unit)
 	if(health + allIncomingHeal > maxHealth) then
 		allIncomingHeal = maxHealth - health;
 	end
-
+	
 	if(allIncomingHeal < myIncomingHeal) then
 		myIncomingHeal = allIncomingHeal;
 		allIncomingHeal = 0;
@@ -31,15 +31,12 @@ local function Update(self, event, unit)
 	healCommBar.parent = self;
 	
 	if(healCommBar.myBar) then
-
 		healCommBar.myBar:SetMinMaxValues(0, maxHealth);
 		healCommBar.myBar:SetValue(myIncomingHeal);
 		healCommBar.myBar:Show();
 	end
 
 	if(healCommBar.otherBar) then
-
-		
 		healCommBar.otherBar:SetMinMaxValues(0, maxHealth);
 		healCommBar.otherBar:SetValue(allIncomingHeal);
 		healCommBar.otherBar:Show();
@@ -61,8 +58,8 @@ end
 local function MultiUpdate(...)
 	for i = 1, select("#", ...) do
 		for _, frame in ipairs(oUF.objects) do
-			if frame.unit and (frame.HealCommBar and frame:IsElementEnabled("HealComm4")) and UnitGUID(frame.unit) == select(i, ...) and frame:IsVisible() then
-				Update(frame)
+			if(frame.unit and (frame.HealCommBar and frame:IsElementEnabled("HealComm4")) and UnitGUID(frame.unit) == select(i, ...)) then
+				Path(frame);
 			end
 		end
 	end

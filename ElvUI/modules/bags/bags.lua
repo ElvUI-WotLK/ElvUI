@@ -428,6 +428,7 @@ function B:Layout(isBank)
 	end
 	
 	local numKey = GetKeyRingSize();
+	local numKeyColumns = 6;
 	if(not isBank) then
 		local totalSlots = 0
 		local lastRowButton
@@ -453,7 +454,7 @@ function B:Layout(isBank)
 			f.keyFrame.slots[i]:ClearAllPoints()
 			f.keyFrame.slots[i]:Size(buttonSize)
 			if(f.keyFrame.slots[i-1]) then
-				if(totalSlots - 1) % 6 == 0 then
+				if(totalSlots - 1) % numKeyColumns == 0 then
 					f.keyFrame.slots[i]:Point('TOP', lastRowButton, 'BOTTOM', 0, -buttonSpacing);
 					lastRowButton = f.keyFrame.slots[i];
 					numKeyRows = numKeyRows + 1;
@@ -468,7 +469,10 @@ function B:Layout(isBank)
 			self:UpdateKeySlot(i)
 		end
 		
-		f.keyFrame:Size(((buttonSize + buttonSpacing) * 6) + buttonSpacing, ((buttonSize + buttonSpacing) * numKeyRows) + buttonSpacing);
+		if(numKey < numKeyColumns) then
+			numKeyColumns = numKey;
+		end
+		f.keyFrame:Size(((buttonSize + buttonSpacing) * numKeyColumns) + buttonSpacing, ((buttonSize + buttonSpacing) * numKeyRows) + buttonSpacing);
 	end
 	
 	f:Size(containerWidth, (((buttonSize + buttonSpacing) * numContainerRows) - buttonSpacing) + f.topOffset + f.bottomOffset); -- 8 is the cussion of the f.holderFrame

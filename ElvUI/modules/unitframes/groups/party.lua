@@ -596,15 +596,15 @@ function UF:Update_PartyFrames(frame, db)
 		
 		do
 			local healCommBar = frame.HealCommBar;
-			local color = UF.db.colors.healPrediction;
+			local c = UF.db.colors.healPrediction;
 			if(db.healPrediction) then
 				if(not frame:IsElementEnabled("HealComm4")) then
 					frame:EnableElement("HealComm4");
 				end
 				
 				if(not USE_PORTRAIT_OVERLAY) then
-					healCommBar.myBar:SetParent(frame);
-					healCommBar.otherBar:SetParent(frame);
+					healCommBar.myBar:SetParent(frame.Health);
+					healCommBar.otherBar:SetParent(frame.Health);
 				else
 					healCommBar.myBar:SetParent(frame.Portrait.overlay);
 					healCommBar.otherBar:SetParent(frame.Portrait.overlay);
@@ -612,8 +612,8 @@ function UF:Update_PartyFrames(frame, db)
 				
 				healCommBar.myBar:SetOrientation(db.health.orientation);
 				healCommBar.otherBar:SetOrientation(db.health.orientation);
-				healCommBar.myBar:SetStatusBarColor(color.r, color.g, color.b, color.a);
-				healCommBar.otherBar:SetStatusBarColor(1, color.g, color.b, color.a);
+				healCommBar.myBar:SetStatusBarColor(c.personal.r, c.personal.g, c.personal.b, c.personal.a);
+				healCommBar.otherBar:SetStatusBarColor(c.others.r, c.others.g, c.others.b, c.others.a);
 			else
 				if(frame:IsElementEnabled("HealComm4")) then
 					frame:DisableElement("HealComm4");
