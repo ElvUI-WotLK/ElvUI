@@ -28,50 +28,25 @@ local function Update(self, event, unit)
 	end
 	
 	local healCommBar = self.HealCommBar;
+	healCommBar.parent = self;
+	
 	if(healCommBar.myBar) then
-		local orientation = self.Health:GetOrientation();
-		healCommBar.myBar:ClearAllPoints();
-		if(orientation == "HORIZONTAL") then
-			healCommBar.myBar:SetPoint("TOPLEFT", self.Health:GetStatusBarTexture(), "TOPRIGHT");
-			healCommBar.myBar:SetPoint("BOTTOMLEFT", self.Health:GetStatusBarTexture(), "BOTTOMRIGHT");
-		else
-			healCommBar.myBar:SetPoint("BOTTOMRIGHT", self.Health:GetStatusBarTexture(), "TOPRIGHT");
-			healCommBar.myBar:SetPoint("BOTTOMLEFT", self.Health:GetStatusBarTexture(), "TOPLEFT");
-		end
-		
-		local totalWidth, totalHeight = self.Health:GetSize();
-		if(orientation == "HORIZONTAL") then
-			healCommBar.myBar:SetWidth(totalWidth);
-		else
-			healCommBar.myBar:SetHeight(totalHeight);
-		end
-		
+
 		healCommBar.myBar:SetMinMaxValues(0, maxHealth);
 		healCommBar.myBar:SetValue(myIncomingHeal);
 		healCommBar.myBar:Show();
 	end
 
 	if(healCommBar.otherBar) then
-		local orientation = self.Health:GetOrientation();
-		healCommBar.otherBar:ClearAllPoints();
-		if(orientation == "HORIZONTAL") then
-			healCommBar.otherBar:SetPoint("TOPLEFT", self.Health:GetStatusBarTexture(), "TOPRIGHT");
-			healCommBar.otherBar:SetPoint("BOTTOMLEFT", self.Health:GetStatusBarTexture(), "BOTTOMRIGHT");
-		else
-			healCommBar.otherBar:SetPoint("BOTTOMRIGHT", self.Health:GetStatusBarTexture(), "TOPRIGHT");
-			healCommBar.otherBar:SetPoint("BOTTOMLEFT", self.Health:GetStatusBarTexture(), "TOPLEFT");
-		end
-		
-		local totalWidth, totalHeight = self.Health:GetSize();
-		if(orientation == "HORIZONTAL") then
-			healCommBar.otherBar:SetWidth(totalWidth);
-		else
-			healCommBar.otherBar:SetHeight(totalHeight);
-		end
+
 		
 		healCommBar.otherBar:SetMinMaxValues(0, maxHealth);
 		healCommBar.otherBar:SetValue(allIncomingHeal);
 		healCommBar.otherBar:Show();
+	end
+	
+	if(healCommBar.PostUpdate) then
+		return healCommBar:PostUpdate(unit, myIncomingHeal, allIncomingHeal);
 	end
 end
 
