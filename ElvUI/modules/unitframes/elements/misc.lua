@@ -12,12 +12,20 @@ function UF:Construct_HealComm(frame)
 	mhpb:SetFrameLevel(frame.Health:GetFrameLevel() - 2);
 	mhpb:Hide();
 	
+	local ohpb = CreateFrame('StatusBar', nil, frame);
+	ohpb:SetStatusBarTexture(E["media"].blankTex);
+	mhpb:SetFrameLevel(mhpb:GetFrameLevel());
+	ohpb:Hide();
+	
 	if(frame.Health) then
+		ohpb:SetParent(frame.Health)
 		mhpb:SetParent(frame.Health);
 	end
 	
-	
-	return mhpb;
+	return {
+		myBar = mhpb,
+		otherBar = ohpb
+	};
 end
 
 function UF:Construct_TargetGlow(frame)

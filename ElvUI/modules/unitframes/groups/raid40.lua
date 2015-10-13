@@ -491,8 +491,10 @@ function UF:Update_Raid40Frames(frame, db)
 				frame:EnableElement("HealComm4");
 			end
 			
-			healCommBar:SetOrientation(db.health.orientation);
-			healCommBar:SetStatusBarColor(color.r, color.g, color.b, color.a);
+			healCommBar.myBar:SetOrientation(db.health.orientation);
+			healCommBar.otherBar:SetOrientation(db.health.orientation);
+			healCommBar.myBar:SetStatusBarColor(color.r, color.g, color.b, color.a);
+			healCommBar.otherBar:SetStatusBarColor(1, color.g, color.b, color.a);
 		else
 			if(frame:IsElementEnabled("HealComm4")) then
 				frame:DisableElement("HealComm4");

@@ -378,7 +378,16 @@ function UF:Update_PetFrame(frame, db)
 				frame:EnableElement("HealComm4");
 			end
 			
-			healCommBar:SetStatusBarColor(color.r, color.g, color.b, color.a);
+			if(not USE_PORTRAIT_OVERLAY) then
+				healCommBar.myBar:SetParent(frame);
+				healCommBar.otherBar:SetParent(frame);
+			else
+				healCommBar.myBar:SetParent(frame.Portrait.overlay);
+				healCommBar.otherBar:SetParent(frame.Portrait.overlay);
+			end
+			
+			healCommBar.myBar:SetStatusBarColor(color.r, color.g, color.b, color.a);
+			healCommBar.otherBar:SetStatusBarColor(1, color.g, color.b, color.a);
 		else
 			if(frame:IsElementEnabled("HealComm4")) then
 				frame:DisableElement("HealComm4");
