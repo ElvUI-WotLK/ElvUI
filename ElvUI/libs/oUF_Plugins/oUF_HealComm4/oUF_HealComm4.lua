@@ -7,7 +7,19 @@ local format = string.format;
 local min = math.min;
 
 local function Update(self, event, unit)
-	if(not self.unit or UnitIsDeadOrGhost(self.unit) or not UnitIsConnected(self.unit)) then return; end
+	local healCommBar = self.HealCommBar;
+	healCommBar.parent = self;
+	
+	if(not self.unit or UnitIsDeadOrGhost(self.unit) or not UnitIsConnected(self.unit)) then
+		if(healCommBar.myBar) then
+			healCommBar.myBar:Hide();
+		end
+		
+		if(healCommBar.otherBar) then
+			healCommBar.otherBar:Hide();
+		end
+		return;
+	end
 	
 	local health, maxHealth = UnitHealth(self.unit), UnitHealthMax(self.unit);
 	local guid = UnitGUID(self.unit);
@@ -26,9 +38,6 @@ local function Update(self, event, unit)
 	else
 		allIncomingHeal = allIncomingHeal - myIncomingHeal;
 	end
-	
-	local healCommBar = self.HealCommBar;
-	healCommBar.parent = self;
 	
 	if(healCommBar.myBar) then
 		healCommBar.myBar:SetMinMaxValues(0, maxHealth);
