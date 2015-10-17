@@ -756,7 +756,7 @@ function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdat
 		self[group].Update = function()
 			local db = self.db["units"][group];
 			if(db.enable ~= true) then 
-				UnregisterStateDriver(self[group], "state-visibility");
+				UnregisterStateDriver(self[group], "visibility");
 				self[group]:Hide();
 				return;
 			end

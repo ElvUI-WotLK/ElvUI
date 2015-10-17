@@ -42,25 +42,9 @@ local SLOT_EMPTY_TCOORDS = {
 }
 
 function AB:MultiCastFlyoutFrameOpenButton_Show(button, _, parent)
-	button:GetHighlightTexture():SetAlpha(0);
-	button:GetNormalTexture():SetAlpha(0);
-
-	button:Height(20);
-	button:ClearAllPoints();
-	button:Point('BOTTOMLEFT', parent, 'TOPLEFT', 0, -3);
-	button:Point('BOTTOMRIGHT', parent, 'TOPRIGHT', 0, -3);
-	
-	if ( not button.visibleBut ) then
-		button.visibleBut = CreateFrame('Frame', nil, button);
-		button.visibleBut:Height(8);
-		button.visibleBut:Width(parent:GetWidth());
-		button.visibleBut:SetPoint('CENTER');
-		button.visibleBut:SetTemplate('Default');
-	end	
+	button.backdrop:SetBackdropBorderColor(parent:GetBackdropBorderColor());
 
 	bar.buttons[button] = true;
-	
-	button.visibleBut:SetBackdropBorderColor(parent:GetBackdropBorderColor());
 	
 	self:AdjustTotemSettings();
 end
@@ -154,22 +138,11 @@ function AB:MultiCastFlyoutFrame_ToggleFlyout(tray)
 		tray.buttons[1].icon:SetTexCoord(tCoords.left, tCoords.right, tCoords.top, tCoords.bottom);
 	end
 	
-	local close = MultiCastFlyoutFrameCloseButton;
-	close:SetTemplate('Default');
-	close:GetHighlightTexture():SetTexture(1, 1, 1, .3);
-	close:GetHighlightTexture():SetInside(close);
-	
-	close:GetNormalTexture():SetTexture(nil);
-	close:ClearAllPoints();
-	close:Point('BOTTOMLEFT', last,'TOPLEFT', 0, 4);
-	close:Point('BOTTOMRIGHT', last,'TOPRIGHT', 0, 4);
-	close:SetBackdropBorderColor(last:GetBackdropBorderColor());
-	close:Height(8);
+	MultiCastFlyoutFrameCloseButton.backdrop:SetBackdropBorderColor(last:GetBackdropBorderColor());
 	
 	tray:ClearAllPoints();
 	tray:Point('BOTTOM', parent, 'TOP', 0, 4);
 	
-	bar.buttons[close] = true;
 	bar.buttons[tray] = true;
 	
 	self:AdjustTotemSettings();
@@ -203,7 +176,7 @@ function AB:AdjustTotemSettings()
 			if ( not self.hooks[button] ) then
 				self:HookScript(button, 'OnEnter', 'TotemOnEnter');
 				self:HookScript(button, 'OnLeave', 'TotemOnLeave');
-			end			
+			end
 		else
 			bar:SetAlpha(1)
 			if ( self.hooks[bar] ) then
@@ -214,7 +187,7 @@ function AB:AdjustTotemSettings()
 			if ( self.hooks[button] ) then
 				self:Unhook(button, 'OnEnter');
 				self:Unhook(button, 'OnLeave');
-			end		
+			end
 		end
 	end
 end
@@ -234,6 +207,29 @@ function AB:CreateTotemBar()
 	
 	bar:Width(MultiCastActionBarFrame:GetWidth());
 	bar:Height(MultiCastActionBarFrame:GetHeight());
+	
+	
+	local closeButton = MultiCastFlyoutFrameCloseButton;
+	closeButton:CreateBackdrop("Default", true, true);
+	closeButton.backdrop:SetPoint("TOPLEFT", -1, -(E.PixelMode and 1 or 3));
+	closeButton.backdrop:SetPoint("BOTTOMRIGHT", 1, E.PixelMode and 1 or 3);
+	
+	closeButton.normalTexture:SetTexture("");
+	
+	closeButton:StyleButton();
+	closeButton.hover:SetInside(closeButton.backdrop);
+	closeButton.pushed:SetInside(closeButton.backdrop);
+	
+	local openButton = MultiCastFlyoutFrameOpenButton;
+	openButton:CreateBackdrop("Default", true, true);
+	openButton.backdrop:SetPoint("TOPLEFT", -1, -(E.PixelMode and 1 or 3));
+	openButton.backdrop:SetPoint("BOTTOMRIGHT", 1, E.PixelMode and 1 or 3);
+	
+	openButton.normalTexture:SetTexture("");
+	
+	openButton:StyleButton();
+	openButton.hover:SetInside(openButton.backdrop);
+	openButton.pushed:SetInside(openButton.backdrop);
 	
 	self:SecureHook('MultiCastFlyoutFrameOpenButton_Show');
 	self:SecureHook('MultiCastActionButton_Update');

@@ -9,6 +9,9 @@ M.RollBars = {};
 local tinsert = table.insert;
 local find = string.find;
 
+local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
+local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
+
 local locale = GetLocale()
 local rollpairs = locale == "deDE" and {
 	["(.*) passt automatisch bei (.+), weil [ersi]+ den Gegenstand nicht benutzen kann.$"]  = "pass",
@@ -79,7 +82,7 @@ local function SetTip(frame)
 	
 	for name, tbl in pairs(frame.parent.rolls) do
 		if(tbl[1] == rolltypes[frame.rolltype]) then
-			local classColor = RAID_CLASS_COLORS[tbl[2]];
+			local classColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[tbl[2]] or RAID_CLASS_COLORS[tbl[2]];
 			GameTooltip:AddLine(name, classColor.r, classColor.g, classColor.b);
 		end
 	end
