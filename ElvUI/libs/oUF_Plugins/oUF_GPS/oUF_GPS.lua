@@ -2,15 +2,12 @@ local _, ns = ...;
 local oUF = ns.oUF or oUF;
 assert(oUF, "oUF not loaded");
 
-local cos, sin, sqrt2, max = math.cos, math.sin, math.sqrt(2), math.max;
+local cos, sin, sqrt2, max, atan2 = math.cos, math.sin, math.sqrt(2), math.max, math.atan2;
+local pi2 = 3.141592653589793 / 2;
 local _FRAMES, OnUpdateFrame = {};
 local tinsert, tremove = table.insert, table.remove;
-local atan2 = math.atan2;
 
-local function CalculateCorner(r)
-	return 0.5 + cos(r) / sqrt2, 0.5 + sin(r) / sqrt2;
-end
-
+local function CalculateCorner(r) return .5 + cos(r) / sqrt2, .5 + sin(r) / sqrt2; end
 local function RotateTexture(texture, angle)
 	local LRx, LRy = CalculateCorner(angle + 0.785398163);
 	local LLx, LLy = CalculateCorner(angle + 2.35619449);
@@ -20,28 +17,12 @@ local function RotateTexture(texture, angle)
 	texture:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
 end
 
-local function GetUnitAngle(unit)
-	if((WorldMapFrame ~= nil and WorldMapFrame:IsShown()) or (GetMouseFocus() ~= nil and GetMouseFocus():GetName() == nil)) then
-		return nil;
-	end
-	
-	local x1, y1 = GetPlayerMapPosition("player");
-	if((x1 or 0) + (y1 or 0) <= 0) then
-		SetMapToCurrentZone();
-		x1, y1 = GetPlayerMapPosition("player");
-		if ((x1 or 0) + (y1 or 0) <= 0) then
-			return nil;
-		end
-	end
-	
-	local x2, y2 = GetPlayerMapPosition(unit);
-	if((x2 or 0) + (y2 or 0) <= 0) then
-		return nil;
-	end
-	
-	local angle = - GetPlayerFacing() - atan2(x2 - x1, y1 - y2);
-	
-	return angle;
+local GetAngle = function(unit1, unit2)
+	local x1, y1 = GetPlayerMapPosition(unit1);
+	if(x1 <= 0 and y1 <= 0) then return nil; end
+	local x2, y2 = GetPlayerMapPosition(unit2)
+	if(x2 <= 0 and y2 <= 0) then return nil; end
+	return -pi2 - GetPlayerFacing() - atan2(y2 - y1, x2 - x1);
 end
 
 local minThrottle = 0.02
@@ -61,9 +42,9 @@ local Update = function(self, elapsed)
 					if(not unit or not (UnitInParty(unit) or UnitInRaid(unit)) or UnitIsUnit(unit, "player") or not UnitIsConnected(unit) or (GPS.onMouseOver and (GetMouseFocus() ~= object)) or (GPS.outOfRange and inRange)) then
 						GPS:Hide()
 					else
-						local angle = GetUnitAngle(unit);
-						if(not angle) then
-							GPS:Hide()
+						local angle = GetAngle("player", unit);
+						if(angle == nil) then
+							GPS:Hide();
 						else
 							GPS:Show();
 							RotateTexture(GPS.Texture, angle);

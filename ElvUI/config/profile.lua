@@ -550,7 +550,7 @@ P["unitframe"] = {
 				["yOffset"] = 10
 			},
 			["GPSArrow"] = {
-				["enable"] = false,
+				["enable"] = true,
 				["size"] = 45,
 				["xOffset"] = 0,
 				["yOffset"] = 0,
@@ -831,7 +831,7 @@ P["unitframe"] = {
 				["yOffset"] = 10
 			},
 			["GPSArrow"] = {
-				["enable"] = false,
+				["enable"] = true,
 				["size"] = 45,
 				["xOffset"] = 0,
 				["yOffset"] = 0,
@@ -1406,7 +1406,7 @@ P["unitframe"] = {
 				["yOffset"] = 10,
 			},
 			["GPSArrow"] = {
-				["enable"] = false,
+				["enable"] = true,
 				["size"] = 45,
 				["xOffset"] = 0,
 				["yOffset"] = 0,
@@ -1530,7 +1530,7 @@ P["unitframe"] = {
 				["yOffset"] = 10,
 			},
 			["GPSArrow"] = {
-				["enable"] = false,
+				["enable"] = true,
 				["size"] = 40,
 				["xOffset"] = 0,
 				["yOffset"] = 0,
@@ -1651,7 +1651,7 @@ P["unitframe"] = {
 				["yOffset"] = 10,
 			},
 			["GPSArrow"] = {
-				["enable"] = false,
+				["enable"] = true,
 				["size"] = 45,
 				["xOffset"] = 0,
 				["yOffset"] = 0,

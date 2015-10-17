@@ -25,6 +25,7 @@ function UF:Construct_HealComm(frame)
 	return {
 		myBar = mhpb,
 		otherBar = ohpb,
+		maxOverflow = 1,
 		PostUpdate = UF.UpdateHealComm,
 	};
 end

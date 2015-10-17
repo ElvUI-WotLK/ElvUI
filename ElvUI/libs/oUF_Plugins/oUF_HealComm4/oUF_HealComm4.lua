@@ -7,6 +7,8 @@ local format = string.format;
 local min = math.min;
 
 local function Update(self, event, unit)
+	if(not self:IsElementEnabled("HealComm4")) then return; end
+	
 	local healCommBar = self.HealCommBar;
 	healCommBar.parent = self;
 	
@@ -28,8 +30,8 @@ local function Update(self, event, unit)
 	local myIncomingHeal = healcomm:GetHealAmount(guid, healcomm.ALL_HEALS, timeFrame, UnitGUID("player")) or 0;
 	local allIncomingHeal = healcomm:GetHealAmount(guid, healcomm.ALL_HEALS, timeFrame) or 0;
 	
-	if(health + allIncomingHeal > maxHealth) then
-		allIncomingHeal = maxHealth - health;
+	if(health + allIncomingHeal > maxHealth * healCommBar.maxOverflow) then
+		allIncomingHeal = maxHealth * healCommBar.maxOverflow - health;
 	end
 	
 	if(allIncomingHeal < myIncomingHeal) then
@@ -87,6 +89,10 @@ local function Enable(self)
 	if(healCommBar) then
 		healCommBar.__owner = self;
 		healCommBar.ForceUpdate = ForceUpdate;
+		
+		if(not healCommBar.maxOverflow) then
+			healCommBar.maxOverflow = 1.05;
+		end
 		
 		self:RegisterEvent("UNIT_HEALTH", Path);
 		self:RegisterEvent("UNIT_MAXHEALTH", Path);
