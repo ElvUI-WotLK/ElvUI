@@ -1,4 +1,3 @@
-
 --
 -- ChatThrottleLib by Mikk
 --

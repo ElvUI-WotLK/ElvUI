@@ -27,6 +27,8 @@ function UF:Construct_TargetFrame(frame)
 	
 	frame.AuraBars = self:Construct_AuraBarHeader(frame);
 	frame.Range = UF:Construct_Range(frame);
+	frame.HealCommBar = UF:Construct_HealComm(frame);
+	frame.GPS = UF:Construct_GPS(frame);
 	
 	frame.customTexts = {};
 	frame:Point("BOTTOMRIGHT", E.UIParent, "BOTTOM", 413, 68);
@@ -620,7 +622,7 @@ function UF:Update_TargetFrame(frame, db)
 	
 	do
 		local dbh = frame.DebuffHighlight;
-		if(E.db.unitframe.debuffHighlighting) then
+		if(E.db.unitframe.debuffHighlighting ~= "NONE") then
 			if(not frame:IsElementEnabled("DebuffHighlight")) then
 				frame:EnableElement("DebuffHighlight");
 				frame.DebuffHighlightFilterTable = E.global.unitframe.DebuffHighlightColors;
@@ -743,7 +745,51 @@ function UF:Update_TargetFrame(frame, db)
 			end
 		end
 	end
-
+	
+	do
+		local healCommBar = frame.HealCommBar;
+		local c = UF.db.colors.healPrediction;
+		if(db.healPrediction) then
+			if(not frame:IsElementEnabled("HealComm4")) then
+				frame:EnableElement("HealComm4");
+			end
+			
+			if(not USE_PORTRAIT_OVERLAY) then
+				healCommBar.myBar:SetParent(frame.Health);
+				healCommBar.otherBar:SetParent(frame.Health);
+			else
+				healCommBar.myBar:SetParent(frame.Portrait.overlay);
+				healCommBar.otherBar:SetParent(frame.Portrait.overlay);
+			end
+			
+			healCommBar.myBar:SetStatusBarColor(c.personal.r, c.personal.g, c.personal.b, c.personal.a);
+			healCommBar.otherBar:SetStatusBarColor(c.others.r, c.others.g, c.others.b, c.others.a);
+		else
+			if(frame:IsElementEnabled("HealComm4")) then
+				frame:DisableElement("HealComm4");
+			end
+		end
+	end
+	
+	do
+		local GPS = frame.GPS;
+		if(db.GPSArrow.enable) then
+			if not frame:IsElementEnabled("GPS") then
+				frame:EnableElement("GPS");
+			end
+			
+			GPS:Size(db.GPSArrow.size);
+			GPS.onMouseOver = db.GPSArrow.onMouseOver;
+			GPS.outOfRange = db.GPSArrow.outOfRange;
+			
+			GPS:SetPoint("CENTER", frame, "CENTER", db.GPSArrow.xOffset, db.GPSArrow.yOffset);
+		else
+			if(frame:IsElementEnabled("GPS")) then
+				frame:DisableElement("GPS");
+			end
+		end
+	end
+	
 	for objectName, object in pairs(frame.customTexts) do
 		if((not db.customTexts) or (db.customTexts and not db.customTexts[objectName])) then
 			object:Hide();

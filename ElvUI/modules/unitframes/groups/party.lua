@@ -44,6 +44,8 @@ function UF:Construct_PartyFrames(unitGroup)
 		self.Threat = UF:Construct_Threat(self);
 		self.RaidIcon = UF:Construct_RaidIcon(self);
 		self.ReadyCheck = UF:Construct_ReadyCheckIcon(self);
+		self.HealCommBar = UF:Construct_HealComm(self);
+		self.GPS = UF:Construct_GPS(self);
 		
 		self.customTexts = {};
 	end
@@ -539,7 +541,7 @@ function UF:Update_PartyFrames(frame, db)
 		
 		do
 			local dbh = frame.DebuffHighlight;
-			if(E.db.unitframe.debuffHighlighting) then
+			if(E.db.unitframe.debuffHighlighting ~= "NONE") then
 				frame:EnableElement("DebuffHighlight");
 				frame.DebuffHighlightFilterTable = E.global.unitframe.DebuffHighlightColors;
 				if(E.db.unitframe.debuffHighlighting == "GLOW") then
@@ -591,6 +593,52 @@ function UF:Update_PartyFrames(frame, db)
 		UF:UpdateAuraWatch(frame);
 		
 		frame:EnableElement("ReadyCheck");
+		
+		do
+			local healCommBar = frame.HealCommBar;
+			local c = UF.db.colors.healPrediction;
+			if(db.healPrediction) then
+				if(not frame:IsElementEnabled("HealComm4")) then
+					frame:EnableElement("HealComm4");
+				end
+				
+				if(not USE_PORTRAIT_OVERLAY) then
+					healCommBar.myBar:SetParent(frame.Health);
+					healCommBar.otherBar:SetParent(frame.Health);
+				else
+					healCommBar.myBar:SetParent(frame.Portrait.overlay);
+					healCommBar.otherBar:SetParent(frame.Portrait.overlay);
+				end
+				
+				healCommBar.myBar:SetOrientation(db.health.orientation);
+				healCommBar.otherBar:SetOrientation(db.health.orientation);
+				healCommBar.myBar:SetStatusBarColor(c.personal.r, c.personal.g, c.personal.b, c.personal.a);
+				healCommBar.otherBar:SetStatusBarColor(c.others.r, c.others.g, c.others.b, c.others.a);
+			else
+				if(frame:IsElementEnabled("HealComm4")) then
+					frame:DisableElement("HealComm4");
+				end
+			end
+		end
+		
+		do
+			local GPS = frame.GPS;
+			if(db.GPSArrow.enable) then
+				if not frame:IsElementEnabled("GPS") then
+					frame:EnableElement("GPS");
+				end
+				
+				GPS:Size(db.GPSArrow.size);
+				GPS.onMouseOver = db.GPSArrow.onMouseOver;
+				GPS.outOfRange = db.GPSArrow.outOfRange;
+				
+				GPS:SetPoint("CENTER", frame, "CENTER", db.GPSArrow.xOffset, db.GPSArrow.yOffset);
+			else
+				if(frame:IsElementEnabled("GPS")) then
+					frame:DisableElement("GPS");
+				end
+			end
+		end
 		
 		for objectName, object in pairs(frame.customTexts) do
 			if((not db.customTexts) or (db.customTexts and not db.customTexts[objectName])) then

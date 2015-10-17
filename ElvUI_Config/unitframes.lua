@@ -1458,50 +1458,99 @@ end
 local function GetOptionsTable_GPS(groupName)
 	local config = {
 		order = 3000,
-		type = 'group',
-		name = L['GPS Arrow'],
-		get = function(info) return E.db.unitframe.units[groupName]['GPSArrow'][ info[#info] ] end,
-		set = function(info, value) E.db.unitframe.units[groupName]['GPSArrow'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup(groupName) end,
+		type = "group",
+		name = L["GPS Arrow"],
+		get = function(info) return E.db.unitframe.units[groupName]["GPSArrow"][ info[#info] ]; end,
+		set = function(info, value) E.db.unitframe.units[groupName]["GPSArrow"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup(groupName); end,
 		args = {
 			enable = {
-				type = 'toggle',
 				order = 1,
-				name = L['Enable'],
+				type = "toggle",
+				name = L["Enable"]
 			},	
 			onMouseOver = {
-				type = 'toggle',
 				order = 2,
-				name = L['Mouseover'],
-				desc = L['Only show when you are mousing over a frame.'],
+				type = "toggle",
+				name = L["Mouseover"],
+				desc = L["Only show when you are mousing over a frame."]
 			},
 			outOfRange = {
-				type = 'toggle',
 				order = 3,
-				name = L['Out of Range'],
-				desc = L['Only show when the unit is not in range.'],
-			},				
+				type = "toggle",
+				name = L["Out of Range"],
+				desc = L["Only show when the unit is not in range."]
+			},
 			size = {
-				type = 'range',
-				name = L['Size'],
 				order = 4,
-				min = 8, max = 60, step = 1,
-			},				
+				type = "range",
+				name = L["Size"],
+				min = 8, max = 60, step = 1
+			},
 			xOffset = {
 				order = 5,
-				type = 'range',
-				name = L['xOffset'],
-				min = -300, max = 300, step = 1,
+				type = "range",
+				name = L["xOffset"],
+				min = -300, max = 300, step = 1
 			},
 			yOffset = {
 				order = 6,
-				type = 'range',
-				name = L['yOffset'],
-				min = -300, max = 300, step = 1,
-			},			
+				type = "range",
+				name = L["yOffset"],
+				min = -300, max = 300, step = 1
+			}
 		}	
-	}
+	};
 	
-	return config
+	return config;
+end
+
+local function GetOptionsTableForNonGroup_GPS(unit)
+	local config = {
+		order = 3000,
+		type = "group",
+		name = L["GPS Arrow"],
+		get = function(info) return E.db.unitframe.units[unit]["GPSArrow"][ info[#info] ] end,
+		set = function(info, value) E.db.unitframe.units[unit]["GPSArrow"][ info[#info] ] = value; UF:CreateAndUpdateUF(unit); end,
+		args = {
+			enable = {
+				order = 1,
+				type = "toggle",
+				name = L["Enable"],
+			},
+			onMouseOver = {
+				order = 2,
+				type = "toggle",
+				name = L["Mouseover"],
+				desc = L["Only show when you are mousing over a frame."]
+			},
+			outOfRange = {
+				order = 3,
+				type = "toggle",
+				name = L["Out of Range"],
+				desc = L["Only show when the unit is not in range."]
+			},
+			size = {
+				order = 4,
+				type = "range",
+				name = L["Size"],
+				min = 8, max = 60, step = 1
+			},
+			xOffset = {
+				order = 5,
+				type = "range",
+				name = L["xOffset"],
+				min = -300, max = 300, step = 1
+			},
+			yOffset = {
+				order = 6,
+				type = "range",
+				name = L["yOffset"],
+				min = -300, max = 300, step = 1
+			}
+		}
+	};
+	
+	return config;
 end
 
 E.Options.args.unitframe = { -- Рамки юнитов
@@ -2009,6 +2058,35 @@ E.Options.args.unitframe = { -- Рамки юнитов
 								},								
 							},
 						},
+						healPrediction = {
+							order = 12,
+							name = L["Heal Prediction"],
+							type = "group",
+							get = function(info)
+								local t = E.db.unitframe.colors.healPrediction[ info[#info] ];
+								local d = P.unitframe.colors.healPrediction[ info[#info] ];
+								return t.r, t.g, t.b, t.a, d.r, d.g, d.b, d.a;
+							end,
+							set = function(info, r, g, b, a)
+								local t = E.db.unitframe.colors.healPrediction[ info[#info] ];
+								t.r, t.g, t.b, t.a = r, g, b, a;
+								UF:Update_AllFrames();
+							end,
+							args = {
+								personal = {
+									order = 1,
+									name = L["Personal"],
+									type = "color",
+									hasAlpha = true,
+								},
+								others = {
+									order = 2,
+									name = L["Others"],
+									type = "color",
+									hasAlpha = true,
+								},
+							},
+						},
 					},
 				},
 			},
@@ -2045,7 +2123,7 @@ E.Options.args.unitframe.args.player = { -- Игрок
 			func = function(info, value) UF:ResetUnitSettings('player'); E:ResetMovers(L['Player Frame']) end,
 		},
 		showAuras = { -- Показать ауры
-			order = 5,
+			order = 4,
 			type = 'execute',
 			name = L['Show Auras'],
 			func = function() 
@@ -2073,21 +2151,14 @@ E.Options.args.unitframe.args.player = { -- Игрок
 				UF:CreateAndUpdateUF('player');
 			end,
 		},
-		height = { -- Высота
+		height = {
 			order = 6,
 			name = L['Height'],
 			type = 'range',
 			min = 10, max = 250, step = 1,
-		},	
-		lowmana = { -- Низкое значение маны
-			order = 7,
-			name = L['Low Mana Threshold'],
-			desc = L['When you mana falls below this point, text will flash on the player frame.'],
-			type = 'range',
-			min = 0, max = 100, step = 1,
 		},
-		combatfade = { -- Скрытие
-			order = 8,
+		combatfade = {
+			order = 7,
 			name = L['Combat Fade'],
 			desc = L['Fade the unitframe when out of combat, not casting, no target exists.'],
 			type = 'toggle',
@@ -2101,6 +2172,12 @@ E.Options.args.unitframe.args.player = { -- Игрок
 					ElvUF_Pet:SetParent(ElvUF_Parent) 
 				end 
 			end,
+		},
+		healPrediction = {
+			order = 8,
+			type = "toggle",
+			name = L["Heal Prediction"],
+			desc = L["Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
 		},
 		restIcon = { -- Иконка отдыха
 			order = 10,
@@ -2278,6 +2355,12 @@ E.Options.args.unitframe.args.target = { -- Цель
 			desc = L["Check if you are in range to cast spells on this specific unit."],
 			type = "toggle",
 		},
+		healPrediction = {
+			order = 8,
+			type = "toggle",
+			name = L["Heal Prediction"],
+			desc = L["Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
+		},
 		middleClickFocus = { -- Средний клик - фокус
 			order = 9,
 			name = L['Middle Click - Set Focus'],
@@ -2366,7 +2449,8 @@ E.Options.args.unitframe.args.target = { -- Цель
 		},
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUF, 'target'), -- Рейдовая иконка
 		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, 'target'), -- Свой текст
-	},
+		GPSArrow = GetOptionsTableForNonGroup_GPS("target")
+	}
 }
 
 E.Options.args.unitframe.args.targettarget = { -- Цуль цели
@@ -2624,6 +2708,12 @@ E.Options.args.unitframe.args.focus = { -- Фокус
 			desc = L["Check if you are in range to cast spells on this specific unit."],
 			type = "toggle",
 		},
+		healPrediction = {
+			order = 8,
+			type = "toggle",
+			name = L["Heal Prediction"],
+			desc = L["Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
+		},
 		hideonnpc = { -- Переключение текста для НИП
 			type = 'toggle',
 			order = 9,
@@ -2659,7 +2749,8 @@ E.Options.args.unitframe.args.focus = { -- Фокус
 		aurabar = GetOptionsTable_AuraBars(false, UF.CreateAndUpdateUF, 'focus'), -- Полоса аур
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUF, 'focus'), -- Рейдовая иконка
 		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, 'focus'), -- Свой текст
-	},
+		GPSArrow = GetOptionsTableForNonGroup_GPS("focus")
+	}
 }
 
 E.Options.args.unitframe.args.focustarget = { -- Цель фокуса
@@ -2818,6 +2909,12 @@ E.Options.args.unitframe.args.pet = { -- Питомец
 			name = L["Range Check"],
 			desc = L["Check if you are in range to cast spells on this specific unit."],
 			type = "toggle",
+		},
+		healPrediction = {
+			order = 8,
+			type = "toggle",
+			name = L["Heal Prediction"],
+			desc = L["Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
 		},
 		hideonnpc = { -- Переключения текста для НИП
 			type = 'toggle',
@@ -3157,6 +3254,12 @@ E.Options.args.unitframe.args.arena = { -- Арена
 			desc = L["Check if you are in range to cast spells on this specific unit."],
 			type = "toggle",
 		},
+		healPrediction = {
+			order = 8,
+			type = "toggle",
+			name = L["Heal Prediction"],
+			desc = L["Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
+		},
 		hideonnpc = { -- Переключения текста для НИП
 			type = 'toggle',
 			order = 9,
@@ -3314,6 +3417,12 @@ E.Options.args.unitframe.args.party = { -- Группа
 					name = L["Range Check"],
 					desc = L["Check if you are in range to cast spells on this specific unit."],
 					type = "toggle",
+				},
+				healPrediction = {
+					order = 8,
+					type = "toggle",
+					name = L["Heal Prediction"],
+					desc = L["Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
 				},
 				threatStyle = { -- Режим отображения угрозы
 					type = 'select',
@@ -3683,7 +3792,8 @@ E.Options.args.unitframe.args.party = { -- Группа
 		},
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateHeaderGroup, 'party'), -- Рейдовая иконка
 		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateHeaderGroup, 'party', nil, 4), -- Свой текст
-	},
+		GPSArrow = GetOptionsTable_GPS("party")
+	}
 }
 --Raid Frames
 E.Options.args.unitframe.args['raid'] = {
@@ -3743,6 +3853,12 @@ E.Options.args.unitframe.args['raid'] = {
 					name = L["Range Check"],
 					desc = L["Check if you are in range to cast spells on this specific unit."],
 					type = "toggle",
+				},
+				healPrediction = {
+					order = 8,
+					type = "toggle",
+					name = L["Heal Prediction"],
+					desc = L["Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
 				},
 				threatStyle = {
 					type = 'select',
@@ -4034,7 +4150,8 @@ E.Options.args.unitframe.args['raid'] = {
 			},
 		},
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateHeaderGroup, 'raid'),
-	},
+		GPSArrow = GetOptionsTable_GPS("raid")
+	}
 }
 
 --Raid Frames
@@ -4095,6 +4212,12 @@ E.Options.args.unitframe.args['raid40'] = {
 					name = L["Range Check"],
 					desc = L["Check if you are in range to cast spells on this specific unit."],
 					type = "toggle",
+				},
+				healPrediction = {
+					order = 8,
+					type = "toggle",
+					name = L["Heal Prediction"],
+					desc = L["Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
 				},
 				threatStyle = {
 					type = 'select',
@@ -4386,7 +4509,8 @@ E.Options.args.unitframe.args['raid40'] = {
 			},
 		},
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateHeaderGroup, 'raid40'),
-	},
+		GPSArrow = GetOptionsTable_GPS("raid40")
+	}
 }
 
 E.Options.args.unitframe.args.raidpet = {
@@ -4442,6 +4566,12 @@ E.Options.args.unitframe.args.raidpet = {
 					name = L["Range Check"],
 					desc = L["Check if you are in range to cast spells on this specific unit."],
 					type = "toggle",
+				},
+				healPrediction = {
+					order = 8,
+					type = "toggle",
+					name = L["Heal Prediction"],
+					desc = L["Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
 				},
 				threatStyle = {
 					type = 'select',

@@ -39,7 +39,7 @@ local function UpdateFilterGroup()
 				},
 				removeSpell = {
 					order = 1,
-					name = L["Remove Spell or spellID"],
+					name = L["Remove Spell"],
 					desc = L["Remove a spell from the filter."],
 					type = 'input',
 					get = function(info) return "" end,

@@ -16,6 +16,9 @@ local PLAYER_NAME = E.myname.."-"..PLAYER_REALM
 local len, gsub, find, sub, gmatch, format, random = string.len, string.gsub, string.find, string.sub, string.gmatch, string.format, math.random
 local tinsert, tremove, tsort, twipe, tconcat = table.insert, table.remove, table.sort, table.wipe, table.concat
 
+local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
+local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
+
 local TIMESTAMP_FORMAT
 local DEFAULT_STRINGS = {
 	BATTLEGROUND = L['BG'],
@@ -106,8 +109,8 @@ local smileyKeys = {
 
 local specialChatIcons = {
 	["WoW Circle 3.3.5a x25"] = {
-		["Дворфдка"] = "|TInterface\\AddOns\\ElvUI\\media\\textures\\ElvUI_Chat_Logo:13:22|t",
-		["Кроль"] = "|TInterface\\AddOns\\ElvUI\\media\\textures\\ElvUI_Chat_Logo:13:22|t"
+		["Кроль"] = "|TInterface\\AddOns\\ElvUI\\media\\textures\\ElvUI_Chat_Logo:13:22|t",
+		["Бесмертный"] = "|TInterface\\AddOns\\ElvUI\\media\\textures\\ElvUI_Chat_Logo:13:22|t"
 	}
 }
 
@@ -742,6 +745,30 @@ local function GetBNFriendColor(name, id)
 			return name
 		end
 	end
+end
+
+function GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12)
+	local chatType = strsub(event, 10);
+	if(strsub(chatType, 1, 7) == "WHISPER") then
+		chatType = "WHISPER";
+	end
+	if(strsub(chatType, 1, 7) == "CHANNEL") then
+		chatType = "CHANNEL"..arg8;
+	end
+	local info = ChatTypeInfo[chatType];
+	
+	if(info and info.colorNameByClass and arg12 ~= "") then
+		local _, localizedClass, englishClass, localizedRace, englishRace, sex = pcall(GetPlayerInfoByGUID, arg12);
+		if(englishClass) then
+			local classColorTable = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[englishClass] or RAID_CLASS_COLORS[englishClass];
+			if(not classColorTable) then
+				return arg2;
+			end
+			return format("\124cff%.2x%.2x%.2x", classColorTable.r*255, classColorTable.g*255, classColorTable.b*255)..arg2.."\124r";
+		end
+	end
+	
+	return arg2;
 end
 
 function CH:ChatFrame_MessageEventHandler(event, ...)

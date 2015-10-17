@@ -26,6 +26,7 @@ function UF:Construct_ArenaFrames(frame)
 	frame:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetGlow);
 	frame:RegisterEvent("PLAYER_ENTERING_WORLD", UF.UpdateTargetGlow);
 	frame:RegisterEvent("GROUP_ROSTER_UPDATE", UF.UpdateTargetGlow);
+	frame.HealCommBar = UF:Construct_HealComm(frame);
 	
 	frame.customTexts = {};
 	ArenaHeader:Point("BOTTOMRIGHT", E.UIParent, "RIGHT", -105, -165);
@@ -454,6 +455,31 @@ function UF:Update_ArenaFrames(frame, db)
 		else
 			if(frame:IsElementEnabled("Range")) then
 				frame:DisableElement("Range");
+			end
+		end
+	end
+	
+	do
+		local healCommBar = frame.HealCommBar;
+		local c = UF.db.colors.healPrediction;
+		if(db.healPrediction) then
+			if(not frame:IsElementEnabled("HealComm4")) then
+				frame:EnableElement("HealComm4");
+			end
+			
+			if(not USE_PORTRAIT_OVERLAY) then
+				healCommBar.myBar:SetParent(frame.Health);
+				healCommBar.otherBar:SetParent(frame.Health);
+			else
+				healCommBar.myBar:SetParent(frame.Portrait.overlay);
+				healCommBar.otherBar:SetParent(frame.Portrait.overlay);
+			end
+			
+			healCommBar.myBar:SetStatusBarColor(c.personal.r, c.personal.g, c.personal.b, c.personal.a);
+			healCommBar.otherBar:SetStatusBarColor(c.others.r, c.others.g, c.others.b, c.others.a);
+		else
+			if(frame:IsElementEnabled("HealComm4")) then
+				frame:DisableElement("HealComm4");
 			end
 		end
 	end
