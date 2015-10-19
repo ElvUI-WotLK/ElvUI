@@ -525,26 +525,10 @@ local initObject = function(unit, style, styleFunc, ...)
 
 		styleFunc(object, unit)
 
-		local height = object:GetAttribute'initial-height'
-		local width = object:GetAttribute'initial-width'
-		local scale = object:GetAttribute'initial-scale'
 		local suffix = object:GetAttribute'unitsuffix'
 		local combat = InCombatLockdown()
 
-		if(height) then
-			object:SetAttribute('initial-height', height)
-			if(not combat) then object:SetHeight(height) end
-		end
 
-		if(width) then
-			object:SetAttribute("initial-width", width)
-			if(not combat) then object:SetWidth(width) end
-		end
-
-		if(scale) then
-			object:SetAttribute("initial-scale", scale)
-			if(not combat) then object:SetScale(scale) end
-		end
 		
 		if(not (unit:match"target" or suffix == "target")) then
 			object:SetAttribute("toggleForVehicle", true);

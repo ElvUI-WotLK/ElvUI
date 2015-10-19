@@ -163,7 +163,7 @@ local function Chat_OnEvent(self, event, arg1, arg2, arg3, arg4, arg5, arg6, arg
 end
 
 function AFK:Initialize()
-	local classColor = RAID_CLASS_COLORS[E.myclass];
+	local classColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass];
 	
 	self.AFKMode = CreateFrame('Frame', 'ElvUIAFKFrame');
 	self.AFKMode:SetScale(UIParent:GetScale());

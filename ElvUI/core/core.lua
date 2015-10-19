@@ -2,6 +2,8 @@
 local LSM = LibStub("LibSharedMedia-3.0");
 
 local format, len, sub, find, split, match, twipe = string.format, string.len, string.sub, string.find, string.split, string.match, table.wipe
+local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
+local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
 
 E.myclass = select(2, UnitClass("player")); -- Constants
 E.myrace = UnitRace("player");
@@ -68,12 +70,19 @@ function E:Print(msg)
 	print(colorizedName, msg)
 end
 
+E.PriestColors = {
+	r = 0.99,
+	g = 0.99,
+	b = 0.99
+};
+
 function E:CheckClassColor(r, g, b)
 	r, g, b = floor(r*100+.5)/100, floor(g*100+.5)/100, floor(b*100+.5)/100
 	local matchFound = false;
 	for class, _ in pairs(RAID_CLASS_COLORS) do
 		if class ~= E.myclass then
-			if RAID_CLASS_COLORS[class].r == r and RAID_CLASS_COLORS[class].g == g and RAID_CLASS_COLORS[class].b == b then
+			local colorTable = E.myclass == "PRIEST" and E.PriestColors or (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class]);
+			if(colorTable.r == r and colorTable.g == g and colorTable.b == b) then
 				matchFound = true;
 			end
 		end
@@ -104,10 +113,10 @@ function E:UpdateMedia()
 	local border = E.db['general'].bordercolor
 	
 	if self:CheckClassColor(border.r, border.g, border.b) then
-		border = RAID_CLASS_COLORS[E.myclass]
-		E.db['general'].bordercolor.r = RAID_CLASS_COLORS[E.myclass].r
-		E.db['general'].bordercolor.g = RAID_CLASS_COLORS[E.myclass].g
-		E.db['general'].bordercolor.b = RAID_CLASS_COLORS[E.myclass].b	
+		local classColor = E.myclass == "PRIEST" and E.PriestColors or (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass]);
+		E.db["general"].bordercolor.r = classColor.r;
+		E.db["general"].bordercolor.g = classColor.g;
+		E.db["general"].bordercolor.b = classColor.b;
 	elseif E.PixelMode then
 		border = {r = 0, g = 0, b = 0}
 	end
@@ -119,10 +128,10 @@ function E:UpdateMedia()
 	local value = self.db['general'].valuecolor
 
 	if self:CheckClassColor(value.r, value.g, value.b) then
-		value = RAID_CLASS_COLORS[E.myclass]
-		self.db['general'].valuecolor.r = RAID_CLASS_COLORS[E.myclass].r
-		self.db['general'].valuecolor.g = RAID_CLASS_COLORS[E.myclass].g
-		self.db['general'].valuecolor.b = RAID_CLASS_COLORS[E.myclass].b		
+		value = E.myclass == "PRIEST" and E.PriestColors or (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass]);
+		self.db["general"].valuecolor.r = value.r;
+		self.db["general"].valuecolor.g = value.g;
+		self.db["general"].valuecolor.b = value.b;
 	end
 	
 	self["media"].hexvaluecolor = self:RGBToHex(value.r, value.g, value.b)
