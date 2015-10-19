@@ -2,15 +2,14 @@ local _, ns = ...;
 local oUF = ns.oUF or oUF;
 assert(oUF, "oUF_HealComm4 was unable to locate oUF install");
 
-local healcomm = LibStub("LibHealComm-4.0");
-local format = string.format;
-local min = math.min;
+local healComm = LibStub("LibHealComm-4.0");
 
-local function Update(self, event, unit)
+local function Update(self, ...)
+	local unit = self.unit;
 	local healCommBar = self.HealCommBar;
 	healCommBar.parent = self;
 	
-	if(not self.unit or UnitIsDeadOrGhost(self.unit) or not UnitIsConnected(self.unit)) then
+	if(not unit or UnitIsDead(unit) or UnitIsGhost(unit) or not UnitIsConnected(unit)) then
 		if(healCommBar.myBar) then
 			healCommBar.myBar:Hide();
 		end
@@ -21,12 +20,12 @@ local function Update(self, event, unit)
 		return;
 	end
 	
-	local health, maxHealth = UnitHealth(self.unit), UnitHealthMax(self.unit);
-	local guid = UnitGUID(self.unit);
+	local health, maxHealth = UnitHealth(unit), UnitHealthMax(unit);
+	local guid = UnitGUID(unit);
 	local timeFrame = self.HealCommTimeframe and GetTime() + self.HealCommTimeframe or nil;
 	
-	local myIncomingHeal = healcomm:GetHealAmount(guid, healcomm.ALL_HEALS, timeFrame, UnitGUID("player")) or 0;
-	local allIncomingHeal = healcomm:GetHealAmount(guid, healcomm.ALL_HEALS, timeFrame) or 0;
+	local myIncomingHeal = healComm:GetHealAmount(guid, healComm.ALL_HEALS, timeFrame, UnitGUID("player")) or 0;
+	local allIncomingHeal = healComm:GetHealAmount(guid, healComm.ALL_HEALS, timeFrame) or 0;
 	
 	if(health + allIncomingHeal > maxHealth * healCommBar.maxOverflow) then
 		allIncomingHeal = maxHealth * healCommBar.maxOverflow - health;
@@ -117,9 +116,9 @@ end
 
 oUF:AddElement("HealComm4", Path, Enable, Disable);
 
-healcomm.RegisterCallback("HealComm4", "HealComm_HealStarted", HealComm_Heal_Update);
-healcomm.RegisterCallback("HealComm4", "HealComm_HealUpdated", HealComm_Heal_Update);
-healcomm.RegisterCallback("HealComm4", "HealComm_HealDelayed", HealComm_Heal_Update);
-healcomm.RegisterCallback("HealComm4", "HealComm_HealStopped", HealComm_Heal_Update);
-healcomm.RegisterCallback("HealComm4", "HealComm_ModifierChanged", HealComm_Modified);
-healcomm.RegisterCallback("HealComm4", "HealComm_GUIDDisappeared", HealComm_Modified);
+healComm.RegisterCallback("HealComm4", "HealComm_HealStarted", HealComm_Heal_Update);
+healComm.RegisterCallback("HealComm4", "HealComm_HealUpdated", HealComm_Heal_Update);
+healComm.RegisterCallback("HealComm4", "HealComm_HealDelayed", HealComm_Heal_Update);
+healComm.RegisterCallback("HealComm4", "HealComm_HealStopped", HealComm_Heal_Update);
+healComm.RegisterCallback("HealComm4", "HealComm_ModifierChanged", HealComm_Modified);
+healComm.RegisterCallback("HealComm4", "HealComm_GUIDDisappeared", HealComm_Modified);

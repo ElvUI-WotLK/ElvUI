@@ -39,7 +39,7 @@ local Enable = function(self)
 		ricon.__owner = self
 		ricon.ForceUpdate = ForceUpdate
 
-		self:RegisterEvent("RAID_TARGET_UPDATE", Path, true)
+		self:RegisterEvent("RAID_TARGET_UPDATE", Path)
 
 		if(ricon:IsObjectType"Texture" and not ricon:GetTexture()) then
 			ricon:SetTexture[[Interface\TargetingFrame\UI-RaidTargetingIcons]]
