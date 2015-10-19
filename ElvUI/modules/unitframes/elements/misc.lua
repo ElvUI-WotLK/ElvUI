@@ -64,7 +64,6 @@ function UF:UpdateHealComm(unit, myIncomingHeal, allIncomingHeal)
 	previousTexture = UpdateFillBar(frame, previousTexture, self.otherBar, allIncomingHeal);
 end
 
-
 function UF:Construct_TargetGlow(frame)
 	frame:CreateShadow("Default")
 	local x = frame.shadow

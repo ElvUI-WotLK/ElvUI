@@ -7,8 +7,6 @@ local format = string.format;
 local min = math.min;
 
 local function Update(self, event, unit)
-	if(not self:IsElementEnabled("HealComm4")) then return; end
-	
 	local healCommBar = self.HealCommBar;
 	healCommBar.parent = self;
 	
@@ -69,7 +67,7 @@ end
 local function MultiUpdate(...)
 	for i = 1, select("#", ...) do
 		for _, frame in ipairs(oUF.objects) do
-			if(frame.unit and (frame.HealCommBar and frame:IsElementEnabled("HealComm4")) and UnitGUID(frame.unit) == select(i, ...)) then
+			if(frame.unit and (frame.HealCommBar and (frame.db and frame.db.healPrediction == true)) and UnitGUID(frame.unit) == select(i, ...)) then
 				Path(frame);
 			end
 		end
