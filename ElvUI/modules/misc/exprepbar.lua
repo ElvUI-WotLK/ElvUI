@@ -127,7 +127,7 @@ local function ReputationBar_OnEnter(self)
 		E:UIFrameFadeIn(self, 0.4, self:GetAlpha(), 1)
 	end
 	GameTooltip:ClearLines()
-	GameTooltip:SetOwner(self, 'ANCHOR_BOTTOM', 0, -4)
+	GameTooltip:SetOwner(self, "ANCHOR_CURSOR", 0, -4);
 	
 	local name, reaction, min, max, value = GetWatchedFactionInfo()
 	if name then

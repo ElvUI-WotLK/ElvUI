@@ -696,7 +696,7 @@ function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdat
 	if(not self[group]) then
 		local stringTitle = E:StringTitle(group);
 		ElvUF:RegisterStyle("ElvUF_"..stringTitle, UF["Construct_"..stringTitle.."Frames"]);
-		ElvUF:SetActiveStyle("ElvUF_"..stringTitle);
+	--	ElvUF:SetActiveStyle("ElvUF_"..stringTitle);
 		
 		if(db.numGroups) then
 			self[group] = CreateFrame("Frame", "ElvUF_"..stringTitle, E.UIParent, "SecureHandlerStateTemplate");
@@ -984,6 +984,16 @@ function UF:Initialize()
 	
 	self:LoadUnits();
 	self:RegisterEvent("PLAYER_ENTERING_WORLD");
+	
+	for k, v in pairs(UnitPopupMenus) do
+		for x, y in pairs(UnitPopupMenus[k]) do
+			if(y == "SET_FOCUS") then
+				tremove(UnitPopupMenus[k], x);
+			elseif(y == "CLEAR_FOCUS") then
+				tremove(UnitPopupMenus[k], x);
+			end
+		end
+	end
 	
 	if(E.private["unitframe"]["disabledBlizzardFrames"].arena and E.private["unitframe"]["disabledBlizzardFrames"].focus and E.private["unitframe"]["disabledBlizzardFrames"].party) then
 		InterfaceOptionsFrameCategoriesButton10:SetScale(0.0001);

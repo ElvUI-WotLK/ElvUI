@@ -71,6 +71,10 @@ local function LoadSkin()
 			_G["StaticPopup"..i.."ItemFrameIconTexture"]:SetTexCoord(unpack(E.TexCoords))
 			_G["StaticPopup"..i.."ItemFrameIconTexture"]:SetInside()
 		end
+		
+		select(8, _G["StaticPopup"..i.."WideEditBox"]:GetRegions()):Hide();
+		S:HandleEditBox(_G["StaticPopup"..i.."WideEditBox"]);
+		_G["StaticPopup"..i.."WideEditBox"]:Height(22);
 	end
 	
 	-- reskin all esc/menu buttons
@@ -270,259 +274,46 @@ local function LoadSkin()
 	end)	
 	
 	--Chat Config
-	local StripAllTextures = {
-		"ChatConfigFrame",
-		"ChatConfigBackgroundFrame",
-		"ChatConfigCategoryFrame",
-		"ChatConfigChatSettingsClassColorLegend",
-		"ChatConfigChatSettingsLeft",
-		"ChatConfigChannelSettingsLeft",
-		"ChatConfigChannelSettingsClassColorLegend",
-		"ChatConfigOtherSettingsCombat",
-		"ChatConfigOtherSettingsPVP",
-		"ChatConfigOtherSettingsSystem",
-		"ChatConfigOtherSettingsCreature",
-		"ChatConfigCombatSettingsFilters",
-		"CombatConfigMessageSourcesDoneBy",
-		"CombatConfigMessageSourcesDoneTo",
-		"CombatConfigColorsUnitColors",
-		"CombatConfigColorsHighlighting",
-		"CombatConfigColorsColorizeUnitName",
-		"CombatConfigColorsColorizeSpellNames",
-		"CombatConfigColorsColorizeDamageNumber",
-		"CombatConfigColorsColorizeDamageSchool",
-		"CombatConfigColorsColorizeEntireLine",
-	}
-			
-	for _, object in pairs(StripAllTextures) do
-		_G[object]:StripTextures()
-	end
-			
-	ChatConfigFrame:SetTemplate("Transparent")
-	ChatConfigBackgroundFrame:SetTemplate("Transparent")
-	ChatConfigCategoryFrame:SetTemplate("Transparent")
-	ChatConfigCombatSettingsFilters:SetTemplate("Transparent")
-	ChatConfigChannelSettingsClassColorLegend:SetTemplate("Transparent")
-	ChatConfigChatSettingsClassColorLegend:SetTemplate("Transparent")
+	ChatConfigFrame:StripTextures();
+	ChatConfigFrame:SetTemplate("Transparent");
+	ChatConfigCategoryFrame:SetTemplate("Transparent");
+	ChatConfigBackgroundFrame:SetTemplate("Transparent");
 	
-	local chatbuttons = {
-		"ChatConfigFrameDefaultButton",
-		"ChatConfigFrameOkayButton",
-		"CombatLogDefaultButton",
-		"ChatConfigCombatSettingsFiltersCopyFilterButton",
-		"ChatConfigCombatSettingsFiltersAddFilterButton",
-		"ChatConfigCombatSettingsFiltersDeleteButton",
-		"CombatConfigSettingsSaveButton",
-		"ChatConfigFrameCancelButton",
-	}
+	ChatConfigChatSettingsClassColorLegend:SetTemplate("Transparent");
+	ChatConfigChannelSettingsClassColorLegend:SetTemplate("Transparent");
 	
-	for i = 1, #chatbuttons do
-		S:HandleButton(_G[chatbuttons[i]], true)
-	end
+	ChatConfigCombatSettingsFilters:SetTemplate("Transparent");
 	
-	ChatConfigFrameOkayButton:Point("RIGHT", ChatConfigFrameCancelButton, "RIGHT", -11, -1)
-	ChatConfigCombatSettingsFiltersDeleteButton:Point("TOPRIGHT", ChatConfigCombatSettingsFilters, "BOTTOMRIGHT", 0, -1)
-	ChatConfigCombatSettingsFiltersAddFilterButton:Point("RIGHT", ChatConfigCombatSettingsFiltersDeleteButton, "LEFT", -1, 0)
-	ChatConfigCombatSettingsFiltersCopyFilterButton:Point("RIGHT", ChatConfigCombatSettingsFiltersAddFilterButton, "LEFT", -1, 0)
+	ChatConfigCombatSettingsFiltersScrollFrame:StripTextures();
+	S:HandleScrollBar(ChatConfigCombatSettingsFiltersScrollFrameScrollBar);
 	
-	for i=1, 5 do
-		local tab = _G["CombatConfigTab"..i]
-		tab:StripTextures()
-	end
+	S:HandleButton(ChatConfigCombatSettingsFiltersDeleteButton);
+	S:HandleButton(ChatConfigCombatSettingsFiltersAddFilterButton);
+	ChatConfigCombatSettingsFiltersAddFilterButton:Point("RIGHT", ChatConfigCombatSettingsFiltersDeleteButton, "LEFT", -1, 0);
+	S:HandleButton(ChatConfigCombatSettingsFiltersCopyFilterButton);
+	ChatConfigCombatSettingsFiltersCopyFilterButton:Point("RIGHT", ChatConfigCombatSettingsFiltersAddFilterButton, "LEFT", -1, 0);
 	
-	S:HandleEditBox(CombatConfigSettingsNameEditBox)
+	S:HandleNextPrevButton(ChatConfigMoveFilterUpButton, true);
+	S:SquareButton_SetIcon(ChatConfigMoveFilterUpButton, "UP");
+	ChatConfigMoveFilterUpButton:Size(26);
+	ChatConfigMoveFilterUpButton:Point("TOPLEFT", ChatConfigCombatSettingsFilters, "BOTTOMLEFT", 3, -1);
+	S:HandleNextPrevButton(ChatConfigMoveFilterDownButton, true);
+	ChatConfigMoveFilterDownButton:Size(26);
+	ChatConfigMoveFilterDownButton:Point("LEFT", ChatConfigMoveFilterUpButton, "RIGHT", 1, 0);
 	
-    local frames = {
-		"ChatConfigFrame",
-		"ChatConfigCategoryFrame",
-		"ChatConfigBackgroundFrame",
-		"ChatConfigChatSettingsClassColorLegend",
-		"ChatConfigChannelSettingsClassColorLegend",
-		"ChatConfigCombatSettingsFilters",
-		"ChatConfigCombatSettingsFiltersScrollFrame",
-		"CombatConfigColorsHighlighting",
-		"CombatConfigColorsColorizeUnitName",
-		"CombatConfigColorsColorizeSpellNames",
-		"CombatConfigColorsColorizeDamageNumber",
-		"CombatConfigColorsColorizeDamageSchool",
-		"CombatConfigColorsColorizeEntireLine",
-		"ChatConfigChatSettingsLeft",
-		"ChatConfigOtherSettingsCombat",
-		"ChatConfigOtherSettingsPVP",
-		"ChatConfigOtherSettingsSystem",
-		"ChatConfigOtherSettingsCreature",
-		"ChatConfigChannelSettingsLeft",
-		"CombatConfigMessageSourcesDoneBy",
-		"CombatConfigMessageSourcesDoneTo",
-		"CombatConfigColorsUnitColors",
-    }
+	CombatConfigColorsHighlighting:StripTextures();
+	CombatConfigColorsColorizeUnitName:StripTextures();
+	CombatConfigColorsColorizeSpellNames:StripTextures();
 	
-    for i = 1, getn(frames) do
-        local SkinFrames = _G[frames[i]]
-        SkinFrames:StripTextures()
-        SkinFrames:SetTemplate("Transparent")
-    end
+	CombatConfigColorsColorizeDamageNumber:StripTextures();
+	CombatConfigColorsColorizeDamageSchool:StripTextures();
+	CombatConfigColorsColorizeEntireLine:StripTextures();
 	
-    local otherframe = {
-		"CombatConfigColorsColorizeSpellNames",
-		"CombatConfigColorsColorizeDamageNumber",
-		"CombatConfigColorsColorizeDamageSchool",
-		"CombatConfigColorsColorizeEntireLine",
-    }
-
-    for i = 1, getn(otherframe) do
-        local SkinFrames = _G[otherframe[i]]
-        SkinFrames:ClearAllPoints()
-        if SkinFrames == CombatConfigColorsColorizeSpellNames then
-            SkinFrames:Point("TOP",CombatConfigColorsColorizeUnitName,"BOTTOM",0,-2)
-        else
-            SkinFrames:Point("TOP",_G[otherframe[i-1]],"BOTTOM",0,-2)
-        end
-    end
+	S:HandleEditBox(CombatConfigSettingsNameEditBox);
 	
-	-- >> Chat >> Channel Settings      /!\ I don't know why, but the skin works only after /reload ui, not at first login =(
-    ChatConfigChannelSettingsLeft:RegisterEvent("PLAYER_ENTERING_WORLD")
-    ChatConfigChannelSettingsLeft:SetScript("OnEvent", function(self, event)
-        ChatConfigChannelSettingsLeft:UnregisterEvent("PLAYER_ENTERING_WORLD")
-        for i = 1,#ChatConfigChannelSettingsLeft.checkBoxTable do
-            _G["ChatConfigChannelSettingsLeftCheckBox"..i]:StripTextures()
-            _G["ChatConfigChannelSettingsLeftCheckBox"..i]:CreateBackdrop()
-            _G["ChatConfigChannelSettingsLeftCheckBox"..i].backdrop:Point("TOPLEFT",3,-1)
-            _G["ChatConfigChannelSettingsLeftCheckBox"..i].backdrop:Point("BOTTOMRIGHT",-3,1)
-            _G["ChatConfigChannelSettingsLeftCheckBox"..i]:SetHeight(ChatConfigOtherSettingsCombatCheckBox1:GetHeight())
-            S:HandleCheckBox(_G["ChatConfigChannelSettingsLeftCheckBox"..i.."Check"])
-            S:HandleCheckBox(_G["ChatConfigChannelSettingsLeftCheckBox"..i.."ColorClasses"])
-            _G["ChatConfigChannelSettingsLeftCheckBox"..i.."ColorClasses"]:SetHeight(ChatConfigChatSettingsLeftCheckBox1Check:GetHeight())
-        end
-    end)
-    
-	--Makes the skin work, but only after /reload ui :o   (found in chatconfingframe.xml)
-    CreateChatChannelList(self, GetChannelList())
-    ChatConfig_CreateCheckboxes(ChatConfigChannelSettingsLeft, CHAT_CONFIG_CHANNEL_LIST, "ChatConfigCheckBoxWithSwatchAndClassColorTemplate", CHANNELS)
-    ChatConfig_UpdateCheckboxes(ChatConfigChannelSettingsLeft)
-    ChatConfigBackgroundFrame:SetScript("OnShow", function(self)
-		-- >> Chat >> Chat Settings
-        for i = 1,#CHAT_CONFIG_CHAT_LEFT do
-            _G["ChatConfigChatSettingsLeftCheckBox"..i]:StripTextures()
-            _G["ChatConfigChatSettingsLeftCheckBox"..i]:CreateBackdrop()
-            _G["ChatConfigChatSettingsLeftCheckBox"..i].backdrop:Point("TOPLEFT",3,-1)
-            _G["ChatConfigChatSettingsLeftCheckBox"..i].backdrop:Point("BOTTOMRIGHT",-3,1)
-            _G["ChatConfigChatSettingsLeftCheckBox"..i]:SetHeight(ChatConfigOtherSettingsCombatCheckBox1:GetHeight())
-            S:HandleCheckBox(_G["ChatConfigChatSettingsLeftCheckBox"..i.."Check"])
-            S:HandleCheckBox(_G["ChatConfigChatSettingsLeftCheckBox"..i.."ColorClasses"])
-            _G["ChatConfigChatSettingsLeftCheckBox"..i.."ColorClasses"]:SetHeight(ChatConfigChatSettingsLeftCheckBox1Check:GetHeight())
-        end
-		-- >> Other >> Combat
-        for i = 1,#CHAT_CONFIG_OTHER_COMBAT do
-            _G["ChatConfigOtherSettingsCombatCheckBox"..i]:StripTextures()
-            _G["ChatConfigOtherSettingsCombatCheckBox"..i]:CreateBackdrop()
-            _G["ChatConfigOtherSettingsCombatCheckBox"..i].backdrop:Point("TOPLEFT",3,-1)
-            _G["ChatConfigOtherSettingsCombatCheckBox"..i].backdrop:Point("BOTTOMRIGHT",-3,1)
-            S:HandleCheckBox(_G["ChatConfigOtherSettingsCombatCheckBox"..i.."Check"])
-        end
-		-- >> Other >> PvP
-        for i = 1,#CHAT_CONFIG_OTHER_PVP do
-            _G["ChatConfigOtherSettingsPVPCheckBox"..i]:StripTextures()
-            _G["ChatConfigOtherSettingsPVPCheckBox"..i]:CreateBackdrop()
-            _G["ChatConfigOtherSettingsPVPCheckBox"..i].backdrop:Point("TOPLEFT",3,-1)
-            _G["ChatConfigOtherSettingsPVPCheckBox"..i].backdrop:Point("BOTTOMRIGHT",-3,1)
-            S:HandleCheckBox(_G["ChatConfigOtherSettingsPVPCheckBox"..i.."Check"])
-        end
-		-- >> Other >> System
-        for i = 1,#CHAT_CONFIG_OTHER_SYSTEM do
-            _G["ChatConfigOtherSettingsSystemCheckBox"..i]:StripTextures()
-            _G["ChatConfigOtherSettingsSystemCheckBox"..i]:CreateBackdrop()
-            _G["ChatConfigOtherSettingsSystemCheckBox"..i].backdrop:Point("TOPLEFT",3,-1)
-            _G["ChatConfigOtherSettingsSystemCheckBox"..i].backdrop:Point("BOTTOMRIGHT",-3,1)
-            S:HandleCheckBox(_G["ChatConfigOtherSettingsSystemCheckBox"..i.."Check"])
-        end
-		-- >> Other >> Creatures
-        for i = 1,#CHAT_CONFIG_CHAT_CREATURE_LEFT do
-            _G["ChatConfigOtherSettingsCreatureCheckBox"..i]:StripTextures()
-            _G["ChatConfigOtherSettingsCreatureCheckBox"..i]:CreateBackdrop()
-            _G["ChatConfigOtherSettingsCreatureCheckBox"..i].backdrop:Point("TOPLEFT",3,-1)
-            _G["ChatConfigOtherSettingsCreatureCheckBox"..i].backdrop:Point("BOTTOMRIGHT",-3,1)
-            S:HandleCheckBox(_G["ChatConfigOtherSettingsCreatureCheckBox"..i.."Check"])
-        end
-		-- >> Sources >> DoneBy
-        for i = 1,#COMBAT_CONFIG_MESSAGESOURCES_BY do
-            _G["CombatConfigMessageSourcesDoneByCheckBox"..i]:StripTextures()
-            _G["CombatConfigMessageSourcesDoneByCheckBox"..i]:CreateBackdrop()
-            _G["CombatConfigMessageSourcesDoneByCheckBox"..i].backdrop:Point("TOPLEFT",3,-1)
-            _G["CombatConfigMessageSourcesDoneByCheckBox"..i].backdrop:Point("BOTTOMRIGHT",-3,1)
-            S:HandleCheckBox(_G["CombatConfigMessageSourcesDoneByCheckBox"..i.."Check"])
-        end
-		-- >> Sources >> DoneTo
-        for i = 1,#COMBAT_CONFIG_MESSAGESOURCES_TO do
-            _G["CombatConfigMessageSourcesDoneToCheckBox"..i]:StripTextures()
-            _G["CombatConfigMessageSourcesDoneToCheckBox"..i]:CreateBackdrop()
-            _G["CombatConfigMessageSourcesDoneToCheckBox"..i].backdrop:Point("TOPLEFT",3,-1)
-            _G["CombatConfigMessageSourcesDoneToCheckBox"..i].backdrop:Point("BOTTOMRIGHT",-3,1)
-            S:HandleCheckBox(_G["CombatConfigMessageSourcesDoneToCheckBox"..i.."Check"])
-        end
-		-- >> Combat >> Colors >> Unit Colors
-        for i = 1,#COMBAT_CONFIG_UNIT_COLORS do
-            _G["CombatConfigColorsUnitColorsSwatch"..i]:StripTextures()
-            _G["CombatConfigColorsUnitColorsSwatch"..i]:CreateBackdrop()
-            _G["CombatConfigColorsUnitColorsSwatch"..i].backdrop:Point("TOPLEFT",3,-1)
-            _G["CombatConfigColorsUnitColorsSwatch"..i].backdrop:Point("BOTTOMRIGHT",-3,1)
-        end
-		-- >> Combat >> Messages Types
-        for i=1,4 do
-            for j=1,4 do
-                if _G["CombatConfigMessageTypesLeftCheckBox"..i] and _G["CombatConfigMessageTypesLeftCheckBox"..i.."_"..j] then
-                    S:HandleCheckBox(_G["CombatConfigMessageTypesLeftCheckBox"..i])
-                    S:HandleCheckBox(_G["CombatConfigMessageTypesLeftCheckBox"..i.."_"..j])
-                end
-            end
-            for j=1,10 do
-                if _G["CombatConfigMessageTypesRightCheckBox"..i] and _G["CombatConfigMessageTypesRightCheckBox"..i.."_"..j] then
-                    S:HandleCheckBox(_G["CombatConfigMessageTypesRightCheckBox"..i])
-                    S:HandleCheckBox(_G["CombatConfigMessageTypesRightCheckBox"..i.."_"..j])
-                end
-            end
-            S:HandleCheckBox(_G["CombatConfigMessageTypesMiscCheckBox"..i])
-        end
-    end)
--- >> Combat >> Tabs
-    for i = 1,#COMBAT_CONFIG_TABS do
-        local cctab = _G["CombatConfigTab"..i]
-        if cctab then
-            S:HandleTab(cctab)
-            cctab:SetHeight(cctab:GetHeight()-2)
-            cctab:SetWidth(ceil(cctab:GetWidth()+1.6))
-            _G["CombatConfigTab"..i.."Text"]:SetPoint("BOTTOM",0,10)
-        end
-    end
-    CombatConfigTab1:ClearAllPoints()
-    CombatConfigTab1:SetPoint("BOTTOMLEFT",ChatConfigBackgroundFrame,"TOPLEFT",6,-2)
-   
-   local ccbuttons = {
-		"ChatConfigFrameOkayButton",
-		"ChatConfigFrameDefaultButton",
-		"CombatLogDefaultButton",
-		"ChatConfigCombatSettingsFiltersDeleteButton",
-		"ChatConfigCombatSettingsFiltersAddFilterButton",
-		"ChatConfigCombatSettingsFiltersCopyFilterButton",
-		"CombatConfigSettingsSaveButton",
-    }
-   
-   for i = 1, getn(ccbuttons) do
-        local ccbtn = _G[ccbuttons[i]]
-        if ccbtn then
-			S:HandleButton(ccbtn)
-
-        end
-    end
-    
-	ChatConfigFrameOkayButton:SetPoint("TOPRIGHT",ChatConfigBackgroundFrame,"BOTTOMRIGHT",-3,-5)
-    ChatConfigFrameDefaultButton:SetPoint("TOPLEFT",ChatConfigCategoryFrame,"BOTTOMLEFT",1,-5)
-    CombatLogDefaultButton:SetPoint("TOPLEFT",ChatConfigCategoryFrame,"BOTTOMLEFT",1,-5)
-    ChatConfigCombatSettingsFiltersDeleteButton:SetPoint("TOPRIGHT",ChatConfigCombatSettingsFilters,"BOTTOMRIGHT",-3,-1)
-    ChatConfigCombatSettingsFiltersCopyFilterButton:SetPoint("RIGHT",ChatConfigCombatSettingsFiltersDeleteButton,"LEFT",-2,0)
-    ChatConfigCombatSettingsFiltersAddFilterButton:SetPoint("RIGHT",ChatConfigCombatSettingsFiltersCopyFilterButton,"LEFT",-2,0)
-   
-   local cccheckbox = {
+	S:HandleButton(CombatConfigSettingsSaveButton);
+	
+	local combatConfigCheck = {
 		"CombatConfigColorsHighlightingLine",
 		"CombatConfigColorsHighlightingAbility",
 		"CombatConfigColorsHighlightingDamage",
@@ -543,23 +334,105 @@ local function LoadSkin()
 		"CombatConfigSettingsShowQuickButton",
 		"CombatConfigSettingsSolo",
 		"CombatConfigSettingsParty",
-		"CombatConfigSettingsRaid",
-    }
-    for i = 1, getn(cccheckbox) do
-		local ccbtn = _G[cccheckbox[i]]
-        S:HandleCheckBox(ccbtn)
-    end
+		"CombatConfigSettingsRaid"
+	};
 	
-    S:HandleNextPrevButton(ChatConfigMoveFilterUpButton,true)
-    S:HandleNextPrevButton(ChatConfigMoveFilterDownButton,true)
-    ChatConfigMoveFilterUpButton:ClearAllPoints()
-    ChatConfigMoveFilterDownButton:ClearAllPoints()
-    ChatConfigMoveFilterUpButton:SetPoint("TOPLEFT",ChatConfigCombatSettingsFilters,"BOTTOMLEFT",3,0)
-    ChatConfigMoveFilterDownButton:SetPoint("LEFT",ChatConfigMoveFilterUpButton,24,0)
-    S:HandleEditBox(CombatConfigSettingsNameEditBox)
-    ChatConfigFrame:Size(680,596)
-    ChatConfigFrameHeader:ClearAllPoints()
-    ChatConfigFrameHeader:SetPoint("TOP", ChatConfigFrame, 0, -5)
+	for i = 1, getn(combatConfigCheck) do
+		S:HandleCheckBox(_G[combatConfigCheck[i]]);
+	end
+	
+	for i = 1, 5 do
+		local tab = _G["CombatConfigTab"..i];
+		tab:StripTextures();
+		
+		tab:CreateBackdrop("Default", true);
+		tab.backdrop:Point("TOPLEFT", 1, -10);
+		tab.backdrop:Point("BOTTOMRIGHT", -1, 2);
+		
+		tab:HookScript("OnEnter", S.SetModifiedBackdrop);
+		tab:HookScript("OnLeave", S.SetOriginalBackdrop);
+	end
+	
+	S:HandleButton(ChatConfigFrameDefaultButton);
+	S:HandleButton(CombatLogDefaultButton);
+	S:HandleButton(ChatConfigFrameCancelButton);
+	S:HandleButton(ChatConfigFrameOkayButton);
+	
+	S:SecureHook("ChatConfig_CreateCheckboxes", function(frame, checkBoxTable, checkBoxTemplate)
+		local checkBoxNameString = frame:GetName().."CheckBox";
+		if(checkBoxTemplate == "ChatConfigCheckBoxTemplate") then
+			frame:SetTemplate("Transparent");
+			for index, value in ipairs(checkBoxTable) do
+				local checkBoxName = checkBoxNameString..index;
+				local checkbox = _G[checkBoxName];
+				if(not checkbox.backdrop) then
+					checkbox:StripTextures();
+					checkbox:CreateBackdrop();
+					checkbox.backdrop:Point("TOPLEFT", 3, -1);
+					checkbox.backdrop:Point("BOTTOMRIGHT", -3, 1);
+					checkbox.backdrop:SetFrameLevel(checkbox:GetParent():GetFrameLevel() + 1);
+					
+					S:HandleCheckBox(_G[checkBoxName.."Check"]);
+				end
+			end
+		elseif(checkBoxTemplate == "ChatConfigCheckBoxWithSwatchTemplate") or (checkBoxTemplate == "ChatConfigCheckBoxWithSwatchAndClassColorTemplate") then
+			frame:SetTemplate("Transparent");
+			for index, value in ipairs(checkBoxTable) do
+				local checkBoxName = checkBoxNameString..index;
+				local checkbox = _G[checkBoxName];
+				if(not checkbox.backdrop) then
+					checkbox:StripTextures();
+					
+					checkbox:CreateBackdrop();
+					checkbox.backdrop:Point("TOPLEFT", 3, -1);
+					checkbox.backdrop:Point("BOTTOMRIGHT", -3, 1);
+					checkbox.backdrop:SetFrameLevel(checkbox:GetParent():GetFrameLevel() + 1);
+					
+					S:HandleCheckBox(_G[checkBoxName.."Check"]);
+					
+					if(checkBoxTemplate == "ChatConfigCheckBoxWithSwatchAndClassColorTemplate") then
+						S:HandleCheckBox(_G[checkBoxName.."ColorClasses"]);
+					end
+				end
+			end
+		end
+	end);
+	
+	S:SecureHook("ChatConfig_CreateTieredCheckboxes", function(frame, checkBoxTable, checkBoxTemplate, subCheckBoxTemplate)
+		local checkBoxNameString = frame:GetName().."CheckBox";
+		for index, value in ipairs(checkBoxTable) do
+			local checkBoxName = checkBoxNameString..index;
+			if(_G[checkBoxName]) then
+				S:HandleCheckBox(_G[checkBoxName]);
+				if(value.subTypes) then
+					local subCheckBoxNameString = checkBoxName.."_";
+					for k, v in ipairs(value.subTypes) do
+						local subCheckBoxName = subCheckBoxNameString..k;
+						if(_G[subCheckBoxName]) then
+							S:HandleCheckBox(_G[subCheckBoxNameString..k]);
+						end
+					end
+				end
+			end
+		end
+	end);
+	
+	S:SecureHook("ChatConfig_CreateColorSwatches", function(frame, swatchTable, swatchTemplate)
+		frame:SetTemplate("Transparent");
+		local nameString = frame:GetName().."Swatch";
+		for index, value in ipairs(swatchTable) do
+			local swatchName = nameString..index;
+			local swatch = _G[swatchName];
+			if(not swatch.backdrop) then
+				swatch:StripTextures();
+				
+				swatch:CreateBackdrop();
+				swatch.backdrop:Point("TOPLEFT", 3, -1);
+				swatch.backdrop:Point("BOTTOMRIGHT", -3, 1);
+				swatch.backdrop:SetFrameLevel(swatch:GetParent():GetFrameLevel() + 1);
+			end
+		end
+	end);
 
 	--DROPDOWN MENU
 	hooksecurefunc("UIDropDownMenu_InitializeHelper", function(frame)
