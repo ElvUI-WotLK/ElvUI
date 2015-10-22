@@ -599,7 +599,7 @@ local Tag = function(self, fs, tagstr)
 		elseif containsOnUpdate then
 			timer = containsOnUpdate
 		else
-			timer = .5
+			timer = .1
 		end
 
 		if(not eventlessUnits[timer]) then eventlessUnits[timer] = {} end

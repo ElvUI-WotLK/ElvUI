@@ -180,6 +180,7 @@ function UF:Update_TargetFrame(frame, db)
 			
 			power.Smooth = self.db.smoothbars;
 			
+			power.value.frequentUpdates = true;
 			local x, y = self:GetPositionOffset(db.power.position);
 			power.value:ClearAllPoints();
 			power.value:Point(db.power.position, db.power.attachTextToPower and power or frame.Health, db.power.position, x + db.power.xOffset, y + db.power.yOffset);

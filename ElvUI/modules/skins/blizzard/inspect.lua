@@ -73,8 +73,6 @@ local function LoadSkin()
 	InspectFrame:HookScript("OnShow", ColorItemBorder)
 	ColorItemBorder(CheckItemBorderColor)
 	
-	InspectModelFrame:SetTemplate('Default')
-	
 	S:HandleRotateButton(InspectModelRotateLeftButton)
 	S:HandleRotateButton(InspectModelRotateRightButton)
 	
