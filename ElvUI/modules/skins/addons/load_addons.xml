@@ -6,5 +6,4 @@
 	<Script file='powerauras.lua'/>
 	<Script file='recount.lua'/>
 	<Script file='skada.lua'/>
-	<Script file='sexycooldown.lua'/>
 </Ui>
