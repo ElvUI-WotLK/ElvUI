@@ -218,7 +218,6 @@ L['Show BG Texts'] = "Показать текст ПБ" --layout\layout.lua
 L["This addon has been disabled. You should install an updated version."] = "Модификация интерфейса была отключена. Установите обновленную версию.";
 L['Toggle Chat Frame'] = "Показать/скрыть чат" --layout\layout.lua
 L['Toggle Configuration'] = "Конфигурация" --layout\layout.lua
-L['Toggle Embedded Addon'] = 'Показать скрыть встроенный аддон';
 L['XP:'] = "Опыт:"
 L["You don't have permission to mark targets."] = "У вас нет разрешения на установку меток"
 L['ABOVE_THREAT_FORMAT'] = '%s: %.0f%% [%.0f%% above |cff%02x%02x%02x%s|r]'

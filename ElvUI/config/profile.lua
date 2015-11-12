@@ -1875,11 +1875,6 @@ P['chat'] = { -- Чат
 	['tabFontOutline'] = 'NONE',
 }
 
---Skins
-P['skins'] = {
-	['embedRight'] = '',
-}
-
 P['datatexts'] = { -- Инфо-тексты
 	['font'] = 'ElvUI Font',
 	['fontSize'] = 12,

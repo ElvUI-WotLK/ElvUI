@@ -5,10 +5,6 @@ E.Skins = S
 S.addonsToLoad = {}
 S.nonAddonsToLoad = {}
 S.allowBypass = {}
-S.EmbeddableAddons = {
-	['Recount'] = true,
-	['Omen'] = true,
-}
 
 S.SQUARE_BUTTON_TEXCOORDS = {
 	["UP"] = {     0.45312500,    0.64062500,     0.01562500,     0.20312500};
@@ -408,12 +404,7 @@ function S:Initialize()
 	for _, loadFunc in pairs(self.nonAddonsToLoad) do
 		loadFunc();
 	end
-	wipe(self.nonAddonsToLoad)
-	
-	for addon, _ in pairs(self.EmbeddableAddons) do
-		self:SaveEmbeddedAddonPoints(addon)
-	end
-	self:SetEmbedRight(E.db.skins.embedRight)
+	wipe(self.nonAddonsToLoad);
 end
 
 S:RegisterEvent('ADDON_LOADED')

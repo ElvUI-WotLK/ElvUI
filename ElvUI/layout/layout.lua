@@ -73,7 +73,6 @@ local function ChatButton_OnEnter(self, ...)
 		GameTooltip:SetOwner(self, 'ANCHOR_TOPRIGHT', 0, (E.PixelMode and 1 or 3))
 		GameTooltip:ClearLines()
 		GameTooltip:AddDoubleLine(L['Left Click:'], L['Toggle Chat Frame'], 1, 1, 1)
-		GameTooltip:AddDoubleLine(L['Right Click:'], L['Toggle Embedded Addon'], 1, 1, 1)
 	end
 
 	GameTooltip:Show()
@@ -90,25 +89,15 @@ end
 
 local function ChatButton_OnClick(self, btn)
 	GameTooltip:Hide()
-	if btn == 'RightButton' then
-		if IsAddOnLoaded('Recount') and E.db.skins.embedRight == 'Recount' then
-			ToggleFrame(Recount_MainWindow)
-		elseif IsAddOnLoaded('Omen') and E.db.skins.embedRight == 'Omen' then
-			ToggleFrame(OmenAnchor)
-		elseif IsAddOnLoaded('Skada') and E.db.skins.embedRight == 'Skada' then
-			Skada:ToggleWindow()
-		end
+	if E.db[self.parent:GetName()..'Faded'] then
+		E.db[self.parent:GetName()..'Faded'] = nil
+		UIFrameFadeIn(self.parent, 0.2, self.parent:GetAlpha(), 1)
+		UIFrameFadeIn(self, 0.2, self:GetAlpha(), 1)
 	else
-		if E.db[self.parent:GetName()..'Faded'] then
-			E.db[self.parent:GetName()..'Faded'] = nil
-			UIFrameFadeIn(self.parent, 0.2, self.parent:GetAlpha(), 1)
-			UIFrameFadeIn(self, 0.2, self:GetAlpha(), 1)
-		else
-			E.db[self.parent:GetName()..'Faded'] = true
-			UIFrameFadeOut(self.parent, 0.2, self.parent:GetAlpha(), 0)
-			UIFrameFadeOut(self, 0.2, self:GetAlpha(), 0)
-			self.parent.fadeInfo.finishedFunc = self.parent.fadeFunc
-		end
+		E.db[self.parent:GetName()..'Faded'] = true
+		UIFrameFadeOut(self.parent, 0.2, self.parent:GetAlpha(), 0)
+		UIFrameFadeOut(self, 0.2, self:GetAlpha(), 0)
+		self.parent.fadeInfo.finishedFunc = self.parent.fadeFunc
 	end
 end
 

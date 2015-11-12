@@ -222,7 +222,6 @@ L['Show BG Texts'] = true; --layout\layout.lua
 L["This addon has been disabled. You should install an updated version."] = true;
 L['Toggle Chat Frame'] = true; --layout\layout.lua
 L['Toggle Configuration'] = true; --layout\layout.lua
-L['Toggle Embedded Addon'] = true; --layout\layout.lua
 L['XP:'] = true;
 L["You don't have permission to mark targets."] = true;
 L['ABOVE_THREAT_FORMAT'] = '%s: %.0f%% [%.0f%% above |cff%02x%02x%02x%s|r]'

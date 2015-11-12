@@ -10,20 +10,20 @@ E.Options.args.skins = {
 			order = 1,
 			type = "description",
 			name = L["SKINS_DESC"],
-		},	
-		embedRight = {
+		},
+		blizzardEnable = {
 			order = 2,
-			type = 'select',
-			name = L['Embedded Addon'],
-			desc = L['Select an addon to embed to the right chat window. This will resize the addon to fit perfectly into the chat window, it will also parent it to the chat window so hiding the chat window will also hide the addon.'],
-			values = {
-				[''] = ' ',
-				['Recount'] = "Recount",
-				['Omen'] = "Omen",
-				["Skada"] = "Skada"
-			},
-			get = function(info) return E.db.skins[ info[#info] ] end,
-			set = function(info, value) E.db.skins[ info[#info] ] = value; S:SetEmbedRight(value) end,
+			type = 'toggle',
+			name = 'Blizzard',
+			get = function(info) return E.private.skins.blizzard.enable end,
+			set = function(info, value) E.private.skins.blizzard.enable = value; E:StaticPopup_Show("PRIVATE_RL") end,
+		},
+		ace3 = {
+			order = 3,
+			type = 'toggle',
+			name = 'Ace3',
+			get = function(info) return E.private.skins.ace3.enable end,
+			set = function(info, value) E.private.skins.ace3.enable = value; E:StaticPopup_Show("PRIVATE_RL") end,
 		},
 		blizzard = {
 			order = 100,
@@ -33,11 +33,6 @@ E.Options.args.skins = {
 			set = function(info, value) E.private.skins.blizzard[ info[#info] ] = value; E:StaticPopup_Show("CONFIG_RL") end,	
 			guiInline = true,
 			args = {
-				enable = {
-					name = L['Enable'],
-					type = 'toggle',
-					order = 1,				
-				},
 				achievement = {
 					type = "toggle",
 					name = L["Achievement Frame"],
@@ -247,57 +242,6 @@ E.Options.args.skins = {
 					type = "toggle",
 					name = L["World Map"],
 					desc = L["TOGGLESKIN_DESC"],
-				},
-			},
-		},
-		addons = {
-			order = 300,
-			type = 'group',
-			name = 'AddOns',
-			get = function(info) return E.private.skins.addons[ info[#info] ] end,
-			set = function(info, value) E.private.skins.addons[ info[#info] ] = value; E:StaticPopup_Show("CONFIG_RL") end,	
-			guiInline = true,
-			args = {
-				enable = {
-					name = L['Enable'],
-					type = 'toggle',
-					order = 1,				
-				},
-				recount = {
-					type = "toggle",
-					name = L["Recount"],
-					desc = L["TOGGLESKIN_DESC"],
-					disabled = function() if 'Recount' then return not IsAddOnLoaded('Recount') else return false end end,
-				},
-				dbm = {
-					type = "toggle",
-					name = L["DBM-Core"],
-					desc = L["TOGGLESKIN_DESC"],
-					disabled = function() if 'DBM-Core' then return not IsAddOnLoaded('DBM-Core') else return false end end,
-				},
-				auctionator = {
-					type = "toggle",
-					name = L["Auctionator"],
-					desc = L["TOGGLESKIN_DESC"],
-					disabled = function() if 'Auctionator' then return not IsAddOnLoaded('Auctionator') else return false end end,
-				},
-				omen = {
-					type = "toggle",
-					name = L["Omen"],
-					desc = L["TOGGLESKIN_DESC"],
-					disabled = function() if 'Omen' then return not IsAddOnLoaded('Omen') else return false end end,
-				},
-				sexycooldown = {
-					type = "toggle",
-					name = L["SexyCooldown"],
-					desc = L["TOGGLESKIN_DESC"],
-					disabled = function() if 'SexyCooldown' then return not IsAddOnLoaded('SexyCooldown') else return false end end,
-				},
-				skada = {
-					type = "toggle",
-					name = L["Skada"],
-					desc = L["TOGGLESKIN_DESC"],
-					disabled = function() if 'Skada' then return not IsAddOnLoaded('Skada') else return false end end,
 				},
 			},
 		},

@@ -88,17 +88,6 @@ V['skins'] = {
 		['trainer'] = true,
 		['worldmap'] = true,
 	},
-	['addons'] = {
-		['enable'] = true,
-		['ace3'] = true,
-		['auctionator'] = true,
-		['dbm'] = true,
-		['omen'] = true,
-		['powerauras'] = true,
-		['recount'] = true,
-		['sexycooldown'] = true,
-		['skada'] = true,
-	}
 }
 
 V['tooltip'] = {
