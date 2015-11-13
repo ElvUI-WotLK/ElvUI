@@ -1461,6 +1461,12 @@ end)
 local cachedMsg = GetGuildRosterMOTD()
 if cachedMsg == "" then cachedMsg = nil end
 function CH:DelayGMOTD()
+	if(self.db.chatHistory) then
+		self.SoundPlayed = true;
+		self:DisplayChatHistory();
+		self.SoundPlayed = nil;
+	end
+	
 	stopScript = true
 	DEFAULT_CHAT_FRAME:RegisterEvent("GUILD_MOTD")
 	local msg = cachedMsg or GetGuildRosterMOTD()
@@ -1614,14 +1620,7 @@ function CH:Initialize()
 		if anchor == GeneralDockManagerOverflowButton and x == 0 and y == 0 then
 			self:SetPoint(point, anchor, attachTo, -2, -6)
 		end
-	end)	
-	
-	if self.db.chatHistory then
-		self.SoundPlayed = true;
-		self:DisplayChatHistory()
-		self.SoundPlayed = nil;
-	end
-		
+	end)
 	
 	local S = E:GetModule('Skins')
 	S:HandleNextPrevButton(CombatLogQuickButtonFrame_CustomAdditionalFilterButton, true)
