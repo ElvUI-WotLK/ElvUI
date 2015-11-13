@@ -307,6 +307,7 @@ local function LoadSkin()
 	S:HandleCloseButton(ReputationDetailCloseButton);
 	
 	S:HandleCheckBox(ReputationDetailAtWarCheckBox);
+	ReputationDetailAtWarCheckBox:SetCheckedTexture("Interface\\Buttons\\UI-CheckBox-SwordCheck");
 	S:HandleCheckBox(ReputationDetailInactiveCheckBox);
 	S:HandleCheckBox(ReputationDetailMainScreenCheckBox);
 	
