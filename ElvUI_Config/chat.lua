@@ -229,7 +229,7 @@ E.Options.args.chat = {
 					type = 'select',
 					name = L['Panel Backdrop'],
 					desc = L['Toggle showing of the left and right chat panels.'],
-					set = function(info, value) E.db.chat.panelBackdrop = value; E:GetModule('Layout'):ToggleChatPanels(); E:GetModule('Chat'):PositionChat(true); E:GetModule('Skins'):SetEmbedRight(E.db.skins.embedRight) end,
+					set = function(info, value) E.db.chat.panelBackdrop = value; E:GetModule('Layout'):ToggleChatPanels(); E:GetModule('Chat'):PositionChat(true); end,
 					values = {
 						['HIDEBOTH'] = L['Hide Both'],
 						['SHOWBOTH'] = L['Show Both'],
@@ -258,7 +258,7 @@ E.Options.args.chat = {
 					type = 'range',
 					name = L['Panel Height'],
 					desc = L['PANEL_DESC'],
-					set = function(info, value) E.db.chat.panelHeight = value; E:GetModule('Chat'):PositionChat(true); E:GetModule('Skins'):SetEmbedRight(E.db.skins.embedRight); end,
+					set = function(info, value) E.db.chat.panelHeight = value; E:GetModule('Chat'):PositionChat(true); end,
 					min = 50, max = 600, step = 1,
 				},
 				panelWidth = {
@@ -274,7 +274,6 @@ E.Options.args.chat = {
 							bags:Layout();
 						end
 						bags:Layout(true);
-						E:GetModule('Skins'):SetEmbedRight(E.db.skins.embedRight);
 					end,
 					min = 50, max = 700, step = 1,
 				},
@@ -290,7 +289,7 @@ E.Options.args.chat = {
 					desc = L['Adjust the height of your right chat panel.'],
 					disabled = function() return not E.db.chat.separateSizes end,
 					hidden = function() return not E.db.chat.separateSizes end,
-					set = function(info, value) E.db.chat.panelHeightRight = value; E:GetModule('Chat'):PositionChat(true); E:GetModule('Skins'):SetEmbedRight(E.db.skins.embedRight); end,
+					set = function(info, value) E.db.chat.panelHeightRight = value; E:GetModule('Chat'):PositionChat(true); end,
 					min = 50, max = 600, step = 1,
 				},
 				panelWidthRight = {
@@ -304,7 +303,6 @@ E.Options.args.chat = {
 						E.db.chat.panelWidthRight = value;
 						E:GetModule('Chat'):PositionChat(true);
 						E:GetModule('Bags'):Layout();
-						E:GetModule('Skins'):SetEmbedRight(E.db.skins.embedRight);
 					end,
 					min = 50, max = 700, step = 1,
 				},
