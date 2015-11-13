@@ -136,9 +136,9 @@ end
 local styles = {
 	["CURRENT"] = "%s",
 	["CURRENT_MAX"] = "%s - %s",
-	["CURRENT_PERCENT"] =  "%s - %s%%",
-	["CURRENT_MAX_PERCENT"] = "%s - %s | %s%%",
-	["PERCENT"] = "%s%%",
+	["CURRENT_PERCENT"] = "%s - %.1f%%",
+	["CURRENT_MAX_PERCENT"] = "%s - %s | %.1f%%",
+	["PERCENT"] = "%.1f%%",
 	["DEFICIT"] = "-%s"
 };
 
