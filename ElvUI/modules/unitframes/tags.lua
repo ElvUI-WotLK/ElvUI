@@ -2,7 +2,15 @@ local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, Private
 local _, ns = ...
 local ElvUF = ns.oUF
 assert(ElvUF, "ElvUI was unable to locate oUF.")
-local format = string.format
+
+local _G = _G;
+local unpack, pairs = unpack, pairs;
+local GetTime = GetTime;
+local ceil, sqrt, floor = math.ceil, math.sqrt, math.floor;
+local format = string.format;
+local DEAD = DEAD;
+local PVP = PVP;
+
 ------------------------------------------------------------------------
 --	Tags
 ------------------------------------------------------------------------

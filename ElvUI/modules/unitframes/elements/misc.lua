@@ -1,10 +1,15 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local UF = E:GetModule("UnitFrames");
-
-local random, floor, ceil = math.random, math.floor, math.ceil
-local format = string.format
-
 local LSM = LibStub("LibSharedMedia-3.0");
+
+local unpack, select, assert, pairs = unpack, select, assert, pairs;
+local tinsert = tinsert;
+local random, floor, ceil = math.random, math.floor, math.ceil;
+local format = string.format;
+local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
+local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
+local FACTION_BAR_COLORS = FACTION_BAR_COLORS;
+local MAX_COMBO_POINTS = MAX_COMBO_POINTS;
 
 function UF:Construct_HealComm(frame)
 	local mhpb = CreateFrame("StatusBar", nil, frame);
@@ -354,26 +359,27 @@ local textCounterOffsets = {
 
 function UF:UpdateAuraWatchFromHeader(group)
 	assert(self[group], "Invalid group specified.")
-	for i=1, self[group]:GetNumChildren() do
-		local frame = select(i, self[group]:GetChildren())
+	local group = self[group];
+	for i=1, group:GetNumChildren() do
+		local frame = select(i, group:GetChildren())
 		if frame and frame.Health then
-			UF:UpdateAuraWatch(frame)
+			UF:UpdateAuraWatch(frame, group.db)
 		elseif frame then
 			for n = 1, frame:GetNumChildren() do
 				local child = select(n, frame:GetChildren())
 				if child and child.Health then
-					UF:UpdateAuraWatch(child)
+					UF:UpdateAuraWatch(child, group.db)
 				end
 			end
 		end
 	end
 end
 
-function UF:UpdateAuraWatch(frame)
+function UF:UpdateAuraWatch(frame, db)
 	local buffs = {};
 	local auras = frame.AuraWatch;
 	local db = frame.db.buffIndicator;
-
+	
 	if not db.enable then
 		auras:Hide()
 		return;

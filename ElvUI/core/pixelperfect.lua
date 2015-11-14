@@ -1,9 +1,13 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 
---Determine if Eyefinity is being used, setup the pixel perfect script.
+local abs, floor, min, max = math.abs, math.floor, math.min, math.max;
+local match = string.match;
+
+local IsMacClient = IsMacClient;
+local GetCVar, SetCVar = GetCVar, SetCVar;
+local GetScreenHeight, GetScreenWidth = GetScreenHeight, GetScreenWidth;
+
 local scale
-local match = string.match
-local abs, floor, min, max = math.abs, math.floor, math.min, math.max
 
 function E:UIScale(event)
 	if IsMacClient() and self.global.screenheight and self.global.screenwidth and (self.screenheight ~= self.global.screenheight or self.screenwidth ~= self.global.screenwidth) then

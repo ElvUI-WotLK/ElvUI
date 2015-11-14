@@ -1,10 +1,13 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local UF = E:GetModule("UnitFrames");
 
+local _G = _G;
+local pairs = pairs;
+local format = format;
+
 local _, ns = ...;
 local ElvUF = ns.oUF;
 assert(ElvUF, "ElvUI was unable to locate oUF.");
-local tinsert = table.insert;
 
 function UF:Construct_PetFrame(frame)
 	frame.Health = self:Construct_HealthBar(frame, true, true, "RIGHT");
@@ -78,12 +81,7 @@ function UF:Update_PetFrame(frame, db)
 				health.colorHealth = true;
 			end
 		else
-			health.colorClass = true;
-			health.colorReaction = true;
-		end
-		
-		if(self.db["colors"].forcehealthreaction == true) then
-			health.colorClass = false;
+			health.colorClass = (not self.db["colors"].forcehealthreaction);
 			health.colorReaction = true;
 		end
 		

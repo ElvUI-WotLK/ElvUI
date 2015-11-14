@@ -1,6 +1,8 @@
 local E, L, DF = unpack(select(2, ...));
 local B = E:GetModule("Blizzard");
 
+local _G = _G;
+
 function B:WorldStateAlwaysUpFrame_Update()
 	local captureBar;
 	for i = 1, NUM_EXTENDED_UI_FRAMES do

@@ -1,13 +1,16 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local B = E:GetModule('Bags');
 
+local GetTime = GetTime;
+local ipairs, pairs, tonumber, select, unpack = ipairs, pairs, tonumber, select, unpack;
+local tinsert, tremove, tsort, twipe = table.insert, table.remove, table.sort, table.wipe;
+local floor = math.floor;
+local band = bit.band;
+local match, split, gmatch = string.match, string.split, string.gmatch;
+local ARMOR, ENCHSLOT_WEAPON = ARMOR, ENCHSLOT_WEAPON;
+
 local guildBags = {51,52,53,54,55,56,57,58}
 local bankBags = {BANK_CONTAINER}
-local match = string.match
-local split = string.split
-local gmatch = string.gmatch
-local floor = math.floor
-local tinsert, tremove, tsort, twipe = table.insert, table.remove, table.sort, table.wipe
 local MAX_MOVE_TIME = 1.25
 
 for i = NUM_BAG_SLOTS + 1, NUM_BAG_SLOTS + NUM_BANKBAGSLOTS do

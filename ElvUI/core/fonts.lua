@@ -1,6 +1,9 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local LSM = LibStub("LibSharedMedia-3.0")
 
+local GetChatWindowInfo = GetChatWindowInfo;
+local SetCVar = SetCVar;
+
 local function SetFont(obj, font, size, style, r, g, b, sr, sg, sb, sox, soy)
 	obj:SetFont(font, size, style)
 	if sr and sg and sb then obj:SetShadowColor(sr, sg, sb) end

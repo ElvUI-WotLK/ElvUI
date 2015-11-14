@@ -1,10 +1,12 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local UF = E:GetModule("UnitFrames");
 
+local pairs = pairs;
+local tinsert = table.insert;
+
 local _, ns = ...;
 local ElvUF = ns.oUF;
 assert(ElvUF, "ElvUI was unable to locate oUF.");
-local tinsert = table.insert;
 
 function UF:Construct_Raid40Frames(unitGroup)
 	self:SetScript("OnEnter", UnitFrame_OnEnter);
@@ -176,12 +178,7 @@ function UF:Update_Raid40Frames(frame, db)
 					health.colorHealth = true;
 				end
 			else
-				health.colorClass = true;
-				health.colorReaction = true;
-			end
-			
-			if(self.db["colors"].forcehealthreaction == true) then
-				health.colorClass = false;
+				health.colorClass = (not self.db["colors"].forcehealthreaction);
 				health.colorReaction = true;
 			end
 		end

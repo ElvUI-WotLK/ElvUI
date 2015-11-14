@@ -1,8 +1,15 @@
 local MAJOR, MINOR = "LibElvUIPlugin-1.0", 12
 local lib, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
-
-
 if not lib then return end
+
+local pairs, tonumber = pairs, tonumber;
+local format, strsplit = format, strsplit;
+
+local CreateFrame = CreateFrame;
+local GetNumPartyMembers, GetNumRaidMembers = GetNumPartyMembers, GetNumRaidMembers;
+local GetAddOnMetadata = GetAddOnMetadata;
+local IsAddOnLoaded = IsAddOnLoaded;
+local SendAddonMessage = SendAddonMessage;
 
 lib.plugins = {}
 lib.index = 0

@@ -1,3 +1,10 @@
+local _G = _G;
+local print, tostring, select = print, tostring, select;
+local format = format;
+
+local GetMouseFocus = GetMouseFocus;
+local FrameStackTooltip_Toggle = FrameStackTooltip_Toggle;
+
 --[[
 	Command to grab frame information when mouseing over a frame
 	
@@ -114,7 +121,7 @@ SlashCmdList["FRAMELIST"] = function(msg)
 	end
 end
 
-function TextureList(frame)
+local function TextureList(frame)
 	frame = _G[frame] or FRAME
 	--[[for key, obj in pairs(frame) do
 		if type(obj) == "table" and obj.GetObjectType and obj:GetObjectType() == "Texture" then

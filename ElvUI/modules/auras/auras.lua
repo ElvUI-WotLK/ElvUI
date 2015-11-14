@@ -2,16 +2,10 @@ local E, L, V, P, G = unpack(select(2, ...));
 local A = E:NewModule('Auras', 'AceHook-3.0', 'AceEvent-3.0');
 local LSM = LibStub('LibSharedMedia-3.0');
 
-local select = select;
-local tonumber = tonumber;
-local floor = math.floor;
-local min = math.min;
-local max = math.max;
-local pairs = pairs;
-local ipairs = ipairs;
-local format = string.format;
-local wipe = table.wipe;
-local tinsert = table.insert;
+local GetTime = GetTime;
+local select, unpack, tonumber, pairs, ipairs = select, unpack, tonumber, pairs, ipairs;
+local floor, min, max = math.floor, math.min, math.max;
+local format, join, wipe, tinsert = string.format, string.join, table.wipe, table.insert;
 
 local DIRECTION_TO_POINT = {
 	DOWN_RIGHT = 'TOPLEFT',

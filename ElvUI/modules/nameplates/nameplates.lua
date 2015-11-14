@@ -2,27 +2,27 @@
 local NP = E:NewModule("NamePlates", "AceHook-3.0", "AceEvent-3.0", "AceTimer-3.0");
 local LSM = LibStub("LibSharedMedia-3.0");
 
-local numChildren = -1;
-local OVERLAY = [=[Interface\TargetingFrame\UI-TargetingFrame-Flash]=];
-local twipe = table.wipe;
-local tsort = table.sort;
-local tinsert = table.insert;
-local band = bit.band;
-local gsub = string.gsub;
-local tolower = string.lower;
-local targetIndicator;
 local _G = _G;
-local targetAlpha = 1;
+local GetTime = GetTime;
+local tonumber, pairs, select, tostring, unpack = tonumber, pairs, select, tostring, unpack;
+local twipe, tsort, tinsert, wipe = table.wipe, table.sort, table.insert, wipe;
+local band = bit.band;
+local floor = math.floor;
+local gsub, tolower, format, strsplit = string.gsub, string.lower, format, strsplit;
 local WorldFrame = WorldFrame;
-local tonumber = tonumber;
-local pairs = pairs;
+local OVERLAY = [=[Interface\TargetingFrame\UI-TargetingFrame-Flash]=];
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
+local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
 local UnitGUID = UnitGUID;
 local UnitHealthMax = UnitHealthMax;
-local floor = math.floor;
-local select = select;
-local tostring = tostring;
-local unpack = unpack;
+local UNKNOWN = UNKNOWN;
+local MAX_COMBO_POINTS = MAX_COMBO_POINTS;
+local AURA_TYPE_BUFF, AURA_TYPE_DEBUFF = AURA_TYPE_BUFF, AURA_TYPE_DEBUFF;
+local COMBATLOG_OBJECT_CONTROL_PLAYER = COMBATLOG_OBJECT_CONTROL_PLAYER;
+
+local numChildren = -1;
+local targetIndicator;
+local targetAlpha = 1;
 
 --Pattern to remove cross realm label added to the end of plate names
 --Taken from http://www.wowace.com/addons/libnameplateregistry-1-0/
@@ -327,7 +327,9 @@ function NP:ColorizeAndScale(myPlate)
 	local canAttack = false;
 	
 	self.unitType = unitType;
-	if(RAID_CLASS_COLORS[unitType]) then
+	if(CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[unitType]) then
+		color = CUSTOM_CLASS_COLORS[unitType]
+	elseif(RAID_CLASS_COLORS[unitType]) then
 		color = RAID_CLASS_COLORS[unitType];
 	elseif(unitType == "TAPPED_NPC") then
 		color = NP.db.reactions.tapped;
@@ -790,7 +792,8 @@ function NP:UpdateSettings()
 	
 	myPlate.name:FontTemplate(font, fontSize, fontOutline);
 	myPlate.name:SetTextColor(1, 1, 1);
-	myPlate.name:SetWordWrap(wrapName == true and true or false);
+	myPlate.name:SetHeight(2*fontSize);
+	myPlate.name:SetWordWrap(wrapName);
 	
 	myPlate.level:FontTemplate(font, fontSize, fontOutline);
 	
@@ -896,6 +899,7 @@ function NP:CreatePlate(frame)
 	
 	myPlate.name = myPlate:CreateFontString(nil, "OVERLAY");
 	myPlate.name:SetJustifyH("LEFT");
+	myPlate.name:SetJustifyV("BOTTOM");
 	
 	frame.raidIcon:SetAlpha(0);
 	myPlate.raidIcon = myPlate:CreateTexture(nil, "ARTWORK");

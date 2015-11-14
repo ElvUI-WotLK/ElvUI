@@ -37,13 +37,13 @@ local function OnEnter(self)
 		text = SPELL_HASTE;
 		tooltip = format(SPELL_HASTE_TOOLTIP, GetCombatRatingBonus(CR_HASTE_SPELL));
 	elseif(E.myclass == "HUNTER") then
-		text = format(PAPERDOLLFRAME_TOOLTIP_FORMAT, ATTACK_SPEED).." "..format("%.2f", UnitRangedDamage("player"));
+		text = format(PAPERDOLLFRAME_TOOLTIP_FORMAT, ATTACK_SPEED).." "..format("%.2F", UnitRangedDamage("player"));
 		tooltip = format(CR_HASTE_RATING_TOOLTIP, GetCombatRating(CR_HASTE_RANGED), GetCombatRatingBonus(CR_HASTE_RANGED));
 	else
 		local speed, offhandSpeed = UnitAttackSpeed("player");
-		speed = format("%.2f", speed);
+		speed = format("%.2F", speed);
 		if(offhandSpeed) then
-			offhandSpeed = format("%.2f", offhandSpeed);
+			offhandSpeed = format("%.2F", offhandSpeed);
 		end
 		local string;	
 		if(offhandSpeed) then
@@ -56,7 +56,7 @@ local function OnEnter(self)
 	end
 	
 	DT.tooltip:AddLine(text, 1, 1, 1);
-	DT.tooltip:AddLine(tooltip);
+	DT.tooltip:AddLine(tooltip, nil, nil, nil, true);
 	DT.tooltip:Show();
 end
 

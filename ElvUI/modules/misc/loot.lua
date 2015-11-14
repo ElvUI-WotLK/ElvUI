@@ -1,6 +1,11 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local M = E:GetModule('Misc');
 
+local unpack, pairs = unpack, pairs;
+local ITEM_QUALITY_COLORS = ITEM_QUALITY_COLORS;
+local TEXTURE_ITEM_QUEST_BANG = TEXTURE_ITEM_QUEST_BANG;
+local LOOT = LOOT;
+
 -- Credit Haste
 local lootFrame, lootFrameHolder
 local iconSize = 30;

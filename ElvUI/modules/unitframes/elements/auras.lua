@@ -1,8 +1,11 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local UF = E:GetModule("UnitFrames");
-
-local tsort = table.sort
 local LSM = LibStub("LibSharedMedia-3.0");
+
+local GetTime = GetTime;
+local unpack, type = unpack, type;
+local tsort = table.sort;
+local format = format;
 
 function UF:Construct_Buffs(frame)
 	local buffs = CreateFrame("Frame", nil, frame)

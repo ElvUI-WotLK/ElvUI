@@ -1,6 +1,8 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 
-local random = math.random
+local tremove = tremove;
+local random = math.random;
+
 function E:SetUpAnimGroup(object, type, ...)
 	if not type then type = 'Flash' end
 	

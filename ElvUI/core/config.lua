@@ -1,8 +1,18 @@
 ﻿local E, L, V, P, G = unpack(select(2, ...)); -- Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local grid
 
+local _G = _G;
+local type, ipairs, tonumber = type, ipairs, tonumber;
+local floor = math.floor;
+
+local CreateFrame = CreateFrame;
+local IsAddOnLoaded = IsAddOnLoaded;
+local GetScreenWidth = GetScreenWidth;
+local GetScreenHeight = GetScreenHeight;
+local InCombatLockdown = InCombatLockdown;
+local RESET = RESET;
+
+local grid
 local selectedValue = 'ALL'
-local floor = math.floor
 
 E.ConfigModeLayouts = {
 	'ALL',

@@ -1,8 +1,9 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local UF = E:GetModule("UnitFrames");
-
-local floor = math.floor;
 local LSM = LibStub("LibSharedMedia-3.0");
+
+local unpack, tonumber = unpack, tonumber;
+local floor, abs = math.floor, abs;
 
 local _, ns = ...;
 local ElvUF = ns.oUF;

@@ -1,15 +1,23 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local TT = E:NewModule('Tooltip', 'AceHook-3.0', 'AceEvent-3.0');
 
-local _G = getfenv(0)
-local GameTooltip, GameTooltipStatusBar = _G["GameTooltip"], _G["GameTooltipStatusBar"]
-local find, format = string.find, string.format
-local floor = math.floor
-local twipe, tinsert, tconcat = table.wipe, table.insert, table.concat
-
+local _G = _G;
+local GetTime = GetTime;
+local unpack, tonumber, select, pairs = unpack, tonumber, select, pairs;
+local twipe, tinsert, tconcat = table.wipe, table.insert, table.concat;
+local floor = math.floor;
+local find, format, sub = string.find, string.format, string.sub;
+local UnitGUID = UnitGUID;
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
 local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
+local PVP = PVP;
+local FACTION_ALLIANCE = FACTION_ALLIANCE;
+local FACTION_HORDE = FACTION_HORDE;
+local LEVEL = LEVEL;
+local FACTION_BAR_COLORS = FACTION_BAR_COLORS;
+local ID = ID;
 
+local GameTooltip, GameTooltipStatusBar = _G["GameTooltip"], _G["GameTooltipStatusBar"]
 local S_ITEM_LEVEL = ITEM_LEVEL:gsub( "%%d", "(%%d+)" )
 local playerGUID = UnitGUID("player")
 local targetList, inspectCache = {}, {}

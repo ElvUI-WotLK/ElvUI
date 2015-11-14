@@ -1,5 +1,20 @@
 ﻿local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 
+local _G = _G;
+local tonumber, type = tonumber, type;
+local format, lower = string.format, string.lower;
+
+local InCombatLockdown = InCombatLockdown;
+local UIFrameFadeOut, UIFrameFadeIn = UIFrameFadeOut, UIFrameFadeIn;
+local EnableAddOn, DisableAllAddOns = EnableAddOn, DisableAllAddOns;
+local SetCVar = SetCVar;
+local ReloadUI = ReloadUI;
+local debugprofilestart, debugprofilestop = debugprofilestart, debugprofilestop;
+local UpdateAddOnCPUUsage, GetAddOnCPUUsage = UpdateAddOnCPUUsage, GetAddOnCPUUsage;
+local ResetCPUUsage = ResetCPUUsage;
+local GetAddOnInfo = GetAddOnInfo;
+local ERR_NOT_IN_COMBAT = ERR_NOT_IN_COMBAT;
+
 function E:EnableAddon(addon)
 	local _, _, _, _, _, reason, _ = GetAddOnInfo(addon)
 	if reason ~= "MISSING" then 

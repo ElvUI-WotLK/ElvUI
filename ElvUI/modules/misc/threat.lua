@@ -2,10 +2,14 @@ local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, Private
 local THREAT = E:NewModule('Threat', 'AceEvent-3.0');
 local LSM = LibStub("LibSharedMedia-3.0")
 
+local pairs, select = pairs, select;
+local twipe = table.wipe;
+local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
+local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
+local UNKNOWN = UNKNOWN;
+
 E.Threat = THREAT
 THREAT.list = {};
-
-local twipe = table.wipe
 
 function THREAT:UpdatePosition()
 	if self.db.position == 'RIGHTCHAT' then
@@ -36,7 +40,7 @@ function THREAT:GetColor(unit)
 	local unitReaction = UnitReaction(unit, 'player')
 	local _, unitClass = UnitClass(unit)
 	if (UnitIsPlayer(unit)) then
-		local class = RAID_CLASS_COLORS[unitClass]
+		local class = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[unitClass] or RAID_CLASS_COLORS[unitClass];
 		if not class then return 194, 194, 194 end
 		return class.r*255, class.g*255, class.b*255
 	elseif (unitReaction) then

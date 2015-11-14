@@ -2,6 +2,9 @@ local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, Private
 local M = E:GetModule('Misc');
 local numChildren = -1
 
+local select, unpack, type = select, unpack, type;
+local strlower = strlower;
+
 function M:UpdateBubbleBorder()
 	if not self.text then return end
 

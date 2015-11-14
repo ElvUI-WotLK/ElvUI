@@ -1,10 +1,24 @@
 ﻿local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local B = E:NewModule('Bags', 'AceHook-3.0', 'AceEvent-3.0', 'AceTimer-3.0');
-
 local Search = LibStub("LibItemSearch-1.2");
 
-local len, sub, find, format, floor, lower = string.len, string.sub, string.find, string.format, math.floor, string.lower
-local tinsert = table.insert
+local _G = _G;
+local type, ipairs, pairs, unpack, select, assert = type, ipairs, pairs, unpack, select, assert;
+local tinsert = table.insert;
+local floor, abs, ceil = math.floor, math.abs, math.ceil;
+local len, sub, find, format, gsub = string.len, string.sub, string.find, string.format, string.gsub;
+
+local SEARCH = SEARCH;
+local KEYRING_CONTAINER = KEYRING_CONTAINER;
+local NUM_CONTAINER_FRAMES = NUM_CONTAINER_FRAMES;
+local MAX_CONTAINER_ITEMS = MAX_CONTAINER_ITEMS;
+local TEXTURE_ITEM_QUEST_BANG = TEXTURE_ITEM_QUEST_BANG;
+local MAX_WATCHED_TOKENS = MAX_WATCHED_TOKENS;
+local NUM_BAG_FRAMES = NUM_BAG_FRAMES;
+local CONTAINER_SCALE = CONTAINER_SCALE;
+local CONTAINER_OFFSET_X, CONTAINER_OFFSET_Y = CONTAINER_OFFSET_X, CONTAINER_OFFSET_Y;
+local CONTAINER_WIDTH = CONTAINER_WIDTH;
+local CONTAINER_SPACING, VISIBLE_CONTAINER_SPACING = CONTAINER_SPACING, VISIBLE_CONTAINER_SPACING;
 
 local SEARCH_STRING = ""
 

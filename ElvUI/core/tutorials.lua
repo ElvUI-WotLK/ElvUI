@@ -1,5 +1,11 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 
+local _G = _G;
+
+local CreateFrame = CreateFrame;
+local DISABLE = DISABLE;
+local HIDE = HIDE;
+
 E.TutorialList = {
 	L["Nearby questgivers that are awaiting your return are shown as a question mark on your mini-map."],
 	L["Your spell casting can be cancelled by moving, jumping or hitting the escape key."],

@@ -17,8 +17,8 @@ local dataLayout = {
 		['left'] = 4,
 		['middle'] = 3,
 		['right'] = 12
-	},	
-}
+	}
+};
 
 local dataStrings = {
 	[11] = DAMAGE,
@@ -27,7 +27,7 @@ local dataStrings = {
 	[4] = DEATHS,
 	[3] = HONORABLE_KILLS,
 	[12] = SHOW_COMBAT_HEALING
-}
+};
 
 local WSG = 444;
 local AV = 402;
@@ -92,7 +92,7 @@ end
 
 local function ValueColorUpdate(hex, r, g, b)
 	displayString = join('', '%s: ', hex, '%s|r');
-
+	
 	if(lastPanel ~= nil) then
 		DT.UPDATE_BATTLEFIELD_SCORE(lastPanel);
 	end

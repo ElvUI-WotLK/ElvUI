@@ -2,6 +2,12 @@ local E, L, V, P, G = unpack(select(2, ...));
 local M = E:NewModule("WorldMap", "AceHook-3.0", "AceEvent-3.0", "AceTimer-3.0");
 E.WorldMap = M;
 
+local PLAYER = PLAYER;
+local MOUSE_LABEL = MOUSE_LABEL;
+local WORLDMAP_FULLMAP_SIZE = WORLDMAP_FULLMAP_SIZE;
+local WORLDMAP_QUESTLIST_SIZE = WORLDMAP_QUESTLIST_SIZE;
+local WORLDMAP_WINDOWED_SIZE = WORLDMAP_WINDOWED_SIZE;
+
 function SetUIPanelAttribute(frame, name, value)
 	local info = UIPanelWindows[frame:GetName()];
 	if(not info) then

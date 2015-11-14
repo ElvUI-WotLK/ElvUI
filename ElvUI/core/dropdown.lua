@@ -1,5 +1,11 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 
+local tinsert = tinsert;
+
+local CreateFrame = CreateFrame;
+local ToggleFrame = ToggleFrame;
+local GetCursorPosition = GetCursorPosition;
+
 local PADDING = 10
 local BUTTON_HEIGHT = 16
 local BUTTON_WIDTH = 135

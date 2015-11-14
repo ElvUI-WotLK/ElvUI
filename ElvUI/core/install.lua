@@ -1,5 +1,38 @@
 local E, L, V, P, G, _ = unpack(select(2, ...));
 
+local _G = _G;
+local unpack = unpack;
+local format = format;
+
+local CreateFrame = CreateFrame;
+local IsAddOnLoaded = IsAddOnLoaded;
+local GetScreenWidth = GetScreenWidth;
+local SetCVar = SetCVar;
+local PlaySoundFile = PlaySoundFile;
+local ReloadUI = ReloadUI;
+local UIFrameFadeOut = UIFrameFadeOut;
+local ChatFrame_AddMessageGroup = ChatFrame_AddMessageGroup;
+local ChatFrame_RemoveAllMessageGroups = ChatFrame_RemoveAllMessageGroups;
+local ChatFrame_AddChannel = ChatFrame_AddChannel;
+local ChatFrame_RemoveChannel = ChatFrame_RemoveChannel;
+local ChangeChatColor = ChangeChatColor;
+local ToggleChatColorNamesByClassGroup = ToggleChatColorNamesByClassGroup;
+local FCF_ResetChatWindows = FCF_ResetChatWindows;
+local FCF_SetLocked = FCF_SetLocked;
+local FCF_DockFrame, FCF_UnDockFrame = FCF_DockFrame, FCF_UnDockFrame;
+local FCF_OpenNewWindow = FCF_OpenNewWindow;
+local FCF_SavePositionAndDimensions = FCF_SavePositionAndDimensions;
+local FCF_GetChatWindowInfo = FCF_GetChatWindowInfo;
+local FCF_SetWindowName = FCF_SetWindowName;
+local FCF_StopDragging = FCF_StopDragging;
+local FCF_SetChatWindowFontSize = FCF_SetChatWindowFontSize;
+local CLASS, CONTINUE, PREVIOUS = CLASS, CONTINUE, PREVIOUS;
+local NUM_CHAT_WINDOWS = NUM_CHAT_WINDOWS;
+local LOOT, GENERAL, TRADE = LOOT, GENERAL, TRADE;
+local GUILD_EVENT_LOG = GUILD_EVENT_LOG;
+local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
+local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
+
 local CURRENT_PAGE = 0;
 local MAX_PAGE = 8;
 

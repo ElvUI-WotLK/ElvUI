@@ -1,10 +1,16 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local UF = E:GetModule("UnitFrames");
 
+local _G = _G;
+local pairs = pairs;
+local tinsert = table.insert;
+local format = format;
+local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
+local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
+
 local _, ns = ...;
 local ElvUF = ns.oUF;
 assert(ElvUF, "ElvUI was unable to locate oUF.");
-local tinsert = table.insert;
 
 function UF:Construct_FocusFrame(frame)
 	frame.Health = self:Construct_HealthBar(frame, true, true, "RIGHT");
@@ -99,12 +105,7 @@ function UF:Update_FocusFrame(frame, db)
 				health.colorHealth = true;
 			end
 		else
-			health.colorClass = true;
-			health.colorReaction = true;
-		end
-		
-		if(self.db["colors"].forcehealthreaction == true) then
-			health.colorClass = false;
+			health.colorClass = (not self.db["colors"].forcehealthreaction);
 			health.colorReaction = true;
 		end
 		
@@ -458,11 +459,11 @@ function UF:Update_FocusFrame(frame, db)
 			local debuffColor = UF.db.colors.auraBarDebuff;
 			
 			if(E:CheckClassColor(buffColor.r, buffColor.g, buffColor.b)) then
-				buffColor = E.myclass == "PRIEST" and E.PriestColors or RAID_CLASS_COLORS[E.myclass];
+				buffColor = E.myclass == "PRIEST" and E.PriestColors or (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass]);
 			end
 			
 			if(E:CheckClassColor(debuffColor.r, debuffColor.g, debuffColor.b)) then
-				debuffColor = E.myclass == "PRIEST" and E.PriestColors or RAID_CLASS_COLORS[E.myclass];
+				debuffColor = E.myclass == "PRIEST" and E.PriestColors or (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass]);
 			end
 			
 			local attachTo = frame;

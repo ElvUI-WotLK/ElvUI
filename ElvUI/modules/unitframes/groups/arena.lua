@@ -1,6 +1,11 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local UF = E:GetModule("UnitFrames");
 
+local _G = _G;
+local pairs, unpack = pairs, unpack;
+local tinsert = table.insert;
+local format = format;
+
 local _, ns = ...;
 local ElvUF = ns.oUF;
 assert(ElvUF, "ElvUI was unable to locate oUF.");
@@ -109,12 +114,7 @@ function UF:Update_ArenaFrames(frame, db)
 					health.colorHealth = true;
 				end
 			else
-				health.colorClass = true;
-				health.colorReaction = true;
-			end
-			
-			if(self.db["colors"].forcehealthreaction == true) then
-				health.colorClass = false;
+				health.colorClass = (not self.db["colors"].forcehealthreaction);
 				health.colorReaction = true;
 			end
 		end

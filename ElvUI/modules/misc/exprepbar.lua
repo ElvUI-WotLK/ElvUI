@@ -1,10 +1,12 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local M = E:GetModule('Misc');
 
-FACTION_STANDING_LABEL100 = UNKNOWN
-
-local format = string.format
-local min, max = math.min, math.max
+local _G = _G;
+local min, max = math.min, math.max;
+local format = string.format;
+local STANDING = STANDING;
+local REPUTATION = REPUTATION;
+local FACTION_BAR_COLORS = FACTION_BAR_COLORS;
 
 function M:GetXP(unit)
 	if(unit == 'pet') then
@@ -59,6 +61,7 @@ function M:UpdateExperience(event)
 	end
 end
 
+local backupColor = FACTION_BAR_COLORS[1];
 function M:UpdateReputation(event)
 	local bar = self.repBar
 	
@@ -73,7 +76,7 @@ function M:UpdateReputation(event)
 
 		local text = ''
 		local textFormat = E.db.general.reputation.textFormat		
-		local color = FACTION_BAR_COLORS[reaction]
+		local color = FACTION_BAR_COLORS[reaction] or backupColor;
 		bar.statusBar:SetStatusBarColor(color.r, color.g, color.b)	
 
 		bar.statusBar:SetMinMaxValues(min, max)

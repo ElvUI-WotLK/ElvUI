@@ -1,7 +1,8 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local UF = E:GetModule("UnitFrames");
 
-local tostring = tostring
+local tostring = tostring;
+local format = format;
 
 function UF:Construct_AuraBars()
 	local bar = self.statusBar
@@ -106,7 +107,7 @@ function UF:AuraBarFilter(unit, name, rank, icon, count, debuffType, duration, e
 	end
 	
 	if UF:CheckFilter(db.onlyDispellable, isFriend) then
-		if (self.type == "buffs" and not isStealable) or (self.type == "debuffs" and dtype and  not E:IsDispellableByMe(dtype)) or dtype == nil then
+		if((self.type == "buffs" and not isStealable) or (self.type == "debuffs" and debuffType and not E:IsDispellableByMe(debuffType)) or debuffType == nil) then
 			returnValue = false;
 		end
 		anotherFilterExists = true

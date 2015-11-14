@@ -1,9 +1,28 @@
 ﻿local E, L, V, P, G = unpack(select(2, ...));
 local LSM = LibStub("LibSharedMedia-3.0");
 
-local format, len, sub, find, split, match, twipe = string.format, string.len, string.sub, string.find, string.split, string.match, table.wipe
+local _G = _G;
+local tonumber, pairs, error, unpack, select = tonumber, pairs, error, unpack, select;
+local print, type, collectgarbage, pcall, date = print, type, collectgarbage, pcall, date;
+local twipe, tinsert = table.wipe, tinsert;
+local floor = floor;
+local format, find, split, match, len, sub = string.format, string.find, string.split, string.match, string.len, string.sub;
+
+local CreateFrame = CreateFrame;
+local GetCVar, SetCVar = GetCVar, SetCVar;
+local IsAddOnLoaded = IsAddOnLoaded;
+local GetSpellInfo = GetSpellInfo;
+local IsInInstance, GetNumPartyMembers, GetNumRaidMembers = IsInInstance, GetNumPartyMembers, GetNumRaidMembers;
+local RequestBattlefieldScoreData = RequestBattlefieldScoreData;
+local GetSpecialization, GetActiveSpecGroup = GetSpecialization, GetActiveSpecGroup;
+local GetCombatRatingBonus = GetCombatRatingBonus;
+local UnitLevel, UnitStat, UnitAttackPower, UnitBuff = UnitLevel, UnitStat, UnitAttackPower, UnitBuff;
+local SendAddonMessage = SendAddonMessage;
+local InCombatLockdown = InCombatLockdown;
+local GetFunctionCPUUsage = GetFunctionCPUUsage;
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
 local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
+local ERR_NOT_IN_COMBAT = ERR_NOT_IN_COMBAT;
 
 E.myclass = select(2, UnitClass("player")); -- Constants
 E.myrace = UnitRace("player");

@@ -2,6 +2,10 @@ local E, L, V, P, G = unpack(select(2, ...));
 local M = E:NewModule('Minimap', 'AceEvent-3.0');
 E.Minimap = M;
 
+local _G = _G;
+local tinsert = table.insert;
+local gsub, upper, strsub = string.gsub, string.upper, strsub;
+
 local menuFrame = CreateFrame('Frame', 'MinimapRightClickMenu', E.UIParent, 'UIDropDownMenuTemplate');
 local menuList = {
     {text = CHARACTER_BUTTON,

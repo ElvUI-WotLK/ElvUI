@@ -1,9 +1,15 @@
 ﻿local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local Sticky = LibStub("LibSimpleSticky-1.0")
 
-local format = string.format
-local split = string.split
-local min = math.min
+local _G = _G;
+local type, unpack, pairs = type, unpack, pairs;
+local min = math.min;
+local format, split = string.format, string.split;
+
+local CreateFrame = CreateFrame;
+local InCombatLockdown = InCombatLockdown;
+local ERR_NOT_IN_COMBAT = ERR_NOT_IN_COMBAT;
+
 E.CreatedMovers = {}
 
 local function SizeChanged(frame)

@@ -1,7 +1,13 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local D = E:NewModule('Distributor', "AceEvent-3.0","AceTimer-3.0","AceComm-3.0","AceSerializer-3.0")
 
-local len, format, split = string.len, string.format, string.split
+local tonumber = tonumber;
+local len, format, split = string.len, string.format, string.split;
+
+local CreateFrame = CreateFrame;
+local GetNumRaidMembers, UnitInRaid = GetNumRaidMembers, UnitInRaid;
+local GetNumPartyMembers, UnitInParty = GetNumPartyMembers, UnitInParty;
+local ACCEPT, CANCEL, YES, NO = ACCEPT, CANCEL, YES, NO;
 
 ----------------------------------
 -- CONSTANTS
@@ -33,7 +39,7 @@ end
 
 -- Used to start uploads
 function D:Distribute(target, otherServer, isGlobal)	
-	local profileKey
+	local profileKey, data;
 	if not isGlobal then
 		if ElvDB.profileKeys then
 			profileKey = ElvDB.profileKeys[E.myname..' - '..E.myrealm]

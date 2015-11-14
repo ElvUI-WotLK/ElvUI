@@ -1,5 +1,10 @@
 ﻿local E, L, V, P, G, _ = unpack(select(2, ...));
 
+local print, unpack = print, unpack;
+
+local GetSpellInfo = GetSpellInfo;
+local UnitClass = UnitClass;
+
 local function SpellName(id)
 	local name, _, _, _, _, _, _, _, _ = GetSpellInfo(id) 	
 	if not name then

@@ -1,8 +1,12 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local B = E:GetModule('Bags');
 
-local TOTAL_BAGS = NUM_BAG_FRAMES + 2
-local tinsert = table.insert
+local _G = _G;
+local unpack = unpack;
+local tinsert = table.insert;
+local NUM_BAG_FRAMES = NUM_BAG_FRAMES;
+
+local TOTAL_BAGS = NUM_BAG_FRAMES + 2;
 
 local ElvUIKeyRing = CreateFrame('Button', 'ElvUIKeyRingButton', UIParent, 'ItemButtonTemplate');
 ElvUIKeyRing:RegisterForClicks('anyUp');
