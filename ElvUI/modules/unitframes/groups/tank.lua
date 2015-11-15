@@ -102,7 +102,7 @@ function UF:Update_TankFrames(frame, db)
 				health.colorHealth = true;
 			end
 		else
-			health.colorClass = true;
+			health.colorClass = (not self.db["colors"].forcehealthreaction);
 			health.colorReaction = true;
 		end
 		
