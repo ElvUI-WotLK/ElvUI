@@ -283,7 +283,7 @@ function UF:ClearChildPoints(...)
 end
 
 function UF:UpdateColors()
-	local db = self.db.colors;
+	local db = E.db.unitframe.colors;
 	
 	local good = E:GetColorTable(db.reaction.GOOD);
 	local bad = E:GetColorTable(db.reaction.BAD);
@@ -1231,4 +1231,4 @@ function UF:ToggleTransparentStatusBar(isTransparent, statusBar, backdropTex, ad
 	end
 end
 
-E:RegisterInitialModule(UF:GetName());
+E:RegisterModule(UF:GetName());
