@@ -364,6 +364,33 @@ function S:HandleSliderFrame(frame)
 	end
 end
 
+function S:SkinFrame(frame, override, kill)
+	if not override then S:StripTextures(frame, kill) end
+	S:SetTemplate(frame);
+end
+
+function S:StripTextures(Object, Kill)
+	for i = 1, Object:GetNumRegions() do
+		local Region = select(i, Object:GetRegions());
+		if Region:GetObjectType() == "Texture" then
+			if Kill then
+				Region:Kill();
+			else
+				Region:SetTexture(nil);
+			end
+		end
+	end
+end
+
+function S:SetTemplate(frame)
+	if (frame) then
+		frame:SetBackdrop(nil);
+		if (not frame.backdrop) then
+			frame:CreateBackdrop("Default");
+		end
+	end
+end
+
 function S:ADDON_LOADED(event, addon)
 	if self.allowBypass[addon] then
 		S.addonsToLoad[addon]()
