@@ -6,6 +6,20 @@ local _G = _G;
 local tinsert = table.insert;
 local gsub, upper, strsub = string.gsub, string.upper, strsub;
 
+local CreateFrame = CreateFrame;
+local ToggleCharacter = ToggleCharacter;
+local ToggleFrame = ToggleFrame;
+local ToggleAchievementFrame = ToggleAchievementFrame;
+local ToggleFriendsFrame = ToggleFriendsFrame;
+local IsAddOnLoaded = IsAddOnLoaded;
+local ToggleHelpFrame = ToggleHelpFrame;
+local GetZonePVPInfo = GetZonePVPInfo;
+local IsShiftKeyDown = IsShiftKeyDown;
+local ToggleDropDownMenu = ToggleDropDownMenu;
+local Minimap_OnClick = Minimap_OnClick;
+local GetMinimapZoneText = GetMinimapZoneText;
+local InCombatLockdown = InCombatLockdown;
+
 local menuFrame = CreateFrame('Frame', 'MinimapRightClickMenu', E.UIParent, 'UIDropDownMenuTemplate');
 local menuList = {
     {text = CHARACTER_BUTTON,

@@ -7,6 +7,9 @@ local select, unpack, tonumber, pairs, ipairs = select, unpack, tonumber, pairs,
 local floor, min, max = math.floor, math.min, math.max;
 local format, join, wipe, tinsert = string.format, string.join, table.wipe, table.insert;
 
+local CreateFrame = CreateFrame;
+local UnitAura = UnitAura;
+
 local DIRECTION_TO_POINT = {
 	DOWN_RIGHT = 'TOPLEFT',
 	DOWN_LEFT = 'TOPRIGHT',

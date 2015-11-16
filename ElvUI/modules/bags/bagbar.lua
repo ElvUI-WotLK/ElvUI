@@ -4,6 +4,8 @@ local B = E:GetModule('Bags');
 local _G = _G;
 local unpack = unpack;
 local tinsert = table.insert;
+
+local CreateFrame = CreateFrame;
 local NUM_BAG_FRAMES = NUM_BAG_FRAMES;
 
 local TOTAL_BAGS = NUM_BAG_FRAMES + 2;

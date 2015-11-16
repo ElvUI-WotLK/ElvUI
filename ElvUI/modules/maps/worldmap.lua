@@ -2,6 +2,12 @@ local E, L, V, P, G = unpack(select(2, ...));
 local M = E:NewModule("WorldMap", "AceHook-3.0", "AceEvent-3.0", "AceTimer-3.0");
 E.WorldMap = M;
 
+local CreateFrame = CreateFrame;
+local InCombatLockdown = InCombatLockdown;
+local SetUIPanelAttribute = SetUIPanelAttribute;
+local IsInInstance = IsInInstance;
+local GetPlayerMapPosition = GetPlayerMapPosition;
+local GetCursorPosition = GetCursorPosition;
 local PLAYER = PLAYER;
 local MOUSE_LABEL = MOUSE_LABEL;
 local WORLDMAP_FULLMAP_SIZE = WORLDMAP_FULLMAP_SIZE;

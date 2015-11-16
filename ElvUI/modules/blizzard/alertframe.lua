@@ -3,6 +3,8 @@ local B = E:GetModule('Blizzard');
 
 local _G = _G;
 local pairs = pairs;
+
+local AlertFrame_FixAnchors = AlertFrame_FixAnchors;
 local MAX_ACHIEVEMENT_ALERTS = MAX_ACHIEVEMENT_ALERTS;
 
 local AlertFrameHolder = CreateFrame('Frame', 'AlertFrameHolder', E.UIParent);

@@ -8,6 +8,8 @@ local S = E:GetModule('Skins');
 local tonumber, collectgarbage = tonumber, collectgarbage;
 local floor = math.floor;
 local format, strsub = string.format, strsub;
+
+local CreateFrame = CreateFrame;
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
 local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
 local CALENDAR_COPY_EVENT, CALENDAR_PASTE_EVENT = CALENDAR_COPY_EVENT, CALENDAR_PASTE_EVENT;
@@ -292,7 +294,7 @@ function B:EnhanceColorPicker()
 			box:SetNumeric(false)
 		else
 			box:SetMaxLetters(3)
-			box:Width(32)
+			box:Width(40)
 			box:SetNumeric(true)
 		end
 		box:SetPoint("TOP", "ColorPickerWheel", "BOTTOM", 0, -15)

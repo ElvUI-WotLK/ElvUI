@@ -9,12 +9,25 @@ local twipe, tsort, tinsert, wipe = table.wipe, table.sort, table.insert, wipe;
 local band = bit.band;
 local floor = math.floor;
 local gsub, tolower, format, strsplit = string.gsub, string.lower, format, strsplit;
+
+local CreateFrame = CreateFrame;
+local GetTime = GetTime;
+local UnitGUID = UnitGUID;
+local UnitName = UnitName;
+local InCombatLockdown = InCombatLockdown;
+local UnitExists = UnitExists;
+local SetCVar = SetCVar;
+local IsAddOnLoaded = IsAddOnLoaded;
+local GetComboPoints = GetComboPoints;
+local UnitHasVehicleUI = UnitHasVehicleUI;
+local GetSpellInfo = GetSpellInfo;
+local GetSpellTexture = GetSpellTexture;
+local UnitBuff, UnitDebuff = UnitBuff, UnitDebuff;
+local UnitPlayerControlled = UnitPlayerControlled;
+local GetRaidTargetIndex = GetRaidTargetIndex;
 local WorldFrame = WorldFrame;
-local OVERLAY = [=[Interface\TargetingFrame\UI-TargetingFrame-Flash]=];
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
 local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
-local UnitGUID = UnitGUID;
-local UnitHealthMax = UnitHealthMax;
 local UNKNOWN = UNKNOWN;
 local MAX_COMBO_POINTS = MAX_COMBO_POINTS;
 local AURA_TYPE_BUFF, AURA_TYPE_DEBUFF = AURA_TYPE_BUFF, AURA_TYPE_DEBUFF;
@@ -23,6 +36,8 @@ local COMBATLOG_OBJECT_CONTROL_PLAYER = COMBATLOG_OBJECT_CONTROL_PLAYER;
 local numChildren = -1;
 local targetIndicator;
 local targetAlpha = 1;
+
+local OVERLAY = [=[Interface\TargetingFrame\UI-TargetingFrame-Flash]=];
 
 --Pattern to remove cross realm label added to the end of plate names
 --Taken from http://www.wowace.com/addons/libnameplateregistry-1-0/

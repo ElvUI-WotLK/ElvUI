@@ -1,11 +1,14 @@
 ﻿local E, L, V, P, G = unpack(select(2, ...));
 local DT = E:GetModule("DataTexts");
 
+local join = string.join;
+
+local GetTotalAchievementPoints = GetTotalAchievementPoints;
+local ToggleAchievementFrame = ToggleAchievementFrame;
 local ACHIEVEMENT_TITLE = ACHIEVEMENT_TITLE;
 
-local displayNumberString = "";
-local join = string.join;
 local lastPanel;
+local displayNumberString = "";
 
 local function OnEvent(self, event)
 	self.text:SetFormattedText(displayNumberString, ACHIEVEMENT_TITLE, GetTotalAchievementPoints());
