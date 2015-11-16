@@ -364,7 +364,7 @@ function S:HandleSliderFrame(frame)
 	end
 end
 
-function S:SkinFrame(frame, override, kill)
+function S:HandleFrame(frame, override, kill)
 	if not override then S:StripTextures(frame, kill) end
 	S:SetTemplate(frame);
 end
