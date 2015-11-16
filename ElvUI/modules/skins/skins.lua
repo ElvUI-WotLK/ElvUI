@@ -184,7 +184,7 @@ function S:HandleNextPrevButton(btn, buttonOverride)
 			self.icon:SetAlpha(1.0);		
 		end)
 		
-		if not btn:IsEnabled() then
+		if(btn:IsEnabled() == 0) then
 			btn:GetScript('OnDisable')(btn)
 		end
 	end
