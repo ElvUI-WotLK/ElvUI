@@ -66,7 +66,8 @@ end
 local function MultiUpdate(...)
 	for i = 1, select("#", ...) do
 		for _, frame in ipairs(oUF.objects) do
-			if(frame.unit and (frame.HealCommBar and (frame.db and frame.db.healPrediction == true)) and UnitGUID(frame.unit) == select(i, ...)) then
+			local db = frame:GetParent().db or frame.db or nil;
+			if(frame.unit and (frame.HealCommBar and (db and db.healPrediction)) and UnitGUID(frame.unit) == select(i, ...)) then
 				Path(frame);
 			end
 		end
