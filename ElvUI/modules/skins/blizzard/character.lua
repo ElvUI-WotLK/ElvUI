@@ -196,10 +196,6 @@ local function LoadSkin()
 		Tab:HookScript('OnLeave', function(self) self.backdrop:SetBackdropBorderColor(unpack(E['media'].bordercolor)); end);
 	end
 	
-	--CompanionModelFrame:CreateBackdrop("Default")
-	--CompanionModelFrame.backdrop:Point("TOPLEFT", -8, 6);
-	--CompanionModelFrame.backdrop:Point("BOTTOMRIGHT", 6, -14);
-	
 	S:HandleRotateButton(PetModelFrameRotateLeftButton)
 	S:HandleRotateButton(PetModelFrameRotateRightButton)
 	
@@ -219,15 +215,15 @@ local function LoadSkin()
 		end
 		local texture = self:GetRegions();
 		if(happiness == 1) then
-			texture:SetTexCoord(0.335, 0.5225, 0.05, 0.309375);
-		elseif( happiness == 2) then
-			texture:SetTexCoord(0.1475, 0.335, 0.05, 0.309375);
+			texture:SetTexCoord(0.41, 0.53, 0.06, 0.30);
+		elseif(happiness == 2) then
+			texture:SetTexCoord(0.22, 0.345, 0.06, 0.30);
 		elseif(happiness == 3) then
-			texture:SetTexCoord(0.04, 0.1475, 0.05, 0.309375);
+			texture:SetTexCoord(0.04, 0.15, 0.06, 0.30);
 		end
 	end
 	
-	PetPaperDollPetInfo:GetRegions():SetTexCoord(0.04, 0.1475, 0.05, 0.309375);
+	PetPaperDollPetInfo:GetRegions():SetTexCoord(0.04, 0.15, 0.06, 0.30);
 	PetPaperDollPetInfo:SetFrameLevel(PetModelFrame:GetFrameLevel() + 2);
 	PetPaperDollPetInfo:CreateBackdrop("Default");
 	PetPaperDollPetInfo:Size(24, 24);
