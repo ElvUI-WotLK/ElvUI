@@ -4,6 +4,7 @@ local UF = E:GetModule("UnitFrames");
 local _G = _G;
 local unpack, pairs = unpack, pairs;
 local format = format;
+
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
 local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
 

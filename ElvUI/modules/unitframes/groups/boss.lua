@@ -5,6 +5,7 @@ local _G = _G;
 local pairs = pairs;
 local tinsert = table.insert;
 local format = format;
+
 local MAX_BOSS_FRAMES = MAX_BOSS_FRAMES;
 
 local _, ns = ...;

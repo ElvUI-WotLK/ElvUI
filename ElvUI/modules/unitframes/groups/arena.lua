@@ -6,6 +6,8 @@ local pairs, unpack = pairs, unpack;
 local tinsert = table.insert;
 local format = format;
 
+local CreateFrame = CreateFrame;
+
 local _, ns = ...;
 local ElvUF = ns.oUF;
 assert(ElvUF, "ElvUI was unable to locate oUF.");

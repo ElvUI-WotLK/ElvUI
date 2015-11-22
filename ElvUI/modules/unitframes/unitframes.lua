@@ -5,6 +5,17 @@ UF.LSM = LSM;
 
 local _G = _G;
 local select, pairs, type, unpack, assert, tostring = select, pairs, type, unpack, assert, tostring;
+
+local hooksecurefunc = hooksecurefunc;
+local CreateFrame = CreateFrame;
+local IsAddOnLoaded = IsAddOnLoaded;
+local UnitFrame_OnEnter = UnitFrame_OnEnter;
+local UnitFrame_OnLeave = UnitFrame_OnLeave;
+local IsInInstance = IsInInstance;
+local InCombatLockdown = InCombatLockdown;
+local GetInstanceInfo = GetInstanceInfo;
+local UnregisterStateDriver = UnregisterStateDriver;
+local RegisterStateDriver = RegisterStateDriver;
 local MAX_RAID_MEMBERS = MAX_RAID_MEMBERS;
 local MAX_BOSS_FRAMES = MAX_BOSS_FRAMES;
 
@@ -565,12 +576,13 @@ function UF.groupPrototype:Configure_Groups()
 end
 
 function UF.groupPrototype:Update()
-	local group = self.groupName;
+	local groupName = self.groupName;
 
-	UF[group].db = UF.db["units"][group];
+	UF[groupName].db = UF.db["units"][groupName];
 	for i = 1, #self.groups do
-		self.groups[i].db = UF.db["units"][group];
-		self.groups[i]:Update();
+		local group = self.groups[i];
+		group.db = UF.db["units"][groupName];
+		group:Update();
 	end
 end
 
@@ -580,14 +592,14 @@ function UF.groupPrototype:AdjustVisibility()
 		for i = 1, #self.groups do
 			local group = self.groups[i];
 			if((i <= numGroups) and ((self.db.raidWideSorting and i <= 1) or not self.db.raidWideSorting)) then
-				self.groups[i]:Show();
+				group:Show();
 			else
-				if(self.groups[i].forceShow) then
-					self.groups[i]:Hide();
+				if(group.forceShow) then
+					group:Hide();
 					UF:UnshowChildUnits(group, group:GetChildren());
 					group:SetAttribute("startingIndex", 1);
 				else
-					self.groups[i]:Reset();
+					group:Reset();
 				end
 			end
 		end
@@ -602,22 +614,22 @@ function UF.headerPrototype:ClearChildPoints()
 end
 
 function UF.headerPrototype:Update(isForced)
-	local group = self.groupName;
-	local db = UF.db["units"][group];
-	UF["Update_"..E:StringTitle(group).."Header"](UF, self, db, isForced);
+	local groupName = self.groupName;
+	local db = UF.db["units"][groupName];
+	UF["Update_"..E:StringTitle(groupName).."Header"](UF, self, db, isForced);
 
 	local i = 1;
 	local child = self:GetAttribute("child" .. i);
 
 	while(child) do
-		UF["Update_"..E:StringTitle(group).."Frames"](UF, child, db);
+		UF["Update_"..E:StringTitle(groupName).."Frames"](UF, child, db);
 
 		if(_G[child:GetName().."Pet"]) then
-			UF["Update_"..E:StringTitle(group).."Frames"](UF, _G[child:GetName().."Pet"], db);
+			UF["Update_"..E:StringTitle(groupName).."Frames"](UF, _G[child:GetName().."Pet"], db);
 		end
 		
 		if(_G[child:GetName().."Target"]) then
-			UF["Update_"..E:StringTitle(group).."Frames"](UF, _G[child:GetName().."Target"], db);
+			UF["Update_"..E:StringTitle(groupName).."Frames"](UF, _G[child:GetName().."Target"], db);
 		end
 		
 		if(not InCombatLockdown()) then
@@ -693,7 +705,7 @@ function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdat
 			end
 			
 			if(maxPlayers > 0) then
-				numGroups = tonumber(E:Round(maxPlayers/5));
+				numGroups = E:Round(maxPlayers/5);
 				E:Print("Forcing maxGroups to: "..numGroups.." because maxPlayers is: "..maxPlayers);
 			end
 		end

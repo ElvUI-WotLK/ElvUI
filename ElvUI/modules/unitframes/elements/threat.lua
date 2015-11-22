@@ -3,6 +3,8 @@ local UF = E:GetModule("UnitFrames");
 
 local unpack = unpack;
 
+local CreateFrame = CreateFrame;
+
 function UF:Construct_Threat(frame, glow)
 	local threat = CreateFrame("Frame", nil, frame);
 	

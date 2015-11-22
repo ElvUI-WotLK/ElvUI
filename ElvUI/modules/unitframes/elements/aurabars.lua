@@ -4,6 +4,12 @@ local UF = E:GetModule("UnitFrames");
 local tostring = tostring;
 local format = format;
 
+local CreateFrame = CreateFrame;
+local IsShiftKeyDown = IsShiftKeyDown;
+local IsAltKeyDown = IsAltKeyDown;
+local IsControlKeyDown = IsControlKeyDown;
+local UnitIsFriend = UnitIsFriend;
+
 function UF:Construct_AuraBars()
 	local bar = self.statusBar
 	

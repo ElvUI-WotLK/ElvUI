@@ -4,6 +4,13 @@ local UF = E:GetModule("UnitFrames");
 local pairs = pairs;
 local tinsert = table.insert;
 
+local CreateFrame = CreateFrame;
+local InCombatLockdown = InCombatLockdown;
+local IsInInstance = IsInInstance;
+local GetInstanceInfo = GetInstanceInfo;
+local UnregisterStateDriver = UnregisterStateDriver;
+local RegisterStateDriver = RegisterStateDriver;
+
 local _, ns = ...;
 local ElvUF = ns.oUF;
 assert(ElvUF, "ElvUI was unable to locate oUF.");
@@ -68,7 +75,7 @@ function UF:RaidSmartVisibility(event)
 			
 			if(maxPlayers < 40) then
 				self:Show();
-				if(ElvUF_Raid.numGroups ~= tonumber(E:Round(maxPlayers/5)) and event) then
+				if(ElvUF_Raid.numGroups ~= E:Round(maxPlayers/5) and event) then
 					UF:CreateAndUpdateHeaderGroup("raid");
 				end
 			else

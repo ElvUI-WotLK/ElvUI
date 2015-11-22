@@ -4,6 +4,8 @@ local UF = E:GetModule("UnitFrames");
 local select = select;
 local ceil, floor = math.ceil, math.floor;
 
+local CreateFrame = CreateFrame;
+
 local _, ns = ...;
 local ElvUF = ns.oUF;
 assert(ElvUF, "ElvUI was unable to locate oUF.");

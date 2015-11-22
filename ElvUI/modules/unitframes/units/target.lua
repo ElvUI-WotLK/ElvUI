@@ -6,6 +6,8 @@ local pairs, unpack = pairs, unpack;
 local tinsert = table.insert;
 local ceil = math.ceil;
 local format = format;
+
+local IsAddOnLoaded = IsAddOnLoaded;
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
 local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
 local MAX_COMBO_POINTS = MAX_COMBO_POINTS;

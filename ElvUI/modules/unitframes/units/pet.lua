@@ -5,6 +5,8 @@ local _G = _G;
 local pairs = pairs;
 local format = format;
 
+local InCombatLockdown = InCombatLockdown;
+
 local _, ns = ...;
 local ElvUF = ns.oUF;
 assert(ElvUF, "ElvUI was unable to locate oUF.");

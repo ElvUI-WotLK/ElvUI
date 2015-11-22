@@ -3,6 +3,14 @@ local UF = E:GetModule("UnitFrames");
 
 local random = random;
 
+local CreateFrame = CreateFrame;
+local UnitIsTapped = UnitIsTapped;
+local UnitIsTappedByPlayer = UnitIsTappedByPlayer;
+local UnitReaction = UnitReaction;
+local UnitIsPlayer = UnitIsPlayer;
+local UnitClass = UnitClass;
+local UnitIsDeadOrGhost = UnitIsDeadOrGhost;
+
 local _, ns = ...
 local ElvUF = ns.oUF
 assert(ElvUF, "ElvUI was unable to locate oUF.")

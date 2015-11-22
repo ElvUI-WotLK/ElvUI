@@ -6,6 +6,15 @@ local unpack, select, assert, pairs = unpack, select, assert, pairs;
 local tinsert = tinsert;
 local random, floor, ceil = math.random, math.floor, math.ceil;
 local format = string.format;
+
+local CreateFrame = CreateFrame;
+local UnitIsUnit = UnitIsUnit;
+local UnitReaction = UnitReaction;
+local UnitIsPlayer = UnitIsPlayer;
+local UnitClass = UnitClass;
+local UnitHasVehicleUI = UnitHasVehicleUI;
+local GetComboPoints = GetComboPoints;
+local GetSpellInfo = GetSpellInfo;
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
 local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
 local FACTION_BAR_COLORS = FACTION_BAR_COLORS;

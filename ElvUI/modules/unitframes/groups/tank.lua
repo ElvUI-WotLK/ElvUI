@@ -3,6 +3,9 @@ local UF = E:GetModule("UnitFrames");
 
 local tinsert = table.insert;
 
+local RegisterStateDriver = RegisterStateDriver;
+local InCombatLockdown = InCombatLockdown
+
 local _, ns = ...;
 local ElvUF = ns.oUF;
 assert(ElvUF, "ElvUI was unable to locate oUF.");

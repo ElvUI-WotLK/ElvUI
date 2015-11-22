@@ -3,6 +3,9 @@ local UF = E:GetModule("UnitFrames");
 
 local random = random;
 
+local CreateFrame = CreateFrame;
+local UnitPowerType = UnitPowerType;
+
 local _, ns = ...
 local ElvUF = ns.oUF
 assert(ElvUF, "ElvUI was unable to locate oUF.")

@@ -5,6 +5,12 @@ local LSM = LibStub("LibSharedMedia-3.0");
 local unpack, tonumber = unpack, tonumber;
 local floor, abs = math.floor, abs;
 
+local CreateFrame = CreateFrame;
+local UnitIsPlayer = UnitIsPlayer;
+local UnitClass = UnitClass;
+local UnitReaction = UnitReaction;
+local UnitCanAttack = UnitCanAttack;
+
 local _, ns = ...;
 local ElvUF = ns.oUF;
 assert(ElvUF, "ElvUI was unable to locate oUF.");

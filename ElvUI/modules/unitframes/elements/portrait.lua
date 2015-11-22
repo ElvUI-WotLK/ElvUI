@@ -1,6 +1,8 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local UF = E:GetModule("UnitFrames");
 
+local CreateFrame = CreateFrame;
+
 function UF:Construct_Portrait(frame, type)
 	local portrait;
 	if(type == "texture") then

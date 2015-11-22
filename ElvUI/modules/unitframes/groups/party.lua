@@ -5,6 +5,12 @@ local _G = _G
 local pairs = pairs
 local tinsert = table.insert
 
+local CreateFrame = CreateFrame;
+local InCombatLockdown = InCombatLockdown;
+local UnregisterStateDriver = UnregisterStateDriver;
+local RegisterStateDriver = RegisterStateDriver;
+local IsInInstance = IsInInstance;
+
 local _, ns = ...;
 local ElvUF = ns.oUF;
 assert(ElvUF, "ElvUI was unable to locate oUF.");

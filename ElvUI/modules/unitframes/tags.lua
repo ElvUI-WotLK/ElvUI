@@ -5,9 +5,35 @@ assert(ElvUF, "ElvUI was unable to locate oUF.")
 
 local _G = _G;
 local unpack, pairs = unpack, pairs;
-local GetTime = GetTime;
 local ceil, sqrt, floor = math.ceil, math.sqrt, math.floor;
 local format = string.format;
+
+local GetTime = GetTime;
+local UnitGUID = UnitGUID;
+local UnitPower = UnitPower;
+local UnitPowerMax = UnitPowerMax;
+local UnitIsAFK = UnitIsAFK;
+local UnitIsDeadOrGhost = UnitIsDeadOrGhost;
+local UnitIsConnected = UnitIsConnected;
+local UnitHealth = UnitHealth;
+local UnitHealthMax = UnitHealthMax;
+local UnitIsDead = UnitIsDead;
+local UnitIsGhost = UnitIsGhost;
+local UnitPowerType = UnitPowerType;
+local UnitLevel = UnitLevel;
+local UnitReaction = UnitReaction;
+local UnitClass = UnitClass;
+local UnitIsPlayer = UnitIsPlayer;
+local UnitDetailedThreatSituation = UnitDetailedThreatSituation;
+local GetThreatStatusColor = GetThreatStatusColor;
+local UnitIsDND = UnitIsDND;
+local UnitIsPVPFreeForAll = UnitIsPVPFreeForAll;
+local UnitIsPVP = UnitIsPVP;
+local GetPVPTimer = GetPVPTimer;
+local GetNumPartyMembers = GetNumPartyMembers;
+local UnitClassification = UnitClassification;
+local GetUnitSpeed = GetUnitSpeed;
+local DEFAULT_AFK_MESSAGE = DEFAULT_AFK_MESSAGE;
 local DEAD = DEAD;
 local PVP = PVP;
 
