@@ -96,6 +96,17 @@ local function LoadSkin()
 	S:HandleButton(GuildInfoSaveButton);
 	S:HandleButton(GuildInfoCancelButton);
 	
+	GuildEventLogFrame:StripTextures(); -- GuildEventLog Frame
+	GuildEventLogFrame:CreateBackdrop("Transparent");
+	GuildEventLogFrame.backdrop:Point("TOPLEFT", 5, -6);
+	GuildEventLogFrame.backdrop:Point("BOTTOMRIGHT", -2, 6);
+	
+	GuildEventFrame:SetTemplate("Default");
+	
+	S:HandleScrollBar(GuildEventLogScrollFrameScrollBar);
+	S:HandleCloseButton(GuildEventLogCloseButton);
+	S:HandleButton(GuildEventLogCancelButton);
+	
 	GuildControlPopupFrame:StripTextures(); -- Control Frame
 	GuildControlPopupFrame:CreateBackdrop("Transparent");
 	GuildControlPopupFrame.backdrop:Point("TOPLEFT", 3, -5);
