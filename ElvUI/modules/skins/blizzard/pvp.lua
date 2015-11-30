@@ -2,6 +2,7 @@ local E, L, P, G = unpack(select(2, ...));
 local S = E:GetModule('Skins');
 
 local _G = _G;
+local MAX_ARENA_TEAMS = MAX_ARENA_TEAMS;
 
 local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.pvp ~= true then return; end
@@ -23,6 +24,21 @@ local function LoadSkin()
 	-- PVPBattlegroundFrame
 	PVPBattlegroundFrame:StripTextures(true);
 	
+	WintergraspTimer:SetSize(24, 24);
+	WintergraspTimer:SetTemplate("Default");
+	
+	WintergraspTimer.texture:SetDrawLayer("ARTWORK");
+	WintergraspTimer.texture:SetInside();
+	
+	WintergraspTimer:HookScript("OnUpdate", function(self)
+		local canQueue = CanQueueForWintergrasp();
+		if(canQueue) then
+			self.texture:SetTexCoord(0.2, 0.8, 0.6, 0.9);
+		else
+			self.texture:SetTexCoord(0.2, 0.8, 0.1, 0.4);
+		end
+	end);
+	
 	PVPBattlegroundFrameTypeScrollFrame:StripTextures();
 	S:HandleScrollBar(PVPBattlegroundFrameTypeScrollFrameScrollBar);
 	
@@ -35,7 +51,7 @@ local function LoadSkin()
 	PVPBattlegroundFrameInfoScrollFrameChildFrameRewardsInfo.description:SetTextColor(1, 1, 1);
 	
 	S:HandleButton(PVPBattlegroundFrameJoinButton);
-	PVPBattlegroundFrameGroupJoinButton:Point('RIGHT', PVPBattlegroundFrameJoinButton, 'LEFT', -1, 0);
+	PVPBattlegroundFrameGroupJoinButton:Point("RIGHT", PVPBattlegroundFrameJoinButton, "LEFT", -2, 0);
 	S:HandleButton(PVPBattlegroundFrameGroupJoinButton);
 	-- PVPFrame
 	PVPParentFrame:CreateBackdrop('Transparent');
@@ -46,21 +62,17 @@ local function LoadSkin()
 	
 	PVPFrame:StripTextures(true);
 	
-	do
-		local team;
-		local teamHighlight;
+	for i = 1, MAX_ARENA_TEAMS do
+		local team = _G["PVPTeam"..i];
+		team:StripTextures();
+		team:CreateBackdrop("Default");
+		team.backdrop:Point("TOPLEFT", 9, -4);
+		team.backdrop:Point("BOTTOMRIGHT", -24, 3);
 		
-		for i = 1, MAX_ARENA_TEAMS do
-			team = _G['PVPTeam'..i];
-			teamHighlight = _G['PVPTeam'..i..'Highlight'];
-			
-			team:StripTextures();
-			team:CreateBackdrop('Transparent');
-			team.backdrop:Point('TOPLEFT', 9, -4);
-			team.backdrop:Point('BOTTOMRIGHT', -24, 3);
-			
-			teamHighlight:Kill();
-		end
+		team:HookScript("OnEnter", S.SetModifiedBackdrop);
+		team:HookScript("OnLeave", S.SetOriginalBackdrop);
+		
+		_G["PVPTeam"..i.."Highlight"]:Kill();
 	end
 	
 	PVPTeamDetails:StripTextures();
