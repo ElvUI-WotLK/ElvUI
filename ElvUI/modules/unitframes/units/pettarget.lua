@@ -18,6 +18,7 @@ function UF:Construct_PetTargetFrame(frame)
 	frame.Threat = self:Construct_Threat(frame);
 	frame.Range = UF:Construct_Range(frame);
 	
+	frame.customTexts = {};
 	frame:Point("BOTTOM", ElvUF_Pet, "TOP", 0, 7);
 	E:CreateMover(frame, frame:GetName().."Mover", L["PetTarget Frame"], nil, -7, nil, "ALL,SOLO");
 end
