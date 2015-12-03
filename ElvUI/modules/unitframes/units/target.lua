@@ -689,6 +689,8 @@ function UF:Update_TargetFrame(frame, db)
 				attachTo = frame.Buffs
 			elseif(db.aurabar.attachTo == "DEBUFFS") then
 				attachTo = frame.Debuffs;
+			elseif(db.aurabar.attachTo == "PLAYER_AURABARS" and ElvUF_Player) then
+				attachTo = ElvUF_Player.AuraBars
 			end
 			
 			local anchorPoint, anchorTo = "BOTTOM", "TOP";
