@@ -695,7 +695,7 @@ function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdat
 	local db = self.db["units"][group];
 	local raidFilter = UF.db.smartRaidFilter;
 	local numGroups = db.numGroups;
-	if(raidFilter and numGroups) then
+	if(raidFilter and numGroups and (self[group] and not self[group].blockVisibilityChanges)) then
 		local inInstance, instanceType = IsInInstance();
 		if(inInstance and (instanceType == "raid" or instanceType == "pvp")) then
 			local _, _, _, _, maxPlayers = GetInstanceInfo();
@@ -887,7 +887,7 @@ function UF:UpdateAllHeaders(event)
 	for group, header in pairs(self["headers"]) do
 		header:Update();
 		
-		local shouldUpdateHeader
+		local shouldUpdateHeader;
 		if(header.numGroups == nil or smartRaidFilterEnabled) then
 			shouldUpdateHeader = false;
 		elseif(header.numGroups ~= nil and not smartRaidFilterEnabled) then

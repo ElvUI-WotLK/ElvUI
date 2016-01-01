@@ -9,15 +9,15 @@ local function LoadSkin()
 	-- BattlefieldFrame
 	BattlefieldFrame:StripTextures(true);
 	BattlefieldFrame:CreateBackdrop('Transparent');
-	BattlefieldFrame.backdrop:Point('TOPLEFT', 12, -12);
-	BattlefieldFrame.backdrop:Point('BOTTOMRIGHT', -34, 76);
+	BattlefieldFrame.backdrop:Point("TOPLEFT", 10, -12);
+	BattlefieldFrame.backdrop:Point("BOTTOMRIGHT", -32, 73);
 	
 	BattlefieldFrameInfoScrollFrameChildFrameDescription:SetTextColor(1, 1, 1);
 	BattlefieldFrameInfoScrollFrameChildFrameRewardsInfoDescription:SetTextColor(1, 1, 1);
 	
 	S:HandleButton(BattlefieldFrameCancelButton);
 	S:HandleButton(BattlefieldFrameJoinButton);
-	BattlefieldFrameGroupJoinButton:Point('RIGHT', BattlefieldFrameJoinButton, 'LEFT', -1, 0);
+	BattlefieldFrameGroupJoinButton:Point("RIGHT", BattlefieldFrameJoinButton, "LEFT", -2, 0);
 	S:HandleButton(BattlefieldFrameGroupJoinButton);
 	
 	S:HandleCloseButton(BattlefieldFrameCloseButton);
@@ -55,22 +55,23 @@ local function LoadSkin()
 	S:HandleButton(PVPBattlegroundFrameGroupJoinButton);
 	-- PVPFrame
 	PVPParentFrame:CreateBackdrop('Transparent');
-	PVPParentFrame.backdrop:Point('TOPLEFT', 13, -13);
-	PVPParentFrame.backdrop:Point('BOTTOMRIGHT', -32, 76);
+	PVPParentFrame.backdrop:Point("TOPLEFT", 12, -13);
+	PVPParentFrame.backdrop:Point("BOTTOMRIGHT", -30, 76);
 	
 	S:HandleCloseButton(PVPParentFrameCloseButton);
 	
 	PVPFrame:StripTextures(true);
 	
+	local pvpTeam;
 	for i = 1, MAX_ARENA_TEAMS do
-		local team = _G["PVPTeam"..i];
-		team:StripTextures();
-		team:CreateBackdrop("Default");
-		team.backdrop:Point("TOPLEFT", 9, -4);
-		team.backdrop:Point("BOTTOMRIGHT", -24, 3);
+		pvpTeam = _G["PVPTeam"..i];
+		pvpTeam:StripTextures();
+		pvpTeam:CreateBackdrop("Default");
+		pvpTeam.backdrop:Point("TOPLEFT", 9, -4);
+		pvpTeam.backdrop:Point("BOTTOMRIGHT", -24, 3);
 		
-		team:HookScript("OnEnter", S.SetModifiedBackdrop);
-		team:HookScript("OnLeave", S.SetOriginalBackdrop);
+		pvpTeam:HookScript("OnEnter", S.SetModifiedBackdrop);
+		pvpTeam:HookScript("OnLeave", S.SetOriginalBackdrop);
 		
 		_G["PVPTeam"..i.."Highlight"]:Kill();
 	end

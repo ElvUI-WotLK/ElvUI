@@ -6,7 +6,7 @@ local tonumber, pairs, error, unpack, select = tonumber, pairs, error, unpack, s
 local print, type, collectgarbage, pcall, date = print, type, collectgarbage, pcall, date;
 local twipe, tinsert = table.wipe, tinsert;
 local floor = floor;
-local format, find, split, match, len, sub = string.format, string.find, string.split, string.match, string.len, string.sub;
+local format, find, split, match, len, sub, gsub = string.format, string.find, string.split, string.match, string.len, string.sub, string.gsub;
 
 local CreateFrame = CreateFrame;
 local GetCVar, SetCVar = GetCVar, SetCVar;
@@ -443,8 +443,6 @@ function E:UpdateAll(ignoreInstall)
 	self:SetMoversPositions()
 	self:UpdateMedia()
 	
-	self:GetModule('Skins'):SetEmbedRight(E.db.skins.embedRight)
-	
 	local UF = self:GetModule('UnitFrames')
 	UF.db = self.db.unitframe
 	UF:Update_AllFrames()
@@ -545,6 +543,15 @@ end
 function E:DBConversions()
 	self.db.unitframe.units.raid10 = nil
 	self.db.unitframe.units.raid25 = nil
+	
+	if(E.db.movers) then
+		for mover, moverString in pairs(E.db.movers) do
+			if(find(moverString, "\031")) then
+				moverString = gsub(moverString, "\031", ",");
+				E.db.movers[mover] = moverString;
+			end
+		end
+	end
 end
 
 function E:StopMassiveShake()

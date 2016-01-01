@@ -282,6 +282,7 @@ function NP:UpdateLevelAndName(myPlate)
 		myPlate.name:Hide();
 	else
 		myPlate.name:SetText(self.name:GetText());
+		myPlate.name.stringHeight = myPlate.name:GetStringHeight();
 		if(not myPlate.name:IsShown()) then myPlate.name:Show(); end
 	end
 	
@@ -806,7 +807,7 @@ function NP:UpdateSettings()
 	
 	myPlate.name:FontTemplate(font, fontSize, fontOutline);
 	myPlate.name:SetTextColor(1, 1, 1);
-	myPlate.name:SetHeight(2*fontSize);
+	myPlate.name:SetHeight(2.5*fontSize);
 	myPlate.name:SetWordWrap(wrapName);
 	
 	myPlate.level:FontTemplate(font, fontSize, fontOutline);
@@ -859,6 +860,11 @@ function NP:UpdateSettings()
 			end
 		end
 	end
+	
+	local stringHeight = myPlate.name:GetStringHeight();
+	local yOffset = stringHeight > 0 and stringHeight or myPlate.name.stringHeight;
+	myPlate.DebuffWidget:SetPoint("BOTTOMRIGHT", myPlate.healthBar, "TOPRIGHT", 0, yOffset);
+	myPlate.DebuffWidget:SetPoint("BOTTOMLEFT", myPlate.healthBar, "TOPLEFT", 0, yOffset);
 	
 	if(NP.db.comboPoints and not myPlate.cPoints:IsShown()) then
 		myPlate.cPoints:Show();
@@ -914,6 +920,7 @@ function NP:CreatePlate(frame)
 	myPlate.name = myPlate:CreateFontString(nil, "OVERLAY");
 	myPlate.name:SetJustifyH("LEFT");
 	myPlate.name:SetJustifyV("BOTTOM");
+	myPlate.name.stringHeight = frame.name:GetStringHeight();
 	
 	frame.raidIcon:SetAlpha(0);
 	myPlate.raidIcon = myPlate:CreateTexture(nil, "ARTWORK");
@@ -927,9 +934,10 @@ function NP:CreatePlate(frame)
 	myPlate.overlay:Hide();
 	
 	local debuffHeader = CreateFrame("Frame", nil, myPlate);
+	local yOffset = myPlate.name.stringHeight or 10;
 	debuffHeader:SetHeight(32); debuffHeader:Show();
-	debuffHeader:SetPoint("BOTTOMRIGHT", myPlate.healthBar, "TOPRIGHT", 0, 10);
-	debuffHeader:SetPoint("BOTTOMLEFT", myPlate.healthBar, "TOPLEFT", 0, 10);
+	debuffHeader:SetPoint("BOTTOMRIGHT", myPlate.healthBar, "TOPRIGHT", 0, yOffset);
+	debuffHeader:SetPoint("BOTTOMLEFT", myPlate.healthBar, "TOPLEFT", 0, yOffset);
 	debuffHeader:SetFrameStrata("BACKGROUND");
 	debuffHeader:SetFrameLevel(0);
 	debuffHeader.PollFunction = NP.UpdateAuraTime;

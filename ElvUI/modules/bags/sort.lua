@@ -265,10 +265,6 @@ local function UpdateSorted(source, destination)
 	end
 end
 
-local blackList = {
-	["Hearthstone"] = true,
-}
-
 local function ShouldMove(source, destination)
 	if destination == source then return end
 
