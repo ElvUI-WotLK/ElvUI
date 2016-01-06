@@ -200,7 +200,6 @@ function M:Initialize()
 	Minimap:Point('TOPLEFT', mmholder, 'TOPLEFT', 2, -2);
 	Minimap:SetMaskTexture('Interface\\ChatFrame\\ChatFrameBackground');
 	Minimap:CreateBackdrop('Default');
-	Minimap:SetFrameLevel(Minimap:GetFrameLevel() + 2);
 	Minimap:HookScript('OnEnter', function(self)
 		if(E.db.general.minimap.locationText ~= 'MOUSEOVER' or not E.private.general.minimap.enable) then
 			return;
