@@ -196,8 +196,8 @@ do
 		end
 	end
 
-	Lib.OR = Lib:Clean(no[GetLocale()] or JUST_OR)
-	Lib.NOT = no[GetLocale()] or NO
+	Lib.OR = Lib:Clean(no[GetLocale()] or "")
+	Lib.NOT = no[GetLocale()] or ""
 	Lib.NOT_MATCH = Lib:Clean(Lib.NOT)
 	setmetatable(Lib, {__call = Lib.Matches})
 end

@@ -146,7 +146,9 @@ function B:UpdateSearch()
 	SEARCH_STRING = searchString
 
 	B:SetSearch(SEARCH_STRING);
+	B:SetGuildBankSearch(SEARCH_STRING);
 end
+
 function B:OpenEditbox()
 	self.BagFrame.detail:Hide();
 	self.BagFrame.editBox:Show();
@@ -170,6 +172,48 @@ function B:SetSearch(query)
 				local _, _, _, _, _, _, link = GetContainerItemInfo(bagID, slotID);
 				local button = bagFrame.Bags[bagID][slotID];
 				if(empty or Search:Matches(link, query)) then
+					SetItemButtonDesaturated(button);
+					button:SetAlpha(1);
+				else
+					SetItemButtonDesaturated(button, 1);
+					button:SetAlpha(0.4);
+				end
+			end
+		end
+	end
+	
+	if(ElvUIKeyFrameItem1) then
+		local numKey = GetKeyRingSize();
+		for slotID = 1, numKey do
+			local _, _, _, _, _, _, link = GetContainerItemInfo(KEYRING_CONTAINER, slotID);
+			local button = _G["ElvUIKeyFrameItem"..slotID];
+			if(empty or Search:Matches(link, query)) then
+				SetItemButtonDesaturated(button);
+				button:SetAlpha(1);
+			else
+				SetItemButtonDesaturated(button, 1);
+				button:SetAlpha(0.4);
+			end
+		end
+	end
+end
+
+function B:SetGuildBankSearch(query)
+	local empty = len(query:gsub(' ', '')) == 0
+	if GuildBankFrame and GuildBankFrame:IsShown() then
+		local tab = GetCurrentGuildBankTab()
+		local _, _, isViewable = GetGuildBankTabInfo(tab)
+
+		if isViewable then
+			for slotID = 1, MAX_GUILDBANK_SLOTS_PER_TAB do
+				local link = GetGuildBankItemLink(tab, slotID)
+				--A column goes from 1-14, e.g. GuildBankColumn1Button14 (slotID 14) or GuildBankColumn2Button3 (slotID 17)
+				local col = ceil(slotID / 14)
+				local btn = (slotID % 14)
+				if col == 0 then col = 1 end
+				if btn == 0 then btn = 14 end
+				local button = _G["GuildBankColumn"..col.."Button"..btn]
+				if (empty or Search:Matches(link, query) ) then
 					SetItemButtonDesaturated(button);
 					button:SetAlpha(1);
 				else
@@ -1125,6 +1169,10 @@ function B:PLAYERBANKBAGSLOTS_CHANGED()
 	self:Layout(true)
 end
 
+function B:GUILDBANKBAGSLOTS_CHANGED()
+	self:SetGuildBankSearch(SEARCH_STRING);
+end
+
 function B:CloseBank()
 	if not self.BankFrame then return; end -- WHY???, WHO KNOWS!
 	self.BankFrame:Hide()
@@ -1163,6 +1211,7 @@ function B:Initialize()
 	E.Bags = self;
 
 	self:DisableBlizzard();
+	self:RegisterEvent("GUILDBANKBAGSLOTS_CHANGED");
 	self:RegisterEvent("PLAYER_MONEY", "UpdateGoldText")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", "UpdateGoldText")
 	self:RegisterEvent("PLAYER_TRADE_MONEY", "UpdateGoldText")
