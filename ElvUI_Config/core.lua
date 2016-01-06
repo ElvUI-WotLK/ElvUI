@@ -204,8 +204,16 @@ E.Options.args.general = {
 					type = "toggle",
 					name = L["Smaller World Map"],
 					desc = L["Make the world map smaller."],
-					get = function(info) return E.private.general.smallerWorldMap; end,
-					set = function(info, value) E.private.general.smallerWorldMap = value; E:StaticPopup_Show("PRIVATE_RL"); end
+					get = function(info) return E.global.general.smallerWorldMap; end,
+					set = function(info, value) E.global.general.smallerWorldMap = value; E:StaticPopup_Show("GLOBAL_RL"); end
+				},
+				worldMapCoordinates = {
+					order = 18,
+ 					type = "toggle",
+					name = L["World Map Coordinates"],
+					desc = L["Puts coordinates on the world map."],
+					get = function(info) return E.global.general.worldMapCoordinates; end,
+					set = function(info, value) E.global.general.worldMapCoordinates = value; E:StaticPopup_Show("GLOBAL_RL"); end
 				},
 				chatBubbles = {
 					order = 30,

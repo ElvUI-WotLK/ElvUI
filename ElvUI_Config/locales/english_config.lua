@@ -331,6 +331,7 @@ L["Map Alpha While Moving"] = true;
 L["Name Font"] = true;
 L["Party / Raid"] = true;
 L["Party Only"] = true;
+L["Puts coordinates on the world map."] = true;
 L["Raid Only"] = true;
 L['Remaining Time'] = true;
 L['Remove Backdrop'] = true;
@@ -344,6 +345,7 @@ L["The font that appears on the text above players heads. |cffFF0000WARNING: Thi
 L['Toggle Tutorials'] = true;
 L['Top Panel'] = true;
 L["When you go AFK display the AFK screen."] = true;
+L["World Map Coordinates"] = true;
 
 --Media
 L["Backdrop color of transparent frames"] = true;
@@ -765,6 +767,7 @@ L["Rapidly update the health, uses more memory and cpu. Only recommended for hea
 L["Reactions"] = true;
 L["Remaining"] = true;
 L["Remove a spell from the filter."] = true;
+L["Remove Spell or spellID"] = true;
 L["Remove Spell"] = true;
 L["Remove SpellID"] = true;
 L["Rest Icon"] = true;
@@ -805,7 +808,7 @@ L["Spacing"] = true;
 L["Spark"] = true;
 L["Spell not found in list."] = true;
 L['Spells'] = true;
-L['Stagger Bar'] = true;
+L["Stack Threshold"] = true;
 L['Start near Center'] = true;
 L["StatusBar Texture"] = true;
 L['Style'] = true;
@@ -824,12 +827,13 @@ L['Text yOffset'] = true
 L['Text'] = true;
 L['Textured Icon'] = true;
 L["The alpha to set units that are out of range to."] = true;
+L["The debuff needs to reach this amount of stacks before it is shown. Set to 0 to always show the debuff."] = true;
 L["The following macro must be true in order for the group to be shown, in addition to any filter that may already be set."] = true;
 L["The font that the unitframes will use."] = true;
 L['The initial group will start near the center and grow out. Corrosponding groups will behave normally.'] = true;
 L['The name you have selected is already in use by another element.'] = true;
 L['The object you want to attach to.'] = true;
-L['The point of which you are anchoring to in relation to the attach to object.'] = true;
+L["This filter is meant to be used when you only want to whitelist specific spellIDs which share names with unwanted spells."] = true;
 L['This filter is used for both aura bars and aura icons no matter what. Its purpose is to block out specific spellids from being shown. For example a paladin can have two sacred shield buffs at once, we block out the short one.'] = true;
 L['Threat Display Mode'] = true;
 L["Threshold before text goes into decimal form. Set to -1 to disable decimals."] = true;

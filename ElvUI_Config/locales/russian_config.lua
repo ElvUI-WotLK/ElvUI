@@ -341,6 +341,7 @@ L["Multi-Monitor Support"] = "Поддержка нескольких монит
 L["Name Font"] = "Шрифт имени"
 L["Party / Raid"] = "Группа / Рейд";
 L["Party Only"] = "Только группа";
+L["Puts coordinates on the world map."] = "Добавляет координаты на карту мира.";
 L["Raid Only"] = "Только рейд";
 L['Remaining Time'] = 'Оставшееся время';
 L['Remove Backdrop'] = "Скрыть фон"
@@ -354,6 +355,7 @@ L["The font that appears on the text above players heads. |cffFF0000WARNING: Thi
 L['Toggle Tutorials'] = "Показать помощь"
 L['Top Panel'] = "Верхняя панель"
 L["When you go AFK display the AFK screen."] = "Отображать специальный экран, когда вы переходите в состояние \"Отсутствует\".";
+L["World Map Coordinates"] = "Координаты карты мира";
 
 --Media
 L["Backdrop color of transparent frames"] = "Цвет фона прозрачных фреймов"
@@ -787,6 +789,7 @@ L["Rapidly update the health, uses more memory and cpu. Only recommended for hea
 L["Reactions"] = "Отношение"
 L["Remaining"] = "Оставшееся"
 L["Remove a spell from the filter."] = "Удаляет заклинание из фильтра"
+L["Remove Spell or spellID"] = "Удалить заклинание или ID";
 L["Remove Spell"] = "Удалить заклинание"
 L["Remove SpellID"] = "Удалить ID заклинания"
 L["Rest Icon"] = "Иконка отдыха"
@@ -828,7 +831,7 @@ L["Spark"] = "Искра"
 L['Spec Icon'] = "Иконка специализации"
 L["Spell not found in list."] = "Заклинание не найдено в этом списке"
 L['Spells'] = "Заклинания"
-L['Stagger Bar'] = "Полоса Пошатывания"
+L["Stack Threshold"] = "Стаки";
 L['Start Near Center'] = "Начинать от центра"
 L["StatusBar Texture"] = "Текстура полос состояния"
 L['Style'] = "Стиль"
@@ -847,12 +850,13 @@ L['Text yOffset'] = "Отсуп текста по Y"
 L['Text'] = "Текст"
 L['Textured Icon'] = "Иконка с текстурой"
 L["The alpha to set units that are out of range to."] = "Прозрачность рамок юнитов, находящихся вне дальности действия заклинаний."
+L["The debuff needs to reach this amount of stacks before it is shown. Set to 0 to always show the debuff."] = "Для показа этого дебаффа, он должен набрать указанное количество стаков. Пи установке на 0, показывается всегда.";
 L["The following macro must be true in order for the group to be shown, in addition to any filter that may already be set."] = "Следующий фильтр должен быть верен для отображения группы в дополнение к любому другому уже установленному фильтру."
 L["The font that the unitframes will use."] = "Шрифт рамок юнитов"
 L['The initial group will start near the center and grow out.'] = "Первая группа появится в центре и будет расти наружу."
 L['The name you have selected is already in use by another element.'] = "Выбранное вами имя уже используется другим элементом"
 L['The object you want to attach to.'] = "Объект, к которому Вы хотите прикрепить полосы"
-L['The point of which you are anchoring to in relation to the attach to object.'] = "Точка фиксации относительно выбранного объекта."
+L["This filter is meant to be used when you only want to whitelist specific spellIDs which share names with unwanted spells."] = "Этот фильтр используется, когда нужно добавить в белый спиок определенный ID заклинания, имеющие одинаковое название с нежелательными.";
 L['This filter is used for both aura bars and aura icons no matter what. Its purpose is to block out specific spellids from being shown. For example a paladin can have two sacred shield buffs at once, we block out the short one.'] = "Этот фильтр всегда используется для полос и иконок аур. Его предназначение блокировать показ специфических заклинаний. Например, паладин может иметь 2 баффа Щита небес одновременно, мы блокируем короткий."
 L['Threat Display Mode'] = "Режим отображения угрозы"
 L["Threshold before text goes into decimal form. Set to -1 to disable decimals."] = "Граница, после которых текст будет показывать десятые доли. Установите на -1 для отключения.";

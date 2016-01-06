@@ -13,7 +13,6 @@ V['general'] = {
 	["chatBubbleFont"] = "ElvUI Font",
 	["chatBubbleFontSize"] = 14,
 	['pixelPerfect'] = true,
-	["smallerWorldMap"] = true,
 	
 	['minimap'] = {
 		['enable'] = true,

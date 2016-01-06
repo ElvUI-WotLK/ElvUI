@@ -1,16 +1,17 @@
-﻿local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+﻿local E, L, V, P, G = unpack(select(2, ...));
 
---Global Settings
-G['general'] = {
+G["general"] = {
 	["autoScale"] = true,
-	["eyefinity"] = false
-}
+	["eyefinity"] = false,
+	["smallerWorldMap"] = true,
+	["worldMapCoordinates"] = true
+};
 
-G['classtimer'] = {}
+G["classtimer"] = {};
 
-G["nameplate"] = {}
+G["nameplate"] = {};
 
-G['unitframe'] = {
-	['aurafilters'] = {},
-	['buffwatch'] = {},
-}
+G["unitframe"] = {
+	["aurafilters"] = {},
+	["buffwatch"] = {}
+};

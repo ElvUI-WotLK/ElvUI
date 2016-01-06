@@ -98,23 +98,25 @@ function M:UpdateCoords()
 end
 
 function M:Initialize()
-	local coordsHolder = CreateFrame("Frame", "CoordsHolder", WorldMapFrame);
-	coordsHolder:SetFrameLevel(WorldMapDetailFrame:GetFrameLevel() + 1);
-	coordsHolder:SetFrameStrata(WorldMapDetailFrame:GetFrameStrata());
-	coordsHolder.playerCoords = coordsHolder:CreateFontString(nil, "OVERLAY");
-	coordsHolder.mouseCoords = coordsHolder:CreateFontString(nil, "OVERLAY");
-	coordsHolder.playerCoords:SetTextColor(1, 1 ,0);
-	coordsHolder.mouseCoords:SetTextColor(1, 1 ,0);
-	coordsHolder.playerCoords:SetFontObject(NumberFontNormal);
-	coordsHolder.mouseCoords:SetFontObject(NumberFontNormal);
-	coordsHolder.playerCoords:SetPoint("BOTTOMLEFT", WorldMapDetailFrame, "BOTTOMLEFT", 5, 5);
-	coordsHolder.playerCoords:SetText(PLAYER..":   0, 0");
-	coordsHolder.mouseCoords:SetPoint("BOTTOMLEFT", coordsHolder.playerCoords, "TOPLEFT", 0, 5);
-	coordsHolder.mouseCoords:SetText(MOUSE_LABEL..":   0, 0");
+	if(E.global.general.worldMapCoordinates) then
+		local coordsHolder = CreateFrame("Frame", "CoordsHolder", WorldMapFrame);
+		coordsHolder:SetFrameLevel(WorldMapDetailFrame:GetFrameLevel() + 1);
+		coordsHolder:SetFrameStrata(WorldMapDetailFrame:GetFrameStrata());
+		coordsHolder.playerCoords = coordsHolder:CreateFontString(nil, "OVERLAY");
+		coordsHolder.mouseCoords = coordsHolder:CreateFontString(nil, "OVERLAY");
+		coordsHolder.playerCoords:SetTextColor(1, 1 ,0);
+		coordsHolder.mouseCoords:SetTextColor(1, 1 ,0);
+		coordsHolder.playerCoords:SetFontObject(NumberFontNormal);
+		coordsHolder.mouseCoords:SetFontObject(NumberFontNormal);
+		coordsHolder.playerCoords:SetPoint("BOTTOMLEFT", WorldMapDetailFrame, "BOTTOMLEFT", 5, 5);
+		coordsHolder.playerCoords:SetText(PLAYER..":   0, 0");
+		coordsHolder.mouseCoords:SetPoint("BOTTOMLEFT", coordsHolder.playerCoords, "TOPLEFT", 0, 5);
+		coordsHolder.mouseCoords:SetText(MOUSE_LABEL..":   0, 0");
+		
+		self:ScheduleRepeatingTimer("UpdateCoords", 0.05);
+	end
 	
-	self:ScheduleRepeatingTimer("UpdateCoords", 0.05);
-	
-	if(E.private.general.smallerWorldMap) then
+	if(E.global.general.smallerWorldMap) then
 		BlackoutWorld:SetTexture(nil);
 		self:SecureHook("WorldMap_ToggleSizeDown", "SetSmallWorldMap");
 		self:SecureHook("WorldMap_ToggleSizeUp", "SetLargeWorldMap");

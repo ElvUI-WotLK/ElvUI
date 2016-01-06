@@ -6,23 +6,27 @@ local GetSpellInfo = GetSpellInfo;
 local UnitClass = UnitClass;
 
 local function SpellName(id)
-	local name, _, _, _, _, _, _, _, _ = GetSpellInfo(id) 	
-	if not name then
-		print('|cff1784d1ElvUI:|r SpellID is not valid: '..id..'. Please check for an updated version, if none exists report to ElvUI author.')
-		return 'Impale'
+	local name, _, _, _, _, _, _, _, _ = GetSpellInfo(id);
+	if(not name) then
+		print("|cff1784d1ElvUI:|r SpellID is not valid: "..id..". Please check for an updated version, if none exists report to ElvUI author.");
+		return "Impale";
 	else
-		return name
+		return name;
 	end
 end
 
 local function Defaults(priorityOverride)
-	return {['enable'] = true, ['priority'] = priorityOverride or 0}
+	return {["enable"] = true, ["priority"] = priorityOverride or 0, ["stackThreshold"] = 0};
+end
+
+local function DefaultsID(spellID, priorityOverride)
+	return {["enable"] = true, ["spellID"] = spellID, ["priority"] = priorityOverride or 0};
 end
 G.unitframe.aurafilters = {};
 
-G.unitframe.aurafilters['CCDebuffs'] = {
-	['type'] = 'Whitelist',
-	['spells'] = {
+G.unitframe.aurafilters["CCDebuffs"] = {
+	["type"] = "Whitelist",
+	["spells"] = {
 	-- Рыцарь смерти
 		[SpellName(47476)] = Defaults(), -- Удушение
 		[SpellName(51209)] = Defaults(), -- Ненасытная стужа
@@ -106,13 +110,13 @@ G.unitframe.aurafilters['CCDebuffs'] = {
 	--PVE Дебаффы
 		
 	-- Король лич
-		[SpellName(73787)] = Defaults(), -- Мертвящая чума
-	},
-}
+		[SpellName(73787)] = Defaults() -- Мертвящая чума
+	}
+};
 
-G.unitframe.aurafilters['TurtleBuffs'] = {
-	['type'] = 'Whitelist',
-	['spells'] = {
+G.unitframe.aurafilters["TurtleBuffs"] = {
+	["type"] = "Whitelist",
+	["spells"] = {
 	-- Маг
 		[SpellName(45438)] = Defaults(5), -- Ледяная глыба
 	-- Рыцарь сперти
@@ -147,13 +151,13 @@ G.unitframe.aurafilters['TurtleBuffs'] = {
 		[SpellName(31821)] = Defaults(3), -- Мастер аур
 	-- Воин
 		[SpellName(871)] = Defaults(3), -- Глухая оборона
-		[SpellName(55694)] = Defaults(), -- Безудержное восстановление
-	},
-}
+		[SpellName(55694)] = Defaults() -- Безудержное восстановление
+	}
+};
 
-G.unitframe.aurafilters['PlayerBuffs'] = {
-	['type'] = 'Whitelist',
-	['spells'] = {
+G.unitframe.aurafilters["PlayerBuffs"] = {
+	["type"] = "Whitelist",
+	["spells"] = {
 	-- Маг
 		[SpellName(12042)] = Defaults(), -- Мощь тайной магии
 		[SpellName(12051)] = Defaults(), -- Прилив сил
@@ -201,13 +205,13 @@ G.unitframe.aurafilters['PlayerBuffs'] = {
 		[SpellName(20594)] = Defaults(), -- Каменная форма
 		[SpellName(59545)] = Defaults(), -- Дар наару
 		[SpellName(20572)] = Defaults(), -- Кровавое неистовство
-		[SpellName(26297)] = Defaults(), -- Берсек
-	},
-}
+		[SpellName(26297)] = Defaults() -- Берсек
+	}
+};
 
-G.unitframe.aurafilters['Blacklist'] = {
-	['type'] = 'Blacklist',
-	['spells'] = {
+G.unitframe.aurafilters["Blacklist"] = {
+	["type"] = "Blacklist",
+	["spells"] = {
 		[SpellName(6788)] = Defaults(), -- Ослабленная душа
 		[SpellName(8326)] = Defaults(), -- Призрак
 		[SpellName(15007)] = Defaults(), -- Слабость после воскрешения
@@ -237,13 +241,13 @@ G.unitframe.aurafilters['Blacklist'] = {
 		[SpellName(72145)] = Defaults(), -- Шлейф зеленой заразы
 	-- Putricide
 		[SpellName(72460)] = Defaults(), -- Удушливый газ
-		[SpellName(72511)] = Defaults(), -- Мутация
-	},
-}
+		[SpellName(72511)] = Defaults() -- Мутация
+	}
+};
 
-G.unitframe.aurafilters['Whitelist'] = {
-	['type'] = 'Whitelist',
-	['spells'] = {
+G.unitframe.aurafilters["Whitelist"] = {
+	["type"] = "Whitelist",
+	["spells"] = {
 		[SpellName(1022)] = Defaults(), -- Длань защиты
 		[SpellName(1490)] = Defaults(), -- Проклятие стихий
 		[SpellName(2825)] = Defaults(), -- Жажда крови
@@ -267,15 +271,22 @@ G.unitframe.aurafilters['Whitelist'] = {
 	-- Offensive Shit
 		[SpellName(31884)] = Defaults(), -- Гнев карателя
 		[SpellName(34471)] = Defaults(), -- Зверь внутри
-	},
-}
+	}
+};
 
-G.unitframe.aurafilters['RaidDebuffs'] = { -- Рейд дебаффы
-	['type'] = 'Whitelist',
-	['spells'] = {
+G.unitframe.aurafilters["Whitelist (Strict)"] = {
+	["type"] = "Whitelist",
+	["spells"] = {
+		
+	}
+};
+
+G.unitframe.aurafilters["RaidDebuffs"] = { -- Рейд дебаффы
+	["type"] = "Whitelist",
+	["spells"] = {
 	-- Наксрамас
 		[SpellName(27808)] = Defaults(), -- Ледяной взрыв
-		[SpellName(28408)] = Defaults(), -- Цепи Кел'Тузада
+		[SpellName(28408)] = Defaults(), -- Цепи Кел"Тузада
 		[SpellName(32407)] = Defaults(), -- Странная аура
 	-- Ульдуар
 		[SpellName(66313)] = Defaults(), -- Огненная бомба
@@ -286,7 +297,7 @@ G.unitframe.aurafilters['RaidDebuffs'] = { -- Рейд дебаффы
 		[SpellName(63495)] = Defaults(), -- Статический сбой
 	-- Испытание крестоносца
 		[SpellName(66406)] = Defaults(), -- Получи снобольда!
-		[SpellName(67574)] = Defaults(), -- Вас преследует Ануб'арак
+		[SpellName(67574)] = Defaults(), -- Вас преследует Ануб"арак
 		[SpellName(68509)] = Defaults(), -- Пронизывающий холод
 		[SpellName(67651)] = Defaults(), -- Арктическое дыхание
 		[SpellName(68127)] = Defaults(), -- Пламя Легиона
@@ -344,9 +355,9 @@ G.unitframe.aurafilters['RaidDebuffs'] = { -- Рейд дебаффы
 		[SpellName(74792)] = Defaults(), -- Пожирание души
 		[SpellName(74795)] = Defaults(), -- Метка пожирания
 	-- Разные
-		[SpellName(67479)] = Defaults(), -- Прокалывание
-	},
-}
+		[SpellName(67479)] = Defaults() -- Прокалывание
+	}
+};
 
 --Spells that we want to show the duration backwards
 E.ReverseTimer = {
@@ -356,90 +367,93 @@ E.ReverseTimer = {
 --BuffWatch
 --List of personal spells to show on unitframes as icon
 local function ClassBuff(id, point, color, anyUnit, onlyShowMissing, style, displayText, decimalThreshold, textColor, textThreshold, xOffset, yOffset)
-	local r, g, b = unpack(color)
-
-	local r2, g2, b2 = 1, 1, 1
-	if textColor then
-		r2, g2, b2 = unpack(textColor)
+	local r, g, b = unpack(color);
+	local r2, g2, b2 = 1, 1, 1;
+	if(textColor) then
+		r2, g2, b2 = unpack(textColor);
 	end
-
+	
 	return {["enabled"] = true, ["id"] = id, ["point"] = point, ["color"] = {["r"] = r, ["g"] = g, ["b"] = b},
-	["anyUnit"] = anyUnit, ["onlyShowMissing"] = onlyShowMissing, ['style'] = style or 'coloredIcon', ['displayText'] = displayText or false, ['decimalThreshold'] = decimalThreshold or 5,
-	['textColor'] = {["r"] = r2, ["g"] = g2, ["b"] = b2}, ['textThreshold'] = textThreshold or -1, ['xOffset'] = xOffset or 0, ['yOffset'] = yOffset or 0}
+	["anyUnit"] = anyUnit, ["onlyShowMissing"] = onlyShowMissing, ["style"] = style or "coloredIcon", ["displayText"] = displayText or false, ["decimalThreshold"] = decimalThreshold or 5,
+	["textColor"] = {["r"] = r2, ["g"] = g2, ["b"] = b2}, ["textThreshold"] = textThreshold or -1, ["xOffset"] = xOffset or 0, ["yOffset"] = yOffset or 0};
 end
 
 G.unitframe.buffwatch = { -- Индикатор баффов
 	PRIEST = {
-		ClassBuff(6788, 'TOPLEFT', {1, 0, 0}, true), -- Ослабленная душа
-		ClassBuff(10060 , 'RIGHT', {227/255, 23/255, 13/255}), -- Придание сил
-		ClassBuff(48066, 'BOTTOMRIGHT', {0.81, 0.85, 0.1}, true), -- Слово силы: Щит
-		ClassBuff(48068, 'BOTTOMLEFT', {0.4, 0.7, 0.2}), -- Обновление
-		ClassBuff(48113, 'TOPRIGHT', {0.2, 0.7, 0.2}), -- Молитва восстановления
+		ClassBuff(6788, "TOPLEFT", {1, 0, 0}, true), -- Ослабленная душа
+		ClassBuff(10060 , "RIGHT", {227/255, 23/255, 13/255}), -- Придание сил
+		ClassBuff(48066, "BOTTOMRIGHT", {0.81, 0.85, 0.1}, true), -- Слово силы: Щит
+		ClassBuff(48068, "BOTTOMLEFT", {0.4, 0.7, 0.2}), -- Обновление
+		ClassBuff(48113, "TOPRIGHT", {0.2, 0.7, 0.2}), -- Молитва восстановления
 	},
 	DRUID = {
-		ClassBuff(48441, 'TOPRIGHT', {0.8, 0.4, 0.8}), -- Омоложение
-		ClassBuff(48443, 'BOTTOMLEFT', {0.2, 0.8, 0.2}), -- Востановление
-		ClassBuff(48451, 'TOPLEFT', {0.4, 0.8, 0.2}), -- Жизнецвет
-		ClassBuff(53251, 'BOTTOMRIGHT', {0.8, 0.4, 0}), -- Буйный рост
+		ClassBuff(48441, "TOPRIGHT", {0.8, 0.4, 0.8}), -- Омоложение
+		ClassBuff(48443, "BOTTOMLEFT", {0.2, 0.8, 0.2}), -- Востановление
+		ClassBuff(48451, "TOPLEFT", {0.4, 0.8, 0.2}), -- Жизнецвет
+		ClassBuff(53251, "BOTTOMRIGHT", {0.8, 0.4, 0}), -- Буйный рост
 	},
 	PALADIN = {
-		ClassBuff(1038, 'BOTTOMRIGHT', {238/255, 201/255, 0}, true), -- Длань спасения
-		ClassBuff(1044, 'BOTTOMRIGHT', {221/255, 117/255, 0}, true), -- Длань свободы
-		ClassBuff(6940, 'BOTTOMRIGHT', {227/255, 23/255, 13/255}, true), -- Длань жертвенности
-		ClassBuff(10278, 'BOTTOMRIGHT', {0.2, 0.2, 1}, true), -- Длань защиты
-		ClassBuff(53563, 'TOPLEFT', {0.7, 0.3, 0.7}), -- Частица Света
-		ClassBuff(53601, 'TOPRIGHT', {0.4, 0.7, 0.2}), -- Священный щит
+		ClassBuff(1038, "BOTTOMRIGHT", {238/255, 201/255, 0}, true), -- Длань спасения
+		ClassBuff(1044, "BOTTOMRIGHT", {221/255, 117/255, 0}, true), -- Длань свободы
+		ClassBuff(6940, "BOTTOMRIGHT", {227/255, 23/255, 13/255}, true), -- Длань жертвенности
+		ClassBuff(10278, "BOTTOMRIGHT", {0.2, 0.2, 1}, true), -- Длань защиты
+		ClassBuff(53563, "TOPLEFT", {0.7, 0.3, 0.7}), -- Частица Света
+		ClassBuff(53601, "TOPRIGHT", {0.4, 0.7, 0.2}), -- Священный щит
 	},
 	SHAMAN = {
-		ClassBuff(16237, 'BOTTOMLEFT', {0.4, 0.7, 0.2}), -- Стойкость предков
-		ClassBuff(49284, 'TOPRIGHT', {0.2, 0.7, 0.2}), -- Щит земли
-		ClassBuff(52000, 'BOTTOMRIGHT', {0.7, 0.4, 0}), -- Жизнь земли
-		ClassBuff(61301, 'TOPLEFT', {0.7, 0.3, 0.7}), -- Быстрина
+		ClassBuff(16237, "BOTTOMLEFT", {0.4, 0.7, 0.2}), -- Стойкость предков
+		ClassBuff(49284, "TOPRIGHT", {0.2, 0.7, 0.2}), -- Щит земли
+		ClassBuff(52000, "BOTTOMRIGHT", {0.7, 0.4, 0}), -- Жизнь земли
+		ClassBuff(61301, "TOPLEFT", {0.7, 0.3, 0.7}), -- Быстрина
 	},
 	ROGUE = {
-		ClassBuff(57933, 'TOPRIGHT', {227/255, 23/255, 13/255}), -- Маленькие хитрости
+		ClassBuff(57933, "TOPRIGHT", {227/255, 23/255, 13/255}), -- Маленькие хитрости
 	},
 	MAGE = {
-		ClassBuff(54646, 'TOPRIGHT', {0.2, 0.2, 1}), -- Магическая консетрация
+		ClassBuff(54646, "TOPRIGHT", {0.2, 0.2, 1}), -- Магическая консетрация
 	},
 	WARRIOR = {
-		ClassBuff(3411, 'TOPRIGHT', {227/255, 23/255, 13/255}), -- Вмешательство
-		ClassBuff(59665, 'TOPLEFT', {0.2, 0.2, 1}), -- Бдительность
+		ClassBuff(3411, "TOPRIGHT", {227/255, 23/255, 13/255}), -- Вмешательство
+		ClassBuff(59665, "TOPLEFT", {0.2, 0.2, 1}), -- Бдительность
 	},
 	DEATHKNIGHT = {
-		ClassBuff(49016, 'TOPRIGHT', {227/255, 23/255, 13/255}), -- Истерия
-	},
-}
+		ClassBuff(49016, "TOPRIGHT", {227/255, 23/255, 13/255}) -- Истерия
+	}
+};
+
+P["unitframe"]["filters"] = {
+	["buffwatch"] = {}
+};
 
 G.unitframe.ChannelTicks = { -- Тики
 	-- Чернокнижник
-	[SpellName(1120)] = 5, -- 'Похищение душы'
-	[SpellName(689)] = 5, -- 'Похишение жызни'
-	[SpellName(5138)] = 5, -- 'Похишение маны'
-	[SpellName(5740)] = 4, -- 'Огненный ливень'
-	[SpellName(755)] = 10, -- 'Канал здоровья'
+	[SpellName(1120)] = 5, -- "Похищение душы"
+	[SpellName(689)] = 5, -- "Похишение жызни"
+	[SpellName(5138)] = 5, -- "Похишение маны"
+	[SpellName(5740)] = 4, -- "Огненный ливень"
+	[SpellName(755)] = 10, -- "Канал здоровья"
 	-- Друид
-	[SpellName(44203)] = 4, -- 'Спокайствие'
-	[SpellName(16914)] = 10, -- 'Гроза'
+	[SpellName(44203)] = 4, -- "Спокайствие"
+	[SpellName(16914)] = 10, -- "Гроза"
 	-- Жрец
-	[SpellName(15407)] = 3, -- 'Пытка разума'
-	[SpellName(48045)] = 5, -- 'Искушение разума'
-	[SpellName(47540)] = 3, -- 'Исповедь'
+	[SpellName(15407)] = 3, -- "Пытка разума"
+	[SpellName(48045)] = 5, -- "Искушение разума"
+	[SpellName(47540)] = 3, -- "Исповедь"
 	-- Маг
-	[SpellName(5143)] = 5, -- 'Чародейские стрелы'
-	[SpellName(10)] = 8, -- 'Снежная буря'
-	[SpellName(12051)] = 4, -- 'Прилив сил'
-}
+	[SpellName(5143)] = 5, -- "Чародейские стрелы"
+	[SpellName(10)] = 8, -- "Снежная буря"
+	[SpellName(12051)] = 4 -- "Прилив сил"
+};
 
 G.unitframe.AuraBarColors = {
 	[SpellName(2825)] = {r = 250/255, g = 146/255, b = 27/255},	-- Жажда крови
-	[SpellName(32182)] = {r = 250/255, g = 146/255, b = 27/255}, -- Героизм
-}
+	[SpellName(32182)] = {r = 250/255, g = 146/255, b = 27/255} -- Героизм
+};
 
 G.unitframe.InvalidSpells = {
-
-}
+	
+};
 
 G.unitframe.DebuffHighlightColors = {
-	[SpellName(25771)] = { enable = false, style = "FILL", color = { r = 0.85, g = 0, b = 0, a = 0.85 } }
+	[SpellName(25771)] = {enable = false, style = "FILL", color = { r = 0.85, g = 0, b = 0, a = 0.85 }}
 };
