@@ -63,9 +63,15 @@ do
 		end
 	end
 	
+	local sharedUnitEvents = {
+		UNIT_ENTERED_VEHICLE = true,
+		UNIT_EXITED_VEHICLE = true,
+		UNIT_PET = true,
+	};
+	
 	eventFrame:SetScript("OnEvent", function(_, event, arg1, ...)
 		local listeners = registry[event];
-		if(arg1) then
+		if(arg1 and not sharedUnitEvents[event]) then
 			local frames = framesForUnit[arg1];
 			if(frames) then
 				for frame in next, frames do
@@ -83,7 +89,11 @@ do
 		end
 	end);
 	
-	function RegisterEvent(self, event)
+	function RegisterEvent(self, event, unitless)
+		if(unitless) then
+			sharedUnitEvents[event] = true;
+		end
+		
 		if(not registry[event]) then
 			registry[event] = {[self] = true};
 			eventFrame:RegisterEvent(event);
@@ -115,7 +125,7 @@ local event_metatable = {
 	end
 };
 
-function frame_metatable.__index:RegisterEvent(event, func)
+function frame_metatable.__index:RegisterEvent(event, func, unitless)
 	if(self.__eventless) then return; end
 	
 	argcheck(event, 2, "string");
@@ -145,7 +155,7 @@ function frame_metatable.__index:RegisterEvent(event, func)
 			return error("Style [%s] attempted to register event [%s] on unit [%s] with a handler that doesn't exist.", self.style, event, self.unit or "unknown");
 		end
 		
-		RegisterEvent(self, event);
+		RegisterEvent(self, event, unitless);
 	end
 end
 
