@@ -2,7 +2,7 @@
 local LSM = LibStub("LibSharedMedia-3.0");
 
 local _G = _G;
-local tonumber, pairs, error, unpack, select = tonumber, pairs, error, unpack, select;
+local tonumber, pairs, ipairs, error, unpack, select = tonumber, pairs, ipairs, error, unpack, select;
 local print, type, collectgarbage, pcall, date = print, type, collectgarbage, pcall, date;
 local twipe, tinsert = table.wipe, tinsert;
 local floor = floor;
@@ -495,7 +495,7 @@ function E:ProfileTableToPluginFormat(inTable, profileType)
 	
 	local function buildLineStructure()
 		local str = profileText;
-		for k, v in ipairs(lineStructureTable) do
+		for _, v in ipairs(lineStructureTable) do
 			if(type(v) == "string") then
 				str = str .. "[\"" .. v .. "\"]";
 			else
@@ -531,14 +531,14 @@ function E:ProfileTableToPluginFormat(inTable, profileType)
 				returnString = returnString .. "] = ";
 				
 				if(type(v) == "number") then
-					returnString = returnString .. v .. "\n";
+					returnString = returnString .. v .. ";\n";
 				elseif(type(v) == "string") then
-					returnString = returnString .. "\"" .. v:gsub("\\", "\\\\"):gsub("\n", "\\n"):gsub("\"", "\\\"") .. "\"\n";
+					returnString = returnString .. "\"" .. v:gsub("\\", "\\\\"):gsub("\n", "\\n"):gsub("\"", "\\\"") .. "\";\n";
 				elseif(type(v) == "boolean") then
 					if(v) then
-						returnString = returnString .. "true\n";
+						returnString = returnString .. "true;\n";
 					else
-						returnString = returnString .. "false\n";
+						returnString = returnString .. "false;\n";
 					end
 				else
 					returnString = returnString .. "\"" .. tostring(v) .. "\"\n";
