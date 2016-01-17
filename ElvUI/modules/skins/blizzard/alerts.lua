@@ -51,8 +51,9 @@ local function LoadSkin()
 	local function DungeonCompletionFixAnchors()
 		for i = 1, DUNGEON_COMPLETION_MAX_REWARDS do
 			local frame = _G["DungeonCompletionAlertFrame"..i];
-			local frameName = frame:GetName();
 			if(frame) then
+				local frameName = frame:GetName();
+				
 				if(not frame.backdrop) then
 					frame:CreateBackdrop("Transparent");
 					frame.backdrop:Point("TOPLEFT", frame, "TOPLEFT", -2, -6);
