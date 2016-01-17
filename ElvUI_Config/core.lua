@@ -1094,7 +1094,7 @@ local function ExportImport_Open(mode)
 	local label1 = AceGUI:Create("Label");
 	local font = GameFontHighlightSmall:GetFont();
 	label1:SetFont(font, 14);
-	label1:SetText(".");
+	label1:SetText(" ");
 	label1:SetWidth(770);
 	label1.label:SetJustifyH("RIGHT");
 	frame:AddChild(label1);
@@ -1102,7 +1102,7 @@ local function ExportImport_Open(mode)
 	local label2 = AceGUI:Create("Label");
 	local font = GameFontHighlightSmall:GetFont();
 	label2:SetFont(font, 14);
-	label2:SetText(".");
+	label2:SetText(" ");
 	label2:SetWidth(770);
 	label2.label:SetJustifyH("RIGHT");
 	frame:AddChild(label2);
@@ -1198,8 +1198,8 @@ local function ExportImport_Open(mode)
 		box.editBox:SetFocus();
 	end
 	
-	label1:SetText("");
-	label2:SetText("");
+	--label1:SetText("");
+	--label2:SetText("");
 	
 	ACD:Close("ElvUI");
 

@@ -24,9 +24,9 @@ local Enable = function(self)
 	if(lfdrole) then
 		local Update = lfdrole.Update or Update
 		if(self.unit == "player") then
-			self:RegisterEvent("PLAYER_ROLES_ASSIGNED", Update)
+			self:RegisterEvent("PLAYER_ROLES_ASSIGNED", Update, true)
 		else
-			self:RegisterEvent("PARTY_MEMBERS_CHANGED", Update)
+			self:RegisterEvent("PARTY_MEMBERS_CHANGED", Update, true)
 		end
 
 		if(lfdrole:IsObjectType"Texture" and not lfdrole:GetTexture()) then

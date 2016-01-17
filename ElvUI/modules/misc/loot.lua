@@ -305,8 +305,8 @@ function M:LoadLoot()
 		CloseDropDownMenus()
 	end
 
-	StaticPopupDialogs['CONFIRM_LOOT_DISTRIBUTION'].OnAccept = function(self, data)
-		GiveMasterLoot(ss, data)
+	E.PopupDialogs["CONFIRM_LOOT_DISTRIBUTION"].OnAccept = function(self, data)
+		GiveMasterLoot(ss, data);
 	end
 	StaticPopupDialogs['CONFIRM_LOOT_DISTRIBUTION'].preferredIndex = 3;
 end

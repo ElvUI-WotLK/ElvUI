@@ -188,7 +188,7 @@ function AFK:Initialize()
 	self.AFKMode.chat:EnableMouseWheel(true);
 	self.AFKMode.chat:SetFading(false);
 	self.AFKMode.chat:SetScript('OnMouseWheel', Chat_OnMouseWheel);
-	self.AFKMode.chat:SetScript('OnEvent', Chat_OnEvent);
+	self.AFKMode.chat:SetScript('OnEvent', CH.ChatFrame_OnEvent);
 	
 	self.AFKMode.bottom = CreateFrame('Frame', nil, self.AFKMode);
 	self.AFKMode.bottom:SetTemplate('Transparent');
