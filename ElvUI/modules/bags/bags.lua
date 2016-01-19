@@ -226,6 +226,7 @@ function B:SetGuildBankSearch(query)
 end
 
 function B:UpdateItemLevelDisplay()
+	if(E.private.bags.enable ~= true) then return; end
 	for _, bagFrame in pairs(self.BagFrames) do
 		for _, bagID in ipairs(bagFrame.BagIDs) do
 			for slotID = 1, GetContainerNumSlots(bagID) do
@@ -236,6 +237,26 @@ function B:UpdateItemLevelDisplay()
 			end
 		end
 		
+		if(bagFrame.UpdateAllSlots) then
+			bagFrame:UpdateAllSlots();
+		end
+	end
+end
+
+function B:UpdateCountDisplay()
+	if(E.private.bags.enable ~= true) then return; end
+	local color = E.db.bags.countFontColor;
+	
+	for _, bagFrame in pairs(self.BagFrames) do
+		for _, bagID in ipairs(bagFrame.BagIDs) do
+			for slotID = 1, GetContainerNumSlots(bagID) do
+				local slot = bagFrame.Bags[bagID][slotID];
+				if(slot and slot.Count) then
+					slot.Count:FontTemplate(E.LSM:Fetch("font", E.db.bags.countFont), E.db.bags.countFontSize, E.db.bags.countFontOutline);
+					slot.Count:SetTextColor(color.r, color.g, color.b);
+				end
+			end
+		end
 		if(bagFrame.UpdateAllSlots) then
 			bagFrame:UpdateAllSlots();
 		end
@@ -377,6 +398,7 @@ function B:Layout(isBank)
 	local holderWidth = ((buttonSize + buttonSpacing) * numContainerColumns) - buttonSpacing;
 	local numContainerRows = 0;
 	local bottomPadding = (containerWidth - holderWidth) / 2;
+	local countColor = E.db.bags.countFontColor;
 	f.holderFrame:Width(holderWidth);
 	
 	f.totalSlots = 0
@@ -464,6 +486,12 @@ function B:Layout(isBank)
 					f.Bags[bagID][slotID]:SetTemplate('Default', true);
 					f.Bags[bagID][slotID]:SetNormalTexture(nil);
 					f.Bags[bagID][slotID]:SetCheckedTexture(nil);
+					
+					f.Bags[bagID][slotID].Count = _G[f.Bags[bagID][slotID]:GetName() .. "Count"];
+					f.Bags[bagID][slotID].Count:ClearAllPoints();
+					f.Bags[bagID][slotID].Count:Point('BOTTOMRIGHT', 0, 2);
+					f.Bags[bagID][slotID].Count:FontTemplate(E.LSM:Fetch("font", E.db.bags.countFont), E.db.bags.countFontSize, E.db.bags.countFontOutline);
+					f.Bags[bagID][slotID].Count:SetTextColor(countColor.r, countColor.g, countColor.b);
 					
 					f.Bags[bagID][slotID].iconTexture = _G[f.Bags[bagID][slotID]:GetName()..'IconTexture'];
 					f.Bags[bagID][slotID].iconTexture:SetInside(f.Bags[bagID][slotID]);
@@ -738,7 +766,7 @@ function B:Token_OnClick()
 end
 
 function B:UpdateGoldText()
-	self.BagFrame.goldText:SetText(GetCoinTextureString(GetMoney(), 12))
+	self.BagFrame.goldText:SetText(E:FormatMoney(GetMoney(), E.db["bags"].moneyFormat, not E.db["bags"].moneyCoins));
 end
 
 function B:GetGraysValue()
