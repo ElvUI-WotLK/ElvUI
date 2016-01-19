@@ -601,7 +601,7 @@ function E:UpdateAll(ignoreInstall)
 	bags:PositionBagFrames();
 	bags:SizeAndPositionBagBar();
 	bags:UpdateItemLevelDisplay();
-	--bags:UpdateCountDisplay();
+	bags:UpdateCountDisplay();
 	
 	local totems = E:GetModule("Totems"); 
 	totems.db = self.db.general.totems;
