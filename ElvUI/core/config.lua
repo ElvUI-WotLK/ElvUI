@@ -162,80 +162,31 @@ local function ConfigMode_Initialize()
 	UIDropDownMenu_SetSelectedValue(ElvUIMoverPopupWindowDropDown, selectedValue);
 end
 
-function E:NudgeFrame()
-	local mover = ElvUIMoverNudgeWindow.child
-
-	local screenWidth, screenHeight, screenCenter = E.UIParent:GetRight(), E.UIParent:GetTop(), E.UIParent:GetCenter()
-	local x, y = mover:GetCenter()
-	local point
-	local LEFT = screenWidth / 3
-	local RIGHT = screenWidth * 2 / 3
-	local TOP = screenHeight / 2
+local function Nudge(nudgeX, nudgeY)
+	local mover = ElvUIMoverNudgeWindow.child;
 	
-	if y >= TOP then
-		point = "TOP"
-	else
-		point = "BOTTOM"
-	end
+	local x, y, point = E:CalculateMoverPoints(mover, nudgeX, nudgeY);
 	
-	if x >= RIGHT then
-		point = point..'RIGHT'
-	elseif x <= LEFT then
-		point = point..'LEFT'
-	end
+	mover:ClearAllPoints();
+	mover:SetPoint(mover.positionOverride or point, E.UIParent, mover.positionOverride and "BOTTOMLEFT" or point, x, y);
+	E:SaveMoverPosition(mover.name);
 	
-	x = tonumber(ElvUIMoverNudgeWindow.xOffset.currentValue)
-	y = tonumber(ElvUIMoverNudgeWindow.yOffset.currentValue)
-
-	mover:ClearAllPoints()
-	mover:Point(mover.positionOverride or point, E.UIParent, mover.positionOverride and "BOTTOMLEFT" or point, x, y)
-	E:SaveMoverPosition(mover.name)	
+	E:UpdateNudgeFrame(mover, x, y);
 end
 
-function E:UpdateNudgeFrame(mover)
-	local screenWidth, screenHeight, screenCenter = E.UIParent:GetRight(), E.UIParent:GetTop(), E.UIParent:GetCenter()
-	local x, y = mover:GetCenter()
-
-	local LEFT = screenWidth / 3
-	local RIGHT = screenWidth * 2 / 3
-	local TOP = screenHeight / 2
-
-	if y >= TOP then
-		y = -(screenHeight - mover:GetTop())
-	else
-		y = mover:GetBottom()
+function E:UpdateNudgeFrame(mover, x, y)
+	if not(x and y) then
+		x, y = E:CalculateMoverPoints(mover);
 	end
 	
-	if x >= RIGHT then
-		x = mover:GetRight() - screenWidth
-	elseif x <= LEFT then
-		x = mover:GetLeft()
-	else
-		x = x - screenCenter
-	end
+	x = E:Round(x, 0);
+	y = E:Round(y, 0);
 	
-	if(mover.positionOverride == "TOPLEFT") then
-		x = mover:GetLeft()
-		y = mover:GetTop()
-	elseif(self.positionOverride == "TOPRIGHT") then
-		x = mover:GetRight()
-		y = mover:GetTop()
-	elseif(mover.positionOverride == "BOTTOMLEFT") then
-		x = mover:GetLeft()
-		y = mover:GetBottom()
-	elseif(mover.positionOverride == "BOTTOMRIGHT") then
-		x = mover:GetRight()
-		y = mover:GetBottom()
-	end
-	
-	x = E:Round(x, 0)
-	y = E:Round(y, 0)
-
-	ElvUIMoverNudgeWindow.xOffset:SetText(x)
-	ElvUIMoverNudgeWindow.yOffset:SetText(y)
-	ElvUIMoverNudgeWindow.xOffset.currentValue = x
-	ElvUIMoverNudgeWindow.yOffset.currentValue = y
-	ElvUIMoverNudgeWindowHeader.title:SetText(mover.textString)
+	ElvUIMoverNudgeWindow.xOffset:SetText(x);
+	ElvUIMoverNudgeWindow.yOffset:SetText(y);
+	ElvUIMoverNudgeWindow.xOffset.currentValue = x;
+	ElvUIMoverNudgeWindow.yOffset.currentValue = y;
+	ElvUIMoverNudgeWindowHeader.title:SetText(mover.textString);
 end
 
 function E:AssignFrameToNudge()
@@ -408,10 +359,11 @@ function E:CreateMoverPopup()
 		EditBox_ClearFocus(self)
 	end)
 	xOffset:SetScript("OnEnterPressed", function(self)
-		local num = self:GetText()
-		if tonumber(num) then
-			xOffset.currentValue = num
-			E:NudgeFrame()
+		local num = self:GetText();
+		if(tonumber(num)) then
+			local diff = num - xOffset.currentValue;
+			xOffset.currentValue = num;
+			Nudge(diff);
 		end
 		self:SetText(E:Round(xOffset.currentValue))
 		EditBox_ClearFocus(self)
@@ -442,10 +394,11 @@ function E:CreateMoverPopup()
 		EditBox_ClearFocus(self)
 	end)
 	yOffset:SetScript("OnEnterPressed", function(self)
-		local num = self:GetText()
-		if tonumber(num) then
-			yOffset.currentValue = num
-			E:NudgeFrame()
+		local num = self:GetText();
+		if(tonumber(num)) then
+			local diff = num - yOffset.currentValue;
+			yOffset.currentValue = num;
+			Nudge(nil, diff);
 		end
 		self:SetText(E:Round(yOffset.currentValue))
 		EditBox_ClearFocus(self)
@@ -471,8 +424,9 @@ function E:CreateMoverPopup()
 	resetButton:SetPoint("TOP", nudgeFrame, "CENTER", 0, 2)
 	resetButton:Size(100, 25)
 	resetButton:SetScript("OnClick", function()
-		if ElvUIMoverNudgeWindow.child.textString then
-			E:ResetMovers(ElvUIMoverNudgeWindow.child.textString)
+		if(ElvUIMoverNudgeWindow.child.textString) then
+			E:ResetMovers(ElvUIMoverNudgeWindow.child.textString);
+			E:UpdateNudgeFrame(ElvUIMoverNudgeWindow.child);
 		end
 	end)
 	S:HandleButton(resetButton)
@@ -481,8 +435,7 @@ function E:CreateMoverPopup()
 	upButton:SetSize(26, 26);
 	upButton:SetPoint("BOTTOMRIGHT", nudgeFrame, "BOTTOM", -6, 4);
 	upButton:SetScript("OnClick", function()
-		yOffset:SetText(yOffset.currentValue + 1);
-		yOffset:GetScript("OnEnterPressed")(yOffset);
+		Nudge(nil, 1);
 	end);
 	upButton.icon = upButton:CreateTexture(nil, "ARTWORK");
 	upButton.icon:SetSize(13, 13);
@@ -497,8 +450,7 @@ function E:CreateMoverPopup()
 	downButton:SetSize(26, 26);
 	downButton:SetPoint("BOTTOMLEFT", nudgeFrame, "BOTTOM", 6, 4);
 	downButton:SetScript("OnClick", function()
-		yOffset:SetText(yOffset.currentValue - 1);
-		yOffset:GetScript("OnEnterPressed")(yOffset);
+		Nudge(nil, -1);
 	end);
 	downButton.icon = downButton:CreateTexture(nil, "ARTWORK");
 	downButton.icon:SetSize(13, 13);
@@ -513,8 +465,7 @@ function E:CreateMoverPopup()
 	leftButton:SetSize(26, 26);
 	leftButton:SetPoint("RIGHT", upButton, "LEFT", -6, 0);
 	leftButton:SetScript("OnClick", function()
-		xOffset:SetText(xOffset.currentValue - 1);
-		xOffset:GetScript("OnEnterPressed")(xOffset);
+		Nudge(-1);
 	end);
 	leftButton.icon = leftButton:CreateTexture(nil, "ARTWORK");
 	leftButton.icon:SetSize(13, 13);
@@ -529,8 +480,7 @@ function E:CreateMoverPopup()
 	rightButton:SetSize(26, 26);
 	rightButton:SetPoint("LEFT", downButton, "RIGHT", 6, 0);
 	rightButton:SetScript("OnClick", function()
-		xOffset:SetText(xOffset.currentValue + 1);
-		xOffset:GetScript("OnEnterPressed")(xOffset);
+		Nudge(1);
 	end);
 	rightButton.icon = rightButton:CreateTexture(nil, "ARTWORK");
 	rightButton.icon:SetSize(13, 13);

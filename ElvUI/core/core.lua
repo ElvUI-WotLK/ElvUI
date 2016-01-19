@@ -601,7 +601,7 @@ function E:UpdateAll(ignoreInstall)
 	bags:PositionBagFrames();
 	bags:SizeAndPositionBagBar();
 	bags:UpdateItemLevelDisplay();
-	bags:UpdateCountDisplay();
+	--bags:UpdateCountDisplay();
 	
 	local totems = E:GetModule("Totems"); 
 	totems.db = self.db.general.totems;
@@ -726,8 +726,50 @@ end
 
 --DATABASE CONVERSIONS
 function E:DBConversions()
-	self.db.unitframe.units.raid10 = nil
-	self.db.unitframe.units.raid25 = nil
+	if(E.global.unitframe["aurafilters"]["RaidDebuffs"].spells) then
+		local matchFound;
+		for k, v in pairs(E.global.unitframe["aurafilters"]["RaidDebuffs"].spells) do
+			if(type(v) == "table") then
+				matchFound = false;
+				for k_,v_ in pairs(v) do
+					if(k_ == "stackThreshold") then
+						matchFound = true;
+					end
+				end
+			end
+			
+			if(not matchFound) then
+				E.global.unitframe["aurafilters"]["RaidDebuffs"]["spells"][k].stackThreshold = 0;
+			end
+		end
+	end
+	
+	if(E.global.unitframe["aurafilters"]["Whitelist (Strict)"].spells) then
+		for k, v in pairs(E.global.unitframe["aurafilters"]["Whitelist (Strict)"].spells) do
+			if(type(v) == "table") then
+				for k_, v_ in pairs(v) do
+					if(k_ == "spellID" and type(v_) == "string" and tonumber(v_)) then
+						E.global.unitframe["aurafilters"]["Whitelist (Strict)"]["spells"][k].spellID = tonumber(v_);
+					end
+				end
+			end
+		end
+	end
+	
+	if(E.db.general.experience.width > 100 and E.db.general.experience.height > 100) then
+		E.db.general.experience.width = P.general.experience.width;
+		E.db.general.experience.height = P.general.experience.height;
+		E:Print("Experience bar appears to be an odd shape. Resetting to default size.");
+	end
+	
+	if(E.db.general.reputation.width > 100 and E.db.general.reputation.height > 100) then
+		E.db.general.reputation.width = P.general.reputation.width;
+		E.db.general.reputation.height = P.general.reputation.height;
+		E:Print("Reputation bar appears to be an odd shape. Resetting to default size.");
+	end
+	
+	if(E.db.chat.panelHeight < 60) then E.db.chat.panelHeight = 60; end
+	if(E.db.chat.panelHeightRight < 60) then E.db.chat.panelHeightRight = 60; end
 	
 	if(E.db.movers) then
 		for mover, moverString in pairs(E.db.movers) do
@@ -735,6 +777,36 @@ function E:DBConversions()
 				moverString = gsub(moverString, "\031", ",");
 				E.db.movers[mover] = moverString;
 			end
+		end
+	end
+	
+	if(not E.global.unitframe.buffwatchBackup) then E.global.unitframe.buffwatchBackup = {}; end
+	local shouldRemove;
+	for class in pairs(E.global.unitframe.buffwatch) do
+		if(not E.global.unitframe.buffwatchBackup[class]) then E.global.unitframe.buffwatchBackup[class] = {}; end
+		shouldRemove = {};
+		for i, values in pairs(E.global.unitframe.buffwatch[class]) do
+			if(values.id) then
+				if(i ~= values.id) then
+					shouldRemove[i] = true;
+				end
+				E.global.unitframe.buffwatch[class][values.id] = values;
+				if(not E.global.unitframe.buffwatchBackup[class][values.id]) then E.global.unitframe.buffwatchBackup[class][values.id] = values; end
+			elseif(G.oldBuffWatch[class] and G.oldBuffWatch[class][i]) then
+				local spellID = G.oldBuffWatch[class][i].id;
+				if(spellID) then
+					if(not E.global.unitframe.buffwatchBackup[class][spellID]) then
+						E.global.unitframe.buffwatchBackup[class][spellID] = G.oldBuffWatch[class][i];
+						E:CopyTable(E.global.unitframe.buffwatchBackup[class][spellID], values);
+					end
+					E.global.unitframe.buffwatch[class][spellID] = G.oldBuffWatch[class][i];
+					E:CopyTable(E.global.unitframe.buffwatch[class][spellID], values);
+					E.global.unitframe.buffwatch[class][i] = nil;
+				end
+			end
+		end
+		for id in pairs(shouldRemove) do
+			E.global.unitframe.buffwatch[class][id] = nil;
 		end
 	end
 end

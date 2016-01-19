@@ -179,6 +179,6 @@ function AB:CreateBar5()
 		end
 	]])
 	
-	E:CreateMover(bar, 'ElvBar_5', L['Bar 5'], nil, nil, nil,'ALL,ACTIONBARS')
+	E:CreateMover(bar, 'ElvAB_5', L['Bar 5'], nil, nil, nil,'ALL,ACTIONBARS')
 	self:PositionAndSizeBar5();
 end
