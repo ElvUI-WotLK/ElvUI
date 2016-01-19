@@ -699,7 +699,7 @@ function B:UpdateTokens()
 	
 	local numTokens = 0
 	for i = 1, MAX_WATCHED_TOKENS do
-		local name, count, type, icon = GetBackpackCurrencyInfo(i)
+		local name, count, type, icon, itemID = GetBackpackCurrencyInfo(i)
 		local button = f.currencyButton[i];
 		
 		if(type == 1) then
@@ -718,7 +718,7 @@ function B:UpdateTokens()
 				button.text:SetText(count);
 			end
 			
-			button.currencyID = currencyID;
+			button.itemID = itemID;
 			button:Show();
 			numTokens = numTokens + 1;
 		else
@@ -760,8 +760,8 @@ function B:Token_OnEnter()
 end
 
 function B:Token_OnClick()
-	if ( IsModifiedClick("CHATLINK") ) then
-		HandleModifiedItemClick(GetCurrencyLink(self.currencyID));
+	if(IsModifiedClick("CHATLINK")) then
+		ChatEdit_InsertLink(select(2, GetItemInfo(self.itemID)));
 	end
 end
 
