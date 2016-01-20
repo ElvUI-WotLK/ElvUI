@@ -162,7 +162,7 @@ local function ConfigMode_Initialize()
 	UIDropDownMenu_SetSelectedValue(ElvUIMoverPopupWindowDropDown, selectedValue);
 end
 
-local function Nudge(nudgeX, nudgeY)
+function E:NudgeMover(nudgeX, nudgeY)
 	local mover = ElvUIMoverNudgeWindow.child;
 	
 	local x, y, point = E:CalculateMoverPoints(mover, nudgeX, nudgeY);
@@ -363,7 +363,7 @@ function E:CreateMoverPopup()
 		if(tonumber(num)) then
 			local diff = num - xOffset.currentValue;
 			xOffset.currentValue = num;
-			Nudge(diff);
+			E:NudgeMover(diff);
 		end
 		self:SetText(E:Round(xOffset.currentValue))
 		EditBox_ClearFocus(self)
@@ -398,7 +398,7 @@ function E:CreateMoverPopup()
 		if(tonumber(num)) then
 			local diff = num - yOffset.currentValue;
 			yOffset.currentValue = num;
-			Nudge(nil, diff);
+			E:NudgeMover(nil, diff);
 		end
 		self:SetText(E:Round(yOffset.currentValue))
 		EditBox_ClearFocus(self)
@@ -435,7 +435,7 @@ function E:CreateMoverPopup()
 	upButton:SetSize(26, 26);
 	upButton:SetPoint("BOTTOMRIGHT", nudgeFrame, "BOTTOM", -6, 4);
 	upButton:SetScript("OnClick", function()
-		Nudge(nil, 1);
+		E:NudgeMover(nil, 1);
 	end);
 	upButton.icon = upButton:CreateTexture(nil, "ARTWORK");
 	upButton.icon:SetSize(13, 13);
@@ -450,7 +450,7 @@ function E:CreateMoverPopup()
 	downButton:SetSize(26, 26);
 	downButton:SetPoint("BOTTOMLEFT", nudgeFrame, "BOTTOM", 6, 4);
 	downButton:SetScript("OnClick", function()
-		Nudge(nil, -1);
+		E:NudgeMover(nil, -1);
 	end);
 	downButton.icon = downButton:CreateTexture(nil, "ARTWORK");
 	downButton.icon:SetSize(13, 13);
@@ -465,7 +465,7 @@ function E:CreateMoverPopup()
 	leftButton:SetSize(26, 26);
 	leftButton:SetPoint("RIGHT", upButton, "LEFT", -6, 0);
 	leftButton:SetScript("OnClick", function()
-		Nudge(-1);
+		E:NudgeMover(-1);
 	end);
 	leftButton.icon = leftButton:CreateTexture(nil, "ARTWORK");
 	leftButton.icon:SetSize(13, 13);
@@ -480,7 +480,7 @@ function E:CreateMoverPopup()
 	rightButton:SetSize(26, 26);
 	rightButton:SetPoint("LEFT", downButton, "RIGHT", 6, 0);
 	rightButton:SetScript("OnClick", function()
-		Nudge(1);
+		E:NudgeMover(1);
 	end);
 	rightButton.icon = rightButton:CreateTexture(nil, "ARTWORK");
 	rightButton.icon:SetSize(13, 13);

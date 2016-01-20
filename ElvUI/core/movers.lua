@@ -51,25 +51,39 @@ local function CreateMover(parent, name, text, overlay, snapOffset, postdrag)
 	if overlay == nil then overlay = true end
 	local point, anchor, secondaryPoint, x, y = split(",", GetPoint(parent));
 	local f = CreateFrame("Button", name, E.UIParent)
-	f:SetFrameLevel(parent:GetFrameLevel() + 1)
 	f:SetClampedToScreen(true)
+	f:RegisterForDrag("LeftButton", "RightButton");
+	f:EnableMouseWheel(true);
+	f:SetMovable(true);
 	f:SetWidth(parent:GetWidth())
 	f:SetHeight(parent:GetHeight())
+	f:SetTemplate("Transparent", nil, nil, true);
+	f:Hide();
 	f.parent = parent
 	f.name = name
 	f.textString = text
 	f.postdrag = postdrag
 	f.overlay = overlay
-	f.snapOffset = snapOffset or -2
-	E.CreatedMovers[name].mover = f
+	f.snapOffset = snapOffset or -2;
 	
-	E['snapBars'][#E['snapBars'] + 1] = f
-	
-	if overlay == true then
+	f:SetFrameLevel(parent:GetFrameLevel() + 1);
+	if(overlay == true) then
 		f:SetFrameStrata("DIALOG")
 	else
 		f:SetFrameStrata("BACKGROUND")
 	end
+	
+	E.CreatedMovers[name].mover = f;
+	E['snapBars'][#E['snapBars'] + 1] = f;
+	
+	local fs = f:CreateFontString(nil, "OVERLAY");
+	fs:FontTemplate();
+	fs:SetJustifyH("CENTER");
+	fs:SetPoint("CENTER");
+	fs:SetText(text or name);
+	fs:SetTextColor(unpack(E["media"].rgbvaluecolor));
+	f:SetFontString(fs);
+	f.text = fs;
 	
 	if E.db['movers'] and E.db['movers'][name] then
 		if type(E.db['movers'][name]) == 'table' then
@@ -91,9 +105,8 @@ local function CreateMover(parent, name, text, overlay, snapOffset, postdrag)
 
 		f:SetPoint(point, anchor, secondaryPoint, x, y)
 	end
-	f:SetTemplate("Transparent", nil, nil, true)
-	f:RegisterForDrag("LeftButton", "RightButton")
-	f:SetScript("OnDragStart", function(self)
+	
+	local function OnDragStart(self)
 		if InCombatLockdown() then E:Print(ERR_NOT_IN_COMBAT) return end
 		
 		if E.db['general'].stickyFrames then
@@ -104,11 +117,9 @@ local function CreateMover(parent, name, text, overlay, snapOffset, postdrag)
 		coordFrame.child = self
 		coordFrame:Show()
 		isDragging = true;
-	end)
+	end
 	
-	f:SetScript('OnMouseUp', E.AssignFrameToNudge)
-	
-	f:SetScript("OnDragStop", function(self) 
+	local function OnDragStop(self)
 		if InCombatLockdown() then E:Print(ERR_NOT_IN_COMBAT) return end
 		isDragging = false;
 		if E.db['general'].stickyFrames then
@@ -161,33 +172,18 @@ local function CreateMover(parent, name, text, overlay, snapOffset, postdrag)
 		end
 	
 		self:SetUserPlaced(false)
-	end)	
+	end
 	
-	parent:SetScript('OnSizeChanged', SizeChanged)
-	parent.mover = f
-	parent:ClearAllPoints()
-
-	parent:SetPoint(point, f, 0, 0)
-	
-	local fs = f:CreateFontString(nil, "OVERLAY")
-	fs:FontTemplate()
-	fs:SetJustifyH("CENTER")
-	fs:SetPoint("CENTER")
-	fs:SetText(text or name)
-	fs:SetTextColor(unpack(E["media"].rgbvaluecolor))
-	f:SetFontString(fs)
-	f.text = fs
-		
-	f:SetScript("OnEnter", function(self) 
+	local function OnEnter(self)
 		if isDragging then return end
 		self.text:SetTextColor(1, 1, 1)
 		ElvUIMoverNudgeWindow:Show()
 		E.AssignFrameToNudge(self)
 		coordFrame.child = self
 		coordFrame:GetScript('OnUpdate')(coordFrame)
-	end)
+	end
 	
-	f:SetScript("OnMouseDown", function(self, button)
+	local function OnMouseDown(self, button)
 		if button == "RightButton" then
 			isDragging = false;
 			if E.db['general'].stickyFrames then
@@ -195,20 +191,43 @@ local function CreateMover(parent, name, text, overlay, snapOffset, postdrag)
 			else
 				self:StopMovingOrSizing()
 			end
+			if(IsControlKeyDown() and self.textString) then
+				E:ResetMovers(self.textString);
+			end
 		end
-	end)
+	end
 	
-	f:SetScript("OnLeave", function(self)
+	local function OnLeave(self)
 		if isDragging then return end
 		self.text:SetTextColor(unpack(E["media"].rgbvaluecolor))
-	end)
-	f:SetScript('OnShow', function(self)
+	end
+	local function OnShow(self)
 		self:SetBackdropBorderColor(unpack(E["media"].rgbvaluecolor))
-	end)
+	end
 	
-	f:SetMovable(true)
-	f:Hide()	
+	local function OnMouseWheel(self, delta)
+		if(IsShiftKeyDown()) then
+			E:NudgeMover(delta);
+		else
+			E:NudgeMover(nil, delta);
+		end
+	end
 	
+	f:SetScript("OnDragStart", OnDragStart);
+	f:SetScript('OnMouseUp', E.AssignFrameToNudge);
+	f:SetScript("OnDragStop", OnDragStop);
+	f:SetScript("OnEnter", OnEnter);
+	f:SetScript("OnMouseDown", OnMouseDown);
+	f:SetScript("OnLeave", OnLeave);
+	f:SetScript("OnShow", OnShow);
+	f:SetScript("OnMouseWheel", OnMouseWheel);
+	
+	parent:SetScript("OnSizeChanged", SizeChanged);
+	parent.mover = f;
+	
+	parent:ClearAllPoints();
+	parent:SetPoint(point, f, 0, 0);
+
 	if postdrag ~= nil and type(postdrag) == 'function' then
 		f:RegisterEvent("PLAYER_ENTERING_WORLD")
 		f:SetScript("OnEvent", function(self, event)
