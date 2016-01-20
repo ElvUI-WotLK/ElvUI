@@ -1040,12 +1040,12 @@ E.Options.args.credits = {
 }
 
 local profileTypeItems = {
-	["profile"] = "Profile",
-	["private"] = "Private (Character Settings)",
-	["global"] = "Global (Account Settings)",
-	["filtersNP"] = "Filters (NamePlates)",
-	["filtersUF"] = "Filters (UnitFrames)",
-	["filtersAll"] = "Filters (All)"
+	["profile"] = L["Profile"],
+	["private"] = L["Private (Character Settings)"],
+	["global"] = L["Global (Account Settings)"],
+	["filtersNP"] = L["Filters (NamePlates)"],
+	["filtersUF"] = L["Filters (UnitFrames)"],
+	["filtersAll"] = L["Filters (All)"]
 };
 
 local profileTypeListOrder = {
@@ -1058,9 +1058,9 @@ local profileTypeListOrder = {
 };
 
 local exportTypeItems = {
-	["text"] = "Text",
-	["luaTable"] = "Table",
-	["luaPlugin"] = "Plugin"
+	["text"] = L["Text"],
+	["luaTable"] = L["Table"],
+	["luaPlugin"] = L["Plugin"]
 };
 
 local exportTypeListOrder = {
@@ -1069,42 +1069,36 @@ local exportTypeListOrder = {
 	"luaPlugin"
 };
 
+local exportString = "";
 local function ExportImport_Open(mode)
 	local frame = AceGUI:Create("Frame");
 	frame:SetTitle("");
 	frame:EnableResize(false);
-	frame.frame:SetWidth(800);
-	frame.frame:SetHeight(600);
+	frame:SetWidth(800);
+	frame:SetHeight(600);
 	frame.frame:SetFrameStrata("FULLSCREEN_DIALOG");
 	frame:SetLayout("flow");
-	frame:SetCallback("OnClose", function(widget)
-		AceGUI:Release(widget);
-		ACD:Open("ElvUI");
-	end);
 	
 	local box = AceGUI:Create("MultiLineEditBox");
 	box:SetNumLines(30);
 	box:DisableButton(true);
 	box:SetWidth(800);
 	box:SetLabel("");
-	box.button:Hide();
-	box.editBox:SetScript("OnEditFocusGained", function() box.editBox:HighlightText(); end);
 	frame:AddChild(box);
+	box.editBox.OnTextChangedOrig = box.editBox:GetScript("OnTextChanged");
 	
 	local label1 = AceGUI:Create("Label");
 	local font = GameFontHighlightSmall:GetFont();
 	label1:SetFont(font, 14);
 	label1:SetText(" ");
-	label1:SetWidth(770);
-	label1.label:SetJustifyH("RIGHT");
+	label1:SetWidth(800);
 	frame:AddChild(label1);
 	
 	local label2 = AceGUI:Create("Label");
 	local font = GameFontHighlightSmall:GetFont();
 	label2:SetFont(font, 14);
-	label2:SetText(" ");
-	label2:SetWidth(770);
-	label2.label:SetJustifyH("RIGHT");
+	label2:SetText(" ")
+	label2:SetWidth(800);
 	frame:AddChild(label2);
 
 	if(mode == "export") then
@@ -1122,14 +1116,13 @@ local function ExportImport_Open(mode)
 		exportFormatDropdown:SetLabel(L["Choose Export Format"]);
 		exportFormatDropdown:SetList(exportTypeItems, exportTypeListOrder);
 		exportFormatDropdown:SetValue("text");
-		exportFormatDropdown.frame:SetWidth(150);
+		exportFormatDropdown:SetWidth(150);
 		frame:AddChild(exportFormatDropdown);
 		
-		local exportButton = AceGUI:Create("Button");
+		local exportButton = AceGUI:Create("Button-ElvUI");
 		exportButton:SetText(L["Export Now"]);
 		exportButton:SetAutoWidth(true);
-		exportButton.text:SetTextColor(1, 0.82, 0);
-		exportButton.OnClick = function(self)
+		local function OnClick(self)
 			label1:SetText("");
 			label2:SetText("");
 			
@@ -1146,17 +1139,21 @@ local function ExportImport_Open(mode)
 			box:SetText(profileExport);
 			box.editBox:HighlightText();
 			box:SetFocus();
-			box.exportString = profileExport;
+			exportString = profileExport;
 		end
-		exportButton:SetCallback("OnClick", exportButton.OnClick);
+		exportButton:SetCallback("OnClick", OnClick);
 		frame:AddChild(exportButton);
 		
-		box.editBox:SetScript("OnChar", function() box:SetText(box.exportString); box.editBox:HighlightText(); end);
-		box.editBox:SetScript("OnMouseUp", function() box.editBox:HighlightText(); end);
-		box.editBox:SetScript("OnTextChanged", nil);
+		box.editBox:SetScript("OnChar", function() box:SetText(exportString); box.editBox:HighlightText(); end);
+		box.editBox:SetScript("OnTextChanged", function(self, userInput)
+			if(userInput) then
+				box:SetText(exportString);
+				box.editBox:HighlightText();
+			end
+		end);
 	elseif(mode == "import") then
 		frame:SetTitle(L["Import Profile"]);
-		local importButton = AceGUI:Create("Button");
+		local importButton = AceGUI:Create("Button-ElvUI");
 		importButton:SetDisabled(true);
 		importButton.text:SetTextColor(0.4, 0.4, 0.4);
 		importButton:SetText(L["Import Now"]);
@@ -1165,38 +1162,83 @@ local function ExportImport_Open(mode)
 			label1:SetText("");
 			label2:SetText("");
 			
-			local message = D:ImportProfile(box:GetText());
-			label1:SetText(message);
+			local text;
+			local success = D:ImportProfile(box:GetText());
+			if(success) then
+				text = L["Profile imported successfully!"];
+			else
+				text = L["Error decoding data. Import string may be corrupted!"];
+			end
+			label1:SetText(text);
 		end)
 		frame:AddChild(importButton);
 		
-		box.editBox:SetScript("OnChar", nil);
-		box.editBox:SetScript("OnMouseUp", nil);
-		box.editBox:SetScript("OnTextChanged", function(self, userInput)
-			if(self:GetText() == "") then
+		local decodeButton = AceGUI:Create("Button");
+		decodeButton:SetDisabled(true);
+		decodeButton:SetText(L["Decode Text"]);
+		decodeButton:SetAutoWidth(true);
+		decodeButton:SetCallback("OnClick", function()
+			label1:SetText("");
+			label2:SetText("");
+			local decodedText;
+			local profileType, profileKey, profileData = D:Decode(box:GetText());
+			if(profileData) then
+				decodedText = E:TableToLuaString(profileData);
+			end
+			local importText = D:CreateProfileExport(decodedText, profileType, profileKey);
+			box:SetText(importText)
+		end)
+		frame:AddChild(decodeButton);
+
+		local function OnTextChanged()
+			local text = box:GetText();
+			if(text == "") then
 				label1:SetText("");
 				label2:SetText("");
 				importButton:SetDisabled(true);
-				importButton.text:SetTextColor(0.4, 0.4, 0.4);
-			elseif(userInput) then
-				local profileType, profileKey = D:Decode(self:GetText());
+				decodeButton:SetDisabled(true)
+			else
+				local stringType = D:GetImportStringType(text);
+				if(stringType == "Base64") then
+					decodeButton:SetDisabled(false);
+				else
+					decodeButton:SetDisabled(true);
+				end
+				
+				local profileType, profileKey = D:Decode(text);
 				if not profileType or (profileType and profileType == "profile" and not profileKey) then
 					label1:SetText(L["Error decoding data. Import string may be corrupted!"]);
 					label2:SetText("");
 					importButton:SetDisabled(true);
-					importButton.text:SetTextColor(0.4, 0.4, 0.4);
+					decodeButton:SetDisabled(true);
 				else
 					label1:SetText(format("%s: %s%s|r", L["Importing"], E.media.hexvaluecolor, profileTypeItems[profileType] or ""));
 					if(profileType == "profile") then
 						label2:SetText(format("%s: %s%s|r", L["Profile Name"], E.media.hexvaluecolor, profileKey));
 					end
+					
 					importButton:SetDisabled(false);
-					importButton.text:SetTextColor(1, 0.82, 0);
 				end
+				
+				box.scrollFrame:SetVerticalScroll(box.scrollFrame:GetVerticalScrollRange());
 			end
-		end);
+		end
+		
 		box.editBox:SetFocus();
+		box.editBox:SetScript("OnChar", nil);
+		box.editBox:SetScript("OnTextChanged", OnTextChanged);
 	end
+	
+	frame:SetCallback("OnClose", function(widget)
+		box.editBox:SetScript("OnChar", nil);
+		box.editBox:SetScript("OnTextChanged", box.editBox.OnTextChangedOrig);
+		box.editBox.OnTextChangedOrig = nil;
+		
+		exportString = "";
+		
+		AceGUI:Release(widget);
+		ACD:Open("ElvUI");
+	end);
 	
 	--label1:SetText("");
 	--label2:SetText("");

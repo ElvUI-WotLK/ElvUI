@@ -469,6 +469,28 @@ L["X-Offset"] = "Смещение по Х";
 L["Y-Offset"] = "Смещение по Y";
 L["You can't remove a default name from the filter, disabling the name."] = "Вы не можете удалить имя по умолчанию из фильтра. Отключаю использование указанного имени.";
 
+-- Экспорт/Импорт профилей
+L["Choose Export Format"] = "Выберите формат экспорта";
+L["Choose What To Export"] = "Выберите что экспортировать";
+L["Decode Text"] = "Декодировать";
+L["Error decoding data. Import string may be corrupted!"] = "Ошибка при кодировании. Импортируемая строка может быть повреждена!";
+L["Error exporting profile!"] = "Ошибка при экспорте профиля!";
+L["Export Now"] = "Экспортировать";
+L["Export Profile"] = "Экспорт профиля";
+L["Exported"] = "Экспортировано";
+L["Filters (All)"] = "Фильтры (Все)";
+L["Filters (NamePlates)"] = "Фильтры (Индикаторы здоровья)";
+L["Filters (UnitFrames)"] = "Фильтры (Рамки юнитов)";
+L["Global (Account Settings)"] = "Глобальные (настройки аккаунта)";
+L["Import Now"] = "Импортировать";
+L["Import Profile"] = "Импорт профиля";
+L["Importing"] = "Импортирую";
+L["Plugin"] = "Плагин";
+L["Private (Character Settings)"] = "Private (Настройки персонажа)";
+L["Profile imported successfully!"] = "Профиль успешно импортирован!";
+L["Profile Name"] = "Имя профиля";
+L["Profile"] = "Профиль";
+L["Table"] = "Таблица";
 --Skins
 L["Achievement Frame"] = "Достижения"
 L['Alert Frames'] = "Предупреждения"

@@ -3,8 +3,8 @@ local D = E:NewModule('Distributor', "AceEvent-3.0","AceTimer-3.0","AceComm-3.0"
 local LibCompress = LibStub:GetLibrary("LibCompress");
 local LibBase64 = LibStub("LibBase64-1.0-ElvUI");
 
-local tonumber = tonumber;
-local len, format, split = string.len, string.format, string.split;
+local tonumber, type, pcall, loadstring = tonumber, type, pcall, loadstring;
+local len, format, split, find = string.len, string.format, string.split, string.find;
 
 local CreateFrame = CreateFrame;
 local GetNumRaidMembers, UnitInRaid = GetNumRaidMembers, UnitInRaid;
@@ -303,23 +303,14 @@ local function GetProfileExport(profileType, exportFormat)
 	if(exportFormat == "text") then
 		local serialData = D:Serialize(profileData);
 		
-		if(profileType == "profile") then
-			exportString = format("%s::%s::%s", serialData, profileType, profileKey);
-		else
-			exportString = format("%s::%s", serialData, profileType);
-		end
+		exportString = D:CreateProfileExport(serialData, profileType, profileKey);
 		
 		local compressedData = LibCompress:Compress(exportString);
 		local encodedData = LibBase64:Encode(compressedData);
 		profileExport = encodedData;
 	elseif(exportFormat == "luaTable") then
 		exportString = E:TableToLuaString(profileData);
-		
-		if(profileType == "profile") then
-			profileExport = format("%s::%s::%s", exportString, profileType, profileKey);
-		else
-			profileExport = format("%s::%s", exportString, profileType);
-		end
+		profileExport = D:CreateProfileExport(exportString, profileType, profileKey);
 	elseif(exportFormat == "luaPlugin") then
 		profileExport = E:ProfileTableToPluginFormat(profileData, profileType);
 	end
@@ -327,10 +318,35 @@ local function GetProfileExport(profileType, exportFormat)
 	return profileKey, profileExport;
 end
 
-function D:Decode(dataString)
-	local profileType, profileKey, profileData, message;
+function D:CreateProfileExport(dataString, profileType, profileKey)
+	local returnString;
+	
+	if(profileType == "profile") then
+		returnString = format("%s::%s::%s", dataString, profileType, profileKey);
+	else
+		returnString = format("%s::%s", dataString, profileType);
+	end
+	
+	return returnString;
+end
+
+function D:GetImportStringType(dataString)
+	local stringType = "";
 	
 	if(LibBase64:IsBase64(dataString)) then
+		stringType = "Base64";
+	elseif(find(dataString, "{")) then
+		stringType = "Table";
+	end
+	
+	return stringType;
+end
+
+function D:Decode(dataString)
+	local profileType, profileKey, profileData, message;
+	local stringType = self:GetImportStringType(dataString);
+	
+	if(stringType == "Base64") then
 		local decodedData = LibBase64:Decode(dataString);
 		local decompressedData, message = LibCompress:Decompress(decodedData);
 		
@@ -346,7 +362,7 @@ function D:Decode(dataString)
 			E:Print("Error deserializing:", profileData);
 			return;
 		end
-	elseif(find(dataString, "{")) then
+	elseif(stringType == "Table") then
 		local profileDataAsString;
 		profileDataAsString, profileType, profileKey = E:StringSplitMultiDelim(dataString, "::");
 		if(not profileDataAsString) then
@@ -407,8 +423,6 @@ local function SetImportedProfile(profileType, profileKey, profileData, force)
 	end
 	
 	E:UpdateAll(true);
-	
-	return L["Profile imported successfully!"];
 end
 
 function D:ExportProfile(profileType, exportFormat)
@@ -422,7 +436,6 @@ function D:ExportProfile(profileType, exportFormat)
 end
 
 function D:ImportProfile(dataString)
-	local message = "";
 	local profileType, profileKey, profileData = self:Decode(dataString);
 	
 	if(not profileData or type(profileData) ~= "table") then
@@ -430,13 +443,11 @@ function D:ImportProfile(dataString)
 		return;
 	end
 	
-	if(not profileType or (profileType and profileType == "profile" and not profileKey)) then
-		message = L["Error decoding data. Import string may be corrupted!"];
-	else
-		message = SetImportedProfile(profileType, profileKey, profileData);
+	if(profileType and ((profileType == "profile" and profileKey) or profileType ~= "profile")) then
+		SetImportedProfile(profileType, profileKey, profileData);
 	end
 	
-	return message;
+	return true;
 end
 
 E.PopupDialogs['DISTRIBUTOR_SUCCESS'] = {
@@ -492,20 +503,20 @@ E.PopupDialogs['IMPORT_PROFILE_EXISTS'] = {
 	end,
 	OnShow = function(self) self.editBox:SetText(D.profileKey); self.editBox:SetFocus(); end,
 	timeout = 0,
-	exclusive = 1,
 	whileDead = 1,
 	hideOnEscape = true,
 	preferredIndex = 3
 };
 
 E.PopupDialogs["IMPORT_RL"] = {
-	text = L["You have imported settings that may require a UI reload to take effect. Reload now?"],
+	text = L["You have imported settings which may require a UI reload to take effect. Reload now?"],
 	button1 = ACCEPT,
 	button2 = CANCEL,
 	OnAccept = function() ReloadUI(); end,
 	timeout = 0,
 	whileDead = 1,
-	hideOnEscape = false
+	hideOnEscape = false,
+	preferredIndex = 3
 };
 
 E:RegisterModule(D:GetName())
