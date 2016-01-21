@@ -59,6 +59,16 @@ Name Formats:
 'name-long' - Name restricted to 20 characters
 
 To disable leave the field blank, if you need more information visit http://www.tukui.org]=];
+L["IGNORE_ITEMS_DESC"] = [=[Valid entries:
+
+Item links or item names
+
+Terms from Search Syntax. Examples:
+q:epic
+s:Tank Set
+q:epic&lvl:>300
+
+See "Bags->Search Syntax" for more.]=];
 
 -- Action Bars
 L['Darken Inactive'] = true;
@@ -117,48 +127,60 @@ L[ [=[This works like a macro, you can run different situations to get the actio
 L[ [=[This works like a macro, you can run different situations to get the actionbar to show/hide differently.
  Example: '[combat] show;hide']=] ] = true;
 
---Bags
-L['Adjust the width of the bag frame.'] = true;
-L['Adjust the width of the bank frame.'] = true;
-L['Align the width of the bag frame to fit inside the chat box.'] = true;
-L['Align To Chat'] = true;
+-- Bags
+L["Adjust the width of the bag frame."] = true;
+L["Adjust the width of the bank frame."] = true;
+L["Align the width of the bag frame to fit inside the chat box."] = true;
+L["Align To Chat"] = true;
 L["Ascending"] = true;
+L["Bag Sorting"] = true;
 L["Bag-Bar"] = true;
 L["Bar Direction"] = true;
+L["Blizzard Style"] = true;
 L["Bottom to Top"] = true;
-L['Button Size (Bag)'] = true;
-L['Button Size (Bank)'] = true;
-L["Click to search.."] = true;
-L['Currency Format'] = true;
+L["Button Size (Bag)"] = true;
+L["Button Size (Bank)"] = true;
+L["Condensed"] = true;
+L["Currency Format"] = true;
 L["Descending"] = true;
 L["Direction the bag sorting will use to allocate the items."] = true;
 L["Display Item Level"] = true;
 L["Displays item level on equippable items."] = true;
 L["Enable/Disable the all-in-one bag."] = true;
 L["Enable/Disable the Bag-Bar."] = true;
+L["Full"] = true;
 L["Icons and Text"] = true;
-L['Ignore Items'] = true;
+L["Ignore Items"] = true;
+L["Item Count Font"] = true;
 L["Item Level Threshold"] = true;
-L['Item Level'] = true;
-L['List of items to ignore when sorting. If you wish to add multiple items you must seperate the word with a comma.'] = true;
-L['Panel Width (Bags)'] = true;
-L['Panel Width (Bank)'] = true;
+L["Item Level"] = true;
+L["List of items to ignore when sorting. If you wish to add multiple items you must seperate the word with a comma."] = true;
+L["Money Format"] = true;
+L["Panel Width (Bags)"] = true;
+L["Panel Width (Bank)"] = true;
 L["Search Syntax"] = true;
 L["Set the size of your bag buttons."] = true;
-L["Sort Direction"] = true; --Also used in Buffs and Debuffs
-L['Sort Inverted'] = true;
+L["Short (Whole Numbers)"] = true;
+L["Short"] = true;
+L["Show Coins"] = true;
+L["Smart"] = true;
+L["Sort Direction"] = true; -- Also used in Buffs and Debuffs
+L["Sort Inverted"] = true;
 L["The direction that the bag frames be (Horizontal or Vertical)."] = true;
 L["The direction that the bag frames will grow from the anchor."] = true;
-L['The display format of the currency icons that get displayed below the main bag. (You have to be watching a currency for this to display)'] = true;
+L["The display format of the currency icons that get displayed below the main bag. (You have to be watching a currency for this to display)"] = true;
+L["The display format of the money text that is shown at the top of the main bag."] = true;
 L["The frame is not shown unless you mouse over the frame."] = true;
 L["The minimum item level required for it to be shown."] = true;
-L['The size of the individual buttons on the bag frame.'] = true;
-L['The size of the individual buttons on the bank frame.'] = true;
+L["The size of the individual buttons on the bag frame."] = true;
+L["The size of the individual buttons on the bank frame."] = true;
 L["The spacing between buttons."] = true;
 L["Top to Bottom"] = true;
-L["X Offset"] = true;
-L["Y Offset"] = true;
-L['You must be at a bank.'] = true;
+L["Use coin icons instead of colored text."] = true;
+L["X Offset Bags"] = true;
+L["X Offset Bank"] = true;
+L["Y Offset Bags"] = true;
+L["Y Offset Bank"] = true;
 
 --Buffs and Debuffs
 L['Begin a new row or column after this many auras.'] = true;
@@ -449,6 +471,29 @@ L["Wraps name instead of truncating it."] = true;
 L["X-Offset"] = true;
 L["Y-Offset"] = true;
 L["You can't remove a default name from the filter, disabling the name."] = true;
+
+--Profiles Export/Import
+L["Choose Export Format"] = true;
+L["Choose What To Export"] = true;
+L["Decode Text"] = true;
+L["Error decoding data. Import string may be corrupted!"] = true;
+L["Error exporting profile!"] = true;
+L["Export Now"] = true;
+L["Export Profile"] = true;
+L["Exported"] = true;
+L["Filters (All)"] = true;
+L["Filters (NamePlates)"] = true;
+L["Filters (UnitFrames)"] = true;
+L["Global (Account Settings)"] = true;
+L["Import Now"] = true;
+L["Import Profile"] = true;
+L["Importing"] = true;
+L["Plugin"] = true;
+L["Private (Character Settings)"] = true;
+L["Profile imported successfully!"] = true;
+L["Profile Name"] = true;
+L["Profile"] = true;
+L["Table"] = true;
 
 --Skins
 L["Achievement Frame"] = true;

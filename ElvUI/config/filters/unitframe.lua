@@ -380,6 +380,87 @@ end
 
 G.unitframe.buffwatch = { -- Индикатор баффов
 	PRIEST = {
+		[6788] = ClassBuff(6788, "TOPLEFT", {1, 0, 0}, true), -- Ослабленная душа
+		[10060] = ClassBuff(10060 , "RIGHT", {227/255, 23/255, 13/255}), -- Придание сил
+		[48066] = ClassBuff(48066, "BOTTOMRIGHT", {0.81, 0.85, 0.1}, true), -- Слово силы: Щит
+		[48068] = ClassBuff(48068, "BOTTOMLEFT", {0.4, 0.7, 0.2}), -- Обновление
+		[48113] = ClassBuff(48113, "TOPRIGHT", {0.2, 0.7, 0.2}), -- Молитва восстановления
+	},
+	DRUID = {
+		[48441] = ClassBuff(48441, "TOPRIGHT", {0.8, 0.4, 0.8}), -- Омоложение
+		[48443] = ClassBuff(48443, "BOTTOMLEFT", {0.2, 0.8, 0.2}), -- Востановление
+		[48451] = ClassBuff(48451, "TOPLEFT", {0.4, 0.8, 0.2}), -- Жизнецвет
+		[53251] = ClassBuff(53251, "BOTTOMRIGHT", {0.8, 0.4, 0}), -- Буйный рост
+	},
+	PALADIN = {
+		[1038] = ClassBuff(1038, "BOTTOMRIGHT", {238/255, 201/255, 0}, true), -- Длань спасения
+		[1044] = ClassBuff(1044, "BOTTOMRIGHT", {221/255, 117/255, 0}, true), -- Длань свободы
+		[6940] = ClassBuff(6940, "BOTTOMRIGHT", {227/255, 23/255, 13/255}, true), -- Длань жертвенности
+		[10278] = ClassBuff(10278, "BOTTOMRIGHT", {0.2, 0.2, 1}, true), -- Длань защиты
+		[53563] = ClassBuff(53563, "TOPLEFT", {0.7, 0.3, 0.7}), -- Частица Света
+		[53601] = ClassBuff(53601, "TOPRIGHT", {0.4, 0.7, 0.2}), -- Священный щит
+	},
+	SHAMAN = {
+		[16237] = ClassBuff(16237, "BOTTOMLEFT", {0.4, 0.7, 0.2}), -- Стойкость предков
+		[49284] = ClassBuff(49284, "TOPRIGHT", {0.2, 0.7, 0.2}), -- Щит земли
+		[52000] = ClassBuff(52000, "BOTTOMRIGHT", {0.7, 0.4, 0}), -- Жизнь земли
+		[61301] = ClassBuff(61301, "TOPLEFT", {0.7, 0.3, 0.7}), -- Быстрина
+	},
+	ROGUE = {
+		[57933] = ClassBuff(57933, "TOPRIGHT", {227/255, 23/255, 13/255}), -- Маленькие хитрости
+	},
+	MAGE = {
+		[54646] = ClassBuff(54646, "TOPRIGHT", {0.2, 0.2, 1}), -- Магическая консетрация
+	},
+	WARRIOR = {
+		[3411] = ClassBuff(3411, "TOPRIGHT", {227/255, 23/255, 13/255}), -- Вмешательство
+		[59665] = ClassBuff(59665, "TOPLEFT", {0.2, 0.2, 1}), -- Бдительность
+	},
+	DEATHKNIGHT = {
+		[49016] = ClassBuff(49016, "TOPRIGHT", {227/255, 23/255, 13/255}) -- Истерия
+	},
+	HUNTER = {}
+};
+
+P["unitframe"]["filters"] = {
+	["buffwatch"] = {}
+};
+
+G.unitframe.ChannelTicks = { -- Тики
+	-- Чернокнижник
+	[SpellName(1120)] = 5, -- "Похищение душы"
+	[SpellName(689)] = 5, -- "Похишение жызни"
+	[SpellName(5138)] = 5, -- "Похишение маны"
+	[SpellName(5740)] = 4, -- "Огненный ливень"
+	[SpellName(755)] = 10, -- "Канал здоровья"
+	-- Друид
+	[SpellName(44203)] = 4, -- "Спокайствие"
+	[SpellName(16914)] = 10, -- "Гроза"
+	-- Жрец
+	[SpellName(15407)] = 3, -- "Пытка разума"
+	[SpellName(48045)] = 5, -- "Искушение разума"
+	[SpellName(47540)] = 3, -- "Исповедь"
+	-- Маг
+	[SpellName(5143)] = 5, -- "Чародейские стрелы"
+	[SpellName(10)] = 8, -- "Снежная буря"
+	[SpellName(12051)] = 4 -- "Прилив сил"
+};
+
+G.unitframe.AuraBarColors = {
+	[SpellName(2825)] = {r = 250/255, g = 146/255, b = 27/255},	-- Жажда крови
+	[SpellName(32182)] = {r = 250/255, g = 146/255, b = 27/255} -- Героизм
+};
+
+G.unitframe.InvalidSpells = {
+	
+};
+
+G.unitframe.DebuffHighlightColors = {
+	[SpellName(25771)] = {enable = false, style = "FILL", color = { r = 0.85, g = 0, b = 0, a = 0.85 }}
+};
+
+G.oldBuffWatch = {
+	PRIEST = {
 		ClassBuff(6788, "TOPLEFT", {1, 0, 0}, true), -- Ослабленная душа
 		ClassBuff(10060 , "RIGHT", {227/255, 23/255, 13/255}), -- Придание сил
 		ClassBuff(48066, "BOTTOMRIGHT", {0.81, 0.85, 0.1}, true), -- Слово силы: Щит
@@ -419,41 +500,4 @@ G.unitframe.buffwatch = { -- Индикатор баффов
 	DEATHKNIGHT = {
 		ClassBuff(49016, "TOPRIGHT", {227/255, 23/255, 13/255}) -- Истерия
 	}
-};
-
-P["unitframe"]["filters"] = {
-	["buffwatch"] = {}
-};
-
-G.unitframe.ChannelTicks = { -- Тики
-	-- Чернокнижник
-	[SpellName(1120)] = 5, -- "Похищение душы"
-	[SpellName(689)] = 5, -- "Похишение жызни"
-	[SpellName(5138)] = 5, -- "Похишение маны"
-	[SpellName(5740)] = 4, -- "Огненный ливень"
-	[SpellName(755)] = 10, -- "Канал здоровья"
-	-- Друид
-	[SpellName(44203)] = 4, -- "Спокайствие"
-	[SpellName(16914)] = 10, -- "Гроза"
-	-- Жрец
-	[SpellName(15407)] = 3, -- "Пытка разума"
-	[SpellName(48045)] = 5, -- "Искушение разума"
-	[SpellName(47540)] = 3, -- "Исповедь"
-	-- Маг
-	[SpellName(5143)] = 5, -- "Чародейские стрелы"
-	[SpellName(10)] = 8, -- "Снежная буря"
-	[SpellName(12051)] = 4 -- "Прилив сил"
-};
-
-G.unitframe.AuraBarColors = {
-	[SpellName(2825)] = {r = 250/255, g = 146/255, b = 27/255},	-- Жажда крови
-	[SpellName(32182)] = {r = 250/255, g = 146/255, b = 27/255} -- Героизм
-};
-
-G.unitframe.InvalidSpells = {
-	
-};
-
-G.unitframe.DebuffHighlightColors = {
-	[SpellName(25771)] = {enable = false, style = "FILL", color = { r = 0.85, g = 0, b = 0, a = 0.85 }}
 };

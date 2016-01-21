@@ -1,6 +1,14 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file='ouf.lua' />
-
+	<Script file="init.lua"/>
+	<Script file="private.lua"/>
+	<Script file="ouf.lua"/>
+	<Script file="events.lua"/>
+	<Script file="factory.lua"/>
+	<Script file="blizzard.lua"/>
+	<Script file="units.lua"/>
+	<Script file="colors.lua"/>
+	<Script file="finalize.lua"/>
+	
 	<Script file='elements\assistant.lua' />
 	<Script file='elements\aura.lua' />
 	<Script file='elements\castbar.lua' />

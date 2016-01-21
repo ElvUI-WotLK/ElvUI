@@ -277,7 +277,7 @@ function E:SetupResolution(noDataReset)
 			E.db.auras.wrapAfter = 10;
 		end
 		
-		E.db.movers.ElvBar_2 = "CENTER,ElvUIParent,BOTTOM,0,56.18"
+		E.db.movers.ElvAB_2 = "CENTER,ElvUIParent,BOTTOM,0,56.18"
 		
 		if not noDataReset then
 			E:CopyTable(E.db.unitframe.units, P.unitframe.units)
@@ -355,9 +355,9 @@ function E:SetupLayout(layout, noDataReset)
 		
 		E.db.actionbar.bar2.enabled = E.db.lowresolutionset
 		if E.PixelMode then
-			E.db.movers.ElvBar_2 = "BOTTOM,ElvUIParent,BOTTOM,0,38"
+			E.db.movers.ElvAB_2 = "BOTTOM,ElvUIParent,BOTTOM,0,38"
 		else
-			E.db.movers.ElvBar_2 = "BOTTOM,ElvUIParent,BOTTOM,0,40"
+			E.db.movers.ElvAB_2 = "BOTTOM,ElvUIParent,BOTTOM,0,40"
 		end
 		if not E.db.lowresolutionset then
 			E.db.actionbar.bar3.buttons = 6

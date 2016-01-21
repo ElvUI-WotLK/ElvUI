@@ -714,7 +714,7 @@ function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdat
 	if(not self[group]) then
 		local stringTitle = E:StringTitle(group);
 		ElvUF:RegisterStyle("ElvUF_"..stringTitle, UF["Construct_"..stringTitle.."Frames"]);
-	--	ElvUF:SetActiveStyle("ElvUF_"..stringTitle);
+		ElvUF:SetActiveStyle("ElvUF_"..stringTitle);
 		
 		if(db.numGroups) then
 			self[group] = CreateFrame("Frame", "ElvUF_"..stringTitle, E.UIParent, "SecureHandlerStateTemplate");
