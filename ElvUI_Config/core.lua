@@ -712,7 +712,7 @@ E.Options.args.general = {
 			order = 11,
 			name = L['Reminder'],
 			get = function(info) return E.db.general.reminder[ info[#info] ] end,
-			set = function(info, value) E.db.general.reminder[ info[#info] ] = value; E:GetModule('ReminderBuffs'):Update_ReminderBuffsSettings(); end,
+			set = function(info, value) E.db.general.reminder[ info[#info] ] = value; E:GetModule('ReminderBuffs'):UpdateSettings(); end,
 			args = {
 				enable = {
 					order = 1,
@@ -732,6 +732,16 @@ E.Options.args.general = {
 							order = 1,
 							name = L['Remaining Time'],
 							type = 'toggle'
+						},
+						position = {
+							order = 2,
+							type = "select",
+							name = L["Position"],
+							set = function(info, value) E.db.general.reminder[ info[#info] ] = value; E:GetModule("ReminderBuffs"):UpdatePosition(); end,
+							values = {
+								["LEFT"] = L["Left"],
+								["RIGHT"] = L["Right"]
+							},
 						},
 					},
 				},

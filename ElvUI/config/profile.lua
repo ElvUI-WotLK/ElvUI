@@ -67,12 +67,13 @@ P['general'] = {
 		['size'] = 40,
 		['spacing'] = 4,
 	},
-	['reminder'] = {
-		['enable'] = true,
-		['durations'] = true,
-		['font'] = 'ElvUI Pixel',
-		['fontSize'] = 10,
-		['fontOutline'] = 'MONOCHROMEOUTLINE'
+	["reminder"] = {
+		["enable"] = true,
+		["durations"] = true,
+		["position"] = "RIGHT",
+		["font"] = "ElvUI Pixel",
+		["fontSize"] = 10,
+		["fontOutline"] = "MONOCHROMEOUTLINE"
 	},
 	['kittys'] = false
 };

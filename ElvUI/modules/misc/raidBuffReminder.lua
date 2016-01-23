@@ -212,7 +212,7 @@ function RB:DisableRB()
 	self:UnregisterEvent('ZONE_CHANGED_NEW_AREA');
 end
 
-function RB:Update_ReminderBuffsSettings(isCallback)
+function RB:UpdateSettings(isCallback)
 	local frame = self.frame;
 	frame:Width(E.RBRWidth);
 	
@@ -242,11 +242,30 @@ function RB:Update_ReminderBuffsSettings(isCallback)
 	end
 	
 	if(not isCallback) then
-		if(self.db.enable) then
-			E:GetModule('ReminderBuffs'):EnableRB();
+		if(E.db.general.reminder.enable) then
+			RB:EnableRB();
 		else
-			E:GetModule('ReminderBuffs'):DisableRB();
+			RB:DisableRB();
 		end
+	end
+end
+
+function RB:UpdatePosition()
+	Minimap:ClearAllPoints();
+	ElvConfigToggle:ClearAllPoints();
+	ElvUI_ReminderBuffs:ClearAllPoints();
+	if(E.db.general.reminder.position == "LEFT") then
+		Minimap:Point("TOPRIGHT", MMHolder, "TOPRIGHT", -2, -2);
+		ElvConfigToggle:SetPoint("TOPRIGHT", LeftMiniPanel, "TOPLEFT", (E.PixelMode and 1 or -1), 0);
+		ElvConfigToggle:SetPoint("BOTTOMRIGHT", LeftMiniPanel, "BOTTOMLEFT", (E.PixelMode and 1 or -1), 0);
+		ElvUI_ReminderBuffs:SetPoint("TOPRIGHT", Minimap.backdrop, "TOPLEFT", (E.PixelMode and 1 or -1), 0);
+		ElvUI_ReminderBuffs:SetPoint("BOTTOMRIGHT", Minimap.backdrop, "BOTTOMLEFT", (E.PixelMode and 1 or -1), 0);
+	else
+		Minimap:Point("TOPLEFT", MMHolder, "TOPLEFT", 2, -2);
+		ElvConfigToggle:SetPoint("TOPLEFT", RightMiniPanel, "TOPRIGHT", (E.PixelMode and -1 or 1), 0);
+		ElvConfigToggle:SetPoint("BOTTOMLEFT", RightMiniPanel, "BOTTOMRIGHT", (E.PixelMode and -1 or 1), 0);
+		ElvUI_ReminderBuffs:SetPoint("TOPLEFT", Minimap.backdrop, "TOPRIGHT", (E.PixelMode and -1 or 1), 0);
+		ElvUI_ReminderBuffs:SetPoint("BOTTOMLEFT", Minimap.backdrop, "BOTTOMRIGHT", (E.PixelMode and -1 or 1), 0);
 	end
 end
 
@@ -265,8 +284,13 @@ function RB:Initialize()
 	local frame = CreateFrame('Frame', 'ElvUI_ReminderBuffs', Minimap);
 	frame:SetTemplate('Default');
 	frame:Width(E.RBRWidth);
-	frame:Point('TOPLEFT', Minimap.backdrop, 'TOPRIGHT', (E.PixelMode and -1 or 1), 0);
-	frame:Point('BOTTOMLEFT', Minimap.backdrop, 'BOTTOMRIGHT', (E.PixelMode and -1 or 1), 0);
+	if(E.db.general.reminder.position == "LEFT") then
+		frame:Point("TOPRIGHT", Minimap.backdrop, "TOPLEFT", (E.PixelMode and 1 or -1), 0);
+		frame:Point("BOTTOMRIGHT", Minimap.backdrop, "BOTTOMLEFT", (E.PixelMode and 1 or -1), 0);
+	else
+		frame:Point("TOPLEFT", Minimap.backdrop, "TOPRIGHT", (E.PixelMode and -1 or 1), 0);
+		frame:Point("BOTTOMLEFT", Minimap.backdrop, "BOTTOMRIGHT", (E.PixelMode and -1 or 1), 0);
+	end
 	self.frame = frame;
 	
 	for i = 1, 6 do
@@ -274,7 +298,7 @@ function RB:Initialize()
 		frame[i]:SetID(i);
 	end
 	
-	self:Update_ReminderBuffsSettings();
+	self:UpdateSettings();
 end
 
 E:RegisterInitialModule(RB:GetName());

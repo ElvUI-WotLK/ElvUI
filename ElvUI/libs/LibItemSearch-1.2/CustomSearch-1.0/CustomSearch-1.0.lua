@@ -135,7 +135,7 @@ function Lib:Find(search, ...)
 		local text = select(i, ...)
 		
 		if(text) then
-			if(self:Clean(text):find(search)) then
+			if(self:Clean(text):find(search, nil, true)) then
 				return true
 			end
 		end
