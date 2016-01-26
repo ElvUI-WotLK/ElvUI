@@ -35,7 +35,7 @@ local function UpdateCoords(self)
 	
 	local coordX, coordY = E:GetXYOffset(nudgeInversePoint, 1);
 	ElvUIMoverNudgeWindow:ClearAllPoints();
-	ElvUIMoverNudgeWindow:SetPoint(nudgePoint, mover, nudgeInversePoint, coordX, coordY);
+	ElvUIMoverNudgeWindow:Point(nudgePoint, mover, nudgeInversePoint, coordX, coordY);
 	E:UpdateNudgeFrame(mover, x, y);
 end
 
@@ -55,8 +55,8 @@ local function CreateMover(parent, name, text, overlay, snapOffset, postdrag)
 	f:RegisterForDrag("LeftButton", "RightButton");
 	f:EnableMouseWheel(true);
 	f:SetMovable(true);
-	f:SetWidth(parent:GetWidth())
-	f:SetHeight(parent:GetHeight())
+	f:Width(parent:GetWidth())
+	f:Height(parent:GetHeight())
 	f:SetTemplate("Transparent", nil, nil, true);
 	f:Hide();
 	f.parent = parent
@@ -87,7 +87,7 @@ local function CreateMover(parent, name, text, overlay, snapOffset, postdrag)
 	
 	if E.db['movers'] and E.db['movers'][name] then
 		if type(E.db['movers'][name]) == 'table' then
-			f:SetPoint(E.db["movers"][name]["p"], E.UIParent, E.db["movers"][name]["p2"], E.db["movers"][name]["p3"], E.db["movers"][name]["p4"])
+			f:Point(E.db["movers"][name]["p"], E.UIParent, E.db["movers"][name]["p2"], E.db["movers"][name]["p3"], E.db["movers"][name]["p4"])
 			E.db['movers'][name] = GetPoint(f)
 			f:ClearAllPoints()
 		end
@@ -100,10 +100,10 @@ local function CreateMover(parent, name, text, overlay, snapOffset, postdrag)
 			delim = ",";
 		end
 		local point, anchor, secondaryPoint, x, y = split(delim, anchorString);
-		f:SetPoint(point, anchor, secondaryPoint, x, y)
+		f:Point(point, anchor, secondaryPoint, x, y)
 	else
 
-		f:SetPoint(point, anchor, secondaryPoint, x, y)
+		f:Point(point, anchor, secondaryPoint, x, y)
 	end
 	
 	local function OnDragStart(self)
@@ -127,41 +127,20 @@ local function CreateMover(parent, name, text, overlay, snapOffset, postdrag)
 		else
 			self:StopMovingOrSizing()
 		end
-
-		--[[
-			okay i'm too drunk to figure this out in my head, i need to adjust this so moving a mover to the topleft topright or bottomright corners of the screen calculates the point from their respective areas
-			instead of the bottomleft always, this way moving a raid group to the topleft corner of the screen will cause the raid group to spawn to the right and down
-			
-			GetLeft(), GetTop(), GetRight(), GetBottom() all return values based on on the bottomleft corner of the screen
-			
-			top:
-				need to calculate the distance from this point to the very top of the screen then make it negative
-				-(screenHeight - 846)
-				OMG YAY IT WORKS!!! NOW LETS TRY FOR THE RIGHT SIDE
-				
-			right:
-				need to calculate the distance from this point to the far right of the screen then make it negative
-				YAY SAME FORMULAR WORKS!@!
-				
-		]]
 		
 		local x, y, point = E:CalculateMoverPoints(self);
 		
 		if self.positionOverride then
 			self.parent:ClearAllPoints()
 			self.parent:Point(self.positionOverride, self, self.positionOverride)
-			
-			self:ClearAllPoints()
-			self:Point(self.positionOverride, E.UIParent, "BOTTOMLEFT", x, y)
-		else
-			self:ClearAllPoints()
-			self:Point(point, E.UIParent, point, x, y)
 		end
+		self:ClearAllPoints()
+		self:Point(point, E.UIParent, point, x, y)
 		
 		E:SaveMoverPosition(name)
 
 		if ElvUIMoverNudgeWindow then
-			E:UpdateNudgeFrame(self)
+			E:UpdateNudgeFrame(self, x, y);
 		end
 		
 		coordFrame.child = nil
@@ -201,6 +180,7 @@ local function CreateMover(parent, name, text, overlay, snapOffset, postdrag)
 		if isDragging then return end
 		self.text:SetTextColor(unpack(E["media"].rgbvaluecolor))
 	end
+	
 	local function OnShow(self)
 		self:SetBackdropBorderColor(unpack(E["media"].rgbvaluecolor))
 	end
@@ -226,7 +206,7 @@ local function CreateMover(parent, name, text, overlay, snapOffset, postdrag)
 	parent.mover = f;
 	
 	parent:ClearAllPoints();
-	parent:SetPoint(point, f, 0, 0);
+	parent:Point(point, f, 0, 0);
 
 	if postdrag ~= nil and type(postdrag) == 'function' then
 		f:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -274,7 +254,7 @@ function E:CalculateMoverPoints(mover, nudgeX, nudgeY)
 		x = x - screenCenter;
 	end
 	
-	if(mover.positionOverride) then
+	--[[if(mover.positionOverride) then
 		if(mover.positionOverride == "TOPLEFT") then
 			x = mover:GetLeft() - E.diffGetLeft;
 			y = mover:GetTop() - E.diffGetTop;
@@ -288,7 +268,7 @@ function E:CalculateMoverPoints(mover, nudgeX, nudgeY)
 			x = mover:GetRight() - E.diffGetRight;
 			y = mover:GetBottom() - E.diffGetBottom;
 		end
-	end
+	end]]
 	
 	x = x + (nudgeX or 0);
 	y = y + (nudgeY or 0);
