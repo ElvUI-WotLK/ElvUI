@@ -30,7 +30,7 @@ function UF:Update_TargetTargetTargetFrame(frame, db)
 	local SPACING = E.Spacing;
 	local UNIT_WIDTH = db.width;
 	local UNIT_HEIGHT = db.height;
-	local SHADOW_SPACING = E.PixelMode and 3 or 4;
+	local SHADOW_SPACING = BORDER*4;
 	local USE_POWERBAR = db.power.enable;
 	local USE_MINI_POWERBAR = db.power.width == "spaced" and USE_POWERBAR;
 	local USE_INSET_POWERBAR = db.power.width == "inset" and USE_POWERBAR;
@@ -139,7 +139,7 @@ function UF:Update_TargetTargetTargetFrame(frame, db)
 				power:SetFrameStrata("MEDIUM");
 				power:SetFrameLevel(frame:GetFrameLevel() + 3);
 			else
-				power:Point("TOPLEFT", frame.Health.backdrop, "BOTTOMLEFT", BORDER, -(E.PixelMode and 0 or (BORDER + SPACING)));
+				power:Point("TOPLEFT", frame.Health.backdrop, "BOTTOMLEFT", BORDER, -(SPACING*3));
 				power:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -BORDER, BORDER);
 			end
 		elseif(frame:IsElementEnabled("Power")) then
@@ -217,7 +217,7 @@ function UF:Update_TargetTargetTargetFrame(frame, db)
 		local x, y = E:GetXYOffset(db.buffs.anchorPoint);
 		local attachTo = self:GetAuraAnchorFrame(frame, db.buffs.attachTo);
 		
-		buffs:Point(E.InversePoints[db.buffs.anchorPoint], attachTo, db.buffs.anchorPoint, x + db.buffs.xOffset, y + db.buffs.yOffset + (E.PixelMode and (db.buffs.anchorPoint:find("TOP") and -1 or 1) or 0));
+		buffs:Point(E.InversePoints[db.buffs.anchorPoint], attachTo, db.buffs.anchorPoint, x + db.buffs.xOffset, y + db.buffs.yOffset + (db.buffs.anchorPoint:find("TOP") and (BORDER + SPACING*2) or (BORDER + SPACING*2)));
 		buffs:Height(buffs.size * rows);
 		buffs["growth-y"] = db.buffs.anchorPoint:find("TOP") and "UP" or "DOWN"
 		buffs["growth-x"] = db.buffs.anchorPoint == "LEFT" and "LEFT" or  db.buffs.anchorPoint == "RIGHT" and "RIGHT" or (db.buffs.anchorPoint:find("LEFT") and "RIGHT" or "LEFT");
@@ -229,7 +229,7 @@ function UF:Update_TargetTargetTargetFrame(frame, db)
 		buffs.point = E.InversePoints[db.buffs.anchorPoint];
 		buffs.anchorPoint = db.buffs.anchorPoint;
 		buffs.xOffset = x + db.buffs.xOffset;
-		buffs.yOffset = y + db.buffs.yOffset + (E.PixelMode and (db.buffs.anchorPoint:find("TOP") and -1 or 1) or 0);
+		buffs.yOffset = y + db.buffs.yOffset + (db.buffs.anchorPoint:find("TOP") and (BORDER + SPACING*2) or (BORDER + SPACING*2));
 		
 		if(db.buffs.enable) then
 			buffs:Show();

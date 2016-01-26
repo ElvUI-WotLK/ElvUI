@@ -75,7 +75,7 @@ function UF:UpdatePlayerFrameAnchors(frame, isShown)
 	local POWERBAR_DETACHED = db.power.detachedFromFrame;
 	local SPACING = E.Spacing;
 	local BORDER = E.Border;
-	local SHADOW_SPACING = E.PixelMode and 3 or 4;
+	local SHADOW_SPACING = BORDER*4;
 	
 	if(not USE_POWERBAR) then
 		POWERBAR_HEIGHT = 0;
@@ -140,9 +140,9 @@ function UF:UpdatePlayerFrameAnchors(frame, isShown)
 			end
 			
 			if(USE_MINI_POWERBAR or USE_POWERBAR_OFFSET or USE_INSET_POWERBAR or not USE_POWERBAR or USE_INSET_POWERBAR or POWERBAR_DETACHED) then
-				portrait.backdrop:Point("BOTTOMRIGHT", frame.Health.backdrop, "BOTTOMLEFT", E.PixelMode and 1 or -SPACING, 0);
+				portrait.backdrop:Point("BOTTOMRIGHT", frame.Health.backdrop, "BOTTOMLEFT", BORDER - SPACING*2, 0);
 			else
-				portrait.backdrop:Point("BOTTOMRIGHT", frame.Power.backdrop, "BOTTOMLEFT", E.PixelMode and 1 or -SPACING, 0);
+				portrait.backdrop:Point("BOTTOMRIGHT", frame.Power.backdrop, "BOTTOMLEFT", BORDER - SPACING*2, 0);
 			end
 		end
 	else
@@ -198,7 +198,7 @@ function UF:Update_PlayerFrame(frame, db)
 	
 	local BORDER = E.Border;
 	local SPACING = E.Spacing;
-	local SHADOW_SPACING = E.PixelMode and 3 or 4;
+	local SHADOW_SPACING = BORDER*4;
 	local UNIT_WIDTH = db.width;
 	local UNIT_HEIGHT = db.height;
 	
@@ -460,7 +460,7 @@ function UF:Update_PlayerFrame(frame, db)
 				power:SetFrameStrata("MEDIUM");
 				power:SetFrameLevel(frame:GetFrameLevel() + 3);
 			else
-				power:Point("TOPLEFT", frame.Health.backdrop, "BOTTOMLEFT", BORDER, -(E.PixelMode and 0 or (BORDER + SPACING)));
+				power:Point("TOPLEFT", frame.Health.backdrop, "BOTTOMLEFT", BORDER, -(SPACING*3));
 				power:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -BORDER, BORDER);
 			end
 			
@@ -540,9 +540,9 @@ function UF:Update_PlayerFrame(frame, db)
 					end
 					
 					if(USE_MINI_POWERBAR or USE_POWERBAR_OFFSET or not USE_POWERBAR or USE_INSET_POWERBAR or POWERBAR_DETACHED) then
-						portrait.backdrop:Point("BOTTOMRIGHT", frame.Health.backdrop, "BOTTOMLEFT", E.PixelMode and 1 or -SPACING, 0);
+						portrait.backdrop:Point("BOTTOMRIGHT", frame.Health.backdrop, "BOTTOMLEFT", BORDER - SPACING*2, 0);
 					else
-						portrait.backdrop:Point("BOTTOMRIGHT", frame.Power.backdrop, "BOTTOMLEFT", E.PixelMode and 1 or -SPACING, 0);
+						portrait.backdrop:Point("BOTTOMRIGHT", frame.Power.backdrop, "BOTTOMLEFT", BORDER - SPACING*2, 0);
 					end
 					
 					portrait:Point("BOTTOMLEFT", portrait.backdrop, "BOTTOMLEFT", BORDER, BORDER);
@@ -604,7 +604,7 @@ function UF:Update_PlayerFrame(frame, db)
 		local x, y = E:GetXYOffset(db.buffs.anchorPoint);
 		local attachTo = self:GetAuraAnchorFrame(frame, db.buffs.attachTo);
 		
-		buffs:Point(E.InversePoints[db.buffs.anchorPoint], attachTo, db.buffs.anchorPoint, x + db.buffs.xOffset, y + db.buffs.yOffset + (E.PixelMode and (db.buffs.anchorPoint:find("TOP") and -1 or 1) or 0));
+		buffs:Point(E.InversePoints[db.buffs.anchorPoint], attachTo, db.buffs.anchorPoint, x + db.buffs.xOffset, y + db.buffs.yOffset + (db.buffs.anchorPoint:find("TOP") and (-BORDER + SPACING*2) or (BORDER + SPACING*2)));
 		buffs:Height(buffs.size * rows);
 		buffs["growth-y"] = db.buffs.anchorPoint:find("TOP") and "UP" or "DOWN";
 		buffs["growth-x"] = db.buffs.anchorPoint == "LEFT" and "LEFT" or  db.buffs.anchorPoint == "RIGHT" and "RIGHT" or (db.buffs.anchorPoint:find("LEFT") and "RIGHT" or "LEFT");
@@ -616,7 +616,7 @@ function UF:Update_PlayerFrame(frame, db)
 		buffs.point = E.InversePoints[db.buffs.anchorPoint];
 		buffs.anchorPoint = db.buffs.anchorPoint;
 		buffs.xOffset = x + db.buffs.xOffset;
-		buffs.yOffset = y + db.buffs.yOffset + (E.PixelMode and (db.buffs.anchorPoint:find("TOP") and -1 or 1) or 0);
+		buffs.yOffset = y + db.buffs.yOffset + (db.buffs.anchorPoint:find("TOP") and -(SPACING*2) or SPACING*2);
 		
 		if(db.buffs.enable) then
 			buffs:Show();
@@ -762,7 +762,7 @@ function UF:Update_PlayerFrame(frame, db)
 				end
 			elseif(not db.classbar.detachFromFrame) then
 				bars:ClearAllPoints();
-				bars:Point("BOTTOMLEFT", frame.Health.backdrop, "TOPLEFT", BORDER, (E.PixelMode and 0 or (BORDER + SPACING)));
+				bars:Point("BOTTOMLEFT", frame.Health.backdrop, "TOPLEFT", BORDER, SPACING*3);
 				bars:SetFrameStrata("LOW");
 				
 				if(bars.mover) then
@@ -774,7 +774,7 @@ function UF:Update_PlayerFrame(frame, db)
 				
 				if(not bars.mover) then
 					bars:Width(CLASSBAR_WIDTH);
-					bars:Height(CLASSBAR_HEIGHT - (E.PixelMode and 1 or 4));
+					bars:Height(CLASSBAR_HEIGHT - (BORDER + SPACING*2));
 					bars:ClearAllPoints();
 					bars:Point("BOTTOM", E.UIParent, "BOTTOM", 0, 150);
 					E:CreateMover(bars, "ClassBarMover", L["Classbar"], nil, nil, nil, "ALL,SOLO");
@@ -789,7 +789,7 @@ function UF:Update_PlayerFrame(frame, db)
 			end
 			
 			bars:Width(CLASSBAR_WIDTH);
-			bars:Height(CLASSBAR_HEIGHT - (E.PixelMode and 1 or 4));
+			bars:Height(CLASSBAR_HEIGHT - (BORDER + SPACING*2));
 			
 			if(E.myclass ~= "DRUID") then
 				for i = 1, MAX_CLASS_BAR do
@@ -917,19 +917,16 @@ function UF:Update_PlayerFrame(frame, db)
 				anchorPoint, anchorTo = "TOP", "BOTTOM";
 			end
 			
-			local yOffset = 0;
-			if(E.PixelMode) then
-				if(db.aurabar.anchorPoint == "BELOW") then
-					yOffset = 1;
-				else
-					yOffset = -1;
-				end
+			if(db.aurabar.anchorPoint == "BELOW") then
+				yOffset = BORDER - SPACING*2;
+			else
+				yOffset = -BORDER + SPACING*2;
 			end
 			
 			auraBars.auraBarHeight = db.aurabar.height;
 			auraBars:ClearAllPoints();
-			auraBars:SetPoint(anchorPoint.."LEFT", attachTo, anchorTo.."LEFT", (attachTo == frame and anchorTo == "BOTTOM") and POWERBAR_OFFSET or 0, E.PixelMode and anchorPoint ==  -1 or yOffset);
-			auraBars:SetPoint(anchorPoint.."RIGHT", attachTo, anchorTo.."RIGHT", attachTo == frame and POWERBAR_OFFSET * (anchorTo == "BOTTOM" and 0 or -1) or 0, E.PixelMode and -1 or yOffset);
+			auraBars:Point(anchorPoint .. "LEFT", attachTo, anchorTo .. "LEFT", (attachTo == frame and anchorTo == "BOTTOM") and POWERBAR_OFFSET or 0, yOffset);
+			auraBars:Point(anchorPoint .. "RIGHT", attachTo, anchorTo .. "RIGHT", attachTo == frame and POWERBAR_OFFSET * (anchorTo == "BOTTOM" and 0 or -1) or 0, yOffset);
 			auraBars.buffColor = {buffColor.r, buffColor.g, buffColor.b};
 			if(UF.db.colors.auraBarByType) then
 				auraBars.debuffColor = nil;

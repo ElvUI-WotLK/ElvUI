@@ -20,6 +20,13 @@ function UF:Construct_TankFrames(unitGroup)
 	self.RaidIcon = UF:Construct_RaidIcon(self);
 	self.Range = UF:Construct_Range(self);
 	
+	if(not self.isChild) then
+		self.Buffs = UF:Construct_Buffs(self);
+		self.Debuffs = UF:Construct_Debuffs(self);
+		self.AuraWatch = UF:Construct_AuraWatch(self);
+		self.DebuffHighlight = UF:Construct_DebuffHighlight(self);
+	end
+	
 	UF:Update_TankFrames(self, E.db["unitframe"]["units"]["tank"]);
 	UF:Update_StatusBars();
 	UF:Update_FontStrings();
@@ -62,7 +69,8 @@ end
 function UF:Update_TankFrames(frame, db)
 	local BORDER = E.Border;
 	local SPACING = E.Spacing;
-	local SHADOW_SPACING = E.PixelMode and 3 or 4;
+	local SHADOW_SPACING = BORDER*4;
+	local UNIT_WIDTH = db.width;
 	frame.colors = ElvUF.colors;
 	frame.Range.outsideAlpha = E.db.unitframe.OORAlpha;
 	frame:RegisterForClicks(self.db.targetOnMouseDown and "AnyDown" or "AnyUp");
@@ -153,22 +161,6 @@ function UF:Update_TankFrames(frame, db)
 	end
 	
 	do
-		local RI = frame.RaidIcon;
-		if db.raidicon.enable then
-			frame:EnableElement("RaidIcon");
-			RI:Show();
-			RI:Size(db.raidicon.size);
-			
-			local x, y = self:GetPositionOffset(db.raidicon.attachTo);
-			RI:ClearAllPoints();
-			RI:Point(db.raidicon.attachTo, frame, db.raidicon.attachTo, x + db.raidicon.xOffset, y + db.raidicon.yOffset);
-		else
-			frame:DisableElement("RaidIcon");
-			RI:Hide();
-		end
-	end
-	
-	do
 		local range = frame.Range;
 		if(db.rangeCheck) then
 			if(not frame:IsElementEnabled("Range")) then
@@ -181,6 +173,97 @@ function UF:Update_TankFrames(frame, db)
 				frame:DisableElement("Range");
 			end
 		end
+	end
+	
+	if(not frame.isChild) then
+		do
+			if(db.debuffs.enable or db.buffs.enable) then
+				frame:EnableElement("Aura");
+			else
+				frame:DisableElement("Aura");
+			end
+			
+			frame.Buffs:ClearAllPoints();
+			frame.Debuffs:ClearAllPoints();
+		end
+		
+		do
+			local buffs = frame.Buffs;
+			local rows = db.buffs.numrows;
+			
+			buffs:Width(UNIT_WIDTH);
+			buffs.forceShow = frame.forceShowAuras;
+			buffs.num = db.buffs.perrow * rows;
+			buffs.size = db.buffs.sizeOverride ~= 0 and db.buffs.sizeOverride or ((((buffs:GetWidth() - (buffs.spacing*(buffs.num/rows - 1))) / buffs.num)) * rows);
+			
+			if(db.buffs.sizeOverride and db.buffs.sizeOverride > 0) then
+				buffs:Width(db.buffs.perrow * db.buffs.sizeOverride);
+			end
+			
+			local x, y = E:GetXYOffset(db.buffs.anchorPoint);
+			local attachTo = self:GetAuraAnchorFrame(frame, db.buffs.attachTo);
+			
+			buffs:Point(E.InversePoints[db.buffs.anchorPoint], attachTo, db.buffs.anchorPoint, x + db.buffs.xOffset, y + db.buffs.yOffset + (db.buffs.anchorPoint:find("TOP") and -(BORDER + SPACING*2) or (BORDER + SPACING*2)));
+			buffs:Height(buffs.size * rows);
+			buffs["growth-y"] = db.buffs.anchorPoint:find("TOP") and "UP" or "DOWN";
+			buffs["growth-x"] = db.buffs.anchorPoint == "LEFT" and "LEFT" or  db.buffs.anchorPoint == "RIGHT" and "RIGHT" or (db.buffs.anchorPoint:find("LEFT") and "RIGHT" or "LEFT");
+			buffs.initialAnchor = E.InversePoints[db.buffs.anchorPoint];
+			
+			if(db.buffs.enable) then
+				buffs:Show();
+				UF:UpdateAuraIconSettings(buffs);
+			else
+				buffs:Hide();
+			end
+		end
+		
+		do
+			local debuffs = frame.Debuffs;
+			local rows = db.debuffs.numrows;
+			
+			debuffs:Width(UNIT_WIDTH);
+			debuffs.forceShow = frame.forceShowAuras;
+			debuffs.num = db.debuffs.perrow * rows;
+			debuffs.size = db.debuffs.sizeOverride ~= 0 and db.debuffs.sizeOverride or ((((debuffs:GetWidth() - (debuffs.spacing*(debuffs.num/rows - 1))) / debuffs.num)) * rows);
+			
+			if(db.debuffs.sizeOverride and db.debuffs.sizeOverride > 0) then
+				debuffs:Width(db.debuffs.perrow * db.debuffs.sizeOverride);
+			end
+			
+			local x, y = E:GetXYOffset(db.debuffs.anchorPoint);
+			local attachTo = self:GetAuraAnchorFrame(frame, db.debuffs.attachTo, db.debuffs.attachTo == "BUFFS" and db.buffs.attachTo == "DEBUFFS");
+			
+			debuffs:Point(E.InversePoints[db.debuffs.anchorPoint], attachTo, db.debuffs.anchorPoint, x + db.debuffs.xOffset, y + db.debuffs.yOffset);
+			debuffs:Height(debuffs.size * rows);
+			debuffs["growth-y"] = db.debuffs.anchorPoint:find("TOP") and "UP" or "DOWN";
+			debuffs["growth-x"] = db.debuffs.anchorPoint == "LEFT" and "LEFT" or  db.debuffs.anchorPoint == "RIGHT" and "RIGHT" or (db.debuffs.anchorPoint:find("LEFT") and "RIGHT" or "LEFT");
+			debuffs.initialAnchor = E.InversePoints[db.debuffs.anchorPoint];
+			
+			if(db.debuffs.enable) then
+				debuffs:Show();
+				UF:UpdateAuraIconSettings(debuffs);
+			else
+				debuffs:Hide();
+			end
+		end
+		
+		do
+			local dbh = frame.DebuffHighlight;
+			if(E.db.unitframe.debuffHighlighting ~= "NONE" and not db.disableDebuffHighlight) then
+				frame:EnableElement("DebuffHighlight");
+				frame.DebuffHighlightFilterTable = E.global.unitframe.DebuffHighlightColors;
+				if(E.db.unitframe.debuffHighlighting == "GLOW") then
+					frame.DebuffHighlightBackdrop = true;
+					frame.DBHGlow:SetAllPoints(frame.Threat.glow);
+				else
+					frame.DebuffHighlightBackdrop = false;
+				end		
+			else
+				frame:DisableElement("DebuffHighlight");
+			end
+		end
+		
+		UF:UpdateAuraWatch(frame);
 	end
 	
 	UF:ToggleTransparentStatusBar(UF.db.colors.transparentHealth, frame.Health, frame.Health.bg, true);

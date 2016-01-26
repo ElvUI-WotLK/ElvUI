@@ -90,7 +90,7 @@ function UF:Update_RaidpetFrames(frame, db)
 	frame.db = db;
 	local BORDER = E.Border;
 	local SPACING = E.Spacing;
-	local SHADOW_SPACING = E.PixelMode and 3 or 4;
+	local SHADOW_SPACING = BORDER*4;
 	local UNIT_WIDTH = db.width;
 	local UNIT_HEIGHT = db.height;
 	
@@ -223,7 +223,7 @@ function UF:Update_RaidpetFrames(frame, db)
 		local x, y = E:GetXYOffset(db.buffs.anchorPoint);
 		local attachTo = self:GetAuraAnchorFrame(frame, db.buffs.attachTo);
 		
-		buffs:Point(E.InversePoints[db.buffs.anchorPoint], attachTo, db.buffs.anchorPoint, x + db.buffs.xOffset, y + db.buffs.yOffset + (E.PixelMode and (db.buffs.anchorPoint:find("TOP") and -1 or 1) or 0));
+		buffs:Point(E.InversePoints[db.buffs.anchorPoint], attachTo, db.buffs.anchorPoint, x + db.buffs.xOffset, y + db.buffs.yOffset + (db.buffs.anchorPoint:find("TOP") and (BORDER + SPACING*2) or (BORDER + SPACING*2)));
 		buffs:Height(buffs.size * rows);
 		buffs["growth-y"] = db.buffs.anchorPoint:find("TOP") and "UP" or "DOWN"
 		buffs["growth-x"] = db.buffs.anchorPoint == "LEFT" and "LEFT" or  db.buffs.anchorPoint == "RIGHT" and "RIGHT" or (db.buffs.anchorPoint:find("LEFT") and "RIGHT" or "LEFT");

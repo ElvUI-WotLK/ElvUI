@@ -285,11 +285,11 @@ function RB:Initialize()
 	frame:SetTemplate('Default');
 	frame:Width(E.RBRWidth);
 	if(E.db.general.reminder.position == "LEFT") then
-		frame:Point("TOPRIGHT", Minimap.backdrop, "TOPLEFT", (E.PixelMode and 1 or -1), 0);
-		frame:Point("BOTTOMRIGHT", Minimap.backdrop, "BOTTOMLEFT", (E.PixelMode and 1 or -1), 0);
+		frame:Point('TOPRIGHT', Minimap.backdrop, 'TOPLEFT', E.Border - E.Spacing*3, 0);
+		frame:Point('BOTTOMRIGHT', Minimap.backdrop, 'BOTTOMLEFT', E.Border - E.Spacing*3, 0);
 	else
-		frame:Point("TOPLEFT", Minimap.backdrop, "TOPRIGHT", (E.PixelMode and -1 or 1), 0);
-		frame:Point("BOTTOMLEFT", Minimap.backdrop, "BOTTOMRIGHT", (E.PixelMode and -1 or 1), 0);
+		frame:Point('TOPLEFT', Minimap.backdrop, 'TOPRIGHT', -E.Border + E.Spacing*3, 0);
+		frame:Point('BOTTOMLEFT', Minimap.backdrop, 'BOTTOMRIGHT', -E.Border + E.Spacing*3, 0);
 	end
 	self.frame = frame;
 	

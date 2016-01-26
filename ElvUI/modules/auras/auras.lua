@@ -440,11 +440,11 @@ function A:Initialize()
 	self.db = E.db.auras;
 	
 	self.BuffFrame = self:CreateAuraHeader('HELPFUL')
-	self.BuffFrame:SetPoint('TOPRIGHT', Minimap, 'TOPLEFT', -8, 0);
+	self.BuffFrame:Point("TOPRIGHT", MMHolder, "TOPLEFT", -(6 + E.Border), -E.Border - E.Spacing);
 	E:CreateMover(self.BuffFrame, 'BuffsMover', L['Player Buffs']);
 	
 	self.DebuffFrame = self:CreateAuraHeader('HARMFUL');
-	self.DebuffFrame:SetPoint('BOTTOMRIGHT', LeftMiniPanel, 'BOTTOMLEFT', -(6 + E.Border), 0);
+	self.DebuffFrame:Point("BOTTOMRIGHT", MMHolder, "BOTTOMLEFT", -(6 + E.Border), E.Border + E.Spacing);
 	E:CreateMover(self.DebuffFrame, 'DebuffsMover', L['Player Debuffs']);
 end
 
