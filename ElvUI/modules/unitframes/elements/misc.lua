@@ -524,8 +524,8 @@ function UF:UpdateAuraWatch(frame, db)
 					icon.count:SetPoint("CENTER", unpack(counterOffsets[buffs[i].point]));
 				end
 				
-				icon.count:FontTemplate(unitframeFont, db.fontSize, "OUTLINE");
-				icon.text:FontTemplate(unitframeFont, db.fontSize, "OUTLINE");
+				icon.count:FontTemplate(unitframeFont, db.fontSize, E.db["unitframe"].fontOutline);
+				icon.text:FontTemplate(unitframeFont, db.fontSize, E.db["unitframe"].fontOutline);
 				icon.text:ClearAllPoints();
 				icon.text:SetPoint(buffs[i].point, icon, buffs[i].point);
 				

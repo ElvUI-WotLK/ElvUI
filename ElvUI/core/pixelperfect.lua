@@ -54,7 +54,8 @@ function E:UIScale(event)
 	end
 	
 	self.mult = 768/match(GetCVar("gxResolution"), "%d+x(%d+)")/scale;
-
+	self.Spacing = self.PixelMode and 0 or self.mult;
+	self.Border = (self.PixelMode and self.mult or self.mult*2);
 	--Set UIScale, NOTE: SetCVar for UIScale can cause taints so only do this when we need to..
 	if E.Round and E:Round(UIParent:GetScale(), 5) ~= E:Round(scale, 5) and (event == 'PLAYER_LOGIN') then
 		SetCVar("useUiScale", 1);
@@ -95,7 +96,7 @@ function E:UIScale(event)
 		end
 		
 		self.UIParent:ClearAllPoints();
-		self.UIParent:SetPoint("CENTER");	
+		self.UIParent:Point("CENTER");	
 		
 		--[[self.diffGetLeft = E:Round(abs(UIParent:GetLeft() - self.UIParent:GetLeft()));
 		self.diffGetRight = E:Round(abs(UIParent:GetRight() - self.UIParent:GetRight()));

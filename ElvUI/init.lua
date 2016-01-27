@@ -73,7 +73,7 @@ function AddOn:OnInitialize()
 	end
 	
 	if self.private.general.pixelPerfect then
-		self.Border = 1;
+		self.Border = self.mult;
 		self.Spacing = 0;
 		self.PixelMode = true;
 	end
@@ -82,7 +82,7 @@ function AddOn:OnInitialize()
 	self:UpdateMedia();
 	
 	self:RegisterEvent('PLAYER_REGEN_DISABLED')
-	self:RegisterEvent('PLAYER_LOGIN', 'Initialize')
+	--self:RegisterEvent('PLAYER_LOGIN', 'Initialize')
 	self:Contruct_StaticPopups()	
 	self:InitializeInitialModules()
 	
@@ -90,6 +90,12 @@ function AddOn:OnInitialize()
 		self:StaticPopup_Show("TUKUI_ELVUI_INCOMPATIBLE")
 	end
 end
+
+local f = CreateFrame("Frame");
+f:RegisterEvent("PLAYER_LOGIN");
+f:SetScript("OnEvent", function()
+	AddOn:Initialize();
+end);
 
 function AddOn:PLAYER_REGEN_ENABLED()
 	self:ToggleConfig() 
