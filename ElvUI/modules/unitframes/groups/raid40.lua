@@ -127,7 +127,7 @@ function UF:Update_Raid40Frames(frame, db)
 	frame.db = db;
 	local BORDER = E.Border;
 	local SPACING = E.Spacing;
-	local SHADOW_SPACING = BORDER*4;
+	local SHADOW_SPACING = SPACING+3;
 	local UNIT_WIDTH = db.width;
 	local UNIT_HEIGHT = db.height;
 	

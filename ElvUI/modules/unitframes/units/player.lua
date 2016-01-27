@@ -75,7 +75,7 @@ function UF:UpdatePlayerFrameAnchors(frame, isShown)
 	local POWERBAR_DETACHED = db.power.detachedFromFrame;
 	local SPACING = E.Spacing;
 	local BORDER = E.Border;
-	local SHADOW_SPACING = BORDER*4;
+	local SHADOW_SPACING = SPACING+3;
 	
 	if(not USE_POWERBAR) then
 		POWERBAR_HEIGHT = 0;
@@ -198,7 +198,7 @@ function UF:Update_PlayerFrame(frame, db)
 	
 	local BORDER = E.Border;
 	local SPACING = E.Spacing;
-	local SHADOW_SPACING = BORDER*4;
+	local SHADOW_SPACING = SPACING+3;
 	local UNIT_WIDTH = db.width;
 	local UNIT_HEIGHT = db.height;
 	
