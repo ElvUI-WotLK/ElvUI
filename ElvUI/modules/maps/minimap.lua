@@ -141,10 +141,10 @@ function M:UpdateSettings()
 	end
 	
 	if(MMHolder) then
-		MMHolder:Width((Minimap:GetWidth() + (E.Border * 5)) + E.RBRWidth);
+		MMHolder:Width((Minimap:GetWidth() + E.Border + E.Spacing*3) +  E.RBRWidth);
 		
 		if(E.db.datatexts.minimapPanels) then
-			MMHolder:Height(Minimap:GetHeight() + 24 + E.Spacing*3);
+			MMHolder:Height(Minimap:GetHeight() + (LeftMiniPanel and (LeftMiniPanel:GetHeight() + E.Border) or 24) + E.Spacing*3);
 		else
 			MMHolder:Height(Minimap:GetHeight() + E.Border + E.Spacing*3);
 		end
@@ -198,9 +198,9 @@ function M:Initialize()
 	
 	Minimap:ClearAllPoints();
 	if(E.db.general.reminder.position == "LEFT") then
-		Minimap:Point("TOPRIGHT", mmholder, "TOPRIGHT", -2, -2);
+		Minimap:Point("TOPRIGHT", mmholder, "TOPRIGHT", -E.Border, -E.Border);
 	else
-		Minimap:Point("TOPLEFT", mmholder, "TOPLEFT", 2, -2);
+		Minimap:Point("TOPLEFT", mmholder, "TOPLEFT", E.Border, -E.Border);
 	end
 	Minimap:SetMaskTexture('Interface\\ChatFrame\\ChatFrameBackground');
 	Minimap:CreateBackdrop('Default');
