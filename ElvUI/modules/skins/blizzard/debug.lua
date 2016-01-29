@@ -32,11 +32,11 @@ local function LoadSkin()
 	end
 	
 	local bg = {
-	  bgFile = E["media"].normTex, 
-	  edgeFile = E["media"].blankTex, 
-	  tile = false, tileSize = 0, edgeSize = noscalemult, 
-	  insets = { left = -noscalemult, right = -noscalemult, top = -noscalemult, bottom = -noscalemult}
-	}
+		bgFile = E["media"].normTex,
+		edgeFile = E["media"].blankTex,
+		tile = false, tileSize = 0, edgeSize = noscalemult,
+		insets = { left = -noscalemult, right = -noscalemult, top = -noscalemult, bottom = -noscalemult}
+	};
 	
 	for i=1, ScriptErrorsFrame:GetNumChildren() do
 		local child = select(i, ScriptErrorsFrame:GetChildren())
@@ -48,11 +48,11 @@ local function LoadSkin()
 	FrameStackTooltip:HookScript("OnShow", function(self)
 		local noscalemult = E.mult * GetCVar('uiScale')
 		self:SetBackdrop({
-		  bgFile = E["media"].blankTex, 
-		  edgeFile = E["media"].blankTex, 
-		  tile = false, tileSize = 0, edgeSize = noscalemult, 
-		  insets = { left = -noscalemult, right = -noscalemult, top = -noscalemult, bottom = -noscalemult}
-		})
+			bgFile = E["media"].blankTex,
+			edgeFile = E["media"].blankTex,
+			tile = false, tileSize = 0, edgeSize = noscalemult,
+			insets = { left = -noscalemult, right = -noscalemult, top = -noscalemult, bottom = -noscalemult}
+		});
 		self:SetBackdropColor(unpack(E["media"].backdropfadecolor))
 		self:SetBackdropBorderColor(unpack(E["media"].bordercolor))
 	end)

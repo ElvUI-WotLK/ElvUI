@@ -162,6 +162,7 @@ function M:CreateBar(name, onEnter, ...)
 	bar.statusBar = CreateFrame('StatusBar', nil, bar)
 	bar.statusBar:SetInside()
 	bar.statusBar:SetStatusBarTexture(E.media.normTex)
+	E:RegisterStatusBar(bar.statusBar);
 	
 	bar.text = bar.statusBar:CreateFontString(nil, 'OVERLAY')
 	bar.text:FontTemplate()
@@ -233,8 +234,9 @@ function M:LoadExpRepBar()
 	self.expBar.rested = CreateFrame('StatusBar', nil, self.expBar)
 	self.expBar.rested:SetInside()
 	self.expBar.rested:SetStatusBarTexture(E.media.normTex)
-	self.expBar.rested:SetStatusBarColor(1, 0, 1, 0.2)
-
+	self.expBar.rested:SetStatusBarColor(1, 0, 1, 0.2);
+	E:RegisterStatusBar(self.expBar.rested);
+	
 	self.repBar = self:CreateBar("ElvUI_ReputationBar", ReputationBar_OnEnter, "RIGHT", RightChatPanel, "LEFT", E.Border - E.Spacing*3, 0);
 
 	self:UpdateExpRepDimensions()

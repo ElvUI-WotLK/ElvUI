@@ -41,7 +41,7 @@ local function LoadSkin()
 	hooksecurefunc('RaidClassButton_Update', function()
 		local button, icon, count;
 		for index, value in pairs(RAID_CLASS_BUTTONS) do
-			button  = _G['RaidClassButton'..value.button];
+			button = _G['RaidClassButton'..value.button];
 			count = _G['RaidClassButton'..value.button..'Count'];
 			icon = _G['RaidClassButton'..value.button..'IconTexture'];
 			
@@ -53,7 +53,7 @@ local function LoadSkin()
 				button.backdrop:Point('BOTTOMRIGHT', 3, -9);
 			end
 			
-			if ( button:GetID() ==  value.button ) then
+			if(button:GetID() == value.button) then
 				button.class = index;
 				if ( index == 'PETS' ) then
 					icon:SetTexture('Interface\\RaidFrame\\UI-RaidFrame-Pets');

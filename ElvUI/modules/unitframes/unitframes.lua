@@ -48,6 +48,8 @@ UF["badHeaderPoints"] = {
 	["RIGHT"] = "LEFT"
 };
 
+UF["headerFunctions"] = {};
+
 UF["classMaxResourceBar"] = {
 	["DEATHKNIGHT"] = 6,
 	["DRUID"] = 1,
@@ -448,7 +450,7 @@ function UF.groupPrototype:GetAttribute(name)
 	return self.groups[1]:GetAttribute(name);
 end
 
-function UF.groupPrototype:Configure_Groups()
+function UF.groupPrototype:Configure_Groups(self)
 	local db = UF.db.units[self.groupName];
 
 	local point;
@@ -518,14 +520,14 @@ function UF.groupPrototype:Configure_Groups()
 		if((i - 1) % db.groupsPerRowCol == 0) then
 			if(DIRECTION_TO_POINT[direction] == "LEFT" or DIRECTION_TO_POINT[direction] == "RIGHT") then
 				if(group) then
-					group:SetPoint(point, self, point, 0, height * yMult);
+					group:Point(point, self, point, 0, height * yMult);
 				end
 				height = height + (db.height + db.verticalSpacing + SPACING);
 				
 				newRows = newRows + 1;
 			else
 				if(group) then
-					group:SetPoint(point, self, point, width * xMult, 0);
+					group:Point(point, self, point, width * xMult, 0);
 				end
 				width = width + (db.width + db.horizontalSpacing + SPACING);
 				
@@ -535,22 +537,22 @@ function UF.groupPrototype:Configure_Groups()
 			if(DIRECTION_TO_POINT[direction] == "LEFT" or DIRECTION_TO_POINT[direction] == "RIGHT") then
 				if(newRows == 1) then
 					if(group) then
-						group:SetPoint(point, self, point, (width + (SPACING * 5)) * xMult, 0);
+						group:Point(point, self, point, (width + (SPACING * 5)) * xMult, 0);
 					end
 					width = width + ((db.width + db.horizontalSpacing + SPACING) * 5);
 					newCols = newCols + 1;
 				elseif(group) then
-					group:SetPoint(point, self, point, (((db.width + db.horizontalSpacing + SPACING) * 5) * ((i-1) % db.groupsPerRowCol)) * xMult, ((db.height + db.verticalSpacing + SPACING) * (newRows - 1)) * yMult);
+					group:Point(point, self, point, (((db.width + db.horizontalSpacing + SPACING) * 5) * ((i-1) % db.groupsPerRowCol)) * xMult, ((db.height + db.verticalSpacing + SPACING) * (newRows - 1)) * yMult);
 				end
 			else
 				if(newCols == 1) then
 					if(group) then
-						group:SetPoint(point, self, point, 0, (height + (SPACING*5)) * yMult);
+						group:Point(point, self, point, 0, (height + (SPACING*5)) * yMult);
 					end
 					height = height + ((db.height + db.verticalSpacing + SPACING) * 5);
 					newRows = newRows + 1;
 				elseif(group) then
-					group:SetPoint(point, self, point, ((db.width + db.horizontalSpacing + SPACING) * (newCols - 1)) * xMult, (((db.height + db.verticalSpacing + SPACING) * 5) * ((i-1) % db.groupsPerRowCol)) * yMult);
+					group:Point(point, self, point, ((db.width + db.horizontalSpacing + SPACING) * (newCols - 1)) * xMult, (((db.height + db.verticalSpacing + SPACING) * 5) * ((i-1) % db.groupsPerRowCol)) * yMult);
 				end
 			end
 		end
@@ -575,18 +577,17 @@ function UF.groupPrototype:Configure_Groups()
 	self:SetSize(width - db.horizontalSpacing, height - db.verticalSpacing);
 end
 
-function UF.groupPrototype:Update()
-	local groupName = self.groupName;
+function UF.groupPrototype:Update(self)
+	local group = self.groupName;
 
-	UF[groupName].db = UF.db["units"][groupName];
+	UF[group].db = UF.db["units"][group];
 	for i = 1, #self.groups do
-		local group = self.groups[i];
-		group.db = UF.db["units"][groupName];
-		group:Update();
+		self.groups[i].db = UF.db["units"][group];
+		self.groups[i]:Update();
 	end
 end
 
-function UF.groupPrototype:AdjustVisibility()
+function UF.groupPrototype:AdjustVisibility(self)
 	if(not self.isForced) then
 		local numGroups = self.numGroups;
 		for i = 1, #self.groups do
@@ -605,6 +606,7 @@ function UF.groupPrototype:AdjustVisibility()
 		end
 	end
 end
+
 
 function UF.headerPrototype:ClearChildPoints()
 	for i = 1, self:GetNumChildren() do
@@ -706,25 +708,26 @@ function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdat
 			
 			if(maxPlayers > 0) then
 				numGroups = E:Round(maxPlayers/5);
-				E:Print("Forcing maxGroups to: "..numGroups.." because maxPlayers is: "..maxPlayers);
+				E:Print("Forcing maxGroups to: " .. numGroups .. " because maxPlayers is: " .. maxPlayers);
 			end
 		end
 	end
 	
 	if(not self[group]) then
 		local stringTitle = E:StringTitle(group);
-		ElvUF:RegisterStyle("ElvUF_"..stringTitle, UF["Construct_"..stringTitle.."Frames"]);
+		ElvUF:RegisterStyle("ElvUF_"..stringTitle, UF["Construct_" .. stringTitle .. "Frames"]);
 		ElvUF:SetActiveStyle("ElvUF_"..stringTitle);
 		
 		if(db.numGroups) then
-			self[group] = CreateFrame("Frame", "ElvUF_"..stringTitle, E.UIParent, "SecureHandlerStateTemplate");
+			self[group] = CreateFrame("Frame", "ElvUF_" .. stringTitle, E.UIParent, "SecureHandlerStateTemplate");
 			self[group].groups = {};
 			self[group].groupName = group;
+			if not UF["headerFunctions"][group] then UF["headerFunctions"][group] = {}; end
 			for k, v in pairs(self.groupPrototype) do
-				self[group][k] = v;
+				UF["headerFunctions"][group][k] = v;
 			end
 		else
-			self[group] = self:CreateHeader(E.UIParent, groupFilter, "ElvUF_"..E:StringTitle(group), template, group, headerTemplate);
+			self[group] = self:CreateHeader(E.UIParent, groupFilter, "ElvUF_" .. E:StringTitle(group), template, group, headerTemplate);
 		end
 		
 		self[group].db = db;
@@ -742,29 +745,29 @@ function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdat
 
 		if(db.raidWideSorting) then
 			if(not self[group].groups[1]) then
-				self[group].groups[1] = self:CreateHeader(self[group], nil, "ElvUF_"..E:StringTitle(self[group].groupName).."Group1", template, nil, headerTemplate);
+				self[group].groups[1] = self:CreateHeader(self[group], nil, "ElvUF_"..E:StringTitle(self[group].groupName) .. "Group1", template, nil, headerTemplate);
 			end
 		else
 			while(numGroups > #self[group].groups) do
 				local index = tostring(#self[group].groups + 1);
-				tinsert(self[group].groups, self:CreateHeader(self[group], index, "ElvUF_"..E:StringTitle(self[group].groupName).."Group"..index, template, nil, headerTemplate));
+				tinsert(self[group].groups, self:CreateHeader(self[group], index, "ElvUF_" .. E:StringTitle(self[group].groupName) .. "Group" .. index, template, nil, headerTemplate));
 			end
 		end
 		
-		self[group]:AdjustVisibility();
+		UF["headerFunctions"][group]:AdjustVisibility(self[group]);
 		
 		if(headerUpdate or not self[group].mover) then
-			self[group]:Configure_Groups();
+			UF["headerFunctions"][group]:Configure_Groups(self[group]);
 			if(not self[group].isForced and not self[group].blockVisibilityChanges) then
 				RegisterStateDriver(self[group], "visibility", db.visibility);
 			end
 			
 			if(not self[group].mover) then
-				self[group]:Update();
+				UF["headerFunctions"][group]:Update(self[group]);
 			end
 		else
-			self[group]:Configure_Groups();
-			self[group]:Update();
+			UF["headerFunctions"][group]:Configure_Groups(self[group]);
+			UF["headerFunctions"][group]:Update(self[group]);
 		end
 
 		if(db.enable ~= true and group == "raidpet") then
@@ -775,25 +778,26 @@ function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdat
 	else
 		self[group].db = db;
 		
-		self[group].Update = function()
-			local db = self.db["units"][group];
-			if(db.enable ~= true) then 
-				UnregisterStateDriver(self[group], "visibility");
-				self[group]:Hide();
+		if not UF["headerFunctions"][group] then UF["headerFunctions"][group] = {}; end
+		UF["headerFunctions"][group]["Update"] = function()
+			local db = UF.db["units"][group];
+			if(db.enable ~= true) then
+				UnregisterAttributeDriver(UF[group], "visibility");
+				UF[group]:Hide();
 				return;
 			end
-			UF["Update_"..E:StringTitle(group).."Header"](self, self[group], db);
+			UF["Update_" .. E:StringTitle(group) .. "Header"](UF, UF[group], db);
 			
-			for i = 1, self[group]:GetNumChildren() do
-				local child = select(i, self[group]:GetChildren());
-				UF["Update_"..E:StringTitle(group).."Frames"](self, child, self.db["units"][group]);
+			for i = 1, UF[group]:GetNumChildren() do
+				local child = select(i, UF[group]:GetChildren());
+				UF["Update_" .. E:StringTitle(group) .. "Frames"](UF, child, UF.db["units"][group]);
 				
-				if(_G[child:GetName().."Target"]) then
-					UF["Update_"..E:StringTitle(group).."Frames"](self, _G[child:GetName().."Target"], self.db["units"][group]);
+				if _G[child:GetName() .. "Target"] then
+					UF["Update_" .. E:StringTitle(group) .. "Frames"](UF, _G[child:GetName() .. "Target"], UF.db["units"][group]);
 				end
 				
-				if(_G[child:GetName().."Pet"]) then
-					UF["Update_"..E:StringTitle(group).."Frames"](self, _G[child:GetName().."Pet"], self.db["units"][group]);
+				if _G[child:GetName() .. "Pet"] then
+					UF["Update_" .. E:StringTitle(group) .. "Frames"](UF, _G[child:GetName() .. "Pet"], UF.db["units"][group]);
 				end
 			end
 		end
@@ -801,7 +805,7 @@ function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdat
 		if(headerUpdate) then
 			UF["Update_"..E:StringTitle(group).."Header"](self, self[group], db);
 		else
-			self[group].Update();
+			UF["headerFunctions"][group]:Update(self[group]);
 		end
 	end
 end
@@ -885,7 +889,7 @@ function UF:UpdateAllHeaders(event)
 	
 	local smartRaidFilterEnabled = self.db.smartRaidFilter
 	for group, header in pairs(self["headers"]) do
-		header:Update();
+		UF["headerFunctions"][group]:Update(header);
 		
 		local shouldUpdateHeader;
 		if(header.numGroups == nil or smartRaidFilterEnabled) then

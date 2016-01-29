@@ -5,12 +5,12 @@ local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.lfr ~= true then return end
 	
 	local buttons = {
-	  "LFRQueueFrameFindGroupButton",
-	  "LFRQueueFrameAcceptCommentButton",
-	  "LFRBrowseFrameSendMessageButton",
-	  "LFRBrowseFrameInviteButton",
-	  "LFRBrowseFrameRefreshButton",
-	}
+		"LFRQueueFrameFindGroupButton",
+		"LFRQueueFrameAcceptCommentButton",
+		"LFRBrowseFrameSendMessageButton",
+		"LFRBrowseFrameInviteButton",
+		"LFRBrowseFrameRefreshButton"
+	};
 
 	LFRParentFrame:StripTextures()
 	LFRParentFrame:CreateBackdrop("Transparent")

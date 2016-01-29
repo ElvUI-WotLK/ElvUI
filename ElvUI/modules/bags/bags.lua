@@ -68,8 +68,8 @@ B.ProfessionColors = {
 	[0x0040] = {160/255, 3/255, 168/255}, -- Enchanting
 	[0x0080] = {232/255, 118/255, 46/255}, -- Engineering
 	[0x0200] = {8/255, 180/255, 207/255}, -- Gems
-	[0x0400] = {105/255, 79/255,  7/255}, -- Mining
-	[0x010000] = {222/255, 13/255,  65/255} -- Cooking
+	[0x0400] = {105/255, 79/255, 7/255}, -- Mining
+	[0x010000] = {222/255, 13/255, 65/255} -- Cooking
 }
 
 function B:GetContainerFrame(arg)
@@ -979,8 +979,7 @@ function B:ContructContainerFrame(name, isBank)
 		f.editBox:Point('RIGHT', f.purchaseBagButton, 'LEFT', -5, 0);
 		f.editBox:SetAutoFocus(false);
 		f.editBox:SetScript('OnEscapePressed', self.ResetAndClear);
-		f.editBox:SetScript('OnEnterPressed', self.ResetAndClear);
-		f.editBox:SetScript('OnEditFocusLost', self.ResetAndClear);
+		f.editBox:SetScript("OnEnterPressed", function(self) self:ClearFocus(); end);
 		f.editBox:SetScript('OnEditFocusGained', f.editBox.HighlightText);
 		f.editBox:SetScript('OnTextChanged', self.UpdateSearch);
 		f.editBox:SetScript('OnChar', self.UpdateSearch);
@@ -1077,8 +1076,7 @@ function B:ContructContainerFrame(name, isBank)
 		f.editBox:Point('RIGHT', f.vendorGraysButton, 'LEFT', -5, 0);
 		f.editBox:SetAutoFocus(false);
 		f.editBox:SetScript('OnEscapePressed', self.ResetAndClear);
-		f.editBox:SetScript('OnEnterPressed', self.ResetAndClear);
-		f.editBox:SetScript('OnEditFocusLost', self.ResetAndClear);
+		f.editBox:SetScript("OnEnterPressed", function(self) self:ClearFocus(); end);
 		f.editBox:SetScript('OnEditFocusGained', f.editBox.HighlightText);
 		f.editBox:SetScript('OnTextChanged', self.UpdateSearch);
 		f.editBox:SetScript('OnChar', self.UpdateSearch);

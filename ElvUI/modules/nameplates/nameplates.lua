@@ -762,7 +762,7 @@ function NP:HealthBar_OnValueChanged(value)
 	end
 end
 
-local green =  {r = 0, g = 1, b = 0};
+local green = {r = 0, g = 1, b = 0};
 function NP:CastBar_OnValueChanged(value)
 	local blizzPlate = self:GetParent();
 	local myPlate = NP.CreatedPlates[blizzPlate];
@@ -885,6 +885,7 @@ function NP:CreatePlate(frame)
 	myPlate.hiddenFrame:Hide();
 	
 	myPlate.healthBar = CreateFrame("StatusBar", nil, myPlate);
+	E:RegisterStatusBar(myPlate.healthBar);
 	myPlate.healthBar:SetPoint("BOTTOM", myPlate, "BOTTOM", 0, 5);
 	myPlate.healthBar:SetFrameStrata("BACKGROUND");
 	myPlate.healthBar:SetFrameLevel(0);
@@ -896,6 +897,7 @@ function NP:CreatePlate(frame)
 	myPlate.healthBar.text:SetJustifyH("CENTER");
 	
 	myPlate.castBar = CreateFrame("StatusBar", nil, myPlate);
+	E:RegisterStatusBar(myPlate.castBar);
 	myPlate.castBar:SetPoint("TOPLEFT", myPlate.healthBar, "BOTTOMLEFT", 0, -5);
 	myPlate.castBar:SetPoint("TOPRIGHT", myPlate.healthBar, "BOTTOMRIGHT", 0, -5);
 	myPlate.castBar:SetFrameStrata("BACKGROUND");
@@ -1405,7 +1407,7 @@ function NP:UNIT_AURA(event, unit)
 end
 
 function NP:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, ...)
-	local sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags, spellID, spellName, _, auraType, stackCount  = ...
+	local sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags, spellID, spellName, _, auraType, stackCount = ...;
 	
 	if event == "SPELL_AURA_APPLIED" or event == "SPELL_AURA_REFRESH" or event == "SPELL_AURA_APPLIED_DOSE" or event == "SPELL_AURA_REMOVED_DOSE" or event == "SPELL_AURA_BROKEN" or event == "SPELL_AURA_BROKEN_SPELL" or event == "SPELL_AURA_REMOVED" then
 		if event == "SPELL_AURA_APPLIED" or event == "SPELL_AURA_REFRESH" then
@@ -1428,7 +1430,7 @@ function NP:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, ...)
 		end
 
 		for iconName, bitmask in pairs(NP.RaidTargetReference) do
-			if band(destFlags, bitmask) > 0  then
+			if(band(destFlags, bitmask) > 0) then
 				NP.ByRaidIcon[iconName] = destGUID
 				raidIcon = iconName
 				break
@@ -1551,7 +1553,7 @@ function NP:UpdateIconGrid(frame, guid)
 	tsort(self.BuffCache, sortByExpiration)
 	tsort(self.DebuffCache, sortByExpiration)	
 
-	for index = 1,  #self.BuffCache do
+	for index = 1, #self.BuffCache do
 		local cachedaura = self.BuffCache[index]
 		if cachedaura.spellID and cachedaura.expiration then 
 			self:UpdateIcon(buffs.icons[BuffSlotIndex], cachedaura.texture, cachedaura.expiration, cachedaura.stacks) 
@@ -1563,7 +1565,7 @@ function NP:UpdateIconGrid(frame, guid)
 		end
 	end
 
-	for index = 1,  #self.DebuffCache do
+	for index = 1, #self.DebuffCache do
 		local cachedaura = self.DebuffCache[index]
 		if cachedaura.spellID and cachedaura.expiration then 
 			self:UpdateIcon(debuffs.icons[DebuffSlotIndex], cachedaura.texture, cachedaura.expiration, cachedaura.stacks) 

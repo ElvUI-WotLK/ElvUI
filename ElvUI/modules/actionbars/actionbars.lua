@@ -82,9 +82,9 @@ function AB:StyleButton(button, noBackdrop)
 	local count = _G[name.."Count"];
 	local flash	 = _G[name.."Flash"];
 	local hotkey = _G[name.."HotKey"];
-	local border  = _G[name.."Border"];
+	local border = _G[name.."Border"];
 	local macroName = _G[name.."Name"];
-	local normal  = _G[name.."NormalTexture"];
+	local normal = _G[name.."NormalTexture"];
 	local buttonCooldown = _G[name.."Cooldown"];
 	local normal2 = button:GetNormalTexture()
 	local combat = InCombatLockdown()

@@ -40,8 +40,9 @@ E.LSM = LSM;
 
 E["media"] = {};
 E["frames"] = {};
+E["statusBars"] = {};
 E["texts"] = {};
-E['snapBars'] = {};
+E["snapBars"] = {};
 E["RegisteredModules"] = {};
 E['RegisteredInitialModules'] = {};
 E['valueColorUpdateFuncs'] = {};
@@ -245,6 +246,20 @@ function E:UpdateFontTemplates()
 	end
 end
 
+function E:RegisterStatusBar(statusBar)
+	tinsert(self.statusBars, statusBar);
+end
+
+function E:UpdateStatusBars()
+	for _, statusBar in pairs(self.statusBars) do
+		if(statusBar and statusBar:GetObjectType() == "StatusBar") then
+			statusBar:SetStatusBarTexture(self.media.normTex);
+		elseif(statusBar and statusBar:GetObjectType() == "Texture") then
+			statusBar:SetTexture(self.media.normTex);
+		end
+	end
+end
+
 --This frame everything in ElvUI should be anchored to for Eyefinity support.
 E.UIParent = CreateFrame("Frame", "ElvUIParent", UIParent);
 E.UIParent:SetFrameLevel(UIParent:GetFrameLevel());
@@ -352,7 +367,7 @@ function E:RemoveTableDuplicates(cleanTable, checkTable)
 		E:Print("Bad argument #1 to 'RemoveTableDuplicates' (table expected)");
 		return;
 	end
-	if(type(checkTable) ~=  "table") then
+	if(type(checkTable) ~= "table") then
 		E:Print("Bad argument #2 to 'RemoveTableDuplicates' (table expected)");
 		return;
 	end
@@ -650,8 +665,11 @@ function E:UpdateAll(ignoreInstall)
 	
 	self:GetModule("Minimap"):UpdateSettings();
 	
-	self:UpdateBorderColors()
-	self:UpdateBackdropColors()
+	self:UpdateBorderColors();
+	self:UpdateBackdropColors();
+	
+	self:UpdateFrameTemplates();
+	self:UpdateStatusBars();
 	
 	local LO = E:GetModule("Layout");
 	LO:ToggleChatPanels();

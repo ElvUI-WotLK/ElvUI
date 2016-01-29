@@ -31,43 +31,43 @@ local overrideFuncs = {}
 local function createConfigEnv()
 	if( configEnv ) then return end
 	configEnv = setmetatable({
-		UnitPower = function (unit)
-			if (unit == "target") or (unit == "focus") then
-				return UnitPower(unit)
-			end
-
-			return random(1, UnitPowerMax(unit))
-		end,
-		UnitHealth = function(unit)
-			if (unit == "target") or (unit == "focus") then
-				return UnitHealth(unit)
-			end
-
-			return random(1, UnitHealthMax(unit))
-		end,
-		UnitName = function(unit)
-			if (unit == "target") or (unit == "focus") then
-				return UnitName(unit)
-			end
-			if E.CreditsList then
-				local max = #E.CreditsList
-				return E.CreditsList[random(1, max)]
-			end
-			return "Test Name"
-		end,
-		UnitClass = function(unit)
-			if (unit == "target") or (unit == "focus") then
-				return UnitClass(unit)
+		UnitPower = function (unit, displayType)
+			if(unit:find("target") or unit:find("focus")) then
+				return UnitPower(unit, displayType);
 			end
 			
-			local classToken = CLASS_SORT_ORDER[random(1, #(CLASS_SORT_ORDER))]
-			return LOCALIZED_CLASS_NAMES_MALE[classToken], classToken
+			return random(1, UnitPowerMax(unit, displayType) or 1);
+		end,
+		UnitHealth = function(unit)
+			if(unit:find("target") or unit:find("focus")) then
+				return UnitHealth(unit);
+			end
+			
+			return random(1, UnitHealthMax(unit));
+		end,
+		UnitName = function(unit)
+			if(unit:find("target") or unit:find("focus")) then
+				return UnitName(unit);
+			end
+			if(E.CreditsList) then
+				local max = #E.CreditsList;
+				return E.CreditsList[random(1, max)];
+			end
+			return "Test Name";
+		end,
+		UnitClass = function(unit)
+			if(unit:find("target") or unit:find("focus")) then
+				return UnitClass(unit);
+			end
+			
+			local classToken = CLASS_SORT_ORDER[random(1, #(CLASS_SORT_ORDER))];
+			return LOCALIZED_CLASS_NAMES_MALE[classToken], classToken;
 		end,
 		Hex = function(r, g, b)
-			if type(r) == "table" then
-				if r.r then r, g, b = r.r, r.g, r.b else r, g, b = unpack(r) end
+			if(type(r) == "table") then
+				if(r.r) then r, g, b = r.r, r.g, r.b; else r, g, b = unpack(r); end
 			end
-			return format("|cff%02x%02x%02x", r*255, g*255, b*255)
+			return format("|cff%02x%02x%02x", r*255, g*255, b*255);
 		end,
 		ColorGradient = ElvUF.ColorGradient,		
 	}, {
@@ -258,7 +258,7 @@ function UF:HeaderConfig(header, configMode)
 		end
 	end
 
-	header:AdjustVisibility()
+	UF["headerFunctions"][header.groupName]:AdjustVisibility(header);
 end
 
 function UF:PLAYER_REGEN_DISABLED()

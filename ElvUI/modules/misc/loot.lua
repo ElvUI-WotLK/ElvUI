@@ -273,7 +273,7 @@ function M:LoadLoot()
 	lootFrame:SetToplevel(true)	
 	lootFrame.title = lootFrame:CreateFontString(nil, 'OVERLAY')
 	lootFrame.title:FontTemplate(nil, nil, 'OUTLINE')
-	lootFrame.title:Point('BOTTOMLEFT', lootFrame, 'TOPLEFT', 0,  1)
+	lootFrame.title:Point("BOTTOMLEFT", lootFrame, "TOPLEFT", 0, 1);
 	lootFrame.slots = {}
 	lootFrame:SetScript('OnHide', function(self)
 		StaticPopup_Hide'CONFIRM_LOOT_DISTRIBUTION'

@@ -43,14 +43,14 @@ local function LoadSkin()
 	--Large
 	local function LargeSkin()
 		WorldMapFrame.backdrop:ClearAllPoints()
-		WorldMapFrame.backdrop:Point("TOPLEFT", WorldMapDetailFrame, "TOPLEFT", -10, 69)
-		WorldMapFrame.backdrop:Point("BOTTOMRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT", 13, -30)    
+		WorldMapFrame.backdrop:Point("TOPLEFT", WorldMapDetailFrame, "TOPLEFT", -10, 69);
+		WorldMapFrame.backdrop:Point("BOTTOMRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT", 13, -30);
 	end
 	
 	local function QuestSkin()
 		WorldMapFrame.backdrop:ClearAllPoints()
 		WorldMapFrame.backdrop:Point("TOPLEFT", WorldMapDetailFrame, "TOPLEFT", -10, 69)
-		WorldMapFrame.backdrop:Point("BOTTOMRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT", 322, -235)  
+		WorldMapFrame.backdrop:Point("BOTTOMRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT", 322, -235);
 		
 		if not WorldMapQuestDetailScrollFrame.backdrop then
 			WorldMapQuestDetailScrollFrame:CreateBackdrop("Default")
@@ -62,13 +62,13 @@ local function LoadSkin()
 		
 		if not WorldMapQuestRewardScrollFrame.backdrop then
 			WorldMapQuestRewardScrollFrame:CreateBackdrop("Default")
-			WorldMapQuestRewardScrollFrame.backdrop:Point("BOTTOMRIGHT", 22, -4)			
+			WorldMapQuestRewardScrollFrame.backdrop:Point("BOTTOMRIGHT", 22, -4);
 		end
 		
 		if not WorldMapQuestScrollFrame.backdrop then
 			WorldMapQuestScrollFrame:CreateBackdrop("Default")
 			WorldMapQuestScrollFrame.backdrop:Point("TOPLEFT", 0, 2)
-			WorldMapQuestScrollFrame.backdrop:Point("BOTTOMRIGHT", 25, -3)					
+			WorldMapQuestScrollFrame.backdrop:Point("BOTTOMRIGHT", 25, -3);
 		end
 	end
 	

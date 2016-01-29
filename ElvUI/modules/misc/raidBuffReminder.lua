@@ -219,12 +219,13 @@ function RB:UpdateSettings(isCallback)
 	for i = 1, 6 do
 		local button = frame[i];
 		button:ClearAllPoints();
-		button:Size(E.RBRWidth - (E.PixelMode and 0 or 4));
+		button:SetWidth(E.RBRWidth);
+		button:SetHeight(E.RBRWidth);
 		
 		if(i == 1) then
-			button:Point('TOP', ElvUI_ReminderBuffs, 'TOP', 0, -(E.PixelMode and 0 or 2));
+			button:Point("TOP", ElvUI_ReminderBuffs, "TOP", 0, 0);
 		else
-			button:Point('TOP', frame[i - 1], 'BOTTOM', 0, (E.PixelMode and 2 or -1));
+			button:Point("TOP", frame[i - 1], "BOTTOM", 0, E.Border - E.Spacing);
 		end
 		
 		if(i == 6) then

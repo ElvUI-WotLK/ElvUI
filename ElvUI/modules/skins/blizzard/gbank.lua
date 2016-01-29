@@ -86,7 +86,7 @@ local function LoadSkin()
 			column = ceil((i-0.5)/NUM_SLOTS_PER_GUILDBANK_GROUP);
 			button = _G["GuildBankColumn"..column.."Button"..index];
 
-			itemLink  = GetGuildBankItemLink(tab, i);
+			itemLink = GetGuildBankItemLink(tab, i);
 			if itemLink then
 				itemRarity = select(3, GetItemInfo(itemLink))
 				if itemRarity > 1 then

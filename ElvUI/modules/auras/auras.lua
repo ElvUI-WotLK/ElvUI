@@ -168,7 +168,7 @@ local function configureAuras(header, auraTable)
 		local buffInfo = auraTable[i];
 		button:SetID(buffInfo.index);
 		button.index = buffInfo.index;
-		button.filter =  buffInfo.filter;
+		button.filter = buffInfo.filter;
 		
 		if(buffInfo.duration > 0 and buffInfo.expires) then
 			local timeLeft = buffInfo.expires - GetTime();

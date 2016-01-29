@@ -247,6 +247,8 @@ local function Update(frame, event, unit)
 	for key, icon in pairs(icons) do
 		if not icon.onlyShowMissing then
 			icon:Hide()
+		else
+			icon:Show()
 		end
 	end
 	

@@ -77,7 +77,8 @@ local function Spawn(type)
 
 	frame:SetStatusBarTexture(E['media'].normTex);
 	frame:SetStatusBarColor(color.r, color.g, color.b);
-
+	E:RegisterStatusBar(frame);
+	
 	frame.type = type
 	frame.text = text
 

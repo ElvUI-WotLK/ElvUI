@@ -322,7 +322,7 @@ function UF:PostChannelUpdate(unit, name)
 		return;
 	end
 	
-    if not(unit == "player" or unit == "vehicle") then
+	if not(unit == "player" or unit == "vehicle") then
 		return;
 	end
 	

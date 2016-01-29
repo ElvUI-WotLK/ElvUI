@@ -152,19 +152,19 @@ function TT:GameTooltip_ShowCompareItem(tt, shift)
 	-- see if we should slide the tooltip
 	if ( tt:GetAnchorType() and tt:GetAnchorType() ~= "ANCHOR_PRESERVE" ) then
 		local totalWidth = 0;
-		if ( item1  ) then
+		if(item1) then
 			totalWidth = totalWidth + shoppingTooltip1:GetWidth();
 		end
-		if ( item2  ) then
+		if(item2) then
 			totalWidth = totalWidth + shoppingTooltip2:GetWidth();
 		end
-		if ( item3  ) then
+		if(item3) then
 			totalWidth = totalWidth + shoppingTooltip3:GetWidth();
 		end
 
 		if ( (side == "left") and (totalWidth > leftPos) ) then
 			tt:SetAnchorType(tt:GetAnchorType(), (totalWidth - leftPos), 0);
-		elseif ( (side == "right") and (rightPos + totalWidth) >  GetScreenWidth() ) then
+		elseif((side == "right") and (rightPos + totalWidth) > GetScreenWidth()) then
 			tt:SetAnchorType(tt:GetAnchorType(), -((rightPos + totalWidth) - GetScreenWidth()), 0);
 		end
 	end
@@ -635,6 +635,7 @@ function TT:GameTooltip_ShowStatusBar(tt, min, max, value, text)
 	if statusBar and not statusBar.skinned then
 		statusBar:StripTextures()
 		statusBar:SetStatusBarTexture(E['media'].normTex)
+		E:RegisterStatusBar(statusBar);
 		statusBar:CreateBackdrop('Default')
 		statusBar.skinned = true;
 	end
@@ -764,6 +765,7 @@ function TT:Initialize()
 
 	GameTooltipStatusBar:Height(self.db.healthBar.height)
 	GameTooltipStatusBar:SetStatusBarTexture(E["media"].normTex)
+	E:RegisterStatusBar(GameTooltipStatusBar);
 	GameTooltipStatusBar:CreateBackdrop('Transparent')
 	GameTooltipStatusBar:SetScript("OnValueChanged", self.OnValueChanged)
 	GameTooltipStatusBar:ClearAllPoints()

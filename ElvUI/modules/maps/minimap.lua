@@ -22,38 +22,38 @@ local InCombatLockdown = InCombatLockdown;
 
 local menuFrame = CreateFrame('Frame', 'MinimapRightClickMenu', E.UIParent, 'UIDropDownMenuTemplate');
 local menuList = {
-    {text = CHARACTER_BUTTON,
-    func = function() ToggleCharacter('PaperDollFrame'); end},
-    {text = SPELLBOOK_ABILITIES_BUTTON,
-    func = function() ToggleFrame(SpellBookFrame); end},
-    {text = TALENTS_BUTTON,
-    func = function() ToggleTalentFrame(); end},
-    {text = ACHIEVEMENT_BUTTON,
-    func = function() ToggleAchievementFrame(); end},
-    {text = QUESTLOG_BUTTON,
-    func = function() ToggleFrame(QuestLogFrame); end},
-    {text = SOCIAL_BUTTON,
-    func = function() ToggleFriendsFrame(1); end},
+	{text = CHARACTER_BUTTON,
+	func = function() ToggleCharacter('PaperDollFrame'); end},
+	{text = SPELLBOOK_ABILITIES_BUTTON,
+	func = function() ToggleFrame(SpellBookFrame); end},
+	{text = TALENTS_BUTTON,
+	func = function() ToggleTalentFrame(); end},
+	{text = ACHIEVEMENT_BUTTON,
+	func = function() ToggleAchievementFrame(); end},
+	{text = QUESTLOG_BUTTON,
+	func = function() ToggleFrame(QuestLogFrame); end},
+	{text = SOCIAL_BUTTON,
+	func = function() ToggleFriendsFrame(1); end},
 	{text = L['Farm Mode'],
 	func = FarmMode},
 	{text = TIMEMANAGER_TITLE,
 	func = function() ToggleTimeManager(); end},
-    {text = PLAYER_V_PLAYER,
-    func = function() ToggleFrame(PVPParentFrame); end},
-    {text = LFG_TITLE,
-    func = function() ToggleFrame(LFDParentFrame); end},
-    {text = L_LFRAID,
-    func = function() ToggleFrame(LFRParentFrame); end},
-    {text = HELP_BUTTON,
-    func = function() ToggleHelpFrame(); end},
-    {text = L_CALENDAR,
-    func = function()
+	{text = PLAYER_V_PLAYER,
+	func = function() ToggleFrame(PVPParentFrame); end},
+	{text = LFG_TITLE,
+	func = function() ToggleFrame(LFDParentFrame); end},
+	{text = L_LFRAID,
+	func = function() ToggleFrame(LFRParentFrame); end},
+	{text = HELP_BUTTON,
+	func = function() ToggleHelpFrame(); end},
+	{text = L_CALENDAR,
+	func = function()
 		if(not CalendarFrame) then
 			LoadAddOn('Blizzard_Calendar');
 		end
 		
-        Calendar_Toggle();
-    end}
+		Calendar_Toggle();
+	end}
 };
 
 function GetMinimapShape() 
@@ -116,15 +116,14 @@ end
 
 function M:UpdateSettings()
 	E.MinimapSize = E.private.general.minimap.enable and E.db.general.minimap.size or Minimap:GetWidth() + 10;
+	E.MinimapWidth = E.MinimapSize;
+	E.MinimapHeight = E.MinimapSize;
 	
 	if(E.db.general.reminder.enable) then
-		E.RBRWidth = ((E.MinimapSize - 6) / 6) + (E.PixelMode and 3 or 4);
+		E.RBRWidth = (E.MinimapHeight + (5*E.Border) + E.Border*2 - (E.Spacing*5)) / (5 + 1);
 	else
 		E.RBRWidth = 0;
 	end
-	
-	E.MinimapWidth = E.MinimapSize;
-	E.MinimapHeight = E.MinimapSize + 5;
 	
 	if(E.private.general.minimap.enable) then
 		Minimap:Size(E.MinimapSize, E.MinimapSize);
@@ -141,7 +140,7 @@ function M:UpdateSettings()
 	end
 	
 	if(MMHolder) then
-		MMHolder:Width((Minimap:GetWidth() + E.Border + E.Spacing*3) +  E.RBRWidth);
+		MMHolder:Width((Minimap:GetWidth() + E.Border + E.Spacing*3) + E.RBRWidth);
 		
 		if(E.db.datatexts.minimapPanels) then
 			MMHolder:Height(Minimap:GetHeight() + (LeftMiniPanel and (LeftMiniPanel:GetHeight() + E.Border) or 24) + E.Spacing*3);

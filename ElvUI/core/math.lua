@@ -272,7 +272,7 @@ function E:GetTimeInfo(s, threshhold)
 		return ceil(s / HOUR), 1, hours > 1 and (s - (hours*HOUR - HALFHOURISH)) or (s - HOURISH);
 	else
 		local days = floor((s/DAY)+.5);
-		return ceil(s / DAY), 0,  days > 1 and (s - (days*DAY - HALFDAYISH)) or (s - DAYISH);
+		return ceil(s / DAY), 0, days > 1 and (s - (days*DAY - HALFDAYISH)) or (s - DAYISH);
 	end
 end
 

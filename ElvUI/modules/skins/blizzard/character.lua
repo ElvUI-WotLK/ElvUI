@@ -205,6 +205,7 @@ local function LoadSkin()
 	
 	PetPaperDollFrameExpBar:StripTextures()
 	PetPaperDollFrameExpBar:SetStatusBarTexture(E["media"].normTex)
+	E:RegisterStatusBar(PetPaperDollFrameExpBar);
 	PetPaperDollFrameExpBar:CreateBackdrop("Default")
 	
 	local function updHappiness(self)
@@ -277,6 +278,7 @@ local function LoadSkin()
 				ReputationBar:SetStatusBarTexture(E['media'].normTex);
 				
 				if not ReputationBar.backdrop then
+					E:RegisterStatusBar(ReputationBar);
 					ReputationBar:CreateBackdrop('Default');
 				end
 				
@@ -319,6 +321,7 @@ local function LoadSkin()
 		statusBar:SetStatusBarTexture(E['media'].normTex);
 		
 		if ( not statusBar.backdrop ) then
+			E:RegisterStatusBar(statusBar);
 			statusBar:CreateBackdrop('Default');
 		end
 		
@@ -331,7 +334,11 @@ local function LoadSkin()
 		local StatusBarBorder = _G['SkillDetailStatusBarBorder'];
 		local StatusBarBackground = _G['SkillDetailStatusBarBackground'];
 		
-		StatusBar:SetStatusBarTexture(E['media'].normTex);
+		if(not StatusBar.skinned) then
+			StatusBar:SetStatusBarTexture(E['media'].normTex);
+			E:RegisterStatusBar(StatusBar);
+			StatusBar.skinned = true;
+		end
 		
 		StatusBar:SetTemplate('Default');
 		

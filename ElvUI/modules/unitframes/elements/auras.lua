@@ -83,17 +83,17 @@ function UF:Construct_AuraIcon(button)
 end
 
 local function SortAurasByPriority(a, b)
-    if (a and b) then
-		if a.isPlayer and not b.isPlayer then
-			return true
-		elseif not a.isPlayer and b.isPlayer then
-			return false
+	if(a and b) then
+		if(a.isPlayer and not b.isPlayer) then
+			return true;
+		elseif(not a.isPlayer and b.isPlayer) then
+			return false;
 		end
-	
-		if (a.priority and b.priority) then
-			return a.priority > b.priority
+		
+		if(a.priority and b.priority) then
+			return a.priority > b.priority;
 		end
-    end
+	end
 end
 
 local function SortAurasByTime(a, b)
@@ -342,7 +342,7 @@ function UF:AuraFilter(unit, icon, name, rank, texture, count, dtype, duration, 
 	end
 	
 	if UF:CheckFilter(db.onlyDispellable, isFriend) then
-		if (self.type == "buffs" and not isStealable) or (self.type == "debuffs" and dtype and  not E:IsDispellableByMe(dtype)) or dtype == nil then
+		if((self.type == "buffs" and not isStealable) or (self.type == "debuffs" and dtype and not E:IsDispellableByMe(dtype)) or dtype == nil) then
 			returnValue = false;
 		end
 		anotherFilterExists = true

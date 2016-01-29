@@ -908,7 +908,7 @@ function CH:ChatFrame_MessageEventHandler(event, ...)
 		end
 	
 		if ( type == "SYSTEM" or type == "SKILL" or type == "LOOT" or type == "MONEY" or
-		     type == "OPENING" or type == "TRADESKILLS" or type == "PET_INFO" or type == "TARGETICONS") then
+			type == "OPENING" or type == "TRADESKILLS" or type == "PET_INFO" or type == "TARGETICONS") then
 			self:AddMessage(CH:ConcatenateTimeStamp(arg1), info.r, info.g, info.b, info.id);
 		elseif ( strsub(type,1,7) == "COMBAT_" ) then
 			self:AddMessage(CH:ConcatenateTimeStamp(arg1), info.r, info.g, info.b, info.id);
@@ -1058,7 +1058,7 @@ function CH:ChatFrame_MessageEventHandler(event, ...)
 
 			-- Add Channel
 			arg4 = gsub(arg4, "%s%-%s.*", "");
-			if( chatGroup  == "BN_CONVERSATION" ) then
+			if(chatGroup == "BN_CONVERSATION") then
 				body = format(CHAT_BN_CONVERSATION_GET_LINK, arg8, Var.MAX_WOW_CHAT_CHANNELS + arg8)..body;
 			elseif(channelLength > 0) then
 				body = "|Hchannel:channel:"..arg8.."|h["..arg4.."]|h "..body;
@@ -1254,7 +1254,7 @@ function CH:CheckKeyword(message)
 	for itemLink in message:gmatch("|%x+|Hitem:.-|h.-|h|r") do
 		for keyword, _ in pairs(CH.Keywords) do
 			if itemLink == keyword then
-				if self.db.keywordSound ~= 'None' and not self.SoundPlayed  then
+				if(self.db.keywordSound ~= "None" and not self.SoundPlayed) then
 					if (self.db.noAlertInCombat and not InCombatLockdown()) or not self.db.noAlertInCombat then
 						PlaySoundFile(LSM:Fetch("sound", self.db.keywordSound), "Master")
 					end
@@ -1274,7 +1274,7 @@ function CH:CheckKeyword(message)
 			if lowerCaseWord == keyword:lower() then
 				local tempWord = word:gsub("%p", "")
 				word = word:gsub(tempWord, E.media.hexvaluecolor..tempWord..'|r')
-				if self.db.keywordSound ~= 'None' and not self.SoundPlayed  then
+				if(self.db.keywordSound ~= "None" and not self.SoundPlayed) then
 					if (self.db.noAlertInCombat and not InCombatLockdown()) or not self.db.noAlertInCombat then
 						PlaySoundFile(LSM:Fetch("sound", self.db.keywordSound), "Master")
 					end
@@ -1296,12 +1296,12 @@ function CH:CheckKeyword(message)
 end
 
 function CH:AddLines(lines, ...)
-  for i=select("#", ...),1,-1 do
-    local x = select(i, ...)
-    if x:GetObjectType() == "FontString" and not x:GetName() then
-        tinsert(lines, x:GetText())
-    end
-  end
+	for i = select("#", ...), 1, -1 do
+		local x = select(i, ...);
+		if(x:GetObjectType() == "FontString" and not x:GetName()) then
+			tinsert(lines, x:GetText());
+		end
+	end
 end
 
 function CH:ChatEdit_OnEnterPressed(editBox)
@@ -1415,21 +1415,21 @@ function CH:SaveChatHistory(event, ...)
 		temp[i] = select(i, ...) or false
 	end
 	
-	if #temp > 0 then
-	  temp[20] = event
-	  local timeForMessage = GetTimeForSavedMessage()
-	  ElvCharacterDB.ChatLog[timeForMessage] = temp
-	  
-		local c, k = 0
+	if(#temp > 0) then
+		temp[20] = event;
+		local timeForMessage = GetTimeForSavedMessage();
+		ElvCharacterDB.ChatLog[timeForMessage] = temp;
+		
+		local c, k = 0;
 		for id, data in pairs(ElvCharacterDB.ChatLog) do
-			c = c + 1
-			if (not k) or k > id then
-				k = id
+			c = c + 1;
+			if((not k) or k > id) then
+				k = id;
 			end
 		end
 		
-		if c > 128 then
-			ElvCharacterDB.ChatLog[k] = nil
+		if(c > 128) then
+			ElvCharacterDB.ChatLog[k] = nil;
 		end
 	end
 end
@@ -1544,12 +1544,11 @@ function CH:Initialize()
 	self:SecureHook('ChatEdit_OnEnterPressed')
 	FriendsMicroButton:Kill()
 	ChatFrameMenuButton:Kill()
-
-		
-    if WIM then
-      WIM.RegisterWidgetTrigger("chat_display", "whisper,chat,w2w,demo", "OnHyperlinkClick", function(self) CH.clickedframe = self end);
-	  WIM.RegisterItemRefHandler('url', WIM_URLLink)
-    end
+	
+	if(WIM) then
+		WIM.RegisterWidgetTrigger("chat_display", "whisper,chat,w2w,demo", "OnHyperlinkClick", function(self) CH.clickedframe = self end);
+		WIM.RegisterItemRefHandler("url", WIM_URLLink);
+	end
 
 	self:SecureHook('FCF_SetChatWindowFontSize', 'SetChatFont')
 	self:SecureHook("FCF_SavePositionAndDimensions", "ON_FCF_SavePositionAndDimensions")

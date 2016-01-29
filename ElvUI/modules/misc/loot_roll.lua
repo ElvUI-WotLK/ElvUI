@@ -18,55 +18,55 @@ local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
 
 local locale = GetLocale()
 local rollpairs = locale == "deDE" and {
-	["(.*) passt automatisch bei (.+), weil [ersi]+ den Gegenstand nicht benutzen kann.$"]  = "pass",
+	["(.*) passt automatisch bei (.+), weil [ersi]+ den Gegenstand nicht benutzen kann.$"] = "pass",
 	["(.*) würfelt nicht für: (.+|r)$"] = "pass",
 	["(.*) hat für (.+) 'Gier' ausgewählt"] = "greed",
 	["(.*) hat für (.+) 'Bedarf' ausgewählt"] = "need",
-	["(.*) hat für '(.+)' Entzauberung gewählt."]  = "disenchant",
+	["(.*) hat für '(.+)' Entzauberung gewählt."] = "disenchant",
 } or locale == "frFR" and {
-	["(.*) a passé pour : (.+) parce qu'((il)|(elle)) ne peut pas ramasser cette objet.$"]  = "pass",
-	["(.*) a passé pour : (.+)"]  = "pass",
+	["(.*) a passé pour : (.+) parce qu'((il)|(elle)) ne peut pas ramasser cette objet.$"] = "pass",
+	["(.*) a passé pour : (.+)"] = "pass",
 	["(.*) a choisi Cupidité pour : (.+)"] = "greed",
-	["(.*) a choisi Besoin pour : (.+)"]  = "need",
-	["(.*) a choisi Désenchantement pour : (.+)"]  = "disenchant",
+	["(.*) a choisi Besoin pour : (.+)"] = "need",
+	["(.*) a choisi Désenchantement pour : (.+)"] = "disenchant",
 } or locale == "zhTW" and {
-    ["(.*)自動放棄:(.+)，因為他無法拾取該物品$"]  = "pass",
-    ["(.*)自動放棄:(.+)，因為她無法拾取該物品$"]  = "pass",
-    ["(.*)放棄了:(.+)"] = "pass",
-    ["(.*)選擇了貪婪:(.+)"] = "greed",
-    ["(.*)選擇了需求:(.+)"] = "need",
-    ["(.*)選擇了分解:(.+)"] = "disenchant",
+	["(.*)自動放棄:(.+)，因為他無法拾取該物品$"] = "pass",
+	["(.*)自動放棄:(.+)，因為她無法拾取該物品$"] = "pass",
+	["(.*)放棄了:(.+)"] = "pass",
+	["(.*)選擇了貪婪:(.+)"] = "greed",
+	["(.*)選擇了需求:(.+)"] = "need",
+	["(.*)選擇了分解:(.+)"] = "disenchant",
 } or locale == "ruRU" and {
 	["(.*) автоматически передает предмет (.+), поскольку не может его забрать"] = "pass",
 	["(.*) пропускает розыгрыш предмета \"(.+)\", поскольку не может его забрать"] = "pass",
-	["(.*) отказывается от предмета (.+)%."]  = "pass",
+	["(.*) отказывается от предмета (.+)%."] = "pass",
 	["Разыгрывается: (.+)%. (.*): \"Не откажусь\""] = "greed",
 	["Разыгрывается: (.+)%. (.*): \"Мне это нужно\""] = "need",
 	["Разыгрывается: (.+)%. (.*): \"Распылить\""] = "disenchant",
 } or locale == "koKR" and {
-       ["(.*)님이 획득할 수 없는 아이템이어서 자동으로 주사위 굴리기를 포기했습니다: (.+)"] = "pass",
-       ["(.*)님이 주사위 굴리기를 포기했습니다: (.+)"] = "pass",
-       ["(.*)님이 차비를 선택했습니다: (.+)"] = "greed",
-       ["(.*)님이 입찰을 선택했습니다: (.+)"] = "need",
-       ["(.*)님이 마력 추출을 선택했습니다: (.+)"] = "disenchant",	
+	["(.*)님이 획득할 수 없는 아이템이어서 자동으로 주사위 굴리기를 포기했습니다: (.+)"] = "pass",
+	["(.*)님이 주사위 굴리기를 포기했습니다: (.+)"] = "pass",
+	["(.*)님이 차비를 선택했습니다: (.+)"] = "greed",
+	["(.*)님이 입찰을 선택했습니다: (.+)"] = "need",
+	["(.*)님이 마력 추출을 선택했습니다: (.+)"] = "disenchant",	
 } or locale == "esES" and {
 	["^(.*) pasó automáticamente de: (.+) porque no puede despojar este objeto.$"] = "pass",
-	["^(.*) pasó de: (.+|r)$"]  = "pass",
+	["^(.*) pasó de: (.+|r)$"] = "pass",
 	["(.*) eligió Codicia para: (.+)"] = "greed",
-	["(.*) eligió Necesidad para: (.+)"]  = "need",
-	["(.*) eligió Desencantar para: (.+)"]  = "disenchant",	   	   
+	["(.*) eligió Necesidad para: (.+)"] = "need",
+	["(.*) eligió Desencantar para: (.+)"] = "disenchant",	   	   
 } or locale == "esMX" and {
 	["^(.*) pasó automáticamente de: (.+) porque no puede despojar este objeto.$"] = "pass",
-	["^(.*) pasó de: (.+|r)$"]  = "pass",
+	["^(.*) pasó de: (.+|r)$"] = "pass",
 	["(.*) eligió Codicia para: (.+)"] = "greed",
-	["(.*) eligió Necesidad para: (.+)"]  = "need",
-	["(.*) eligió Desencantar para: (.+)"]  = "disenchant",	   
+	["(.*) eligió Necesidad para: (.+)"] = "need",
+	["(.*) eligió Desencantar para: (.+)"] = "disenchant",	   
 } or {
 	["^(.*) automatically passed on: (.+) because s?he cannot loot that item.$"] = "pass",
-	["^(.*) passed on: (.+|r)$"]  = "pass",
+	["^(.*) passed on: (.+|r)$"] = "pass",
 	["(.*) has selected Greed for: (.+)"] = "greed",
-	["(.*) has selected Need for: (.+)"]  = "need",
-	["(.*) has selected Disenchant for: (.+)"]  = "disenchant",
+	["(.*) has selected Need for: (.+)"] = "need",
+	["(.*) has selected Disenchant for: (.+)"] = "disenchant"
 }
 
 local function ClickRoll(frame)
@@ -198,6 +198,7 @@ function M:CreateRollFrame()
 	status:SetScript("OnUpdate", StatusUpdate);
 	status:SetFrameLevel(status:GetFrameLevel() - 1);
 	status:SetStatusBarTexture(E["media"].normTex);
+	E:RegisterStatusBar(status);
 	status:SetStatusBarColor(.8, .8, .8, .9);
 	status.parent = frame;
 	frame.status = status;

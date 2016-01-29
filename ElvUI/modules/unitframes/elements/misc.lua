@@ -551,6 +551,8 @@ function UF:UpdateAuraWatch(frame, db)
 		frame.AuraWatch.Update(frame);
 	end
 	
+	frame:UpdateElement("AuraWatch");
+	
 	buffs = nil;
 end
 

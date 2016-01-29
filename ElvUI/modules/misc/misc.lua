@@ -129,7 +129,7 @@ function M:AutoInvite(event, leaderName)
 		local inGroup = false;
 		
 		for friendIndex = 1, GetNumFriends() do
-			local friendName = gsub(GetFriendInfo(friendIndex),  "-.*", "")
+			local friendName = gsub(GetFriendInfo(friendIndex), "-.*", "")
 			if friendName == leaderName then
 				AcceptGroup()
 				inGroup = true

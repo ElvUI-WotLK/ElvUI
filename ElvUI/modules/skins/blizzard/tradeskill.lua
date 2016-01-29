@@ -18,6 +18,7 @@ local function LoadSkin()
 	TradeSkillRankFrame:StripTextures();
 	TradeSkillRankFrame:CreateBackdrop('Default');
 	TradeSkillRankFrame:SetStatusBarTexture(E['media'].normTex);
+	E:RegisterStatusBar(TradeSkillRankFrame);
 	
 	S:HandleCheckBox(TradeSkillFrameAvailableFilterCheckButton);
 	

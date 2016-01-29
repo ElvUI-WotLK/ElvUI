@@ -88,9 +88,17 @@ end
 local function SetTemplate(f, t, glossTex, ignoreUpdates)
 	GetTemplate(t)
 	
-	f.template = t;
-	f.glossTex = glossTex;
-	f.ignoreUpdates = ignoreUpdates;
+	if(t) then
+		f.template = t;
+	end
+	
+	if(glossTex) then
+		f.glossTex = glossTex;
+	end
+	
+	if(ignoreUpdates) then
+		f.ignoreUpdates = ignoreUpdates;
+	end
 	
 	local bgFile = E.media.blankTex;
 	if(glossTex) then
@@ -99,28 +107,28 @@ local function SetTemplate(f, t, glossTex, ignoreUpdates)
 	
 	if E.private.general.pixelPerfect then
 		f:SetBackdrop({
-		  bgFile = bgFile, 
-		  edgeFile = E["media"].blankTex, 
-		  tile = false, tileSize = 0, edgeSize = E.mult, 
-		  insets = { left = 0, right = 0, top = 0, bottom = 0}
-		})	
+			bgFile = bgFile,
+			edgeFile = E["media"].blankTex,
+			tile = false, tileSize = 0, edgeSize = E.mult,
+			insets = {left = 0, right = 0, top = 0, bottom = 0}
+		});
 	else
 		f:SetBackdrop({
-		  bgFile = bgFile, 
-		  edgeFile = E["media"].blankTex, 
-		  tile = false, tileSize = 0, edgeSize = E.mult, 
-		  insets = { left = -E.mult, right = -E.mult, top = -E.mult, bottom = -E.mult}
-		})
+			bgFile = bgFile,
+			edgeFile = E["media"].blankTex,
+			tile = false, tileSize = 0, edgeSize = E.mult,
+			insets = {left = -E.mult, right = -E.mult, top = -E.mult, bottom = -E.mult}
+		});
 	end
 
 	if not f.oborder and not f.iborder and not E.private.general.pixelPerfect then
 		local border = CreateFrame("Frame", nil, f)
 		border:SetInside(f, E.mult, E.mult)
 		border:SetBackdrop({
-			edgeFile = E["media"].blankTex, 
-			edgeSize = E.mult, 
-			insets = { left = E.mult, right = E.mult, top = E.mult, bottom = E.mult }
-		})
+			edgeFile = E["media"].blankTex,
+			edgeSize = E.mult,
+			insets = {left = E.mult, right = E.mult, top = E.mult, bottom = E.mult}
+		});
 		border:SetBackdropBorderColor(0, 0, 0, 1)
 		f.iborder = border
 		
@@ -129,10 +137,10 @@ local function SetTemplate(f, t, glossTex, ignoreUpdates)
 		border:SetOutside(f, E.mult, E.mult)
 		border:SetFrameLevel(f:GetFrameLevel() + 1)
 		border:SetBackdrop({
-			edgeFile = E["media"].blankTex, 
-			edgeSize = E.mult, 
-			insets = { left = E.mult, right = E.mult, top = E.mult, bottom = E.mult }
-		})
+			edgeFile = E["media"].blankTex,
+			edgeSize = E.mult,
+			insets = {left = E.mult, right = E.mult, top = E.mult, bottom = E.mult}
+		});
 		border:SetBackdropBorderColor(0, 0, 0, 1)
 		f.oborder = border				
 	end
@@ -140,8 +148,8 @@ local function SetTemplate(f, t, glossTex, ignoreUpdates)
 	f:SetBackdropColor(backdropr, backdropg, backdropb, backdropa)
 	f:SetBackdropBorderColor(borderr, borderg, borderb)
 	
-	if not ignoreUpdates then
-		E["frames"][f] = true
+	if(not f.ignoreUpdates) then
+		E["frames"][f] = true;
 	end
 end
 
@@ -171,10 +179,10 @@ local function CreateShadow(f)
 	shadow:SetFrameLevel(1)
 	shadow:SetFrameStrata(f:GetFrameStrata())
 	shadow:SetOutside(f, 3, 3)
-	shadow:SetBackdrop( { 
+	shadow:SetBackdrop({
 		edgeFile = LSM:Fetch("border", "ElvUI GlowBorder"), edgeSize = E:Scale(3),
-		insets = {left = E:Scale(5), right = E:Scale(5), top = E:Scale(5), bottom = E:Scale(5)},
-	})
+		insets = {left = E:Scale(5), right = E:Scale(5), top = E:Scale(5), bottom = E:Scale(5)}
+	});
 	shadow:SetBackdropColor(backdropr, backdropg, backdropb, 0)
 	shadow:SetBackdropBorderColor(borderr, borderg, borderb, 0.9)
 	f.shadow = shadow

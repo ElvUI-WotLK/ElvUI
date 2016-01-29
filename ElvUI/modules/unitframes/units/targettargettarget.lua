@@ -217,10 +217,10 @@ function UF:Update_TargetTargetTargetFrame(frame, db)
 		local x, y = E:GetXYOffset(db.buffs.anchorPoint);
 		local attachTo = self:GetAuraAnchorFrame(frame, db.buffs.attachTo);
 		
-		buffs:Point(E.InversePoints[db.buffs.anchorPoint], attachTo, db.buffs.anchorPoint, x + db.buffs.xOffset, y + db.buffs.yOffset + (db.buffs.anchorPoint:find("TOP") and (BORDER + SPACING*2) or (BORDER + SPACING*2)));
+		buffs:Point(E.InversePoints[db.buffs.anchorPoint], attachTo, db.buffs.anchorPoint, x + db.buffs.xOffset, y + db.buffs.yOffset);
 		buffs:Height(buffs.size * rows);
 		buffs["growth-y"] = db.buffs.anchorPoint:find("TOP") and "UP" or "DOWN"
-		buffs["growth-x"] = db.buffs.anchorPoint == "LEFT" and "LEFT" or  db.buffs.anchorPoint == "RIGHT" and "RIGHT" or (db.buffs.anchorPoint:find("LEFT") and "RIGHT" or "LEFT");
+		buffs["growth-x"] = db.buffs.anchorPoint == "LEFT" and "LEFT" or db.buffs.anchorPoint == "RIGHT" and "RIGHT" or (db.buffs.anchorPoint:find("LEFT") and "RIGHT" or "LEFT");
 		buffs["spacing-x"] = db.buffs.xSpacing;
 		buffs["spacing-y"] = db.buffs.ySpacing;
 		buffs.initialAnchor = E.InversePoints[db.buffs.anchorPoint];
@@ -229,7 +229,7 @@ function UF:Update_TargetTargetTargetFrame(frame, db)
 		buffs.point = E.InversePoints[db.buffs.anchorPoint];
 		buffs.anchorPoint = db.buffs.anchorPoint;
 		buffs.xOffset = x + db.buffs.xOffset;
-		buffs.yOffset = y + db.buffs.yOffset + (db.buffs.anchorPoint:find("TOP") and (BORDER + SPACING*2) or (BORDER + SPACING*2));
+		buffs.yOffset = y + db.buffs.yOffset;
 		
 		if(db.buffs.enable) then
 			buffs:Show();
@@ -263,7 +263,7 @@ function UF:Update_TargetTargetTargetFrame(frame, db)
 		debuffs:Point(E.InversePoints[db.debuffs.anchorPoint], attachTo, db.debuffs.anchorPoint, x + db.debuffs.xOffset, y + db.debuffs.yOffset);
 		debuffs:Height(debuffs.size * rows);
 		debuffs["growth-y"] = db.debuffs.anchorPoint:find("TOP") and "UP" or "DOWN";
-		debuffs["growth-x"] = db.debuffs.anchorPoint == "LEFT" and "LEFT" or  db.debuffs.anchorPoint == "RIGHT" and "RIGHT" or (db.debuffs.anchorPoint:find("LEFT") and "RIGHT" or "LEFT");
+		debuffs["growth-x"] = db.debuffs.anchorPoint == "LEFT" and "LEFT" or db.debuffs.anchorPoint == "RIGHT" and "RIGHT" or (db.debuffs.anchorPoint:find("LEFT") and "RIGHT" or "LEFT");
 		debuffs["spacing-x"] = db.debuffs.xSpacing;
 		debuffs["spacing-y"] = db.debuffs.ySpacing;
 		debuffs.initialAnchor = E.InversePoints[db.debuffs.anchorPoint];

@@ -18,7 +18,7 @@ local function LoadSkin()
 	
 	S:HandleScrollBar(ItemSocketingScrollFrameScrollBar, 2);
 	
-	for i = 1, MAX_NUM_SOCKETS  do
+	for i = 1, MAX_NUM_SOCKETS do
 		local button = _G[('ItemSocketingSocket%d'):format(i)];
 		local button_bracket = _G[('ItemSocketingSocket%dBracketFrame'):format(i)];
 		local button_bg = _G[('ItemSocketingSocket%dBackground'):format(i)];

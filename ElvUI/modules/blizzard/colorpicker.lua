@@ -119,13 +119,13 @@ function B:EnhanceColorPicker()
 		if ColorPickerFrame.hasOpacity then
 			ColorPPBoxA:Show()
 			ColorPPBoxLabelA:Show()
-			ColorPPBoxH:SetScript("OnTabPressed", function(self) ColorPPBoxA:SetFocus()  end)
+			ColorPPBoxH:SetScript("OnTabPressed", function(self) ColorPPBoxA:SetFocus(); end);
 			UpdateAlphaText()
 			self:SetWidth(405)
 		else
 			ColorPPBoxA:Hide()
 			ColorPPBoxLabelA:Hide()
-			ColorPPBoxH:SetScript("OnTabPressed", function(self) ColorPPBoxR:SetFocus()  end)
+			ColorPPBoxH:SetScript("OnTabPressed", function(self) ColorPPBoxR:SetFocus(); end);
 			self:SetWidth(345)
 		end
 	end)
@@ -334,10 +334,10 @@ function B:EnhanceColorPicker()
 	ColorPPBoxR:Point("RIGHT", "ColorPPBoxG", "LEFT", -25, 0)
 
 	-- define the order of tab cursor movement
-	ColorPPBoxR:SetScript("OnTabPressed", function(self) ColorPPBoxG:SetFocus() end)
-	ColorPPBoxG:SetScript("OnTabPressed", function(self) ColorPPBoxB:SetFocus()  end)
-	ColorPPBoxB:SetScript("OnTabPressed", function(self) ColorPPBoxH:SetFocus()  end)
-	ColorPPBoxA:SetScript("OnTabPressed", function(self) ColorPPBoxR:SetFocus()  end)
+	ColorPPBoxR:SetScript("OnTabPressed", function(self) ColorPPBoxG:SetFocus(); end);
+	ColorPPBoxG:SetScript("OnTabPressed", function(self) ColorPPBoxB:SetFocus(); end);
+	ColorPPBoxB:SetScript("OnTabPressed", function(self) ColorPPBoxH:SetFocus(); end);
+	ColorPPBoxA:SetScript("OnTabPressed", function(self) ColorPPBoxR:SetFocus(); end);
 
 	-- make the color picker movable.
 	local mover = CreateFrame('Frame', nil, ColorPickerFrame)

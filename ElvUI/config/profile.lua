@@ -86,7 +86,7 @@ P["nameplate"] = {
 	['nonTargetAlpha'] = 0.6,
 	['targetAlpha'] = 1,
 	['combatHide'] = false,
-	['colorNameByValue'] =  true,
+	['colorNameByValue'] = true,
 	['showName'] = true,
 	['wrapName'] = false,
 	['showLevel'] = true,
@@ -101,7 +101,7 @@ P["nameplate"] = {
 		['xOffset'] = 0
 	},
 	['healthBar'] = {
-		['lowThreshold'] =  0.40,
+		['lowThreshold'] = 0.40,
 		['width'] = 108,
 		['height'] = 9,
 		["colorByRaidIcon"] = false,
@@ -133,7 +133,7 @@ P["nameplate"] = {
 		['enable'] = true,
 		['goodScale'] = 1,
 		['badScale'] = 1,
-		["goodColor"] = {r = 75/255,  g = 175/255, b = 76/255},
+		["goodColor"] = {r = 75/255, g = 175/255, b = 76/255},
 		["badColor"] = {r = 0.78, g = 0.25, b = 0.25},
 		["goodTransitionColor"] = {r = 218/255, g = 197/255, b = 92/255},
 		["badTransitionColor"] = {r = 240/255, g = 154/255, b = 17/255},
@@ -159,14 +159,14 @@ P["nameplate"] = {
 	['reactions'] = {
 		["tapped"] = {r = 0.6, g = 0.6, b = 0.6},
 		["friendlyNPC"] = {r = 0.31, g = 0.45, b = 0.63},
-		["friendlyPlayer"] = {r = 75/255,  g = 175/255, b = 76/255},
+		["friendlyPlayer"] = {r = 75/255, g = 175/255, b = 76/255},
 		["neutral"] = { r = 218/255, g = 197/255, b = 92/255 },
 		["enemy"] = { r = 0.78, g = 0.25, b = 0.25 },	
 	},
 };
 
 P["bags"] = {
-    ["sortInverted"] = true,
+	["sortInverted"] = true,
 	["xOffset"] = 0,
 	["yOffset"] = 0,
 	["xOffsetBank"] = 0,
@@ -1518,7 +1518,23 @@ P["unitframe"] = {
 			["rdebuffs"] = {
 				["enable"] = true,
 				["fontSize"] = 10,
+				["font"] = "ElvUI Font",
+				["fontOutline"] = "OUTLINE",
 				["size"] = 26,
+				["xOffset"] = 0,
+				["yOffset"] = 2,
+				["duration"] = {
+					["position"] = "CENTER",
+					["xOffset"] = 0,
+					["yOffset"] = 0,
+					["color"] = {r = 1, g = 0.9, b = 0}
+				},
+				["stack"] = {
+					["position"] = "BOTTOMRIGHT",
+					["xOffset"] = 0,
+					["yOffset"] = 2,
+					["color"] = {r = 1, g = 0.9, b = 0}
+				}
 			},
 			["roleIcon"] = {
 				["enable"] = true,
@@ -1633,9 +1649,25 @@ P["unitframe"] = {
 				["ySpacing"] = 0,
 			},
 			["rdebuffs"] = {
-				["enable"] = false,
+				["enable"] = true,
 				["fontSize"] = 10,
-				["size"] = 22,
+				["font"] = "ElvUI Font",
+				["fontOutline"] = "OUTLINE",
+				["size"] = 26,
+				["xOffset"] = 0,
+				["yOffset"] = 2,
+				["duration"] = {
+					["position"] = "CENTER",
+					["xOffset"] = 0,
+					["yOffset"] = 0,
+					["color"] = {r = 1, g = 0.9, b = 0}
+				},
+				["stack"] = {
+					["position"] = "BOTTOMRIGHT",
+					["xOffset"] = 0,
+					["yOffset"] = 2,
+					["color"] = {r = 1, g = 0.9, b = 0}
+				}
 			},
 			["roleIcon"] = {
 				["enable"] = false,
@@ -1752,9 +1784,23 @@ P["unitframe"] = {
 			["rdebuffs"] = {
 				["enable"] = true,
 				["fontSize"] = 10,
+				["font"] = "ElvUI Font",
+				["fontOutline"] = "OUTLINE",
 				["size"] = 26,
 				["xOffset"] = 0,
 				["yOffset"] = 2,
+				["duration"] = {
+					["position"] = "CENTER",
+					["xOffset"] = 0,
+					["yOffset"] = 0,
+					["color"] = {r = 1, g = 0.9, b = 0}
+				},
+				["stack"] = {
+					["position"] = "BOTTOMRIGHT",
+					["xOffset"] = 0,
+					["yOffset"] = 2,
+					["color"] = {r = 1, g = 0.9, b = 0}
+				}
 			},
 			["raidicon"] = {
 				["enable"] = true,

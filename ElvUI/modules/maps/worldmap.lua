@@ -88,7 +88,7 @@ function M:UpdateCoords()
 	local adjustedX = (x / scale - (centerX - (width/2))) / width;
 	local adjustedY = (centerY + (height/2) - y / scale) / height;
 	
-	if(adjustedX >= 0  and adjustedY >= 0 and adjustedX <= 1 and adjustedY <= 1) then
+	if(adjustedX >= 0 and adjustedY >= 0 and adjustedX <= 1 and adjustedY <= 1) then
 		adjustedX = E:Round(100 * adjustedX, 2);
 		adjustedY = E:Round(100 * adjustedY, 2);
 		CoordsHolder.mouseCoords:SetText(MOUSE_LABEL..":   "..adjustedX..", "..adjustedY);

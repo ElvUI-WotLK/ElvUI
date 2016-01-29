@@ -605,7 +605,7 @@ function E:StaticPopup_Resize(dialog, which)
 		width = width + (info.editBoxWidth - 260);
 	end
 	
-	if(width > maxWidthSoFar)  then
+	if(width > maxWidthSoFar) then
 		dialog:SetWidth(width);
 		dialog.maxWidthSoFar = width;
 	end
