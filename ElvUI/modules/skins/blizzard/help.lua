@@ -1,67 +1,45 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local S = E:GetModule('Skins');
+local S = E:GetModule("Skins");
+
+local _G = _G;
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.help ~= true then return end
+	if(E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.help ~= true) then return; end
 	
-	HelpFrame:StripTextures(true);
+	local helpFrameButtons = {
+		"GMTalkOpenTicket", "GMTalkCancel",
+		"ReportIssueOpenTicket", "ReportIssueCancel",
+		"LagLoot", "LagAuctionHouse", "LagMail", "LagChat", "LagMovement", "LagSpell", "LagCancel",
+		"StuckStuck", "StuckOpenTicket", "StuckCancel",
+		"OpenTicketCancel", "OpenTicketSubmit",
+		"ViewResponseCancel", "ViewResponseMoreHelp", "ViewResponseIssueResolved",
+		"WelcomeGMTalk", "WelcomeReportIssue", "WelcomeStuck", "WelcomeCancel"
+	};
+	
+	HelpFrame:StripTextures();
 	HelpFrame:CreateBackdrop("Transparent");
 	HelpFrame.backdrop:Point("TOPLEFT", 6, -6);
 	HelpFrame.backdrop:Point("BOTTOMRIGHT", -45, 14);
 	
-	KnowledgeBaseFrame:StripTextures(true);
-	
 	S:HandleCloseButton(HelpFrameCloseButton);
 	
-	S:HandleButton(GMChatOpenLog);
-	S:HandleButton(KnowledgeBaseFrameTopIssuesButton);
-	
-	KnowledgeBaseFrameDivider:StripTextures();
-	
-	S:HandleEditBox(KnowledgeBaseFrameEditBox);
-	
-	S:HandleDropDownBox(KnowledgeBaseFrameCategoryDropDown);
-	S:HandleDropDownBox(KnowledgeBaseFrameSubCategoryDropDown);
-	
-	S:HandleButton(KnowledgeBaseFrameSearchButton);
-	
-	KnowledgeBaseFrameDivider2:StripTextures();
-	
-	S:HandleButton(KnowledgeBaseFrameGMTalk);
-	S:HandleButton(KnowledgeBaseFrameLag);
-	S:HandleButton(KnowledgeBaseFrameReportIssue);
-	S:HandleButton(KnowledgeBaseFrameStuck);
-	S:HandleButton(KnowledgeBaseFrameEditTicket);
-	S:HandleButton(KnowledgeBaseFrameAbandonTicket);
-	
-	S:HandleButton(KnowledgeBaseFrameCancel);
-	
-	S:HandleButton(HelpFrameGMTalkOpenTicket); -- Связатся с ГМ
-	S:HandleButton(HelpFrameGMTalkCancel);
-	
-	S:HandleButton(HelpFrameLagLoot, true); -- Сообщить о задержки
-	S:HandleButton(HelpFrameLagAuctionHouse, true);
-	S:HandleButton(HelpFrameLagMail, true);
-	S:HandleButton(HelpFrameLagChat, true);
-	S:HandleButton(HelpFrameLagMovement, true);
-	S:HandleButton(HelpFrameLagSpell, true);
-	
-	S:HandleButton(HelpFrameLagCancel);
-	
-	S:HandleButton(HelpFrameReportIssueOpenTicket); -- Сообщить о проблеме
-	
-	S:HandleButton(HelpFrameReportIssueCancel);
+	for i = 1, #helpFrameButtons do
+		local button = _G["HelpFrame" .. helpFrameButtons[i]];
+		S:HandleButton(button);
+	end
 	
 	HelpFrameOpenTicketDivider:StripTextures();
 	
 	S:HandleScrollBar(HelpFrameOpenTicketScrollFrameScrollBar);
 	
-	S:HandleButton(HelpFrameOpenTicketSubmit);
-	S:HandleButton(HelpFrameOpenTicketCancel);
+	HelpFrameOpenTicketSubmit:SetPoint("RIGHT", HelpFrameOpenTicketCancel, "LEFT", -2, 0);
 	
-	S:HandleButton(HelpFrameStuckStuck, true); -- Персонаж застрял
-	S:HandleButton(HelpFrameStuckOpenTicket, true);
-	S:HandleButton(HelpFrameStuckCancel);
+	S:HandleScrollBar(HelpFrameViewResponseIssueScrollFrameScrollBar);
+	HelpFrameViewResponseDivider:Kill();
+	S:HandleScrollBar(HelpFrameViewResponseMessageScrollFrameScrollBar);
+	HelpFrameViewResponseIssueResolved:SetPoint("LEFT", HelpFrameViewResponseMoreHelp, "RIGHT", -3, 0);
+	
+	KnowledgeBaseFrame:StripTextures();
 	
 	KnowledgeBaseFrame:HookScript("OnShow", function()
 		select(11, HelpFrame:GetRegions()):Hide();
@@ -70,6 +48,41 @@ local function LoadSkin()
 	KnowledgeBaseFrame:SetScript("OnHide", function()
 		select(11, HelpFrame:GetRegions()):Show();
 	end);
+	
+	S:HandleButton(KnowledgeBaseFrameTopIssuesButton);
+	S:HandleButton(GMChatOpenLog);
+	
+	KnowledgeBaseFrameDivider:Kill();
+	
+	S:HandleEditBox(KnowledgeBaseFrameEditBox);
+	KnowledgeBaseFrameEditBox.backdrop:Point("TOPLEFT", -E.Border, -4);
+	KnowledgeBaseFrameEditBox.backdrop:Point("BOTTOMRIGHT", E.Border, 7);
+	
+	S:HandleDropDownBox(KnowledgeBaseFrameCategoryDropDown);
+	S:HandleDropDownBox(KnowledgeBaseFrameSubCategoryDropDown);
+	
+	S:HandleButton(KnowledgeBaseFrameSearchButton);
+	
+	KnowledgeBaseFrameDivider2:Kill();
+	
+	S:HandleNextPrevButton(KnowledgeBaseArticleListFrameNextButton);
+	S:HandleNextPrevButton(KnowledgeBaseArticleListFramePreviousButton);
+	
+	S:HandleScrollBar(KnowledgeBaseArticleScrollFrameScrollBar);
+	S:HandleButton(KnowledgeBaseArticleScrollChildFrameBackButton);
+	
+	S:HandleButton(KnowledgeBaseFrameReportIssue);
+	KnowledgeBaseFrameGMTalk:SetPoint("BOTTOM", KnowledgeBaseFrameReportIssue, "TOP", 0, 2);
+	S:HandleButton(KnowledgeBaseFrameGMTalk);
+	S:HandleButton(KnowledgeBaseFrameAbandonTicket);
+	KnowledgeBaseFrameEditTicket:SetPoint("BOTTOM", KnowledgeBaseFrameAbandonTicket, "TOP", 0, 2);
+	S:HandleButton(KnowledgeBaseFrameEditTicket);
+	
+	KnowledgeBaseFrameStuck:SetPoint("LEFT", KnowledgeBaseFrameReportIssue, "RIGHT", 2, 0);
+	S:HandleButton(KnowledgeBaseFrameStuck);
+	KnowledgeBaseFrameLag:SetPoint("LEFT", KnowledgeBaseFrameGMTalk, "RIGHT", 2, 0);
+	S:HandleButton(KnowledgeBaseFrameLag);
+	S:HandleButton(KnowledgeBaseFrameCancel);
 end
 
-S:RegisterSkin('ElvUI', LoadSkin);
+S:RegisterSkin("ElvUI", LoadSkin);
