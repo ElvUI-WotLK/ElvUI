@@ -48,6 +48,8 @@ local function LoadSkin()
 	
 	-- reskin popup buttons
 	for i = 1, 3 do
+		S:HandleCloseButton(_G["StaticPopup"..i.."CloseButton"]);
+		
 		for j = 1, 3 do
 			S:HandleButton(_G["StaticPopup"..i.."Button"..j])
 			S:HandleEditBox(_G["StaticPopup"..i.."EditBox"])
