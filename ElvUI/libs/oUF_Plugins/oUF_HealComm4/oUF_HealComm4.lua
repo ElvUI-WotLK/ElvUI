@@ -5,6 +5,7 @@ assert(oUF, "oUF_HealComm4 was unable to locate oUF install");
 local healComm = LibStub("LibHealComm-4.0");
 
 local function Update(self, ...)
+	if(self.db and not self.db.healPrediction) then return; end
 	local unit = self.unit;
 	local healCommBar = self.HealCommBar;
 	healCommBar.parent = self;
@@ -66,8 +67,7 @@ end
 local function MultiUpdate(...)
 	for i = 1, select("#", ...) do
 		for _, frame in ipairs(oUF.objects) do
-			local db = frame:GetParent().db or frame.db or false;
-			if(frame.unit and (frame.HealCommBar and (db and db.healPrediction)) and UnitGUID(frame.unit) == select(i, ...)) then
+			if(frame.unit and frame.HealCommBar and UnitGUID(frame.unit) == select(i, ...)) then
 				Path(frame);
 			end
 		end
