@@ -1,6 +1,11 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local S = E:GetModule('Skins')
 
+local GUILDMEMBERS_TO_DISPLAY = GUILDMEMBERS_TO_DISPLAY;
+local NORMAL_FONT_COLOR = NORMAL_FONT_COLOR;
+local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
+local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
+
 local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.friends ~= true then return end
 	-- Friends Frame
@@ -50,6 +55,45 @@ local function LoadSkin()
 	S:HandleButton(WhoFrameAddFriendButton);
 	S:HandleButton(WhoFrameGroupInviteButton);
 	-- Guild Frame
+	hooksecurefunc("GuildStatus_Update", function()
+		local name, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName;
+		local button, buttonText, classTextColor;
+		local guildIndex;
+
+		if(FriendsFrame.playerStatusFrame) then
+			for i = 1, GUILDMEMBERS_TO_DISPLAY, 1 do
+				button = _G["GuildFrameButton"..i];
+				name, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName = GetGuildRosterInfo(button.guildIndex);
+				if(online) then
+					if(classFileName) then
+						classTextColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[classFileName] or RAID_CLASS_COLORS[classFileName];
+					else
+						classTextColor = NORMAL_FONT_COLOR;
+					end
+					buttonText = _G["GuildFrameButton"..i.."Name"];
+					buttonText:SetTextColor(1.0, 1.0, 1.0);
+					buttonText = _G["GuildFrameButton"..i.."Class"];
+					buttonText:SetTextColor(classTextColor.r, classTextColor.g, classTextColor.b);
+				end
+			end
+		else
+			local classFileName;
+			for i = 1, GUILDMEMBERS_TO_DISPLAY, 1 do
+				button = _G["GuildFrameGuildStatusButton"..i];
+				name, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName = GetGuildRosterInfo(button.guildIndex);
+				if(online) then
+					if(classFileName) then
+						classTextColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[classFileName] or RAID_CLASS_COLORS[classFileName];
+					else
+						classTextColor = NORMAL_FONT_COLOR;
+					end
+					_G["GuildFrameGuildStatusButton"..i.."Name"]:SetTextColor(classTextColor.r, classTextColor.g, classTextColor.b);
+					_G["GuildFrameGuildStatusButton"..i.."Online"]:SetTextColor(1.0, 1.0, 1.0);
+				end
+			end
+		end
+	end);
+	
 	GuildFrameLFGFrame:StripTextures();
 	GuildFrameLFGFrame:SetTemplate("Default");
 	S:HandleCheckBox(GuildFrameLFGButton);
