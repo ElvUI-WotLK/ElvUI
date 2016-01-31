@@ -782,7 +782,7 @@ function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdat
 		UF["headerFunctions"][group]["Update"] = function()
 			local db = UF.db["units"][group];
 			if(db.enable ~= true) then
-				UnregisterAttributeDriver(UF[group], "visibility");
+				UnregisterStateDriver(UF[group], "visibility");
 				UF[group]:Hide();
 				return;
 			end

@@ -168,7 +168,7 @@ function E:NudgeMover(nudgeX, nudgeY)
 	local x, y, point = E:CalculateMoverPoints(mover, nudgeX, nudgeY);
 	
 	mover:ClearAllPoints();
-	mover:SetPoint(mover.positionOverride or point, E.UIParent, mover.positionOverride and "BOTTOMLEFT" or point, x, y);
+	mover:Point(mover.positionOverride or point, E.UIParent, mover.positionOverride and "BOTTOMLEFT" or point, x, y);
 	E:SaveMoverPosition(mover.name);
 	
 	E:UpdateNudgeFrame(mover, x, y);
