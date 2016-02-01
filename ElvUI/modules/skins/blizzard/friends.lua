@@ -55,11 +55,44 @@ local function LoadSkin()
 	S:HandleButton(WhoFrameAddFriendButton);
 	S:HandleButton(WhoFrameGroupInviteButton);
 	-- Guild Frame
+	GuildFrameColumnHeader3:ClearAllPoints();
+	GuildFrameColumnHeader3:SetPoint("TOPLEFT", 20, -70);
+	
+	GuildFrameColumnHeader4:ClearAllPoints();
+	GuildFrameColumnHeader4:SetPoint("LEFT", GuildFrameColumnHeader3, "RIGHT", -2, -0);
+	WhoFrameColumn_SetWidth(GuildFrameColumnHeader4, 48);
+	
+	GuildFrameColumnHeader1:ClearAllPoints();
+	GuildFrameColumnHeader1:SetPoint("LEFT", GuildFrameColumnHeader4, "RIGHT", -2, -0);
+	WhoFrameColumn_SetWidth(GuildFrameColumnHeader1, 105);
+	
+	GuildFrameColumnHeader2:ClearAllPoints();
+	GuildFrameColumnHeader2:SetPoint("LEFT", GuildFrameColumnHeader1, "RIGHT", -2, -0);
+	WhoFrameColumn_SetWidth(GuildFrameColumnHeader2, 127);
+	
+	for i = 1, GUILDMEMBERS_TO_DISPLAY do
+		local button = _G["GuildFrameButton"..i];
+		
+		button.icon = button:CreateTexture("$parentIcon", "ARTWORK")
+		button.icon:SetPoint("LEFT", 48, -3);
+		button.icon:SetSize(16, 16);
+		button.icon:SetTexture("Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes");
+		button.icon:SetTexCoord(0, 0.25, 0, 0.25);
+		
+		_G["GuildFrameButton" .. i .. "Level"]:ClearAllPoints();
+		_G["GuildFrameButton" .. i .. "Level"]:SetPoint("TOPLEFT", 10, -3);
+		
+		_G["GuildFrameButton" .. i .. "Name"]:SetSize(100, 14);
+		_G["GuildFrameButton" .. i .. "Name"]:ClearAllPoints();
+		_G["GuildFrameButton" .. i .. "Name"]:SetPoint("LEFT", 85, -3);
+		
+		_G["GuildFrameButton" .. i .. "Class"]:Hide();
+	end
+	
 	hooksecurefunc("GuildStatus_Update", function()
 		local name, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName;
 		local button, buttonText, classTextColor;
-		local guildIndex;
-
+		
 		if(FriendsFrame.playerStatusFrame) then
 			for i = 1, GUILDMEMBERS_TO_DISPLAY, 1 do
 				button = _G["GuildFrameButton"..i];
@@ -70,11 +103,13 @@ local function LoadSkin()
 					else
 						classTextColor = NORMAL_FONT_COLOR;
 					end
+					
 					buttonText = _G["GuildFrameButton"..i.."Name"];
-					buttonText:SetTextColor(1.0, 1.0, 1.0);
+					buttonText:SetTextColor(classTextColor.r, classTextColor.g, classTextColor.b);
 					buttonText = _G["GuildFrameButton"..i.."Class"];
 					buttonText:SetTextColor(classTextColor.r, classTextColor.g, classTextColor.b);
 				end
+				button.icon:SetTexCoord(unpack(CLASS_ICON_TCOORDS[classFileName]));
 			end
 		else
 			local classFileName;
