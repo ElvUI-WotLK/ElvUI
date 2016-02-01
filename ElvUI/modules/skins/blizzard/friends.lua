@@ -73,7 +73,7 @@ local function LoadSkin()
 	for i = 1, GUILDMEMBERS_TO_DISPLAY do
 		local button = _G["GuildFrameButton"..i];
 		
-		button.icon = button:CreateTexture("$parentIcon", "ARTWORK")
+		button.icon = button:CreateTexture("$parentIcon", "ARTWORK");
 		button.icon:SetPoint("LEFT", 48, -3);
 		button.icon:SetSize(16, 16);
 		button.icon:SetTexture("Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes");
@@ -95,35 +95,28 @@ local function LoadSkin()
 		
 		if(FriendsFrame.playerStatusFrame) then
 			for i = 1, GUILDMEMBERS_TO_DISPLAY, 1 do
-				button = _G["GuildFrameButton"..i];
+				button = _G["GuildFrameButton" .. i];
 				name, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName = GetGuildRosterInfo(button.guildIndex);
-				if(online) then
-					if(classFileName) then
+				if(classFileName) then
+					if(online) then
 						classTextColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[classFileName] or RAID_CLASS_COLORS[classFileName];
-					else
-						classTextColor = NORMAL_FONT_COLOR;
+						buttonText = _G["GuildFrameButton" .. i .. "Name"];
+						buttonText:SetTextColor(classTextColor.r, classTextColor.g, classTextColor.b);
 					end
-					
-					buttonText = _G["GuildFrameButton"..i.."Name"];
-					buttonText:SetTextColor(classTextColor.r, classTextColor.g, classTextColor.b);
-					buttonText = _G["GuildFrameButton"..i.."Class"];
-					buttonText:SetTextColor(classTextColor.r, classTextColor.g, classTextColor.b);
+					button.icon:SetTexCoord(unpack(CLASS_ICON_TCOORDS[classFileName]));
 				end
-				button.icon:SetTexCoord(unpack(CLASS_ICON_TCOORDS[classFileName]));
 			end
 		else
 			local classFileName;
 			for i = 1, GUILDMEMBERS_TO_DISPLAY, 1 do
-				button = _G["GuildFrameGuildStatusButton"..i];
+				button = _G["GuildFrameGuildStatusButton" .. i];
 				name, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName = GetGuildRosterInfo(button.guildIndex);
-				if(online) then
-					if(classFileName) then
+				if(classFileName) then
+					if(online) then
 						classTextColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[classFileName] or RAID_CLASS_COLORS[classFileName];
-					else
-						classTextColor = NORMAL_FONT_COLOR;
+						_G["GuildFrameGuildStatusButton" .. i .. "Name"]:SetTextColor(classTextColor.r, classTextColor.g, classTextColor.b);
+						_G["GuildFrameGuildStatusButton" .. i .. "Online"]:SetTextColor(1.0, 1.0, 1.0);
 					end
-					_G["GuildFrameGuildStatusButton"..i.."Name"]:SetTextColor(classTextColor.r, classTextColor.g, classTextColor.b);
-					_G["GuildFrameGuildStatusButton"..i.."Online"]:SetTextColor(1.0, 1.0, 1.0);
 				end
 			end
 		end
@@ -153,6 +146,10 @@ local function LoadSkin()
 	GuildMemberDetailFrame:CreateBackdrop("Transparent");
 	
 	S:HandleCloseButton(GuildMemberDetailCloseButton);
+	
+	S:HandleNextPrevButton(GuildFramePromoteButton, true);
+	S:HandleNextPrevButton(GuildFrameDemoteButton, true);
+	GuildFrameDemoteButton:SetPoint("LEFT", GuildFramePromoteButton, "RIGHT", 2, 0);
 	
 	GuildMemberNoteBackground:SetTemplate("Default");
 	GuildMemberOfficerNoteBackground:SetTemplate("Default");
