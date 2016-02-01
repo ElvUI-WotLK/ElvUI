@@ -1,6 +1,9 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local S = E:GetModule('Skins')
 
+local _G = _G;
+local unpack = unpack;
+
 local GUILDMEMBERS_TO_DISPLAY = GUILDMEMBERS_TO_DISPLAY;
 local NORMAL_FONT_COLOR = NORMAL_FONT_COLOR;
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
@@ -29,8 +32,8 @@ local function LoadSkin()
 		Tab.backdrop:Point("TOPLEFT", 3, -7);
 		Tab.backdrop:Point("BOTTOMRIGHT", -2, -1);
 		
-		Tab:HookScript('OnEnter', function(self) self.backdrop:SetBackdropBorderColor(unpack(E['media'].rgbvaluecolor)); end);
-		Tab:HookScript('OnLeave', function(self) self.backdrop:SetBackdropBorderColor(unpack(E['media'].bordercolor)); end);
+		Tab:HookScript("OnEnter", S.SetModifiedBackdrop);
+		Tab:HookScript("OnLeave", S.SetOriginalBackdrop);
 	end
 	
 	S:HandleScrollBar(FriendsFrameFriendsScrollFrameScrollBar);
@@ -161,18 +164,20 @@ local function LoadSkin()
 	
 	GuildInfoFrame:StripTextures(); -- Info Frame
 	GuildInfoFrame:CreateBackdrop("Transparent");
-	GuildInfoFrame.backdrop:Point("TOPLEFT", 3, -5);
+	GuildInfoFrame.backdrop:Point("TOPLEFT", 3, -6);
 	GuildInfoFrame.backdrop:Point("BOTTOMRIGHT", -2, 3);
+	
+	GuildInfoTextBackground:SetTemplate("Default");
+	S:HandleScrollBar(GuildInfoFrameScrollFrameScrollBar);
 	
 	S:HandleCloseButton(GuildInfoCloseButton);
 	
-	GuildInfoTextBackground:SetTemplate("Default");
-	
-	S:HandleScrollBar(GuildInfoFrameScrollFrameScrollBar);
-	
-	S:HandleButton(GuildInfoGuildEventButton);
 	S:HandleButton(GuildInfoSaveButton);
+	GuildInfoSaveButton:SetPoint("BOTTOMLEFT", 104, 11);
 	S:HandleButton(GuildInfoCancelButton);
+	GuildInfoCancelButton:SetPoint("LEFT", GuildInfoSaveButton, "RIGHT", 3, 0);
+	S:HandleButton(GuildInfoGuildEventButton);
+	GuildInfoGuildEventButton:SetPoint("RIGHT", GuildInfoSaveButton, "LEFT", -28, 0);
 	
 	GuildEventLogFrame:StripTextures(); -- GuildEventLog Frame
 	GuildEventLogFrame:CreateBackdrop("Transparent");

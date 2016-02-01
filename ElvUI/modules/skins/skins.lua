@@ -110,7 +110,7 @@ function S:HandleScrollBar(frame, thumbTrim)
 				frame.thumbbg:SetTemplate("Default", true, true);
 				frame.thumbbg:SetBackdropColor(0.6, 0.6, 0.6);
 				if frame.trackbg then
-					frame.thumbbg:SetFrameLevel(frame.trackbg:GetFrameLevel())
+					frame.thumbbg:SetFrameLevel(frame.trackbg:GetFrameLevel()+1)
 				end
 			end
 		end
