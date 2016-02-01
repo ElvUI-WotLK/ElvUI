@@ -147,15 +147,17 @@ local function LoadSkin()
 	
 	S:HandleCloseButton(GuildMemberDetailCloseButton);
 	
+	S:HandleButton(GuildMemberRemoveButton);
+	GuildMemberRemoveButton:SetPoint("BOTTOMLEFT", 8, 7);
+	S:HandleButton(GuildMemberGroupInviteButton);
+	GuildMemberGroupInviteButton:SetPoint("LEFT", GuildMemberRemoveButton, "RIGHT", 3, 0);
+	
 	S:HandleNextPrevButton(GuildFramePromoteButton, true);
 	S:HandleNextPrevButton(GuildFrameDemoteButton, true);
 	GuildFrameDemoteButton:SetPoint("LEFT", GuildFramePromoteButton, "RIGHT", 2, 0);
 	
 	GuildMemberNoteBackground:SetTemplate("Default");
 	GuildMemberOfficerNoteBackground:SetTemplate("Default");
-	
-	S:HandleButton(GuildMemberRemoveButton);
-	S:HandleButton(GuildMemberGroupInviteButton);
 	
 	GuildInfoFrame:StripTextures(); -- Info Frame
 	GuildInfoFrame:CreateBackdrop("Transparent");
