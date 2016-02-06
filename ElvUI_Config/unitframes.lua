@@ -7,6 +7,9 @@ local ElvUF = ns.oUF;
 local tinsert = table.insert;
 local twipe = table.wipe;
 
+local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
+local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
+
 local ACD = LibStub("AceConfigDialog-3.0-ElvUI");
 local fillValues = {
 	["fill"] = L["Filled"],
@@ -171,14 +174,14 @@ local function GetOptionsTable_Power(hasDetatchOption, updateFunc, groupName, nu
 					E.db.unitframe.units[groupName]["power"][ info[#info] ] = value;
 					
 					local frameName = E:StringTitle(groupName);
-					frameName = "ElvUF_"..frameName;
+					frameName = "ElvUF_" .. frameName;
 					frameName = frameName:gsub("t(arget)", "T%1");
 					
 					if(numUnits) then
 						for i = 1, numUnits do
-							if(_G[frameName..i]) then
-								local v = _G[frameName..i].Power:GetValue();
-								local min, max = _G[frameName..i].Power:GetMinMaxValues();
+							if(_G[frameName .. i]) then
+								local v = _G[frameName .. i].Power:GetValue();
+								local min, max = _G[frameName .. i].Power:GetMinMaxValues();
 								_G[frameName..i].Power:SetMinMaxValues(min, max + 500);
 								_G[frameName..i].Power:SetValue(1);
 								_G[frameName..i].Power:SetValue(0);
@@ -224,13 +227,15 @@ local function GetOptionsTable_Power(hasDetatchOption, updateFunc, groupName, nu
 			configureButton = {
 				order = 5,
 				name = L["Coloring"],
+				desc = L["This opens the UnitFrames Color settings. These settings affect all unitframes."],
 				type = "execute",
 				func = function() ACD:SelectGroup("ElvUI", "unitframe", "general", "allColorsGroup", "powerGroup"); end,
 			},
-			spacer = {
-				type = "description",
-				name = "",
-				order = 6
+			position = {
+				type = "select",
+				order = 6,
+				name = L["Text Position"],
+				values = positionValues
 			},
 			xOffset = {
 				order = 7,
@@ -246,15 +251,9 @@ local function GetOptionsTable_Power(hasDetatchOption, updateFunc, groupName, nu
 				desc = L["Offset position for text."],
 				min = -300, max = 300, step = 1
 			},
-			position = {
-				type = "select",
-				order = 9,
-				name = L["Text Position"],
-				values = positionValues
-			}
 		}
 	};
-
+	
 	if(hasDetatchOption) then
 		config.args.attachTextToPower = {
 			type = "toggle",
@@ -272,6 +271,17 @@ local function GetOptionsTable_Power(hasDetatchOption, updateFunc, groupName, nu
 			name = L["Detached Width"],
 			disabled = function() return not E.db.unitframe.units[groupName].power.detachFromFrame; end,
 			min = 15, max = 450, step = 1
+		};
+		config.args.parent = {
+			type = "select",
+			order = 11,
+			name = L["Parent"],
+			desc = L["Choose UIPARENT to prevent it from hiding with the unitframe."],
+			disabled = function() return not E.db.unitframe.units[groupName].power.detachFromFrame; end,
+			values = {
+				["FRAME"] = "FRAME",
+				["UIPARENT"] = "UIPARENT"
+			}
 		};
 	end
 	
@@ -324,111 +334,88 @@ local function GetOptionsTable_Power(hasDetatchOption, updateFunc, groupName, nu
 	
 	return config;
 end
--- 300
-local function GetOptionsTable_Name(updateFunc, groupName, numUnits) -- Имя
+
+local function GetOptionsTable_Name(updateFunc, groupName, numUnits)
 	local config = {
 		order = 300,
-		type = 'group',
-		name = L['Name'],
-		get = function(info) return E.db.unitframe.units[groupName]['name'][ info[#info] ] end,
-		set = function(info, value) E.db.unitframe.units[groupName]['name'][ info[#info] ] = value; updateFunc(UF, groupName, numUnits) end,
+		type = "group",
+		name = L["Name"],
+		get = function(info) return E.db.unitframe.units[groupName]["name"][ info[#info] ]; end,
+		set = function(info, value) E.db.unitframe.units[groupName]["name"][ info[#info] ] = value; updateFunc(UF, groupName, numUnits); end,
 		args = {
-			position = { -- Позиция текста
-				type = 'select',
+			position = {
+				type = "select",
 				order = 1,
-				name = L['Text Position'],
-				values = positionValues,
-			},	
-			xOffset = { -- Отступ текста по X
+				name = L["Text Position"],
+				values = positionValues
+			},
+			xOffset = {
 				order = 2,
-				type = 'range',
-				name = L['Text xOffset'],
-				desc = L['Offset position for text.'],
-				min = -300, max = 300, step = 1,
-			},		
-			yOffset = { -- Отступ текста по Y
+				type = "range",
+				name = L["Text xOffset"],
+				desc = L["Offset position for text."],
+				min = -300, max = 300, step = 1
+			},
+			yOffset = {
 				order = 3,
-				type = 'range',
-				name = L['Text yOffset'],
-				desc = L['Offset position for text.'],
-				min = -300, max = 300, step = 1,
-			},				
-			text_format = { -- Формат текста
+				type = "range",
+				name = L["Text yOffset"],
+				desc = L["Offset position for text."],
+				min = -300, max = 300, step = 1
+			},
+			text_format = {
 				order = 100,
-				name = L['Text Format'],
-				type = 'input',
-				width = 'full',
-				desc = L['TEXT_FORMAT_DESC'],
-			},					
-		},
-	}
+				name = L["Text Format"],
+				type = "input",
+				width = "full",
+				desc = L["TEXT_FORMAT_DESC"]
+			}
+		}
+	};
 	
-	return config
+	return config;
 end
--- 400
-local function GetOptionsTable_Portrait(updateFunc, groupName, numUnits, hasDetatchOption) -- Портрет
+
+local function GetOptionsTable_Portrait(updateFunc, groupName, numUnits)
 	local config = {
 		order = 400,
-		type = 'group',
-		name = L['Portrait'],
-		get = function(info) return E.db.unitframe.units[groupName]['portrait'][ info[#info] ] end,
-		set = function(info, value) E.db.unitframe.units[groupName]['portrait'][ info[#info] ] = value; updateFunc(UF, groupName, numUnits) end,
+		type = "group",
+		name = L["Portrait"],
+		get = function(info) return E.db.unitframe.units[groupName]["portrait"][ info[#info] ]; end,
+		set = function(info, value) E.db.unitframe.units[groupName]["portrait"][ info[#info] ] = value; updateFunc(UF, groupName, numUnits); end,
 		args = {
-			enable = { -- Включить
-				type = 'toggle',
+			enable = {
+				type = "toggle",
 				order = 1,
-				name = L['Enable'],
+				name = L["Enable"]
 			},
-			width = { -- Ширина
-				type = 'range',
+			width = {
+				type = "range",
 				order = 2,
-				name = L['Width'],
+				name = L["Width"],
 				min = 1, max = 150, step = 1,
-				disabled = function() return not E.db.unitframe.units[groupName]['portrait']['enable'] or E.db.unitframe.units[groupName]['portrait']['overlay'] or E.db.unitframe.units[groupName]['portrait']['detachFromFrame'] end,
+				disabled = function() return not E.db.unitframe.units[groupName]["portrait"]["enable"] or E.db.unitframe.units[groupName]["portrait"]["overlay"]; end,
 			},
-			overlay = { -- Наложение
-				type = 'toggle',
-				name = L['Overlay'],
-				desc = L['Overlay the healthbar'],
+			overlay = {
+				type = "toggle",
+				name = L["Overlay"],
+				desc = L["Overlay the healthbar"],
 				order = 3,
-				disabled = function() return not E.db.unitframe.units[groupName]['portrait']['enable'] or E.db.unitframe.units[groupName]['portrait']['detachFromFrame'] end,
+				disabled = function() return not E.db.unitframe.units[groupName]["portrait"]["enable"]; end,
 			},
-			style = { -- Стиль
-				type = 'select',
-				name = L['Style'],
-				desc = L['Select the display method of the portrait.'],
+			style = {
+				type = "select",
+				name = L["Style"],
+				desc = L["Select the display method of the portrait."],
 				order = 4,
 				values = {
-					['2D'] = L['2D'],
-					['3D'] = L['3D'],
+					["2D"] = L["2D"],
+					["3D"] = L["3D"]
 				},
-				disabled = function() return not E.db.unitframe.units[groupName]['portrait']['enable'] end,
-			},
-		},
-	}
-	
-	if(hasDetatchOption) then
-		config.args.detachFromFrame = {
-			type = 'toggle',
-			order = 5,
-			name = L['Detach From Frame'],
-			disabled = function() return not E.db.unitframe.units[groupName]['portrait']['enable'] end,
-		};
-		config.args.detachedWidth = {
-			type = 'range',
-			order = 6,
-			name = L['Detached Width'],
-			min = 15, max = 450, step = 1,
-			disabled = function() return not E.db.unitframe.units[groupName]['portrait']['detachFromFrame'] end,
-		};
-		config.args.detachedHeight = {
-			type = 'range',
-			order = 7,
-			name = L['Detached Height'],
-			min = 15, max = 450, step = 1,
-			disabled = function() return not E.db.unitframe.units[groupName]['portrait']['detachFromFrame'] end,
-		};
-	end
+				disabled = function() return not E.db.unitframe.units[groupName]["portrait"]["enable"] end
+			}
+		}
+	};
 	
 	return config
 end
@@ -456,7 +443,7 @@ local function GetOptionsTable_Auras(friendlyUnitOnly, auraType, isGroupFrame, u
 				type = "range",
 				order = 3,
 				name = L["Num Rows"],
-				min = 1, max = 4, step = 1
+				min = 1, max = 10, step = 1
 			},
 			sizeOverride = {
 				type = "range",
@@ -469,54 +456,42 @@ local function GetOptionsTable_Auras(friendlyUnitOnly, auraType, isGroupFrame, u
 				order = 5,
 				type = "range",
 				name = L["xOffset"],
-				min = -60, max = 60, step = 1
+				min = -300, max = 300, step = 1
 			},
 			yOffset = {
 				order = 6,
 				type = "range",
 				name = L["yOffset"],
-				min = -60, max = 60, step = 1
-			},
-			xSpacing = {
-				order = 7,
-				type = "range",
-				name = L["xSpacing"],
-				min = -60, max = 60, step = 1
-			},
-			ySpacing = {
-				order = 8,
-				type = "range",
-				name = L["ySpacing"],
-				min = -60, max = 60, step = 1
+				min = -300, max = 300, step = 1
 			},
 			anchorPoint = {
 				type = "select",
-				order = 9,
+				order = 7,
 				name = L["Anchor Point"],
 				desc = L["What point to anchor to the frame you set to attach to."],
 				values = positionValues
 			},
 			fontSize = {
-				order = 10,
+				order = 8,
 				name = L["Font Size"],
 				type = "range",
 				min = 6, max = 22, step = 1
 			},	
 			clickThrough = {
-				order = 11,
+				order = 9,
 				name = L["Click Through"],
 				desc = L["Ignore mouse events."],
 				type = "toggle"
 			},
 			sortMethod = {
-				order = 12,
+				order = 10,
 				name = L["Sort By"],
 				desc = L["Method to sort by."],
 				type = "select",
 				values = auraSortValues
 			},
 			sortDirection = {
-				order = 13,
+				order = 11,
 				name = L["Sort Direction"],
 				desc = L["Ascending or Descending order."],
 				type = "select",
@@ -786,503 +761,684 @@ local function GetOptionsTable_Auras(friendlyUnitOnly, auraType, isGroupFrame, u
 	
 	return config;
 end
--- 700
-local function GetOptionsTable_Castbar(hasTicks, updateFunc, groupName, numUnits) -- Полоса заклинаний
+
+local function GetOptionsTable_Castbar(hasTicks, updateFunc, groupName, numUnits)
 	local config = {
 		order = 700,
-		type = 'group',
-		name = L['Castbar'],
-		get = function(info) return E.db.unitframe.units[groupName]['castbar'][ info[#info] ] end,
-		set = function(info, value) E.db.unitframe.units[groupName]['castbar'][ info[#info] ] = value; updateFunc(UF, groupName, numUnits) end,
+		type = "group",
+		name = L["Castbar"],
+		get = function(info) return E.db.unitframe.units[groupName]["castbar"][ info[#info] ]; end,
+		set = function(info, value) E.db.unitframe.units[groupName]["castbar"][ info[#info] ] = value; updateFunc(UF, groupName, numUnits); end,
 		args = {
-			enable = { -- Включить
-				type = 'toggle',
+			enable = {
+				type = "toggle",
 				order = 1,
-				name = L['Enable'],
+				name = L["Enable"]
 			},	
-			matchsize = { -- По ширине рамки
+			matchsize = {
 				order = 2,
-				type = 'execute',
-				name = L['Match Frame Width'],
-				func = function() E.db.unitframe.units[groupName]['castbar']['width'] = E.db.unitframe.units[groupName]['width']; updateFunc(UF, groupName, numUnits) end,
+				type = "execute",
+				name = L["Match Frame Width"],
+				func = function() E.db.unitframe.units[groupName]["castbar"]["width"] = E.db.unitframe.units[groupName]["width"]; updateFunc(UF, groupName, numUnits); end,
 			},			
-			forceshow = { -- Показать/Скрыть
+			forceshow = {
 				order = 3,
-				name = L["Show"]..' / '..HIDE,
+				name = L["Show"] .. " / " .. HIDE,
 				func = function() 
-					local frameName = E:StringTitle(groupName)
-					frameName = "ElvUF_"..frameName
-					frameName = frameName:gsub('t(arget)', 'T%1')
-
-					if numUnits then
-						for i=1, numUnits do
-							local castbar = _G[frameName..i].Castbar
-							if not castbar.oldHide then
-								castbar.oldHide = castbar.Hide
-								castbar.Hide = castbar.Show
+					local frameName = E:StringTitle(groupName);
+					frameName = "ElvUF_"..frameName;
+					frameName = frameName:gsub("t(arget)", "T%1");
+					
+					if(numUnits) then
+						for i = 1, numUnits do
+							local castbar = _G[frameName .. i].Castbar;
+							if(not castbar.oldHide) then
+								castbar.oldHide = castbar.Hide;
+								castbar.Hide = castbar.Show;
 								castbar:SetAlpha(1);
-								castbar:Show()
+								castbar:Show();
 							else
-								castbar.Hide = castbar.oldHide
-								castbar.oldHide = nil
-								castbar:Hide()			
-							end						
+								castbar.Hide = castbar.oldHide;
+								castbar.oldHide = nil;
+								castbar:Hide();
+							end
 						end
 					else
-						local castbar = _G[frameName].Castbar
-						if not castbar.oldHide then
-							castbar.oldHide = castbar.Hide
-							castbar.Hide = castbar.Show
+						local castbar = _G[frameName].Castbar;
+						if(not castbar.oldHide) then
+							castbar.oldHide = castbar.Hide;
+							castbar.Hide = castbar.Show;
 							castbar:SetAlpha(1);
-							castbar:Show()
+							castbar:Show();
 						else
-							castbar.Hide = castbar.oldHide
-							castbar.oldHide = nil
-							castbar:Hide()		
+							castbar.Hide = castbar.oldHide;
+							castbar.oldHide = nil;
+							castbar:Hide();
 						end
 					end
 				end,
-				type = 'execute',
+				type = "execute"
 			},
-			configureButton = { -- Окрашивание
+			configureButton = {
 				order = 4,
-				name = L['Coloring'],
-				type = 'execute',
-				func = function() ACD:SelectGroup("ElvUI", "unitframe", "general", "allColorsGroup", "castBars") end,
-			},					
-			width = { -- Ширина
+				name = L["Coloring"],
+				type = "execute",
+				desc = L["This opens the UnitFrames Color settings. These settings affect all unitframes."],
+				func = function() ACD:SelectGroup("ElvUI", "unitframe", "general", "allColorsGroup", "castBars") end
+			},
+			width = {
 				order = 5,
-				name = L['Width'],
-				type = 'range',
-				min = 50, max = 600, step = 1,
+				name = L["Width"],
+				type = "range",
+				min = 50, max = 600, step = 1
 			},
-			height = { -- Высота
+			height = {
 				order = 6,
-				name = L['Height'],
-				type = 'range',
-				min = 10, max = 85, step = 1,
-			},		
-			icon = { -- Иконка
+				name = L["Height"],
+				type = "range",
+				min = 10, max = 85, step = 1
+			},
+			icon = {
 				order = 7,
-				name = L['Icon'],
-				type = 'toggle',
-			},			
-			latency = { -- Задержка
+				name = L["Icon"],
+				type = "toggle"
+			},
+			latency = {
 				order = 8,
-				name = L['Latency'],
-				type = 'toggle',				
+				name = L["Latency"],
+				type = "toggle"
 			},
-			format = { -- Формат
+			format = {
 				order = 9,
-				type = 'select',
-				name = L['Format'],
+				type = "select",
+				name = L["Format"],
 				values = {
-					['CURRENTMAX'] = L['Current / Max'],
-					['CURRENT'] = L['Current'],
-					['REMAINING'] = L['Remaining'],
-				},
+					["CURRENTMAX"] = L["Current / Max"],
+					["CURRENT"] = L["Current"],
+					["REMAINING"] = L["Remaining"]
+				}
 			},
-			spark = { -- Искра
+			spark = {
 				order = 10,
-				type = 'toggle',
-				name = L['Spark'],
-				desc = L['Display a spark texture at the end of the castbar statusbar to help show the differance between castbar and backdrop.'],
-			},
-		},
-	}
-	
-	if hasTicks then -- Игрок
-		config.args.ticks = { -- Тики
-			order = 11,
-			type = 'toggle',
-			name = L['Ticks'],
-			desc = L['Display tick marks on the castbar for channelled spells. This will adjust automatically for spells like Drain Soul and add additional ticks based on haste.'],
+				type = "toggle",
+				name = L["Spark"],
+				desc = L["Display a spark texture at the end of the castbar statusbar to help show the differance between castbar and backdrop."]
+			}
 		}
-		config.args.displayTarget = { -- Показывать цель
+	};
+	
+	if(hasTicks) then
+		config.args.ticks = {
+			order = 11,
+			type = "toggle",
+			name = L["Ticks"],
+			desc = L["Display tick marks on the castbar for channelled spells. This will adjust automatically for spells like Drain Soul and add additional ticks based on haste."]
+		};
+		config.args.displayTarget = {
 			order = 12,
-			type = 'toggle',
-			name = L['Display Target'],
-			desc = L['Display the target of your current cast. Useful for mouseover casts.'],
-		}		
+			type = "toggle",
+			name = L["Display Target"],
+			desc = L["Display the target of your current cast. Useful for mouseover casts."]
+		};
 	end
 	
-	return config
+	return config;
 end
--- 800
-local filters; -- Полосы аур
+
+local filters;
 local function GetOptionsTable_AuraBars(friendlyOnly, updateFunc, groupName)
 	local config = {
 		order = 800,
-		type = 'group',
-		name = L['Aura Bars'],
-		get = function(info) return E.db.unitframe.units[groupName]['aurabar'][ info[#info] ] end,
-		set = function(info, value) E.db.unitframe.units[groupName]['aurabar'][ info[#info] ] = value; updateFunc(UF, groupName) end,
+		type = "group",
+		name = L["Aura Bars"],
+		get = function(info) return E.db.unitframe.units[groupName]["aurabar"][ info[#info] ]; end,
+		set = function(info, value) E.db.unitframe.units[groupName]["aurabar"][ info[#info] ] = value; updateFunc(UF, groupName); end,
 		args = {
-			enable = { -- Включить
-				type = 'toggle',
+			enable = {
+				type = "toggle",
 				order = 1,
-				name = L['Enable'],
-			},			
-			configureButton1 = { -- Окрашивание
+				name = L["Enable"]
+			},
+			configureButton1 = {
 				order = 2,
-				name = L['Coloring'],
-				type = 'execute',
-				func = function() ACD:SelectGroup("ElvUI", "unitframe", "general", "allColorsGroup", "auraBars") end,
-			},		
-			configureButton2 = { -- Окрашивание конкретных
+				name = L["Coloring"],
+				desc = L["This opens the UnitFrames Color settings. These settings affect all unitframes."],
+				type = "execute",
+				func = function() ACD:SelectGroup("ElvUI", "unitframe", "general", "allColorsGroup", "auraBars") end
+			},
+			configureButton2 = {
 				order = 3,
-				name = L['Coloring (Specific)'],
-				type = 'execute',
-				func = function() E:SetToFilterConfig('AuraBar Colors') end,
-			},				
-			anchorPoint = { -- Точка фиксации
-				type = 'select',
+				name = L["Coloring (Specific)"],
+				type = "execute",
+				func = function() E:SetToFilterConfig("AuraBar Colors") end
+			},
+			anchorPoint = {
+				type = "select",
 				order = 4,
-				name = L['Anchor Point'],
-				desc = L['What point to anchor to the frame you set to attach to.'],
+				name = L["Anchor Point"],
+				desc = L["What point to anchor to the frame you set to attach to."],
 				values = {
-					['ABOVE'] = L['Above'],
-					['BELOW'] = L['Below'],
-				},
+					["ABOVE"] = L["Above"],
+					["BELOW"] = L["Below"]
+				}
 			},
-			attachTo = { -- Прикрепить к
-				type = 'select',
+			attachTo = {
+				type = "select",
 				order = 5,
-				name = L['Attach To'],
-				desc = L['The object you want to attach to.'],
+				name = L["Attach To"],
+				desc = L["The object you want to attach to."],
 				values = {
-					['FRAME'] = L['Frame'],
-					['DEBUFFS'] = L['Debuffs'],
-					['BUFFS'] = L['Buffs'],
-				},					
+					["FRAME"] = L["Frame"],
+					["DEBUFFS"] = L["Debuffs"],
+					["BUFFS"] = L["Buffs"]
+				}
 			},
-			height = { -- Высота
-				type = 'range',
+			height = {
+				type = "range",
 				order = 6,
-				name = L['Height'],
-				min = 6, max = 40, step = 1,
+				name = L["Height"],
+				min = 6, max = 40, step = 1
 			},
 			maxBars = {
-				type = 'range',
+				type = "range",
 				order = 7,
-				name = L['Max Bars'],
-				min = 1, max = 40, step = 1,
+				name = L["Max Bars"],
+				min = 1, max = 40, step = 1
 			},
-			sort = { -- Метод сортировки
-				type = 'select',
+			sort = {
+				type = "select",
 				order = 8,
-				name = L['Sort Method'],
-				values = auraBarsSortValues,
+				name = L["Sort Method"],
+				values = auraBarsSortValues
 			},
-			friendlyAuraType = { -- Тип аур друга
-				type = 'select',
-				order = 8,
-				name = L['Friendly Aura Type'],
-				desc = L['Set the type of auras to show when a unit is friendly.'],
+			friendlyAuraType = {
+				type = "select",
+				order = 17,
+				name = L["Friendly Aura Type"],
+				desc = L["Set the type of auras to show when a unit is friendly."],
 				values = {
-					['HARMFUL'] = L['Debuffs'],
-					['HELPFUL'] = L['Buffs'],
-				},						
+					["HARMFUL"] = L["Debuffs"],
+					["HELPFUL"] = L["Buffs"]
+				}
 			},
-			enemyAuraType = { -- Тип аур врага
-				type = 'select',
-				order = 9,
-				name = L['Enemy Aura Type'],
-				desc = L['Set the type of auras to show when a unit is a foe.'],
+			enemyAuraType = {
+				type = "select",
+				order = 18,
+				name = L["Enemy Aura Type"],
+				desc = L["Set the type of auras to show when a unit is a foe."],
 				values = {
-					['HARMFUL'] = L['Debuffs'],
-					['HELPFUL'] = L['Buffs'],
-				},						
+					["HARMFUL"] = L["Debuffs"],
+					["HELPFUL"] = L["Buffs"]
+				}
 			},
 			uniformThreshold = {
-				order = 18,
+				order = 19,
 				type = "range",
 				name = L["Uniform Threshold"],
 				desc = L["Seconds remaining on the aura duration before the bar starts moving. Set to 0 to disable."],
-				min = 0, max = 3600, step = 1,
+				min = 0, max = 3600, step = 1
 			},
-			filters = { -- Дополнительный фильтр
+			filters = {
 				name = L["Filters"],
 				guiInline = true,
-				type = 'group',
+				type = "group",
 				order = 100,
-				args = {},
-			},
-		},
-	}		
+				args = {}
+			}
+		}
+	};
 	
-	if groupName == "target" then
-		config.args.attachTo.values['PLAYER_AURABARS'] = L["Player Frame Aura Bars"]
+	if(groupName == "target") then
+		config.args.attachTo.values["PLAYER_AURABARS"] = L["Player Frame Aura Bars"];
 	end
 	
-	if friendlyOnly then -- Игрок
-		config.args.filters.args.playerOnly = { -- Блокировать чужие ауры
+	if(friendlyOnly) then
+		config.args.filters.args.playerOnly = {
 			order = 10,
-			type = 'toggle',
+			type = "toggle",
 			name = L["Block Non-Personal Auras"],
-			desc = L["Don't display auras that are not yours."],
-		}
-		config.args.filters.args.useBlacklist = { -- Блокировать ауры из черного списка
+			desc = L["Don't display auras that are not yours."]
+		};
+		config.args.filters.args.useBlacklist = {
 			order = 11,
-			type = 'toggle',
+			type = "toggle",
 			name = L["Block Blacklisted Auras"],
 			desc = L["Don't display any auras found on the 'Blacklist' filter."],
-		}
-		config.args.filters.args.useWhitelist = { -- Разрешить ауры из белого списка
+		};
+		config.args.filters.args.useWhitelist = {
 			order = 12,
-			type = 'toggle',
+			type = "toggle",
 			name = L["Allow Whitelisted Auras"],
-			desc = L["If no other filter options are being used then it will block anything not on the 'Whitelist' filter, otherwise it will simply add auras on the whitelist in addition to any other filter settings."],
-		}
-		config.args.filters.args.noDuration = { -- Блокировать ауры без бдительности
+			desc = L["If no other filter options are being used then it will block anything not on the 'Whitelist' filter, otherwise it will simply add auras on the whitelist in addition to any other filter settings."]
+		};
+		config.args.filters.args.noDuration = {
 			order = 13,
-			type = 'toggle',
+			type = "toggle",
 			name = L["Block Auras Without Duration"],
-			desc = L["Don't display auras that have no duration."],					
-		}
-		config.args.filters.args.onlyDispellable = { -- Блокировать не развеиваемые ауры
+			desc = L["Don't display auras that have no duration."]
+		};
+		config.args.filters.args.onlyDispellable = {
 			order = 14,
-			type = 'toggle',
-			name = L['Block Non-Dispellable Auras'],
-			desc = L["Don't display auras that cannot be purged or dispelled by your class."],
-		}
-		config.args.filters.args.noConsolidated = { -- Блокировать рейдовые баффы
+			type = "toggle",
+			name = L["Block Non-Dispellable Auras"],
+			desc = L["Don't display auras that cannot be purged or dispelled by your class."]
+		};
+		config.args.filters.args.noConsolidated = {
 			order = 15,
-			type = 'toggle',
+			type = "toggle",
 			name = L["Block Raid Buffs"],
-			desc = L["Don't display raid buffs such as Blessing of Kings or Mark of the Wild."],		
-		}				
-		config.args.filters.args.useFilter = { -- Дополнительный фильтр
+			desc = L["Don't display raid buffs such as Blessing of Kings or Mark of the Wild."]
+		};
+		config.args.filters.args.useFilter = {
 			order = 16,
-			name = L['Additional Filter'],
-			desc = L['Select an additional filter to use. If the selected filter is a whitelist and no other filters are being used (with the exception of Block Non-Personal Auras) then it will block anything not on the whitelist, otherwise it will simply add auras on the whitelist in addition to any other filter settings.'],
-			type = 'select',
+			name = L["Additional Filter"],
+			desc = L["Select an additional filter to use. If the selected filter is a whitelist and no other filters are being used (with the exception of Block Non-Personal Auras) then it will block anything not on the whitelist, otherwise it will simply add auras on the whitelist in addition to any other filter settings."],
+			type = "select",
 			values = function()
-				filters = {}
-				filters[''] = NONE
-				for filter in pairs(E.global.unitframe['aurafilters']) do
-					filters[filter] = filter
+				filters = {};
+				filters[""] = NONE;
+				for filter in pairs(E.global.unitframe["aurafilters"]) do
+					filters[filter] = filter;
 				end
-				return filters
-			end,
-		}		
-	else -- Цель, Фокус
-		config.args.filters.args.playerOnly = { -- Блокировать чужие ауры
+				return filters;
+			end
+		};
+	else
+		config.args.filters.args.playerOnly = {
 			order = 10,
 			guiInline = true,
-			type = 'group',
+			type = "group",
 			name = L["Block Non-Personal Auras"],
 			args = {
-				friendly = { -- Дружественный
+				friendly = {
 					order = 1,
-					type = 'toggle',
-					name = L['Friendly'],
-					desc = L["If the unit is friendly to you."].." "..L["Don't display auras that are not yours."],
-					get = function(info) return E.db.unitframe.units[groupName]['aurabar'].playerOnly.friendly end,
-					set = function(info, value) E.db.unitframe.units[groupName]['aurabar'].playerOnly.friendly = value; updateFunc(UF, groupName) end,									
+					type = "toggle",
+					name = L["Friendly"],
+					desc = L["If the unit is friendly to you."] .. " " .. L["Don't display auras that are not yours."],
+					get = function(info) return E.db.unitframe.units[groupName]["aurabar"].playerOnly.friendly; end,
+					set = function(info, value) E.db.unitframe.units[groupName]["aurabar"].playerOnly.friendly = value; updateFunc(UF, groupName); end
 				},
 				enemy = { -- Враг
 					order = 2,
-					type = 'toggle',
-					name = L['Enemy'],
-					desc = L["If the unit is an enemy to you."].." "..L["Don't display auras that are not yours."],
-					get = function(info) return E.db.unitframe.units[groupName]['aurabar'].playerOnly.enemy end,
-					set = function(info, value) E.db.unitframe.units[groupName]['aurabar'].playerOnly.enemy = value; updateFunc(UF, groupName) end,										
+					type = "toggle",
+					name = L["Enemy"],
+					desc = L["If the unit is an enemy to you."] .. " " .. L["Don't display auras that are not yours."],
+					get = function(info) return E.db.unitframe.units[groupName]["aurabar"].playerOnly.enemy; end,
+					set = function(info, value) E.db.unitframe.units[groupName]["aurabar"].playerOnly.enemy = value; updateFunc(UF, groupName); end
 				}
-			},
-		}
-		config.args.filters.args.useBlacklist = { -- Блокировать ауры из черного списка
+			}
+		};
+		config.args.filters.args.useBlacklist = {
 			order = 11,
 			guiInline = true,
-			type = 'group',
+			type = "group",
 			name = L["Block Blacklisted Auras"],
 			args = {
-				friendly = { -- Дружественный
+				friendly = {
 					order = 1,
-					type = 'toggle',
-					name = L['Friendly'],
-					desc = L["If the unit is friendly to you."].." "..L["Don't display any auras found on the 'Blacklist' filter."],
-					get = function(info) return E.db.unitframe.units[groupName]['aurabar'].useBlacklist.friendly end,
-					set = function(info, value) E.db.unitframe.units[groupName]['aurabar'].useBlacklist.friendly = value; updateFunc(UF, groupName) end,									
+					type = "toggle",
+					name = L["Friendly"],
+					desc = L["If the unit is friendly to you."] .. " " .. L["Don't display any auras found on the 'Blacklist' filter."],
+					get = function(info) return E.db.unitframe.units[groupName]["aurabar"].useBlacklist.friendly; end,
+					set = function(info, value) E.db.unitframe.units[groupName]["aurabar"].useBlacklist.friendly = value; updateFunc(UF, groupName); end
 				},
-				enemy = { -- Враг
+				enemy = {
 					order = 2,
-					type = 'toggle',
-					name = L['Enemy'],
-					desc = L["If the unit is an enemy to you."].." "..L["Don't display any auras found on the 'Blacklist' filter."],
-					get = function(info) return E.db.unitframe.units[groupName]['aurabar'].useBlacklist.enemy end,
-					set = function(info, value) E.db.unitframe.units[groupName]['aurabar'].useBlacklist.enemy = value; updateFunc(UF, groupName) end,										
+					type = "toggle",
+					name = L["Enemy"],
+					desc = L["If the unit is an enemy to you."] .. " " .. L["Don't display any auras found on the 'Blacklist' filter."],
+					get = function(info) return E.db.unitframe.units[groupName]["aurabar"].useBlacklist.enemy; end,
+					set = function(info, value) E.db.unitframe.units[groupName]["aurabar"].useBlacklist.enemy = value; updateFunc(UF, groupName); end
 				}
-			},
-		}
-		config.args.filters.args.useWhitelist = { -- Разрешить ауры из белого списка
+			}
+		};
+		config.args.filters.args.useWhitelist = {
 			order = 12,
 			guiInline = true,
-			type = 'group',
+			type = "group",
 			name = L["Allow Whitelisted Auras"],
 			args = {
-				friendly = { -- Дружественный
+				friendly = {
 					order = 1,
-					type = 'toggle',
-					name = L['Friendly'],
-					desc = L["If the unit is friendly to you."].." "..L["If no other filter options are being used then it will block anything not on the 'Whitelist' filter, otherwise it will simply add auras on the whitelist in addition to any other filter settings."],
-					get = function(info) return E.db.unitframe.units[groupName]['aurabar'].useWhitelist.friendly end,
-					set = function(info, value) E.db.unitframe.units[groupName]['aurabar'].useWhitelist.friendly = value; updateFunc(UF, groupName) end,									
+					type = "toggle",
+					name = L["Friendly"],
+					desc = L["If the unit is friendly to you."] .. " " .. L["If no other filter options are being used then it will block anything not on the 'Whitelist' filter, otherwise it will simply add auras on the whitelist in addition to any other filter settings."],
+					get = function(info) return E.db.unitframe.units[groupName]["aurabar"].useWhitelist.friendly; end,
+					set = function(info, value) E.db.unitframe.units[groupName]["aurabar"].useWhitelist.friendly = value; updateFunc(UF, groupName); end,									
 				},
-				enemy = { -- Враг
+				enemy = {
 					order = 2,
-					type = 'toggle',
-					name = L['Enemy'],
-					desc = L["If the unit is an enemy to you."].." "..L["If no other filter options are being used then it will block anything not on the 'Whitelist' filter, otherwise it will simply add auras on the whitelist in addition to any other filter settings."],
-					get = function(info) return E.db.unitframe.units[groupName]['aurabar'].useWhitelist.enemy end,
-					set = function(info, value) E.db.unitframe.units[groupName]['aurabar'].useWhitelist.enemy = value; updateFunc(UF, groupName) end,										
+					type = "toggle",
+					name = L["Enemy"],
+					desc = L["If the unit is an enemy to you."] .. " " .. L["If no other filter options are being used then it will block anything not on the 'Whitelist' filter, otherwise it will simply add auras on the whitelist in addition to any other filter settings."],
+					get = function(info) return E.db.unitframe.units[groupName]["aurabar"].useWhitelist.enemy; end,
+					set = function(info, value) E.db.unitframe.units[groupName]["aurabar"].useWhitelist.enemy = value; updateFunc(UF, groupName); end
 				}
-			},
-		}
-		config.args.filters.args.noDuration = { -- Блокировать ауры без бдительности
+			}
+		};
+		config.args.filters.args.noDuration = {
 			order = 13,
 			guiInline = true,
-			type = 'group',
+			type = "group",
 			name = L["Block Auras Without Duration"],
 			args = {
-				friendly = { -- Дружественный
+				friendly = {
 					order = 1,
-					type = 'toggle',
-					name = L['Friendly'],
-					desc = L["If the unit is friendly to you."].." "..L["Don't display auras that have no duration."],
-					get = function(info) return E.db.unitframe.units[groupName]['aurabar'].noDuration.friendly end,
-					set = function(info, value) E.db.unitframe.units[groupName]['aurabar'].noDuration.friendly = value; updateFunc(UF, groupName) end,									
+					type = "toggle",
+					name = L["Friendly"],
+					desc = L["If the unit is friendly to you."] .. " " .. L["Don't display auras that have no duration."],
+					get = function(info) return E.db.unitframe.units[groupName]["aurabar"].noDuration.friendly; end,
+					set = function(info, value) E.db.unitframe.units[groupName]["aurabar"].noDuration.friendly = value; updateFunc(UF, groupName); end
 				},
-				enemy = { -- Враг
+				enemy = {
 					order = 2,
-					type = 'toggle',
-					name = L['Enemy'],
-					desc = L["If the unit is an enemy to you."].." "..L["Don't display auras that have no duration."],
-					get = function(info) return E.db.unitframe.units[groupName]['aurabar'].noDuration.enemy end,
-					set = function(info, value) E.db.unitframe.units[groupName]['aurabar'].noDuration.enemy = value; updateFunc(UF, groupName) end,										
+					type = "toggle",
+					name = L["Enemy"],
+					desc = L["If the unit is an enemy to you."] .. " " .. L["Don't display auras that have no duration."],
+					get = function(info) return E.db.unitframe.units[groupName]["aurabar"].noDuration.enemy; end,
+					set = function(info, value) E.db.unitframe.units[groupName]["aurabar"].noDuration.enemy = value; updateFunc(UF, groupName); end
 				}
-			},				
-		}
-		config.args.filters.args.onlyDispellable = { -- Блокировать не развеиваемые ауры
+			}
+		};
+		config.args.filters.args.onlyDispellable = {
 			order = 14,
 			guiInline = true,
-			type = 'group',
-			name = L['Block Non-Dispellable Auras'],
+			type = "group",
+			name = L["Block Non-Dispellable Auras"],
 			args = {
-				friendly = { -- Дружественный
+				friendly = {
 					order = 1,
-					type = 'toggle',
-					name = L['Friendly'],
-					desc = L["If the unit is friendly to you."].." "..L["Don't display auras that cannot be purged or dispelled by your class."],
-					get = function(info) return E.db.unitframe.units[groupName]['aurabar'].onlyDispellable.friendly end,
-					set = function(info, value) E.db.unitframe.units[groupName]['aurabar'].onlyDispellable.friendly = value; updateFunc(UF, groupName) end,									
+					type = "toggle",
+					name = L["Friendly"],
+					desc = L["If the unit is friendly to you."] .. " " .. L["Don't display auras that cannot be purged or dispelled by your class."],
+					get = function(info) return E.db.unitframe.units[groupName]["aurabar"].onlyDispellable.friendly; end,
+					set = function(info, value) E.db.unitframe.units[groupName]["aurabar"].onlyDispellable.friendly = value; updateFunc(UF, groupName); end
 				},
-				enemy = { -- Враг
+				enemy = {
 					order = 2,
-					type = 'toggle',
-					name = L['Enemy'],
-					desc = L["If the unit is an enemy to you."].." "..L["Don't display auras that cannot be purged or dispelled by your class."],
-					get = function(info) return E.db.unitframe.units[groupName]['aurabar'].onlyDispellable.enemy end,
-					set = function(info, value) E.db.unitframe.units[groupName]['aurabar'].onlyDispellable.enemy = value; updateFunc(UF, groupName) end,										
+					type = "toggle",
+					name = L["Enemy"],
+					desc = L["If the unit is an enemy to you."] .. " " .. L["Don't display auras that cannot be purged or dispelled by your class."],
+					get = function(info) return E.db.unitframe.units[groupName]["aurabar"].onlyDispellable.enemy; end,
+					set = function(info, value) E.db.unitframe.units[groupName]["aurabar"].onlyDispellable.enemy = value; updateFunc(UF, groupName); end
 				}
-			},	
-		}
-		config.args.filters.args.noConsolidated = { -- Блокировать рейдовые баффы
+			}
+		};
+		config.args.filters.args.noConsolidated = {
 			order = 15,
 			guiInline = true,
-			type = 'group',
+			type = "group",
 			name = L["Block Raid Buffs"],
 			args = {
-				friendly = { -- Дружественный
+				friendly = {
 					order = 1,
-					type = 'toggle',
-					name = L['Friendly'],
-					desc = L["If the unit is friendly to you."].." "..L["Don't display raid buffs such as Blessing of Kings or Mark of the Wild."],
-					get = function(info) return E.db.unitframe.units[groupName]['aurabar'].noConsolidated.friendly end,
-					set = function(info, value) E.db.unitframe.units[groupName]['aurabar'].noConsolidated.friendly = value; updateFunc(UF, groupName) end,									
+					type = "toggle",
+					name = L["Friendly"],
+					desc = L["If the unit is friendly to you."] .. " " .. L["Don't display raid buffs such as Blessing of Kings or Mark of the Wild."],
+					get = function(info) return E.db.unitframe.units[groupName]["aurabar"].noConsolidated.friendly; end,
+					set = function(info, value) E.db.unitframe.units[groupName]["aurabar"].noConsolidated.friendly = value; updateFunc(UF, groupName); end
 				},
-				enemy = { -- Враг
+				enemy = {
 					order = 2,
-					type = 'toggle',
-					name = L['Enemy'],
-					desc = L["If the unit is an enemy to you."].." "..L["Don't display raid buffs such as Blessing of Kings or Mark of the Wild."],
-					get = function(info) return E.db.unitframe.units[groupName]['aurabar'].noConsolidated.enemy end,
-					set = function(info, value) E.db.unitframe.units[groupName]['aurabar'].noConsolidated.enemy = value; updateFunc(UF, groupName) end,										
+					type = "toggle",
+					name = L["Enemy"],
+					desc = L["If the unit is an enemy to you."] .. " " .. L["Don't display raid buffs such as Blessing of Kings or Mark of the Wild."],
+					get = function(info) return E.db.unitframe.units[groupName]["aurabar"].noConsolidated.enemy; end,
+					set = function(info, value) E.db.unitframe.units[groupName]["aurabar"].noConsolidated.enemy = value; updateFunc(UF, groupName); end
 				}
-			},		
-		}
-		config.args.filters.args.useFilter = { -- Дополнительный фильтр
+			}
+		};
+		config.args.filters.args.useFilter = {
 			order = 16,
-			name = L['Additional Filter'],
-			desc = L['Select an additional filter to use. If the selected filter is a whitelist and no other filters are being used (with the exception of Block Non-Personal Auras) then it will block anything not on the whitelist, otherwise it will simply add auras on the whitelist in addition to any other filter settings.'],
-			type = 'select',
+			name = L["Additional Filter"],
+			desc = L["Select an additional filter to use. If the selected filter is a whitelist and no other filters are being used (with the exception of Block Non-Personal Auras) then it will block anything not on the whitelist, otherwise it will simply add auras on the whitelist in addition to any other filter settings."],
+			type = "select",
 			values = function()
-				filters = {}
-				filters[''] = NONE
-				for filter in pairs(E.global.unitframe['aurafilters']) do
-					filters[filter] = filter
+				filters = {};
+				filters[""] = NONE;
+				for filter in pairs(E.global.unitframe["aurafilters"]) do
+					filters[filter] = filter;
 				end
-				return filters
-			end,
-		}										
+				return filters;
+			end
+		};
 	end
 	
 	config.args.filters.args.maxDuration = {
 		order = 17,
-		type = 'range',
+		type = "range",
 		name = L["Maximum Duration"],
 		desc = L["Don't display auras that are longer than this duration (in seconds). Set to zero to disable."],
-		min = 0, max = 3600, step = 1,
-	}
+		min = 0, max = 3600, step = 1
+	};
 	
-	return config
+	return config;
 end
--- 1000
-local function GetOptionsTable_RaidIcon(updateFunc, groupName, numUnits) -- Рейдовая иконка
+
+local function GetOptionsTable_RaidIcon(updateFunc, groupName, numUnits)
 	local config = {
 		order = 1000,
-		type = 'group',
-		name = L['Raid Icon'],
-		get = function(info) return E.db.unitframe.units[groupName]['raidicon'][ info[#info] ] end,
-		set = function(info, value) E.db.unitframe.units[groupName]['raidicon'][ info[#info] ] = value; updateFunc(UF, groupName, numUnits) end,
+		type = "group",
+		name = L["Raid Icon"],
+		get = function(info) return E.db.unitframe.units[groupName]["raidicon"][ info[#info] ]; end,
+		set = function(info, value) E.db.unitframe.units[groupName]["raidicon"][ info[#info] ] = value; updateFunc(UF, groupName, numUnits); end,
 		args = {
-			enable = { -- Включить
-				type = 'toggle',
+			enable = {
+				type = "toggle",
 				order = 1,
-				name = L['Enable'],
+				name = L["Enable"],
 			},	
-			attachTo = { -- Позиция
-				type = 'select',
+			attachTo = {
+				type = "select",
 				order = 2,
-				name = L['Position'],
+				name = L["Position"],
 				values = positionValues,
-				disabled = function() return not E.db.unitframe.units[groupName]['raidicon']['enable'] end,
+				disabled = function() return not E.db.unitframe.units[groupName]["raidicon"]["enable"]; end
 			},
-			size = { -- Размер
-				type = 'range',
-				name = L['Size'],
+			size = {
+				type = "range",
+				name = L["Size"],
 				order = 3,
 				min = 8, max = 60, step = 1,
-				disabled = function() return not E.db.unitframe.units[groupName]['raidicon']['enable'] end,
+				disabled = function() return not E.db.unitframe.units[groupName]["raidicon"]["enable"]; end
 			},				
-			xOffset = { -- Отступ по X
+			xOffset = {
 				order = 4,
-				type = 'range',
-				name = L['xOffset'],
+				type = "range",
+				name = L["xOffset"],
 				min = -300, max = 300, step = 1,
-				disabled = function() return not E.db.unitframe.units[groupName]['raidicon']['enable'] end,
+				disabled = function() return not E.db.unitframe.units[groupName]["raidicon"]["enable"]; end
 			},
-			yOffset = { -- Отступ по Y
+			yOffset = {
 				order = 5,
-				type = 'range',
-				name = L['yOffset'],
+				type = "range",
+				name = L["yOffset"],
 				min = -300, max = 300, step = 1,
-				disabled = function() return not E.db.unitframe.units[groupName]['raidicon']['enable'] end,
-			},			
-		},
-	}
+				disabled = function() return not E.db.unitframe.units[groupName]["raidicon"]["enable"]; end
+			}
+		}
+	};
 	
-	return config
+	return config;
+end
+
+local function GetOptionsTable_RaidDebuff(updateFunc, groupName)
+	local config = {
+		order = 800,
+		type = "group",
+		name = L["RaidDebuff Indicator"],
+		get = function(info) return E.db.unitframe.units[groupName]["rdebuffs"][ info[#info] ]; end,
+		set = function(info, value) E.db.unitframe.units[groupName]["rdebuffs"][ info[#info] ] = value; updateFunc(UF, groupName); end,
+		args = {
+			enable = {
+				order = 1,
+				type = "toggle",
+				name = L["Enable"]
+			},
+			showDispellableDebuff = {
+				order = 2,
+				type = "toggle",
+				name = L["Show Dispellable Debuffs"]
+			},
+			size = {
+				order = 3,
+				type = "range",
+				name = L["Size"],
+				min = 8, max = 35, step = 1
+			},
+			font = {
+				order = 4,
+				type = "select", dialogControl = "LSM30_Font",
+				name = L["Font"],
+				values = AceGUIWidgetLSMlists.font
+			},
+			fontSize = {
+				order = 5,
+				type = "range",
+				name = L["Font Size"],
+				min = 7, max = 22, step = 1
+			},
+			fontOutline = {
+				order = 6,
+				type = "select",
+				name = L["Font Outline"],
+				values = {
+					["NONE"] = L["None"],
+					["OUTLINE"] = "OUTLINE",
+					["MONOCHROMEOUTLINE"] = "MONOCROMEOUTLINE",
+					["THICKOUTLINE"] = "THICKOUTLINE"
+				}
+			},
+			xOffset = {
+				order = 7,
+				type = "range",
+				name = L["xOffset"],
+				min = -300, max = 300, step = 1
+			},
+			yOffset = {
+				order = 8,
+				type = "range",
+				name = L["yOffset"],
+				min = -300, max = 300, step = 1
+			},
+			configureButton = {
+				order = 9,
+				type = "execute",
+				name = L["Configure Auras"],
+				func = function() E:SetToFilterConfig("RaidDebuffs"); end
+			},
+			duration = {
+				order = 11,
+				type = "group",
+				guiInline = true,
+				name = L["Duration Text"],
+				get = function(info) return E.db.unitframe.units[groupName]["rdebuffs"]["duration"][ info[#info] ]; end,
+				set = function(info, value) E.db.unitframe.units[groupName]["rdebuffs"]["duration"][ info[#info] ] = value; updateFunc(UF, groupName); end,
+				args = {
+					position = {
+						order = 1,
+						type = "select",
+						name = L["Position"],
+						values = {
+							["TOP"] = "TOP",
+							["LEFT"] = "LEFT",
+							["RIGHT"] = "RIGHT",
+							["BOTTOM"] = "BOTTOM",
+							["CENTER"] = "CENTER",
+							["TOPLEFT"] = "TOPLEFT",
+							["TOPRIGHT"] = "TOPRIGHT",
+							["BOTTOMLEFT"] = "BOTTOMLEFT",
+							["BOTTOMRIGHT"] = "BOTTOMRIGHT"
+						}
+					},
+					xOffset = {
+						order = 2,
+						type = "range",
+						name = L["xOffset"],
+						min = -10, max = 10, step = 1
+					},
+					yOffset = {
+						order = 3,
+						type = "range",
+						name = L["yOffset"],
+						min = -10, max = 10, step = 1
+					},
+					color = {
+						order = 4,
+						type = "color",
+						name = L["Color"],
+						get = function(info)
+							local c = E.db.unitframe.units.raid.rdebuffs.duration.color;
+							local d = P.unitframe.units.raid.rdebuffs.duration.color;
+							return c.r, c.g, c.b, c.a, d.r, d.g, d.b;
+						end,
+						set = function(info, r, g, b)
+							E.db.unitframe.units.raid.rdebuffs.duration.color = {};
+							local c = E.db.unitframe.units.raid.rdebuffs.duration.color;
+							c.r, c.g, c.b = r, g, b;
+							UF:CreateAndUpdateHeaderGroup("raid");
+						end
+					}
+				}
+			},
+			stack = {
+				order = 11,
+				type = "group",
+				guiInline = true,
+				name = L["Stack Counter"],
+				get = function(info) return E.db.unitframe.units[groupName]["rdebuffs"]["stack"][ info[#info] ]; end,
+				set = function(info, value) E.db.unitframe.units[groupName]["rdebuffs"]["stack"][ info[#info] ] = value; updateFunc(UF, groupName); end,
+				args = {
+					position = {
+						order = 1,
+						type = "select",
+						name = L["Position"],
+						values = {
+							["TOP"] = "TOP",
+							["LEFT"] = "LEFT",
+							["RIGHT"] = "RIGHT",
+							["BOTTOM"] = "BOTTOM",
+							["CENTER"] = "CENTER",
+							["TOPLEFT"] = "TOPLEFT",
+							["TOPRIGHT"] = "TOPRIGHT",
+							["BOTTOMLEFT"] = "BOTTOMLEFT",
+							["BOTTOMRIGHT"] = "BOTTOMRIGHT"
+						}
+					},
+					xOffset = {
+						order = 2,
+						type = "range",
+						name = L["xOffset"],
+						min = -10, max = 10, step = 1
+					},
+					yOffset = {
+						order = 3,
+						type = "range",
+						name = L["yOffset"],
+						min = -10, max = 10, step = 1
+					},
+					color = {
+						order = 4,
+						type = "color",
+						name = L["Color"],
+						get = function(info)
+							local c = E.db.unitframe.units[groupName].rdebuffs.stack.color;
+							local d = P.unitframe.units[groupName].rdebuffs.stack.color;
+							return c.r, c.g, c.b, c.a, d.r, d.g, d.b;
+						end,
+						set = function(info, r, g, b)
+							E.db.unitframe.units[groupName].rdebuffs.stack.color = {};
+							local c = E.db.unitframe.units[groupName].rdebuffs.stack.color;
+							c.r, c.g, c.b = r, g, b;
+							updateFunc(UF, groupName);
+						end
+					}
+				}
+			}
+		}
+	};
+
+	return config;
 end
 
 function UF:CreateCustomTextGroup(unit, objectName)
@@ -1323,9 +1479,9 @@ function UF:CreateCustomTextGroup(unit, objectName)
 					
 					if(unit == "boss" or unit == "arena") then
 						for i = 1, 5 do
-							if(UF[unit..i]) then
-								UF[unit..i]:Tag(UF[unit..i]["customTexts"][objectName], "");
-								UF[unit..i]["customTexts"][objectName]:Hide();
+							if(UF[unit .. i]) then
+								UF[unit .. i]:Tag(UF[unit .. i]["customTexts"][objectName], "");
+								UF[unit .. i]["customTexts"][objectName]:Hide();
 							end
 						end
 					elseif(unit == "party" or unit:find("raid")) then
@@ -1431,8 +1587,8 @@ local function GetOptionsTable_CustomText(updateFunc, groupName, numUnits, order
 				E.db.unitframe.units[groupName].customTexts = {};
 			end
 			
-			local frameName = "ElvUF_"..E:StringTitle(groupName)
-			if(E.db.unitframe.units[groupName].customTexts[textName] or (_G[frameName] and _G[frameName]["customTexts"] and _G[frameName]["customTexts"][textName] or _G[frameName.."Group1UnitButton1"] and _G[frameName.."Group1UnitButton1"]["customTexts"] and _G[frameName.."Group1UnitButton1"][textName])) then
+			local frameName = "ElvUF_" .. E:StringTitle(groupName)
+			if(E.db.unitframe.units[groupName].customTexts[textName] or (_G[frameName] and _G[frameName]["customTexts"] and _G[frameName]["customTexts"][textName] or _G[frameName .. "Group1UnitButton1"] and _G[frameName .. "Group1UnitButton1"]["customTexts"] and _G[frameName .. "Group1UnitButton1"][textName])) then
 				E:Print(L["The name you have selected is already in use by another element."]);
 				return;
 			end
@@ -1553,511 +1709,523 @@ local function GetOptionsTableForNonGroup_GPS(unit)
 	return config;
 end
 
-E.Options.args.unitframe = { -- Рамки юнитов
+E.Options.args.unitframe = {
 	type = "group",
 	name = L["UnitFrames"],
 	childGroups = "tree",
-	get = function(info) return E.db.unitframe[ info[#info] ] end,
-	set = function(info, value) E.db.unitframe[ info[#info] ] = value end,
+	get = function(info) return E.db.unitframe[ info[#info] ]; end,
+	set = function(info, value) E.db.unitframe[ info[#info] ] = value; end,
 	args = {
-		enable = { -- Включить
+		enable = {
 			order = 1,
 			type = "toggle",
 			name = L["Enable"],
-			get = function(info) return E.private.unitframe.enable end,
-			set = function(info, value) E.private.unitframe.enable = value; E:StaticPopup_Show("PRIVATE_RL") end
+			get = function(info) return E.private.unitframe.enable; end,
+			set = function(info, value) E.private.unitframe.enable = value; E:StaticPopup_Show("PRIVATE_RL"); end
 		},
-		general = { -- Общие
+		general = {
 			order = 200,
-			type = 'group',
-			name = L['General'],
+			type = "group",
+			name = L["General"],
 			guiInline = true,
 			disabled = function() return not E.private.unitframe.enable end,
-			set = function(info, value) E.db.unitframe[ info[#info] ] = value; UF:Update_AllFrames() end,
+			set = function(info, value) E.db.unitframe[ info[#info] ] = value; UF:Update_AllFrames(); end,
 			args = {
 				disabledBlizzardFrames = {
 					order = 1,
 					type = "group",
 					guiInline = true,
 					name = L["Disabled Blizzard Frames"],
-					get = function(info) return E.private.unitframe.disabledBlizzardFrames[ info[#info] ] end,
-					set = function(info, value) E.private["unitframe"].disabledBlizzardFrames[ info[#info] ] = value; E:StaticPopup_Show("PRIVATE_RL") end,
+					get = function(info) return E.private.unitframe.disabledBlizzardFrames[ info[#info] ]; end,
+					set = function(info, value) E.private["unitframe"].disabledBlizzardFrames[ info[#info] ] = value; E:StaticPopup_Show("PRIVATE_RL"); end,
 					args = {
 						player = {
 							order = 1,
-							type = 'toggle',
+							type = "toggle",
 							name = L["Player Frame"],
-							desc = L["Disables the player and pet unitframes."],
+							desc = L["Disables the player and pet unitframes."]
 						},
 						target = {
 							order = 2,
-							type = 'toggle',
+							type = "toggle",
 							name = L["Target Frame"],
-							desc = L["Disables the target and target of target unitframes."],
+							desc = L["Disables the target and target of target unitframes."]
 						},
 						focus = {
 							order = 3,
-							type = 'toggle',
+							type = "toggle",
 							name = L["Focus Frame"],
-							desc = L["Disables the focus and target of focus unitframes."],
+							desc = L["Disables the focus and target of focus unitframes."]
 						},
 						boss = {
 							order = 4,
-							type = 'toggle',
-							name = L["Boss Frames"],
+							type = "toggle",
+							name = L["Boss Frames"]
 						},
 						arena = {
 							order = 5,
-							type = 'toggle',
-							name = L["Arena Frames"],
+							type = "toggle",
+							name = L["Arena Frames"]
 						},
 						party = {
 							order = 6,
-							type = 'toggle',
-							name = L["Party Frames"],
-						},
-					},
+							type = "toggle",
+							name = L["Party Frames"]
+						}
+					}
 				},
-				generalGroup = { -- Общие
+				generalGroup = {
 					order = 2,
-					type = 'group',
+					type = "group",
 					guiInline = true,
-					name = L['General'],
+					name = L["General"],
 					args = {
-						OORAlpha = { -- Прозрачность в не радиуса
+						OORAlpha = {
 							order = 1,
-							name = L['OOR Alpha'],
-							desc = L['The alpha to set units that are out of range to.'],
-							type = 'range',
-							min = 0, max = 1, step = 0.01,
+							name = L["OOR Alpha"],
+							desc = L["The alpha to set units that are out of range to."],
+							type = "range",
+							min = 0, max = 1, step = 0.01
 						},
-						debuffHighlighting = { -- Подсветка дебаффов
+						debuffHighlighting = {
 							order = 2,
-							name = L['Debuff Highlighting'],
-							desc = L['Color the unit healthbar if there is a debuff that can be dispelled by you.'],
+							name = L["Debuff Highlighting"],
+							desc = L["Color the unit healthbar if there is a debuff that can be dispelled by you."],
 							type = "select",
 							values = {
 								["NONE"] = NONE,
 								["GLOW"] = L["Glow"],
 								["FILL"] = L["Fill"]
-							},
+							}
 						},
-						smartRaidFilter = { -- Умный фильтр рейда
+						smartRaidFilter = {
 							order = 3,
-							name = L['Smart Raid Filter'],
-							desc = L['Override any custom visibility setting in certain situations, EX: Only show groups 1 and 2 inside a 10 man instance.'],
-							type = 'toggle',
-							set = function(info, value) E.db.unitframe[ info[#info] ] = value; UF:UpdateAllHeaders() end
+							name = L["Smart Raid Filter"],
+							desc = L["Override any custom visibility setting in certain situations, EX: Only show groups 1 and 2 inside a 10 man instance."],
+							type = "toggle",
+							set = function(info, value) E.db.unitframe[ info[#info] ] = value; UF:UpdateAllHeaders(); end
 						},
-						targetOnMouseDown = { -- Выделение при нажатии
+						targetOnMouseDown = {
 							order = 4,
 							name = L["Target On Mouse-Down"],
 							desc = L["Target units on mouse down rather than mouse up. \n\n|cffFF0000Warning: If you are using the addon 'Clique' you may have to adjust your clique settings when changing this."],
-							type = "toggle",
+							type = "toggle"
 						},
-					},
+						auraBlacklistModifier = {
+							order = 5,
+							type = "select",
+							name = L["Blacklist Modifier"],
+							desc = L["You need to hold this modifier down in order to blacklist an aura by right-clicking the icon. Set to None to disable the blacklist functionality."],
+							values = {
+								["NONE"] = NONE,
+								["SHIFT"] = SHIFT_KEY,
+								["ALT"] = ALT_KEY,
+								["CTRL"] = CTRL_KEY
+							}
+						}
+					}
 				},
-				barGroup = { -- Полосы
+				barGroup = {
 					order = 3,
-					type = 'group',
+					type = "group",
 					guiInline = true,
-					name = L['Bars'],
+					name = L["Bars"],
 					args = {
-						smoothbars = { -- Плавные полосы
-							type = 'toggle',
+						smoothbars = {
+							type = "toggle",
 							order = 2,
-							name = L['Smooth Bars'],
-							desc = L['Bars will transition smoothly.'],	
-							set = function(info, value) E.db.unitframe[ info[#info] ] = value; UF:Update_AllFrames(); end,
+							name = L["Smooth Bars"],
+							desc = L["Bars will transition smoothly."],	
+							set = function(info, value) E.db.unitframe[ info[#info] ] = value; UF:Update_AllFrames(); end
 						},
-						statusbar = { -- Текстура полос состояния
-							type = "select", dialogControl = 'LSM30_Statusbar',
+						statusbar = {
+							type = "select", dialogControl = "LSM30_Statusbar",
 							order = 3,
 							name = L["StatusBar Texture"],
 							desc = L["Main statusbar texture."],
 							values = AceGUIWidgetLSMlists.statusbar,			
-							set = function(info, value) E.db.unitframe[ info[#info] ] = value; UF:Update_StatusBars() end,
-						},	
-					},
+							set = function(info, value) E.db.unitframe[ info[#info] ] = value; UF:Update_StatusBars(); end
+						}
+					}
 				},
-				fontGroup = { -- Шрифты
+				fontGroup = {
 					order = 4,
-					type = 'group',
+					type = "group",
 					guiInline = true,
-					name = L['Fonts'],
+					name = L["Fonts"],
 					args = {
-						font = { -- Шрифт по умолчанию
-							type = "select", dialogControl = 'LSM30_Font',
-							order = 4,
+						font = {
+							type = "select", dialogControl = "LSM30_Font",
+							order = 1,
 							name = L["Default Font"],
 							desc = L["The font that the unitframes will use."],
 							values = AceGUIWidgetLSMlists.font,
-							set = function(info, value) E.db.unitframe[ info[#info] ] = value; UF:Update_FontStrings() end,
+							set = function(info, value) E.db.unitframe[ info[#info] ] = value; UF:Update_FontStrings(); end
 						},
-						fontSize = { -- Размер шрифта
-							order = 5,
+						fontSize = {
+							order = 2,
 							name = L["Font Size"],
 							desc = L["Set the font size for unitframes."],
 							type = "range",
 							min = 6, max = 22, step = 1,
-							set = function(info, value) E.db.unitframe[ info[#info] ] = value; UF:Update_FontStrings() end,
+							set = function(info, value) E.db.unitframe[ info[#info] ] = value; UF:Update_FontStrings(); end,
 						},	
-						fontOutline = { -- Граница шрифта
-							order = 6,
+						fontOutline = {
+							order = 3,
 							name = L["Font Outline"],
 							desc = L["Set the font outline."],
 							type = "select",
 							values = {
-								['NONE'] = L['None'],
-								['OUTLINE'] = 'OUTLINE',
-								['MONOCHROME'] = (not E.isMacClient) and 'MONOCHROME' or nil,
-								['MONOCHROMEOUTLINE'] = 'MONOCROMEOUTLINE',
-								['THICKOUTLINE'] = 'THICKOUTLINE',
+								["NONE"] = L["None"],
+								["OUTLINE"] = "OUTLINE",
+								["MONOCHROME"] = (not E.isMacClient) and "MONOCHROME" or nil,
+								["MONOCHROMEOUTLINE"] = "MONOCROMEOUTLINE",
+								["THICKOUTLINE"] = "THICKOUTLINE"
 							},
-							set = function(info, value) E.db.unitframe[ info[#info] ] = value; UF:Update_FontStrings() end,
-						},	
-					},
+							set = function(info, value) E.db.unitframe[ info[#info] ] = value; UF:Update_FontStrings(); end
+						}
+					}
 				},
-				allColorsGroup = { -- Цвета
+				allColorsGroup = {
 					order = 5,
-					type = 'group',
+					type = "group",
 					guiInline = true,
-					name = L['Colors'],
-					get = function(info) return E.db.unitframe.colors[ info[#info] ] end,
-					set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames() end,					
+					name = L["Colors"],
+					get = function(info) return E.db.unitframe.colors[ info[#info] ]; end,
+					set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames(); end,					
 					args = {				
-						healthGroup = { -- Здоровье
+						healthGroup = {
 							order = 7,
-							type = 'group',
+							type = "group",
 							guiInline = true,
 							name = HEALTH,
 							get = function(info)
-								local t = E.db.unitframe.colors[ info[#info] ]
-								local d = P.unitframe.colors[ info[#info] ]
-								return t.r, t.g, t.b, t.a, d.r, d.g, d.b
+								local t = E.db.unitframe.colors[ info[#info] ];
+								local d = P.unitframe.colors[ info[#info] ];
+								return t.r, t.g, t.b, t.a, d.r, d.g, d.b;
 							end,
 							set = function(info, r, g, b)
-								E.db.general[ info[#info] ] = {}
-								local t = E.db.unitframe.colors[ info[#info] ]
-								t.r, t.g, t.b = r, g, b
-								UF:Update_AllFrames()
+								E.db.general[ info[#info] ] = {};
+								local t = E.db.unitframe.colors[ info[#info] ];
+								t.r, t.g, t.b = r, g, b;
+								UF:Update_AllFrames();
 							end,
 							args = {
-								healthclass = { -- Здоровье по классу
+								healthclass = {
 									order = 1,
-									type = 'toggle',
-									name = L['Class Health'],
-									desc = L['Color health by classcolor or reaction.'],
-									get = function(info) return E.db.unitframe.colors[ info[#info] ] end,
-									set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames() end,											
+									type = "toggle",
+									name = L["Class Health"],
+									desc = L["Color health by classcolor or reaction."],
+									get = function(info) return E.db.unitframe.colors[ info[#info] ]; end,
+									set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames(); end											
 								},	
 								forcehealthreaction = {
 									order = 2,
-									type = 'toggle',
-									name = L['Force Reaction Color'],
-									desc = L['Forces reaction color instead of class color on units controlled by players.'],
-									get = function(info) return E.db.unitframe.colors[ info[#info] ] end,
-									set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames() end,
-									disabled = function() return not E.db.unitframe.colors.healthclass end,
+									type = "toggle",
+									name = L["Force Reaction Color"],
+									desc = L["Forces reaction color instead of class color on units controlled by players."],
+									get = function(info) return E.db.unitframe.colors[ info[#info] ]; end,
+									set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames(); end,
+									disabled = function() return not E.db.unitframe.colors.healthclass end
 								},
-								colorhealthbyvalue = { -- Здоровье по значению
+								colorhealthbyvalue = {
 									order = 3,
-									type = 'toggle',
-									name = L['Health By Value'],
-									desc = L['Color health by amount remaining.'],	
+									type = "toggle",
+									name = L["Health By Value"],
+									desc = L["Color health by amount remaining."],	
 									get = function(info) return E.db.unitframe.colors[ info[#info] ] end,
-									set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames() end,										
+									set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames(); end
 								},
-								customhealthbackdrop = { -- Свой фон полосы здоровья
+								customhealthbackdrop = {
 									order = 4,
-									type = 'toggle',
-									name = L['Custom Health Backdrop'],
-									desc = L['Use the custom health backdrop color instead of a multiple of the main health color.'],
+									type = "toggle",
+									name = L["Custom Health Backdrop"],
+									desc = L["Use the custom health backdrop color instead of a multiple of the main health color."],
 									get = function(info) return E.db.unitframe.colors[ info[#info] ] end,
-									set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames() end,										
+									set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames(); end
 								},
-								classbackdrop = { -- Фон по классу
+								classbackdrop = {
 									order = 5,
-									type = 'toggle',
-									name = L['Class Backdrop'],
-									desc = L['Color the health backdrop by class or reaction.'],
+									type = "toggle",
+									name = L["Class Backdrop"],
+									desc = L["Color the health backdrop by class or reaction."],
 									get = function(info) return E.db.unitframe.colors[ info[#info] ] end,
-									set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames() end,										
+									set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames(); end
 								},
-								transparentHealth = { -- Прозрачный
+								transparentHealth = {
 									order = 6,
-									type = 'toggle',
-									name = L['Transparent'],
-									desc = L['Make textures transparent.'],
+									type = "toggle",
+									name = L["Transparent"],
+									desc = L["Make textures transparent."],
 									get = function(info) return E.db.unitframe.colors[ info[#info] ] end,
-									set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames() end,										
+									set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames(); end
 								},
 								useDeadBackdrop = {
 									order = 7,
 									type = "toggle",
 									name = L["Use Dead Backdrop"],
 									get = function(info) return E.db.unitframe.colors[ info[#info] ] end,
-									set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames() end,
+									set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames(); end
 								},
-								health = { -- Здоровье 
+								health = {
 									order = 10,
-									type = 'color',
-									name = L['Health'],
+									type = "color",
+									name = L["Health"]
 								},
-								health_backdrop = { -- Фон полосы здоровья
+								health_backdrop = {
 									order = 11,
-									type = 'color',
-									name = L['Health Backdrop'],
+									type = "color",
+									name = L["Health Backdrop"]
 								},			
-								tapped = { -- Чужой
+								tapped = {
 									order = 12,
-									type = 'color',
-									name = L['Tapped'],
+									type = "color",
+									name = L["Tapped"]
 								},
-								disconnected = { -- Не в сети
+								disconnected = {
 									order = 13,
-									type = 'color',
-									name = L['Disconnected'],
+									type = "color",
+									name = L["Disconnected"]
 								},
 								health_backdrop_dead = {
 									order = 14,
 									type = "color",
 									name = L["Custom Dead Backdrop"],
-									desc = L["Use this backdrop color for units that are dead or ghosts."],
-								},
-							},
+									desc = L["Use this backdrop color for units that are dead or ghosts."]
+								}
+							}
 						},
-						powerGroup = { -- Ресурсы
+						powerGroup = {
 							order = 8,
-							type = 'group',
+							type = "group",
 							guiInline = true,
-							name = L['Powers'],
+							name = L["Powers"],
 							get = function(info)
-								local t = E.db.unitframe.colors.power[ info[#info] ]
-								local d = P.unitframe.colors.power[ info[#info] ]
-								return t.r, t.g, t.b, t.a, d.r, d.g, d.b
+								local t = E.db.unitframe.colors.power[ info[#info] ];
+								local d = P.unitframe.colors.power[ info[#info] ];
+								return t.r, t.g, t.b, t.a, d.r, d.g, d.b;
 							end,
 							set = function(info, r, g, b)
-								E.db.general[ info[#info] ] = {}
-								local t = E.db.unitframe.colors.power[ info[#info] ]
-								t.r, t.g, t.b = r, g, b
-								UF:Update_AllFrames()
+								E.db.general[ info[#info] ] = {};
+								local t = E.db.unitframe.colors.power[ info[#info] ];
+								t.r, t.g, t.b = r, g, b;
+								UF:Update_AllFrames();
 							end,	
 							args = {
-								powerclass = { -- Ресурс по классу
+								powerclass = {
 									order = 1,
-									type = 'toggle',
-									name = L['Class Power'],
-									desc = L['Color power by classcolor or reaction.'],
-									get = function(info) return E.db.unitframe.colors[ info[#info] ] end,
-									set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames() end,										
+									type = "toggle",
+									name = L["Class Power"],
+									desc = L["Color power by classcolor or reaction."],
+									get = function(info) return E.db.unitframe.colors[ info[#info] ]; end,
+									set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames(); end
 								},
-								transparentPower = { -- Прозначный
+								transparentPower = {
 									order = 2,
-									type = 'toggle',
-									name = L['Transparent'],
-									desc = L['Make textures transparent.'],
-									get = function(info) return E.db.unitframe.colors[ info[#info] ] end,
-									set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames() end,										
+									type = "toggle",
+									name = L["Transparent"],
+									desc = L["Make textures transparent."],
+									get = function(info) return E.db.unitframe.colors[ info[#info] ]; end,
+									set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames(); end
 								},
-								MANA = { -- Мана
+								MANA = {
 									order = 3,
 									name = MANA,
-									type = 'color',
+									type = "color"
 								},
-								RAGE = { -- Ярость
+								RAGE = {
 									order = 4,
 									name = RAGE,
-									type = 'color',
+									type = "color"
 								},	
-								FOCUS = { -- Тонус
+								FOCUS = {
 									order = 5,
 									name = FOCUS,
-									type = 'color',
+									type = "color"
 								},	
-								ENERGY = { -- Энергия
+								ENERGY = {
 									order = 6,
 									name = ENERGY,
-									type = 'color',
+									type = "color",
 								},		
-								RUNIC_POWER = { -- Сила рун
+								RUNIC_POWER = {
 									order = 7,
 									name = RUNIC_POWER,
-									type = 'color',
-								},									
-							},
+									type = "color"
+								}
+							}
 						},
-						reactionGroup = { -- Отношение
+						reactionGroup = {
 							order = 9,
-							type = 'group',
+							type = "group",
 							guiInline = true,
-							name = L['Reactions'],
+							name = L["Reactions"],
 							get = function(info)
-								local t = E.db.unitframe.colors.reaction[ info[#info] ]
-								local d = P.unitframe.colors.reaction[ info[#info] ]
-								return t.r, t.g, t.b, t.a, d.r, d.g, d.b
+								local t = E.db.unitframe.colors.reaction[ info[#info] ];
+								local d = P.unitframe.colors.reaction[ info[#info] ];
+								return t.r, t.g, t.b, t.a, d.r, d.g, d.b;
 							end,
 							set = function(info, r, g, b)
-								E.db.general[ info[#info] ] = {}
-								local t = E.db.unitframe.colors.reaction[ info[#info] ]
-								t.r, t.g, t.b = r, g, b
-								UF:Update_AllFrames()
+								E.db.general[ info[#info] ] = {};
+								local t = E.db.unitframe.colors.reaction[ info[#info] ];
+								t.r, t.g, t.b = r, g, b;
+								UF:Update_AllFrames();
 							end,	
 							args = {
-								BAD = { -- Плохое
+								BAD = {
 									order = 1,
-									name = L['Bad'],
-									type = 'color',
+									name = L["Bad"],
+									type = "color"
 								},	
-								NEUTRAL = { -- Нейтральное
+								NEUTRAL = {
 									order = 2,
-									name = L['Neutral'],
-									type = 'color',
+									name = L["Neutral"],
+									type = "color"
 								},	
-								GOOD = { -- Хорошее
+								GOOD = {
 									order = 3,
-									name = L['Good'],
-									type = 'color',
-								},									
-							},
+									name = L["Good"],
+									type = "color"
+								}
+							}
 						},	
-						castBars = { -- Полоса заклинаний
+						castBars = {
 							order = 9,
-							type = 'group',
+							type = "group",
 							guiInline = true,
-							name = L['Castbar'],
+							name = L["Castbar"],
 							get = function(info)
-								local t = E.db.unitframe.colors[ info[#info] ]
-								local d = P.unitframe.colors[ info[#info] ]
-								return t.r, t.g, t.b, t.a, d.r, d.g, d.b
+								local t = E.db.unitframe.colors[ info[#info] ];
+								local d = P.unitframe.colors[ info[#info] ];
+								return t.r, t.g, t.b, t.a, d.r, d.g, d.b;
 							end,
 							set = function(info, r, g, b)
 								E.db.general[ info[#info] ] = {}
-								local t = E.db.unitframe.colors[ info[#info] ]
-								t.r, t.g, t.b = r, g, b
-								UF:Update_AllFrames()
+								local t = E.db.unitframe.colors[ info[#info] ];
+								t.r, t.g, t.b = r, g, b;
+								UF:Update_AllFrames();
 							end,			
 							args = {
-								castClassColor = { -- Полоса заклинаний по классу
+								castClassColor = {
 									order = 1,
-									type = 'toggle',
-									name = L['Class Castbars'],
-									desc = L['Color castbars by the class or reaction type of the unit.'],
+									type = "toggle",
+									name = L["Class Castbars"],
+									desc = L["Color castbars by the class or reaction type of the unit."],
 									get = function(info) return E.db.unitframe.colors[ info[#info] ] end,
-									set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames() end,										
+									set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames(); end
 								},
-								transparentCastbar = { -- Прозрачный
+								transparentCastbar = {
 									order = 2,
-									type = 'toggle',
-									name = L['Transparent'],
-									desc = L['Make textures transparent.'],
+									type = "toggle",
+									name = L["Transparent"],
+									desc = L["Make textures transparent."],
 									get = function(info) return E.db.unitframe.colors[ info[#info] ] end,
-									set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames() end,										
+									set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames(); end
 								},	
-								castColor = { -- Прерываемые
+								castColor = {
 									order = 3,
-									name = L['Interruptable'],
-									type = 'color',
+									name = L["Interruptable"],
+									type = "color"
 								},	
-								castNoInterrupt = { -- Не прерываемые
+								castNoInterrupt = {
 									order = 4,
-									name = L['Non-Interruptable'],
-									type = 'color',
+									name = L["Non-Interruptable"],
+									type = "color"
 								},
 								castCompleteColor = {
 									order = 5,
-									name = L['Complete'],
-									type = 'color',
+									name = L["Complete"],
+									type = "color"
 								},
 								castFailColor = {
 									order = 6,
-									name = L['Fail'],
-									type = 'color',
-								},
-							},
+									name = L["Fail"],
+									type = "color"
+								}
+							}
 						},
-						auraBars = { -- Полосы аур
+						auraBars = {
 							order = 9,
-							type = 'group',
+							type = "group",
 							guiInline = true,
-							name = L['Aura Bars'],
+							name = L["Aura Bars"],
 							args = {
-								transparentAurabars = { -- Прозрачный
+								transparentAurabars = {
 									order = 1,
-									type = 'toggle',
-									name = L['Transparent'],
-									desc = L['Make textures transparent.'],
-									get = function(info) return E.db.unitframe.colors[ info[#info] ] end,
-									set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames() end,										
+									type = "toggle",
+									name = L["Transparent"],
+									desc = L["Make textures transparent."],
+									get = function(info) return E.db.unitframe.colors[ info[#info] ]; end,
+									set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames(); end,										
 								},
-								auraBarByType = { -- По типу
+								auraBarByType = {
 									order = 2,
-									name = L['By Type'],
-									desc = L['Color aurabar debuffs by type.'],
-									type = 'toggle',
+									name = L["By Type"],
+									desc = L["Color aurabar debuffs by type."],
+									type = "toggle"
 								},
-								auraBarTurtle = { -- Окрашывать Turtle Buffs
+								auraBarTurtle = {
 									order = 3,
-									name = L['Color Turtle Buffs'],
+									name = L["Color Turtle Buffs"],
 									desc = L["Color all buffs that reduce the unit's incoming damage."],
-									type = 'toggle',
+									type = "toggle"
 								},								
-								BUFFS = { -- Баффы
+								BUFFS = {
 									order = 10,
-									name = L['Buffs'],
-									type = 'color',
+									name = L["Buffs"],
+									type = "color",
 									get = function(info)
-										local t = E.db.unitframe.colors.auraBarBuff
-										local d = P.unitframe.colors.auraBarBuff
-										return t.r, t.g, t.b, t.a, d.r, d.g, d.b
+										local t = E.db.unitframe.colors.auraBarBuff;
+										local d = P.unitframe.colors.auraBarBuff;
+										return t.r, t.g, t.b, t.a, d.r, d.g, d.b;
  									end,
 									set = function(info, r, g, b)
 										if E:CheckClassColor(r, g, b) then
-											local classColor = E.myclass == 'PRIEST' and E.PriestColors or RAID_CLASS_COLORS[E.myclass]
-											r = classColor.r
-											g = classColor.g
-											b = classColor.b			
+											local classColor = E.myclass == "PRIEST" and E.PriestColors or (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass]);
+											r = classColor.r;
+											g = classColor.g;
+											b = classColor.b;
 										end			
 										
-										local t = E.db.unitframe.colors.auraBarBuff										
-										t.r, t.g, t.b = r, g, b
-
-										UF:Update_AllFrames()
-									end,										
+										local t = E.db.unitframe.colors.auraBarBuff;
+										t.r, t.g, t.b = r, g, b;
+										
+										UF:Update_AllFrames();
+									end
 								},	
-								DEBUFFS = { -- Дебаффы
+								DEBUFFS = {
 									order = 11,
-									name = L['Debuffs'],
-									type = 'color',
+									name = L["Debuffs"],
+									type = "color",
 									get = function(info)
-										local t = E.db.unitframe.colors.auraBarDebuff
-										local d = P.unitframe.colors.auraBarDebuff
-										return t.r, t.g, t.b, t.a, d.r, d.g, d.b
+										local t = E.db.unitframe.colors.auraBarDebuff;
+										local d = P.unitframe.colors.auraBarDebuff;
+										return t.r, t.g, t.b, t.a, d.r, d.g, d.b;
 									end,
 									set = function(info, r, g, b)
-										E.db.general[ info[#info] ] = {}
-										local t = E.db.unitframe.colors.auraBarDebuff
-										t.r, t.g, t.b = r, g, b
-										UF:Update_AllFrames()
-									end,										
+										E.db.general[ info[#info] ] = {};
+										local t = E.db.unitframe.colors.auraBarDebuff;
+										t.r, t.g, t.b = r, g, b;
+										UF:Update_AllFrames();
+									end
 								},
-								auraBarTurtleColor = { -- Цвет Turtle Buffs
+								auraBarTurtleColor = {
 									order = 12,
-									name = L['Turtle Color'],
-									type = 'color',
+									name = L["Turtle Color"],
+									type = "color",
 									get = function(info)
-										local t = E.db.unitframe.colors.auraBarTurtleColor
-										local d = P.unitframe.colors.auraBarTurtleColor
-										return t.r, t.g, t.b, t.a, d.r, d.g, d.b
+										local t = E.db.unitframe.colors.auraBarTurtleColor;
+										local d = P.unitframe.colors.auraBarTurtleColor;
+										return t.r, t.g, t.b, t.a, d.r, d.g, d.b;
 									end,
 									set = function(info, r, g, b)
-										E.db.general[ info[#info] ] = {}
-										local t = E.db.unitframe.colors.auraBarTurtleColor
-										t.r, t.g, t.b = r, g, b
-										UF:Update_AllFrames()
-									end,	
-								},								
-							},
+										E.db.general[ info[#info] ] = {};
+										local t = E.db.unitframe.colors.auraBarTurtleColor;
+										t.r, t.g, t.b = r, g, b;
+										UF:Update_AllFrames();
+									end
+								}
+							}
 						},
 						healPrediction = {
 							order = 12,
@@ -2085,94 +2253,94 @@ E.Options.args.unitframe = { -- Рамки юнитов
 									name = L["Others"],
 									type = "color",
 									hasAlpha = true,
-								},
-							},
-						},
-					},
-				},
-			},
-		},
-	},
-}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+};
 
-E.Options.args.unitframe.args.player = { -- Игрок
-	name = L['Player Frame'],
-	type = 'group',
+E.Options.args.unitframe.args.player = {
+	name = L["Player Frame"],
+	type = "group",
 	order = 300,
 	childGroups = "select",
-	get = function(info) return E.db.unitframe.units['player'][ info[#info] ] end,
-	set = function(info, value) E.db.unitframe.units['player'][ info[#info] ] = value; UF:CreateAndUpdateUF('player') end,
+	get = function(info) return E.db.unitframe.units["player"][ info[#info] ]; end,
+	set = function(info, value) E.db.unitframe.units["player"][ info[#info] ] = value; UF:CreateAndUpdateUF("player"); end,
 	disabled = function() return not E.private.unitframe.enable end,
 	args = {
-		enable = { -- Включить
-			type = 'toggle',
+		enable = {
+			type = "toggle",
 			order = 1,
-			name = L['Enable'],
+			name = L["Enable"]
 		},
-		copyFrom = { -- Скопировать из
-			type = 'select',
+		copyFrom = {
+			type = "select",
 			order = 2,
-			name = L['Copy From'],
-			desc = L['Select a unit to copy settings from.'],
-			values = UF['units'],
-			set = function(info, value) UF:MergeUnitSettings(value, 'player'); end,
+			name = L["Copy From"],
+			desc = L["Select a unit to copy settings from."],
+			values = UF["units"],
+			set = function(info, value) UF:MergeUnitSettings(value, "player"); end
 		},
-		resetSettings = { -- Восстановить умолчания
-			type = 'execute',
+		resetSettings = {
+			type = "execute",
 			order = 3,
-			name = L['Restore Defaults'],
-			func = function(info, value) UF:ResetUnitSettings('player'); E:ResetMovers(L['Player Frame']) end,
+			name = L["Restore Defaults"],
+			func = function(info, value) UF:ResetUnitSettings("player"); E:ResetMovers(L["Player Frame"]); end
 		},
-		showAuras = { -- Показать ауры
+		showAuras = {
 			order = 4,
-			type = 'execute',
-			name = L['Show Auras'],
+			type = "execute",
+			name = L["Show Auras"],
 			func = function() 
-				local frame = ElvUF_Player
-				if frame.forceShowAuras then
+				local frame = ElvUF_Player;
+				if(frame.forceShowAuras) then
 					frame.forceShowAuras = nil; 
 				else
 					frame.forceShowAuras = true; 
 				end
 				
-				UF:CreateAndUpdateUF('player') 
-			end,
+				UF:CreateAndUpdateUF("player");
+			end
 		},			
-		width = { -- Ширина
+		width = {
 			order = 5,
-			name = L['Width'],
-			type = 'range',
+			name = L["Width"],
+			type = "range",
 			min = 50, max = 500, step = 1,
 			set = function(info, value) 
-				if E.db.unitframe.units['player'].castbar.width == E.db.unitframe.units['player'][ info[#info] ] then
-					E.db.unitframe.units['player'].castbar.width = value;
+				if(E.db.unitframe.units["player"].castbar.width == E.db.unitframe.units["player"][ info[#info] ]) then
+					E.db.unitframe.units["player"].castbar.width = value;
 				end
 				
-				E.db.unitframe.units['player'][ info[#info] ] = value; 
-				UF:CreateAndUpdateUF('player');
-			end,
+				E.db.unitframe.units["player"][ info[#info] ] = value; 
+				UF:CreateAndUpdateUF("player");
+			end
 		},
 		height = {
 			order = 6,
-			name = L['Height'],
-			type = 'range',
-			min = 10, max = 250, step = 1,
+			name = L["Height"],
+			type = "range",
+			min = 10, max = 250, step = 1
 		},
 		combatfade = {
 			order = 7,
-			name = L['Combat Fade'],
-			desc = L['Fade the unitframe when out of combat, not casting, no target exists.'],
-			type = 'toggle',
+			name = L["Combat Fade"],
+			desc = L["Fade the unitframe when out of combat, not casting, no target exists."],
+			type = "toggle",
 			set = function(info, value) 
-				E.db.unitframe.units['player'][ info[#info] ] = value; 
-				UF:CreateAndUpdateUF('player'); 
-
-				if value == true then 
-					ElvUF_Pet:SetParent(ElvUF_Player)
+				E.db.unitframe.units["player"][ info[#info] ] = value; 
+				UF:CreateAndUpdateUF("player");
+				
+				if(value == true) then 
+					ElvUF_Pet:SetParent(ElvUF_Player);
 				else 
-					ElvUF_Pet:SetParent(ElvUF_Parent) 
+					ElvUF_Pet:SetParent(ElvUF_Parent) ;
 				end 
-			end,
+			end
 		},
 		healPrediction = {
 			order = 8,
@@ -2180,24 +2348,30 @@ E.Options.args.unitframe.args.player = { -- Игрок
 			name = L["Heal Prediction"],
 			desc = L["Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
 		},
-		restIcon = { -- Иконка отдыха
+		hideonnpc = {
+			type = "toggle",
+			order = 9,
+			name = L["Text Toggle On NPC"],
+			desc = L["Power text will be hidden on NPC targets, in addition the name text will be repositioned to the power texts anchor point."],
+			get = function(info) return E.db.unitframe.units["player"]["power"].hideonnpc end,
+			set = function(info, value) E.db.unitframe.units["player"]["power"].hideonnpc = value; UF:CreateAndUpdateUF("player") end
+		},
+		restIcon = {
 			order = 10,
-			name = L['Rest Icon'],
-			desc = L['Display the rested icon on the unitframe.'],
-			type = 'toggle',
+			type = "toggle",
+			name = L["Rest Icon"],
+			desc = L["Display the rested icon on the unitframe."]
 		},
-		hideonnpc = { -- Переключения текста для НИП
-			type = 'toggle',
+		combatIcon = {
 			order = 11,
-			name = L['Text Toggle On NPC'],
-			desc = L['Power text will be hidden on NPC targets, in addition the name text will be repositioned to the power texts anchor point.'],
-			get = function(info) return E.db.unitframe.units['player']['power'].hideonnpc end,
-			set = function(info, value) E.db.unitframe.units['player']['power'].hideonnpc = value; UF:CreateAndUpdateUF('player') end,
+			type = "toggle",
+			name = L["Combat Icon"],
+			desc = L["Display the combat icon on the unitframe."]
 		},
-		threatStyle = { -- Режим отображения угрозы
-			type = 'select',
+		threatStyle = {
 			order = 12,
-			name = L['Threat Display Mode'],
+			type = "select",
+			name = L["Threat Display Mode"],
 			values = threatValues,
 		},
 		smartAuraPosition = {
@@ -2211,150 +2385,178 @@ E.Options.args.unitframe.args.player = { -- Игрок
 				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
 			},
 		},
-		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, 'player'), -- Здоровье
-		power = GetOptionsTable_Power(true, UF.CreateAndUpdateUF, 'player', nil, true),
-		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, 'player'), -- Имя
-		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUF, 'player', nil, true), -- Портрет
-		buffs = GetOptionsTable_Auras(true, 'buffs', false, UF.CreateAndUpdateUF, 'player'), -- Баффы
-		debuffs = GetOptionsTable_Auras(true, 'debuffs', false, UF.CreateAndUpdateUF, 'player'), -- Дебаффы
-		castbar = GetOptionsTable_Castbar(true, UF.CreateAndUpdateUF, 'player'), -- Полоса заклинаний
-		classbar = { -- Полоса класса
-			order = 750,
-			type = 'group',
-			name = L['Classbar'],
-			get = function(info) return E.db.unitframe.units['player']['classbar'][ info[#info] ] end,
-			set = function(info, value) E.db.unitframe.units['player']['classbar'][ info[#info] ] = value; UF:CreateAndUpdateUF('player') end,
-			args = {
-				enable = { -- Включить
-					type = 'toggle',
-					order = 1,
-					name = L['Enable'],
-				},
-				height = { -- Высота
-					type = 'range',
-					order = 2,
-					name = L['Height'],
-					min = 5, max = 15, step = 1,
-				},	
-				fill = { -- Заполнение
-					type = 'select',
-					order = 3,
-					name = L['Fill'],
-					values = {
-						['fill'] = L['Filled'],
-						['spaced'] = L['Spaced'],
-					},
-				},		
-				detachFromFrame = { -- Открепить от рамки
-					type = 'toggle',
-					order = 4,
-					name = L['Detach From Frame'],
-				},	
-				detachedWidth = { -- Ширина при откриплении
-					type = 'range',
-					order = 5,
-					name = L['Detached Width'],
-					disabled = function() return not E.db.unitframe.units['player']['classbar'].detachFromFrame end,
-					min = 15, max = 450, step = 1,
-				},
-			},
-		},	
-		aurabar = GetOptionsTable_AuraBars(true, UF.CreateAndUpdateUF, 'player'), -- Полоса аур
-		pvp = { --  PvP
-			order = 850,
-			type = 'group',
-			name = PVP,
-			get = function(info) return E.db.unitframe.units['player']['pvp'][ info[#info] ] end,
-			set = function(info, value) E.db.unitframe.units['player']['pvp'][ info[#info] ] = value; UF:CreateAndUpdateUF('player') end,
-			args = {
-				position = { -- Позиция
-					type = 'select',
-					order = 2,
-					name = L['Position'],
-					values = positionValues,
-				},	
-				text_format = { -- Формат текста
-					order = 100,
-					name = L['Text Format'],
-					type = 'input',
-					width = 'full',
-					desc = L['TEXT_FORMAT_DESC'],
-				},
-			},
+		orientation = {
+			order = 14,
+			type = "select",
+			name = L["Frame Orientation"],
+			desc = L["Set the orientation of the UnitFrame. If set to automatic it will adjust based on where the frame is located on the screen."],
+			values = {
+				--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
+				["LEFT"] = L["Left"],
+				["MIDDLE"] = L["Middle"],
+				["RIGHT"] = L["Right"]
+			}
 		},
-		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUF, 'player'), -- Рейдовая иконка
-		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, 'player'), -- Свой текст
-	},
-}
+		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, "player"),
+		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, "player"),
+		power = GetOptionsTable_Power(true, UF.CreateAndUpdateUF, "player", nil, true),
+		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, "player"),
+		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUF, "player"),
+		buffs = GetOptionsTable_Auras(true, "buffs", false, UF.CreateAndUpdateUF, "player"),
+		debuffs = GetOptionsTable_Auras(true, "debuffs", false, UF.CreateAndUpdateUF, "player"),
+		castbar = GetOptionsTable_Castbar(true, UF.CreateAndUpdateUF, "player"),
+		aurabar = GetOptionsTable_AuraBars(true, UF.CreateAndUpdateUF, "player"),
+		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUF, "player"),
+		classbar = {
+			order = 750,
+			type = "group",
+			name = L["Classbar"],
+			get = function(info) return E.db.unitframe.units["player"]["classbar"][ info[#info] ]; end,
+			set = function(info, value) E.db.unitframe.units["player"]["classbar"][ info[#info] ] = value; UF:CreateAndUpdateUF("player"); end,
+			args = {
+				enable = {
+					type = "toggle",
+					order = 1,
+					name = L["Enable"]
+				},
+				height = {
+					type = "range",
+					order = 2,
+					name = L["Height"],
+					min = 5, max = 15, step = 1
+				},	
+				fill = {
+					type = "select",
+					order = 3,
+					name = L["Fill"],
+					values = {
+						["fill"] = L["Filled"],
+						["spaced"] = L["Spaced"]
+					}
+				},		
+				detachFromFrame = {
+					type = "toggle",
+					order = 4,
+					name = L["Detach From Frame"]
+				},	
+				detachedWidth = {
+					type = "range",
+					order = 5,
+					name = L["Detached Width"],
+					disabled = function() return not E.db.unitframe.units["player"]["classbar"].detachFromFrame; end,
+					min = 15, max = 450, step = 1
+				},
+				autoHide = {
+					order = 6,
+					type = "toggle",
+					name = L["Auto-Hide"]
+				},
+				parent = {
+					type = "select",
+					order = 7,
+					name = L["Parent"],
+					desc = L["Choose UIPARENT to prevent it from hiding with the unitframe."],
+					disabled = function() return not E.db.unitframe.units["player"]["classbar"].detachFromFrame; end,
+					values = {
+						["FRAME"] = "FRAME",
+						["UIPARENT"] = "UIPARENT"
+					}
+				}
+			}
+		},
+		pvp = {
+			order = 850,
+			type = "group",
+			name = PVP,
+			get = function(info) return E.db.unitframe.units["player"]["pvp"][ info[#info] ]; end,
+			set = function(info, value) E.db.unitframe.units["player"]["pvp"][ info[#info] ] = value; UF:CreateAndUpdateUF("player"); end,
+			args = {
+				position = {
+					type = "select",
+					order = 2,
+					name = L["Position"],
+					values = positionValues
+				},	
+				text_format = {
+					order = 100,
+					name = L["Text Format"],
+					type = "input",
+					width = "full",
+					desc = L["TEXT_FORMAT_DESC"]
+				}
+			}
+		}
+	}
+};
 
-E.Options.args.unitframe.args.target = { -- Цель
-	name = L['Target Frame'],
-	type = 'group',
+E.Options.args.unitframe.args.target = {
+	name = L["Target Frame"],
+	type = "group",
 	order = 400,
 	childGroups = "select",
-	get = function(info) return E.db.unitframe.units['target'][ info[#info] ] end,
-	set = function(info, value) E.db.unitframe.units['target'][ info[#info] ] = value; UF:CreateAndUpdateUF(L['target']) end,
-	disabled = function() return not E.private.unitframe.enable end,
+	get = function(info) return E.db.unitframe.units["target"][ info[#info] ]; end,
+	set = function(info, value) E.db.unitframe.units["target"][ info[#info] ] = value; UF:CreateAndUpdateUF("target"); end,
+	disabled = function() return not E.private.unitframe.enable; end,
 	args = {
-		enable = { -- Включить
-			type = 'toggle',
+		enable = {
+			type = "toggle",
 			order = 1,
-			name = L['Enable'],
+			name = L["Enable"]
 		},
-		copyFrom = { -- Скопировать из
-			type = 'select',
+		copyFrom = {
+			type = "select",
 			order = 2,
-			name = L['Copy From'],
-			desc = L['Select a unit to copy settings from.'],
-			values = UF['units'],
-			set = function(info, value) UF:MergeUnitSettings(value, 'target'); end,
+			name = L["Copy From"],
+			desc = L["Select a unit to copy settings from."],
+			values = UF["units"],
+			set = function(info, value) UF:MergeUnitSettings(value, "target"); end
 		},
-		resetSettings = { -- Восстановить умолчания
-			type = 'execute',
+		resetSettings = {
+			type = "execute",
 			order = 3,
-			name = L['Restore Defaults'],
-			func = function(info, value) UF:ResetUnitSettings('target'); E:ResetMovers(L['Target Frame']) end,
+			name = L["Restore Defaults"],
+			func = function(info, value) UF:ResetUnitSettings("target"); E:ResetMovers(L["Target Frame"]); end
 		},		
-		showAuras = { -- Показать ауры
+		showAuras = {
 			order = 4,
-			type = 'execute',
-			name = L['Show Auras'],
+			type = "execute",
+			name = L["Show Auras"],
 			func = function() 
-				local frame = ElvUF_Target
-				if frame.forceShowAuras then
+				local frame = ElvUF_Target;
+				if(frame.forceShowAuras) then
 					frame.forceShowAuras = nil; 
 				else
 					frame.forceShowAuras = true; 
 				end
 				
-				UF:CreateAndUpdateUF('target') 
-			end,
+				UF:CreateAndUpdateUF("target");
+			end
 		},			
-		width = { -- Ширина
+		width = {
 			order = 5,
-			name = L['Width'],
-			type = 'range',
+			name = L["Width"],
+			type = "range",
 			min = 50, max = 500, step = 1,
 			set = function(info, value) 
-				if E.db.unitframe.units['target'].castbar.width == E.db.unitframe.units['target'][ info[#info] ] then
-					E.db.unitframe.units['target'].castbar.width = value;
+				if E.db.unitframe.units["target"].castbar.width == E.db.unitframe.units["target"][ info[#info] ] then
+					E.db.unitframe.units["target"].castbar.width = value;
 				end
 				
-				E.db.unitframe.units['target'][ info[#info] ] = value; 
-				UF:CreateAndUpdateUF('target');
-			end,			
+				E.db.unitframe.units["target"][ info[#info] ] = value; 
+				UF:CreateAndUpdateUF("target");
+			end
 		},
-		height = { -- Высота
+		height = {
 			order = 6,
-			name = L['Height'],
-			type = 'range',
-			min = 10, max = 250, step = 1,
+			name = L["Height"],
+			type = "range",
+			min = 10, max = 250, step = 1
 		},
-		rangeCheck = { -- Проверка дистанции
+		rangeCheck = {
 			order = 7,
-			name = L["Range Check"],
-			desc = L["Check if you are in range to cast spells on this specific unit."],
 			type = "toggle",
+			name = L["Range Check"],
+			desc = L["Check if you are in range to cast spells on this specific unit."]
 		},
 		healPrediction = {
 			order = 8,
@@ -2362,269 +2564,293 @@ E.Options.args.unitframe.args.target = { -- Цель
 			name = L["Heal Prediction"],
 			desc = L["Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
 		},
-		middleClickFocus = { -- Средний клик - фокус
+		middleClickFocus = {
 			order = 9,
-			name = L['Middle Click - Set Focus'],
-			desc = L['Middle clicking the unit frame will cause your focus to match the unit.'],
-			type = 'toggle',
-			disabled = function() return IsAddOnLoaded("Clique") end,
+			type = "toggle",
+			name = L["Middle Click - Set Focus"],
+			desc = L["Middle clicking the unit frame will cause your focus to match the unit."],
+			disabled = function() return IsAddOnLoaded("Clique"); end
 		},
-		hideonnpc = { -- Переключения текста для НИП
-			type = 'toggle',
+		hideonnpc = {
 			order = 10,
-			name = L['Text Toggle On NPC'],
-			desc = L['Power text will be hidden on NPC targets, in addition the name text will be repositioned to the power texts anchor point.'],
-			get = function(info) return E.db.unitframe.units['target']['power'].hideonnpc end,
-			set = function(info, value) E.db.unitframe.units['target']['power'].hideonnpc = value; UF:CreateAndUpdateUF('target') end,
+			type = "toggle",
+			name = L["Text Toggle On NPC"],
+			desc = L["Power text will be hidden on NPC targets, in addition the name text will be repositioned to the power texts anchor point."],
+			get = function(info) return E.db.unitframe.units["target"]["power"].hideonnpc; end,
+			set = function(info, value) E.db.unitframe.units["target"]["power"].hideonnpc = value; UF:CreateAndUpdateUF("target"); end
 		},
-		threatStyle = { -- Режим отображения угрозы
-			type = 'select',
+		threatStyle = {
+			type = "select",
 			order = 11,
-			name = L['Threat Display Mode'],
-			values = threatValues,
+			name = L["Threat Display Mode"],
+			values = threatValues
 		},
 		smartAuraPosition = {
-			order = 13,
+			order = 12,
 			type = "select",
 			name = L["Smart Aura Position"],
 			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
 			values = {
 				["DISABLED"] = L["Disabled"],
 				["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
-				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
-			},
+				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"]
+			}
 		},
-		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, 'target'), -- Здоровье
-		power = GetOptionsTable_Power(true, UF.CreateAndUpdateUF, 'target', nil, true),
-		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, 'target'), -- Имя
-		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUF, 'target', nil, true), -- Портрет
-		buffs = GetOptionsTable_Auras(false, 'buffs', false, UF.CreateAndUpdateUF, 'target'), -- Баффы
-		debuffs = GetOptionsTable_Auras(false, 'debuffs', false, UF.CreateAndUpdateUF, 'target'), -- Дебаффы
-		castbar = GetOptionsTable_Castbar(false, UF.CreateAndUpdateUF, 'target'), -- Полоса заклинаний
-		aurabar = GetOptionsTable_AuraBars(false, UF.CreateAndUpdateUF, 'target'), -- Полоса аур
-		combobar = { -- Полоса серии (Разбойник)
+		orientation = {
+			order = 13,
+			type = "select",
+			name = L["Frame Orientation"],
+			desc = L["Set the orientation of the UnitFrame. If set to automatic it will adjust based on where the frame is located on the screen."],
+			values = {
+				--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
+				["LEFT"] = L["Left"],
+				["MIDDLE"] = L["Middle"],
+				["RIGHT"] = L["Right"]
+			}
+		},
+		combobar = {
 			order = 850,
-			type = 'group',
-			name = L['Combobar'],
-			get = function(info) return E.db.unitframe.units['target']['combobar'][ info[#info] ] end,
-			set = function(info, value) E.db.unitframe.units['target']['combobar'][ info[#info] ] = value; UF:CreateAndUpdateUF('target') end,
+			type = "group",
+			name = L["Combobar"],
+			get = function(info) return E.db.unitframe.units["target"]["combobar"][ info[#info] ]; end,
+			set = function(info, value) E.db.unitframe.units["target"]["combobar"][ info[#info] ] = value; UF:CreateAndUpdateUF("target"); end,
 			args = {
-				enable = { -- Включить
-					type = 'toggle',
+				enable = {
 					order = 1,
-					name = L['Enable'],
+					type = "toggle",
+					name = L["Enable"]
 				},
-				height = { -- Высота
-					type = 'range',
+				height = {
 					order = 2,
-					name = L['Height'],
-					min = 5, max = 15, step = 1,
+					type = "range",
+					name = L["Height"],
+					min = 5, max = 15, step = 1
 				},
-				fill = { -- Заполнение
-					type = 'select',
+				fill = {
 					order = 3,
-					name = L['Fill'],
+					type = "select",
+					name = L["Fill"],
 					values = {
-						['fill'] = L['Filled'],
-						['spaced'] = L['Spaced'],
+						["fill"] = L["Filled"],
+						["spaced"] = L["Spaced"],
 					},
 				},		
-				autoHide = { -- Автоматически скрывать
-					type = 'toggle',
-					name = L['Auto-Hide'],
+				autoHide = {
 					order = 4,
+					type = "toggle",
+					name = L["Auto-Hide"]
 				},		
-				detachFromFrame = { -- Открепить от рамки
-					type = 'toggle',
+				detachFromFrame = {
 					order = 5,
-					name = L['Detach From Frame'],
+					type = "toggle",
+					name = L["Detach From Frame"]
 				},	
-				detachedWidth = { -- Ширина при откриплении
-					type = 'range',
+				detachedWidth = {
 					order = 6,
-					name = L['Detached Width'],
-					disabled = function() return not E.db.unitframe.units['target']['combobar'].detachFromFrame end,
-					min = 15, max = 450, step = 1,
-				},				
-			},
+					type = "range",
+					name = L["Detached Width"],
+					disabled = function() return not E.db.unitframe.units["target"]["combobar"].detachFromFrame; end,
+					min = 15, max = 450, step = 1
+				}
+			}
 		},
-		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUF, 'target'), -- Рейдовая иконка
-		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, 'target'), -- Свой текст
+		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, "target"),
+		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, "target"),
+		power = GetOptionsTable_Power(true, UF.CreateAndUpdateUF, "target", nil, true),
+		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, "target"),
+		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUF, "target"),
+		buffs = GetOptionsTable_Auras(false, "buffs", false, UF.CreateAndUpdateUF, "target"),
+		debuffs = GetOptionsTable_Auras(false, "debuffs", false, UF.CreateAndUpdateUF, "target"),
+		castbar = GetOptionsTable_Castbar(false, UF.CreateAndUpdateUF, "target"),
+		aurabar = GetOptionsTable_AuraBars(false, UF.CreateAndUpdateUF, "target"),
+		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUF, "target"),
 		GPSArrow = GetOptionsTableForNonGroup_GPS("target")
 	}
-}
+};
 
-E.Options.args.unitframe.args.targettarget = { -- Цуль цели
-	name = L['TargetTarget Frame'],
-	type = 'group',
+E.Options.args.unitframe.args.targettarget = {
+	name = L["TargetTarget Frame"],
+	type = "group",
 	order = 500,
 	childGroups = "select",
-	get = function(info) return E.db.unitframe.units['targettarget'][ info[#info] ] end,
-	set = function(info, value) E.db.unitframe.units['targettarget'][ info[#info] ] = value; UF:CreateAndUpdateUF('targettarget') end,
+	get = function(info) return E.db.unitframe.units["targettarget"][ info[#info] ]; end,
+	set = function(info, value) E.db.unitframe.units["targettarget"][ info[#info] ] = value; UF:CreateAndUpdateUF("targettarget"); end,
 	disabled = function() return not E.private.unitframe.enable end,
 	args = {
-		enable = { -- Включить
-			type = 'toggle',
+		enable = {
 			order = 1,
-			name = L['Enable'],
+			type = "toggle",
+			name = L["Enable"]
 		},
-		copyFrom = { -- Скопировать из
-			type = 'select',
+		copyFrom = {
 			order = 2,
-			name = L['Copy From'],
-			desc = L['Select a unit to copy settings from.'],
-			values = UF['units'],
-			set = function(info, value) UF:MergeUnitSettings(value, 'targettarget'); end,
+			type = "select",
+			name = L["Copy From"],
+			desc = L["Select a unit to copy settings from."],
+			values = UF["units"],
+			set = function(info, value) UF:MergeUnitSettings(value, "targettarget"); end,
 		},
-		resetSettings = { -- Востановить умолчания
-			type = 'execute',
+		resetSettings = {
 			order = 3,
-			name = L['Restore Defaults'],
-			func = function(info, value) UF:ResetUnitSettings('targettarget'); E:ResetMovers(L['TargetTarget Frame']) end,
+			type = "execute",
+			name = L["Restore Defaults"],
+			func = function(info, value) UF:ResetUnitSettings("targettarget"); E:ResetMovers(L["TargetTarget Frame"]) end,
 		},
-		showAuras = { -- Показать ауры
+		showAuras = {
 			order = 4,
-			type = 'execute',
-			name = L['Show Auras'],
+			type = "execute",
+			name = L["Show Auras"],
 			func = function() 
-				local frame = ElvUF_TargetTarget
-				if frame.forceShowAuras then
+				local frame = ElvUF_TargetTarget;
+				if(frame.forceShowAuras) then
 					frame.forceShowAuras = nil; 
 				else
 					frame.forceShowAuras = true; 
 				end
 				
-				UF:CreateAndUpdateUF('targettarget') 
+				UF:CreateAndUpdateUF("targettarget");
 			end,
 		},			
-		width = { -- Ширина
+		width = {
 			order = 5,
-			name = L['Width'],
-			type = 'range',
-			min = 50, max = 500, step = 1,
+			type = "range",
+			name = L["Width"],
+			min = 50, max = 500, step = 1
 		},
-		height = { -- Высота
+		height = {
 			order = 6,
-			name = L['Height'],
-			type = 'range',
-			min = 10, max = 250, step = 1,
+			type = "range",
+			name = L["Height"],
+			min = 10, max = 250, step = 1
 		},	
-		rangeCheck = { -- Проверка дистанции
+		rangeCheck = {
 			order = 7,
-			name = L["Range Check"],
-			desc = L["Check if you are in range to cast spells on this specific unit."],
 			type = "toggle",
+			name = L["Range Check"],
+			desc = L["Check if you are in range to cast spells on this specific unit."]
 		},
-		hideonnpc = { -- Переключение Текста для НИП
-			type = 'toggle',
+		hideonnpc = {
+			type = "toggle",
+			order = 8,
+			name = L["Text Toggle On NPC"],
+			desc = L["Power text will be hidden on NPC targets, in addition the name text will be repositioned to the power texts anchor point."],
+			get = function(info) return E.db.unitframe.units["targettarget"]["power"].hideonnpc end,
+			set = function(info, value) E.db.unitframe.units["targettarget"]["power"].hideonnpc = value; UF:CreateAndUpdateUF("targettarget"); end
+		},
+		threatStyle = {
 			order = 9,
-			name = L['Text Toggle On NPC'],
-			desc = L['Power text will be hidden on NPC targets, in addition the name text will be repositioned to the power texts anchor point.'],
-			get = function(info) return E.db.unitframe.units['targettarget']['power'].hideonnpc end,
-			set = function(info, value) E.db.unitframe.units['targettarget']['power'].hideonnpc = value; UF:CreateAndUpdateUF('targettarget') end,
-		},
-		threatStyle = { -- Режим отображения угрозы
-			type = 'select',
-			order = 10,
-			name = L['Threat Display Mode'],
-			values = threatValues,
+			type = "select",
+			name = L["Threat Display Mode"],
+			values = threatValues
 		},
 		smartAuraPosition = {
-			order = 11,
+			order = 10,
 			type = "select",
 			name = L["Smart Aura Position"],
 			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
 			values = {
 				["DISABLED"] = L["Disabled"],
 				["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
-				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
+				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"]
+			}
+		},
+		orientation = {
+			order = 11,
+			type = "select",
+			name = L["Frame Orientation"],
+			desc = L["Set the orientation of the UnitFrame. If set to automatic it will adjust based on where the frame is located on the screen."],
+			values = {
+				--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
+				["LEFT"] = L["Left"],
+				["MIDDLE"] = L["Middle"],
+				["RIGHT"] = L["Right"],
 			},
 		},
-		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, 'targettarget'), -- Здоровье
-		power = GetOptionsTable_Power(nil, UF.CreateAndUpdateUF, 'targettarget'), -- Мана
-		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, 'targettarget'), --Имя
-		buffs = GetOptionsTable_Auras(false, 'buffs', false, UF.CreateAndUpdateUF, 'targettarget'), -- Баффы
-		debuffs = GetOptionsTable_Auras(false, 'debuffs', false, UF.CreateAndUpdateUF, 'targettarget'), -- Дебаффы
-		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUF, 'targettarget'), -- Рейдовая иконка
-		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, 'targettarget'), -- Свой текст
-	},
-}
+		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, "targettarget"),
+		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, "targettarget"),
+		power = GetOptionsTable_Power(nil, UF.CreateAndUpdateUF, "targettarget"),
+		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, "targettarget"),
+		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUF, "targettarget"),
+		buffs = GetOptionsTable_Auras(false, "buffs", false, UF.CreateAndUpdateUF, "targettarget"),
+		debuffs = GetOptionsTable_Auras(false, "debuffs", false, UF.CreateAndUpdateUF, "targettarget"),
+		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUF, "targettarget")
+	}
+};
 
-
-E.Options.args.unitframe.args.targettargettarget = { -- TargetTargetTarget
-	name = L['TargetTargetTarget Frame'],
-	type = 'group',
+E.Options.args.unitframe.args.targettargettarget = {
+	name = L["TargetTargetTarget Frame"],
+	type = "group",
 	order = 550,
 	childGroups = "select",
-	get = function(info) return E.db.unitframe.units['targettargettarget'][ info[#info] ] end,
-	set = function(info, value) E.db.unitframe.units['targettargettarget'][ info[#info] ] = value; UF:CreateAndUpdateUF('targettargettarget') end,
+	get = function(info) return E.db.unitframe.units["targettargettarget"][ info[#info] ]; end,
+	set = function(info, value) E.db.unitframe.units["targettargettarget"][ info[#info] ] = value; UF:CreateAndUpdateUF("targettargettarget"); end,
 	disabled = function() return not E.private.unitframe.enable end,
 	args = {
-		enable = { -- Включить
-			type = 'toggle',
+		enable = {
 			order = 1,
-			name = L['Enable'],
+			type = "toggle",
+			name = L["Enable"]
 		},
-		copyFrom = { -- Скопировать из
-			type = 'select',
+		copyFrom = {
 			order = 2,
-			name = L['Copy From'],
-			desc = L['Select a unit to copy settings from.'],
-			values = UF['units'],
-			set = function(info, value) UF:MergeUnitSettings(value, 'targettargettarget'); end,
+			type = "select",
+			name = L["Copy From"],
+			desc = L["Select a unit to copy settings from."],
+			values = UF["units"],
+			set = function(info, value) UF:MergeUnitSettings(value, "targettargettarget"); end
 		},
-		resetSettings = { -- Востановить умолчания
-			type = 'execute',
+		resetSettings = {
+			type = "execute",
 			order = 3,
-			name = L['Restore Defaults'],
-			func = function(info, value) UF:ResetUnitSettings('targettargettarget'); E:ResetMovers(L['TargetTargetTarget Frame']) end,
+			name = L["Restore Defaults"],
+			func = function(info, value) UF:ResetUnitSettings("targettargettarget"); E:ResetMovers(L["TargetTargetTarget Frame"]); end
 		},
-		showAuras = { -- Показать ауры
+		showAuras = {
 			order = 4,
-			type = 'execute',
-			name = L['Show Auras'],
+			type = "execute",
+			name = L["Show Auras"],
 			func = function()
-				local frame = ElvUF_TargetTargetTarget
-				if frame.forceShowAuras then
+				local frame = ElvUF_TargetTargetTarget;
+				if(frame.forceShowAuras) then
 					frame.forceShowAuras = nil;
 				else
 					frame.forceShowAuras = true;
 				end
-
-				UF:CreateAndUpdateUF('targettargettarget')
-			end,
+				
+				UF:CreateAndUpdateUF("targettargettarget");
+			end
 		},
-		width = { -- Ширина
+		width = {
 			order = 4,
-			name = L['Width'],
-			type = 'range',
-			min = 50, max = 500, step = 1,
+			type = "range",
+			name = L["Width"],
+			min = 50, max = 500, step = 1
 		},
-		height = { -- Высота
+		height = {
 			order = 5,
-			name = L['Height'],
-			type = 'range',
-			min = 10, max = 250, step = 1,
+			type = "range",
+			name = L["Height"],
+			min = 10, max = 250, step = 1
 		},
-		rangeCheck = { -- Проверка дистанции
+		rangeCheck = {
 			order = 6,
-			name = L["Range Check"],
-			desc = L["Check if you are in range to cast spells on this specific unit."],
 			type = "toggle",
+			name = L["Range Check"],
+			desc = L["Check if you are in range to cast spells on this specific unit."]
 		},
-		hideonnpc = { -- Переключение текста для НИП
-			type = 'toggle',
+		hideonnpc = {
 			order = 7,
-			name = L['Text Toggle On NPC'],
-			desc = L['Power text will be hidden on NPC targets, in addition the name text will be repositioned to the power texts anchor point.'],
-			get = function(info) return E.db.unitframe.units['targettargettarget']['power'].hideonnpc end,
-			set = function(info, value) E.db.unitframe.units['targettargettarget']['power'].hideonnpc = value; UF:CreateAndUpdateUF('targettargettarget') end,
+			type = "toggle",
+			name = L["Text Toggle On NPC"],
+			desc = L["Power text will be hidden on NPC targets, in addition the name text will be repositioned to the power texts anchor point."],
+			get = function(info) return E.db.unitframe.units["targettargettarget"]["power"].hideonnpc end,
+			set = function(info, value) E.db.unitframe.units["targettargettarget"]["power"].hideonnpc = value; UF:CreateAndUpdateUF("targettargettarget"); end
 		},
-		threatStyle = { -- Режим отображения угрозы
-			type = 'select',
+		threatStyle = {
 			order = 11,
-			name = L['Threat Display Mode'],
-			values = threatValues,
+			type = "select",
+			name = L["Threat Display Mode"],
+			values = threatValues
 		},
 		smartAuraPosition = {
 			order = 12,
@@ -2634,626 +2860,319 @@ E.Options.args.unitframe.args.targettargettarget = { -- TargetTargetTarget
 			values = {
 				["DISABLED"] = L["Disabled"],
 				["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
-				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
-			},
+				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"]
+			}
 		},
-		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, 'targettargettarget'), -- Здоровье
-		power = GetOptionsTable_Power(nil, UF.CreateAndUpdateUF, 'targettargettarget'), -- Мана
-		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, 'targettargettarget'), -- Имя
-		buffs = GetOptionsTable_Auras(false, 'buffs', false, UF.CreateAndUpdateUF, 'targettargettarget'), -- Баффы
-		debuffs = GetOptionsTable_Auras(false, 'debuffs', false, UF.CreateAndUpdateUF, 'targettargettarget'), -- Дебаффы
-		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUF, 'targettargettarget'), -- Рейдовая иконка
-		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, 'targettargettarget'), -- Свой текст
-	},
-}
+		orientation = {
+			order = 10,
+			type = "select",
+			name = L["Frame Orientation"],
+			desc = L["Set the orientation of the UnitFrame. If set to automatic it will adjust based on where the frame is located on the screen."],
+			values = {
+				--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
+				["LEFT"] = L["Left"],
+				["MIDDLE"] = L["Middle"],
+				["RIGHT"] = L["Right"]
+			}
+		},
+		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, "targettargettarget"),
+		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, "targettargettarget"),
+		power = GetOptionsTable_Power(nil, UF.CreateAndUpdateUF, "targettargettarget"),
+		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, "targettargettarget"),
+		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUF, "targettargettarget"),
+		buffs = GetOptionsTable_Auras(false, "buffs", false, UF.CreateAndUpdateUF, "targettargettarget"),
+		debuffs = GetOptionsTable_Auras(false, "debuffs", false, UF.CreateAndUpdateUF, "targettargettarget"),
+		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUF, "targettargettarget")
+	}
+};
 
-
-E.Options.args.unitframe.args.focus = { -- Фокус
-	name = L['Focus Frame'],
-	type = 'group',
+E.Options.args.unitframe.args.focus = {
+	name = L["Focus Frame"],
+	type = "group",
 	order = 600,
 	childGroups = "select",
-	get = function(info) return E.db.unitframe.units['focus'][ info[#info] ] end,
-	set = function(info, value) E.db.unitframe.units['focus'][ info[#info] ] = value; UF:CreateAndUpdateUF('focus') end,
+	get = function(info) return E.db.unitframe.units["focus"][ info[#info] ]; end,
+	set = function(info, value) E.db.unitframe.units["focus"][ info[#info] ] = value; UF:CreateAndUpdateUF("focus"); end,
 	disabled = function() return not E.private.unitframe.enable end,
 	args = {
-		enable = { -- Включить
-			type = 'toggle',
+		enable = {
 			order = 1,
-			name = L['Enable'],
+			type = "toggle",
+			name = L["Enable"]
 		},
-		copyFrom = { -- Скопировать из
-			type = 'select',
+		copyFrom = {
 			order = 2,
-			name = L['Copy From'],
-			desc = L['Select a unit to copy settings from.'],
-			values = UF['units'],
-			set = function(info, value) UF:MergeUnitSettings(value, 'focus'); end,
+			type = "select",
+			name = L["Copy From"],
+			desc = L["Select a unit to copy settings from."],
+			values = UF["units"],
+			set = function(info, value) UF:MergeUnitSettings(value, "focus"); end
 		},
-		resetSettings = { -- Востановить умолчания
-			type = 'execute',
+		resetSettings = {
 			order = 3,
-			name = L['Restore Defaults'],
-			func = function(info, value) UF:ResetUnitSettings('focus'); E:ResetMovers(L['Focus Frame']) end,
+			type = "execute",
+			name = L["Restore Defaults"],
+			func = function(info, value) UF:ResetUnitSettings("focus"); E:ResetMovers(L["Focus Frame"]); end
 		},	
-		showAuras = { -- Показать ауры
+		showAuras = {
 			order = 4,
-			type = 'execute',
-			name = L['Show Auras'],
+			type = "execute",
+			name = L["Show Auras"],
 			func = function() 
-				local frame = ElvUF_Focus
-				if frame.forceShowAuras then
+				local frame = ElvUF_Focus;
+				if(frame.forceShowAuras) then
 					frame.forceShowAuras = nil; 
 				else
 					frame.forceShowAuras = true; 
 				end
 				
-				UF:CreateAndUpdateUF('focus') 
+				UF:CreateAndUpdateUF("focus");
 			end,
 		},			
-		width = { -- Ширина
+		width = {
 			order = 5,
-			name = L['Width'],
-			type = 'range',
-			min = 50, max = 500, step = 1,
-		},
-		height = { -- Высота
-			order = 6,
-			name = L['Height'],
-			type = 'range',
-			min = 10, max = 250, step = 1,
-		},
-		rangeCheck = { -- Проверка дистанции
-			order = 7,
-			name = L["Range Check"],
-			desc = L["Check if you are in range to cast spells on this specific unit."],
-			type = "toggle",
-		},
-		healPrediction = {
-			order = 8,
-			type = "toggle",
-			name = L["Heal Prediction"],
-			desc = L["Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
-		},
-		hideonnpc = { -- Переключение текста для НИП
-			type = 'toggle',
-			order = 9,
-			name = L['Text Toggle On NPC'],
-			desc = L['Power text will be hidden on NPC targets, in addition the name text will be repositioned to the power texts anchor point.'],
-			get = function(info) return E.db.unitframe.units['focus']['power'].hideonnpc end,
-			set = function(info, value) E.db.unitframe.units['focus']['power'].hideonnpc = value; UF:CreateAndUpdateUF('focus') end,
-		},
-		threatStyle = { -- Режим отображения угрозы
-			type = 'select',
-			order = 10,
-			name = L['Threat Display Mode'],
-			values = threatValues,
-		},
-		smartAuraPosition = {
-			order = 11,
-			type = "select",
-			name = L["Smart Aura Position"],
-			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
-			values = {
-				["DISABLED"] = L["Disabled"],
-				["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
-				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
-			},
-		},
-		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, 'focus'), -- Здоровье
-		power = GetOptionsTable_Power(nil, UF.CreateAndUpdateUF, 'focus'), -- Мана
-		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, 'focus'), -- Имя
-		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUF, 'focus'),
-		buffs = GetOptionsTable_Auras(false, 'buffs', false, UF.CreateAndUpdateUF, 'focus'), -- Баффы
-		debuffs = GetOptionsTable_Auras(false, 'debuffs', false, UF.CreateAndUpdateUF, 'focus'), -- Дебаффы
-		castbar = GetOptionsTable_Castbar(false, UF.CreateAndUpdateUF, 'focus'), -- Полоса заклинаний
-		aurabar = GetOptionsTable_AuraBars(false, UF.CreateAndUpdateUF, 'focus'), -- Полоса аур
-		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUF, 'focus'), -- Рейдовая иконка
-		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, 'focus'), -- Свой текст
-		GPSArrow = GetOptionsTableForNonGroup_GPS("focus")
-	}
-}
-
-E.Options.args.unitframe.args.focustarget = { -- Цель фокуса
-	name = L['FocusTarget Frame'],
-	type = 'group',
-	order = 700,
-	childGroups = "select",
-	get = function(info) return E.db.unitframe.units['focustarget'][ info[#info] ] end,
-	set = function(info, value) E.db.unitframe.units['focustarget'][ info[#info] ] = value; UF:CreateAndUpdateUF('focustarget') end,
-	disabled = function() return not E.private.unitframe.enable end,
-	args = {
-		enable = { -- Включить
-			type = 'toggle',
-			order = 1,
-			name = L['Enable'],
-		},
-		copyFrom = { -- Скопировать из
-			type = 'select',
-			order = 2,
-			name = L['Copy From'],
-			desc = L['Select a unit to copy settings from.'],
-			values = UF['units'],
-			set = function(info, value) UF:MergeUnitSettings(value, 'focustarget'); end,
-		},
-		resetSettings = { -- Востановить умолчания
-			type = 'execute',
-			order = 3,
-			name = L['Restore Defaults'],
-			func = function(info, value) UF:ResetUnitSettings('focustarget'); E:ResetMovers(L['FocusTarget Frame']) end,
-		},	
-		showAuras = { -- Показать ауры
-			order = 4,
-			type = 'execute',
-			name = L['Show Auras'],
-			func = function() 
-				local frame = ElvUF_FocusTarget
-				if frame.forceShowAuras then
-					frame.forceShowAuras = nil; 
-				else
-					frame.forceShowAuras = true; 
-				end
-				
-				UF:CreateAndUpdateUF('focustarget') 
-			end,
-		},			
-		width = { -- Ширина
-			order = 5,
-			name = L['Width'],
-			type = 'range',
-			min = 50, max = 500, step = 1,
-		},
-		height = { -- Высота
-			order = 6,
-			name = L['Height'],
-			type = 'range',
-			min = 10, max = 250, step = 1,
-		},	
-		rangeCheck = { -- Проверка дистанции
-			order = 7,
-			name = L["Range Check"],
-			desc = L["Check if you are in range to cast spells on this specific unit."],
-			type = "toggle",
-		},
-		hideonnpc = { -- Переключение текста для НИП
-			type = 'toggle',
-			order = 9,
-			name = L['Text Toggle On NPC'],
-			desc = L['Power text will be hidden on NPC targets, in addition the name text will be repositioned to the power texts anchor point.'],
-			get = function(info) return E.db.unitframe.units['focustarget']['power'].hideonnpc end,
-			set = function(info, value) E.db.unitframe.units['focustarget']['power'].hideonnpc = value; UF:CreateAndUpdateUF('focustarget') end,
-		},	
-		threatStyle = { -- Режим отображения угрозы
-			type = 'select',
-			order = 10,
-			name = L['Threat Display Mode'],
-			values = threatValues,
-		},
-		smartAuraPosition = {
-			order = 11,
-			type = "select",
-			name = L["Smart Aura Position"],
-			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
-			values = {
-				["DISABLED"] = L["Disabled"],
-				["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
-				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
-			},
-		},
-		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, 'focustarget'), -- Здоровье
-		power = GetOptionsTable_Power(false, UF.CreateAndUpdateUF, 'focustarget'), -- Мана
-		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, 'focustarget'), -- Имя
-		buffs = GetOptionsTable_Auras(false, 'buffs', false, UF.CreateAndUpdateUF, 'focustarget'), -- Баффы
-		debuffs = GetOptionsTable_Auras(false, 'debuffs', false, UF.CreateAndUpdateUF, 'focustarget'), -- ДЕбаффы
-		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUF, 'focustarget'), -- Рейдовая иконка
-		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, 'focustarget'), -- Свой текст
-	},
-}
-
-E.Options.args.unitframe.args.pet = { -- Питомец
-	name = L['Pet Frame'],
-	type = 'group',
-	order = 800,
-	childGroups = "select",
-	get = function(info) return E.db.unitframe.units['pet'][ info[#info] ] end,
-	set = function(info, value) E.db.unitframe.units['pet'][ info[#info] ] = value; UF:CreateAndUpdateUF('pet') end,
-	disabled = function() return not E.private.unitframe.enable end,
-	args = {
-		enable = { -- Включить
-			type = 'toggle',
-			order = 1,
-			name = L['Enable'],
-		},
-		copyFrom = { -- Скопировать из
-			type = 'select',
-			order = 2,
-			name = L['Copy From'],
-			desc = L['Select a unit to copy settings from.'],
-			values = UF['units'],
-			set = function(info, value) UF:MergeUnitSettings(value, 'pet'); end,
-		},
-		resetSettings = { -- Востановить умолчания
-			type = 'execute',
-			order = 3,
-			name = L['Restore Defaults'],
-			func = function(info, value) UF:ResetUnitSettings('pet'); E:ResetMovers(L['Pet Frame']) end,
-		},
-		showAuras = { -- Показать ауры
-			order = 4,
-			type = 'execute',
-			name = L['Show Auras'],
-			func = function() 
-				local frame = ElvUF_Pet
-				if frame.forceShowAuras then
-					frame.forceShowAuras = nil; 
-				else
-					frame.forceShowAuras = true; 
-				end
-				
-				UF:CreateAndUpdateUF('pet') 
-			end,
-		},			
-		width = { -- Ширина
-			order = 5,
-			name = L['Width'],
-			type = 'range',
-			min = 50, max = 500, step = 1,
-		},
-		height = { -- Высота
-			order = 6,
-			name = L['Height'],
-			type = 'range',
-			min = 10, max = 250, step = 1,
-		},	
-		rangeCheck = { -- Проверка дистанции
-			order = 7,
-			name = L["Range Check"],
-			desc = L["Check if you are in range to cast spells on this specific unit."],
-			type = "toggle",
-		},
-		healPrediction = {
-			order = 8,
-			type = "toggle",
-			name = L["Heal Prediction"],
-			desc = L["Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
-		},
-		hideonnpc = { -- Переключения текста для НИП
-			type = 'toggle',
-			order = 9,
-			name = L['Text Toggle On NPC'],
-			desc = L['Power text will be hidden on NPC targets, in addition the name text will be repositioned to the power texts anchor point.'],
-			get = function(info) return E.db.unitframe.units['pet']['power'].hideonnpc end,
-			set = function(info, value) E.db.unitframe.units['pet']['power'].hideonnpc = value; UF:CreateAndUpdateUF('pet') end,
-		},	
-		threatStyle = { -- Режим отображения угрозы
-			type = 'select',
-			order = 10,
-			name = L['Threat Display Mode'],
-			values = threatValues,
-		},
-		smartAuraPosition = {
-			order = 11,
-			type = "select",
-			name = L["Smart Aura Position"],
-			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
-			values = {
-				["DISABLED"] = L["Disabled"],
-				["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
-				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
-			},
-		},
-		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, 'pet'), -- Здоровье
-		power = GetOptionsTable_Power(false, UF.CreateAndUpdateUF, 'pet'), -- Мана
-		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, 'pet'), -- Имя
-		buffs = GetOptionsTable_Auras(true, 'buffs', false, UF.CreateAndUpdateUF, 'pet'), -- Баффы
-		debuffs = GetOptionsTable_Auras(true, 'debuffs', false, UF.CreateAndUpdateUF, 'pet'), -- Дебаффы
-		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, 'pet'), -- Свой текст
-		buffIndicator = { -- Индикатор баффов
-			order = 600,
-			type = 'group',
-			name = L['Buff Indicator'],
-			get = function(info) return E.db.unitframe.units['pet']['buffIndicator'][ info[#info] ] end,
-			set = function(info, value) E.db.unitframe.units['pet']['buffIndicator'][ info[#info] ] = value; UF:CreateAndUpdateUF('pet') end,
-			args = {
-				enable = { -- Включить
-					type = 'toggle',
-					name = L['Enable'],
-					order = 1,
-				},
-				size = { -- Размер
-					type = 'range',
-					name = L['Size'],
-					desc = L['Size of the indicator icon.'],
-					order = 2,
-					min = 4, max = 15, step = 1,
-				},
-				fontSize = { -- Размер шрифта
-					type = 'range',
-					name = L['Font Size'],
-					order = 3,
-					min = 7, max = 22, step = 1,
-				},
-			},
-		},	
-	},
-}
-
-E.Options.args.unitframe.args.pettarget = { -- Цель питомца
-	name = L['PetTarget Frame'],
-	type = 'group',
-	order = 900,
-	childGroups = "select",
-	get = function(info) return E.db.unitframe.units['pettarget'][ info[#info] ] end,
-	set = function(info, value) E.db.unitframe.units['pettarget'][ info[#info] ] = value; UF:CreateAndUpdateUF('pettarget') end,
-	disabled = function() return not E.private.unitframe.enable end,
-	args = {
-		enable = { -- Включить
-			type = 'toggle',
-			order = 1,
-			name = L['Enable'],
-		},
-		copyFrom = { -- Скопировать из
-			type = 'select',
-			order = 2,
-			name = L['Copy From'],
-			desc = L['Select a unit to copy settings from.'],
-			values = UF['units'],
-			set = function(info, value) UF:MergeUnitSettings(value, 'pettarget'); end,
-		},
-		resetSettings = { -- Востановить умолчания
-			type = 'execute',
-			order = 3,
-			name = L['Restore Defaults'],
-			func = function(info, value) UF:ResetUnitSettings('pettarget'); E:ResetMovers(L['PetTarget Frame']) end,
-		},	
-		showAuras = { -- Показать ауры
-			order = 4,
-			type = 'execute',
-			name = L['Show Auras'],
-			func = function() 
-				local frame = ElvUF_PetTarget
-				if frame.forceShowAuras then
-					frame.forceShowAuras = nil; 
-				else
-					frame.forceShowAuras = true; 
-				end
-				
-				UF:CreateAndUpdateUF('pettarget') 
-			end,
-		},			
-		width = { -- Ширина
-			order = 5,
-			name = L['Width'],
-			type = 'range',
-			min = 50, max = 500, step = 1,
-		},
-		height = { -- Высота
-			order = 6,
-			name = L['Height'],
-			type = 'range',
-			min = 10, max = 250, step = 1,
-		},	
-		rangeCheck = { -- Проверка дистанции
-			order = 7,
-			name = L["Range Check"],
-			desc = L["Check if you are in range to cast spells on this specific unit."],
-			type = "toggle",
-		},
-		hideonnpc = { -- Переключения текста для НИП
-			type = 'toggle',
-			order = 9,
-			name = L['Text Toggle On NPC'],
-			desc = L['Power text will be hidden on NPC targets, in addition the name text will be repositioned to the power texts anchor point.'],
-			get = function(info) return E.db.unitframe.units['pettarget']['power'].hideonnpc end,
-			set = function(info, value) E.db.unitframe.units['pettarget']['power'].hideonnpc = value; UF:CreateAndUpdateUF('pettarget') end,
-		},		
-		threatStyle = { -- Режим отображения угрозы
-			type = 'select',
-			order = 10,
-			name = L['Threat Display Mode'],
-			values = threatValues,
-		},
-		smartAuraPosition = {
-			order = 11,
-			type = "select",
-			name = L["Smart Aura Position"],
-			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
-			values = {
-				["DISABLED"] = L["Disabled"],
-				["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
-				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
-			},
-		},
-		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, 'pettarget'), -- Здоровье
-		power = GetOptionsTable_Power(false, UF.CreateAndUpdateUF, 'pettarget'), -- Мана
-		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, 'pettarget'), -- Имя
-		buffs = GetOptionsTable_Auras(false, 'buffs', false, UF.CreateAndUpdateUF, 'pettarget'), -- Баффы
-		debuffs = GetOptionsTable_Auras(false, 'debuffs', false, UF.CreateAndUpdateUF, 'pettarget'), -- Дебаффы
-		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, 'pettarget'), -- Свой текст
-	},
-}
-
-E.Options.args.unitframe.args.boss = { -- Боссы
-	name = L['Boss Frames'],
-	type = 'group',
-	order = 1000,
-	childGroups = "select",
-	get = function(info) return E.db.unitframe.units['boss'][ info[#info] ] end,
-	set = function(info, value) E.db.unitframe.units['boss'][ info[#info] ] = value; UF:CreateAndUpdateUFGroup('boss', MAX_BOSS_FRAMES) end,
-	disabled = function() return not E.private.unitframe.enable end,
-	args = {
-		enable = { -- Включить
-			type = 'toggle',
-			order = 1,
-			name = L['Enable'],
-		},
-		copyFrom = { -- Скопировать из
-			type = 'select',
-			order = 2,
-			name = L['Copy From'],
-			desc = L['Select a unit to copy settings from.'],
-			values = {
-				['boss'] = 'boss',
-				['arena'] = 'arena',
-			},
-			set = function(info, value) UF:MergeUnitSettings(value, 'boss'); end,
-		},
-		resetSettings = { -- Востановить умолчания
-			type = 'execute',
-			order = 3,
-			name = L['Restore Defaults'],
-			func = function(info, value) UF:ResetUnitSettings('boss'); E:ResetMovers(L['Boss Frames']) end,
-		},		
-		displayFrames = { -- Показать рамки
-			type = 'execute',
-			order = 4,
-			name = L['Display Frames'],
-			desc = L['Force the frames to show, they will act as if they are the player frame.'],
-			func = function() UF:ToggleForceShowGroupFrames('boss', 4) end,
-		},
-		width = { -- Ширина
-			order = 5,
-			name = L['Width'],
-			type = 'range',
-			min = 50, max = 500, step = 1,
-			set = function(info, value) 
-				if E.db.unitframe.units['boss'].castbar.width == E.db.unitframe.units['boss'][ info[#info] ] then
-					E.db.unitframe.units['boss'].castbar.width = value;
-				end
-				
-				E.db.unitframe.units['boss'][ info[#info] ] = value; 
-				UF:CreateAndUpdateUFGroup('boss', MAX_BOSS_FRAMES);
-			end,			
-		},
-		height = { -- Высота
-			order = 6,
-			name = L['Height'],
-			type = 'range',
-			min = 10, max = 250, step = 1,
-		},	
-		rangeCheck = { -- Проверка дистанции
-			order = 7,
-			name = L["Range Check"],
-			desc = L["Check if you are in range to cast spells on this specific unit."],
-			type = "toggle",
-		},
-		hideonnpc = { -- Переключения текста для НИП
-			type = 'toggle',
-			order = 8,
-			name = L['Text Toggle On NPC'],
-			desc = L['Power text will be hidden on NPC targets, in addition the name text will be repositioned to the power texts anchor point.'],
-			get = function(info) return E.db.unitframe.units['boss']['power'].hideonnpc end,
-			set = function(info, value) E.db.unitframe.units['boss']['power'].hideonnpc = value; UF:CreateAndUpdateUFGroup('boss', MAX_BOSS_FRAMES) end,
-		},
-		growthDirection = { -- Направление роста
-			order = 9,
-			name = L["Growth Direction"],
-			type = "select",
-			values = {
-				['UP'] = L["Bottom to Top"],
-				['DOWN'] = L["Top to Bottom"],
-				['LEFT'] = L["Right to Left"],
-				['RIGHT'] = L["Left to Right"],
-			},
-		},
-		spacing = {
-			order = 10,
 			type = "range",
-			name = L["Spacing"],
-			min = 0, max = 400, step = 1,
+			name = L["Width"],
+			min = 50, max = 500, step = 1
 		},
-		threatStyle = { -- РЕжим отображения угрозы
-			type = 'select',
-			order = 11,
-			name = L['Threat Display Mode'],
-			values = threatValues,
+		height = {
+			order = 6,
+			type = "range",
+			name = L["Height"],
+			min = 10, max = 250, step = 1
+		},
+		rangeCheck = {
+			order = 7,
+			type = "toggle",
+			name = L["Range Check"],
+			desc = L["Check if you are in range to cast spells on this specific unit."]
+		},
+		healPrediction = {
+			order = 8,
+			type = "toggle",
+			name = L["Heal Prediction"],
+			desc = L["Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
+		},
+		hideonnpc = {
+			order = 9,
+			type = "toggle",
+			name = L["Text Toggle On NPC"],
+			desc = L["Power text will be hidden on NPC targets, in addition the name text will be repositioned to the power texts anchor point."],
+			get = function(info) return E.db.unitframe.units["focus"]["power"].hideonnpc end,
+			set = function(info, value) E.db.unitframe.units["focus"]["power"].hideonnpc = value; UF:CreateAndUpdateUF("focus"); end,
+		},
+		threatStyle = {
+			order = 10,
+			type = "select",
+			name = L["Threat Display Mode"],
+			values = threatValues
 		},
 		smartAuraPosition = {
+			order = 11,
+			type = "select",
+			name = L["Smart Aura Position"],
+			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
+			values = {
+				["DISABLED"] = L["Disabled"],
+				["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
+				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"]
+			}
+		},
+		orientation = {
 			order = 12,
 			type = "select",
+			name = L["Frame Orientation"],
+			desc = L["Set the orientation of the UnitFrame. If set to automatic it will adjust based on where the frame is located on the screen."],
+			values = {
+				--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
+				["LEFT"] = L["Left"],
+				["MIDDLE"] = L["Middle"],
+				["RIGHT"] = L["Right"],
+			},
+		},
+		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, "focus"),
+		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, "focus"),
+		power = GetOptionsTable_Power(nil, UF.CreateAndUpdateUF, "focus"),
+		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, "focus"),
+		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUF, "focus"),
+		buffs = GetOptionsTable_Auras(false, "buffs", false, UF.CreateAndUpdateUF, "focus"),
+		debuffs = GetOptionsTable_Auras(false, "debuffs", false, UF.CreateAndUpdateUF, "focus"),
+		castbar = GetOptionsTable_Castbar(false, UF.CreateAndUpdateUF, "focus"),
+		aurabar = GetOptionsTable_AuraBars(false, UF.CreateAndUpdateUF, "focus"),
+		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUF, "focus"),
+		GPSArrow = GetOptionsTableForNonGroup_GPS("focus")
+	}
+};
+
+E.Options.args.unitframe.args.focustarget = {
+	name = L["FocusTarget Frame"],
+	type = "group",
+	order = 700,
+	childGroups = "select",
+	get = function(info) return E.db.unitframe.units["focustarget"][ info[#info] ]; end,
+	set = function(info, value) E.db.unitframe.units["focustarget"][ info[#info] ] = value; UF:CreateAndUpdateUF("focustarget"); end,
+	disabled = function() return not E.private.unitframe.enable end,
+	args = {
+		enable = {
+			order = 1,
+			type = "toggle",
+			name = L["Enable"],
+		},
+		copyFrom = {
+			order = 2,
+			type = "select",
+			name = L["Copy From"],
+			desc = L["Select a unit to copy settings from."],
+			values = UF["units"],
+			set = function(info, value) UF:MergeUnitSettings(value, "focustarget"); end
+		},
+		resetSettings = {
+			order = 3,
+			type = "execute",
+			name = L["Restore Defaults"],
+			func = function(info, value) UF:ResetUnitSettings("focustarget"); E:ResetMovers(L["FocusTarget Frame"]); end
+		},	
+		showAuras = {
+			order = 4,
+			type = "execute",
+			name = L["Show Auras"],
+			func = function() 
+				local frame = ElvUF_FocusTarget;
+				if(frame.forceShowAuras) then
+					frame.forceShowAuras = nil; 
+				else
+					frame.forceShowAuras = true; 
+				end
+				
+				UF:CreateAndUpdateUF("focustarget");
+			end
+		},			
+		width = {
+			order = 5,
+			type = "range",
+			name = L["Width"],
+			min = 50, max = 500, step = 1
+		},
+		height = {
+			order = 6,
+			type = "range",
+			name = L["Height"],
+			min = 10, max = 250, step = 1
+		},	
+		rangeCheck = {
+			order = 7,
+			type = "toggle",
+			name = L["Range Check"],
+			desc = L["Check if you are in range to cast spells on this specific unit."]
+		},
+		hideonnpc = {
+			order = 8,
+			type = "toggle",
+			name = L["Text Toggle On NPC"],
+			desc = L["Power text will be hidden on NPC targets, in addition the name text will be repositioned to the power texts anchor point."],
+			get = function(info) return E.db.unitframe.units["focustarget"]["power"].hideonnpc end,
+			set = function(info, value) E.db.unitframe.units["focustarget"]["power"].hideonnpc = value; UF:CreateAndUpdateUF("focustarget"); end
+		},	
+		threatStyle = {
+			type = "select",
+			order = 9,
+			name = L["Threat Display Mode"],
+			values = threatValues
+		},
+		smartAuraPosition = {
+			order = 10,
+			type = "select",
 			name = L["Smart Aura Position"],
 			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
 			values = {
 				["DISABLED"] = L["Disabled"],
 				["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
-				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
-			},
+				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"]
+			}
 		},
-		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUFGroup, 'boss', MAX_BOSS_FRAMES), -- Здоровье
-		power = GetOptionsTable_Power(false, UF.CreateAndUpdateUFGroup, 'boss', MAX_BOSS_FRAMES), -- Мана
-		name = GetOptionsTable_Name(UF.CreateAndUpdateUFGroup, 'boss', MAX_BOSS_FRAMES), -- Имя
-		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUFGroup, 'boss', MAX_BOSS_FRAMES), -- Портрет
-		buffs = GetOptionsTable_Auras(true, 'buffs', false, UF.CreateAndUpdateUFGroup, 'boss', MAX_BOSS_FRAMES), -- Баффы
-		debuffs = GetOptionsTable_Auras(true, 'debuffs', false, UF.CreateAndUpdateUFGroup, 'boss', MAX_BOSS_FRAMES), -- Дебаффы
-		castbar = GetOptionsTable_Castbar(false, UF.CreateAndUpdateUFGroup, 'boss', MAX_BOSS_FRAMES), -- Полоса заклинаний
-		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUFGroup, 'boss', MAX_BOSS_FRAMES), -- Рейдовая иконка
-		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUFGroup, 'boss', MAX_BOSS_FRAMES), -- Свой текст
-	},
-}
+		orientation = {
+			order = 11,
+			type = "select",
+			name = L["Frame Orientation"],
+			desc = L["Set the orientation of the UnitFrame. If set to automatic it will adjust based on where the frame is located on the screen."],
+			values = {
+				--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
+				["LEFT"] = L["Left"],
+				["MIDDLE"] = L["Middle"],
+				["RIGHT"] = L["Right"]
+			}
+		},
+		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, "focustarget"),
+		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, "focustarget"),
+		power = GetOptionsTable_Power(false, UF.CreateAndUpdateUF, "focustarget"),
+		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, "focustarget"),
+		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUF, "focustarget"),
+		buffs = GetOptionsTable_Auras(false, "buffs", false, UF.CreateAndUpdateUF, "focustarget"),
+		debuffs = GetOptionsTable_Auras(false, "debuffs", false, UF.CreateAndUpdateUF, "focustarget"),
+		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUF, "focustarget")
+	}
+};
 
-E.Options.args.unitframe.args.arena = { -- Арена
-	name = L['Arena Frames'],
-	type = 'group',
-	order = 1100,
+E.Options.args.unitframe.args.pet = {
+	name = L["Pet Frame"],
+	type = "group",
+	order = 800,
 	childGroups = "select",
-	get = function(info) return E.db.unitframe.units['arena'][ info[#info] ] end,
-	set = function(info, value) E.db.unitframe.units['arena'][ info[#info] ] = value; UF:CreateAndUpdateUFGroup('arena', 5) end,
+	get = function(info) return E.db.unitframe.units["pet"][ info[#info] ] end,
+	set = function(info, value) E.db.unitframe.units["pet"][ info[#info] ] = value; UF:CreateAndUpdateUF("pet"); end,
 	disabled = function() return not E.private.unitframe.enable end,
 	args = {
-		enable = { -- Включить
-			type = 'toggle',
+		enable = {
 			order = 1,
-			name = L['Enable'],
+			type = "toggle",
+			name = L["Enable"]
 		},
-		copyFrom = { -- Скопировать из
-			type = 'select',
+		copyFrom = {
+			type = "select",
 			order = 2,
-			name = L['Copy From'],
-			desc = L['Select a unit to copy settings from.'],
-			values = {
-				['boss'] = 'boss',
-				['arena'] = 'arena',
-			},
-			set = function(info, value) UF:MergeUnitSettings(value, 'arena'); end,
+			name = L["Copy From"],
+			desc = L["Select a unit to copy settings from."],
+			values = UF["units"],
+			set = function(info, value) UF:MergeUnitSettings(value, "pet"); end
 		},
-		resetSettings = { -- Востановить умолчания
-			type = 'execute',
+		resetSettings = {
+			type = "execute",
 			order = 3,
-			name = L['Restore Defaults'],
-			func = function(info, value) UF:ResetUnitSettings('arena'); E:ResetMovers(L['Arena Frames']) end,
-		},			
-		displayFrames = { -- Показать рамки
-			type = 'execute',
+			name = L["Restore Defaults"],
+			func = function(info, value) UF:ResetUnitSettings("pet"); E:ResetMovers(L["Pet Frame"]); end
+		},
+		showAuras = {
 			order = 4,
-			name = L['Display Frames'],
-			desc = L['Force the frames to show, they will act as if they are the player frame.'],
-			func = function() UF:ToggleForceShowGroupFrames('arena', 5) end,
-		},		
-		width = { -- Ширина
-			order = 5,
-			name = L['Width'],
-			type = 'range',
-			min = 50, max = 500, step = 1,
-			set = function(info, value) 
-				if E.db.unitframe.units['arena'].castbar.width == E.db.unitframe.units['arena'][ info[#info] ] then
-					E.db.unitframe.units['arena'].castbar.width = value;
+			type = "execute",
+			name = L["Show Auras"],
+			func = function() 
+				local frame = ElvUF_Pet;
+				if(frame.forceShowAuras) then
+					frame.forceShowAuras = nil; 
+				else
+					frame.forceShowAuras = true; 
 				end
 				
-				E.db.unitframe.units['arena'][ info[#info] ] = value; 
-				UF:CreateAndUpdateUFGroup('arena', 5);
-			end,			
+				UF:CreateAndUpdateUF("pet");
+			end,
+		},			
+		width = {
+			order = 5,
+			type = "range",
+			name = L["Width"],
+			min = 50, max = 500, step = 1
 		},
-		height = { -- Высота
+		height = {
 			order = 6,
-			name = L['Height'],
-			type = 'range',
-			min = 10, max = 250, step = 1,
+			type = "range",
+			name = L["Height"],
+			min = 10, max = 250, step = 1
 		},	
-		rangeCheck = { -- Проверка дистанции
+		rangeCheck = {
 			order = 7,
-			name = L["Range Check"],
-			desc = L["Check if you are in range to cast spells on this specific unit."],
 			type = "toggle",
+			name = L["Range Check"],
+			desc = L["Check if you are in range to cast spells on this specific unit."]
 		},
 		healPrediction = {
 			order = 8,
@@ -3261,857 +3180,49 @@ E.Options.args.unitframe.args.arena = { -- Арена
 			name = L["Heal Prediction"],
 			desc = L["Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
 		},
-		hideonnpc = { -- Переключения текста для НИП
-			type = 'toggle',
+		hideonnpc = {
 			order = 9,
-			name = L['Text Toggle On NPC'],
-			desc = L['Power text will be hidden on NPC targets, in addition the name text will be repositioned to the power texts anchor point.'],
-			get = function(info) return E.db.unitframe.units['arena']['power'].hideonnpc end,
-			set = function(info, value) E.db.unitframe.units['arena']['power'].hideonnpc = value; UF:CreateAndUpdateUFGroup('arena', 5) end,
-		},
-		growthDirection = { -- Направление роста
+			type = "toggle",
+			name = L["Text Toggle On NPC"],
+			desc = L["Power text will be hidden on NPC targets, in addition the name text will be repositioned to the power texts anchor point."],
+			get = function(info) return E.db.unitframe.units["pet"]["power"].hideonnpc end,
+			set = function(info, value) E.db.unitframe.units["pet"]["power"].hideonnpc = value; UF:CreateAndUpdateUF("pet"); end
+		},	
+		threatStyle = {
 			order = 10,
-			name = L["Growth Direction"],
 			type = "select",
-			values = {
-				["UP"] = L["Bottom to Top"],
-				["DOWN"] = L["Top to Bottom"],
-				["LEFT"] = L["Right to Left"],
-				["RIGHT"] = L["Left to Right"],
-			},
-		},
-		spacing = {
- 			order = 11,
-			type = "range",
-			name = L["Spacing"],
-			min = 0, max = 400, step = 1,
-		},
-		colorOverride = {
-			order = 13,
-			name = L['Class Color Override'],
-			desc = L['Override the default class color setting.'],
-			type = 'select',
-			values = {
-				['USE_DEFAULT'] = L['Use Default'],
-				['FORCE_ON'] = L['Force On'],
-				['FORCE_OFF'] = L['Force Off'],
-			},
+			name = L["Threat Display Mode"],
+			values = threatValues
 		},
 		smartAuraPosition = {
-			order = 14,
+			order = 11,
 			type = "select",
 			name = L["Smart Aura Position"],
 			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
 			values = {
 				["DISABLED"] = L["Disabled"],
 				["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
-				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
-			},
+				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"]
+			}
 		},
-		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUFGroup, 'arena', 5), -- Здоровье
-		power = GetOptionsTable_Power(false, UF.CreateAndUpdateUFGroup, 'arena', 5), -- Мана
-		name = GetOptionsTable_Name(UF.CreateAndUpdateUFGroup, 'arena', 5), -- Имя
-		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUFGroup, 'arena', 5),
-		buffs = GetOptionsTable_Auras(false, 'buffs', false, UF.CreateAndUpdateUFGroup, 'arena', 5), -- Баффы
-		debuffs = GetOptionsTable_Auras(false, 'debuffs', false, UF.CreateAndUpdateUFGroup, 'arena', 5), -- Дебаффы
-		castbar = GetOptionsTable_Castbar(false, UF.CreateAndUpdateUFGroup, 'arena', 5), -- Полоса заклинаний
-		pvpTrinket = { -- ПвП Аксессуар
-			order = 750,
-			type = 'group',
-			name = L['PVP Trinket'],
-			get = function(info) return E.db.unitframe.units['arena']['pvpTrinket'][ info[#info] ] end,
-			set = function(info, value) E.db.unitframe.units['arena']['pvpTrinket'][ info[#info] ] = value; UF:CreateAndUpdateUFGroup('arena', 5) end,
-			args = {
-				enable = { -- Включить
-					type = 'toggle',
-					order = 1,
-					name = L['Enable'],
-				},
-				position = { -- Позиция
-					type = 'select',
-					order = 2,
-					name = L['Position'],
-					values = {
-						['LEFT'] = L['Left'],
-						['RIGHT'] = L['Right'],
-					},
-				},
-				size = { -- Размер
-					order = 3,
-					type = 'range',
-					name = L['Size'],
-					min = 10, max = 60, step = 1,
-				},
-				xOffset = { -- Отступ по X
-					order = 4,
-					type = 'range',
-					name = L['xOffset'],
-					min = -60, max = 60, step = 1,
-				},
-				yOffset = { -- Отступ по Y
-					order = 5,
-					type = 'range',
-					name = L['yOffset'],
-					min = -60, max = 60, step = 1,
-				},				
-			},
-		},	
-		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUFGroup, 'arena', 5), -- Свой текст
-	},
-}
-
-E.Options.args.unitframe.args.party = { -- Группа
-	name = L['Party Frames'],
-	type = 'group',
-	order = 1200,
-	childGroups = "select",
-	get = function(info) return E.db.unitframe.units['party'][ info[#info] ] end,
-	set = function(info, value) E.db.unitframe.units['party'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('party') end,
-	disabled = function() return not E.private.unitframe.enable end,
-	args = {
-		configureToggle = { -- Показать рамки
-			order = 1,
-			type = 'execute',
-			name = L['Display Frames'],
-			func = function() 
-				UF:HeaderConfig(ElvUF_Party, ElvUF_Party.forceShow ~= true or nil)
-			end,
-		},
-		resetSettings = { -- Востановить умолчания
-			type = 'execute',
-			order = 2,
-			name = L['Restore Defaults'],
-			func = function(info, value) UF:ResetUnitSettings('party'); E:ResetMovers(L['Party Frames']) end,
-			disabled = function() return not _G['ElvUF_Party'].isForced == false end,
-		},
-		copyFrom = { -- Скопировать из
-			type = 'select',
-			order = 3,
-			name = L['Copy From'],
-			desc = L['Select a unit to copy settings from.'],
+		orientation = {
+			order = 12,
+			type = "select",
+			name = L["Frame Orientation"],
+			desc = L["Set the orientation of the UnitFrame. If set to automatic it will adjust based on where the frame is located on the screen."],
 			values = {
-				['raid'] = L['Raid Frames'],
-				['raid40'] = L['Raid-40 Frames'],
-			},
-			set = function(info, value) UF:MergeUnitSettings(value, 'party', true); end,
+				--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
+				["LEFT"] = L["Left"],
+				["MIDDLE"] = L["Middle"],
+				["RIGHT"] = L["Right"]
+			}
 		},
-		general = {
-			order = 4,
-			type = 'group',
-			name = L['General'],
-			args = {
-				enable = { -- Включить
-					type = 'toggle',
-					order = 1,
-					name = L['Enable'],
-				},
-				hideonnpc = { -- Переключение текста для НИП
-					type = 'toggle',
-					order = 2,
-					name = L['Text Toggle On NPC'],
-					desc = L['Power text will be hidden on NPC targets, in addition the name text will be repositioned to the power texts anchor point.'],
-					get = function(info) return E.db.unitframe.units['party']['power'].hideonnpc end,
-					set = function(info, value) E.db.unitframe.units['party']['power'].hideonnpc = value; UF:CreateAndUpdateHeaderGroup('party'); end,
-				},
-				rangeCheck = { -- Проверка дистанции
-					order = 3,
-					name = L["Range Check"],
-					desc = L["Check if you are in range to cast spells on this specific unit."],
-					type = "toggle",
-				},
-				healPrediction = {
-					order = 8,
-					type = "toggle",
-					name = L["Heal Prediction"],
-					desc = L["Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
-				},
-				threatStyle = { -- Режим отображения угрозы
-					type = 'select',
-					order = 5,
-					name = L['Threat Display Mode'],
-					values = threatValues,
-				},	
-				colorOverride = { -- Принудительный цвет класса
-					order = 6,
-					name = L['Class Color Override'],
-					desc = L['Override the default class color setting.'],
-					type = 'select',
-					values = {
-						['USE_DEFAULT'] = L['Use Default'],
-						['FORCE_ON'] = L['Force On'],
-						['FORCE_OFF'] = L['Force Off'],
-					},
-				},								
-				positionsGroup = {
-					order = 100,
-					name = L['Size and Positions'],
-					type = 'group',
-					guiInline = true,
-					set = function(info, value) E.db.unitframe.units['party'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('party', nil, nil, true) end,
-					args = {
-						width = { -- Ширина
-							order = 1,
-							name = L['Width'],
-							type = 'range',
-							min = 10, max = 500, step = 1,
-							set = function(info, value) E.db.unitframe.units['party'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('party') end,
-						},			
-						height = { -- Высота
-							order = 2,
-							name = L['Height'],
-							type = 'range',
-							min = 10, max = 500, step = 1,
-							set = function(info, value) E.db.unitframe.units['party'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('party') end,
-						},	
-						spacer = { -- Пробел
-							order = 3,
-							name = '',
-							type = 'description',
-							width = 'full',
-						},						
-						growthDirection = { -- Направление роста
-							order = 4,
-							name = L['Growth Direction'],
-							desc = L['Growth direction from the first unitframe.'],
-							type = 'select',
-							values = {
-								DOWN_RIGHT = format(L['%s and then %s'], L['Down'], L['Right']),
-								DOWN_LEFT = format(L['%s and then %s'], L['Down'], L['Left']),
-								UP_RIGHT = format(L['%s and then %s'], L['Up'], L['Right']),
-								UP_LEFT = format(L['%s and then %s'], L['Up'], L['Left']),
-								RIGHT_DOWN = format(L['%s and then %s'], L['Right'], L['Down']),
-								RIGHT_UP = format(L['%s and then %s'], L['Right'], L['Up']),
-								LEFT_DOWN = format(L['%s and then %s'], L['Left'], L['Down']),
-								LEFT_UP = format(L['%s and then %s'], L['Left'], L['Up']),				
-							},
-						},
-						numGroups = { -- Количество групп
-							order = 7,
-							type = 'range',
-							name = L['Number of Groups'],
-							min = 1, max = 8, step = 1,
-								set = function(info, value) 
-									E.db.unitframe.units['party'][ info[#info] ] = value; 
-									UF:CreateAndUpdateHeaderGroup('party')
-									if ElvUF_Party.isForced then
-										UF:HeaderConfig(ElvUF_Party)
-										UF:HeaderConfig(ElvUF_Party, true)
-									end
-								end,
-						},
-						groupsPerRowCol = { -- ???
-							order = 8,
-							type = 'range',
-							name = L['Groups Per Row/Column'],
-							min = 1, max = 8, step = 1,
-							set = function(info, value) 
-								E.db.unitframe.units['party'][ info[#info] ] = value; 
-								UF:CreateAndUpdateHeaderGroup('party')
-								if ElvUF_Party.isForced then
-									UF:HeaderConfig(ElvUF_Party)
-									UF:HeaderConfig(ElvUF_Party, true)
-								end
-							end,
-						},		
-						horizontalSpacing = { -- Отступ по горизонтале
-							order = 9,
-							type = 'range',
-							name = L['Horizontal Spacing'],
-							min = 0, max = 50, step = 1,		
-						},
-						verticalSpacing = { -- Отступ по вертикали
-							order = 10,
-							type = 'range',
-							name = L['Vertical Spacing'],
-							min = 0, max = 50, step = 1,		
-						},					
-					},
-				},
-				visibilityGroup = {
-					order = 200,
-					name = L['Visibility'],
-					type = 'group',
-					guiInline = true,
-					set = function(info, value) E.db.unitframe.units['party'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('party', nil, nil, true) end,
-					args = {
-						showPlayer = { -- Показать себя
-							order = 1,
-							type = 'toggle',
-							name = L['Display Player'],
-							desc = L['When true, the header includes the player when not in a raid.'],			
-						},		
-						visibility = { -- Видимость
-							order = 2,
-							type = 'input',
-							name = L['Visibility'],
-							desc = L['The following macro must be true in order for the group to be shown, in addition to any filter that may already be set.'],
-							width = 'full',
-							desc = L['TEXT_FORMAT_DESC'],
-						},							
-					},
-				},
-				sortingGroup = {
-					order = 300,
-					type = 'group',
-					guiInline = true,
-					name = L['Grouping & Sorting'],
-					set = function(info, value) E.db.unitframe.units['party'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('party', nil, nil, true) end,
-					args = {
-						groupBy = { -- Группировать по
-							order = 1,
-							name = L['Group By'],
-							desc = L['Set the order that the group will sort.'],
-							type = 'select',		
-							values = {
-								['CLASS'] = CLASS,
-								['NAME'] = NAME,
-								['MTMA'] = L['Main Tanks / Main Assist'],
-								['GROUP'] = GROUP,
-							},
-						},
-						sortDir = { -- Направление сортировки
-							order = 2,
-							name = L['Sort Direction'],
-							desc = L['Defines the sort order of the selected sort method.'],
-							type = 'select',
-							values = {
-								['ASC'] = L['Ascending'],
-								['DESC'] = L['Descending']
-							},
-						},
-						spacer = {
-							order = 3,
-							type = 'description',
-							width = 'full',
-							name = ' '
-						},
-						raidWideSorting = {
-							order = 4,
-							name = L['Raid-Wide Sorting'],
-							desc = L['Enabling this allows raid-wide sorting however you will not be able to distinguish between groups.'],
-							type = 'toggle',
-						},
-						invertGroupingOrder = {
-							order = 5,
-							name = L['Invert Grouping Order'],
-							desc = L['Enabling this inverts the grouping order when the raid is not full, this will reverse the direction it starts from.'],
-							disabled = function() return not E.db.unitframe.units['party'].raidWideSorting end,
-							type = 'toggle',
-						},	
-						startFromCenter = {
-							order = 6,
-							name = L['Start Near Center'],
-							desc = L['The initial group will start near the center and grow out.'],
-							disabled = function() return not E.db.unitframe.units['party'].raidWideSorting end,
-							type = 'toggle',
-						},
-					},
-				},							
-			},
-		},
-		health = GetOptionsTable_Health(true, UF.CreateAndUpdateHeaderGroup, 'party'), -- Здоровье
-		power = GetOptionsTable_Power(false, UF.CreateAndUpdateHeaderGroup, 'party'), -- Мана
-		name = GetOptionsTable_Name(UF.CreateAndUpdateHeaderGroup, 'party'), -- Имя
-		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateHeaderGroup, 'party'),
-		buffs = GetOptionsTable_Auras(true, 'buffs', true, UF.CreateAndUpdateHeaderGroup, 'party'), -- Баффы
-		debuffs = GetOptionsTable_Auras(true, 'debuffs', true, UF.CreateAndUpdateHeaderGroup, 'party'), -- Дебаффы
-		buffIndicator = { -- Индикатор баффов
-			order = 650,
-			type = 'group',
-			name = L['Buff Indicator'],
-			get = function(info) return E.db.unitframe.units['party']['buffIndicator'][ info[#info] ] end,
-			set = function(info, value) E.db.unitframe.units['party']['buffIndicator'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('party') end,
-			args = {
-				enable = { -- Включить
-					type = 'toggle',
-					name = L['Enable'],
-					order = 1,
-				},
-				size = { -- Размер
-					type = 'range',
-					name = L['Size'],
-					desc = L['Size of the indicator icon.'],
-					order = 3,
-					min = 4, max = 15, step = 1,
-				},
-				fontSize = { -- Размер шрифта
-					type = 'range',
-					name = L['Font Size'],
-					order = 4,
-					min = 7, max = 22, step = 1,
-				},
-				configureButton = { -- Настроить Ауры
-					type = 'execute', 
-					name = L['Configure Auras'],
-					func = function() E:SetToFilterConfig('Buff Indicator') end,
-					order = 5
-				},
-			},
-		},
-		roleIcon = { -- Иконка роли
-			order = 700,
-			type = 'group',
-			name = L['Role Icon'],
-			get = function(info) return E.db.unitframe.units['party']['roleIcon'][ info[#info] ] end,
-			set = function(info, value) E.db.unitframe.units['party']['roleIcon'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('party') end,	
-			args = {
-				enable = {
-					type = 'toggle',
-					name = L['Enable'],
-					order = 1,
-				},
-				position = {
-					type = 'select',
-					order = 2,
-					name = L['Position'],
-					values = positionValues,
-				},
-				size = {
-					type = 'range',
-					order = 3,
-					name = L['Size'],
-					min = 4, max = 100, step = 1,
-				},
-			},
-		},
-		raidRoleIcons = { -- Иконка лидера/ответственного
-			order = 750,
-			type = 'group',
-			name = L['RL / ML Icons'],
-			get = function(info) return E.db.unitframe.units['party']['raidRoleIcons'][ info[#info] ] end,
-			set = function(info, value) E.db.unitframe.units['party']['raidRoleIcons'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('party') end,	
-			args = {
-				enable = { -- Включить
-					type = 'toggle',
-					name = L['Enable'],
-					order = 1,
-				},
-				position = { -- Позиция
-					type = 'select',
-					order = 2,
-					name = L['Position'],
-					values = {
-						['TOPLEFT'] = 'TOPLEFT',
-						['TOPRIGHT'] = 'TOPRIGHT',
-					},
-				},							
-			},
-		},
-		petsGroup = {
-			order = 800,
-			type = 'group',
-			name = L['Party Pets'],
-			get = function(info) return E.db.unitframe.units['party']['petsGroup'][ info[#info] ] end,
-			set = function(info, value) E.db.unitframe.units['party']['petsGroup'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('party') end,	
-			args = {		
-				enable = {
-					type = 'toggle',
-					name = L['Enable'],
-					order = 1,
-				},
-				width = {
-					order = 2,
-					name = L['Width'],
-					type = 'range',
-					min = 10, max = 500, step = 1,
-				},			
-				height = {
-					order = 3,
-					name = L['Height'],
-					type = 'range',
-					min = 10, max = 250, step = 1,
-				},	
-				anchorPoint = {
-					type = 'select',
-					order = 5,
-					name = L['Anchor Point'],
-					desc = L['What point to anchor to the frame you set to attach to.'],
-					values = petAnchors,				
-				},	
-				xOffset = {
-					order = 6,
-					type = 'range',
-					name = L['xOffset'],
-					desc = L['An X offset (in pixels) to be used when anchoring new frames.'],
-					min = -500, max = 500, step = 1,		
-				},
-				yOffset = {
-					order = 7,
-					type = 'range',
-					name = L['yOffset'],
-					desc = L['An Y offset (in pixels) to be used when anchoring new frames.'],
-					min = -500, max = 500, step = 1,		
-				},					
-			},
-		},
-		targetsGroup = {
-			order = 900,
-			type = 'group',
-			name = L['Party Targets'],
-			get = function(info) return E.db.unitframe.units['party']['targetsGroup'][ info[#info] ] end,
-			set = function(info, value) E.db.unitframe.units['party']['targetsGroup'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('party') end,	
-			args = {		
-				enable = {
-					type = 'toggle',
-					name = L['Enable'],
-					order = 1,
-				},
-				width = {
-					order = 2,
-					name = L['Width'],
-					type = 'range',
-					min = 10, max = 500, step = 1,
-				},			
-				height = {
-					order = 3,
-					name = L['Height'],
-					type = 'range',
-					min = 10, max = 250, step = 1,
-				},	
-				anchorPoint = {
-					type = 'select',
-					order = 5,
-					name = L['Anchor Point'],
-					desc = L['What point to anchor to the frame you set to attach to.'],
-					values = petAnchors,				
-				},	
-				xOffset = {
-					order = 6,
-					type = 'range',
-					name = L['xOffset'],
-					desc = L['An X offset (in pixels) to be used when anchoring new frames.'],
-					min = -500, max = 500, step = 1,		
-				},
-				yOffset = {
-					order = 7,
-					type = 'range',
-					name = L['yOffset'],
-					desc = L['An Y offset (in pixels) to be used when anchoring new frames.'],
-					min = -500, max = 500, step = 1,	
-				},					
-			},
-		},
-		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateHeaderGroup, 'party'), -- Рейдовая иконка
-		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateHeaderGroup, 'party', nil, 4), -- Свой текст
-		GPSArrow = GetOptionsTable_GPS("party")
-	}
-}
---Raid Frames
-E.Options.args.unitframe.args['raid'] = {
-	name = L['Raid Frames'],
-	type = 'group',
-	order = 1300,
-	childGroups = "select",
-	get = function(info) return E.db.unitframe.units['raid'][ info[#info] ] end,
-	set = function(info, value) E.db.unitframe.units['raid'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('raid') end,
-	args = {
-		configureToggle = {
-			order = 1,
-			type = 'execute',
-			name = L['Display Frames'],
-			func = function() 
-				UF:HeaderConfig(_G['ElvUF_Raid'], _G['ElvUF_Raid'].forceShow ~= true or nil)
-			end,
-		},			
-		resetSettings = {
-			type = 'execute',
-			order = 2,
-			name = L['Restore Defaults'],
-			func = function(info, value) UF:ResetUnitSettings('raid'); E:ResetMovers('Raid Frames') end,
-		},	
-		copyFrom = {
-			type = 'select',
-			order = 3,
-			name = L['Copy From'],
-			desc = L['Select a unit to copy settings from.'],
-			values = {
-				['party'] = L['Party Frames'],
-				['raid40'] = L['Raid40 Frames'],
-			},
-			set = function(info, value) UF:MergeUnitSettings(value, 'raid', true); end,
-		},
-		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateHeaderGroup, 'raid', nil, 4),			
-		general = {
-			order = 5,
-			type = 'group',
-			name = L['General'],
-			args = {
-				enable = {
-					type = 'toggle',
-					order = 1,
-					name = L['Enable'],
-				},
-				hideonnpc = {
-					type = 'toggle',
-					order = 2,
-					name = L['Text Toggle On NPC'],
-					desc = L['Power text will be hidden on NPC targets, in addition the name text will be repositioned to the power texts anchor point.'],
-					get = function(info) return E.db.unitframe.units['raid']['power'].hideonnpc end,
-					set = function(info, value) E.db.unitframe.units['raid']['power'].hideonnpc = value; UF:CreateAndUpdateHeaderGroup('raid'); end,
-				},
-				rangeCheck = {
-					order = 3,
-					name = L["Range Check"],
-					desc = L["Check if you are in range to cast spells on this specific unit."],
-					type = "toggle",
-				},
-				healPrediction = {
-					order = 8,
-					type = "toggle",
-					name = L["Heal Prediction"],
-					desc = L["Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
-				},
-				threatStyle = {
-					type = 'select',
-					order = 5,
-					name = L['Threat Display Mode'],
-					values = threatValues,
-				},	
-				colorOverride = {
-					order = 6,
-					name = L['Class Color Override'],
-					desc = L['Override the default class color setting.'],
-					type = 'select',
-					values = {
-						['USE_DEFAULT'] = L['Use Default'],
-						['FORCE_ON'] = L['Force On'],
-						['FORCE_OFF'] = L['Force Off'],
-					},
-				},									
-				positionsGroup = {
-					order = 100,
-					name = L['Size and Positions'],
-					type = 'group',
-					guiInline = true,
-					set = function(info, value) E.db.unitframe.units['raid'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('raid', nil, nil, true) end,
-					args = {
-						width = {
-							order = 1,
-							name = L['Width'],
-							type = 'range',
-							min = 10, max = 500, step = 1,
-							set = function(info, value) E.db.unitframe.units['raid'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('raid') end,
-						},			
-						height = {
-							order = 2,
-							name = L['Height'],
-							type = 'range',
-							min = 10, max = 500, step = 1,
-							set = function(info, value) E.db.unitframe.units['raid'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('raid') end,
-						},	
-						spacer = {
-							order = 3,
-							name = '',
-							type = 'description',
-							width = 'full',
-						},
-						growthDirection = {
-							order = 4,
-							name = L['Growth Direction'],
-							desc = L['Growth direction from the first unitframe.'],
-							type = 'select',
-							values = {
-								DOWN_RIGHT = format(L['%s and then %s'], L['Down'], L['Right']),
-								DOWN_LEFT = format(L['%s and then %s'], L['Down'], L['Left']),
-								UP_RIGHT = format(L['%s and then %s'], L['Up'], L['Right']),
-								UP_LEFT = format(L['%s and then %s'], L['Up'], L['Left']),
-								RIGHT_DOWN = format(L['%s and then %s'], L['Right'], L['Down']),
-								RIGHT_UP = format(L['%s and then %s'], L['Right'], L['Up']),
-								LEFT_DOWN = format(L['%s and then %s'], L['Left'], L['Down']),
-								LEFT_UP = format(L['%s and then %s'], L['Left'], L['Up']),		
-							},
-						},								
-						numGroups = {
-							order = 7,
-							type = 'range',
-							name = L['Number of Groups'],
-							min = 1, max = 8, step = 1,
-							set = function(info, value) 
-								E.db.unitframe.units['raid'][ info[#info] ] = value; 
-								UF:CreateAndUpdateHeaderGroup('raid')
-								if _G['ElvUF_Raid'].isForced then
-									UF:HeaderConfig(_G['ElvUF_Raid'])
-									UF:HeaderConfig(_G['ElvUF_Raid'], true)
-								end									
-							end,
-						},
-						groupsPerRowCol = {
-							order = 8,
-							type = 'range',
-							name = L['Groups Per Row/Column'],
-							min = 1, max = 8, step = 1,
-							set = function(info, value) 
-								E.db.unitframe.units['raid'][ info[#info] ] = value; 
-								UF:CreateAndUpdateHeaderGroup('raid')
-								if _G['ElvUF_Raid'].isForced then
-									UF:HeaderConfig(_G['ElvUF_Raid'])
-									UF:HeaderConfig(_G['ElvUF_Raid'], true)
-								end			
-							end,
-						},								
-						horizontalSpacing = {
-							order = 9,
-							type = 'range',
-							name = L['Horizontal Spacing'],
-							min = 0, max = 50, step = 1,		
-						},
-						verticalSpacing = {
-							order = 10,
-							type = 'range',
-							name = L['Vertical Spacing'],
-							min = 0, max = 50, step = 1,		
-						},					
-					},
-				},
-				visibilityGroup = {
-					order = 200,
-					name = L['Visibility'],
-					type = 'group',
-					guiInline = true,
-					set = function(info, value) E.db.unitframe.units['raid'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('raid', nil, nil, true) end,
-					args = {
-						showPlayer = {
-							order = 1,
-							type = 'toggle',
-							name = L['Display Player'],
-							desc = L['When true, the header includes the player when not in a raid.'],			
-						},		
-						visibility = {
-							order = 2,
-							type = 'input',
-							name = L['Visibility'],
-							desc = L['The following macro must be true in order for the group to be shown, in addition to any filter that may already be set.'],
-							width = 'full',
-						},							
-					},
-				},
-				sortingGroup = {
-					order = 300,
-					type = 'group',
-					guiInline = true,
-					name = L['Grouping & Sorting'],
-					set = function(info, value) E.db.unitframe.units['raid'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('raid', nil, nil, true) end,
-					args = {
-						groupBy = {
-							order = 1,
-							name = L['Group By'],
-							desc = L['Set the order that the group will sort.'],
-							type = 'select',		
-							values = {
-								['CLASS'] = CLASS,
-								['ROLE'] = ROLE,
-								['NAME'] = NAME,
-								['MTMA'] = L['Main Tanks / Main Assist'],
-								['GROUP'] = GROUP,
-							},
-						},
-						sortDir = {
-							order = 2,
-							name = L['Sort Direction'],
-							desc = L['Defines the sort order of the selected sort method.'],
-							type = 'select',
-							values = {
-								['ASC'] = L['Ascending'],
-								['DESC'] = L['Descending']
-							},
-						},
-						spacer = {
-							order = 3,
-							type = 'description',
-							width = 'full',
-							name = ' '
-						},
-						raidWideSorting = {
-							order = 4,
-							name = L['Raid-Wide Sorting'],
-							desc = L['Enabling this allows raid-wide sorting however you will not be able to distinguish between groups.'],
-							type = 'toggle',
-						},
-						invertGroupingOrder = {
-							order = 5,
-							name = L['Invert Grouping Order'],
-							desc = L['Enabling this inverts the grouping order when the raid is not full, this will reverse the direction it starts from.'],
-							disabled = function() return not E.db.unitframe.units['raid'].raidWideSorting end,
-							type = 'toggle',
-						},	
-						startFromCenter = {
-							order = 6,
-							name = L['Start Near Center'],
-							desc = L['The initial group will start near the center and grow out.'],
-							disabled = function() return not E.db.unitframe.units['raid'].raidWideSorting end,
-							type = 'toggle',
-						},
-					},
-				},							
-			},
-		},	
-		health = GetOptionsTable_Health(true, UF.CreateAndUpdateHeaderGroup, 'raid'),
-		power = GetOptionsTable_Power(false, UF.CreateAndUpdateHeaderGroup, 'raid'),	
-		name = GetOptionsTable_Name(UF.CreateAndUpdateHeaderGroup, 'raid'),
-		buffs = GetOptionsTable_Auras(true, 'buffs', true, UF.CreateAndUpdateHeaderGroup, 'raid'),
-		debuffs = GetOptionsTable_Auras(true, 'debuffs', true, UF.CreateAndUpdateHeaderGroup, 'raid'),
 		buffIndicator = {
 			order = 600,
-			type = 'group',
-			name = L['Buff Indicator'],
-			get = function(info) return E.db.unitframe.units['raid']['buffIndicator'][ info[#info] ] end,
-			set = function(info, value) E.db.unitframe.units['raid']['buffIndicator'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('raid') end,
-			args = {
-				enable = {
-					type = 'toggle',
-					name = L['Enable'],
-					order = 1,
-				},
-				size = {
-					type = 'range',
-					name = L['Size'],
-					desc = L['Size of the indicator icon.'],
-					order = 3,
-					min = 4, max = 15, step = 1,
-				},
-				fontSize = {
-					type = 'range',
-					name = L['Font Size'],
-					order = 4,
-					min = 7, max = 22, step = 1,
-				},
-				configureButton = {
-					type = 'execute', 
-					name = L['Configure Auras'],
-					func = function() E:SetToFilterConfig('Buff Indicator') end,
-					order = 5
-				},					
-			},
-		},
-		raidRoleIcons = {
-			order = 750,
-			type = 'group',
-			name = L['RL / ML Icons'],
-			get = function(info) return E.db.unitframe.units['raid']['raidRoleIcons'][ info[#info] ] end,
-			set = function(info, value) E.db.unitframe.units['raid']['raidRoleIcons'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('raid') end,	
-			args = {
-				enable = {
-					type = 'toggle',
-					name = L['Enable'],
-					order = 1,
-				},
-				position = {
-					type = 'select',
-					order = 2,
-					name = L['Position'],
-					values = {
-						['TOPLEFT'] = 'TOPLEFT',
-						['TOPRIGHT'] = 'TOPRIGHT',
-					},
-				},							
-			},
-		},
-		rdebuffs = {
-			order = 800,
 			type = "group",
-			name = L["RaidDebuff Indicator"],
-			get = function(info) return E.db.unitframe.units["raid"]["rdebuffs"][ info[#info] ]; end,
-			set = function(info, value) E.db.unitframe.units["raid"]["rdebuffs"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("raid"); end,
+			name = L["Buff Indicator"],
+			get = function(info) return E.db.unitframe.units["pet"]["buffIndicator"][ info[#info] ]; end,
+			set = function(info, value) E.db.unitframe.units["pet"]["buffIndicator"][ info[#info] ] = value; UF:CreateAndUpdateUF("pet"); end,
 			args = {
 				enable = {
 					order = 1,
@@ -4122,13 +3233,726 @@ E.Options.args.unitframe.args['raid'] = {
 					order = 2,
 					type = "range",
 					name = L["Size"],
-					min = 8, max = 35, step = 1
+					desc = L["Size of the indicator icon."],
+					min = 4, max = 15, step = 1
 				},
-				font = {
+				fontSize = {
 					order = 3,
-					type = "select", dialogControl = "LSM30_Font",
-					name = L["Font"],
-					values = AceGUIWidgetLSMlists.font
+					type = "range",
+					name = L["Font Size"],
+					min = 7, max = 22, step = 1
+				}
+			}
+		},
+		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, "pet"),
+		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, "pet"),
+		power = GetOptionsTable_Power(false, UF.CreateAndUpdateUF, "pet"),
+		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, "pet"),
+		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUF, "pet"),
+		buffs = GetOptionsTable_Auras(true, "buffs", false, UF.CreateAndUpdateUF, "pet"),
+		debuffs = GetOptionsTable_Auras(true, "debuffs", false, UF.CreateAndUpdateUF, "pet"),
+		castbar = GetOptionsTable_Castbar(false, UF.CreateAndUpdateUF, "pet")
+	}
+};
+
+E.Options.args.unitframe.args.pettarget = {
+	name = L["PetTarget Frame"],
+	type = "group",
+	order = 900,
+	childGroups = "select",
+	get = function(info) return E.db.unitframe.units["pettarget"][ info[#info] ]; end,
+	set = function(info, value) E.db.unitframe.units["pettarget"][ info[#info] ] = value; UF:CreateAndUpdateUF("pettarget"); end,
+	disabled = function() return not E.private.unitframe.enable end,
+	args = {
+		enable = {
+			order = 1,
+			type = "toggle",
+			name = L["Enable"]
+		},
+		copyFrom = {
+			type = "select",
+			order = 2,
+			name = L["Copy From"],
+			desc = L["Select a unit to copy settings from."],
+			values = UF["units"],
+			set = function(info, value) UF:MergeUnitSettings(value, "pettarget"); end
+		},
+		resetSettings = {
+			order = 3,
+			type = "execute",
+			name = L["Restore Defaults"],
+			func = function(info, value) UF:ResetUnitSettings("pettarget"); E:ResetMovers(L["PetTarget Frame"]); end
+		},	
+		showAuras = {
+			order = 4,
+			type = "execute",
+			name = L["Show Auras"],
+			func = function() 
+				local frame = ElvUF_PetTarget;
+				if(frame.forceShowAuras) then
+					frame.forceShowAuras = nil; 
+				else
+					frame.forceShowAuras = true; 
+				end
+				
+				UF:CreateAndUpdateUF("pettarget");
+			end,
+		},			
+		width = {
+			order = 5,
+			type = "range",
+			name = L["Width"],
+			min = 50, max = 500, step = 1
+		},
+		height = {
+			order = 6,
+			type = "range",
+			name = L["Height"],
+			min = 10, max = 250, step = 1
+		},	
+		rangeCheck = {
+			order = 7,
+			type = "toggle",
+			name = L["Range Check"],
+			desc = L["Check if you are in range to cast spells on this specific unit."]
+		},
+		hideonnpc = {
+			order = 9,
+			type = "toggle",
+			name = L["Text Toggle On NPC"],
+			desc = L["Power text will be hidden on NPC targets, in addition the name text will be repositioned to the power texts anchor point."],
+			get = function(info) return E.db.unitframe.units["pettarget"]["power"].hideonnpc end,
+			set = function(info, value) E.db.unitframe.units["pettarget"]["power"].hideonnpc = value; UF:CreateAndUpdateUF("pettarget"); end
+		},		
+		threatStyle = {
+			order = 10,
+			type = "select",
+			name = L["Threat Display Mode"],
+			values = threatValues
+		},
+		smartAuraPosition = {
+			order = 11,
+			type = "select",
+			name = L["Smart Aura Position"],
+			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
+			values = {
+				["DISABLED"] = L["Disabled"],
+				["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
+				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"]
+			}
+		},
+		orientation = {
+			order = 12,
+			type = "select",
+			name = L["Frame Orientation"],
+			desc = L["Set the orientation of the UnitFrame. If set to automatic it will adjust based on where the frame is located on the screen."],
+			values = {
+				--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
+				["LEFT"] = L["Left"],
+				["MIDDLE"] = L["Middle"],
+				["RIGHT"] = L["Right"]
+			}
+		},
+		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, "pettarget"),
+		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, "pettarget"),
+		power = GetOptionsTable_Power(false, UF.CreateAndUpdateUF, "pettarget"),
+		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, "pettarget"),
+		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUF, "pettarget"),
+		buffs = GetOptionsTable_Auras(false, "buffs", false, UF.CreateAndUpdateUF, "pettarget"),
+		debuffs = GetOptionsTable_Auras(false, "debuffs", false, UF.CreateAndUpdateUF, "pettarget")
+	}
+};
+
+E.Options.args.unitframe.args.boss = {
+	name = L["Boss Frames"],
+	type = "group",
+	order = 1000,
+	childGroups = "select",
+	get = function(info) return E.db.unitframe.units["boss"][ info[#info] ]; end,
+	set = function(info, value) E.db.unitframe.units["boss"][ info[#info] ] = value; UF:CreateAndUpdateUFGroup("boss", MAX_BOSS_FRAMES); end,
+	disabled = function() return not E.private.unitframe.enable end,
+	args = {
+		enable = {
+			order = 1,
+			type = "toggle",
+			name = L["Enable"]
+		},
+		copyFrom = {
+			order = 2,
+			type = "select",
+			name = L["Copy From"],
+			desc = L["Select a unit to copy settings from."],
+			values = {
+				["boss"] = "boss",
+				["arena"] = "arena"
+			},
+			set = function(info, value) UF:MergeUnitSettings(value, "boss"); end
+		},
+		resetSettings = {
+			order = 3,
+			type = "execute",
+			name = L["Restore Defaults"],
+			func = function(info, value) UF:ResetUnitSettings("boss"); E:ResetMovers(L["Boss Frames"]); end,
+		},		
+		displayFrames = {
+			order = 4,
+			type = "execute",
+			name = L["Display Frames"],
+			desc = L["Force the frames to show, they will act as if they are the player frame."],
+			func = function() UF:ToggleForceShowGroupFrames("boss", 4) end
+		},
+		width = {
+			order = 5,
+			type = "range",
+			name = L["Width"],
+			min = 50, max = 500, step = 1,
+			set = function(info, value) 
+				if(E.db.unitframe.units["boss"].castbar.width == E.db.unitframe.units["boss"][ info[#info] ]) then
+					E.db.unitframe.units["boss"].castbar.width = value;
+				end
+				
+				E.db.unitframe.units["boss"][ info[#info] ] = value; 
+				UF:CreateAndUpdateUFGroup("boss", MAX_BOSS_FRAMES);
+			end
+		},
+		height = {
+			order = 6,
+			type = "range",
+			name = L["Height"],
+			min = 10, max = 250, step = 1
+		},	
+		rangeCheck = {
+			order = 7,
+			type = "toggle",
+			name = L["Range Check"],
+			desc = L["Check if you are in range to cast spells on this specific unit."]
+		},
+		hideonnpc = {
+			order = 8,
+			type = "toggle",
+			name = L["Text Toggle On NPC"],
+			desc = L["Power text will be hidden on NPC targets, in addition the name text will be repositioned to the power texts anchor point."],
+			get = function(info) return E.db.unitframe.units["boss"]["power"].hideonnpc end,
+			set = function(info, value) E.db.unitframe.units["boss"]["power"].hideonnpc = value; UF:CreateAndUpdateUFGroup("boss", MAX_BOSS_FRAMES); end
+		},
+		growthDirection = {
+			order = 9,
+			type = "select",
+			name = L["Growth Direction"],
+			values = {
+				["UP"] = L["Bottom to Top"],
+				["DOWN"] = L["Top to Bottom"],
+				["LEFT"] = L["Right to Left"],
+				["RIGHT"] = L["Left to Right"]
+			}
+		},
+		spacing = {
+			order = 10,
+			type = "range",
+			name = L["Spacing"],
+			min = 0, max = 400, step = 1
+		},
+		threatStyle = {
+			order = 11,
+			type = "select",
+			name = L["Threat Display Mode"],
+			values = threatValues
+		},
+		smartAuraPosition = {
+			order = 12,
+			type = "select",
+			name = L["Smart Aura Position"],
+			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
+			values = {
+				["DISABLED"] = L["Disabled"],
+				["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
+				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"]
+			}
+		},
+		orientation = {
+			order = 13,
+			type = "select",
+			name = L["Frame Orientation"],
+			desc = L["Set the orientation of the UnitFrame. If set to automatic it will adjust based on where the frame is located on the screen."],
+			values = {
+				--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
+				["LEFT"] = L["Left"],
+				["MIDDLE"] = L["Middle"],
+				["RIGHT"] = L["Right"]
+			}
+		},
+		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUFGroup, "boss", MAX_BOSS_FRAMES),
+		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUFGroup, "boss", MAX_BOSS_FRAMES),
+		power = GetOptionsTable_Power(false, UF.CreateAndUpdateUFGroup, "boss", MAX_BOSS_FRAMES),
+		name = GetOptionsTable_Name(UF.CreateAndUpdateUFGroup, "boss", MAX_BOSS_FRAMES),
+		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUFGroup, "boss", MAX_BOSS_FRAMES),
+		buffs = GetOptionsTable_Auras(false, "buffs", false, UF.CreateAndUpdateUFGroup, "boss", MAX_BOSS_FRAMES),
+		debuffs = GetOptionsTable_Auras(false, "debuffs", false, UF.CreateAndUpdateUFGroup, "boss", MAX_BOSS_FRAMES),
+		castbar = GetOptionsTable_Castbar(false, UF.CreateAndUpdateUFGroup, "boss", MAX_BOSS_FRAMES),
+		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUFGroup, "boss", MAX_BOSS_FRAMES)
+	}
+};
+
+E.Options.args.unitframe.args.arena = {
+	name = L["Arena Frames"],
+	type = "group",
+	order = 1100,
+	childGroups = "select",
+	get = function(info) return E.db.unitframe.units["arena"][ info[#info] ]; end,
+	set = function(info, value) E.db.unitframe.units["arena"][ info[#info] ] = value; UF:CreateAndUpdateUFGroup("arena", 5); end,
+	disabled = function() return not E.private.unitframe.enable end,
+	args = {
+		enable = {
+			order = 1,
+			type = "toggle",
+			name = L["Enable"],
+		},
+		copyFrom = {
+			order = 2,
+			type = "select",
+			name = L["Copy From"],
+			desc = L["Select a unit to copy settings from."],
+			values = {
+				["boss"] = "boss",
+				["arena"] = "arena"
+			},
+			set = function(info, value) UF:MergeUnitSettings(value, "arena"); end
+		},
+		resetSettings = {
+			order = 3,
+			type = "execute",
+			name = L["Restore Defaults"],
+			func = function(info, value) UF:ResetUnitSettings("arena"); E:ResetMovers(L["Arena Frames"]); end
+		},			
+		displayFrames = {
+			order = 4,
+			type = "execute",
+			name = L["Display Frames"],
+			desc = L["Force the frames to show, they will act as if they are the player frame."],
+			func = function() UF:ToggleForceShowGroupFrames("arena", 5) end
+		},		
+		width = {
+			order = 5,
+			type = "range",
+			name = L["Width"],
+			min = 50, max = 500, step = 1,
+			set = function(info, value) 
+				if(E.db.unitframe.units["arena"].castbar.width == E.db.unitframe.units["arena"][ info[#info] ]) then
+					E.db.unitframe.units["arena"].castbar.width = value;
+				end
+				
+				E.db.unitframe.units["arena"][ info[#info] ] = value; 
+				UF:CreateAndUpdateUFGroup("arena", 5);
+			end
+		},
+		height = {
+			order = 6,
+			type = "range",
+			name = L["Height"],
+			min = 10, max = 250, step = 1
+		},	
+		rangeCheck = {
+			order = 7,
+			type = "toggle",
+			name = L["Range Check"],
+			desc = L["Check if you are in range to cast spells on this specific unit."]
+		},
+		healPrediction = {
+			order = 8,
+			type = "toggle",
+			name = L["Heal Prediction"],
+			desc = L["Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
+		},
+		hideonnpc = {
+			order = 9,
+			type = "toggle",
+			name = L["Text Toggle On NPC"],
+			desc = L["Power text will be hidden on NPC targets, in addition the name text will be repositioned to the power texts anchor point."],
+			get = function(info) return E.db.unitframe.units["arena"]["power"].hideonnpc end,
+			set = function(info, value) E.db.unitframe.units["arena"]["power"].hideonnpc = value; UF:CreateAndUpdateUFGroup("arena", 5) end
+		},
+		growthDirection = {
+			order = 10,
+			name = L["Growth Direction"],
+			type = "select",
+			values = {
+				["UP"] = L["Bottom to Top"],
+				["DOWN"] = L["Top to Bottom"],
+				["LEFT"] = L["Right to Left"],
+				["RIGHT"] = L["Left to Right"]
+			}
+		},
+		spacing = {
+ 			order = 11,
+			type = "range",
+			name = L["Spacing"],
+			min = 0, max = 400, step = 1
+		},
+		colorOverride = {
+			order = 12,
+			name = L["Class Color Override"],
+			desc = L["Override the default class color setting."],
+			type = "select",
+			values = {
+				["USE_DEFAULT"] = L["Use Default"],
+				["FORCE_ON"] = L["Force On"],
+				["FORCE_OFF"] = L["Force Off"]
+			}
+		},
+		smartAuraPosition = {
+			order = 13,
+			type = "select",
+			name = L["Smart Aura Position"],
+			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
+			values = {
+				["DISABLED"] = L["Disabled"],
+				["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
+				["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"]
+			}
+		},
+		orientation = {
+			order = 14,
+			type = "select",
+			name = L["Frame Orientation"],
+			desc = L["Set the orientation of the UnitFrame. If set to automatic it will adjust based on where the frame is located on the screen."],
+			values = {
+				--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
+				["LEFT"] = L["Left"],
+				--["MIDDLE"] = L["Middle"], --no way to handle this with trinket 
+				["RIGHT"] = L["Right"]
+			}
+		},
+		pvpTrinket = {
+			order = 750,
+			type = "group",
+			name = L["PVP Trinket"],
+			get = function(info) return E.db.unitframe.units["arena"]["pvpTrinket"][ info[#info] ]; end,
+			set = function(info, value) E.db.unitframe.units["arena"]["pvpTrinket"][ info[#info] ] = value; UF:CreateAndUpdateUFGroup("arena", 5); end,
+			args = {
+				enable = {
+					order = 1,
+					type = "toggle",
+					name = L["Enable"]
+				},
+				position = {
+					type = "select",
+					order = 2,
+					name = L["Position"],
+					values = {
+						["LEFT"] = L["Left"],
+						["RIGHT"] = L["Right"]
+					}
+				},
+				size = {
+					order = 3,
+					type = "range",
+					name = L["Size"],
+					min = 10, max = 60, step = 1
+				},
+				xOffset = {
+					order = 4,
+					type = "range",
+					name = L["xOffset"],
+					min = -60, max = 60, step = 1
+				},
+				yOffset = {
+					order = 5,
+					type = "range",
+					name = L["yOffset"],
+					min = -60, max = 60, step = 1
+				}
+			}
+		},	
+		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUFGroup, "arena", 5),
+		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUFGroup, "arena", 5),
+		power = GetOptionsTable_Power(false, UF.CreateAndUpdateUFGroup, "arena", 5),
+		name = GetOptionsTable_Name(UF.CreateAndUpdateUFGroup, "arena", 5),
+		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUFGroup, "arena", 5),
+		buffs = GetOptionsTable_Auras(false, "buffs", false, UF.CreateAndUpdateUFGroup, "arena", 5),
+		debuffs = GetOptionsTable_Auras(false, "debuffs", false, UF.CreateAndUpdateUFGroup, "arena", 5),
+		castbar = GetOptionsTable_Castbar(false, UF.CreateAndUpdateUFGroup, "arena", 5)
+	}
+};
+
+E.Options.args.unitframe.args.party = {
+	name = L["Party Frames"],
+	type = "group",
+	order = 1200,
+	childGroups = "select",
+	get = function(info) return E.db.unitframe.units["party"][ info[#info] ]; end,
+	set = function(info, value) E.db.unitframe.units["party"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("party"); end,
+	disabled = function() return not E.private.unitframe.enable end,
+	args = {
+		configureToggle = {
+			type = "execute",
+			order = 1,
+			name = L["Display Frames"],
+			func = function() 
+				UF:HeaderConfig(ElvUF_Party, ElvUF_Party.forceShow ~= true or nil);
+			end,
+		},
+		resetSettings = {
+			order = 2,
+			type = "execute",
+			name = L["Restore Defaults"],
+			func = function(info, value) UF:ResetUnitSettings("party"); E:ResetMovers(L["Party Frames"]) end,
+			disabled = function() return not _G["ElvUF_Party"].isForced == false; end,
+		},
+		copyFrom = {
+			order = 3,
+			type = "select",
+			name = L["Copy From"],
+			desc = L["Select a unit to copy settings from."],
+			values = {
+				["raid"] = L["Raid Frames"],
+				["raid40"] = L["Raid-40 Frames"]
+			},
+			set = function(info, value) UF:MergeUnitSettings(value, "party", true); end
+		},
+		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateHeaderGroup, "party", nil, 4),
+		general = {
+			order = 5,
+			type = "group",
+			name = L["General"],
+			args = {
+				enable = {
+					order = 1,
+					type = "toggle",
+					name = L["Enable"]
+				},
+				hideonnpc = {
+					order = 2,
+					type = "toggle",
+					name = L["Text Toggle On NPC"],
+					desc = L["Power text will be hidden on NPC targets, in addition the name text will be repositioned to the power texts anchor point."],
+					get = function(info) return E.db.unitframe.units["party"]["power"].hideonnpc end,
+					set = function(info, value) E.db.unitframe.units["party"]["power"].hideonnpc = value; UF:CreateAndUpdateHeaderGroup("party"); end
+				},
+				rangeCheck = {
+					order = 3,
+					type = "toggle",
+					name = L["Range Check"],
+					desc = L["Check if you are in range to cast spells on this specific unit."]
+				},
+				healPrediction = {
+					order = 4,
+					type = "toggle",
+					name = L["Heal Prediction"],
+					desc = L["Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
+				},
+				threatStyle = {
+					order = 5,
+					type = "select",
+					name = L["Threat Display Mode"],
+					values = threatValues
+				},	
+				colorOverride = {
+					order = 6,
+					name = L["Class Color Override"],
+					desc = L["Override the default class color setting."],
+					type = "select",
+					values = {
+						["USE_DEFAULT"] = L["Use Default"],
+						["FORCE_ON"] = L["Force On"],
+						["FORCE_OFF"] = L["Force Off"]
+					}
+				},
+				orientation = {
+					order = 7,
+					type = "select",
+					name = L["Frame Orientation"],
+					desc = L["Set the orientation of the UnitFrame. If set to automatic it will adjust based on where the frame is located on the screen."],
+					values = {
+						--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
+						["LEFT"] = L["Left"],
+						["MIDDLE"] = L["Middle"],
+						["RIGHT"] = L["Right"]
+					}
+				},
+				positionsGroup = {
+					order = 100,
+					name = L["Size and Positions"],
+					type = "group",
+					guiInline = true,
+					set = function(info, value) E.db.unitframe.units["party"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("party", nil, nil, true); end,
+					args = {
+						width = {
+							order = 1,
+							type = "range",
+							name = L["Width"],
+							min = 10, max = 500, step = 1,
+							set = function(info, value) E.db.unitframe.units["party"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("party"); end
+						},			
+						height = {
+							order = 2,
+							type = "range",
+							name = L["Height"],
+							min = 10, max = 500, step = 1,
+							set = function(info, value) E.db.unitframe.units["party"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("party"); end
+						},	
+						spacer = {
+							order = 3,
+							type = "description",
+							name = "",
+							width = "full"
+						},						
+						growthDirection = {
+							order = 4,
+							name = L["Growth Direction"],
+							desc = L["Growth direction from the first unitframe."],
+							type = "select",
+							values = {
+								DOWN_RIGHT = format(L["%s and then %s"], L["Down"], L["Right"]),
+								DOWN_LEFT = format(L["%s and then %s"], L["Down"], L["Left"]),
+								UP_RIGHT = format(L["%s and then %s"], L["Up"], L["Right"]),
+								UP_LEFT = format(L["%s and then %s"], L["Up"], L["Left"]),
+								RIGHT_DOWN = format(L["%s and then %s"], L["Right"], L["Down"]),
+								RIGHT_UP = format(L["%s and then %s"], L["Right"], L["Up"]),
+								LEFT_DOWN = format(L["%s and then %s"], L["Left"], L["Down"]),
+								LEFT_UP = format(L["%s and then %s"], L["Left"], L["Up"])
+							}
+						},
+						numGroups = {
+							order = 5,
+							type = "range",
+							name = L["Number of Groups"],
+							min = 1, max = 8, step = 1,
+							set = function(info, value) 
+								E.db.unitframe.units["party"][ info[#info] ] = value; 
+								UF:CreateAndUpdateHeaderGroup("party");
+								if(ElvUF_Party.isForced) then
+									UF:HeaderConfig(ElvUF_Party);
+									UF:HeaderConfig(ElvUF_Party, true);
+								end
+							end
+						},
+						groupsPerRowCol = {
+							order = 6,
+							type = "range",
+							name = L["Groups Per Row/Column"],
+							min = 1, max = 8, step = 1,
+							set = function(info, value) 
+								E.db.unitframe.units["party"][ info[#info] ] = value; 
+								UF:CreateAndUpdateHeaderGroup("party");
+								if(ElvUF_Party.isForced) then
+									UF:HeaderConfig(ElvUF_Party);
+									UF:HeaderConfig(ElvUF_Party, true);
+								end
+							end
+						},		
+						horizontalSpacing = {
+							order = 7,
+							type = "range",
+							name = L["Horizontal Spacing"],
+							min = 0, max = 50, step = 1
+						},
+						verticalSpacing = {
+							order = 8,
+							type = "range",
+							name = L["Vertical Spacing"],
+							min = 0, max = 50, step = 1	
+						}
+					}
+				},
+				visibilityGroup = {
+					order = 200,
+					name = L["Visibility"],
+					type = "group",
+					guiInline = true,
+					set = function(info, value) E.db.unitframe.units["party"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("party", nil, nil, true); end,
+					args = {
+						showPlayer = {
+							order = 1,
+							type = "toggle",
+							name = L["Display Player"],
+							desc = L["When true, the header includes the player when not in a raid."],			
+						},		
+						visibility = {
+							order = 2,
+							type = "input",
+							name = L["Visibility"],
+							desc = L["The following macro must be true in order for the group to be shown, in addition to any filter that may already be set."],
+							width = "full"
+						}
+					}
+				},
+				sortingGroup = {
+					order = 300,
+					type = "group",
+					guiInline = true,
+					name = L["Grouping & Sorting"],
+					set = function(info, value) E.db.unitframe.units["party"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("party", nil, nil, true); end,
+					args = {
+						groupBy = {
+							order = 1,
+							name = L["Group By"],
+							desc = L["Set the order that the group will sort."],
+							type = "select",		
+							values = {
+								["CLASS"] = CLASS,
+								["NAME"] = NAME,
+								["MTMA"] = L["Main Tanks / Main Assist"],
+								["GROUP"] = GROUP
+							}
+						},
+						sortDir = {
+							order = 2,
+							name = L["Sort Direction"],
+							desc = L["Defines the sort order of the selected sort method."],
+							type = "select",
+							values = {
+								["ASC"] = L["Ascending"],
+								["DESC"] = L["Descending"]
+							}
+						},
+						spacer = {
+							order = 3,
+							type = "description",
+							width = "full",
+							name = " "
+						},
+						raidWideSorting = {
+							order = 4,
+							name = L["Raid-Wide Sorting"],
+							desc = L["Enabling this allows raid-wide sorting however you will not be able to distinguish between groups."],
+							type = "toggle"
+						},
+						invertGroupingOrder = {
+							order = 5,
+							name = L["Invert Grouping Order"],
+							desc = L["Enabling this inverts the grouping order when the raid is not full, this will reverse the direction it starts from."],
+							disabled = function() return not E.db.unitframe.units["party"].raidWideSorting end,
+							type = "toggle"
+						},	
+						startFromCenter = {
+							order = 6,
+							name = L["Start Near Center"],
+							desc = L["The initial group will start near the center and grow out."],
+							disabled = function() return not E.db.unitframe.units["party"].raidWideSorting end,
+							type = "toggle"
+						}
+					}
+				}
+			}
+		},
+		buffIndicator = {
+			order = 600,
+			type = "group",
+			name = L["Buff Indicator"],
+			get = function(info) return E.db.unitframe.units["party"]["buffIndicator"][ info[#info] ] end,
+			set = function(info, value) E.db.unitframe.units["party"]["buffIndicator"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("party") end,
+			args = {
+				enable = {
+					order = 1,
+					type = "toggle",
+					name = L["Enable"]
+				},
+				size = {
+					order = 3,
+					type = "range",
+					name = L["Size"],
+					desc = L["Size of the indicator icon."],
+					min = 4, max = 15, step = 1
 				},
 				fontSize = {
 					order = 4,
@@ -4136,202 +3960,653 @@ E.Options.args.unitframe.args['raid'] = {
 					name = L["Font Size"],
 					min = 7, max = 22, step = 1
 				},
-				fontOutline = {
+				profileSpecific = {
+					order = 5,
+					type = "toggle",
+					name = L["Profile Specific"],
+					desc = L["Use the profile specific filter 'Buff Indicator (Profile)' instead of the global filter 'Buff Indicator'."]
+				},
+				configureButton = {
+					order = 6,
+					type = "execute",
+					name = L["Configure Auras"],
+					func = function()
+						if(E.db.unitframe.units["party"]["buffIndicator"].profileSpecific) then
+							E:SetToFilterConfig("Buff Indicator (Profile)");
+						else
+							E:SetToFilterConfig("Buff Indicator");
+						end
+					end
+				}
+			}
+		},
+		roleIcon = {
+			order = 700,
+			type = "group",
+			name = L["Role Icon"],
+			get = function(info) return E.db.unitframe.units["party"]["roleIcon"][ info[#info] ]; end,
+			set = function(info, value) E.db.unitframe.units["party"]["roleIcon"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("party"); end,
+			args = {
+				enable = {
+					order = 1,
+					type = "toggle",
+					name = L["Enable"]
+				},
+				position = {
+					type = "select",
+					order = 2,
+					name = L["Position"],
+					values = positionValues
+				},
+				size = {
+					order = 3,
+					type = "range",
+					name = L["Size"],
+					min = 4, max = 100, step = 1
+				}
+			}
+		},
+		raidRoleIcons = {
+			order = 750,
+			type = "group",
+			name = L["RL / ML Icons"],
+			get = function(info) return E.db.unitframe.units["party"]["raidRoleIcons"][ info[#info] ]; end,
+			set = function(info, value) E.db.unitframe.units["party"]["raidRoleIcons"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("party"); end,
+			args = {
+				enable = {
+					order = 1,
+					type = "toggle",
+					name = L["Enable"]
+				},
+				position = {
+					order = 2,
+					type = "select",
+					name = L["Position"],
+					values = {
+						["TOPLEFT"] = "TOPLEFT",
+						["TOPRIGHT"] = "TOPRIGHT"
+					}
+				}
+			}
+		},
+		health = GetOptionsTable_Health(true, UF.CreateAndUpdateHeaderGroup, "party"),
+		power = GetOptionsTable_Power(false, UF.CreateAndUpdateHeaderGroup, "party"),
+		name = GetOptionsTable_Name(UF.CreateAndUpdateHeaderGroup, "party"),
+		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateHeaderGroup, "party"),
+		buffs = GetOptionsTable_Auras(true, "buffs", true, UF.CreateAndUpdateHeaderGroup, "party"),
+		debuffs = GetOptionsTable_Auras(true, "debuffs", true, UF.CreateAndUpdateHeaderGroup, "party"),
+		rdebuffs = GetOptionsTable_RaidDebuff(UF.CreateAndUpdateHeaderGroup, "party"),
+		petsGroup = {
+			order = 850,
+			type = "group",
+			name = L["Party Pets"],
+			get = function(info) return E.db.unitframe.units["party"]["petsGroup"][ info[#info] ]; end,
+			set = function(info, value) E.db.unitframe.units["party"]["petsGroup"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("party"); end,
+			args = {
+				enable = {
+					order = 1,
+					type = "toggle",
+					name = L["Enable"]
+				},
+				width = {
+					order = 2,
+					type = "range",
+					name = L["Width"],
+					min = 10, max = 500, step = 1
+				},
+				height = {
+					order = 3,
+					type = "range",
+					name = L["Height"],
+					min = 10, max = 250, step = 1
+				},
+				anchorPoint = {
 					order = 5,
 					type = "select",
-					name = L["Font Outline"],
-					values = {
-						["NONE"] = L["None"],
-						["OUTLINE"] = "OUTLINE",
-						["MONOCHROMEOUTLINE"] = "MONOCROMEOUTLINE",
-						["THICKOUTLINE"] = "THICKOUTLINE"
-					}
+					name = L["Anchor Point"],
+					desc = L["What point to anchor to the frame you set to attach to."],
+					values = petAnchors
 				},
 				xOffset = {
 					order = 6,
 					type = "range",
 					name = L["xOffset"],
-					min = -300, max = 300, step = 1
+					desc = L["An X offset (in pixels) to be used when anchoring new frames."],
+					min = -500, max = 500, step = 1
 				},
 				yOffset = {
 					order = 7,
 					type = "range",
 					name = L["yOffset"],
-					min = -300, max = 300, step = 1
+					desc = L["An Y offset (in pixels) to be used when anchoring new frames."],
+					min = -500, max = 500, step = 1
 				},
-				configureButton = {
+				name = {
 					order = 8,
-					type = "execute",
-					name = L["Configure Auras"],
-					func = function() E:SetToFilterConfig("RaidDebuffs"); end
-				},
-				duration = {
-					order = 11,
 					type = "group",
 					guiInline = true,
-					name = L["Duration Text"],
-					get = function(info) return E.db.unitframe.units["raid"]["rdebuffs"]["duration"][ info[#info] ]; end,
-					set = function(info, value) E.db.unitframe.units["raid"]["rdebuffs"]["duration"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("raid"); end,
+					get = function(info) return E.db.unitframe.units["party"]["petsGroup"]["name"][ info[#info] ]; end,
+					set = function(info, value) E.db.unitframe.units["party"]["petsGroup"]["name"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("party"); end,
+					name = L["Name"],
 					args = {
 						position = {
 							order = 1,
 							type = "select",
-							name = L["Position"],
-							values = {
-								["TOP"] = "TOP",
-								["LEFT"] = "LEFT",
-								["RIGHT"] = "RIGHT",
-								["BOTTOM"] = "BOTTOM",
-								["CENTER"] = "CENTER",
-								["TOPLEFT"] = "TOPLEFT",
-								["TOPRIGHT"] = "TOPRIGHT",
-								["BOTTOMLEFT"] = "BOTTOMLEFT",
-								["BOTTOMRIGHT"] = "BOTTOMRIGHT"
-							}
+							name = L["Text Position"],
+							values = positionValues
 						},
 						xOffset = {
 							order = 2,
 							type = "range",
-							name = L["xOffset"],
-							min = -10, max = 10, step = 1
+							name = L["Text xOffset"],
+							desc = L["Offset position for text."],
+							min = -300, max = 300, step = 1
 						},
 						yOffset = {
 							order = 3,
 							type = "range",
-							name = L["yOffset"],
-							min = -10, max = 10, step = 1
+							name = L["Text yOffset"],
+							desc = L["Offset position for text."],
+							min = -300, max = 300, step = 1
 						},
-						color = {
-							order = 4,
-							type = "color",
-							name = L["Color"],
-							get = function(info)
-								local c = E.db.unitframe.units.raid.rdebuffs.duration.color;
-								local d = P.unitframe.units.raid.rdebuffs.duration.color;
-								return c.r, c.g, c.b, c.a, d.r, d.g, d.b;
-							end,
-							set = function(info, r, g, b)
-								E.db.unitframe.units.raid.rdebuffs.duration.color = {};
-								local c = E.db.unitframe.units.raid.rdebuffs.duration.color;
-								c.r, c.g, c.b = r, g, b;
-								UF:CreateAndUpdateHeaderGroup("raid");
-							end
-						}
-					}
-				},
-				stack = {
-					order = 11,
-					type = "group",
-					guiInline = true,
-					name = L["Stack Counter"],
-					get = function(info) return E.db.unitframe.units["raid"]["rdebuffs"]["stack"][ info[#info] ]; end,
-					set = function(info, value) E.db.unitframe.units["raid"]["rdebuffs"]["stack"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("raid"); end,
-					args = {
-						position = {
-							order = 1,
-							type = "select",
-							name = L["Position"],
-							values = {
-								["TOP"] = "TOP",
-								["LEFT"] = "LEFT",
-								["RIGHT"] = "RIGHT",
-								["BOTTOM"] = "BOTTOM",
-								["CENTER"] = "CENTER",
-								["TOPLEFT"] = "TOPLEFT",
-								["TOPRIGHT"] = "TOPRIGHT",
-								["BOTTOMLEFT"] = "BOTTOMLEFT",
-								["BOTTOMRIGHT"] = "BOTTOMRIGHT"
-							}
-						},
-						xOffset = {
-							order = 2,
-							type = "range",
-							name = L["xOffset"],
-							min = -10, max = 10, step = 1
-						},
-						yOffset = {
-							order = 3,
-							type = "range",
-							name = L["yOffset"],
-							min = -10, max = 10, step = 1
-						},
-						color = {
-							order = 4,
-							type = "color",
-							name = L["Color"],
-							get = function(info)
-								local c = E.db.unitframe.units.raid.rdebuffs.stack.color;
-								local d = P.unitframe.units.raid.rdebuffs.stack.color;
-								return c.r, c.g, c.b, c.a, d.r, d.g, d.b;
-							end,
-							set = function(info, r, g, b)
-								E.db.unitframe.units.raid.rdebuffs.stack.color = {};
-								local c = E.db.unitframe.units.raid.rdebuffs.stack.color;
-								c.r, c.g, c.b = r, g, b;
-								UF:CreateAndUpdateHeaderGroup("raid");
-							end
+						text_format = {
+							order = 100,
+							type = "input",
+							name = L["Text Format"],
+							width = "full",
+							desc = L["TEXT_FORMAT_DESC"]
 						}
 					}
 				}
 			}
 		},
-		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateHeaderGroup, 'raid'),
+		targetsGroup = {
+			order = 900,
+			type = "group",
+			name = L["Party Targets"],
+			get = function(info) return E.db.unitframe.units["party"]["targetsGroup"][ info[#info] ]; end,
+			set = function(info, value) E.db.unitframe.units["party"]["targetsGroup"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("party"); end,
+			args = {
+				enable = {
+					order = 1,
+					type = "toggle",
+					name = L["Enable"]
+				},
+				width = {
+					order = 2,
+					type = "range",
+					name = L["Width"],
+					min = 10, max = 500, step = 1
+				},
+				height = {
+					order = 3,
+					type = "range",
+					name = L["Height"],
+					min = 10, max = 250, step = 1
+				},
+				anchorPoint = {
+					order = 5,
+					type = "select",
+					name = L["Anchor Point"],
+					desc = L["What point to anchor to the frame you set to attach to."],
+					values = petAnchors
+				},
+				xOffset = {
+					order = 6,
+					type = "range",
+					name = L["xOffset"],
+					desc = L["An X offset (in pixels) to be used when anchoring new frames."],
+					min = -500, max = 500, step = 1
+				},
+				yOffset = {
+					order = 7,
+					type = "range",
+					name = L["yOffset"],
+					desc = L["An Y offset (in pixels) to be used when anchoring new frames."],
+					min = -500, max = 500, step = 1
+				},
+				name = {
+					order = 8,
+					type = "group",
+					guiInline = true,
+					get = function(info) return E.db.unitframe.units["party"]["targetsGroup"]["name"][ info[#info] ]; end,
+					set = function(info, value) E.db.unitframe.units["party"]["targetsGroup"]["name"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("party"); end,
+					name = L["Name"],
+					args = {
+						position = {
+							order = 1,
+							type = "select",
+							name = L["Text Position"],
+							values = positionValues
+						},
+						xOffset = {
+							order = 2,
+							type = "range",
+							name = L["Text xOffset"],
+							desc = L["Offset position for text."],
+							min = -300, max = 300, step = 1
+						},
+						yOffset = {
+							order = 3,
+							type = "range",
+							name = L["Text yOffset"],
+							desc = L["Offset position for text."],
+							min = -300, max = 300, step = 1
+						},
+						text_format = {
+							order = 100,
+							type = "input",
+							name = L["Text Format"],
+							width = "full",
+							desc = L["TEXT_FORMAT_DESC"]
+						}
+					}
+				}
+			}
+		},
+		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateHeaderGroup, "party"),
+		GPSArrow = GetOptionsTable_GPS("party")
+	}
+};
+
+E.Options.args.unitframe.args["raid"] = {
+	name = L["Raid Frames"],
+	type = "group",
+	order = 1300,
+	childGroups = "select",
+	get = function(info) return E.db.unitframe.units["raid"][ info[#info] ] end,
+	set = function(info, value) E.db.unitframe.units["raid"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("raid"); end,
+	args = {
+		configureToggle = {
+			order = 1,
+			type = "execute",
+			name = L["Display Frames"],
+			func = function() 
+				UF:HeaderConfig(_G["ElvUF_Raid"], _G["ElvUF_Raid"].forceShow ~= true or nil);
+			end
+		},			
+		resetSettings = {
+			order = 2,
+			type = "execute",
+			name = L["Restore Defaults"],
+			func = function(info, value) UF:ResetUnitSettings("raid"); E:ResetMovers("Raid Frames"); end,
+		},	
+		copyFrom = {
+			order = 3,
+			type = "select",
+			name = L["Copy From"],
+			desc = L["Select a unit to copy settings from."],
+			values = {
+				["party"] = L["Party Frames"],
+				["raid40"] = L["Raid40 Frames"]
+			},
+			set = function(info, value) UF:MergeUnitSettings(value, "raid", true); end
+		},
+		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateHeaderGroup, "raid", nil, 4),			
+		general = {
+			order = 5,
+			type = "group",
+			name = L["General"],
+			args = {
+				enable = {
+					order = 1,
+					type = "toggle",
+					name = L["Enable"]
+				},
+				hideonnpc = {
+					type = "toggle",
+					order = 2,
+					name = L["Text Toggle On NPC"],
+					desc = L["Power text will be hidden on NPC targets, in addition the name text will be repositioned to the power texts anchor point."],
+					get = function(info) return E.db.unitframe.units["raid"]["power"].hideonnpc end,
+					set = function(info, value) E.db.unitframe.units["raid"]["power"].hideonnpc = value; UF:CreateAndUpdateHeaderGroup("raid"); end
+				},
+				rangeCheck = {
+					order = 3,
+					type = "toggle",
+					name = L["Range Check"],
+					desc = L["Check if you are in range to cast spells on this specific unit."]
+				},
+				healPrediction = {
+					order = 4,
+					type = "toggle",
+					name = L["Heal Prediction"],
+					desc = L["Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
+				},
+				threatStyle = {
+					order = 5,
+					type = "select",
+					name = L["Threat Display Mode"],
+					values = threatValues
+				},	
+				colorOverride = {
+					order = 6,
+					type = "select",
+					name = L["Class Color Override"],
+					desc = L["Override the default class color setting."],
+					values = {
+						["USE_DEFAULT"] = L["Use Default"],
+						["FORCE_ON"] = L["Force On"],
+						["FORCE_OFF"] = L["Force Off"]
+					}
+				},
+				orientation = {
+					order = 7,
+					type = "select",
+					name = L["Frame Orientation"],
+					desc = L["Set the orientation of the UnitFrame. If set to automatic it will adjust based on where the frame is located on the screen."],
+					values = {
+						--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
+						["LEFT"] = L["Left"],
+						["MIDDLE"] = L["Middle"],
+						["RIGHT"] = L["Right"],
+					}
+				},
+				positionsGroup = {
+					order = 100,
+					name = L["Size and Positions"],
+					type = "group",
+					guiInline = true,
+					set = function(info, value) E.db.unitframe.units["raid"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("raid", nil, nil, true); end,
+					args = {
+						width = {
+							order = 1,
+							type = "range",
+							name = L["Width"],
+							min = 10, max = 500, step = 1,
+							set = function(info, value) E.db.unitframe.units["raid"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("raid"); end
+						},			
+						height = {
+							order = 2,
+							name = L["Height"],
+							type = "range",
+							min = 10, max = 500, step = 1,
+							set = function(info, value) E.db.unitframe.units["raid"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("raid") end,
+						},	
+						spacer = {
+							order = 3,
+							type = "description",
+							name = "",
+							width = "full"
+						},
+						growthDirection = {
+							order = 4,
+							name = L["Growth Direction"],
+							desc = L["Growth direction from the first unitframe."],
+							type = "select",
+							values = {
+								DOWN_RIGHT = format(L["%s and then %s"], L["Down"], L["Right"]),
+								DOWN_LEFT = format(L["%s and then %s"], L["Down"], L["Left"]),
+								UP_RIGHT = format(L["%s and then %s"], L["Up"], L["Right"]),
+								UP_LEFT = format(L["%s and then %s"], L["Up"], L["Left"]),
+								RIGHT_DOWN = format(L["%s and then %s"], L["Right"], L["Down"]),
+								RIGHT_UP = format(L["%s and then %s"], L["Right"], L["Up"]),
+								LEFT_DOWN = format(L["%s and then %s"], L["Left"], L["Down"]),
+								LEFT_UP = format(L["%s and then %s"], L["Left"], L["Up"])
+							}
+						},								
+						numGroups = {
+							order = 7,
+							type = "range",
+							name = L["Number of Groups"],
+							min = 1, max = 8, step = 1,
+							set = function(info, value) 
+								E.db.unitframe.units["raid"][ info[#info] ] = value; 
+								UF:CreateAndUpdateHeaderGroup("raid");
+								if(_G["ElvUF_Raid"].isForced) then
+									UF:HeaderConfig(_G["ElvUF_Raid"]);
+									UF:HeaderConfig(_G["ElvUF_Raid"], true);
+								end									
+							end,
+						},
+						groupsPerRowCol = {
+							order = 8,
+							type = "range",
+							name = L["Groups Per Row/Column"],
+							min = 1, max = 8, step = 1,
+							set = function(info, value) 
+								E.db.unitframe.units["raid"][ info[#info] ] = value; 
+								UF:CreateAndUpdateHeaderGroup("raid");
+								if(_G["ElvUF_Raid"].isForced) then
+									UF:HeaderConfig(_G["ElvUF_Raid"]);
+									UF:HeaderConfig(_G["ElvUF_Raid"], true);
+								end			
+							end
+						},								
+						horizontalSpacing = {
+							order = 9,
+							type = "range",
+							name = L["Horizontal Spacing"],
+							min = 0, max = 50, step = 1		
+						},
+						verticalSpacing = {
+							order = 10,
+							type = "range",
+							name = L["Vertical Spacing"],
+							min = 0, max = 50, step = 1		
+						}
+					}
+				},
+				visibilityGroup = {
+					order = 200,
+					name = L["Visibility"],
+					type = "group",
+					guiInline = true,
+					set = function(info, value) E.db.unitframe.units["raid"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("raid", nil, nil, true); end,
+					args = {
+						showPlayer = {
+							order = 1,
+							type = "toggle",
+							name = L["Display Player"],
+							desc = L["When true, the header includes the player when not in a raid."],			
+						},		
+						visibility = {
+							order = 2,
+							type = "input",
+							name = L["Visibility"],
+							desc = L["The following macro must be true in order for the group to be shown, in addition to any filter that may already be set."],
+							width = "full"
+						}
+					}
+				},
+				sortingGroup = {
+					order = 300,
+					type = "group",
+					guiInline = true,
+					name = L["Grouping & Sorting"],
+					set = function(info, value) E.db.unitframe.units["raid"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("raid", nil, nil, true); end,
+					args = {
+						groupBy = {
+							order = 1,
+							name = L["Group By"],
+							desc = L["Set the order that the group will sort."],
+							type = "select",		
+							values = {
+								["CLASS"] = CLASS,
+								["ROLE"] = ROLE,
+								["NAME"] = NAME,
+								["MTMA"] = L["Main Tanks / Main Assist"],
+								["GROUP"] = GROUP
+							}
+						},
+						sortDir = {
+							order = 2,
+							name = L["Sort Direction"],
+							desc = L["Defines the sort order of the selected sort method."],
+							type = "select",
+							values = {
+								["ASC"] = L["Ascending"],
+								["DESC"] = L["Descending"]
+							}
+						},
+						spacer = {
+							order = 3,
+							type = "description",
+							width = "full",
+							name = " "
+						},
+						raidWideSorting = {
+							order = 4,
+							type = "toggle",
+							name = L["Raid-Wide Sorting"],
+							desc = L["Enabling this allows raid-wide sorting however you will not be able to distinguish between groups."]
+						},
+						invertGroupingOrder = {
+							order = 5,
+							type = "toggle",
+							name = L["Invert Grouping Order"],
+							desc = L["Enabling this inverts the grouping order when the raid is not full, this will reverse the direction it starts from."],
+							disabled = function() return not E.db.unitframe.units["raid"].raidWideSorting; end
+						},	
+						startFromCenter = {
+							order = 6,
+							type = "toggle",
+							name = L["Start Near Center"],
+							desc = L["The initial group will start near the center and grow out."],
+							disabled = function() return not E.db.unitframe.units["raid"].raidWideSorting; end
+						}
+					}
+				}
+			}
+		},	
+		health = GetOptionsTable_Health(true, UF.CreateAndUpdateHeaderGroup, "raid"),
+		power = GetOptionsTable_Power(false, UF.CreateAndUpdateHeaderGroup, "raid"),
+		name = GetOptionsTable_Name(UF.CreateAndUpdateHeaderGroup, "raid"),
+		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateHeaderGroup, "raid"),
+		buffs = GetOptionsTable_Auras(true, "buffs", true, UF.CreateAndUpdateHeaderGroup, "raid"),
+		debuffs = GetOptionsTable_Auras(true, "debuffs", true, UF.CreateAndUpdateHeaderGroup, "raid"),
+		buffIndicator = {
+			order = 600,
+			type = "group",
+			name = L["Buff Indicator"],
+			get = function(info) return E.db.unitframe.units["raid"]["buffIndicator"][ info[#info] ]; end,
+			set = function(info, value) E.db.unitframe.units["raid"]["buffIndicator"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("raid"); end,
+			args = {
+				enable = {
+					order = 1,
+					type = "toggle",
+					name = L["Enable"]
+				},
+				size = {
+					order = 3,
+					type = "range",
+					name = L["Size"],
+					desc = L["Size of the indicator icon."],
+					min = 4, max = 15, step = 1
+				},
+				fontSize = {
+					order = 4,
+					type = "range",
+					name = L["Font Size"],
+					min = 7, max = 22, step = 1
+				},
+				profileSpecific = {
+					order = 5,
+					type = "toggle",
+					name = L["Profile Specific"],
+					desc = L["Use the profile specific filter 'Buff Indicator (Profile)' instead of the global filter 'Buff Indicator'."]
+				},
+				configureButton = {
+					order = 6,
+					type = "execute",
+					name = L["Configure Auras"],
+					func = function()
+						if(E.db.unitframe.units["raid"]["buffIndicator"].profileSpecific) then
+							E:SetToFilterConfig("Buff Indicator (Profile)");
+						else
+							E:SetToFilterConfig("Buff Indicator");
+						end
+					end
+				}
+			}
+		},
+		raidRoleIcons = {
+			order = 750,
+			type = "group",
+			name = L["RL / ML Icons"],
+			get = function(info) return E.db.unitframe.units["raid"]["raidRoleIcons"][ info[#info] ]; end,
+			set = function(info, value) E.db.unitframe.units["raid"]["raidRoleIcons"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("raid"); end,	
+			args = {
+				enable = {
+					order = 1,
+					type = "toggle",
+					name = L["Enable"]
+				},
+				position = {
+					order = 2,
+					type = "select",
+					name = L["Position"],
+					values = {
+						["TOPLEFT"] = "TOPLEFT",
+						["TOPRIGHT"] = "TOPRIGHT"
+					}
+				},
+				size = {
+					order = 3,
+					type = "range",
+					name = L["Size"],
+					min = 4, max = 100, step = 1
+				},
+			},
+		},
+		rdebuffs = GetOptionsTable_RaidDebuff(UF.CreateAndUpdateHeaderGroup, "raid"),
+		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateHeaderGroup, "raid"),
 		GPSArrow = GetOptionsTable_GPS("raid")
 	}
 }
 
 --Raid Frames
-E.Options.args.unitframe.args['raid40'] = {
-	name = L['Raid-40 Frames'],
-	type = 'group',
+E.Options.args.unitframe.args["raid40"] = {
+	name = L["Raid-40 Frames"],
+	type = "group",
 	order = 1350,
 	childGroups = "select",
-	get = function(info) return E.db.unitframe.units['raid40'][ info[#info] ] end,
-	set = function(info, value) E.db.unitframe.units['raid40'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('raid40') end,
+	get = function(info) return E.db.unitframe.units["raid40"][ info[#info] ] end,
+	set = function(info, value) E.db.unitframe.units["raid40"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("raid40") end,
 	args = {
 		configureToggle = {
 			order = 1,
-			type = 'execute',
-			name = L['Display Frames'],
+			type = "execute",
+			name = L["Display Frames"],
 			func = function() 
-				UF:HeaderConfig(_G['ElvUF_Raid40'], _G['ElvUF_Raid40'].forceShow ~= true or nil)
+				UF:HeaderConfig(_G["ElvUF_Raid40"], _G["ElvUF_Raid40"].forceShow ~= true or nil)
 			end,
 		},			
 		resetSettings = {
-			type = 'execute',
+			type = "execute",
 			order = 2,
-			name = L['Restore Defaults'],
-			func = function(info, value) UF:ResetUnitSettings('raid40'); E:ResetMovers('Raid Frames') end,
+			name = L["Restore Defaults"],
+			func = function(info, value) UF:ResetUnitSettings("raid40"); E:ResetMovers("Raid Frames") end,
 		},	
 		copyFrom = {
-			type = 'select',
+			type = "select",
 			order = 3,
-			name = L['Copy From'],
-			desc = L['Select a unit to copy settings from.'],
+			name = L["Copy From"],
+			desc = L["Select a unit to copy settings from."],
 			values = {
-				['party'] = L['Party Frames'],
-				['raid'] = L['Raid Frames'],
+				["party"] = L["Party Frames"],
+				["raid"] = L["Raid Frames"],
 			},
-			set = function(info, value) UF:MergeUnitSettings(value, 'raid40', true); end,
+			set = function(info, value) UF:MergeUnitSettings(value, "raid40", true); end,
 		},
-		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateHeaderGroup, 'raid40', nil, 4),			
+		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateHeaderGroup, "raid40", nil, 4),			
 		general = {
 			order = 5,
-			type = 'group',
-			name = L['General'],
+			type = "group",
+			name = L["General"],
 			args = {
 				enable = {
-					type = 'toggle',
+					type = "toggle",
 					order = 1,
-					name = L['Enable'],
+					name = L["Enable"],
 				},
 				hideonnpc = {
-					type = 'toggle',
+					type = "toggle",
 					order = 2,
-					name = L['Text Toggle On NPC'],
-					desc = L['Power text will be hidden on NPC targets, in addition the name text will be repositioned to the power texts anchor point.'],
-					get = function(info) return E.db.unitframe.units['raid40']['power'].hideonnpc end,
-					set = function(info, value) E.db.unitframe.units['raid40']['power'].hideonnpc = value; UF:CreateAndUpdateHeaderGroup('raid40'); end,
+					name = L["Text Toggle On NPC"],
+					desc = L["Power text will be hidden on NPC targets, in addition the name text will be repositioned to the power texts anchor point."],
+					get = function(info) return E.db.unitframe.units["raid40"]["power"].hideonnpc end,
+					set = function(info, value) E.db.unitframe.units["raid40"]["power"].hideonnpc = value; UF:CreateAndUpdateHeaderGroup("raid40"); end,
 				},
 				rangeCheck = {
 					order = 3,
@@ -4346,246 +4621,258 @@ E.Options.args.unitframe.args['raid40'] = {
 					desc = L["Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
 				},
 				threatStyle = {
-					type = 'select',
+					type = "select",
 					order = 5,
-					name = L['Threat Display Mode'],
+					name = L["Threat Display Mode"],
 					values = threatValues,
 				},	
 				colorOverride = {
 					order = 6,
-					name = L['Class Color Override'],
-					desc = L['Override the default class color setting.'],
-					type = 'select',
+					name = L["Class Color Override"],
+					desc = L["Override the default class color setting."],
+					type = "select",
 					values = {
-						['USE_DEFAULT'] = L['Use Default'],
-						['FORCE_ON'] = L['Force On'],
-						['FORCE_OFF'] = L['Force Off'],
+						["USE_DEFAULT"] = L["Use Default"],
+						["FORCE_ON"] = L["Force On"],
+						["FORCE_OFF"] = L["Force Off"],
 					},
-				},									
+				},
+				orientation = {
+					order = 7,
+					type = "select",
+					name = L["Frame Orientation"],
+					desc = L["Set the orientation of the UnitFrame. If set to automatic it will adjust based on where the frame is located on the screen."],
+					values = {
+						--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
+						["LEFT"] = L["Left"],
+						["MIDDLE"] = L["Middle"],
+						["RIGHT"] = L["Right"],
+					},
+				},
 				positionsGroup = {
 					order = 100,
-					name = L['Size and Positions'],
-					type = 'group',
+					name = L["Size and Positions"],
+					type = "group",
 					guiInline = true,
-					set = function(info, value) E.db.unitframe.units['raid40'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('raid40', nil, nil, true) end,
+					set = function(info, value) E.db.unitframe.units["raid40"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("raid40", nil, nil, true) end,
 					args = {
 						width = {
 							order = 1,
-							name = L['Width'],
-							type = 'range',
+							name = L["Width"],
+							type = "range",
 							min = 10, max = 500, step = 1,
-							set = function(info, value) E.db.unitframe.units['raid40'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('raid40') end,
+							set = function(info, value) E.db.unitframe.units["raid40"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("raid40") end,
 						},			
 						height = {
 							order = 2,
-							name = L['Height'],
-							type = 'range',
+							name = L["Height"],
+							type = "range",
 							min = 10, max = 500, step = 1,
-							set = function(info, value) E.db.unitframe.units['raid40'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('raid40') end,
+							set = function(info, value) E.db.unitframe.units["raid40"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("raid40") end,
 						},	
 						spacer = {
 							order = 3,
-							name = '',
-							type = 'description',
-							width = 'full',
+							name = "",
+							type = "description",
+							width = "full",
 						},
 						growthDirection = {
 							order = 4,
-							name = L['Growth Direction'],
-							desc = L['Growth direction from the first unitframe.'],
-							type = 'select',
+							name = L["Growth Direction"],
+							desc = L["Growth direction from the first unitframe."],
+							type = "select",
 							values = {
-								DOWN_RIGHT = format(L['%s and then %s'], L['Down'], L['Right']),
-								DOWN_LEFT = format(L['%s and then %s'], L['Down'], L['Left']),
-								UP_RIGHT = format(L['%s and then %s'], L['Up'], L['Right']),
-								UP_LEFT = format(L['%s and then %s'], L['Up'], L['Left']),
-								RIGHT_DOWN = format(L['%s and then %s'], L['Right'], L['Down']),
-								RIGHT_UP = format(L['%s and then %s'], L['Right'], L['Up']),
-								LEFT_DOWN = format(L['%s and then %s'], L['Left'], L['Down']),
-								LEFT_UP = format(L['%s and then %s'], L['Left'], L['Up']),		
+								DOWN_RIGHT = format(L["%s and then %s"], L["Down"], L["Right"]),
+								DOWN_LEFT = format(L["%s and then %s"], L["Down"], L["Left"]),
+								UP_RIGHT = format(L["%s and then %s"], L["Up"], L["Right"]),
+								UP_LEFT = format(L["%s and then %s"], L["Up"], L["Left"]),
+								RIGHT_DOWN = format(L["%s and then %s"], L["Right"], L["Down"]),
+								RIGHT_UP = format(L["%s and then %s"], L["Right"], L["Up"]),
+								LEFT_DOWN = format(L["%s and then %s"], L["Left"], L["Down"]),
+								LEFT_UP = format(L["%s and then %s"], L["Left"], L["Up"]),		
 							},
 						},								
 						numGroups = {
 							order = 7,
-							type = 'range',
-							name = L['Number of Groups'],
+							type = "range",
+							name = L["Number of Groups"],
 							min = 1, max = 8, step = 1,
 							set = function(info, value) 
-								E.db.unitframe.units['raid40'][ info[#info] ] = value; 
-								UF:CreateAndUpdateHeaderGroup('raid40')
-								if _G['ElvUF_Raid'].isForced then
-									UF:HeaderConfig(_G['ElvUF_Raid40'])
-									UF:HeaderConfig(_G['ElvUF_Raid40'], true)
+								E.db.unitframe.units["raid40"][ info[#info] ] = value; 
+								UF:CreateAndUpdateHeaderGroup("raid40")
+								if _G["ElvUF_Raid"].isForced then
+									UF:HeaderConfig(_G["ElvUF_Raid40"])
+									UF:HeaderConfig(_G["ElvUF_Raid40"], true)
 								end									
 							end,
 						},
 						groupsPerRowCol = {
 							order = 8,
-							type = 'range',
-							name = L['Groups Per Row/Column'],
+							type = "range",
+							name = L["Groups Per Row/Column"],
 							min = 1, max = 8, step = 1,
 							set = function(info, value) 
-								E.db.unitframe.units['raid40'][ info[#info] ] = value; 
-								UF:CreateAndUpdateHeaderGroup('raid40')
-								if _G['ElvUF_Raid'].isForced then
-									UF:HeaderConfig(_G['ElvUF_Raid40'])
-									UF:HeaderConfig(_G['ElvUF_Raid40'], true)
+								E.db.unitframe.units["raid40"][ info[#info] ] = value; 
+								UF:CreateAndUpdateHeaderGroup("raid40")
+								if _G["ElvUF_Raid"].isForced then
+									UF:HeaderConfig(_G["ElvUF_Raid40"])
+									UF:HeaderConfig(_G["ElvUF_Raid40"], true)
 								end			
 							end,
 						},								
 						horizontalSpacing = {
 							order = 9,
-							type = 'range',
-							name = L['Horizontal Spacing'],
+							type = "range",
+							name = L["Horizontal Spacing"],
 							min = 0, max = 50, step = 1,		
 						},
 						verticalSpacing = {
 							order = 10,
-							type = 'range',
-							name = L['Vertical Spacing'],
+							type = "range",
+							name = L["Vertical Spacing"],
 							min = 0, max = 50, step = 1,		
 						},					
 					},
 				},
 				visibilityGroup = {
 					order = 200,
-					name = L['Visibility'],
-					type = 'group',
+					name = L["Visibility"],
+					type = "group",
 					guiInline = true,
-					set = function(info, value) E.db.unitframe.units['raid40'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('raid40', nil, nil, true) end,
+					set = function(info, value) E.db.unitframe.units["raid40"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("raid40", nil, nil, true) end,
 					args = {
 						showPlayer = {
 							order = 1,
-							type = 'toggle',
-							name = L['Display Player'],
-							desc = L['When true, the header includes the player when not in a raid.'],			
+							type = "toggle",
+							name = L["Display Player"],
+							desc = L["When true, the header includes the player when not in a raid."],			
 						},		
 						visibility = {
 							order = 2,
-							type = 'input',
-							name = L['Visibility'],
-							desc = L['The following macro must be true in order for the group to be shown, in addition to any filter that may already be set.'],
-							width = 'full',
+							type = "input",
+							name = L["Visibility"],
+							desc = L["The following macro must be true in order for the group to be shown, in addition to any filter that may already be set."],
+							width = "full",
 						},							
 					},
 				},
 				sortingGroup = {
 					order = 300,
-					type = 'group',
+					type = "group",
 					guiInline = true,
-					name = L['Grouping & Sorting'],
-					set = function(info, value) E.db.unitframe.units['raid40'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('raid40', nil, nil, true) end,
+					name = L["Grouping & Sorting"],
+					set = function(info, value) E.db.unitframe.units["raid40"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("raid40", nil, nil, true) end,
 					args = {
 						groupBy = {
 							order = 1,
-							name = L['Group By'],
-							desc = L['Set the order that the group will sort.'],
-							type = 'select',		
+							name = L["Group By"],
+							desc = L["Set the order that the group will sort."],
+							type = "select",		
 							values = {
-								['CLASS'] = CLASS,
-								['ROLE'] = ROLE,
-								['NAME'] = NAME,
-								['MTMA'] = L['Main Tanks / Main Assist'],
-								['GROUP'] = GROUP,
+								["CLASS"] = CLASS,
+								["ROLE"] = ROLE,
+								["NAME"] = NAME,
+								["MTMA"] = L["Main Tanks / Main Assist"],
+								["GROUP"] = GROUP,
 							},
 						},
 						sortDir = {
 							order = 2,
-							name = L['Sort Direction'],
-							desc = L['Defines the sort order of the selected sort method.'],
-							type = 'select',
+							name = L["Sort Direction"],
+							desc = L["Defines the sort order of the selected sort method."],
+							type = "select",
 							values = {
-								['ASC'] = L['Ascending'],
-								['DESC'] = L['Descending']
+								["ASC"] = L["Ascending"],
+								["DESC"] = L["Descending"]
 							},
 						},
 						spacer = {
 							order = 3,
-							type = 'description',
-							width = 'full',
-							name = ' '
+							type = "description",
+							width = "full",
+							name = " "
 						},
 						raidWideSorting = {
 							order = 4,
-							name = L['Raid-Wide Sorting'],
-							desc = L['Enabling this allows raid-wide sorting however you will not be able to distinguish between groups.'],
-							type = 'toggle',
+							name = L["Raid-Wide Sorting"],
+							desc = L["Enabling this allows raid-wide sorting however you will not be able to distinguish between groups."],
+							type = "toggle",
 						},
 						invertGroupingOrder = {
 							order = 5,
-							name = L['Invert Grouping Order'],
-							desc = L['Enabling this inverts the grouping order when the raid is not full, this will reverse the direction it starts from.'],
-							disabled = function() return not E.db.unitframe.units['raid40'].raidWideSorting end,
-							type = 'toggle',
+							name = L["Invert Grouping Order"],
+							desc = L["Enabling this inverts the grouping order when the raid is not full, this will reverse the direction it starts from."],
+							disabled = function() return not E.db.unitframe.units["raid40"].raidWideSorting end,
+							type = "toggle",
 						},	
 						startFromCenter = {
 							order = 6,
-							name = L['Start Near Center'],
-							desc = L['The initial group will start near the center and grow out.'],
-							disabled = function() return not E.db.unitframe.units['raid40'].raidWideSorting end,
-							type = 'toggle',
+							name = L["Start Near Center"],
+							desc = L["The initial group will start near the center and grow out."],
+							disabled = function() return not E.db.unitframe.units["raid40"].raidWideSorting end,
+							type = "toggle",
 						},
 					},
 				},							
 			},
 		},	
-		health = GetOptionsTable_Health(true, UF.CreateAndUpdateHeaderGroup, 'raid40'),
-		power = GetOptionsTable_Power(false, UF.CreateAndUpdateHeaderGroup, 'raid40'),	
-		name = GetOptionsTable_Name(UF.CreateAndUpdateHeaderGroup, 'raid40'),
-		buffs = GetOptionsTable_Auras(true, 'buffs', true, UF.CreateAndUpdateHeaderGroup, 'raid40'),
-		debuffs = GetOptionsTable_Auras(true, 'debuffs', true, UF.CreateAndUpdateHeaderGroup, 'raid40'),
+		health = GetOptionsTable_Health(true, UF.CreateAndUpdateHeaderGroup, "raid40"),
+		power = GetOptionsTable_Power(false, UF.CreateAndUpdateHeaderGroup, "raid40"),	
+		name = GetOptionsTable_Name(UF.CreateAndUpdateHeaderGroup, "raid40"),
+		buffs = GetOptionsTable_Auras(true, "buffs", true, UF.CreateAndUpdateHeaderGroup, "raid40"),
+		debuffs = GetOptionsTable_Auras(true, "debuffs", true, UF.CreateAndUpdateHeaderGroup, "raid40"),
 		buffIndicator = {
 			order = 600,
-			type = 'group',
-			name = L['Buff Indicator'],
-			get = function(info) return E.db.unitframe.units['raid40']['buffIndicator'][ info[#info] ] end,
-			set = function(info, value) E.db.unitframe.units['raid40']['buffIndicator'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('raid40') end,
+			type = "group",
+			name = L["Buff Indicator"],
+			get = function(info) return E.db.unitframe.units["raid40"]["buffIndicator"][ info[#info] ] end,
+			set = function(info, value) E.db.unitframe.units["raid40"]["buffIndicator"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("raid40") end,
 			args = {
 				enable = {
-					type = 'toggle',
-					name = L['Enable'],
+					type = "toggle",
+					name = L["Enable"],
 					order = 1,
 				},
 				size = {
-					type = 'range',
-					name = L['Size'],
-					desc = L['Size of the indicator icon.'],
+					type = "range",
+					name = L["Size"],
+					desc = L["Size of the indicator icon."],
 					order = 3,
 					min = 4, max = 15, step = 1,
 				},
 				fontSize = {
-					type = 'range',
-					name = L['Font Size'],
+					type = "range",
+					name = L["Font Size"],
 					order = 4,
 					min = 7, max = 22, step = 1,
 				},
 				configureButton = {
-					type = 'execute', 
-					name = L['Configure Auras'],
-					func = function() E:SetToFilterConfig('Buff Indicator') end,
+					type = "execute", 
+					name = L["Configure Auras"],
+					func = function() E:SetToFilterConfig("Buff Indicator") end,
 					order = 5
 				},					
 			},
 		},
 		raidRoleIcons = {
 			order = 750,
-			type = 'group',
-			name = L['RL / ML Icons'],
-			get = function(info) return E.db.unitframe.units['raid40']['raidRoleIcons'][ info[#info] ] end,
-			set = function(info, value) E.db.unitframe.units['raid40']['raidRoleIcons'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('raid40') end,	
+			type = "group",
+			name = L["RL / ML Icons"],
+			get = function(info) return E.db.unitframe.units["raid40"]["raidRoleIcons"][ info[#info] ] end,
+			set = function(info, value) E.db.unitframe.units["raid40"]["raidRoleIcons"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("raid40") end,	
 			args = {
 				enable = {
-					type = 'toggle',
-					name = L['Enable'],
+					type = "toggle",
+					name = L["Enable"],
 					order = 1,
 				},
 				position = {
-					type = 'select',
+					type = "select",
 					order = 2,
-					name = L['Position'],
+					name = L["Position"],
 					values = {
-						['TOPLEFT'] = 'TOPLEFT',
-						['TOPRIGHT'] = 'TOPRIGHT',
+						["TOPLEFT"] = "TOPLEFT",
+						["TOPRIGHT"] = "TOPRIGHT",
 					},
 				},							
 			},
@@ -4759,58 +5046,58 @@ E.Options.args.unitframe.args['raid40'] = {
 				}
 			}
 		},
-		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateHeaderGroup, 'raid40'),
+		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateHeaderGroup, "raid40"),
 		GPSArrow = GetOptionsTable_GPS("raid40")
 	}
 }
 
 E.Options.args.unitframe.args.raidpet = {
 	order = 1400,
-	type = 'group',
-	name = L['Raid Pet Frames'],
+	type = "group",
+	name = L["Raid Pet Frames"],
 	childGroups = "select",
-	get = function(info) return E.db.unitframe.units['raidpet'][ info[#info] ] end,
-	set = function(info, value) E.db.unitframe.units['raidpet'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('raidpet') end,
+	get = function(info) return E.db.unitframe.units["raidpet"][ info[#info] ] end,
+	set = function(info, value) E.db.unitframe.units["raidpet"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("raidpet") end,
 	disabled = function() return not E.private.unitframe.enable end,
 	args = {
 		configureToggle = {
 			order = 1,
-			type = 'execute',
-			name = L['Display Frames'],
+			type = "execute",
+			name = L["Display Frames"],
 			func = function() 
 				UF:HeaderConfig(ElvUF_Raidpet, ElvUF_Raidpet.forceShow ~= true or nil)
 			end,
 		},
 		resetSettings = {
-			type = 'execute',
+			type = "execute",
 			order = 2,
-			name = L['Restore Defaults'],
-			func = function(info, value) UF:ResetUnitSettings('raidpet'); E:ResetMovers(L['Raid Pet Frames']); UF:CreateAndUpdateHeaderGroup('raidpet', nil, nil, true); end,
-			disabled = function() return not _G['ElvUF_Raidpet'].isForced == false end,
+			name = L["Restore Defaults"],
+			func = function(info, value) UF:ResetUnitSettings("raidpet"); E:ResetMovers(L["Raid Pet Frames"]); UF:CreateAndUpdateHeaderGroup("raidpet", nil, nil, true); end,
+			disabled = function() return not _G["ElvUF_Raidpet"].isForced == false end,
 		},
 		copyFrom = {
-			type = 'select',
+			type = "select",
 			order = 3,
-			name = L['Copy From'],
-			desc = L['Select a unit to copy settings from.'],
+			name = L["Copy From"],
+			desc = L["Select a unit to copy settings from."],
 			values = {
-				['party'] = L['Party Frames'],
-				['raid10'] = L['Raid-10 Frames'],
-				['raid25'] = L['Raid-25 Frames'],
-				['raid40'] = L['Raid-40 Frames'],
+				["party"] = L["Party Frames"],
+				["raid10"] = L["Raid-10 Frames"],
+				["raid25"] = L["Raid-25 Frames"],
+				["raid40"] = L["Raid-40 Frames"],
 			},
-			set = function(info, value) UF:MergeUnitSettings(value, 'raidpet', true); end,
+			set = function(info, value) UF:MergeUnitSettings(value, "raidpet", true); end,
 		},
-		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateHeaderGroup, 'raidpet', nil, 4),
+		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateHeaderGroup, "raidpet", nil, 4),
 		general = {
 			order = 5,
-			type = 'group',
-			name = L['General'],
+			type = "group",
+			name = L["General"],
 			args = {
 				enable = {
-					type = 'toggle',
+					type = "toggle",
 					order = 1,
-					name = L['Enable'],
+					name = L["Enable"],
 				},
 				rangeCheck = {
 					order = 3,
@@ -4825,73 +5112,85 @@ E.Options.args.unitframe.args.raidpet = {
 					desc = L["Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
 				},
 				threatStyle = {
-					type = 'select',
+					type = "select",
 					order = 5,
-					name = L['Threat Display Mode'],
+					name = L["Threat Display Mode"],
 					values = threatValues,
 				},	
 				colorOverride = {
 					order = 6,
-					name = L['Class Color Override'],
-					desc = L['Override the default class color setting.'],
-					type = 'select',
+					name = L["Class Color Override"],
+					desc = L["Override the default class color setting."],
+					type = "select",
 					values = {
-						['USE_DEFAULT'] = L['Use Default'],
-						['FORCE_ON'] = L['Force On'],
-						['FORCE_OFF'] = L['Force Off'],
+						["USE_DEFAULT"] = L["Use Default"],
+						["FORCE_ON"] = L["Force On"],
+						["FORCE_OFF"] = L["Force Off"],
 					},
-				},								
+				},
+				orientation = {
+					order = 7,
+					type = "select",
+					name = L["Frame Orientation"],
+					desc = L["Set the orientation of the UnitFrame. If set to automatic it will adjust based on where the frame is located on the screen."],
+					values = {
+						--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
+						["LEFT"] = L["Left"],
+						["MIDDLE"] = L["Middle"],
+						["RIGHT"] = L["Right"],
+					},
+				},
 				positionsGroup = {
 					order = 100,
-					name = L['Size and Positions'],
-					type = 'group',
+					name = L["Size and Positions"],
+					type = "group",
 					guiInline = true,
-					set = function(info, value) E.db.unitframe.units['raidpet'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('raidpet', nil, nil, true) end,
+					set = function(info, value) E.db.unitframe.units["raidpet"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("raidpet", nil, nil, true) end,
 					args = {
 						width = {
 							order = 1,
-							name = L['Width'],
-							type = 'range',
+							name = L["Width"],
+							type = "range",
 							min = 10, max = 500, step = 1,
-							set = function(info, value) E.db.unitframe.units['raidpet'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('raidpet') end,
+							set = function(info, value) E.db.unitframe.units["raidpet"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("raidpet") end,
 						},			
 						height = {
 							order = 2,
-							name = L['Height'],
-							type = 'range',
+							name = L["Height"],
+							type = "range",
 							min = 10, max = 500, step = 1,
-							set = function(info, value) E.db.unitframe.units['raidpet'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('raidpet') end,
+							set = function(info, value) E.db.unitframe.units["raidpet"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("raidpet") end,
 						},	
 						spacer = {
 							order = 3,
-							name = '',
-							type = 'description',
-							width = 'full',
+							name = "",
+							type = "description",
+							width = "full",
 						},						
 						growthDirection = {
 							order = 4,
-							name = L['Growth Direction'],
-							desc = L['Growth direction from the first unitframe.'],
-							type = 'select',
+							name = L["Growth Direction"],
+							desc = L["Growth direction from the first unitframe."],
+							type = "select",
 							values = {
-								DOWN_RIGHT = format(L['%s and then %s'], L['Down'], L['Right']),
-								DOWN_LEFT = format(L['%s and then %s'], L['Down'], L['Left']),
-								UP_RIGHT = format(L['%s and then %s'], L['Up'], L['Right']),
-								UP_LEFT = format(L['%s and then %s'], L['Up'], L['Left']),
-								RIGHT_DOWN = format(L['%s and then %s'], L['Right'], L['Down']),
-								RIGHT_UP = format(L['%s and then %s'], L['Right'], L['Up']),
-								LEFT_DOWN = format(L['%s and then %s'], L['Left'], L['Down']),
-								LEFT_UP = format(L['%s and then %s'], L['Left'], L['Up']),				
+								DOWN_RIGHT = format(L["%s and then %s"], L["Down"], L["Right"]),
+								DOWN_LEFT = format(L["%s and then %s"], L["Down"], L["Left"]),
+								UP_RIGHT = format(L["%s and then %s"], L["Up"], L["Right"]),
+								UP_LEFT = format(L["%s and then %s"], L["Up"], L["Left"]),
+								RIGHT_DOWN = format(L["%s and then %s"], L["Right"], L["Down"]),
+								RIGHT_UP = format(L["%s and then %s"], L["Right"], L["Up"]),
+								LEFT_DOWN = format(L["%s and then %s"], L["Left"], L["Down"]),
+								LEFT_UP = format(L["%s and then %s"], L["Left"], L["Up"]),				
 							},
 						},
 						numGroups = {
 							order = 7,
-							type = 'range',
-							name = L['Number of Groups'],
+							type = "range",
+							name = L["Number of Groups"],
 							min = 1, max = 8, step = 1,
 								set = function(info, value) 
-									E.db.unitframe.units['raidpet'][ info[#info] ] = value; 
-									UF:CreateAndUpdateHeaderGroup('raidpet')
+									E.db.unitframe.units["raidpet"][ info[#info] ] = value; 
+									UF:CreateAndUpdateHeaderGroup("raidpet")
 									if ElvUF_Raidpet.isForced then
 										UF:HeaderConfig(ElvUF_Raidpet)
 										UF:HeaderConfig(ElvUF_Raidpet, true)
@@ -4900,12 +5199,12 @@ E.Options.args.unitframe.args.raidpet = {
 						},
 						groupsPerRowCol = {
 							order = 8,
-							type = 'range',
-							name = L['Groups Per Row/Column'],
+							type = "range",
+							name = L["Groups Per Row/Column"],
 							min = 1, max = 8, step = 1,
 							set = function(info, value) 
-								E.db.unitframe.units['raidpet'][ info[#info] ] = value; 
-								UF:CreateAndUpdateHeaderGroup('raidpet')
+								E.db.unitframe.units["raidpet"][ info[#info] ] = value; 
+								UF:CreateAndUpdateHeaderGroup("raidpet")
 								if ElvUF_Raidpet.isForced then
 									UF:HeaderConfig(ElvUF_Raidpet)
 									UF:HeaderConfig(ElvUF_Raidpet, true)
@@ -4914,126 +5213,126 @@ E.Options.args.unitframe.args.raidpet = {
 						},		
 						horizontalSpacing = {
 							order = 9,
-							type = 'range',
-							name = L['Horizontal Spacing'],
+							type = "range",
+							name = L["Horizontal Spacing"],
 							min = 0, max = 50, step = 1,		
 						},
 						verticalSpacing = {
 							order = 10,
-							type = 'range',
-							name = L['Vertical Spacing'],
+							type = "range",
+							name = L["Vertical Spacing"],
 							min = 0, max = 50, step = 1,		
 						},					
 					},
 				},
 				visibilityGroup = {
 					order = 200,
-					name = L['Visibility'],
-					type = 'group',
+					name = L["Visibility"],
+					type = "group",
 					guiInline = true,
-					set = function(info, value) E.db.unitframe.units['raidpet'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('raidpet', nil, nil, true) end,
+					set = function(info, value) E.db.unitframe.units["raidpet"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("raidpet", nil, nil, true) end,
 					args = {
 						visibility = {
 							order = 2,
-							type = 'input',
-							name = L['Visibility'],
-							desc = L['The following macro must be true in order for the group to be shown, in addition to any filter that may already be set.'],
-							width = 'full',
-							desc = L['TEXT_FORMAT_DESC'],
+							type = "input",
+							name = L["Visibility"],
+							desc = L["The following macro must be true in order for the group to be shown, in addition to any filter that may already be set."],
+							width = "full",
+							desc = L["TEXT_FORMAT_DESC"],
 						},							
 					},
 				},
 				sortingGroup = {
 					order = 300,
-					type = 'group',
+					type = "group",
 					guiInline = true,
-					name = L['Grouping & Sorting'],
-					set = function(info, value) E.db.unitframe.units['raidpet'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('raidpet', nil, nil, true) end,
+					name = L["Grouping & Sorting"],
+					set = function(info, value) E.db.unitframe.units["raidpet"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("raidpet", nil, nil, true) end,
 					args = {
 						groupBy = {
 							order = 1,
-							name = L['Group By'],
-							desc = L['Set the order that the group will sort.'],
-							type = 'select',		
+							name = L["Group By"],
+							desc = L["Set the order that the group will sort."],
+							type = "select",		
 							values = {
-								['NAME'] = L['Owners Name'],
-								['PETNAME'] = L['Pet Name'],
-								['GROUP'] = GROUP,
+								["NAME"] = L["Owners Name"],
+								["PETNAME"] = L["Pet Name"],
+								["GROUP"] = GROUP,
 							},
 						},
 						sortDir = {
 							order = 2,
-							name = L['Sort Direction'],
-							desc = L['Defines the sort order of the selected sort method.'],
-							type = 'select',
+							name = L["Sort Direction"],
+							desc = L["Defines the sort order of the selected sort method."],
+							type = "select",
 							values = {
-								['ASC'] = L['Ascending'],
-								['DESC'] = L['Descending']
+								["ASC"] = L["Ascending"],
+								["DESC"] = L["Descending"]
 							},
 						},
 						spacer = {
 							order = 3,
-							type = 'description',
-							width = 'full',
-							name = ' '
+							type = "description",
+							width = "full",
+							name = " "
 						},
 						raidWideSorting = {
 							order = 4,
-							name = L['Raid-Wide Sorting'],
-							desc = L['Enabling this allows raid-wide sorting however you will not be able to distinguish between groups.'],
-							type = 'toggle',
+							name = L["Raid-Wide Sorting"],
+							desc = L["Enabling this allows raid-wide sorting however you will not be able to distinguish between groups."],
+							type = "toggle",
 						},
 						invertGroupingOrder = {
 							order = 5,
-							name = L['Invert Grouping Order'],
-							desc = L['Enabling this inverts the grouping order when the raid is not full, this will reverse the direction it starts from.'],
-							disabled = function() return not E.db.unitframe.units['raidpet'].raidWideSorting end,
-							type = 'toggle',
+							name = L["Invert Grouping Order"],
+							desc = L["Enabling this inverts the grouping order when the raid is not full, this will reverse the direction it starts from."],
+							disabled = function() return not E.db.unitframe.units["raidpet"].raidWideSorting end,
+							type = "toggle",
 						},	
 						startFromCenter = {
 							order = 6,
-							name = L['Start Near Center'],
-							desc = L['The initial group will start near the center and grow out.'],
-							disabled = function() return not E.db.unitframe.units['raidpet'].raidWideSorting end,
-							type = 'toggle',
+							name = L["Start Near Center"],
+							desc = L["The initial group will start near the center and grow out."],
+							disabled = function() return not E.db.unitframe.units["raidpet"].raidWideSorting end,
+							type = "toggle",
 						},
 					},
 				},							
 			},
 		},
-		health = GetOptionsTable_Health(true, UF.CreateAndUpdateHeaderGroup, 'raidpet'),	
-		name = GetOptionsTable_Name(UF.CreateAndUpdateHeaderGroup, 'raidpet'),
-		buffs = GetOptionsTable_Auras(true, 'buffs', true, UF.CreateAndUpdateHeaderGroup, 'raidpet'),
-		debuffs = GetOptionsTable_Auras(true, 'debuffs', true, UF.CreateAndUpdateHeaderGroup, 'raidpet'),
+		health = GetOptionsTable_Health(true, UF.CreateAndUpdateHeaderGroup, "raidpet"),	
+		name = GetOptionsTable_Name(UF.CreateAndUpdateHeaderGroup, "raidpet"),
+		buffs = GetOptionsTable_Auras(true, "buffs", true, UF.CreateAndUpdateHeaderGroup, "raidpet"),
+		debuffs = GetOptionsTable_Auras(true, "debuffs", true, UF.CreateAndUpdateHeaderGroup, "raidpet"),
 		buffIndicator = {
 			order = 600,
-			type = 'group',
-			name = L['Buff Indicator'],
-			get = function(info) return E.db.unitframe.units['raidpet']['buffIndicator'][ info[#info] ] end,
-			set = function(info, value) E.db.unitframe.units['raidpet']['buffIndicator'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('raidpet') end,
+			type = "group",
+			name = L["Buff Indicator"],
+			get = function(info) return E.db.unitframe.units["raidpet"]["buffIndicator"][ info[#info] ] end,
+			set = function(info, value) E.db.unitframe.units["raidpet"]["buffIndicator"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("raidpet") end,
 			args = {
 				enable = {
-					type = 'toggle',
-					name = L['Enable'],
+					type = "toggle",
+					name = L["Enable"],
 					order = 1,
 				},
 				size = {
-					type = 'range',
-					name = L['Size'],
-					desc = L['Size of the indicator icon.'],
+					type = "range",
+					name = L["Size"],
+					desc = L["Size of the indicator icon."],
 					order = 3,
 					min = 4, max = 15, step = 1,
 				},
 				fontSize = {
-					type = 'range',
-					name = L['Font Size'],
+					type = "range",
+					name = L["Font Size"],
 					order = 4,
 					min = 7, max = 22, step = 1,
 				},
 				configureButton = {
-					type = 'execute', 
-					name = L['Configure Auras'],
-					func = function() E:SetToFilterConfig('Buff Indicator') end,
+					type = "execute", 
+					name = L["Configure Auras"],
+					func = function() E:SetToFilterConfig("Buff Indicator") end,
 					order = 5
 				},					
 			},
@@ -5207,45 +5506,45 @@ E.Options.args.unitframe.args.raidpet = {
 				}
 			}
 		},
-		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateHeaderGroup, 'raidpet'),	
+		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateHeaderGroup, "raidpet"),	
 	},
 }
 
 E.Options.args.unitframe.args.tank = { -- Танки
-	name = L['Tank Frames'],
-	type = 'group',
+	name = L["Tank Frames"],
+	type = "group",
 	order = 1500,
 	childGroups = "select",
-	get = function(info) return E.db.unitframe.units['tank'][ info[#info] ] end,
-	set = function(info, value) E.db.unitframe.units['tank'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('tank') end,
+	get = function(info) return E.db.unitframe.units["tank"][ info[#info] ] end,
+	set = function(info, value) E.db.unitframe.units["tank"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("tank") end,
 	args = {
 		resetSettings = {
-			type = 'execute',
+			type = "execute",
 			order = 1,
 			name = L["Restore Defaults"],
-			func = function(info, value) UF:ResetUnitSettings('tank') end,
+			func = function(info, value) UF:ResetUnitSettings("tank") end,
 		},
 		general = {
 			order = 2,
-			type = 'group',
+			type = "group",
 			name = L["General"],
 			guiInline = true,
 			args = {
 				enable = {
-					type = 'toggle',
+					type = "toggle",
 					order = 1,
 					name = L["Enable"],
 				},
 				width = {
 					order = 2,
 					name = L["Width"],
-					type = 'range',
+					type = "range",
 					min = 50, max = 500, step = 1,
 				},
 				height = {
 					order = 3,
 					name = L["Height"],
-					type = 'range',
+					type = "range",
 					min = 10, max = 250, step = 1,
 				},
 				verticalSpacing = {
@@ -5265,30 +5564,30 @@ E.Options.args.unitframe.args.tank = { -- Танки
 		},
 		targetsGroup = {
 			order = 4,
-			type = 'group',
+			type = "group",
 			name = L["Tank Target"],
-			get = function(info) return E.db.unitframe.units['tank']['targetsGroup'][ info[#info] ] end,
-			set = function(info, value) E.db.unitframe.units['tank']['targetsGroup'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('tank') end,
+			get = function(info) return E.db.unitframe.units["tank"]["targetsGroup"][ info[#info] ] end,
+			set = function(info, value) E.db.unitframe.units["tank"]["targetsGroup"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("tank") end,
 			args = {
 				enable = {
-					type = 'toggle',
+					type = "toggle",
 					name = L["Enable"],
 					order = 1,
 				},
 				width = {
 					order = 2,
 					name = L["Width"],
-					type = 'range',
+					type = "range",
 					min = 10, max = 500, step = 1,
 				},
 				height = {
 					order = 3,
 					name = L["Height"],
-					type = 'range',
+					type = "range",
 					min = 10, max = 250, step = 1,
 				},
 				anchorPoint = {
-					type = 'select',
+					type = "select",
 					order = 5,
 					name = L["Anchor Point"],
 					desc = L["What point to anchor to the frame you set to attach to."],
@@ -5296,61 +5595,61 @@ E.Options.args.unitframe.args.tank = { -- Танки
 				},
 				xOffset = {
 					order = 6,
-					type = 'range',
+					type = "range",
 					name = L["xOffset"],
 					desc = L["An X offset (in pixels) to be used when anchoring new frames."],
 					min = -500, max = 500, step = 1,
 				},
 				yOffset = {
 					order = 7,
-					type = 'range',
+					type = "range",
 					name = L["yOffset"],
 					desc = L["An Y offset (in pixels) to be used when anchoring new frames."],
 					min = -500, max = 500, step = 1,
 				},
 			},
 		},
-		buffs = GetOptionsTable_Auras(true, 'buffs', true, UF.CreateAndUpdateHeaderGroup, 'tank'),
-		debuffs = GetOptionsTable_Auras(true, 'debuffs', true, UF.CreateAndUpdateHeaderGroup, 'tank'),
+		buffs = GetOptionsTable_Auras(true, "buffs", true, UF.CreateAndUpdateHeaderGroup, "tank"),
+		debuffs = GetOptionsTable_Auras(true, "debuffs", true, UF.CreateAndUpdateHeaderGroup, "tank"),
 		buffIndicator = {
 			order = 800,
-			type = 'group',
+			type = "group",
 			name = L["Buff Indicator"],
-			get = function(info) return E.db.unitframe.units['tank']['buffIndicator'][ info[#info] ] end,
-			set = function(info, value) E.db.unitframe.units['tank']['buffIndicator'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('tank') end,
+			get = function(info) return E.db.unitframe.units["tank"]["buffIndicator"][ info[#info] ] end,
+			set = function(info, value) E.db.unitframe.units["tank"]["buffIndicator"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("tank") end,
 			args = {
 				enable = {
-					type = 'toggle',
+					type = "toggle",
 					name = L["Enable"],
 					order = 1,
 				},
 				size = {
-					type = 'range',
+					type = "range",
 					name = L["Size"],
 					desc = L["Size of the indicator icon."],
 					order = 3,
 					min = 4, max = 15, step = 1,
 				},
 				fontSize = {
-					type = 'range',
+					type = "range",
 					name = L["Font Size"],
 					order = 4,
 					min = 7, max = 22, step = 1,
 				},
 				profileSpecific = {
-					type = 'toggle',
+					type = "toggle",
 					name = L["Profile Specific"],
 					desc = L["Use the profile specific filter 'Buff Indicator (Profile)' instead of the global filter 'Buff Indicator'."],
 					order = 5,
 				},
 				configureButton = {
-					type = 'execute',
+					type = "execute",
 					name = L["Configure Auras"],
 					func = function() 
-						if E.db.unitframe.units['tank']['buffIndicator'].profileSpecific then
-							E:SetToFilterConfig('Buff Indicator (Profile)')
+						if E.db.unitframe.units["tank"]["buffIndicator"].profileSpecific then
+							E:SetToFilterConfig("Buff Indicator (Profile)")
 						else
-							E:SetToFilterConfig('Buff Indicator')
+							E:SetToFilterConfig("Buff Indicator")
 						end
 					end,
 					order = 6
@@ -5361,12 +5660,12 @@ E.Options.args.unitframe.args.tank = { -- Танки
 }
 
 E.Options.args.unitframe.args.assist = { -- Помощники
-	name = L['Assist Frames'],
-	type = 'group',
+	name = L["Assist Frames"],
+	type = "group",
 	order = 1600,
 	childGroups = "select",
-	get = function(info) return E.db.unitframe.units['assist'][ info[#info] ] end,
-	set = function(info, value) E.db.unitframe.units['assist'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('assist') end,
+	get = function(info) return E.db.unitframe.units["assist"][ info[#info] ] end,
+	set = function(info, value) E.db.unitframe.units["assist"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("assist") end,
 	args = {
 		resetSettings = {
 			type = "execute",
@@ -5376,7 +5675,7 @@ E.Options.args.unitframe.args.assist = { -- Помощники
 		},
 		general = {
 			order = 2,
-			type = 'group',
+			type = "group",
 			name = L["General"],
 			guiInline = true,
 			args = {
@@ -5388,13 +5687,13 @@ E.Options.args.unitframe.args.assist = { -- Помощники
 				width = {
 					order = 2,
 					name = L["Width"],
-					type = 'range',
+					type = "range",
 					min = 50, max = 500, step = 1,
 				},
 				height = {
 					order = 3,
 					name = L["Height"],
-					type = 'range',
+					type = "range",
 					min = 10, max = 250, step = 1,
 				},
 				verticalSpacing = {
@@ -5414,30 +5713,30 @@ E.Options.args.unitframe.args.assist = { -- Помощники
 		},
 		targetsGroup = {
 			order = 4,
-			type = 'group',
+			type = "group",
 			name = L["Assist Target"],
-			get = function(info) return E.db.unitframe.units['assist']['targetsGroup'][ info[#info] ] end,
-			set = function(info, value) E.db.unitframe.units['assist']['targetsGroup'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('assist') end,
+			get = function(info) return E.db.unitframe.units["assist"]["targetsGroup"][ info[#info] ] end,
+			set = function(info, value) E.db.unitframe.units["assist"]["targetsGroup"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("assist") end,
 			args = {
 				enable = {
-					type = 'toggle',
+					type = "toggle",
 					name = L["Enable"],
 					order = 1,
 				},
 				width = {
 					order = 2,
 					name = L["Width"],
-					type = 'range',
+					type = "range",
 					min = 10, max = 500, step = 1,
 				},
 				height = {
 					order = 3,
 					name = L["Height"],
-					type = 'range',
+					type = "range",
 					min = 10, max = 250, step = 1,
 				},
 				anchorPoint = {
-					type = 'select',
+					type = "select",
 					order = 5,
 					name = L["Anchor Point"],
 					desc = L["What point to anchor to the frame you set to attach to."],
@@ -5445,61 +5744,61 @@ E.Options.args.unitframe.args.assist = { -- Помощники
 				},
 				xOffset = {
 					order = 6,
-					type = 'range',
+					type = "range",
 					name = L["xOffset"],
 					desc = L["An X offset (in pixels) to be used when anchoring new frames."],
 					min = -500, max = 500, step = 1,
 				},
 				yOffset = {
 					order = 7,
-					type = 'range',
+					type = "range",
 					name = L["yOffset"],
 					desc = L["An Y offset (in pixels) to be used when anchoring new frames."],
 					min = -500, max = 500, step = 1,
 				},
 			},
 		},
-		buffs = GetOptionsTable_Auras(true, 'buffs', true, UF.CreateAndUpdateHeaderGroup, 'assist'),
-		debuffs = GetOptionsTable_Auras(true, 'debuffs', true, UF.CreateAndUpdateHeaderGroup, 'assist'),
+		buffs = GetOptionsTable_Auras(true, "buffs", true, UF.CreateAndUpdateHeaderGroup, "assist"),
+		debuffs = GetOptionsTable_Auras(true, "debuffs", true, UF.CreateAndUpdateHeaderGroup, "assist"),
 		buffIndicator = {
 			order = 800,
-			type = 'group',
+			type = "group",
 			name = L["Buff Indicator"],
-			get = function(info) return E.db.unitframe.units['assist']['buffIndicator'][ info[#info] ] end,
-			set = function(info, value) E.db.unitframe.units['assist']['buffIndicator'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('assist') end,
+			get = function(info) return E.db.unitframe.units["assist"]["buffIndicator"][ info[#info] ] end,
+			set = function(info, value) E.db.unitframe.units["assist"]["buffIndicator"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("assist") end,
 			args = {
 				enable = {
-					type = 'toggle',
+					type = "toggle",
 					name = L["Enable"],
 					order = 1,
 				},
 				size = {
-					type = 'range',
+					type = "range",
 					name = L["Size"],
 					desc = L["Size of the indicator icon."],
 					order = 3,
 					min = 4, max = 15, step = 1,
 				},
 				fontSize = {
-					type = 'range',
+					type = "range",
 					name = L["Font Size"],
 					order = 4,
 					min = 7, max = 22, step = 1,
 				},
 				profileSpecific = {
-					type = 'toggle',
+					type = "toggle",
 					name = L["Profile Specific"],
 					desc = L["Use the profile specific filter 'Buff Indicator (Profile)' instead of the global filter 'Buff Indicator'."],
 					order = 5,
 				},
 				configureButton = {
-					type = 'execute',
+					type = "execute",
 					name = L["Configure Auras"],
 					func = function() 
-						if E.db.unitframe.units['assist']['buffIndicator'].profileSpecific then
-							E:SetToFilterConfig('Buff Indicator (Profile)')
+						if E.db.unitframe.units["assist"]["buffIndicator"].profileSpecific then
+							E:SetToFilterConfig("Buff Indicator (Profile)")
 						else
-							E:SetToFilterConfig('Buff Indicator')
+							E:SetToFilterConfig("Buff Indicator")
 						end
 					end,
 					order = 6
