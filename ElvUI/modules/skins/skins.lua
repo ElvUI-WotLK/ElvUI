@@ -313,6 +313,9 @@ end
 function S:HandleCloseButton(f, point, text)
 	f:StripTextures()
 	
+	if(f:GetNormalTexture()) then f:SetNormalTexture(""); f.SetNormalTexture = E.noop; end
+	if(f:GetPushedTexture()) then f:SetPushedTexture(""); f.SetPushedTexture = E.noop; end
+	
 	if not f.backdrop then
 		f:CreateBackdrop('Default', true)
 		f.backdrop:Point('TOPLEFT', 7, -8)
