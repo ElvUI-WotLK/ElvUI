@@ -61,13 +61,19 @@ function UF:Construct_Castbar(self, direction, moverName)
 	local holder = CreateFrame("Frame", nil, castbar);
 	button:SetTemplate("Default");
 	
+	if(direction == "LEFT" ) then
+		holder:Point("TOPRIGHT", self, "BOTTOMRIGHT", 0, -(E.Border * 3));
+		castbar:Point("BOTTOMRIGHT", holder, "BOTTOMRIGHT", -E.Border, E.Border);
+		button:Point("RIGHT", castbar, "LEFT", E.PixelMode and 0 or -3, 0);
+	else
+		holder:Point("TOPLEFT", self, "BOTTOMLEFT", 0, -(E.Border * 3));
+		castbar:Point("BOTTOMLEFT", holder, "BOTTOMLEFT", E.Border, E.Border);
+		button:Point("LEFT", castbar, "RIGHT", E.PixelMode and 0 or 3, 0);
+	end
+	
 	castbar.Holder = holder;
 	
-	castbar.Holder:Point("TOPLEFT", self, "BOTTOMLEFT", 0, -(E.Border * 3));
-	castbar:Point('BOTTOMLEFT', castbar.Holder, 'BOTTOMLEFT', E.Border, E.Border);
-	button:Point("RIGHT", castbar, "LEFT", -E.Spacing*3, 0);
-	
-	if(moverName) then
+	if(moverName ) then
 		E:CreateMover(castbar.Holder, self:GetName().."CastbarMover", moverName, nil, -6, nil, "ALL,SOLO");
 	end
 	
@@ -79,76 +85,6 @@ function UF:Construct_Castbar(self, direction, moverName)
 	castbar.ButtonIcon = icon;
 	
 	return castbar;
-end
-
-function UF:Configure_Castbar(frame)
-	local castbar = frame.Castbar;
-	local db = frame.db;
-	castbar:Width(db.castbar.width - ((frame.BORDER+frame.SPACING)*2));
-	castbar:Height(db.castbar.height - ((frame.BORDER+frame.SPACING)*2));
-	castbar.Holder:Width(db.castbar.width);
-	castbar.Holder:Height(db.castbar.height);
-	if(castbar.Holder:GetScript("OnSizeChanged")) then
-		castbar.Holder:GetScript("OnSizeChanged")(castbar.Holder);
-	end
-	
-	if(db.castbar.latency) then
-		castbar.SafeZone = castbar.LatencyTexture;
-		castbar.LatencyTexture:Show();
-	else
-		castbar.SafeZone = nil;
-		castbar.LatencyTexture:Hide();
-	end
-	
-	if(db.castbar.icon) then
-		castbar.Icon = castbar.ButtonIcon;
-		castbar.Icon.bg:Width(db.castbar.height-frame.SPACING*2);
-		castbar.Icon.bg:Height(db.castbar.height-frame.SPACING*2);
-		
-		castbar:Width(db.castbar.width - castbar.Icon.bg:GetWidth() - (frame.BORDER + frame.SPACING*5));
-		castbar.Icon.bg:Show();
-	else
-		castbar.ButtonIcon.bg:Hide();
-		castbar.Icon = nil;
-	end
-	
-	if(db.castbar.spark) then
-		castbar.Spark:Show();
-	else
-		castbar.Spark:Hide();
-	end
-	
-	local isMoved = E:HasMoverBeenMoved(frame:GetName() .. "CastbarMover") or not castbar.Holder.mover;
-	if(not isMoved) then castbar.Holder.mover:ClearAllPoints(); end
-	
-	castbar:ClearAllPoints();
-	
-	if(frame.ORIENTATION ~= "RIGHT")  then
-		castbar:Point("BOTTOMRIGHT", castbar.Holder, "BOTTOMRIGHT", -(frame.BORDER+frame.SPACING), frame.BORDER+frame.SPACING);
-		if(not isMoved) then
-			castbar.Holder.mover:Point("TOPRIGHT", frame, "BOTTOMRIGHT", 0, -(frame.BORDER * 3));
-		end
-	else
-		castbar:Point("BOTTOMLEFT", castbar.Holder, "BOTTOMLEFT", frame.BORDER+frame.SPACING, frame.BORDER+frame.SPACING);
-		if(not isMoved) then
-			castbar.Holder.mover:Point("TOPLEFT", frame, "BOTTOMLEFT", 0, -(frame.BORDER * 3));
-		end
-	end
-	
-	if(castbar.Icon) then
-		castbar.Icon.bg:ClearAllPoints();
-		if(frame.ORIENTATION ~= "RIGHT") then
-			castbar.Icon.bg:Point("RIGHT", castbar, "LEFT", -frame.SPACING*3, 0);
-		else
-			castbar.Icon.bg:Point("LEFT", castbar, "RIGHT", frame.SPACING*3, 0);
-		end
-	end
-
-	if(db.castbar.enable and not frame:IsElementEnabled("Castbar")) then
-		frame:EnableElement("Castbar");
-	elseif(not db.castbar.enable and frame:IsElementEnabled("Castbar")) then
-		frame:DisableElement("Castbar");
-	end
 end
 
 function UF:OnCastUpdate(elapsed)

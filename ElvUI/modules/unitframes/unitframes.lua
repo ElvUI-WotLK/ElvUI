@@ -212,10 +212,6 @@ function UF:Construct_UF(frame, unit)
 	frame:SetScript("OnEnter", UnitFrame_OnEnter);
 	frame:SetScript("OnLeave", UnitFrame_OnLeave);
 	
-	frame.BORDER = E.Border;
-	frame.SPACING = E.Spacing;
-	frame.SHADOW_SPACING = 3;
-	frame.CLASSBAR_YOFFSET = 0;
 	frame:SetFrameLevel(5);
 	
 	frame.RaisedElementParent = CreateFrame("Frame", nil, frame);
