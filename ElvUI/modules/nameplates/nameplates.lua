@@ -1041,96 +1041,83 @@ function NP:CreateBackdrop(parent, point)
 	local noscalemult = E.mult * UIParent:GetScale()
 	
 	if point.bordertop then return end
-
-	point.backdrop = parent:CreateTexture(nil, "BORDER")
-	point.backdrop:SetDrawLayer("BORDER", -4)
-	point.backdrop:SetAllPoints(point)
-	point.backdrop:SetTexture(unpack(E["media"].backdropfadecolor))		
 	
-	if E.PixelMode then 
-		point.bordertop = parent:CreateTexture(nil, "BORDER")
-		point.bordertop:SetPoint("TOPLEFT", point, "TOPLEFT", -noscalemult, noscalemult)
-		point.bordertop:SetPoint("TOPRIGHT", point, "TOPRIGHT", noscalemult, noscalemult)
-		point.bordertop:SetHeight(noscalemult)
-		point.bordertop:SetTexture(unpack(E["media"].bordercolor))	
-		point.bordertop:SetDrawLayer("BORDER", 1)
+	point.backdrop = parent:CreateTexture(nil, "BACKGROUND");
+	point.backdrop:SetAllPoints(point);
+	point.backdrop:SetTexture(unpack(E["media"].backdropfadecolor));
+	
+	if(E.PixelMode) then 
+		point.bordertop = parent:CreateTexture(nil, "BORDER");
+		point.bordertop:SetPoint("TOPLEFT", point, "TOPLEFT", -noscalemult, noscalemult);
+		point.bordertop:SetPoint("TOPRIGHT", point, "TOPRIGHT", noscalemult, noscalemult);
+		point.bordertop:SetHeight(noscalemult);
+		point.bordertop:SetTexture(unpack(E["media"].bordercolor));
 		
-		point.borderbottom = parent:CreateTexture(nil, "BORDER")
-		point.borderbottom:SetPoint("BOTTOMLEFT", point, "BOTTOMLEFT", -noscalemult, -noscalemult)
+		point.borderbottom = parent:CreateTexture(nil, "BORDER");
+		point.borderbottom:SetPoint("BOTTOMLEFT", point, "BOTTOMLEFT", -noscalemult, -noscalemult);
 		point.borderbottom:SetPoint("BOTTOMRIGHT", point, "BOTTOMRIGHT", noscalemult, -noscalemult)
-		point.borderbottom:SetHeight(noscalemult)
-		point.borderbottom:SetTexture(unpack(E["media"].bordercolor))	
-		point.borderbottom:SetDrawLayer("BORDER", 1)
+		point.borderbottom:SetHeight(noscalemult);
+		point.borderbottom:SetTexture(unpack(E["media"].bordercolor));
 		
-		point.borderleft = parent:CreateTexture(nil, "BORDER")
-		point.borderleft:SetPoint("TOPLEFT", point, "TOPLEFT", -noscalemult, noscalemult)
-		point.borderleft:SetPoint("BOTTOMLEFT", point, "BOTTOMLEFT", noscalemult, -noscalemult)
-		point.borderleft:SetWidth(noscalemult)
-		point.borderleft:SetTexture(unpack(E["media"].bordercolor))	
-		point.borderleft:SetDrawLayer("BORDER", 1)
+		point.borderleft = parent:CreateTexture(nil, "BORDER");
+		point.borderleft:SetPoint("TOPLEFT", point, "TOPLEFT", -noscalemult, noscalemult);
+		point.borderleft:SetPoint("BOTTOMLEFT", point, "BOTTOMLEFT", noscalemult, -noscalemult);
+		point.borderleft:SetWidth(noscalemult);
+		point.borderleft:SetTexture(unpack(E["media"].bordercolor));
 		
-		point.borderright = parent:CreateTexture(nil, "BORDER")
-		point.borderright:SetPoint("TOPRIGHT", point, "TOPRIGHT", noscalemult, noscalemult)
-		point.borderright:SetPoint("BOTTOMRIGHT", point, "BOTTOMRIGHT", -noscalemult, -noscalemult)
-		point.borderright:SetWidth(noscalemult)
-		point.borderright:SetTexture(unpack(E["media"].bordercolor))	
-		point.borderright:SetDrawLayer("BORDER", 1)			
+		point.borderright = parent:CreateTexture(nil, "BORDER");
+		point.borderright:SetPoint("TOPRIGHT", point, "TOPRIGHT", noscalemult, noscalemult);
+		point.borderright:SetPoint("BOTTOMRIGHT", point, "BOTTOMRIGHT", -noscalemult, -noscalemult);
+		point.borderright:SetWidth(noscalemult);
+		point.borderright:SetTexture(unpack(E["media"].bordercolor));
 	else
-		point.bordertop = parent:CreateTexture(nil, "ARTWORK")
-		point.bordertop:SetPoint("TOPLEFT", point, "TOPLEFT", -noscalemult*2, noscalemult*2)
-		point.bordertop:SetPoint("TOPRIGHT", point, "TOPRIGHT", noscalemult*2, noscalemult*2)
-		point.bordertop:SetHeight(noscalemult)
-		point.bordertop:SetTexture(unpack(E.media.bordercolor))	
-		point.bordertop:SetDrawLayer("ARTWORK", -6)
+		point.bordertop = parent:CreateTexture(nil, "OVERLAY");
+		point.bordertop:SetPoint("TOPLEFT", point, "TOPLEFT", -noscalemult*2, noscalemult*2);
+		point.bordertop:SetPoint("TOPRIGHT", point, "TOPRIGHT", noscalemult*2, noscalemult*2);
+		point.bordertop:SetHeight(noscalemult);
+		point.bordertop:SetTexture(unpack(E.media.bordercolor));
 		
-		point.bordertop.backdrop = parent:CreateTexture(nil, "ARTWORK")
-		point.bordertop.backdrop:SetPoint("TOPLEFT", point.bordertop, "TOPLEFT", -noscalemult, noscalemult)
-		point.bordertop.backdrop:SetPoint("TOPRIGHT", point.bordertop, "TOPRIGHT", noscalemult, noscalemult)
-		point.bordertop.backdrop:SetHeight(noscalemult * 3)
-		point.bordertop.backdrop:SetTexture(0, 0, 0)	
-		point.bordertop.backdrop:SetDrawLayer("ARTWORK", -7) 
-
-		point.borderbottom = parent:CreateTexture(nil, "ARTWORK")
-		point.borderbottom:SetPoint("BOTTOMLEFT", point, "BOTTOMLEFT", -noscalemult*2, -noscalemult*2)
-		point.borderbottom:SetPoint("BOTTOMRIGHT", point, "BOTTOMRIGHT", noscalemult*2, -noscalemult*2)
-		point.borderbottom:SetHeight(noscalemult)
-		point.borderbottom:SetTexture(unpack(E.media.bordercolor))	
-		point.borderbottom:SetDrawLayer("ARTWORK", -6)
-
-		point.borderbottom.backdrop = parent:CreateTexture(nil, "ARTWORK")
-		point.borderbottom.backdrop:SetPoint("BOTTOMLEFT", point.borderbottom, "BOTTOMLEFT", -noscalemult, -noscalemult)
-		point.borderbottom.backdrop:SetPoint("BOTTOMRIGHT", point.borderbottom, "BOTTOMRIGHT", noscalemult, -noscalemult)
-		point.borderbottom.backdrop:SetHeight(noscalemult * 3)
-		point.borderbottom.backdrop:SetTexture(0, 0, 0)	
-		point.borderbottom.backdrop:SetDrawLayer("ARTWORK", -7)			
+		point.bordertop.backdrop = parent:CreateTexture(nil, "BORDER")
+		point.bordertop.backdrop:SetPoint("TOPLEFT", point.bordertop, "TOPLEFT", -noscalemult, noscalemult);
+		point.bordertop.backdrop:SetPoint("TOPRIGHT", point.bordertop, "TOPRIGHT", noscalemult, noscalemult);
+		point.bordertop.backdrop:SetHeight(noscalemult * 3);
+		point.bordertop.backdrop:SetTexture(0, 0, 0);
 		
-		point.borderleft = parent:CreateTexture(nil, "ARTWORK")
-		point.borderleft:SetPoint("TOPLEFT", point, "TOPLEFT", -noscalemult*2, noscalemult*2)
-		point.borderleft:SetPoint("BOTTOMLEFT", point, "BOTTOMLEFT", noscalemult*2, -noscalemult*2)
-		point.borderleft:SetWidth(noscalemult)
-		point.borderleft:SetTexture(unpack(E.media.bordercolor))	
-		point.borderleft:SetDrawLayer("ARTWORK", -6)
-
-		point.borderleft.backdrop = parent:CreateTexture(nil, "ARTWORK")
-		point.borderleft.backdrop:SetPoint("TOPLEFT", point.borderleft, "TOPLEFT", -noscalemult, noscalemult)
-		point.borderleft.backdrop:SetPoint("BOTTOMLEFT", point.borderleft, "BOTTOMLEFT", -noscalemult, -noscalemult)
-		point.borderleft.backdrop:SetWidth(noscalemult * 3)
-		point.borderleft.backdrop:SetTexture(0, 0, 0)	
-		point.borderleft.backdrop:SetDrawLayer("ARTWORK", -7)					
+		point.borderbottom = parent:CreateTexture(nil, "OVERLAY");
+		point.borderbottom:SetPoint("BOTTOMLEFT", point, "BOTTOMLEFT", -noscalemult*2, -noscalemult*2);
+		point.borderbottom:SetPoint("BOTTOMRIGHT", point, "BOTTOMRIGHT", noscalemult*2, -noscalemult*2);
+		point.borderbottom:SetHeight(noscalemult);
+		point.borderbottom:SetTexture(unpack(E.media.bordercolor));
 		
-		point.borderright = parent:CreateTexture(nil, "ARTWORK")
-		point.borderright:SetPoint("TOPRIGHT", point, "TOPRIGHT", noscalemult*2, noscalemult*2)
-		point.borderright:SetPoint("BOTTOMRIGHT", point, "BOTTOMRIGHT", -noscalemult*2, -noscalemult*2)
-		point.borderright:SetWidth(noscalemult)
-		point.borderright:SetTexture(unpack(E.media.bordercolor))	
-		point.borderright:SetDrawLayer("ARTWORK", -6)	
-
-		point.borderright.backdrop = parent:CreateTexture(nil, "ARTWORK")
-		point.borderright.backdrop:SetPoint("TOPRIGHT", point.borderright, "TOPRIGHT", noscalemult, noscalemult)
-		point.borderright.backdrop:SetPoint("BOTTOMRIGHT", point.borderright, "BOTTOMRIGHT", noscalemult, -noscalemult)
-		point.borderright.backdrop:SetWidth(noscalemult * 3)
-		point.borderright.backdrop:SetTexture(0, 0, 0)	
-		point.borderright.backdrop:SetDrawLayer("ARTWORK", -7)
+		point.borderbottom.backdrop = parent:CreateTexture(nil, "BORDER");
+		point.borderbottom.backdrop:SetPoint("BOTTOMLEFT", point.borderbottom, "BOTTOMLEFT", -noscalemult, -noscalemult);
+		point.borderbottom.backdrop:SetPoint("BOTTOMRIGHT", point.borderbottom, "BOTTOMRIGHT", noscalemult, -noscalemult);
+		point.borderbottom.backdrop:SetHeight(noscalemult * 3);
+		point.borderbottom.backdrop:SetTexture(0, 0, 0);
+		
+		point.borderleft = parent:CreateTexture(nil, "OVERLAY");
+		point.borderleft:SetPoint("TOPLEFT", point, "TOPLEFT", -noscalemult*2, noscalemult*2);
+		point.borderleft:SetPoint("BOTTOMLEFT", point, "BOTTOMLEFT", noscalemult*2, -noscalemult*2);
+		point.borderleft:SetWidth(noscalemult);
+		point.borderleft:SetTexture(unpack(E.media.bordercolor));
+		
+		point.borderleft.backdrop = parent:CreateTexture(nil, "BORDER");
+		point.borderleft.backdrop:SetPoint("TOPLEFT", point.borderleft, "TOPLEFT", -noscalemult, noscalemult);
+		point.borderleft.backdrop:SetPoint("BOTTOMLEFT", point.borderleft, "BOTTOMLEFT", -noscalemult, -noscalemult);
+		point.borderleft.backdrop:SetWidth(noscalemult * 3);
+		point.borderleft.backdrop:SetTexture(0, 0, 0);
+		
+		point.borderright = parent:CreateTexture(nil, "OVERLAY");
+		point.borderright:SetPoint("TOPRIGHT", point, "TOPRIGHT", noscalemult*2, noscalemult*2);
+		point.borderright:SetPoint("BOTTOMRIGHT", point, "BOTTOMRIGHT", -noscalemult*2, -noscalemult*2);
+		point.borderright:SetWidth(noscalemult);
+		point.borderright:SetTexture(unpack(E.media.bordercolor));
+		
+		point.borderright.backdrop = parent:CreateTexture(nil, "BORDER");
+		point.borderright.backdrop:SetPoint("TOPRIGHT", point.borderright, "TOPRIGHT", noscalemult, noscalemult);
+		point.borderright.backdrop:SetPoint("BOTTOMRIGHT", point.borderright, "BOTTOMRIGHT", noscalemult, -noscalemult);
+		point.borderright.backdrop:SetWidth(noscalemult * 3);
+		point.borderright.backdrop:SetTexture(0, 0, 0);
 	end
 end
 
@@ -1246,15 +1233,14 @@ function NP:CreateAuraIcon(frame, parent, dbTable)
 	end)
 	local db = NP.db[dbTable]
 	if E.PixelMode then
-		button.bord = button:CreateTexture(nil, "BACKGROUND")
-		button.bord:SetDrawLayer("BACKGROUND", 2)
-		button.bord:SetTexture(unpack(E["media"].bordercolor))
-		button.bord:SetPoint("TOPLEFT",button,"TOPLEFT", noscalemult,-noscalemult)
-		button.bord:SetPoint("BOTTOMRIGHT",button,"BOTTOMRIGHT",-noscalemult,noscalemult)
+		button.bord = button:CreateTexture(nil, "BACKGROUND");
+		button.bord:SetTexture(unpack(E["media"].bordercolor));
+		button.bord:SetPoint("TOPLEFT", button, "TOPLEFT", noscalemult, -noscalemult);
+		button.bord:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -noscalemult, noscalemult);
 		
-		button.Icon = button:CreateTexture(nil, "BORDER")
-		button.Icon:SetPoint("TOPLEFT",button,"TOPLEFT", noscalemult*2,-noscalemult*2)
-		button.Icon:SetPoint("BOTTOMRIGHT",button,"BOTTOMRIGHT",-noscalemult*2,noscalemult*2)
+		button.Icon = button:CreateTexture(nil, "BORDER");
+		button.Icon:SetPoint("TOPLEFT", button, "TOPLEFT", noscalemult*2, -noscalemult*2);
+		button.Icon:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -noscalemult*2, noscalemult*2);
 
 		if db.stretchTexture then
 			button.Icon:SetTexCoord(.07, 0.93, .23, 0.77)
@@ -1262,25 +1248,23 @@ function NP:CreateAuraIcon(frame, parent, dbTable)
 			button.Icon:SetTexCoord(.07, .93, .07, .93)
 		end
 	else
-		button.bg = button:CreateTexture(nil, "BACKGROUND")
-		button.bg:SetTexture(0, 0, 0, 1)
-		button.bg:SetAllPoints(button)
+		button.bg = button:CreateTexture(nil, "BACKGROUND");
+		button.bg:SetTexture(0, 0, 0, 1);
+		button.bg:SetAllPoints(button);
 		
-		button.bord = button:CreateTexture(nil, "BACKGROUND")
-		button.bord:SetDrawLayer("BACKGROUND", 2)
-		button.bord:SetTexture(unpack(E["media"].bordercolor))
-		button.bord:SetPoint("TOPLEFT",button,"TOPLEFT", noscalemult,-noscalemult)
-		button.bord:SetPoint("BOTTOMRIGHT",button,"BOTTOMRIGHT",-noscalemult,noscalemult)
+		button.bord = button:CreateTexture(nil, "OVERLAY");
+		button.bord:SetTexture(unpack(E["media"].bordercolor));
+		button.bord:SetPoint("TOPLEFT", button, "TOPLEFT", noscalemult, -noscalemult);
+		button.bord:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -noscalemult, noscalemult);
 		
-		button.bg2 = button:CreateTexture(nil, "BACKGROUND")
-		button.bg2:SetDrawLayer("BACKGROUND", 3)
-		button.bg2:SetTexture(0, 0, 0, 1)
-		button.bg2:SetPoint("TOPLEFT",button,"TOPLEFT", noscalemult*2,-noscalemult*2)
-		button.bg2:SetPoint("BOTTOMRIGHT",button,"BOTTOMRIGHT",-noscalemult*2,noscalemult*2)	
-
-		button.Icon = button:CreateTexture(nil, "BORDER")
-		button.Icon:SetPoint("TOPLEFT",button,"TOPLEFT", noscalemult*3,-noscalemult*3)
-		button.Icon:SetPoint("BOTTOMRIGHT",button,"BOTTOMRIGHT",-noscalemult*3,noscalemult*3)
+		button.bg2 = button:CreateTexture(nil, "BORDER")
+		button.bg2:SetTexture(0, 0, 0, 1);
+		button.bg2:SetPoint("TOPLEFT", button, "TOPLEFT", noscalemult*2, -noscalemult*2);
+		button.bg2:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -noscalemult*2, noscalemult*2);
+		
+		button.Icon = button:CreateTexture(nil, "ARTWORK");
+		button.Icon:SetPoint("TOPLEFT", button, "TOPLEFT", noscalemult*3, -noscalemult*3);
+		button.Icon:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -noscalemult*3, noscalemult*3);
 		if db.stretchTexture then
 			button.Icon:SetTexCoord(.07, 0.93, .23, 0.77)
 		else
