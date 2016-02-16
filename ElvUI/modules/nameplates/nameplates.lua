@@ -1252,17 +1252,17 @@ function NP:CreateAuraIcon(frame, parent, dbTable)
 		button.bg:SetTexture(0, 0, 0, 1);
 		button.bg:SetAllPoints(button);
 		
-		button.bord = button:CreateTexture(nil, "OVERLAY");
+		button.bord = button:CreateTexture(nil, "BORDER");
 		button.bord:SetTexture(unpack(E["media"].bordercolor));
 		button.bord:SetPoint("TOPLEFT", button, "TOPLEFT", noscalemult, -noscalemult);
 		button.bord:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -noscalemult, noscalemult);
 		
-		button.bg2 = button:CreateTexture(nil, "BORDER")
+		button.bg2 = button:CreateTexture(nil, "ARTWORK")
 		button.bg2:SetTexture(0, 0, 0, 1);
 		button.bg2:SetPoint("TOPLEFT", button, "TOPLEFT", noscalemult*2, -noscalemult*2);
 		button.bg2:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -noscalemult*2, noscalemult*2);
 		
-		button.Icon = button:CreateTexture(nil, "ARTWORK");
+		button.Icon = button:CreateTexture(nil, "OVERLAY");
 		button.Icon:SetPoint("TOPLEFT", button, "TOPLEFT", noscalemult*3, -noscalemult*3);
 		button.Icon:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -noscalemult*3, noscalemult*3);
 		if db.stretchTexture then
