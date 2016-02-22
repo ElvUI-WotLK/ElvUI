@@ -119,9 +119,11 @@ function AB:PositionAndSizeBarShapeShift()
 	if self.db['barShapeShift'].enabled then
 		bar:SetScale(1);
 		bar:SetAlpha(bar.db.alpha);
+		E:EnableMover(bar.mover:GetName());
 	else
 		bar:SetScale(0.000001);
 		bar:SetAlpha(0);
+		E:DisableMover(bar.mover:GetName());
 	end
 	
 	if self.db['barShapeShift'].backdrop == true then

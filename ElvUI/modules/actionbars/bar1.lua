@@ -153,7 +153,9 @@ function AB:PositionAndSizeBar1()
 			
 			return;
 		end
+		E:EnableMover(bar.mover:GetName());
 	else
+		E:DisableMover(bar.mover:GetName());
 		bar:Hide();
 		UnregisterStateDriver(bar, "visibility");
 	end
@@ -162,7 +164,7 @@ end
 function AB:CreateBar1()
 	bar:CreateBackdrop("Default");
 	bar.backdrop:SetAllPoints();
-	bar:Point("BOTTOM", 0, 3);
+	bar:Point("BOTTOM", 0, 4);
 
 	local button;
 	for i = 1, NUM_ACTIONBAR_BUTTONS do
@@ -191,7 +193,6 @@ function AB:CreateBar1()
 		end
 	]])
 	
-	E:CreateMover(bar, "ElvAB_1", L["Bar 1"], nil, nil, nil, "ALL,ACTIONBARS");
-	
+	E:CreateMover(bar, "ElvAB_1", L["Bar "] .. "1", nil, nil, nil, "ALL,ACTIONBARS");
 	self:PositionAndSizeBar1();
 end

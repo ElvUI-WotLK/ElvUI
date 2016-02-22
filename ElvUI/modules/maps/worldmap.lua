@@ -4,7 +4,6 @@ E.WorldMap = M;
 
 local CreateFrame = CreateFrame;
 local InCombatLockdown = InCombatLockdown;
-local SetUIPanelAttribute = SetUIPanelAttribute;
 local IsInInstance = IsInInstance;
 local GetPlayerMapPosition = GetPlayerMapPosition;
 local GetCursorPosition = GetCursorPosition;

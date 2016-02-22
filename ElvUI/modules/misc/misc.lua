@@ -108,8 +108,9 @@ function M:CheckMovement()
 end
 
 function M:PVPMessageEnhancement(_, msg)
-	local _, instanceType = IsInInstance()
-	if instanceType == "pvp" or instanceType == "arena" then
+	if(not E.db.general.enhancedPvpMessages) then return; end
+	local _, instanceType = IsInInstance();
+	if(instanceType == "pvp" or instanceType == "arena") then
 		RaidNotice_AddMessage(RaidBossEmoteFrame, msg, ChatTypeInfo["RAID_BOSS_EMOTE"]);
 	end
 end

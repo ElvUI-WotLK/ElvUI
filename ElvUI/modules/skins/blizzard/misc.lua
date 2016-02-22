@@ -48,6 +48,7 @@ local function LoadSkin()
 	
 	-- reskin popup buttons
 	for i = 1, 3 do
+		_G["StaticPopup"..i.."CloseButton"]:StripTextures()
 		S:HandleCloseButton(_G["StaticPopup"..i.."CloseButton"]);
 		
 		for j = 1, 3 do

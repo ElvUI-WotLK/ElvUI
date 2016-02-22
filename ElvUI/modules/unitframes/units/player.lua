@@ -18,7 +18,7 @@ function UF:Construct_PlayerFrame(frame)
 	frame.Threat = self:Construct_Threat(frame, true);
 	frame.Health = self:Construct_HealthBar(frame, true, true, "RIGHT");
 	frame.Health.frequentUpdates = true;
-	frame.Power = self:Construct_PowerBar(frame, true, true, "LEFT", true);
+	frame.Power = self:Construct_PowerBar(frame, true, true, "LEFT");
 	frame.Power.frequentUpdates = true;
 	frame.Name = self:Construct_NameText(frame);
 	frame.Portrait3D = self:Construct_Portrait(frame, "model");
@@ -37,993 +37,129 @@ function UF:Construct_PlayerFrame(frame)
 		frame.ArcaneChargeBar = self:Construct_MageResourceBar(frame);
 		frame.ClassBar = "ArcaneChargeBar";
 	end
-	
-	frame.Resting = self:Construct_RestingIndicator(frame);
+
 	frame.RaidIcon = UF:Construct_RaidIcon(frame);
+	frame.Resting = self:Construct_RestingIndicator(frame);
 	frame.Combat = self:Construct_CombatIndicator(frame);
 	frame.PvPText = self:Construct_PvPIndicator(frame);
 	frame.DebuffHighlight = self:Construct_DebuffHighlight(frame);
+	frame.HealCommBar = self:Construct_HealComm(frame);
 	frame.AuraBars = self:Construct_AuraBarHeader(frame);
 	frame.CombatFade = true;
-	
-	frame.HealCommBar = UF:Construct_HealComm(frame);
-	
+	frame.InfoPanel = self:Construct_InfoPanel(frame);
 	frame.customTexts = {};
+	
 	frame:Point("BOTTOMLEFT", E.UIParent, "BOTTOM", -413, 68);
-	E:CreateMover(frame, frame:GetName().."Mover", L["Player Frame"], nil, nil, nil, "ALL,SOLO");
+	E:CreateMover(frame, frame:GetName() .. "Mover", L["Player Frame"], nil, nil, nil, "ALL,SOLO");
+	frame.unitframeType = "player";
 end
 
-
 function UF:UpdatePlayerFrameAnchors(frame, isShown)
-	local db = E.db["unitframe"]["units"].player;
-	local health = frame.Health;
-	local threat = frame.Threat;
-	local power = frame.Power;
-	local PORTRAIT_WIDTH = db.portrait.width;
-	local USE_PORTRAIT = db.portrait.enable;
-	local USE_PORTRAIT_OVERLAY = db.portrait.overlay and USE_PORTRAIT;
-	local PORTRAIT_DETACHED = db.portrait.detachFromFrame;
-	local CLASSBAR_HEIGHT = db.classbar.height;
-	local USE_CLASSBAR = db.classbar.enable;
-	local USE_MINI_CLASSBAR = db.classbar.fill == "spaced" and USE_CLASSBAR;
-	local USE_POWERBAR = db.power.enable;
-	local USE_INSET_POWERBAR = db.power.width == "inset" and USE_POWERBAR;
-	local USE_MINI_POWERBAR = db.power.width == "spaced" and USE_POWERBAR;
-	local USE_POWERBAR_OFFSET = db.power.offset ~= 0 and USE_POWERBAR;
-	local POWERBAR_OFFSET = db.power.offset;
-	local POWERBAR_HEIGHT = db.power.height;
-	local POWERBAR_DETACHED = db.power.detachedFromFrame;
-	local SPACING = E.Spacing;
-	local BORDER = E.Border;
-	local SHADOW_SPACING = SPACING+3;
-	
-	if(not USE_POWERBAR) then
-		POWERBAR_HEIGHT = 0;
-	end
-	
-	if(USE_PORTRAIT_OVERLAY or PORTRAIT_DETACHED or not USE_PORTRAIT) then
-		PORTRAIT_WIDTH = 0;
-	end
-	
-	if(USE_MINI_CLASSBAR) then
-		CLASSBAR_HEIGHT = CLASSBAR_HEIGHT / 2;
-	end
-	
-	if(db.classbar.detachFromFrame) then
-		CLASSBAR_HEIGHT = 0;
-	end
-	
-	if(db.classbar.detachFromFrame) then
-		CLASSBAR_HEIGHT = E.PixelMode and 0 or -1;
-	end
-	
-	if(isShown) then
-		if(db.power.offset ~= 0) then
-			health:Point("TOPRIGHT", frame, "TOPRIGHT", -BORDER+db.power.offset, -(BORDER + CLASSBAR_HEIGHT + SPACING));
-		else
-			health:Point("TOPRIGHT", frame, "TOPRIGHT", -BORDER, -(BORDER + CLASSBAR_HEIGHT + SPACING));
-		end
-		
-		health:Point("TOPLEFT", frame, "TOPLEFT", PORTRAIT_WIDTH + BORDER, -(BORDER + CLASSBAR_HEIGHT + SPACING));
-		
-		local mini_classbarY = 0;
-		if(USE_MINI_CLASSBAR) then
-			mini_classbarY = -(SPACING+(CLASSBAR_HEIGHT));
-		end
-		
-		if(db.threatStyle == "GLOW") then
-			threat.glow:Point("TOPLEFT", -SHADOW_SPACING, SHADOW_SPACING+mini_classbarY);
-			threat.glow:Point("TOPRIGHT", SHADOW_SPACING, SHADOW_SPACING+mini_classbarY);
-			
-			if(USE_MINI_POWERBAR) then
-				threat.glow:Point("BOTTOMLEFT", -SHADOW_SPACING, -SHADOW_SPACING + (POWERBAR_HEIGHT/2));
-				threat.glow:Point("BOTTOMRIGHT", SHADOW_SPACING, -SHADOW_SPACING + (POWERBAR_HEIGHT/2));	
-			else
-				threat.glow:Point("BOTTOMLEFT", -SHADOW_SPACING, -SHADOW_SPACING);
-				threat.glow:Point("BOTTOMRIGHT", SHADOW_SPACING, -SHADOW_SPACING);
-			end
-			
-			if(USE_POWERBAR_OFFSET) then
-				threat.glow:Point("TOPRIGHT", SHADOW_SPACING-POWERBAR_OFFSET, SHADOW_SPACING+mini_classbarY);
-				threat.glow:Point("BOTTOMRIGHT", SHADOW_SPACING-POWERBAR_OFFSET, -SHADOW_SPACING);
-			end
-		end
-		
-		if(db.portrait.enable and not USE_PORTRAIT_OVERLAY and not PORTRAIT_DETACHED and frame.Portrait) then
-			local portrait = frame.Portrait;
-			portrait.backdrop:ClearAllPoints();
-			
-			if USE_MINI_CLASSBAR and USE_CLASSBAR then
-				portrait.backdrop:Point("TOPLEFT", frame, "TOPLEFT", 0, -(CLASSBAR_HEIGHT + SPACING));
-			else
-				portrait.backdrop:SetPoint("TOPLEFT", frame, "TOPLEFT");
-			end
-			
-			if(USE_MINI_POWERBAR or USE_POWERBAR_OFFSET or USE_INSET_POWERBAR or not USE_POWERBAR or USE_INSET_POWERBAR or POWERBAR_DETACHED) then
-				portrait.backdrop:Point("BOTTOMRIGHT", frame.Health.backdrop, "BOTTOMLEFT", BORDER - SPACING*2, 0);
-			else
-				portrait.backdrop:Point("BOTTOMRIGHT", frame.Power.backdrop, "BOTTOMLEFT", BORDER - SPACING*2, 0);
-			end
-		end
-	else
-		if(db.power.offset ~= 0) then
-			health:Point("TOPRIGHT", frame, "TOPRIGHT", -BORDER + db.power.offset, -BORDER);
-		else
-			health:Point("TOPRIGHT", frame, "TOPRIGHT", -BORDER, -BORDER);
-		end
-		
-		health:Point("TOPLEFT", frame, "TOPLEFT", PORTRAIT_WIDTH + BORDER, -BORDER);
-		if db.threatStyle == "GLOW" then
-			threat.glow:Point("TOPLEFT", -SHADOW_SPACING, SHADOW_SPACING);
-			threat.glow:Point("TOPRIGHT", SHADOW_SPACING, SHADOW_SPACING);
-			
-			if(USE_MINI_POWERBAR) then
-				threat.glow:Point("BOTTOMLEFT", -SHADOW_SPACING, -SHADOW_SPACING + (POWERBAR_HEIGHT/2));
-				threat.glow:Point("BOTTOMRIGHT", SHADOW_SPACING, -SHADOW_SPACING + (POWERBAR_HEIGHT/2));
-			else
-				threat.glow:Point("BOTTOMLEFT", -SHADOW_SPACING, -SHADOW_SPACING);
-				threat.glow:Point("BOTTOMRIGHT", SHADOW_SPACING, -SHADOW_SPACING);
-			end
-			
-			if(USE_POWERBAR_OFFSET) then
-				threat.glow:Point("TOPRIGHT", SHADOW_SPACING-POWERBAR_OFFSET, SHADOW_SPACING);
-				threat.glow:Point("BOTTOMRIGHT", SHADOW_SPACING-POWERBAR_OFFSET, -SHADOW_SPACING);
-			end
-		end
-		
-		if(db.portrait.enable and not USE_PORTRAIT_OVERLAY and not PORTRAIT_DETACHED and frame.Portrait) then
-			local portrait = frame.Portrait;
-			portrait.backdrop:ClearAllPoints();
-			portrait.backdrop:Point("TOPLEFT", frame, "TOPLEFT");
-			
-			if(USE_MINI_POWERBAR or USE_POWERBAR_OFFSET or not USE_POWERBAR or USE_INSET_POWERBAR or POWERBAR_DETACHED) then
-				portrait.backdrop:Point("BOTTOMRIGHT", frame.Health.backdrop, "BOTTOMLEFT", E.PixelMode and 1 or -SPACING, 0);
-			else
-				portrait.backdrop:Point("BOTTOMRIGHT", frame.Power.backdrop, "BOTTOMLEFT", E.PixelMode and 1 or -SPACING, 0);
-			end
-		end
-	end
+	print("old method still in effect")
 end
 
 function UF:Update_PlayerFrame(frame, db)
 	frame.db = db;
-	if(frame.Portrait) then
-		frame.Portrait:Hide();
-		frame.Portrait:ClearAllPoints();
-		frame.Portrait.backdrop:Hide();
-	end
 	
+	do
+		frame.ORIENTATION = db.orientation;
+		frame.UNIT_WIDTH = db.width;
+		frame.UNIT_HEIGHT = (E.global.tukuiMode and not db.infoPanel.enable) and db.height + db.infoPanel.height or db.height;
+		
+		frame.USE_POWERBAR = db.power.enable;
+		frame.POWERBAR_DETACHED = db.power.detachFromFrame;
+		frame.USE_INSET_POWERBAR = not frame.POWERBAR_DETACHED and db.power.width == "inset" and frame.USE_POWERBAR;
+		frame.USE_MINI_POWERBAR = (not frame.POWERBAR_DETACHED and db.power.width == "spaced" and frame.USE_POWERBAR);
+		frame.USE_POWERBAR_OFFSET = db.power.offset ~= 0 and frame.USE_POWERBAR and not frame.POWERBAR_DETACHED;
+		frame.POWERBAR_OFFSET = frame.USE_POWERBAR_OFFSET and db.power.offset or 0;
+		
+		frame.POWERBAR_HEIGHT = not frame.USE_POWERBAR and 0 or db.power.height;
+		frame.POWERBAR_WIDTH = frame.USE_MINI_POWERBAR and (frame.UNIT_WIDTH - (frame.BORDER*2))/2 or (frame.POWERBAR_DETACHED and db.power.detachedWidth or (frame.UNIT_WIDTH - ((frame.BORDER+frame.SPACING)*2)));
+		
+		frame.USE_PORTRAIT = db.portrait and db.portrait.enable;
+		frame.USE_PORTRAIT_OVERLAY = frame.USE_PORTRAIT and (db.portrait.overlay or frame.ORIENTATION == "MIDDLE");
+		frame.PORTRAIT_WIDTH = (frame.USE_PORTRAIT_OVERLAY or not frame.USE_PORTRAIT) and 0 or db.portrait.width;
+		
+		frame.CAN_HAVE_CLASSBAR = CAN_HAVE_CLASSBAR;
+		frame.MAX_CLASS_BAR = frame.MAX_CLASS_BAR or UF.classMaxResourceBar[E.myclass] or 0;
+		frame.USE_CLASSBAR = db.classbar.enable and frame.CAN_HAVE_CLASSBAR;
+		frame.CLASSBAR_SHOWN = frame.CAN_HAVE_CLASSBAR and frame[frame.ClassBar]:IsShown();
+		frame.CLASSBAR_DETACHED = db.classbar.detachFromFrame;
+		frame.USE_MINI_CLASSBAR = db.classbar.fill == "spaced" and frame.USE_CLASSBAR;
+		frame.CLASSBAR_HEIGHT = frame.USE_CLASSBAR and db.classbar.height or 0;
+		frame.CLASSBAR_WIDTH = frame.UNIT_WIDTH - ((frame.BORDER+frame.SPACING)*2) - frame.PORTRAIT_WIDTH  -(frame.ORIENTATION == "MIDDLE" and (frame.POWERBAR_OFFSET*2) or frame.POWERBAR_OFFSET);
+		frame.CLASSBAR_YOFFSET = (not frame.USE_CLASSBAR or not frame.CLASSBAR_SHOWN or frame.CLASSBAR_DETACHED) and 0 or (frame.USE_MINI_CLASSBAR and (frame.SPACING+(frame.CLASSBAR_HEIGHT/2)) or (frame.CLASSBAR_HEIGHT - (frame.BORDER-frame.SPACING)));
+		
+		frame.USE_INFO_PANEL = not frame.USE_MINI_POWERBAR and not frame.USE_POWERBAR_OFFSET and (db.infoPanel.enable or E.global.tukuiMode);
+		frame.INFO_PANEL_HEIGHT = frame.USE_INFO_PANEL and db.infoPanel.height or 0;
+		
+		local bottomOffset = 0;
+		if(frame.USE_POWERBAR and not frame.POWERBAR_DETACHED and not frame.USE_INSET_POWERBAR) then
+			bottomOffset = bottomOffset + frame.POWERBAR_HEIGHT - (frame.BORDER-frame.SPACING);
+		end
+		if(frame.USE_INFO_PANEL) then
+			bottomOffset = bottomOffset + frame.INFO_PANEL_HEIGHT - (frame.BORDER-frame.SPACING);
+		end
+		frame.BOTTOM_OFFSET = bottomOffset;
+	end
+
+	frame.colors = ElvUF.colors;
 	frame.Portrait = db.portrait.style == "2D" and frame.Portrait2D or frame.Portrait3D;
 	frame:RegisterForClicks(self.db.targetOnMouseDown and "AnyDown" or "AnyUp");
+	frame:Size(frame.UNIT_WIDTH, frame.UNIT_HEIGHT);
+	_G[frame:GetName() .. "Mover"]:Size(frame:GetSize());
 	
-	local BORDER = E.Border;
-	local SPACING = E.Spacing;
-	local SHADOW_SPACING = SPACING+3;
-	local UNIT_WIDTH = db.width;
-	local UNIT_HEIGHT = db.height;
+	UF:Configure_InfoPanel(frame);
 	
-	local USE_POWERBAR = db.power.enable
-	local USE_INSET_POWERBAR = db.power.width == "inset" and USE_POWERBAR;
-	local USE_MINI_POWERBAR = db.power.width == "spaced" and USE_POWERBAR;
-	local USE_POWERBAR_OFFSET = db.power.offset ~= 0 and USE_POWERBAR;
-	local POWERBAR_DETACHED = db.power.detachFromFrame;
-	local POWERBAR_OFFSET = db.power.offset;
-	local POWERBAR_HEIGHT = db.power.height;
-	local POWERBAR_WIDTH = POWERBAR_DETACHED and db.power.detachedWidth or (db.width - (BORDER*2));
+	UF:Configure_Threat(frame);
 	
-	local USE_CLASSBAR = db.classbar.enable and CAN_HAVE_CLASSBAR;
-	local USE_MINI_CLASSBAR = db.classbar.fill == "spaced" and USE_CLASSBAR and db.classbar.detachFromFrame ~= true;
-	local CLASSBAR_HEIGHT = db.classbar.height;
-	local CLASSBAR_WIDTH = db.width - (BORDER*2);
+	UF:Configure_RestingIndicator(frame);
 	
-	local USE_PORTRAIT = db.portrait.enable;
-	local USE_PORTRAIT_OVERLAY = db.portrait.overlay and USE_PORTRAIT;
-	local PORTRAIT_WIDTH = db.portrait.width;
-	local PORTRAIT_DETACHED = db.portrait.detachFromFrame;
+	UF:Configure_CombatIndicator(frame);
 	
-	local unit = self.unit;
-	
-	frame.colors = ElvUF.colors;
-	frame:Size(UNIT_WIDTH, UNIT_HEIGHT);
-	_G[frame:GetName().."Mover"]:Size(frame:GetSize());
-	
-	do
-		if(not USE_POWERBAR) then
-			POWERBAR_HEIGHT = 0;
-		end
-		
-		if(USE_PORTRAIT_OVERLAY or PORTRAIT_DETACHED or not USE_PORTRAIT) then
-			PORTRAIT_WIDTH = 0;	
-		end
-		
-		if(USE_PORTRAIT) then
-			CLASSBAR_WIDTH = (UNIT_WIDTH - (BORDER*2)) - PORTRAIT_WIDTH;
-		end
-		
-		if(USE_POWERBAR_OFFSET) then
-			CLASSBAR_WIDTH = CLASSBAR_WIDTH - POWERBAR_OFFSET;
-		end
-		
-		if(USE_MINI_POWERBAR and not POWERBAR_DETACHED) then
-			POWERBAR_WIDTH = POWERBAR_WIDTH / 2;
-		end
-	end
-	
-	local mini_classbarY = 0;
-	if(USE_MINI_CLASSBAR) then
-		mini_classbarY = -(SPACING+(CLASSBAR_HEIGHT/2));
-	end
-	
-	do
-		local threat = frame.Threat;
-		if(db.threatStyle ~= "NONE" and db.threatStyle ~= nil) then
-			if(not frame:IsElementEnabled("Threat")) then
-				frame:EnableElement("Threat");
-			end
-			
-			if(db.threatStyle == "GLOW") then
-				threat:SetFrameStrata("BACKGROUND");
-				threat.glow:ClearAllPoints();
-				threat.glow:SetBackdropBorderColor(0, 0, 0, 0);
-				threat.glow:Point("TOPLEFT", -SHADOW_SPACING, SHADOW_SPACING+mini_classbarY);
-				threat.glow:Point("TOPRIGHT", SHADOW_SPACING, SHADOW_SPACING+mini_classbarY);
-				
-				if(USE_MINI_POWERBAR) then
-					threat.glow:Point("BOTTOMLEFT", -SHADOW_SPACING, -SHADOW_SPACING + (POWERBAR_HEIGHT/2));
-					threat.glow:Point("BOTTOMRIGHT", SHADOW_SPACING, -SHADOW_SPACING + (POWERBAR_HEIGHT/2));
-				else
-					threat.glow:Point("BOTTOMLEFT", -SHADOW_SPACING, -SHADOW_SPACING);
-					threat.glow:Point("BOTTOMRIGHT", SHADOW_SPACING, -SHADOW_SPACING);
-				end
-				
-				if(USE_POWERBAR_OFFSET) then
-					threat.glow:Point("TOPRIGHT", SHADOW_SPACING-POWERBAR_OFFSET, SHADOW_SPACING+mini_classbarY);
-					threat.glow:Point("BOTTOMRIGHT", SHADOW_SPACING-POWERBAR_OFFSET, -SHADOW_SPACING);
-					
-					if(USE_PORTRAIT == true and not USE_PORTRAIT_OVERLAY and not PORTRAIT_DETACHED) then
-						threat.glow:Point("BOTTOMLEFT", frame.Portrait.backdrop, "BOTTOMLEFT", -4, -4);
-					else
-						threat.glow:Point("BOTTOMLEFT", frame.Health, "BOTTOMLEFT", -5, -5);
-					end
-					threat.glow:Point("BOTTOMRIGHT", frame.Health, "BOTTOMRIGHT", 5, -5);
-				end
-			elseif(db.threatStyle == "ICONTOPLEFT" or db.threatStyle == "ICONTOPRIGHT" or db.threatStyle == "ICONBOTTOMLEFT" or db.threatStyle == "ICONBOTTOMRIGHT" or db.threatStyle == "ICONTOP" or db.threatStyle == "ICONBOTTOM" or db.threatStyle == "ICONLEFT" or db.threatStyle == "ICONRIGHT") then
-				threat:SetFrameStrata("HIGH");
-				local point = db.threatStyle;
-				point = point:gsub("ICON", "");
-				
-				threat.texIcon:ClearAllPoints();
-				threat.texIcon:SetPoint(point, frame.Health, point);
-			end
-		elseif(frame:IsElementEnabled("Threat")) then
-			frame:DisableElement("Threat");
-		end
-	end
-	
-	do
-		local rIcon = frame.Resting;
-		if(db.restIcon) then
-			if(not frame:IsElementEnabled("Resting")) then
-				frame:EnableElement("Resting");
-			end
-		elseif(frame:IsElementEnabled("Resting")) then
-			frame:DisableElement("Resting");
-			rIcon:Hide();
-		end
-	end
-	
-	do
-		local health = frame.Health;
-		health.Smooth = self.db.smoothbars;
-		
-		local x, y = self:GetPositionOffset(db.health.position);
-		health.value:ClearAllPoints();
-		health.value:Point(db.health.position, health, db.health.position, x + db.health.xOffset, y + db.health.yOffset);
-		frame:Tag(health.value, db.health.text_format);
-		
-		health.colorSmooth = nil;
-		health.colorHealth = nil;
-		health.colorClass = nil;
-		health.colorReaction = nil;
-		if(self.db["colors"].healthclass ~= true) then
-			if(self.db["colors"].colorhealthbyvalue == true) then
-				health.colorSmooth = true;
-			else
-				health.colorHealth = true;
-			end
-		else
-			health.colorClass = (not self.db["colors"].forcehealthreaction);
-			health.colorReaction = true;
-		end
-		
-		health:ClearAllPoints();
-		health:Point("TOPRIGHT", frame, "TOPRIGHT", -BORDER, -BORDER);
-		
-		if(POWERBAR_DETACHED) then
- 			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER, BORDER);
- 		elseif(USE_POWERBAR_OFFSET) then
- 			health:Point("TOPRIGHT", frame, "TOPRIGHT", -(BORDER+POWERBAR_OFFSET), -BORDER);
- 			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER, BORDER+POWERBAR_OFFSET);
-		elseif(USE_INSET_POWERBAR) then
-			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER, BORDER);
- 		elseif(USE_MINI_POWERBAR) then
- 			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER, BORDER + (POWERBAR_HEIGHT/2));
-		else
-			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER, (USE_POWERBAR and ((BORDER + SPACING)*2) or BORDER) + POWERBAR_HEIGHT);
-		end
-		
-		health.bg:ClearAllPoints();
-		if(not USE_PORTRAIT_OVERLAY) then
-			health:Point("TOPLEFT", PORTRAIT_WIDTH+BORDER, -BORDER);
-			health.bg:SetParent(health);
-			health.bg:SetAllPoints();
-		else
-			health.bg:Point("BOTTOMLEFT", health:GetStatusBarTexture(), "BOTTOMRIGHT");
-			health.bg:Point("TOPRIGHT", health);
-			health.bg:SetParent(frame.Portrait.overlay);
-		end
-		
-		if(USE_CLASSBAR and not db.classbar.detachFromFrame) then
-			local DEPTH;
-			if(USE_MINI_CLASSBAR) then
-				DEPTH = -(BORDER+(CLASSBAR_HEIGHT/2));
-			else
-				DEPTH = -(BORDER+CLASSBAR_HEIGHT+SPACING);
-			end
-			
-			if(USE_POWERBAR_OFFSET) then
-				health:Point("TOPRIGHT", frame, "TOPRIGHT", -(BORDER+POWERBAR_OFFSET), DEPTH);
-			else
-				health:Point("TOPRIGHT", frame, "TOPRIGHT", -BORDER, DEPTH);
-			end
-			
-			health:Point("TOPLEFT", frame, "TOPLEFT", PORTRAIT_WIDTH+BORDER, DEPTH);
-		end
-	end
+	UF:Configure_HealthBar(frame);
 	
 	UF:UpdateNameSettings(frame);
 	
-	do
-		local pvp = frame.PvPText;
-		local x, y = self:GetPositionOffset(db.pvp.position);
-		pvp:ClearAllPoints();
-		pvp:Point(db.pvp.position, frame.Health, db.pvp.position, x, y);
-		
-		frame:Tag(pvp, db.pvp.text_format);
+	UF:Configure_PVPIndicator(frame);
+	
+	UF:Configure_Power(frame);
+	
+	UF:Configure_Portrait(frame);
+	
+	UF:EnableDisable_Auras(frame);
+	UF:Configure_Auras(frame, "Buffs");
+	UF:Configure_Auras(frame, "Debuffs");
+	
+	UF:Configure_Castbar(frame);
+	
+	UF:Configure_ClassBar(frame);
+	
+	if(db.combatfade and not frame:IsElementEnabled("CombatFade")) then
+		frame:EnableElement("CombatFade");
+	elseif(not db.combatfade and frame:IsElementEnabled("CombatFade")) then
+		frame:DisableElement("CombatFade");
 	end
 	
-	do
-		local power = frame.Power;
-		if(USE_POWERBAR) then
-			if(not frame:IsElementEnabled("Power")) then
-				frame:EnableElement("Power");
-				power:Show();
-			end
-			
-			power.Smooth = self.db.smoothbars;
-			
-			power.value.frequentUpdates = true;
-			local x, y = self:GetPositionOffset(db.power.position);
-			power.value:ClearAllPoints();
-			power.value:Point(db.power.position, db.power.attachTextToPower and power or frame.Health, db.power.position, x + db.power.xOffset, y + db.power.yOffset);
-			frame:Tag(power.value, db.power.text_format);
-			
-			if(db.power.attachTextToPower) then
-				power.value:SetParent(power);
-			else
-				power.value:SetParent(frame.RaisedElementParent);
-			end
-			
-			power.colorClass = nil;
-			power.colorReaction = nil;
-			power.colorPower = nil;
-			if(self.db["colors"].powerclass) then
-				power.colorClass = true;
-				power.colorReaction = true;
-			else
-				power.colorPower = true;
-			end
-			
-			power:ClearAllPoints();
-			if(POWERBAR_DETACHED) then
-				power:Width(POWERBAR_WIDTH);
-				power:Height(POWERBAR_HEIGHT);
-				
-				if(not power.mover) then
-					power:ClearAllPoints();
-					power:Point("BOTTOM", frame, "BOTTOM", 0, -20);
-					E:CreateMover(power, "PlayerPowerBarMover", "Player Powerbar", nil, nil, nil, "ALL,SOLO");
-				else
-					power:ClearAllPoints();
-					power:SetPoint("BOTTOMLEFT", power.mover, "BOTTOMLEFT");
-					power.mover:SetScale(1);
-					power.mover:SetAlpha(1);
-				end
-				
-				power:SetFrameStrata("MEDIUM");
-				power:SetFrameLevel(frame:GetFrameLevel() + 3);
-			elseif(USE_POWERBAR_OFFSET) then
-				power:Point("TOPRIGHT", frame.Health, "TOPRIGHT", POWERBAR_OFFSET, -POWERBAR_OFFSET);
-				power:Point("BOTTOMLEFT", frame.Health, "BOTTOMLEFT", POWERBAR_OFFSET, -POWERBAR_OFFSET);
-				power:SetFrameStrata("LOW");
-				power:SetFrameLevel(2);
-			elseif(USE_INSET_POWERBAR) then
-				power:Height(POWERBAR_HEIGHT);
-				power:Point("BOTTOMLEFT", frame.Health, "BOTTOMLEFT", BORDER + (BORDER*2), BORDER + (BORDER*2));
-				power:Point("BOTTOMRIGHT", frame.Health, "BOTTOMRIGHT", -(BORDER + (BORDER*2)), BORDER + (BORDER*2));
-				power:SetFrameStrata("MEDIUM");
-				power:SetFrameLevel(frame:GetFrameLevel() + 3);
-			elseif(USE_MINI_POWERBAR) then
-				power:Width(POWERBAR_WIDTH - BORDER*2);
-				power:Height(POWERBAR_HEIGHT);
-				power:Point("RIGHT", frame, "BOTTOMRIGHT", -(BORDER*2 + 4), BORDER + (POWERBAR_HEIGHT/2));
-				power:SetFrameStrata("MEDIUM");
-				power:SetFrameLevel(frame:GetFrameLevel() + 3);
-			else
-				power:Point("TOPLEFT", frame.Health.backdrop, "BOTTOMLEFT", BORDER, -(SPACING*3));
-				power:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -BORDER, BORDER);
-			end
-			
-			if(db.power.strataAndLevel.useCustomStrata) then
-				power:SetFrameStrata(db.power.strataAndLevel.frameStrata);
-			end
-			
-			if(db.power.strataAndLevel.useCustomLevel) then
-				power:SetFrameLevel(db.power.strataAndLevel.frameLevel);
-			end
-		elseif(frame:IsElementEnabled("Power")) then
-			frame:DisableElement("Power");
-			power:Hide();
-		end
-		
-		if(frame.DruidAltMana) then
-			if(true) then
-				frame:EnableElement("DruidAltMana");
-			else
-				frame:DisableElement("DruidAltMana");
-				frame.DruidAltMana:Hide();
-			end
-		end
-	end
+	UF:Configure_DebuffHighlight(frame);
 	
-	do
-		local portrait = frame.Portrait;
-		if(USE_PORTRAIT) then
-			if(not frame:IsElementEnabled("Portrait")) then
-				frame:EnableElement("Portrait")
-			end
-			
-			portrait:ClearAllPoints();
-			if(USE_PORTRAIT_OVERLAY) then
-				if(db.portrait.style == "3D") then
-					portrait:SetFrameLevel(frame.Health:GetFrameLevel() + 1);
-				end
-				
-				portrait:SetAllPoints(frame.Health);
-				portrait:SetAlpha(0.3);
-				portrait:Show();
-				portrait.backdrop:Hide();
-				
-				if(portrait.mover) then
-					portrait.mover:SetScale(0.000001);
-					portrait.mover:SetAlpha(0);
-				end
-			else
-				portrait:SetAlpha(1);
-				portrait:Show();
-				portrait.backdrop:Show();
-				
-				if(PORTRAIT_DETACHED and db.portrait.style == "3D") then
-					portrait:Width(db.portrait.detachedWidth);
-					portrait:Height(db.portrait.detachedHeight);
-					portrait.backdrop:SetOutside();
-					
-					if(not portrait.mover) then
-						portrait:ClearAllPoints();
-						portrait:Point("BOTTOM", frame, "BOTTOM", 0, -20);
-						E:CreateMover(portrait, "PlayerPortraitMover", "Player Portrait", nil, nil, nil, "ALL,SOLO");
-					else
-						portrait:ClearAllPoints();
-						portrait:SetPoint("BOTTOMLEFT", portrait.mover, "BOTTOMLEFT");
-						portrait.mover:SetScale(1);
-						portrait.mover:SetAlpha(1);
-					end
-				else
-					if(db.portrait.style == "3D") then
-						portrait:SetFrameLevel(frame:GetFrameLevel() + 5);
-					end
-					
-					if(USE_MINI_CLASSBAR and USE_CLASSBAR and not db.classbar.detachFromFrame) then
-						portrait.backdrop:Point("TOPLEFT", frame, "TOPLEFT", 0, -((CLASSBAR_HEIGHT/2)));
-					else
-						portrait.backdrop:SetPoint("TOPLEFT", frame, "TOPLEFT");
-					end
-					
-					if(USE_MINI_POWERBAR or USE_POWERBAR_OFFSET or not USE_POWERBAR or USE_INSET_POWERBAR or POWERBAR_DETACHED) then
-						portrait.backdrop:Point("BOTTOMRIGHT", frame.Health.backdrop, "BOTTOMLEFT", BORDER - SPACING*2, 0);
-					else
-						portrait.backdrop:Point("BOTTOMRIGHT", frame.Power.backdrop, "BOTTOMLEFT", BORDER - SPACING*2, 0);
-					end
-					
-					portrait:Point("BOTTOMLEFT", portrait.backdrop, "BOTTOMLEFT", BORDER, BORDER);
-					portrait:Point("TOPRIGHT", portrait.backdrop, "TOPRIGHT", -BORDER, -BORDER);
-					
-					if(portrait.mover) then
-						portrait.mover:SetScale(0.000001);
-						portrait.mover:SetAlpha(0);
-					end
-				end
-			end
-		else
-			if(frame:IsElementEnabled("Portrait")) then
-				frame:DisableElement("Portrait");
-				portrait:Hide();
-				portrait.backdrop:Hide();
-				
-				if(portrait.mover) then
-					portrait.mover:SetScale(0.000001);
-					portrait.mover:SetAlpha(0);
-				end
-			end
-		end
-	end
+	UF:Configure_RaidIcon(frame);
 	
-	do
-		if(db.debuffs.enable or db.buffs.enable) then
-			if not frame:IsElementEnabled("Aura") then
-				frame:EnableElement("Aura");
-			end
-		else
-			if(frame:IsElementEnabled("Aura")) then
-				frame:DisableElement("Aura");
-			end
-		end
-		
-		frame.Buffs:ClearAllPoints();
-		frame.Debuffs:ClearAllPoints();
-	end
+	UF:Configure_HealComm(frame);
 	
-	do
-		local buffs = frame.Buffs;
-		local rows = db.buffs.numrows;
-		
-		if(USE_POWERBAR_OFFSET) then
-			buffs:SetWidth(UNIT_WIDTH - POWERBAR_OFFSET);
-		else
-			buffs:SetWidth(UNIT_WIDTH);
-		end
-		
-		buffs.forceShow = frame.forceShowAuras;
-		buffs.num = db.buffs.perrow * rows;
-		buffs.size = db.buffs.sizeOverride ~= 0 and db.buffs.sizeOverride or ((((buffs:GetWidth() - (buffs.spacing*(buffs.num/rows - 1))) / buffs.num)) * rows);
-		
-		if(db.buffs.sizeOverride and db.buffs.sizeOverride > 0) then
-			buffs:SetWidth(db.buffs.perrow * db.buffs.sizeOverride);
-		end
-		
-		local x, y = E:GetXYOffset(db.buffs.anchorPoint);
-		local attachTo = self:GetAuraAnchorFrame(frame, db.buffs.attachTo);
-		
-		buffs:Point(E.InversePoints[db.buffs.anchorPoint], attachTo, db.buffs.anchorPoint, x + db.buffs.xOffset, y + db.buffs.yOffset);
-		buffs:Height(buffs.size * rows);
-		buffs["growth-y"] = db.buffs.anchorPoint:find("TOP") and "UP" or "DOWN";
-		buffs["growth-x"] = db.buffs.anchorPoint == "LEFT" and "LEFT" or db.buffs.anchorPoint == "RIGHT" and "RIGHT" or (db.buffs.anchorPoint:find("LEFT") and "RIGHT" or "LEFT");
-		buffs["spacing-x"] = db.buffs.xSpacing;
-		buffs["spacing-y"] = db.buffs.ySpacing;
-		buffs.initialAnchor = E.InversePoints[db.buffs.anchorPoint];
-		
-		buffs.attachTo = attachTo;
-		buffs.point = E.InversePoints[db.buffs.anchorPoint];
-		buffs.anchorPoint = db.buffs.anchorPoint;
-		buffs.xOffset = x + db.buffs.xOffset;
-		buffs.yOffset = y + db.buffs.yOffset;
-		
-		if(db.buffs.enable) then
-			buffs:Show();
-			UF:UpdateAuraIconSettings(buffs);
-		else
-			buffs:Hide();
-		end
-	end
+	UF:Configure_AuraBars(frame);
 	
-	do
-		local debuffs = frame.Debuffs;
-		local rows = db.debuffs.numrows;
-		
-		if(USE_POWERBAR_OFFSET) then
-			debuffs:SetWidth(UNIT_WIDTH - POWERBAR_OFFSET);
-		else
-			debuffs:SetWidth(UNIT_WIDTH);
-		end
-		
-		debuffs.forceShow = frame.forceShowAuras;
-		debuffs.num = db.debuffs.perrow * rows;
-		debuffs.size = db.debuffs.sizeOverride ~= 0 and db.debuffs.sizeOverride or ((((debuffs:GetWidth() - (debuffs.spacing*(debuffs.num/rows - 1))) / debuffs.num)) * rows);
-		
-		if(db.debuffs.sizeOverride and db.debuffs.sizeOverride > 0) then
-			debuffs:SetWidth(db.debuffs.perrow * db.debuffs.sizeOverride);
-		end
-		
-		local x, y = E:GetXYOffset(db.debuffs.anchorPoint);
-		local attachTo = self:GetAuraAnchorFrame(frame, db.debuffs.attachTo, db.debuffs.attachTo == "BUFFS" and db.buffs.attachTo == "DEBUFFS");
-		
-		debuffs:Point(E.InversePoints[db.debuffs.anchorPoint], attachTo, db.debuffs.anchorPoint, x + db.debuffs.xOffset, y + db.debuffs.yOffset);
-		debuffs:Height(debuffs.size * rows);
-		debuffs["growth-y"] = db.debuffs.anchorPoint:find("TOP") and "UP" or "DOWN";
-		debuffs["growth-x"] = db.debuffs.anchorPoint == "LEFT" and "LEFT" or db.debuffs.anchorPoint == "RIGHT" and "RIGHT" or (db.debuffs.anchorPoint:find("LEFT") and "RIGHT" or "LEFT");
-		debuffs["spacing-x"] = db.debuffs.xSpacing;
-		debuffs["spacing-y"] = db.debuffs.ySpacing;
-		debuffs.initialAnchor = E.InversePoints[db.debuffs.anchorPoint];
-		
-		debuffs.attachTo = attachTo;
-		debuffs.point = E.InversePoints[db.debuffs.anchorPoint];
-		debuffs.anchorPoint = db.debuffs.anchorPoint;
-		debuffs.xOffset = x + db.debuffs.xOffset;
-		debuffs.yOffset = y + db.debuffs.yOffset;
-		
-		if(db.debuffs.enable) then
-			debuffs:Show();
-			UF:UpdateAuraIconSettings(debuffs);
-		else
-			debuffs:Hide();
-		end
-	end
-	
-	do
-		local position = db.smartAuraPosition;
-		if(position == "BUFFS_ON_DEBUFFS") then
-			if(db.debuffs.attachTo == "BUFFS") then
-				E:Print(format(L["This setting caused a conflicting anchor point, where '%s' would be attached to itself. Please check your anchor points. Setting '%s' to be attached to '%s'."], L["Buffs"], L["Debuffs"], L["Frame"]));
-				db.debuffs.attachTo = "FRAME";
-				frame.Debuffs.attachTo = frame;
-			end
-			
-			frame.Buffs.PostUpdate = nil;
-			frame.Debuffs.PostUpdate = UF.UpdateBuffsHeaderPosition;
-		elseif(position == "DEBUFFS_ON_BUFFS") then
-			if(db.buffs.attachTo == "DEBUFFS") then
-				E:Print(format(L["This setting caused a conflicting anchor point, where '%s' would be attached to itself. Please check your anchor points. Setting '%s' to be attached to '%s'."], L["Debuffs"], L["Buffs"], L["Frame"]));
-				db.buffs.attachTo = "FRAME";
-				frame.Buffs.attachTo = frame;
-			end
-			
-			frame.Buffs.PostUpdate = UF.UpdateDebuffsHeaderPosition;
-			frame.Debuffs.PostUpdate = nil;
-		else
-			frame.Buffs.PostUpdate = nil;
-			frame.Debuffs.PostUpdate = nil;
-		end
-	end
-	
-	do
-		local castbar = frame.Castbar;
-		castbar:Width(db.castbar.width - (BORDER*2));
-		castbar:Height(db.castbar.height - (BORDER*2));
-		castbar.Holder:Width(db.castbar.width);
-		castbar.Holder:Height(db.castbar.height);
-		castbar.Holder:GetScript("OnSizeChanged")(castbar.Holder);
-		
-		if(db.castbar.latency) then
-			castbar.SafeZone = castbar.LatencyTexture;
-			castbar.LatencyTexture:Show();
-		else
-			castbar.SafeZone = nil;
-			castbar.LatencyTexture:Hide();
-		end
-		
-		if(db.castbar.icon) then
-			castbar.Icon = castbar.ButtonIcon
-			castbar.Icon.bg:Width(db.castbar.height);
-			castbar.Icon.bg:Height(db.castbar.height);
-			
-			castbar:Width(db.castbar.width - castbar.Icon.bg:GetWidth() - (BORDER + SPACING*3));
-			castbar.Icon.bg:Show();
-		else
-			castbar.ButtonIcon.bg:Hide();
-			castbar.Icon = nil;
-		end
-		
-		if(db.castbar.spark) then
-			castbar.Spark:Show();
-		else
-			castbar.Spark:Hide();
-		end
-		
-		if(db.castbar.enable and not frame:IsElementEnabled("Castbar")) then
-			frame:EnableElement("Castbar");
-		elseif(not db.castbar.enable and frame:IsElementEnabled("Castbar")) then
-			frame:DisableElement("Castbar");
-		end
-	end
-	
-	do
-		local bars = frame[frame.ClassBar];
-		if(bars) then
-			if(bars.UpdateAllRuneTypes) then
-				bars.UpdateAllRuneTypes(frame);
-			end
-			
-			local MAX_CLASS_BAR = UF.classMaxResourceBar[E.myclass];
-			if(USE_MINI_CLASSBAR and not db.classbar.detachFromFrame) then
-				bars:ClearAllPoints();
-				if(E.myclass == "DRUID") then
-					CLASSBAR_WIDTH = CLASSBAR_WIDTH * 2/3
-				else
-					CLASSBAR_WIDTH = CLASSBAR_WIDTH * (MAX_CLASS_BAR - 1) / MAX_CLASS_BAR
-				end
-				
-				CLASSBAR_WIDTH = CLASSBAR_WIDTH * (MAX_CLASS_BAR - 1) / MAX_CLASS_BAR;
-				bars:Point("CENTER", frame.Health.backdrop, "TOP", -(BORDER*3 + 6), 0);
-				bars:SetFrameStrata("MEDIUM");
-				
-				if(bars.mover) then
-					bars.mover:SetScale(0.000001);
-					bars.mover:SetAlpha(0);
-				end
-			elseif(not db.classbar.detachFromFrame) then
-				bars:ClearAllPoints();
-				bars:Point("BOTTOMLEFT", frame.Health.backdrop, "TOPLEFT", BORDER, SPACING*3);
-				bars:SetFrameStrata("LOW");
-				
-				if(bars.mover) then
-					bars.mover:SetScale(0.000001);
-					bars.mover:SetAlpha(0);
-				end
-			else
-				CLASSBAR_WIDTH = db.classbar.detachedWidth;
-				
-				if(not bars.mover) then
-					bars:Width(CLASSBAR_WIDTH);
-					bars:Height(CLASSBAR_HEIGHT - (BORDER + SPACING*2));
-					bars:ClearAllPoints();
-					bars:Point("BOTTOM", E.UIParent, "BOTTOM", 0, 150);
-					E:CreateMover(bars, "ClassBarMover", L["Classbar"], nil, nil, nil, "ALL,SOLO");
-				else
-					bars:ClearAllPoints();
-					bars:SetPoint("BOTTOMLEFT", bars.mover, "BOTTOMLEFT");
-					bars.mover:SetScale(1);
-					bars.mover:SetAlpha(1);
-				end
-				
-				bars:SetFrameStrata("LOW");
-			end
-			
-			bars:Width(CLASSBAR_WIDTH);
-			bars:Height(CLASSBAR_HEIGHT - (BORDER + SPACING*2));
-			
-			if(E.myclass ~= "DRUID") then
-				for i = 1, MAX_CLASS_BAR do
-					bars[i]:SetHeight(bars:GetHeight());
-					bars[i]:SetWidth(E:Scale(bars:GetWidth() - (MAX_CLASS_BAR - 1))/MAX_CLASS_BAR);
-					bars[i]:GetStatusBarTexture():SetHorizTile(false);
-					bars[i]:ClearAllPoints();
-					
-					if(i == 1) then
-						bars[i]:SetPoint("LEFT", bars);
-					else
-						if(db.classbar.fill == "spaced") then
-							bars[i]:Point("LEFT", bars[i-1], "RIGHT", SPACING + (BORDER*2) + 2, 0);
-						else
-							bars[i]:Point("LEFT", bars[i-1], "RIGHT", 1, 0);
-						end
-					end
-					
-					if(db.classbar.fill ~= "spaced") then
-						bars[i].backdrop:Hide();
-					else
-						bars[i].backdrop:Show();
-					end
-					
-					if(E.myclass ~= "DEATHKNIGHT") then
-						bars[i]:SetStatusBarColor(unpack(ElvUF.colors[frame.ClassBar]));
-						
-						if bars[i].bg then
-							bars[i].bg:SetTexture(unpack(ElvUF.colors[frame.ClassBar]));
-						end
-					end
-				end
-			end
-			
-			if(E.myclass ~= "DRUID") then
-				if(db.classbar.fill ~= "spaced") then
-					bars.backdrop:Show();
-				else
-					bars.backdrop:Hide();
-				end
-			end
-			
-			if(USE_CLASSBAR and not frame:IsElementEnabled(frame.ClassBar)) then
-				frame:EnableElement(frame.ClassBar);
-				bars:Show();
-			elseif(not USE_CLASSBAR and frame:IsElementEnabled(frame.ClassBar)) then
-				frame:DisableElement(frame.ClassBar);
-				bars:Hide();
-			end
-		end
-	end
-	
-	do
-		if(db.combatfade and not frame:IsElementEnabled("CombatFade")) then
-			frame:EnableElement("CombatFade");
-		elseif(not db.combatfade and frame:IsElementEnabled("CombatFade")) then
-			frame:DisableElement("CombatFade");
-		end
-	end
-	
-	do
-		local dbh = frame.DebuffHighlight;
-		if(E.db.unitframe.debuffHighlighting ~= "NONE") then
-			frame:EnableElement("DebuffHighlight");
-			frame.DebuffHighlightFilterTable = E.global.unitframe.DebuffHighlightColors;
-			if(E.db.unitframe.debuffHighlighting == "GLOW") then
-				frame.DebuffHighlightBackdrop = true;
-				frame.DBHGlow:SetAllPoints(frame.Threat.glow);
-			else
-				frame.DebuffHighlightBackdrop = false;
-			end
-		else
-			frame:DisableElement("DebuffHighlight");
-		end
-	end
-	
-	do
-		local RI = frame.RaidIcon;
-		if(db.raidicon.enable) then
-			frame:EnableElement("RaidIcon");
-			RI:Show();
-			RI:Size(db.raidicon.size);
-			
-			local x, y = self:GetPositionOffset(db.raidicon.attachTo);
-			RI:ClearAllPoints();
-			RI:Point(db.raidicon.attachTo, frame, db.raidicon.attachTo, x + db.raidicon.xOffset, y + db.raidicon.yOffset);
-		else
-			frame:DisableElement("RaidIcon");
-			RI:Hide();
-		end
-	end
-	
-	do
-		local auraBars = frame.AuraBars;
-		if(db.aurabar.enable) then
-			if(not frame:IsElementEnabled("AuraBars")) then
-				frame:EnableElement("AuraBars");
-			end
-			
-			auraBars:Show();
-			auraBars.friendlyAuraType = db.aurabar.friendlyAuraType;
-			auraBars.enemyAuraType = db.aurabar.enemyAuraType;
-			auraBars.scaleTime = db.aurabar.uniformThreshold;
-			
-			local buffColor = UF.db.colors.auraBarBuff;
-			local debuffColor = UF.db.colors.auraBarDebuff;
-			local attachTo = frame;
-			
-			if(E:CheckClassColor(buffColor.r, buffColor.g, buffColor.b)) then
-				buffColor = E.myclass == 'PRIEST' and E.PriestColors or (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass]);
-			end
-			
-			if(E:CheckClassColor(debuffColor.r, debuffColor.g, debuffColor.b)) then
-				debuffColor = E.myclass == 'PRIEST' and E.PriestColors or (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass]);
-			end
-			
-			if(db.aurabar.attachTo == "BUFFS") then
-				attachTo = frame.Buffs
-			elseif(db.aurabar.attachTo == "DEBUFFS") then
-				attachTo = frame.Debuffs;
-			end
-			
-			local anchorPoint, anchorTo = "BOTTOM", "TOP";
-			if(db.aurabar.anchorPoint == "BELOW") then
-				anchorPoint, anchorTo = "TOP", "BOTTOM";
-			end
-			
-			if(db.aurabar.anchorPoint == "BELOW") then
-				yOffset = BORDER - SPACING*2;
-			else
-				yOffset = -BORDER + SPACING*2;
-			end
-			
-			auraBars.auraBarHeight = db.aurabar.height;
-			auraBars:ClearAllPoints();
-			auraBars:Point(anchorPoint .. "LEFT", attachTo, anchorTo .. "LEFT", (attachTo == frame and anchorTo == "BOTTOM") and POWERBAR_OFFSET or 0, yOffset);
-			auraBars:Point(anchorPoint .. "RIGHT", attachTo, anchorTo .. "RIGHT", attachTo == frame and POWERBAR_OFFSET * (anchorTo == "BOTTOM" and 0 or -1) or 0, yOffset);
-			auraBars.buffColor = {buffColor.r, buffColor.g, buffColor.b};
-			if(UF.db.colors.auraBarByType) then
-				auraBars.debuffColor = nil;
-				auraBars.defaultDebuffColor = {debuffColor.r, debuffColor.g, debuffColor.b};
-			else
-				auraBars.debuffColor = {debuffColor.r, debuffColor.g, debuffColor.b};
-				auraBars.defaultDebuffColor = nil;
-			end
-			auraBars.down = db.aurabar.anchorPoint == "BELOW";
-			
-			if(db.aurabar.sort == "TIME_REMAINING") then
-				auraBars.sort = true;
-			elseif(db.aurabar.sort == "TIME_REMAINING_REVERSE") then
-				auraBars.sort = UF.SortAuraBarReverse;
-			elseif(db.aurabar.sort == "TIME_DURATION") then
-				auraBars.sort = UF.SortAuraBarDuration;
-			elseif(db.aurabar.sort == "TIME_DURATION_REVERSE") then
-				auraBars.sort = UF.SortAuraBarDurationReverse;
-			elseif(db.aurabar.sort == "NAME") then
-				auraBars.sort = UF.SortAuraBarName;
-			else
-				auraBars.sort = nil;
-			end
-			
-			auraBars.maxBars = db.aurabar.maxBars
-			auraBars.forceShow = frame.forceShowAuras
-			auraBars:SetAnchors();
-		else
-			if(frame:IsElementEnabled("AuraBars")) then
-				frame:DisableElement("AuraBars");
-				auraBars:Hide();
-			end
-		end
-	end
-	
-	do
-		local healCommBar = frame.HealCommBar;
-		local c = UF.db.colors.healPrediction;
-		if(db.healPrediction) then
-			if(not frame:IsElementEnabled("HealComm4")) then
-				frame:EnableElement("HealComm4");
-			end
-			
-			if(not USE_PORTRAIT_OVERLAY) then
-				healCommBar.myBar:SetParent(frame.Health);
-				healCommBar.otherBar:SetParent(frame.Health);
-			else
-				healCommBar.myBar:SetParent(frame.Portrait.overlay);
-				healCommBar.otherBar:SetParent(frame.Portrait.overlay);
-			end
-			
-			healCommBar.myBar:SetStatusBarColor(c.personal.r, c.personal.g, c.personal.b, c.personal.a);
-			healCommBar.otherBar:SetStatusBarColor(c.others.r, c.others.g, c.others.b, c.others.a);
-		else
-			if(frame:IsElementEnabled("HealComm4")) then
-				frame:DisableElement("HealComm4");
-			end
-		end
-	end
-	
-	for objectName, object in pairs(frame.customTexts) do
-		if((not db.customTexts) or (db.customTexts and not db.customTexts[objectName])) then
-			object:Hide();
-			frame.customTexts[objectName] = nil;
-		end
-	end
-	
-	if(db.customTexts) then
-		local customFont = UF.LSM:Fetch("font", UF.db.font);
-		for objectName, _ in pairs(db.customTexts) do
-			if(not frame.customTexts[objectName]) then
-				frame.customTexts[objectName] = frame.RaisedElementParent:CreateFontString(nil, "OVERLAY");
-			end
-			
-			local objectDB = db.customTexts[objectName];
-			if(objectDB.font) then
-				customFont = UF.LSM:Fetch("font", objectDB.font);
-			end
-			
-			frame.customTexts[objectName]:FontTemplate(customFont, objectDB.size or UF.db.fontSize, objectDB.fontOutline or UF.db.fontOutline);
-			frame:Tag(frame.customTexts[objectName], objectDB.text_format or "");
-			frame.customTexts[objectName]:SetJustifyH(objectDB.justifyH or "CENTER");
-			frame.customTexts[objectName]:ClearAllPoints();
-			frame.customTexts[objectName]:SetPoint(objectDB.justifyH or "CENTER", frame, objectDB.justifyH or "CENTER", objectDB.xOffset, objectDB.yOffset);
-		end
-	end
+	UF:Configure_CustomTexts(frame);
 	
 	if(UF.db.colors.transparentHealth) then
 		UF:ToggleTransparentStatusBar(true, frame.Health, frame.Health.bg);
 	else
-		UF:ToggleTransparentStatusBar(false, frame.Health, frame.Health.bg, (USE_PORTRAIT and USE_PORTRAIT_OVERLAY) ~= true);
+		UF:ToggleTransparentStatusBar(false, frame.Health, frame.Health.bg, (frame.USE_PORTRAIT and frame.USE_PORTRAIT_OVERLAY) ~= true);
 	end
 	
 	UF:ToggleTransparentStatusBar(UF.db.colors.transparentPower, frame.Power, frame.Power.bg);
 	
-	E:SetMoverSnapOffset(frame:GetName().."Mover", -(12 + db.castbar.height));
-	
+	E:SetMoverSnapOffset(frame:GetName() .. "Mover", -(12 + db.castbar.height));
 	frame:UpdateAllElements();
 end
 
