@@ -32,12 +32,10 @@ function TOTEMS:ToggleEnable()
 		self:RegisterEvent('PLAYER_TOTEM_UPDATE', 'Update')
 		self:RegisterEvent('PLAYER_ENTERING_WORLD', 'Update')
 		self:Update()
-		E:EnableMover("TotemBarMover");
 	else
 		self.bar:Hide()
 		self:UnregisterEvent('PLAYER_TOTEM_UPDATE')
 		self:UnregisterEvent('PLAYER_ENTERING_WORLD')
-		E:DisableMover("TotemBarMover");
 	end
 end
 
@@ -114,10 +112,10 @@ function TOTEMS:Initialize()
 		self.bar[i] = frame;
 	end
 	
+	self:ToggleEnable()
 	self:PositionAndSize()
 
 	E:CreateMover(bar, 'TotemBarMover', L['Totems']);
-	self:ToggleEnable();
 end
 
 E:RegisterModule(TOTEMS:GetName())

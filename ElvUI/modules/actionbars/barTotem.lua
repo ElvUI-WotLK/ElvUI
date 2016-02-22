@@ -192,36 +192,6 @@ function AB:AdjustTotemSettings()
 	end
 end
 
-function AB:PositionAndSizeBarTotem()
-	local spacing = E:Scale(self.db["barTotem"].buttonspacing);
-	local size = E:Scale(self.db["barTotem"].buttonsize);
-	
-	MultiCastSummonSpellButton:ClearAllPoints();
-	MultiCastSummonSpellButton:SetSize(size, size);
-	MultiCastSummonSpellButton:Point("BOTTOMLEFT", 7 + spacing, 3);
-	
-	for i = 1, 4 do
-		local button = _G["MultiCastSlotButton" .. i];
-		local lastButton = _G["MultiCastSlotButton"..i-1];
-		button:ClearAllPoints();
-		button:SetSize(size, size);
-		
-		if(i == 1) then
-			button:Point("BOTTOMLEFT", 36 + spacing, 3);
-		else
-			button:Point("LEFT", lastButton, "RIGHT", spacing, 0);
-		end
-	end
-	
-	--MultiCastRecallSpellButton:ClearAllPoints();
-	MultiCastRecallSpellButton:SetSize(size, size);
-	--MultiCastRecallSpellButton:SetPoint("LEFT", MultiCastActionButton4, "RIGHT", 66, 44);
-	
-	MultiCastFlyoutFrameCloseButton:Width(size);
-	
-	MultiCastFlyoutFrameOpenButton:Width(size);
-end
-
 function AB:CreateTotemBar()
 	bar:Point('BOTTOM', E.UIParent, 'BOTTOM', 0, 250);
 	
@@ -241,8 +211,8 @@ function AB:CreateTotemBar()
 	
 	local closeButton = MultiCastFlyoutFrameCloseButton;
 	closeButton:CreateBackdrop("Default", true, true);
-	closeButton.backdrop:SetPoint("TOPLEFT", 0, -(E.PixelMode and 1 or 3));
-	closeButton.backdrop:SetPoint("BOTTOMRIGHT", 0, E.PixelMode and 1 or 3);
+	closeButton.backdrop:SetPoint("TOPLEFT", -1, -(E.PixelMode and 1 or 3));
+	closeButton.backdrop:SetPoint("BOTTOMRIGHT", 1, E.PixelMode and 1 or 3);
 	
 	closeButton.normalTexture:SetTexture("");
 	
@@ -252,17 +222,14 @@ function AB:CreateTotemBar()
 	
 	local openButton = MultiCastFlyoutFrameOpenButton;
 	openButton:CreateBackdrop("Default", true, true);
-	openButton.backdrop:SetPoint("TOPLEFT", 0, -(E.PixelMode and 1 or 3));
-	openButton.backdrop:SetPoint("BOTTOMRIGHT", 0, E.PixelMode and 1 or 3);
+	openButton.backdrop:SetPoint("TOPLEFT", -1, -(E.PixelMode and 1 or 3));
+	openButton.backdrop:SetPoint("BOTTOMRIGHT", 1, E.PixelMode and 1 or 3);
 	
 	openButton.normalTexture:SetTexture("");
 	
 	openButton:StyleButton();
 	openButton.hover:SetInside(openButton.backdrop);
 	openButton.pushed:SetInside(openButton.backdrop);
-	
-	
-	AB:PositionAndSizeBarTotem();
 	
 	self:SecureHook('MultiCastFlyoutFrameOpenButton_Show');
 	self:SecureHook('MultiCastActionButton_Update');

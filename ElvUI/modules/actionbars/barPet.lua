@@ -98,11 +98,9 @@ function AB:PositionAndSizeBarPet()
 	if self.db['barPet'].enabled then
 		bar:SetScale(1);
 		bar:SetAlpha(self.db['barPet'].alpha);
-		E:EnableMover(bar.mover:GetName());
 	else
 		bar:SetScale(0.000001);
 		bar:SetAlpha(0);
-		E:DisableMover(bar.mover:GetName());
 	end
 	
 	if self.db['barPet'].backdrop == true then

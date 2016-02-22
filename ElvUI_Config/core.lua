@@ -217,12 +217,6 @@ E.Options.args.general = {
 					get = function(info) return E.global.general.worldMapCoordinates; end,
 					set = function(info, value) E.global.general.worldMapCoordinates = value; E:StaticPopup_Show("GLOBAL_RL"); end
 				},
-				enhancedPvpMessages = {
-					order = 19,
-					type = "toggle",
-					name = L["Enhanced PVP Messages"],
-					desc = L["Display battleground messages in the middle of the screen."]
-				},
 				chatBubbles = {
 					order = 30,
 					type = "group",
@@ -787,25 +781,8 @@ E.Options.args.general = {
 				},
 			},
 		},
-		watchFrame = {
-			order = 11,
-			type = "group",
-			name = L["Watch Frame"],
-			get = function(info) return E.db.general[ info[#info] ]; end,
-			set = function(info, value) E.db.general[ info[#info] ] = value; end,
-			args = {
-				watchFrameHeight = {
-					order = 1,
-					type = "range",
-					name = L["Watch Frame Height"],
-					desc = L["Height of the watch tracker. Increase size to be able to see more objectives."],
-					min = 400, max = E.screenheight, step = 1,
-					set = function(info, value) E.db.general.watchFrameHeight = value; E:GetModule('Blizzard'):WatchFrameHeight(); end
-				}
-			}
-		}
-	}
-};
+	},
+}
 
 E.Options.args.media = {
 	order = 2,
@@ -898,15 +875,7 @@ E.Options.args.media = {
 					values = AceGUIWidgetLSMlists.font,
 					get = function(info) return E.private.general[ info[#info] ] end,							
 					set = function(info, value) E.private.general[ info[#info] ] = value; E:UpdateMedia(); E:UpdateFontTemplates(); E:StaticPopup_Show("PRIVATE_RL"); end,
-				},
-				replaceBlizzFonts = {
-					order = 6,
-					type = "toggle",
-					name = L["Replace Blizzard Fonts"],
-					desc = L["Replaces the default Blizzard fonts on various panels and frames with the fonts chosen in the Media section of the ElvUI config. NOTE: Any font that inherits from the fonts ElvUI usually replaces will be affected as well if you disable this. Enabled by default."],
-					get = function(info) return E.private.general[ info[#info] ]; end,
-					set = function(info, value) E.private.general[ info[#info] ] = value; E:StaticPopup_Show("PRIVATE_RL"); end
-				},
+				}
 			},
 		},	
 		textures = {

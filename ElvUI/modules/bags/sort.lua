@@ -547,7 +547,6 @@ function B.Sort(bags, sorter, invertDirection)
 	
 	local ignoreItems = B.db.ignoreItems
 	ignoreItems = ignoreItems:gsub(',%s', ',') --remove spaces that follow a comma
-	ignoreItems = ignoreItems:gsub("\n", "");
 	buildBlacklist(split(",", ignoreItems))
 	
 	for i, bag, slot in B.IterateBags(bags, nil, 'both') do

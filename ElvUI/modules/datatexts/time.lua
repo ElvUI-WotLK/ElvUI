@@ -21,8 +21,8 @@ local Update, lastPanel; -- UpValue
 local name, instanceID, reset, difficultyId, locked, extended, isRaid, maxPlayers, difficulty;
 
 local function ValueColorUpdate(hex, r, g, b)
-	europeDisplayFormat = join("", "%02d", hex, ":|r%02d ", format("%s", date(hex .. "%d.%m.%y|r")));
-	ukDisplayFormat = join("", "", "%d", hex, ":|r%02d", hex, " %s|r ", format("%s", date(hex .. "%d.%m.%y|r")));
+	europeDisplayFormat = join("", "%02d", hex, ":|r%02d ", format("%s", date(hex.."%x|r")));
+	ukDisplayFormat = join("", "", "%d", hex, ":|r%02d", hex, " %s|r ", format("%s", date(hex.."%x|r")));
 	
 	if(lastPanel ~= nil) then
 		Update(lastPanel, 20000);

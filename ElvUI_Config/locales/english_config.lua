@@ -366,7 +366,6 @@ L["Smaller World Map"] = true;
 L["The font that appears on the text above players heads. |cffFF0000WARNING: This requires a game restart or re-log for this change to take effect.|r"] = true;
 L['Toggle Tutorials'] = true;
 L['Top Panel'] = true;
-L["Watch Frame Height"] = true;
 L["When you go AFK display the AFK screen."] = true;
 L["World Map Coordinates"] = true;
 

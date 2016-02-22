@@ -66,9 +66,9 @@ E.InversePoints = {
 E.noop = function() end;
 
 local colorizedName;
-local length = len(E.UIName)
+local length = len("ElvUI")
 for i = 1, length do
-	local letter = sub(E.UIName, i, i);
+	local letter = sub("ElvUI", i, i);
 	if(i == 1) then
 		colorizedName = format("|cffA11313%s", letter);
 	elseif(i == 2) then
@@ -136,10 +136,6 @@ function E:UpdateMedia()
 		border = {r = 0, g = 0, b = 0};
 	end
 	
-	if(self.global.tukuiMode) then
-		border = {r=0.6, g = 0.6, b = 0.6};
-	end
-	
 	self["media"].bordercolor = {border.r, border.g, border.b};
 	self["media"].backdropcolor = E:GetColorTable(self.db["general"].backdropcolor);
 	self["media"].backdropfadecolor = E:GetColorTable(self.db["general"].backdropfadecolor);
@@ -150,10 +146,6 @@ function E:UpdateMedia()
 		self.db["general"].valuecolor.r = value.r;
 		self.db["general"].valuecolor.g = value.g;
 		self.db["general"].valuecolor.b = value.b;
-	end
-	
-	if(self.global.tukuiMode) then
-		value = {r = 1, g = 1, b = 1};
 	end
 	
 	self["media"].hexvaluecolor = self:RGBToHex(value.r, value.g, value.b);
@@ -575,7 +567,7 @@ local function SendRecieve(self, event, prefix, message, channel, sender)
 		if(sender == myName) then return; end
 		if(prefix == "ELVUI_VERSIONCHK" and not E.recievedOutOfDateMessage) then
 			if(tonumber(message) ~= nil and tonumber(message) > tonumber(E.version)) then
-				E:Print(L["ElvUI is out of date. You can download the newest version from www.tukui.org. Get premium membership and have ElvUI automatically updated with the Tukui Client!"]:gsub("ElvUI", E.UIName));
+				E:Print(L["ElvUI is out of date. You can download the newest version from www.tukui.org. Get premium membership and have ElvUI automatically updated with the Tukui Client!"]);
 				
 				if((tonumber(message) - tonumber(E.version)) >= 0.05) then
 					E:StaticPopup_Show("ELVUI_UPDATE_AVAILABLE");
@@ -920,10 +912,6 @@ function E:Initialize()
 		self:HelloKittyFix();
 	end
 	
-	if(self.global.tukuiMode) then
-		self.UIName = "Tukui";
-	end
-	
 	self:UpdateMedia();
 	self:UpdateFrameTemplates();
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", "CheckRole");
@@ -932,31 +920,20 @@ function E:Initialize()
 	self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", "CheckRole");
 	self:RegisterEvent("CHARACTER_POINTS_CHANGED", "CheckRole");
 	self:RegisterEvent("UNIT_INVENTORY_CHANGED", "CheckRole");
-	self:RegisterEvent("UPDATE_FLOATING_CHAT_WINDOWS", "UIScale");
-	self:RegisterEvent("PLAYER_ENTERING_WORLD");
+	self:RegisterEvent('UPDATE_FLOATING_CHAT_WINDOWS', 'UIScale');
+	self:RegisterEvent('PLAYER_ENTERING_WORLD');
 	
 	if(self.db.general.kittys) then
 		self:CreateKittys();
 		self:Delay(5, self.Print, self, L["Type /hellokitty to revert to old settings."]);
 	end
 	
-	self:Tutorials();
-	self:GetModule("Minimap"):UpdateSettings();
+	self:Tutorials()
+	self:GetModule('Minimap'):UpdateSettings()
 	self:RefreshModulesDB()
 	collectgarbage("collect");
 	
-	if(self:IsFoolsDay() and not E.global.aprilFools and not self.global.tukuiMode) then
-		self:StaticPopup_Show("TUKUI_MODE");
-	end
-	
 	if(self.db.general.loginmessage) then
-		print(select(2, E:GetModule("Chat"):FindURL("CHAT_MSG_DUMMY", format(L["LOGIN_MSG"]:gsub("ElvUI", E.UIName), self["media"].hexvaluecolor, self["media"].hexvaluecolor, self.version)))..".");
-	end
-	
-	if(self.global.tukuiMode) then
-		if(self:IsFoolsDay()) then
-			self:ShowTukuiFrame();
-		end
-		self:Print("Thank you for being a good sport, type /aprilfools to revert the changes.");
+		print(select(2, E:GetModule("Chat"):FindURL("CHAT_MSG_DUMMY", format(L["LOGIN_MSG"], self["media"].hexvaluecolor, self["media"].hexvaluecolor, self.version)))..".");
 	end
 end

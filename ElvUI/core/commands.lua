@@ -140,21 +140,6 @@ function E:GetCPUImpact()
 	end
 end
 
-function E:ToggleTukuiMode()
-	if(E.global.tukuiMode) then
-		E.global.tukuiMode = nil;
-	else
-		E.global.tukuiMode = true;
-	end
-	ReloadUI();
-end
-
-function E:DisableTukuiMode()
-	E.global.tukuiMode = nil;
-	E.global.aprilFools = true;
-	ReloadUI();
-end
-
 function E:LoadCommands()
 	self:RegisterChatCommand("in", "DelayScriptCall");
 	self:RegisterChatCommand("ec", "ToggleConfig");
@@ -172,8 +157,6 @@ function E:LoadCommands()
 	self:RegisterChatCommand("enable", "EnableAddon");
 	self:RegisterChatCommand("disable", "DisableAddon");
 	self:RegisterChatCommand("farmmode", "FarmMode");
-	self:RegisterChatCommand("aprilfools", "DisableTukuiMode");
-	self:RegisterChatCommand("tukuimode", "ToggleTukuiMode");
 	
 	if(E:GetModule("ActionBars")) then
 		self:RegisterChatCommand("kb", E:GetModule("ActionBars").ActivateBindMode);
