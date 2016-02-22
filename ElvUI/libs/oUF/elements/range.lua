@@ -56,6 +56,7 @@ local function UpdateSpellList()
 		AddSpell(friendlySpells, 5697) -- Бесконечное дыхание
 	elseif class == "MAGE" then
 		AddSpell(enemySpells, 12826) -- Превращение
+		AddSpell(longEnemySpells, 133) -- Огненный шар
 		AddSpell(longEnemySpells, 47610) -- Стрела ледяного огня
 		AddSpell(friendlySpells, 475) -- Снятие проклятия
 	elseif class == "HUNTER" then
