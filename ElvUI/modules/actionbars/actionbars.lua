@@ -21,37 +21,37 @@ AB["handledbuttons"] = {};
 AB["barDefaults"] = {
 	["bar1"] = {
 		["page"] = 1,
-		["name"] = "Action",
 		["conditions"] = "[bonusbar:5] 11; [bar:2] 2; [bar:3] 3; [bar:4] 4; [bar:5] 5; [bar:6] 6;",
 		["position"] = "BOTTOM,ElvUIParent,BOTTOM,0,4"
 	},
 	["bar2"] = {
 		["page"] = 5,
-		["name"] = "MultiBarBottomRight",
 		["conditions"] = "",
 		["position"] = "BOTTOM,ElvUI_Bar1,TOP,0,2"
 	},
 	["bar3"] = {
 		["page"] = 6,
-		["name"] = "MultiBarBottomLeft",
 		["conditions"] = "",
 		["position"] = "LEFT,ElvUI_Bar1,RIGHT,4,0"
 	},
 	["bar4"] = {
 		["page"] = 4,
-		["name"] = "MultiBarLeft",
 		["conditions"] = "",
 		["position"] = "RIGHT,ElvUIParent,RIGHT,-4,0"
 	},
 	["bar5"] = {
 		["page"] = 3,
-		["name"] = "MultiBarRight",
 		["conditions"] = "",
 		["position"] = "RIGHT,ElvUI_Bar1,LEFT,-4,0"
 	}
 };
 
 function AB:CreateActionBars()
+	self:CreateBar1()
+	self:CreateBar2()
+	self:CreateBar3()
+	self:CreateBar4()
+	self:CreateBar5()
 	self:CreateBarPet()
 	self:CreateBarShapeShift()
 	
@@ -128,9 +128,7 @@ function AB:PositionAndSizeBar(barName)
 		button = bar.buttons[i];
 		lastButton = bar.buttons[i-1];
 		lastColumnButton = bar.buttons[i-buttonsPerRow];
-		if(barName == "bar1") then
-			button:SetParent(bar);
-		end
+		button:SetParent(bar);
 		button:ClearAllPoints();
 		button:Size(size);
 		button:SetAttribute("showgrid", 1);
@@ -191,10 +189,6 @@ function AB:PositionAndSizeBar(barName)
 		RegisterStateDriver(bar, "visibility", self.db[barName].visibility);
 		RegisterStateDriver(bar, "page", page);
 		
-		if(barName ~= "bar1") then
-		--	bar:SetAttribute("actionpage", self["barDefaults"][barName].page);
-		end
-		
 		if(not bar.initialized) then
 			bar.initialized = true;
 			AB:PositionAndSizeBar(barName);
@@ -207,37 +201,7 @@ function AB:PositionAndSizeBar(barName)
 		UnregisterStateDriver(bar, "visibility");
 	end
 	
-	if(barName ~= "bar1") then
-		_G[bar.name]:SetParent(bar);
-	end
-	
-	E:SetMoverSnapOffset("ElvAB_"..bar.id, bar.db.buttonspacing / 2);
-end
-
-function AB:CreateBar(id)
-	local bar = CreateFrame("Frame", "ElvUI_Bar" .. id, E.UIParent, "SecureHandlerStateTemplate");
-	local point, anchor, attachTo, x, y = split(",", self["barDefaults"]["bar" .. id].position);
-	bar:Point(point, anchor, attachTo, x, y);
-	bar.id = id;
-	bar:CreateBackdrop("Default");
-	bar:SetFrameStrata("LOW");
-	bar.backdrop:SetAllPoints();
-	bar.buttons = {};
-	bar.name = self["barDefaults"]["bar" .. id].name;
-	self:HookScript(bar, "OnEnter", "Bar_OnEnter");
-	self:HookScript(bar, "OnLeave", "Bar_OnLeave");
-	
-	for i = 1, 12 do
-		bar.buttons[i] = _G[bar.name .. "Button" .. i];
-		bar.buttons[i]:SetID(i);
-		
-		bar:SetFrameRef(bar.name .. "Button" .. i, bar.buttons[i]);
-	end
-	
-	self["handledBars"]["bar" .. id] = bar;
-	E:CreateMover(bar, "ElvAB_" .. id, L["Bar "] .. id, nil, nil, nil, "ALL,ACTIONBARS");
-	self:PositionAndSizeBar("bar" .. id);
-	return bar;
+	E:SetMoverSnapOffset("ElvAB_" .. bar.id, bar.db.buttonspacing / 2);
 end
 
 function AB:CreateVehicleLeave()
@@ -522,10 +486,6 @@ function AB:Initialize()
 	self:DisableBlizzard()
 	
 	self:SetupMicroBar()
-	
-	for i = 1, 5 do
-		self:CreateBar(i);
-	end
 	
 	self:CreateActionBars()
 	self:CreateVehicleLeave()
