@@ -24,6 +24,8 @@ function UF:Construct_RaidpetFrames(unitGroup)
 	
 	self.Health = UF:Construct_HealthBar(self, true, true, "RIGHT");
 	self.Name = UF:Construct_NameText(self);
+	self.Portrait3D = UF:Construct_Portrait(self, "model");
+	self.Portrait2D = UF:Construct_Portrait(self, "texture");
 	self.Buffs = UF:Construct_Buffs(self);
 	self.Debuffs = UF:Construct_Debuffs(self);
 	self.AuraWatch = UF:Construct_AuraWatch(self);
@@ -33,17 +35,17 @@ function UF:Construct_RaidpetFrames(unitGroup)
 	tinsert(self.__elements, UF.UpdateTargetGlow);
 	self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetGlow);
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", UF.UpdateTargetGlow);
-	
 	self.Threat = UF:Construct_Threat(self);
 	self.RaidIcon = UF:Construct_RaidIcon(self);
-	self.Range = UF:Construct_Range(self);
 	self.HealCommBar = UF:Construct_HealComm(self);
-	
+	self.Range = UF:Construct_Range(self);
 	self.customTexts = {};
+	
+	
 	UF:Update_RaidpetFrames(self, UF.db["units"]["raidpet"]);
 	UF:Update_StatusBars();
 	UF:Update_FontStrings();
-	
+	self.unitframeType = "raidpet";
 	return self;
 end
 
@@ -75,10 +77,10 @@ function UF:Update_RaidpetHeader(header, db)
 		headerHolder:ClearAllPoints();
 		headerHolder:Point("BOTTOMLEFT", E.UIParent, "BOTTOMLEFT", 4, 574);
 		
-		E:CreateMover(headerHolder, headerHolder:GetName().."Mover", L["Raid Pet Frames"], nil, nil, nil, "ALL,RAID10,RAID25,RAID40");
+		E:CreateMover(headerHolder, headerHolder:GetName() .. "Mover", L["Raid Pet Frames"], nil, nil, nil, "ALL,RAID10,RAID25,RAID40");
 		headerHolder.positioned = true;
 
-		headerHolder:RegisterEvent("PLAYER_ENTERING_WORLD");
+		headerHolder:RegisterEvent("PLAYER_LOGIN");
 		headerHolder:RegisterEvent("ZONE_CHANGED_NEW_AREA");
 		headerHolder:SetScript("OnEvent", UF["RaidPetsSmartVisibility"]);
 	end
@@ -88,319 +90,83 @@ end
 
 function UF:Update_RaidpetFrames(frame, db)
 	frame.db = db;
-	local BORDER = E.Border;
-	local SPACING = E.Spacing;
-	local SHADOW_SPACING = SPACING+3;
-	local UNIT_WIDTH = db.width;
-	local UNIT_HEIGHT = db.height;
 	
+	frame.Portrait = db.portrait.style == "2D" and frame.Portrait2D or frame.Portrait3D;
 	frame.colors = ElvUF.colors;
 	frame:RegisterForClicks(self.db.targetOnMouseDown and "AnyDown" or "AnyUp");
-	
-	frame:SetAttribute("initial-height", UNIT_HEIGHT);
-	frame:SetAttribute("initial-width", UNIT_WIDTH);
-	frame.Range = {insideAlpha = 1, outsideAlpha = E.db.unitframe.OORAlpha};
-	if(not frame:IsElementEnabled("Range")) then
-		frame:EnableElement("Range");
-	end
-	
+
 	do
-		local health = frame.Health;
-		health.Smooth = self.db.smoothbars;
-		health.frequentUpdates = db.health.frequentUpdates;
-		
-		local x, y = self:GetPositionOffset(db.health.position);
-		health.value:ClearAllPoints();
-		health.value:Point(db.health.position, health, db.health.position, x + db.health.xOffset, y + db.health.yOffset);
-		frame:Tag(health.value, db.health.text_format);
-		
-		health.colorSmooth = nil;
-		health.colorHealth = nil;
-		health.colorClass = nil;
-		health.colorReaction = nil;
-		
-		if(db.colorOverride == "FORCE_ON") then
-			health.colorClass = true;
-			health.colorReaction = true;
-		elseif(db.colorOverride == "FORCE_OFF") then
-			if(self.db["colors"].colorhealthbyvalue == true) then
-				health.colorSmooth = true;
-			else
-				health.colorHealth = true;
-			end
+		if(self.thinBorders) then
+			frame.SPACING = 0;
+			frame.BORDER = E.mult;
 		else
-			if(self.db["colors"].healthclass ~= true) then
-				if(self.db["colors"].colorhealthbyvalue == true) then
-					health.colorSmooth = true;
-				else
-					health.colorHealth = true;
-				end
-			else
-				health.colorClass = (not self.db["colors"].forcehealthreaction);
-				health.colorReaction = true;
-			end
+			frame.BORDER = E.Border;
+			frame.SPACING = E.Spacing;
 		end
 		
-		health:ClearAllPoints();
-		health:Point("TOPRIGHT", frame, "TOPRIGHT", -BORDER, -BORDER);
-		health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", BORDER, BORDER);
+		frame.SHADOW_SPACING = 3;
 		
-		health:SetOrientation(db.health.orientation);
+		frame.ORIENTATION = db.orientation;
+		
+		frame.UNIT_WIDTH = db.width;
+		frame.UNIT_HEIGHT = db.height;
+		
+		frame.USE_POWERBAR = false;
+		frame.POWERBAR_DETACHED = false;
+		frame.USE_INSET_POWERBAR = false;
+		frame.USE_MINI_POWERBAR = false;
+		frame.USE_POWERBAR_OFFSET = false;
+		frame.POWERBAR_OFFSET = 0;
+		frame.POWERBAR_HEIGHT = 0;
+		frame.POWERBAR_WIDTH = 0;
+		
+		frame.USE_PORTRAIT = db.portrait and db.portrait.enable;
+		frame.USE_PORTRAIT_OVERLAY = frame.USE_PORTRAIT and (db.portrait.overlay or frame.ORIENTATION == "MIDDLE");
+		frame.PORTRAIT_WIDTH = (frame.USE_PORTRAIT_OVERLAY or not frame.USE_PORTRAIT) and 0 or db.portrait.width;
+		
+		frame.CLASSBAR_WIDTH = 0;
+		frame.CLASSBAR_YOFFSET = 0;
+		frame.BOTTOM_OFFSET = 0;
 	end
+	
+	if(not InCombatLockdown()) then
+		frame:Size(frame.UNIT_WIDTH, frame.UNIT_HEIGHT);
+	else
+		frame:SetAttribute("initial-height", frame.UNIT_WIDTH);
+		frame:SetAttribute("initial-width", frame.UNIT_HEIGHT);
+	end
+	
+	UF:Configure_HealthBar(frame);
 	
 	UF:UpdateNameSettings(frame);
 	
-	do
-		local threat = frame.Threat;
-		if(db.threatStyle ~= "NONE" and db.threatStyle ~= nil) then
-			if(not frame:IsElementEnabled("Threat")) then
-				frame:EnableElement("Threat");
-			end
-
-			if(db.threatStyle == "GLOW") then
-				threat:SetFrameStrata("BACKGROUND");
-				threat.glow:ClearAllPoints();
-				threat.glow:SetBackdropBorderColor(0, 0, 0, 0);
-				threat.glow:Point("TOPLEFT", frame.Health.backdrop, "TOPLEFT", -SHADOW_SPACING, SHADOW_SPACING);
-				threat.glow:Point("TOPRIGHT", frame.Health.backdrop, "TOPRIGHT", SHADOW_SPACING, SHADOW_SPACING);
-				threat.glow:Point("BOTTOMLEFT", frame.Health.backdrop, "BOTTOMLEFT", -SHADOW_SPACING, -SHADOW_SPACING);
-				threat.glow:Point("BOTTOMRIGHT", frame.Health.backdrop, "BOTTOMRIGHT", SHADOW_SPACING, -SHADOW_SPACING);
-			elseif(db.threatStyle == "ICONTOPLEFT" or db.threatStyle == "ICONTOPRIGHT" or db.threatStyle == "ICONBOTTOMLEFT" or db.threatStyle == "ICONBOTTOMRIGHT" or db.threatStyle == "ICONTOP" or db.threatStyle == "ICONBOTTOM" or db.threatStyle == "ICONLEFT" or db.threatStyle == "ICONRIGHT") then
-				threat:SetFrameStrata("HIGH");
-				local point = db.threatStyle;
-				point = point:gsub("ICON", "");
-				
-				threat.texIcon:ClearAllPoints();
-				threat.texIcon:SetPoint(point, frame.Health, point);
-			end
-		elseif(frame:IsElementEnabled("Threat")) then
-			frame:DisableElement("Threat");
-		end
-	end
+	UF:Configure_Portrait(frame);
 	
-	do
-		local tGlow = frame.TargetGlow;
-		tGlow:ClearAllPoints();
-		tGlow:Point("TOPLEFT", -SHADOW_SPACING, SHADOW_SPACING);
-		tGlow:Point("TOPRIGHT", SHADOW_SPACING, SHADOW_SPACING);
-		tGlow:Point("BOTTOMLEFT", -SHADOW_SPACING, -SHADOW_SPACING);
-		tGlow:Point("BOTTOMRIGHT", SHADOW_SPACING, -SHADOW_SPACING);
-	end
+	UF:Configure_Threat(frame);
 	
-	do
-		if(db.debuffs.enable or db.buffs.enable) then
-			if(not frame:IsElementEnabled("Aura")) then
-				frame:EnableElement("Aura");
-			end
-		else
-			if(frame:IsElementEnabled("Aura")) then
-				frame:DisableElement("Aura");
-			end
-		end
-		
-		frame.Buffs:ClearAllPoints();
-		frame.Debuffs:ClearAllPoints();
-	end
+	UF:Configure_TargetGlow(frame);
 	
-	do
-		local buffs = frame.Buffs;
-		local rows = db.buffs.numrows;
-		
-		if(USE_POWERBAR_OFFSET) then
-			buffs:SetWidth(UNIT_WIDTH - POWERBAR_OFFSET);
-		else
-			buffs:SetWidth(UNIT_WIDTH);
-		end
-		
-		buffs.forceShow = frame.forceShowAuras;
-		buffs.num = db.buffs.perrow * rows;
-		buffs.size = db.buffs.sizeOverride ~= 0 and db.buffs.sizeOverride or ((((buffs:GetWidth() - (buffs.spacing*(buffs.num/rows - 1))) / buffs.num)) * rows);
-		
-		if(db.buffs.sizeOverride and db.buffs.sizeOverride > 0) then
-			buffs:SetWidth(db.buffs.perrow * db.buffs.sizeOverride);
-		end
-		
-		local x, y = E:GetXYOffset(db.buffs.anchorPoint);
-		local attachTo = self:GetAuraAnchorFrame(frame, db.buffs.attachTo);
-		
-		buffs:Point(E.InversePoints[db.buffs.anchorPoint], attachTo, db.buffs.anchorPoint, x + db.buffs.xOffset, y + db.buffs.yOffset);
-		buffs:Height(buffs.size * rows);
-		buffs["growth-y"] = db.buffs.anchorPoint:find("TOP") and "UP" or "DOWN"
-		buffs["growth-x"] = db.buffs.anchorPoint == "LEFT" and "LEFT" or db.buffs.anchorPoint == "RIGHT" and "RIGHT" or (db.buffs.anchorPoint:find("LEFT") and "RIGHT" or "LEFT");
-		buffs["spacing-x"] = db.buffs.xSpacing;
-		buffs["spacing-y"] = db.buffs.ySpacing;
-		buffs.initialAnchor = E.InversePoints[db.buffs.anchorPoint];
-		
-		if(db.buffs.enable) then
-			buffs:Show();
-			UF:UpdateAuraIconSettings(buffs);
-		else
-			buffs:Hide();
-		end
-	end
+	UF:EnableDisable_Auras(frame);
+	UF:Configure_Auras(frame, "Buffs");
+	UF:Configure_Auras(frame, "Debuffs");
 	
-	do
-		local debuffs = frame.Debuffs;
-		local rows = db.debuffs.numrows;
-		
-		if(USE_POWERBAR_OFFSET) then
-			debuffs:SetWidth(UNIT_WIDTH - POWERBAR_OFFSET);
-		else
-			debuffs:SetWidth(UNIT_WIDTH);
-		end
-		
-		debuffs.forceShow = frame.forceShowAuras;
-		debuffs.num = db.debuffs.perrow * rows;
-		debuffs.size = db.debuffs.sizeOverride ~= 0 and db.debuffs.sizeOverride or ((((debuffs:GetWidth() - (debuffs.spacing*(debuffs.num/rows - 1))) / debuffs.num)) * rows);
-		
-		if(db.debuffs.sizeOverride and db.debuffs.sizeOverride > 0) then
-			debuffs:SetWidth(db.debuffs.perrow * db.debuffs.sizeOverride);
-		end
-		
-		local x, y = E:GetXYOffset(db.debuffs.anchorPoint);
-		local attachTo = self:GetAuraAnchorFrame(frame, db.debuffs.attachTo, db.debuffs.attachTo == "BUFFS" and db.buffs.attachTo == "DEBUFFS");
-		
-		debuffs:Point(E.InversePoints[db.debuffs.anchorPoint], attachTo, db.debuffs.anchorPoint, x + db.debuffs.xOffset, y + db.debuffs.yOffset);
-		debuffs:Height(debuffs.size * rows);
-		debuffs["growth-y"] = db.debuffs.anchorPoint:find("TOP") and "UP" or "DOWN";
-		debuffs["growth-x"] = db.debuffs.anchorPoint == "LEFT" and "LEFT" or db.debuffs.anchorPoint == "RIGHT" and "RIGHT" or (db.debuffs.anchorPoint:find("LEFT") and "RIGHT" or "LEFT");
-		debuffs["spacing-x"] = db.debuffs.xSpacing;
-		debuffs["spacing-y"] = db.debuffs.ySpacing;
-		debuffs.initialAnchor = E.InversePoints[db.debuffs.anchorPoint];
-		
-		if(db.debuffs.enable) then
-			debuffs:Show();
-			UF:UpdateAuraIconSettings(debuffs);
-		else
-			debuffs:Hide();
-		end
-	end
+	UF:Configure_RaidDebuffs(frame);
 	
-	do
-		local rdebuffs = frame.RaidDebuffs;
-		local stackColor = db.rdebuffs.stack.color;
-		local durationColor = db.rdebuffs.duration.color;
-		if(db.rdebuffs.enable) then
-			local rdebuffsFont = UF.LSM:Fetch("font", db.rdebuffs.font);
-			frame:EnableElement("RaidDebuffs");
-			
-			rdebuffs.forceShow = frame.forceShowAuras;
-			rdebuffs:Size(db.rdebuffs.size);
-			rdebuffs:Point("BOTTOM", frame, "BOTTOM", db.rdebuffs.xOffset, db.rdebuffs.yOffset);
-			
-			rdebuffs.count:FontTemplate(rdebuffsFont, db.rdebuffs.fontSize, db.rdebuffs.fontOutline);
-			rdebuffs.count:ClearAllPoints();
-			rdebuffs.count:Point(db.rdebuffs.stack.position, db.rdebuffs.stack.xOffset, db.rdebuffs.stack.yOffset);
-			rdebuffs.count:SetTextColor(stackColor.r, stackColor.g, stackColor.b);
-			
-			rdebuffs.time:FontTemplate(rdebuffsFont, db.rdebuffs.fontSize, db.rdebuffs.fontOutline);
-			rdebuffs.time:ClearAllPoints();
-			rdebuffs.time:Point(db.rdebuffs.duration.position, db.rdebuffs.duration.xOffset, db.rdebuffs.duration.yOffset);
-			rdebuffs.time:SetTextColor(durationColor.r, durationColor.g, durationColor.b);
-		else
-			frame:DisableElement("RaidDebuffs");
-			rdebuffs:Hide();
-		end
-	end
+	UF:Configure_RaidIcon(frame);
 	
-	do
-		local RI = frame.RaidIcon;
-		if(db.raidicon.enable) then
-			frame:EnableElement("RaidIcon");
-			RI:Show();
-			RI:Size(db.raidicon.size);
-			
-			local x, y = self:GetPositionOffset(db.raidicon.attachTo);
-			RI:ClearAllPoints();
-			RI:Point(db.raidicon.attachTo, frame, db.raidicon.attachTo, x + db.raidicon.xOffset, y + db.raidicon.yOffset);
-		else
-			frame:DisableElement("RaidIcon");
-			RI:Hide();
-		end
-	end
+	UF:Configure_DebuffHighlight(frame);
 	
-	do
-		local dbh = frame.DebuffHighlight;
-		if(E.db.unitframe.debuffHighlighting ~= "NONE") then
-			frame:EnableElement("DebuffHighlight");
-			frame.DebuffHighlightFilterTable = E.global.unitframe.DebuffHighlightColors;
-			if(E.db.unitframe.debuffHighlighting == "GLOW") then
-				frame.DebuffHighlightBackdrop = true;
-				frame.DBHGlow:SetAllPoints(frame.Threat.glow);
-			else
-				frame.DebuffHighlightBackdrop = false;
-			end
-		else
-			frame:DisableElement("DebuffHighlight");
-		end
-	end
+	UF:Configure_HealComm(frame);
 	
-	do
-		local range = frame.Range;
-		if(db.rangeCheck) then
-			if(not frame:IsElementEnabled("Range")) then
-				frame:EnableElement("Range");
-			end
-			
-			range.outsideAlpha = E.db.unitframe.OORAlpha;
-		else
-			if(frame:IsElementEnabled("Range")) then
-				frame:DisableElement("Range");
-			end
-		end
-	end
+	UF:Configure_Range(frame);
 	
 	UF:UpdateAuraWatch(frame, true);
 	
-	do
-		local healCommBar = frame.HealCommBar;
-		local c = UF.db.colors.healPrediction;
-		if(db.healPrediction) then
-			if(not frame:IsElementEnabled("HealComm4")) then
-				frame:EnableElement("HealComm4");
-			end
-			
-			healCommBar.myBar:SetOrientation(db.health.orientation);
-			healCommBar.otherBar:SetOrientation(db.health.orientation);
-			healCommBar.myBar:SetStatusBarColor(c.personal.r, c.personal.g, c.personal.b, c.personal.a);
-			healCommBar.otherBar:SetStatusBarColor(c.others.r, c.others.g, c.others.b, c.others.a);
-		else
-			if(frame:IsElementEnabled("HealComm4")) then
-				frame:DisableElement("HealComm4");
-			end
-		end
-	end
+	UF:Configure_CustomTexts(frame);
 	
-	for objectName, object in pairs(frame.customTexts) do
-		if((not db.customTexts) or (db.customTexts and not db.customTexts[objectName])) then
-			object:Hide();
-			frame.customTexts[objectName] = nil;
-		end
-	end
-	
-	if(db.customTexts) then
-		local customFont = UF.LSM:Fetch("font", UF.db.font);
-		for objectName, _ in pairs(db.customTexts) do
-			if(not frame.customTexts[objectName]) then
-				frame.customTexts[objectName] = frame.RaisedElementParent:CreateFontString(nil, "OVERLAY");
-			end
-			
-			local objectDB = db.customTexts[objectName];
-			if(objectDB.font) then
-				customFont = UF.LSM:Fetch("font", objectDB.font);
-			end
-			
-			frame.customTexts[objectName]:FontTemplate(customFont, objectDB.size or UF.db.fontSize, objectDB.fontOutline or UF.db.fontOutline);
-			frame:Tag(frame.customTexts[objectName], objectDB.text_format or "");
-			frame.customTexts[objectName]:SetJustifyH(objectDB.justifyH or "CENTER");
-			frame.customTexts[objectName]:ClearAllPoints();
-			frame.customTexts[objectName]:SetPoint(objectDB.justifyH or "CENTER", frame, objectDB.justifyH or "CENTER", objectDB.xOffset, objectDB.yOffset);
-		end
-	end
-	
-	UF:ToggleTransparentStatusBar(UF.db.colors.transparentHealth, frame.Health, frame.Health.bg, true);
+	UF:ToggleTransparentStatusBar(UF.db.colors.transparentHealth, frame.Health, frame.Health.bg, (frame.USE_PORTRAIT and frame.USE_PORTRAIT_OVERLAY) ~= true);
 	
 	frame:UpdateAllElements();
 end
 
-UF["headerstoload"]["raidpet"] = {nil, "ELVUI_UNITPET", "SecureGroupPetHeaderTemplate"};
+UF["headerstoload"]["raidpet"] = {nil, nil, "SecureGroupPetHeaderTemplate"};

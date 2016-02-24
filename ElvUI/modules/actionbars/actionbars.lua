@@ -2,20 +2,56 @@ local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, Private
 local AB = E:NewModule('ActionBars', 'AceHook-3.0', 'AceEvent-3.0');
 local LSM = LibStub("LibSharedMedia-3.0")
 local gsub = string.gsub
-
+local split = string.split;
 local KEY_MOUSEBUTTON = KEY_BUTTON10;
 KEY_MOUSEBUTTON = gsub(KEY_MOUSEBUTTON, '10', '');
 local KEY_NUMPAD = KEY_NUMPAD0;
 KEY_NUMPAD = gsub(KEY_NUMPAD, '0', '');
 
-AB["handledbuttons"] = {} --List of all buttons that have been modified.
+local hooksecurefunc = hooksecurefunc;
+local CreateFrame = CreateFrame;
+local VehicleExit = VehicleExit;
+local RegisterStateDriver = RegisterStateDriver;
+local UnregisterStateDriver = UnregisterStateDriver;
+local InCombatLockdown = InCombatLockdown;
+local NUM_ACTIONBAR_BUTTONS = NUM_ACTIONBAR_BUTTONS;
+
+AB["handledBars"] = {};
+AB["handledbuttons"] = {};
+AB["barDefaults"] = {
+	["bar1"] = {
+		["page"] = 1,
+		["name"] = "Action",
+		["conditions"] = "[bonusbar:5] 11; [bar:2] 2; [bar:3] 3; [bar:4] 4; [bar:5] 5; [bar:6] 6;",
+		["position"] = "BOTTOM,ElvUIParent,BOTTOM,0,4"
+	},
+	["bar2"] = {
+		["page"] = 5,
+		["name"] = "MultiBarBottomRight",
+		["conditions"] = "",
+		["position"] = "BOTTOM,ElvUI_Bar1,TOP,0,2"
+	},
+	["bar3"] = {
+		["page"] = 6,
+		["name"] = "MultiBarBottomLeft",
+		["conditions"] = "",
+		["position"] = "LEFT,ElvUI_Bar1,RIGHT,4,0"
+	},
+	["bar4"] = {
+		["page"] = 4,
+		["name"] = "MultiBarLeft",
+		["conditions"] = "",
+		["position"] = "RIGHT,ElvUIParent,RIGHT,-4,0"
+	},
+	["bar5"] = {
+		["page"] = 3,
+		["name"] = "MultiBarRight",
+		["conditions"] = "",
+		["position"] = "RIGHT,ElvUI_Bar1,LEFT,-4,0"
+	}
+};
 
 function AB:CreateActionBars()
-	self:CreateBar1()
-	self:CreateBar2()
-	self:CreateBar3()
-	self:CreateBar4()
-	self:CreateBar5()
 	self:CreateBarPet()
 	self:CreateBarShapeShift()
 	
@@ -29,12 +65,179 @@ function AB:PLAYER_REGEN_ENABLED()
 	self:UnregisterEvent('PLAYER_REGEN_ENABLED')
 end
 
-function AB:PositionAndSizeBar()
-	self:PositionAndSizeBar1()
-	self:PositionAndSizeBar2()
-	self:PositionAndSizeBar3()
-	self:PositionAndSizeBar4()
-	self:PositionAndSizeBar5()
+function AB:PositionAndSizeBar(barName)
+	local spacing = E:Scale(self.db[barName].buttonspacing);
+	local buttonsPerRow = self.db[barName].buttonsPerRow;
+	local numButtons = self.db[barName].buttons;
+	local size = E:Scale(self.db[barName].buttonsize);
+	local point = self.db[barName].point;
+	local numColumns = ceil(numButtons / buttonsPerRow);
+	local widthMult = self.db[barName].widthMult;
+	local heightMult = self.db[barName].heightMult;
+	local bar = self["handledBars"][barName];
+	
+	bar.db = self.db[barName];
+	bar.db.position = nil;
+	
+	if(numButtons < buttonsPerRow) then
+		buttonsPerRow = numButtons;
+	end
+	
+	if(numColumns < 1) then
+		numColumns = 1;
+	end
+	
+	bar:Width(spacing + ((size * (buttonsPerRow * widthMult)) + ((spacing * (buttonsPerRow - 1)) * widthMult) + (spacing * widthMult)));
+	bar:Height(spacing + ((size * (numColumns * heightMult)) + ((spacing * (numColumns - 1)) * heightMult) + (spacing * heightMult)));
+	
+	bar.mouseover = self.db[barName].mouseover;
+	
+	if(self.db[barName].backdrop == true) then
+		bar.backdrop:Show();
+	else
+		bar.backdrop:Hide();
+	end
+
+	local horizontalGrowth, verticalGrowth;
+	if(point == "TOPLEFT" or point == "TOPRIGHT") then
+		verticalGrowth = "DOWN";
+	else
+		verticalGrowth = "UP";
+	end
+	
+	if(point == "BOTTOMLEFT" or point == "TOPLEFT") then
+		horizontalGrowth = "RIGHT";
+	else
+		horizontalGrowth = "LEFT";
+	end
+	
+	if(self.db[barName].mouseover) then
+		bar:SetAlpha(0);
+	else
+		bar:SetAlpha(self.db[barName].alpha);
+	end
+	
+	if(self.db[barName].inheritGlobalFade) then
+		bar:SetParent(self.fadeParent);
+	else
+		bar:SetParent(E.UIParent);
+	end
+	
+	local button, lastButton, lastColumnButton ;
+	for i = 1, NUM_ACTIONBAR_BUTTONS do
+		button = bar.buttons[i];
+		lastButton = bar.buttons[i-1];
+		lastColumnButton = bar.buttons[i-buttonsPerRow];
+		if(barName == "bar1") then
+			button:SetParent(bar);
+		end
+		button:ClearAllPoints();
+		button:Size(size);
+		button:SetAttribute("showgrid", 1);
+		ActionButton_ShowGrid(button);
+		
+		if(i == 1) then
+			local x, y;
+			if(point == "BOTTOMLEFT") then
+				x, y = spacing, spacing;
+			elseif(point == "TOPRIGHT") then
+				x, y = -spacing, -spacing;
+			elseif(point == "TOPLEFT") then
+				x, y = spacing, -spacing;
+			else
+				x, y = -spacing, spacing;
+			end
+			
+			button:Point(point, bar, point, x, y);
+		elseif((i - 1) % buttonsPerRow == 0) then
+			local x = 0;
+			local y = -spacing;
+			local buttonPoint, anchorPoint = "TOP", "BOTTOM";
+			if(verticalGrowth == "UP") then
+				y = spacing;
+				buttonPoint = "BOTTOM";
+				anchorPoint = "TOP";
+			end
+			button:Point(buttonPoint, lastColumnButton, anchorPoint, x, y);
+		else
+			local x = spacing;
+			local y = 0;
+			local buttonPoint, anchorPoint = "LEFT", "RIGHT";
+			if(horizontalGrowth == "LEFT") then
+				x = -spacing;
+				buttonPoint = "RIGHT";
+				anchorPoint = "LEFT";
+			end
+			
+			button:Point(buttonPoint, lastButton, anchorPoint, x, y);
+		end
+		
+		if(i > numButtons) then
+			button:SetScale(0.000001);
+			button:SetAlpha(0);
+		else
+			button:SetScale(1);
+			button:SetAlpha(1);
+		end
+	end
+	
+	if(self.db[barName].enabled or not bar.initialized) then
+		if not self.db[barName].mouseover then
+			bar:SetAlpha(self.db[barName].alpha);
+		end
+
+		local page = self:GetPage(barName, self['barDefaults'][barName].page, self['barDefaults'][barName].conditions);
+		bar:Show();
+		RegisterStateDriver(bar, "visibility", self.db[barName].visibility);
+		RegisterStateDriver(bar, "page", page);
+		
+		if(barName ~= "bar1") then
+		--	bar:SetAttribute("actionpage", self["barDefaults"][barName].page);
+		end
+		
+		if(not bar.initialized) then
+			bar.initialized = true;
+			AB:PositionAndSizeBar(barName);
+			return;
+		end
+		E:EnableMover(bar.mover:GetName());
+	else
+		E:DisableMover(bar.mover:GetName());
+		bar:Hide();
+		UnregisterStateDriver(bar, "visibility");
+	end
+	
+	if(barName ~= "bar1") then
+		_G[bar.name]:SetParent(bar);
+	end
+	
+	E:SetMoverSnapOffset("ElvAB_"..bar.id, bar.db.buttonspacing / 2);
+end
+
+function AB:CreateBar(id)
+	local bar = CreateFrame("Frame", "ElvUI_Bar" .. id, E.UIParent, "SecureHandlerStateTemplate");
+	local point, anchor, attachTo, x, y = split(",", self["barDefaults"]["bar" .. id].position);
+	bar:Point(point, anchor, attachTo, x, y);
+	bar.id = id;
+	bar:CreateBackdrop("Default");
+	bar:SetFrameStrata("LOW");
+	bar.backdrop:SetAllPoints();
+	bar.buttons = {};
+	bar.name = self["barDefaults"]["bar" .. id].name;
+	self:HookScript(bar, "OnEnter", "Bar_OnEnter");
+	self:HookScript(bar, "OnLeave", "Bar_OnLeave");
+	
+	for i = 1, 12 do
+		bar.buttons[i] = _G[bar.name .. "Button" .. i];
+		bar.buttons[i]:SetID(i);
+		
+		bar:SetFrameRef(bar.name .. "Button" .. i, bar.buttons[i]);
+	end
+	
+	self["handledBars"]["bar" .. id] = bar;
+	E:CreateMover(bar, "ElvAB_" .. id, L["Bar "] .. id, nil, nil, nil, "ALL,ACTIONBARS");
+	self:PositionAndSizeBar("bar" .. id);
+	return bar;
 end
 
 function AB:CreateVehicleLeave()
@@ -60,7 +263,9 @@ function AB:UpdateButtonSettings()
 		end
 	end
 	
-	self:PositionAndSizeBar();
+	for i = 1, 5 do
+		self:PositionAndSizeBar("bar" .. i);
+	end
 	self:PositionAndSizeBarPet();
 	self:PositionAndSizeBarShapeShift();
 end
@@ -141,21 +346,62 @@ function AB:StyleButton(button, noBackdrop)
 end
 
 function AB:Bar_OnEnter(bar)
-	E:UIFrameFadeIn(bar, 0.2, bar:GetAlpha(), 1)
+	if(bar:GetParent() == self.fadeParent) then
+		if(not self.fadeParent.lockTarget and not self.fadeParent.lockCombat) then
+			E:UIFrameFadeIn(self.fadeParent, 0.2, self.fadeParent:GetAlpha(), 1);
+		end
+	elseif(bar.mouseover) then
+		E:UIFrameFadeIn(bar, 0.2, bar:GetAlpha(), bar.db.alpha);
+	end
 end
 
 function AB:Bar_OnLeave(bar)
-	E:UIFrameFadeOut(bar, 0.2, bar:GetAlpha(), 0)
+	if(bar:GetParent() == self.fadeParent) then
+		if(not self.fadeParent.lockTarget and not self.fadeParent.lockCombat) then
+			E:UIFrameFadeOut(self.fadeParent, 0.2, self.fadeParent:GetAlpha(), 1 - self.db.globalFadeAlpha);
+		end
+	elseif(bar.mouseover) then
+		E:UIFrameFadeOut(bar, 0.2, bar:GetAlpha(), 0);
+	end
 end
 
 function AB:Button_OnEnter(button)
 	local bar = button:GetParent()
-	E:UIFrameFadeIn(bar, 0.2, bar:GetAlpha(), 1)
+	if(bar:GetParent() == self.fadeParent) then
+		if(not self.fadeParent.lockTarget and not self.fadeParent.lockCombat) then
+			E:UIFrameFadeIn(self.fadeParent, 0.2, self.fadeParent:GetAlpha(), 1);
+		end
+	elseif(bar.mouseover) then
+		E:UIFrameFadeIn(bar, 0.2, bar:GetAlpha(), bar.db.alpha);
+	end
 end
 
 function AB:Button_OnLeave(button)
 	local bar = button:GetParent()
-	E:UIFrameFadeOut(bar, 0.2, bar:GetAlpha(), 0)
+	if(bar:GetParent() == self.fadeParent) then
+		if(not self.fadeParent.lockTarget and not self.fadeParent.lockCombat) then
+			E:UIFrameFadeOut(self.fadeParent, 0.2, self.fadeParent:GetAlpha(), 1 - self.db.globalFadeAlpha);
+		end
+	elseif(bar.mouseover) then
+		E:UIFrameFadeOut(bar, 0.2, bar:GetAlpha(), 0);
+	end
+end
+
+function AB:FadeParent_OnEvent(event, unit)
+	if(event == "UNIT_SPELLCAST_START" or event == "UNIT_SPELLCAST_STOP" or event == "UNIT_SPELLCAST_CHANNEL_START" or event == "UNIT_SPELLCAST_CHANNEL_STOP" or event == "UNIT_HEALTH") then
+		if(not unit or unit ~= "player") then return; end
+	end
+	local cur, max = UnitHealth("player"), UnitHealthMax("player");
+	local cast, channel = UnitCastingInfo("player"), UnitChannelInfo("player");
+	local target, focus = UnitExists("target"), UnitExists("focus");
+	local combat = UnitAffectingCombat("player");
+	if((cast or channel) or (cur ~= max) or (target or focus) or combat) then
+		self.mouseLock = true;
+		E:UIFrameFadeIn(self, 0.2, self:GetAlpha(), 1);
+	else
+		self.mouseLock = false;
+		E:UIFrameFadeOut(self, 0.2, self:GetAlpha(), 1 - AB.db.globalFadeAlpha);
+	end
 end
 
 function AB:DisableBlizzard()
@@ -260,9 +506,27 @@ function AB:Initialize()
 	if E.private.actionbar.enable ~= true then return; end
 	E.ActionBars = AB;
 	
+	self.fadeParent = CreateFrame("Frame", "Elv_ABFade", UIParent);
+	self.fadeParent:SetAlpha(1 - self.db.globalFadeAlpha);
+	self.fadeParent:RegisterEvent("PLAYER_REGEN_DISABLED");
+	self.fadeParent:RegisterEvent("PLAYER_REGEN_ENABLED");
+	self.fadeParent:RegisterEvent("PLAYER_TARGET_CHANGED");
+	self.fadeParent:RegisterEvent("UNIT_SPELLCAST_START");
+	self.fadeParent:RegisterEvent("UNIT_SPELLCAST_STOP");
+	self.fadeParent:RegisterEvent("UNIT_SPELLCAST_CHANNEL_START");
+	self.fadeParent:RegisterEvent("UNIT_SPELLCAST_CHANNEL_STOP");
+	self.fadeParent:RegisterEvent("UNIT_HEALTH");
+	self.fadeParent:RegisterEvent("PLAYER_FOCUS_CHANGED");
+	self.fadeParent:SetScript("OnEvent", self.FadeParent_OnEvent);
+	
 	self:DisableBlizzard()
 	
 	self:SetupMicroBar()
+	
+	for i = 1, 5 do
+		self:CreateBar(i);
+	end
+	
 	self:CreateActionBars()
 	self:CreateVehicleLeave()
 	

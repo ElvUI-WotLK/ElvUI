@@ -214,6 +214,7 @@ function NP:OnUpdate(elapsed)
 				NP.SetUnitInfo(blizzPlate, plate);
 				NP.ColorizeAndScale(blizzPlate, plate);
 				NP.UpdateLevelAndName(blizzPlate, plate);
+				plate:SetDepth(25);
 			end
 		end
 		
@@ -463,6 +464,7 @@ function NP:SetUnitInfo(myPlate)
 		if(NP.db.targetIndicator.enable) then
 			targetIndicator:Show();
 			NP:PositionTargetIndicator(myPlate);
+			targetIndicator:SetDepth(myPlate:GetDepth());
 		end
 
 		if((NP.NumTargetChecks > -1) or self.allowCheck) then

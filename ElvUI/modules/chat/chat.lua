@@ -268,9 +268,17 @@ function CH:StyleChat(frame)
 	end)
 
 	tab.text = _G[name.."TabText"]
-	tab.text:SetTextColor(unpack(E["media"].rgbvaluecolor))
+	if(not E.global.tukuiMode) then
+		tab.text:SetTextColor(unpack(E["media"].rgbvaluecolor));
+	else
+		tab.text:SetTextColor(0.8, 0.8, 0);
+	end
 	hooksecurefunc(tab.text, "SetTextColor", function(t, r, g, b, a)
 		local rR, gG, bB = unpack(E["media"].rgbvaluecolor)
+		
+		if(E.global.tukuiMode) then
+			rR, gG, bB = 0.8, 0.8, 0;
+		end
 
 		if r ~= rR or g ~= gG or b ~= bB then
 			t:SetTextColor(rR, gG, bB)
@@ -471,16 +479,27 @@ end
 
 function CH:UpdateAnchors()
 	for _, frameName in pairs(CHAT_FRAMES) do
-		local frame = _G[frameName..'EditBox']
-		if not frame then break; end
-		if E.db.datatexts.leftChatPanel and E.db.chat.editBoxPosition == 'BELOW_CHAT' then
-			frame:SetAllPoints(LeftChatDataPanel)
-		else
-			frame:SetAllPoints(LeftChatTab)
+		local frame = _G[frameName .. "EditBox"];
+		if(not frame) then break; end
+		if(not E.db.datatexts.leftChatPanel and (self.db.panelBackdrop == "HIDEBOTH" or self.db.panelBackdrop == "RIGHT")) then
+			frame:ClearAllPoints();
+			if(E.db.chat.editBoxPosition == "BELOW_CHAT") then
+				frame:SetPoint("TOPLEFT", ChatFrame1, "BOTTOMLEFT");
+				frame:SetPoint("BOTTOMRIGHT", ChatFrame1, "BOTTOMRIGHT", 0, -LeftChatTab:GetHeight());
+			else
+				frame:SetPoint("BOTTOMLEFT", ChatFrame1, "TOPLEFT");
+				frame:SetPoint("TOPRIGHT", ChatFrame1, "TOPRIGHT", 0, LeftChatTab:GetHeight());
+			end
+ 		else
+			if(E.db.datatexts.leftChatPanel and E.db.chat.editBoxPosition == "BELOW_CHAT") then
+				frame:SetAllPoints(LeftChatDataPanel);
+			else
+				frame:SetAllPoints(LeftChatTab);
+			end
 		end
 	end
 	
-	CH:PositionChat(true)
+	CH:PositionChat(true);
 end
 
 local function FindRightChatID()
@@ -574,16 +593,26 @@ function CH:PositionChat(override)
 		
 		if chat:IsShown() and not (id > NUM_CHAT_WINDOWS) and id == self.RightChatWindowID then
 			chat:ClearAllPoints()
-			if E.db.datatexts.rightChatPanel then
-				chat:SetPoint("BOTTOMLEFT", RightChatDataPanel, "TOPLEFT", 1, 3)
+			
+			if(E.global.tukuiMode) then
+ 				chat:Point("BOTTOMLEFT", RightChatDataPanel, "TOPLEFT", 1, 3)
+				if id ~= 2 then
+					chat:SetSize((E.db.chat.separateSizes and E.db.chat.panelWidthRight or E.db.chat.panelWidth) - 11 - LeftChatToggleButton:GetWidth(), (E.db.chat.separateSizes and E.db.chat.panelHeightRight or E.db.chat.panelHeight) - BASE_OFFSET)
+				else
+					chat:SetSize(E.db.chat.panelWidth - 11 - LeftChatToggleButton:GetWidth(), (E.db.chat.panelHeight - BASE_OFFSET) - CombatLogQuickButtonFrame_Custom:GetHeight())
+				end
 			else
-				BASE_OFFSET = BASE_OFFSET - 24
-				chat:SetPoint("BOTTOMLEFT", RightChatDataPanel, "BOTTOMLEFT", 1, 1)
-			end
-			if id ~= 2 then
-				chat:SetSize((E.db.chat.separateSizes and E.db.chat.panelWidthRight or E.db.chat.panelWidth) - 11, (E.db.chat.separateSizes and E.db.chat.panelHeightRight or E.db.chat.panelHeight) - BASE_OFFSET)
-			else
-				chat:SetSize(E.db.chat.panelWidth - 11, (E.db.chat.panelHeight - BASE_OFFSET) - CombatLogQuickButtonFrame_Custom:GetHeight())				
+				if E.db.datatexts.rightChatPanel then
+					chat:Point("BOTTOMLEFT", RightChatDataPanel, "TOPLEFT", 1, 3)
+				else
+					BASE_OFFSET = BASE_OFFSET - 24
+					chat:Point("BOTTOMLEFT", RightChatDataPanel, "BOTTOMLEFT", 1, 1)
+				end
+				if id ~= 2 then
+					chat:SetSize((E.db.chat.separateSizes and E.db.chat.panelWidthRight or E.db.chat.panelWidth) - 11, (E.db.chat.separateSizes and E.db.chat.panelHeightRight or E.db.chat.panelHeight) - BASE_OFFSET)
+				else
+					chat:SetSize(E.db.chat.panelWidth - 11, (E.db.chat.panelHeight - BASE_OFFSET) - CombatLogQuickButtonFrame_Custom:GetHeight())
+				end
 			end
 			
 			FCF_SavePositionAndDimensions(chat, true);
@@ -606,13 +635,18 @@ function CH:PositionChat(override)
 		else
 			if id ~= 2 and not (id > NUM_CHAT_WINDOWS) then
 				chat:ClearAllPoints()
-				if E.db.datatexts.leftChatPanel then
-					chat:SetPoint("BOTTOMLEFT", LeftChatToggleButton, "TOPLEFT", 1, 3)
+				if(E.global.tukuiMode) then
+					chat:Point("BOTTOMLEFT", LeftChatToggleButton, "TOPRIGHT", 1, 3)	
+					chat:SetSize(E.db.chat.panelWidth - 11 - LeftChatToggleButton:GetWidth(), (E.db.chat.panelHeight - BASE_OFFSET))
 				else
-					BASE_OFFSET = BASE_OFFSET - 24
-					chat:SetPoint("BOTTOMLEFT", LeftChatToggleButton, "BOTTOMLEFT", 1, 1)
+					if E.db.datatexts.leftChatPanel then
+						chat:Point("BOTTOMLEFT", LeftChatToggleButton, "TOPLEFT", 1, 3)
+					else
+						BASE_OFFSET = BASE_OFFSET - 24
+						chat:Point("BOTTOMLEFT", LeftChatToggleButton, "BOTTOMLEFT", 1, 1)
+					end
+					chat:SetSize(E.db.chat.panelWidth - 11, (E.db.chat.panelHeight - BASE_OFFSET))
 				end
-				chat:SetSize(E.db.chat.panelWidth - 11, (E.db.chat.panelHeight - BASE_OFFSET))
 				
 				FCF_SavePositionAndDimensions(chat, true);
 			end
@@ -638,6 +672,10 @@ function CH:PositionChat(override)
 end
 
 local function UpdateChatTabColor(hex, r, g, b)
+	if(E.global.tukuiMode) then
+		r, g, b = 0.8, 0.8, 0;
+	end
+
 	for i=1, CreatedFrames do
 		_G['ChatFrame'..i..'TabText']:SetTextColor(r, g, b)
 	end

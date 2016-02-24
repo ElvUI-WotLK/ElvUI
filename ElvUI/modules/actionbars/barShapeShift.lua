@@ -119,9 +119,11 @@ function AB:PositionAndSizeBarShapeShift()
 	if self.db['barShapeShift'].enabled then
 		bar:SetScale(1);
 		bar:SetAlpha(bar.db.alpha);
+		E:EnableMover(bar.mover:GetName());
 	else
 		bar:SetScale(0.000001);
 		bar:SetAlpha(0);
+		E:DisableMover(bar.mover:GetName());
 	end
 	
 	if self.db['barShapeShift'].backdrop == true then
@@ -143,6 +145,12 @@ function AB:PositionAndSizeBarShapeShift()
 		horizontalGrowth = "LEFT";
 	end
 	
+	if(self.db["barShapeShift"].inheritGlobalFade) then
+		bar:SetParent(self.fadeParent);
+	else
+		bar:SetParent(E.UIParent);
+	end
+	
 	local button, lastButton, lastColumnButton;
 	for i=1, NUM_SHAPESHIFT_SLOTS do
 		button = _G["ElvUI_StanceBarButton"..i];
@@ -154,26 +162,8 @@ function AB:PositionAndSizeBarShapeShift()
 		
 		if self.db['barShapeShift'].mouseover == true then
 			bar:SetAlpha(0);
-			if not self.hooks[bar] then
-				self:HookScript(bar, 'OnEnter', 'Bar_OnEnter');
-				self:HookScript(bar, 'OnLeave', 'Bar_OnLeave');	
-			end
-			
-			if not self.hooks[button] then
-				self:HookScript(button, 'OnEnter', 'Button_OnEnter');
-				self:HookScript(button, 'OnLeave', 'Button_OnLeave');					
-			end
 		else
 			bar:SetAlpha(bar.db.alpha);
-			if self.hooks[bar] then
-				self:Unhook(bar, 'OnEnter');
-				self:Unhook(bar, 'OnLeave');
-			end
-			
-			if self.hooks[button] then
-				self:Unhook(button, 'OnEnter');	
-				self:Unhook(button, 'OnLeave');		
-			end
 		end
 		
 		if i == 1 then
@@ -237,6 +227,8 @@ function AB:AdjustMaxStanceButtons(event)
 		if not bar.buttons[i] then
 			bar.buttons[i] = CreateFrame("CheckButton", format(bar:GetName().."Button%d", i), bar, "ShapeshiftButtonTemplate")
 			bar.buttons[i]:SetID(i)
+			self:HookScript(bar.buttons[i], "OnEnter", "Button_OnEnter");
+			self:HookScript(bar.buttons[i], "OnLeave", "Button_OnLeave");	
 		end
 
 		if ( i <= numButtons ) then
@@ -279,6 +271,9 @@ function AB:CreateBarShapeShift()
 			self:Show();
 		end
 	]]);
+	
+	self:HookScript(bar, "OnEnter", "Bar_OnEnter");
+	self:HookScript(bar, "OnLeave", "Bar_OnLeave");
 	
 	self:RegisterEvent('UPDATE_SHAPESHIFT_FORMS', 'AdjustMaxStanceButtons');
 	self:RegisterEvent('UPDATE_SHAPESHIFT_COOLDOWN');

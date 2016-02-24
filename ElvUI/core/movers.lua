@@ -11,6 +11,7 @@ local InCombatLockdown = InCombatLockdown;
 local ERR_NOT_IN_COMBAT = ERR_NOT_IN_COMBAT;
 
 E.CreatedMovers = {}
+E.DisabledMovers = {};
 
 local function SizeChanged(frame)
 	if InCombatLockdown() then return; end
@@ -335,6 +336,8 @@ function E:CreateMover(parent, name, text, overlay, snapoffset, postdrag, moverT
 end
 
 function E:ToggleMovers(show, moverType)
+	self.configMode = show;
+	
 	for name, _ in pairs(E.CreatedMovers) do
 		if not show then
 			_G[name]:Hide()
@@ -346,6 +349,42 @@ function E:ToggleMovers(show, moverType)
 			end
 		end
 	end
+end
+
+function E:DisableMover(name)
+	if(self.DisabledMovers[name]) then return; end
+	if(not self.CreatedMovers[name]) then
+		error("mover doesn't exist");
+	end	
+		
+	self.DisabledMovers[name] = {};
+	for x, y in pairs(self.CreatedMovers[name]) do
+		self.DisabledMovers[name][x] = y;
+	end
+	
+	if(self.configMode) then
+		_G[name]:Hide();
+	end
+	
+	self.CreatedMovers[name] = nil;
+end
+
+function E:EnableMover(name)
+	if(self.CreatedMovers[name]) then return; end
+	if(not self.DisabledMovers[name]) then
+		error("mover doesn't exist");
+	end	
+	
+	self.CreatedMovers[name] = {}
+	for x, y in pairs(self.DisabledMovers[name]) do
+		self.CreatedMovers[name][x] = y;
+	end
+	
+	if(self.configMode) then
+		_G[name]:Show();
+	end	
+	
+	self.DisabledMovers[name] = nil;
 end
 
 function E:ResetMovers(arg)

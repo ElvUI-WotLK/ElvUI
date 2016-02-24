@@ -119,17 +119,27 @@ function E:GetScreenQuadrant(frame)
 end
 
 function E:GetXYOffset(position, override)
-	local default = E.PixelMode and 0 or 1;
+	local default = E.Spacing;
 	local x, y = override or default, override or default;
 	
-	if(position == "TOP" or position == "TOPLEFT" or position == "TOPRIGHT") then
+	if(position == "TOP")then
 		return 0, y;
-	elseif(position == "BOTTOM" or position == "BOTTOMLEFT" or position == "BOTTOMRIGHT") then
+	elseif(position == "TOPLEFT") then
+		return x, y;
+	elseif(position == "TOPRIGHT") then
+		return -x, y;
+	elseif(position == "BOTTOM") then
 		return 0, -y;
+	elseif(position == "BOTTOMLEFT") then
+		return x, -y;
+	elseif(position == "BOTTOMRIGHT") then
+		return -x, -y;
 	elseif(position == "LEFT") then
 		return -x, 0;
-	else
+	elseif(position == "RIGHT") then
 		return x, 0;
+	elseif(position == "CENTER") then
+		return 0, 0;
 	end
 end
 

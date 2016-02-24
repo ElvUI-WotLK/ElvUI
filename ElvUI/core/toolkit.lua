@@ -13,7 +13,7 @@ local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
 E.mult = 1;
 local backdropr, backdropg, backdropb, backdropa, borderr, borderg, borderb = 0, 0, 0, 1, 0, 0, 0;
 
-local function GetTemplate(t)
+local function GetTemplate(t, isPixelPerfectForced)
 	backdropa = 1
 	if t == "ClassColor" then
 		if(CUSTOM_CLASS_COLORS) then
@@ -34,10 +34,15 @@ local function GetTemplate(t)
 		borderr, borderg, borderb = unpack(E["media"].bordercolor)
 		backdropr, backdropg, backdropb = unpack(E["media"].backdropcolor)
 	end
+	
+	if(isPixelPerfectForced) then
+		borderr, borderg, borderb = 0, 0, 0;
+	end	
 end
 
 local function Size(frame, width, height)
-	frame:SetSize(E:Scale(width), E:Scale(height or width))
+	assert(width);
+	frame:SetSize(E:Scale(width), E:Scale(height or width));
 end
 
 local function Width(frame, width)
@@ -45,11 +50,15 @@ local function Width(frame, width)
 end
 
 local function Height(frame, height)
-	frame:SetHeight(E:Scale(height))
+	assert(height)
+	frame:SetHeight(E:Scale(height));
 end
 
 local function Point(obj, arg1, arg2, arg3, arg4, arg5)
-	-- anyone has a more elegant way for this?
+	if(arg2 == nil) then
+		arg2 = obj:GetParent();
+	end
+	
 	if type(arg1)=="number" then arg1 = E:Scale(arg1) end
 	if type(arg2)=="number" then arg2 = E:Scale(arg2) end
 	if type(arg3)=="number" then arg3 = E:Scale(arg3) end
@@ -64,6 +73,7 @@ local function SetOutside(obj, anchor, xOffset, yOffset)
 	yOffset = yOffset or E.Border
 	anchor = anchor or obj:GetParent()
 	
+	assert(anchor);
 	if obj:GetPoint() then
 		obj:ClearAllPoints()
 	end
@@ -77,6 +87,7 @@ local function SetInside(obj, anchor, xOffset, yOffset)
 	yOffset = yOffset or E.Border
 	anchor = anchor or obj:GetParent()
 	
+	assert(anchor);
 	if obj:GetPoint() then
 		obj:ClearAllPoints()
 	end
@@ -85,9 +96,11 @@ local function SetInside(obj, anchor, xOffset, yOffset)
 	obj:Point('BOTTOMRIGHT', anchor, 'BOTTOMRIGHT', -xOffset, yOffset)
 end
 
-local function SetTemplate(f, t, glossTex, ignoreUpdates)
-	GetTemplate(t)
-	
+local function SetTemplate(f, t, glossTex, ignoreUpdates, forcePixelMode)
+	GetTemplate(t, f.forcePixelMode or forcePixelMode)
+	if(E.global.tukuiMode) then
+		glossTex = nil;
+	end
 	if(t) then
 		f.template = t;
 	end
@@ -100,12 +113,16 @@ local function SetTemplate(f, t, glossTex, ignoreUpdates)
 		f.ignoreUpdates = ignoreUpdates;
 	end
 	
+	if(forcePixelMode) then
+		f.forcePixelMode = forcePixelMode
+	end
+	
 	local bgFile = E.media.blankTex;
 	if(glossTex) then
 		bgFile = E.media.glossTex;
 	end
 	
-	if E.private.general.pixelPerfect then
+	if((E.private.general.pixelPerfect and not E.global.tukuiMode) or f.forcePixelMode) then
 		f:SetBackdrop({
 			bgFile = bgFile,
 			edgeFile = E["media"].blankTex,
@@ -121,7 +138,7 @@ local function SetTemplate(f, t, glossTex, ignoreUpdates)
 		});
 	end
 
-	if not f.oborder and not f.iborder and not E.private.general.pixelPerfect then
+	if not f.oborder and not f.iborder and (not E.private.general.pixelPerfect or E.global.tukuiMode) and not f.forcePixelMode then
 		local border = CreateFrame("Frame", nil, f)
 		border:SetInside(f, E.mult, E.mult)
 		border:SetBackdrop({
@@ -148,25 +165,29 @@ local function SetTemplate(f, t, glossTex, ignoreUpdates)
 	f:SetBackdropColor(backdropr, backdropg, backdropb, backdropa)
 	f:SetBackdropBorderColor(borderr, borderg, borderb)
 	
-	if(not f.ignoreUpdates) then
+	if(not f.ignoreUpdates and not f.forcePixelMode) then
 		E["frames"][f] = true;
 	end
 end
 
-local function CreateBackdrop(f, t, tex)
-	if not t then t = "Default" end
+local function CreateBackdrop(f, t, tex, ignoreUpdates, forcePixelMode)
+	if(not t) then t = "Default"; end
 	
-	local b = CreateFrame("Frame", nil, f)
-	b:SetOutside()
-	b:SetTemplate(t, tex)
-
-	if f:GetFrameLevel() - 1 >= 0 then
-		b:SetFrameLevel(f:GetFrameLevel() - 1)
+	local b = CreateFrame("Frame", nil, f);
+	if(f.forcePixelMode or forcePixelMode) then
+		b:SetOutside(nil, E.mult, E.mult);
 	else
-		b:SetFrameLevel(0)
+		b:SetOutside();
+	end
+	b:SetTemplate(t, tex, ignoreUpdates, forcePixelMode);
+	
+	if(f:GetFrameLevel() - 1 >= 0) then
+		b:SetFrameLevel(f:GetFrameLevel() - 1);
+	else
+		b:SetFrameLevel(0);
 	end
 	
-	f.backdrop = b
+	f.backdrop = b;
 end
 
 local function CreateShadow(f)

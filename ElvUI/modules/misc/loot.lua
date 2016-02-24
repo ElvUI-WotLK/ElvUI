@@ -179,14 +179,16 @@ function M:LOOT_OPENED(event, autoloot)
 		local x, y = GetCursorPosition()
 		x = x / lootFrame:GetEffectiveScale()
 		y = y / lootFrame:GetEffectiveScale()
-
+		
 		lootFrame:ClearAllPoints()
-		lootFrame:Point('TOPLEFT', nil, 'BOTTOMLEFT', x - 40, y + 20)
+		lootFrame:Point('TOPLEFT', UIParent, 'BOTTOMLEFT', x - 40, y + 20)
 		lootFrame:GetCenter()
 		lootFrame:Raise()
+		E:DisableMover("LootFrameMover");
 	else
 		lootFrame:ClearAllPoints()
-		lootFrame:SetPoint('TOPLEFT', lootFrameHolder, 'TOPLEFT')	
+		lootFrame:SetPoint('TOPLEFT', lootFrameHolder, 'TOPLEFT')
+		E:EnableMover("LootFrameMover");
 	end
 
 	local m, w, t = 0, 0, lootFrame.title:GetStringWidth()
@@ -288,6 +290,10 @@ function M:LoadLoot()
 	self:RegisterEvent('UPDATE_MASTER_LOOT_LIST')
 	
 	E:CreateMover(lootFrameHolder, 'LootFrameMover', L['Loot Frame'])
+	
+	if(GetCVar("lootUnderMouse") == "1") then
+		E:DisableMover("LootFrameMover");
+	end
 	
 	-- Fuzz
 	LootFrame:UnregisterAllEvents()
