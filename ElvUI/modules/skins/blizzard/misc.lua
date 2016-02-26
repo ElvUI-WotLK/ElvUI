@@ -260,7 +260,9 @@ local function LoadSkin()
 	end
 	
 	OpacityFrame:StripTextures()
-	OpacityFrame:SetTemplate("Transparent")	
+	OpacityFrame:SetTemplate("Transparent")
+	
+	S:HandleSliderFrame(OpacityFrameSlider);
 	
 	WatchFrameCollapseExpandButton:StripTextures()
 	S:HandleCloseButton(WatchFrameCollapseExpandButton)
