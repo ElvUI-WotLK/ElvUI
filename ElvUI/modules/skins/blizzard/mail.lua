@@ -1,6 +1,13 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local S = E:GetModule('Skins')
 
+local hooksecurefunc = hooksecurefunc;
+local GetSendMailItem = GetSendMailItem;
+local GetItemInfo = GetItemInfo;
+local GetItemQualityColor = GetItemQualityColor;
+local INBOXITEMS_TO_DISPLAY = INBOXITEMS_TO_DISPLAY;
+local ATTACHMENTS_MAX_SEND = ATTACHMENTS_MAX_SEND;
+
 local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.mail ~= true then return end
 	MailFrame:StripTextures(true)
@@ -49,18 +56,29 @@ local function LoadSkin()
 	SendMailFrame:StripTextures()
 	
 	local function MailFrameSkin()
-		for i = 1, ATTACHMENTS_MAX_SEND do				
-			local b = _G["SendMailAttachment"..i]
-			if not b.skinned then
-				b:StripTextures()
-				b:SetTemplate("Default", true)
-				b:StyleButton(nil, true)
-				b.skinned = true
+		for i = 1, ATTACHMENTS_MAX_SEND do
+			local b = _G["SendMailAttachment"..i];
+			if(not b.skinned) then
+				b:StripTextures();
+				b:SetTemplate("Default", true);
+				b:StyleButton(nil, true);
+				b.skinned = true;
 			end
-			local t = b:GetNormalTexture()
-			if t then
-				t:SetTexCoord(unpack(E.TexCoords))
-				t:SetInside()
+			
+			local t = b:GetNormalTexture();
+			local itemName = GetSendMailItem(i);
+			if(itemName) then
+				local quality = select(3, GetItemInfo(itemName));
+				if(quality and quality > 1) then
+					b:SetBackdropBorderColor(GetItemQualityColor(quality));
+				else
+					b:SetBackdropBorderColor(unpack(E["media"].bordercolor));
+				end
+				
+				t:SetTexCoord(unpack(E.TexCoords));
+				t:SetInside();
+			else
+				b:SetBackdropBorderColor(unpack(E["media"].bordercolor));
 			end
 		end
 	end
