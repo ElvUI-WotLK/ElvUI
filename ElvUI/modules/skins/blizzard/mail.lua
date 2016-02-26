@@ -2,11 +2,14 @@ local E, L, V, P, G = unpack(select(2, ...));
 local S = E:GetModule('Skins')
 
 local hooksecurefunc = hooksecurefunc;
-local GetSendMailItem = GetSendMailItem;
+local GetInboxItem = GetInboxItem;
+local GetInboxText = GetInboxText;
 local GetItemInfo = GetItemInfo;
 local GetItemQualityColor = GetItemQualityColor;
-local INBOXITEMS_TO_DISPLAY = INBOXITEMS_TO_DISPLAY;
+local GetSendMailItem = GetSendMailItem;
+local OpenMail_GetItemCounts = OpenMail_GetItemCounts;
 local ATTACHMENTS_MAX_SEND = ATTACHMENTS_MAX_SEND;
+local INBOXITEMS_TO_DISPLAY = INBOXITEMS_TO_DISPLAY;
 
 local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.mail ~= true then return end
@@ -83,6 +86,28 @@ local function LoadSkin()
 		end
 	end
 	hooksecurefunc("SendMailFrame_Update", MailFrameSkin)
+	
+	local function OpenMail_Update()
+		if(not InboxFrame.openMailID) then return; end
+		local bodyText, texture, isTakeable, isInvoice = GetInboxText(InboxFrame.openMailID);
+		local itemButtonCount, itemRowCount = OpenMail_GetItemCounts(isTakeable, textCreated, money);
+		if(itemRowCount > 0 and OpenMailFrame.activeAttachmentButtons) then
+			for i, attachmentButton in pairs(OpenMailFrame.activeAttachmentButtons) do
+				if(attachmentButton ~= OpenMailLetterButton and attachmentButton ~= OpenMailMoneyButton) then
+					local name, itemTexture, count, quality = GetInboxItem(InboxFrame.openMailID, attachmentButton:GetID());
+					if(name) then
+						-- local quality = select(3, GetItemInfo(name));
+						if(quality and quality > 1) then
+							attachmentButton:SetBackdropBorderColor(GetItemQualityColor(quality));
+						else
+							attachmentButton:SetBackdropBorderColor(unpack(E["media"].bordercolor));
+						end
+					end
+				end
+			end
+		end
+	end
+	hooksecurefunc("OpenMail_Update", OpenMail_Update);
 	
 	S:HandleButton(SendMailMailButton)
 	S:HandleButton(SendMailCancelButton)

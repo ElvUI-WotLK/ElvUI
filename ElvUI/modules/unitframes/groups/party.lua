@@ -179,6 +179,8 @@ function UF:Update_PartyFrames(frame, db)
 		frame.POWERBAR_WIDTH = 0;
 		frame.BOTTOM_OFFSET = 0;
 		
+		frame.BOTTOM_OFFSET = 0;
+		
 		local childDB = db.petsGroup;
 		local childType = "pet";
 		if(frame == _G[frame.originalParent:GetName() .. 'Target']) then
@@ -204,7 +206,7 @@ function UF:Update_PartyFrames(frame, db)
 		
 		UF:Configure_HealthBar(frame);
 		
-		UF:UpdateNameSettings(frame, childType);
+		UF:UpdateNameSettings(frame, frame.childType);
 	else
 		if(not InCombatLockdown()) then
 			frame:Size(frame.UNIT_WIDTH, frame.UNIT_HEIGHT);
