@@ -19,7 +19,7 @@ P['general'] = {
 	
 	['afk'] = true,
 	
-	['fontsize'] = 12, -- Медия\Шрифты
+	['fontSize'] = 12, -- Медия\Шрифты
 	['font'] = 'PT Sans Narrow',
 
 	["bordercolor"] = { r = 0.1, g = 0.1, b = 0.1 },
