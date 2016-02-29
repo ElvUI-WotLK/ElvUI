@@ -261,23 +261,57 @@ function S:HandleDropDownBox(frame, width)
 	frame.backdrop:Point("BOTTOMRIGHT", button, "BOTTOMRIGHT", 2, -2)
 end
 
-function S:HandleCheckBox(frame)
+function S:HandleCheckBox(frame, noBackdrop)
+	assert(frame, 'does not exist.')
 	frame:StripTextures()
-	frame:CreateBackdrop("Default")
-	frame.backdrop:Point("TOPLEFT", 4, -4)
-	frame.backdrop:Point("BOTTOMRIGHT", -4, 4)
-	
+	if noBackdrop then
+		frame:SetTemplate("Default")
+		frame:Size(16)
+	else
+		frame:CreateBackdrop('Default')
+		frame.backdrop:SetInside(nil, 4, 4)
+	end
+
 	if frame.SetCheckedTexture then
 		frame:SetCheckedTexture("Interface\\Buttons\\UI-CheckBox-Check")
+		if noBackdrop then
+			frame:GetCheckedTexture():SetInside(nil, -4, -4)
+		end
 	end
-	
+
 	if frame.SetDisabledTexture then
 		frame:SetDisabledTexture("Interface\\Buttons\\UI-CheckBox-Check-Disabled")
+		if noBackdrop then
+			frame:GetDisabledTexture():SetInside(nil, -4, -4)
+		end
 	end
-	
-	frame.SetNormalTexture = E.noop
-	frame.SetPushedTexture = E.noop
-	frame.SetHighlightTexture = E.noop
+
+	frame:HookScript('OnDisable', function(self)
+		if not self.SetDisabledTexture then return; end
+		if self:GetChecked() then
+			self:SetDisabledTexture("Interface\\Buttons\\UI-CheckBox-Check-Disabled")
+		else
+			self:SetDisabledTexture("")
+		end
+	end)
+
+	hooksecurefunc(frame, "SetNormalTexture", function(self, texPath)
+		if texPath ~= "" then
+			self:SetNormalTexture("");
+		end
+	end)
+
+	hooksecurefunc(frame, "SetPushedTexture", function(self, texPath)
+		if texPath ~= "" then
+			self:SetPushedTexture("");
+		end
+	end)
+
+	hooksecurefunc(frame, "SetHighlightTexture", function(self, texPath)
+		if texPath ~= "" then
+			self:SetHighlightTexture("");
+		end
+	end)
 end
 
 function S:HandleItemButton(b, shrinkIcon)
