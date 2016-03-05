@@ -19,8 +19,8 @@ S:RegisterSkin('Blizzard_BarbershopUI', function()
 		selectorPrev = _G['BarberShopFrameSelector'..i..'Prev'];
 		selectorNext = _G['BarberShopFrameSelector'..i..'Next'];
 		
-		S:HandleNextPrevButton(selectorPrev, 'Left');
-		S:HandleNextPrevButton(selectorNext, 'Right');
+		S:HandleNextPrevButton(selectorPrev);
+		S:HandleNextPrevButton(selectorNext);
 	end
 	
 	BarberShopFrameMoneyFrame:StripTextures();
