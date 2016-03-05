@@ -23,8 +23,8 @@ local function LoadSkin(event)
 		
 		if(achievement.highlight) then
 			achievement.highlight:StripTextures();
-			achievement:HookScript("OnEnter", function(self) self:SetBackdropBorderColor(1, 1, 0); end);
-			achievement:HookScript("OnLeave", function(self) self:SetBackdropBorderColor(unpack(E["media"].bordercolor)); end);
+			achievement:HookScript("OnEnter", S.SetModifiedBackdrop);
+			achievement:HookScript("OnLeave", S.SetOriginalBackdrop);
 		end
 		
 		if(achievement.label) then
@@ -51,6 +51,13 @@ local function LoadSkin(event)
 			achievement.tracked:Point("TOPLEFT", achievement.icon, "BOTTOMLEFT", 0, -2);
 		end
 		
+		hooksecurefunc(achievement, "Saturate", function()
+			achievement:SetBackdropBorderColor(unpack(E["media"].bordercolor));
+		end);
+		hooksecurefunc(achievement, "Desaturate", function()
+			achievement:SetBackdropBorderColor(unpack(E["media"].bordercolor));
+		end);
+		
 		achievement.isSkinned = true;
 	end
 	
@@ -67,13 +74,6 @@ local function LoadSkin(event)
 			if(template == "AchievementTemplate") then
 				for _, achievement in pairs(frame.buttons) do
 					SkinAchievement(achievement, true);
-					
-					hooksecurefunc(achievement, "Saturate", function()
-						achievement:SetBackdropBorderColor(unpack(E["media"].bordercolor));
-					end);
-					hooksecurefunc(achievement, "Desaturate", function()
-						achievement:SetBackdropBorderColor(unpack(E["media"].bordercolor));
-					end);
 				end
 			end
 			if(template == "ComparisonTemplate") then
@@ -81,18 +81,6 @@ local function LoadSkin(event)
 					if(achievement.isSkinned) then return; end
 					SkinAchievement(achievement.player);
 					SkinAchievement(achievement.friend);
-					hooksecurefunc(achievement.player, "Saturate", function()
-						achievement.player:SetBackdropBorderColor(unpack(E["media"].bordercolor));
-					end);
-					hooksecurefunc(achievement.player, "Desaturate", function()
-						achievement.player:SetBackdropBorderColor(unpack(E["media"].bordercolor));
-					end);
-					hooksecurefunc(achievement.friend, "Saturate", function()
-						achievement.friend:SetBackdropBorderColor(unpack(E["media"].bordercolor));
-					end);
-					hooksecurefunc(achievement.friend, "Desaturate", function()
-						achievement.friend:SetBackdropBorderColor(unpack(E["media"].bordercolor));
-					end);
 				end
 			end
 			if(template == "StatTemplate") then
@@ -124,7 +112,7 @@ local function LoadSkin(event)
 	};
 	
 	for _, frame in pairs(frames) do
-		_G[frame]:StripTextures(true)
+		_G[frame]:StripTextures(true);
 	end
 	
 	local noname_frames = {
@@ -170,7 +158,6 @@ local function LoadSkin(event)
 	
 	for i = 1, 2 do
 		S:HandleTab(_G["AchievementFrameTab" .. i]);
-		_G["AchievementFrameTab" .. i]:SetFrameLevel(_G["AchievementFrameTab" .. i]:GetFrameLevel() + 2);
 	end
 	
 	local function SkinStatusBar(bar)
@@ -180,17 +167,17 @@ local function LoadSkin(event)
 		bar:CreateBackdrop("Default");
 		E:RegisterStatusBar(bar);
 		
-		local StatusBarName = bar:GetName();
-		if(_G[StatusBarName.."Title"]) then
-			_G[StatusBarName.."Title"]:Point("LEFT", 4, 0);
+		local barName = bar:GetName();
+		if(_G[barName .. "Title"]) then
+			_G[barName .. "Title"]:Point("LEFT", 4, 0);
 		end
 		
-		if(_G[StatusBarName.."Label"]) then
-			_G[StatusBarName.."Label"]:Point("LEFT", 4, 0);
+		if(_G[barName .. "Label"]) then
+			_G[barName .. "Label"]:Point("LEFT", 4, 0);
 		end
 		
-		if(_G[StatusBarName.."Text"]) then
-			_G[StatusBarName.."Text"]:Point("RIGHT", -4, 0);
+		if(_G[barName .. "Text"]) then
+			_G[barName .. "Text"]:Point("RIGHT", -4, 0);
 		end
 	end
 	
@@ -203,23 +190,16 @@ local function LoadSkin(event)
 	
 	for i = 1, 8 do
 		local frame = _G["AchievementFrameSummaryCategoriesCategory" .. i];
-		local button = _G["AchievementFrameSummaryCategoriesCategory" .. i .."Button"];
+		local button = _G["AchievementFrameSummaryCategoriesCategory" .. i .. "Button"];
 		local highlight = _G["AchievementFrameSummaryCategoriesCategory" .. i .. "ButtonHighlight"];
 		SkinStatusBar(frame);
 		button:StripTextures();
 		highlight:StripTextures();
 		
-		_G[highlight:GetName().."Middle"]:SetTexture(1, 1, 1, 0.3);
-		_G[highlight:GetName().."Middle"]:SetAllPoints(frame);
+		_G[highlight:GetName() .. "Middle"]:SetTexture(1, 1, 1, 0.3);
+		_G[highlight:GetName() .. "Middle"]:SetAllPoints(frame);
 	end
 	
-	hooksecurefunc("AchievementButton_DisplayAchievement", function(frame)
-		if(not frame.isSkinned) then
-			SkinAchievement(frame, true);
-		end
-		frame:SetBackdropBorderColor(unpack(E.media.bordercolor));
-	end);
-
 	hooksecurefunc("AchievementFrameSummary_UpdateAchievements", function()
 		for i = 1, ACHIEVEMENTUI_MAX_SUMMARY_ACHIEVEMENTS do
 			local frame = _G["AchievementFrameSummaryAchievement" .. i];
@@ -231,13 +211,13 @@ local function LoadSkin(event)
 			local prevFrame = _G["AchievementFrameSummaryAchievement" .. i-1];
 			if(i ~= 1) then
 				frame:ClearAllPoints()
-				frame:Point("TOPLEFT", prevFrame, "BOTTOMLEFT", 0, 1);
+				frame:Point("TOPLEFT", prevFrame, "BOTTOMLEFT", 0, -1);
 				frame:Point("TOPRIGHT", prevFrame, "BOTTOMRIGHT", 0, 1);
 			end
 			
 			frame:SetBackdropBorderColor(unpack(E.media.bordercolor));
 		end
-	end)
+	end);
 
 	for i = 1, 20 do
 		local frame = _G["AchievementFrameStatsContainerButton" .. i];
@@ -251,8 +231,8 @@ local function LoadSkin(event)
 		local frame = "AchievementFrameComparisonStatsContainerButton" .. i;
 		_G[frame]:StripTextures();
 		_G[frame]:StyleButton();
-		_G[frame .. "BG"]:SetTexture(1, 1, 1, 0.2)
-		_G[frame.. "HeaderLeft"]:Kill();
+		_G[frame .. "BG"]:SetTexture(1, 1, 1, 0.2);
+		_G[frame .. "HeaderLeft"]:Kill();
 		_G[frame .. "HeaderRight"]:Kill();
 		_G[frame .. "HeaderMiddle"]:Kill();
 	end
@@ -336,7 +316,7 @@ local function LoadSkin(event)
 				if(objectivesFrame.completed and completed) then
 					criteria.name:SetTextColor(1, 1, 1, 1);
 					criteria.name:SetShadowOffset(0, 0);
-				elseif ( completed ) then
+				elseif(completed) then
 					criteria.name:SetTextColor(0, 1, 0, 1);
 					criteria.name:SetShadowOffset(1, -1);
 				else
@@ -346,29 +326,6 @@ local function LoadSkin(event)
 			end
 		end
 	end);
-	
-	for i = 1, 20 do
-		local button = _G["AchievementFrameCategoriesContainerButton" .. i];
-		if(not button or (button and button.isSkinned)) then return; end
-		button:StripTextures(true);
-		button:StyleButton();
-		button.isSkinned = true;
-	end
-	
-	for i = 1, 10 do
-		local achievement = _G["AchievementFrameComparisonContainerButton" .. i];
-		if(not achievement or (achievement and achievement.isSkinned)) then return; end
-		
-		SkinAchievement(achievement.player);
-		SkinAchievement(achievement.friend);
-		
-		hooksecurefunc(achievement.player, "Saturate", function()
-			achievement.player:SetBackdropBorderColor(unpack(E["media"].bordercolor));
-			achievement.friend:SetBackdropBorderColor(unpack(E["media"].bordercolor));
-		end);
-		
-		achievement.isSkinned = true;
-	end
 end
 
 local f = CreateFrame("Frame");

@@ -293,7 +293,7 @@ P["unitframe"] = {
 			["health"] = {
 				["text_format"] = "[healthcolor][health:current-percent]",
 				["position"] = "LEFT",
-				["xOffset"] = 0,
+				["xOffset"] = 2,
 				["yOffset"] = 0,
 				["attachTextTo"] = "Health"
 			},
@@ -305,7 +305,7 @@ P["unitframe"] = {
 				["offset"] = 0,
 				["position"] = "RIGHT",
 				["hideonnpc"] = false,
-				["xOffset"] = 0,
+				["xOffset"] = -2,
 				["yOffset"] = 0,
 				["attachTextTo"] = "Health",
 				["detachFromFrame"] = false,
@@ -427,8 +427,9 @@ P["unitframe"] = {
 				["enable"] = true,
 				["size"] = 18,
 				["attachTo"] = "TOP",
+				["attachToObject"] = "Frame",
 				["xOffset"] = 0,
-				["yOffset"] = 10
+				["yOffset"] = 8
 			}
 		},
 		["target"] = {
@@ -444,7 +445,7 @@ P["unitframe"] = {
 			["health"] = {
 				["text_format"] = "[healthcolor][health:current-percent]",
 				["position"] = "RIGHT",
-				["xOffset"] = 0,
+				["xOffset"] = -2,
 				["yOffset"] = 0,
 				["attachTextTo"] = "Health"
 			},
@@ -456,7 +457,7 @@ P["unitframe"] = {
 				["offset"] = 0,
 				["position"] = "LEFT",
 				["hideonnpc"] = true,
-				["xOffset"] = 0,
+				["xOffset"] = 2,
 				["yOffset"] = 0,
 				["detachFromFrame"] = false,
 				["detachedWidth"] = 250,
@@ -567,8 +568,9 @@ P["unitframe"] = {
 				["enable"] = true,
 				["size"] = 18,
 				["attachTo"] = "TOP",
+				["attachToObject"] = "Frame",
 				["xOffset"] = 0,
-				["yOffset"] = 10
+				["yOffset"] = 8
 			},
 			["GPSArrow"] = {
 				["enable"] = false,
@@ -590,7 +592,7 @@ P["unitframe"] = {
 			["health"] = {
 				["text_format"] = "",
 				["position"] = "RIGHT",
-				["xOffset"] = 0,
+				["xOffset"] = -2,
 				["yOffset"] = 0
 			},
 			["power"] = {
@@ -601,7 +603,7 @@ P["unitframe"] = {
 				["offset"] = 0,
 				["position"] = "LEFT",
 				["hideonnpc"] = false,
-				["xOffset"] = 0,
+				["xOffset"] = 2,
 				["yOffset"] = 0
 			},
 			["infoPanel"] = {
@@ -665,8 +667,9 @@ P["unitframe"] = {
 				["enable"] = true,
 				["size"] = 18,
 				["attachTo"] = "TOP",
+				["attachToObject"] = "Frame",
 				["xOffset"] = 0,
-				["yOffset"] = 10
+				["yOffset"] = 8
 			}
 		},
 		["targettargettarget"] = {
@@ -680,7 +683,7 @@ P["unitframe"] = {
 			["health"] = {
 				["text_format"] = "",
 				["position"] = "RIGHT",
-				["xOffset"] = 0,
+				["xOffset"] = -2,
 				["yOffset"] = 0
 			},
 			["power"] = {
@@ -691,7 +694,7 @@ P["unitframe"] = {
 				["offset"] = 0,
 				["position"] = "LEFT",
 				["hideonnpc"] = false,
-				["xOffset"] = 0,
+				["xOffset"] = 2,
 				["yOffset"] = 0
 			},
 			["infoPanel"] = {
@@ -754,8 +757,9 @@ P["unitframe"] = {
 				["enable"] = true,
 				["size"] = 18,
 				["attachTo"] = "TOP",
+				["attachToObject"] = "Frame",
 				["xOffset"] = 0,
-				["yOffset"] = 10
+				["yOffset"] = 8
 			}
 		},
 		["focus"] = {
@@ -770,7 +774,7 @@ P["unitframe"] = {
 			["health"] = {
 				["text_format"] = "",
 				["position"] = "RIGHT",
-				["xOffset"] = 0,
+				["xOffset"] = -2,
 				["yOffset"] = 0,
 				["attachTextTo"] = "Health"
 			},
@@ -782,7 +786,7 @@ P["unitframe"] = {
 				["offset"] = 0,
 				["position"] = "LEFT",
 				["hideonnpc"] = false,
-				["xOffset"] = 0,
+				["xOffset"] = 2,
 				["yOffset"] = 0,
 				["attachTextTo"] = "Health"
 			},
@@ -876,8 +880,9 @@ P["unitframe"] = {
 				["enable"] = true,
 				["size"] = 18,
 				["attachTo"] = "TOP",
+				["attachToObject"] = "Frame",
 				["xOffset"] = 0,
-				["yOffset"] = 10
+				["yOffset"] = 8
 			},
 			["GPSArrow"] = {
 				["enable"] = true,
@@ -899,7 +904,7 @@ P["unitframe"] = {
 			["health"] = {
 				["text_format"] = "",
 				["position"] = "RIGHT",
-				["xOffset"] = 0,
+				["xOffset"] = -2,
 				["yOffset"] = 0
 			},
 			["power"] = {
@@ -910,7 +915,7 @@ P["unitframe"] = {
 				["offset"] = 0,
 				["position"] = "LEFT",
 				["hideonnpc"] = false,
-				["xOffset"] = 0,
+				["xOffset"] = 2,
 				["yOffset"] = 0
 			},
 			["infoPanel"] = {
@@ -973,8 +978,9 @@ P["unitframe"] = {
 				["enable"] = true,
 				["size"] = 18,
 				["attachTo"] = "TOP",
+				["attachToObject"] = "Frame",
 				["xOffset"] = 0,
-				["yOffset"] = 10
+				["yOffset"] = 8
 			}
 		},
 		["pet"] = {
@@ -990,7 +996,7 @@ P["unitframe"] = {
 				["text_format"] = "",
 				["position"] = "RIGHT",
 				["yOffset"] = 0,
-				["xOffset"] = 0
+				["xOffset"] = -2
 			},
 			["power"] = {
 				["enable"] = true,
@@ -1001,7 +1007,7 @@ P["unitframe"] = {
 				["position"] = "LEFT",
 				["hideonnpc"] = false,
 				["yOffset"] = 0,
-				["xOffset"] = 0
+				["xOffset"] = 2
 			},
 			["infoPanel"] = {
 				["enable"] = false,
@@ -1087,7 +1093,7 @@ P["unitframe"] = {
 				["text_format"] = "",
 				["position"] = "RIGHT",
 				["yOffset"] = 0,
-				["xOffset"] = 0
+				["xOffset"] = -2
 			},
 			["power"] = {
 				["enable"] = false,
@@ -1098,7 +1104,7 @@ P["unitframe"] = {
 				["position"] = "LEFT",
 				["hideonnpc"] = false,
 				["yOffset"] = 0,
-				["xOffset"] = 0
+				["xOffset"] = 2
 			},
 			["infoPanel"] = {
 				["enable"] = false,
@@ -1170,7 +1176,7 @@ P["unitframe"] = {
 				["text_format"] = "[healthcolor][health:current]",
 				["position"] = "LEFT",
 				["yOffset"] = 0,
-				["xOffset"] = 0,
+				["xOffset"] = 2,
 				["attachTextTo"] = "Health"
 			},
 			["power"] = {
@@ -1182,7 +1188,7 @@ P["unitframe"] = {
 				["position"] = "RIGHT",
 				["hideonnpc"] = false,
 				["yOffset"] = 0,
-				["xOffset"] = 0,
+				["xOffset"] = -2,
 				["attachTextTo"] = "Health"
 			},
 			["portrait"] = {
@@ -1258,8 +1264,9 @@ P["unitframe"] = {
 				["enable"] = true,
 				["size"] = 18,
 				["attachTo"] = "TOP",
+				["attachToObject"] = "Frame",
 				["xOffset"] = 0,
-				["yOffset"] = 10
+				["yOffset"] = 8
 			}
 		},
 		["arena"] = {
@@ -1277,7 +1284,7 @@ P["unitframe"] = {
 				["text_format"] = "[healthcolor][health:current]",
 				["position"] = "LEFT",
 				["yOffset"] = 0,
-				["xOffset"] = 0,
+				["xOffset"] = 2,
 				["attachTextTo"] = "Health"
 			},
 			["power"] = {
@@ -1290,7 +1297,7 @@ P["unitframe"] = {
 				["position"] = "RIGHT",
 				["hideonnpc"] = false,
 				["yOffset"] = 0,
-				["xOffset"] = 0
+				["xOffset"] = -2
 			},
 			["infoPanel"] = {
 				["enable"] = false,
@@ -1397,7 +1404,7 @@ P["unitframe"] = {
 				["attachTextTo"] = "Health",
 				["frequentUpdates"] = false,
 				["yOffset"] = 0,
-				["xOffset"] = 0
+				["xOffset"] = 2
 			},
 			["power"] = {
 				["enable"] = true,
@@ -1409,7 +1416,7 @@ P["unitframe"] = {
 				["position"] = "RIGHT",
 				["hideonnpc"] = false,
 				["yOffset"] = 0,
-				["xOffset"] = 0
+				["xOffset"] = -2
 			},
 			["infoPanel"] = {
 				["enable"] = false,
@@ -1540,8 +1547,9 @@ P["unitframe"] = {
 				["enable"] = true,
 				["size"] = 18,
 				["attachTo"] = "TOP",
+				["attachToObject"] = "Frame",
 				["xOffset"] = 0,
-				["yOffset"] = 10
+				["yOffset"] = 8
 			},
 			["GPSArrow"] = {
 				["enable"] = true,
@@ -1588,7 +1596,7 @@ P["unitframe"] = {
 				["position"] = "BOTTOMRIGHT",
 				["hideonnpc"] = false,
 				["yOffset"] = 0,
-				["xOffset"] = 0
+				["xOffset"] = -2
 			},
 			["infoPanel"] = {
 				["enable"] = false,
@@ -1690,8 +1698,9 @@ P["unitframe"] = {
 				["enable"] = true,
 				["size"] = 18,
 				["attachTo"] = "TOP",
+				["attachToObject"] = "Frame",
 				["xOffset"] = 0,
-				["yOffset"] = 10
+				["yOffset"] = 8
 			},
 			["GPSArrow"] = {
 				["enable"] = true,
@@ -1726,7 +1735,7 @@ P["unitframe"] = {
 				["orientation"] = "HORIZONTAL",
 				["frequentUpdates"] = false,
 				["attachTextTo"] = "Health",
-				["yOffset"] = 0,
+				["yOffset"] = 2,
 				["xOffset"] = 0
 			},
 			["power"] = {
@@ -1737,8 +1746,8 @@ P["unitframe"] = {
 				["offset"] = 0,
 				["position"] = "BOTTOMRIGHT",
 				["hideonnpc"] = false,
-				["yOffset"] = 0,
-				["xOffset"] = 0
+				["yOffset"] = 2,
+				["xOffset"] = -2
 			},
 			["infoPanel"] = {
 				["enable"] = false,
@@ -1840,8 +1849,9 @@ P["unitframe"] = {
 				["enable"] = true,
 				["size"] = 18,
 				["attachTo"] = "TOP",
+				["attachToObject"] = "Frame",
 				["xOffset"] = 0,
-				["yOffset"] = 10
+				["yOffset"] = 8
 			},
 			["GPSArrow"] = {
 				["enable"] = true,
@@ -1877,14 +1887,14 @@ P["unitframe"] = {
 				["position"] = "BOTTOM",
 				["orientation"] = "HORIZONTAL",
 				["frequentUpdates"] = true,
-				["yOffset"] = 0,
+				["yOffset"] = 2,
 				["xOffset"] = 0,
 				["attachTextTo"] = "Health"
 			},
 			["name"] = {
 				["position"] = "TOP",
 				["text_format"] = "[namecolor][name:short]",
-				["yOffset"] = 0,
+				["yOffset"] = -2,
 				["xOffset"] = 0,
 				["attachTextTo"] = "Health"
 			},
@@ -1966,8 +1976,9 @@ P["unitframe"] = {
 				["enable"] = true,
 				["size"] = 18,
 				["attachTo"] = "TOP",
+				["attachToObject"] = "Frame",
 				["xOffset"] = 0,
-				["yOffset"] = 10
+				["yOffset"] = 8
 			}
 		},
 		["tank"] = {

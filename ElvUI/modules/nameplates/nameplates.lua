@@ -123,8 +123,8 @@ local TimeColors = {
 
 function NP:SetTargetIndicatorDimensions()
 	if(self.db.targetIndicator.style == "arrow") then
-		targetIndicator:SetHeight(self.db.targetIndicator.height);
-		targetIndicator:SetWidth(self.db.targetIndicator.width);
+		targetIndicator.arrow:SetHeight(self.db.targetIndicator.height);
+		targetIndicator.arrow:SetWidth(self.db.targetIndicator.width);
 	elseif(self.db.targetIndicator.style == "doubleArrow" or self.db.targetIndicator.style == "doubleArrowInverted") then
 		targetIndicator.left:SetHeight(self.db.targetIndicator.height);
 		targetIndicator.left:SetWidth(self.db.targetIndicator.width);
@@ -136,8 +136,8 @@ end
 function NP:PositionTargetIndicator(myPlate)
 	targetIndicator:SetParent(myPlate);
 	if(self.db.targetIndicator.style == "arrow") then
-		targetIndicator:ClearAllPoints();
-		targetIndicator:SetPoint("BOTTOM", myPlate.healthBar, "TOP", 0, 30 + self.db.targetIndicator.yOffset);
+		targetIndicator.arrow:ClearAllPoints();
+		targetIndicator.arrow:SetPoint("BOTTOM", myPlate.healthBar, "TOP", 0, 30 + self.db.targetIndicator.yOffset);
 	elseif(self.db.targetIndicator.style == "doubleArrow") then
 		targetIndicator.left:SetPoint("RIGHT", myPlate.healthBar, "LEFT", -self.db.targetIndicator.xOffset, 0);
 		targetIndicator.right:SetPoint("LEFT", myPlate.healthBar, "RIGHT", self.db.targetIndicator.xOffset, 0);
@@ -159,7 +159,7 @@ end
 
 function NP:ColorTargetIndicator(r, g, b)
 	if(self.db.targetIndicator.style == "arrow") then
-		targetIndicator:SetVertexColor(r, g, b);
+		targetIndicator.arrow:SetVertexColor(r, g, b);
 	elseif(self.db.targetIndicator.style == "doubleArrow" or self.db.targetIndicator.style == "doubleArrowInverted") then
 		targetIndicator.left:SetVertexColor(r, g, b);
 		targetIndicator.right:SetVertexColor(r, g, b);
@@ -556,14 +556,15 @@ function NP:Initialize()
 	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT");
 	self:RegisterEvent("UNIT_COMBO_POINTS");
 	
-	self.arrowIndicator = WorldFrame:CreateTexture(nil, "BORDER", -1);
-	self.arrowIndicator:SetTexture([[Interface\AddOns\ElvUI\media\textures\nameplateTargetIndicator.tga]]);
+	self.arrowIndicator = CreateFrame("Frame", nil, WorldFrame);
+	self.arrowIndicator.arrow = self.arrowIndicator:CreateTexture(nil, "BORDER");
+	self.arrowIndicator.arrow:SetTexture([[Interface\AddOns\ElvUI\media\textures\nameplateTargetIndicator.tga]]);
 	self.arrowIndicator:Hide();
 	
 	self.doubleArrowIndicator = CreateFrame("Frame", nil, WorldFrame);
-	self.doubleArrowIndicator.left = self.doubleArrowIndicator:CreateTexture(nil, "BORDER", -1);
+	self.doubleArrowIndicator.left = self.doubleArrowIndicator:CreateTexture(nil, "BORDER");
 	self.doubleArrowIndicator.left:SetTexture([[Interface\AddOns\ElvUI\media\textures\nameplateTargetIndicatorLeft.tga]]);
-	self.doubleArrowIndicator.right = self.doubleArrowIndicator:CreateTexture(nil, "BORDER", -1);
+	self.doubleArrowIndicator.right = self.doubleArrowIndicator:CreateTexture(nil, "BORDER");
 	self.doubleArrowIndicator.right:SetTexture([[Interface\AddOns\ElvUI\media\textures\nameplateTargetIndicatorRight.tga]]);
 	self.doubleArrowIndicator:Hide();
 	

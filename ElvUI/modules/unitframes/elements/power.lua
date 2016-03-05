@@ -58,13 +58,12 @@ function UF:Configure_Power(frame)
 		
 		power.Smooth = self.db.smoothbars;
 		
-		local x, y = self:GetPositionOffset(db.power.position);
-		local attachPoint = self:GetTextAnchorPoint(frame, db.power.attachTextTo);
+		local attachPoint = self:GetObjectAnchorPoint(frame, db.power.attachTextTo);
 		if(E.global.tukuiMode and frame.InfoPanel and frame.InfoPanel:IsShown()) then
 			attachPoint = frame.InfoPanel;
 		end
 		power.value:ClearAllPoints();
-		power.value:Point(db.power.position, attachPoint, db.power.position, x + db.power.xOffset, y + db.power.yOffset);
+		power.value:Point(db.power.position, attachPoint, db.power.position, db.power.xOffset, db.power.yOffset);
 		frame:Tag(power.value, db.power.text_format);
 		
 		if(db.power.attachTextToPower) then

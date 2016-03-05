@@ -1298,33 +1298,44 @@ local function GetOptionsTable_RaidIcon(updateFunc, groupName, numUnits)
 		set = function(info, value) E.db.unitframe.units[groupName]["raidicon"][ info[#info] ] = value; updateFunc(UF, groupName, numUnits); end,
 		args = {
 			enable = {
-				type = "toggle",
 				order = 1,
+				type = "toggle",
 				name = L["Enable"],
 			},	
 			attachTo = {
-				type = "select",
 				order = 2,
+				type = "select",
 				name = L["Position"],
 				values = positionValues,
 				disabled = function() return not E.db.unitframe.units[groupName]["raidicon"]["enable"]; end
 			},
+			attachToObject = {
+				order = 3,
+				type = "select",
+				name = L["Attach To"],
+				values = {
+					["Health"] = L["Health"],
+					["Power"] = L["Power"],
+					["InfoPanel"] = L["Information Bar"],
+					["Frame"] = L["Frame"]
+				}
+			},
 			size = {
+				order = 4,
 				type = "range",
 				name = L["Size"],
-				order = 3,
 				min = 8, max = 60, step = 1,
 				disabled = function() return not E.db.unitframe.units[groupName]["raidicon"]["enable"]; end
 			},				
 			xOffset = {
-				order = 4,
+				order = 5,
 				type = "range",
 				name = L["xOffset"],
 				min = -300, max = 300, step = 1,
 				disabled = function() return not E.db.unitframe.units[groupName]["raidicon"]["enable"]; end
 			},
 			yOffset = {
-				order = 5,
+				order = 6,
 				type = "range",
 				name = L["yOffset"],
 				min = -300, max = 300, step = 1,

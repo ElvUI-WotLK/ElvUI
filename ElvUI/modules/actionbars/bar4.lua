@@ -3,9 +3,8 @@ local AB = E:GetModule("ActionBars");
 
 local split = string.split;
 
-local bar = CreateFrame("Frame", "ElvUI_Bar4", E.UIParent, "SecureHandlerStateTemplate");
-
 function AB:CreateBar4()
+	local bar = CreateFrame("Frame", "ElvUI_Bar4", E.UIParent, "SecureHandlerStateTemplate");
 	local point, anchor, attachTo, x, y = split(",", self["barDefaults"]["bar4"].position);
 	bar:Point(point, anchor, attachTo, x, y);
 	bar.id = "4";
@@ -15,13 +14,13 @@ function AB:CreateBar4()
 	bar.buttons = {};
 	self:HookScript(bar, "OnEnter", "Bar_OnEnter");
 	self:HookScript(bar, "OnLeave", "Bar_OnLeave");
-	local button
+	
 	for i = 1, NUM_ACTIONBAR_BUTTONS do
-		button = _G["MultiBarLeftButton" .. i];
+		local button = _G["MultiBarLeftButton" .. i];
 		bar.buttons[i] = button;
 		bar:SetFrameRef("MultiBarLeftButton" .. i, button);
 		self:HookScript(button, "OnEnter", "Button_OnEnter");
-		self:HookScript(button, "OnLeave", "Button_OnEnter");
+		self:HookScript(button, "OnLeave", "Button_OnLeave");
 	end
 	
 	bar:Execute([[

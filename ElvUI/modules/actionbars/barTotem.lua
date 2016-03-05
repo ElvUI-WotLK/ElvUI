@@ -238,11 +238,10 @@ function AB:CreateTotemBar()
 	bar:Width(MultiCastActionBarFrame:GetWidth());
 	bar:Height(MultiCastActionBarFrame:GetHeight());
 	
-	
 	local closeButton = MultiCastFlyoutFrameCloseButton;
 	closeButton:CreateBackdrop("Default", true, true);
-	closeButton.backdrop:SetPoint("TOPLEFT", 0, -(E.PixelMode and 1 or 3));
-	closeButton.backdrop:SetPoint("BOTTOMRIGHT", 0, E.PixelMode and 1 or 3);
+	closeButton.backdrop:SetPoint("TOPLEFT", 0, -(E.Border + E.Spacing));
+	closeButton.backdrop:SetPoint("BOTTOMRIGHT", 0, E.Border + E.Spacing);
 	
 	closeButton.normalTexture:SetTexture("");
 	
@@ -252,8 +251,8 @@ function AB:CreateTotemBar()
 	
 	local openButton = MultiCastFlyoutFrameOpenButton;
 	openButton:CreateBackdrop("Default", true, true);
-	openButton.backdrop:SetPoint("TOPLEFT", 0, -(E.PixelMode and 1 or 3));
-	openButton.backdrop:SetPoint("BOTTOMRIGHT", 0, E.PixelMode and 1 or 3);
+	openButton.backdrop:SetPoint("TOPLEFT", 0, -(E.Border + E.Spacing));
+	openButton.backdrop:SetPoint("BOTTOMRIGHT", 0, E.Border + E.Spacing);
 	
 	openButton.normalTexture:SetTexture("");
 	

@@ -13,14 +13,16 @@ end
 
 function UF:Configure_RaidIcon(frame)
 	local RI = frame.RaidIcon;
-	if(frame.db.raidicon.enable) then
+	local db = frame.db;
+	
+	if(db.raidicon.enable) then
 		frame:EnableElement("RaidIcon");
 		RI:Show();
-		RI:Size(frame.db.raidicon.size);
+		RI:Size(db.raidicon.size);
 		
-		local x, y = self:GetPositionOffset(frame.db.raidicon.attachTo);
+		local attachPoint = self:GetObjectAnchorPoint(frame, db.raidicon.attachToObject);
 		RI:ClearAllPoints();
-		RI:Point(frame.db.raidicon.attachTo, frame, frame.db.raidicon.attachTo, x + frame.db.raidicon.xOffset, y + frame.db.raidicon.yOffset);
+		RI:Point(db.raidicon.attachTo, attachPoint, db.raidicon.attachTo, db.raidicon.xOffset, db.raidicon.yOffset);
 	else
 		frame:DisableElement("RaidIcon");
 		RI:Hide();

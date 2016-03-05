@@ -58,8 +58,7 @@ function UF:Configure_HealthBar(frame)
 	health.Smooth = self.db.smoothbars;
 	
 	if(health.value) then
-		local attachPoint = self:GetTextAnchorPoint(frame, db.health.attachTextTo)
-		local x, y = self:GetPositionOffset(db.health.position);
+		local attachPoint = self:GetObjectAnchorPoint(frame, db.health.attachTextTo);
 		if(E.global.tukuiMode and frame.InfoPanel and frame.InfoPanel:IsShown()) then
 			if(frame.unitframeType == "raid") then
 				attachPoint = frame.Health;
@@ -68,7 +67,7 @@ function UF:Configure_HealthBar(frame)
 			end
 		end
 		health.value:ClearAllPoints();
-		health.value:Point(db.health.position, attachPoint, db.health.position, x + db.health.xOffset, y + db.health.yOffset);
+		health.value:Point(db.health.position, attachPoint, db.health.position, db.health.xOffset, db.health.yOffset);
 		frame:Tag(health.value, db.health.text_format);
 	end
 	
