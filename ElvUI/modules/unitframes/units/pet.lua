@@ -104,13 +104,6 @@ function UF:Update_PetFrame(frame, db)
 	
 	UF:Configure_CustomTexts(frame);
 	
-	if(UF.db.colors.transparentHealth) then
-		UF:ToggleTransparentStatusBar(true, frame.Health, frame.Health.bg);
-	else
-		UF:ToggleTransparentStatusBar(false, frame.Health, frame.Health.bg, (frame.USE_PORTRAIT and frame.USE_PORTRAIT_OVERLAY) ~= true);
-	end
-	UF:ToggleTransparentStatusBar(UF.db.colors.transparentPower, frame.Power, frame.Power.bg);
-	
 	UF:UpdateAuraWatch(frame);
 	frame:UpdateAllElements();
 end

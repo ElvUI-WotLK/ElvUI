@@ -253,16 +253,6 @@ function UF:Update_PartyFrames(frame, db)
 	
 	UF:Configure_Range(frame);
 	
-	if(UF.db.colors.transparentHealth) then
-		UF:ToggleTransparentStatusBar(true, frame.Health, frame.Health.bg);
-	else
-		UF:ToggleTransparentStatusBar(false, frame.Health, frame.Health.bg, (frame.USE_PORTRAIT and frame.USE_PORTRAIT_OVERLAY) ~= true);
-	end
-	
-	if(frame.Power) then
-		UF:ToggleTransparentStatusBar(UF.db.colors.transparentPower, frame.Power, frame.Power.bg)
-	end
-	
 	frame:UpdateAllElements();
 end
 

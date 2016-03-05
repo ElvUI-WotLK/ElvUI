@@ -113,13 +113,6 @@ function UF:Update_FocusFrame(frame, db)
 	
 	UF:Configure_CustomTexts(frame);
 	
-	if(UF.db.colors.transparentHealth) then
-		UF:ToggleTransparentStatusBar(true, frame.Health, frame.Health.bg);
-	else
-		UF:ToggleTransparentStatusBar(false, frame.Health, frame.Health.bg, (USE_PORTRAIT and USE_PORTRAIT_OVERLAY) ~= true);
-	end
-	UF:ToggleTransparentStatusBar(UF.db.colors.transparentPower, frame.Power, frame.Power.bg);
-	
 	frame:UpdateAllElements();
 end
 

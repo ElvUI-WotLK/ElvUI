@@ -157,8 +157,6 @@ function UF:Update_TankFrames(frame, db)
 		UF:UpdateAuraWatch(frame);
 	end
 	
-	UF:ToggleTransparentStatusBar(UF.db.colors.transparentHealth, frame.Health, frame.Health.bg, true);
-	
 	frame:UpdateAllElements();
 end
 

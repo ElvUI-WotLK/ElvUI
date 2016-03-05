@@ -1,49 +1,65 @@
-local parent, ns = ...
-local oUF = ns.oUF
+local parent, ns = ...;
+local oUF = ns.oUF;
 
 local Update = function(self, event)
-	local lfdrole = self.LFDRole
-	local isTank, isHealer, isDamage = UnitGroupRolesAssigned(self.unit)
-
+	local lfdrole = self.LFDRole;
+	if(lfdrole.PreUpdate) then
+		lfdrole:PreUpdate();
+	end
+	
+	local isTank, isHealer, isDamage = UnitGroupRolesAssigned(self.unit);
 	if(isTank) then
-		lfdrole:SetTexture([[Interface\AddOns\ElvUI\media\textures\tank.tga]])
-		lfdrole:Show()
+		lfdrole:SetTexture([[Interface\AddOns\ElvUI\media\textures\tank.tga]]);
+		lfdrole:Show();
 	elseif(isHealer) then
-		lfdrole:SetTexture([[Interface\AddOns\ElvUI\media\textures\healer.tga]])
-		lfdrole:Show()
+		lfdrole:SetTexture([[Interface\AddOns\ElvUI\media\textures\healer.tga]]);
+		lfdrole:Show();
 	elseif(isDamage) then
-		lfdrole:SetTexture([[Interface\AddOns\ElvUI\media\textures\dps.tga]])
-		lfdrole:Show()
+		lfdrole:SetTexture([[Interface\AddOns\ElvUI\media\textures\dps.tga]]);
+		lfdrole:Show();
 	else
-		lfdrole:Hide()
+		lfdrole:Hide();
+	end
+	
+	if(lfdrole.PostUpdate) then
+		return lfdrole:PostUpdate(isTank, isHealer, isDamage);
 	end
 end
 
+local Path = function(self, ...)
+	return (self.LFDRole.Override or Update) (self, ...);
+end
+
+local ForceUpdate = function(element)
+	return Path(element.__owner, "ForceUpdate");
+end
+
 local Enable = function(self)
-	local lfdrole = self.LFDRole
+	local lfdrole = self.LFDRole;
 	if(lfdrole) then
-		local Update = lfdrole.Update or Update
+		lfdrole.__owner = self;
+		lfdrole.ForceUpdate = ForceUpdate;
+		
 		if(self.unit == "player") then
-			self:RegisterEvent("PLAYER_ROLES_ASSIGNED", Update, true)
+			self:RegisterEvent("PLAYER_ROLES_ASSIGNED", Path, true);
 		else
-			self:RegisterEvent("PARTY_MEMBERS_CHANGED", Update, true)
+			self:RegisterEvent("PARTY_MEMBERS_CHANGED", Path, true);
 		end
-
+		
 		if(lfdrole:IsObjectType"Texture" and not lfdrole:GetTexture()) then
-			lfdrole:SetTexture[[Interface\LFGFrame\UI-LFG-ICON-PORTRAITROLES]]
+			lfdrole:SetTexture[[Interface\LFGFrame\UI-LFG-ICON-PORTRAITROLES]];
 		end
-
-		return true
+		
+		return true;
 	end
 end
 
 local Disable = function(self)
-	local lfdrole = self.LFDRole
+	local lfdrole = self.LFDRole;
 	if(lfdrole) then
-		local Update = lfdrole.Update or Update
-		self:UnregisterEvent("PLAYER_ROLES_ASSIGNED", Update)
-		self:UnregisterEvent("PARTY_MEMBERS_CHANGED", Update)
+		self:UnregisterEvent("PLAYER_ROLES_ASSIGNED", Path);
+		self:UnregisterEvent("PARTY_MEMBERS_CHANGED", Path);
 	end
 end
 
-oUF:AddElement('LFDRole', Update, Enable, Disable)
+oUF:AddElement("LFDRole", Path, Enable, Disable);

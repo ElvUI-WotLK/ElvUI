@@ -194,6 +194,10 @@ function UF:Configure_Power(frame)
 			frame.DruidAltMana:Hide();
 		end
 	end
+	
+	if(frame.Power) then
+		UF:ToggleTransparentStatusBar(UF.db.colors.transparentPower, frame.Power, frame.Power.bg);
+	end
 end
 
 local tokens = {[0] = "MANA", "RAGE", "FOCUS", "ENERGY", "RUNIC_POWER"}

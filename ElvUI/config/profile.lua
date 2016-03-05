@@ -1509,6 +1509,9 @@ P["unitframe"] = {
 			["roleIcon"] = {
 				["enable"] = true,
 				["position"] = "CENTER",
+				["attachTo"] = "Health",
+				["xOffset"] = 0,
+				["yOffset"] = 0,
 				["size"] = 15
 			},
 			["raidRoleIcons"] = {
@@ -1688,6 +1691,9 @@ P["unitframe"] = {
 			["roleIcon"] = {
 				["enable"] = true,
 				["position"] = "BOTTOMRIGHT",
+				["attachTo"] = "Health",
+				["xOffset"] = 0,
+				["yOffset"] = 0,
 				["size"] = 15
 			},
 			["raidRoleIcons"] = {
@@ -1833,6 +1839,9 @@ P["unitframe"] = {
 			["roleIcon"] = {
 				["enable"] = false,
 				["position"] = "BOTTOMRIGHT",
+				["attachTo"] = "Health",
+				["xOffset"] = 0,
+				["yOffset"] = 0,
 				["size"] = 15
 			},
 			["raidRoleIcons"] = {

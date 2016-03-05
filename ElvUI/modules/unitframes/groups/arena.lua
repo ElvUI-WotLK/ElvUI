@@ -129,7 +129,7 @@ function UF:Update_ArenaFrames(frame, db)
 			frame:Point("TOPRIGHT", _G["ElvUF_Arena"..frame.index-1], "BOTTOMRIGHT", 0, -db.spacing);
 		end
 	end
-
+	
 	if(db.growthDirection == "UP" or db.growthDirection == "DOWN") then
 		ArenaHeader:Width(frame.UNIT_WIDTH);
 		ArenaHeader:Height(frame.UNIT_HEIGHT + ((frame.UNIT_HEIGHT + db.spacing) * 4));
@@ -137,9 +137,6 @@ function UF:Update_ArenaFrames(frame, db)
 		ArenaHeader:Width(frame.UNIT_WIDTH + ((frame.UNIT_WIDTH + db.spacing) * 4));
 		ArenaHeader:Height(frame.UNIT_HEIGHT);
 	end
-
-	UF:ToggleTransparentStatusBar(UF.db.colors.transparentHealth, frame.Health, frame.Health.bg, (USE_PORTRAIT and USE_PORTRAIT_OVERLAY) ~= true);
-	UF:ToggleTransparentStatusBar(UF.db.colors.transparentPower, frame.Power, frame.Power.bg);
 	
 	frame:UpdateAllElements();
 end

@@ -164,8 +164,6 @@ function UF:Update_RaidpetFrames(frame, db)
 	
 	UF:Configure_CustomTexts(frame);
 	
-	UF:ToggleTransparentStatusBar(UF.db.colors.transparentHealth, frame.Health, frame.Health.bg, (frame.USE_PORTRAIT and frame.USE_PORTRAIT_OVERLAY) ~= true);
-	
 	frame:UpdateAllElements();
 end
 

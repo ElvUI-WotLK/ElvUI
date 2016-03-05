@@ -137,21 +137,6 @@ function UF:Update_BossFrames(frame, db)
 		BossHeader:Height(frame.UNIT_HEIGHT)
 	end
 	
-	if(UF.db.colors.transparentHealth) then
-		UF:ToggleTransparentStatusBar(true, frame.Health, frame.Health.bg);
-	else
-		UF:ToggleTransparentStatusBar(false, frame.Health, frame.Health.bg, (frame.USE_PORTRAIT and frame.USE_PORTRAIT_OVERLAY) ~= true);
-	end
-	
-	if(UF.db.colors.transparentPower) then
-		UF:ToggleTransparentStatusBar(true, frame.Power, frame.Power.bg);
-	else
-		UF:ToggleTransparentStatusBar(false, frame.Power, frame.Power.bg, true);
-	end
-	
-	UF:ToggleTransparentStatusBar(UF.db.colors.transparentHealth, frame.Health, frame.Health.bg, true);
-	UF:ToggleTransparentStatusBar(UF.db.colors.transparentPower, frame.Power, frame.Power.bg);
-	
 	frame:UpdateAllElements();
 end
 

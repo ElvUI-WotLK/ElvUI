@@ -4113,8 +4113,31 @@ E.Options.args.unitframe.args.party = {
 					name = L["Position"],
 					values = positionValues
 				},
-				size = {
+				attachTo = {
 					order = 3,
+					type = "select",
+					name = L["Attach To"],
+					values = {
+						["Health"] = L["Health"],
+						["Power"] = L["Power"],
+						["InfoPanel"] = L["Information Bar"],
+						["Frame"] = L["Frame"]
+					}
+				},
+				xOffset = {
+					order = 4,
+					type = "range",
+					name = L["xOffset"],
+					min = -300, max = 300, step = 1
+				},
+				yOffset = {
+					order = 5,
+					type = "range",
+					name = L["yOffset"],
+					min = -300, max = 300, step = 1
+				},
+				size = {
+					order = 6,
 					type = "range",
 					name = L["Size"],
 					min = 4, max = 100, step = 1
@@ -4637,6 +4660,55 @@ E.Options.args.unitframe.args["raid"] = {
 				}
 			}
 		},
+		roleIcon = {
+			order = 700,
+			type = "group",
+			name = L["Role Icon"],
+			get = function(info) return E.db.unitframe.units["raid"]["roleIcon"][ info[#info] ]; end,
+			set = function(info, value) E.db.unitframe.units["raid"]["roleIcon"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("raid"); end,
+			args = {
+				enable = {
+					order = 1,
+					type = "toggle",
+					name = L["Enable"]
+				},
+				position = {
+					order = 2,
+					type = "select",
+					name = L["Position"],
+					values = positionValues
+				},
+				attachTo = {
+					order = 3,
+					type = "select",
+					name = L["Attach To"],
+					values = {
+						["Health"] = L["Health"],
+						["Power"] = L["Power"],
+						["InfoPanel"] = L["Information Bar"],
+						["Frame"] = L["Frame"]
+					}
+				},
+				xOffset = {
+					order = 4,
+					type = "range",
+					name = L["xOffset"],
+					min = -300, max = 300, step = 1
+				},
+				yOffset = {
+					order = 5,
+					type = "range",
+					name = L["yOffset"],
+					min = -300, max = 300, step = 1
+				},
+				size = {
+					order = 6,
+					type = "range",
+					name = L["Size"],
+					min = 4, max = 100, step = 1
+				}
+			}
+		},
 		raidRoleIcons = {
 			order = 750,
 			type = "group",
@@ -5002,8 +5074,31 @@ E.Options.args.unitframe.args["raid40"] = {
 					name = L["Position"],
 					values = positionValues
 				},
-				size = {
+				attachTo = {
 					order = 3,
+					type = "select",
+					name = L["Attach To"],
+					values = {
+						["Health"] = L["Health"],
+						["Power"] = L["Power"],
+						["InfoPanel"] = L["Information Bar"],
+						["Frame"] = L["Frame"]
+					}
+				},
+				xOffset = {
+					order = 4,
+					type = "range",
+					name = L["xOffset"],
+					min = -300, max = 300, step = 1
+				},
+				yOffset = {
+					order = 5,
+					type = "range",
+					name = L["yOffset"],
+					min = -300, max = 300, step = 1
+				},
+				size = {
+					order = 6,
 					type = "range",
 					name = L["Size"],
 					min = 4, max = 100, step = 1
