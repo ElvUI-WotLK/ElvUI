@@ -75,15 +75,26 @@ function UF:Configure_HealthBar(frame)
 	health.colorHealth = nil;
 	health.colorClass = nil;
 	health.colorReaction = nil;
-	if(self.db.colors.healthclass ~= true) then
-		if(self.db.colors.colorhealthbyvalue == true) then
+	if(db.colorOverride and db.colorOverride == "FORCE_ON") then
+		health.colorClass = true
+		health.colorReaction = true
+	elseif(db.colorOverride and db.colorOverride == "FORCE_OFF") then
+		if(self.db["colors"].colorhealthbyvalue == true) then
 			health.colorSmooth = true;
 		else
 			health.colorHealth = true;
 		end
 	else
-		health.colorClass = (not self.db.colors.forcehealthreaction);
-		health.colorReaction = true;
+		if(self.db.colors.healthclass ~= true) then
+			if(self.db.colors.colorhealthbyvalue == true) then
+				health.colorSmooth = true;
+			else
+				health.colorHealth = true;
+			end
+		else
+			health.colorClass = (not self.db.colors.forcehealthreaction);
+			health.colorReaction = true;
+		end
 	end
 	
 	health:ClearAllPoints();
