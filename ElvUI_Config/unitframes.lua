@@ -2424,14 +2424,9 @@ E.Options.args.unitframe.args.player = {
 	set = function(info, value) E.db.unitframe.units["player"][ info[#info] ] = value; UF:CreateAndUpdateUF("player"); end,
 	disabled = function() return not E.private.unitframe.enable end,
 	args = {
-		enable = {
-			type = "toggle",
-			order = 1,
-			name = L["Enable"]
-		},
 		copyFrom = {
 			type = "select",
-			order = 2,
+			order = 1,
 			name = L["Copy From"],
 			desc = L["Select a unit to copy settings from."],
 			values = UF["units"],
@@ -2439,12 +2434,12 @@ E.Options.args.unitframe.args.player = {
 		},
 		resetSettings = {
 			type = "execute",
-			order = 3,
+			order = 2,
 			name = L["Restore Defaults"],
 			func = function(info, value) UF:ResetUnitSettings("player"); E:ResetMovers(L["Player Frame"]); end
 		},
 		showAuras = {
-			order = 4,
+			order = 3,
 			type = "execute",
 			name = L["Show Auras"],
 			func = function() 
@@ -2457,7 +2452,12 @@ E.Options.args.unitframe.args.player = {
 				
 				UF:CreateAndUpdateUF("player");
 			end
-		},			
+		},
+		enable = {
+			type = "toggle",
+			order = 4,
+			name = L["Enable"]
+		},
 		width = {
 			order = 5,
 			name = L["Width"],
@@ -2547,6 +2547,17 @@ E.Options.args.unitframe.args.player = {
 				["LEFT"] = L["Left"],
 				["MIDDLE"] = L["Middle"],
 				["RIGHT"] = L["Right"]
+			}
+		},
+		colorOverride = {
+			order = 15,
+			name = L["Class Color Override"],
+			desc = L["Override the default class color setting."],
+			type = "select",
+			values = {
+				["USE_DEFAULT"] = L["Use Default"],
+				["FORCE_ON"] = L["Force On"],
+				["FORCE_OFF"] = L["Force Off"]
 			}
 		},
 		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, "player"),
@@ -2651,14 +2662,9 @@ E.Options.args.unitframe.args.target = {
 	set = function(info, value) E.db.unitframe.units["target"][ info[#info] ] = value; UF:CreateAndUpdateUF("target"); end,
 	disabled = function() return not E.private.unitframe.enable; end,
 	args = {
-		enable = {
-			type = "toggle",
-			order = 1,
-			name = L["Enable"]
-		},
 		copyFrom = {
 			type = "select",
-			order = 2,
+			order = 1,
 			name = L["Copy From"],
 			desc = L["Select a unit to copy settings from."],
 			values = UF["units"],
@@ -2666,12 +2672,12 @@ E.Options.args.unitframe.args.target = {
 		},
 		resetSettings = {
 			type = "execute",
-			order = 3,
+			order = 2,
 			name = L["Restore Defaults"],
 			func = function(info, value) UF:ResetUnitSettings("target"); E:ResetMovers(L["Target Frame"]); end
 		},		
 		showAuras = {
-			order = 4,
+			order = 3,
 			type = "execute",
 			name = L["Show Auras"],
 			func = function() 
@@ -2684,7 +2690,12 @@ E.Options.args.unitframe.args.target = {
 				
 				UF:CreateAndUpdateUF("target");
 			end
-		},			
+		},
+		enable = {
+			order = 4,
+			type = "toggle",
+			name = L["Enable"]
+		},
 		width = {
 			order = 5,
 			name = L["Width"],
@@ -2717,20 +2728,20 @@ E.Options.args.unitframe.args.target = {
 			name = L["Heal Prediction"],
 			desc = L["Show a incomming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
 		},
-		middleClickFocus = {
-			order = 9,
-			type = "toggle",
-			name = L["Middle Click - Set Focus"],
-			desc = L["Middle clicking the unit frame will cause your focus to match the unit."],
-			disabled = function() return IsAddOnLoaded("Clique"); end
-		},
 		hideonnpc = {
-			order = 10,
+			order = 9,
 			type = "toggle",
 			name = L["Text Toggle On NPC"],
 			desc = L["Power text will be hidden on NPC targets, in addition the name text will be repositioned to the power texts anchor point."],
 			get = function(info) return E.db.unitframe.units["target"]["power"].hideonnpc; end,
 			set = function(info, value) E.db.unitframe.units["target"]["power"].hideonnpc = value; UF:CreateAndUpdateUF("target"); end
+		},
+		middleClickFocus = {
+			order = 10,
+			type = "toggle",
+			name = L["Middle Click - Set Focus"],
+			desc = L["Middle clicking the unit frame will cause your focus to match the unit."],
+			disabled = function() return IsAddOnLoaded("Clique"); end
 		},
 		threatStyle = {
 			type = "select",
@@ -2759,6 +2770,17 @@ E.Options.args.unitframe.args.target = {
 				["LEFT"] = L["Left"],
 				["MIDDLE"] = L["Middle"],
 				["RIGHT"] = L["Right"]
+			}
+		},
+		colorOverride = {
+			order = 14,
+			name = L["Class Color Override"],
+			desc = L["Override the default class color setting."],
+			type = "select",
+			values = {
+				["USE_DEFAULT"] = L["Use Default"],
+				["FORCE_ON"] = L["Force On"],
+				["FORCE_OFF"] = L["Force Off"]
 			}
 		},
 		combobar = {
@@ -2831,13 +2853,8 @@ E.Options.args.unitframe.args.targettarget = {
 	set = function(info, value) E.db.unitframe.units["targettarget"][ info[#info] ] = value; UF:CreateAndUpdateUF("targettarget"); end,
 	disabled = function() return not E.private.unitframe.enable end,
 	args = {
-		enable = {
-			order = 1,
-			type = "toggle",
-			name = L["Enable"]
-		},
 		copyFrom = {
-			order = 2,
+			order = 1,
 			type = "select",
 			name = L["Copy From"],
 			desc = L["Select a unit to copy settings from."],
@@ -2845,13 +2862,13 @@ E.Options.args.unitframe.args.targettarget = {
 			set = function(info, value) UF:MergeUnitSettings(value, "targettarget"); end,
 		},
 		resetSettings = {
-			order = 3,
+			order = 2,
 			type = "execute",
 			name = L["Restore Defaults"],
 			func = function(info, value) UF:ResetUnitSettings("targettarget"); E:ResetMovers(L["TargetTarget Frame"]) end,
 		},
 		showAuras = {
-			order = 4,
+			order = 3,
 			type = "execute",
 			name = L["Show Auras"],
 			func = function() 
@@ -2864,7 +2881,12 @@ E.Options.args.unitframe.args.targettarget = {
 				
 				UF:CreateAndUpdateUF("targettarget");
 			end,
-		},			
+		},
+		enable = {
+			order = 4,
+			type = "toggle",
+			name = L["Enable"]
+		},
 		width = {
 			order = 5,
 			type = "range",
@@ -2917,8 +2939,19 @@ E.Options.args.unitframe.args.targettarget = {
 				--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
 				["LEFT"] = L["Left"],
 				["MIDDLE"] = L["Middle"],
-				["RIGHT"] = L["Right"],
-			},
+				["RIGHT"] = L["Right"]
+			}
+		},
+		colorOverride = {
+			order = 12,
+			name = L["Class Color Override"],
+			desc = L["Override the default class color setting."],
+			type = "select",
+			values = {
+				["USE_DEFAULT"] = L["Use Default"],
+				["FORCE_ON"] = L["Force On"],
+				["FORCE_OFF"] = L["Force Off"]
+			}
 		},
 		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, "targettarget"),
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, "targettarget"),
@@ -2941,13 +2974,8 @@ E.Options.args.unitframe.args.targettargettarget = {
 	set = function(info, value) E.db.unitframe.units["targettargettarget"][ info[#info] ] = value; UF:CreateAndUpdateUF("targettargettarget"); end,
 	disabled = function() return not E.private.unitframe.enable end,
 	args = {
-		enable = {
-			order = 1,
-			type = "toggle",
-			name = L["Enable"]
-		},
 		copyFrom = {
-			order = 2,
+			order = 1,
 			type = "select",
 			name = L["Copy From"],
 			desc = L["Select a unit to copy settings from."],
@@ -2956,12 +2984,12 @@ E.Options.args.unitframe.args.targettargettarget = {
 		},
 		resetSettings = {
 			type = "execute",
-			order = 3,
+			order = 2,
 			name = L["Restore Defaults"],
 			func = function(info, value) UF:ResetUnitSettings("targettargettarget"); E:ResetMovers(L["TargetTargetTarget Frame"]); end
 		},
 		showAuras = {
-			order = 4,
+			order = 3,
 			type = "execute",
 			name = L["Show Auras"],
 			func = function()
@@ -2975,26 +3003,31 @@ E.Options.args.unitframe.args.targettargettarget = {
 				UF:CreateAndUpdateUF("targettargettarget");
 			end
 		},
-		width = {
+		enable = {
 			order = 4,
+			type = "toggle",
+			name = L["Enable"]
+		},
+		width = {
+			order = 5,
 			type = "range",
 			name = L["Width"],
 			min = 50, max = 500, step = 1
 		},
 		height = {
-			order = 5,
+			order = 6,
 			type = "range",
 			name = L["Height"],
 			min = 10, max = 250, step = 1
 		},
 		rangeCheck = {
-			order = 6,
+			order = 7,
 			type = "toggle",
 			name = L["Range Check"],
 			desc = L["Check if you are in range to cast spells on this specific unit."]
 		},
 		hideonnpc = {
-			order = 7,
+			order = 8,
 			type = "toggle",
 			name = L["Text Toggle On NPC"],
 			desc = L["Power text will be hidden on NPC targets, in addition the name text will be repositioned to the power texts anchor point."],
@@ -3002,13 +3035,13 @@ E.Options.args.unitframe.args.targettargettarget = {
 			set = function(info, value) E.db.unitframe.units["targettargettarget"]["power"].hideonnpc = value; UF:CreateAndUpdateUF("targettargettarget"); end
 		},
 		threatStyle = {
-			order = 11,
+			order = 9,
 			type = "select",
 			name = L["Threat Display Mode"],
 			values = threatValues
 		},
 		smartAuraPosition = {
-			order = 12,
+			order = 10,
 			type = "select",
 			name = L["Smart Aura Position"],
 			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
@@ -3019,7 +3052,7 @@ E.Options.args.unitframe.args.targettargettarget = {
 			}
 		},
 		orientation = {
-			order = 10,
+			order = 11,
 			type = "select",
 			name = L["Frame Orientation"],
 			desc = L["Set the orientation of the UnitFrame. If set to automatic it will adjust based on where the frame is located on the screen."],
@@ -3028,6 +3061,17 @@ E.Options.args.unitframe.args.targettargettarget = {
 				["LEFT"] = L["Left"],
 				["MIDDLE"] = L["Middle"],
 				["RIGHT"] = L["Right"]
+			}
+		},
+		colorOverride = {
+			order = 12,
+			name = L["Class Color Override"],
+			desc = L["Override the default class color setting."],
+			type = "select",
+			values = {
+				["USE_DEFAULT"] = L["Use Default"],
+				["FORCE_ON"] = L["Force On"],
+				["FORCE_OFF"] = L["Force Off"]
 			}
 		},
 		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, "targettargettarget"),
@@ -3051,13 +3095,8 @@ E.Options.args.unitframe.args.focus = {
 	set = function(info, value) E.db.unitframe.units["focus"][ info[#info] ] = value; UF:CreateAndUpdateUF("focus"); end,
 	disabled = function() return not E.private.unitframe.enable end,
 	args = {
-		enable = {
-			order = 1,
-			type = "toggle",
-			name = L["Enable"]
-		},
 		copyFrom = {
-			order = 2,
+			order = 1,
 			type = "select",
 			name = L["Copy From"],
 			desc = L["Select a unit to copy settings from."],
@@ -3065,13 +3104,13 @@ E.Options.args.unitframe.args.focus = {
 			set = function(info, value) UF:MergeUnitSettings(value, "focus"); end
 		},
 		resetSettings = {
-			order = 3,
+			order = 2,
 			type = "execute",
 			name = L["Restore Defaults"],
 			func = function(info, value) UF:ResetUnitSettings("focus"); E:ResetMovers(L["Focus Frame"]); end
 		},	
 		showAuras = {
-			order = 4,
+			order = 3,
 			type = "execute",
 			name = L["Show Auras"],
 			func = function() 
@@ -3084,7 +3123,12 @@ E.Options.args.unitframe.args.focus = {
 				
 				UF:CreateAndUpdateUF("focus");
 			end,
-		},			
+		},
+		enable = {
+			order = 4,
+			type = "toggle",
+			name = L["Enable"]
+		},
 		width = {
 			order = 5,
 			type = "range",
@@ -3146,6 +3190,17 @@ E.Options.args.unitframe.args.focus = {
 				["RIGHT"] = L["Right"],
 			},
 		},
+		colorOverride = {
+			order = 12,
+			name = L["Class Color Override"],
+			desc = L["Override the default class color setting."],
+			type = "select",
+			values = {
+				["USE_DEFAULT"] = L["Use Default"],
+				["FORCE_ON"] = L["Force On"],
+				["FORCE_OFF"] = L["Force Off"]
+			}
+		},
 		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, "focus"),
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, "focus"),
 		infoPanel = GetOptionsTable_InformationPanel(UF.CreateAndUpdateUF, "focus"),
@@ -3170,13 +3225,8 @@ E.Options.args.unitframe.args.focustarget = {
 	set = function(info, value) E.db.unitframe.units["focustarget"][ info[#info] ] = value; UF:CreateAndUpdateUF("focustarget"); end,
 	disabled = function() return not E.private.unitframe.enable end,
 	args = {
-		enable = {
-			order = 1,
-			type = "toggle",
-			name = L["Enable"],
-		},
 		copyFrom = {
-			order = 2,
+			order = 1,
 			type = "select",
 			name = L["Copy From"],
 			desc = L["Select a unit to copy settings from."],
@@ -3184,13 +3234,13 @@ E.Options.args.unitframe.args.focustarget = {
 			set = function(info, value) UF:MergeUnitSettings(value, "focustarget"); end
 		},
 		resetSettings = {
-			order = 3,
+			order = 2,
 			type = "execute",
 			name = L["Restore Defaults"],
 			func = function(info, value) UF:ResetUnitSettings("focustarget"); E:ResetMovers(L["FocusTarget Frame"]); end
 		},	
 		showAuras = {
-			order = 4,
+			order = 3,
 			type = "execute",
 			name = L["Show Auras"],
 			func = function() 
@@ -3203,7 +3253,12 @@ E.Options.args.unitframe.args.focustarget = {
 				
 				UF:CreateAndUpdateUF("focustarget");
 			end
-		},			
+		},
+		enable = {
+			order = 4,
+			type = "toggle",
+			name = L["Enable"],
+		},
 		width = {
 			order = 5,
 			type = "range",
@@ -3259,6 +3314,17 @@ E.Options.args.unitframe.args.focustarget = {
 				["RIGHT"] = L["Right"]
 			}
 		},
+		colorOverride = {
+			order = 12,
+			name = L["Class Color Override"],
+			desc = L["Override the default class color setting."],
+			type = "select",
+			values = {
+				["USE_DEFAULT"] = L["Use Default"],
+				["FORCE_ON"] = L["Force On"],
+				["FORCE_OFF"] = L["Force Off"]
+			}
+		},
 		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, "focustarget"),
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, "focustarget"),
 		infoPanel = GetOptionsTable_InformationPanel(UF.CreateAndUpdateUF, "focustarget"),
@@ -3280,14 +3346,9 @@ E.Options.args.unitframe.args.pet = {
 	set = function(info, value) E.db.unitframe.units["pet"][ info[#info] ] = value; UF:CreateAndUpdateUF("pet"); end,
 	disabled = function() return not E.private.unitframe.enable end,
 	args = {
-		enable = {
-			order = 1,
-			type = "toggle",
-			name = L["Enable"]
-		},
 		copyFrom = {
 			type = "select",
-			order = 2,
+			order = 1,
 			name = L["Copy From"],
 			desc = L["Select a unit to copy settings from."],
 			values = UF["units"],
@@ -3295,12 +3356,12 @@ E.Options.args.unitframe.args.pet = {
 		},
 		resetSettings = {
 			type = "execute",
-			order = 3,
+			order = 2,
 			name = L["Restore Defaults"],
 			func = function(info, value) UF:ResetUnitSettings("pet"); E:ResetMovers(L["Pet Frame"]); end
 		},
 		showAuras = {
-			order = 4,
+			order = 3,
 			type = "execute",
 			name = L["Show Auras"],
 			func = function() 
@@ -3313,7 +3374,12 @@ E.Options.args.unitframe.args.pet = {
 				
 				UF:CreateAndUpdateUF("pet");
 			end,
-		},			
+		},
+		enable = {
+			order = 4,
+			type = "toggle",
+			name = L["Enable"]
+		},
 		width = {
 			order = 5,
 			type = "range",
@@ -3375,6 +3441,17 @@ E.Options.args.unitframe.args.pet = {
 				["RIGHT"] = L["Right"]
 			}
 		},
+		colorOverride = {
+			order = 13,
+			name = L["Class Color Override"],
+			desc = L["Override the default class color setting."],
+			type = "select",
+			values = {
+				["USE_DEFAULT"] = L["Use Default"],
+				["FORCE_ON"] = L["Force On"],
+				["FORCE_OFF"] = L["Force Off"]
+			}
+		},
 		buffIndicator = {
 			order = 600,
 			type = "group",
@@ -3423,27 +3500,22 @@ E.Options.args.unitframe.args.pettarget = {
 	set = function(info, value) E.db.unitframe.units["pettarget"][ info[#info] ] = value; UF:CreateAndUpdateUF("pettarget"); end,
 	disabled = function() return not E.private.unitframe.enable end,
 	args = {
-		enable = {
-			order = 1,
-			type = "toggle",
-			name = L["Enable"]
-		},
 		copyFrom = {
 			type = "select",
-			order = 2,
+			order = 1,
 			name = L["Copy From"],
 			desc = L["Select a unit to copy settings from."],
 			values = UF["units"],
 			set = function(info, value) UF:MergeUnitSettings(value, "pettarget"); end
 		},
 		resetSettings = {
-			order = 3,
+			order = 2,
 			type = "execute",
 			name = L["Restore Defaults"],
 			func = function(info, value) UF:ResetUnitSettings("pettarget"); E:ResetMovers(L["PetTarget Frame"]); end
 		},	
 		showAuras = {
-			order = 4,
+			order = 3,
 			type = "execute",
 			name = L["Show Auras"],
 			func = function() 
@@ -3456,7 +3528,12 @@ E.Options.args.unitframe.args.pettarget = {
 				
 				UF:CreateAndUpdateUF("pettarget");
 			end,
-		},			
+		},
+		enable = {
+			order = 4,
+			type = "toggle",
+			name = L["Enable"]
+		},
 		width = {
 			order = 5,
 			type = "range",
@@ -3512,6 +3589,17 @@ E.Options.args.unitframe.args.pettarget = {
 				["RIGHT"] = L["Right"]
 			}
 		},
+		colorOverride = {
+			order = 13,
+			name = L["Class Color Override"],
+			desc = L["Override the default class color setting."],
+			type = "select",
+			values = {
+				["USE_DEFAULT"] = L["Use Default"],
+				["FORCE_ON"] = L["Force On"],
+				["FORCE_OFF"] = L["Force Off"]
+			}
+		},
 		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, "pettarget"),
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, "pettarget"),
 		infoPanel = GetOptionsTable_InformationPanel(UF.CreateAndUpdateUF, "pettarget"),
@@ -3532,13 +3620,8 @@ E.Options.args.unitframe.args.boss = {
 	set = function(info, value) E.db.unitframe.units["boss"][ info[#info] ] = value; UF:CreateAndUpdateUFGroup("boss", MAX_BOSS_FRAMES); end,
 	disabled = function() return not E.private.unitframe.enable end,
 	args = {
-		enable = {
-			order = 1,
-			type = "toggle",
-			name = L["Enable"]
-		},
 		copyFrom = {
-			order = 2,
+			order = 1,
 			type = "select",
 			name = L["Copy From"],
 			desc = L["Select a unit to copy settings from."],
@@ -3549,17 +3632,22 @@ E.Options.args.unitframe.args.boss = {
 			set = function(info, value) UF:MergeUnitSettings(value, "boss"); end
 		},
 		resetSettings = {
-			order = 3,
+			order = 2,
 			type = "execute",
 			name = L["Restore Defaults"],
 			func = function(info, value) UF:ResetUnitSettings("boss"); E:ResetMovers(L["Boss Frames"]); end,
 		},		
 		displayFrames = {
-			order = 4,
+			order = 3,
 			type = "execute",
 			name = L["Display Frames"],
 			desc = L["Force the frames to show, they will act as if they are the player frame."],
 			func = function() UF:ToggleForceShowGroupFrames("boss", 4) end
+		},
+		enable = {
+			order = 4,
+			type = "toggle",
+			name = L["Enable"]
 		},
 		width = {
 			order = 5,
@@ -3641,6 +3729,17 @@ E.Options.args.unitframe.args.boss = {
 				["RIGHT"] = L["Right"]
 			}
 		},
+		colorOverride = {
+			order = 15,
+			name = L["Class Color Override"],
+			desc = L["Override the default class color setting."],
+			type = "select",
+			values = {
+				["USE_DEFAULT"] = L["Use Default"],
+				["FORCE_ON"] = L["Force On"],
+				["FORCE_OFF"] = L["Force Off"]
+			}
+		},
 		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUFGroup, "boss", MAX_BOSS_FRAMES),
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUFGroup, "boss", MAX_BOSS_FRAMES),
 		power = GetOptionsTable_Power(false, UF.CreateAndUpdateUFGroup, "boss", MAX_BOSS_FRAMES),
@@ -3663,13 +3762,8 @@ E.Options.args.unitframe.args.arena = {
 	set = function(info, value) E.db.unitframe.units["arena"][ info[#info] ] = value; UF:CreateAndUpdateUFGroup("arena", 5); end,
 	disabled = function() return not E.private.unitframe.enable end,
 	args = {
-		enable = {
-			order = 1,
-			type = "toggle",
-			name = L["Enable"],
-		},
 		copyFrom = {
-			order = 2,
+			order = 1,
 			type = "select",
 			name = L["Copy From"],
 			desc = L["Select a unit to copy settings from."],
@@ -3680,18 +3774,23 @@ E.Options.args.unitframe.args.arena = {
 			set = function(info, value) UF:MergeUnitSettings(value, "arena"); end
 		},
 		resetSettings = {
-			order = 3,
+			order = 2,
 			type = "execute",
 			name = L["Restore Defaults"],
 			func = function(info, value) UF:ResetUnitSettings("arena"); E:ResetMovers(L["Arena Frames"]); end
 		},			
 		displayFrames = {
-			order = 4,
+			order = 3,
 			type = "execute",
 			name = L["Display Frames"],
 			desc = L["Force the frames to show, they will act as if they are the player frame."],
-			func = function() UF:ToggleForceShowGroupFrames("arena", 5) end
-		},		
+			func = function() UF:ToggleForceShowGroupFrames("arena", 5); end
+		},
+		enable = {
+			order = 4,
+			type = "toggle",
+			name = L["Enable"]
+		},
 		width = {
 			order = 5,
 			type = "range",
@@ -5690,6 +5789,29 @@ E.Options.args.unitframe.args.tank = { -- Танки
 					desc = L["Forces Debuff Highlight to be disabled for these frames"],
 					disabled = function() return E.db.unitframe.debuffHighlighting == "NONE" end,
 				},
+				orientation = {
+					order = 6,
+					type = "select",
+					name = L["Frame Orientation"],
+					desc = L["Set the orientation of the UnitFrame. If set to automatic it will adjust based on where the frame is located on the screen."],
+					values = {
+						--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
+						["LEFT"] = L["Left"],
+						["MIDDLE"] = L["Middle"],
+						["RIGHT"] = L["Right"],
+					},
+				},
+				colorOverride = {
+					order = 7,
+					name = L["Class Color Override"],
+					desc = L["Override the default class color setting."],
+					type = "select",
+					values = {
+						["USE_DEFAULT"] = L["Use Default"],
+						["FORCE_ON"] = L["Force On"],
+						["FORCE_OFF"] = L["Force Off"]
+					}
+				},
 			},
 		},
 		targetsGroup = {
@@ -5736,6 +5858,17 @@ E.Options.args.unitframe.args.tank = { -- Танки
 					name = L["yOffset"],
 					desc = L["An Y offset (in pixels) to be used when anchoring new frames."],
 					min = -500, max = 500, step = 1,
+				},
+				colorOverride = {
+					order = 8,
+					name = L["Class Color Override"],
+					desc = L["Override the default class color setting."],
+					type = "select",
+					values = {
+						["USE_DEFAULT"] = L["Use Default"],
+						["FORCE_ON"] = L["Force On"],
+						["FORCE_OFF"] = L["Force Off"]
+					}
 				},
 			},
 		},
@@ -5839,6 +5972,29 @@ E.Options.args.unitframe.args.assist = { -- Помощники
 					desc = L["Forces Debuff Highlight to be disabled for these frames"],
 					disabled = function() return E.db.unitframe.debuffHighlighting == "NONE"; end,
 				},
+				orientation = {
+					order = 6,
+					type = "select",
+					name = L["Frame Orientation"],
+					desc = L["Set the orientation of the UnitFrame. If set to automatic it will adjust based on where the frame is located on the screen."],
+					values = {
+						--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
+						["LEFT"] = L["Left"],
+						["MIDDLE"] = L["Middle"],
+						["RIGHT"] = L["Right"],
+					},
+				},
+				colorOverride = {
+					order = 7,
+					name = L["Class Color Override"],
+					desc = L["Override the default class color setting."],
+					type = "select",
+					values = {
+						["USE_DEFAULT"] = L["Use Default"],
+						["FORCE_ON"] = L["Force On"],
+						["FORCE_OFF"] = L["Force Off"]
+					}
+				},
 			},
 		},
 		targetsGroup = {
@@ -5885,6 +6041,17 @@ E.Options.args.unitframe.args.assist = { -- Помощники
 					name = L["yOffset"],
 					desc = L["An Y offset (in pixels) to be used when anchoring new frames."],
 					min = -500, max = 500, step = 1,
+				},
+				colorOverride = {
+					order = 8,
+					name = L["Class Color Override"],
+					desc = L["Override the default class color setting."],
+					type = "select",
+					values = {
+						["USE_DEFAULT"] = L["Use Default"],
+						["FORCE_ON"] = L["Force On"],
+						["FORCE_OFF"] = L["Force Off"]
+					}
 				},
 			},
 		},
