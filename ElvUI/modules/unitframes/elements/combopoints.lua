@@ -128,8 +128,10 @@ function UF:Configure_ComboPoints(frame)
 end
 
 function UF:UpdateComboDisplay(event, unit)
-	if (unit == "pet") then return; end
-	local cpoints = self.CPoints
+	if(unit == "pet") then return; end
+	local db = self.db;
+	if(not db) then return; end
+	local cpoints = self.CPoints;
 	local cp;
 	if (UnitHasVehicleUI("player") or UnitHasVehicleUI("vehicle")) then
 		cp = GetComboPoints("vehicle", "target");
@@ -137,7 +139,7 @@ function UF:UpdateComboDisplay(event, unit)
 		cp = GetComboPoints("player", "target");
 	end
 	
-	if(cp == 0 and self.db.combobar.autoHide) then
+	if(cp == 0 and db.combobar.autoHide) then
 		cpoints:Hide();
 	else
 		cpoints:Show();

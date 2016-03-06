@@ -380,6 +380,10 @@ function E:EnableMover(name)
 		self.CreatedMovers[name][x] = y;
 	end
 	
+	if(E.db["movers"] and E.db["movers"][name] and type(E.db["movers"][name]) == "string") then
+		self.CreatedMovers[name]["point"] = E.db["movers"][name];
+	end
+	
 	if(self.configMode) then
 		_G[name]:Show();
 	end	
@@ -429,6 +433,10 @@ end
 
 --Profile Change
 function E:SetMoversPositions()
+	for name in pairs(E.DisabledMovers) do
+		E:EnableMover(name);
+	end
+	
 	for name, _ in pairs(E.CreatedMovers) do
 		local f = _G[name]
 		local point, anchor, secondaryPoint, x, y

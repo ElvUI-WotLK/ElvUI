@@ -15,6 +15,18 @@ local _, ns = ...;
 local ElvUF = ns.oUF;
 assert(ElvUF, "ElvUI was unable to locate oUF.");
 
+local INVERT_ANCHORPOINT = {
+	TOPLEFT = "BOTTOMRIGHT",
+	LEFT = "RIGHT",
+	BOTTOMLEFT = "TOPRIGHT",
+	RIGHT = "LEFT",
+	TOPRIGHT = "BOTTOMLEFT",
+	BOTTOMRIGHT = "TOPLEFT",
+	CENTER = "CENTER",
+	TOP = "BOTTOM",
+	BOTTOM = "TOP"
+};
+
 function UF:Construct_Castbar(frame, direction, moverName)
 	local castbar = CreateFrame("StatusBar", nil, frame);
 	castbar:SetFrameStrata("HIGH");
@@ -60,7 +72,7 @@ function UF:Construct_Castbar(frame, direction, moverName)
 	
 	local button = CreateFrame("Frame", nil, castbar);
 	local holder = CreateFrame("Frame", nil, castbar);
-	button:SetTemplate("Default", nil, nil, self.thinBorders);
+	button:SetTemplate("Default", nil, nil, self.thinBorders and not E.global.tukuiMode);
 	
 	castbar.Holder = holder;
 	
@@ -73,7 +85,11 @@ function UF:Construct_Castbar(frame, direction, moverName)
 	end
 	
 	local icon = button:CreateTexture(nil, "ARTWORK");
-	icon:SetInside(nil, frame.BORDER, frame.BORDER);
+	if(E.global.tukuiMode) then
+		icon:SetInside(nil, E.Border, E.Border);
+	else
+		icon:SetInside(nil, frame.BORDER, frame.BORDER);
+	end
 	icon:SetTexCoord(unpack(E.TexCoords));
 	icon.bg = button;
 	
@@ -104,10 +120,17 @@ function UF:Configure_Castbar(frame)
 	
 	if(db.castbar.icon) then
 		castbar.Icon = castbar.ButtonIcon;
-		castbar.Icon.bg:Width(db.castbar.height-frame.SPACING*2);
-		castbar.Icon.bg:Height(db.castbar.height-frame.SPACING*2);
+		if((not db.castbar.iconAttached) or E.global.tukuiMode) then
+			castbar.Icon.bg:Size(db.castbar.iconSize);
+		else
+			if(db.castbar.insideInfoPanel and frame.USE_INFO_PANEL) then
+				castbar.Icon.bg:Size(db.infoPanel.height - frame.SPACING*2);
+			else
+				castbar.Icon.bg:Size(db.castbar.height-frame.SPACING*2);
+			end
+			castbar:Width(db.castbar.width - castbar.Icon.bg:GetWidth() - (frame.BORDER + frame.SPACING*5));
+		end
 		
-		castbar:Width(db.castbar.width - castbar.Icon.bg:GetWidth() - (frame.BORDER + frame.SPACING*5));
 		castbar.Icon.bg:Show();
 	else
 		castbar.ButtonIcon.bg:Hide();
@@ -122,16 +145,17 @@ function UF:Configure_Castbar(frame)
 	
 	castbar:ClearAllPoints();
 	if((db.castbar.insideInfoPanel and frame.USE_INFO_PANEL) or E.global.tukuiMode) then
-		castbar:SetAllPoints(frame.InfoPanel);
 		castbar:Size(frame.InfoPanel:GetSize());
-		
-		if(db.castbar.icon) then
-			castbar.Icon.bg:ClearAllPoints();
-			castbar.Icon.bg:Size(db.castbar.iconSize);
-			if(frame.ORIENTATION == "LEFT") then
-				castbar.Icon.bg:Point("RIGHT", frame, "LEFT", -10, 0);
-			else
-				castbar.Icon.bg:Point("LEFT", frame, "RIGHT", 10, 0);
+		if((not db.castbar.iconAttached) or E.global.tukuiMode) then
+			castbar:SetInside(frame.InfoPanel, 0, 0);
+		else
+			local iconWidth = db.castbar.icon and (castbar.Icon.bg:GetWidth() - frame.BORDER) or 0;
+ 			if(frame.ORIENTATION == "LEFT") then
+				castbar:SetPoint("TOPLEFT", frame.InfoPanel, "TOPLEFT", iconWidth + frame.SPACING*3, 0);
+				castbar:SetPoint("BOTTOMRIGHT", frame.InfoPanel, "BOTTOMRIGHT");
+ 			else
+				castbar:SetPoint("TOPLEFT", frame.InfoPanel, "TOPLEFT");
+				castbar:SetPoint("BOTTOMRIGHT", frame.InfoPanel, "BOTTOMRIGHT", -iconWidth - frame.SPACING*3, 0);
 			end
 		end
 		if(castbar.Holder.mover) then
@@ -156,20 +180,33 @@ function UF:Configure_Castbar(frame)
 			end
 		end
 		
-		if(castbar.Icon) then
-			castbar.Icon.bg:ClearAllPoints();
-			if(frame.ORIENTATION ~= "RIGHT") then
-				castbar.Icon.bg:Point("RIGHT", castbar, "LEFT", -frame.SPACING*3, 0);
-			else
-				castbar.Icon.bg:Point("LEFT", castbar, "RIGHT", frame.SPACING*3, 0);
-			end
-		end
-		
 		if(castbar.Holder.mover) then
 			E:EnableMover(castbar.Holder.mover:GetName());
 		end
 	end
-
+	
+	if(E.global.tukuiMode and db.castbar.icon) then
+		castbar.Icon.bg:ClearAllPoints();
+		if(frame.ORIENTATION == "LEFT") then
+			castbar.Icon.bg:Point("RIGHT", frame, "LEFT", -10, 0);
+		else
+			castbar.Icon.bg:Point("LEFT", frame, "RIGHT", 10, 0);
+		end
+	elseif(not db.castbar.iconAttached and db.castbar.icon) then
+		local attachPoint = db.castbar.iconAttachedTo == "Frame" and frame or frame.Castbar;
+		local anchorPoint = db.castbar.iconPosition;
+		castbar.Icon.bg:ClearAllPoints();
+		castbar.Icon.bg:Point(INVERT_ANCHORPOINT[anchorPoint], attachPoint, anchorPoint, db.castbar.iconXOffset, db.castbar.iconYOffset);
+		castbar.Icon.bg:SetFrameStrata("HIGH");
+	elseif(db.castbar.icon) then
+		castbar.Icon.bg:ClearAllPoints();
+		if(frame.ORIENTATION == "LEFT") then
+			castbar.Icon.bg:Point("RIGHT", castbar, "LEFT", -frame.SPACING*3, 0);
+		else
+			castbar.Icon.bg:Point("LEFT", castbar, "RIGHT", frame.SPACING*3, 0);
+		end
+	end
+	
 	if(db.castbar.enable and not frame:IsElementEnabled("Castbar")) then
 		frame:EnableElement("Castbar");
 	elseif(not db.castbar.enable and frame:IsElementEnabled("Castbar")) then
