@@ -45,14 +45,15 @@ function UF:Construct_AuraIcon(button)
 	button.text:Point("CENTER", 1, 1);
 	button.text:SetJustifyH("CENTER");
 	
-	button:SetTemplate("Default", nil, nil, UF.thinBorders and not E.global.tukuiMode);
+	button:SetTemplate("Default", nil, nil, (UF.thinBorders and not E.global.tukuiMode));
 	
 	button.cd.noOCC = true;
 	button.cd.noCooldownCount = true;
 	button.cd:SetReverse(true);
 	button.cd:SetInside();
 	
-	button.icon:SetInside();
+	local offset = (UF.thinBorders and not E.global.tukuiMode) and E.mult or E.Border;
+	button.icon:SetInside(button, offset, offset);
 	button.icon:SetTexCoord(unpack(E.TexCoords));
 	button.icon:SetDrawLayer("ARTWORK");
 	
@@ -101,11 +102,14 @@ function UF:Configure_Auras(frame, auraType)
 	auraType = auraType:lower();
 	local rows = db[auraType].numrows;
 	
+	local totalWidth = frame.UNIT_WIDTH - frame.SPACING*2
 	if(frame.USE_POWERBAR_OFFSET) then
-		auras:Width(frame.UNIT_WIDTH - frame.POWERBAR_OFFSET - frame.SPACING*2);
-	else
-		auras:Width(frame.UNIT_WIDTH - frame.SPACING*2);
+		local powerOffset = ((frame.ORIENTATION == "MIDDLE" and 2 or 1) * frame.POWERBAR_OFFSET);
+		if not (db[auraType].attachTo == "POWER" and frame.ORIENTATION == "MIDDLE") then
+			totalWidth = totalWidth - powerOffset;
+		end
 	end
+	auras:Width(totalWidth);
 	
 	auras.forceShow = frame.forceShowAuras;
 	auras.num = db[auraType].perrow * rows;
@@ -115,8 +119,20 @@ function UF:Configure_Auras(frame, auraType)
 		auras:Width(db[auraType].perrow * db[auraType].sizeOverride);
 	end
 	
-	local x, y = E:GetXYOffset(db[auraType].anchorPoint, (not E.global.tukuiMode and frame.SPACING));
+	local override = ((db[auraType].attachTo == "HEALTH" or db[auraType].attachTo == "POWER") and (frame.BORDER - frame.SPACING) or frame.SPACING);
 	local attachTo = self:GetAuraAnchorFrame(frame, db[auraType].attachTo, db.debuffs.attachTo == "BUFFS" and db.buffs.attachTo == "DEBUFFS");
+	local x, y = E:GetXYOffset(db[auraType].anchorPoint, (not E.global.tukuiMode and frame.SPACING));
+	
+	if(db[auraType].attachTo == "FRAME") then
+		y = 0;
+	elseif(db[auraType].attachTo == "HEALTH" or db[auraType].attachTo == "POWER") then
+		local newX = E:GetXYOffset(db[auraType].anchorPoint, -frame.BORDER);
+		local _, newY = E:GetXYOffset(db[auraType].anchorPoint, (frame.BORDER + frame.SPACING));
+		x = newX;
+		y = newY;
+	else
+		x = 0;
+	end
 	
 	auras:ClearAllPoints();
 	auras:Point(E.InversePoints[db[auraType].anchorPoint], attachTo, db[auraType].anchorPoint, x + db[auraType].xOffset, y + db[auraType].yOffset);

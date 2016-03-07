@@ -257,7 +257,7 @@ local function GetOptionsTable_Power(hasDetatchOption, updateFunc, groupName, nu
 				type = "range",
 				name = L["Height"],
 				order = 3,
-				min = (E.db.unitframe.thinBorders and 3 or 7), max = 50, step = 1
+				min = ((E.db.unitframe.thinBorders or E.PixelMode) and 3 or 7), max = 50, step = 1
 			},
 			offset = {
 				type = "range",
@@ -574,7 +574,9 @@ local function GetOptionsTable_Auras(friendlyUnitOnly, auraType, isGroupFrame, u
 			desc = L["What to attach the buff anchor frame to."],
 			values = {
 				["FRAME"] = L["Frame"],
-				["DEBUFFS"] = L["Debuffs"]
+				["DEBUFFS"] = L["Debuffs"],
+				["HEALTH"] = L["Health"],
+				["POWER"] = L["Power"]
 			}
 		};
 	else
@@ -585,7 +587,9 @@ local function GetOptionsTable_Auras(friendlyUnitOnly, auraType, isGroupFrame, u
 			desc = L["What to attach the debuff anchor frame to."],
 			values = {
 				["FRAME"] = L["Frame"],
-				["BUFFS"] = L["Buffs"]
+				["BUFFS"] = L["Buffs"],
+				["HEALTH"] = L["Health"],
+				["POWER"] = L["Power"]
 			}
 		};
 	end

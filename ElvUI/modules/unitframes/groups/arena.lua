@@ -101,6 +101,8 @@ function UF:Update_ArenaFrames(frame, db)
 	
 	UF:Configure_Castbar(frame);
 	
+	UF:Configure_Trinket(frame);
+	
 	UF:Configure_Range(frame);
 	
 	UF:Configure_HealComm(frame);
@@ -141,4 +143,4 @@ function UF:Update_ArenaFrames(frame, db)
 	frame:UpdateAllElements();
 end
 
-UF["unitgroupstoload"]["arena"] = { 5 };
+UF["unitgroupstoload"]["arena"] = {5};

@@ -66,7 +66,7 @@ function UF:Configure_Power(frame)
 		power.value:Point(db.power.position, attachPoint, db.power.position, db.power.xOffset, db.power.yOffset);
 		frame:Tag(power.value, db.power.text_format);
 		
-		if(db.power.attachTextToPower) then
+		if(db.power.attachTextTo == "Power") then
 			power.value:SetParent(power);
 		else
 			power.value:SetParent(frame.RaisedElementParent);
@@ -82,10 +82,10 @@ function UF:Configure_Power(frame)
 			power.colorPower = true;
 		end
 		
-		if(not self.thinBorders and frame.POWERBAR_HEIGHT < 7) then
+		if((not self.thinBorders and not E.PixelMode) and frame.POWERBAR_HEIGHT < 7) then
 			frame.POWERBAR_HEIGHT = 7;
 			if(db.power) then db.power.height = 7; end
-		elseif(self.thinBorders and frame.POWERBAR_HEIGHT < 3) then
+		elseif((self.thinBorders or E.PixelMode) and frame.POWERBAR_HEIGHT < 3) then
 			frame.POWERBAR_HEIGHT = 3;
 			if(db.power) then db.power.height = 3; end
 		end
@@ -121,8 +121,8 @@ function UF:Configure_Power(frame)
 				power:Point("TOPRIGHT", frame.Health, "TOPRIGHT", frame.POWERBAR_OFFSET, -frame.POWERBAR_OFFSET);
 				power:Point("BOTTOMLEFT", frame.Health, "BOTTOMLEFT", frame.POWERBAR_OFFSET, -frame.POWERBAR_OFFSET);
 			elseif(frame.ORIENTATION == "MIDDLE") then
-				power:Point("TOPLEFT", frame, "TOPLEFT", frame.BORDER, -frame.POWERBAR_OFFSET -frame.CLASSBAR_YOFFSET);
-				power:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -frame.BORDER, frame.BORDER);
+				power:Point("TOPLEFT", frame, "TOPLEFT", frame.BORDER + frame.SPACING, -frame.POWERBAR_OFFSET -frame.CLASSBAR_YOFFSET);
+				power:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -frame.BORDER - frame.SPACING, frame.BORDER);
 			else
 				power:Point("TOPLEFT", frame.Health, "TOPLEFT", -frame.POWERBAR_OFFSET, -frame.POWERBAR_OFFSET);
 				power:Point("BOTTOMRIGHT", frame.Health, "BOTTOMRIGHT", -frame.POWERBAR_OFFSET, -frame.POWERBAR_OFFSET);

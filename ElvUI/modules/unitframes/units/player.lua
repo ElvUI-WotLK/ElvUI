@@ -149,6 +149,10 @@ function UF:Update_PlayerFrame(frame, db)
 	
 	UF:Configure_AuraBars(frame);
 	
+	if(E.db.unitframe.units.target.aurabar.attachTo == "PLAYER_AURABARS" and ElvUF_Target) then
+		UF:Configure_AuraBars(ElvUF_Target);
+	end
+	
 	UF:Configure_CustomTexts(frame);
 	
 	E:SetMoverSnapOffset(frame:GetName() .. "Mover", -(12 + db.castbar.height));
