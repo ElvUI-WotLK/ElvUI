@@ -78,6 +78,7 @@ function E:UpdateBlizzardFonts()
 		SetFont(FriendsFont_Small,					NORMAL, self.db.general.fontSize);
 		SetFont(FriendsFont_Large,					NORMAL, self.db.general.fontSize);
 		SetFont(FriendsFont_UserText,				NORMAL, self.db.general.fontSize);
+		SetFont(SpellFont_Small,					NORMAL, self.db.general.fontSize*0.9);
 		SetFont(ZoneTextString,						NORMAL, 32, MONOCHROME .. "OUTLINE");
 		SetFont(SubZoneTextString,					NORMAL, 25, MONOCHROME .. "OUTLINE");
 		SetFont(PVPInfoTextString,					NORMAL, 22, MONOCHROME .. "OUTLINE");

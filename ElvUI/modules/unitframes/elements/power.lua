@@ -82,12 +82,19 @@ function UF:Configure_Power(frame)
 			power.colorPower = true;
 		end
 		
+		local heightChanged = false;
 		if((not self.thinBorders and not E.PixelMode) and frame.POWERBAR_HEIGHT < 7) then
 			frame.POWERBAR_HEIGHT = 7;
 			if(db.power) then db.power.height = 7; end
+			heightChanged = true;
 		elseif((self.thinBorders or E.PixelMode) and frame.POWERBAR_HEIGHT < 3) then
 			frame.POWERBAR_HEIGHT = 3;
 			if(db.power) then db.power.height = 3; end
+			heightChanged = true;
+		end
+		if(heightChanged) then
+			frame.BOTTOM_OFFSET = UF:GetHealthBottomOffset(frame);
+			UF:Configure_HealthBar(frame);
 		end
 		
 		power:ClearAllPoints()
