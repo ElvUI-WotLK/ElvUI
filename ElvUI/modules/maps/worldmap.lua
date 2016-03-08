@@ -117,8 +117,8 @@ function M:Initialize()
 	
 	if(E.global.general.smallerWorldMap) then
 		BlackoutWorld:SetTexture(nil);
-		WorldMapBlobFrame:Hide();
 		WorldMapBlobFrame.Show = E.noop;
+		WorldMapBlobFrame.Hide = E.noop;
 		self:SecureHook("WorldMap_ToggleSizeDown", "SetSmallWorldMap");
 		self:SecureHook("WorldMap_ToggleSizeUp", "SetLargeWorldMap");
 		self:RegisterEvent("PLAYER_REGEN_ENABLED");
