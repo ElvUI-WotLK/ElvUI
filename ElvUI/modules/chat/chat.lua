@@ -1082,7 +1082,10 @@ function CH:ChatFrame_MessageEventHandler(event, ...)
 				end
 			else
 				if ( not showLink or strlen(arg2) == 0 ) then
-					body = format(_G["CHAT_"..type.."_GET"]..arg1, pflag..arg2, arg2);
+					if(arg1:find("% ") and GetLocale() == "ruRU") then
+						arg1 = arg1:gsub("%%", "%%s");
+					end
+					body = format(_G["CHAT_" .. type .. "_GET"] .. arg1, pflag .. arg2, arg2);
 				else
 					if ( type == "EMOTE" ) then
 						body = format(_G["CHAT_"..type.."_GET"]..arg1, pflag..playerLink..coloredName.."|h");
