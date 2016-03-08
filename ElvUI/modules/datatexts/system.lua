@@ -13,6 +13,7 @@ local StatusColors = {
 	'|cffFF9000',
 	'|cffD80909'
 }
+local resetInfoFormatter = join("", "|cffaaaaaa", L["Reset CPU Usage: Right Click"], "|r")
 
 local EnteredFrame = false;
 
@@ -83,8 +84,12 @@ local function UpdateCPU()
 end
 
 local function Click()
-	collectgarbage('collect');
-	ResetCPUUsage();
+	if btn == "RightButton" then
+		collectgarbage("collect");
+		ResetCPUUsage();
+	else
+		ToggleGameMenu()
+	end
 end
 
 local function OnEnter(self)
@@ -135,6 +140,9 @@ local function OnEnter(self)
 		DT.tooltip:AddLine(L['(Hold Shift) Memory Usage']);
 	end
 	
+	DT.tooltip:AddLine' '
+	DT.tooltip:AddLine(resetInfoFormatter)
+
 	DT.tooltip:Show();
 end
 
