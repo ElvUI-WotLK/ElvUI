@@ -488,8 +488,8 @@ function UF.groupPrototype:Configure_Groups(self)
 	local width, height, newCols, newRows = 0, 0, 0, 0;
 	local direction = db.growthDirection;
 	local xMult, yMult = DIRECTION_TO_HORIZONTAL_SPACING_MULTIPLIER[direction], DIRECTION_TO_VERTICAL_SPACING_MULTIPLIER[direction];
-	local SPACING = E.Spacing;
-	local UNIT_HEIGHT = (E.global.tukuiMode and db.infoPanel) and db.height + db.infoPanel.height or db.height;
+	local UNIT_HEIGHT = (E.global.tukuiMode and db.infoPanel) and (db.height + db.infoPanel.height) or db.height;
+
 	local numGroups = self.numGroups;
 
 	for i = 1, numGroups do
@@ -500,12 +500,12 @@ function UF.groupPrototype:Configure_Groups(self)
 		if(group) then
 			UF:ConvertGroupDB(group);
 			if(point == "LEFT" or point == "RIGHT") then
-				group:SetAttribute("xOffset", (db.horizontalSpacing + SPACING) * DIRECTION_TO_HORIZONTAL_SPACING_MULTIPLIER[direction]);
+				group:SetAttribute("xOffset", db.horizontalSpacing * DIRECTION_TO_HORIZONTAL_SPACING_MULTIPLIER[direction]);
 				group:SetAttribute("yOffset", 0);
 				group:SetAttribute("columnSpacing", db.verticalSpacing);
 			else
 				group:SetAttribute("xOffset", 0);
-				group:SetAttribute("yOffset", (db.verticalSpacing + SPACING) * DIRECTION_TO_VERTICAL_SPACING_MULTIPLIER[direction]);
+				group:SetAttribute("yOffset", db.verticalSpacing * DIRECTION_TO_VERTICAL_SPACING_MULTIPLIER[direction]);
 				group:SetAttribute("columnSpacing", db.horizontalSpacing);
 			end
 			
@@ -554,14 +554,14 @@ function UF.groupPrototype:Configure_Groups(self)
 				if(group) then
 					group:Point(point, self, point, 0, height * yMult);
 				end
-				height = height + (UNIT_HEIGHT + db.verticalSpacing + SPACING);
+				height = height + UNIT_HEIGHT + db.verticalSpacing;
 				
 				newRows = newRows + 1;
 			else
 				if(group) then
 					group:Point(point, self, point, width * xMult, 0);
 				end
-				width = width + (db.width + db.horizontalSpacing + SPACING);
+				width = width + db.width + db.horizontalSpacing;
 				
 				newCols = newCols + 1;
 			end
@@ -569,22 +569,22 @@ function UF.groupPrototype:Configure_Groups(self)
 			if(DIRECTION_TO_POINT[direction] == "LEFT" or DIRECTION_TO_POINT[direction] == "RIGHT") then
 				if(newRows == 1) then
 					if(group) then
-						group:Point(point, self, point, (width + (SPACING * 5)) * xMult, 0);
+						group:Point(point, self, point, width * xMult, 0);
 					end
-					width = width + ((db.width + db.horizontalSpacing + SPACING) * 5);
+					width = width + ((db.width + db.horizontalSpacing) * 5);
 					newCols = newCols + 1;
 				elseif(group) then
-					group:Point(point, self, point, (((db.width + db.horizontalSpacing + SPACING) * 5) * ((i-1) % db.groupsPerRowCol)) * xMult, ((UNIT_HEIGHT + db.verticalSpacing + SPACING) * (newRows - 1)) * yMult);
+					group:Point(point, self, point, (((db.width + db.horizontalSpacing) * 5) * ((i-1) % db.groupsPerRowCol)) * xMult, ((UNIT_HEIGHT + db.verticalSpacing) * (newRows - 1)) * yMult);
 				end
 			else
 				if(newCols == 1) then
 					if(group) then
-						group:Point(point, self, point, 0, (height + (SPACING*5)) * yMult);
+						group:Point(point, self, point, 0, height * yMult);
 					end
-					height = height + ((UNIT_HEIGHT + db.verticalSpacing + SPACING) * 5);
+					height = height + ((UNIT_HEIGHT + db.verticalSpacing) * 5);
 					newRows = newRows + 1;
 				elseif(group) then
-					group:Point(point, self, point, ((db.width + db.horizontalSpacing + SPACING) * (newCols - 1)) * xMult, (((UNIT_HEIGHT + db.verticalSpacing + SPACING) * 5) * ((i-1) % db.groupsPerRowCol)) * yMult);
+					group:Point(point, self, point, ((db.width + db.horizontalSpacing) * (newCols - 1)) * xMult, (((UNIT_HEIGHT + db.verticalSpacing) * 5) * ((i-1) % db.groupsPerRowCol)) * yMult);
 				end
 			end
 		end
@@ -760,6 +760,8 @@ function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdat
 			self[group] = CreateFrame("Frame", "ElvUF_" .. stringTitle, E.UIParent, "SecureHandlerStateTemplate");
 			self[group].groups = {};
 			self[group].groupName = group;
+			self[group].template = self[group].template or template;
+			self[group].headerTemplate = self[group].headerTemplate or headerTemplate;
 			if not UF["headerFunctions"][group] then UF["headerFunctions"][group] = {}; end
 			for k, v in pairs(self.groupPrototype) do
 				UF["headerFunctions"][group][k] = v;
@@ -786,12 +788,12 @@ function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdat
 
 		if(db.raidWideSorting) then
 			if(not self[group].groups[1]) then
-				self[group].groups[1] = self:CreateHeader(self[group], nil, "ElvUF_"..E:StringTitle(self[group].groupName) .. "Group1", template, nil, headerTemplate);
+				self[group].groups[1] = self:CreateHeader(self[group], nil, "ElvUF_"..E:StringTitle(self[group].groupName) .. "Group1", template or self[group].template, nil, headerTemplate or self[group].headerTemplate);
 			end
 		else
 			while(numGroups > #self[group].groups) do
 				local index = tostring(#self[group].groups + 1);
-				tinsert(self[group].groups, self:CreateHeader(self[group], index, "ElvUF_" .. E:StringTitle(self[group].groupName) .. "Group" .. index, template, nil, headerTemplate));
+				tinsert(self[group].groups, self:CreateHeader(self[group], index, "ElvUF_" .. E:StringTitle(self[group].groupName) .. "Group" .. index, template or self[group].template, nil, headerTemplate or self[group].headerTemplate));
 			end
 		end
 		
@@ -1066,7 +1068,7 @@ end
 function UF:Initialize()
 	self.db = E.db["unitframe"];
 	
-	self.thinBorders = E.global.tukuiMode or self.db.thinBorders;
+	self.thinBorders = E.global.tukuiMode or self.db.thinBorders or E.PixelMode;
 	if(E.private["unitframe"].enable ~= true) then return; end
 	E.UnitFrames = UF;
 	

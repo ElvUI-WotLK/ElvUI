@@ -149,8 +149,14 @@ function UF:Configure_HealthBar(frame)
 		health.bg:SetParent(frame.Portrait.overlay);
 	end
 	
-	if(db.health and db.health.orientation) then
-		health:SetOrientation(db.health.orientation);
+	if(db.health) then
+		if(db.health.orientation) then
+			health:SetOrientation(db.health.orientation);
+		end
+
+		if(db.health.frequentUpdates) then
+			health.frequentUpdates = db.health.frequentUpdates;
+		end
 	end
 	
 	UF:ToggleTransparentStatusBar(UF.db.colors.transparentHealth, frame.Health, frame.Health.bg, (frame.USE_PORTRAIT and frame.USE_PORTRAIT_OVERLAY) ~= true);

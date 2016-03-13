@@ -20,6 +20,16 @@ function UF:Configure_ClassBar(frame)
 		bars.UpdateAllRuneTypes(frame);
 	end
 	
+	if((not self.thinBorders and not E.PixelMode) and frame.CLASSBAR_HEIGHT < 7) then
+		frame.CLASSBAR_HEIGHT = 7;
+		if(db.classbar) then db.classbar.height = 7; end
+		UF.ToggleResourceBar(bars);
+	elseif((self.thinBorders or E.PixelMode) and frame.CLASSBAR_HEIGHT < 3) then
+		frame.CLASSBAR_HEIGHT = 3;
+		if(db.classbar) then db.classbar.height = 3; end
+		UF.ToggleResourceBar(bars);
+	end
+	
 	local CLASSBAR_WIDTH = frame.CLASSBAR_WIDTH;
 
 	local c = self.db.colors.classResources.bgColor;
@@ -189,7 +199,7 @@ local function ToggleResourceBar(bars)
 		end
 	end
 	
-	frame.CLASSBAR_HEIGHT = frame.USE_CLASSBAR and frame.CLASSBAR_SHOWN and height or 0;
+	frame.CLASSBAR_HEIGHT = (frame.USE_CLASSBAR and (frame.CLASSBAR_SHOWN and height) or 0);
 	frame.CLASSBAR_YOFFSET = (not frame.USE_CLASSBAR or not frame.CLASSBAR_SHOWN or frame.CLASSBAR_DETACHED) and 0 or (frame.USE_MINI_CLASSBAR and ((frame.SPACING+(frame.CLASSBAR_HEIGHT/2))) or (frame.CLASSBAR_HEIGHT - (frame.BORDER-frame.SPACING)));
 	
 	if(not frame.CLASSBAR_DETACHED) then

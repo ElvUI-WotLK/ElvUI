@@ -2309,14 +2309,21 @@ P["datatexts"] = {
 	["localtime"] = true,
 	["time24"] = false,
 	["battleground"] = true,
-	["minimapPanels"] = true,
-	["leftChatPanel"] = true,
-	["rightChatPanel"] = true,
 	["panelTransparency"] = false,
 	["goldFormat"] = "BLIZZARD",
 	["goldCoins"] = false,
 	["noCombatClick"] = false,
-	["noCombatHover"] = false
+	["noCombatHover"] = false,
+
+	["minimapPanels"] = true,
+	["leftChatPanel"] = true,
+	["rightChatPanel"] = true,
+	["minimapTop"] = false,
+	["minimapTopLeft"] = false,
+	["minimapTopRight"] = false,
+	["minimapBottom"] = false,
+	["minimapBottomLeft"] = false,
+	["minimapBottomRight"] = false
 };
 
 P['tooltip'] = {

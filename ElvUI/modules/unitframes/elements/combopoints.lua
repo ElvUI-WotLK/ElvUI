@@ -10,6 +10,7 @@ function UF:Construct_Combobar(frame)
 	local CPoints = CreateFrame("Frame", nil, frame);
 	CPoints:CreateBackdrop("Default", nil, nil, UF.thinBorders);
 	CPoints.Override = UF.UpdateComboDisplay;
+	--CPoints.origParent = frame;
 	
 	for i = 1, MAX_COMBO_POINTS do
 		CPoints[i] = CreateFrame("StatusBar", frame:GetName() .. "ComboBarButton" .. i, CPoints);
@@ -35,6 +36,20 @@ function UF:Configure_ComboPoints(frame)
 		CPoints:SetParent(frame);
 	else
 		CPoints:SetParent(E.UIParent);
+	end
+	
+	if((not self.thinBorders and not E.PixelMode) and frame.CLASSBAR_HEIGHT < 7) then
+		frame.CLASSBAR_HEIGHT = 7;
+		if(db.combobar) then db.combobar.height = 7; end
+	--	UF.ToggleResourceBar(CPoints);
+	elseif((self.thinBorders or E.PixelMode) and frame.CLASSBAR_HEIGHT < 3) then
+		frame.CLASSBAR_HEIGHT = 3;
+		if(db.combobar) then db.combobar.height = 3; end
+	--	UF.ToggleResourceBar(CPoints);
+	end
+	
+	if(not frame.USE_CLASSBAR) then
+		CPoints:Hide();
 	end
 	
 	local CLASSBAR_WIDTH = frame.CLASSBAR_WIDTH;
@@ -118,6 +133,10 @@ function UF:Configure_ComboPoints(frame)
 		frame:DisableElement("CPoints");
 		CPoints:Hide();
 	end
+	
+	if(not frame:IsShown()) then
+	--	CPoints:ForceUpdate();
+	end
 end
 
 function UF:UpdateComboDisplay(event, unit)
@@ -134,6 +153,7 @@ function UF:UpdateComboDisplay(event, unit)
 	
 	if(cp == 0 and db.combobar.autoHide) then
 		cpoints:Hide();
+	--	UF.ToggleResourceBar(cpoints);
 	else
 		cpoints:Show();
 		for i = 1, MAX_COMBO_POINTS do
@@ -143,5 +163,6 @@ function UF:UpdateComboDisplay(event, unit)
 				cpoints[i]:SetAlpha(.2);
 			end
 		end
+	--	UF.ToggleResourceBar(cpoints);
 	end
 end

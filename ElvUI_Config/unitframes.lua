@@ -2591,7 +2591,7 @@ E.Options.args.unitframe.args.player = {
 					type = "range",
 					order = 2,
 					name = L["Height"],
-					min = 5, max = 15, step = 1
+					min = ((E.db.unitframe.thinBorders or E.PixelMode) and 3 or 7), max = 30, step = 1
 				},	
 				fill = {
 					type = "select",
@@ -2803,7 +2803,7 @@ E.Options.args.unitframe.args.target = {
 					order = 2,
 					type = "range",
 					name = L["Height"],
-					min = 5, max = 15, step = 1
+					min = ((E.db.unitframe.thinBorders or E.PixelMode) and 3 or 7), max = 15, step = 1
 				},
 				fill = {
 					order = 3,
@@ -4109,13 +4109,13 @@ E.Options.args.unitframe.args.party = {
 							order = 7,
 							type = "range",
 							name = L["Horizontal Spacing"],
-							min = 0, max = 50, step = 1
+							min = -1, max = 50, step = 1
 						},
 						verticalSpacing = {
 							order = 8,
 							type = "range",
 							name = L["Vertical Spacing"],
-							min = 0, max = 50, step = 1	
+							min = -1, max = 50, step = 1	
 						}
 					}
 				},
@@ -4666,13 +4666,13 @@ E.Options.args.unitframe.args["raid"] = {
 							order = 9,
 							type = "range",
 							name = L["Horizontal Spacing"],
-							min = 0, max = 50, step = 1		
+							min = -1, max = 50, step = 1		
 						},
 						verticalSpacing = {
 							order = 10,
 							type = "range",
 							name = L["Vertical Spacing"],
-							min = 0, max = 50, step = 1		
+							min = -1, max = 50, step = 1		
 						}
 					}
 				},
@@ -5062,13 +5062,13 @@ E.Options.args.unitframe.args["raid40"] = {
 							order = 9,
 							type = "range",
 							name = L["Horizontal Spacing"],
-							min = 0, max = 50, step = 1
+							min = -1, max = 50, step = 1
 						},
 						verticalSpacing = {
 							order = 10,
 							type = "range",
 							name = L["Vertical Spacing"],
-							min = 0, max = 50, step = 1
+							min = -1, max = 50, step = 1
 						}
 					}
 				},
@@ -5448,13 +5448,13 @@ E.Options.args.unitframe.args.raidpet = {
 							order = 9,
 							type = "range",
 							name = L["Horizontal Spacing"],
-							min = 0, max = 50, step = 1,		
+							min = -1, max = 50, step = 1,		
 						},
 						verticalSpacing = {
 							order = 10,
 							type = "range",
 							name = L["Vertical Spacing"],
-							min = 0, max = 50, step = 1,		
+							min = -1, max = 50, step = 1,		
 						},					
 					},
 				},
