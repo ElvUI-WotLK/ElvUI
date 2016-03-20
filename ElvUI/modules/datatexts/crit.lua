@@ -3,7 +3,6 @@ local DT = E:GetModule("DataTexts");
 
 local PAPERDOLLFRAME_TOOLTIP_FORMAT = PAPERDOLLFRAME_TOOLTIP_FORMAT;
 local CR_CRIT_SPELL = CR_CRIT_SPELL;
-local CR_CRIT_SPELL_TOOLTIP = CR_CRIT_SPELL_TOOLTIP;
 local SPELL_CRIT_CHANCE = SPELL_CRIT_CHANCE;
 local RANGED_CRIT_CHANCE = RANGED_CRIT_CHANCE;
 local CR_CRIT_RANGED_TOOLTIP = CR_CRIT_RANGED_TOOLTIP;
@@ -40,7 +39,7 @@ local function OnEnter(self)
 	local text, tooltip;
 	if(E.Role == "Caster") then
 		text = format(PAPERDOLLFRAME_TOOLTIP_FORMAT, SPELL_CRIT_CHANCE).." "..format("%.2F%%", GetSpellCritChance(2));
-		tooltip = format(CR_CRIT_SPELL_TOOLTIP, GetCombatRating(CR_CRIT_SPELL), GetCombatRatingBonus(CR_CRIT_SPELL));
+		tooltip = format(PAPERDOLLFRAME_TOOLTIP_FORMAT, COMBAT_RATING_NAME11).." "..GetCombatRating(11);
 	else
 		if(E.myclass == "HUNTER") then
 			text = format(PAPERDOLLFRAME_TOOLTIP_FORMAT, RANGED_CRIT_CHANCE).." "..format("%.2F%%", GetRangedCritChance());
