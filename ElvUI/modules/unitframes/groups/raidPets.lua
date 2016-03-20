@@ -41,8 +41,6 @@ function UF:Construct_RaidpetFrames(unitGroup)
 	self.Range = UF:Construct_Range(self);
 	self.customTexts = {};
 	
-	
-	UF:Update_RaidpetFrames(self, UF.db["units"]["raidpet"]);
 	UF:Update_StatusBars();
 	UF:Update_FontStrings();
 	self.unitframeType = "raidpet";
@@ -91,7 +89,7 @@ end
 function UF:Update_RaidpetFrames(frame, db)
 	frame.db = db;
 	
-	frame.Portrait = db.portrait.style == "2D" and frame.Portrait2D or frame.Portrait3D;
+	frame.Portrait = frame.Portrait or (db.portrait.style == "2D" and frame.Portrait2D or frame.Portrait3D);
 	frame.colors = ElvUF.colors;
 	frame:RegisterForClicks(self.db.targetOnMouseDown and "AnyDown" or "AnyUp");
 
@@ -131,9 +129,6 @@ function UF:Update_RaidpetFrames(frame, db)
 	
 	if(not InCombatLockdown()) then
 		frame:Size(frame.UNIT_WIDTH, frame.UNIT_HEIGHT);
-	else
-		frame:SetAttribute("initial-height", frame.UNIT_WIDTH);
-		frame:SetAttribute("initial-width", frame.UNIT_HEIGHT);
 	end
 	
 	UF:Configure_HealthBar(frame);

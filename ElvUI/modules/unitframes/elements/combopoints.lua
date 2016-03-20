@@ -38,11 +38,11 @@ function UF:Configure_ComboPoints(frame)
 		CPoints:SetParent(E.UIParent);
 	end
 	
-	if((not self.thinBorders and not E.PixelMode) and frame.CLASSBAR_HEIGHT < 7) then
+	if((not self.thinBorders and not E.PixelMode) and frame.CLASSBAR_HEIGHT > 0 and frame.CLASSBAR_HEIGHT < 7) then
 		frame.CLASSBAR_HEIGHT = 7;
 		if(db.combobar) then db.combobar.height = 7; end
 	--	UF.ToggleResourceBar(CPoints);
-	elseif((self.thinBorders or E.PixelMode) and frame.CLASSBAR_HEIGHT < 3) then
+	elseif((self.thinBorders or E.PixelMode) and frame.CLASSBAR_HEIGHT > 0 and frame.CLASSBAR_HEIGHT < 3) then
 		frame.CLASSBAR_HEIGHT = 3;
 		if(db.combobar) then db.combobar.height = 3; end
 	--	UF.ToggleResourceBar(CPoints);

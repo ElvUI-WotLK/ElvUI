@@ -51,7 +51,6 @@ function UF:Construct_Raid40Frames(unitGroup)
 	
 	UF:Update_StatusBars();
 	UF:Update_FontStrings();
-	UF:Update_Raid40Frames(self, UF.db["units"]["raid40"]);
 	self.unitframeType = "raid40";
 	return self;
 end
@@ -125,7 +124,7 @@ end
 function UF:Update_Raid40Frames(frame, db)
 	frame.db = db;
 	
-	frame.Portrait = db.portrait.style == "2D" and frame.Portrait2D or frame.Portrait3D;
+	frame.Portrait = frame.Portrait or (db.portrait.style == "2D" and frame.Portrait2D or frame.Portrait3D);
 	frame.colors = ElvUF.colors;
 	frame:RegisterForClicks(self.db.targetOnMouseDown and "AnyDown" or "AnyUp");
 
@@ -169,9 +168,6 @@ function UF:Update_Raid40Frames(frame, db)
 	
 	if(not InCombatLockdown()) then
 		frame:Size(frame.UNIT_WIDTH, frame.UNIT_HEIGHT);
-	else
-		frame:SetAttribute("initial-height", frame.UNIT_WIDTH);
-		frame:SetAttribute("initial-width", frame.UNIT_HEIGHT);
 	end
 	
 	UF:Configure_InfoPanel(frame)
