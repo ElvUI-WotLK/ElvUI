@@ -66,8 +66,7 @@ function AB:PLAYER_REGEN_ENABLED()
 end
 
 function AB:PositionAndSizeBar(barName)
-	local buttonSpacing = E:Scale(self.db[barName].buttonspacing);
-	local backdropSpacing = E:Scale((self.db[barName].backdropSpacing or self.db[barName].buttonspacing));
+	local spacing = E:Scale(self.db[barName].buttonspacing);
 	local buttonsPerRow = self.db[barName].buttonsPerRow;
 	local numButtons = self.db[barName].buttons;
 	local size = E:Scale(self.db[barName].buttonsize);
@@ -88,10 +87,8 @@ function AB:PositionAndSizeBar(barName)
 		numColumns = 1;
 	end
 	
-	local barWidth = (size * (buttonsPerRow * widthMult)) + ((buttonSpacing * (buttonsPerRow - 1)) * widthMult) + (buttonSpacing * (widthMult-1)) + (backdropSpacing*2) + ((self.db[barName].backdrop == true and E.Border or E.Spacing)*2);
-	local barHeight = (size * (numColumns * heightMult)) + ((buttonSpacing * (numColumns - 1)) * heightMult) + (buttonSpacing * (heightMult-1)) + (backdropSpacing*2) + ((self.db[barName].backdrop == true and E.Border or E.Spacing)*2);
-	bar:Width(barWidth);
-	bar:Height(barHeight);
+	bar:Width(spacing + ((size * (buttonsPerRow * widthMult)) + ((spacing * (buttonsPerRow - 1)) * widthMult) + (spacing * widthMult)));
+	bar:Height(spacing + ((size * (numColumns * heightMult)) + ((spacing * (numColumns - 1)) * heightMult) + (spacing * heightMult)));
 	
 	bar.mouseover = self.db[barName].mouseover;
 	
@@ -126,8 +123,7 @@ function AB:PositionAndSizeBar(barName)
 		bar:SetParent(E.UIParent);
 	end
 	
-	local button, lastButton, lastColumnButton;
-	local firstButtonSpacing = backdropSpacing + (self.db[barName].backdrop == true and E.Border or E.Spacing);
+	local button, lastButton, lastColumnButton ;
 	for i = 1, NUM_ACTIONBAR_BUTTONS do
 		button = bar.buttons[i];
 		lastButton = bar.buttons[i-1];
@@ -141,32 +137,32 @@ function AB:PositionAndSizeBar(barName)
 		if(i == 1) then
 			local x, y;
 			if(point == "BOTTOMLEFT") then
-				x, y = firstButtonSpacing, firstButtonSpacing;
+				x, y = spacing, spacing;
 			elseif(point == "TOPRIGHT") then
-				x, y = -firstButtonSpacing, -firstButtonSpacing;
+				x, y = -spacing, -spacing;
 			elseif(point == "TOPLEFT") then
-				x, y = firstButtonSpacing, -firstButtonSpacing;
+				x, y = spacing, -spacing;
 			else
-				x, y = -firstButtonSpacing, firstButtonSpacing;
+				x, y = -spacing, spacing;
 			end
 			
 			button:Point(point, bar, point, x, y);
 		elseif((i - 1) % buttonsPerRow == 0) then
 			local x = 0;
-			local y = -buttonSpacing;
+			local y = -spacing;
 			local buttonPoint, anchorPoint = "TOP", "BOTTOM";
 			if(verticalGrowth == "UP") then
-				y = buttonSpacing;
+				y = spacing;
 				buttonPoint = "BOTTOM";
 				anchorPoint = "TOP";
 			end
 			button:Point(buttonPoint, lastColumnButton, anchorPoint, x, y);
 		else
-			local x = buttonSpacing;
+			local x = spacing;
 			local y = 0;
 			local buttonPoint, anchorPoint = "LEFT", "RIGHT";
 			if(horizontalGrowth == "LEFT") then
-				x = -buttonSpacing;
+				x = -spacing;
 				buttonPoint = "RIGHT";
 				anchorPoint = "LEFT";
 			end

@@ -68,7 +68,7 @@ function UF:Construct_PartyFrames(unitGroup)
 	
 	UF:Update_StatusBars();
 	UF:Update_FontStrings();
-	--UF:Update_PartyFrames(self, UF.db["units"]["party"]);
+	UF:Update_PartyFrames(self, UF.db["units"]["party"]);
 	return self;
 end
 

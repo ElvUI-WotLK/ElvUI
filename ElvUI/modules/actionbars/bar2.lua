@@ -10,9 +10,7 @@ function AB:CreateBar2()
 	bar.id = "2";
 	bar:SetFrameStrata("LOW");
 	bar:CreateBackdrop("Default");
-	local offset = E.Spacing;
-	bar.backdrop:SetPoint("TOPLEFT", bar, "TOPLEFT", offset, -offset);
-	bar.backdrop:SetPoint("BOTTOMRIGHT", bar, "BOTTOMRIGHT", -offset, offset);
+	bar.backdrop:SetAllPoints();
 	bar.buttons = {};
 	self:HookScript(bar, "OnEnter", "Bar_OnEnter");
 	self:HookScript(bar, "OnLeave", "Bar_OnLeave");

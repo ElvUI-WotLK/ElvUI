@@ -328,11 +328,6 @@ function M:Initialize()
 	self:RegisterEvent('ZONE_CHANGED_NEW_AREA', 'Minimap_Update');
 	self:RegisterEvent('ADDON_LOADED');
 	
-	MinimapCluster:ClearAllPoints();
-	MinimapCluster:SetAllPoints(Minimap);
-	MinimapBackdrop:ClearAllPoints();
-	MinimapBackdrop:SetAllPoints(Minimap);
-	
 	local fm = CreateFrame('Minimap', 'FarmModeMap', E.UIParent);
 	fm:Size(E.db.farmSize);
 	fm:Point('TOP', E.UIParent, 'TOP', 0, -120);

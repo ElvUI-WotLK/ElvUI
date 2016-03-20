@@ -171,8 +171,7 @@ function B:SetSearch(query)
 			for slotID = 1, GetContainerNumSlots(bagID) do
 				local _, _, _, _, _, _, link = GetContainerItemInfo(bagID, slotID);
 				local button = bagFrame.Bags[bagID][slotID];
-				local success, result = pcall(Search.Matches, Search, link, query);
-				if(empty or (success and result)) then
+				if(empty or Search:Matches(link, query)) then
 					SetItemButtonDesaturated(button);
 					button:SetAlpha(1);
 				else
@@ -188,8 +187,7 @@ function B:SetSearch(query)
 		for slotID = 1, numKey do
 			local _, _, _, _, _, _, link = GetContainerItemInfo(KEYRING_CONTAINER, slotID);
 			local button = _G["ElvUIKeyFrameItem"..slotID];
-			local success, result = pcall(Search.Matches, Search, link, query);
-			if(empty or (success and result)) then
+			if(empty or Search:Matches(link, query)) then
 				SetItemButtonDesaturated(button);
 				button:SetAlpha(1);
 			else
@@ -215,8 +213,7 @@ function B:SetGuildBankSearch(query)
 				if col == 0 then col = 1 end
 				if btn == 0 then btn = 14 end
 				local button = _G["GuildBankColumn"..col.."Button"..btn]
-				local success, result = pcall(Search.Matches, Search, link, query);
-				if(empty or (success and result)) then
+				if (empty or Search:Matches(link, query) ) then
 					SetItemButtonDesaturated(button);
 					button:SetAlpha(1);
 				else

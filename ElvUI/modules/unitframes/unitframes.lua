@@ -401,7 +401,7 @@ function UF:Configure_FontString(obj)
 end
 
 function UF:Update_AllFrames()
-	if(InCombatLockdown()) then self:RegisterEvent("PLAYER_REGEN_ENABLED"); return; end
+	--if(InCombatLockdown()) then self:RegisterEvent("PLAYER_REGEN_ENABLED"); return; end
 	if(E.private["unitframe"].enable ~= true) then return; end
 	self:UpdateColors();
 	self:Update_FontStrings();
@@ -433,7 +433,7 @@ function UF:Update_AllFrames()
 end
 
 function UF:CreateAndUpdateUFGroup(group, numGroup, template)
-	if(InCombatLockdown()) then self:RegisterEvent("PLAYER_REGEN_ENABLED"); return; end
+	--if(InCombatLockdown()) then self:RegisterEvent("PLAYER_REGEN_ENABLED"); return; end
 
 	for i = 1, numGroup do
 		local unit = group..i;
@@ -509,14 +509,14 @@ function UF.groupPrototype:Configure_Groups(self)
 				group:SetAttribute("columnSpacing", db.horizontalSpacing);
 			end
 			
-			if(not group.isForced) then
-				if(not group.initialized) then
+			--[[if not group.isForced then
+				if not group.initialized then
 					group:SetAttribute("startingIndex", db.raidWideSorting and (-min(numGroups * (db.groupsPerRowCol * 5), MAX_RAID_MEMBERS) + 1) or -4)
 					group:Show()
 					group.initialized = true
 				end
 				group:SetAttribute("startingIndex", 1)
-			end
+			end]]
 			
 			group:ClearAllPoints();
 
@@ -672,6 +672,11 @@ function UF.headerPrototype:Update(isForced)
 			UF["Update_"..E:StringTitle(groupName).."Frames"](UF, _G[child:GetName().."Target"], db);
 		end
 		
+		if(not InCombatLockdown()) then
+			child:SetHeight(db.height);
+			child:SetWidth(db.width);
+		end
+		
 		i = i + 1;
 		child = self:GetAttribute("child" .. i);
 	end
@@ -726,7 +731,7 @@ function UF:CreateHeader(parent, groupFilter, overrideName, template, groupName,
 end
 
 function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdate, headerTemplate)
-	if(InCombatLockdown()) then self:RegisterEvent("PLAYER_REGEN_ENABLED"); return; end
+	--if(InCombatLockdown()) then self:RegisterEvent("PLAYER_REGEN_ENABLED"); return; end
 	local db = self.db["units"][group];
 	local raidFilter = UF.db.smartRaidFilter;
 	local numGroups = db.numGroups;
@@ -801,7 +806,7 @@ function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdat
 			end
 			
 			if(not self[group].mover) then
-				UF["headerFunctions"][group]:Update(self[group]);
+				--UF["headerFunctions"][group]:Update(self[group]);
 				UF["headerFunctions"][group]:UpdateHeader(self[group]);
 			end
 		else
@@ -861,13 +866,13 @@ function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdat
 end
 
 function UF:PLAYER_REGEN_ENABLED()
-	self:Update_AllFrames();
-	self:UnregisterEvent("PLAYER_REGEN_ENABLED");
+	--self:Update_AllFrames();
+	--self:UnregisterEvent("PLAYER_REGEN_ENABLED");
 end
 
 function UF:CreateAndUpdateUF(unit)
 	assert(unit, "No unit provided to create or update.");
-	if(InCombatLockdown()) then self:RegisterEvent("PLAYER_REGEN_ENABLED"); return; end
+	--if(InCombatLockdown()) then self:RegisterEvent("PLAYER_REGEN_ENABLED"); return; end
 	
 	local frameName = E:StringTitle(unit);
 	frameName = frameName:gsub("t(arget)", "T%1");
@@ -915,12 +920,12 @@ end
 
 function UF:UpdateAllHeaders(event)
 	if(InCombatLockdown()) then
-		self:RegisterEvent("PLAYER_REGEN_ENABLED", "UpdateAllHeaders");
+	--	self:RegisterEvent("PLAYER_REGEN_ENABLED", "UpdateAllHeaders");
 		return;
 	end
 	
 	if(event == "PLAYER_REGEN_ENABLED") then
-		self:UnregisterEvent("PLAYER_REGEN_ENABLED");
+	--	self:UnregisterEvent("PLAYER_REGEN_ENABLED");
 	end
 	
 	local _, instanceType = IsInInstance();

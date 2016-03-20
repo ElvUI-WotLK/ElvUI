@@ -105,23 +105,13 @@ E.Options.args.chat = {
 					name = L['Chat History'],
 					desc = L['Log the main chat frames history. So when you reloadui or log in and out you see the history from your last session.'],
 				},
-				useAltKey = {
- 					order = 9,
-					type = "toggle",
-					name = L["Use Alt Key"],
-					desc = L["Require holding the Alt key down to move cursor or cycle through messages in the editbox."],
-					set = function(self, value)
-						E.db.chat.useAltKey = value;
-						CH:UpdateSettings();
-					end
-				},
 				spacer = {
-					order = 10,
+					order = 9,
 					type = 'description',
 					name = '',
 				},				
 				throttleInterval = {
-					order = 11,
+					order = 10,
 					type = 'range',
 					name = L['Spam Interval'],
 					desc = L['Prevent the same messages from displaying in chat more than once within this set amount of seconds, set to zero to disable.'],
@@ -134,7 +124,7 @@ E.Options.args.chat = {
 					end,					
 				},
 				scrollDownInterval = {
-					order = 12,
+					order = 11,
 					type = 'range',
 					name = L['Scroll Interval'],
 					desc = L['Number of time in seconds to scroll down to the bottom of the chat window if you are not scrolled down completely.'],
@@ -144,7 +134,7 @@ E.Options.args.chat = {
 					end,					
 				},					
 				timeStampFormat = {
-					order = 13,
+					order = 12,
 					type = 'select',
 					name = TIMESTAMPS_LABEL,
 					desc = OPTION_TOOLTIP_TIMESTAMPS,

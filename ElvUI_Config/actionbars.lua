@@ -86,31 +86,23 @@ local function BuildABConfig()
 					desc = L['The spacing between buttons.'],
 					min = 1, max = 10, step = 1,	
 					order = 10,
-				},
-				backdropSpacing = {
-					order = 11,
-					type = "range",
-					name = L["Backdrop Spacing"],
-					desc = L["The spacing between the backdrop and the buttons."],
-					min = 0, max = 10, step = 1,
-					disabled = function() return not E.private.actionbar.enable; end
-				},
+				},	
 				heightMult = {
-					order = 12,
+					order = 11,
 					type = 'range',
 					name = L['Height Multiplier'],
 					desc = L['Multiply the backdrops height or width by this value. This is usefull if you wish to have more than one bar behind a backdrop.'],
 					min = 1, max = 5, step = 1,					
 				},
 				widthMult = {
-					order = 13,
+					order = 12,
 					type = 'range',
 					name = L['Width Multiplier'],
 					desc = L['Multiply the backdrops height or width by this value. This is usefull if you wish to have more than one bar behind a backdrop.'],
 					min = 1, max = 5, step = 1,					
 				},
 				alpha = {
-					order = 14,
+					order = 13,
 					type = 'range',
 					name = L['Alpha'],
 					isPercent = true,
@@ -118,7 +110,7 @@ local function BuildABConfig()
 				},
 				paging = {
 					type = 'input',
-					order = 15,
+					order = 14,
 					name = L['Action Paging'],
 					desc = L["This works like a macro, you can run different situations to get the actionbar to page differently.\n Example: '[combat] 2;'"],
 					width = 'full',
@@ -135,7 +127,7 @@ local function BuildABConfig()
 				},
 				visibility = {
 					type = 'input',
-					order = 16,
+					order = 15,
 					name = L['Visibility State'],
 					desc = L["This works like a macro, you can run different situations to get the actionbar to show/hide differently.\n Example: '[combat] show;hide'"],
 					width = 'full',
