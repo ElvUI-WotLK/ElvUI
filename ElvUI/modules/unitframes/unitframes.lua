@@ -672,11 +672,6 @@ function UF.headerPrototype:Update(isForced)
 			UF["Update_"..E:StringTitle(groupName).."Frames"](UF, _G[child:GetName().."Target"], db);
 		end
 		
-		if(not InCombatLockdown()) then
-			child:SetHeight(db.height);
-			child:SetWidth(db.width);
-		end
-		
 		i = i + 1;
 		child = self:GetAttribute("child" .. i);
 	end
@@ -806,7 +801,7 @@ function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdat
 			end
 			
 			if(not self[group].mover) then
-				--UF["headerFunctions"][group]:Update(self[group]);
+				UF["headerFunctions"][group]:Update(self[group]);
 				UF["headerFunctions"][group]:UpdateHeader(self[group]);
 			end
 		else
@@ -866,8 +861,8 @@ function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdat
 end
 
 function UF:PLAYER_REGEN_ENABLED()
-	--self:Update_AllFrames();
-	--self:UnregisterEvent("PLAYER_REGEN_ENABLED");
+	self:Update_AllFrames();
+	self:UnregisterEvent("PLAYER_REGEN_ENABLED");
 end
 
 function UF:CreateAndUpdateUF(unit)
@@ -921,11 +916,11 @@ end
 function UF:UpdateAllHeaders(event)
 	if(InCombatLockdown()) then
 	--	self:RegisterEvent("PLAYER_REGEN_ENABLED", "UpdateAllHeaders");
-		return;
+	--	return;
 	end
 	
 	if(event == "PLAYER_REGEN_ENABLED") then
-	--	self:UnregisterEvent("PLAYER_REGEN_ENABLED");
+		self:UnregisterEvent("PLAYER_REGEN_ENABLED");
 	end
 	
 	local _, instanceType = IsInInstance();
@@ -1078,7 +1073,7 @@ function UF:Initialize()
 	end);
 	
 	self:LoadUnits();
-	self:RegisterEvent("PLAYER_ENTERING_WORLD");
+	--self:RegisterEvent("PLAYER_ENTERING_WORLD");
 	
 	for k, v in pairs(UnitPopupMenus) do
 		for x, y in pairs(UnitPopupMenus[k]) do

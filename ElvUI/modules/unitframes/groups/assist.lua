@@ -34,7 +34,10 @@ function UF:Construct_AssistFrames(unitGroup)
 	UF:Update_FontStrings();
 	
 	self.originalParent = self:GetParent();
-	
+
+	self:SetAttribute("initial-width", UF.db["units"]["assist"].width);
+	self:SetAttribute("initial-height", UF.db["units"]["assist"].height);
+
 	return self;
 end
 
@@ -122,10 +125,18 @@ function UF:Update_AssistFrames(frame, db)
 			else
 				frame:SetParent(E.HiddenFrame);
 			end
+		else
+			frame:SetAttribute("initial-height", childDB.height);
+			frame:SetAttribute("initial-width", childDB.width);
 		end
-	elseif(not InCombatLockdown()) then
+	end
+	
+	if(not InCombatLockdown()) then
 		frame.db = db;
-		frame:Size(frame.UNIT_WIDTH, frame.UNIT_HEIGHT);
+		frame:Size(db.width, db.height);
+	else
+		frame:SetAttribute("initial-height", frame.UNIT_HEIGHT);
+		frame:SetAttribute("initial-width", frame.UNIT_WIDTH);
 	end
 	
 	UF:Configure_HealthBar(frame);

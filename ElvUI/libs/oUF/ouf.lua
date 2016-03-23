@@ -471,8 +471,6 @@ local initialConfigFunction = function(self)
         local frame = select(i, self);
 		local unit;
 		if(not frame.onlyProcessChildren) then
-			RegisterUnitWatch(frame);
-			
 			local groupFilter = header:GetAttribute("groupFilter");
 			
 			if(type(groupFilter) == "string" and groupFilter:match("MAIN[AT]")) then

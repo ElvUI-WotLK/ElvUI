@@ -50,9 +50,10 @@ function UF:Construct_RaidFrames(unitGroup)
 	self.InfoPanel = UF:Construct_InfoPanel(self);
 	UF:Update_StatusBars();
 	UF:Update_FontStrings();
-	UF:Update_RaidFrames(self, UF.db["units"]["raid"]);
 	self.unitframeType = "raid";
-	
+
+	UF:Update_RaidFrames(self, UF.db["units"]["raid"]);
+
 	return self;
 end
 
@@ -125,7 +126,7 @@ end
 function UF:Update_RaidFrames(frame, db)
 	frame.db = db;
 	
-	frame.Portrait = db.portrait.style == "2D" and frame.Portrait2D or frame.Portrait3D;
+	frame.Portrait = frame.Portrait or (db.portrait.style == "2D" and frame.Portrait2D or frame.Portrait3D);
 	frame.colors = ElvUF.colors;
 	frame:RegisterForClicks(self.db.targetOnMouseDown and "AnyDown" or "AnyUp");
 	
@@ -170,8 +171,8 @@ function UF:Update_RaidFrames(frame, db)
 	if(not InCombatLockdown()) then
 		frame:Size(frame.UNIT_WIDTH, frame.UNIT_HEIGHT);
 	else
-		frame:SetAttribute("initial-height", frame.UNIT_WIDTH);
-		frame:SetAttribute("initial-width", frame.UNIT_HEIGHT);
+		frame:SetAttribute("initial-height", frame.UNIT_HEIGHT);
+		frame:SetAttribute("initial-width", frame.UNIT_WIDTH);
 	end
 	
 	UF:Configure_InfoPanel(frame);

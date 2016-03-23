@@ -31,12 +31,13 @@ function UF:Construct_TankFrames(unitGroup)
 		self.unitframeType = "tanktarget";
 	end
 	
-	UF:Update_TankFrames(self, E.db["unitframe"]["units"]["tank"]);
 	UF:Update_StatusBars();
 	UF:Update_FontStrings();
 	
 	self.originalParent = self:GetParent();
-	
+
+	UF:Update_TankFrames(self, UF.db["units"]["tank"]);
+
 	return self;
 end
 
@@ -125,10 +126,18 @@ function UF:Update_TankFrames(frame, db)
 			else
 				frame:SetParent(E.HiddenFrame);
 			end
+		else
+			frame:SetAttribute("initial-height", childDB.height);
+			frame:SetAttribute("initial-width", childDB.width);
 		end
-	elseif(not InCombatLockdown()) then
-		frame.db = db
-		frame:Size(db.width, db.height)
+	end
+	
+	if(not InCombatLockdown()) then
+		frame.db = db;
+		frame:Size(db.width, db.height);
+	else
+		frame:SetAttribute("initial-height", frame.UNIT_HEIGHT);
+		frame:SetAttribute("initial-width", frame.UNIT_WIDTH);
 	end
 	
 	UF:Configure_HealthBar(frame);
@@ -160,4 +169,4 @@ function UF:Update_TankFrames(frame, db)
 	frame:UpdateAllElements();
 end
 
-UF["headerstoload"]["tank"] = { "MAINTANK", "ELVUI_UNITTARGET" };
+UF["headerstoload"]["tank"] = {"MAINTANK", "ELVUI_UNITTARGET"};

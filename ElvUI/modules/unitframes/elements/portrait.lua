@@ -34,7 +34,7 @@ function UF:Configure_Portrait(frame, dontHide)
 		frame.Portrait:ClearAllPoints();
 		frame.Portrait.backdrop:Hide();
 	end
-	frame.Portrait = db.portrait.style == "2D" and frame.Portrait2D or frame.Portrait3D;
+	frame.Portrait = frame.Portrait or (db.portrait.style == "2D" and frame.Portrait2D or frame.Portrait3D);
 	
 	local portrait = frame.Portrait;
 	if(frame.USE_PORTRAIT) then

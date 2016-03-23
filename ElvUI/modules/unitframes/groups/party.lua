@@ -68,7 +68,9 @@ function UF:Construct_PartyFrames(unitGroup)
 	
 	UF:Update_StatusBars();
 	UF:Update_FontStrings();
+
 	UF:Update_PartyFrames(self, UF.db["units"]["party"]);
+
 	return self;
 end
 
@@ -176,7 +178,7 @@ function UF:Update_PartyFrames(frame, db)
 		
 		local childDB = db.petsGroup;
 		local childType = "pet";
-		if(frame == _G[frame.originalParent:GetName() .. 'Target']) then
+		if(frame == _G[frame.originalParent:GetName() .. "Target"]) then
 			childDB = db.targetsGroup;
 			childType = "target";
 		end
@@ -195,6 +197,9 @@ function UF:Update_PartyFrames(frame, db)
 			else
 				frame:SetParent(E.HiddenFrame);
 			end
+		else
+			frame:SetAttribute("initial-height", childDB.height);
+			frame:SetAttribute("initial-width", childDB.width);
 		end
 		
 		UF:Configure_HealthBar(frame);
@@ -203,6 +208,9 @@ function UF:Update_PartyFrames(frame, db)
 	else
 		if(not InCombatLockdown()) then
 			frame:Size(frame.UNIT_WIDTH, frame.UNIT_HEIGHT);
+		else
+			frame:SetAttribute("initial-height", frame.UNIT_HEIGHT);
+			frame:SetAttribute("initial-width", frame.UNIT_WIDTH);
 		end
 		
 		UF:Configure_InfoPanel(frame);
