@@ -563,7 +563,7 @@ function B.Sort(bags, sorter, invertDirection)
 				for _,itemsearchquery in pairs(blackListQueries) do
 					local success, result = pcall(Search.Matches, Search, link, itemsearchquery);
 					if(success) then
-						blackListedSlots[bagSlot] = result;
+						blackListedSlots[bagSlot] = blackListedSlots[bagSlot] or result;
 					end
 				end
 			end
