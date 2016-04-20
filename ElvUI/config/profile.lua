@@ -72,6 +72,7 @@ P['general'] = {
 	["reminder"] = {
 		["enable"] = true,
 		["durations"] = true,
+		["reverse"] = true,
 		["position"] = "RIGHT",
 		["font"] = "Homespun",
 		["fontSize"] = 10,
