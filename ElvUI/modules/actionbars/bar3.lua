@@ -20,7 +20,7 @@ function AB:CreateBar3()
 	for i = 1, NUM_ACTIONBAR_BUTTONS do
 		local button = _G["MultiBarBottomLeftButton" .. i];
 		if(E.db.actionbar.selfcast) then
-		    button:SetAttribute("unit2", "player");
+			button:SetAttribute("unit2", "player");
 		else
 			button:SetAttribute("unit2", "target");
 		end
