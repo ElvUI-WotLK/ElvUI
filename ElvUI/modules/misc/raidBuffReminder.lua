@@ -178,6 +178,7 @@ function RB:CreateButton()
 	button.cd:SetInside();
 	button.cd.noOCC = true;
 	button.cd.noCooldownCount = true;
+	button.cd:SetReverse(true);
 	
 	button.timer = button.cd:CreateFontString(nil, 'OVERLAY');
 	button.timer:SetPoint('CENTER');
@@ -232,12 +233,14 @@ function RB:UpdateSettings(isCallback)
 			button:Point('BOTTOM', ElvUI_ReminderBuffs, 'BOTTOM', 0, (E.PixelMode and 0 or 2));
 		end
 		
-		if(self.db.durations) then
+		if(E.db.general.reminder.durations) then
 			button.cd:SetAlpha(1);
 		else
 			button.cd:SetAlpha(0);
 		end
 		
+		button.cd:SetReverse(E.db.general.reminder.reverse);
+
 		local font = LSM:Fetch('font', self.db.font);
 		button.timer:FontTemplate(font, self.db.fontSize, self.db.fontOutline);
 	end

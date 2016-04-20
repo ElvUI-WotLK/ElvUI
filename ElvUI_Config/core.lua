@@ -739,8 +739,13 @@ E.Options.args.general = {
 							name = L['Remaining Time'],
 							type = 'toggle'
 						},
-						position = {
+						reverse = {
 							order = 2,
+							name = L['Reverse highlight'],
+							type = 'toggle'
+						},
+						position = {
+							order = 3,
 							type = "select",
 							name = L["Position"],
 							set = function(info, value) E.db.general.reminder[ info[#info] ] = value; E:GetModule("ReminderBuffs"):UpdatePosition(); end,
