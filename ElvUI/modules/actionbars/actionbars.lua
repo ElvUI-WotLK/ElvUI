@@ -225,6 +225,11 @@ function AB:UpdateButtonSettings()
 	if InCombatLockdown() then self:RegisterEvent('PLAYER_REGEN_ENABLED'); return; end
 	for button, _ in pairs(self["handledbuttons"]) do
 		if button then
+			if(E.db.actionbar.selfcast) then
+				button:SetAttribute("unit2", "player");
+			else
+				button:SetAttribute("unit2", "target");
+			end
 			self:StyleButton(button, button.noBackdrop)
 		else
 			self["handledbuttons"][button] = nil

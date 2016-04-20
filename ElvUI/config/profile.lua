@@ -2383,6 +2383,7 @@ P['actionbar'] = { -- Панели команд
 	['enable'] = true,
 	['macrotext'] = false,
 	['hotkeytext'] = true,
+	['selfcast'] = true,
 	
 	['noRangeColor'] = { r = 0.8, g = 0.1, b = 0.1 },
 	['noPowerColor'] = { r = 0.5, g = 0.5, b = 1 },

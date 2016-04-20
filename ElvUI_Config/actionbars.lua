@@ -442,6 +442,12 @@ E.Options.args.actionbar = {
 					name = L['Keybind Text'],
 					desc = L['Display bind names on action buttons.'],
 				},
+				selfcast = {
+					order = 3,
+					type = "toggle",
+					name = L['Self Cast'],
+					desc = L['Self cast on button right click.'],
+				},
 				noRangeColor = {
 					type = 'color',
 					order = 9,
