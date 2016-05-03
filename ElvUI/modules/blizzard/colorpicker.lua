@@ -24,7 +24,7 @@ local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
 
 local function UpdateAlphaText()
 	local a = OpacitySliderFrame:GetValue()
-	a = a * 100
+	a = (1 - a) * 100
 	a = floor(a +.05)
 	ColorPPBoxA:SetText(("%d"):format(a));
 end
@@ -35,7 +35,7 @@ local function UpdateAlpha(tbox)
 		a = 100
 		ColorPPBoxA:SetText(("%d"):format(a));
 	end
-	a = a/100
+	a = 1 - (a / 100)
 	editingText = true
 	OpacitySliderFrame:SetValue(a)
 	editingText = nil

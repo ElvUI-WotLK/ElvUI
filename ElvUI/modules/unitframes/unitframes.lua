@@ -401,7 +401,7 @@ function UF:Configure_FontString(obj)
 end
 
 function UF:Update_AllFrames()
-	--if(InCombatLockdown()) then self:RegisterEvent("PLAYER_REGEN_ENABLED"); return; end
+	if(InCombatLockdown()) then self:RegisterEvent("PLAYER_REGEN_ENABLED"); return; end
 	if(E.private["unitframe"].enable ~= true) then return; end
 	self:UpdateColors();
 	self:Update_FontStrings();
@@ -433,7 +433,7 @@ function UF:Update_AllFrames()
 end
 
 function UF:CreateAndUpdateUFGroup(group, numGroup, template)
-	--if(InCombatLockdown()) then self:RegisterEvent("PLAYER_REGEN_ENABLED"); return; end
+	if(InCombatLockdown()) then self:RegisterEvent("PLAYER_REGEN_ENABLED"); return; end
 
 	for i = 1, numGroup do
 		local unit = group..i;
@@ -726,7 +726,7 @@ function UF:CreateHeader(parent, groupFilter, overrideName, template, groupName,
 end
 
 function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdate, headerTemplate)
-	--if(InCombatLockdown()) then self:RegisterEvent("PLAYER_REGEN_ENABLED"); return; end
+	if(InCombatLockdown()) then self:RegisterEvent("PLAYER_REGEN_ENABLED"); return; end
 	local db = self.db["units"][group];
 	local raidFilter = UF.db.smartRaidFilter;
 	local numGroups = db.numGroups;
@@ -867,7 +867,7 @@ end
 
 function UF:CreateAndUpdateUF(unit)
 	assert(unit, "No unit provided to create or update.");
-	--if(InCombatLockdown()) then self:RegisterEvent("PLAYER_REGEN_ENABLED"); return; end
+	if(InCombatLockdown()) then self:RegisterEvent("PLAYER_REGEN_ENABLED"); return; end
 	
 	local frameName = E:StringTitle(unit);
 	frameName = frameName:gsub("t(arget)", "T%1");
@@ -915,8 +915,8 @@ end
 
 function UF:UpdateAllHeaders(event)
 	if(InCombatLockdown()) then
-	--	self:RegisterEvent("PLAYER_REGEN_ENABLED", "UpdateAllHeaders");
-	--	return;
+		self:RegisterEvent("PLAYER_REGEN_ENABLED", "UpdateAllHeaders");
+		return;
 	end
 	
 	if(event == "PLAYER_REGEN_ENABLED") then
@@ -1073,7 +1073,7 @@ function UF:Initialize()
 	end);
 	
 	self:LoadUnits();
-	--self:RegisterEvent("PLAYER_ENTERING_WORLD");
+	self:RegisterEvent("PLAYER_ENTERING_WORLD");
 	
 	for k, v in pairs(UnitPopupMenus) do
 		for x, y in pairs(UnitPopupMenus[k]) do
