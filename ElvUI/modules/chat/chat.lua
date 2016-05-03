@@ -760,20 +760,19 @@ function CH:FindURL(event, msg, ...)
 	return false, msg, ...
 end
 
-local function URLChatFrame_OnHyperlinkShow(self, link, ...)
-	CH.clickedframe = self
-	if (link):sub(1, 3) == "url" then
-		local ChatFrameEditBox = ChatEdit_ChooseBoxForSend()
-		local currentLink = (link):sub(5)
-		if (not ChatFrameEditBox:IsShown()) then
-			ChatEdit_ActivateChat(ChatFrameEditBox)
+local SetHyperlink = ItemRefTooltip.SetHyperlink;
+function ItemRefTooltip:SetHyperlink(data, ...)
+	if((data):sub(1, 3) == "url") then
+		local ChatFrameEditBox = ChatEdit_ChooseBoxForSend();
+		local currentLink = (data):sub(5);
+		if(not ChatFrameEditBox:IsShown()) then
+			ChatEdit_ActivateChat(ChatFrameEditBox);
 		end
-		ChatFrameEditBox:Insert(currentLink)
-		ChatFrameEditBox:HighlightText()
-		return;
+		ChatFrameEditBox:Insert(currentLink);
+		ChatFrameEditBox:HighlightText();
+	else
+		SetHyperlink(self, data, ...);
 	end
-	
-	ChatFrame_OnHyperlinkShow(self, link, ...)
 end
 
 local function WIM_URLLink(link)
