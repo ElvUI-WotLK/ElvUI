@@ -34,7 +34,7 @@ function UF:Configure_Portrait(frame, dontHide)
 		frame.Portrait:ClearAllPoints();
 		frame.Portrait.backdrop:Hide();
 	end
-	frame.Portrait = frame.Portrait or (db.portrait.style == "2D" and frame.Portrait2D or frame.Portrait3D);
+	frame.Portrait = db.portrait.style == "2D" and frame.Portrait2D or frame.Portrait3D;
 	
 	local portrait = frame.Portrait;
 	if(frame.USE_PORTRAIT) then
@@ -66,7 +66,7 @@ function UF:Configure_Portrait(frame, dontHide)
 			end
 			
 			if(frame.ORIENTATION == "LEFT") then
-				portrait.backdrop:Point("TOPLEFT", frame, "TOPLEFT", frame.SPACING, frame.USE_MINI_CLASSBAR and -(frame.CLASSBAR_YOFFSET+frame.SPACING) or 0);
+				portrait.backdrop:Point("TOPLEFT", frame, "TOPLEFT", frame.SPACING, frame.USE_MINI_CLASSBAR and -(frame.CLASSBAR_YOFFSET+frame.SPACING) or -frame.SPACING);
 				
 				if(frame.USE_MINI_POWERBAR or frame.USE_POWERBAR_OFFSET or not frame.USE_POWERBAR or frame.USE_INSET_POWERBAR or frame.POWERBAR_DETACHED) then
 					portrait.backdrop:Point("BOTTOMRIGHT", frame.Health.backdrop, "BOTTOMLEFT", frame.BORDER - frame.SPACING*3, 0);
@@ -74,7 +74,7 @@ function UF:Configure_Portrait(frame, dontHide)
 					portrait.backdrop:Point("BOTTOMRIGHT", frame.Power.backdrop, "BOTTOMLEFT", frame.BORDER - frame.SPACING*3, 0);
 				end
 			elseif(frame.ORIENTATION == "RIGHT") then
-				portrait.backdrop:Point("TOPRIGHT", frame, "TOPRIGHT", -frame.SPACING, frame.USE_MINI_CLASSBAR and -(frame.CLASSBAR_YOFFSET+frame.SPACING) or 0);
+				portrait.backdrop:Point("TOPRIGHT", frame, "TOPRIGHT", -frame.SPACING, frame.USE_MINI_CLASSBAR and -(frame.CLASSBAR_YOFFSET+frame.SPACING) or -frame.SPACING);
 				
 				if(frame.USE_MINI_POWERBAR or frame.USE_POWERBAR_OFFSET or not frame.USE_POWERBAR or frame.USE_INSET_POWERBAR or frame.POWERBAR_DETACHED) then
 					portrait.backdrop:Point("BOTTOMLEFT", frame.Health.backdrop, "BOTTOMRIGHT", -frame.BORDER + frame.SPACING*3, 0);
@@ -99,7 +99,7 @@ function UF:PortraitUpdate(unit)
 	if(not db) then return; end
 	
 	local portrait = db.portrait;
-	if(portrait.enable and portrait.overlay) then
+	if(portrait.enable and self:GetParent().USE_PORTRAIT_OVERLAY) then
 		self:SetAlpha(0); 
 		self:SetAlpha(0.35);
 	else
