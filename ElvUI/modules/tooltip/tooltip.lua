@@ -228,7 +228,7 @@ function TT:GameTooltip_SetDefaultAnchor(tt, parent)
 	end
 	
 	local ownerName = tt:GetOwner() and tt:GetOwner().GetName and tt:GetOwner():GetName()
-	if (self.db.visibility.actionbars ~= 'NONE' and ownerName and (find(ownerName, "ElvUI_Bar") or find(ownerName, "ElvUI_StanceBar") or find(ownerName, "PetAction"))) then
+	if (self.db.visibility.actionbars ~= 'NONE' and ownerName and (find(ownerName, "ActionButton") or find(ownerName, "MultiBar") or find(ownerName, "ElvUI_StanceBar") or find(ownerName, "PetAction"))) then
 		local modifier = self.db.visibility.actionbars
 
 		if(modifier == 'ALL' or not ((modifier == 'SHIFT' and IsShiftKeyDown()) or (modifier == 'CTRL' and IsControlKeyDown()) or (modifier == 'ALT' and IsAltKeyDown()))) then

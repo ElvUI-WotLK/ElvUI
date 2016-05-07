@@ -69,7 +69,6 @@ local coreGroups = {
 
 local bagCache = {};
 local bagIDs = {};
-local bagPetIDs = {};
 local bagStacks = {};
 local bagMaxStacks = {};
 local bagGroups = {};
@@ -190,20 +189,7 @@ local function DefaultSort(a, b)
 	local bID = bagIDs[b]
 
 	if (not aID) or (not bID) then return aID end
-	
-	if bagPetIDs[a] and bagPetIDs[b] then
-		local aName, _, aType = C_PetJournal.GetPetInfoBySpeciesID(aID);
-		local bName, _, bType = C_PetJournal.GetPetInfoBySpeciesID(bID);
 
-		if aType and bType and aType ~= bType then
-			return aType > bType
-		end
-		
-		if aName and bName and aName ~= bName then
-			return aName < bName
-		end
-	end
-	
 	local aOrder, bOrder = initialOrder[a], initialOrder[b]
 
 	if aID == bID then
@@ -218,14 +204,6 @@ local function DefaultSort(a, b)
 
 	local _, _, aRarity, _, _, aType, aSubType, _, aEquipLoc = GetItemInfo(aID)
 	local _, _, bRarity, _, _, bType, bSubType, _, bEquipLoc = GetItemInfo(bID)
-	
-	if bagPetIDs[a] then
-		aRarity = 1
-	end
-	
-	if bagPetIDs[b] then
-		bRarity = 1
-	end
 	
 	if aRarity ~= bRarity and aRarity and bRarity then
 		return aRarity > bRarity
@@ -323,7 +301,7 @@ end
 function B:GetItemID(bag, slot)
 	if IsGuildBankBag(bag) then
 		local link = self:GetItemLink(bag, slot)
-		return link and tonumber(string.match(link, "item:(%d+)"))
+		return link and tonumber(match(link, "item:(%d+)"))
 	else
 		return GetContainerItemID(bag, slot)
 	end
@@ -376,12 +354,10 @@ function B:GetNumSlots(bag, role)
 end
 
 local function ConvertLinkToID(link) 
-	if not link then return; end
-	
-	if tonumber(match(link, "item:(%d+)")) then
+	if(not link) then return; end
+
+	if(tonumber(match(link, "item:(%d+)"))) then
 		return tonumber(match(link, "item:(%d+)"));
-	else
-		return tonumber(match(link, "battlepet:(%d+)")), true;
 	end
 end 
 
@@ -421,18 +397,12 @@ end
 
 function B:ScanBags()
 	for _, bag, slot in B.IterateBags(allBags) do
-		local bagSlot = B:Encode_BagSlot(bag, slot)
-		local itemID, isBattlePet = ConvertLinkToID(B:GetItemLink(bag, slot))
-		if itemID then
-			if isBattlePet then
-				bagPetIDs[bagSlot] = itemID
-				bagMaxStacks[bagSlot] = 1
-			else
-				bagMaxStacks[bagSlot] = select(8, GetItemInfo(itemID))
-			end
-
-			bagIDs[bagSlot] = itemID
-			bagStacks[bagSlot] = select(2, B:GetItemInfo(bag, slot))
+		local bagSlot = B:Encode_BagSlot(bag, slot);
+		local itemID = ConvertLinkToID(B:GetItemLink(bag, slot));
+		if(itemID) then
+			bagMaxStacks[bagSlot] = select(8, GetItemInfo(itemID));
+			bagIDs[bagSlot] = itemID;
+			bagStacks[bagSlot] = select(2, B:GetItemInfo(bag, slot));
 		end
 	end
 end
@@ -465,7 +435,7 @@ function B:CanItemGoInBag(bag, slot, targetBag)
 	end
 	local bagFamily = select(2, GetContainerNumFreeSlots(targetBag))
 	if itemFamily then
-		return (bagFamily == 0) or bit.band(itemFamily, bagFamily) > 0
+		return (bagFamily == 0) or band(itemFamily, bagFamily) > 0
 	else
 		return false;
 	end
@@ -513,9 +483,9 @@ function B.Stack(sourceBags, targetBags, canMove)
 		end
 	end
 
-	wipe(targetItems)
-	wipe(targetSlots)
-	wipe(sourceUsed)
+	twipe(targetItems)
+	twipe(targetSlots)
+	twipe(sourceUsed)
 end
 
 local blackListedSlots = {}
@@ -562,8 +532,9 @@ function B.Sort(bags, sorter, invertDirection)
 			if(not blackListedSlots[bagSlot]) then
 				for _,itemsearchquery in pairs(blackListQueries) do
 					local success, result = pcall(Search.Matches, Search, link, itemsearchquery);
-					if(success) then
+					if(success and result) then
 						blackListedSlots[bagSlot] = blackListedSlots[bagSlot] or result;
+						break
 					end
 				end
 			end
@@ -599,11 +570,11 @@ function B.Sort(bags, sorter, invertDirection)
 				i = i + 1
 			end
 		end
-		wipe(bagLocked)
+		twipe(bagLocked)
 	end
 
-	wipe(bagSorted)
-	wipe(initialOrder)	
+	twipe(bagSorted)
+	twipe(initialOrder)	
 end
 
 function B.FillBags(from, to)
@@ -618,7 +589,7 @@ function B.FillBags(from, to)
 	end
 
 	B.Fill(from, to)
-	wipe(specialtyBags)	
+	twipe(specialtyBags)	
 end
 
 function B.Fill(sourceBags, targetBags, reverse, canMove)
@@ -639,7 +610,7 @@ function B.Fill(sourceBags, targetBags, reverse, canMove)
 			B:AddMove(bagSlot, tremove(emptySlots, 1))
 		end
 	end
-	wipe(emptySlots)
+	twipe(emptySlots)
 end
 
 function B.SortBags(...)
@@ -658,25 +629,25 @@ function B.SortBags(...)
 				B.Stack(bagCache['Normal'], sortedBags)
 				B.Fill(bagCache['Normal'], sortedBags, B.db.sortInverted)
 				B.Sort(sortedBags, nil, B.db.sortInverted)
-				wipe(sortedBags)
+				twipe(sortedBags)
 			end
 		end
 		
 		if bagCache['Normal'] then
 			B.Stack(bagCache['Normal'], bagCache['Normal'], B.IsPartial)
 			B.Sort(bagCache['Normal'], nil, B.db.sortInverted)
-			wipe(bagCache['Normal'])
+			twipe(bagCache['Normal'])
 		end
-		wipe(bagCache)
-		wipe(bagGroups)
+		twipe(bagCache)
+		twipe(bagGroups)
 	end
 end
 
 function B:StartStacking()
-	wipe(bagMaxStacks)
-	wipe(bagStacks)
-	wipe(bagIDs)
-	wipe(moveTracker)
+	twipe(bagMaxStacks)
+	twipe(bagStacks)
+	twipe(bagIDs)
+	twipe(moveTracker)
 
 	if #moves > 0 then
 		self.SortUpdateTimer:Show()
@@ -686,8 +657,8 @@ function B:StartStacking()
 end
 
 function B:StopStacking(message)
-	wipe(moves)
-	wipe(moveTracker)
+	twipe(moves)
+	twipe(moveTracker)
 	moveRetries, lastItemID, lockStop, lastDestination, lastMove = 0, nil, nil, nil, nil
 
 	self.SortUpdateTimer:Hide()
@@ -791,9 +762,9 @@ function B:DoMoves()
 						moveTracker[moveSource] = targetID
 						moveTracker[moveTarget] = moveID
 						lastDestination = moveTarget
-						lastMove = moves[i]
+						--lastMove = moves[i]
 						lastItemID = moveID
-						tremove(moves, i)
+						--tremove(moves, i)
 						return
 					end
 
@@ -807,7 +778,7 @@ function B:DoMoves()
 	end
 	
 	lastItemID, lockStop, lastDestination, lastMove = nil, nil, nil, nil
-	wipe(moveTracker)
+	twipe(moveTracker)
 
 	local start, success, moveID, targetID, moveSource, moveTarget, wasGuild
 	start = GetTime()
@@ -856,7 +827,7 @@ function B:CommandDecorator(func, groupsDefaults)
 			return;
 		end
 
-		wipe(bagGroups)
+		twipe(bagGroups)
 		if not groups or #groups == 0 then
 			groups = groupsDefaults
 		end
@@ -878,7 +849,7 @@ function B:CommandDecorator(func, groupsDefaults)
 		if func(unpack(bagGroups)) == false then
 			return
 		end
-		wipe(bagGroups)
+		twipe(bagGroups)
 		B:StartStacking()
 	end
 end

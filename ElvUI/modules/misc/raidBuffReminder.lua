@@ -241,8 +241,8 @@ function RB:UpdateSettings(isCallback)
 		
 		button.cd:SetReverse(E.db.general.reminder.reverse);
 
-		local font = LSM:Fetch('font', self.db.font);
-		button.timer:FontTemplate(font, self.db.fontSize, self.db.fontOutline);
+		local font = LSM:Fetch("font", E.db.general.reminder.font);
+		button.timer:FontTemplate(font, E.db.general.reminder.fontSize, E.db.general.reminder.fontOutline);
 	end
 	
 	if(not isCallback) then
