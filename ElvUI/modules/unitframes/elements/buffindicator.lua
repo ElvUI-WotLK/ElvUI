@@ -154,6 +154,7 @@ function UF:UpdateAuraWatch(frame, petOverride, db)
 				if(not icon.cd) then
 					icon.cd = CreateFrame("Cooldown", nil, icon, "CooldownFrameTemplate");
 					icon.cd:SetAllPoints(icon);
+					icon.cd:SetReverse(true);
 					icon.cd:SetFrameLevel(icon:GetFrameLevel());
 				end
 				
