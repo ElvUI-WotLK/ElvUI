@@ -180,6 +180,7 @@ function M:Kill()
 end
 
 function M:Initialize()
+	self:LoadRaidMarker();
 	self:LoadExpRepBar()
 	self:LoadLoot()
 	self:LoadLootRoll()
