@@ -246,6 +246,7 @@ L["Loot Frame"] = true;
 L['MA Frames'] = true;
 L['Micro Bar'] = true;
 L['Minimap'] = true;
+L["MirrorTimer"] = true;
 L['MT Frames'] = true;
 L['Party Frames'] = true;
 L['Pet Bar'] = true;

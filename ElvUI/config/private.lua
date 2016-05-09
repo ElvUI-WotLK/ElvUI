@@ -86,6 +86,7 @@ V['skins'] = {
 		['tradeskill'] = true,
 		['trainer'] = true,
 		['worldmap'] = true,
+		["mirrorTimers"] = true
 	},
 }
 

@@ -142,9 +142,9 @@ function RU:Initialize()
 		xOffset = xOffset - screenWidth;
 		self:ClearAllPoints();
 		if(find(point, "BOTTOM")) then
-			self:Point("BOTTOM", E.UIParent, "BOTTOM", xOffset, -1)
+			self:Point("BOTTOM", E.UIParent, "BOTTOM", xOffset, -1);
 		else
-			self:Point("TOP", E.UIParent, "TOP", xOffset, 1)		
+			self:Point("TOP", E.UIParent, "TOP", xOffset, 1);
 		end
 	end);
 

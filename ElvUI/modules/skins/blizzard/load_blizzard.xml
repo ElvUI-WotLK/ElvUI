@@ -26,6 +26,7 @@
 	<Script file='macro.lua'/>
 	<Script file='mail.lua'/>
 	<Script file='merchant.lua'/>
+	<Script file='mirrortimers.lua'/>
 	<Script file='misc.lua'/>
 	<Script file='petition.lua'/>
 	<Script file='pvp.lua'/>

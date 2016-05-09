@@ -243,6 +243,11 @@ E.Options.args.skins = {
 					name = L["World Map"],
 					desc = L["TOGGLESKIN_DESC"],
 				},
+				mirrorTimers = {
+					type = "toggle",
+					name = L["Mirror Timers"],
+					desc = L["TOGGLESKIN_DESC"],
+				},
 			},
 		},
 	},

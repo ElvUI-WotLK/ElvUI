@@ -181,7 +181,6 @@ end
 
 function M:Initialize()
 	self:LoadExpRepBar()
-	self:LoadMirrorBars()
 	self:LoadLoot()
 	self:LoadLootRoll()
 	self:LoadChatBubbles()
