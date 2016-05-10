@@ -259,6 +259,10 @@ local function LoadSkin()
 		S:HandleButton(MacOptionsCancelFrameYes);
 	end
 	
+	BNToastFrameCloseButton:Size(32);
+	BNToastFrameCloseButton:Point("TOPRIGHT", "BNToastFrame", 4, 4);
+	S:HandleCloseButton(BNToastFrameCloseButton);
+	
 	OpacityFrame:StripTextures()
 	OpacityFrame:SetTemplate("Transparent")
 	
