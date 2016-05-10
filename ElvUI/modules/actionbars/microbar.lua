@@ -85,7 +85,7 @@ function AB:UpdateMicroPositionDimensions()
 		button:ClearAllPoints();
 
 		if(prevButton == ElvUI_MicroBar) then
-			button:SetPoint('TOPLEFT', prevButton, 'TOPLEFT', -2, 28);
+			button:SetPoint('TOPLEFT', prevButton, 'TOPLEFT', -2 + E.Border, 28 - E.Border);
 		elseif((i - 1) % self.db.microbar.buttonsPerRow == 0) then
 			button:Point('TOP', lastColumnButton, 'BOTTOM', 0, 28 - self.db.microbar.yOffset);	
 			numRows = numRows + 1;
@@ -100,8 +100,8 @@ function AB:UpdateMicroPositionDimensions()
 		ElvUI_MicroBar:SetAlpha(self.db.microbar.alpha);
 	end
 	
-	ElvUI_MicroBar:SetWidth(((CharacterMicroButton:GetWidth()) * (#MICRO_BUTTONS - 1) - 3) / numRows);
-	ElvUI_MicroBar:SetHeight((CharacterMicroButton:GetHeight() - 27) * numRows);
+	ElvUI_MicroBar:SetWidth(((CharacterMicroButton:GetWidth() - 4) * self.db.microbar.buttonsPerRow) + (self.db.microbar.xOffset * (self.db.microbar.buttonsPerRow-1)) + E.Border*2);
+	ElvUI_MicroBar:SetHeight(((CharacterMicroButton:GetHeight() - 28) * numRows) + (self.db.microbar.yOffset * (numRows-1)) + E.Border*2);
 
 	if(self.db.microbar.enabled) then
 		ElvUI_MicroBar:Show();
