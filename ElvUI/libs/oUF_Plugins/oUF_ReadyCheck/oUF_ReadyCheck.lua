@@ -1,84 +1,131 @@
-local _, ns = ...
-local oUF = ns.oUF or oUF
-if not oUF then return end
+local parent, ns = ...;
+local oUF = ns.oUF;
 
-local GetReadyCheckStatus = GetReadyCheckStatus
+local _TIMERS = {};
+local ReadyCheckFrame;
 
-local statusTexture = {
-	notready = [=[Interface\RAIDFRAME\ReadyCheck-NotReady]=],
-	ready = [=[Interface\RAIDFRAME\ReadyCheck-Ready]=],
-	waiting = [=[Interface\RAIDFRAME\ReadyCheck-Waiting]=],
-}
+local removeEntry = function(icon)
+	_TIMERS[icon] = nil;
+	if(not next(_TIMERS)) then
+		return ReadyCheckFrame:Hide();
+	end
+end
 
-local onUpdate
-do
-	function onUpdate(self, elapsed)
-		if(self.finish) then
-			self.finish = self.finish - elapsed
-			if(self.finish <= 0) then
-				self.finish = nil
+local Start = function(self)
+	removeEntry(self);
+
+	self:SetTexture(READY_CHECK_WAITING_TEXTURE);
+	self.state = "waiting";
+	self:SetAlpha(1);
+	self:Show();
+end
+
+local Confirm = function(self, ready)
+	removeEntry(self);
+
+	if(ready) then
+		self:SetTexture(READY_CHECK_READY_TEXTURE);
+		self.state = "ready";
+	else
+		self:SetTexture(READY_CHECK_NOT_READY_TEXTURE);
+		self.state = "notready";
+	end
+
+	self:SetAlpha(1);
+	self:Show();
+end
+
+local Finish = function(self)
+	if(self.state == "waiting") then
+		self:SetTexture(READY_CHECK_AFK_TEXTURE);
+		self.state = "afk";
+	end
+
+	self.finishedTimer = self.finishedTime or 10;
+	self.fadeTimer = self.fadeTime or 1.5;
+
+	_TIMERS[self] = true;
+	ReadyCheckFrame:Show();
+end
+
+local OnUpdate = function(self, elapsed)
+	self.elapsed = (self.elapsed or 0) + elapsed;
+	if(self.elapsed < .25) then return; end
+	
+	for icon in next, _TIMERS do
+		if(icon.finishedTimer) then
+			icon.finishedTimer = icon.finishedTimer - self.elapsed;
+			if(icon.finishedTimer <= 0) then
+				icon.finishedTimer = nil;
 			end
-		elseif(self.fade) then
-			self.fade = self.fade - elapsed
-			if(self.fade <= 0) then
-				self.fade = nil
-				self:SetScript('OnUpdate', nil)
+		elseif(icon.fadeTimer) then
+			icon.fadeTimer = icon.fadeTimer - self.elapsed;
+			icon:SetAlpha(icon.fadeTimer / (icon.fadeTime or 1.5));
 
-				for k, v in next, oUF.objects do
-					if(v.ReadyCheck and v.unit == self.unit) then
-						v.ReadyCheck:Hide()
-					end
-				end
+			if(icon.fadeTimer <= 0) then
+				icon:Hide();
+				removeEntry(icon);
+			end
+		end
+	end
+
+	self.elapsed = 0;
+end
+
+local Update = function(self, event)
+	if(not IsRaidLeader() and not IsRaidOfficer() and not IsPartyLeader()) then return; end
+	local unit = self.unit;
+	local readyCheck = self.ReadyCheck;
+	if(event == "READY_CHECK_FINISHED") then
+		Finish(readyCheck);
+	else
+		local status = GetReadyCheckStatus(unit);
+		if(UnitExists(unit) and status) then
+			if(status == "ready") then
+				Confirm(readyCheck, 1);
+			elseif(status == "notready") then
+				Confirm(readyCheck);
 			else
-				for k, v in next, oUF.objects do
-					if(v.ReadyCheck and v.unit == self.unit) then
-						v.ReadyCheck:SetAlpha(self.fade / self.offset)
-					end
-				end
+				Start(readyCheck);
 			end
 		end
 	end
 end
 
-local function Update(self)
-	if(not IsRaidLeader() and not IsRaidOfficer() and not IsPartyLeader()) then return end
-
-	self.ReadyCheck:SetTexture(statusTexture[GetReadyCheckStatus(self.unit)])
-	self.ReadyCheck:SetAlpha(1)
-	self.ReadyCheck:Show()
+local Path = function(self, ...)
+	return (self.ReadyCheck.Override or Update) (self, ...);
 end
 
-local function Prepare(self)
-	local readycheck = self.ReadyCheck
-	local dummy = readycheck.dummy
-
-	dummy.unit = self.unit
-	dummy.finish = readycheck.delayTime or 10
-	dummy.fade = readycheck.fadeTime or 1.5
-	dummy.offset = readycheck.fadeTime or 1.5
-
-	dummy:SetScript('OnUpdate', OnUpdate)
+local ForceUpdate = function(element)
+	return Path(element.__owner, "ForceUpdate");
 end
 
-local function Enable(self)
-	local readycheck = self.ReadyCheck
-	if(readycheck) then
-		self:RegisterEvent('READY_CHECK', Update)
-		self:RegisterEvent('READY_CHECK_CONFIRM', Update)
-		self:RegisterEvent('READY_CHECK_FINISHED', Prepare)
+local Enable = function(self, unit)
+	local readyCheck = self.ReadyCheck;
+	if(readyCheck and (unit and (unit:sub(1, 5) == "party" or unit:sub(1, 4) == "raid"))) then
+		readyCheck.__owner = self;
+		readyCheck.ForceUpdate = ForceUpdate;
 
-		readycheck.dummy = CreateFrame('Frame', nil, self)
+		if(not ReadyCheckFrame) then
+			ReadyCheckFrame = CreateFrame("Frame");
+			ReadyCheckFrame:SetScript("OnUpdate", OnUpdate);
+		end
 
-		return true
+		self:RegisterEvent("READY_CHECK", Path, true);
+		self:RegisterEvent("READY_CHECK_CONFIRM", Path, true);
+		self:RegisterEvent("READY_CHECK_FINISHED", Path, true);
+
+		return true;
 	end
 end
 
-local function Disable(self)
-	if(self.ReadyCheck) then
-		self:UnregisterEvent('READY_CHECK', Update)
-		self:UnregisterEvent('READY_CHECK_CONFIRM', Update)
-		self:UnregisterEvent('READY_CHECK_FINISHED', Prepare)
+local Disable = function(self)
+	local readyCheck = self.ReadyCheck;
+	if(readyCheck) then
+		self:UnregisterEvent("READY_CHECK", Path);
+		self:UnregisterEvent("READY_CHECK_CONFIRM", Path);
+		self:UnregisterEvent("READY_CHECK_FINISHED", Path);
 	end
 end
 
-oUF:AddElement('ReadyCheck', Update, Enable, Disable)
+oUF:AddElement("ReadyCheck", Path, Enable, Disable);
