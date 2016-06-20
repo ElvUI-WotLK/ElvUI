@@ -16,7 +16,7 @@ V['general'] = {
 	["replaceBlizzFonts"] = true,
 	['minimap'] = {
 		['enable'] = true,
-	},
+	}
 }
 
 V['bags'] = {
