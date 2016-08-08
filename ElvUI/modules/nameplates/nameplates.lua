@@ -288,7 +288,7 @@ function NP:UpdateLevelAndName(myPlate)
 		r, g, b = self.Level:GetTextColor();
 	end
 
-	if(NP.db.healthBar.enable or myPlate.isTarget) then
+	if(NP.db.healthBar.enable or myPlate.isTarget or myPlate.lowHealth:IsShown()) then
 		myPlate.Level:SetText(level);
 	else
 		myPlate.Level:SetFormattedText(" [%s]", level);

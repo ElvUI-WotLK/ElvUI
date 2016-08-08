@@ -6,7 +6,7 @@ function mod:ConfigureElement_HealthBar(frame, configuring)
 	local healthBar = frame.HealthBar;
 	
 	healthBar:SetPoint("BOTTOM", frame, "BOTTOM", 0, self.db.castBar.height + 3);
-	if(UnitIsUnit(self.unit, "target") and not frame.isTarget) then
+	if(frame.isTarget) then
 		healthBar:SetHeight(self.db.healthBar.height * self.db.targetScale);
 		healthBar:SetWidth(self.db.healthBar.width * self.db.targetScale);
 	else
