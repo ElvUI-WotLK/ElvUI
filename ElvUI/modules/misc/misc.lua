@@ -176,12 +176,13 @@ function M:PLAYER_ENTERING_WORLD()
 end
 
 function M:Kill()
-	--Kill Frames
+
 end
 
 function M:Initialize()
+	M:ScheduleTimer("Kill", 8)
+	
 	self:LoadRaidMarker();
-	self:LoadExpRepBar()
 	self:LoadLoot()
 	self:LoadLootRoll()
 	self:LoadChatBubbles()
@@ -198,7 +199,7 @@ function M:Initialize()
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 	
 	self.MovingTimer = self:ScheduleRepeatingTimer("CheckMovement", 0.1)
-	self:Kill()
+	--self:Kill()
 end
 
 E:RegisterModule(M:GetName())

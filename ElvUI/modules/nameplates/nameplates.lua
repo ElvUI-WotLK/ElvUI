@@ -188,6 +188,18 @@ function NP:SetTargetIndicator()
 	self:SetTargetIndicatorDimensions();
 end
 
+function NP:SetFrameScale(frame, scale)
+	if(frame.healthBar.currentScale ~= scale) then
+		if(frame.healthBar.scale:IsPlaying()) then
+			frame.healthBar.scale:Stop();
+		end
+		frame.healthBar.scale.width:SetChange(self.db.healthBar.width * scale);
+		frame.healthBar.scale.height:SetChange(self.db.healthBar.height * scale);
+		frame.healthBar.scale:Play();
+		frame.healthBar.currentScale = scale;
+	end
+end
+
 function NP:OnUpdate(elapsed)
 	local count = WorldFrame:GetNumChildren();
 	if(count ~= numChildren) then
@@ -245,8 +257,14 @@ function NP:CheckFilter(myPlate)
 			end
 			
 			if(db.customScale and db.customScale ~= 1) then
-				myPlate.healthBar:Height(NP.db.healthBar.height * db.customScale);
-				myPlate.healthBar:Width(NP.db.healthBar.width * db.customScale);
+			--	myPlate.healthBar:Height(NP.db.healthBar.height * db.customScale);
+				--myPlate.healthBar:Width(NP.db.healthBar.width * db.customScale);
+				--NP:SetFrameScale(myPlate, db.customScale);
+				if(self.unit == "target") then
+					NP:SetFrameScale(myPlate, db.customScale * 1.25);
+				else
+					NP:SetFrameScale(myPlate, db.customScale);
+				end
 				self.customScale = true;
 			else
 				self.customScale = nil;
@@ -260,24 +278,23 @@ function NP:CheckFilter(myPlate)
 end
 
 function NP:UpdateLevelAndName(myPlate)
-	if(not NP.db.showLevel) then
-		myPlate.level:SetText("");
-		myPlate.level:Hide();
-	else
-		local level, elite, boss = self.level:GetObjectType() == "FontString" and tonumber(self.level:GetText()) or nil, self.eliteIcon:IsShown(), self.bossIcon:IsShown()
-		if(boss) then
-			myPlate.level:SetText("??");
-			myPlate.level:SetTextColor(0.8, 0.05, 0);
-		elseif(level) then
-			myPlate.level:SetText(level..(elite and "+" or ""));
-			myPlate.level:SetTextColor(self.level:GetTextColor());
-		end
-		
-		if(not myPlate.level:IsShown()) then
-			myPlate.level:Show();
-		end
+	local level, elite, boss = self.level:GetObjectType() == "FontString" and tonumber(self.level:GetText()) or nil, self.eliteIcon:IsShown(), self.bossIcon:IsShown();
+	local r, g, b;
+	if(boss) then
+		level = "??";
+		r, g, b = 0.8, 0.05, 0;
+	elseif(level) then
+		level = level .. (elite and "+" or "");
+		r, g, b = self.level:GetTextColor();
 	end
-	
+
+	if(NP.db.healthBar.enable or myPlate.isTarget) then
+		myPlate.level:SetText(level);
+	else
+		myPlate.level:SetFormattedText(" [%s]", level);
+	end
+	myPlate.level:SetTextColor(r, g, b);
+
 	if(not NP.db.showName) then
 		myPlate.name:SetText("");
 		myPlate.name:Hide();
@@ -286,7 +303,7 @@ function NP:UpdateLevelAndName(myPlate)
 		myPlate.name.stringHeight = myPlate.name:GetStringHeight();
 		if(not myPlate.name:IsShown()) then myPlate.name:Show(); end
 	end
-	
+
 	if(self.raidIcon:IsShown()) then
 		myPlate.raidIcon:Show();
 		myPlate.raidIcon:SetTexCoord(self.raidIcon:GetTexCoord());
@@ -297,13 +314,13 @@ end
 
 function NP:GetReaction(frame)
 	local r, g, b = NP:RoundColors(frame.healthBar:GetStatusBarColor());
-	
+
 	for class, _ in pairs(RAID_CLASS_COLORS) do
 		if(RAID_CLASS_COLORS[class].r == r and RAID_CLASS_COLORS[class].g == g and RAID_CLASS_COLORS[class].b == b) then
 			return class;
 		end
 	end
-	
+
 	if((r + b + b) == 1.59) then
 		return "TAPPED_NPC";
 	elseif(g + b == 0) then
@@ -394,7 +411,6 @@ function NP:ColorizeAndScale(myPlate)
 				color = NP.db.reactions.enemy;
 			end
 		end
-		
 		self.threatReaction = threatReaction;
 	elseif(unitType == "FRIENDLY_NPC") then
 		color = NP.db.reactions.friendlyNPC;
@@ -415,6 +431,7 @@ function NP:ColorizeAndScale(myPlate)
 	end
 	
 	if(not self.customColor) then
+		myPlate.name:SetTextColor(color.r, color.g, color.b);
 		myPlate.healthBar:SetStatusBarColor(color.r, color.g, color.b);
 
 		if(NP.db.targetIndicator.enable and NP.db.targetIndicator.colorMatchHealthBar and self.unit == "target") then
@@ -440,7 +457,11 @@ function NP:ColorizeAndScale(myPlate)
 		end
 	end
 	if(not self.customScale and myPlate.healthBar:GetWidth() ~= w) then
-		myPlate.healthBar:SetSize(w, h);
+		--myPlate.healthBar:SetSize(w, h);
+		if(not myPlate.isTarget or not NP.db.useTargetScale) then
+			myPlate.ThreatScale = scale;
+			NP:SetFrameScale(myPlate, scale);
+		end
 		myPlate.castBar.icon:SetSize(NP.db.castBar.height + h + 5, NP.db.castBar.height + h + 5);
 	end
 end
@@ -454,12 +475,23 @@ function NP:SetAlpha(myPlate)
 end
 
 function NP:SetUnitInfo(myPlate)
-	local plateName = gsub(self.name:GetText(), FSPAT,"");
+	local plateName = gsub(self.name:GetText(), FSPAT, "");
 	if(self:GetAlpha() == 1 and NP.targetName and (NP.targetName == plateName)) then
 		self.guid = UnitGUID("target");
 		self.unit = "target";
 		myPlate:SetFrameLevel(2);
 		myPlate.overlay:Hide();
+
+		myPlate.isTarget = true;
+		if(NP.db.useTargetScale) then
+			NP:SetFrameScale(myPlate, NP.db.targetScale);
+		end
+
+		if(not myPlate.healthBar:IsShown()) then
+			myPlate.healthBar:Show();
+			NP:ConfigureElement_Level(myPlate);
+			NP:ConfigureElement_Name(myPlate);
+		end
 		
 		if(NP.db.targetIndicator.enable) then
 			targetIndicator:Show();
@@ -469,7 +501,8 @@ function NP:SetUnitInfo(myPlate)
 
 		if((NP.NumTargetChecks > -1) or self.allowCheck) then
 			NP.NumTargetChecks = NP.NumTargetChecks + 1;
-			if NP.NumTargetChecks > 0 then
+			
+			if(NP.NumTargetChecks > 0) then
 				NP.NumTargetChecks = -1;
 			end
 
@@ -477,10 +510,12 @@ function NP:SetUnitInfo(myPlate)
 			NP:UpdateComboPointsByUnitID("target");
 			self.allowCheck = nil;
 		end
-	elseif self.highlight:IsShown() and UnitExists("mouseover") and (UnitName("mouseover") == plateName) then
+	elseif(self.highlight:IsShown() and UnitExists("mouseover") and (UnitName("mouseover") == plateName)) then
 		if(self.unit ~= "mouseover") then
 			myPlate:SetFrameLevel(1);
-			myPlate.overlay:Show();
+			if(myPlate.healthBar:IsShown()) then
+				myPlate.overlay:Show();
+			end
 			NP:UpdateAurasByUnitID("mouseover");
 			NP:UpdateComboPointsByUnitID("mouseover");
 		end
@@ -488,6 +523,18 @@ function NP:SetUnitInfo(myPlate)
 		self.unit = "mouseover";
 		NP:UpdateAurasByUnitID("mouseover");
 	else
+		if(NP.db.useTargetScale) then
+			NP:SetFrameScale(myPlate, myPlate.ThreatScale or 1);
+		end
+
+		if(myPlate.isTarget) then
+			myPlate.isTarget = nil;
+			if(not NP.db.healthBar.enable and myPlate.healthBar:IsShown() and not myPlate.lowHealth:IsShown()) then
+				myPlate.healthBar:Hide();
+				NP:ConfigureElement_Name(myPlate);
+				NP:ConfigureElement_Level(myPlate);
+			end
+		end
 		myPlate:SetFrameLevel(0);
 		myPlate.overlay:Hide();
 		self.unit = nil;
@@ -544,7 +591,7 @@ function NP:Initialize()
 	self.db = E.db["nameplate"];
 	if(E.private["nameplate"].enable ~= true) then return; end
 	E.NamePlates = NP;
-	
+	self.unit = "player"
 	self.PlateParent = CreateFrame("Frame", nil, WorldFrame);
 	self.PlateParent:SetFrameStrata("BACKGROUND");
 	self.PlateParent:SetFrameLevel(0);
@@ -626,9 +673,7 @@ function NP:OnShow()
 	if(not NP.CheckFilter(self, myPlate)) then return; end
 	myPlate:SetSize(self:GetSize());
 	
-	myPlate.name:ClearAllPoints();
-	myPlate.name:SetPoint("BOTTOMLEFT", myPlate.healthBar, "TOPLEFT", 0, 3);
-	myPlate.name:SetPoint("BOTTOMRIGHT", myPlate.level, "BOTTOMLEFT", -2, 0);
+	NP:ConfigureElement_HealthBar(myPlate);
 	
 	NP.UpdateLevelAndName(self, myPlate);
 	NP.ColorizeAndScale(self, myPlate);
@@ -655,37 +700,29 @@ function NP:OnHide()
 	self.customColor = nil;
 	self.customScale = nil;
 	self.allowCheck = nil;
-	
+
 	if(targetIndicator:GetParent() == myPlate) then
 		targetIndicator:Hide();
 	end
-	
+
 	myPlate:SetAlpha(0);
 	myPlate.lowHealth:Hide();
-	
-	myPlate.healthBar:SetSize(NP.db.healthBar.width, NP.db.healthBar.height);
-	myPlate.castBar.icon:Size(NP.db.castBar.height + NP.db.healthBar.height + 5);
-	
+
 	if(myPlate.BuffWidget) then
 		for index = 1, #myPlate.BuffWidget.icons do 
 			NP.PolledHideIn(myPlate.BuffWidget.icons[index], 0);
 		end
 	end
-	
+
 	if(myPlate.DebuffWidget) then
 		for index = 1, #myPlate.DebuffWidget.icons do 
 			NP.PolledHideIn(myPlate.DebuffWidget.icons[index], 0);
 		end
 	end
-	
+
 	for i = 1, MAX_COMBO_POINTS do
 		myPlate.cPoints[i]:Hide();
 	end
-	
-	--UIFrameFadeOut(myPlate, 0.1, myPlate:GetAlpha(), 0)
-	--myPlate:Hide()
-	
-	--myPlate:SetPoint("BOTTOMLEFT", self, "BOTTOMLEFT") --Prevent nameplate being in random location on screen when first shown
 end
 
 function NP:SizeAuraHeader(myPlate, width, auraHeader, dbTable)
@@ -739,20 +776,24 @@ function NP:HealthBar_OnValueChanged(value)
 	local minValue, maxValue = self:GetMinMaxValues();
 	myPlate.healthBar:SetMinMaxValues(minValue, maxValue);
 	myPlate.healthBar:SetValue(value);
-	
-	--Health Threshold
+
 	local percentValue = (value/maxValue)
-	if percentValue < NP.db.healthBar.lowThreshold then
-		myPlate.lowHealth:Show()
-		if percentValue < (NP.db.healthBar.lowThreshold / 2) then
-			myPlate.lowHealth:SetBackdropBorderColor(1, 0, 0, 0.9)
-		else
-			myPlate.lowHealth:SetBackdropBorderColor(1, 1, 0, 0.9)
+	if(percentValue < NP.db.healthBar.lowThreshold) then
+		myPlate.lowHealth:Show();
+		if(not myPlate.healthBar:IsShown()) then
+			myPlate.healthBar:Show();
+			NP:ConfigureElement_Level(myPlate);
+			NP:ConfigureElement_Name(myPlate);
 		end
-	elseif myPlate.lowHealth:IsShown() then
-		myPlate.lowHealth:Hide()
+		if(percentValue < (NP.db.healthBar.lowThreshold / 2)) then
+			myPlate.lowHealth:SetBackdropBorderColor(1, 0, 0, 0.9);
+		else
+			myPlate.lowHealth:SetBackdropBorderColor(1, 1, 0, 0.9);
+		end
+	elseif(myPlate.lowHealth:IsShown()) then
+		myPlate.lowHealth:Hide();
 	end
-	
+
 	if(NP.db.healthBar.text.enable and value and maxValue and maxValue > 1 and self:GetScale() == 1) then
 		myPlate.healthBar.text:Show();
 		myPlate.healthBar.text:SetText(E:GetFormattedText(NP.db.healthBar.text.format, value, maxValue));
@@ -810,27 +851,29 @@ function NP:UpdateSettings()
 	
 	myPlate.name:FontTemplate(font, fontSize, fontOutline);
 	myPlate.name:SetTextColor(1, 1, 1);
-	myPlate.name:SetHeight(2.5*fontSize);
-	myPlate.name:SetWordWrap(wrapName);
+	--myPlate.name:SetHeight(2.5*fontSize);
+	--myPlate.name:SetWordWrap(wrapName);
 	
 	myPlate.level:FontTemplate(font, fontSize, fontOutline);
 	
 	if(not self.customScale) then
-		myPlate.healthBar:SetSize(NP.db.healthBar.width, NP.db.healthBar.height);
+	--	myPlate.healthBar:SetSize(NP.db.healthBar.width, NP.db.healthBar.height);
+		NP:SetFrameScale(myPlate, 1);
 	end
 	
-	myPlate.healthBar:SetStatusBarTexture(E.media.normTex);
 	
-	myPlate.healthBar.text:FontTemplate(font, fontSize, fontOutline);
+	-- Healt Bar
+	myPlate.healthBar.text:SetAllPoints(healthBar);
+	myPlate.healthBar.text:SetFont(LSM:Fetch("font", NP.db.font), NP.db.fontSize, NP.db.fontOutline);
+	
+	--NP:ConfigureElement_HealthBar(myPlate);
 	
 	myPlate.castBar:SetSize(NP.db.healthBar.width, NP.db.castBar.height);
 	myPlate.castBar:SetStatusBarTexture(E.media.normTex);
 	myPlate.castBar.time:FontTemplate(font, fontSize, fontOutline);
 	myPlate.castBar.icon:Size(NP.db.castBar.height + NP.db.healthBar.height + 5);
 	
-	myPlate.raidIcon:ClearAllPoints();
-	myPlate.raidIcon:SetPoint(E.InversePoints[NP.db.raidIcon.attachTo], myPlate.healthBar, NP.db.raidIcon.attachTo, NP.db.raidIcon.xOffset, NP.db.raidIcon.yOffset);
-	myPlate.raidIcon:SetSize(NP.db.raidIcon.size, NP.db.raidIcon.size);
+	NP:UpdateElement_RaidIcon(myPlate);
 	
 	local auraFont = LSM:Fetch("font", NP.db.buffs.font);
 	for index = 1, #myPlate.BuffWidget.icons do
@@ -882,22 +925,12 @@ end
 function NP:CreatePlate(frame)
 	frame.healthBar, frame.castBar = frame:GetChildren();
 	frame.threat, frame.border, frame.castBar.shield, frame.castBar.border, frame.castBar.icon, frame.highlight, frame.name, frame.level, frame.bossIcon, frame.raidIcon, frame.eliteIcon = frame:GetRegions();
-	local myPlate = CreateFrame("Frame", nil, self.PlateParent);
 	
+	local myPlate = CreateFrame("Frame", nil, self.PlateParent);
 	myPlate.hiddenFrame = CreateFrame("Frame", nil, myPlate);
 	myPlate.hiddenFrame:Hide();
 	
-	myPlate.healthBar = CreateFrame("StatusBar", nil, myPlate);
-	E:RegisterStatusBar(myPlate.healthBar);
-	myPlate.healthBar:SetPoint("BOTTOM", myPlate, "BOTTOM", 0, 5);
-	myPlate.healthBar:SetFrameStrata("BACKGROUND");
-	myPlate.healthBar:SetFrameLevel(0);
-	myPlate.healthBar:SetScript("OnSizeChanged", NP.HealthBar_OnSizeChanged);
-	NP:CreateBackdrop(myPlate.healthBar);
-	
-	myPlate.healthBar.text = myPlate.healthBar:CreateFontString(nil, "OVERLAY");
-	myPlate.healthBar.text:SetPoint("CENTER", myPlate.healthBar, NP.db.healthBar.text.attachTo, "CENTER");
-	myPlate.healthBar.text:SetJustifyH("CENTER");
+	myPlate.healthBar = self:ConstructElement_HealthBar(myPlate);
 	
 	myPlate.castBar = CreateFrame("StatusBar", nil, myPlate);
 	E:RegisterStatusBar(myPlate.castBar);
@@ -918,20 +951,11 @@ function NP:CreatePlate(frame)
 	myPlate.castBar.icon:SetPoint("TOPLEFT", myPlate.healthBar, "TOPRIGHT", 5, 0);
 	NP:CreateBackdrop(myPlate.castBar, myPlate.castBar.icon);
 	
-	myPlate.level = myPlate:CreateFontString(nil, "OVERLAY");
-	myPlate.level:SetPoint("BOTTOMRIGHT", myPlate.healthBar, "TOPRIGHT", 3, 3);
-	myPlate.level:SetJustifyH("RIGHT");
-	
-	myPlate.name = myPlate:CreateFontString(nil, "OVERLAY");
-	myPlate.name:SetJustifyH("LEFT");
-	myPlate.name:SetJustifyV("BOTTOM");
-	myPlate.name.stringHeight = frame.name:GetStringHeight();
+	myPlate.level = self:ConstructElement_Level(myPlate)
+	myPlate.name = self:ConstructElement_Name(myPlate)
 	
 	frame.raidIcon:SetAlpha(0);
-	myPlate.raidIcon = myPlate:CreateTexture(nil, "ARTWORK");
-	myPlate.raidIcon:SetSize(frame.raidIcon:GetSize());
-	myPlate.raidIcon:SetTexture([[Interface\TargetingFrame\UI-RaidTargetingIcons]]);
-	myPlate.raidIcon:Hide();
+	myPlate.raidIcon = NP:ConstructElement_RaidIcon(myPlate);
 	
 	myPlate.overlay = myPlate:CreateTexture(nil, "OVERLAY");
 	myPlate.overlay:SetAllPoints(myPlate.healthBar);

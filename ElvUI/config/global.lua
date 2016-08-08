@@ -4,7 +4,13 @@ G["general"] = {
 	["autoScale"] = true,
 	["eyefinity"] = false,
 	["smallerWorldMap"] = true,
-	["worldMapCoordinates"] = true
+	["worldMapCoordinates"] = {
+		["enable"] = true,
+		["position"] = "BOTTOMLEFT",
+		["xOffset"] = 0,
+		["yOffset"] = 0
+	},
+	["animateConfig"] = true
 };
 
 G["classtimer"] = {};

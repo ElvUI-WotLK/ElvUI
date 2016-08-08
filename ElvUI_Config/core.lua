@@ -64,13 +64,26 @@ E.Options.args.general = {
 	get = function(info) return E.db.general[ info[#info] ] end,
 	set = function(info, value) E.db.general[ info[#info] ] = value end,
 	args = {
-		intro = {
+		animateConfig = {
 			order = 1,
+			type = "toggle",
+			name = L["Animate Config"],
+			get = function(info) return E.global.general.animateConfig; end,
+			set = function(info, value) E.global.general.animateConfig = value; E:StaticPopup_Show("GLOBAL_RL"); end
+		},
+		spacer = {
+			order = 2,
+			type = "description",
+			name = "",
+			width = "full"
+		},
+		intro = {
+			order = 3,
 			type = "description",
 			name = L["ELVUI_DESC"],
 		},			
 		general = {
-			order = 2,
+			order = 4,
 			type = "group",
 			name = L["General"],
 			args = {
@@ -209,19 +222,58 @@ E.Options.args.general = {
 					get = function(info) return E.global.general.smallerWorldMap; end,
 					set = function(info, value) E.global.general.smallerWorldMap = value; E:StaticPopup_Show("GLOBAL_RL"); end
 				},
-				worldMapCoordinates = {
-					order = 18,
- 					type = "toggle",
-					name = L["World Map Coordinates"],
-					desc = L["Puts coordinates on the world map."],
-					get = function(info) return E.global.general.worldMapCoordinates; end,
-					set = function(info, value) E.global.general.worldMapCoordinates = value; E:StaticPopup_Show("GLOBAL_RL"); end
-				},
 				enhancedPvpMessages = {
-					order = 19,
+					order = 18,
 					type = "toggle",
 					name = L["Enhanced PVP Messages"],
 					desc = L["Display battleground messages in the middle of the screen."]
+				},
+				worldMapCoordinates = {
+					order = 19,
+					type = "group",
+					guiInline = true,
+					name = L["World Map Coordinates"],
+					args = {
+						enable = {
+							order = 1,
+							type = "toggle",
+							name = L["Enable"],
+							desc = L["Puts coordinates on the world map."],
+							get = function(info) return E.global.general.worldMapCoordinates.enable; end,
+							set = function(info, value) E.global.general.worldMapCoordinates.enable = value; E:StaticPopup_Show("GLOBAL_RL"); end
+						},
+						position = {
+							order = 2,
+							type = "select",
+							name = L["Position"],
+							get = function(info) return E.global.general.worldMapCoordinates.position; end,
+							set = function(info, value) E.global.general.worldMapCoordinates.position = value; E:GetModule('WorldMap'):PositionCoords(); end,
+							values = {
+								["TOP"] = "TOP",
+								["TOPLEFT"] = "TOPLEFT",
+								["TOPRIGHT"] = "TOPRIGHT",
+								["BOTTOM"] = "BOTTOM",
+								["BOTTOMLEFT"] = "BOTTOMLEFT",
+								["BOTTOMRIGHT"] = "BOTTOMRIGHT"
+							}
+						},
+						xOffset = {
+							order = 4,
+							type = "range",
+							name = L["X-Offset"],
+							get = function(info) return E.global.general.worldMapCoordinates.xOffset; end,
+							set = function(info, value) E.global.general.worldMapCoordinates.xOffset = value; E:GetModule('WorldMap'):PositionCoords();end,
+							min = -200, max = 200, step = 1
+						},
+						yOffset = {
+							order = 5,
+							type = "range",
+							name = L["Y-Offset"],
+							get = function(info) return E.global.general.worldMapCoordinates.yOffset; end,
+							set = function(info, value) E.global.general.worldMapCoordinates.yOffset = value; E:GetModule('WorldMap'):PositionCoords(); end,
+							min = -200, max = 200, step = 1
+						}
+					}
 				},
 				chatBubbles = {
 					order = 30,
@@ -264,7 +316,7 @@ E.Options.args.general = {
 			},
 		},
 		minimap = { -- Мини-карта
-			order = 3,
+			order = 5,
 			get = function(info) return E.db.general.minimap[ info[#info] ] end,	
 			name = MINIMAP_LABEL,
 			type = "group",
@@ -308,200 +360,6 @@ E.Options.args.general = {
 					},
 				},
 			},		
-		},
-		experience = { -- Индикатор опыта
-			order = 4,
-			get = function(info) return E.db.general.experience[ info[#info] ] end,
-			set = function(info, value) E.db.general.experience[ info[#info] ] = value; E:GetModule('Misc'):UpdateExpRepDimensions() end,		
-			type = "group",
-			name = XPBAR_LABEL,
-			args = {
-				enable = { -- Включить
-					order = 1,
-					type = "toggle",
-					name = L["Enable"],
-					set = function(info, value) E.db.general.experience[ info[#info] ] = value; E:GetModule('Misc'):EnableDisable_ExperienceBar() end,
-				},
-				generalGroup = { -- Общие
-					order = 2,
-					type = "group",
-					guiInline = true,
-					name = L["General"],
-					disabled = function() return not E.db.general.experience.enable end,
-					args = {
-						mouseover = { -- При наведении
-							order = 1,
-							type = "toggle",
-							name = L['Mouseover'],
-						},			
-						width = { -- Ширина
-							order = 2,
-							type = "range",
-							name = L["Width"],
-							min = 5, max = ceil(GetScreenWidth() or 800), step = 1,
-						},
-						height = { -- Высота
-							order = 3,
-							type = "range",
-							name = L["Height"],
-							min = 5, max = ceil(GetScreenHeight() or 800), step = 1,
-						},
-						orientation = { -- Ориентация
-							order = 4,
-							type = "select",
-							name = L['Orientation'],
-							desc = L['Direction the bar moves on gains/losses'],
-							values = {
-								['HORIZONTAL'] = L['Horizontal'],
-								['VERTICAL'] = L['Vertical']
-							},
-						},
-						textFormat = { -- Формат текста
-							order = 5,
-							type = 'select',
-							name = L["Text Format"],
-							values = {
-								NONE = NONE,
-								PERCENT = L["Percent"],
-								CURMAX = L["Current - Max"],
-								CURPERC = L["Current - Percent"],
-							},
-							set = function(info, value) E.db.general.experience[ info[#info] ] = value; E:GetModule('Misc'):UpdateExperience() end,
-						},	
-					},
-				},
-				fontGroup = { -- Шрифт
-					order = 3,
-					type = "group",
-					guiInline = true,
-					name = L["Font"],
-					disabled = function() return not E.db.general.experience.enable end,
-					args = {
-						textFont = { -- Шрифт
-							type = 'select', dialogControl = 'LSM30_Font',
-							order = 1,
-							name = L['Font'],
-							values = AceGUIWidgetLSMlists.font,
-						},
-						textSize = { -- Размер шрифта
-							order = 2,
-							name = L["Font Size"],
-							type = "range",
-							min = 6, max = 22, step = 1,
-						},
-						textOutline = { -- Граница шрифта
-							order = 6,
-							name = L['Font Outline'],
-							desc = L['Set the font outline.'],
-							type = 'select',
-							values = {
-								['NONE'] = L['None'],
-								['OUTLINE'] = 'OUTLINE',
-								['MONOCHROME'] = 'MONOCHROME',
-								['MONOCHROMEOUTLINE'] = 'MONOCROMEOUTLINE',
-								['THICKOUTLINE'] = 'THICKOUTLINE',
-							},
-						},
-					},
-				},
-			},
-		},
-		reputation = { -- Репутация
-			order = 5,
-			get = function(info) return E.db.general.reputation[ info[#info] ] end,
-			set = function(info, value) E.db.general.reputation[ info[#info] ] = value; E:GetModule('Misc'):UpdateExpRepDimensions() end,		
-			type = "group",
-			name = REPUTATION,
-			args = {
-				enable = { -- Включить
-					order = 1,
-					type = "toggle",
-					name = L["Enable"],
-					set = function(info, value) E.db.general.reputation[ info[#info] ] = value; E:GetModule('Misc'):EnableDisable_ReputationBar() end,
-				},
-				generalGroup = { -- Общие
-					order = 2,
-					type = "group",
-					guiInline = true,
-					name = L["General"],
-					disabled = function() return not E.db.general.reputation.enable end,
-					args = {
-						mouseover = { -- При наведении
-							order = 1,
-							type = "toggle",
-							name = L['Mouseover'],
-						},
-						width = { -- Ширина
-							order = 2,
-							type = "range",
-							name = L["Width"],
-							min = 5, max = ceil(GetScreenWidth() or 800), step = 1,
-						},
-						height = { -- Высота
-							order = 3,
-							type = "range",
-							name = L["Height"],
-							min = 5, max = ceil(GetScreenHeight() or 800), step = 1,
-						},
-						orientation = { -- Ориентация
-							order = 4,
-							type = "select",
-							name = L['Orientation'],
-							desc = L['Direction the bar moves on gains/losses'],
-							values = {
-								['HORIZONTAL'] = L['Horizontal'],
-								['VERTICAL'] = L['Vertical']
-							},
-						},				
-						textFormat = { -- Формат текста
-							order = 7,
-							type = 'select',
-							name = L["Text Format"],
-							values = {
-								NONE = NONE,
-								PERCENT = L["Percent"],
-								CURMAX = L["Current - Max"],
-								CURPERC = L["Current - Percent"],
-							},
-							set = function(info, value) E.db.general.reputation[ info[#info] ] = value; E:GetModule('Misc'):UpdateReputation() end,
-						},
-					},
-				},
-				fontGroup = { -- Шрифт
-					order = 3,
-					type = "group",
-					guiInline = true,
-					name = L["Font"],
-					disabled = function() return not E.db.general.reputation.enable end,
-					args = {
-						textFont = { -- Шрифт
-							type = 'select', dialogControl = 'LSM30_Font',
-							order = 1,
-							name = L['Font'],
-							values = AceGUIWidgetLSMlists.font,
-						},
-						textSize = { -- Размер шрифта
-							order = 2,
-							name = L["Font Size"],
-							type = "range",
-							min = 6, max = 22, step = 1,
-						},
-						textOutline = { -- Граница шрифта
-							order = 6,
-							name = L['Font Outline'],
-							desc = L['Set the font outline.'],
-							type = 'select',
-							values = {
-								['NONE'] = L['None'],
-								['OUTLINE'] = 'OUTLINE',
-								['MONOCHROME'] = 'MONOCHROME',
-								['MONOCHROMEOUTLINE'] = 'MONOCROMEOUTLINE',
-								['THICKOUTLINE'] = 'THICKOUTLINE',
-							},
-						},
-					},
-				},
-			},
 		},
 		threat = { -- Угроза
 			order = 6,

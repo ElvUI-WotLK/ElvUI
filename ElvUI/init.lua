@@ -156,7 +156,8 @@ function AddOn:ToggleConfig()
 	
 	if not IsAddOnLoaded("ElvUI_Config") then
 		local _, _, _, _, _, reason = GetAddOnInfo("ElvUI_Config")
-		if reason ~= "MISSING" and reason ~= "DISABLED" then 
+		if reason ~= "MISSING" and reason ~= "DISABLED" then
+			self.GUIFrame = false;
 			LoadAddOn("ElvUI_Config")
 			if GetAddOnMetadata("ElvUI_Config", "Version") ~= "1.01" then
 				self:StaticPopup_Show("CLIENT_UPDATE_REQUEST")
@@ -181,5 +182,29 @@ function AddOn:ToggleConfig()
 	end
 	
 	ACD[mode](ACD, AddOnName) 
+
+	if(self.GUIFrame and mode == "Open" and AddOn.global.general.animateConfig) then
+		local width, height = self.GUIFrame:GetSize();
+		self.GUIFrame:SetWidth(width - 40);
+		self.GUIFrame:SetHeight(height - 40);
+		if(not self.GUIFrame.bounce) then
+			self.GUIFrame.bounce = CreateAnimationGroup(self.GUIFrame);
+
+			self.GUIFrame.bounce.width = self.GUIFrame.bounce:CreateAnimation("Width");
+			self.GUIFrame.bounce.width:SetDuration(1.3);
+			self.GUIFrame.bounce.width:SetSmoothing("elastic");
+			self.GUIFrame.bounce.width:SetOrder(1);
+			self.GUIFrame.bounce.width:SetChange(width);
+
+			self.GUIFrame.bounce.height = self.GUIFrame.bounce:CreateAnimation("Height");
+			self.GUIFrame.bounce.height:SetDuration(1.3);
+			self.GUIFrame.bounce.height:SetSmoothing("elastic");
+			self.GUIFrame.bounce.height:SetOrder(1);
+			self.GUIFrame.bounce.height:SetChange(height);
+		end
+
+		self.GUIFrame.bounce:Play();
+	end
+	
 	GameTooltip:Hide() --Just in case you're mouseovered something and it closes.
 end

@@ -81,10 +81,39 @@ P['general'] = {
 	['kittys'] = false
 };
 
+P["databars"] = {
+	["experience"] = {
+		["enable"] = true,
+		["width"] = 10,
+		["height"] = 180,
+		["textSize"] = 10,
+		["textFont"] = "Homespun",
+		["textFormat"] = "NONE",
+		["mouseover"] = false,
+		["orientation"] = "VERTICAL",
+		["hideAtMaxLevel"] = true,
+		["hideInVehicle"] = false
+	},
+	["reputation"] = {
+		["enable"] = false,
+		["width"] = 10,
+		["height"] = 180,
+		["textSize"] = 10,
+		["textFont"] = "Homespun",
+		["textFormat"] = "NONE",
+		["mouseover"] = false,
+		["orientation"] = "VERTICAL",
+		["hideInVehicle"] = false
+	}
+};
+
 P["nameplate"] = {
+	["statusbar"] = "ElvUI Norm",
 	['font'] = 'Homespun',
 	['fontSize'] = 8,
 	['fontOutline'] = 'MONOCHROMEOUTLINE',
+	['useTargetScale'] = true,
+	['targetScale'] = 1.15,
 	["comboPoints"] = true,
 	['nonTargetAlpha'] = 0.6,
 	['targetAlpha'] = 1,
@@ -104,6 +133,7 @@ P["nameplate"] = {
 		['xOffset'] = 0
 	},
 	['healthBar'] = {
+		['enable'] = false,
 		['lowThreshold'] = 0.40,
 		['width'] = 108,
 		['height'] = 9,

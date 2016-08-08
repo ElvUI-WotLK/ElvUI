@@ -244,9 +244,14 @@ E.Options.args.nameplate = {
 			get = function(info) return E.db.nameplate.healthBar[ info[#info] ] end,
 			set = function(info, value) E.db.nameplate.healthBar[ info[#info] ] = value; NP:UpdateAllPlates() end,			
 			args = {
+				enable = {
+					type = "toggle",
+					order = 1,
+					name = L["Enable"],
+				},
 				width = {
 					type = "range",
-					order = 1,
+					order = 2,
 					name = L["Width"],
 					desc = L["Controls the width of the nameplate"],
 					type = "range",
@@ -254,7 +259,7 @@ E.Options.args.nameplate = {
 				},	
 				height = {
 					type = "range",
-					order = 2,
+					order = 3,
 					name = L["Height"],
 					desc = L["Controls the height of the nameplate"],
 					type = "range",
@@ -262,7 +267,7 @@ E.Options.args.nameplate = {
 				},
 				lowThreshold = {
 					type = "range",
-					order = 3,
+					order = 4,
 					name = L["Low Health Threshold"],
 					desc = L["Color the border of the nameplate yellow when it reaches this point, it will be colored red when it reaches half this value."],
 					isPercent = true,
@@ -270,17 +275,17 @@ E.Options.args.nameplate = {
 				},
 				colorByRaidIcon = {
 					type = "toggle",
-					order = 4,
+					order = 5,
 					name = L["Color By Raid Icon"],
 				},
 				spacer = {
-					order = 5,
+					order = 6,
 					type = "description",
 					name = "\n",
 				},
 				lowHPScale = {
 					type = "group",
-					order = 6,
+					order = 7,
 					name = L["Scale if Low Health"],
 					guiInline = true,
 					get = function(info) return E.db.nameplate.healthBar.lowHPScale[ info[#info] ] end,
@@ -340,7 +345,7 @@ E.Options.args.nameplate = {
 					},
 				},
 				fontGroup = {
-					order = 5,
+					order = 8,
 					type = "group",
 					name = L["Fonts"],
 					guiInline = true,

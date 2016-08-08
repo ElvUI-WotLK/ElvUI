@@ -49,7 +49,6 @@ function UF:Update_AssistHeader(header, db)
 	
 	header:SetAttribute("startingIndex", -1);
 	RegisterStateDriver(header, "visibility", "show");
-	header.dirtyWidth, header.dirtyHeight = header:GetSize();
 	RegisterStateDriver(header, "visibility", "[@raid1,exists] show;hide");
 	header:SetAttribute("startingIndex", 1);
 	
@@ -59,6 +58,9 @@ function UF:Update_AssistHeader(header, db)
 	UF:ClearChildPoints(header:GetChildren());
 	header:SetAttribute("yOffset", db.verticalSpacing);
 	
+	local width, height = header:GetSize();
+	header.dirtyWidth, header.dirtyHeight = width, max(height, 2*db.height + db.verticalSpacing);
+
 	if(not header.positioned) then
 		header:ClearAllPoints();
 		header:Point("TOPLEFT", E.UIParent, "TOPLEFT", 4, -248);
