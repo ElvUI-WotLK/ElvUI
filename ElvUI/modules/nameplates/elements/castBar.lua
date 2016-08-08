@@ -6,7 +6,7 @@ local unpack = unpack;
 local CreateFrame = CreateFrame;
 
 function mod:ConstructElement_CastBar(parent)
-	local frame = CreateFrame("StatusBar", "$parentCastBar", parent);
+	local frame = CreateFrame("StatusBar", nil, parent);
 	frame:SetPoint("TOPLEFT", parent.HealthBar, "BOTTOMLEFT", 0, -E.Border - E.Spacing*3);
 	frame:SetPoint("TOPRIGHT", parent.HealthBar, "BOTTOMRIGHT", 0, -E.Border - E.Spacing*3);
 	self:CreateBackdrop(frame);

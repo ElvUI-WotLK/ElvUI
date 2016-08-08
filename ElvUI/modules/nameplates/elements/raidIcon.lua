@@ -4,8 +4,8 @@ local mod = E:GetModule("NamePlates");
 function mod:UpdateElement_RaidIcon(frame)
 	local icon = frame.raidIcon;
 	icon:ClearAllPoints();
-	icon:SetPoint(E.InversePoints[mod.db.raidIcon.attachTo], frame.healthBar, mod.db.raidIcon.attachTo, mod.db.raidIcon.xOffset, mod.db.raidIcon.yOffset);
-	icon:SetSize(mod.db.raidIcon.size, mod.db.raidIcon.size);
+	icon:SetPoint(E.InversePoints[self.db.raidIcon.attachTo], frame.healthBar, self.db.raidIcon.attachTo, self.db.raidIcon.xOffset, self.db.raidIcon.yOffset);
+	icon:SetSize(self.db.raidIcon.size, self.db.raidIcon.size);
 end
 
 function mod:ConstructElement_RaidIcon(frame)

@@ -590,7 +590,7 @@ function NP:Initialize()
 	self.db = E.db["nameplate"];
 	if(E.private["nameplate"].enable ~= true) then return; end
 	E.NamePlates = NP;
-	self.unit = "player"
+
 	self.PlateParent = CreateFrame("Frame", nil, WorldFrame);
 	self.PlateParent:SetFrameStrata("BACKGROUND");
 	self.PlateParent:SetFrameLevel(0);
@@ -645,11 +645,6 @@ end
 
 function NP:RoundColors(r, g, b)	
 	return floor(r*100+.5)/100, floor(g*100+.5)/100, floor(b*100+.5)/100;
-end
-
-function NP:OnSizeChanged(width, height)
-	local myPlate = NP.CreatedPlates[self];
-	myPlate:SetSize(width, height);
 end
 
 function NP:OnShow()
@@ -917,20 +912,23 @@ end
 function NP:CreatePlate(frame)
 	frame.HealthBar, frame.CastBar = frame:GetChildren();
 	frame.threat, frame.border, frame.CastBar.Shield, frame.CastBar.Border, frame.CastBar.Icon, frame.highlight, frame.Name, frame.Level, frame.bossIcon, frame.raidIcon, frame.eliteIcon = frame:GetRegions();
-	
+
 	local myPlate = CreateFrame("Frame", nil, self.PlateParent);
 	myPlate.hiddenFrame = CreateFrame("Frame", nil, myPlate);
 	myPlate.hiddenFrame:Hide();
-	
+
 	myPlate.HealthBar = self:ConstructElement_HealthBar(myPlate);
+
 	frame.CastBar.Icon:SetParent(myPlate.hiddenFrame);
 	myPlate.CastBar = self:ConstructElement_CastBar(myPlate);
+
 	myPlate.Level = self:ConstructElement_Level(myPlate);
+
 	myPlate.Name = self:ConstructElement_Name(myPlate);
-	
+
 	frame.raidIcon:SetAlpha(0);
-	myPlate.raidIcon = NP:ConstructElement_RaidIcon(myPlate);
-	
+	myPlate.raidIcon = self:ConstructElement_RaidIcon(myPlate);
+
 	myPlate.overlay = myPlate:CreateTexture(nil, "OVERLAY");
 	myPlate.overlay:SetAllPoints(myPlate.HealthBar);
 	myPlate.overlay:SetTexture(1, 1, 1, 0.3);
@@ -989,7 +987,6 @@ function NP:CreatePlate(frame)
 	
 	frame:HookScript("OnShow", NP.OnShow);
 	frame:HookScript("OnHide", NP.OnHide);
-	frame:HookScript("OnSizeChanged", NP.OnSizeChanged);
 	frame.HealthBar:HookScript("OnValueChanged", NP.HealthBar_OnValueChanged);
 	frame.CastBar:HookScript("OnShow", NP.CastBar_OnShow);
 	frame.CastBar:HookScript("OnHide", NP.CastBar_OnHide);
