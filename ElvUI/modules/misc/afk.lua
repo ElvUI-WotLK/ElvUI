@@ -33,7 +33,7 @@ function AFK:SetAFK(status)
 		MoveViewLeftStart(CAMERA_SPEED);
 		self.AFKMode:Show();
 		if(InspectFrame) then
-			InspectFrame:Hide();
+			InspectPaperDollFrame:Hide();
 		end
 		UIParent:Hide();
 		
