@@ -14,8 +14,10 @@ local function LoadSkin()
 	S:HandleCloseButton(PlayerTalentFrameCloseButton);
 
 	PlayerTalentFrameStatusFrame:StripTextures();
+	PlayerTalentFrameStatusFrame:Point("TOPLEFT", PlayerTalentFrame, "TOPLEFT", 57, -40)
 
 	S:HandleButton(PlayerTalentFrameActivateButton, true);
+	PlayerTalentFrameActivateButton:Point("TOP", PlayerTalentFrame, "TOP", 0, -40)
 
 	PlayerTalentFramePointsBar:StripTextures();
 	PlayerTalentFramePreviewBar:StripTextures();

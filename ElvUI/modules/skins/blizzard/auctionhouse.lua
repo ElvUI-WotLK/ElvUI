@@ -126,11 +126,16 @@ local function LoadSkin()
 		_G[sorttab.."Left"]:Kill()
 		_G[sorttab.."Middle"]:Kill()
 		_G[sorttab.."Right"]:Kill()
+		_G[sorttab]:StyleButton()
 	end
 	
 	for i=1, 3 do
 		S:HandleTab(_G["AuctionFrameTab"..i])
 	end
+	
+	AuctionFrameTab1:ClearAllPoints()
+	AuctionFrameTab1:SetPoint("BOTTOMLEFT", AuctionFrame, "BOTTOMLEFT", 25, -25)
+	AuctionFrameTab1.SetPoint = E.noop
 	
 	for i=1, NUM_FILTERS_TO_DISPLAY do
 		local tab = _G["AuctionFilterButton"..i]
@@ -303,13 +308,13 @@ local function LoadSkin()
 	AuctionFrameAuctions.bg1:SetTemplate("Default")
 	AuctionFrameAuctions.bg1:Point("TOPLEFT", 15, -70)
 	AuctionFrameAuctions.bg1:Point("BOTTOMRIGHT", -545, 35);
-	AuctionFrameAuctions.bg1:SetFrameLevel(AuctionFrameAuctions.bg1:GetFrameLevel() - 2)	
+	AuctionFrameAuctions.bg1:SetFrameLevel(AuctionFrameAuctions.bg1:GetFrameLevel() - 3)	
 	
 	AuctionFrameAuctions.bg2 = CreateFrame("Frame", nil, AuctionFrameAuctions)
 	AuctionFrameAuctions.bg2:SetTemplate("Default")
 	AuctionFrameAuctions.bg2:Point("TOPLEFT", AuctionFrameAuctions.bg1, "TOPRIGHT", 3, 0)
 	AuctionFrameAuctions.bg2:Point("BOTTOMRIGHT", AuctionFrame, -8, 35);
-	AuctionFrameAuctions.bg2:SetFrameLevel(AuctionFrameAuctions.bg2:GetFrameLevel() - 2)	
+	AuctionFrameAuctions.bg2:SetFrameLevel(AuctionFrameAuctions.bg2:GetFrameLevel() - 3)	
 end
 
 S:RegisterSkin("Blizzard_AuctionUI", LoadSkin)
