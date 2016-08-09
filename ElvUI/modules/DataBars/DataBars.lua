@@ -34,7 +34,6 @@ end
 function mod:UpdateDataBarDimensions()
 	self:UpdateExperienceDimensions();
 	self:UpdateReputationDimensions();
-	self:UpdateHonorDimensions();
 end
 
 function mod:PLAYER_LEVEL_UP(level)

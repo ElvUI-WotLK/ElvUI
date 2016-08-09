@@ -645,10 +645,11 @@ function E:UpdateAll(ignoreInstall)
 	NP.db = self.db.nameplate;
 	NP:UpdateAllPlates();
 	
-	local M = self:GetModule("Misc");
-	M:UpdateExpRepDimensions();
-	M:EnableDisable_ExperienceBar();
-	M:EnableDisable_ReputationBar()	;
+	local DataBars = self:GetModule("DataBars");
+	DataBars.db = E.db.databars;
+	DataBars:UpdateDataBarDimensions();
+	DataBars:EnableDisable_ExperienceBar();
+	DataBars:EnableDisable_ReputationBar();
 	
 	local T = self:GetModule("Threat");
 	T.db = self.db.general.threat;
