@@ -22,6 +22,27 @@ local function LoadSkin()
 		S:HandleItemButton(_G["PetStableStabledPet" .. i], true);
 		_G["PetStableStabledPet" .. i .. "IconTexture"]:SetDrawLayer("OVERLAY");
 	end
+	
+	PetStablePetInfo:GetRegions():SetTexCoord(0.04, 0.15, 0.06, 0.30);
+	PetStablePetInfo:SetFrameLevel(PetModelFrame:GetFrameLevel() + 2);
+	PetStablePetInfo:CreateBackdrop("Default");
+	PetStablePetInfo:Size(24, 24);
+
+	hooksecurefunc("PetStable_Update", function()
+		local happiness, damagePercentage = GetPetHappiness();
+		local hasPetUI, isHunterPet = HasPetUI();
+		if(UnitExists("pet") and hasPetUI and not isHunterPet) then
+			return;
+		end
+		local texture = PetStablePetInfo:GetRegions();
+		if(happiness == 1) then
+			texture:SetTexCoord(0.41, 0.53, 0.06, 0.30);
+		elseif(happiness == 2) then
+			texture:SetTexCoord(0.22, 0.345, 0.06, 0.30);
+		elseif(happiness == 3) then
+			texture:SetTexCoord(0.04, 0.15, 0.06, 0.30);
+		end
+	end);
 end
 
 S:RegisterSkin("ElvUI", LoadSkin);
