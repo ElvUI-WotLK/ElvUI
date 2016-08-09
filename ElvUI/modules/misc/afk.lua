@@ -32,6 +32,9 @@ function AFK:SetAFK(status)
 	if(status) then
 		MoveViewLeftStart(CAMERA_SPEED);
 		self.AFKMode:Show();
+		if(InspectFrame) then
+			InspectFrame:Hide();
+		end
 		UIParent:Hide();
 		
 		if(IsInGuild()) then
