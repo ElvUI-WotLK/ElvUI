@@ -488,8 +488,6 @@ function NP:SetUnitInfo(myPlate)
 
 		if(not myPlate.HealthBar:IsShown()) then
 			myPlate.HealthBar:Show();
-			NP:ConfigureElement_Level(myPlate);
-			NP:ConfigureElement_Name(myPlate);
 		end
 		
 		if(NP.db.targetIndicator.enable) then
@@ -528,7 +526,7 @@ function NP:SetUnitInfo(myPlate)
 
 		if(myPlate.isTarget) then
 			myPlate.isTarget = nil;
-			if(not NP.db.healthBar.enable and myPlate.HealthBar:IsShown() and not myPlate.lowHealth:IsShown()) then
+			if(not NP.db.healthBar.enable and myPlate.HealthBar:IsShown()) then
 				myPlate.HealthBar:Hide();
 				NP:ConfigureElement_Name(myPlate);
 				NP:ConfigureElement_Level(myPlate);
@@ -667,8 +665,6 @@ function NP:OnShow()
 	if(not NP.CheckFilter(self, myPlate)) then return; end
 	myPlate:SetSize(self:GetSize());
 	
-	NP:ConfigureElement_HealthBar(myPlate);
-	
 	NP.UpdateLevelAndName(self, myPlate);
 	NP.ColorizeAndScale(self, myPlate);
 	
@@ -770,15 +766,13 @@ function NP:HealthBar_OnValueChanged(value)
 	local minValue, maxValue = self:GetMinMaxValues();
 	myPlate.HealthBar:SetMinMaxValues(minValue, maxValue);
 	myPlate.HealthBar:SetValue(value);
-
+	
+	if((not NP.db.healthBar.enable and value ~= maxValue) and not myPlate.HealthBar:IsShown()) then
+		myPlate.HealthBar:Show();
+	end
 	local percentValue = (value/maxValue)
 	if(percentValue < NP.db.healthBar.lowThreshold) then
 		myPlate.lowHealth:Show();
-		if(not myPlate.HealthBar:IsShown()) then
-			myPlate.HealthBar:Show();
-			NP:ConfigureElement_Level(myPlate);
-			NP:ConfigureElement_Name(myPlate);
-		end
 		if(percentValue < (NP.db.healthBar.lowThreshold / 2)) then
 			myPlate.lowHealth:SetBackdropBorderColor(1, 0, 0, 0.9);
 		else
@@ -860,6 +854,7 @@ function NP:UpdateSettings()
 	myPlate.CastBar.Icon:SetWidth(NP.db.castBar.height + NP.db.healthBar.height + E.Border + E.Spacing*3);
 	myPlate.CastBar.Time:SetFont(font, fontSize, fontOutline);
 	
+	NP:ConfigureElement_HealthBar(myPlate);
 	NP:UpdateElement_RaidIcon(myPlate);
 	
 	local auraFont = LSM:Fetch("font", NP.db.buffs.font);

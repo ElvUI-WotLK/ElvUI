@@ -6,7 +6,7 @@ function mod:ConfigureElement_Level(frame)
 	local level = frame.Level;
 
 	level:ClearAllPoints();
-	if(self.db.healthBar.enable or frame.isTarget or frame.lowHealth:IsShown()) then
+	if(self.db.healthBar.enable or frame.isTarget) then
 		level:SetJustifyH("RIGHT");
 		level:SetPoint("BOTTOMRIGHT", frame.HealthBar, "TOPRIGHT", 0, E.Border*2);
 	else
