@@ -82,6 +82,51 @@ local function LoadSkin()
 			_G["TradeSkillReagent" .. i .. "NameFrame"]:Kill();
 		end
 	end);
+	
+	--Expand/Collapse Buttons
+	hooksecurefunc('TradeSkillFrame_Update', function()
+		local skillOffset = FauxScrollFrame_GetOffset(TradeSkillListScrollFrame);
+		local diplayedSkills = TRADE_SKILLS_DISPLAYED;
+		local numTradeSkills = GetNumTradeSkills();
+		local buttonIndex = 1
+		for i = 1, diplayedSkills, 1 do
+			local skillIndex = i + skillOffset
+			local skillName, skillType, numAvailable, isExpanded, altVerb, numSkillUps = GetTradeSkillInfo(skillIndex);
+			if ( skillIndex <= numTradeSkills ) then
+				if ( skillType == "header" ) then
+						buttonIndex = i;
+					local skillButton = _G["TradeSkillSkill"..buttonIndex];
+					skillButton:SetNormalTexture("Interface\\Buttons\\UI-PlusMinus-Buttons");
+					skillButton:GetNormalTexture():Size(12)
+					skillButton:GetNormalTexture():SetPoint("LEFT", 3, 2);
+					skillButton:SetHighlightTexture('')
+					if ( isExpanded ) then
+						skillButton:GetNormalTexture():SetTexCoord(0.5625, 1, 0, 0.4375)
+					else
+						skillButton:GetNormalTexture():SetTexCoord(0, 0.4375, 0, 0.4375)
+					end
+				end
+			end
+		end
+	end)
+	
+	--Expand/Collapse All Button
+	TradeSkillCollapseAllButton:HookScript('OnUpdate', function(self)
+		self:SetNormalTexture("Interface\\Buttons\\UI-PlusMinus-Buttons")
+		self:SetHighlightTexture("")
+		self:GetNormalTexture():SetPoint("LEFT", 3, 2)
+		self:GetNormalTexture():Size(11)
+		if (self.collapsed) then
+			self:GetNormalTexture():SetTexCoord(0, 0.4375, 0, 0.4375)
+		else
+			self:GetNormalTexture():SetTexCoord(0.5625, 1, 0, 0.4375)
+		end
+		self:SetDisabledTexture("Interface\\Buttons\\UI-PlusMinus-Buttons")
+		self:GetDisabledTexture():SetPoint("LEFT", 3, 2)
+		self:GetDisabledTexture():Size(10)
+		self:GetDisabledTexture():SetTexCoord(0, 0.4375, 0, 0.4375)
+		self:GetDisabledTexture():SetDesaturated(true)
+	end)
 end
 
 S:RegisterSkin("Blizzard_TradeSkillUI", LoadSkin);
