@@ -283,15 +283,42 @@ local function LoadSkin()
 				end
 				
 				_G['ReputationBar'..i..'Background']:SetTexture(nil);
+				_G["ReputationBar"..i.."LeftLine"]:Kill()
+				_G["ReputationBar"..i.."BottomLine"]:Kill()
 				_G['ReputationBar'..i..'ReputationBarHighlight1']:SetTexture(nil);
 				_G['ReputationBar'..i..'ReputationBarHighlight2']:SetTexture(nil);
 				_G['ReputationBar'..i..'ReputationBarAtWarHighlight1']:SetTexture(nil);
 				_G['ReputationBar'..i..'ReputationBarAtWarHighlight2']:SetTexture(nil);
 				_G['ReputationBar'..i..'ReputationBarLeftTexture']:SetTexture(nil);
 				_G['ReputationBar'..i..'ReputationBarRightTexture']:SetTexture(nil);
+				_G["ReputationBar"..i.."ExpandOrCollapseButton"]:SetNormalTexture("Interface\\Buttons\\UI-PlusMinus-Buttons")
+				_G["ReputationBar"..i.."ExpandOrCollapseButton"].SetNormalTexture = function() end
+				_G["ReputationBar"..i.."ExpandOrCollapseButton"]:GetNormalTexture():SetInside()
+				_G["ReputationBar"..i.."ExpandOrCollapseButton"]:SetHighlightTexture(nil)
 			end
 		end
 	end
+
+	local function UpdateFaction()
+		local factionOffset = FauxScrollFrame_GetOffset(ReputationListScrollFrame)
+		local numFactions = GetNumFactions()
+		for i = 1, NUM_FACTIONS_DISPLAYED, 1 do
+			local Bar = _G["ReputationBar"..i]
+			local Button = _G["ReputationBar"..i.."ExpandOrCollapseButton"]
+			local FactionName = _G["ReputationBar"..i.."FactionName"]
+			local factionIndex = factionOffset + i
+			if ( factionIndex <= numFactions ) then
+				local name, _, _, _, _, _, atWarWith, canToggleAtWar, _, isCollapsed = GetFactionInfo(factionIndex);
+				if isCollapsed then
+					Button:GetNormalTexture():SetTexCoord(0, 0.4375, 0, 0.4375)
+				else
+					Button:GetNormalTexture():SetTexCoord(0.5625, 1, 0, 0.4375)
+				end
+			end
+		end
+	end
+
+	hooksecurefunc("ReputationFrame_Update", UpdateFaction)
 
 	ReputationFrame:HookScript('OnShow', UpdateFactionSkins);
 	ReputationFrame:HookScript('OnEvent', UpdateFactionSkins);
@@ -353,6 +380,19 @@ local function LoadSkin()
 	S:HandleScrollBar(SkillDetailScrollFrameScrollBar);
 	
 	S:HandleButton(SkillFrameCancelButton);
+	
+	--Skill Expand/Collapse All Button
+	SkillFrameCollapseAllButton:HookScript('OnUpdate', function(self)
+		self:SetNormalTexture("Interface\\Buttons\\UI-PlusMinus-Buttons")
+		self:SetHighlightTexture("")
+		self:GetNormalTexture():SetPoint("LEFT", 5, 0)
+		self:GetNormalTexture():Size(12)
+		if (self.isExpanded) then
+			self:GetNormalTexture():SetTexCoord(0.5625, 1, 0, 0.4375)
+		else
+			self:GetNormalTexture():SetTexCoord(0, 0.4375, 0, 0.4375)
+		end
+	end)
 	
 	TokenFrame:StripTextures(true);
 	

@@ -137,10 +137,11 @@ local function LoadSkin()
 	QuestLogFrame:HookScript("OnShow", function()
 		QuestLogScrollFrame:Height(331);
 		QuestLogDetailScrollFrame:Height(328);
-
 		if(not QuestLogDetailScrollFrame.backdrop) then
-			QuestLogScrollFrame:SetTemplate("Default");
+			QuestLogScrollFrame:CreateBackdrop("Default");
+			QuestLogScrollFrame.backdrop:SetFrameLevel(QuestLogScrollFrame:GetFrameLevel() - 3)
 			QuestLogDetailScrollFrame:CreateBackdrop("Default");
+			QuestLogDetailScrollFrame.backdrop:SetFrameLevel(QuestLogDetailScrollFrame:GetFrameLevel() - 2)
 		end
 	end);
 
@@ -164,6 +165,7 @@ local function LoadSkin()
 	S:HandleScrollBar(QuestLogDetailScrollFrameScrollBar);
 	S:HandleScrollBar(QuestDetailScrollFrameScrollBar);
 	S:HandleScrollBar(QuestLogScrollFrameScrollBar, 5);
+	QuestLogScrollFrameScrollBar:Point("RIGHT", 25, 0)
 	S:HandleScrollBar(QuestProgressScrollFrameScrollBar);
 	S:HandleScrollBar(QuestRewardScrollFrameScrollBar);
 

@@ -27,6 +27,20 @@ S:RegisterSkin('ElvUI', function()
 	end
 	
 	S:HandleButton(WorldStateScoreFrameLeaveButton);
-	
 	S:HandleCloseButton(WorldStateScoreFrameCloseButton);
+	
+	WorldStateScoreFrameKB:StyleButton()
+	WorldStateScoreFrameDeaths:StyleButton()
+	WorldStateScoreFrameHK:StyleButton()
+	WorldStateScoreFrameDamageDone:StyleButton()
+	WorldStateScoreFrameHealingDone:StyleButton()
+	WorldStateScoreFrameHonorGained:StyleButton()
+	WorldStateScoreFrameName:StyleButton()
+	WorldStateScoreFrameClass:StyleButton()
+	WorldStateScoreFrameTeam:StyleButton()
+	WorldStateScoreFrameRatingChange:StyleButton()
+	
+	for i = 1, 5 do 
+		_G["WorldStateScoreColumn"..i]:StyleButton()
+	end
 end);

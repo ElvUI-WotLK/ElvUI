@@ -61,6 +61,30 @@ local function LoadSkin()
 
 	S:HandleButton(TradeFrameTradeButton);
 	S:HandleButton(TradeFrameCancelButton);
+
+	hooksecurefunc('TradeFrame_UpdatePlayerItem', function(id)
+		local tradeItem = _G["TradePlayerItem"..id.."ItemButton"];
+		tradeItem:SetBackdropBorderColor(unpack(E["media"].bordercolor));
+		local Link = GetTradePlayerItemLink(id);
+		if Link then
+			local quality = select(3, GetItemInfo(Link))
+			if (quality and quality > 1) then
+				tradeItem:SetBackdropBorderColor(GetItemQualityColor(quality));
+			end
+		end
+	end)
+
+	hooksecurefunc('TradeFrame_UpdateTargetItem', function(id)
+		local tradeItem = _G["TradeRecipientItem"..id.."ItemButton"];
+		tradeItem:SetBackdropBorderColor(unpack(E["media"].bordercolor));
+		local Link = GetTradeTargetItemLink(id);
+		if Link then
+			local quality = select(3, GetItemInfo(Link))
+			if (quality and quality > 1) then
+				tradeItem:SetBackdropBorderColor(GetItemQualityColor(quality));
+			end
+		end
+	end)
 end
 
 S:RegisterSkin("ElvUI", LoadSkin);
