@@ -502,11 +502,12 @@ local function LoadSkin()
         "InterfaceOptionsFrameTab1",
         "InterfaceOptionsFrameTab2",
     }
-    for i = 1, getn(interfacetab) do
+	for i = 1, #interfacetab do
         local itab = _G[interfacetab[i]]
         if itab then
             itab:StripTextures()
             S:HandleTab(itab)
+			itab.backdrop:Point("TOPLEFT", 10, E.PixelMode and -4 or -6)
         end
     end
     InterfaceOptionsFrameTab1:ClearAllPoints()
@@ -517,6 +518,10 @@ local function LoadSkin()
     VideoOptionsFrameDefaults:SetPoint("TOPLEFT",VideoOptionsFrameCategoryFrame,"BOTTOMLEFT",-1,-5)
     InterfaceOptionsFrameDefaults:SetPoint("TOPLEFT",InterfaceOptionsFrameCategories,"BOTTOMLEFT",-1,-5)
     InterfaceOptionsFrameCancel:SetPoint("TOPRIGHT",InterfaceOptionsFramePanelContainer,"BOTTOMRIGHT",0,-6)
+	InterfaceOptionsFrameCategoriesList:StripTextures();
+	S:HandleScrollBar(InterfaceOptionsFrameCategoriesListScrollBar);
+	InterfaceOptionsFrameAddOnsList:StripTextures();
+	S:HandleScrollBar(InterfaceOptionsFrameAddOnsListScrollBar);
 
     local interfacecheckbox = {
         "ControlsPanelStickyTargeting",

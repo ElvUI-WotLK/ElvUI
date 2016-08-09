@@ -2,6 +2,8 @@ local E, L, V, P, G = unpack(select(2, ...));
 local M = E:NewModule("WorldMap", "AceHook-3.0", "AceEvent-3.0", "AceTimer-3.0");
 E.WorldMap = M;
 
+local find = string.find;
+
 local CreateFrame = CreateFrame;
 local InCombatLockdown = InCombatLockdown;
 local IsInInstance = IsInInstance;
@@ -12,6 +14,15 @@ local MOUSE_LABEL = MOUSE_LABEL;
 local WORLDMAP_FULLMAP_SIZE = WORLDMAP_FULLMAP_SIZE;
 local WORLDMAP_QUESTLIST_SIZE = WORLDMAP_QUESTLIST_SIZE;
 local WORLDMAP_WINDOWED_SIZE = WORLDMAP_WINDOWED_SIZE;
+
+local INVERTED_POINTS = {
+	["TOPLEFT"] = "BOTTOMLEFT",
+	["TOPRIGHT"] = "BOTTOMRIGHT",
+	["BOTTOMLEFT"] = "TOPLEFT",
+	["BOTTOMRIGHT"] = "TOPRIGHT",
+	["TOP"] = "BOTTOM",
+	["BOTTOM"] = "TOP"
+};
 
 function SetUIPanelAttribute(frame, name, value)
 	local info = UIPanelWindows[frame:GetName()];
@@ -96,8 +107,24 @@ function M:UpdateCoords()
 	end
 end
 
+function M:PositionCoords()
+	local db = E.global.general.worldMapCoordinates;
+	local position = db.position;
+	local xOffset = db.xOffset;
+	local yOffset = db.yOffset;
+
+	local x, y = 5, 5;
+	if(find(position, "RIGHT")) then x = -5; end
+	if(find(position, "TOP")) then y = -5; end
+
+	CoordsHolder.playerCoords:ClearAllPoints();
+	CoordsHolder.playerCoords:Point(position, WorldMapScrollFrame, position, x + xOffset, y + yOffset);
+	CoordsHolder.mouseCoords:ClearAllPoints();
+	CoordsHolder.mouseCoords:Point(position, CoordsHolder.playerCoords, INVERTED_POINTS[position], 0, y);
+end
+
 function M:Initialize()
-	if(E.global.general.worldMapCoordinates) then
+	if(E.global.general.worldMapCoordinates.enable) then
 		local coordsHolder = CreateFrame("Frame", "CoordsHolder", WorldMapFrame);
 		coordsHolder:SetFrameLevel(WorldMapDetailFrame:GetFrameLevel() + 1);
 		coordsHolder:SetFrameStrata(WorldMapDetailFrame:GetFrameStrata());
@@ -108,11 +135,12 @@ function M:Initialize()
 		coordsHolder.playerCoords:SetFontObject(NumberFontNormal);
 		coordsHolder.mouseCoords:SetFontObject(NumberFontNormal);
 		coordsHolder.playerCoords:SetPoint("BOTTOMLEFT", WorldMapDetailFrame, "BOTTOMLEFT", 5, 5);
-		coordsHolder.playerCoords:SetText(PLAYER..":   0, 0");
+		coordsHolder.playerCoords:SetText(PLAYER .. ":   0, 0");
 		coordsHolder.mouseCoords:SetPoint("BOTTOMLEFT", coordsHolder.playerCoords, "TOPLEFT", 0, 5);
-		coordsHolder.mouseCoords:SetText(MOUSE_LABEL..":   0, 0");
+		coordsHolder.mouseCoords:SetText(MOUSE_LABEL .. ":   0, 0");
 		
 		self:ScheduleRepeatingTimer("UpdateCoords", 0.05);
+		self:PositionCoords();
 	end
 	
 	if(E.global.general.smallerWorldMap) then

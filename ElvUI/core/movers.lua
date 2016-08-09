@@ -51,13 +51,17 @@ local function CreateMover(parent, name, text, overlay, snapOffset, postdrag)
 	
 	if overlay == nil then overlay = true end
 	local point, anchor, secondaryPoint, x, y = split(",", GetPoint(parent));
+
+	local width = parent.dirtyWidth or parent:GetWidth();
+	local height = parent.dirtyHeight or parent:GetHeight();
+
 	local f = CreateFrame("Button", name, E.UIParent)
 	f:SetClampedToScreen(true)
 	f:RegisterForDrag("LeftButton", "RightButton");
 	f:EnableMouseWheel(true);
 	f:SetMovable(true);
-	f:Width(parent:GetWidth())
-	f:Height(parent:GetHeight())
+	f:Width(width);
+	f:Height(height);
 	f:SetTemplate("Transparent", nil, nil, true);
 	f:Hide();
 	f.parent = parent

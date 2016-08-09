@@ -698,8 +698,10 @@ end
 local function SetPage(PageNum)
 	CURRENT_PAGE = PageNum
 	ResetAll()
-	InstallStatus:SetValue(PageNum)
-	
+	InstallStatus.anim.progress:SetChange(PageNum);
+	InstallStatus.anim.progress:Play();
+	InstallStatus.text:SetFormattedText("%d / %d", CURRENT_PAGE, MAX_PAGE);
+
 	local r, g, b = E:ColorGradient(CURRENT_PAGE / MAX_PAGE, 1, 0, 0, 1, 1, 0, 0, 1, 0);
 	ElvUIInstallFrame.Status:SetStatusBarColor(r, g, b);
 	
@@ -896,14 +898,17 @@ function E:Install()
 		f.Status:SetMinMaxValues(0, MAX_PAGE)
 		f.Status:Point("TOPLEFT", f.Prev, "TOPRIGHT", 6, -2)
 		f.Status:Point("BOTTOMRIGHT", f.Next, "BOTTOMLEFT", -6, 2)
+
+		f.Status.anim = CreateAnimationGroup(f.Status);
+		f.Status.anim.progress = f.Status.anim:CreateAnimation("Progress");
+		f.Status.anim.progress:SetSmoothing("Out");
+		f.Status.anim.progress:SetDuration(.3);
+
 		f.Status.text = f.Status:CreateFontString(nil, 'OVERLAY')
 		f.Status.text:FontTemplate()
 		f.Status.text:SetPoint("CENTER")
-		f.Status.text:SetText(CURRENT_PAGE.." / "..MAX_PAGE)
-		f.Status:SetScript("OnValueChanged", function(self)
-			self.text:SetText(self:GetValue().." / "..MAX_PAGE)
-		end)
-		
+		f.Status.text:SetFormattedText("%d / %d", CURRENT_PAGE, MAX_PAGE);
+
 		f.Option1 = CreateFrame("Button", "InstallOption1Button", f, "UIPanelButtonTemplate")
 		f.Option1:StripTextures()
 		f.Option1:Size(160, 30)

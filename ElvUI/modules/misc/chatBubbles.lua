@@ -1,5 +1,6 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local M = E:GetModule("Misc");
+local CH = E:GetModule("Chat");
 local numChildren = -1;
 
 local select, unpack, type = select, unpack, type;
@@ -17,6 +18,27 @@ function M:UpdateBubbleBorder()
 		self.borderleft:SetTexture(r, g, b);
 		self.borderright:SetTexture(r, g, b);
 	end
+
+	local classColorTable, lowerCaseWord, isFirstWord, rebuiltString, tempWord;
+	local text = self.text:GetText();
+	for word in text:gmatch("[^%s]+") do
+		lowerCaseWord = word:lower();
+		lowerCaseWord = lowerCaseWord:gsub("%p", "");
+		if(CH.ClassNames[lowerCaseWord]) then
+			classColorTable = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[CH.ClassNames[lowerCaseWord]] or RAID_CLASS_COLORS[CH.ClassNames[lowerCaseWord]];
+			tempWord = word:gsub("%p", "");
+			word = word:gsub(tempWord, format("\124cff%.2x%.2x%.2x", classColorTable.r*255, classColorTable.g*255, classColorTable.b*255) .. tempWord .. "\124r");
+		end
+
+		if(not isFirstWord) then
+			rebuiltString = word;
+			isFirstWord = true;
+		else
+			rebuiltString = format("%s %s", rebuiltString, word);
+		end
+	end
+
+	self.text:SetText(rebuiltString);
 end
 
 function M:SkinBubble(frame)
@@ -44,57 +66,59 @@ function M:SkinBubble(frame)
 		
 		local r, g, b = frame.text:GetTextColor();
 		if(not E.PixelMode) then
-			frame.backdrop = frame:CreateTexture(nil, "BACKGROUND");
-			frame.backdrop:SetAllPoints(frame);
-			frame.backdrop:SetTexture(unpack(E.media.backdropfadecolor));
-			
-			frame.bordertop = frame:CreateTexture(nil, "OVERLAY");
-			frame.bordertop:SetPoint("TOPLEFT", frame, "TOPLEFT", -mult*2, mult*2);
-			frame.bordertop:SetPoint("TOPRIGHT", frame, "TOPRIGHT", mult*2, mult*2);
-			frame.bordertop:SetHeight(mult);
-			frame.bordertop:SetTexture(r, g, b);
-			
-			frame.bordertop.backdrop = frame:CreateTexture(nil, "BORDER");
-			frame.bordertop.backdrop:SetPoint("TOPLEFT", frame.bordertop, "TOPLEFT", -mult, mult);
-			frame.bordertop.backdrop:SetPoint("TOPRIGHT", frame.bordertop, "TOPRIGHT", mult, mult);
-			frame.bordertop.backdrop:SetHeight(mult * 3);
-			frame.bordertop.backdrop:SetTexture(0, 0, 0);
-			
-			frame.borderbottom = frame:CreateTexture(nil, "OVERLAY");
-			frame.borderbottom:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", -mult*2, -mult*2);
-			frame.borderbottom:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", mult*2, -mult*2);
-			frame.borderbottom:SetHeight(mult);
-			frame.borderbottom:SetTexture(r, g, b);
-			
-			frame.borderbottom.backdrop = frame:CreateTexture(nil, "BORDER");
-			frame.borderbottom.backdrop:SetPoint("BOTTOMLEFT", frame.borderbottom, "BOTTOMLEFT", -mult, -mult);
-			frame.borderbottom.backdrop:SetPoint("BOTTOMRIGHT", frame.borderbottom, "BOTTOMRIGHT", mult, -mult);
-			frame.borderbottom.backdrop:SetHeight(mult * 3)
-			frame.borderbottom.backdrop:SetTexture(0, 0, 0);
-			
-			frame.borderleft = frame:CreateTexture(nil, "OVERLAY");
-			frame.borderleft:SetPoint("TOPLEFT", frame, "TOPLEFT", -mult*2, mult*2);
-			frame.borderleft:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", mult*2, -mult*2);
-			frame.borderleft:SetWidth(mult);
-			frame.borderleft:SetTexture(r, g, b);
-			
-			frame.borderleft.backdrop = frame:CreateTexture(nil, "BORDER");
-			frame.borderleft.backdrop:SetPoint("TOPLEFT", frame.borderleft, "TOPLEFT", -mult, mult);
-			frame.borderleft.backdrop:SetPoint("BOTTOMLEFT", frame.borderleft, "BOTTOMLEFT", -mult, -mult);
-			frame.borderleft.backdrop:SetWidth(mult * 3);
-			frame.borderleft.backdrop:SetTexture(0, 0, 0);
-			
-			frame.borderright = frame:CreateTexture(nil, "OVERLAY");
-			frame.borderright:SetPoint("TOPRIGHT", frame, "TOPRIGHT", mult*2, mult*2);
-			frame.borderright:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -mult*2, -mult*2);
-			frame.borderright:SetWidth(mult);
-			frame.borderright:SetTexture(r, g, b);
-			
-			frame.borderright.backdrop = frame:CreateTexture(nil, "BORDER");
-			frame.borderright.backdrop:SetPoint("TOPRIGHT", frame.borderright, "TOPRIGHT", mult, mult);
-			frame.borderright.backdrop:SetPoint("BOTTOMRIGHT", frame.borderright, "BOTTOMRIGHT", mult, -mult);
-			frame.borderright.backdrop:SetWidth(mult * 3);
-			frame.borderright.backdrop:SetTexture(0, 0, 0);
+			if(not frame.backdrop) then
+				frame.backdrop = frame:CreateTexture(nil, "BACKGROUND");
+				frame.backdrop:SetAllPoints(frame);
+				frame.backdrop:SetTexture(unpack(E.media.backdropfadecolor));
+				
+				frame.bordertop = frame:CreateTexture(nil, "OVERLAY");
+				frame.bordertop:SetPoint("TOPLEFT", frame, "TOPLEFT", -mult*2, mult*2);
+				frame.bordertop:SetPoint("TOPRIGHT", frame, "TOPRIGHT", mult*2, mult*2);
+				frame.bordertop:SetHeight(mult);
+				frame.bordertop:SetTexture(r, g, b);
+				
+				frame.bordertop.backdrop = frame:CreateTexture(nil, "BORDER");
+				frame.bordertop.backdrop:SetPoint("TOPLEFT", frame.bordertop, "TOPLEFT", -mult, mult);
+				frame.bordertop.backdrop:SetPoint("TOPRIGHT", frame.bordertop, "TOPRIGHT", mult, mult);
+				frame.bordertop.backdrop:SetHeight(mult * 3);
+				frame.bordertop.backdrop:SetTexture(0, 0, 0);
+				
+				frame.borderbottom = frame:CreateTexture(nil, "OVERLAY");
+				frame.borderbottom:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", -mult*2, -mult*2);
+				frame.borderbottom:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", mult*2, -mult*2);
+				frame.borderbottom:SetHeight(mult);
+				frame.borderbottom:SetTexture(r, g, b);
+				
+				frame.borderbottom.backdrop = frame:CreateTexture(nil, "BORDER");
+				frame.borderbottom.backdrop:SetPoint("BOTTOMLEFT", frame.borderbottom, "BOTTOMLEFT", -mult, -mult);
+				frame.borderbottom.backdrop:SetPoint("BOTTOMRIGHT", frame.borderbottom, "BOTTOMRIGHT", mult, -mult);
+				frame.borderbottom.backdrop:SetHeight(mult * 3)
+				frame.borderbottom.backdrop:SetTexture(0, 0, 0);
+				
+				frame.borderleft = frame:CreateTexture(nil, "OVERLAY");
+				frame.borderleft:SetPoint("TOPLEFT", frame, "TOPLEFT", -mult*2, mult*2);
+				frame.borderleft:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", mult*2, -mult*2);
+				frame.borderleft:SetWidth(mult);
+				frame.borderleft:SetTexture(r, g, b);
+				
+				frame.borderleft.backdrop = frame:CreateTexture(nil, "BORDER");
+				frame.borderleft.backdrop:SetPoint("TOPLEFT", frame.borderleft, "TOPLEFT", -mult, mult);
+				frame.borderleft.backdrop:SetPoint("BOTTOMLEFT", frame.borderleft, "BOTTOMLEFT", -mult, -mult);
+				frame.borderleft.backdrop:SetWidth(mult * 3);
+				frame.borderleft.backdrop:SetTexture(0, 0, 0);
+				
+				frame.borderright = frame:CreateTexture(nil, "OVERLAY");
+				frame.borderright:SetPoint("TOPRIGHT", frame, "TOPRIGHT", mult*2, mult*2);
+				frame.borderright:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -mult*2, -mult*2);
+				frame.borderright:SetWidth(mult);
+				frame.borderright:SetTexture(r, g, b);
+				
+				frame.borderright.backdrop = frame:CreateTexture(nil, "BORDER");
+				frame.borderright.backdrop:SetPoint("TOPRIGHT", frame.borderright, "TOPRIGHT", mult, mult);
+				frame.borderright.backdrop:SetPoint("BOTTOMRIGHT", frame.borderright, "BOTTOMRIGHT", mult, -mult);
+				frame.borderright.backdrop:SetWidth(mult * 3);
+				frame.borderright.backdrop:SetTexture(0, 0, 0);
+			end
 		else
 			frame:SetBackdropColor(unpack(E.media.backdropfadecolor));
 			frame:SetBackdropBorderColor(r, g, b);
@@ -104,6 +128,7 @@ function M:SkinBubble(frame)
 		
 		frame:SetClampedToScreen(false);
 		frame:HookScript("OnShow", M.UpdateBubbleBorder);
+		M.UpdateBubbleBorder(frame);
 	elseif(E.private.general.chatBubbles == "nobackdrop") then
 		frame:SetBackdrop(nil);
 		frame.text:FontTemplate(E.LSM:Fetch("font", E.private.general.chatBubbleFont), E.private.general.chatBubbleFontSize);
