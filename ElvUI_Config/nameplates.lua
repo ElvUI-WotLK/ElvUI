@@ -103,37 +103,52 @@ E.Options.args.nameplate = {
 			type = "group",
 			name = L["General"],
 			disabled = function() return not E.NamePlates; end,
-			args = {	
-				combatHide = {
+			args = {
+				useTargetScale = {
 					type = "toggle",
 					order = 1,
+					name = L["Use Target Scale"],
+					desc = L["Enable/Disable the scaling of targetted nameplates."]
+				},
+				targetScale = {
+					type = "range",
+					order = 2,
+					name = L["Target Scale"],
+					desc = L["Scale of the nameplate that is targetted."],
+					min = 0.3, max = 2, step = 0.01,
+					isPercent = true,
+					disabled = function() return E.db.nameplate.useTargetScale ~= true; end
+				},
+				combatHide = {
+					type = "toggle",
+					order = 3,
 					name = L["Combat Toggle"],
 					desc = L["Toggle the nameplates to be visible outside of combat and visible inside combat."],
 					set = function(info, value) E.db.nameplate[ info[#info] ] = value; NP:CombatToggle() end,
 				},
 				comboPoints = {
 					type = "toggle",
-					order = 3,
+					order = 4,
 					name = L["Combo Points"],
 					desc = L["Display combo points on nameplates."],
 				},
 				nonTargetAlpha = {
 					type = "range",
-					order = 3,
+					order = 5,
 					name = L["Non-Target Alpha"],
 					desc = L["Alpha of nameplates that are not your current target."],
 					min = 0, max = 1, step = 0.01, isPercent = true,
 				},
 				targetAlpha = {
 					type = "range",
-					order = 4,
+					order = 5,
 					name = L["Target Alpha"],
 					desc = L["Alpha of current target nameplate."],
 					min = 0, max = 1, step = 0.01, isPercent = true,
 				},
 				colorNameByValue = {
 					type = "toggle",
-					order = 5,
+					order = 6,
 					name = L["Color Name By Health Value"],		
 				},				
 				fontGroup = {

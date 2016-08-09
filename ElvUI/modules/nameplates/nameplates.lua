@@ -257,14 +257,7 @@ function NP:CheckFilter(myPlate)
 			end
 			
 			if(db.customScale and db.customScale ~= 1) then
-			--	myPlate.healthBar:Height(NP.db.healthBar.height * db.customScale);
-				--myPlate.healthBar:Width(NP.db.healthBar.width * db.customScale);
-				--NP:SetFrameScale(myPlate, db.customScale);
-				if(self.unit == "target") then
-					NP:SetFrameScale(myPlate, db.customScale * 1.25);
-				else
-					NP:SetFrameScale(myPlate, db.customScale);
-				end
+				NP:SetFrameScale(myPlate, db.customScale);
 				self.customScale = true;
 			else
 				self.customScale = nil;
@@ -288,11 +281,7 @@ function NP:UpdateLevelAndName(myPlate)
 		r, g, b = self.Level:GetTextColor();
 	end
 
-	if(NP.db.healthBar.enable or myPlate.isTarget or myPlate.lowHealth:IsShown()) then
-		myPlate.Level:SetText(level);
-	else
-		myPlate.Level:SetFormattedText(" [%s]", level);
-	end
+	myPlate.Level:SetText(level);
 	myPlate.Level:SetTextColor(r, g, b);
 
 	if(not NP.db.showName) then
@@ -457,7 +446,6 @@ function NP:ColorizeAndScale(myPlate)
 		end
 	end
 	if(not self.customScale and myPlate.HealthBar:GetWidth() ~= w) then
-		--myPlate.healthBar:SetSize(w, h);
 		if(not myPlate.isTarget or not NP.db.useTargetScale) then
 			myPlate.ThreatScale = scale;
 			NP:SetFrameScale(myPlate, scale);
@@ -486,10 +474,6 @@ function NP:SetUnitInfo(myPlate)
 			NP:SetFrameScale(myPlate, NP.db.targetScale);
 		end
 
-		if(not myPlate.HealthBar:IsShown()) then
-			myPlate.HealthBar:Show();
-		end
-		
 		if(NP.db.targetIndicator.enable) then
 			targetIndicator:Show();
 			NP:PositionTargetIndicator(myPlate);
@@ -524,14 +508,7 @@ function NP:SetUnitInfo(myPlate)
 			NP:SetFrameScale(myPlate, myPlate.ThreatScale or 1);
 		end
 
-		if(myPlate.isTarget) then
-			myPlate.isTarget = nil;
-			if(not NP.db.healthBar.enable and myPlate.HealthBar:IsShown()) then
-				myPlate.HealthBar:Hide();
-				NP:ConfigureElement_Name(myPlate);
-				NP:ConfigureElement_Level(myPlate);
-			end
-		end
+		myPlate.isTarget = nil;
 		myPlate:SetFrameLevel(0);
 		myPlate.overlay:Hide();
 		self.unit = nil;
@@ -664,6 +641,10 @@ function NP:OnShow()
 	
 	if(not NP.CheckFilter(self, myPlate)) then return; end
 	myPlate:SetSize(self:GetSize());
+
+	NP:ConfigureElement_HealthBar(myPlate);
+	NP:ConfigureElement_Name(myPlate);
+	NP:ConfigureElement_Level(myPlate);
 	
 	NP.UpdateLevelAndName(self, myPlate);
 	NP.ColorizeAndScale(self, myPlate);
@@ -766,10 +747,7 @@ function NP:HealthBar_OnValueChanged(value)
 	local minValue, maxValue = self:GetMinMaxValues();
 	myPlate.HealthBar:SetMinMaxValues(minValue, maxValue);
 	myPlate.HealthBar:SetValue(value);
-	
-	if((not NP.db.healthBar.enable and value ~= maxValue) and not myPlate.HealthBar:IsShown()) then
-		myPlate.HealthBar:Show();
-	end
+
 	local percentValue = (value/maxValue)
 	if(percentValue < NP.db.healthBar.lowThreshold) then
 		myPlate.lowHealth:Show();
@@ -853,7 +831,7 @@ function NP:UpdateSettings()
 	myPlate.CastBar:SetHeight(NP.db.castBar.height);
 	myPlate.CastBar.Icon:SetWidth(NP.db.castBar.height + NP.db.healthBar.height + E.Border + E.Spacing*3);
 	myPlate.CastBar.Time:SetFont(font, fontSize, fontOutline);
-	
+
 	NP:ConfigureElement_HealthBar(myPlate);
 	NP:UpdateElement_RaidIcon(myPlate);
 	

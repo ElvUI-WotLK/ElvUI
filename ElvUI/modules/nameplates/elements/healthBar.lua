@@ -2,11 +2,6 @@ local E, L, V, P, G = unpack(select(2, ...));
 local mod = E:GetModule("NamePlates")
 local LSM = LibStub("LibSharedMedia-3.0")
 
-local function OnShow(self)
-	mod:ConfigureElement_Level(self:GetParent());
-	mod:ConfigureElement_Name(self:GetParent());
-end
-
 function mod:ConfigureElement_HealthBar(frame, configuring)
 	local healthBar = frame.HealthBar;
 	
@@ -17,14 +12,6 @@ function mod:ConfigureElement_HealthBar(frame, configuring)
 	else
 		healthBar:SetHeight(self.db.healthBar.height);
 		healthBar:SetWidth(self.db.healthBar.width);
-	end
-
-	if(self.db.healthBar.enable) then
-		healthBar:Show();
-	else
-		healthBar:Hide();
-		mod:ConfigureElement_Name(frame);
-		mod:ConfigureElement_Level(frame);
 	end
 end
 
@@ -41,8 +28,5 @@ function mod:ConstructElement_HealthBar(parent)
 	frame.scale.width:SetDuration(0.2);
 	frame.scale.height = frame.scale:CreateAnimation("Height");
 	frame.scale.height:SetDuration(0.2);
-	
-	frame:SetScript("OnShow", OnShow);
-	frame:Hide();
 	return frame;
 end
