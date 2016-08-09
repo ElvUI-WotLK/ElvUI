@@ -763,6 +763,8 @@ function TT:Initialize()
 	if E.private.tooltip.enable ~= true then return end
 	E.Tooltip = TT
 
+	SetCVar("showItemLevel", 1);
+
 	GameTooltipStatusBar:Height(self.db.healthBar.height)
 	GameTooltipStatusBar:SetStatusBarTexture(E["media"].normTex)
 	E:RegisterStatusBar(GameTooltipStatusBar);
