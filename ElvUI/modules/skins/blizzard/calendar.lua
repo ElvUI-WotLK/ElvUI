@@ -83,7 +83,6 @@ local function LoadSkin()
 	for i=1, 7 do
 		_G["CalendarContextMenuButton"..i]:StyleButton()
 	end
-	CalendarContextMenuButton4:StripTextures()
 	
 	for i = 1, 42 do
 		local Button = _G["CalendarDayButton"..i]
