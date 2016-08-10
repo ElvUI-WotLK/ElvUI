@@ -123,7 +123,7 @@ local function LoadSkin()
 			local skillName, skillType, numAvailable, isExpanded, altVerb, numSkillUps = GetTradeSkillInfo(skillIndex);
 			if ( skillIndex <= numTradeSkills ) then
 				if ( skillType == "header" ) then
-						buttonIndex = i;
+					buttonIndex = i;
 					local skillButton = _G["TradeSkillSkill"..buttonIndex];
 					skillButton:SetNormalTexture("Interface\\Buttons\\UI-PlusMinus-Buttons");
 					skillButton:GetNormalTexture():Size(12)
