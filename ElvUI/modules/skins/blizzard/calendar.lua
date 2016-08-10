@@ -80,13 +80,38 @@ local function LoadSkin()
 		end
 	end)
 	
-	for i=1, 42 do
-		_G["CalendarDayButton"..i]:SetFrameLevel(_G["CalendarDayButton"..i]:GetFrameLevel() + 1)
+	for i=1, 7 do
+		_G["CalendarContextMenuButton"..i]:StyleButton()
+	end
+	CalendarContextMenuButton4:StripTextures()
+	
+	for i = 1, 42 do
+		local Button = _G["CalendarDayButton"..i]
+		Button:SetFrameLevel(Button:GetFrameLevel() + 1)
+		Button:StripTextures()
+		Button:CreateBackdrop("Default")
+		Button:SetBackdropColor(0,0,0,0)
+		Button:GetHighlightTexture():SetTexture(1, 1, 1, 0.15)
+		for j = 1, 4 do
+			local EventButton = _G["CalendarDayButton"..i.."EventButton"..j]
+			EventButton:StripTextures()
+			EventButton:StyleButton()
+		end
 	end
 	
+	CalendarTodayFrame:StripTextures()
+	CalendarTodayFrame:CreateBackdrop("Default")
+	CalendarTodayFrame:Size(CalendarDayButton1:GetWidth(), CalendarDayButton1:GetHeight())
+	CalendarTodayFrame:SetBackdropBorderColor(0, 0.44, .87, 1)
+	CalendarTodayFrame:SetBackdropColor(0, 0, 0, 0)
+	CalendarTodayFrame:HookScript('OnUpdate', function(self) self:SetAlpha(CalendarTodayTextureGlow:GetAlpha()) end)
+	CalendarTodayFrame.backdrop:SetBackdropBorderColor(0, 0.44, .87, 1)
+	CalendarTodayFrame.backdrop:SetBackdropColor(0, 0, 0, 0)
+	CalendarTodayFrame.backdrop:CreateShadow()
+
 	CalendarCreateEventFrame:StripTextures()
 	CalendarCreateEventFrame:SetTemplate("Transparent")
-	CalendarCreateEventFrame:Point("TOPLEFT", CalendarFrame, "TOPRIGHT", 3, -24)
+	CalendarCreateEventFrame:Point("TOPLEFT", CalendarFrame, "TOPRIGHT", 2, -24)
 	CalendarCreateEventTitleFrame:StripTextures()
 	
 	S:HandleButton(CalendarCreateEventCreateButton, true)
@@ -128,17 +153,19 @@ local function LoadSkin()
 			local button = _G["CalendarClassButton"..i]
 			button:StripTextures()
 			button:CreateBackdrop("Default")
+			button:Size(23)
 			
 			local tcoords = CLASS_ICON_TCOORDS[class]
 			local buttonIcon = button:GetNormalTexture()
 			buttonIcon:SetTexture("Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes")
-			buttonIcon:SetTexCoord(tcoords[1] + 0.015, tcoords[2] - 0.02, tcoords[3] + 0.018, tcoords[4] - 0.02) --F U C K I N G H A X
+			buttonIcon:SetTexCoord(tcoords[1] + 0.015, tcoords[2] - 0.02, tcoords[3] + 0.018, tcoords[4] - 0.02)
 		end
 		
-		CalendarClassButton1:Point("TOPLEFT", CalendarClassButtonContainer, "TOPLEFT", 5, 0)
+		CalendarClassButton1:Point("TOPLEFT", CalendarClassButtonContainer, "TOPLEFT", 2, 0)
 		
 		CalendarClassTotalsButton:StripTextures()
 		CalendarClassTotalsButton:CreateBackdrop("Default")
+		CalendarClassTotalsButton:Size(23)
 	end)
 	
 	--Texture Picker Frame
@@ -146,12 +173,17 @@ local function LoadSkin()
 	CalendarTexturePickerTitleFrame:StripTextures()
 	
 	CalendarTexturePickerFrame:SetTemplate("Transparent")
+	CalendarTexturePickerFrame:Point("TOPRIGHT", CalendarFrame, "TOPRIGHT", 640, -22)
 	
 	S:HandleScrollBar(CalendarTexturePickerScrollBar)
 	S:HandleButton(CalendarTexturePickerAcceptButton, true)
 	S:HandleButton(CalendarTexturePickerCancelButton, true)
 	S:HandleButton(CalendarCreateEventInviteButton, true)
 	S:HandleButton(CalendarCreateEventRaidInviteButton, true)
+	
+	for i=1, 16 do
+		_G["CalendarTexturePickerScrollFrameButton"..i]:StyleButton()
+	end
 	
 	--Mass Invite Frame
 	CalendarMassInviteFrame:StripTextures()
@@ -171,21 +203,21 @@ local function LoadSkin()
 	--Raid View
 	CalendarViewRaidFrame:StripTextures()
 	CalendarViewRaidFrame:SetTemplate("Transparent")
-	CalendarViewRaidFrame:Point("TOPLEFT", CalendarFrame, "TOPRIGHT", 3, -24)
+	CalendarViewRaidFrame:Point("TOPLEFT", CalendarFrame, "TOPRIGHT", 1, -2)
 	CalendarViewRaidTitleFrame:StripTextures()
 	S:HandleCloseButton(CalendarViewRaidCloseButton)
 	
 	--Holiday View
 	CalendarViewHolidayFrame:StripTextures(true)
 	CalendarViewHolidayFrame:SetTemplate("Transparent")
-	CalendarViewHolidayFrame:Point("TOPLEFT", CalendarFrame, "TOPRIGHT", 3, -24)
+	CalendarViewHolidayFrame:Point("TOPLEFT", CalendarFrame, "TOPRIGHT", 1, -2)
 	CalendarViewHolidayTitleFrame:StripTextures()
 	S:HandleCloseButton(CalendarViewHolidayCloseButton)
 	
 	-- Event View
 	CalendarViewEventFrame:StripTextures()
 	CalendarViewEventFrame:SetTemplate("Transparent")
-	CalendarViewEventFrame:Point("TOPLEFT", CalendarFrame, "TOPRIGHT", 3, -24)
+	CalendarViewEventFrame:Point("TOPLEFT", CalendarFrame, "TOPRIGHT", 1, -2)
 	CalendarViewEventTitleFrame:StripTextures()
 	CalendarViewEventDescriptionContainer:StripTextures()
 	CalendarViewEventDescriptionContainer:SetTemplate("Transparent")

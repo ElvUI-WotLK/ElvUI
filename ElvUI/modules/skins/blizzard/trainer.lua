@@ -40,6 +40,23 @@ local function LoadSkin()
 			ClassTrainerSkillIcon:SetBackdrop(nil);
 		end
 	end);
+	
+	ClassTrainerCollapseAllButton:HookScript('OnUpdate', function(self)
+		self:SetNormalTexture("Interface\\Buttons\\UI-PlusMinus-Buttons")
+		self:SetHighlightTexture("")
+		self:GetNormalTexture():SetPoint("LEFT", 3, 2)
+		self:GetNormalTexture():Size(12)
+		if (self.collapsed) then
+			self:GetNormalTexture():SetTexCoord(0, 0.4375, 0, 0.4375)
+		else
+			self:GetNormalTexture():SetTexCoord(0.5625, 1, 0, 0.4375)
+		end
+		self:SetDisabledTexture("Interface\\Buttons\\UI-PlusMinus-Buttons")
+		self:GetDisabledTexture():SetPoint("LEFT", 3, 2)
+		self:GetDisabledTexture():Size(11)
+		self:GetDisabledTexture():SetTexCoord(0, 0.4375, 0, 0.4375)
+		self:GetDisabledTexture():SetDesaturated(true)
+	end)
 end
 
 S:RegisterSkin("Blizzard_TrainerUI", LoadSkin);

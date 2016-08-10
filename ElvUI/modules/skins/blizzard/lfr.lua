@@ -46,6 +46,7 @@ local function LoadSkin()
 		_G[button.."Left"]:Kill()
 		_G[button.."Middle"]:Kill()
 		_G[button.."Right"]:Kill()
+		_G[button]:StyleButton()
 	end
 	
 	for i=1, NUM_LFR_CHOICE_BUTTONS do
