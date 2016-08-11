@@ -233,46 +233,6 @@ function UF:Construct_DeathKnightResourceBar(frame)
 	return runes;
 end
 
-function UF:Construct_MageResourceBar(frame)
-	local bars = CreateFrame("Frame", nil, frame);
-	bars:CreateBackdrop("Default", nil, nil, self.thinBorders);
-
-	for i = 1, UF["classMaxResourceBar"][E.myclass] do
-		bars[i] = CreateFrame("StatusBar", nil, bars);
-		bars[i]:SetStatusBarTexture(E["media"].blankTex);
-		bars[i]:GetStatusBarTexture():SetHorizTile(false);
-		
-		bars[i].bg = bars[i]:CreateTexture(nil, "ARTWORK");
-		
-		UF["statusbars"][bars[i]] = true;
-
-		bars[i]:CreateBackdrop("Default", nil, nil, self.thinBorders);
-		bars[i].backdrop:SetParent(bars);
-	end
-	
-	bars.PostUpdate = UF.UpdateArcaneCharges;
-	bars:SetScript("OnShow", ToggleResourceBar);
-	bars:SetScript("OnHide", ToggleResourceBar);
-	
-	return bars;
-end
-
-function UF:UpdateArcaneCharges(event, arcaneCharges, maxCharges)
-	local frame = self.origParent or self:GetParent();
-	if(IsSpellKnown(31583) and arcaneCharges == 0) then
-		if(frame.db.classbar.autoHide) then
-			self:Hide();
-		else
-			for i = 1, maxCharges do
-				self[i]:SetValue(0);
-				self[i]:SetScript("OnUpdate", nil);
-			end
-			
-			self:Show();
-		end
-	end
-end
-
 function UF:Construct_DruidAltManaBar(frame)
 	local dpower = CreateFrame("Frame", nil, frame);
 	dpower:CreateBackdrop("Default", nil, nil, self.thinBorders);

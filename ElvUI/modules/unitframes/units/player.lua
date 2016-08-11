@@ -12,7 +12,7 @@ local _, ns = ...;
 local ElvUF = ns.oUF;
 assert(ElvUF, "ElvUI was unable to locate oUF.");
 
-local CAN_HAVE_CLASSBAR = (E.myclass == "DEATHKNIGHT" or E.myclass == "DRUID" or E.myclass == "MAGE");
+local CAN_HAVE_CLASSBAR = (E.myclass == "DEATHKNIGHT" or E.myclass == "DRUID");
 
 function UF:Construct_PlayerFrame(frame)
 	frame.Threat = self:Construct_Threat(frame, true);
@@ -33,9 +33,6 @@ function UF:Construct_PlayerFrame(frame)
 	elseif(E.myclass == "DRUID") then
 		frame.DruidAltMana = self:Construct_DruidAltManaBar(frame);
 		frame.ClassBar = "DruidAltMana";
-	elseif(E.myclass == "MAGE") then
-		frame.ArcaneChargeBar = self:Construct_MageResourceBar(frame);
-		frame.ClassBar = "ArcaneChargeBar";
 	end
 
 	frame.RaidIcon = UF:Construct_RaidIcon(frame);
