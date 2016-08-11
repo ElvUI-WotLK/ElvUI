@@ -52,8 +52,7 @@ UF["headerFunctions"] = {};
 
 UF["classMaxResourceBar"] = {
 	["DEATHKNIGHT"] = 6,
-	["DRUID"] = 1,
-	["MAGE"] = 4
+	["DRUID"] = 1
 };
 
 UF["mapIDs"] = {
@@ -341,8 +340,6 @@ function UF:UpdateColors()
 	ElvUF.colors.Runes[2] = E:GetColorTable(db.classResources.DEATHKNIGHT[2]);
 	ElvUF.colors.Runes[3] = E:GetColorTable(db.classResources.DEATHKNIGHT[3]);
 	ElvUF.colors.Runes[4] = E:GetColorTable(db.classResources.DEATHKNIGHT[4]);
-	
-	ElvUF.colors.ArcaneChargeBar = E:GetColorTable(db.classResources.MAGE);
 	
 	ElvUF.colors.ComboPoints = {};
 	ElvUF.colors.ComboPoints[1] = E:GetColorTable(db.classResources.comboPoints[1]);
