@@ -54,7 +54,7 @@ function UF:Construct_PartyFrames(unitGroup)
 		tinsert(self.__elements, UF.UpdateTargetGlow);
 		self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetGlow);
 		self:RegisterEvent("PLAYER_ENTERING_WORLD", UF.UpdateTargetGlow);
-		self:RegisterEvent("GROUP_ROSTER_UPDATE", UF.UpdateTargetGlow);
+		self:RegisterEvent("RAID_ROSTER_UPDATE", UF.UpdateTargetGlow);
 		self.Threat = UF:Construct_Threat(self);
 		self.RaidIcon = UF:Construct_RaidIcon(self);
 		self.ReadyCheck = UF:Construct_ReadyCheckIcon(self);
