@@ -24,9 +24,13 @@ local function LoadSkin()
 	S:HandleButton(GuildBankFramePurchaseButton, true)
 	
 	GuildBankFrameWithdrawButton:Point("RIGHT", GuildBankFrameDepositButton, "LEFT", -2, 0)
+	
 	GuildBankInfoScrollFrame:Point('TOPLEFT', GuildBankInfo, 'TOPLEFT', -10, 12)
 	GuildBankInfoScrollFrame:StripTextures()
-	GuildBankInfoScrollFrame:Width(GuildBankInfoScrollFrame:GetWidth() - 8)
+	GuildBankInfoScrollFrame:Width(GuildBankInfoScrollFrame:GetWidth() + 14)
+	
+	GuildBankTabInfoEditBox:SetWidth(702)
+	
 	GuildBankTransactionsScrollFrame:StripTextures()
 	
 	GuildBankFrame.inset = CreateFrame("Frame", nil, GuildBankFrame)
@@ -69,6 +73,13 @@ local function LoadSkin()
 		texture:SetTexCoord(unpack(E.TexCoords))
 		texture:SetDrawLayer("OVERLAY")
 	end
+	
+	GuildBankTab1:Point("TOPLEFT", GuildBankFrame, "TOPRIGHT", -3, -36)
+	GuildBankTab2:Point("TOPLEFT", GuildBankTab1, "BOTTOMLEFT", 0, 7)
+	GuildBankTab3:Point("TOPLEFT", GuildBankTab2, "BOTTOMLEFT", 0, 7)
+	GuildBankTab4:Point("TOPLEFT", GuildBankTab3, "BOTTOMLEFT", 0, 7)
+	GuildBankTab5:Point("TOPLEFT", GuildBankTab4, "BOTTOMLEFT", 0, 7)
+	GuildBankTab6:Point("TOPLEFT", GuildBankTab5, "BOTTOMLEFT", 0, 7)
 	
 	for i=1, 4 do
 		S:HandleTab(_G["GuildBankFrameTab"..i])

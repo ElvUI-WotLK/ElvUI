@@ -56,30 +56,59 @@ local function LoadSkin()
 		end
 		TradeSkillSkillIcon:SetTemplate("Default");
 
-		for i = 1, MAX_TRADE_SKILL_REAGENTS do
-			local reagent = _G["TradeSkillReagent" .. i];
-			local iconTexture = _G["TradeSkillReagent" .. i .. "IconTexture"];
-			local count = _G["TradeSkillReagent" .. i .. "Count"];
-
-			iconTexture:SetTexCoord(unpack(E.TexCoords));
-			iconTexture:SetDrawLayer("OVERLAY");
-
-			if(not reagent.backdrop) then
-				S:HandleIcon(iconTexture);
+		for i=1, MAX_TRADE_SKILL_REAGENTS do
+			local button = _G["TradeSkillReagent"..i]
+			local icon = _G["TradeSkillReagent"..i.."IconTexture"]
+			local count = _G["TradeSkillReagent"..i.."Count"]
+			
+			icon:SetTexCoord(unpack(E.TexCoords))
+			icon:SetDrawLayer("OVERLAY")
+			if not icon.backdrop then
+				icon.backdrop = CreateFrame("Frame", nil, button)
+				icon.backdrop:SetFrameLevel(button:GetFrameLevel() - 1)
+				icon.backdrop:SetTemplate("Default")
+				icon.backdrop:SetOutside(icon)
 			end
-
-			iconTexture:SetParent(reagent.backdrop);
-			count:SetParent(reagent.backdrop);
-			count:SetDrawLayer("OVERLAY");
-
-			if(i > 2 and once == false) then
-				local point, anchoredto, point2, x, y = reagent:GetPoint();
-				reagent:ClearAllPoints();
-				reagent:Point(point, anchoredto, point2, x, y - 3);
-				once = true;
+			icon:SetParent(icon.backdrop)
+			count:SetParent(icon.backdrop)
+			count:SetDrawLayer("OVERLAY")
+			
+			if i > 2 and once == false then
+				local point, anchoredto, point2, x, y = button:GetPoint()
+				button:ClearAllPoints()
+				button:Point(point, anchoredto, point2, x, y - 3)
+				once = true
 			end
-
-			_G["TradeSkillReagent" .. i .. "NameFrame"]:Kill();
+			
+			_G["TradeSkillReagent"..i.."NameFrame"]:Kill()
+		end
+		
+		local skillName, skillType, numAvailable, isExpanded, altVerb, numSkillUps = GetTradeSkillInfo(id);
+		local skillLink = GetTradeSkillItemLink(id)
+		if skillLink then
+			local quality = select(3, GetItemInfo(skillLink))
+			if (quality and quality > 1) then
+				TradeSkillSkillIcon:SetBackdropBorderColor(GetItemQualityColor(quality));
+			else
+				TradeSkillSkillIcon:SetBackdropBorderColor(unpack(E["media"].bordercolor));
+			end
+		end
+		
+		local numReagents = GetTradeSkillNumReagents(id);
+		for i = 1, numReagents, 1 do
+			local reagentName, reagentTexture, reagentCount, playerReagentCount = GetTradeSkillReagentInfo(id, i);
+			local reagentLink = GetTradeSkillReagentItemLink(id, i)
+			local reagent = _G["TradeSkillReagent"..i]
+			if reagent:IsShown() then
+				if reagentLink then
+					local quality = select(3, GetItemInfo(reagentLink))
+					if (quality and quality > 1) then
+						_G["TradeSkillReagent"..i.."IconTexture"].backdrop:SetBackdropBorderColor(GetItemQualityColor(quality));
+					else
+						_G["TradeSkillReagent"..i.."IconTexture"].backdrop:SetBackdropBorderColor(unpack(E["media"].bordercolor));
+					end
+				end
+			end
 		end
 	end);
 	
@@ -94,7 +123,7 @@ local function LoadSkin()
 			local skillName, skillType, numAvailable, isExpanded, altVerb, numSkillUps = GetTradeSkillInfo(skillIndex);
 			if ( skillIndex <= numTradeSkills ) then
 				if ( skillType == "header" ) then
-						buttonIndex = i;
+					buttonIndex = i;
 					local skillButton = _G["TradeSkillSkill"..buttonIndex];
 					skillButton:SetNormalTexture("Interface\\Buttons\\UI-PlusMinus-Buttons");
 					skillButton:GetNormalTexture():Size(12)
