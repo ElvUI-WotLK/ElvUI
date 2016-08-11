@@ -36,28 +36,33 @@ local function LoadSkin()
 	S:HandleButton(GearManagerDialogEquipSet)
 	S:HandleButton(GearManagerDialogSaveSet)
 	
-	--[[PaperDollFrameItemFlyoutHighlight:Kill()
+	PaperDollFrameItemFlyoutHighlight:Kill()
 	local function SkinItemFlyouts()
 		PaperDollFrameItemFlyoutButtons:StripTextures()
 		
-		for i=1, 25 do
-			local button = _G['PaperDollFrameItemFlyoutButtons'..i]
-			local icon = _G['PaperDollFrameItemFlyoutButtons'..i..'IconTexture']
+		for i=1, 25 do 
+			local button = _G["PaperDollFrameItemFlyoutButtons"..i]
+			local icon = _G["PaperDollFrameItemFlyoutButtons"..i.."IconTexture"]
 			if button then
-				button:StyleButton()
-				button:SetTemplate("Default", true)
 				button:GetNormalTexture():SetTexture(nil)
 				button:SetFrameLevel(button:GetFrameLevel() + 2)
+				button:StyleButton(false)
 				
 				icon:SetTexCoord(unpack(E.TexCoords))
-				icon:SetDrawLayer("OVERLAY")
-				icon:SetInside()
+				icon:ClearAllPoints()
+				icon:Point("TOPLEFT", 2, -2)
+				icon:Point("BOTTOMRIGHT", -2, 2)
+				
+				if not button.backdrop then
+					button:CreateBackdrop("Default")
+					button.backdrop:SetAllPoints()			
+				end
 			end
 		end
 	end
 	
 	PaperDollFrameItemFlyout:HookScript('OnShow', SkinItemFlyouts)
-	hooksecurefunc('PaperDollItemSlotButton_OnShow', SkinItemFlyouts)]]--
+	hooksecurefunc('PaperDollItemSlotButton_OnShow', SkinItemFlyouts)
 	
 	GearManagerDialogPopup:StripTextures()
 	GearManagerDialogPopup:CreateBackdrop("Transparent")

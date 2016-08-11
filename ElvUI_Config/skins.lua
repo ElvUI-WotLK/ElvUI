@@ -238,6 +238,11 @@ E.Options.args.skins = {
 					name = L["Trainer Frame"],
 					desc = L["TOGGLESKIN_DESC"],
 				},
+				tutorial = {
+					type = "toggle",
+					name = L["Tutorial Frame"],
+					desc = L["TOGGLESKIN_DESC"],
+				},
 				worldmap = {
 					type = "toggle",
 					name = L["World Map"],
