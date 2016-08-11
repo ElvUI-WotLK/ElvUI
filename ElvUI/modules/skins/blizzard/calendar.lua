@@ -87,6 +87,7 @@ local function LoadSkin()
 	for i = 1, 42 do
 		local button = _G["CalendarDayButton" .. i]
 		local eventTexture = _G["CalendarDayButton" .. i .. "EventTexture"];
+		local overlayFrame = _G["CalendarDayButton" .. i .. "OverlayFrame"];
 		button:SetFrameLevel(button:GetFrameLevel() + 1);
 		button:Size(91 - E.Border);
 		button:StripTextures();
@@ -94,6 +95,7 @@ local function LoadSkin()
 		button:GetHighlightTexture():SetInside();
 		button:GetHighlightTexture():SetTexture(1, 1, 1, 0.15);
 		eventTexture:SetInside();
+		overlayFrame:SetInside();
 
 		for j = 1, 4 do
 			local EventButton = _G["CalendarDayButton" .. i .. "EventButton" .. j]
