@@ -85,28 +85,41 @@ local function LoadSkin()
 	end
 	
 	for i = 1, 42 do
-		local Button = _G["CalendarDayButton"..i]
-		Button:SetFrameLevel(Button:GetFrameLevel() + 1)
-		Button:StripTextures()
-		Button:CreateBackdrop("Default")
-		Button:SetBackdropColor(0,0,0,0)
-		Button:GetHighlightTexture():SetTexture(1, 1, 1, 0.15)
+		local button = _G["CalendarDayButton" .. i]
+		local eventTexture = _G["CalendarDayButton" .. i .. "EventTexture"];
+		button:SetFrameLevel(button:GetFrameLevel() + 1);
+		button:Size(91 - E.Border);
+		button:StripTextures();
+		button:SetTemplate("Default", true);
+		button:GetHighlightTexture():SetInside();
+		button:GetHighlightTexture():SetTexture(1, 1, 1, 0.15);
+		eventTexture:SetInside();
+
 		for j = 1, 4 do
-			local EventButton = _G["CalendarDayButton"..i.."EventButton"..j]
+			local EventButton = _G["CalendarDayButton" .. i .. "EventButton" .. j]
 			EventButton:StripTextures()
 			EventButton:StyleButton()
+		end
+
+		button:ClearAllPoints();
+		if(i == 1) then
+			button:SetPoint("TOPLEFT", CalendarWeekday1Background, "BOTTOMLEFT", E.Spacing, 0);
+		elseif(mod(i, 7) == 1) then
+			button:SetPoint("TOPLEFT", _G["CalendarDayButton" .. (i - 7)], "BOTTOMLEFT", 0, -E.Border);
+		else
+			button:SetPoint("TOPLEFT", _G["CalendarDayButton" .. (i - 1)], "TOPRIGHT", E.Border, 0);
 		end
 	end
 	
 	CalendarTodayFrame:StripTextures()
-	CalendarTodayFrame:CreateBackdrop("Default")
+	CalendarTodayFrame:SetTemplate("Default")
 	CalendarTodayFrame:Size(CalendarDayButton1:GetWidth(), CalendarDayButton1:GetHeight())
-	CalendarTodayFrame:SetBackdropBorderColor(0, 0.44, .87, 1)
-	CalendarTodayFrame:SetBackdropColor(0, 0, 0, 0)
+	CalendarTodayFrame:SetBackdropBorderColor(unpack(E["media"].rgbvaluecolor));
+	local value = E.db["general"].valuecolor;
+	CalendarTodayFrame:SetBackdropColor(value.r, value.g, value.b, 0.3);
 	CalendarTodayFrame:HookScript('OnUpdate', function(self) self:SetAlpha(CalendarTodayTextureGlow:GetAlpha()) end)
-	CalendarTodayFrame.backdrop:SetBackdropBorderColor(0, 0.44, .87, 1)
-	CalendarTodayFrame.backdrop:SetBackdropColor(0, 0, 0, 0)
-	CalendarTodayFrame.backdrop:CreateShadow()
+	CalendarTodayFrame:CreateShadow()
+	CalendarTodayFrame.shadow:SetBackdropBorderColor(unpack(E["media"].rgbvaluecolor))
 
 	CalendarCreateEventFrame:StripTextures()
 	CalendarCreateEventFrame:SetTemplate("Transparent")
