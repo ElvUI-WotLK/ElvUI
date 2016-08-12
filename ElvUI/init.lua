@@ -102,7 +102,7 @@ function AddOn:OnInitialize()
 	GameMenuFrame:HookScript("OnShow", function()
 		if(not GameMenuFrame.isElvUI) then
 			GameMenuFrame:SetHeight(GameMenuFrame:GetHeight() + GameMenuButtonLogout:GetHeight() + 1);
-			GameMenuButton:Point("TOP", ElvUI_ButtonAddons or GameMenuButtonMacros, "BOTTOM", 0, -1);
+			GameMenuButton:Point("TOP", ElvUI_ButtonAddons or GameMenuButtonAddOns or GameMenuButtonMacros, "BOTTOM", 0, -1);
 			GameMenuButtonLogout:SetPoint("TOP", GameMenuButton, "BOTTOM", 0, -16);
 			GameMenuFrame.isElvUI = true;
 		end
