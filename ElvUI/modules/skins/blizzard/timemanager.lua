@@ -4,13 +4,19 @@ local S = E:GetModule("Skins");
 local function LoadSkin()
 	if(E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.timemanager ~= true) then return; end
 
-	TimeManagerFrame:CreateBackdrop("Transparent");
-	TimeManagerFrame.backdrop:Point("TOPLEFT", 14, -11);
-	TimeManagerFrame.backdrop:Point("BOTTOMRIGHT", -49, 9);
-
+	TimeManagerFrame:Size(190, 240);
 	TimeManagerFrame:StripTextures();
+	TimeManagerFrame:SetTemplate("Transparent");
 
+	E:CreateMover(TimeManagerFrame, "TimeManagerFrameMover", L["Time Manager Frame"]);
+	TimeManagerFrame.mover:SetFrameLevel(TimeManagerFrame:GetFrameLevel() + 4);
+
+	select(7, TimeManagerFrame:GetRegions()):Point("TOP", 0, -5);
+
+	TimeManagerCloseButton:Point("TOPRIGHT", 4, 5);
 	S:HandleCloseButton(TimeManagerCloseButton);
+
+	TimeManagerStopwatchFrame:Point("TOPRIGHT", 10, -12);
 
 	TimeManagerStopwatchFrameBackground:SetTexture(nil);
 
@@ -20,18 +26,22 @@ local function LoadSkin()
 	TimeManagerStopwatchCheck:GetNormalTexture():SetInside();
 	TimeManagerStopwatchCheck:GetNormalTexture():SetTexCoord(unpack(E.TexCoords));
 
+	TimeManagerAlarmTimeFrame:Point("TOPLEFT", 12, -65);
+
 	S:HandleDropDownBox(TimeManagerAlarmHourDropDown, 80);
 	S:HandleDropDownBox(TimeManagerAlarmMinuteDropDown, 80);
 	S:HandleDropDownBox(TimeManagerAlarmAMPMDropDown, 80);
 
 	S:HandleEditBox(TimeManagerAlarmMessageEditBox);
 
+	TimeManagerAlarmEnabledButton:Point("LEFT", 16, -45);
 	TimeManagerAlarmEnabledButton:SetNormalTexture(nil);
 	TimeManagerAlarmEnabledButton.SetNormalTexture = E.noop;
 	TimeManagerAlarmEnabledButton:SetPushedTexture(nil);
 	TimeManagerAlarmEnabledButton.SetPushedTexture = E.noop;
 	S:HandleButton(TimeManagerAlarmEnabledButton);
 
+	TimeManagerMilitaryTimeCheck:Point("TOPLEFT", 155, -190);
 	S:HandleCheckBox(TimeManagerMilitaryTimeCheck);
 	S:HandleCheckBox(TimeManagerLocalTimeCheck);
 
