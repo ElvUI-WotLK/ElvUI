@@ -922,6 +922,12 @@ function E:DBConversions()
 			E.global.unitframe.buffwatch[class][id] = nil;
 		end
 	end
+
+	if(type(E.global.general.WorldMapCoordinates) == "boolean") then
+		local enabledState = E.global.general.WorldMapCoordinates;
+		E.global.general.WorldMapCoordinates = nil;
+		E.global.general.WorldMapCoordinates.enable = enabledState;
+	end
 end
 
 local CPU_USAGE = {};

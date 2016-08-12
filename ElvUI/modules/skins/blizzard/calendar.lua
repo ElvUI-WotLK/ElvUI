@@ -49,8 +49,8 @@ local function LoadSkin()
 	
 	local bg = CreateFrame("Frame", "CalendarFrameBackdrop", CalendarFrame)
 	bg:SetTemplate("Default")
-	bg:Point("TOPLEFT", 10, -72)
-	bg:Point("BOTTOMRIGHT", -8, 3)
+	bg:Point("TOPLEFT", 8, -70)
+	bg:Point("BOTTOMRIGHT", -7, 0)
 	
 	CalendarContextMenu:SetTemplate("Default")
 	hooksecurefunc(CalendarContextMenu, "SetBackdropColor", function(self, r, g, b, a)
@@ -105,7 +105,7 @@ local function LoadSkin()
 
 		button:ClearAllPoints();
 		if(i == 1) then
-			button:SetPoint("TOPLEFT", CalendarWeekday1Background, "BOTTOMLEFT", E.Spacing, 0);
+			button:SetPoint("TOPLEFT", CalendarWeekday1Background, "BOTTOMLEFT", 0, 0);
 		elseif(mod(i, 7) == 1) then
 			button:SetPoint("TOPLEFT", _G["CalendarDayButton" .. (i - 7)], "BOTTOMLEFT", 0, -E.Border);
 		else
