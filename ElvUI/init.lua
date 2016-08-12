@@ -89,6 +89,26 @@ function AddOn:OnInitialize()
 	if IsAddOnLoaded("Tukui") then
 		self:StaticPopup_Show("TUKUI_ELVUI_INCOMPATIBLE")
 	end
+
+	local GameMenuButton = CreateFrame("Button", nil, GameMenuFrame, "GameMenuButtonTemplate");
+	GameMenuButton:Size(GameMenuButtonLogout:GetWidth(), GameMenuButtonLogout:GetHeight());
+
+	GameMenuButton:SetText(AddOnName);
+	GameMenuButton:SetScript("OnClick", function(self)
+		AddOn:ToggleConfig();
+		HideUIPanel(GameMenuFrame);
+	end);
+
+	GameMenuFrame:HookScript("OnShow", function()
+		if(not GameMenuFrame.isElvUI) then
+			GameMenuFrame:SetHeight(GameMenuFrame:GetHeight() + GameMenuButtonLogout:GetHeight() + 1);
+			GameMenuButton:Point("TOP", ElvUI_ButtonAddons or GameMenuButtonMacros, "BOTTOM", 0, -1);
+			GameMenuButtonLogout:SetPoint("TOP", GameMenuButton, "BOTTOM", 0, -16);
+			GameMenuFrame.isElvUI = true;
+		end
+	end);
+	local S = AddOn:GetModule("Skins");
+	S:HandleButton(GameMenuButton);
 end
 
 local f = CreateFrame("Frame");
