@@ -869,15 +869,15 @@ function E:DBConversions()
 		end
 	end
 	
-	if(E.db.general.experience.width > 100 and E.db.general.experience.height > 100) then
-		E.db.general.experience.width = P.general.experience.width;
-		E.db.general.experience.height = P.general.experience.height;
+	if(E.db.databars.experience.width > 100 and E.db.databars.experience.height > 100) then
+		E.db.databars.experience.width = P.databars.experience.width;
+		E.db.databars.experience.height = P.databars.experience.height;
 		E:Print("Experience bar appears to be an odd shape. Resetting to default size.");
 	end
 	
-	if(E.db.general.reputation.width > 100 and E.db.general.reputation.height > 100) then
-		E.db.general.reputation.width = P.general.reputation.width;
-		E.db.general.reputation.height = P.general.reputation.height;
+	if(E.db.databars.reputation.width > 100 and E.db.databars.reputation.height > 100) then
+		E.db.databars.reputation.width = P.databars.reputation.width;
+		E.db.databars.reputation.height = P.databars.reputation.height;
 		E:Print("Reputation bar appears to be an odd shape. Resetting to default size.");
 	end
 	
