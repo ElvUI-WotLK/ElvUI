@@ -637,7 +637,17 @@ function NP:OnShow()
 	myPlate.nameText = gsub(self.name:GetText(), FSPAT,"");
 	
 	NP:CheckRaidIcon(self);
-	NP:UpdateAuras(self);
+	
+	if(NP.db.buffs.enable) then
+		NP:UpdateAuraIcons(myPlate.Buffs);
+	end
+	if(NP.db.debuffs.enable) then
+		NP:UpdateAuraIcons(myPlate.Debuffs);
+	end
+	if(NP.db.buffs.enable or NP.db.debuffs.enable) then
+		NP:UpdateElement_Auras(self);
+	end
+	
 	NP:UpdateComboPoints(self);
 	
 	if(not NP.db.targetIndicator.colorMatchHealthBar) then
@@ -666,15 +676,15 @@ function NP:OnHide()
 	myPlate.healthBar:SetSize(NP.db.healthBar.width, NP.db.healthBar.height);
 	myPlate.castBar.icon:Size(NP.db.castBar.height + NP.db.healthBar.height + 5);
 	
-	if(myPlate.BuffWidget) then
-		for index = 1, #myPlate.BuffWidget.icons do 
-			NP.PolledHideIn(myPlate.BuffWidget.icons[index], 0);
+	if(myPlate.Buffs) then
+		for index = 1, #myPlate.Buffs.icons do 
+			NP.PolledHideIn(myPlate.Buffs.icons[index], 0);
 		end
 	end
 	
-	if(myPlate.DebuffWidget) then
-		for index = 1, #myPlate.DebuffWidget.icons do 
-			NP.PolledHideIn(myPlate.DebuffWidget.icons[index], 0);
+	if(myPlate.Debuffs) then
+		for index = 1, #myPlate.Debuffs.icons do 
+			NP.PolledHideIn(myPlate.Debuffs.icons[index], 0);
 		end
 	end
 	
@@ -686,52 +696,6 @@ function NP:OnHide()
 	--myPlate:Hide()
 	
 	--myPlate:SetPoint("BOTTOMLEFT", self, "BOTTOMLEFT") --Prevent nameplate being in random location on screen when first shown
-end
-
-function NP:SizeAuraHeader(myPlate, width, auraHeader, dbTable)
-	local db = NP.db[dbTable];
-	local baseSpacing = 1;
-	local numAuras = db.numAuras;
-	local auraWidth = ((width - (baseSpacing * (numAuras - 1))) / numAuras);
-	local auraHeight = (db.stretchTexture and (auraWidth * 0.72) or auraWidth);
-	
-	for index = 1, numAuras do
-		if(not auraHeader.icons[index]) then
-			auraHeader.icons[index] = NP:CreateAuraIcon(auraHeader, myPlate, dbTable); 
-		end
-		
-		auraHeader.icons[index]:SetWidth(auraWidth);
-		auraHeader.icons[index]:SetHeight(auraHeight);
-		auraHeader.icons[index]:ClearAllPoints();
-		if(dbTable == "debuffs") then
-			if(index == 1) then
-				auraHeader.icons[index]:SetPoint("LEFT", auraHeader, 0, 0);
-			else
-				auraHeader.icons[index]:SetPoint("LEFT", auraHeader.icons[index-1], "RIGHT", baseSpacing, 0);
-			end
-		else
-			if(index == 1) then
-				auraHeader.icons[index]:SetPoint("RIGHT", auraHeader, 0, 0);
-			else
-				auraHeader.icons[index]:SetPoint("RIGHT", auraHeader.icons[index-1], "LEFT", -baseSpacing, 0);
-			end
-		end
-	end
-	
-	if(numAuras > #auraHeader.icons) then
-		for index = (numAuras + 1), #auraHeader.icons do
-			NP.PolledHideIn(auraHeader.icons[index], 0);
-		end
-	end
-	
-	auraHeader.numAuras = numAuras;
-end
-
-function NP:HealthBar_OnSizeChanged(width, height)
-	--Adjust aura width/height ratio based on the healthBar width
-	width = floor(width + 0.5);
-	NP:SizeAuraHeader(self, width, self:GetParent().BuffWidget, "buffs");
-	NP:SizeAuraHeader(self, width, self:GetParent().DebuffWidget, "debuffs");
 end
 
 function NP:HealthBar_OnValueChanged(value)
@@ -832,42 +796,17 @@ function NP:UpdateSettings()
 	myPlate.raidIcon:SetPoint(E.InversePoints[NP.db.raidIcon.attachTo], myPlate.healthBar, NP.db.raidIcon.attachTo, NP.db.raidIcon.xOffset, NP.db.raidIcon.yOffset);
 	myPlate.raidIcon:SetSize(NP.db.raidIcon.size, NP.db.raidIcon.size);
 	
-	local auraFont = LSM:Fetch("font", NP.db.buffs.font);
-	for index = 1, #myPlate.BuffWidget.icons do
-		if(myPlate.BuffWidget.icons and myPlate.BuffWidget.icons[index]) then
-			myPlate.BuffWidget.icons[index].TimeLeft:FontTemplate(auraFont, NP.db.buffs.fontSize, NP.db.buffs.fontOutline);
-			myPlate.BuffWidget.icons[index].Stacks:FontTemplate(auraFont, NP.db.buffs.fontSize, NP.db.buffs.fontOutline);
-			
-			if(NP.db.buffs.stretchTexture) then
-				myPlate.BuffWidget.icons[index].Icon:SetTexCoord(.07, 0.93, .23, 0.77);
-			else
-				myPlate.BuffWidget.icons[index].Icon:SetTexCoord(.07, .93, .07, .93);
-			end
-		end
-	end
+	myPlate.Buffs.db = NP.db.buffs;
+	myPlate.Debuffs.db = NP.db.debuffs;
 	
-	local yOffset = NP.db.debuffs.stretchTexture and -8 or -2;
-	myPlate.BuffWidget:SetPoint("BOTTOMRIGHT", myPlate.DebuffWidget, "TOPRIGHT", 0, yOffset);
-	myPlate.BuffWidget:SetPoint("BOTTOMLEFT", myPlate.DebuffWidget, "TOPLEFT", 0, yOffset);
+	--local yOffset = NP.db.debuffs.stretchTexture and -8 or -2;
+	--myPlate.Buffs:SetPoint("BOTTOMRIGHT", myPlate.Debuffs, "TOPRIGHT", 0, yOffset);
+	--myPlate.Buffs:SetPoint("BOTTOMLEFT", myPlate.Debuffs, "TOPLEFT", 0, yOffset);
 	
-	auraFont = LSM:Fetch("font", NP.db.debuffs.font);
-	for index = 1, #myPlate.DebuffWidget.icons do 
-		if(myPlate.DebuffWidget.icons and myPlate.DebuffWidget.icons[index]) then
-			myPlate.DebuffWidget.icons[index].TimeLeft:FontTemplate(auraFont, NP.db.debuffs.fontSize, NP.db.debuffs.fontOutline);
-			myPlate.DebuffWidget.icons[index].Stacks:FontTemplate(auraFont, NP.db.debuffs.fontSize, NP.db.debuffs.fontOutline);
-			
-			if(NP.db.debuffs.stretchTexture) then
-				myPlate.DebuffWidget.icons[index].Icon:SetTexCoord(.07, 0.93, .23, 0.77);
-			else
-				myPlate.DebuffWidget.icons[index].Icon:SetTexCoord(.07, .93, .07, .93);
-			end
-		end
-	end
-	
-	local stringHeight = myPlate.name:GetStringHeight();
-	local yOffset = stringHeight > 0 and stringHeight or myPlate.name.stringHeight;
-	myPlate.DebuffWidget:SetPoint("BOTTOMRIGHT", myPlate.healthBar, "TOPRIGHT", 0, yOffset);
-	myPlate.DebuffWidget:SetPoint("BOTTOMLEFT", myPlate.healthBar, "TOPLEFT", 0, yOffset);
+	--local stringHeight = myPlate.name:GetStringHeight();
+	--local yOffset = stringHeight > 0 and stringHeight or myPlate.name.stringHeight;
+	--myPlate.Debuffs:SetPoint("BOTTOMRIGHT", myPlate.healthBar, "TOPRIGHT", 0, yOffset);
+	--myPlate.Debuffs:SetPoint("BOTTOMLEFT", myPlate.healthBar, "TOPLEFT", 0, yOffset);
 	
 	if(NP.db.comboPoints and not myPlate.cPoints:IsShown()) then
 		myPlate.cPoints:Show();
@@ -876,7 +815,6 @@ function NP:UpdateSettings()
 	end
 	
 	NP.OnShow(self);
-	NP.HealthBar_OnSizeChanged(myPlate.healthBar, myPlate.healthBar:GetSize());
 end
 
 function NP:CreatePlate(frame)
@@ -892,7 +830,6 @@ function NP:CreatePlate(frame)
 	myPlate.healthBar:SetPoint("BOTTOM", myPlate, "BOTTOM", 0, 5);
 	myPlate.healthBar:SetFrameStrata("BACKGROUND");
 	myPlate.healthBar:SetFrameLevel(0);
-	myPlate.healthBar:SetScript("OnSizeChanged", NP.HealthBar_OnSizeChanged);
 	NP:CreateBackdrop(myPlate.healthBar);
 	
 	myPlate.healthBar.text = myPlate.healthBar:CreateFontString(nil, "OVERLAY");
@@ -937,25 +874,9 @@ function NP:CreatePlate(frame)
 	myPlate.overlay:SetAllPoints(myPlate.healthBar);
 	myPlate.overlay:SetTexture(1, 1, 1, 0.3);
 	myPlate.overlay:Hide();
-	
-	local debuffHeader = CreateFrame("Frame", nil, myPlate);
-	local yOffset = myPlate.name.stringHeight or 10;
-	debuffHeader:SetHeight(32); debuffHeader:Show();
-	debuffHeader:SetPoint("BOTTOMRIGHT", myPlate.healthBar, "TOPRIGHT", 0, yOffset);
-	debuffHeader:SetPoint("BOTTOMLEFT", myPlate.healthBar, "TOPLEFT", 0, yOffset);
-	debuffHeader:SetFrameStrata("BACKGROUND");
-	debuffHeader:SetFrameLevel(0);
-	debuffHeader.PollFunction = NP.UpdateAuraTime;
-	debuffHeader.icons = {};
-	myPlate.DebuffWidget = debuffHeader;
-	
-	local buffHeader = CreateFrame("Frame", nil, myPlate);
-	buffHeader:SetHeight(32); buffHeader:Show();
-	buffHeader:SetFrameStrata("BACKGROUND");
-	buffHeader:SetFrameLevel(0);
-	buffHeader.PollFunction = NP.UpdateAuraTime;
-	buffHeader.icons = {};
-	myPlate.BuffWidget = buffHeader;
+
+	myPlate.Buffs = self:ConstructElement_Auras(frame.UnitFrame, 5, "LEFT");
+	myPlate.Debuffs = self:ConstructElement_Auras(frame.UnitFrame, 5, "RIGHT");
 	
 	myPlate.lowHealth = CreateFrame("Frame", nil, myPlate);
 	myPlate.lowHealth:SetFrameLevel(0);
@@ -1226,71 +1147,6 @@ function NP:SetSpellDuration(spellID, duration)
 	if spellID then NP.CachedAuraDurations[spellID] = duration end
 end
 
-function NP:CreateAuraIcon(frame, parent, dbTable)
-	local noscalemult = E.mult * UIParent:GetScale()
-	local button = CreateFrame("Frame",nil,frame)
-	button:SetScript("OnHide", function()
-		if frame.guid then
-			NP:UpdateIconGrid(parent, frame.guid)
-		end
-	end)
-	local db = NP.db[dbTable]
-	if E.PixelMode then
-		button.bord = button:CreateTexture(nil, "BACKGROUND");
-		button.bord:SetTexture(unpack(E["media"].bordercolor));
-		button.bord:SetPoint("TOPLEFT", button, "TOPLEFT", noscalemult, -noscalemult);
-		button.bord:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -noscalemult, noscalemult);
-		
-		button.Icon = button:CreateTexture(nil, "BORDER");
-		button.Icon:SetPoint("TOPLEFT", button, "TOPLEFT", noscalemult*2, -noscalemult*2);
-		button.Icon:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -noscalemult*2, noscalemult*2);
-
-		if db.stretchTexture then
-			button.Icon:SetTexCoord(.07, 0.93, .23, 0.77)
-		else
-			button.Icon:SetTexCoord(.07, .93, .07, .93)
-		end
-	else
-		button.bg = button:CreateTexture(nil, "BACKGROUND");
-		button.bg:SetTexture(0, 0, 0, 1);
-		button.bg:SetAllPoints(button);
-		
-		button.bord = button:CreateTexture(nil, "BORDER");
-		button.bord:SetTexture(unpack(E["media"].bordercolor));
-		button.bord:SetPoint("TOPLEFT", button, "TOPLEFT", noscalemult, -noscalemult);
-		button.bord:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -noscalemult, noscalemult);
-		
-		button.bg2 = button:CreateTexture(nil, "ARTWORK")
-		button.bg2:SetTexture(0, 0, 0, 1);
-		button.bg2:SetPoint("TOPLEFT", button, "TOPLEFT", noscalemult*2, -noscalemult*2);
-		button.bg2:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -noscalemult*2, noscalemult*2);
-		
-		button.Icon = button:CreateTexture(nil, "OVERLAY");
-		button.Icon:SetPoint("TOPLEFT", button, "TOPLEFT", noscalemult*3, -noscalemult*3);
-		button.Icon:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -noscalemult*3, noscalemult*3);
-		if db.stretchTexture then
-			button.Icon:SetTexCoord(.07, 0.93, .23, 0.77)
-		else
-			button.Icon:SetTexCoord(.07, .93, .07, .93)
-		end
-	end
-	
-	local font = LSM:Fetch("font", db.font)
-	button.TimeLeft = button:CreateFontString(nil, "OVERLAY")
-	button.TimeLeft:SetFont(font, db.fontSize, db.fontOutline)
-	button.TimeLeft:Point("TOPLEFT", 2, 2)
-	button.TimeLeft:SetJustifyH("CENTER")	
-	
-	button.Stacks = button:CreateFontString(nil,"OVERLAY")
-	button.Stacks:SetFont(font, db.fontSize, db.fontOutline)
-	button.Stacks:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 2, -2)
-
-	button.Poll = frame.PollFunction
-	button:Hide() 
-	
-	return button
-end
-
 function NP:UpdateAuraTime(frame, expiration)
 	local timeleft = expiration-GetTime()
 	local timervalue, formatid = E:GetTimeInfo(timeleft, 4)
@@ -1335,41 +1191,41 @@ function NP:GetAuraInstance(guid, auraID)
 end
 
 function NP:SetAuraInstance(guid, spellID, expiration, stacks, caster, duration, texture, auraType, auraTarget)
-	local filter = false
-	local db = self.db.buffs
+	local filter = false;
+	local db = self.db.buffs;
 	if(auraType == AURA_TYPE_DEBUFF) then
-		db = self.db.debuffs
+		db = self.db.debuffs;
 	end
 
-	if (db.showPersonal and caster == UnitGUID("player")) then
+	if(db.filters.personal and caster == UnitGUID("player")) then
 		filter = true;
 	end
-	
-	local trackFilter = E.global["unitframe"]["aurafilters"][db.additionalFilter]
-	if db.additionalFilter and trackFilter then
-		local name = GetSpellInfo(spellID)
-		local spellList = trackFilter.spells
-		local type = trackFilter.type
-		if type == "Blacklist" then
-			if spellList[name] and spellList[name].enable then
+
+	local trackFilter = E.global["unitframe"]["aurafilters"][db.filters.filter];
+	if(db.filters.filter and trackFilter) then
+		local name = GetSpellInfo(spellID);
+		local spellList = trackFilter.spells;
+		local type = trackFilter.type;
+		if(type == "Blacklist") then
+			if(spellList[name] and spellList[name].enable) then
 				filter = false;
 			end
 		else
-			if spellList[name] and spellList[name].enable then
+			if(spellList[name] and spellList[name].enable) then
 				filter = true;
 			end
 		end
 	end
-	
-	if E.global.unitframe.InvalidSpells[spellID] then
+
+	if(E.global.unitframe.InvalidSpells[spellID]) then
 		filter = false;
 	end
 
-	if filter ~= true then
+	if(filter ~= true) then
 		return;
 	end
 
-	if guid and spellID and caster and texture then
+	if(guid and spellID and caster and texture) then
 		local auraID = spellID..(tostring(caster or "UNKNOWN_CASTER"))
 		local instanceID = guid..auraID
 		NP.AuraList[guid] = NP.AuraList[guid] or {}
@@ -1426,7 +1282,7 @@ function NP:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, ...)
 
 		local frame = self:SearchForFrame(destGUID, raidIcon, name)
 		if(frame) then
-			NP:UpdateAuras(frame)
+			NP:UpdateElement_Auras(frame)
 		end
 	end
 end
@@ -1478,105 +1334,11 @@ function NP:UpdateAurasByUnitID(unit)
 	
 	local frame = self:SearchForFrame(guid, raidIcon, name)
 	if frame then
-		NP:UpdateAuras(frame)
+		NP:UpdateElement_Auras(frame)
 	end
 end
 
-function NP:UpdateIcon(frame, texture, expiration, stacks)
-	if frame and texture and expiration then
-		-- Icon
-		frame.Icon:SetTexture(texture)
-		
-		-- Stacks
-		if stacks > 1 then 
-			frame.Stacks:SetText(stacks)
-		else 
-			frame.Stacks:SetText("") 
-		end
-		
-		-- Expiration
-		frame:Show()
-		NP.PolledHideIn(frame, expiration)
-	else 
-		NP.PolledHideIn(frame, 0)
-	end
-end
-
-local function sortByExpiration(a, b) 
-	return a.expiration < b.expiration
-end
-
-function NP:UpdateIconGrid(frame, guid)
-	local myPlate = NP.CreatedPlates[frame]
-	local buffs = myPlate.BuffWidget 
-	local debuffs = myPlate.DebuffWidget 
-	local AurasOnUnit = self:GetAuraList(guid)
-	local BuffSlotIndex = 1
-	local DebuffSlotIndex = 1
-	local instanceid
-
-	-- Cache displayable auras
-	if AurasOnUnit then
-		buffs:Show()
-		debuffs:Show()
-		for instanceid in pairs(AurasOnUnit) do
-			local aura = {} --THIS IS BAD, FIX IT
-			aura.spellID, aura.expiration, aura.stacks, aura.caster, aura.duration, aura.texture, aura.type, aura.target = self:GetAuraInstance(guid, instanceid)
-			if tonumber(aura.spellID) then
-				aura.name = GetSpellInfo(tonumber(aura.spellID))
-				aura.unit = frame.unit
-				-- Get Order/Priority
-				if aura.expiration > GetTime() then
-					if(aura.type == "BUFF") then
-						tinsert(self.BuffCache, aura)
-					else
-						tinsert(self.DebuffCache, aura)
-					end
-				end
-			end
-		end
-	end
-
-	tsort(self.BuffCache, sortByExpiration)
-	tsort(self.DebuffCache, sortByExpiration)	
-
-	for index = 1, #self.BuffCache do
-		local cachedaura = self.BuffCache[index]
-		if cachedaura.spellID and cachedaura.expiration then 
-			self:UpdateIcon(buffs.icons[BuffSlotIndex], cachedaura.texture, cachedaura.expiration, cachedaura.stacks) 
-			BuffSlotIndex = BuffSlotIndex + 1
-		end
-
-		if(BuffSlotIndex > NP.db.buffs.numAuras) then 
-			break 
-		end
-	end
-
-	for index = 1, #self.DebuffCache do
-		local cachedaura = self.DebuffCache[index]
-		if cachedaura.spellID and cachedaura.expiration then 
-			self:UpdateIcon(debuffs.icons[DebuffSlotIndex], cachedaura.texture, cachedaura.expiration, cachedaura.stacks) 
-			DebuffSlotIndex = DebuffSlotIndex + 1
-		end
-
-		if(DebuffSlotIndex > NP.db.debuffs.numAuras) then 
-			break 
-		end
-	end
-	
-	if buffs.icons[BuffSlotIndex] then
-		NP.PolledHideIn(buffs.icons[BuffSlotIndex], 0)
-	end
-
-	if debuffs.icons[DebuffSlotIndex] then
-		NP.PolledHideIn(debuffs.icons[DebuffSlotIndex], 0)
-	end
-
-	self.BuffCache = wipe(self.BuffCache)
-	self.DebuffCache = wipe(self.DebuffCache)	
-end
-
-function NP:UpdateAuras(frame)
+function NP:UpdateElement_Auras(frame)
 	-- Check for ID
 	local guid = frame.guid
 	local myPlate = NP.CreatedPlates[frame]
@@ -1593,13 +1355,104 @@ function NP:UpdateAuras(frame)
 		if guid then
 			frame.guid = guid
 		else
-			myPlate.DebuffWidget:Hide()
-			myPlate.BuffWidget:Hide()
+			myPlate.Debuffs:Hide()
+			myPlate.Buffs:Hide()
 			return
 		end
 	end
 
-	self:UpdateIconGrid(frame, guid)
+	local buffs = myPlate.Buffs;
+	local debuffs = myPlate.Debuffs;
+	local aurasOnUnit = self:GetAuraList(guid);
+	local BuffSlotIndex = 1;
+	local DebuffSlotIndex = 1;
+	local hasBuffs = false
+	local hasDebuffs = false
+
+	if(aurasOnUnit) then
+		for instanceid in pairs(aurasOnUnit) do
+			local aura = {};
+			aura.spellID, aura.expirationTime, aura.count, aura.caster, aura.duration, aura.icon, aura.type, aura.target = self:GetAuraInstance(guid, instanceid);
+			if(tonumber(aura.spellID)) then
+				aura.name = GetSpellInfo(tonumber(aura.spellID));
+				aura.unit = frame.unit;
+				if(aura.expirationTime > GetTime()) then
+					if(aura.type == "BUFF") then
+						tinsert(self.BuffCache, aura);
+					else
+						tinsert(self.DebuffCache, aura);
+					end
+				end
+			end
+		end
+	end
+
+	if(self.db.buffs.enable) then
+		buffs:Show();
+		for index = 1, #self.BuffCache do
+			local cachedaura = self.BuffCache[index];
+			if(cachedaura and cachedaura.spellID and cachedaura.expirationTime) then
+				self:SetAura(buffs.icons[BuffSlotIndex], cachedaura.icon, cachedaura.count, cachedaura.duration, cachedaura.expirationTime);
+				BuffSlotIndex = BuffSlotIndex + 1;
+				hasBuffs = true
+			end
+
+			if(BuffSlotIndex > NP.db.buffs.numAuras) then
+				break;
+			end
+		end
+	else
+		buffs:Hide();
+	end
+
+	if(self.db.debuffs.enable) then
+		debuffs:Show();
+		for index = 1, #self.DebuffCache do
+			local cachedaura = self.DebuffCache[index];
+			if(cachedaura.spellID and cachedaura.expirationTime) then
+				self:SetAura(debuffs.icons[DebuffSlotIndex], cachedaura.icon, cachedaura.count, cachedaura.duration, cachedaura.expirationTime);
+				DebuffSlotIndex = DebuffSlotIndex + 1;
+				hasDebuffs = true
+			end
+
+			if(DebuffSlotIndex > NP.db.debuffs.numAuras) then
+				break;
+			end
+		end
+	else
+		debuffs:Hide();
+	end
+	
+	if(buffs.icons[BuffSlotIndex]) then
+		NP.PolledHideIn(buffs.icons[BuffSlotIndex], 0);
+	end
+
+	if(debuffs.icons[DebuffSlotIndex]) then
+		NP.PolledHideIn(debuffs.icons[DebuffSlotIndex], 0);
+	end
+
+	self.BuffCache = wipe(self.BuffCache);
+	self.DebuffCache = wipe(self.DebuffCache);
+
+	local TopLevel = myPlate.healthBar;
+	local TopOffset = select(2, myPlate.name:GetFont()) + 5 or 0;
+	if(hasDebuffs) then
+		TopOffset = TopOffset + 3;
+		debuffs:SetPoint("BOTTOMLEFT", TopLevel, "TOPLEFT", 0, TopOffset);
+		debuffs:SetPoint("BOTTOMRIGHT", TopLevel, "TOPRIGHT", 0, TopOffset);
+		TopLevel = debuffs;
+		TopOffset = 3;
+	end
+
+	if(hasBuffs) then
+		if(not hasDebuffs) then
+			TopOffset = TopOffset + 3;
+		end
+		buffs:SetPoint("BOTTOMLEFT", TopLevel, "TOPLEFT", 0, TopOffset);
+		buffs:SetPoint("BOTTOMRIGHT", TopLevel, "TOPRIGHT", 0, TopOffset);
+		TopLevel = buffs;
+		TopOffset = 3;
+	end
 end
 
 function NP:UpdateAuraByLookup(guid)

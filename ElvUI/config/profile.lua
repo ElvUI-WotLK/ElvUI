@@ -167,24 +167,27 @@ P["nameplate"] = {
 		["goodTransitionColor"] = {r = 218/255, g = 197/255, b = 92/255},
 		["badTransitionColor"] = {r = 240/255, g = 154/255, b = 17/255},
 	},
-	['buffs'] = {
-		['font'] = 'Homespun',
-		['fontSize'] = 7,
-		['fontOutline'] = 'MONOCHROMEOUTLINE',
-		['numAuras'] = 4,
-		['stretchTexture'] = true,
-		['showPersonal'] = false,
-		['additionalFilter'] = 'TurtleBuffs',
-	},	
-	['debuffs'] = {
-		['font'] = 'Homespun',
-		['fontSize'] = 7,
-		['fontOutline'] = 'MONOCHROMEOUTLINE',
-		['numAuras'] = 4,
-		['stretchTexture'] = true,
-		['showPersonal'] = true,
-		['additionalFilter'] = 'CCDebuffs',
-	},		
+	["buffs"] = {
+		["enable"] = true,
+		["numAuras"] = 4,
+		["baseHeight"] = 18,
+		["filters"] = {
+			["personal"] = true,
+			["maxDuration"] = 120,
+			["filter"] = "TurtleBuffs"
+		}
+	},
+	["debuffs"] = {
+		["enable"] = true,
+		["numAuras"] = 4,
+		["baseHeight"] = 18,
+		["filters"] = {
+			["personal"] = true,
+			["maxDuration"] = 120,
+			["filter"] = "CCDebuffs"
+		}
+	},
+	
 	['reactions'] = {
 		["tapped"] = {r = 0.6, g = 0.6, b = 0.6},
 		["friendlyNPC"] = {r = 0.31, g = 0.45, b = 0.63},
