@@ -17,13 +17,6 @@ function mod:SetAura(aura, icon, count, duration, expirationTime)
 		else
 			aura.count:SetText("");
 		end
-		if(expirationTime and expirationTime ~= 0) then
-			local startTime = expirationTime - duration;
-			aura.cooldown:SetCooldown(startTime, duration);
-			aura.cooldown:Show();
-		else
-			aura.cooldown:Hide();
-		end
 		aura:Show();
 		mod.PolledHideIn(aura, expirationTime);
 	else 
@@ -45,16 +38,15 @@ function mod:CreateAuraIcon(parent)
 	aura.icon:SetAllPoints();
 	aura.icon:SetTexCoord(unpack(E.TexCoords));
 
-	aura.cooldown = CreateFrame("Cooldown", nil, aura, "CooldownFrameTemplate");
-	aura.cooldown:SetAllPoints(aura);
-	aura.cooldown:SetReverse(true);
-	aura.cooldown.SizeOverride = 10;
-	E:RegisterCooldown(aura.cooldown);
+	aura.timeLeft = aura:CreateFontString(nil, "OVERLAY");
+	aura.timeLeft:SetPoint("TOPLEFT", 2, 2);
+	aura.timeLeft:SetFont(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline);
 
 	aura.count = aura:CreateFontString(nil, "OVERLAY");
 	aura.count:SetPoint("BOTTOMRIGHT");
 	aura.count:SetFont(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline);
-	aura.Poll = parent.PollFunction
+	aura.Poll = parent.PollFunction;
+
 	return aura;
 end
 
@@ -110,6 +102,7 @@ function mod:ConstructElement_Auras(frame, maxAuras, side)
 	auras:SetScript("OnSizeChanged", mod.Auras_SizeChanged);
 	auras:SetHeight(18);
 	auras.side = side;
+	auras.PollFunction = mod.UpdateAuraTime;
 	auras.icons = {};
 
 	return auras;

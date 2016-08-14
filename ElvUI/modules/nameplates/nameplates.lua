@@ -875,8 +875,8 @@ function NP:CreatePlate(frame)
 	myPlate.overlay:SetTexture(1, 1, 1, 0.3);
 	myPlate.overlay:Hide();
 
-	myPlate.Buffs = self:ConstructElement_Auras(frame.UnitFrame, 5, "LEFT");
-	myPlate.Debuffs = self:ConstructElement_Auras(frame.UnitFrame, 5, "RIGHT");
+	myPlate.Buffs = self:ConstructElement_Auras(frame.UnitFrame, 5, "RIGHT");
+	myPlate.Debuffs = self:ConstructElement_Auras(frame.UnitFrame, 5, "LEFT");
 	
 	myPlate.lowHealth = CreateFrame("Frame", nil, myPlate);
 	myPlate.lowHealth:SetFrameLevel(0);
@@ -1148,13 +1148,13 @@ function NP:SetSpellDuration(spellID, duration)
 end
 
 function NP:UpdateAuraTime(frame, expiration)
-	local timeleft = expiration-GetTime()
-	local timervalue, formatid = E:GetTimeInfo(timeleft, 4)
-	local format = E.TimeFormats[3][2]
-	if timervalue < 4 then
-		format = E.TimeFormats[4][2]
+	local timeleft = expiration - GetTime();
+	local timervalue, formatid = E:GetTimeInfo(timeleft, 4);
+	local format = E.TimeFormats[3][2];
+	if(timervalue < 4) then
+		format = E.TimeFormats[4][2];
 	end
-	frame.TimeLeft:SetFormattedText(("%s%s|r"):format(TimeColors[formatid], format), timervalue)	
+	frame.timeLeft:SetFormattedText(("%s%s|r"):format(TimeColors[formatid], format), timervalue);
 end
 
 function NP:ClearAuraContext(frame)
