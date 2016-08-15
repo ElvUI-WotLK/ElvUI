@@ -39,7 +39,6 @@ local function LoadSkin()
 	PaperDollFrameItemFlyoutHighlight:Kill()
 	local function SkinItemFlyouts(button)
 		if(not button.isSkinned) then
-			PaperDollFrameItemFlyoutButtons:StripTextures();
 			button.icon = _G[button:GetName() .. "IconTexture"];
 
 			button:GetNormalTexture():SetTexture(nil);
@@ -48,6 +47,11 @@ local function LoadSkin()
 
 			button.icon:SetInside();
 			button.icon:SetTexCoord(unpack(E.TexCoords));
+		end
+
+		cooldown = _G[button:GetName() .."Cooldown"];
+		if(cooldown) then
+			E:RegisterCooldown(cooldown);
 		end
 
 		local location = button.location;
@@ -61,6 +65,11 @@ local function LoadSkin()
 		button:SetBackdropBorderColor(r, g, b);
 	end
 	hooksecurefunc("PaperDollFrameItemFlyout_DisplayButton", SkinItemFlyouts);
+	
+	local function SkinFrameFlyouts(button)
+		PaperDollFrameItemFlyoutButtons:StripTextures();
+	end
+ 	PaperDollFrameItemFlyout:HookScript('OnShow', SkinFrameFlyouts)
 	
 	GearManagerDialogPopup:StripTextures()
 	GearManagerDialogPopup:CreateBackdrop("Transparent")
