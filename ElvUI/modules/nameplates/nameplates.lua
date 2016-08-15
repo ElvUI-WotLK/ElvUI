@@ -637,13 +637,23 @@ function NP:OnShow()
 	myPlate.nameText = gsub(self.name:GetText(), FSPAT,"");
 	
 	NP:CheckRaidIcon(self);
-	
+
 	if(NP.db.buffs.enable) then
+		if(not myPlate.Buffs) then
+			myPlate.Buffs = NP:ConstructElement_Auras(myPlate, 5, "RIGHT");
+		end
+		myPlate.Buffs.db = NP.db.buffs;
 		NP:UpdateAuraIcons(myPlate.Buffs);
 	end
+
 	if(NP.db.debuffs.enable) then
+		if(not myPlate.Debuffs) then
+			myPlate.Debuffs = NP:ConstructElement_Auras(myPlate, 5, "LEFT");
+		end
+		myPlate.Debuffs.db = NP.db.debuffs;
 		NP:UpdateAuraIcons(myPlate.Debuffs);
 	end
+
 	if(NP.db.buffs.enable or NP.db.debuffs.enable) then
 		NP:UpdateElement_Auras(self);
 	end
@@ -796,8 +806,7 @@ function NP:UpdateSettings()
 	myPlate.raidIcon:SetPoint(E.InversePoints[NP.db.raidIcon.attachTo], myPlate.healthBar, NP.db.raidIcon.attachTo, NP.db.raidIcon.xOffset, NP.db.raidIcon.yOffset);
 	myPlate.raidIcon:SetSize(NP.db.raidIcon.size, NP.db.raidIcon.size);
 	
-	myPlate.Buffs.db = NP.db.buffs;
-	myPlate.Debuffs.db = NP.db.debuffs;
+	
 	
 	--local yOffset = NP.db.debuffs.stretchTexture and -8 or -2;
 	--myPlate.Buffs:SetPoint("BOTTOMRIGHT", myPlate.Debuffs, "TOPRIGHT", 0, yOffset);
@@ -875,9 +884,6 @@ function NP:CreatePlate(frame)
 	myPlate.overlay:SetTexture(1, 1, 1, 0.3);
 	myPlate.overlay:Hide();
 
-	myPlate.Buffs = self:ConstructElement_Auras(frame.UnitFrame, 5, "RIGHT");
-	myPlate.Debuffs = self:ConstructElement_Auras(frame.UnitFrame, 5, "LEFT");
-	
 	myPlate.lowHealth = CreateFrame("Frame", nil, myPlate);
 	myPlate.lowHealth:SetFrameLevel(0);
 	myPlate.lowHealth:SetOutside(myPlate.healthBar, 3, 3);
