@@ -74,7 +74,8 @@ function AB:UpdatePet()
 end
 
 function AB:PositionAndSizeBarPet()
-	local spacing = E:Scale(self.db['barPet'].buttonspacing);
+	local buttonSpacing = E:Scale(self.db['barPet'].buttonspacing);
+	local backdropSpacing = E:Scale((self.db['barPet'].backdropSpacing or self.db['barPet'].buttonspacing));
 	local buttonsPerRow = self.db['barPet'].buttonsPerRow;
 	local numButtons = self.db['barPet'].buttons;
 	local size = E:Scale(self.db['barPet'].buttonsize);
@@ -91,8 +92,11 @@ function AB:PositionAndSizeBarPet()
 		numColumns = 1;
 	end
 
-	bar:SetWidth(spacing + ((size * (buttonsPerRow * widthMult)) + ((spacing * (buttonsPerRow - 1)) * widthMult) + (spacing * widthMult)));
-	bar:SetHeight(spacing + ((size * (numColumns * heightMult)) + ((spacing * (numColumns - 1)) * heightMult) + (spacing * heightMult)));
+	local barWidth = (size * (buttonsPerRow * widthMult)) + ((buttonSpacing * (buttonsPerRow - 1)) * widthMult) + (buttonSpacing * (widthMult-1)) + (backdropSpacing*2) + ((self.db['barPet'].backdrop == true and E.Border or E.Spacing)*2);
+	local barHeight = (size * (numColumns * heightMult)) + ((buttonSpacing * (numColumns - 1)) * heightMult) + (buttonSpacing * (heightMult-1)) + (backdropSpacing*2) + ((self.db['barPet'].backdrop == true and E.Border or E.Spacing)*2);
+	bar:Width(barWidth);
+	bar:Height(barHeight);
+	
 	bar.mover:SetSize(bar:GetSize());
 
 	if self.db['barPet'].enabled then
@@ -137,7 +141,8 @@ function AB:PositionAndSizeBarPet()
 		bar:SetParent(E.UIParent);
 	end
 	
-	local button, lastButton, lastColumnButton;
+	local button, lastButton, lastColumnButton, autoCast;
+	local firstButtonSpacing = backdropSpacing + (self.db['barPet'].backdrop == true and E.Border or E.Spacing);
 	for i=1, NUM_PET_ACTION_SLOTS do
 		button = _G['PetActionButton'..i];
 		lastButton = _G['PetActionButton'..i-1];
@@ -147,35 +152,35 @@ function AB:PositionAndSizeBarPet()
 		button:Size(size);
 		button:SetAttribute('showgrid', 1);
 		
-		if i == 1 then
+		if(i == 1) then
 			local x, y;
-			if point == "BOTTOMLEFT" then
-				x, y = spacing, spacing;
-			elseif point == "TOPRIGHT" then
-				x, y = -spacing, -spacing;
-			elseif point == "TOPLEFT" then
-				x, y = spacing, -spacing;
+			if(point == "BOTTOMLEFT") then
+				x, y = firstButtonSpacing, firstButtonSpacing;
+			elseif(point == "TOPRIGHT") then
+				x, y = -firstButtonSpacing, -firstButtonSpacing;
+			elseif(point == "TOPLEFT") then
+				x, y = firstButtonSpacing, -firstButtonSpacing;
 			else
-				x, y = -spacing, spacing;
+				x, y = -firstButtonSpacing, firstButtonSpacing;
 			end
-
+			
 			button:Point(point, bar, point, x, y);
-		elseif (i - 1) % buttonsPerRow == 0 then
+		elseif((i - 1) % buttonsPerRow == 0) then
 			local x = 0;
-			local y = -spacing;
+			local y = -buttonSpacing;
 			local buttonPoint, anchorPoint = "TOP", "BOTTOM";
-			if verticalGrowth == 'UP' then
-				y = spacing;
+			if(verticalGrowth == "UP") then
+				y = buttonSpacing;
 				buttonPoint = "BOTTOM";
 				anchorPoint = "TOP";
 			end
-			button:Point(buttonPoint, lastColumnButton, anchorPoint, x, y);		
+			button:Point(buttonPoint, lastColumnButton, anchorPoint, x, y);
 		else
-			local x = spacing;
+			local x = buttonSpacing;
 			local y = 0;
 			local buttonPoint, anchorPoint = "LEFT", "RIGHT";
-			if horizontalGrowth == 'LEFT' then
-				x = -spacing;
+			if(horizontalGrowth == "LEFT") then
+				x = -buttonSpacing;
 				buttonPoint = "RIGHT";
 				anchorPoint = "LEFT";
 			end
