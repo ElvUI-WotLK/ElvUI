@@ -6,7 +6,16 @@ function mod:UpdateElement_HealthOnValueChanged(value)
 	local myPlate = mod.CreatedPlates[self:GetParent()];
 	local min, max = self:GetMinMaxValues();
 	myPlate.HealthBar:SetMinMaxValues(min, max);
-	myPlate.HealthBar:SetValue(value);
+	--myPlate.HealthBar:SetValue(value);
+
+	if(myPlate.HealthBar.currentValue ~= value) then
+		if(myPlate.HealthBar.anim.progress:IsPlaying()) then
+			myPlate.HealthBar.anim.progress:Stop()
+		end
+		myPlate.HealthBar.anim.progress:SetChange(value);
+		myPlate.HealthBar.anim.progress:Play();
+		myPlate.HealthBar.currentValue = value;
+	end
 
 	local r, g, b, shouldShow;
 	local perc = value/max;
@@ -58,6 +67,10 @@ function mod:ConstructElement_HealthBar(parent)
 	self:CreateBackdrop(frame);
 	frame:SetFrameStrata("BACKGROUND");
 	frame:SetFrameLevel(0);
+	frame.anim = CreateAnimationGroup(frame);
+	frame.anim.progress = frame.anim:CreateAnimation("Progress");
+	frame.anim.progress:SetSmoothing("Out");
+	frame.anim.progress:SetDuration(.3);
 	frame.text = frame:CreateFontString(nil, "OVERLAY");
 	frame.text:SetAllPoints(frame);
 	frame.text:SetWordWrap(false);
