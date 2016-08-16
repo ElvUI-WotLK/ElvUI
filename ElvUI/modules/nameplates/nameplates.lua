@@ -286,12 +286,12 @@ function NP:UpdateLevelAndName(myPlate)
 		myPlate.name.stringHeight = myPlate.name:GetStringHeight();
 		if(not myPlate.name:IsShown()) then myPlate.name:Show(); end
 	end
-	
-	if(self.raidIcon:IsShown()) then
-		myPlate.raidIcon:Show();
-		myPlate.raidIcon:SetTexCoord(self.raidIcon:GetTexCoord());
-	else
-		myPlate.raidIcon:Hide();
+
+	if(self.RaidIcon:IsShown()) then
+		myPlate.RaidIcon:Show();
+		myPlate.RaidIcon:SetTexCoord(self.RaidIcon:GetTexCoord());
+	elseif(myPlate.RaidIcon:IsShown()) then
+		myPlate.RaidIcon:Hide();
 	end
 end
 
@@ -404,7 +404,7 @@ function NP:ColorizeAndScale(myPlate)
 		color = NP.db.reactions.enemy;
 	end
 	
-	if(self.raidIcon:IsShown() and NP.db.healthBar.colorByRaidIcon) then
+	if(self.RaidIcon:IsShown() and NP.db.healthBar.colorByRaidIcon) then
 		NP:CheckRaidIcon(self);
 		local raidColor = NP.RaidMarkColors[self.raidIconType];
 		color = raidColor or color;
@@ -730,10 +730,9 @@ function NP:HealthBar_OnValueChanged(value)
 	end
 
 	if(NP.db.healthBar.text.enable and value and max and max > 1 and self:GetScale() == 1) then
-		myPlate.healthBar.text:Show();
 		myPlate.healthBar.text:SetText(E:GetFormattedText(NP.db.healthBar.text.format, value, max));
-	elseif(myPlate.healthBar.text:IsShown()) then
-		myPlate.healthBar.text:Hide();
+	else
+		myPlate.healthBar.text:SetText("");
 	end
 
 	if(NP.db.colorNameByValue) then
@@ -764,9 +763,7 @@ function NP:UpdateSettings()
 	
 	NP:ConfigureElement_CastBar(myPlate);
 
-	myPlate.raidIcon:ClearAllPoints();
-	myPlate.raidIcon:SetPoint(E.InversePoints[NP.db.raidIcon.attachTo], myPlate.healthBar, NP.db.raidIcon.attachTo, NP.db.raidIcon.xOffset, NP.db.raidIcon.yOffset);
-	myPlate.raidIcon:SetSize(NP.db.raidIcon.size, NP.db.raidIcon.size);
+	NP:ConfigureElement_RaidIcon(myPlate);
 	
 	if(NP.db.comboPoints and not myPlate.cPoints:IsShown()) then
 		myPlate.cPoints:Show();
@@ -779,7 +776,7 @@ end
 
 function NP:CreatePlate(frame)
 	frame.healthBar, frame.CastBar = frame:GetChildren();
-	frame.threat, frame.border, frame.CastBar.Shield, frame.CastBar.Border, frame.CastBar.Icon, frame.highlight, frame.name, frame.level, frame.bossIcon, frame.raidIcon, frame.eliteIcon = frame:GetRegions();
+	frame.threat, frame.border, frame.CastBar.Shield, frame.CastBar.Border, frame.CastBar.Icon, frame.highlight, frame.name, frame.level, frame.bossIcon, frame.RaidIcon, frame.eliteIcon = frame:GetRegions();
 	local myPlate = CreateFrame("Frame", nil, self.PlateParent);
 	
 	myPlate.hiddenFrame = CreateFrame("Frame", nil, myPlate);
@@ -808,11 +805,8 @@ function NP:CreatePlate(frame)
 	myPlate.name:SetJustifyV("BOTTOM");
 	myPlate.name.stringHeight = frame.name:GetStringHeight();
 	
-	frame.raidIcon:SetAlpha(0);
-	myPlate.raidIcon = myPlate:CreateTexture(nil, "ARTWORK");
-	myPlate.raidIcon:SetSize(frame.raidIcon:GetSize());
-	myPlate.raidIcon:SetTexture([[Interface\TargetingFrame\UI-RaidTargetingIcons]]);
-	myPlate.raidIcon:Hide();
+	frame.RaidIcon:SetAlpha(0);
+	myPlate.RaidIcon = self:ConstructElement_RaidIcon(myPlate);
 	
 	myPlate.overlay = myPlate:CreateTexture(nil, "OVERLAY");
 	myPlate.overlay:SetAllPoints(myPlate.healthBar);
@@ -1293,7 +1287,7 @@ function NP:UpdateElement_Auras(frame)
 		if(RAID_CLASS_COLORS[frame.unitType]) then
 			local name = gsub(frame.name:GetText(), "%s%(%*%)","");
 			guid = NP.ByName[name];
-		elseif(frame.raidIcon:IsShown()) then
+		elseif(frame.RaidIcon:IsShown()) then
 			guid = NP.ByRaidIcon[frame.raidIconType];
 		end
 
@@ -1409,8 +1403,8 @@ function NP:UpdateAuraByLookup(guid)
 end
 
 function NP:CheckRaidIcon(frame)
-	if(frame.raidIcon:IsShown()) then
-		local ux, uy = frame.raidIcon:GetTexCoord();
+	if(frame.RaidIcon:IsShown()) then
+		local ux, uy = frame.RaidIcon:GetTexCoord();
 		frame.raidIconType = NP.RaidIconCoordinate[ux][uy];
 	else
 		frame.raidIconType = nil;
@@ -1438,7 +1432,7 @@ end
 function NP:SearchNameplateByIconName(raidIcon)
 	for frame, _ in pairs(NP.CreatedPlates) do
 		NP:CheckRaidIcon(frame)
-		if(frame and frame:IsShown() and frame.raidIcon:IsShown() and (frame.raidIconType == raidIcon)) then
+		if(frame and frame:IsShown() and frame.RaidIcon:IsShown() and (frame.raidIconType == raidIcon)) then
 			return frame
 		end
 	end
