@@ -3,7 +3,7 @@ local mod = E:GetModule("NamePlates");
 
 function mod:ConfigureElement_RaidIcon(frame)
 	frame.RaidIcon:ClearAllPoints();
-	frame.RaidIcon:SetPoint(E.InversePoints[self.db.raidIcon.attachTo], frame.healthBar, self.db.raidIcon.attachTo, self.db.raidIcon.xOffset, self.db.raidIcon.yOffset);
+	frame.RaidIcon:SetPoint(E.InversePoints[self.db.raidIcon.attachTo], frame.HealthBar, self.db.raidIcon.attachTo, self.db.raidIcon.xOffset, self.db.raidIcon.yOffset);
 	frame.RaidIcon:SetSize(self.db.raidIcon.size, self.db.raidIcon.size);
 end
 

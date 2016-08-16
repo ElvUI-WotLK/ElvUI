@@ -58,12 +58,12 @@ end
 
 function mod:ConstructElement_CastBar(parent)
 	local frame = CreateFrame("StatusBar", nil, parent);
-	frame:SetPoint("TOPLEFT", parent.healthBar, "BOTTOMLEFT", 0, -E.Border - E.Spacing*3);
-	frame:SetPoint("TOPRIGHT", parent.healthBar, "BOTTOMRIGHT", 0, -E.Border - E.Spacing*3);
+	frame:SetPoint("TOPLEFT", parent.HealthBar, "BOTTOMLEFT", 0, -E.Border - E.Spacing*3);
+	frame:SetPoint("TOPRIGHT", parent.HealthBar, "BOTTOMRIGHT", 0, -E.Border - E.Spacing*3);
 	self:CreateBackdrop(frame);
 
 	frame.Icon = CreateFrame("Frame", nil, frame);
-	frame.Icon:SetPoint("TOPLEFT", parent.healthBar, "TOPRIGHT", E.Border + E.Spacing*3, 0)
+	frame.Icon:SetPoint("TOPLEFT", parent.HealthBar, "TOPRIGHT", E.Border + E.Spacing*3, 0)
 	frame.Icon:SetPoint("BOTTOMLEFT", frame, "BOTTOMRIGHT", E.Border + E.Spacing*3, 0)
 	frame.Icon.texture = frame.Icon:CreateTexture(nil, "BORDER");
 	frame.Icon.texture:SetAllPoints();
