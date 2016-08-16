@@ -60,7 +60,7 @@ function mod:ConstructElement_CastBar(parent)
 	local frame = CreateFrame("StatusBar", nil, parent);
 	frame:SetPoint("TOPLEFT", parent.HealthBar, "BOTTOMLEFT", 0, -E.Border - E.Spacing*3);
 	frame:SetPoint("TOPRIGHT", parent.HealthBar, "BOTTOMRIGHT", 0, -E.Border - E.Spacing*3);
-	self:CreateBackdrop(frame);
+	self:StyleFrame(frame);
 
 	frame.Icon = CreateFrame("Frame", nil, frame);
 	frame.Icon:SetPoint("TOPLEFT", parent.HealthBar, "TOPRIGHT", E.Border + E.Spacing*3, 0)
@@ -68,7 +68,7 @@ function mod:ConstructElement_CastBar(parent)
 	frame.Icon.texture = frame.Icon:CreateTexture(nil, "BORDER");
 	frame.Icon.texture:SetAllPoints();
 	frame.Icon.texture:SetTexCoord(unpack(E.TexCoords));
-	self:CreateBackdrop(frame.Icon);
+	self:StyleFrame(frame.Icon, true);
 
 	frame.Time = frame:CreateFontString(nil, "OVERLAY");
 	frame.Time:SetPoint("TOPRIGHT", frame, "BOTTOMRIGHT", 0, -E.Border*3);

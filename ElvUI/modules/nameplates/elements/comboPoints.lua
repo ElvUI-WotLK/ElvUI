@@ -2,6 +2,10 @@ local E, L, V, P, G = unpack(select(2, ...));
 local mod = E:GetModule("NamePlates");
 local LSM = LibStub("LibSharedMedia-3.0");
 
+local GetComboPoints = GetComboPoints;
+local UnitHasVehicleUI = UnitHasVehicleUI;
+local MAX_COMBO_POINTS = MAX_COMBO_POINTS;
+
 function mod:HideComboPoints(frame)
 	for i = 1, MAX_COMBO_POINTS do
 		frame.CPoints[i]:Hide();

@@ -64,13 +64,13 @@ end
 
 function mod:ConstructElement_HealthBar(parent)
 	local frame = CreateFrame("StatusBar", nil, parent);
-	self:CreateBackdrop(frame);
+	self:StyleFrame(frame);
 	frame:SetFrameStrata("BACKGROUND");
 	frame:SetFrameLevel(0);
 	frame.anim = CreateAnimationGroup(frame);
 	frame.anim.progress = frame.anim:CreateAnimation("Progress");
 	frame.anim.progress:SetSmoothing("Out");
-	frame.anim.progress:SetDuration(.3);
+	frame.anim.progress:SetDuration(.2);
 	frame.text = frame:CreateFontString(nil, "OVERLAY");
 	frame.text:SetAllPoints(frame);
 	frame.text:SetWordWrap(false);
