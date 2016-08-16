@@ -90,10 +90,12 @@ local function LoadSkin()
 		local overlayFrame = _G["CalendarDayButton" .. i .. "OverlayFrame"];
 		button:SetFrameLevel(button:GetFrameLevel() + 1);
 		button:Size(91 - E.Border);
-		button:StripTextures();
-		button:SetTemplate("Default", true);
+		button:SetTemplate("Default", nil, true);
+		button:SetBackdropColor(0, 0, 0, 0);
+		button:GetNormalTexture():SetInside();
+		button:GetNormalTexture():SetDrawLayer("BACKGROUND");
 		button:GetHighlightTexture():SetInside();
-		button:GetHighlightTexture():SetTexture(1, 1, 1, 0.15);
+		button:GetHighlightTexture():SetTexture(1, 1, 1, 0.3);
 		eventTexture:SetInside();
 		overlayFrame:SetInside();
 
@@ -118,7 +120,7 @@ local function LoadSkin()
 	CalendarTodayFrame:Size(CalendarDayButton1:GetWidth(), CalendarDayButton1:GetHeight())
 	CalendarTodayFrame:SetBackdropBorderColor(unpack(E["media"].rgbvaluecolor));
 	local value = E.db["general"].valuecolor;
-	CalendarTodayFrame:SetBackdropColor(value.r, value.g, value.b, 0.3);
+	CalendarTodayFrame:SetBackdropColor(value.r, value.g, value.b, 0.5);
 	CalendarTodayFrame:HookScript('OnUpdate', function(self) self:SetAlpha(CalendarTodayTextureGlow:GetAlpha()) end)
 	CalendarTodayFrame:CreateShadow()
 	CalendarTodayFrame.shadow:SetBackdropBorderColor(unpack(E["media"].rgbvaluecolor))

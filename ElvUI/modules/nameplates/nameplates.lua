@@ -369,15 +369,15 @@ function NP:ColorizeAndScale(myPlate)
 			end
 		elseif(threatReaction == "GAINING_THREAT") then
 			if(classRole == "Tank") then
-				color = NP.db.threat.goodTransitionColor;
+				color = NP.db.threat.goodTransition;
 			else
-				color = NP.db.threat.badTransitionColor;
+				color = NP.db.threat.badTransition;
 			end
 		elseif(threatReaction == "LOSING_THREAT") then
 			if(classRole == "Tank") then
-				color = NP.db.threat.badTransitionColor;
+				color = NP.db.threat.badTransition;
 			else
-				color = NP.db.threat.goodTransitionColor;
+				color = NP.db.threat.goodTransition;
 			end
 		elseif(InCombatLockdown()) then
 			if(classRole == "Tank") then
