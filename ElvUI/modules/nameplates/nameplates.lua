@@ -194,20 +194,20 @@ function NP:OnUpdate(elapsed)
 		numChildren = count;
 		NP:ScanFrames(WorldFrame:GetChildren());
 	end
-	
-	NP.PlateParent:Hide()
+
+	--NP.PlateParent:Hide()
 	for blizzPlate, plate in pairs(NP.CreatedPlates) do
 		if(blizzPlate:IsShown()) then
 			if(not self.viewPort) then
 				plate:SetPoint("CENTER", WorldFrame, "BOTTOMLEFT", blizzPlate:GetCenter());
 			end
 			NP.SetAlpha(blizzPlate, plate);
-		else
+		elseif(plate:IsShown()) then
 			plate:Hide();
 		end
 	end
-	NP.PlateParent:Show();
-	
+	--NP.PlateParent:Show();
+
 	if(self.elapsed and self.elapsed > 0.2) then
 		for blizzPlate, plate in pairs(NP.CreatedPlates) do
 			if(blizzPlate:IsShown() and plate:IsShown()) then
@@ -217,7 +217,7 @@ function NP:OnUpdate(elapsed)
 				plate:SetDepth(25);
 			end
 		end
-		
+
 		self.elapsed = 0;
 	else
 		self.elapsed = (self.elapsed or 0) + elapsed;
@@ -288,8 +288,12 @@ function NP:UpdateLevelAndName(myPlate)
 	end
 
 	if(self.RaidIcon:IsShown()) then
-		myPlate.RaidIcon:Show();
-		myPlate.RaidIcon:SetTexCoord(self.RaidIcon:GetTexCoord());
+		local ux, uy = self.RaidIcon:GetTexCoord();
+		if((ux ~= myPlate.RaidIcon.ULx or uy ~= myPlate.RaidIcon.ULy)) then
+			myPlate.RaidIcon:Show();
+			myPlate.RaidIcon:SetTexCoord(self.RaidIcon:GetTexCoord());
+			myPlate.RaidIcon.ULx, myPlate.RaidIcon.ULy = ux, uy;
+		end
 	elseif(myPlate.RaidIcon:IsShown()) then
 		myPlate.RaidIcon:Hide();
 	end
@@ -671,7 +675,8 @@ function NP:OnHide()
 	if(targetIndicator:GetParent() == myPlate) then
 		targetIndicator:Hide();
 	end
-
+	
+	myPlate.RaidIcon.ULx, myPlate.RaidIcon.ULy = nil, nil;
 	myPlate.Glow.r, myPlate.Glow.g, myPlate.Glow.b = nil, nil, nil;
 	myPlate.Glow:Hide();
 
