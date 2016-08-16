@@ -88,17 +88,40 @@ P["databars"] = {
 };
 
 P["nameplate"] = {
-	['font'] = 'Homespun',
-	['fontSize'] = 8,
-	['fontOutline'] = 'MONOCHROMEOUTLINE',
+	["statusbar"] = "ElvUI Norm",
+	["font"] = "Homespun",
+	["fontSize"] = 8,
+	["fontOutline"] = "MONOCHROMEOUTLINE",
+
 	["comboPoints"] = true,
 	['nonTargetAlpha'] = 0.6,
 	['targetAlpha'] = 1,
+	["lowHealthThreshold"] = 0.4,
 	['combatHide'] = false,
 	['colorNameByValue'] = true,
 	['showName'] = true,
 	['wrapName'] = false,
 	['showLevel'] = true,
+
+	["castColor"] = {r = 1,g = 208/255,b = 0 },
+	["castNoInterruptColor"] = {r = 0.78, g = 0.25, b = 0.25},
+	["reactions"] = {
+		["tapped"] = {r = 0.6, g = 0.6, b = 0.6},
+		["friendlyNPC"] = {r = 0.31, g = 0.45, b = 0.63},
+		["friendlyPlayer"] = {r = 75/255, g = 175/255, b = 76/255},
+		["neutral"] = {r = 218/255, g = 197/255, b = 92/255},
+		["enemy"] = {r = 0.78, g = 0.25, b = 0.25},	
+	},
+	["threat"] = {
+		["goodColor"] = {r = 75/255, g = 175/255, b = 76/255},
+		["badColor"] = {r = 0.78, g = 0.25, b = 0.25},
+		["goodTransition"] = {r = 218/255, g = 197/255, b = 92/255},
+		["badTransition"] = {r = 240/255, g = 154/255, b = 17/255},
+		["goodScale"] = 1,
+		["badScale"] = 1,
+		["useThreatColor"] = true,
+	},
+
 	['targetIndicator'] = {
 		['enable'] = true,
 		['style'] = 'glow',
@@ -110,7 +133,6 @@ P["nameplate"] = {
 		['xOffset'] = 0
 	},
 	['healthBar'] = {
-		['lowThreshold'] = 0.40,
 		['width'] = 108,
 		['height'] = 9,
 		["colorByRaidIcon"] = false,
@@ -138,15 +160,6 @@ P["nameplate"] = {
 		['size'] = 36,
 		['attachTo'] = 'LEFT',
 	},
-	['threat'] = {
-		['enable'] = true,
-		['goodScale'] = 1,
-		['badScale'] = 1,
-		["goodColor"] = {r = 75/255, g = 175/255, b = 76/255},
-		["badColor"] = {r = 0.78, g = 0.25, b = 0.25},
-		["goodTransitionColor"] = {r = 218/255, g = 197/255, b = 92/255},
-		["badTransitionColor"] = {r = 240/255, g = 154/255, b = 17/255},
-	},
 	["buffs"] = {
 		["enable"] = true,
 		["numAuras"] = 4,
@@ -166,14 +179,6 @@ P["nameplate"] = {
 			["maxDuration"] = 120,
 			["filter"] = "CCDebuffs"
 		}
-	},
-	
-	['reactions'] = {
-		["tapped"] = {r = 0.6, g = 0.6, b = 0.6},
-		["friendlyNPC"] = {r = 0.31, g = 0.45, b = 0.63},
-		["friendlyPlayer"] = {r = 75/255, g = 175/255, b = 76/255},
-		["neutral"] = { r = 218/255, g = 197/255, b = 92/255 },
-		["enemy"] = { r = 0.78, g = 0.25, b = 0.25 },	
 	},
 };
 

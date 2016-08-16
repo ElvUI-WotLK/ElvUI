@@ -103,7 +103,14 @@ E.Options.args.nameplate = {
 			type = "group",
 			name = L["General"],
 			disabled = function() return not E.NamePlates; end,
-			args = {	
+			args = {
+				statusbar = {
+					order = 0,
+					type = "select",
+					dialogControl = "LSM30_Statusbar",
+					name = L["StatusBar Texture"],
+					values = AceGUIWidgetLSMlists.statusbar
+				},
 				combatHide = {
 					type = "toggle",
 					order = 1,
@@ -135,7 +142,15 @@ E.Options.args.nameplate = {
 					type = "toggle",
 					order = 5,
 					name = L["Color Name By Health Value"],		
-				},				
+				},
+				lowHealthThreshold = {
+					order = 6,
+					type = "range",
+					name = L["Low Health Threshold"],
+					desc = L["Make the unitframe glow yellow when it is below this percent of health, it will glow red when the health value is half of this value."],
+					isPercent = true,
+					min = 0.2, max = 1, step = 0.01
+				},
 				fontGroup = {
 					order = 100,
 					type = "group",
@@ -184,7 +199,37 @@ E.Options.args.nameplate = {
 							},
 						},							
 					},
-				},	
+				},
+				castGroup = {
+					order = 150,
+					type = "group",
+					name = L["Cast Bar"],
+					guiInline = true,
+					get = function(info)
+						local t = E.db.nameplate[ info[#info] ];
+						local d = P.nameplate[info[#info]];
+						return t.r, t.g, t.b, t.a, d.r, d.g, d.b;
+					end,
+					set = function(info, r, g, b)
+						E.db.nameplate[ info[#info] ] = {};
+						local t = E.db.nameplate[ info[#info] ];
+						t.r, t.g, t.b = r, g, b;
+					end,
+					args = {
+						castColor = {
+							order = 1,
+							type = "color",
+							name = L["Cast Color"],
+							hasAlpha = false
+						},
+						castNoInterruptColor = {
+							order = 2,
+							type = "color",
+							name = L["Cast No Interrupt Color"],
+							hasAlpha = false
+						}
+					}
+				},
 				reactions = {
 					order = 200,
 					type = "group",
@@ -259,14 +304,6 @@ E.Options.args.nameplate = {
 					desc = L["Controls the height of the nameplate"],
 					type = "range",
 					min = 4, max = 30, step = 1,					
-				},
-				lowThreshold = {
-					type = "range",
-					order = 3,
-					name = L["Low Health Threshold"],
-					desc = L["Color the border of the nameplate yellow when it reaches this point, it will be colored red when it reaches half this value."],
-					isPercent = true,
-					min = 0, max = 1, step = 0.01,
 				},
 				colorByRaidIcon = {
 					type = "toggle",
@@ -383,37 +420,6 @@ E.Options.args.nameplate = {
 					name = L["Height"],
 					type = "range",
 					min = 4, max = 30, step = 1,
-				},
-				colors = {
-					order = 100,
-					type = "group",
-					name = L["Colors"],
-					guiInline = true,
-					get = function(info)
-						local t = E.db.nameplate.castBar[ info[#info] ]
-						local d = P.nameplate.castBar[ info[#info] ]
-						return t.r, t.g, t.b, t.a, d.r, d.g, d.b
-					end,
-					set = function(info, r, g, b)
-						E.db.nameplate.castBar[ info[#info] ] = {}
-						local t = E.db.nameplate.castBar[ info[#info] ]
-						t.r, t.g, t.b = r, g, b
-						NP:UpdateAllPlates()
-					end,				
-					args = {
-						color = {
-							type = "color",
-							order = 1,
-							name = L["Can Interrupt"],
-							hasAlpha = false,
-						},
-						noInterrupt = {
-							name = L["No Interrupt"],
-							order = 2,
-							type = "color",
-							hasAlpha = false,
-						},
-					},
 				},
 			},
 		},
@@ -663,81 +669,68 @@ E.Options.args.nameplate = {
 			}
 		},
 		threat = {
-			type = "group",
 			order = 6,
+			type = "group",
 			name = L["Threat"],
-			get = function(info) return E.db.nameplate.threat[ info[#info] ] end,
-			set = function(info, value) E.db.nameplate.threat[ info[#info] ] = value; NP:UpdateAllPlates() end,	
+			get = function(info)
+				local t = E.db.nameplate.threat[ info[#info] ]
+				local d = P.nameplate.threat[info[#info]]
+				return t.r, t.g, t.b, t.a, d.r, d.g, d.b
+			end,
+			set = function(info, r, g, b)
+				E.db.nameplate[ info[#info] ] = {}
+				local t = E.db.nameplate.threat[ info[#info] ]
+				t.r, t.g, t.b = r, g, b
+			end,
 			args = {
-				enable = {
-					type = "toggle",
+				useThreatColor = {
 					order = 1,
-					name = L["Enable"],
+					type = "toggle",
+					name = L["Use Threat Color"],
+					get = function(info) return E.db.nameplate.threat.useThreatColor; end,
+					set = function(info, value) E.db.nameplate.threat.useThreatColor = value; end
 				},
-				scaling = {
-					type = "group",
-					name = L["Scaling"],
-					guiInline = true,
+				goodColor = {
 					order = 2,
-					args = {
-						goodScale = {
-							type = "range",
-							name = L["Good"],
-							order = 1,
-							min = 0.5, max = 1.5, step = 0.01, isPercent = true,
-						},
-						badScale = {
-							type = "range",
-							name = L["Bad"],
-							order = 1,
-							min = 0.5, max = 1.5, step = 0.01, isPercent = true,
-						},
-					},
+					type = "color",
+					name = L["Good"],
+					hasAlpha = false
 				},
-				colors = {
+				badColor = {
 					order = 3,
-					type = "group",
-					name = L["Colors"],
-					guiInline = true,
-					get = function(info)
-						local t = E.db.nameplate.threat[ info[#info] ]
-						local d = P.nameplate.threat[ info[#info] ]
-						return t.r, t.g, t.b, t.a, d.r, d.g, d.b
-					end,
-					set = function(info, r, g, b)
-						E.db.nameplate.castBar[ info[#info] ] = {}
-						local t = E.db.nameplate.threat[ info[#info] ]
-						t.r, t.g, t.b = r, g, b
-						NP:UpdateAllPlates()
-					end,
-					args = {
-						goodColor = {
-							type = "color",
-							order = 1,
-							name = L["Good"],
-							hasAlpha = false,
-						},
-						badColor = {
-							name = L["Bad"],
-							order = 2,
-							type = "color",
-							hasAlpha = false,
-						},
-						goodTransitionColor = {
-							name = L["Good Transition"],
-							order = 3,
-							type = "color",
-							hasAlpha = false,
-						},		
-						badTransitionColor = {
-							name = L["Bad Transition"],
-							order = 4,
-							type = "color",
-							hasAlpha = false,
-						},
-					},
+					type = "color",
+					name = L["Bad"],
+					hasAlpha = false
 				},
-			},
+				goodTransition = {
+					order = 4,
+					type = "color",
+					name = L["Good Transition"],
+					hasAlpha = false
+				},		
+				badTransition = {
+					order = 5,
+					type = "color",
+					name = L["Bad Transition"],
+					hasAlpha = false
+				},
+				goodScale = {
+					order = 6,
+					type = "range",
+					name = L["Good"],
+					min = 0.5, max = 1.5, step = 0.01, isPercent = true,
+					get = function(info) return E.db.nameplate.threat[ info[#info] ] end,
+					set = function(info, value) E.db.nameplate.threat[ info[#info] ] = value; end
+				},
+				badScale = {
+					order = 7,
+					type = "range",
+					name = L["Bad"],
+					min = 0.5, max = 1.5, step = 0.01, isPercent = true,
+					get = function(info) return E.db.nameplate.threat[ info[#info] ] end,
+					set = function(info, value) E.db.nameplate.threat[ info[#info] ] = value; end
+				}
+			}
 		},
 		filters = {
 			type = "group",
