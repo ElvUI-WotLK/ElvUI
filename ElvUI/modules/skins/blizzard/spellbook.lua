@@ -47,11 +47,9 @@ local function LoadSkin()
 
 		if(iconTexture) then
 			iconTexture:SetTexCoord(unpack(E.TexCoords))
-			iconTexture:SetInside()
 
 			if not button.backdrop then
 				button:CreateBackdrop("Default", true)
-				button.backdrop:SetFrameLevel(button.backdrop:GetFrameLevel() - 1)
 			end
 		end
 
@@ -73,7 +71,6 @@ local function LoadSkin()
 		if (iconTexture)  then
 			if (highlight) then
 				highlight:SetTexture(1, 1, 1, 0.3)
-				highlight:SetInside(iconTexture)
 			end
 		end
 	end);
