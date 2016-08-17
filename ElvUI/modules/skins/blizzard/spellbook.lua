@@ -34,6 +34,7 @@ local function LoadSkin()
 	for i = 1, SPELLS_PER_PAGE do
 		local button = _G["SpellButton" .. i];
 		local iconTexture = _G["SpellButton" .. i .. "IconTexture"];
+		local cooldown = _G["SpellButton"..i.."Cooldown"];
 
 		for i = 1, button:GetNumRegions() do
 			local region = select(i, button:GetRegions());
@@ -45,23 +46,36 @@ local function LoadSkin()
 		end
 
 		if(iconTexture) then
-			button:SetTemplate("Default", true);
+			iconTexture:SetTexCoord(unpack(E.TexCoords))
+			iconTexture:SetInside()
 
-			iconTexture:SetTexCoord(unpack(E.TexCoords));
-			iconTexture:SetInside();
+			if not button.backdrop then
+				button:CreateBackdrop("Default", true)
+				button.backdrop:SetFrameLevel(button.backdrop:GetFrameLevel() - 1)
+			end
+		end
+
+		if(cooldown) then
+			E:RegisterCooldown(cooldown);
 		end
 	end
 
 	hooksecurefunc("SpellButton_UpdateButton", function(self)
 		local name = self:GetName();
+		local spellName = _G[name .. "SpellName"];
 		local subSpellName = _G[name .. "SubSpellName"];
 		local iconTexture = _G[name .. "IconTexture"];
 		local highlight = _G[name .. "Highlight"];
 
+		spellName:SetTextColor(1, 0.80, 0.10)
 		subSpellName:SetTextColor(1, 1, 1);
 
-		highlight:SetTexture(1, 1, 1, .3);
-		highlight:SetAllPoints(iconTexture);
+		if (iconTexture)  then
+			if (highlight) then
+				highlight:SetTexture(1, 1, 1, 0.3)
+				highlight:SetInside(iconTexture)
+			end
+		end
 	end);
 
 	for i = 1, MAX_SKILLLINE_TABS do
@@ -74,6 +88,33 @@ local function LoadSkin()
 		tab:GetNormalTexture():SetTexCoord(unpack(E.TexCoords));
 		tab:GetNormalTexture():SetInside();
 	end
+
+	for i = 1, 12 do
+		_G["SpellButton" .. i]:CreateBackdrop("Transparent", true);
+		_G["SpellButton" .. i].backdrop:Point("TOPLEFT", -7, 6);
+		_G["SpellButton" .. i].backdrop:Point("BOTTOMRIGHT", 116, -5);
+	end
+
+	ShowAllSpellRanksCheckBox:SetPoint("TOPLEFT", SpellBookFrame, "TOPLEFT", 30, -38)
+
+	SpellButton1:SetPoint("TOPLEFT", SpellBookFrame, "TOPLEFT", 25, -75)
+	SpellButton2:SetPoint("TOPLEFT", SpellButton1, "TOPLEFT", 167, 0)
+	SpellButton3:SetPoint("TOPLEFT", SpellButton1, "BOTTOMLEFT", 0, -17)
+	SpellButton4:SetPoint("TOPLEFT", SpellButton3, "TOPLEFT", 167, 0)
+	SpellButton5:SetPoint("TOPLEFT", SpellButton3, "BOTTOMLEFT", 0, -17)
+	SpellButton6:SetPoint("TOPLEFT", SpellButton5, "TOPLEFT", 167, 0)
+	SpellButton7:SetPoint("TOPLEFT", SpellButton5, "BOTTOMLEFT", 0, -17)
+	SpellButton8:SetPoint("TOPLEFT", SpellButton7, "TOPLEFT", 167, 0)
+	SpellButton9:SetPoint("TOPLEFT", SpellButton7, "BOTTOMLEFT", 0, -17)
+	SpellButton10:SetPoint("TOPLEFT", SpellButton9, "TOPLEFT", 167, 0)
+	SpellButton11:SetPoint("TOPLEFT", SpellButton9, "BOTTOMLEFT", 0, -17)
+	SpellButton12:SetPoint("TOPLEFT", SpellButton11, "TOPLEFT", 167, 0)
+
+	SpellBookPrevPageButton:SetPoint("CENTER", SpellBookFrame, "BOTTOMLEFT", 30, 100)
+	SpellBookNextPageButton:SetPoint("CENTER", SpellBookFrame, "BOTTOMLEFT", 330, 100)
+
+	SpellBookPageText:SetTextColor(1, 1, 1)
+	SpellBookPageText:SetPoint("CENTER", SpellBookFrame, "BOTTOMLEFT", 185, 0)
 end
 
 S:RegisterSkin("ElvUI", LoadSkin);
