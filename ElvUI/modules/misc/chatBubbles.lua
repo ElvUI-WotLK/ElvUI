@@ -1,22 +1,25 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local M = E:GetModule("Misc");
 local CH = E:GetModule("Chat");
-local numChildren = -1;
 
 local select, unpack, type = select, unpack, type;
 local strlower = strlower;
 
+local CreateFrame = CreateFrame;
+
 function M:UpdateBubbleBorder()
 	if(not self.text) then return; end
 
-	if(E.PixelMode) then
-		self:SetBackdropBorderColor(self.text:GetTextColor());
-	else
-		local r, g, b = self.text:GetTextColor();
-		self.bordertop:SetTexture(r, g, b);
-		self.borderbottom:SetTexture(r, g, b);
-		self.borderleft:SetTexture(r, g, b);
-		self.borderright:SetTexture(r, g, b);
+	if(E.private.general.chatBubbles == "backdrop") then
+		if(E.PixelMode) then
+			self:SetBackdropBorderColor(self.text:GetTextColor());
+		else
+			local r, g, b = self.text:GetTextColor();
+			self.bordertop:SetTexture(r, g, b);
+			self.borderbottom:SetTexture(r, g, b);
+			self.borderleft:SetTexture(r, g, b);
+			self.borderright:SetTexture(r, g, b);
+		end
 	end
 
 	local classColorTable, lowerCaseWord, isFirstWord, rebuiltString, tempWord;
@@ -24,10 +27,16 @@ function M:UpdateBubbleBorder()
 	for word in text:gmatch("[^%s]+") do
 		lowerCaseWord = word:lower();
 		lowerCaseWord = lowerCaseWord:gsub("%p", "");
-		if(CH.ClassNames[lowerCaseWord]) then
-			classColorTable = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[CH.ClassNames[lowerCaseWord]] or RAID_CLASS_COLORS[CH.ClassNames[lowerCaseWord]];
-			tempWord = word:gsub("%p", "");
-			word = word:gsub(tempWord, format("\124cff%.2x%.2x%.2x", classColorTable.r*255, classColorTable.g*255, classColorTable.b*255) .. tempWord .. "\124r");
+
+		if(E.private.general.classColorMentionsSpeech) then
+			if(CH.ClassNames[lowerCaseWord]) then
+				classColorTable = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[CH.ClassNames[lowerCaseWord]] or RAID_CLASS_COLORS[CH.ClassNames[lowerCaseWord]];
+				tempWord = word:gsub("%p", "");
+				word = word:gsub(tempWord, format("\124cff%.2x%.2x%.2x", classColorTable.r*255, classColorTable.g*255, classColorTable.b*255) .. tempWord .. "\124r");
+			elseif(CH.ClassNames[word]) then
+				classColorTable = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[CH.ClassNames[word]] or RAID_CLASS_COLORS[CH.ClassNames[word]];
+				word = word:gsub(word:gsub("%-","%%-"), format("\124cff%.2x%.2x%.2x", classColorTable.r*255, classColorTable.g*255, classColorTable.b*255) .. word .. "\124r");
+			end
 		end
 
 		if(not isFirstWord) then
@@ -60,6 +69,8 @@ function M:SkinBubble(frame)
 				tile = false, tileSize = 0, edgeSize = mult,
 				insets = { left = 0, right = 0, top = 0, bottom = 0}
 			});
+			frame:SetBackdropColor(unpack(E.media.backdropfadecolor));
+			frame:SetBackdropBorderColor(0, 0, 0);
 		else
 			frame:SetBackdrop(nil);
 		end
@@ -123,17 +134,28 @@ function M:SkinBubble(frame)
 			frame:SetBackdropColor(unpack(E.media.backdropfadecolor));
 			frame:SetBackdropBorderColor(r, g, b);
 		end
-		
+
 		frame.text:FontTemplate(E.LSM:Fetch("font", E.private.general.chatBubbleFont), E.private.general.chatBubbleFontSize);
-		
+	elseif(E.private.general.chatBubbles == "backdrop_noborder") then
+		frame:SetBackdrop(nil);
+	
+		if(not frame.backdrop) then
+			frame.backdrop = frame:CreateTexture(nil, "ARTWORK");
+			frame.backdrop:SetInside(frame, 4, 4);
+			frame.backdrop:SetTexture(unpack(E.media.backdropfadecolor));
+		end
+		frame.text:FontTemplate(E.LSM:Fetch("font", E.private.general.chatBubbleFont), E.private.general.chatBubbleFontSize);
+
 		frame:SetClampedToScreen(false);
-		frame:HookScript("OnShow", M.UpdateBubbleBorder);
-		M.UpdateBubbleBorder(frame);
-	elseif(E.private.general.chatBubbles == "nobackdrop") then
+	elseif E.private.general.chatBubbles == 'nobackdrop' then
 		frame:SetBackdrop(nil);
 		frame.text:FontTemplate(E.LSM:Fetch("font", E.private.general.chatBubbleFont), E.private.general.chatBubbleFontSize);
 		frame:SetClampedToScreen(false);
 	end
+
+	frame:HookScript("OnShow", M.UpdateBubbleBorder);
+	frame:SetFrameStrata("DIALOG");
+	M.UpdateBubbleBorder(frame);
 	frame.isBubblePowered = true;
 end
 
@@ -145,14 +167,7 @@ function M:IsChatBubble(frame)
 	return false;
 end
 
-function M:HookBubbles(...)
-	for index = 1, select("#", ...) do
-		local frame = select(index, ...);
-		
-		if(M:IsChatBubble(frame) and not frame.isBubblePowered) then M:SkinBubble(frame); end
-	end
-end
-
+local numChildren = 0;
 function M:LoadChatBubbles()
 	if(E.private.general.bubbles == false) then
 		E.private.general.chatBubbles = "disabled";
@@ -171,8 +186,14 @@ function M:LoadChatBubbles()
 		
 		local count = WorldFrame:GetNumChildren();
 		if(count ~= numChildren) then
+			for i = numChildren + 1, count do
+				local frame = select(i, WorldFrame:GetChildren());
+				
+				if(M:IsChatBubble(frame)) then
+					M:SkinBubble(frame);
+				end
+			end
 			numChildren = count;
-			M:HookBubbles(WorldFrame:GetChildren());
 		end
 	end);
 end

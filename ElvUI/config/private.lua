@@ -17,6 +17,7 @@ V['general'] = {
 	['minimap'] = {
 		['enable'] = true,
 	},
+	["classColorMentionsSpeech"] = true
 }
 
 V['bags'] = {

@@ -27,7 +27,7 @@ local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
 local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
 local COMBATLOG_OBJECT_CONTROL_PLAYER = COMBATLOG_OBJECT_CONTROL_PLAYER;
 
-local numChildren = -1;
+local numChildren = 0;
 local targetIndicator;
 local targetAlpha = 1;
 
@@ -186,8 +186,15 @@ end
 function mod:OnUpdate(elapsed)
 	local count = WorldFrame:GetNumChildren();
 	if(count ~= numChildren) then
+		for i = numChildren + 1, count do
+			local frame = select(i, WorldFrame:GetChildren())
+			local region = frame:GetRegions();
+
+			if(not mod.CreatedPlates[frame] and not frame:GetName() and region and region:GetObjectType() == "Texture" and region:GetTexture() == OVERLAY) then
+				mod:CreatePlate(frame);
+			end
+		end
 		numChildren = count;
-		mod:ScanFrames(WorldFrame:GetChildren());
 	end
 
 	--mod.PlateParent:Hide()
@@ -687,17 +694,6 @@ function mod:QueueObject(frame, object)
 	
 	if(object.OldTexture) then
 		object:SetTexture(object.OldTexture);
-	end
-end
-
-function mod:ScanFrames(...)
-	for index = 1, select("#", ...) do
-		local frame = select(index, ...);
-		local region = frame:GetRegions();
-
-		if(not mod.CreatedPlates[frame] and not frame:GetName() and region and region:GetObjectType() == "Texture" and region:GetTexture() == OVERLAY) then
-			mod:CreatePlate(frame);
-		end
 	end
 end
 
