@@ -13,20 +13,20 @@ function mod:HideComboPoints(frame)
 end
 
 function mod:UpdateElement_CPoints(frame)
-	local frame = mod.CreatedPlates[frame];
+	local myPlate = mod.CreatedPlates[frame];
 	local numPoints = mod.ComboPoints[frame.guid];
 	if(not numPoints) then
 		for i = 1, MAX_COMBO_POINTS do
-			frame.CPoints[i]:Hide();
+			myPlate.CPoints[i]:Hide();
 		end
 		return;
 	end
 
 	for i = 1, MAX_COMBO_POINTS do
 		if(i <= numPoints) then
-			frame.CPoints[i]:Show();
+			myPlate.CPoints[i]:Show();
 		else
-			frame.CPoints[i]:Hide();
+			myPlate.CPoints[i]:Hide();
 		end
 	end
 end

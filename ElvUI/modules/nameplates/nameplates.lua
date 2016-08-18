@@ -624,6 +624,8 @@ function mod:UpdateSettings()
 	mod:ConfigureElement_Name(myPlate);
 	mod:ConfigureElement_CastBar(myPlate);
 	mod:ConfigureElement_RaidIcon(myPlate);
+	myPlate.Buffs.db = mod.db.buffs;
+	myPlate.Debuffs.db = mod.db.debuffs;
 	mod:ConfigureElement_CPoints(myPlate);
 
 	mod.OnShow(self);
@@ -652,9 +654,7 @@ function mod:CreatePlate(frame)
 
 	myPlate.Glow = self:ConstructElement_Glow(myPlate);
 	myPlate.Buffs = self:ConstructElement_Auras(myPlate, 5, "RIGHT");
-	myPlate.Buffs.db = self.db.buffs;
 	myPlate.Debuffs = self:ConstructElement_Auras(myPlate, 5, "LEFT");
-	myPlate.Debuffs.db = self.db.debuffs;
 
 	myPlate.CPoints = self:ConstructElement_CPoints(myPlate);
 
