@@ -194,6 +194,7 @@ local function Update(self, event, unit)
 	local auraBars = self.AuraBars
 	local helpOrHarm
 	local isFriend = UnitIsFriend('player', unit)
+	local both = false
 	
 	if auraBars.friendlyAuraType and auraBars.enemyAuraType then
 		if isFriend then
@@ -203,6 +204,11 @@ local function Update(self, event, unit)
 		end
 	else
 		helpOrHarm = isFriend and 'HELPFUL' or 'HARMFUL'
+	end
+	
+	if helpOrHarm == 'BOTH' then
+		both = true
+		helpOrHarm = 'HELPFUL'
 	end
 
 	-- Create a table of auras to display
@@ -232,8 +238,21 @@ local function Update(self, event, unit)
 		end
 	else
 		for index = 1, 40 do
-			local name, rank, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, shouldConsolidate, spellID = UnitAura(unit, index, helpOrHarm)
-			if not name then break end
+			local name, rank, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, shouldConsolidate, spellID
+			
+			if not both then
+				name, rank, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, shouldConsolidate, spellID = UnitAura(unit, index, helpOrHarm)
+				
+				if not name then break end
+			else
+				name, rank, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, shouldConsolidate, spellID = UnitAura(unit, index, 'HELPFUL')
+				
+				if not name then
+					name, rank, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, shouldConsolidate, spellID = UnitAura(unit, index, 'HARMFUL')
+					
+					if not name then break end
+				end
+			end
 			
 			if (auraBars.filter or DefaultFilter)(self, unit, name, rank, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, shouldConsolidate, spellID) then
 				lastAuraIndex = lastAuraIndex + 1
