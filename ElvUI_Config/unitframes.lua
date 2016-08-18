@@ -1084,6 +1084,7 @@ local function GetOptionsTable_AuraBars(friendlyOnly, updateFunc, groupName)
 				values = {
 					["HARMFUL"] = L["Debuffs"],
 					["HELPFUL"] = L["Buffs"]
+					["BOTH"] = L["Both"]
 				}
 			},
 			enemyAuraType = {
@@ -1094,6 +1095,7 @@ local function GetOptionsTable_AuraBars(friendlyOnly, updateFunc, groupName)
 				values = {
 					["HARMFUL"] = L["Debuffs"],
 					["HELPFUL"] = L["Buffs"]
+					["BOTH"] = L["Both"]
 				}
 			},
 			uniformThreshold = {
