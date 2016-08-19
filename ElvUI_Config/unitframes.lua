@@ -1083,7 +1083,7 @@ local function GetOptionsTable_AuraBars(friendlyOnly, updateFunc, groupName)
 				desc = L["Set the type of auras to show when a unit is friendly."],
 				values = {
 					["HARMFUL"] = L["Debuffs"],
-					["HELPFUL"] = L["Buffs"]
+					["HELPFUL"] = L["Buffs"],
 					["BOTH"] = L["Both"]
 				}
 			},
@@ -1094,7 +1094,7 @@ local function GetOptionsTable_AuraBars(friendlyOnly, updateFunc, groupName)
 				desc = L["Set the type of auras to show when a unit is a foe."],
 				values = {
 					["HARMFUL"] = L["Debuffs"],
-					["HELPFUL"] = L["Buffs"]
+					["HELPFUL"] = L["Buffs"],
 					["BOTH"] = L["Both"]
 				}
 			},
