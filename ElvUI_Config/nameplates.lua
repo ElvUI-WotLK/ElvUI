@@ -149,7 +149,7 @@ E.Options.args.nameplate = {
 					name = L["Low Health Threshold"],
 					desc = L["Make the unitframe glow yellow when it is below this percent of health, it will glow red when the health value is half of this value."],
 					isPercent = true,
-					min = 0.2, max = 1, step = 0.01
+					min = 0, max = 1, step = 0.01
 				},
 				fontGroup = {
 					order = 100,
