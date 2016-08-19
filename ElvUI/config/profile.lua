@@ -2275,6 +2275,7 @@ P['chat'] = { -- Чат
 	["noAlertInCombat"] = false,
 	['chatHistory'] = true,
 	['timeStampFormat'] = 'NONE',
+	['chatDirection'] = 'BOTTOM',
 	['keywords'] = '%MYNAME%, ElvUI',
 	['separateSizes'] = false,
 	['panelWidth'] = 412,
