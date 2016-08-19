@@ -15,4 +15,5 @@
 	<Script file='dropdown.lua'/>
 	<Script file='cooldowns.lua'/>
 	<Script file='aprilfools.lua'/>
+	<Script file='pluginInstaller.lua'/>
 </Ui>
