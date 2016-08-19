@@ -158,6 +158,16 @@ E.Options.args.chat = {
 						['%H:%M:%S '] =	'15:27:32'					
 					},
 				},
+				chatDirection = {
+					order = 14,
+					type = 'select',
+					name = 'Chat Direction',
+					desc = 'Controls where text is added to the chat frame.',
+					values = {
+						['BOTTOM'] = 'Bottom to top',
+						['TOP'] = 'Top to bottom',				
+					},
+				},
 			},
 		},
 		alerts = {
