@@ -22,7 +22,7 @@ function mod:UpdateElement_CastBarOnValueChanged(value)
 	end
 
 	local color;
-	if(self.Border:IsShown()) then
+	if(self.shield and self.shield:IsShown()) then
 		color = mod.db.castNoInterruptColor;
 	else
 		if(value > 0 and (isChannel and (value/max) <= 0.02 or (value/max) >= 0.98)) then
