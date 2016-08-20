@@ -1006,7 +1006,7 @@ function CH:ChatFrame_MessageEventHandler(event, ...)
 					found2 = true
 					break
 				end
-				if self.messageTypeList[i] == "EMOTE" and chatGroup == "TEXT_EMOTE" then
+				if self.messageTypeList[i] == "EMOTE" and (chatGroup == "TEXT_EMOTE" or chatGroup == "RAID_BOSS_EMOTE") then
 					found2 = true
 					break
 				end
