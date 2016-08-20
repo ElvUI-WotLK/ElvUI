@@ -70,7 +70,7 @@ function mod:ConstructElement_HealthBar(parent)
 	frame.anim = CreateAnimationGroup(frame);
 	frame.anim.progress = frame.anim:CreateAnimation("Progress");
 	frame.anim.progress:SetSmoothing("Out");
-	frame.anim.progress:SetDuration(.2);
+	frame.anim.progress:SetDuration(mod.db.healthAnimationSpeed);
 	frame.text = frame:CreateFontString(nil, "OVERLAY");
 	frame.text:SetAllPoints(frame);
 	frame.text:SetWordWrap(false);
