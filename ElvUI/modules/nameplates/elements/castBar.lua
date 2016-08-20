@@ -22,7 +22,7 @@ function mod:UpdateElement_CastBarOnValueChanged(value)
 	end
 
 	local color;
-	if(self.Border:IsShown()) then
+	if(self.shield and self.shield:IsShown()) then
 		color = mod.db.castNoInterruptColor;
 	else
 		if(value > 0 and (isChannel and (value/max) <= 0.02 or (value/max) >= 0.98)) then
@@ -32,6 +32,12 @@ function mod:UpdateElement_CastBarOnValueChanged(value)
 		end
 	end
 
+	local spell, _, spellName, iconTexture = UnitCastingInfo("target");
+	if(not spell) then
+		spell, _, spellName, iconTexture = UnitChannelInfo("target");
+	end
+
+	myPlate.CastBar.Name:SetText(spellName)
 	myPlate.CastBar.Icon.texture:SetTexture(blizzPlate.CastBar.Icon:GetTexture());
 	myPlate.CastBar:SetStatusBarColor(color.r, color.g, color.b);
 end
@@ -52,6 +58,18 @@ function mod:ConfigureElement_CastBar(frame)
 	castBar.Icon:SetWidth(self.db.castBar.height + self.db.healthBar.height + E.Border + E.Spacing*3);
 
 	castBar.Time:SetFont(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline);
+	castBar.Name:SetFont(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline);
+
+	if (self.db.castBar.hideSpellName) then
+		castBar.Name:Hide()
+	else
+		castBar.Name:Show()
+	end
+	if (self.db.castBar.hideTime) then
+		castBar.Time:Hide()
+	else
+		castBar.Time:Show()
+	end
 
 	castBar:SetStatusBarTexture(LSM:Fetch("statusbar", self.db.statusbar));
 end
@@ -75,6 +93,13 @@ function mod:ConstructElement_CastBar(parent)
 	frame.Time:SetJustifyH("RIGHT");
 	frame.Time:SetJustifyV("TOP");
 	frame.Time:SetWordWrap(false);
+	
+	frame.Name = frame:CreateFontString(nil, "OVERLAY")
+	frame.Name:SetPoint("TOPLEFT", frame, "BOTTOMLEFT", 0, -E.Border*3)
+	frame.Name:SetPoint("TOPRIGHT", frame.Time, "TOPLEFT", 30, 30)
+	frame.Name:SetJustifyH("LEFT")
+	frame.Name:SetJustifyV("TOP")
+	frame.Name:SetWordWrap(false)
 
 	frame.Spark = frame:CreateTexture(nil, "OVERLAY");
 	frame.Spark:SetTexture([[Interface\CastingBar\UI-CastingBar-Spark]]);

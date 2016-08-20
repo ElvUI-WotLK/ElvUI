@@ -440,9 +440,19 @@ E.Options.args.nameplate = {
 			get = function(info) return E.db.nameplate.castBar[ info[#info] ] end,
 			set = function(info, value) E.db.nameplate.castBar[ info[#info] ] = value; NP:UpdateAllPlates() end,			
 			args = {
+				hideSpellName = {
+					order = 1,
+					name = L["Hide Spell Name"],
+					type = "toggle",
+				},
+				hideTime = {
+					order = 2,
+					name = L["Hide Time"],
+					type = "toggle",
+				},
 				height = {
 					type = "range",
-					order = 1,
+					order = 3,
 					name = L["Height"],
 					type = "range",
 					min = 4, max = 30, step = 1,

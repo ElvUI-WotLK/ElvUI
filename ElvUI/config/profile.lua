@@ -153,8 +153,8 @@ P["nameplate"] = {
 	},
 	['castBar'] = {
 		['height'] = 6,
-		['color'] = { r = 1,g = 208/255,b = 0 },
-		['noInterrupt'] = { r = 0.78, g = 0.25, b = 0.25 },		
+		["hideSpellName"] = false,
+		["hideTime"] = false,	
 	},
 	['raidIcon'] = {
 		['xOffset'] = -4,
