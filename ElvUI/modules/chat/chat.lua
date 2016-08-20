@@ -997,6 +997,26 @@ function CH:ChatFrame_MessageEventHandler(event, ...)
 		if ( FCFManager_ShouldSuppressMessage(self, chatGroup, chatTarget) ) then
 			return true;
 		end
+		
+		if not (chatGroup == "CHANNEL") and not (self:GetName() == "AFKChat") then
+			local found2 = false
+			
+			for i = 1, #self.messageTypeList, 1 do
+				if self.messageTypeList[i] == chatGroup then
+					found2 = true
+					break
+				end
+				if self.messageTypeList[i] == "EMOTE" and chatGroup == "TEXT_EMOTE" then
+					found2 = true
+					break
+				end
+			end
+			
+			if not found2 then
+				return true
+			end
+		end
+		
 			
 		if ( chatGroup == "WHISPER" or chatGroup == "BN_WHISPER" ) then
 			if ( self.privateMessageList and not self.privateMessageList[strlower(arg2)] ) then
@@ -1236,9 +1256,9 @@ function CH:SetupChat(event, ...)
 	if E.private.chat.enable ~= true then return end
 	for _, frameName in pairs(CHAT_FRAMES) do
 		local frame = _G[frameName]
+		frame:SetMaxLines(CH.db.chatLines)
 		
 		if CH.db.chatDirection == 'TOP' then
-			frame:SetMaxLines(frame:GetMaxLines())
 			frame:SetInsertMode('TOP')
 		end
 		
@@ -1503,7 +1523,9 @@ function CH:DisplayChatHistory()
 
 		if type(data) == "table" and data[20] ~= nil then
 			CH.timeOverride = temp[i]
+			
 			CH.ChatFrame_MessageEventHandler(DEFAULT_CHAT_FRAME, data[20], unpack(data))
+			CH.ChatFrame_MessageEventHandler(ChatFrame3, data[20], unpack(data))
 		end
 	end
 end
@@ -1544,7 +1566,7 @@ function CH:SaveChatHistory(event, ...)
 			end
 		end
 		
-		if(c > 128) then
+		if(c > CH.db.chatHistoryLines) then
 			ElvCharacterDB.ChatLog[k] = nil;
 		end
 	end
@@ -1684,6 +1706,7 @@ function CH:Initialize()
 	self:RegisterEvent("CHAT_MSG_BN_WHISPER_INFORM", 'SaveChatHistory')
 	self:RegisterEvent("CHAT_MSG_CHANNEL", 'SaveChatHistory')
 	self:RegisterEvent("CHAT_MSG_EMOTE", 'SaveChatHistory')
+	self:RegisterEvent("CHAT_MSG_TEXT_EMOTE", 'SaveChatHistory')
 	self:RegisterEvent("CHAT_MSG_GUILD", 'SaveChatHistory')
 	self:RegisterEvent("CHAT_MSG_GUILD_ACHIEVEMENT", 'SaveChatHistory')
 	self:RegisterEvent("CHAT_MSG_OFFICER", 'SaveChatHistory')
@@ -1695,6 +1718,7 @@ function CH:Initialize()
 	self:RegisterEvent("CHAT_MSG_SAY", 'SaveChatHistory')
 	self:RegisterEvent("CHAT_MSG_WHISPER", 'SaveChatHistory')
 	self:RegisterEvent("CHAT_MSG_WHISPER_INFORM", 'SaveChatHistory')
+	self:RegisterEvent("CHAT_MSG_SYSTEM", 'SaveChatHistory')
 	self:RegisterEvent("CHAT_MSG_YELL", 'SaveChatHistory')
 	
 	--First get all pre-existing filters and copy them to our version of chatFilters using ChatFrame_GetMessageEventFilters

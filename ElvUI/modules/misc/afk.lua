@@ -182,7 +182,7 @@ function AFK:Initialize()
 	self.AFKMode:EnableKeyboard(true);
 	self.AFKMode:SetScript('OnKeyDown', OnKeyDown);
 	
-	self.AFKMode.chat = CreateFrame('ScrollingMessageFrame', nil, self.AFKMode);
+	self.AFKMode.chat = CreateFrame('ScrollingMessageFrame', 'AFKChat', self.AFKMode);
 	self.AFKMode.chat:SetSize(500, 200);
 	self.AFKMode.chat:SetPoint('TOPLEFT', self.AFKMode, 'TOPLEFT', 4, -4);
 	self.AFKMode.chat:FontTemplate();
