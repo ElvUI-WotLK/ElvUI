@@ -276,7 +276,7 @@ function AB:StyleButton(button, noBackdrop)
 		count:ClearAllPoints();
 		count:SetPoint("BOTTOMRIGHT", 0, 2);
 		count:FontTemplate(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline)
-		count:SetTextColor(color.r, color.g, color.b)
+		--count:SetTextColor(color.r, color.g, color.b)
 	end
 	
 	if macroName then
@@ -303,9 +303,12 @@ function AB:StyleButton(button, noBackdrop)
 	
 	if self.db.hotkeytext then
 		hotkey:FontTemplate(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline)
-		hotkey:SetTextColor(color.r, color.g, color.b)
+		--hotkey:SetTextColor(color.r, color.g, color.b)
 	end
-	
+
+	count:SetTextColor(color.r, color.g, color.b)
+	hotkey:SetTextColor(color.r, color.g, color.b)
+
 	self:FixKeybindText(button);
 	button:StyleButton();
 	
