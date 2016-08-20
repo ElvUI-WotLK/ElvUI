@@ -92,6 +92,7 @@ P["nameplate"] = {
 	["font"] = "Homespun",
 	["fontSize"] = 8,
 	["fontOutline"] = "MONOCHROMEOUTLINE",
+	["healthAnimationSpeed"] = 0.2,
 
 	["comboPoints"] = true,
 	['nonTargetAlpha'] = 0.6,

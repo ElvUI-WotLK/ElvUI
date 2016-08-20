@@ -171,6 +171,12 @@ E.Options.args.nameplate = {
 					isPercent = true,
 					min = 0, max = 1, step = 0.01
 				},
+				healthAnimationSpeed = {
+ 					order = 8,
+					type = "range",
+					name = L["Health Animation Speed"],
+					min = 0, max = 1, step = 0.01
+				},
 				fontGroup = {
 					order = 100,
 					type = "group",
