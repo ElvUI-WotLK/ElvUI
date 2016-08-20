@@ -111,13 +111,33 @@ E.Options.args.nameplate = {
 					name = L["StatusBar Texture"],
 					values = AceGUIWidgetLSMlists.statusbar
 				},
-				combatHide = {
-					type = "toggle",
+				showEnemyCombat = {
 					order = 1,
-					name = L["Combat Toggle"],
-					desc = L["Toggle the nameplates to be visible outside of combat and visible inside combat."],
-					set = function(info, value) E.db.nameplate[ info[#info] ] = value; NP:CombatToggle() end,
+					type = "select",
+					name = L["Enemy Combat Toggle"],
+					desc = L["Control enemy nameplates toggling on or off when in combat."],
+					values = {
+						["DISABLED"] = L["Disabled"],
+						["TOGGLE_ON"] = L["Toggle On While In Combat"],
+						["TOGGLE_OFF"] = L["Toggle Off While In Combat"],
+					},
+					set = function(info, value) 
+						E.db.nameplate[ info[#info] ] = value; 
+						NP:PLAYER_REGEN_ENABLED()
+					end,
 				},
+				showFriendlyCombat = {
+					order = 2,
+					type = "select",
+					name = L["Friendly Combat Toggle"],
+					desc = L["Control friendly nameplates toggling on or off when in combat."],
+					values = {
+						["DISABLED"] = L["Disabled"],
+						["TOGGLE_ON"] = L["Toggle On While In Combat"],
+						["TOGGLE_OFF"] = L["Toggle Off While In Combat"],
+					},					
+					set = function(info, value) E.db.nameplate[ info[#info] ] = value; NP:PLAYER_REGEN_ENABLED() end,
+				}, 
 				comboPoints = {
 					type = "toggle",
 					order = 3,
@@ -126,25 +146,25 @@ E.Options.args.nameplate = {
 				},
 				nonTargetAlpha = {
 					type = "range",
-					order = 3,
+					order = 4,
 					name = L["Non-Target Alpha"],
 					desc = L["Alpha of nameplates that are not your current target."],
 					min = 0, max = 1, step = 0.01, isPercent = true,
 				},
 				targetAlpha = {
 					type = "range",
-					order = 4,
+					order = 5,
 					name = L["Target Alpha"],
 					desc = L["Alpha of current target nameplate."],
 					min = 0, max = 1, step = 0.01, isPercent = true,
 				},
 				colorNameByValue = {
 					type = "toggle",
-					order = 5,
+					order = 6,
 					name = L["Color Name By Health Value"],		
 				},
 				lowHealthThreshold = {
-					order = 6,
+					order = 7,
 					type = "range",
 					name = L["Low Health Threshold"],
 					desc = L["Make the unitframe glow yellow when it is below this percent of health, it will glow red when the health value is half of this value."],

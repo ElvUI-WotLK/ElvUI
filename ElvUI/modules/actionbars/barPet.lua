@@ -208,8 +208,10 @@ function AB:PositionAndSizeBarPet()
 			button.CheckFixed = true;
 		end
 	end
-	
+
 	RegisterStateDriver(bar, 'visibility', self.db['barPet'].visibility);
+
+	bar:GetScript("OnSizeChanged")(bar)
 end
 
 function AB:UpdatePetBindings()

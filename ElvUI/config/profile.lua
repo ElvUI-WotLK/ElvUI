@@ -97,7 +97,8 @@ P["nameplate"] = {
 	['nonTargetAlpha'] = 0.6,
 	['targetAlpha'] = 1,
 	["lowHealthThreshold"] = 0.4,
-	['combatHide'] = false,
+	["showFriendlyCombat"] = "DISABLED",
+	["showEnemyCombat"] = "DISABLED",
 	['colorNameByValue'] = true,
 	['showName'] = true,
 	['wrapName'] = false,
@@ -2291,6 +2292,7 @@ P['chat'] = { -- Чат
 	['fadeUndockedTabs'] = true,
 	['fadeTabsNoBackdrop'] = true,
 	["useAltKey"] = false,
+	["numAllowedCombatRepeat"] = 3,
 	
 	['tabFont'] = 'PT Sans Narrow',
 	['tabFontSize'] = 12,
@@ -2393,6 +2395,7 @@ P['actionbar'] = { -- Панели команд
 	['font'] = 'Homespun',
 	['fontSize'] = 10,
 	['fontOutline'] = 'MONOCHROMEOUTLINE',
+	['fontColor'] = { r = 1, g = 1, b = 1 },
 	
 	['enable'] = true,
 	['macrotext'] = false,
