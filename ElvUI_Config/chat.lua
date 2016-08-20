@@ -142,9 +142,16 @@ E.Options.args.chat = {
 					set = function(info, value) 
 						E.db.chat[ info[#info] ] = value 
 					end,					
-				},					
+				},
+				numAllowedCombatRepeat = {
+ 					order = 13,
+					type = "range",
+					name = L["Allowed Combat Repeat"],
+					desc = L["Number of repeat characters while in combat before the chat editbox is automatically closed."],
+					min = 2, max = 10, step = 1,
+				},
 				timeStampFormat = {
-					order = 13,
+					order = 14,
 					type = 'select',
 					name = TIMESTAMPS_LABEL,
 					desc = OPTION_TOOLTIP_TIMESTAMPS,
@@ -159,7 +166,7 @@ E.Options.args.chat = {
 					},
 				},
 				chatDirection = {
-					order = 14,
+					order = 15,
 					type = 'select',
 					name = 'Chat Direction',
 					desc = 'Controls where text is added to the chat frame.',
@@ -294,7 +301,7 @@ E.Options.args.chat = {
 						end
 						bags:Layout(true);
 					end,
-					min = 50, max = 700, step = 1,
+					min = 50, max = 1000, step = 1,
 				},
 				spacer2 = {
 					order = 10,
@@ -323,7 +330,7 @@ E.Options.args.chat = {
 						E:GetModule('Chat'):PositionChat(true);
 						E:GetModule('Bags'):Layout();
 					end,
-					min = 50, max = 700, step = 1,
+					min = 50, max = 1000, step = 1,
 				},
 				panelBackdropNameLeft = {
 					order = 13,
@@ -371,7 +378,7 @@ E.Options.args.chat = {
 						['NONE'] = L['None'],
 						['OUTLINE'] = 'OUTLINE',
 						['MONOCHROME'] = (not E.isMacClient) and 'MONOCHROME' or nil,
-						['MONOCHROMEOUTLINE'] = 'MONOCROMEOUTLINE',
+						['MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
 						['THICKOUTLINE'] = 'THICKOUTLINE',
 					},
 				},
@@ -396,7 +403,7 @@ E.Options.args.chat = {
 						['NONE'] = L['None'],
 						['OUTLINE'] = 'OUTLINE',
 						['MONOCHROME'] = (not E.isMacClient) and 'MONOCHROME' or nil,
-						['MONOCHROMEOUTLINE'] = 'MONOCROMEOUTLINE',
+						['MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
 						['THICKOUTLINE'] = 'THICKOUTLINE',
 					},
 				},	
