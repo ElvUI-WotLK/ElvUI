@@ -424,7 +424,13 @@ P["unitframe"] = {
 				["detachFromFrame"] = false,
 				["detachedWidth"] = 250,
 				["autoHide"] = false,
-				["parent"] = "FRAME"
+				["parent"] = "FRAME",
+				["strataAndLevel"] = {
+					["useCustomStrata"] = false,
+					["frameStrata"] = "LOW",
+					["useCustomLevel"] = false,
+					["frameLevel"] = 1
+				},
 			},
 			["aurabar"] = {
 				["enable"] = true,
@@ -2295,6 +2301,7 @@ P['chat'] = { -- Чат
 	['fadeUndockedTabs'] = true,
 	['fadeTabsNoBackdrop'] = true,
 	["useAltKey"] = false,
+	["classColorMentionsChat"] = true,
 	["numAllowedCombatRepeat"] = 3,
 	
 	['tabFont'] = 'PT Sans Narrow',

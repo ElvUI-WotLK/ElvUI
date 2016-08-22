@@ -1279,11 +1279,16 @@ function CH:SetupChat(event, ...)
 		if not frame.scriptsSet then
 			frame:SetScript("OnMouseWheel", ChatFrame_OnMouseScroll)
 
+			--[[THIS CAUSES LUA ERROR WHEN RESETTING CHAT TO DEFAULTS OR WHEN RUNNING FCF_ResetChatWindows()
 			if id > NUM_CHAT_WINDOWS then
 				frame:SetScript("OnEvent", CH.FloatingChatFrame_OnEvent)
 			elseif id ~= 2 then
 				frame:SetScript("OnEvent", CH.ChatFrame_OnEvent)
-			end
+			end]]
+			--Use this instead for the time being
+			if id ~= 2 then
+				frame:SetScript("OnEvent", CH.FloatingChatFrame_OnEvent)
+ 			end
 
 			hooksecurefunc(frame, "SetScript", function(f, script, func)
 				if script == "OnMouseWheel" and func ~= ChatFrame_OnMouseScroll then
@@ -1418,10 +1423,12 @@ function CH:CheckKeyword(message)
 			end
 		end
 
-		if(CH.ClassNames[lowerCaseWord]) then
-			classColorTable = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[CH.ClassNames[lowerCaseWord]] or RAID_CLASS_COLORS[CH.ClassNames[lowerCaseWord]];
-			tempWord = word:gsub("%p", "");
-			word = word:gsub(tempWord, format("\124cff%.2x%.2x%.2x", classColorTable.r*255, classColorTable.g*255, classColorTable.b*255) .. tempWord.."\124r");
+		if self.db.classColorMentionsChat then
+			if(CH.ClassNames[lowerCaseWord]) then
+				classColorTable = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[CH.ClassNames[lowerCaseWord]] or RAID_CLASS_COLORS[CH.ClassNames[lowerCaseWord]];
+				tempWord = word:gsub("%p", "")
+				word = word:gsub(tempWord, format("\124cff%.2x%.2x%.2x", classColorTable.r*255, classColorTable.g*255, classColorTable.b*255)..tempWord.."\124r")
+			end
 		end
 
 		if isFirstWord then

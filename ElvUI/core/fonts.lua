@@ -28,7 +28,7 @@ function E:UpdateBlizzardFonts()
 	DAMAGE_TEXT_FONT	= COMBAT;
 	STANDARD_TEXT_FONT	= NORMAL;
 	
-	if self.db.general.font:lower():find('pixel') then
+	if self.db.general.font == "Homespun" then
 		MONOCHROME = 'MONOCHROME'
 	end
 	
@@ -83,6 +83,6 @@ function E:UpdateBlizzardFonts()
 		SetFont(SubZoneTextString,					NORMAL, 25, MONOCHROME .. "OUTLINE");
 		SetFont(PVPInfoTextString,					NORMAL, 22, MONOCHROME .. "OUTLINE");
 		SetFont(PVPArenaTextString,					NORMAL, 22, MONOCHROME .. "OUTLINE");
-		SetFont(CombatTextFont,						COMBAT, 100, "OUTLINE");
+		SetFont(CombatTextFont,						COMBAT, 100, MONOCHROME .. "OUTLINE");
 	end
 end

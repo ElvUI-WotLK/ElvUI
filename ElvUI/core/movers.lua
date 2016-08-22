@@ -228,6 +228,11 @@ function E:CalculateMoverPoints(mover, nudgeX, nudgeY)
 	local screenWidth, screenHeight, screenCenter = E.UIParent:GetRight(), E.UIParent:GetTop(), E.UIParent:GetCenter();
 	local x, y = mover:GetCenter();
 	
+	if not x or not y then
+		if not x then x = 300 end
+		if not y then y = 300 end
+	end
+
 	local LEFT = screenWidth / 3;
 	local RIGHT = screenWidth * 2 / 3;
 	local TOP = screenHeight / 2;
