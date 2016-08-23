@@ -115,13 +115,19 @@ E.Options.args.chat = {
 						CH:UpdateSettings();
 					end
 				},
-				spacer = {
+				classColorMentionsChat = {
 					order = 10,
+					type = "toggle",
+					name = L["Class Color Mentions"],
+					desc = L["Use class color for the names of players when they are mentioned."],
+				},
+				spacer = {
+					order = 11,
 					type = 'description',
 					name = '',
-				},				
+				},
 				throttleInterval = {
-					order = 11,
+					order = 12,
 					type = 'range',
 					name = L['Spam Interval'],
 					desc = L['Prevent the same messages from displaying in chat more than once within this set amount of seconds, set to zero to disable.'],
@@ -134,7 +140,7 @@ E.Options.args.chat = {
 					end,					
 				},
 				scrollDownInterval = {
-					order = 12,
+					order = 13,
 					type = 'range',
 					name = L['Scroll Interval'],
 					desc = L['Number of time in seconds to scroll down to the bottom of the chat window if you are not scrolled down completely.'],
@@ -144,14 +150,14 @@ E.Options.args.chat = {
 					end,					
 				},
 				numAllowedCombatRepeat = {
- 					order = 13,
+ 					order = 14,
 					type = "range",
 					name = L["Allowed Combat Repeat"],
 					desc = L["Number of repeat characters while in combat before the chat editbox is automatically closed."],
 					min = 2, max = 10, step = 1,
 				},
 				timeStampFormat = {
-					order = 14,
+					order = 15,
 					type = 'select',
 					name = TIMESTAMPS_LABEL,
 					desc = OPTION_TOOLTIP_TIMESTAMPS,
@@ -166,7 +172,7 @@ E.Options.args.chat = {
 					},
 				},
 				chatDirection = {
-					order = 15,
+					order = 16,
 					type = 'select',
 					name = 'Chat Direction',
 					desc = 'Controls where text is added to the chat frame.',
@@ -176,7 +182,7 @@ E.Options.args.chat = {
 					},
 				},
 				chatLines = {
-					order = 15,
+					order = 17,
 					type = 'range',
 					name = L['Max Chat Lines'],
 					desc = L['Number of chat messages to be kept in the frame before old messages are discarded. The interface has to be reloaded to show effect.'],
@@ -187,7 +193,7 @@ E.Options.args.chat = {
 					end,					
 				},
 				chatHistoryLines = {
-					order = 16,
+					order = 18,
 					type = 'range',
 					name = L['Chat History Lines'],
 					desc = L['Number of chat messages to be stores in the chat history.'],

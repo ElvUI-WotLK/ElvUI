@@ -374,7 +374,7 @@ local function GetOptionsTable_Power(hasDetatchOption, updateFunc, groupName, nu
 					order = 5,
 					type = "range",
 					name = L["Frame Level"],
-					min = 0, max = 128, step = 1
+					min = 2, max = 128, step = 1
 				}
 			}
 		};
@@ -2630,9 +2630,55 @@ E.Options.args.unitframe.args.player = {
 					values = {
 						["FRAME"] = "FRAME",
 						["UIPARENT"] = "UIPARENT"
-					}
-				}
-			}
+					},
+				},
+				strataAndLevel = {
+					order = 20,
+					type = "group",
+					name = L["Strata and Level"],
+					get = function(info) return E.db.unitframe.units['player']['classbar']["strataAndLevel"][ info[#info] ] end,
+					set = function(info, value) E.db.unitframe.units['player']['classbar']["strataAndLevel"][ info[#info] ] = value; UF:CreateAndUpdateUF('player') end,
+					guiInline = true,
+					disabled = function() return not E.db.unitframe.units['player']['classbar'].detachFromFrame end,
+					hidden = function() return not E.db.unitframe.units['player']['classbar'].detachFromFrame end,
+					args = {
+						useCustomStrata = {
+							order = 1,
+							type = "toggle",
+							name = L["Use Custom Strata"],
+						},
+						frameStrata = {
+							order = 2,
+							type = "select",
+							name = L["Frame Strata"],
+							values = {
+								["BACKGROUND"] = "BACKGROUND",
+								["LOW"] = "LOW",
+								["MEDIUM"] = "MEDIUM",
+								["HIGH"] = "HIGH",
+								["DIALOG"] = "DIALOG",
+								["TOOLTIP"] = "TOOLTIP",
+							},
+						},
+						spacer = {
+							order = 3,
+							type = "description",
+							name = "",
+						},
+						useCustomLevel = {
+							order = 4,
+							type = "toggle",
+							name = L["Use Custom Level"],
+						},
+						frameLevel = {
+							order = 5,
+							type = "range",
+							name = L["Frame Level"],
+							min = 2, max = 128, step = 1,
+						},
+					},
+				},
+			},
 		},
 		pvp = {
 			order = 850,
@@ -3475,7 +3521,7 @@ E.Options.args.unitframe.args.pet = {
 					type = "range",
 					name = L["Size"],
 					desc = L["Size of the indicator icon."],
-					min = 4, max = 15, step = 1
+					min = 4, max = 50, step = 1
 				},
 				fontSize = {
 					order = 3,
@@ -4219,7 +4265,7 @@ E.Options.args.unitframe.args.party = {
 					type = "range",
 					name = L["Size"],
 					desc = L["Size of the indicator icon."],
-					min = 4, max = 15, step = 1
+					min = 4, max = 50, step = 1
 				},
 				fontSize = {
 					order = 4,
@@ -4784,7 +4830,7 @@ E.Options.args.unitframe.args["raid"] = {
 					type = "range",
 					name = L["Size"],
 					desc = L["Size of the indicator icon."],
-					min = 4, max = 15, step = 1
+					min = 4, max = 50, step = 1
 				},
 				fontSize = {
 					order = 4,
@@ -5180,7 +5226,7 @@ E.Options.args.unitframe.args["raid40"] = {
 					name = L["Size"],
 					desc = L["Size of the indicator icon."],
 					order = 3,
-					min = 4, max = 15, step = 1,
+					min = 4, max = 50, step = 1,
 				},
 				fontSize = {
 					type = "range",
@@ -5556,7 +5602,7 @@ E.Options.args.unitframe.args.raidpet = {
 					name = L["Size"],
 					desc = L["Size of the indicator icon."],
 					order = 3,
-					min = 4, max = 15, step = 1,
+					min = 4, max = 50, step = 1,
 				},
 				fontSize = {
 					type = "range",
@@ -5897,7 +5943,7 @@ E.Options.args.unitframe.args.tank = { -- Танки
 					name = L["Size"],
 					desc = L["Size of the indicator icon."],
 					order = 3,
-					min = 4, max = 15, step = 1,
+					min = 4, max = 50, step = 1,
 				},
 				fontSize = {
 					type = "range",
@@ -6080,7 +6126,7 @@ E.Options.args.unitframe.args.assist = { -- Помощники
 					name = L["Size"],
 					desc = L["Size of the indicator icon."],
 					order = 3,
-					min = 4, max = 15, step = 1,
+					min = 4, max = 50, step = 1,
 				},
 				fontSize = {
 					type = "range",

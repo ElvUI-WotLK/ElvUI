@@ -86,7 +86,7 @@ function UF:Update_FocusFrame(frame, db)
 	
 	UF:Configure_Portrait(frame);
 	
-	UF:Configure_Portrait(frame);
+	UF:Configure_Threat(frame)
 	
 	UF:EnableDisable_Auras(frame);
 	UF:Configure_Auras(frame, "Buffs");
