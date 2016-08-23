@@ -3521,7 +3521,7 @@ E.Options.args.unitframe.args.pet = {
 					type = "range",
 					name = L["Size"],
 					desc = L["Size of the indicator icon."],
-					min = 4, max = 15, step = 1
+					min = 4, max = 50, step = 1
 				},
 				fontSize = {
 					order = 3,
@@ -4265,7 +4265,7 @@ E.Options.args.unitframe.args.party = {
 					type = "range",
 					name = L["Size"],
 					desc = L["Size of the indicator icon."],
-					min = 4, max = 15, step = 1
+					min = 4, max = 50, step = 1
 				},
 				fontSize = {
 					order = 4,
@@ -4830,7 +4830,7 @@ E.Options.args.unitframe.args["raid"] = {
 					type = "range",
 					name = L["Size"],
 					desc = L["Size of the indicator icon."],
-					min = 4, max = 15, step = 1
+					min = 4, max = 50, step = 1
 				},
 				fontSize = {
 					order = 4,
@@ -5226,7 +5226,7 @@ E.Options.args.unitframe.args["raid40"] = {
 					name = L["Size"],
 					desc = L["Size of the indicator icon."],
 					order = 3,
-					min = 4, max = 15, step = 1,
+					min = 4, max = 50, step = 1,
 				},
 				fontSize = {
 					type = "range",
@@ -5602,7 +5602,7 @@ E.Options.args.unitframe.args.raidpet = {
 					name = L["Size"],
 					desc = L["Size of the indicator icon."],
 					order = 3,
-					min = 4, max = 15, step = 1,
+					min = 4, max = 50, step = 1,
 				},
 				fontSize = {
 					type = "range",
@@ -5943,7 +5943,7 @@ E.Options.args.unitframe.args.tank = { -- Танки
 					name = L["Size"],
 					desc = L["Size of the indicator icon."],
 					order = 3,
-					min = 4, max = 15, step = 1,
+					min = 4, max = 50, step = 1,
 				},
 				fontSize = {
 					type = "range",
@@ -6126,7 +6126,7 @@ E.Options.args.unitframe.args.assist = { -- Помощники
 					name = L["Size"],
 					desc = L["Size of the indicator icon."],
 					order = 3,
-					min = 4, max = 15, step = 1,
+					min = 4, max = 50, step = 1,
 				},
 				fontSize = {
 					type = "range",

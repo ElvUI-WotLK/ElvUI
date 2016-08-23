@@ -177,6 +177,8 @@ local function CreateMover(parent, name, text, overlay, snapOffset, postdrag)
 			end
 			if(IsControlKeyDown() and self.textString) then
 				E:ResetMovers(self.textString);
+			elseif IsShiftKeyDown() then
+				self:Hide()
 			end
 		end
 	end

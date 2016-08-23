@@ -155,7 +155,6 @@ L["Layout"] = "Расположение"
 L["Lock"] = "Закрепить"
 L['Low Resolution'] = "Низкое разрешение"
 L["low"] = "низким"
-L["Movers unlocked. Move them now and click Lock when you are done."] = "Блокировка отключена. Передвиньте фреймы и нажмите 'Закрепить', когда закончите."
 L['Nudge'] = "Сдвиг"
 L['Physical DPS'] = "Физический урон"
 L["Pixel Perfect"] = "Pixel Perfect"
@@ -264,6 +263,12 @@ L['TargetTargetTarget Frame'] = 'Цель цели цели'
 L['Tooltip'] = "Подсказка"
 L['Totems'] = "Тотемы"
 L["Vehicle Seat Frame"] = "Техника"
+L["DESC_MOVERCONFIG"] = [=[Блокировка отключена. Передвиньте фреймы и нажмите 'Закрепить', когда закончите.
+
+Options:
+  Shift + RightClick - Hides mover temporarily.
+  Ctrl + RightClick - Resets mover position to default.
+]=]
 L['Watch Frame'] = "Задания"
 L['Weapons'] = "Оружие"
 
