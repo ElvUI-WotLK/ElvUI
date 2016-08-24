@@ -56,12 +56,6 @@ mod.CachedAuraDurations = {};
 mod.BuffCache = {};
 mod.DebuffCache = {};
 
-mod.HealerSpecs = {
-	[L["Restoration"]] = true,
-	[L["Holy"]] = true,
-	[L["Discipline"]] = true
-};
-
 mod.RaidTargetReference = {
 	["STAR"] = 0x00000001,
 	["CIRCLE"] = 0x00000002,
@@ -275,7 +269,7 @@ function mod:CheckFilter(myPlate)
 end
 
 function mod:CheckBGHealers()
-	local name, _;
+	local name, _, damageDone, healingDone;
 	for i = 1, GetNumBattlefieldScores() do
 		name, _, _, _, _, _, _, _, _, _, damageDone, healingDone = GetBattlefieldScore(i);
 		if(name) then
@@ -284,18 +278,6 @@ function mod:CheckBGHealers()
 				self.Healers[name] = true;
 			elseif(name and self.Healers[name]) then
 				self.Healers[name] = nil;
-			end
-		end
-	end
-end
-
-function mod:CheckArenaHealers()
-	for i = 1, 5 do
-		local name = UnitName(format("arena%d", i));
-		if(name and name ~= UNKNOWN) then
-			local talentSpec = E:GetModule("Tooltip"):GetTalentSpec(nil, format("arena%d", i));
-			if(talentSpec and self.HealerSpecs[talentSpec]) then
-				self.Healers[name] = talentSpec;
 			end
 		end
 	end
@@ -1060,13 +1042,7 @@ function mod:PLAYER_ENTERING_WORLD()
 	if inInstance and instanceType == "pvp" --[[and self.db.raidHealIcon.markHealers]] then
 		self.CheckHealerTimer = self:ScheduleRepeatingTimer("CheckBGHealers", 3);
 		self:CheckBGHealers();
-	elseif inInstance and instanceType == "arena" --[[and self.db.raidHealIcon.markHealers]] then
-		self:RegisterEvent("UNIT_NAME_UPDATE", "CheckArenaHealers");
-	--	self:RegisterEvent("ARENA_OPPONENT_UPDATE", "CheckArenaHealers");
-		self:CheckArenaHealers();
 	else
-		self:UnregisterEvent("UNIT_NAME_UPDATE");
-	--	self:UnregisterEvent("ARENA_OPPONENT_UPDATE");
 		if(self.CheckHealerTimer) then
 			self:CancelTimer(self.CheckHealerTimer);
 			self.CheckHealerTimer = nil;
@@ -1074,6 +1050,8 @@ function mod:PLAYER_ENTERING_WORLD()
 	end
 end
 
+local PET = COMBATLOG_OBJECT_TYPE_PET;
+local HOSTILE_OUTSIDER = bit.bor(COMBATLOG_OBJECT_AFFILIATION_OUTSIDER, COMBATLOG_OBJECT_REACTION_HOSTILE);
 function mod:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, ...)
 	local sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags, spellID, spellName, _, auraType, stackCount = ...;
 	if(event == "SPELL_AURA_APPLIED" or event == "SPELL_AURA_REFRESH" or event == "SPELL_AURA_APPLIED_DOSE" or event == "SPELL_AURA_REMOVED_DOSE" or event == "SPELL_AURA_BROKEN" or event == "SPELL_AURA_BROKEN_SPELL" or event == "SPELL_AURA_REMOVED") then
@@ -1107,6 +1085,15 @@ function mod:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, ...)
 		local frame = self:SearchForFrame(destGUID, raidIcon, name);
 		if(frame) then
 			self:UpdateElement_Auras(frame);
+		end
+	end
+
+	local inInstance, instanceType = IsInInstance();
+	if inInstance and instanceType == "arena" and sourceName --[[and self.db.raidHealIcon.markHealers]] then
+		if(not band(sourceFlags, HOSTILE_OUTSIDER) ~= HOSTILE_OUTSIDER or band(destFlags, PET) == PET) then
+			if(event:sub(-5) == "_HEAL" and sourceGUID ~= destGUID) then
+				self.Healers[sourceName] = true;
+			end
 		end
 	end
 end
