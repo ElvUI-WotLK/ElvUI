@@ -283,7 +283,6 @@ L["Vehicle Seat Frame"] = "Marco del Asiento del Vehículo"
 --NamePlates
 L["Discipline"] = "Disciplina"
 L["Holy"] = "Sagrado"
-L["Mistweaver"] = "Tejedor de niebla"
 L["Restoration"] = "Restauración"
 
 --Prints

@@ -272,6 +272,11 @@ Options:
 L['Watch Frame'] = "Задания"
 L['Weapons'] = "Оружие"
 
+--NamePlates
+L["Discipline"] = "Послушание";
+L["Holy"] = "Свет";
+L["Restoration"] = "Исцеление";
+
 --Prints
 L[" |cff00ff00bound to |r"] = " |cff00ff00назначено для |r"
 L["%s frame(s) has a conflicting anchor point, please change either the buff or debuff anchor point so they are not attached to each other. Forcing the debuffs to be attached to the main unitframe until fixed."] = "Обнаружен конфликт точек фиксирования во фрейме(ах) %s. Пожалуйста, переназначьте фиксирование баффов и дебаффов так, чтобы они не крепились друг к другу. Установлено принудительное крепление дебаффов к фрейму."

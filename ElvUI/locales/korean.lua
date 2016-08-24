@@ -283,7 +283,6 @@ L["Vehicle Seat Frame"] = "차량 좌석 프레임"
 --NamePlates
 L["Discipline"] = "수양"
 L["Holy"] = "신성"
-L["Mistweaver"] = "운무"
 L["Restoration"] = "회복"
 
 --Prints

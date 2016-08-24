@@ -96,7 +96,7 @@ function mod:ConstructElement_CastBar(parent)
 	
 	frame.Name = frame:CreateFontString(nil, "OVERLAY")
 	frame.Name:SetPoint("TOPLEFT", frame, "BOTTOMLEFT", 0, -E.Border*3)
-	frame.Name:SetPoint("TOPRIGHT", frame.Time, "TOPLEFT", 30, 30)
+	frame.Name:SetPoint("TOPRIGHT", frame.Time, "TOPLEFT")
 	frame.Name:SetJustifyH("LEFT")
 	frame.Name:SetJustifyV("TOP")
 	frame.Name:SetWordWrap(false)

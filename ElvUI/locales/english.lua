@@ -273,6 +273,11 @@ Options:
 L['Watch Frame'] = true;
 L['Weapons'] = true;
 
+--NamePlates
+L["Discipline"] = true;
+L["Holy"] = true;
+L["Restoration"] = true;
+
 --Prints
 L[" |cff00ff00bound to |r"] = true;
 L["%s frame(s) has a conflicting anchor point, please change either the buff or debuff anchor point so they are not attached to each other. Forcing the debuffs to be attached to the main unitframe until fixed."] = true;

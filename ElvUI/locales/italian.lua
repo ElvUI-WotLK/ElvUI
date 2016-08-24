@@ -283,7 +283,6 @@ L["Vehicle Seat Frame"] = true;
 --NamePlates
 L["Discipline"] = true;
 L["Holy"] = true;
-L["Mistweaver"] = true;
 L["Restoration"] = true;
 
 --Prints

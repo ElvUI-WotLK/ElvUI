@@ -288,7 +288,6 @@ Options:
 --NamePlates
 L["Discipline"] = "Disziplin"
 L["Holy"] = "Heilig"
-L["Mistweaver"] = "Nebelwirker"
 L["Restoration"] = "Wiederherstellung"
 
 --Prints

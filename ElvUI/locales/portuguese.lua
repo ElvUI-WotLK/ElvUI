@@ -283,7 +283,6 @@ L["Vehicle Seat Frame"] = "Quadro de Assento de Veículo"
 --NamePlates
 L["Discipline"] = "Disciplina"
 L["Holy"] = "Sagrado"
-L["Mistweaver"] = "Tecelão da Névoa"
 L["Restoration"] = "Restauração"
 
 --Prints

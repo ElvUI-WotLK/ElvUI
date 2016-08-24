@@ -39,6 +39,7 @@ local FSPAT = "%s*"..((_G.FOREIGN_SERVER_LABEL:gsub("^%s", "")):gsub("[%*()]", "
 
 mod.NumTargetChecks = -1;
 mod.CreatedPlates = {};
+mod.Healers = {};
 mod.ComboPoints = {};
 mod.ByRaidIcon = {};
 mod.ByName = {};
@@ -54,6 +55,12 @@ mod.AuraTarget = {};
 mod.CachedAuraDurations = {};
 mod.BuffCache = {};
 mod.DebuffCache = {};
+
+mod.HealerSpecs = {
+	[L["Restoration"]] = true,
+	[L["Holy"]] = true,
+	[L["Discipline"]] = true
+};
 
 mod.RaidTargetReference = {
 	["STAR"] = 0x00000001,
@@ -258,7 +265,40 @@ function mod:CheckFilter(myPlate)
 		myPlate:Show();
 	end
 
+	if(mod.Healers[name]) then
+		myPlate.HealerIcon:Show();
+	else
+		myPlate.HealerIcon:Hide();
+	end
+
 	return true;
+end
+
+function mod:CheckBGHealers()
+	local name, _;
+	for i = 1, GetNumBattlefieldScores() do
+		name, _, _, _, _, _, _, _, _, _, damageDone, healingDone = GetBattlefieldScore(i);
+		if(name) then
+			name = name:match("(.+)%-.+") or name;
+			if(name and healingDone > damageDone) then
+				self.Healers[name] = true;
+			elseif(name and self.Healers[name]) then
+				self.Healers[name] = nil;
+			end
+		end
+	end
+end
+
+function mod:CheckArenaHealers()
+	for i = 1, 5 do
+		local name = UnitName(format("arena%d", i));
+		if(name and name ~= UNKNOWN) then
+			local talentSpec = E:GetModule("Tooltip"):GetTalentSpec(nil, format("arena%d", i));
+			if(talentSpec and self.HealerSpecs[talentSpec]) then
+				self.Healers[name] = talentSpec;
+			end
+		end
+	end
 end
 
 function mod:UpdateLevelAndName(myPlate)
@@ -280,12 +320,12 @@ function mod:UpdateLevelAndName(myPlate)
 		end
 	end
 
-	if(mod.db.showName) then
-		myPlate.Name:SetText(self.Name:GetText());
-		if(not myPlate.Name:IsShown()) then myPlate.Name:Show(); end
-	elseif(myPlate.Name:IsShown()) then
+	if(not mod.db.showName) then
 		myPlate.Name:SetText("");
 		myPlate.Name:Hide();
+	else
+		myPlate.Name:SetText(self.Name:GetText());
+		if(not myPlate.Name:IsShown()) then myPlate.Name:Show(); end
 	end
 
 	if(self.RaidIcon:IsShown()) then
@@ -640,6 +680,7 @@ function mod:CreatePlate(frame)
 	myPlate.Buffs = self:ConstructElement_Auras(myPlate, 5, "RIGHT");
 	myPlate.Debuffs = self:ConstructElement_Auras(myPlate, 5, "LEFT");
 
+	myPlate.HealerIcon = self:ConstructElement_HealerIcon(myPlate);
 	myPlate.CPoints = self:ConstructElement_CPoints(myPlate);
 
 	frame:HookScript("OnShow", self.OnShow);
@@ -1013,7 +1054,24 @@ function mod:PLAYER_REGEN_ENABLED()
 end
 
 function mod:PLAYER_ENTERING_WORLD()
+	twipe(self.Healers);
 	twipe(self.ComboPoints);
+	local inInstance, instanceType = IsInInstance();
+	if inInstance and instanceType == "pvp" --[[and self.db.raidHealIcon.markHealers]] then
+		self.CheckHealerTimer = self:ScheduleRepeatingTimer("CheckBGHealers", 3);
+		self:CheckBGHealers();
+	elseif inInstance and instanceType == "arena" --[[and self.db.raidHealIcon.markHealers]] then
+		self:RegisterEvent("UNIT_NAME_UPDATE", "CheckArenaHealers");
+	--	self:RegisterEvent("ARENA_OPPONENT_UPDATE", "CheckArenaHealers");
+		self:CheckArenaHealers();
+	else
+		self:UnregisterEvent("UNIT_NAME_UPDATE");
+	--	self:UnregisterEvent("ARENA_OPPONENT_UPDATE");
+		if(self.CheckHealerTimer) then
+			self:CancelTimer(self.CheckHealerTimer);
+			self.CheckHealerTimer = nil;
+		end
+	end
 end
 
 function mod:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, ...)
