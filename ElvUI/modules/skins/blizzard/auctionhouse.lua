@@ -102,6 +102,12 @@ local function LoadSkin()
 			self:GetNormalTexture():SetTexCoord(unpack(E.TexCoords));
 			self:GetNormalTexture():SetInside();
 		end
+		local name, texture, count, quality, canUse, price, pricePerUnit, stackCount, totalCount = GetAuctionSellItemInfo()
+		if (quality and quality > 1) then
+			AuctionsItemButton:SetBackdropBorderColor(GetItemQualityColor(quality));
+		else
+			AuctionsItemButton:SetTemplate("Default", true)
+		end
 	end);
 	
 	local sorttabs = {
