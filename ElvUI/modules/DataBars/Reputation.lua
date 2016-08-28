@@ -9,9 +9,9 @@ function mod:UpdateReputation(event)
 	local name, reaction, min, max, value = GetWatchedFactionInfo();
 	local numFactions = GetNumFactions();
 
-	if(not name) then
+	if not name or (event == "PLAYER_REGEN_DISABLED" and self.db.reputation.hideInCombat) then
 		bar:Hide();
-	else
+	elseif (not self.db.reputation.hideInCombat or not InCombatLockdown()) then
 		bar:Show();
 
 		if(self.db.reputation.hideInVehicle) then
@@ -93,6 +93,9 @@ end
 function mod:LoadReputationBar()
 	self.repBar = self:CreateBar("ElvUI_ReputationBar", self.ReputationBar_OnEnter, "RIGHT", RightChatPanel, "LEFT", E.Border - E.Spacing*3, 0);
 	E:RegisterStatusBar(self.repBar.statusBar);
+
+	self:RegisterEvent("PLAYER_REGEN_DISABLED", "UpdateReputation")
+	self:RegisterEvent("PLAYER_REGEN_ENABLED", "UpdateReputation")
 
 	self:UpdateReputationDimensions();
 

@@ -29,6 +29,10 @@ function UF:Configure_ClassBar(frame)
 		frame.CLASSBAR_HEIGHT = 3;
 		if(db.classbar) then db.classbar.height = 3; end
 		UF.ToggleResourceBar(bars);
+	elseif (not frame.CLASSBAR_DETACHED and frame.CLASSBAR_HEIGHT > 30) then
+		frame.CLASSBAR_HEIGHT = 10
+		if db.classbar then db.classbar.height = 10 end
+		UF.ToggleResourceBar(bars)
 	end
 	
 	local CLASSBAR_WIDTH = frame.CLASSBAR_WIDTH;
@@ -158,6 +162,12 @@ function UF:Configure_ClassBar(frame)
 					if(bars[i].bg) then
 						bars[i].bg:SetTexture(unpack(ElvUF.colors[frame.ClassBar]));
 					end
+				end
+
+				if frame.CLASSBAR_DETACHED and db.classbar.verticalOrientation then
+					bars[i]:SetOrientation("VERTICAL")
+				else
+					bars[i]:SetOrientation("HORIZONTAL")
 				end
 				bars[i]:Show();
 			end

@@ -11,10 +11,11 @@ end
 
 function mod:UpdateExperience(event)
 	local bar = self.expBar;
+	local hideXP = ((UnitLevel('player') == MAX_PLAYER_LEVEL and self.db.experience.hideAtMaxLevel) or IsXPUserDisabled())
 
-	if((UnitLevel("player") == MAX_PLAYER_LEVEL and self.db.experience.hideAtMaxLevel) or IsXPUserDisabled()) then
+	if hideXP or (event == "PLAYER_REGEN_DISABLED" and self.db.experience.hideInCombat) then
 		bar:Hide();
-	else
+	elseif not hideXP and (not self.db.experience.hideInCombat or not InCombatLockdown()) then
 		bar:Show();
 
 		if(self.db.experience.hideInVehicle) then
@@ -127,6 +128,12 @@ function mod:LoadExperienceBar()
 	self.expBar.rested:SetStatusBarTexture(E.media.normTex);
 	E:RegisterStatusBar(self.expBar.rested);
 	self.expBar.rested:SetStatusBarColor(1, 0, 1, 0.2);
+
+	self.expBar.eventFrame = CreateFrame("Frame")
+	self.expBar.eventFrame:Hide()
+	self.expBar.eventFrame:RegisterEvent("PLAYER_REGEN_DISABLED")
+	self.expBar.eventFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
+	self.expBar.eventFrame:SetScript("OnEvent", function(self, event) mod:UpdateExperience(event) end)
 
 	self:UpdateExperienceDimensions();
 
