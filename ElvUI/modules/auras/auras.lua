@@ -482,71 +482,68 @@ function A:Initialize()
 	self.DebuffFrame = self:CreateAuraHeader('HARMFUL');
 	self.DebuffFrame:Point("BOTTOMRIGHT", MMHolder, "BOTTOMLEFT", -(6 + E.Border), E.Border + E.Spacing);
 	E:CreateMover(self.DebuffFrame, 'DebuffsMover', L['Player Debuffs']);
+
+	self.WeaponFrame = CreateFrame("Frame", "ElvUIPlayerWeapons", UIParent);
+	self.WeaponFrame:Point("TOPRIGHT", MMHolder, "BOTTOMRIGHT", 0, -E.Border - E.Spacing);
+	self.WeaponFrame:Size(A.db.buffs.size);
 	
-	if(E.myclass == "ROGUE" or E.myclass == "SHAMAN" or E.myclass == "WARLOCK") then
-		self.WeaponFrame = CreateFrame("Frame", "ElvUIPlayerWeapons", UIParent);
-		self.WeaponFrame:Point("TOPRIGHT", MMHolder, "BOTTOMRIGHT", 0, -E.Border - E.Spacing);
-		self.WeaponFrame:Size(A.db.buffs.size);
+	self.WeaponFrame.buttons = {};
+	for i = 1, 2 do
+		self.WeaponFrame.buttons[i] = CreateFrame("Button", "$parentButton" .. i, self.WeaponFrame);
+		self.WeaponFrame.buttons[i]:Size(A.db.buffs.size);
 		
-		self.WeaponFrame.buttons = {};
-		for i = 1, 2 do
-			self.WeaponFrame.buttons[i] = CreateFrame("Button", "$parentButton" .. i, self.WeaponFrame);
-			self.WeaponFrame.buttons[i]:Size(A.db.buffs.size);
-			
-			if(i == 1) then
-				self.WeaponFrame.buttons[i]:SetPoint("RIGHT", self.WeaponFrame);
-			else
-				self.WeaponFrame.buttons[i]:SetPoint("RIGHT", self.WeaponFrame.buttons[1], "LEFT", -A.db.buffs.horizontalSpacing, 0);
-			end
-			
-			A:CreateIcon(self.WeaponFrame.buttons[i]);
-			self.WeaponFrame.buttons[i].isWeapon = true;
+		if(i == 1) then
+			self.WeaponFrame.buttons[i]:SetPoint("RIGHT", self.WeaponFrame);
+		else
+			self.WeaponFrame.buttons[i]:SetPoint("RIGHT", self.WeaponFrame.buttons[1], "LEFT", -A.db.buffs.horizontalSpacing, 0);
 		end
 		
-		self.WeaponFrame:RegisterEvent("UNIT_AURA");
-		self.WeaponFrame:SetScript("OnUpdate", function(self, event, ...)
-			if(self:IsVisible()) then
-				local hasMainHandEnchant, mainHandExpiration, mainHandCharges, hasOffHandEnchant, offHandExpiration, offHandCharges = GetWeaponEnchantInfo();
-				if(not hasMainHandEnchant and not hasOffHandEnchant) then
-					for i = 1, 2 do
-						self.buttons[i]:Hide();
-					end
-					return;
-				end
-				
-				local textureName;
-				local enchantIndex = 0;
-				if(hasOffHandEnchant) then
-					enchantIndex = enchantIndex + 1;
-					textureName = GetInventoryItemTexture("player", 17);
-					self.buttons[1]:SetID(17);
-					self.buttons[1].texture:SetTexture(textureName);
-					self.buttons[1].duration = offHandExpiration;
-					self.buttons[1]:Show();
-					
-					A:UpdateWeapon(self.buttons[1]);
-				end
-				
-				if(hasMainHandEnchant) then
-					enchantIndex = enchantIndex + 1;
-					enchantButton = self.buttons[enchantIndex];
-					textureName = GetInventoryItemTexture("player", 16);
-					enchantButton:SetID(16);
-					enchantButton.texture:SetTexture(textureName);
-					enchantButton.duration = mainHandExpiration;
-					enchantButton:Show();
-					
-					A:UpdateWeapon(enchantButton);
-				end
-				self.enchantIndex = enchantIndex;
-				
-				for i = enchantIndex+1, 2 do
+		A:CreateIcon(self.WeaponFrame.buttons[i]);
+		self.WeaponFrame.buttons[i].isWeapon = true;
+	end
+
+	self.WeaponFrame:SetScript("OnUpdate", function(self, event, ...)
+		if(self:IsVisible()) then
+			local hasMainHandEnchant, mainHandExpiration, mainHandCharges, hasOffHandEnchant, offHandExpiration, offHandCharges = GetWeaponEnchantInfo();
+			if(not hasMainHandEnchant and not hasOffHandEnchant) then
+				for i = 1, 2 do
 					self.buttons[i]:Hide();
 				end
+				return;
 			end
-		end);
-		E:CreateMover(self.WeaponFrame, "WeaponsMover", L["Player Weapons"]);
-	end
+			
+			local textureName;
+			local enchantIndex = 0;
+			if(hasOffHandEnchant) then
+				enchantIndex = enchantIndex + 1;
+				textureName = GetInventoryItemTexture("player", 17);
+				self.buttons[1]:SetID(17);
+				self.buttons[1].texture:SetTexture(textureName);
+				self.buttons[1].duration = offHandExpiration;
+				self.buttons[1]:Show();
+				
+				A:UpdateWeapon(self.buttons[1]);
+			end
+			
+			if(hasMainHandEnchant) then
+				enchantIndex = enchantIndex + 1;
+				enchantButton = self.buttons[enchantIndex];
+				textureName = GetInventoryItemTexture("player", 16);
+				enchantButton:SetID(16);
+				enchantButton.texture:SetTexture(textureName);
+				enchantButton.duration = mainHandExpiration;
+				enchantButton:Show();
+				
+				A:UpdateWeapon(enchantButton);
+			end
+			self.enchantIndex = enchantIndex;
+			
+			for i = enchantIndex+1, 2 do
+				self.buttons[i]:Hide();
+			end
+		end
+	end);
+	E:CreateMover(self.WeaponFrame, "WeaponsMover", L["Player Weapons"]);
 end
 
 E:RegisterModule(A:GetName());
