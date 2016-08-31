@@ -47,7 +47,7 @@ local function LoadSkin()
 	S:HandleCheckBox(WorldMapQuestShowObjectives);
 
 	WorldMapQuestDetailScrollFrame.backdrop = CreateFrame("Frame", nil, WorldMapQuestDetailScrollFrame);
-	WorldMapQuestDetailScrollFrame.backdrop:SetTemplate("Default");
+	WorldMapQuestDetailScrollFrame.backdrop:SetTemplate("Transparent");
 	WorldMapQuestDetailScrollFrame.backdrop:Point("TOPLEFT", -21, 3);
 	WorldMapQuestDetailScrollFrame.backdrop:Point("BOTTOMRIGHT", 25, -3);
 	WorldMapQuestDetailScrollFrame.backdrop:SetFrameLevel(WorldMapQuestDetailScrollFrame:GetFrameLevel());
@@ -56,13 +56,13 @@ local function LoadSkin()
 	WorldMapQuestDetailScrollFrameTrack.Show = E.noop;
 
 	WorldMapQuestRewardScrollFrame.backdrop = CreateFrame("Frame", nil, WorldMapQuestRewardScrollFrame);
-	WorldMapQuestRewardScrollFrame.backdrop:SetTemplate("Default");
+	WorldMapQuestRewardScrollFrame.backdrop:SetTemplate("Transparent");
 	WorldMapQuestRewardScrollFrame.backdrop:Point("TOPLEFT", 0, 3);
 	WorldMapQuestRewardScrollFrame.backdrop:Point("BOTTOMRIGHT", 20, -3);
 	WorldMapQuestRewardScrollFrame.backdrop:SetFrameLevel(WorldMapQuestRewardScrollFrame:GetFrameLevel());
 
 	WorldMapQuestScrollFrame.backdrop = CreateFrame("Frame", nil, WorldMapQuestScrollFrame);
-	WorldMapQuestScrollFrame.backdrop:SetTemplate("Default");
+	WorldMapQuestScrollFrame.backdrop:SetTemplate("Transparent");
 	WorldMapQuestScrollFrame.backdrop:Point("TOPLEFT", 0, 2);
 	WorldMapQuestScrollFrame.backdrop:Point("BOTTOMRIGHT", 25, -2);
 	WorldMapQuestScrollFrame.backdrop:SetFrameLevel(WorldMapQuestScrollFrame:GetFrameLevel());

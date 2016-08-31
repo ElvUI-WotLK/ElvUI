@@ -16,7 +16,7 @@ function mod:UpdateElement_CastBarOnValueChanged(value)
 	myPlate.CastBar:SetValue(value);
 	myPlate.CastBar.Time:SetFormattedText("%.1f ", value);
 
-	if(myPlate.CastBar.Spark and not isChannel) then
+	if(myPlate.CastBar.Spark) then
 		local sparkPosition = (value / max) * myPlate.CastBar:GetWidth();
 		myPlate.CastBar.Spark:SetPoint("CENTER", myPlate.CastBar, "LEFT", sparkPosition, 0);
 	end

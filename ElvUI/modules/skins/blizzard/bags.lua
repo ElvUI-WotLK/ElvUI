@@ -86,11 +86,19 @@ S:RegisterSkin('ElvUI', function()
 		
 		S:HandleCloseButton(containerFrameClose);
 	end
-	
+
 	S:SecureHook('ContainerFrame_Update');
-	
+
 	BackpackTokenFrame:StripTextures()
-	
+
+	for i=1, MAX_WATCHED_TOKENS do
+		_G["BackpackTokenFrameToken"..i].icon:SetTexCoord(unpack(E.TexCoords));
+		_G["BackpackTokenFrameToken"..i]:CreateBackdrop("Default");
+		_G["BackpackTokenFrameToken"..i].backdrop:SetOutside(_G["BackpackTokenFrameToken"..i].icon);
+		_G["BackpackTokenFrameToken"..i].icon:Point("LEFT", _G["BackpackTokenFrameToken"..i].count, "RIGHT", 2, 0);
+		_G["BackpackTokenFrameToken"..i].icon:Size(16);
+	end
+
 	-- BankFrame
 	BankFrame:CreateBackdrop('Transparent');
 	BankFrame.backdrop:Point('TOPLEFT', 10, -11);

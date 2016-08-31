@@ -171,8 +171,31 @@ E.Options.args.chat = {
 						['%H:%M:%S '] =	'15:27:32'					
 					},
 				},
-				chatDirection = {
+				useCustomTimeColor = {
 					order = 16,
+					type = "toggle",
+					name = L["Custom Timestamp Color"],
+					disabled = function() return not E.db.chat.timeStampFormat == "NONE" end,
+				},
+				customTimeColor = {
+					order = 17,
+					type = "color",
+					hasAlpha = false,
+					name = L["Timestamp Color"],
+					disabled = function() return (not E.db.chat.timeStampFormat == "NONE" or not E.db.chat.useCustomTimeColor) end,
+					get = function(info)
+						local t = E.db.chat.customTimeColor
+						local d = P.chat.customTimeColor
+						return t.r, t.g, t.b, t.a, d.r, d.g, d.b
+					end,
+					set = function(info, r, g, b)
+						E.db.chat.customTimeColor = {}
+						local t = E.db.chat.customTimeColor
+						t.r, t.g, t.b = r, g, b
+					end,
+				},
+				chatDirection = {
+					order = 18,
 					type = 'select',
 					name = 'Chat Direction',
 					desc = 'Controls where text is added to the chat frame.',
@@ -182,7 +205,7 @@ E.Options.args.chat = {
 					},
 				},
 				chatLines = {
-					order = 17,
+					order = 19,
 					type = 'range',
 					name = L['Max Chat Lines'],
 					desc = L['Number of chat messages to be kept in the frame before old messages are discarded. The interface has to be reloaded to show effect.'],
@@ -193,7 +216,7 @@ E.Options.args.chat = {
 					end,					
 				},
 				chatHistoryLines = {
-					order = 18,
+					order = 20,
 					type = 'range',
 					name = L['Chat History Lines'],
 					desc = L['Number of chat messages to be stores in the chat history.'],
