@@ -483,14 +483,14 @@ function A:Initialize()
 	self.DebuffFrame:Point("BOTTOMRIGHT", MMHolder, "BOTTOMLEFT", -(6 + E.Border), E.Border + E.Spacing);
 	E:CreateMover(self.DebuffFrame, 'DebuffsMover', L['Player Debuffs']);
 	
-	if(E.myclass == "ROGUE" or E.myclass == "SHAMAN") then
+	if(E.myclass == "ROGUE" or E.myclass == "SHAMAN" or E.myclass == "WARLOCK") then
 		self.WeaponFrame = CreateFrame("Frame", "ElvUIPlayerWeapons", UIParent);
 		self.WeaponFrame:Point("TOPRIGHT", MMHolder, "BOTTOMRIGHT", 0, -E.Border - E.Spacing);
 		self.WeaponFrame:Size(A.db.buffs.size);
 		
 		self.WeaponFrame.buttons = {};
 		for i = 1, 2 do
-			self.WeaponFrame.buttons[i] = CreateFrame("Button", "$parentWeaponButton" .. i, self.WeaponFrame);
+			self.WeaponFrame.buttons[i] = CreateFrame("Button", "$parentButton" .. i, self.WeaponFrame);
 			self.WeaponFrame.buttons[i]:Size(A.db.buffs.size);
 			
 			if(i == 1) then

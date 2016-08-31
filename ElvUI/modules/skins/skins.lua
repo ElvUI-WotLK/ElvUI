@@ -203,9 +203,9 @@ function S:HandleRotateButton(btn)
 	btn:SetTemplate("Default");
 	btn:Size(btn:GetWidth() - 14, btn:GetHeight() - 14);
 	
-	btn:GetNormalTexture():SetTexCoord(0.3, 0.29, 0.3, 0.65, 0.69, 0.29, 0.69, 0.65);
-	btn:GetPushedTexture():SetTexCoord(0.3, 0.29, 0.3, 0.65, 0.69, 0.29, 0.69, 0.65);	
-	
+	btn:GetNormalTexture():SetTexCoord(0.27, 0.73, 0.27, 0.68);
+	btn:GetPushedTexture():SetTexCoord(0.27, 0.73, 0.27, 0.68);
+
 	btn:GetHighlightTexture():SetTexture(1, 1, 1, 0.3);
 	
 	btn:GetNormalTexture():SetInside();
@@ -216,17 +216,7 @@ end
 function S:HandleEditBox(frame)
 	frame:CreateBackdrop("Default");
 	frame.backdrop:SetFrameLevel(frame:GetFrameLevel());
-	
-	if(frame.TopLeftTex) then frame.TopLeftTex:Kill(); end
-	if(frame.TopRightTex) then frame.TopRightTex:Kill(); end
-	if(frame.TopTex) then frame.TopTex:Kill(); end
-	if(frame.BottomLeftTex) then frame.BottomLeftTex:Kill(); end
-	if(frame.BottomRightTex) then frame.BottomRightTex:Kill() end
-	if(frame.BottomTex) then frame.BottomTex:Kill(); end
-	if(frame.LeftTex) then frame.LeftTex:Kill(); end
-	if(frame.RightTex) then frame.RightTex:Kill(); end
-	if(frame.MiddleTex) then frame.MiddleTex:Kill(); end
-	
+
 	if(frame:GetName()) then
 		if(_G[frame:GetName() .. "Left"]) then _G[frame:GetName() .. "Left"]:Kill(); end
 		if(_G[frame:GetName() .. "Middle"]) then _G[frame:GetName() .. "Middle"]:Kill(); end
@@ -236,18 +226,6 @@ function S:HandleEditBox(frame)
 		if(frame:GetName():find("Silver") or frame:GetName():find("Copper")) then
 			frame.backdrop:Point("BOTTOMRIGHT", -12, -2);
 		end
-	end
-	
-	if(frame.Left) then
-		frame.Left:Kill();
-	end
-	
-	if(frame.Right) then
-		frame.Right:Kill();
-	end
-	
-	if(frame.Middle) then
-		frame.Middle:Kill();
 	end
 end
 
