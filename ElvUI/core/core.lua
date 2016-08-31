@@ -64,6 +64,30 @@ E.InversePoints = {
 	CENTER = "CENTER"
 };
 
+E.DispelClasses = {
+	['PRIEST'] = {
+		['Magic'] = true,
+		['Disease'] = true
+	},
+	['SHAMAN'] = {
+		['Poison'] = true,
+		['Disease'] = true,
+		['Curse'] = true
+	},
+	['PALADIN'] = {
+		['Poison'] = true,
+		['Magic'] = true,
+		['Disease'] = true
+	},
+	['MAGE'] = {
+		['Curse'] = true
+	},
+	['DRUID'] = {
+		['Curse'] = true,
+		['Poison'] = true
+	},
+};
+
 E.noop = function() end;
 
 local colorizedName;
@@ -297,6 +321,14 @@ function E:CheckRole()
 		else
 			E.Role = "Caster"
 		end
+	end
+end
+
+function E:IsDispellableByMe(debuffType)
+	if not self.DispelClasses[E.myclass] then return; end
+
+	if self.DispelClasses[E.myclass][debuffType] then
+		return true;
 	end
 end
 
