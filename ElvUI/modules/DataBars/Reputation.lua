@@ -1,8 +1,17 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local mod = E:GetModule("DataBars");
 
+local _G = _G;
+local format = format;
+
+local GetWatchedFactionInfo, GetNumFactions, GetFactionInfo = GetWatchedFactionInfo, GetNumFactions, GetFactionInfo;
+local REPUTATION, STANDING = REPUTATION, STANDING;
+local FACTION_BAR_COLORS = FACTION_BAR_COLORS;
+local InCombatLockdown = InCombatLockdown;
+
 local backupColor = FACTION_BAR_COLORS[1];
 function mod:UpdateReputation(event)
+	if(not mod.db.reputation.enable) then return; end
 	local bar = self.repBar;
 
 	local ID = 100;
@@ -65,6 +74,10 @@ function mod:ReputationBar_OnEnter()
 	GameTooltip:Show();
 end
 
+function mod:ReputationBar_OnClick()
+	ToggleCharacter("ReputationFrame");
+end
+
 function mod:UpdateReputationDimensions()
 	self.repBar:Width(self.db.reputation.width);
 	self.repBar:Height(self.db.reputation.height);
@@ -91,11 +104,14 @@ end
 
 
 function mod:LoadReputationBar()
-	self.repBar = self:CreateBar("ElvUI_ReputationBar", self.ReputationBar_OnEnter, "RIGHT", RightChatPanel, "LEFT", E.Border - E.Spacing*3, 0);
+	self.repBar = self:CreateBar("ElvUI_ReputationBar", self.ReputationBar_OnEnter, self.ReputationBar_OnClick, "RIGHT", RightChatPanel, "LEFT", E.Border - E.Spacing*3, 0);
 	E:RegisterStatusBar(self.repBar.statusBar);
 
-	self:RegisterEvent("PLAYER_REGEN_DISABLED", "UpdateReputation")
-	self:RegisterEvent("PLAYER_REGEN_ENABLED", "UpdateReputation")
+	self.repBar.eventFrame = CreateFrame("Frame");
+	self.repBar.eventFrame:Hide();
+	self.repBar.eventFrame:RegisterEvent("PLAYER_REGEN_DISABLED");
+	self.repBar.eventFrame:RegisterEvent("PLAYER_REGEN_ENABLED");
+	self.repBar.eventFrame:SetScript("OnEvent", function(self, event) mod:UpdateReputation(event); end);
 
 	self:UpdateReputationDimensions();
 

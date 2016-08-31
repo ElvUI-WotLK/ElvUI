@@ -1,6 +1,11 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local mod = E:NewModule("DataBars", "AceEvent-3.0");
-E.DataBars = mod
+E.DataBars = mod;
+
+local _G = _G;
+
+local GetExpansionLevel = GetExpansionLevel;
+local MAX_PLAYER_LEVEL_TABLE = MAX_PLAYER_LEVEL_TABLE;
 
 function mod:OnLeave()
 	if((self == ElvUI_ExperienceBar and mod.db.experience.mouseover) or (self == ElvUI_ReputationBar and mod.db.reputation.mouseover) or (self == ElvUI_HonorBar and mod.db.honor.mouseover)) then
@@ -9,11 +14,12 @@ function mod:OnLeave()
 	GameTooltip:Hide();
 end
 
-function mod:CreateBar(name, onEnter, ...)
+function mod:CreateBar(name, onEnter, onClick, ...)
 	local bar = CreateFrame("Button", name, E.UIParent);
 	bar:Point(...);
 	bar:SetScript("OnEnter", onEnter);
 	bar:SetScript("OnLeave", mod.OnLeave);
+	bar:SetScript("OnClick", onClick)
 	bar:SetFrameStrata("LOW");
 	bar:SetTemplate("Transparent");
 	bar:Hide();
