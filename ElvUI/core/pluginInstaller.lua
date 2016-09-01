@@ -374,7 +374,7 @@ function PI:RunInstall()
 		f.Title:SetText(db.Title or L["ElvUI Plugin Installation"])
 		f.Status:SetMinMaxValues(0, f.MaxPage)
 		f.Status.text:SetText(f.CurrentPage.." / "..f.MaxPage)
-		f.tutorialImage:SetTexture(db.tutorialImage or [[Interface\AddOns\ElvUI\media\textures\logo.tga]])
+		f.tutorialImage:SetTexture(db.tutorialImage or [[Interface\AddOns\ElvUI\media\textures\logo_elvui.tga]])
 
 		f.Pages = db.Pages
 
