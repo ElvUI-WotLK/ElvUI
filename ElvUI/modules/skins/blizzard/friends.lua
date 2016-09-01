@@ -20,7 +20,10 @@ local function LoadSkin()
 	S:HandleCloseButton(FriendsFrameCloseButton);
 	
 	S:HandleDropDownBox(FriendsFrameStatusDropDown, 70);
+	FriendsFrameStatusDropDown:Point("TOPLEFT", FreindsListFrame, "TOPLEFT", 13, -44);
 	S:HandleEditBox(FriendsFrameBroadcastInput);
+	FriendsFrameBroadcastInput:Width(150);
+	FriendsFrameBroadcastInput:Point("TOPLEFT", FriendsFrameStatusDropDown, "TOPRIGHT", 13, -2);
 	
 	for i = 1, 5 do
 		S:HandleTab(_G['FriendsFrameTab'..i]);
