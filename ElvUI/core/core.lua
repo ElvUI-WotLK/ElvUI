@@ -960,6 +960,11 @@ function E:DBConversions()
 		E.global.general.WorldMapCoordinates = nil;
 		E.global.general.WorldMapCoordinates.enable = enabledState;
 	end
+	
+	if(not E.db.bagSortIgnoreItemsReset) then
+		E.db.bags.ignoreItems = "";
+		E.db.bagSortIgnoreItemsReset = true;
+	end
 end
 
 local CPU_USAGE = {};

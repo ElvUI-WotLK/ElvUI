@@ -4,6 +4,7 @@ local B = E:GetModule("Bags");
 E.Options.args.bags = {
 	type = "group",
 	name = L["Bags"],
+	childGroups = "tab",
 	get = function(info) return E.db.bags[ info[#info] ]; end,
 	set = function(info, value) E.db.bags[ info[#info] ] = value; end,
 	args = {
@@ -24,9 +25,13 @@ E.Options.args.bags = {
 			order = 3,
 			type = "group",
 			name = L["General"],
-			guiInline = true,
-			disabled = function() return not E.bags end,
+			disabled = function() return not E.bags; end,
 			args = {
+				header = {
+					order = 0,
+					type = "header",
+					name = L["General"]
+				},
 				currencyFormat = {
 					order = 1,
 					type = "select",
@@ -35,6 +40,7 @@ E.Options.args.bags = {
 					values = {
 						["ICON"] = L["Icons Only"],
 						["ICON_TEXT"] = L["Icons and Text"],
+						["ICON_TEXT_ABBR"] = L["Icons and Text (Short)"]
 					},
 					set = function(info, value) E.db.bags[ info[#info] ] = value; B:UpdateTokens(); end
 				},
@@ -70,6 +76,7 @@ E.Options.args.bags = {
 					order = 5,
 					type = "group",
 					name = L["Item Count Font"],
+					guiInline = true,
 					args = {
 						countFont = {
 							order = 1,
@@ -112,14 +119,15 @@ E.Options.args.bags = {
 								["OUTLINE"] = "OUTLINE",
 								["MONOCHROMEOUTLINE"] = "MONOCROMEOUTLINE",
 								["THICKOUTLINE"] = "THICKOUTLINE"
-							},
-						},
-					},
+							}
+						}
+					}
 				},
 				itemLevelGroup = {
 					order = 6,
 					type = "group",
 					name = L["Item Level"],
+					guiInline = true,
 					args = {
 						itemLevel = {
 							order = 1,
@@ -137,13 +145,8 @@ E.Options.args.bags = {
 							disabled = function() return not E.db.bags.itemLevel; end,
 							set = function(info, value) E.db.bags.itemLevelThreshold = value; B:UpdateItemLevelDisplay(); end
 						},
-						spacer = {
-							order = 3,
-							type = "description",
-							name = ""
-						},
 						itemLevelFont = {
-							order = 4,
+							order = 3,
 							type = "select",
 							dialogControl = "LSM30_Font",
 							name = L["Font"],
@@ -152,15 +155,15 @@ E.Options.args.bags = {
 							set = function(info, value) E.db.bags.itemLevelFont = value; B:UpdateItemLevelDisplay(); end
 						},
 						itemLevelFontSize = {
-							order = 5,
+							order = 4,
 							type = "range",
 							name = L["Font Size"],
-							min = 6, max = 22, step = 1,
+							min = 6, max = 212, step = 1,
 							disabled = function() return not E.db.bags.itemLevel; end,
 							set = function(info, value) E.db.bags.itemLevelFontSize = value; B:UpdateItemLevelDisplay(); end
 						},
 						itemLevelFontOutline = {
-							order = 6,
+							order = 5,
 							type = "select",
 							name = L["Font Outline"],
 							disabled = function() return not E.db.bags.itemLevel end,
@@ -170,41 +173,23 @@ E.Options.args.bags = {
 								["OUTLINE"] = "OUTLINE",
 								["MONOCHROMEOUTLINE"] = "MONOCROMEOUTLINE",
 								["THICKOUTLINE"] = "THICKOUTLINE"
-							},
-						},
-					},
-				},
-				bagSortingGroup = {
-					order = 7,
-					type = "group",
-					guiInline = true,
-					name = L["Bag Sorting"],
-					args = {
-						description = {
-							order = 1,
-							type = "description",
-							name = L["Items in this list or items that match any Search Syntax query in this list will be ignored when sorting. Separate each entry with a comma."]
-						},
-						ignoreItems = {
-							order = 100,
-							name = L["Ignore Items"],
-							desc = L["IGNORE_ITEMS_DESC"],
-							type = "input",
-							width = "full",
-							multiline = true,
-							set = function(info, value) E.db.bags.ignoreItems = value; end
-						},
-					},
-				},
-			},
+							}
+						}
+					}
+				}
+			}
 		},
 		sizeAndPos = {
 			order = 4,
 			type = "group",
 			name = L["Size and Positions"],
-			guiInline = true,
 			disabled = function() return not E.bags; end,
 			args = {
+				header = {
+					order = 0,
+					type = "header",
+					name = L["Size and Positions"]
+				},
 				alignToChat = {
 					order = 1,
 					type = "toggle",
@@ -273,17 +258,21 @@ E.Options.args.bags = {
 					name = L["Y Offset Bank"],
 					min = -3000, max = 3000, step = 1,
 					set = function(info, value) E.db.bags[ info[#info] ] = value; B:PositionBagFrames(); end
-				},
-			},
+				}
+			}
 		},
 		bagBar = {
 			order = 5,
 			type = "group",
 			name = L["Bag-Bar"],
-			guiInline = true,
 			get = function(info) return E.db.bags.bagBar[ info[#info] ]; end,
 			set = function(info, value) E.db.bags.bagBar[ info[#info] ] = value; B:SizeAndPositionBagBar(); end,
 			args = {
+				header = {
+					order = 0,
+					type = "header",
+					name = L["Bag-Bar"]
+				},
 				enable = {
 					order = 1,
 					type = "toggle",
@@ -325,7 +314,7 @@ E.Options.args.bags = {
 					values = {
 						["ASCENDING"] = L["Ascending"],
 						["DESCENDING"] = L["Descending"]
-					},
+					}
 				},
 				growthDirection = {
 					order = 7,
@@ -335,12 +324,38 @@ E.Options.args.bags = {
 					values = {
 						["VERTICAL"] = L["Vertical"],
 						["HORIZONTAL"] = L["Horizontal"]
-					},
-				},				
-			},
+					}
+				}
+			}
+		},
+		bagSortingGroup = {
+			order = 6,
+			type = "group",
+			name = L["Bag Sorting"],
+			args = {
+				header = {
+					order = 0,
+					type = "header",
+					name = L["Bag Sorting"]
+				},
+				description = {
+					order = 1,
+					type = "description",
+					name = L["Items in this list or items that match any Search Syntax query in this list will be ignored when sorting. Separate each entry with a semicolon ;."]
+				},
+				ignoreItems = {
+					order = 100,
+					name = L["Ignore Items"],
+					desc = L["IGNORE_ITEMS_DESC"],
+					type = "input",
+					width = "full",
+					multiline = true,
+					set = function(info, value) E.db.bags.ignoreItems = value; end
+				}
+			}
 		},
 		search_syntax = {
-			order = 6,
+			order = 7,
 			type = "group",
 			name = L["Search Syntax"],
 			disabled = function() return not E.bags; end,

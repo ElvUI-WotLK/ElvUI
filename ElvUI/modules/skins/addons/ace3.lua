@@ -334,9 +334,14 @@ function S:SkinAce3()
 			if TYPE == "TabGroup" then
 				local oldCreateTab = widget.CreateTab
 				widget.CreateTab = function(self, id)
-					local tab = oldCreateTab(self, id)
-					tab:StripTextures()			
-					return tab
+					local tab = oldCreateTab(self, id);
+					tab:StripTextures();
+					tab.backdrop = CreateFrame("Frame", nil, tab);
+					tab.backdrop:SetTemplate("Transparent");
+					tab.backdrop:SetFrameLevel(tab:GetFrameLevel() - 1);
+					tab.backdrop:Point("TOPLEFT", 10, -3);
+					tab.backdrop:Point("BOTTOMRIGHT", -10, 0);
+					return tab;
 				end
 			end
 			
