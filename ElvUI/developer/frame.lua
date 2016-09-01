@@ -48,7 +48,7 @@ SlashCmdList["FRAME"] = function(arg)
 		if relativeTo and relativeTo:GetName() then
 			ChatFrame1:AddMessage("Point: |cffFFD100"..point.."|r anchored to "..relativeTo:GetName().."'s |cffFFD100"..relativePoint)
 		end
-		ChatFrame1:AddMessage("|cffCC0000----------------------------")
+		ChatFrame1:AddMessage("|cffCC0000----------------------------|r")
 	elseif arg == nil then
 		ChatFrame1:AddMessage("Invalid frame name")
 	else
@@ -146,11 +146,11 @@ local function GetPoint(frame)
 	else
 		frame = GetMouseFocus()
 	end
-	
+
 	local point, relativeTo, relativePoint, xOffset, yOffset = frame:GetPoint()
 	local frameName = frame.GetName and frame:GetName() or "nil"
 	local relativeToName = relativeTo.GetName and relativeTo:GetName() or "nil"
-	
+
 	print(frameName, point, relativeToName, relativePoint, xOffset, yOffset)
 end
 

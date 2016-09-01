@@ -61,7 +61,7 @@ local function SkinScrollBar(frame, thumbTrim)
 	end
 end
 
-local function SkinButton(f, noTemplate)
+local function SkinButton(f, strip, noTemplate)
 	local name = f:GetName();
 	
 	if(name) then
@@ -82,7 +82,9 @@ local function SkinButton(f, noTemplate)
 	if f.SetHighlightTexture then f:SetHighlightTexture("") end
 	if f.SetPushedTexture then f:SetPushedTexture("") end
 	if f.SetDisabledTexture then f:SetDisabledTexture("") end
-	
+
+	if strip then f:StripTextures() end
+
 	if not f.template and not noTemplate then
 		f:SetTemplate("Default", true)
 	end
@@ -114,10 +116,10 @@ function S:SkinAce3()
 
 			SkinButton(widget.button)
 			SkinScrollBar(widget.scrollBar)
-			widget.scrollBar:SetPoint("RIGHT", frame, "RIGHT", 0 -4)
-			widget.scrollBG:SetPoint("TOPRIGHT", widget.scrollBar, "TOPLEFT", -2, 19)
-			widget.scrollBG:SetPoint("BOTTOMLEFT", widget.button, "TOPLEFT")
-			widget.scrollFrame:SetPoint("BOTTOMRIGHT", widget.scrollBG, "BOTTOMRIGHT", -4, 8)
+			widget.scrollBar:Point("RIGHT", frame, "RIGHT", 0 -4)
+			widget.scrollBG:Point("TOPRIGHT", widget.scrollBar, "TOPLEFT", -2, 19)
+			widget.scrollBG:Point("BOTTOMLEFT", widget.button, "TOPLEFT")
+			widget.scrollFrame:Point("BOTTOMRIGHT", widget.scrollBG, "BOTTOMRIGHT", -4, 8)
 		elseif TYPE == "CheckBox" then
 			widget.checkbg:Kill()
 			widget.highlight:Kill()
@@ -207,7 +209,7 @@ function S:SkinAce3()
 			SkinButton(button)
 		elseif TYPE == "Button" then
 			local frame = widget.frame
-			SkinButton(frame, true)
+			SkinButton(frame, nil, true)
 			frame:StripTextures()
 			frame:CreateBackdrop('Default', true)
 			frame.backdrop:SetInside()
@@ -219,6 +221,21 @@ function S:SkinAce3()
 			frame:CreateBackdrop('Default', true)
 			frame.backdrop:SetInside()
 			widget.text:SetParent(frame.backdrop)
+		elseif TYPE == "Keybinding" then
+			local button = widget.button
+			local msgframe = widget.msgframe
+			local msg = widget.msgframe.msg
+			SkinButton(button)
+			msgframe:StripTextures()
+			msgframe:CreateBackdrop('Default', true)
+			msgframe.backdrop:SetInside()
+			msgframe:SetToplevel(true)
+
+			msg:ClearAllPoints()
+			msg:Point("LEFT", 10, 0)
+			msg:Point("RIGHT", -10, 0)
+			msg:SetJustifyV("MIDDLE")
+			msg:Width(msg:GetWidth() + 10)
 		elseif TYPE == "Slider" then
 			local frame = widget.slider
 			local editbox = widget.editbox
@@ -237,8 +254,8 @@ function S:SkinAce3()
 			editbox:Height(15)
 			editbox:Point("TOP", frame, "BOTTOM", 0, -1)
 			
-			lowtext:SetPoint("TOPLEFT", frame, "BOTTOMLEFT", 2, -2)
-			hightext:SetPoint("TOPRIGHT", frame, "BOTTOMRIGHT", -2, -2)
+			lowtext:Point("TOPLEFT", frame, "BOTTOMLEFT", 2, -2)
+			hightext:Point("TOPRIGHT", frame, "BOTTOMRIGHT", -2, -2)
 
 		
 		--[[elseif TYPE == "ColorPicker" then
@@ -289,7 +306,7 @@ function S:SkinAce3()
 					button.toggle.SetPushedTexture = E.noop
 					button.toggleText = button.toggle:CreateFontString(nil, 'OVERLAY')
 					button.toggleText:FontTemplate(nil, 19)
-					button.toggleText:SetPoint('CENTER')
+					button.toggleText:Point('CENTER')
 					button.toggleText:SetText('+')
 					return button
 				end
