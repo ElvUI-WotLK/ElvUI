@@ -102,10 +102,10 @@ function M:DisbandRaidGroup()
 end
 
 function M:CheckMovement()
-	if E.db.general.mapAlpha == 100 or not WorldMapFrame:IsShown() then return end
+	if E.global.general.mapAlphaWhenMoving == 100 or not WorldMapFrame:IsShown() then return end
 	
 	if GetUnitSpeed("player") ~= 0 then
-		WorldMapFrame:SetAlpha(E.db.general.mapAlpha)
+		WorldMapFrame:SetAlpha(E.global.general.mapAlphaWhenMoving)
 	else
 		WorldMapFrame:SetAlpha(1)
 	end

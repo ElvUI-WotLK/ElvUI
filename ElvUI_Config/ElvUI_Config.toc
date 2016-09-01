@@ -20,3 +20,4 @@ skins.lua
 tooltip.lua
 unitframes.lua
 DataBars.lua
+maps.lua
