@@ -19,6 +19,11 @@ function AB:CreateBar4()
 	
 	for i = 1, NUM_ACTIONBAR_BUTTONS do
 		local button = _G["MultiBarLeftButton" .. i];
+		if(E.db.actionbar.selfcast) then
+			button:SetAttribute("unit2", "player");
+		else
+			button:SetAttribute("unit2", "target");
+		end
 		bar.buttons[i] = button;
 		bar:SetFrameRef("MultiBarLeftButton" .. i, button);
 		self:HookScript(button, "OnEnter", "Button_OnEnter");
