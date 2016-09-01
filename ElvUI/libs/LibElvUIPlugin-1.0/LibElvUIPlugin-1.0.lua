@@ -172,7 +172,7 @@ function lib:GeneratePluginList()
 			end
 			list = list .. color .. " - " .. INFO_VERSION .." " .. plugin.version
 			if plugin.old then
-			  list = list .. INFO_NEW .. plugin.newversion .. ")"
+			  list = list .. " (" .. INFO_NEW .." " .. plugin.newversion .. ")"
 			end
 			list = list .. "|r\n"
 		end
