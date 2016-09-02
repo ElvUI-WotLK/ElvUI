@@ -190,6 +190,11 @@ local function LoadSkin(event)
 		bar.anim.color:SetColorType("Statusbar");
 		bar.anim.color:SetDuration(1.7);
 		bar.anim.color.StartR, bar.anim.color.StartG, bar.anim.color.StartB = 1, 0, 0;
+
+		bar.anim2 = CreateAnimationGroup(_G[barName .. "Text"]);
+		bar.anim2.number = bar.anim2:CreateAnimation("Number");
+		bar.anim2.number:SetSmoothing("In");
+		bar.anim2.number:SetDuration(1.7);
 	end
 	
 	SkinStatusBar(AchievementFrameSummaryCategoriesStatusBar);
@@ -218,35 +223,44 @@ local function LoadSkin(event)
 		local statusBar = AchievementFrameComparisonSummaryPlayerStatusBar;
 		statusBar:SetValue(0);
 		statusBar.anim.progress:SetChange(numCompleted);
-		statusBar.anim.progress:Play();
 
 		r, g, b = E:ColorGradient(numCompleted / numAchievements, 1, 0, 0, 1, 1, 0, 0, 1, 0);
 		statusBar.anim.color:Reset();
 		statusBar.anim.color:SetChange(r, g, b);
-		statusBar.anim.color:Play();
+		statusBar.anim:Play();
+
+		statusBar.anim2.number:SetPostfix("/" .. numAchievements);
+		statusBar.anim2.number:SetChange(numCompleted);
+		statusBar.anim2:Play();
 
 		local friendCompleted = GetComparisonCategoryNumAchievements(id);
 
 		statusBar = AchievementFrameComparisonSummaryFriendStatusBar;
 		statusBar:SetValue(0);
 		statusBar.anim.progress:SetChange(friendCompleted);
-		statusBar.anim.progress:Play();
 
 		r, g, b = E:ColorGradient(friendCompleted / numAchievements, 1, 0, 0, 1, 1, 0, 0, 1, 0);
 		statusBar.anim.color:Reset();
 		statusBar.anim.color:SetChange(r, g, b);
-		statusBar.anim.color:Play();
+		statusBar.anim:Play();
+
+		statusBar.anim2.number:SetPostfix("/" .. numAchievements);
+		statusBar.anim2.number:SetChange(friendCompleted);
+		statusBar.anim2:Play();
 	end);
 
 	hooksecurefunc("AchievementFrameSummaryCategoriesStatusBar_Update", function()
 		local total, completed = GetNumCompletedAchievements();
 		AchievementFrameSummaryCategoriesStatusBar:SetValue(0);
 		AchievementFrameSummaryCategoriesStatusBar.anim.progress:SetChange(completed);
-		AchievementFrameSummaryCategoriesStatusBar.anim.progress:Play();
 		local r, g, b = E:ColorGradient(completed / total, 1, 0, 0, 1, 1, 0, 0, 1, 0);
 		AchievementFrameSummaryCategoriesStatusBar.anim.color:Reset();
 		AchievementFrameSummaryCategoriesStatusBar.anim.color:SetChange(r, g, b);
-		AchievementFrameSummaryCategoriesStatusBar.anim.color:Play();
+		AchievementFrameSummaryCategoriesStatusBar.anim:Play();
+
+		AchievementFrameSummaryCategoriesStatusBar.anim2.number:SetPostfix("/" .. total);
+		AchievementFrameSummaryCategoriesStatusBar.anim2.number:SetChange(completed);
+		AchievementFrameSummaryCategoriesStatusBar.anim2:Play();
 	end);
 
 	hooksecurefunc("AchievementFrameSummaryCategory_OnShow", function(self)
@@ -254,11 +268,14 @@ local function LoadSkin(event)
 
 		self:SetValue(0);
 		self.anim.progress:SetChange(totalCompleted);
-		self.anim.progress:Play();
 		local r, g, b = E:ColorGradient(totalCompleted / totalAchievements, 1, 0, 0, 1, 1, 0, 0, 1, 0);
 		self.anim.color:Reset();
 		self.anim.color:SetChange(r, g, b);
-		self.anim.color:Play();
+		self.anim:Play();
+
+		self.anim2.number:SetPostfix("/" .. totalAchievements);
+		self.anim2.number:SetChange(totalCompleted);
+		self.anim2:Play();
 	end);
 
 	hooksecurefunc("AchievementFrameSummary_UpdateAchievements", function()
