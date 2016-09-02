@@ -208,6 +208,17 @@ function AB:PositionAndSizeBar(barName)
 	E:SetMoverSnapOffset("ElvAB_" .. bar.id, bar.db.buttonspacing / 2);
 end
 
+function AB:UpdateVehicleLeave()
+	local button = LeaveVehicleButton
+	if not button then return; end
+
+	local pos = E.db.general.minimap.icons.vehicleLeave.position or "BOTTOMLEFT"
+	local size = E.db.general.minimap.icons.vehicleLeave.size or 26
+	button:ClearAllPoints()
+	button:Point(pos, Minimap, pos, E.db.general.minimap.icons.vehicleLeave.xOffset or 2, E.db.general.minimap.icons.vehicleLeave.yOffset or 2)
+	button:SetSize(size, size)
+end
+
 function AB:CreateVehicleLeave()
 	local vehicle = CreateFrame("Button", 'LeaveVehicleButton', E.UIParent, "SecureHandlerClickTemplate")
 	vehicle:Size(26)
@@ -219,6 +230,8 @@ function AB:CreateVehicleLeave()
 	vehicle:RegisterForClicks("AnyUp")
 	vehicle:SetScript("OnClick", function() VehicleExit() end)
 	RegisterStateDriver(vehicle, "visibility", "[vehicleui] show;[target=vehicle,exists] show;hide")
+
+	self:UpdateVehicleLeave()
 end
 
 function AB:UpdateButtonSettings()
