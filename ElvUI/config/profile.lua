@@ -30,6 +30,46 @@ P['general'] = {
 	['minimap'] = { -- Мини-карта
 		['size'] = 176,
 		['locationText'] = 'MOUSEOVER',
+		['icons'] = {
+			['calendar'] = {
+				['scale'] = 1,
+				['position'] = "TOPRIGHT",
+				['xOffset'] = 0,
+				['yOffset'] = 0,
+				["hide"] = true,
+			},
+			['mail'] = {
+				['scale'] = 1,
+				['position'] = "TOPRIGHT",
+				['xOffset'] = 3,
+				['yOffset'] = 4,
+			},
+			['lfgEye'] = {
+				['scale'] = 1,
+				['position'] = "BOTTOMRIGHT",
+				['xOffset'] = 3,
+				['yOffset'] = 0,
+			},
+			['battlefield'] = {
+				['scale'] = 1,
+				['position'] = "BOTTOMRIGHT",
+				['xOffset'] = 3,
+				['yOffset'] = 0,
+			},
+			['difficulty'] = {
+				['scale'] = 1,
+				['position'] = "TOPLEFT",
+				['xOffset'] = 0,
+				['yOffset'] = 0,
+			},
+			['vehicleLeave'] = {
+				['size'] = 26,
+				['position'] = "BOTTOMLEFT",
+				['xOffset'] = 2,
+				['yOffset'] = 2,
+				["hide"] = false,
+			},
+		}
 	},
 	['threat'] = { -- Угроза
 		['enable'] = true,
