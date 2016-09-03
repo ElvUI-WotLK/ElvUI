@@ -262,7 +262,10 @@ function E:SetupResolution(noDataReset)
 		if not noDataReset then
 			E.db.chat.panelWidth = 400
 			E.db.chat.panelHeight = 180
-			
+
+			E.db.bags.bagWidth = 394;
+			E.db.bags.bankWidth = 394;
+
 			E:CopyTable(E.db.actionbar, P.actionbar)
 			
 			E.db.actionbar.bar1.heightMult = 2;
@@ -321,7 +324,10 @@ function E:SetupResolution(noDataReset)
 	elseif not noDataReset then
 		E.db.chat.panelWidth = P.chat.panelWidth
 		E.db.chat.panelHeight = P.chat.panelHeight
-		
+
+		E.db.bags.bagWidth = P.bags.bagWidth;
+		E.db.bags.bankWidth = P.bags.bankWidth;
+
 		E:CopyTable(E.db.actionbar, P.actionbar)
 		E:CopyTable(E.db.unitframe.units, P.unitframe.units)
 		E.db.auras.wrapAfter = P.auras.wrapAfter;

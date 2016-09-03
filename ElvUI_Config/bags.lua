@@ -66,14 +66,8 @@ E.Options.args.bags = {
 					desc = L["Use coin icons instead of colored text."],
 					set = function(info, value) E.db.bags[ info[#info] ] = value; B:UpdateGoldText(); end
 				},
-				sortInverted = {
-					order = 4,
-					type = "toggle",
-					name = L["Sort Inverted"],
-					desc = L["Direction the bag sorting will use to allocate the items."]
-				},
 				countGroup = {
-					order = 5,
+					order = 4,
 					type = "group",
 					name = L["Item Count Font"],
 					guiInline = true,
@@ -124,7 +118,7 @@ E.Options.args.bags = {
 					}
 				},
 				itemLevelGroup = {
-					order = 6,
+					order = 5,
 					type = "group",
 					name = L["Item Level"],
 					guiInline = true,
@@ -179,10 +173,10 @@ E.Options.args.bags = {
 				}
 			}
 		},
-		sizeAndPos = {
+		sizeGroup = {
 			order = 4,
 			type = "group",
-			name = L["Size and Positions"],
+			name = L["Size"],
 			disabled = function() return not E.bags; end,
 			args = {
 				header = {
@@ -190,15 +184,8 @@ E.Options.args.bags = {
 					type = "header",
 					name = L["Size and Positions"]
 				},
-				alignToChat = {
-					order = 1,
-					type = "toggle",
-					name = L["Align To Chat"],
-					desc = L["Align the width of the bag frame to fit inside the chat box."],
-					set = function(info, value) E.db.bags[ info[#info] ] = value; B:Layout(); B:Layout(true); end
-				},
 				bagSize = {
-					order = 2,
+					order = 1,
 					type = "range",
 					name = L["Button Size (Bag)"],
 					desc = L["The size of the individual buttons on the bag frame."],
@@ -206,7 +193,7 @@ E.Options.args.bags = {
 					set = function(info, value) E.db.bags[ info[#info] ] = value; B:Layout(); end
 				},
 				bankSize = {
-					order = 3,
+					order = 2,
 					type = "range",
 					name = L["Button Size (Bank)"],
 					desc = L["The size of the individual buttons on the bank frame."],
@@ -214,50 +201,20 @@ E.Options.args.bags = {
 					set = function(info, value) E.db.bags[ info[#info] ] = value; B:Layout(true); end
 				},
 				bagWidth = {
-					order = 4,
+					order = 3,
 					type = "range",
 					name = L["Panel Width (Bags)"],
 					desc = L["Adjust the width of the bag frame."],
 					min = 150, max = 1400, step = 1,
-					set = function(info, value) E.db.bags[ info[#info] ] = value; B:Layout(); end,
-					disabled = function() return E.db.bags.alignToChat end
+					set = function(info, value) E.db.bags[ info[#info] ] = value; B:Layout(); end
 				},
 				bankWidth = {
-					order = 5,
+					order = 4,
 					type = "range",
 					name = L["Panel Width (Bank)"],
 					desc = L["Adjust the width of the bank frame."],
 					min = 150, max = 1400, step = 1,
-					set = function(info, value) E.db.bags[ info[#info] ] = value; B:Layout(true); end,
-					disabled = function() return E.db.bags.alignToChat; end
-				},
-				xOffset = {
-					order = 6,
-					type = "range",
-					name = L["X Offset Bags"],
-					min = -5000, max = 5000, step = 1,
-					set = function(info, value) E.db.bags[ info[#info] ] = value; B:PositionBagFrames(); end
-				},
-				yOffset = {
-					order = 7,
-					type = "range",
-					name = L["Y Offset Bags"],
-					min = -3000, max = 3000, step = 1,
-					set = function(info, value) E.db.bags[ info[#info] ] = value; B:PositionBagFrames(); end
-				},
-				xOffsetBank = {
-					order = 8,
-					type = "range",
-					name = L["X Offset Bank"],
-					min = -5000, max = 5000, step = 1,
-					set = function(info, value) E.db.bags[ info[#info] ] = value; B:PositionBagFrames(); end
-				},
-				yOffsetBank = {
-					order = 9,
-					type = "range",
-					name = L["Y Offset Bank"],
-					min = -3000, max = 3000, step = 1,
-					set = function(info, value) E.db.bags[ info[#info] ] = value; B:PositionBagFrames(); end
+					set = function(info, value) E.db.bags[ info[#info] ] = value; B:Layout(true); end
 				}
 			}
 		},
@@ -336,21 +293,48 @@ E.Options.args.bags = {
 				header = {
 					order = 0,
 					type = "header",
-					name = L["Bag Sorting"]
+					name = L["Bag Sorting"],
+				},
+				sortInverted = {
+					order = 1,
+					type = "toggle",
+					name = L["Sort Inverted"],
+					desc = L["Direction the bag sorting will use to allocate the items."]
+				},
+				spacer = {
+					order = 2,
+					type = "description",
+					name = " "
 				},
 				description = {
-					order = 1,
+					order = 3,
 					type = "description",
-					name = L["Items in this list or items that match any Search Syntax query in this list will be ignored when sorting. Separate each entry with a semicolon ;."]
+					width = "double",
+					name = L["Here you can add items or search terms that you want to be excluded from sorting. To remove an item just click on its name in the list."]
 				},
-				ignoreItems = {
-					order = 100,
-					name = L["Ignore Items"],
-					desc = L["IGNORE_ITEMS_DESC"],
+				addEntry = {
+					order = 4,
+					name = L["Add Item or Search Syntax"],
+					desc = L["Add an item or search syntax to the ignored list. Items matching the search syntax will be ignored."],
 					type = "input",
-					width = "full",
-					multiline = true,
-					set = function(info, value) E.db.bags.ignoreItems = value; end
+					get = function(info) return "" end,
+					set = function(info, value)
+						if(value == "" or string.gsub(value, "%s+", "") == "") then return; end
+
+						local itemID = string.match(value, "item:(%d+)");
+						E.db.bags.ignoredItems[(itemID or value)] = value;
+					end
+				},
+				ignoredEntries = {
+					order = 5,
+					type = "multiselect",
+					name = L["Ignored Items and Search Syntax"],
+					values = E.db.bags.ignoredItems,
+					get = function(info, value)	return E.db.bags.ignoredItems[value]; end,
+					set = function(info, value)
+						E.db.bags.ignoredItems[value] = nil;
+						GameTooltip:Hide();
+					end
 				}
 			}
 		},
