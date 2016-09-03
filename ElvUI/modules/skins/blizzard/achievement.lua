@@ -160,7 +160,7 @@ local function LoadSkin(event)
 		S:HandleTab(_G["AchievementFrameTab" .. i]);
 	end
 	
-	local function AnimationStatusBar(bar)
+	local function AnimationStatusBar(bar, noNumber)
 		bar.anim = CreateAnimationGroup(bar);
 		bar.anim.progress = bar.anim:CreateAnimation("Progress");
 		bar.anim.progress:SetSmoothing("Out");
@@ -172,15 +172,19 @@ local function LoadSkin(event)
 		bar.anim.color:SetDuration(1.7);
 		bar.anim.color.StartR, bar.anim.color.StartG, bar.anim.color.StartB = 1, 0, 0;
 
-		bar.anim2 = CreateAnimationGroup(_G[bar:GetName() .. "Text"]);
-		bar.anim2.number = bar.anim2:CreateAnimation("Number");
-		bar.anim2.number:SetDuration(1.7);
+		if(not noNumber) then
+			bar.anim2 = CreateAnimationGroup(_G[bar:GetName() .. "Text"]);
+			bar.anim2.number = bar.anim2:CreateAnimation("Number");
+			bar.anim2.number:SetDuration(1.7);
+		end
 	end
 
-	local function PlayAnimationStatusBar(bar, max, value)
-		if(bar.anim:IsPlaying() or bar.anim2:IsPlaying()) then
+	local function PlayAnimationStatusBar(bar, max, value, noNumber)
+		if(bar.anim:IsPlaying() or (bar.anim2 and bar.anim2:IsPlaying())) then
 			bar.anim:Stop();
-			bar.anim2:Stop();
+			if(not noNumber) then
+				bar.anim2:Stop();
+			end
 		end
 		bar:SetValue(0);
 		bar.anim.progress:SetChange(value);
@@ -190,9 +194,11 @@ local function LoadSkin(event)
 		bar.anim.color:SetChange(r, g, b);
 		bar.anim:Play();
 
-		bar.anim2.number:SetPostfix("/" .. max);
-		bar.anim2.number:SetChange(value);
-		bar.anim2:Play();
+		if(not noNumber) then
+			bar.anim2.number:SetPostfix("/" .. max);
+			bar.anim2.number:SetChange(value);
+			bar.anim2:Play();
+		end
 	end
 
 	local function SkinStatusBar(bar)
@@ -357,7 +363,7 @@ local function LoadSkin(event)
 					frame.ClearAllPoints = E.noop;
 				end
 
-				AnimationStatusBar(frame);
+				AnimationStatusBar(frame, true);
 
 				frame.skinned = true;
 			end
@@ -385,7 +391,7 @@ local function LoadSkin(event)
 			elseif(bit.band(flags, ACHIEVEMENT_CRITERIA_PROGRESS_BAR) == ACHIEVEMENT_CRITERIA_PROGRESS_BAR) then
 				progressBars = progressBars + 1;
 				local progressBar = AchievementButton_GetProgressBar(progressBars);
-				PlayAnimationStatusBar(progressBar, reqQuantity, quantity)
+				PlayAnimationStatusBar(progressBar, reqQuantity, quantity, true);
 			elseif(criteriaType ~= 1) then
 				textStrings = textStrings + 1;
 				local criteria = AchievementButton_GetCriteria(textStrings);
