@@ -321,37 +321,10 @@ local function LoadSkin(event)
 				frame:SetStatusBarTexture(E["media"].normTex);
 				E:RegisterStatusBar(frame);
 				frame:SetStatusBarColor(4/255, 179/255, 30/255);
-				frame:GetStatusBarTexture():SetDrawLayer("OVERLAY");
-				frame:Height(frame:GetHeight() - 2);
-				
-				if(not E.PixelMode) then
-					frame.bg1 = frame:CreateTexture(nil, "BACKGROUND");
-					frame.bg1:SetTexture(E["media"].normTex);
-					frame.bg1:SetVertexColor(unpack(E["media"].backdropcolor));
-					frame.bg1:Point("TOPLEFT", -E.mult*3, E.mult*3);
-					frame.bg1:Point("BOTTOMRIGHT", E.mult*3, -E.mult*3);
-					
-					frame.bg2 = frame:CreateTexture(nil, "BORDER");
-					frame.bg2:SetTexture(unpack(E["media"].bordercolor));
-					frame.bg2:Point("TOPLEFT", -E.mult*2, E.mult*2);
-					frame.bg2:Point("BOTTOMRIGHT", E.mult*2, -E.mult*2);
-					
-					frame.bg3 = frame:CreateTexture(nil, "ARTWORK");
-					frame.bg3:SetTexture(unpack(E["media"].backdropcolor));
-					frame.bg3:Point("TOPLEFT", -E.mult, E.mult);
-					frame.bg3:Point("BOTTOMRIGHT", E.mult, -E.mult);
-				else
-					frame.bg1 = frame:CreateTexture(nil, "BORDER");
-					frame.bg1:SetTexture(E["media"].normTex);
-					frame.bg1:SetVertexColor(unpack(E["media"].backdropcolor));
-					frame.bg1:SetAllPoints();
-					
-					frame.bg3 = frame:CreateTexture(nil, "BACKGROUND");
-					frame.bg3:SetTexture(unpack(E["media"].bordercolor));
-					frame.bg3:Point("TOPLEFT", -E.mult, E.mult);
-					frame.bg3:Point("BOTTOMRIGHT", E.mult, -E.mult);
-				end
-				
+				frame:GetStatusBarTexture():SetInside();
+				frame:Height(frame:GetHeight() + (E.Border + E.Spacing));
+				frame:SetTemplate("Default");
+
 				frame.text:ClearAllPoints();
 				frame.text:Point("CENTER", frame, "CENTER", 0, -1);
 				frame.text:SetJustifyH("CENTER");
