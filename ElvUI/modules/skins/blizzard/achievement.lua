@@ -178,23 +178,21 @@ local function LoadSkin(event)
 	end
 
 	local function PlayAnimationStatusBar(bar, max, value)
-		if(bar.currentValue ~= value) then
-			if(bar.anim:IsPlaying()) then
-				bar.anim:Stop();
-			end
-			bar:SetValue(0);
-			bar.anim.progress:SetChange(value);
-
-			local r, g, b = E:ColorGradient(value / max, 1, 0, 0, 1, 1, 0, 0, 1, 0);
-			bar.anim.color:Reset();
-			bar.anim.color:SetChange(r, g, b);
-			bar.anim:Play();
-
-			bar.anim2.number:SetPostfix("/" .. max);
-			bar.anim2.number:SetChange(value);
-			bar.anim2:Play();
-			bar.currentValue = value;
+		if(bar.anim:IsPlaying() or bar.anim2:IsPlaying()) then
+			bar.anim:Stop();
+			bar.anim2:Stop();
 		end
+		bar:SetValue(0);
+		bar.anim.progress:SetChange(value);
+
+		local r, g, b = E:ColorGradient(value / max, 1, 0, 0, 1, 1, 0, 0, 1, 0);
+		bar.anim.color:Reset();
+		bar.anim.color:SetChange(r, g, b);
+		bar.anim:Play();
+
+		bar.anim2.number:SetPostfix("/" .. max);
+		bar.anim2.number:SetChange(value);
+		bar.anim2:Play();
 	end
 
 	local function SkinStatusBar(bar)
