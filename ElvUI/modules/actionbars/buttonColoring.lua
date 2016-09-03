@@ -169,7 +169,7 @@ function tullaRange.UpdateButtonUsable(button)
 		tullaRange.SetButtonColor(button, 'OOM')
 	--unusable
 	else
-		button.tullaRangeColor = 'unusuable'
+		tullaRange.SetButtonColor(button, 'UNUSABLE')
 	end
 end
 
@@ -212,11 +212,11 @@ end
 
 function tullaRange:LoadDefaults()
 	TULLARANGE_COLORS = {
-		['OOR'] = E:GetColorTable(E.db.actionbar.noRangeColor),
-		['OOM'] = E:GetColorTable(E.db.actionbar.noPowerColor),
-		['NORMAL'] = {1.0, 1.0, 1.0},
-		['UNUSABLE'] = {0.2, 0.2, 0.2},
-	}
+		["OOR"] = E:GetColorTable(E.db.actionbar.noRangeColor),
+		["OOM"] = E:GetColorTable(E.db.actionbar.noPowerColor),
+		["NORMAL"] = E:GetColorTable(E.db.actionbar.usableColor),
+		["UNUSABLE"] = E:GetColorTable(E.db.actionbar.notUsableColor)
+	};
 end
 
 function tullaRange:Reset()

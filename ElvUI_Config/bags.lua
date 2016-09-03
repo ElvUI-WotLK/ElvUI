@@ -329,8 +329,8 @@ E.Options.args.bags = {
 					order = 5,
 					type = "multiselect",
 					name = L["Ignored Items and Search Syntax"],
-					values = E.db.bags.ignoredItems,
-					get = function(info, value)	return E.db.bags.ignoredItems[value]; end,
+					values = function() return E.db.bags.ignoredItems; end,
++					get = function(info, value) return E.db.bags.ignoredItems[value]; end,
 					set = function(info, value)
 						E.db.bags.ignoredItems[value] = nil;
 						GameTooltip:Hide();

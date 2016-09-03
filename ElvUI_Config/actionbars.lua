@@ -454,43 +454,9 @@ E.Options.args.actionbar = {
 					order = 2,
 					type = "toggle",
 					name = L['Keybind Text'],
-					desc = L['Display bind names on action buttons.'],
-				},
-				noRangeColor = {
-					type = 'color',
-					order = 9,
-					name = L['Out of Range'],
-					desc = L['Color of the actionbutton when out of range.'],
-					get = function(info)
-						local t = E.db.actionbar[ info[#info] ]
-						local d = P.actionbar[ info[#info] ]
-						return t.r, t.g, t.b, t.a, d.r, d.g, d.b
-					end,
-					set = function(info, r, g, b)
-						E.db.actionbar[ info[#info] ] = {}
-						local t = E.db.actionbar[ info[#info] ]
-						t.r, t.g, t.b = r, g, b
-						tullaRange:Reset();
-					end,
-				},
-				noPowerColor = {
-					type = 'color',
-					order = 10,
-					name = L['Out of Power'],
-					desc = L["Color of the actionbutton when out of power (Mana, Rage)."],
-					get = function(info)
-						local t = E.db.actionbar[ info[#info] ]
-						local d = P.actionbar[ info[#info] ]
-						return t.r, t.g, t.b, t.a, d.r, d.g, d.b
-					end,
-					set = function(info, r, g, b)
-						E.db.actionbar[ info[#info] ] = {}
-						local t = E.db.actionbar[ info[#info] ]
-						t.r, t.g, t.b = r, g, b
-						tullaRange:Reset();
-					end,
-				},
-			},
+					desc = L['Display bind names on action buttons.']
+				}
+			}
 		},
 		globalFadeAlpha = {
  			order = 4,
@@ -501,8 +467,51 @@ E.Options.args.actionbar = {
 			isPercent = true,
 			set = function(info, value) E.db.actionbar[ info[#info] ] = value; AB.fadeParent:SetAlpha(1-value); end,
 		},
-		fontGroup = {
+		colorGroup = {
 			order = 5,
+			type = "group",
+			name = L["Colors"],
+			guiInline = true,
+			get = function(info)
+				local t = E.db.actionbar[ info[#info] ]
+				local d = P.actionbar[ info[#info] ]
+				return t.r, t.g, t.b, t.a, d.r, d.g, d.b
+			end,
+			set = function(info, r, g, b)
+				E.db.actionbar[ info[#info] ] = {}
+				local t = E.db.actionbar[ info[#info] ]
+				t.r, t.g, t.b = r, g, b
+				tullaRange:Reset();
+			end,
+			args = {
+				noRangeColor = {
+					order = 1,
+					type = "color",
+					name = L["Out of Range"],
+					desc = L["Color of the actionbutton when out of range."]
+				},
+				noPowerColor = {
+					order = 2,
+					type = "color",
+					name = L["Out of Power"],
+					desc = L["Color of the actionbutton when out of power (Mana, Rage)."]
+				},
+				usableColor = {
+					order = 3,
+					type = "color",
+					name = L["Usable"],
+					desc = L["Color of the actionbutton when usable."]
+				},
+				notUsableColor = {
+					order = 4,
+					type = "color",
+					name = L["Not Usable"],
+					desc = L["Color of the actionbutton when not usable."]
+				}
+			}
+		},
+		fontGroup = {
+			order = 7,
 			type = 'group',
 			guiInline = true,
 			disabled = function() return not E.private.actionbar.enable end,
