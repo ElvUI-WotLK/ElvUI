@@ -27,11 +27,49 @@ P['general'] = {
 	["backdropfadecolor"] = { r = .06, g = .06, b = .06, a = 0.8 },
 	["valuecolor"] = { r = 23/255, g = 132/255, b = 209/255 },
 	
-	['mapAlpha'] = 1,
-	
 	['minimap'] = { -- Мини-карта
 		['size'] = 176,
 		['locationText'] = 'MOUSEOVER',
+		['icons'] = {
+			['calendar'] = {
+				['scale'] = 1,
+				['position'] = "TOPRIGHT",
+				['xOffset'] = 0,
+				['yOffset'] = 0,
+				["hide"] = true,
+			},
+			['mail'] = {
+				['scale'] = 1,
+				['position'] = "TOPRIGHT",
+				['xOffset'] = 3,
+				['yOffset'] = 4,
+			},
+			['lfgEye'] = {
+				['scale'] = 1,
+				['position'] = "BOTTOMRIGHT",
+				['xOffset'] = 3,
+				['yOffset'] = 0,
+			},
+			['battlefield'] = {
+				['scale'] = 1,
+				['position'] = "BOTTOMRIGHT",
+				['xOffset'] = 3,
+				['yOffset'] = 0,
+			},
+			['difficulty'] = {
+				['scale'] = 1,
+				['position'] = "TOPLEFT",
+				['xOffset'] = 0,
+				['yOffset'] = 0,
+			},
+			['vehicleLeave'] = {
+				['size'] = 26,
+				['position'] = "BOTTOMLEFT",
+				['xOffset'] = 2,
+				['yOffset'] = 2,
+				["hide"] = false,
+			},
+		}
 	},
 	['threat'] = { -- Угроза
 		['enable'] = true,
@@ -188,19 +226,14 @@ P["nameplate"] = {
 
 P["bags"] = {
 	["sortInverted"] = true,
-	["xOffset"] = 0,
-	["yOffset"] = 0,
-	["xOffsetBank"] = 0,
-	["yOffsetBank"] = 0,
 	["bagSize"] = 34,
 	["bankSize"] = 34,
-	["alignToChat"] = true,
-	["bagWidth"] = 350,
-	["bankWidth"] = 350,
+	["bagWidth"] = 406,
+	["bankWidth"] = 406,
 	["currencyFormat"] = "ICON_TEXT",
 	["moneyFormat"] = "SMART",
 	["moneyCoins"] = true,
-	["ignoreItems"] = "",
+	["ignoredItems"] = {},
 	["itemLevel"] = true,
 	["itemLevelThreshold"] = 1,
 	["itemLevelFont"] = "Homespun",
@@ -2421,9 +2454,11 @@ P['actionbar'] = { -- Панели команд
 	['macrotext'] = false,
 	['hotkeytext'] = true,
 	
-	['noRangeColor'] = { r = 0.8, g = 0.1, b = 0.1 },
-	['noPowerColor'] = { r = 0.5, g = 0.5, b = 1 },
-	
+	["noRangeColor"] = {r = 0.8, g = 0.1, b = 0.1},
+	["noPowerColor"] = {r = 0.5, g = 0.5, b = 1},
+	["usableColor"] = {r = 1, g = 1, b = 1},
+	["notUsableColor"] = {r = 0.4, g = 0.4, b = 0.4},
+
 	['enablecd'] = true,
 	['treshold'] = 3,
 	['microbar'] = {

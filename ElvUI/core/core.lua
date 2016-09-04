@@ -657,7 +657,6 @@ function E:UpdateAll(ignoreInstall)
 	bags.db = self.db.bags;
 	bags:Layout();
 	bags:Layout(true);
-	bags:PositionBagFrames();
 	bags:SizeAndPositionBagBar();
 	bags:UpdateItemLevelDisplay();
 	bags:UpdateCountDisplay();
@@ -959,6 +958,11 @@ function E:DBConversions()
 		local enabledState = E.global.general.WorldMapCoordinates;
 		E.global.general.WorldMapCoordinates = nil;
 		E.global.general.WorldMapCoordinates.enable = enabledState;
+	end
+	
+	if(not E.db.bagSortIgnoreItemsReset) then
+		E.db.bags.ignoreItems = "";
+		E.db.bagSortIgnoreItemsReset = true;
 	end
 end
 

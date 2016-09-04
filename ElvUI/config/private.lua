@@ -16,6 +16,7 @@ V['general'] = {
 	["replaceBlizzFonts"] = true,
 	['minimap'] = {
 		['enable'] = true,
+		["hideCalendar"] = true,
 	},
 	["classColorMentionsSpeech"] = true
 }

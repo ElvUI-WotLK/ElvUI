@@ -120,14 +120,6 @@ E.Options.args.general = {
 						['PLAYER'] = PLAYER,
 					},				
 				},
-				mapAlpha = {
-					order = 4,
-					name = L["Map Alpha While Moving"],
-					desc = L['Controls what the transparency of the worldmap will be set to when you are moving.'],
-					type = 'range',
-					isPercent = true,
-					min = 0, max = 1, step = 0.01,
-				},
 				autoAcceptInvite = {
 					order = 5,
 					name = L['Accept Invites'],
@@ -215,66 +207,11 @@ E.Options.args.general = {
 					get = function(info) return E.db.general.afk end,
 					set = function(info, value) E.db.general.afk = value; E:GetModule('AFK'):Toggle() end
 				},
-				smallerWorldMap = {
-					order = 17,
-					type = "toggle",
-					name = L["Smaller World Map"],
-					desc = L["Make the world map smaller."],
-					get = function(info) return E.global.general.smallerWorldMap; end,
-					set = function(info, value) E.global.general.smallerWorldMap = value; E:StaticPopup_Show("GLOBAL_RL"); end
-				},
 				enhancedPvpMessages = {
 					order = 18,
 					type = "toggle",
 					name = L["Enhanced PVP Messages"],
 					desc = L["Display battleground messages in the middle of the screen."]
-				},
-				worldMapCoordinates = {
-					order = 19,
-					type = "group",
-					guiInline = true,
-					name = L["World Map Coordinates"],
-					args = {
-						enable = {
-							order = 1,
-							type = "toggle",
-							name = L["Enable"],
-							desc = L["Puts coordinates on the world map."],
-							get = function(info) return E.global.general.worldMapCoordinates.enable; end,
-							set = function(info, value) E.global.general.worldMapCoordinates.enable = value; E:StaticPopup_Show("GLOBAL_RL"); end
-						},
-						position = {
-							order = 2,
-							type = "select",
-							name = L["Position"],
-							get = function(info) return E.global.general.worldMapCoordinates.position; end,
-							set = function(info, value) E.global.general.worldMapCoordinates.position = value; E:GetModule('WorldMap'):PositionCoords(); end,
-							values = {
-								["TOP"] = "TOP",
-								["TOPLEFT"] = "TOPLEFT",
-								["TOPRIGHT"] = "TOPRIGHT",
-								["BOTTOM"] = "BOTTOM",
-								["BOTTOMLEFT"] = "BOTTOMLEFT",
-								["BOTTOMRIGHT"] = "BOTTOMRIGHT"
-							}
-						},
-						xOffset = {
-							order = 4,
-							type = "range",
-							name = L["X-Offset"],
-							get = function(info) return E.global.general.worldMapCoordinates.xOffset; end,
-							set = function(info, value) E.global.general.worldMapCoordinates.xOffset = value; E:GetModule('WorldMap'):PositionCoords();end,
-							min = -200, max = 200, step = 1
-						},
-						yOffset = {
-							order = 5,
-							type = "range",
-							name = L["Y-Offset"],
-							get = function(info) return E.global.general.worldMapCoordinates.yOffset; end,
-							set = function(info, value) E.global.general.worldMapCoordinates.yOffset = value; E:GetModule('WorldMap'):PositionCoords(); end,
-							min = -200, max = 200, step = 1
-						}
-					}
 				},
 				chatBubbles = {
 					order = 30,
@@ -327,52 +264,6 @@ E.Options.args.general = {
 					},
 				},
 			},
-		},
-		minimap = { -- Мини-карта
-			order = 5,
-			get = function(info) return E.db.general.minimap[ info[#info] ] end,	
-			name = MINIMAP_LABEL,
-			type = "group",
-			args = {
-				enable = { -- Включить
-					order = 1,
-					type = "toggle",
-					name = L["Enable"],
-					desc = L['Enable/Disable the minimap. |cffFF0000Warning: This will prevent you from seeing the consolidated buffs bar, and prevent you from seeing the minimap datatexts.|r'],
-					get = function(info) return E.private.general.minimap[ info[#info] ] end,
-					set = function(info, value) E.private.general.minimap[ info[#info] ] = value; E:StaticPopup_Show("PRIVATE_RL") end,	
-				},
-				generalGruop = { -- Общие
-					order = 2,
-					type = "group",
-					guiInline = true,
-					name = L["General"],
-					disabled = function() return not E.private.general.minimap.enable end,
-					args = {
-						size = { -- Размер
-							order = 1,
-							type = "range",
-							name = L["Size"],
-							desc = L['Adjust the size of the minimap.'],
-							min = 120, max = 250, step = 1,
-							set = function(info, value) E.db.general.minimap[ info[#info] ] = value; E:GetModule('Minimap'):UpdateSettings() end,
-						},	
-						locationText = { -- Текст локачии
-							order = 2,
-							type = 'select',
-							name = L['Location Text'],
-							desc = L['Change settings for the display of the location text that is on the minimap.'],
-							get = function(info) return E.db.general.minimap.locationText end,
-							set = function(info, value) E.db.general.minimap.locationText = value; E:GetModule('Minimap'):UpdateSettings() end,
-							values = {
-								['MOUSEOVER'] = L['Minimap Mouseover'],
-								['SHOW'] = L['Always Display'],
-								['HIDE'] = L['Hide'],
-							},
-						},
-					},
-				},
-			},		
 		},
 		threat = { -- Угроза
 			order = 6,

@@ -1,6 +1,8 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local S = E:GetModule('Skins');
 
+local find = string.find;
+
 local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.lfd ~= true then return end
 	
@@ -53,8 +55,26 @@ local function LoadSkin()
 	S:HandleButton(LFDQueueFrameFindGroupButton, true);
 	S:HandleButton(LFDQueueFrameCancelButton, true);
 	
-	for i=1, NUM_LFD_CHOICE_BUTTONS do
+	for i = 1, NUM_LFD_CHOICE_BUTTONS do
 		S:HandleCheckBox(_G["LFDQueueFrameSpecificListButton"..i.."EnableButton"]);
+
+		local buttonToggle = _G["LFDQueueFrameSpecificListButton" .. i .. "ExpandOrCollapseButton"];
+		buttonToggle:SetNormalTexture("");
+		buttonToggle.SetNormalTexture = E.noop;
+		buttonToggle:SetHighlightTexture(nil);
+
+		buttonToggle.Text = buttonToggle:CreateFontString(nil, "OVERLAY");
+		buttonToggle.Text:FontTemplate(nil, 22);
+		buttonToggle.Text:Point("CENTER", 4, 0);
+		buttonToggle.Text:SetText("+");
+
+		hooksecurefunc(buttonToggle, "SetNormalTexture", function(self, texture)
+			if(find(texture, "MinusButton")) then
+				self.Text:SetText("-");
+			else
+				self.Text:SetText("+");
+			end
+		end);
 	end
 	
 	S:HandleButton(LFDQueueFramePartyBackfillBackfillButton);

@@ -1,6 +1,7 @@
 local E, L, V, P, G, _ = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB, Localize Underscore
 local S = E:GetModule('Skins')
 
+local find = string.find;
 local ceil = math.ceil
 
 local function LoadSkin()
@@ -164,6 +165,12 @@ local function LoadSkin()
 	ReadyCheckFrameText:SetPoint("TOP", 0, -12)
 	
 	-- others
+	CoinPickupFrame:StripTextures();
+	CoinPickupFrame:SetTemplate("Transparent");
+
+	S:HandleButton(CoinPickupOkayButton);
+	S:HandleButton(CoinPickupCancelButton);
+
 	ReadyCheckListenerFrame:SetAlpha(0)
 	ReadyCheckFrame:HookScript("OnShow", function(self) if UnitIsUnit("player", self.initiator) then self:Hide() end end) -- bug fix, don't show it if initiator
 	StackSplitFrame:GetRegions():Hide()
@@ -510,6 +517,30 @@ local function LoadSkin()
 			itab.backdrop:Point("TOPLEFT", 10, E.PixelMode and -4 or -6)
         end
     end
+
+	local maxButtons = (InterfaceOptionsFrameAddOns:GetHeight() - 8) / InterfaceOptionsFrameAddOns.buttonHeight;
+	for i = 1, maxButtons do
+		local buttonToggle = _G["InterfaceOptionsFrameAddOnsButton" .. i .. "Toggle"];
+		buttonToggle:SetNormalTexture("");
+		buttonToggle.SetNormalTexture = E.noop;
+		buttonToggle:SetPushedTexture("");
+		buttonToggle.SetPushedTexture = E.noop;
+		buttonToggle:SetHighlightTexture(nil);
+
+		buttonToggle.Text = buttonToggle:CreateFontString(nil, "OVERLAY");
+		buttonToggle.Text:FontTemplate(nil, 22);
+		buttonToggle.Text:Point("CENTER");
+		buttonToggle.Text:SetText("+");
+		
+		hooksecurefunc(buttonToggle, "SetNormalTexture", function(self, texture)
+			if(find(texture, "MinusButton")) then
+				self.Text:SetText("-");
+			else
+				self.Text:SetText("+");
+			end
+		end);
+	end
+
     InterfaceOptionsFrameTab1:ClearAllPoints()
     InterfaceOptionsFrameTab1:SetPoint("BOTTOMLEFT",InterfaceOptionsFrameCategories,"TOPLEFT",-11,-2)
     VideoOptionsFrameDefaults:ClearAllPoints()
