@@ -29,6 +29,10 @@ local function LoadSkin()
 	AuctionDressUpFrame.backdrop:Point("TOPLEFT", 1, -3)
 	AuctionDressUpFrame.backdrop:Point("BOTTOMRIGHT", -2, 0)
 
+	S:HandleRotateButton(AuctionDressUpModelRotateLeftButton);
+	AuctionDressUpModelRotateLeftButton:SetPoint("TOPLEFT", AuctionDressUpFrame, 5, -15);
+	S:HandleRotateButton(AuctionDressUpModelRotateRightButton);
+	AuctionDressUpModelRotateRightButton:SetPoint("TOPLEFT", AuctionDressUpModelRotateLeftButton, "TOPRIGHT", 3, 0);
 	S:HandleButton(AuctionDressUpFrameResetButton)
 	S:HandleCloseButton(AuctionDressUpFrameCloseButton)
 	

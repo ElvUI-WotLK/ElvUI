@@ -68,7 +68,7 @@ local function Point(obj, arg1, arg2, arg3, arg4, arg5)
 	obj:SetPoint(arg1, arg2, arg3, arg4, arg5)
 end
 
-local function SetOutside(obj, anchor, xOffset, yOffset)
+local function SetOutside(obj, anchor, xOffset, yOffset, anchor2)
 	xOffset = xOffset or E.Border
 	yOffset = yOffset or E.Border
 	anchor = anchor or obj:GetParent()
@@ -79,10 +79,10 @@ local function SetOutside(obj, anchor, xOffset, yOffset)
 	end
 	
 	obj:Point('TOPLEFT', anchor, 'TOPLEFT', -xOffset, yOffset)
-	obj:Point('BOTTOMRIGHT', anchor, 'BOTTOMRIGHT', xOffset, -yOffset)
+	obj:Point('BOTTOMRIGHT', anchor2 or anchor, 'BOTTOMRIGHT', xOffset, -yOffset)
 end
 
-local function SetInside(obj, anchor, xOffset, yOffset)
+local function SetInside(obj, anchor, xOffset, yOffset, anchor2)
 	xOffset = xOffset or E.Border
 	yOffset = yOffset or E.Border
 	anchor = anchor or obj:GetParent()
@@ -93,7 +93,7 @@ local function SetInside(obj, anchor, xOffset, yOffset)
 	end
 	
 	obj:Point('TOPLEFT', anchor, 'TOPLEFT', xOffset, -yOffset)
-	obj:Point('BOTTOMRIGHT', anchor, 'BOTTOMRIGHT', -xOffset, yOffset)
+	obj:Point('BOTTOMRIGHT', anchor2 or anchor, 'BOTTOMRIGHT', -xOffset, yOffset)
 end
 
 local function SetTemplate(f, t, glossTex, ignoreUpdates, forcePixelMode)

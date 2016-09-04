@@ -182,11 +182,18 @@ local function LoadSkin()
 	
 	S:HandleRotateButton(CharacterModelFrameRotateLeftButton)
 	S:HandleRotateButton(CharacterModelFrameRotateRightButton)
+	CharacterModelFrameRotateRightButton:SetPoint("TOPLEFT", CharacterModelFrameRotateLeftButton, "TOPRIGHT", 3, 0);
 	
-	CharacterResistanceFrame:CreateBackdrop('Default');
-	CharacterResistanceFrame.backdrop:Point('TOPLEFT', -1, 1);
-	CharacterResistanceFrame.backdrop:Point('BOTTOMRIGHT', 1, 14);
-	
+	CharacterResistanceFrame:CreateBackdrop("Default");
+	CharacterResistanceFrame.backdrop:SetOutside(MagicResFrame1, nil, nil, MagicResFrame5);
+
+	for i = 1, 5 do
+		local frame = _G["MagicResFrame" .. i];
+		frame:Size(24);
+		frame = _G["PetMagicResFrame" .. i];
+		frame:Size(24);
+	end
+
 	select(1, MagicResFrame1:GetRegions()):SetTexCoord(0.21875, 0.78125, 0.25, 0.3203125);
 	select(1, MagicResFrame2:GetRegions()):SetTexCoord(0.21875, 0.78125, 0.0234375, 0.09375);
 	select(1, MagicResFrame3:GetRegions()):SetTexCoord(0.21875, 0.78125, 0.13671875, 0.20703125);
@@ -212,7 +219,17 @@ local function LoadSkin()
 	
 	S:HandleRotateButton(PetModelFrameRotateLeftButton)
 	S:HandleRotateButton(PetModelFrameRotateRightButton)
-	
+	PetModelFrameRotateRightButton:SetPoint("TOPLEFT", PetModelFrameRotateLeftButton, "TOPRIGHT", 3, 0);
+
+	PetResistanceFrame:CreateBackdrop("Default");
+	PetResistanceFrame.backdrop:SetOutside(PetMagicResFrame1, nil, nil, PetMagicResFrame5);
+
+	select(1, PetMagicResFrame1:GetRegions()):SetTexCoord(0.21875, 0.78125, 0.25, 0.3203125);
+	select(1, PetMagicResFrame2:GetRegions()):SetTexCoord(0.21875, 0.78125, 0.0234375, 0.09375);
+	select(1, PetMagicResFrame3:GetRegions()):SetTexCoord(0.21875, 0.78125, 0.13671875, 0.20703125);
+	select(1, PetMagicResFrame4:GetRegions()):SetTexCoord(0.21875, 0.78125, 0.36328125, 0.43359375);
+	select(1, PetMagicResFrame5:GetRegions()):SetTexCoord(0.21875, 0.78125, 0.4765625, 0.546875);
+
 	PetAttributesFrame:StripTextures()
 	
 	S:HandleButton(PetPaperDollCloseButton)
@@ -238,6 +255,7 @@ local function LoadSkin()
 		end
 	end
 	
+	PetPaperDollPetInfo:SetPoint("TOPLEFT", PetModelFrameRotateLeftButton, "BOTTOMLEFT", 9, -3);
 	PetPaperDollPetInfo:GetRegions():SetTexCoord(0.04, 0.15, 0.06, 0.30);
 	PetPaperDollPetInfo:SetFrameLevel(PetModelFrame:GetFrameLevel() + 2);
 	PetPaperDollPetInfo:CreateBackdrop("Default");
@@ -252,6 +270,7 @@ local function LoadSkin()
 	
 	S:HandleRotateButton(CompanionModelFrameRotateLeftButton)
 	S:HandleRotateButton(CompanionModelFrameRotateRightButton)
+	CompanionModelFrameRotateRightButton:SetPoint("TOPLEFT", CompanionModelFrameRotateLeftButton, "TOPRIGHT", 3, 0);
 	
 	S:HandleButton(CompanionSummonButton)
 	
