@@ -391,7 +391,7 @@ local function BuildABConfig()
 			guiInline = false,
 			disabled = function() return not E.private.actionbar.enable or not E.myclass == "SHAMAN" end,
 			get = function(info) return E.db.actionbar['barTotem'][ info[#info] ] end,
-			set = function(info, value) E.db.actionbar['barTotem'][ info[#info] ] = value; AB:AdjustTotemSettings() end,
+			set = function(info, value) E.db.actionbar['barTotem'][ info[#info] ] = value; AB:AdjustTotemSettings(); AB:PositionAndSizeBarTotem(); end,
 			args = {
 				enabled = {
 					order = 1,
@@ -410,6 +410,33 @@ local function BuildABConfig()
 					name = L['Mouse Over'],
 					desc = L['The frame is not shown unless you mouse over the frame.'],
 					type = "toggle",
+				},
+				buttonsize = {
+					type = 'range',
+					name = L['Button Size'],
+					desc = L['The size of the action buttons.'],
+					min = 15, max = 60, step = 1,
+					order = 4,
+				},
+				buttonspacing = {
+					type = 'range',
+					name = L['Button Spacing'],
+					desc = L['The spacing between buttons.'],
+					min = -1, max = 10, step = 1,	
+					order = 5,
+				},
+				inheritGlobalFade = {
+					order = 6,
+					type = "toggle",
+					name = L["Inherit Global Fade"],
+					desc = L["Inherit the global fade, mousing over, targetting, setting focus, losing health, entering combat will set the remove transparency. Otherwise it will use the transparency level in the general actionbar settings for global fade alpha."]
+				},
+				alpha = {
+					order = 7,
+					type = 'range',
+					name = L['Alpha'],
+					isPercent = true,
+					min = 0, max = 1, step = 0.01,
 				},
 			},
 		}
