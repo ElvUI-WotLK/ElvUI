@@ -192,6 +192,42 @@ local function LoadSkin()
 		QuestProgressRequiredItemsText:SetTextColor(1, 1, 0);
 		QuestProgressRequiredMoneyText:SetTextColor(1, 1, 0);
 	end);
+
+	hooksecurefunc("QuestLog_Update", function()
+		local numEntries, numQuests = GetNumQuestLogEntries();
+		local buttons = QuestLogScrollFrame.buttons;
+		local numButtons = #buttons;
+		local scrollOffset = HybridScrollFrame_GetOffset(QuestLogScrollFrame);
+
+		local questIndex, questLogTitle;
+		local title, level, questTag, suggestedGroup, isHeader, isCollapsed, isComplete, isDaily, questID, displayQuestID;
+		for i = 1, numButtons do
+			questLogTitle = buttons[i];
+			questIndex = i + scrollOffset;
+
+			if(not questLogTitle.Text) then
+				questLogTitle.Text = questLogTitle:CreateFontString(nil, "OVERLAY");
+				questLogTitle.Text:FontTemplate(nil, 22);
+				questLogTitle.Text:Point("LEFT", 3, 0);
+				questLogTitle.Text:SetText("+");
+			end
+
+			if(questIndex <= numEntries) then
+				title, level, questTag, suggestedGroup, isHeader, isCollapsed, isComplete, isDaily, questID, displayQuestID = GetQuestLogTitle(questIndex);
+				if(isHeader) then
+					questLogTitle:SetNormalTexture(""); 
+					questLogTitle:SetHighlightTexture("");
+					if(isCollapsed) then
+						questLogTitle.Text:SetText("+");
+					else
+						questLogTitle.Text:SetText("-");
+					end
+				else
+					questLogTitle.Text:SetText("");
+				end
+			end
+		end
+	end);
 end
 
 S:RegisterSkin("ElvUI", LoadSkin);

@@ -1,6 +1,8 @@
 local E, L, V, P, G = unpack(select(2, ...)); -- Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule('Skins')
 
+local find = string.find;
+
 local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.character ~= true then return end
 	
@@ -282,58 +284,46 @@ local function LoadSkin()
 	
 	ReputationFrame:StripTextures(true);
 
-	local function UpdateFactionSkins()
-		for i = 1, GetNumFactions() do
-			local ReputationBar = _G["ReputationBar"..i.."ReputationBar"];
+	for i = 1, NUM_FACTIONS_DISPLAYED do
+		local factionRow = _G["ReputationBar" .. i];
+		local factionBar = _G["ReputationBar" .. i .. "ReputationBar"];
+		local factionButton = _G["ReputationBar" .. i .. "ExpandOrCollapseButton"];
 
-			if ReputationBar then
-				ReputationBar:SetStatusBarTexture(E['media'].normTex);
-				
-				if not ReputationBar.backdrop then
-					E:RegisterStatusBar(ReputationBar);
-					ReputationBar:CreateBackdrop('Default');
-				end
-				
-				_G['ReputationBar'..i..'Background']:SetTexture(nil);
-				_G["ReputationBar"..i.."LeftLine"]:Kill()
-				_G["ReputationBar"..i.."BottomLine"]:Kill()
-				_G['ReputationBar'..i..'ReputationBarHighlight1']:SetTexture(nil);
-				_G['ReputationBar'..i..'ReputationBarHighlight2']:SetTexture(nil);
-				_G['ReputationBar'..i..'ReputationBarAtWarHighlight1']:SetTexture(nil);
-				_G['ReputationBar'..i..'ReputationBarAtWarHighlight2']:SetTexture(nil);
-				_G['ReputationBar'..i..'ReputationBarLeftTexture']:SetTexture(nil);
-				_G['ReputationBar'..i..'ReputationBarRightTexture']:SetTexture(nil);
-				_G["ReputationBar"..i.."ExpandOrCollapseButton"]:SetNormalTexture("Interface\\Buttons\\UI-PlusMinus-Buttons")
-				_G["ReputationBar"..i.."ExpandOrCollapseButton"].SetNormalTexture = function() end
-				_G["ReputationBar"..i.."ExpandOrCollapseButton"]:GetNormalTexture():SetInside()
-				_G["ReputationBar"..i.."ExpandOrCollapseButton"]:SetHighlightTexture(nil)
-			end
-		end
+		factionRow:StripTextures(true);
+
+		factionBar:StripTextures();
+		factionBar:SetStatusBarTexture(E["media"].normTex);
+		E:RegisterStatusBar(factionBar);
+		factionBar:CreateBackdrop("Default");
+
+		factionButton:StripTextures(true);
+		factionButton:SetNormalTexture(nil);
+		factionButton.SetNormalTexture = E.noop;
+
+		factionButton.Text = factionButton:CreateFontString(nil, "OVERLAY");
+		factionButton.Text:FontTemplate(nil, 22);
+		factionButton.Text:Point("CENTER");
+		factionButton.Text:SetText("+");
 	end
 
 	local function UpdateFaction()
-		local factionOffset = FauxScrollFrame_GetOffset(ReputationListScrollFrame)
-		local numFactions = GetNumFactions()
+		local factionOffset = FauxScrollFrame_GetOffset(ReputationListScrollFrame);
+		local factionIndex, factionRow, factionButton;
+		local numFactions = GetNumFactions();
 		for i = 1, NUM_FACTIONS_DISPLAYED, 1 do
-			local Bar = _G["ReputationBar"..i]
-			local Button = _G["ReputationBar"..i.."ExpandOrCollapseButton"]
-			local FactionName = _G["ReputationBar"..i.."FactionName"]
-			local factionIndex = factionOffset + i
-			if ( factionIndex <= numFactions ) then
-				local name, _, _, _, _, _, atWarWith, canToggleAtWar, _, isCollapsed = GetFactionInfo(factionIndex);
-				if isCollapsed then
-					Button:GetNormalTexture():SetTexCoord(0, 0.4375, 0, 0.4375)
+			factionRow = _G["ReputationBar" .. i];
+			factionButton = _G["ReputationBar" .. i .. "ExpandOrCollapseButton"];
+			factionIndex = factionOffset + i;
+			if(factionIndex <= numFactions) then
+				if(factionRow.isCollapsed) then
+					factionButton.Text:SetText("+");
 				else
-					Button:GetNormalTexture():SetTexCoord(0.5625, 1, 0, 0.4375)
+					factionButton.Text:SetText("-");
 				end
 			end
 		end
 	end
-
-	hooksecurefunc("ReputationFrame_Update", UpdateFaction)
-
-	ReputationFrame:HookScript('OnShow', UpdateFactionSkins);
-	ReputationFrame:HookScript('OnEvent', UpdateFactionSkins);
+	hooksecurefunc("ReputationFrame_Update", UpdateFaction);
 	
 	ReputationListScrollFrame:StripTextures();
 	S:HandleScrollBar(ReputationListScrollFrameScrollBar);
@@ -352,21 +342,53 @@ local function LoadSkin()
 	
 	SkillFrameExpandButtonFrame:StripTextures();
 	
-	hooksecurefunc('SkillFrame_SetStatusBar', function(statusBarID, skillIndex, numSkills, adjustedSkillPoints)
-		local statusBar = _G['SkillRankFrame'..statusBarID];
-		local statusBarBorder = _G['SkillRankFrame'..statusBarID..'Border'];
-		local statusBarBackground = _G['SkillRankFrame'..statusBarID..'Background'];
-		
-		statusBar:SetStatusBarTexture(E['media'].normTex);
-		
-		if ( not statusBar.backdrop ) then
-			E:RegisterStatusBar(statusBar);
-			statusBar:CreateBackdrop('Default');
+	SkillFrameCollapseAllButton:SetNormalTexture("");
+	SkillFrameCollapseAllButton.SetNormalTexture = E.noop;
+	SkillFrameCollapseAllButton:SetHighlightTexture(nil);
+
+	SkillFrameCollapseAllButton.Text = SkillFrameCollapseAllButton:CreateFontString(nil, "OVERLAY");
+	SkillFrameCollapseAllButton.Text:FontTemplate(nil, 22);
+	SkillFrameCollapseAllButton.Text:Point("CENTER", -10, 0);
+	SkillFrameCollapseAllButton.Text:SetText("+");
+
+	hooksecurefunc(SkillFrameCollapseAllButton, "SetNormalTexture", function(self, texture)
+		if(find(texture, "MinusButton")) then
+			self.Text:SetText("-");
+		else
+			self.Text:SetText("+");
 		end
-		
+	end);
+
+	for i = 1, SKILLS_TO_DISPLAY do
+		local statusBar = _G["SkillRankFrame" .. i];
+		local statusBarBorder = _G["SkillRankFrame" .. i .. "Border"];
+		local statusBarBackground = _G["SkillRankFrame" .. i .. "Background"];
+
+		statusBar:SetStatusBarTexture(E["media"].normTex);
+		E:RegisterStatusBar(statusBar);
+		statusBar:CreateBackdrop("Default");
+
 		statusBarBorder:StripTextures();
 		statusBarBackground:SetTexture(nil);
-	end)
+
+		local skillTypeLabelText = _G["SkillTypeLabel" .. i];
+		skillTypeLabelText:SetNormalTexture("");
+		skillTypeLabelText.SetNormalTexture = E.noop;
+		skillTypeLabelText:SetHighlightTexture(nil);
+
+		skillTypeLabelText.Text = skillTypeLabelText:CreateFontString(nil, "OVERLAY");
+		skillTypeLabelText.Text:FontTemplate(nil, 22);
+		skillTypeLabelText.Text:Point("LEFT", 3, 0);
+		skillTypeLabelText.Text:SetText("+");
+
+		hooksecurefunc(skillTypeLabelText, "SetNormalTexture", function(self, texture)
+			if(find(texture, "MinusButton")) then
+				self.Text:SetText("-");
+			else
+				self.Text:SetText("+");
+			end
+		end);
+	end
 	
 	hooksecurefunc('SkillDetailFrame_SetStatusBar', function()
 		local StatusBar = _G["SkillDetailStatusBar"];
@@ -392,20 +414,7 @@ local function LoadSkin()
 	S:HandleScrollBar(SkillDetailScrollFrameScrollBar);
 	
 	S:HandleButton(SkillFrameCancelButton);
-	
-	--Skill Expand/Collapse All Button
-	SkillFrameCollapseAllButton:HookScript('OnUpdate', function(self)
-		self:SetNormalTexture("Interface\\Buttons\\UI-PlusMinus-Buttons")
-		self:SetHighlightTexture("")
-		self:GetNormalTexture():SetPoint("LEFT", 5, 0)
-		self:GetNormalTexture():Size(12)
-		if (self.isExpanded) then
-			self:GetNormalTexture():SetTexCoord(0.5625, 1, 0, 0.4375)
-		else
-			self:GetNormalTexture():SetTexCoord(0, 0.4375, 0, 0.4375)
-		end
-	end)
-	
+
 	TokenFrame:StripTextures(true);
 	
 	select(4, TokenFrame:GetChildren()):Hide();

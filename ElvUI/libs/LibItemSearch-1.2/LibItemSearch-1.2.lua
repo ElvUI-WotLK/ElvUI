@@ -171,6 +171,18 @@ Lib.Filters.tip = {
 	end
 };
 
+local escapes = {
+	["|c%x%x%x%x%x%x%x%x"] = "",
+	["|r"] = ""
+};
+
+local function CleanString(str)
+    for k, v in pairs(escapes) do
+        str = str:gsub(k, v);
+    end
+    return str;
+end
+
 Lib.Filters.tipPhrases = {
 	canSearch = function(self, _, search)
 		return self.keywords[search];
@@ -192,7 +204,9 @@ Lib.Filters.tipPhrases = {
 		
 		local matches = false
 		for i = 1, scanner:NumLines() do
-			if(search == _G["LibItemSearchTooltipScannerTextLeft" .. i]:GetText()) then
+			local text = _G["LibItemSearchTooltipScannerTextLeft" .. i]:GetText();
+			text = CleanString(text);
+			if(search == text) then
 				matches = true;
 				break;
 			end
