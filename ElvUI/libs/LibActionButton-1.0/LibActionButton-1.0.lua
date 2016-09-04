@@ -121,7 +121,7 @@ function lib:CreateButton(id, name, header, config)
 		KeyBound = LibStub("LibKeyBound-1.0", true)
 	end
 
-	local button = setmetatable(CreateFrame("CheckButton", name, header, "SecureActionButtonTemplate, ActionButtonTemplate, SecureHandlerShowHideTemplate"), Generic_MT)
+	local button = setmetatable(CreateFrame("CheckButton", name, header, "SecureActionButtonTemplate, ActionButtonTemplate"), Generic_MT)
 	button:RegisterForDrag("LeftButton", "RightButton")
 	button:RegisterForClicks("AnyUp")
 
@@ -242,6 +242,41 @@ function SetupSecureSnippets(button)
 		return control:RunFor(self, self:GetAttribute("PickupButton"), type, action);
 	]]);
 
+	button:SetAttribute("OnReceiveDrag", [[
+		if(self:GetAttribute("LABdisableDragNDrop")) then return false; end
+		local kind, value, subtype, extra = ...;
+		if(not kind or not value) then return false; end
+		local state = self:GetAttribute("state");
+		local buttonType, buttonAction = self:GetAttribute("type"), nil;
+		if(buttonType == "custom") then return false; end
+
+		if(buttonType ~= "action" and buttonType ~= "pet") then
+			if(kind == "spell") then
+				if(extra) then
+					value = extra;
+				else
+					print("no spell id?", ...);
+				end
+			elseif(kind == "item" and value) then
+				value = format("item:%d", value);
+			end
+
+			if(buttonType ~= "empty") then
+				buttonAction = self:GetAttribute(self:GetAttribute("action_field"));
+			end
+
+			self:SetAttribute(format("labtype-%d", state), kind);
+			self:SetAttribute(format("labaction-%d", state), value);
+
+			control:RunFor(self, self:GetAttribute("UpdateState"), state);
+
+			--self:CallMethod("ButtonContentsChanged", state, kind, value)
+		else
+			buttonAction = self:GetAttribute("action");
+		end
+		return control:RunFor(self, self:GetAttribute("PickupButton"), buttonType, buttonAction);
+	]]);
+
 	button:SetScript("OnDragStart", nil);
 
 	button.header:WrapScript(button, "OnDragStart", [[
@@ -252,6 +287,18 @@ function SetupSecureSnippets(button)
 		return "message", "update";
 	]], [[
 		return control:RunFor(self, self:GetAttribute("UpdateState"), self:GetAttribute("state"));
+	]]);
+
+	button:SetScript("OnReceiveDrag", nil);
+
+	button.header:WrapScript(button, "OnReceiveDrag", [[
+		return control:RunFor(self, self:GetAttribute("OnReceiveDrag"), kind, value, ...);
+	]]);
+
+	button.header:WrapScript(button, "OnReceiveDrag", [[
+		return "message", "update";
+	]], [[
+		control:RunFor(self, self:GetAttribute("UpdateState"), self:GetAttribute("state"));
 	]]);
 
 	button:SetScript("OnAttributeChanged", function(self, ...)
@@ -586,7 +633,6 @@ function InitializeEventHandler()
 	lib.eventFrame:RegisterEvent("PLAYER_TARGET_CHANGED")
 	lib.eventFrame:RegisterEvent("TRADE_SKILL_SHOW")
 	lib.eventFrame:RegisterEvent("TRADE_SKILL_CLOSE")
-	lib.eventFrame:RegisterEvent("ARCHAEOLOGY_CLOSED")
 	lib.eventFrame:RegisterEvent("PLAYER_ENTER_COMBAT")
 	lib.eventFrame:RegisterEvent("PLAYER_LEAVE_COMBAT")
 	lib.eventFrame:RegisterEvent("START_AUTOREPEAT_SPELL")
@@ -598,8 +644,6 @@ function InitializeEventHandler()
 	lib.eventFrame:RegisterEvent("LEARNED_SPELL_IN_TAB")
 	lib.eventFrame:RegisterEvent("PET_STABLE_UPDATE")
 	lib.eventFrame:RegisterEvent("PET_STABLE_SHOW")
-	lib.eventFrame:RegisterEvent("SPELL_ACTIVATION_OVERLAY_GLOW_SHOW")
-	lib.eventFrame:RegisterEvent("SPELL_ACTIVATION_OVERLAY_GLOW_HIDE")
 
 	-- With those two, do we still need the ACTIONBAR equivalents of them?
 	lib.eventFrame:RegisterEvent("SPELL_UPDATE_COOLDOWN")
@@ -642,7 +686,7 @@ function OnEvent(frame, event, arg1, ...)
 		ForAllButtons(UpdateUsable, true)
 	elseif event == "ACTIONBAR_UPDATE_COOLDOWN" or event == "SPELL_UPDATE_COOLDOWN" then
 		ForAllButtons(UpdateCooldown, true)
-	elseif event == "TRADE_SKILL_SHOW" or event == "TRADE_SKILL_CLOSE"  or event == "ARCHAEOLOGY_CLOSED" then
+	elseif event == "TRADE_SKILL_SHOW" or event == "TRADE_SKILL_CLOSE" then
 		ForAllButtons(UpdateButtonState, true)
 	elseif event == "PLAYER_ENTER_COMBAT" then
 		for button in next, ActiveButtons do
@@ -670,20 +714,6 @@ function OnEvent(frame, event, arg1, ...)
 		end
 	elseif event == "PET_STABLE_UPDATE" or event == "PET_STABLE_SHOW" then
 		ForAllButtons(Update)
-	elseif event == "SPELL_ACTIVATION_OVERLAY_GLOW_SHOW" then
-		for button in next, ActiveButtons do
-			local spellId = button:GetSpellId()
-			if spellId and spellId == arg1 then
-				ActionButton_ShowOverlayGlow(button)
-			end
-		end
-	elseif event == "SPELL_ACTIVATION_OVERLAY_GLOW_HIDE" then
-		for button in next, ActiveButtons do
-			local spellId = button:GetSpellId()
-			if spellId and spellId == arg1 then
-				ActionButton_HideOverlayGlow(button)
-			end
-		end
 	elseif event == "PLAYER_EQUIPMENT_CHANGED" then
 		for button in next, ActiveButtons do
 			if button._state_type == "item" then
@@ -946,24 +976,6 @@ function UpdateButtonState(self)
 	end
 	lib.callbacks:Fire("OnButtonState", self)
 end
-
---[[local function IsHolyPowerAbility(actionId)
-	if not actionId or type(actionId) ~= 'number' then return false; end
-	local actionType, id = GetActionInfo(actionId);
-	if actionType == 'macro' then
-		local macroSpell = GetMacroSpell(id);
-		if macroSpell then
-			for spellId, spellName in pairs(HOLY_POWER_SPELLS) do
-				if macroSpell == spellName then
-					return true;
-				end
-			end
-		end
-	else
-		return HOLY_POWER_SPELLS[id];
-	end
-	return false;
-end]]
 
 function UpdateUsable(self)
 	if self.config.useColoring then
