@@ -16,10 +16,9 @@ P['general'] = {
 	['hideErrorFrame'] = true,
 	["enhancedPvpMessages"] = true,
 	["watchFrameHeight"] = 480,
-	
 	['afk'] = true,
-	
-	['fontSize'] = 12, -- Медия\Шрифты
+	["numberPrefixStyle"] = "METRIC",
+	['fontSize'] = 12,
 	['font'] = 'PT Sans Narrow',
 
 	["bordercolor"] = { r = 0.1, g = 0.1, b = 0.1 },
@@ -27,7 +26,7 @@ P['general'] = {
 	["backdropfadecolor"] = { r = .06, g = .06, b = .06, a = 0.8 },
 	["valuecolor"] = { r = 23/255, g = 132/255, b = 209/255 },
 	
-	['minimap'] = { -- Мини-карта
+	['minimap'] = {
 		['size'] = 176,
 		['locationText'] = 'MOUSEOVER',
 		['icons'] = {
@@ -71,14 +70,12 @@ P['general'] = {
 			},
 		}
 	},
-	['threat'] = { -- Угроза
+	['threat'] = {
 		['enable'] = true,
 		['position'] = 'RIGHTCHAT',
-		['textfont'] = 'PT Sans Narrow',
 		['textSize'] = 12,
-		['textOutline'] = 'OUTLINE',
 	},
-	['totems'] = { -- Панель тотемов
+	['totems'] = {
 		['enable'] = true,
 		['growthDirection'] = 'VERTICAL',
 		['sortDirection'] = 'ASCENDING',

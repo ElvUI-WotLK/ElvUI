@@ -6,14 +6,34 @@ local modf, ceil, floor, abs, mod = math.modf, math.ceil, math.floor, math.abs, 
 local format, sub, upper = format, string.sub, string.upper;
 
 function E:ShortValue(v)
-	if(abs(v) >= 1e9) then
-		return format("%.1fG", v / 1e9);
-	elseif(abs(v) >= 1e6) then
-		return format("%.1fM", v / 1e6);
-	elseif(abs(v) >= 1e3) then
-		return format("%.1fk", v / 1e3);
+	if(E.db.general.numberPrefixStyle == "METRIC") then
+		if(abs(v) >= 1e9) then
+			return format("%.1fG", v / 1e9);
+		elseif(abs(v) >= 1e6) then
+			return format("%.1fM", v / 1e6);
+		elseif(abs(v) >= 1e3) then
+			return format("%.1fk", v / 1e3);
+		else
+			return format("%d", v);
+		end
+	elseif(E.db.general.numberPrefixStyle == "CHINESE") then
+		if(abs(v) >= 1e8) then
+			return format("%.1fY", v / 1e8);
+		elseif(abs(v) >= 1e4) then
+			return format("%.1fW", v / 1e4);
+		else
+			return format("%d", v);
+		end
 	else
-		return format("%d", v);
+		if(abs(v) >= 1e9) then
+			return format("%.1fB", v / 1e9);
+		elseif(abs(v) >= 1e6) then
+			return format("%.1fM", v / 1e6);
+		elseif(abs(v) >= 1e3) then
+			return format("%.1fK", v / 1e3);
+		else
+			return format("%d", v);
+		end
 	end
 end
 

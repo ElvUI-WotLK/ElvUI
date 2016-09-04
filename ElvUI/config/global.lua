@@ -2,6 +2,7 @@
 
 G["general"] = {
 	["autoScale"] = true,
+	["minUiScale"] = 0.64,
 	["eyefinity"] = false,
 	["smallerWorldMap"] = true,
 	["mapAlphaWhenMoving"] = 0.35,

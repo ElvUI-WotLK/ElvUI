@@ -510,11 +510,13 @@ local function LoadSkin()
         "InterfaceOptionsFrameTab2",
     }
 	for i = 1, #interfacetab do
-        local itab = _G[interfacetab[i]]
-        if itab then
-            itab:StripTextures()
-            S:HandleTab(itab)
-			itab.backdrop:Point("TOPLEFT", 10, E.PixelMode and -4 or -6)
+        local itab = _G[interfacetab[i]];
+        if(itab) then
+            itab:StripTextures();
+            S:HandleTab(itab);
+			itab.backdrop:SetTemplate("Transparent");
+			itab.backdrop:Point("TOPLEFT", 10, E.PixelMode and -4 or -6);
+			itab.backdrop:Point("BOTTOMRIGHT", -10, 1);
         end
     end
 
