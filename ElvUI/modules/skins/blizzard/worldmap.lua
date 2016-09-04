@@ -118,7 +118,6 @@ local function LoadSkin()
 		if(InCombatLockdown()) then return; end
 		WorldMapFrame:SetFrameLevel(3);
 		WorldMapDetailFrame:SetFrameLevel(WorldMapFrame:GetFrameLevel() + 1);
-		WorldMapFrame:SetFrameStrata("HIGH");
 	end
 
 	WorldMapFrame:HookScript("OnShow", FixSkin);
