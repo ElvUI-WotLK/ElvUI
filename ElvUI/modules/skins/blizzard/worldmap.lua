@@ -116,7 +116,7 @@ local function LoadSkin()
 		WorldMapFrameSizeDownButton:Point("RIGHT", WorldMapFrameCloseButton, "LEFT", 4, 0);
 
 		if(InCombatLockdown()) then return; end
-		WorldMapFrame:SetFrameLevel(3);
+		WorldMapFrame:SetFrameLevel(30);
 		WorldMapDetailFrame:SetFrameLevel(WorldMapFrame:GetFrameLevel() + 1);
 	end
 
