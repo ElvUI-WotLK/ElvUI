@@ -37,7 +37,12 @@ Die folgenden Suchbegriffe können auch benutzt werden:
     • bou : Beim Benutzen gebundene Gegenstände.
     • boe : Beim Ausrüsten gebundene Gegenstände.
     • boa : An den Account gebundene Gegenstände.
-    • quest : Gebundene Quest Gegenstände.]=];
+    • quest : Gebundene Quest Gegenstände.
+    • reagents, reagent, crafting : Berufs Reagenzien.
+    • naval : Schiffsausrüstung.
+    • follower, followe, follow : Anhänger Gegenstände.
+    • relic, reli, rel : Artefakt Relikte.
+    • power, powe, pow : Gegenstände die Artefaktkraft gewähren.]=];
 L["TEXT_FORMAT_DESC"] = [=[Wähle eine Zeichenfolge um das Textformat zu ändern.
 
 Beispiele:
@@ -59,16 +64,6 @@ Namensformate:
 'name:long' - Name auf 20 Zeichen beschränkt
 
 Zum Deaktvieren lasse das Feld leer. Brauchst du mehr Informationen besuche http://www.tukui.org]=];
-L["IGNORE_ITEMS_DESC"] = [=[Gültige Einträge:
-
-Gegenstandslinks oder Gegenstandsnamen
-
-Bedingungen vom Suchsyntax. Beispiele:
-q:epic
-s:Tank Set
-q:epic&lvl:>300
-
-Siehe "Taschen->Suchsyntax" für mehr.]=];
 
 --ActionBars
 L["Action Paging"] = "Seitenwechsel der Aktionsleisten"
@@ -83,8 +78,10 @@ L["Button Spacing"] = "Abstand der Tasten" --Also used in Bags
 L["Buttons Per Row"] = "Tasten pro Zeile"
 L["Buttons"] = "Tasten"
 L["Change the alpha level of the frame."] = "Ändere den Alphakanal des Fensters."
+L["Color of the actionbutton when not usable."] = "Farbe der Aktionsleisten wenn nicht nutzbar."
 L["Color of the actionbutton when out of power (Mana, Rage, Focus, Holy Power)."] = "Die Farbe der Aktionstasten, wenn keine Kraft, wie z.B. Mana, Wut, Fokus oder Heilige Kraft, mehr vorhanden ist."
 L["Color of the actionbutton when out of range."] = "Die Farbe der Aktionstasten, wenn das Ziel außer Reichweite ist."
+L["Color of the actionbutton when usable."] = "Farbe der Aktionsleisten wenn nutzbar."
 L["Color when the text is about to expire"] = "Färbe den Text in dieser Farbe, wenn er in Kürze abläuft."
 L["Color when the text is in the days format."] = "Färbe den Text in dieser Farbe, wenn er Tagen angezeigt wird."
 L["Color when the text is in the hours format."] = "Färbe den Text in dieser Farbe, wenn er in Stunden angezeigt wird."
@@ -114,6 +111,7 @@ L["Masque Support"] = "Masque Unterstützung"
 L["Minutes"] = "Minuten"
 L["Mouse Over"] = "Mouseover" --Also used in Bags
 L["Multiply the backdrops height or width by this value. This is usefull if you wish to have more than one bar behind a backdrop."] = "Multipliziere die Höhe und die Breite des Hintergrundes. Das ist nützlich, wenn du mehr als eine Leiste hinter einem Hintergrund haben möchtest."
+L["Not Usable"] = "Nicht nutzbar"
 L["Out of Power"] = "Keine Kraft"
 L["Out of Range"] = "Außer Reichweite"
 L["Restore Bar"] = "Leiste zurücksetzen"
@@ -130,6 +128,7 @@ L["This setting will be updated upon changing stances."] = "Diese Einstellungen 
 L["Threshold before text turns red and is in decimal form. Set to -1 for it to never turn red"] = "CD-Schwelle bevor der Text rot wird. Setze diesen Wert auf -1, wenn er nie rot werden soll"
 L["Toggles the display of the actionbars backdrop."] = "Aktiviere den Hintergrund der Aktionsleisten."
 L["Transparency level when not in combat, no target exists, full health, not casting, and no focus target exists."] = "Transparenz Level wenn nicht im Kampf, kein Ziel ausgewählt, volle Gesundheit, nicht am Zaubern und kein Fokus existiert."
+L["Usable"] = "Nutzbar"
 L["Visibility State"] = "Sichbarkeitszustand"
 L["Width Multiplier"] = "Breitenmultiplikator"
 L[ [=[This works like a macro, you can run different situations to get the actionbar to page differently.
@@ -140,10 +139,11 @@ L[ [=[This works like a macro, you can run different situations to get the actio
  Beispiel: '[combat] show;hide']=]
 
 --Bags
+L["Add an item or search syntax to the ignored list. Items matching the search syntax will be ignored."] = "Füge ein Gegenstand oder ein Suchoperator zu der Ignorierliste hinzu. Gegenstände die auf den Suchoperator zutreffen werden ignoriert."
+L["Add Item or Search Syntax"] = "Füge Gegenstand oder Suchoperator hinzu"
 L["Adjust the width of the bag frame."] = "Passe die Breite des Taschenfensters an."
 L["Adjust the width of the bank frame."] = "Passe die Breite des Bankfensters an."
 L["Align the width of the bag frame to fit inside the chat box."] = "Passt die Breite der Taschenfenster an, damit diese innerhalb des Chatfensters passen."
-L["Align To Chat"] = "Zum Chat ausrichten"
 L["Ascending"] = "Aufsteigend"
 L["Bag Sorting"] = "Taschen Sortierung"
 L["Bag-Bar"] = "Taschenleiste"
@@ -162,13 +162,13 @@ L["Displays item level on equippable items."] = "Zeigt das Itemlevel für ausrü
 L["Enable/Disable the all-in-one bag."] = "Einschalten/Ausschalten der zusammengefassten Tasche."
 L["Enable/Disable the Bag-Bar."] = "Aktiviere/Deaktiviere die Taschenleiste."
 L["Full"] = "Voll"
+L["Here you can add items or search terms that you want to be excluded from sorting. To remove an item just click on its name in the list."] = "Hier kannst du Gegenstände oder Suchbedingungen vom Suchen ausschließen. Um ein Gegenstand zu entfernen, klicke einfach auf den Namen in der Liste."
 L["Icons and Text (Short)"] = "Symbole und Text (Kurz)"
 L["Icons and Text"] = "Symbole und Text"
-L["Ignore Items"] = "Ignoriere Items"
+L["Ignored Items and Search Syntax"] = "Ignorierte Gegenstände oder Suchoperatoren"
 L["Item Count Font"] = "Gegenstandszähler Schriftart"
 L["Item Level Threshold"] = "Itemlevel Schwellenwert"
 L["Item Level"] = "Itemlevel"
-L["Items in this list or items that match any Search Syntax query in this list will be ignored when sorting. Separate each entry with a semicolon ;."] = "Gegenstände in dieser Liste oder Gegenstände die auf den Suchsyntax zutreffen werden ignoriert beim Sortieren. Trenne jeden Eintrag mit einem Semikolon ;."
 L["Money Format"] = "Geldformat"
 L["Panel Width (Bags)"] = "Leistenbreite (Taschen)"
 L["Panel Width (Bank)"] = "Leistenbreite (Bank)"
@@ -194,10 +194,6 @@ L["This makes the item level display more reliable but uses more resources. If t
 L["Top to Bottom"] = "Von oben nach unten"
 L["Use coin icons instead of colored text."] = "Benutze Währungssymbole anstatt von farbigem Text."
 L["Use Tooltip Scanning"] = "Benutze Tooltip-Scanning"
-L["X Offset Bags"] = "X-Versatz Taschen"
-L["X Offset Bank"] = "X-Versatz Bank"
-L["Y Offset Bags"] = "Y-Versatz Taschen"
-L["Y Offset Bank"] = "Y-Versatz Bank"
 
 --Buffs and Debuffs
 L["Begin a new row or column after this many auras."] = "Beginne nach so vielen Stärkungszaubern eine neue Reihe oder Spalte."
@@ -325,6 +321,7 @@ L["Testing:"] = "Tester:"
 
 --DataBars
 L["DATABAR_DESC"] = "Einstellung der Informationsleisten."
+L["Current - Remaining"] = "Aktuell - Verbleibend"
 L["DataBars"] = "Informationsleisten"
 L["Hide in Combat"] = "Im Kampf ausblenden"
 
@@ -396,6 +393,7 @@ L["Bottom Panel"] = "Untere Leiste"
 L["Chat Bubbles Style"] = "Sprechblasen Stil"
 L["Chat Bubbles"] = "Sprechblasen"
 L["Direction the bar moves on gains/losses"] = "Richtung in die der Balken wächst/sinkt"
+L["Disable OrderHall Bar"] = "Deaktiviere die Orderhallen-Leiste"
 L["Disable Tutorial Buttons"] = "Deaktiviere Tutorial Tasten"
 L["Disables the tutorial button found on some frames."] = "Deaktiviert die Tutorial Taste auf einigen Fenstern."
 L["Display a panel across the bottom of the screen. This is for cosmetic only."] = "Zeige eine Leiste am unterem Bildschirmrand. Das ist rein kosmetisch."
@@ -403,6 +401,7 @@ L["Display a panel across the top of the screen. This is for cosmetic only."] = 
 L["Display battleground messages in the middle of the screen."] = "Zeigt Schlachtfeld Nachrichten in der Mitte des Bildschirms."
 L["Display emotion icons in chat."] = "Zeige Emoticons im Chat."
 L["Emotion Icons"] = "Emoticons"
+L["Enable + Adjust Movers"] = true;
 L["Enable/Disable the loot frame."] = "Aktiviere/Deaktiviere das Beutefenster."
 L["Enable/Disable the loot roll frame."] = "Aktiviere/Deaktiviere das Beutewürfelfenster."
 L["Enhanced PVP Messages"] = "Erweiterte PvP Nachrichten"

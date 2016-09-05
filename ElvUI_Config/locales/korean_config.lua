@@ -63,7 +63,11 @@ L["SEARCH_SYNTAX_DESC"] = [=[
      - boe : 착용 시 귀속 아이템을 표시합니다.
      - boa : 계정 귀속 아이템을 표시합니다.
      - quest : 퀘스트 아이템을 표시합니다.
-]=]
+     - reagents, reagent, crafting : Profession reagents.
+     - naval : Naval equipment.
+     - follower, followe, follow : Follower items.
+     - relic, reli, rel : Artifact Relics.
+     - power, powe, pow : Items granting Artifact Power.]=]
 
 L["TEXT_FORMAT_DESC"] = [=[글자가 표시되는 형식을 변경할 수 있습니다.
 
@@ -96,16 +100,6 @@ L["TEXT_FORMAT_DESC"] = [=[글자가 표시되는 형식을 변경할 수 있습
 |cffceff00name:long|r : 최대 20글자
 
 표시하고 싶지 않으면 빈칸으로 두면 되며, 자세한 정보는 |cff2eb7e4www.tukui.org|r 에서 확인하세요.]=];
-L["IGNORE_ITEMS_DESC"] = [=[Valid entries:
-
-Item links or item names
-
-Terms from Search Syntax. Examples:
-q:epic
-s:Tank Set
-q:epic&lvl:>300
-
-See "Bags->Search Syntax" for more.]=];
 
 --ActionBars
 L["Action Paging"] = "페이지 자동전환 조건"
@@ -120,8 +114,10 @@ L["Button Spacing"] = "버튼 간격"
 L["Buttons Per Row"] = "한 줄당 버튼 수"
 L["Buttons"] = "버튼 수"
 L["Change the alpha level of the frame."] = "해당 프레임의 투명한 수준을 결정합니다."
+L["Color of the actionbutton when not usable."] = true;
 L["Color of the actionbutton when out of power (Mana, Rage, Focus, Holy Power)."] = "버튼에 배치된 행동에 필요한 자원(마나, 기력, 분노 등)이 부족하면 아이콘에 이 색상이 덧칠됩니다."
 L["Color of the actionbutton when out of range."] = "대상이 버튼에 배치된 행동에 필요한 사정거리보다 밖에 있으면 아이콘에 이 색상이 덧칠됩니다."
+L["Color of the actionbutton when usable."] = true;
 L["Color when the text is about to expire"] = "버튼에 배치된 행동의 재사용 대기시간이 초읽기 상태일 경우 글자색"
 L["Color when the text is in the days format."] = "버튼에 배치된 행동의 재사용 대기시간이 일 단위일 경우 글자색"
 L["Color when the text is in the hours format."] = "버튼에 배치된 행동의 재사용 대기시간이 시간 단위일 경우 글자색"
@@ -151,6 +147,7 @@ L["Masque Support"] = true;
 L["Minutes"] = "분 단위 색상"
 L["Mouse Over"] = "마우스오버 시 표시"
 L["Multiply the backdrops height or width by this value. This is usefull if you wish to have more than one bar behind a backdrop."] = "이 값 만큼 배경의 길이가 배로 늘어납니다. 배경 하나에 여러 행동단축바를 올리고 싶은 경우에 유용합니다."
+L["Not Usable"] = true;
 L["Out of Power"] = "자원 부족"
 L["Out of Range"] = "사정거리 밖"
 L["Restore Bar"] = "기본값으로 초기화"
@@ -167,6 +164,7 @@ L["This setting will be updated upon changing stances."] = "이 설정은 태세
 L["Threshold before text turns red and is in decimal form. Set to -1 for it to never turn red"] = "이 값 이하로 시간이 내려가면 시간이 소숫점 단위 초읽기 형태로 표시됩니다.|n|n-1로 설정하면 이 기능을 사용하지 않습니다."
 L["Toggles the display of the actionbars backdrop."] = "행동단축바의 배경을 표시할지 여부를 결정합니다."
 L["Transparency level when not in combat, no target exists, full health, not casting, and no focus target exists."] = true;
+L["Usable"] = true;
 L["Visibility State"] = "표시 자동전환 조건"
 L["Width Multiplier"] = "배경 가로길이 배율"
 L[ [=[This works like a macro, you can run different situations to get the actionbar to page differently.
@@ -187,10 +185,11 @@ L[ [=[This works like a macro, you can run different situations to get the actio
  : 전투에 돌입하면 표시, 전투가 끝나면 숨김]=]
 
 --Bags
+L["Add an item or search syntax to the ignored list. Items matching the search syntax will be ignored."] = true;
+L["Add Item or Search Syntax"] = true;
 L["Adjust the width of the bag frame."] = "통합가방 프레임의 가로길이를 결정합니다."
 L["Adjust the width of the bank frame."] = "통합은행 프레임의 가로길이를 결정합니다."
 L["Align the width of the bag frame to fit inside the chat box."] = "통합은행 프레임의 가로길이를 좌측 패널, 통합가방 프레임의 가로길이를 우측 패널 각각의 가로길이에 맞춥니다."
-L["Align To Chat"] = "패널에 맞춤"
 L["Ascending"] = "오름차순"
 L["Bag Sorting"] = true;
 L["Bag-Bar"] = "가방바"
@@ -209,13 +208,13 @@ L["Displays item level on equippable items."] = "착용 가능한 아이템의 �
 L["Enable/Disable the all-in-one bag."] = "통합가방 기능을 사용할지 여부를 결정합니다."
 L["Enable/Disable the Bag-Bar."] = "가방바를 사용할지 여부를 결정합니다."
 L["Full"] = "전체"
+L["Here you can add items or search terms that you want to be excluded from sorting. To remove an item just click on its name in the list."] = true;
 L["Icons and Text (Short)"] = true;
 L["Icons and Text"] = "아이콘 + 문자"
-L["Ignore Items"] = "정렬 예외 아이템 목록"
+L["Ignored Items and Search Syntax"] = true;
 L["Item Count Font"] = true;
 L["Item Level Threshold"] = "템렙표시 커트라인"
 L["Item Level"] = "아이템 레벨"
-L["Items in this list or items that match any Search Syntax query in this list will be ignored when sorting. Separate each entry with a semicolon ;."] = true;
 L["Money Format"] = "소지금 표시방법"
 L["Panel Width (Bags)"] = "통합가방 프레임 가로길이"
 L["Panel Width (Bank)"] = "통합은행 프레임 가로길이"
@@ -241,10 +240,6 @@ L["This makes the item level display more reliable but uses more resources. If t
 L["Top to Bottom"] = "위에서 아래로"
 L["Use coin icons instead of colored text."] = "골드 이미지를 글자가 아닌 아이콘으로 표시합니다."
 L["Use Tooltip Scanning"] = true;
-L["X Offset Bags"] = "가방 위치 가로기준"
-L["X Offset Bank"] = "은행 위치 가로기준"
-L["Y Offset Bags"] = "가방 위치 세로기준"
-L["Y Offset Bank"] = "은행 위치 세로기준"
 
 --Buffs and Debuffs
 L["Begin a new row or column after this many auras."] = "한 줄에 아이콘이 이 값보다 많으면 다음 줄에 배치합니다."
@@ -373,6 +368,7 @@ L["Testing:"] = "|cff2eb7e4< 테스터 >|r"
 
 --DataBars
 L["DATABAR_DESC"] = "Setup on-screen display of information bars."
+L["Current - Remaining"] = true;
 L["DataBars"] = true;
 L["Hide in Combat"] = true;
 
@@ -444,6 +440,7 @@ L["Bottom Panel"] = "하단 패널 표시"
 L["Chat Bubbles Style"] = "말풍선 디자인"
 L["Chat Bubbles"] = true;
 L["Direction the bar moves on gains/losses"] = "바의 증감방향을 결정합니다."
+L["Disable OrderHall Bar"] = true;
 L["Disable Tutorial Buttons"] = true;
 L["Disables the tutorial button found on some frames."] = true;
 L["Display a panel across the bottom of the screen. This is for cosmetic only."] = "화면 하단에 꾸미기 용도의 바를 생성합니다."
@@ -451,6 +448,7 @@ L["Display a panel across the top of the screen. This is for cosmetic only."] = 
 L["Display battleground messages in the middle of the screen."] = true;
 L["Display emotion icons in chat."] = "메시지 안에 이모티콘이 있으면 그림으로 바꿔 보여줍니다."
 L["Emotion Icons"] = "이모티콘 전환"
+L["Enable + Adjust Movers"] = true;
 L["Enable/Disable the loot frame."] = "주사위 굴림 및 전리품 획득 확인창의 사용 여부를 결정합니다.|n|n이 창은 |cff2eb7e4/loot|r 명령어로 볼 수 있습니다."
 L["Enable/Disable the loot roll frame."] = "ElvUI 디자인의 입찰 / 차비 / 마력추출을 선택하는 주사위 굴림창 사용 여부를 결정합니다."
 L["Enhanced PVP Messages"] = true;

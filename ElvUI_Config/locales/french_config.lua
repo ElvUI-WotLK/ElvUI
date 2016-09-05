@@ -37,7 +37,12 @@ The following search keywords can also be used:
     • bou : Bind on use items.
     • boe : Bind on equip items.
     • boa : Bind on account items.
-    • quest : Quest bound items.]=];
+    • quest : Quest bound items.
+    • reagents, reagent, crafting : Profession reagents.
+    • naval : Naval equipment.
+    • follower, followe, follow : Follower items.
+    • relic, reli, rel : Artifact Relics.
+    • power, powe, pow : Items granting Artifact Power.]=];
 L["TEXT_FORMAT_DESC"] = [=[Entrer une séquence pour changer le format du texte.
 
 Exemples:
@@ -59,16 +64,6 @@ Format des Noms:
 'name:long' - Nom limité à 20 caractères
 
 Pour désactiver, laisser le champs vide. Pour plus d'information, merci de visiter http://www.tukui.org]=];
-L["IGNORE_ITEMS_DESC"] = [=[Valid entries:
-
-Item links or item names
-
-Terms from Search Syntax. Examples:
-q:epic
-s:Tank Set
-q:epic&lvl:>300
-
-See "Bags->Search Syntax" for more.]=];
 
 --ActionBars
 L["Action Paging"] = "Pagination d'action"
@@ -83,8 +78,10 @@ L["Button Spacing"] = "Espacement des boutons"
 L["Buttons Per Row"] = "Boutons par ligne"
 L["Buttons"] = "Boutons"
 L["Change the alpha level of the frame."] = "Changer le niveau alpha de la fenêtre."
+L["Color of the actionbutton when not usable."] = true;
 L["Color of the actionbutton when out of power (Mana, Rage, Focus, Holy Power)."] = "Couleur du bouton d'action quand il n'y a pas ressource (Mana, Rage, Focalisation, Puissance sacrée)."
 L["Color of the actionbutton when out of range."] = "Couleur du bouton d'action quand hors de portée."
+L["Color of the actionbutton when usable."] = true;
 L["Color when the text is about to expire"] = "Couleur lorsque le texte est sur le point d'expirer."
 L["Color when the text is in the days format."] = "Couleur quand le texte est exprimé en jours."
 L["Color when the text is in the hours format."] = "Couleur quand le texte est exprimé en heure."
@@ -114,6 +111,7 @@ L["Masque Support"] = "Support de Maque";
 L["Minutes"] = "Minutes"
 L["Mouse Over"] = "Au survol"
 L["Multiply the backdrops height or width by this value. This is usefull if you wish to have more than one bar behind a backdrop."] = "Multiplie la hauteur ou la largeur de l'arrière-plan par cette valeur. Très utile si vous souhaitez avoir une barre de plus en arrière-plan."
+L["Not Usable"] = true;
 L["Out of Power"] = "Sans ressource"
 L["Out of Range"] = "Hors de portée"
 L["Restore Bar"] = "Restaurer la barre"
@@ -130,6 +128,7 @@ L["This setting will be updated upon changing stances."] = "Ce réglage sera act
 L["Threshold before text turns red and is in decimal form. Set to -1 for it to never turn red"] = "Seuil avant que le texte devienne rouge sous forme de décimal. Mettre -1 pour qu'il ne devienne jamais rouge."
 L["Toggles the display of the actionbars backdrop."] = "Affiche ou non la couleur de fond de la barre d'action."
 L["Transparency level when not in combat, no target exists, full health, not casting, and no focus target exists."] = true;
+L["Usable"] = true;
 L["Visibility State"] = "État de visibilité"
 L["Width Multiplier"] = "Multiplicateur largeur"
 L[ [=[This works like a macro, you can run different situations to get the actionbar to page differently.
@@ -140,10 +139,11 @@ L[ [=[This works like a macro, you can run different situations to get the actio
 Exemple: '[combat] show;hide']=]
 
 --Bags
+L["Add an item or search syntax to the ignored list. Items matching the search syntax will be ignored."] = true;
+L["Add Item or Search Syntax"] = true;
 L["Adjust the width of the bag frame."] = "Ajuster la largeur de la fenêtre du sac."
 L["Adjust the width of the bank frame."] = "Ajuster la largeur de la fenêtre du sac de banque."
 L["Align the width of the bag frame to fit inside the chat box."] = "Aligner la largeur de la fenêtre du sac pour s'adapter à l'intérieur de la zone de chat."
-L["Align To Chat"] = "Aligner sur le Chat"
 L["Ascending"] = "Ascendant"
 L["Bag Sorting"] = "Tri des sacs";
 L["Bag-Bar"] = "Barre des sacs"
@@ -162,13 +162,13 @@ L["Displays item level on equippable items."] = "Afficher le niveau d'objet sur 
 L["Enable/Disable the all-in-one bag."] = "Activer / désactiver le sac tout-en-un."
 L["Enable/Disable the Bag-Bar."] = "Activer / Désactiver la barre des sacs."
 L["Full"] = "Plein"; -- we talk about bags, so full means "plein" instead of "complet"
+L["Here you can add items or search terms that you want to be excluded from sorting. To remove an item just click on its name in the list."] = true;
 L["Icons and Text (Short)"] = true;
 L["Icons and Text"] = "Icônes et textes"
-L["Ignore Items"] = "Objets ignorés"
+L["Ignored Items and Search Syntax"] = true;
 L["Item Count Font"] = "Police d'équipement du compteur";  --need review
 L["Item Level Threshold"] = "Seuil de niveau d'objet";
 L["Item Level"] = "Niveau d'objet";
-L["Items in this list or items that match any Search Syntax query in this list will be ignored when sorting. Separate each entry with a semicolon ;."] = true;
 L["Money Format"] = "Format monétaire";
 L["Panel Width (Bags)"] = "Largeur du panneau (Sac)"
 L["Panel Width (Bank)"] = "Largeur du panneau (Banque)"
@@ -194,10 +194,6 @@ L["This makes the item level display more reliable but uses more resources. If t
 L["Top to Bottom"] = "Du haut vers le bas"
 L["Use coin icons instead of colored text."] = "Utiliser les icônes de pièces au lieu du texte coloré.";
 L["Use Tooltip Scanning"] = true;
-L["X Offset Bags"] = "Décalage X des sacs";
-L["X Offset Bank"] = "Décalage X de la banque";
-L["Y Offset Bags"] = "Décalage Y des sacs";
-L["Y Offset Bank"] = "Décalage Y de la banque";
 
 --Buffs and Debuffs
 L["Begin a new row or column after this many auras."] = "Commencer une nouvelle ligne ou colonne après cette limite d'auras."
@@ -325,6 +321,7 @@ L["Testing:"] = "Testeurs: "
 
 --DataBars
 L["DATABAR_DESC"] = "Setup on-screen display of information bars."
+L["Current - Remaining"] = true;
 L["DataBars"] = true;
 L["Hide in Combat"] = true;
 
@@ -396,6 +393,7 @@ L["Bottom Panel"] = "Bandeau en bas"
 L["Chat Bubbles Style"] = 'Style des bulles de discussion'
 L["Chat Bubbles"] = "Bulles de discussion";
 L["Direction the bar moves on gains/losses"] = "Direction que prend la barre quand gain / perte";
+L["Disable OrderHall Bar"] = true;
 L["Disable Tutorial Buttons"] = true;
 L["Disables the tutorial button found on some frames."] = true;
 L["Display a panel across the bottom of the screen. This is for cosmetic only."] = "Affiche un bandeau au bas de l'écran. Option purement cosmétique."
@@ -403,6 +401,7 @@ L["Display a panel across the top of the screen. This is for cosmetic only."] = 
 L["Display battleground messages in the middle of the screen."] = "Afficher le message du champs de bataille au milieu de l'écran";
 L["Display emotion icons in chat."] = "Afficher les émoticônes dans le Chat"
 L["Emotion Icons"] = "Emoticônes"
+L["Enable + Adjust Movers"] = true;
 L["Enable/Disable the loot frame."] = "Activer / désactiver le cadre de butin."
 L["Enable/Disable the loot roll frame."] = "Activer / désactiver le cadre du tirage au sort du butin."
 L["Enhanced PVP Messages"] = "Messages PVP améliorés";

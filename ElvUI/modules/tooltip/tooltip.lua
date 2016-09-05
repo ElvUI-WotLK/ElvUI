@@ -570,7 +570,7 @@ function TT:GameTooltipStatusBar_OnValueChanged(tt, value)
 		end
 	end
 
-	local min, max = tt:GetMinMaxValues()
+	local _, max = tt:GetMinMaxValues()
 	if(value > 0 and max == 1) then
 		tt.text:SetFormattedText("%d%%", floor(value * 100));
 		tt:SetStatusBarColor(TAPPED_COLOR.r, TAPPED_COLOR.g, TAPPED_COLOR.b) --most effeciant?
@@ -630,7 +630,7 @@ function TT:GameTooltip_OnTooltipSetItem(tt)
 	end
 end
 
-function TT:GameTooltip_ShowStatusBar(tt, min, max, value, text)
+function TT:GameTooltip_ShowStatusBar(tt, _, max, value, text)
 	local statusBar = _G[tt:GetName().."StatusBar"..tt.shownStatusBars];
 	if statusBar and not statusBar.skinned then
 		statusBar:StripTextures()
@@ -642,7 +642,9 @@ function TT:GameTooltip_ShowStatusBar(tt, min, max, value, text)
 end
 
 function TT:SetStyle(tt)
-	tt:SetTemplate("Transparent")
+	tt:SetTemplate("Transparent", nil, true);
+	local r, g, b = tt:GetBackdropColor();
+	tt:SetBackdropColor(r, g, b, self.db.colorAlpha);
 end
 
 function TT:MODIFIER_STATE_CHANGED(event, key)
@@ -696,7 +698,7 @@ function TT:SetItemRef(link, ...)
 	end
 end
 
-function TT:RepositionBNET(frame, point, anchor, anchorPoint, xOffset, yOffset)
+function TT:RepositionBNET(_, point, anchor, anchorPoint, xOffset, yOffset)
 	if anchor ~= BNETMover then
 		BNToastFrame:ClearAllPoints()
 		BNToastFrame:Point('TOPLEFT', BNETMover, 'TOPLEFT');

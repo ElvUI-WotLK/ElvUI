@@ -252,7 +252,7 @@ function E:CreateMoverPopup()
 	local lock = CreateFrame("Button", f:GetName()..'CloseButton', f, "OptionsButtonTemplate")
 	_G[lock:GetName() .. "Text"]:SetText(L["Lock"])
 
-	lock:SetScript("OnClick", function(self)
+	lock:SetScript("OnClick", function()
 		E:ToggleConfigMode(true)
 		
 		if(IsAddOnLoaded("ElvUI_Config")) then

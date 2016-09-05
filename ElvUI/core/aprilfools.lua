@@ -5,9 +5,8 @@ local pairs = pairs;
 local twipe, tinsert = table.wipe, table.insert;
 
 local CreateFrame = CreateFrame;
-local PlaySoundFile, PlayMusic, StopMusic = PlaySoundFile, PlayMusic, StopMusic;
+local PlayMusic, StopMusic = PlayMusic, StopMusic;
 local GetCVar, SetCVar = GetCVar, SetCVar;
-local UIFrameFadeOut = UIFrameFadeOut;
 local DoEmote = DoEmote;
 local SendChatMessage = SendChatMessage;
 local NUM_PET_ACTION_SLOTS = NUM_PET_ACTION_SLOTS;

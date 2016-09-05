@@ -3,7 +3,6 @@
 local print, unpack = print, unpack;
 
 local GetSpellInfo = GetSpellInfo;
-local UnitClass = UnitClass;
 
 local function SpellName(id)
 	local name, _, _, _, _, _, _, _, _ = GetSpellInfo(id);

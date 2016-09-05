@@ -53,15 +53,15 @@ function LO:TopPanelVisibility()
 	end
 end
 
-local function ChatPanelLeft_OnFade(self)
+local function ChatPanelLeft_OnFade()
 	LeftChatPanel:Hide()
 end
 
-local function ChatPanelRight_OnFade(self)
+local function ChatPanelRight_OnFade()
 	RightChatPanel:Hide()
 end
 
-local function ChatButton_OnEnter(self, ...)
+local function ChatButton_OnEnter(self)
 	if E.db[self.parent:GetName()..'Faded'] then
 		self.parent:Show()
 		UIFrameFadeIn(self.parent, 0.2, self.parent:GetAlpha(), 1)
@@ -81,7 +81,7 @@ local function ChatButton_OnEnter(self, ...)
 	GameTooltip:Show()
 end
 
-local function ChatButton_OnLeave(self, ...)
+local function ChatButton_OnLeave(self)
 	if E.db[self.parent:GetName()..'Faded'] then
 		UIFrameFadeOut(self.parent, 0.2, self.parent:GetAlpha(), 0)
 		UIFrameFadeOut(self, 0.2, self:GetAlpha(), 0)
@@ -90,7 +90,7 @@ local function ChatButton_OnLeave(self, ...)
 	GameTooltip:Hide()
 end
 
-local function ChatButton_OnClick(self, btn)
+local function ChatButton_OnClick(self)
 	GameTooltip:Hide()
 	if E.db[self.parent:GetName()..'Faded'] then
 		E.db[self.parent:GetName()..'Faded'] = nil
@@ -377,7 +377,7 @@ function LO:CreateMinimapPanels()
 	configtoggle.text:SetText('C')
 	configtoggle.text:SetPoint('CENTER')
 	configtoggle.text:SetJustifyH('CENTER')
-	configtoggle:SetScript('OnClick', function(self, btn) 
+	configtoggle:SetScript('OnClick', function(_, btn) 
 		if btn == 'LeftButton' then
 			E:ToggleConfig()
 		else
@@ -394,7 +394,7 @@ function LO:CreateMinimapPanels()
 		end
 		GameTooltip:Show()
 	end)
-	configtoggle:SetScript('OnLeave', function(self)
+	configtoggle:SetScript('OnLeave', function()
 		GameTooltip:Hide()
 	end)
 	
@@ -425,7 +425,7 @@ function LO:CreateMinimapPanels()
 		CubeLeft:Point("BOTTOM", LeftVerticalLine, "TOP", 0, 1);
 		CubeLeft:EnableMouse(true);
 		CubeLeft:SetFrameLevel(0);
-		CubeLeft:SetScript("OnMouseDown", function(self, Button)
+		CubeLeft:SetScript("OnMouseDown", function(_, Button)
 			if(Button == "LeftButton") then	
 				ToggleFrame(ChatMenu);
 			end
@@ -437,7 +437,7 @@ function LO:CreateMinimapPanels()
 		CubeRight:Point("BOTTOM", RightVerticalLine, "TOP", 0, 1);
 		CubeRight:EnableMouse(true);
 		CubeRight:SetFrameLevel(0);
-		CubeRight:SetScript("OnMouseDown", function(self, Button)
+		CubeRight:SetScript("OnMouseDown", function(_, Button)
 			if(Button == "LeftButton") then	
 				ToggleCharacter("ReputationFrame");
 			end

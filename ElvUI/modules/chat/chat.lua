@@ -831,7 +831,7 @@ function CH:OnHyperlinkEnter(frame, refString)
 	end
 end
 
-function CH:OnHyperlinkLeave(frame, refString)
+function CH:OnHyperlinkLeave(_, refString)
 	local linkToken = refString:match("^([^:]+)")
 	if hyperlinkTypes[linkToken] then
 		HideUIPanel(GameTooltip)

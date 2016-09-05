@@ -9,6 +9,7 @@
 libs\load_libs.xml
 locales\load_locales.xml
 core.lua
+General.lua
 actionbars.lua
 auras.lua
 bags.lua

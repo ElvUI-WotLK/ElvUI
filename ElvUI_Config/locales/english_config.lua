@@ -37,7 +37,12 @@ The following search keywords can also be used:
     • bou : Bind on use items.
     • boe : Bind on equip items.
     • boa : Bind on account items.
-    • quest : Quest bound items.]=];
+    • quest : Quest bound items.
+    • reagents, reagent, crafting : Profession reagents.
+    • naval : Naval equipment.
+    • follower, followe, follow : Follower items.
+    • relic, reli, rel : Artifact Relics.
+    • power, powe, pow : Items granting Artifact Power.]=];
 L["TEXT_FORMAT_DESC"] = [=[Provide a string to change the text format.
 
 Examples:
@@ -59,16 +64,6 @@ Name Formats:
 'name:long' - Name restricted to 20 characters
 
 To disable leave the field blank, if you need more information visit http://www.tukui.org]=];
-L["IGNORE_ITEMS_DESC"] = [=[Valid entries:
-
-Item links or item names
-
-Terms from Search Syntax. Examples:
-q:epic
-s:Tank Set
-q:epic&lvl:>300
-
-See "Bags->Search Syntax" for more.]=];
 
 --ActionBars
 L["Action Paging"] = true;
@@ -83,8 +78,10 @@ L["Button Spacing"] = true; --Also used in Bags
 L["Buttons Per Row"] = true;
 L["Buttons"] = true;
 L["Change the alpha level of the frame."] = true;
+L["Color of the actionbutton when not usable."] = true;
 L["Color of the actionbutton when out of power (Mana, Rage, Focus, Holy Power)."] = true;
 L["Color of the actionbutton when out of range."] = true;
+L["Color of the actionbutton when usable."] = true;
 L["Color when the text is about to expire"] = true;
 L["Color when the text is in the days format."] = true;
 L["Color when the text is in the hours format."] = true;
@@ -114,6 +111,7 @@ L["Masque Support"] = true;
 L["Minutes"] = true;
 L["Mouse Over"] = true; --Also used in Bags
 L["Multiply the backdrops height or width by this value. This is usefull if you wish to have more than one bar behind a backdrop."] = true;
+L["Not Usable"] = true;
 L["Out of Power"] = true;
 L["Out of Range"] = true;
 L["Restore Bar"] = true;
@@ -130,6 +128,7 @@ L["This setting will be updated upon changing stances."] = true;
 L["Threshold before text turns red and is in decimal form. Set to -1 for it to never turn red"] = true;
 L["Toggles the display of the actionbars backdrop."] = true;
 L["Transparency level when not in combat, no target exists, full health, not casting, and no focus target exists."] = true;
+L["Usable"] = true;
 L["Visibility State"] = true;
 L["Width Multiplier"] = true;
 L[ [=[This works like a macro, you can run different situations to get the actionbar to page differently.
@@ -138,10 +137,11 @@ L[ [=[This works like a macro, you can run different situations to get the actio
  Example: '[combat] show;hide']=] ] = true;
 
 --Bags
+L["Add an item or search syntax to the ignored list. Items matching the search syntax will be ignored."] = true;
+L["Add Item or Search Syntax"] = true;
 L["Adjust the width of the bag frame."] = true;
 L["Adjust the width of the bank frame."] = true;
 L["Align the width of the bag frame to fit inside the chat box."] = true;
-L["Align To Chat"] = true;
 L["Ascending"] = true;
 L["Bag Sorting"] = true;
 L["Bag-Bar"] = true;
@@ -160,13 +160,13 @@ L["Displays item level on equippable items."] = true;
 L["Enable/Disable the all-in-one bag."] = true;
 L["Enable/Disable the Bag-Bar."] = true;
 L["Full"] = true;
+L["Here you can add items or search terms that you want to be excluded from sorting. To remove an item just click on its name in the list."] = true;
 L["Icons and Text (Short)"] = true;
 L["Icons and Text"] = true;
-L["Ignore Items"] = true;
+L["Ignored Items and Search Syntax"] = true;
 L["Item Count Font"] = true;
 L["Item Level Threshold"] = true;
 L["Item Level"] = true;
-L["Items in this list or items that match any Search Syntax query in this list will be ignored when sorting. Separate each entry with a semicolon ;."] = true;
 L["Money Format"] = true;
 L["Panel Width (Bags)"] = true;
 L["Panel Width (Bank)"] = true;
@@ -192,10 +192,6 @@ L["This makes the item level display more reliable but uses more resources. If t
 L["Top to Bottom"] = true;
 L["Use coin icons instead of colored text."] = true;
 L["Use Tooltip Scanning"] = true;
-L["X Offset Bags"] = true;
-L["X Offset Bank"] = true;
-L["Y Offset Bags"] = true;
-L["Y Offset Bank"] = true;
 
 --Buffs and Debuffs
 L["Begin a new row or column after this many auras."] = true;
@@ -314,6 +310,7 @@ L["Testing:"] = true;
 
 --DataBars
 L["DATABAR_DESC"] = "Setup on-screen display of information bars."
+L["Current - Remaining"] = true;
 L["DataBars"] = true;
 L["Hide in Combat"] = true;
 
@@ -385,6 +382,7 @@ L["Bottom Panel"] = true;
 L["Chat Bubbles Style"] = true;
 L["Chat Bubbles"] = true;
 L["Direction the bar moves on gains/losses"] = true;
+L["Disable OrderHall Bar"] = true;
 L["Disable Tutorial Buttons"] = true;
 L["Disables the tutorial button found on some frames."] = true;
 L["Display a panel across the bottom of the screen. This is for cosmetic only."] = true;
@@ -392,6 +390,7 @@ L["Display a panel across the top of the screen. This is for cosmetic only."] = 
 L["Display battleground messages in the middle of the screen."] = true;
 L["Display emotion icons in chat."] = true;
 L["Emotion Icons"] = true;
+L["Enable + Adjust Movers"] = true;
 L["Enable/Disable the loot frame."] = true;
 L["Enable/Disable the loot roll frame."] = true;
 L["Enhanced PVP Messages"] = true;

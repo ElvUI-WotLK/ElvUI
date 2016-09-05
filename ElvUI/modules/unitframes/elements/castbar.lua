@@ -2,7 +2,7 @@ local E, L, V, P, G = unpack(select(2, ...));
 local UF = E:GetModule("UnitFrames");
 local LSM = LibStub("LibSharedMedia-3.0");
 
-local unpack, tonumber = unpack, tonumber;
+local unpack = unpack;
 local floor, abs = math.floor, abs;
 
 local CreateFrame = CreateFrame;

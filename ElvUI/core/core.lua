@@ -6,17 +6,16 @@ local tonumber, pairs, ipairs, error, unpack, select, tostring = tonumber, pairs
 local assert, print, type, collectgarbage, pcall, date = assert, print, type, collectgarbage, pcall, date;
 local twipe, tinsert, tremove = table.wipe, tinsert, tremove;
 local floor = floor;
-local format, find, split, match, strrep, len, sub, gsub = string.format, string.find, string.split, string.match, strrep, string.len, string.sub, string.gsub;
+local format, find, match, strrep, len, sub, gsub = string.format, string.find, string.match, strrep, string.len, string.sub, string.gsub;
 
 local CreateFrame = CreateFrame;
-local GetCVar, SetCVar = GetCVar, SetCVar;
+local GetCVar = GetCVar;
 local IsAddOnLoaded = IsAddOnLoaded;
 local GetSpellInfo = GetSpellInfo;
 local IsInInstance, GetNumPartyMembers, GetNumRaidMembers = IsInInstance, GetNumPartyMembers, GetNumRaidMembers;
 local RequestBattlefieldScoreData = RequestBattlefieldScoreData;
-local GetSpecialization, GetActiveSpecGroup = GetSpecialization, GetActiveSpecGroup;
 local GetCombatRatingBonus = GetCombatRatingBonus;
-local UnitLevel, UnitStat, UnitAttackPower, UnitBuff = UnitLevel, UnitStat, UnitAttackPower, UnitBuff;
+local UnitStat, UnitAttackPower, UnitBuff = UnitStat, UnitAttackPower, UnitBuff;
 local SendAddonMessage = SendAddonMessage;
 local InCombatLockdown = InCombatLockdown;
 local GetFunctionCPUUsage = GetFunctionCPUUsage;
@@ -602,8 +601,7 @@ end
 
 local myName = E.myname.."-"..E.myrealm;
 myName = myName:gsub("%s+", "");
-local frames = {};
-local function SendRecieve(self, event, prefix, message, channel, sender)
+local function SendRecieve(_, event, prefix, message, _, sender)
 	if(event == "CHAT_MSG_ADDON") then
 		if(sender == myName) then return; end
 		if(prefix == "ELVUI_VERSIONCHK" and not E.recievedOutOfDateMessage) then
@@ -721,7 +719,7 @@ function E:UpdateAll(ignoreInstall)
 	collectgarbage("collect");
 end
 
-function E:EnterVehicleHideFrames(event, unit)
+function E:EnterVehicleHideFrames(_, unit)
 	if(unit ~= "player") then return; end
 
 	for object in pairs(E.VehicleLocks) do
@@ -729,7 +727,7 @@ function E:EnterVehicleHideFrames(event, unit)
 	end
 end
 
-function E:ExitVehicleShowFrames(event, unit)
+function E:ExitVehicleShowFrames(_, unit)
 	if(unit ~= "player") then return; end
 
 	for object, originalParent in pairs(E.VehicleLocks) do
@@ -842,132 +840,11 @@ end
 
 --DATABASE CONVERSIONS
 function E:DBConversions()
-	local fonts = {
-		["ElvUI Alt-Font"] = "Continuum Medium",
-		["ElvUI Alt-Combat"] = "Die Die Die!",
-		["ElvUI Combat"] = "Action Man",
-		["ElvUI Font"] = "PT Sans Narrow",
-		["ElvUI Pixel"] = "Homespun"
-	};
-	
-	if(fonts[E.db.general.font]) then E.db.general.font = fonts[E.db.general.font]; end
-	if(fonts[E.db.general.itemLevelFont]) then E.db.general.itemLevelFont = fonts[E.db.general.itemLevelFont]; end
-	if(fonts[E.db.general.countFont]) then E.db.general.itemLevelFont = fonts[E.db.general.countFont]; end
-	if(fonts[E.db.nameplate.font]) then E.db.nameplate.font = fonts[E.db.nameplate.font]; end
-	if(fonts[E.db.nameplate.buffs.font]) then E.db.nameplate.buffs.font = fonts[E.db.nameplate.buffs.font]; end
-	if(fonts[E.db.nameplate.debuffs.font]) then E.db.nameplate.debuffs.font = fonts[E.db.nameplate.debuffs.font]; end
-	if(fonts[E.db.bags.itemLevelFont]) then E.db.bags.itemLevelFont = fonts[E.db.bags.itemLevelFont]; end
-	if(fonts[E.db.bags.countFont]) then E.db.bags.countFont = fonts[E.db.bags.countFont]; end
-	if(fonts[E.db.auras.font]) then E.db.auras.font = fonts[E.db.auras.font]; end
-	if(fonts[E.db.general.reminder.font]) then E.db.general.reminder.font = fonts[E.db.general.reminder.font]; end
-	if(fonts[E.db.chat.font]) then E.db.chat.font = fonts[E.db.chat.font]; end
-	if(fonts[E.db.chat.tabFont]) then E.db.chat.tabFont = fonts[E.db.chat.tabFont]; end
-	if(fonts[E.db.datatexts.font]) then E.db.datatexts.font = fonts[E.db.datatexts.font]; end
-	if(fonts[E.db.tooltip.font]) then E.db.tooltip.font = fonts[E.db.tooltip.font]; end
-	if(fonts[E.db.tooltip.healthBar.font]) then E.db.tooltip.healthBar.font = fonts[E.db.tooltip.healthBar.font]; end
-	if(fonts[E.db.unitframe.font]) then E.db.unitframe.font = fonts[E.db.unitframe.font]; end
-	if(fonts[E.db.unitframe.units.party.rdebuffs.font]) then E.db.unitframe.units.party.rdebuffs.font = fonts[E.db.unitframe.units.party.rdebuffs.font]; end
-	if(fonts[E.db.unitframe.units.raid.rdebuffs.font]) then E.db.unitframe.units.raid.rdebuffs.font = fonts[E.db.unitframe.units.raid.rdebuffs.font]; end
-	if(fonts[E.db.unitframe.units.raid40.rdebuffs.font]) then E.db.unitframe.units.raid40.rdebuffs.font = fonts[E.db.unitframe.units.raid40.rdebuffs.font]; end
-	
-	if(E.global.unitframe["aurafilters"]["RaidDebuffs"].spells) then
-		local matchFound;
-		for k, v in pairs(E.global.unitframe["aurafilters"]["RaidDebuffs"].spells) do
-			if(type(v) == "table") then
-				matchFound = false;
-				for k_,v_ in pairs(v) do
-					if(k_ == "stackThreshold") then
-						matchFound = true;
-					end
-				end
-			end
-			
-			if(not matchFound) then
-				E.global.unitframe["aurafilters"]["RaidDebuffs"]["spells"][k].stackThreshold = 0;
-			end
-		end
-	end
-	
-	if(E.global.unitframe["aurafilters"]["Whitelist (Strict)"].spells) then
-		for k, v in pairs(E.global.unitframe["aurafilters"]["Whitelist (Strict)"].spells) do
-			if(type(v) == "table") then
-				for k_, v_ in pairs(v) do
-					if(k_ == "spellID" and type(v_) == "string" and tonumber(v_)) then
-						E.global.unitframe["aurafilters"]["Whitelist (Strict)"]["spells"][k].spellID = tonumber(v_);
-					end
-				end
-			end
-		end
-	end
-	
-	if(E.db.databars.experience.width > 100 and E.db.databars.experience.height > 100) then
-		E.db.databars.experience.width = P.databars.experience.width;
-		E.db.databars.experience.height = P.databars.experience.height;
-		E:Print("Experience bar appears to be an odd shape. Resetting to default size.");
-	end
-	
-	if(E.db.databars.reputation.width > 100 and E.db.databars.reputation.height > 100) then
-		E.db.databars.reputation.width = P.databars.reputation.width;
-		E.db.databars.reputation.height = P.databars.reputation.height;
-		E:Print("Reputation bar appears to be an odd shape. Resetting to default size.");
-	end
-	
-	if(E.db.chat.panelHeight < 60) then E.db.chat.panelHeight = 60; end
-	if(E.db.chat.panelHeightRight < 60) then E.db.chat.panelHeightRight = 60; end
-	
-	if(E.db.movers) then
-		for mover, moverString in pairs(E.db.movers) do
-			if(find(moverString, "\031")) then
-				moverString = gsub(moverString, "\031", ",");
-				E.db.movers[mover] = moverString;
-			end
-		end
-	end
-	
-	if(not E.global.unitframe.buffwatchBackup) then E.global.unitframe.buffwatchBackup = {}; end
-	local shouldRemove;
-	for class in pairs(E.global.unitframe.buffwatch) do
-		if(not E.global.unitframe.buffwatchBackup[class]) then E.global.unitframe.buffwatchBackup[class] = {}; end
-		shouldRemove = {};
-		for i, values in pairs(E.global.unitframe.buffwatch[class]) do
-			if(values.id) then
-				if(i ~= values.id) then
-					shouldRemove[i] = true;
-				end
-				E.global.unitframe.buffwatch[class][values.id] = values;
-				if(not E.global.unitframe.buffwatchBackup[class][values.id]) then E.global.unitframe.buffwatchBackup[class][values.id] = values; end
-			elseif(G.oldBuffWatch[class] and G.oldBuffWatch[class][i]) then
-				local spellID = G.oldBuffWatch[class][i].id;
-				if(spellID) then
-					if(not E.global.unitframe.buffwatchBackup[class][spellID]) then
-						E.global.unitframe.buffwatchBackup[class][spellID] = G.oldBuffWatch[class][i];
-						E:CopyTable(E.global.unitframe.buffwatchBackup[class][spellID], values);
-					end
-					E.global.unitframe.buffwatch[class][spellID] = G.oldBuffWatch[class][i];
-					E:CopyTable(E.global.unitframe.buffwatch[class][spellID], values);
-					E.global.unitframe.buffwatch[class][i] = nil;
-				end
-			end
-		end
-		for id in pairs(shouldRemove) do
-			E.global.unitframe.buffwatch[class][id] = nil;
-		end
-	end
 
-	if(type(E.global.general.WorldMapCoordinates) == "boolean") then
-		local enabledState = E.global.general.WorldMapCoordinates;
-		E.global.general.WorldMapCoordinates = nil;
-		E.global.general.WorldMapCoordinates.enable = enabledState;
-	end
-	
-	if(not E.db.bagSortIgnoreItemsReset) then
-		E.db.bags.ignoreItems = "";
-		E.db.bagSortIgnoreItemsReset = true;
-	end
 end
 
 local CPU_USAGE = {};
-local function CompareCPUDiff(module, minCalls)
+local function CompareCPUDiff(showall, module, minCalls)
 	local greatestUsage, greatestCalls, greatestName, newName, newFunc;
 	local greatestDiff, lastModule, mod, newUsage, calls, differance = 0;
 
@@ -985,7 +862,6 @@ local function CompareCPUDiff(module, minCalls)
 			if(showall and calls > minCalls) then
 				E:Print(calls, name, differance);
 			end
-			
 			if((differance > greatestDiff) and calls > minCalls) then
 				greatestName, greatestUsage, greatestCalls, greatestDiff = name, newUsage, calls, differance;
 			end

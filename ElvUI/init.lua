@@ -94,7 +94,7 @@ function AddOn:OnInitialize()
 	GameMenuButton:Size(GameMenuButtonLogout:GetWidth(), GameMenuButtonLogout:GetHeight());
 
 	GameMenuButton:SetText(AddOnName);
-	GameMenuButton:SetScript("OnClick", function(self)
+	GameMenuButton:SetScript("OnClick", function()
 		AddOn:ToggleConfig();
 		HideUIPanel(GameMenuFrame);
 	end);

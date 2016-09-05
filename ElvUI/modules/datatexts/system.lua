@@ -1,7 +1,9 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local DT = E:GetModule('DataTexts');
 
-local format, sort = string.format, table.sort;
+local sort = table.sort;
+local floor = math.floor;
+local format, join = string.format, string.join;
 
 local MemoryTable = {};
 local CPUTable = {};
@@ -13,6 +15,7 @@ local StatusColors = {
 	'|cffFF9000',
 	'|cffD80909'
 }
+local resetInfoFormatter = join("", "|cffaaaaaa", L["Right Click: Reset CPU Usage"], "|r")
 
 local EnteredFrame = false;
 
@@ -82,9 +85,13 @@ local function UpdateCPU()
 	return TotalCPU;
 end
 
-local function Click()
-	collectgarbage('collect');
-	ResetCPUUsage();
+local function Click(self, btn)
+	if btn == "RightButton" then
+		collectgarbage("collect");
+		ResetCPUUsage();
+	else
+		ToggleGameMenu()
+	end
 end
 
 local function OnEnter(self)
@@ -135,6 +142,9 @@ local function OnEnter(self)
 		DT.tooltip:AddLine(L['(Hold Shift) Memory Usage']);
 	end
 	
+	DT.tooltip:AddLine' '
+	DT.tooltip:AddLine(resetInfoFormatter)
+
 	DT.tooltip:Show();
 end
 
@@ -174,7 +184,7 @@ local function Update(self, t)
 			FramerateColor = 3;
 		end
 		
-		DisplayFormat = string.join('', 'FPS: ', StatusColors[FramerateColor], '%d|r MS: ', StatusColors[LatencyColor], '%d|r');
+		DisplayFormat = join('', 'FPS: ', StatusColors[FramerateColor], '%d|r MS: ', StatusColors[LatencyColor], '%d|r');
 		self.text:SetFormattedText(DisplayFormat, Framerate, Latency);
 		
 		int2 = 1;
