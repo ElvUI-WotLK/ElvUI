@@ -3,9 +3,9 @@ local A = E:NewModule('Auras', 'AceHook-3.0', 'AceEvent-3.0');
 local LSM = LibStub('LibSharedMedia-3.0');
 
 local GetTime = GetTime;
-local select, unpack, tonumber, pairs, ipairs = select, unpack, tonumber, pairs, ipairs;
+local select, unpack, pairs, ipairs = select, unpack, pairs, ipairs;
 local floor, min, max = math.floor, math.min, math.max;
-local format, join, wipe, tinsert = string.format, string.join, table.wipe, table.insert;
+local format, wipe, tinsert = string.format, table.wipe, table.insert;
 
 local CreateFrame = CreateFrame;
 local UnitAura = UnitAura;
@@ -362,8 +362,6 @@ function A:UpdateHeader(self)
 	end
 	local sortMethod = (sorters[tostring(db.sortMethod):upper()] or sorters['INDEX'])[sortDirection == '-'][separateOwn];
 
-	local time = GetTime();
-
 	wipe(sortingTable);
 	wipe(groupingTable);
 
@@ -502,9 +500,9 @@ function A:Initialize()
 		self.WeaponFrame.buttons[i].isWeapon = true;
 	end
 
-	self.WeaponFrame:SetScript("OnUpdate", function(self, event, ...)
+	self.WeaponFrame:SetScript("OnUpdate", function(self)
 		if(self:IsVisible()) then
-			local hasMainHandEnchant, mainHandExpiration, mainHandCharges, hasOffHandEnchant, offHandExpiration, offHandCharges = GetWeaponEnchantInfo();
+			local hasMainHandEnchant, mainHandExpiration, _, hasOffHandEnchant, offHandExpiration = GetWeaponEnchantInfo();
 			if(not hasMainHandEnchant and not hasOffHandEnchant) then
 				for i = 1, 2 do
 					self.buttons[i]:Hide();

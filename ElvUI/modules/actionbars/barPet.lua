@@ -141,7 +141,7 @@ function AB:PositionAndSizeBarPet()
 		bar:SetParent(E.UIParent);
 	end
 	
-	local button, lastButton, lastColumnButton, autoCast;
+	local button, lastButton, lastColumnButton;
 	local firstButtonSpacing = backdropSpacing + (self.db['barPet'].backdrop == true and E.Border or E.Spacing);
 	for i=1, NUM_PET_ACTION_SLOTS do
 		button = _G['PetActionButton'..i];
