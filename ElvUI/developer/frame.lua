@@ -62,7 +62,7 @@ local t = FrameStackHighlight:CreateTexture(nil, "BORDER");
 t:SetAllPoints();
 t:SetTexture(0, 1, 0, 0.5);
 
-hooksecurefunc("FrameStackTooltip_Toggle", function(showHidden)
+hooksecurefunc("FrameStackTooltip_Toggle", function()
 	local tooltip = _G["FrameStackTooltip"];
 	if(not tooltip:IsVisible()) then
 		FrameStackHighlight:Hide();
@@ -70,7 +70,7 @@ hooksecurefunc("FrameStackTooltip_Toggle", function(showHidden)
 end);
 
 local _timeSinceLast = 0
-FrameStackTooltip:HookScript("OnUpdate", function(self, elapsed)
+FrameStackTooltip:HookScript("OnUpdate", function(_, elapsed)
 	_timeSinceLast = _timeSinceLast - elapsed;
 	if(_timeSinceLast <= 0) then
 		_timeSinceLast = FRAMESTACK_UPDATE_TIME;

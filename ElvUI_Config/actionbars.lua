@@ -509,13 +509,13 @@ E.Options.args.actionbar = {
 			order = 6,
 			type = "toggle",
 			name = L["Key Down"],
-			desc = "OPTION_TOOLTIP_ACTION_BUTTON_USE_KEY_DOWN",
+			desc = L["Action button keybinds will respond on key down, rather than on key up"],
 			disabled = function() return not E.private.actionbar.enable; end
 		},
 		movementModifier = {
 			order = 7,
 			type = "select",
-			name = "PICKUP_ACTION_KEY_TEXT",
+			name = L["Pick Up Action Key"],
 			desc = L["The button you must hold down in order to drag an ability to another action button."],
 			disabled = function() return not E.private.actionbar.enable; end,
 			values = {

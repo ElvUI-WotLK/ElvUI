@@ -451,7 +451,7 @@ local function LoadSkin()
 	end);
 
 	--DROPDOWN MENU
-	hooksecurefunc("UIDropDownMenu_InitializeHelper", function(frame)
+	hooksecurefunc("UIDropDownMenu_InitializeHelper", function()
 		for i = 1, UIDROPDOWNMENU_MAXLEVELS do
 			_G["DropDownList"..i.."Backdrop"]:SetTemplate("Default", true)
 			_G["DropDownList"..i.."MenuBackdrop"]:SetTemplate("Default", true)

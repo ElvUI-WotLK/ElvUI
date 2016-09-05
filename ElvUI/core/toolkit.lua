@@ -3,7 +3,6 @@ local LSM = LibStub("LibSharedMedia-3.0")
 
 local _G = _G;
 local unpack, type, select, getmetatable = unpack, type, select, getmetatable;
-local floor = math.floor;
 
 local CreateFrame = CreateFrame;
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS;

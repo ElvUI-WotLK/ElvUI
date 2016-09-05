@@ -10,7 +10,7 @@ local UnitIsDeadOrGhost, InCinematic = UnitIsDeadOrGhost, InCinematic;
 local GetBindingFromClick, RunBinding = GetBindingFromClick, RunBinding;
 local PurchaseSlot, GetBankSlotCost = PurchaseSlot, GetBankSlotCost;
 local MoneyFrame_Update = MoneyFrame_Update;
-local SetCVar, EnableAddOn, DisableAddOn = SetCVar, EnableAddOn, DisableAddOn;
+local SetCVar, DisableAddOn = SetCVar, DisableAddOn;
 local ReloadUI, PlaySound, StopMusic = ReloadUI, PlaySound, StopMusic;
 local StaticPopup_Resize = StaticPopup_Resize;
 local AutoCompleteEditBox_OnEnterPressed = AutoCompleteEditBox_OnEnterPressed;
@@ -851,7 +851,7 @@ function E:StaticPopup_Show(which, text_arg1, text_arg2, data)
 			tempButtonLocs[i]:Show();
 		end
 		
-		table.wipe(tempButtonLocs);
+		wipe(tempButtonLocs);
 	end
 	
 	local alertIcon = _G[name .. "AlertIcon"];

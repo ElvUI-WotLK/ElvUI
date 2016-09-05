@@ -6,17 +6,16 @@ local tonumber, pairs, ipairs, error, unpack, select, tostring = tonumber, pairs
 local assert, print, type, collectgarbage, pcall, date = assert, print, type, collectgarbage, pcall, date;
 local twipe, tinsert, tremove = table.wipe, tinsert, tremove;
 local floor = floor;
-local format, find, split, match, strrep, len, sub, gsub = string.format, string.find, string.split, string.match, strrep, string.len, string.sub, string.gsub;
+local format, find, match, strrep, len, sub, gsub = string.format, string.find, string.match, strrep, string.len, string.sub, string.gsub;
 
 local CreateFrame = CreateFrame;
-local GetCVar, SetCVar = GetCVar, SetCVar;
+local GetCVar = GetCVar;
 local IsAddOnLoaded = IsAddOnLoaded;
 local GetSpellInfo = GetSpellInfo;
 local IsInInstance, GetNumPartyMembers, GetNumRaidMembers = IsInInstance, GetNumPartyMembers, GetNumRaidMembers;
 local RequestBattlefieldScoreData = RequestBattlefieldScoreData;
-local GetSpecialization, GetActiveSpecGroup = GetSpecialization, GetActiveSpecGroup;
 local GetCombatRatingBonus = GetCombatRatingBonus;
-local UnitLevel, UnitStat, UnitAttackPower, UnitBuff = UnitLevel, UnitStat, UnitAttackPower, UnitBuff;
+local UnitStat, UnitAttackPower, UnitBuff = UnitStat, UnitAttackPower, UnitBuff;
 local SendAddonMessage = SendAddonMessage;
 local InCombatLockdown = InCombatLockdown;
 local GetFunctionCPUUsage = GetFunctionCPUUsage;
@@ -602,8 +601,7 @@ end
 
 local myName = E.myname.."-"..E.myrealm;
 myName = myName:gsub("%s+", "");
-local frames = {};
-local function SendRecieve(self, event, prefix, message, channel, sender)
+local function SendRecieve(_, event, prefix, message, _, sender)
 	if(event == "CHAT_MSG_ADDON") then
 		if(sender == myName) then return; end
 		if(prefix == "ELVUI_VERSIONCHK" and not E.recievedOutOfDateMessage) then
@@ -721,7 +719,7 @@ function E:UpdateAll(ignoreInstall)
 	collectgarbage("collect");
 end
 
-function E:EnterVehicleHideFrames(event, unit)
+function E:EnterVehicleHideFrames(_, unit)
 	if(unit ~= "player") then return; end
 
 	for object in pairs(E.VehicleLocks) do
@@ -729,7 +727,7 @@ function E:EnterVehicleHideFrames(event, unit)
 	end
 end
 
-function E:ExitVehicleShowFrames(event, unit)
+function E:ExitVehicleShowFrames(_, unit)
 	if(unit ~= "player") then return; end
 
 	for object, originalParent in pairs(E.VehicleLocks) do

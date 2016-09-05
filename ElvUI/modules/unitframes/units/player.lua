@@ -51,10 +51,6 @@ function UF:Construct_PlayerFrame(frame)
 	frame.unitframeType = "player";
 end
 
-function UF:UpdatePlayerFrameAnchors(frame, isShown)
-	print("old method still in effect")
-end
-
 function UF:Update_PlayerFrame(frame, db)
 	frame.db = db;
 	

@@ -1,7 +1,6 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local LSM = LibStub("LibSharedMedia-3.0")
 
-local GetChatWindowInfo = GetChatWindowInfo;
 local SetCVar = SetCVar;
 
 local function SetFont(obj, font, size, style, r, g, b, sr, sg, sb, sox, soy)
@@ -18,7 +17,6 @@ function E:UpdateBlizzardFonts()
 	local NUMBER			= self["media"].normFont;
 	local NAMEFONT			= LSM:Fetch("font", self.private.general.namefont);
 	local MONOCHROME		= "";
-	local _, editBoxFontSize, _, _, _, _, _, _, _, _ = GetChatWindowInfo(1)
 
 	UIDROPDOWNMENU_DEFAULT_TEXT_HEIGHT = 12
 	CHAT_FONT_HEIGHTS = {10, 12, 13, 14, 15, 16, 17, 18, 19, 20}
