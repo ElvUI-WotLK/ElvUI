@@ -37,7 +37,12 @@ The following search keywords can also be used:
     • bou : Bind on use items.
     • boe : Bind on equip items.
     • boa : Bind on account items.
-    • quest : Quest bound items.]=];
+    • quest : Quest bound items.
+    • reagents, reagent, crafting : Profession reagents.
+    • naval : Naval equipment.
+    • follower, followe, follow : Follower items.
+    • relic, reli, rel : Artifact Relics.
+    • power, powe, pow : Items granting Artifact Power.]=];
 L["TEXT_FORMAT_DESC"] = [=[請填入代碼以變更文字格式。
 
 範例：
@@ -59,16 +64,6 @@ L["TEXT_FORMAT_DESC"] = [=[請填入代碼以變更文字格式。
 'name:long' - 名稱上限為 20 個字元
 
 若要停用此功能，此欄位請留空。如需更多資訊，請至 http://www.tukui.org]=];
-L["IGNORE_ITEMS_DESC"] = [=[Valid entries:
-
-Item links or item names
-
-Terms from Search Syntax. Examples:
-q:epic
-s:Tank Set
-q:epic&lvl:>300
-
-See "Bags->Search Syntax" for more.]=];
 
 --ActionBars
 L["Action Paging"] = "快捷列翻頁"
@@ -83,8 +78,10 @@ L["Button Spacing"] = "按鈕間距"
 L["Buttons Per Row"] = "每行按鈕數"
 L["Buttons"] = "按鈕數"
 L["Change the alpha level of the frame."] = "改變框架透明度."
+L["Color of the actionbutton when not usable."] = true;
 L["Color of the actionbutton when out of power (Mana, Rage, Focus, Holy Power)."] = "施放能量 (法力、怒氣、集中值、聖能) 不足的技能快捷鍵顏色."
 L["Color of the actionbutton when out of range."] = "超出施放範圍的技能快捷鍵顏色."
+L["Color of the actionbutton when usable."] = true;
 L["Color when the text is about to expire"] = "即將冷卻完畢的數字顏色."
 L["Color when the text is in the days format."] = "以天顯示的文字顏色."
 L["Color when the text is in the hours format."] = "以小時顯示的文字顏色."
@@ -114,6 +111,7 @@ L["Masque Support"] = true;
 L["Minutes"] = "分"
 L["Mouse Over"] = "滑鼠滑過顯示"
 L["Multiply the backdrops height or width by this value. This is usefull if you wish to have more than one bar behind a backdrop."] = "根據此值增加背景的高度或寬度. 一般用來設定在一個背景框裡放置多條快捷列."
+L["Not Usable"] = true;
 L["Out of Power"] = "施放能量不足"
 L["Out of Range"] = "超出施放範圍"
 L["Restore Bar"] = "還原快捷列"
@@ -130,6 +128,7 @@ L["This setting will be updated upon changing stances."] = true;
 L["Threshold before text turns red and is in decimal form. Set to -1 for it to never turn red"] = "冷卻時間低於此秒數後將變為紅色數字, 並以小數顯示, 設為- 1 冷卻時間將不會變為紅色."
 L["Toggles the display of the actionbars backdrop."] = "顯示/隱藏快捷列背景框."
 L["Transparency level when not in combat, no target exists, full health, not casting, and no focus target exists."] = true;
+L["Usable"] = true;
 L["Visibility State"] = "顯示狀態"
 L["Width Multiplier"] = "寬度倍增"
 L[ [=[This works like a macro, you can run different situations to get the actionbar to page differently.
@@ -140,10 +139,11 @@ L[ [=[This works like a macro, you can run different situations to get the actio
 例如：'[combat] show;hide']=]
 
 --Bags
+L["Add an item or search syntax to the ignored list. Items matching the search syntax will be ignored."] = true;
+L["Add Item or Search Syntax"] = true;
 L["Adjust the width of the bag frame."] = '調整背包框架寬度.'
 L["Adjust the width of the bank frame."] = '調整銀行框架寬度.'
 L["Align the width of the bag frame to fit inside the chat box."] = '調整背包框架寬度以適應對話框.'
-L["Align To Chat"] = '對齊對話框架'
 L["Ascending"] = "升序"
 L["Bag Sorting"] = true;
 L["Bag-Bar"] = "背包條"
@@ -162,13 +162,13 @@ L["Displays item level on equippable items."] = true;
 L["Enable/Disable the all-in-one bag."] = "啟用/停用整合背包."
 L["Enable/Disable the Bag-Bar."] = "啟用/停用背包條."
 L["Full"] = true;
+L["Here you can add items or search terms that you want to be excluded from sorting. To remove an item just click on its name in the list."] = true;
 L["Icons and Text (Short)"] = true;
 L["Icons and Text"] = '圖示與文字'
-L["Ignore Items"] = "忽略項目"
+L["Ignored Items and Search Syntax"] = true;
 L["Item Count Font"] = true;
 L["Item Level Threshold"] = true;
 L["Item Level"] = true;
-L["Items in this list or items that match any Search Syntax query in this list will be ignored when sorting. Separate each entry with a semicolon ;."] = true;
 L["Money Format"] = true;
 L["Panel Width (Bags)"] = '框架寬度 (背包)'
 L["Panel Width (Bank)"] = '框架寬度 (銀行)'
@@ -194,10 +194,6 @@ L["This makes the item level display more reliable but uses more resources. If t
 L["Top to Bottom"] = "頂部至底部"
 L["Use coin icons instead of colored text."] = true;
 L["Use Tooltip Scanning"] = true;
-L["X Offset Bags"] = true;
-L["X Offset Bank"] = true;
-L["Y Offset Bags"] = true;
-L["Y Offset Bank"] = true;
 
 --Buffs and Debuffs
 L["Begin a new row or column after this many auras."] = "在這些光環旁開始新的行或列."
@@ -324,8 +320,9 @@ L["ELVUI_CREDITS"] = "我想透過這個特別方式, 向那些協助測試、�
 L["Testing:"] = "測試："
 
 --DataBars
-L["DATABAR_DESC"] = "Setup on-screen display of information bars."
+L["Current - Remaining"] = true;
 L["DataBars"] = true;
+L["DATABAR_DESC"] = "Setup on-screen display of information bars."
 L["Hide in Combat"] = true;
 
 --DataTexts
@@ -396,6 +393,7 @@ L["Bottom Panel"] = '底部面板'
 L["Chat Bubbles Style"] = true;
 L["Chat Bubbles"] = true;
 L["Direction the bar moves on gains/losses"] = true;
+L["Disable OrderHall Bar"] = true;
 L["Disable Tutorial Buttons"] = true;
 L["Disables the tutorial button found on some frames."] = true;
 L["Display a panel across the bottom of the screen. This is for cosmetic only."] = '顯示跨越屏幕底部的面板,僅僅是用于裝飾.'
@@ -403,6 +401,7 @@ L["Display a panel across the top of the screen. This is for cosmetic only."] = 
 L["Display battleground messages in the middle of the screen."] = true;
 L["Display emotion icons in chat."] = "在對話中顯示表情圖示."
 L["Emotion Icons"] = "表情圖示"
+L["Enable + Adjust Movers"] = true;
 L["Enable/Disable the loot frame."] = "啟用/停用拾取框架."
 L["Enable/Disable the loot roll frame."] = "啟用/停用擲骰框架."
 L["Enhanced PVP Messages"] = true;
