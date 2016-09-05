@@ -85,12 +85,22 @@ local function UpdateCPU()
 	return TotalCPU;
 end
 
+local function ToggleGameMenuFrame()
+	if GameMenuFrame:IsShown() then
+		PlaySound("igMainMenuQuit");
+		HideUIPanel(GameMenuFrame);
+	else
+		PlaySound("igMainMenuOpen");
+		ShowUIPanel(GameMenuFrame);
+	end
+end
+
 local function Click(self, btn)
 	if btn == "RightButton" then
 		collectgarbage("collect");
 		ResetCPUUsage();
-	else
-		ToggleGameMenu()
+	elseif btn == "LeftButton" then
+		ToggleGameMenuFrame()
 	end
 end
 
