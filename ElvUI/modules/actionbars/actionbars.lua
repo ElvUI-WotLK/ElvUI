@@ -374,6 +374,55 @@ function AB:RemoveBindings()
 	self:RegisterEvent("PLAYER_REGEN_DISABLED", "ReassignBindings");
 end
 
+function AB:UpdateBar1Paging()
+	if(self.db.bar6.enabled) then
+		E.ActionBars.barDefaults.bar1.conditions = "[bonusbar:5] 11; [bar:3] 3; [bar:4] 4; [bar:5] 5; [bar:6] 6;";
+	else
+		E.ActionBars.barDefaults.bar1.conditions = "[bonusbar:5] 11; [bar:2] 2; [bar:3] 3; [bar:4] 4; [bar:5] 5; [bar:6] 6;";
+	end
+
+	if((E.private.actionbar.enable ~= true or InCombatLockdown()) or not self.isInitialized) then return; end
+	local bar2Option = InterfaceOptionsActionBarsPanelBottomRight;
+	local bar3Option = InterfaceOptionsActionBarsPanelBottomLeft;
+	local bar4Option = InterfaceOptionsActionBarsPanelRightTwo;
+	local bar5Option = InterfaceOptionsActionBarsPanelRight;
+
+	if((self.db.bar2.enabled and not bar2Option:GetChecked()) or (not self.db.bar2.enabled and bar2Option:GetChecked())) then
+		bar2Option:Click()
+	end
+
+	if((self.db.bar3.enabled and not bar3Option:GetChecked()) or (not self.db.bar3.enabled and bar3Option:GetChecked())) then
+		bar3Option:Click()
+	end
+
+	if(not self.db.bar5.enabled and not self.db.bar4.enabled) then
+		if(bar4Option:GetChecked()) then
+			bar4Option:Click();
+		end
+
+		if(bar5Option:GetChecked()) then
+			bar5Option:Click();
+		end
+	elseif(not self.db.bar5.enabled) then
+		if(not bar5Option:GetChecked()) then
+			bar5Option:Click();
+		end
+
+		if(not bar4Option:GetChecked()) then
+			bar4Option:Click();
+		end
+	elseif((self.db.bar4.enabled and not bar4Option:GetChecked()) or (not self.db.bar4.enabled and bar4Option:GetChecked())) then
+		bar4Option:Click();
+	elseif((self.db.bar5.enabled and not bar5Option:GetChecked()) or (not self.db.bar5.enabled and bar5Option:GetChecked())) then
+		bar5Option:Click();
+	end
+end
+
+function AB:UpdateButtonSettingsForBar(barName)
+	local bar = self["handledBars"][barName];
+	self:UpdateButtonConfig(bar, bar.bindButtons);
+end
+
 function AB:UpdateButtonSettings()
 	if(E.private.actionbar.enable ~= true) then return; end
 	if(InCombatLockdown()) then self:RegisterEvent("PLAYER_REGEN_ENABLED"); return; end
@@ -526,6 +575,18 @@ function AB:Button_OnLeave(button)
 	end
 end
 
+function AB:BlizzardOptionsPanel_OnEvent()
+	InterfaceOptionsActionBarsPanelBottomRightText:SetFormattedText(L["Remove Bar %d Action Page"], 2);
+	InterfaceOptionsActionBarsPanelBottomLeftText:SetFormattedText(L["Remove Bar %d Action Page"], 3);
+	InterfaceOptionsActionBarsPanelRightTwoText:SetFormattedText(L["Remove Bar %d Action Page"], 4);
+	InterfaceOptionsActionBarsPanelRightText:SetFormattedText(L["Remove Bar %d Action Page"], 5);
+
+	InterfaceOptionsActionBarsPanelBottomRight:SetScript("OnEnter", nil);
+	InterfaceOptionsActionBarsPanelBottomLeft:SetScript("OnEnter", nil);
+	InterfaceOptionsActionBarsPanelRightTwo:SetScript("OnEnter", nil);
+	InterfaceOptionsActionBarsPanelRight:SetScript("OnEnter", nil);
+end
+
 function AB:FadeParent_OnEvent(event)
 	local cur, max = UnitHealth("player"), UnitHealthMax("player");
 	local cast, channel = UnitCastingInfo("player"), UnitChannelInfo("player");
@@ -612,6 +673,8 @@ function AB:DisableBlizzard()
 	VehicleMenuBar:Hide();
 	VehicleMenuBar:SetParent(UIHider);
 
+	self:SecureHook("BlizzardOptionsPanel_OnEvent");
+
 	if(PlayerTalentFrame) then
 		PlayerTalentFrame:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED");
 	else
@@ -624,8 +687,9 @@ function AB:UpdateButtonConfig(bar, buttonName)
 	if(not bar.buttonConfig) then bar.buttonConfig = {hideElements = {}, colors = {}}; end
 	bar.buttonConfig.hideElements.macro = self.db.macrotext;
 	bar.buttonConfig.hideElements.hotkey = self.db.hotkeytext;
-	bar.buttonConfig.showGrid = GetCVar("alwaysShowActionBars") == "1" and true or false;
+	bar.buttonConfig.showGrid = self.db["bar" .. bar.id].showGrid;
 	bar.buttonConfig.clickOnDown = self.db.keyDown;
+	SetModifiedClick("PICKUPACTION", self.db.movementModifier);
 	bar.buttonConfig.colors.range = E:GetColorTable(self.db.noRangeColor);
 	bar.buttonConfig.colors.mana = E:GetColorTable(self.db.noPowerColor);
 	bar.buttonConfig.colors.usable = E:GetColorTable(self.db.usableColor);

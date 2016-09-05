@@ -149,9 +149,6 @@ function lib:CreateButton(id, name, header, config)
 	-- Store all sub frames on the button object for easier access
 	button.icon               = _G[name .. "Icon"]
 	button.flash              = _G[name .. "Flash"]
-	button.FlyoutBorder       = _G[name .. "FlyoutBorder"]
-	button.FlyoutBorderShadow = _G[name .. "FlyoutBorderShadow"]
-	button.FlyoutArrow        = _G[name .. "FlyoutArrow"]
 	button.hotkey             = _G[name .. "HotKey"]
 	button.count              = _G[name .. "Count"]
 	button.actionName         = _G[name .. "Name"]
@@ -302,7 +299,7 @@ function SetupSecureSnippets(button)
 	]]);
 
 	button:SetScript("OnAttributeChanged", function(self, ...)
-		button:UpdateAction();
+		button:ButtonContentsChanged(...);
 	end);
 end
 
