@@ -23,7 +23,7 @@ local function LoadSkin()
 	FriendsFrameStatusDropDown:Point("TOPLEFT", FreindsListFrame, "TOPLEFT", 13, -44);
 	S:HandleEditBox(FriendsFrameBroadcastInput);
 	FriendsFrameBroadcastInput:Width(224);
-	FriendsFrameBroadcastInput:Point("TOPLEFT", FriendsFrameStatusDropDown, "TOPRIGHT", 13, -2);
+	FriendsFrameBroadcastInput:Point("TOPLEFT", FriendsFrameStatusDropDown, "TOPRIGHT", 13, -3);
 	
 	for i = 1, 5 do
 		S:HandleTab(_G['FriendsFrameTab'..i]);
