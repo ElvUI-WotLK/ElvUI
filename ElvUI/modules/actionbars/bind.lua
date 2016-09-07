@@ -21,7 +21,6 @@ local GameTooltip_ShowCompareItem = GameTooltip_ShowCompareItem;
 local GetMacroInfo = GetMacroInfo;
 local SecureActionButton_OnClick = SecureActionButton_OnClick;
 local GameTooltip_Hide = GameTooltip_Hide;
-local MAX_ACCOUNT_MACROS = MAX_ACCOUNT_MACROS;
 local CHARACTER_SPECIFIC_KEYBINDING_TOOLTIP = CHARACTER_SPECIFIC_KEYBINDING_TOOLTIP;
 local CHARACTER_SPECIFIC_KEYBINDINGS = CHARACTER_SPECIFIC_KEYBINDINGS;
 
