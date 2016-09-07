@@ -1,6 +1,8 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local S = E:GetModule("Skins")
 
+local find = string.find;
+
 local function LoadSkin()
 	if(E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.quest ~= true) then return; end
 
@@ -193,41 +195,28 @@ local function LoadSkin()
 		QuestProgressRequiredMoneyText:SetTextColor(1, 1, 0);
 	end);
 
-	hooksecurefunc("QuestLog_Update", function()
-		local numEntries, numQuests = GetNumQuestLogEntries();
-		local buttons = QuestLogScrollFrame.buttons;
-		local numButtons = #buttons;
-		local scrollOffset = HybridScrollFrame_GetOffset(QuestLogScrollFrame);
-
-		local questIndex, questLogTitle;
-		local title, level, questTag, suggestedGroup, isHeader, isCollapsed, isComplete, isDaily, questID, displayQuestID;
-		for i = 1, numButtons do
-			questLogTitle = buttons[i];
-			questIndex = i + scrollOffset;
-
-			if(not questLogTitle.Text) then
-				questLogTitle.Text = questLogTitle:CreateFontString(nil, "OVERLAY");
-				questLogTitle.Text:FontTemplate(nil, 22);
-				questLogTitle.Text:Point("LEFT", 3, 0);
-				questLogTitle.Text:SetText("+");
+	for i = 1, #QuestLogScrollFrame.buttons do
+		local questLogTitle = _G["QuestLogScrollFrameButton" .. i];
+		questLogTitle:SetNormalTexture("");
+		questLogTitle.SetNormalTexture = E.noop;
+		questLogTitle:SetHighlightTexture("");
+		questLogTitle.SetHighlightTexture = E.noop;
+		
+		questLogTitle.Text = questLogTitle:CreateFontString(nil, "OVERLAY");
+		questLogTitle.Text:FontTemplate(nil, 22);
+		questLogTitle.Text:Point("LEFT", 3, 0);
+		questLogTitle.Text:SetText("+");
+		
+		hooksecurefunc(questLogTitle, "SetNormalTexture", function(self, texture)
+			if(find(texture, "MinusButton")) then
+				self.Text:SetText("-");
+			elseif(find(texture, "PlusButton")) then
+				self.Text:SetText("+");
+			else
+				self.Text:SetText("");
 			end
-
-			if(questIndex <= numEntries) then
-				title, level, questTag, suggestedGroup, isHeader, isCollapsed, isComplete, isDaily, questID, displayQuestID = GetQuestLogTitle(questIndex);
-				if(isHeader) then
-					questLogTitle:SetNormalTexture(""); 
-					questLogTitle:SetHighlightTexture("");
-					if(isCollapsed) then
-						questLogTitle.Text:SetText("+");
-					else
-						questLogTitle.Text:SetText("-");
-					end
-				else
-					questLogTitle.Text:SetText("");
-				end
-			end
-		end
-	end);
+		end);
+	end
 end
 
 S:RegisterSkin("ElvUI", LoadSkin);
