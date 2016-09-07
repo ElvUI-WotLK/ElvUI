@@ -357,9 +357,9 @@ function D:Decode(dataString)
 		end
 		
 		local serializedData, success;
-		serializedData, profileInfo = E:SplitString(decompressedData, "^^::");
+		serializedData, profileInfo = E:StringSplitMultiDelim(decompressedData, "^^::");
 		serializedData = format("%s%s", serializedData, "^^");
-		profileType, profileKey = E:SplitString(profileInfo, "::");
+		profileType, profileKey = E:StringSplitMultiDelim(profileInfo, "::");
 		success, profileData = D:Deserialize(serializedData);
 		if(not success) then
 			E:Print("Error deserializing:", profileData);
@@ -367,9 +367,9 @@ function D:Decode(dataString)
 		end
 	elseif(stringType == "Table") then
 		local profileDataAsString;
-		profileDataAsString, profileInfo = E:SplitString(dataString, "}::");
+		profileDataAsString, profileInfo = E:StringSplitMultiDelim(dataString, "}::");
 		profileDataAsString = format("%s%s", profileDataAsString, "}");
-		profileType, profileKey = E:SplitString(profileInfo, "::");
+		profileType, profileKey = E:StringSplitMultiDelim(profileInfo, "::");
 		if(not profileDataAsString) then
 			E:Print("Error extracting profile data. Invalid import string!");
 			return;

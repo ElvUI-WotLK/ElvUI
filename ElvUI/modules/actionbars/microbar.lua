@@ -65,12 +65,14 @@ function AB:HandleMicroButton(button)
 	end
 end
 
-function AB:UpdateMicroButtonsParent(parent)
-	if(parent ~= ElvUI_MicroBar) then parent = ElvUI_MicroBar; end
-	
+function AB:UpdateMicroButtonsParent()
+	if(CharacterMicroButton:GetParent() == ElvUI_MicroBar) then return; end
+
 	for i = 1, #MICRO_BUTTONS do
 		_G[MICRO_BUTTONS[i]]:SetParent(ElvUI_MicroBar);
 	end
+
+	AB:UpdateMicroPositionDimensions()
 end
 
 function AB:UpdateMicroPositionDimensions()
@@ -124,6 +126,9 @@ function AB:SetupMicroBar()
 	end
 
 	MicroButtonPortrait:SetInside(CharacterMicroButton.backdrop);
+
+	self:RegisterEvent('PLAYER_ENTERING_WORLD', 'UpdateMicroButtonsParent')
+	self:SecureHook('VehicleMenuBar_MoveMicroButtons', 'UpdateMicroButtonsParent')
 
 	self:SecureHook('MainMenuMicroButton_SetPushed');
 	self:SecureHook('MainMenuMicroButton_SetNormal');
