@@ -879,13 +879,13 @@ function B:ContructContainerFrame(name, isBank)
 	f:SetMovable(true)
 	f:RegisterForDrag("LeftButton", "RightButton");
 	f:RegisterForClicks("AnyUp");
-	f:SetScript("OnDragStart", function(self) self:StartMoving(); end)
+	f:SetScript("OnDragStart", function(self) if(IsShiftKeyDown()) then self:StartMoving(); end end);
 	f:SetScript("OnDragStop", function(self) self:StopMovingOrSizing(); end)
 	f:SetScript("OnClick", function(self) if(IsControlKeyDown()) then B.PostBagMove(self.mover); end end);
 	f:SetScript("OnEnter", function(self)
 		GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT", 0, 4);
 		GameTooltip:ClearLines();
-		GameTooltip:AddDoubleLine(--[["DRAG_MODEL"]]L["Hold Shift + Drag:"], L["Temporary Move"], 1, 1, 1);
+		GameTooltip:AddDoubleLine(L["Hold Shift + Drag:"], L["Temporary Move"], 1, 1, 1);
 		GameTooltip:AddDoubleLine(L["Hold Control + Right Click:"], L["Reset Position"], 1, 1, 1);
 
 		GameTooltip:Show();
@@ -1194,15 +1194,16 @@ end
 function B:PostBagMove()
 	if(not E.private.bags.enable) then return; end
 
-	local _, y = self:GetCenter();
+	local x, y = self:GetCenter();;
 	local screenHeight = E.UIParent:GetTop();
+	local screenWidth = E.UIParent:GetRight();
 
 	if(y > (screenHeight / 2)) then
 		self:SetText(self.textGrowDown);
-		self.POINT = "TOP";
+		self.POINT = ((x > (screenWidth/2)) and "TOPRIGHT" or "TOPLEFT");
 	else
 		self:SetText(self.textGrowUp);
-		self.POINT = "BOTTOM";
+		self.POINT = ((x > (screenWidth/2)) and "BOTTOMRIGHT" or "BOTTOMLEFT");
 	end
 
 	local bagFrame;
@@ -1237,13 +1238,13 @@ function B:Initialize()
 	self.db = E.db.bags;
 	self.BagFrames = {};
 
-	BagFrameHolder:Point("BOTTOM", RightChatPanel, "BOTTOM", 0, 22 + E.Border*4 - E.Spacing*2);
+	BagFrameHolder:Point("BOTTOMRIGHT", RightChatPanel, "BOTTOMRIGHT", 0, 22 + E.Border*4 - E.Spacing*2);
 	E:CreateMover(BagFrameHolder, 'ElvUIBagMover', L["Bag Mover (Grow Up)"], nil, nil, B.PostBagMove);
 
 	local BankFrameHolder = CreateFrame("Frame", nil, E.UIParent);
 	BankFrameHolder:Width(200);
 	BankFrameHolder:Height(22);
-	BankFrameHolder:Point("BOTTOM", LeftChatPanel, "BOTTOM", 0, 22 + E.Border*4 - E.Spacing*2);
+	BankFrameHolder:Point("BOTTOMLEFT", LeftChatPanel, "BOTTOMLEFT", 0, 22 + E.Border*4 - E.Spacing*2);
 	BankFrameHolder:SetFrameLevel(BankFrameHolder:GetFrameLevel() + 400);
 	E:CreateMover(BankFrameHolder, "ElvUIBankMover", L["Bank Mover (Grow Up)"], nil, nil, B.PostBagMove);
 

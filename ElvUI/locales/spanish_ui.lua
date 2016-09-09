@@ -3,9 +3,6 @@ local AceLocale = LibStub:GetLibrary("AceLocale-3.0")
 local L = AceLocale:NewLocale("ElvUI", "esES") or AceLocale:NewLocale("ElvUI", "esMX")
 if not L then return end
 
---TEMP
-L["A taint has occured that is preventing you from using the queue system. Please reload your user interface and try again."] = "Un error ha ocurrido que te impide usar el sistema de cola. Recarga tu interfaz y trata nuevamente."
-
 --*_ADDON locales
 L["INCOMPATIBLE_ADDON"] = "The addon %s is not compatible with ElvUI's %s module. Please select either the addon or the ElvUI module to disable."
 
@@ -36,7 +33,6 @@ L["Trigger"] = "Disparador"
 L["Bank"] = true;
 L["Deposit Reagents"] = true;
 L["Hold Control + Right Click:"] = "Mantén Control y Haz Clic Derecho:"
-L["Hold Shift + Drag:"] = "Mantén Shift y Arrastra:"
 L["Purchase Bags"] = true;
 L["Purchase"] = "Comprar"
 L["Reagent Bank"] = true;
@@ -85,6 +81,7 @@ L["Earned:"] = "Ganada:"
 L["Feet"] = "Pies"
 L["Friends List"] = "Lista de Amigos"
 L["Friends"] = "Amigos"
+L["Gold:"] = true;
 L["goldabbrev"] = "|cffffd700g|r"
 L["Hands"] = "Manos"
 L["Head"] = "Cabeza"
@@ -98,7 +95,6 @@ L["lvl"] = "Niv"
 L["Main Hand"] = "Mano Derecha"
 L["Mission(s) Report:"] = true;
 L["Mitigation By Level: "] = "Mitigación Por Nivel: "
-L["Multistrike"] = true;
 L["Naval Mission(s) Report:"] = true;
 L["No Guild"] = "Sin Hermandad"
 L["Offhand"] = "Mano Izquierda"
@@ -170,10 +166,8 @@ L["Layout"] = "Distribución"
 L["Lock"] = "Bloquear"
 L["Low Resolution"] = "Baja Resolución"
 L["low"] = "baja"
-L["Movers unlocked. Move them now and click Lock when you are done."] = "Fijadores desbloqueados. Muévelos ahora y haz click en Bloquear cuando termines."
 L["Nudge"] = "Ajuste Fino"
 L["Physical DPS"] = "DPS Físico"
-L["Pixel Perfect"] = "Perfección por Pixel"
 L["Please click the button below so you can setup variables and ReloadUI."] = "Haz clic en el botón de abajo para configurar variables y recargar la interfaz."
 L["Please click the button below to setup your CVars."] = "Haz clic en el botón de abajo para configurar las CVars"
 L["Please press the continue button to go onto the next step."] = "Presiona el botón de continuar para ir al siguiente paso"
@@ -187,7 +181,6 @@ L["Sticky Frames"] = "Marcos Adhesivos"
 L["Tank"] = "Tanque"
 L["The chat windows function the same as Blizzard standard chat windows, you can right click the tabs and drag them around, rename, etc. Please click the button below to setup your chat windows."] = "Las ventanas de chat funcionan igual que sus contrapartes estándar de Blizzard. Puedes hacer clic derecho en las pestañas y arrastrarlas, cambiarles el nombre, etc. Haz clic en el botón de abajo para configurar las ventanas de chat."
 L["The in-game configuration menu can be accesses by typing the /ec command or by clicking the 'C' button on the minimap. Press the button below if you wish to skip the installation process."] = "El menú de configuración puede ser accedido mediante el comando /ec o haciendo clic en el botón 'C' del minimapa. Presiona el botón de abajo si deseas saltarte la instalación."
-L["The Pixel Perfect option will change the overall apperance of your UI. Using Pixel Perfect is a slight performance increase over the traditional layout."] = "La opción de Perfección por Pixel cambiará la apariencia general de la interfaz. Este mejorará el desempeño ligeramente en comparación con el diseño tradicional"
 L["Theme Set"] = "Establecer Tema"
 L["Theme Setup"] = "Configurar Tema"
 L["This install process will help you learn some of the features in ElvUI has to offer and also prepare your user interface for usage."] = "El proceso de instalación te ayudará a aprender algunas de las características de ElvUI y preparará la interfaz para su uso."
@@ -214,7 +207,6 @@ L["Can't Roll"] = "No puede tirar dados"
 L["Disband Group"] = "Disolver Grupo"
 L["Enable"] = "Habilitar"
 L["Experience"] = "Experiencia"
-L["Farm Mode"] = true; -- Minimap middle click menu
 L["Fishy Loot"] = "Botín Sospechoso"
 L["iLvl"] = true; --Column header in raidbrowser
 L["Important Group Members:"] = true;
@@ -235,10 +227,15 @@ L["You don't have permission to mark targets."] = "No tienes permiso para marcar
 L["Alternative Power"] = "Poder Alternativo"
 L["Archeology Progress Bar"] = true;
 L["Arena Frames"] = "Marcos de Arena"
+L["Artifact Bar"] = true;
+L["Bag Mover (Grow Down)"] = true;
+L["Bag Mover (Grow Up)"] = true;
+L["Bag Mover"] = true;
 L["Bags"] = "Bolsas"
+L["Bank Mover (Grow Down)"] = true;
+L["Bank Mover (Grow Up)"] = true;
 L["Bar "] = "Barra "
 L["BNet Frame"] = "Marco BNet"
-L["BodyGuard Frame"] = true;
 L["Boss Button"] = "Botón de Jefe"
 L["Boss Frames"] = "Marco de Jefe"
 L["Class Bar"] = true;
@@ -248,6 +245,7 @@ L["Focus Castbar"] = "Barra de Lanzamiento del Foco"
 L["Focus Frame"] = "Marco de Foco"
 L["FocusTarget Frame"] = "Marco de Objetivo del Foco"
 L["GM Ticket Frame"] = "Marco de Consultas para el MJ"
+L["Honor Bar"] = true;
 L["Left Chat"] = "Chat Izquierdo"
 L["Loot / Alert Frames"] = "Marcos de Botín / Alerta"
 L["Loot Frame"] = true;
@@ -267,23 +265,35 @@ L["Player Buffs"] = true;
 L["Player Castbar"] = "Barra de Lanzamiento del Jugador"
 L["Player Debuffs"] = true;
 L["Player Frame"] = "Marco de Jugador"
+L["Player Nameplate"] = true;
+L["Player Powerbar"] = true;
 L["Raid Frames"] = true;
 L["Raid Pet Frames"] = true;
 L["Raid-40 Frames"] = true;
 L["Reputation Bar"] = "Barra de Reputación"
 L["Right Chat"] = "Chat Derecho"
 L["Stance Bar"] = "Barra de Forma"
+L["Talking Head Frame"] = true
 L["Target Castbar"] = "Barra de Lanzamiento del Objetivo"
 L["Target Frame"] = "Marco de Objetivo"
+L["Target Powerbar"] = true;
 L["TargetTarget Frame"] = "Marco de Objetivo de Objetivo"
 L["TargetTargetTarget Frame"] = true;
 L["Tooltip"] = "Descripción Emergente"
 L["Vehicle Seat Frame"] = "Marco del Asiento del Vehículo"
+L["DESC_MOVERCONFIG"] = [=[Fijadores desbloqueados. Muévelos ahora y haz click en Bloquear cuando termines.
 
---NamePlates
-L["Discipline"] = "Disciplina"
-L["Holy"] = "Sagrado"
-L["Restoration"] = "Restauración"
+Options:
+  Shift + RightClick - Hides mover temporarily.
+  Ctrl + RightClick - Resets mover position to default.
+]=]
+
+--Plugin Installer
+L["ElvUI Plugin Installation"] = true;
+L["In Progress"] = true;
+L["List of installations in queue:"] = true;
+L["Pending"] = true;
+L["Steps"] = true;
 
 --Prints
 L[" |cff00ff00bound to |r"] = " |cff00ff00ligado(a) a |r"
@@ -297,6 +307,7 @@ L["Binds Saved"] = "Teclas Guardadas"
 L["Confused.. Try Again!"] = "Confundido... ¡Intenta de Nuevo!"
 L["No gray items to delete."] = "No hay objetos grises para eliminar."
 L["The spell '%s' has been added to the Blacklist unitframe aura filter."] = "El hechizo '%s' ha sido añadido a la Lista Negra del filtro de auras del marco de unidad."
+L["This setting caused a conflicting anchor point, where '%s' would be attached to itself. Please check your anchor points. Setting '%s' to be attached to '%s'."] = true;
 L["Vendored gray items for:"] = "Objetos grises vendidos por:"
 L["You don't have enough money to repair."] = "No tienes suficiente dinero para reparaciones."
 L["You must be at a vendor."] = "Debes estar cerca de un vendedor."
@@ -329,11 +340,13 @@ L["Oh lord, you have got ElvUI and Tukui both enabled at the same time. Select a
 L["One or more of the changes you have made require a ReloadUI."] = "Uno o más de los cambios que has hecho requieren una recarga de la interfaz."
 L["One or more of the changes you have made will effect all characters using this addon. You will have to reload the user interface to see the changes you have made."] = "Uno o más de los cambios que has hecho afectaran a todos los personajes que usen este addon. Tendrás que recargar la intefaz de usuario para ver el cambio que has realizado."
 L["Save"] = "Guardar"
+L["The profile you tried to import already exists. Choose a new name or accept to overwrite the existing profile."] = true;
 L["Type /hellokitty to revert to old settings."] = true;
 L["Using the healer layout it is highly recommended you download the addon Clique if you wish to have the click-to-heal function."] = true;
 L["Yes, Keep Changes!"] = true;
-L["You have changed the pixel perfect option. You will have to complete the installation process to remove any graphical bugs."] = "Has cambiado la opción de perfección por pixel. Tienes que completar la instalación para eliminar cualquier error gráfico."
+L["You have changed the Thin Border Theme option. You will have to complete the installation process to remove any graphical bugs."] = true;
 L["You have changed your UIScale, however you still have the AutoScale option enabled in ElvUI. Press accept if you would like to disable the Auto Scale option."] = "Has cambiado la escala de tu interfaz, sin embargo aún tienes el AutoEscalado activado en ElvUI. Pulsa aceptar si te gustaría desactivar el AutoEscalado."
+L["You have imported settings which may require a UI reload to take effect. Reload now?"] = true;
 L["You must purchase a bank slot first!"] = "¡Debes comprar un hueco del banco primero!"
 
 --Tooltip
@@ -348,11 +361,9 @@ L["ElvUI has a dual spec feature which allows you to load different profiles bas
 L["For technical support visit us at http://www.tukui.org."] = "Para soporte técnico visítanos en http://www.tukui.org."
 L["If you accidently remove a chat frame you can always go the in-game configuration menu, press install, go to the chat portion and reset them."] = "Si eliminas un marco de chat accidentalmente, siempre puedes ir a la configuración, pulsar instalar, ir a la parte del chat, y restaurarlo."
 L["If you are experiencing issues with ElvUI try disabling all your addons except ElvUI, remember ElvUI is a full UI replacement addon, you cannot run two addons that do the same thing."] = "Si has experimentado errores con ElvUI prueba a desactivar todos tus addons excepto ElvUI, recuerda que ElvUI remplaza por completo la interfaz, no puede haber addons que hagan lo mismo."
-L["The buff panel to the right of minimap is a list of your consolidated buffs. You can disable it in Buffs and Debuffs options of ElvUI."] = "El panel de beneficios a la derecha del minimapa es una lista de los beneficios consolidados. Puedes desactivarlo en la pestaña de Beneficios y Perjuicios de ElvUI."
 L["The focus unit can be set by typing /focus when you are targeting the unit you want to focus. It is recommended you make a macro to do this."] = "El foco puede establecerse escribiendo /enfoque cuando tienes seleccionado al objetivo al cual quieres hacer foco. Es recomendable que hagas una macro para esto."
 L["To move abilities on the actionbars by default hold shift + drag. You can change the modifier key from the actionbar options menu."] = "Para mover habilidades a las barras de acción mantener shift + arrastrar. Puedes cambiar la tecla de modificación desde el menú de opciones de la barra de acción."
 L["To setup which channels appear in which chat frame, right click the chat tab and go to settings."] = "Para configurar que canales aparecen en el chat, haz clic con el botón derecho en la pestaña del chat y elige opciones."
-L["Using the /farmmode <size> command will spawn a larger minimap on your screen that can be moved around, very useful when farming."] = "El comando /farmmode <tamaño> hace aparecer un minimapa más grande en su pantalla que puede moverse, muy útil para recolectar."
 L["You can access copy chat and chat menu functions by mouse over the top right corner of chat panel and left/right click on the button that will appear."] = "Puedes acceder a copiar y a las opciones del chat pasando el ratón sobre la esquina superior derecha del panel del chat y haciendo click en el botón que aparece."
 L["You can see someones average item level of their gear by holding shift and mousing over them. It should appear inside the tooltip."] = "Puedes ver la media de nivel de objeto de un objetivo manteniendo pulsado shift mientras pasas el ratón por encima de él. El iNvl aparecerá en la descripción emergente."
 L["You can set your keybinds quickly by typing /kb."] = "Puedes establecer tus atajos rapidamente escribiendo /kb."

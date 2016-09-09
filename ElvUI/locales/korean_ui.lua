@@ -3,9 +3,6 @@ local AceLocale = LibStub:GetLibrary("AceLocale-3.0")
 local L = AceLocale:NewLocale("ElvUI", "koKR")
 if not L then return end
 
---TEMP
-L["A taint has occured that is preventing you from using the queue system. Please reload your user interface and try again."] = "대기열 시스템에 오류가 발생했습니다. 애드온을 리로드하고 다시 시도해주세요."
-
 --*_ADDON locales
 L["INCOMPATIBLE_ADDON"] = "%s 애드온의 기능이 ElvUI의 %s 모듈과 상충됩니다. 그 애드온을 쓰지 않거나 ElvUI의 기능을 사용해제하세요."
 
@@ -36,7 +33,6 @@ L["Trigger"] = "묶음을 펼치고 각 주문에 지정하세요."
 L["Bank"] = "은행"
 L["Deposit Reagents"] = REAGENTBANK_DEPOSIT
 L["Hold Control + Right Click:"] = "Shift 우클릭:"
-L["Hold Shift + Drag:"] = "Shift 드래그:"
 L["Purchase Bags"] = "가방 슬롯 구입"
 L["Purchase"] = "구입"
 L["Reagent Bank"] = REAGENT_BANK
@@ -85,6 +81,7 @@ L["Earned:"] = "수입:"
 L["Feet"] = "발"
 L["Friends List"] = "친구 목록"
 L["Friends"] = "친구"
+L["Gold:"] = true;
 L["goldabbrev"] = "|TInterface\\MoneyFrame\\UI-MoneyIcons:0:0:1:0:64:16:1:16:1:16|t" --"|cffffd700●|r"
 L["Hands"] = "손"
 L["Head"] = "머리"
@@ -98,7 +95,6 @@ L["lvl"] = "레벨"
 L["Main Hand"] = "주장비"
 L["Mission(s) Report:"] = true;
 L["Mitigation By Level: "] = "레벨별 데미지 경감률"
-L["Multistrike"] = "연타"
 L["Naval Mission(s) Report:"] = true;
 L["No Guild"] = "길드 없음"
 L["Offhand"] = "보조장비"
@@ -170,10 +166,8 @@ L["Layout"] = "레이아웃"
 L["Lock"] = "잠금"
 L["Low Resolution"] = "저해상도 세팅"
 L["low"] = "저"
-L["Movers unlocked. Move them now and click Lock when you are done."] = "프레임을 드래그로 원하는 위치로 이동시키세요.|n[잠금] 버튼을 누르면 이동모드가 종료됩니다."
 L["Nudge"] = "미세조정"
 L["Physical DPS"] = "근접 딜러"
-L["Pixel Perfect"] = "Pixel Perfect 모드"
 L["Please click the button below so you can setup variables and ReloadUI."] = "아래 버튼을 누르면 설치를 마무리하고 UI를 재시작합니다."
 L["Please click the button below to setup your CVars."] = "ElvUI의 게임 인터페이스 설정을 적용하려면 아래 버튼을 클릭하세요."
 L["Please press the continue button to go onto the next step."] = "|cff2eb7e4[계속]|r 버튼으로 설치를 진행하세요."
@@ -187,7 +181,6 @@ L["Sticky Frames"] = "자석"
 L["Tank"] = "탱커"
 L["The chat windows function the same as Blizzard standard chat windows, you can right click the tabs and drag them around, rename, etc. Please click the button below to setup your chat windows."] = "보편적인 설정을 적용할 뿐이므로, 마음대로 채널표시나 색상을 변경할 수 있습니다.|n아래 버튼을 클릭하면 채팅창 설정을 적용합니다."
 L["The in-game configuration menu can be accesses by typing the /ec command or by clicking the 'C' button on the minimap. Press the button below if you wish to skip the installation process."] = "게임 내 설정창은 채팅창에 /ec를 입력하시거나 미니맵 옆의 C버튼을 클릭하면 열립니다. 그냥 사용하고자 한다면 아래의 |cff2eb7e4[건너뛰기]|r 버튼을 누르세요."
-L["The Pixel Perfect option will change the overall apperance of your UI. Using Pixel Perfect is a slight performance increase over the traditional layout."] = "Pixel Perfect 모드는 프레임의 테두리를 최소화함으로써 UI의 전체적인 분위기를 날렵하게 바꾸고 크기 계산을 쉽게 합니다."
 L["Theme Set"] = "테마 적용"
 L["Theme Setup"] = "테마 설정"
 L["This install process will help you learn some of the features in ElvUI has to offer and also prepare your user interface for usage."] = "이 설치과정을 통해 ElvUI를 좀 더 자신에게 맞게 설정하고|n몇가지 기능에 대해 알 수 있습니다."
@@ -214,7 +207,6 @@ L["Can't Roll"] = "주사위를 굴릴 수 없습니다."
 L["Disband Group"] = "그룹 해산"
 L["Enable"] = "사용"
 L["Experience"] = "경험치"
-L["Farm Mode"] = "채집 모드" -- Minimap middle click menu
 L["Fishy Loot"] = "낚시 전리품"
 L["iLvl"] = "템렙" --Column header in raidbrowser
 L["Important Group Members:"] = "중요 멤버"
@@ -235,10 +227,15 @@ L["You don't have permission to mark targets."] = "레이드 아이콘을 지정
 L["Alternative Power"] = "특수상황 진행 바"
 L["Archeology Progress Bar"] = "고고학 진척도 바"
 L["Arena Frames"] = "투기장 프레임"
+L["Artifact Bar"] = true;
+L["Bag Mover (Grow Down)"] = true;
+L["Bag Mover (Grow Up)"] = true;
+L["Bag Mover"] = true;
 L["Bags"] = "가방"
+L["Bank Mover (Grow Down)"] = true;
+L["Bank Mover (Grow Up)"] = true;
 L["Bar "] = "바 "
 L["BNet Frame"] = "배틀넷 알림"
-L["BodyGuard Frame"] = "경호원 프레임"
 L["Boss Button"] = "특수능력 버튼"
 L["Boss Frames"] = "보스 프레임"
 L["Class Bar"] = "직업바 (토템)"
@@ -248,6 +245,7 @@ L["Focus Castbar"] = "주시대상 시전바"
 L["Focus Frame"] = "주시대상 프레임"
 L["FocusTarget Frame"] = "주시대상의 대상 프레임"
 L["GM Ticket Frame"] = "GM요청 번호표"
+L["Honor Bar"] = true;
 L["Left Chat"] = "좌측 패널"
 L["Loot / Alert Frames"] = "획득/알림 창"
 L["Loot Frame"] = "전리품 프레임";
@@ -267,23 +265,35 @@ L["Player Buffs"] = "플레이어 버프"
 L["Player Castbar"] = "플레이어 시전바"
 L["Player Debuffs"] = "플레이어 디버프"
 L["Player Frame"] = "플레이어 프레임"
+L["Player Nameplate"] = true;
+L["Player Powerbar"] = true;
 L["Raid Frames"] = "레이드 프레임"
 L["Raid Pet Frames"] = "레이드 소환수 프레임"
 L["Raid-40 Frames"] = "레이드 프레임(40인)"
 L["Reputation Bar"] = "평판 바"
 L["Right Chat"] = "우측 패널"
 L["Stance Bar"] = "태세 바"
+L["Talking Head Frame"] = true
 L["Target Castbar"] = "대상 시전바"
 L["Target Frame"] = "대상 프레임"
+L["Target Powerbar"] = true;
 L["TargetTarget Frame"] = "대상의대상 프레임"
 L["TargetTargetTarget Frame"] = "대상의대상의대상 프레임"
 L["Tooltip"] = "툴팁"
 L["Vehicle Seat Frame"] = "차량 좌석 프레임"
+L["DESC_MOVERCONFIG"] = [=[프레임을 드래그로 원하는 위치로 이동시키세요.|n[잠금] 버튼을 누르면 이동모드가 종료됩니다.
 
---NamePlates
-L["Discipline"] = "수양"
-L["Holy"] = "신성"
-L["Restoration"] = "회복"
+Options:
+  Shift + RightClick - Hides mover temporarily.
+  Ctrl + RightClick - Resets mover position to default.
+]=]
+
+--Plugin Installer
+L["ElvUI Plugin Installation"] = true;
+L["In Progress"] = true;
+L["List of installations in queue:"] = true;
+L["Pending"] = true;
+L["Steps"] = true;
 
 --Prints
 L[" |cff00ff00bound to |r"] = " 키로 다음의 행동을 실행합니다: |cff2eb7e4"
@@ -297,6 +307,7 @@ L["Binds Saved"] = "단축키가 저장되었습니다."
 L["Confused.. Try Again!"] = "작업에 혼선이 있었습니다. 다시 시도해 주세요."
 L["No gray items to delete."] = "잡동사니가 없습니다."
 L["The spell '%s' has been added to the Blacklist unitframe aura filter."] = "%s 주문이 차단 목록에 등록되었습니다."
+L["This setting caused a conflicting anchor point, where '%s' would be attached to itself. Please check your anchor points. Setting '%s' to be attached to '%s'."] = true;
 L["Vendored gray items for:"] = "모든 잡동사니를 팔았습니다:"
 L["You don't have enough money to repair."] = "수리 비용이 부족합니다."
 L["You must be at a vendor."] = "상인을 만나야 가능합니다."
@@ -329,11 +340,13 @@ L["Oh lord, you have got ElvUI and Tukui both enabled at the same time. Select a
 L["One or more of the changes you have made require a ReloadUI."] = "변경 사항을 적용하려면 애드온을 리로드 해야합니다."
 L["One or more of the changes you have made will effect all characters using this addon. You will have to reload the user interface to see the changes you have made."] = "이 설정은 모든 캐릭터에게 동일하게 적용됩니다.|n|n설정 적용을 위해 리로드 하시겠습니까?"
 L["Save"] = "저장"
+L["The profile you tried to import already exists. Choose a new name or accept to overwrite the existing profile."] = true;
 L["Type /hellokitty to revert to old settings."] = "/hellokitty 를 입력해서 예전 세팅으로 돌릴 수 있습니다."
 L["Using the healer layout it is highly recommended you download the addon Clique if you wish to have the click-to-heal function."] = "힐러 레이아웃을 사용할 거라면 Clique 애드온을 같이 써 클릭캐스팅 기능을 이용할 것을 강력히 추천합니다."
 L["Yes, Keep Changes!"] = "네! 이대로 할래요!"
-L["You have changed the pixel perfect option. You will have to complete the installation process to remove any graphical bugs."] = "Pixel Perfect 선택을 바꾸었습니다. 설치과정을 끝까지 밟아 그래픽 관련 버그를 미연에 방지하는 걸 추천합니다."
+L["You have changed the Thin Border Theme option. You will have to complete the installation process to remove any graphical bugs."] = "Thin Border Theme 선택을 바꾸었습니다. 설치과정을 끝까지 밟아 그래픽 관련 버그를 미연에 방지하는 걸 추천합니다."
 L["You have changed your UIScale, however you still have the AutoScale option enabled in ElvUI. Press accept if you would like to disable the Auto Scale option."] = "UI 배율이 변경되었지만 ElvUI의 UI크기 자동조절 기능이 켜져있습니다. UI크기 자동조절 기능을 끄고 싶다면 '수락'을 누르세요."
+L["You have imported settings which may require a UI reload to take effect. Reload now?"] = true;
 L["You must purchase a bank slot first!"] = "우선 은행가방 칸을 구입해야됩니다!"
 
 --Tooltip
@@ -348,11 +361,9 @@ L["ElvUI has a dual spec feature which allows you to load different profiles bas
 L["For technical support visit us at http://www.tukui.org."] = "궁금한 사항이나 기술지원은 |cff2eb7e4www.tukui.org|r에서 해결하세요."
 L["If you accidently remove a chat frame you can always go the in-game configuration menu, press install, go to the chat portion and reset them."] = "ElvUI 에서 지원하는 대부분의 기능은 |cff2eb7e4/ec|r 에서 조정이 가능합니다. 하고 싶은 조절 기능이 없다면 직접 lua수정으로 고쳐야 합니다."
 L["If you are experiencing issues with ElvUI try disabling all your addons except ElvUI, remember ElvUI is a full UI replacement addon, you cannot run two addons that do the same thing."] = "ElvUI에서 지원하는 기능과 겹치는 다른 애드온을 쓰고 싶으면 ElvUI 설정에서 해당 기능을 사용 체크해제 해야합니다. (예: Bartender, Dominos)"
-L["The buff panel to the right of minimap is a list of your consolidated buffs. You can disable it in Buffs and Debuffs options of ElvUI."] = "미니맵 우측의 아이콘은 시너지버프 표시 기능입니다. 환하게 보이면 해당 시너지 계열의 버프가 없어 필요하다는 뜻입니다."
 L["The focus unit can be set by typing /focus when you are targeting the unit you want to focus. It is recommended you make a macro to do this."] = "ElvUI의 특정 기능만 따로 독립애드온으로 분리하는 것은 불가능합니다."
 L["To move abilities on the actionbars by default hold shift + drag. You can change the modifier key from the actionbar options menu."] = "기본적으로 단축바에서 스킬을 뺄려면 |cff2eb7e4Shift 키를 누른 상태에서 드래그|r해야 합니다. 수정키는 /ec -> 행동단축바 항목에서 바꿀 수 있습니다."
 L["To setup which channels appear in which chat frame, right click the chat tab and go to settings."] = "채팅창에 표시할 채널은 채팅탭을 우클릭하면 뜨는 메뉴의 설정에서 변경할 수 있습니다."
-L["Using the /farmmode <size> command will spawn a larger minimap on your screen that can be moved around, very useful when farming."] = "|cff2eb7e4/farmmode|r 를 입력하면 미니맵을 채집 모드로 전환합니다. 미니맵으로 채광이나 약초의 위치를 확인하는데 아주 유용합니다."
 L["You can access copy chat and chat menu functions by mouse over the top right corner of chat panel and left/right click on the button that will appear."] = "채팅창 우측상단의 문서 아이콘을 클릭하면 대화 내역을 복사할 수 있습니다. 우클릭하면 채팅에 관련된 메뉴가 나옵니다."
 L["You can see someones average item level of their gear by holding shift and mousing over them. It should appear inside the tooltip."] = "/ec -> 툴팁 항목에서 |cff2eb7e4[특성/아이템레벨 표시]|r 기능을 체크하고 Shift를 누른 상태로 마우스를 대면 그 유저의 템렙과 특성을 툴팁에 표시합니다."
 L["You can set your keybinds quickly by typing /kb."] = "|cff2eb7e4/kb|r 를 입력하면 간편하게 단축키를 설정할 수 있는 기능이 실행됩니다."

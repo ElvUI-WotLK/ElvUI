@@ -3,9 +3,6 @@ local AceLocale = LibStub:GetLibrary("AceLocale-3.0")
 local L = AceLocale:NewLocale("ElvUI", "zhTW")
 if not L then return end
 
---TEMP
-L["A taint has occured that is preventing you from using the queue system. Please reload your user interface and try again."] = "發生一個錯誤導致你無法使用隊列系統,請重新加載你的用戶界面,然後再試一次."
-
 --*_ADDON locales
 L["INCOMPATIBLE_ADDON"] = "插件 %s 與 ElvUI 的 %s 模組不相容。請停用不相容的插件，或停用模組."
 
@@ -36,7 +33,6 @@ L["Trigger"] = "觸發器"
 L["Bank"] = true;
 L["Deposit Reagents"] = true;
 L["Hold Control + Right Click:"] = '按住 Ctrl 並按滑鼠右鍵：'
-L["Hold Shift + Drag:"] = '按住 Shift 並拖曳：'
 L["Purchase Bags"] = true;
 L["Purchase"] = "購買銀行欄位"
 L["Reagent Bank"] = true;
@@ -85,6 +81,7 @@ L["Earned:"] = "賺取:"
 L["Feet"] = "腳部"
 L["Friends List"] = "好友列表"
 L["Friends"] = "好友" --Also in Skins
+L["Gold:"] = true;
 L["goldabbrev"] = "|cffffd700金|r" --Also used in Bags
 L["Hands"] = "手部"
 L["Head"] = "頭部"
@@ -98,7 +95,6 @@ L["lvl"] = "等級"
 L["Main Hand"] = "主手"
 L["Mission(s) Report:"] = true;
 L["Mitigation By Level: "] = "等級減傷: "
-L["Multistrike"] = true;
 L["Naval Mission(s) Report:"] = true;
 L["No Guild"] = "沒有公會"
 L["Offhand"] = "副手"
@@ -170,10 +166,8 @@ L["Layout"] = "介面佈局"
 L["Lock"] = "鎖定"
 L["Low Resolution"] = "低解析度"
 L["low"] = "低"
-L["Movers unlocked. Move them now and click Lock when you are done."] = "解除框架移動鎖定. 現在可以移動它們, 移好後請點擊「鎖定」."
 L["Nudge"] = "微調"
 L["Physical DPS"] = "物理輸出"
-L["Pixel Perfect"] = "像素完美"
 L["Please click the button below so you can setup variables and ReloadUI."] = "請按下方按鈕設定變數並重載介面."
 L["Please click the button below to setup your CVars."] = "請按下方按鈕設定參數."
 L["Please press the continue button to go onto the next step."] = "請按「繼續」按鈕，執行下一個步驟."
@@ -187,7 +181,6 @@ L["Sticky Frames"] = "框架依附"
 L["Tank"] = "坦克"
 L["The chat windows function the same as Blizzard standard chat windows, you can right click the tabs and drag them around, rename, etc. Please click the button below to setup your chat windows."] = "對話視窗與WOW 原始對話視窗的操作方式相同, 你可以拖拉、移動分頁或重新命名分頁. 請按下方按鈕以設定對話視窗."
 L["The in-game configuration menu can be accesses by typing the /ec command or by clicking the 'C' button on the minimap. Press the button below if you wish to skip the installation process."] = "若要進入內建設定選單, 請輸入/ec, 或者按一下小地圖旁的「C」按鈕.若要略過安裝程序, 請按下方按鈕."
-L["The Pixel Perfect option will change the overall apperance of your UI. Using Pixel Perfect is a slight performance increase over the traditional layout."] = "像素完美選項將改變你的整體用戶界面, 使用像素完美能輕微提升傳統界面的性能."
 L["Theme Set"] = "主題設置"
 L["Theme Setup"] = "主題安裝"
 L["This install process will help you learn some of the features in ElvUI has to offer and also prepare your user interface for usage."] = "此安裝程序有助你瞭解ElvUI 部份功能, 並可協助你預先設定UI."
@@ -214,7 +207,6 @@ L["Can't Roll"] = "無法需求此裝備"
 L["Disband Group"] = "解散隊伍"
 L["Enable"] = "啟用" --Doesn't fit a section since it's used a lot of places
 L["Experience"] = "經驗/聲望條"
-L["Farm Mode"] = true; -- Minimap middle click menu
 L["Fishy Loot"] = "貪婪"
 L["iLvl"] = true; --Column header in raidbrowser
 L["Important Group Members:"] = true;
@@ -235,10 +227,15 @@ L["You don't have permission to mark targets."] = "你沒有標記目標的權�
 L["Alternative Power"] = "特殊能量條框架"
 L["Archeology Progress Bar"] = true;
 L["Arena Frames"] = "競技場框架" --Also used in UnitFrames
+L["Artifact Bar"] = true;
+L["Bag Mover (Grow Down)"] = true;
+L["Bag Mover (Grow Up)"] = true;
+L["Bag Mover"] = true;
 L["Bags"] = "背包" --Also in DataTexts
+L["Bank Mover (Grow Down)"] = true;
+L["Bank Mover (Grow Up)"] = true;
 L["Bar "] = "快捷列 " --Also in ActionBars
 L["BNet Frame"] = "戰網提示資訊"
-L["BodyGuard Frame"] = true;
 L["Boss Button"] = "特殊技能鍵"
 L["Boss Frames"] = "首領框架" --Also used in UnitFrames
 L["Class Bar"] = true;
@@ -248,6 +245,7 @@ L["Focus Castbar"] = "焦點目標施法條"
 L["Focus Frame"] = "焦點目標框架" --Also used in UnitFrames
 L["FocusTarget Frame"] = "焦點目標的目標框架" --Also used in UnitFrames
 L["GM Ticket Frame"] = "GM 對話框"
+L["Honor Bar"] = true;
 L["Left Chat"] = "左側對話框"
 L["Loot / Alert Frames"] = "拾取 / 提醒框架"
 L["Loot Frame"] = true;
@@ -267,23 +265,35 @@ L["Player Buffs"] = true;
 L["Player Castbar"] = "玩家施法條"
 L["Player Debuffs"] = true;
 L["Player Frame"] = "玩家框架" --Also used in UnitFrames
+L["Player Nameplate"] = true;
+L["Player Powerbar"] = true;
 L["Raid Frames"] = true;
 L["Raid Pet Frames"] = true;
 L["Raid-40 Frames"] = true;
 L["Reputation Bar"] = "聲望條"
 L["Right Chat"] = "右側對話框"
 L["Stance Bar"] = "姿態列" --Also in ActionBars
+L["Talking Head Frame"] = true
 L["Target Castbar"] = "目標施法條"
 L["Target Frame"] = "目標框架" --Also used in UnitFrames
+L["Target Powerbar"] = true;
 L["TargetTarget Frame"] = "目標的目標框架" --Also used in UnitFrames
 L["TargetTargetTarget Frame"] = true;
 L["Tooltip"] = "浮動提示"
 L["Vehicle Seat Frame"] = "載具座位框"
+L["DESC_MOVERCONFIG"] = [=[解除框架移動鎖定. 現在可以移動它們, 移好後請點擊「鎖定」.
 
---NamePlates
-L["Discipline"] = "戒律"
-L["Holy"] = "神聖"
-L["Restoration"] = "恢復"
+Options:
+  Shift + RightClick - Hides mover temporarily.
+  Ctrl + RightClick - Resets mover position to default.
+]=]
+
+--Plugin Installer
+L["ElvUI Plugin Installation"] = true;
+L["In Progress"] = true;
+L["List of installations in queue:"] = true;
+L["Pending"] = true;
+L["Steps"] = true;
 
 --Prints
 L[" |cff00ff00bound to |r"] = " |cff00ff00綁定到 |r"
@@ -297,6 +307,7 @@ L["Binds Saved"] = "儲存綁定"
 L["Confused.. Try Again!"] = '請再試一次！'
 L["No gray items to delete."] = "沒有可刪除的灰色物品."
 L["The spell '%s' has been added to the Blacklist unitframe aura filter."] = '法術"%s"已經被添加到單位框架的光環過濾器中.'
+L["This setting caused a conflicting anchor point, where '%s' would be attached to itself. Please check your anchor points. Setting '%s' to be attached to '%s'."] = true;
 L["Vendored gray items for:"] = "已售出灰色物品，共得："
 L["You don't have enough money to repair."] = "沒有足夠的資金來修復."
 L["You must be at a vendor."] = "你必須與商人對話."
@@ -329,11 +340,13 @@ L["Oh lord, you have got ElvUI and Tukui both enabled at the same time. Select a
 L["One or more of the changes you have made require a ReloadUI."] = "已變更一或多個設定, 需重載介面."
 L["One or more of the changes you have made will effect all characters using this addon. You will have to reload the user interface to see the changes you have made."] = "你所做的改動可能會影響到使用這個插件的所有角色, 你需要重新加載介面才能使改動生效."
 L["Save"] = "儲存"
+L["The profile you tried to import already exists. Choose a new name or accept to overwrite the existing profile."] = true;
 L["Type /hellokitty to revert to old settings."] = true;
 L["Using the healer layout it is highly recommended you download the addon Clique if you wish to have the click-to-heal function."] = true;
 L["Yes, Keep Changes!"] = true;
-L["You have changed the pixel perfect option. You will have to complete the installation process to remove any graphical bugs."] = "你已改變了像素完美中的選項, 你必須完成安裝過程以消除任何圖形錯誤."
+L["You have changed the Thin Border Theme option. You will have to complete the installation process to remove any graphical bugs."] = true;
 L["You have changed your UIScale, however you still have the AutoScale option enabled in ElvUI. Press accept if you would like to disable the Auto Scale option."] = "你改變了介面縮放比例, 然而ElvUI的自動縮放選項是開啟的. 點擊接受以關閉ElvUI的自動縮放."
+L["You have imported settings which may require a UI reload to take effect. Reload now?"] = true;
 L["You must purchase a bank slot first!"] = "你必需購買一個銀行背包欄位!"
 
 --Tooltip
@@ -348,11 +361,9 @@ L["ElvUI has a dual spec feature which allows you to load different profiles bas
 L["For technical support visit us at http://www.tukui.org."] = "如需技術支援請至http://www.tukui.org."
 L["If you accidently remove a chat frame you can always go the in-game configuration menu, press install, go to the chat portion and reset them."] = "如果你不慎移除了對話框, 你可以重新安裝一次重置他們."
 L["If you are experiencing issues with ElvUI try disabling all your addons except ElvUI, remember ElvUI is a full UI replacement addon, you cannot run two addons that do the same thing."] = "如果你遇到問題, ElvUI會嘗試禁用你除了ElvUI之外的插件. 請記住你不能用不同的插件實現同一功能."
-L["The buff panel to the right of minimap is a list of your consolidated buffs. You can disable it in Buffs and Debuffs options of ElvUI."] = "小地圖右側的光環條是你的整合Buff條, 你可以在你的ElvUI光環設定中關閉此功能."
 L["The focus unit can be set by typing /focus when you are targeting the unit you want to focus. It is recommended you make a macro to do this."] = "你可以通過/focus 命令設定焦點目標."
 L["To move abilities on the actionbars by default hold shift + drag. You can change the modifier key from the actionbar options menu."] = "你可以通過按住Shift拖動技能條中的按鍵. 你可以在Blizzard的快捷列設定中更改按鍵."
 L["To setup which channels appear in which chat frame, right click the chat tab and go to settings."] = "你可以通過右鍵點擊對話框標籤欄設定你需要在對話框內顯示的頻道."
-L["Using the /farmmode <size> command will spawn a larger minimap on your screen that can be moved around, very useful when farming."] = "使用/farmmode 命令可以切換小地圖的顯示模式為大型可移動小地圖, 這在你Farm的時候會很有用."
 L["You can access copy chat and chat menu functions by mouse over the top right corner of chat panel and left/right click on the button that will appear."] = "你可以通過滑鼠滑過對話框右上角點擊複製圖示打開對話復制窗口."
 L["You can see someones average item level of their gear by holding shift and mousing over them. It should appear inside the tooltip."] = "你可以通過按住Shift並將滑鼠滑過目標看到目標的裝備等級, 這將顯示在你的滑鼠提示框內."
 L["You can set your keybinds quickly by typing /kb."] = "你可以通過輸入/kb 快速綁定按鍵."
