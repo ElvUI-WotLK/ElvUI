@@ -1,6 +1,8 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local S = E:GetModule('Skins')
 
+local find = string.find;
+
 local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.lfr ~= true then return end
 	
@@ -52,6 +54,24 @@ local function LoadSkin()
 	for i=1, NUM_LFR_CHOICE_BUTTONS do
 		local button = _G["LFRQueueFrameSpecificListButton"..i]
 		S:HandleCheckBox(button.enableButton)
+
+		local buttonToggle = _G["LFRQueueFrameSpecificListButton" .. i .. "ExpandOrCollapseButton"];
+		buttonToggle:SetNormalTexture("");
+		buttonToggle.SetNormalTexture = E.noop;
+		buttonToggle:SetHighlightTexture(nil);
+
+		buttonToggle.Text = buttonToggle:CreateFontString(nil, "OVERLAY");
+		buttonToggle.Text:FontTemplate(nil, 22);
+		buttonToggle.Text:Point("CENTER", 4, 0);
+		buttonToggle.Text:SetText("+");
+
+		hooksecurefunc(buttonToggle, "SetNormalTexture", function(self, texture)
+			if(find(texture, "MinusButton")) then
+				self.Text:SetText("-");
+			else
+				self.Text:SetText("+");
+			end
+		end);
 	end
 	
 	--DPS, Healer, Tank check button's don't have a name, use it's parent as a referance.
