@@ -50,16 +50,13 @@ local function LoadSkin()
 
 	for i = 1, MAX_TALENT_TABS do
 		local tab = _G["PlayerSpecTab" .. i];
+		tab:GetRegions():Hide();
 
-		if(tab) then
-			tab:GetRegions():Hide();
+		tab:SetTemplate("Default");
+		tab:StyleButton(nil, true);
 
-			tab:SetTemplate("Default");
-			tab:StyleButton(nil, true);
-
-			tab:GetNormalTexture():SetInside();
-			tab:GetNormalTexture():SetTexCoord(unpack(E.TexCoords));
-		end
+		tab:GetNormalTexture():SetInside();
+		tab:GetNormalTexture():SetTexCoord(unpack(E.TexCoords));
 	end
 end
 

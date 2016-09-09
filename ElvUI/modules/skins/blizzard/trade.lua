@@ -2,6 +2,12 @@ local E, L, V, P, G = unpack(select(2, ...));
 local S = E:GetModule("Skins");
 
 local _G = _G;
+local unpack, select = unpack, select;
+
+local GetItemInfo = GetItemInfo;
+local GetItemQualityColor = GetItemQualityColor;
+local GetTradePlayerItemLink = GetTradePlayerItemLink;
+local GetTradeTargetItemLink = GetTradeTargetItemLink;
 
 local function LoadSkin()
 	if(E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.trade ~= true) then return; end
@@ -62,29 +68,31 @@ local function LoadSkin()
 	S:HandleButton(TradeFrameTradeButton);
 	S:HandleButton(TradeFrameCancelButton);
 
-	hooksecurefunc('TradeFrame_UpdatePlayerItem', function(id)
-		local tradeItem = _G["TradePlayerItem"..id.."ItemButton"];
-		tradeItem:SetBackdropBorderColor(unpack(E["media"].bordercolor));
-		local Link = GetTradePlayerItemLink(id);
-		if Link then
-			local quality = select(3, GetItemInfo(Link))
-			if (quality and quality > 1) then
-				tradeItem:SetBackdropBorderColor(GetItemQualityColor(quality));
+	hooksecurefunc("TradeFrame_UpdatePlayerItem", function(id)
+		local link = GetTradePlayerItemLink(id);
+		local tradeItemButton = _G["TradePlayerItem" .. id .. "ItemButton"];
+		if(link) then
+			local quality = select(3, GetItemInfo(link));
+			if(quality and quality > 1) then
+				tradeItemButton:SetBackdropBorderColor(GetItemQualityColor(quality));
 			end
+		else
+			tradeItemButton:SetBackdropBorderColor(unpack(E["media"].bordercolor));
 		end
-	end)
+	end);
 
-	hooksecurefunc('TradeFrame_UpdateTargetItem', function(id)
-		local tradeItem = _G["TradeRecipientItem"..id.."ItemButton"];
-		tradeItem:SetBackdropBorderColor(unpack(E["media"].bordercolor));
-		local Link = GetTradeTargetItemLink(id);
-		if Link then
-			local quality = select(3, GetItemInfo(Link))
-			if (quality and quality > 1) then
-				tradeItem:SetBackdropBorderColor(GetItemQualityColor(quality));
+	hooksecurefunc("TradeFrame_UpdateTargetItem", function(id)
+		local link = GetTradeTargetItemLink(id);
+		local tradeItemButton = _G["TradeRecipientItem" .. id .. "ItemButton"];
+		if(link) then
+			local quality = select(3, GetItemInfo(link));
+			if(quality and quality > 1) then
+				tradeItemButton:SetBackdropBorderColor(GetItemQualityColor(quality));
 			end
+		else
+			tradeItemButton:SetBackdropBorderColor(unpack(E["media"].bordercolor));
 		end
-	end)
+	end);
 end
 
 S:RegisterSkin("ElvUI", LoadSkin);

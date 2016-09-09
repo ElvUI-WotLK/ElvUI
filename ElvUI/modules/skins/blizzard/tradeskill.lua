@@ -97,14 +97,12 @@ local function LoadSkin()
 				reagent.isSkinned = true;
 			end
 
-			if(reagent:IsShown()) then
-				if(reagentLink) then
-					local quality = select(3, GetItemInfo(reagentLink));
-					if(quality and quality > 1) then
-						_G["TradeSkillReagent" .. i .. "IconTexture"].backdrop:SetBackdropBorderColor(GetItemQualityColor(quality));
-					else
-						_G["TradeSkillReagent" .. i .. "IconTexture"].backdrop:SetBackdropBorderColor(unpack(E["media"].bordercolor));
-					end
+			if(reagentLink) then
+				local quality = select(3, GetItemInfo(reagentLink));
+				if(quality and quality > 1) then
+					_G["TradeSkillReagent" .. i .. "IconTexture"].backdrop:SetBackdropBorderColor(GetItemQualityColor(quality));
+				else
+					_G["TradeSkillReagent" .. i .. "IconTexture"].backdrop:SetBackdropBorderColor(unpack(E["media"].bordercolor));
 				end
 			end
 		end

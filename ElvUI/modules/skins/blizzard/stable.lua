@@ -1,6 +1,12 @@
 local E, L, V, P, G, _ = unpack(select(2, ...));
 local S = E:GetModule("Skins");
 
+local _G = _G;
+
+local GetPetHappiness = GetPetHappiness;
+local HasPetUI = HasPetUI;
+local UnitExists = UnitExists;
+
 local function LoadSkin()
 	if(E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.stable ~= true) then return; end
 
@@ -29,7 +35,7 @@ local function LoadSkin()
 	PetStablePetInfo:Size(24, 24);
 
 	hooksecurefunc("PetStable_Update", function()
-		local happiness, damagePercentage = GetPetHappiness();
+		local happiness = GetPetHappiness();
 		local hasPetUI, isHunterPet = HasPetUI();
 		if(UnitExists("pet") and hasPetUI and not isHunterPet) then
 			return;
