@@ -18,6 +18,11 @@ local function LoadSkin()
 
 	S:HandleButton(PlayerTalentFrameActivateButton, true);
 	PlayerTalentFrameActivateButton:Point("TOP", PlayerTalentFrame, "TOP", 0, -40)
+	PlayerTalentFrameActivateButton:HookScript("OnShow", function(self)
+		if(GlyphFrame and GlyphFrame:IsShown()) then
+			self:Hide();
+		end
+	end);
 
 	PlayerTalentFramePointsBar:StripTextures();
 	PlayerTalentFramePreviewBar:StripTextures();
