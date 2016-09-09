@@ -56,19 +56,19 @@ local function LoadSkin()
 	S:HandleButton(LFDQueueFrameCancelButton, true);
 	
 	for i = 1, NUM_LFD_CHOICE_BUTTONS do
-		S:HandleCheckBox(_G["LFDQueueFrameSpecificListButton"..i.."EnableButton"]);
+		local button = _G["LFDQueueFrameSpecificListButton" .. i];
+		S:HandleCheckBox(button.enableButton);
 
-		local buttonToggle = _G["LFDQueueFrameSpecificListButton" .. i .. "ExpandOrCollapseButton"];
-		buttonToggle:SetNormalTexture("");
-		buttonToggle.SetNormalTexture = E.noop;
-		buttonToggle:SetHighlightTexture(nil);
+		button.expandOrCollapseButton:SetNormalTexture("");
+		button.expandOrCollapseButton.SetNormalTexture = E.noop;
+		button.expandOrCollapseButton:SetHighlightTexture(nil);
 
-		buttonToggle.Text = buttonToggle:CreateFontString(nil, "OVERLAY");
-		buttonToggle.Text:FontTemplate(nil, 22);
-		buttonToggle.Text:Point("CENTER", 4, 0);
-		buttonToggle.Text:SetText("+");
+		button.expandOrCollapseButton.Text = button.expandOrCollapseButton:CreateFontString(nil, "OVERLAY");
+		button.expandOrCollapseButton.Text:FontTemplate(nil, 22);
+		button.expandOrCollapseButton.Text:Point("CENTER", 4, 0);
+		button.expandOrCollapseButton.Text:SetText("+");
 
-		hooksecurefunc(buttonToggle, "SetNormalTexture", function(self, texture)
+		hooksecurefunc(button.expandOrCollapseButton, "SetNormalTexture", function(self, texture)
 			if(find(texture, "MinusButton")) then
 				self.Text:SetText("-");
 			else
