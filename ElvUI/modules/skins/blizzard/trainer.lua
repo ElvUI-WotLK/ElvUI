@@ -69,6 +69,8 @@ local function LoadSkin()
 	ClassTrainerCollapseAllButton.SetNormalTexture = E.noop;
 	ClassTrainerCollapseAllButton:SetHighlightTexture("");
 	ClassTrainerCollapseAllButton.SetHighlightTexture = E.noop;
+	ClassTrainerCollapseAllButton:SetDisabledTexture("");
+	ClassTrainerCollapseAllButton.SetDisabledTexture = E.noop;
 
 	ClassTrainerCollapseAllButton.Text = ClassTrainerCollapseAllButton:CreateFontString(nil, "OVERLAY");
 	ClassTrainerCollapseAllButton.Text:FontTemplate(nil, 22);
