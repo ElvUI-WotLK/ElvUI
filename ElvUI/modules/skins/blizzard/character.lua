@@ -437,26 +437,42 @@ local function LoadSkin()
 	TokenFrame:StripTextures(true);
 	
 	select(4, TokenFrame:GetChildren()):Hide();
-	
+
 	hooksecurefunc('TokenFrame_Update', function()
 		local scrollFrame = TokenFrameContainer;
 		local offset = HybridScrollFrame_GetOffset(scrollFrame);
 		local buttons = scrollFrame.buttons;
 		local numButtons = #buttons;
-		local name, isHeader, extraCurrencyType, icon, itemID;
+		local name, isHeader, extraCurrencyType, icon;
 		local button, index;
 		
 		for i = 1, numButtons do
 			index = offset+i;
-			name, isHeader, _, _, _, _, extraCurrencyType, icon, itemID = GetCurrencyListInfo(index);
-
+			name, isHeader, isExpanded, _, _, _, extraCurrencyType, icon = GetCurrencyListInfo(index);
 			button = buttons[i];
-			if name or name == "" then
+
+			if(not button.isSkinned) then
 				button.categoryLeft:Kill();
 				button.categoryRight:Kill();
 				button.highlight:Kill();
-				
-				if ( not isHeader ) then
+				button.expandIcon:Kill();
+
+				button.Text = button:CreateFontString(nil, "OVERLAY");
+				button.Text:FontTemplate(nil, 22);
+				button.Text:Point("RIGHT", -5, 0);
+				button.Text:SetText("+");
+				button.isSkinned = true;
+			end
+
+			if(name or name == "") then
+				if(isHeader) then
+					if(isExpanded) then
+						button.Text:SetText("-");
+					else
+						button.Text:SetText("+");
+					end
+				else
+					button.Text:SetText("");
 					if ( extraCurrencyType == 1 ) then
 						button.icon:SetTexCoord(unpack(E.TexCoords));
 					elseif ( extraCurrencyType == 2 ) then

@@ -1,7 +1,9 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local S = E:GetModule("Skins");
 
+local _G = _G;
 local unpack = unpack;
+local find = string.find;
 
 local function LoadSkin()
 	if(E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.trainer ~= true) then return; end
@@ -34,29 +36,52 @@ local function LoadSkin()
 		if(skillIcon) then
 			skillIcon:SetInside();
 			skillIcon:SetTexCoord(unpack(E.TexCoords));
-			
-			ClassTrainerSkillIcon:SetTemplate("Default", true);
-		else
-			ClassTrainerSkillIcon:SetBackdrop(nil);
+
+			ClassTrainerSkillIcon:SetTemplate("Default");
 		end
 	end);
-	
-	ClassTrainerCollapseAllButton:HookScript('OnUpdate', function(self)
-		self:SetNormalTexture("Interface\\Buttons\\UI-PlusMinus-Buttons")
-		self:SetHighlightTexture("")
-		self:GetNormalTexture():SetPoint("LEFT", 3, 2)
-		self:GetNormalTexture():Size(12)
-		if (self.collapsed) then
-			self:GetNormalTexture():SetTexCoord(0, 0.4375, 0, 0.4375)
+
+	for i = 1, CLASS_TRAINER_SKILLS_DISPLAYED do
+		local skillButton = _G["ClassTrainerSkill" .. i];
+		skillButton:SetNormalTexture("");
+		skillButton.SetNormalTexture = E.noop;
+
+		_G["ClassTrainerSkill" .. i .. "Highlight"]:SetTexture("");
+		_G["ClassTrainerSkill" .. i .. "Highlight"].SetTexture = E.noop;
+
+		skillButton.Text = skillButton:CreateFontString(nil, "OVERLAY");
+		skillButton.Text:FontTemplate(nil, 22);
+		skillButton.Text:Point("LEFT", 3, 0);
+		skillButton.Text:SetText("+");
+
+		hooksecurefunc(skillButton, "SetNormalTexture", function(self, texture)
+			if(find(texture, "MinusButton")) then
+				self.Text:SetText("-");
+			elseif(find(texture, "PlusButton")) then
+				self.Text:SetText("+");
+			else
+				self.Text:SetText("");
+			end
+		end);
+	end
+
+	ClassTrainerCollapseAllButton:SetNormalTexture("");
+	ClassTrainerCollapseAllButton.SetNormalTexture = E.noop;
+	ClassTrainerCollapseAllButton:SetHighlightTexture("");
+	ClassTrainerCollapseAllButton.SetHighlightTexture = E.noop;
+
+	ClassTrainerCollapseAllButton.Text = ClassTrainerCollapseAllButton:CreateFontString(nil, "OVERLAY");
+	ClassTrainerCollapseAllButton.Text:FontTemplate(nil, 22);
+	ClassTrainerCollapseAllButton.Text:Point("LEFT", 3, 0);
+	ClassTrainerCollapseAllButton.Text:SetText("+");
+
+	hooksecurefunc(ClassTrainerCollapseAllButton, "SetNormalTexture", function(self, texture)
+		if(find(texture, "MinusButton")) then
+			self.Text:SetText("-");
 		else
-			self:GetNormalTexture():SetTexCoord(0.5625, 1, 0, 0.4375)
+			self.Text:SetText("+");
 		end
-		self:SetDisabledTexture("Interface\\Buttons\\UI-PlusMinus-Buttons")
-		self:GetDisabledTexture():SetPoint("LEFT", 3, 2)
-		self:GetDisabledTexture():Size(11)
-		self:GetDisabledTexture():SetTexCoord(0, 0.4375, 0, 0.4375)
-		self:GetDisabledTexture():SetDesaturated(true)
-	end)
+	end);
 end
 
 S:RegisterSkin("Blizzard_TrainerUI", LoadSkin);
