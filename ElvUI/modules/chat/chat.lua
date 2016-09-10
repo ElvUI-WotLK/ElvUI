@@ -1866,17 +1866,7 @@ function CH:Initialize()
 	close:SetFrameLevel(close:GetFrameLevel() + 1)
 	close:EnableMouse(true)
 	
-	S:HandleCloseButton(close)	
-
-	--Disable Blizzard
-	InterfaceOptionsSocialPanelTimestampsButton:SetAlpha(0)
-	InterfaceOptionsSocialPanelTimestampsButton:SetScale(0.000001)
-	InterfaceOptionsSocialPanelTimestamps:SetAlpha(0)
-	InterfaceOptionsSocialPanelTimestamps:SetScale(0.000001)
-	
-	InterfaceOptionsSocialPanelChatStyle:EnableMouse(false)
-	InterfaceOptionsSocialPanelChatStyleButton:Hide()
-	InterfaceOptionsSocialPanelChatStyle:SetAlpha(0)
+	S:HandleCloseButton(close)
 
  	CombatLogQuickButtonFrame_CustomAdditionalFilterButton:Size(20, 22)
  	CombatLogQuickButtonFrame_CustomAdditionalFilterButton:Point("TOPRIGHT", CombatLogQuickButtonFrame_Custom, "TOPRIGHT", 0, -1)
