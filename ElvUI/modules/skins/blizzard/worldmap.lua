@@ -70,15 +70,18 @@ local function LoadSkin()
 	local function SmallSkin()
 		WorldMapFrame.backdrop:ClearAllPoints();
 
-		WorldMapLevelDropDown:ClearAllPoints();
-		WorldMapLevelDropDown:SetPoint("TOPRIGHT", WorldMapPositioningGuide, "TOPRIGHT", -420, -24);
-
 		if(not WORLDMAP_SETTINGS.advanced) then
 			WorldMapFrame.backdrop:SetPoint("TOPLEFT", 14, -12);
 			WorldMapFrame.backdrop:SetPoint("BOTTOMRIGHT", -20, -12);
+
+			WorldMapLevelDropDown:ClearAllPoints();
+			WorldMapLevelDropDown:SetPoint("TOPRIGHT", WorldMapPositioningGuide, "TOPRIGHT", -440, -38);
 		else
 			WorldMapFrame.backdrop:SetPoint("TOPLEFT", 4, 2);
 			WorldMapFrame.backdrop:SetPoint("BOTTOMRIGHT", -1, 2);
+
+			WorldMapLevelDropDown:ClearAllPoints();
+			WorldMapLevelDropDown:SetPoint("TOPRIGHT", WorldMapPositioningGuide, "TOPRIGHT", -420, -24);
 		end
 	end
 
