@@ -12,10 +12,10 @@ local ARMOR = ARMOR;
 local lastPanel;
 local chanceString = "%.2f%%";
 local displayString = "";
-local baseArmor, effectiveArmor, armor, posBuff, negBuff;
+local _, effectiveArmor;
 
 local function OnEvent(self)
-	baseArmor, effectiveArmor, armor, posBuff, negBuff = UnitArmor("player");
+	_, effectiveArmor = UnitArmor("player");
 
 	self.text:SetFormattedText(displayString, ARMOR, effectiveArmor);
 	lastPanel = self;

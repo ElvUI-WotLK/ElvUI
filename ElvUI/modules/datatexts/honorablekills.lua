@@ -6,7 +6,7 @@ local join = string.join;
 local lastPanel;
 local displayNumberString = '';
 
-local function OnEvent(self, event)
+local function OnEvent(self)
 	local hk = GetPVPLifetimeStats();
 	
 	self.text:SetFormattedText(displayNumberString, HONORABLE_KILLS, hk);

@@ -18,7 +18,7 @@ local Profit = 0;
 local Spent = 0;
 local resetInfoFormatter = join("", "|cffaaaaaa", L["Reset Data: Hold Shift + Right Click"], "|r");
 
-local function OnEvent(self, event, ...)
+local function OnEvent(self)
 	if(not IsLoggedIn()) then return; end
 	local NewMoney = GetMoney();
 	ElvDB = ElvDB or { };

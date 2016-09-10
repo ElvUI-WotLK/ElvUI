@@ -20,8 +20,6 @@ local europeDisplayFormat = "";
 local ukDisplayFormat = "";
 local europeDisplayFormat_nocolor = join("", "%02d", ":|r%02d");
 local ukDisplayFormat_nocolor = join("", "", "%d", ":|r%02d", " %s|r");
-local timerLongFormat = "%d:%02d:%02d";
-local timerShortFormat = "%d:%02d";
 local lockoutInfoFormatNoEnc = "%s%s |cffaaaaaa(%s)";
 local difficultyInfo = {"N", "N", "H", "H"};
 local lockoutColorExtended, lockoutColorNormal = {r = 0.3, g = 1, b = 0.3}, {r = .8, g = .8, b = .8};
@@ -29,7 +27,7 @@ local curHr, curMin, curAmPm;
 local enteredFrame = false;
 
 local Update, lastPanel; -- UpValue
-local name, instanceID, reset, difficultyId, locked, extended, isRaid, maxPlayers, difficulty;
+local name, _, reset, difficultyId, locked, extended, isRaid, maxPlayers;
 
 local function ValueColorUpdate(hex)
 	europeDisplayFormat = join("", "%02d", hex, ":|r%02d ", format("%s", date(hex .. "%d.%m.%y|r")));
@@ -123,7 +121,6 @@ local function OnEnter(self)
 		end
 	end
 
-	local timeText;
 	local Hr, Min, AmPm = CalculateTimeValues(true);
 
 	DT.tooltip:AddLine(" ");

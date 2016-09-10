@@ -16,7 +16,7 @@ local format = string.format;
 local join = string.join;
 local lastPanel;
 
-local function OnEvent(self, event, unit)
+local function OnEvent(self)
 	local hasteRating;
 	if(E.Role == "Caster") then
 		hasteRating = GetCombatRating(CR_HASTE_SPELL);
@@ -60,7 +60,7 @@ local function OnEnter(self)
 	DT.tooltip:Show();
 end
 
-local function ValueColorUpdate(hex, r, g, b)
+local function ValueColorUpdate(hex)
 	displayNumberString = join("", "%s: ", hex, "%d|r");
 	
 	if(lastPanel ~= nil)then

@@ -16,13 +16,11 @@ local BOSS = BOSS;
 local DODGE_CHANCE = DODGE_CHANCE;
 local PARRY_CHANCE = PARRY_CHANCE;
 local BLOCK_CHANCE = BLOCK_CHANCE;
-local MISS_CHANCE = MISS_CHANCE;
 
 local displayString, lastPanel;
 local targetlv, playerlv;
 local basemisschance, leveldifference, dodge, parry, block, avoidance, unhittable, avoided, blocked, numAvoidances, unhittableMax;
 local chanceString = "%.2f%%";
-local modifierString = join("", "%d (+", chanceString, ")");
 local AVD_DECAY_RATE = 1.5;
 
 function IsWearingShield()
