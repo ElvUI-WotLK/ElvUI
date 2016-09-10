@@ -49,8 +49,7 @@ local function LoadSkin()
 	
 	local bg = CreateFrame("Frame", "CalendarFrameBackdrop", CalendarFrame)
 	bg:SetTemplate("Default")
-	bg:Point("TOPLEFT", 8, -70)
-	bg:Point("BOTTOMRIGHT", -7, 0)
+	bg:SetOutside(CalendarDayButton1, 3, 3, CalendarDayButton42);
 	
 	CalendarContextMenu:SetTemplate("Default")
 	hooksecurefunc(CalendarContextMenu, "SetBackdropColor", function(self, r, g, b, a)

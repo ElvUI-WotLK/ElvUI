@@ -63,7 +63,7 @@ function mod:ReputationBar_OnEnter()
 	GameTooltip:ClearLines();
 	GameTooltip:SetOwner(self, "ANCHOR_CURSOR", 0, -4);
 
-	local name, reaction, min, max, value, factionID = GetWatchedFactionInfo();
+	local name, reaction, min, max, value = GetWatchedFactionInfo();
 	if(name) then
 		GameTooltip:AddLine(name);
 		GameTooltip:AddLine(" ");

@@ -6,7 +6,6 @@ local find = string.find;
 
 local CreateFrame = CreateFrame;
 local InCombatLockdown = InCombatLockdown;
-local IsInInstance = IsInInstance;
 local GetPlayerMapPosition = GetPlayerMapPosition;
 local GetCursorPosition = GetCursorPosition;
 local PLAYER = PLAYER;
@@ -79,7 +78,6 @@ end
 
 function M:UpdateCoords()
 	if(not WorldMapFrame:IsShown()) then return; end
-	local inInstance, _ = IsInInstance();
 	local x, y = GetPlayerMapPosition("player");
 	x = E:Round(100 * x, 2);
 	y = E:Round(100 * y, 2);
@@ -160,7 +158,7 @@ function M:Initialize()
 			WorldMap_ToggleSizeDown();
 		end
 		
-		DropDownList1:HookScript("OnShow", function(self)
+		DropDownList1:HookScript("OnShow", function()
 			if(DropDownList1:GetScale() ~= UIParent:GetScale()) then
 				DropDownList1:SetScale(UIParent:GetScale());
 			end

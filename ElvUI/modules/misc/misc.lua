@@ -2,9 +2,7 @@ local E, L, V, P, G = unpack(select(2, ...));
 local M = E:NewModule("Misc", "AceEvent-3.0", "AceTimer-3.0");
 E.Misc = M;
 
-local floor = math.floor;
 local format, gsub = string.format, string.gsub;
-local UnitGUID = UnitGUID;
 local UIErrorsFrame = UIErrorsFrame;
 local MAX_PARTY_MEMBERS = MAX_PARTY_MEMBERS;
 

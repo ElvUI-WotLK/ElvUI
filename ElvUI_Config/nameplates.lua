@@ -457,7 +457,27 @@ E.Options.args.nameplate = {
 					type = "range",
 					min = 4, max = 30, step = 1,
 				},
-			},
+				castTimeFormat = {
+					order = 4,
+					type = "select",
+					name = L["Cast Time Format"],
+					values = {
+						["CURRENT"] = L["Current"],
+						["CURRENT_MAX"] = L["Current / Max"],
+						["REMAINING"] = L["Remaining"]
+					}
+				},
+				channelTimeFormat = {
+					order = 5,
+					type = "select",
+					name = L["Channel Time Format"],
+					values = {
+						["CURRENT"] = L["Current"],
+						["CURRENT_MAX"] = L["Current / Max"],
+						["REMAINING"] = L["Remaining"]
+					}
+				}
+			}
 		},
 		targetIndicator = {
 			type = "group",

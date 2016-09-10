@@ -3,7 +3,6 @@ local M = E:GetModule('Misc');
 
 local unpack, pairs = unpack, pairs;
 local ITEM_QUALITY_COLORS = ITEM_QUALITY_COLORS;
-local TEXTURE_ITEM_QUEST_BANG = TEXTURE_ITEM_QUEST_BANG;
 local LOOT = LOOT;
 
 -- Credit Haste
@@ -195,7 +194,7 @@ function M:LOOT_OPENED(event, autoloot)
 	if(items > 0) then
 		for i=1, items do
 			local slot = lootFrame.slots[i] or createSlot(i)
-			local texture, item, quantity, quality, locked = GetLootSlotInfo(i)
+			local texture, item, quantity, quality = GetLootSlotInfo(i)
 			local color = ITEM_QUALITY_COLORS[quality]
 
 			if(LootSlotIsCoin(i)) then

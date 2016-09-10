@@ -269,7 +269,7 @@ function M:START_LOOT_ROLL(event, rollID, time)
 	f.pass:SetText(0);
 	f.disenchant:SetText(0);
 	
-	local texture, name, count, quality, bop, canNeed, canGreed, canDisenchant = GetLootRollItemInfo(rollID);
+	local texture, name, _, quality, bop, canNeed, canGreed, canDisenchant = GetLootRollItemInfo(rollID);
 	f.button.icon:SetTexture(texture);
 	f.button.link = GetLootRollItemLink(rollID);
 	

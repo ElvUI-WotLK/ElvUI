@@ -191,7 +191,9 @@ P["nameplate"] = {
 	['castBar'] = {
 		['height'] = 6,
 		["hideSpellName"] = false,
-		["hideTime"] = false,	
+		["hideTime"] = false,
+		["castTimeFormat"] = "CURRENT",
+		["channelTimeFormat"] = "CURRENT"
 	},
 	['raidIcon'] = {
 		['xOffset'] = -4,
