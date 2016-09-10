@@ -1,6 +1,11 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local S = E:NewModule("Skins", "AceHook-3.0", "AceEvent-3.0");
 
+local _G = _G;
+local unpack = unpack;
+local pairs = pairs;
+local find = string.find;
+
 E.Skins = S;
 S.addonsToLoad = {};
 S.nonAddonsToLoad = {};
@@ -13,8 +18,6 @@ S.SQUARE_BUTTON_TEXCOORDS = {
 	["RIGHT"] = {  0.42187500,    0.23437500,     0.01562500,     0.20312500};
 	["DELETE"] = { 0.01562500,    0.20312500,     0.01562500,     0.20312500}
 };
-
-local find = string.find;
 
 function S:SquareButton_SetIcon(self, name)
 	local coords = S.SQUARE_BUTTON_TEXCOORDS[strupper(name)];
@@ -246,7 +249,7 @@ function S:HandleDropDownBox(frame, width)
 	if(button) then
 		button:ClearAllPoints();
 		button:Point("RIGHT", frame, "RIGHT", -10, 3);
-		hooksecurefunc(button, "SetPoint", function(self, point, attachTo, anchorPoint, xOffset, yOffset, noReset)
+		hooksecurefunc(button, "SetPoint", function(_, _, _, _, _, _, noReset)
 			if(not noReset) then
 				button:ClearAllPoints();
 				button:SetPoint("RIGHT", frame, "RIGHT", E:Scale(-10), E:Scale(3), true);

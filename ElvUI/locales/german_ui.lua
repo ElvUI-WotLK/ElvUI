@@ -45,10 +45,10 @@ L["Vendor Grays"] = "Graue Gegenstände verkaufen"
 
 --Chat
 L["AFK"] = "AFK" --Also used in datatexts and tooltip
+L["BG"] = true;
+L["BGL"] = true;
 L["DND"] = "DND" --Also used in datatexts and tooltip
 L["G"] = "G"
-L["I"] = "I"
-L["IL"] = "IL"
 L["Invalid Target"] = "Ungültiges Ziel"
 L["O"] = "O"
 L["P"] = "P"
@@ -87,6 +87,7 @@ L["Hands"] = "Hände"
 L["Head"] = "Kopf"
 L["Hit"] = "Hit"
 L["Hold Shift + Right Click:"] = "Halte Umschalt + Rechts Klick:"
+L["Right Click: Reset CPU Usage"] = true;
 L["Home Latency:"] = "Standort Latenz"
 L["HP"] = "HP"
 L["HPS"] = "HPS"

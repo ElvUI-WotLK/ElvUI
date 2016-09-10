@@ -45,10 +45,10 @@ L["Vendor Grays"] = "Vender Objetos Grises"
 
 --Chat
 L["AFK"] = "Ausente"
+L["BG"] = true;
+L["BGL"] = true;
 L["DND"] = "Oc"
 L["G"] = "H"
-L["I"] = true
-L["IL"] = "LI"
 L["Invalid Target"] = "Objetivo Inválido"
 L["O"] = "O"
 L["P"] = "G"
@@ -100,6 +100,7 @@ L["No Guild"] = "Sin Hermandad"
 L["Offhand"] = "Mano Izquierda"
 L["Profit:"] = "Ganancia:"
 L["Reset Data: Hold Shift + Right Click"] = "Restablecer Datos: Mantén Shift + Clic Derecho"
+L["Right Click: Reset CPU Usage"] = true;
 L["Saved Raid(s)"] = "Banda(s) Guardada(s)"
 L["Server: "] = "Servidor: "
 L["Session:"] = "Sesión:"

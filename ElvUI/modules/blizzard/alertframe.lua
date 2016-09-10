@@ -22,12 +22,12 @@ function E:PostAlertMove(screenQuadrant)
 		POSITION = 'TOP';
 		ANCHOR_POINT = 'BOTTOM';
 		YOFFSET = -10;
-		AlertFrameMover:SetText(AlertFrameMover.textString..L[' [Grow Down]']);
+		AlertFrameMover:SetText(AlertFrameMover.textString .. ' [Grow Down]');
 	else
 		POSITION = 'BOTTOM';
 		ANCHOR_POINT = 'TOP';
 		YOFFSET = 10;
-		AlertFrameMover:SetText(AlertFrameMover.textString..L[' [Grow Up]']);
+		AlertFrameMover:SetText(AlertFrameMover.textString .. ' [Grow Up]');
 	end
 	
 	local rollBars = E:GetModule('Misc').RollBars;

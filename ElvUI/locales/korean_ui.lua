@@ -45,10 +45,10 @@ L["Vendor Grays"] = "잡동사니 자동판매"
 
 --Chat
 L["AFK"] = "자리비움"
+L["BG"] = true;
+L["BGL"] = true;
 L["DND"] = "다른 용무중"
 L["G"] = "길드"
-L["I"] = "인스"
-L["IL"] = "인스장"
 L["Invalid Target"] = "잘못된 대상"
 L["O"] = "관리자"
 L["P"] = "파티"
@@ -100,6 +100,7 @@ L["No Guild"] = "길드 없음"
 L["Offhand"] = "보조장비"
 L["Profit:"] = "이익:"
 L["Reset Data: Hold Shift + Right Click"] = "기록 리셋: Shift + 우클릭"
+L["Right Click: Reset CPU Usage"] = true;
 L["Saved Raid(s)"] = "귀속된 던전"
 L["Server: "] = "서버:"
 L["Session:"] = "현재 접속:"

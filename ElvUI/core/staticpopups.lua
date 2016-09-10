@@ -126,7 +126,7 @@ E.PopupDialogs["INCOMPATIBLE_ADDON"] = {
 };
 
 E.PopupDialogs["PIXELPERFECT_CHANGED"] = {
-	text = L["You have changed the pixel perfect option. You will have to complete the installation process to remove any graphical bugs."],
+	text = L["You have changed the Thin Border Theme option. You will have to complete the installation process to remove any graphical bugs."],
 	button1 = ACCEPT,
 	OnAccept = E.noop,
 	timeout = 0,
@@ -144,7 +144,7 @@ E.PopupDialogs["CONFIGAURA_SET"] = {
 };
 
 E.PopupDialogs["QUEUE_TAINT"] = {
-	text = L["A taint has occured that is preventing you from using the queue system. Please reload your user interface and try again."],
+	text = L["You have changed your UIScale, however you still have the AutoScale option enabled in ElvUI. Press accept if you would like to disable the Auto Scale option."],
 	button1 = ACCEPT,
 	button2 = CANCEL,
 	OnAccept = function() ReloadUI(); end,

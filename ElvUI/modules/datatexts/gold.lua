@@ -13,6 +13,7 @@ local GetBackpackCurrencyInfo = GetBackpackCurrencyInfo;
 local MAX_WATCHED_TOKENS = MAX_WATCHED_TOKENS;
 local CURRENCY = CURRENCY;
 
+local currencyString = "|T%s:14:14:0:0:64:64:4:60:4:60|t %s";
 local Profit = 0;
 local Spent = 0;
 local resetInfoFormatter = join("", "|cffaaaaaa", L["Reset Data: Hold Shift + Right Click"], "|r");
@@ -79,15 +80,12 @@ local function OnEnter(self)
 	DT.tooltip:AddDoubleLine(L["Total: "], E:FormatMoney(totalGold, style, textOnly), 1, 1, 1, 1, 1, 1);
 
 	for i = 1, MAX_WATCHED_TOKENS do
-		local name, count, type, icon, itemID = GetBackpackCurrencyInfo(i)
-		local currencyString = "|T%s:14:14:0:0:64:64:4:60:4:60|t |cff%s%s|r"
-		local color = "ffffff"
-		local countColor = "ffc300"
+		local name, count, _, icon = GetBackpackCurrencyInfo(i);
 		if(name and i == 1) then
-			DT.tooltip:AddLine(" ");
 			DT.tooltip:AddLine(CURRENCY);
+			DT.tooltip:AddLine(" ");
 		end
-		if(name and count) then DT.tooltip:AddDoubleLine(currencyString:format(icon, color, name), ("|cff%s%d|r"):format(countColor, count)); end
+		if(name and count) then DT.tooltip:AddDoubleLine(currencyString:format(icon, name), count, 1, 1, 1); end
 	end
 
 	DT.tooltip:AddLine(" ");

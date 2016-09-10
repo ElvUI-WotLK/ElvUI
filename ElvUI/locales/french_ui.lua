@@ -45,10 +45,10 @@ L["Vendor Grays"] = "Vendre les objets gris"
 
 --Chat
 L["AFK"] = "ABS" --Also used in datatexts and tooltip
+L["BG"] = true;
+L["BGL"] = true;
 L["DND"] = "NPD" --Also used in datatexts and tooltip
 L["G"] = "G"
-L["I"] = "I"
-L["IL"] = "IL"
 L["Invalid Target"] = "Cible incorrecte"
 L["O"] = "O"
 L["P"] = "Gr"
@@ -100,6 +100,7 @@ L["No Guild"] = "Pas de Guilde"
 L["Offhand"] = "Main gauche"
 L["Profit:"] = "Profit:"
 L["Reset Data: Hold Shift + Right Click"] = "RAZ des données: MAJ + Clic droit"
+L["Right Click: Reset CPU Usage"] = true;
 L["Saved Raid(s)"] = "Raid(s) Sauvegardé(s)"
 L["Server: "] = "Serveur: "
 L["Session:"] = "Session:"

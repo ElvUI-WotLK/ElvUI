@@ -23,4 +23,4 @@ local function ValueColorUpdate(hex, r, g, b)
 end
 E['valueColorUpdateFuncs'][ValueColorUpdate] = true;
 
-DT:RegisterDatatext(HONORABLE_KILLS, nil, OnEvent);
+DT:RegisterDatatext("Honorable Kills", nil, OnEvent);

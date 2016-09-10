@@ -45,10 +45,10 @@ L["Vendor Grays"] = "出售灰色物品"
 
 --Chat
 L["AFK"] = "離開" --Also used in datatexts and tooltip
+L["BG"] = true;
+L["BGL"] = true;
 L["DND"] = "忙碌" --Also used in datatexts and tooltip
 L["G"] = "公會"
-L["I"] = '副本'
-L["IL"] = '副本隊長'
 L["Invalid Target"] = "無效的目標"
 L["O"] = "幹部"
 L["P"] = "隊伍"
@@ -100,6 +100,7 @@ L["No Guild"] = "沒有公會"
 L["Offhand"] = "副手"
 L["Profit:"] = "利潤: "
 L["Reset Data: Hold Shift + Right Click"] = "重置數據: 按住 Shift + 右鍵點擊"
+L["Right Click: Reset CPU Usage"] = true;
 L["Saved Raid(s)"] = "已有進度的副本"
 L["Server: "] = "伺服器: "
 L["Session:"] = "本次登入:"

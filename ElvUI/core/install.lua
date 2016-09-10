@@ -589,14 +589,14 @@ function E:SetupLayout(layout, noDataReset)
 	if not noDataReset then
 		E:CopyTable(E.db.datatexts.panels, P.datatexts.panels)
 		if layout == 'tank' then
-			E.db.datatexts.panels.LeftChatDataPanel.left = ARMOR;
-			E.db.datatexts.panels.LeftChatDataPanel.right = DEFENSE;
+			E.db.datatexts.panels.LeftChatDataPanel.left = "Armor";
+			E.db.datatexts.panels.LeftChatDataPanel.right = "Avoidance";
 		elseif layout == 'healer' or layout == 'dpsCaster' then
-			E.db.datatexts.panels.LeftChatDataPanel.left = L['Spell/Heal Power'];
-			E.db.datatexts.panels.LeftChatDataPanel.right = SPEED;
+			E.db.datatexts.panels.LeftChatDataPanel.left = "Spell/Heal Power";
+			E.db.datatexts.panels.LeftChatDataPanel.right = "Haste";
 		else
-			E.db.datatexts.panels.LeftChatDataPanel.left = ATTACK_POWER;
-			E.db.datatexts.panels.LeftChatDataPanel.right = SPEED;
+			E.db.datatexts.panels.LeftChatDataPanel.left = "Attack Power";
+			E.db.datatexts.panels.LeftChatDataPanel.right = "Haste";
 		end
 
 		if InstallStepComplete then

@@ -45,10 +45,10 @@ L["Vendor Grays"] = true;
 
 --Chat
 L["AFK"] = true; --Also used in datatexts
+L["BG"] = true;
+L["BGL"] = true;
 L["DND"] = true; --Also used in datatexts
 L["G"] = true;
-L["I"] = true;
-L["IL"] = true;
 L["Invalid Target"] = true;
 L["O"] = true;
 L["P"] = true;
@@ -100,6 +100,7 @@ L["No Guild"] = true;
 L["Offhand"] = true;
 L["Profit:"] = true;
 L["Reset Data: Hold Shift + Right Click"] = true;
+L["Right Click: Reset CPU Usage"] = true;
 L["Saved Raid(s)"] = true;
 L["Server: "] = true;
 L["Session:"] = true;
