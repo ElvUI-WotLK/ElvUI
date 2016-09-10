@@ -6,7 +6,6 @@ local format = format;
 
 local GetNumSockets = GetNumSockets;
 local GetSocketTypes = GetSocketTypes;
-local GEM_TYPE_INFO = GEM_TYPE_INFO;
 
 local function LoadSkin()
 	if(E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.socket ~= true) then return; end
