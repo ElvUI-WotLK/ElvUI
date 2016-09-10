@@ -1194,7 +1194,7 @@ end
 function B:PostBagMove()
 	if(not E.private.bags.enable) then return; end
 
-	local x, y = self:GetCenter();;
+	local x, y = self:GetCenter();
 	local screenHeight = E.UIParent:GetTop();
 	local screenWidth = E.UIParent:GetRight();
 
