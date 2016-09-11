@@ -9,7 +9,7 @@
 -- make into AceConsole.
 -- @class file
 -- @name AceConsole-3.0
--- @release $Id: AceConsole-3.0.lua 878 2009-11-02 18:51:58Z nevcairiel $
+-- @release $Id: AceConsole-3.0.lua 1143 2016-07-11 08:52:03Z nevcairiel $
 local MAJOR,MINOR = "AceConsole-3.0", 7
 
 local AceConsole, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
@@ -85,7 +85,7 @@ end
 function AceConsole:RegisterChatCommand( command, func, persist )
 	if type(command)~="string" then error([[Usage: AceConsole:RegisterChatCommand( "command", func[, persist ]): 'command' - expected a string]], 2) end
 	
-	if persist==nil then persist=true end -- I'd rather have my addon's "/addon enable" around if the author screws up. Having some extra slash regged when it shouldnt be isn't as destructive. True is a better default. /Mikk
+	if persist==nil then persist=true end	-- I'd rather have my addon's "/addon enable" around if the author screws up. Having some extra slash regged when it shouldnt be isn't as destructive. True is a better default. /Mikk
 	
 	local name = "ACECONSOLE_"..command:upper()
 	
@@ -136,7 +136,7 @@ end
 
 --- Retreive one or more space-separated arguments from a string. 
 -- Treats quoted strings and itemlinks as non-spaced.
--- @param string The raw argument string
+-- @param str The raw argument string
 -- @param numargs How many arguments to get (default 1)
 -- @param startpos Where in the string to start scanning (default  1)
 -- @return Returns arg1, arg2, ..., nextposition\\
