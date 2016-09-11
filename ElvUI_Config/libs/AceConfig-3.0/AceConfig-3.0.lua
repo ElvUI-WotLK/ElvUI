@@ -12,7 +12,7 @@ Very light wrapper library that combines all the AceConfig subcomponents into on
 
 ]]
 
-local MAJOR, MINOR = "AceConfig-3.0-ElvUI", 1
+local MAJOR, MINOR = "AceConfig-3.0-ElvUI", 2
 local AceConfig = LibStub:NewLibrary(MAJOR, MINOR)
 
 if not AceConfig then return end
