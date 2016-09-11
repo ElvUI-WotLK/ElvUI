@@ -5,12 +5,12 @@ function S:ContainerFrame_Update(self)
 	local id = self:GetID();
 	local name = self:GetName();
 	local itemButton;
-	local texture, itemCount, locked, quality;
+	local _, quality;
 	
 	for i = 1, self.size, 1 do
 		itemButton = _G[name..'Item'..i];
 		
-		texture, itemCount, locked, quality = GetContainerItemInfo(id, itemButton:GetID());
+		_, _, _, quality = GetContainerItemInfo(id, itemButton:GetID());
 		isQuestItem, questId, isActive = GetContainerItemQuestInfo(id, itemButton:GetID());
 		
 		if(quality and quality > 1) then

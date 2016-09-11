@@ -143,7 +143,6 @@ function S:HandleTab(tab)
 end
 
 function S:HandleNextPrevButton(btn, buttonOverride)
-	local norm, pushed, disabled;
 	local inverseDirection = btn:GetName() and (find(btn:GetName():lower(), "left") or find(btn:GetName():lower(), "prev") or find(btn:GetName():lower(), "decrement") or find(btn:GetName():lower(), "promote"));
 	
 	btn:StripTextures();
@@ -396,7 +395,7 @@ function S:HandleSliderFrame(frame)
 	frame:StripTextures();
 	frame:CreateBackdrop("Default");
 	frame.backdrop:SetAllPoints();
-	hooksecurefunc(frame, "SetBackdrop", function(self, backdrop)
+	hooksecurefunc(frame, "SetBackdrop", function(_, backdrop)
 		if(backdrop ~= nil) then
 			frame:SetBackdrop(nil);
 		end
@@ -421,7 +420,7 @@ function S:HandleSliderFrame(frame)
 	end
 end
 
-function S:ADDON_LOADED(event, addon)
+function S:ADDON_LOADED(_, addon)
 	if(self.allowBypass[addon]) then
 		S.addonsToLoad[addon]();
 		S.addonsToLoad[addon] = nil;

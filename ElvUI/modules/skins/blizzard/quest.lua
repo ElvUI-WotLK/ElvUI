@@ -88,7 +88,7 @@ local function LoadSkin()
 		end
 	end
 
-	hooksecurefunc("QuestInfo_Display", function(template, parentFrame, acceptButton, material)								
+	hooksecurefunc("QuestInfo_Display", function()								
 		local textColor = {1, 1, 1};
 		local titleTextColor = {1, 1, 0};
 

@@ -33,7 +33,7 @@ local function LoadSkin(event)
 		
 		if(achievement.description) then
 			achievement.description:SetTextColor(.6, .6, .6);
-			hooksecurefunc(achievement.description, "SetTextColor", function(self, r, g, b)
+			hooksecurefunc(achievement.description, "SetTextColor", function(_, r, g, b)
 				if(r == 0 and g == 0 and b == 0) then
 					achievement.description:SetTextColor(.6, .6, .6);
 				end
@@ -347,7 +347,7 @@ local function LoadSkin(event)
 		local numCriteria = GetAchievementNumCriteria(id);
 		local textStrings, metas, progressBars = 0, 0, 0;
 		for i = 1, numCriteria do
-			local criteriaString, criteriaType, completed, quantity, reqQuantity, charName, flags, assetID, quantityString = GetAchievementCriteriaInfo(id, i);
+			local _, criteriaType, completed, quantity, reqQuantity, _, flags, assetID = GetAchievementCriteriaInfo(id, i);
 			if(criteriaType == CRITERIA_TYPE_ACHIEVEMENT and assetID) then
 				metas = metas + 1;
 				local metaCriteria = AchievementButton_GetMeta(metas);

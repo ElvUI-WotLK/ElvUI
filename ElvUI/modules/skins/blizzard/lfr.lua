@@ -99,7 +99,7 @@ local function LoadSkin()
 			tab.backdrop:SetAllPoints()
 			tab:StyleButton(true)				
 			
-			local point, relatedTo, point2, x, y = tab:GetPoint()
+			local point, relatedTo, point2, _, y = tab:GetPoint()
 			tab:Point(point, relatedTo, point2, 1, y)
 		end
 	end

@@ -10,7 +10,7 @@ local MAX_ACHIEVEMENT_ALERTS = MAX_ACHIEVEMENT_ALERTS;
 local function LoadSkin()
 	if(E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.alertframes ~= true) then return; end
 	
-	local function AchievementFixAnchors(anchorFrame)
+	local function AchievementFixAnchors()
 		for i = 1, MAX_ACHIEVEMENT_ALERTS do
 			local frame = _G["AchievementAlertFrame" .. i];
 			if(frame) then

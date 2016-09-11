@@ -1,7 +1,6 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule('Skins')
 
-local AceGUI = LibStub("AceGUI-3.0", true)
 local RegisterAsWidget, RegisterAsContainer
 local function SetModifiedBackdrop(self)
 	if self.backdrop then self = self.backdrop end
@@ -188,7 +187,7 @@ function S:SkinAce3()
 			end
 			button:SetParent(frame.backdrop)
 			text:SetParent(frame.backdrop)
-			button:HookScript('OnClick', function(this, button)
+			button:HookScript('OnClick', function(this)
 				local self = this.obj
 				if self.dropdown then
 					self.dropdown:SetTemplate('Default', true)

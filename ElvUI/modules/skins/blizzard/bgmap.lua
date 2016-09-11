@@ -35,7 +35,7 @@ local function LoadSkin()
 		end
 	end)
 
-	BattlefieldMinimap:SetScript("OnMouseDown", function(self, btn)
+	BattlefieldMinimap:SetScript("OnMouseDown", function(_, btn)
 		if btn == "LeftButton" then
 			if BattlefieldMinimapOptions and BattlefieldMinimapOptions.locked then
 				return
@@ -46,7 +46,7 @@ local function LoadSkin()
 	end)	
 	
 	
-	hooksecurefunc('BattlefieldMinimap_UpdateOpacity', function(opacity)
+	hooksecurefunc('BattlefieldMinimap_UpdateOpacity', function()
 		local alpha = 1.0 - BattlefieldMinimapOptions.opacity or 0;
 		BattlefieldMinimap.backdrop:SetAlpha(alpha)
 	end)

@@ -2,7 +2,6 @@ local E, L, V, P, G, _ = unpack(select(2, ...)); --Inport: Engine, Locales, Priv
 local S = E:GetModule('Skins')
 
 local find = string.find;
-local ceil = math.ceil
 
 local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.misc ~= true then return end
@@ -222,14 +221,14 @@ local function LoadSkin()
 		S:HandleButton(MacOptionsButtonCompress)
  
 		--Reposition and resize buttons
-		local tPoint, tRTo, tRP, tX, tY =  MacOptionsButtonCompress:GetPoint()
+		local tPoint, tRTo, tRP, _, tY =  MacOptionsButtonCompress:GetPoint()
 		MacOptionsButtonCompress:SetWidth(136)
 		MacOptionsButtonCompress:ClearAllPoints()
 		MacOptionsButtonCompress:Point(tPoint, tRTo, tRP, 4, tY)
  
 		MacOptionsFrameCancel:SetWidth(96)
 		MacOptionsFrameCancel:SetHeight(22)
-		tPoint, tRTo, tRP, tX, tY =  MacOptionsFrameCancel:GetPoint()
+		tPoint, tRTo, tRP, _, tY =  MacOptionsFrameCancel:GetPoint()
 		MacOptionsFrameCancel:ClearAllPoints()
 		MacOptionsFrameCancel:Point(tPoint, tRTo, tRP, -14, tY)
  
@@ -414,7 +413,7 @@ local function LoadSkin()
 		end
 	end);
 	
-	S:SecureHook("ChatConfig_CreateTieredCheckboxes", function(frame, checkBoxTable, checkBoxTemplate, subCheckBoxTemplate)
+	S:SecureHook("ChatConfig_CreateTieredCheckboxes", function(frame, checkBoxTable)
 		local checkBoxNameString = frame:GetName().."CheckBox";
 		for index, value in ipairs(checkBoxTable) do
 			local checkBoxName = checkBoxNameString..index;
@@ -433,7 +432,7 @@ local function LoadSkin()
 		end
 	end);
 	
-	S:SecureHook("ChatConfig_CreateColorSwatches", function(frame, swatchTable, swatchTemplate)
+	S:SecureHook("ChatConfig_CreateColorSwatches", function(frame, swatchTable)
 		frame:SetTemplate("Transparent");
 		local nameString = frame:GetName().."Swatch";
 		for index, value in ipairs(swatchTable) do

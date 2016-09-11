@@ -100,13 +100,13 @@ local function LoadSkin()
 	BrowseResetButton:Point("TOPLEFT", AuctionFrameBrowse, "TOPLEFT", 81, -74)
 	BrowseSearchButton:Point("TOPRIGHT", AuctionFrameBrowse, "TOPRIGHT", 25, -34)
 	
-	AuctionsItemButton:HookScript("OnEvent", function(self, event, ...)
+	AuctionsItemButton:HookScript("OnEvent", function(self, event)
 		self:SetBackdropBorderColor(unpack(E["media"].bordercolor))
 		if(event == 'NEW_AUCTION_UPDATE' and self:GetNormalTexture()) then
 			self:GetNormalTexture():SetTexCoord(unpack(E.TexCoords));
 			self:GetNormalTexture():SetInside();
 		end
-		local name, texture, count, quality, canUse, price, pricePerUnit, stackCount, totalCount = GetAuctionSellItemInfo()
+		local _, _, _, quality = GetAuctionSellItemInfo()
 		if (quality and quality > 1) then
 			AuctionsItemButton:SetBackdropBorderColor(GetItemQualityColor(quality));
 		else
@@ -194,14 +194,14 @@ local function LoadSkin()
 			icon:GetNormalTexture():SetTexture("");
 			icon:SetTemplate("Default");
 			
-			hooksecurefunc(name, "SetVertexColor", function(self, r, g, b)
+			hooksecurefunc(name, "SetVertexColor", function(_, r, g, b)
 				if(r == 1 and g == 1 and b == 1) then
 					icon:SetBackdropBorderColor(unpack(E["media"].bordercolor));
 				else
 					icon:SetBackdropBorderColor(r, g, b);
 				end
 			end);
-			hooksecurefunc(name, "Hide", function(self, r, g, b)
+			hooksecurefunc(name, "Hide", function(_, r, g, b)
 				icon:SetBackdropBorderColor(unpack(E["media"].bordercolor));
 			end);
 		end
@@ -227,14 +227,14 @@ local function LoadSkin()
 		icon:GetNormalTexture():SetTexture("");
 		icon:SetTemplate("Default");
 		
-		hooksecurefunc(name, "SetVertexColor", function(self, r, g, b)
+		hooksecurefunc(name, "SetVertexColor", function(_, r, g, b)
 			if(r == 1 and g == 1 and b == 1) then
 				icon:SetBackdropBorderColor(unpack(E["media"].bordercolor));
 			else
 				icon:SetBackdropBorderColor(r, g, b);
 			end
 		end);
-		hooksecurefunc(name, "Hide", function(self, r, g, b)
+		hooksecurefunc(name, "Hide", function(_, r, g, b)
 			icon:SetBackdropBorderColor(unpack(E["media"].bordercolor));
 		end);
 		
@@ -262,14 +262,14 @@ local function LoadSkin()
 		icon:CreateBackdrop("Default")
 		icon.backdrop:SetAllPoints()
 		
-		hooksecurefunc(name, "SetVertexColor", function(self, r, g, b)
+		hooksecurefunc(name, "SetVertexColor", function(_, r, g, b)
 			if(r == 1 and g == 1 and b == 1) then
 				icon:SetBackdropBorderColor(unpack(E["media"].bordercolor));
 			else
 				icon:SetBackdropBorderColor(r, g, b);
 			end
 		end);
-		hooksecurefunc(name, "Hide", function(self, r, g, b)
+		hooksecurefunc(name, "Hide", function(_, r, g, b)
 			icon:SetBackdropBorderColor(unpack(E["media"].bordercolor));
 		end);
 		

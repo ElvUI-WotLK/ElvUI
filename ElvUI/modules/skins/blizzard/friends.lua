@@ -5,7 +5,6 @@ local _G = _G;
 local unpack = unpack;
 
 local GUILDMEMBERS_TO_DISPLAY = GUILDMEMBERS_TO_DISPLAY;
-local NORMAL_FONT_COLOR = NORMAL_FONT_COLOR;
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
 local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
 
@@ -97,13 +96,13 @@ local function LoadSkin()
 	end
 	
 	hooksecurefunc("GuildStatus_Update", function()
-		local name, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName;
+		local _, online, classFileName;
 		local button, buttonText, classTextColor;
 		
 		if(FriendsFrame.playerStatusFrame) then
 			for i = 1, GUILDMEMBERS_TO_DISPLAY, 1 do
 				button = _G["GuildFrameButton" .. i];
-				name, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName = GetGuildRosterInfo(button.guildIndex);
+				_, _, _, _, _, _, _, _, online, _, classFileName = GetGuildRosterInfo(button.guildIndex);
 				if(classFileName) then
 					if(online) then
 						classTextColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[classFileName] or RAID_CLASS_COLORS[classFileName];
@@ -117,7 +116,7 @@ local function LoadSkin()
 			local classFileName;
 			for i = 1, GUILDMEMBERS_TO_DISPLAY, 1 do
 				button = _G["GuildFrameGuildStatusButton" .. i];
-				name, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName = GetGuildRosterInfo(button.guildIndex);
+				_, _, _, _, _, _, _, _, online, _, classFileName = GetGuildRosterInfo(button.guildIndex);
 				if(classFileName) then
 					if(online) then
 						classTextColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[classFileName] or RAID_CLASS_COLORS[classFileName];

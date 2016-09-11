@@ -41,10 +41,9 @@ local function LoadSkin()
 	end
 
 	hooksecurefunc("RaidClassButton_Update", function()
-		local button, icon, count;
+		local button, icon;
 		for index, value in pairs(RAID_CLASS_BUTTONS) do
 			button = _G["RaidClassButton" .. value.button];
-			count = _G["RaidClassButton" .. value.button .. "Count"];
 			icon = _G["RaidClassButton" .. value.button .. "IconTexture"];
 
 			button:StripTextures();
@@ -83,7 +82,7 @@ local function LoadSkin()
 		end
 	end
 
-	hooksecurefunc("RaidPullout_GetFrame", function(...)
+	hooksecurefunc("RaidPullout_GetFrame", function()
 		skinPulloutFrames();
 	end);
 

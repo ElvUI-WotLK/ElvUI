@@ -89,12 +89,12 @@ local function LoadSkin()
 	
 	local function OpenMail_Update()
 		if(not InboxFrame.openMailID) then return; end
-		local bodyText, texture, isTakeable, isInvoice = GetInboxText(InboxFrame.openMailID);
-		local itemButtonCount, itemRowCount = OpenMail_GetItemCounts(isTakeable, textCreated, money);
+		local _, _, isTakeable = GetInboxText(InboxFrame.openMailID);
+		local _, itemRowCount = OpenMail_GetItemCounts(isTakeable, textCreated, money);
 		if(itemRowCount > 0 and OpenMailFrame.activeAttachmentButtons) then
 			for i, attachmentButton in pairs(OpenMailFrame.activeAttachmentButtons) do
 				if(attachmentButton ~= OpenMailLetterButton and attachmentButton ~= OpenMailMoneyButton) then
-					local name, itemTexture, count, quality = GetInboxItem(InboxFrame.openMailID, attachmentButton:GetID());
+					local name, _, _, quality = GetInboxItem(InboxFrame.openMailID, attachmentButton:GetID());
 					if(name) then
 						-- local quality = select(3, GetItemInfo(name));
 						if(quality and quality > 1) then

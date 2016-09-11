@@ -31,13 +31,6 @@ local function LoadSkin()
 		_G["EventTraceFrame"..texs[i]]:SetTexture(nil)
 	end
 	
-	local bg = {
-		bgFile = E["media"].normTex,
-		edgeFile = E["media"].blankTex,
-		tile = false, tileSize = 0, edgeSize = noscalemult,
-		insets = { left = -noscalemult, right = -noscalemult, top = -noscalemult, bottom = -noscalemult}
-	};
-	
 	for i=1, ScriptErrorsFrame:GetNumChildren() do
 		local child = select(i, ScriptErrorsFrame:GetChildren())
 		if child:GetObjectType() == "Button" and not child:GetName() then

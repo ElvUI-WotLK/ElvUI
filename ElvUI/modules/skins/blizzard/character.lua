@@ -68,7 +68,7 @@ local function LoadSkin()
 	end
 	hooksecurefunc("PaperDollFrameItemFlyout_DisplayButton", SkinItemFlyouts);
 	
-	local function SkinFrameFlyouts(button)
+	local function SkinFrameFlyouts()
 		PaperDollFrameItemFlyoutButtons:StripTextures();
 	end
  	PaperDollFrameItemFlyout:HookScript('OnShow', SkinFrameFlyouts)
@@ -240,8 +240,8 @@ local function LoadSkin()
 	PetPaperDollFrameExpBar:CreateBackdrop("Default")
 	
 	local function updHappiness(self)
-		local happiness, damagePercentage = GetPetHappiness();
-		local hasPetUI, isHunterPet = HasPetUI();
+		local happiness = GetPetHappiness();
+		local _, isHunterPet = HasPetUI();
 		if(not happiness or not isHunterPet) then
 			return;	
 		end
