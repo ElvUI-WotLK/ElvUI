@@ -1,7 +1,16 @@
 ﻿local E, L, V, P, G = unpack(select(2, ...)); -- Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local AB = E:GetModule('ActionBars');
 
+local _G = _G;
+local select = select;
 local ceil = math.ceil;
+
+local GetPetActionInfo = GetPetActionInfo;
+local IsPetAttackAction = IsPetAttackAction;
+local GetPetActionSlotUsable = GetPetActionSlotUsable;
+local PetHasActionBar = PetHasActionBar;
+local GetBindingKey = GetBindingKey;
+local NUM_PET_ACTION_SLOTS = NUM_PET_ACTION_SLOTS;
 
 local bar = CreateFrame('Frame', 'ElvUI_BarPet', E.UIParent, 'SecureHandlerStateTemplate');
 
@@ -197,16 +206,6 @@ function AB:PositionAndSizeBarPet()
 		end
 		
 		self:StyleButton(button);
-		
-		--wtf lol
-		if not button.CheckFixed then 
-			hooksecurefunc(button:GetCheckedTexture(), 'SetAlpha', function(self, value)
-				if value == 1 then
-					self:SetAlpha(0.3)
-				end
-			end)
-			button.CheckFixed = true;
-		end
 	end
 
 	RegisterStateDriver(bar, 'visibility', self.db['barPet'].visibility);

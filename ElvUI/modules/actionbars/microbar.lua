@@ -1,6 +1,11 @@
 ﻿local E, L, V, P, G = unpack(select(2, ...));
 local AB = E:GetModule('ActionBars');
 
+local _G = _G;
+local select = select;
+
+local CreateFrame = CreateFrame;
+
 local MICRO_BUTTONS = {
 	'CharacterMicroButton',
 	'SpellbookMicroButton',

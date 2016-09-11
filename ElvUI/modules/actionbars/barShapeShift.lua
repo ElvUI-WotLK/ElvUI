@@ -1,8 +1,20 @@
 ﻿local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local AB = E:GetModule('ActionBars');
 
+local _G = _G;
+local select = select;
 local ceil = math.ceil;
 local lower = string.lower;
+
+local CreateFrame = CreateFrame;
+local GetShapeshiftForm = GetShapeshiftForm;
+local GetNumShapeshiftForms = GetNumShapeshiftForms;
+local GetShapeshiftFormCooldown = GetShapeshiftFormCooldown;
+local GetShapeshiftFormInfo = GetShapeshiftFormInfo;
+local GetSpellInfo = GetSpellInfo;
+local InCombatLockdown = InCombatLockdown;
+local GetBindingKey = GetBindingKey;
+local NUM_SHAPESHIFT_SLOTS = NUM_SHAPESHIFT_SLOTS;
 
 local bar = CreateFrame('Frame', 'ElvUI_StanceBar', E.UIParent, 'SecureHandlerStateTemplate');
 
@@ -24,6 +36,7 @@ function AB:StyleShapeShift()
 	local numForms = GetNumShapeshiftForms();
 	local texture, name, isActive, isCastable, _;
 	local buttonName, button, icon, cooldown;
+	local stance = GetShapeshiftForm();
 
 	for i = 1, NUM_SHAPESHIFT_SLOTS do
 		buttonName = "ElvUI_StanceBarButton"..i;

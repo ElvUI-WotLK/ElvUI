@@ -3,12 +3,20 @@ local A = E:NewModule('Auras', 'AceHook-3.0', 'AceEvent-3.0');
 local LSM = LibStub('LibSharedMedia-3.0');
 
 local GetTime = GetTime;
-local select, unpack, pairs, ipairs = select, unpack, pairs, ipairs;
-local floor, min, max = math.floor, math.min, math.max;
-local format, wipe, tinsert = string.format, table.wipe, table.insert;
+local select, unpack, pairs, ipairs, tostring = select, unpack, pairs, ipairs, tostring;
+local floor, min, max, huge = math.floor, math.min, math.max, math.huge;
+local format, wipe, tinsert, tremove = string.format, table.wipe, table.insert, table.remove;
+local format, wipe, tinsert, tsort = string.format, table.wipe, table.insert, table.sort;
 
 local CreateFrame = CreateFrame;
 local UnitAura = UnitAura;
+local CancelItemTempEnchantment = CancelItemTempEnchantment;
+local CancelUnitBuff = CancelUnitBuff;
+local GetInventoryItemQuality = GetInventoryItemQuality;
+local GetItemQualityColor = GetItemQualityColor;
+local GetWeaponEnchantInfo = GetWeaponEnchantInfo;
+local GetInventoryItemTexture = GetInventoryItemTexture;
+
 
 local DIRECTION_TO_POINT = {
 	DOWN_RIGHT = 'TOPLEFT',
@@ -222,7 +230,7 @@ local function configureAuras(header, auraTable)
 		display = min(display, wrapAfter * maxWraps);
 	end
 	
-	local left, right, top, bottom = math.huge, -math.huge, -math.huge, math.huge;
+	local left, right, top, bottom = huge, -huge, -huge, huge;
 	for index=1,display do
 		local button = buttons[index];
 		local wrapAfter = wrapAfter or index
@@ -243,10 +251,10 @@ local function configureAuras(header, auraTable)
 		end
 		
 		button:Show();
-		left = min(left, button:GetLeft() or math.huge);
-		right = max(right, button:GetRight() or -math.huge);
-		top = max(top, button:GetTop() or -math.huge);
-		bottom = min(bottom, button:GetBottom() or math.huge);
+		left = min(left, button:GetLeft() or huge);
+		right = max(right, button:GetRight() or -huge);
+		top = max(top, button:GetTop() or -huge);
+		bottom = min(bottom, button:GetBottom() or huge);
 	end
 	local deadIndex = #(auraTable) + 1;
 	local button = select(deadIndex, header:GetChildren());
@@ -265,7 +273,6 @@ local function configureAuras(header, auraTable)
 	end
 end
 
-local tremove = table.remove;
 local function stripRAID(filter)
 	return filter and tostring(filter):upper():gsub('RAID', ''):gsub('|+', '|'):match('^|?(.+[^|])|?$');
 end
@@ -398,7 +405,7 @@ function A:UpdateHeader(self)
 			i = i + 1;
 		until(not aura.name);
 	end
-	table.sort(sortingTable, sortMethod);
+	tsort(sortingTable, sortMethod);
 
 	configureAuras(self, sortingTable);
 	while(sortingTable[1]) do

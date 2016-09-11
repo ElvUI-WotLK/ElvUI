@@ -1,6 +1,14 @@
 ﻿local E, L, V, P, G = unpack(select(2, ...));
 local AB = E:GetModule("ActionBars");
 
+local _G = _G;
+local select, unpack = select, unpack;
+local ipairs, pairs = ipairs, pairs;
+local tonumber = tonumber;
+local match = string.match;
+
+local HasMultiCastActionBar = HasMultiCastActionBar;
+
 if(E.myclass ~= "SHAMAN") then return; end
 
 local bar = CreateFrame("Frame", "ElvUI_BarTotem", E.UIParent, "SecureHandlerStateTemplate");
@@ -254,7 +262,7 @@ function AB:CreateTotemBar()
 	self:SecureHook("MultiCastActionButton_Update");
 	
 	self:SecureHook("MultiCastSlotButton_Update", function(self)
-		AB:StyleTotemSlotButton(self, tonumber( string.match(self:GetName(), "MultiCastSlotButton(%d)")));
+		AB:StyleTotemSlotButton(self, tonumber(match(self:GetName(), "MultiCastSlotButton(%d)")));
 	end);
 
 	self:SecureHook("MultiCastSummonSpellButton_Update", function(self) AB:SkinSummonButton(self); end);

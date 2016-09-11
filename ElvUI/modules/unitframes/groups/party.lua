@@ -2,7 +2,6 @@ local E, L, V, P, G = unpack(select(2, ...));
 local UF = E:GetModule("UnitFrames");
 
 local _G = _G
-local pairs = pairs
 local tinsert = table.insert
 
 local CreateFrame = CreateFrame;
@@ -177,10 +176,8 @@ function UF:Update_PartyFrames(frame, db)
 		frame.BOTTOM_OFFSET = 0;
 		
 		local childDB = db.petsGroup;
-		local childType = "pet";
 		if(frame == _G[frame.originalParent:GetName() .. "Target"]) then
 			childDB = db.targetsGroup;
-			childType = "target";
 		end
 		
 		if(not frame.originalParent.childList) then

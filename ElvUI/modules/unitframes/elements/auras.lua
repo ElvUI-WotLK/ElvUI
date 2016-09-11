@@ -408,7 +408,7 @@ function UF:CheckFilter(filterType, isFriend)
 	return false;
 end
 
-function UF:AuraFilter(unit, icon, name, _, _, _, dtype, duration, timeLeft, unitCaster, isStealable, shouldConsolidate, spellID)
+function UF:AuraFilter(unit, icon, name, _, _, _, dtype, duration, _, unitCaster, isStealable, shouldConsolidate, spellID)
 	if(E.global.unitframe.InvalidSpells[spellID]) then
 		return false;
 	end
@@ -424,7 +424,6 @@ function UF:AuraFilter(unit, icon, name, _, _, _, dtype, duration, timeLeft, uni
 	local playerOnlyFilter = false;
 	local isPlayer = unitCaster == "player" or unitCaster == "vehicle";
 	local isFriend = UnitIsFriend("player", unit) == 1 and true or false;
-	local auraType = isFriend and db.friendlyAuraType or db.enemyAuraType;
 	
 	icon.isPlayer = isPlayer;
 	icon.owner = unitCaster;
