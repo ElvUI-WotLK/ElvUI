@@ -3,12 +3,12 @@ local DT = E:GetModule("DataTexts");
 
 local datatexts = {};
 
-function DT:PanelLayoutOptions()	
+function DT:PanelLayoutOptions()
 	for name, _ in pairs(DT.RegisteredDataTexts) do
 		datatexts[name] = name;
 	end
 	datatexts[""] = NONE;
-	
+
 	local order;
 	local table = E.Options.args.datatexts.args.panels.args;
 	for pointLoc, tab in pairs(P.datatexts.panels) do

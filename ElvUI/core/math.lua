@@ -49,11 +49,11 @@ function E:ColorGradient(perc, ...)
 		local r, g, b = ...;
 		return r, g, b;
 	end
-	
+
 	local num = select("#", ...) / 3;
 	local segment, relperc = modf(perc*(num-1));
 	local r1, g1, b1, r2, g2, b2 = select((segment*3)+1, ...);
-	
+
 	return r1 + (r2-r1)*relperc, g1 + (g2-g1)*relperc, b1 + (b2-b1)*relperc;
 end
 
@@ -83,23 +83,23 @@ end
 
 function E:FramesOverlap(frameA, frameB)
 	if(not frameA or not frameB) then return; end
-	
+
 	local sA, sB = frameA:GetEffectiveScale(), frameB:GetEffectiveScale();
 	if(not sA or not sB) then return; end
-	
+
 	local frameALeft = frameA:GetLeft();
 	local frameARight = frameA:GetRight();
 	local frameABottom = frameA:GetBottom();
 	local frameATop = frameA:GetTop();
-	
+
 	local frameBLeft = frameB:GetLeft();
 	local frameBRight = frameB:GetRight();
 	local frameBBottom = frameB:GetBottom();
 	local frameBTop = frameB:GetTop();
-	
+
 	if(not frameALeft or not frameARight or not frameABottom or not frameATop) then return; end
 	if(not frameBLeft or not frameBRight or not frameBBottom or not frameBTop) then return; end
-	
+
 	return ((frameALeft*sA) < (frameBRight*sB))
 		and ((frameBLeft*sB) < (frameARight*sA))
 		and ((frameABottom*sA) < (frameBTop*sB))
@@ -111,11 +111,11 @@ function E:GetScreenQuadrant(frame)
 	local screenWidth = GetScreenWidth();
 	local screenHeight = GetScreenHeight();
 	local point;
-	
+
 	if(not frame:GetCenter()) then
 		return "UNKNOWN", frame:GetName();
 	end
-	
+
 	if (x > (screenWidth / 3) and x < (screenWidth / 3)*2) and y > (screenHeight / 3)*2 then
 		point = "TOP";
 	elseif x < (screenWidth / 3) and y > (screenHeight / 3)*2 then
@@ -141,7 +141,7 @@ end
 function E:GetXYOffset(position, override)
 	local default = E.Spacing;
 	local x, y = override or default, override or default;
-	
+
 	if(position == "TOP")then
 		return 0, y;
 	elseif(position == "TOPLEFT") then
@@ -176,11 +176,11 @@ function E:GetFormattedText(style, min, max)
 	assert(styles[style], "Invalid format style: "..style);
 	assert(min, "You need to provide a current value. Usage: E:GetFormattedText(style, min, max)");
 	assert(max, "You need to provide a maximum value. Usage: E:GetFormattedText(style, min, max)");
-	
+
 	if(max == 0) then max = 1; end
-	
+
 	local useStyle = styles[style];
-	
+
 	if(style == "DEFICIT") then
 		local deficit = max - min;
 		if(deficit <= 0) then
@@ -317,12 +317,12 @@ function E:FormatMoney(amount, style, textonly)
 	local coppername = textonly and L.copperabbrev or ICON_COPPER;
 	local silvername = textonly and L.silverabbrev or ICON_SILVER;
 	local goldname = textonly and L.goldabbrev or ICON_GOLD;
-	
+
 	local value = abs(amount);
 	local gold = floor(value / 10000);
 	local silver = floor(mod(value / 100, 100));
 	local copper = floor(mod(value, 100));
-	
+
 	if(not style or style == "SMART") then
 		local str = "";
 		if(gold > 0) then
@@ -336,7 +336,7 @@ function E:FormatMoney(amount, style, textonly)
 		end
 		return str;
 	end
-	
+
 	if(style == "FULL") then
 		if(gold > 0) then
 			return format("%d%s %d%s %d%s", gold, goldname, silver, silvername, copper, coppername);
@@ -378,6 +378,6 @@ function E:FormatMoney(amount, style, textonly)
 			return format("%d%s", copper, coppername);
 		end
 	end
-	
+
 	return self:FormatMoney(amount, "SMART");
 end

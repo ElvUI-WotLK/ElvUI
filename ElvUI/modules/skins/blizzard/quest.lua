@@ -88,7 +88,7 @@ local function LoadSkin()
 		end
 	end
 
-	hooksecurefunc("QuestInfo_Display", function()								
+	hooksecurefunc("QuestInfo_Display", function()
 		local textColor = {1, 1, 1};
 		local titleTextColor = {1, 1, 0};
 
@@ -201,12 +201,12 @@ local function LoadSkin()
 		questLogTitle.SetNormalTexture = E.noop;
 		questLogTitle:SetHighlightTexture("");
 		questLogTitle.SetHighlightTexture = E.noop;
-		
+
 		questLogTitle.Text = questLogTitle:CreateFontString(nil, "OVERLAY");
 		questLogTitle.Text:FontTemplate(nil, 22);
 		questLogTitle.Text:Point("LEFT", 3, 0);
 		questLogTitle.Text:SetText("+");
-		
+
 		hooksecurefunc(questLogTitle, "SetNormalTexture", function(self, texture)
 			if(find(texture, "MinusButton")) then
 				self.Text:SetText("-");

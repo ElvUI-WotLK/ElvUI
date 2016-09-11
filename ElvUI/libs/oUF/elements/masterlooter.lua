@@ -12,11 +12,11 @@ local Update = function(self, event)
 	if(not (UnitInParty(unit) or UnitInRaid(unit))) then
 		return masterlooter:Hide()
 	end
-	
+
 	if(masterlooter.PreUpdate) then
 		masterlooter:PreUpdate();
 	end
-	
+
 	local method, pid, rid = GetLootMethod();
 	if(method == 'master') then
 		local mlUnit
@@ -38,7 +38,7 @@ local Update = function(self, event)
 	elseif(masterlooter:IsShown()) then
 		masterlooter:Hide();
 	end
-	
+
 	if(masterlooter.PostUpdate) then
 		return masterlooter:PostUpdate(masterlooter:IsShown());
 	end

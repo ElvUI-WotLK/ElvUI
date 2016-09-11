@@ -13,7 +13,7 @@ function UF:Construct_GPS(frame)
 	gps.Texture:SetBlendMode("BLEND");
 	gps.Texture:SetVertexColor(214/255, 41/255, 41/255);
 	gps.Texture:SetAllPoints();
-	
+
 	return gps;
 end
 
@@ -23,11 +23,11 @@ function UF:Configure_GPS(frame)
 		if(not frame:IsElementEnabled("GPS")) then
 			frame:EnableElement("GPS");
 		end
-		
+
 		GPS:Size(frame.db.GPSArrow.size);
 		GPS.onMouseOver = frame.db.GPSArrow.onMouseOver;
 		GPS.outOfRange = frame.db.GPSArrow.outOfRange;
-		
+
 		GPS:Point("CENTER", frame, "CENTER", frame.db.GPSArrow.xOffset, frame.db.GPSArrow.yOffset);
 	else
 		if(frame:IsElementEnabled("GPS")) then

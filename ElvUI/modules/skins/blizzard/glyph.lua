@@ -12,7 +12,7 @@ S:RegisterSkin('Blizzard_GlyphUI', function()
 		PlayerTalentFrameScrollFrame:Hide();
 		PlayerTalentFrameStatusFrame:Hide();
 		PlayerTalentFrameActivateButton:Hide();
-		
+
 		local preview = GetCVarBool("previewTalents");
 		if(preview) then
 			PlayerTalentFramePreviewBar:Hide();
@@ -23,7 +23,7 @@ S:RegisterSkin('Blizzard_GlyphUI', function()
 		PlayerTalentFrameTitleText:Show();
 		PlayerTalentFramePointsBar:Show();
 		PlayerTalentFrameScrollFrame:Show();
-		
+
 		local preview = GetCVarBool("previewTalents");
 		if(preview) then
 			PlayerTalentFramePreviewBar:Show();

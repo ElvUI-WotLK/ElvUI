@@ -1,4 +1,4 @@
-﻿local E, L, V, P, G = unpack(select(2, ...));
+local E, L, V, P, G = unpack(select(2, ...));
 local DT = E:GetModule("DataTexts");
 
 local select = select;
@@ -64,7 +64,7 @@ function DT:BattlegroundStats()
 		if(name and name == E.myname) then
 			DT.tooltip:AddDoubleLine(L["Stats For:"], name, 1, 1, 1, classColor.r, classColor.g, classColor.b);
 			DT.tooltip:AddLine(" ");
-			if(CurrentMapID == WSG) then 
+			if(CurrentMapID == WSG) then
 				DT.tooltip:AddDoubleLine(GetBattlefieldStatInfo(1), GetBattlefieldStatData(index, 1), 1, 1, 1);
 				DT.tooltip:AddDoubleLine(GetBattlefieldStatInfo(2), GetBattlefieldStatData(index, 2), 1, 1, 1);
 			elseif(CurrentMapID == EOTS) then

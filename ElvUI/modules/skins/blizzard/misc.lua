@@ -30,12 +30,12 @@ local function LoadSkin()
 		_G[skins[i]]:SetTemplate("Transparent")
 	end
 
-	
+
 	local ChatMenus = {
 		"ChatMenu",
 		"EmoteMenu",
 		"LanguageMenu",
-		"VoiceMacroMenu",		
+		"VoiceMacroMenu",
 	}
 	--
 	for i = 1, getn(ChatMenus) do
@@ -45,12 +45,12 @@ local function LoadSkin()
 			_G[ChatMenus[i]]:HookScript("OnShow", function(self) self:SetTemplate("Default", true) self:SetBackdropColor(unpack(E['media'].backdropfadecolor)) end)
 		end
 	end
-	
+
 	-- reskin popup buttons
 	for i = 1, 3 do
 		_G["StaticPopup"..i.."CloseButton"]:StripTextures()
 		S:HandleCloseButton(_G["StaticPopup"..i.."CloseButton"]);
-		
+
 		for j = 1, 3 do
 			S:HandleButton(_G["StaticPopup"..i.."Button"..j])
 			S:HandleEditBox(_G["StaticPopup"..i.."EditBox"])
@@ -74,41 +74,41 @@ local function LoadSkin()
 			_G["StaticPopup"..i.."ItemFrameIconTexture"]:SetTexCoord(unpack(E.TexCoords))
 			_G["StaticPopup"..i.."ItemFrameIconTexture"]:SetInside()
 		end
-		
+
 		select(8, _G["StaticPopup"..i.."WideEditBox"]:GetRegions()):Hide();
 		S:HandleEditBox(_G["StaticPopup"..i.."WideEditBox"]);
 		_G["StaticPopup"..i.."WideEditBox"]:Height(22);
 	end
-	
+
 	-- reskin all esc/menu buttons
 	local BlizzardMenuButtons = {
-		"Options", 
-		"SoundOptions", 
-		"UIOptions", 
-		"Keybindings", 
+		"Options",
+		"SoundOptions",
+		"UIOptions",
+		"Keybindings",
 		"Macros",
-		"Logout", 
+		"Logout",
 		"Quit",
 		"Continue",
 	}
-	
+
 	for i = 1, getn(BlizzardMenuButtons) do
 		local ElvuiMenuButtons = _G["GameMenuButton"..BlizzardMenuButtons[i]]
 		if ElvuiMenuButtons then
 			S:HandleButton(ElvuiMenuButtons)
 		end
 	end
-	
+
 	-- hide header textures and move text/buttons.
 	local BlizzardHeader = {
-		"GameMenuFrame", 
-		"InterfaceOptionsFrame", 
-		"AudioOptionsFrame", 
+		"GameMenuFrame",
+		"InterfaceOptionsFrame",
+		"AudioOptionsFrame",
 		"VideoOptionsFrame",
 	}
-	
+
 	for i = 1, getn(BlizzardHeader) do
-		local title = _G[BlizzardHeader[i].."Header"]			
+		local title = _G[BlizzardHeader[i].."Header"]
 		if title then
 			title:SetTexture("")
 			title:ClearAllPoints()
@@ -119,18 +119,18 @@ local function LoadSkin()
 			end
 		end
 	end
-	
+
 	-- here we reskin all "normal" buttons
 	local BlizzardButtons = {
-		"VideoOptionsFrameOkay", 
-		"VideoOptionsFrameCancel", 
-		"VideoOptionsFrameDefaults", 
-		"VideoOptionsFrameApply", 
-		"AudioOptionsFrameOkay", 
-		"AudioOptionsFrameCancel", 
-		"AudioOptionsFrameDefaults", 
-		"InterfaceOptionsFrameDefaults", 
-		"InterfaceOptionsFrameOkay", 
+		"VideoOptionsFrameOkay",
+		"VideoOptionsFrameCancel",
+		"VideoOptionsFrameDefaults",
+		"VideoOptionsFrameApply",
+		"AudioOptionsFrameOkay",
+		"AudioOptionsFrameCancel",
+		"AudioOptionsFrameDefaults",
+		"InterfaceOptionsFrameDefaults",
+		"InterfaceOptionsFrameOkay",
 		"InterfaceOptionsFrameCancel",
 		"ReadyCheckFrameYesButton",
 		"ReadyCheckFrameNoButton",
@@ -138,31 +138,31 @@ local function LoadSkin()
 		"StackSplitCancelButton",
 		"RolePollPopupAcceptButton"
 	}
-	
+
 	for i = 1, getn(BlizzardButtons) do
 		local ElvuiButtons = _G[BlizzardButtons[i]]
 		if ElvuiButtons then
 			S:HandleButton(ElvuiButtons)
 		end
 	end
-	
+
 	-- if a button position is not really where we want, we move it here
 	VideoOptionsFrameCancel:ClearAllPoints()
-	VideoOptionsFrameCancel:SetPoint("RIGHT",VideoOptionsFrameApply,"LEFT",-4,0)		 
+	VideoOptionsFrameCancel:SetPoint("RIGHT",VideoOptionsFrameApply,"LEFT",-4,0)
 	VideoOptionsFrameOkay:ClearAllPoints()
-	VideoOptionsFrameOkay:SetPoint("RIGHT",VideoOptionsFrameCancel,"LEFT",-4,0)	
+	VideoOptionsFrameOkay:SetPoint("RIGHT",VideoOptionsFrameCancel,"LEFT",-4,0)
 	AudioOptionsFrameOkay:ClearAllPoints()
 	AudioOptionsFrameOkay:SetPoint("RIGHT",AudioOptionsFrameCancel,"LEFT",-4,0)
 	InterfaceOptionsFrameOkay:ClearAllPoints()
 	InterfaceOptionsFrameOkay:SetPoint("RIGHT",InterfaceOptionsFrameCancel,"LEFT", -4,0)
 	ReadyCheckFrameYesButton:SetParent(ReadyCheckFrame)
-	ReadyCheckFrameNoButton:SetParent(ReadyCheckFrame) 
+	ReadyCheckFrameNoButton:SetParent(ReadyCheckFrame)
 	ReadyCheckFrameYesButton:SetPoint("RIGHT", ReadyCheckFrame, "CENTER", -1, 0)
 	ReadyCheckFrameNoButton:SetPoint("LEFT", ReadyCheckFrameYesButton, "RIGHT", 3, 0)
-	ReadyCheckFrameText:SetParent(ReadyCheckFrame)	
+	ReadyCheckFrameText:SetParent(ReadyCheckFrame)
 	ReadyCheckFrameText:ClearAllPoints()
 	ReadyCheckFrameText:SetPoint("TOP", 0, -12)
-	
+
 	-- others
 	CoinPickupFrame:StripTextures();
 	CoinPickupFrame:SetTemplate("Transparent");
@@ -178,136 +178,136 @@ local function LoadSkin()
 	InterfaceOptionsFrame:SetMovable(true)
 	InterfaceOptionsFrame:EnableMouse(true)
 	InterfaceOptionsFrame:RegisterForDrag("LeftButton", "RightButton")
-	InterfaceOptionsFrame:SetScript("OnDragStart", function(self) 
+	InterfaceOptionsFrame:SetScript("OnDragStart", function(self)
 		if InCombatLockdown() then return end
-		
+
 		if IsShiftKeyDown() then
-			self:StartMoving() 
+			self:StartMoving()
 		end
 	end)
-	InterfaceOptionsFrame:SetScript("OnDragStop", function(self) 
+	InterfaceOptionsFrame:SetScript("OnDragStop", function(self)
 		self:StopMovingOrSizing()
 	end)
-	
+
 	-- mac menu/option panel, made by affli.
 	if IsMacClient() then
 		S:HandleButton(GameMenuButtonMacOptions);
-		
+
 		-- Skin main frame and reposition the header
 		MacOptionsFrame:SetTemplate("Default", true)
 		MacOptionsFrameHeader:SetTexture("")
 		MacOptionsFrameHeader:ClearAllPoints()
 		MacOptionsFrameHeader:SetPoint("TOP", MacOptionsFrame, 0, 0)
-		
+
 		S:HandleDropDownBox(MacOptionsFrameResolutionDropDown);
 		S:HandleDropDownBox(MacOptionsFrameFramerateDropDown);
 		S:HandleDropDownBox(MacOptionsFrameCodecDropDown);
-		
+
 		S:HandleSliderFrame(MacOptionsFrameQualitySlider);
-		
+
 		for i = 1, 8 do
 			S:HandleCheckBox(_G["MacOptionsFrameCheckButton"..i]);
 		end
-		
+
 		--Skin internal frames
 		MacOptionsFrameMovieRecording:SetTemplate("Default", true)
 		MacOptionsITunesRemote:SetTemplate("Default", true)
- 
+
 		--Skin buttons
 		S:HandleButton(MacOptionsFrameCancel)
 		S:HandleButton(MacOptionsFrameOkay)
 		S:HandleButton(MacOptionsButtonKeybindings)
 		S:HandleButton(MacOptionsFrameDefaults)
 		S:HandleButton(MacOptionsButtonCompress)
- 
+
 		--Reposition and resize buttons
 		local tPoint, tRTo, tRP, _, tY =  MacOptionsButtonCompress:GetPoint()
 		MacOptionsButtonCompress:SetWidth(136)
 		MacOptionsButtonCompress:ClearAllPoints()
 		MacOptionsButtonCompress:Point(tPoint, tRTo, tRP, 4, tY)
- 
+
 		MacOptionsFrameCancel:SetWidth(96)
 		MacOptionsFrameCancel:SetHeight(22)
 		tPoint, tRTo, tRP, _, tY =  MacOptionsFrameCancel:GetPoint()
 		MacOptionsFrameCancel:ClearAllPoints()
 		MacOptionsFrameCancel:Point(tPoint, tRTo, tRP, -14, tY)
- 
+
 		MacOptionsFrameOkay:ClearAllPoints()
 		MacOptionsFrameOkay:SetWidth(96)
 		MacOptionsFrameOkay:SetHeight(22)
 		MacOptionsFrameOkay:Point("LEFT",MacOptionsFrameCancel, -99,0)
- 
+
 		MacOptionsButtonKeybindings:ClearAllPoints()
 		MacOptionsButtonKeybindings:SetWidth(96)
 		MacOptionsButtonKeybindings:SetHeight(22)
 		MacOptionsButtonKeybindings:Point("LEFT",MacOptionsFrameOkay, -99,0)
- 
+
 		MacOptionsFrameDefaults:SetWidth(96)
 		MacOptionsFrameDefaults:SetHeight(22)
-		
+
 		MacOptionsCompressFrame:SetTemplate("Default", true);
-		
+
 		MacOptionsCompressFrameHeader:SetTexture("")
 		MacOptionsCompressFrameHeader:ClearAllPoints();
 		MacOptionsCompressFrameHeader:SetPoint("TOP", MacOptionsCompressFrame, 0, 0);
-		
+
 		S:HandleButton(MacOptionsCompressFrameDelete);
 		S:HandleButton(MacOptionsCompressFrameSkip);
 		S:HandleButton(MacOptionsCompressFrameCompress);
-		
+
 		MacOptionsCancelFrame:SetTemplate("Default", true);
-		
+
 		MacOptionsCancelFrameHeader:SetTexture("");
 		MacOptionsCancelFrameHeader:ClearAllPoints();
 		MacOptionsCancelFrameHeader:SetPoint("TOP", MacOptionsCancelFrame, 0, 0);
-		
+
 		S:HandleButton(MacOptionsCancelFrameNo);
 		S:HandleButton(MacOptionsCancelFrameYes);
 	end
-	
+
 	BNToastFrameCloseButton:Size(32);
 	BNToastFrameCloseButton:Point("TOPRIGHT", "BNToastFrame", 4, 4);
 	S:HandleCloseButton(BNToastFrameCloseButton);
-	
+
 	OpacityFrame:StripTextures()
 	OpacityFrame:SetTemplate("Transparent")
-	
+
 	S:HandleSliderFrame(OpacityFrameSlider);
-	
+
 	WatchFrameCollapseExpandButton:StripTextures()
 	S:HandleCloseButton(WatchFrameCollapseExpandButton)
 	WatchFrameCollapseExpandButton.backdrop:SetAllPoints()
 	WatchFrameCollapseExpandButton.text:SetText('-')
 	WatchFrameCollapseExpandButton:SetFrameStrata('MEDIUM')
-	
+
 	hooksecurefunc('WatchFrame_Expand', function()
 		WatchFrameCollapseExpandButton.text:SetText('-')
 	end)
-	
+
 	hooksecurefunc('WatchFrame_Collapse', function()
 		WatchFrameCollapseExpandButton.text:SetText('+')
-	end)	
-	
+	end)
+
 	--Chat Config
 	ChatConfigFrame:StripTextures();
 	ChatConfigFrame:SetTemplate("Transparent");
 	ChatConfigCategoryFrame:SetTemplate("Transparent");
 	ChatConfigBackgroundFrame:SetTemplate("Transparent");
-	
+
 	ChatConfigChatSettingsClassColorLegend:SetTemplate("Transparent");
 	ChatConfigChannelSettingsClassColorLegend:SetTemplate("Transparent");
-	
+
 	ChatConfigCombatSettingsFilters:SetTemplate("Transparent");
-	
+
 	ChatConfigCombatSettingsFiltersScrollFrame:StripTextures();
 	S:HandleScrollBar(ChatConfigCombatSettingsFiltersScrollFrameScrollBar);
-	
+
 	S:HandleButton(ChatConfigCombatSettingsFiltersDeleteButton);
 	S:HandleButton(ChatConfigCombatSettingsFiltersAddFilterButton);
 	ChatConfigCombatSettingsFiltersAddFilterButton:Point("RIGHT", ChatConfigCombatSettingsFiltersDeleteButton, "LEFT", -1, 0);
 	S:HandleButton(ChatConfigCombatSettingsFiltersCopyFilterButton);
 	ChatConfigCombatSettingsFiltersCopyFilterButton:Point("RIGHT", ChatConfigCombatSettingsFiltersAddFilterButton, "LEFT", -1, 0);
-	
+
 	S:HandleNextPrevButton(ChatConfigMoveFilterUpButton, true);
 	S:SquareButton_SetIcon(ChatConfigMoveFilterUpButton, "UP");
 	ChatConfigMoveFilterUpButton:Size(26);
@@ -315,19 +315,19 @@ local function LoadSkin()
 	S:HandleNextPrevButton(ChatConfigMoveFilterDownButton, true);
 	ChatConfigMoveFilterDownButton:Size(26);
 	ChatConfigMoveFilterDownButton:Point("LEFT", ChatConfigMoveFilterUpButton, "RIGHT", 1, 0);
-	
+
 	CombatConfigColorsHighlighting:StripTextures();
 	CombatConfigColorsColorizeUnitName:StripTextures();
 	CombatConfigColorsColorizeSpellNames:StripTextures();
-	
+
 	CombatConfigColorsColorizeDamageNumber:StripTextures();
 	CombatConfigColorsColorizeDamageSchool:StripTextures();
 	CombatConfigColorsColorizeEntireLine:StripTextures();
-	
+
 	S:HandleEditBox(CombatConfigSettingsNameEditBox);
-	
+
 	S:HandleButton(CombatConfigSettingsSaveButton);
-	
+
 	local combatConfigCheck = {
 		"CombatConfigColorsHighlightingLine",
 		"CombatConfigColorsHighlightingAbility",
@@ -351,28 +351,28 @@ local function LoadSkin()
 		"CombatConfigSettingsParty",
 		"CombatConfigSettingsRaid"
 	};
-	
+
 	for i = 1, getn(combatConfigCheck) do
 		S:HandleCheckBox(_G[combatConfigCheck[i]]);
 	end
-	
+
 	for i = 1, 5 do
 		local tab = _G["CombatConfigTab"..i];
 		tab:StripTextures();
-		
+
 		tab:CreateBackdrop("Default", true);
 		tab.backdrop:Point("TOPLEFT", 1, -10);
 		tab.backdrop:Point("BOTTOMRIGHT", -1, 2);
-		
+
 		tab:HookScript("OnEnter", S.SetModifiedBackdrop);
 		tab:HookScript("OnLeave", S.SetOriginalBackdrop);
 	end
-	
+
 	S:HandleButton(ChatConfigFrameDefaultButton);
 	S:HandleButton(CombatLogDefaultButton);
 	S:HandleButton(ChatConfigFrameCancelButton);
 	S:HandleButton(ChatConfigFrameOkayButton);
-	
+
 	S:SecureHook("ChatConfig_CreateCheckboxes", function(frame, checkBoxTable, checkBoxTemplate)
 		local checkBoxNameString = frame:GetName().."CheckBox";
 		if(checkBoxTemplate == "ChatConfigCheckBoxTemplate") then
@@ -386,7 +386,7 @@ local function LoadSkin()
 					checkbox.backdrop:Point("TOPLEFT", 3, -1);
 					checkbox.backdrop:Point("BOTTOMRIGHT", -3, 1);
 					checkbox.backdrop:SetFrameLevel(checkbox:GetParent():GetFrameLevel() + 1);
-					
+
 					S:HandleCheckBox(_G[checkBoxName.."Check"]);
 				end
 			end
@@ -397,14 +397,14 @@ local function LoadSkin()
 				local checkbox = _G[checkBoxName];
 				if(not checkbox.backdrop) then
 					checkbox:StripTextures();
-					
+
 					checkbox:CreateBackdrop();
 					checkbox.backdrop:Point("TOPLEFT", 3, -1);
 					checkbox.backdrop:Point("BOTTOMRIGHT", -3, 1);
 					checkbox.backdrop:SetFrameLevel(checkbox:GetParent():GetFrameLevel() + 1);
-					
+
 					S:HandleCheckBox(_G[checkBoxName.."Check"]);
-					
+
 					if(checkBoxTemplate == "ChatConfigCheckBoxWithSwatchAndClassColorTemplate") then
 						S:HandleCheckBox(_G[checkBoxName.."ColorClasses"]);
 					end
@@ -412,7 +412,7 @@ local function LoadSkin()
 			end
 		end
 	end);
-	
+
 	S:SecureHook("ChatConfig_CreateTieredCheckboxes", function(frame, checkBoxTable)
 		local checkBoxNameString = frame:GetName().."CheckBox";
 		for index, value in ipairs(checkBoxTable) do
@@ -431,7 +431,7 @@ local function LoadSkin()
 			end
 		end
 	end);
-	
+
 	S:SecureHook("ChatConfig_CreateColorSwatches", function(frame, swatchTable)
 		frame:SetTemplate("Transparent");
 		local nameString = frame:GetName().."Swatch";
@@ -440,7 +440,7 @@ local function LoadSkin()
 			local swatch = _G[swatchName];
 			if(not swatch.backdrop) then
 				swatch:StripTextures();
-				
+
 				swatch:CreateBackdrop();
 				swatch.backdrop:Point("TOPLEFT", 3, -1);
 				swatch.backdrop:Point("BOTTOMRIGHT", -3, 1);
@@ -455,8 +455,8 @@ local function LoadSkin()
 			_G["DropDownList"..i.."Backdrop"]:SetTemplate("Default", true)
 			_G["DropDownList"..i.."MenuBackdrop"]:SetTemplate("Default", true)
 		end
-	end)	
-	
+	end)
+
 	local function SkinWatchFrameItems()
 		for i=1, WATCHFRAME_NUM_ITEMS do
 			local button = _G["WatchFrameItem"..i]
@@ -472,7 +472,7 @@ local function LoadSkin()
 			end
 		end
 	end
-	
+
 	WatchFrame:HookScript("OnEvent", SkinWatchFrameItems)
 
     local frames = {
@@ -532,7 +532,7 @@ local function LoadSkin()
 		buttonToggle.Text:FontTemplate(nil, 22);
 		buttonToggle.Text:Point("CENTER");
 		buttonToggle.Text:SetText("+");
-		
+
 		hooksecurefunc(buttonToggle, "SetNormalTexture", function(self, texture)
 			if(find(texture, "MinusButton")) then
 				self.Text:SetText("-");
@@ -706,9 +706,9 @@ local function LoadSkin()
             DropDownList1:SetTemplate("Transparent")
         end
     end
-	
+
     S:HandleButton(InterfaceOptionsHelpPanelResetTutorials)
-	
+
     local optioncheckbox = {
         "AudioOptionsSoundPanelEnableSound",
         "AudioOptionsSoundPanelSoundEffects",
@@ -756,7 +756,7 @@ local function LoadSkin()
             DropDownList1:SetTemplate("Transparent")
         end
     end
-	
+
 	local sliders = {
 		"VideoOptionsResolutionPanelUIScaleSlider",
 		"VideoOptionsEffectsPanelQualitySlider",

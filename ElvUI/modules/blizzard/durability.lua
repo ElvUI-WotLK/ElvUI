@@ -5,7 +5,7 @@ local _G = _G;
 
 function B:PositionDurabilityFrame()
 	DurabilityFrame:SetFrameStrata("HIGH");
-	
+
 	local function SetPosition(self, _, parent)
 		if((parent == "MinimapCluster") or (parent == _G["MinimapCluster"])) then
 			self:ClearAllPoints();

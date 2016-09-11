@@ -11,7 +11,7 @@ local function SetFont(obj, font, size, style, r, g, b, sr, sg, sb, sox, soy)
 	elseif r then obj:SetAlpha(r) end
 end
 
-function E:UpdateBlizzardFonts()	
+function E:UpdateBlizzardFonts()
 	local NORMAL			= self["media"].normFont;
 	local COMBAT			= LSM:Fetch("font", self.private.general.dmgfont);
 	local NUMBER			= self["media"].normFont;
@@ -25,11 +25,11 @@ function E:UpdateBlizzardFonts()
 	NAMEPLATE_FONT		= NAMEFONT;
 	DAMAGE_TEXT_FONT	= COMBAT;
 	STANDARD_TEXT_FONT	= NORMAL;
-	
+
 	if self.db.general.font == "Homespun" then
 		MONOCHROME = 'MONOCHROME'
 	end
-	
+
 	if self.eyefinity then
 		-- damage are huge on eyefinity, so we disable it
 		InterfaceOptionsCombatTextPanelTargetDamage:Hide()
@@ -40,12 +40,12 @@ function E:UpdateBlizzardFonts()
 		SetCVar("PetMeleeDamage",0)
 		SetCVar("CombatDamage",0)
 		SetCVar("CombatHealing",0)
-		
+
 		-- set an invisible font for xp, honor kill, etc
 		local INVISIBLE = [=[Interface\Addons\ElvUI\media\fonts\Invisible.ttf]=]
 		COMBAT = INVISIBLE
 	end
-	
+
 	if(self.private.general.replaceBlizzFonts) then
 		SetFont(GameTooltipHeader,					NORMAL, self.db.general.fontSize);
 		SetFont(NumberFont_OutlineThick_Mono_Small,	NUMBER, self.db.general.fontSize, "OUTLINE");

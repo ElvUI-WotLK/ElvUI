@@ -30,7 +30,7 @@ function mod:SetAura(aura, icon, count, duration, expirationTime)
 		end
 		aura:Show();
 		mod.PolledHideIn(aura, expirationTime);
-	else 
+	else
 		mod.PolledHideIn(aura, 0);
 	end
 end

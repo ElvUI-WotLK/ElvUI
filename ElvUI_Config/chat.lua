@@ -12,14 +12,14 @@ E.Options.args.chat = {
 			order = 1,
 			type = "description",
 			name = L["CHAT_DESC"]
-		},		
+		},
 		enable = {
 			order = 2,
 			type = "toggle",
 			name = L["Enable"],
 			get = function(info) return E.private.chat.enable; end,
 			set = function(info, value) E.private.chat.enable = value; E:StaticPopup_Show("PRIVATE_RL"); end
-		},				
+		},
 		general = {
 			order = 3,
 			type = "group",
@@ -168,7 +168,7 @@ E.Options.args.chat = {
 						["%I:%M %p "] = "03:27 PM",
 						["%I:%M:%S %p "] = "03:27:32 PM",
 						["%H:%M "] = "15:27",
-						["%H:%M:%S "] =	"15:27:32"					
+						["%H:%M:%S "] =	"15:27:32"
 					}
 				},
 				useCustomTimeColor = {
@@ -324,7 +324,7 @@ E.Options.args.chat = {
 						["LEFT"] = L["Left Only"],
 						["RIGHT"] = L["Right Only"]
 					}
-				},	
+				},
 				separateSizes = {
 					order = 6,
 					type = "toggle",

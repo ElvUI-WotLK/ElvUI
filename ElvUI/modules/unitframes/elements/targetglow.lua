@@ -15,27 +15,27 @@ function UF:Construct_TargetGlow(frame)
 	frame.shadow = nil;
 	--x:SetFrameStrata("BACKGROUND");
 	x:Hide();
-	
+
 	frame:CreateShadow("Default");
 	local shadow = frame.shadow;
 	shadow:SetFrameStrata("BACKGROUND");
 	x.powerGlow = shadow;
 	frame.shadow = nil;
-	
+
 	return x;
 end
 
 function UF:UpdateTargetGlow()
 	if(not self.unit) then return; end
 	local unit = self.unit;
-	
+
 	if UnitIsUnit(unit, 'target') and UF.db.units[self.unitframeType].targetGlow then
 		self.TargetGlow:Show();
 		if(self.USE_POWERBAR_OFFSET) then
 			self.TargetGlow.powerGlow:Show();
 		end
 		local reaction = UnitReaction(unit, "player");
-		
+
 		if(UnitIsPlayer(unit)) then
 			local _, class = UnitClass(unit);
 			if(class) then
@@ -64,7 +64,7 @@ function UF:Configure_TargetGlow(frame)
 	local targetHealthGlow = frame.TargetGlow;
 	local targetPowerGlow = frame.TargetGlow.powerGlow;
 	targetHealthGlow:ClearAllPoints();
-	
+
 	if(frame.USE_POWERBAR_OFFSET) then
 		if(frame.ORIENTATION == "RIGHT") then
 			targetHealthGlow:Point("TOPLEFT", frame.Health.backdrop, "TOPLEFT", -frame.SHADOW_SPACING - frame.SPACING, frame.SHADOW_SPACING + frame.SPACING + (frame.USE_CLASSBAR and (frame.USE_MINI_CLASSBAR and 0 or frame.CLASSBAR_HEIGHT)));
@@ -73,7 +73,7 @@ function UF:Configure_TargetGlow(frame)
 			targetHealthGlow:Point("TOPLEFT", frame.Health.backdrop, "TOPLEFT", -frame.SHADOW_SPACING - frame.SPACING, frame.SHADOW_SPACING + frame.SPACING + (frame.USE_CLASSBAR and (frame.USE_MINI_CLASSBAR and 0 or frame.CLASSBAR_HEIGHT) or 0));
 			targetHealthGlow:Point("BOTTOMRIGHT", frame.Health.backdrop, "BOTTOMRIGHT", frame.SHADOW_SPACING + frame.SPACING, -frame.SHADOW_SPACING - frame.SPACING);
 		end
-		
+
 		targetPowerGlow:ClearAllPoints();
 		targetPowerGlow:Point("TOPLEFT", frame.Power.backdrop, "TOPLEFT", -frame.SHADOW_SPACING - frame.SPACING, frame.SHADOW_SPACING + frame.SPACING);
 		targetPowerGlow:Point("BOTTOMRIGHT", frame.Power.backdrop, "BOTTOMRIGHT", frame.SHADOW_SPACING + frame.SPACING, -frame.SHADOW_SPACING - frame.SPACING);

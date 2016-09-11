@@ -1,4 +1,4 @@
-﻿local E, L, V, P, G, _ = unpack(ElvUI);
+local E, L, V, P, G, _ = unpack(ElvUI);
 local A = E:GetModule("Auras");
 
 local function GetAuraOptions(headerName)
@@ -55,8 +55,8 @@ local function GetAuraOptions(headerName)
 			order = 6,
 			type = "range",
 			name = L["Vertical Spacing"],
-			min = 0, max = 50, step = 1		
-		},				
+			min = 0, max = 50, step = 1
+		},
 		sortMethod = {
 			order = 7,
 			type = "select",
@@ -77,7 +77,7 @@ local function GetAuraOptions(headerName)
 				["+"] = L["Ascending"],
 				["-"] = L["Descending"]
 			}
-		},				
+		},
 		seperateOwn = {
 			order = 9,
 			type = "select",
@@ -162,11 +162,11 @@ E.Options.args.auras = {
 					values = {
 						["NONE"] = L["None"],
 						["OUTLINE"] = "OUTLINE",
-						
+
 						["MONOCHROMEOUTLINE"] = "MONOCROMEOUTLINE",
 						["THICKOUTLINE"] = "THICKOUTLINE"
 					}
-				},	
+				},
 				timeXOffset = {
 					order = 5,
 					type = "range",

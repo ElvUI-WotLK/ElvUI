@@ -1,4 +1,4 @@
-﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">	
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file='math.lua'/>
 	<Script file='core.lua'/>
 	<Script file='fonts.lua'/>
@@ -8,7 +8,7 @@
 	<Script file='commands.lua'/>
 	<Script file='staticpopups.lua'/>
 	<Script file='animation.lua'/>
-	<Script file='movers.lua'/>	
+	<Script file='movers.lua'/>
 	<Script file='config.lua'/>
 	<Script file='tutorials.lua'/>
 	<Script file='distributor.lua'/>

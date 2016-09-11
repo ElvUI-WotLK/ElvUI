@@ -5,7 +5,7 @@ local oUF = ns.oUF or oUF;
 
 local UPDATE_VISIBILITY = function(self, event)
 	local druidmana = self.DruidAltMana;
-	
+
 	local min, max = druidmana.ManaBar:GetMinMaxValues();
 	local num, str = UnitPowerType("player");
 	if(num ~= 0) then
@@ -17,7 +17,7 @@ local UPDATE_VISIBILITY = function(self, event)
 	else
 		druidmana:Hide();
 	end
-	
+
 	if(druidmana.PostUpdateVisibility) then
 		return druidmana:PostUpdateVisibility(self.unit);
 	end
@@ -26,13 +26,13 @@ end
 local UNIT_MANA = function(self, event, unit, powerType)
 	if(self.unit ~= unit) then return; end
 	local druidmana = self.DruidAltMana;
-	
+
 	if(not druidmana.ManaBar) then return; end
-	
+
 	if(druidmana.PreUpdate) then
 		druidmana:PreUpdate(unit);
 	end
-	
+
 	local min, max = UnitPower("player", 0), UnitPowerMax("player", 0);
 
 	druidmana.ManaBar:SetMinMaxValues(0, max);
@@ -65,9 +65,9 @@ local UNIT_MANA = function(self, event, unit, powerType)
 			bg:SetVertexColor(r * mu, g * mu, b * mu);
 		end
 	end
-	
+
 	UPDATE_VISIBILITY(self);
-	
+
 	if(druidmana.PostUpdatePower) then
 		return druidmana:PostUpdatePower(unit, min, max);
 	end
@@ -91,7 +91,7 @@ local Enable = function(self, unit)
 		self:RegisterEvent("UNIT_MANA", UNIT_MANA);
 		self:RegisterEvent("UNIT_MAXMANA", UNIT_MANA);
 		self:RegisterEvent("UPDATE_SHAPESHIFT_FORM", UPDATE_VISIBILITY);
-		
+
 		return true;
 	end
 end

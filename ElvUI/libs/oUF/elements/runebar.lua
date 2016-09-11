@@ -30,10 +30,10 @@
       local Rune = CreateFrame('StatusBar', nil, self)
       Rune:SetSize(120 / 6, 20)
       Rune:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', index * 120 / 6, 0)
-   
+
       Runes[index] = Rune
    end
-   
+
    -- Register with oUF
    self.Runes = Runes
 ]]
@@ -131,9 +131,9 @@ local Enable = function(self, unit)
 		self:RegisterEvent("RUNE_POWER_UPDATE", UpdateRune, true)
 		self:RegisterEvent("RUNE_TYPE_UPDATE", UpdateType, true)	--I have no idea why this won't fire on initial login.
 		self:RegisterEvent("PLAYER_ENTERING_WORLD", UpdateAllRuneTypes)
-		
+
 		if not runes.UpdateAllRuneTypes then runes.UpdateAllRuneTypes = UpdateAllRuneTypes end;
-		
+
 		for i=1, 6 do
 			local rune = runes[runemap[i]]
 			if(rune:IsObjectType'StatusBar' and not rune:GetStatusBarTexture()) then
@@ -159,7 +159,7 @@ end
 local Disable = function(self)
 	RuneFrame.Show = nil
 	RuneFrame:Show()
-	
+
 
 	local runes = self.Runes
 	if(runes) then

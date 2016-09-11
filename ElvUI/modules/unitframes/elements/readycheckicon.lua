@@ -7,11 +7,11 @@ function UF:Construct_ReadyCheckIcon(frame)
 	local f = CreateFrame("FRAME", nil, frame);
 	f:SetFrameStrata("HIGH");
 	f:SetFrameLevel(100);
-	
+
 	local tex = f:CreateTexture(nil, "OVERLAY");
 	tex:Size(12);
 	tex:Point("BOTTOM", frame.Health, "BOTTOM", 0, 2);
-	
+
 	return tex;
 end
 

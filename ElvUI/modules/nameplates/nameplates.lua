@@ -1,4 +1,4 @@
-﻿local E, L, V, P, G = unpack(select(2, ...));
+local E, L, V, P, G = unpack(select(2, ...));
 local mod = E:NewModule("NamePlates", "AceHook-3.0", "AceEvent-3.0", "AceTimer-3.0");
 local LSM = LibStub("LibSharedMedia-3.0");
 
@@ -296,7 +296,7 @@ function mod:UpdateLevelAndName(myPlate)
 			myPlate.Level:SetText(level .. (elite and "+" or ""));
 			myPlate.Level:SetTextColor(self.Level:GetTextColor());
 		end
-		
+
 		if(not myPlate.Level:IsShown()) then
 			myPlate.Level:Show();
 		end
@@ -324,13 +324,13 @@ end
 
 function mod:GetReaction(frame)
 	local r, g, b = self:RoundColors(frame.HealthBar:GetStatusBarColor());
-	
+
 	for class, _ in pairs(RAID_CLASS_COLORS) do
 		if(RAID_CLASS_COLORS[class].r == r and RAID_CLASS_COLORS[class].g == g and RAID_CLASS_COLORS[class].b == b) then
 			return class;
 		end
 	end
-	
+
 	if((r + b + b) == 1.59) then
 		return "TAPPED_NPC";
 	elseif(g + b == 0) then
@@ -535,7 +535,7 @@ function mod:ForEachPlate(functionToRun, ...)
 	end
 end
 
-function mod:RoundColors(r, g, b)	
+function mod:RoundColors(r, g, b)
 	return floor(r*100+.5)/100, floor(g*100+.5)/100, floor(b*100+.5)/100;
 end
 
@@ -547,7 +547,7 @@ end
 function mod:OnShow()
 	local myPlate = mod.CreatedPlates[self];
 	local objectType;
-	for object in pairs(self.queue) do		
+	for object in pairs(self.queue) do
 		objectType = object:GetObjectType();
 		if(objectType == "Texture") then
 			object.OldTexture = object:GetTexture();
@@ -644,7 +644,7 @@ function mod:CreatePlate(frame)
 
 	myPlate.hiddenFrame = CreateFrame("Frame", nil, myPlate);
 	myPlate.hiddenFrame:Hide();
-	
+
 	myPlate.HealthBar = self:ConstructElement_HealthBar(myPlate);
 	frame.CastBar.Icon:SetParent(myPlate.hiddenFrame);
 	myPlate.CastBar = self:ConstructElement_CastBar(myPlate);
@@ -698,7 +698,7 @@ end
 function mod:QueueObject(frame, object)
 	frame.queue = frame.queue or {};
 	frame.queue[object] = true;
-	
+
 	if(object.OldTexture) then
 		object:SetTexture(object.OldTexture);
 	end
@@ -716,7 +716,7 @@ function mod:StyleFrame(parent, noBackdrop, point)
 		point.backdrop:SetTexture(unpack(E["media"].backdropfadecolor));
 	end
 
-	if(E.PixelMode) then 
+	if(E.PixelMode) then
 		point.bordertop = parent:CreateTexture(nil, "BORDER");
 		point.bordertop:SetPoint("TOPLEFT", point, "TOPLEFT", -noscalemult, noscalemult);
 		point.bordertop:SetPoint("TOPRIGHT", point, "TOPRIGHT", noscalemult, noscalemult);
@@ -817,22 +817,22 @@ do
 			end
 		end
 
-		if(framecount == 0) then 
-			Watcherframe:SetScript("OnUpdate", nil); 
+		if(framecount == 0) then
+			Watcherframe:SetScript("OnUpdate", nil);
 			WatcherframeActive = false;
 		end
 	end
 
 	function PolledHideIn(frame, expiration)
 		if(not frame) then return; end
-		if(expiration == 0) then 
+		if(expiration == 0) then
 			frame:Hide();
 			Framelist[frame] = nil;
 		else
 			Framelist[frame] = expiration;
 			frame:Show();
 
-			if(not WatcherframeActive) then 
+			if(not WatcherframeActive) then
 				Watcherframe:SetScript("OnUpdate", CheckFramelist);
 				WatcherframeActive = true;
 			end
@@ -1162,7 +1162,7 @@ function mod:Initialize()
 	self.glowIndicator = CreateFrame("Frame", nil, WorldFrame);
 	self.glowIndicator:SetFrameLevel(0);
 	self.glowIndicator:SetFrameStrata("BACKGROUND");
-	self.glowIndicator:SetBackdrop( {	
+	self.glowIndicator:SetBackdrop( {
  		edgeFile = LSM:Fetch("border", "ElvUI GlowBorder"), edgeSize = 3,
  		insets = {left = 5, right = 5, top = 5, bottom = 5}
  	});

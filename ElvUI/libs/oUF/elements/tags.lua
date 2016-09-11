@@ -500,13 +500,13 @@ local Tag = function(self, fs, tagstr)
 	end
 
 	fs.parent = self
-	
+
 	for escapeSequence, replacement in pairs(escapeSequences) do
 		while tagstr:find(escapeSequence) do
 			tagstr = tagstr:gsub(escapeSequence, replacement)
 		end
 	end
-	
+
 	if tagstr:find('%[mouseover%]') then
 		tinsert(self.__mousetags, fs)
 		fs:SetAlpha(0)
@@ -524,14 +524,14 @@ local Tag = function(self, fs, tagstr)
 			end
 		end
 	end
-	
+
 	local containsOnUpdate
 	for tag in tagstr:gmatch(_PATTERN) do
 		if not tagEvents[tag:sub(2, -2)] then
 			containsOnUpdate = onUpdateDelay[tag:sub(2, -2)] or 0.15;
 		end
 	end
-	
+
 	local func = tagPool[tagstr]
 	if(not func) then
 		local format = tagstr:gsub('%%', '%%%%'):gsub(_PATTERN, '%%s')

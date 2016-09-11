@@ -20,7 +20,7 @@ local function GetTemplate(t, isPixelPerfectForced)
 		else
 			borderr, borderg, borderb = RAID_CLASS_COLORS[E.myclass].r, RAID_CLASS_COLORS[E.myclass].g, RAID_CLASS_COLORS[E.myclass].b;
 		end
-		
+
 		if t ~= "Transparent" then
 			backdropr, backdropg, backdropb = unpack(E["media"].backdropcolor)
 		else
@@ -33,10 +33,10 @@ local function GetTemplate(t, isPixelPerfectForced)
 		borderr, borderg, borderb = unpack(E["media"].bordercolor)
 		backdropr, backdropg, backdropb = unpack(E["media"].backdropcolor)
 	end
-	
+
 	if(isPixelPerfectForced) then
 		borderr, borderg, borderb = 0, 0, 0;
-	end	
+	end
 end
 
 local function Size(frame, width, height)
@@ -57,7 +57,7 @@ local function Point(obj, arg1, arg2, arg3, arg4, arg5)
 	if(arg2 == nil) then
 		arg2 = obj:GetParent();
 	end
-	
+
 	if type(arg1)=="number" then arg1 = E:Scale(arg1) end
 	if type(arg2)=="number" then arg2 = E:Scale(arg2) end
 	if type(arg3)=="number" then arg3 = E:Scale(arg3) end
@@ -71,12 +71,12 @@ local function SetOutside(obj, anchor, xOffset, yOffset, anchor2)
 	xOffset = xOffset or E.Border
 	yOffset = yOffset or E.Border
 	anchor = anchor or obj:GetParent()
-	
+
 	assert(anchor);
 	if obj:GetPoint() then
 		obj:ClearAllPoints()
 	end
-	
+
 	obj:Point('TOPLEFT', anchor, 'TOPLEFT', -xOffset, yOffset)
 	obj:Point('BOTTOMRIGHT', anchor2 or anchor, 'BOTTOMRIGHT', xOffset, -yOffset)
 end
@@ -85,12 +85,12 @@ local function SetInside(obj, anchor, xOffset, yOffset, anchor2)
 	xOffset = xOffset or E.Border
 	yOffset = yOffset or E.Border
 	anchor = anchor or obj:GetParent()
-	
+
 	assert(anchor);
 	if obj:GetPoint() then
 		obj:ClearAllPoints()
 	end
-	
+
 	obj:Point('TOPLEFT', anchor, 'TOPLEFT', xOffset, -yOffset)
 	obj:Point('BOTTOMRIGHT', anchor2 or anchor, 'BOTTOMRIGHT', -xOffset, yOffset)
 end
@@ -103,24 +103,24 @@ local function SetTemplate(f, t, glossTex, ignoreUpdates, forcePixelMode)
 	if(t) then
 		f.template = t;
 	end
-	
+
 	if(glossTex) then
 		f.glossTex = glossTex;
 	end
-	
+
 	if(ignoreUpdates) then
 		f.ignoreUpdates = ignoreUpdates;
 	end
-	
+
 	if(forcePixelMode) then
 		f.forcePixelMode = forcePixelMode
 	end
-	
+
 	local bgFile = E.media.blankTex;
 	if(glossTex) then
 		bgFile = E.media.glossTex;
 	end
-	
+
 	if((E.private.general.pixelPerfect and not E.global.tukuiMode) or f.forcePixelMode) then
 		f:SetBackdrop({
 			bgFile = bgFile,
@@ -147,7 +147,7 @@ local function SetTemplate(f, t, glossTex, ignoreUpdates, forcePixelMode)
 		});
 		border:SetBackdropBorderColor(0, 0, 0, 1)
 		f.iborder = border
-		
+
 		if f.oborder then return end
 		local border = CreateFrame("Frame", nil, f)
 		border:SetOutside(f, E.mult, E.mult)
@@ -158,12 +158,12 @@ local function SetTemplate(f, t, glossTex, ignoreUpdates, forcePixelMode)
 			insets = {left = E.mult, right = E.mult, top = E.mult, bottom = E.mult}
 		});
 		border:SetBackdropBorderColor(0, 0, 0, 1)
-		f.oborder = border				
+		f.oborder = border
 	end
-	
+
 	f:SetBackdropColor(backdropr, backdropg, backdropb, backdropa)
 	f:SetBackdropBorderColor(borderr, borderg, borderb)
-	
+
 	if(not f.ignoreUpdates and not f.forcePixelMode) then
 		E["frames"][f] = true;
 	end
@@ -171,7 +171,7 @@ end
 
 local function CreateBackdrop(f, t, tex, ignoreUpdates, forcePixelMode)
 	if(not t) then t = "Default"; end
-	
+
 	local b = CreateFrame("Frame", nil, f);
 	if(f.forcePixelMode or forcePixelMode) then
 		b:SetOutside(nil, E.mult, E.mult);
@@ -179,19 +179,19 @@ local function CreateBackdrop(f, t, tex, ignoreUpdates, forcePixelMode)
 		b:SetOutside();
 	end
 	b:SetTemplate(t, tex, ignoreUpdates, forcePixelMode);
-	
+
 	if(f:GetFrameLevel() - 1 >= 0) then
 		b:SetFrameLevel(f:GetFrameLevel() - 1);
 	else
 		b:SetFrameLevel(0);
 	end
-	
+
 	f.backdrop = b;
 end
 
 local function CreateShadow(f)
 	if f.shadow then return end
-	
+
 	borderr, borderg, borderb = 0, 0, 0
 	backdropr, backdropg, backdropb = 0, 0, 0
 
@@ -215,7 +215,7 @@ local function Kill(object)
 	else
 		object.Show = object.Hide
 	end
-	
+
 	object:Hide()
 end
 
@@ -240,7 +240,7 @@ local function FontTemplate(fs, font, fontSize, fontStyle)
 	fs.font = font
 	fs.fontSize = fontSize
 	fs.fontStyle = fontStyle
-	
+
 	if not font then font = LSM:Fetch("font", E.db['general'].font) end
 	if not fontSize then fontSize = E.db.general.fontSize end
 	if fontStyle == 'OUTLINE' and E.db.general.font:lower():find('pixel') then
@@ -249,7 +249,7 @@ local function FontTemplate(fs, font, fontSize, fontStyle)
 			fontSize = 10
 		end
 	end
-	
+
 	fs:SetFont(font, fontSize, fontStyle)
 	if fontStyle then
 		fs:SetShadowColor(0, 0, 0, 0.2)
@@ -257,7 +257,7 @@ local function FontTemplate(fs, font, fontSize, fontStyle)
 		fs:SetShadowColor(0, 0, 0, 1)
 	end
 	fs:SetShadowOffset((E.mult or 1), -(E.mult or 1))
-	
+
 	E["texts"][fs] = true
 end
 
@@ -269,7 +269,7 @@ local function StyleButton(button, noHover, noPushed, noChecked)
 		button.hover = hover
 		button:SetHighlightTexture(hover)
 	end
-	
+
 	if button.SetPushedTexture and not button.pushed and not noPushed then
 		local pushed = button:CreateTexture();
 		pushed:SetTexture(0.9, 0.8, 0.1, 0.3)
@@ -277,7 +277,7 @@ local function StyleButton(button, noHover, noPushed, noChecked)
 		button.pushed = pushed
 		button:SetPushedTexture(pushed)
 	end
-	
+
 	if button.SetCheckedTexture and not button.checked and not noChecked then
 		local checked = button:CreateTexture();
 		checked:SetTexture(1, 1, 1)
@@ -286,8 +286,8 @@ local function StyleButton(button, noHover, noPushed, noChecked)
 		button.checked = checked
 		button:SetCheckedTexture(checked)
 	end
-	
-	local cooldown = button:GetName() and _G[button:GetName().."Cooldown"] 
+
+	local cooldown = button:GetName() and _G[button:GetName().."Cooldown"]
 	if cooldown then
 		cooldown:ClearAllPoints()
 		cooldown:SetInside()
@@ -323,6 +323,6 @@ while object do
 		addapi(object)
 		handled[object:GetObjectType()] = true
 	end
-	
+
 	object = EnumerateFrames(object)
 end

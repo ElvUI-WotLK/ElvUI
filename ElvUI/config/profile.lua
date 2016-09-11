@@ -25,7 +25,7 @@ P['general'] = {
 	["backdropcolor"] = { r = 0.1, g = 0.1, b = 0.1 },
 	["backdropfadecolor"] = { r = .06, g = .06, b = .06, a = 0.8 },
 	["valuecolor"] = { r = 23/255, g = 132/255, b = 209/255 },
-	
+
 	['minimap'] = {
 		['size'] = 176,
 		['locationText'] = 'MOUSEOVER',
@@ -149,7 +149,7 @@ P["nameplate"] = {
 		["friendlyNPC"] = {r = 0.31, g = 0.45, b = 0.63},
 		["friendlyPlayer"] = {r = 75/255, g = 175/255, b = 76/255},
 		["neutral"] = {r = 218/255, g = 197/255, b = 92/255},
-		["enemy"] = {r = 0.78, g = 0.25, b = 0.25},	
+		["enemy"] = {r = 0.78, g = 0.25, b = 0.25},
 	},
 	["threat"] = {
 		["goodColor"] = {r = 75/255, g = 175/255, b = 76/255},
@@ -185,7 +185,7 @@ P["nameplate"] = {
 		},
 		['text'] = {
 			['enable'] = false,
-			['format'] = 'CURRENT',			
+			['format'] = 'CURRENT',
 		}
 	},
 	['castBar'] = {
@@ -285,7 +285,7 @@ P["unitframe"] = {
 		["castFailColor"] = { r = 1.0, g = 0.09, b = 0 },
 		["castClassColor"] = false,
 		["castReactionColor"] = false,
-		
+
 		["health"] = { r = .31,g = .31,b = .31 },
 		["health_backdrop"] = { r = .8,g = .01,b = .01 },
 		["health_backdrop_dead"] = { r = .8,g = .01,b = .01 },
@@ -2281,7 +2281,7 @@ P['auras'] = {
 	['countXOffset'] = 0,
 	['timeYOffset'] = 0,
 	['timeXOffset'] = 0,
-	
+
 	['fadeThreshold'] = 5,
 	['buffs'] = {
 		['growthDirection'] = 'LEFT_DOWN',
@@ -2299,7 +2299,7 @@ P['auras'] = {
 		['wrapAfter'] = 12,
 		['maxWraps'] = 1,
 		['horizontalSpacing'] = 6,
-		['verticalSpacing'] = 16,		
+		['verticalSpacing'] = 16,
 		['sortMethod'] = "TIME",
 		['sortDir'] = '-',
 		['seperateOwn'] = 1,
@@ -2346,7 +2346,7 @@ P['chat'] = { -- Чат
 	["numAllowedCombatRepeat"] = 3,
 	["useCustomTimeColor"] = true,
 	["customTimeColor"] = {r = 0.7, g = 0.7, b = 0.7},
-	
+
 	['tabFont'] = 'PT Sans Narrow',
 	['tabFontSize'] = 12,
 	['tabFontOutline'] = 'NONE',
@@ -2493,7 +2493,7 @@ P["actionbar"] = {
 			["DRUID"] = "[bonusbar:1,nostealth] 7; [bonusbar:1,stealth] 8; [bonusbar:2] 8; [bonusbar:3] 9; [bonusbar:4] 10;",
 			["WARRIOR"] = "[bonusbar:1] 7; [bonusbar:2] 8; [bonusbar:3] 9;",
 			["PRIEST"] = "[bonusbar:1] 7;",
-			["ROGUE"] = "[bonusbar:1] 7; [form:3] 7;"	
+			["ROGUE"] = "[bonusbar:1] 7; [form:3] 7;"
 		},
 		["visibility"] = ""
 	},

@@ -1,4 +1,4 @@
-﻿local E, L, P, G = unpack(select(2, ...));
+local E, L, P, G = unpack(select(2, ...));
 local DT = E:GetModule("DataTexts");
 
 local max = math.max;
@@ -56,7 +56,7 @@ local function OnEnter(self)
 		DT.tooltip:AddLine(line, nil, nil, nil, true);
 	else
 		DT.tooltip:AddDoubleLine(MELEE_ATTACK_POWER, pwr, 1, 1, 1);
-		DT.tooltip:AddLine(format(MELEE_ATTACK_POWER_TOOLTIP, max((base + posBuff + negBuff), 0) / ATTACK_POWER_MAGIC_NUMBER), nil, nil, nil, true);	
+		DT.tooltip:AddLine(format(MELEE_ATTACK_POWER_TOOLTIP, max((base + posBuff + negBuff), 0) / ATTACK_POWER_MAGIC_NUMBER), nil, nil, nil, true);
 	end
 
 	DT.tooltip:Show();

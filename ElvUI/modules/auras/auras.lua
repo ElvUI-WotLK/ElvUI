@@ -63,16 +63,16 @@ local groupingTable = {};
 
 function A:UpdateTime(elapsed)
 	self.timeLeft = self.timeLeft - elapsed;
-	
+
 	if(self.nextUpdate > 0) then
 		self.nextUpdate = self.nextUpdate - elapsed;
 		return;
 	end
-	
+
 	local timerValue, formatID;
 	timerValue, formatID, self.nextUpdate = E:GetTimeInfo(self.timeLeft, A.db.fadeThreshold);
 	self.time:SetFormattedText(('%s%s|r'):format(E.TimeColors[formatID], E.TimeFormats[formatID][1]), timerValue);
-	
+
 	if(self.timeLeft > E.db.auras.fadeThreshold) then
 		E:StopFlash(self);
 	else
@@ -115,25 +115,25 @@ function A:CreateIcon(button)
 	local font = LSM:Fetch('font', self.db.font);
 	button:RegisterForClicks('RightButtonUp');
 	button:SetTemplate('Default');
-	
+
 	button.texture = button:CreateTexture(nil, 'BORDER');
 	button.texture:SetInside();
 	button.texture:SetTexCoord(unpack(E.TexCoords));
-	
+
 	button.count = button:CreateFontString(nil, 'ARTWORK');
 	button.count:SetPoint('BOTTOMRIGHT', -1 + self.db.countXOffset, 1 + self.db.countYOffset);
 	button.count:FontTemplate(font, self.db.fontSize, self.db.fontOutline);
-	
+
 	button.time = button:CreateFontString(nil, 'ARTWORK');
 	button.time:SetPoint('TOP', button, 'BOTTOM', 1 + self.db.timeXOffset, 0 + self.db.timeYOffset);
 	button.time:FontTemplate(font, self.db.fontSize, self.db.fontOutline);
-	
+
 	button.highlight = button:CreateTexture(nil, 'HIGHLIGHT');
 	button.highlight:SetTexture(1, 1, 1, 0.45);
 	button.highlight:SetInside();
-	
+
 	E:SetUpAnimGroup(button);
-	
+
 	button.UpdateTooltip = UpdateTooltip;
 	button:SetScript('OnEnter', OnEnter);
 	button:SetScript('OnLeave', OnLeave);
@@ -146,7 +146,7 @@ local function configureAuras(header, auraTable)
 	if(header.filter == 'HELPFUL') then
 		db = A.db.buffs;
 	end
-	
+
 	local size = db.size;
 	local point = DIRECTION_TO_POINT[db.growthDirection];
 	local xOffset = 0;
@@ -157,7 +157,7 @@ local function configureAuras(header, auraTable)
 	local maxWraps = db.maxWraps;
 	local minWidth = 0;
 	local minHeight = 0;
-	
+
 	if(IS_HORIZONTAL_GROWTH[db.growthDirection]) then
 		minWidth = ((wrapAfter == 1 and 0 or db.horizontalSpacing) + size) * wrapAfter;
 		minHeight = (db.verticalSpacing + size) * maxWraps;
@@ -173,9 +173,9 @@ local function configureAuras(header, auraTable)
 		wrapXOffset = DIRECTION_TO_HORIZONTAL_SPACING_MULTIPLIER[db.growthDirection] * (db.horizontalSpacing + size);
 		wrapYOffset = 0;
 	end
-	
+
 	local name = header:GetName();
-	
+
 	wipe(buttons);
 	for i=1, #auraTable do
 		local button = select(i, header:GetChildren());
@@ -189,7 +189,7 @@ local function configureAuras(header, auraTable)
 		button:SetID(buffInfo.index);
 		button.index = buffInfo.index;
 		button.filter = buffInfo.filter;
-		
+
 		if(buffInfo.duration > 0 and buffInfo.expires) then
 			local timeLeft = buffInfo.expires - GetTime();
 			if(not button.timeLeft) then
@@ -206,50 +206,50 @@ local function configureAuras(header, auraTable)
 			button.time:SetText('');
 			button:SetScript('OnUpdate', nil);
 		end
-		
+
 		if(buffInfo.count > 1) then
 			button.count:SetText(buffInfo.count);
 		else
 			button.count:SetText('');
 		end
-		
+
 		if(buffInfo.filter == 'HARMFUL') then
 			local color = DebuffTypeColor[buffInfo.dtype or ''];
 			button:SetBackdropBorderColor(color.r, color.g, color.b);
 		else
 			button:SetBackdropBorderColor(unpack(E.media.bordercolor));
 		end
-		
+
 		button.texture:SetTexture(buffInfo.icon);
-		
+
 		buttons[i] = button;
 	end
-	
+
 	local display = #buttons;
 	if(wrapAfter and maxWraps) then
 		display = min(display, wrapAfter * maxWraps);
 	end
-	
+
 	local left, right, top, bottom = huge, -huge, -huge, huge;
 	for index=1,display do
 		local button = buttons[index];
 		local wrapAfter = wrapAfter or index
 		local tick, cycle = floor((index - 1) % wrapAfter), floor((index - 1) / wrapAfter);
 		button:SetPoint(point, header, cycle * wrapXOffset + tick * xOffset, cycle * wrapYOffset + tick * yOffset);
-		
+
 		button:SetSize(size, size);
-		
+
 		if(button.time) then
 			local font = LSM:Fetch('font', A.db.font);
 			button.time:ClearAllPoints();
 			button.time:SetPoint('TOP', button, 'BOTTOM', 1 + A.db.timeXOffset, 0 + A.db.timeYOffset);
 			button.time:FontTemplate(font, A.db.fontSize, A.db.fontOutline);
-			
+
 			button.count:ClearAllPoints();
 			button.count:SetPoint('BOTTOMRIGHT', -1 + A.db.countXOffset, 0 + A.db.countYOffset);
 			button.count:FontTemplate(font, A.db.fontSize, A.db.fontOutline);
 		end
-		
+
 		button:Show();
 		left = min(left, button:GetLeft() or huge);
 		right = max(right, button:GetRight() or -huge);
@@ -263,7 +263,7 @@ local function configureAuras(header, auraTable)
 		deadIndex = deadIndex + 1;
 		button = select(deadIndex, header:GetChildren());
 	end
-	
+
 	if(display >= 1) then
 		header:SetWidth(max(right - left, minWidth));
 		header:SetHeight(max(top - bottom, minHeight));
@@ -396,7 +396,7 @@ function A:UpdateHeader(self)
 				aura.filter = fullFilter;
 				aura.index = i;
 				aura.duration = duration;
-				
+
 				local targetList = sortingTable;
 				tinsert(targetList, aura);
 			else
@@ -419,7 +419,7 @@ function A:UpdateWeapon(button)
 	if(quality) then
 		button:SetBackdropBorderColor(GetItemQualityColor(quality));
 	end
-	
+
 	if(button.duration) then
 		button.timeLeft = button.duration / 1e3;
 		button.nextUpdate = -1;
@@ -430,7 +430,7 @@ function A:UpdateWeapon(button)
 		button:SetScript("OnUpdate", nil);
 		button.time:SetText("");
 	end
-	
+
 	local enchantIndex = self.WeaponFrame.enchantIndex;
 	if(enchantIndex ~= nil) then
 		self.WeaponFrame:Width((enchantIndex * A.db.buffs.size) + (enchantIndex == 2 and A.db.buffs.horizontalSpacing or 0));
@@ -439,15 +439,15 @@ end
 
 function A:CreateAuraHeader(filter)
 	local name = 'ElvUIPlayerDebuffs';
-	if(filter == 'HELPFUL') then 
+	if(filter == 'HELPFUL') then
 		name = 'ElvUIPlayerBuffs';
 	end
-	
+
 	local header = CreateFrame('Frame', name, UIParent);
 	header:SetClampedToScreen(true);
 	header.unit = 'player';
 	header.filter = filter;
-	
+
 	header:RegisterEvent('UNIT_AURA');
 	header:SetScript('OnEvent', function(self, event, ...)
 		if(self:IsVisible()) then
@@ -457,9 +457,9 @@ function A:CreateAuraHeader(filter)
 			end
 		end
 	end);
-	
+
 	A:UpdateHeader(header);
-	
+
 	return header;
 end
 
@@ -479,11 +479,11 @@ function A:Initialize()
 	end
 
 	self.db = E.db.auras;
-	
+
 	self.BuffFrame = self:CreateAuraHeader('HELPFUL')
 	self.BuffFrame:Point("TOPRIGHT", MMHolder, "TOPLEFT", -(6 + E.Border), -E.Border - E.Spacing);
 	E:CreateMover(self.BuffFrame, 'BuffsMover', L['Player Buffs']);
-	
+
 	self.DebuffFrame = self:CreateAuraHeader('HARMFUL');
 	self.DebuffFrame:Point("BOTTOMRIGHT", MMHolder, "BOTTOMLEFT", -(6 + E.Border), E.Border + E.Spacing);
 	E:CreateMover(self.DebuffFrame, 'DebuffsMover', L['Player Debuffs']);
@@ -491,18 +491,18 @@ function A:Initialize()
 	self.WeaponFrame = CreateFrame("Frame", "ElvUIPlayerWeapons", UIParent);
 	self.WeaponFrame:Point("TOPRIGHT", MMHolder, "BOTTOMRIGHT", 0, -E.Border - E.Spacing);
 	self.WeaponFrame:Size(A.db.buffs.size);
-	
+
 	self.WeaponFrame.buttons = {};
 	for i = 1, 2 do
 		self.WeaponFrame.buttons[i] = CreateFrame("Button", "$parentButton" .. i, self.WeaponFrame);
 		self.WeaponFrame.buttons[i]:Size(A.db.buffs.size);
-		
+
 		if(i == 1) then
 			self.WeaponFrame.buttons[i]:SetPoint("RIGHT", self.WeaponFrame);
 		else
 			self.WeaponFrame.buttons[i]:SetPoint("RIGHT", self.WeaponFrame.buttons[1], "LEFT", -A.db.buffs.horizontalSpacing, 0);
 		end
-		
+
 		A:CreateIcon(self.WeaponFrame.buttons[i]);
 		self.WeaponFrame.buttons[i].isWeapon = true;
 	end
@@ -516,7 +516,7 @@ function A:Initialize()
 				end
 				return;
 			end
-			
+
 			local textureName;
 			local enchantIndex = 0;
 			if(hasOffHandEnchant) then
@@ -526,10 +526,10 @@ function A:Initialize()
 				self.buttons[1].texture:SetTexture(textureName);
 				self.buttons[1].duration = offHandExpiration;
 				self.buttons[1]:Show();
-				
+
 				A:UpdateWeapon(self.buttons[1]);
 			end
-			
+
 			if(hasMainHandEnchant) then
 				enchantIndex = enchantIndex + 1;
 				enchantButton = self.buttons[enchantIndex];
@@ -538,11 +538,11 @@ function A:Initialize()
 				enchantButton.texture:SetTexture(textureName);
 				enchantButton.duration = mainHandExpiration;
 				enchantButton:Show();
-				
+
 				A:UpdateWeapon(enchantButton);
 			end
 			self.enchantIndex = enchantIndex;
-			
+
 			for i = enchantIndex+1, 2 do
 				self.buttons[i]:Hide();
 			end

@@ -1,4 +1,4 @@
-﻿local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local AB = E:GetModule('ActionBars');
 
 local _G = _G;
@@ -64,7 +64,7 @@ function AB:BindListener(key)
 		if bind.spellmacro~="MACRO" then GameTooltip:Hide(); end
 		return;
 	end
-	
+
 	if key == "LSHIFT"
 	or key == "RSHIFT"
 	or key == "LCTRL"
@@ -74,16 +74,16 @@ function AB:BindListener(key)
 	or key == "UNKNOWN"
 	or key == "LeftButton"
 	then return; end
-	
+
 	if key == "MiddleButton" then key = "BUTTON3"; end
 	if key:find('Button%d') then
 		key = key:upper()
 	end
-		
+
 	local alt = IsAltKeyDown() and "ALT-" or "";
 	local ctrl = IsControlKeyDown() and "CTRL-" or "";
 	local shift = IsShiftKeyDown() and "SHIFT-" or "";
-	
+
 	if not bind.spellmacro or bind.spellmacro == "PET" or bind.spellmacro == "SHAPESHIFT" then
 		SetBinding(alt..ctrl..shift..key, bind.button.bindstring);
 	else
@@ -96,27 +96,27 @@ end
 
 function AB:BindUpdate(button, spellmacro)
 	if not bind.active or InCombatLockdown() then return; end
-	
+
 	bind.button = button;
 	bind.spellmacro = spellmacro;
-	
+
 	bind:ClearAllPoints();
 	bind:SetAllPoints(button);
 	bind:Show();
-	
+
 	ShoppingTooltip1:Hide();
-	
+
 	if not bind:IsMouseEnabled() then
 		bind:EnableMouse(true)
 	end
-	
+
 	if spellmacro == "MACRO" then
 		bind.button.id = bind.button:GetID();
-		
+
 		if floor(.5+select(2,MacroFrameTab1Text:GetTextColor())*10)/10==.8 then bind.button.id = bind.button.id + MAX_ACCOUNT_MACROS; end
-		
+
 		bind.button.name = GetMacroInfo(bind.button.id);
-		
+
 		GameTooltip:SetOwner(bind, "ANCHOR_TOP");
 		GameTooltip:SetPoint("BOTTOM", bind, "TOP", 0, 1);
 		GameTooltip:AddLine(bind.button.name, 1, 1, 1);
@@ -134,15 +134,15 @@ function AB:BindUpdate(button, spellmacro)
 	elseif spellmacro=="SHAPESHIFT" or spellmacro=="PET" then
 		bind.button.id = tonumber(button:GetID());
 		bind.button.name = button:GetName();
-		
+
 		if not bind.button.name then return; end
-		
+
 		if not bind.button.id or bind.button.id < 1 or bind.button.id > (spellmacro=="SHAPESHIFT" and 10 or 12) then
 			bind.button.bindstring = "CLICK "..bind.button.name..":LeftButton";
 		else
 			bind.button.bindstring = (spellmacro=="SHAPESHIFT" and "ShapeshiftButton" or "BONUSACTIONBUTTON")..bind.button.id;
 		end
-		
+
 		GameTooltip:AddLine(L['Trigger']);
 		GameTooltip:Show();
 		GameTooltip:SetScript("OnHide", function(tt)
@@ -164,7 +164,7 @@ function AB:BindUpdate(button, spellmacro)
 	else
 		bind.button.action = tonumber(button.action);
 		bind.button.name = button:GetName();
-		
+
 		if not bind.button.name then return; end
 		if (not bind.button.action or bind.button.action < 1 or bind.button.action > 132) and not (bind.button.keyBoundTarget) then
 			bind.button.bindstring = "CLICK "..bind.button.name..":LeftButton";
@@ -266,32 +266,32 @@ function AB:LoadKeyBinder()
 	bind.texture:SetAllPoints(bind);
 	bind.texture:SetTexture(0, 0, 0, .25);
 	bind:Hide();
-	
+
 	self:HookScript(GameTooltip, "OnUpdate", "Tooltip_OnUpdate");
 	hooksecurefunc(GameTooltip, "Hide", function(tooltip) for _, tt in pairs(tooltip.shoppingTooltips) do tt:Hide(); end end);
-	
+
 	bind:SetScript('OnEnter', function(self) local db = self.button:GetParent().db if db and db.mouseover then AB:Button_OnEnter(self.button) end end)
 	bind:SetScript("OnLeave", function(self) AB:BindHide(); local db = self.button:GetParent().db if db and db.mouseover then AB:Button_OnLeave(self.button) end end)
 	bind:SetScript("OnKeyUp", function(_, key) self:BindListener(key) end);
 	bind:SetScript("OnMouseUp", function(_, key) self:BindListener(key) end);
 	bind:SetScript("OnMouseWheel", function(_, delta) if delta>0 then self:BindListener("MOUSEWHEELUP") else self:BindListener("MOUSEWHEELDOWN"); end end);
-		
+
 	local b = EnumerateFrames();
 	while b do
 		self:RegisterButton(b);
 		b = EnumerateFrames(b);
 	end
-	
+
 	for b, _ in pairs(self["handledbuttons"]) do
 		self:RegisterButton(b, true);
 	end
-	
+
 	if not IsAddOnLoaded("Blizzard_MacroUI") then
 		self:SecureHook("LoadAddOn", "RegisterMacro");
 	else
 		self:RegisterMacro("Blizzard_MacroUI");
 	end
-	
+
 	--Special Popup
 	local f = CreateFrame("Frame", "ElvUIBindPopupWindow", UIParent)
 	f:SetFrameStrata("DIALOG")
@@ -314,12 +314,12 @@ function AB:LoadKeyBinder()
 	header:RegisterForClicks('AnyUp', 'AnyDown')
 	header:SetScript('OnMouseDown', function() f:StartMoving() end)
 	header:SetScript('OnMouseUp', function() f:StopMovingOrSizing() end)
-	
+
 	local title = header:CreateFontString("OVERLAY")
 	title:FontTemplate()
 	title:SetPoint("CENTER", header, "CENTER")
 	title:SetText('Key Binds')
-		
+
 	local desc = f:CreateFontString("ARTWORK")
 	desc:SetFontObject("GameFontHighlight")
 	desc:SetJustifyV("TOP")
@@ -348,7 +348,7 @@ function AB:LoadKeyBinder()
 		GameTooltip:SetText(CHARACTER_SPECIFIC_KEYBINDING_TOOLTIP, nil, nil, nil, nil, 1);
 	end)
 
-	perCharCheck:SetScript("OnLeave", GameTooltip_Hide)	
+	perCharCheck:SetScript("OnLeave", GameTooltip_Hide)
 
 	local save = CreateFrame("Button", f:GetName()..'SaveButton', f, "OptionsButtonTemplate")
 	_G[save:GetName() .. "Text"]:SetText(L["Save"])
@@ -363,13 +363,13 @@ function AB:LoadKeyBinder()
 
 	discard:SetScript("OnClick", function()
 		AB:DeactivateBindMode(false)
-	end)	
-	
+	end)
+
 	--position buttons
 	perCharCheck:SetPoint("BOTTOMLEFT", discard, "TOPLEFT", 0, 2)
 	save:SetPoint("BOTTOMRIGHT", -14, 10)
 	discard:SetPoint("BOTTOMLEFT", 14, 10)
-	
+
 	local S = E:GetModule('Skins')
 	S:HandleCheckBox(perCharCheck)
 	S:HandleButton(save)

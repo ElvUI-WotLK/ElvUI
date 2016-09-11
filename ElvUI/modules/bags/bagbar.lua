@@ -33,7 +33,7 @@ end
 function B:SkinBag(bag)
 	local icon = _G[bag:GetName().."IconTexture"];
 	bag.oldTex = icon:GetTexture();
-	
+
 	bag:StripTextures();
 	bag:CreateBackdrop('Default', true);
 	bag.backdrop:SetAllPoints();
@@ -45,22 +45,22 @@ end
 
 function B:SizeAndPositionBagBar()
 	if not ElvUIBags then return; end
-	
+
 	if E.db.bags.bagBar.mouseover then
 		ElvUIBags:SetAlpha(0);
 	else
 		ElvUIBags:SetAlpha(1);
 	end
-	
+
 	if E.db.bags.bagBar.showBackdrop then
 		ElvUIBags.backdrop:Show();
 	else
 		ElvUIBags.backdrop:Hide();
 	end
-	
+
 	ElvUIKeyRingButton:Size(E.db.bags.bagBar.size);
 	ElvUIKeyRingButton:ClearAllPoints();
-	
+
 	for i=1, #ElvUIBags.buttons do
 		local button = ElvUIBags.buttons[i];
 		local prevButton = ElvUIBags.buttons[i-1];
@@ -92,7 +92,7 @@ function B:SizeAndPositionBagBar()
 			end
 		end
 	end
-	
+
 	if E.db.bags.bagBar.growthDirection == 'HORIZONTAL' then
 		ElvUIBags:Width(E.db.bags.bagBar.size*(TOTAL_BAGS) + E.db.bags.bagBar.spacing*(TOTAL_BAGS) + E.db.bags.bagBar.spacing);
 		ElvUIBags:Height(E.db.bags.bagBar.size + E.db.bags.bagBar.spacing*2);
@@ -103,10 +103,10 @@ function B:SizeAndPositionBagBar()
 end
 
 function B:LoadBagBar()
-	if not E.private.bags.bagBar then 
-		return 
+	if not E.private.bags.bagBar then
+		return
 	end
-	
+
 	local ElvUIBags = CreateFrame("Frame", "ElvUIBags", E.UIParent);
 	ElvUIBags:SetPoint('TOPRIGHT', RightChatPanel, 'TOPLEFT', -4, 0);
 	ElvUIBags.buttons = {};
@@ -115,7 +115,7 @@ function B:LoadBagBar()
 	ElvUIBags:EnableMouse(true);
 	ElvUIBags:SetScript("OnEnter", OnEnter);
 	ElvUIBags:SetScript("OnLeave", OnLeave);
-	
+
 	MainMenuBarBackpackButton:SetParent(ElvUIBags);
 	MainMenuBarBackpackButton.SetParent = E.dummy;
 	MainMenuBarBackpackButton:ClearAllPoints();
@@ -126,18 +126,18 @@ function B:LoadBagBar()
 	MainMenuBarBackpackButton:HookScript('OnLeave', OnLeave);
 	tinsert(ElvUIBags.buttons, MainMenuBarBackpackButton);
 	self:SkinBag(MainMenuBarBackpackButton);
-	
+
 	for i=0, NUM_BAG_FRAMES-1 do
 		local b = _G["CharacterBag"..i.."Slot"];
 		b:SetParent(ElvUIBags);
 		b.SetParent = E.dummy;
 		b:HookScript('OnEnter', OnEnter);
 		b:HookScript('OnLeave', OnLeave);
-		
+
 		self:SkinBag(b);
 		tinsert(ElvUIBags.buttons, b);
 	end
-	
+
 	ElvUIKeyRingButton:CreateBackdrop();
 	ElvUIKeyRingButton.backdrop:SetAllPoints();
 	ElvUIKeyRingButton:SetParent(ElvUIBags);
@@ -145,7 +145,7 @@ function B:LoadBagBar()
 	ElvUIKeyRingButton:HookScript('OnEnter', OnEnter);
 	ElvUIKeyRingButton:HookScript('OnLeave', OnLeave);
 	tinsert(ElvUIBags.buttons, ElvUIKeyRingButton);
-	
+
 	self:SizeAndPositionBagBar();
 	E:CreateMover(ElvUIBags, 'BagsMover', L['Bags']);
 end

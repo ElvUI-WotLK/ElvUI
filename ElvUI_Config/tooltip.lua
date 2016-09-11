@@ -220,7 +220,7 @@ E.Options.args.tooltip = {
 						["NONE"] = L["Never Hide"],
 						["SHIFT"] = SHIFT_KEY,
 						["ALT"] = ALT_KEY,
-						["CTRL"] = CTRL_KEY					
+						["CTRL"] = CTRL_KEY
 					}
 				},
 				combat = {
@@ -236,7 +236,7 @@ E.Options.args.tooltip = {
 			type = "group",
 			name = L["Health Bar"],
 			get = function(info) return E.db.tooltip.healthBar[ info[#info] ]; end,
-			set = function(info, value) E.db.tooltip.healthBar[ info[#info] ] = value; end,			
+			set = function(info, value) E.db.tooltip.healthBar[ info[#info] ] = value; end,
 			args = {
 				header = {
 					order = 0,

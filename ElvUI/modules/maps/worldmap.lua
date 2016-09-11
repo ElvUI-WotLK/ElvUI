@@ -28,40 +28,40 @@ function SetUIPanelAttribute(frame, name, value)
 	if(not info) then
 		return;
 	end
-	
+
 	if(not frame:GetAttribute("UIPanelLayout-defined")) then
 		frame:SetAttribute("UIPanelLayout-defined", true);
 		for name,value in pairs(info) do
 			frame:SetAttribute("UIPanelLayout-"..name, value);
 		end
 	end
-	
+
 	frame:SetAttribute("UIPanelLayout-"..name, value);
 end
 
 function M:SetLargeWorldMap()
 	if(InCombatLockdown()) then return; end
-	
+
 	WorldMapFrame:SetParent(E.UIParent);
 	WorldMapFrame:EnableKeyboard(false);
 	WorldMapFrame:SetScale(1);
 	WorldMapFrame:EnableMouse(false);
-	
+
 	if(WorldMapFrame:GetAttribute('UIPanelLayout-area') ~= 'center') then
 		SetUIPanelAttribute(WorldMapFrame, "area", "center");
 	end
-	
+
 	if(WorldMapFrame:GetAttribute('UIPanelLayout-allowOtherPanels') ~= true) then
 		SetUIPanelAttribute(WorldMapFrame, "allowOtherPanels", true);
 	end
-	
+
 	WorldMapFrameSizeUpButton:Hide();
 	WorldMapFrameSizeDownButton:Show();
 end
 
 function M:SetSmallWorldMap()
 	if(InCombatLockdown()) then return; end
-	
+
 	WorldMapFrameSizeUpButton:Show();
 	WorldMapFrameSizeDownButton:Hide();
 end
@@ -81,13 +81,13 @@ function M:UpdateCoords()
 	local x, y = GetPlayerMapPosition("player");
 	x = E:Round(100 * x, 2);
 	y = E:Round(100 * y, 2);
-	
+
 	if(x ~= 0 and y ~= 0) then
 		CoordsHolder.playerCoords:SetText(PLAYER..":   "..x..", "..y);
 	else
 		CoordsHolder.playerCoords:SetText("");
 	end
-	
+
 	local scale = WorldMapDetailFrame:GetEffectiveScale();
 	local width = WorldMapDetailFrame:GetWidth();
 	local height = WorldMapDetailFrame:GetHeight();
@@ -95,7 +95,7 @@ function M:UpdateCoords()
 	local x, y = GetCursorPosition();
 	local adjustedX = (x / scale - (centerX - (width/2))) / width;
 	local adjustedY = (centerY + (height/2) - y / scale) / height;
-	
+
 	if(adjustedX >= 0 and adjustedY >= 0 and adjustedX <= 1 and adjustedY <= 1) then
 		adjustedX = E:Round(100 * adjustedX, 2);
 		adjustedY = E:Round(100 * adjustedY, 2);
@@ -136,11 +136,11 @@ function M:Initialize()
 		coordsHolder.playerCoords:SetText(PLAYER .. ":   0, 0");
 		coordsHolder.mouseCoords:SetPoint("BOTTOMLEFT", coordsHolder.playerCoords, "TOPLEFT", 0, 5);
 		coordsHolder.mouseCoords:SetText(MOUSE_LABEL .. ":   0, 0");
-		
+
 		self:ScheduleRepeatingTimer("UpdateCoords", 0.05);
 		self:PositionCoords();
 	end
-	
+
 	if(E.global.general.smallerWorldMap) then
 		BlackoutWorld:SetTexture(nil);
 		WorldMapBlobFrame.Show = E.noop;
@@ -149,7 +149,7 @@ function M:Initialize()
 		self:SecureHook("WorldMap_ToggleSizeUp", "SetLargeWorldMap");
 		self:RegisterEvent("PLAYER_REGEN_ENABLED");
 		self:RegisterEvent("PLAYER_REGEN_DISABLED");
-		
+
 		if(WORLDMAP_SETTINGS.size == WORLDMAP_FULLMAP_SIZE) then
 			WorldMap_ToggleSizeDown();
 		elseif(WORLDMAP_SETTINGS.size == WORLDMAP_WINDOWED_SIZE) then
@@ -157,7 +157,7 @@ function M:Initialize()
 		elseif(WORLDMAP_SETTINGS.size == WORLDMAP_QUESTLIST_SIZE) then
 			WorldMap_ToggleSizeDown();
 		end
-		
+
 		DropDownList1:HookScript("OnShow", function()
 			if(DropDownList1:GetScale() ~= UIParent:GetScale()) then
 				DropDownList1:SetScale(UIParent:GetScale());

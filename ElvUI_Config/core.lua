@@ -1,4 +1,4 @@
-﻿local E, L, V, P, G = unpack(ElvUI);
+local E, L, V, P, G = unpack(ElvUI);
 local D = E:GetModule("Distributor");
 local AceGUI = LibStub("AceGUI-3.0");
 
@@ -207,7 +207,7 @@ local function ExportImport_Open(mode)
 	frame:SetHeight(600);
 	frame.frame:SetFrameStrata("FULLSCREEN_DIALOG");
 	frame:SetLayout("flow");
-	
+
 	local box = AceGUI:Create("MultiLineEditBox");
 	box:SetNumLines(30);
 	box:DisableButton(true);
@@ -217,14 +217,14 @@ local function ExportImport_Open(mode)
 	box.editBox.OnTextChangedOrig = box.editBox:GetScript("OnTextChanged");
 	box.editBox.OnCursorChangedOrig = box.editBox:GetScript("OnCursorChanged");
 	box.editBox:SetScript("OnCursorChanged", nil);
-	
+
 	local label1 = AceGUI:Create("Label");
 	local font = GameFontHighlightSmall:GetFont();
 	label1:SetFont(font, 14);
 	label1:SetText(".");
 	label1:SetWidth(800);
 	frame:AddChild(label1);
-	
+
 	local label2 = AceGUI:Create("Label");
 	local font = GameFontHighlightSmall:GetFont();
 	label2:SetFont(font, 14);
@@ -234,14 +234,14 @@ local function ExportImport_Open(mode)
 
 	if(mode == "export") then
 		frame:SetTitle(L["Export Profile"]);
-		
+
 		local profileTypeDropdown = AceGUI:Create("Dropdown");
 		profileTypeDropdown:SetMultiselect(false);
 		profileTypeDropdown:SetLabel(L["Choose What To Export"]);
 		profileTypeDropdown:SetList(profileTypeItems, profileTypeListOrder);
 		profileTypeDropdown:SetValue("profile");
 		frame:AddChild(profileTypeDropdown);
-		
+
 		local exportFormatDropdown = AceGUI:Create("Dropdown");
 		exportFormatDropdown:SetMultiselect(false);
 		exportFormatDropdown:SetLabel(L["Choose Export Format"]);
@@ -249,14 +249,14 @@ local function ExportImport_Open(mode)
 		exportFormatDropdown:SetValue("text");
 		exportFormatDropdown:SetWidth(150);
 		frame:AddChild(exportFormatDropdown);
-		
+
 		local exportButton = AceGUI:Create("Button");
 		exportButton:SetText(L["Export Now"]);
 		exportButton:SetAutoWidth(true);
 		local function OnClick(self)
 			label1:SetText("");
 			label2:SetText("");
-			
+
 			local profileType, exportFormat = profileTypeDropdown:GetValue(), exportFormatDropdown:GetValue();
 			local profileKey, profileExport = D:ExportProfile(profileType, exportFormat);
 			if(not profileKey or not profileExport) then
@@ -274,7 +274,7 @@ local function ExportImport_Open(mode)
 		end
 		exportButton:SetCallback("OnClick", OnClick);
 		frame:AddChild(exportButton);
-		
+
 		box.editBox:SetScript("OnChar", function() box:SetText(exportString); box.editBox:HighlightText(); end);
 		box.editBox:SetScript("OnTextChanged", function(self, userInput)
 			if(userInput) then
@@ -291,7 +291,7 @@ local function ExportImport_Open(mode)
 		importButton:SetCallback("OnClick", function()
 			label1:SetText("");
 			label2:SetText("");
-			
+
 			local text;
 			local success = D:ImportProfile(box:GetText());
 			if(success) then
@@ -302,7 +302,7 @@ local function ExportImport_Open(mode)
 			label1:SetText(text);
 		end)
 		frame:AddChild(importButton);
-		
+
 		local decodeButton = AceGUI:Create("Button-ElvUI");
 		decodeButton:SetDisabled(true);
 		decodeButton:SetText(L["Decode Text"]);
@@ -335,7 +335,7 @@ local function ExportImport_Open(mode)
 				else
 					decodeButton:SetDisabled(true);
 				end
-				
+
 				local profileType, profileKey = D:Decode(text);
 				if not profileType or (profileType and profileType == "profile" and not profileKey) then
 					label1:SetText(L["Error decoding data. Import string may be corrupted!"]);
@@ -356,28 +356,28 @@ local function ExportImport_Open(mode)
 				oldText = text;
 			end
 		end
-		
+
 		box.editBox:SetFocus();
 		box.editBox:SetScript("OnChar", nil);
 		box.editBox:SetScript("OnTextChanged", OnTextChanged);
 	end
-	
+
 	frame:SetCallback("OnClose", function(widget)
 		box.editBox:SetScript("OnChar", nil);
 		box.editBox:SetScript("OnTextChanged", box.editBox.OnTextChangedOrig);
 		box.editBox:SetScript("OnCursorChanged", box.editBox.OnCursorChangedOrig);
 		box.editBox.OnTextChangedOrig = nil;
 		box.editBox.OnCursorChangedOrig = nil;
-		
+
 		exportString = "";
-		
+
 		AceGUI:Release(widget);
 		ACD:Open("ElvUI");
 	end);
-	
+
 	label1:SetText("");
 	label2:SetText("");
-	
+
 	ACD:Close("ElvUI");
 
 	GameTooltip_Hide();

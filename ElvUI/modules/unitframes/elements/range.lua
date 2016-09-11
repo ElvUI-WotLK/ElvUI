@@ -11,7 +11,7 @@ function UF:Configure_Range(frame)
 		if(not frame:IsElementEnabled("Range")) then
 			frame:EnableElement("Range");
 		end
-		
+
 		range.outsideAlpha = E.db.unitframe.OORAlpha;
 	else
 		if(frame:IsElementEnabled("Range")) then

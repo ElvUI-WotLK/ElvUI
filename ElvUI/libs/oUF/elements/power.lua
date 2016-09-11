@@ -124,14 +124,14 @@ local Enable = function(self, unit)
 			self:RegisterEvent("UNIT_ENERGY", Path)
 			self:RegisterEvent("UNIT_RUNIC_POWER", Path)
 		end
-		
+
 		self:RegisterEvent("UNIT_MAXMANA", Path)
 		self:RegisterEvent("UNIT_MAXRAGE", Path)
 		self:RegisterEvent("UNIT_MAXFOCUS", Path)
 		self:RegisterEvent("UNIT_MAXENERGY", Path)
 		self:RegisterEvent("UNIT_DISPLAYPOWER", Path)
 		self:RegisterEvent("UNIT_MAXRUNIC_POWER", Path)
-		
+
 		self:RegisterEvent('UNIT_CONNECTION', Path)
 		self:RegisterEvent('UNIT_HAPPINESS', Path)
 
@@ -158,14 +158,14 @@ local Disable = function(self)
 			self:UnregisterEvent("UNIT_ENERGY", Path)
 			self:UnregisterEvent("UNIT_RUNIC_POWER", Path)
 		end
-		
+
 		self:UnregisterEvent("UNIT_MAXMANA", Path)
 		self:UnregisterEvent("UNIT_MAXRAGE", Path)
 		self:UnregisterEvent("UNIT_MAXFOCUS", Path)
 		self:UnregisterEvent("UNIT_MAXENERGY", Path)
 		self:UnregisterEvent("UNIT_DISPLAYPOWER", Path)
 		self:UnregisterEvent("UNIT_MAXRUNIC_POWER", Path)
-		
+
 		self:UnregisterEvent('UNIT_CONNECTION', Path)
 		self:UnregisterEvent('UNIT_HAPPINESS', Path)
 		self:UnregisterEvent('UNIT_FACTION', Path)

@@ -87,7 +87,7 @@ function mod:UpdateReputationDimensions()
 		self.repBar:SetAlpha(0);
 	else
 		self.repBar:SetAlpha(1);
-	end	
+	end
 end
 
 function mod:EnableDisable_ReputationBar()

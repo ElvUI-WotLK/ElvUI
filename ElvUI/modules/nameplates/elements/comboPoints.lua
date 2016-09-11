@@ -61,13 +61,13 @@ function mod:ConstructElement_CPoints(parent)
 		frame[i]:SetTexture([[Interface\AddOns\ElvUI\media\textures\bubbleTex.tga]]);
 		frame[i]:SetSize(12, 12);
 		frame[i]:SetVertexColor(unpack(self.ComboColors[i]));
-		
+
 		if(i == 1) then
 			frame[i]:SetPoint("LEFT", frame, "TOPLEFT")
 		else
 			frame[i]:SetPoint("LEFT", frame[i-1], "RIGHT", 2, 0)
 		end
-		
+
 		frame[i]:Hide();
 	end
 	return frame;

@@ -15,7 +15,7 @@ end
 local function SkinScrollBar(frame, thumbTrim)
 	if _G[frame:GetName().."BG"] then _G[frame:GetName().."BG"]:SetTexture(nil) end
 	if _G[frame:GetName().."Track"] then _G[frame:GetName().."Track"]:SetTexture(nil) end
-	
+
 	if _G[frame:GetName().."Top"] then
 		_G[frame:GetName().."Top"]:SetTexture(nil)
 		_G[frame:GetName().."Bottom"]:SetTexture(nil)
@@ -27,23 +27,23 @@ local function SkinScrollBar(frame, thumbTrim)
 		if not _G[frame:GetName().."ScrollUpButton"].icon then
 			S:HandleNextPrevButton(_G[frame:GetName().."ScrollUpButton"])
 			S:SquareButton_SetIcon(_G[frame:GetName().."ScrollUpButton"], 'UP')
-			_G[frame:GetName().."ScrollUpButton"]:Size(_G[frame:GetName().."ScrollUpButton"]:GetWidth() + 7, _G[frame:GetName().."ScrollUpButton"]:GetHeight() + 7)	
+			_G[frame:GetName().."ScrollUpButton"]:Size(_G[frame:GetName().."ScrollUpButton"]:GetWidth() + 7, _G[frame:GetName().."ScrollUpButton"]:GetHeight() + 7)
 		end
-		
+
 		_G[frame:GetName().."ScrollDownButton"]:StripTextures()
 		if not _G[frame:GetName().."ScrollDownButton"].icon then
 			S:HandleNextPrevButton(_G[frame:GetName().."ScrollDownButton"])
 			S:SquareButton_SetIcon(_G[frame:GetName().."ScrollDownButton"], 'DOWN')
-			_G[frame:GetName().."ScrollDownButton"]:Size(_G[frame:GetName().."ScrollDownButton"]:GetWidth() + 7, _G[frame:GetName().."ScrollDownButton"]:GetHeight() + 7)	
+			_G[frame:GetName().."ScrollDownButton"]:Size(_G[frame:GetName().."ScrollDownButton"]:GetWidth() + 7, _G[frame:GetName().."ScrollDownButton"]:GetHeight() + 7)
 		end
-		
+
 		if not frame.trackbg then
 			frame.trackbg = CreateFrame("Frame", nil, frame)
 			frame.trackbg:Point("TOPLEFT", _G[frame:GetName().."ScrollUpButton"], "BOTTOMLEFT", 0, -1)
 			frame.trackbg:Point("BOTTOMRIGHT", _G[frame:GetName().."ScrollDownButton"], "TOPRIGHT", 0, 1)
 			frame.trackbg:SetTemplate("Transparent")
 		end
-		
+
 		if frame:GetThumbTexture() then
 			if not thumbTrim then thumbTrim = 3 end
 			frame:GetThumbTexture():SetTexture(nil)
@@ -62,21 +62,21 @@ end
 
 local function SkinButton(f, strip, noTemplate)
 	local name = f:GetName();
-	
+
 	if(name) then
 		local left = _G[name..'Left'];
 		local middle = _G[name..'Middle'];
 		local right = _G[name..'Right'];
-		
+
 		if(left) then left:Kill(); end
 		if(middle) then middle:Kill(); end
 		if(right) then right:Kill(); end
 	end
-	
+
 	if(f.Left) then f.Left:Kill(); end
 	if(f.Middle) then f.Middle:Kill(); end
 	if(f.Right) then f.Right:Kill(); end
-	
+
 	if f.SetNormalTexture then f:SetNormalTexture("") end
 	if f.SetHighlightTexture then f:SetHighlightTexture("") end
 	if f.SetPushedTexture then f:SetPushedTexture("") end
@@ -87,7 +87,7 @@ local function SkinButton(f, strip, noTemplate)
 	if not f.template and not noTemplate then
 		f:SetTemplate("Default", true)
 	end
-	
+
 	f:HookScript("OnEnter", SetModifiedBackdrop)
 	f:HookScript("OnLeave", SetOriginalBackdrop)
 end
@@ -108,7 +108,7 @@ function S:SkinAce3()
 		local TYPE = widget.type
 		if TYPE == 'MultiLineEditBox' then
 			local frame = widget.frame
-			
+
 			if not widget.scrollBG.template then
 				widget.scrollBG:SetTemplate('Default')
 			end
@@ -122,14 +122,14 @@ function S:SkinAce3()
 		elseif TYPE == "CheckBox" then
 			widget.checkbg:Kill()
 			widget.highlight:Kill()
-			
+
 			if not widget.skinnedCheckBG then
 				widget.skinnedCheckBG = CreateFrame('Frame', nil, widget.frame)
 				widget.skinnedCheckBG:SetTemplate('Default')
 				widget.skinnedCheckBG:Point('TOPLEFT', widget.checkbg, 'TOPLEFT', 4, -4)
 				widget.skinnedCheckBG:Point('BOTTOMRIGHT', widget.checkbg, 'BOTTOMRIGHT', -4, 4)
 			end
-			
+
 			widget.check:SetParent(widget.skinnedCheckBG)
 		elseif TYPE == "Dropdown" then
 			local frame = widget.dropdown
@@ -139,9 +139,9 @@ function S:SkinAce3()
 
 			button:ClearAllPoints()
 			button:Point("RIGHT", frame, "RIGHT", -20, 0)
-			
+
 			SkinNextPrevButton(button, true)
-			
+
 			if not frame.backdrop then
 				frame:CreateBackdrop("Default")
 				frame.backdrop:Point("TOPLEFT", 20, -2)
@@ -152,7 +152,7 @@ function S:SkinAce3()
 			button:HookScript('OnClick', function(this)
 				local self = this.obj
 				self.pullout.frame:SetTemplate('Default', true)
-			end)	
+			end)
 		elseif TYPE == "LSM30_Font" or TYPE == "LSM30_Sound" or TYPE == "LSM30_Border" or TYPE == "LSM30_Background" or TYPE == "LSM30_Statusbar" then
 			local frame = widget.frame
 			local button = frame.dropButton
@@ -165,7 +165,7 @@ function S:SkinAce3()
 
 			button:ClearAllPoints()
 			button:Point("RIGHT", frame, "RIGHT", -10, -6)
-			
+
 			if not frame.backdrop then
 				frame:CreateBackdrop("Default")
 				if TYPE == "LSM30_Font" then
@@ -182,7 +182,7 @@ function S:SkinAce3()
 				elseif TYPE == "LSM30_Border" or TYPE == "LSM30_Background" then
 					frame.backdrop:Point("TOPLEFT", 42, -16)
 				end
-				
+
 				frame.backdrop:Point("BOTTOMRIGHT", button, "BOTTOMRIGHT", 2, -2)
 			end
 			button:SetParent(frame.backdrop)
@@ -192,7 +192,7 @@ function S:SkinAce3()
 				if self.dropdown then
 					self.dropdown:SetTemplate('Default', true)
 				end
-			end)		
+			end)
 		elseif TYPE == "EditBox" then
 			local frame = widget.editbox
 			local button = widget.button
@@ -202,7 +202,7 @@ function S:SkinAce3()
 			frame:Height(17)
 			frame:CreateBackdrop('Default')
 			frame.backdrop:Point('TOPLEFT', -2, 0)
-			frame.backdrop:Point('BOTTOMRIGHT', 2, 0)		
+			frame.backdrop:Point('BOTTOMRIGHT', 2, 0)
 			frame.backdrop:SetParent(widget.frame)
 			frame:SetParent(frame.backdrop)
 			SkinButton(button)
@@ -241,22 +241,22 @@ function S:SkinAce3()
 			local lowtext = widget.lowtext
 			local hightext = widget.hightext
 			local HEIGHT = 12
-			
+
 			frame:StripTextures()
 			frame:SetTemplate('Default')
 			frame:Height(HEIGHT)
 			frame:SetThumbTexture(E["media"].blankTex)
 			frame:GetThumbTexture():SetVertexColor(0.3, 0.3, 0.3)
 			frame:GetThumbTexture():Size(HEIGHT-2,HEIGHT+2)
-			
+
 			editbox:SetTemplate('Default')
 			editbox:Height(15)
 			editbox:Point("TOP", frame, "BOTTOM", 0, -1)
-			
+
 			lowtext:Point("TOPLEFT", frame, "BOTTOMLEFT", 2, -2)
 			hightext:Point("TOPRIGHT", frame, "BOTTOMRIGHT", -2, -2)
 
-		
+
 		--[[elseif TYPE == "ColorPicker" then
 			local frame = widget.frame
 			local colorSwatch = widget.colorSwatch
@@ -292,11 +292,11 @@ function S:SkinAce3()
 				end
 			end
 			frame:SetTemplate('Transparent')
-			
+
 			if widget.treeframe then
 				widget.treeframe:SetTemplate('Transparent')
 				frame:Point("TOPLEFT", widget.treeframe, "TOPRIGHT", 1, 0)
-				
+
 				local oldCreateButton = widget.CreateButton
 				widget.CreateButton = function(self)
 					local button = oldCreateButton(self)
@@ -309,16 +309,16 @@ function S:SkinAce3()
 					button.toggleText:SetText('+')
 					return button
 				end
-				
+
 				local oldRefreshTree = widget.RefreshTree
-				widget.RefreshTree = function(self, scrollToSelection)		
+				widget.RefreshTree = function(self, scrollToSelection)
 					oldRefreshTree(self, scrollToSelection)
 					if not self.tree then return end
 					local status = self.status or self.localstatus
-					local groupstatus = status.groups		
+					local groupstatus = status.groups
 					local lines = self.lines
 					local buttons = self.buttons
-					
+
 					for i, line in pairs(lines) do
 						local button = buttons[i]
 						if groupstatus[line.uniquevalue] and button then
@@ -329,7 +329,7 @@ function S:SkinAce3()
 					end
 				end
 			end
-			
+
 			if TYPE == "TabGroup" then
 				local oldCreateTab = widget.CreateTab
 				widget.CreateTab = function(self, id)
@@ -343,7 +343,7 @@ function S:SkinAce3()
 					return tab;
 				end
 			end
-			
+
 			if widget.scrollbar then
 				SkinScrollBar(widget.scrollbar)
 			end

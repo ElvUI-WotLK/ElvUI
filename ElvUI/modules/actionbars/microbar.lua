@@ -1,4 +1,4 @@
-﻿local E, L, V, P, G = unpack(select(2, ...));
+local E, L, V, P, G = unpack(select(2, ...));
 local AB = E:GetModule('ActionBars');
 
 local _G = _G;
@@ -43,13 +43,13 @@ function AB:HandleMicroButton(button)
 	local pushed = button:GetPushedTexture();
 	local normal = button:GetNormalTexture();
 	local disabled = button:GetDisabledTexture();
-	
+
 	button:SetParent(ElvUI_MicroBar);
-	
+
 	button:GetHighlightTexture():Kill();
 	button:HookScript('OnEnter', Button_OnEnter);
 	button:HookScript('OnLeave', Button_OnLeave);
-	
+
 	local f = CreateFrame('Frame', nil, button);
 	f:SetFrameLevel(1);
 	f:SetFrameStrata('BACKGROUND');
@@ -57,13 +57,13 @@ function AB:HandleMicroButton(button)
 	f:SetPoint('TOPRIGHT', button, 'TOPRIGHT', -2, -28);
 	f:SetTemplate('Default', true);
 	button.backdrop = f;
-	
+
 	pushed:SetTexCoord(0.17, 0.87, 0.5, 0.908);
 	pushed:SetInside(f);
-	
+
 	normal:SetTexCoord(0.17, 0.87, 0.5, 0.908);
 	normal:SetInside(f);
-	
+
 	if(disabled) then
 		disabled:SetTexCoord(0.17, 0.87, 0.5, 0.908);
 		disabled:SetInside(f);
@@ -82,19 +82,19 @@ end
 
 function AB:UpdateMicroPositionDimensions()
 	if(not ElvUI_MicroBar) then return; end
-	
+
 	local numRows = 1;
 	for i = 1, #MICRO_BUTTONS do
 		local button = _G[MICRO_BUTTONS[i]];
 		local prevButton = _G[MICRO_BUTTONS[i-1]] or ElvUI_MicroBar;
 		local lastColumnButton = _G[MICRO_BUTTONS[i-self.db.microbar.buttonsPerRow]];
-		
+
 		button:ClearAllPoints();
 
 		if(prevButton == ElvUI_MicroBar) then
 			button:SetPoint('TOPLEFT', prevButton, 'TOPLEFT', -2 + E.Border, 28 - E.Border);
 		elseif((i - 1) % self.db.microbar.buttonsPerRow == 0) then
-			button:Point('TOP', lastColumnButton, 'BOTTOM', 0, 28 - self.db.microbar.yOffset);	
+			button:Point('TOP', lastColumnButton, 'BOTTOM', 0, 28 - self.db.microbar.yOffset);
 			numRows = numRows + 1;
 		else
 			button:Point('LEFT', prevButton, 'RIGHT', - 4 + self.db.microbar.xOffset, 0);
@@ -106,7 +106,7 @@ function AB:UpdateMicroPositionDimensions()
 	else
 		ElvUI_MicroBar:SetAlpha(self.db.microbar.alpha);
 	end
-	
+
 	ElvUI_MicroBar:SetWidth(((CharacterMicroButton:GetWidth() - 4) * self.db.microbar.buttonsPerRow) + (self.db.microbar.xOffset * (self.db.microbar.buttonsPerRow-1)) + E.Border*2);
 	ElvUI_MicroBar:SetHeight(((CharacterMicroButton:GetHeight() - 28) * numRows) + (self.db.microbar.yOffset * (numRows-1)) + E.Border*2);
 
@@ -139,7 +139,7 @@ function AB:SetupMicroBar()
 	self:SecureHook('MainMenuMicroButton_SetNormal');
 
 	self:MainMenuMicroButton_SetNormal();
-	
+
 	self:UpdateMicroPositionDimensions();
 	E:CreateMover(microBar, 'MicrobarMover', L['Micro Bar'], nil, nil, nil, 'ALL,ACTIONBARS');
 end

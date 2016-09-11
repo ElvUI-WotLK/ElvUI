@@ -126,7 +126,7 @@ end
 
 local function SendPluginVersionCheck(self)
 	lib:SendPluginVersionCheck(lib:GenerateVersionCheckMessage())
-	
+
 	if self["ElvUIPluginSendMSGTimer"] then
 		self:CancelTimer(self["ElvUIPluginSendMSGTimer"])
 		self["ElvUIPluginSendMSGTimer"] = nil
@@ -155,7 +155,7 @@ function lib:VersionCheck(event, prefix, message, channel, sender)
 	else
 		E.SendPluginVersionCheck = E.SendPluginVersionCheck or SendPluginVersionCheck
 		E["ElvUIPluginSendMSGTimer"] = E:ScheduleTimer("SendPluginVersionCheck", 2)
-	end 
+	end
 end
 
 function lib:GeneratePluginList()
@@ -166,7 +166,7 @@ function lib:GeneratePluginList()
 			local author = GetAddOnMetadata(plugin.name, "Author")
 			local Pname = GetAddOnMetadata(plugin.name, "Title") or plugin.name
 			local color = plugin.old and E:RGBToHex(1,0,0) or E:RGBToHex(0,1,0)
-			list = list .. Pname 
+			list = list .. Pname
 			if author then
 			  list = list .. " ".. INFO_BY .." " .. author
 			end

@@ -13,7 +13,7 @@ local function RotateTexture(texture, angle)
 	local LLx, LLy = CalculateCorner(angle + 2.35619449);
 	local ULx, ULy = CalculateCorner(angle + 3.92699082);
 	local URx, URy = CalculateCorner(angle - 0.785398163);
-	
+
 	texture:SetTexCoord(ULx, ULy, LLx, LLy, URx, URy, LRx, LRy);
 end
 
@@ -38,7 +38,7 @@ local Update = function(self, elapsed)
 					if(unit and GPS.outOfRange) then
 						inRange = UnitInRange(unit);
 					end
-					
+
 					if(not unit or not (UnitInParty(unit) or UnitInRaid(unit)) or UnitIsUnit(unit, "player") or not UnitIsConnected(unit) or (GPS.onMouseOver and (GetMouseFocus() ~= object)) or (GPS.outOfRange and inRange)) then
 						GPS:Hide()
 					else
@@ -48,7 +48,7 @@ local Update = function(self, elapsed)
 						else
 							GPS:Show();
 							RotateTexture(GPS.Texture, angle);
-							
+
 							numArrows = numArrows + 1;
 						end
 					end
@@ -57,7 +57,7 @@ local Update = function(self, elapsed)
 				end
 			end
 		end
-		
+
 		self.elapsed = 0;
 		self.throttle = max(minThrottle, 0.005 * numArrows);
 	else
@@ -69,17 +69,17 @@ local Enable = function(self)
 	local GPS = self.GPS;
 	if(GPS) then
 		tinsert(_FRAMES, self);
-		
+
 		if(not OnUpdateFrame) then
 			OnUpdateFrame = CreateFrame("Frame");
 			OnUpdateFrame:SetScript("OnUpdate", Update);
 		end
-		
+
 		OnUpdateFrame:Show();
 		return true;
 	end
 end
- 
+
 local Disable = function(self)
 	local GPS = self.GPS;
 	if(GPS) then
@@ -96,5 +96,5 @@ local Disable = function(self)
 		end
 	end
 end
- 
+
 oUF:AddElement("GPS", nil, Enable, Disable);

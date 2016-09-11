@@ -6,10 +6,10 @@ local unpack, pairs = unpack, pairs;
 
 local function LoadSkin(event)
 	if(E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.achievement ~= true) then return; end
-	
+
 	local function SkinAchievement(achievement, BiggerIcon)
 		if(achievement.isSkinned) then return; end
-		
+
 		achievement:StripTextures(true);
 		achievement:SetTemplate("Default", true);
 		achievement.icon:SetTemplate();
@@ -20,17 +20,17 @@ local function LoadSkin(event)
 		achievement.icon.frame:Kill();
 		achievement.icon.texture:SetTexCoord(unpack(E.TexCoords));
 		achievement.icon.texture:SetInside();
-		
+
 		if(achievement.highlight) then
 			achievement.highlight:StripTextures();
 			achievement:HookScript("OnEnter", S.SetModifiedBackdrop);
 			achievement:HookScript("OnLeave", S.SetOriginalBackdrop);
 		end
-		
+
 		if(achievement.label) then
 			achievement.label:SetTextColor(1, 1, 1);
 		end
-		
+
 		if(achievement.description) then
 			achievement.description:SetTextColor(.6, .6, .6);
 			hooksecurefunc(achievement.description, "SetTextColor", function(_, r, g, b)
@@ -39,28 +39,28 @@ local function LoadSkin(event)
 				end
 			end);
 		end
-		
+
 		if(achievement.hiddenDescription) then
 			achievement.hiddenDescription:SetTextColor(1, 1, 1)
 		end
-		
+
 		if(achievement.tracked) then
 			S:HandleCheckBox(achievement.tracked, true);
 			achievement.tracked:Size(14, 14);
 			achievement.tracked:ClearAllPoints();
 			achievement.tracked:Point("TOPLEFT", achievement.icon, "BOTTOMLEFT", 0, -2);
 		end
-		
+
 		hooksecurefunc(achievement, "Saturate", function()
 			achievement:SetBackdropBorderColor(unpack(E["media"].bordercolor));
 		end);
 		hooksecurefunc(achievement, "Desaturate", function()
 			achievement:SetBackdropBorderColor(unpack(E["media"].bordercolor));
 		end);
-		
+
 		achievement.isSkinned = true;
 	end
-	
+
 	if(event == "PLAYER_ENTERING_WORLD") then
 		hooksecurefunc("HybridScrollFrame_CreateButtons", function(frame, template)
 			if(template == "AchievementCategoryTemplate") then
@@ -91,11 +91,11 @@ local function LoadSkin(event)
 			end
 		end);
 	end
-	
+
 	if(not IsAddOnLoaded("Blizzard_AchievementUI")) then
 		return;
 	end
-	
+
 	local frames = {
 		"AchievementFrame",
 		"AchievementFrameCategories",
@@ -110,18 +110,18 @@ local function LoadSkin(event)
 		"AchievementFrameComparisonSummaryPlayer",
 		"AchievementFrameComparisonSummaryFriend"
 	};
-	
+
 	for _, frame in pairs(frames) do
 		_G[frame]:StripTextures(true);
 	end
-	
+
 	local noname_frames = {
 		"AchievementFrameStats",
 		"AchievementFrameSummary",
 		"AchievementFrameAchievements",
 		"AchievementFrameComparison"
 	};
-	
+
 	for _, frame in pairs(noname_frames) do
 		for i = 1, _G[frame]:GetNumChildren() do
 			local child = select(i, _G[frame]:GetChildren());
@@ -130,7 +130,7 @@ local function LoadSkin(event)
 			end
 		end
 	end
-	
+
 	AchievementFrame:CreateBackdrop("Transparent");
 	AchievementFrame.backdrop:Point("TOPLEFT", 0, 6);
 	AchievementFrame.backdrop:Point("BOTTOMRIGHT");
@@ -138,28 +138,28 @@ local function LoadSkin(event)
 	AchievementFrameHeaderTitle:Point("TOPLEFT", AchievementFrame.backdrop, "TOPLEFT", -30, -8);
 	AchievementFrameHeaderPoints:ClearAllPoints();
 	AchievementFrameHeaderPoints:Point("LEFT", AchievementFrameHeaderTitle, "RIGHT", 2, 0);
-	
+
 	AchievementFrameCategoriesContainer:CreateBackdrop("Default");
 	AchievementFrameCategoriesContainer.backdrop:Point("TOPLEFT", 0, 4);
 	AchievementFrameCategoriesContainer.backdrop:Point("BOTTOMRIGHT", -2, -3);
 	AchievementFrameAchievementsContainer:CreateBackdrop("Transparent");
 	AchievementFrameAchievementsContainer.backdrop:Point("TOPLEFT", -2, 2);
 	AchievementFrameAchievementsContainer.backdrop:Point("BOTTOMRIGHT", -2, -3);
-	
+
 	S:HandleCloseButton(AchievementFrameCloseButton, AchievementFrame.backdrop);
 	S:HandleDropDownBox(AchievementFrameFilterDropDown);
 	AchievementFrameFilterDropDown:Point("TOPRIGHT", AchievementFrame, "TOPRIGHT", -44, 5);
-	
+
 	S:HandleScrollBar(AchievementFrameCategoriesContainerScrollBar, 5);
 	S:HandleScrollBar(AchievementFrameAchievementsContainerScrollBar, 5);
 	S:HandleScrollBar(AchievementFrameStatsContainerScrollBar, 5);
 	S:HandleScrollBar(AchievementFrameComparisonContainerScrollBar, 5);
 	S:HandleScrollBar(AchievementFrameComparisonStatsContainerScrollBar, 5);
-	
+
 	for i = 1, 2 do
 		S:HandleTab(_G["AchievementFrameTab" .. i]);
 	end
-	
+
 	local function AnimationStatusBar(bar, noNumber)
 		bar.anim = CreateAnimationGroup(bar);
 		bar.anim.progress = bar.anim:CreateAnimation("Progress");
@@ -207,30 +207,30 @@ local function LoadSkin(event)
 		bar:SetStatusBarColor(4/255, 179/255, 30/255);
 		bar:CreateBackdrop("Default");
 		E:RegisterStatusBar(bar);
-		
+
 		local barName = bar:GetName();
 		if(_G[barName .. "Title"]) then
 			_G[barName .. "Title"]:Point("LEFT", 4, 0);
 		end
-		
+
 		if(_G[barName .. "Label"]) then
 			_G[barName .. "Label"]:Point("LEFT", 4, 0);
 		end
-		
+
 		if(_G[barName .. "Text"]) then
 			_G[barName .. "Text"]:Point("RIGHT", -4, 0);
 		end
 
 		AnimationStatusBar(bar);
 	end
-	
+
 	SkinStatusBar(AchievementFrameSummaryCategoriesStatusBar);
 	SkinStatusBar(AchievementFrameComparisonSummaryPlayerStatusBar);
 	SkinStatusBar(AchievementFrameComparisonSummaryFriendStatusBar);
 	AchievementFrameComparisonSummaryFriendStatusBar.text:ClearAllPoints();
 	AchievementFrameComparisonSummaryFriendStatusBar.text:Point("CENTER");
 	AchievementFrameComparisonHeader:Point("BOTTOMRIGHT", AchievementFrameComparison, "TOPRIGHT", 45, -20);
-	
+
 	for i = 1, 8 do
 		local frame = _G["AchievementFrameSummaryCategoriesCategory" .. i];
 		local button = _G["AchievementFrameSummaryCategoriesCategory" .. i .. "Button"];
@@ -238,7 +238,7 @@ local function LoadSkin(event)
 		SkinStatusBar(frame);
 		button:StripTextures();
 		highlight:StripTextures();
-		
+
 		_G[highlight:GetName() .. "Middle"]:SetTexture(1, 1, 1, 0.3);
 		_G[highlight:GetName() .. "Middle"]:SetAllPoints(frame);
 	end
@@ -283,14 +283,14 @@ local function LoadSkin(event)
 				SkinAchievement(frame);
 				frame.isSkinned = true;
 			end
-			
+
 			local prevFrame = _G["AchievementFrameSummaryAchievement" .. i-1];
 			if(i ~= 1) then
 				frame:ClearAllPoints()
 				frame:Point("TOPLEFT", prevFrame, "BOTTOMLEFT", 0, -1);
 				frame:Point("TOPRIGHT", prevFrame, "BOTTOMRIGHT", 0, 1);
 			end
-			
+
 			frame:SetBackdropBorderColor(unpack(E.media.bordercolor));
 		end
 	end);
@@ -298,12 +298,12 @@ local function LoadSkin(event)
 	for i = 1, 20 do
 		local frame = _G["AchievementFrameStatsContainerButton" .. i];
 		frame:StyleButton();
-		
+
 		_G["AchievementFrameStatsContainerButton" .. i .. "BG"]:SetTexture(1, 1, 1, 0.2);
 		_G["AchievementFrameStatsContainerButton" .. i .. "HeaderLeft"]:Kill();
 		_G["AchievementFrameStatsContainerButton" .. i .. "HeaderRight"]:Kill();
 		_G["AchievementFrameStatsContainerButton" .. i .. "HeaderMiddle"]:Kill();
-		
+
 		local frame = "AchievementFrameComparisonStatsContainerButton" .. i;
 		_G[frame]:StripTextures();
 		_G[frame]:StyleButton();
@@ -312,7 +312,7 @@ local function LoadSkin(event)
 		_G[frame .. "HeaderRight"]:Kill();
 		_G[frame .. "HeaderMiddle"]:Kill();
 	end
-	
+
 	hooksecurefunc("AchievementButton_GetProgressBar", function(index)
 		local frame = _G["AchievementFrameProgressBar" .. index];
 		if(frame) then
@@ -328,7 +328,7 @@ local function LoadSkin(event)
 				frame.text:ClearAllPoints();
 				frame.text:Point("CENTER", frame, "CENTER", 0, -1);
 				frame.text:SetJustifyH("CENTER");
-				
+
 				if(index > 1) then
 					frame:ClearAllPoints();
 					frame:Point("TOP", _G["AchievementFrameProgressBar" .. index-1], "BOTTOM", 0, -5);
@@ -342,7 +342,7 @@ local function LoadSkin(event)
 			end
 		end
 	end);
-	
+
 	hooksecurefunc("AchievementObjectives_DisplayCriteria", function(objectivesFrame, id)
 		local numCriteria = GetAchievementNumCriteria(id);
 		local textStrings, metas, progressBars = 0, 0, 0;

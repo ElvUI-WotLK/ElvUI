@@ -19,7 +19,7 @@ local function LoadSkin()
 
 	for _, object in pairs(StripAllTextures) do
 		if(not _G[object]) then print(object) end
-		
+
 		if(_G[object]) then
 			_G[object]:StripTextures()
 		end
@@ -100,7 +100,7 @@ local function LoadSkin()
 
 				_G[pfBName .. "ManaBar"]:Point("TOP", "$parentHealthBar", "BOTTOM", 0, 0);
 				_G[pfBName .. "Target"]:Point("TOP", "$parentManaBar", "BOTTOM", 0, -1);
-				
+
 				pfBObj:CreateBackdrop("Default");
 				pfBObj.backdrop:Point("TOPLEFT", E.PixelMode and 0 or -1, -(E.PixelMode and 10 or 9));
 				pfBObj.backdrop:Point("BOTTOMRIGHT", E.PixelMode and 0 or 1, E.PixelMode and 1 or 0);

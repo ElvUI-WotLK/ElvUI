@@ -1,4 +1,4 @@
-﻿local E, L, P, G = unpack(select(2, ...));
+local E, L, P, G = unpack(select(2, ...));
 local DT = E:GetModule("DataTexts");
 
 local type, pairs, select = type, pairs, select;
@@ -85,7 +85,7 @@ local function BuildFriendTable(total)
 			status = "|cffFFFFFF[|r|cffFF0000" .. L["DND"] .. "|r|cffFFFFFF]|r";
 		end
 
-		if(connected) then 
+		if(connected) then
 			for k, v in pairs(LOCALIZED_CLASS_NAMES_MALE) do if(class == v) then class = k; end end
 			for k, v in pairs(LOCALIZED_CLASS_NAMES_FEMALE) do if(class == v) then class = k; end end
 			friendTable[i] = {name, level, class, area, connected, status, note};

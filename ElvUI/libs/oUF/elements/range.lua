@@ -1,4 +1,4 @@
-﻿local _, ns = ...
+local _, ns = ...
 local oUF = ns.oUF
 
 local ipairs = ipairs
@@ -39,7 +39,7 @@ local function UpdateSpellList()
 	twipe(longEnemySpells)
 	twipe(enemySpells)
 	twipe(petSpells)
-	
+
 	if class == "PRIEST" then
 		AddSpell(enemySpells, 585) -- Smite
 		AddSpell(longEnemySpells, 589) -- Shadow Word: Pain
@@ -49,17 +49,17 @@ local function UpdateSpellList()
 		AddSpell(enemySpells, 33786) -- Cyclone
 		AddSpell(longEnemySpells, 5176) -- Wrath
 		AddSpell(friendlySpells, 774) -- Rejuvenation
-		AddSpell(resSpells, 50769) -- Revive 
-		AddSpell(resSpells, 20484) -- Rebirth 
+		AddSpell(resSpells, 50769) -- Revive
+		AddSpell(resSpells, 20484) -- Rebirth
 	elseif class == "PALADIN" then
 		AddSpell(enemySpells, 20271) -- Judgement
 		AddSpell(friendlySpells, 635) -- Holy Light
 		AddSpell(resSpells, 7328) -- Redemption
 	elseif class == "SHAMAN" then
-		AddSpell(enemySpells, 8042) -- Earth Shock 
+		AddSpell(enemySpells, 8042) -- Earth Shock
 		AddSpell(longEnemySpells, 403) -- Lightning Bolt
 		AddSpell(friendlySpells, 8004) -- Healing Surge
-		AddSpell(resSpells, 2008) -- Ancestral Spirit 
+		AddSpell(resSpells, 2008) -- Ancestral Spirit
 	elseif class == "WARLOCK" then
 		AddSpell(enemySpells, 5782) -- Страх
 		AddSpell(longEnemySpells, 172) -- Порча
@@ -113,7 +113,7 @@ local function friendlyIsInRange(unit)
 	if CheckInteractDistance(unit, 1) then
 		return true
 	end
-	
+
 	if UnitIsDeadOrGhost(unit) and #resSpells > 0 then
 		for _, name in ipairs(resSpells) do
 			if IsSpellInRange(name, unit) == 1 then
@@ -134,7 +134,7 @@ local function friendlyIsInRange(unit)
 			end
 		end
 	end
-	
+
 	return false
 end
 
@@ -142,7 +142,7 @@ local function petIsInRange(unit)
 	if CheckInteractDistance(unit, 2) then
 		return true
 	end
-	
+
 	for _, name in ipairs(friendlySpells) do
 		if IsSpellInRange(name, unit) == 1 then
 			return true
@@ -153,7 +153,7 @@ local function petIsInRange(unit)
 			return true
 		end
 	end
-	
+
 	return false
 end
 
@@ -161,13 +161,13 @@ local function enemyIsInRange(unit)
 	if CheckInteractDistance(unit, 2) then
 		return true
 	end
-	
+
 	for _, name in ipairs(enemySpells) do
 		if IsSpellInRange(name, unit) == 1 then
 			return true
 		end
 	end
-	
+
 	return false
 end
 
@@ -177,7 +177,7 @@ local function enemyIsInLongRange(unit)
 			return true
 		end
 	end
-	
+
 	return false
 end
 
@@ -214,7 +214,7 @@ local OnRangeUpdate = function(_, elapsed)
 						end
 					end
 				else
-					object:SetAlpha(range.insideAlpha)	
+					object:SetAlpha(range.insideAlpha)
 				end
 			end
 		end

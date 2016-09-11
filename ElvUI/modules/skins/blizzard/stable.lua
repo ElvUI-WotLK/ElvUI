@@ -28,7 +28,7 @@ local function LoadSkin()
 		S:HandleItemButton(_G["PetStableStabledPet" .. i], true);
 		_G["PetStableStabledPet" .. i .. "IconTexture"]:SetDrawLayer("OVERLAY");
 	end
-	
+
 	PetStablePetInfo:GetRegions():SetTexCoord(0.04, 0.15, 0.06, 0.30);
 	PetStablePetInfo:SetFrameLevel(PetModelFrame:GetFrameLevel() + 2);
 	PetStablePetInfo:CreateBackdrop("Default");

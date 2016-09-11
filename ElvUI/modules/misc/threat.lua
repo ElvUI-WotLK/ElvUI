@@ -27,7 +27,7 @@ function THREAT:UpdatePosition()
 		self.bar:SetParent(RightChatDataPanel);
 	else
 		self.bar:SetInside(LeftChatDataPanel);
-		self.bar:SetParent(LeftChatDataPanel);	
+		self.bar:SetParent(LeftChatDataPanel);
 	end
 	self.bar.text:FontTemplate(nil, self.db.textSize);
 	self.bar:SetFrameStrata("MEDIUM");

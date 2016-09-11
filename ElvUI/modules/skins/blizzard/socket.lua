@@ -45,7 +45,7 @@ local function LoadSkin()
 			local gemColor = GetSocketTypes(i);
 			local color = GEM_TYPE_INFO[gemColor];
 			button:SetBackdropColor(color.r, color.g, color.b, 0.15);
-			button:SetBackdropBorderColor(color.r, color.g, color.b);			
+			button:SetBackdropBorderColor(color.r, color.g, color.b);
 		end
 	end);
 

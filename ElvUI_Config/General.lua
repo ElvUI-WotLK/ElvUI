@@ -1,4 +1,4 @@
-﻿local E, L, V, P, G = unpack(ElvUI);
+local E, L, V, P, G = unpack(ElvUI);
 
 E.Options.args.general = {
 	type = "group",

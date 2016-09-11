@@ -133,7 +133,7 @@ end
 function Lib:Find(search, ...)
 	for i = 1, select('#', ...) do
 		local text = select(i, ...)
-		
+
 		if(text) then
 			if(self:Clean(text):find(search, nil, true)) then
 				return true

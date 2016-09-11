@@ -6,7 +6,7 @@ function UF:Construct_CombatIndicator(frame)
 	combat:Size(19);
 	combat:Point("CENTER", frame.Health, "CENTER", 0,6);
 	combat:SetVertexColor(0.69, 0.31, 0.31);
-	
+
 	return combat;
 end
 

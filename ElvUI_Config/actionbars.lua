@@ -1,4 +1,4 @@
-﻿local E, L, V, P, G = unpack(ElvUI);
+local E, L, V, P, G = unpack(ElvUI);
 local AB = E:GetModule("ActionBars");
 local group;
 
@@ -159,7 +159,7 @@ local function BuildABConfig()
 				}
 			}
 		};
-		
+
 		if(i == 6) then
 			group["bar" .. i].args.enabled.set = function(info, value)
 				E.db.actionbar['bar'..i].enabled = value;
@@ -192,20 +192,20 @@ local function BuildABConfig()
 				name = L["Restore Bar"],
 				desc = L["Restore the actionbars default settings"],
 				func = function() E:CopyTable(E.db.actionbar["barPet"], P.actionbar["barPet"]); E:ResetMovers(L["Pet Bar"]); AB:PositionAndSizeBarPet() end,
-			},	
+			},
 			point = {
 				order = 3,
 				type = "select",
 				name = L["Anchor Point"],
 				desc = L["The first button anchors itself to this point on the bar."],
 				values = points,
-			},				
+			},
 			backdrop = {
 				order = 4,
 				type = "toggle",
 				name = L["Backdrop"],
 				desc = L["Toggles the display of the actionbars backdrop."],
-			},	
+			},
 			mouseover = {
 				order = 5,
 				name = L["Mouse Over"],
@@ -223,14 +223,14 @@ local function BuildABConfig()
 				type = "range",
 				name = L["Buttons"],
 				desc = L["The amount of buttons to display."],
-				min = 1, max = NUM_PET_ACTION_SLOTS, step = 1,				
+				min = 1, max = NUM_PET_ACTION_SLOTS, step = 1,
 			},
 			buttonsPerRow = {
 				order = 8,
 				type = "range",
 				name = L["Buttons Per Row"],
 				desc = L["The amount of buttons to display per row."],
-				min = 1, max = NUM_PET_ACTION_SLOTS, step = 1,					
+				min = 1, max = NUM_PET_ACTION_SLOTS, step = 1,
 			},
 			buttonsize = {
 				type = "range",
@@ -243,7 +243,7 @@ local function BuildABConfig()
 				type = "range",
 				name = L["Button Spacing"],
 				desc = L["The spacing between buttons."],
-				min = -1, max = 10, step = 1,	
+				min = -1, max = 10, step = 1,
 				order = 10,
 			},
 			backdropSpacing = {
@@ -258,14 +258,14 @@ local function BuildABConfig()
 				type = "range",
 				name = L["Height Multiplier"],
 				desc = L["Multiply the backdrops height or width by this value. This is usefull if you wish to have more than one bar behind a backdrop."],
-				min = 1, max = 5, step = 1,					
+				min = 1, max = 5, step = 1,
 			},
 			widthMult = {
 				order = 13,
 				type = "range",
 				name = L["Width Multiplier"],
 				desc = L["Multiply the backdrops height or width by this value. This is usefull if you wish to have more than one bar behind a backdrop."],
-				min = 1, max = 5, step = 1,					
+				min = 1, max = 5, step = 1,
 			},
 			alpha = {
 				order = 14,
@@ -281,13 +281,13 @@ local function BuildABConfig()
 				desc = L["This works like a macro, you can run different situations to get the actionbar to show/hide differently.\n Example: '[combat] show;hide'"],
 				width = "full",
 				multiline = true,
-				set = function(info, value) 						
-					E.db.actionbar["barPet"]["visibility"] = value; 
+				set = function(info, value)
+					E.db.actionbar["barPet"]["visibility"] = value;
 					AB:UpdateButtonSettings()
 				end,
 			},
 		},
-	}	
+	}
 	group["stanceBar"] = {
 		order = i,
 		name = L["Stance Bar"],
@@ -309,20 +309,20 @@ local function BuildABConfig()
 				name = L["Restore Bar"],
 				desc = L["Restore the actionbars default settings"],
 				func = function() E:CopyTable(E.db.actionbar["barShapeShift"], P.actionbar["barShapeShift"]); E:ResetMovers(L["Stance Bar"]); AB:PositionAndSizeBarShapeShift() end,
-			},	
+			},
 			point = {
 				order = 3,
 				type = "select",
 				name = L["Anchor Point"],
 				desc = L["The first button anchors itself to this point on the bar."],
 				values = points,
-			},				
+			},
 			backdrop = {
 				order = 4,
 				type = "toggle",
 				name = L["Backdrop"],
 				desc = L["Toggles the display of the actionbars backdrop."],
-			},	
+			},
 			mouseover = {
 				order = 5,
 				name = L["Mouse Over"],
@@ -340,14 +340,14 @@ local function BuildABConfig()
 				type = "range",
 				name = L["Buttons"],
 				desc = L["The amount of buttons to display."],
-				min = 1, max = NUM_PET_ACTION_SLOTS, step = 1,				
+				min = 1, max = NUM_PET_ACTION_SLOTS, step = 1,
 			},
 			buttonsPerRow = {
 				order = 8,
 				type = "range",
 				name = L["Buttons Per Row"],
 				desc = L["The amount of buttons to display per row."],
-				min = 1, max = NUM_PET_ACTION_SLOTS, step = 1,					
+				min = 1, max = NUM_PET_ACTION_SLOTS, step = 1,
 			},
 			buttonsize = {
 				type = "range",
@@ -360,7 +360,7 @@ local function BuildABConfig()
 				type = "range",
 				name = L["Button Spacing"],
 				desc = L["The spacing between buttons."],
-				min = -1, max = 10, step = 1,	
+				min = -1, max = 10, step = 1,
 				order = 10,
 			},
 			backdropSpacing = {
@@ -375,14 +375,14 @@ local function BuildABConfig()
 				type = "range",
 				name = L["Height Multiplier"],
 				desc = L["Multiply the backdrops height or width by this value. This is usefull if you wish to have more than one bar behind a backdrop."],
-				min = 1, max = 5, step = 1,					
+				min = 1, max = 5, step = 1,
 			},
 			widthMult = {
 				order = 13,
 				type = "range",
 				name = L["Width Multiplier"],
 				desc = L["Multiply the backdrops height or width by this value. This is usefull if you wish to have more than one bar behind a backdrop."],
-				min = 1, max = 5, step = 1,					
+				min = 1, max = 5, step = 1,
 			},
 			alpha = {
 				order = 14,
@@ -403,7 +403,7 @@ local function BuildABConfig()
 			},
 		},
 	}
-	
+
 	if E.myclass == "SHAMAN" then
 		group["barTotem"] = {
 			order = i,
@@ -426,7 +426,7 @@ local function BuildABConfig()
 					name = L["Restore Bar"],
 					desc = L["Restore the actionbars default settings"],
 					func = function() E:CopyTable(E.db.actionbar["barTotem"], P.actionbar["barTotem"]); E:ResetMovers(L["Totems"]); AB:AdjustTotemSettings() end,
-				},			
+				},
 				mouseover = {
 					order = 3,
 					name = L["Mouse Over"],
@@ -444,7 +444,7 @@ local function BuildABConfig()
 					type = "range",
 					name = L["Button Spacing"],
 					desc = L["The spacing between buttons."],
-					min = -1, max = 10, step = 1,	
+					min = -1, max = 10, step = 1,
 					order = 5,
 				},
 				inheritGlobalFade = {
@@ -595,7 +595,7 @@ E.Options.args.actionbar = {
 					name = L["Font Size"],
 					type = "range",
 					min = 6, max = 22, step = 1,
-				},	
+				},
 				fontOutline = {
 					order = 3,
 					name = L["Font Outline"],
@@ -656,26 +656,26 @@ E.Options.args.actionbar = {
 							type = "range",
 							name = L["Buttons Per Row"],
 							desc = L["The amount of buttons to display per row."],
-							min = 1, max = 10, step = 1,					
+							min = 1, max = 10, step = 1,
 						},
 						xOffset = {
 							order = 2,
 							type = "range",
 							name = L["xOffset"],
-							min = 0, max = 60, step = 1,					
+							min = 0, max = 60, step = 1,
 						},
 						yOffset = {
 							order = 3,
 							type = "range",
 							name = L["yOffset"],
-							min = 0, max = 60, step = 1,					
+							min = 0, max = 60, step = 1,
 						},
 						alpha = {
 							order = 4,
 							type = "range",
 							name = L["Alpha"],
 							desc = L["Change the alpha level of the frame."],
-							min = 0, max = 1, step = 0.1,					
+							min = 0, max = 1, step = 0.1,
 						},
 						mouseover = {
 							order = 5,

@@ -25,18 +25,18 @@ local function OnEvent(self)
 	ElvDB["gold"] = ElvDB["gold"] or {};
 	ElvDB["gold"][E.myrealm] = ElvDB["gold"][E.myrealm] or {};
 	ElvDB["gold"][E.myrealm][E.myname] = ElvDB["gold"][E.myrealm][E.myname] or NewMoney;
-	
+
 	local OldMoney = ElvDB["gold"][E.myrealm][E.myname] or NewMoney;
-	
+
 	local Change = NewMoney-OldMoney;
 	if(OldMoney>NewMoney) then
 		Spent = Spent - Change;
 	else
 		Profit = Profit + Change;
 	end
-	
+
 	self.text:SetText(E:FormatMoney(NewMoney, E.db.datatexts.goldFormat or "BLIZZARD", not E.db.datatexts.goldCoins));
-	
+
 	ElvDB["gold"][E.myrealm][E.myname] = NewMoney;
 end
 

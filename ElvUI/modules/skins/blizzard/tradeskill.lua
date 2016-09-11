@@ -107,7 +107,7 @@ local function LoadSkin()
 			end
 		end
 	end);
-	
+
 	for i = 1, TRADE_SKILLS_DISPLAYED do
 		local skillButton = _G["TradeSkillSkill" .. i];
 		skillButton:SetNormalTexture("");

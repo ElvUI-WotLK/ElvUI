@@ -236,8 +236,8 @@ E.Options.args.bags = {
 					name = L["Enable"],
 					desc = L["Enable/Disable the Bag-Bar."],
 					get = function(info) return E.private.bags.bagBar end,
-					set = function(info, value) E.private.bags.bagBar = value; E:StaticPopup_Show("PRIVATE_RL"); end			
-				},					
+					set = function(info, value) E.private.bags.bagBar = value; E:StaticPopup_Show("PRIVATE_RL"); end
+				},
 				size = {
 					order = 2,
 					type = "range",
@@ -250,7 +250,7 @@ E.Options.args.bags = {
 					type = "range",
 					name = L["Button Spacing"],
 					desc = L["The spacing between buttons."],
-					min = 1, max = 10, step = 1,		
+					min = 1, max = 10, step = 1,
 				},
 				showBackdrop = {
 					order = 4,

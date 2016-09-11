@@ -54,7 +54,7 @@ local menuList = {
 	end}
 };
 
-function GetMinimapShape() 
+function GetMinimapShape()
 	return "SQUARE";
 end
 
@@ -66,7 +66,7 @@ function M:GetLocTextColor()
 		return 0.84, 0.03, 0.03;
 	elseif(pvpType == "friendly") then
 		return 0.05, 0.85, 0.03;
-	elseif(pvpType == "hostile") then 
+	elseif(pvpType == "hostile") then
 		return 0.84, 0.03, 0.03;
 	elseif(pvpType == "contested") then
 		return 0.9, 0.85, 0.05;
@@ -194,7 +194,7 @@ function M:UpdateSettings()
 
 	if(MMHolder) then
 		MMHolder:Width((Minimap:GetWidth() + E.Border + E.Spacing*3) + E.RBRWidth);
-		
+
 		if(E.db.datatexts.minimapPanels) then
 			MMHolder:Height(Minimap:GetHeight() + (LeftMiniPanel and (LeftMiniPanel:GetHeight() + E.Border) or 24) + E.Spacing*3);
 		else
@@ -204,7 +204,7 @@ function M:UpdateSettings()
 
 	if(Minimap.location) then
 		Minimap.location:Width(E.MinimapSize);
-		
+
 		if(E.db.general.minimap.locationText ~= "SHOW" or not E.private.general.minimap.enable) then
 			Minimap.location:Hide();
 		else
@@ -253,7 +253,7 @@ function M:UpdateSettings()
 		MiniMapBattlefieldFrame:Point(pos, Minimap, pos, E.db.general.minimap.icons.battlefield.xOffset or 3, E.db.general.minimap.icons.battlefield.yOffset or 0)
 		MiniMapBattlefieldFrame:SetScale(scale)
 	end
-	
+
 	if MiniMapInstanceDifficulty then
 		local pos = E.db.general.minimap.icons.difficulty.position or "TOPLEFT"
 		local scale = E.db.general.minimap.icons.difficulty.scale or 1
@@ -278,14 +278,14 @@ function M:UpdateSettings()
 	end
 end
 
-function M:Initialize()	
+function M:Initialize()
 	menuFrame:SetTemplate("Transparent", true);
 
 	self:UpdateSettings();
 
-	if(not E.private.general.minimap.enable) then 
+	if(not E.private.general.minimap.enable) then
 		Minimap:SetMaskTexture("Textures\\MinimapMask");
-		return; 
+		return;
 	end
 
 	local mmholder = CreateFrame("Frame", "MMHolder", Minimap);
@@ -385,7 +385,7 @@ function M:Initialize()
 	fm:Hide();
 	E.FrameLocks["FarmModeMap"] = true;
 
-	FarmModeMap:SetScript("OnShow", function() 	
+	FarmModeMap:SetScript("OnShow", function()
 		if(BuffsMover and not E:HasMoverBeenMoved("BuffsMover")) then
 			BuffsMover:ClearAllPoints();
 			BuffsMover:Point("TOPRIGHT", E.UIParent, "TOPRIGHT", -3, -3);
@@ -408,7 +408,7 @@ function M:Initialize()
 		end
 	end);
 
-	FarmModeMap:SetScript("OnHide", function() 
+	FarmModeMap:SetScript("OnHide", function()
 		if(BuffsMover and not E:HasMoverBeenMoved("BuffsMover")) then
 			E:ResetMovers(L["Player Buffs"]);
 		end

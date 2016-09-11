@@ -30,7 +30,7 @@ E.Options.args.skins = {
 			type = 'group',
 			name = 'Blizzard',
 			get = function(info) return E.private.skins.blizzard[ info[#info] ] end,
-			set = function(info, value) E.private.skins.blizzard[ info[#info] ] = value; E:StaticPopup_Show("CONFIG_RL") end,	
+			set = function(info, value) E.private.skins.blizzard[ info[#info] ] = value; E:StaticPopup_Show("CONFIG_RL") end,
 			guiInline = true,
 			args = {
 				achievement = {
@@ -221,7 +221,7 @@ E.Options.args.skins = {
 				timemanager = {
 					type = "toggle",
 					name = L["Time Manager"],
-					desc = L["TOGGLESKIN_DESC"],	
+					desc = L["TOGGLESKIN_DESC"],
 				},
 				trade = {
 					type = "toggle",

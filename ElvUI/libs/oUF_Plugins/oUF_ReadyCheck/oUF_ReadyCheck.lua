@@ -51,7 +51,7 @@ end
 local OnUpdate = function(self, elapsed)
 	self.elapsed = (self.elapsed or 0) + elapsed;
 	if(self.elapsed < .25) then return; end
-	
+
 	for icon in next, _TIMERS do
 		if(icon.finishedTimer) then
 			icon.finishedTimer = icon.finishedTimer - self.elapsed;

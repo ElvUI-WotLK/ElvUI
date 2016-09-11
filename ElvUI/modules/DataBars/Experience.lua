@@ -111,7 +111,7 @@ function mod:UpdateExperienceDimensions()
 		self.expBar:SetAlpha(0);
 	else
 		self.expBar:SetAlpha(1);
-	end	
+	end
 end
 
 function mod:EnableDisable_ExperienceBar()

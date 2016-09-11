@@ -29,7 +29,7 @@ local function CheckRaidStatus()
 end
 
 local function ButtonEnter(self)
-	self:SetBackdropBorderColor(unpack(E["media"].rgbvaluecolor));	
+	self:SetBackdropBorderColor(unpack(E["media"].rgbvaluecolor));
 end
 
 local function ButtonLeave(self)
@@ -56,7 +56,7 @@ function RU:CreateUtilButton(name, parent, template, width, height, point, relat
 		local t = b:CreateTexture(nil, "OVERLAY", nil);
 		t:SetTexture(texture);
 		t:Point("TOPLEFT", b, "TOPLEFT", E.mult, -E.mult);
-		t:Point("BOTTOMRIGHT", b, "BOTTOMRIGHT", -E.mult, E.mult);	
+		t:Point("BOTTOMRIGHT", b, "BOTTOMRIGHT", -E.mult, E.mult);
 	end
 end
 
@@ -128,13 +128,13 @@ function RU:Initialize()
 	RaidUtility_ShowButton:SetClampRectInsets(0, 0, -1, 1);
 	RaidUtility_ShowButton:RegisterForDrag("RightButton");
 	RaidUtility_ShowButton:SetFrameStrata("HIGH");
-	RaidUtility_ShowButton:SetScript("OnDragStart", function(self) 
+	RaidUtility_ShowButton:SetScript("OnDragStart", function(self)
 		self:StartMoving();
 	end);
 
 	E.FrameLocks["RaidUtility_ShowButton"] = true;
 
-	RaidUtility_ShowButton:SetScript("OnDragStop", function(self) 
+	RaidUtility_ShowButton:SetScript("OnDragStop", function(self)
 		self:StopMovingOrSizing();
 		local point = self:GetPoint();
 		local xOffset = self:GetCenter();

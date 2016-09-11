@@ -39,11 +39,11 @@ Lib.Filters.name = {
   	tags = {
 		"n", "name"
 	},
-	
+
 	canSearch = function(self, operator, search)
 		return not operator and search;
 	end,
-	
+
 	match = function(self, item, _, search)
 		local name = item:match("%[(.-)%]");
 		return Search:Find(search, name);
@@ -54,11 +54,11 @@ Lib.Filters.type = {
 	tags = {
 		"t", "type", "s", "slot"
 	},
-	
+
 	canSearch = function(self, operator, search)
 		return not operator and search;
 	end,
-	
+
 	match = function(self, item, _, search)
 		local type, subType, _, equipSlot = select(6, GetItemInfo(item));
 		return Search:Find(search, type, subType, _G[equipSlot]);
@@ -69,11 +69,11 @@ Lib.Filters.level = {
 	tags = {
 		"l", "level", "lvl", "ilvl"
 	},
-	
+
 	canSearch = function(self, _, search)
 		return tonumber(search);
 	end,
-	
+
 	match = function(self, link, operator, num)
 		local lvl = select(4, GetItemInfo(link));
 		if(lvl) then
@@ -86,11 +86,11 @@ Lib.Filters.requiredlevel = {
 	tags = {
 		"r", "req", "rl", "reql", "reqlvl"
 	},
-	
+
 	canSearch = function(self, _, search)
 		return tonumber(search);
 	end,
-	
+
 	match = function(self, link, operator, num)
 		local lvl = select(5, GetItemInfo(link));
 		if(lvl) then
@@ -110,7 +110,7 @@ Lib.Filters.quality = {
 	tags = {
 		"q", "quality"
 	},
-	
+
 	canSearch = function(self, _, search)
 		for i, name in pairs(qualities) do
 			if(name:find(search, nil, true)) then
@@ -118,7 +118,7 @@ Lib.Filters.quality = {
 			end
 		end
 	end,
-	
+
 	match = function(self, link, operator, num)
 		local quality = select(3, GetItemInfo(link));
 		return Search:Compare(operator, quality, num);
@@ -129,11 +129,11 @@ Lib.Filters.quality = {
 
 Lib.Filters.usable = {
 	tags = {},
-	
+
 	canSearch = function(self, operator, search)
 		return not operator and search == "usable";
 	end,
-	
+
 	match = function(self, link)
 		if(not Unfit:IsItemUnusable(link)) then
 			local lvl = select(5, GetItemInfo(link));
@@ -150,13 +150,13 @@ Lib.Filters.tip = {
 	tags = {
 		"tt", "tip", "tooltip"
 	},
-	
+
 	onlyTags = true,
-	
+
 	canSearch = function(self, _, search)
 		return search;
 	end,
-	
+
 	match = function(self, link, _, search)
 		if(link:find("item:")) then
 			scanner:SetOwner(UIParent, "ANCHOR_NONE");
@@ -187,21 +187,21 @@ Lib.Filters.tipPhrases = {
 	canSearch = function(self, _, search)
 		return self.keywords[search];
 	end,
-	
+
 	match = function(self, link, _, search)
 		local id = link:match("item:(%d+)");
 		if(not id) then
 			return;
 		end
-		
+
 		local cached = self.cache[search][id];
 		if(cached ~= nil) then
 			return cached;
 		end
-		
+
 		scanner:SetOwner(UIParent, "ANCHOR_NONE");
 		scanner:SetHyperlink(link);
-		
+
 		local matches = false
 		for i = 1, scanner:NumLines() do
 			local text = _G["LibItemSearchTooltipScannerTextLeft" .. i]:GetText();
@@ -211,13 +211,13 @@ Lib.Filters.tipPhrases = {
 				break;
 			end
 		end
-		
+
 		self.cache[search][id] = matches;
 		return matches;
 	end,
 
 	cache = setmetatable({}, {__index = function(t, k) local v = {} t[k] = v return v end}),
-	
+
 	keywords = {
     	[ITEM_SOULBOUND:lower()] = ITEM_BIND_ON_PICKUP,
     	["bound"] = ITEM_BIND_ON_PICKUP,

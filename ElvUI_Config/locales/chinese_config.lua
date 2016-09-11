@@ -197,7 +197,7 @@ L["Use Tooltip Scanning"] = "使用高级扫描"
 
 --Buffs and Debuffs
 L["Begin a new row or column after this many auras."] = "在这些光环旁开始新的行或列."
-L["Count xOffset"] = "计数X偏移"	
+L["Count xOffset"] = "计数X偏移"
 L["Count yOffset"] = "计数Y偏移"
 L["Defines how the group is sorted."] = "定义组排序方式."
 L["Defines the sort order of the selected sort method."] = "定义排序方式的排序方向."

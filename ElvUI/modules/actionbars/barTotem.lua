@@ -1,4 +1,4 @@
-﻿local E, L, V, P, G = unpack(select(2, ...));
+local E, L, V, P, G = unpack(select(2, ...));
 local AB = E:GetModule("ActionBars");
 
 local _G = _G;
@@ -260,7 +260,7 @@ function AB:CreateTotemBar()
 
 	self:SecureHook("MultiCastFlyoutFrameOpenButton_Show");
 	self:SecureHook("MultiCastActionButton_Update");
-	
+
 	self:SecureHook("MultiCastSlotButton_Update", function(self)
 		AB:StyleTotemSlotButton(self, tonumber(match(self:GetName(), "MultiCastSlotButton(%d)")));
 	end);
@@ -269,7 +269,7 @@ function AB:CreateTotemBar()
 	self:SecureHook("MultiCastFlyoutFrame_ToggleFlyout");
 	self:SecureHook("MultiCastRecallSpellButton_Update");
 	self:SecureHook("ShowMultiCastActionBar");
-	
+
 	bar.buttons[MultiCastActionBarFrame] = true;
 	E:CreateMover(bar, "ElvBar_Totem", L["Totems"], nil, nil, nil,"ALL,ACTIONBARS");
 	self:AdjustTotemSettings();

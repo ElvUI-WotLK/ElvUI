@@ -16,7 +16,7 @@ function UF:Construct_AuraWatch(frame)
 	auras.missingAlpha = 0;
 	auras.strictMatching = true;
 	auras.icons = {};
-	
+
 	return auras;
 end
 
@@ -64,14 +64,14 @@ function UF:UpdateAuraWatch(frame, petOverride, db)
 	local buffs = {};
 	local auras = frame.AuraWatch;
 	local db = db and db.buffIndicator or frame.db.buffIndicator;
-	
+
 	if(not db.enable) then
 		auras:Hide();
 		return;
 	else
 		auras:Show();
 	end
-	
+
 	if(frame.unit == "pet" and not petOverride) then
 		local petWatch = E.global["unitframe"].buffwatch.PET or {};
 		for _, value in pairs(petWatch) do
@@ -85,7 +85,7 @@ function UF:UpdateAuraWatch(frame, petOverride, db)
 			tinsert(buffs, value);
 		end
 	end
-	
+
 	if(auras.icons) then
 		for i = 1, #auras.icons do
 			local matchFound = false;
@@ -95,16 +95,16 @@ function UF:UpdateAuraWatch(frame, petOverride, db)
 					break;
 				end
 			end
-			
+
 			if(not matchFound) then
 				auras.icons[i]:Hide();
 				auras.icons[i] = nil;
 			end
 		end
 	end
-	
+
 	local unitframeFont = LSM:Fetch("font", E.db["unitframe"].font);
-	
+
 	for i = 1, #buffs do
 		if(buffs[i].id) then
 			local name, _, image = GetSpellInfo(buffs[i].id);
@@ -126,12 +126,12 @@ function UF:UpdateAuraWatch(frame, petOverride, db)
 				icon.textThreshold = buffs[i].textThreshold or -1;
 				icon.displayText = buffs[i].displayText;
 				icon.decimalThreshold = buffs[i].decimalThreshold;
-				
+
 				icon:Width(db.size);
 				icon:Height(db.size);
 				icon:ClearAllPoints();
 				icon:Point(buffs[i].point or "TOPLEFT", frame.Health, buffs[i].point or "TOPLEFT", buffs[i].xOffset, buffs[i].yOffset);
-				
+
 				if(not icon.icon) then
 					icon.icon = icon:CreateTexture(nil, "BORDER");
 					icon.icon:SetAllPoints(icon);
@@ -142,7 +142,7 @@ function UF:UpdateAuraWatch(frame, petOverride, db)
 					f:SetFrameLevel(icon:GetFrameLevel() + 50);
 					icon.text = f:CreateFontString(nil, "BORDER");
 				end
-				
+
 				if(not icon.border) then
 					icon.border = icon:CreateTexture(nil, "BACKGROUND");
 					icon.border:Point("TOPLEFT", -E.mult, E.mult);
@@ -150,17 +150,17 @@ function UF:UpdateAuraWatch(frame, petOverride, db)
 					icon.border:SetTexture(E["media"].blankTex);
 					icon.border:SetVertexColor(0, 0, 0);
 				end
-				
+
 				if(not icon.cd) then
 					icon.cd = CreateFrame("Cooldown", nil, icon, "CooldownFrameTemplate");
 					icon.cd:SetAllPoints(icon);
 					icon.cd:SetReverse(true);
 					icon.cd:SetFrameLevel(icon:GetFrameLevel());
 				end
-				
+
 				if(icon.style == "coloredIcon") then
 					icon.icon:SetTexture(E["media"].blankTex);
-					
+
 					if(buffs[i]["color"]) then
 						icon.icon:SetVertexColor(buffs[i]["color"].r, buffs[i]["color"].g, buffs[i]["color"].b);
 					else
@@ -181,23 +181,23 @@ function UF:UpdateAuraWatch(frame, petOverride, db)
 					icon.icon:Hide();
 					icon.cd:SetAlpha(0);
 				end
-				
+
 				if(icon.displayText) then
 					icon.text:Show();
 					local r, g, b = 1, 1, 1;
 					if(buffs[i].textColor) then
 						r, g, b = buffs[i].textColor.r, buffs[i].textColor.g, buffs[i].textColor.b;
 					end
-					
+
 					icon.text:SetTextColor(r, g, b);
 				else
 					icon.text:Hide();
 				end
-				
+
 				if(not icon.count) then
 					icon.count = icon:CreateFontString(nil, "OVERLAY");
 				end
-				
+
 				icon.count:ClearAllPoints();
 				if(icon.displayText) then
 					local point, anchorPoint, x, y = unpack(textCounterOffsets[buffs[i].point]);
@@ -205,12 +205,12 @@ function UF:UpdateAuraWatch(frame, petOverride, db)
 				else
 					icon.count:Point("CENTER", unpack(counterOffsets[buffs[i].point]));
 				end
-				
+
 				icon.count:FontTemplate(unitframeFont, db.fontSize, E.db["unitframe"].fontOutline);
 				icon.text:FontTemplate(unitframeFont, db.fontSize, E.db["unitframe"].fontOutline);
 				icon.text:ClearAllPoints();
 				icon.text:Point(buffs[i].point, icon, buffs[i].point);
-				
+
 				if(buffs[i].enabled) then
 					auras.icons[buffs[i].id] = icon;
 					if(auras.watched) then
@@ -227,12 +227,12 @@ function UF:UpdateAuraWatch(frame, petOverride, db)
 			end
 		end
 	end
-	
+
 	if(frame.AuraWatch.Update) then
 		frame.AuraWatch.Update(frame);
 	end
-	
+
 	frame:UpdateElement("AuraWatch");
-	
+
 	buffs = nil;
 end

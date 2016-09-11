@@ -60,7 +60,7 @@ function M:SkinBubble(frame)
 			frame.text = region;
 		end
 	end
-	
+
 	if(E.private.general.chatBubbles == "backdrop") then
 		if(E.PixelMode) then
 			frame:SetBackdrop({
@@ -74,56 +74,56 @@ function M:SkinBubble(frame)
 		else
 			frame:SetBackdrop(nil);
 		end
-		
+
 		local r, g, b = frame.text:GetTextColor();
 		if(not E.PixelMode) then
 			if(not frame.backdrop) then
 				frame.backdrop = frame:CreateTexture(nil, "BACKGROUND");
 				frame.backdrop:SetAllPoints(frame);
 				frame.backdrop:SetTexture(unpack(E.media.backdropfadecolor));
-				
+
 				frame.bordertop = frame:CreateTexture(nil, "OVERLAY");
 				frame.bordertop:SetPoint("TOPLEFT", frame, "TOPLEFT", -mult*2, mult*2);
 				frame.bordertop:SetPoint("TOPRIGHT", frame, "TOPRIGHT", mult*2, mult*2);
 				frame.bordertop:SetHeight(mult);
 				frame.bordertop:SetTexture(r, g, b);
-				
+
 				frame.bordertop.backdrop = frame:CreateTexture(nil, "BORDER");
 				frame.bordertop.backdrop:SetPoint("TOPLEFT", frame.bordertop, "TOPLEFT", -mult, mult);
 				frame.bordertop.backdrop:SetPoint("TOPRIGHT", frame.bordertop, "TOPRIGHT", mult, mult);
 				frame.bordertop.backdrop:SetHeight(mult * 3);
 				frame.bordertop.backdrop:SetTexture(0, 0, 0);
-				
+
 				frame.borderbottom = frame:CreateTexture(nil, "OVERLAY");
 				frame.borderbottom:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", -mult*2, -mult*2);
 				frame.borderbottom:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", mult*2, -mult*2);
 				frame.borderbottom:SetHeight(mult);
 				frame.borderbottom:SetTexture(r, g, b);
-				
+
 				frame.borderbottom.backdrop = frame:CreateTexture(nil, "BORDER");
 				frame.borderbottom.backdrop:SetPoint("BOTTOMLEFT", frame.borderbottom, "BOTTOMLEFT", -mult, -mult);
 				frame.borderbottom.backdrop:SetPoint("BOTTOMRIGHT", frame.borderbottom, "BOTTOMRIGHT", mult, -mult);
 				frame.borderbottom.backdrop:SetHeight(mult * 3)
 				frame.borderbottom.backdrop:SetTexture(0, 0, 0);
-				
+
 				frame.borderleft = frame:CreateTexture(nil, "OVERLAY");
 				frame.borderleft:SetPoint("TOPLEFT", frame, "TOPLEFT", -mult*2, mult*2);
 				frame.borderleft:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", mult*2, -mult*2);
 				frame.borderleft:SetWidth(mult);
 				frame.borderleft:SetTexture(r, g, b);
-				
+
 				frame.borderleft.backdrop = frame:CreateTexture(nil, "BORDER");
 				frame.borderleft.backdrop:SetPoint("TOPLEFT", frame.borderleft, "TOPLEFT", -mult, mult);
 				frame.borderleft.backdrop:SetPoint("BOTTOMLEFT", frame.borderleft, "BOTTOMLEFT", -mult, -mult);
 				frame.borderleft.backdrop:SetWidth(mult * 3);
 				frame.borderleft.backdrop:SetTexture(0, 0, 0);
-				
+
 				frame.borderright = frame:CreateTexture(nil, "OVERLAY");
 				frame.borderright:SetPoint("TOPRIGHT", frame, "TOPRIGHT", mult*2, mult*2);
 				frame.borderright:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -mult*2, -mult*2);
 				frame.borderright:SetWidth(mult);
 				frame.borderright:SetTexture(r, g, b);
-				
+
 				frame.borderright.backdrop = frame:CreateTexture(nil, "BORDER");
 				frame.borderright.backdrop:SetPoint("TOPRIGHT", frame.borderright, "TOPRIGHT", mult, mult);
 				frame.borderright.backdrop:SetPoint("BOTTOMRIGHT", frame.borderright, "BOTTOMRIGHT", mult, -mult);
@@ -138,7 +138,7 @@ function M:SkinBubble(frame)
 		frame.text:FontTemplate(E.LSM:Fetch("font", E.private.general.chatBubbleFont), E.private.general.chatBubbleFontSize);
 	elseif(E.private.general.chatBubbles == "backdrop_noborder") then
 		frame:SetBackdrop(nil);
-	
+
 		if(not frame.backdrop) then
 			frame.backdrop = frame:CreateTexture(nil, "ARTWORK");
 			frame.backdrop:SetInside(frame, 4, 4);
@@ -173,22 +173,22 @@ function M:LoadChatBubbles()
 		E.private.general.chatBubbles = "disabled";
 		E.private.general.bubbles = nil;
 	end
-	
+
 	if(E.private.general.chatBubbles == "disabled") then return; end
-	
+
 	local frame = CreateFrame("Frame");
 	frame.lastupdate = -2;
-	
+
 	frame:SetScript("OnUpdate", function(self, elapsed)
 		self.lastupdate = self.lastupdate + elapsed;
 		if(self.lastupdate < .1) then return; end
 		self.lastupdate = 0;
-		
+
 		local count = WorldFrame:GetNumChildren();
 		if(count ~= numChildren) then
 			for i = numChildren + 1, count do
 				local frame = select(i, WorldFrame:GetChildren());
-				
+
 				if(M:IsChatBubble(frame)) then
 					M:SkinBubble(frame);
 				end
