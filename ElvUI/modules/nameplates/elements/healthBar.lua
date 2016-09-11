@@ -67,7 +67,7 @@ function mod:ConstructElement_HealthBar(parent)
 	local frame = CreateFrame("StatusBar", nil, parent);
 	self:StyleFrame(frame);
 	frame:SetFrameStrata("BACKGROUND");
-	frame:SetFrameLevel(0);
+	frame:SetFrameLevel(5);
 	frame.anim = CreateAnimationGroup(frame);
 	frame.anim.progress = frame.anim:CreateAnimation("Progress");
 	frame.anim.progress:SetSmoothing("Out");
