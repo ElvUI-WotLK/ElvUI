@@ -278,13 +278,13 @@ function UF:Construct_DruidAltManaBar(frame)
 	return dpower;
 end
 
-function UF:DruidResourceBarVisibilityUpdate(unit)
+function UF:DruidResourceBarVisibilityUpdate()
 	local parent = self:GetParent();
 	
 	UF:UpdatePlayerFrameAnchors(parent, self:IsShown());
 end
 
-function UF:DruidPostUpdateAltPower(unit, min, max)
+function UF:DruidPostUpdateAltPower(_, min, max)
 	local parent = self:GetParent();
 	local powerText = parent.Power.value;
 	local powerTextParent = powerText:GetParent();

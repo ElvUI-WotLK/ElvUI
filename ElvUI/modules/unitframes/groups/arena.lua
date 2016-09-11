@@ -2,7 +2,7 @@ local E, L, V, P, G = unpack(select(2, ...));
 local UF = E:GetModule("UnitFrames");
 
 local _G = _G;
-local pairs, unpack = pairs, unpack;
+local pairs = pairs;
 local tinsert = table.insert;
 local format = format;
 

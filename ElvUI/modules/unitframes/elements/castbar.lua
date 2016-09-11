@@ -1,9 +1,8 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local UF = E:GetModule("UnitFrames");
-local LSM = LibStub("LibSharedMedia-3.0");
 
 local unpack = unpack;
-local floor, abs = math.floor, abs;
+local abs = abs;
 
 local CreateFrame = CreateFrame;
 local UnitIsPlayer = UnitIsPlayer;
@@ -359,7 +358,7 @@ function UF:SetCastTicks(frame, numTicks)
 	end
 end
 
-function UF:PostCastStart(unit, name, rank, castid)
+function UF:PostCastStart(unit, name)
 	local db = self:GetParent().db;
 	if(not db or not db.castbar) then
 		return;
@@ -422,7 +421,7 @@ function UF:PostCastStart(unit, name, rank, castid)
 	end
 end
 
-function UF:PostCastStop(unit, name, rank, castid)
+function UF:PostCastStop()
 	local db = self:GetParent().db;
 	if(not db) then
 		return;
@@ -464,7 +463,7 @@ function UF:PostChannelUpdate(unit, name)
 	end
 end
 
-function UF:PostCastFailed(event, unit, name, rank, castid)
+function UF:PostCastFailed()
 	local db = self:GetParent().db;
 	if(not db) then
 		return;
@@ -484,7 +483,7 @@ function UF:PostCastFailed(event, unit, name, rank, castid)
 	end
 end
 
-function UF:PostCastNotInterruptible(unit)
+function UF:PostCastNotInterruptible()
 	local colors = ElvUF.colors;
 	
 	self:SetStatusBarColor(colors.castNoInterrupt[1], colors.castNoInterrupt[2], colors.castNoInterrupt[3]);
@@ -526,7 +525,7 @@ function UF:PostCastInterruptible(unit)
 	end
 end
 
-function UF:PostChannelStop(unit, spellname)
+function UF:PostChannelStop()
 	local db = self:GetParent().db;
 	if(not db) then
 		return;

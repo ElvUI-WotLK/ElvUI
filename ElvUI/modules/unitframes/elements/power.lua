@@ -210,7 +210,7 @@ end
 
 local tokens = {[0] = "MANA", "RAGE", "FOCUS", "ENERGY", "RUNIC_POWER"}
 function UF:PostUpdatePower(unit, min, max)
-	local pType, _, altR, altG, altB = UnitPowerType(unit);
+	local pType = UnitPowerType(unit);
 	local parent = self:GetParent();
 	
 	if(parent.isForced) then

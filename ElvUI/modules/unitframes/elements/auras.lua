@@ -186,20 +186,6 @@ function UF:Configure_Auras(frame, auraType)
 	end
 end
 
-local function SortAurasByPriority(a, b)
-	if(a and b) then
-		if(a.isPlayer and not b.isPlayer) then
-			return true;
-		elseif(not a.isPlayer and b.isPlayer) then
-			return false;
-		end
-		
-		if(a.priority and b.priority) then
-			return a.priority > b.priority;
-		end
-	end
-end
-
 local function SortAurasByTime(a, b)
 	if(a and b and a:GetParent().db) then
 		local sortDirection = a:GetParent().db.sortDirection;
@@ -319,7 +305,7 @@ end
 
 local unstableAffliction = GetSpellInfo(30108);
 local vampiricTouch = GetSpellInfo(34914);
-function UF:PostUpdateAura(unit, button, index, offset, filter, isDebuff, duration, timeLeft)
+function UF:PostUpdateAura(unit, button, index)
 	local name, _, _, _, dtype, duration, expiration, _, isStealable = UnitAura(unit, index, button.filter);
 	
 	local isFriend = UnitIsFriend("player", unit) == 1 and true or false;
@@ -422,12 +408,11 @@ function UF:CheckFilter(filterType, isFriend)
 	return false;
 end
 
-function UF:AuraFilter(unit, icon, name, rank, texture, count, dtype, duration, timeLeft, unitCaster, isStealable, shouldConsolidate, spellID)
+function UF:AuraFilter(unit, icon, name, _, _, _, dtype, duration, timeLeft, unitCaster, isStealable, shouldConsolidate, spellID)
 	if(E.global.unitframe.InvalidSpells[spellID]) then
 		return false;
 	end
-	
-	local isPlayer, isFriend;
+
 	local db = self:GetParent().db;
 	if(not db or not db[self.type]) then return true; end
 	

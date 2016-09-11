@@ -2,10 +2,7 @@ local E, L, V, P, G = unpack(select(2, ...));
 local UF = E:GetModule("UnitFrames");
 
 local _G = _G;
-local pairs, unpack = pairs, unpack;
 local tinsert = table.insert;
-local ceil = math.ceil;
-local format = format;
 
 local IsAddOnLoaded = IsAddOnLoaded;
 local MAX_COMBO_POINTS = MAX_COMBO_POINTS;

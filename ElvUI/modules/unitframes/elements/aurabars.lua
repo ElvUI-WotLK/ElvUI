@@ -174,7 +174,7 @@ function UF.SortAuraBarName(a, b)
 	return a.name > b.name;
 end
 
-function UF:AuraBarFilter(unit, name, rank, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, shouldConsolidate, spellID)
+function UF:AuraBarFilter(unit, name, _, _, _, debuffType, duration, _, unitCaster, isStealable, shouldConsolidate, spellID)
 	if(not self.db) then return; end
 	if(E.global.unitframe.InvalidSpells[spellID]) then
 		return false;
@@ -188,7 +188,6 @@ function UF:AuraBarFilter(unit, name, rank, icon, count, debuffType, duration, e
 	local playerOnlyFilter = false;
 	local isPlayer = unitCaster == "player" or unitCaster == "vehicle";
 	local isFriend = UnitIsFriend("player", unit) == 1 and true or false;
-	local auraType = isFriend and db.friendlyAuraType or db.enemyAuraType;
 	
 	if(UF:CheckFilter(db.playerOnly, isFriend)) then
 		if(isPlayer) then
@@ -286,7 +285,7 @@ function UF:AuraBarFilter(unit, name, rank, icon, count, debuffType, duration, e
 	return returnValue;
 end
 
-function UF:ColorizeAuraBars(event, unit)
+function UF:ColorizeAuraBars()
 	local bars = self.bars;
 	for index = 1, #bars do
 		local frame = bars[index];

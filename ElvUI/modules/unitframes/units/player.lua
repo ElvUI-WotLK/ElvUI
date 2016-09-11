@@ -2,11 +2,6 @@ local E, L, V, P, G = unpack(select(2, ...));
 local UF = E:GetModule("UnitFrames");
 
 local _G = _G;
-local unpack, pairs = unpack, pairs;
-local format = format;
-
-local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
-local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
 
 local _, ns = ...;
 local ElvUF = ns.oUF;

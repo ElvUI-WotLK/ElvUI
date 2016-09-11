@@ -53,8 +53,7 @@ function UF:RaidRoleUpdate()
 	local masterLooter = anchor:GetParent().MasterLooter;
 	
 	if(not leader or not masterLooter or not assistant) then return; end
-	
-	local unit = anchor:GetParent().unit;
+
 	local db = anchor:GetParent().db;
 	local isLeader = leader:IsShown();
 	local isMasterLooter = masterLooter:IsShown();

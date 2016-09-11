@@ -85,7 +85,7 @@ local function UpdateFillBar(frame, previousTexture, bar, amount)
 	return bar:GetStatusBarTexture();
 end
 
-function UF:UpdateHealComm(unit, myIncomingHeal, allIncomingHeal)
+function UF:UpdateHealComm(_, myIncomingHeal, allIncomingHeal)
 	local frame = self.parent;
 	local previousTexture = frame.Health:GetStatusBarTexture();
 	

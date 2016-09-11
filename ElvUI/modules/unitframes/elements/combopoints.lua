@@ -139,7 +139,7 @@ function UF:Configure_ComboPoints(frame)
 	end
 end
 
-function UF:UpdateComboDisplay(event, unit)
+function UF:UpdateComboDisplay(_, unit)
 	if(unit == "pet") then return; end
 	local db = self.db;
 	if(not db) then return; end

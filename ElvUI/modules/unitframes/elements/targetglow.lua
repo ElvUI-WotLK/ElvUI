@@ -25,7 +25,7 @@ function UF:Construct_TargetGlow(frame)
 	return x;
 end
 
-function UF:UpdateTargetGlow(event)
+function UF:UpdateTargetGlow()
 	if(not self.unit) then return; end
 	local unit = self.unit;
 	
@@ -61,7 +61,6 @@ function UF:UpdateTargetGlow(event)
 end
 
 function UF:Configure_TargetGlow(frame)
-	local SHADOW_SPACING = frame.SHADOW_SPACING;
 	local targetHealthGlow = frame.TargetGlow;
 	local targetPowerGlow = frame.TargetGlow.powerGlow;
 	targetHealthGlow:ClearAllPoints();

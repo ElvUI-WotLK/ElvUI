@@ -72,7 +72,7 @@ local function createConfigEnv()
 		ColorGradient = ElvUF.ColorGradient,		
 	}, {
 		__index = _G,
-		__newindex = function(tbl, key, value) _G[key] = value end,
+		__newindex = function(_, key, value) _G[key] = value end,
 	})
 	
 	overrideFuncs["namecolor"] = ElvUF.Tags["namecolor"]
@@ -184,7 +184,7 @@ function UF:UnshowChildUnits(header, ...)
 	end
 end
 
-local function OnAttributeChanged(self, name, value)
+local function OnAttributeChanged(self)
 	if not self:GetParent().forceShow and not self.forceShow then return; end
 	if not self:IsShown() then return end
 	
@@ -232,7 +232,6 @@ function UF:HeaderConfig(header, configMode)
 	
 	for i=1, #header.groups do
 		local group = header.groups[i]
-		local db = group.db
 
 		if group:IsShown() then
 			group.forceShow = header.forceShow

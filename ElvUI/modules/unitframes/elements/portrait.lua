@@ -94,7 +94,7 @@ function UF:Configure_Portrait(frame, dontHide)
 	end
 end
 
-function UF:PortraitUpdate(unit)
+function UF:PortraitUpdate()
 	local db = self:GetParent().db;
 	if(not db) then return; end
 	

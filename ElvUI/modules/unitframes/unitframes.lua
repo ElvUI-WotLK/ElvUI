@@ -21,13 +21,7 @@ local MAX_BOSS_FRAMES = MAX_BOSS_FRAMES;
 
 local _, ns = ...;
 local ElvUF = ns.oUF;
-local AceTimer = LibStub:GetLibrary("AceTimer-3.0");
 assert(ElvUF, "ElvUI was unable to locate oUF.");
-
-local opposites = {
-	["DEBUFFS"] = "BUFFS",
-	["BUFFS"] = "DEBUFFS"
-}
 
 UF["headerstoload"] = {};
 UF["unitgroupstoload"] = {};
@@ -186,8 +180,8 @@ local DIRECTION_TO_VERTICAL_SPACING_MULTIPLIER = {
 	LEFT_UP = 1
 };
 
-local find, gsub, split, format = string.find, string.gsub, string.split, string.format;
-local min, abs = math.min, math.abs;
+local find, gsub, format = string.find, string.gsub, string.format;
+local min = math.min;
 local tremove, tinsert = table.remove, table.insert;
 
 function UF:ConvertGroupDB(group)
@@ -702,7 +696,6 @@ end
 
 function UF:CreateHeader(parent, groupFilter, overrideName, template, groupName, headerTemplate)
 	local group = parent.groupName or groupName;
-	local db = UF.db["units"][group];
 	ElvUF:SetActiveStyle("ElvUF_"..E:StringTitle(group));
 	local header = ElvUF:SpawnHeader(overrideName, headerTemplate, nil,
 			"groupFilter", groupFilter,
@@ -989,7 +982,7 @@ local HandleFrame = function(baseName)
 	end
 end
 
-function ElvUF:DisableBlizzard(unit, object)
+function ElvUF:DisableBlizzard(unit)
 	if((not unit) or InCombatLockdown()) then return; end
 	
 	if((unit == "player") and E.private["unitframe"]["disabledBlizzardFrames"].player) then
@@ -1043,13 +1036,13 @@ function ElvUF:DisableBlizzard(unit, object)
 	end
 end
 
-function UF:ADDON_LOADED(event, addon)
+function UF:ADDON_LOADED(_, addon)
 	if(addon ~= "Blizzard_ArenaUI") then return; end
 	ElvUF:DisableBlizzard("arena");
 	self:UnregisterEvent("ADDON_LOADED");
 end
 
-function UF:PLAYER_ENTERING_WORLD(event)
+function UF:PLAYER_ENTERING_WORLD()
 	self:Update_AllFrames()
 end
 

@@ -4,8 +4,7 @@ local ElvUF = ns.oUF
 assert(ElvUF, "ElvUI was unable to locate oUF.")
 
 local _G = _G;
-local unpack, pairs = unpack, pairs;
-local ceil, sqrt, floor = math.ceil, math.sqrt, math.floor;
+local floor = math.floor;
 local format = string.format;
 
 local GetTime = GetTime;
@@ -174,7 +173,7 @@ end
 ElvUF.TagEvents["powercolor"] = "UNIT_ENERGY UNIT_FOCUS UNIT_MANA UNIT_RAGE UNIT_RUNIC_POWER UNIT_MAXPOWER"
 ElvUF.Tags["powercolor"] = function(unit)
 	if not unit then return end
-	local pType, pToken, altR, altG, altB = UnitPowerType(unit)
+	local _, pToken, altR, altG, altB = UnitPowerType(unit)
 	local color = ElvUF["colors"].power[pToken]
 	if color then
 		return Hex(color[1], color[2], color[3])
