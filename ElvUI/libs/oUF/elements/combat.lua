@@ -1,5 +1,7 @@
-local parent, ns = ...
+local _, ns = ...
 local oUF = ns.oUF
+
+local UnitAffectingCombat = UnitAffectingCombat;
 
 local Update = function(self, event)
 	local combat = self.Combat

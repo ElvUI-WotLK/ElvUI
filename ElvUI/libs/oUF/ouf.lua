@@ -14,6 +14,13 @@ local upper, lower = string.upper, string.lower;
 local split = string.split;
 local tinsert, tremove = table.insert, table.remove;
 
+local UnitExists = UnitExists
+local CreateFrame = CreateFrame
+local UnitIsUnit = UnitIsUnit
+local UnitIsPlayer = UnitIsPlayer
+local UnitInRaid = UnitInRaid
+local UnitInParty = UnitInParty
+
 local styles, style = {};
 local callback, objects = {}, {};
 
@@ -209,7 +216,7 @@ local InitializeSecureMenu = function(self)
 	end
 end
 
-local togglemenu = function(self, unit, button)
+local togglemenu = function(self, unit)
 	if(not secureDropdown) then
 		secureDropdown = CreateFrame("Frame", "SecureTemplatesDropdown", nil, "UIDropDownMenuTemplate");
 		secureDropdown:SetID(1);
@@ -461,7 +468,7 @@ local generateName = function(unit, ...)
 	return name;
 end
 
-local styleProxy = function(self, frame, ...)
+local styleProxy = function(_, frame)
 	return walkObject(_G[frame]);
 end
 

@@ -1,5 +1,19 @@
-local parent, ns = ...
+local _, ns = ...
 local oUF = ns.oUF
+
+local unpack = unpack
+
+local GetPetHappiness = GetPetHappiness
+local UnitHealth = UnitHealth
+local UnitHealthMax = UnitHealthMax
+local UnitIsConnected = UnitIsConnected
+local UnitIsUnit = UnitIsUnit
+local UnitIsPlayer = UnitIsPlayer
+local UnitPlayerControlled = UnitPlayerControlled
+local UnitClass = UnitClass
+local UnitReaction = UnitReaction
+local UnitIsTapped = UnitIsTapped
+local UnitIsTappedByPlayer = UnitIsTappedByPlayer
 
 oUF.colors.health = {49/255, 207/255, 37/255}
 

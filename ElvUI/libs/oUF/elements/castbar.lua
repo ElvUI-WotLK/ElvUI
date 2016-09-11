@@ -3,13 +3,17 @@
 		oUF_Castbar by starlon.
 		http://svn.wowace.com/wowace/trunk/oUF_Castbar/
 --]]
-local parent, ns = ...
+local _, ns = ...
 local oUF = ns.oUF
 local tradeskillCurrent, tradeskillTotal, mergeTradeskill = 0, 0, false;
 
 local GetTime = GetTime;
 local UnitCastingInfo = UnitCastingInfo;
 local UnitChannelInfo = UnitChannelInfo;
+local GetNetStats = GetNetStats;
+local UnitIsUnit = UnitIsUnit;
+local CASTING_BAR_HOLD_TIME = CASTING_BAR_HOLD_TIME;
+local CASTING_BAR_ALPHA_STEP = CASTING_BAR_ALPHA_STEP;
 
 local updateSafeZone = function(self)
 	local sz = self.SafeZone;
@@ -467,7 +471,7 @@ local Disable = function(object, unit)
 	end
 end
 
-hooksecurefunc("DoTradeSkill", function(index, num, ...)
+hooksecurefunc("DoTradeSkill", function(_, num)
 	tradeskillCurrent = 0
 	tradeskillTotal = tonumber(num) or 1
 	mergeTradeskill = true

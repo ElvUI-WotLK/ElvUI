@@ -40,10 +40,16 @@
 
 if select(2, UnitClass("player")) ~= "DEATHKNIGHT" then return end
 
-
-local parent, ns = ...
+local _, ns = ...
 local oUF = ns.oUF
+
 local floor = math.floor
+
+local GetSpellInfo = GetSpellInfo
+local IsUsableSpell = IsUsableSpell
+local GetRuneCooldown = GetRuneCooldown
+local GetTime = GetTime
+local GetRuneType = GetRuneType
 
 oUF.colors.Runes = {
 	{1, 0, 0},   -- blood

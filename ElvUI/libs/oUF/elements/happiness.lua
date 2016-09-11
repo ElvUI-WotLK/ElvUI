@@ -1,5 +1,8 @@
-local parent, ns = ...
+local _, ns = ...
 local oUF = ns.oUF
+
+local GetPetHappiness = GetPetHappiness
+local HasPetUI = HasPetUI
 
 local Update = function(self, event, unit)
 	if(self.unit ~= unit) then return end

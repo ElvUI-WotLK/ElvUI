@@ -1,5 +1,10 @@
-local parent, ns = ...
+local _, ns = ...
 local oUF = ns.oUF
+
+local UnitInParty = UnitInParty
+local UnitInRaid = UnitInRaid
+local GetLootMethod = GetLootMethod
+local UnitIsUnit = UnitIsUnit
 
 local Update = function(self, event)
 	local unit = self.unit;

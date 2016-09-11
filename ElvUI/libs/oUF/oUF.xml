@@ -29,5 +29,4 @@
 	<Script file='elements\runebar.lua' />
 	<Script file='elements\tags.lua' />
 	<Script file='elements\threat.lua' />
-	<Script file='elements\vehicle.lua' />
 </Ui>

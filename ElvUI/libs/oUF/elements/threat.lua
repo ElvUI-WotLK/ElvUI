@@ -1,5 +1,9 @@
-local parent, ns = ...
+local _, ns = ...
 local oUF = ns.oUF
+
+local IsLoggedIn = IsLoggedIn
+local UnitThreatSituation = UnitThreatSituation
+local GetThreatStatusColor = GetThreatStatusColor
 
 local Update = function(self, event, unit)
 	if(unit ~= self.unit) or not unit or not IsLoggedIn() then return end

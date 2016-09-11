@@ -1,4 +1,4 @@
-local parent, ns = ...
+local _, ns = ...
 local oUF = ns.oUF
 
 local VISIBLE = 1
@@ -6,6 +6,11 @@ local HIDDEN = 0
 
 local floor = math.floor
 local tinsert = table.insert
+
+local CreateFrame = CreateFrame
+local UnitAura = UnitAura
+local GetSpellInfo = GetSpellInfo
+local UnitIsUnit = UnitIsUnit
 
 local UpdateTooltip = function(self)
 	GameTooltip:SetUnitAura(self.parent.__owner.unit, self:GetID(), self.filter)

@@ -1,5 +1,20 @@
-local parent, ns = ...
+local _, ns = ...
 local oUF = ns.oUF
+
+local unpack = unpack
+
+local GetPetHappiness = GetPetHappiness
+local UnitPower = UnitPower
+local UnitPowerMax = UnitPowerMax
+local UnitIsConnected = UnitIsConnected
+local UnitIsUnit = UnitIsUnit
+local UnitPowerType = UnitPowerType
+local UnitIsPlayer = UnitIsPlayer
+local UnitPlayerControlled = UnitPlayerControlled
+local UnitClass = UnitClass
+local UnitReaction = UnitReaction
+local UnitIsTapped = UnitIsTapped
+local UnitIsTappedByPlayer = UnitIsTappedByPlayer
 
 oUF.colors.power = {}
 for power, color in next, PowerBarColor do
