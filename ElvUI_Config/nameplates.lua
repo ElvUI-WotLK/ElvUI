@@ -445,20 +445,27 @@ E.Options.args.nameplate = {
 					name = L["Hide Spell Name"],
 					type = "toggle",
 				},
-				hideTime = {
+				offset = {
+					type = "range",
 					order = 2,
+					name = L["Offset"],
+					type = "range",
+					min = 0, max = 30, step = 1,
+				},
+				hideTime = {
+					order = 3,
 					name = L["Hide Time"],
 					type = "toggle",
 				},
 				height = {
 					type = "range",
-					order = 3,
+					order = 4,
 					name = L["Height"],
 					type = "range",
 					min = 4, max = 30, step = 1,
 				},
 				castTimeFormat = {
-					order = 4,
+					order = 5,
 					type = "select",
 					name = L["Cast Time Format"],
 					values = {
@@ -468,7 +475,7 @@ E.Options.args.nameplate = {
 					}
 				},
 				channelTimeFormat = {
-					order = 5,
+					order = 6,
 					type = "select",
 					name = L["Channel Time Format"],
 					values = {

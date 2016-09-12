@@ -71,7 +71,13 @@ end
 
 function mod:ConfigureElement_CastBar(frame)
 	local castBar = frame.CastBar;
+
+	castBar:SetPoint("TOPLEFT", frame.HealthBar, "BOTTOMLEFT", 0, -(E.Border - E.Spacing*3 + self.db.castBar.offset));
+	castBar:SetPoint("TOPRIGHT", frame.HealthBar, "BOTTOMRIGHT", 0, -(E.Border - E.Spacing*3 + self.db.castBar.offset));
 	castBar:SetHeight(self.db.castBar.height);
+
+	castBar.Icon:SetPoint("TOPLEFT", frame.HealthBar, "TOPRIGHT", (E.Border + E.Spacing*3) + self.db.castBar.offset, 0);
+	castBar.Icon:SetPoint("BOTTOMLEFT", castBar, "BOTTOMRIGHT", (E.Border + E.Spacing*3) + self.db.castBar.offset, 0);
 	castBar.Icon:SetWidth(self.db.castBar.height + self.db.healthBar.height + E.Border + E.Spacing*3);
 
 	castBar.Time:SetFont(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline);
@@ -96,13 +102,9 @@ end
 
 function mod:ConstructElement_CastBar(parent)
 	local frame = CreateFrame("StatusBar", nil, parent);
-	frame:SetPoint("TOPLEFT", parent.HealthBar, "BOTTOMLEFT", 0, -E.Border - E.Spacing*3);
-	frame:SetPoint("TOPRIGHT", parent.HealthBar, "BOTTOMRIGHT", 0, -E.Border - E.Spacing*3);
 	self:StyleFrame(frame);
 
 	frame.Icon = CreateFrame("Frame", nil, frame);
-	frame.Icon:SetPoint("TOPLEFT", parent.HealthBar, "TOPRIGHT", E.Border + E.Spacing*3, 0)
-	frame.Icon:SetPoint("BOTTOMLEFT", frame, "BOTTOMRIGHT", E.Border + E.Spacing*3, 0)
 	frame.Icon.texture = frame.Icon:CreateTexture(nil, "BORDER");
 	frame.Icon.texture:SetAllPoints();
 	frame.Icon.texture:SetTexCoord(unpack(E.TexCoords));

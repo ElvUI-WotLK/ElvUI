@@ -190,6 +190,7 @@ P["nameplate"] = {
 	},
 	['castBar'] = {
 		['height'] = 6,
+		['offset'] = 0,
 		["hideSpellName"] = false,
 		["hideTime"] = false,
 		["castTimeFormat"] = "CURRENT",
