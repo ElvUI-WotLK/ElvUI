@@ -164,22 +164,29 @@ local function LoadSkin(event)
 		bar.anim = CreateAnimationGroup(bar);
 		bar.anim.progress = bar.anim:CreateAnimation("Progress");
 		bar.anim.progress:SetSmoothing("Out");
-		bar.anim.progress:SetDuration(1.7);
 
 		bar.anim.color = bar.anim:CreateAnimation("Color");
 		bar.anim.color:SetSmoothing("Out");
 		bar.anim.color:SetColorType("Statusbar");
-		bar.anim.color:SetDuration(1.7);
 		bar.anim.color.StartR, bar.anim.color.StartG, bar.anim.color.StartB = 1, 0, 0;
 
 		if(not noNumber) then
 			bar.anim2 = CreateAnimationGroup(_G[bar:GetName() .. "Text"]);
 			bar.anim2.number = bar.anim2:CreateAnimation("Number");
-			bar.anim2.number:SetDuration(1.7);
 		end
 	end
 
 	local function PlayAnimationStatusBar(bar, max, value, noNumber)
+		if(E.private.skins.animations) then
+			bar.anim.progress:SetDuration(1.7);
+			bar.anim.color:SetDuration(1.7);
+			bar.anim2.number:SetDuration(1.7);
+		else
+			bar.anim.progress:SetDuration(0);
+			bar.anim.color:SetDuration(0);
+			bar.anim2.number:SetDuration(0);
+		end
+
 		if(bar.anim:IsPlaying() or (bar.anim2 and bar.anim2:IsPlaying())) then
 			bar.anim:Stop();
 			if(not noNumber) then
