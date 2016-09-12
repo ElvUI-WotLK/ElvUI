@@ -57,7 +57,7 @@ function UF:Configure_Power(frame)
 		end
 
 		power.Smooth = self.db.smoothbars;
-		power.SmoothSpeed = self.db.smoothSpeed;
+		power.SmoothSpeed = self.db.smoothSpeed * 10;
 
 		local attachPoint = self:GetObjectAnchorPoint(frame, db.power.attachTextTo);
 		if(E.global.tukuiMode and frame.InfoPanel and frame.InfoPanel:IsShown()) then
