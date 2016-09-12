@@ -44,7 +44,7 @@ f:SetScript('OnUpdate', function()
 
 	for bar, value in pairs(smoothing) do
 		local cur = bar:GetValue()
-		local new = cur + min((value-cur)/3, max(value-cur, limit))
+		local new = cur + min((value-cur)/(bar.SmoothSpeed or 3), max(value-cur, limit))
 		if new ~= new then
 			new = value
 		end

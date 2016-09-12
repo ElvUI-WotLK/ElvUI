@@ -56,6 +56,7 @@ function UF:Configure_HealthBar(frame)
 	local health = frame.Health;
 
 	health.Smooth = self.db.smoothbars;
+	health.SmoothSpeed = self.db.smoothSpeed;
 
 	if(health.value) then
 		local attachPoint = self:GetObjectAnchorPoint(frame, db.health.attachTextTo);

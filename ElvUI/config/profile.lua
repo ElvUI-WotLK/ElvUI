@@ -255,6 +255,7 @@ P["bags"] = {
 
 P["unitframe"] = {
 	["smoothbars"] = false,
+	["smoothSpeed"] = 3,
 	["statusbar"] = "ElvUI Norm",
 	["font"] = "Homespun",
 	["fontSize"] = 10,

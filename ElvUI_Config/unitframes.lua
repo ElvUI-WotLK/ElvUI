@@ -1997,9 +1997,17 @@ E.Options.args.unitframe = {
 							desc = L["Bars will transition smoothly."],
 							set = function(info, value) E.db.unitframe[ info[#info] ] = value; UF:Update_AllFrames(); end
 						},
+						smoothSpeed = {
+							type = "range",
+							order = 3,
+							name = L["Smooth Speed"],
+							desc = L["Speed In Milliseconds"],
+							min = 0, max = 100, step = 1,
+							set = function(info, value) E.db.unitframe[ info[#info] ] = value; UF:Update_AllFrames(); end
+						},
 						statusbar = {
 							type = "select", dialogControl = "LSM30_Statusbar",
-							order = 3,
+							order = 4,
 							name = L["StatusBar Texture"],
 							desc = L["Main statusbar texture."],
 							values = AceGUIWidgetLSMlists.statusbar,
