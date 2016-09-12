@@ -180,11 +180,15 @@ local function LoadSkin(event)
 		if(E.private.skins.animations) then
 			bar.anim.progress:SetDuration(1.7);
 			bar.anim.color:SetDuration(1.7);
-			bar.anim2.number:SetDuration(1.7);
+			if(not noNumber) then
+				bar.anim2.number:SetDuration(1.7);
+			end
 		else
 			bar.anim.progress:SetDuration(0);
 			bar.anim.color:SetDuration(0);
-			bar.anim2.number:SetDuration(0);
+			if(not noNumber) then
+				bar.anim2.number:SetDuration(0);
+			end
 		end
 
 		if(bar.anim:IsPlaying() or (bar.anim2 and bar.anim2:IsPlaying())) then
