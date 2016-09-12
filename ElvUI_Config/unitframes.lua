@@ -2000,9 +2000,9 @@ E.Options.args.unitframe = {
 						smoothSpeed = {
 							type = "range",
 							order = 3,
-							name = L["Smooth Speed"],
-							desc = L["Speed In Milliseconds"],
-							min = 0, max = 100, step = 1,
+							name = L["Animation Speed"],
+							desc = L["Speed in seconds"],
+							min = 0.1, max = 3, step = 0.01,
 							set = function(info, value) E.db.unitframe[ info[#info] ] = value; UF:Update_AllFrames(); end
 						},
 						statusbar = {
