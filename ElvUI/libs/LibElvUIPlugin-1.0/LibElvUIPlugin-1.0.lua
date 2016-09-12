@@ -57,7 +57,7 @@ function lib:RegisterPlugin(name,callback)
 	local enabled, loadable = select(4,GetAddOnInfo("ElvUI_Config"))
 	local loaded = IsAddOnLoaded("ElvUI_Config")
 
-	if not lib.vcframe then
+	--[[if not lib.vcframe then
 
 		local f = CreateFrame('Frame')
 		f:RegisterEvent("RAID_ROSTER_UPDATE");
@@ -65,7 +65,7 @@ function lib:RegisterPlugin(name,callback)
 		f:RegisterEvent("CHAT_MSG_ADDON")
 		f:SetScript('OnEvent', lib.VersionCheck)
 		lib.vcframe = f
-	end
+	end]]
 
 	if enabled and loadable and not loaded then
 		if not lib.ConfigFrame then

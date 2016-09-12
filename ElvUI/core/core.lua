@@ -620,11 +620,11 @@ local function SendRecieve(_, event, prefix, message, _, sender)
 	end
 end
 
-local f = CreateFrame("Frame");
+--[[local f = CreateFrame("Frame");
 f:RegisterEvent("RAID_ROSTER_UPDATE");
 f:RegisterEvent("PARTY_MEMBERS_CHANGED");
 f:RegisterEvent("CHAT_MSG_ADDON");
-f:SetScript("OnEvent", SendRecieve);
+f:SetScript("OnEvent", SendRecieve);]]
 
 function E:UpdateAll(ignoreInstall)
 	self.private = self.charSettings.profile;
