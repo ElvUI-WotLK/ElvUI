@@ -650,6 +650,7 @@ function E:UpdateAll(ignoreInstall)
 	local AB = self:GetModule("ActionBars");
 	AB.db = self.db.actionbar;
 	AB:UpdateButtonSettings();
+	AB:UpdateMicroPositionDimensions();
 
 	local bags = E:GetModule("Bags");
 	bags.db = self.db.bags;
