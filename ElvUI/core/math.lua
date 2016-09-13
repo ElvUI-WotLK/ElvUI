@@ -3,7 +3,7 @@ local E, L, V, P, G = unpack(select(2, ...));
 local select, tonumber, assert, type, unpack = select, tonumber, assert, type, unpack;
 local tinsert, tremove = tinsert, tremove;
 local modf, ceil, floor, abs, mod = math.modf, math.ceil, math.floor, math.abs, mod;
-local format, sub, upper = format, string.sub, string.upper;
+local format, sub, upper, split = format, string.sub, string.upper, string.split;
 
 function E:ShortValue(v)
 	if(E.db.general.numberPrefixStyle == "METRIC") then
@@ -202,6 +202,20 @@ function E:GetFormattedText(style, min, max)
 		local s = format(useStyle, E:ShortValue(min), E:ShortValue(max), min / max * 100);
 		return s;
 	end
+end
+
+function E:AbbreviateString(string, allUpper)
+    local newString = ""
+    local words = {split(" ", string)}
+    for _, word in pairs(words) do
+        word = sub(word, 1, 1)
+        if(allUpper) then
+            word = word:upper()
+        end
+        newString = newString .. word
+    end
+
+    return newString
 end
 
 function E:ShortenString(string, numChars, dots)
