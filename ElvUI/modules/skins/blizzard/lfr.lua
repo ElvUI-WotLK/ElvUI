@@ -53,7 +53,9 @@ local function LoadSkin()
 
 	for i=1, NUM_LFR_CHOICE_BUTTONS do
 		local button = _G["LFRQueueFrameSpecificListButton" .. i];
-		S:HandleCheckBox(button.enableButton);
+		button.enableButton:StripTextures();
+		button.enableButton:CreateBackdrop("Default");
+		button.enableButton.backdrop:SetInside(nil, 4, 4);
 
 		button.expandOrCollapseButton:SetNormalTexture("");
 		button.expandOrCollapseButton.SetNormalTexture = E.noop;
