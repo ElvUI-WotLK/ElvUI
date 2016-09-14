@@ -1,7 +1,41 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local UF = E:GetModule("UnitFrames");
 
+local match = string.match;
 local CreateFrame = CreateFrame;
+
+local function CheckLeader(unit)
+	if(unit == "player") then
+		return IsPartyLeader();
+	elseif(unit ~= "player" and (UnitInParty(unit) or UnitInRaid(unit))) then
+		local gtype, index = unit:match("(%D+)(%d+)");
+		index = tonumber(index);
+		if(gtype == "party" and GetNumRaidMembers() == 0) then
+			return GetPartyLeaderIndex() == index;
+		elseif(gtype == "raid" and GetNumRaidMembers() > 0) then
+			return select(2, GetRaidRosterInfo(index)) == 2;
+		end
+	end
+end
+
+local function UpdateOverride(self, event)
+	local leader = self.Leader;
+	if(leader.PreUpdate) then
+		leader:PreUpdate();
+	end
+
+	local isLeader = CheckLeader(self.unit)
+
+	if(isLeader) then
+		leader:Show();
+	else
+		leader:Hide();
+	end
+
+	if(leader.PostUpdate) then
+		return leader:PostUpdate(isLeader);
+	end
+end
 
 function UF:Construct_RaidRoleFrames(frame)
 	local anchor = CreateFrame("Frame", nil, frame);
@@ -13,6 +47,8 @@ function UF:Construct_RaidRoleFrames(frame)
 	frame.Leader:Size(12);
 	frame.Assistant:Size(12);
 	frame.MasterLooter:Size(11);
+
+	frame.Leader.Override = UpdateOverride;
 
 	frame.Leader.PostUpdate = UF.RaidRoleUpdate;
 	frame.Assistant.PostUpdate = UF.RaidRoleUpdate;
