@@ -11,10 +11,8 @@ local function CheckLeader(unit)
 		local gtype, index = unit:match("(%D+)(%d+)");
 		index = tonumber(index);
 		if(gtype == "party" and GetNumRaidMembers() == 0) then
---			print(gtype, index, GetPartyLeaderIndex() == index);
 			return GetPartyLeaderIndex() == index;
 		elseif(gtype == "raid" and GetNumRaidMembers() > 0) then
---			print(gtype, index, select(2, GetRaidRosterInfo(index)) == 2);
 			return select(2, GetRaidRosterInfo(index)) == 2;
 		end
 	end
@@ -50,9 +48,7 @@ function UF:Construct_RaidRoleFrames(frame)
 	frame.Assistant:Size(12);
 	frame.MasterLooter:Size(11);
 
---	if(frame.db.raidRoleIcons.fix)
-		frame.Leader.Override = UpdateOverride;
---	end
+	frame.Leader.Override = UpdateOverride;
 
 	frame.Leader.PostUpdate = UF.RaidRoleUpdate;
 	frame.Assistant.PostUpdate = UF.RaidRoleUpdate;
