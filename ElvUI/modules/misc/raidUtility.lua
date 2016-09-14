@@ -161,12 +161,12 @@ function RU:Initialize()
 		end
 	end);
 
-	self:CreateUtilButton("MainTankButton", RaidUtilityPanel, nil, (DisbandRaidButton:GetWidth() / 2) - 2, 18, "TOPLEFT", DisbandRaidButton, "BOTTOMLEFT", 0, -5, MAINTANK, nil);
+	self:CreateUtilButton("MainTankButton", RaidUtilityPanel, "SecureActionButtonTemplate", (DisbandRaidButton:GetWidth() / 2) - 2, 18, "TOPLEFT", DisbandRaidButton, "BOTTOMLEFT", 0, -5, MAINTANK, nil);
 	MainTankButton:SetAttribute("type", "maintank");
 	MainTankButton:SetAttribute("unit", "target");
 	MainTankButton:SetAttribute("action", "toggle");
 
-	self:CreateUtilButton("MainAssistButton", RaidUtilityPanel, nil, (DisbandRaidButton:GetWidth() / 2) - 2, 18, "TOPRIGHT", DisbandRaidButton, "BOTTOMRIGHT", 0, -5, MAINASSIST, nil);
+	self:CreateUtilButton("MainAssistButton", RaidUtilityPanel, "SecureActionButtonTemplate", (DisbandRaidButton:GetWidth() / 2) - 2, 18, "TOPRIGHT", DisbandRaidButton, "BOTTOMRIGHT", 0, -5, MAINASSIST, nil);
 	MainAssistButton:SetAttribute("type", "mainassist");
 	MainAssistButton:SetAttribute("unit", "target");
 	MainAssistButton:SetAttribute("action", "toggle");
