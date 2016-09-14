@@ -36,9 +36,7 @@ end
 --[[ Basics ]]--
 
 Lib.Filters.name = {
-  	tags = {
-		"n", "name"
-	},
+  	tags = {"n", "name"},
 
 	canSearch = function(self, operator, search)
 		return not operator and search;
@@ -51,9 +49,7 @@ Lib.Filters.name = {
 };
 
 Lib.Filters.type = {
-	tags = {
-		"t", "type", "s", "slot"
-	},
+	tags = {"t", "type", "s", "slot"},
 
 	canSearch = function(self, operator, search)
 		return not operator and search;
@@ -66,9 +62,7 @@ Lib.Filters.type = {
 };
 
 Lib.Filters.level = {
-	tags = {
-		"l", "level", "lvl", "ilvl"
-	},
+	tags = {"l", "level", "lvl", "ilvl"},
 
 	canSearch = function(self, _, search)
 		return tonumber(search);
@@ -83,9 +77,7 @@ Lib.Filters.level = {
 };
 
 Lib.Filters.requiredlevel = {
-	tags = {
-		"r", "req", "rl", "reql", "reqlvl"
-	},
+	tags = {"r", "req", "rl", "reql", "reqlvl"},
 
 	canSearch = function(self, _, search)
 		return tonumber(search);
@@ -107,13 +99,11 @@ for i = 0, #ITEM_QUALITY_COLORS do
 end
 
 Lib.Filters.quality = {
-	tags = {
-		"q", "quality"
-	},
+	tags = {"q", "quality"},
 
 	canSearch = function(self, _, search)
 		for i, name in pairs(qualities) do
-			if(name:find(search, nil, true)) then
+			if(name:find(search)) then
 				return i;
 			end
 		end
@@ -147,9 +137,7 @@ Lib.Filters.usable = {
 local scanner = LibItemSearchTooltipScanner or CreateFrame("GameTooltip", "LibItemSearchTooltipScanner", UIParent, "GameTooltipTemplate");
 
 Lib.Filters.tip = {
-	tags = {
-		"tt", "tip", "tooltip"
-	},
+	tags = {"tt", "tip", "tooltip"},
 
 	onlyTags = true,
 
@@ -224,6 +212,7 @@ Lib.Filters.tipPhrases = {
     	["bop"] = ITEM_BIND_ON_PICKUP,
 		["boe"] = ITEM_BIND_ON_EQUIP,
 		["bou"] = ITEM_BIND_ON_USE,
+		["boa"] = ITEM_BIND_TO_ACCOUNT,
 		[QUESTS_LABEL:lower()] = ITEM_BIND_QUEST
 	};
 };

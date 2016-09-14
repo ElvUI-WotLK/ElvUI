@@ -1,6 +1,6 @@
 
 local MAJOR, MINOR = "LibChatAnims", 1 -- Bump minor on changes
-local LCA, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
+local LCA = LibStub:NewLibrary(MAJOR, MINOR)
 if not LCA then return end -- No upgrade needed
 
 LCA.animations = LCA.animations or {} -- Animation storage

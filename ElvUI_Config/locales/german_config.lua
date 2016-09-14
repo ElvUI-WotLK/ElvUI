@@ -37,12 +37,7 @@ Die folgenden Suchbegriffe können auch benutzt werden:
     • bou : Beim Benutzen gebundene Gegenstände.
     • boe : Beim Ausrüsten gebundene Gegenstände.
     • boa : An den Account gebundene Gegenstände.
-    • quest : Gebundene Quest Gegenstände.
-    • reagents, reagent, crafting : Berufs Reagenzien.
-    • naval : Schiffsausrüstung.
-    • follower, followe, follow : Anhänger Gegenstände.
-    • relic, reli, rel : Artefakt Relikte.
-    • power, powe, pow : Gegenstände die Artefaktkraft gewähren.]=];
+    • quest : Gebundene Quest Gegenstände.]=];
 L["TEXT_FORMAT_DESC"] = [=[Wähle eine Zeichenfolge um das Textformat zu ändern.
 
 Beispiele:

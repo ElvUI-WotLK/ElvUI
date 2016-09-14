@@ -18,7 +18,7 @@ along with the library. If not, see <http://www.gnu.org/licenses/gpl-3.0.txt>.
 This file is part of CustomSearch.
 --]]
 
-local Lib = LibStub:NewLibrary('CustomSearch-1.0', 7)
+local Lib = LibStub:NewLibrary('CustomSearch-1.0', 9)
 if not Lib then
 	return
 end
@@ -121,7 +121,7 @@ function Lib:Filter(tag, operator, search)
 end
 
 function Lib:UseFilter(filter, operator, search)
-	local data = {filter:canSearch(operator, search)}
+	local data = {filter:canSearch(operator, search, self.object)}
 	if data[1] then
 		return filter:match(self.object, operator, unpack(data))
 	end
@@ -133,17 +133,15 @@ end
 function Lib:Find(search, ...)
 	for i = 1, select('#', ...) do
 		local text = select(i, ...)
-
-		if(text) then
-			if(self:Clean(text):find(search, nil, true)) then
-				return true
-			end
+		if text and self:Clean(text):find(search) then
+			return true
 		end
 	end
 end
 
 function Lib:Clean(string)
 	string = string:lower()
+	string = string:gsub('[%(%)%.%%%+%-%*%?%[%]%^%$]', function(c) return '%'..c end)
 
 	for accent, char in pairs(self.ACCENTS) do
 		string = string:gsub(accent, char)
@@ -178,8 +176,8 @@ end
 --[[ Localization ]]--
 
 do
-	local no = {enUS = 'Not', ruRU = 'Нет'}
-	local just_or = {enUS = 'Or', ruRU = 'Или'}
+	local no = {enUS = 'Not', frFR = 'Pas', deDE = 'Nicht', ruRU = 'Нет'}
+	local just_or = {enUS = 'Or', frFR = 'Ou', deDE = 'Oder', ruRU = 'Или'}
 	local accents = {
 		a = {'à','â','ã','å'},
 		e = {'è','é','ê','ê','ë'},
@@ -196,8 +194,8 @@ do
 		end
 	end
 
-	Lib.OR = Lib:Clean(no[GetLocale()] or "")
-	Lib.NOT = no[GetLocale()] or ""
+	Lib.OR = Lib:Clean(just_or[GetLocale()] or "")
+	Lib.NOT = no[GetLocale()] or NO
 	Lib.NOT_MATCH = Lib:Clean(Lib.NOT)
 	setmetatable(Lib, {__call = Lib.Matches})
 end

@@ -1,22 +1,24 @@
-local MAJOR, MINOR = "LibElvUIPlugin-1.0", 12
+local MAJOR, MINOR = "LibElvUIPlugin-1.0", 13
 local lib, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
 if not lib then return end
 
+--Cache global variables
+--Lua functions
 local pairs, tonumber = pairs, tonumber;
 local format, strsplit = format, strsplit;
-
+--WoW API / Variables
 local CreateFrame = CreateFrame;
 local GetNumPartyMembers, GetNumRaidMembers = GetNumPartyMembers, GetNumRaidMembers;
 local GetAddOnMetadata = GetAddOnMetadata;
 local IsAddOnLoaded = IsAddOnLoaded;
 local SendAddonMessage = SendAddonMessage;
 
+--Global variables that we don't cache, list them here for the mikk's Find Globals script
+-- GLOBALS: ElvUI
+
 lib.plugins = {}
 lib.index = 0
 lib.prefix = "ElvUIPluginVC"
---
--- GLOBALS:
---
 
 -- MULTI Language Support (Default Language: English)
 local MSG_OUTDATED = "Your version of %s is out of date (latest is version %s). You can download the latest version from http://www.tukui.org"
@@ -25,14 +27,26 @@ local HDR_INFORMATION = "LibElvUIPlugin-1.0.%d - Plugins Loaded  (|cff2BC226Gree
 local INFO_BY = "by"
 local INFO_VERSION = "Version:"
 local INFO_NEW = "Newest:"
+local LIBRARY = "Library"
+
+if GetLocale() == "deDE" then -- German Translation
+	MSG_OUTDATED = "Deine Version von %s ist veraltet (akutelle Version ist %s). Du kannst die aktuelle Version von http://www.tukui.org herunterrladen."
+	HDR_CONFIG = "Plugins"
+	HDR_INFORMATION = "LibElvUIPlugin-1.0.%d - Plugins geladen (|cff2BC226Grün|r bedeutet du hast die aktuelle Version, |cffFF0000Rot|r bedeutet es ist veraltet)"
+	INFO_BY = "von"
+	INFO_VERSION = "Version:"
+	INFO_NEW = "Neuste:"
+	LIBRARY = "Bibliothek"
+end
 
 if GetLocale() == "ruRU" then -- Russian Translations
-	MSG_OUTDATED = "Ваша версия %s устарела. Вы можете скачать последнюю версию на http://www.tukui.org"
+	MSG_OUTDATED = "Ваша версия %s устарела (последняя версия %s). Вы можете скачать последнюю версию на http://www.tukui.org"
 	HDR_CONFIG = "Плагины"
 	HDR_INFORMATION = "LibElvUIPlugin-1.0.%d - Загруженные плагины (|cff2BC226Зеленый|r означает, что у вас последняя версия, |cffFF0000Красный|r - устаревшая)"
 	INFO_BY = "от"
 	INFO_VERSION = "Версия:"
 	INFO_NEW = "Последняя:"
+	LIBRARY = "Библиотека"
 end
 
 --
@@ -48,26 +62,25 @@ end
 --   Registers a module with the given name and option callback, pulls version info from metadata
 --
 
-function lib:RegisterPlugin(name,callback)
+function lib:RegisterPlugin(name,callback, isLib)
 	local plugin = {}
 	plugin.name = name
 	plugin.version = name == MAJOR and MINOR or GetAddOnMetadata(name, "Version")
+	if isLib then plugin.isLib = true; plugin.version = 1 end
 	plugin.callback = callback
 	lib.plugins[name] = plugin
-	local enabled, loadable = select(4,GetAddOnInfo("ElvUI_Config"))
 	local loaded = IsAddOnLoaded("ElvUI_Config")
-
-	--[[if not lib.vcframe then
-
+--[[
+	if not lib.vcframe then
 		local f = CreateFrame('Frame')
 		f:RegisterEvent("RAID_ROSTER_UPDATE");
 		f:RegisterEvent("PARTY_MEMBERS_CHANGED");
 		f:RegisterEvent("CHAT_MSG_ADDON")
 		f:SetScript('OnEvent', lib.VersionCheck)
 		lib.vcframe = f
-	end]]
-
-	if enabled and loadable and not loaded then
+	end
+]]
+	if not loaded then
 		if not lib.ConfigFrame then
 			local configFrame = CreateFrame("Frame")
 			configFrame:RegisterEvent("ADDON_LOADED")
@@ -82,7 +95,7 @@ function lib:RegisterPlugin(name,callback)
 			end)
 			lib.ConfigFrame = configFrame
 		end
-	elseif enabled and loadable then
+	elseif loaded then
 		-- Need to update plugins list
 		if name ~= MAJOR then
 			ElvUI[1].Options.args.plugins.args.plugins.name = lib:GeneratePluginList()
@@ -170,7 +183,7 @@ function lib:GeneratePluginList()
 			if author then
 			  list = list .. " ".. INFO_BY .." " .. author
 			end
-			list = list .. color .. " - " .. INFO_VERSION .." " .. plugin.version
+			list = list .. color .. " - " .. (plugin.isLib and LIBRARY or INFO_VERSION .." " .. plugin.version)
 			if plugin.old then
 			  list = list .. " (" .. INFO_NEW .." " .. plugin.newversion .. ")"
 			end

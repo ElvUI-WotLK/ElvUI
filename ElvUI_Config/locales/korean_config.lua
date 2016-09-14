@@ -62,12 +62,7 @@ L["SEARCH_SYNTAX_DESC"] = [=[
      - bou : 사용시 귀속 아이템을 표시합니다.
      - boe : 착용 시 귀속 아이템을 표시합니다.
      - boa : 계정 귀속 아이템을 표시합니다.
-     - quest : 퀘스트 아이템을 표시합니다.
-     - reagents, reagent, crafting : Profession reagents.
-     - naval : Naval equipment.
-     - follower, followe, follow : Follower items.
-     - relic, reli, rel : Artifact Relics.
-     - power, powe, pow : Items granting Artifact Power.]=]
+     - quest : 퀘스트 아이템을 표시합니다.]=]
 
 L["TEXT_FORMAT_DESC"] = [=[글자가 표시되는 형식을 변경할 수 있습니다.
 
