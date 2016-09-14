@@ -85,7 +85,7 @@ function RU:ToggleRaidUtil(event)
 end
 
 function RU:Initialize()
-	local RaidUtilityPanel = CreateFrame("Frame", "RaidUtilityPanel", E.UIParent, "SecureHandlerClickTemplate");
+	local RaidUtilityPanel = CreateFrame("Frame", "RaidUtilityPanel", E.UIParent);
 	RaidUtilityPanel:SetTemplate("Transparent");
 	RaidUtilityPanel:Width(230);
 	RaidUtilityPanel:Height(PANEL_HEIGHT);
@@ -95,13 +95,10 @@ function RU:Initialize()
 	RaidUtilityPanel:SetFrameStrata("HIGH");
 	E.FrameLocks["RaidUtilityPanel"] = true;
 
-	self:CreateUtilButton("RaidUtility_ShowButton", E.UIParent, "SecureHandlerClickTemplate", 136, 18, "TOP", E.UIParent, "TOP", -400, E.Border, RAID_CONTROL, nil)
-	RaidUtility_ShowButton:SetFrameRef("RaidUtilityPanel", RaidUtilityPanel);
-	RaidUtility_ShowButton:SetAttribute("_onclick", ([=[
-		local raidUtil = self:GetFrameRef("RaidUtilityPanel");
-		local closeButton = raidUtil:GetFrameRef("RaidUtility_CloseButton");
+	self:CreateUtilButton("RaidUtility_ShowButton", E.UIParent, nil, 136, 18, "TOP", E.UIParent, "TOP", -400, E.Border, RAID_CONTROL, nil)
+	RaidUtility_ShowButton:SetScript("OnClick", function(self)
 		self:Hide();
-		raidUtil:Show();
+		RaidUtilityPanel:Show();
 
 		local point = self:GetPoint();
 		local raidUtilPoint, closeButtonPoint, yOffset
@@ -115,13 +112,13 @@ function RU:Initialize()
 			yOffset = -1;
 		end
 
-		yOffset = yOffset * (tonumber(%d));
+		yOffset = yOffset * (-E.Border + E.Spacing*3);
 
-		raidUtil:ClearAllPoints();
-		closeButton:ClearAllPoints();
-		raidUtil:SetPoint(raidUtilPoint, self, raidUtilPoint);
-		closeButton:SetPoint(raidUtilPoint, raidUtil, closeButtonPoint, 0, yOffset);
-	]=]):format(-E.Border + E.Spacing*3));
+		RaidUtilityPanel:ClearAllPoints();
+		RaidUtility_CloseButton:ClearAllPoints();
+		RaidUtilityPanel:SetPoint(raidUtilPoint, self, raidUtilPoint);
+		RaidUtility_CloseButton:SetPoint(raidUtilPoint, RaidUtilityPanel, closeButtonPoint, 0, yOffset);
+	end);
 	RaidUtility_ShowButton:SetScript("OnMouseUp", function(self) RaidUtilityPanel.toggled = true; end);
 	RaidUtility_ShowButton:SetMovable(true);
 	RaidUtility_ShowButton:SetClampedToScreen(true);
@@ -148,11 +145,9 @@ function RU:Initialize()
 		end
 	end);
 
-	self:CreateUtilButton("RaidUtility_CloseButton", RaidUtilityPanel, "SecureHandlerClickTemplate", 136, 18, "TOP", RaidUtilityPanel, "BOTTOM", 0, -1, CLOSE, nil);
-	RaidUtility_CloseButton:SetFrameRef("RaidUtility_ShowButton", RaidUtility_ShowButton);
-	RaidUtility_CloseButton:SetAttribute("_onclick", [=[self:GetParent():Hide(); self:GetFrameRef("RaidUtility_ShowButton"):Show();]=]);
+	self:CreateUtilButton("RaidUtility_CloseButton", RaidUtilityPanel, nil, 136, 18, "TOP", RaidUtilityPanel, "BOTTOM", 0, -1, CLOSE, nil);
+	RaidUtility_CloseButton:SetScript("OnClick", function(self) self:GetParent():Hide(); RaidUtility_ShowButton:Show(); end);
 	RaidUtility_CloseButton:SetScript("OnMouseUp", function(self) RaidUtilityPanel.toggled = false; end);
-	RaidUtilityPanel:SetFrameRef("RaidUtility_CloseButton", RaidUtility_CloseButton);
 
 	self:CreateUtilButton("DisbandRaidButton", RaidUtilityPanel, nil, RaidUtilityPanel:GetWidth() * 0.8, 18, "TOP", RaidUtilityPanel, "TOP", 0, -5, L["Disband Group"], nil);
 	DisbandRaidButton:SetScript("OnMouseUp", function(self)
