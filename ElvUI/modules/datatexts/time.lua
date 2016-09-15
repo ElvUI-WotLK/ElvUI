@@ -94,7 +94,7 @@ local function OnEnter(self)
 	DT.tooltip:Show();
 end
 
-local int = 0;
+local int = 5;
 function Update(self, t)
 	int = int - t;
 
