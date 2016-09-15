@@ -16,14 +16,10 @@ local WINTERGRASP_IN_PROGRESS = WINTERGRASP_IN_PROGRESS;
 
 local timeDisplayFormat = "";
 local dateDisplayFormat = "";
-local amDisplayFormat = "";
-local pmDisplayFormat = "";
 local europeDisplayFormat_nocolor = join("", "%02d", ":|r%02d");
 local lockoutInfoFormatNoEnc = "%s%s |cffaaaaaa(%s)";
 local difficultyInfo = {"N", "N", "H", "H"};
 local lockoutColorExtended, lockoutColorNormal = {r = 0.3, g = 1, b = 0.3}, {r = .8, g = .8, b = .8};
-local curHr, curMin, curAmPm;
-local enteredFrame = false;
 
 local Update, lastPanel; -- UpValue
 local name, _, reset, difficultyId, locked, extended, isRaid, maxPlayers;
@@ -31,8 +27,6 @@ local name, _, reset, difficultyId, locked, extended, isRaid, maxPlayers;
 local function ValueColorUpdate(hex)
 	timeDisplayFormat = join("", hex, ":|r");
 	dateDisplayFormat = join("", hex, " ");
-	pmDisplayFormat = join("", hex, TIMEMANAGER_PM .. "|r");
-	amDisplayFormat = join("", hex, TIMEMANAGER_AM .. "|r");
 
 	if(lastPanel ~= nil) then
 		Update(lastPanel, 20000);
@@ -50,11 +44,10 @@ end
 
 local function OnLeave()
 	DT.tooltip:Hide();
-	enteredFrame = false;
 end
 
 local function OnEvent(_, event)
-	if(event == "UPDATE_INSTANCE_INFO" and enteredFrame) then
+	if(event == "UPDATE_INSTANCE_INFO") then
 		RequestRaidInfo();
 	end
 end
@@ -62,10 +55,7 @@ end
 local function OnEnter(self)
 	DT:SetupTooltip(self)
 
-	if(not enteredFrame) then
-		enteredFrame = true;
-	--	RequestRaidInfo();
-	end
+	RequestRaidInfo();
 
 	local wgtime = GetWintergraspWaitTime() or nil;
 	inInstance, instanceType = IsInInstance();
@@ -104,7 +94,7 @@ local function OnEnter(self)
 	DT.tooltip:Show();
 end
 
-local int = 1;
+local int = 0;
 function Update(self, t)
 	int = int - t;
 
@@ -116,14 +106,10 @@ function Update(self, t)
 		E:StopFlash(self);
 	end
 
-	if(enteredFrame) then
-		OnEnter(self)
-	end
-
-	self.text:SetText(BetterDate(E.db.datatexts.timeFormat .. E.db.datatexts.dateFormat, time()):gsub(":", timeDisplayFormat):gsub(TIMEMANAGER_PM, pmDisplayFormat):gsub(TIMEMANAGER_AM, amDisplayFormat):gsub("%s", dateDisplayFormat));
+	self.text:SetText(BetterDate(E.db.datatexts.timeFormat .. " " .. E.db.datatexts.dateFormat, time()):gsub(":", timeDisplayFormat):gsub("%s", dateDisplayFormat));
 
 	lastPanel = self;
-	int = 3;
+	int = 1;
 end
 
 DT:RegisterDatatext("Time", {"UPDATE_INSTANCE_INFO"}, OnEvent, Update, Click, OnEnter, OnLeave);

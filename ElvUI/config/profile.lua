@@ -2381,8 +2381,6 @@ P["datatexts"] = {
 	},
 	["timeFormat"] = "%I:%M",
 	["dateFormat"] = "",
-	["localtime"] = true,
-	["time24"] = false,
 	["battleground"] = true,
 	["panelTransparency"] = false,
 	["goldFormat"] = "BLIZZARD",

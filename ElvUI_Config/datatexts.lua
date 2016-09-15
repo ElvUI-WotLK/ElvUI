@@ -86,16 +86,16 @@ E.Options.args.datatexts = {
 							name = L["Time Format"],
 							values = {
 								[""] = NONE,
-								["%I:%M "] = "03:27",
-								["%I:%M:%S "] = "03:27:32",
-								["%I:%M %p "] = "03:27 PM",
-								["%I:%M:%S %p "] = "03:27:32 PM",
-								["%H:%M "] = "15:27",
-								["%H:%M:%S "] =	"15:27:32",
+								["%I:%M"] = "03:27",
+								["%I:%M:%S"] = "03:27:32",
+								["%I:%M %p"] = "03:27 PM",
+								["%I:%M:%S %p"] = "03:27:32 PM",
+								["%H:%M"] = "15:27",
+								["%H:%M:%S"] ="15:27:32",
 							}
 						},
 						dateFormat = {
-							order = 1.5,
+							order = 2,
 							type = "select",
 							name = L["Date Format"],
 							values = {
@@ -105,12 +105,6 @@ E.Options.args.datatexts = {
 								["%y/%m/%d "] = "16/03/27",
 								["%d.%m.%y "] = "27.03.32",
 							}
-						},
-						localtime = {
-							order = 2,
-							type = "toggle",
-							name = L["Local Time"],
-							desc = L["If not set to true then the server time will be displayed instead."]
 						},
 						battleground = {
 							order = 3,
