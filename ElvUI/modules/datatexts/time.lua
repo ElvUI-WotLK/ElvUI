@@ -30,7 +30,7 @@ local Update, lastPanel; -- UpValue
 local name, _, reset, difficultyId, locked, extended, isRaid, maxPlayers;
 
 local function ValueColorUpdate(hex)
-	europeDisplayFormat = join("", "%02d", hex, ":|r%02d ", format("%s", date(hex .. "%d.%m.%y|r")));
+	europeDisplayFormat = join("", "%02d", hex, ":|r%02d ");
 	ukDisplayFormat = join("", "", "%d", hex, ":|r%02d", hex, " %s|r ", format("%s", date(hex .. "%d.%m.%y|r")));
 
 	if(lastPanel ~= nil) then
@@ -135,7 +135,7 @@ local function OnEnter(self)
 	DT.tooltip:Show();
 end
 
-local int = 3;
+local int = 0;
 function Update(self, t)
 	int = int - t;
 
@@ -151,24 +151,10 @@ function Update(self, t)
 		OnEnter(self)
 	end
 
-	local Hr, Min, AmPm = CalculateTimeValues(false);
+	self.text:SetText(BetterDate(E.db.datatexts.timeFormat .. E.db.datatexts.dateFormat, time()):gsub(":", "|cff0CD809:|r"):gsub("%s", " |cffE8DA0F"));
 
-	if(Hr == curHr and Min == curMin and AmPm == curAmPm) and not (int < -15000) then
-		int = 5;
-		return;
-	end
-
-	curHr = Hr;
-	curMin = Min;
-	curAmPm = AmPm;
-
-	if(AmPm == -1) then
-		self.text:SetFormattedText(europeDisplayFormat, Hr, Min);
-	else
-		self.text:SetFormattedText(ukDisplayFormat, Hr, Min, APM[AmPm]);
-	end
 	lastPanel = self;
-	int = 5;
+	int = 1;
 end
 
 DT:RegisterDatatext("Time", {"UPDATE_INSTANCE_INFO"}, OnEvent, Update, Click, OnEnter, OnLeave);

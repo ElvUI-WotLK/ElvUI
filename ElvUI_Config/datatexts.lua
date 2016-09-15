@@ -80,6 +80,31 @@ E.Options.args.datatexts = {
 					guiInline = true,
 					name = L["General"],
 					args = {
+						timeFormat = {
+							order = 0,
+							type = "select",
+							name = TIMESTAMPS_LABEL,
+							desc = OPTION_TOOLTIP_TIMESTAMPS,
+							values = {
+								["%I:%M "] = "03:27",
+								["%I:%M:%S "] = "03:27:32",
+								["%I:%M %p "] = "03:27 PM",
+								["%I:%M:%S %p "] = "03:27:32 PM",
+								["%H:%M "] = "15:27",
+								["%H:%M:%S "] =	"15:27:32",
+							}
+						},
+						dateFormat = {
+							order = 0.5,
+							type = "select",
+							name = TIMESTAMPS_LABEL,
+							desc = OPTION_TOOLTIP_TIMESTAMPS,
+							values = {
+								[""] = NONE,
+								["%d/%m/%y "] = "27/03/32",
+								["%d.%m.%y "] = "27.03.32",
+							}
+						},
 						time24 = {
 							order = 1,
 							type = "toggle",
