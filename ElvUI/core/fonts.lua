@@ -1,7 +1,6 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local LSM = LibStub("LibSharedMedia-3.0")
 
-local GetChatWindowInfo = GetChatWindowInfo;
 local SetCVar = SetCVar;
 
 local function SetFont(obj, font, size, style, r, g, b, sr, sg, sb, sox, soy)
@@ -12,13 +11,12 @@ local function SetFont(obj, font, size, style, r, g, b, sr, sg, sb, sox, soy)
 	elseif r then obj:SetAlpha(r) end
 end
 
-function E:UpdateBlizzardFonts()	
+function E:UpdateBlizzardFonts()
 	local NORMAL			= self["media"].normFont;
 	local COMBAT			= LSM:Fetch("font", self.private.general.dmgfont);
 	local NUMBER			= self["media"].normFont;
 	local NAMEFONT			= LSM:Fetch("font", self.private.general.namefont);
 	local MONOCHROME		= "";
-	local _, editBoxFontSize, _, _, _, _, _, _, _, _ = GetChatWindowInfo(1)
 
 	UIDROPDOWNMENU_DEFAULT_TEXT_HEIGHT = 12
 	CHAT_FONT_HEIGHTS = {10, 12, 13, 14, 15, 16, 17, 18, 19, 20}
@@ -27,11 +25,11 @@ function E:UpdateBlizzardFonts()
 	NAMEPLATE_FONT		= NAMEFONT;
 	DAMAGE_TEXT_FONT	= COMBAT;
 	STANDARD_TEXT_FONT	= NORMAL;
-	
-	if self.db.general.font:lower():find('pixel') then
+
+	if self.db.general.font == "Homespun" then
 		MONOCHROME = 'MONOCHROME'
 	end
-	
+
 	if self.eyefinity then
 		-- damage are huge on eyefinity, so we disable it
 		InterfaceOptionsCombatTextPanelTargetDamage:Hide()
@@ -42,12 +40,12 @@ function E:UpdateBlizzardFonts()
 		SetCVar("PetMeleeDamage",0)
 		SetCVar("CombatDamage",0)
 		SetCVar("CombatHealing",0)
-		
+
 		-- set an invisible font for xp, honor kill, etc
 		local INVISIBLE = [=[Interface\Addons\ElvUI\media\fonts\Invisible.ttf]=]
 		COMBAT = INVISIBLE
 	end
-	
+
 	if(self.private.general.replaceBlizzFonts) then
 		SetFont(GameTooltipHeader,					NORMAL, self.db.general.fontSize);
 		SetFont(NumberFont_OutlineThick_Mono_Small,	NUMBER, self.db.general.fontSize, "OUTLINE");
@@ -83,6 +81,6 @@ function E:UpdateBlizzardFonts()
 		SetFont(SubZoneTextString,					NORMAL, 25, MONOCHROME .. "OUTLINE");
 		SetFont(PVPInfoTextString,					NORMAL, 22, MONOCHROME .. "OUTLINE");
 		SetFont(PVPArenaTextString,					NORMAL, 22, MONOCHROME .. "OUTLINE");
-		SetFont(CombatTextFont,						COMBAT, 100, "OUTLINE");
+		SetFont(CombatTextFont,						COMBAT, 100, MONOCHROME .. "OUTLINE");
 	end
 end

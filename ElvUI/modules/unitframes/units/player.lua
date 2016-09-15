@@ -2,17 +2,12 @@ local E, L, V, P, G = unpack(select(2, ...));
 local UF = E:GetModule("UnitFrames");
 
 local _G = _G;
-local unpack, pairs = unpack, pairs;
-local format = format;
-
-local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
-local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
 
 local _, ns = ...;
 local ElvUF = ns.oUF;
 assert(ElvUF, "ElvUI was unable to locate oUF.");
 
-local CAN_HAVE_CLASSBAR = (E.myclass == "DEATHKNIGHT" or E.myclass == "DRUID" or E.myclass == "MAGE");
+local CAN_HAVE_CLASSBAR = (E.myclass == "DEATHKNIGHT" or E.myclass == "DRUID");
 
 function UF:Construct_PlayerFrame(frame)
 	frame.Threat = self:Construct_Threat(frame, true);
@@ -26,16 +21,13 @@ function UF:Construct_PlayerFrame(frame)
 	frame.Buffs = self:Construct_Buffs(frame);
 	frame.Debuffs = self:Construct_Debuffs(frame);
 	frame.Castbar = self:Construct_Castbar(frame, "LEFT", L["Player Castbar"]);
-	
+
 	if(E.myclass == "DEATHKNIGHT") then
 		frame.Runes = self:Construct_DeathKnightResourceBar(frame);
 		frame.ClassBar = "Runes";
 	elseif(E.myclass == "DRUID") then
 		frame.DruidAltMana = self:Construct_DruidAltManaBar(frame);
 		frame.ClassBar = "DruidAltMana";
-	elseif(E.myclass == "MAGE") then
-		frame.ArcaneChargeBar = self:Construct_MageResourceBar(frame);
-		frame.ClassBar = "ArcaneChargeBar";
 	end
 
 	frame.RaidIcon = UF:Construct_RaidIcon(frame);
@@ -48,38 +40,34 @@ function UF:Construct_PlayerFrame(frame)
 	frame.CombatFade = true;
 	frame.InfoPanel = self:Construct_InfoPanel(frame);
 	frame.customTexts = {};
-	
+
 	frame:Point("BOTTOMLEFT", E.UIParent, "BOTTOM", -413, 68);
 	E:CreateMover(frame, frame:GetName() .. "Mover", L["Player Frame"], nil, nil, nil, "ALL,SOLO");
 	frame.unitframeType = "player";
 end
 
-function UF:UpdatePlayerFrameAnchors(frame, isShown)
-	print("old method still in effect")
-end
-
 function UF:Update_PlayerFrame(frame, db)
 	frame.db = db;
-	
+
 	do
 		frame.ORIENTATION = db.orientation;
 		frame.UNIT_WIDTH = db.width;
 		frame.UNIT_HEIGHT = (E.global.tukuiMode and not db.infoPanel.enable) and db.height + db.infoPanel.height or db.height;
-		
+
 		frame.USE_POWERBAR = db.power.enable;
 		frame.POWERBAR_DETACHED = db.power.detachFromFrame;
 		frame.USE_INSET_POWERBAR = not frame.POWERBAR_DETACHED and db.power.width == "inset" and frame.USE_POWERBAR;
 		frame.USE_MINI_POWERBAR = (not frame.POWERBAR_DETACHED and db.power.width == "spaced" and frame.USE_POWERBAR);
 		frame.USE_POWERBAR_OFFSET = db.power.offset ~= 0 and frame.USE_POWERBAR and not frame.POWERBAR_DETACHED;
 		frame.POWERBAR_OFFSET = frame.USE_POWERBAR_OFFSET and db.power.offset or 0;
-		
+
 		frame.POWERBAR_HEIGHT = not frame.USE_POWERBAR and 0 or db.power.height;
 		frame.POWERBAR_WIDTH = frame.USE_MINI_POWERBAR and (frame.UNIT_WIDTH - (frame.BORDER*2))/2 or (frame.POWERBAR_DETACHED and db.power.detachedWidth or (frame.UNIT_WIDTH - ((frame.BORDER+frame.SPACING)*2)));
-		
+
 		frame.USE_PORTRAIT = db.portrait and db.portrait.enable;
 		frame.USE_PORTRAIT_OVERLAY = frame.USE_PORTRAIT and (db.portrait.overlay or frame.ORIENTATION == "MIDDLE");
 		frame.PORTRAIT_WIDTH = (frame.USE_PORTRAIT_OVERLAY or not frame.USE_PORTRAIT) and 0 or db.portrait.width;
-		
+
 		frame.CAN_HAVE_CLASSBAR = CAN_HAVE_CLASSBAR;
 		frame.MAX_CLASS_BAR = frame.MAX_CLASS_BAR or UF.classMaxResourceBar[E.myclass] or 0;
 		frame.USE_CLASSBAR = db.classbar.enable and frame.CAN_HAVE_CLASSBAR;
@@ -89,10 +77,10 @@ function UF:Update_PlayerFrame(frame, db)
 		frame.CLASSBAR_HEIGHT = frame.USE_CLASSBAR and db.classbar.height or 0;
 		frame.CLASSBAR_WIDTH = frame.UNIT_WIDTH - ((frame.BORDER+frame.SPACING)*2) - frame.PORTRAIT_WIDTH  -(frame.ORIENTATION == "MIDDLE" and (frame.POWERBAR_OFFSET*2) or frame.POWERBAR_OFFSET);
 		frame.CLASSBAR_YOFFSET = (not frame.USE_CLASSBAR or not frame.CLASSBAR_SHOWN or frame.CLASSBAR_DETACHED) and 0 or (frame.USE_MINI_CLASSBAR and (frame.SPACING+(frame.CLASSBAR_HEIGHT/2)) or (frame.CLASSBAR_HEIGHT - (frame.BORDER-frame.SPACING)));
-		
+
 		frame.USE_INFO_PANEL = not frame.USE_MINI_POWERBAR and not frame.USE_POWERBAR_OFFSET and (db.infoPanel.enable or E.global.tukuiMode);
 		frame.INFO_PANEL_HEIGHT = frame.USE_INFO_PANEL and db.infoPanel.height or 0;
-		
+
 		frame.BOTTOM_OFFSET = UF:GetHealthBottomOffset(frame);
 	end
 
@@ -101,53 +89,53 @@ function UF:Update_PlayerFrame(frame, db)
 	frame:RegisterForClicks(self.db.targetOnMouseDown and "AnyDown" or "AnyUp");
 	frame:Size(frame.UNIT_WIDTH, frame.UNIT_HEIGHT);
 	_G[frame:GetName() .. "Mover"]:Size(frame:GetSize());
-	
+
 	UF:Configure_InfoPanel(frame);
-	
+
 	UF:Configure_Threat(frame);
-	
+
 	UF:Configure_RestingIndicator(frame);
-	
+
 	UF:Configure_CombatIndicator(frame);
-	
+
 	UF:Configure_HealthBar(frame);
-	
+
 	UF:UpdateNameSettings(frame);
-	
+
 	UF:Configure_PVPIndicator(frame);
-	
+
 	UF:Configure_Power(frame);
-	
+
 	UF:Configure_Portrait(frame);
-	
+
 	UF:EnableDisable_Auras(frame);
 	UF:Configure_Auras(frame, "Buffs");
 	UF:Configure_Auras(frame, "Debuffs");
-	
+
 	UF:Configure_Castbar(frame);
-	
+
 	UF:Configure_ClassBar(frame);
-	
+
 	if(db.combatfade and not frame:IsElementEnabled("CombatFade")) then
 		frame:EnableElement("CombatFade");
 	elseif(not db.combatfade and frame:IsElementEnabled("CombatFade")) then
 		frame:DisableElement("CombatFade");
 	end
-	
+
 	UF:Configure_DebuffHighlight(frame);
-	
+
 	UF:Configure_RaidIcon(frame);
-	
+
 	UF:Configure_HealComm(frame);
-	
+
 	UF:Configure_AuraBars(frame);
-	
+
 	if(E.db.unitframe.units.target.aurabar.attachTo == "PLAYER_AURABARS" and ElvUF_Target) then
 		UF:Configure_AuraBars(ElvUF_Target);
 	end
-	
+
 	UF:Configure_CustomTexts(frame);
-	
+
 	E:SetMoverSnapOffset(frame:GetName() .. "Mover", -(12 + db.castbar.height));
 	frame:UpdateAllElements();
 end

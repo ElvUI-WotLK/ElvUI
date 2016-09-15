@@ -1,9 +1,13 @@
-local parent, ns = ...
+local _, ns = ...
 local oUF = ns.oUF
+
+local IsLoggedIn = IsLoggedIn
+local UnitThreatSituation = UnitThreatSituation
+local GetThreatStatusColor = GetThreatStatusColor
 
 local Update = function(self, event, unit)
 	if(unit ~= self.unit) or not unit or not IsLoggedIn() then return end
-	
+
 	local threat = self.Threat
 	if(threat.PreUpdate) then threat:PreUpdate(unit) end
 
@@ -12,7 +16,7 @@ local Update = function(self, event, unit)
 	local r, g, b
 	if(status and status > 0) then
 		r, g, b = GetThreatStatusColor(status)
-		
+
 		if threat:IsObjectType"Texture" then
 			threat:SetVertexColor(r, g, b)
 		end
@@ -48,7 +52,7 @@ local Enable = function(self)
 			threat:SetTexture[[Interface\Minimap\ObjectIcons]]
 			threat:SetTexCoord(1/4, 3/8, 0, 1/4)
 		end
-		
+
 		return true
 	end
 end

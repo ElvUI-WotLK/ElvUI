@@ -1,7 +1,6 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local UF = E:GetModule("UnitFrames");
 
-local pairs = pairs;
 local tinsert = table.insert;
 
 local CreateFrame = CreateFrame;
@@ -17,11 +16,11 @@ assert(ElvUF, "ElvUI was unable to locate oUF.");
 function UF:Construct_RaidpetFrames(unitGroup)
 	self:SetScript("OnEnter", UnitFrame_OnEnter);
 	self:SetScript("OnLeave", UnitFrame_OnLeave);
-	
+
 	self.RaisedElementParent = CreateFrame("Frame", nil, self);
 	self.RaisedElementParent:SetFrameStrata("MEDIUM");
 	self.RaisedElementParent:SetFrameLevel(self:GetFrameLevel() + 10);
-	
+
 	self.Health = UF:Construct_HealthBar(self, true, true, "RIGHT");
 	self.Name = UF:Construct_NameText(self);
 	self.Portrait3D = UF:Construct_Portrait(self, "model");
@@ -40,7 +39,7 @@ function UF:Construct_RaidpetFrames(unitGroup)
 	self.HealCommBar = UF:Construct_HealComm(self);
 	self.Range = UF:Construct_Range(self);
 	self.customTexts = {};
-	
+
 	UF:Update_StatusBars();
 	UF:Update_FontStrings();
 	self.unitframeType = "raidpet";
@@ -53,7 +52,7 @@ end
 function UF:RaidPetsSmartVisibility(event)
 	if(not self.db or (self.db and not self.db.enable) or (UF.db and not UF.db.smartRaidFilter) or self.isForced) then return; end
 	if(event == "PLAYER_REGEN_ENABLED") then self:UnregisterEvent("PLAYER_REGEN_ENABLED") end
-	
+
 	if(not InCombatLockdown()) then
 		local inInstance, instanceType = IsInInstance();
 		if(inInstance and instanceType == "raid") then
@@ -70,14 +69,14 @@ end
 
 function UF:Update_RaidpetHeader(header, db)
 	header.db = db;
-	
+
 	local headerHolder = header:GetParent();
 	headerHolder.db = db;
-	
+
 	if(not headerHolder.positioned) then
 		headerHolder:ClearAllPoints();
 		headerHolder:Point("BOTTOMLEFT", E.UIParent, "BOTTOMLEFT", 4, 574);
-		
+
 		E:CreateMover(headerHolder, headerHolder:GetName() .. "Mover", L["Raid Pet Frames"], nil, nil, nil, "ALL,RAID10,RAID25,RAID40");
 		headerHolder.positioned = true;
 
@@ -85,13 +84,13 @@ function UF:Update_RaidpetHeader(header, db)
 		headerHolder:RegisterEvent("ZONE_CHANGED_NEW_AREA");
 		headerHolder:SetScript("OnEvent", UF["RaidPetsSmartVisibility"]);
 	end
-	
+
 	UF.RaidPetsSmartVisibility(headerHolder);
 end
 
 function UF:Update_RaidpetFrames(frame, db)
 	frame.db = db;
-	
+
 	frame.Portrait = frame.Portrait or (db.portrait.style == "2D" and frame.Portrait2D or frame.Portrait3D);
 	frame.colors = ElvUF.colors;
 	frame:RegisterForClicks(self.db.targetOnMouseDown and "AnyDown" or "AnyUp");
@@ -104,14 +103,14 @@ function UF:Update_RaidpetFrames(frame, db)
 			frame.BORDER = E.Border;
 			frame.SPACING = E.Spacing;
 		end
-		
+
 		frame.SHADOW_SPACING = 3;
-		
+
 		frame.ORIENTATION = db.orientation;
-		
+
 		frame.UNIT_WIDTH = db.width;
 		frame.UNIT_HEIGHT = db.height;
-		
+
 		frame.USE_POWERBAR = false;
 		frame.POWERBAR_DETACHED = false;
 		frame.USE_INSET_POWERBAR = false;
@@ -120,51 +119,51 @@ function UF:Update_RaidpetFrames(frame, db)
 		frame.POWERBAR_OFFSET = 0;
 		frame.POWERBAR_HEIGHT = 0;
 		frame.POWERBAR_WIDTH = 0;
-		
+
 		frame.USE_PORTRAIT = db.portrait and db.portrait.enable;
 		frame.USE_PORTRAIT_OVERLAY = frame.USE_PORTRAIT and (db.portrait.overlay or frame.ORIENTATION == "MIDDLE");
 		frame.PORTRAIT_WIDTH = (frame.USE_PORTRAIT_OVERLAY or not frame.USE_PORTRAIT) and 0 or db.portrait.width;
-		
+
 		frame.CLASSBAR_WIDTH = 0;
 		frame.CLASSBAR_YOFFSET = 0;
 		frame.BOTTOM_OFFSET = 0;
 	end
-	
+
 	if(not InCombatLockdown()) then
 		frame:Size(frame.UNIT_WIDTH, frame.UNIT_HEIGHT);
 	else
 		frame:SetAttribute("initial-height", frame.UNIT_HEIGHT);
 		frame:SetAttribute("initial-width", frame.UNIT_WIDTH);
 	end
-	
+
 	UF:Configure_HealthBar(frame);
-	
+
 	UF:UpdateNameSettings(frame);
-	
+
 	UF:Configure_Portrait(frame);
-	
+
 	UF:Configure_Threat(frame);
-	
+
 	UF:Configure_TargetGlow(frame);
-	
+
 	UF:EnableDisable_Auras(frame);
 	UF:Configure_Auras(frame, "Buffs");
 	UF:Configure_Auras(frame, "Debuffs");
-	
+
 	UF:Configure_RaidDebuffs(frame);
-	
+
 	UF:Configure_RaidIcon(frame);
-	
+
 	UF:Configure_DebuffHighlight(frame);
-	
+
 	UF:Configure_HealComm(frame);
-	
+
 	UF:Configure_Range(frame);
-	
+
 	UF:UpdateAuraWatch(frame, true);
-	
+
 	UF:Configure_CustomTexts(frame);
-	
+
 	frame:UpdateAllElements();
 end
 

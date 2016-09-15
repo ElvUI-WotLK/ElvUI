@@ -2,7 +2,7 @@
 -- It'll automatically split the messages into multiple parts and rebuild them on the receiving end.\\
 -- **ChatThrottleLib** is of course being used to avoid being disconnected by the server.
 --
--- **AceComm-3.0** can be embeded into your addon, either explicitly by calling AceComm:Embed(MyAddon) or by 
+-- **AceComm-3.0** can be embeded into your addon, either explicitly by calling AceComm:Embed(MyAddon) or by
 -- specifying it as an embeded library in your AceAddon. All functions will be available on your addon object
 -- and can be accessed directly, without having to explicitly call AceComm itself.\\
 -- It is recommended to embed AceComm, otherwise you'll have to specify a custom `self` on all calls you
@@ -47,7 +47,7 @@ AceComm.multipart_origprefixes = AceComm.multipart_origprefixes or {} -- e.g. "P
 AceComm.multipart_reassemblers = AceComm.multipart_reassemblers or {} -- e.g. "Prefix\001"="OnReceiveMultipartFirst"
 
 -- the multipart message spool: indexed by a combination of sender+distribution+
-AceComm.multipart_spool = AceComm.multipart_spool or {} 
+AceComm.multipart_spool = AceComm.multipart_spool or {}
 
 --- Register for Addon Traffic on a specified prefix
 -- @param prefix A printable character (\032-\255) classification of the message (typically AddonName or AddonNameEvent)
@@ -76,11 +76,11 @@ function AceComm:SendCommMessage(prefix, text, distribution, target, prio, callb
 			type(text)=="string" and
 			type(distribution)=="string" and
 			(target==nil or type(target)=="string") and
-			(prio=="BULK" or prio=="NORMAL" or prio=="ALERT") 
+			(prio=="BULK" or prio=="NORMAL" or prio=="ALERT")
 		) then
 		error('Usage: SendCommMessage(addon, "prefix", "text", "distribution"[, "target"[, "prio"[, callbackFn, callbackarg]]])', 2)
 	end
-	
+
 	if strfind(prefix, "[\001-\009]") then
 		if strfind(prefix, "[\001-\003]") then
 			error("SendCommMessage: Characters \\001--\\003 in prefix are reserved for AceComm metadata", 2)
@@ -138,17 +138,17 @@ do
 	local compost = setmetatable({}, {__mode = "k"})
 	local function new()
 		local t = next(compost)
-		if t then 
+		if t then
 			compost[t]=nil
 			for i=#t,3,-1 do	-- faster than pairs loop. don't even nil out 1/2 since they'll be overwritten
 				t[i]=nil
 			end
 			return t
 		end
-		
+
 		return {}
 	end
-	
+
 	local function lostdatawarning(prefix,sender,where)
 		DEFAULT_CHAT_FRAME:AddMessage(MAJOR..": Warning: lost network data regarding '"..tostring(prefix).."' from '"..tostring(sender).."' (in "..where..")")
 	end
@@ -156,14 +156,14 @@ do
 	function AceComm:OnReceiveMultipartFirst(prefix, message, distribution, sender)
 		local key = prefix.."\t"..distribution.."\t"..sender	-- a unique stream is defined by the prefix + distribution + sender
 		local spool = AceComm.multipart_spool
-		
+
 		--[[
-		if spool[key] then 
+		if spool[key] then
 			lostdatawarning(prefix,sender,"First")
 			-- continue and overwrite
 		end
 		--]]
-		
+
 		spool[key] = message  -- plain string for now
 	end
 
@@ -171,7 +171,7 @@ do
 		local key = prefix.."\t"..distribution.."\t"..sender	-- a unique stream is defined by the prefix + distribution + sender
 		local spool = AceComm.multipart_spool
 		local olddata = spool[key]
-		
+
 		if not olddata then
 			--lostdatawarning(prefix,sender,"Next")
 			return
@@ -192,14 +192,14 @@ do
 		local key = prefix.."\t"..distribution.."\t"..sender	-- a unique stream is defined by the prefix + distribution + sender
 		local spool = AceComm.multipart_spool
 		local olddata = spool[key]
-		
+
 		if not olddata then
 			--lostdatawarning(prefix,sender,"End")
 			return
 		end
 
 		spool[key] = nil
-		
+
 		if type(olddata) == "table" then
 			-- if we've received a "next", the spooled data will be a table for rapid & garbage-free tconcat
 			tinsert(olddata, message)
@@ -235,10 +235,10 @@ end
 function AceComm.callbacks:OnUsed(target, prefix)
 	AceComm.multipart_origprefixes[prefix..MSG_MULTI_FIRST] = prefix
 	AceComm.multipart_reassemblers[prefix..MSG_MULTI_FIRST] = "OnReceiveMultipartFirst"
-	
+
 	AceComm.multipart_origprefixes[prefix..MSG_MULTI_NEXT] = prefix
 	AceComm.multipart_reassemblers[prefix..MSG_MULTI_NEXT] = "OnReceiveMultipartNext"
-	
+
 	AceComm.multipart_origprefixes[prefix..MSG_MULTI_LAST] = prefix
 	AceComm.multipart_reassemblers[prefix..MSG_MULTI_LAST] = "OnReceiveMultipartLast"
 end
@@ -246,10 +246,10 @@ end
 function AceComm.callbacks:OnUnused(target, prefix)
 	AceComm.multipart_origprefixes[prefix..MSG_MULTI_FIRST] = nil
 	AceComm.multipart_reassemblers[prefix..MSG_MULTI_FIRST] = nil
-	
+
 	AceComm.multipart_origprefixes[prefix..MSG_MULTI_NEXT] = nil
 	AceComm.multipart_reassemblers[prefix..MSG_MULTI_NEXT] = nil
-	
+
 	AceComm.multipart_origprefixes[prefix..MSG_MULTI_LAST] = nil
 	AceComm.multipart_reassemblers[prefix..MSG_MULTI_LAST] = nil
 end

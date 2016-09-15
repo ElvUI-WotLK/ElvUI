@@ -16,11 +16,11 @@ function UF:Configure_ClassBar(frame)
 	if(not bars) then return; end
 	local db = frame.db;
 	bars.origParent = frame;
-	
+
 	if(bars.UpdateAllRuneTypes) then
 		bars.UpdateAllRuneTypes(frame);
 	end
-	
+
 	if((not self.thinBorders and not E.PixelMode) and frame.CLASSBAR_HEIGHT > 0 and frame.CLASSBAR_HEIGHT < 7) then
 		frame.CLASSBAR_HEIGHT = 7;
 		if(db.classbar) then db.classbar.height = 7; end
@@ -29,8 +29,12 @@ function UF:Configure_ClassBar(frame)
 		frame.CLASSBAR_HEIGHT = 3;
 		if(db.classbar) then db.classbar.height = 3; end
 		UF.ToggleResourceBar(bars);
+	elseif (not frame.CLASSBAR_DETACHED and frame.CLASSBAR_HEIGHT > 30) then
+		frame.CLASSBAR_HEIGHT = 10
+		if db.classbar then db.classbar.height = 10 end
+		UF.ToggleResourceBar(bars)
 	end
-	
+
 	local CLASSBAR_WIDTH = frame.CLASSBAR_WIDTH;
 
 	local c = self.db.colors.classResources.bgColor;
@@ -54,21 +58,23 @@ function UF:Configure_ClassBar(frame)
 			CLASSBAR_WIDTH = CLASSBAR_WIDTH * (frame.MAX_CLASS_BAR - 1) / frame.MAX_CLASS_BAR;
 		end
 		bars:SetFrameStrata("MEDIUM");
-		
+		bars:SetFrameLevel(frame:GetFrameLevel() + 5)
+
 		if(bars.Holder and bars.Holder.mover) then
 			bars.Holder.mover:SetScale(0.000001);
 			bars.Holder.mover:SetAlpha(0);
 		end
 	elseif(not frame.CLASSBAR_DETACHED) then
 		bars:ClearAllPoints();
-		
+
 		if(frame.ORIENTATION == "RIGHT") then
 			bars:Point("BOTTOMRIGHT", frame.Health.backdrop, "TOPRIGHT", -frame.BORDER, frame.SPACING*3);
 		else
 			bars:Point("BOTTOMLEFT", frame.Health.backdrop, "TOPLEFT", frame.BORDER, frame.SPACING*3);
 		end
 		bars:SetFrameStrata("LOW");
-		
+		bars:SetFrameLevel(frame:GetFrameLevel() + 5)
+
 		if(bars.Holder and bars.Holder.mover) then
 			bars.Holder.mover:SetScale(0.000001);
 			bars.Holder.mover:SetAlpha(0);
@@ -92,17 +98,27 @@ function UF:Configure_ClassBar(frame)
 			bars.Holder.mover:SetScale(1);
 			bars.Holder.mover:SetAlpha(1);
 		end
-		
-		bars:SetFrameStrata("LOW");
+
+		if not db.classbar.strataAndLevel.useCustomStrata then
+			bars:SetFrameStrata("LOW")
+		else
+			bars:SetFrameStrata(db.classbar.strataAndLevel.frameStrata)
+		end
+
+		if not db.classbar.strataAndLevel.useCustomLevel then
+			bars:SetFrameLevel(frame:GetFrameLevel() + 5)
+		else
+			bars:SetFrameLevel(db.classbar.strataAndLevel.frameLevel)
+		end
 	end
-	
+
 	bars:Width(CLASSBAR_WIDTH);
 	bars:Height(frame.CLASSBAR_HEIGHT - ((frame.BORDER + frame.SPACING)*2));
 
 	if(E.myclass ~= "DRUID") then
 		for i = 1, (UF.classMaxResourceBar[E.myclass] or 0) do
 			bars[i]:Hide();
-			
+
 			if(i <= frame.MAX_CLASS_BAR) then
 				bars[i].backdrop.ignoreUpdates = true;
 				bars[i].backdrop:SetBackdropColor(c.r, c.g, c.b);
@@ -118,7 +134,7 @@ function UF:Configure_ClassBar(frame)
 				elseif(i ~= frame.MAX_CLASS_BAR) then
 					bars[i]:Width((CLASSBAR_WIDTH - ((frame.MAX_CLASS_BAR-1)*(frame.BORDER-frame.SPACING))) / frame.MAX_CLASS_BAR);
 				end
-				
+
 				bars[i]:GetStatusBarTexture():SetHorizTile(false);
 				bars[i]:ClearAllPoints();
 				if(i == 1) then
@@ -139,19 +155,25 @@ function UF:Configure_ClassBar(frame)
 				else
 					bars[i].backdrop:Show();
 				end
-				
+
 				if(E.myclass ~= "DEATHKNIGHT") then
 					bars[i]:SetStatusBarColor(unpack(ElvUF.colors[frame.ClassBar]));
-					
+
 					if(bars[i].bg) then
 						bars[i].bg:SetTexture(unpack(ElvUF.colors[frame.ClassBar]));
 					end
+				end
+
+				if frame.CLASSBAR_DETACHED and db.classbar.verticalOrientation then
+					bars[i]:SetOrientation("VERTICAL")
+				else
+					bars[i]:SetOrientation("HORIZONTAL")
 				end
 				bars[i]:Show();
 			end
 		end
 	end
-	
+
 	if(E.myclass ~= "DRUID") then
 		if(not frame.USE_MINI_CLASSBAR) then
 			bars.backdrop:Show();
@@ -182,7 +204,7 @@ local function ToggleResourceBar(bars)
 	local db = frame.db;
 	if(not db) then return; end
 	frame.CLASSBAR_SHOWN = bars:IsShown();
-	
+
 	local height;
 	if(db.classbar) then
 		height = db.classbar.height;
@@ -191,7 +213,7 @@ local function ToggleResourceBar(bars)
 	elseif(frame.AltPowerBar) then
 		height = db.power.height;
 	end
-	
+
 	if(bars.text) then
 		if(frame.CLASSBAR_SHOWN) then
 			bars.text:SetAlpha(1);
@@ -199,10 +221,10 @@ local function ToggleResourceBar(bars)
 			bars.text:SetAlpha(0);
 		end
 	end
-	
+
 	frame.CLASSBAR_HEIGHT = (frame.USE_CLASSBAR and (frame.CLASSBAR_SHOWN and height) or 0);
 	frame.CLASSBAR_YOFFSET = (not frame.USE_CLASSBAR or not frame.CLASSBAR_SHOWN or frame.CLASSBAR_DETACHED) and 0 or (frame.USE_MINI_CLASSBAR and ((frame.SPACING+(frame.CLASSBAR_HEIGHT/2))) or (frame.CLASSBAR_HEIGHT - (frame.BORDER-frame.SPACING)));
-	
+
 	if(not frame.CLASSBAR_DETACHED) then
 		UF:Configure_HealthBar(frame);
 		UF:Configure_Portrait(frame, true);
@@ -214,63 +236,23 @@ UF.ToggleResourceBar = ToggleResourceBar;
 function UF:Construct_DeathKnightResourceBar(frame)
 	local runes = CreateFrame("Frame", nil, frame);
 	runes:CreateBackdrop("Default", nil, nil, self.thinBorders);
-	
+
 	for i = 1, self["classMaxResourceBar"][E.myclass] do
 		runes[i] = CreateFrame("StatusBar", nil, runes);
 		self["statusbars"][runes[i]] = true;
 		runes[i]:SetStatusBarTexture(E["media"].blankTex);
 		runes[i]:GetStatusBarTexture():SetHorizTile(false);
-		
+
 		runes[i]:CreateBackdrop("Default", nil, nil, self.thinBorders);
 		runes[i].backdrop:SetParent(runes);
-		
+
 		runes[i].bg = runes[i]:CreateTexture(nil, "BORDER");
 		runes[i].bg:SetAllPoints();
 		runes[i].bg:SetTexture(E["media"].blankTex);
 		runes[i].bg.multiplier = 0.2;
 	end
-	
+
 	return runes;
-end
-
-function UF:Construct_MageResourceBar(frame)
-	local bars = CreateFrame("Frame", nil, frame);
-	bars:CreateBackdrop("Default", nil, nil, self.thinBorders);
-
-	for i = 1, UF["classMaxResourceBar"][E.myclass] do
-		bars[i] = CreateFrame("StatusBar", nil, bars);
-		bars[i]:SetStatusBarTexture(E["media"].blankTex);
-		bars[i]:GetStatusBarTexture():SetHorizTile(false);
-		
-		bars[i].bg = bars[i]:CreateTexture(nil, "ARTWORK");
-		
-		UF["statusbars"][bars[i]] = true;
-
-		bars[i]:CreateBackdrop("Default", nil, nil, self.thinBorders);
-		bars[i].backdrop:SetParent(bars);
-	end
-	
-	bars.PostUpdate = UF.UpdateArcaneCharges;
-	bars:SetScript("OnShow", ToggleResourceBar);
-	bars:SetScript("OnHide", ToggleResourceBar);
-	
-	return bars;
-end
-
-function UF:UpdateArcaneCharges(event, arcaneCharges, maxCharges)
-	local frame = self.origParent or self:GetParent();
-	if(IsSpellKnown(31583) and arcaneCharges == 0) then
-		if(frame.db.classbar.autoHide) then
-			self:Hide();
-		else
-			for i = 1, maxCharges do
-				self[i]:SetValue(0);
-				self[i]:SetScript("OnUpdate", nil);
-			end
-			
-			self:Show();
-		end
-	end
 end
 
 function UF:Construct_DruidAltManaBar(frame)
@@ -296,13 +278,13 @@ function UF:Construct_DruidAltManaBar(frame)
 	return dpower;
 end
 
-function UF:DruidResourceBarVisibilityUpdate(unit)
+function UF:DruidResourceBarVisibilityUpdate()
 	local parent = self:GetParent();
-	
+
 	UF:UpdatePlayerFrameAnchors(parent, self:IsShown());
 end
 
-function UF:DruidPostUpdateAltPower(unit, min, max)
+function UF:DruidPostUpdateAltPower(_, min, max)
 	local parent = self:GetParent();
 	local powerText = parent.Power.value;
 	local powerTextParent = powerText:GetParent();

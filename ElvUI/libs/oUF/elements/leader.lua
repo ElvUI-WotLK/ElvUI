@@ -1,5 +1,9 @@
-local parent, ns = ...;
+local _, ns = ...;
 local oUF = ns.oUF;
+
+local UnitIsPartyLeader = UnitIsPartyLeader
+local UnitInParty = UnitInParty
+local UnitInRaid = UnitInRaid
 
 local Update = function(self, event)
 	local leader = self.Leader;

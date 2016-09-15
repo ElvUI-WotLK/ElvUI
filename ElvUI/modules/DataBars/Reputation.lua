@@ -1,17 +1,26 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local mod = E:GetModule("DataBars");
 
+local _G = _G;
+local format = format;
+
+local GetWatchedFactionInfo, GetNumFactions, GetFactionInfo = GetWatchedFactionInfo, GetNumFactions, GetFactionInfo;
+local REPUTATION, STANDING = REPUTATION, STANDING;
+local FACTION_BAR_COLORS = FACTION_BAR_COLORS;
+local InCombatLockdown = InCombatLockdown;
+
 local backupColor = FACTION_BAR_COLORS[1];
 function mod:UpdateReputation(event)
+	if(not mod.db.reputation.enable) then return; end
 	local bar = self.repBar;
 
 	local ID = 100;
 	local name, reaction, min, max, value = GetWatchedFactionInfo();
 	local numFactions = GetNumFactions();
 
-	if(not name) then
+	if not name or (event == "PLAYER_REGEN_DISABLED" and self.db.reputation.hideInCombat) then
 		bar:Hide();
-	else
+	elseif (not self.db.reputation.hideInCombat or not InCombatLockdown()) then
 		bar:Show();
 
 		if(self.db.reputation.hideInVehicle) then
@@ -54,7 +63,7 @@ function mod:ReputationBar_OnEnter()
 	GameTooltip:ClearLines();
 	GameTooltip:SetOwner(self, "ANCHOR_CURSOR", 0, -4);
 
-	local name, reaction, min, max, value, factionID = GetWatchedFactionInfo();
+	local name, reaction, min, max, value = GetWatchedFactionInfo();
 	if(name) then
 		GameTooltip:AddLine(name);
 		GameTooltip:AddLine(" ");
@@ -63,6 +72,10 @@ function mod:ReputationBar_OnEnter()
 		GameTooltip:AddDoubleLine(REPUTATION .. ":", format("%d / %d (%d%%)", value - min, max - min, (value - min) / ((max - min == 0) and max or (max - min)) * 100), 1, 1, 1);
 	end
 	GameTooltip:Show();
+end
+
+function mod:ReputationBar_OnClick()
+	ToggleCharacter("ReputationFrame");
 end
 
 function mod:UpdateReputationDimensions()
@@ -74,7 +87,7 @@ function mod:UpdateReputationDimensions()
 		self.repBar:SetAlpha(0);
 	else
 		self.repBar:SetAlpha(1);
-	end	
+	end
 end
 
 function mod:EnableDisable_ReputationBar()
@@ -91,8 +104,14 @@ end
 
 
 function mod:LoadReputationBar()
-	self.repBar = self:CreateBar("ElvUI_ReputationBar", self.ReputationBar_OnEnter, "RIGHT", RightChatPanel, "LEFT", E.Border - E.Spacing*3, 0);
+	self.repBar = self:CreateBar("ElvUI_ReputationBar", self.ReputationBar_OnEnter, self.ReputationBar_OnClick, "RIGHT", RightChatPanel, "LEFT", E.Border - E.Spacing*3, 0);
 	E:RegisterStatusBar(self.repBar.statusBar);
+
+	self.repBar.eventFrame = CreateFrame("Frame");
+	self.repBar.eventFrame:Hide();
+	self.repBar.eventFrame:RegisterEvent("PLAYER_REGEN_DISABLED");
+	self.repBar.eventFrame:RegisterEvent("PLAYER_REGEN_ENABLED");
+	self.repBar.eventFrame:SetScript("OnEvent", function(self, event) mod:UpdateReputation(event); end);
 
 	self:UpdateReputationDimensions();
 

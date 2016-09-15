@@ -16,17 +16,17 @@ _FACTORY.active = true;
 
 function _FACTORY:PLAYER_LOGIN()
 	if(not self.active) then return; end
-	
+
 	for _, func in next, _QUEUE do
 		func(oUF);
 	end
-	
+
 	wipe(_QUEUE);
 end
 
 function oUF:Factory(func)
 	argcheck(func, 2, "function");
-	
+
 	if(IsLoggedIn() and _FACTORY.active) then
 		return func(self);
 	else

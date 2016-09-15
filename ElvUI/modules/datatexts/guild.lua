@@ -10,7 +10,7 @@ local ceil = math.ceil
 
 local tthead, ttsubh, ttoff = {r=0.4, g=0.78, b=1}, {r=0.75, g=0.9, b=1}, {r=.3,g=1,b=.3}
 local activezone, inactivezone = {r=0.3, g=1.0, b=0.3}, {r=0.65, g=0.65, b=0.65}
-local groupedTable = { "|cffaaaaaa*|r", "" } 
+local groupedTable = { "|cffaaaaaa*|r", "" }
 local displayString = ""
 local noGuildString = ""
 local guildInfoString = "%s"
@@ -41,12 +41,12 @@ end
 local function BuildGuildTable()
 	wipe(guildTable)
 	local name, rank, _, level, _, zone, note, officernote, connected, status, class
-	
+
 	local totalMembers = GetNumGuildMembers()
 	for i = 1, totalMembers do
 		name, rank, _, level, _, zone, note, officernote, connected, status, class = GetGuildRosterInfo(i)
 
-		if connected then 
+		if connected then
 			guildTable[#guildTable + 1] = { name, rank, level, zone, note, officernote, connected, status, class }
 		end
 	end
@@ -61,10 +61,10 @@ local eventHandlers = {
 		GuildRoster()
 	end,
 	-- when we enter the world and guildframe is not available then
-	-- load guild frame, update guild message and guild xp	
+	-- load guild frame, update guild message and guild xp
 	["PLAYER_ENTERING_WORLD"] = function (self)
-		if not IsInGuild() then 
-			GuildRoster() 
+		if not IsInGuild() then
+			GuildRoster()
 		end
 	end,
 	-- Guild Roster updated, so rebuild the guild table
@@ -90,7 +90,7 @@ local eventHandlers = {
 
 local function OnEvent(self, event, ...)
 	lastPanel = self
-	
+
 	if IsInGuild() then
 		eventHandlers[event](self, select(1, ...))
 
@@ -145,7 +145,7 @@ local function Click(self, btn)
 			end
 		end
 
-		EasyMenu(menuList, menuFrame, "cursor", 0, 0, "MENU", 2)	
+		EasyMenu(menuList, menuFrame, "cursor", 0, 0, "MENU", 2)
 	else
 		ToggleFriendsFrame(3)
 	end
@@ -155,7 +155,7 @@ local function OnEnter(self, _, noUpdate)
 	if not IsInGuild() then return end
 
 	DT:SetupTooltip(self)
-	
+
 	local online, total = 0, GetNumGuildMembers(true)
 	for i = 0, total do if select(9, GetGuildRosterInfo(i)) then online = online + 1 end end
 	if #guildTable == 0 then BuildGuildTable() end
@@ -163,20 +163,20 @@ local function OnEnter(self, _, noUpdate)
 	SortGuildTable(IsShiftKeyDown())
 
 	local guildName, guildRank = GetGuildInfo('player')
-	
+
 	if guildName and guildRank then
 		DT.tooltip:AddDoubleLine(format(guildInfoString, guildName), format(guildInfoString2, online, total),tthead.r,tthead.g,tthead.b,tthead.r,tthead.g,tthead.b)
 		DT.tooltip:AddLine(guildRank, unpack(tthead))
 	end
-	
-	if guildMotD ~= "" then 
+
+	if guildMotD ~= "" then
 		DT.tooltip:AddLine(' ')
-		DT.tooltip:AddLine(format(guildMotDString, MOTD_COLON, guildMotD), ttsubh.r, ttsubh.g, ttsubh.b, 1) 
+		DT.tooltip:AddLine(format(guildMotDString, MOTD_COLON, guildMotD), ttsubh.r, ttsubh.g, ttsubh.b, 1)
 	end
-	
+
 	local zonec, classc, levelc, info, grouped
 	local shown = 0
-	
+
 	DT.tooltip:AddLine(' ')
 	for i = 1, #guildTable do
 		-- if more then 30 guild members are online, we don't Show any more, but inform user there are more
@@ -188,7 +188,7 @@ local function OnEnter(self, _, noUpdate)
 		info = guildTable[i]
 		if GetRealZoneText() == info[4] then zonec = activezone else zonec = inactivezone end
 		classc, levelc = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[info[9]], GetQuestDifficultyColor(info[3])
-		
+
 		if (UnitInParty(info[1]) or UnitInRaid(info[1])) then grouped = 1 else grouped = 2 end
 
 		if IsShiftKeyDown() then
@@ -200,9 +200,9 @@ local function OnEnter(self, _, noUpdate)
 		end
 		shown = shown + 1
 	end
-	
+
 	DT.tooltip:Show()
-	
+
 	if not noUpdate then
 		GuildRoster()
 	end
@@ -211,7 +211,7 @@ end
 local function ValueColorUpdate(hex, r, g, b)
 	displayString = join("", GUILD, ": ", hex, "%d|r")
 	noGuildString = join("", hex, L['No Guild'])
-	
+
 	if lastPanel ~= nil then
 		OnEvent(lastPanel, 'ELVUI_COLOR_UPDATE')
 	end
@@ -220,9 +220,9 @@ E['valueColorUpdateFuncs'][ValueColorUpdate] = true
 
 --[[
 	DT:RegisterDatatext(name, events, eventFunc, updateFunc, clickFunc, onEnterFunc, onLeaveFunc)
-	
+
 	name - name of the datatext (required)
-	events - must be a table with string values of event names to register 
+	events - must be a table with string values of event names to register
 	eventFunc - function that gets fired when an event gets triggered
 	updateFunc - onUpdate script target function
 	click - function to fire when clicking the datatext
@@ -230,4 +230,4 @@ E['valueColorUpdateFuncs'][ValueColorUpdate] = true
 	onLeaveFunc - function to fire OnLeave, if not provided one will be set for you that hides the tooltip.
 ]]
 
-DT:RegisterDatatext(GUILD, {'PLAYER_ENTERING_WORLD', 'CHAT_MSG_SYSTEM', "GUILD_ROSTER_UPDATE", "PLAYER_GUILD_UPDATE", "GUILD_MOTD"}, OnEvent, nil, Click, OnEnter)
+DT:RegisterDatatext("Guild", {'PLAYER_ENTERING_WORLD', 'CHAT_MSG_SYSTEM', "GUILD_ROSTER_UPDATE", "PLAYER_GUILD_UPDATE", "GUILD_MOTD"}, OnEvent, nil, Click, OnEnter)

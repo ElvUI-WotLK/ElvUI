@@ -25,12 +25,19 @@ E.Options.args.skins = {
 			get = function(info) return E.private.skins.ace3.enable end,
 			set = function(info, value) E.private.skins.ace3.enable = value; E:StaticPopup_Show("PRIVATE_RL") end,
 		},
+		animations = {
+			order = 4,
+			type = 'toggle',
+			name = 'Animations',
+			get = function(info) return E.private.skins.animations; end,
+			set = function(info, value) E.private.skins.animations = value; end,
+		},
 		blizzard = {
 			order = 100,
 			type = 'group',
 			name = 'Blizzard',
 			get = function(info) return E.private.skins.blizzard[ info[#info] ] end,
-			set = function(info, value) E.private.skins.blizzard[ info[#info] ] = value; E:StaticPopup_Show("CONFIG_RL") end,	
+			set = function(info, value) E.private.skins.blizzard[ info[#info] ] = value; E:StaticPopup_Show("CONFIG_RL") end,
 			guiInline = true,
 			args = {
 				achievement = {
@@ -221,7 +228,7 @@ E.Options.args.skins = {
 				timemanager = {
 					type = "toggle",
 					name = L["Time Manager"],
-					desc = L["TOGGLESKIN_DESC"],	
+					desc = L["TOGGLESKIN_DESC"],
 				},
 				trade = {
 					type = "toggle",
@@ -236,6 +243,11 @@ E.Options.args.skins = {
 				trainer = {
 					type = "toggle",
 					name = L["Trainer Frame"],
+					desc = L["TOGGLESKIN_DESC"],
+				},
+				tutorial = {
+					type = "toggle",
+					name = L["Tutorial Frame"],
 					desc = L["TOGGLESKIN_DESC"],
 				},
 				worldmap = {

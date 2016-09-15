@@ -6,7 +6,7 @@ V['general'] = {
 	['loot'] = true,
 	['lootRoll'] = true,
 	["normTex"] = "ElvUI Norm",
-	["glossTex"] = "ElvUI Norm",	
+	["glossTex"] = "ElvUI Norm",
 	["dmgfont"] = "Homespun",
 	["namefont"] = "PT Sans Narrow",
 	["chatBubbles"] = "backdrop",
@@ -16,7 +16,9 @@ V['general'] = {
 	["replaceBlizzFonts"] = true,
 	['minimap'] = {
 		['enable'] = true,
+		["hideCalendar"] = true,
 	},
+	["classColorMentionsSpeech"] = true
 }
 
 V['bags'] = {
@@ -38,6 +40,7 @@ V['chat'] = {
 }
 
 V['skins'] = {
+	["animations"] = true,
 	['ace3'] = {
 		['enable'] = true,
 	},
@@ -85,6 +88,7 @@ V['skins'] = {
 		['trade'] = true,
 		['tradeskill'] = true,
 		['trainer'] = true,
+		['tutorial'] = true,
 		['worldmap'] = true,
 		["mirrorTimers"] = true
 	},

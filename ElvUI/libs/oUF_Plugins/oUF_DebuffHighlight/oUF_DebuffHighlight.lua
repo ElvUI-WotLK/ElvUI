@@ -31,7 +31,7 @@ end
 
 local function Update(object, event, unit)
 	if(object.unit ~= unit) then return; end
-	
+
 	local debuffType, texture, wasFiltered, style, color = GetDebuffType(unit, object.DebuffHighlightFilter, object.DebuffHighlightFilterTable);
 	if(wasFiltered) then
 		if(style == "GLOW" and object.DBHGlow) then
@@ -73,7 +73,7 @@ local function Enable(object)
 	if object.DebuffHighlightFilter and not CanDispel[playerClass] then
 		return
 	end
-	
+
 	-- make sure aura scanning is active for this object
 	object:RegisterEvent("UNIT_AURA", Update)
 
@@ -83,11 +83,11 @@ end
 local function Disable(object)
 	if object.DebuffHighlightBackdrop or object.DebuffHighlight or object.DBHGlow then
 		object:UnregisterEvent("UNIT_AURA", Update)
-		
+
 		if(object.DBHGlow) then
 			object.DBHGlow:Hide();
 		end
-		
+
 		if(object.DebuffHighlight) then
 			local color = origColors[object];
 			if(color) then

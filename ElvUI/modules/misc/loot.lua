@@ -3,7 +3,6 @@ local M = E:GetModule('Misc');
 
 local unpack, pairs = unpack, pairs;
 local ITEM_QUALITY_COLORS = ITEM_QUALITY_COLORS;
-local TEXTURE_ITEM_QUEST_BANG = TEXTURE_ITEM_QUEST_BANG;
 local LOOT = LOOT;
 
 -- Credit Haste
@@ -21,7 +20,7 @@ local OnEnter = function(self)
 		GameTooltip:SetLootItem(slot);
 		CursorUpdate(self);
 	end
-	
+
 	self.drop:Show();
 	self.drop:SetVertexColor(1, 1, 0);
 end
@@ -33,7 +32,7 @@ local OnLeave = function(self)
 	else
 		self.drop:Hide();
 	end
-	
+
 	GameTooltip:Hide();
 	ResetCursor();
 end
@@ -43,7 +42,7 @@ local OnClick = function(self)
 	LootFrame.selectedItemName = self.name:GetText()
 	LootFrame.selectedSlot = self:GetID()
 	LootFrame.selectedLootButton = self:GetName()
-	
+
 	if(IsModifiedClick()) then
 		HandleModifiedItemClick(GetLootSlotLink(self:GetID()))
 	else
@@ -179,7 +178,7 @@ function M:LOOT_OPENED(event, autoloot)
 		local x, y = GetCursorPosition()
 		x = x / lootFrame:GetEffectiveScale()
 		y = y / lootFrame:GetEffectiveScale()
-		
+
 		lootFrame:ClearAllPoints()
 		lootFrame:Point('TOPLEFT', UIParent, 'BOTTOMLEFT', x - 40, y + 20)
 		lootFrame:GetCenter()
@@ -195,7 +194,7 @@ function M:LOOT_OPENED(event, autoloot)
 	if(items > 0) then
 		for i=1, items do
 			local slot = lootFrame.slots[i] or createSlot(i)
-			local texture, item, quantity, quality, locked = GetLootSlotInfo(i)
+			local texture, item, quantity, quality = GetLootSlotInfo(i)
 			local color = ITEM_QUALITY_COLORS[quality]
 
 			if(LootSlotIsCoin(i)) then
@@ -222,7 +221,7 @@ function M:LOOT_OPENED(event, autoloot)
 				slot.name:SetTextColor(color.r, color.g, color.b)
 			end
 			slot.icon:SetTexture(texture)
-			
+
 			if quality then
 				m = max(m, quality)
 			end
@@ -265,14 +264,14 @@ function M:LoadLoot()
 	lootFrameHolder:Point('TOPLEFT', 36, -195)
 	lootFrameHolder:Width(150)
 	lootFrameHolder:Height(22)
-	
+
 	lootFrame = CreateFrame('Button', 'ElvLootFrame', lootFrameHolder)
 	lootFrame:SetClampedToScreen(true)
 	lootFrame:SetPoint('TOPLEFT')
 	lootFrame:Size(256, 64)
 	lootFrame:SetTemplate('Transparent')
 	lootFrame:SetFrameStrata'FULLSCREEN'
-	lootFrame:SetToplevel(true)	
+	lootFrame:SetToplevel(true)
 	lootFrame.title = lootFrame:CreateFontString(nil, 'OVERLAY')
 	lootFrame.title:FontTemplate(nil, nil, 'OUTLINE')
 	lootFrame.title:Point("BOTTOMLEFT", lootFrame, "TOPLEFT", 0, 1);
@@ -288,13 +287,13 @@ function M:LoadLoot()
 	self:RegisterEvent('LOOT_CLOSED')
 	self:RegisterEvent('OPEN_MASTER_LOOT_LIST')
 	self:RegisterEvent('UPDATE_MASTER_LOOT_LIST')
-	
+
 	E:CreateMover(lootFrameHolder, 'LootFrameMover', L['Loot Frame'])
-	
+
 	if(GetCVar("lootUnderMouse") == "1") then
 		E:DisableMover("LootFrameMover");
 	end
-	
+
 	-- Fuzz
 	LootFrame:UnregisterAllEvents()
 	tinsert(UISpecialFrames, 'ElvLootFrame')

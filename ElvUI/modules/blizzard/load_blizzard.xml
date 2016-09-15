@@ -1,4 +1,4 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/">	
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file='blizzard.lua'/>
 	<Script file='alertframe.lua'/>
 	<Script file='colorpicker.lua'/>

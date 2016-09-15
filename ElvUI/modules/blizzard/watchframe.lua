@@ -17,12 +17,12 @@ end
 function B:MoveWatchFrame()
 	E:CreateMover(WatchFrameHolder, "WatchFrameMover", L["Watch Frame"]);
 	WatchFrameHolder:SetAllPoints(WatchFrameMover);
-	
+
 	WatchFrame:ClearAllPoints();
 	WatchFrame:SetPoint("TOP", WatchFrameHolder, "TOP");
 	B:WatchFrameHeight();
 	WatchFrame:SetClampedToScreen(false);
-	
+
 	hooksecurefunc(WatchFrame, "SetPoint", function(_,_,parent)
 		if(parent ~= WatchFrameHolder) then
 			WatchFrame:ClearAllPoints();

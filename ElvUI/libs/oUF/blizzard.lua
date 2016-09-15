@@ -11,23 +11,23 @@ local HandleFrame = function(baseName)
 	else
 		frame = baseName;
 	end
-	
+
 	if(frame) then
 		frame:UnregisterAllEvents();
 		frame:Hide();
-		
+
 		frame:SetParent(hiddenParent);
 
 		local health = frame.healthbar;
 		if(health) then
 			health:UnregisterAllEvents();
 		end
-		
+
 		local power = frame.manabar;
 		if(power) then
 			power:UnregisterAllEvents();
 		end
-		
+
 		local spell = frame.spellbar;
 		if(spell) then
 			spell:UnregisterAllEvents();
@@ -37,10 +37,10 @@ end
 
 function oUF:DisableBlizzard(unit)
 	if(not unit) then return; end
-	
+
 	if(unit == "player") then
 		HandleFrame(PlayerFrame);
-		
+
 		PlayerFrame:RegisterEvent("UNIT_ENTERING_VEHICLE");
 		PlayerFrame:RegisterEvent("UNIT_ENTERED_VEHICLE");
 		PlayerFrame:RegisterEvent("UNIT_EXITING_VEHICLE");
@@ -82,7 +82,7 @@ function oUF:DisableBlizzard(unit)
 				HandleFrame(("ArenaEnemyFrame%d"):format(i));
 			end
 		end
-		
+
 		Arena_LoadUI = function() end
 	end
 end

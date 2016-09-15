@@ -12,7 +12,7 @@ Very light wrapper library that combines all the AceConfig subcomponents into on
 
 ]]
 
-local MAJOR, MINOR = "AceConfig-3.0-ElvUI", 1
+local MAJOR, MINOR = "AceConfig-3.0-ElvUI", 2
 local AceConfig = LibStub:NewLibrary(MAJOR, MINOR)
 
 if not AceConfig then return end
@@ -44,7 +44,7 @@ local pcall, error, type, pairs = pcall, error, type, pairs
 function AceConfig:RegisterOptionsTable(appName, options, slashcmd)
 	local ok,msg = pcall(cfgreg.RegisterOptionsTable, self, appName, options)
 	if not ok then error(msg, 2) end
-	
+
 	if slashcmd then
 		if type(slashcmd) == "table" then
 			for _,cmd in pairs(slashcmd) do

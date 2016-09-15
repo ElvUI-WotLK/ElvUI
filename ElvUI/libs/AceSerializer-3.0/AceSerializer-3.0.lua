@@ -1,9 +1,9 @@
 --- **AceSerializer-3.0** can serialize any variable (except functions or userdata) into a string format,
--- that can be send over the addon comm channel. AceSerializer was designed to keep all data intact, especially 
+-- that can be send over the addon comm channel. AceSerializer was designed to keep all data intact, especially
 -- very large numbers or floating point numbers, and table structures. The only caveat currently is, that multiple
 -- references to the same table will be send individually.
 --
--- **AceSerializer-3.0** can be embeded into your addon, either explicitly by calling AceSerializer:Embed(MyAddon) or by 
+-- **AceSerializer-3.0** can be embeded into your addon, either explicitly by calling AceSerializer:Embed(MyAddon) or by
 -- specifying it as an embeded library in your AceAddon. All functions will be available on your addon object
 -- and can be accessed directly, without having to explicitly call AceSerializer itself.\\
 -- It is recommended to embed AceSerializer, otherwise you'll have to specify a custom `self` on all calls you
@@ -38,7 +38,7 @@ local function SerializeStringHelper(ch)	-- Used by SerializeValue for strings
 		return "\126\122"
 	elseif n<=32 then 			-- nonprint + space
 		return "\126"..strchar(n+64)
-	elseif n==94 then		-- value separator 
+	elseif n==94 then		-- value separator
 		return "\126\125"
 	elseif n==126 then		-- our own escape character
 		return "\126\124"
@@ -52,12 +52,12 @@ end
 local function SerializeValue(v, res, nres)
 	-- We use "^" as a value separator, followed by one byte for type indicator
 	local t=type(v)
-	
+
 	if t=="string" then		-- ^S = string (escaped to remove nonprints, "^"s, etc)
 		res[nres+1] = "^S"
 		res[nres+2] = gsub(v,"[%c \94\126\127]", SerializeStringHelper)
 		nres=nres+2
-	
+
 	elseif t=="number" then	-- ^N = number (just tostring()ed) or ^F (float components)
 		local str = tostring(v)
 		if tonumber(str)==v  or str==serNaN or str==serInf or str==serNegInf then
@@ -73,7 +73,7 @@ local function SerializeValue(v, res, nres)
 			res[nres+4] = tostring(e-53)	-- adjust exponent to counteract mantissa manipulation
 			nres=nres+4
 		end
-	
+
 	elseif t=="table" then	-- ^T...^t = table (list of key,value pairs)
 		nres=nres+1
 		res[nres] = "^T"
@@ -83,7 +83,7 @@ local function SerializeValue(v, res, nres)
 		end
 		nres=nres+1
 		res[nres] = "^t"
-	
+
 	elseif t=="boolean" then	-- ^B = true, ^b = false
 		nres=nres+1
 		if v then
@@ -91,15 +91,15 @@ local function SerializeValue(v, res, nres)
 		else
 			res[nres] = "^b"	-- false
 		end
-	
+
 	elseif t=="nil" then		-- ^Z = nil (zero, "N" was taken :P)
 		nres=nres+1
 		res[nres] = "^Z"
-	
+
 	else
 		error(MAJOR..": Cannot serialize a value of type '"..t.."'")	-- can't produce error on right level, this is wildly recursive
 	end
-	
+
 	return nres
 end
 
@@ -115,14 +115,14 @@ local serializeTbl = { "^1" }	-- "^1" = Hi, I'm data serialized by AceSerializer
 -- @return The data in its serialized form (string)
 function AceSerializer:Serialize(...)
 	local nres = 1
-	
+
 	for i=1,select("#", ...) do
 		local v = select(i, ...)
 		nres = SerializeValue(v, serializeTbl, nres)
 	end
-	
+
 	serializeTbl[nres+1] = "^^"	-- "^^" = End of serialized data
-	
+
 	return tconcat(serializeTbl, "", 1, nres+1)
 end
 
@@ -169,17 +169,17 @@ local function DeserializeValue(iter,single,ctl,data)
 		ctl,data = iter()
 	end
 
-	if not ctl then 
+	if not ctl then
 		error("Supplied data misses AceSerializer terminator ('^^')")
 	end
-	
+
 	if ctl=="^^" then
 		-- ignore extraneous data
 		return
 	end
 
 	local res
-	
+
 	if ctl=="^S" then
 		res = gsub(data, "~.", DeserializeStringHelper)
 	elseif ctl=="^N" then
@@ -210,9 +210,9 @@ local function DeserializeValue(iter,single,ctl,data)
 		local k,v
 		while true do
 			ctl,data = iter()
-			if ctl=="^t" then break end -- ignore ^t's data
+			if ctl=="^t" then break end	-- ignore ^t's data
 			k = DeserializeValue(iter,true,ctl,data)
-			if k==nil then 
+			if k==nil then
 				error("Invalid AceSerializer table format (no table end marker)")
 			end
 			ctl,data = iter()
@@ -225,7 +225,7 @@ local function DeserializeValue(iter,single,ctl,data)
 	else
 		error("Invalid AceSerializer control code '"..ctl.."'")
 	end
-	
+
 	if not single then
 		return res,DeserializeValue(iter)
 	else

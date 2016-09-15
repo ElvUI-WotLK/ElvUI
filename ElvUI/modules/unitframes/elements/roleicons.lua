@@ -5,7 +5,7 @@ local CreateFrame = CreateFrame;
 
 function UF:Construct_RoleIcon(frame)
 	local f = CreateFrame("Frame", nil, frame);
-	
+
 	local tex = f:CreateTexture(nil, "ARTWORK");
 	tex:Size(17);
 	tex:Point("BOTTOM", frame.Health, "BOTTOM", 0, 2);
@@ -23,12 +23,12 @@ function UF:UpdateRoleIcon()
 	local lfdrole = self.LFDRole;
 	if(not self.db) then return; end
 	local db = self.db.roleIcon;
-	
+
 	if((not db) or (db and not db.enable)) then
 		lfdrole:Hide();
 		return;
 	end
-	
+
 	local role;
 	local isTank, isHealer, isDamage = UnitGroupRolesAssigned(self.unit);
 	if(isTank) then
@@ -43,7 +43,7 @@ function UF:UpdateRoleIcon()
 	else
 		role = nil;
 	end
-	
+
 	if((self.isForced or UnitIsConnected(self.unit)) and role ~= nil) then
 		lfdrole:SetTexture(roleIconTextures[role]);
 		lfdrole:Show();
@@ -55,11 +55,11 @@ end
 function UF:Configure_RoleIcon(frame)
 	local role = frame.LFDRole;
 	local db = frame.db;
-	
+
 	if(db.roleIcon.enable) then
 		frame:EnableElement("LFDRole");
 		local attachPoint = self:GetObjectAnchorPoint(frame, db.roleIcon.attachTo);
-		
+
 		role:ClearAllPoints();
 		role:Point(db.roleIcon.position, attachPoint, db.roleIcon.position, db.roleIcon.xOffset, db.roleIcon.yOffset);
 		role:Size(db.roleIcon.size);

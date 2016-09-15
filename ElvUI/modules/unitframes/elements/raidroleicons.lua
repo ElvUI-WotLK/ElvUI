@@ -1,36 +1,73 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local UF = E:GetModule("UnitFrames");
 
+local match = string.match;
 local CreateFrame = CreateFrame;
+
+local function CheckLeader(unit)
+	if(unit == "player") then
+		return IsPartyLeader();
+	elseif(unit ~= "player" and (UnitInParty(unit) or UnitInRaid(unit))) then
+		local gtype, index = unit:match("(%D+)(%d+)");
+		index = tonumber(index);
+		if(gtype == "party" and GetNumRaidMembers() == 0) then
+			return GetPartyLeaderIndex() == index;
+		elseif(gtype == "raid" and GetNumRaidMembers() > 0) then
+			return select(2, GetRaidRosterInfo(index)) == 2;
+		end
+	end
+end
+
+local function UpdateOverride(self, event)
+	local leader = self.Leader;
+	if(leader.PreUpdate) then
+		leader:PreUpdate();
+	end
+
+	local isLeader = CheckLeader(self.unit)
+
+	if(isLeader) then
+		leader:Show();
+	else
+		leader:Hide();
+	end
+
+	if(leader.PostUpdate) then
+		return leader:PostUpdate(isLeader);
+	end
+end
 
 function UF:Construct_RaidRoleFrames(frame)
 	local anchor = CreateFrame("Frame", nil, frame);
 	frame.Leader = anchor:CreateTexture(nil, "OVERLAY");
 	frame.Assistant = anchor:CreateTexture(nil, "OVERLAY");
 	frame.MasterLooter = anchor:CreateTexture(nil, "OVERLAY");
-	
+
 	anchor:Size(24, 12);
 	frame.Leader:Size(12);
 	frame.Assistant:Size(12);
 	frame.MasterLooter:Size(11);
-	
+
+	frame.Leader.Override = UpdateOverride;
+
 	frame.Leader.PostUpdate = UF.RaidRoleUpdate;
 	frame.Assistant.PostUpdate = UF.RaidRoleUpdate;
 	frame.MasterLooter.PostUpdate = UF.RaidRoleUpdate;
-	
+
 	return anchor;
 end
 
 function UF:Configure_RaidRoleIcons(frame)
 	local raidRoleFrameAnchor = frame.RaidRoleFramesAnchor;
-	
+
 	if(frame.db.raidRoleIcons.enable) then
 		raidRoleFrameAnchor:Show()
 		if(not frame:IsElementEnabled("Leader")) then
 			frame:EnableElement("Leader");
 			frame:EnableElement("MasterLooter");
+			frame:EnableElement('Assistant');
 		end
-		
+
 		raidRoleFrameAnchor:ClearAllPoints();
 		if(frame.db.raidRoleIcons.position == "TOPLEFT") then
 			raidRoleFrameAnchor:Point("LEFT", frame.Health, "TOPLEFT", 2, 0);
@@ -41,6 +78,7 @@ function UF:Configure_RaidRoleIcons(frame)
 		raidRoleFrameAnchor:Hide();
 		frame:DisableElement("Leader");
 		frame:DisableElement("MasterLooter");
+		frame:DisableElement('Assistant');
 	end
 end
 
@@ -49,19 +87,18 @@ function UF:RaidRoleUpdate()
 	local leader = anchor:GetParent().Leader;
 	local assistant = anchor:GetParent().Assistant;
 	local masterLooter = anchor:GetParent().MasterLooter;
-	
+
 	if(not leader or not masterLooter or not assistant) then return; end
-	
-	local unit = anchor:GetParent().unit;
+
 	local db = anchor:GetParent().db;
 	local isLeader = leader:IsShown();
 	local isMasterLooter = masterLooter:IsShown();
 	local isAssist = assistant:IsShown();
-	
+
 	leader:ClearAllPoints();
 	assistant:ClearAllPoints();
 	masterLooter:ClearAllPoints();
-	
+
 	if(db and db.raidRoleIcons) then
 		if(isLeader and db.raidRoleIcons.position == "TOPLEFT") then
 			leader:Point("LEFT", anchor, "LEFT");

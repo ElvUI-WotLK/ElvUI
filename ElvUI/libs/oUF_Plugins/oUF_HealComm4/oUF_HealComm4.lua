@@ -9,36 +9,36 @@ local function Update(self, ...)
 	local unit = self.unit;
 	local healCommBar = self.HealCommBar;
 	healCommBar.parent = self;
-	
+
 	if(not unit or UnitIsDead(unit) or UnitIsGhost(unit) or not UnitIsConnected(unit)) then
 		if(healCommBar.myBar) then
 			healCommBar.myBar:Hide();
 		end
-		
+
 		if(healCommBar.otherBar) then
 			healCommBar.otherBar:Hide();
 		end
 		return;
 	end
-	
+
 	local health, maxHealth = UnitHealth(unit), UnitHealthMax(unit);
 	local guid = UnitGUID(unit);
 	local timeFrame = self.HealCommTimeframe and GetTime() + self.HealCommTimeframe or nil;
-	
+
 	local myIncomingHeal = healComm:GetHealAmount(guid, healComm.ALL_HEALS, timeFrame, UnitGUID("player")) or 0;
 	local allIncomingHeal = healComm:GetHealAmount(guid, healComm.ALL_HEALS, timeFrame) or 0;
-	
+
 	if(health + allIncomingHeal > maxHealth * healCommBar.maxOverflow) then
 		allIncomingHeal = maxHealth * healCommBar.maxOverflow - health;
 	end
-	
+
 	if(allIncomingHeal < myIncomingHeal) then
 		myIncomingHeal = allIncomingHeal;
 		allIncomingHeal = 0;
 	else
 		allIncomingHeal = allIncomingHeal - myIncomingHeal;
 	end
-	
+
 	if(healCommBar.myBar) then
 		healCommBar.myBar:SetMinMaxValues(0, maxHealth);
 		healCommBar.myBar:SetValue(myIncomingHeal);
@@ -50,7 +50,7 @@ local function Update(self, ...)
 		healCommBar.otherBar:SetValue(allIncomingHeal);
 		healCommBar.otherBar:Show();
 	end
-	
+
 	if(healCommBar.PostUpdate) then
 		return healCommBar:PostUpdate(unit, myIncomingHeal, allIncomingHeal);
 	end
@@ -87,14 +87,14 @@ local function Enable(self)
 	if(healCommBar) then
 		healCommBar.__owner = self;
 		healCommBar.ForceUpdate = ForceUpdate;
-		
+
 		if(not healCommBar.maxOverflow) then
 			healCommBar.maxOverflow = 1.05;
 		end
-		
+
 		self:RegisterEvent("UNIT_HEALTH", Path);
 		self:RegisterEvent("UNIT_MAXHEALTH", Path);
-		
+
 		return true;
 	end
 end
@@ -104,11 +104,11 @@ local function Disable(self)
 	if(healCommBar) then
 		self:UnregisterEvent("UNIT_HEALTH", Path);
 		self:UnregisterEvent("UNIT_MAXHEALTH", Path);
-		
+
 		if(healCommBar.myBar) then
 			healCommBar.myBar:Hide();
 		end
-		
+
 		if(healCommBar.otherBar) then
 			healCommBar.otherBar:Hide();
 		end

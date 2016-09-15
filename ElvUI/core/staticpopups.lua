@@ -1,4 +1,4 @@
-﻿local E, L, V, P, G = unpack(select(2, ...));
+local E, L, V, P, G = unpack(select(2, ...));
 
 local _G = _G;
 local pairs, type, unpack, assert = pairs, type, unpack, assert;
@@ -10,7 +10,7 @@ local UnitIsDeadOrGhost, InCinematic = UnitIsDeadOrGhost, InCinematic;
 local GetBindingFromClick, RunBinding = GetBindingFromClick, RunBinding;
 local PurchaseSlot, GetBankSlotCost = PurchaseSlot, GetBankSlotCost;
 local MoneyFrame_Update = MoneyFrame_Update;
-local SetCVar, EnableAddOn, DisableAddOn = SetCVar, EnableAddOn, DisableAddOn;
+local SetCVar, DisableAddOn = SetCVar, DisableAddOn;
 local ReloadUI, PlaySound, StopMusic = ReloadUI, PlaySound, StopMusic;
 local StaticPopup_Resize = StaticPopup_Resize;
 local AutoCompleteEditBox_OnEnterPressed = AutoCompleteEditBox_OnEnterPressed;
@@ -126,12 +126,12 @@ E.PopupDialogs["INCOMPATIBLE_ADDON"] = {
 };
 
 E.PopupDialogs["PIXELPERFECT_CHANGED"] = {
-	text = L["You have changed the pixel perfect option. You will have to complete the installation process to remove any graphical bugs."],
+	text = L["You have changed the Thin Border Theme option. You will have to complete the installation process to remove any graphical bugs."],
 	button1 = ACCEPT,
 	OnAccept = E.noop,
 	timeout = 0,
 	whileDead = 1,
-	hideOnEscape = false	
+	hideOnEscape = false
 };
 
 E.PopupDialogs["CONFIGAURA_SET"] = {
@@ -144,7 +144,7 @@ E.PopupDialogs["CONFIGAURA_SET"] = {
 };
 
 E.PopupDialogs["QUEUE_TAINT"] = {
-	text = L["A taint has occured that is preventing you from using the queue system. Please reload your user interface and try again."],
+	text = L["You have changed your UIScale, however you still have the AutoScale option enabled in ElvUI. Press accept if you would like to disable the Auto Scale option."],
 	button1 = ACCEPT,
 	button2 = CANCEL,
 	OnAccept = function() ReloadUI(); end,
@@ -344,10 +344,10 @@ local MAX_STATIC_POPUPS = 4;
 
 function E:StaticPopup_OnShow()
 	PlaySound("igMainMenuOpen");
-	
+
 	local dialog = E.PopupDialogs[self.which];
 	local OnShow = dialog.OnShow;
-	
+
 	if(OnShow) then
 		OnShow(self, self.data);
 	end
@@ -436,7 +436,7 @@ function E:StaticPopup_OnKeyDown(key)
 		RunBinding("SCREENSHOT");
 		return;
 	end
-	
+
 	local dialog = E.PopupDialogs[self.which];
 	if(dialog) then
 		if(key == "ENTER" and dialog.enterClicksFirstButton) then
@@ -461,9 +461,9 @@ end
 
 function E:StaticPopup_OnHide()
 	PlaySound("igMainMenuClose");
-	
+
 	E:StaticPopup_CollapseTable();
-	
+
 	local dialog = E.PopupDialogs[self.which];
 	local OnHide = dialog.OnHide;
 	if(OnHide) then
@@ -492,7 +492,7 @@ function E:StaticPopup_OnUpdate(elapsed)
 		end
 		self.timeleft = timeleft;
 	end
-	
+
 	if(self.startDelay) then
 		local which = self.which;
 		local timeleft = self.startDelay - elapsed;
@@ -507,7 +507,7 @@ function E:StaticPopup_OnUpdate(elapsed)
 		end
 		self.startDelay = timeleft;
 	end
-	
+
 	local onUpdate = E.PopupDialogs[self.which].OnUpdate;
 	if(onUpdate) then
 		onUpdate(self, elapsed);
@@ -540,7 +540,7 @@ function E:StaticPopup_OnClick(index)
 			hide = not OnCancel(self, self.data, "clicked");
 		end
 	end
-	
+
 	if(hide and (which == self.which)) then
 		self:Hide();
 	end
@@ -599,15 +599,15 @@ function E:StaticPopup_Resize(dialog, which)
 	if(not info) then
 		return nil;
 	end
-	
+
 	local name = dialog:GetName();
 	local text = _G[name .. "Text"];
 	local editBox = _G[name .. "EditBox"];
 	local button1 = _G[name .. "Button1"];
-	
+
 	local maxHeightSoFar, maxWidthSoFar = (dialog.maxHeightSoFar or 0), (dialog.maxWidthSoFar or 0);
 	local width = 320;
-	
+
 	if(dialog.numButtons == 3) then
 		width = 440;
 	elseif(info.showAlert or info.showAlertGear or info.closeButton) then
@@ -615,12 +615,12 @@ function E:StaticPopup_Resize(dialog, which)
 	elseif(info.editBoxWidth and info.editBoxWidth > 260) then
 		width = width + (info.editBoxWidth - 260);
 	end
-	
+
 	if(width > maxWidthSoFar) then
 		dialog:SetWidth(width);
 		dialog.maxWidthSoFar = width;
 	end
-	
+
 	local height = 32 + text:GetHeight() + 8 + button1:GetHeight();
 	if(info.hasEditBox) then
 		height = height + 8 + editBox:GetHeight();
@@ -632,7 +632,7 @@ function E:StaticPopup_Resize(dialog, which)
 	if(info.hasItemFrame) then
 		height = height + 64;
 	end
-	
+
 	if(height > maxHeightSoFar) then
 		dialog:SetHeight(height);
 		dialog.maxHeightSoFar = height;
@@ -650,21 +650,21 @@ function E:StaticPopup_Show(which, text_arg1, text_arg2, data)
 	if(not info) then
 		return nil;
 	end
-	
+
 	if(UnitIsDeadOrGhost("player") and not info.whileDead) then
 		if(info.OnCancel) then
 			info.OnCancel();
 		end
 		return nil;
 	end
-	
+
 	if(InCinematic() and not info.interruptCinematic) then
 		if(info.OnCancel) then
 			info.OnCancel();
 		end
 		return nil;
 	end
-	
+
 	if(info.cancels) then
 		for index = 1, MAX_STATIC_POPUPS, 1 do
 			local frame = _G["ElvUI_StaticPopup" .. index];
@@ -677,7 +677,7 @@ function E:StaticPopup_Show(which, text_arg1, text_arg2, data)
 			end
 		end
 	end
-	
+
 	local dialog = nil;
 	dialog = E:StaticPopup_FindVisible(which, data);
 	if(dialog) then
@@ -719,11 +719,11 @@ function E:StaticPopup_Show(which, text_arg1, text_arg2, data)
 	end
 
 	dialog.maxHeightSoFar, dialog.maxWidthSoFar = 0, 0;
-	
+
 	local name = dialog:GetName();
 	local text = _G[name .. "Text"];
 	text:SetFormattedText(info.text, text_arg1, text_arg2);
-	
+
 	if(info.closeButton) then
 		local closeButton = _G[name .. "CloseButton"];
 		if(info.closeButtonIsHide) then
@@ -737,11 +737,11 @@ function E:StaticPopup_Show(which, text_arg1, text_arg2, data)
 	else
 		_G[name .. "CloseButton"]:Hide();
 	end
-	
+
 	local editBox = _G[name .. "EditBox"];
 	if(info.hasEditBox) then
 		editBox:Show();
-		
+
 		if(info.maxLetters) then
 			editBox:SetMaxLetters(info.maxLetters);
 			editBox:SetCountInvisibleLetters(info.countInvisibleLetters);
@@ -758,7 +758,7 @@ function E:StaticPopup_Show(which, text_arg1, text_arg2, data)
 	else
 		editBox:Hide();
 	end
-	
+
 	if(info.hasMoneyFrame) then
 		_G[name .. "MoneyFrame"]:Show();
 		_G[name .. "MoneyInputFrame"]:Hide();
@@ -779,7 +779,7 @@ function E:StaticPopup_Show(which, text_arg1, text_arg2, data)
 		_G[name .. "MoneyFrame"]:Hide();
 		_G[name .. "MoneyInputFrame"]:Hide();
 	end
-	
+
 	if(info.hasItemFrame) then
 		_G[name .. "ItemFrame"]:Show();
 		if(data and type(data) == "table") then
@@ -798,25 +798,25 @@ function E:StaticPopup_Show(which, text_arg1, text_arg2, data)
 	else
 		_G[name .. "ItemFrame"]:Hide();
 	end
-	
+
 	dialog.which = which;
 	dialog.timeleft = info.timeout;
 	dialog.hideOnEscape = info.hideOnEscape;
 	dialog.exclusive = info.exclusive;
 	dialog.enterClicksFirstButton = info.enterClicksFirstButton;
 	dialog.data = data;
-	
+
 	local button1 = _G[name .. "Button1"];
 	local button2 = _G[name .. "Button2"];
 	local button3 = _G[name .. "Button3"];
-	
+
 	do
 		assert(#tempButtonLocs == 0);
-		
+
 		tinsert(tempButtonLocs, button1);
 		tinsert(tempButtonLocs, button2);
 		tinsert(tempButtonLocs, button3);
-		
+
 		for i = #tempButtonLocs, 1, -1 do
 			tempButtonLocs[i]:SetText(info["button"..i]);
 			tempButtonLocs[i]:Hide();
@@ -825,7 +825,7 @@ function E:StaticPopup_Show(which, text_arg1, text_arg2, data)
 				tremove(tempButtonLocs, i);
 			end
 		end
-		
+
 		local numButtons = #tempButtonLocs;
 		dialog.numButtons = numButtons;
 		if(numButtons == 3) then
@@ -835,12 +835,12 @@ function E:StaticPopup_Show(which, text_arg1, text_arg2, data)
 		elseif(numButtons == 1) then
 			tempButtonLocs[1]:SetPoint("BOTTOM", dialog, "BOTTOM", 0, 16);
 		end
-		
+
 		for i = 1, numButtons do
 			if(i > 1) then
 				tempButtonLocs[i]:SetPoint("LEFT", tempButtonLocs[i-1], "RIGHT", 13, 0);
 			end
-			
+
 			local width = tempButtonLocs[i]:GetTextWidth();
 			if(width > 110) then
 				tempButtonLocs[i]:SetWidth(width + 20);
@@ -850,10 +850,10 @@ function E:StaticPopup_Show(which, text_arg1, text_arg2, data)
 			tempButtonLocs[i]:Enable();
 			tempButtonLocs[i]:Show();
 		end
-		
-		table.wipe(tempButtonLocs);
+
+		wipe(tempButtonLocs);
 	end
-	
+
 	local alertIcon = _G[name .. "AlertIcon"];
 	if(info.showAlert) then
 		alertIcon:SetTexture(STATICPOPUP_TEXTURE_ALERT);
@@ -875,7 +875,7 @@ function E:StaticPopup_Show(which, text_arg1, text_arg2, data)
 		alertIcon:SetTexture();
 		alertIcon:Hide();
 	end
-	
+
 	if(info.StartDelay) then
 		dialog.startDelay = info.StartDelay();
 		button1:Disable();
@@ -883,22 +883,22 @@ function E:StaticPopup_Show(which, text_arg1, text_arg2, data)
 		dialog.startDelay = nil;
 		button1:Enable();
 	end
-	
+
 	editBox.autoCompleteParams = info.autoCompleteParams;
 	editBox.autoCompleteRegex = info.autoCompleteRegex;
 	editBox.autoCompleteFormatRegex = info.autoCompleteFormatRegex;
-	
+
 	editBox.addHighlightedText = true;
-	
+
 	E:StaticPopup_SetUpPosition(dialog);
 	dialog:Show();
-	
+
 	E:StaticPopup_Resize(dialog, which);
-	
+
 	if(info.sound) then
 		PlaySound(info.sound);
 	end
-	
+
 	return dialog;
 end
 
@@ -925,34 +925,34 @@ end
 
 function E:Contruct_StaticPopups()
 	E.StaticPopupFrames = {};
-	
+
 	local S = self:GetModule("Skins");
 	for index = 1, MAX_STATIC_POPUPS do
 		E.StaticPopupFrames[index] = CreateFrame("Frame", "ElvUI_StaticPopup" .. index, E.UIParent, "StaticPopupTemplate");
 		E.StaticPopupFrames[index]:SetID(index);
-		
+
 		E.StaticPopupFrames[index]:SetScript("OnShow", E.StaticPopup_OnShow);
 		E.StaticPopupFrames[index]:SetScript("OnHide", E.StaticPopup_OnHide);
 		E.StaticPopupFrames[index]:SetScript("OnUpdate", E.StaticPopup_OnUpdate);
 		E.StaticPopupFrames[index]:SetScript("OnEvent", E.StaticPopup_OnEvent);
-		
+
 		local name = E.StaticPopupFrames[index]:GetName();
 		for i = 1, 3 do
 			_G[name .. "Button" .. i]:SetScript("OnClick", function(self)
 				E.StaticPopup_OnClick(self:GetParent(), self:GetID());
 			end);
 		end
-		
+
 		_G[name .. "EditBox"]:SetScript("OnEnterPressed", E.StaticPopup_EditBoxOnEnterPressed);
 		_G[name .. "EditBox"]:SetScript("OnEscapePressed", E.StaticPopup_EditBoxOnEscapePressed);
 		_G[name .. "EditBox"]:SetScript("OnTextChanged", E.StaticPopup_EditBoxOnTextChanged);
-		
+
 		E.StaticPopupFrames[index]:SetTemplate("Transparent");
-		
+
 		for i = 1, 3 do
 			S:HandleButton(_G[name .. "Button" .. i]);
 		end
-		
+
 		S:HandleEditBox(_G[name .. "EditBox"]);
 		for k = 1, _G[name .. "EditBox"]:GetNumRegions() do
 			local region = select(k, _G[name .. "EditBox"]:GetRegions())
@@ -974,7 +974,7 @@ function E:Contruct_StaticPopups()
 		_G[name .. "ItemFrameIconTexture"]:SetTexCoord(unpack(E.TexCoords));
 		_G[name .. "ItemFrameIconTexture"]:SetInside();
 	end
-	
+
 	E:SecureHook("StaticPopup_SetUpPosition");
 	E:SecureHook("StaticPopup_CollapseTable");
 end

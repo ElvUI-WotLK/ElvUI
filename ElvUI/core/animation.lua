@@ -5,7 +5,7 @@ local random = math.random;
 
 function E:SetUpAnimGroup(object, type, ...)
 	if not type then type = 'Flash' end
-	
+
 	if type == 'Flash' then
 		object.anim = object:CreateAnimationGroup("Flash")
 		object.anim.fadein = object.anim:CreateAnimation("ALPHA", "FadeIn")
@@ -25,7 +25,7 @@ function E:SetUpAnimGroup(object, type, ...)
 		object.anim.fadeout:SetChange(-1)
 		object.anim.fadeout:SetOrder(1)
 
-		object.anim:SetScript("OnFinished", function(self, requested)
+		object.anim:SetScript("OnFinished", function(_, requested)
 			if(not requested) then
 				object.anim:Play()
 			end
@@ -41,7 +41,7 @@ function E:SetUpAnimGroup(object, type, ...)
 		object.shake.path[5] = object.shake.path:CreateControlPoint()
 		object.shake.path[6] = object.shake.path:CreateControlPoint()
 
-		object.shake.path:SetDuration(0.7)		
+		object.shake.path:SetDuration(0.7)
 		object.shake.path[1]:SetOffset(random(-9, 7), random(-7, 12))
 		object.shake.path[1]:SetOrder(1)
 		object.shake.path[2]:SetOffset(random(-5, 9), random(-9, 5))
@@ -64,8 +64,8 @@ function E:SetUpAnimGroup(object, type, ...)
 		object.shakeh.path[4] = object.shakeh.path:CreateControlPoint()
 		object.shakeh.path[5] = object.shakeh.path:CreateControlPoint()
 		object.shakeh.path[6] = object.shakeh.path:CreateControlPoint()
-		
-		object.shakeh.path:SetDuration(2)		
+
+		object.shakeh.path:SetDuration(2)
 		object.shakeh.path[1]:SetOffset(-5, 0)
 		object.shakeh.path[1]:SetOrder(1)
 		object.shakeh.path[2]:SetOffset(5, 0)
@@ -77,7 +77,7 @@ function E:SetUpAnimGroup(object, type, ...)
 		object.shakeh.path[5]:SetOffset(-2, 0)
 		object.shakeh.path[5]:SetOrder(5)
 		object.shakeh.path[6]:SetOffset(5, 0)
-		object.shakeh.path[6]:SetOrder(6)	
+		object.shakeh.path[6]:SetOrder(6)
 	else
 		local x, y, duration, customName = ...
 		if not customName then
@@ -99,7 +99,7 @@ function E:SetUpAnimGroup(object, type, ...)
 		object[customName].in1:SetOffset(E:Scale(x), E:Scale(y))
 		object[customName].in2:SetOffset(E:Scale(-x), E:Scale(-y))
 		object[customName].out2:SetOffset(E:Scale(x), E:Scale(y))
-		object[customName].out1:SetScript("OnFinished", function() object:Hide() end)	
+		object[customName].out1:SetScript("OnFinished", function() object:Hide() end)
 	end
 end
 
@@ -107,8 +107,8 @@ function E:Shake(object)
 	if not object.shake then
 		E:SetUpAnimGroup(object, 'Shake')
 	end
-	
-	object.shake:Play()	
+
+	object.shake:Play()
 end
 
 function E:StopShake(object)
@@ -121,8 +121,8 @@ function E:ShakeHorizontal(object)
 	if not object.shakeh then
 		E:SetUpAnimGroup(object, 'Shake_Horizontal')
 	end
-	
-	object.shakeh:Play()	
+
+	object.shakeh:Play()
 end
 
 function E:StopShakeHorizontal(object)
@@ -152,7 +152,7 @@ function E:SlideIn(object, customName)
 		customName = 'anim'
 	end
 	if not object[customName] then return end
-	
+
 	object[customName].out1:Stop()
 	object:Show()
 	object[customName]:Play()
@@ -163,8 +163,8 @@ function E:SlideOut(object, customName)
 		customName = 'anim'
 	end
 	if not object[customName] then return end
-	
-	object[customName]:Finish() 
+
+	object[customName]:Finish()
 	object[customName]:Stop()
 	object[customName].out1:Play()
 end
@@ -182,7 +182,7 @@ function E:UIFrameFade_OnUpdate(elapsed)
 		fadeInfo.fadeTimer = (fadeInfo.fadeTimer or 0) + elapsed;
 		fadeInfo.fadeTimer = fadeInfo.fadeTimer + elapsed;
 
-		-- If the fadeTimer is less then the desired fade time then set the alpha otherwise hold the fade state, call the finished function, or just finish the fade 
+		-- If the fadeTimer is less then the desired fade time then set the alpha otherwise hold the fade state, call the finished function, or just finish the fade
 		if ( fadeInfo.fadeTimer < fadeInfo.timeToFade ) then
 			if ( fadeInfo.mode == "IN" ) then
 				frame:SetAlpha((fadeInfo.fadeTimer / fadeInfo.timeToFade) * (fadeInfo.endAlpha - fadeInfo.startAlpha) + fadeInfo.startAlpha);
@@ -203,10 +203,10 @@ function E:UIFrameFade_OnUpdate(elapsed)
 				end
 			end
 		end
-		
+
 		index = index + 1;
 	end
-	
+
 	if ( #FADEFRAMES == 0 ) then
 		frameFadeManager:SetScript("OnUpdate", nil);
 	end
@@ -220,7 +220,6 @@ function E:UIFrameFade(frame, fadeInfo)
 	if ( not fadeInfo.mode ) then
 		fadeInfo.mode = "IN";
 	end
-	local alpha;
 	if ( fadeInfo.mode == "IN" ) then
 		if ( not fadeInfo.startAlpha ) then
 			fadeInfo.startAlpha = 0;
@@ -228,7 +227,6 @@ function E:UIFrameFade(frame, fadeInfo)
 		if ( not fadeInfo.endAlpha ) then
 			fadeInfo.endAlpha = 1.0;
 		end
-		alpha = 0;
 	elseif ( fadeInfo.mode == "OUT" ) then
 		if ( not fadeInfo.startAlpha ) then
 			fadeInfo.startAlpha = 1.0;
@@ -236,7 +234,6 @@ function E:UIFrameFade(frame, fadeInfo)
 		if ( not fadeInfo.endAlpha ) then
 			fadeInfo.endAlpha = 0;
 		end
-		alpha = 1.0;
 	end
 	frame:SetAlpha(fadeInfo.startAlpha);
 
@@ -244,7 +241,7 @@ function E:UIFrameFade(frame, fadeInfo)
 	if not frame:IsProtected() then
 		frame:Show();
 	end
-	
+
 	local index = 1;
 	while FADEFRAMES[index] do
 		-- If frame is already set to fade then return

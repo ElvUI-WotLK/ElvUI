@@ -1,4 +1,4 @@
-﻿local E, L, V, P, G = unpack(select(2, ...));
+local E, L, V, P, G = unpack(select(2, ...));
 local LSM = LibStub("LibSharedMedia-3.0");
 
 local _G = _G;
@@ -6,17 +6,16 @@ local tonumber, pairs, ipairs, error, unpack, select, tostring = tonumber, pairs
 local assert, print, type, collectgarbage, pcall, date = assert, print, type, collectgarbage, pcall, date;
 local twipe, tinsert, tremove = table.wipe, tinsert, tremove;
 local floor = floor;
-local format, find, split, match, strrep, len, sub, gsub = string.format, string.find, string.split, string.match, strrep, string.len, string.sub, string.gsub;
+local format, find, match, strrep, len, sub, gsub = string.format, string.find, string.match, strrep, string.len, string.sub, string.gsub;
 
 local CreateFrame = CreateFrame;
-local GetCVar, SetCVar = GetCVar, SetCVar;
+local GetCVar = GetCVar;
 local IsAddOnLoaded = IsAddOnLoaded;
 local GetSpellInfo = GetSpellInfo;
 local IsInInstance, GetNumPartyMembers, GetNumRaidMembers = IsInInstance, GetNumPartyMembers, GetNumRaidMembers;
 local RequestBattlefieldScoreData = RequestBattlefieldScoreData;
-local GetSpecialization, GetActiveSpecGroup = GetSpecialization, GetActiveSpecGroup;
 local GetCombatRatingBonus = GetCombatRatingBonus;
-local UnitLevel, UnitStat, UnitAttackPower, UnitBuff = UnitLevel, UnitStat, UnitAttackPower, UnitBuff;
+local UnitStat, UnitAttackPower, UnitBuff = UnitStat, UnitAttackPower, UnitBuff;
 local SendAddonMessage = SendAddonMessage;
 local InCombatLockdown = InCombatLockdown;
 local GetFunctionCPUUsage = GetFunctionCPUUsage;
@@ -29,7 +28,7 @@ E.myrace = select(2, UnitRace("player"));
 E.myfaction = select(2, UnitFactionGroup("player"));
 E.myname = UnitName("player");
 E.myguid = UnitGUID("player");
-E.version = GetAddOnMetadata("ElvUI", "Version"); 
+E.version = GetAddOnMetadata("ElvUI", "Version");
 E.myrealm = GetRealmName();
 E.wowbuild = select(2, GetBuildInfo()); E.wowbuild = tonumber(E.wowbuild);
 E.resolution = GetCVar("gxResolution");
@@ -62,6 +61,30 @@ E.InversePoints = {
 	BOTTOMLEFT = "TOPLEFT",
 	BOTTOMRIGHT = "TOPRIGHT",
 	CENTER = "CENTER"
+};
+
+E.DispelClasses = {
+	['PRIEST'] = {
+		['Magic'] = true,
+		['Disease'] = true
+	},
+	['SHAMAN'] = {
+		['Poison'] = true,
+		['Disease'] = true,
+		['Curse'] = true
+	},
+	['PALADIN'] = {
+		['Poison'] = true,
+		['Magic'] = true,
+		['Disease'] = true
+	},
+	['MAGE'] = {
+		['Curse'] = true
+	},
+	['DRUID'] = {
+		['Curse'] = true,
+		['Poison'] = true
+	},
 };
 
 E.noop = function() end;
@@ -102,7 +125,7 @@ function E:CheckClassColor(r, g, b)
 			end
 		end
 	end
-	
+
 	return matchFound;
 end
 
@@ -110,7 +133,7 @@ function E:GetColorTable(data)
 	if(not data.r or not data.g or not data.b) then
 		error("Could not unpack color values.");
 	end
-	
+
 	if(data.a) then
 		return {data.r, data.g, data.b, data.a};
 	else
@@ -120,13 +143,13 @@ end
 
 function E:UpdateMedia()
 	if(not self.db["general"] or not self.private["general"]) then return; end
-	
+
 	self["media"].normFont = LSM:Fetch("font", self.db["general"].font);
 	self["media"].combatFont = LSM:Fetch("font", self.db["general"].dmgfont);
 	self["media"].blankTex = LSM:Fetch("background", "ElvUI Blank");
 	self["media"].normTex = LSM:Fetch("statusbar", self.private["general"].normTex);
 	self["media"].glossTex = LSM:Fetch("statusbar", self.private["general"].glossTex);
-	
+
 	local border = E.db["general"].bordercolor;
 	if(self:CheckClassColor(border.r, border.g, border.b)) then
 		local classColor = E.myclass == "PRIEST" and E.PriestColors or (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass]);
@@ -136,15 +159,15 @@ function E:UpdateMedia()
 	elseif(E.PixelMode) then
 		border = {r = 0, g = 0, b = 0};
 	end
-	
+
 	if(self.global.tukuiMode) then
 		border = {r=0.6, g = 0.6, b = 0.6};
 	end
-	
+
 	self["media"].bordercolor = {border.r, border.g, border.b};
 	self["media"].backdropcolor = E:GetColorTable(self.db["general"].backdropcolor);
 	self["media"].backdropfadecolor = E:GetColorTable(self.db["general"].backdropfadecolor);
-	
+
 	local value = self.db["general"].valuecolor;
 	if(self:CheckClassColor(value.r, value.g, value.b)) then
 		value = E.myclass == "PRIEST" and E.PriestColors or (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass]);
@@ -152,23 +175,23 @@ function E:UpdateMedia()
 		self.db["general"].valuecolor.g = value.g;
 		self.db["general"].valuecolor.b = value.b;
 	end
-	
+
 	if(self.global.tukuiMode) then
 		value = {r = 1, g = 1, b = 1};
 	end
-	
+
 	self["media"].hexvaluecolor = self:RGBToHex(value.r, value.g, value.b);
 	self["media"].rgbvaluecolor = {value.r, value.g, value.b};
-	
+
 	if(LeftChatPanel and LeftChatPanel.tex and RightChatPanel and RightChatPanel.tex) then
 		LeftChatPanel.tex:SetTexture(E.db.chat.panelBackdropNameLeft);
 		local a = E.db.general.backdropfadecolor.a or 0.5;
 		LeftChatPanel.tex:SetAlpha(a);
-		
+
 		RightChatPanel.tex:SetTexture(E.db.chat.panelBackdropNameRight);
 		RightChatPanel.tex:SetAlpha(a);
 	end
-	
+
 	self:ValueFuncCall();
 	self:UpdateBlizzardFonts();
 end
@@ -188,7 +211,7 @@ function E:PLAYER_ENTERING_WORLD()
 		self:UpdateMedia();
 		self.MediaUpdated = true;
 	end
-	
+
 	local _, instanceType = IsInInstance();
 	if(instanceType == "pvp") then
 		self.BGTimer = self:ScheduleRepeatingTimer("RequestBGInfo", 5);
@@ -281,8 +304,8 @@ E.HiddenFrame:Hide();
 
 function E:CheckRole()
 	if event == "UNIT_AURA" and unit ~= "player" then return end
-	if (E.myclass == "PALADIN" and UnitBuff("player", GetSpellInfo(25780))) and GetCombatRatingBonus(CR_DEFENSE_SKILL) > 100 or 
-	(E.myclass == "WARRIOR" and GetBonusBarOffset() == 2) or 
+	if (E.myclass == "PALADIN" and UnitBuff("player", GetSpellInfo(25780))) and GetCombatRatingBonus(CR_DEFENSE_SKILL) > 100 or
+	(E.myclass == "WARRIOR" and GetBonusBarOffset() == 2) or
 	(E.myclass == "DEATHKNIGHT" and UnitBuff("player", GetSpellInfo(48263))) or
 	(E.myclass == "DRUID" and GetBonusBarOffset() == 3) then
 		E.Role = "Tank"
@@ -300,6 +323,14 @@ function E:CheckRole()
 	end
 end
 
+function E:IsDispellableByMe(debuffType)
+	if not self.DispelClasses[E.myclass] then return; end
+
+	if self.DispelClasses[E.myclass][debuffType] then
+		return true;
+	end
+end
+
 function E:IncompatibleAddOn(addon, module)
 	E.PopupDialogs["INCOMPATIBLE_ADDON"].button1 = addon;
 	E.PopupDialogs["INCOMPATIBLE_ADDON"].button2 = "ElvUI "..module;
@@ -313,11 +344,11 @@ function E:CheckIncompatible()
 	if(IsAddOnLoaded("Prat-3.0") and E.private.chat.enable) then
 		E:IncompatibleAddOn("Prat-3.0", "Chat");
 	end
-	
+
 	if(IsAddOnLoaded("Chatter") and E.private.chat.enable) then
 		E:IncompatibleAddOn("Chatter", "Chat");
 	end
-	
+
 	if(IsAddOnLoaded("TidyPlates") and E.private.nameplate.enable) then
 		E:IncompatibleAddOn("TidyPlates", "NamePlate");
 	end
@@ -333,17 +364,17 @@ end
 
 function E:CopyTable(currentTable, defaultTable)
 	if(type(currentTable) ~= "table") then currentTable = {}; end
-	
+
 	if type(defaultTable) == "table" then
 		for option, value in pairs(defaultTable) do
 			if(type(value) == "table") then
 				value = self:CopyTable(currentTable[option], value);
 			end
-			
+
 			currentTable[option] = value;
 		end
 	end
-	
+
 	return currentTable;
 end
 
@@ -359,7 +390,7 @@ function E:RemoveEmptySubTables(tbl)
 		E:Print("Bad argument #1 to 'RemoveEmptySubTables' (table expected)");
 		return;
 	end
-	
+
 	for k, v in pairs(tbl) do
 		if(type(v) == "table") then
 			if(IsTableEmpty(v)) then
@@ -380,7 +411,7 @@ function E:RemoveTableDuplicates(cleanTable, checkTable)
 		E:Print("Bad argument #2 to 'RemoveTableDuplicates' (table expected)");
 		return;
 	end
-	
+
 	local cleaned = {};
 	for option, value in pairs(cleanTable) do
 		if(type(value) == "table" and checkTable[option] and type(checkTable[option]) == "table") then
@@ -391,9 +422,9 @@ function E:RemoveTableDuplicates(cleanTable, checkTable)
 			end
 		end
 	end
-	
+
 	self:RemoveEmptySubTables(cleaned);
-	
+
 	return cleaned;
 end
 
@@ -413,7 +444,7 @@ function E:TableToLuaString(inTable)
 				ret = ret .. i;
 			end
 			ret = ret .. "] = ";
-			
+
 			if(type(v) == "number") then
 				ret = ret .. v .. ",\n"
 			elseif(type(v) == "string") then
@@ -433,12 +464,12 @@ function E:TableToLuaString(inTable)
 			end
 		end
 	end
-	
+
 	if(inTable) then
 		recurse(inTable, 1);
 	end
 	ret = ret.."}";
-	
+
 	return ret;
 end
 
@@ -458,12 +489,12 @@ function E:ProfileTableToPluginFormat(inTable, profileType)
 	if(not profileText) then
 		return;
 	end
-	
+
 	twipe(lineStructureTable);
 	local returnString = "";
 	local lineStructure = "";
 	local sameLine = false;
-	
+
 	local function buildLineStructure()
 		local str = profileText;
 		for _, v in ipairs(lineStructureTable) do
@@ -473,25 +504,25 @@ function E:ProfileTableToPluginFormat(inTable, profileType)
 				str = str .. "[" .. v .. "]";
 			end
 		end
-		
+
 		return str;
 	end
-	
+
 	local function recurse(tbl)
 		lineStructure = buildLineStructure();
 		for k, v in pairs(tbl) do
 			if(not sameLine) then
 				returnString = returnString .. lineStructure;
 			end
-			
+
 			returnString = returnString .. "[";
-			
+
 			if(type(k) == "string") then
 				returnString = returnString.."\"" .. k .. "\"";
 			else
 				returnString = returnString .. k;
 			end
-			
+
 			if(type(v) == "table") then
 				tinsert(lineStructureTable, k);
 				sameLine = true;
@@ -500,7 +531,7 @@ function E:ProfileTableToPluginFormat(inTable, profileType)
 			else
 				sameLine = false;
 				returnString = returnString .. "] = ";
-				
+
 				if(type(v) == "number") then
 					returnString = returnString .. v .. ";\n";
 				elseif(type(v) == "string") then
@@ -516,24 +547,24 @@ function E:ProfileTableToPluginFormat(inTable, profileType)
 				end
 			end
 		end
-		
+
 		tremove(lineStructureTable);
 		lineStructure = buildLineStructure();
 	end
-	
+
 	if(inTable and profileType) then
 		recurse(inTable);
 	end
-	
+
 	return returnString;
 end
 
 function E:StringSplitMultiDelim(s, delim)
 	assert(type (delim) == "string" and len(delim) > 0, "bad delimiter");
-	
+
 	local start = 1;
 	local t = {};
-	
+
 	while(true) do
 		local pos = find(s, delim, start, true);
 		if(not pos) then
@@ -543,9 +574,9 @@ function E:StringSplitMultiDelim(s, delim)
 		tinsert(t, sub(s, start, pos - 1));
 		start = pos + len(delim);
 	end
-	
+
 	tinsert(t, sub(s, start));
-	
+
 	return unpack(t);
 end
 
@@ -561,7 +592,7 @@ function E:SendMessage()
 			SendAddonMessage("ELVUI_VERSIONCHK", E.version, "PARTY");
 		end
 	end
-	
+
 	if(E.SendMSGTimer) then
 		self:CancelTimer(E.SendMSGTimer);
 		E.SendMSGTimer = nil;
@@ -570,18 +601,17 @@ end
 
 local myName = E.myname.."-"..E.myrealm;
 myName = myName:gsub("%s+", "");
-local frames = {};
-local function SendRecieve(self, event, prefix, message, channel, sender)
+local function SendRecieve(_, event, prefix, message, _, sender)
 	if(event == "CHAT_MSG_ADDON") then
 		if(sender == myName) then return; end
 		if(prefix == "ELVUI_VERSIONCHK" and not E.recievedOutOfDateMessage) then
 			if(tonumber(message) ~= nil and tonumber(message) > tonumber(E.version)) then
 				E:Print(L["ElvUI is out of date. You can download the newest version from www.tukui.org. Get premium membership and have ElvUI automatically updated with the Tukui Client!"]:gsub("ElvUI", E.UIName));
-				
+
 				if((tonumber(message) - tonumber(E.version)) >= 0.05) then
 					E:StaticPopup_Show("ELVUI_UPDATE_AVAILABLE");
 				end
-				
+
 				E.recievedOutOfDateMessage = true;
 			end
 		end
@@ -590,11 +620,11 @@ local function SendRecieve(self, event, prefix, message, channel, sender)
 	end
 end
 
-local f = CreateFrame("Frame");
+--[[local f = CreateFrame("Frame");
 f:RegisterEvent("RAID_ROSTER_UPDATE");
 f:RegisterEvent("PARTY_MEMBERS_CHANGED");
 f:RegisterEvent("CHAT_MSG_ADDON");
-f:SetScript("OnEvent", SendRecieve);
+f:SetScript("OnEvent", SendRecieve);]]
 
 function E:UpdateAll(ignoreInstall)
 	self.private = self.charSettings.profile;
@@ -603,93 +633,94 @@ function E:UpdateAll(ignoreInstall)
 	self.db.theme = nil;
 	self.db.install_complete = nil;
 	--LibStub('LibDualSpec-1.0'):EnhanceDatabase(self.data, "ElvUI");
-	
+
 	self:SetMoversPositions();
 	self:UpdateMedia();
 	self:UpdateCooldownSettings();
-	
+
 	local UF = self:GetModule("UnitFrames")
 	UF.db = self.db.unitframe;
 	UF:Update_AllFrames();
-	
+
 	local CH = self:GetModule("Chat");
 	CH.db = self.db.chat;
 	CH:PositionChat(true);
 	CH:SetupChat();
-	
+
 	local AB = self:GetModule("ActionBars");
 	AB.db = self.db.actionbar;
 	AB:UpdateButtonSettings();
-	
-	local bags = E:GetModule("Bags"); 
+	AB:UpdateMicroPositionDimensions();
+
+	local bags = E:GetModule("Bags");
 	bags.db = self.db.bags;
 	bags:Layout();
 	bags:Layout(true);
-	bags:PositionBagFrames();
 	bags:SizeAndPositionBagBar();
 	bags:UpdateItemLevelDisplay();
 	bags:UpdateCountDisplay();
-	
-	local totems = E:GetModule("Totems"); 
+
+	local totems = E:GetModule("Totems");
 	totems.db = self.db.general.totems;
 	totems:PositionAndSize();
 	totems:ToggleEnable();
-	
+
 	self:GetModule("Layout"):ToggleChatPanels();
-	
+
 	local DT = self:GetModule("DataTexts");
 	DT.db = self.db.datatexts;
 	DT:LoadDataTexts();
-	
+
 	local NP = self:GetModule("NamePlates");
 	NP.db = self.db.nameplate;
 	NP:UpdateAllPlates();
-	
-	local M = self:GetModule("Misc");
-	M:UpdateExpRepDimensions();
-	M:EnableDisable_ExperienceBar();
-	M:EnableDisable_ReputationBar()	;
-	
+
+	local DataBars = self:GetModule("DataBars");
+	DataBars.db = E.db.databars;
+	DataBars:UpdateDataBarDimensions();
+	DataBars:EnableDisable_ExperienceBar();
+	DataBars:EnableDisable_ReputationBar();
+
 	local T = self:GetModule("Threat");
 	T.db = self.db.general.threat;
 	T:UpdatePosition();
 	T:ToggleEnable();
-	
+
 	self:GetModule("Auras").db = self.db.auras
 	self:GetModule("Tooltip").db = self.db.tooltip
-	
+
 	if(ElvUIPlayerBuffs) then
 		E:GetModule("Auras"):UpdateHeader(ElvUIPlayerBuffs);
 	end
-	
+
 	if(ElvUIPlayerDebuffs) then
 		E:GetModule("Auras"):UpdateHeader(ElvUIPlayerDebuffs);
 	end
-	
+
 	if(self.private.install_complete == nil or (self.private.install_complete and type(self.private.install_complete) == 'boolean') or (self.private.install_complete and type(tonumber(self.private.install_complete)) == 'number' and tonumber(self.private.install_complete) <= 3.83)) then
 		if(not ignoreInstall) then
 			self:Install();
 		end
 	end
-	
+
 	self:GetModule("Minimap"):UpdateSettings();
-	
+
 	self:UpdateBorderColors();
 	self:UpdateBackdropColors();
-	
+
 	self:UpdateFrameTemplates();
 	self:UpdateStatusBars();
-	
+
 	local LO = E:GetModule("Layout");
 	LO:ToggleChatPanels();
 	LO:BottomPanelVisibility();
 	LO:TopPanelVisibility();
 	LO:SetDataPanelStyle();
-	
+
 	collectgarbage("collect");
 end
 
-function E:EnterVehicleHideFrames(event, unit)
+function E:EnterVehicleHideFrames(_, unit)
 	if(unit ~= "player") then return; end
 
 	for object in pairs(E.VehicleLocks) do
@@ -697,7 +728,7 @@ function E:EnterVehicleHideFrames(event, unit)
 	end
 end
 
-function E:ExitVehicleShowFrames(event, unit)
+function E:ExitVehicleShowFrames(_, unit)
 	if(unit ~= "player") then return; end
 
 	for object, originalParent in pairs(E.VehicleLocks) do
@@ -745,11 +776,11 @@ end
 
 function E:ResetAllUI()
 	self:ResetMovers();
-	
+
 	if(E.db.lowresolutionset) then
 		E:SetupResolution(true)
 	end
-	
+
 	if(E.db.layoutSet) then
 		E:SetupLayout(E.db.layoutSet, true);
 	end
@@ -757,12 +788,12 @@ end
 
 function E:ResetUI(...)
 	if(InCombatLockdown()) then E:Print(ERR_NOT_IN_COMBAT) return; end
-	
+
 	if(... == "" or ... == " " or ... == nil) then
 		E:StaticPopup_Show("RESETUI_CHECK");
 		return;
 	end
-	
+
 	self:ResetMovers(...);
 end
 
@@ -796,7 +827,7 @@ function E:RefreshModulesDB()
 	--UF.db = self.db.unitframe;
 end
 
-function E:InitializeModules()	
+function E:InitializeModules()
 	for _, module in pairs(E["RegisteredModules"]) do
 		local module = self:GetModule(module);
 		if(module.Initialize) then
@@ -810,121 +841,11 @@ end
 
 --DATABASE CONVERSIONS
 function E:DBConversions()
-	local fonts = {
-		["ElvUI Alt-Font"] = "Continuum Medium",
-		["ElvUI Alt-Combat"] = "Die Die Die!",
-		["ElvUI Combat"] = "Action Man",
-		["ElvUI Font"] = "PT Sans Narrow",
-		["ElvUI Pixel"] = "Homespun"
-	};
-	
-	if(fonts[E.db.general.font]) then E.db.general.font = fonts[E.db.general.font]; end
-	if(fonts[E.db.general.itemLevelFont]) then E.db.general.itemLevelFont = fonts[E.db.general.itemLevelFont]; end
-	if(fonts[E.db.general.countFont]) then E.db.general.itemLevelFont = fonts[E.db.general.countFont]; end
-	if(fonts[E.db.nameplate.font]) then E.db.nameplate.font = fonts[E.db.nameplate.font]; end
-	if(fonts[E.db.nameplate.buffs.font]) then E.db.nameplate.buffs.font = fonts[E.db.nameplate.buffs.font]; end
-	if(fonts[E.db.nameplate.debuffs.font]) then E.db.nameplate.debuffs.font = fonts[E.db.nameplate.debuffs.font]; end
-	if(fonts[E.db.bags.itemLevelFont]) then E.db.bags.itemLevelFont = fonts[E.db.bags.itemLevelFont]; end
-	if(fonts[E.db.bags.countFont]) then E.db.bags.countFont = fonts[E.db.bags.countFont]; end
-	if(fonts[E.db.auras.font]) then E.db.auras.font = fonts[E.db.auras.font]; end
-	if(fonts[E.db.general.reminder.font]) then E.db.general.reminder.font = fonts[E.db.general.reminder.font]; end
-	if(fonts[E.db.chat.font]) then E.db.chat.font = fonts[E.db.chat.font]; end
-	if(fonts[E.db.chat.tabFont]) then E.db.chat.tabFont = fonts[E.db.chat.tabFont]; end
-	if(fonts[E.db.datatexts.font]) then E.db.datatexts.font = fonts[E.db.datatexts.font]; end
-	if(fonts[E.db.tooltip.font]) then E.db.tooltip.font = fonts[E.db.tooltip.font]; end
-	if(fonts[E.db.tooltip.healthBar.font]) then E.db.tooltip.healthBar.font = fonts[E.db.tooltip.healthBar.font]; end
-	if(fonts[E.db.unitframe.font]) then E.db.unitframe.font = fonts[E.db.unitframe.font]; end
-	if(fonts[E.db.unitframe.units.party.rdebuffs.font]) then E.db.unitframe.units.party.rdebuffs.font = fonts[E.db.unitframe.units.party.rdebuffs.font]; end
-	if(fonts[E.db.unitframe.units.raid.rdebuffs.font]) then E.db.unitframe.units.raid.rdebuffs.font = fonts[E.db.unitframe.units.raid.rdebuffs.font]; end
-	if(fonts[E.db.unitframe.units.raid40.rdebuffs.font]) then E.db.unitframe.units.raid40.rdebuffs.font = fonts[E.db.unitframe.units.raid40.rdebuffs.font]; end
-	
-	if(E.global.unitframe["aurafilters"]["RaidDebuffs"].spells) then
-		local matchFound;
-		for k, v in pairs(E.global.unitframe["aurafilters"]["RaidDebuffs"].spells) do
-			if(type(v) == "table") then
-				matchFound = false;
-				for k_,v_ in pairs(v) do
-					if(k_ == "stackThreshold") then
-						matchFound = true;
-					end
-				end
-			end
-			
-			if(not matchFound) then
-				E.global.unitframe["aurafilters"]["RaidDebuffs"]["spells"][k].stackThreshold = 0;
-			end
-		end
-	end
-	
-	if(E.global.unitframe["aurafilters"]["Whitelist (Strict)"].spells) then
-		for k, v in pairs(E.global.unitframe["aurafilters"]["Whitelist (Strict)"].spells) do
-			if(type(v) == "table") then
-				for k_, v_ in pairs(v) do
-					if(k_ == "spellID" and type(v_) == "string" and tonumber(v_)) then
-						E.global.unitframe["aurafilters"]["Whitelist (Strict)"]["spells"][k].spellID = tonumber(v_);
-					end
-				end
-			end
-		end
-	end
-	
-	if(E.db.general.experience.width > 100 and E.db.general.experience.height > 100) then
-		E.db.general.experience.width = P.general.experience.width;
-		E.db.general.experience.height = P.general.experience.height;
-		E:Print("Experience bar appears to be an odd shape. Resetting to default size.");
-	end
-	
-	if(E.db.general.reputation.width > 100 and E.db.general.reputation.height > 100) then
-		E.db.general.reputation.width = P.general.reputation.width;
-		E.db.general.reputation.height = P.general.reputation.height;
-		E:Print("Reputation bar appears to be an odd shape. Resetting to default size.");
-	end
-	
-	if(E.db.chat.panelHeight < 60) then E.db.chat.panelHeight = 60; end
-	if(E.db.chat.panelHeightRight < 60) then E.db.chat.panelHeightRight = 60; end
-	
-	if(E.db.movers) then
-		for mover, moverString in pairs(E.db.movers) do
-			if(find(moverString, "\031")) then
-				moverString = gsub(moverString, "\031", ",");
-				E.db.movers[mover] = moverString;
-			end
-		end
-	end
-	
-	if(not E.global.unitframe.buffwatchBackup) then E.global.unitframe.buffwatchBackup = {}; end
-	local shouldRemove;
-	for class in pairs(E.global.unitframe.buffwatch) do
-		if(not E.global.unitframe.buffwatchBackup[class]) then E.global.unitframe.buffwatchBackup[class] = {}; end
-		shouldRemove = {};
-		for i, values in pairs(E.global.unitframe.buffwatch[class]) do
-			if(values.id) then
-				if(i ~= values.id) then
-					shouldRemove[i] = true;
-				end
-				E.global.unitframe.buffwatch[class][values.id] = values;
-				if(not E.global.unitframe.buffwatchBackup[class][values.id]) then E.global.unitframe.buffwatchBackup[class][values.id] = values; end
-			elseif(G.oldBuffWatch[class] and G.oldBuffWatch[class][i]) then
-				local spellID = G.oldBuffWatch[class][i].id;
-				if(spellID) then
-					if(not E.global.unitframe.buffwatchBackup[class][spellID]) then
-						E.global.unitframe.buffwatchBackup[class][spellID] = G.oldBuffWatch[class][i];
-						E:CopyTable(E.global.unitframe.buffwatchBackup[class][spellID], values);
-					end
-					E.global.unitframe.buffwatch[class][spellID] = G.oldBuffWatch[class][i];
-					E:CopyTable(E.global.unitframe.buffwatch[class][spellID], values);
-					E.global.unitframe.buffwatch[class][i] = nil;
-				end
-			end
-		end
-		for id in pairs(shouldRemove) do
-			E.global.unitframe.buffwatch[class][id] = nil;
-		end
-	end
+
 end
 
 local CPU_USAGE = {};
-local function CompareCPUDiff(module, minCalls)
+local function CompareCPUDiff(showall, module, minCalls)
 	local greatestUsage, greatestCalls, greatestName, newName, newFunc;
 	local greatestDiff, lastModule, mod, newUsage, calls, differance = 0;
 
@@ -942,7 +863,6 @@ local function CompareCPUDiff(module, minCalls)
 			if(showall and calls > minCalls) then
 				E:Print(calls, name, differance);
 			end
-			
 			if((differance > greatestDiff) and calls > minCalls) then
 				greatestName, greatestUsage, greatestCalls, greatestDiff = name, newUsage, calls, differance;
 			end
@@ -996,44 +916,44 @@ function E:Initialize()
 	twipe(self.db);
 	twipe(self.global);
 	twipe(self.private)
-	
+
 	self.data = LibStub("AceDB-3.0"):New("ElvDB", self.DF);
 	self.data.RegisterCallback(self, "OnProfileChanged", "UpdateAll");
 	self.data.RegisterCallback(self, "OnProfileCopied", "UpdateAll");
 	self.data.RegisterCallback(self, "OnProfileReset", "OnProfileReset");
 	LibStub("LibDualSpec-1.0"):EnhanceDatabase(self.data, "ElvUI");
-	self.charSettings = LibStub("AceDB-3.0"):New("ElvPrivateDB", self.privateVars);	
+	self.charSettings = LibStub("AceDB-3.0"):New("ElvPrivateDB", self.privateVars);
 	self.private = self.charSettings.profile;
 	self.db = self.data.profile;
 	self.global = self.data.global;
 	self:CheckIncompatible();
 	self:DBConversions();
-	
+
 	self:CheckRole();
 	self:UIScale("PLAYER_LOGIN");
-	
+
 	self:LoadCommands();
 	self:InitializeModules();
 	self:LoadMovers();
 	self:UpdateCooldownSettings();
 	self.initialized = true;
-	
+
 	if(self.private.install_complete == nil) then
 		self:Install();
 	end
-	
+
 	if(not find(date(), "04/01/")) then
 		E.global.aprilFools = nil;
 	end
-	
+
 	if(self:HelloKittyFixCheck()) then
 		self:HelloKittyFix();
 	end
-	
+
 	if(self.global.tukuiMode) then
 		self.UIName = "Tukui";
 	end
-	
+
 	self:UpdateMedia();
 	self:UpdateFrameTemplates();
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", "CheckRole");
@@ -1044,25 +964,25 @@ function E:Initialize()
 	self:RegisterEvent("UNIT_INVENTORY_CHANGED", "CheckRole");
 	self:RegisterEvent("UPDATE_FLOATING_CHAT_WINDOWS", "UIScale");
 	self:RegisterEvent("PLAYER_ENTERING_WORLD");
-	
+
 	if(self.db.general.kittys) then
 		self:CreateKittys();
 		self:Delay(5, self.Print, self, L["Type /hellokitty to revert to old settings."]);
 	end
-	
+
 	self:Tutorials();
 	self:GetModule("Minimap"):UpdateSettings();
 	self:RefreshModulesDB()
 	collectgarbage("collect");
-	
+
 	if(self:IsFoolsDay() and not E.global.aprilFools and not self.global.tukuiMode) then
 		self:StaticPopup_Show("TUKUI_MODE");
 	end
-	
+
 	if(self.db.general.loginmessage) then
 		print(select(2, E:GetModule("Chat"):FindURL("CHAT_MSG_DUMMY", format(L["LOGIN_MSG"]:gsub("ElvUI", E.UIName), self["media"].hexvaluecolor, self["media"].hexvaluecolor, self.version)))..".");
 	end
-	
+
 	if(self.global.tukuiMode) then
 		if(self:IsFoolsDay()) then
 			self:ShowTukuiFrame();

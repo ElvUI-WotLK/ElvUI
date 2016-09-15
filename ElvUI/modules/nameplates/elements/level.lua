@@ -4,11 +4,12 @@ local LSM = LibStub("LibSharedMedia-3.0");
 
 function mod:ConfigureElement_Level(frame)
 	local level = frame.Level;
-
-	level:SetJustifyH("RIGHT");
-	level:SetPoint("BOTTOMRIGHT", frame.HealthBar, "TOPRIGHT", 0, E.Border*2);
+	level:SetFont(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline);
 end
 
 function mod:ConstructElement_Level(frame)
-	return frame:CreateFontString(nil, "OVERLAY");
+	local level = frame:CreateFontString(nil, "OVERLAY");
+	level:SetJustifyH("RIGHT");
+	level:SetPoint("BOTTOMRIGHT", frame.HealthBar, "TOPRIGHT", 0, E.Border*2);
+	return level;
 end

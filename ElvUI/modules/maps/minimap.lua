@@ -3,8 +3,7 @@ local M = E:NewModule("Minimap", "AceEvent-3.0");
 E.Minimap = M;
 
 local _G = _G;
-local tinsert = table.insert;
-local gsub, upper, strsub = string.gsub, string.upper, strsub;
+local strsub = strsub;
 
 local CreateFrame = CreateFrame;
 local ToggleCharacter = ToggleCharacter;
@@ -55,7 +54,7 @@ local menuList = {
 	end}
 };
 
-function GetMinimapShape() 
+function GetMinimapShape()
 	return "SQUARE";
 end
 
@@ -67,13 +66,29 @@ function M:GetLocTextColor()
 		return 0.84, 0.03, 0.03;
 	elseif(pvpType == "friendly") then
 		return 0.05, 0.85, 0.03;
-	elseif(pvpType == "hostile") then 
+	elseif(pvpType == "hostile") then
 		return 0.84, 0.03, 0.03;
 	elseif(pvpType == "contested") then
 		return 0.9, 0.85, 0.05;
 	else
 		return 0.84, 0.03, 0.03;
 	end
+end
+
+function M:ADDON_LOADED(_, addon)
+	if(addon == "Blizzard_TimeManager") then
+		TimeManagerClockButton:Kill();
+	end
+end
+
+function M:PLAYER_ENTERING_WORLD()
+	self:Update_ZoneText()
+
+	MinimapPing:HookScript("OnUpdate", function(self, elapsed)
+		if self.fadeOut or self.timer > MINIMAPPING_FADE_TIMER then
+			Minimap_SetPing(Minimap:GetPingPosition())
+		end
+	end)
 end
 
 function M:Minimap_OnMouseUp(btn)
@@ -85,11 +100,6 @@ function M:Minimap_OnMouseUp(btn)
 			EasyMenu(menuList, menuFrame, "cursor", -160, 0, "MENU", 2);
 		end
 	elseif(btn == "RightButton") then
-		local xoff = -1;
-		if(position:match("RIGHT")) then
-			xoff = E:Scale(-16);
-		end
-
 		ToggleDropDownMenu(1, nil, MiniMapTrackingDropDown, "cursor");
 	else
 		Minimap_OnClick(self);
@@ -104,16 +114,22 @@ function M:Minimap_OnMouseWheel(d)
 	end
 end
 
-function M:Minimap_Update()
-	if(E.db.general.minimap.locationText == "HIDE" or not E.private.general.minimap.enable) then
-		return;
-	end
+function M:Update_ZoneText()
+	if E.db.general.minimap.locationText == 'HIDE' or not E.private.general.minimap.enable then return; end
+	Minimap.location:SetText(strsub(GetMinimapZoneText(),1,46))
+	Minimap.location:SetTextColor(self:GetLocTextColor())
+end
 
-	Minimap.location:SetText(strsub(GetMinimapZoneText(), 1, 46));
-	Minimap.location:SetTextColor(self:GetLocTextColor());
+function M:PLAYER_REGEN_ENABLED()
+	self:UnregisterEvent('PLAYER_REGEN_ENABLED')
+	self:UpdateSettings()
 end
 
 function M:UpdateSettings()
+	if InCombatLockdown() then
+		self:RegisterEvent('PLAYER_REGEN_ENABLED')
+	end
+
 	E.MinimapSize = E.private.general.minimap.enable and E.db.general.minimap.size or Minimap:GetWidth() + 10;
 	E.MinimapWidth = E.MinimapSize;
 	E.MinimapHeight = E.MinimapSize;
@@ -188,7 +204,7 @@ function M:UpdateSettings()
 
 	if(MMHolder) then
 		MMHolder:Width((Minimap:GetWidth() + E.Border + E.Spacing*3) + E.RBRWidth);
-		
+
 		if(E.db.datatexts.minimapPanels) then
 			MMHolder:Height(Minimap:GetHeight() + (LeftMiniPanel and (LeftMiniPanel:GetHeight() + E.Border) or 24) + E.Spacing*3);
 		else
@@ -198,7 +214,7 @@ function M:UpdateSettings()
 
 	if(Minimap.location) then
 		Minimap.location:Width(E.MinimapSize);
-		
+
 		if(E.db.general.minimap.locationText ~= "SHOW" or not E.private.general.minimap.enable) then
 			Minimap.location:Hide();
 		else
@@ -208,6 +224,54 @@ function M:UpdateSettings()
 
 	if(MinimapMover) then
 		MinimapMover:Size(MMHolder:GetSize());
+	end
+
+	if GameTimeFrame then
+		if E.private.general.minimap.hideCalendar then
+			GameTimeFrame:Hide()
+		else
+			local pos = E.db.general.minimap.icons.calendar.position or "TOPRIGHT"
+			local scale = E.db.general.minimap.icons.calendar.scale or 1
+			GameTimeFrame:ClearAllPoints()
+			GameTimeFrame:Point(pos, Minimap, pos, E.db.general.minimap.icons.calendar.xOffset or 0, E.db.general.minimap.icons.calendar.yOffset or 0)
+			GameTimeFrame:SetScale(scale)
+			GameTimeFrame:Show()
+		end
+	end
+
+	if MiniMapMailFrame then
+		local pos = E.db.general.minimap.icons.mail.position or "TOPRIGHT"
+		local scale = E.db.general.minimap.icons.mail.scale or 1
+		MiniMapMailFrame:ClearAllPoints()
+		MiniMapMailFrame:Point(pos, Minimap, pos, E.db.general.minimap.icons.mail.xOffset or 3, E.db.general.minimap.icons.mail.yOffset or 4)
+		MiniMapMailFrame:SetScale(scale)
+	end
+
+	if MiniMapLFGFrame then
+		local pos = E.db.general.minimap.icons.lfgEye.position or "BOTTOMRIGHT"
+		local scale = E.db.general.minimap.icons.lfgEye.scale or 1
+		MiniMapLFGFrame:ClearAllPoints()
+		MiniMapLFGFrame:Point(pos, Minimap, pos, E.db.general.minimap.icons.lfgEye.xOffset or 3, E.db.general.minimap.icons.lfgEye.yOffset or 0)
+		MiniMapLFGFrame:SetScale(scale)
+		LFDSearchStatus:SetScale(1/scale)
+	end
+
+	if MiniMapBattlefieldFrame then
+		local pos = E.db.general.minimap.icons.battlefield.position or "BOTTOMRIGHT"
+		local scale = E.db.general.minimap.icons.battlefield.scale or 1
+		MiniMapBattlefieldFrame:ClearAllPoints()
+		MiniMapBattlefieldFrame:Point(pos, Minimap, pos, E.db.general.minimap.icons.battlefield.xOffset or 3, E.db.general.minimap.icons.battlefield.yOffset or 0)
+		MiniMapBattlefieldFrame:SetScale(scale)
+	end
+
+	if MiniMapInstanceDifficulty then
+		local pos = E.db.general.minimap.icons.difficulty.position or "TOPLEFT"
+		local scale = E.db.general.minimap.icons.difficulty.scale or 1
+		local x = E.db.general.minimap.icons.difficulty.xOffset or 0
+		local y = E.db.general.minimap.icons.difficulty.yOffset or 0
+		MiniMapInstanceDifficulty:ClearAllPoints()
+		MiniMapInstanceDifficulty:Point(pos, Minimap, pos, x, y)
+		MiniMapInstanceDifficulty:SetScale(scale)
 	end
 
 	if(ElvConfigToggle) then
@@ -224,27 +288,20 @@ function M:UpdateSettings()
 	end
 end
 
-function M:ADDON_LOADED(event, addon)
-	if(addon == "Blizzard_TimeManager") then
-		TimeManagerClockButton:Kill();
-	end
-end
-
-function M:Initialize()	
+function M:Initialize()
 	menuFrame:SetTemplate("Transparent", true);
 
 	self:UpdateSettings();
 
-	if(not E.private.general.minimap.enable) then 
+	if(not E.private.general.minimap.enable) then
 		Minimap:SetMaskTexture("Textures\\MinimapMask");
-		return; 
+		return;
 	end
 
 	local mmholder = CreateFrame("Frame", "MMHolder", Minimap);
 	mmholder:Point("TOPRIGHT", E.UIParent, "TOPRIGHT", -3, -3);
 	mmholder:Width((Minimap:GetWidth() + 29) + E.RBRWidth);
 	mmholder:Height(Minimap:GetHeight() + 53);
-
 	Minimap:ClearAllPoints();
 	if(E.db.general.reminder.position == "LEFT") then
 		Minimap:Point("TOPRIGHT", mmholder, "TOPRIGHT", -E.Border, -E.Border);
@@ -253,6 +310,7 @@ function M:Initialize()
 	end
 	Minimap:SetMaskTexture("Interface\\ChatFrame\\ChatFrameBackground");
 	Minimap:CreateBackdrop("Default");
+	Minimap:SetFrameLevel(Minimap:GetFrameLevel() + 2)
 	Minimap:HookScript("OnEnter", function(self)
 		if(E.db.general.minimap.locationText ~= "MOUSEOVER" or not E.private.general.minimap.enable) then
 			return;
@@ -286,26 +344,24 @@ function M:Initialize()
 
 	MinimapNorthTag:Kill();
 
-	GameTimeFrame:Hide();
-
 	MinimapZoneTextButton:Hide();
 
 	MiniMapTracking:Kill();
 
-	MiniMapMailFrame:ClearAllPoints();
-	MiniMapMailFrame:Point("TOPRIGHT", Minimap, 3, 4);
 	MiniMapMailBorder:Hide();
 	MiniMapMailIcon:SetTexture("Interface\\AddOns\\ElvUI\\media\\textures\\mail");
 
-	MiniMapBattlefieldFrame:ClearAllPoints();
-	MiniMapBattlefieldFrame:Point("BOTTOMRIGHT", Minimap, 3, 0);
 	MiniMapBattlefieldBorder:Hide();
+
+	MiniMapLFGFrameBorder:Hide();
 
 	MiniMapWorldMapButton:Hide();
 
-	MiniMapInstanceDifficulty:ClearAllPoints();
-	MiniMapInstanceDifficulty:SetParent(Minimap);
-	MiniMapInstanceDifficulty:Point("TOPLEFT", Minimap, "TOPLEFT", 0, 0);
+	MiniMapInstanceDifficulty:SetParent(Minimap)
+
+	if TimeManagerClockButton then
+		TimeManagerClockButton:Kill()
+	end
 
 	E:CreateMover(MMHolder, "MinimapMover", L["Minimap"]);
 
@@ -313,15 +369,10 @@ function M:Initialize()
 	Minimap:SetScript("OnMouseWheel", M.Minimap_OnMouseWheel);
 	Minimap:SetScript("OnMouseUp", M.Minimap_OnMouseUp);
 
-	MiniMapLFGFrame:ClearAllPoints();
-	MiniMapLFGFrame:Point("BOTTOMRIGHT", Minimap, "BOTTOMRIGHT", 2, 1);
-	MiniMapLFGFrameBorder:Hide();
-
-	self:Minimap_Update();
-
-	self:RegisterEvent("ZONE_CHANGED", "Minimap_Update");
-	self:RegisterEvent("ZONE_CHANGED_INDOORS", "Minimap_Update");
-	self:RegisterEvent("ZONE_CHANGED_NEW_AREA", "Minimap_Update");
+	self:RegisterEvent("ZONE_CHANGED_NEW_AREA", "Update_ZoneText")
+	self:RegisterEvent("ZONE_CHANGED", "Update_ZoneText")
+	self:RegisterEvent("ZONE_CHANGED_INDOORS", "Update_ZoneText")
+	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 	self:RegisterEvent("ADDON_LOADED");
 
 	MinimapCluster:ClearAllPoints();
@@ -344,7 +395,7 @@ function M:Initialize()
 	fm:Hide();
 	E.FrameLocks["FarmModeMap"] = true;
 
-	FarmModeMap:SetScript("OnShow", function() 	
+	FarmModeMap:SetScript("OnShow", function()
 		if(BuffsMover and not E:HasMoverBeenMoved("BuffsMover")) then
 			BuffsMover:ClearAllPoints();
 			BuffsMover:Point("TOPRIGHT", E.UIParent, "TOPRIGHT", -3, -3);
@@ -367,7 +418,7 @@ function M:Initialize()
 		end
 	end);
 
-	FarmModeMap:SetScript("OnHide", function() 
+	FarmModeMap:SetScript("OnHide", function()
 		if(BuffsMover and not E:HasMoverBeenMoved("BuffsMover")) then
 			E:ResetMovers(L["Player Buffs"]);
 		end

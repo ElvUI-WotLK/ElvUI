@@ -18,45 +18,46 @@ assert(ElvUF, "ElvUI was unable to locate oUF.");
 function UF:Construct_HealthBar(frame, bg, text, textPos)
 	local health = CreateFrame("StatusBar", nil, frame);
 	UF["statusbars"][health] = true;
-	
+
 	health:SetFrameStrata("LOW");
 	health:SetFrameLevel(10);
 	health.PostUpdate = self.PostUpdateHealth;
-	
+
 	if(bg) then
 		health.bg = health:CreateTexture(nil, "BORDER");
 		health.bg:SetAllPoints();
 		health.bg:SetTexture(E["media"].blankTex);
 		health.bg.multiplier = 0.25;
 	end
-	
+
 	if(text) then
 		health.value = frame.RaisedElementParent:CreateFontString(nil, "OVERLAY");
 		UF:Configure_FontString(health.value);
-		
+
 		health.value:SetParent(frame);
-		
+
 		local x = -2;
 		if(textPos == "LEFT") then
 			x = 2;
 		end
-		
+
 		health.value:Point(textPos, health, textPos, x, 0);
 	end
-	
+
 	health.colorTapping = true;
 	health.colorDisconnected = true;
 	health:CreateBackdrop("Default", nil, nil, self.thinBorders);
-	
+
 	return health;
 end
 
 function UF:Configure_HealthBar(frame)
 	local db = frame.db;
 	local health = frame.Health;
-	
+
 	health.Smooth = self.db.smoothbars;
-	
+	health.SmoothSpeed = self.db.smoothSpeed * 10;
+
 	if(health.value) then
 		local attachPoint = self:GetObjectAnchorPoint(frame, db.health.attachTextTo);
 		if(E.global.tukuiMode and frame.InfoPanel and frame.InfoPanel:IsShown()) then
@@ -70,7 +71,7 @@ function UF:Configure_HealthBar(frame)
 		health.value:Point(db.health.position, attachPoint, db.health.position, db.health.xOffset, db.health.yOffset);
 		frame:Tag(health.value, db.health.text_format);
 	end
-	
+
 	health.colorSmooth = nil;
 	health.colorHealth = nil;
 	health.colorClass = nil;
@@ -96,11 +97,11 @@ function UF:Configure_HealthBar(frame)
 			health.colorReaction = true;
 		end
 	end
-	
+
 	health:ClearAllPoints();
 	if(frame.ORIENTATION == "LEFT") then
 		health:Point("TOPRIGHT", frame, "TOPRIGHT", -frame.BORDER - frame.SPACING, -frame.BORDER - frame.SPACING - frame.CLASSBAR_YOFFSET);
-		
+
 		if(frame.USE_POWERBAR_OFFSET) then
 			health:Point("TOPRIGHT", frame, "TOPRIGHT", -frame.BORDER - frame.SPACING - frame.POWERBAR_OFFSET, -frame.BORDER - frame.SPACING - frame.CLASSBAR_YOFFSET);
 			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", frame.PORTRAIT_WIDTH + frame.BORDER + frame.SPACING, frame.BORDER + frame.SPACING + frame.POWERBAR_OFFSET);
@@ -113,7 +114,7 @@ function UF:Configure_HealthBar(frame)
 		end
 	elseif(frame.ORIENTATION == "RIGHT") then
 		health:Point("TOPLEFT", frame, "TOPLEFT", frame.BORDER + frame.SPACING, -frame.BORDER - frame.SPACING - frame.CLASSBAR_YOFFSET);
-		
+
 		if(frame.USE_POWERBAR_OFFSET) then
 			health:Point("TOPLEFT", frame, "TOPLEFT", frame.BORDER + frame.SPACING + frame.POWERBAR_OFFSET, -frame.BORDER - frame.SPACING - frame.CLASSBAR_YOFFSET);
 			health:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -frame.PORTRAIT_WIDTH - frame.BORDER - frame.SPACING, frame.BORDER + frame.SPACING + frame.POWERBAR_OFFSET);
@@ -138,7 +139,7 @@ function UF:Configure_HealthBar(frame)
 			health:Point("BOTTOMLEFT", frame, "BOTTOMLEFT", frame.PORTRAIT_WIDTH + frame.BORDER + frame.SPACING, frame.BORDER + frame.SPACING + frame.BOTTOM_OFFSET);
 		end
 	end
-	
+
 	health.bg:ClearAllPoints();
 	if(not frame.USE_PORTRAIT_OVERLAY) then
 		health.bg:SetParent(health);
@@ -148,7 +149,7 @@ function UF:Configure_HealthBar(frame)
 		health.bg:Point("TOPRIGHT", health);
 		health.bg:SetParent(frame.Portrait.overlay);
 	end
-	
+
 	if(db.health) then
 		if(db.health.orientation) then
 			health:SetOrientation(db.health.orientation);
@@ -158,9 +159,9 @@ function UF:Configure_HealthBar(frame)
 			health.frequentUpdates = db.health.frequentUpdates;
 		end
 	end
-	
+
 	UF:ToggleTransparentStatusBar(UF.db.colors.transparentHealth, frame.Health, frame.Health.bg, (frame.USE_PORTRAIT and frame.USE_PORTRAIT_OVERLAY) ~= true);
-	
+
 	frame:UpdateElement("Health");
 end
 
@@ -172,7 +173,7 @@ function UF:GetHealthBottomOffset(frame)
 	if(frame.USE_INFO_PANEL) then
 		bottomOffset = bottomOffset + frame.INFO_PANEL_HEIGHT - (frame.BORDER-frame.SPACING);
 	end
-	
+
 	return bottomOffset;
 end
 
@@ -182,19 +183,19 @@ function UF:PostUpdateHealth(unit, min, max)
 		min = random(1, max);
 		self:SetValue(min);
 	end
-	
+
 	local r, g, b = self:GetStatusBarColor();
 	local colors = E.db["unitframe"]["colors"];
 	if((colors.healthclass == true and colors.colorhealthbyvalue == true) or (colors.colorhealthbyvalue and parent.isForced) and not (UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit))) then
 		local newr, newg, newb = ElvUF.ColorGradient(min, max, 1, 0, 0, 1, 1, 0, r, g, b);
-		
+
 		self:SetStatusBarColor(newr, newg, newb);
 		if(self.bg and self.bg.multiplier) then
 			local mu = self.bg.multiplier;
 			self.bg:SetVertexColor(newr * mu, newg * mu, newb * mu);
 		end
 	end
-	
+
 	if(colors.classbackdrop) then
 		local reaction = UnitReaction(unit, "player");
 		local t;
@@ -204,17 +205,17 @@ function UF:PostUpdateHealth(unit, min, max)
 		elseif(reaction) then
 			t = parent.colors.reaction[reaction];
 		end
-		
+
 		if(t) then
 			self.bg:SetVertexColor(t[1], t[2], t[3]);
 		end
 	end
-	
+
 	if(colors.customhealthbackdrop) then
 		local backdrop = colors.health_backdrop;
 		self.bg:SetVertexColor(backdrop.r, backdrop.g, backdrop.b);
 	end
-	
+
 	if(colors.useDeadBackdrop and UnitIsDeadOrGhost(unit)) then
 		local backdrop = colors.health_backdrop_dead;
 		self.bg:SetVertexColor(backdrop.r, backdrop.g, backdrop.b);

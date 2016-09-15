@@ -1,4 +1,4 @@
-﻿local E, L, V, P, G = unpack(select(2, ...));
+local E, L, V, P, G = unpack(select(2, ...));
 local DT = E:GetModule("DataTexts");
 
 local join = string.join;
@@ -10,22 +10,22 @@ local ACHIEVEMENT_TITLE = ACHIEVEMENT_TITLE;
 local lastPanel;
 local displayNumberString = "";
 
-local function OnEvent(self, event)
+local function OnEvent(self)
 	self.text:SetFormattedText(displayNumberString, ACHIEVEMENT_TITLE, GetTotalAchievementPoints());
 	lastPanel = self;
 end
 
-local function Click(self)
+local function Click()
 	ToggleAchievementFrame();
 end
 
-local function ValueColorUpdate(hex, r, g, b)
+local function ValueColorUpdate(hex)
 	displayNumberString = join("", "%s: ", hex, "%d|r");
-	
+
 	if(lastPanel ~= nil) then
 		OnEvent(lastPanel);
 	end
 end
 E["valueColorUpdateFuncs"][ValueColorUpdate] = true;
 
-DT:RegisterDatatext(ACHIEVEMENT_TITLE, { "ACHIEVEMENT_EARNED" }, OnEvent, nil, Click);
+DT:RegisterDatatext("Achievement", {"ACHIEVEMENT_EARNED"}, OnEvent, nil, Click);

@@ -2,7 +2,7 @@
 Keybinding Widget
 Set Keybindings in the Config UI.
 -------------------------------------------------------------------------------]]
-local Type, Version = "Keybinding", 24
+local Type, Version = "Keybinding", 25
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
@@ -34,11 +34,13 @@ local function Keybinding_OnClick(frame, button)
 		local self = frame.obj
 		if self.waitingForKey then
 			frame:EnableKeyboard(false)
+			frame:EnableMouseWheel(false)
 			self.msgframe:Hide()
 			frame:UnlockHighlight()
 			self.waitingForKey = nil
 		else
 			frame:EnableKeyboard(true)
+			frame:EnableMouseWheel(true)
 			self.msgframe:Show()
 			frame:LockHighlight()
 			self.waitingForKey = true
@@ -73,6 +75,7 @@ local function Keybinding_OnKeyDown(frame, key)
 		end
 
 		frame:EnableKeyboard(false)
+		frame:EnableMouseWheel(false)
 		self.msgframe:Hide()
 		frame:UnlockHighlight()
 		self.waitingForKey = nil
@@ -97,6 +100,16 @@ local function Keybinding_OnMouseDown(frame, button)
 	Keybinding_OnKeyDown(frame, button)
 end
 
+local function Keybinding_OnMouseWheel(frame, direction)
+	local button
+	if direction >= 0 then
+		button = "MOUSEWHEELUP"
+	else
+		button = "MOUSEWHEELDOWN"
+	end
+	Keybinding_OnKeyDown(frame, button)
+end
+
 --[[-----------------------------------------------------------------------------
 Methods
 -------------------------------------------------------------------------------]]
@@ -109,6 +122,7 @@ local methods = {
 		self.msgframe:Hide()
 		self:SetDisabled(false)
 		self.button:EnableKeyboard(false)
+		self.button:EnableMouseWheel(false)
 	end,
 
 	-- ["OnRelease"] = nil,
@@ -177,12 +191,14 @@ local function Constructor()
 	local button = CreateFrame("Button", name, frame, "UIPanelButtonTemplate2")
 
 	button:EnableMouse(true)
+	button:EnableMouseWheel(false)
 	button:RegisterForClicks("AnyDown")
 	button:SetScript("OnEnter", Control_OnEnter)
 	button:SetScript("OnLeave", Control_OnLeave)
 	button:SetScript("OnClick", Keybinding_OnClick)
 	button:SetScript("OnKeyDown", Keybinding_OnKeyDown)
 	button:SetScript("OnMouseDown", Keybinding_OnMouseDown)
+	button:SetScript("OnMouseWheel", Keybinding_OnMouseWheel)
 	button:SetPoint("BOTTOMLEFT")
 	button:SetPoint("BOTTOMRIGHT")
 	button:SetHeight(24)

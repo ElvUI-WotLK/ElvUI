@@ -7,7 +7,7 @@ local FrameStackTooltip_Toggle = FrameStackTooltip_Toggle;
 
 --[[
 	Command to grab frame information when mouseing over a frame
-	
+
 	Frame Name
 	Width
 	Height
@@ -33,12 +33,12 @@ SlashCmdList["FRAME"] = function(arg)
 		if arg:GetParent() and arg:GetParent():GetName() then
 			ChatFrame1:AddMessage("Parent: |cffFFD100"..arg:GetParent():GetName())
 		end
- 
+
 		ChatFrame1:AddMessage("Width: |cffFFD100"..format("%.2f",arg:GetWidth()))
 		ChatFrame1:AddMessage("Height: |cffFFD100"..format("%.2f",arg:GetHeight()))
 		ChatFrame1:AddMessage("Strata: |cffFFD100"..arg:GetFrameStrata())
 		ChatFrame1:AddMessage("Level: |cffFFD100"..arg:GetFrameLevel())
- 
+
 		if xOfs then
 			ChatFrame1:AddMessage("X: |cffFFD100"..format("%.2f",xOfs))
 		end
@@ -48,7 +48,7 @@ SlashCmdList["FRAME"] = function(arg)
 		if relativeTo and relativeTo:GetName() then
 			ChatFrame1:AddMessage("Point: |cffFFD100"..point.."|r anchored to "..relativeTo:GetName().."'s |cffFFD100"..relativePoint)
 		end
-		ChatFrame1:AddMessage("|cffCC0000----------------------------")
+		ChatFrame1:AddMessage("|cffCC0000----------------------------|r")
 	elseif arg == nil then
 		ChatFrame1:AddMessage("Invalid frame name")
 	else
@@ -62,7 +62,7 @@ local t = FrameStackHighlight:CreateTexture(nil, "BORDER");
 t:SetAllPoints();
 t:SetTexture(0, 1, 0, 0.5);
 
-hooksecurefunc("FrameStackTooltip_Toggle", function(showHidden)
+hooksecurefunc("FrameStackTooltip_Toggle", function()
 	local tooltip = _G["FrameStackTooltip"];
 	if(not tooltip:IsVisible()) then
 		FrameStackHighlight:Hide();
@@ -70,7 +70,7 @@ hooksecurefunc("FrameStackTooltip_Toggle", function(showHidden)
 end);
 
 local _timeSinceLast = 0
-FrameStackTooltip:HookScript("OnUpdate", function(self, elapsed)
+FrameStackTooltip:HookScript("OnUpdate", function(_, elapsed)
 	_timeSinceLast = _timeSinceLast - elapsed;
 	if(_timeSinceLast <= 0) then
 		_timeSinceLast = FRAMESTACK_UPDATE_TIME;
@@ -139,3 +139,20 @@ end
 
 SLASH_TEXLIST1 = "/texlist"
 SlashCmdList["TEXLIST"] = TextureList
+
+local function GetPoint(frame)
+	if frame ~= "" then
+		frame = _G[frame]
+	else
+		frame = GetMouseFocus()
+	end
+
+	local point, relativeTo, relativePoint, xOffset, yOffset = frame:GetPoint()
+	local frameName = frame.GetName and frame:GetName() or "nil"
+	local relativeToName = relativeTo.GetName and relativeTo:GetName() or "nil"
+
+	print(frameName, point, relativeToName, relativePoint, xOffset, yOffset)
+end
+
+SLASH_GETPOINT1 = "/getpoint"
+SlashCmdList["GETPOINT"] = GetPoint

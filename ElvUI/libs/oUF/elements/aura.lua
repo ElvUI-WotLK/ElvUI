@@ -1,4 +1,4 @@
-local parent, ns = ...
+local _, ns = ...
 local oUF = ns.oUF
 
 local VISIBLE = 1
@@ -6,6 +6,11 @@ local HIDDEN = 0
 
 local floor = math.floor
 local tinsert = table.insert
+
+local CreateFrame = CreateFrame
+local UnitAura = UnitAura
+local GetSpellInfo = GetSpellInfo
+local UnitIsUnit = UnitIsUnit
 
 local UpdateTooltip = function(self)
 	GameTooltip:SetUnitAura(self.parent.__owner.unit, self:GetID(), self.filter)
@@ -86,20 +91,20 @@ end
 local updateIcon = function(unit, icons, index, offset, filter, isDebuff, visible)
 	if not unit then return; end
 	local name, rank, texture, count, dtype, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID = UnitAura(unit, index, filter)
-	
+
 	if icons.forceShow then
 		spellID = 47540
 		name, rank, texture = GetSpellInfo(spellID)
 		count, dtype, duration, timeLeft, caster, isStealable, shouldConsolidate = 5, 'Magic', 0, 60, 'player', nil, nil
 	end
-	
+
 	if(name) then
 		local n = visible + offset + 1
 		local icon = icons[n]
 		if(not icon) then
 			icon = (icons.CreateIcon or createAuraIcon) (icons, n)
 		end
-		
+
 		local show = true
 		if not icons.forceShow then
 			show = (icons.CustomFilter or customFilter) (icons, unit, icon, name, rank, texture, count, dtype, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID)

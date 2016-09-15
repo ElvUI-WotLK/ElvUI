@@ -22,7 +22,7 @@ do
 		["party3"] = "partypet3",
 		["party4"] = "partypet4",
 	};
-	
+
 	local RegisterFrameForUnit = function(frame, unit)
 		if(not unit) then return; end
 		if(framesForUnit[unit]) then
@@ -31,7 +31,7 @@ do
 			framesForUnit[unit] = {[frame] = true};
 		end
 	end
-	
+
 	local UnregisterFrameForUnit = function(frame, unit)
 		if(not unit) then return; end
 		local frames = framesForUnit[unit];
@@ -42,7 +42,7 @@ do
 			end
 		end
 	end
-	
+
 	Private.UpdateUnits = function(frame, unit, realUnit)
 		if(unit == realUnit) then
 			realUnit = nil;
@@ -54,7 +54,7 @@ do
 				RegisterFrameForUnit(frame, unit);
 				RegisterFrameForUnit(frame, realUnit);
 			end
-			
+
 			frame.alternativeUnit = alternativeUnits[unit];
 			frame.unit = unit;
 			frame.realUnit = realUnit;
@@ -62,13 +62,13 @@ do
 			return true;
 		end
 	end
-	
+
 	local sharedUnitEvents = {
 		UNIT_ENTERED_VEHICLE = true,
 		UNIT_EXITED_VEHICLE = true,
 		UNIT_PET = true,
 	};
-	
+
 	eventFrame:SetScript("OnEvent", function(_, event, arg1, ...)
 		local listeners = registry[event];
 		if(arg1 and not sharedUnitEvents[event]) then
@@ -88,12 +88,12 @@ do
 			end
 		end
 	end);
-	
+
 	function RegisterEvent(self, event, unitless)
 		if(unitless) then
 			sharedUnitEvents[event] = true;
 		end
-		
+
 		if(not registry[event]) then
 			registry[event] = {[self] = true};
 			eventFrame:RegisterEvent(event);
@@ -111,7 +111,7 @@ do
 			end
 		end
 	end
-	
+
 	function IsEventRegistered(self, event)
 		return registry[event] and registry[event][self];
 	end
@@ -127,13 +127,13 @@ local event_metatable = {
 
 function frame_metatable.__index:RegisterEvent(event, func, unitless)
 	if(self.__eventless) then return; end
-	
+
 	argcheck(event, 2, "string");
-	
+
 	if(type(func) == "string" and type(self[func]) == "function") then
 		func = self[func];
 	end
-	
+
 	local curev = self[event];
 	local kind = type(curev);
 	if(curev and func) then
@@ -143,7 +143,7 @@ function frame_metatable.__index:RegisterEvent(event, func, unitless)
 			for _, infunc in next, curev do
 				if(infunc == func) then return; end
 			end
-			
+
 			tinsert(curev, func);
 		end
 	elseif(IsEventRegistered(self, event)) then
@@ -154,20 +154,20 @@ function frame_metatable.__index:RegisterEvent(event, func, unitless)
 		elseif(not self[event]) then
 			return error("Style [%s] attempted to register event [%s] on unit [%s] with a handler that doesn't exist.", self.style, event, self.unit or "unknown");
 		end
-		
+
 		RegisterEvent(self, event, unitless);
 	end
 end
 
 function frame_metatable.__index:UnregisterEvent(event, func)
 	argcheck(event, 2, "string");
-	
+
 	local curev = self[event]
 	if(type(curev) == "table" and func) then
 		for k, infunc in next, curev do
 			if(infunc == func) then
 				tremove(curev, k);
-				
+
 				local n = #curev;
 				if(n == 1) then
 					local _, handler = next(curev);
@@ -175,7 +175,7 @@ function frame_metatable.__index:UnregisterEvent(event, func)
 				elseif(n == 0) then
 					UnregisterEvent(self, event);
 				end
-				
+
 				break;
 			end
 		end

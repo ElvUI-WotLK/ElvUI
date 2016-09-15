@@ -1,7 +1,9 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local S = E:GetModule("Skins");
 
+local _G = _G;
 local unpack = unpack;
+local find = string.find;
 
 local function LoadSkin()
 	if(E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.trainer ~= true) then return; end
@@ -34,12 +36,54 @@ local function LoadSkin()
 		if(skillIcon) then
 			skillIcon:SetInside();
 			skillIcon:SetTexCoord(unpack(E.TexCoords));
-			
-			ClassTrainerSkillIcon:SetTemplate("Default", true);
+
+			ClassTrainerSkillIcon:SetTemplate("Default");
+		end
+	end);
+
+	for i = 1, CLASS_TRAINER_SKILLS_DISPLAYED do
+		local skillButton = _G["ClassTrainerSkill" .. i];
+		skillButton:SetNormalTexture("");
+		skillButton.SetNormalTexture = E.noop;
+
+		_G["ClassTrainerSkill" .. i .. "Highlight"]:SetTexture("");
+		_G["ClassTrainerSkill" .. i .. "Highlight"].SetTexture = E.noop;
+
+		skillButton.Text = skillButton:CreateFontString(nil, "OVERLAY");
+		skillButton.Text:FontTemplate(nil, 22);
+		skillButton.Text:Point("LEFT", 3, 0);
+		skillButton.Text:SetText("+");
+
+		hooksecurefunc(skillButton, "SetNormalTexture", function(self, texture)
+			if(find(texture, "MinusButton")) then
+				self.Text:SetText("-");
+			elseif(find(texture, "PlusButton")) then
+				self.Text:SetText("+");
+			else
+				self.Text:SetText("");
+			end
+		end);
+	end
+
+	ClassTrainerCollapseAllButton:SetNormalTexture("");
+	ClassTrainerCollapseAllButton.SetNormalTexture = E.noop;
+	ClassTrainerCollapseAllButton:SetHighlightTexture("");
+	ClassTrainerCollapseAllButton.SetHighlightTexture = E.noop;
+	ClassTrainerCollapseAllButton:SetDisabledTexture("");
+	ClassTrainerCollapseAllButton.SetDisabledTexture = E.noop;
+
+	ClassTrainerCollapseAllButton.Text = ClassTrainerCollapseAllButton:CreateFontString(nil, "OVERLAY");
+	ClassTrainerCollapseAllButton.Text:FontTemplate(nil, 22);
+	ClassTrainerCollapseAllButton.Text:Point("LEFT", 3, 0);
+	ClassTrainerCollapseAllButton.Text:SetText("+");
+
+	hooksecurefunc(ClassTrainerCollapseAllButton, "SetNormalTexture", function(self, texture)
+		if(find(texture, "MinusButton")) then
+			self.Text:SetText("-");
 		else
-			ClassTrainerSkillIcon:SetBackdrop(nil);
+			self.Text:SetText("+");
 		end
 	end);
 end
 
-S:RegisterSkin("Blizzard_TrainerUI", LoadSkin);
+S:AddCallbackForAddon("Blizzard_TrainerUI", "Trainer", LoadSkin);

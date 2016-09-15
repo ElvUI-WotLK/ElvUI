@@ -14,8 +14,20 @@ local function LoadSkin()
 	S:HandleCloseButton(PlayerTalentFrameCloseButton);
 
 	PlayerTalentFrameStatusFrame:StripTextures();
+	PlayerTalentFrameStatusFrame:Point("TOPLEFT", PlayerTalentFrame, "TOPLEFT", 57, -40)
+	PlayerTalentFrameStatusFrame:HookScript("OnShow", function(self)
+		if(GlyphFrame and GlyphFrame:IsShown()) then
+			self:Hide();
+		end
+	end);
 
 	S:HandleButton(PlayerTalentFrameActivateButton, true);
+	PlayerTalentFrameActivateButton:Point("TOP", PlayerTalentFrame, "TOP", 0, -40)
+	PlayerTalentFrameActivateButton:HookScript("OnShow", function(self)
+		if(GlyphFrame and GlyphFrame:IsShown()) then
+			self:Hide();
+		end
+	end);
 
 	PlayerTalentFramePointsBar:StripTextures();
 	PlayerTalentFramePreviewBar:StripTextures();
@@ -48,17 +60,14 @@ local function LoadSkin()
 
 	for i = 1, MAX_TALENT_TABS do
 		local tab = _G["PlayerSpecTab" .. i];
+		tab:GetRegions():Hide();
 
-		if(tab) then
-			tab:GetRegions():Hide();
+		tab:SetTemplate("Default");
+		tab:StyleButton(nil, true);
 
-			tab:SetTemplate("Default");
-			tab:StyleButton(nil, true);
-
-			tab:GetNormalTexture():SetInside();
-			tab:GetNormalTexture():SetTexCoord(unpack(E.TexCoords));
-		end
+		tab:GetNormalTexture():SetInside();
+		tab:GetNormalTexture():SetTexCoord(unpack(E.TexCoords));
 	end
 end
 
-S:RegisterSkin("Blizzard_TalentUI", LoadSkin);
+S:AddCallbackForAddon("Blizzard_TalentUI", "Talent", LoadSkin);

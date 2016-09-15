@@ -1,12 +1,14 @@
-local parent, ns = ...;
+local _, ns = ...;
 local oUF = ns.oUF;
+
+local UnitGroupRolesAssigned = UnitGroupRolesAssigned;
 
 local Update = function(self, event)
 	local lfdrole = self.LFDRole;
 	if(lfdrole.PreUpdate) then
 		lfdrole:PreUpdate();
 	end
-	
+
 	local isTank, isHealer, isDamage = UnitGroupRolesAssigned(self.unit);
 	if(isTank) then
 		lfdrole:SetTexture([[Interface\AddOns\ElvUI\media\textures\tank.tga]]);
@@ -20,7 +22,7 @@ local Update = function(self, event)
 	else
 		lfdrole:Hide();
 	end
-	
+
 	if(lfdrole.PostUpdate) then
 		return lfdrole:PostUpdate(isTank, isHealer, isDamage);
 	end
@@ -39,17 +41,17 @@ local Enable = function(self)
 	if(lfdrole) then
 		lfdrole.__owner = self;
 		lfdrole.ForceUpdate = ForceUpdate;
-		
+
 		if(self.unit == "player") then
 			self:RegisterEvent("PLAYER_ROLES_ASSIGNED", Path, true);
 		else
 			self:RegisterEvent("PARTY_MEMBERS_CHANGED", Path, true);
 		end
-		
+
 		if(lfdrole:IsObjectType"Texture" and not lfdrole:GetTexture()) then
 			lfdrole:SetTexture[[Interface\LFGFrame\UI-LFG-ICON-PORTRAITROLES]];
 		end
-		
+
 		return true;
 	end
 end

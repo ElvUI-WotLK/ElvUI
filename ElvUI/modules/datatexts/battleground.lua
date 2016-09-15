@@ -1,22 +1,29 @@
-﻿local E, L, V, P, G = unpack(select(2, ...));
-local DT = E:GetModule('DataTexts');
+local E, L, V, P, G = unpack(select(2, ...));
+local DT = E:GetModule("DataTexts");
 
+local select = select;
 local join = string.join;
 
+local GetNumBattlefieldScores = GetNumBattlefieldScores;
+local GetBattlefieldScore = GetBattlefieldScore;
+local GetCurrentMapAreaID = GetCurrentMapAreaID;
+local GetBattlefieldStatInfo = GetBattlefieldStatInfo;
+local GetBattlefieldStatData = GetBattlefieldStatData;
+
 local lastPanel;
-local displayString = '';
+local displayString = "";
 local classColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass];
 
 local dataLayout = {
-	['LeftChatDataPanel'] = {
-		['left'] = 11,
-		['middle'] = 5,
-		['right'] = 2
+	["LeftChatDataPanel"] = {
+		["left"] = 11,
+		["middle"] = 5,
+		["right"] = 2
 	},
-	['RightChatDataPanel'] = {
-		['left'] = 4,
-		['middle'] = 3,
-		['right'] = 12
+	["RightChatDataPanel"] = {
+		["left"] = 4,
+		["middle"] = 3,
+		["right"] = 12
 	}
 };
 
@@ -44,11 +51,9 @@ function DT:UPDATE_BATTLEFIELD_SCORE()
 		name = GetBattlefieldScore(i);
 		if(name == E.myname) then
 			self.text:SetFormattedText(displayString, dataStrings[pointIndex], select(pointIndex, GetBattlefieldScore(i)));
-			break	
+			break;
 		end
 	end
-	
-	lastPanel = self;
 end
 
 function DT:BattlegroundStats()
@@ -57,9 +62,9 @@ function DT:BattlegroundStats()
 	for index = 1, GetNumBattlefieldScores() do
 		name = GetBattlefieldScore(index);
 		if(name and name == E.myname) then
-			DT.tooltip:AddDoubleLine(L['Stats For:'], name, 1, 1, 1, classColor.r, classColor.g, classColor.b);
-			DT.tooltip:AddLine(' ');
-			if(CurrentMapID == WSG) then 
+			DT.tooltip:AddDoubleLine(L["Stats For:"], name, 1, 1, 1, classColor.r, classColor.g, classColor.b);
+			DT.tooltip:AddLine(" ");
+			if(CurrentMapID == WSG) then
 				DT.tooltip:AddDoubleLine(GetBattlefieldStatInfo(1), GetBattlefieldStatData(index, 1), 1, 1, 1);
 				DT.tooltip:AddDoubleLine(GetBattlefieldStatInfo(2), GetBattlefieldStatData(index, 2), 1, 1, 1);
 			elseif(CurrentMapID == EOTS) then
@@ -76,25 +81,24 @@ function DT:BattlegroundStats()
 				DT.tooltip:AddDoubleLine(GetBattlefieldStatInfo(1), GetBattlefieldStatData(index, 1), 1, 1, 1);
 				DT.tooltip:AddDoubleLine(GetBattlefieldStatInfo(2), GetBattlefieldStatData(index, 2), 1, 1, 1);
 			end
-			break
+			break;
 		end
 	end
-	
+
 	DT.tooltip:Show();
 end
 
 function DT:HideBattlegroundTexts()
 	DT.ForceHideBGStats = true;
 	DT:LoadDataTexts();
-	
-	E:Print(L['Battleground datatexts temporarily hidden, to show type /bgstats or right click the "C" icon near the minimap.']);
+	E:Print(L["Battleground datatexts temporarily hidden, to show type /bgstats or right click the 'C' icon near the minimap."]);
 end
 
-local function ValueColorUpdate(hex, r, g, b)
-	displayString = join('', '%s: ', hex, '%s|r');
-	
+local function ValueColorUpdate(hex)
+	displayString = join("", "%s: ", hex, "%s|r");
+
 	if(lastPanel ~= nil) then
 		DT.UPDATE_BATTLEFIELD_SCORE(lastPanel);
 	end
 end
-E['valueColorUpdateFuncs'][ValueColorUpdate] = true;
+E["valueColorUpdateFuncs"][ValueColorUpdate] = true;

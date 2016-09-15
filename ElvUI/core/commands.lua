@@ -1,4 +1,4 @@
-﻿local E, L, V, P, G = unpack(select(2, ...));
+local E, L, V, P, G = unpack(select(2, ...));
 
 local _G = _G;
 local tonumber, type = tonumber, type;
@@ -17,20 +17,20 @@ local ERR_NOT_IN_COMBAT = ERR_NOT_IN_COMBAT;
 
 function E:EnableAddon(addon)
 	local _, _, _, _, _, reason, _ = GetAddOnInfo(addon);
-	if(reason ~= "MISSING") then 
+	if(reason ~= "MISSING") then
 		EnableAddOn(addon);
 		ReloadUI();
-	else 
+	else
 		E:Print(format("Addon '%s' not found.", addon));
 	end
 end
 
 function E:DisableAddon(addon)
 	local _, _, _, _, _, reason, _ = GetAddOnInfo(addon);
-	if(reason ~= "MISSING") then 
+	if(reason ~= "MISSING") then
 		DisableAddOn(addon);
 		ReloadUI();
-	else 
+	else
 		E:Print(format("Addon '%s' not found.", addon));
 	end
 end
@@ -57,7 +57,7 @@ function E:FarmMode(msg)
 		E.db.farmSize = tonumber(msg);
 		FarmModeMap:Size(tonumber(msg));
 	end
-	
+
 	FarmMode();
 end
 
@@ -65,10 +65,10 @@ function E:Grid(msg)
 	if(msg and type(tonumber(msg)) == "number" and tonumber(msg) <= 256 and tonumber(msg) >= 4) then
 		E.db.gridSize = msg;
 		E:Grid_Show();
-	else 
+	else
 		if(EGrid) then
 			E:Grid_Hide();
-		else 
+		else
 			E:Grid_Show();
 		end
 	end
@@ -94,7 +94,7 @@ function E:BGStats()
 	local DT = E:GetModule("DataTexts");
 	DT.ForceHideBGStats = nil;
 	DT:LoadDataTexts();
-	
+
 	E:Print(L["Battleground datatexts will now show again if you are inside a battleground."]);
 end
 
@@ -134,7 +134,7 @@ function E:GetCPUImpact()
 		f:Hide()
 		local ms_passed = debugprofilestop();
 		UpdateAddOnCPUUsage();
-		
+
 		self:Print("Consumed " .. (GetAddOnCPUUsage("ElvUI") / num_frames) .. " milliseconds per frame. Each frame took " .. (ms_passed / num_frames) .. " to render.");
 		toggleMode = false;
 	end
@@ -174,7 +174,7 @@ function E:LoadCommands()
 	self:RegisterChatCommand("farmmode", "FarmMode");
 	self:RegisterChatCommand("aprilfools", "DisableTukuiMode");
 	self:RegisterChatCommand("tukuimode", "ToggleTukuiMode");
-	
+
 	if(E:GetModule("ActionBars")) then
 		self:RegisterChatCommand("kb", E:GetModule("ActionBars").ActivateBindMode);
 	end

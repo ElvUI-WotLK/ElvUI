@@ -8,19 +8,18 @@ local pairs, type, error = pairs, type, error;
 local len = string.len;
 
 local CreateFrame = CreateFrame;
-local UnitGUID = UnitGUID;
 local InCombatLockdown = InCombatLockdown;
 local IsInInstance = IsInInstance;
 
 function DT:Initialize()
 	E.DataTexts = DT;
-	
+
 	self.tooltip = CreateFrame("GameTooltip", "DatatextTooltip", E.UIParent, "GameTooltipTemplate");
 	TT:HookScript(self.tooltip, "OnShow", "SetStyle");
-	
+
 	self:RegisterLDB();
 	self:LoadDataTexts();
-	
+
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", "LoadDataTexts");
 end
 
@@ -46,7 +45,7 @@ function DT:RegisterLDB()
 				DT.tooltip:Show();
 			end
 		end
-		
+
 		if(obj.OnEnter) then
 			function OnEnter(self)
 				DT:SetupTooltip(self);
@@ -54,33 +53,33 @@ function DT:RegisterLDB()
 				DT.tooltip:Show();
 			end
 		end
-		
+
 		if(obj.OnLeave) then
 			function OnLeave(self)
 				obj.OnLeave(self);
 				DT.tooltip:Hide();
 			end
 		end
-		
+
 		local function OnClick(self, button)
 			obj.OnClick(self, button);
 		end
-		
-		local function textUpdate(event, name, key, value, dataobj)
+
+		local function textUpdate(_, name, _, value)
 			if(value == nil or (len(value) >= 3) or value == "n/a" or name == value) then
 				curFrame.text:SetText(value ~= "n/a" and value or name);
 			else
 				curFrame.text:SetFormattedText("%s: %s%s|r", name, hex, value);
 			end
 		end
-		
+
 		local function OnEvent(self)
 			curFrame = self;
 			LDB:RegisterCallback("LibDataBroker_AttributeChanged_" .. name .. "_text", textUpdate);
 			LDB:RegisterCallback("LibDataBroker_AttributeChanged_" .. name .. "_value", textUpdate);
 			LDB.callbacks:Fire("LibDataBroker_AttributeChanged_" .. name .. "_text", name, nil, obj.text, obj);
 		end
-		
+
 		self:RegisterDatatext(name, {"PLAYER_ENTER_WORLD"}, OnEvent, nil, OnClick, OnEnter, OnLeave);
 	end
 end
@@ -133,7 +132,7 @@ function DT:RegisterPanel(panel, numPoints, anchor, xOff, yOff)
 	DT.RegisteredPanels[panel:GetName()] = panel;
 	panel.dataPanels = {};
 	panel.numPoints = numPoints;
-	
+
 	panel.xOff = xOff;
 	panel.yOff = yOff;
 	panel.anchor = anchor;
@@ -148,10 +147,10 @@ function DT:RegisterPanel(panel, numPoints, anchor, xOff, yOff)
 			panel.dataPanels[pointIndex].text:SetJustifyH("CENTER");
 			panel.dataPanels[pointIndex].text:SetJustifyV("middle");
 		end
-		
+
 		panel.dataPanels[pointIndex]:Point(DT:GetDataPanelPoint(panel, i, numPoints));
 	end
-	
+
 	panel:SetScript("OnSizeChanged", DT.UpdateAllDimensions);
 	DT.UpdateAllDimensions(panel);
 end
@@ -161,13 +160,13 @@ function DT:AssignPanelToDataText(panel, data)
 	if(data["name"]) then
 		panel.name = data["name"];
 	end
-	
+
 	if(data["events"]) then
 		for _, event in pairs(data["events"]) do
 			panel:RegisterEvent(event);
 		end
 	end
-	
+
 	if(data["eventFunc"]) then
 		panel:SetScript("OnEvent", data["eventFunc"]);
 		data["eventFunc"](panel, "ELVUI_FORCE_RUN");
@@ -177,21 +176,21 @@ function DT:AssignPanelToDataText(panel, data)
 		panel:SetScript("OnUpdate", data["onUpdate"]);
 		data["onUpdate"](panel, 20000);
 	end
-	
+
 	if(data["onClick"]) then
 		panel:SetScript("OnClick", function(self, button)
 			if(E.db.datatexts.noCombatClick and InCombatLockdown()) then return; end
 			data["onClick"](self, button);
 		end);
 	end
-	
+
 	if(data["onEnter"]) then
 		panel:SetScript("OnEnter", function(self)
 			if(E.db.datatexts.noCombatHover and InCombatLockdown()) then return; end
 			data["onEnter"](self);
 		end);
 	end
-	
+
 	if(data["onLeave"]) then
 		panel:SetScript("OnLeave", data["onLeave"]);
 	else
@@ -204,7 +203,7 @@ function DT:LoadDataTexts()
 	for name, obj in LDB:DataObjectIterator() do
 		LDB:UnregisterAllCallbacks(self);
 	end
-	
+
 	local inInstance, instanceType = IsInInstance();
 	local fontTemplate = LSM:Fetch("font", self.db.font);
 	if(ElvConfigToggle) then
@@ -222,7 +221,7 @@ function DT:LoadDataTexts()
 			panel.dataPanels[pointIndex].text:SetWordWrap(self.db.wordWrap);
 			panel.dataPanels[pointIndex].text:SetText(nil);
 			panel.dataPanels[pointIndex].pointIndex = pointIndex;
-			
+
 			if((panelName == "LeftChatDataPanel" or panelName == "RightChatDataPanel") and (inInstance and (instanceType == "pvp")) and not DT.ForceHideBGStats and E.db.datatexts.battleground) then
 				panel.dataPanels[pointIndex]:RegisterEvent("UPDATE_BATTLEFIELD_SCORE");
 				panel.dataPanels[pointIndex]:RegisterEvent("PLAYER_REGEN_ENABLED");
@@ -248,7 +247,7 @@ function DT:LoadDataTexts()
 			end
 		end
 	end
-	
+
 	if(DT.ForceHideBGStats) then
 		DT.ForceHideBGStats = nil;
 	end
@@ -256,9 +255,9 @@ end
 
 --[[
 	DT:RegisterDatatext(name, events, eventFunc, updateFunc, clickFunc, onEnterFunc, onLeaveFunc)
-	
+
 	name - name of the datatext (required)
-	events - must be a table with string values of event names to register 
+	events - must be a table with string values of event names to register
 	eventFunc - function that gets fired when an event gets triggered
 	updateFunc - onUpdate script target function
 	click - function to fire when clicking the datatext
@@ -271,28 +270,28 @@ function DT:RegisterDatatext(name, events, eventFunc, updateFunc, clickFunc, onE
 	else
 		error("Cannot register datatext no name was provided.");
 	end
-	
+
 	DT.RegisteredDataTexts[name]["name"] = name;
-	
+
 	if(type(events) ~= "table" and events ~= nil) then
 		error("Events must be registered as a table.");
 	else
 		DT.RegisteredDataTexts[name]["events"] = events;
 		DT.RegisteredDataTexts[name]["eventFunc"] = eventFunc;
 	end
-	
+
 	if(updateFunc and type(updateFunc) == "function") then
 		DT.RegisteredDataTexts[name]["onUpdate"] = updateFunc;
 	end
-	
+
 	if(clickFunc and type(clickFunc) == "function") then
 		DT.RegisteredDataTexts[name]["onClick"] = clickFunc;
 	end
-	
+
 	if(onEnterFunc and type(onEnterFunc) == "function") then
 		DT.RegisteredDataTexts[name]["onEnter"] = onEnterFunc;
 	end
-	
+
 	if(onLeaveFunc and type(onLeaveFunc) == "function") then
 		DT.RegisteredDataTexts[name]["onLeave"] = onLeaveFunc;
 	end

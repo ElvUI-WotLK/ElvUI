@@ -10,24 +10,23 @@ function UF:Construct_DebuffHighlight(frame)
 	frame.DebuffHighlightFilter = true;
 	frame.DebuffHighlightAlpha = 0.45;
 	frame.DebuffHighlightFilterTable = E.global.unitframe.DebuffHighlightColors;
-	
+
 	frame:CreateShadow("Default");
 	local x = frame.shadow;
 	frame.shadow = nil;
 	x:Hide();
-	
+
 	frame.DBHGlow = x;
-	
+
 	if(frame.Health) then
 		dbh:SetParent(frame.Health);
 		frame.DBHGlow:SetParent(frame.Health);
 	end
-	
+
 	return dbh;
 end
 
 function UF:Configure_DebuffHighlight(frame)
-	local dbh = frame.DebuffHighlight;
 	if(E.db.unitframe.debuffHighlighting ~= "NONE") then
 		frame:EnableElement("DebuffHighlight");
 		frame.DebuffHighlightFilterTable = E.global.unitframe.DebuffHighlightColors;

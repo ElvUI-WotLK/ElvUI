@@ -2,7 +2,14 @@ local E, L, V, P, G = unpack(select(2, ...));
 local S = E:GetModule("Skins");
 
 local _G = _G;
-local unpack = unpack;
+local unpack, select = unpack, select;
+local find = string.find;
+
+local GetItemInfo = GetItemInfo;
+local GetItemQualityColor = GetItemQualityColor;
+local GetTradeSkillItemLink = GetTradeSkillItemLink;
+local GetTradeSkillReagentInfo = GetTradeSkillReagentInfo;
+local GetTradeSkillReagentItemLink = GetTradeSkillReagentItemLink;
 
 local function LoadSkin()
 	if(E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.tradeskill ~= true) then return; end
@@ -47,7 +54,6 @@ local function LoadSkin()
 
 	S:HandleCloseButton(TradeSkillFrameCloseButton);
 
-	local once = false;
 	hooksecurefunc("TradeSkillFrame_SetSelection", function(id)
 		TradeSkillSkillIcon:StyleButton(nil, true);
 		if(TradeSkillSkillIcon:GetNormalTexture()) then
@@ -56,32 +62,93 @@ local function LoadSkin()
 		end
 		TradeSkillSkillIcon:SetTemplate("Default");
 
-		for i = 1, MAX_TRADE_SKILL_REAGENTS do
+		local skillLink = GetTradeSkillItemLink(id)
+		if(skillLink) then
+			local quality = select(3, GetItemInfo(skillLink));
+			if(quality and quality > 1) then
+				TradeSkillSkillIcon:SetBackdropBorderColor(GetItemQualityColor(quality));
+			else
+				TradeSkillSkillIcon:SetBackdropBorderColor(unpack(E["media"].bordercolor));
+			end
+		end
+
+		local numReagents = GetTradeSkillNumReagents(id);
+		for i = 1, numReagents, 1 do
+			local reagentName, reagentTexture = GetTradeSkillReagentInfo(id, i);
+			local reagentLink = GetTradeSkillReagentItemLink(id, i);
 			local reagent = _G["TradeSkillReagent" .. i];
-			local iconTexture = _G["TradeSkillReagent" .. i .. "IconTexture"];
+			local icon = _G["TradeSkillReagent" .. i .. "IconTexture"];
 			local count = _G["TradeSkillReagent" .. i .. "Count"];
 
-			iconTexture:SetTexCoord(unpack(E.TexCoords));
-			iconTexture:SetDrawLayer("OVERLAY");
+			if((reagentName or reagentTexture) and not reagent.isSkinned) then
+				icon:SetTexCoord(unpack(E.TexCoords));
+				icon:SetDrawLayer("OVERLAY");
 
-			if(not reagent.backdrop) then
-				S:HandleIcon(iconTexture);
+				icon.backdrop = CreateFrame("Frame", nil, reagent);
+				icon.backdrop:SetFrameLevel(reagent:GetFrameLevel() - 1);
+				icon.backdrop:SetTemplate("Default");
+				icon.backdrop:SetOutside(icon);
+
+				icon:SetParent(icon.backdrop);
+				count:SetParent(icon.backdrop);
+				count:SetDrawLayer("OVERLAY");
+
+				_G["TradeSkillReagent" .. i .. "NameFrame"]:Kill();
+				reagent.isSkinned = true;
 			end
 
-			iconTexture:SetParent(reagent.backdrop);
-			count:SetParent(reagent.backdrop);
-			count:SetDrawLayer("OVERLAY");
-
-			if(i > 2 and once == false) then
-				local point, anchoredto, point2, x, y = reagent:GetPoint();
-				reagent:ClearAllPoints();
-				reagent:Point(point, anchoredto, point2, x, y - 3);
-				once = true;
+			if(reagentLink) then
+				local quality = select(3, GetItemInfo(reagentLink));
+				if(quality and quality > 1) then
+					_G["TradeSkillReagent" .. i .. "IconTexture"].backdrop:SetBackdropBorderColor(GetItemQualityColor(quality));
+				else
+					_G["TradeSkillReagent" .. i .. "IconTexture"].backdrop:SetBackdropBorderColor(unpack(E["media"].bordercolor));
+				end
 			end
+		end
+	end);
 
-			_G["TradeSkillReagent" .. i .. "NameFrame"]:Kill();
+	for i = 1, TRADE_SKILLS_DISPLAYED do
+		local skillButton = _G["TradeSkillSkill" .. i];
+		skillButton:SetNormalTexture("");
+		skillButton.SetNormalTexture = E.noop;
+
+		_G["TradeSkillSkill" .. i .. "Highlight"]:SetTexture("");
+		_G["TradeSkillSkill" .. i .. "Highlight"].SetTexture = E.noop;
+
+		skillButton.Text = skillButton:CreateFontString(nil, "OVERLAY");
+		skillButton.Text:FontTemplate(nil, 22);
+		skillButton.Text:Point("LEFT", 3, 0);
+		skillButton.Text:SetText("+");
+
+		hooksecurefunc(skillButton, "SetNormalTexture", function(self, texture)
+			if(find(texture, "MinusButton")) then
+				self.Text:SetText("-");
+			elseif(find(texture, "PlusButton")) then
+				self.Text:SetText("+");
+			else
+				self.Text:SetText("");
+			end
+		end);
+	end
+
+	TradeSkillCollapseAllButton:SetNormalTexture("");
+	TradeSkillCollapseAllButton.SetNormalTexture = E.noop;
+	TradeSkillCollapseAllButton:SetHighlightTexture("");
+	TradeSkillCollapseAllButton.SetHighlightTexture = E.noop;
+
+	TradeSkillCollapseAllButton.Text = TradeSkillCollapseAllButton:CreateFontString(nil, "OVERLAY");
+	TradeSkillCollapseAllButton.Text:FontTemplate(nil, 22);
+	TradeSkillCollapseAllButton.Text:Point("LEFT", 3, 0);
+	TradeSkillCollapseAllButton.Text:SetText("+");
+
+	hooksecurefunc(TradeSkillCollapseAllButton, "SetNormalTexture", function(self, texture)
+		if(find(texture, "MinusButton")) then
+			self.Text:SetText("-");
+		else
+			self.Text:SetText("+");
 		end
 	end);
 end
 
-S:RegisterSkin("Blizzard_TradeSkillUI", LoadSkin);
+S:AddCallbackForAddon("Blizzard_TradeSkillUI", "TradeSkill", LoadSkin);

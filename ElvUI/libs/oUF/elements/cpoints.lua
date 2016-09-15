@@ -1,7 +1,8 @@
-local parent, ns = ...
+local _, ns = ...
 local oUF = ns.oUF
 
 local GetComboPoints = GetComboPoints
+local UnitHasVehicleUI = UnitHasVehicleUI
 local MAX_COMBO_POINTS = MAX_COMBO_POINTS
 
 local Update = function(self, event, unit)

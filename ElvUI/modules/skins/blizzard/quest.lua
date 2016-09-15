@@ -1,6 +1,8 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local S = E:GetModule("Skins")
 
+local find = string.find;
+
 local function LoadSkin()
 	if(E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.quest ~= true) then return; end
 
@@ -86,7 +88,7 @@ local function LoadSkin()
 		end
 	end
 
-	hooksecurefunc("QuestInfo_Display", function(template, parentFrame, acceptButton, material)								
+	hooksecurefunc("QuestInfo_Display", function()
 		local textColor = {1, 1, 1};
 		local titleTextColor = {1, 1, 0};
 
@@ -137,10 +139,11 @@ local function LoadSkin()
 	QuestLogFrame:HookScript("OnShow", function()
 		QuestLogScrollFrame:Height(331);
 		QuestLogDetailScrollFrame:Height(328);
-
 		if(not QuestLogDetailScrollFrame.backdrop) then
-			QuestLogScrollFrame:SetTemplate("Default");
+			QuestLogScrollFrame:CreateBackdrop("Default");
+			QuestLogScrollFrame.backdrop:SetFrameLevel(QuestLogScrollFrame:GetFrameLevel() - 3)
 			QuestLogDetailScrollFrame:CreateBackdrop("Default");
+			QuestLogDetailScrollFrame.backdrop:SetFrameLevel(QuestLogDetailScrollFrame:GetFrameLevel() - 2)
 		end
 	end);
 
@@ -164,6 +167,7 @@ local function LoadSkin()
 	S:HandleScrollBar(QuestLogDetailScrollFrameScrollBar);
 	S:HandleScrollBar(QuestDetailScrollFrameScrollBar);
 	S:HandleScrollBar(QuestLogScrollFrameScrollBar, 5);
+	QuestLogScrollFrameScrollBar:Point("RIGHT", 25, 0)
 	S:HandleScrollBar(QuestProgressScrollFrameScrollBar);
 	S:HandleScrollBar(QuestRewardScrollFrameScrollBar);
 
@@ -190,6 +194,29 @@ local function LoadSkin()
 		QuestProgressRequiredItemsText:SetTextColor(1, 1, 0);
 		QuestProgressRequiredMoneyText:SetTextColor(1, 1, 0);
 	end);
+
+	for i = 1, #QuestLogScrollFrame.buttons do
+		local questLogTitle = _G["QuestLogScrollFrameButton" .. i];
+		questLogTitle:SetNormalTexture("");
+		questLogTitle.SetNormalTexture = E.noop;
+		questLogTitle:SetHighlightTexture("");
+		questLogTitle.SetHighlightTexture = E.noop;
+
+		questLogTitle.Text = questLogTitle:CreateFontString(nil, "OVERLAY");
+		questLogTitle.Text:FontTemplate(nil, 22);
+		questLogTitle.Text:Point("LEFT", 3, 0);
+		questLogTitle.Text:SetText("+");
+
+		hooksecurefunc(questLogTitle, "SetNormalTexture", function(self, texture)
+			if(find(texture, "MinusButton")) then
+				self.Text:SetText("-");
+			elseif(find(texture, "PlusButton")) then
+				self.Text:SetText("+");
+			else
+				self.Text:SetText("");
+			end
+		end);
+	end
 end
 
-S:RegisterSkin("ElvUI", LoadSkin);
+S:AddCallback("Quest", LoadSkin);

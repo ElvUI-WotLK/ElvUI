@@ -1,7 +1,6 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local UF = E:GetModule("UnitFrames");
 
-local pairs = pairs;
 local tinsert = table.insert;
 
 local CreateFrame = CreateFrame;
@@ -18,11 +17,11 @@ assert(ElvUF, "ElvUI was unable to locate oUF.");
 function UF:Construct_Raid40Frames(unitGroup)
 	self:SetScript("OnEnter", UnitFrame_OnEnter);
 	self:SetScript("OnLeave", UnitFrame_OnLeave);
-	
+
 	self.RaisedElementParent = CreateFrame("Frame", nil, self);
 	self.RaisedElementParent:SetFrameStrata("MEDIUM");
 	self.RaisedElementParent:SetFrameLevel(self:GetFrameLevel() + 10);
-	
+
 	self.Health = UF:Construct_HealthBar(self, true, true, "RIGHT");
 	self.Power = UF:Construct_PowerBar(self, true, true, "LEFT");
 	self.Power.frequentUpdates = false;
@@ -48,7 +47,7 @@ function UF:Construct_Raid40Frames(unitGroup)
 	self.GPS = UF:Construct_GPS(self);
 	self.Range = UF:Construct_Range(self);
 	self.customTexts = {};
-	
+
 	UF:Update_StatusBars();
 	UF:Update_FontStrings();
 	self.unitframeType = "raid40";
@@ -64,9 +63,9 @@ function UF:Raid40SmartVisibility(event)
 		self.blockVisibilityChanges = false;
 		return;
 	end
-	
+
 	if(event == "PLAYER_REGEN_ENABLED") then self:UnregisterEvent("PLAYER_REGEN_ENABLED") end
-	
+
 	if(not InCombatLockdown()) then
 		self.isInstanceForced = nil;
 		local inInstance, instanceType = IsInInstance();
@@ -76,9 +75,9 @@ function UF:Raid40SmartVisibility(event)
 			if(UF.mapIDs[mapID]) then
 				maxPlayers = UF.mapIDs[mapID];
 			end
-			
+
 			UnregisterStateDriver(self, "visibility");
-			
+
 			if(maxPlayers == 40) then
 				self:Show();
 				self.isInstanceForced = true;
@@ -105,28 +104,28 @@ end
 
 function UF:Update_Raid40Header(header, db, isForced)
 	header:GetParent().db = db;
-	
+
 	local headerHolder = header:GetParent();
 	headerHolder.db = db;
-	
+
 	if(not headerHolder.positioned) then
 		headerHolder:ClearAllPoints();
 		headerHolder:Point("BOTTOMLEFT", E.UIParent, "BOTTOMLEFT", 4, 195);
-		
+
 		E:CreateMover(headerHolder, headerHolder:GetName() .. "Mover", L["Raid-40 Frames"], nil, nil, nil, "ALL,RAID");
-		
+
 		headerHolder:RegisterEvent("PLAYER_LOGIN");
 		headerHolder:RegisterEvent("ZONE_CHANGED_NEW_AREA");
 		headerHolder:SetScript("OnEvent", UF["Raid40SmartVisibility"]);
 		headerHolder.positioned = true;
 	end
-	
+
 	UF.Raid40SmartVisibility(headerHolder);
 end
 
 function UF:Update_Raid40Frames(frame, db)
 	frame.db = db;
-	
+
 	frame.Portrait = frame.Portrait or (db.portrait.style == "2D" and frame.Portrait2D or frame.Portrait3D);
 	frame.colors = ElvUF.colors;
 	frame:RegisterForClicks(self.db.targetOnMouseDown and "AnyDown" or "AnyUp");
@@ -139,83 +138,83 @@ function UF:Update_Raid40Frames(frame, db)
 			frame.BORDER = E.Border;
 			frame.SPACING = E.Spacing;
 		end
-		
+
 		frame.SHADOW_SPACING = 3;
 		frame.ORIENTATION = db.orientation;
-		
+
 		frame.UNIT_WIDTH = db.width;
 		frame.UNIT_HEIGHT = (E.global.tukuiMode and not db.infoPanel.enable) and db.height + db.infoPanel.height or db.height;
-		
+
 		frame.USE_POWERBAR = db.power.enable;
 		frame.POWERBAR_DETACHED = db.power.detachFromFrame;
 		frame.USE_INSET_POWERBAR = not frame.POWERBAR_DETACHED and db.power.width == "inset" and frame.USE_POWERBAR;
 		frame.USE_MINI_POWERBAR = (not frame.POWERBAR_DETACHED and db.power.width == "spaced" and frame.USE_POWERBAR);
 		frame.USE_POWERBAR_OFFSET = db.power.offset ~= 0 and frame.USE_POWERBAR and not frame.POWERBAR_DETACHED;
 		frame.POWERBAR_OFFSET = frame.USE_POWERBAR_OFFSET and db.power.offset or 0;
-		
+
 		frame.POWERBAR_HEIGHT = not frame.USE_POWERBAR and 0 or db.power.height;
 		frame.POWERBAR_WIDTH = frame.USE_MINI_POWERBAR and (frame.UNIT_WIDTH - (frame.BORDER*2))/2 or (frame.POWERBAR_DETACHED and db.power.detachedWidth or (frame.UNIT_WIDTH - ((frame.BORDER+frame.SPACING)*2)));
-		
+
 		frame.USE_PORTRAIT = db.portrait and db.portrait.enable;
 		frame.USE_PORTRAIT_OVERLAY = frame.USE_PORTRAIT and (db.portrait.overlay or frame.ORIENTATION == "MIDDLE");
 		frame.PORTRAIT_WIDTH = (frame.USE_PORTRAIT_OVERLAY or not frame.USE_PORTRAIT) and 0 or db.portrait.width;
-		
+
 		frame.CLASSBAR_WIDTH = 0;
 		frame.CLASSBAR_YOFFSET = 0;
-		
+
 		frame.USE_INFO_PANEL = not frame.USE_MINI_POWERBAR and not frame.USE_POWERBAR_OFFSET and (db.infoPanel.enable or E.global.tukuiMode);
 		frame.INFO_PANEL_HEIGHT = frame.USE_INFO_PANEL and db.infoPanel.height or 0;
-		
+
 		frame.BOTTOM_OFFSET = UF:GetHealthBottomOffset(frame);
 	end
-	
+
 	if(not InCombatLockdown()) then
 		frame:Size(frame.UNIT_WIDTH, frame.UNIT_HEIGHT);
 	else
 		frame:SetAttribute("initial-height", frame.UNIT_HEIGHT);
 		frame:SetAttribute("initial-width", frame.UNIT_WIDTH);
 	end
-	
+
 	UF:Configure_InfoPanel(frame)
-	
+
 	UF:Configure_HealthBar(frame);
-	
+
 	UF:UpdateNameSettings(frame);
-	
+
 	UF:Configure_Power(frame);
-	
+
 	UF:Configure_Portrait(frame);
-	
+
 	UF:Configure_Threat(frame);
-	
+
 	UF:Configure_TargetGlow(frame);
-	
+
 	UF:EnableDisable_Auras(frame);
 	UF:Configure_Auras(frame, "Buffs");
 	UF:Configure_Auras(frame, "Debuffs");
-	
+
 	UF:Configure_RaidDebuffs(frame);
-	
+
 	UF:Configure_RaidIcon(frame);
-	
+
 	UF:Configure_DebuffHighlight(frame);
-	
+
 	UF:Configure_RoleIcon(frame);
-	
+
 	UF:Configure_HealComm(frame);
-	
+
 	UF:Configure_GPS(frame);
-	
+
 	UF:Configure_RaidRoleIcons(frame);
-	
+
 	UF:Configure_Range(frame);
-	
+
 	UF:UpdateAuraWatch(frame);
-	
+
 	UF:Configure_ReadyCheckIcon(frame);
-	
+
 	UF:Configure_CustomTexts(frame);
-	
+
 	frame:UpdateAllElements();
 end
 

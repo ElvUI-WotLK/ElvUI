@@ -1,30 +1,34 @@
-local parent, ns = ...;
+local _, ns = ...;
 local oUF = ns.oUF;
+
+local UnitFactionGroup = UnitFactionGroup;
+local UnitIsPVPFreeForAll = UnitIsPVPFreeForAll;
+local UnitIsPVP = UnitIsPVP;
 
 local Update = function(self, event, unit)
 	if(unit ~= self.unit) then return; end
-	
+
 	local pvp = self.PvP;
 	if(pvp.PreUpdate) then
 		pvp:PreUpdate();
 	end
-	
+
 	local status;
 	local factionGroup = UnitFactionGroup(unit);
 	if(UnitIsPVPFreeForAll(unit)) then
 		pvp:SetTexture([[Interface\TargetingFrame\UI-PVP-FFA]]);
 		status = "ffa";
 	elseif(factionGroup and UnitIsPVP(unit)) then
-		pvp:SetTexture([[Interface\TargetingFrame\UI-PVP-]]..factionGroup);
+		pvp:SetTexture([[Interface\TargetingFrame\UI-PVP-]] .. factionGroup);
 		status = factionGroup;
 	end
-	
+
 	if(status) then
 		pvp:Show();
 	else
 		pvp:Hide();
 	end
-	
+
 	if(pvp.PostUpdate) then
 		return pvp:PostUpdate(status);
 	end
@@ -43,9 +47,9 @@ local Enable = function(self)
 	if(pvp) then
 		pvp.__owner = self;
 		pvp.ForceUpdate = ForceUpdate;
-		
+
 		self:RegisterEvent("UNIT_FACTION", Path);
-		
+
 		return true;
 	end
 end

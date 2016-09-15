@@ -19,7 +19,7 @@ local function LoadSkin()
 
 	for _, object in pairs(StripAllTextures) do
 		if(not _G[object]) then print(object) end
-		
+
 		if(_G[object]) then
 			_G[object]:StripTextures()
 		end
@@ -41,10 +41,9 @@ local function LoadSkin()
 	end
 
 	hooksecurefunc("RaidClassButton_Update", function()
-		local button, icon, count;
+		local button, icon;
 		for index, value in pairs(RAID_CLASS_BUTTONS) do
 			button = _G["RaidClassButton" .. value.button];
-			count = _G["RaidClassButton" .. value.button .. "Count"];
 			icon = _G["RaidClassButton" .. value.button .. "IconTexture"];
 
 			button:StripTextures();
@@ -83,7 +82,7 @@ local function LoadSkin()
 		end
 	end
 
-	hooksecurefunc("RaidPullout_GetFrame", function(...)
+	hooksecurefunc("RaidPullout_GetFrame", function()
 		skinPulloutFrames();
 	end);
 
@@ -101,7 +100,7 @@ local function LoadSkin()
 
 				_G[pfBName .. "ManaBar"]:Point("TOP", "$parentHealthBar", "BOTTOM", 0, 0);
 				_G[pfBName .. "Target"]:Point("TOP", "$parentManaBar", "BOTTOM", 0, -1);
-				
+
 				pfBObj:CreateBackdrop("Default");
 				pfBObj.backdrop:Point("TOPLEFT", E.PixelMode and 0 or -1, -(E.PixelMode and 10 or 9));
 				pfBObj.backdrop:Point("BOTTOMRIGHT", E.PixelMode and 0 or 1, E.PixelMode and 1 or 0);
@@ -117,4 +116,4 @@ local function LoadSkin()
 	end);
 end
 
-S:RegisterSkin("Blizzard_RaidUI", LoadSkin);
+S:AddCallbackForAddon("Blizzard_RaidUI", "RaidUI", LoadSkin);

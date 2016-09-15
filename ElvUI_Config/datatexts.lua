@@ -3,12 +3,12 @@ local DT = E:GetModule("DataTexts");
 
 local datatexts = {};
 
-function DT:PanelLayoutOptions()	
+function DT:PanelLayoutOptions()
 	for name, _ in pairs(DT.RegisteredDataTexts) do
 		datatexts[name] = name;
 	end
 	datatexts[""] = NONE;
-	
+
 	local order;
 	local table = E.Options.args.datatexts.args.panels.args;
 	for pointLoc, tab in pairs(P.datatexts.panels) do
@@ -203,7 +203,6 @@ E.Options.args.datatexts = {
 						end
 						E:GetModule("Chat"):UpdateAnchors();
 						E:GetModule("Layout"):ToggleChatPanels();
-						E:GetModule("Bags"):PositionBagFrames();
 					end
 				},
 				rightChatPanel = {
@@ -219,7 +218,6 @@ E.Options.args.datatexts = {
 						end
 						E:GetModule("Chat"):UpdateAnchors();
 						E:GetModule("Layout"):ToggleChatPanels();
-						E:GetModule("Bags"):PositionBagFrames();
 					end
 				},
 				minimapPanels = {

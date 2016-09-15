@@ -1,4 +1,4 @@
-﻿local E, L, V, P, G = unpack(select(2, ...));
+local E, L, V, P, G = unpack(select(2, ...));
 local DT = E:GetModule("DataTexts");
 
 local ATTACK_SPEED = ATTACK_SPEED;
@@ -16,7 +16,7 @@ local format = string.format;
 local join = string.join;
 local lastPanel;
 
-local function OnEvent(self, event, unit)
+local function OnEvent(self)
 	local hasteRating;
 	if(E.Role == "Caster") then
 		hasteRating = GetCombatRating(CR_HASTE_SPELL);
@@ -31,7 +31,7 @@ end
 
 local function OnEnter(self)
 	DT:SetupTooltip(self);
-	
+
 	local text, tooltip;
 	if(E.Role == "Caster") then
 		text = SPELL_HASTE;
@@ -45,7 +45,7 @@ local function OnEnter(self)
 		if(offhandSpeed) then
 			offhandSpeed = format("%.2F", offhandSpeed);
 		end
-		local string;	
+		local string;
 		if(offhandSpeed) then
 			string = speed.." / "..offhandSpeed;
 		else
@@ -54,19 +54,19 @@ local function OnEnter(self)
 		text = format(PAPERDOLLFRAME_TOOLTIP_FORMAT, ATTACK_SPEED).." "..string;
 		tooltip = format(CR_HASTE_RATING_TOOLTIP, GetCombatRating(CR_HASTE_MELEE), GetCombatRatingBonus(CR_HASTE_MELEE));
 	end
-	
+
 	DT.tooltip:AddLine(text, 1, 1, 1);
 	DT.tooltip:AddLine(tooltip, nil, nil, nil, true);
 	DT.tooltip:Show();
 end
 
-local function ValueColorUpdate(hex, r, g, b)
+local function ValueColorUpdate(hex)
 	displayNumberString = join("", "%s: ", hex, "%d|r");
-	
+
 	if(lastPanel ~= nil)then
 		OnEvent(lastPanel);
 	end
 end
 E["valueColorUpdateFuncs"][ValueColorUpdate] = true;
 
-DT:RegisterDatatext(SPEED, { "UNIT_ATTACK_SPEED", "UNIT_STATS", "UNIT_AURA", "ACTIVE_TALENT_GROUP_CHANGED", "PLAYER_TALENT_UPDATE", "UNIT_SPELL_HASTE", "PLAYER_DAMAGE_DONE_MODS" }, OnEvent, nil, nil, OnEnter);
+DT:RegisterDatatext("Haste", { "UNIT_ATTACK_SPEED", "UNIT_STATS", "UNIT_AURA", "ACTIVE_TALENT_GROUP_CHANGED", "PLAYER_TALENT_UPDATE", "UNIT_SPELL_HASTE", "PLAYER_DAMAGE_DONE_MODS" }, OnEvent, nil, nil, OnEnter);

@@ -24,7 +24,7 @@ function TOTEMS:Update(event)
 				if(_G["TotemFrameTotem" .. d .. "IconTexture"]:GetTexture() == icon) then
 					_G["TotemFrameTotem" .. d]:ClearAllPoints();
 					_G["TotemFrameTotem" .. d]:SetParent(self.bar[i].holder);
-					_G["TotemFrameTotem" .. d]:SetAllPoints(self.bar[i].holder);		
+					_G["TotemFrameTotem" .. d]:SetAllPoints(self.bar[i].holder);
 				end
 			end
 		else

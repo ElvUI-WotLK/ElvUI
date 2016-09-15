@@ -42,5 +42,6 @@
 	<Script file='trade.lua'/>
 	<Script file='tradeskill.lua'/>
 	<Script file='trainer.lua'/>
+	<Script file='tutorial.lua'/>
 	<Script file='worldmap.lua'/>
 </Ui>

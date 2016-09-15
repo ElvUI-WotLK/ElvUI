@@ -2,9 +2,7 @@ local E, L, V, P, G = unpack(select(2, ...));
 local M = E:NewModule("Misc", "AceEvent-3.0", "AceTimer-3.0");
 E.Misc = M;
 
-local floor = math.floor;
 local format, gsub = string.format, string.gsub;
-local UnitGUID = UnitGUID;
 local UIErrorsFrame = UIErrorsFrame;
 local MAX_PARTY_MEMBERS = MAX_PARTY_MEMBERS;
 
@@ -22,11 +20,11 @@ end
 function M:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, _, sourceName, _, _, destName, _, _, _, _, spellID, spellName)
 	if(E.db.general.interruptAnnounce == "NONE") then return; end -- No Announcement configured, exit.
 	if not (event == "SPELL_INTERRUPT" and sourceName == UnitName("player")) then return; end -- No annoucable interrupt from player, exit.
-	
+
 	local party, raid = GetNumPartyMembers(), GetNumRaidMembers();
 	local _, instanceType = IsInInstance();
 	local battleground = instanceType == "pvp";
-	
+
 	if(E.db.general.interruptAnnounce == "PARTY") then
 		if(party > 0) then
 			SendChatMessage(format(interruptMsg, destName, spellID, spellName), battleground and "BATTLEGROUND" or "PARTY");
@@ -45,6 +43,10 @@ function M:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, _, sourceName, _, _, destNam
 		if(party > 0) then
 			SendChatMessage(format(interruptMsg, destName, spellID, spellName), "SAY");
 		end
+	elseif E.db.general.interruptAnnounce == "EMOTE" then
+		if(party > 0) then
+			SendChatMessage(format(interruptMsg, destName, spellID, spellName), "EMOTE")
+		end
 	end
 end
 
@@ -55,17 +57,17 @@ function M:MERCHANT_SHOW()
 
 	local autoRepair = E.db.general.autoRepair
 	if IsShiftKeyDown() or autoRepair == "NONE" or not CanMerchantRepair() then return end
-	
+
 	local cost, possible = GetRepairAllCost()
 	local withdrawLimit = GetGuildBankWithdrawMoney();
 	if autoRepair == "GUILD" and (not CanGuildBankRepair() or cost > withdrawLimit) then
 		autoRepair = "PLAYER"
 	end
-		
+
 	if cost > 0 then
 		if possible then
 			RepairAllItems(autoRepair == "GUILD")
-			
+
 			if autoRepair == "GUILD" then
 				E:Print(L["Your items have been repaired using guild bank funds for: "]..GetCoinTextureString(cost, 12))
 			else
@@ -98,10 +100,10 @@ function M:DisbandRaidGroup()
 end
 
 function M:CheckMovement()
-	if E.db.general.mapAlpha == 100 or not WorldMapFrame:IsShown() then return end
-	
+	if E.global.general.mapAlphaWhenMoving == 100 or not WorldMapFrame:IsShown() then return end
+
 	if GetUnitSpeed("player") ~= 0 then
-		WorldMapFrame:SetAlpha(E.db.general.mapAlpha)
+		WorldMapFrame:SetAlpha(E.global.general.mapAlphaWhenMoving)
 	else
 		WorldMapFrame:SetAlpha(1)
 	end
@@ -123,12 +125,12 @@ function M:AutoInvite(event, leaderName)
 		if MiniMapLFGFrame:IsShown() then return end -- Prevent losing que inside LFD if someone invites you to group
 		if GetNumPartyMembers() > 0 or GetNumRaidMembers() > 0 then return end
 		hideStatic = true
-	
+
 		-- Update Guild and Friendlist
 		if GetNumFriends() > 0 then ShowFriends() end
 		if IsInGuild() then GuildRoster() end
 		local inGroup = false;
-		
+
 		for friendIndex = 1, GetNumFriends() do
 			local friendName = gsub(GetFriendInfo(friendIndex), "-.*", "")
 			if friendName == leaderName then
@@ -137,7 +139,7 @@ function M:AutoInvite(event, leaderName)
 				break
 			end
 		end
-		
+
 		if not inGroup then
 			for guildIndex = 1, GetNumGuildMembers(true) do
 				local guildMemberName = gsub(GetGuildRosterInfo(guildIndex), "-.*", "")
@@ -148,7 +150,7 @@ function M:AutoInvite(event, leaderName)
 				end
 			end
 		end
-		
+
 		if not inGroup then
 			for bnIndex = 1, BNGetNumFriends() do
 				local _, _, _, name = BNGetFriendInfo(bnIndex)
@@ -175,13 +177,22 @@ function M:PLAYER_ENTERING_WORLD()
 	self:ForceCVars()
 end
 
-function M:Kill()
+function M:ADDON_LOADED(_, addon)
+	if addon == "Blizzard_TradeSkillUI" then
+		TradeSkillLinkButton:SetScript("OnClick", function(self, button)
+			local link = GetTradeSkillListLink()
+			local ChatFrameEditBox = ChatEdit_ChooseBoxForSend()
 
+			if not ChatFrameEditBox:IsShown() then
+				ChatEdit_ActivateChat(ChatFrameEditBox)
+			end
+
+			ChatFrameEditBox:Insert(link)
+		end)
+	end
 end
 
 function M:Initialize()
-	M:ScheduleTimer("Kill", 8)
-	
 	self:LoadRaidMarker();
 	self:LoadLoot()
 	self:LoadLootRoll()
@@ -197,9 +208,9 @@ function M:Initialize()
 	self:RegisterEvent("PARTY_MEMBERS_CHANGED", "AutoInvite")
 	self:RegisterEvent("CVAR_UPDATE", "ForceCVars")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
-	
+	self:RegisterEvent("ADDON_LOADED")
+
 	self.MovingTimer = self:ScheduleRepeatingTimer("CheckMovement", 0.1)
-	--self:Kill()
 end
 
 E:RegisterModule(M:GetName())

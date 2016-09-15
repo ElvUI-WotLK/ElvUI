@@ -1,4 +1,4 @@
-﻿--[[
+--[[
 LibDualSpec-1.0 - Adds dual spec support to individual AceDB-3.0 databases
 Copyright (C) 2009 Adirelle
 
@@ -120,7 +120,7 @@ end
 -- Mixin
 -- ----------------------------------------------------------------------------
 
---- Get dual spec feature status. 
+--- Get dual spec feature status.
 -- @return (boolean) true is dual spec feature enabled.
 -- @name enhancedDB:IsDualSpecEnabled
 function mixin:IsDualSpecEnabled()
@@ -135,7 +135,7 @@ function mixin:SetDualSpecEnabled(enabled)
 	if enabled and not db.char.talentGroup then
 		db.char.talentGroup = lib.talentGroup
 		db.char.profile = self:GetCurrentProfile()
-		db.char.enabled = true	
+		db.char.enabled = true
 	else
 		db.char.enabled = enabled
 		self:CheckDualSpecState()
@@ -152,7 +152,7 @@ end
 
 --- Set the alternate profile name.
 -- No validation are done to ensure the profile is valid.
--- @param profileName (string) the profile name to use. 
+-- @param profileName (string) the profile name to use.
 -- @name enhancedDB:SetDualSpecProfile
 function mixin:SetDualSpecProfile(profileName)
 	registry[self].db.char.profile = profileName

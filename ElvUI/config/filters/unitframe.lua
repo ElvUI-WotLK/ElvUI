@@ -1,9 +1,8 @@
-﻿local E, L, V, P, G, _ = unpack(select(2, ...));
+local E, L, V, P, G, _ = unpack(select(2, ...));
 
 local print, unpack = print, unpack;
 
 local GetSpellInfo = GetSpellInfo;
-local UnitClass = UnitClass;
 
 local function SpellName(id)
 	local name, _, _, _, _, _, _, _, _ = GetSpellInfo(id);
@@ -108,7 +107,7 @@ G.unitframe.aurafilters["CCDebuffs"] = {
 		[SpellName(25046)] = Defaults(), -- Волшебный поток
 		[SpellName(20549)] = Defaults(), -- Громовой поступь
 	--PVE Дебаффы
-		
+
 	-- Король лич
 		[SpellName(73787)] = Defaults() -- Мертвящая чума
 	}
@@ -130,7 +129,7 @@ G.unitframe.aurafilters["TurtleBuffs"] = {
 		[SpellName(47585)] = Defaults(5), -- Слияние с тьмой
 		[SpellName(47788)] = Defaults(), -- Оберегающий дух
 	-- Чернокнижник
-	
+
 	-- Друид
 		[SpellName(22812)] = Defaults(2), -- Дубовая кожа
 		[SpellName(61336)] = Defaults(), -- Инстинкт выживания
@@ -181,13 +180,13 @@ G.unitframe.aurafilters["PlayerBuffs"] = {
 		[SpellName(47585)] = Defaults(), -- Слияние с тьмой
 		[SpellName(47788)] = Defaults(), -- Оберегающий дух
 	-- Чернокнижник
-	
+
 	-- Друид
-	
+
 	-- Охотник
-	
+
 	-- Разбойник
-	
+
 	-- Шаман
 		[SpellName(2825)] = Defaults(), -- Жажда крови
 		[SpellName(8178)] = Defaults(), -- Эффект тотема заземления
@@ -198,9 +197,9 @@ G.unitframe.aurafilters["PlayerBuffs"] = {
 		[SpellName(32182)] = Defaults(), -- Героизм
 		[SpellName(58875)] = Defaults(), -- Поступь духа
 	-- Паладин
-	
+
 	-- Воин
-	
+
 	-- Рассовые
 		[SpellName(20594)] = Defaults(), -- Каменная форма
 		[SpellName(59545)] = Defaults(), -- Дар наару
@@ -277,7 +276,7 @@ G.unitframe.aurafilters["Whitelist"] = {
 G.unitframe.aurafilters["Whitelist (Strict)"] = {
 	["type"] = "Whitelist",
 	["spells"] = {
-		
+
 	}
 };
 
@@ -372,7 +371,7 @@ local function ClassBuff(id, point, color, anyUnit, onlyShowMissing, style, disp
 	if(textColor) then
 		r2, g2, b2 = unpack(textColor);
 	end
-	
+
 	return {["enabled"] = true, ["id"] = id, ["point"] = point, ["color"] = {["r"] = r, ["g"] = g, ["b"] = b},
 	["anyUnit"] = anyUnit, ["onlyShowMissing"] = onlyShowMissing, ["style"] = style or "coloredIcon", ["displayText"] = displayText or false, ["decimalThreshold"] = decimalThreshold or 5,
 	["textColor"] = {["r"] = r2, ["g"] = g2, ["b"] = b2}, ["textThreshold"] = textThreshold or -1, ["xOffset"] = xOffset or 0, ["yOffset"] = yOffset or 0};
@@ -452,7 +451,7 @@ G.unitframe.AuraBarColors = {
 };
 
 G.unitframe.InvalidSpells = {
-	
+
 };
 
 G.unitframe.DebuffHighlightColors = {

@@ -8,7 +8,7 @@
 	<Script file="units.lua"/>
 	<Script file="colors.lua"/>
 	<Script file="finalize.lua"/>
-	
+
 	<Script file='elements\assistant.lua' />
 	<Script file='elements\aura.lua' />
 	<Script file='elements\castbar.lua' />
@@ -29,5 +29,4 @@
 	<Script file='elements\runebar.lua' />
 	<Script file='elements\tags.lua' />
 	<Script file='elements\threat.lua' />
-	<Script file='elements\vehicle.lua' />
 </Ui>

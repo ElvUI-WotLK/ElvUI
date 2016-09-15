@@ -13,29 +13,30 @@ local GetBackpackCurrencyInfo = GetBackpackCurrencyInfo;
 local MAX_WATCHED_TOKENS = MAX_WATCHED_TOKENS;
 local CURRENCY = CURRENCY;
 
+local currencyString = "|T%s:14:14:0:0:64:64:4:60:4:60|t %s";
 local Profit = 0;
 local Spent = 0;
 local resetInfoFormatter = join("", "|cffaaaaaa", L["Reset Data: Hold Shift + Right Click"], "|r");
 
-local function OnEvent(self, event, ...)
+local function OnEvent(self)
 	if(not IsLoggedIn()) then return; end
 	local NewMoney = GetMoney();
 	ElvDB = ElvDB or { };
 	ElvDB["gold"] = ElvDB["gold"] or {};
 	ElvDB["gold"][E.myrealm] = ElvDB["gold"][E.myrealm] or {};
 	ElvDB["gold"][E.myrealm][E.myname] = ElvDB["gold"][E.myrealm][E.myname] or NewMoney;
-	
+
 	local OldMoney = ElvDB["gold"][E.myrealm][E.myname] or NewMoney;
-	
+
 	local Change = NewMoney-OldMoney;
 	if(OldMoney>NewMoney) then
 		Spent = Spent - Change;
 	else
 		Profit = Profit + Change;
 	end
-	
+
 	self.text:SetText(E:FormatMoney(NewMoney, E.db.datatexts.goldFormat or "BLIZZARD", not E.db.datatexts.goldCoins));
-	
+
 	ElvDB["gold"][E.myrealm][E.myname] = NewMoney;
 end
 
@@ -53,7 +54,7 @@ local function OnEnter(self)
 	DT:SetupTooltip(self);
 	local textOnly = not E.db.datatexts.goldCoins and true or false;
 	local style = E.db.datatexts.goldFormat or "BLIZZARD";
-	
+
 	DT.tooltip:AddLine(L["Session:"]);
 	DT.tooltip:AddDoubleLine(L["Earned:"], E:FormatMoney(Profit, style, textOnly), 1, 1, 1, 1, 1, 1);
 	DT.tooltip:AddDoubleLine(L["Spent:"], E:FormatMoney(Spent, style, textOnly), 1, 1, 1, 1, 1, 1);
@@ -63,33 +64,33 @@ local function OnEnter(self)
 		DT.tooltip:AddDoubleLine(L["Profit:"], E:FormatMoney(Profit-Spent, style, textOnly), 0, 1, 0, 1, 1, 1);
 	end
 	DT.tooltip:AddLine(" ");
-	
+
 	local totalGold = 0;
 	DT.tooltip:AddLine(L["Character: "]);
-	
+
 	for k,_ in pairs(ElvDB["gold"][E.myrealm]) do
 		if(ElvDB["gold"][E.myrealm][k]) then
 			DT.tooltip:AddDoubleLine(k, E:FormatMoney(ElvDB["gold"][E.myrealm][k], style, textOnly), 1, 1, 1, 1, 1, 1);
 			totalGold = totalGold + ElvDB["gold"][E.myrealm][k];
 		end
 	end
-	
+
 	DT.tooltip:AddLine(" ");
 	DT.tooltip:AddLine(L["Server: "]);
 	DT.tooltip:AddDoubleLine(L["Total: "], E:FormatMoney(totalGold, style, textOnly), 1, 1, 1, 1, 1, 1);
-	
+
 	for i = 1, MAX_WATCHED_TOKENS do
-		local name, count, extraCurrencyType, icon, itemID = GetBackpackCurrencyInfo(i);
+		local name, count, _, icon = GetBackpackCurrencyInfo(i);
 		if(name and i == 1) then
-			DT.tooltip:AddLine(" ");
 			DT.tooltip:AddLine(CURRENCY);
+			DT.tooltip:AddLine(" ");
 		end
-		if(name and count) then DT.tooltip:AddDoubleLine(name, count, 1, 1, 1); end
+		if(name and count) then DT.tooltip:AddDoubleLine(currencyString:format(icon, name), count, 1, 1, 1); end
 	end
-	
+
 	DT.tooltip:AddLine(" ");
 	DT.tooltip:AddLine(resetInfoFormatter);
-	
+
 	DT.tooltip:Show();
 end
 

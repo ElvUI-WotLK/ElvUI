@@ -1,19 +1,21 @@
-local parent, ns = ...;
+local _, ns = ...;
 local oUF = ns.oUF;
+
+local UnitInPhase = UnitInPhase;
 
 local Update = function(self, event)
 	local picon = self.PhaseIcon;
 	if(picon.PreUpdate) then
 		picon:PreUpdate();
 	end
-	
+
 	local inPhase = UnitInPhase(self.unit);
 	if(inPhase) then
 		picon:Hide();
 	else
 		picon:Show();
 	end
-	
+
 	if(picon.PostUpdate) then
 		return picon:PostUpdate(inPhase);
 	end
@@ -32,13 +34,13 @@ local Enable = function(self)
 	if(picon) then
 		picon.__owner = self;
 		picon.ForceUpdate = ForceUpdate;
-		
+
 		self:RegisterEvent("UNIT_PHASE", Path, true);
-		
+
 		if(picon:IsObjectType("Texture") and not picon:GetTexture()) then
 			picon:SetTexture([[Interface\TargetingFrame\UI-PhasingIcon]]);
 		end
-		
+
 		return true;
 	end
 end

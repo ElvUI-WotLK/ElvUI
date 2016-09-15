@@ -1,12 +1,19 @@
-local parent, ns = ...;
+local _, ns = ...;
 local oUF = ns.oUF;
+
+local UnitIsUnit = UnitIsUnit;
+local UnitGUID = UnitGUID;
+local UnitExists = UnitExists;
+local UnitIsConnected = UnitIsConnected;
+local UnitIsVisible = UnitIsVisible;
+local SetPortraitTexture = SetPortraitTexture;
 
 local Update = function(self, event, unit)
 	if(not unit or not UnitIsUnit(self.unit, unit)) then return; end
-	
+
 	local portrait = self.Portrait;
 	if(portrait.PreUpdate) then portrait:PreUpdate(unit); end
-	
+
 	if(portrait:IsObjectType("Model")) then
 		local guid = UnitGUID(unit);
 		if(not UnitExists(unit) or not UnitIsConnected(unit) or not UnitIsVisible(unit)) then
@@ -17,7 +24,7 @@ local Update = function(self, event, unit)
 		elseif(portrait.guid ~= guid or event == "UNIT_MODEL_CHANGED") then
 			portrait:SetUnit(unit);
 			portrait:SetCamera(0);
-			
+
 			portrait.guid = guid;
 		else
 			portrait:SetCamera(0);
@@ -25,7 +32,7 @@ local Update = function(self, event, unit)
 	else
 		SetPortraitTexture(portrait, unit);
 	end
-	
+
 	if(portrait.PostUpdate) then
 		return portrait:PostUpdate(unit);
 	end
@@ -44,11 +51,11 @@ local Enable = function(self, unit)
 	if(portrait) then
 		portrait.__owner = self;
 		portrait.ForceUpdate = ForceUpdate;
-		
+
 		self:RegisterEvent("UNIT_PORTRAIT_UPDATE", Path);
 		self:RegisterEvent("UNIT_MODEL_CHANGED", Path);
 		self:RegisterEvent("UNIT_CONNECTION", Path);
-		
+
 		-- The quest log uses PARTY_MEMBER_{ENABLE,DISABLE} to handle updating of
 		-- party members overlapping quests. This will probably be enough to handle
 		-- model updating.
@@ -58,7 +65,7 @@ local Enable = function(self, unit)
 		if(unit == "party") then
 			self:RegisterEvent("PARTY_MEMBER_ENABLE", Update);
 		end
-		
+
 		return true;
 	end
 end

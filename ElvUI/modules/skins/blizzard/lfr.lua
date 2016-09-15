@@ -1,9 +1,11 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local S = E:GetModule('Skins')
 
+local find = string.find;
+
 local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.lfr ~= true then return end
-	
+
 	local buttons = {
 		"LFRQueueFrameFindGroupButton",
 		"LFRQueueFrameAcceptCommentButton",
@@ -16,7 +18,7 @@ local function LoadSkin()
 	LFRParentFrame:CreateBackdrop("Transparent")
 	LFRParentFrame.backdrop:Point("TOPLEFT", 10, -11)
 	LFRParentFrame.backdrop:Point("BOTTOMRIGHT", -1, 5)
-	
+
 	LFRQueueFrame:StripTextures()
 	LFRBrowseFrame:StripTextures()
 
@@ -37,7 +39,7 @@ local function LoadSkin()
 
 	S:HandleDropDownBox(LFRBrowseFrameRaidDropDown)
 	S:HandleScrollBar(LFRQueueFrameSpecificListScrollFrameScrollBar)
-	
+
 	LFRQueueFrameCommentTextButton:CreateBackdrop("Default")
 	LFRQueueFrameCommentTextButton:Height(35)
 
@@ -46,13 +48,33 @@ local function LoadSkin()
 		_G[button.."Left"]:Kill()
 		_G[button.."Middle"]:Kill()
 		_G[button.."Right"]:Kill()
+		_G[button]:StyleButton()
 	end
-	
+
 	for i=1, NUM_LFR_CHOICE_BUTTONS do
-		local button = _G["LFRQueueFrameSpecificListButton"..i]
-		S:HandleCheckBox(button.enableButton)
+		local button = _G["LFRQueueFrameSpecificListButton" .. i];
+		button.enableButton:StripTextures();
+		button.enableButton:CreateBackdrop("Default");
+		button.enableButton.backdrop:SetInside(nil, 4, 4);
+
+		button.expandOrCollapseButton:SetNormalTexture("");
+		button.expandOrCollapseButton.SetNormalTexture = E.noop;
+		button.expandOrCollapseButton:SetHighlightTexture(nil);
+
+		button.expandOrCollapseButton.Text = button.expandOrCollapseButton:CreateFontString(nil, "OVERLAY");
+		button.expandOrCollapseButton.Text:FontTemplate(nil, 22);
+		button.expandOrCollapseButton.Text:Point("CENTER", 4, 0);
+		button.expandOrCollapseButton.Text:SetText("+");
+
+		hooksecurefunc(button.expandOrCollapseButton, "SetNormalTexture", function(self, texture)
+			if(find(texture, "MinusButton")) then
+				self.Text:SetText("-");
+			else
+				self.Text:SetText("+");
+			end
+		end);
 	end
-	
+
 	--DPS, Healer, Tank check button's don't have a name, use it's parent as a referance.
 	S:HandleCheckBox(LFRQueueFrameRoleButtonTank:GetChildren())
 	S:HandleCheckBox(LFRQueueFrameRoleButtonHealer:GetChildren())
@@ -60,9 +82,9 @@ local function LoadSkin()
 	LFRQueueFrameRoleButtonTank:GetChildren():SetFrameLevel(LFRQueueFrameRoleButtonTank:GetChildren():GetFrameLevel() + 2)
 	LFRQueueFrameRoleButtonHealer:GetChildren():SetFrameLevel(LFRQueueFrameRoleButtonHealer:GetChildren():GetFrameLevel() + 2)
 	LFRQueueFrameRoleButtonDPS:GetChildren():SetFrameLevel(LFRQueueFrameRoleButtonDPS:GetChildren():GetFrameLevel() + 2)
-	
+
 	LFRQueueFrameSpecificListScrollFrame:StripTextures()
-	
+
 	--Skill Line Tabs
 	for i=1, 2 do
 		local tab = _G["LFRParentFrameSideTab"..i]
@@ -74,25 +96,21 @@ local function LoadSkin()
 			tab:GetNormalTexture():Point("TOPLEFT", 2, -2)
 			tab:GetNormalTexture():Point("BOTTOMRIGHT", -2, 2)
 			tab:SetNormalTexture(tex)
-			
+
 			tab:CreateBackdrop("Default")
 			tab.backdrop:SetAllPoints()
-			tab:StyleButton(true)				
-			
-			local point, relatedTo, point2, x, y = tab:GetPoint()
+			tab:StyleButton(true)
+
+			local point, relatedTo, point2, _, y = tab:GetPoint()
 			tab:Point(point, relatedTo, point2, 1, y)
 		end
 	end
-	
-	for i=1, 3 do 
-		S:HandleTab(_G['RaidParentFrameTab'..i])
-	end
-	
+
 	for i=1, 1 do
 		local button = _G["RaidFinderQueueFrameScrollFrameChildFrameItem"..i]
 		local icon = _G["RaidFinderQueueFrameScrollFrameChildFrameItem"..i.."IconTexture"]
 		local count = _G["RaidFinderQueueFrameScrollFrameChildFrameItem"..i.."Count"]
-		
+
 		if button then
 			local __texture = _G[button:GetName().."IconTexture"]:GetTexture()
 			button:StripTextures()
@@ -107,7 +125,7 @@ local function LoadSkin()
 				button.backdrop:Point("BOTTOMRIGHT", icon, "BOTTOMRIGHT", 2, -2)
 				icon:SetParent(button.backdrop)
 				icon.SetPoint = E.noop
-				
+
 				if count then
 					count:SetParent(button.backdrop)
 				end
@@ -116,4 +134,4 @@ local function LoadSkin()
 	end
 end
 
-S:RegisterSkin('ElvUI', LoadSkin)
+S:AddCallback("LFR", LoadSkin);

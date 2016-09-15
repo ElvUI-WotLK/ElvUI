@@ -5,12 +5,12 @@
 -- Authors: jjsheets and Galmok of European Stormrage (Horde)
 -- Email : sheets.jeff@gmail.com and galmok@gmail.com
 -- Licence: GPL version 2 (General Public License)
--- Revision: $Revision: 65 $
--- Date: $Date: 2015-08-23 12:09:36 +0000 (Sun, 23 Aug 2015) $
+-- Revision: $Revision: 72 $
+-- Date: $Date: 2016-08-28 14:36:27 +0000 (Sun, 28 Aug 2016) $
 ----------------------------------------------------------------------------------
 
 
-local LibCompress = LibStub:NewLibrary("LibCompress", 90000 + tonumber(("$Revision: 65 $"):match("%d+")))
+local LibCompress = LibStub:NewLibrary("LibCompress", 90000 + tonumber(("$Revision: 72 $"):match("%d+")))
 
 if not LibCompress then return end
 
@@ -262,6 +262,9 @@ local function escape_code(code, length)
 		escaped_code = bit_lshift(escaped_code, 1 + b) + b
 		l = l + b
 	end
+	if length + l > 32 then
+		return nil, "escape overflow ("..(length + l)..")"
+	end
 	return escaped_code, length + l
 end
 
@@ -275,7 +278,7 @@ local function addBits(tbl, code, length)
 	remainder = remainder + bit_lshift(code, remainder_length)
 	remainder_length = length + remainder_length
 	if remainder_length > 32 then
-		return true -- Bits lost due to too long code-words.
+		return nil, "addBits overflow ("..remainder_length..")"
 	end
 	
 	while remainder_length >= 8 do
@@ -284,6 +287,7 @@ local function addBits(tbl, code, length)
 		remainder = bit_rshift(remainder, 8)
 		remainder_length = remainder_length -8
 	end
+	return true
 end
 
 -- word size for this huffman algorithm is 8 bits (1 byte). This means the best compression is representing 1 byte with 1 bit, i.e. compress to 0.125 of original size.
@@ -438,11 +442,20 @@ function LibCompress:CompressHuffman(uncompressed)
 	compressed_size = 5
 	
 	-- create symbol/code map
+	local escaped_code, escaped_code_len, success, msg
 	for symbol, leaf in pairs(symbols) do
-		addBits(compressed, symbol, 8)
-		if addBits(compressed, escape_code(leaf.bcode, leaf.blength)) then
+		success, msg = addBits(compressed, symbol, 8)
+		if not success then
+			return nil, msg
+		end
+		escaped_code, escaped_code_len = escape_code(leaf.bcode, leaf.blength)
+		if not escaped_code then
+			return nil, escaped_code_len
+		end
+		success, msg = addBits(compressed, escaped_code, escaped_code_len)
+		if not success then
 			-- code word too long. Needs new revision to be able to handle more than 32 bits
-			return string_char(0)..uncompressed
+			return nil, msg
 		end
 		addBits(compressed, 3, 2)
 	end
@@ -456,7 +469,10 @@ function LibCompress:CompressHuffman(uncompressed)
 		
 		for sub_i = i, ulimit do
 			c = string_byte(uncompressed, sub_i)
-			addBits(compressed, symbols[c].bcode, symbols[c].blength)
+			success, msg = addBits(compressed, symbols[c].bcode, symbols[c].blength)
+			if not success then
+				return nil, msg
+			end
 		end
 		
 		large_compressed_size = large_compressed_size + 1
@@ -500,18 +516,68 @@ setmetatable(lshiftMinusOneMask, {
 	end
 })
 
-local function getCode(bitfield, field_len)
+local function bor64(valueA_high, valueA, valueB_high, valueB)
+	return bit_bor(valueA_high, valueB_high),
+		bit_bor(valueA, valueB)
+end
+
+local function band64(valueA_high, valueA, valueB_high, valueB)
+	return bit_band(valueA_high, valueB_high),
+		bit_band(valueA, valueB)
+end
+
+local function lshift64(value_high, value, lshift_amount)
+	if lshift_amount == 0 then
+		return value_high, value
+	end
+	if lshift_amount >= 64 then
+		return 0, 0
+	end
+	if lshift_amount < 32 then
+		return bit_bor(bit_lshift(value_high, lshift_amount), bit_rshift(value, 32-lshift_amount)), 
+			bit_lshift(value, lshift_amount)
+	end
+	-- 32-63 bit shift
+	return bit_lshift(value, lshift_amount), -- builtin modulus 32 on shift amount
+		0
+end
+
+local function rshift64(value_high, value, rshift_amount)
+	if rshift_amount == 0 then
+		return value_high, value
+	end
+	if rshift_amount >= 64 then
+		return 0, 0
+	end
+	if rshift_amount < 32 then
+		return bit_rshift(value_high, rshift_amount),
+			bit_bor(bit_lshift(value_high, 32-rshift_amount), bit_rshift(value, rshift_amount))
+	end
+	-- 32-63 bit shift
+	return 0,
+		bit_rshift(value_high, rshift_amount)
+end
+
+local function getCode2(bitfield_high, bitfield, field_len)
 	if field_len >= 2 then
-		local b
-		local p = 0
-		for i = 0, field_len -1 do
-			b = bit_band(bitfield, lshiftMask[i])
-			if not (p == 0) and not (b == 0) then
-				-- found 2 bits set right after each other (stop bits)
-				return bit_band( bitfield, lshiftMinusOneMask[i - 1]), i - 1, 
-					bit_rshift(bitfield, i + 1), field_len -  i - 1
+		-- [bitfield_high..bitfield]: bit 0 is right most in bitfield. bit <field_len-1> is left most in bitfield_high
+		local b1, b2, remainder_high, remainder
+		for i = 0, field_len - 2 do
+			b1 = i <= 31 and bit_band(bitfield, bit_lshift(1, i)) or bit_band(bitfield_high, bit_lshift(1, i)) -- for shifts, 32 = 0 (5 bit used)
+			b2 = (i+1) <= 31 and bit_band(bitfield, bit_lshift(1, i+1)) or bit_band(bitfield_high, bit_lshift(1, i+1))
+			if not (b1 == 0) and not (b2 == 0) then
+				-- found 2 bits set right after each other (stop bits) with i pointing at the first stop bit
+				-- return the two bitfields separated by the two stopbits (3 values for each: bitfield_high, bitfield, field_len)
+				-- bits left: field_len - (i+2)
+				remainder_high, remainder = rshift64(bitfield_high, bitfield, i+2)
+				-- first bitfield is the lower part
+				return (i-1) >= 32 and bit_band(bitfield_high, bit_lshift(1, i) - 1) or 0,
+					i >= 32 and bitfield or bit_band(bitfield, bit_lshift(1, i) - 1),
+					i,
+					remainder_high,
+					remainder,
+					field_len-(i+2)
 			end
-			p = b
 		end
 	end
 	return nil
@@ -564,6 +630,7 @@ function LibCompress:DecompressHuffman(compressed)
 
 	-- decode code -> symbol map
 	local bitfield = 0
+	local bitfield_high = 0
 	local bitfield_len = 0
 	local map = {} -- only table not reused in Huffman decode.
 	setmetatable(map, {
@@ -578,7 +645,7 @@ function LibCompress:DecompressHuffman(compressed)
 	local c, cl
 	local minCodeLen = 1000
 	local maxCodeLen = 0
-	local symbol, code, code_len, _bitfield, _bitfield_len
+	local symbol, code_high, code, code_len, temp_high, temp
 	local n = 0
 	local state = 0 -- 0 = get symbol (8 bits),  1 = get code (varying bits, ends with 2 bits set)
 	while n < num_symbols do
@@ -587,18 +654,22 @@ function LibCompress:DecompressHuffman(compressed)
 		end
 
 		c = string_byte(compressed, i)
-		bitfield = bit_bor(bitfield, bit_lshift(c, bitfield_len))
+		temp_high, temp = lshift64(0, c, bitfield_len)
+		bitfield_high, bitfield = bor64(bitfield_high, bitfield, temp_high, temp)
 		bitfield_len = bitfield_len + 8
 		
 		if state == 0 then
 			symbol = bit_band(bitfield, 255)
-			bitfield = bit_rshift(bitfield, 8)
+			bitfield_high, bitfield = rshift64(bitfield_high, bitfield, 8)
 			bitfield_len = bitfield_len - 8
 			state = 1 -- search for code now
 		else
-			code, code_len, _bitfield, _bitfield_len = getCode(bitfield, bitfield_len)
-			if code then
-				bitfield, bitfield_len = _bitfield, _bitfield_len
+			code_high, code, code_len, _bitfield_high, _bitfield, _bitfield_len = getCode2(bitfield_high, bitfield, bitfield_len)
+			if code_high then
+				bitfield_high, bitfield, bitfield_len = _bitfield_high, _bitfield, _bitfield_len
+				if code_len > 32 then
+					return nil, "Unsupported symbol code length ("..code_len..")"
+				end
 				c, cl = unescape_code(code, code_len)
 				map[cl][c] = string_char(symbol)
 				minCodeLen = cl < minCodeLen and cl or minCodeLen
@@ -679,6 +750,13 @@ end
 
 --------------------------------------------------------------------------------
 -- Generic codec interface
+
+function LibCompress:Store(uncompressed)
+	if type(uncompressed) ~= "string" then
+		return nil, "Can only compress strings"
+	end
+	return "\001"..uncompressed
+end
 
 function LibCompress:DecompressUncompressed(data)
 	if type(data) ~= "string" then

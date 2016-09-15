@@ -1,19 +1,21 @@
-local parent, ns = ...;
+local _, ns = ...;
 local oUF = ns.oUF;
+
+local IsResting = IsResting;
 
 local Update = function(self, event)
 	local resting = self.Resting
 	if(resting.PreUpdate) then
 		resting:PreUpdate();
 	end
-	
+
 	local isResting = IsResting();
 	if(isResting) then
 		resting:Show();
 	else
 		resting:Hide();
 	end
-	
+
 	if(resting.PostUpdate) then
 		return resting:PostUpdate(isResting);
 	end
@@ -32,14 +34,14 @@ local Enable = function(self, unit)
 	if(resting and unit == "player") then
 		resting.__owner = self;
 		resting.ForceUpdate = ForceUpdate;
-		
+
 		self:RegisterEvent("PLAYER_UPDATE_RESTING", Path, true);
-		
+
 		if(resting:IsObjectType"Texture" and not resting:GetTexture()) then
 			resting:SetTexture([[Interface\CharacterFrame\UI-StateIcon]]);
 			resting:SetTexCoord(0, .5, 0, .421875);
 		end
-		
+
 		return true;
 	end
 end
