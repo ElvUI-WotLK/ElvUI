@@ -11,17 +11,14 @@ local GetWintergraspWaitTime = GetWintergraspWaitTime;
 local RequestRaidInfo = RequestRaidInfo;
 local SecondsToTime = SecondsToTime;
 local QUEUE_TIME_UNAVAILABLE = QUEUE_TIME_UNAVAILABLE;
-local TIMEMANAGER_TOOLTIP_LOCALTIME = TIMEMANAGER_TOOLTIP_LOCALTIME;
 local TIMEMANAGER_TOOLTIP_REALMTIME = TIMEMANAGER_TOOLTIP_REALMTIME;
 local WINTERGRASP_IN_PROGRESS = WINTERGRASP_IN_PROGRESS;
 
-local APM = {TIMEMANAGER_PM, TIMEMANAGER_AM};
 local timeDisplayFormat = "";
 local dateDisplayFormat = "";
 local amDisplayFormat = "";
 local pmDisplayFormat = "";
 local europeDisplayFormat_nocolor = join("", "%02d", ":|r%02d");
-local ukDisplayFormat_nocolor = join("", "", "%d", ":|r%02d", " %s|r");
 local lockoutInfoFormatNoEnc = "%s%s |cffaaaaaa(%s)";
 local difficultyInfo = {"N", "N", "H", "H"};
 local lockoutColorExtended, lockoutColorNormal = {r = 0.3, g = 1, b = 0.3}, {r = .8, g = .8, b = .8};
@@ -42,31 +39,6 @@ local function ValueColorUpdate(hex)
 	end
 end
 E["valueColorUpdateFuncs"][ValueColorUpdate] = true;
-
-local function ConvertTime(h, m)
-	local AmPm;
-	if(E.db.datatexts.time24 == true) then
-		return h, m, -1;
-	else
-		if(h >= 12) then
-			if(h > 12) then h = h - 12; end
-			AmPm = 1;
-		else
-			if(h == 0) then h = 12; end
-			AmPm = 2;
-		end
-	end
-	return h, m, AmPm;
-end
-
-local function CalculateTimeValues(tooltip)
-	if(tooltip and E.db.datatexts.localtime) or (not tooltip and not E.db.datatexts.localtime) then
-		return ConvertTime(GetGameTime());
-	else
-		local dateTable = date("*t");
-		return ConvertTime(dateTable["hour"], dateTable["min"]);
-	end
-end
 
 local function Click(_, btn)
 	if(btn == "RightButton") then
@@ -92,7 +64,7 @@ local function OnEnter(self)
 
 	if(not enteredFrame) then
 		enteredFrame = true;
-		RequestRaidInfo();
+	--	RequestRaidInfo();
 	end
 
 	local wgtime = GetWintergraspWaitTime() or nil;
@@ -125,21 +97,14 @@ local function OnEnter(self)
 		end
 	end
 
-	local Hr, Min, AmPm = CalculateTimeValues(true);
-
 	DT.tooltip:AddLine(" ");
-	if(AmPm == -1) then
-		DT.tooltip:AddDoubleLine(E.db.datatexts.localtime and TIMEMANAGER_TOOLTIP_REALMTIME or TIMEMANAGER_TOOLTIP_LOCALTIME,
-			format(europeDisplayFormat_nocolor, Hr, Min), 1, 1, 1, lockoutColorNormal.r, lockoutColorNormal.g, lockoutColorNormal.b);
-	else
-		DT.tooltip:AddDoubleLine(E.db.datatexts.localtime and TIMEMANAGER_TOOLTIP_REALMTIME or TIMEMANAGER_TOOLTIP_LOCALTIME,
-			format(ukDisplayFormat_nocolor, Hr, Min, APM[AmPm]), 1, 1, 1, lockoutColorNormal.r, lockoutColorNormal.g, lockoutColorNormal.b);
-	end
+
+	DT.tooltip:AddDoubleLine(TIMEMANAGER_TOOLTIP_REALMTIME, format(europeDisplayFormat_nocolor, GetGameTime()), 1, 1, 1, lockoutColorNormal.r, lockoutColorNormal.g, lockoutColorNormal.b);
 
 	DT.tooltip:Show();
 end
 
-local int = 0;
+local int = 1;
 function Update(self, t)
 	int = int - t;
 
@@ -158,7 +123,7 @@ function Update(self, t)
 	self.text:SetText(BetterDate(E.db.datatexts.timeFormat .. E.db.datatexts.dateFormat, time()):gsub(":", timeDisplayFormat):gsub(TIMEMANAGER_PM, pmDisplayFormat):gsub(TIMEMANAGER_AM, amDisplayFormat):gsub("%s", dateDisplayFormat));
 
 	lastPanel = self;
-	int = 1;
+	int = 3;
 end
 
 DT:RegisterDatatext("Time", {"UPDATE_INSTANCE_INFO"}, OnEvent, Update, Click, OnEnter, OnLeave);
