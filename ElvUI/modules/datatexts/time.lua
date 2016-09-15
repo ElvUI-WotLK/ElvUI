@@ -1,7 +1,7 @@
 local E, L, P, G = unpack(select(2, ...));
 local DT = E:GetModule("DataTexts");
 
-local date = date;
+local time = time;
 local format, join = string.format, string.join;
 
 local GetGameTime = GetGameTime;
@@ -16,8 +16,10 @@ local TIMEMANAGER_TOOLTIP_REALMTIME = TIMEMANAGER_TOOLTIP_REALMTIME;
 local WINTERGRASP_IN_PROGRESS = WINTERGRASP_IN_PROGRESS;
 
 local APM = {TIMEMANAGER_PM, TIMEMANAGER_AM};
-local europeDisplayFormat = "";
-local ukDisplayFormat = "";
+local timeDisplayFormat = "";
+local dateDisplayFormat = "";
+local amDisplayFormat = "";
+local pmDisplayFormat = "";
 local europeDisplayFormat_nocolor = join("", "%02d", ":|r%02d");
 local ukDisplayFormat_nocolor = join("", "", "%d", ":|r%02d", " %s|r");
 local lockoutInfoFormatNoEnc = "%s%s |cffaaaaaa(%s)";
@@ -29,11 +31,11 @@ local enteredFrame = false;
 local Update, lastPanel; -- UpValue
 local name, _, reset, difficultyId, locked, extended, isRaid, maxPlayers;
 
-local string1 = "";
-local string3 = "";
 local function ValueColorUpdate(hex)
-	string1 = join("", hex, ":|r");
-	string3 = join("", hex, "/|r");
+	timeDisplayFormat = join("", hex, ":|r");
+	dateDisplayFormat = join("", hex, " ");
+	pmDisplayFormat = join("", hex, TIMEMANAGER_PM .. "|r");
+	amDisplayFormat = join("", hex, TIMEMANAGER_AM .. "|r");
 
 	if(lastPanel ~= nil) then
 		Update(lastPanel, 20000);
@@ -153,7 +155,7 @@ function Update(self, t)
 		OnEnter(self)
 	end
 
-	self.text:SetText(BetterDate(E.db.datatexts.timeFormat .. E.db.datatexts.dateFormat, time()):gsub(":", string1):gsub("%s", " |cffE8DA0F|r"):gsub("/", string3));
+	self.text:SetText(BetterDate(E.db.datatexts.timeFormat .. E.db.datatexts.dateFormat, time()):gsub(":", timeDisplayFormat):gsub(TIMEMANAGER_PM, pmDisplayFormat):gsub(TIMEMANAGER_AM, amDisplayFormat):gsub("%s", dateDisplayFormat));
 
 	lastPanel = self;
 	int = 1;
