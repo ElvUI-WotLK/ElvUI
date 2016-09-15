@@ -286,4 +286,4 @@ local function LoadSkin()
 	S:HandleButton(RaidInfoCancelButton);
 end
 
-S:RegisterSkin('ElvUI', LoadSkin)
+S:AddCallback("Friends", LoadSkin);

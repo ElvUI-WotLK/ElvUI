@@ -114,4 +114,4 @@ local function LoadSkin()
 	SpellBookPageText:SetPoint("CENTER", SpellBookFrame, "BOTTOMLEFT", 185, 0)
 end
 
-S:RegisterSkin("ElvUI", LoadSkin);
+S:AddCallback("Spellbook", LoadSkin);

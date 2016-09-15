@@ -86,4 +86,4 @@ local function LoadSkin()
 	end);
 end
 
-S:RegisterSkin("Blizzard_TrainerUI", LoadSkin);
+S:AddCallbackForAddon("Blizzard_TrainerUI", "Trainer", LoadSkin);

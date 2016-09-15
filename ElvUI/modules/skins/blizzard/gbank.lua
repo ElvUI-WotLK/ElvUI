@@ -138,4 +138,4 @@ local function LoadSkin()
 	S:HandleScrollBar(GuildBankInfoScrollFrameScrollBar)
 end
 
-S:RegisterSkin("Blizzard_GuildBankUI", LoadSkin)
+S:AddCallbackForAddon("Blizzard_GuildBankUI", "GuildBank", LoadSkin);

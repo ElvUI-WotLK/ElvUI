@@ -85,4 +85,4 @@ local function LoadSkin()
 	S:HandleButton(KnowledgeBaseFrameCancel);
 end
 
-S:RegisterSkin("ElvUI", LoadSkin);
+S:AddCallback("Help", LoadSkin);

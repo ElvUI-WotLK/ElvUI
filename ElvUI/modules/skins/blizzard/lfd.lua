@@ -105,4 +105,4 @@ local function LoadSkin()
 	S:HandleCloseButton(LFDDungeonReadyStatusCloseButton, nil, '-');
 end
 
-S:RegisterSkin('ElvUI', LoadSkin)
+S:AddCallback("LFD", LoadSkin);

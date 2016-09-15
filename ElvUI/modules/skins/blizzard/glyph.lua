@@ -1,7 +1,7 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local S = E:GetModule('Skins');
 
-S:RegisterSkin('Blizzard_GlyphUI', function()
+local function LoadSkin()
 	if(E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.talent ~= true) then return; end
 
 	GlyphFrame:StripTextures();
@@ -29,4 +29,6 @@ S:RegisterSkin('Blizzard_GlyphUI', function()
 			PlayerTalentFramePreviewBar:Show();
 		end
 	end);
-end);
+end
+
+S:AddCallbackForAddon("Blizzard_GlyphUI", "Glyph", LoadSkin);

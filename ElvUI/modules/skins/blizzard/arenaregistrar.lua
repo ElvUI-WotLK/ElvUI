@@ -4,7 +4,7 @@ local S = E:GetModule("Skins");
 local _G = _G;
 local select = select;
 
-S:RegisterSkin("ElvUI", function()
+local function LoadSkin()
 	if(E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.arenaregistrar ~= true) then return; end
 
 	ArenaRegistrarFrame:CreateBackdrop("Transparent");
@@ -74,4 +74,6 @@ S:RegisterSkin("ElvUI", function()
 	S:HandleButton(PVPBannerFrameCancelButton);
 
 	S:HandleCloseButton(PVPBannerFrameCloseButton);
-end);
+end
+
+S:AddCallback("ArenaRegistrar", LoadSkin);

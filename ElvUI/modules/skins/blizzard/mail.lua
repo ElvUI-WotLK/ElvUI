@@ -173,4 +173,4 @@ local function LoadSkin()
 	SendMailMailButton:Point("RIGHT", SendMailCancelButton, "LEFT", -2, 0)
 end
 
-S:RegisterSkin('ElvUI', LoadSkin)
+S:AddCallback("Mail", LoadSkin);

@@ -505,4 +505,4 @@ local function LoadSkin()
 	S:HandleCheckBox(TokenFramePopupBackpackCheckBox);
 end
 
-S:RegisterSkin('ElvUI', LoadSkin)
+S:AddCallback("Character", LoadSkin);

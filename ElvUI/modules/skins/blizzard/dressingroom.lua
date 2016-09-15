@@ -1,7 +1,7 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local S = E:GetModule('Skins');
 
-S:RegisterSkin('ElvUI', function()
+local function LoadSkin()
 	if(E.private.skins.blizzard.enable ~= true
 		or E.private.skins.blizzard.dressingroom ~= true)
 	then
@@ -23,4 +23,6 @@ S:RegisterSkin('ElvUI', function()
 	S:HandleButton(DressUpFrameCancelButton);
 	DressUpFrameResetButton:SetPoint('RIGHT', DressUpFrameCancelButton, 'LEFT', -3, 0);
 	S:HandleButton(DressUpFrameResetButton);
-end);
+end
+
+S:AddCallback("DressingRoom", LoadSkin);

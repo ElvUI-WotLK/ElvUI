@@ -44,4 +44,4 @@ local function LoadSkin()
 	TutorialFrameCallOut:Kill()
 end
 
-S:RegisterSkin('ElvUI', LoadSkin)
+S:AddCallback("Tutorial", LoadSkin);
