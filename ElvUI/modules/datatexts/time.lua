@@ -29,9 +29,11 @@ local enteredFrame = false;
 local Update, lastPanel; -- UpValue
 local name, _, reset, difficultyId, locked, extended, isRaid, maxPlayers;
 
+local string1 = "";
+local string3 = "";
 local function ValueColorUpdate(hex)
-	europeDisplayFormat = join("", "%02d", hex, ":|r%02d ");
-	ukDisplayFormat = join("", "", "%d", hex, ":|r%02d", hex, " %s|r ", format("%s", date(hex .. "%d.%m.%y|r")));
+	string1 = join("", hex, ":|r");
+	string3 = join("", hex, "/|r");
 
 	if(lastPanel ~= nil) then
 		Update(lastPanel, 20000);
@@ -151,7 +153,7 @@ function Update(self, t)
 		OnEnter(self)
 	end
 
-	self.text:SetText(BetterDate(E.db.datatexts.timeFormat .. E.db.datatexts.dateFormat, time()):gsub(":", "|cff0CD809:|r"):gsub("%s", " |cffE8DA0F"));
+	self.text:SetText(BetterDate(E.db.datatexts.timeFormat .. E.db.datatexts.dateFormat, time()):gsub(":", string1):gsub("%s", " |cffE8DA0F|r"):gsub("/", string3));
 
 	lastPanel = self;
 	int = 1;

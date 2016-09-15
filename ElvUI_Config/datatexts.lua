@@ -81,11 +81,11 @@ E.Options.args.datatexts = {
 					name = L["General"],
 					args = {
 						timeFormat = {
-							order = 0,
+							order = 1,
 							type = "select",
-							name = TIMESTAMPS_LABEL,
-							desc = OPTION_TOOLTIP_TIMESTAMPS,
+							name = L["Time Format"],
 							values = {
+								[""] = NONE,
 								["%I:%M "] = "03:27",
 								["%I:%M:%S "] = "03:27:32",
 								["%I:%M %p "] = "03:27 PM",
@@ -95,21 +95,14 @@ E.Options.args.datatexts = {
 							}
 						},
 						dateFormat = {
-							order = 0.5,
+							order = 1.5,
 							type = "select",
-							name = TIMESTAMPS_LABEL,
-							desc = OPTION_TOOLTIP_TIMESTAMPS,
+							name = L["Date Format"],
 							values = {
 								[""] = NONE,
 								["%d/%m/%y "] = "27/03/32",
 								["%d.%m.%y "] = "27.03.32",
 							}
-						},
-						time24 = {
-							order = 1,
-							type = "toggle",
-							name = L["24-Hour Time"],
-							desc = L["Toggle 24-hour mode for the time datatext."]
 						},
 						localtime = {
 							order = 2,
