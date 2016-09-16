@@ -48,14 +48,14 @@ end
 
 local function OnEvent(_, event)
 	if(event == "UPDATE_INSTANCE_INFO") then
-		RequestRaidInfo();
+	--	RequestRaidInfo();
 	end
 end
 
 local function OnEnter(self)
 	DT:SetupTooltip(self)
 
-	RequestRaidInfo();
+	--RequestRaidInfo();
 
 	local wgtime = GetWintergraspWaitTime() or nil;
 	inInstance, instanceType = IsInInstance();
