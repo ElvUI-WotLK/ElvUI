@@ -100,6 +100,7 @@ end
 
 function mod:ConstructElement_CastBar(parent)
 	local frame = CreateFrame("StatusBar", nil, parent);
+	frame:SetFrameStrata("BACKGROUND");
 	self:StyleFrame(frame);
 
 	frame.Icon = CreateFrame("Frame", nil, frame);

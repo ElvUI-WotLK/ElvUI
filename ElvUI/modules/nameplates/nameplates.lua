@@ -267,7 +267,7 @@ function mod:UpdateLevelAndName()
 		self.Level:SetText("");
 		self.Level:Hide();
 	else
-		local level, elite, boss = self.Level:GetObjectType() == "FontString" and tonumber(self.oldLevel:GetText()) or nil, self.eliteIcon:IsShown(), self.bossIcon:IsShown();
+		local level, elite, boss = self.Level:GetObjectType() == "FontString" and tonumber(self.oldLevel:GetText()) or nil, self.EliteIcon:IsShown(), self.BossIcon:IsShown();
 		if(boss) then
 			self.Level:SetText("??");
 			self.level:SetTextColor(0.8, 0.05, 0);
@@ -437,11 +437,11 @@ function mod:ColorizeAndScale()
 			w = mod.db.healthBar.lowHPScale.width * scale;
 			h = mod.db.healthBar.lowHPScale.height * scale;
 			if(mod.db.healthBar.lowHPScale.toFront) then
-			--	self:SetFrameStrata("HIGH");
+				self.HealthBar:SetFrameStrata("HIGH");
 			end
 		else
 			if(mod.db.healthBar.lowHPScale.toFront) then
-			--	self:SetFrameStrata("BACKGROUND");
+				self.HealthBar:SetFrameStrata("BACKGROUND");
 			end
 		end
 	end
@@ -601,7 +601,7 @@ end
 
 function mod:CreatePlate(frame)
 	local HealthBar, CastBar = frame:GetChildren();
-	local Threat, border, CastBarShield, CastBarBorder, CastBarIcon, Highlight, Name, Level, bossIcon, RaidIcon, eliteIcon = frame:GetRegions();
+	local Threat, Border, CastBarShield, CastBarBorder, CastBarIcon, Highlight, Name, Level, BossIcon, RaidIcon, EliteIcon = frame:GetRegions();
 
 	frame.HealthBar = self:ConstructElement_HealthBar(frame);
 	CastBarIcon:SetParent(E.HiddenFrame);
@@ -636,21 +636,21 @@ function mod:CreatePlate(frame)
 	frame.oldName = Name;
 	frame.oldHighlight = Highlight;
 	frame.oldLevel = Level;
-	frame.bossIcon = bossIcon;
+	frame.BossIcon = BossIcon;
 	frame.oldRaidIcon = RaidIcon;
-	frame.eliteIcon = eliteIcon;
+	frame.EliteIcon = EliteIcon;
 
 	self:QueueObject(frame, HealthBar);
 	self:QueueObject(frame, CastBar);
 	self:QueueObject(frame, Level);
 	self:QueueObject(frame, Name);
 	self:QueueObject(frame, Threat);
-	self:QueueObject(frame, border);
+	self:QueueObject(frame, Border);
 	self:QueueObject(frame, CastBarShield);
 	self:QueueObject(frame, CastBarBorder);
 	self:QueueObject(frame, Highlight);
-	self:QueueObject(frame, bossIcon);
-	self:QueueObject(frame, eliteIcon);
+	self:QueueObject(frame, BossIcon);
+	self:QueueObject(frame, EliteIcon);
 	self:QueueObject(frame, CastBarIcon);
 
 	self.CreatedPlates[frame] = true;

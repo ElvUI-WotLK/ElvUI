@@ -6,6 +6,7 @@ local CreateFrame = CreateFrame;
 
 function mod:ConstructElement_Glow(frame)
 	local f = CreateFrame("Frame", nil, frame);
+	f:SetFrameStrata("BACKGROUND");
 	f:SetFrameLevel(0);
 	f:SetOutside(frame.HealthBar, 3, 3);
 	f:SetBackdrop({

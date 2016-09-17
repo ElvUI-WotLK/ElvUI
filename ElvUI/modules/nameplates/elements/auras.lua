@@ -264,6 +264,7 @@ end
 
 function mod:ConstructElement_Auras(frame, maxAuras, side)
 	local auras = CreateFrame("Frame", nil, frame);
+	auras:SetFrameStrata("BACKGROUND");
 
 	auras:SetScript("OnSizeChanged", mod.Auras_SizeChanged);
 	auras:SetHeight(18);

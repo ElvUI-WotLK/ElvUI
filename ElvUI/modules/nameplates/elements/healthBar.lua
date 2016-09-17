@@ -45,7 +45,7 @@ function mod:UpdateElement_HealthOnValueChanged(value)
 	end
 
 	if(mod.db.colorNameByValue) then
-	--	myPlate.Name:SetTextColor(E:ColorGradient(perc, 1,0,0, 1,1,0, 1,1,1));
+		myPlate.Name:SetTextColor(E:ColorGradient(perc, 1,0,0, 1,1,0, 1,1,1));
 	end
 end
 
@@ -65,6 +65,7 @@ end
 
 function mod:ConstructElement_HealthBar(parent)
 	local frame = CreateFrame("StatusBar", nil, parent);
+	frame:SetFrameStrata("BACKGROUND");
 	self:StyleFrame(frame);
 	frame.anim = CreateAnimationGroup(frame);
 	frame.anim.progress = frame.anim:CreateAnimation("Progress");
