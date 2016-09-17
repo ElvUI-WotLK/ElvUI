@@ -491,9 +491,8 @@ function mod:SetUnitInfo()
 		self.guid = UnitGUID("mouseover");
 		self.unit = "mouseover";
 		mod:UpdateElement_AurasByUnitID("mouseover");
-	elseif(self.Highlight:IsShown()) then
-		self.Highlight:Hide();
 	else
+		self.Highlight:Hide();
 		self.unit = nil;
 	end
 end
