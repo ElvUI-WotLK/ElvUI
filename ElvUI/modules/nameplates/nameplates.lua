@@ -191,7 +191,7 @@ function mod:OnUpdate(elapsed)
 			local frame = select(i, WorldFrame:GetChildren())
 			local region = frame:GetRegions();
 
-			if(not mod.CreatedPlates[frame] and not frame:GetName() and region and region:GetObjectType() == "Texture" and region:GetTexture() == OVERLAY) then
+			if(not mod.CreatedPlates[frame] and region and region:GetObjectType() == "Texture" and region:GetTexture() == OVERLAY) then
 				mod:CreatePlate(frame);
 			end
 		end
@@ -465,6 +465,7 @@ function mod:SetUnitInfo()
 	if(self:GetAlpha() == 1 and mod.targetName and (mod.targetName == plateName)) then
 		self.guid = UnitGUID("target");
 		self.unit = "target";
+		self.Highlight:Hide();
 
 		if(mod.db.targetIndicator.enable) then
 			targetIndicator:Show();
@@ -481,14 +482,17 @@ function mod:SetUnitInfo()
 			mod:UpdateElement_CPointsByUnitID("target");
 			self.allowCheck = nil;
 		end
-	elseif(self.Highlight:IsShown() and UnitExists("mouseover") and (UnitName("mouseover") == plateName)) then
+	elseif(self.oldHighlight:IsShown() and UnitExists("mouseover") and (UnitName("mouseover") == plateName)) then
 		if(self.unit ~= "mouseover") then
+			self.Highlight:Show();
 			mod:UpdateElement_AurasByUnitID("mouseover");
 			mod:UpdateElement_CPointsByUnitID("mouseover");
 		end
 		self.guid = UnitGUID("mouseover");
 		self.unit = "mouseover";
 		mod:UpdateElement_AurasByUnitID("mouseover");
+	elseif(self.Highlight:IsShown()) then
+		self.Highlight:Hide();
 	else
 		self.unit = nil;
 	end
@@ -607,8 +611,10 @@ function mod:CreatePlate(frame)
 	RaidIcon:SetAlpha(0);
 	frame.RaidIcon = self:ConstructElement_RaidIcon(frame);
 
-	Highlight:SetTexture(1, 1, 1, 0.3);
-	--Highlight:SetParent(frame.HealthBar);
+	frame.Highlight = frame.HealthBar:CreateTexture(nil, "OVERLAY");
+	frame.Highlight:SetAllPoints();
+	frame.Highlight:SetTexture(1, 1, 1, 0.3);
+	frame.Highlight:Hide();
 
 	frame.Glow = self:ConstructElement_Glow(frame);
 	frame.Buffs = self:ConstructElement_Auras(frame, 5, "RIGHT");
@@ -627,8 +633,8 @@ function mod:CreatePlate(frame)
 
 	frame.oldHealthBar = HealthBar;
 	frame.Threat = Threat;
-	frame.Highlight = Highlight;
 	frame.oldName = Name;
+	frame.oldHighlight = Highlight;
 	frame.oldLevel = Level;
 	frame.bossIcon = bossIcon;
 	frame.oldRaidIcon = RaidIcon;
@@ -642,6 +648,7 @@ function mod:CreatePlate(frame)
 	self:QueueObject(frame, border);
 	self:QueueObject(frame, CastBarShield);
 	self:QueueObject(frame, CastBarBorder);
+	self:QueueObject(frame, Highlight);
 	self:QueueObject(frame, bossIcon);
 	self:QueueObject(frame, eliteIcon);
 	self:QueueObject(frame, CastBarIcon);
