@@ -219,8 +219,13 @@ function mod:CheckFilter()
 
 	if(db and db.enable) then
 		if(db.hide) then
+			self.HealthBar:Hide();
 			return;
 		else
+			if(not self.HealthBar:IsShown()) then
+				self.HealthBar:Show();
+			end
+
 			if(db.customColor) then
 				self.customColor = db.color;
 				self.HealthBar:SetStatusBarColor(db.color.r, db.color.g, db.color.b);
@@ -236,6 +241,8 @@ function mod:CheckFilter()
 				self.customScale = nil;
 			end
 		end
+	elseif(not self.HealthBar:IsShown()) then
+		self.HealthBar:Show();
 	end
 
 	if(mod.Healers[name]) then
@@ -267,10 +274,10 @@ function mod:UpdateLevelAndName()
 		self.Level:SetText("");
 		self.Level:Hide();
 	else
-		local level, elite, boss = self.Level:GetObjectType() == "FontString" and tonumber(self.oldLevel:GetText()) or nil, self.EliteIcon:IsShown(), self.BossIcon:IsShown();
+		local level, elite, boss = self.oldLevel:GetObjectType() == "FontString" and tonumber(self.oldLevel:GetText()) or nil, self.EliteIcon:IsShown(), self.BossIcon:IsShown();
 		if(boss) then
 			self.Level:SetText("??");
-			self.level:SetTextColor(0.8, 0.05, 0);
+			self.Level:SetTextColor(0.8, 0.05, 0);
 		elseif(level) then
 			self.Level:SetText(level .. (elite and "+" or ""));
 			self.Level:SetTextColor(self.oldLevel:GetTextColor());
@@ -452,14 +459,6 @@ function mod:ColorizeAndScale()
 	end
 end
 
-function mod:SetAlpha()
-	if(self:GetAlpha() < 1) then
-		self:SetAlpha(mod.db.nonTargetAlpha);
-	else
-		self:SetAlpha(targetAlpha);
-	end
-end
-
 function mod:SetUnitInfo()
 	local plateName = gsub(self.oldName:GetText(), FSPAT,"");
 	if(self:GetAlpha() == 1 and mod.targetName and (mod.targetName == plateName)) then
@@ -469,7 +468,7 @@ function mod:SetUnitInfo()
 
 		if(mod.db.targetIndicator.enable) then
 			targetIndicator:Show();
-			mod:PositionTargetIndicator(self);
+			mod:PositionTargetIndicator(self.HealthBar);
 		end
 
 		if((mod.NumTargetChecks > -1) or self.allowCheck) then
@@ -619,6 +618,9 @@ function mod:CreatePlate(frame)
 	frame.Buffs = self:ConstructElement_Auras(frame, 5, "RIGHT");
 	frame.Debuffs = self:ConstructElement_Auras(frame, 5, "LEFT");
 
+	BossIcon:SetAlpha(0);
+	EliteIcon:SetAlpha(0);
+
 	frame.HealerIcon = self:ConstructElement_HealerIcon(frame);
 	frame.CPoints = self:ConstructElement_CPoints(frame);
 
@@ -648,8 +650,6 @@ function mod:CreatePlate(frame)
 	self:QueueObject(frame, CastBarShield);
 	self:QueueObject(frame, CastBarBorder);
 	self:QueueObject(frame, Highlight);
-	self:QueueObject(frame, BossIcon);
-	self:QueueObject(frame, EliteIcon);
 	self:QueueObject(frame, CastBarIcon);
 
 	self.CreatedPlates[frame] = true;

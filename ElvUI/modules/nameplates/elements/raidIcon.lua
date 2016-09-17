@@ -9,6 +9,7 @@ end
 
 function mod:ConstructElement_RaidIcon(frame)
 	local texture = frame:CreateTexture(nil, "OVERLAY");
+	texture:SetParent(frame.HealthBar);
 	texture:SetTexture([[Interface\TargetingFrame\UI-RaidTargetingIcons]]);
 	texture:Hide();
 	return texture;
