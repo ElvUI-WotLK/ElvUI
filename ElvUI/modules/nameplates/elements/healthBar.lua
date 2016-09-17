@@ -3,7 +3,7 @@ local mod = E:GetModule("NamePlates");
 local LSM = LibStub("LibSharedMedia-3.0");
 
 function mod:UpdateElement_HealthOnValueChanged(value)
-	local myPlate = mod.CreatedPlates[self:GetParent()];
+	local myPlate = self:GetParent();
 	local min, max = self:GetMinMaxValues();
 	myPlate.HealthBar:SetMinMaxValues(min, max);
 	--myPlate.HealthBar:SetValue(value);
@@ -45,7 +45,7 @@ function mod:UpdateElement_HealthOnValueChanged(value)
 	end
 
 	if(mod.db.colorNameByValue) then
-		myPlate.Name:SetTextColor(E:ColorGradient(perc, 1,0,0, 1,1,0, 1,1,1));
+	--	myPlate.Name:SetTextColor(E:ColorGradient(perc, 1,0,0, 1,1,0, 1,1,1));
 	end
 end
 
@@ -66,7 +66,6 @@ end
 function mod:ConstructElement_HealthBar(parent)
 	local frame = CreateFrame("StatusBar", nil, parent);
 	self:StyleFrame(frame);
-	frame:SetFrameLevel(10);
 	frame.anim = CreateAnimationGroup(frame);
 	frame.anim.progress = frame.anim:CreateAnimation("Progress");
 	frame.anim.progress:SetSmoothing("Out");

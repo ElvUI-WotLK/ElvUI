@@ -9,7 +9,7 @@ local CreateFrame = CreateFrame;
 local green = {r = 0, g = 1, b = 0};
 function mod:UpdateElement_CastBarOnValueChanged(value)
 	local blizzPlate = self:GetParent();
-	local myPlate = mod.CreatedPlates[blizzPlate];
+	local myPlate = blizzPlate;
 	local min, max = self:GetMinMaxValues();
 	local isChannel = value < myPlate.CastBar:GetValue();
 	myPlate.CastBar:SetMinMaxValues(min, max);
@@ -49,24 +49,22 @@ function mod:UpdateElement_CastBarOnValueChanged(value)
 		end
 	end
 
-	local spell, _, spellName = UnitCastingInfo("target");
+	local spell, _, spellName, texture = UnitCastingInfo("target");
 	if(not spell) then
 		spell, _, spellName = UnitChannelInfo("target");
 	end
 
 	myPlate.CastBar.Name:SetText(spellName)
-	myPlate.CastBar.Icon.texture:SetTexture(blizzPlate.CastBar.Icon:GetTexture());
+	myPlate.CastBar.Icon.texture:SetTexture(texture);
 	myPlate.CastBar:SetStatusBarColor(color.r, color.g, color.b);
 end
 
 function mod:UpdateElement_CastBarOnShow()
-	local myPlate = mod.CreatedPlates[self:GetParent()];
-	myPlate.CastBar:Show();
+	self:GetParent().CastBar:Show();
 end
 
 function mod:UpdateElement_CastBarOnHide()
-	local myPlate = mod.CreatedPlates[self:GetParent()];
-	myPlate.CastBar:Hide();
+	self:GetParent().CastBar:Hide();
 end
 
 function mod:ConfigureElement_CastBar(frame)
