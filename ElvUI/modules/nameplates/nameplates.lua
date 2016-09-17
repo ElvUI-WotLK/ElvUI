@@ -502,11 +502,6 @@ function mod:RoundColors(r, g, b)
 	return floor(r*100+.5)/100, floor(g*100+.5)/100, floor(b*100+.5)/100;
 end
 
-function mod:OnSizeChanged(width, height)
-	local myPlate = mod.CreatedPlates[self];
-	myPlate:SetSize(width, height);
-end
-
 function mod:OnShow()
 	local objectType;
 	for object in pairs(self.queue) do
@@ -529,7 +524,7 @@ function mod:OnShow()
 	mod.ColorizeAndScale(self);
 
 	mod.UpdateElement_HealthOnValueChanged(self.oldHealthBar, self.oldHealthBar:GetValue());
-	self.nameText = gsub(self.oldName:GetText(), FSPAT,"");
+	self.NameText = gsub(self.oldName:GetText(), FSPAT, "");
 
 	mod:CheckRaidIcon(self);
 
@@ -612,7 +607,6 @@ function mod:CreatePlate(frame)
 
 	frame:HookScript("OnShow", self.OnShow);
 	frame:HookScript("OnHide", self.OnHide);
-	frame:HookScript("OnSizeChanged", self.OnSizeChanged);
 	HealthBar:HookScript("OnValueChanged", self.UpdateElement_HealthOnValueChanged);
 	CastBar:HookScript("OnShow", self.UpdateElement_CastBarOnShow);
 	CastBar:HookScript("OnHide", self.UpdateElement_CastBarOnHide);
@@ -937,7 +931,7 @@ function mod:SearchNameplateByName(sourceName)
 	if(not sourceName) then return; end
 	local SearchFor = strsplit("-", sourceName)
 	for frame in pairs(self.CreatedPlates) do
-		if(frame and frame:IsShown() and frame.nameText == SearchFor and RAID_CLASS_COLORS[frame.unitType]) then
+		if(frame and frame:IsShown() and frame.NameText == SearchFor and RAID_CLASS_COLORS[frame.unitType]) then
 			return frame;
 		end
 	end
