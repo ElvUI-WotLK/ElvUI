@@ -9,6 +9,7 @@ end
 
 function mod:ConstructElement_Level(frame)
 	local level = frame:CreateFontString(nil, "OVERLAY");
+	level:SetParent(frame.HealthBar);
 	level:SetJustifyH("RIGHT");
 	level:SetPoint("BOTTOMRIGHT", frame.HealthBar, "TOPRIGHT", 0, E.Border*2);
 	return level;

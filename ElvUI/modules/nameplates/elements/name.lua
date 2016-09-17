@@ -9,6 +9,7 @@ end
 
 function mod:ConstructElement_Name(frame)
 	local name = frame:CreateFontString(nil, "OVERLAY");
+	name:SetParent(frame.HealthBar);
 	name:SetJustifyH("LEFT");
 	name:SetJustifyV("BOTTOM");
 	name:SetPoint("BOTTOMLEFT", frame.HealthBar, "TOPLEFT", 0, E.Border*2);

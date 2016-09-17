@@ -144,27 +144,13 @@ E.Options.args.nameplate = {
 					name = L["Combo Points"],
 					desc = L["Display combo points on nameplates."],
 				},
-				nonTargetAlpha = {
-					type = "range",
-					order = 4,
-					name = L["Non-Target Alpha"],
-					desc = L["Alpha of nameplates that are not your current target."],
-					min = 0, max = 1, step = 0.01, isPercent = true,
-				},
-				targetAlpha = {
-					type = "range",
-					order = 5,
-					name = L["Target Alpha"],
-					desc = L["Alpha of current target nameplate."],
-					min = 0, max = 1, step = 0.01, isPercent = true,
-				},
 				colorNameByValue = {
 					type = "toggle",
-					order = 6,
+					order = 4,
 					name = L["Color Name By Health Value"],
 				},
 				lowHealthThreshold = {
-					order = 7,
+					order = 5,
 					type = "range",
 					name = L["Low Health Threshold"],
 					desc = L["Make the unitframe glow yellow when it is below this percent of health, it will glow red when the health value is half of this value."],
@@ -172,7 +158,7 @@ E.Options.args.nameplate = {
 					min = 0, max = 1, step = 0.01
 				},
 				healthAnimationSpeed = {
- 					order = 8,
+ 					order = 6,
 					type = "range",
 					name = L["Health Animation Speed"],
 					min = 0, max = 1, step = 0.01
@@ -442,27 +428,25 @@ E.Options.args.nameplate = {
 			args = {
 				hideSpellName = {
 					order = 1,
-					name = L["Hide Spell Name"],
 					type = "toggle",
-				},
-				offset = {
-					type = "range",
-					order = 2,
-					name = L["Offset"],
-					type = "range",
-					min = 0, max = 30, step = 1,
+					name = L["Hide Spell Name"]
 				},
 				hideTime = {
-					order = 3,
+					order = 2,
 					name = L["Hide Time"],
-					type = "toggle",
+					type = "toggle"
 				},
 				height = {
+					order = 3,
 					type = "range",
-					order = 4,
 					name = L["Height"],
+					min = 4, max = 30, step = 1
+				},
+				offset = {
+					order = 4,
 					type = "range",
-					min = 4, max = 30, step = 1,
+					name = L["Offset"],
+					min = 0, max = 30, step = 1
 				},
 				castTimeFormat = {
 					order = 5,
