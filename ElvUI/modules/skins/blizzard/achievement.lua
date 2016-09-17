@@ -369,7 +369,7 @@ local function LoadSkin(event)
 					metaCriteria.label:SetShadowOffset(1, -1)
 					metaCriteria.label:SetTextColor(.6, .6, .6, 1);
 				end
-			elseif(not E.private.skins.animations and bit.band(flags, ACHIEVEMENT_CRITERIA_PROGRESS_BAR) == ACHIEVEMENT_CRITERIA_PROGRESS_BAR) then
+			elseif(E.private.skins.animations and bit.band(flags, ACHIEVEMENT_CRITERIA_PROGRESS_BAR) == ACHIEVEMENT_CRITERIA_PROGRESS_BAR) then
 				progressBars = progressBars + 1;
 				local progressBar = AchievementButton_GetProgressBar(progressBars);
 				PlayAnimationStatusBar(progressBar, reqQuantity, quantity, true);
