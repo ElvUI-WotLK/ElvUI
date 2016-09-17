@@ -133,19 +133,19 @@ function mod:PositionTargetIndicator(frame)
 	targetIndicator:SetParent(frame);
 	if(self.db.targetIndicator.style == "arrow") then
 		targetIndicator.arrow:ClearAllPoints();
-		targetIndicator.arrow:SetPoint("BOTTOM", frame.HealthBar, "TOP", 0, 30 + self.db.targetIndicator.yOffset);
+		targetIndicator.arrow:SetPoint("BOTTOM", frame, "TOP", 0, 30 + self.db.targetIndicator.yOffset);
 	elseif(self.db.targetIndicator.style == "doubleArrow") then
-		targetIndicator.left:SetPoint("RIGHT", frame.HealthBar, "LEFT", -self.db.targetIndicator.xOffset, 0);
-		targetIndicator.right:SetPoint("LEFT", frame.HealthBar, "RIGHT", self.db.targetIndicator.xOffset, 0);
+		targetIndicator.left:SetPoint("RIGHT", frame, "LEFT", -self.db.targetIndicator.xOffset, 0);
+		targetIndicator.right:SetPoint("LEFT", frame, "RIGHT", self.db.targetIndicator.xOffset, 0);
 		targetIndicator:SetFrameLevel(0);
 		targetIndicator:SetFrameStrata("BACKGROUND");
 	elseif(self.db.targetIndicator.style == "doubleArrowInverted") then
-		targetIndicator.right:SetPoint("RIGHT", frame.HealthBar, "LEFT", -self.db.targetIndicator.xOffset, 0);
-		targetIndicator.left:SetPoint("LEFT", frame.HealthBar, "RIGHT", self.db.targetIndicator.xOffset, 0);
+		targetIndicator.right:SetPoint("RIGHT", frame, "LEFT", -self.db.targetIndicator.xOffset, 0);
+		targetIndicator.left:SetPoint("LEFT", frame, "RIGHT", self.db.targetIndicator.xOffset, 0);
 		targetIndicator:SetFrameLevel(0);
 		targetIndicator:SetFrameStrata("BACKGROUND");
 	elseif(self.db.targetIndicator.style == "glow") then
-		targetIndicator:SetOutside(frame.HealthBar, 3, 3);
+		targetIndicator:SetOutside(frame, 3, 3);
 		targetIndicator:SetFrameLevel(0);
 		targetIndicator:SetFrameStrata("BACKGROUND");
 	end
@@ -294,17 +294,6 @@ function mod:UpdateLevelAndName()
 	else
 		self.Name:SetText(self.oldName:GetText());
 		if(not self.Name:IsShown()) then self.Name:Show(); end
-	end
-
-	if(self.oldRaidIcon:IsShown()) then
-		local ux, uy = self.oldRaidIcon:GetTexCoord();
-		if((ux ~= self.RaidIcon.ULx or uy ~= self.RaidIcon.ULy)) then
-			self.RaidIcon:Show();
-			self.RaidIcon:SetTexCoord(self.oldRaidIcon:GetTexCoord());
-			self.RaidIcon.ULx, self.RaidIcon.ULy = ux, uy;
-		end
-	elseif(self.RaidIcon:IsShown()) then
-		self.RaidIcon:Hide();
 	end
 end
 
@@ -571,7 +560,6 @@ function mod:OnHide()
 
 	mod:HideAuraIcons(self.Buffs);
 	mod:HideAuraIcons(self.Debuffs);
-	self.RaidIcon.ULx, self.RaidIcon.ULy = nil, nil;
 	self.Glow.r, self.Glow.g, self.Glow.b = nil, nil, nil;
 	self.Glow:Hide();
 
@@ -599,15 +587,13 @@ end
 
 function mod:CreatePlate(frame)
 	local HealthBar, CastBar = frame:GetChildren();
-	local Threat, Border, CastBarShield, CastBarBorder, CastBarIcon, Highlight, Name, Level, BossIcon, RaidIcon, EliteIcon = frame:GetRegions();
+	local Threat, Border, CastBarBorder, CastBarShield, CastBarIcon, Highlight, Name, Level, BossIcon, RaidIcon, EliteIcon = frame:GetRegions();
 
 	frame.HealthBar = self:ConstructElement_HealthBar(frame);
 	CastBarIcon:SetParent(E.HiddenFrame);
 	frame.CastBar = self:ConstructElement_CastBar(frame);
 	frame.Level = self:ConstructElement_Level(frame);
 	frame.Name = self:ConstructElement_Name(frame);
-	RaidIcon:SetAlpha(0);
-	frame.RaidIcon = self:ConstructElement_RaidIcon(frame);
 
 	frame.Highlight = frame.HealthBar:CreateTexture(nil, "OVERLAY");
 	frame.Highlight:SetAllPoints();
@@ -633,12 +619,15 @@ function mod:CreatePlate(frame)
 	CastBar:HookScript("OnValueChanged", self.UpdateElement_CastBarOnValueChanged);
 
 	frame.oldHealthBar = HealthBar;
+	frame.oldCastBar = CastBar;
 	frame.Threat = Threat;
+	frame.oldCastBar.Shield = CastBarShield;
+	frame.oldCastBar.Icon = CastBarIcon;
 	frame.oldName = Name;
 	frame.oldHighlight = Highlight;
 	frame.oldLevel = Level;
 	frame.BossIcon = BossIcon;
-	frame.oldRaidIcon = RaidIcon;
+	frame.RaidIcon = RaidIcon;
 	frame.EliteIcon = EliteIcon;
 
 	self:QueueObject(frame, HealthBar);
@@ -647,8 +636,8 @@ function mod:CreatePlate(frame)
 	self:QueueObject(frame, Name);
 	self:QueueObject(frame, Threat);
 	self:QueueObject(frame, Border);
-	self:QueueObject(frame, CastBarShield);
 	self:QueueObject(frame, CastBarBorder);
+	self:QueueObject(frame, CastBarShield);
 	self:QueueObject(frame, Highlight);
 	self:QueueObject(frame, CastBarIcon);
 
@@ -928,8 +917,8 @@ function mod:WipeAuraList(guid)
 end
 
 function mod:CheckRaidIcon(frame)
-	if(frame.oldRaidIcon:IsShown()) then
-		local ux, uy = frame.oldRaidIcon:GetTexCoord();
+	if(frame.RaidIcon:IsShown()) then
+		local ux, uy = frame.RaidIcon:GetTexCoord();
 		frame.raidIconType = self.RaidIconCoordinate[ux][uy];
 	else
 		frame.raidIconType = nil;
@@ -957,7 +946,7 @@ end
 function mod:SearchNameplateByIconName(raidIcon)
 	for frame in pairs(self.CreatedPlates) do
 		self:CheckRaidIcon(frame)
-		if(frame and frame:IsShown() and frame.oldRaidIcon:IsShown() and (frame.raidIconType == raidIcon)) then
+		if(frame and frame:IsShown() and frame.RaidIcon:IsShown() and (frame.raidIconType == raidIcon)) then
 			return frame
 		end
 	end
