@@ -434,6 +434,7 @@ L["Bonus Reward Position"] = "추가보상 표시 위치"
 L["Bottom Panel"] = "하단 패널 표시"
 L["Chat Bubbles Style"] = "말풍선 디자인"
 L["Chat Bubbles"] = true;
+L["Check version"] = true;
 L["Direction the bar moves on gains/losses"] = "바의 증감방향을 결정합니다."
 L["Disable OrderHall Bar"] = true;
 L["Disable Tutorial Buttons"] = true;

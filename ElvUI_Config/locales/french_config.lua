@@ -387,6 +387,7 @@ L["Bonus Reward Position"] = "Position des récompenses bonus";
 L["Bottom Panel"] = "Bandeau en bas"
 L["Chat Bubbles Style"] = 'Style des bulles de discussion'
 L["Chat Bubbles"] = "Bulles de discussion";
+L["Check version"] = true;
 L["Direction the bar moves on gains/losses"] = "Direction que prend la barre quand gain / perte";
 L["Disable OrderHall Bar"] = true;
 L["Disable Tutorial Buttons"] = true;

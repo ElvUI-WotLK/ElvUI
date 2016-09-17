@@ -23,13 +23,13 @@ E.PopupDialogs = {};
 E.StaticPopup_DisplayedFrames = {};
 
 E.PopupDialogs["ELVUI_UPDATE_AVAILABLE"] = {
-	text = L["ElvUI is five or more revisions out of date. You can download the newest version from www.tukui.org. Get premium membership and have ElvUI automatically updated with the Tukui Client!"],
+	text = L["ElvUI is five or more revisions out of date. You can download the newest version from https://github.com/ElvUI-WotLK/ElvUI/"],
 	hasEditBox = 1,
 	OnShow = function(self)
 		self.editBox:SetAutoFocus(false);
 		self.editBox.width = self.editBox:GetWidth();
 		self.editBox:SetWidth(220);
-		self.editBox:SetText("http://www.tukui.org/dl.php");
+		self.editBox:SetText("https://github.com/ElvUI-WotLK/ElvUI/archive/master.zip");
 		self.editBox:HighlightText();
 		ChatEdit_FocusActiveWindow();
 	end,
