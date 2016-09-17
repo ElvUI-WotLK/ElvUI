@@ -387,6 +387,7 @@ L["Bonus Reward Position"] = "Bonusbeute Position"
 L["Bottom Panel"] = "Untere Leiste"
 L["Chat Bubbles Style"] = "Sprechblasen Stil"
 L["Chat Bubbles"] = "Sprechblasen"
+L["Check version"] = true;
 L["Direction the bar moves on gains/losses"] = "Richtung in die der Balken wächst/sinkt"
 L["Disable OrderHall Bar"] = "Deaktiviere die Orderhallen-Leiste"
 L["Disable Tutorial Buttons"] = "Deaktiviere Tutorial Tasten"

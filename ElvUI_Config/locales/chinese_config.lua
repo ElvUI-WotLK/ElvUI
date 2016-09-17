@@ -387,6 +387,7 @@ L["Bonus Reward Position"] = "额外奖励位置"
 L["Bottom Panel"] = "底部面板"
 L["Chat Bubbles Style"] = "聊天气泡样式"
 L["Chat Bubbles"] = "聊天气泡"
+L["Check version"] = true;
 L["Direction the bar moves on gains/losses"] = true;
 L["Disable OrderHall Bar"] = true;
 L["Disable Tutorial Buttons"] = "禁用教程按钮"

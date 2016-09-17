@@ -376,6 +376,7 @@ L["Bonus Reward Position"] = true;
 L["Bottom Panel"] = true;
 L["Chat Bubbles Style"] = true;
 L["Chat Bubbles"] = true;
+L["Check version"] = true;
 L["Direction the bar moves on gains/losses"] = true;
 L["Disable OrderHall Bar"] = true;
 L["Disable Tutorial Buttons"] = true;
