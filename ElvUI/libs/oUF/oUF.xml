@@ -19,7 +19,6 @@
 	<Script file='elements\leader.lua' />
 	<Script file='elements\lfdrole.lua' />
 	<Script file='elements\masterlooter.lua' />
-	<Script file='elements\picon.lua' />
 	<Script file='elements\portraits.lua' />
 	<Script file='elements\power.lua' />
 	<Script file='elements\pvp.lua' />

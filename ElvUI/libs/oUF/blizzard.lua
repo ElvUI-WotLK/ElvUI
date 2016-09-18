@@ -41,6 +41,7 @@ function oUF:DisableBlizzard(unit)
 	if(unit == "player") then
 		HandleFrame(PlayerFrame);
 
+		PlayerFrame:RegisterEvent("PLAYER_ENTERING_WORLD");
 		PlayerFrame:RegisterEvent("UNIT_ENTERING_VEHICLE");
 		PlayerFrame:RegisterEvent("UNIT_ENTERED_VEHICLE");
 		PlayerFrame:RegisterEvent("UNIT_EXITING_VEHICLE");
