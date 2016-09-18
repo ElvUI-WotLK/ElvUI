@@ -302,7 +302,6 @@ E.Options.args.nameplate = {
 			set = function(info, value) E.db.nameplate.healthBar[ info[#info] ] = value; NP:UpdateAllPlates() end,
 			args = {
 				width = {
-					type = "range",
 					order = 1,
 					name = L["Width"],
 					desc = L["Controls the width of the nameplate"],
@@ -310,7 +309,6 @@ E.Options.args.nameplate = {
 					min = 50, max = 125, step = 1,
 				},
 				height = {
-					type = "range",
 					order = 2,
 					name = L["Height"],
 					desc = L["Controls the height of the nameplate"],
@@ -342,7 +340,6 @@ E.Options.args.nameplate = {
 							desc = L["Adjust nameplate size on low health"],
 						},
 						width = {
-							type = "range",
 							order = 2,
 							name = L["Low HP Width"],
 							desc = L["Controls the width of the nameplate on low health"],
@@ -350,7 +347,6 @@ E.Options.args.nameplate = {
 							min = 50, max = 125, step = 1,
 						},
 						height = {
-							type = "range",
 							order = 3,
 							name = L["Low HP Height"],
 							desc = L["Controls the height of the nameplate on low health"],
