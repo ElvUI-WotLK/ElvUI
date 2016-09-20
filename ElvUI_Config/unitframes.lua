@@ -524,6 +524,12 @@ local function GetOptionsTable_Auras(friendlyUnitOnly, auraType, isGroupFrame, u
 				name = L["yOffset"],
 				min = -300, max = 300, step = 1
 			},
+			spacing = {
+				order = 6,
+				type = "range",
+				name = L["Spacing"],
+				min = 0, max = 40, step = 1
+			},
 			anchorPoint = {
 				type = "select",
 				order = 7,

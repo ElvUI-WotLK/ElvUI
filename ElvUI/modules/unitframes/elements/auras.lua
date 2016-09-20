@@ -118,10 +118,11 @@ function UF:Configure_Auras(frame, auraType)
 
 	auras.forceShow = frame.forceShowAuras;
 	auras.num = db[auraType].perrow * rows;
+	auras.spacing = db[auraType].spacing or 0;
 	auras.size = db[auraType].sizeOverride ~= 0 and db[auraType].sizeOverride or ((((auras:GetWidth() - (auras.spacing*(auras.num/rows - 1))) / auras.num)) * rows);
 
 	if(db[auraType].sizeOverride and db[auraType].sizeOverride > 0) then
-		auras:Width(db[auraType].perrow * db[auraType].sizeOverride);
+		auras:Width((db[auraType].perrow * db[auraType].sizeOverride) + (auras.spacing*(db[auraType].perrow - 1)));
 	end
 
 	local attachTo = self:GetAuraAnchorFrame(frame, db[auraType].attachTo, db.debuffs.attachTo == "BUFFS" and db.buffs.attachTo == "DEBUFFS");
@@ -145,7 +146,7 @@ function UF:Configure_Auras(frame, auraType)
 
 	auras:ClearAllPoints();
 	auras:Point(E.InversePoints[db[auraType].anchorPoint], attachTo, db[auraType].anchorPoint, x + db[auraType].xOffset, y + db[auraType].yOffset);
-	auras:Height(auras.size * rows);
+	auras:Height((auras.size * rows) + (auras.spacing*(rows - 1)));
 	auras["growth-y"] = db[auraType].anchorPoint:find("TOP") and "UP" or "DOWN";
 	auras["growth-x"] = db[auraType].anchorPoint == "LEFT" and "LEFT" or  db[auraType].anchorPoint == "RIGHT" and "RIGHT" or (db[auraType].anchorPoint:find("LEFT") and "RIGHT" or "LEFT");
 	auras.initialAnchor = E.InversePoints[db[auraType].anchorPoint];

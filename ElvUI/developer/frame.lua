@@ -77,7 +77,7 @@ FrameStackTooltip:HookScript("OnUpdate", function(_, elapsed)
 		local highlightFrame = GetMouseFocus();
 
 		FrameStackHighlight:ClearAllPoints();
-		if(highlightFrame) then
+		if(highlightFrame and highlightFrame ~= _G["WorldFrame"]) then
 			FrameStackHighlight:SetPoint("BOTTOMLEFT", highlightFrame);
 			FrameStackHighlight:SetPoint("TOPRIGHT", highlightFrame);
 			FrameStackHighlight:Show();
