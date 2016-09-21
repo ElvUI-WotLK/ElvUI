@@ -50,46 +50,22 @@ local SLOT_EMPTY_TCOORDS = {
 
 function AB:MultiCastFlyoutFrameOpenButton_Show(button, _, parent)
 	button.backdrop:SetBackdropBorderColor(parent:GetBackdropBorderColor());
-
-	if(not bar.buttons[button]) then
-		bar.buttons[button] = true;
-		AB:AdjustTotemSettings();
-	end
 end
 
 function AB:MultiCastActionButton_Update(button, _, index)
-	AB:SkinSummonButton(button);
 	button:SetBackdropBorderColor(unpack(bordercolors[((index-1) % 5) + 1]));
-	button:SetBackdropColor(0, 0, 0, 0);
+	if(InCombatLockdown()) then bar.eventFrame:RegisterEvent("PLAYER_REGEN_ENABLED"); return; end
 	button:ClearAllPoints();
 	button:SetAllPoints(button.slotButton);
-	button.overlay:SetTexture(nil);
 end
 
 function AB:StyleTotemSlotButton(button, index)
-	button:SetTemplate("Default");
-	button:StyleButton();
-
-	if(button.actionButton) then
-		button.actionButton:SetTemplate("Default");
-		button.actionButton:StyleButton();
-	end
-
-	button.background:SetDrawLayer("ARTWORK");
-	button.background:SetInside(button);
-
-	button.overlay:SetTexture(nil);
 	button:SetBackdropBorderColor(unpack(bordercolors[((index-1) % 5) + 1]));
-
-	if(not bar.buttons[button]) then
-		bar.buttons[button] = true;
-		AB:AdjustTotemSettings();
-	end
 end
 
 function AB:SkinSummonButton(button)
 	local name = button:GetName();
-	local icon = select(1, button:GetRegions());
+	local icon = _G[name .. "Icon"];
 	local highlight = _G[name .. "Highlight"];
 	local normal = _G[name .. "NormalTexture"];
 
@@ -100,14 +76,8 @@ function AB:SkinSummonButton(button)
 	icon:SetDrawLayer("ARTWORK");
 	icon:SetInside(button);
 
-	if(highlight) then highlight:SetTexture(nil); end
+	highlight:SetTexture(nil);
 	normal:SetTexture(nil);
-	normal:SetAlpha(0);
-
-	if(not bar.buttons[button]) then
-		bar.buttons[button] = true;
-		AB:AdjustTotemSettings();
-	end
 end
 
 function AB:MultiCastFlyoutFrame_ToggleFlyout(self, type, parent)
@@ -116,17 +86,13 @@ function AB:MultiCastFlyoutFrame_ToggleFlyout(self, type, parent)
 
 	local numButtons = 0;
 	for i, button in ipairs(self.buttons) do
-		button:SetTemplate("Default");
+		if(not button.isSkinned) then
+			button:SetTemplate("Default");
+			button:StyleButton();
 
-		local buttonIcon = select(1, button:GetRegions());
-		buttonIcon:SetTexCoord(unpack(E.TexCoords));
-		buttonIcon:SetDrawLayer("ARTWORK");
-		buttonIcon:SetInside(button);
-		button:StyleButton();
-
-		if(not bar.buttons[button]) then
-			bar.buttons[button] = true;
-			AB:AdjustTotemSettings();
+			button.icon:SetTexCoord(unpack(E.TexCoords));
+			button.icon:SetDrawLayer("ARTWORK");
+			button.icon:SetInside(button);
 		end
 
 		if(button:IsShown()) then
@@ -152,14 +118,13 @@ function AB:MultiCastFlyoutFrame_ToggleFlyout(self, type, parent)
 end
 
 function AB:MultiCastRecallSpellButton_Update(self)
+	if(InCombatLockdown()) then bar.eventFrame:RegisterEvent("PLAYER_REGEN_ENABLED"); return; end
 	if(HasMultiCastActionBar()) then
 		local activeSlots = MultiCastActionBarFrame.numActiveSlots;
 		if(activeSlots > 0) then
 			self:SetPoint("LEFT", _G["MultiCastSlotButton" .. activeSlots], "RIGHT", AB.db["barTotem"].buttonspacing, 0);
 		end
 	end
-
-	AB:SkinSummonButton(self);
 end
 
 function AB:Totem_OnEnter()
@@ -249,8 +214,15 @@ function AB:CreateTotemBar()
 	bar:Point("BOTTOM", E.UIParent, "BOTTOM", 0, 250);
 	bar.buttons = {};
 
-	self:HookScript(bar, "OnEnter", "Totem_OnEnter");
-	self:HookScript(bar, "OnLeave", "Totem_OnLeave");
+	bar.eventFrame = CreateFrame("Frame");
+	bar.eventFrame:Hide();
+	bar.eventFrame:SetScript("OnEvent", function(self)
+		AB:PositionAndSizeBarTotem();
+		self:UnregisterEvent("PLAYER_REGEN_ENABLED");
+	end);
+
+	--self:HookScript(bar, "OnEnter", "Totem_OnEnter");
+	--self:HookScript(bar, "OnLeave", "Totem_OnLeave");
 
 	MultiCastActionBarFrame:SetParent(bar);
 	MultiCastActionBarFrame:ClearAllPoints();
@@ -274,6 +246,7 @@ function AB:CreateTotemBar()
 	closeButton.pushed:SetInside(closeButton.backdrop);
 
 	local openButton = MultiCastFlyoutFrameOpenButton;
+	bar.buttons[openButton] = true;
 	openButton:CreateBackdrop("Default", true, true);
 	openButton.backdrop:SetPoint("TOPLEFT", 0, -(E.Border + E.Spacing));
 	openButton.backdrop:SetPoint("BOTTOMRIGHT", 0, E.Border + E.Spacing);
@@ -284,19 +257,44 @@ function AB:CreateTotemBar()
 	openButton.hover:SetInside(openButton.backdrop);
 	openButton.pushed:SetInside(openButton.backdrop);
 
+	self:SkinSummonButton(MultiCastSummonSpellButton);
+
+	for i = 1, 4 do
+		local button = _G["MultiCastSlotButton" .. i];
+		button:StyleButton();
+		button:SetTemplate("Default");
+		button.background:SetTexCoord(unpack(E.TexCoords));
+		button.background:SetDrawLayer("ARTWORK");
+		button.background:SetInside(button);
+		button.overlay:SetTexture(nil);
+		bar.buttons[button] = true;
+	end
+
+	for i = 1, 12 do
+		local button = _G["MultiCastActionButton" .. i];
+		local icon = _G["MultiCastActionButton" .. i .. "Icon"];
+		local normal = _G["MultiCastActionButton" .. i .. "NormalTexture"];
+		button:StyleButton();
+		button:SetTemplate("Default");
+		icon:SetTexCoord(unpack(E.TexCoords));
+		icon:SetDrawLayer("ARTWORK");
+		icon:SetInside();
+		button.overlay:SetTexture(nil);
+		normal:SetAlpha(0);
+		bar.buttons[button] = true;
+	end
+
+	self:SkinSummonButton(MultiCastRecallSpellButton)
+
 	self:SecureHook("MultiCastFlyoutFrameOpenButton_Show");
 	self:SecureHook("MultiCastActionButton_Update");
 
-	self:SecureHook("MultiCastSlotButton_Update", function(self)
-		AB:StyleTotemSlotButton(self, tonumber(match(self:GetName(), "MultiCastSlotButton(%d)")));
-	end);
-
-	self:SecureHook("MultiCastSummonSpellButton_Update", function(self) AB:SkinSummonButton(self); end);
+	self:SecureHook("MultiCastSlotButton_Update", function(self) AB:StyleTotemSlotButton(self, tonumber(match(self:GetName(), "MultiCastSlotButton(%d)"))); end);
 	self:SecureHook("MultiCastFlyoutFrame_ToggleFlyout");
 	self:SecureHook("MultiCastRecallSpellButton_Update");
 	self:SecureHook("ShowMultiCastActionBar");
 
 	bar.buttons[MultiCastActionBarFrame] = true;
 	E:CreateMover(bar, "ElvBar_Totem", L["Totems"], nil, nil, nil,"ALL,ACTIONBARS");
-	self:AdjustTotemSettings();
+	--self:AdjustTotemSettings();
 end

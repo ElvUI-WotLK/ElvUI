@@ -409,7 +409,7 @@ local function BuildABConfig()
 			guiInline = false,
 			disabled = function() return not E.private.actionbar.enable or not E.myclass == "SHAMAN" end,
 			get = function(info) return E.db.actionbar["barTotem"][ info[#info] ] end,
-			set = function(info, value) E.db.actionbar["barTotem"][ info[#info] ] = value; AB:AdjustTotemSettings(); AB:PositionAndSizeBarTotem(); end,
+			set = function(info, value) E.db.actionbar["barTotem"][ info[#info] ] = value; --[[AB:AdjustTotemSettings();]] AB:PositionAndSizeBarTotem(); end,
 			args = {
 				enabled = {
 					order = 1,
@@ -421,7 +421,7 @@ local function BuildABConfig()
 					type = "execute",
 					name = L["Restore Bar"],
 					desc = L["Restore the actionbars default settings"],
-					func = function() E:CopyTable(E.db.actionbar["barTotem"], P.actionbar["barTotem"]); E:ResetMovers(L["Totems"]); AB:AdjustTotemSettings() end,
+					func = function() E:CopyTable(E.db.actionbar["barTotem"], P.actionbar["barTotem"]); E:ResetMovers(L["Totems"]); --[[AB:AdjustTotemSettings()]] end,
 				},
 				mouseover = {
 					order = 3,
