@@ -2,7 +2,7 @@ local E, L, V, P, G = unpack(select(2, ...));
 local AB = E:GetModule("ActionBars");
 
 local _G = _G;
-local select, unpack = select, unpack;
+local unpack = unpack;
 local ipairs, pairs = ipairs, pairs;
 local tonumber = tonumber;
 local match = string.match;
@@ -94,7 +94,7 @@ function AB:MultiCastFlyoutFrame_ToggleFlyout(self, type, parent)
 			button.icon:SetDrawLayer("ARTWORK");
 			button.icon:SetInside(button);
 			bar.buttons[button] = true;
-			AB:AdjustTotemSettings()
+			AB:AdjustTotemSettings();
 		end
 
 		if(button:IsShown()) then
@@ -132,7 +132,7 @@ end
 function AB:Totem_OnEnter()
 	if(bar:GetParent() == self.fadeParent) then
 		if(not self.fadeParent.mouseLock) then
-			E:UIFrameFadeIn(bar, 0.2, self.fadeParent:GetAlpha(), 1);
+			E:UIFrameFadeIn(self.fadeParent, 0.2, self.fadeParent:GetAlpha(), 1);
 		end
 	elseif(bar.mouseover) then
 		E:UIFrameFadeIn(bar, 0.2, bar:GetAlpha(), bar.db.alpha);
@@ -142,7 +142,7 @@ end
 function AB:Totem_OnLeave()
 	if(bar:GetParent() == self.fadeParent) then
 		if(not self.fadeParent.mouseLock) then
-			E:UIFrameFadeOut(bar, 0.2, self.fadeParent:GetAlpha(), 1 - self.db.globalFadeAlpha);
+			E:UIFrameFadeOut(self.fadeParent, 0.2, self.fadeParent:GetAlpha(), 1 - self.db.globalFadeAlpha);
 		end
 	elseif(bar.mouseover) then
 		E:UIFrameFadeOut(bar, 0.2, bar:GetAlpha(), 0);
@@ -223,8 +223,8 @@ function AB:CreateTotemBar()
 		self:UnregisterEvent("PLAYER_REGEN_ENABLED");
 	end);
 
-	bar:HookScript("OnEnter", function() AB:Totem_OnEnter(); end);
-	bar:HookScript("OnLeave", function() AB:Totem_OnLeave(); end);
+	bar:HookScript("OnEnter", AB.Bar_OnEnter);
+	bar:HookScript("OnLeave", AB.Bar_OnLeave);
 
 	MultiCastActionBarFrame:SetParent(bar);
 	MultiCastActionBarFrame:ClearAllPoints();
@@ -298,7 +298,6 @@ function AB:CreateTotemBar()
 	self:SecureHook("MultiCastRecallSpellButton_Update");
 	self:SecureHook("ShowMultiCastActionBar");
 
-	bar.buttons[MultiCastActionBarFrame] = true;
 	E:CreateMover(bar, "ElvBar_Totem", L["Totems"], nil, nil, nil,"ALL,ACTIONBARS");
 	self:AdjustTotemSettings();
 end
