@@ -93,6 +93,8 @@ function AB:MultiCastFlyoutFrame_ToggleFlyout(self, type, parent)
 			button.icon:SetTexCoord(unpack(E.TexCoords));
 			button.icon:SetDrawLayer("ARTWORK");
 			button.icon:SetInside(button);
+			bar.buttons[button] = true;
+			AB:AdjustTotemSettings()
 		end
 
 		if(button:IsShown()) then
@@ -150,8 +152,8 @@ end
 function AB:AdjustTotemSettings()
 	for button, _ in pairs(bar.buttons) do
 		if(not self.hooks[button]) then
-			self:HookScript(button, "OnEnter", "Totem_OnEnter");
-			self:HookScript(button, "OnLeave", "Totem_OnLeave");
+			button:HookScript("OnEnter", function() AB:Totem_OnEnter(); end);
+			button:HookScript("OnLeave", function() AB:Totem_OnLeave(); end);
 		end
 	end
 end
@@ -221,12 +223,12 @@ function AB:CreateTotemBar()
 		self:UnregisterEvent("PLAYER_REGEN_ENABLED");
 	end);
 
-	--self:HookScript(bar, "OnEnter", "Totem_OnEnter");
-	--self:HookScript(bar, "OnLeave", "Totem_OnLeave");
+	bar:HookScript("OnEnter", function() AB:Totem_OnEnter(); end);
+	bar:HookScript("OnLeave", function() AB:Totem_OnLeave(); end);
 
 	MultiCastActionBarFrame:SetParent(bar);
 	MultiCastActionBarFrame:ClearAllPoints();
-	MultiCastActionBarFrame:SetPoint("BOTTOMLEFT", bar, "BOTTOMLEFT", -2, -2);
+	MultiCastActionBarFrame:SetPoint("BOTTOMLEFT", bar, "BOTTOMLEFT", -E.Border, -E.Border);
 	MultiCastActionBarFrame:SetScript("OnUpdate", nil);
 	MultiCastActionBarFrame:SetScript("OnShow", nil);
 	MultiCastActionBarFrame:SetScript("OnHide", nil);
@@ -258,6 +260,7 @@ function AB:CreateTotemBar()
 	openButton.pushed:SetInside(openButton.backdrop);
 
 	self:SkinSummonButton(MultiCastSummonSpellButton);
+	bar.buttons[MultiCastSummonSpellButton] = true;
 
 	for i = 1, 4 do
 		local button = _G["MultiCastSlotButton" .. i];
@@ -284,7 +287,8 @@ function AB:CreateTotemBar()
 		bar.buttons[button] = true;
 	end
 
-	self:SkinSummonButton(MultiCastRecallSpellButton)
+	self:SkinSummonButton(MultiCastRecallSpellButton);
+	bar.buttons[MultiCastRecallSpellButton] = true;
 
 	self:SecureHook("MultiCastFlyoutFrameOpenButton_Show");
 	self:SecureHook("MultiCastActionButton_Update");
@@ -296,5 +300,5 @@ function AB:CreateTotemBar()
 
 	bar.buttons[MultiCastActionBarFrame] = true;
 	E:CreateMover(bar, "ElvBar_Totem", L["Totems"], nil, nil, nil,"ALL,ACTIONBARS");
-	--self:AdjustTotemSettings();
+	self:AdjustTotemSettings();
 end
