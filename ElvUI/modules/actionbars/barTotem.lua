@@ -53,26 +53,20 @@ function AB:MultiCastFlyoutFrameOpenButton_Show(button, _, parent)
 
 	if(not bar.buttons[button]) then
 		bar.buttons[button] = true;
+		AB:AdjustTotemSettings();
 	end
 end
 
 function AB:MultiCastActionButton_Update(button, _, index)
-	if(bar.buttons[button]) then return; end
-
-	button:SetTemplate("Default");
+	AB:SkinSummonButton(button);
 	button:SetBackdropBorderColor(unpack(bordercolors[((index-1) % 5) + 1]));
 	button:SetBackdropColor(0, 0, 0, 0);
 	button:ClearAllPoints();
 	button:SetAllPoints(button.slotButton);
 	button.overlay:SetTexture(nil);
-	button:GetRegions():SetDrawLayer("ARTWORK");
-
-	bar.buttons[button] = true;
 end
 
 function AB:StyleTotemSlotButton(button, index)
-	if(bar.buttons[button]) then return; end
-
 	button:SetTemplate("Default");
 	button:StyleButton();
 
@@ -87,12 +81,13 @@ function AB:StyleTotemSlotButton(button, index)
 	button.overlay:SetTexture(nil);
 	button:SetBackdropBorderColor(unpack(bordercolors[((index-1) % 5) + 1]));
 
-	bar.buttons[button] = true;
+	if(not bar.buttons[button]) then
+		bar.buttons[button] = true;
+		AB:AdjustTotemSettings();
+	end
 end
 
 function AB:SkinSummonButton(button)
-	if(bar.buttons[button]) then return; end
-
 	local name = button:GetName();
 	local icon = select(1, button:GetRegions());
 	local highlight = _G[name .. "Highlight"];
@@ -105,10 +100,14 @@ function AB:SkinSummonButton(button)
 	icon:SetDrawLayer("ARTWORK");
 	icon:SetInside(button);
 
-	highlight:SetTexture(nil);
+	if(highlight) then highlight:SetTexture(nil); end
 	normal:SetTexture(nil);
+	normal:SetAlpha(0);
 
-	bar.buttons[button] = true;
+	if(not bar.buttons[button]) then
+		bar.buttons[button] = true;
+		AB:AdjustTotemSettings();
+	end
 end
 
 function AB:MultiCastFlyoutFrame_ToggleFlyout(self, type, parent)
@@ -117,14 +116,17 @@ function AB:MultiCastFlyoutFrame_ToggleFlyout(self, type, parent)
 
 	local numButtons = 0;
 	for i, button in ipairs(self.buttons) do
-		if(not bar.buttons[button]) then
-			button:SetTemplate("Default");
+		button:SetTemplate("Default");
 
-			local buttonIcon = select(1, button:GetRegions());
-			buttonIcon:SetTexCoord(unpack(E.TexCoords));
-			buttonIcon:SetDrawLayer("ARTWORK");
-			buttonIcon:SetInside(button);
-			button:StyleButton();
+		local buttonIcon = select(1, button:GetRegions());
+		buttonIcon:SetTexCoord(unpack(E.TexCoords));
+		buttonIcon:SetDrawLayer("ARTWORK");
+		buttonIcon:SetInside(button);
+		button:StyleButton();
+
+		if(not bar.buttons[button]) then
+			bar.buttons[button] = true;
+			AB:AdjustTotemSettings();
 		end
 
 		if(button:IsShown()) then
@@ -160,24 +162,31 @@ function AB:MultiCastRecallSpellButton_Update(self)
 	AB:SkinSummonButton(self);
 end
 
+function AB:Totem_OnEnter()
+	if(bar:GetParent() == self.fadeParent) then
+		if(not self.fadeParent.mouseLock) then
+			E:UIFrameFadeIn(bar, 0.2, self.fadeParent:GetAlpha(), 1);
+		end
+	elseif(bar.mouseover) then
+		E:UIFrameFadeIn(bar, 0.2, bar:GetAlpha(), bar.db.alpha);
+	end
+end
+
+function AB:Totem_OnLeave()
+	if(bar:GetParent() == self.fadeParent) then
+		if(not self.fadeParent.mouseLock) then
+			E:UIFrameFadeOut(bar, 0.2, self.fadeParent:GetAlpha(), 1 - self.db.globalFadeAlpha);
+		end
+	elseif(bar.mouseover) then
+		E:UIFrameFadeOut(bar, 0.2, bar:GetAlpha(), 0);
+	end
+end
+
 function AB:AdjustTotemSettings()
-	bar.mouseover = self.db["barTotem"].mouseover;
-	if(self.db["barTotem"].inheritGlobalFade) then
-		bar:SetParent(self.fadeParent);
-	else
-		bar:SetParent(E.UIParent);
-	end
-
-	if(self.db["barTotem"].mouseover == true) then
-		bar:SetAlpha(0);
-	else
-		bar:SetAlpha(self.db["barTotem"].alpha);
-	end
-
 	for button, _ in pairs(bar.buttons) do
-		if(not self.hooks[button] ) then
-			self:HookScript(button, "OnEnter", "Button_OnEnter");
-			self:HookScript(button, "OnLeave", "Button_OnLeave");
+		if(not self.hooks[button]) then
+			self:HookScript(button, "OnEnter", "Totem_OnEnter");
+			self:HookScript(button, "OnLeave", "Totem_OnLeave");
 		end
 	end
 end
@@ -192,7 +201,23 @@ function AB:PositionAndSizeBarTotem()
 	local numActiveSlots = MultiCastActionBarFrame.numActiveSlots;
 
 	bar:Width((size * (2 + numActiveSlots)) + (buttonSpacing * (2 + numActiveSlots - 1)));
+	MultiCastActionBarFrame:Width((size * (2 + numActiveSlots)) + (buttonSpacing * (2 + numActiveSlots - 1)));
 	bar:Height(size);
+	MultiCastActionBarFrame:Height(size);
+	bar.db = self.db["barTotem"];
+
+	bar.mouseover = self.db["barTotem"].mouseover;
+	if(self.db["barTotem"].inheritGlobalFade) then
+		bar:SetParent(self.fadeParent);
+	else
+		bar:SetParent(E.UIParent);
+	end
+
+	if(self.db["barTotem"].mouseover == true) then
+		bar:SetAlpha(0);
+	else
+		bar:SetAlpha(self.db["barTotem"].alpha);
+	end
 
 	MultiCastSummonSpellButton:ClearAllPoints();
 	MultiCastSummonSpellButton:Size(size);
@@ -224,8 +249,8 @@ function AB:CreateTotemBar()
 	bar:Point("BOTTOM", E.UIParent, "BOTTOM", 0, 250);
 	bar.buttons = {};
 
-	self:HookScript(bar, "OnEnter", "Bar_OnEnter");
-	self:HookScript(bar, "OnLeave", "Bar_OnLeave");
+	self:HookScript(bar, "OnEnter", "Totem_OnEnter");
+	self:HookScript(bar, "OnLeave", "Totem_OnLeave");
 
 	MultiCastActionBarFrame:SetParent(bar);
 	MultiCastActionBarFrame:ClearAllPoints();
@@ -237,6 +262,7 @@ function AB:CreateTotemBar()
 	MultiCastActionBarFrame.SetPoint = E.noop;
 
 	local closeButton = MultiCastFlyoutFrameCloseButton;
+	bar.buttons[MultiCastFlyoutFrameCloseButton] = true;
 	closeButton:CreateBackdrop("Default", true, true);
 	closeButton.backdrop:SetPoint("TOPLEFT", 0, -(E.Border + E.Spacing));
 	closeButton.backdrop:SetPoint("BOTTOMRIGHT", 0, E.Border + E.Spacing);
