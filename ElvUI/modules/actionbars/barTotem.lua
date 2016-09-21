@@ -277,6 +277,7 @@ function AB:CreateTotemBar()
 		local button = _G["MultiCastActionButton" .. i];
 		local icon = _G["MultiCastActionButton" .. i .. "Icon"];
 		local normal = _G["MultiCastActionButton" .. i .. "NormalTexture"];
+		local cooldown = _G["MultiCastActionButton" .. i .. "Cooldown"];
 		button:StyleButton();
 		button:SetTemplate("Default");
 		icon:SetTexCoord(unpack(E.TexCoords));
@@ -284,6 +285,7 @@ function AB:CreateTotemBar()
 		icon:SetInside();
 		button.overlay:SetTexture(nil);
 		normal:SetAlpha(0);
+		E:RegisterCooldown(cooldown);
 		bar.buttons[button] = true;
 	end
 
