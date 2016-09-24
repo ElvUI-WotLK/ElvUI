@@ -3,18 +3,18 @@ local mod = E:GetModule("NamePlates");
 local LSM = LibStub("LibSharedMedia-3.0");
 
 function mod:UpdateElement_HealthOnValueChanged(value)
-	local myPlate = mod.CreatedPlates[self:GetParent()];
+	local frame = self:GetParent();
 	local min, max = self:GetMinMaxValues();
-	myPlate.HealthBar:SetMinMaxValues(min, max);
-	--myPlate.HealthBar:SetValue(value);
+	frame.HealthBar:SetMinMaxValues(min, max);
+	--frame.HealthBar:SetValue(value);
 
-	if(myPlate.HealthBar.currentValue ~= value) then
-		if(myPlate.HealthBar.anim.progress:IsPlaying()) then
-			myPlate.HealthBar.anim.progress:Stop()
+	if(frame.HealthBar.currentValue ~= value) then
+		if(frame.HealthBar.anim.progress:IsPlaying()) then
+			frame.HealthBar.anim.progress:Stop()
 		end
-		myPlate.HealthBar.anim.progress:SetChange(value);
-		myPlate.HealthBar.anim.progress:Play();
-		myPlate.HealthBar.currentValue = value;
+		frame.HealthBar.anim.progress:SetChange(value);
+		frame.HealthBar.anim.progress:Play();
+		frame.HealthBar.currentValue = value;
 	end
 
 	local r, g, b, shouldShow;
@@ -29,23 +29,23 @@ function mod:UpdateElement_HealthOnValueChanged(value)
 	end
 
 	if(shouldShow) then
-		myPlate.Glow:Show();
-		if((r ~= myPlate.Glow.r or g ~= myPlate.Glow.g or b ~= myPlate.Glow.b)) then
-			myPlate.Glow:SetBackdropBorderColor(r, g, b);
-			myPlate.Glow.r, myPlate.Glow.g, myPlate.Glow.b = r, g, b;
+		frame.Glow:Show();
+		if((r ~= frame.Glow.r or g ~= frame.Glow.g or b ~= frame.Glow.b)) then
+			frame.Glow:SetBackdropBorderColor(r, g, b);
+			frame.Glow.r, frame.Glow.g, frame.Glow.b = r, g, b;
 		end
-	elseif(myPlate.Glow:IsShown()) then
-		myPlate.Glow:Hide();
+	elseif(frame.Glow:IsShown()) then
+		frame.Glow:Hide();
 	end
 
 	if(mod.db.healthBar.text.enable and value and max and max > 1 and self:GetScale() == 1) then
-		myPlate.HealthBar.text:SetText(E:GetFormattedText(mod.db.healthBar.text.format, value, max));
+		frame.HealthBar.text:SetText(E:GetFormattedText(mod.db.healthBar.text.format, value, max));
 	else
-		myPlate.HealthBar.text:SetText("");
+		frame.HealthBar.text:SetText("");
 	end
 
 	if(mod.db.colorNameByValue) then
-		myPlate.Name:SetTextColor(E:ColorGradient(perc, 1,0,0, 1,1,0, 1,1,1));
+		frame.Name:SetTextColor(E:ColorGradient(perc, 1,0,0, 1,1,0, 1,1,1));
 	end
 end
 
@@ -65,8 +65,8 @@ end
 
 function mod:ConstructElement_HealthBar(parent)
 	local frame = CreateFrame("StatusBar", nil, parent);
+	frame:SetFrameStrata("BACKGROUND");
 	self:StyleFrame(frame);
-	frame:SetFrameLevel(10);
 	frame.anim = CreateAnimationGroup(frame);
 	frame.anim.progress = frame.anim:CreateAnimation("Progress");
 	frame.anim.progress:SetSmoothing("Out");

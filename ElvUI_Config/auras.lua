@@ -208,6 +208,90 @@ E.Options.args.auras = {
 			get = function(info) return E.db.auras.debuffs[ info[#info] ]; end,
 			set = function(info, value) E.db.auras.debuffs[ info[#info] ] = value; A:UpdateHeader(ElvUIPlayerDebuffs); end,
 			args = GetAuraOptions(L["Debuffs"])
-		}
+		},
+		reminder = {
+			type = "group",
+			order = 7,
+			name = L["Reminder"],
+			get = function(info) return E.db.general.reminder[ info[#info] ] end,
+			set = function(info, value) E.db.general.reminder[ info[#info] ] = value; E:GetModule('ReminderBuffs'):UpdateSettings(); end,
+			args = {
+				header = {
+					order = 0,
+					type = "header",
+					name = L["Reminder"]
+				},
+				enable = {
+					order = 1,
+					name = L['Enable'],
+					desc = L['Display reminder bar on the minimap.'],
+					type = 'toggle',
+					set = function(info, value) E.db.general.reminder[ info[#info] ] = value; E:GetModule('Minimap'):UpdateSettings(); end
+				},
+				generalGroup = {
+					order = 2,
+					type = 'group',
+					guiInline = true,
+					name = L['General'],
+					disabled = function() return not E.db.general.reminder.enable end,
+					args = {
+						durations = {
+							order = 1,
+							name = L['Remaining Time'],
+							type = 'toggle'
+						},
+						reverse = {
+							order = 2,
+							name = L['Reverse highlight'],
+							type = 'toggle'
+						},
+						position = {
+							order = 3,
+							type = "select",
+							name = L["Position"],
+							set = function(info, value) E.db.general.reminder[ info[#info] ] = value; E:GetModule("ReminderBuffs"):UpdatePosition(); end,
+							values = {
+								["LEFT"] = L["Left"],
+								["RIGHT"] = L["Right"]
+							},
+						},
+					},
+				},
+				fontGroup = {
+					order = 3,
+					type = 'group',
+					guiInline = true,
+					name = L['Font'],
+					disabled = function() return not E.db.general.reminder.enable or not E.db.general.reminder.durations end,
+					args = {
+						font = {
+							type = 'select', dialogControl = 'LSM30_Font',
+							order = 1,
+							name = L['Font'],
+							values = AceGUIWidgetLSMlists.font
+						},
+						fontSize = {
+							order = 2,
+							name = L['Font Size'],
+							type = 'range',
+							min = 6, max = 22, step = 1
+						},
+						fontOutline = {
+							order = 3,
+							name = L['Font Outline'],
+							desc = L['Set the font outline.'],
+							type = 'select',
+							values = {
+								['NONE'] = L['None'],
+								['OUTLINE'] = 'OUTLINE',
+								['MONOCHROME'] = (not E.isMacClient) and 'MONOCHROME' or nil,
+								['MONOCHROMEOUTLINE'] = 'MONOCROMEOUTLINE',
+								['THICKOUTLINE'] = 'THICKOUTLINE'
+							},
+						},
+					},
+				},
+			},
+		},
 	}
 };

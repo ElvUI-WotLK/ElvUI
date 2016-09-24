@@ -132,8 +132,6 @@ P["nameplate"] = {
 	["healthAnimationSpeed"] = 0.2,
 
 	["comboPoints"] = true,
-	['nonTargetAlpha'] = 0.6,
-	['targetAlpha'] = 1,
 	["lowHealthThreshold"] = 0.4,
 	["showFriendlyCombat"] = "DISABLED",
 	["showEnemyCombat"] = "DISABLED",
@@ -190,7 +188,7 @@ P["nameplate"] = {
 	},
 	['castBar'] = {
 		['height'] = 6,
-		['offset'] = 0,
+		['offset'] = 1,
 		["hideSpellName"] = false,
 		["hideTime"] = false,
 		["castTimeFormat"] = "CURRENT",

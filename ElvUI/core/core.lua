@@ -9,16 +9,17 @@ local floor = floor;
 local format, find, match, strrep, len, sub, gsub = string.format, string.find, string.match, strrep, string.len, string.sub, string.gsub;
 
 local CreateFrame = CreateFrame;
+local GetBonusBarOffset = GetBonusBarOffset;
 local GetCVar = GetCVar;
-local IsAddOnLoaded = IsAddOnLoaded;
+local GetCombatRatingBonus = GetCombatRatingBonus;
+local GetFunctionCPUUsage = GetFunctionCPUUsage;
 local GetSpellInfo = GetSpellInfo;
+local InCombatLockdown = InCombatLockdown;
+local IsAddOnLoaded = IsAddOnLoaded;
 local IsInInstance, GetNumPartyMembers, GetNumRaidMembers = IsInInstance, GetNumPartyMembers, GetNumRaidMembers;
 local RequestBattlefieldScoreData = RequestBattlefieldScoreData;
-local GetCombatRatingBonus = GetCombatRatingBonus;
-local UnitStat, UnitAttackPower, UnitBuff = UnitStat, UnitAttackPower, UnitBuff;
 local SendAddonMessage = SendAddonMessage;
-local InCombatLockdown = InCombatLockdown;
-local GetFunctionCPUUsage = GetFunctionCPUUsage;
+local UnitStat, UnitAttackPower, UnitBuff = UnitStat, UnitAttackPower, UnitBuff;
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
 local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
 local ERR_NOT_IN_COMBAT = ERR_NOT_IN_COMBAT;
@@ -602,11 +603,13 @@ end
 local myName = E.myname.."-"..E.myrealm;
 myName = myName:gsub("%s+", "");
 local function SendRecieve(_, event, prefix, message, _, sender)
+	if(not E.global.general.versionCheck) then return; end
+
 	if(event == "CHAT_MSG_ADDON") then
 		if(sender == myName) then return; end
 		if(prefix == "ELVUI_VERSIONCHK" and not E.recievedOutOfDateMessage) then
 			if(tonumber(message) ~= nil and tonumber(message) > tonumber(E.version)) then
-				E:Print(L["ElvUI is out of date. You can download the newest version from www.tukui.org. Get premium membership and have ElvUI automatically updated with the Tukui Client!"]:gsub("ElvUI", E.UIName));
+				E:Print(L["ElvUI is out of date. You can download the newest version from https://github.com/ElvUI-WotLK/ElvUI/"]:gsub("ElvUI", E.UIName));
 
 				if((tonumber(message) - tonumber(E.version)) >= 0.05) then
 					E:StaticPopup_Show("ELVUI_UPDATE_AVAILABLE");
@@ -620,11 +623,11 @@ local function SendRecieve(_, event, prefix, message, _, sender)
 	end
 end
 
---[[local f = CreateFrame("Frame");
+local f = CreateFrame("Frame");
 f:RegisterEvent("RAID_ROSTER_UPDATE");
 f:RegisterEvent("PARTY_MEMBERS_CHANGED");
 f:RegisterEvent("CHAT_MSG_ADDON");
-f:SetScript("OnEvent", SendRecieve);]]
+f:SetScript("OnEvent", SendRecieve);
 
 function E:UpdateAll(ignoreInstall)
 	self.private = self.charSettings.profile;
@@ -956,7 +959,6 @@ function E:Initialize()
 
 	self:UpdateMedia();
 	self:UpdateFrameTemplates();
-	self:RegisterEvent("PLAYER_ENTERING_WORLD", "CheckRole");
 	self:RegisterEvent("UNIT_AURA", "CheckRole");
 	self:RegisterEvent("UPDATE_BONUS_ACTIONBAR", "CheckRole");
 	self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", "CheckRole");

@@ -2,9 +2,16 @@ local E, L, V, P, G = unpack(ElvUI);
 local D = E:GetModule("Distributor");
 local AceGUI = LibStub("AceGUI-3.0");
 
+local pairs = pairs;
 local tsort, tinsert = table.sort, table.insert;
-local floor, ceil = math.floor, math.ceil;
 local format = string.format;
+
+local UnitExists = UnitExists;
+local UnitIsFriend = UnitIsFriend;
+local UnitIsPlayer = UnitIsPlayer;
+local UnitIsUnit = UnitIsUnit;
+local UnitName = UnitName;
+
 local DEFAULT_WIDTH = 890;
 local DEFAULT_HEIGHT = 651;
 local AC = LibStub("AceConfig-3.0-ElvUI");

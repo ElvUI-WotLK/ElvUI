@@ -11,5 +11,3 @@
 ## X-Embeds: LibHealComm-4.0
 
 oUF_HealComm4.xml
-
-oUF_HealComm4.lua

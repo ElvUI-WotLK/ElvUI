@@ -43,11 +43,10 @@ end
 
 function mod:UpdateElement_Auras(frame)
 	local guid = frame.guid;
-	local myPlate = self.CreatedPlates[frame];
 
 	if(not guid) then
 		if(RAID_CLASS_COLORS[frame.unitType]) then
-			local name = gsub(frame.Name:GetText(), "%s%(%*%)","");
+			local name = gsub(frame.oldName:GetText(), "%s%(%*%)","");
 			guid = self.ByName[name];
 		elseif(frame.RaidIcon:IsShown()) then
 			guid = self.ByRaidIcon[frame.raidIconType];
@@ -56,16 +55,16 @@ function mod:UpdateElement_Auras(frame)
 		if(guid) then
 			frame.guid = guid;
 		else
-			myPlate.Debuffs:Hide();
-			myPlate.Buffs:Hide();
+			frame.Debuffs:Hide();
+			frame.Buffs:Hide();
 			return;
 		end
 	end
 
 	local hasBuffs = false;
 	local hasDebuffs = false;
-	local buffs = myPlate.Buffs;
-	local debuffs = myPlate.Debuffs;
+	local buffs = frame.Buffs;
+	local debuffs = frame.Debuffs;
 	local aurasOnUnit = self:GetAuraList(guid);
 	local BuffSlotIndex = 1;
 	local DebuffSlotIndex = 1;
@@ -135,8 +134,8 @@ function mod:UpdateElement_Auras(frame)
 	self.BuffCache = wipe(self.BuffCache);
 	self.DebuffCache = wipe(self.DebuffCache);
 
-	local TopLevel = myPlate.HealthBar;
-	local TopOffset = select(2, myPlate.Name:GetFont()) + 5 or 0;
+	local TopLevel = frame.HealthBar;
+	local TopOffset = select(2, frame.Name:GetFont()) + 5 or 0;
 	if(hasDebuffs) then
 		TopOffset = TopOffset + 3;
 		debuffs:SetPoint("BOTTOMLEFT", TopLevel, "TOPLEFT", 0, TopOffset);
@@ -265,6 +264,7 @@ end
 
 function mod:ConstructElement_Auras(frame, maxAuras, side)
 	local auras = CreateFrame("Frame", nil, frame);
+	auras:SetFrameStrata("BACKGROUND");
 
 	auras:SetScript("OnSizeChanged", mod.Auras_SizeChanged);
 	auras:SetHeight(18);

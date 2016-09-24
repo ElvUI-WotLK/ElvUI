@@ -5,80 +5,77 @@ local _G = _G;
 local select = select;
 local ceil = math.ceil;
 
+local RegisterStateDriver = RegisterStateDriver;
+local GetBindingKey = GetBindingKey;
+local PetHasActionBar = PetHasActionBar;
 local GetPetActionInfo = GetPetActionInfo;
 local IsPetAttackAction = IsPetAttackAction;
+local PetActionButton_StartFlash = PetActionButton_StartFlash;
+local PetActionButton_StopFlash = PetActionButton_StopFlash;
+local AutoCastShine_AutoCastStart = AutoCastShine_AutoCastStart;
+local AutoCastShine_AutoCastStop = AutoCastShine_AutoCastStop;
 local GetPetActionSlotUsable = GetPetActionSlotUsable;
-local PetHasActionBar = PetHasActionBar;
-local GetBindingKey = GetBindingKey;
+local SetDesaturation = SetDesaturation;
+local PetActionBar_ShowGrid = PetActionBar_ShowGrid;
+local PetActionBar_UpdateCooldowns = PetActionBar_UpdateCooldowns;
 local NUM_PET_ACTION_SLOTS = NUM_PET_ACTION_SLOTS;
 
 local bar = CreateFrame('Frame', 'ElvUI_BarPet', E.UIParent, 'SecureHandlerStateTemplate');
 
 function AB:UpdatePet()
-	for i=1, NUM_PET_ACTION_SLOTS, 1 do
-		local buttonName = 'PetActionButton'..i;
-		local button = _G[buttonName];
-		local icon = _G[buttonName..'Icon'];
-		local autoCast = _G[buttonName..'AutoCastable'];
-		local shine = _G[buttonName..'Shine'];
-		local checked = button:GetCheckedTexture();
+	local petActionButton, petActionIcon, petAutoCastableTexture, petAutoCastShine;
+	for i = 1, NUM_PET_ACTION_SLOTS, 1 do
+		local buttonName = "PetActionButton" .. i;
+		petActionButton = _G[buttonName];
+		petActionIcon = _G[buttonName .. "Icon"];
+		petAutoCastableTexture = _G[buttonName .. "AutoCastable"];
+		petAutoCastShine = _G[buttonName .. "Shine"];
 		local name, subtext, texture, isToken, isActive, autoCastAllowed, autoCastEnabled = GetPetActionInfo(i);
-
-		if not isToken then
-			icon:SetTexture(texture);
-			button.tooltipName = name;
+		if(not isToken) then
+			petActionIcon:SetTexture(texture);
+			petActionButton.tooltipName = name;
 		else
-			icon:SetTexture(_G[texture]);
-			button.tooltipName = _G[name];
+			petActionIcon:SetTexture(_G[texture]);
+			petActionButton.tooltipName = _G[name];
 		end
-
-		button.isToken = isToken;
-		button.tooltipSubtext = subtext;
-
-		if isActive and name ~= 'PET_ACTION_FOLLOW' then
-			button:SetChecked(1);
-			if IsPetAttackAction(i) then
-				PetActionButton_StartFlash(button);
+		petActionButton.isToken = isToken;
+		petActionButton.tooltipSubtext = subtext;
+		if(isActive and name ~= "PET_ACTION_FOLLOW") then
+			petActionButton:SetChecked(true);
+			if(IsPetAttackAction(i)) then
+				PetActionButton_StartFlash(petActionButton);
 			end
 		else
-			button:SetChecked(0);
-			if IsPetAttackAction(i) then
-				PetActionButton_StopFlash(button);
+			petActionButton:SetChecked(false);
+			if(IsPetAttackAction(i)) then
+				PetActionButton_StopFlash(petActionButton);
 			end
 		end
-
-		if autoCastAllowed then
-			autoCast:Show();
+		if(autoCastAllowed) then
+			petAutoCastableTexture:Show();
 		else
-			autoCast:Hide();
+			petAutoCastableTexture:Hide();
 		end
-
-		if autoCastEnabled then
-			AutoCastShine_AutoCastStart(shine);
+		if(autoCastEnabled) then
+			AutoCastShine_AutoCastStart(petAutoCastShine);
 		else
-			AutoCastShine_AutoCastStop(shine);
+			AutoCastShine_AutoCastStop(petAutoCastShine);
 		end
-
-		button:SetAlpha(1);
-
-		if texture then
-			if GetPetActionSlotUsable(i) then
-				SetDesaturation(icon, nil);
+		if(texture) then
+			if(GetPetActionSlotUsable(i)) then
+				SetDesaturation(petActionIcon, nil);
 			else
-				SetDesaturation(icon, 1);
+				SetDesaturation(petActionIcon, 1);
 			end
-			icon:Show();
+			petActionIcon:Show();
 		else
-			icon:Hide();
+			petActionIcon:Hide();
 		end
-
-		if not PetHasActionBar() and texture and name ~= 'PET_ACTION_FOLLOW' then
-			PetActionButton_StopFlash(button);
-			SetDesaturation(icon, 1);
-			button:SetChecked(0);
+		if(not PetHasActionBar() and texture and name ~= "PET_ACTION_FOLLOW") then
+			PetActionButton_StopFlash(petActionButton);
+			SetDesaturation(petActionIcon, 1);
+			petActionButton:SetChecked(false);
 		end
-
-		checked:SetAlpha(0.3);
 	end
 end
 

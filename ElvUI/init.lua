@@ -100,14 +100,20 @@ function AddOn:OnInitialize()
 		AddOn:ToggleConfig();
 		HideUIPanel(GameMenuFrame);
 	end);
+	GameMenuFrame[AddOnName] = GameMenuButton;
 
 	GameMenuFrame:HookScript("OnShow", function()
 		if(not GameMenuFrame.isElvUI) then
 			GameMenuFrame:SetHeight(GameMenuFrame:GetHeight() + GameMenuButtonLogout:GetHeight() + 1);
 			GameMenuFrame.isElvUI = true;
 		end
-		GameMenuButton:Point("TOP", ElvUI_ButtonAddons or GameMenuButtonAddOns or GameMenuButtonMacros, "BOTTOM", 0, -1);
-		GameMenuButtonLogout:SetPoint("TOP", GameMenuButton, "BOTTOM", 0, -16);
+		local _, relTo, _, _, offY = GameMenuButtonLogout:GetPoint();
+		if(relTo ~= GameMenuFrame[AddOnName]) then
+			GameMenuFrame[AddOnName]:ClearAllPoints();
+			GameMenuFrame[AddOnName]:Point("TOPLEFT", relTo, "BOTTOMLEFT", 0, -1);
+			GameMenuButtonLogout:ClearAllPoints();
+			GameMenuButtonLogout:Point("TOPLEFT", GameMenuFrame[AddOnName], "BOTTOMLEFT", 0, -16);
+		end
 	end);
 	local S = AddOn:GetModule("Skins");
 	S:HandleButton(GameMenuButton);

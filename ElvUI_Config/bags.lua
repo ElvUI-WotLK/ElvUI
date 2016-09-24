@@ -309,30 +309,71 @@ E.Options.args.bags = {
 				description = {
 					order = 3,
 					type = "description",
-					width = "double",
 					name = L["Here you can add items or search terms that you want to be excluded from sorting. To remove an item just click on its name in the list."]
 				},
-				addEntry = {
+				addEntryGroup = {
 					order = 4,
+					type = "group",
 					name = L["Add Item or Search Syntax"],
-					desc = L["Add an item or search syntax to the ignored list. Items matching the search syntax will be ignored."],
-					type = "input",
-					get = function(info) return "" end,
-					set = function(info, value)
-						if(value == "" or string.gsub(value, "%s+", "") == "") then return; end
+					guiInline = true,
+					args = {
+						addEntryProfile = {
+							order = 1,
+							type = "input",
+							name = L["Profile"],
+							desc = L["Add an item or search syntax to the ignored list. Items matching the search syntax will be ignored."],
+							get = function(info) return ""; end,
+							set = function(info, value)
+								if(value == "" or string.gsub(value, "%s+", "") == "") then return; end
 
-						local itemID = string.match(value, "item:(%d+)");
-						E.db.bags.ignoredItems[(itemID or value)] = value;
-					end
+								local itemID = string.match(value, "item:(%d+)");
+								E.db.bags.ignoredItems[(itemID or value)] = value;
+							end
+						},
+						spacer = {
+							order = 2,
+							type = "description",
+							name = " ",
+							width = "normal"
+						},
+						addEntryGlobal = {
+							order = 3,
+							type = "input",
+							name = L["Global"],
+							desc = L["Add an item or search syntax to the ignored list. Items matching the search syntax will be ignored."],
+							get = function(info) return ""; end,
+							set = function(info, value)
+								if(value == "" or string.gsub(value, "%s+", "") == "") then return; end
+
+								local itemID = string.match(value, "item:(%d+)");
+								E.global.bags.ignoredItems[(itemID or value)] = value;
+
+								if(E.db.bags.ignoredItems[(itemID or value)]) then
+									E.db.bags.ignoredItems[(itemID or value)] = nil;
+								end
+							end
+						}
+					}
 				},
-				ignoredEntries = {
+				ignoredEntriesProfile = {
 					order = 5,
 					type = "multiselect",
-					name = L["Ignored Items and Search Syntax"],
+					name = L["Ignored Items and Search Syntax (Profile)"],
 					values = function() return E.db.bags.ignoredItems; end,
-					get = function(info, value) return E.db.bags.ignoredItems[value]; end,
+					get = function(info, value)	return E.db.bags.ignoredItems[value]; end,
 					set = function(info, value)
 						E.db.bags.ignoredItems[value] = nil;
+						GameTooltip:Hide();
+					end
+				},
+				ignoredEntriesGlobal = {
+					order = 6,
+					type = "multiselect",
+					name = L["Ignored Items and Search Syntax (Global)"],
+					values = function() return E.global.bags.ignoredItems; end,
+					get = function(info, value)	return E.global.bags.ignoredItems[value]; end,
+					set = function(info, value)
+						E.global.bags.ignoredItems[value] = nil;
 						GameTooltip:Hide();
 					end
 				}

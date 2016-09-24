@@ -137,7 +137,7 @@ E.Options.args.databars = {
 								CURMAX = L["Current - Max"],
 								CURPERC = L["Current - Percent"],
 							},
-							set = function(info, value) mod.db.reputation[ info[#info] ] = value; mod:UpdateExperience(); end
+							set = function(info, value) mod.db.experience[ info[#info] ] = value; mod:UpdateExperience(); end
 						}
 					}
 				}
