@@ -22,7 +22,10 @@ local NUM_PET_ACTION_SLOTS = NUM_PET_ACTION_SLOTS;
 
 local bar = CreateFrame('Frame', 'ElvUI_BarPet', E.UIParent, 'SecureHandlerStateTemplate');
 
-function AB:UpdatePet()
+function AB:UpdatePet(event, arg1)
+	if (((event == "UNIT_FLAGS") or (event == "UNIT_AURA")) and arg1 ~= "pet") then return; end
+	if (event == "UNIT_PET" and arg1 ~= "player") then return; end
+
 	local petActionButton, petActionIcon, petAutoCastableTexture, petAutoCastShine;
 	for i = 1, NUM_PET_ACTION_SLOTS, 1 do
 		local buttonName = "PetActionButton" .. i;

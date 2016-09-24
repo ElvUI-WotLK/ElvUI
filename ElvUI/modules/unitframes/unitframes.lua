@@ -632,9 +632,7 @@ end
 
 function UF.groupPrototype:UpdateHeader(self)
 	local group = self.groupName;
-	--for i = 1, #self.groups do
-		UF["Update_"..E:StringTitle(group).."Header"](UF, self, UF.db["units"][group], isForced);
-	--end
+	UF["Update_"..E:StringTitle(group).."Header"](UF, self, UF.db["units"][group]);
 end
 
 function UF.headerPrototype:ClearChildPoints()
@@ -647,7 +645,6 @@ end
 function UF.headerPrototype:Update(isForced)
 	local groupName = self.groupName;
 	local db = UF.db["units"][groupName];
-	--UF["Update_"..E:StringTitle(groupName).."Header"](UF, self, db, isForced);
 
 	local i = 1;
 	local child = self:GetAttribute("child" .. i);
