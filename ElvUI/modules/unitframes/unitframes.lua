@@ -632,9 +632,9 @@ end
 
 function UF.groupPrototype:UpdateHeader(self)
 	local group = self.groupName;
-	for i = 1, #self.groups do
-		UF["Update_"..E:StringTitle(group).."Header"](UF, self.groups[i], UF.db["units"][group], isForced);
-	end
+	--for i = 1, #self.groups do
+		UF["Update_"..E:StringTitle(group).."Header"](UF, self, UF.db["units"][group], isForced);
+	--end
 end
 
 function UF.headerPrototype:ClearChildPoints()
