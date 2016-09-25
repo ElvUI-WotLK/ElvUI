@@ -37,4 +37,4 @@ local function ValueColorUpdate(hex)
 end
 E["valueColorUpdateFuncs"][ValueColorUpdate] = true;
 
-DT:RegisterDatatext("Hit", {"UNIT_STATS"}, OnEvent);
+DT:RegisterDatatext("Hit", {"COMBAT_RATING_UPDATE"}, OnEvent);

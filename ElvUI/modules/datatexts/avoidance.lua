@@ -123,4 +123,4 @@ local function ValueColorUpdate(hex)
 end
 E["valueColorUpdateFuncs"][ValueColorUpdate] = true;
 
-DT:RegisterDatatext("Avoidance", {"UNIT_TARGET", "PLAYER_EQUIPMENT_CHANGED"}, OnEvent, nil, nil, OnEnter);
+DT:RegisterDatatext("Avoidance", {"COMBAT_RATING_UPDATE", "UNIT_TARGET"}, OnEvent, nil, nil, OnEnter);
