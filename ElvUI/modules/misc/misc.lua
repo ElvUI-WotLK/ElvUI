@@ -100,12 +100,21 @@ function M:DisbandRaidGroup()
 end
 
 function M:CheckMovement()
-	if E.global.general.mapAlphaWhenMoving == 100 or not WorldMapFrame:IsShown() then return end
+	if(not WorldMapFrame:IsShown()) then return; end
 
 	if GetUnitSpeed("player") ~= 0 then
 		WorldMapFrame:SetAlpha(E.global.general.mapAlphaWhenMoving)
 	else
 		WorldMapFrame:SetAlpha(1)
+	end
+end
+
+function M:UpdateMapAlpha()
+	if((E.global.general.mapAlphaWhenMoving >= 1) and self.MovingTimer) then
+		self:CancelTimer(self.MovingTimer);
+		self.MovingTimer = nil;
+	elseif((E.global.general.mapAlphaWhenMoving < 1) and not self.MovingTimer) then
+		self.MovingTimer = self:ScheduleRepeatingTimer("CheckMovement", 0.1);
 	end
 end
 
@@ -210,7 +219,9 @@ function M:Initialize()
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 	self:RegisterEvent("ADDON_LOADED")
 
-	self.MovingTimer = self:ScheduleRepeatingTimer("CheckMovement", 0.1)
+	if(E.global.general.mapAlphaWhenMoving < 1) then
+		self.MovingTimer = self:ScheduleRepeatingTimer("CheckMovement", 0.1)
+	end
 end
 
 E:RegisterModule(M:GetName())
