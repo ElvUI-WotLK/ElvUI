@@ -34,6 +34,7 @@ function UF:Construct_Combobar(frame)
 end
 
 function UF:Configure_ComboPoints(frame)
+	if(not frame.VARIABLES_SET) then return; end
 	local CPoints = frame.CPoints;
 	CPoints:ClearAllPoints();
 	local db = frame.db;

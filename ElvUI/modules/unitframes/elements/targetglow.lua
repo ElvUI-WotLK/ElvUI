@@ -61,6 +61,7 @@ function UF:UpdateTargetGlow()
 end
 
 function UF:Configure_TargetGlow(frame)
+	if(not frame.VARIABLES_SET) then return; end
 	local targetHealthGlow = frame.TargetGlow;
 	local targetPowerGlow = frame.TargetGlow.powerGlow;
 	targetHealthGlow:ClearAllPoints();
