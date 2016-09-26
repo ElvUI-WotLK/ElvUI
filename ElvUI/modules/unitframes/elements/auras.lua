@@ -23,6 +23,7 @@ function UF:Construct_Buffs(frame)
 	buffs.CustomFilter = self.AuraFilter;
 	buffs:SetFrameLevel(10);
 	buffs.type = "buffs";
+	buffs:Width(100);
 
 	return buffs;
 end
@@ -36,6 +37,7 @@ function UF:Construct_Debuffs(frame)
 	debuffs.CustomFilter = self.AuraFilter;
 	debuffs.type = "debuffs";
 	debuffs:SetFrameLevel(10);
+	debuffs:Width(100);
 
 	return debuffs;
 end
@@ -190,62 +192,74 @@ end
 
 local function SortAurasByTime(a, b)
 	if(a and b and a:GetParent().db) then
-		local sortDirection = a:GetParent().db.sortDirection;
-		local aTime = a.expiration or -1;
-		local bTime = b.expiration or -1;
-		if(aTime and bTime) then
-			if(sortDirection == "DESCENDING") then
-				return aTime < bTime;
-			else
-				return aTime > bTime;
+		if(a:IsShown() and b:IsShown()) then
+			local sortDirection = a:GetParent().db.sortDirection;
+			local aTime = a.expiration or -1;
+			local bTime = b.expiration or -1;
+			if(aTime and bTime) then
+				if(sortDirection == "DESCENDING") then
+					return aTime < bTime;
+				else
+					return aTime > bTime;
+				end
 			end
+		elseif(a:IsShown()) then
+			return true;
 		end
 	end
 end
 
 local function SortAurasByName(a, b)
 	if(a and b and a:GetParent().db) then
-		local sortDirection = a:GetParent().db.sortDirection;
-		local aName = a.spell or "";
-		local bName = b.spell or "";
-		if(aName and bName) then
-			if(sortDirection == "DESCENDING") then
-				return aName < bName;
-			else
-				return aName > bName;
+		if(a:IsShown() and b:IsShown()) then
+			local sortDirection = a:GetParent().db.sortDirection;
+			local aName = a.spell or "";
+			local bName = b.spell or "";
+			if(aName and bName) then
+				if(sortDirection == "DESCENDING") then
+					return aName < bName;
+				else
+					return aName > bName;
+				end
 			end
+		elseif(a:IsShown()) then
+			return true;
 		end
 	end
 end
 
 local function SortAurasByDuration(a, b)
 	if(a and b and a:GetParent().db) then
-		local sortDirection = a:GetParent().db.sortDirection;
-		local aTime = a.duration or -1;
-		local bTime = b.duration or -1;
-		if(aTime and bTime) then
-			if(sortDirection == "DESCENDING") then
-				return aTime < bTime;
-			else
-				return aTime > bTime;
+		if(a:IsShown() and b:IsShown()) then
+			local sortDirection = a:GetParent().db.sortDirection;
+			local aTime = a.duration or -1;
+			local bTime = b.duration or -1;
+			if(aTime and bTime) then
+				if(sortDirection == "DESCENDING") then
+					return aTime < bTime;
+				else
+					return aTime > bTime;
+				end
 			end
+		elseif(a:IsShown()) then
+			return true;
 		end
 	end
 end
 
 local function SortAurasByCaster(a, b)
-	if (a and b and a:GetParent().db) then
-		if a:IsShown() and b:IsShown() then
-			local sortDirection = a:GetParent().db.sortDirection
-			local aPlayer = a.isPlayer or false
-			local bPlayer = b.isPlayer or false
+	if(a and b and a:GetParent().db) then
+		if(a:IsShown() and b:IsShown()) then
+			local sortDirection = a:GetParent().db.sortDirection;
+			local aPlayer = a.isPlayer or false;
+			local bPlayer = b.isPlayer or false;
 			if(sortDirection == "DESCENDING") then
-				return (aPlayer and not bPlayer)
+				return (aPlayer and not bPlayer);
 			else
-				return (not aPlayer and bPlayer)
+				return (not aPlayer and bPlayer);
 			end
-		elseif a:IsShown() then
-			return true
+		elseif(a:IsShown()) then
+			return true;
 		end
 	end
 end
@@ -260,8 +274,10 @@ function UF:SortAuras()
 	elseif(self.db.sortMethod == "DURATION") then
 		tsort(self, SortAurasByDuration);
 	elseif (self.db.sortMethod == "PLAYER") then
-		tsort(self, SortAurasByCaster)
+		tsort(self, SortAurasByCaster);
 	end
+
+	return 1, #self;
 end
 
 function UF:UpdateAuraIconSettings(auras, noCycle)
@@ -309,8 +325,21 @@ local unstableAffliction = GetSpellInfo(30108);
 local vampiricTouch = GetSpellInfo(34914);
 function UF:PostUpdateAura(unit, button, index)
 	local name, _, _, _, dtype, duration, expiration, _, isStealable = UnitAura(unit, index, button.filter);
-
 	local isFriend = UnitIsFriend("player", unit) == 1 and true or false;
+
+	local auras = button:GetParent();
+	local frame = auras:GetParent();
+	local type = auras.type;
+	local db = frame.db and frame.db[type];
+
+	if(db) then
+		if(db.clickThrough and button:IsMouseEnabled()) then
+			button:EnableMouse(false);
+		elseif(not db.clickThrough and not button:IsMouseEnabled()) then
+			button:EnableMouse(true);
+		end
+	end
+
 	if(button.isDebuff) then
 		if(not isFriend and button.owner ~= "player" and button.owner ~= "vehicle") --[[and (not E.isDebuffWhiteList[name])]] then
 			button:SetBackdropBorderColor(0.9, 0.1, 0.1);
@@ -334,7 +363,7 @@ function UF:PostUpdateAura(unit, button, index)
 
 	local size = button:GetParent().size;
 	if(size) then
-		button:Size(size);
+		button:SetSize(size, size);
 	end
 
 	button.spell = name;
@@ -410,11 +439,7 @@ function UF:CheckFilter(filterType, isFriend)
 	return false;
 end
 
-function UF:AuraFilter(unit, icon, name, _, _, _, dtype, duration, _, unitCaster, isStealable, shouldConsolidate, spellID)
-	if(E.global.unitframe.InvalidSpells[spellID]) then
-		return false;
-	end
-
+function UF:AuraFilter(unit, icon, name, _, _, _, dtype, duration, _, _, isStealable, shouldConsolidate, spellID)
 	local db = self:GetParent().db;
 	if(not db or not db[self.type]) then return true; end
 
@@ -424,42 +449,31 @@ function UF:AuraFilter(unit, icon, name, _, _, _, dtype, duration, _, unitCaster
 	local passPlayerOnlyCheck = true;
 	local anotherFilterExists = false;
 	local playerOnlyFilter = false;
-	local isPlayer = unitCaster == "player" or unitCaster == "vehicle";
 	local isFriend = UnitIsFriend("player", unit) == 1 and true or false;
 
-	icon.isPlayer = isPlayer;
-	icon.owner = unitCaster;
 	icon.name = name;
 	icon.priority = 0;
 
-	local turtleBuff = E.global["unitframe"]["aurafilters"]["TurtleBuffs"].spells[name];
+	local turtleBuff = (E.global["unitframe"]["aurafilters"]["TurtleBuffs"].spells[spellID] or E.global["unitframe"]["aurafilters"]["TurtleBuffs"].spells[name]);
 	if(turtleBuff and turtleBuff.enable) then
 		icon.priority = turtleBuff.priority;
 	end
 
 	if(UF:CheckFilter(db.playerOnly, isFriend)) then
-		if(isPlayer) then
+		if(icon.isPlayer) then
 			returnValue = true;
 		else
 			returnValue = false;
 		end
 
 		passPlayerOnlyCheck = returnValue;
-		anotherFilterExists = true;
+		playerOnlyFilter = true;
 	end
 
 	if(UF:CheckFilter(db.onlyDispellable, isFriend)) then
 		if((self.type == "buffs" and not isStealable) or (self.type == "debuffs" and dtype and not E:IsDispellableByMe(dtype)) or dtype == nil) then
 			returnValue = false;
 		end
-		anotherFilterExists = true;
-	end
-
-	if(UF:CheckFilter(db.noConsolidated, isFriend)) then
-		if(shouldConsolidate == 1) then
-			returnValue = false;
-		end
-
 		anotherFilterExists = true;
 	end
 
@@ -472,7 +486,7 @@ function UF:AuraFilter(unit, icon, name, _, _, _, dtype, duration, _, unitCaster
 	end
 
 	if(UF:CheckFilter(db.useBlacklist, isFriend)) then
-		local blackList = E.global["unitframe"]["aurafilters"]["Blacklist"].spells[name];
+		local blackList = (E.global["unitframe"]["aurafilters"]["Blacklist"].spells[spellID] or E.global["unitframe"]["aurafilters"]["Blacklist"].spells[name]);
 		if(blackList and blackList.enable) then
 			returnValue = false;
 		end
@@ -481,51 +495,30 @@ function UF:AuraFilter(unit, icon, name, _, _, _, dtype, duration, _, unitCaster
 	end
 
 	if(UF:CheckFilter(db.useWhitelist, isFriend)) then
-		local whiteList = E.global["unitframe"]["aurafilters"]["Whitelist"].spells[name];
+		local whiteList = (E.global["unitframe"]["aurafilters"]["Whitelist"].spells[spellID] or E.global["unitframe"]["aurafilters"]["Whitelist"].spells[name]);
 		if(whiteList and whiteList.enable) then
 			returnValue = true;
 			icon.priority = whiteList.priority;
-		elseif(not anotherFilterExists) then
+		elseif(not anotherFilterExists and not playerOnlyFilter) then
 			returnValue = false;
 		end
 
 		anotherFilterExists = true;
 	end
 
-	if(UF:CheckFilter(db.useWhitelist, isFriend)) then
-		local whiteList = E.global["unitframe"]["aurafilters"]["Whitelist (Strict)"].spells[name];
-		if(whiteList and whiteList.enable) then
-			if(whiteList.spellID and whiteList.spellID == spellID) then
-				returnValue = true;
-			else
-				returnValue = false;
-			end
-			icon.priority = whiteList.priority;
-		elseif(not anotherFilterExists and not playerOnlyFilter) then
-			returnValue = false;
-		end
-	end
-
 	if(db.useFilter and E.global["unitframe"]["aurafilters"][db.useFilter]) then
 		local type = E.global["unitframe"]["aurafilters"][db.useFilter].type;
 		local spellList = E.global["unitframe"]["aurafilters"][db.useFilter].spells;
+		local spell = (spellList[spellID] or spellList[name]);
 
 		if(type == "Whitelist") then
-			if(spellList[name] and spellList[name].enable and passPlayerOnlyCheck) then
+			if(spell and spell.enable and passPlayerOnlyCheck) then
 				returnValue = true;
-				icon.priority = spellList[name].priority;
-
-				if(db.useFilter == "TurtleBuffs") then
-					returnValue = false;
-				end
-
-				if(db.useFilter == "Whitelist (Strict)" and spellList[name].spellID and not spellList[name].spellID == spellID) then
-					returnValue = false;
-				end
-			elseif(not anotherFilterExists) then
+				icon.priority = spell.priority;
+			elseif not anotherFilterExists then
 				returnValue = false;
 			end
-		elseif(type == "Blacklist" and spellList[name] and spellList[name].enable) then
+		elseif(type == "Blacklist" and spell and spell.enable) then
 			returnValue = false;
 		end
 	end
