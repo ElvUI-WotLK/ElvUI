@@ -590,8 +590,8 @@ function AB:BlizzardOptionsPanel_OnEvent()
 	InterfaceOptionsActionBarsPanelRight:SetScript("OnEnter", nil);
 end
 
-function AB:FadeParent_OnEvent(_, arg1)
-	if(arg1 ~= "player") then return; end
+function AB:FadeParent_OnEvent(_, unit)
+	if(unit ~= "player") then return; end
 
 	local cur, max = UnitHealth("player"), UnitHealthMax("player");
 	local cast, channel = UnitCastingInfo("player"), UnitChannelInfo("player");

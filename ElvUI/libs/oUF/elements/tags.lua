@@ -114,6 +114,15 @@ local tagStrings = {
 		end
 	end]],
 
+	["manapp"] = [[function(u)
+		local m = UnitPowerMax(u, 0);
+		if(m == 0) then
+			return 0
+		else
+			return math.floor(UnitPower(u, 0)/m*100+.5)
+		end
+	end]],
+
 	["plus"] = [[function(u)
 		local c = UnitClassification(u)
 		if(c == 'elite' or c == 'rareelite') then
@@ -343,6 +352,7 @@ local tagEvents = {
 	["offline"]             = "UNIT_HEALTH",
 	["perhp"]               = "UNIT_HEALTH UNIT_MAXHEALTH",
 	["perpp"]               = "UNIT_MAXENERGY UNIT_MAXFOCUS UNIT_MAXMANA UNIT_MAXRAGE UNIT_ENERGY UNIT_FOCUS UNIT_MANA UNIT_RAGE UNIT_MAXRUNIC_POWER UNIT_RUNIC_POWER",
+	["manapp"]              = "UNIT_MANA UNIT_MAXMANA",
 	["pvp"]                 = "UNIT_FACTION",
 	["resting"]             = "PLAYER_UPDATE_RESTING",
 	["status"]              = "UNIT_HEALTH PLAYER_UPDATE_RESTING",
