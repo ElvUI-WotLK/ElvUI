@@ -491,24 +491,6 @@ function E:StaticPopup_OnUpdate(elapsed)
 			return;
 		end
 		self.timeleft = timeleft;
-		
-		if(which == "DEATH") then
-			local text = _G[self:GetName() .. "Text"];
-			local hasText = nil;
-			if(text:GetText() ~= " ") then
-				hasText = 1;
-			end
-			timeleft = ceil(timeleft);
-			if(timeleft < 60) then
-				text:SetFormattedText(E.PopupDialogs[which].text, timeleft, SECONDS);
-			else
-				text:SetFormattedText(E.PopupDialogs[which].text, ceil(timeleft / 60), MINUTES);
-			end
-
-			if(not hasText) then
-				StaticPopup_Resize(self, which);
-			end
-		end
 	end
 
 	if(self.startDelay) then
@@ -740,13 +722,7 @@ function E:StaticPopup_Show(which, text_arg1, text_arg2, data)
 
 	local name = dialog:GetName();
 	local text = _G[name .. "Text"];
-	if((which == "DEATH")) then
-		text:SetText(" ");
-		text.text_arg1 = text_arg1;
-		text.text_arg2 = text_arg2;
-	else
-		text:SetFormattedText(info.text, text_arg1, text_arg2);
-	end
+	text:SetFormattedText(info.text, text_arg1, text_arg2);
 
 	if(info.closeButton) then
 		local closeButton = _G[name .. "CloseButton"];
