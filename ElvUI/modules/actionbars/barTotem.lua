@@ -124,6 +124,7 @@ function AB:MultiCastRecallSpellButton_Update(self)
 	if(HasMultiCastActionBar()) then
 		local activeSlots = MultiCastActionBarFrame.numActiveSlots;
 		if(activeSlots > 0) then
+			self:ClearAllPoints();
 			self:SetPoint("LEFT", _G["MultiCastSlotButton" .. activeSlots], "RIGHT", AB.db["barTotem"].buttonspacing, 0);
 		end
 	end
@@ -203,9 +204,8 @@ function AB:PositionAndSizeBarTotem()
 		end
 	end
 
-	MultiCastRecallSpellButton:ClearAllPoints();
 	MultiCastRecallSpellButton:SetSize(size, size);
-	MultiCastRecallSpellButton:SetPoint("LEFT", MultiCastActionButton4, "RIGHT", buttonSpacing, 0);
+	self:MultiCastRecallSpellButton_Update(MultiCastRecallSpellButton);
 
 	MultiCastFlyoutFrameCloseButton:Width(size);
 
