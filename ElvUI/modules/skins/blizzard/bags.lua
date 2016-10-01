@@ -48,7 +48,7 @@ function S:BankFrameItemButton_Update(button)
 	end
 end
 
-S:RegisterSkin('ElvUI', function()
+local function LoadSkin()
 	if(E.private.skins.blizzard.enable ~= true
 		or E.private.skins.blizzard.bags ~= true
 		or E.private.bags.enable)
@@ -155,4 +155,6 @@ S:RegisterSkin('ElvUI', function()
 	S:HandleButton(BankFramePurchaseButton);
 
 	S:SecureHook('BankFrameItemButton_Update');
-end);
+end
+
+S:AddCallback("Bags", LoadSkin)

@@ -17,6 +17,8 @@ BINDING_HEADER_ELVUI = GetAddOnMetadata(..., "Title");
 
 local AddOnName, Engine = ...;
 local AddOn = LibStub("AceAddon-3.0"):NewAddon(AddOnName, "AceConsole-3.0", "AceEvent-3.0", 'AceTimer-3.0', 'AceHook-3.0');
+AddOn.callbacks = AddOn.callbacks or
+  LibStub("CallbackHandler-1.0"):New(AddOn);
 AddOn.DF = {}; AddOn.DF["profile"] = {}; AddOn.DF["global"] = {}; AddOn.privateVars = {}; AddOn.privateVars["profile"] = {}; -- Defaults
 AddOn.Options = {
 	type = "group",
@@ -98,14 +100,20 @@ function AddOn:OnInitialize()
 		AddOn:ToggleConfig();
 		HideUIPanel(GameMenuFrame);
 	end);
+	GameMenuFrame[AddOnName] = GameMenuButton;
 
 	GameMenuFrame:HookScript("OnShow", function()
 		if(not GameMenuFrame.isElvUI) then
 			GameMenuFrame:SetHeight(GameMenuFrame:GetHeight() + GameMenuButtonLogout:GetHeight() + 1);
 			GameMenuFrame.isElvUI = true;
 		end
-		GameMenuButton:Point("TOP", ElvUI_ButtonAddons or GameMenuButtonAddOns or GameMenuButtonMacros, "BOTTOM", 0, -1);
-		GameMenuButtonLogout:SetPoint("TOP", GameMenuButton, "BOTTOM", 0, -16);
+		local _, relTo, _, _, offY = GameMenuButtonLogout:GetPoint();
+		if(relTo ~= GameMenuFrame[AddOnName]) then
+			GameMenuFrame[AddOnName]:ClearAllPoints();
+			GameMenuFrame[AddOnName]:Point("TOPLEFT", relTo, "BOTTOMLEFT", 0, -1);
+			GameMenuButtonLogout:ClearAllPoints();
+			GameMenuButtonLogout:Point("TOPLEFT", GameMenuFrame[AddOnName], "BOTTOMLEFT", 0, -16);
+		end
 	end);
 	local S = AddOn:GetModule("Skins");
 	S:HandleButton(GameMenuButton);

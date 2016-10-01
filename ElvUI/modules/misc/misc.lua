@@ -100,12 +100,21 @@ function M:DisbandRaidGroup()
 end
 
 function M:CheckMovement()
-	if E.global.general.mapAlphaWhenMoving == 100 or not WorldMapFrame:IsShown() then return end
+	if(not WorldMapFrame:IsShown()) then return; end
 
 	if GetUnitSpeed("player") ~= 0 then
 		WorldMapFrame:SetAlpha(E.global.general.mapAlphaWhenMoving)
 	else
 		WorldMapFrame:SetAlpha(1)
+	end
+end
+
+function M:UpdateMapAlpha()
+	if((E.global.general.mapAlphaWhenMoving >= 1) and self.MovingTimer) then
+		self:CancelTimer(self.MovingTimer);
+		self.MovingTimer = nil;
+	elseif((E.global.general.mapAlphaWhenMoving < 1) and not self.MovingTimer) then
+		self.MovingTimer = self:ScheduleRepeatingTimer("CheckMovement", 0.1);
 	end
 end
 
@@ -177,13 +186,22 @@ function M:PLAYER_ENTERING_WORLD()
 	self:ForceCVars()
 end
 
-function M:Kill()
+function M:ADDON_LOADED(_, addon)
+	if addon == "Blizzard_TradeSkillUI" then
+		TradeSkillLinkButton:SetScript("OnClick", function(self, button)
+			local link = GetTradeSkillListLink()
+			local ChatFrameEditBox = ChatEdit_ChooseBoxForSend()
 
+			if not ChatFrameEditBox:IsShown() then
+				ChatEdit_ActivateChat(ChatFrameEditBox)
+			end
+
+			ChatFrameEditBox:Insert(link)
+		end)
+	end
 end
 
 function M:Initialize()
-	M:ScheduleTimer("Kill", 8)
-
 	self:LoadRaidMarker();
 	self:LoadLoot()
 	self:LoadLootRoll()
@@ -199,9 +217,11 @@ function M:Initialize()
 	self:RegisterEvent("PARTY_MEMBERS_CHANGED", "AutoInvite")
 	self:RegisterEvent("CVAR_UPDATE", "ForceCVars")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
+	self:RegisterEvent("ADDON_LOADED")
 
-	self.MovingTimer = self:ScheduleRepeatingTimer("CheckMovement", 0.1)
-	--self:Kill()
+	if(E.global.general.mapAlphaWhenMoving < 1) then
+		self.MovingTimer = self:ScheduleRepeatingTimer("CheckMovement", 0.1)
+	end
 end
 
 E:RegisterModule(M:GetName())

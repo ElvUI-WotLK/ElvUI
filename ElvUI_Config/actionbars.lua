@@ -13,7 +13,6 @@ local function BuildABConfig()
 	for i = 1, 6 do
 		local name = L["Bar "] .. i;
 		group["bar" .. i] = {
-			order = i,
 			order = 200,
 			name = name,
 			type = "group",
@@ -172,10 +171,9 @@ local function BuildABConfig()
 	end
 
 	group["barPet"] = {
-		order = i,
+		order = 300,
 		name = L["Pet Bar"],
 		type = "group",
-		order = 300,
 		guiInline = false,
 		disabled = function() return not E.private.actionbar.enable end,
 		get = function(info) return E.db.actionbar["barPet"][ info[#info] ] end,
@@ -289,10 +287,9 @@ local function BuildABConfig()
 		},
 	}
 	group["stanceBar"] = {
-		order = i,
+		order = 400,
 		name = L["Stance Bar"],
 		type = "group",
-		order = 400,
 		guiInline = false,
 		disabled = function() return not E.private.actionbar.enable end,
 		get = function(info) return E.db.actionbar["barShapeShift"][ info[#info] ] end,
@@ -406,10 +403,9 @@ local function BuildABConfig()
 
 	if E.myclass == "SHAMAN" then
 		group["barTotem"] = {
-			order = i,
+			order = 100,
 			name = L["Totems"],
 			type = "group",
-			order = 100,
 			guiInline = false,
 			disabled = function() return not E.private.actionbar.enable or not E.myclass == "SHAMAN" end,
 			get = function(info) return E.db.actionbar["barTotem"][ info[#info] ] end,

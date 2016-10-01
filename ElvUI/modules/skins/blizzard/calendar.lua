@@ -270,4 +270,4 @@ local function LoadSkin()
 	S:HandleScrollBar(CalendarViewEventDescriptionScrollFrameScrollBar)
 end
 
-S:RegisterSkin("Blizzard_Calendar", LoadSkin)
+S:AddCallbackForAddon("Blizzard_Calendar", "Calendar", LoadSkin);

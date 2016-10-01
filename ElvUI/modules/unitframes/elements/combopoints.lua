@@ -3,6 +3,7 @@ local UF = E:GetModule("UnitFrames");
 
 local CreateFrame = CreateFrame;
 local UnitHasVehicleUI = UnitHasVehicleUI;
+local GetShapeshiftForm = GetShapeshiftForm;
 local GetComboPoints = GetComboPoints;
 local MAX_COMBO_POINTS = MAX_COMBO_POINTS;
 
@@ -22,6 +23,10 @@ function UF:Construct_Combobar(frame)
 		CPoints[i].backdrop:SetParent(CPoints);
 	end
 
+	if(E.myclass == "DRUID") then
+		frame:RegisterEvent("UPDATE_SHAPESHIFT_FORM", UF.UpdateComboDisplay);
+	end
+
 	CPoints:SetScript("OnShow", UF.ToggleResourceBar);
 	CPoints:SetScript("OnHide", UF.ToggleResourceBar);
 
@@ -29,6 +34,7 @@ function UF:Construct_Combobar(frame)
 end
 
 function UF:Configure_ComboPoints(frame)
+	if(not frame.VARIABLES_SET) then return; end
 	local CPoints = frame.CPoints;
 	CPoints:ClearAllPoints();
 	local db = frame.db;
@@ -139,8 +145,11 @@ function UF:Configure_ComboPoints(frame)
 	end
 end
 
-function UF:UpdateComboDisplay(_, unit)
+function UF:UpdateComboDisplay(event, unit)
 	if(unit == "pet") then return; end
+	if(event == "UPDATE_SHAPESHIFT_FORM" and GetShapeshiftForm() ~= 3) then return self.CPoints:Hide(); end
+	if(E.myclass ~= "ROGUE" and (E.myclass ~= "DRUID" or (E.myclass == "DRUID" and GetShapeshiftForm() ~= 3)) and not (UnitHasVehicleUI("player") or UnitHasVehicleUI("vehicle"))) then return self.CPoints:Hide(); end
+
 	local db = self.db;
 	if(not db) then return; end
 	local cpoints = self.CPoints;

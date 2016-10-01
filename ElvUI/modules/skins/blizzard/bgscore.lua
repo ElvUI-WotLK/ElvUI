@@ -1,7 +1,7 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local S = E:GetModule('Skins');
 
-S:RegisterSkin('ElvUI', function()
+local function LoadSkin()
 	if(E.private.skins.blizzard.enable ~= true
 		or E.private.skins.blizzard.bgscore ~= true)
 	then
@@ -38,9 +38,11 @@ S:RegisterSkin('ElvUI', function()
 	WorldStateScoreFrameName:StyleButton()
 	WorldStateScoreFrameClass:StyleButton()
 	WorldStateScoreFrameTeam:StyleButton()
-	WorldStateScoreFrameRatingChange:StyleButton()
+	--WorldStateScoreFrameRatingChange:StyleButton()
 
 	for i = 1, 5 do
 		_G["WorldStateScoreColumn"..i]:StyleButton()
 	end
-end);
+end
+
+S:AddCallback("WorldStateScore", LoadSkin);

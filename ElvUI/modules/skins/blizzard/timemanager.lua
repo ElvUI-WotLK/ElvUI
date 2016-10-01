@@ -79,4 +79,4 @@ local function LoadSkin()
 	hooksecurefunc("Stopwatch_Clear", SetPlayTexture);
 end
 
-S:RegisterSkin("Blizzard_TimeManager", LoadSkin);
+S:AddCallbackForAddon("Blizzard_TimeManager", "TimeManager", LoadSkin);

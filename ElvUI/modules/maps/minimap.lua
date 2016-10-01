@@ -81,6 +81,16 @@ function M:ADDON_LOADED(_, addon)
 	end
 end
 
+function M:PLAYER_ENTERING_WORLD()
+	self:Update_ZoneText()
+
+	MinimapPing:HookScript("OnUpdate", function(self, elapsed)
+		if self.fadeOut or self.timer > MINIMAPPING_FADE_TIMER then
+			Minimap_SetPing(Minimap:GetPingPosition())
+		end
+	end)
+end
+
 function M:Minimap_OnMouseUp(btn)
 	local position = self:GetPoint();
 	if(btn == "MiddleButton" or (btn == "RightButton" and IsShiftKeyDown())) then
@@ -359,10 +369,10 @@ function M:Initialize()
 	Minimap:SetScript("OnMouseWheel", M.Minimap_OnMouseWheel);
 	Minimap:SetScript("OnMouseUp", M.Minimap_OnMouseUp);
 
-	self:RegisterEvent("PLAYER_ENTERING_WORLD", "Update_ZoneText")
 	self:RegisterEvent("ZONE_CHANGED_NEW_AREA", "Update_ZoneText")
 	self:RegisterEvent("ZONE_CHANGED", "Update_ZoneText")
 	self:RegisterEvent("ZONE_CHANGED_INDOORS", "Update_ZoneText")
+	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 	self:RegisterEvent("ADDON_LOADED");
 
 	MinimapCluster:ClearAllPoints();

@@ -70,4 +70,4 @@ local function LoadSkin()
 	end
 end
 
-S:RegisterSkin("Blizzard_TalentUI", LoadSkin);
+S:AddCallbackForAddon("Blizzard_TalentUI", "Talent", LoadSkin);

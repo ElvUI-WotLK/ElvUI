@@ -37,12 +37,7 @@ The following search keywords can also be used:
     • bou : Bind on use items.
     • boe : Bind on equip items.
     • boa : Bind on account items.
-    • quest : Quest bound items.
-    • reagents, reagent, crafting : Profession reagents.
-    • naval : Naval equipment.
-    • follower, followe, follow : Follower items.
-    • relic, reli, rel : Artifact Relics.
-    • power, powe, pow : Items granting Artifact Power.]=];
+    • quest : Quest bound items.]=];
 L["TEXT_FORMAT_DESC"] = [=[Provide a string to change the text format.
 
 Examples:
@@ -160,10 +155,12 @@ L["Displays item level on equippable items."] = true;
 L["Enable/Disable the all-in-one bag."] = true;
 L["Enable/Disable the Bag-Bar."] = true;
 L["Full"] = true;
+L["Global"] = true;
 L["Here you can add items or search terms that you want to be excluded from sorting. To remove an item just click on its name in the list."] = true;
 L["Icons and Text (Short)"] = true;
 L["Icons and Text"] = true;
-L["Ignored Items and Search Syntax"] = true;
+L["Ignored Items and Search Syntax (Global)"] = true;
+L["Ignored Items and Search Syntax (Profile)"] = true;
 L["Item Count Font"] = true;
 L["Item Level Threshold"] = true;
 L["Item Level"] = true;
@@ -381,6 +378,7 @@ L["Bonus Reward Position"] = true;
 L["Bottom Panel"] = true;
 L["Chat Bubbles Style"] = true;
 L["Chat Bubbles"] = true;
+L["Check version"] = true;
 L["Direction the bar moves on gains/losses"] = true;
 L["Disable OrderHall Bar"] = true;
 L["Disable Tutorial Buttons"] = true;
@@ -602,62 +600,49 @@ L["Table"] = true;
 
 --Skins
 L["Achievement Frame"] = true;
-L["AddOn Manager"] = true;
 L["Alert Frames"] = true;
-L["Archaeology Frame"] = true;
-L["Artifact"] = true;
+L["Arena Frame"] = true;
+L["Arena Registrar"] = true;
 L["Auction Frame"] = true;
-L["Barbershop Frame"] = true;
 L["BG Map"] = true;
 L["BG Score"] = true;
-L["Black Market AH"] = true;
+L["Barbershop Frame"] = true;
 L["Calendar Frame"] = true;
 L["Character Frame"] = true;
-L["Death Recap"] = true;
 L["Debug Tools"] = true;
 L["Dressing Room"] = true;
-L["Encounter Journal"] = true;
 L["Gossip Frame"] = true;
+L["Greeting Frame"] = true;
 L["Guild Bank"] = true;
-L["Guild Control Frame"] = true;
 L["Guild Frame"] = true;
 L["Guild Registrar"] = true;
 L["Help Frame"] = true;
 L["Inspect Frame"] = true;
-L["Item Upgrade"] = true;
 L["KeyBinding Frame"] = true;
-L["LF Guild Frame"] = true;
-L["LFG Frame"] = true;
+L["LFD Frame"] = true;
+L["LFR Frame"] = true;
 L["Loot Frames"] = true;
-L["Loss Control"] = true;
 L["Macro Frame"] = true;
 L["Mail Frame"] = true;
 L["Merchant Frame"] = true;
 L["Mirror Timers"] = true;
 L["Misc Frames"] = true;
-L["Non-Raid Frame"] = true;
-L["Orderhall"] = true;
-L["Pet Battle"] = true;
 L["Petition Frame"] = true;
 L["PvP Frames"] = true;
-L["Quest Choice"] = true;
 L["Quest Frames"] = true;
 L["Raid Frame"] = true;
-L["Reforge Frame"] = true;
 L["Skins"] = true;
 L["Socket Frame"] = true;
 L["Spellbook"] = true;
 L["Stable"] = true;
 L["Tabard Frame"] = true;
 L["Talent Frame"] = true;
-L["TalkingHead"] = true;
 L["Taxi Frame"] = true;
 L["Time Manager"] = true;
 L["Trade Frame"] = true;
 L["TradeSkill Frame"] = true;
 L["Trainer Frame"] = true;
-L["Transmogrify Frame"] = true;
-L["Void Storage"] = true;
+L["Tutorial Frame"] = true;
 L["World Map"] = true;
 
 --Tooltip
@@ -696,21 +681,17 @@ L["%s and then %s"] = true;
 L["2D"] = true;
 L["3D"] = true;
 L["Above"] = true;
-L["Absorbs"] = true;
 L["Add a spell to the filter. Use spell ID if you don't want to match all auras which share the same name."] = true;
 L["Add a spell to the filter."] = true;
 L["Add Spell ID or Name"] = true;
 L["Add SpellID"] = true;
 L["Additional Filter"] = true;
 L["Additional Power Text"] = true;
-L["Affliction"] = true;
 L["Allow auras considered to be part of a boss encounter."] = true;
 L["Allow Boss Encounter Auras"] = true;
 L["Allow Whitelisted Auras"] = true;
 L["An X offset (in pixels) to be used when anchoring new frames."] = true;
 L["An Y offset (in pixels) to be used when anchoring new frames."] = true;
-L["Anticipation"] = true;
-L["Arcane Charges"] = true;
 L["Ascending or Descending order."] = true;
 L["Assist Frames"] = true;
 L["Assist Target"] = true;

@@ -132,4 +132,4 @@ local function LoadSkin()
 	hooksecurefunc("WorldMap_ToggleSizeUp", FixSkin);
 end
 
-S:RegisterSkin("ElvUI", LoadSkin);
+S:AddCallback("WorldMap", LoadSkin);

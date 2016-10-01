@@ -5,6 +5,7 @@ function mod:ConstructElement_HealerIcon(frame)
 	local texture = frame:CreateTexture(nil, "OVERLAY");
 	texture:SetPoint("RIGHT", frame.HealthBar, "LEFT", -6, 0);
 	texture:SetSize(40, 40);
+	texture:SetParent(frame.HealthBar);
 	texture:SetTexture([[Interface\AddOns\ElvUI\media\textures\healer.tga]]);
 	texture:Hide();
 

@@ -31,4 +31,4 @@ local function LoadSkin()
 	PetitionFrameRenameButton:Point("RIGHT", PetitionFrameCancelButton, "LEFT", -3, 0);
 end
 
-S:RegisterSkin("ElvUI", LoadSkin);
+S:AddCallback("Petition", LoadSkin);

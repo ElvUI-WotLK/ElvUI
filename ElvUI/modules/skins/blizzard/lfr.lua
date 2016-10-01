@@ -53,7 +53,9 @@ local function LoadSkin()
 
 	for i=1, NUM_LFR_CHOICE_BUTTONS do
 		local button = _G["LFRQueueFrameSpecificListButton" .. i];
-		S:HandleCheckBox(button.enableButton);
+		button.enableButton:StripTextures();
+		button.enableButton:CreateBackdrop("Default");
+		button.enableButton.backdrop:SetInside(nil, 4, 4);
 
 		button.expandOrCollapseButton:SetNormalTexture("");
 		button.expandOrCollapseButton.SetNormalTexture = E.noop;
@@ -104,10 +106,6 @@ local function LoadSkin()
 		end
 	end
 
-	for i=1, 3 do
-		S:HandleTab(_G['RaidParentFrameTab'..i])
-	end
-
 	for i=1, 1 do
 		local button = _G["RaidFinderQueueFrameScrollFrameChildFrameItem"..i]
 		local icon = _G["RaidFinderQueueFrameScrollFrameChildFrameItem"..i.."IconTexture"]
@@ -136,4 +134,4 @@ local function LoadSkin()
 	end
 end
 
-S:RegisterSkin('ElvUI', LoadSkin)
+S:AddCallback("LFR", LoadSkin);

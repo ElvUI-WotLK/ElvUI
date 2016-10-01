@@ -524,34 +524,40 @@ local function GetOptionsTable_Auras(friendlyUnitOnly, auraType, isGroupFrame, u
 				name = L["yOffset"],
 				min = -300, max = 300, step = 1
 			},
+			spacing = {
+				order = 7,
+				type = "range",
+				name = L["Spacing"],
+				min = 0, max = 40, step = 1
+			},
 			anchorPoint = {
 				type = "select",
-				order = 7,
+				order = 9,
 				name = L["Anchor Point"],
 				desc = L["What point to anchor to the frame you set to attach to."],
 				values = positionValues
 			},
 			fontSize = {
-				order = 8,
+				order = 10,
 				name = L["Font Size"],
 				type = "range",
 				min = 6, max = 22, step = 1
 			},
 			clickThrough = {
-				order = 9,
+				order = 11,
 				name = L["Click Through"],
 				desc = L["Ignore mouse events."],
 				type = "toggle"
 			},
 			sortMethod = {
-				order = 10,
+				order = 12,
 				name = L["Sort By"],
 				desc = L["Method to sort by."],
 				type = "select",
 				values = auraSortValues
 			},
 			sortDirection = {
-				order = 11,
+				order = 13,
 				name = L["Sort Direction"],
 				desc = L["Ascending or Descending order."],
 				type = "select",
@@ -570,7 +576,7 @@ local function GetOptionsTable_Auras(friendlyUnitOnly, auraType, isGroupFrame, u
 	if(auraType == "buffs") then
 		config.args.attachTo = {
 			type = "select",
-			order = 7,
+			order = 8,
 			name = L["Attach To"],
 			desc = L["What to attach the buff anchor frame to."],
 			values = {
@@ -583,7 +589,7 @@ local function GetOptionsTable_Auras(friendlyUnitOnly, auraType, isGroupFrame, u
 	else
 		config.args.attachTo = {
 			type = "select",
-			order = 7,
+			order = 8,
 			name = L["Attach To"],
 			desc = L["What to attach the debuff anchor frame to."],
 			values = {
@@ -606,31 +612,31 @@ local function GetOptionsTable_Auras(friendlyUnitOnly, auraType, isGroupFrame, u
 
 	if(friendlyUnitOnly) then
 		config.args.filters.args.playerOnly = {
-			order = 10,
+			order = 14,
 			type = "toggle",
 			name = L["Block Non-Personal Auras"],
 			desc = L["Don't display auras that are not yours."]
 		};
 		config.args.filters.args.useBlacklist = {
-			order = 11,
+			order = 15,
 			type = "toggle",
 			name = L["Block Blacklisted Auras"],
 			desc = L["Don't display any auras found on the 'Blacklist' filter."]
 		};
 		config.args.filters.args.useWhitelist = {
-			order = 12,
+			order = 16,
 			type = "toggle",
 			name = L["Allow Whitelisted Auras"],
 			desc = L["If no other filter options are being used then it will block anything not on the 'Whitelist' filter, otherwise it will simply add auras on the whitelist in addition to any other filter settings."]
 		};
 		config.args.filters.args.noDuration = {
-			order = 13,
+			order = 17,
 			type = "toggle",
 			name = L["Block Auras Without Duration"],
 			desc = L["Don't display auras that have no duration."]
 		};
 		config.args.filters.args.onlyDispellable = {
-			order = 14,
+			order = 18,
 			type = "toggle",
 			name = L["Block Non-Dispellable Auras"],
 			desc = L["Don't display auras that cannot be purged or dispelled by your class."]
@@ -638,7 +644,7 @@ local function GetOptionsTable_Auras(friendlyUnitOnly, auraType, isGroupFrame, u
 
 		if(auraType == "buffs") then
 			config.args.filters.args.noConsolidated = {
-				order = 15,
+				order = 18,
 				type = "toggle",
 				name = L["Block Raid Buffs"],
 				desc = L["Don't display raid buffs such as Blessing of Kings or Mark of the Wild."]
@@ -646,7 +652,7 @@ local function GetOptionsTable_Auras(friendlyUnitOnly, auraType, isGroupFrame, u
 		end
 
 		config.args.filters.args.useFilter = {
-			order = 16,
+			order = 19,
 			name = L["Additional Filter"],
 			desc = L["Select an additional filter to use. If the selected filter is a whitelist and no other filters are being used (with the exception of Block Non-Personal Auras) then it will block anything not on the whitelist, otherwise it will simply add auras on the whitelist in addition to any other filter settings."],
 			type = "select",
@@ -661,7 +667,7 @@ local function GetOptionsTable_Auras(friendlyUnitOnly, auraType, isGroupFrame, u
 		};
 	else
 		config.args.filters.args.playerOnly = {
-			order = 10,
+			order = 14,
 			guiInline = true,
 			type = "group",
 			name = L["Block Non-Personal Auras"],
@@ -685,7 +691,7 @@ local function GetOptionsTable_Auras(friendlyUnitOnly, auraType, isGroupFrame, u
 			}
 		};
 		config.args.filters.args.useBlacklist = {
-			order = 11,
+			order = 15,
 			guiInline = true,
 			type = "group",
 			name = L["Block Blacklisted Auras"],
@@ -709,7 +715,7 @@ local function GetOptionsTable_Auras(friendlyUnitOnly, auraType, isGroupFrame, u
 			}
 		};
 		config.args.filters.args.useWhitelist = {
-			order = 12,
+			order = 16,
 			guiInline = true,
 			type = "group",
 			name = L["Allow Whitelisted Auras"],
@@ -733,7 +739,7 @@ local function GetOptionsTable_Auras(friendlyUnitOnly, auraType, isGroupFrame, u
 			}
 		};
 		config.args.filters.args.noDuration = {
-			order = 13,
+			order = 17,
 			guiInline = true,
 			type = "group",
 			name = L["Block Auras Without Duration"],
@@ -757,7 +763,7 @@ local function GetOptionsTable_Auras(friendlyUnitOnly, auraType, isGroupFrame, u
 			}
 		};
 		config.args.filters.args.onlyDispellable = {
-			order = 14,
+			order = 18,
 			guiInline = true,
 			type = "group",
 			name = L["Block Non-Dispellable Auras"],
@@ -782,7 +788,7 @@ local function GetOptionsTable_Auras(friendlyUnitOnly, auraType, isGroupFrame, u
 		};
 		if(auraType == "buffs") then
 			config.args.filters.args.noConsolidated = {
-				order = 15,
+				order = 18,
 				guiInline = true,
 				type = "group",
 				name = L["Block Raid Buffs"],
@@ -808,7 +814,7 @@ local function GetOptionsTable_Auras(friendlyUnitOnly, auraType, isGroupFrame, u
 		end
 
 		config.args.filters.args.useFilter = {
-			order = 16,
+			order = 19,
 			name = L["Additional Filter"],
 			desc = L["Select an additional filter to use. If the selected filter is a whitelist and no other filters are being used (with the exception of Block Non-Personal Auras) then it will block anything not on the whitelist, otherwise it will simply add auras on the whitelist in addition to any other filter settings."],
 			type = "select",
@@ -1056,7 +1062,8 @@ local function GetOptionsTable_AuraBars(friendlyOnly, updateFunc, groupName)
 				values = {
 					["FRAME"] = L["Frame"],
 					["DEBUFFS"] = L["Debuffs"],
-					["BUFFS"] = L["Buffs"]
+					["BUFFS"] = L["Buffs"],
+					["POWER"] = L["Power"]
 				}
 			},
 			height = {
@@ -5581,7 +5588,6 @@ E.Options.args.unitframe.args.raidpet = {
 							name = L["Visibility"],
 							desc = L["The following macro must be true in order for the group to be shown, in addition to any filter that may already be set."],
 							width = "full",
-							desc = L["TEXT_FORMAT_DESC"],
 						},
 					},
 				},

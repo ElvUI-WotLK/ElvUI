@@ -51,4 +51,4 @@ local function LoadSkin()
 	end);
 end
 
-S:RegisterSkin("ElvUI", LoadSkin);
+S:AddCallback("Stable", LoadSkin);

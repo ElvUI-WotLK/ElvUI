@@ -95,4 +95,4 @@ local function LoadSkin()
 	end
 end
 
-S:RegisterSkin('Blizzard_MacroUI', LoadSkin);
+S:AddCallbackForAddon("Blizzard_MacroUI", "Macro", LoadSkin);

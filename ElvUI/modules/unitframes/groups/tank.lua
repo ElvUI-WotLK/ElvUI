@@ -104,6 +104,8 @@ function UF:Update_TankFrames(frame, db)
 		frame.CLASSBAR_WIDTH = 0;
 		frame.CLASSBAR_YOFFSET = 0;
 		frame.BOTTOM_OFFSET = 0;
+
+		frame.VARIABLES_SET = true;
 	end
 
 	frame.colors = ElvUF.colors;
@@ -166,7 +168,7 @@ function UF:Update_TankFrames(frame, db)
 		UF:UpdateAuraWatch(frame);
 	end
 
-	frame:UpdateAllElements();
+	frame:UpdateAllElements("ElvUI_UpdateAllElements");
 end
 
 UF["headerstoload"]["tank"] = {"MAINTANK", "ELVUI_UNITTARGET"};

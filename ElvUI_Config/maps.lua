@@ -32,7 +32,7 @@ E.Options.args.maps = {
 					isPercent = true,
 					min = 0, max = 1, step = 0.01,
 					get = function(info) return E.global.general.mapAlphaWhenMoving; end,
-					set = function(info, value) E.global.general.mapAlphaWhenMoving = value; end
+					set = function(info, value) E.global.general.mapAlphaWhenMoving = value; E:GetModule("Misc"):UpdateMapAlpha(); end
 				},
 				spacer  = {
 					order = 3,

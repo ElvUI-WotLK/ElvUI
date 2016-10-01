@@ -101,25 +101,22 @@ function UF:RaidSmartVisibility(event)
 	end
 end
 
-function UF:Update_RaidHeader(header, db, isForced)
-	header:GetParent().db = db;
+function UF:Update_RaidHeader(header, db)
+	header.db = db;
 
-	local headerHolder = header:GetParent();
-	headerHolder.db = db;
+	if(not header.positioned) then
+		header:ClearAllPoints();
+		header:Point("BOTTOMLEFT", E.UIParent, "BOTTOMLEFT", 4, 195);
 
-	if(not headerHolder.positioned) then
-		headerHolder:ClearAllPoints();
-		headerHolder:Point("BOTTOMLEFT", E.UIParent, "BOTTOMLEFT", 4, 195);
+		E:CreateMover(header, header:GetName() .. "Mover", L["Raid Frames"], nil, nil, nil, "ALL,RAID");
 
-		E:CreateMover(headerHolder, headerHolder:GetName() .. "Mover", L["Raid Frames"], nil, nil, nil, "ALL,RAID");
-
-		headerHolder:RegisterEvent("PLAYER_LOGIN");
-		headerHolder:RegisterEvent("ZONE_CHANGED_NEW_AREA");
-		headerHolder:SetScript("OnEvent", UF["RaidSmartVisibility"]);
-		headerHolder.positioned = true;
+		header:RegisterEvent("PLAYER_LOGIN");
+		header:RegisterEvent("ZONE_CHANGED_NEW_AREA");
+		header:SetScript("OnEvent", UF["RaidSmartVisibility"]);
+		header.positioned = true;
 	end
 
-	UF.RaidSmartVisibility(headerHolder);
+	UF.RaidSmartVisibility(header);
 end
 
 function UF:Update_RaidFrames(frame, db)
@@ -165,6 +162,8 @@ function UF:Update_RaidFrames(frame, db)
 		frame.INFO_PANEL_HEIGHT = frame.USE_INFO_PANEL and db.infoPanel.height or 0;
 
 		frame.BOTTOM_OFFSET = UF:GetHealthBottomOffset(frame);
+
+		frame.VARIABLES_SET = true;
 	end
 
 	if(not InCombatLockdown()) then
@@ -214,7 +213,7 @@ function UF:Update_RaidFrames(frame, db)
 
 	UF:Configure_CustomTexts(frame);
 
-	frame:UpdateAllElements();
+	frame:UpdateAllElements("ElvUI_UpdateAllElements");
 end
 
 UF["headerstoload"]["raid"] = true;

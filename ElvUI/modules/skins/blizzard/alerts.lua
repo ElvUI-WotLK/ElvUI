@@ -88,4 +88,4 @@ local function LoadSkin()
 	hooksecurefunc("DungeonCompletionAlertFrame_FixAnchors", DungeonCompletionFixAnchors);
 end
 
-S:RegisterSkin("ElvUI", LoadSkin);
+S:AddCallback("Alerts", LoadSkin);

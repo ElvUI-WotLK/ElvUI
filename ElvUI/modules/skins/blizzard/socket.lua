@@ -52,4 +52,4 @@ local function LoadSkin()
 	S:HandleButton(ItemSocketingSocketButton);
 end
 
-S:RegisterSkin("Blizzard_ItemSocketingUI", LoadSkin);
+S:AddCallbackForAddon("Blizzard_ItemSocketingUI", "ItemSocket", LoadSkin);

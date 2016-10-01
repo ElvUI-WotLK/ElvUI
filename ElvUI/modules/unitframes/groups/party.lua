@@ -75,23 +75,19 @@ end
 
 function UF:Update_PartyHeader(header, db)
 	header.db = db;
+	if(not header.positioned) then
+		header:ClearAllPoints();
+		header:Point("BOTTOMLEFT", E.UIParent, "BOTTOMLEFT", 4, 195);
 
-	local headerHolder = header:GetParent();
-	headerHolder.db = db;
+		E:CreateMover(header, header:GetName() .. "Mover", L["Party Frames"], nil, nil, nil, "ALL,PARTY,ARENA");
+		header.positioned = true;
 
-	if(not headerHolder.positioned) then
-		headerHolder:ClearAllPoints();
-		headerHolder:Point("BOTTOMLEFT", E.UIParent, "BOTTOMLEFT", 4, 195);
-
-		E:CreateMover(headerHolder, headerHolder:GetName() .. "Mover", L["Party Frames"], nil, nil, nil, "ALL,PARTY,ARENA");
-		headerHolder.positioned = true;
-
-		headerHolder:RegisterEvent("PLAYER_LOGIN");
-		headerHolder:RegisterEvent("ZONE_CHANGED_NEW_AREA");
-		headerHolder:SetScript("OnEvent", UF["PartySmartVisibility"]);
+		header:RegisterEvent("PLAYER_LOGIN");
+		header:RegisterEvent("ZONE_CHANGED_NEW_AREA");
+		header:SetScript("OnEvent", UF["PartySmartVisibility"]);
 	end
 
-	UF.PartySmartVisibility(headerHolder);
+	UF.PartySmartVisibility(header);
 end
 
 function UF:PartySmartVisibility(event)
@@ -157,6 +153,8 @@ function UF:Update_PartyFrames(frame, db)
 		frame.INFO_PANEL_HEIGHT = frame.USE_INFO_PANEL and db.infoPanel.height or 0;
 
 		frame.BOTTOM_OFFSET = UF:GetHealthBottomOffset(frame);
+
+		frame.VARIABLES_SET = true;
 	end
 
 	if(frame.isChild) then
@@ -251,7 +249,7 @@ function UF:Update_PartyFrames(frame, db)
 
 	UF:Configure_Range(frame);
 
-	frame:UpdateAllElements();
+	frame:UpdateAllElements("ElvUI_UpdateAllElements");
 end
 
 UF["headerstoload"]["party"] = {nil, "ELVUI_UNITPET, ELVUI_UNITTARGET"};

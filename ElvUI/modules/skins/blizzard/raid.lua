@@ -116,4 +116,4 @@ local function LoadSkin()
 	end);
 end
 
-S:RegisterSkin("Blizzard_RaidUI", LoadSkin);
+S:AddCallbackForAddon("Blizzard_RaidUI", "RaidUI", LoadSkin);

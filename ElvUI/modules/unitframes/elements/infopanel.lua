@@ -15,6 +15,7 @@ function UF:Construct_InfoPanel(frame)
 end
 
 function UF:Configure_InfoPanel(frame)
+	if(not frame.VARIABLES_SET) then return; end
 	local db = frame.db;
 
 	if(frame.USE_INFO_PANEL) then

@@ -327,4 +327,4 @@ local function LoadSkin()
 	AuctionFrameAuctions.bg2:SetFrameLevel(AuctionFrameAuctions.bg2:GetFrameLevel() - 3)
 end
 
-S:RegisterSkin("Blizzard_AuctionUI", LoadSkin)
+S:AddCallbackForAddon("Blizzard_AuctionUI", "AuctionHouse", LoadSkin);

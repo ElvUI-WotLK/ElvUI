@@ -6,7 +6,7 @@
 ## RequiredDeps: ElvUI
 ## LoadOnDemand: true
 
-libs\load_libs.xml
+Libraries\Load_Libraries.xml
 locales\load_locales.xml
 core.lua
 General.lua

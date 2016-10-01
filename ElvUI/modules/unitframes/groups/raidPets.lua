@@ -70,22 +70,19 @@ end
 function UF:Update_RaidpetHeader(header, db)
 	header.db = db;
 
-	local headerHolder = header:GetParent();
-	headerHolder.db = db;
+	if(not header.positioned) then
+		header:ClearAllPoints();
+		header:Point("BOTTOMLEFT", E.UIParent, "BOTTOMLEFT", 4, 574);
 
-	if(not headerHolder.positioned) then
-		headerHolder:ClearAllPoints();
-		headerHolder:Point("BOTTOMLEFT", E.UIParent, "BOTTOMLEFT", 4, 574);
+		E:CreateMover(header, header:GetName() .. "Mover", L["Raid Pet Frames"], nil, nil, nil, "ALL,RAID10,RAID25,RAID40");
+		header.positioned = true;
 
-		E:CreateMover(headerHolder, headerHolder:GetName() .. "Mover", L["Raid Pet Frames"], nil, nil, nil, "ALL,RAID10,RAID25,RAID40");
-		headerHolder.positioned = true;
-
-		headerHolder:RegisterEvent("PLAYER_LOGIN");
-		headerHolder:RegisterEvent("ZONE_CHANGED_NEW_AREA");
-		headerHolder:SetScript("OnEvent", UF["RaidPetsSmartVisibility"]);
+		header:RegisterEvent("PLAYER_LOGIN");
+		header:RegisterEvent("ZONE_CHANGED_NEW_AREA");
+		header:SetScript("OnEvent", UF["RaidPetsSmartVisibility"]);
 	end
 
-	UF.RaidPetsSmartVisibility(headerHolder);
+	UF.RaidPetsSmartVisibility(header);
 end
 
 function UF:Update_RaidpetFrames(frame, db)
@@ -127,6 +124,8 @@ function UF:Update_RaidpetFrames(frame, db)
 		frame.CLASSBAR_WIDTH = 0;
 		frame.CLASSBAR_YOFFSET = 0;
 		frame.BOTTOM_OFFSET = 0;
+
+		frame.VARIABLES_SET = true;
 	end
 
 	if(not InCombatLockdown()) then
@@ -164,7 +163,7 @@ function UF:Update_RaidpetFrames(frame, db)
 
 	UF:Configure_CustomTexts(frame);
 
-	frame:UpdateAllElements();
+	frame:UpdateAllElements("ElvUI_UpdateAllElements");
 end
 
 UF["headerstoload"]["raidpet"] = {nil, nil, "SecureGroupPetHeaderTemplate"};

@@ -1,7 +1,7 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local S = E:GetModule('Skins');
 
-S:RegisterSkin('Blizzard_BindingUI', function()
+local function LoadSkin()
 	if(E.private.skins.blizzard.enable ~= true
 		or E.private.skins.blizzard.binding ~= true)
 	then
@@ -34,4 +34,6 @@ S:RegisterSkin('Blizzard_BindingUI', function()
 	KeyBindingFrameOkayButton:Point('RIGHT', KeyBindingFrameCancelButton, 'LEFT', -3, 0);
 	S:HandleButton(KeyBindingFrameUnbindButton);
 	KeyBindingFrameUnbindButton:Point('RIGHT', KeyBindingFrameOkayButton, 'LEFT', -3, 0);
-end);
+end
+
+S:AddCallbackForAddon("Blizzard_BindingUI", "Binding", LoadSkin);
