@@ -205,7 +205,16 @@ function AB:PositionAndSizeBarTotem()
 
 	MultiCastRecallSpellButton:ClearAllPoints();
 	MultiCastRecallSpellButton:SetSize(size, size);
-	MultiCastRecallSpellButton:SetPoint("LEFT", MultiCastActionButton4, "RIGHT", buttonSpacing, 0);
+
+	if(MultiCastActionButton4 and MultiCastActionButton4:IsShown()) then
+		MultiCastRecallSpellButton:SetPoint("LEFT", MultiCastActionButton4, "RIGHT", buttonSpacing, 0);
+	elseif(MultiCastActionButton3 and MultiCastActionButton3:IsShown()) then
+		MultiCastRecallSpellButton:SetPoint("LEFT", MultiCastActionButton3, "RIGHT", buttonSpacing, 0);
+	elseif(MultiCastActionButton2 and MultiCastActionButton2:IsShown()) then
+		MultiCastRecallSpellButton:SetPoint("LEFT", MultiCastActionButton2, "RIGHT", buttonSpacing, 0);
+	elseif(MultiCastActionButton1 and MultiCastActionButton1:IsShown()) then
+		MultiCastRecallSpellButton:SetPoint("LEFT", MultiCastActionButton1, "RIGHT", buttonSpacing, 0);
+	end
 
 	MultiCastFlyoutFrameCloseButton:Width(size);
 
