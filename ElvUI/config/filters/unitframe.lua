@@ -179,11 +179,22 @@ G.unitframe.aurafilters["PlayerBuffs"] = {
 	-- Чернокнижник
 
 	-- Друид
-
+		[1850] = Defaults(), -- Dash
+		[22812] = Defaults(), -- Barkskin
+		[52610] = Defaults(), -- Savage Roar
 	-- Охотник
-
+		[3045] = Defaults(), -- Rapid Fire
+		[3584] = Defaults(), -- Feign Death
+		[19263] = Defaults(), -- Deterrence
+		[53480] = Defaults(), -- Roar of Sacrifice (Cunning)
+		[54216] = Defaults(), -- Master's Call
 	-- Разбойник
-
+		[2983] = Defaults(), -- Sprint
+		[5277] = Defaults(), -- Evasion
+		[11327] = Defaults(), -- Vanish
+		[13750] = Defaults(), -- Adrenaline Rush
+		[31224] = Defaults(), -- Cloak of Shadows
+		[45182] = Defaults(), -- Cheating Death
 	-- Шаман
 		[2825] = Defaults(), -- Жажда крови
 		[8178] = Defaults(), -- Эффект тотема заземления
@@ -204,7 +215,13 @@ G.unitframe.aurafilters["PlayerBuffs"] = {
 		[31884] = Defaults(), -- Avenging Wrath
 		[53563] = Defaults(), -- Beacon of Light
 	-- Воин
-
+		[871] = Defaults(), -- Shield Wall
+		[1719] = Defaults(), -- Recklessness
+		[3411] = Defaults(), -- Intervene
+		[12975] = Defaults(), -- Last Stand
+		[18499] = Defaults(), -- Berserker Rage
+		[23920] = Defaults(), -- Spell Reflection
+		[46924] = Defaults(), -- Bladestorm
 	-- Рассовые
 		[20594] = Defaults(), -- Каменная форма
 		[59545] = Defaults(), -- Дар наару
