@@ -18,98 +18,95 @@ local function Defaults(priorityOverride)
 	return {["enable"] = true, ["priority"] = priorityOverride or 0, ["stackThreshold"] = 0};
 end
 
-local function DefaultsID(spellID, priorityOverride)
-	return {["enable"] = true, ["spellID"] = spellID, ["priority"] = priorityOverride or 0};
-end
 G.unitframe.aurafilters = {};
 
 G.unitframe.aurafilters["CCDebuffs"] = {
 	["type"] = "Whitelist",
 	["spells"] = {
 	-- Рыцарь смерти
-		[SpellName(47476)] = Defaults(), -- Удушение
-		[SpellName(51209)] = Defaults(), -- Ненасытная стужа
+		[47476] = Defaults(), -- Удушение
+		[51209] = Defaults(), -- Ненасытная стужа
 	-- Друид
-		[SpellName(99)] = Defaults(), -- Устрашающий рев
-		[SpellName(339)] = Defaults(), -- Гнев деревьев
-		[SpellName(2637)] = Defaults(), -- Спячка
-		[SpellName(5211)] = Defaults(), -- Оглушить
-		[SpellName(9005)] = Defaults(), -- Наскок
-		[SpellName(22570)] = Defaults(), -- Колечение
-		[SpellName(33786)] = Defaults(), -- Смерч
-		[SpellName(45334)] = Defaults(), -- Звериная атака - эффект
+		[99] = Defaults(), -- Устрашающий рев
+		[339] = Defaults(), -- Гнев деревьев
+		[2637] = Defaults(), -- Спячка
+		[5211] = Defaults(), -- Оглушить
+		[9005] = Defaults(), -- Наскок
+		[22570] = Defaults(), -- Колечение
+		[33786] = Defaults(), -- Смерч
+		[45334] = Defaults(), -- Звериная атака - эффект
 	-- Охотник
-		[SpellName(1513)] = Defaults(), -- Отпугивание зверя
-		[SpellName(3355)] = Defaults(), -- Эффект замораживающей ловушки
-		[SpellName(19386)] = Defaults(), -- Укус виверны
-		[SpellName(19503)] = Defaults(), -- Дезориентирующий выстрел
-		[SpellName(24394)] = Defaults(), -- Устрашение
-		[SpellName(34490)] = Defaults(), -- Глушащий выстрел
-		[SpellName(50245)] = Defaults(), -- Шип
-		[SpellName(50519)] = Defaults(), -- Ультразвук
-		[SpellName(50541)] = Defaults(), -- Хватка
-		[SpellName(54706)] = Defaults(), -- Ядовитая поутина
-		[SpellName(56626)] = Defaults(), -- Ужалить
-		[SpellName(60210)] = Defaults(), -- Эффект замораживающей стрелы
-		[SpellName(64803)] = Defaults(), -- Удержание
+		[1513] = Defaults(), -- Отпугивание зверя
+		[3355] = Defaults(), -- Эффект замораживающей ловушки
+		[19386] = Defaults(), -- Укус виверны
+		[19503] = Defaults(), -- Дезориентирующий выстрел
+		[24394] = Defaults(), -- Устрашение
+		[34490] = Defaults(), -- Глушащий выстрел
+		[50245] = Defaults(), -- Шип
+		[50519] = Defaults(), -- Ультразвук
+		[50541] = Defaults(), -- Хватка
+		[54706] = Defaults(), -- Ядовитая поутина
+		[56626] = Defaults(), -- Ужалить
+		[60210] = Defaults(), -- Эффект замораживающей стрелы
+		[64803] = Defaults(), -- Удержание
 	-- Маг
-		[SpellName(118)] = Defaults(), -- Преврашение
-		[SpellName(122)] = Defaults(), -- Кольцо льда
-		[SpellName(18469)] = Defaults(), -- Антимагия - немота
-		[SpellName(31589)] = Defaults(), -- Замедление
-		[SpellName(31661)] = Defaults(), -- Дыхание дракона
-		[SpellName(33395)] = Defaults(), -- Холод
-		[SpellName(44572)] = Defaults(), -- Глубокая заморозка
-		[SpellName(55080)] = Defaults(), -- Разрушенная преграда
-		[SpellName(61305)] = Defaults(), -- Превращение
-		[SpellName(55021)] = Defaults(), -- Антимагия - немота
+		[118] = Defaults(), -- Преврашение
+		[122] = Defaults(), -- Кольцо льда
+		[18469] = Defaults(), -- Антимагия - немота
+		[31589] = Defaults(), -- Замедление
+		[31661] = Defaults(), -- Дыхание дракона
+		[33395] = Defaults(), -- Холод
+		[44572] = Defaults(), -- Глубокая заморозка
+		[55080] = Defaults(), -- Разрушенная преграда
+		[61305] = Defaults(), -- Превращение
+		[55021] = Defaults(), -- Антимагия - немота
 	-- Паладин
-		[SpellName(853)] = Defaults(), -- Молот правосудия
-		[SpellName(10326)] = Defaults(), -- Изгнание зла
-		[SpellName(20066)] = Defaults(), -- Покаяние
-		[SpellName(31935)] = Defaults(), -- Щит мстителя
+		[853] = Defaults(), -- Молот правосудия
+		[10326] = Defaults(), -- Изгнание зла
+		[20066] = Defaults(), -- Покаяние
+		[31935] = Defaults(), -- Щит мстителя
 	-- Жрец
-		[SpellName(605)] = Defaults(), -- Контроль над разумом
-		[SpellName(8122)] = Defaults(), -- Ментальный крик
-		[SpellName(9484)] = Defaults(), -- Сковывание нежити
-		[SpellName(15487)] = Defaults(), -- Безмолвие
-		[SpellName(64044)] = Defaults(), -- Глубинный ужас
+		[605] = Defaults(), -- Контроль над разумом
+		[8122] = Defaults(), -- Ментальный крик
+		[9484] = Defaults(), -- Сковывание нежити
+		[15487] = Defaults(), -- Безмолвие
+		[64044] = Defaults(), -- Глубинный ужас
 	-- Разбойник
-		[SpellName(408)] = Defaults(), -- Удар по почкам
-		[SpellName(1330)] = Defaults(), -- Гаррота - немота
-		[SpellName(1776)] = Defaults(), -- Парализующий удар
-		[SpellName(1833)] = Defaults(), -- Подлый трюк
-		[SpellName(2094)] = Defaults(), -- Ослепление
-		[SpellName(6770)] = Defaults(), -- Ошеломление
-		[SpellName(18425)] = Defaults(), -- Пинок - немота
-		[SpellName(51722)] = Defaults(), -- Долой оружие
+		[408] = Defaults(), -- Удар по почкам
+		[1330] = Defaults(), -- Гаррота - немота
+		[1776] = Defaults(), -- Парализующий удар
+		[1833] = Defaults(), -- Подлый трюк
+		[2094] = Defaults(), -- Ослепление
+		[6770] = Defaults(), -- Ошеломление
+		[18425] = Defaults(), -- Пинок - немота
+		[51722] = Defaults(), -- Долой оружие
 	-- Шаман
-		[SpellName(3600)] = Defaults(), -- Оковы земли
-		[SpellName(8056)] = Defaults(), -- Ледяной шок
-		[SpellName(39796)] = Defaults(), -- Оглушение каменного когтя
-		[SpellName(51514)] = Defaults(), -- Сглаз
-		[SpellName(63685)] = Defaults(), -- Заморозка
-		[SpellName(64695)] = Defaults(), -- Хватка земли
+		[3600] = Defaults(), -- Оковы земли
+		[8056] = Defaults(), -- Ледяной шок
+		[39796] = Defaults(), -- Оглушение каменного когтя
+		[51514] = Defaults(), -- Сглаз
+		[63685] = Defaults(), -- Заморозка
+		[64695] = Defaults(), -- Хватка земли
 	-- Чернокнижник
-		[SpellName(710)] = Defaults(), -- Изгнание
-		[SpellName(5782)] = Defaults(), -- Страх
-		[SpellName(6358)] = Defaults(), -- Соблазн
-		[SpellName(6789)] = Defaults(), -- Лик смерти
-		[SpellName(17928)] = Defaults(), -- Вой ужаса
-		[SpellName(24259)] = Defaults(), -- Запрет чар
-		[SpellName(30283)] = Defaults(), -- Неистовство Тьмы
+		[710] = Defaults(), -- Изгнание
+		[5782] = Defaults(), -- Страх
+		[6358] = Defaults(), -- Соблазн
+		[6789] = Defaults(), -- Лик смерти
+		[17928] = Defaults(), -- Вой ужаса
+		[24259] = Defaults(), -- Запрет чар
+		[30283] = Defaults(), -- Неистовство Тьмы
 	-- Воин
-		[SpellName(676)] = Defaults(), -- Разоружие
-		[SpellName(7922)] = Defaults(), -- Наскок и оглушение
-		[SpellName(18498)] = Defaults(), -- Обет молчания - немота
-		[SpellName(20511)] = Defaults(), -- Устрашающий крик
+		[676] = Defaults(), -- Разоружие
+		[7922] = Defaults(), -- Наскок и оглушение
+		[18498] = Defaults(), -- Обет молчания - немота
+		[20511] = Defaults(), -- Устрашающий крик
 	-- Racial
-		[SpellName(25046)] = Defaults(), -- Волшебный поток
-		[SpellName(20549)] = Defaults(), -- Громовой поступь
+		[25046] = Defaults(), -- Волшебный поток
+		[20549] = Defaults(), -- Громовой поступь
 	--PVE Дебаффы
 
 	-- Король лич
-		[SpellName(73787)] = Defaults() -- Мертвящая чума
+		[73787] = Defaults() -- Мертвящая чума
 	}
 };
 
@@ -117,40 +114,40 @@ G.unitframe.aurafilters["TurtleBuffs"] = {
 	["type"] = "Whitelist",
 	["spells"] = {
 	-- Маг
-		[SpellName(45438)] = Defaults(5), -- Ледяная глыба
+		[45438] = Defaults(5), -- Ледяная глыба
 	-- Рыцарь сперти
-		[SpellName(48707)] = Defaults(5), -- Антимагический панцирь
-		[SpellName(48792)] = Defaults(), -- Незыблемость льда
-		[SpellName(49039)] = Defaults(), -- Перерождение
-		[SpellName(50461)] = Defaults(), -- Зона антимагии
-		[SpellName(55233)] = Defaults(), -- Кровь вампира
+		[48707] = Defaults(5), -- Антимагический панцирь
+		[48792] = Defaults(), -- Незыблемость льда
+		[49039] = Defaults(), -- Перерождение
+		[50461] = Defaults(), -- Зона антимагии
+		[55233] = Defaults(), -- Кровь вампира
 	-- Жрец
-		[SpellName(33206)] = Defaults(3), -- Подавление боли
-		[SpellName(47585)] = Defaults(5), -- Слияние с тьмой
-		[SpellName(47788)] = Defaults(), -- Оберегающий дух
+		[33206] = Defaults(3), -- Подавление боли
+		[47585] = Defaults(5), -- Слияние с тьмой
+		[47788] = Defaults(), -- Оберегающий дух
 	-- Чернокнижник
 
 	-- Друид
-		[SpellName(22812)] = Defaults(2), -- Дубовая кожа
-		[SpellName(61336)] = Defaults(), -- Инстинкт выживания
+		[22812] = Defaults(2), -- Дубовая кожа
+		[61336] = Defaults(), -- Инстинкт выживания
 	-- Охотник
-		[SpellName(19263)] = Defaults(5), -- Сдерживание
-		[SpellName(53480)] = Defaults(), -- Рев самопожертвования
+		[19263] = Defaults(5), -- Сдерживание
+		[53480] = Defaults(), -- Рев самопожертвования
 	-- Разбойник
-		[SpellName(5277)] = Defaults(5), -- Ускользание
-		[SpellName(31224)] = Defaults(), -- Плащь Теней
-		[SpellName(45182)] = Defaults(), -- Обман смерти
+		[5277] = Defaults(5), -- Ускользание
+		[31224] = Defaults(), -- Плащь Теней
+		[45182] = Defaults(), -- Обман смерти
 	-- Шаман
-		[SpellName(30823)] = Defaults(), -- Ярость шамана
+		[30823] = Defaults(), -- Ярость шамана
 	-- Паладин
-		[SpellName(498)] = Defaults(2), -- Божественная защита
-		[SpellName(642)] = Defaults(5), -- Божественный щит
-		[SpellName(1022)] = Defaults(5), -- Длань защиты
-		[SpellName(6940)] = Defaults(), -- Длань жертвенности
-		[SpellName(31821)] = Defaults(3), -- Мастер аур
+		[498] = Defaults(2), -- Божественная защита
+		[642] = Defaults(5), -- Божественный щит
+		[1022] = Defaults(5), -- Длань защиты
+		[6940] = Defaults(), -- Длань жертвенности
+		[31821] = Defaults(3), -- Мастер аур
 	-- Воин
-		[SpellName(871)] = Defaults(3), -- Глухая оборона
-		[SpellName(55694)] = Defaults() -- Безудержное восстановление
+		[871] = Defaults(3), -- Глухая оборона
+		[55694] = Defaults() -- Безудержное восстановление
 	}
 };
 
@@ -158,27 +155,27 @@ G.unitframe.aurafilters["PlayerBuffs"] = {
 	["type"] = "Whitelist",
 	["spells"] = {
 	-- Маг
-		[SpellName(12042)] = Defaults(), -- Мощь тайной магии
-		[SpellName(12051)] = Defaults(), -- Прилив сил
-		[SpellName(12472)] = Defaults(), -- Стальная кровь
-		[SpellName(32612)] = Defaults(), -- Невидимость
-		[SpellName(45438)] = Defaults(), -- Ледяная глыба
+		[12042] = Defaults(), -- Мощь тайной магии
+		[12051] = Defaults(), -- Прилив сил
+		[12472] = Defaults(), -- Стальная кровь
+		[32612] = Defaults(), -- Невидимость
+		[45438] = Defaults(), -- Ледяная глыба
 	-- Рыцарь сперти
-		[SpellName(48707)] = Defaults(), -- Антимагический панцирь
-		[SpellName(48792)] = Defaults(), -- Незыблемость льда
-		[SpellName(49016)] = Defaults(), -- Истерия
-		[SpellName(49039)] = Defaults(), -- Перерождение
-		[SpellName(49222)] = Defaults(), -- Костяной щит
-		[SpellName(50461)] = Defaults(), -- Зона антимагии
-		[SpellName(51271)] = Defaults(), -- Несокрушимая броня
-		[SpellName(55233)] = Defaults(), -- Кровь вампира
+		[48707] = Defaults(), -- Антимагический панцирь
+		[48792] = Defaults(), -- Незыблемость льда
+		[49016] = Defaults(), -- Истерия
+		[49039] = Defaults(), -- Перерождение
+		[49222] = Defaults(), -- Костяной щит
+		[50461] = Defaults(), -- Зона антимагии
+		[51271] = Defaults(), -- Несокрушимая броня
+		[55233] = Defaults(), -- Кровь вампира
 	-- Жрец
-		[SpellName(6346)] = Defaults(), -- Защита от страха
-		[SpellName(10060)] = Defaults(), -- Придание сил
-		[SpellName(27827)] = Defaults(), -- Дух воздания
-		[SpellName(33206)] = Defaults(), -- Подавление боли
-		[SpellName(47585)] = Defaults(), -- Слияние с тьмой
-		[SpellName(47788)] = Defaults(), -- Оберегающий дух
+		[6346] = Defaults(), -- Защита от страха
+		[10060] = Defaults(), -- Придание сил
+		[27827] = Defaults(), -- Дух воздания
+		[33206] = Defaults(), -- Подавление боли
+		[47585] = Defaults(), -- Слияние с тьмой
+		[47788] = Defaults(), -- Оберегающий дух
 	-- Чернокнижник
 
 	-- Друид
@@ -188,88 +185,96 @@ G.unitframe.aurafilters["PlayerBuffs"] = {
 	-- Разбойник
 
 	-- Шаман
-		[SpellName(2825)] = Defaults(), -- Жажда крови
-		[SpellName(8178)] = Defaults(), -- Эффект тотема заземления
-		[SpellName(16166)] = Defaults(), -- Покорение стехий
-		[SpellName(16188)] = Defaults(), -- Природная стремительность
-		[SpellName(16191)] = Defaults(), -- Тотем прилива маны
-		[SpellName(30823)] = Defaults(), -- Ярость шамана
-		[SpellName(32182)] = Defaults(), -- Героизм
-		[SpellName(58875)] = Defaults(), -- Поступь духа
+		[2825] = Defaults(), -- Жажда крови
+		[8178] = Defaults(), -- Эффект тотема заземления
+		[16166] = Defaults(), -- Покорение стехий
+		[16188] = Defaults(), -- Природная стремительность
+		[16191] = Defaults(), -- Тотем прилива маны
+		[30823] = Defaults(), -- Ярость шамана
+		[32182] = Defaults(), -- Героизм
+		[58875] = Defaults(), -- Поступь духа
 	-- Паладин
-
+		[498] = Defaults(), -- Divine Protection
+		[1022] = Defaults(), -- Hand of Protection
+		[1044] = Defaults(), -- Hand of Freedom
+		[6940] = Defaults(), -- Hand of Sacrifice
+		[31821] = Defaults(), -- Devotion Aura
+		[31842] = Defaults(), -- Divine Favor
+		[31850] = Defaults(), -- Ardent Defender
+		[31884] = Defaults(), -- Avenging Wrath
+		[53563] = Defaults(), -- Beacon of Light
 	-- Воин
 
 	-- Рассовые
-		[SpellName(20594)] = Defaults(), -- Каменная форма
-		[SpellName(59545)] = Defaults(), -- Дар наару
-		[SpellName(20572)] = Defaults(), -- Кровавое неистовство
-		[SpellName(26297)] = Defaults() -- Берсек
+		[20594] = Defaults(), -- Каменная форма
+		[59545] = Defaults(), -- Дар наару
+		[20572] = Defaults(), -- Кровавое неистовство
+		[26297] = Defaults() -- Берсек
 	}
 };
 
 G.unitframe.aurafilters["Blacklist"] = {
 	["type"] = "Blacklist",
 	["spells"] = {
-		[SpellName(6788)] = Defaults(), -- Ослабленная душа
-		[SpellName(8326)] = Defaults(), -- Призрак
-		[SpellName(15007)] = Defaults(), -- Слабость после воскрешения
-		[SpellName(23445)] = Defaults(), -- Злой двойник
-		[SpellName(24755)] = Defaults(), -- Конфета или жизнь
-		[SpellName(25771)] = Defaults(), -- Воздержанность
-		[SpellName(26013)] = Defaults(), -- Дезертир
-		[SpellName(36032)] = Defaults(), -- Чародейская вспышка
-		[SpellName(36893)] = Defaults(), -- Неисправность транспортера
-		[SpellName(36900)] = Defaults(), -- Расщипление души: Зло!
-		[SpellName(36901)] = Defaults(), -- Расщипление души: Добро
-		[SpellName(41425)] = Defaults(), -- Гипотермия
-		[SpellName(55711)] = Defaults(), -- Сердце феникса
-		[SpellName(57723)] = Defaults(), -- Изнеможение
-		[SpellName(57724)] = Defaults(), -- Пресыщение
-		[SpellName(58539)] = Defaults(), -- Тело наблюдателя
-		[SpellName(67604)] = Defaults(), -- Накопление энергии
-		[SpellName(69127)] = Defaults(), -- Холод Трона
-		[SpellName(71041)] = Defaults(), -- Покинувший подземелье
+		[6788] = Defaults(), -- Ослабленная душа
+		[8326] = Defaults(), -- Призрак
+		[15007] = Defaults(), -- Слабость после воскрешения
+		[23445] = Defaults(), -- Злой двойник
+		[24755] = Defaults(), -- Конфета или жизнь
+		[25771] = Defaults(), -- Воздержанность
+		[26013] = Defaults(), -- Дезертир
+		[36032] = Defaults(), -- Чародейская вспышка
+		[36893] = Defaults(), -- Неисправность транспортера
+		[36900] = Defaults(), -- Расщипление души: Зло!
+		[36901] = Defaults(), -- Расщипление души: Добро
+		[41425] = Defaults(), -- Гипотермия
+		[55711] = Defaults(), -- Сердце феникса
+		[57723] = Defaults(), -- Изнеможение
+		[57724] = Defaults(), -- Пресыщение
+		[58539] = Defaults(), -- Тело наблюдателя
+		[67604] = Defaults(), -- Накопление энергии
+		[69127] = Defaults(), -- Холод Трона
+		[71041] = Defaults(), -- Покинувший подземелье
 	-- Blood Princes
-		[SpellName(71911)] = Defaults(), -- Теневой резонанс
+		[71911] = Defaults(), -- Теневой резонанс
 	-- Festergut
-		[SpellName(70852)] = Defaults(), -- Вязкая гадость
-		[SpellName(72144)] = Defaults(), -- Шлейф оранжевой заразы
-		[SpellName(73034)] = Defaults(), -- Зараженные гнилью споры
+		[70852] = Defaults(), -- Вязкая гадость
+		[72144] = Defaults(), -- Шлейф оранжевой заразы
+		[73034] = Defaults(), -- Зараженные гнилью споры
 	-- Rotface
-		[SpellName(72145)] = Defaults(), -- Шлейф зеленой заразы
+		[72145] = Defaults(), -- Шлейф зеленой заразы
 	-- Putricide
-		[SpellName(72460)] = Defaults(), -- Удушливый газ
-		[SpellName(72511)] = Defaults() -- Мутация
+		[72460] = Defaults(), -- Удушливый газ
+		[72511] = Defaults() -- Мутация
 	}
 };
 
 G.unitframe.aurafilters["Whitelist"] = {
 	["type"] = "Whitelist",
 	["spells"] = {
-		[SpellName(1022)] = Defaults(), -- Длань защиты
-		[SpellName(1490)] = Defaults(), -- Проклятие стихий
-		[SpellName(2825)] = Defaults(), -- Жажда крови
-		[SpellName(12051)] = Defaults(), -- Прилив сил
-		[SpellName(18708)] = Defaults(), -- Господство Скверны
-		[SpellName(22812)] = Defaults(), -- Дубовая кожа
-		[SpellName(29166)] = Defaults(), -- Озаренье
-		[SpellName(31821)] = Defaults(), -- Мастер аур
-		[SpellName(32182)] = Defaults(), -- Героизм
-		[SpellName(33206)] = Defaults(), -- Подавление боли
-		[SpellName(47788)] = Defaults(), -- Оберегающий дух
-		[SpellName(54428)] = Defaults(), -- Святая клятва
+		[1022] = Defaults(), -- Длань защиты
+		[1490] = Defaults(), -- Проклятие стихий
+		[2825] = Defaults(), -- Жажда крови
+		[12051] = Defaults(), -- Прилив сил
+		[18708] = Defaults(), -- Господство Скверны
+		[22812] = Defaults(), -- Дубовая кожа
+		[29166] = Defaults(), -- Озаренье
+		[31821] = Defaults(), -- Мастер аур
+		[32182] = Defaults(), -- Героизм
+		[33206] = Defaults(), -- Подавление боли
+		[47788] = Defaults(), -- Оберегающий дух
+		[54428] = Defaults(), -- Святая клятва
 	-- Turtling abilities
-		[SpellName(871)] = Defaults(), -- Глухая оборона
-		[SpellName(19263)] = Defaults(), -- Сдерживание
-		[SpellName(31224)] = Defaults(), -- Плащь Теней
-		[SpellName(48707)] = Defaults(), -- Антимагический панцирь
+		[871] = Defaults(), -- Глухая оборона
+		[19263] = Defaults(), -- Сдерживание
+		[31224] = Defaults(), -- Плащь Теней
+		[48707] = Defaults(), -- Антимагический панцирь
 	-- Imm
-		[SpellName(642)] = Defaults(), -- Божественный щит
-		[SpellName(45438)] = Defaults(), -- Ледяная глыба
+		[642] = Defaults(), -- Божественный щит
+		[45438] = Defaults(), -- Ледяная глыба
 	-- Offensive Shit
-		[SpellName(31884)] = Defaults(), -- Гнев карателя
-		[SpellName(34471)] = Defaults(), -- Зверь внутри
+		[31884] = Defaults(), -- Гнев карателя
+		[34471] = Defaults(), -- Зверь внутри
 	}
 };
 
@@ -284,77 +289,77 @@ G.unitframe.aurafilters["RaidDebuffs"] = { -- Рейд дебаффы
 	["type"] = "Whitelist",
 	["spells"] = {
 	-- Наксрамас
-		[SpellName(27808)] = Defaults(), -- Ледяной взрыв
-		[SpellName(28408)] = Defaults(), -- Цепи Кел"Тузада
-		[SpellName(32407)] = Defaults(), -- Странная аура
+		[27808] = Defaults(), -- Ледяной взрыв
+		[28408] = Defaults(), -- Цепи Кел"Тузада
+		[32407] = Defaults(), -- Странная аура
 	-- Ульдуар
-		[SpellName(66313)] = Defaults(), -- Огненная бомба
-		[SpellName(63134)] = Defaults(), -- Благословение Сары
-		[SpellName(62717)] = Defaults(), -- Шлаковый ковш
-		[SpellName(63018)] = Defaults(), -- Опаляющий свет
-		[SpellName(64233)] = Defaults(), -- Гравитационная бомба
-		[SpellName(63495)] = Defaults(), -- Статический сбой
+		[66313] = Defaults(), -- Огненная бомба
+		[63134] = Defaults(), -- Благословение Сары
+		[62717] = Defaults(), -- Шлаковый ковш
+		[63018] = Defaults(), -- Опаляющий свет
+		[64233] = Defaults(), -- Гравитационная бомба
+		[63495] = Defaults(), -- Статический сбой
 	-- Испытание крестоносца
-		[SpellName(66406)] = Defaults(), -- Получи снобольда!
-		[SpellName(67574)] = Defaults(), -- Вас преследует Ануб"арак
-		[SpellName(68509)] = Defaults(), -- Пронизывающий холод
-		[SpellName(67651)] = Defaults(), -- Арктическое дыхание
-		[SpellName(68127)] = Defaults(), -- Пламя Легиона
-		[SpellName(67049)] = Defaults(), -- Испепеление плоти
-		[SpellName(66869)] = Defaults(), -- Горящая желчь
-		[SpellName(66823)] = Defaults(), -- Паралитический токсин
+		[66406] = Defaults(), -- Получи снобольда!
+		[67574] = Defaults(), -- Вас преследует Ануб"арак
+		[68509] = Defaults(), -- Пронизывающий холод
+		[67651] = Defaults(), -- Арктическое дыхание
+		[68127] = Defaults(), -- Пламя Легиона
+		[67049] = Defaults(), -- Испепеление плоти
+		[66869] = Defaults(), -- Горящая желчь
+		[66823] = Defaults(), -- Паралитический токсин
 	-- Цитадель Ледяной Кароны
-		[SpellName(71224)] = Defaults(), -- Мутировавшая инфекция
-		[SpellName(71822)] = Defaults(), -- Теневой резонанс
-		[SpellName(70447)] = Defaults(), -- Выделение неустойчивого слизнюка
-		[SpellName(72293)] = Defaults(), -- Метка падшего воителя
-		[SpellName(72448)] = Defaults(), -- Руна крови
-		[SpellName(71473)] = Defaults(), -- Сущность Кровавой королевы
-		[SpellName(71624)] = Defaults(), -- Безумный выпад
-		[SpellName(70923)] = Defaults(), -- Неконтролируемое бешенство
-		[SpellName(70588)] = Defaults(), -- Падавление
-		[SpellName(71738)] = Defaults(), -- Коррозия
-		[SpellName(71733)] = Defaults(), -- Кислотный взрыв
-		[SpellName(72108)] = Defaults(), -- Смерть и разложение
-		[SpellName(71289)] = Defaults(), -- Господство над разумом
-		[SpellName(69762)] = Defaults(), -- Освобожденная магия
-		[SpellName(69651)] = Defaults(), -- Ранящий удар
-		[SpellName(69065)] = Defaults(), -- Прокалывание
-		[SpellName(71218)] = Defaults(), -- Губительный газ
-		[SpellName(72442)] = Defaults(), -- Кипящая кровь
-		[SpellName(72769)] = Defaults(), -- Запах крови
-		[SpellName(69279)] = Defaults(), -- Газообразные споры
-		[SpellName(70949)] = Defaults(), -- Сущность Кровавой королевы
-		[SpellName(72151)] = Defaults(), -- Бешеная кровожадность
-		[SpellName(71474)] = Defaults(), -- Бешеная кровожадность
-		[SpellName(71340)] = Defaults(), -- Пакт Омраченных
-		[SpellName(72985)] = Defaults(), -- Роящиеся тени
-		[SpellName(71267)] = Defaults(), -- Роящиеся тени
-		[SpellName(71264)] = Defaults(), -- Роящиеся тени
-		[SpellName(71807)] = Defaults(), -- Ослепительные искры
-		[SpellName(70873)] = Defaults(), -- Изумрудная энергия
-		[SpellName(71283)] = Defaults(), -- Выброс внутренностей
-		[SpellName(69766)] = Defaults(), -- Неустойчивость
-		[SpellName(70126)] = Defaults(), -- Ледяная метка
-		[SpellName(70157)] = Defaults(), -- Ледяной склеп
-		[SpellName(71056)] = Defaults(), -- Ледяное дыхание
-		[SpellName(70106)] = Defaults(), -- Обморожение
-		[SpellName(70128)] = Defaults(), -- Таинственная энергия
-		[SpellName(73785)] = Defaults(), -- Мертвящая чума
-		[SpellName(73779)] = Defaults(), -- Заражение
-		[SpellName(73800)] = Defaults(), -- Визг души
-		[SpellName(73797)] = Defaults(), -- Жнец душ
-		[SpellName(73708)] = Defaults(), -- Осквернение
-		[SpellName(74322)] = Defaults(), -- Жнец душ
+		[71224] = Defaults(), -- Мутировавшая инфекция
+		[71822] = Defaults(), -- Теневой резонанс
+		[70447] = Defaults(), -- Выделение неустойчивого слизнюка
+		[72293] = Defaults(), -- Метка падшего воителя
+		[72448] = Defaults(), -- Руна крови
+		[71473] = Defaults(), -- Сущность Кровавой королевы
+		[71624] = Defaults(), -- Безумный выпад
+		[70923] = Defaults(), -- Неконтролируемое бешенство
+		[70588] = Defaults(), -- Падавление
+		[71738] = Defaults(), -- Коррозия
+		[71733] = Defaults(), -- Кислотный взрыв
+		[72108] = Defaults(), -- Смерть и разложение
+		[71289] = Defaults(), -- Господство над разумом
+		[69762] = Defaults(), -- Освобожденная магия
+		[69651] = Defaults(), -- Ранящий удар
+		[69065] = Defaults(), -- Прокалывание
+		[71218] = Defaults(), -- Губительный газ
+		[72442] = Defaults(), -- Кипящая кровь
+		[72769] = Defaults(), -- Запах крови
+		[69279] = Defaults(), -- Газообразные споры
+		[70949] = Defaults(), -- Сущность Кровавой королевы
+		[72151] = Defaults(), -- Бешеная кровожадность
+		[71474] = Defaults(), -- Бешеная кровожадность
+		[71340] = Defaults(), -- Пакт Омраченных
+		[72985] = Defaults(), -- Роящиеся тени
+		[71267] = Defaults(), -- Роящиеся тени
+		[71264] = Defaults(), -- Роящиеся тени
+		[71807] = Defaults(), -- Ослепительные искры
+		[70873] = Defaults(), -- Изумрудная энергия
+		[71283] = Defaults(), -- Выброс внутренностей
+		[69766] = Defaults(), -- Неустойчивость
+		[70126] = Defaults(), -- Ледяная метка
+		[70157] = Defaults(), -- Ледяной склеп
+		[71056] = Defaults(), -- Ледяное дыхание
+		[70106] = Defaults(), -- Обморожение
+		[70128] = Defaults(), -- Таинственная энергия
+		[73785] = Defaults(), -- Мертвящая чума
+		[73779] = Defaults(), -- Заражение
+		[73800] = Defaults(), -- Визг души
+		[73797] = Defaults(), -- Жнец душ
+		[73708] = Defaults(), -- Осквернение
+		[74322] = Defaults(), -- Жнец душ
 	-- Рубиновое святилище
-		[SpellName(74502)] = Defaults(), -- Ослабляющее прижигание
-		[SpellName(75887)] = Defaults(), -- Пылающая аура
-		[SpellName(74562)] = Defaults(), -- Пылающий огонь
-		[SpellName(74567)] = Defaults(), -- Метка пылающего огня
-		[SpellName(74792)] = Defaults(), -- Пожирание души
-		[SpellName(74795)] = Defaults(), -- Метка пожирания
+		[74502] = Defaults(), -- Ослабляющее прижигание
+		[75887] = Defaults(), -- Пылающая аура
+		[74562] = Defaults(), -- Пылающий огонь
+		[74567] = Defaults(), -- Метка пылающего огня
+		[74792] = Defaults(), -- Пожирание души
+		[74795] = Defaults(), -- Метка пожирания
 	-- Разные
-		[SpellName(67479)] = Defaults() -- Прокалывание
+		[67479] = Defaults() -- Прокалывание
 	}
 };
 
