@@ -253,7 +253,7 @@ function M:UpdateSettings()
 		MiniMapLFGFrame:ClearAllPoints()
 		MiniMapLFGFrame:Point(pos, Minimap, pos, E.db.general.minimap.icons.lfgEye.xOffset or 3, E.db.general.minimap.icons.lfgEye.yOffset or 0)
 		MiniMapLFGFrame:SetScale(scale)
-		LFDSearchStatus:SetScale(1/scale)
+		LFDSearchStatus:SetScale(scale)
 	end
 
 	if MiniMapBattlefieldFrame then
