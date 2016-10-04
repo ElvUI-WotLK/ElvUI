@@ -728,7 +728,7 @@ function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdat
 
 			if(maxPlayers > 0) then
 				numGroups = E:Round(maxPlayers/5);
-				E:Print("Forcing maxGroups to: " .. numGroups .. " because maxPlayers is: " .. maxPlayers);
+				E:Print(group, "Forcing maxGroups to: " .. numGroups .. " because maxPlayers is: " .. maxPlayers);
 			end
 		end
 	end
@@ -1288,4 +1288,4 @@ function UF:ToggleTransparentStatusBar(isTransparent, statusBar, backdropTex, ad
 	end
 end
 
-E:RegisterModule(UF:GetName());
+E:RegisterInitialModule(UF:GetName());

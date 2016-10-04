@@ -825,9 +825,9 @@ function E:InitializeInitialModules()
 end
 
 function E:RefreshModulesDB()
-	--local UF = self:GetModule("UnitFrames");
-	--twipe(UF.db);
-	--UF.db = self.db.unitframe;
+	local UF = self:GetModule("UnitFrames");
+	twipe(UF.db);
+	UF.db = self.db.unitframe;
 end
 
 function E:InitializeModules()
