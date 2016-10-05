@@ -71,8 +71,10 @@ local function LoadSkin()
 	hooksecurefunc("TradeFrame_UpdatePlayerItem", function(id)
 		local link = GetTradePlayerItemLink(id);
 		local tradeItemButton = _G["TradePlayerItem" .. id .. "ItemButton"];
+		local tradeItemName = _G["TradePlayerItem" .. id .. "Name"];
 		if(link) then
 			local quality = select(3, GetItemInfo(link));
+			tradeItemName:SetTextColor(GetItemQualityColor(quality));
 			if(quality and quality > 1) then
 				tradeItemButton:SetBackdropBorderColor(GetItemQualityColor(quality));
 			end
@@ -84,8 +86,10 @@ local function LoadSkin()
 	hooksecurefunc("TradeFrame_UpdateTargetItem", function(id)
 		local link = GetTradeTargetItemLink(id);
 		local tradeItemButton = _G["TradeRecipientItem" .. id .. "ItemButton"];
+		local tradeItemName = _G["TradeRecipientItem" .. id .. "Name"];
 		if(link) then
 			local quality = select(3, GetItemInfo(link));
+			tradeItemName:SetTextColor(GetItemQualityColor(quality));
 			if(quality and quality > 1) then
 				tradeItemButton:SetBackdropBorderColor(GetItemQualityColor(quality));
 			end
