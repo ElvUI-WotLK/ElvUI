@@ -4,6 +4,9 @@ local S = E:GetModule('Skins')
 local _G = _G;
 local unpack = unpack;
 
+local hooksecurefunc = hooksecurefunc;
+local GetWhoInfo = GetWhoInfo;
+local GetGuildRosterInfo = GetGuildRosterInfo;
 local GUILDMEMBERS_TO_DISPLAY = GUILDMEMBERS_TO_DISPLAY;
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
 local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
@@ -69,7 +72,7 @@ local function LoadSkin()
 	S:HandleDropDownBox(WhoFrameDropDown);
 	
 	for i = 1, 17 do
-		local button = _G["WhoFrameButton"..i];
+		local button = _G["WhoFrameButton" .. i];
 
 		button.icon = button:CreateTexture("$parentIcon", "ARTWORK");
 		button.icon:SetPoint("LEFT", 48, -3);
@@ -94,8 +97,8 @@ local function LoadSkin()
 	WhoFrameWhoButton:ClearAllPoints();
 	WhoFrameWhoButton:SetPoint("BOTTOMLEFT", 16, 82);
 	S:HandleButton(WhoFrameAddFriendButton);
-	WhoFrameAddFriendButton:Point("LEFT", WhoFrameWhoButton, "RIGHT", 3, 0);
-	WhoFrameAddFriendButton:Point("RIGHT", WhoFrameGroupInviteButton, "LEFT", -3, 0);
+	WhoFrameAddFriendButton:SetPoint("LEFT", WhoFrameWhoButton, "RIGHT", 3, 0);
+	WhoFrameAddFriendButton:SetPoint("RIGHT", WhoFrameGroupInviteButton, "LEFT", -3, 0);
 	S:HandleButton(WhoFrameGroupInviteButton);
 
 	hooksecurefunc("WhoList_Update", function()
@@ -285,11 +288,11 @@ local function LoadSkin()
 	GuildControlWithdrawGoldEditBox.backdrop:Point("BOTTOMRIGHT", 0, 5);
 
 	for i = 1, MAX_GUILDBANK_TABS do
-		Tab = _G["GuildBankTabPermissionsTab"..i];
-		Tab:StripTextures();
-		Tab:CreateBackdrop("Default");
-		Tab.backdrop:Point("TOPLEFT", 3, -10);
-		Tab.backdrop:Point("BOTTOMRIGHT", -2, 4);
+		local tab = _G["GuildBankTabPermissionsTab" .. i];
+		tab:StripTextures();
+		tab:CreateBackdrop("Default");
+		tab.backdrop:Point("TOPLEFT", 3, -10);
+		tab.backdrop:Point("BOTTOMRIGHT", -2, 4);
 	end
 
 	GuildControlPopupFrameTabPermissions:SetTemplate("Default");
