@@ -91,7 +91,11 @@ local function LoadSkin()
 	S:HandleScrollBar(WhoListScrollFrameScrollBar);
 
 	S:HandleButton(WhoFrameWhoButton);
+	WhoFrameWhoButton:ClearAllPoints();
+	WhoFrameWhoButton:SetPoint("BOTTOMLEFT", 16, 82);
 	S:HandleButton(WhoFrameAddFriendButton);
+	WhoFrameAddFriendButton:Point("LEFT", WhoFrameWhoButton, "RIGHT", 3, 0);
+	WhoFrameAddFriendButton:Point("RIGHT", WhoFrameGroupInviteButton, "LEFT", -3, 0);
 	S:HandleButton(WhoFrameGroupInviteButton);
 
 	hooksecurefunc("WhoList_Update", function()
