@@ -60,6 +60,31 @@ local function LoadSkin()
 	S:HandleButton(WhoFrameWhoButton);
 	S:HandleButton(WhoFrameAddFriendButton);
 	S:HandleButton(WhoFrameGroupInviteButton);
+
+	hooksecurefunc("WhoList_Update", function()
+		local _, level;
+		local button, buttonText, classTextColor, classFileName, levelTextColor;
+
+		for i = 1, WHOS_TO_DISPLAY, 1 do
+			button = _G["WhoFrameButton"..i];
+			_, _, level, _, _, _, classFileName = GetWhoInfo(button.whoIndex);
+
+			if(classFileName) then
+				classTextColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[classFileName] or RAID_CLASS_COLORS[classFileName];
+			else
+				classTextColor = HIGHLIGHT_FONT_COLOR;
+			end
+
+			levelTextColor = GetQuestDifficultyColor(level);
+
+			buttonText = _G["WhoFrameButton" .. i .. "Name"];
+			buttonText:SetTextColor(classTextColor.r, classTextColor.g, classTextColor.b);
+			buttonText = _G["WhoFrameButton" .. i .. "Level"];
+			buttonText:SetTextColor(levelTextColor.r, levelTextColor.g, levelTextColor.b);
+			buttonText = _G["WhoFrameButton" .. i .. "Class"];
+			buttonText:SetTextColor(1.0, 1.0, 1.0);
+		end
+	end);
 	-- Guild Frame
 	GuildFrameColumnHeader3:ClearAllPoints();
 	GuildFrameColumnHeader3:SetPoint("TOPLEFT", 20, -70);
@@ -96,18 +121,21 @@ local function LoadSkin()
 	end
 
 	hooksecurefunc("GuildStatus_Update", function()
-		local _, online, classFileName;
-		local button, buttonText, classTextColor;
+		local _, level, online, classFileName;
+		local button, buttonText, classTextColor, levelTextColor;
 
 		if(FriendsFrame.playerStatusFrame) then
 			for i = 1, GUILDMEMBERS_TO_DISPLAY, 1 do
 				button = _G["GuildFrameButton" .. i];
-				_, _, _, _, _, _, _, _, online, _, classFileName = GetGuildRosterInfo(button.guildIndex);
+				_, _, _, level, _, _, _, _, online, _, classFileName = GetGuildRosterInfo(button.guildIndex);
 				if(classFileName) then
 					if(online) then
 						classTextColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[classFileName] or RAID_CLASS_COLORS[classFileName];
+						levelTextColor = GetQuestDifficultyColor(level);
 						buttonText = _G["GuildFrameButton" .. i .. "Name"];
 						buttonText:SetTextColor(classTextColor.r, classTextColor.g, classTextColor.b);
+						buttonText = _G["GuildFrameButton" .. i .. "Level"];
+						buttonText:SetTextColor(levelTextColor.r, levelTextColor.g, levelTextColor.b);
 					end
 					button.icon:SetTexCoord(unpack(CLASS_ICON_TCOORDS[classFileName]));
 				end
