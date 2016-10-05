@@ -47,12 +47,45 @@ local function LoadSkin()
 	S:HandleButton(FriendsFrameIgnorePlayerButton, true); -- Ignore List Frame
 	S:HandleButton(FriendsFrameUnsquelchButton, true);
 	-- Who Frame
+	WhoFrameColumnHeader3:ClearAllPoints();
+	WhoFrameColumnHeader3:SetPoint("TOPLEFT", 20, -70);
+
+	WhoFrameColumnHeader4:ClearAllPoints();
+	WhoFrameColumnHeader4:SetPoint("LEFT", WhoFrameColumnHeader3, "RIGHT", -2, -0);
+	WhoFrameColumn_SetWidth(WhoFrameColumnHeader4, 48);
+
+	WhoFrameColumnHeader1:ClearAllPoints();
+	WhoFrameColumnHeader1:SetPoint("LEFT", WhoFrameColumnHeader4, "RIGHT", -2, -0);
+	WhoFrameColumn_SetWidth(WhoFrameColumnHeader1, 105);
+
+	WhoFrameColumnHeader2:ClearAllPoints();
+	WhoFrameColumnHeader2:SetPoint("LEFT", WhoFrameColumnHeader1, "RIGHT", -2, -0);
+
 	for i = 1, 4 do
-		_G['WhoFrameColumnHeader'..i]:StripTextures();
-		_G['WhoFrameColumnHeader'..i]:StyleButton();
+		_G["WhoFrameColumnHeader" .. i]:StripTextures();
+		_G["WhoFrameColumnHeader" .. i]:StyleButton();
 	end
 
 	S:HandleDropDownBox(WhoFrameDropDown);
+	
+	for i = 1, 17 do
+		local button = _G["WhoFrameButton"..i];
+
+		button.icon = button:CreateTexture("$parentIcon", "ARTWORK");
+		button.icon:SetPoint("LEFT", 48, -3);
+		button.icon:SetSize(16, 16);
+		button.icon:SetTexture("Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes");
+		button.icon:SetTexCoord(0, 0.25, 0, 0.25);
+
+		_G["WhoFrameButton" .. i .. "Level"]:ClearAllPoints();
+		_G["WhoFrameButton" .. i .. "Level"]:SetPoint("TOPLEFT", 10, -3);
+
+		_G["WhoFrameButton" .. i .. "Name"]:SetSize(100, 14);
+		_G["WhoFrameButton" .. i .. "Name"]:ClearAllPoints();
+		_G["WhoFrameButton" .. i .. "Name"]:SetPoint("LEFT", 85, -3);
+
+		_G["WhoFrameButton" .. i .. "Class"]:Hide();
+	end
 
 	WhoListScrollFrame:StripTextures();
 	S:HandleScrollBar(WhoListScrollFrameScrollBar);
@@ -71,8 +104,11 @@ local function LoadSkin()
 
 			if(classFileName) then
 				classTextColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[classFileName] or RAID_CLASS_COLORS[classFileName];
+				button.icon:Show();
+				button.icon:SetTexCoord(unpack(CLASS_ICON_TCOORDS[classFileName]));
 			else
 				classTextColor = HIGHLIGHT_FONT_COLOR;
+				button.icon:Hide();
 			end
 
 			levelTextColor = GetQuestDifficultyColor(level);
