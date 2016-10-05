@@ -1262,7 +1262,7 @@ function CH:SetupChat(event, ...)
 	if E.private.chat.enable ~= true then return end
 	for _, frameName in pairs(CHAT_FRAMES) do
 		local frame = _G[frameName]
-		frame:SetMaxLines(CH.db.chatLines)
+		--frame:SetMaxLines(CH.db.chatLines)
 
 		if CH.db.chatDirection == 'TOP' then
 			frame:SetInsertMode('TOP')
