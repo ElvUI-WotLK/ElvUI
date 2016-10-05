@@ -23,7 +23,7 @@ function AB:UPDATE_SHAPESHIFT_COOLDOWN()
 	local start, duration, enable, cooldown
 	for i = 1, NUM_SHAPESHIFT_SLOTS do
 		if i <= numForms then
-			cooldown = _G["ShapeshiftButton"..i.."Cooldown"];
+			cooldown = _G["ElvUI_StanceBarButton"..i.."Cooldown"];
 			start, duration, enable = GetShapeshiftFormCooldown(i);
 			CooldownFrame_SetTimer(cooldown, start, duration, enable);
 		end
@@ -39,7 +39,7 @@ function AB:StyleShapeShift()
 	local stance = GetShapeshiftForm();
 
 	for i = 1, NUM_SHAPESHIFT_SLOTS do
-		buttonName = "ShapeshiftButton"..i;
+		buttonName = "ElvUI_StanceBarButton"..i;
 		button = _G[buttonName];
 		icon = _G[buttonName.."Icon"];
 		cooldown = _G[buttonName.."Cooldown"];
@@ -171,9 +171,9 @@ function AB:PositionAndSizeBarShapeShift()
 	local button, lastButton, lastColumnButton;
 	local firstButtonSpacing = backdropSpacing + (self.db['barShapeShift'].backdrop == true and E.Border or E.Spacing);
 	for i=1, NUM_SHAPESHIFT_SLOTS do
-		button = _G["ShapeshiftButton"..i];
-		lastButton = _G["ShapeshiftButton"..i-1];
-		lastColumnButton = _G["ShapeshiftButton"..i-buttonsPerRow];
+		button = _G["ElvUI_StanceBarButton"..i];
+		lastButton = _G["ElvUI_StanceBarButton"..i-1];
+		lastColumnButton = _G["ElvUI_StanceBarButton"..i-buttonsPerRow];
 		button:SetParent(bar);
 		button:ClearAllPoints();
 		button:Size(size);
@@ -243,9 +243,8 @@ function AB:AdjustMaxStanceButtons(event)
 	local numButtons = GetNumShapeshiftForms()
 	for i = 1, NUM_SHAPESHIFT_SLOTS do
 		if not bar.buttons[i] then
-			--bar.buttons[i] = CreateFrame("CheckButton", format(bar:GetName().."Button%d", i), bar, "ShapeshiftButtonTemplate")
-			bar.buttons[i] = _G["ShapeshiftButton" .. i];
-			--bar.buttons[i]:SetID(i)
+			bar.buttons[i] = CreateFrame("CheckButton", format(bar:GetName().."Button%d", i), bar, "ShapeshiftButtonTemplate")
+			bar.buttons[i]:SetID(i)
 			self:HookScript(bar.buttons[i], "OnEnter", "Button_OnEnter");
 			self:HookScript(bar.buttons[i], "OnLeave", "Button_OnLeave");
 		end
@@ -268,11 +267,11 @@ end
 function AB:UpdateStanceBindings()
 	for i = 1, NUM_SHAPESHIFT_SLOTS do
 		if self.db.hotkeytext then
-			_G["ShapeshiftButton"..i.."HotKey"]:Show()
-			_G["ShapeshiftButton"..i.."HotKey"]:SetText(GetBindingKey("SHAPESHIFTBUTTON" .. i))
-			self:FixKeybindText(_G["ShapeshiftButton"..i])
+			_G["ElvUI_StanceBarButton"..i.."HotKey"]:Show()
+			_G["ElvUI_StanceBarButton"..i.."HotKey"]:SetText(GetBindingKey("SHAPESHIFTBUTTON" .. i))
+			self:FixKeybindText(_G["ElvUI_StanceBarButton"..i])
 		else
-			_G["ShapeshiftButton"..i.."HotKey"]:Hide()
+			_G["ElvUI_StanceBarButton"..i.."HotKey"]:Hide()
 		end
 	end
 end

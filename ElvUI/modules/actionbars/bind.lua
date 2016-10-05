@@ -214,10 +214,11 @@ function AB:RegisterButton(b, override)
 		local script = b:GetScript("OnClick");
 		if script==button or override then
 			b:HookScript("OnEnter", function(b) self:BindUpdate(b); end);
-		elseif script==shapeshift then
-			b:HookScript("OnEnter", function(b) self:BindUpdate(b, "SHAPESHIFT"); end);
-		elseif script==pet then
-			b:HookScript("OnEnter", function(b) self:BindUpdate(b, "PET"); end);
+			if script==shapeshift then
+				b:HookScript("OnEnter", function(b) self:BindUpdate(b, "SHAPESHIFT"); end);
+			elseif script==pet then
+				b:HookScript("OnEnter", function(b) self:BindUpdate(b, "PET"); end);
+			end
 		end
 	end
 end
