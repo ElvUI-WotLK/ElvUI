@@ -365,18 +365,6 @@ function AB:ReassignBindings(event)
 			end
 		end
 	end
-
-	ClearOverrideBindings(ElvUI_StanceBar);
-	for i = 1, 10 do
-		local button = ("SHAPESHIFTBUTTON%d"):format(i);
-		local real_button = ("ElvUI_StanceBarButton%d"):format(i);
-		for k = 1, select("#", GetBindingKey(button)) do
-			local key = select(k, GetBindingKey(button));
-			if(key and key ~= "") then
-				SetOverrideBindingClick(ElvUI_StanceBar, false, key, real_button);
-			end
-		end
-	end
 end
 
 function AB:RemoveBindings()
@@ -387,7 +375,6 @@ function AB:RemoveBindings()
 		ClearOverrideBindings(bar);
 	end
 
-	ClearOverrideBindings(ElvUI_StanceBar);
 	self:RegisterEvent("PLAYER_REGEN_DISABLED", "ReassignBindings");
 end
 
