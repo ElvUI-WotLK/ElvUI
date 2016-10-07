@@ -172,6 +172,13 @@ function lib:Register(mediatype, key, data, langmask)
 	end
 	mediatype = mediatype:lower()
 	if mediatype == lib.MediaType.FONT and ((langmask and band(langmask, LOCALE_MASK) == 0) or not (langmask or locale_is_western)) then return false end
+	if mediatype == lib.MediaType.SOUND and type(data) == "string" then
+		local path = data:lower()
+		-- Only wav, ogg and mp3 are valid sounds.
+		if not path:find(".ogg", nil, true) and not path:find(".mp3", nil, true) and not path:find(".wav", nil, true) then
+			return false
+		end
+	end
 	if not mediaTable[mediatype] then mediaTable[mediatype] = {} end
 	local mtable = mediaTable[mediatype]
 	if mtable[key] then return false end

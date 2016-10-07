@@ -1,6 +1,13 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule('Skins')
 
+--Cache global variables
+--Lua functions
+local _G = _G
+local unpack, select, pairs = unpack, select, pairs
+--WoW API / Variables
+local CreateFrame = CreateFrame
+
 local RegisterAsWidget, RegisterAsContainer
 local function SetModifiedBackdrop(self)
 	if self.backdrop then self = self.backdrop end
@@ -187,10 +194,28 @@ function S:SkinAce3()
 			end
 			button:SetParent(frame.backdrop)
 			text:SetParent(frame.backdrop)
-			button:HookScript('OnClick', function(this)
-				local self = this.obj
-				if self.dropdown then
-					self.dropdown:SetTemplate('Default', true)
+			button:HookScript('OnClick', function(this, button)
+				local dropdown = this.obj.dropdown
+				if dropdown then
+					dropdown:SetTemplate('Default', true)
+					if dropdown.slider then
+						dropdown.slider:SetTemplate("Transparent")
+						dropdown.slider:Point("TOPRIGHT", dropdown, "TOPRIGHT", -10, -10)
+						dropdown.slider:Point("BOTTOMRIGHT", dropdown, "BOTTOMRIGHT", -10, 10)
+
+						if dropdown.slider:GetThumbTexture() then
+							dropdown.slider:SetThumbTexture(E["media"].blankTex)
+							dropdown.slider:GetThumbTexture():SetVertexColor(0.3, 0.3, 0.3)
+							dropdown.slider:GetThumbTexture():Size(10, 12)
+						end
+					end
+
+					if TYPE == "LSM30_Sound" then
+						local frame = this.obj.frame
+						local width = frame:GetWidth()
+						dropdown:Point("TOPLEFT", frame, "BOTTOMLEFT")
+						dropdown:Point("TOPRIGHT", frame, "BOTTOMRIGHT", width < 160 and (160 - width) or 30, 0)
+					end
 				end
 			end)
 		elseif TYPE == "EditBox" then
@@ -256,7 +281,6 @@ function S:SkinAce3()
 			lowtext:Point("TOPLEFT", frame, "BOTTOMLEFT", 2, -2)
 			hightext:Point("TOPRIGHT", frame, "BOTTOMRIGHT", -2, -2)
 
-
 		--[[elseif TYPE == "ColorPicker" then
 			local frame = widget.frame
 			local colorSwatch = widget.colorSwatch
@@ -275,7 +299,7 @@ function S:SkinAce3()
 		if TYPE == "ScrollFrame" then
 			local frame = widget.scrollbar
 			SkinScrollBar(frame)
-		elseif TYPE == "InlineGroup" or TYPE == "TreeGroup" or TYPE == "TabGroup" or TYPE == "SimpleGroup" or TYPE == "Frame" or TYPE == "DropdownGroup" then
+		elseif TYPE == "InlineGroup" or TYPE == "TreeGroup" or TYPE == "TabGroup" or TYPE == "SimpleGroup" or TYPE == "Frame" or TYPE == "DropdownGroup" or TYPE == "Window" then
 			local frame = widget.content:GetParent()
 			if TYPE == "Frame" then
 				frame:StripTextures()
@@ -290,6 +314,9 @@ function S:SkinAce3()
 						child:StripTextures()
 					end
 				end
+			elseif TYPE == "Window" then
+				frame:StripTextures()
+				S:HandleCloseButton(frame.obj.closebutton)
 			end
 			frame:SetTemplate('Transparent')
 
