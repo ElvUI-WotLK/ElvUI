@@ -14,7 +14,7 @@ LSM:Register("font", "Action Man", [[Interface\AddOns\ElvUI\media\fonts\Action_M
 LSM:Register("font", "Expressway", [[Interface\AddOns\ElvUI\media\fonts\Expressway.ttf]], LSM.LOCALE_BIT_ruRU + LSM.LOCALE_BIT_western);
 LSM:Register("font", "PT Sans Narrow", [[Interface\AddOns\ElvUI\media\fonts\PT_Sans_Narrow.ttf]], LSM.LOCALE_BIT_ruRU + LSM.LOCALE_BIT_western);
 LSM:Register("font", "Homespun", [[Interface\AddOns\ElvUI\media\fonts\Homespun.ttf]],LSM.LOCALE_BIT_ruRU + LSM.LOCALE_BIT_western);
-LSM:Register('sound', 'ElvUI Aska', [[Interface\AddOns\ElvUI\media\sounds\sndIncMsg.wav]]);
+LSM:Register('sound', 'ElvUI Aska', [[Interface\AddOns\ElvUI\media\sounds\sndIncMsg.ogg]]);
 LSM:Register("sound", "Awww Crap", [[Interface\AddOns\ElvUI\media\sounds\awwcrap.ogg]]);
 LSM:Register("sound", "BBQ Ass", [[Interface\AddOns\ElvUI\media\sounds\bbqass.ogg]]);
 LSM:Register("sound", "Big Yankie Devil", [[Interface\AddOns\ElvUI\media\sounds\yankiebangbang.ogg]]);
