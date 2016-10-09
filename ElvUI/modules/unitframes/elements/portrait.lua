@@ -22,7 +22,7 @@ function UF:Construct_Portrait(frame, type)
 	portrait.PostUpdate = self.PortraitUpdate;
 
 	portrait.overlay = CreateFrame("Frame", nil, frame);
-	portrait.overlay:SetFrameLevel(frame:GetFrameLevel() - 2);
+	portrait.overlay:SetFrameLevel(frame.Health:GetFrameLevel() + 5);
 
 	return portrait;
 end

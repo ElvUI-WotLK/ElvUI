@@ -216,7 +216,6 @@ function UF:Construct_UF(frame, unit)
 	frame.SHADOW_SPACING = 3;
 	frame.CLASSBAR_YOFFSET = 0;
 	frame.BOTTOM_OFFSET = 0;
-	frame:SetFrameLevel(5);
 
 	frame.RaisedElementParent = CreateFrame("Frame", nil, frame);
 	frame.RaisedElementParent:SetFrameStrata("MEDIUM");
