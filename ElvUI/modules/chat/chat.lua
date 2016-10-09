@@ -1262,9 +1262,6 @@ function CH:SetupChat(event, ...)
 	if E.private.chat.enable ~= true then return end
 	for _, frameName in pairs(CHAT_FRAMES) do
 		local frame = _G[frameName]
-		if(event ~= "UPDATE_FLOATING_CHAT_WINDOWS") then
-			frame:SetMaxLines(CH.db.chatLines);
-		end
 
 		if CH.db.chatDirection == 'TOP' then
 			frame:SetInsertMode('TOP')

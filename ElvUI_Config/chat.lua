@@ -204,19 +204,8 @@ E.Options.args.chat = {
 						["TOP"] = "Top to bottom"
 					}
 				},
-				chatLines = {
-					order = 19,
-					type = "range",
-					name = L["Max Chat Lines"],
-					desc = L["Number of chat messages to be kept in the frame before old messages are discarded. The interface has to be reloaded to show effect."],
-					min = 125, max = 5000, step = 5,
-					set = function(info, value)
-						E.db.chat.chatLines = value;
-						E:StaticPopup_Show("PRIVATE_RL");
-					end
-				},
 				chatHistoryLines = {
-					order = 20,
+					order = 19,
 					type = "range",
 					name = L["Chat History Lines"],
 					desc = L["Number of chat messages to be stores in the chat history."],
