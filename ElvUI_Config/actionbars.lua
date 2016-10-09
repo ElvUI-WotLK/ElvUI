@@ -521,8 +521,21 @@ E.Options.args.actionbar = {
 				["CTRL"] = CTRL_KEY
 			}
 		},
+		lockActionBars = {
+			order = 8,
+			type = "toggle",
+			name = LOCK_ACTIONBAR_TEXT,
+			desc = L["If you unlock actionbars then trying to move a spell might instantly cast it if you cast spells on key press instead of key release."],
+			set = function(info, value)
+				E.db.actionbar[ info[#info] ] = value;
+				AB:UpdateButtonSettings();
+
+				SetCVar("lockActionBars", (value == true and 1 or 0));
+				LOCK_ACTIONBAR = (value == true and "1" or "0");
+			end
+		},
 		globalFadeAlpha = {
- 			order = 8,
+ 			order = 9,
 			type = "range",
 			name = L["Global Fade Transparency"],
 			desc = L["Transparency level when not in combat, no target exists, full health, not casting, and no focus target exists."],
@@ -531,7 +544,7 @@ E.Options.args.actionbar = {
 			set = function(info, value) E.db.actionbar[ info[#info] ] = value; AB.fadeParent:SetAlpha(1-value); end,
 		},
 		colorGroup = {
-			order = 9,
+			order = 10,
 			type = "group",
 			name = L["Colors"],
 			guiInline = true,
@@ -574,7 +587,7 @@ E.Options.args.actionbar = {
 			}
 		},
 		fontGroup = {
-			order = 7,
+			order = 11,
 			type = "group",
 			guiInline = true,
 			disabled = function() return not E.private.actionbar.enable end,

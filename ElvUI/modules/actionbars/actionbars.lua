@@ -452,12 +452,6 @@ function AB:UpdateButtonSettings()
 	self:PositionAndSizeBarShapeShift();
 end
 
-function AB:CVAR_UPDATE()
-	for barName, bar in pairs(self["handledBars"]) do
-		self:UpdateButtonConfig(bar, bar.bindButtons);
-	end
-end
-
 function AB:GetPage(bar, defaultPage, condition)
 	local page = self.db[bar]["paging"][E.myclass];
 	if(not condition) then condition = ""; end
@@ -708,7 +702,7 @@ function AB:UpdateButtonConfig(bar, buttonName)
 		bar.buttonConfig.keyBoundTarget = format(buttonName .. "%d", i);
 		button.keyBoundTarget = bar.buttonConfig.keyBoundTarget;
 		button.postKeybind = AB.FixKeybindText;
-		button:SetAttribute("buttonlock", GetCVar("lockActionBars") == "1" and true or false);
+		button:SetAttribute("buttonlock", self.db.lockActionBars);
 		button:SetAttribute("checkselfcast", true);
 		button:SetAttribute("checkfocuscast", true);
 
@@ -791,12 +785,10 @@ function AB:Initialize()
 
 	self:LoadKeyBinder();
 	self:RegisterEvent("UPDATE_BINDINGS", "ReassignBindings");
-	self:RegisterEvent("CVAR_UPDATE");
 	self:ReassignBindings();
 
-	if(not GetCVarBool("lockActionBars")) then
-		SetCVar("lockActionBars", 1);
-	end
+	SetCVar("lockActionBars", (self.db.lockActionBars == true and 1 or 0));
+	LOCK_ACTIONBAR = (self.db.lockActionBars == true and "1" or "0");
 end
 
 E:RegisterModule(AB:GetName())
