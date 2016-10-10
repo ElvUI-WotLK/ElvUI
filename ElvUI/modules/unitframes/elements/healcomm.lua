@@ -4,20 +4,13 @@ local UF = E:GetModule("UnitFrames");
 local CreateFrame = CreateFrame;
 
 function UF:Construct_HealComm(frame)
-	local mhpb = CreateFrame("StatusBar", nil, frame);
+	local mhpb = CreateFrame("StatusBar", nil, frame.Health);
 	mhpb:SetStatusBarTexture(E["media"].blankTex);
-	mhpb:SetFrameLevel(frame.Health:GetFrameLevel() - 2);
 	mhpb:Hide();
 
-	local ohpb = CreateFrame("StatusBar", nil, frame);
+	local ohpb = CreateFrame("StatusBar", nil, frame.Health);
 	ohpb:SetStatusBarTexture(E["media"].blankTex);
-	mhpb:SetFrameLevel(mhpb:GetFrameLevel());
 	ohpb:Hide();
-
-	if(frame.Health) then
-		ohpb:SetParent(frame.Health)
-		mhpb:SetParent(frame.Health);
-	end
 
 	return {
 		myBar = mhpb,
@@ -37,8 +30,8 @@ function UF:Configure_HealComm(frame)
 		end
 
 		if(not frame.USE_PORTRAIT_OVERLAY) then
-			healCommBar.myBar:SetParent(frame);
-			healCommBar.otherBar:SetParent(frame);
+			healCommBar.myBar:SetParent(frame.Health);
+			healCommBar.otherBar:SetParent(frame.Health);
 		else
 			healCommBar.myBar:SetParent(frame.Portrait.overlay);
 			healCommBar.otherBar:SetParent(frame.Portrait.overlay);

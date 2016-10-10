@@ -6,7 +6,7 @@ local CreateFrame = CreateFrame;
 function UF:Construct_Portrait(frame, type)
 	local portrait;
 	if(type == "texture") then
-		local backdrop = CreateFrame("Frame",nil,frame);
+		local backdrop = CreateFrame("Frame", nil, frame);
 		portrait = frame:CreateTexture(nil, "OVERLAY");
 		portrait:SetTexCoord(0.15, 0.85, 0.15, 0.85);
 		backdrop:SetOutside(portrait);
@@ -48,6 +48,8 @@ function UF:Configure_Portrait(frame, dontHide)
 		if(frame.USE_PORTRAIT_OVERLAY) then
 			if(db.portrait.style == "3D") then
 				portrait:SetFrameLevel(frame.Health:GetFrameLevel() + 1);
+			else
+				portrait:SetParent(frame.Health);
 			end
 
 			portrait:SetAllPoints(frame.Health);
@@ -64,6 +66,8 @@ function UF:Configure_Portrait(frame, dontHide)
 			portrait.backdrop:Show();
 			if(db.portrait.style == "3D") then
 				portrait:SetFrameLevel(frame.Health:GetFrameLevel() - 4);
+			else
+				portrait:SetParent(frame.Health);
 			end
 
 			if(frame.ORIENTATION == "LEFT") then
