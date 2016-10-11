@@ -57,7 +57,7 @@ local updateActiveUnit = function(self, event, unit)
 		modUnit = "vehicle";
 	end
 
-	if(not UnitExists(modUnit) or unit and unit ~= realUnit and unit ~= modUnit) then return; end
+	if(not UnitExists(modUnit)) then return end
 
 	if(Private.UpdateUnits(self, modUnit, realUnit)) then
 		self:UpdateAllElements("RefreshUnit");
@@ -160,6 +160,8 @@ for k, v in pairs{
 	UpdateAllElements = function(self, event)
 		local unit = self.unit;
 		if(not unit or not UnitExists(unit)) then return; end
+
+		assert(type(event) == 'string', 'Invalid argument "event" in UpdateAllElements.')
 
 		if(self.PreUpdate) then
 			self:PreUpdate(event);
