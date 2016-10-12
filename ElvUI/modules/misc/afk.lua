@@ -8,6 +8,23 @@ local GetTime = GetTime;
 local tostring = tostring;
 local floor = floor;
 local format, strsub = string.format, string.sub;
+
+local CreateFrame = CreateFrame;
+local InCombatLockdown = InCombatLockdown;
+local MoveViewLeftStart = MoveViewLeftStart;
+local MoveViewLeftStop = MoveViewLeftStop;
+local IsInGuild = IsInGuild;
+local GetGuildInfo = GetGuildInfo;
+local GetBattlefieldStatus = GetBattlefieldStatus;
+local UnitIsAFK = UnitIsAFK;
+local SetCVar = SetCVar;
+local IsShiftKeyDown = IsShiftKeyDown;
+local GetColoredName = GetColoredName;
+local Chat_GetChatCategory = Chat_GetChatCategory;
+local ChatHistory_GetAccessID = ChatHistory_GetAccessID;
+local GetScreenWidth = GetScreenWidth;
+local GetScreenHeight = GetScreenHeight;
+local UnitFactionGroup = UnitFactionGroup;
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
 local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
 local DND = DND;
@@ -18,6 +35,14 @@ local ignoreKeys = {
 	LSHIFT = true,
 	RSHIFT = true
 };
+
+local printKeys = {
+	["PRINTSCREEN"] = true,
+};
+
+if IsMacClient() then
+	printKeys[_G["KEY_PRINTSCREEN_MAC"]] = true
+end
 
 function AFK:UpdateTimer()
 	local time = GetTime() - self.startTime;
@@ -113,12 +138,13 @@ function AFK:Toggle()
 end
 
 local function OnKeyDown(self, key)
-	if(ignoreKeys[key]) then
-		return;
+	if(ignoreKeys[key]) then return end
+	if printKeys[key] then
+		Screenshot()
+	else
+		AFK:SetAFK(false);
+		AFK:ScheduleTimer('OnEvent', 60);
 	end
-
-	AFK:SetAFK(false);
-	AFK:ScheduleTimer('OnEvent', 60);
 end
 
 local function Chat_OnMouseWheel(self, delta)

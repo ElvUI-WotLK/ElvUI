@@ -987,7 +987,7 @@ function E:Install()
 		E.Skins:HandleCloseButton(close)
 
 		f.tutorialImage = f:CreateTexture('InstallTutorialImage', 'OVERLAY')
-		f.tutorialImage:Size(250)
+		f.tutorialImage:Size(256, 128)
 		f.tutorialImage:SetTexture('Interface\\AddOns\\ElvUI\\media\\textures\\logo_elvui.tga')
 		f.tutorialImage:Point('BOTTOM', 0, 70)
 
