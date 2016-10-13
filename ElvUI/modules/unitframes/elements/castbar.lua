@@ -28,7 +28,7 @@ local INVERT_ANCHORPOINT = {
 
 function UF:Construct_Castbar(frame, direction, moverName)
 	local castbar = CreateFrame("StatusBar", nil, frame);
-	castbar:SetFrameStrata("HIGH");
+	castbar:SetFrameLevel(frame.RaisedElementParent:GetFrameLevel() + 30);
 	self["statusbars"][castbar] = true;
 
 	castbar.OnUpdate = self.OnCastUpdate;
@@ -194,7 +194,6 @@ function UF:Configure_Castbar(frame)
 		local anchorPoint = db.castbar.iconPosition;
 		castbar.Icon.bg:ClearAllPoints();
 		castbar.Icon.bg:Point(INVERT_ANCHORPOINT[anchorPoint], attachPoint, anchorPoint, db.castbar.iconXOffset, db.castbar.iconYOffset);
-		castbar.Icon.bg:SetFrameStrata("HIGH");
 	elseif(db.castbar.icon) then
 		castbar.Icon.bg:ClearAllPoints();
 		if(frame.ORIENTATION == "RIGHT") then

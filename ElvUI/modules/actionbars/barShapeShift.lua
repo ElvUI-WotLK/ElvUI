@@ -96,8 +96,8 @@ function AB:StyleShapeShift()
 end
 
 function AB:PositionAndSizeBarShapeShift()
-	local buttonSpacing = E:Scale(self.db['barShapeShift'].buttonspacing);
-	local backdropSpacing = E:Scale((self.db['barShapeShift'].backdropSpacing or self.db['barShapeShift'].buttonspacing));
+ 	local buttonSpacing = E:Scale(self.db['barShapeShift'].buttonspacing);
+	local backdropSpacing = E:Scale((self.db["barShapeShift"].backdropSpacing or self.db["barShapeShift"].buttonspacing));
 	local buttonsPerRow = self.db['barShapeShift'].buttonsPerRow;
 	local numButtons = self.db['barShapeShift'].buttons;
 	local size = E:Scale(self.db['barShapeShift'].buttonsize);
@@ -110,6 +110,8 @@ function AB:PositionAndSizeBarShapeShift()
 	end
 	bar.db = self.db['barShapeShift']
 	bar.db.position = nil; --Depreciated
+	bar.mouseover = self.db['barShapeShift'].mouseover
+
 	if bar.LastButton and numButtons > bar.LastButton then
 		numButtons = bar.LastButton;
 	end
@@ -127,12 +129,20 @@ function AB:PositionAndSizeBarShapeShift()
 		numColumns = 1;
 	end
 
-	local barWidth = (size * (buttonsPerRow * widthMult)) + ((buttonSpacing * (buttonsPerRow - 1)) * widthMult) + (buttonSpacing * (widthMult-1)) + (backdropSpacing*2) + ((self.db['barShapeShift'].backdrop == true and E.Border or E.Spacing)*2);
-	local barHeight = (size * (numColumns * heightMult)) + ((buttonSpacing * (numColumns - 1)) * heightMult) + (buttonSpacing * (heightMult-1)) + (backdropSpacing*2) + ((self.db['barShapeShift'].backdrop == true and E.Border or E.Spacing)*2);
-	bar:Width(barWidth);
+ 	if self.db['barShapeShift'].backdrop == true then
+ 		bar.backdrop:Show();
+ 	else
+ 		bar.backdrop:Hide();
+
+ 		widthMult = 1
+ 		heightMult = 1
+ 	end
+ 
+ 	local barWidth = (size * (buttonsPerRow * widthMult)) + ((buttonSpacing * (buttonsPerRow - 1)) * widthMult) + (buttonSpacing * (widthMult-1)) + ((self.db["barShapeShift"].backdrop == true and (E.Border + backdropSpacing) or E.Spacing)*2)
+ 	local barHeight = (size * (numColumns * heightMult)) + ((buttonSpacing * (numColumns - 1)) * heightMult) + (buttonSpacing * (heightMult-1)) + ((self.db["barShapeShift"].backdrop == true and (E.Border + backdropSpacing) or E.Spacing)*2)
+ 	bar:Width(barWidth);
 	bar:Height(barHeight);
 
-	bar.mouseover = self.db['barShapeShift'].mouseover
 	if self.db['barShapeShift'].enabled then
 		bar:SetScale(1);
 		bar:SetAlpha(bar.db.alpha);
@@ -141,12 +151,6 @@ function AB:PositionAndSizeBarShapeShift()
 		bar:SetScale(0.000001);
 		bar:SetAlpha(0);
 		E:DisableMover(bar.mover:GetName());
-	end
-
-	if self.db['barShapeShift'].backdrop == true then
-		bar.backdrop:Show();
-	else
-		bar.backdrop:Hide();
 	end
 
 	local horizontalGrowth, verticalGrowth;
@@ -169,7 +173,7 @@ function AB:PositionAndSizeBarShapeShift()
 	end
 
 	local button, lastButton, lastColumnButton;
-	local firstButtonSpacing = backdropSpacing + (self.db['barShapeShift'].backdrop == true and E.Border or E.Spacing);
+	local firstButtonSpacing = (self.db["barShapeShift"].backdrop == true and (E.Border + backdropSpacing) or E.Spacing)
 	for i=1, NUM_SHAPESHIFT_SLOTS do
 		button = _G["ElvUI_StanceBarButton"..i];
 		lastButton = _G["ElvUI_StanceBarButton"..i-1];

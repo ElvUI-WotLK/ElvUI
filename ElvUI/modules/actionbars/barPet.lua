@@ -21,6 +21,7 @@ local PetActionBar_UpdateCooldowns = PetActionBar_UpdateCooldowns;
 local NUM_PET_ACTION_SLOTS = NUM_PET_ACTION_SLOTS;
 
 local bar = CreateFrame('Frame', 'ElvUI_BarPet', E.UIParent, 'SecureHandlerStateTemplate');
+bar:SetFrameStrata("LOW");
 
 function AB:UpdatePet(event, unit)
 	if ((event == "UNIT_FLAGS" or event == "UNIT_AURA") and unit ~= "pet") then return; end
@@ -83,8 +84,8 @@ function AB:UpdatePet(event, unit)
 end
 
 function AB:PositionAndSizeBarPet()
-	local buttonSpacing = E:Scale(self.db['barPet'].buttonspacing);
-	local backdropSpacing = E:Scale((self.db['barPet'].backdropSpacing or self.db['barPet'].buttonspacing));
+ 	local buttonSpacing = E:Scale(self.db['barPet'].buttonspacing);
+	local backdropSpacing = E:Scale((self.db["barPet"].backdropSpacing or self.db["barPet"].buttonspacing));
 	local buttonsPerRow = self.db['barPet'].buttonsPerRow;
 	local numButtons = self.db['barPet'].buttons;
 	local size = E:Scale(self.db['barPet'].buttonsize);
@@ -101,9 +102,18 @@ function AB:PositionAndSizeBarPet()
 		numColumns = 1;
 	end
 
-	local barWidth = (size * (buttonsPerRow * widthMult)) + ((buttonSpacing * (buttonsPerRow - 1)) * widthMult) + (buttonSpacing * (widthMult-1)) + (backdropSpacing*2) + ((self.db['barPet'].backdrop == true and E.Border or E.Spacing)*2);
-	local barHeight = (size * (numColumns * heightMult)) + ((buttonSpacing * (numColumns - 1)) * heightMult) + (buttonSpacing * (heightMult-1)) + (backdropSpacing*2) + ((self.db['barPet'].backdrop == true and E.Border or E.Spacing)*2);
-	bar:Width(barWidth);
+ 	if self.db['barPet'].backdrop == true then
+ 		bar.backdrop:Show();
+ 	else
+ 		bar.backdrop:Hide();
+
+ 		widthMult = 1
+ 		heightMult = 1
+ 	end
+ 
+ 	local barWidth = (size * (buttonsPerRow * widthMult)) + ((buttonSpacing * (buttonsPerRow - 1)) * widthMult) + (buttonSpacing * (widthMult-1)) + ((self.db["barPet"].backdrop == true and (E.Border + backdropSpacing) or E.Spacing)*2)
+ 	local barHeight = (size * (numColumns * heightMult)) + ((buttonSpacing * (numColumns - 1)) * heightMult) + (buttonSpacing * (heightMult-1)) + ((self.db["barPet"].backdrop == true and (E.Border + backdropSpacing) or E.Spacing)*2)
+ 	bar:Width(barWidth);
 	bar:Height(barHeight);
 
 	bar.mover:SetSize(bar:GetSize());
@@ -116,12 +126,6 @@ function AB:PositionAndSizeBarPet()
 		bar:SetScale(0.000001);
 		bar:SetAlpha(0);
 		E:DisableMover(bar.mover:GetName());
-	end
-
-	if self.db['barPet'].backdrop == true then
-		bar.backdrop:Show();
-	else
-		bar.backdrop:Hide();
 	end
 
 	local horizontalGrowth, verticalGrowth;
@@ -151,8 +155,8 @@ function AB:PositionAndSizeBarPet()
 	end
 
 	local button, lastButton, lastColumnButton;
-	local firstButtonSpacing = backdropSpacing + (self.db['barPet'].backdrop == true and E.Border or E.Spacing);
-	for i=1, NUM_PET_ACTION_SLOTS do
+	local firstButtonSpacing = (self.db["barPet"].backdrop == true and (E.Border + backdropSpacing) or E.Spacing);
+	for i = 1, NUM_PET_ACTION_SLOTS do
 		button = _G['PetActionButton'..i];
 		lastButton = _G['PetActionButton'..i-1];
 		lastColumnButton = _G['PetActionButton'..i-buttonsPerRow];

@@ -3,7 +3,6 @@ local UF = E:GetModule("UnitFrames");
 
 function UF:Construct_InfoPanel(frame)
 	local infoPanel = CreateFrame("Frame", nil, frame);
-	infoPanel:SetFrameStrata("LOW");
 	infoPanel:SetFrameLevel(7);
 	local thinBorders = self.thinBorders;
 	if(E.global.tukuiMode) then

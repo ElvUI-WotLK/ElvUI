@@ -21,7 +21,7 @@ function UF:Construct_Buffs(frame)
 	buffs.PostCreateIcon = self.Construct_AuraIcon;
 	buffs.PostUpdateIcon = self.PostUpdateAura;
 	buffs.CustomFilter = self.AuraFilter;
-	buffs:SetFrameLevel(10);
+	buffs:SetFrameLevel(frame.RaisedElementParent:GetFrameLevel() + 10);
 	buffs.type = "buffs";
 	buffs:Width(100);
 
@@ -36,7 +36,7 @@ function UF:Construct_Debuffs(frame)
 	debuffs.PostUpdateIcon = self.PostUpdateAura;
 	debuffs.CustomFilter = self.AuraFilter;
 	debuffs.type = "debuffs";
-	debuffs:SetFrameLevel(10);
+	debuffs:SetFrameLevel(frame.RaisedElementParent:GetFrameLevel() + 10);
 	debuffs:Width(100);
 
 	return debuffs;

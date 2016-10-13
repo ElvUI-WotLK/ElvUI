@@ -19,7 +19,6 @@ function UF:Construct_HealthBar(frame, bg, text, textPos)
 	local health = CreateFrame("StatusBar", nil, frame);
 	UF["statusbars"][health] = true;
 
-	health:SetFrameStrata("LOW");
 	health:SetFrameLevel(10);
 	health.PostUpdate = self.PostUpdateHealth;
 

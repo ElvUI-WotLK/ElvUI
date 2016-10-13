@@ -8,6 +8,7 @@ local CreateFrame = CreateFrame;
 function UF:Construct_RaidDebuffs(frame)
 	local rdebuff = CreateFrame("Frame", nil, frame.RaisedElementParent);
 	rdebuff:SetTemplate("Default", nil, nil, (UF.thinBorders and not E.global.tukuiMode));
+	rdebuff:SetFrameLevel(frame.RaisedElementParent:GetFrameLevel() + 20);
 
 	local offset = (UF.thinBorders and not E.global.tukuiMode) and E.mult or E.Border;
 	rdebuff.icon = rdebuff:CreateTexture(nil, "OVERLAY");

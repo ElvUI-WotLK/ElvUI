@@ -15,14 +15,13 @@ function UF:Construct_Portrait(frame, type)
 		portrait.backdrop = backdrop;
 	else
 		portrait = CreateFrame("PlayerModel", nil, frame);
-		portrait:SetFrameStrata("LOW");
 		portrait:CreateBackdrop("Default", nil, nil, self.thinBorders);
 	end
 
 	portrait.PostUpdate = self.PortraitUpdate;
 
 	portrait.overlay = CreateFrame("Frame", nil, frame);
-	portrait.overlay:SetFrameLevel(frame:GetFrameLevel() + 5);
+	portrait.overlay:SetFrameLevel(frame.Health:GetFrameLevel())
 
 	return portrait;
 end
@@ -47,7 +46,7 @@ function UF:Configure_Portrait(frame, dontHide)
 		portrait.backdrop:ClearAllPoints();
 		if(frame.USE_PORTRAIT_OVERLAY) then
 			if(db.portrait.style == "3D") then
-				portrait:SetFrameLevel(frame.Health:GetFrameLevel() + 1);
+				portrait:SetFrameLevel(frame.Health:GetFrameLevel());
 			else
 				portrait:SetParent(frame.Health);
 			end
