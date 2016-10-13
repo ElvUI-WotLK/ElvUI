@@ -38,6 +38,7 @@ E.Options.args.skins = {
 			name = "Blizzard",
 			get = function(info) return E.private.skins.blizzard[ info[#info] ]; end,
 			set = function(info, value) E.private.skins.blizzard[ info[#info] ] = value; E:StaticPopup_Show("CONFIG_RL"); end,
+			disabled = function() return not E.private.skins.blizzard.enable end,
 			guiInline = true,
 			args = {
 				achievement = {

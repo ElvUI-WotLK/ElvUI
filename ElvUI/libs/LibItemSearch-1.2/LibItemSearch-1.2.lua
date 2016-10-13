@@ -239,7 +239,7 @@ elseif IsAddOnLoaded("Wardrobe") then
 	function Lib:BelongsToSet(id, search)
 		for _, outfit in ipairs(Wardrobe.CurrentConfig.Outfit) do
 			local name = outfit.OutfitName
-			if Search:Find(search, name) then
+			if Search:Find(search, name) or search == "matchall" then
 				for _, item in pairs(outfit.Item) do
 					if item.IsSlotUsed == 1 and item.ItemID == id then
 						return true
