@@ -246,6 +246,7 @@ P["bags"] = {
 		["sortDirection"] = "ASCENDING",
 		["size"] = 30,
 		["spacing"] = 4,
+		["backdropSpacing"] = 4,
 		["showBackdrop"] = false,
 		["mouseover"] = false
 	}
@@ -387,6 +388,13 @@ P["unitframe"] = {
 				["text_format"] = "||cFFB04F4F[pvptimer][mouseover]||r",
 				["xOffset"] = 0,
 				["yOffset"] = 0
+			},
+ 			["pvpIcon"] = {
+ 				["enable"] = false,
+ 				["anchorPoint"] = "CENTER",
+ 				["xOffset"] = 0,
+ 				["yOffset"] = 0,
+ 				["scale"] = 1,
 			},
 			["portrait"] = {
 				["enable"] = false,
@@ -546,6 +554,13 @@ P["unitframe"] = {
 				["xOffset"] = 0,
 				["yOffset"] = 0,
 				["attachTextTo"] = "Health"
+			},
+ 			["pvpIcon"] = {
+ 				["enable"] = false,
+ 				["anchorPoint"] = "CENTER",
+ 				["xOffset"] = 0,
+ 				["yOffset"] = 0,
+ 				["scale"] = 1,
 			},
 			["portrait"] = {
 				["enable"] = false,

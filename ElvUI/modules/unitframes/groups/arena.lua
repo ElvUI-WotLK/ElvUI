@@ -14,8 +14,7 @@ local ArenaHeader = CreateFrame("Frame", "ArenaHeader", UIParent);
 
 function UF:Construct_ArenaFrames(frame)
 	frame.RaisedElementParent = CreateFrame("Frame", nil, frame);
-	frame.RaisedElementParent:SetFrameStrata("MEDIUM");
-	frame.RaisedElementParent:SetFrameLevel(frame:GetFrameLevel() + 10);
+	frame.RaisedElementParent:SetFrameLevel(frame:GetFrameLevel() + 100);
 
 	frame.Health = self:Construct_HealthBar(frame, true, true, "RIGHT");
 	frame.Name = self:Construct_NameText(frame);

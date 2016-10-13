@@ -33,6 +33,7 @@ function UF:Construct_TargetFrame(frame)
 	frame.InfoPanel = self:Construct_InfoPanel(frame);
 	frame.AuraBars = self:Construct_AuraBarHeader(frame);
 	frame.Range = UF:Construct_Range(frame);
+	frame.PvP = UF:Construct_PvPIcon(frame);
 	frame.customTexts = {};
 
 	frame:Point("BOTTOMRIGHT", E.UIParent, "BOTTOM", 413, 68);
@@ -125,6 +126,8 @@ function UF:Update_TargetFrame(frame, db)
 	UF:Configure_AuraBars(frame);
 
 	UF:Configure_Range(frame);
+
+	UF:Configure_PVPIcon(frame)
 
 	UF:Configure_CustomTexts(frame);
 

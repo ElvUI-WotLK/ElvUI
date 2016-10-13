@@ -37,8 +37,9 @@ function UF:Construct_PlayerFrame(frame)
 	frame.DebuffHighlight = self:Construct_DebuffHighlight(frame);
 	frame.HealCommBar = self:Construct_HealComm(frame);
 	frame.AuraBars = self:Construct_AuraBarHeader(frame);
-	frame.CombatFade = true;
 	frame.InfoPanel = self:Construct_InfoPanel(frame);
+	frame.PvP = UF:Construct_PvPIcon(frame);
+	frame.CombatFade = true;
 	frame.customTexts = {};
 
 	frame:Point("BOTTOMLEFT", E.UIParent, "BOTTOM", -413, 68);
@@ -135,6 +136,8 @@ function UF:Update_PlayerFrame(frame, db)
 	if(E.db.unitframe.units.target.aurabar.attachTo == "PLAYER_AURABARS" and ElvUF_Target) then
 		UF:Configure_AuraBars(ElvUF_Target);
 	end
+
+	UF:Configure_PVPIcon(frame)
 
 	UF:Configure_CustomTexts(frame);
 
