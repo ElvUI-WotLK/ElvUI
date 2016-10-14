@@ -34,19 +34,19 @@ local function UpdateFilterGroup()
 				type = "toggle",
 				order = 1,
 				name = L["Enable"],
-				desc = L["Use this filter."],
+				desc = L["Use this filter."]
 			},
 			hide = {
 				type = "toggle",
 				order = 2,
 				name = L["Hide"],
-				desc = L["Prevent any nameplate with this unit name from showing."],
+				desc = L["Prevent any nameplate with this unit name from showing."]
 			},
 			customColor = {
 				type = "toggle",
 				order = 3,
 				name = L["Custom Color"],
-				desc = L["Disable threat coloring for this plate and use the custom color."],
+				desc = L["Disable threat coloring for this plate and use the custom color."]
 			},
 			color = {
 				type = "color",
@@ -67,22 +67,22 @@ local function UpdateFilterGroup()
 						NP:ForEachPlate("CheckFilter")
 						NP:UpdateAllPlates()
 					end
-				end,
+				end
 			},
 			customScale = {
 				type = "range",
 				name = L["Custom Scale"],
 				desc = L["Set the scale of the nameplate."],
-				min = 0.67, max = 2, step = 0.01,
-			},
-		},
+				min = 0.67, max = 2, step = 0.01
+			}
+		}
 	}
 end
 
 E.Options.args.nameplate = {
 	type = "group",
 	name = L["NamePlates"],
-	childGroups = "select",
+	childGroups = "tab",
 	get = function(info) return E.db.nameplate[ info[#info] ] end,
 	set = function(info, value) E.db.nameplate[ info[#info] ] = value; NP:UpdateAllPlates() end,
 	args = {
@@ -99,20 +99,25 @@ E.Options.args.nameplate = {
 			set = function(info, value) E.private.nameplate[ info[#info] ] = value; E:StaticPopup_Show("PRIVATE_RL") end
 		},
 		general = {
-			order = 1,
+			order = 3,
 			type = "group",
 			name = L["General"],
 			disabled = function() return not E.NamePlates; end,
 			args = {
+				header = {
+ 					order = 1,
+					type = "header",
+					name = L["General"]
+				},
 				statusbar = {
-					order = 0,
+					order = 2,
 					type = "select",
 					dialogControl = "LSM30_Statusbar",
 					name = L["StatusBar Texture"],
 					values = AceGUIWidgetLSMlists.statusbar
 				},
 				showEnemyCombat = {
-					order = 1,
+					order = 3,
 					type = "select",
 					name = L["Enemy Combat Toggle"],
 					desc = L["Control enemy nameplates toggling on or off when in combat."],
@@ -127,7 +132,7 @@ E.Options.args.nameplate = {
 					end,
 				},
 				showFriendlyCombat = {
-					order = 2,
+					order = 4,
 					type = "select",
 					name = L["Friendly Combat Toggle"],
 					desc = L["Control friendly nameplates toggling on or off when in combat."],
@@ -140,17 +145,17 @@ E.Options.args.nameplate = {
 				},
 				comboPoints = {
 					type = "toggle",
-					order = 3,
+					order = 5,
 					name = L["Combo Points"],
 					desc = L["Display combo points on nameplates."],
 				},
 				colorNameByValue = {
 					type = "toggle",
-					order = 4,
+					order = 6,
 					name = L["Color Name By Health Value"],
 				},
 				lowHealthThreshold = {
-					order = 5,
+					order = 7,
 					type = "range",
 					name = L["Low Health Threshold"],
 					desc = L["Make the unitframe glow yellow when it is below this percent of health, it will glow red when the health value is half of this value."],
@@ -158,13 +163,13 @@ E.Options.args.nameplate = {
 					min = 0, max = 1, step = 0.01
 				},
 				healthAnimationSpeed = {
- 					order = 6,
+ 					order = 8,
 					type = "range",
 					name = L["Health Animation Speed"],
 					min = 0, max = 1, step = 0.01
 				},
 				fontGroup = {
-					order = 100,
+					order = 9,
 					type = "group",
 					guiInline = true,
 					name = L["Fonts"],
@@ -172,30 +177,30 @@ E.Options.args.nameplate = {
 						showName = {
 							type = "toggle",
 							order = 1,
-							name = L["Show Name"],
+							name = L["Show Name"]
 						},
 						showLevel = {
 							type = "toggle",
 							order = 2,
-							name = L["Show Level"],
+							name = L["Show Level"]
 						},
 						wrapName = {
 							type = "toggle",
 							order = 3,
 							name = L["Wrap Name"],
-							desc = L["Wraps name instead of truncating it."],
+							desc = L["Wraps name instead of truncating it."]
 						},
 						font = {
 							type = "select", dialogControl = "LSM30_Font",
 							order = 4,
 							name = L["Font"],
-							values = AceGUIWidgetLSMlists.font,
+							values = AceGUIWidgetLSMlists.font
 						},
 						fontSize = {
 							order = 5,
 							name = L["Font Size"],
 							type = "range",
-							min = 6, max = 22, step = 1,
+							min = 6, max = 22, step = 1
 						},
 						fontOutline = {
 							order = 6,
@@ -207,13 +212,13 @@ E.Options.args.nameplate = {
 								["OUTLINE"] = "OUTLINE",
 
 								["MONOCHROMEOUTLINE"] = "MONOCROMEOUTLINE",
-								["THICKOUTLINE"] = "THICKOUTLINE",
-							},
-						},
-					},
+								["THICKOUTLINE"] = "THICKOUTLINE"
+							}
+						}
+					}
 				},
 				castGroup = {
-					order = 150,
+					order = 10,
 					type = "group",
 					name = L["Cast Bar"],
 					guiInline = true,
@@ -243,7 +248,7 @@ E.Options.args.nameplate = {
 					}
 				},
 				reactions = {
-					order = 200,
+					order = 11,
 					type = "group",
 					name = L["Reaction Coloring"],
 					guiInline = true,
@@ -263,107 +268,112 @@ E.Options.args.nameplate = {
 							type = "color",
 							order = 1,
 							name = L["Friendly NPC"],
-							hasAlpha = false,
+							hasAlpha = false
 						},
 						friendlyPlayer = {
 							name = L["Friendly Player"],
 							order = 2,
 							type = "color",
-							hasAlpha = false,
+							hasAlpha = false
 						},
 						neutral = {
 							name = L["Neutral"],
 							order = 3,
 							type = "color",
-							hasAlpha = false,
+							hasAlpha = false
 						},
 						enemy = {
 							name = L["Enemy"],
 							order = 4,
 							type = "color",
-							hasAlpha = false,
+							hasAlpha = false
 						},
 						tapped = {
 							name = L["Tagged NPC"],
 							order = 5,
 							type = "color",
-							hasAlpha = false,
-						},
-					},
-				},
-			},
+							hasAlpha = false
+						}
+					}
+				}
+			}
 		},
 		healthBar = {
 			type = "group",
-			order = 2,
+			order = 4,
 			name = L["Health Bar"],
 			disabled = function() return not E.NamePlates; end,
 			get = function(info) return E.db.nameplate.healthBar[ info[#info] ] end,
 			set = function(info, value) E.db.nameplate.healthBar[ info[#info] ] = value; NP:UpdateAllPlates() end,
 			args = {
+				header = {
+ 					order = 1,
+					type = "header",
+					name = L["Health Bar"]
+				},
 				width = {
-					order = 1,
+					order = 2,
+					type = "range",
 					name = L["Width"],
 					desc = L["Controls the width of the nameplate"],
-					type = "range",
-					min = 50, max = 125, step = 1,
+					min = 50, max = 125, step = 1
 				},
 				height = {
-					order = 2,
+					order = 3,
+					type = "range",
 					name = L["Height"],
 					desc = L["Controls the height of the nameplate"],
-					type = "range",
-					min = 4, max = 30, step = 1,
+					min = 4, max = 30, step = 1
 				},
 				colorByRaidIcon = {
-					type = "toggle",
 					order = 4,
-					name = L["Color By Raid Icon"],
+					type = "toggle",
+					name = L["Color By Raid Icon"]
 				},
 				spacer = {
 					order = 5,
 					type = "description",
-					name = "\n",
+					name = "\n"
 				},
 				lowHPScale = {
-					type = "group",
 					order = 6,
+					type = "group",
 					name = L["Scale if Low Health"],
 					guiInline = true,
 					get = function(info) return E.db.nameplate.healthBar.lowHPScale[ info[#info] ] end,
 					set = function(info, value) E.db.nameplate.healthBar.lowHPScale[ info[#info] ] = value; NP:UpdateAllPlates() end,
 					args = {
 						enable = {
+							order = 1,
 							type = "toggle",
 							name = L["Enable"],
-							order = 1,
-							desc = L["Adjust nameplate size on low health"],
+							desc = L["Adjust nameplate size on low health"]
 						},
 						width = {
 							order = 2,
+							type = "range",
 							name = L["Low HP Width"],
 							desc = L["Controls the width of the nameplate on low health"],
-							type = "range",
-							min = 50, max = 125, step = 1,
+							min = 50, max = 125, step = 1
 						},
 						height = {
 							order = 3,
+							type = "range",
 							name = L["Low HP Height"],
 							desc = L["Controls the height of the nameplate on low health"],
-							type = "range",
-							min = 4, max = 30, step = 1,
+							min = 4, max = 30, step = 1
 						},
 						toFront = {
-							type = "toggle",
 							order = 4,
+							type = "toggle",
 							name = L["Bring to front on low health"],
-							desc = L["Bring nameplate to front on low health"],
+							desc = L["Bring nameplate to front on low health"]
 						},
 						changeColor = {
-							type = "toggle",
 							order = 5,
+							type = "toggle",
 							name = L["Change color on low health"],
-							desc = L["Change color on low health"],
+							desc = L["Change color on low health"]
 						},
 						color = {
 							get = function(info)
@@ -377,12 +387,12 @@ E.Options.args.nameplate = {
 								t.r, t.g, t.b = r, g, b
 								NP:UpdateAllPlates()
 							end,
-							name = L["Color on low health"],
 							order = 6,
 							type = "color",
-							hasAlpha = false,
-						},
-					},
+							name = L["Color on low health"],
+							hasAlpha = false
+						}
+					}
 				},
 				fontGroup = {
 					order = 5,
@@ -393,13 +403,13 @@ E.Options.args.nameplate = {
 					set = function(info, value) E.db.nameplate.healthBar.text[ info[#info] ] = value; NP:UpdateAllPlates() end,
 					args = {
 						enable = {
-							type = "toggle",
-							name = L["Enable"],
 							order = 1,
+							type = "toggle",
+							name = L["Enable"]
 						},
 						format = {
-							type = "select",
 							order = 2,
+							type = "select",
 							name = L["Format"],
 							values = {
 								["CURRENT_MAX_PERCENT"] = L["Current - Max | Percent"],
@@ -407,45 +417,50 @@ E.Options.args.nameplate = {
 								["CURRENT_MAX"] = L["Current - Max"],
 								["CURRENT"] = L["Current"],
 								["PERCENT"] = L["Percent"],
-								["DEFICIT"] = L["Deficit"],
-							},
-						},
-					},
+								["DEFICIT"] = L["Deficit"]
+							}
+						}
+					}
 				}
-			},
+			}
 		},
 		castBar = {
 			type = "group",
-			order = 3,
+			order = 5,
 			name = L["Cast Bar"],
 			disabled = function() return not E.NamePlates; end,
 			get = function(info) return E.db.nameplate.castBar[ info[#info] ] end,
 			set = function(info, value) E.db.nameplate.castBar[ info[#info] ] = value; NP:UpdateAllPlates() end,
 			args = {
+				header = {
+ 					order = 1,
+					type = "header",
+					name = L["Cast Bar"]
+				},
 				hideSpellName = {
-					order = 1,
+					order = 2,
 					type = "toggle",
 					name = L["Hide Spell Name"]
 				},
 				hideTime = {
-					order = 2,
+					order = 3,
 					name = L["Hide Time"],
 					type = "toggle"
 				},
 				height = {
-					order = 3,
+					order = 4,
 					type = "range",
 					name = L["Height"],
 					min = 4, max = 30, step = 1
 				},
 				offset = {
-					order = 4,
+					order = 5,
 					type = "range",
 					name = L["Offset"],
 					min = 0, max = 30, step = 1
 				},
 				castTimeFormat = {
-					order = 5,
+					order = 6,
 					type = "select",
 					name = L["Cast Time Format"],
 					values = {
@@ -455,7 +470,7 @@ E.Options.args.nameplate = {
 					}
 				},
 				channelTimeFormat = {
-					order = 6,
+					order = 7,
 					type = "select",
 					name = L["Channel Time Format"],
 					values = {
@@ -468,18 +483,23 @@ E.Options.args.nameplate = {
 		},
 		targetIndicator = {
 			type = "group",
-			order = 4,
+			order = 6,
 			name = L["Target Indicator"],
 			get = function(info) return E.db.nameplate.targetIndicator[ info[#info] ] end,
 			set = function(info, value) E.db.nameplate.targetIndicator[ info[#info] ] = value; WorldFrame.elapsed = 3; NP:UpdateAllPlates() end,
 			args = {
+				header = {
+ 					order = 1,
+					type = "header",
+					name = L["Target Indicator"]
+				},
 				enable = {
-					order = 1,
+					order = 2,
 					type = "toggle",
 					name = L["Enable"],
 				},
 				width = {
-					order = 2,
+					order = 3,
 					name = L["Width"],
 					type = "range",
 					min = 0, max = 220, step = 1,
@@ -487,7 +507,7 @@ E.Options.args.nameplate = {
 					set = function(info, value) E.db.nameplate.targetIndicator[ info[#info] ] = value; NP:SetTargetIndicatorDimensions() end,
 				},
 				height = {
-					order = 3,
+					order = 4,
 					name = L["Height"],
 					type = "range",
 					min = 0, max = 220, step = 1,
@@ -495,7 +515,7 @@ E.Options.args.nameplate = {
 					set = function(info, value) E.db.nameplate.targetIndicator[ info[#info] ] = value; NP:SetTargetIndicatorDimensions() end,
 				},
 				style = {
-					order = 4,
+					order = 5,
 					name = L["Style"],
 					type = "select",
 					values = {
@@ -507,21 +527,21 @@ E.Options.args.nameplate = {
 					set = function(info, value) E.db.nameplate.targetIndicator[ info[#info] ] = value; NP:SetTargetIndicator(); NP:UpdateAllPlates() end,
 				},
 				xOffset = {
-					order = 5,
+					order = 6,
 					name = L["X-Offset"],
 					type = "range",
 					min = -100, max = 100, step = 1,
 					disabled = function() return (NP.db.targetIndicator.style ~= "doubleArrow" and NP.db.targetIndicator.style ~= "doubleArrowInverted") end
 				},
 				yOffset = {
-					order = 6,
+					order = 7,
 					name = L["Y-Offset"],
 					type = "range",
 					min = -100, max = 100, step = 1,
 					disabled = function() return (NP.db.targetIndicator.style ~= "arrow") end
 				},
 				colorMatchHealthBar = {
-					order = 10,
+					order = 8,
 					type = "toggle",
 					name = L["Color By Healthbar"],
 					desc = L["Match the color of the healthbar."],
@@ -538,7 +558,7 @@ E.Options.args.nameplate = {
 				color = {
 					type = "color",
 					name = L["Color"],
-					order = 11,
+					order = 9,
 					disabled = function() return E.db.nameplate.targetIndicator.colorMatchHealthBar end,
 					get = function(info)
 						local t = E.db.nameplate.targetIndicator[ info[#info] ]
@@ -551,70 +571,80 @@ E.Options.args.nameplate = {
 						t.r, t.g, t.b = r, g, b
 						NP:UpdateAllPlates()
 					end,
-				},
-			},
+				}
+			}
 		},
 		raidIcon = {
 			type = "group",
-			order = 5,
+			order = 7,
 			name = L["Raid Icon"],
 			get = function(info) return E.db.nameplate.raidIcon[ info[#info] ] end,
 			set = function(info, value) E.db.nameplate.raidIcon[ info[#info] ] = value; NP:UpdateAllPlates() end,
 			args = {
+				header = {
+ 					order = 1,
+					type = "header",
+					name = L["Raid Icon"]
+				},
 				size = {
 					order = 2,
 					type = "range",
 					name = L["Size"],
-					min = 10, max = 200, step = 1,
+					min = 10, max = 200, step = 1
 				},
 				attachTo = {
 					type = "select",
 					order = 3,
 					name = L["Attach To"],
-					values = positionValues,
+					values = positionValues
 				},
 				xOffset = {
 					type = "range",
 					order = 4,
 					name = L["X-Offset"],
-					min = -150, max = 150, step = 1,
+					min = -150, max = 150, step = 1
 				},
 				yOffset = {
 					type = "range",
 					order = 5,
 					name = L["Y-Offset"],
-					min = -150, max = 150, step = 1,
-				},
-			},
+					min = -150, max = 150, step = 1
+				}
+			}
 		},
 		buffs = {
-			order = 4,
+			order = 8,
 			type = "group",
 			name = L["Buffs"],
 			get = function(info) return E.db.nameplate.buffs[ info[#info] ]; end,
 			set = function(info, value) E.db.nameplate.buffs[ info[#info] ] = value; NP:UpdateAllPlates(); end,
 			args = {
+				header = {
+ 					order = 1,
+					type = "header",
+					name = L["Buffs"]
+				},
 				enable = {
-					order = 1,
+					order = 2,
 					type = "toggle",
 					name = L["Enable"]
 				},
 				numAuras = {
-					order = 2,
+					order = 3,
 					type = "range",
 					name = L["# Displayed Auras"],
 					desc = L["Controls how many auras are displayed, this will also affect the size of the auras."],
 					min = 1, max = 8, step = 1
 				},
 				baseHeight = {
-					order = 3,
+					order = 4,
 					type = "range",
 					name = L["Icon Base Height"],
 					desc = L["Base Height for the Aura Icon"],
 					min = 6, max = 60, step = 1
 				},
 				filtersGroup = {
-					order = 4,
+					order = 5,
 					type = "group",
 					name = L["Filters"],
 					guiInline = true,
@@ -650,33 +680,38 @@ E.Options.args.nameplate = {
 			}
 		},
 		debuffs = {
-			order = 5,
+			order = 9,
 			type = "group",
 			name = L["Debuffs"],
 			get = function(info) return E.db.nameplate.debuffs[ info[#info] ]; end,
 			set = function(info, value) E.db.nameplate.debuffs[ info[#info] ] = value; NP:UpdateAllPlates(); end,
 			args = {
+				header = {
+ 					order = 1,
+					type = "header",
+					name = L["Debuffs"]
+				},
 				enable = {
-					order = 1,
+					order = 2,
 					type = "toggle",
 					name = L["Enable"]
 				},
 				numAuras = {
-					order = 2,
+					order = 3,
 					type = "range",
 					name = L["# Displayed Auras"],
 					desc = L["Controls how many auras are displayed, this will also affect the size of the auras."],
 					min = 1, max = 8, step = 1
 				},
 				baseHeight = {
-					order = 3,
+					order = 4,
 					type = "range",
 					name = L["Icon Base Height"],
 					desc = L["Base Height for the Aura Icon"],
 					min = 6, max = 60, step = 1
 				},
 				filtersGroup = {
-					order = 4,
+					order = 5,
 					type = "group",
 					name = L["Filters"],
 					guiInline = true,
@@ -712,7 +747,7 @@ E.Options.args.nameplate = {
 			}
 		},
 		threat = {
-			order = 6,
+			order = 10,
 			type = "group",
 			name = L["Threat"],
 			get = function(info)
@@ -726,39 +761,44 @@ E.Options.args.nameplate = {
 				t.r, t.g, t.b = r, g, b
 			end,
 			args = {
+				header = {
+ 					order = 1,
+					type = "header",
+					name = L["Threat"]
+				},
 				useThreatColor = {
-					order = 1,
+					order = 2,
 					type = "toggle",
 					name = L["Use Threat Color"],
 					get = function(info) return E.db.nameplate.threat.useThreatColor; end,
 					set = function(info, value) E.db.nameplate.threat.useThreatColor = value; end
 				},
 				goodColor = {
-					order = 2,
+					order = 3,
 					type = "color",
 					name = L["Good"],
 					hasAlpha = false
 				},
 				badColor = {
-					order = 3,
+					order = 4,
 					type = "color",
 					name = L["Bad"],
 					hasAlpha = false
 				},
 				goodTransition = {
-					order = 4,
+					order = 5,
 					type = "color",
 					name = L["Good Transition"],
 					hasAlpha = false
 				},
 				badTransition = {
-					order = 5,
+					order = 6,
 					type = "color",
 					name = L["Bad Transition"],
 					hasAlpha = false
 				},
 				goodScale = {
-					order = 6,
+					order = 7,
 					type = "range",
 					name = L["Good"],
 					min = 0.5, max = 1.5, step = 0.01, isPercent = true,
@@ -766,7 +806,7 @@ E.Options.args.nameplate = {
 					set = function(info, value) E.db.nameplate.threat[ info[#info] ] = value; end
 				},
 				badScale = {
-					order = 7,
+					order = 8,
 					type = "range",
 					name = L["Bad"],
 					min = 0.5, max = 1.5, step = 0.01, isPercent = true,
@@ -777,13 +817,18 @@ E.Options.args.nameplate = {
 		},
 		filters = {
 			type = "group",
-			order = 200,
+			order = 11,
 			name = L["Filters"],
 			disabled = function() return not E.NamePlates; end,
 			args = {
+				header = {
+ 					order = 1,
+					type = "header",
+					name = L["Filters"]
+				},
 				addname = {
+					order = 2,
 					type = "input",
-					order = 1,
 					name = L["Add Name"],
 					get = function(info) return "" end,
 					set = function(info, value)
@@ -797,15 +842,15 @@ E.Options.args.nameplate = {
 							["hide"] = false,
 							["customColor"] = false,
 							["customScale"] = 1,
-							["color"] = {r = 104/255, g = 138/255, b = 217/255},
+							["color"] = {r = 104/255, g = 138/255, b = 217/255}
 						}
 						UpdateFilterGroup()
 						NP:UpdateAllPlates()
-					end,
+					end
 				},
 				deletename = {
+					order = 3,
 					type = "input",
-					order = 2,
 					name = L["Remove Name"],
 					get = function(info) return "" end,
 					set = function(info, value)
@@ -818,7 +863,7 @@ E.Options.args.nameplate = {
 						end
 						UpdateFilterGroup()
 						NP:UpdateAllPlates();
-					end,
+					end
 				},
 				selectFilter = {
 					order = 3,
@@ -832,9 +877,9 @@ E.Options.args.nameplate = {
 							filters[filter] = filter
 						end
 						return filters
-					end,
-				},
-			},
-		},
-	},
+					end
+				}
+			}
+		}
+	}
 };

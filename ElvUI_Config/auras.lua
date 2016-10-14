@@ -215,6 +215,7 @@ E.Options.args.auras = {
 			name = L["Reminder"],
 			get = function(info) return E.db.general.reminder[ info[#info] ] end,
 			set = function(info, value) E.db.general.reminder[ info[#info] ] = value; E:GetModule('ReminderBuffs'):UpdateSettings(); end,
+			disabled = function() return not E.private.general.minimap.enable end,
 			args = {
 				header = {
 					order = 0,
