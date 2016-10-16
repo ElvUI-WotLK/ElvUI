@@ -1037,9 +1037,18 @@ function UF:ADDON_LOADED(_, addon)
 	self:UnregisterEvent("ADDON_LOADED");
 end
 
+local hasEnteredWorld = false
 function UF:PLAYER_ENTERING_WORLD(event)
 	self:Update_AllFrames();
 	self:UnregisterEvent(event);
+	if(not hasEnteredWorld) then
+		--We only want to run Update_AllFrames once when we first log in or /reload
+		self:Update_AllFrames();
+		hasEnteredWorld = true;
+	else
+		--We need to update headers in case we zoned into an instance
+		UF:UpdateAllHeaders();
+	end
 end
 
 function UF:UnitFrameThreatIndicator_Initialize(_, unitFrame)

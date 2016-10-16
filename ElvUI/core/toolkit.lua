@@ -121,44 +121,48 @@ local function SetTemplate(f, t, glossTex, ignoreUpdates, forcePixelMode)
 		bgFile = E.media.glossTex;
 	end
 
-	if((E.private.general.pixelPerfect and not E.global.tukuiMode) or f.forcePixelMode) then
-		f:SetBackdrop({
-			bgFile = bgFile,
-			edgeFile = E["media"].blankTex,
-			tile = false, tileSize = 0, edgeSize = E.mult,
-			insets = {left = 0, right = 0, top = 0, bottom = 0}
-		});
+	if(t ~= "NoBackdrop") then
+		if((E.private.general.pixelPerfect and not E.global.tukuiMode) or f.forcePixelMode) then
+			f:SetBackdrop({
+				bgFile = bgFile,
+				edgeFile = E["media"].blankTex,
+				tile = false, tileSize = 0, edgeSize = E.mult,
+				insets = {left = 0, right = 0, top = 0, bottom = 0}
+			});
+		else
+			f:SetBackdrop({
+				bgFile = bgFile,
+				edgeFile = E["media"].blankTex,
+				tile = false, tileSize = 0, edgeSize = E.mult,
+				insets = {left = -E.mult, right = -E.mult, top = -E.mult, bottom = -E.mult}
+			});
+		end
+
+		if not f.oborder and not f.iborder and (not E.private.general.pixelPerfect or E.global.tukuiMode) and not f.forcePixelMode then
+			local border = CreateFrame("Frame", nil, f)
+			border:SetInside(f, E.mult, E.mult)
+			border:SetBackdrop({
+				edgeFile = E["media"].blankTex,
+				edgeSize = E.mult,
+				insets = {left = E.mult, right = E.mult, top = E.mult, bottom = E.mult}
+			});
+			border:SetBackdropBorderColor(0, 0, 0, 1)
+			f.iborder = border
+
+			if f.oborder then return end
+			local border = CreateFrame("Frame", nil, f)
+			border:SetOutside(f, E.mult, E.mult)
+			border:SetFrameLevel(f:GetFrameLevel() + 1)
+			border:SetBackdrop({
+				edgeFile = E["media"].blankTex,
+				edgeSize = E.mult,
+				insets = {left = E.mult, right = E.mult, top = E.mult, bottom = E.mult}
+			});
+			border:SetBackdropBorderColor(0, 0, 0, 1)
+			f.oborder = border
+		end
 	else
-		f:SetBackdrop({
-			bgFile = bgFile,
-			edgeFile = E["media"].blankTex,
-			tile = false, tileSize = 0, edgeSize = E.mult,
-			insets = {left = -E.mult, right = -E.mult, top = -E.mult, bottom = -E.mult}
-		});
-	end
-
-	if not f.oborder and not f.iborder and (not E.private.general.pixelPerfect or E.global.tukuiMode) and not f.forcePixelMode then
-		local border = CreateFrame("Frame", nil, f)
-		border:SetInside(f, E.mult, E.mult)
-		border:SetBackdrop({
-			edgeFile = E["media"].blankTex,
-			edgeSize = E.mult,
-			insets = {left = E.mult, right = E.mult, top = E.mult, bottom = E.mult}
-		});
-		border:SetBackdropBorderColor(0, 0, 0, 1)
-		f.iborder = border
-
-		if f.oborder then return end
-		local border = CreateFrame("Frame", nil, f)
-		border:SetOutside(f, E.mult, E.mult)
-		border:SetFrameLevel(f:GetFrameLevel() + 1)
-		border:SetBackdrop({
-			edgeFile = E["media"].blankTex,
-			edgeSize = E.mult,
-			insets = {left = E.mult, right = E.mult, top = E.mult, bottom = E.mult}
-		});
-		border:SetBackdropBorderColor(0, 0, 0, 1)
-		f.oborder = border
+		f:SetBackdrop(nil);
 	end
 
 	f:SetBackdropColor(backdropr, backdropg, backdropb, backdropa)
