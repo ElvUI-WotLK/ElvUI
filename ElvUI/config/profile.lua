@@ -29,6 +29,13 @@ P['general'] = {
 	['minimap'] = {
 		['size'] = 176,
 		['locationText'] = 'MOUSEOVER',
+		["locationFontSize"] = 12,
+		["locationFontOutline"] = "OUTLINE",
+		["locationFont"] = "PT Sans Narrow",
+		["resetZoom"] = {
+			["enable"] = false,
+			["time"] = 3
+		},
 		['icons'] = {
 			['calendar'] = {
 				['scale'] = 1,

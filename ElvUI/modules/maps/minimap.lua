@@ -118,12 +118,28 @@ function M:Update_ZoneText()
 	if E.db.general.minimap.locationText == 'HIDE' or not E.private.general.minimap.enable then return; end
 	Minimap.location:SetText(strsub(GetMinimapZoneText(),1,46))
 	Minimap.location:SetTextColor(self:GetLocTextColor())
+	Minimap.location:FontTemplate(E.LSM:Fetch("font", E.db.general.minimap.locationFont), E.db.general.minimap.locationFontSize, E.db.general.minimap.locationFontOutline);
 end
 
 function M:PLAYER_REGEN_ENABLED()
 	self:UnregisterEvent('PLAYER_REGEN_ENABLED')
 	self:UpdateSettings()
 end
+
+local isResetting;
+local function ResetZoom()
+	Minimap:SetZoom(0);
+	MinimapZoomIn:Enable();
+	MinimapZoomOut:Disable();
+	isResetting = false;
+end
+local function SetupZoomReset()
+	if(E.db.general.minimap.resetZoom.enable and not isResetting) then
+		isResetting = true;
+		E:Delay(E.db.general.minimap.resetZoom.time, ResetZoom);
+	end
+end
+hooksecurefunc(Minimap, "SetZoom", SetupZoomReset);
 
 function M:UpdateSettings()
 	if InCombatLockdown() then
