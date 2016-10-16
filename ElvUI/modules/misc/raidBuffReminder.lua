@@ -305,4 +305,4 @@ function RB:Initialize()
 	self:UpdateSettings();
 end
 
-E:RegisterInitialModule(RB:GetName());
+E:RegisterModule(RB:GetName());
