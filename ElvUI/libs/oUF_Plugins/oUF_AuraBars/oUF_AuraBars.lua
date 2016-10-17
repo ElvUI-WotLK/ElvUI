@@ -193,7 +193,7 @@ local function Update(self, event, unit)
 	if self.unit ~= unit then return end
 	local auraBars = self.AuraBars
 	local helpOrHarm
-	local isFriend = UnitIsFriend('player', unit)
+	local isFriend = UnitIsFriend("player", unit) == 1 and true or false;
 	local both = false
 
 	if auraBars.friendlyAuraType and auraBars.enemyAuraType then
