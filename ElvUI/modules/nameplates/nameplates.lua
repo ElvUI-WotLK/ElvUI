@@ -856,17 +856,16 @@ function mod:SetAuraInstance(guid, spellID, expiration, stacks, caster, duration
 	local trackFilter = E.global["unitframe"]["aurafilters"][db.filters.filter];
 	if(db.filters.filter and trackFilter) then
 		local name = GetSpellInfo(spellID);
+		local type = trackFilter.type;
 		local spellList = trackFilter.spells;
 		local spell = (spellList[spellID] or spellList[name]);
-		local type = trackFilter.type;
-		if(type == "Blacklist") then
-			if(spell and spell.enable) then
-				filter = false;
-			end
-		else
+
+		if(type == "Whitelist") then
 			if(spell and spell.enable) then
 				filter = true;
 			end
+		elseif(type == "Blacklist" and spell and spell.enable) then
+			filter = false;
 		end
 	end
 

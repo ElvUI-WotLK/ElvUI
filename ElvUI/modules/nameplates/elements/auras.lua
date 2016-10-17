@@ -160,21 +160,21 @@ function mod:UpdateElement_AurasByUnitID(unit)
 	self:WipeAuraList(guid);
 
 	local index = 1;
-	local name, _, texture, count, _, duration, expirationTime, unitCaster, _, _, spellID = UnitDebuff(unit, index);
+	local name, _, texture, count, _, duration, expirationTime, unitCaster, _, _, spellID = UnitAura(unit, index, "HARMFUL");
 	while(name) do
 		self:SetSpellDuration(spellID, duration);
 		self:SetAuraInstance(guid, spellID, expirationTime, count, UnitGUID(unitCaster or ""), duration, texture, AURA_TYPE_DEBUFF);
 		index = index + 1;
-		name , _, texture, count, _, duration, expirationTime, unitCaster, _, _, spellID = UnitDebuff(unit, index);
+		name , _, texture, count, _, duration, expirationTime, unitCaster, _, _, spellID = UnitAura(unit, index, "HARMFUL");
 	end
 
 	index = 1;
-	local name, _, texture, count, _, duration, expirationTime, unitCaster, _, _, spellID = UnitBuff(unit, index);
+	local name, _, texture, count, _, duration, expirationTime, unitCaster, _, _, spellID = UnitAura(unit, index, "HELPFUL");
 	while(name) do
 		self:SetSpellDuration(spellID, duration);
 		self:SetAuraInstance(guid, spellID, expirationTime, count, UnitGUID(unitCaster or ""), duration, texture, AURA_TYPE_BUFF);
 		index = index + 1;
-		name, _, texture, count, _, duration, expirationTime, unitCaster, _, _, spellID = UnitBuff(unit, index);
+		name, _, texture, count, _, duration, expirationTime, unitCaster, _, _, spellID = UnitAura(unit, index, "HELPFUL");
 	end
 
 	local raidIcon, name;
