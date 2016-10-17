@@ -477,6 +477,14 @@ function UF:AuraFilter(unit, icon, name, _, _, _, dtype, duration, _, _, isSteal
 		anotherFilterExists = true;
 	end
 
+	if(UF:CheckFilter(db.noConsolidated, isFriend)) then
+		if(shouldConsolidate == 1) then
+			returnValue = false;
+		end
+
+		anotherFilterExists = true;
+	end
+
 	if(UF:CheckFilter(db.noDuration, isFriend)) then
 		if(duration == 0 or not duration) then
 			returnValue = false;

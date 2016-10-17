@@ -1151,6 +1151,12 @@ local function GetOptionsTable_AuraBars(friendlyOnly, updateFunc, groupName)
 			name = L["Block Non-Dispellable Auras"],
 			desc = L["Don't display auras that cannot be purged or dispelled by your class."]
 		};
+		config.args.filters.args.noConsolidated = {
+			order = 15,
+			type = "toggle",
+			name = L["Block Raid Buffs"],
+			desc = L["Don't display raid buffs such as Blessing of Kings or Mark of the Wild."]
+		};
 		config.args.filters.args.useFilter = {
 			order = 16,
 			name = L["Additional Filter"],
@@ -1283,6 +1289,30 @@ local function GetOptionsTable_AuraBars(friendlyOnly, updateFunc, groupName)
 					desc = L["If the unit is an enemy to you."] .. " " .. L["Don't display auras that cannot be purged or dispelled by your class."],
 					get = function(info) return E.db.unitframe.units[groupName]["aurabar"].onlyDispellable.enemy; end,
 					set = function(info, value) E.db.unitframe.units[groupName]["aurabar"].onlyDispellable.enemy = value; updateFunc(UF, groupName); end
+				}
+			}
+		};
+		config.args.filters.args.noConsolidated = {
+			order = 15,
+			guiInline = true,
+			type = "group",
+			name = L["Block Raid Buffs"],
+			args = {
+				friendly = {
+					order = 1,
+					type = "toggle",
+					name = L["Friendly"],
+					desc = L["If the unit is friendly to you."] .. " " .. L["Don't display raid buffs such as Blessing of Kings or Mark of the Wild."],
+					get = function(info) return E.db.unitframe.units[groupName]["aurabar"].noConsolidated.friendly; end,
+					set = function(info, value) E.db.unitframe.units[groupName]["aurabar"].noConsolidated.friendly = value; updateFunc(UF, groupName); end
+				},
+				enemy = {
+					order = 2,
+					type = "toggle",
+					name = L["Enemy"],
+					desc = L["If the unit is an enemy to you."] .. " " .. L["Don't display raid buffs such as Blessing of Kings or Mark of the Wild."],
+					get = function(info) return E.db.unitframe.units[groupName]["aurabar"].noConsolidated.enemy; end,
+					set = function(info, value) E.db.unitframe.units[groupName]["aurabar"].noConsolidated.enemy = value; updateFunc(UF, groupName); end
 				}
 			}
 		};

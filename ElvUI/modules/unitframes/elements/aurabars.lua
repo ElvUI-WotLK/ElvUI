@@ -205,6 +205,14 @@ function UF:AuraBarFilter(unit, name, _, _, _, debuffType, duration, _, unitCast
 		anotherFilterExists = true;
 	end
 
+	if(UF:CheckFilter(db.noConsolidated, isFriend)) then
+		if(shouldConsolidate == 1) then
+			returnValue = false;
+		end
+
+		anotherFilterExists = true;
+	end
+
 	if(UF:CheckFilter(db.noDuration, isFriend)) then
 		if(duration == 0 or not duration) then
 			returnValue = false;
