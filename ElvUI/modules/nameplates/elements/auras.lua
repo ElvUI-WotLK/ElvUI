@@ -6,6 +6,7 @@ local select, unpack = select, unpack;
 local tinsert = table.insert;
 
 local CreateFrame = CreateFrame;
+local UnitAura = UnitAura;
 
 local auraCache = {};
 
@@ -163,7 +164,7 @@ function mod:UpdateElement_AurasByUnitID(unit)
 	local name, _, texture, count, _, duration, expirationTime, unitCaster, _, _, spellID = UnitAura(unit, index, "HARMFUL");
 	while(name) do
 		self:SetSpellDuration(spellID, duration);
-		self:SetAuraInstance(guid, spellID, expirationTime, count, UnitGUID(unitCaster or ""), duration, texture, AURA_TYPE_DEBUFF);
+		self:SetAuraInstance(guid, name, spellID, expirationTime, count, UnitGUID(unitCaster or ""), duration, texture, AURA_TYPE_DEBUFF);
 		index = index + 1;
 		name , _, texture, count, _, duration, expirationTime, unitCaster, _, _, spellID = UnitAura(unit, index, "HARMFUL");
 	end
@@ -172,7 +173,7 @@ function mod:UpdateElement_AurasByUnitID(unit)
 	local name, _, texture, count, _, duration, expirationTime, unitCaster, _, _, spellID = UnitAura(unit, index, "HELPFUL");
 	while(name) do
 		self:SetSpellDuration(spellID, duration);
-		self:SetAuraInstance(guid, spellID, expirationTime, count, UnitGUID(unitCaster or ""), duration, texture, AURA_TYPE_BUFF);
+		self:SetAuraInstance(guid, name, spellID, expirationTime, count, UnitGUID(unitCaster or ""), duration, texture, AURA_TYPE_BUFF);
 		index = index + 1;
 		name, _, texture, count, _, duration, expirationTime, unitCaster, _, _, spellID = UnitAura(unit, index, "HELPFUL");
 	end
