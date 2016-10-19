@@ -45,6 +45,7 @@ mod.ByRaidIcon = {};
 mod.ByName = {};
 mod.AuraList = {};
 mod.AuraSpellID = {};
+mod.AuraName = {};
 mod.AuraExpiration = {};
 mod.AuraStacks = {};
 mod.AuraCaster = {};
@@ -819,6 +820,7 @@ function mod:RemoveAuraInstance(guid, spellID, caster)
 		local auraID = spellID .. (tostring(caster or "UNKNOWN_CASTER"));
 		if(self.AuraList[guid][auraID]) then
 			self.AuraSpellID[instanceID] = nil;
+			self.AuraName[instanceID] = nil;
 			self.AuraExpiration[instanceID] = nil;
 			self.AuraStacks[instanceID] = nil;
 			self.AuraCaster[instanceID] = nil;
@@ -838,7 +840,7 @@ end
 function mod:GetAuraInstance(guid, auraID)
 	if(guid and auraID) then
 		local instanceID = guid .. auraID;
-		return self.AuraSpellID[instanceID], self.AuraExpiration[instanceID], self.AuraStacks[instanceID], self.AuraCaster[instanceID], self.AuraDuration[instanceID], self.AuraTexture[instanceID], self.AuraType[instanceID], self.AuraTarget[instanceID];
+		return self.AuraSpellID[instanceID], self.AuraName[instanceID], self.AuraExpiration[instanceID], self.AuraStacks[instanceID], self.AuraCaster[instanceID], self.AuraDuration[instanceID], self.AuraTexture[instanceID], self.AuraType[instanceID], self.AuraTarget[instanceID];
 	end
 end
 
@@ -855,10 +857,9 @@ function mod:SetAuraInstance(guid, name, spellID, expiration, stacks, caster, du
 
 	local trackFilter = E.global["unitframe"]["aurafilters"][db.filters.filter];
 	if(db.filters.filter and trackFilter) then
-		local spellName = name or GetSpellInfo(spellID);
 		local type = trackFilter.type;
 		local spellList = trackFilter.spells;
-		local spell = (spellList[spellID] or spellList[spellName]);
+		local spell = (spellList[spellID] or spellList[name]);
 
 		if(type == "Whitelist") then
 			if(spell and spell.enable) then
@@ -879,6 +880,7 @@ function mod:SetAuraInstance(guid, name, spellID, expiration, stacks, caster, du
 		self.AuraList[guid] = self.AuraList[guid] or {};
 		self.AuraList[guid][auraID] = instanceID;
 		self.AuraSpellID[instanceID] = spellID;
+		self.AuraName[instanceID] = name;
 		self.AuraExpiration[instanceID] = expiration;
 		self.AuraStacks[instanceID] = stacks;
 		self.AuraCaster[instanceID] = caster;
@@ -894,6 +896,7 @@ function mod:WipeAuraList(guid)
 		local unitAuraList = self.AuraList[guid];
 		for auraID, instanceID in pairs(unitAuraList) do
 			self.AuraSpellID[instanceID] = nil;
+			self.AuraName[instanceID] = nil;
 			self.AuraExpiration[instanceID] = nil;
 			self.AuraStacks[instanceID] = nil;
 			self.AuraCaster[instanceID] = nil;
