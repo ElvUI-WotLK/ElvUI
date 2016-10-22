@@ -12,6 +12,7 @@ local HasMultiCastActionBar = HasMultiCastActionBar;
 if(E.myclass ~= "SHAMAN") then return; end
 
 local bar = CreateFrame("Frame", "ElvUI_BarTotem", E.UIParent, "SecureHandlerStateTemplate");
+bar:SetFrameStrata("LOW");
 
 local bordercolors = {
 	{.23, .45, .13},

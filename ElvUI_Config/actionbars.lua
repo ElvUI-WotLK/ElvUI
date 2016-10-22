@@ -415,6 +415,7 @@ local function BuildABConfig()
 					order = 1,
 					type = "toggle",
 					name = L["Enable"],
+					set = function(info, value) E.db.actionbar["barTotem"][ info[#info] ] = value; E:StaticPopup_Show("PRIVATE_RL"); end
 				},
 				restorePosition = {
 					order = 2,

@@ -782,7 +782,7 @@ function AB:Initialize()
 	self:CreateBarShapeShift();
 	self:CreateVehicleLeave();
 
-	if(E.myclass == "SHAMAN") then
+	if(E.myclass == "SHAMAN" and self.db.barTotem.enabled) then
 		self:CreateTotemBar();
 	end
 
