@@ -220,10 +220,7 @@ function AB:PositionAndSizeBar(barName)
 		bar:Show();
 		RegisterStateDriver(bar, "visibility", self.db[barName].visibility);
 		RegisterStateDriver(bar, "page", page);
-
-		bar:Show();
-		RegisterStateDriver(bar, "visibility", self.db[barName].visibility);
-		RegisterStateDriver(bar, "page", page);
+		bar:SetAttribute("page", page);
 
 		if(not bar.initialized) then
 			bar.initialized = true;

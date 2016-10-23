@@ -135,17 +135,8 @@ local function LoadSkin()
 		AvailableQuestsText:SetTextColor(1, 1, 1);
 	end);
 
-	QuestLogDetailScrollFrame:StripTextures();
-	QuestLogFrame:HookScript("OnShow", function()
-		QuestLogScrollFrame:Height(331);
-		QuestLogDetailScrollFrame:Height(328);
-		if(not QuestLogDetailScrollFrame.backdrop) then
-			QuestLogScrollFrame:CreateBackdrop("Default");
-			QuestLogScrollFrame.backdrop:SetFrameLevel(QuestLogScrollFrame:GetFrameLevel() - 3)
-			QuestLogDetailScrollFrame:CreateBackdrop("Default");
-			QuestLogDetailScrollFrame.backdrop:SetFrameLevel(QuestLogDetailScrollFrame:GetFrameLevel() - 2)
-		end
-	end);
+	QuestLogScrollFrame:SetTemplate("Default");
+	QuestLogDetailScrollFrame:SetTemplate("Default");
 
 	QuestFrame:CreateBackdrop("Transparent");
 	QuestFrame.backdrop:Point("TOPLEFT", QuestFrame, "TOPLEFT", 10, -12);
