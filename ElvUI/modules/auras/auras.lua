@@ -17,6 +17,7 @@ local GetItemQualityColor = GetItemQualityColor;
 local GetWeaponEnchantInfo = GetWeaponEnchantInfo;
 local GetInventoryItemTexture = GetInventoryItemTexture;
 
+local LBF = LibStub("LibButtonFacade", true);
 
 local DIRECTION_TO_POINT = {
 	DOWN_RIGHT = 'TOPLEFT',
@@ -114,7 +115,7 @@ end
 function A:CreateIcon(button)
 	local font = LSM:Fetch('font', self.db.font);
 	button:RegisterForClicks('RightButtonUp');
-	button:SetTemplate('Default');
+	--button:SetTemplate('Default');
 
 	button.texture = button:CreateTexture(nil, 'BORDER');
 	button.texture:SetInside();
@@ -138,6 +139,27 @@ function A:CreateIcon(button)
 	button:SetScript('OnEnter', OnEnter);
 	button:SetScript('OnLeave', OnLeave);
 	button:SetScript('OnClick', OnClick);
+
+	local ButtonData = {
+		Icon = button.texture,
+		Flash = nil,
+		Cooldown = nil,
+		AutoCast = nil,
+		AutoCastable = nil,
+		HotKey = nil,
+		Count = false,
+		Name = nil,
+		Highlight = button.highlight,
+	};
+
+	local header = button:GetParent();
+	local auraType = header.filter;
+
+	if(self.LBFGroup and E.private.auras.lbf.enable) then
+		self.LBFGroup:AddButton(button, ButtonData);
+	else
+		button:SetTemplate("Default");
+	end
 end
 
 local buttons = {};
@@ -411,6 +433,10 @@ function A:UpdateHeader(self)
 	while(sortingTable[1]) do
 		releaseTable(tremove(sortingTable));
 	end
+
+	if(A.LBFGroup) then
+		A.LBFGroup:Skin(E.private.auras.lbf.skin);
+	end
 end
 
 function A:UpdateWeapon(button)
@@ -479,6 +505,10 @@ function A:Initialize()
 	end
 
 	self.db = E.db.auras;
+
+	if(LBF) then
+		self.LBFGroup = LBF and LBF:Group("ElvUI", "Auras");
+	end
 
 	self.BuffFrame = self:CreateAuraHeader('HELPFUL')
 	self.BuffFrame:Point("TOPRIGHT", MMHolder, "TOPLEFT", -(6 + E.Border), -E.Border - E.Spacing);

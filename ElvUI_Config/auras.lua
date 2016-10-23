@@ -190,6 +190,23 @@ E.Options.args.auras = {
 					name = L["Count yOffset"],
 					type = "range",
 					min = -60, max = 60, step = 1
+				},
+				lbf = {
+					order = 9,
+					type = "group",
+					guiInline = true,
+					name = L["LBF Support"],
+					get = function(info) return E.private.auras.lbf[info[#info]]; end,
+					set = function(info, value) E.private.auras.lbf[info[#info]] = value; E:StaticPopup_Show("PRIVATE_RL"); end,
+					disabled = function() return not E.private.auras.enable; end,
+					args = {
+						enable = {
+							order = 1,
+							type = "toggle",
+							name = L["Enable"],
+							desc = L["Allow LBF to handle the skinning of this element."]
+						}
+					}
 				}
 			}
 		},

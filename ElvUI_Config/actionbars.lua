@@ -637,6 +637,23 @@ E.Options.args.actionbar = {
 				}
 			}
 		},
+		lbf = {
+			order = 12,
+			type = "group",
+			guiInline = true,
+			name = L["LBF Support"],
+			get = function(info) return E.private.actionbar.lbf[info[#info]]; end,
+			set = function(info, value) E.private.actionbar.lbf[info[#info]] = value; E:StaticPopup_Show("PRIVATE_RL"); end,
+			disabled = function() return not E.private.actionbar.enable; end,
+			args = {
+				enable = {
+					order = 1,
+					type = "toggle",
+					name = L["Enable"],
+					desc = L["Allow LBF to handle the skinning of this element."]
+				}
+			}
+		},
 		microbar = {
 			type = "group",
 			name = L["Micro Bar"],

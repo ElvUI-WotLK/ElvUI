@@ -16,6 +16,8 @@ local InCombatLockdown = InCombatLockdown;
 local GetBindingKey = GetBindingKey;
 local NUM_SHAPESHIFT_SLOTS = NUM_SHAPESHIFT_SLOTS;
 
+local LBF = LibStub("LibButtonFacade", true);
+
 local bar = CreateFrame('Frame', 'ElvUI_StanceBar', E.UIParent, 'SecureHandlerStateTemplate');
 
 function AB:UPDATE_SHAPESHIFT_COOLDOWN()
@@ -66,10 +68,10 @@ function AB:StyleShapeShift()
 			if isActive then
 				ShapeshiftBarFrame.lastSelected = button:GetID();
 				if numForms == 1 then
-					button.checked:SetTexture(1, 1, 1, 0.5)
+					button:GetCheckedTexture():SetTexture(1, 1, 1, 0.5)
 					button:SetChecked(true);
 				else
-					button.checked:SetTexture(1, 1, 1, 0.5)
+					button:GetCheckedTexture():SetTexture(1, 1, 1, 0.5)
 					button:SetChecked(self.db.barShapeShift.style ~= 'darkenInactive');
 				end
 			else
@@ -77,11 +79,11 @@ function AB:StyleShapeShift()
 					button:SetChecked(false);
 				else
 					button:SetChecked(self.db.barShapeShift.style == 'darkenInactive');
-					button.checked:SetAlpha(1)
+					button:GetCheckedTexture():SetAlpha(1)
 					if self.db.barShapeShift.style == 'darkenInactive' then
-						button.checked:SetTexture(0, 0, 0, 0.5)
+						button:GetCheckedTexture():SetTexture(0, 0, 0, 0.5)
 					else
-						button.checked:SetTexture(1, 1, 1, 0.5)
+						button:GetCheckedTexture():SetTexture(1, 1, 1, 0.5)
 					end
 				end
 			end
@@ -233,9 +235,11 @@ function AB:PositionAndSizeBarShapeShift()
 		end
 
 		if(not button.FlyoutUpdateFunc) then
-			self:StyleButton(button, nil, true);
+			self:StyleButton(button, nil, self.LBFGroup and E.private.actionbar.lbf.enable and true or nil);
 		end
 	end
+
+	if(self.LBFGroup and E.private.actionbar.lbf.enable) then self.LBFGroup:Skin(E.private.actionbar.lbf.skin); end
 end
 
 function AB:AdjustMaxStanceButtons(event)
@@ -249,6 +253,9 @@ function AB:AdjustMaxStanceButtons(event)
 		if not bar.buttons[i] then
 			bar.buttons[i] = CreateFrame("CheckButton", format(bar:GetName().."Button%d", i), bar, "ShapeshiftButtonTemplate")
 			bar.buttons[i]:SetID(i)
+			if(self.LBFGroup and E.private.actionbar.lbf.enable) then
+				self.LBFGroup:AddButton(bar.buttons[i])
+			end
 			self:HookScript(bar.buttons[i], "OnEnter", "Button_OnEnter");
 			self:HookScript(bar.buttons[i], "OnLeave", "Button_OnLeave");
 		end

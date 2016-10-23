@@ -202,6 +202,27 @@ local function LSMCallback()
 end
 E.LSM.RegisterCallback(E, "LibSharedMedia_Registered", LSMCallback);
 
+local LBF = LibStub("LibButtonFacade", true);
+
+local LBFGroupToTableElement = {
+	["ActionBars"] = "actionbar",
+	["Auras"] = "auras"
+};
+
+function E:LBFCallback(SkinID, _, _, Group)
+	if(not E.private) then return; end
+	local element = LBFGroupToTableElement[Group];
+	if(element) then
+		if(E.private[element].lbf.enable) then
+			E.private[element].lbf.skin = SkinID;
+		end
+	end
+end
+
+if(LBF) then
+	LBF:RegisterSkinCallback("ElvUI", E.LBFCallback, E);
+end
+
 function E:RequestBGInfo()
 	RequestBattlefieldScoreData();
 end

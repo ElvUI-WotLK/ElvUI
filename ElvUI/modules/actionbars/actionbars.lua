@@ -35,6 +35,8 @@ local LEAVE_VEHICLE = LEAVE_VEHICLE;
 local LAB = LibStub("LibActionButton-1.0");
 local LSM = LibStub("LibSharedMedia-3.0");
 
+local LBF = LibStub("LibButtonFacade", true);
+
 E.ActionBars = AB;
 AB["handledBars"] = {};
 AB["handledbuttons"] = {};
@@ -206,7 +208,7 @@ function AB:PositionAndSizeBar(barName)
 			button:Show();
 		end
 
-		self:StyleButton(button);
+		self:StyleButton(button, nil, self.LBFGroup and E.private.actionbar.lbf.enable and true or nil);
 	end
 
 	if(self.db[barName].enabled or not bar.initialized) then
@@ -234,6 +236,8 @@ function AB:PositionAndSizeBar(barName)
 	end
 
 	E:SetMoverSnapOffset("ElvAB_" .. bar.id, bar.db.buttonspacing / 2);
+
+	if(self.LBFGroup and E.private.actionbar.lbf.enable) then self.LBFGroup:Skin(E.private.actionbar.lbf.skin); end
 end
 
 function AB:CreateBar(id)
@@ -250,8 +254,8 @@ function AB:CreateBar(id)
 	bar.bindButtons = self["barDefaults"]["bar" .. id].bindButtons;
 	self:HookScript(bar, "OnEnter", "Bar_OnEnter");
 	self:HookScript(bar, "OnLeave", "Bar_OnLeave");
-
-	for i=1, 12 do
+	
+	for i = 1, 12 do
 		bar.buttons[i] = LAB:CreateButton(i, format(bar:GetName() .. "Button%d", i), bar, nil);
 		bar.buttons[i]:SetState(0, "action", i);
 		for k = 1, 11 do
@@ -260,6 +264,10 @@ function AB:CreateBar(id)
 
 		if(i == 12) then
 			bar.buttons[i]:SetState(11, "custom", AB.customExitButton);
+		end
+
+		if(self.LBFGroup and E.private.actionbar.lbf.enable) then
+			self.LBFGroup:AddButton(bar.buttons[i]);
 		end
 
 		self:HookScript(bar.buttons[i], "OnEnter", "Button_OnEnter");
@@ -467,7 +475,7 @@ function AB:GetPage(bar, defaultPage, condition)
 	return condition;
 end
 
-function AB:StyleButton(button, noBackdrop)
+function AB:StyleButton(button, noBackdrop, useMasque)
 	local name = button:GetName();
 	local icon = _G[name.."Icon"];
 	local count = _G[name.."Count"];
@@ -480,13 +488,20 @@ function AB:StyleButton(button, noBackdrop)
 	local buttonCooldown = _G[name.."Cooldown"];
 	local color = self.db.fontColor;
 
+	if(not button.noBackdrop) then
+		button.noBackdrop = noBackdrop;
+	end
+
+	if(not button.useMasque) then
+		button.useMasque = useMasque;
+	end
+
 	if(flash) then flash:SetTexture(nil); end
 	if(normal) then normal:SetTexture(nil); normal:Hide(); normal:SetAlpha(0); end
 	if(normal2) then normal2:SetTexture(nil); normal2:Hide(); normal2:SetAlpha(0); end
-	if(border) then border:Kill(); end
 
-	if(not button.noBackdrop) then
-		button.noBackdrop = noBackdrop;
+	if(border and not button.useMasque) then
+		border:Kill();
 	end
 
 	if(count) then
@@ -496,7 +511,7 @@ function AB:StyleButton(button, noBackdrop)
 		count:SetTextColor(color.r, color.g, color.b);
 	end
 
-	if(not button.noBackdrop and not button.backdrop) then
+	if(not button.noBackdrop and not button.backdrop and not button.useMasque) then
 		button:CreateBackdrop("Default", true);
 		button.backdrop:SetAllPoints();
 	end
@@ -524,7 +539,12 @@ function AB:StyleButton(button, noBackdrop)
 	end
 
 	self:FixKeybindText(button);
-	button:StyleButton();
+
+	if(not button.useMasque) then
+		button:StyleButton();
+	else
+		button:StyleButton(true, true, true)
+	end
 
 	if(not self.handledbuttons[button]) then
 		E:RegisterCooldown(buttonCooldown)
@@ -756,6 +776,8 @@ function AB:Initialize()
 	self.db = E.db.actionbar;
 	if(E.private.actionbar.enable ~= true) then return; end
 	E.ActionBars = AB;
+
+	self.LBFGroup = LBF and LBF:Group("ElvUI", "ActionBars");
 
 	self.fadeParent = CreateFrame("Frame", "Elv_ABFade", UIParent);
 	self.fadeParent:SetAlpha(1 - self.db.globalFadeAlpha);

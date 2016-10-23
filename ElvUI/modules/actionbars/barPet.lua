@@ -209,12 +209,14 @@ function AB:PositionAndSizeBarPet()
 			button:SetAlpha(1);
 		end
 
-		self:StyleButton(button);
+		self:StyleButton(button, nil, self.LBFGroup and E.private.actionbar.lbf.enable and true or nil);
 	end
 
 	RegisterStateDriver(bar, 'visibility', self.db['barPet'].visibility);
 
 	bar:GetScript("OnSizeChanged")(bar)
+
+	if(self.LBFGroup and E.private.actionbar.lbf.enable) then self.LBFGroup:Skin(E.private.actionbar.lbf.skin); end
 end
 
 function AB:UpdatePetBindings()
@@ -272,4 +274,11 @@ function AB:CreateBarPet()
 
 	self:PositionAndSizeBarPet();
 	self:UpdatePetBindings();
+
+	if(self.LBFGroup and E.private.actionbar.lbf.enable) then
+		for i = 1, NUM_PET_ACTION_SLOTS do
+			local button = _G["PetActionButton" .. i];
+			self.LBFGroup:AddButton(button);
+		end
+	end
 end
