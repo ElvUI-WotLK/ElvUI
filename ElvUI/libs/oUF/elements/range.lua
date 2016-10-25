@@ -22,17 +22,17 @@ local OnRangeFrame
 
 local friendlySpells, resSpells, longEnemySpells, enemySpells, petSpells = {}, {}, {}, {}, {}
 
+local _,class = UnitClass("player")
 local function AddSpell(table, spellID)
 	local name = GetSpellInfo(spellID)
 	if name then
 		local usable, nomana = IsUsableSpell(name)
-		if usable or nomana then
+		if((usable or nomana) or (class == "PALADIN")) then
 			table[#table + 1] = name
 		end
 	end
 end
 
-local _,class = UnitClass("player")
 local function UpdateSpellList()
 	twipe(friendlySpells)
 	twipe(resSpells)
