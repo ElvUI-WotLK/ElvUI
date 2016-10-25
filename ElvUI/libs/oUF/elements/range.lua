@@ -53,6 +53,7 @@ local function UpdateSpellList()
 		AddSpell(resSpells, 20484) -- Rebirth
 	elseif class == "PALADIN" then
 		AddSpell(enemySpells, 20271) -- Judgement
+		AddSpell(enemySpells, 62124) -- Длань возмездия
 		AddSpell(friendlySpells, 635) -- Holy Light
 		AddSpell(resSpells, 7328) -- Redemption
 	elseif class == "SHAMAN" then
