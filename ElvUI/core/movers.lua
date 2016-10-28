@@ -133,12 +133,20 @@ local function CreateMover(parent, name, text, overlay, snapOffset, postdrag)
 		end
 
 		local x, y, point = E:CalculateMoverPoints(self);
-
 		self:ClearAllPoints();
-		self:Point(self.positionOverride or point, E.UIParent, self.positionOverride and "BOTTOMLEFT" or point, x, y);
-		if self.positionOverride then
-			self.parent:ClearAllPoints()
-			self.parent:Point(self.positionOverride, self, self.positionOverride)
+		local overridePoint;
+		if(self.positionOverride) then
+			if(self.positionOverride == "BOTTOM" or self.positionOverride == "TOP") then
+				overridePoint = "BOTTOM";
+			else
+				overridePoint = "BOTTOMLEFT";
+			end
+		end
+
+		self:Point(self.positionOverride or point, E.UIParent, overridePoint and overridePoint or point, x, y);
+		if(self.positionOverride) then
+			self.parent:ClearAllPoints();
+			self.parent:Point(self.positionOverride, self, self.positionOverride);
 		end
 
 		E:SaveMoverPosition(name)
@@ -229,11 +237,6 @@ function E:CalculateMoverPoints(mover, nudgeX, nudgeY)
 	local screenWidth, screenHeight, screenCenter = E.UIParent:GetRight(), E.UIParent:GetTop(), E.UIParent:GetCenter();
 	local x, y = mover:GetCenter();
 
-	if not x or not y then
-		if not x then x = 300 end
-		if not y then y = 300 end
-	end
-
 	local LEFT = screenWidth / 3;
 	local RIGHT = screenWidth * 2 / 3;
 	local TOP = screenHeight / 2;
@@ -257,10 +260,10 @@ function E:CalculateMoverPoints(mover, nudgeX, nudgeY)
 		nudgeInversePoint = "LEFT";
 		x = mover:GetRight() - screenWidth;
 	elseif(x <= LEFT) then
-		point = point .. "LEFT"
+		point = point .. "LEFT";
 		nudgePoint = "LEFT";
 		nudgeInversePoint = "RIGHT";
-		x = mover:GetLeft()
+		x = mover:GetLeft();
 	else
 		x = x - screenCenter;
 	end
@@ -269,7 +272,7 @@ function E:CalculateMoverPoints(mover, nudgeX, nudgeY)
 		if(mover.positionOverride == "TOPLEFT") then
 			x = mover:GetLeft() - E.diffGetLeft;
 			y = mover:GetTop() - E.diffGetTop;
-		elseif(self.positionOverride == "TOPRIGHT") then
+		elseif(mover.positionOverride == "TOPRIGHT") then
 			x = mover:GetRight() - E.diffGetRight;
 			y = mover:GetTop() - E.diffGetTop;
 		elseif(mover.positionOverride == "BOTTOMLEFT") then
@@ -278,6 +281,12 @@ function E:CalculateMoverPoints(mover, nudgeX, nudgeY)
 		elseif(mover.positionOverride == "BOTTOMRIGHT") then
 			x = mover:GetRight() - E.diffGetRight;
 			y = mover:GetBottom() - E.diffGetBottom;
+		elseif(mover.positionOverride == "BOTTOM") then
+			x = mover:GetCenter() - screenCenter;
+			y = mover:GetBottom() - E.diffGetBottom;
+		elseif(mover.positionOverride == "TOP") then
+			x = mover:GetCenter() - screenCenter;
+			y = mover:GetTop() - E.diffGetTop;
 		end
 	end
 
