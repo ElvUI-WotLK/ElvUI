@@ -374,7 +374,7 @@ function A:UpdateHeader(header)
 		local aura, _, duration = freshTable();
 		aura.name, _, aura.icon, aura.count, aura.dispelType, duration, aura.expires, aura.caster = UnitAura("player", i, filter);
 		if(aura.name) then
-			aura.filter = fullFilter;
+			aura.filter = filter;
 			aura.index = i;
 			aura.duration = duration;
 
