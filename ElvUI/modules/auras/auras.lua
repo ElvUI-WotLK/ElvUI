@@ -1,6 +1,6 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local A = E:NewModule('Auras', 'AceHook-3.0', 'AceEvent-3.0');
-local LSM = LibStub('LibSharedMedia-3.0');
+local A = E:NewModule("Auras", "AceHook-3.0", "AceEvent-3.0");
+local LSM = LibStub("LibSharedMedia-3.0");
 
 local GetTime = GetTime;
 local select, unpack, pairs, ipairs, tostring = select, unpack, pairs, ipairs, tostring;
@@ -20,14 +20,14 @@ local GetInventoryItemTexture = GetInventoryItemTexture;
 local LBF = LibStub("LibButtonFacade", true);
 
 local DIRECTION_TO_POINT = {
-	DOWN_RIGHT = 'TOPLEFT',
-	DOWN_LEFT = 'TOPRIGHT',
-	UP_RIGHT = 'BOTTOMLEFT',
-	UP_LEFT = 'BOTTOMRIGHT',
-	RIGHT_DOWN = 'TOPLEFT',
-	RIGHT_UP = 'BOTTOMLEFT',
-	LEFT_DOWN = 'TOPRIGHT',
-	LEFT_UP = 'BOTTOMRIGHT'
+	DOWN_RIGHT = "TOPLEFT",
+	DOWN_LEFT = "TOPRIGHT",
+	UP_RIGHT = "BOTTOMLEFT",
+	UP_LEFT = "BOTTOMRIGHT",
+	RIGHT_DOWN = "TOPLEFT",
+	RIGHT_UP = "BOTTOMLEFT",
+	LEFT_DOWN = "TOPRIGHT",
+	LEFT_UP = "BOTTOMRIGHT"
 };
 
 local DIRECTION_TO_HORIZONTAL_SPACING_MULTIPLIER = {
@@ -59,9 +59,6 @@ local IS_HORIZONTAL_GROWTH = {
 	LEFT_UP = true
 };
 
-local sortingTable = {};
-local groupingTable = {};
-
 function A:UpdateTime(elapsed)
 	self.timeLeft = self.timeLeft - elapsed;
 
@@ -72,7 +69,7 @@ function A:UpdateTime(elapsed)
 
 	local timerValue, formatID;
 	timerValue, formatID, self.nextUpdate = E:GetTimeInfo(self.timeLeft, A.db.fadeThreshold);
-	self.time:SetFormattedText(('%s%s|r'):format(E.TimeColors[formatID], E.TimeFormats[formatID][1]), timerValue);
+	self.time:SetFormattedText(("%s%s|r"):format(E.TimeColors[formatID], E.TimeFormats[formatID][1]), timerValue);
 
 	if(self.timeLeft > E.db.auras.fadeThreshold) then
 		E:StopFlash(self);
@@ -85,14 +82,14 @@ local UpdateTooltip = function(self)
 	if(self.isWeapon) then
 		GameTooltip:SetInventoryItem("player", self:GetID());
 	else
-		GameTooltip:SetUnitAura(self:GetParent().unit, self:GetID(), self:GetParent().filter);
+		GameTooltip:SetUnitAura("player", self:GetID(), self:GetParent().filter);
 	end
 end
 
 local OnEnter = function(self)
 	if(not self:IsVisible()) then return end
 
-	GameTooltip:SetOwner(self, 'ANCHOR_BOTTOMLEFT', -5, -5);
+	GameTooltip:SetOwner(self, "ANCHOR_BOTTOMLEFT", -5, -5);
 	self:UpdateTooltip();
 end
 
@@ -108,37 +105,36 @@ local OnClick = function(self)
 			CancelItemTempEnchantment(2);
 		end
 	else
-		CancelUnitBuff(self:GetParent().unit, self:GetID(), self:GetParent().filter);
+		CancelUnitBuff("player", self:GetID(), self:GetParent().filter);
 	end
 end
 
 function A:CreateIcon(button)
-	local font = LSM:Fetch('font', self.db.font);
-	button:RegisterForClicks('RightButtonUp');
-	--button:SetTemplate('Default');
+	local font = LSM:Fetch("font", self.db.font);
+	button:RegisterForClicks("RightButtonUp");
 
-	button.texture = button:CreateTexture(nil, 'BORDER');
+	button.texture = button:CreateTexture(nil, "BORDER");
 	button.texture:SetInside();
 	button.texture:SetTexCoord(unpack(E.TexCoords));
 
-	button.count = button:CreateFontString(nil, 'ARTWORK');
-	button.count:SetPoint('BOTTOMRIGHT', -1 + self.db.countXOffset, 1 + self.db.countYOffset);
+	button.count = button:CreateFontString(nil, "ARTWORK");
+	button.count:SetPoint("BOTTOMRIGHT", -1 + self.db.countXOffset, 1 + self.db.countYOffset);
 	button.count:FontTemplate(font, self.db.fontSize, self.db.fontOutline);
 
-	button.time = button:CreateFontString(nil, 'ARTWORK');
-	button.time:SetPoint('TOP', button, 'BOTTOM', 1 + self.db.timeXOffset, 0 + self.db.timeYOffset);
+	button.time = button:CreateFontString(nil, "ARTWORK");
+	button.time:SetPoint("TOP", button, "BOTTOM", 1 + self.db.timeXOffset, 0 + self.db.timeYOffset);
 	button.time:FontTemplate(font, self.db.fontSize, self.db.fontOutline);
 
-	button.highlight = button:CreateTexture(nil, 'HIGHLIGHT');
+	button.highlight = button:CreateTexture(nil, "HIGHLIGHT");
 	button.highlight:SetTexture(1, 1, 1, 0.45);
 	button.highlight:SetInside();
 
 	E:SetUpAnimGroup(button);
 
 	button.UpdateTooltip = UpdateTooltip;
-	button:SetScript('OnEnter', OnEnter);
-	button:SetScript('OnLeave', OnLeave);
-	button:SetScript('OnClick', OnClick);
+	button:SetScript("OnEnter", OnEnter);
+	button:SetScript("OnLeave", OnLeave);
+	button:SetScript("OnClick", OnClick);
 
 	local ButtonData = {
 		Icon = button.texture,
@@ -152,9 +148,6 @@ function A:CreateIcon(button)
 		Highlight = button.highlight,
 	};
 
-	local header = button:GetParent();
-	local auraType = header.filter;
-
 	if(self.LBFGroup and E.private.auras.lbf.enable) then
 		self.LBFGroup:AddButton(button, ButtonData);
 	else
@@ -165,7 +158,7 @@ end
 local buttons = {};
 local function configureAuras(header, auraTable)
 	local db = A.db.debuffs;
-	if(header.filter == 'HELPFUL') then
+	if(header.filter == "HELPFUL") then
 		db = A.db.buffs;
 	end
 
@@ -196,27 +189,23 @@ local function configureAuras(header, auraTable)
 		wrapYOffset = 0;
 	end
 
-	local name = header:GetName();
-
 	wipe(buttons);
-	for i=1, #auraTable do
+	for i = 1, #auraTable do
 		local button = select(i, header:GetChildren());
 		if(button) then
 			button:ClearAllPoints();
 		else
-			button = CreateFrame('Button', name and name..'AuraButton'..i, header);
+			button = CreateFrame("Button", "$parentAuraButton" .. i, header);
 			A:CreateIcon(button);
 		end
 		local buffInfo = auraTable[i];
 		button:SetID(buffInfo.index);
-		button.index = buffInfo.index;
-		button.filter = buffInfo.filter;
 
 		if(buffInfo.duration > 0 and buffInfo.expires) then
 			local timeLeft = buffInfo.expires - GetTime();
 			if(not button.timeLeft) then
 				button.timeLeft = timeLeft;
-				button:SetScript('OnUpdate', A.UpdateTime);
+				button:SetScript("OnUpdate", A.UpdateTime);
 			else
 				button.timeLeft = timeLeft;
 			end
@@ -225,18 +214,18 @@ local function configureAuras(header, auraTable)
 			A.UpdateTime(button, 0);
 		else
 			button.timeLeft = nil;
-			button.time:SetText('');
-			button:SetScript('OnUpdate', nil);
+			button.time:SetText("");
+			button:SetScript("OnUpdate", nil);
 		end
 
 		if(buffInfo.count > 1) then
 			button.count:SetText(buffInfo.count);
 		else
-			button.count:SetText('');
+			button.count:SetText("");
 		end
 
-		if(buffInfo.filter == 'HARMFUL') then
-			local color = DebuffTypeColor[buffInfo.dtype or ''];
+		if(buffInfo.filter == "HARMFUL") then
+			local color = DebuffTypeColor[buffInfo.dispelType or ""];
 			button:SetBackdropBorderColor(color.r, color.g, color.b);
 		else
 			button:SetBackdropBorderColor(unpack(E.media.bordercolor));
@@ -253,22 +242,22 @@ local function configureAuras(header, auraTable)
 	end
 
 	local left, right, top, bottom = huge, -huge, -huge, huge;
-	for index=1,display do
+	for index = 1, display do
 		local button = buttons[index];
-		local wrapAfter = wrapAfter or index
+		local wrapAfter = wrapAfter or index;
 		local tick, cycle = floor((index - 1) % wrapAfter), floor((index - 1) / wrapAfter);
 		button:SetPoint(point, header, cycle * wrapXOffset + tick * xOffset, cycle * wrapYOffset + tick * yOffset);
 
 		button:SetSize(size, size);
 
 		if(button.time) then
-			local font = LSM:Fetch('font', A.db.font);
+			local font = LSM:Fetch("font", A.db.font);
 			button.time:ClearAllPoints();
-			button.time:SetPoint('TOP', button, 'BOTTOM', 1 + A.db.timeXOffset, 0 + A.db.timeYOffset);
+			button.time:SetPoint("TOP", button, "BOTTOM", 1 + A.db.timeXOffset, 0 + A.db.timeYOffset);
 			button.time:FontTemplate(font, A.db.fontSize, A.db.fontOutline);
 
 			button.count:ClearAllPoints();
-			button.count:SetPoint('BOTTOMRIGHT', -1 + A.db.countXOffset, 0 + A.db.countYOffset);
+			button.count:SetPoint("BOTTOMRIGHT", -1 + A.db.countXOffset, 0 + A.db.countYOffset);
 			button.count:FontTemplate(font, A.db.fontSize, A.db.fontOutline);
 		end
 
@@ -295,10 +284,6 @@ local function configureAuras(header, auraTable)
 	end
 end
 
-local function stripRAID(filter)
-	return filter and tostring(filter):upper():gsub('RAID', ''):gsub('|+', '|'):match('^|?(.+[^|])|?$');
-end
-
 local freshTable;
 local releaseTable;
 do
@@ -313,123 +298,97 @@ do
 	end
 end
 
-local sorters = {};
 local function sortFactory(key, separateOwn, reverse)
 	if(separateOwn ~= 0) then
 		if(reverse) then
-			return function (a, b)
-				if(groupingTable[a.filter] == groupingTable[b.filter]) then
-					local ownA, ownB = a.caster == 'player', b.caster == 'player';
+			return function(a, b)
+				if(a.filter == b.filter) then
+					local ownA, ownB = a.caster == "player", b.caster == "player";
 					if(ownA ~= ownB) then
 						return ownA == (separateOwn > 0)
 					end
 					return a[key] > b[key];
 				else
-					return groupingTable[a.filter] < groupingTable[b.filter];
+					return a.filter < b.filter;
 				end
 			end;
 		else
-			return function (a, b)
-				if(groupingTable[a.filter] == groupingTable[b.filter]) then
-					local ownA, ownB = a.caster == 'player', b.caster == 'player';
+			return function(a, b)
+				if(a.filter == b.filter) then
+					local ownA, ownB = a.caster == "player", b.caster == "player";
 					if(ownA ~= ownB) then
 						return ownA == (separateOwn > 0);
 					end
 					return a[key] < b[key];
 				else
-					return groupingTable[a.filter] < groupingTable[b.filter];
+					return a.filter < b.filter;
 				end
 			end;
 		end
 	else
 		if(reverse) then
-			return function (a, b)
-				if(groupingTable[a.filter] == groupingTable[b.filter]) then
+			return function(a, b)
+				if(a.filter == b.filter) then
 					return a[key] > b[key];
 				else
-					return groupingTable[a.filter] < groupingTable[b.filter];
+					return a.filter < b.filter;
 				end
 			end;
 		else
-			return function (a, b)
-				if(groupingTable[a.filter] == groupingTable[b.filter]) then
+			return function(a, b)
+				if(a.filter == b.filter) then
 					return a[key] < b[key];
 				else
-					return groupingTable[a.filter] < groupingTable[b.filter];
+					return a.filter < b.filter;
 				end
 			end;
 		end
 	end
 end
 
-for i, key in ipairs{'index', 'name', 'expires'} do
+local sorters = {};
+for i, key in ipairs{"index", "name", "expires"} do
 	local label = key:upper();
 	sorters[label] = {};
 	for bool in pairs{[true] = true, [false] = false} do
 		sorters[label][bool] = {}
-		for sep=-1,1 do
+		for sep = -1, 1 do
 			sorters[label][bool][sep] = sortFactory(key, sep, bool);
 		end
 	end
 end
 sorters.TIME = sorters.EXPIRES;
 
-function A:UpdateHeader(self)
+local sortingTable = {};
+function A:UpdateHeader(header)
+	local filter = header.filter;
 	local db = A.db.debuffs;
-	if(self.filter == 'HELPFUL') then
+	if(filter == "HELPFUL") then
 		db = A.db.buffs;
 	end
-	local filter = self.filter;
-	local groupBy = self.groupBy;
-	local unit = self.unit;
-	local sortDirection = db.sortDir;
-	local separateOwn = db.seperateOwn or 0;
-	if(separateOwn > 0) then
-		separateOwn = 1;
-	elseif(separateOwn < 0) then
-		separateOwn = -1;
-	end
-	local sortMethod = (sorters[tostring(db.sortMethod):upper()] or sorters['INDEX'])[sortDirection == '-'][separateOwn];
 
 	wipe(sortingTable);
-	wipe(groupingTable);
 
-	if(groupBy) then
-		local i = 1;
-		for subFilter in groupBy:gmatch('[^,]+') do
-			if(filter) then
-				subFilter = stripRAID(filter..'|'..subFilter);
-			else
-				subFilter = stripRAID(subFilter);
-			end
-			groupingTable[subFilter], groupingTable[i] = i, subFilter;
-			i = i + 1;
+	local i = 1;
+	repeat
+		local aura, _, duration = freshTable();
+		aura.name, _, aura.icon, aura.count, aura.dispelType, duration, aura.expires, aura.caster = UnitAura("player", i, filter);
+		if(aura.name) then
+			aura.filter = fullFilter;
+			aura.index = i;
+			aura.duration = duration;
+
+			tinsert(sortingTable, aura);
+		else
+			releaseTable(aura);
 		end
-	else
-		filter = stripRAID(filter);
-		groupingTable[filter], groupingTable[1] = 1, filter;
-	end
-	for filterIndex, fullFilter in ipairs(groupingTable) do
-		local i = 1;
-		repeat
-			local aura, _, duration = freshTable();
-			aura.name, _, aura.icon, aura.count, aura.dtype, duration, aura.expires, aura.caster, _, aura.shouldConsolidate, _ = UnitAura(unit, i, fullFilter);
-			if(aura.name) then
-				aura.filter = fullFilter;
-				aura.index = i;
-				aura.duration = duration;
+		i = i + 1;
+	until(not aura.name);
 
-				local targetList = sortingTable;
-				tinsert(targetList, aura);
-			else
-				releaseTable(aura);
-			end
-			i = i + 1;
-		until(not aura.name);
-	end
+	local sortMethod = (sorters[tostring(db.sortMethod):upper()] or sorters["INDEX"])[db.sortDir == "-"][db.seperateOwn];
 	tsort(sortingTable, sortMethod);
 
-	configureAuras(self, sortingTable);
+	configureAuras(header, sortingTable);
 	while(sortingTable[1]) do
 		releaseTable(tremove(sortingTable));
 	end
@@ -464,21 +423,19 @@ function A:UpdateWeapon(button)
 end
 
 function A:CreateAuraHeader(filter)
-	local name = 'ElvUIPlayerDebuffs';
-	if(filter == 'HELPFUL') then
-		name = 'ElvUIPlayerBuffs';
+	local name = "ElvUIPlayerDebuffs";
+	if(filter == "HELPFUL") then
+		name = "ElvUIPlayerBuffs";
 	end
 
-	local header = CreateFrame('Frame', name, UIParent);
+	local header = CreateFrame("Frame", name, UIParent);
 	header:SetClampedToScreen(true);
-	header.unit = 'player';
 	header.filter = filter;
 
-	header:RegisterEvent('UNIT_AURA');
-	header:SetScript('OnEvent', function(self, event, ...)
+	header:RegisterEvent("UNIT_AURA");
+	header:SetScript("OnEvent", function(self, event, unit)
 		if(self:IsVisible()) then
-			local unit = self.unit;
-			if(event == 'UNIT_AURA' and ... == unit) then
+			if(event == "UNIT_AURA" and unit == "player") then
 				A:UpdateHeader(self);
 			end
 		end
@@ -490,9 +447,7 @@ function A:CreateAuraHeader(filter)
 end
 
 function A:Initialize()
-	if(self.db) then
-		return;
-	end
+	if(self.db) then return; end
 
 	if(E.private.auras.disableBlizzard) then
 		BuffFrame:Kill()
@@ -500,9 +455,7 @@ function A:Initialize()
 		TemporaryEnchantFrame:Kill();
 	end
 
-	if(not E.private.auras.enable) then
-		return;
-	end
+	if(not E.private.auras.enable) then return; end
 
 	self.db = E.db.auras;
 
@@ -510,13 +463,13 @@ function A:Initialize()
 		self.LBFGroup = LBF and LBF:Group("ElvUI", "Auras");
 	end
 
-	self.BuffFrame = self:CreateAuraHeader('HELPFUL')
+	self.BuffFrame = self:CreateAuraHeader("HELPFUL")
 	self.BuffFrame:Point("TOPRIGHT", MMHolder, "TOPLEFT", -(6 + E.Border), -E.Border - E.Spacing);
-	E:CreateMover(self.BuffFrame, 'BuffsMover', L['Player Buffs']);
+	E:CreateMover(self.BuffFrame, "BuffsMover", L["Player Buffs"]);
 
-	self.DebuffFrame = self:CreateAuraHeader('HARMFUL');
+	self.DebuffFrame = self:CreateAuraHeader("HARMFUL");
 	self.DebuffFrame:Point("BOTTOMRIGHT", MMHolder, "BOTTOMLEFT", -(6 + E.Border), E.Border + E.Spacing);
-	E:CreateMover(self.DebuffFrame, 'DebuffsMover', L['Player Debuffs']);
+	E:CreateMover(self.DebuffFrame, "DebuffsMover", L["Player Debuffs"]);
 
 	self.WeaponFrame = CreateFrame("Frame", "ElvUIPlayerWeapons", UIParent);
 	self.WeaponFrame:Point("TOPRIGHT", MMHolder, "BOTTOMRIGHT", 0, -E.Border - E.Spacing);
