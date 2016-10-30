@@ -18,13 +18,16 @@ local Update = function(self, event, unit)
 		local guid = UnitGUID(unit);
 		if(not UnitExists(unit) or not UnitIsConnected(unit) or not UnitIsVisible(unit)) then
 			portrait:SetModelScale(4.25);
+			portrait:SetCamera(0);
 			portrait:SetPosition(0, 0, -1.5);
 			portrait:SetModel("Interface\\Buttons\\talktomequestionmark.mdx");
 			portrait.guid = nil;
 		elseif(portrait.guid ~= guid or event == "UNIT_MODEL_CHANGED") then
+			portrait:ClearModel();
 			portrait:SetUnit(unit);
+			portrait:SetModelScale(1);
 			portrait:SetCamera(0);
-
+			portrait:SetPosition(0, 0, 0);
 			portrait.guid = guid;
 		else
 			portrait:SetCamera(0);
@@ -49,6 +52,7 @@ end
 local Enable = function(self, unit)
 	local portrait = self.Portrait;
 	if(portrait) then
+		portrait:Show();
 		portrait.__owner = self;
 		portrait.ForceUpdate = ForceUpdate;
 
@@ -73,6 +77,7 @@ end
 local Disable = function(self)
 	local portrait = self.Portrait;
 	if(portrait) then
+		portrait:Hide();
 		self:UnregisterEvent("UNIT_PORTRAIT_UPDATE", Path);
 		self:UnregisterEvent("UNIT_MODEL_CHANGED", Path);
 		self:UnregisterEvent("PARTY_MEMBER_ENABLE", Path);

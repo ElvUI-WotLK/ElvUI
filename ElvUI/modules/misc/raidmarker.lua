@@ -1,7 +1,7 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local M = E:GetModule("Misc");
 
-local sin, cos = math.sin, math.cos;
+local sin, cos, pi = math.sin, math.cos, math.pi;
 
 local CreateFrame = CreateFrame;
 local GetNumPartyMembers = GetNumPartyMembers;
@@ -68,16 +68,16 @@ function M:RaidMarkButton_OnLeave()
 	self.Texture:SetAllPoints();
 end
 
-function M:RaidMarkButton_OnClick(arg1)
+function M:RaidMarkButton_OnClick(button)
 	PlaySound("UChatScrollButton");
-	SetRaidTarget("target", (arg1 ~= "RightButton") and self:GetID() or 0);
+	SetRaidTarget("target", (button ~= "RightButton") and self:GetID() or 0);
 	self:GetParent():Hide();
 end
 
 function M:LoadRaidMarker()
 	local marker = CreateFrame("Frame", nil, E.UIParent);
 	marker:EnableMouse(true);
-	marker:SetSize(100, 100);
+	marker:Size(100);
 	marker:SetFrameStrata("DIALOG");
 
 	for i = 1, 8 do
@@ -85,7 +85,7 @@ function M:LoadRaidMarker()
 		button:Size(40);
 		button:SetID(i);
 		button.Texture = button:CreateTexture(button:GetName() .. "NormalTexture", "ARTWORK");
-		button.Texture:SetTexture([[Interface\TargetingFrame\UI-RaidTargetingIcons]]);
+		button.Texture:SetTexture("Interface\\TargetingFrame\\UI-RaidTargetingIcons");
 		button.Texture:SetAllPoints();
 		SetRaidTargetIconTexture(button.Texture, i);
 		button:RegisterForClicks("LeftbuttonUp","RightbuttonUp");
@@ -95,7 +95,7 @@ function M:LoadRaidMarker()
 		if(i == 8) then
 			button:Point("CENTER");
 		else
-			local angle = 360 / 7 * i;
+			local angle = pi / 0.7 * i;
 			button:Point("CENTER", sin(angle) * 60, cos(angle) * 60);
 		end
 	end

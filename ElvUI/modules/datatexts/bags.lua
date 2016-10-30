@@ -27,7 +27,7 @@ local function OnEvent(self)
 end
 
 local function OnClick()
-	OpenAllBags();
+	ToggleBackpack();
 end
 
 local function OnEnter(self)
