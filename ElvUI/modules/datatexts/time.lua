@@ -46,16 +46,8 @@ local function OnLeave()
 	DT.tooltip:Hide();
 end
 
-local function OnEvent(_, event)
-	if(event == "UPDATE_INSTANCE_INFO") then
-	--	RequestRaidInfo();
-	end
-end
-
 local function OnEnter(self)
 	DT:SetupTooltip(self)
-
-	--RequestRaidInfo();
 
 	local wgtime = GetWintergraspWaitTime() or nil;
 	inInstance, instanceType = IsInInstance();
@@ -112,4 +104,4 @@ function Update(self, t)
 	int = 1;
 end
 
-DT:RegisterDatatext("Time", {"UPDATE_INSTANCE_INFO"}, OnEvent, Update, Click, OnEnter, OnLeave);
+DT:RegisterDatatext("Time", nil, nil, Update, Click, OnEnter, OnLeave);

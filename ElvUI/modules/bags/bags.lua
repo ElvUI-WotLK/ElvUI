@@ -1229,6 +1229,7 @@ function B:PostBagMove()
 		bagFrame:Point(self.POINT, self);
 	end
 end
+
 function B:Initialize()
 	self:LoadBagBar();
 
@@ -1250,7 +1251,7 @@ function B:Initialize()
 	self.BagFrames = {};
 
 	BagFrameHolder:Point("BOTTOMRIGHT", RightChatPanel, "BOTTOMRIGHT", 0, 22 + E.Border*4 - E.Spacing*2);
-	E:CreateMover(BagFrameHolder, 'ElvUIBagMover', L["Bag Mover (Grow Up)"], nil, nil, B.PostBagMove);
+	E:CreateMover(BagFrameHolder, "ElvUIBagMover", L["Bag Mover (Grow Up)"], nil, nil, B.PostBagMove);
 
 	local BankFrameHolder = CreateFrame("Frame", nil, E.UIParent);
 	BankFrameHolder:Width(200);
@@ -1266,22 +1267,16 @@ function B:Initialize()
 	ElvUIBankMover.textGrowDown = L["Bank Mover (Grow Down)"];
 	ElvUIBankMover.POINT = "BOTTOM";
 
-	self.BagFrame = self:ContructContainerFrame('ElvUI_ContainerFrame');
+	self.BagFrame = self:ContructContainerFrame("ElvUI_ContainerFrame");
 
 	--Hook onto Blizzard Functions
-	self:SecureHook('ToggleBackpack', 'ToggleBackpack');
-	self:SecureHook('ToggleBag', 'ToggleBags');
-	self:SecureHook('OpenAllBags', 'ToggleBackpack');
-	self:SecureHook('OpenBackpack', 'OpenBags');
-	self:SecureHook('CloseAllBags', 'CloseBags');
-	self:SecureHook('CloseBackpack', 'CloseBags');
-
-	-- self:SecureHook('OpenAllBags', 'OpenBags');
-	-- self:SecureHook('CloseAllBags', 'CloseBags');
-	-- self:SecureHook('ToggleBag', 'ToggleBags');
-	--self:SecureHook('OpenAllBags', 'ToggleBackpack');
-	-- self:SecureHook('ToggleBackpack')
-	self:SecureHook('BackpackTokenFrame_Update', 'UpdateTokens');
+	self:SecureHook("ToggleBackpack");
+	self:SecureHook("ToggleBag", "ToggleBags");
+	self:SecureHook("OpenAllBags", "ToggleBackpack");
+	self:SecureHook("OpenBackpack", "OpenBags");
+	self:SecureHook("CloseAllBags", "CloseBags");
+	self:SecureHook("CloseBackpack", "CloseBags");
+	self:SecureHook("BackpackTokenFrame_Update", "UpdateTokens");
 
 	self:Layout();
 
@@ -1297,7 +1292,7 @@ function B:Initialize()
 	self:RegisterEvent("BANKFRAME_CLOSED", "CloseBank")
 	self:RegisterEvent("PLAYERBANKBAGSLOTS_CHANGED")
 
-	StackSplitFrame:SetFrameStrata('DIALOG')
+	StackSplitFrame:SetFrameStrata("DIALOG")
 end
 
 E:RegisterModule(B:GetName())

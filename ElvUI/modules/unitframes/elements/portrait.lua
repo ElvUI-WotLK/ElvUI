@@ -21,7 +21,7 @@ function UF:Construct_Portrait(frame, type)
 	portrait.PostUpdate = self.PortraitUpdate;
 
 	portrait.overlay = CreateFrame("Frame", nil, frame);
-	portrait.overlay:SetFrameLevel(frame.Health:GetFrameLevel() + 5)
+	portrait.overlay:SetFrameLevel(frame.Health:GetFrameLevel() + 5);
 
 	return portrait;
 end
@@ -108,12 +108,5 @@ function UF:PortraitUpdate()
 		self:SetAlpha(0.35);
 	else
 		self:SetAlpha(1)
-	end
-
-	if(self:GetObjectType() ~= "Texture") then
-		local model = self:GetModel();
-		if(model and model.find and model:find("worgenmale")) then
-			self:SetCamera(1)
-		end
 	end
 end
