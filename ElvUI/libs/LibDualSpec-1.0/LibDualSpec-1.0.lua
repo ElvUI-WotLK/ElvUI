@@ -76,25 +76,23 @@ do
 
 	local locale = GetLocale()
 	if locale == "frFR" then
-		L_DUALSPEC_DESC = "Lorsqu'elle est activée, cette fonctionnalité vous permet "..
-			"de choisir un profil différent pour chaque spécialisation de talents. "..
-			"Le second profil sera échangé avec le profil courant chaque fois que vous "..
-			"passerez d'une spécialisation à l'autre."
-		L_ENABLED = 'Activez le second profil'
-		L_ENABLED_DESC = "Cochez cette case pour échanger automatiquement les profils "..
-			"lors d'un changement de spécialisation."
-		L_DUAL_PROFILE = 'Second profil'
-		L_DUAL_PROFILE_DESC = "Sélectionnez le profil à échanger avec le profil courant "..
-			"lors du changement de spécialisation."
+		L_DUALSPEC_DESC = "Lorsqu'elle est activée, cette fonctionnalité vous permet de choisir un profil différent pour chaque spécialisation de talents.  Le second profil sera échangé avec le profil courant chaque fois que vous passerez d'une spécialisation à l'autre."
+		L_DUAL_PROFILE = "Second profil"
+		L_DUAL_PROFILE_DESC = "Sélectionnez le profil à échanger avec le profil courant lors du changement de spécialisation."
+		L_ENABLED = "Activez le second profil"
+		L_ENABLED_DESC = "Cochez cette case pour échanger automatiquement les profils lors d'un changement de spécialisation."
 	elseif locale == "deDE" then
+		L_DUALSPEC_DESC = "Wenn aktiv, wechselt dieses Feature bei jedem Wechsel der dualen Talentspezialisierung das Profil. Das duale Profil wird beim Wechsel automatisch mit dem derzeit aktiven Profil getauscht."
 		L_DUAL_PROFILE = "Duales Profil"
-		L_DUAL_PROFILE_DESC = "W\195\164hle das Profil, das beim Wechsel der Talente aktiviert wird."
-		L_DUALSPEC_DESC = "Wenn aktiv, wechselt dieses Feature bei jedem Wechsel "..
-			"der dualen Talentspezialisierung das Profil. Das duale Profil wird beim "..
-			"Wechsel automatisch mit dem derzeit aktiven Profil getauscht."
+		L_DUAL_PROFILE_DESC = "Wähle das Profil, das beim Wechsel der Talente aktiviert wird."
 		L_ENABLED = "Aktiviere Duale Profile"
-		L_ENABLED_DESC = "Aktiviere diese Option, um beim Talentwechsel automatisch "..
-			"zwischen den Profilen zu wechseln."
+		L_ENABLED_DESC = "Aktiviere diese Option, um beim Talentwechsel automatisch zwischen den Profilen zu wechseln."
+	elseif locale == "koKR" then
+		L_DUALSPEC_DESC = "|n전문화 변경 시 현재 프로필을 첫 번째 전문화 때에, 여기서 설정하는 프로필을 두 번째 전문화 때에 적용시킵니다.|n전문화별로 설정을 다르게 하고 싶을 때 아주 유용합니다."
+		L_DUAL_PROFILE = "두번째 전문화 때 프로필"
+		L_DUAL_PROFILE_DESC = "두번째 전문화 때 적용할 프로필을 선택하세요."
+		L_ENABLED = "이중 프로필 사용"
+		L_ENABLED_DESC = "전문화에 따라 다른 프로필을 적용시킵니다."
 	elseif locale == "ruRU" then
 		L_DUALSPEC_DESC = "Двойной профиль позволяет вам выбрать различные профили для каждой раскладки талантов. Профили будут переключаться каждый раз, когда вы переключаете раскладку талантов."
 		L_DUAL_PROFILE = "Второй профиль"
@@ -102,17 +100,23 @@ do
 		L_ENABLED = "Включить двойной профиль"
 		L_ENABLED_DESC = "Включите эту опцию для автоматического переключения между профилями при переключении раскладки талантов."
 	elseif locale == "zhCN" then
+		L_DUALSPEC_DESC = "启时，你可以为你的双天赋设定另一组配置文件，你的双重配置文件将在你转换天赋时自动与目前使用配置文件交换。"
 		L_DUAL_PROFILE = "双重配置文件"
 		L_DUAL_PROFILE_DESC = "选择转换天赋时所要使用的配置文件"
-		L_DUALSPEC_DESC = "启时，你可以为你的双天赋设定另一组配置文件，你的双重配置文件将在你转换天赋时自动与目前使用配置文件交换。"
 		L_ENABLED = "开启双重配置文件"
 		L_ENABLED_DESC = "勾选以便转换天赋时自动交换配置文件。"
 	elseif locale == "zhTW" then
 		L_DUALSPEC_DESC = "啟用時，你可以為你的雙天賦設定另一組設定檔。你的雙設定檔將在你轉換天賦時自動與目前使用設定檔交換。"
-		L_ENABLED = "啟用雙設定檔"
-		L_ENABLED_DESC = "勾選以在轉換天賦時自動交換設定檔"
 		L_DUAL_PROFILE = "雙設定檔"
 		L_DUAL_PROFILE_DESC = "選擇轉換天賦後所要使用的設定檔"
+		L_ENABLED = "啟用雙設定檔"
+		L_ENABLED_DESC = "勾選以在轉換天賦時自動交換設定檔"
+	elseif locale == "esES" then
+		L_DUALSPEC_DESC = "Si está activa, esta característica te permite seleccionar un perfil distinto para cada configuración de talentos. El perfil secundario será intercambiado por el activo cada vez que cambies de una configuración de talentos a otra."
+		L_DUAL_PROFILE = "Perfil secundario"
+		L_DUAL_PROFILE_DESC = "Elige el perfil secundario que se usará cuando cambies de talentos."
+		L_ENABLED = "Activar perfil secundario"
+		L_ENABLED_DESC = "Activa esta casilla para alternar automáticamente entre prefiles cuando cambies de talentos."
 	end
 end
 
@@ -172,8 +176,8 @@ function mixin:CheckDualSpecState()
 		local newProfile = db.char.profile
 		db.char.talentGroup = lib.talentGroup
 		if newProfile ~= currentProfile then
-			self:SetProfile(newProfile)
 			db.char.profile = currentProfile
+			self:SetProfile(newProfile)
 		end
 	end
 end
@@ -191,6 +195,14 @@ end
 -- Upgrade existing mixins
 for target in pairs(registry) do
 	EmbedMixin(target)
+end
+
+-- Actually enhance the database
+-- This is used on first initialization and everytime the database is reset using :ResetDB
+function lib:_EnhanceDatabase(event, target)
+	registry[target].db = target:GetNamespace(MAJOR, true) or target:RegisterNamespace(MAJOR)
+	EmbedMixin(target)
+	target:CheckDualSpecState()
 end
 
 --- Embed dual spec feature into an existing AceDB-3.0 database.
@@ -211,10 +223,9 @@ function lib:EnhanceDatabase(target, name)
 	elseif registry[target] then
 		return
 	end
-	local db = target:GetNamespace(MAJOR, true) or target:RegisterNamespace(MAJOR)
-	registry[target] = { name = name, db = db	}
-	EmbedMixin(target)
-	target:CheckDualSpecState()
+	registry[target] = { name = name }
+	lib:_EnhanceDatabase("EnhanceDatabase", target)
+	target.RegisterCallback(lib, "OnDatabaseReset", "_EnhanceDatabase")
 end
 
 -- ----------------------------------------------------------------------------
@@ -315,4 +326,3 @@ lib.eventFrame:SetScript('OnEvent', function()
 		end
 	end
 end)
-

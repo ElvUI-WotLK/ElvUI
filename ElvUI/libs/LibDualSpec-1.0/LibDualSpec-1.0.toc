@@ -3,7 +3,7 @@
 ## Title: Lib: DualSpec-1.0
 ## Version: v1.3
 ## X-Date: @project-date@
-## Notes: Adds dual spec support to individual AceDB-3.0 databases
+## Notes: Adds spec switching support to individual AceDB-3.0 databases.
 ## Author: Adirelle
 ## OptionalDeps: LibStub, Ace3
 ## X-Curse-Packaged-Version: v1.3
@@ -13,4 +13,3 @@
 
 LibStub.lua
 LibDualSpec-1.0.lua
-
