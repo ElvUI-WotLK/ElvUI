@@ -156,10 +156,10 @@ function A:CreateIcon(button)
 end
 
 local buttons = {};
-local function configureAuras(header, auraTable)
-	local db = A.db.debuffs;
+function A:ConfigureAuras(header, auraTable)
+	local db = self.db.debuffs;
 	if(header.filter == "HELPFUL") then
-		db = A.db.buffs;
+		db = self.db.buffs;
 	end
 
 	local size = db.size;
@@ -193,10 +193,10 @@ local function configureAuras(header, auraTable)
 	for i = 1, #auraTable do
 		local button = select(i, header:GetChildren());
 		if(button) then
-			button:ClearAllPoints();
+			if(button:IsShown()) then button:Hide(); end
 		else
 			button = CreateFrame("Button", "$parentAuraButton" .. i, header);
-			A:CreateIcon(button);
+			self:CreateIcon(button);
 		end
 		local buffInfo = auraTable[i];
 		button:SetID(buffInfo.index);
@@ -205,13 +205,13 @@ local function configureAuras(header, auraTable)
 			local timeLeft = buffInfo.expires - GetTime();
 			if(not button.timeLeft) then
 				button.timeLeft = timeLeft;
-				button:SetScript("OnUpdate", A.UpdateTime);
+				button:SetScript("OnUpdate", self.UpdateTime);
 			else
 				button.timeLeft = timeLeft;
 			end
 
 			button.nextUpdate = -1;
-			A.UpdateTime(button, 0);
+			self.UpdateTime(button, 0);
 		else
 			button.timeLeft = nil;
 			button.time:SetText("");
@@ -246,19 +246,20 @@ local function configureAuras(header, auraTable)
 		local button = buttons[index];
 		local wrapAfter = wrapAfter or index;
 		local tick, cycle = floor((index - 1) % wrapAfter), floor((index - 1) / wrapAfter);
+		button:ClearAllPoints();
 		button:SetPoint(point, header, cycle * wrapXOffset + tick * xOffset, cycle * wrapYOffset + tick * yOffset);
 
 		button:SetSize(size, size);
 
 		if(button.time) then
-			local font = LSM:Fetch("font", A.db.font);
+			local font = LSM:Fetch("font", self.db.font);
 			button.time:ClearAllPoints();
-			button.time:SetPoint("TOP", button, "BOTTOM", 1 + A.db.timeXOffset, 0 + A.db.timeYOffset);
-			button.time:FontTemplate(font, A.db.fontSize, A.db.fontOutline);
+			button.time:SetPoint("TOP", button, "BOTTOM", 1 + self.db.timeXOffset, 0 + self.db.timeYOffset);
+			button.time:FontTemplate(font, self.db.fontSize, self.db.fontOutline);
 
 			button.count:ClearAllPoints();
-			button.count:SetPoint("BOTTOMRIGHT", -1 + A.db.countXOffset, 0 + A.db.countYOffset);
-			button.count:FontTemplate(font, A.db.fontSize, A.db.fontOutline);
+			button.count:SetPoint("BOTTOMRIGHT", -1 + self.db.countXOffset, 0 + self.db.countYOffset);
+			button.count:FontTemplate(font, self.db.fontSize, self.db.fontOutline);
 		end
 
 		button:Show();
@@ -270,7 +271,7 @@ local function configureAuras(header, auraTable)
 	local deadIndex = #(auraTable) + 1;
 	local button = select(deadIndex, header:GetChildren());
 	while(button) do
-		button:Hide();
+		if(button:IsShown()) then button:Hide(); end
 		deadIndex = deadIndex + 1;
 		button = select(deadIndex, header:GetChildren());
 	end
@@ -362,21 +363,20 @@ sorters.TIME = sorters.EXPIRES;
 local sortingTable = {};
 function A:UpdateHeader(header)
 	local filter = header.filter;
-	local db = A.db.debuffs;
+	local db = self.db.debuffs;
 	if(filter == "HELPFUL") then
-		db = A.db.buffs;
+		db = self.db.buffs;
 	end
 
 	wipe(sortingTable);
 
 	local i = 1;
 	repeat
-		local aura, _, duration = freshTable();
-		aura.name, _, aura.icon, aura.count, aura.dispelType, duration, aura.expires, aura.caster = UnitAura("player", i, filter);
+		local aura = freshTable();
+		aura.name, _, aura.icon, aura.count, aura.dispelType, aura.duration, aura.expires, aura.caster = UnitAura("player", i, filter);
 		if(aura.name) then
 			aura.filter = filter;
 			aura.index = i;
-			aura.duration = duration;
 
 			tinsert(sortingTable, aura);
 		else
@@ -388,13 +388,13 @@ function A:UpdateHeader(header)
 	local sortMethod = (sorters[tostring(db.sortMethod):upper()] or sorters["INDEX"])[db.sortDir == "-"][db.seperateOwn];
 	tsort(sortingTable, sortMethod);
 
-	configureAuras(header, sortingTable);
+	self:ConfigureAuras(header, sortingTable);
 	while(sortingTable[1]) do
 		releaseTable(tremove(sortingTable));
 	end
 
-	if(A.LBFGroup) then
-		A.LBFGroup:Skin(E.private.auras.lbf.skin);
+	if(self.LBFGroup) then
+		self.LBFGroup:Skin(E.private.auras.lbf.skin);
 	end
 end
 
@@ -434,14 +434,12 @@ function A:CreateAuraHeader(filter)
 
 	header:RegisterEvent("UNIT_AURA");
 	header:SetScript("OnEvent", function(self, event, unit)
-		if(self:IsVisible()) then
-			if(event == "UNIT_AURA" and unit == "player") then
-				A:UpdateHeader(self);
-			end
+		if(event == "UNIT_AURA" and unit == "player") then
+			A:UpdateHeader(self);
 		end
 	end);
 
-	A:UpdateHeader(header);
+	self:UpdateHeader(header);
 
 	return header;
 end
