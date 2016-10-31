@@ -429,6 +429,40 @@ function S:HandleSliderFrame(frame)
 	end
 end
 
+function S:HandleIconSelectionFrame(frame, numIcons, buttonNameTemplate, frameNameOverride)
+	assert(frame, "HandleIconSelectionFrame: frame argument missing");
+	assert(numIcons and type(numIcons) == "number", "HandleIconSelectionFrame: numIcons argument missing or not a number");
+	assert(buttonNameTemplate and type(buttonNameTemplate) == "string", "HandleIconSelectionFrame: buttonNameTemplate argument missing or not a string");
+
+	local frameName = frameNameOverride or frame:GetName(); --We need override in case Blizzard fucks up the naming (guild bank)
+	local scrollFrame = _G[frameName .. "ScrollFrame"];
+	local editBox = _G[frameName .. "EditBox"];
+	local okayButton = _G[frameName .. "OkayButton"] or _G[frameName .. "Okay"];
+	local cancelButton = _G[frameName .. "CancelButton"] or _G[frameName .. "Cancel"];
+
+	frame:StripTextures();
+	scrollFrame:StripTextures();
+	editBox:DisableDrawLayer("BACKGROUND"); --Removes textures around it
+
+	frame:CreateBackdrop("Transparent");
+	frame.backdrop:Point("TOPLEFT", frame, "TOPLEFT", 10, -12);
+	frame.backdrop:Point("BOTTOMRIGHT", cancelButton, "BOTTOMRIGHT", 5, -5);
+
+	S:HandleButton(okayButton);
+	S:HandleButton(cancelButton);
+	S:HandleEditBox(editBox);
+
+	for i = 1, numIcons do
+		local button = _G[buttonNameTemplate .. i];
+		local icon = _G[button:GetName() .. "Icon"];
+		button:StripTextures();
+		button:SetTemplate("Default");
+		button:StyleButton(nil, true);
+		icon:SetInside();
+		icon:SetTexCoord(unpack(E.TexCoords));
+	end
+end
+
 function S:ADDON_LOADED(event, addon)
 	if(self.allowBypass[addon]) then
 		if(S.addonsToLoad[addon]) then

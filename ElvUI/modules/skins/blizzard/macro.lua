@@ -17,8 +17,8 @@ local function LoadSkin()
 	end
 
 	for i = 1, 2 do
-		Tab = _G[format('MacroFrameTab%s', i)];
-		Tab:Height(22);
+		local tab = _G["MacroFrameTab" .. i];
+		tab:Height(22);
 	end
 	MacroFrameTab1:Point('TOPLEFT', MacroFrame, 'TOPLEFT', 85, -39);
 	MacroFrameTab2:Point('LEFT', MacroFrameTab1, 'RIGHT', 4, 0);
@@ -37,22 +37,6 @@ local function LoadSkin()
 
 	S:HandleScrollBar(MacroButtonScrollFrame);
 
-	MacroPopupFrame:StripTextures();
-	MacroPopupFrame:CreateBackdrop('Transparent');
-	MacroPopupFrame.backdrop:Point('TOPLEFT', 9, -9);
-	MacroPopupFrame.backdrop:Point('BOTTOMRIGHT', -7, 9);
-
-	MacroPopupScrollFrame:StripTextures();
-	MacroPopupScrollFrame:CreateBackdrop();
-	MacroPopupScrollFrame.backdrop:Point('TOPLEFT', 58, -14);
-	MacroPopupScrollFrame.backdrop:Point('BOTTOMRIGHT', -10, 5);
-
-	S:HandleEditBox(MacroPopupEditBox);
-
-	MacroPopupNameLeft:SetTexture(nil);
-	MacroPopupNameMiddle:SetTexture(nil);
-	MacroPopupNameRight:SetTexture(nil);
-
 	MacroEditButton:ClearAllPoints();
 	MacroEditButton:Point('BOTTOMLEFT', MacroFrameSelectedMacroButton, 'BOTTOMRIGHT', 10, 0);
 
@@ -66,8 +50,6 @@ local function LoadSkin()
 	for i = 1, MAX_ACCOUNT_MACROS do
 		local Button = _G['MacroButton'..i];
 		local ButtonIcon = _G['MacroButton'..i..'Icon'];
-		local PopupButton = _G['MacroPopupButton'..i];
-		local PopupButtonIcon = _G['MacroPopupButton'..i..'Icon'];
 
 		if Button then
 			Button:StripTextures();
@@ -80,19 +62,9 @@ local function LoadSkin()
 			ButtonIcon:SetTexCoord(unpack(E.TexCoords));
 			ButtonIcon:SetInside();
 		end
-
-		if PopupButton then
-			PopupButton:StripTextures();
-			PopupButton:StyleButton(nil, true);
-
-			PopupButton:SetTemplate('Default');
-		end
-
-		if PopupButtonIcon then
-			PopupButtonIcon:SetTexCoord(unpack(E.TexCoords));
-			PopupButtonIcon:SetInside();
-		end
 	end
+	
+	S:HandleIconSelectionFrame(MacroPopupFrame, NUM_MACRO_ICONS_SHOWN, "MacroPopupButton", "MacroPopup")
 end
 
 S:AddCallbackForAddon("Blizzard_MacroUI", "Macro", LoadSkin);

@@ -113,26 +113,7 @@ local function LoadSkin()
 	end)
 
 	--Popup
-	GuildBankPopupFrame:StripTextures()
-	GuildBankPopupScrollFrame:StripTextures()
-	GuildBankPopupFrame:SetTemplate("Transparent")
-	GuildBankPopupFrame:Point("TOPLEFT", GuildBankFrame, "TOPRIGHT", 1, -30)
-	S:HandleButton(GuildBankPopupOkayButton)
-	S:HandleButton(GuildBankPopupCancelButton)
-	S:HandleEditBox(GuildBankPopupEditBox)
-	GuildBankPopupNameLeft:Kill()
-	GuildBankPopupNameRight:Kill()
-	GuildBankPopupNameMiddle:Kill()
-
-	for i=1, 16 do
-		local button = _G["GuildBankPopupButton"..i]
-		local icon = _G[button:GetName().."Icon"]
-		button:StripTextures()
-		button:SetTemplate("Default")
-		button:StyleButton(nil, true)
-		icon:SetInside()
-		icon:SetTexCoord(unpack(E.TexCoords))
-	end
+	S:HandleIconSelectionFrame(GuildBankPopupFrame, NUM_GUILDBANK_ICONS_SHOWN, "GuildBankPopupButton", "GuildBankPopup");
 
 	S:HandleScrollBar(GuildBankTransactionsScrollFrameScrollBar)
 	S:HandleScrollBar(GuildBankInfoScrollFrameScrollBar)

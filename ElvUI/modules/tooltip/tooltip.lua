@@ -231,7 +231,7 @@ function TT:GameTooltip_SetDefaultAnchor(tt, parent)
 	end
 
 	local ownerName = tt:GetOwner() and tt:GetOwner().GetName and tt:GetOwner():GetName()
-	if(self.db.visibility.actionbars ~= 'NONE' and ownerName and (find(ownerName, "ElvUI_Bar") or find(ownerName, "MultiBar") or find(ownerName, "ElvUI_StanceBar") or find(ownerName, "PetAction")) and not keybindFrame.active) then
+	if(self.db.visibility.actionbars ~= 'NONE' and ownerName and (find(ownerName, "ElvUI_Bar") or find(ownerName, "ElvUI_StanceBar") or find(ownerName, "PetAction")) and not keybindFrame.active) then
 		local modifier = self.db.visibility.actionbars
 
 		if(modifier == 'ALL' or not ((modifier == 'SHIFT' and IsShiftKeyDown()) or (modifier == 'CTRL' and IsControlKeyDown()) or (modifier == 'ALT' and IsAltKeyDown()))) then
@@ -241,26 +241,28 @@ function TT:GameTooltip_SetDefaultAnchor(tt, parent)
 	end
 
 	if(parent) then
-		if(self.db.cursorAnchor) then
-			tt:SetOwner(parent, "ANCHOR_CURSOR")
-			if(not GameTooltipStatusBar.anchoredToTop) then
-				GameTooltipStatusBar:ClearAllPoints()
-				GameTooltipStatusBar:SetPoint("BOTTOMLEFT", GameTooltip, "TOPLEFT", E.Border, (E.Spacing * 3))
-				GameTooltipStatusBar:SetPoint("BOTTOMRIGHT", GameTooltip, "TOPRIGHT", -E.Border, (E.Spacing * 3))
-				GameTooltipStatusBar.text:Point("CENTER", GameTooltipStatusBar, 0, 3)
-				GameTooltipStatusBar.anchoredToTop = true
-			end
-			return
-		else
-			tt:SetOwner(parent, "ANCHOR_NONE")
-			tt:ClearAllPoints()
+		if(self.db.healthBar.statusPosition == "BOTTOM") then
 			if(GameTooltipStatusBar.anchoredToTop) then
-				GameTooltipStatusBar:ClearAllPoints()
-				GameTooltipStatusBar:SetPoint("TOPLEFT", GameTooltip, "BOTTOMLEFT", E.Border, -(E.Spacing * 3))
-				GameTooltipStatusBar:SetPoint("TOPRIGHT", GameTooltip, "BOTTOMRIGHT", -E.Border, -(E.Spacing * 3))
-				GameTooltipStatusBar.text:Point("CENTER", GameTooltipStatusBar, 0, -3)
-				GameTooltipStatusBar.anchoredToTop = nil
+				GameTooltipStatusBar:ClearAllPoints();
+				GameTooltipStatusBar:Point("TOPLEFT", GameTooltip, "BOTTOMLEFT", E.Border, -(E.Spacing * 3));
+				GameTooltipStatusBar:Point("TOPRIGHT", GameTooltip, "BOTTOMRIGHT", -E.Border, -(E.Spacing * 3));
+				GameTooltipStatusBar.text:Point("CENTER", GameTooltipStatusBar, 0, -3);
+				GameTooltipStatusBar.anchoredToTop = nil;
 			end
+		else
+			if(not GameTooltipStatusBar.anchoredToTop) then
+				GameTooltipStatusBar:ClearAllPoints();
+				GameTooltipStatusBar:Point("BOTTOMLEFT", GameTooltip, "TOPLEFT", E.Border, (E.Spacing * 3));
+				GameTooltipStatusBar:Point("BOTTOMRIGHT", GameTooltip, "TOPRIGHT", -E.Border, (E.Spacing * 3));
+				GameTooltipStatusBar.text:Point("CENTER", GameTooltipStatusBar, 0, 3);
+				GameTooltipStatusBar.anchoredToTop = true;
+			end
+		end
+		if(self.db.cursorAnchor) then
+			tt:SetOwner(parent, "ANCHOR_CURSOR");
+			return;
+		else
+			tt:SetOwner(parent, "ANCHOR_NONE");
 		end
 	end
 
