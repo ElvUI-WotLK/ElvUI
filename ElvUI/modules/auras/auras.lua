@@ -5,8 +5,8 @@ local LSM = LibStub("LibSharedMedia-3.0");
 local GetTime = GetTime;
 local select, unpack, pairs, ipairs, tostring = select, unpack, pairs, ipairs, tostring;
 local floor, min, max, huge = math.floor, math.min, math.max, math.huge;
-local format, wipe, tinsert, tremove = string.format, table.wipe, table.insert, table.remove;
-local format, wipe, tinsert, tsort = string.format, table.wipe, table.insert, table.sort;
+local format = string.format;
+local wipe, tinsert, tsort, tremove = table.wipe, table.insert, table.sort, table.remove;
 
 local CreateFrame = CreateFrame;
 local UnitAura = UnitAura;
@@ -372,7 +372,7 @@ function A:UpdateHeader(header)
 
 	local i = 1;
 	repeat
-		local aura = freshTable();
+		local aura, _ = freshTable();
 		aura.name, _, aura.icon, aura.count, aura.dispelType, aura.duration, aura.expires, aura.caster = UnitAura("player", i, filter);
 		if(aura.name) then
 			aura.filter = filter;
@@ -498,6 +498,7 @@ function A:Initialize()
 				return;
 			end
 
+			local enchantButton;
 			local textureName;
 			local enchantIndex = 0;
 			if(hasOffHandEnchant) then
