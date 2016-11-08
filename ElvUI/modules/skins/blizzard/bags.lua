@@ -1,6 +1,14 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local S = E:GetModule('Skins');
 
+local _G = _G
+local unpack = unpack
+
+local GetItemQualityColor = GetItemQualityColor
+local GetContainerItemInfo = GetContainerItemInfo
+local GetContainerItemQuestInfo = GetContainerItemQuestInfo
+local NUM_CONTAINER_FRAMES = NUM_CONTAINER_FRAMES
+
 function S:ContainerFrame_Update(self)
 	local id = self:GetID();
 	local name = self:GetName();
@@ -20,7 +28,7 @@ function S:ContainerFrame_Update(self)
 		end
 
 		if(questId and not isActive) then
-			itemButton:SetBackdropBorderColor(1, 0.2, 0.2);
+			itemButton:SetBackdropBorderColor(1, 1, 0);
 		elseif(questId or isQuestItem) then
 			itemButton:SetBackdropBorderColor(1, 0.2, 0.2);
 		end
@@ -41,7 +49,7 @@ function S:BankFrameItemButton_Update(button)
 		local isQuestItem, questId, isActive = GetContainerItemQuestInfo(BANK_CONTAINER, buttonID);
 
 		if(questId and not isActive) then
-			button:SetBackdropBorderColor(1, 0.2, 0.2);
+			button:SetBackdropBorderColor(1, 1, 0);
 		elseif(questId or isQuestItem) then
 			button:SetBackdropBorderColor(1, 0.2, 0.2);
 		end
@@ -155,6 +163,46 @@ local function LoadSkin()
 	S:HandleButton(BankFramePurchaseButton);
 
 	S:SecureHook('BankFrameItemButton_Update');
+
+	local function UpdateBagIcon()
+		for i = 1, 12 do
+			for j = 1, 30 do
+				local ItemButton = _G["ContainerFrame"..i.."Item"..j]
+				if(ItemButton) then
+					local QuestIcon = _G["ContainerFrame"..i.."Item"..j.."IconQuestTexture"]
+					local QuestTexture = QuestIcon:GetTexture()
+					if(QuestTexture == TEXTURE_ITEM_QUEST_BANG) then
+						QuestIcon:SetAlpha(1)
+						QuestIcon:SetInside()
+						QuestIcon:SetTexCoord(unpack(E.TexCoords));
+					else
+						QuestIcon:SetAlpha(0)
+					end
+				end
+			end
+		end
+	end
+
+	local function UpdateBankFrameIcon()
+		for i = 1, 28 do
+			local ItemButton = _G["BankFrameItem"..i]
+			if(ItemButton) then
+				local QuestIcon = _G["BankFrameItem"..i.."IconQuestTexture"]
+				local QuestTexture = QuestIcon:GetTexture()
+				if(QuestTexture == TEXTURE_ITEM_QUEST_BANG) then
+					QuestIcon:SetAlpha(1)
+					QuestIcon:SetInside()
+					QuestIcon:SetTexCoord(unpack(E.TexCoords));
+				else
+					QuestIcon:SetAlpha(0)
+				end
+			end
+		end
+	end
+
+	hooksecurefunc('ContainerFrame_Update', UpdateBagIcon)
+	hooksecurefunc('BankFrameItemButton_Update', UpdateBagIcon)
+	hooksecurefunc('BankFrameItemButton_Update', UpdateBankFrameIcon)
 end
 
 S:AddCallback("Bags", LoadSkin)
