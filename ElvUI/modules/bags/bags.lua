@@ -275,6 +275,9 @@ function B:UpdateSlot(bagID, slotID)
 	local specialType = select(2, GetContainerNumFreeSlots(bagID))
 
 	slot:Show();
+	if(slot.questIcon) then
+		slot.questIcon:Hide();
+	end
 	slot.name, slot.rarity = nil, nil;
 
 	local start, duration, enable = GetContainerItemCooldown(bagID, slotID)
@@ -308,8 +311,11 @@ function B:UpdateSlot(bagID, slotID)
 		end
 
 		-- color slot according to item quality
-		if questId and not isActive then
-			slot:SetBackdropBorderColor(1.0, 0.3, 0.3);
+		if questId and not isActiveQuest then
+			slot:SetBackdropBorderColor(1.0, 1.0, 0.0);
+			if(slot.questIcon) then
+				slot.questIcon:Show();
+			end
 		elseif questId or isQuestItem then
 			slot:SetBackdropBorderColor(1.0, 0.3, 0.3);
 		elseif slot.rarity and slot.rarity > 1 then
@@ -501,6 +507,14 @@ function B:Layout(isBank)
 					f.Bags[bagID][slotID].Count:Point('BOTTOMRIGHT', 0, 2);
 					f.Bags[bagID][slotID].Count:FontTemplate(E.LSM:Fetch("font", E.db.bags.countFont), E.db.bags.countFontSize, E.db.bags.countFontOutline);
 					f.Bags[bagID][slotID].Count:SetTextColor(countColor.r, countColor.g, countColor.b);
+
+					if not(f.Bags[bagID][slotID].questIcon) then
+						f.Bags[bagID][slotID].questIcon = _G[f.Bags[bagID][slotID]:GetName()..'IconQuestTexture'] or _G[f.Bags[bagID][slotID]:GetName()].IconQuestTexture
+						f.Bags[bagID][slotID].questIcon:SetTexture(TEXTURE_ITEM_QUEST_BANG);
+						f.Bags[bagID][slotID].questIcon:SetInside(f.Bags[bagID][slotID]);
+						f.Bags[bagID][slotID].questIcon:SetTexCoord(unpack(E.TexCoords));
+						f.Bags[bagID][slotID].questIcon:Hide();
+					end
 
 					f.Bags[bagID][slotID].iconTexture = _G[f.Bags[bagID][slotID]:GetName()..'IconTexture'];
 					f.Bags[bagID][slotID].iconTexture:SetInside(f.Bags[bagID][slotID]);
@@ -700,6 +714,8 @@ function B:OnEvent(event, ...)
 		self:UpdateCooldowns();
 	elseif event == 'PLAYERBANKSLOTS_CHANGED' then
 		self:UpdateAllSlots()
+	elseif (event == "QUEST_ACCEPTED" or event == "QUEST_LOG_UPDATE") and self:IsShown() then
+		self:UpdateAllSlots()
 	end
 end
 
@@ -870,6 +886,8 @@ function B:ContructContainerFrame(name, isBank)
 	f:RegisterEvent('BAG_UPDATE_COOLDOWN')
 	f:RegisterEvent('BAG_UPDATE');
 	f:RegisterEvent('PLAYERBANKSLOTS_CHANGED');
+	f:RegisterEvent("QUEST_ACCEPTED");
+	f:RegisterEvent("QUEST_LOG_UPDATE");
 
 	f:SetScript('OnEvent', B.OnEvent);
 	f:Hide();
