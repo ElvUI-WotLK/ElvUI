@@ -8,6 +8,24 @@ local function LoadSkin()
 
 	GlyphFrame:StripTextures();
 
+	GlyphFrame:CreateBackdrop();
+	GlyphFrame.backdrop:Point("TOPLEFT", 21, -60);
+	GlyphFrame.backdrop:Point("BOTTOMRIGHT", -38, 100);
+	GlyphFrame.backdrop:SetBackdropBorderColor(0, 0, 0, 0);
+	GlyphFrame.backdrop:CreateShadow();
+
+	GlyphFrame.texture = GlyphFrame:CreateTexture(nil, "OVERLAY");
+	GlyphFrame.texture:SetTexture("Interface\\Spellbook\\UI-GlyphFrame");
+	GlyphFrame.texture:SetTexCoord(0.075, 0.630, 0.154, 0.770);
+	GlyphFrame.texture:SetInside(GlyphFrame.backdrop);
+	GlyphFrame.texture:SetDesaturated(true);
+
+	for i = 1, 6 do
+		_G["GlyphFrameGlyph" .. i .. "Shine"]:SetDesaturated(true);
+		_G["GlyphFrameGlyph" .. i .. "Ring"]:SetDesaturated(true);
+		_G["GlyphFrameGlyph" .. i .. "Setting"]:SetDesaturated(true);
+	end
+
 	GlyphFrame:HookScript("OnShow", function()
 		PlayerTalentFrameTitleText:Hide();
 		PlayerTalentFramePointsBar:Hide();
