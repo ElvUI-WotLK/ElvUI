@@ -390,7 +390,7 @@ function S:HandleCloseButton(f, point, text)
 		f.text:SetFont([[Interface\AddOns\ElvUI\media\fonts\PT_Sans_Narrow.ttf]], 16, "OUTLINE");
 		f.text:SetText(text);
 		f.text:SetJustifyH("CENTER");
-		f.text:SetPoint("CENTER", f, "CENTER");
+		f.text:SetPoint("CENTER", f, "CENTER", -1, 1);
 	end
 
 	if(point) then
