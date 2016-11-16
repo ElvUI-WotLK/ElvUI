@@ -113,7 +113,6 @@ local function LoadSkin()
 	PlayerTitleFrame:CreateBackdrop("Default");
 	PlayerTitleFrame.backdrop:Point("TOPLEFT", 20, 3);
 	PlayerTitleFrame.backdrop:Point("BOTTOMRIGHT", -16, 14);
-	PlayerTitleFrame.backdrop:Point("BOTTOMRIGHT", -16, 14);
 	PlayerTitleFrame.backdrop:SetFrameLevel(PlayerTitleFrame:GetFrameLevel());
 	S:HandleNextPrevButton(PlayerTitleFrameButton, true)
 	PlayerTitleFrameButton:ClearAllPoints()
