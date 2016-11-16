@@ -4,7 +4,6 @@ local UF = E:GetModule("UnitFrames");
 local random = random;
 
 local CreateFrame = CreateFrame;
-local UnitPowerType = UnitPowerType;
 
 local _, ns = ...;
 local ElvUF = ns.oUF;
@@ -209,7 +208,6 @@ end
 
 local tokens = {[0] = "MANA", "RAGE", "FOCUS", "ENERGY", "RUNIC_POWER"}
 function UF:PostUpdatePower(unit, min, max)
-	local pType = UnitPowerType(unit);
 	local parent = self:GetParent();
 
 	if(parent.isForced) then
