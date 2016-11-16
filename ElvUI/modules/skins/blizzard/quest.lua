@@ -18,7 +18,9 @@ local function LoadSkin()
 	end
 
 	S:HandleButton(QuestFrameAcceptButton);
+	QuestFrameAcceptButton:Point("BOTTOMLEFT", QuestFrame, 19, 71);
 	S:HandleButton(QuestFrameDeclineButton);
+	QuestFrameDeclineButton:Point("BOTTOMRIGHT", QuestFrame, -34, 71);
 	S:HandleButton(QuestFrameCompleteButton);
 	S:HandleButton(QuestFrameGoodbyeButton);
 	S:HandleButton(QuestFrameCompleteQuestButton);
@@ -139,8 +141,8 @@ local function LoadSkin()
 	QuestLogDetailScrollFrame:SetTemplate("Default");
 
 	QuestFrame:CreateBackdrop("Transparent");
-	QuestFrame.backdrop:Point("TOPLEFT", QuestFrame, "TOPLEFT", 10, -12);
-	QuestFrame.backdrop:Point("BOTTOMRIGHT", QuestFrame, "BOTTOMRIGHT", -31, 67);
+	QuestFrame.backdrop:Point("TOPLEFT", QuestFrame, "TOPLEFT", 15, -19);
+	QuestFrame.backdrop:Point("BOTTOMRIGHT", QuestFrame, "BOTTOMRIGHT", -30, 67);
 
 	QuestLogDetailFrame:StripTextures();
 	QuestLogDetailFrame:CreateBackdrop("Transparent");
@@ -151,7 +153,7 @@ local function LoadSkin()
 	QuestLogFrame.backdrop:Point("TOPLEFT", QuestLogFrame, "TOPLEFT", 10, -12);
 	QuestLogFrame.backdrop:Point("BOTTOMRIGHT", QuestLogFrame, "BOTTOMRIGHT", -1, 8);
 
-	S:HandleCloseButton(QuestFrameCloseButton, QuestFrame.backdrop);
+	S:HandleCloseButton(QuestFrameCloseButton);
 	S:HandleCloseButton(QuestLogDetailFrameCloseButton);
 	S:HandleCloseButton(QuestLogFrameCloseButton);
 
