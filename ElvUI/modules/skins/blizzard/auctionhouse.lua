@@ -35,7 +35,7 @@ local function LoadSkin()
 	AuctionDressUpFrame.backdrop:SetOutside(AuctionDressUpBackgroundTop, nil, nil, AuctionDressUpBackgroundBot);
 
 	S:HandleRotateButton(AuctionDressUpModelRotateLeftButton);
-	AuctionDressUpModelRotateLeftButton:SetPoint("TOPLEFT", AuctionDressUpFrame, 5, -15);
+	AuctionDressUpModelRotateLeftButton:SetPoint("TOPLEFT", AuctionDressUpFrame, 8, -17);
 	S:HandleRotateButton(AuctionDressUpModelRotateRightButton);
 	AuctionDressUpModelRotateRightButton:SetPoint("TOPLEFT", AuctionDressUpModelRotateLeftButton, "TOPRIGHT", 3, 0);
 

@@ -6,11 +6,11 @@ local SetDressUpBackground = SetDressUpBackground;
 local function LoadSkin()
 	if(E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.dressingroom ~= true) then return; end
 
+	DressUpFrame:StripTextures();
 	DressUpFrame:CreateBackdrop("Transparent");
 	DressUpFrame.backdrop:Point("TOPLEFT", 10, -12);
 	DressUpFrame.backdrop:Point("BOTTOMRIGHT", -33, 73);
 
-	DressUpFrame:StripTextures();
 	DressUpFramePortrait:Kill();
 
 	SetDressUpBackground();
@@ -22,8 +22,9 @@ local function LoadSkin()
 	S:HandleCloseButton(DressUpFrameCloseButton);
 
 	S:HandleRotateButton(DressUpModelRotateLeftButton);
-	DressUpModelRotateRightButton:Point("TOPLEFT", DressUpModelRotateLeftButton, "TOPRIGHT", 3, 0);
+	DressUpModelRotateLeftButton:Point("TOPLEFT", DressUpFrame, 25, -80);
 	S:HandleRotateButton(DressUpModelRotateRightButton);
+	DressUpModelRotateRightButton:Point("TOPLEFT", DressUpModelRotateLeftButton, "TOPRIGHT", 3, 0);
 
 	S:HandleButton(DressUpFrameCancelButton);
 	DressUpFrameResetButton:Point("RIGHT", DressUpFrameCancelButton, "LEFT", -3, 0);
