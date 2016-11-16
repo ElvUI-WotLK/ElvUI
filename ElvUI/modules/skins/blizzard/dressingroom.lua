@@ -22,7 +22,7 @@ local function LoadSkin()
 	S:HandleCloseButton(DressUpFrameCloseButton);
 
 	S:HandleRotateButton(DressUpModelRotateLeftButton);
-	DressUpModelRotateLeftButton:Point("TOPLEFT", DressUpFrame, 25, -80);
+	DressUpModelRotateLeftButton:Point("TOPLEFT", DressUpFrame, 25, -79);
 	S:HandleRotateButton(DressUpModelRotateRightButton);
 	DressUpModelRotateRightButton:Point("TOPLEFT", DressUpModelRotateLeftButton, "TOPRIGHT", 3, 0);
 

@@ -181,6 +181,7 @@ local function LoadSkin()
 	ColorItemBorder()
 
 	S:HandleRotateButton(CharacterModelFrameRotateLeftButton)
+	CharacterModelFrameRotateLeftButton:SetPoint("TOPLEFT", 3, -3);
 	S:HandleRotateButton(CharacterModelFrameRotateRightButton)
 	CharacterModelFrameRotateRightButton:SetPoint("TOPLEFT", CharacterModelFrameRotateLeftButton, "TOPRIGHT", 3, 0);
 
