@@ -124,7 +124,11 @@ local function LoadSkin()
 	PlayerTitlePickerFrame.backdrop:Point("BOTTOMRIGHT", -10, 6);
 	PlayerTitlePickerFrame.backdrop:SetFrameLevel(PlayerTitlePickerFrame:GetFrameLevel());
 
-	S:HandleScrollBar(PlayerTitlePickerScrollFrameScrollBar)
+	for i = 1, #PlayerTitlePickerScrollFrame.buttons do
+		PlayerTitlePickerScrollFrame.buttons[i].text:FontTemplate();
+	end
+
+	S:HandleScrollBar(PlayerTitlePickerScrollFrameScrollBar);
 
 	_G['GearManagerToggleButton']:Size(26, 32);
 	_G['GearManagerToggleButton']:CreateBackdrop('Default');
