@@ -27,8 +27,9 @@ local function LoadSkin()
 	DressUpModelRotateRightButton:Point("TOPLEFT", DressUpModelRotateLeftButton, "TOPRIGHT", 3, 0);
 
 	S:HandleButton(DressUpFrameCancelButton);
-	DressUpFrameResetButton:Point("RIGHT", DressUpFrameCancelButton, "LEFT", -3, 0);
+	DressUpFrameCancelButton:Point("CENTER", DressUpFrame, "TOPLEFT", 306, -423);
 	S:HandleButton(DressUpFrameResetButton);
+	DressUpFrameResetButton:Point("RIGHT", DressUpFrameCancelButton, "LEFT", -3, 0);
 
 	DressUpModel:CreateBackdrop("Default");
 	DressUpModel.backdrop:SetOutside(DressUpBackgroundTopLeft, nil, nil, DressUpModel);

@@ -11,14 +11,15 @@ local function LoadSkin()
 	CharacterFrame.backdrop:Point('TOPLEFT', 10, -12)
 	CharacterFrame.backdrop:Point('BOTTOMRIGHT', -32, 76)
 
-	S:HandleCloseButton(CharacterFrameCloseButton)
+	S:HandleCloseButton(CharacterFrameCloseButton);
+	CharacterFrameCloseButton:Point("CENTER", CharacterFrame, "TOPRIGHT", -45, -25);
 
 	for i = 1, #CHARACTERFRAME_SUBFRAMES do
 		local tab = _G["CharacterFrameTab"..i];
 		S:HandleTab(tab);
 	end
 
-		GearManagerDialog:StripTextures()
+	GearManagerDialog:StripTextures()
 	GearManagerDialog:CreateBackdrop('Transparent')
 	GearManagerDialog.backdrop:Point('TOPLEFT', 5, -2)
 	GearManagerDialog.backdrop:Point('BOTTOMRIGHT', -1, 4)
@@ -108,18 +109,21 @@ local function LoadSkin()
 
 	PaperDollFrame:StripTextures(true)
 
-	PlayerTitleFrame:StripTextures()
-	PlayerTitleFrame:CreateBackdrop('Default')
-	PlayerTitleFrame.backdrop:Point('TOPLEFT', 20, 3)
-	PlayerTitleFrame.backdrop:Point('BOTTOMRIGHT', -16, 14)
+	PlayerTitleFrame:StripTextures();
+	PlayerTitleFrame:CreateBackdrop("Default");
+	PlayerTitleFrame.backdrop:Point("TOPLEFT", 20, 3);
+	PlayerTitleFrame.backdrop:Point("BOTTOMRIGHT", -16, 14);
+	PlayerTitleFrame.backdrop:Point("BOTTOMRIGHT", -16, 14);
+	PlayerTitleFrame.backdrop:SetFrameLevel(PlayerTitleFrame:GetFrameLevel());
 	S:HandleNextPrevButton(PlayerTitleFrameButton, true)
 	PlayerTitleFrameButton:ClearAllPoints()
 	PlayerTitleFrameButton:Point("RIGHT", PlayerTitleFrame.backdrop, "RIGHT", -2, 0)
 
-	PlayerTitlePickerFrame:StripTextures()
-	PlayerTitlePickerFrame:CreateBackdrop('Transparent')
-	PlayerTitlePickerFrame.backdrop:Point('TOPLEFT', 5, -8)
-	PlayerTitlePickerFrame.backdrop:Point('BOTTOMRIGHT', -10, 5)
+	PlayerTitlePickerFrame:StripTextures();
+	PlayerTitlePickerFrame:CreateBackdrop("Transparent");
+	PlayerTitlePickerFrame.backdrop:Point("TOPLEFT", 6, -10);
+	PlayerTitlePickerFrame.backdrop:Point("BOTTOMRIGHT", -10, 6);
+	PlayerTitlePickerFrame.backdrop:SetFrameLevel(PlayerTitlePickerFrame:GetFrameLevel());
 
 	S:HandleScrollBar(PlayerTitlePickerScrollFrameScrollBar)
 
@@ -434,6 +438,7 @@ local function LoadSkin()
 	S:HandleScrollBar(SkillDetailScrollFrameScrollBar);
 
 	S:HandleButton(SkillFrameCancelButton);
+	SkillFrameCancelButton:Point("CENTER", SkillFrame, "TOPLEFT", 307, -420);
 
 	TokenFrame:StripTextures(true);
 
@@ -496,6 +501,7 @@ local function LoadSkin()
 	S:HandleScrollBar(TokenFrameContainerScrollBar);
 
 	S:HandleButton(TokenFrameCancelButton);
+	TokenFrameCancelButton:Point("CENTER", TokenFrame, "TOPLEFT", 307, -420);
 
 	TokenFramePopup:StripTextures();
 	TokenFramePopup:SetTemplate('Transparent');
