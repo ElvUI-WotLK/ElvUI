@@ -14,21 +14,22 @@ local GetTradeSkillReagentItemLink = GetTradeSkillReagentItemLink;
 local function LoadSkin()
 	if(E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.tradeskill ~= true) then return; end
 
-	TradeSkillFrame:StripTextures(true);
 	TradeSkillListScrollFrame:StripTextures();
 	TradeSkillDetailScrollFrame:StripTextures();
 
 	TradeSkillExpandButtonFrame:StripTextures();
 	TradeSkillDetailScrollChildFrame:StripTextures();
 
+	TradeSkillFrame:StripTextures(true);
 	TradeSkillFrame:CreateBackdrop("Transparent");
-	TradeSkillFrame.backdrop:Point("TOPLEFT", 10, -12);
-	TradeSkillFrame.backdrop:Point("BOTTOMRIGHT", -31, 74);
+	TradeSkillFrame.backdrop:Point("TOPLEFT", 10, 0);
+	TradeSkillFrame.backdrop:Point("BOTTOMRIGHT", -38, 74);
 
 	TradeSkillRankFrame:StripTextures();
-	TradeSkillRankFrame:CreateBackdrop("Default");
+	TradeSkillRankFrame:CreateBackdrop();
 	TradeSkillRankFrame:SetStatusBarTexture(E["media"].normTex);
-	E:RegisterStatusBar(TradeSkillRankFrame);
+
+	TradeSkillRankFrameSkillRank:FontTemplate(nil, 12, "OUTLINE");
 
 	S:HandleCheckBox(TradeSkillFrameAvailableFilterCheckButton);
 
@@ -40,27 +41,60 @@ local function LoadSkin()
 	S:HandleDropDownBox(TradeSkillInvSlotDropDown);
 
 	S:HandleButton(TradeSkillCreateButton);
+	TradeSkillCreateButton:Point("CENTER", TradeSkillFrame, "TOPLEFT", 214, -422);
+
 	S:HandleButton(TradeSkillCancelButton);
+	TradeSkillCancelButton:Point("CENTER", TradeSkillFrame, "TOPLEFT", 300, -422);
+
 	S:HandleButton(TradeSkillCreateAllButton);
+	TradeSkillCreateAllButton:Point("RIGHT", TradeSkillCreateButton, "LEFT", -76, 0);
 
 	S:HandleScrollBar(TradeSkillListScrollFrameScrollBar);
 	S:HandleScrollBar(TradeSkillDetailScrollFrameScrollBar);
 
 	S:HandleEditBox(TradeSkillInputBox);
+	TradeSkillInputBox:Height(16);
 
 	S:HandleNextPrevButton(TradeSkillDecrementButton);
 	S:HandleNextPrevButton(TradeSkillIncrementButton);
-	TradeSkillIncrementButton:Point("RIGHT", TradeSkillCreateButton, "LEFT", -13, 0);
 
 	S:HandleCloseButton(TradeSkillFrameCloseButton);
+	TradeSkillFrameCloseButton:Point("TOPRIGHT", TradeSkillFrame, "TOPRIGHT", -34, 4);
+
+	TradeSkillReagent1:Point("TOPLEFT", TradeSkillReagentLabel, "BOTTOMLEFT", -2, -3)
+	TradeSkillReagent2:Point("LEFT", TradeSkillReagent1, "RIGHT", 3, 0)
+	TradeSkillReagent4:Point("LEFT", TradeSkillReagent3, "RIGHT", 3, 0)
+	TradeSkillReagent6:Point("LEFT", TradeSkillReagent5, "RIGHT", 3, 0)
+	TradeSkillReagent8:Point("LEFT", TradeSkillReagent7, "RIGHT", 3, 0)
 
 	hooksecurefunc("TradeSkillFrame_SetSelection", function(id)
 		TradeSkillSkillIcon:StyleButton(nil, true);
+		TradeSkillSkillIcon:SetTemplate();
 		if(TradeSkillSkillIcon:GetNormalTexture()) then
 			TradeSkillSkillIcon:GetNormalTexture():SetTexCoord(unpack(E.TexCoords));
 			TradeSkillSkillIcon:GetNormalTexture():SetInside();
 		end
-		TradeSkillSkillIcon:SetTemplate("Default");
+
+		TradeSkillRankFrame:Height(16);
+		TradeSkillRankFrame:Width(280);
+		TradeSkillRankFrame:SetStatusBarColor(0.13, 0.35, 0.80);
+		TradeSkillRankFrame:Point("TOPLEFT", TradeSkillFrame, "TOPLEFT", 35, -22);
+
+		TradeSkillRankFrameSkillRank:ClearAllPoints();
+		TradeSkillRankFrameSkillRank:Point("CENTER", TradeSkillRankFrame, "CENTER", 0, 0);
+
+		TradeSkillFrameEditBox:Height(26);
+		TradeSkillFrameEditBox:Point("TOPRIGHT", TradeSkillRankFrame, "BOTTOMRIGHT", 2, -2);
+
+		TradeSkillFrameTitleText:Point("TOP", TradeSkillFrame, "TOP", -20, -5);
+
+		TradeSkillFrameAvailableFilterCheckButton:Point("TOPLEFT", TradeSkillFrame, "TOPLEFT", 30, -41);
+
+		TradeSkillInvSlotDropDown:Point("TOPRIGHT", TradeSkillFrame, "TOPRIGHT", -60, -68);
+		TradeSkillInvSlotDropDown:Width(140);
+
+		TradeSkillSubClassDropDown:Point("RIGHT", TradeSkillInvSlotDropDown, "LEFT", 15, 0);
+		TradeSkillSubClassDropDown:Width(140);
 
 		local skillLink = GetTradeSkillItemLink(id)
 		if(skillLink) then
@@ -83,21 +117,29 @@ local function LoadSkin()
 			local icon = _G["TradeSkillReagent" .. i .. "IconTexture"];
 			local name = _G["TradeSkillReagent" .. i .. "Name"];
 			local count = _G["TradeSkillReagent" .. i .. "Count"];
+			local nameFrame = _G["TradeSkillReagent" .. i .. "NameFrame"];
 
 			if((reagentName or reagentTexture) and not reagent.isSkinned) then
+				reagent:SetTemplate("Transparent", true);
+				reagent:StyleButton(nil, true);
+				reagent:Size(reagent:GetWidth(), reagent:GetHeight() + 1)
+
 				icon:SetTexCoord(unpack(E.TexCoords));
 				icon:SetDrawLayer("OVERLAY");
+				icon:Size(38);
+				icon:Point("TOPLEFT", 2, -2);
 
 				icon.backdrop = CreateFrame("Frame", nil, reagent);
 				icon.backdrop:SetFrameLevel(reagent:GetFrameLevel() - 1);
-				icon.backdrop:SetTemplate("Default");
+				icon.backdrop:SetTemplate();
 				icon.backdrop:SetOutside(icon);
 
 				icon:SetParent(icon.backdrop);
 				count:SetParent(icon.backdrop);
 				count:SetDrawLayer("OVERLAY");
 
-				_G["TradeSkillReagent" .. i .. "NameFrame"]:Kill();
+				nameFrame:Kill();
+
 				reagent.isSkinned = true;
 			end
 
