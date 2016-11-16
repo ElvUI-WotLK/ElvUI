@@ -223,6 +223,7 @@ function UF:PostUpdatePower(unit, min, max)
 		end
 	end
 
+	local db = parent.db;
 	if(db and db.power and db.power.hideonnpc) then
 		UF:PostNamePosition(parent, unit);
 	end
