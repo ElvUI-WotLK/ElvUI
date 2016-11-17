@@ -323,9 +323,10 @@ function mod:GetThreatReaction(frame)
 	end
 end
 
-local color, scale;
+local color;
 function mod:ColorizeAndScale()
 	local unitType = mod:GetReaction(self);
+	local scale = 1;
 	local canAttack = false;
 
 	self.unitType = unitType;
