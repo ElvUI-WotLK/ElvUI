@@ -2,7 +2,6 @@ local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, Private
 local AB = E:GetModule('ActionBars');
 
 local _G = _G;
-local select = select;
 local ceil = math.ceil;
 local lower = string.lower;
 
@@ -15,8 +14,6 @@ local GetSpellInfo = GetSpellInfo;
 local InCombatLockdown = InCombatLockdown;
 local GetBindingKey = GetBindingKey;
 local NUM_SHAPESHIFT_SLOTS = NUM_SHAPESHIFT_SLOTS;
-
-local LBF = LibStub("LibButtonFacade", true);
 
 local bar = CreateFrame('Frame', 'ElvUI_StanceBar', E.UIParent, 'SecureHandlerStateTemplate');
 

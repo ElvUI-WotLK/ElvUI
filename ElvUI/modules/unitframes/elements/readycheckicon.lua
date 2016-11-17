@@ -1,8 +1,6 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local UF = E:GetModule("UnitFrames");
 
-local CreateFrame = CreateFrame;
-
 function UF:Construct_ReadyCheckIcon(frame)
 	local tex = frame.RaisedElementParent:CreateTexture(nil, "OVERLAY", nil, 7);
 	tex:Size(12);

@@ -48,7 +48,7 @@ local function OnEnter(self)
 	DT.tooltip:Show();
 end
 
-local function Click(self, button)
+local function Click(_, button)
 	if(button == "LeftButton" or (button == "RightButton" and not IsShiftKeyDown())) then
 		E:ToggleConfig();
 	elseif(button == "RightButton" and IsShiftKeyDown()) then

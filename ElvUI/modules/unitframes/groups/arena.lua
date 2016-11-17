@@ -23,7 +23,7 @@ function UF:Construct_ArenaFrames(frame)
 	frame.Portrait2D = self:Construct_Portrait(frame, "texture");
 	frame.Buffs = self:Construct_Buffs(frame);
 	frame.Debuffs = self:Construct_Debuffs(frame);
-	frame.Castbar = self:Construct_Castbar(frame, "RIGHT");
+	frame.Castbar = self:Construct_Castbar(frame);
 	frame.HealCommBar = UF:Construct_HealComm(frame);
 	frame.Trinket = self:Construct_Trinket(frame);
 	frame.Range = UF:Construct_Range(frame);

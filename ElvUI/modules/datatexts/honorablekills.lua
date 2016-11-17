@@ -1,10 +1,13 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local DT = E:GetModule('DataTexts');
+local DT = E:GetModule("DataTexts");
 
 local join = string.join;
 
+local GetPVPLifetimeStats = GetPVPLifetimeStats;
+local HONORABLE_KILLS = HONORABLE_KILLS;
+
 local lastPanel;
-local displayNumberString = '';
+local displayNumberString = "";
 
 local function OnEvent(self)
 	local hk = GetPVPLifetimeStats();
@@ -14,13 +17,13 @@ local function OnEvent(self)
 	lastPanel = self;
 end
 
-local function ValueColorUpdate(hex, r, g, b)
-	displayNumberString = join('', '%s: ', hex, '%d|r');
+local function ValueColorUpdate(hex)
+	displayNumberString = join("", "%s: ", hex, "%d|r");
 
 	if(lastPanel ~= nil) then
 		OnEvent(lastPanel);
 	end
 end
-E['valueColorUpdateFuncs'][ValueColorUpdate] = true;
+E["valueColorUpdateFuncs"][ValueColorUpdate] = true;
 
 DT:RegisterDatatext("Honorable Kills", nil, OnEvent);

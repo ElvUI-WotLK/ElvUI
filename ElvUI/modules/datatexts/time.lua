@@ -8,7 +8,6 @@ local GetGameTime = GetGameTime;
 local GetNumSavedInstances = GetNumSavedInstances;
 local GetSavedInstanceInfo = GetSavedInstanceInfo;
 local GetWintergraspWaitTime = GetWintergraspWaitTime;
-local RequestRaidInfo = RequestRaidInfo;
 local SecondsToTime = SecondsToTime;
 local QUEUE_TIME_UNAVAILABLE = QUEUE_TIME_UNAVAILABLE;
 local TIMEMANAGER_TOOLTIP_REALMTIME = TIMEMANAGER_TOOLTIP_REALMTIME;

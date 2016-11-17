@@ -421,7 +421,7 @@ function UF:Update_AllFrames()
 	self:UpdateAllHeaders();
 end
 
-function UF:CreateAndUpdateUFGroup(group, numGroup, template)
+function UF:CreateAndUpdateUFGroup(group, numGroup)
 	if(InCombatLockdown()) then self:RegisterEvent("PLAYER_REGEN_ENABLED"); return; end
 
 	for i = 1, numGroup do
@@ -640,7 +640,7 @@ function UF.headerPrototype:ClearChildPoints()
 	end
 end
 
-function UF.headerPrototype:Update(isForced)
+function UF.headerPrototype:Update()
 	local groupName = self.groupName;
 	local db = UF.db["units"][groupName];
 

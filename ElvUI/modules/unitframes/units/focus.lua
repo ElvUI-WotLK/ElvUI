@@ -15,7 +15,7 @@ function UF:Construct_FocusFrame(frame)
 	frame.Name = self:Construct_NameText(frame);
 	frame.Portrait3D = self:Construct_Portrait(frame, "model");
 	frame.Portrait2D = self:Construct_Portrait(frame, "texture");
-	frame.Castbar = self:Construct_Castbar(frame, "LEFT", L["Focus Castbar"]);
+	frame.Castbar = self:Construct_Castbar(frame, L["Focus Castbar"]);
 	frame.Castbar.SafeZone = nil;
 	frame.Castbar.LatencyTexture:Hide();
 	frame.Buffs = self:Construct_Buffs(frame);

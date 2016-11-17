@@ -1,8 +1,6 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local UF = E:GetModule("UnitFrames");
 
-local CreateFrame = CreateFrame;
-
 function UF:Construct_RoleIcon(frame)
 	local tex = frame.RaisedElementParent:CreateTexture(nil, "ARTWORK");
 	tex:Size(17);

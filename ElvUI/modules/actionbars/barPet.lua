@@ -2,7 +2,6 @@ local E, L, V, P, G = unpack(select(2, ...)); -- Inport: Engine, Locales, Privat
 local AB = E:GetModule('ActionBars');
 
 local _G = _G;
-local select = select;
 local ceil = math.ceil;
 
 local RegisterStateDriver = RegisterStateDriver;

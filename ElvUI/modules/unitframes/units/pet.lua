@@ -18,7 +18,7 @@ function UF:Construct_PetFrame(frame)
 	frame.Portrait2D = self:Construct_Portrait(frame, "texture");
 	frame.Buffs = self:Construct_Buffs(frame);
 	frame.Debuffs = self:Construct_Debuffs(frame);
-	frame.Castbar = self:Construct_Castbar(frame, "LEFT", L["Pet Castbar"]);
+	frame.Castbar = self:Construct_Castbar(frame, L["Pet Castbar"]);
 	frame.Castbar.SafeZone = nil;
 	frame.Castbar.LatencyTexture:Hide();
 	frame.Threat = self:Construct_Threat(frame);

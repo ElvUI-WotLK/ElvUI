@@ -5,7 +5,7 @@ local unpack = unpack;
 
 local CreateFrame = CreateFrame;
 
-function UF:Construct_Threat(frame, glow)
+function UF:Construct_Threat(frame)
 	local threat = CreateFrame("Frame", nil, frame);
 
 	frame:CreateShadow("Default");
