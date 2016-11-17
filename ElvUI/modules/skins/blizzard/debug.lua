@@ -3,7 +3,6 @@ local S = E:GetModule('Skins');
 
 local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.debug ~= true then return end
-	local noscalemult = E.mult * GetCVar('uiScale')
 
 	ScriptErrorsFrame:SetParent(E.UIParent)
 	ScriptErrorsFrame:SetTemplate('Transparent')

@@ -23,7 +23,7 @@ local basemisschance, leveldifference, dodge, parry, block, avoidance, unhittabl
 local chanceString = "%.2f%%";
 local AVD_DECAY_RATE = 1.5;
 
-function IsWearingShield()
+local function IsWearingShield()
 	local slotID = GetInventorySlotInfo("SecondaryHandSlot");
 	local itemID = GetInventoryItemID("player", slotID);
 

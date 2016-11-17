@@ -52,7 +52,7 @@ local function LoadSkin()
 			button.icon:SetTexCoord(unpack(E.TexCoords));
 		end
 
-		cooldown = _G[button:GetName() .."Cooldown"];
+		local cooldown = _G[button:GetName() .."Cooldown"];
 		if(cooldown) then
 			E:RegisterCooldown(cooldown);
 		end
@@ -459,7 +459,7 @@ local function LoadSkin()
 		local offset = HybridScrollFrame_GetOffset(scrollFrame);
 		local buttons = scrollFrame.buttons;
 		local numButtons = #buttons;
-		local name, isHeader, extraCurrencyType, icon;
+		local _, name, isHeader, isExpanded, extraCurrencyType, icon;
 		local button, index;
 
 		for i = 1, numButtons do

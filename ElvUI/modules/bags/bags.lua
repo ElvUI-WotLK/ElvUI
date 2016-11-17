@@ -646,7 +646,7 @@ function B:UpdateKeySlot(slotID)
 	end
 
 	if(clink) then
-		local itemEquipLoc;
+		local _, itemEquipLoc;
 		slot.name, _, slot.rarity, _, _, _, _, _, itemEquipLoc = GetItemInfo(clink);
 
 		local isQuestItem, questId, isActiveQuest = GetContainerItemQuestInfo(bagID, slotID);

@@ -74,7 +74,7 @@ local function LoadSkin()
 	local function QuestObjectiveText()
 		local numObjectives = GetNumQuestLeaderBoards();
 		local objective;
-		local type, finished;
+		local _, type, finished;
 		local numVisibleObjectives = 0;
 		for i = 1, numObjectives do
 			_, type, finished = GetQuestLogLeaderBoard(i);

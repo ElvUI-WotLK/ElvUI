@@ -14,6 +14,7 @@ function S:ContainerFrame_Update(self)
 	local name = self:GetName();
 	local itemButton;
 	local _, quality;
+	local isQuestItem, questId, isActive;
 
 	for i = 1, self.size, 1 do
 		itemButton = _G[name..'Item'..i];

@@ -151,7 +151,7 @@ local function OnEnter(self)
 		dataValid = true;
 	end
 
-	local zonec, classc, levelc, info;
+	local zonec, classc, levelc, info, grouped;
 	DT.tooltip:AddDoubleLine(L["Friends List"], format(totalOnlineString, onlineFriends, numberOfFriends), tthead.r,tthead.g,tthead.b, tthead.r,tthead.g,tthead.b);
 	if(onlineFriends > 0) then
 		DT.tooltip:AddLine(" ");

@@ -1409,7 +1409,7 @@ function CH:CheckKeyword(message)
 		end
 	end
 
-	local rebuiltString, lowerCaseWord
+	local classColorTable, tempWord, rebuiltString, lowerCaseWord
 	local isFirstWord = true
 	for word in message:gmatch("[^%s]+") do
 		lowerCaseWord = word:lower()
@@ -1417,13 +1417,13 @@ function CH:CheckKeyword(message)
 		for keyword, _ in pairs(CH.Keywords) do
 			if lowerCaseWord == keyword:lower() then
 				local tempWord = word:gsub("%p", "")
-				word = word:gsub(tempWord, E.media.hexvaluecolor..tempWord..'|r')
-				if(self.db.keywordSound ~= "None" and not self.SoundPlayed) then
+				word = word:gsub(tempWord, format("%s%s|r", E.media.hexvaluecolor, tempWord))
+				if self.db.keywordSound ~= 'None' and not self.SoundPlayed  then
 					if (self.db.noAlertInCombat and not InCombatLockdown()) or not self.db.noAlertInCombat then
 						PlaySoundFile(LSM:Fetch("sound", self.db.keywordSound), "Master")
 					end
 					self.SoundPlayed = true
-					self.SoundTimer = CH:ScheduleTimer('ThrottleSound', 1);
+					self.SoundTimer = CH:ScheduleTimer('ThrottleSound', 1)
 				end
 			end
 		end
@@ -1432,7 +1432,10 @@ function CH:CheckKeyword(message)
 			if(CH.ClassNames[lowerCaseWord]) then
 				classColorTable = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[CH.ClassNames[lowerCaseWord]] or RAID_CLASS_COLORS[CH.ClassNames[lowerCaseWord]];
 				tempWord = word:gsub("%p", "")
-				word = word:gsub(tempWord, format("\124cff%.2x%.2x%.2x", classColorTable.r*255, classColorTable.g*255, classColorTable.b*255)..tempWord.."\124r")
+				word = word:gsub(tempWord, format("\124cff%.2x%.2x%.2x%s\124r", classColorTable.r*255, classColorTable.g*255, classColorTable.b*255, tempWord))
+			elseif(CH.ClassNames[word]) then
+				classColorTable = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[CH.ClassNames[word]] or RAID_CLASS_COLORS[CH.ClassNames[word]];
+				word = word:gsub(word:gsub("%-","%%-"), format("\124cff%.2x%.2x%.2x%s\124r", classColorTable.r*255, classColorTable.g*255, classColorTable.b*255, word))
 			end
 		end
 
@@ -1840,6 +1843,9 @@ function CH:Initialize()
 	scrollArea:SetScript("OnSizeChanged", function(self)
 		CopyChatFrameEditBox:Width(self:GetWidth());
 		CopyChatFrameEditBox:Height(self:GetHeight());
+	end);
+	scrollArea:HookScript("OnVerticalScroll", function(self, offset)
+		CopyChatFrameEditBox:SetHitRectInsets(0, 0, offset, (CopyChatFrameEditBox:GetHeight() - offset - self:GetHeight()));
 	end);
 
 	local editBox = CreateFrame("EditBox", "CopyChatFrameEditBox", frame)

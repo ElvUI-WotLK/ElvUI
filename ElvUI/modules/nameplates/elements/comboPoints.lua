@@ -50,7 +50,7 @@ function mod:ConfigureElement_CPoints(frame)
 end
 
 function mod:ConstructElement_CPoints(parent)
-	frame = CreateFrame("Frame", nil, parent.HealthBar);
+	local frame = CreateFrame("Frame", nil, parent.HealthBar);
 	frame:Point("CENTER", parent.HealthBar, "BOTTOM");
 	frame:SetSize(68, 1);
 	frame:Hide();
