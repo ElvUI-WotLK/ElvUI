@@ -2,7 +2,7 @@ local E, L, V, P, G = unpack(select(2, ...));
 local mod = E:GetModule("NamePlates");
 local LSM = LibStub("LibSharedMedia-3.0");
 
-local select, unpack = select, unpack;
+local unpack = unpack;
 
 local CreateFrame = CreateFrame;
 
@@ -48,7 +48,7 @@ function mod:UpdateElement_CastBarOnValueChanged(value)
 		end
 	end
 
-	local spell, _, spellName, texture = UnitCastingInfo("target");
+	local spell, _, spellName = UnitCastingInfo("target");
 	if(not spell) then
 		spell, _, spellName = UnitChannelInfo("target");
 	end

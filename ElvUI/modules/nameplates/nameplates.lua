@@ -4,10 +4,10 @@ local LSM = LibStub("LibSharedMedia-3.0");
 
 local _G = _G;
 local tonumber, pairs, select, tostring, unpack = tonumber, pairs, select, tostring, unpack;
-local twipe, tinsert, wipe = table.wipe, table.insert, wipe;
+local twipe = table.wipe;
 local band = bit.band;
 local floor = math.floor;
-local gsub, format, strsplit = string.gsub, format, strsplit;
+local gsub, strsplit = string.gsub, strsplit;
 
 local CreateFrame = CreateFrame;
 local GetTime = GetTime;
@@ -18,10 +18,6 @@ local UnitExists = UnitExists;
 local SetCVar = SetCVar;
 local IsAddOnLoaded = IsAddOnLoaded;
 local GetSpellInfo = GetSpellInfo;
-local GetSpellTexture = GetSpellTexture;
-local UnitBuff, UnitDebuff = UnitBuff, UnitDebuff;
-local UnitPlayerControlled = UnitPlayerControlled;
-local GetRaidTargetIndex = GetRaidTargetIndex;
 local WorldFrame = WorldFrame;
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
 local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
@@ -96,19 +92,7 @@ mod.RaidMarkColors = {
 
 local AURA_UPDATE_INTERVAL = 0.1;
 local AURA_TARGET_HOSTILE = 1;
-local AURA_TARGET_FRIENDLY = 2;
-local AuraList, AuraGUID = {}, {}
-
-local RaidIconIndex = {
-	"STAR",
-	"CIRCLE",
-	"DIAMOND",
-	"TRIANGLE",
-	"MOON",
-	"SQUARE",
-	"CROSS",
-	"SKULL"
-};
+local AuraList = {};
 
 local TimeColors = {
 	[0] = "|cffeeeeee",
@@ -324,7 +308,7 @@ end
 
 function mod:GetThreatReaction(frame)
 	if(frame.Threat:IsShown()) then
-		local r, g, b = frame.Threat:GetVertexColor();
+		local _, g, b = frame.Threat:GetVertexColor();
 		if(g + b == 0) then
 			return "FULL_THREAT";
 		else
@@ -342,7 +326,6 @@ end
 local color, scale;
 function mod:ColorizeAndScale()
 	local unitType = mod:GetReaction(self);
-	local scale = 1;
 	local canAttack = false;
 
 	self.unitType = unitType;
@@ -597,8 +580,8 @@ function mod:CreatePlate(frame)
 	frame.Highlight:Hide();
 
 	frame.Glow = self:ConstructElement_Glow(frame);
-	frame.Buffs = self:ConstructElement_Auras(frame, 5, "RIGHT");
-	frame.Debuffs = self:ConstructElement_Auras(frame, 5, "LEFT");
+	frame.Buffs = self:ConstructElement_Auras(frame, "RIGHT");
+	frame.Debuffs = self:ConstructElement_Auras(frame, "LEFT");
 
 	BossIcon:SetAlpha(0);
 	EliteIcon:SetAlpha(0);
@@ -746,10 +729,9 @@ do
 	local Framelist = {};
 	local Watcherframe = CreateFrame("Frame");
 	local WatcherframeActive = false;
-	local select = select;
 	local timeToUpdate = 0;
 
-	local function CheckFramelist(self)
+	local function CheckFramelist()
 		local curTime = GetTime();
 		if(curTime < timeToUpdate) then return; end
 		local framecount = 0;
@@ -1046,7 +1028,7 @@ function mod:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, ...)
 	end
 end
 
-function mod:UNIT_AURA(event, unit)
+function mod:UNIT_AURA(_, unit)
 	if(unit == "target") then
 		self:UpdateElement_AurasByUnitID("target");
 	elseif(unit == "focus") then
@@ -1072,7 +1054,7 @@ function mod:UPDATE_MOUSEOVER_UNIT()
 	WorldFrame.elapsed = 0.1;
 end
 
-function mod:UNIT_COMBO_POINTS(event, unit)
+function mod:UNIT_COMBO_POINTS(_, unit)
 	if(unit == "player" or unit == "vehicle") then
 		self:UpdateElement_CPointsByUnitID("target");
 	end

@@ -25,7 +25,7 @@ local RaidIconIndex = {
 	"SKULL"
 };
 
-function mod:SetAura(aura, icon, count, duration, expirationTime)
+function mod:SetAura(aura, icon, count, expirationTime)
 	aura.icon:SetTexture(icon);
 	if(count > 1) then
 		aura.count:SetText(count);
@@ -62,8 +62,6 @@ function mod:UpdateElement_Auras(frame)
 
 	local hasBuffs = false;
 	local hasDebuffs = false;
-	local buffs = frame.Buffs;
-	local debuffs = frame.Debuffs;
 	local aurasOnUnit = self:GetAuraList(guid);
 
 	if(aurasOnUnit) then
@@ -93,7 +91,7 @@ function mod:UpdateElement_Auras(frame)
 		while(frameNum <= maxAuras) do
 			local cachedaura = self.DebuffCache[index];
 			if(cachedaura and cachedaura.spellID and cachedaura.expirationTime and cachedaura.duration <= maxDuration) then
-				self:SetAura(frame.Debuffs.icons[frameNum], cachedaura.icon, cachedaura.count, cachedaura.duration, cachedaura.expirationTime);
+				self:SetAura(frame.Debuffs.icons[frameNum], cachedaura.icon, cachedaura.count, cachedaura.expirationTime);
 				frameNum = frameNum + 1;
 				hasDebuffs = true;
 			else
@@ -113,7 +111,7 @@ function mod:UpdateElement_Auras(frame)
 		while(frameNum <= maxAuras) do
 			local cachedaura = self.BuffCache[index];
 			if(cachedaura and cachedaura.spellID and cachedaura.expirationTime and cachedaura.duration <= maxDuration) then
-				self:SetAura(frame.Buffs.icons[frameNum], cachedaura.icon, cachedaura.count, cachedaura.duration, cachedaura.expirationTime);
+				self:SetAura(frame.Buffs.icons[frameNum], cachedaura.icon, cachedaura.count, cachedaura.expirationTime);
 				frameNum = frameNum + 1;
 				hasBuffs = true;
 			else
@@ -208,7 +206,7 @@ function mod:CreateAuraIcon(parent)
 	return aura;
 end
 
-function mod:Auras_SizeChanged(width, height)
+function mod:Auras_SizeChanged(width)
 	local numAuras = #self.icons;
 	for i = 1, numAuras do
 		self.icons[i]:SetWidth((width - (E.mult*numAuras)) / numAuras);
@@ -254,7 +252,7 @@ function mod:UpdateAuraIcons(auras)
 	end
 end
 
-function mod:ConstructElement_Auras(frame, maxAuras, side)
+function mod:ConstructElement_Auras(frame, side)
 	local auras = CreateFrame("Frame", nil, frame);
 	auras:SetFrameStrata("BACKGROUND");
 

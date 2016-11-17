@@ -1,6 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local mod = E:GetModule("NamePlates");
-local LSM = LibStub("LibSharedMedia-3.0");
 
 local GetComboPoints = GetComboPoints;
 local UnitHasVehicleUI = UnitHasVehicleUI;
