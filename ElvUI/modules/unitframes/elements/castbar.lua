@@ -26,7 +26,7 @@ local INVERT_ANCHORPOINT = {
 	BOTTOM = "TOP"
 };
 
-function UF:Construct_Castbar(frame, direction, moverName)
+function UF:Construct_Castbar(frame, moverName)
 	local castbar = CreateFrame("StatusBar", nil, frame);
 	castbar:SetFrameLevel(frame.RaisedElementParent:GetFrameLevel() + 30);
 	self["statusbars"][castbar] = true;
