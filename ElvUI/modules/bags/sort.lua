@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...));
 local B = E:GetModule('Bags');
 
 local Search = LibStub("LibItemSearch-1.2");
@@ -69,6 +69,7 @@ local coreGroups = {
 
 local bagCache = {};
 local bagIDs = {};
+local bagQualities = {};
 local bagStacks = {};
 local bagMaxStacks = {};
 local bagGroups = {};
@@ -84,7 +85,7 @@ local specialtyBags = {};
 local emptySlots = {};
 
 local moveRetries = 0
-local movesUnderway, lastItemID, lockStop, lastDestination, lastMove
+local lastItemID, lockStop, lastDestination, lastMove
 local moveTracker = {}
 
 local inventorySlots = {
@@ -159,10 +160,12 @@ local function UpdateLocation(from, to)
 			bagStacks[to] = bagStacks[to] + bagStacks[from]
 			bagStacks[from] = nil
 			bagIDs[from] = nil
+			bagQualities[from] = nil
 			bagMaxStacks[from] = nil
 		end
 	else
 		bagIDs[from], bagIDs[to] = bagIDs[to], bagIDs[from]
+		bagQualities[from], bagQualities[to] = bagQualities[to], bagQualities[from]
 		bagStacks[from], bagStacks[to] = bagStacks[to], bagStacks[from]
 		bagMaxStacks[from], bagMaxStacks[to] = bagMaxStacks[to], bagMaxStacks[from]
 	end
@@ -204,6 +207,9 @@ local function DefaultSort(a, b)
 
 	local _, _, aRarity, _, _, aType, aSubType, _, aEquipLoc = GetItemInfo(aID)
 	local _, _, bRarity, _, _, bType, bSubType, _, bEquipLoc = GetItemInfo(bID)
+
+ 	aRarity = bagQualities[a]
+	bRarity = bagQualities[b]
 
 	if aRarity ~= bRarity and aRarity and bRarity then
 		return aRarity > bRarity
@@ -342,7 +348,7 @@ end
 function B:GetNumSlots(bag, role)
 	if IsGuildBankBag(bag) then
 		if not role then role = "deposit" end
-		local name, icon, canView, canDeposit, numWithdrawals = GetGuildBankTabInfo(bag - 50)
+		local name, _, canView, canDeposit, numWithdrawals = GetGuildBankTabInfo(bag - 50)
 		if name and canView --[[and ((role == "withdraw" and numWithdrawals ~= 0) or (role == "deposit" and canDeposit) or (role == "both" and numWithdrawals ~= 0 and canDeposit))]] then
 			return 98
 		end
@@ -402,6 +408,7 @@ function B:ScanBags()
 		if(itemID) then
 			bagMaxStacks[bagSlot] = select(8, GetItemInfo(itemID));
 			bagIDs[bagSlot] = itemID;
+			bagQualities[bagSlot] = select(3, GetItemInfo(B:GetItemLink(bag, slot)))
 			bagStacks[bagSlot] = select(2, B:GetItemInfo(bag, slot));
 		end
 	end
@@ -608,7 +615,7 @@ function B.Fill(sourceBags, targetBags, reverse, canMove)
 	for _, bag, slot in B.IterateBags(sourceBags, not reverse, "withdraw") do
 		if #emptySlots == 0 then break end
 		local bagSlot = B:Encode_BagSlot(bag, slot)
-		local targetBag, targetSlot = B:Decode_BagSlot(emptySlots[1])
+		local targetBag = B:Decode_BagSlot(emptySlots[1])
 		local link = B:GetItemLink(bag, slot);
 
 		if(link and blackList[GetItemInfo(link)]) then
@@ -656,6 +663,7 @@ function B:StartStacking()
 	twipe(bagMaxStacks)
 	twipe(bagStacks)
 	twipe(bagIDs)
+	twipe(bagQualities)
 	twipe(moveTracker)
 
 	if #moves > 0 then
@@ -692,7 +700,6 @@ function B:DoMove(move)
 		return false, 'source/target_locked'
 	end
 
-	local sourceLink = B:GetItemLink(sourceBag, sourceSlot)
 	local sourceItemID = self:GetItemID(sourceBag, sourceSlot)
 	local targetItemID = self:GetItemID(targetBag, targetSlot)
 
@@ -789,9 +796,8 @@ function B:DoMoves()
 	lastItemID, lockStop, lastDestination, lastMove = nil, nil, nil, nil
 	twipe(moveTracker)
 
-	local start, success, moveID, targetID, moveSource, moveTarget, wasGuild
-	start = GetTime()
-	if #moves > 0 then
+	local success, moveID, targetID, moveSource, moveTarget, wasGuild
+	if #moves > 0 then 
 		for i = #moves, 1, -1 do
 			success, moveID, moveSource, targetID, moveTarget, wasGuild = B:DoMove(moves[i])
 			if not success then
