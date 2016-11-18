@@ -27,39 +27,56 @@ local function LoadSkin()
 
 	TradeSkillRankFrame:StripTextures();
 	TradeSkillRankFrame:CreateBackdrop();
+	TradeSkillRankFrame:Point("TOPLEFT", TradeSkillFrame, "TOPLEFT", 35, -22);
+	TradeSkillRankFrame:Size(280, 16);
 	TradeSkillRankFrame:SetStatusBarTexture(E["media"].normTex);
+	TradeSkillRankFrame:SetStatusBarColor(0.13, 0.35, 0.80);
+	E:RegisterStatusBar(TradeSkillRankFrame);
 
 	TradeSkillRankFrameSkillRank:FontTemplate(nil, 12, "OUTLINE");
+	TradeSkillRankFrameSkillRank:ClearAllPoints();
+	TradeSkillRankFrameSkillRank:Point("CENTER", TradeSkillRankFrame, "CENTER", 0, 0);
 
 	S:HandleCheckBox(TradeSkillFrameAvailableFilterCheckButton);
 
+	TradeSkillFrameEditBox:Point("TOPRIGHT", TradeSkillRankFrame, "BOTTOMRIGHT", 2, -2);
+	TradeSkillFrameEditBox:Height(26);
 	S:HandleEditBox(TradeSkillFrameEditBox);
 	TradeSkillFrameEditBox.backdrop:Point("TOPLEFT", 0, -4);
 	TradeSkillFrameEditBox.backdrop:Point("BOTTOMRIGHT", -1, 4);
 
+	TradeSkillFrameTitleText:Point("TOP", TradeSkillFrame, "TOP", -20, -5);
+
+	TradeSkillFrameAvailableFilterCheckButton:Point("TOPLEFT", TradeSkillFrame, "TOPLEFT", 30, -41);
+
 	S:HandleDropDownBox(TradeSkillSubClassDropDown);
+	TradeSkillSubClassDropDown:Point("RIGHT", TradeSkillInvSlotDropDown, "LEFT", 15, 0);
+	TradeSkillSubClassDropDown:Width(140);
+
 	S:HandleDropDownBox(TradeSkillInvSlotDropDown);
+	TradeSkillInvSlotDropDown:Point("TOPRIGHT", TradeSkillFrame, "TOPRIGHT", -60, -68);
+	TradeSkillInvSlotDropDown:Width(140);
 
-	S:HandleButton(TradeSkillCreateButton);
 	TradeSkillCreateButton:Point("CENTER", TradeSkillFrame, "TOPLEFT", 214, -422);
+	S:HandleButton(TradeSkillCreateButton);
 
-	S:HandleButton(TradeSkillCancelButton);
 	TradeSkillCancelButton:Point("CENTER", TradeSkillFrame, "TOPLEFT", 300, -422);
+	S:HandleButton(TradeSkillCancelButton);
 
+	TradeSkillCreateAllButton:Point("CENTER", TradeSkillFrame, "TOPLEFT", 58, -422);
 	S:HandleButton(TradeSkillCreateAllButton);
-	TradeSkillCreateAllButton:Point("RIGHT", TradeSkillCreateButton, "LEFT", -76, 0);
 
 	S:HandleScrollBar(TradeSkillListScrollFrameScrollBar);
 	S:HandleScrollBar(TradeSkillDetailScrollFrameScrollBar);
 
-	S:HandleEditBox(TradeSkillInputBox);
 	TradeSkillInputBox:Height(16);
+	S:HandleEditBox(TradeSkillInputBox);
 
 	S:HandleNextPrevButton(TradeSkillDecrementButton);
 	S:HandleNextPrevButton(TradeSkillIncrementButton);
 
-	S:HandleCloseButton(TradeSkillFrameCloseButton);
 	TradeSkillFrameCloseButton:Point("TOPRIGHT", TradeSkillFrame, "TOPRIGHT", -34, 4);
+	S:HandleCloseButton(TradeSkillFrameCloseButton);
 
 	TradeSkillReagent1:Point("TOPLEFT", TradeSkillReagentLabel, "BOTTOMLEFT", -2, -3)
 	TradeSkillReagent2:Point("LEFT", TradeSkillReagent1, "RIGHT", 3, 0)
@@ -74,27 +91,6 @@ local function LoadSkin()
 			TradeSkillSkillIcon:GetNormalTexture():SetTexCoord(unpack(E.TexCoords));
 			TradeSkillSkillIcon:GetNormalTexture():SetInside();
 		end
-
-		TradeSkillRankFrame:Height(16);
-		TradeSkillRankFrame:Width(280);
-		TradeSkillRankFrame:SetStatusBarColor(0.13, 0.35, 0.80);
-		TradeSkillRankFrame:Point("TOPLEFT", TradeSkillFrame, "TOPLEFT", 35, -22);
-
-		TradeSkillRankFrameSkillRank:ClearAllPoints();
-		TradeSkillRankFrameSkillRank:Point("CENTER", TradeSkillRankFrame, "CENTER", 0, 0);
-
-		TradeSkillFrameEditBox:Height(26);
-		TradeSkillFrameEditBox:Point("TOPRIGHT", TradeSkillRankFrame, "BOTTOMRIGHT", 2, -2);
-
-		TradeSkillFrameTitleText:Point("TOP", TradeSkillFrame, "TOP", -20, -5);
-
-		TradeSkillFrameAvailableFilterCheckButton:Point("TOPLEFT", TradeSkillFrame, "TOPLEFT", 30, -41);
-
-		TradeSkillInvSlotDropDown:Point("TOPRIGHT", TradeSkillFrame, "TOPRIGHT", -60, -68);
-		TradeSkillInvSlotDropDown:Width(140);
-
-		TradeSkillSubClassDropDown:Point("RIGHT", TradeSkillInvSlotDropDown, "LEFT", 15, 0);
-		TradeSkillSubClassDropDown:Width(140);
 
 		local skillLink = GetTradeSkillItemLink(id)
 		if(skillLink) then
