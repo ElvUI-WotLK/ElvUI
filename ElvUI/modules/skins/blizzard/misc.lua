@@ -7,9 +7,6 @@ local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.misc ~= true then return end
 	-- Blizzard frame we want to reskin
 	local skins = {
-		"StaticPopup1",
-		"StaticPopup2",
-		"StaticPopup3",
 		"GameMenuFrame",
 		"InterfaceOptionsFrame",
 		"VideoOptionsFrame",
@@ -46,38 +43,56 @@ local function LoadSkin()
 		end
 	end
 
-	-- reskin popup buttons
-	for i = 1, 3 do
-		_G["StaticPopup"..i.."CloseButton"]:StripTextures()
-		S:HandleCloseButton(_G["StaticPopup"..i.."CloseButton"]);
+	-- Static Popups
+	for i = 1, 4 do
+		local staticPopup = _G["StaticPopup"..i];
+		local itemFrame = _G["StaticPopup"..i.."ItemFrame"];
+		local itemFrameBox = _G["StaticPopup"..i.."EditBox"];
+		local itemFrameTexture = _G["StaticPopup"..i.."ItemFrameIconTexture"];
+		local itemFrameNormal = _G["StaticPopup"..i.."ItemFrameNormalTexture"];
+		local itemFrameName = _G["StaticPopup"..i.."ItemFrameNameFrame"];
+		local closeButton = _G["StaticPopup"..i.."CloseButton"];
+		local wideBox = _G["StaticPopup"..i.."WideEditBox"];
 
-		for j = 1, 3 do
-			S:HandleButton(_G["StaticPopup"..i.."Button"..j])
-			S:HandleEditBox(_G["StaticPopup"..i.."EditBox"])
-			for k = 1, _G["StaticPopup"..i.."EditBox"]:GetNumRegions() do
-				local region = select(k, _G["StaticPopup"..i.."EditBox"]:GetRegions())
-				if region and region:GetObjectType() == "Texture" then
-					if region:GetTexture() == "Interface\\ChatFrame\\UI-ChatInputBorder-Left" or region:GetTexture() == "Interface\\ChatFrame\\UI-ChatInputBorder-Right" then
-						region:Kill()
-					end
+		staticPopup:SetTemplate("Transparent");
+
+		S:HandleEditBox(itemFrameBox);
+		itemFrameBox.backdrop:Point("TOPLEFT", -2, -4);
+		itemFrameBox.backdrop:Point("BOTTOMRIGHT", 2, 4);
+
+		S:HandleEditBox(_G["StaticPopup"..i.."MoneyInputFrameGold"]);
+		S:HandleEditBox(_G["StaticPopup"..i.."MoneyInputFrameSilver"]);
+		S:HandleEditBox(_G["StaticPopup"..i.."MoneyInputFrameCopper"]);
+
+		for k = 1, itemFrameBox:GetNumRegions() do
+			local region = select(k, itemFrameBox:GetRegions());
+			if(region and region:GetObjectType() == "Texture") then
+				if region:GetTexture() == "Interface\\ChatFrame\\UI-ChatInputBorder-Left" or region:GetTexture() == "Interface\\ChatFrame\\UI-ChatInputBorder-Right" then
+					region:Kill();
 				end
 			end
-			S:HandleEditBox(_G["StaticPopup"..i.."MoneyInputFrameGold"])
-			S:HandleEditBox(_G["StaticPopup"..i.."MoneyInputFrameSilver"])
-			S:HandleEditBox(_G["StaticPopup"..i.."MoneyInputFrameCopper"])
-			_G["StaticPopup"..i.."EditBox"].backdrop:Point("TOPLEFT", -2, -4)
-			_G["StaticPopup"..i.."EditBox"].backdrop:Point("BOTTOMRIGHT", 2, 4)
-			_G["StaticPopup"..i.."ItemFrameNameFrame"]:Kill()
-			_G["StaticPopup"..i.."ItemFrame"]:GetNormalTexture():Kill()
-			_G["StaticPopup"..i.."ItemFrame"]:SetTemplate("Default")
-			_G["StaticPopup"..i.."ItemFrame"]:StyleButton()
-			_G["StaticPopup"..i.."ItemFrameIconTexture"]:SetTexCoord(unpack(E.TexCoords))
-			_G["StaticPopup"..i.."ItemFrameIconTexture"]:SetInside()
 		end
 
-		select(8, _G["StaticPopup"..i.."WideEditBox"]:GetRegions()):Hide();
-		S:HandleEditBox(_G["StaticPopup"..i.."WideEditBox"]);
-		_G["StaticPopup"..i.."WideEditBox"]:Height(22);
+		closeButton:StripTextures();
+		S:HandleCloseButton(closeButton);
+
+		itemFrame:GetNormalTexture():Kill();
+		itemFrame:SetTemplate();
+		itemFrame:StyleButton();
+
+		itemFrameTexture:SetTexCoord(unpack(E.TexCoords));
+		itemFrameTexture:SetInside();
+
+		itemFrameNormal:SetAlpha(0);
+		itemFrameName:Kill();
+
+		select(8, wideBox:GetRegions()):Hide();
+		S:HandleEditBox(wideBox);
+		wideBox:Height(22);
+
+		for j = 1, 3 do
+			S:HandleButton(_G["StaticPopup"..i.."Button"..j]);
+		end
 	end
 
 	-- reskin all esc/menu buttons
