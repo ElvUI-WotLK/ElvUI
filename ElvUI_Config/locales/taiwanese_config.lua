@@ -258,6 +258,7 @@ L["List of words to color in chat if found in a message. If you wish to add mult
 L["Lock Positions"] = '鎖定位置'
 L["Log the main chat frames history. So when you reloadui or log in and out you see the history from your last session."] = '記錄對話歷史,當你重載,登錄和退出時會恢復你最後一次會話'
 L["No Alert In Combat"] = true;
+L["Number of messages you scroll for each step."] = true;
 L["Number of repeat characters while in combat before the chat editbox is automatically closed."] = true;
 L["Number of time in seconds to scroll down to the bottom of the chat window if you are not scrolled down completely."] = "對話框滾動到底部所需要的滾動時間(秒)."
 L["Panel Backdrop"] = "對話框背景"
@@ -272,6 +273,7 @@ L["Right Only"] = "僅顯示右框背景"
 L["Right Panel Height"] = true;
 L["Right Panel Width"] = true;
 L["Scroll Interval"] = "滾動間隔"
+L["Scroll Messages"] = true;
 L["Separate Panel Sizes"] = true;
 L["Set the font outline."] = "字體描邊設定."
 L["Short Channels"] = "隱藏頻道名稱"

@@ -64,13 +64,7 @@ local Var = {
 local CreatedFrames = 0;
 local lines = {};
 local msgList, msgCount, msgTime = {}, {}, {}
-local good, maybe, filter, login = {}, {}, {}, false
 local chatFilters = {};
-local cvars = {
-	["bnWhisperMode"] = true,
-	["conversationMode"] = true,
-	["whisperMode"] = true,
-}
 
 local PLAYER_REALM = gsub(E.myrealm,'[%s%-]','')
 local PLAYER_NAME = E.myname.."-"..PLAYER_REALM
@@ -78,7 +72,6 @@ local PLAYER_NAME = E.myname.."-"..PLAYER_REALM
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
 local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
 
-local TIMESTAMP_FORMAT
 local DEFAULT_STRINGS = {
 	BATTLEGROUND = L['BG'],
 	GUILD = L['G'],
@@ -176,13 +169,15 @@ local specialChatIcons = {
 CH.Keywords = {};
 CH.ClassNames = {};
 
+local numScrollMessages
 local function ChatFrame_OnMouseScroll(frame, delta)
+	numScrollMessages = CH.db.numScrollMessages or 3
 	if CH.db.chatDirection == 'TOP' then
 		if delta < 0 then
 			if IsShiftKeyDown() then
 				frame:ScrollToTop()
 			else
-				for i = 1, 3 do
+				for i = 1, numScrollMessages do
 					frame:ScrollUp()
 				end
 			end
@@ -190,26 +185,25 @@ local function ChatFrame_OnMouseScroll(frame, delta)
 			if IsShiftKeyDown() then
 				frame:ScrollToBottom()
 			else
-				for i = 1, 3 do
+				for i = 1, numScrollMessages do
 					frame:ScrollDown()
 				end
 			end
 
-			-- doesn't work for some reason, not sure what it does anyway, queue up scrolls?
-			--if CH.db.scrollUpInterval ~= 0 then
-			--	if frame.ScrollTimer then
-			--		CH:CancelTimer(frame.ScrollTimer, true)
-			--	end
-			--
-			--	frame.ScrollTimer = CH:ScheduleTimer('ScrollToTop', CH.db.scrollUpInterval, frame)
-			--end
+			if CH.db.scrollDownInterval ~= 0 then
+				if frame.ScrollTimer then
+					CH:CancelTimer(frame.ScrollTimer, true)
+				end
+			
+				frame.ScrollTimer = CH:ScheduleTimer('ScrollToTop', CH.db.scrollDownInterval, frame)
+			end
 		end
 	else
 		if delta < 0 then
 			if IsShiftKeyDown() then
 				frame:ScrollToBottom()
 			else
-				for i = 1, 3 do
+				for i = 1, numScrollMessages do
 					frame:ScrollDown()
 				end
 			end
@@ -217,7 +211,7 @@ local function ChatFrame_OnMouseScroll(frame, delta)
 			if IsShiftKeyDown() then
 				frame:ScrollToTop()
 			else
-				for i = 1, 3 do
+				for i = 1, numScrollMessages do
 					frame:ScrollUp()
 				end
 			end
@@ -303,7 +297,7 @@ function CH:StyleChat(frame)
 	else
 		tab.text:SetTextColor(0.8, 0.8, 0);
 	end
-	hooksecurefunc(tab.text, "SetTextColor", function(t, r, g, b, a)
+	hooksecurefunc(tab.text, "SetTextColor", function(self, r, g, b)
 		local rR, gG, bB = unpack(E["media"].rgbvaluecolor)
 
 		if(E.global.tukuiMode) then
@@ -311,7 +305,7 @@ function CH:StyleChat(frame)
 		end
 
 		if r ~= rR or g ~= gG or b ~= bB then
-			t:SetTextColor(rR, gG, bB)
+			self:SetTextColor(rR, gG, bB)
 		end
 	end)
 
@@ -420,9 +414,11 @@ function CH:StyleChat(frame)
 
 	--copy chat button
 	frame.button = CreateFrame('Button', format("CopyChatButton%d", id), frame)
+	frame.button:EnableMouse(true)
 	frame.button:SetAlpha(0.35)
 	frame.button:Size(20, 22)
 	frame.button:SetPoint('TOPRIGHT')
+	frame.button:SetFrameLevel(frame:GetFrameLevel() + 5)
 
 	frame.button.tex = frame.button:CreateTexture(nil, 'OVERLAY')
 	frame.button.tex:SetInside()
@@ -460,7 +456,7 @@ function CH:UpdateSettings()
 end
 
 local function removeIconFromLine(text)
-	for i=1, 8 do
+	for i = 1, 8 do
 		text = gsub(text, "|TInterface\\TargetingFrame\\UI%-RaidTargetingIcon_"..i..":0|t", "{"..strlower(_G["RAID_TARGET_"..i]).."}")
 	end
 	text = gsub(text, "(|TInterface(.*)|t)", "")
@@ -512,7 +508,6 @@ function CH:OnLeave(frame)
 	end
 end
 
-local x = CreateFrame('Frame')
 function CH:SetupChatTabs(frame, hook)
 	if hook and (not self.hooks or not self.hooks[frame] or not self.hooks[frame].OnEnter) then
 		self:HookScript(frame, 'OnEnter')
@@ -633,7 +628,7 @@ function CH:PositionChat(override)
 
 	if not self.db.lockPositions or E.private.chat.enable ~= true then return end
 
-	local chat, chatbg, tab, id, point, button, isDocked
+	local chat, chatbg, tab, id, point, isDocked
 	local fadeUndockedTabs = E.db["chat"].fadeUndockedTabs
 	local fadeTabsNoBackdrop = E.db["chat"].fadeTabsNoBackdrop
 
@@ -642,7 +637,6 @@ function CH:PositionChat(override)
 
 		chat = _G[format("ChatFrame%d", i)]
 		chatbg = format("ChatFrame%dBackground", i)
-		button = _G[format("ButtonCF%d", i)]
 		id = chat:GetID()
 		tab = _G[format("ChatFrame%sTab", i)]
 		point = GetChatWindowSavedPosition(id)
@@ -775,13 +769,20 @@ function CH:FindURL(event, msg, ...)
 		return false, msg, ...
 	end
 
+	-- http://example.com
 	local newMsg, found = gsub(msg, "(%a+)://(%S+)%s?", CH:PrintURL("%1://%2"))
 	if found > 0 then return false, CH:GetSmileyReplacementText(CH:CheckKeyword(newMsg)), ... end
-
+	-- www.example.com
 	newMsg, found = gsub(msg, "www%.([_A-Za-z0-9-]+)%.(%S+)%s?", CH:PrintURL("www.%1.%2"))
 	if found > 0 then return false, CH:GetSmileyReplacementText(CH:CheckKeyword(newMsg)), ... end
-
+	-- example@example.com
 	newMsg, found = gsub(msg, "([_A-Za-z0-9-%.]+)@([_A-Za-z0-9-]+)(%.+)([_A-Za-z0-9-%.]+)%s?", CH:PrintURL("%1@%2%3%4"))
+	if found > 0 then return false, CH:GetSmileyReplacementText(CH:CheckKeyword(newMsg)), ... end
+	-- IP address with port 1.1.1.1:1
+	newMsg, found = gsub(msg, "(%d%d?%d?)%.(%d%d?%d?)%.(%d%d?%d?)%.(%d%d?%d?)(:%d+)%s?", CH:PrintURL("%1.%2.%3.%4%5"))
+	if found > 0 then return false, CH:GetSmileyReplacementText(CH:CheckKeyword(newMsg)), ... end
+	-- IP address 1.1.1.1
+	newMsg, found = gsub(msg, "(%d%d?%d?)%.(%d%d?%d?)%.(%d%d?%d?)%.(%d%d?%d?)%s?", CH:PrintURL("%1.%2.%3.%4"))
 	if found > 0 then return false, CH:GetSmileyReplacementText(CH:CheckKeyword(newMsg)), ... end
 
 	msg = CH:CheckKeyword(msg)
@@ -1080,6 +1081,7 @@ function CH:ChatFrame_MessageEventHandler(event, ...)
 				self:AddMessage(format(globalstring, arg8, arg4, arg2), info.r, info.g, info.b, info.id);
 			end
 		elseif (type == "CHANNEL_NOTICE") then
+			if arg1 == "NOT_IN_LFG" then return; end
 			local globalstring = _G["CHAT_"..arg1.."_NOTICE_BN"];
 			if ( not globalstring ) then
 				globalstring = _G["CHAT_"..arg1.."_NOTICE"];
@@ -1093,7 +1095,6 @@ function CH:ChatFrame_MessageEventHandler(event, ...)
 			self:AddMessage(format(CH:ConcatenateTimeStamp(globalstring), arg8, arg4), info.r, info.g, info.b, info.id, false, accessID, typeID);
 		else
 			local body;
-
 			local _, fontHeight = FCF_GetChatWindowInfo(self:GetID());
 
 			if ( fontHeight == 0 ) then
@@ -1258,7 +1259,7 @@ function CH:FloatingChatFrame_OnEvent(event, ...)
 	FloatingChatFrame_OnEvent(self, event, ...);
 end
 
-function CH:SetupChat(event, ...)
+function CH:SetupChat()
 	if E.private.chat.enable ~= true then return end
 	for _, frameName in pairs(CHAT_FRAMES) do
 		local frame = _G[frameName]
@@ -1319,7 +1320,7 @@ function CH:SetupChat(event, ...)
 end
 
 local function PrepareMessage(author, message)
-	return author:upper() .. message
+	return format("%s%s", author:upper(), message)
 end
 
 function CH:ChatThrottleHandler(event, ...)
@@ -1337,7 +1338,6 @@ function CH:ChatThrottleHandler(event, ...)
 	end
 end
 
-local locale = GetLocale()
 function CH:CHAT_MSG_CHANNEL(event, message, author, ...)
 	local blockFlag = false
 	local msg = PrepareMessage(author, message)
@@ -1418,7 +1418,7 @@ function CH:CheckKeyword(message)
 			if lowerCaseWord == keyword:lower() then
 				local tempWord = word:gsub("%p", "")
 				word = word:gsub(tempWord, format("%s%s|r", E.media.hexvaluecolor, tempWord))
-				if self.db.keywordSound ~= 'None' and not self.SoundPlayed  then
+				if self.db.keywordSound ~= 'None' and not self.SoundPlayed then
 					if (self.db.noAlertInCombat and not InCombatLockdown()) or not self.db.noAlertInCombat then
 						PlaySoundFile(LSM:Fetch("sound", self.db.keywordSound), "Master")
 					end
@@ -1620,7 +1620,7 @@ function CH:ChatFrame_RemoveMessageEventFilter (event, filter)
 	end
 end
 
-function CH:FCF_SetWindowAlpha(frame, alpha, doNotSave)
+function CH:FCF_SetWindowAlpha(frame, alpha)
 	frame.oldAlpha = alpha or 1;
 end
 
@@ -1846,6 +1846,9 @@ function CH:Initialize()
 	end);
 	scrollArea:HookScript("OnVerticalScroll", function(self, offset)
 		CopyChatFrameEditBox:SetHitRectInsets(0, 0, offset, (CopyChatFrameEditBox:GetHeight() - offset - self:GetHeight()));
+	end);
+	scrollArea:HookScript("OnVerticalScroll", function(self, offset)
+		CopyChatFrameEditBox:SetHitRectInsets(0, 0, offset, (CopyChatFrameEditBox:GetHeight() - offset - self:GetHeight()))
 	end);
 
 	local editBox = CreateFrame("EditBox", "CopyChatFrameEditBox", frame)
