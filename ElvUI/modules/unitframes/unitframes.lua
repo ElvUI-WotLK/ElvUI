@@ -593,6 +593,7 @@ function UF.groupPrototype:Configure_Groups(self)
 	if(self.mover) then
 		self.mover.positionOverride = DIRECTION_TO_GROUP_ANCHOR_POINT[direction];
 		E:UpdatePositionOverride(self.mover:GetName());
+		self:GetScript("OnSizeChanged")(self);
 	end
 
 	self:SetSize(width - db.horizontalSpacing, height - db.verticalSpacing);

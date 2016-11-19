@@ -464,14 +464,31 @@ local function removeIconFromLine(text)
 	return text
 end
 
+local function colorizeLine(text, r, g, b)
+	local hexCode = E:RGBToHex(r, g, b)
+	local hexReplacement = format("|r%s", hexCode)
+
+	text = gsub(text, "|r", hexReplacement) -- If the message contains color strings then we need to add message color hex code after every "|r"
+	text = format("%s%s|r", hexCode, text) -- Add message color
+
+	return text
+ end
+
 function CH:GetLines(...)
 	local index = 1
+	wipe(lines);
 	for i = select("#", ...), 1, -1 do
 		local region = select(i, ...)
 		if region:GetObjectType() == "FontString" then
 			local line = tostring(region:GetText())
-			lines[index] = removeIconFromLine(line)
-			index = index + 1
+			local r, g, b = region:GetTextColor();
+
+			line = removeIconFromLine(line);
+
+			line = colorizeLine(line, r, g, b);
+
+			lines[index] = line;
+			index = index + 1;
 		end
 	end
 	return index - 1
