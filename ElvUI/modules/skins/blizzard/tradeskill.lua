@@ -63,6 +63,7 @@ local function LoadSkin()
 	TradeSkillCancelButton:Point("CENTER", TradeSkillFrame, "TOPLEFT", 300, -422);
 	S:HandleButton(TradeSkillCancelButton);
 
+	TradeSkillCreateAllButton:ClearAllPoints();
 	TradeSkillCreateAllButton:Point("CENTER", TradeSkillFrame, "TOPLEFT", 58, -422);
 	S:HandleButton(TradeSkillCreateAllButton);
 
