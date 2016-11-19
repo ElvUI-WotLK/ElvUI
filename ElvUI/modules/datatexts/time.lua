@@ -49,7 +49,7 @@ local function OnEnter(self)
 	DT:SetupTooltip(self)
 
 	local wgtime = GetWintergraspWaitTime() or nil;
-	local inInstance, instanceType = IsInInstance();
+	local _, instanceType = IsInInstance();
 	if not(instanceType == "none") then
 		wgtime = QUEUE_TIME_UNAVAILABLE;
 	elseif(wgtime == nil) then

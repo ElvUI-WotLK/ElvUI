@@ -107,7 +107,7 @@ function AddOn:OnInitialize()
 			GameMenuFrame:SetHeight(GameMenuFrame:GetHeight() + GameMenuButtonLogout:GetHeight() + 1);
 			GameMenuFrame.isElvUI = true;
 		end
-		local _, relTo, _, _, offY = GameMenuButtonLogout:GetPoint();
+		local _, relTo = GameMenuButtonLogout:GetPoint();
 		if(relTo ~= GameMenuFrame[AddOnName]) then
 			GameMenuFrame[AddOnName]:ClearAllPoints();
 			GameMenuFrame[AddOnName]:Point("TOPLEFT", relTo, "BOTTOMLEFT", 0, -1);

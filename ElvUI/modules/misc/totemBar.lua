@@ -10,10 +10,10 @@ local GetTotemInfo = GetTotemInfo;
 local CooldownFrame_SetTimer = CooldownFrame_SetTimer;
 local MAX_TOTEMS = MAX_TOTEMS;
 
-function TOTEMS:Update(event)
+function TOTEMS:Update()
 	local displayedTotems = 0;
 	for i = 1, MAX_TOTEMS do
-		local haveTotem, name, startTime, duration, icon = GetTotemInfo(i);
+		local haveTotem, _, startTime, duration, icon = GetTotemInfo(i);
 		if(haveTotem and icon and icon ~= "") then
 			self.bar[i]:Show();
 			self.bar[i].iconTexture:SetTexture(icon);

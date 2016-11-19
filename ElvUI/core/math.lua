@@ -1,9 +1,12 @@
 local E, L, V, P, G = unpack(select(2, ...));
 
-local select, tonumber, assert, type, unpack = select, tonumber, assert, type, unpack;
+local select, unpack, assert, tonumber, type, pairs = select, unpack, assert, tonumber, type, pairs;
 local tinsert, tremove = tinsert, tremove;
-local modf, ceil, floor, abs, mod = math.modf, math.ceil, math.floor, math.abs, mod;
-local format, sub, upper, split = format, string.sub, string.upper, string.split;
+local abs, ceil, floor, modf, mod = math.abs, math.ceil, math.floor, math.modf, mod;
+local format, split, sub, upper = format, string.split, string.sub, string.upper;
+
+local GetScreenWidth, GetScreenHeight = GetScreenWidth, GetScreenHeight;
+local CreateFrame = CreateFrame;
 
 function E:ShortValue(v)
 	if(E.db.general.numberPrefixStyle == "METRIC") then

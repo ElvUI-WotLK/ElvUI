@@ -132,7 +132,7 @@ local function createSlot(id)
 	return frame
 end
 
-function M:LOOT_SLOT_CLEARED(event, slot)
+function M:LOOT_SLOT_CLEARED(_, slot)
 	if(not lootFrame:IsShown()) then return end
 
 	lootFrame.slots[slot]:Hide()
@@ -156,7 +156,7 @@ function M:UPDATE_MASTER_LOOT_LIST()
 	UIDropDownMenu_Refresh(GroupLootDropDown);
 end
 
-function M:LOOT_OPENED(event, autoloot)
+function M:LOOT_OPENED(_, autoloot)
 	lootFrame:Show()
 
 	if(not lootFrame:IsShown()) then
@@ -276,7 +276,7 @@ function M:LoadLoot()
 	lootFrame.title:FontTemplate(nil, nil, 'OUTLINE')
 	lootFrame.title:Point("BOTTOMLEFT", lootFrame, "TOPLEFT", 0, 1);
 	lootFrame.slots = {}
-	lootFrame:SetScript('OnHide', function(self)
+	lootFrame:SetScript('OnHide', function()
 		StaticPopup_Hide'CONFIRM_LOOT_DISTRIBUTION'
 		CloseLoot()
 	end)

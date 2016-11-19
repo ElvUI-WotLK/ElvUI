@@ -188,7 +188,7 @@ end
 
 function M:ADDON_LOADED(_, addon)
 	if addon == "Blizzard_TradeSkillUI" then
-		TradeSkillLinkButton:SetScript("OnClick", function(self, button)
+		TradeSkillLinkButton:SetScript("OnClick", function()
 			local link = GetTradeSkillListLink()
 			local ChatFrameEditBox = ChatEdit_ChooseBoxForSend()
 

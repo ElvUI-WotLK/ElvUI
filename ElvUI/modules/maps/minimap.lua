@@ -84,7 +84,7 @@ end
 function M:PLAYER_ENTERING_WORLD()
 	self:Update_ZoneText()
 
-	MinimapPing:HookScript("OnUpdate", function(self, elapsed)
+	MinimapPing:HookScript("OnUpdate", function(self)
 		if self.fadeOut or self.timer > MINIMAPPING_FADE_TIMER then
 			Minimap_SetPing(Minimap:GetPingPosition())
 		end

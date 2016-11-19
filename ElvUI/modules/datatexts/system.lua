@@ -95,7 +95,7 @@ local function ToggleGameMenuFrame()
 	end
 end
 
-local function Click(self, btn)
+local function Click(_, btn)
 	if btn == "RightButton" then
 		collectgarbage("collect");
 		ResetCPUUsage();
@@ -158,7 +158,7 @@ local function OnEnter(self)
 	DT.tooltip:Show();
 end
 
-local function OnLeave(self)
+local function OnLeave()
 	EnteredFrame = false;
 	DT.tooltip:Hide();
 end
