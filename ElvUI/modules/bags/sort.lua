@@ -124,7 +124,7 @@ local safe = {
 
 local frame = CreateFrame("Frame")
 local t, WAIT_TIME = 0, 0.05
-frame:SetScript("OnUpdate", function(self, elapsed)
+frame:SetScript("OnUpdate", function(_, elapsed)
 	t = t + (elapsed or 0.01)
 	if t > WAIT_TIME then
 		t = 0

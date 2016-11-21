@@ -170,6 +170,16 @@ ElvUF.Tags["health:percent-nostatus"] = function(unit)
 	return E:GetFormattedText("PERCENT", UnitHealth(unit), UnitHealthMax(unit));
 end
 
+ElvUF.TagEvents["health:deficit-percent:name"] = "UNIT_HEALTH UNIT_MAXHEALTH";
+ElvUF.Tags["health:deficit-percent:name"] = function(unit)
+	local deficit = UnitHealthMax(unit) - UnitHealth(unit);
+	if(deficit > 0) then
+		return _TAGS["health:percent-nostatus"](unit);
+	else
+		return _TAGS["name"](unit);
+	end
+end
+
 ElvUF.TagEvents["powercolor"] = "UNIT_ENERGY UNIT_FOCUS UNIT_MANA UNIT_RAGE UNIT_RUNIC_POWER UNIT_MAXPOWER"
 ElvUF.Tags["powercolor"] = function(unit)
 	if not unit then return end

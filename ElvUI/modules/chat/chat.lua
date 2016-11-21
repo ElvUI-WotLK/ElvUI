@@ -13,11 +13,10 @@ local strlower, strsub, strlen, strupper = strlower, strsub, strlen, strupper;
 local hooksecurefunc = hooksecurefunc;
 local CreateFrame = CreateFrame;
 local GetTime = GetTime;
-local UnitName, UnitGUID = UnitName, UnitGUID;
+local UnitName = UnitName;
 local IsShiftKeyDown = IsShiftKeyDown;
 local InCombatLockdown = InCombatLockdown;
 local ChatFrame_SendTell = ChatFrame_SendTell;
-local ChatEdit_ParseText = ChatEdit_ParseText;
 local GetChannelName = GetChannelName;
 local ToggleFrame = ToggleFrame;
 local FCF_GetChatWindowInfo = FCF_GetChatWindowInfo;
@@ -46,7 +45,6 @@ local FloatingChatFrame_OnEvent = FloatingChatFrame_OnEvent;
 local FCFTab_UpdateAlpha = FCFTab_UpdateAlpha;
 local FCF_GetCurrentChatFrame = FCF_GetCurrentChatFrame;
 local GetGuildRosterMOTD = GetGuildRosterMOTD;
-local UnitExists, UnitIsUnit = UnitExists, UnitIsUnit;
 local ScrollFrameTemplate_OnMouseWheel = ScrollFrameTemplate_OnMouseWheel;
 local NUM_CHAT_WINDOWS = NUM_CHAT_WINDOWS;
 
@@ -67,7 +65,6 @@ local msgList, msgCount, msgTime = {}, {}, {}
 local chatFilters = {};
 
 local PLAYER_REALM = gsub(E.myrealm,'[%s%-]','')
-local PLAYER_NAME = E.myname.."-"..PLAYER_REALM
 
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
 local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
@@ -160,9 +157,9 @@ local smileyKeys = {
 };
 
 local specialChatIcons = {
-	["WoW Circle 3.3.5a x25"] = {
-		["Кроль"] = "|TInterface\\AddOns\\ElvUI\\media\\textures\\ElvUI_Chat_Logo:13:22|t",
-		["Бесмертный"] = "|TInterface\\AddOns\\ElvUI\\media\\textures\\ElvUI_Chat_Logo:13:22|t"
+	["WoW Circle 3.3.5a x10"] = {
+		["Крольченок"] = "|TInterface\\AddOns\\ElvUI\\media\\textures\\ElvUI_Chat_Logo:13:22|t",
+		["Неумеряющый"] = "|TInterface\\AddOns\\ElvUI\\media\\textures\\ElvUI_Chat_Logo:13:22|t"
 	}
 }
 
@@ -356,28 +353,6 @@ function CH:StyleChat(frame)
 		end
 	end
 
-	local function OnArrowPressed(self, key)
-		if(#self.historyLines == 0) then
-			return;
-		end
-
-		if(key == "DOWN") then
-			self.historyIndex = self.historyIndex - 1;
-			if self.historyIndex < 1 then
-				self.historyIndex = #self.historyLines;
-			end
-		elseif(key == "UP") then
-			self.historyIndex = self.historyIndex + 1;
-
-			if(self.historyIndex > #self.historyLines) then
-				self.historyIndex = 1;
-			end
-		else
-			return;
-		end
-		self:SetText(self.historyLines[self.historyIndex]);
-	end
-
 	local a, b, c = select(6, editbox:GetRegions()); a:Kill(); b:Kill(); c:Kill();
 	_G[format(editbox:GetName() .. "FocusLeft", id)]:Kill();
 	_G[format(editbox:GetName() .. "FocusMid", id)]:Kill();
@@ -392,7 +367,6 @@ function CH:StyleChat(frame)
 
 	editbox.historyLines = ElvCharacterDB.ChatEditHistory;
 	editbox.historyIndex = 0;
-	--editbox:HookScript("OnArrowPressed", OnArrowPressed);
 
 	for i, text in pairs(ElvCharacterDB.ChatEditHistory) do
 		editbox:AddHistoryLine(text)
@@ -424,7 +398,7 @@ function CH:StyleChat(frame)
 	frame.button.tex:SetInside()
 	frame.button.tex:SetTexture([[Interface\AddOns\ElvUI\media\textures\copy.tga]])
 
-	frame.button:SetScript("OnMouseUp", function(self, btn)
+	frame.button:SetScript("OnMouseUp", function(_, btn)
 		if btn == "LeftButton" then
 			CH:CopyChat(frame)
 		elseif btn == "RightButton" and id ~= 2 then
@@ -749,7 +723,7 @@ function CH:PositionChat(override)
 	self.initialMove = true;
 end
 
-local function UpdateChatTabColor(hex, r, g, b)
+local function UpdateChatTabColor(_, r, g, b)
 	if(E.global.tukuiMode) then
 		r, g, b = 0.8, 0.8, 0;
 	end
@@ -913,25 +887,6 @@ function CH:ConcatenateTimeStamp(msg)
 	return msg
 end
 
-
-
-local function GetBNFriendColor(name, id)
-	local _, _, game, _, _, _, _, class = BNGetToonInfo(id)
-
-	if game ~= BNET_CLIENT_WOW or not class then
-		return name
-	else
-		for k,v in pairs(LOCALIZED_CLASS_NAMES_MALE) do if class == v then class = k end end
-		for k,v in pairs(LOCALIZED_CLASS_NAMES_FEMALE) do if class == v then class = k end end
-
-		if RAID_CLASS_COLORS[class] then
-			return "|c"..RAID_CLASS_COLORS[class].colorStr..name.."|r"
-		else
-			return name
-		end
-	end
-end
-
 function GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12)
 	local chatType = strsub(event, 10);
 	if(strsub(chatType, 1, 7) == "WHISPER") then
@@ -943,7 +898,7 @@ function GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, a
 	local info = ChatTypeInfo[chatType];
 
 	if(info and info.colorNameByClass and arg12 ~= "") then
-		local _, localizedClass, englishClass, localizedRace, englishRace, sex, name = pcall(GetPlayerInfoByGUID, arg12);
+		local _, _, englishClass, _, _, _, name = pcall(GetPlayerInfoByGUID, arg12);
 		if(englishClass) then
 			local classColorTable = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[englishClass] or RAID_CLASS_COLORS[englishClass];
 			if(not classColorTable) then
@@ -1169,10 +1124,10 @@ function CH:ChatFrame_MessageEventHandler(event, ...)
 
 			-- Search for icon links and replace them with texture links.
 			local term;
-			for tag in string.gmatch(arg1, "%b{}") do
-				term = strlower(string.gsub(tag, "[{}]", ""));
+			for tag in gmatch(arg1, "%b{}") do
+				term = strlower(gsub(tag, "[{}]", ""));
 				if ( ICON_TAG_LIST[term] and ICON_LIST[ICON_TAG_LIST[term]] ) then
-					arg1 = string.gsub(arg1, tag, ICON_LIST[ICON_TAG_LIST[term]] .. "0|t");
+					arg1 = gsub(arg1, tag, ICON_LIST[ICON_TAG_LIST[term]] .. "0|t");
 				end
 			end
 
@@ -1340,7 +1295,7 @@ local function PrepareMessage(author, message)
 	return format("%s%s", author:upper(), message)
 end
 
-function CH:ChatThrottleHandler(event, ...)
+function CH:ChatThrottleHandler(_, ...)
 	local arg1, arg2 = ...
 
 	if arg2 ~= "" then
@@ -1501,7 +1456,7 @@ function CH:SetChatFont(dropDown, chatFrame, fontSize)
 	chatFrame:SetShadowOffset((E.mult or 1), -(E.mult or 1))
 end
 
-function CH:ChatEdit_AddHistory(editBox, line)
+function CH:ChatEdit_AddHistory(_, line)
 	if line:find("/rl") then return; end
 
 	if ( strlen(line) > 0 ) then
@@ -1523,8 +1478,8 @@ function CH:UpdateChatKeywords()
 	local keywords = self.db.keywords
 	keywords = keywords:gsub(',%s', ',')
 
-	for i=1, #{string.split(',', keywords)} do
-		local stringValue = select(i, string.split(',', keywords));
+	for i=1, #{split(',', keywords)} do
+		local stringValue = select(i, split(',', keywords));
 		if stringValue ~= '' then
 			CH.Keywords[stringValue] = true;
 		end
@@ -1875,7 +1830,7 @@ function CH:Initialize()
 	editBox:Height(200)
 	editBox:SetScript("OnEscapePressed", function() CopyChatFrame:Hide() end)
 	scrollArea:SetScrollChild(editBox)
-	CopyChatFrameEditBox:SetScript("OnTextChanged", function(self, userInput)
+	CopyChatFrameEditBox:SetScript("OnTextChanged", function(_, userInput)
 		if userInput then return end
 		local _, max = CopyChatScrollFrameScrollBar:GetMinMaxValues()
 		for i=1, max do

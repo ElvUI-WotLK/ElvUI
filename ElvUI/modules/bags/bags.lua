@@ -42,7 +42,6 @@ local DeleteCursorItem = DeleteCursorItem;
 local UseContainerItem = UseContainerItem;
 local PickupMerchantItem = PickupMerchantItem;
 local IsControlKeyDown = IsControlKeyDown;
-local StaticPopup_Show = StaticPopup_Show;
 local GetKeyRingSize = GetKeyRingSize;
 local SEARCH = SEARCH;
 local KEYRING_CONTAINER = KEYRING_CONTAINER;
@@ -279,7 +278,6 @@ function B:UpdateSlot(bagID, slotID)
 	local bagType = self.Bags[bagID].type;
 	local texture, count, locked = GetContainerItemInfo(bagID, slotID);
 	local clink = GetContainerItemLink(bagID, slotID);
-	local specialType = select(2, GetContainerNumFreeSlots(bagID))
 
 	slot:Show();
 	if(slot.questIcon) then
@@ -656,10 +654,10 @@ function B:UpdateKeySlot(slotID)
 	end
 
 	if(clink) then
-		local _, itemEquipLoc;
-		slot.name, _, slot.rarity, _, _, _, _, _, itemEquipLoc = GetItemInfo(clink);
+		local _;
+		slot.name, _, slot.rarity = GetItemInfo(clink);
 
-		local isQuestItem, questId, isActiveQuest = GetContainerItemQuestInfo(bagID, slotID);
+		local isQuestItem, questId = GetContainerItemQuestInfo(bagID, slotID);
 		local r, g, b;
 
 		if(slot.rarity) then
@@ -827,7 +825,7 @@ function B:GetGraysValue()
 	return c;
 end
 
-function B:VendorGrays(delete, nomsg, getValue)
+function B:VendorGrays(delete, _, getValue)
 	if (not MerchantFrame or not MerchantFrame:IsShown()) and not delete and not getValue then
 		E:Print(L['You must be at a vendor.'])
 		return
@@ -932,7 +930,7 @@ function B:ContructContainerFrame(name, isBank)
 
 		GameTooltip:Show();
 	end);
-	f:SetScript("OnLeave", function(self) GameTooltip:Hide(); end);
+	f:SetScript("OnLeave", function() GameTooltip:Hide(); end);
 
 	f.closeButton = CreateFrame('Button', name..'CloseButton', f, 'UIPanelCloseButton');
 	f.closeButton:Point('TOPRIGHT', -4, -4);

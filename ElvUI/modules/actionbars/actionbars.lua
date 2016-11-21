@@ -627,9 +627,13 @@ function AB:DisableBlizzard()
 	UIHider:Hide();
 
 	MultiBarBottomLeft:SetParent(UIHider);
+	MultiBarBottomLeft.Show = E.noop;
 	MultiBarBottomRight:SetParent(UIHider);
+	MultiBarBottomRight.Show = E.noop;
 	MultiBarLeft:SetParent(UIHider);
+	MultiBarLeft.Show = E.noop;
 	MultiBarRight:SetParent(UIHider);
+	MultiBarRight.Show = E.noop;
 
 	for i = 1,12 do
 		_G["ActionButton" .. i]:Hide();
