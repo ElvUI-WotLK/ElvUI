@@ -103,7 +103,12 @@ function M:CheckMovement()
 	if(not WorldMapFrame:IsShown()) then return; end
 
 	if GetUnitSpeed("player") ~= 0 then
-		WorldMapFrame:SetAlpha(E.global.general.mapAlphaWhenMoving)
+		local frame = GetMouseFocus()
+		if frame and (frame:GetName() == "WorldMapFrame" or (frame:GetParent() and frame:GetParent():GetName() == "WorldMapFrame")) then
+			WorldMapFrame:SetAlpha(1)
+		else
+			WorldMapFrame:SetAlpha(E.global.general.mapAlphaWhenMoving)
+		end
 	else
 		WorldMapFrame:SetAlpha(1)
 	end
