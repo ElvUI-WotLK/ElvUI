@@ -460,12 +460,12 @@ end
 
 function AB:GetPage(bar, defaultPage, condition)
 	local page = self.db[bar]["paging"][E.myclass];
-	if(not condition) then condition = ""; end
+	if(not condition) then condition = ""; else condition = defaultPage; end
 	if(not page) then page = ""; end
 	if(page) then
 		condition = condition .. " " .. page;
 	end
-	condition = condition .. " " .. defaultPage;
+	condition = condition .. " 1";
 
 	return condition;
 end
