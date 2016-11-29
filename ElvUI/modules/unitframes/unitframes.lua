@@ -1040,8 +1040,6 @@ end
 
 local hasEnteredWorld = false
 function UF:PLAYER_ENTERING_WORLD(event)
-	self:Update_AllFrames();
-	self:UnregisterEvent(event);
 	if(not hasEnteredWorld) then
 		--We only want to run Update_AllFrames once when we first log in or /reload
 		self:Update_AllFrames();
