@@ -977,7 +977,7 @@ function CH:ChatFrame_MessageEventHandler(event, ...)
 			return true;
 		end
 
-		if not (chatGroup == "CHANNEL") and not (self:GetName() == "AFKChat") then
+		--[[if not (chatGroup == "CHANNEL") and not (self:GetName() == "AFKChat") then
 			local found2 = false
 
 			for i = 1, #self.messageTypeList, 1 do
@@ -994,7 +994,7 @@ function CH:ChatFrame_MessageEventHandler(event, ...)
 			if not found2 then
 				return true
 			end
-		end
+		end]]
 
 
 		if ( chatGroup == "WHISPER" or chatGroup == "BN_WHISPER" ) then
