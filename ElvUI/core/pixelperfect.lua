@@ -33,7 +33,7 @@ function E:UIScale(event)
 		local height = self.screenheight;
 
 		-- because some user enable bezel compensation, we need to find the real width of a single monitor.
-		-- I don't know how it really work, but i"m assuming they add pixel to width to compensate the bezel. :P
+		-- I don't know how it really work, but i'm assuming they add pixel to width to compensate the bezel. :P
 
 		-- HQ resolution
 		if width >= 9840 then width = 3280; end										-- WQSXGA
