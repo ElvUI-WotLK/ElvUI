@@ -4,7 +4,7 @@ local L = AceLocale:NewLocale("ElvUI", "enUS", true, true);
 if not L then return; end
 
 -- *_DESC locales
-L["AURAS_DESC"] = 'Configure the aura icons that appear near the minimap.'
+L["AURAS_DESC"] = "Configure the aura icons that appear near the minimap."
 L["BAGS_DESC"] = "Adjust bag settings for ElvUI."
 L["CHAT_DESC"] = "Adjust chat settings for ElvUI."
 L["DATATEXT_DESC"] = "Setup the on-screen display of info-texts."
@@ -46,17 +46,17 @@ Examples:
 [powercolor][power:current]
 
 Health / Power Formats:
-'current' - current amount
-'percent' - percentage amount
-'current-max' - current amount followed by maximum amount, will display only max if current is equal to max
-'current-percent' - current amount followed by percentage amount, will display only max if current is equal to max
-'current-max-percent' - current amount, max amount, followed by percentage amount, will display only max if current is equal to max
-'deficit' - display the deficit value, will display nothing if there is no deficit
+"current" - current amount
+"percent" - percentage amount
+"current-max" - current amount followed by maximum amount, will display only max if current is equal to max
+"current-percent" - current amount followed by percentage amount, will display only max if current is equal to max
+"current-max-percent" - current amount, max amount, followed by percentage amount, will display only max if current is equal to max
+"deficit" - display the deficit value, will display nothing if there is no deficit
 
 Name Formats:
-'name:short' - Name restricted to 10 characters
-'name:medium' - Name restricted to 15 characters
-'name:long' - Name restricted to 20 characters
+"name:short" - Name restricted to 10 characters
+"name:medium" - Name restricted to 15 characters
+"name:long" - Name restricted to 20 characters
 
 To disable leave the field blank, if you need more information visit http://www.tukui.org]=];
 
@@ -127,9 +127,9 @@ L["Usable"] = true;
 L["Visibility State"] = true;
 L["Width Multiplier"] = true;
 L[ [=[This works like a macro, you can run different situations to get the actionbar to page differently.
- Example: '[combat] 2;']=] ] = true;
+ Example: "[combat] 2;"]=] ] = true;
 L[ [=[This works like a macro, you can run different situations to get the actionbar to show/hide differently.
- Example: '[combat] show;hide']=] ] = true;
+ Example: "[combat] show;hide"]=] ] = true;
 
 --Bags
 L["Add an item or search syntax to the ignored list. Items matching the search syntax will be ignored."] = true;

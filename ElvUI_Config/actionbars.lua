@@ -161,7 +161,7 @@ local function BuildABConfig()
 
 		if(i == 6) then
 			group["bar" .. i].args.enabled.set = function(info, value)
-				E.db.actionbar['bar'..i].enabled = value;
+				E.db.actionbar["bar"..i].enabled = value;
 				AB:PositionAndSizeBar("bar6");
 
 				AB:UpdateBar1Paging();

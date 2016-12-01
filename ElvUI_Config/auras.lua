@@ -231,7 +231,7 @@ E.Options.args.auras = {
 			order = 7,
 			name = L["Reminder"],
 			get = function(info) return E.db.general.reminder[ info[#info] ] end,
-			set = function(info, value) E.db.general.reminder[ info[#info] ] = value; E:GetModule('ReminderBuffs'):UpdateSettings(); end,
+			set = function(info, value) E.db.general.reminder[ info[#info] ] = value; E:GetModule("ReminderBuffs"):UpdateSettings(); end,
 			disabled = function() return not E.private.general.minimap.enable end,
 			args = {
 				header = {
@@ -241,27 +241,27 @@ E.Options.args.auras = {
 				},
 				enable = {
 					order = 1,
-					name = L['Enable'],
-					desc = L['Display reminder bar on the minimap.'],
-					type = 'toggle',
-					set = function(info, value) E.db.general.reminder[ info[#info] ] = value; E:GetModule('Minimap'):UpdateSettings(); end
+					name = L["Enable"],
+					desc = L["Display reminder bar on the minimap."],
+					type = "toggle",
+					set = function(info, value) E.db.general.reminder[ info[#info] ] = value; E:GetModule("Minimap"):UpdateSettings(); end
 				},
 				generalGroup = {
 					order = 2,
-					type = 'group',
+					type = "group",
 					guiInline = true,
-					name = L['General'],
+					name = L["General"],
 					disabled = function() return not E.db.general.reminder.enable end,
 					args = {
 						durations = {
 							order = 1,
-							name = L['Remaining Time'],
-							type = 'toggle'
+							name = L["Remaining Time"],
+							type = "toggle"
 						},
 						reverse = {
 							order = 2,
-							name = L['Reverse highlight'],
-							type = 'toggle'
+							name = L["Reverse highlight"],
+							type = "toggle"
 						},
 						position = {
 							order = 3,
@@ -277,34 +277,34 @@ E.Options.args.auras = {
 				},
 				fontGroup = {
 					order = 3,
-					type = 'group',
+					type = "group",
 					guiInline = true,
-					name = L['Font'],
+					name = L["Font"],
 					disabled = function() return not E.db.general.reminder.enable or not E.db.general.reminder.durations end,
 					args = {
 						font = {
-							type = 'select', dialogControl = 'LSM30_Font',
+							type = "select", dialogControl = "LSM30_Font",
 							order = 1,
-							name = L['Font'],
+							name = L["Font"],
 							values = AceGUIWidgetLSMlists.font
 						},
 						fontSize = {
 							order = 2,
-							name = L['Font Size'],
-							type = 'range',
+							name = L["Font Size"],
+							type = "range",
 							min = 6, max = 22, step = 1
 						},
 						fontOutline = {
 							order = 3,
-							name = L['Font Outline'],
-							desc = L['Set the font outline.'],
-							type = 'select',
+							name = L["Font Outline"],
+							desc = L["Set the font outline."],
+							type = "select",
 							values = {
-								['NONE'] = L['None'],
-								['OUTLINE'] = 'OUTLINE',
-								['MONOCHROME'] = (not E.isMacClient) and 'MONOCHROME' or nil,
-								['MONOCHROMEOUTLINE'] = 'MONOCROMEOUTLINE',
-								['THICKOUTLINE'] = 'THICKOUTLINE'
+								["NONE"] = L["None"],
+								["OUTLINE"] = "OUTLINE",
+								["MONOCHROME"] = (not E.isMacClient) and "MONOCHROME" or nil,
+								["MONOCHROMEOUTLINE"] = "MONOCROMEOUTLINE",
+								["THICKOUTLINE"] = "THICKOUTLINE"
 							},
 						},
 					},

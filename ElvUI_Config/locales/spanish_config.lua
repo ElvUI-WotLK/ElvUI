@@ -46,17 +46,17 @@ Ejemplos:
 [powercolor][power:current]
 
 Formatos de Salud / Poder:
-'current' - cantidad actual
-'percent' - cantidad porcentual
-'current-max' - cantidad actual seguido de cantidad máxima, sólo se mostrará la máxima si la actual es igual a la máxima
-'current-percent' - cantidad actual seguido de porcentaje
-'current-max-percent' - cantidad actual, cantidad máxima y porcentaje, sólo se mostrará la máxima si la actual es igual a la máxima
-'deficit' - muestra el valor de déficit, no muestra nada si no hay déficit
+"current" - cantidad actual
+"percent" - cantidad porcentual
+"current-max" - cantidad actual seguido de cantidad máxima, sólo se mostrará la máxima si la actual es igual a la máxima
+"current-percent" - cantidad actual seguido de porcentaje
+"current-max-percent" - cantidad actual, cantidad máxima y porcentaje, sólo se mostrará la máxima si la actual es igual a la máxima
+"deficit" - muestra el valor de déficit, no muestra nada si no hay déficit
 
 Formatos de Nombre:
-'name:short' - Nombre restringido a 10 caracteres
-'name:medium' - Nombre restringido a 15 caracteres
-'name:long' - Nombre restringido a 20 caracteres
+"name:short" - Nombre restringido a 10 caracteres
+"name:medium" - Nombre restringido a 15 caracteres
+"name:long" - Nombre restringido a 20 caracteres
 
 Para desactivarlo dejar el campo en blanco, si necesitas más información visita http://www.tukui.org]=];
 
@@ -127,11 +127,11 @@ L["Usable"] = true;
 L["Visibility State"] = "Estado de Visibilidad"
 L["Width Multiplier"] = "Multiplicador de Anchura"
 L[ [=[This works like a macro, you can run different situations to get the actionbar to page differently.
- Example: '[combat] 2;']=] ] = [=[Esto funciona como una macro. Puedes ejecutar diferentes situaciones para paginar la barra de acción de forma diferente.
- Ejemplo: '[combat] 2;']=]
+ Example: "[combat] 2;"]=] ] = [=[Esto funciona como una macro. Puedes ejecutar diferentes situaciones para paginar la barra de acción de forma diferente.
+ Ejemplo: "[combat] 2;"]=]
 L[ [=[This works like a macro, you can run different situations to get the actionbar to show/hide differently.
- Example: '[combat] show;hide']=] ] = [=[Esto funciona como una macro. Puede ejecutar diferentes situaciones para mostrar u ocultar la barra de acción de forma diferente.
- Ejemplo: '[combat] show;hide']=]
+ Example: "[combat] show;hide"]=] ] = [=[Esto funciona como una macro. Puede ejecutar diferentes situaciones para mostrar u ocultar la barra de acción de forma diferente.
+ Ejemplo: "[combat] show;hide"]=]
 
 --Bags
 L["Add an item or search syntax to the ignored list. Items matching the search syntax will be ignored."] = true;

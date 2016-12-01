@@ -584,7 +584,7 @@ local function UpdateFilterGroup()
 		end
 
 		buffs = nil;
-	elseif(selectedFilter == "Buff Indicator (Profile)") then
+	elseif(selectedFilter == 'Buff Indicator (Profile)') then
 		E.Options.args.filters.args.filterGroup = {
 			type = "group",
 			name = selectedFilter,
@@ -1006,7 +1006,7 @@ E.Options.args.filters = {
 				end
 
 				filters["Buff Indicator"] = "Buff Indicator";
-				filters["Buff Indicator (Profile)"] = "Buff Indicator (Profile)";
+				filters['Buff Indicator (Profile)'] = 'Buff Indicator (Profile)';
 				filters["AuraBar Colors"] = "AuraBar Colors";
 				filters["Debuff Highlight"] = "Debuff Highlight";
 				return filters;

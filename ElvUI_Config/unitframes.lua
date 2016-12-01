@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(ElvUI);
-local UF = E:GetModule('UnitFrames');
+local UF = E:GetModule("UnitFrames");
 
 local _, ns = ...;
 local ElvUF = ns.oUF;
@@ -2604,7 +2604,7 @@ E.Options.args.unitframe.args.player = {
 					order = 2,
 					name = L["Height"],
 					min = ((E.db.unitframe.thinBorders or E.PixelMode) and 3 or 7),
-					max = (E.db.unitframe.units['player']['classbar'].detachFromFrame and 300 or 30),
+					max = (E.db.unitframe.units["player"]["classbar"].detachFromFrame and 300 or 30),
 					step = 1,
 				},
 				fill = {
@@ -2618,7 +2618,7 @@ E.Options.args.unitframe.args.player = {
 				},
 				autoHide = {
 					order = 4,
-					type = 'toggle',
+					type = "toggle",
 					name = L["Auto-Hide"],
 				},
 				detachFromFrame = {
@@ -2631,15 +2631,15 @@ E.Options.args.unitframe.args.player = {
 						else
 							E.Options.args.unitframe.args.player.args.classbar.args.height.max = 30
 						end
-						E.db.unitframe.units['player']['classbar'][ info[#info] ] = value;
-						UF:CreateAndUpdateUF('player')
+						E.db.unitframe.units["player"]["classbar"][ info[#info] ] = value;
+						UF:CreateAndUpdateUF("player")
 					end,
 				},
 				verticalOrientation = {
 					order = 6,
 					type = "toggle",
 					name = L["Vertical Orientation"],
-					disabled = function() return not E.db.unitframe.units['player']['classbar'].detachFromFrame end,
+					disabled = function() return not E.db.unitframe.units["player"]["classbar"].detachFromFrame end,
  				},
 				detachedWidth = {
 					type = "range",
@@ -2663,11 +2663,11 @@ E.Options.args.unitframe.args.player = {
 					order = 20,
 					type = "group",
 					name = L["Strata and Level"],
-					get = function(info) return E.db.unitframe.units['player']['classbar']["strataAndLevel"][ info[#info] ] end,
-					set = function(info, value) E.db.unitframe.units['player']['classbar']["strataAndLevel"][ info[#info] ] = value; UF:CreateAndUpdateUF('player') end,
+					get = function(info) return E.db.unitframe.units["player"]["classbar"]["strataAndLevel"][ info[#info] ] end,
+					set = function(info, value) E.db.unitframe.units["player"]["classbar"]["strataAndLevel"][ info[#info] ] = value; UF:CreateAndUpdateUF("player") end,
 					guiInline = true,
-					disabled = function() return not E.db.unitframe.units['player']['classbar'].detachFromFrame end,
-					hidden = function() return not E.db.unitframe.units['player']['classbar'].detachFromFrame end,
+					disabled = function() return not E.db.unitframe.units["player"]["classbar"].detachFromFrame end,
+					hidden = function() return not E.db.unitframe.units["player"]["classbar"].detachFromFrame end,
 					args = {
 						useCustomStrata = {
 							order = 1,
@@ -2709,10 +2709,10 @@ E.Options.args.unitframe.args.player = {
 		},
  		pvpIcon = {
  			order = 449,
- 			type = 'group',
+ 			type = "group",
  			name = L["PvP Icon"],
- 			get = function(info) return E.db.unitframe.units['player']['pvpIcon'][ info[#info] ] end,
- 			set = function(info, value) E.db.unitframe.units['player']['pvpIcon'][ info[#info] ] = value; UF:CreateAndUpdateUF('player') end,
+ 			get = function(info) return E.db.unitframe.units["player"]["pvpIcon"][ info[#info] ] end,
+ 			set = function(info, value) E.db.unitframe.units["player"]["pvpIcon"][ info[#info] ] = value; UF:CreateAndUpdateUF("player") end,
  			args = {
  				enable = {
  					order = 1,
@@ -2966,10 +2966,10 @@ E.Options.args.unitframe.args.target = {
 		GPSArrow = GetOptionsTableForNonGroup_GPS("target"),
  		pvpIcon = {
  			order = 449,
- 			type = 'group',
+ 			type = "group",
  			name = L["PvP Icon"],
- 			get = function(info) return E.db.unitframe.units['target']['pvpIcon'][ info[#info] ] end,
-			set = function(info, value) E.db.unitframe.units['target']['pvpIcon'][ info[#info] ] = value; UF:CreateAndUpdateUF('target') end,
+ 			get = function(info) return E.db.unitframe.units["target"]["pvpIcon"][ info[#info] ] end,
+			set = function(info, value) E.db.unitframe.units["target"]["pvpIcon"][ info[#info] ] = value; UF:CreateAndUpdateUF("target") end,
  			args = {
  				enable = {
  					order = 1,
@@ -4418,7 +4418,7 @@ E.Options.args.unitframe.args.party = {
 					name = L["Configure Auras"],
 					func = function()
 						if(E.db.unitframe.units["party"]["buffIndicator"].profileSpecific) then
-							E:SetToFilterConfig("Buff Indicator (Profile)");
+							E:SetToFilterConfig('Buff Indicator (Profile)');
 						else
 							E:SetToFilterConfig("Buff Indicator");
 						end
@@ -4989,7 +4989,7 @@ E.Options.args.unitframe.args["raid"] = {
 					name = L["Configure Auras"],
 					func = function()
 						if(E.db.unitframe.units["raid"]["buffIndicator"].profileSpecific) then
-							E:SetToFilterConfig("Buff Indicator (Profile)");
+							E:SetToFilterConfig('Buff Indicator (Profile)');
 						else
 							E:SetToFilterConfig("Buff Indicator");
 						end
@@ -5391,7 +5391,7 @@ E.Options.args.unitframe.args["raid40"] = {
 					name = L["Configure Auras"],
 					func = function()
 						if(E.db.unitframe.units["raid40"]["buffIndicator"].profileSpecific) then
-							E:SetToFilterConfig("Buff Indicator (Profile)");
+							E:SetToFilterConfig('Buff Indicator (Profile)');
 						else
 							E:SetToFilterConfig("Buff Indicator");
 						end
@@ -6112,7 +6112,7 @@ E.Options.args.unitframe.args.tank = { -- Танки
 					name = L["Configure Auras"],
 					func = function()
 						if E.db.unitframe.units["tank"]["buffIndicator"].profileSpecific then
-							E:SetToFilterConfig("Buff Indicator (Profile)")
+							E:SetToFilterConfig('Buff Indicator (Profile)')
 						else
 							E:SetToFilterConfig("Buff Indicator")
 						end
@@ -6295,7 +6295,7 @@ E.Options.args.unitframe.args.assist = { -- Помощники
 					name = L["Configure Auras"],
 					func = function()
 						if E.db.unitframe.units["assist"]["buffIndicator"].profileSpecific then
-							E:SetToFilterConfig("Buff Indicator (Profile)")
+							E:SetToFilterConfig('Buff Indicator (Profile)')
 						else
 							E:SetToFilterConfig("Buff Indicator")
 						end
@@ -6310,9 +6310,9 @@ E.Options.args.unitframe.args.assist = { -- Помощники
 --MORE COLORING STUFF YAY
 E.Options.args.unitframe.args.general.args.allColorsGroup.args.classResourceGroup = {
 	order = -10,
-	type = 'group',
+	type = "group",
 	guiInline = true,
-	name = L['Class Resources'],
+	name = L["Class Resources"],
 	get = function(info)
 		local t = E.db.unitframe.colors.classResources[ info[#info] ];
 		local d = P.unitframe.colors.classResources[ info[#info] ]
@@ -6329,16 +6329,16 @@ E.Options.args.unitframe.args.general.args.allColorsGroup.args.classResourceGrou
 
 E.Options.args.unitframe.args.general.args.allColorsGroup.args.classResourceGroup.args.spacer = {
 	order = 2,
-	name = ' ',
-	type = 'description',
-	width = 'full'
+	name = " ",
+	type = "description",
+	width = "full"
 };
 
 for i = 1, 5 do
-	E.Options.args.unitframe.args.general.args.allColorsGroup.args.classResourceGroup.args['combo'..i] = {
+	E.Options.args.unitframe.args.general.args.allColorsGroup.args.classResourceGroup.args["combo"..i] = {
 		order = i + 2,
-		type = 'color',
-		name = L['Combo Point']..' #'..i,
+		type = "color",
+		name = L["Combo Point"].." #"..i,
 		get = function(info)
 			local t = E.db.unitframe.colors.classResources.comboPoints[i];
 			local d = P.unitframe.colors.classResources.comboPoints[i]
@@ -6357,22 +6357,22 @@ end
 if(P.unitframe.colors.classResources[E.myclass]) then
 	E.Options.args.unitframe.args.general.args.allColorsGroup.args.classResourceGroup.args.spacer2 = {
 		order = 10,
-		name = ' ',
-		type = 'description',
-		width = 'full'
+		name = " ",
+		type = "description",
+		width = "full"
 	};
 
 	local ORDER = 20
-	if(E.myclass == 'DEATHKNIGHT') then
+	if(E.myclass == "DEATHKNIGHT") then
 		local names = {
-			[1] = L['Blood'],
-			[2] = L['Unholy'],
-			[3] = L['Frost'],
-			[4] = L['Death']
+			[1] = L["Blood"],
+			[2] = L["Unholy"],
+			[3] = L["Frost"],
+			[4] = L["Death"]
 		};
 		for i = 1, 4 do
-			E.Options.args.unitframe.args.general.args.allColorsGroup.args.classResourceGroup.args['resource'..i] = {
-				type = 'color',
+			E.Options.args.unitframe.args.general.args.allColorsGroup.args.classResourceGroup.args["resource"..i] = {
+				type = "color",
 				name = names[i],
 				order = ORDER + i,
 				get = function(info)

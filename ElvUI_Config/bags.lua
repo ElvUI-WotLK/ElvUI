@@ -68,7 +68,7 @@ E.Options.args.bags = {
 				},
 				clearSearchOnClose = {
  					order = 4,
-					type = 'toggle',
+					type = "toggle",
 					name = L["Clear Search On Close"],
 					set = function(info, value) E.db.bags[info[#info]] = value; end
 				},
@@ -258,7 +258,7 @@ E.Options.args.bags = {
 				},
  				showBackdrop = {
 					order = 2,
- 					type = 'toggle',
+ 					type = "toggle",
  					name = L["Backdrop"]
  				},
  				mouseover = {
@@ -283,7 +283,7 @@ E.Options.args.bags = {
 				},
  				backdropSpacing = {
  					order = 6,
- 					type = 'range',
+ 					type = "range",
  					name = L["Backdrop Spacing"],
  					desc = L["The spacing between the backdrop and the buttons."],
  					min = 0, max = 10, step = 1,

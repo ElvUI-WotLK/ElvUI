@@ -46,17 +46,17 @@ Exemples:
 [powercolor][power:current]
 
 Formats de la Vie / des Ressources:
-'current' - Quantité actuelle
-'percent' - Quantité en pourcentage
-'current-max' - Quantité actuelle maximale, n'affichera seulement la quantité maximale si la quantité actuelle est égale au maximum.
-'current-percent' - Quantité actuelle suivie par quantité en pourcentage, n'affichera seulement la quantité maximale si la quantité actuelle est égale au maximum
-'current-max-percent' -  Quantité actuelle, quantité maximale, suivie par quantité en pourcentage, n'affichera seulement la quantité maximale si la quantité actuelle est égale au maximum
-'deficit' - Affiche la valeur du déficit, n'affichera rien si il n'y a pas de déficit
+"current" - Quantité actuelle
+"percent" - Quantité en pourcentage
+"current-max" - Quantité actuelle maximale, n'affichera seulement la quantité maximale si la quantité actuelle est égale au maximum.
+"current-percent" - Quantité actuelle suivie par quantité en pourcentage, n'affichera seulement la quantité maximale si la quantité actuelle est égale au maximum
+"current-max-percent" -  Quantité actuelle, quantité maximale, suivie par quantité en pourcentage, n'affichera seulement la quantité maximale si la quantité actuelle est égale au maximum
+"deficit" - Affiche la valeur du déficit, n'affichera rien si il n'y a pas de déficit
 
 Format des Noms:
-'name:short' - Nom limité à 10 caractères
-'name:medium' - Nom limité à 15 caractères
-'name:long' - Nom limité à 20 caractères
+"name:short" - Nom limité à 10 caractères
+"name:medium" - Nom limité à 15 caractères
+"name:long" - Nom limité à 20 caractères
 
 Pour désactiver, laisser le champs vide. Pour plus d'information, merci de visiter http://www.tukui.org]=];
 
@@ -127,11 +127,11 @@ L["Usable"] = true;
 L["Visibility State"] = "État de visibilité"
 L["Width Multiplier"] = "Multiplicateur largeur"
 L[ [=[This works like a macro, you can run different situations to get the actionbar to page differently.
- Example: '[combat] 2;']=] ] = [=[Ceci fonctionne comme une macro, vous pouvez exécuter différentes situations pour avoir une pagination de la barre d'actions différente.
-Exemple: '[combat] 2;']=]
+ Example: "[combat] 2;"]=] ] = [=[Ceci fonctionne comme une macro, vous pouvez exécuter différentes situations pour avoir une pagination de la barre d'actions différente.
+Exemple: "[combat] 2;"]=]
 L[ [=[This works like a macro, you can run different situations to get the actionbar to show/hide differently.
- Example: '[combat] show;hide']=] ] = [=[Ceci fonctionne comme une macro, vous pouvez exécuter différentes situations pour afficher ou masquer la barre d'actions différemment.
-Exemple: '[combat] show;hide']=]
+ Example: "[combat] show;hide"]=] ] = [=[Ceci fonctionne comme une macro, vous pouvez exécuter différentes situations pour afficher ou masquer la barre d'actions différemment.
+Exemple: "[combat] show;hide"]=]
 
 --Bags
 L["Add an item or search syntax to the ignored list. Items matching the search syntax will be ignored."] = true;
@@ -392,7 +392,7 @@ L["Automatically select greed or disenchant (when available) on green quality it
 L["Automatically vendor gray items when visiting a vendor."] = "Vendre automatiquement les objets gris quand vous rendez visite à un marchand."
 L["Bonus Reward Position"] = "Position des récompenses bonus";
 L["Bottom Panel"] = "Bandeau en bas"
-L["Chat Bubbles Style"] = 'Style des bulles de discussion'
+L["Chat Bubbles Style"] = "Style des bulles de discussion"
 L["Chat Bubbles"] = "Bulles de discussion";
 L["Check version"] = true;
 L["Direction the bar moves on gains/losses"] = "Direction que prend la barre quand gain / perte";
@@ -427,13 +427,13 @@ L["Party / Raid"] = "Groupe / Raid";
 L["Party Only"] = "Groupe seulement";
 L["Position of bonus quest reward frame relative to the objective tracker."] = "Position de la récompense de l'objectif par rapport à la fenêtre de suivi des objectifs";
 L["Raid Only"] = "Raid seulement";
-L["Remove Backdrop"] = 'Supprimer le fond'
+L["Remove Backdrop"] = "Supprimer le fond"
 L["Reset all frames to their original positions."] = "Réinitialiser les cadres à leurs positions initiales."
 L["Reset Anchors"] = "Réinitialiser les ancres"
 L["Reverse Fill Direction"] = "Inverser la direction de remplissage";
 L["Send ADDON_ACTION_BLOCKED errors to the Lua Error frame. These errors are less important in most cases and will not effect your game performance. Also a lot of these errors cannot be fixed. Please only report these errors if you notice a Defect in gameplay."] = "Envoyer les ADDON_ACTION_BLOCKED dans la fenêtre d'erreur LUA. Ces erreurs sont minimes dans la plupart des cas et n'affecteront pas votre expérience de jeu. Tenez compte que nombreuses de celles-ci ne peuvent être fixé. Signalez-les uniquement si cela affecte grandement le jeu."
 L["Skin Backdrop (No Borders)"] = true;
-L["Skin Backdrop"] = 'Habiller le fond'
+L["Skin Backdrop"] = "Habiller le fond"
 L["Skin the blizzard chat bubbles."] = "Habillage des bulles de Chat."
 L["Talking Head Scale"] = true;
 L["The font that appears on the text above players heads. |cffFF0000WARNING: This requires a game restart or re-log for this change to take effect.|r"] = "Police qui apparait sur le texte au dessus de la tête des joueurs. |cffFF0000ATTENTION: requiert un redémarrage du jeu ou une reconnexion pour que les changements soient pris en compte.|r"
@@ -710,13 +710,13 @@ L["An X offset (in pixels) to be used when anchoring new frames."] = "Un décala
 L["An Y offset (in pixels) to be used when anchoring new frames."] = "Un décalage Y (en pixels) à utiliser lors d'un ancrage d'une nouvelle fenêtre."; --need review
 L["Ascending or Descending order."] = "Ordre ascendant ou descendant.";
 L["Assist Frames"] = "Cadre des Soutiens"
-L["Assist Target"] = 'Cible de soutien'
+L["Assist Target"] = "Cible de soutien"
 L["At what point should the text be displayed. Set to -1 to disable."] = "A quel moment le texte devrait être affiché. Mettre à -1 pour désactiver."
-L["Attach Text to Power"] = 'Attacher le texte à la puissance'
+L["Attach Text to Power"] = "Attacher le texte à la puissance"
 L["Attach Text To"] = true;
 L["Attach To"] = "Attacher à"
 L["Aura Bars"] = "Barre d'auras"
-L["Auto-Hide"] = 'Masquer Automatiquement'
+L["Auto-Hide"] = "Masquer Automatiquement"
 L["Bad"] = "Mauvais"
 L["Bars will transition smoothly."] = "La transitions des barres seront fluides."
 L["Below"] = "En dessous"
@@ -738,7 +738,7 @@ L["Check if you are in range to cast spells on this specific unit."] = "Vérifie
 L["Choose UIPARENT to prevent it from hiding with the unitframe."] = true;
 L["Class Backdrop"] = "Fond selon la classe"
 L["Class Castbars"] = "Barres d'incantation selon la classe"
-L["Class Color Override"] = 'Remplacer les couleurs de classes'
+L["Class Color Override"] = "Remplacer les couleurs de classes"
 L["Class Health"] = "Santé selon la Classe"
 L["Class Power"] = "Énergie selon la Classe"
 L["Class Resources"] = "Ressources des Classes"
@@ -752,7 +752,7 @@ L["Color health by classcolor or reaction."] = "Colore la vie par la couleur de 
 L["Color power by classcolor or reaction."] = "Colore l'énergie de la classe par la couleur de la classe ou par l'aggro."
 L["Color the health backdrop by class or reaction."] = "Colore l'arrière-plan de la barre de vie par la couleur de la classe ou par l'aggro."
 L["Color the unit healthbar if there is a debuff that can be dispelled by you."] = "Colore la barre de vie de l'unité qui peut être dissipé par vous-même."
-L["Color Turtle Buffs"] = "Colore les améliorations 'Turtle'" -- Not yet official translation for this term
+L["Color Turtle Buffs"] = "Colore les améliorations "Turtle"" -- Not yet official translation for this term
 L["Color"] = "Couleur"
 L["Colored Icon"] = "Icône Coloré"
 L["Coloring (Specific)"] = "Coloration (Spécifique)"
@@ -783,8 +783,8 @@ L["Delete a created filter, you cannot delete pre-existing filters, only custom 
 L["Delete Filter"] = "Supprimer un filtre"
 L["Demonology"] = "Démonologie"
 L["Destruction"] = "Destruction"
-L["Detach From Frame"] = 'Détacher du cadre'
-L["Detached Width"] = 'Largeur de détachement'
+L["Detach From Frame"] = "Détacher du cadre"
+L["Detached Width"] = "Largeur de détachement"
 L["Direction the health bar moves when gaining/losing health."] = "Sens de direction de la barre de vie quand vous en gagnez ou perdez."
 L["Disable Debuff Highlight"] = true;
 L["Disabled Blizzard Frames"] = true;
@@ -823,8 +823,8 @@ L["Fade the unitframe when out of combat, not casting, no target exists."] = "Es
 L["Fill"] = "Remplissage"
 L["Filled"] = "Rempli"
 L["Filter Type"] = "Type de filtre"
-L["Force Off"] = 'Forcer Off'
-L["Force On"] = 'Forcer On'
+L["Force Off"] = "Forcer Off"
+L["Force On"] = "Forcer On"
 L["Force Reaction Color"] = true;
 L["Force the frames to show, they will act as if they are the player frame."] = "Forcer l'affichage des cadres, ils agiront comme sur le cadre de joueur."
 L["Forces Debuff Highlight to be disabled for these frames"] = true;
@@ -885,7 +885,7 @@ L["Latency"] = "Latence"
 L["Left to Right"] = true;
 L["Lunar"] = "Lunaire"
 L["Main statusbar texture."] = "Texture de la barre principale."
-L["Main Tanks / Main Assist"] = 'Tank Principal / Assistant Principal'
+L["Main Tanks / Main Assist"] = "Tank Principal / Assistant Principal"
 L["Make textures transparent."] = "Mettre les textures transparentes."
 L["Match Frame Width"] = "Accorder à la largeur du cadre"
 L["Max Bars"] = "Barres max";
@@ -914,7 +914,7 @@ L["Others"] = "Autres"
 L["Overlay the healthbar"] = "Superposé sur la barre de vie"
 L["Overlay"] = "Superposition"
 L["Override any custom visibility setting in certain situations, EX: Only show groups 1 and 2 inside a 10 man instance."] = "Remplace tout paramètre de visibilité dans certaines situations, Ex: afficher seulement le groupe 1 et 2 quand vous êtes dans un raid à 10 joueurs."
-L["Override the default class color setting."] = 'Remplacer les réglages des couleurs de classes par défaut.'
+L["Override the default class color setting."] = "Remplacer les réglages des couleurs de classes par défaut."
 L["Owners Name"] = "Nom des propriétaires";
 L["Parent"] = true;
 L["Party Pets"] = "Familiers des coéquipiers"
@@ -937,7 +937,7 @@ L["Priority"] = "Priorité"
 L["Profile Specific"] = true;
 L["PvP Icon"] = true;
 L["PvP Text"] = true;
-L["PVP Trinket"] = 'Bijou PVP'
+L["PVP Trinket"] = "Bijou PVP"
 L["Raid Icon"] = "Icône de Raid"
 L["Raid-Wide Sorting"] = "Tri du Raid-Large";
 L["Raid40 Frames"] = "Fenêtre de Raid40";
@@ -992,11 +992,11 @@ L["Sort By"] = true;
 L["Spaced"] = "Espacé"
 L["Spacing"] = true;
 L["Spark"] = "Lueur"
-L["Spec Icon"] = 'Icône de spécialisation'
+L["Spec Icon"] = "Icône de spécialisation"
 L["Spell not found in list."] = "Sort non trouvé dans la liste."
 L["Stack Counter"] = true;
 L["Stack Threshold"] = "Seuil de stack";
-L["Start Near Center"] = 'Démarrer près du centre'
+L["Start Near Center"] = "Démarrer près du centre"
 L["Statusbar Fill Orientation"] = true;
 L["StatusBar Texture"] = "Texture de la barre d'état."
 L["Strata and Level"] = true;
@@ -1033,7 +1033,7 @@ L["Time Remaining Reverse"] =  "Temps restant inversé"
 L["Time Remaining"] = "Temps restant"
 L["Toggles health text display"] = "Affiche le texte de la vie de l'unité"
 L["Transparent"] = "Transparent"
-L["Turtle Color"] = "Couleur 'Turtle'" -- Same
+L["Turtle Color"] = "Couleur "Turtle"" -- Same
 L["Unholy"] = "Sacré"
 L["Uniform Threshold"] = true;
 L["UnitFrames"] = "Cadre d'unité"
@@ -1041,7 +1041,7 @@ L["Up"] = "Haut"
 L["Use Custom Level"] = true;
 L["Use Custom Strata"] = true;
 L["Use Dead Backdrop"] = true;
-L["Use Default"] = 'Utiliser par défaut'
+L["Use Default"] = "Utiliser par défaut"
 L["Use the custom health backdrop color instead of a multiple of the main health color."] = "Utilise une couleur personnalisé pour colorer le fond de la barre de vie au lieu d'utiliser la couleur par défaut."
 L["Use the profile specific filter 'Buff Indicator (Profile)' instead of the global filter 'Buff Indicator'."] = true;
 L["Use thin borders on certain unitframe elements."] = true;

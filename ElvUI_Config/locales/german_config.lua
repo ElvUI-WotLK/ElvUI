@@ -46,17 +46,17 @@ Beispiele:
 [powercolor][power:current]
 
 Leben / Kraft Formate:
-'current' - Aktueller Wert
-'percent' - Prozentualer Wert
-'current-max' - Aktueller Wert gefolgt von dem maximalen Wert. Es wird nur der Maximale Wert anzeigt, wenn der aktuelle Wert auch das Maximum ist
-'current-percent' - Aktueller Wert gefolgt von dem prozentualen Wert. Es wird nur der maximale Wert angezeigt, wenn der aktuelle Wert auch das Maximum ist
-'current-max-percent' - Aktueller Wert, Maximaler Wert, gefolgt von dem prozentualen Wert. Es wird nur der maximale Wert angezeigt, wenn der aktuelle Wert auch das Maximum ist
-'deficit' - Zeigt das Defizit. Es wird nichts angezeigt, wenn kein Defizit vorhanden ist
+"current" - Aktueller Wert
+"percent" - Prozentualer Wert
+"current-max" - Aktueller Wert gefolgt von dem maximalen Wert. Es wird nur der Maximale Wert anzeigt, wenn der aktuelle Wert auch das Maximum ist
+"current-percent" - Aktueller Wert gefolgt von dem prozentualen Wert. Es wird nur der maximale Wert angezeigt, wenn der aktuelle Wert auch das Maximum ist
+"current-max-percent" - Aktueller Wert, Maximaler Wert, gefolgt von dem prozentualen Wert. Es wird nur der maximale Wert angezeigt, wenn der aktuelle Wert auch das Maximum ist
+"deficit" - Zeigt das Defizit. Es wird nichts angezeigt, wenn kein Defizit vorhanden ist
 
 Namensformate:
-'name:short' - Name auf 10 Zeichen beschränkt
-'name:medium' - Name auf 15 Zeichen beschränkt
-'name:long' - Name auf 20 Zeichen beschränkt
+"name:short" - Name auf 10 Zeichen beschränkt
+"name:medium" - Name auf 15 Zeichen beschränkt
+"name:long" - Name auf 20 Zeichen beschränkt
 
 Zum Deaktvieren lasse das Feld leer. Brauchst du mehr Informationen besuche http://www.tukui.org]=];
 
@@ -127,11 +127,11 @@ L["Usable"] = "Nutzbar"
 L["Visibility State"] = "Sichbarkeitszustand"
 L["Width Multiplier"] = "Breitenmultiplikator"
 L[ [=[This works like a macro, you can run different situations to get the actionbar to page differently.
- Example: '[combat] 2;']=] ] = [=[Dieses funktioniert wie ein Makro, du kannst verschiedene Situationen haben um die Aktionsleiste zu wechseln.
- Beispiel: '[combat] 2;']=]
+ Example: "[combat] 2;"]=] ] = [=[Dieses funktioniert wie ein Makro, du kannst verschiedene Situationen haben um die Aktionsleiste zu wechseln.
+ Beispiel: "[combat] 2;"]=]
 L[ [=[This works like a macro, you can run different situations to get the actionbar to show/hide differently.
- Example: '[combat] show;hide']=] ] = [=[Dieses funktioniert wie ein Makro, du kannst verschiedene Situationen haben um die Aktionsleiste ein-/auszublenden.
- Beispiel: '[combat] show;hide']=]
+ Example: "[combat] show;hide"]=] ] = [=[Dieses funktioniert wie ein Makro, du kannst verschiedene Situationen haben um die Aktionsleiste ein-/auszublenden.
+ Beispiel: "[combat] show;hide"]=]
 
 --Bags
 L["Add an item or search syntax to the ignored list. Items matching the search syntax will be ignored."] = "Füge ein Gegenstand oder ein Suchoperator zu der Ignorierliste hinzu. Gegenstände die auf den Suchoperator zutreffen werden ignoriert."
@@ -807,7 +807,7 @@ L["Display the combat icon on the unitframe."] = "Zeige das Kampfsymbol auf den 
 L["Display the rested icon on the unitframe."] = "Zeige das Ausgeruht-Symbol auf den Einheitenfenstern."
 L["Display the target of your current cast. Useful for mouseover casts."] = "Zeige das Ziel deines derzeitigen Zaubers, für Mouseover Zauber nützlich"
 L["Display tick marks on the castbar for channelled spells. This will adjust automatically for spells like Drain Soul and add additional ticks based on haste."] = "Anzeige der Zauberbalkenticks für kanalisierte Zauber. Dies ändert sich automatisch für Zauber wie Seelendieb, wenn zusätzliche Ticks durch einen hohen Tempowert entstehen."
-L["Don't display any auras found on the 'Blacklist' filter."] = "Zeige keinerlei Auren die sich im 'Schwarzenlisten' filter befinden."
+L["Don't display any auras found on the 'Blacklist' filter."] = "Zeige keinerlei Auren die sich im "Schwarzenlisten" filter befinden."
 L["Don't display auras that are longer than this duration (in seconds). Set to zero to disable."] = "Keine Auren anzeigen die länger als diese Dauer (in Sekunden) sind"
 L["Don't display auras that are not yours."] = "Zeige keine Auren die nicht von dir sind."
 L["Don't display auras that cannot be purged or dispelled by your class."] = "Zeige keine Auren die nicht von deiner Klasse entzaubert oder gereinigt werden kann."
