@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local S = E:GetModule('Skins')
+local S = E:GetModule("Skins")
 
 local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.gbank ~= true then return end
@@ -25,7 +25,7 @@ local function LoadSkin()
 
 	GuildBankFrameWithdrawButton:Point("RIGHT", GuildBankFrameDepositButton, "LEFT", -2, 0)
 
-	GuildBankInfoScrollFrame:Point('TOPLEFT', GuildBankInfo, 'TOPLEFT', -10, 12)
+	GuildBankInfoScrollFrame:Point("TOPLEFT", GuildBankInfo, "TOPLEFT", -10, 12)
 	GuildBankInfoScrollFrame:StripTextures()
 	GuildBankInfoScrollFrame:Width(GuildBankInfoScrollFrame:GetWidth() + 14)
 
@@ -85,7 +85,7 @@ local function LoadSkin()
 		S:HandleTab(_G["GuildBankFrameTab"..i])
 	end
 
-	hooksecurefunc('GuildBankFrame_Update', function()
+	hooksecurefunc("GuildBankFrame_Update", function()
 		if GuildBankFrame.mode ~= "bank" then return; end
 		local tab = GetCurrentGuildBankTab();
 		local button, index, column, itemLink, itemRarity, r, g, b;

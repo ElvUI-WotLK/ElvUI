@@ -44,13 +44,13 @@ function E:DropDown(list, frame, xOffset, yOffset)
 		if not frame.buttons[i] then
 			frame.buttons[i] = CreateFrame("Button", nil, frame)
 
-			frame.buttons[i].hoverTex = frame.buttons[i]:CreateTexture(nil, 'OVERLAY')
+			frame.buttons[i].hoverTex = frame.buttons[i]:CreateTexture(nil, "OVERLAY")
 			frame.buttons[i].hoverTex:SetAllPoints()
 			frame.buttons[i].hoverTex:SetTexture([[Interface\QuestFrame\UI-QuestTitleHighlight]])
 			frame.buttons[i].hoverTex:SetBlendMode("ADD")
 			frame.buttons[i].hoverTex:Hide()
 
-			frame.buttons[i].text = frame.buttons[i]:CreateFontString(nil, 'BORDER')
+			frame.buttons[i].text = frame.buttons[i]:CreateFontString(nil, "BORDER")
 			frame.buttons[i].text:SetAllPoints()
 			frame.buttons[i].text:FontTemplate()
 			frame.buttons[i].text:SetJustifyH("LEFT")

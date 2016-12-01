@@ -77,8 +77,8 @@ local function SetOutside(obj, anchor, xOffset, yOffset, anchor2)
 		obj:ClearAllPoints()
 	end
 
-	obj:Point('TOPLEFT', anchor, 'TOPLEFT', -xOffset, yOffset)
-	obj:Point('BOTTOMRIGHT', anchor2 or anchor, 'BOTTOMRIGHT', xOffset, -yOffset)
+	obj:Point("TOPLEFT", anchor, "TOPLEFT", -xOffset, yOffset)
+	obj:Point("BOTTOMRIGHT", anchor2 or anchor, "BOTTOMRIGHT", xOffset, -yOffset)
 end
 
 local function SetInside(obj, anchor, xOffset, yOffset, anchor2)
@@ -91,8 +91,8 @@ local function SetInside(obj, anchor, xOffset, yOffset, anchor2)
 		obj:ClearAllPoints()
 	end
 
-	obj:Point('TOPLEFT', anchor, 'TOPLEFT', xOffset, -yOffset)
-	obj:Point('BOTTOMRIGHT', anchor2 or anchor, 'BOTTOMRIGHT', -xOffset, yOffset)
+	obj:Point("TOPLEFT", anchor, "TOPLEFT", xOffset, -yOffset)
+	obj:Point("BOTTOMRIGHT", anchor2 or anchor, "BOTTOMRIGHT", -xOffset, yOffset)
 end
 
 local function SetTemplate(f, t, glossTex, ignoreUpdates, forcePixelMode)
@@ -227,11 +227,11 @@ local function StripTextures(object, kill)
 	for i=1, object:GetNumRegions() do
 		local region = select(i, object:GetRegions())
 		if region and region:GetObjectType() == "Texture" then
-			if kill and type(kill) == 'boolean' then
+			if kill and type(kill) == "boolean" then
 				region:Kill()
 			elseif region:GetDrawLayer() == kill then
 				region:SetTexture(nil)
-			elseif kill and type(kill) == 'string' and region:GetTexture() ~= kill then
+			elseif kill and type(kill) == "string" and region:GetTexture() ~= kill then
 				region:SetTexture(nil)
 			else
 				region:SetTexture(nil)
@@ -245,12 +245,12 @@ local function FontTemplate(fs, font, fontSize, fontStyle)
 	fs.fontSize = fontSize
 	fs.fontStyle = fontStyle
 
-	font = font or LSM:Fetch("font", E.db['general'].font)
+	font = font or LSM:Fetch("font", E.db["general"].font)
 	fontSize = fontSize or E.db.general.fontSize
 
-	if fontStyle == 'OUTLINE' and (E.db.general.font == "Homespun") then
+	if fontStyle == "OUTLINE" and (E.db.general.font == "Homespun") then
 		if (fontSize > 10 and not fs.fontSize) then
-			fontStyle = 'MONOCHROMEOUTLINE'
+			fontStyle = "MONOCHROMEOUTLINE"
 			fontSize = 10
 		end
 	end

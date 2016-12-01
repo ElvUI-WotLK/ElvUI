@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local S = E:GetModule('Skins');
+local S = E:GetModule("Skins");
 
 local function LoadSkin()
 	if(E.private.skins.blizzard.enable ~= true
@@ -8,16 +8,16 @@ local function LoadSkin()
 		return;
 	end
 
-	BarberShopFrame:CreateBackdrop('Transparent');
-	BarberShopFrame.backdrop:Point('TOPLEFT', 44, -70);
-	BarberShopFrame.backdrop:Point('BOTTOMRIGHT', -38, 42);
+	BarberShopFrame:CreateBackdrop("Transparent");
+	BarberShopFrame.backdrop:Point("TOPLEFT", 44, -70);
+	BarberShopFrame.backdrop:Point("BOTTOMRIGHT", -38, 42);
 
 	BarberShopFrameBackground:Kill();
 
 	local selectorPrev, selectorNext;
 	for i = 1, 4 do
-		selectorPrev = _G['BarberShopFrameSelector'..i..'Prev'];
-		selectorNext = _G['BarberShopFrameSelector'..i..'Next'];
+		selectorPrev = _G["BarberShopFrameSelector"..i.."Prev"];
+		selectorNext = _G["BarberShopFrameSelector"..i.."Next"];
 
 		S:HandleNextPrevButton(selectorPrev);
 		S:HandleNextPrevButton(selectorNext);

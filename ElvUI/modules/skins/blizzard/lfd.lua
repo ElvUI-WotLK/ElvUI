@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local S = E:GetModule('Skins');
+local S = E:GetModule("Skins");
 
 local find = string.find;
 
@@ -43,9 +43,9 @@ local function LoadSkin()
 			Item:SetTemplate("Default");
 
 			ItemIconTexture:SetTexCoord(unpack(E.TexCoords));
-			ItemIconTexture:SetDrawLayer('OVERLAY');
+			ItemIconTexture:SetDrawLayer("OVERLAY");
 
-			ItemCount:SetDrawLayer('OVERLAY');
+			ItemCount:SetDrawLayer("OVERLAY");
 		end
 	end
 
@@ -82,9 +82,9 @@ local function LoadSkin()
 	S:HandleButton(LFDQueueFramePartyBackfillBackfillButton);
 	S:HandleButton(LFDQueueFramePartyBackfillNoBackfillButton);
 
-	LFDSearchStatus:SetTemplate('Transparent'); -- LFDSearchStatus
+	LFDSearchStatus:SetTemplate("Transparent"); -- LFDSearchStatus
 
-	LFDRoleCheckPopup:SetTemplate('Transparent'); -- LFDRoleCheckPopup
+	LFDRoleCheckPopup:SetTemplate("Transparent"); -- LFDRoleCheckPopup
 
 	S:HandleCheckBox(LFDRoleCheckPopupRoleButtonTank.checkButton);
 	S:HandleCheckBox(LFDRoleCheckPopupRoleButtonHealer.checkButton);
@@ -93,16 +93,16 @@ local function LoadSkin()
 	S:HandleButton(LFDRoleCheckPopupAcceptButton);
 	S:HandleButton(LFDRoleCheckPopupDeclineButton);
 
-	LFDDungeonReadyDialog:SetTemplate('Transparent'); -- LFDDungeonReadyDialog
+	LFDDungeonReadyDialog:SetTemplate("Transparent"); -- LFDDungeonReadyDialog
 
-	S:HandleCloseButton(LFDDungeonReadyDialogCloseButton, nil, '-');
+	S:HandleCloseButton(LFDDungeonReadyDialogCloseButton, nil, "-");
 
 	S:HandleButton(LFDDungeonReadyDialogEnterDungeonButton);
 	S:HandleButton(LFDDungeonReadyDialogLeaveQueueButton);
 
-	LFDDungeonReadyStatus:SetTemplate('Transparent'); -- LFDDungeonReadyStatus
+	LFDDungeonReadyStatus:SetTemplate("Transparent"); -- LFDDungeonReadyStatus
 
-	S:HandleCloseButton(LFDDungeonReadyStatusCloseButton, nil, '-');
+	S:HandleCloseButton(LFDDungeonReadyStatusCloseButton, nil, "-");
 end
 
 S:AddCallback("LFD", LoadSkin);

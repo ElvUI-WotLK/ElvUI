@@ -50,11 +50,11 @@ function M:SetLargeWorldMap()
 	WorldMapCompareTooltip1:SetFrameStrata("TOOLTIP");
 	WorldMapCompareTooltip2:SetFrameStrata("TOOLTIP");
 
-	if(WorldMapFrame:GetAttribute('UIPanelLayout-area') ~= 'center') then
+	if(WorldMapFrame:GetAttribute("UIPanelLayout-area") ~= "center") then
 		SetUIPanelAttribute(WorldMapFrame, "area", "center");
 	end
 
-	if(WorldMapFrame:GetAttribute('UIPanelLayout-allowOtherPanels') ~= true) then
+	if(WorldMapFrame:GetAttribute("UIPanelLayout-allowOtherPanels") ~= true) then
 		SetUIPanelAttribute(WorldMapFrame, "allowOtherPanels", true);
 	end
 

@@ -38,7 +38,7 @@ L["Purchase"] = "Acheter"
 L["Reagent Bank"] = "Banque de composants";
 L["Reset Position"] = "Réinitialiser la position"
 L["Show/Hide Reagents"] = "Afficher / Masquer les composants";
-L["Sort Tab"] = 'Organiser les onglets' --Not used, yet?
+L["Sort Tab"] = "Organiser les onglets" --Not used, yet?
 L["Temporary Move"] = "Déplacer temporairement";
 L["Toggle Bags"] = "Afficher les sacs"
 L["Vendor Grays"] = "Vendre les objets gris"
@@ -107,7 +107,7 @@ L["Session:"] = "Session:"
 L["Shoulder"] = "Épaule"
 L["silverabbrev"] = "|cffc7c7cfs|r" --Also used in Bags
 L["SP"] = "PdS"
-L["Spec"] = 'Spécialisation'
+L["Spec"] = "Spécialisation"
 L["Spent:"] = "Dépensé: "
 L["Stats For:"] = "Stats pour:"
 L["Total CPU:"] = "Charge du CPU:"
@@ -116,8 +116,8 @@ L["Total: "] = "Total: "
 L["Unhittable:"] = "Intouchable:"
 L["Waist"] = "Ceinture"
 L["Wrist"] = "Poignets"
-L["|cffFFFFFFLeft Click:|r Change Talent Specialization"] = '|cffFFFFFFClick Gauche:|r Changer de spécialisation des talents'
-L["|cffFFFFFFRight Click:|r Change Loot Specialization"] = '|cffFFFFFFClick Droit:|r Changer la spécialisation de butin'
+L["|cffFFFFFFLeft Click:|r Change Talent Specialization"] = "|cffFFFFFFClick Gauche:|r Changer de spécialisation des talents"
+L["|cffFFFFFFRight Click:|r Change Loot Specialization"] = "|cffFFFFFFClick Droit:|r Changer la spécialisation de butin"
 
 --DebugTools
 L["%s: %s tried to call the protected function '%s'."] = "%s: %s a essayé d'appeler la fonction protégée '%s'."
@@ -167,7 +167,7 @@ L["Layout"] = "Disposition"
 L["Lock"] = "Verrouiller"
 L["Low Resolution"] = "Basse résolution"
 L["low"] = "Faible"
-L["Nudge"] = 'Pousser'
+L["Nudge"] = "Pousser"
 L["Physical DPS"] = "DPS Physique"
 L["Please click the button below so you can setup variables and ReloadUI."] = "Pour configurer les variables et recharger l'interface, cliquez sur le bouton ci-dessous."
 L["Please click the button below to setup your CVars."] = "Pour configurer les CVars, cliquez sur le bouton ci-dessous."
@@ -200,10 +200,10 @@ L["You may need to further alter these settings depending how low you resolution
 L["Your current resolution is %s, this is considered a %s resolution."] = "Votre résolution actuelle est %s, elle est donc considérée comme une %s Résolution."
 
 --Misc
-L["ABOVE_THREAT_FORMAT"] = '%s: %.0f%% [%.0f%% excès |cff%02x%02x%02x%s|r]'
+L["ABOVE_THREAT_FORMAT"] = "%s: %.0f%% [%.0f%% excès |cff%02x%02x%02x%s|r]"
 L["Average Group iLvl:"] = "iLvl moyen du groupe";
 L["Bars"] = "Barres" --Also used in UnitFrames
-L["Calendar"] = 'Calendrier'
+L["Calendar"] = "Calendrier"
 L["Can't Roll"] = "Ne peut pas jeter les dés"
 L["Disband Group"] = "Dissoudre le groupe"
 L["Enable"] = "Activer" --Doesn't fit a section since it's used a lot of places

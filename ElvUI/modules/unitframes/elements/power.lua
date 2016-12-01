@@ -212,7 +212,7 @@ function UF:PostUpdatePower(unit, min, max)
 
 	if(parent.isForced) then
 		local pType = random(0, 4);
-		local color = ElvUF['colors'].power[tokens[pType]];
+		local color = ElvUF["colors"].power[tokens[pType]];
 		min = random(1, max);
 		self:SetValue(min);
 

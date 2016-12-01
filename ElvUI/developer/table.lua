@@ -9,7 +9,7 @@ function table.copy(t, deep, seen)
 
 	local nt = {};
 	for k, v in pairs(t) do
-		if(deep and type(v) == 'table') then
+		if(deep and type(v) == "table") then
 			nt[k] = table.copy(v, deep, seen);
 		else
 			nt[k] = v;

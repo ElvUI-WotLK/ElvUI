@@ -8,20 +8,20 @@ local E, L, V, P, G, _ = unpack(select(2, ...)); --Engine
 G["nameplate"]["filter"] = {
 	--Army of the Dead
 	["Army of the Dead Ghoul"] = {
-		['enable'] = true,
-		['hide'] = true,
-		['customColor'] = false,
-		['color'] = {r = 104/255, g = 138/255, b = 217/255},
-		['customScale'] = 1,
+		["enable"] = true,
+		["hide"] = true,
+		["customColor"] = false,
+		["color"] = {r = 104/255, g = 138/255, b = 217/255},
+		["customScale"] = 1,
 	},
 
 	--Hunter Trap
 	["Venomous Snake"] = {
-		['enable'] = true,
-		['hide'] = true,
-		['customColor'] = false,
-		['color'] = {r = 104/255, g = 138/255, b = 217/255},
-		['customScale'] = 1,
+		["enable"] = true,
+		["hide"] = true,
+		["customColor"] = false,
+		["color"] = {r = 104/255, g = 138/255, b = 217/255},
+		["customScale"] = 1,
 	},
 
 	["Healing Tide Totem"] = {

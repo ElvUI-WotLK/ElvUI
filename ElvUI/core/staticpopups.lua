@@ -195,8 +195,8 @@ E.PopupDialogs["PRIVATE_RL"] = {
 
 E.PopupDialogs["KEYBIND_MODE"] = {
 	text = L["Hover your mouse over any actionbutton or spellbook button to bind it. Press the escape key or right click to clear the current actionbutton's keybinding."],
-	button1 = L['Save'],
-	button2 = L['Discard'],
+	button1 = L["Save"],
+	button2 = L["Discard"],
 	OnAccept = function() local AB = E:GetModule("ActionBars"); AB:DeactivateBindMode(true); end,
 	OnCancel = function() local AB = E:GetModule("ActionBars"); AB:DeactivateBindMode(false); end,
 	timeout = 0,
@@ -241,7 +241,7 @@ E.PopupDialogs["CANNOT_BUY_BANK_SLOT"] = {
 };
 
 E.PopupDialogs["NO_BANK_BAGS"] = {
-	text = L['You must purchase a bank slot first!'],
+	text = L["You must purchase a bank slot first!"],
 	button1 = ACCEPT,
 	timeout = 0,
 	whileDead = 1
@@ -340,7 +340,7 @@ E.PopupDialogs["RESET_PROFILE_PROMPT"] = {
 	OnAccept = function() E:ResetProfile(); end
 };
 
-E.PopupDialogs['APPLY_FONT_WARNING'] = {
+E.PopupDialogs["APPLY_FONT_WARNING"] = {
 	text = L["Are you sure you want to apply this font to all ElvUI elements?"],
 	OnAccept = function()
 		local font = E.db.general.font;
@@ -383,7 +383,7 @@ E.PopupDialogs['APPLY_FONT_WARNING'] = {
 
 		E:UpdateAll(true);
 	end,
-	OnCancel = function() E:StaticPopup_Hide('APPLY_FONT_WARNING'); end,
+	OnCancel = function() E:StaticPopup_Hide("APPLY_FONT_WARNING"); end,
 	button1 = YES,
 	button2 = CANCEL,
 	timeout = 0,

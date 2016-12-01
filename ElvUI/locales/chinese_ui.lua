@@ -32,14 +32,14 @@ L["Trigger"] = "触发器"
 --Bags
 L["Bank"] = "银行"
 L["Deposit Reagents"] = "导入材料"
-L["Hold Control + Right Click:"] = '按住 Ctrl 并按鼠标右键：'
+L["Hold Control + Right Click:"] = "按住 Ctrl 并按鼠标右键："
 L["Purchase Bags"] = "购买背包"
 L["Purchase"] = "购买"
 L["Reagent Bank"] = "材料银行"
 L["Reset Position"] = "重设位置"
 L["Show/Hide Reagents"] = "显示/隐藏材料"
 L["Sort Tab"] = "选项排列" --Not used, yet?
-L["Temporary Move"] = '移动背包'
+L["Temporary Move"] = "移动背包"
 L["Toggle Bags"] = "背包开关"
 L["Vendor Grays"] = "出售灰色物品"
 
@@ -200,7 +200,7 @@ L["You may need to further alter these settings depending how low you resolution
 L["Your current resolution is %s, this is considered a %s resolution."] = "你当前的分辨率是 %s, 这被认为是个 %s 分辨率。"
 
 --Misc
-L["ABOVE_THREAT_FORMAT"] = '%s: %.0f%% [%.0f%% 以上 |cff%02x%02x%02x%s|r]'
+L["ABOVE_THREAT_FORMAT"] = "%s: %.0f%% [%.0f%% 以上 |cff%02x%02x%02x%s|r]"
 L["Average Group iLvl:"] = "平均小队装等"
 L["Bars"] = "条"
 L["Calendar"] = "日历"
@@ -300,14 +300,14 @@ L["Steps"] = "步骤"
 L[" |cff00ff00bound to |r"] = " |cff00ff00绑定到 |r"
 L["%s frame(s) has a conflicting anchor point, please change either the buff or debuff anchor point so they are not attached to each other. Forcing the debuffs to be attached to the main unitframe until fixed."] = "%s 个框架锚点冲突，请移动buff或者debuff锚点让他们彼此不依附。暂时强制debuff依附到主框架。"
 L["All keybindings cleared for |cff00ff00%s|r."] = "取消 |cff00ff00%s|r 所有绑定的快捷键."
-L["Already Running.. Bailing Out!"] = '正在运行!'
-L["Battleground datatexts temporarily hidden, to show type /bgstats or right click the 'C' icon near the minimap."] = '战场资讯暂时隐藏, 你可以通过输入 /bgstats 或右键点击小地图旁「C」按钮显示.'
+L["Already Running.. Bailing Out!"] = "正在运行!"
+L["Battleground datatexts temporarily hidden, to show type /bgstats or right click the 'C' icon near the minimap."] = "战场资讯暂时隐藏, 你可以通过输入 /bgstats 或右键点击小地图旁「C」按钮显示."
 L["Battleground datatexts will now show again if you are inside a battleground."] = "当你处于战场时战场资讯将再次显示."
 L["Binds Discarded"] = "取消绑定"
 L["Binds Saved"] = "储存绑定"
-L["Confused.. Try Again!"] = '请再试一次！'
+L["Confused.. Try Again!"] = "请再试一次！"
 L["No gray items to delete."] = "没有要删除的灰色物品"
-L["The spell '%s' has been added to the Blacklist unitframe aura filter."] = '法术"%s"已经被添加到单位框架的光环过滤器中.'
+L["The spell '%s' has been added to the Blacklist unitframe aura filter."] = "法术"%s"已经被添加到单位框架的光环过滤器中."
 L["This setting caused a conflicting anchor point, where '%s' would be attached to itself. Please check your anchor points. Setting '%s' to be attached to '%s'."] = true;
 L["Vendored gray items for:"] = "已出售灰色物品:"
 L["You don't have enough money to repair."] = "没有足够的资金来修复."
@@ -326,7 +326,7 @@ L["Are you sure you want to reset every mover back to it's default position?"] =
 L["Because of the mass confusion caused by the new aura system I've implemented a new step to the installation process. This is optional. If you like how your auras are setup go to the last step and click finished to not be prompted again. If for some reason you are prompted repeatedly please restart your game."] = "由于大量的改动导致光环系统需要一个新的安装过程. 这是可选的, 最后一步将设置你的光环样式. 点击「完成」将不再提示. 如果由于某些原因反复提示, 请重新开启游戏."
 L["Can't buy anymore slots!"] = "银行背包栏位已达最大值"
 L["Detected that your ElvUI Config addon is out of date. This may be a result of your Tukui Client being out of date. Please visit our download page and update your Tukui Client, then reinstall ElvUI. Not having your ElvUI Config addon up to date will result in missing options."] = true;
-L["Disable Warning"] = '停用警告'
+L["Disable Warning"] = "停用警告"
 L["Discard"] = "取消"
 L["Do you enjoy the new ElvUI?"] = "你喜欢新的ElvUI么？"
 L["Do you swear not to post in technical support about something not working without first disabling the addon/module combination first?"] = true;
@@ -335,7 +335,7 @@ L["ElvUI is out of date. You can download the newest version from https://github
 L["ElvUI needs to perform database optimizations please be patient."] = "ElvUI需要进行数据库优化，请耐性等待。"
 L["Enabling/Disabling Bar #6 will toggle a paging option from your main actionbar to prevent duplicating bars, are you sure you want to do this?"] = true;
 L["Hover your mouse over any actionbutton or spellbook button to bind it. Press the escape key or right click to clear the current actionbutton's keybinding."] = "移动滑鼠到动作条或技能书按钮上绑定快捷键. 按ESC或滑鼠右键取消目前快捷键"
-L["I Swear"] = '我承诺'
+L["I Swear"] = "我承诺"
 L["It appears one of your AddOns have disabled the AddOn Blizzard_CompactRaidFrames. This can cause errors and other issues. The AddOn will now be re-enabled."] = true;
 L["No, Revert Changes!"] = "不，撤销修改！"
 L["Oh lord, you have got ElvUI and Tukui both enabled at the same time. Select an addon to disable."] = "你不能同时使用Elvui和Tukui，请选择一个禁用."

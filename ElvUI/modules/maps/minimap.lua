@@ -115,14 +115,14 @@ function M:Minimap_OnMouseWheel(d)
 end
 
 function M:Update_ZoneText()
-	if E.db.general.minimap.locationText == 'HIDE' or not E.private.general.minimap.enable then return; end
+	if E.db.general.minimap.locationText == "HIDE" or not E.private.general.minimap.enable then return; end
 	Minimap.location:SetText(strsub(GetMinimapZoneText(),1,46))
 	Minimap.location:SetTextColor(self:GetLocTextColor())
 	Minimap.location:FontTemplate(E.LSM:Fetch("font", E.db.general.minimap.locationFont), E.db.general.minimap.locationFontSize, E.db.general.minimap.locationFontOutline);
 end
 
 function M:PLAYER_REGEN_ENABLED()
-	self:UnregisterEvent('PLAYER_REGEN_ENABLED')
+	self:UnregisterEvent("PLAYER_REGEN_ENABLED")
 	self:UpdateSettings()
 end
 
@@ -143,7 +143,7 @@ hooksecurefunc(Minimap, "SetZoom", SetupZoomReset);
 
 function M:UpdateSettings()
 	if InCombatLockdown() then
-		self:RegisterEvent('PLAYER_REGEN_ENABLED')
+		self:RegisterEvent("PLAYER_REGEN_ENABLED")
 	end
 
 	E.MinimapSize = E.private.general.minimap.enable and E.db.general.minimap.size or Minimap:GetWidth() + 10;

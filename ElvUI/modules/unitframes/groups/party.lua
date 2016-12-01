@@ -114,9 +114,9 @@ end
 function UF:Update_PartyFrames(frame, db)
 	frame.db = db;
 
-	frame.Portrait = db.portrait.style == '2D' and frame.Portrait2D or frame.Portrait3D;
+	frame.Portrait = db.portrait.style == "2D" and frame.Portrait2D or frame.Portrait3D;
 	frame.colors = ElvUF.colors;
-	frame:RegisterForClicks(self.db.targetOnMouseDown and 'AnyDown' or 'AnyUp');
+	frame:RegisterForClicks(self.db.targetOnMouseDown and "AnyDown" or "AnyUp");
 
 	do
 		if(self.thinBorders) then
@@ -133,8 +133,8 @@ function UF:Update_PartyFrames(frame, db)
 
 		frame.USE_POWERBAR = db.power.enable;
 		frame.POWERBAR_DETACHED = db.power.detachFromFrame;
-		frame.USE_INSET_POWERBAR = not frame.POWERBAR_DETACHED and db.power.width == 'inset' and frame.USE_POWERBAR;
-		frame.USE_MINI_POWERBAR = (not frame.POWERBAR_DETACHED and db.power.width == 'spaced' and frame.USE_POWERBAR);
+		frame.USE_INSET_POWERBAR = not frame.POWERBAR_DETACHED and db.power.width == "inset" and frame.USE_POWERBAR;
+		frame.USE_MINI_POWERBAR = (not frame.POWERBAR_DETACHED and db.power.width == "spaced" and frame.USE_POWERBAR);
 		frame.USE_POWERBAR_OFFSET = db.power.offset ~= 0 and frame.USE_POWERBAR and not frame.POWERBAR_DETACHED;
 		frame.POWERBAR_OFFSET = frame.USE_POWERBAR_OFFSET and db.power.offset or 0;
 
@@ -222,8 +222,8 @@ function UF:Update_PartyFrames(frame, db)
 		UF:Configure_TargetGlow(frame);
 
 		UF:EnableDisable_Auras(frame);
-		UF:Configure_Auras(frame, 'Buffs');
-		UF:Configure_Auras(frame, 'Debuffs');
+		UF:Configure_Auras(frame, "Buffs");
+		UF:Configure_Auras(frame, "Debuffs");
 
 		UF:Configure_RaidDebuffs(frame);
 

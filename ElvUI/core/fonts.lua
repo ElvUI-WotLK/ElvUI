@@ -27,7 +27,7 @@ function E:UpdateBlizzardFonts()
 	STANDARD_TEXT_FONT	= NORMAL;
 
 	if self.db.general.font == "Homespun" then
-		MONOCHROME = 'MONOCHROME'
+		MONOCHROME = "MONOCHROME"
 	end
 
 	if self.eyefinity then

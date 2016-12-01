@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local S = E:GetModule('Skins');
+local S = E:GetModule("Skins");
 
 local function LoadSkin()
 	if(E.private.skins.blizzard.enable ~= true
@@ -8,9 +8,9 @@ local function LoadSkin()
 		return;
 	end
 
-	WorldStateScoreFrame:CreateBackdrop('Transparent');
-	WorldStateScoreFrame.backdrop:Point('TOPLEFT', 10, -15);
-	WorldStateScoreFrame.backdrop:Point('BOTTOMRIGHT', -113, 67);
+	WorldStateScoreFrame:CreateBackdrop("Transparent");
+	WorldStateScoreFrame.backdrop:Point("TOPLEFT", 10, -15);
+	WorldStateScoreFrame.backdrop:Point("BOTTOMRIGHT", -113, 67);
 
 	WorldStateScoreFrame:StripTextures();
 
@@ -19,11 +19,11 @@ local function LoadSkin()
 
 	local tab
 	for i = 1, 3 do
-		tab = _G['WorldStateScoreFrameTab'..i];
+		tab = _G["WorldStateScoreFrameTab"..i];
 
 		S:HandleTab(tab);
 
-		_G['WorldStateScoreFrameTab'..i..'Text']:Point('CENTER', 0, 2);
+		_G["WorldStateScoreFrameTab"..i.."Text"]:Point("CENTER", 0, 2);
 	end
 
 	S:HandleButton(WorldStateScoreFrameLeaveButton);

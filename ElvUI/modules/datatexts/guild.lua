@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local DT = E:GetModule('DataTexts')
+local DT = E:GetModule("DataTexts")
 
 local join = string.join
 local format = string.format
@@ -12,7 +12,7 @@ local activezone, inactivezone = {r=0.3, g=1.0, b=0.3}, {r=0.65, g=0.65, b=0.65}
 local groupedTable = { "|cffaaaaaa*|r", "" }
 local displayString = ""
 local noGuildString = ""
-local guildInfoString = "%s"
+local guildInfoString = '%s'
 local guildInfoString2 = join("", GUILD, ": %d/%d")
 local guildMotDString = "%s |cffaaaaaa |cffffffff%s"
 local levelNameString = "|cff%02x%02x%02x%d|r |cff%02x%02x%02x%s|r %s"
@@ -55,7 +55,7 @@ local function UpdateGuildMessage()
 end
 
 local eventHandlers = {
-	['CHAT_MSG_SYSTEM'] = function(self)
+	["CHAT_MSG_SYSTEM"] = function(self)
 		GuildRoster()
 	end,
 	-- when we enter the world and guildframe is not available then
@@ -160,7 +160,7 @@ local function OnEnter(self, _, noUpdate)
 
 	SortGuildTable(IsShiftKeyDown())
 
-	local guildName, guildRank = GetGuildInfo('player')
+	local guildName, guildRank = GetGuildInfo("player")
 
 	if guildName and guildRank then
 		DT.tooltip:AddDoubleLine(format(guildInfoString, guildName), format(guildInfoString2, online, total),tthead.r,tthead.g,tthead.b,tthead.r,tthead.g,tthead.b)
@@ -168,14 +168,14 @@ local function OnEnter(self, _, noUpdate)
 	end
 
 	if guildMotD ~= "" then
-		DT.tooltip:AddLine(' ')
+		DT.tooltip:AddLine(" ")
 		DT.tooltip:AddLine(format(guildMotDString, MOTD_COLON, guildMotD), ttsubh.r, ttsubh.g, ttsubh.b, 1)
 	end
 
 	local zonec, classc, levelc, info, grouped
 	local shown = 0
 
-	DT.tooltip:AddLine(' ')
+	DT.tooltip:AddLine(" ")
 	for i = 1, #guildTable do
 		-- if more then 30 guild members are online, we don't Show any more, but inform user there are more
 		if 30 - shown <= 1 then
@@ -208,13 +208,13 @@ end
 
 local function ValueColorUpdate(hex)
 	displayString = join("", GUILD, ": ", hex, "%d|r")
-	noGuildString = join("", hex, L['No Guild'])
+	noGuildString = join("", hex, L["No Guild"])
 
 	if lastPanel ~= nil then
-		OnEvent(lastPanel, 'ELVUI_COLOR_UPDATE')
+		OnEvent(lastPanel, "ELVUI_COLOR_UPDATE")
 	end
 end
-E['valueColorUpdateFuncs'][ValueColorUpdate] = true
+E["valueColorUpdateFuncs"][ValueColorUpdate] = true
 
 --[[
 	DT:RegisterDatatext(name, events, eventFunc, updateFunc, clickFunc, onEnterFunc, onLeaveFunc)
@@ -228,4 +228,4 @@ E['valueColorUpdateFuncs'][ValueColorUpdate] = true
 	onLeaveFunc - function to fire OnLeave, if not provided one will be set for you that hides the tooltip.
 ]]
 
-DT:RegisterDatatext("Guild", {'PLAYER_ENTERING_WORLD', 'CHAT_MSG_SYSTEM', "GUILD_ROSTER_UPDATE", "PLAYER_GUILD_UPDATE", "GUILD_MOTD"}, OnEvent, nil, Click, OnEnter)
+DT:RegisterDatatext("Guild", {"PLAYER_ENTERING_WORLD", "CHAT_MSG_SYSTEM", "GUILD_ROSTER_UPDATE", "PLAYER_GUILD_UPDATE", "GUILD_MOTD"}, OnEvent, nil, Click, OnEnter)

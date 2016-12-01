@@ -1,8 +1,8 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file='actionbars.lua'/>
-	<Script file='microbar.lua'/>
-	<Script file='barPet.lua'/>
-	<Script file='barShapeShift.lua'/>
-	<Script file='barTotem.lua'/>
-	<Script file='bind.lua'/>
+	<Script file="actionbars.lua"/>
+	<Script file="microbar.lua"/>
+	<Script file="barPet.lua"/>
+	<Script file="barShapeShift.lua"/>
+	<Script file="barTotem.lua"/>
+	<Script file="bind.lua"/>
 </Ui>

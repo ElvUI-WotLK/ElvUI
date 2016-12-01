@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local S = E:GetModule('Skins')
+local S = E:GetModule("Skins")
 
 local _G = _G;
 local unpack = unpack;
@@ -28,11 +28,11 @@ local function LoadSkin()
 	FriendsFrameBroadcastInput:Point("TOPLEFT", FriendsFrameStatusDropDown, "TOPRIGHT", 13, -3);
 
 	for i = 1, 5 do
-		S:HandleTab(_G['FriendsFrameTab'..i]);
+		S:HandleTab(_G["FriendsFrameTab"..i]);
 	end
 
 	for i = 1, 2 do -- Friends List Frame
-		local Tab = _G['FriendsTabHeaderTab'..i];
+		local Tab = _G["FriendsTabHeaderTab"..i];
 		Tab:StripTextures();
 		Tab:CreateBackdrop("Default", true);
 		Tab.backdrop:Point("TOPLEFT", 3, -7);
@@ -204,10 +204,10 @@ local function LoadSkin()
 	S:HandleCheckBox(GuildFrameLFGButton);
 
 	for i = 1, 4 do
-		_G['GuildFrameColumnHeader'..i]:StripTextures();
-		_G['GuildFrameColumnHeader'..i]:StyleButton();
-		_G['GuildFrameGuildStatusColumnHeader'..i]:StripTextures();
-		_G['GuildFrameGuildStatusColumnHeader'..i]:StyleButton();
+		_G["GuildFrameColumnHeader"..i]:StripTextures();
+		_G["GuildFrameColumnHeader"..i]:StyleButton();
+		_G["GuildFrameGuildStatusColumnHeader"..i]:StripTextures();
+		_G["GuildFrameGuildStatusColumnHeader"..i]:StyleButton();
 	end
 
 	GuildListScrollFrame:StripTextures();

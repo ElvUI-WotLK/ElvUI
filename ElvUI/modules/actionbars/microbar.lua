@@ -1,21 +1,21 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local AB = E:GetModule('ActionBars');
+local AB = E:GetModule("ActionBars");
 
 local _G = _G;
 
 local CreateFrame = CreateFrame;
 
 local MICRO_BUTTONS = {
-	'CharacterMicroButton',
-	'SpellbookMicroButton',
-	'TalentMicroButton',
-	'AchievementMicroButton',
-	'QuestLogMicroButton',
-	'SocialsMicroButton',
-	'PVPMicroButton',
-	'LFDMicroButton',
-	'MainMenuMicroButton',
-	'HelpMicroButton'
+	"CharacterMicroButton",
+	"SpellbookMicroButton",
+	"TalentMicroButton",
+	"AchievementMicroButton",
+	"QuestLogMicroButton",
+	"SocialsMicroButton",
+	"PVPMicroButton",
+	"LFDMicroButton",
+	"MainMenuMicroButton",
+	"HelpMicroButton"
 };
 
 local function Button_OnEnter()
@@ -31,11 +31,11 @@ local function Button_OnLeave()
 end
 
 function AB:MainMenuMicroButton_SetNormal()
-	MainMenuBarPerformanceBar:SetPoint('TOPLEFT', MainMenuMicroButton, 'TOPLEFT', 9, -36);
+	MainMenuBarPerformanceBar:SetPoint("TOPLEFT", MainMenuMicroButton, "TOPLEFT", 9, -36);
 end
 
 function AB:MainMenuMicroButton_SetPushed()
-	MainMenuBarPerformanceBar:SetPoint('TOPLEFT', MainMenuMicroButton, 'TOPLEFT', 8, -37);
+	MainMenuBarPerformanceBar:SetPoint("TOPLEFT", MainMenuMicroButton, "TOPLEFT", 8, -37);
 end
 
 function AB:HandleMicroButton(button)
@@ -46,15 +46,15 @@ function AB:HandleMicroButton(button)
 	button:SetParent(ElvUI_MicroBar);
 
 	button:GetHighlightTexture():Kill();
-	button:HookScript('OnEnter', Button_OnEnter);
-	button:HookScript('OnLeave', Button_OnLeave);
+	button:HookScript("OnEnter", Button_OnEnter);
+	button:HookScript("OnLeave", Button_OnLeave);
 
-	local f = CreateFrame('Frame', nil, button);
+	local f = CreateFrame("Frame", nil, button);
 	f:SetFrameLevel(1);
-	f:SetFrameStrata('BACKGROUND');
-	f:SetPoint('BOTTOMLEFT', button, 'BOTTOMLEFT', 2, 0);
-	f:SetPoint('TOPRIGHT', button, 'TOPRIGHT', -2, -28);
-	f:SetTemplate('Default', true);
+	f:SetFrameStrata("BACKGROUND");
+	f:SetPoint("BOTTOMLEFT", button, "BOTTOMLEFT", 2, 0);
+	f:SetPoint("TOPRIGHT", button, "TOPRIGHT", -2, -28);
+	f:SetTemplate("Default", true);
 	button.backdrop = f;
 
 	pushed:SetTexCoord(0.17, 0.87, 0.5, 0.908);
@@ -91,12 +91,12 @@ function AB:UpdateMicroPositionDimensions()
 		button:ClearAllPoints();
 
 		if(prevButton == ElvUI_MicroBar) then
-			button:SetPoint('TOPLEFT', prevButton, 'TOPLEFT', -2 + E.Border, 28 - E.Border);
+			button:SetPoint("TOPLEFT", prevButton, "TOPLEFT", -2 + E.Border, 28 - E.Border);
 		elseif((i - 1) % self.db.microbar.buttonsPerRow == 0) then
-			button:Point('TOP', lastColumnButton, 'BOTTOM', 0, 28 - self.db.microbar.yOffset);
+			button:Point("TOP", lastColumnButton, "BOTTOM", 0, 28 - self.db.microbar.yOffset);
 			numRows = numRows + 1;
 		else
-			button:Point('LEFT', prevButton, 'RIGHT', - 4 + self.db.microbar.xOffset, 0);
+			button:Point("LEFT", prevButton, "RIGHT", - 4 + self.db.microbar.xOffset, 0);
 		end
 	end
 
@@ -123,22 +123,22 @@ function AB:UpdateMicroPositionDimensions()
 end
 
 function AB:SetupMicroBar()
-	local microBar = CreateFrame('Frame', 'ElvUI_MicroBar', E.UIParent);
-	microBar:Point('TOPLEFT', E.UIParent, 'TOPLEFT', 4, -48);
+	local microBar = CreateFrame("Frame", "ElvUI_MicroBar", E.UIParent);
+	microBar:Point("TOPLEFT", E.UIParent, "TOPLEFT", 4, -48);
 	for i = 1, #MICRO_BUTTONS do
 		self:HandleMicroButton(_G[MICRO_BUTTONS[i]]);
 	end
 
 	MicroButtonPortrait:SetInside(CharacterMicroButton.backdrop);
 
-	self:RegisterEvent('PLAYER_ENTERING_WORLD', 'UpdateMicroButtonsParent')
-	self:SecureHook('VehicleMenuBar_MoveMicroButtons', 'UpdateMicroButtonsParent')
+	self:RegisterEvent("PLAYER_ENTERING_WORLD", "UpdateMicroButtonsParent")
+	self:SecureHook("VehicleMenuBar_MoveMicroButtons", "UpdateMicroButtonsParent")
 
-	self:SecureHook('MainMenuMicroButton_SetPushed');
-	self:SecureHook('MainMenuMicroButton_SetNormal');
+	self:SecureHook("MainMenuMicroButton_SetPushed");
+	self:SecureHook("MainMenuMicroButton_SetNormal");
 
 	self:MainMenuMicroButton_SetNormal();
 
 	self:UpdateMicroPositionDimensions();
-	E:CreateMover(microBar, 'MicrobarMover', L['Micro Bar'], nil, nil, nil, 'ALL,ACTIONBARS');
+	E:CreateMover(microBar, "MicrobarMover", L["Micro Bar"], nil, nil, nil, "ALL,ACTIONBARS");
 end

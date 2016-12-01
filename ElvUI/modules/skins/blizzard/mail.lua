@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local S = E:GetModule('Skins')
+local S = E:GetModule("Skins")
 
 local hooksecurefunc = hooksecurefunc;
 local GetInboxItem = GetInboxItem;

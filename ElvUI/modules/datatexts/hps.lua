@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local DT = E:GetModule('DataTexts')
+local DT = E:GetModule("DataTexts")
 
 local events = {SPELL_HEAL = true, SPELL_PERIODIC_HEAL = true}
 local playerID, petID
@@ -8,7 +8,7 @@ local combatTime = 0
 local timeStamp = 0
 local lastSegment = 0
 local lastPanel
-local displayString = '';
+local displayString = "";
 
 local function Reset()
 	timeStamp = 0
@@ -24,21 +24,21 @@ local function GetHPS(self)
 	else
 		hps = healTotal / combatTime
 	end
-	self.text:SetFormattedText(displayString, L["HPS"]..': ', hps)
+	self.text:SetFormattedText(displayString, L["HPS"]..": ", hps)
 end
 
 local function OnEvent(self, event, ...)
 	lastPanel = self
 
-	if event == 'PLAYER_ENTERING_WORLD' then
-		playerID = UnitGUID('player')
-	elseif event == 'PLAYER_REGEN_DISABLED' or event == "PLAYER_LEAVE_COMBAT" then
+	if event == "PLAYER_ENTERING_WORLD" then
+		playerID = UnitGUID("player")
+	elseif event == "PLAYER_REGEN_DISABLED" or event == "PLAYER_LEAVE_COMBAT" then
 		local now = time()
 		if now - lastSegment > 20 then
 			Reset()
 		end
 		lastSegment = now
-	elseif event == 'COMBAT_LOG_EVENT_UNFILTERED' then
+	elseif event == "COMBAT_LOG_EVENT_UNFILTERED" then
 		if not events[select(2, ...)] then return end
 
 		local id = select(3, ...)
@@ -63,13 +63,13 @@ local function OnClick(self)
 end
 
 local function ValueColorUpdate(hex)
-	displayString = string.join("", "%s", hex, "%.1f|r")
+	displayString = string.join("", '%s', hex, "%.1f|r")
 
 	if lastPanel ~= nil then
 		OnEvent(lastPanel)
 	end
 end
-E['valueColorUpdateFuncs'][ValueColorUpdate] = true;
+E["valueColorUpdateFuncs"][ValueColorUpdate] = true;
 
 --[[
 	DT:RegisterDatatext(name, events, eventFunc, updateFunc, clickFunc, onEnterFunc)
@@ -81,4 +81,4 @@ E['valueColorUpdateFuncs'][ValueColorUpdate] = true;
 	click - function to fire when clicking the datatext
 	onEnterFunc - function to fire OnEnter
 ]]
-DT:RegisterDatatext('HPS', {'PLAYER_ENTERING_WORLD', 'COMBAT_LOG_EVENT_UNFILTERED', "PLAYER_LEAVE_COMBAT", 'PLAYER_REGEN_DISABLED', 'UNIT_PET'}, OnEvent, nil, OnClick)
+DT:RegisterDatatext("HPS", {"PLAYER_ENTERING_WORLD", "COMBAT_LOG_EVENT_UNFILTERED", "PLAYER_LEAVE_COMBAT", "PLAYER_REGEN_DISABLED", "UNIT_PET"}, OnEvent, nil, OnClick)

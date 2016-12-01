@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local AB = E:GetModule('ActionBars');
+local AB = E:GetModule("ActionBars");
 
 local _G = _G;
 local select, tonumber, pairs = select, tonumber, pairs;
@@ -29,16 +29,16 @@ local bind = CreateFrame("Frame", "ElvUI_KeyBinder", E.UIParent);
 function AB:ActivateBindMode()
 	bind.active = true;
 	E:StaticPopupSpecial_Show(ElvUIBindPopupWindow)
-	AB:RegisterEvent('PLAYER_REGEN_DISABLED', 'DeactivateBindMode', false);
+	AB:RegisterEvent("PLAYER_REGEN_DISABLED", "DeactivateBindMode", false);
 end
 
 function AB:DeactivateBindMode(save)
 	if save then
 		SaveBindings(GetCurrentBindingSet());
-		E:Print(L['Binds Saved']);
+		E:Print(L["Binds Saved"]);
 	else
 		LoadBindings(GetCurrentBindingSet());
-		E:Print(L['Binds Discarded']);
+		E:Print(L["Binds Discarded"]);
 	end
 	bind.active = false;
 	self:BindHide();
@@ -76,7 +76,7 @@ function AB:BindListener(key)
 	then return; end
 
 	if key == "MiddleButton" then key = "BUTTON3"; end
-	if key:find('Button%d') then
+	if key:find("Button%d") then
 		key = key:upper()
 	end
 
@@ -143,7 +143,7 @@ function AB:BindUpdate(button, spellmacro)
 			bind.button.bindstring = (spellmacro=="SHAPESHIFT" and "ShapeshiftButton" or "BONUSACTIONBUTTON")..bind.button.id;
 		end
 
-		GameTooltip:AddLine(L['Trigger']);
+		GameTooltip:AddLine(L["Trigger"]);
 		GameTooltip:Show();
 		GameTooltip:SetScript("OnHide", function(tt)
 			tt:SetOwner(bind, "ANCHOR_NONE");
@@ -185,7 +185,7 @@ function AB:BindUpdate(button, spellmacro)
 			end
 		end
 
-		GameTooltip:AddLine(L['Trigger']);
+		GameTooltip:AddLine(L["Trigger"]);
 		GameTooltip:Show();
 		GameTooltip:SetScript("OnHide", function(tt)
 			tt:SetOwner(bind, "ANCHOR_TOP");
@@ -271,7 +271,7 @@ function AB:LoadKeyBinder()
 	self:HookScript(GameTooltip, "OnUpdate", "Tooltip_OnUpdate");
 	hooksecurefunc(GameTooltip, "Hide", function(tooltip) for _, tt in pairs(tooltip.shoppingTooltips) do tt:Hide(); end end);
 
-	bind:SetScript('OnEnter', function(self) local db = self.button:GetParent().db if db and db.mouseover then AB:Button_OnEnter(self.button) end end)
+	bind:SetScript("OnEnter", function(self) local db = self.button:GetParent().db if db and db.mouseover then AB:Button_OnEnter(self.button) end end)
 	bind:SetScript("OnLeave", function(self) AB:BindHide(); local db = self.button:GetParent().db if db and db.mouseover then AB:Button_OnLeave(self.button) end end)
 	bind:SetScript("OnKeyUp", function(_, key) self:BindListener(key) end);
 	bind:SetScript("OnMouseUp", function(_, key) self:BindListener(key) end);
@@ -303,23 +303,23 @@ function AB:LoadKeyBinder()
 	f:SetClampedToScreen(true)
 	f:SetWidth(360)
 	f:SetHeight(130)
-	f:SetTemplate('Transparent')
+	f:SetTemplate("Transparent")
 	f:Hide()
 
-	local header = CreateFrame('Button', nil, f)
-	header:SetTemplate('Default', true)
+	local header = CreateFrame("Button", nil, f)
+	header:SetTemplate("Default", true)
 	header:SetWidth(100); header:SetHeight(25)
-	header:SetPoint("CENTER", f, 'TOP')
+	header:SetPoint("CENTER", f, "TOP")
 	header:SetFrameLevel(header:GetFrameLevel() + 2)
 	header:EnableMouse(true)
-	header:RegisterForClicks('AnyUp', 'AnyDown')
-	header:SetScript('OnMouseDown', function() f:StartMoving() end)
-	header:SetScript('OnMouseUp', function() f:StopMovingOrSizing() end)
+	header:RegisterForClicks("AnyUp", "AnyDown")
+	header:SetScript("OnMouseDown", function() f:StartMoving() end)
+	header:SetScript("OnMouseUp", function() f:StopMovingOrSizing() end)
 
 	local title = header:CreateFontString("OVERLAY")
 	title:FontTemplate()
 	title:SetPoint("CENTER", header, "CENTER")
-	title:SetText('Key Binds')
+	title:SetText("Key Binds")
 
 	local desc = f:CreateFontString("ARTWORK")
 	desc:SetFontObject("GameFontHighlight")
@@ -329,7 +329,7 @@ function AB:LoadKeyBinder()
 	desc:SetPoint("BOTTOMRIGHT", -18, 48)
 	desc:SetText(L["Hover your mouse over any actionbutton or spellbook button to bind it. Press the escape key or right click to clear the current actionbutton's keybinding."])
 
-	local perCharCheck = CreateFrame("CheckButton", f:GetName()..'CheckButton', f, "OptionsCheckButtonTemplate")
+	local perCharCheck = CreateFrame("CheckButton", f:GetName().."CheckButton", f, "OptionsCheckButtonTemplate")
 	_G[perCharCheck:GetName() .. "Text"]:SetText(CHARACTER_SPECIFIC_KEYBINDINGS)
 
 	perCharCheck:SetScript("OnShow", function(self)
@@ -351,14 +351,14 @@ function AB:LoadKeyBinder()
 
 	perCharCheck:SetScript("OnLeave", GameTooltip_Hide)
 
-	local save = CreateFrame("Button", f:GetName()..'SaveButton', f, "OptionsButtonTemplate")
+	local save = CreateFrame("Button", f:GetName().."SaveButton", f, "OptionsButtonTemplate")
 	_G[save:GetName() .. "Text"]:SetText(L["Save"])
 	save:Width(150)
 	save:SetScript("OnClick", function()
 		AB:DeactivateBindMode(true)
 	end)
 
-	local discard = CreateFrame("Button", f:GetName()..'DiscardButton', f, "OptionsButtonTemplate")
+	local discard = CreateFrame("Button", f:GetName().."DiscardButton", f, "OptionsButtonTemplate")
 	discard:Width(150)
 	_G[discard:GetName() .. "Text"]:SetText(L["Discard"])
 
@@ -371,7 +371,7 @@ function AB:LoadKeyBinder()
 	save:SetPoint("BOTTOMRIGHT", -14, 10)
 	discard:SetPoint("BOTTOMLEFT", 14, 10)
 
-	local S = E:GetModule('Skins')
+	local S = E:GetModule("Skins")
 	S:HandleCheckBox(perCharCheck)
 	S:HandleButton(save)
 	S:HandleButton(discard)

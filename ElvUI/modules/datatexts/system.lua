@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local DT = E:GetModule('DataTexts');
+local DT = E:GetModule("DataTexts");
 
 local sort = table.sort;
 local floor = math.floor;
@@ -10,10 +10,10 @@ local CPUTable = {};
 
 local int, int2 = 6, 5;
 local StatusColors = {
-	'|cff0CD809',
-	'|cffE8DA0F',
-	'|cffFF9000',
-	'|cffD80909'
+	"|cff0CD809",
+	"|cffE8DA0F",
+	"|cffFF9000",
+	"|cffD80909"
 }
 local resetInfoFormatter = join("", "|cffaaaaaa", L["Right Click: Reset CPU Usage"], "|r")
 
@@ -24,10 +24,10 @@ local function FormatMem(Memory)
 
 	if ( Memory > 999 ) then
 		local Mem = ((Memory / 1024) * Mult) / Mult;
-		return format('%.2f mb', Mem);
+		return format("%.2f mb", Mem);
 	else
 		local Mem = (Memory * Mult) / Mult;
-		return format('%d kb', Mem);
+		return format("%d kb", Mem);
 	end
 end
 
@@ -105,8 +105,8 @@ local function Click(_, btn)
 end
 
 local function OnEnter(self)
-	local HomeLatencyString = '%d ms';
-	local CPUProfiling = GetCVar('scriptProfile') == '1';
+	local HomeLatencyString = "%d ms";
+	local CPUProfiling = GetCVar("scriptProfile") == "1";
 	local HomeLatency = select(3, GetNetStats());
 
 	local TotalMemory, TotalCPU = UpdateMemory(), nil;
@@ -115,16 +115,16 @@ local function OnEnter(self)
 
 	DT:SetupTooltip(self)
 
-	DT.tooltip:AddDoubleLine(L['Home Latency:'], format(HomeLatencyString, HomeLatency), 0.69, 0.31, 0.31,0.84, 0.75, 0.65);
-	DT.tooltip:AddDoubleLine(L['Total Memory:'], FormatMem(TotalMemory), 0.69, 0.31, 0.31,0.84, 0.75, 0.65);
+	DT.tooltip:AddDoubleLine(L["Home Latency:"], format(HomeLatencyString, HomeLatency), 0.69, 0.31, 0.31,0.84, 0.75, 0.65);
+	DT.tooltip:AddDoubleLine(L["Total Memory:"], FormatMem(TotalMemory), 0.69, 0.31, 0.31,0.84, 0.75, 0.65);
 
 	if CPUProfiling then
 		TotalCPU = UpdateCPU();
-		DT.tooltip:AddDoubleLine(L['Total CPU:'], format(HomeLatencyString, TotalCPU), 0.69, 0.31, 0.31,0.84, 0.75, 0.65);
+		DT.tooltip:AddDoubleLine(L["Total CPU:"], format(HomeLatencyString, TotalCPU), 0.69, 0.31, 0.31,0.84, 0.75, 0.65);
 	end
 
 	if ( IsShiftKeyDown() ) or ( not CPUProfiling ) then
-		DT.tooltip:AddLine(' ');
+		DT.tooltip:AddLine(" ");
 
 		for i = 1, #MemoryTable do
 			if ( MemoryTable[i][4] ) then
@@ -137,7 +137,7 @@ local function OnEnter(self)
 	end
 
 	if ( CPUProfiling ) and ( not IsShiftKeyDown() ) then
-		DT.tooltip:AddLine(' ');
+		DT.tooltip:AddLine(" ");
 
 		for i = 1, #CPUTable do
 			if ( CPUTable[i][4] ) then
@@ -148,11 +148,11 @@ local function OnEnter(self)
 			end
 		end
 
-		DT.tooltip:AddLine(' ');
-		DT.tooltip:AddLine(L['(Hold Shift) Memory Usage']);
+		DT.tooltip:AddLine(" ");
+		DT.tooltip:AddLine(L["(Hold Shift) Memory Usage"]);
 	end
 
-	DT.tooltip:AddLine' '
+	DT.tooltip:AddLine" "
 	DT.tooltip:AddLine(resetInfoFormatter)
 
 	DT.tooltip:Show();
@@ -194,7 +194,7 @@ local function Update(self, t)
 			FramerateColor = 3;
 		end
 
-		DisplayFormat = join('', 'FPS: ', StatusColors[FramerateColor], '%d|r MS: ', StatusColors[LatencyColor], '%d|r');
+		DisplayFormat = join("", "FPS: ", StatusColors[FramerateColor], "%d|r MS: ", StatusColors[LatencyColor], "%d|r");
 		self.text:SetFormattedText(DisplayFormat, Framerate, Latency);
 
 		int2 = 1;

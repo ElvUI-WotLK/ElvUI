@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local S = E:GetModule('Skins')
+local S = E:GetModule("Skins")
 
 local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.calendar ~= true then return end
@@ -120,7 +120,7 @@ local function LoadSkin()
 	CalendarTodayFrame:SetBackdropBorderColor(unpack(E["media"].rgbvaluecolor));
 	local value = E.db["general"].valuecolor;
 	CalendarTodayFrame:SetBackdropColor(value.r, value.g, value.b, 0.5);
-	CalendarTodayFrame:HookScript('OnUpdate', function(self) self:SetAlpha(CalendarTodayTextureGlow:GetAlpha()) end)
+	CalendarTodayFrame:HookScript("OnUpdate", function(self) self:SetAlpha(CalendarTodayTextureGlow:GetAlpha()) end)
 	CalendarTodayFrame:CreateShadow()
 	CalendarTodayFrame.shadow:SetBackdropBorderColor(unpack(E["media"].rgbvaluecolor))
 

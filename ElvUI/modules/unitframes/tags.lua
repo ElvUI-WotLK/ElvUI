@@ -334,47 +334,47 @@ ElvUF.Tags["name:long"] = function(unit)
 	return name ~= nil and E:ShortenString(name, 20) or ""
 end
 
-ElvUF.TagEvents['name:veryshort:status'] = 'UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED UNIT_HEALTH'
-ElvUF.Tags['name:veryshort:status'] = function(unit)
+ElvUF.TagEvents["name:veryshort:status"] = "UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED UNIT_HEALTH"
+ElvUF.Tags["name:veryshort:status"] = function(unit)
 	local status = UnitIsDead(unit) and DEAD or UnitIsGhost(unit) and L["Ghost"] or not UnitIsConnected(unit) and L["Offline"]
 	local name = UnitName(unit)
 	if (status) then
 		return status
 	else
-		return name ~= nil and E:ShortenString(name, 5) or ''
+		return name ~= nil and E:ShortenString(name, 5) or ""
 	end
 end
 
-ElvUF.TagEvents['name:short:status'] = 'UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED UNIT_HEALTH'
-ElvUF.Tags['name:short:status'] = function(unit)
+ElvUF.TagEvents["name:short:status"] = "UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED UNIT_HEALTH"
+ElvUF.Tags["name:short:status"] = function(unit)
 	local status = UnitIsDead(unit) and DEAD or UnitIsGhost(unit) and L["Ghost"] or not UnitIsConnected(unit) and L["Offline"]
 	local name = UnitName(unit)
 	if (status) then
 		return status
 	else
-		return name ~= nil and E:ShortenString(name, 10) or ''
+		return name ~= nil and E:ShortenString(name, 10) or ""
 	end
 end
 
-ElvUF.TagEvents['name:medium:status'] = 'UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED UNIT_HEALTH'
-ElvUF.Tags['name:medium:status'] = function(unit)
+ElvUF.TagEvents["name:medium:status"] = "UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED UNIT_HEALTH"
+ElvUF.Tags["name:medium:status"] = function(unit)
 	local status = UnitIsDead(unit) and DEAD or UnitIsGhost(unit) and L["Ghost"] or not UnitIsConnected(unit) and L["Offline"]
 	local name = UnitName(unit)
 	if (status) then
 		return status
 	else
-		return name ~= nil and E:ShortenString(name, 15) or ''
+		return name ~= nil and E:ShortenString(name, 15) or ""
 	end
 end
 
-ElvUF.TagEvents['name:long:status'] = 'UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED UNIT_HEALTH'
-ElvUF.Tags['name:long:status'] = function(unit)
+ElvUF.TagEvents["name:long:status"] = "UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED UNIT_HEALTH"
+ElvUF.Tags["name:long:status"] = function(unit)
 	local status = UnitIsDead(unit) and DEAD or UnitIsGhost(unit) and L["Ghost"] or not UnitIsConnected(unit) and L["Offline"]
 	local name = UnitName(unit)
 	if (status) then
 		return status
 	else
-		return name ~= nil and E:ShortenString(name, 20) or ''
+		return name ~= nil and E:ShortenString(name, 20) or ""
 	end
 end
 
@@ -536,15 +536,15 @@ ElvUF.Tags["classificationcolor"] = function(unit)
 	end
 end
 
-ElvUF.TagEvents['guild'] = 'PLAYER_GUILD_UPDATE'
-ElvUF.Tags['guild'] = function(unit)
+ElvUF.TagEvents["guild"] = "PLAYER_GUILD_UPDATE"
+ElvUF.Tags["guild"] = function(unit)
 	local guildName = GetGuildInfo(unit)
 
 	return guildName or ""
 end
 
-ElvUF.TagEvents['guild:brackets'] = 'PLAYER_GUILD_UPDATE'
-ElvUF.Tags['guild:brackets'] = function(unit)
+ElvUF.TagEvents["guild:brackets"] = "PLAYER_GUILD_UPDATE"
+ElvUF.Tags["guild:brackets"] = function(unit)
 	local guildName = GetGuildInfo(unit)
 
 	return guildName and format("<%s>", guildName) or ""

@@ -38,7 +38,7 @@ local function UpdateOverride(self)
 end
 
 function UF:Construct_RaidRoleFrames(frame)
-	local anchor = CreateFrame('Frame', nil, frame.RaisedElementParent);
+	local anchor = CreateFrame("Frame", nil, frame.RaisedElementParent);
 	frame.Leader = anchor:CreateTexture(nil, "OVERLAY");
 	frame.Assistant = anchor:CreateTexture(nil, "OVERLAY");
 	frame.MasterLooter = anchor:CreateTexture(nil, "OVERLAY");
@@ -65,7 +65,7 @@ function UF:Configure_RaidRoleIcons(frame)
 		if(not frame:IsElementEnabled("Leader")) then
 			frame:EnableElement("Leader");
 			frame:EnableElement("MasterLooter");
-			frame:EnableElement('Assistant');
+			frame:EnableElement("Assistant");
 		end
 
 		raidRoleFrameAnchor:ClearAllPoints();
@@ -78,7 +78,7 @@ function UF:Configure_RaidRoleIcons(frame)
 		raidRoleFrameAnchor:Hide();
 		frame:DisableElement("Leader");
 		frame:DisableElement("MasterLooter");
-		frame:DisableElement('Assistant');
+		frame:DisableElement("Assistant");
 	end
 end
 

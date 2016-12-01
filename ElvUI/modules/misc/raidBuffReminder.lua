@@ -1,36 +1,36 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local RB = E:NewModule('ReminderBuffs', 'AceEvent-3.0');
-local LSM = LibStub('LibSharedMedia-3.0');
+local RB = E:NewModule("ReminderBuffs", "AceEvent-3.0");
+local LSM = LibStub("LibSharedMedia-3.0");
 
 E.ReminderBuffs = RB;
 
 RB.Spell1Buffs = {
-	67016, --'Flask of the North-SP'
-	67017, --'Flask of the North-AP'
-	67018, --'Flask of the North-STR'
-	53758, --'Flask of Stoneblood'
-	53755, --'Flask of the Frost Wyrm',
-	54212, --'Flask of Pure Mojo',
-	53760, --'Flask of Endless Rage',
-	17627, --'Flask of Distilled Wisdom',
+	67016, --"Flask of the North-SP"
+	67017, --"Flask of the North-AP"
+	67018, --"Flask of the North-STR"
+	53758, --"Flask of Stoneblood"
+	53755, --"Flask of the Frost Wyrm",
+	54212, --"Flask of Pure Mojo",
+	53760, --"Flask of Endless Rage",
+	17627, --"Flask of Distilled Wisdom",
 
-	33721, --'Spellpower Elixir',
-	53746, --'Wrath Elixir',
-	28497, --'Elixir of Mighty Agility',
-	53748, --'Elixir of Mighty Strength',
-	60346, --'Elixir of Lightning Speed',
-	60344, --'Elixir of Expertise',
-	60341, --'Elixir of Deadly Strikes',
-	60345, --'Elixir of Armor Piercing',
-	60340, --'Elixir of Accuracy',
-	53749, --'Guru's Elixir',
+	33721, --"Spellpower Elixir",
+	53746, --"Wrath Elixir",
+	28497, --"Elixir of Mighty Agility",
+	53748, --"Elixir of Mighty Strength",
+	60346, --"Elixir of Lightning Speed",
+	60344, --"Elixir of Expertise",
+	60341, --"Elixir of Deadly Strikes",
+	60345, --"Elixir of Armor Piercing",
+	60340, --"Elixir of Accuracy",
+	53749, --"Guru's Elixir",
 
-	60343, --'Elixir of Mighty Defense',
-	53751, --'Elixir of Mighty Fortitude',
-	53764, --'Elixir of Mighty Mageblood',
-	60347, --'Elixir of Mighty Thoughts',
-	53763, --'Elixir of Protection',
-	53747, --'Elixir of Spirit',
+	60343, --"Elixir of Mighty Defense",
+	53751, --"Elixir of Mighty Fortitude",
+	53764, --"Elixir of Mighty Mageblood",
+	60347, --"Elixir of Mighty Thoughts",
+	53763, --"Elixir of Protection",
+	53747, --"Elixir of Spirit",
 };
 
 RB.Spell2Buffs = {
@@ -90,7 +90,7 @@ function RB:CheckFilterForActiveBuff(filter)
 
 	for _, spell in pairs(filter) do
 		spellName = GetSpellInfo(spell);
-		name, _, texture, _, _, duration, expirationTime = UnitAura('player', spellName);
+		name, _, texture, _, _, duration, expirationTime = UnitAura("player", spellName);
 
 		if(name) then
 			return true, texture, duration, expirationTime;
@@ -110,25 +110,25 @@ function RB:UpdateReminderTime(elapsed)
 	end
 
 	if(self.expiration <= 0) then
-		self.timer:SetText('');
-		self:SetScript('OnUpdate', nil);
+		self.timer:SetText("");
+		self:SetScript("OnUpdate", nil);
 
 		return;
 	end
 
 	local timervalue, formatid;
 	timervalue, formatid, self.nextupdate = E:GetTimeInfo(self.expiration, 4);
-	self.timer:SetFormattedText(('%s%s|r'):format(E.TimeColors[formatid], E.TimeFormats[formatid][1]), timervalue);
+	self.timer:SetFormattedText(("%s%s|r"):format(E.TimeColors[formatid], E.TimeFormats[formatid][1]), timervalue);
 end
 
 function RB:UpdateReminder(event, unit)
-	if(event == 'UNIT_AURA' and unit ~= 'player') then
+	if(event == "UNIT_AURA" and unit ~= "player") then
 		return;
 	end
 
 	local frame = self.frame;
 
-	if(E.Role == 'Caster') then
+	if(E.Role == "Caster") then
 		self.Spell5Buffs = self.CasterSpell5Buffs;
 		self.Spell6Buffs = self.CasterSpell6Buffs;
 	else
@@ -137,7 +137,7 @@ function RB:UpdateReminder(event, unit)
 	end
 
 	for i = 1, 6 do
-		local hasBuff, texture, duration, expirationTime = self:CheckFilterForActiveBuff(self['Spell'..i..'Buffs']);
+		local hasBuff, texture, duration, expirationTime = self:CheckFilterForActiveBuff(self["Spell"..i.."Buffs"]);
 		local button = frame[i];
 
 		if(hasBuff) then
@@ -147,18 +147,18 @@ function RB:UpdateReminder(event, unit)
 
 			if(duration == 0 and expirationTime == 0) then
 			--	button.t:SetAlpha(0.3);
-				button:SetScript('OnUpdate', nil);
+				button:SetScript("OnUpdate", nil);
 				button.timer:SetText(nil);
 				CooldownFrame_SetTimer(button.cd, 0, 0, 0);
 			else
 				button.t:SetAlpha(1)
 				CooldownFrame_SetTimer(button.cd, expirationTime - duration, duration, 1);
-				button:SetScript('OnUpdate', self.UpdateReminderTime);
+				button:SetScript("OnUpdate", self.UpdateReminderTime);
 			end
 		else
 			CooldownFrame_SetTimer(button.cd, 0, 0, 0);
 			button.t:SetAlpha(0.3);
-			button:SetScript('OnUpdate', nil);
+			button:SetScript("OnUpdate", nil);
 			button.timer:SetText(nil);
 			button.t:SetTexture(self.DefaultIcons[i]);
 		end
@@ -166,51 +166,51 @@ function RB:UpdateReminder(event, unit)
 end
 
 function RB:CreateButton()
-	local button = CreateFrame('Button', nil, ElvUI_ReminderBuffs);
-	button:SetTemplate('Default');
+	local button = CreateFrame("Button", nil, ElvUI_ReminderBuffs);
+	button:SetTemplate("Default");
 
-	button.t = button:CreateTexture(nil, 'OVERLAY');
+	button.t = button:CreateTexture(nil, "OVERLAY");
 	button.t:SetTexCoord(unpack(E.TexCoords));
 	button.t:SetInside();
-	button.t:SetTexture('Interface\\Icons\\INV_Misc_QuestionMark');
+	button.t:SetTexture("Interface\\Icons\\INV_Misc_QuestionMark");
 
-	button.cd = CreateFrame('Cooldown', nil, button, 'CooldownFrameTemplate');
+	button.cd = CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate");
 	button.cd:SetInside();
 	button.cd.noOCC = true;
 	button.cd.noCooldownCount = true;
 	button.cd:SetReverse(true);
 
-	button.timer = button.cd:CreateFontString(nil, 'OVERLAY');
-	button.timer:SetPoint('CENTER');
+	button.timer = button.cd:CreateFontString(nil, "OVERLAY");
+	button.timer:SetPoint("CENTER");
 
 	return button;
 end
 
 function RB:EnableRB()
 	ElvUI_ReminderBuffs:Show()
-	self:RegisterEvent('ACTIVE_TALENT_GROUP_CHANGED', 'UpdateReminder');
-	self:RegisterEvent('UNIT_INVENTORY_CHANGED', 'UpdateReminder');
-	self:RegisterEvent('UNIT_AURA', 'UpdateReminder');
-	self:RegisterEvent('PLAYER_REGEN_ENABLED', 'UpdateReminder');
-	self:RegisterEvent('PLAYER_REGEN_DISABLED', 'UpdateReminder');
-	self:RegisterEvent('PLAYER_ENTERING_WORLD', 'UpdateReminder');
-	self:RegisterEvent('UPDATE_BONUS_ACTIONBAR', 'UpdateReminder');
-	self:RegisterEvent('CHARACTER_POINTS_CHANGED', 'UpdateReminder');
-	self:RegisterEvent('ZONE_CHANGED_NEW_AREA', 'UpdateReminder');
+	self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", "UpdateReminder");
+	self:RegisterEvent("UNIT_INVENTORY_CHANGED", "UpdateReminder");
+	self:RegisterEvent("UNIT_AURA", "UpdateReminder");
+	self:RegisterEvent("PLAYER_REGEN_ENABLED", "UpdateReminder");
+	self:RegisterEvent("PLAYER_REGEN_DISABLED", "UpdateReminder");
+	self:RegisterEvent("PLAYER_ENTERING_WORLD", "UpdateReminder");
+	self:RegisterEvent("UPDATE_BONUS_ACTIONBAR", "UpdateReminder");
+	self:RegisterEvent("CHARACTER_POINTS_CHANGED", "UpdateReminder");
+	self:RegisterEvent("ZONE_CHANGED_NEW_AREA", "UpdateReminder");
 	self:UpdateReminder();
 end
 
 function RB:DisableRB()
 	ElvUI_ReminderBuffs:Hide()
-	self:UnregisterEvent('ACTIVE_TALENT_GROUP_CHANGED');
-	self:UnregisterEvent('UNIT_INVENTORY_CHANGED');
-	self:UnregisterEvent('UNIT_AURA');
-	self:UnregisterEvent('PLAYER_REGEN_ENABLED');
-	self:UnregisterEvent('PLAYER_REGEN_DISABLED');
-	self:UnregisterEvent('PLAYER_ENTERING_WORLD');
-	self:UnregisterEvent('UPDATE_BONUS_ACTIONBAR');
-	self:UnregisterEvent('CHARACTER_POINTS_CHANGED');
-	self:UnregisterEvent('ZONE_CHANGED_NEW_AREA');
+	self:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED");
+	self:UnregisterEvent("UNIT_INVENTORY_CHANGED");
+	self:UnregisterEvent("UNIT_AURA");
+	self:UnregisterEvent("PLAYER_REGEN_ENABLED");
+	self:UnregisterEvent("PLAYER_REGEN_DISABLED");
+	self:UnregisterEvent("PLAYER_ENTERING_WORLD");
+	self:UnregisterEvent("UPDATE_BONUS_ACTIONBAR");
+	self:UnregisterEvent("CHARACTER_POINTS_CHANGED");
+	self:UnregisterEvent("ZONE_CHANGED_NEW_AREA");
 end
 
 function RB:UpdateSettings(isCallback)
@@ -230,7 +230,7 @@ function RB:UpdateSettings(isCallback)
 		end
 
 		if(i == 6) then
-			button:Point('BOTTOM', ElvUI_ReminderBuffs, 'BOTTOM', 0, (E.PixelMode and 0 or 2));
+			button:Point("BOTTOM", ElvUI_ReminderBuffs, "BOTTOM", 0, (E.PixelMode and 0 or 2));
 		end
 
 		if(E.db.general.reminder.durations) then
@@ -277,23 +277,23 @@ function RB:Initialize()
 	self.db = E.db.general.reminder;
 
 	self.DefaultIcons = {
-		[1] = 'Interface\\Icons\\INV_Potion_97',
-		[2] = 'Interface\\Icons\\Spell_Misc_Food',
-		[3] = 'Interface\\Icons\\Spell_Nature_Regeneration',
-		[4] = 'Interface\\Icons\\Spell_Magic_GreaterBlessingofKings',
-		[5] = (E.Role == 'Caster' and 'Interface\\Icons\\Spell_Holy_MagicalSentry') or 'Interface\\Icons\\Spell_Holy_WordFortitude',
-		[6] = (E.Role == 'Caster' and 'Interface\\Icons\\Spell_Holy_GreaterBlessingofWisdom') or 'Interface\\Icons\\Ability_Warrior_BattleShout'
+		[1] = "Interface\\Icons\\INV_Potion_97",
+		[2] = "Interface\\Icons\\Spell_Misc_Food",
+		[3] = "Interface\\Icons\\Spell_Nature_Regeneration",
+		[4] = "Interface\\Icons\\Spell_Magic_GreaterBlessingofKings",
+		[5] = (E.Role == "Caster" and "Interface\\Icons\\Spell_Holy_MagicalSentry") or "Interface\\Icons\\Spell_Holy_WordFortitude",
+		[6] = (E.Role == "Caster" and "Interface\\Icons\\Spell_Holy_GreaterBlessingofWisdom") or "Interface\\Icons\\Ability_Warrior_BattleShout"
 	};
 
-	local frame = CreateFrame('Frame', 'ElvUI_ReminderBuffs', Minimap);
-	frame:SetTemplate('Default');
+	local frame = CreateFrame("Frame", "ElvUI_ReminderBuffs", Minimap);
+	frame:SetTemplate("Default");
 	frame:Width(E.RBRWidth);
 	if(E.db.general.reminder.position == "LEFT") then
-		frame:Point('TOPRIGHT', Minimap.backdrop, 'TOPLEFT', E.Border - E.Spacing*3, 0);
-		frame:Point('BOTTOMRIGHT', Minimap.backdrop, 'BOTTOMLEFT', E.Border - E.Spacing*3, 0);
+		frame:Point("TOPRIGHT", Minimap.backdrop, "TOPLEFT", E.Border - E.Spacing*3, 0);
+		frame:Point("BOTTOMRIGHT", Minimap.backdrop, "BOTTOMLEFT", E.Border - E.Spacing*3, 0);
 	else
-		frame:Point('TOPLEFT', Minimap.backdrop, 'TOPRIGHT', -E.Border + E.Spacing*3, 0);
-		frame:Point('BOTTOMLEFT', Minimap.backdrop, 'BOTTOMRIGHT', -E.Border + E.Spacing*3, 0);
+		frame:Point("TOPLEFT", Minimap.backdrop, "TOPRIGHT", -E.Border + E.Spacing*3, 0);
+		frame:Point("BOTTOMLEFT", Minimap.backdrop, "BOTTOMRIGHT", -E.Border + E.Spacing*3, 0);
 	end
 	self.frame = frame;
 

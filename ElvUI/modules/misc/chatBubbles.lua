@@ -147,7 +147,7 @@ function M:SkinBubble(frame)
 		frame.text:FontTemplate(E.LSM:Fetch("font", E.private.general.chatBubbleFont), E.private.general.chatBubbleFontSize);
 
 		frame:SetClampedToScreen(false);
-	elseif E.private.general.chatBubbles == 'nobackdrop' then
+	elseif E.private.general.chatBubbles == "nobackdrop" then
 		frame:SetBackdrop(nil);
 		frame.text:FontTemplate(E.LSM:Fetch("font", E.private.general.chatBubbleFont), E.private.general.chatBubbleFontSize);
 		frame:SetClampedToScreen(false);

@@ -4,7 +4,7 @@ local UF = E:GetModule("UnitFrames");
 local UnitIsPlayer = UnitIsPlayer;
 
 function UF:Construct_NameText(frame)
-	local name = frame.RaisedElementParent:CreateFontString(nil, 'OVERLAY');
+	local name = frame.RaisedElementParent:CreateFontString(nil, "OVERLAY");
 	UF:Configure_FontString(name);
 	name:Point("CENTER", frame.Health);
 

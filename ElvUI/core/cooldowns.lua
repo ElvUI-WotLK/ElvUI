@@ -12,11 +12,11 @@ local MIN_SCALE = 0.5 --the minimum scale we want to show cooldown counts at, an
 local MIN_DURATION = 1.5 --the minimum duration to show cooldown text for
 
 local TimeColors = {
-	[0] = '|cfffefefe',
-	[1] = '|cfffefefe',
-	[2] = '|cfffefefe',
-	[3] = '|cfffefefe',
-	[4] = '|cfffe0000',
+	[0] = "|cfffefefe",
+	[1] = "|cfffefefe",
+	[2] = "|cfffefefe",
+	[3] = "|cfffefefe",
+	[4] = "|cfffe0000",
 }
 
 local function Cooldown_OnUpdate(cd, elapsed)
@@ -29,7 +29,7 @@ local function Cooldown_OnUpdate(cd, elapsed)
 
 	if remain > 0.05 then
 		if (cd.fontScale * cd:GetEffectiveScale() / UIParent:GetScale()) < MIN_SCALE then
-			cd.text:SetText('')
+			cd.text:SetText("")
 			cd.nextUpdate = 500
 		else
 			local timervalue, formatid
@@ -57,7 +57,7 @@ function E:Cooldown_OnSizeChanged(cd, width)
 		cd:Hide()
 	else
 		cd:Show()
-		cd.text:FontTemplate(nil, fontScale * FONT_SIZE, 'OUTLINE')
+		cd.text:FontTemplate(nil, fontScale * FONT_SIZE, "OUTLINE")
 		if cd.enabled then
 			self:Cooldown_ForceUpdate(cd)
 		end
@@ -75,20 +75,20 @@ function E:Cooldown_StopTimer(cd)
 end
 
 function E:CreateCooldownTimer(parent)
-	local scaler = CreateFrame('Frame', nil, parent)
+	local scaler = CreateFrame("Frame", nil, parent)
 	scaler:SetAllPoints()
 
-	local timer = CreateFrame('Frame', nil, scaler); timer:Hide()
+	local timer = CreateFrame("Frame", nil, scaler); timer:Hide()
 	timer:SetAllPoints()
-	timer:SetScript('OnUpdate', Cooldown_OnUpdate)
+	timer:SetScript("OnUpdate", Cooldown_OnUpdate)
 
-	local text = timer:CreateFontString(nil, 'OVERLAY')
-	text:SetPoint('CENTER', 1, 1)
+	local text = timer:CreateFontString(nil, "OVERLAY")
+	text:SetPoint("CENTER", 1, 1)
 	text:SetJustifyH("CENTER")
 	timer.text = text
 
 	self:Cooldown_OnSizeChanged(timer, parent:GetSize())
-	parent:SetScript('OnSizeChanged', function(_, ...) self:Cooldown_OnSizeChanged(timer, ...) end)
+	parent:SetScript("OnSizeChanged", function(_, ...) self:Cooldown_OnSizeChanged(timer, ...) end)
 
 	parent.timer = timer
 	return timer

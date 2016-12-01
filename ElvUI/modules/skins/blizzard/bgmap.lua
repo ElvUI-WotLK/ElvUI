@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local S = E:GetModule('Skins')
+local S = E:GetModule("Skins")
 
 local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.bgmap ~= true then return end
@@ -11,15 +11,15 @@ local function LoadSkin()
 	BattlefieldMinimapTabMiddle:Kill()
 	BattlefieldMinimapTabRight:Kill()
 
-	BattlefieldMinimap:CreateBackdrop('Default')
-	BattlefieldMinimap.backdrop:Point('BOTTOMRIGHT', -4, 2)
-	BattlefieldMinimap:SetFrameStrata('LOW')
+	BattlefieldMinimap:CreateBackdrop("Default")
+	BattlefieldMinimap.backdrop:Point("BOTTOMRIGHT", -4, 2)
+	BattlefieldMinimap:SetFrameStrata("LOW")
 	BattlefieldMinimapCloseButton:ClearAllPoints()
 	BattlefieldMinimapCloseButton:SetPoint("TOPRIGHT", -4, 0)
 	S:HandleCloseButton(BattlefieldMinimapCloseButton)
 	BattlefieldMinimapCloseButton.text:ClearAllPoints()
-	BattlefieldMinimapCloseButton.text:SetPoint('CENTER', BattlefieldMinimapCloseButton, 'CENTER', 0, 1)
-	BattlefieldMinimapCloseButton:SetFrameStrata('MEDIUM')
+	BattlefieldMinimapCloseButton.text:SetPoint("CENTER", BattlefieldMinimapCloseButton, "CENTER", 0, 1)
+	BattlefieldMinimapCloseButton:SetFrameStrata("MEDIUM")
 
 	BattlefieldMinimap:EnableMouse(true)
 	BattlefieldMinimap:SetMovable(true)
@@ -46,30 +46,30 @@ local function LoadSkin()
 	end)
 
 
-	hooksecurefunc('BattlefieldMinimap_UpdateOpacity', function()
+	hooksecurefunc("BattlefieldMinimap_UpdateOpacity", function()
 		local alpha = 1.0 - BattlefieldMinimapOptions.opacity or 0;
 		BattlefieldMinimap.backdrop:SetAlpha(alpha)
 	end)
 
 	local oldAlpha
-	BattlefieldMinimap:HookScript('OnEnter', function()
+	BattlefieldMinimap:HookScript("OnEnter", function()
 		oldAlpha = BattlefieldMinimapOptions.opacity or 0;
 		BattlefieldMinimap_UpdateOpacity(0)
 	end)
 
-	BattlefieldMinimap:HookScript('OnLeave', function()
+	BattlefieldMinimap:HookScript("OnLeave", function()
 		if oldAlpha then
 			BattlefieldMinimap_UpdateOpacity(oldAlpha)
 			oldAlpha = nil;
 		end
 	end)
 
-	BattlefieldMinimapCloseButton:HookScript('OnEnter', function()
+	BattlefieldMinimapCloseButton:HookScript("OnEnter", function()
 		oldAlpha = BattlefieldMinimapOptions.opacity or 0;
 		BattlefieldMinimap_UpdateOpacity(0)
 	end)
 
-	BattlefieldMinimapCloseButton:HookScript('OnLeave', function()
+	BattlefieldMinimapCloseButton:HookScript("OnLeave", function()
 		if oldAlpha then
 			BattlefieldMinimap_UpdateOpacity(oldAlpha)
 			oldAlpha = nil;

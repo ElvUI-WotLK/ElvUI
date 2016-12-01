@@ -4,9 +4,9 @@ local tremove = tremove;
 local random = math.random;
 
 function E:SetUpAnimGroup(object, type, ...)
-	if not type then type = 'Flash' end
+	if not type then type = "Flash" end
 
-	if type == 'Flash' then
+	if type == "Flash" then
 		object.anim = object:CreateAnimationGroup("Flash")
 		object.anim.fadein = object.anim:CreateAnimation("ALPHA", "FadeIn")
 		object.anim.fadein:SetChange(1)
@@ -15,7 +15,7 @@ function E:SetUpAnimGroup(object, type, ...)
 		object.anim.fadeout = object.anim:CreateAnimation("ALPHA", "FadeOut")
 		object.anim.fadeout:SetChange(-1)
 		object.anim.fadeout:SetOrder(1)
-	elseif type == 'FlashLoop' then
+	elseif type == "FlashLoop" then
 		object.anim = object:CreateAnimationGroup("Flash")
 		object.anim.fadein = object.anim:CreateAnimation("ALPHA", "FadeIn")
 		object.anim.fadein:SetChange(1)
@@ -30,7 +30,7 @@ function E:SetUpAnimGroup(object, type, ...)
 				object.anim:Play()
 			end
 		end)
-	elseif type == 'Shake' then
+	elseif type == "Shake" then
 		object.shake = object:CreateAnimationGroup("Shake")
 		object.shake:SetLooping("REPEAT")
 		object.shake.path = object.shake:CreateAnimation("Path")
@@ -54,7 +54,7 @@ function E:SetUpAnimGroup(object, type, ...)
 		object.shake.path[5]:SetOrder(5)
 		object.shake.path[6]:SetOffset(random(-9, 7), random(-9, 5))
 		object.shake.path[6]:SetOrder(6)
-	elseif type == 'Shake_Horizontal' then
+	elseif type == "Shake_Horizontal" then
 		object.shakeh = object:CreateAnimationGroup("ShakeH")
 		object.shakeh:SetLooping("REPEAT")
 		object.shakeh.path = object.shakeh:CreateAnimation("Path")
@@ -81,7 +81,7 @@ function E:SetUpAnimGroup(object, type, ...)
 	else
 		local x, y, duration, customName = ...
 		if not customName then
-			customName = 'anim'
+			customName = "anim"
 		end
 		object[customName] = object:CreateAnimationGroup("Move_In")
 		object[customName].in1 = object[customName]:CreateAnimation("Translation")
@@ -105,7 +105,7 @@ end
 
 function E:Shake(object)
 	if not object.shake then
-		E:SetUpAnimGroup(object, 'Shake')
+		E:SetUpAnimGroup(object, "Shake")
 	end
 
 	object.shake:Play()
@@ -119,7 +119,7 @@ end
 
 function E:ShakeHorizontal(object)
 	if not object.shakeh then
-		E:SetUpAnimGroup(object, 'Shake_Horizontal')
+		E:SetUpAnimGroup(object, "Shake_Horizontal")
 	end
 
 	object.shakeh:Play()
@@ -133,7 +133,7 @@ end
 
 function E:Flash(object, duration, loop)
 	if not object.anim then
-		E:SetUpAnimGroup(object, loop and "FlashLoop" or 'Flash')
+		E:SetUpAnimGroup(object, loop and "FlashLoop" or "Flash")
 	end
 
 	object.anim.fadein:SetDuration(duration)
@@ -149,7 +149,7 @@ end
 
 function E:SlideIn(object, customName)
 	if not customName then
-		customName = 'anim'
+		customName = "anim"
 	end
 	if not object[customName] then return end
 
@@ -160,7 +160,7 @@ end
 
 function E:SlideOut(object, customName)
 	if not customName then
-		customName = 'anim'
+		customName = "anim"
 	end
 	if not object[customName] then return end
 

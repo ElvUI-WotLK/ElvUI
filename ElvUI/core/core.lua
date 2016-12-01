@@ -44,8 +44,8 @@ E["statusBars"] = {};
 E["texts"] = {};
 E["snapBars"] = {};
 E["RegisteredModules"] = {};
-E['RegisteredInitialModules'] = {};
-E['valueColorUpdateFuncs'] = {};
+E["RegisteredInitialModules"] = {};
+E["valueColorUpdateFuncs"] = {};
 E.TexCoords = {.08, .92, .08, .92};
 E.FrameLocks = {};
 E.VehicleLocks = {};
@@ -65,26 +65,26 @@ E.InversePoints = {
 };
 
 E.DispelClasses = {
-	['PRIEST'] = {
-		['Magic'] = true,
-		['Disease'] = true
+	["PRIEST"] = {
+		["Magic"] = true,
+		["Disease"] = true
 	},
-	['SHAMAN'] = {
-		['Poison'] = true,
-		['Disease'] = true,
-		['Curse'] = true
+	["SHAMAN"] = {
+		["Poison"] = true,
+		["Disease"] = true,
+		["Curse"] = true
 	},
-	['PALADIN'] = {
-		['Poison'] = true,
-		['Magic'] = true,
-		['Disease'] = true
+	["PALADIN"] = {
+		["Poison"] = true,
+		["Magic"] = true,
+		["Disease"] = true
 	},
-	['MAGE'] = {
-		['Curse'] = true
+	["MAGE"] = {
+		["Curse"] = true
 	},
-	['DRUID'] = {
-		['Curse'] = true,
-		['Poison'] = true
+	["DRUID"] = {
+		["Curse"] = true,
+		["Poison"] = true
 	},
 };
 
@@ -656,7 +656,7 @@ function E:UpdateAll(ignoreInstall)
 	self.global = self.data.global;
 	self.db.theme = nil;
 	self.db.install_complete = nil;
-	--LibStub('LibDualSpec-1.0'):EnhanceDatabase(self.data, "ElvUI");
+	--LibStub("LibDualSpec-1.0"):EnhanceDatabase(self.data, "ElvUI");
 
 	self:SetMoversPositions();
 	self:UpdateMedia();
@@ -721,7 +721,7 @@ function E:UpdateAll(ignoreInstall)
 		E:GetModule("Auras"):UpdateHeader(ElvUIPlayerDebuffs);
 	end
 
-	if(self.private.install_complete == nil or (self.private.install_complete and type(self.private.install_complete) == 'boolean') or (self.private.install_complete and type(tonumber(self.private.install_complete)) == 'number' and tonumber(self.private.install_complete) <= 3.83)) then
+	if(self.private.install_complete == nil or (self.private.install_complete and type(self.private.install_complete) == "boolean") or (self.private.install_complete and type(tonumber(self.private.install_complete)) == "number" and tonumber(self.private.install_complete) <= 3.83)) then
 		if(not ignoreInstall) then
 			self:Install();
 		end

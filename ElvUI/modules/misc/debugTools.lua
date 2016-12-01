@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local D = E:NewModule('DebugTools', 'AceEvent-3.0', 'AceHook-3.0');
+local D = E:NewModule("DebugTools", "AceEvent-3.0", "AceHook-3.0");
 
 E.DebugTools = D
 
@@ -10,7 +10,7 @@ function D:ModifyErrorFrame()
 
 	local Orig_ScriptErrorsFrame_Update = ScriptErrorsFrame_Update
 	ScriptErrorsFrame_Update = function(...)
-		if GetCVarBool('scriptErrors') ~= 1 then
+		if GetCVarBool("scriptErrors") ~= 1 then
 			Orig_ScriptErrorsFrame_Update(...)
 			return
 		end
@@ -105,9 +105,9 @@ function D:ScriptErrorsFrame_UpdateButtons()
 end
 
 function D:ScriptErrorsFrame_OnError(_, keepHidden)
-	if keepHidden or self.MessagePrinted or not InCombatLockdown() or GetCVarBool('scriptErrors') ~= 1 then return; end
+	if keepHidden or self.MessagePrinted or not InCombatLockdown() or GetCVarBool("scriptErrors") ~= 1 then return; end
 
-	E:Print(L['|cFFE30000Lua error recieved. You can view the error message when you exit combat.'])
+	E:Print(L["|cFFE30000Lua error recieved. You can view the error message when you exit combat."])
 	self.MessagePrinted = true;
 end
 
@@ -121,7 +121,7 @@ function D:PLAYER_REGEN_DISABLED()
 end
 
 function D:TaintError(event, addonName, addonFunc)
-	if GetCVarBool('scriptErrors') ~= 1 or E.db.general.taintLog ~= true then return end
+	if GetCVarBool("scriptErrors") ~= 1 or E.db.general.taintLog ~= true then return end
 	ScriptErrorsFrame_OnError(L["%s: %s tried to call the protected function '%s'."]:format(event, addonName or "<name>", addonFunc or "<func>"), false)
 end
 
@@ -132,7 +132,7 @@ function D:StaticPopup_Show(name)
 end
 
 function D:Initialize()
-	self.HideFrame = CreateFrame('Frame')
+	self.HideFrame = CreateFrame("Frame")
 	self.HideFrame:Hide()
 
 	if( not IsAddOnLoaded("Blizzard_DebugTools") ) then
@@ -140,11 +140,11 @@ function D:Initialize()
 	end
 
 	self:ModifyErrorFrame()
-	self:SecureHook('ScriptErrorsFrame_UpdateButtons')
-	self:SecureHook('ScriptErrorsFrame_OnError')
-	self:SecureHook('StaticPopup_Show')
-	self:RegisterEvent('PLAYER_REGEN_DISABLED')
-	self:RegisterEvent('PLAYER_REGEN_ENABLED')
+	self:SecureHook("ScriptErrorsFrame_UpdateButtons")
+	self:SecureHook("ScriptErrorsFrame_OnError")
+	self:SecureHook("StaticPopup_Show")
+	self:RegisterEvent("PLAYER_REGEN_DISABLED")
+	self:RegisterEvent("PLAYER_REGEN_ENABLED")
 	self:RegisterEvent("ADDON_ACTION_BLOCKED", "TaintError")
 	self:RegisterEvent("ADDON_ACTION_FORBIDDEN", "TaintError")
 end

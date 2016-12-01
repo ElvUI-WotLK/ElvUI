@@ -1,5 +1,5 @@
 local E, L, V, P, G, _ = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB, Localize Underscore
-local S = E:GetModule('Skins')
+local S = E:GetModule("Skins")
 
 local find = string.find;
 
@@ -37,9 +37,9 @@ local function LoadSkin()
 	--
 	for i = 1, getn(ChatMenus) do
 		if _G[ChatMenus[i]] == _G["ChatMenu"] then
-			_G[ChatMenus[i]]:HookScript("OnShow", function(self) self:SetTemplate("Default", true) self:SetBackdropColor(unpack(E['media'].backdropfadecolor)) self:ClearAllPoints() self:Point("BOTTOMLEFT", ChatFrame1, "TOPLEFT", 0, 30) end)
+			_G[ChatMenus[i]]:HookScript("OnShow", function(self) self:SetTemplate("Default", true) self:SetBackdropColor(unpack(E["media"].backdropfadecolor)) self:ClearAllPoints() self:Point("BOTTOMLEFT", ChatFrame1, "TOPLEFT", 0, 30) end)
 		else
-			_G[ChatMenus[i]]:HookScript("OnShow", function(self) self:SetTemplate("Default", true) self:SetBackdropColor(unpack(E['media'].backdropfadecolor)) end)
+			_G[ChatMenus[i]]:HookScript("OnShow", function(self) self:SetTemplate("Default", true) self:SetBackdropColor(unpack(E["media"].backdropfadecolor)) end)
 		end
 	end
 
@@ -292,15 +292,15 @@ local function LoadSkin()
 	WatchFrameCollapseExpandButton:StripTextures()
 	S:HandleCloseButton(WatchFrameCollapseExpandButton)
 	WatchFrameCollapseExpandButton.backdrop:SetAllPoints()
-	WatchFrameCollapseExpandButton.text:SetText('-')
-	WatchFrameCollapseExpandButton:SetFrameStrata('MEDIUM')
+	WatchFrameCollapseExpandButton.text:SetText("-")
+	WatchFrameCollapseExpandButton:SetFrameStrata("MEDIUM")
 
-	hooksecurefunc('WatchFrame_Expand', function()
-		WatchFrameCollapseExpandButton.text:SetText('-')
+	hooksecurefunc("WatchFrame_Expand", function()
+		WatchFrameCollapseExpandButton.text:SetText("-")
 	end)
 
-	hooksecurefunc('WatchFrame_Collapse', function()
-		WatchFrameCollapseExpandButton.text:SetText('+')
+	hooksecurefunc("WatchFrame_Collapse", function()
+		WatchFrameCollapseExpandButton.text:SetText("+")
 	end)
 
 	--Chat Config
@@ -476,7 +476,7 @@ local function LoadSkin()
 		for i=1, WATCHFRAME_NUM_ITEMS do
 			local button = _G["WatchFrameItem"..i]
 			if not button.skinned then
-				button:CreateBackdrop('Default')
+				button:CreateBackdrop("Default")
 				button.backdrop:SetAllPoints()
 				button:StyleButton()
 				_G["WatchFrameItem"..i.."NormalTexture"]:SetAlpha(0)

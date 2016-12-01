@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local B = E:GetModule('Bags');
+local B = E:GetModule("Bags");
 
 local Search = LibStub("LibItemSearch-1.2");
 
@@ -524,7 +524,7 @@ function B.Sort(bags, sorter, invertDirection)
 	buildBlacklist(B.db.ignoredItems);
 	buildBlacklist(E.global.bags.ignoredItems);
 
-	for i, bag, slot in B.IterateBags(bags, nil, 'both') do
+	for i, bag, slot in B.IterateBags(bags, nil, "both") do
 		local bagSlot = B:Encode_BagSlot(bag, slot)
 		local link = B:GetItemLink(bag, slot);
 
@@ -556,7 +556,7 @@ function B.Sort(bags, sorter, invertDirection)
 	while passNeeded do
 		passNeeded = false
 		local i = 1
-		for _, bag, slot in B.IterateBags(bags, nil, 'both') do
+		for _, bag, slot in B.IterateBags(bags, nil, "both") do
 			local destination = B:Encode_BagSlot(bag, slot)
 			local source = bagSorted[i]
 
@@ -634,25 +634,25 @@ function B.SortBags(...)
 		local bags = select(i, ...)
 		for _, slotNum in ipairs(bags) do
 			local bagType = B:IsSpecialtyBag(slotNum)
-			if bagType == false then bagType = 'Normal' end
+			if bagType == false then bagType = "Normal" end
 			if not bagCache[bagType] then bagCache[bagType] = {} end
 			tinsert(bagCache[bagType], slotNum)
 		end
 
 		for bagType, sortedBags in pairs(bagCache) do
-			if bagType ~= 'Normal' then
+			if bagType ~= "Normal" then
 				B.Stack(sortedBags, sortedBags, B.IsPartial)
-				B.Stack(bagCache['Normal'], sortedBags)
-				B.Fill(bagCache['Normal'], sortedBags, B.db.sortInverted)
+				B.Stack(bagCache["Normal"], sortedBags)
+				B.Fill(bagCache["Normal"], sortedBags, B.db.sortInverted)
 				B.Sort(sortedBags, nil, B.db.sortInverted)
 				twipe(sortedBags)
 			end
 		end
 
-		if bagCache['Normal'] then
-			B.Stack(bagCache['Normal'], bagCache['Normal'], B.IsPartial)
-			B.Sort(bagCache['Normal'], nil, B.db.sortInverted)
-			twipe(bagCache['Normal'])
+		if bagCache["Normal"] then
+			B.Stack(bagCache["Normal"], bagCache["Normal"], B.IsPartial)
+			B.Sort(bagCache["Normal"], nil, B.db.sortInverted)
+			twipe(bagCache["Normal"])
 		end
 		twipe(bagCache)
 		twipe(bagGroups)
@@ -686,7 +686,7 @@ end
 
 function B:DoMove(move)
 	if GetCursorInfo() == "item" then
-		return false, 'cursorhasitem'
+		return false, "cursorhasitem"
 	end
 
 	local source, target = B:DecodeMove(move)
@@ -697,7 +697,7 @@ function B:DoMove(move)
 	local _, targetCount, targetLocked = B:GetItemInfo(targetBag, targetSlot)
 
 	if sourceLocked or targetLocked then
-		return false, 'source/target_locked'
+		return false, "source/target_locked"
 	end
 
 	local sourceItemID = self:GetItemID(sourceBag, sourceSlot)
@@ -705,9 +705,9 @@ function B:DoMove(move)
 
 	if not sourceItemID then
 		if moveTracker[source] then
-			return false, 'move incomplete'
+			return false, "move incomplete"
 		else
-			return B:StopStacking(L['Confused.. Try Again!'])
+			return B:StopStacking(L["Confused.. Try Again!"])
 		end
 	end
 
@@ -737,13 +737,13 @@ end
 
 function B:DoMoves()
 	if InCombatLockdown() then
-		return B:StopStacking(L['Confused.. Try Again!'])
+		return B:StopStacking(L["Confused.. Try Again!"])
 	end
 
 	local cursorType, cursorItemID = GetCursorInfo()
 	if cursorType == "item" and cursorItemID then
 		if lastItemID ~= cursorItemID then
-			return B:StopStacking(L['Confused.. Try Again!'])
+			return B:StopStacking(L["Confused.. Try Again!"])
 		end
 
 		if moveRetries < 100 then
@@ -837,7 +837,7 @@ function B:CommandDecorator(func, groupsDefaults)
 
 	return function(groups)
 		if self.SortUpdateTimer:IsShown() then
-			E:Print(L['Already Running.. Bailing Out!']);
+			E:Print(L["Already Running.. Bailing Out!"]);
 			B:StopStacking()
 			return;
 		end

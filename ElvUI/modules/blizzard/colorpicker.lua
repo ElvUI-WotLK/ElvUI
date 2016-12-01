@@ -2,8 +2,8 @@
 	Credit to Jaslm, most of this code is his from the addon ColorPickerPlus
 ]]
 local E, L, DF = unpack(select(2, ...))
-local B = E:GetModule('Blizzard');
-local S = E:GetModule('Skins');
+local B = E:GetModule("Blizzard");
+local S = E:GetModule("Skins");
 
 local tonumber, collectgarbage = tonumber, collectgarbage;
 local floor = math.floor;
@@ -72,7 +72,7 @@ local function UpdateColor(tbox)
 		-- hex values
 		if tbox:GetNumLetters() == 6 then
 			local rgb = tbox:GetText()
-			r, g, b = tonumber('0x'..strsub(rgb, 0, 2)), tonumber('0x'..strsub(rgb, 3, 4)), tonumber('0x'..strsub(rgb, 5, 6))
+			r, g, b = tonumber("0x"..strsub(rgb, 0, 2)), tonumber("0x"..strsub(rgb, 3, 4)), tonumber("0x"..strsub(rgb, 5, 6))
 			if not r then r = 0 else r = r/255 end
 			if not g then g = 0 else g = g/255 end
 			if not b then b = 0 else b = b/255 end
@@ -132,14 +132,14 @@ function B:EnhanceColorPicker()
 
 	--Memory Fix, Colorpicker will call the self.func() 100x per second, causing fps/memory issues,
 	--this little script will make you have to press ok for you to notice any changes.
-	ColorPickerFrame:SetScript('OnColorSelect', function(s, r, g, b)
+	ColorPickerFrame:SetScript("OnColorSelect", function(s, r, g, b)
 		ColorSwatch:SetTexture(r, g, b)
 		if not editingText then
 			UpdateColorTexts(r, g, b)
 		end
 	end)
 
-	ColorPickerOkayButton:HookScript('OnClick', function()
+	ColorPickerOkayButton:HookScript("OnClick", function()
 		collectgarbage("collect"); --Couldn't hurt to do this, this button usually executes a lot of code.
 	end)
 
@@ -197,7 +197,7 @@ function B:EnhanceColorPicker()
 	end)
 
 	--class color button
-	b = CreateFrame('Button', 'ColorPPClass', ColorPickerFrame, 'UIPanelButtonTemplate')
+	b = CreateFrame("Button", "ColorPPClass", ColorPickerFrame, "UIPanelButtonTemplate")
 	b:SetText(CLASS)
 	S:HandleButton(b)
 	b:Width(80)
@@ -205,8 +205,8 @@ function B:EnhanceColorPicker()
 	b:Point("TOP", "ColorPPCopy", "BOTTOMRIGHT", 0, -7)
 
 
-	b:SetScript('OnClick', function()
-		local color = E.myclass == 'PRIEST' and E.PriestColors or (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass]);
+	b:SetScript("OnClick", function()
+		local color = E.myclass == "PRIEST" and E.PriestColors or (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass]);
 		ColorPickerFrame:SetColorRGB(color.r, color.g, color.b)
 		ColorSwatch:SetTexture(color.r, color.g, color.b)
 		if ColorPickerFrame.hasOpacity then
@@ -220,7 +220,7 @@ function B:EnhanceColorPicker()
 	S:HandleButton(b)
 	b:Width(60)
 	b:Height(22)
-	b:Point('TOPLEFT', 'ColorPPCopy', 'TOPRIGHT', 2, 0)
+	b:Point("TOPLEFT", "ColorPPCopy", "TOPRIGHT", 2, 0)
 	b:Disable()  -- enable when something has been copied
 
 	-- paste color on button click, updating frame components
@@ -340,12 +340,12 @@ function B:EnhanceColorPicker()
 	ColorPPBoxA:SetScript("OnTabPressed", function(self) ColorPPBoxR:SetFocus(); end);
 
 	-- make the color picker movable.
-	local mover = CreateFrame('Frame', nil, ColorPickerFrame)
-	mover:SetPoint('TOPLEFT', ColorPickerFrame, 'TOP', -60, 0)
-	mover:SetPoint('BOTTOMRIGHT', ColorPickerFrame, 'TOP', 60, -15)
+	local mover = CreateFrame("Frame", nil, ColorPickerFrame)
+	mover:SetPoint("TOPLEFT", ColorPickerFrame, "TOP", -60, 0)
+	mover:SetPoint("BOTTOMRIGHT", ColorPickerFrame, "TOP", 60, -15)
 	mover:EnableMouse(true)
-	mover:SetScript('OnMouseDown', function() ColorPickerFrame:StartMoving() end)
-	mover:SetScript('OnMouseUp', function() ColorPickerFrame:StopMovingOrSizing() end)
+	mover:SetScript("OnMouseDown", function() ColorPickerFrame:StartMoving() end)
+	mover:SetScript("OnMouseUp", function() ColorPickerFrame:StopMovingOrSizing() end)
 	ColorPickerFrame:SetUserPlaced(true)
 	ColorPickerFrame:EnableKeyboard(false)
 end

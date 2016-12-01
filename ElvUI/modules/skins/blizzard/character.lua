@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...)); -- Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local S = E:GetModule('Skins')
+local S = E:GetModule("Skins")
 
 local find = string.find;
 
@@ -7,9 +7,9 @@ local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.character ~= true then return end
 
 	CharacterFrame:StripTextures(true)
-	CharacterFrame:CreateBackdrop('Transparent')
-	CharacterFrame.backdrop:Point('TOPLEFT', 10, -12)
-	CharacterFrame.backdrop:Point('BOTTOMRIGHT', -32, 76)
+	CharacterFrame:CreateBackdrop("Transparent")
+	CharacterFrame.backdrop:Point("TOPLEFT", 10, -12)
+	CharacterFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
 	S:HandleCloseButton(CharacterFrameCloseButton);
 	CharacterFrameCloseButton:Point("CENTER", CharacterFrame, "TOPRIGHT", -45, -25);
@@ -20,19 +20,19 @@ local function LoadSkin()
 	end
 
 	GearManagerDialog:StripTextures()
-	GearManagerDialog:CreateBackdrop('Transparent')
-	GearManagerDialog.backdrop:Point('TOPLEFT', 5, -2)
-	GearManagerDialog.backdrop:Point('BOTTOMRIGHT', -1, 4)
+	GearManagerDialog:CreateBackdrop("Transparent")
+	GearManagerDialog.backdrop:Point("TOPLEFT", 5, -2)
+	GearManagerDialog.backdrop:Point("BOTTOMRIGHT", -1, 4)
 
 	S:HandleCloseButton(GearManagerDialogClose)
 
 	for i = 1, 10 do
-		_G['GearSetButton'..i]:StripTextures()
-		_G['GearSetButton'..i]:StyleButton()
-		_G['GearSetButton'..i]:CreateBackdrop('Default')
-		_G['GearSetButton'..i].backdrop:SetAllPoints()
-		_G['GearSetButton'..i..'Icon']:SetTexCoord(unpack(E.TexCoords))
-		_G['GearSetButton'..i..'Icon']:SetInside()
+		_G["GearSetButton"..i]:StripTextures()
+		_G["GearSetButton"..i]:StyleButton()
+		_G["GearSetButton"..i]:CreateBackdrop("Default")
+		_G["GearSetButton"..i].backdrop:SetAllPoints()
+		_G["GearSetButton"..i.."Icon"]:SetTexCoord(unpack(E.TexCoords))
+		_G["GearSetButton"..i.."Icon"]:SetInside()
 	end
 
 	S:HandleButton(GearManagerDialogDeleteSet)
@@ -72,12 +72,12 @@ local function LoadSkin()
 	local function SkinFrameFlyouts()
 		PaperDollFrameItemFlyoutButtons:StripTextures();
 	end
- 	PaperDollFrameItemFlyout:HookScript('OnShow', SkinFrameFlyouts)
+ 	PaperDollFrameItemFlyout:HookScript("OnShow", SkinFrameFlyouts)
 
 	GearManagerDialogPopup:StripTextures()
 	GearManagerDialogPopup:CreateBackdrop("Transparent")
-	GearManagerDialogPopup.backdrop:Point('TOPLEFT', 5, -2)
-	GearManagerDialogPopup.backdrop:Point('BOTTOMRIGHT', -4, 8)
+	GearManagerDialogPopup.backdrop:Point("TOPLEFT", 5, -2)
+	GearManagerDialogPopup.backdrop:Point("BOTTOMRIGHT", -4, 8)
 
 	S:HandleEditBox(GearManagerDialogPopupEditBox)
 
@@ -130,8 +130,8 @@ local function LoadSkin()
 
 	S:HandleScrollBar(PlayerTitlePickerScrollFrameScrollBar);
 
-	_G['GearManagerToggleButton']:Size(26, 32);
-	_G['GearManagerToggleButton']:CreateBackdrop('Default');
+	_G["GearManagerToggleButton"]:Size(26, 32);
+	_G["GearManagerToggleButton"]:CreateBackdrop("Default");
 
 	GearManagerToggleButton:GetNormalTexture():SetTexCoord(0.1875, 0.796875, 0.125, 0.890625);
 	GearManagerToggleButton:GetPushedTexture():SetTexCoord(0.1875, 0.796875, 0.125, 0.890625);
@@ -164,27 +164,27 @@ local function LoadSkin()
 
 	local function ColorItemBorder()
 		for _, slot in pairs(slots) do
-			local target = _G['Character'..slot]
+			local target = _G["Character"..slot]
 			local slotId, _, _ = GetInventorySlotInfo(slot)
-			local itemId = GetInventoryItemID('player', slotId)
+			local itemId = GetInventoryItemID("player", slotId)
 
 			if itemId then
 				local rarity = GetInventoryItemQuality("player", slotId);
 				if rarity and rarity > 1 then
 					target:SetBackdropBorderColor(GetItemQualityColor(rarity))
 				else
-					target:SetBackdropBorderColor(unpack(E['media'].bordercolor))
+					target:SetBackdropBorderColor(unpack(E["media"].bordercolor))
 				end
 			else
-				target:SetBackdropBorderColor(unpack(E['media'].bordercolor))
+				target:SetBackdropBorderColor(unpack(E["media"].bordercolor))
 			end
 		end
 	end
 
-	local CheckItemBorderColor = CreateFrame('Frame')
-	CheckItemBorderColor:RegisterEvent('PLAYER_EQUIPMENT_CHANGED')
-	CheckItemBorderColor:SetScript('OnEvent', ColorItemBorder)
-	CharacterFrame:HookScript('OnShow', ColorItemBorder)
+	local CheckItemBorderColor = CreateFrame("Frame")
+	CheckItemBorderColor:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
+	CheckItemBorderColor:SetScript("OnEvent", ColorItemBorder)
+	CharacterFrame:HookScript("OnShow", ColorItemBorder)
 	ColorItemBorder()
 
 	S:HandleRotateButton(CharacterModelFrameRotateLeftButton)
@@ -215,14 +215,14 @@ local function LoadSkin()
 	PetPaperDollFrame:StripTextures(true)
 
 	for i=1, 3 do
-		local Tab = _G['PetPaperDollFrameTab'..i];
+		local Tab = _G["PetPaperDollFrameTab"..i];
 		Tab:StripTextures();
 		Tab:CreateBackdrop("Default", true);
 		Tab.backdrop:Point("TOPLEFT", 3, -7);
 		Tab.backdrop:Point("BOTTOMRIGHT", -2, -1);
 
-		Tab:HookScript('OnEnter', function(self) self.backdrop:SetBackdropBorderColor(unpack(E['media'].rgbvaluecolor)); end);
-		Tab:HookScript('OnLeave', function(self) self.backdrop:SetBackdropBorderColor(unpack(E['media'].bordercolor)); end);
+		Tab:HookScript("OnEnter", function(self) self.backdrop:SetBackdropBorderColor(unpack(E["media"].rgbvaluecolor)); end);
+		Tab:HookScript("OnLeave", function(self) self.backdrop:SetBackdropBorderColor(unpack(E["media"].bordercolor)); end);
 	end
 
 	S:HandleRotateButton(PetModelFrameRotateLeftButton)
@@ -282,17 +282,17 @@ local function LoadSkin()
 
 	S:HandleButton(CompanionSummonButton)
 
-	hooksecurefunc('PetPaperDollFrame_UpdateCompanions', function()
+	hooksecurefunc("PetPaperDollFrame_UpdateCompanions", function()
 		local Button, IconNormal, IconDisabled, ActiveTexture;
 
 		for i = 1, NUM_COMPANIONS_PER_PAGE do
 			Button = _G["CompanionButton"..i];
 			IconNormal = Button:GetNormalTexture();
 			IconDisabled = Button:GetDisabledTexture();
-			ActiveTexture = _G['CompanionButton'..i..'ActiveTexture'];
+			ActiveTexture = _G["CompanionButton"..i.."ActiveTexture"];
 
 			Button:StyleButton(nil, true);
-			Button:SetTemplate('Default', true)
+			Button:SetTemplate("Default", true)
 
 			if IconNormal then
 				IconNormal:SetTexCoord(unpack(E.TexCoords));
@@ -356,7 +356,7 @@ local function LoadSkin()
 	S:HandleScrollBar(ReputationListScrollFrameScrollBar);
 
 	ReputationDetailFrame:StripTextures();
-	ReputationDetailFrame:SetTemplate('Transparent');
+	ReputationDetailFrame:SetTemplate("Transparent");
 
 	S:HandleCloseButton(ReputationDetailCloseButton);
 
@@ -424,18 +424,18 @@ local function LoadSkin()
 		end);
 	end
 
-	hooksecurefunc('SkillDetailFrame_SetStatusBar', function()
+	hooksecurefunc("SkillDetailFrame_SetStatusBar", function()
 		local StatusBar = _G["SkillDetailStatusBar"];
-		local StatusBarBorder = _G['SkillDetailStatusBarBorder'];
-		local StatusBarBackground = _G['SkillDetailStatusBarBackground'];
+		local StatusBarBorder = _G["SkillDetailStatusBarBorder"];
+		local StatusBarBackground = _G["SkillDetailStatusBarBackground"];
 
 		if(not StatusBar.skinned) then
-			StatusBar:SetStatusBarTexture(E['media'].normTex);
+			StatusBar:SetStatusBarTexture(E["media"].normTex);
 			E:RegisterStatusBar(StatusBar);
 			StatusBar.skinned = true;
 		end
 
-		StatusBar:SetTemplate('Default');
+		StatusBar:SetTemplate("Default");
 
 		StatusBarBorder:SetTexture(nil);
 		StatusBarBackground:SetTexture(nil);
@@ -454,7 +454,7 @@ local function LoadSkin()
 
 	select(4, TokenFrame:GetChildren()):Hide();
 
-	hooksecurefunc('TokenFrame_Update', function()
+	hooksecurefunc("TokenFrame_Update", function()
 		local scrollFrame = TokenFrameContainer;
 		local offset = HybridScrollFrame_GetOffset(scrollFrame);
 		local buttons = scrollFrame.buttons;
@@ -492,7 +492,7 @@ local function LoadSkin()
 					if ( extraCurrencyType == 1 ) then
 						button.icon:SetTexCoord(unpack(E.TexCoords));
 					elseif ( extraCurrencyType == 2 ) then
-						local factionGroup = UnitFactionGroup('player');
+						local factionGroup = UnitFactionGroup("player");
 						if ( factionGroup ) then
 							button.icon:SetTexture("Interface\\TargetingFrame\\UI-PVP-"..factionGroup);
 							button.icon:SetTexCoord( 0.03125, 0.59375, 0.03125, 0.59375 );
@@ -514,7 +514,7 @@ local function LoadSkin()
 	TokenFrameCancelButton:Point("CENTER", TokenFrame, "TOPLEFT", 307, -420);
 
 	TokenFramePopup:StripTextures();
-	TokenFramePopup:SetTemplate('Transparent');
+	TokenFramePopup:SetTemplate("Transparent");
 
 	S:HandleCloseButton(TokenFramePopupCloseButton);
 

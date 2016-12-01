@@ -116,8 +116,8 @@ local function SetupChat()
 	ChatFrame_AddMessageGroup(ChatFrame3, "COMBAT_HONOR_GAIN")
 	ChatFrame_AddMessageGroup(ChatFrame3, "COMBAT_GUILD_XP_GAIN")
 	ChatFrame_AddChannel(ChatFrame1, GENERAL)
-	ChatFrame_RemoveChannel(ChatFrame1, L['Trade'])
-	ChatFrame_AddChannel(ChatFrame3, L['Trade'])
+	ChatFrame_RemoveChannel(ChatFrame1, L["Trade"])
+	ChatFrame_AddChannel(ChatFrame3, L["Trade"])
 
 	if E.myname == "Elvz" then
 		SetCVar("scriptErrors", 1)
@@ -161,11 +161,11 @@ local function SetupChat()
 
 	if E.Chat then
 		E.Chat:PositionChat(true)
-		if E.db['RightChatPanelFaded'] then
+		if E.db["RightChatPanelFaded"] then
 			RightChatToggleButton:Click()
 		end
 
-		if E.db['LeftChatPanelFaded'] then
+		if E.db["LeftChatPanelFaded"] then
 			LeftChatToggleButton:Click()
 		end
 	end
@@ -184,8 +184,8 @@ local function SetupCVars()
 	SetCVar("showLootSpam", 1)
 	SetCVar("UberTooltips", 1)
 	SetCVar("threatWarning", 3)
-	SetCVar('alwaysShowActionBars', 1)
-	SetCVar('lockActionBars', 1)
+	SetCVar("alwaysShowActionBars", 1)
+	SetCVar("lockActionBars", 1)
 
 	InstallStepComplete.message = L["CVars Set"]
 	InstallStepComplete:Show()
@@ -196,7 +196,7 @@ function E:GetColor(r, b, g, a)
 end
 
 function E:SetupTheme(theme, noDisplayMsg)
-	local classColor = E.myclass == 'PRIEST' and E.PriestColors or (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass]);
+	local classColor = E.myclass == "PRIEST" and E.PriestColors or (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass]);
 	E.private.theme = theme
 
 
@@ -250,10 +250,10 @@ end
 
 function E:SetupResolution(noDataReset)
 	if not noDataReset then
-		E:ResetMovers('')
+		E:ResetMovers("")
 	end
 
-	if self == 'low' then
+	if self == "low" then
 		if not E.db.movers then E.db.movers = {}; end
 		if not noDataReset then
 			E.db.chat.panelWidth = 400
@@ -283,12 +283,12 @@ function E:SetupResolution(noDataReset)
 
 			E.db.unitframe.units.player.width = 200;
 			E.db.unitframe.units.player.castbar.width = 200;
-			E.db.unitframe.units.player.classbar.fill = 'fill';
+			E.db.unitframe.units.player.classbar.fill = "fill";
 			E.db.unitframe.units.player.health.text_format = "[healthcolor][health:current]"
 
 			E.db.unitframe.units.target.width = 200;
 			E.db.unitframe.units.target.castbar.width = 200;
-			E.db.unitframe.units.target.health.text_format = '[healthcolor][health:current]'
+			E.db.unitframe.units.target.health.text_format = "[healthcolor][health:current]"
 
 			E.db.unitframe.units.pet.power.enable = false;
 			E.db.unitframe.units.pet.width = 200;
@@ -350,7 +350,7 @@ function E:SetupLayout(layout, noDataReset)
 	end
 
 	if not noDataReset then
-		E:ResetMovers('')
+		E:ResetMovers("")
 		if not E.db.movers then E.db.movers = {} end
 
 		E.db.actionbar.bar2.enabled = E.db.lowresolutionset
@@ -366,8 +366,8 @@ function E:SetupLayout(layout, noDataReset)
 		end
 	end
 
-	if layout == 'healer' then
-		if not IsAddOnLoaded('Clique') then
+	if layout == "healer" then
+		if not IsAddOnLoaded("Clique") then
 			E:StaticPopup_Show("CLIQUE_ADVERT")
 		end
 
@@ -505,16 +505,16 @@ function E:SetupLayout(layout, noDataReset)
 		end
 	end
 
-	if layout ~= 'healer' and not E.db.lowresolutionset then
+	if layout ~= "healer" and not E.db.lowresolutionset then
 		E.db.actionbar.bar1.heightMult = 1
 	end
 
 	if E.db.lowresolutionset and not noDataReset then
 		E.db.unitframe.units.player.width = 200;
-		if layout ~= 'healer' then
+		if layout ~= "healer" then
 			E.db.unitframe.units.player.castbar.width = 200;
 		end
-		E.db.unitframe.units.player.classbar.fill = 'fill';
+		E.db.unitframe.units.player.classbar.fill = "fill";
 
 		E.db.unitframe.units.target.width = 200;
 		E.db.unitframe.units.target.castbar.width = 200;
@@ -534,14 +534,14 @@ function E:SetupLayout(layout, noDataReset)
 		E.db.unitframe.units.arena.castbar.width = 200;
 	end
 
-	if(layout == 'dpsCaster' or layout == 'healer' or (layout == 'dpsMelee' and E.myclass == 'HUNTER')) then
+	if(layout == "dpsCaster" or layout == "healer" or (layout == "dpsMelee" and E.myclass == "HUNTER")) then
 		if not E.db.movers then E.db.movers = {}; end
 		E.db.unitframe.units.player.castbar.width = E.PixelMode and 406 or 436
 		E.db.unitframe.units.player.castbar.height = 28
 		E.db.unitframe.units.player.castbar.insideInfoPanel = false;
 		local yOffset = 80
 		if not E.db.lowresolutionset then
-			if layout ~= 'healer' then
+			if layout ~= "healer" then
 				yOffset = 42
 
 				if E.PixelMode then
@@ -579,7 +579,7 @@ function E:SetupLayout(layout, noDataReset)
 		else
 			E.db.movers.ElvUF_PlayerCastbarMover = "BOTTOM,ElvUIParent,BOTTOM,-2,"..(yOffset + 5)
 		end
-	elseif (layout == 'dpsMelee' or layout == 'tank') and not E.db.lowresolutionset and not E.PixelMode then
+	elseif (layout == "dpsMelee" or layout == "tank") and not E.db.lowresolutionset and not E.PixelMode then
 		E.db.movers.ElvUF_PlayerMover = "BOTTOM,ElvUIParent,BOTTOM,-307,76"
 		E.db.movers.ElvUF_TargetMover = "BOTTOM,ElvUIParent,BOTTOM,307,76"
 		E.db.movers.ElvUF_TargetTargetMover = "BOTTOM,ElvUIParent,BOTTOM,0,76"
@@ -588,10 +588,10 @@ function E:SetupLayout(layout, noDataReset)
 
 	if not noDataReset then
 		E:CopyTable(E.db.datatexts.panels, P.datatexts.panels)
-		if layout == 'tank' then
+		if layout == "tank" then
 			E.db.datatexts.panels.LeftChatDataPanel.left = "Armor";
 			E.db.datatexts.panels.LeftChatDataPanel.right = "Avoidance";
-		elseif layout == 'healer' or layout == 'dpsCaster' then
+		elseif layout == "healer" or layout == "dpsCaster" then
 			E.db.datatexts.panels.LeftChatDataPanel.left = "Spell/Heal Power";
 			E.db.datatexts.panels.LeftChatDataPanel.right = "Haste";
 		else
@@ -685,14 +685,14 @@ local function ResetAll()
 	InstallOption1Button:SetScript("OnClick", nil)
 	InstallOption1Button:SetText("")
 	InstallOption2Button:Hide()
-	InstallOption2Button:SetScript('OnClick', nil)
-	InstallOption2Button:SetText('')
+	InstallOption2Button:SetScript("OnClick", nil)
+	InstallOption2Button:SetText("")
 	InstallOption3Button:Hide()
-	InstallOption3Button:SetScript('OnClick', nil)
-	InstallOption3Button:SetText('')
+	InstallOption3Button:SetScript("OnClick", nil)
+	InstallOption3Button:SetText("")
 	InstallOption4Button:Hide()
-	InstallOption4Button:SetScript('OnClick', nil)
-	InstallOption4Button:SetText('')
+	InstallOption4Button:SetScript("OnClick", nil)
+	InstallOption4Button:SetText("")
 	ElvUIInstallFrame.SubTitle:SetText("")
 	ElvUIInstallFrame.Desc1:SetText("")
 	ElvUIInstallFrame.Desc2:SetText("")
@@ -750,19 +750,19 @@ local function SetPage(PageNum)
 		InstallOption1Button:SetScript("OnClick", SetupChat)
 		InstallOption1Button:SetText(L["Setup Chat"])
 	elseif PageNum == 4 then
-		f.SubTitle:SetText(L['Theme Setup'])
-		f.Desc1:SetText(L['Choose a theme layout you wish to use for your initial setup.'])
-		f.Desc2:SetText(L['You can always change fonts and colors of any element of ElvUI from the in-game configuration.']:gsub("ElvUI", E.UIName))
+		f.SubTitle:SetText(L["Theme Setup"])
+		f.Desc1:SetText(L["Choose a theme layout you wish to use for your initial setup."])
+		f.Desc2:SetText(L["You can always change fonts and colors of any element of ElvUI from the in-game configuration."]:gsub("ElvUI", E.UIName))
 		f.Desc3:SetText(L["Importance: |cffFF0000Low|r"])
 
 		InstallOption1Button:Show()
-		InstallOption1Button:SetScript('OnClick', function() E:SetupTheme('classic') end)
+		InstallOption1Button:SetScript("OnClick", function() E:SetupTheme("classic") end)
 		InstallOption1Button:SetText(L["Classic"])
 		InstallOption2Button:Show()
-		InstallOption2Button:SetScript('OnClick', function() E:SetupTheme('default') end)
-		InstallOption2Button:SetText(L['Dark'])
+		InstallOption2Button:SetScript("OnClick", function() E:SetupTheme("default") end)
+		InstallOption2Button:SetText(L["Dark"])
 		InstallOption3Button:Show()
-		InstallOption3Button:SetScript('OnClick', function() E:SetupTheme('class') end)
+		InstallOption3Button:SetScript("OnClick", function() E:SetupTheme("class") end)
 		InstallOption3Button:SetText(CLASS)
 	elseif PageNum == 5 then
 		f.SubTitle:SetText(L["Resolution"])
@@ -776,39 +776,39 @@ local function SetPage(PageNum)
 		end
 
 		InstallOption1Button:Show()
-		InstallOption1Button:SetScript('OnClick', function() E.SetupResolution('high') end)
+		InstallOption1Button:SetScript("OnClick", function() E.SetupResolution("high") end)
 		InstallOption1Button:SetText(L["High Resolution"])
 		InstallOption2Button:Show()
-		InstallOption2Button:SetScript('OnClick', function() E.SetupResolution('low') end)
-		InstallOption2Button:SetText(L['Low Resolution'])
+		InstallOption2Button:SetScript("OnClick", function() E.SetupResolution("low") end)
+		InstallOption2Button:SetText(L["Low Resolution"])
 	elseif PageNum == 6 then
 		f.SubTitle:SetText(L["Layout"])
 		f.Desc1:SetText(L["You can now choose what layout you wish to use based on your combat role."])
 		f.Desc2:SetText(L["This will change the layout of your unitframes and actionbars."])
 		f.Desc3:SetText(L["Importance: |cffD3CF00Medium|r"])
 		InstallOption1Button:Show()
-		InstallOption1Button:SetScript('OnClick', function() E.db.layoutSet = nil; E:SetupLayout('tank') end)
-		InstallOption1Button:SetText(L['Tank'])
+		InstallOption1Button:SetScript("OnClick", function() E.db.layoutSet = nil; E:SetupLayout("tank") end)
+		InstallOption1Button:SetText(L["Tank"])
 		InstallOption2Button:Show()
-		InstallOption2Button:SetScript('OnClick', function() E.db.layoutSet = nil; E:SetupLayout('healer') end)
-		InstallOption2Button:SetText(L['Healer'])
+		InstallOption2Button:SetScript("OnClick", function() E.db.layoutSet = nil; E:SetupLayout("healer") end)
+		InstallOption2Button:SetText(L["Healer"])
 		InstallOption3Button:Show()
-		InstallOption3Button:SetScript('OnClick', function() E.db.layoutSet = nil; E:SetupLayout('dpsMelee') end)
-		InstallOption3Button:SetText(L['Physical DPS'])
+		InstallOption3Button:SetScript("OnClick", function() E.db.layoutSet = nil; E:SetupLayout("dpsMelee") end)
+		InstallOption3Button:SetText(L["Physical DPS"])
 		InstallOption4Button:Show()
-		InstallOption4Button:SetScript('OnClick', function() E.db.layoutSet = nil; E:SetupLayout('dpsCaster') end)
-		InstallOption4Button:SetText(L['Caster DPS'])
+		InstallOption4Button:SetScript("OnClick", function() E.db.layoutSet = nil; E:SetupLayout("dpsCaster") end)
+		InstallOption4Button:SetText(L["Caster DPS"])
 	elseif PageNum == 7 then
 		f.SubTitle:SetText(L["Auras"])
 		f.Desc1:SetText(L["Select the type of aura system you want to use with ElvUI's unitframes. Set to Aura Bar & Icons to use both aura bars and icons, set to icons only to only see icons."]:gsub("ElvUI", E.UIName))
 		f.Desc2:SetText(L["If you have an icon or aurabar that you don't want to display simply hold down shift and right click the icon for it to disapear."])
 		f.Desc3:SetText(L["Importance: |cffD3CF00Medium|r"])
 		InstallOption1Button:Show()
-		InstallOption1Button:SetScript('OnClick', function() SetupAuras(true) end)
-		InstallOption1Button:SetText(L['Aura Bars & Icons'])
+		InstallOption1Button:SetScript("OnClick", function() SetupAuras(true) end)
+		InstallOption1Button:SetText(L["Aura Bars & Icons"])
 		InstallOption2Button:Show()
-		InstallOption2Button:SetScript('OnClick', function() SetupAuras() end)
-		InstallOption2Button:SetText(L['Icons Only'])
+		InstallOption2Button:SetScript("OnClick", function() SetupAuras() end)
+		InstallOption2Button:SetText(L["Icons Only"])
 	elseif PageNum == 8 then
 		f.SubTitle:SetText(L["Installation Complete"])
 		f.Desc1:SetText(L["You are now finished with the installation process. If you are in need of technical support please visit us at http://www.tukui.org."])
@@ -841,7 +841,7 @@ function E:Install()
 		imsg:Size(418, 72)
 		imsg:Point("TOP", 0, -190)
 		imsg:Hide()
-		imsg:SetScript('OnShow', function(self)
+		imsg:SetScript("OnShow", function(self)
 			if self.message then
 				PlaySoundFile([[Sound\Interface\LevelUp.wav]])
 				self.text:SetText(self.message)
@@ -855,7 +855,7 @@ function E:Install()
 
 		imsg.firstShow = false
 
-		imsg.text = imsg:CreateFontString(nil, 'OVERLAY')
+		imsg.text = imsg:CreateFontString(nil, "OVERLAY")
 		imsg.text:FontTemplate(E["media"].normFont, 32, "OUTLINE")
 		imsg.text:Point("BOTTOM", 0, 16)
 		imsg.text:SetTextColor(1, 0.82, 0)
@@ -868,9 +868,9 @@ function E:Install()
 		f:Size(550, 400)
 		f:SetTemplate("Transparent")
 		f:SetPoint("CENTER")
-		f:SetFrameStrata('TOOLTIP')
+		f:SetFrameStrata("TOOLTIP")
 
-		f.Title = f:CreateFontString(nil, 'OVERLAY')
+		f.Title = f:CreateFontString(nil, "OVERLAY")
 		f.Title:FontTemplate(nil, 17, nil)
 		f.Title:Point("TOP", 0, -5)
 		f.Title:SetText(L["ElvUI Installation"]:gsub("ElvUI", E.UIName))
@@ -909,7 +909,7 @@ function E:Install()
 		f.Status.anim.progress:SetSmoothing("Out");
 		f.Status.anim.progress:SetDuration(.3);
 
-		f.Status.text = f.Status:CreateFontString(nil, 'OVERLAY')
+		f.Status.text = f.Status:CreateFontString(nil, "OVERLAY")
 		f.Status.text:FontTemplate()
 		f.Status.text:SetPoint("CENTER")
 		f.Status.text:SetFormattedText("%d / %d", CURRENT_PAGE, MAX_PAGE);
@@ -925,56 +925,56 @@ function E:Install()
 		f.Option2 = CreateFrame("Button", "InstallOption2Button", f, "UIPanelButtonTemplate")
 		f.Option2:StripTextures()
 		f.Option2:Size(110, 30)
-		f.Option2:Point('BOTTOMLEFT', f, 'BOTTOM', 4, 45)
+		f.Option2:Point("BOTTOMLEFT", f, "BOTTOM", 4, 45)
 		f.Option2:SetText("")
 		f.Option2:Hide()
-		f.Option2:SetScript('OnShow', function() f.Option1:SetWidth(110); f.Option1:ClearAllPoints(); f.Option1:Point('BOTTOMRIGHT', f, 'BOTTOM', -4, 45) end)
-		f.Option2:SetScript('OnHide', function() f.Option1:SetWidth(160); f.Option1:ClearAllPoints(); f.Option1:Point("BOTTOM", 0, 45) end)
+		f.Option2:SetScript("OnShow", function() f.Option1:SetWidth(110); f.Option1:ClearAllPoints(); f.Option1:Point("BOTTOMRIGHT", f, "BOTTOM", -4, 45) end)
+		f.Option2:SetScript("OnHide", function() f.Option1:SetWidth(160); f.Option1:ClearAllPoints(); f.Option1:Point("BOTTOM", 0, 45) end)
 		E.Skins:HandleButton(f.Option2, true)
 
 		f.Option3 = CreateFrame("Button", "InstallOption3Button", f, "UIPanelButtonTemplate")
 		f.Option3:StripTextures()
 		f.Option3:Size(100, 30)
-		f.Option3:Point('LEFT', f.Option2, 'RIGHT', 4, 0)
+		f.Option3:Point("LEFT", f.Option2, "RIGHT", 4, 0)
 		f.Option3:SetText("")
 		f.Option3:Hide()
-		f.Option3:SetScript('OnShow', function() f.Option1:SetWidth(100); f.Option1:ClearAllPoints(); f.Option1:Point('RIGHT', f.Option2, 'LEFT', -4, 0); f.Option2:SetWidth(100); f.Option2:ClearAllPoints(); f.Option2:Point('BOTTOM', f, 'BOTTOM', 0, 45); end);
-		f.Option3:SetScript('OnHide', function() f.Option1:SetWidth(160); f.Option1:ClearAllPoints(); f.Option1:Point("BOTTOM", 0, 45); f.Option2:SetWidth(110); f.Option2:ClearAllPoints(); f.Option2:Point('BOTTOMLEFT', f, 'BOTTOM', 4, 45) end)
+		f.Option3:SetScript("OnShow", function() f.Option1:SetWidth(100); f.Option1:ClearAllPoints(); f.Option1:Point("RIGHT", f.Option2, "LEFT", -4, 0); f.Option2:SetWidth(100); f.Option2:ClearAllPoints(); f.Option2:Point("BOTTOM", f, "BOTTOM", 0, 45); end);
+		f.Option3:SetScript("OnHide", function() f.Option1:SetWidth(160); f.Option1:ClearAllPoints(); f.Option1:Point("BOTTOM", 0, 45); f.Option2:SetWidth(110); f.Option2:ClearAllPoints(); f.Option2:Point("BOTTOMLEFT", f, "BOTTOM", 4, 45) end)
 		E.Skins:HandleButton(f.Option3, true)
 
 		f.Option4 = CreateFrame("Button", "InstallOption4Button", f, "UIPanelButtonTemplate")
 		f.Option4:StripTextures()
 		f.Option4:Size(100, 30)
-		f.Option4:Point('LEFT', f.Option3, 'RIGHT', 4, 0)
+		f.Option4:Point("LEFT", f.Option3, "RIGHT", 4, 0)
 		f.Option4:SetText("")
 		f.Option4:Hide()
-		f.Option4:SetScript('OnShow', function()
+		f.Option4:SetScript("OnShow", function()
 			f.Option1:Width(100)
 			f.Option2:Width(100)
 
 			f.Option1:ClearAllPoints();
-			f.Option1:Point('RIGHT', f.Option2, 'LEFT', -4, 0);
+			f.Option1:Point("RIGHT", f.Option2, "LEFT", -4, 0);
 			f.Option2:ClearAllPoints();
-			f.Option2:Point('BOTTOMRIGHT', f, 'BOTTOM', -4, 45);
+			f.Option2:Point("BOTTOMRIGHT", f, "BOTTOM", -4, 45);
 		end)
-		f.Option4:SetScript('OnHide', function() f.Option1:SetWidth(160); f.Option1:ClearAllPoints(); f.Option1:Point("BOTTOM", 0, 45); f.Option2:SetWidth(110); f.Option2:ClearAllPoints(); f.Option2:Point('BOTTOMLEFT', f, 'BOTTOM', 4, 45) end)
+		f.Option4:SetScript("OnHide", function() f.Option1:SetWidth(160); f.Option1:ClearAllPoints(); f.Option1:Point("BOTTOM", 0, 45); f.Option2:SetWidth(110); f.Option2:ClearAllPoints(); f.Option2:Point("BOTTOMLEFT", f, "BOTTOM", 4, 45) end)
 		E.Skins:HandleButton(f.Option4, true)
 
-		f.SubTitle = f:CreateFontString(nil, 'OVERLAY')
+		f.SubTitle = f:CreateFontString(nil, "OVERLAY")
 		f.SubTitle:FontTemplate(nil, 15, nil)
 		f.SubTitle:Point("TOP", 0, -40)
 
-		f.Desc1 = f:CreateFontString(nil, 'OVERLAY')
+		f.Desc1 = f:CreateFontString(nil, "OVERLAY")
 		f.Desc1:FontTemplate()
 		f.Desc1:Point("TOPLEFT", 20, -75)
 		f.Desc1:Width(f:GetWidth() - 40)
 
-		f.Desc2 = f:CreateFontString(nil, 'OVERLAY')
+		f.Desc2 = f:CreateFontString(nil, "OVERLAY")
 		f.Desc2:FontTemplate()
 		f.Desc2:Point("TOPLEFT", 20, -125)
 		f.Desc2:Width(f:GetWidth() - 40)
 
-		f.Desc3 = f:CreateFontString(nil, 'OVERLAY')
+		f.Desc3 = f:CreateFontString(nil, "OVERLAY")
 		f.Desc3:FontTemplate()
 		f.Desc3:Point("TOPLEFT", 20, -175)
 		f.Desc3:Width(f:GetWidth() - 40)
@@ -986,10 +986,10 @@ function E:Install()
 		end)
 		E.Skins:HandleCloseButton(close)
 
-		f.tutorialImage = f:CreateTexture('InstallTutorialImage', 'OVERLAY')
+		f.tutorialImage = f:CreateTexture("InstallTutorialImage", "OVERLAY")
 		f.tutorialImage:Size(256, 128)
-		f.tutorialImage:SetTexture('Interface\\AddOns\\ElvUI\\media\\textures\\logo_elvui.tga')
-		f.tutorialImage:Point('BOTTOM', 0, 70)
+		f.tutorialImage:SetTexture("Interface\\AddOns\\ElvUI\\media\\textures\\logo_elvui.tga")
+		f.tutorialImage:Point("BOTTOM", 0, 70)
 
 	end
 

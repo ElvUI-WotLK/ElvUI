@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local TT = E:NewModule('Tooltip', 'AceHook-3.0', 'AceEvent-3.0');
+local TT = E:NewModule("Tooltip", "AceHook-3.0", "AceEvent-3.0");
 
 local _G = _G;
 local unpack, tonumber, select, pairs = unpack, tonumber, select, pairs;
@@ -229,10 +229,10 @@ function TT:GameTooltip_SetDefaultAnchor(tt, parent)
 	end
 
 	local ownerName = tt:GetOwner() and tt:GetOwner().GetName and tt:GetOwner():GetName()
-	if(self.db.visibility.actionbars ~= 'NONE' and ownerName and (find(ownerName, "ElvUI_Bar") or find(ownerName, "ElvUI_StanceBar") or find(ownerName, "PetAction")) and not keybindFrame.active) then
+	if(self.db.visibility.actionbars ~= "NONE" and ownerName and (find(ownerName, "ElvUI_Bar") or find(ownerName, "ElvUI_StanceBar") or find(ownerName, "PetAction")) and not keybindFrame.active) then
 		local modifier = self.db.visibility.actionbars
 
-		if(modifier == 'ALL' or not ((modifier == 'SHIFT' and IsShiftKeyDown()) or (modifier == 'CTRL' and IsControlKeyDown()) or (modifier == 'ALT' and IsAltKeyDown()))) then
+		if(modifier == "ALL" or not ((modifier == "SHIFT" and IsShiftKeyDown()) or (modifier == "CTRL" and IsControlKeyDown()) or (modifier == "ALT" and IsAltKeyDown()))) then
 			tt:Hide()
 			return
 		end
@@ -264,13 +264,13 @@ function TT:GameTooltip_SetDefaultAnchor(tt, parent)
 		end
 	end
 
-	if(not E:HasMoverBeenMoved('TooltipMover')) then
+	if(not E:HasMoverBeenMoved("TooltipMover")) then
 		if ElvUI_ContainerFrame and ElvUI_ContainerFrame:IsShown() then
-			tt:SetPoint('BOTTOMRIGHT', ElvUI_ContainerFrame, 'TOPRIGHT', 0, 18)
+			tt:SetPoint("BOTTOMRIGHT", ElvUI_ContainerFrame, "TOPRIGHT", 0, 18)
 		elseif RightChatPanel:GetAlpha() == 1 and RightChatPanel:IsShown() then
-			tt:SetPoint('BOTTOMRIGHT', RightChatPanel, 'TOPRIGHT', 0, 18)
+			tt:SetPoint("BOTTOMRIGHT", RightChatPanel, "TOPRIGHT", 0, 18)
 		else
-			tt:SetPoint('BOTTOMRIGHT', RightChatPanel, 'BOTTOMRIGHT', 0, 18)
+			tt:SetPoint("BOTTOMRIGHT", RightChatPanel, "BOTTOMRIGHT", 0, 18)
 		end
 	else
 		local point = E:GetScreenQuadrant(TooltipMover);
@@ -424,10 +424,10 @@ end
 
 function TT:GameTooltip_OnTooltipSetUnit(tt)
 	local unit = select(2, tt:GetUnit())
-	if((tt:GetOwner() ~= UIParent) and self.db.visibility.unitFrames ~= 'NONE') then
+	if((tt:GetOwner() ~= UIParent) and self.db.visibility.unitFrames ~= "NONE") then
 		local modifier = self.db.visibility.unitFrames
 
-		if(modifier == 'ALL' or not ((modifier == 'SHIFT' and IsShiftKeyDown()) or (modifier == 'CTRL' and IsControlKeyDown()) or (modifier == 'ALT' and IsAltKeyDown()))) then
+		if(modifier == "ALL" or not ((modifier == "SHIFT" and IsShiftKeyDown()) or (modifier == "CTRL" and IsControlKeyDown()) or (modifier == "ALT" and IsAltKeyDown()))) then
 			tt:Hide()
 			return
 		end
@@ -551,7 +551,7 @@ function TT:GameTooltip_OnTooltipSetUnit(tt)
 		end
 		local numList = #targetList
 		if (numList > 0) then
-			GameTooltip:AddLine(format("%s (|cffffffff%d|r): %s", L['Targeted By:'], numList, tconcat(targetList, ", ")), nil, nil, nil, true);
+			GameTooltip:AddLine(format("%s (|cffffffff%d|r): %s", L["Targeted By:"], numList, tconcat(targetList, ", ")), nil, nil, nil, true);
 			twipe(targetList);
 		end
 	end
@@ -590,10 +590,10 @@ end
 
 function TT:GameTooltip_OnTooltipSetItem(tt)
 	local ownerName = tt:GetOwner() and tt:GetOwner().GetName and tt:GetOwner():GetName()
-	if (self.db.visibility.bags ~= 'NONE' and ownerName and (find(ownerName, "ElvUI_Container") or find(ownerName, "ElvUI_BankContainer"))) then
+	if (self.db.visibility.bags ~= "NONE" and ownerName and (find(ownerName, "ElvUI_Container") or find(ownerName, "ElvUI_BankContainer"))) then
 		local modifier = self.db.visibility.bags
 
-		if(modifier == 'ALL' or not ((modifier == 'SHIFT' and IsShiftKeyDown()) or (modifier == 'CTRL' and IsControlKeyDown()) or (modifier == 'ALT' and IsAltKeyDown()))) then
+		if(modifier == "ALL" or not ((modifier == "SHIFT" and IsShiftKeyDown()) or (modifier == "CTRL" and IsControlKeyDown()) or (modifier == "ALT" and IsAltKeyDown()))) then
 			tt.itemCleared = true
 			tt:Hide()
 			return
@@ -613,12 +613,12 @@ function TT:GameTooltip_OnTooltipSetItem(tt)
 		end
 
 		if self.db.itemCount == "BAGS_ONLY" then
-			right = ("|cFFCA3C3C%s|r %d"):format(L['Count'], num)
+			right = ("|cFFCA3C3C%s|r %d"):format(L["Count"], num)
 		elseif self.db.itemCount == "BANK_ONLY" then
-			bankCount = ("|cFFCA3C3C%s|r %d"):format(L['Bank'],(numall - num))
+			bankCount = ("|cFFCA3C3C%s|r %d"):format(L["Bank"],(numall - num))
 		elseif self.db.itemCount == "BOTH" then
-			right = ("|cFFCA3C3C%s|r %d"):format(L['Count'], num)
-			bankCount = ("|cFFCA3C3C%s|r %d"):format(L['Bank'],(numall - num))
+			right = ("|cFFCA3C3C%s|r %d"):format(L["Count"], num)
+			bankCount = ("|cFFCA3C3C%s|r %d"):format(L["Bank"],(numall - num))
 		end
 
 		if left ~= " " or right ~= " " then
@@ -637,9 +637,9 @@ function TT:GameTooltip_ShowStatusBar(tt)
 	local statusBar = _G[tt:GetName().."StatusBar"..tt.shownStatusBars];
 	if statusBar and not statusBar.skinned then
 		statusBar:StripTextures()
-		statusBar:SetStatusBarTexture(E['media'].normTex)
+		statusBar:SetStatusBarTexture(E["media"].normTex)
 		E:RegisterStatusBar(statusBar);
-		statusBar:CreateBackdrop('Default')
+		statusBar:CreateBackdrop("Default")
 		statusBar.skinned = true;
 	end
 end
@@ -652,7 +652,7 @@ end
 
 function TT:MODIFIER_STATE_CHANGED(_, key)
 	if((key == "LSHIFT" or key == "RSHIFT") and UnitExists("mouseover")) then
-		GameTooltip:SetUnit('mouseover')
+		GameTooltip:SetUnit("mouseover")
 	end
 end
 
@@ -704,7 +704,7 @@ end
 function TT:RepositionBNET(_, _, anchor)
 	if anchor ~= BNETMover then
 		BNToastFrame:ClearAllPoints()
-		BNToastFrame:Point('TOPLEFT', BNETMover, 'TOPLEFT');
+		BNToastFrame:Point("TOPLEFT", BNETMover, "TOPLEFT");
 	end
 end
 
@@ -762,8 +762,8 @@ end
 function TT:Initialize()
 	self.db = E.db.tooltip
 
-	BNToastFrame:Point('TOPRIGHT', MMHolder, 'BOTTOMRIGHT', 0, -10);
-	E:CreateMover(BNToastFrame, 'BNETMover', L['BNet Frame'])
+	BNToastFrame:Point("TOPRIGHT", MMHolder, "BOTTOMRIGHT", 0, -10);
+	E:CreateMover(BNToastFrame, "BNETMover", L["BNet Frame"])
 	self:SecureHook(BNToastFrame, "SetPoint", "RepositionBNET")
 
 	if E.private.tooltip.enable ~= true then return end
@@ -774,7 +774,7 @@ function TT:Initialize()
 	GameTooltipStatusBar:Height(self.db.healthBar.height)
 	GameTooltipStatusBar:SetStatusBarTexture(E["media"].normTex)
 	E:RegisterStatusBar(GameTooltipStatusBar);
-	GameTooltipStatusBar:CreateBackdrop('Transparent')
+	GameTooltipStatusBar:CreateBackdrop("Transparent")
 	GameTooltipStatusBar:SetScript("OnValueChanged", self.OnValueChanged)
 	GameTooltipStatusBar:ClearAllPoints()
 	GameTooltipStatusBar:SetPoint("TOPLEFT", GameTooltip, "BOTTOMLEFT", E.Border, -(E.Spacing * 3))
@@ -790,32 +790,32 @@ function TT:Initialize()
 	end
 	self:SetTooltipFonts();
 
-	local GameTooltipAnchor = CreateFrame('Frame', 'GameTooltipAnchor', E.UIParent)
-	GameTooltipAnchor:Point('BOTTOMRIGHT', RightChatToggleButton, 'BOTTOMRIGHT')
+	local GameTooltipAnchor = CreateFrame("Frame", "GameTooltipAnchor", E.UIParent)
+	GameTooltipAnchor:Point("BOTTOMRIGHT", RightChatToggleButton, "BOTTOMRIGHT")
 	GameTooltipAnchor:Size(130, 20)
 	GameTooltipAnchor:SetFrameLevel(GameTooltipAnchor:GetFrameLevel() + 50)
-	E:CreateMover(GameTooltipAnchor, 'TooltipMover', L['Tooltip'])
+	E:CreateMover(GameTooltipAnchor, "TooltipMover", L["Tooltip"])
 
-	self:SecureHook('GameTooltip_SetDefaultAnchor')
-	self:SecureHook('GameTooltip_ShowStatusBar')
+	self:SecureHook("GameTooltip_SetDefaultAnchor")
+	self:SecureHook("GameTooltip_ShowStatusBar")
 	self:SecureHook("SetItemRef")
 	self:SecureHook("GameTooltip_ShowCompareItem")
 	self:SecureHook(GameTooltip, "SetUnitAura")
 	self:SecureHook(GameTooltip, "SetUnitBuff", "SetUnitAura")
 	self:SecureHook(GameTooltip, "SetUnitDebuff", "SetUnitAura")
 	self:HookScript(GameTooltip, "OnTooltipSetSpell", "GameTooltip_OnTooltipSetSpell")
-	self:HookScript(GameTooltip, 'OnTooltipCleared', 'GameTooltip_OnTooltipCleared')
-	self:HookScript(GameTooltip, 'OnTooltipSetItem', 'GameTooltip_OnTooltipSetItem')
-	self:HookScript(GameTooltip, 'OnTooltipSetUnit', 'GameTooltip_OnTooltipSetUnit')
+	self:HookScript(GameTooltip, "OnTooltipCleared", "GameTooltip_OnTooltipCleared")
+	self:HookScript(GameTooltip, "OnTooltipSetItem", "GameTooltip_OnTooltipSetItem")
+	self:HookScript(GameTooltip, "OnTooltipSetUnit", "GameTooltip_OnTooltipSetUnit")
 	self:HookScript(GameTooltip, "OnSizeChanged", "CheckBackdropColor")
 
-	self:HookScript(GameTooltipStatusBar, 'OnValueChanged', 'GameTooltipStatusBar_OnValueChanged')
+	self:HookScript(GameTooltipStatusBar, "OnValueChanged", "GameTooltipStatusBar_OnValueChanged")
 
 	self:RegisterEvent("MODIFIER_STATE_CHANGED")
 	self:RegisterEvent("CURSOR_UPDATE", "CheckBackdropColor")
 	E.Skins:HandleCloseButton(ItemRefCloseButton)
 	for _, tt in pairs(tooltips) do
-		self:HookScript(tt, 'OnShow', 'SetStyle')
+		self:HookScript(tt, "OnShow", "SetStyle")
 	end
 
 	keybindFrame = ElvUI_KeyBinder

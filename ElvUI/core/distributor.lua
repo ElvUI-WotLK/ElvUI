@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local D = E:NewModule('Distributor', "AceEvent-3.0","AceTimer-3.0","AceComm-3.0","AceSerializer-3.0")
+local D = E:NewModule("Distributor", "AceEvent-3.0","AceTimer-3.0","AceComm-3.0","AceSerializer-3.0")
 local LibCompress = LibStub:GetLibrary("LibCompress");
 local LibBase64 = LibStub("LibBase64-1.0-ElvUI");
 
@@ -30,11 +30,11 @@ function D:Initialize()
 
 	self.statusBar = CreateFrame("StatusBar", "ElvUI_Download", UIParent)
 	E:RegisterStatusBar(self.statusBar);
-	self.statusBar:CreateBackdrop('Default')
+	self.statusBar:CreateBackdrop("Default")
 	self.statusBar:SetStatusBarTexture(E.media.normTex)
 	self.statusBar:SetStatusBarColor(0.95, 0.15, 0.15)
 	self.statusBar:Size(250, 18)
-	self.statusBar.text = self.statusBar:CreateFontString(nil, 'OVERLAY')
+	self.statusBar.text = self.statusBar:CreateFontString(nil, "OVERLAY")
 	self.statusBar.text:FontTemplate()
 	self.statusBar.text:SetPoint("CENTER")
 	self.statusBar:Hide()
@@ -45,12 +45,12 @@ function D:Distribute(target, otherServer, isGlobal)
 	local profileKey, data;
 	if not isGlobal then
 		if ElvDB.profileKeys then
-			profileKey = ElvDB.profileKeys[E.myname..' - '..E.myrealm]
+			profileKey = ElvDB.profileKeys[E.myname.." - "..E.myrealm]
 		end
 
 		data = ElvDB.profiles[profileKey]
 	else
-		profileKey = 'global'
+		profileKey = "global"
 		data = ElvDB.global
 	end
 
@@ -79,7 +79,7 @@ function D:Distribute(target, otherServer, isGlobal)
 		self:SendCommMessage(REQUEST_PREFIX, message, "WHISPER", target)
 	end
 	self:RegisterComm(REPLY_PREFIX)
-	E:StaticPopup_Show('DISTRIBUTOR_WAITING')
+	E:StaticPopup_Show("DISTRIBUTOR_WAITING")
 end
 
 function D:CHAT_MSG_ADDON(_, _, message, _, sender)
@@ -108,12 +108,12 @@ function D:OnCommReceived(prefix, msg, dist, sender)
 			return
 		end
 
-		local textString = format(L['%s is attempting to share the profile %s with you. Would you like to accept the request?'], sender, profile)
+		local textString = format(L["%s is attempting to share the profile %s with you. Would you like to accept the request?"], sender, profile)
 		if profile == "global" then
-			textString = format(L['%s is attempting to share his filters with you. Would you like to accept the request?'], sender)
+			textString = format(L["%s is attempting to share his filters with you. Would you like to accept the request?"], sender)
 		end
 
-		E.PopupDialogs['DISTRIBUTOR_RESPONSE'] = {
+		E.PopupDialogs["DISTRIBUTOR_RESPONSE"] = {
 			text = textString,
 			OnAccept = function()
 				self.statusBar:SetMinMaxValues(0, length)
@@ -131,7 +131,7 @@ function D:OnCommReceived(prefix, msg, dist, sender)
 			whileDead = 1,
 			hideOnEscape = 1,
 		}
-		E:StaticPopup_Show('DISTRIBUTOR_RESPONSE')
+		E:StaticPopup_Show("DISTRIBUTOR_RESPONSE")
 
 		Downloads[sender] = {
 			current = 0,
@@ -142,7 +142,7 @@ function D:OnCommReceived(prefix, msg, dist, sender)
 		self:RegisterComm(TRANSFER_PREFIX)
 	elseif prefix == REPLY_PREFIX then
 		self:UnregisterComm(REPLY_PREFIX)
-		E:StaticPopup_Hide('DISTRIBUTOR_WAITING')
+		E:StaticPopup_Hide("DISTRIBUTOR_WAITING")
 
 		local profileKey, response = split(":", msg)
 		if response == "YES" then
@@ -150,7 +150,7 @@ function D:OnCommReceived(prefix, msg, dist, sender)
 			self:SendCommMessage(TRANSFER_PREFIX, Uploads[profileKey].serialData, dist, Uploads[profileKey].target)
 			Uploads[profileKey] = nil
 		else
-			E:StaticPopup_Show('DISTRIBUTOR_REQUEST_DENIED')
+			E:StaticPopup_Show("DISTRIBUTOR_REQUEST_DENIED")
 			Uploads[profileKey] = nil
 		end
 	elseif prefix == TRANSFER_PREFIX then
@@ -161,16 +161,16 @@ function D:OnCommReceived(prefix, msg, dist, sender)
 		local success, data = self:Deserialize(msg)
 
 		if success then
-			local textString = format(L['Profile download complete from %s, would you like to load the profile %s now?'], sender, profileKey)
+			local textString = format(L["Profile download complete from %s, would you like to load the profile %s now?"], sender, profileKey)
 
 			if profileKey == "global" then
-				textString = format(L['Filter download complete from %s, would you like to apply changes now?'], sender)
+				textString = format(L["Filter download complete from %s, would you like to apply changes now?"], sender)
 			else
 				if not ElvDB.profiles[profileKey] then
 					ElvDB.profiles[profileKey] = data
 				else
-					textString = format(L['Profile download complete from %s, but the profile %s already exists. Change the name or else it will overwrite the existing profile.'], sender, profileKey)
-					E.PopupDialogs['DISTRIBUTOR_CONFIRM'] = {
+					textString = format(L["Profile download complete from %s, but the profile %s already exists. Change the name or else it will overwrite the existing profile."], sender, profileKey)
+					E.PopupDialogs["DISTRIBUTOR_CONFIRM"] = {
 						text = textString,
 						button1 = ACCEPT,
 						hasEditBox = 1,
@@ -190,13 +190,13 @@ function D:OnCommReceived(prefix, msg, dist, sender)
 						preferredIndex = 3
 					}
 
-					E:StaticPopup_Show('DISTRIBUTOR_CONFIRM')
+					E:StaticPopup_Show("DISTRIBUTOR_CONFIRM")
 					self:SendCommMessage(TRANSFER_COMPLETE_PREFIX, "COMPLETE", dist, sender)
 					return
 				end
 			end
 
-			E.PopupDialogs['DISTRIBUTOR_CONFIRM'] = {
+			E.PopupDialogs["DISTRIBUTOR_CONFIRM"] = {
 				text = textString,
 				OnAccept = function()
 					if profileKey == "global" then
@@ -216,18 +216,18 @@ function D:OnCommReceived(prefix, msg, dist, sender)
 				hideOnEscape = 1,
 			}
 
-			E:StaticPopup_Show('DISTRIBUTOR_CONFIRM')
+			E:StaticPopup_Show("DISTRIBUTOR_CONFIRM")
 			self:SendCommMessage(TRANSFER_COMPLETE_PREFIX, "COMPLETE", dist, sender)
 		else
-			E:StaticPopup_Show('DISTRIBUTOR_FAILED')
+			E:StaticPopup_Show("DISTRIBUTOR_FAILED")
 			self:SendCommMessage(TRANSFER_COMPLETE_PREFIX, "FAILED", dist, sender)
 		end
 	elseif prefix == TRANSFER_COMPLETE_PREFIX then
 		self:UnregisterComm(TRANSFER_COMPLETE_PREFIX)
 		if msg == "COMPLETE" then
-			E:StaticPopup_Show('DISTRIBUTOR_SUCCESS')
+			E:StaticPopup_Show("DISTRIBUTOR_SUCCESS")
 		else
-			E:StaticPopup_Show('DISTRIBUTOR_FAILED')
+			E:StaticPopup_Show("DISTRIBUTOR_FAILED")
 		end
 	end
 end
@@ -406,12 +406,12 @@ local function SetImportedProfile(profileType, profileKey, profileData, force)
 			D.profileType = profileType;
 			D.profileKey = profileKey;
 			D.profileData = profileData;
-			E:StaticPopup_Show('IMPORT_PROFILE_EXISTS');
+			E:StaticPopup_Show("IMPORT_PROFILE_EXISTS");
 
 			return;
 		end
 	elseif(profileType == "private") then
-		local profileKey = ElvPrivateDB.profileKeys[E.myname..' - '..E.myrealm];
+		local profileKey = ElvPrivateDB.profileKeys[E.myname.." - "..E.myrealm];
 		ElvPrivateDB.profiles[profileKey] = profileData;
 		E:StaticPopup_Show("IMPORT_RL");
 
@@ -455,38 +455,38 @@ function D:ImportProfile(dataString)
 	return true;
 end
 
-E.PopupDialogs['DISTRIBUTOR_SUCCESS'] = {
-	text = L['Your profile was successfully recieved by the player.'],
+E.PopupDialogs["DISTRIBUTOR_SUCCESS"] = {
+	text = L["Your profile was successfully recieved by the player."],
 	whileDead = 1,
 	hideOnEscape = 1,
 	button1 = OKAY,
 }
 
-E.PopupDialogs['DISTRIBUTOR_WAITING'] = {
-	text = L['Profile request sent. Waiting for response from player.'],
+E.PopupDialogs["DISTRIBUTOR_WAITING"] = {
+	text = L["Profile request sent. Waiting for response from player."],
 	whileDead = 1,
 	hideOnEscape = 1,
 	timeout = 35,
 }
 
-E.PopupDialogs['DISTRIBUTOR_REQUEST_DENIED'] = {
-	text = L['Request was denied by user.'],
+E.PopupDialogs["DISTRIBUTOR_REQUEST_DENIED"] = {
+	text = L["Request was denied by user."],
 	whileDead = 1,
 	hideOnEscape = 1,
 	button1 = OKAY,
 }
 
-E.PopupDialogs['DISTRIBUTOR_FAILED'] = {
+E.PopupDialogs["DISTRIBUTOR_FAILED"] = {
 	text = L["Lord! It's a miracle! The download up and vanished like a fart in the wind! Try Again!"],
 	whileDead = 1,
 	hideOnEscape = 1,
 	button1 = OKAY,
 }
 
-E.PopupDialogs['DISTRIBUTOR_RESPONSE'] = {}
-E.PopupDialogs['DISTRIBUTOR_CONFIRM'] = {}
+E.PopupDialogs["DISTRIBUTOR_RESPONSE"] = {}
+E.PopupDialogs["DISTRIBUTOR_CONFIRM"] = {}
 
-E.PopupDialogs['IMPORT_PROFILE_EXISTS'] = {
+E.PopupDialogs["IMPORT_PROFILE_EXISTS"] = {
 	text = L["The profile you tried to import already exists. Choose a new name or accept to overwrite the existing profile."],
 	button1 = ACCEPT,
 	button2 = CANCEL,

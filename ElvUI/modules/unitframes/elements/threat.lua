@@ -17,7 +17,7 @@ function UF:Construct_Threat(frame)
 	frame:CreateShadow("Default");
 	threat.powerGlow = frame.shadow;
 	threat.powerGlow:SetParent(frame);
-	threat.powerGlow:SetFrameStrata('BACKGROUND');
+	threat.powerGlow:SetFrameStrata("BACKGROUND");
 	threat.powerGlow:Hide();
 	frame.shadow = nil;
 
@@ -68,7 +68,7 @@ function UF:Configure_Threat(frame)
 				end
 			end
 		elseif(db.threatStyle == "ICONTOPLEFT" or db.threatStyle == "ICONTOPRIGHT" or db.threatStyle == "ICONBOTTOMLEFT" or db.threatStyle == "ICONBOTTOMRIGHT" or db.threatStyle == "ICONTOP" or db.threatStyle == "ICONBOTTOM" or db.threatStyle == "ICONLEFT" or db.threatStyle == "ICONRIGHT") then
-			threat:SetFrameStrata('LOW');
+			threat:SetFrameStrata("LOW");
 			threat:SetFrameLevel(75)
 			local point = db.threatStyle;
 			point = point:gsub("ICON", "");

@@ -167,7 +167,7 @@ function E:GetXYOffset(position, override)
 end
 
 local styles = {
-	["CURRENT"] = "%s",
+	["CURRENT"] = '%s',
 	["CURRENT_MAX"] = "%s - %s",
 	["CURRENT_PERCENT"] = "%s - %.1f%%",
 	["CURRENT_MAX_PERCENT"] = "%s - %s | %.1f%%",

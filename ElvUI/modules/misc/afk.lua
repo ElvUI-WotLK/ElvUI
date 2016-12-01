@@ -1,7 +1,7 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local AFKString = _G['AFK'];
-local AFK = E:NewModule('AFK', 'AceEvent-3.0', 'AceTimer-3.0');
-local CH = E:GetModule('Chat');
+local AFKString = _G["AFK"];
+local AFK = E:NewModule("AFK", "AceEvent-3.0", "AceTimer-3.0");
+local CH = E:GetModule("Chat");
 
 local _G = _G;
 local GetTime = GetTime;
@@ -63,20 +63,20 @@ function AFK:SetAFK(status)
 		UIParent:Hide();
 
 		if(IsInGuild()) then
-			local guildName, guildRankName = GetGuildInfo('player');
+			local guildName, guildRankName = GetGuildInfo("player");
 			self.AFKMode.bottom.guild:SetFormattedText("%s-%s", guildName, guildRankName);
 		else
-			self.AFKMode.bottom.guild:SetText(L['No Guild']);
+			self.AFKMode.bottom.guild:SetText(L["No Guild"]);
 		end
 
-		self.AFKMode.bottom.model:SetUnit('player');
+		self.AFKMode.bottom.model:SetUnit("player");
 		self.startTime = GetTime();
-		self.timer = self:ScheduleRepeatingTimer('UpdateTimer', 1);
+		self.timer = self:ScheduleRepeatingTimer("UpdateTimer", 1);
 
-		self.AFKMode.chat:RegisterEvent('CHAT_MSG_WHISPER');
-		self.AFKMode.chat:RegisterEvent('CHAT_MSG_BN_WHISPER');
-		self.AFKMode.chat:RegisterEvent('CHAT_MSG_BN_CONVERSATION');
-		self.AFKMode.chat:RegisterEvent('CHAT_MSG_GUILD');
+		self.AFKMode.chat:RegisterEvent("CHAT_MSG_WHISPER");
+		self.AFKMode.chat:RegisterEvent("CHAT_MSG_BN_WHISPER");
+		self.AFKMode.chat:RegisterEvent("CHAT_MSG_BN_CONVERSATION");
+		self.AFKMode.chat:RegisterEvent("CHAT_MSG_GUILD");
 
 		self.isAFK = true;
 	elseif(self.isAFK) then
@@ -85,7 +85,7 @@ function AFK:SetAFK(status)
 		MoveViewLeftStop();
 
 		self:CancelTimer(self.timer);
-		self.AFKMode.bottom.time:SetText('00:00');
+		self.AFKMode.bottom.time:SetText("00:00");
 
 		self.AFKMode.chat:UnregisterAllEvents();
 		self.AFKMode.chat:Clear();
@@ -95,28 +95,28 @@ function AFK:SetAFK(status)
 end
 
 function AFK:OnEvent(event, ...)
-	if(event == 'PLAYER_REGEN_DISABLED' or event == 'UPDATE_BATTLEFIELD_STATUS') then
-		if(event == 'UPDATE_BATTLEFIELD_STATUS') then
+	if(event == "PLAYER_REGEN_DISABLED" or event == "UPDATE_BATTLEFIELD_STATUS") then
+		if(event == "UPDATE_BATTLEFIELD_STATUS") then
 			local status = GetBattlefieldStatus(...);
-			if(status == 'confirm') then
+			if(status == "confirm") then
 				self:SetAFK(false);
 			end
 		else
 			self:SetAFK(false);
 		end
 
-		if(event == 'PLAYER_REGEN_DISABLED') then
-			self:RegisterEvent('PLAYER_REGEN_ENABLED', 'OnEvent');
+		if(event == "PLAYER_REGEN_DISABLED") then
+			self:RegisterEvent("PLAYER_REGEN_ENABLED", "OnEvent");
 		end
 
 		return;
 	end
 
-	if(event == 'PLAYER_REGEN_ENABLED') then
-		self:UnregisterEvent('PLAYER_REGEN_ENABLED');
+	if(event == "PLAYER_REGEN_ENABLED") then
+		self:UnregisterEvent("PLAYER_REGEN_ENABLED");
 	end
 
-	if(UnitIsAFK('player')) then
+	if(UnitIsAFK("player")) then
 		self:SetAFK(true);
 	else
 		self:SetAFK(false);
@@ -125,15 +125,15 @@ end
 
 function AFK:Toggle()
 	if(E.db.general.afk) then
-		self:RegisterEvent('PLAYER_FLAGS_CHANGED', 'OnEvent');
-		self:RegisterEvent('PLAYER_REGEN_DISABLED', 'OnEvent');
-		self:RegisterEvent('UPDATE_BATTLEFIELD_STATUS', 'OnEvent');
+		self:RegisterEvent("PLAYER_FLAGS_CHANGED", "OnEvent");
+		self:RegisterEvent("PLAYER_REGEN_DISABLED", "OnEvent");
+		self:RegisterEvent("UPDATE_BATTLEFIELD_STATUS", "OnEvent");
 
-		SetCVar('autoClearAFK', '1');
+		SetCVar("autoClearAFK", "1");
 	else
-		self:UnregisterEvent('PLAYER_FLAGS_CHANGED');
-		self:UnregisterEvent('PLAYER_REGEN_DISABLED');
-		self:UnregisterEvent('UPDATE_BATTLEFIELD_STATUS');
+		self:UnregisterEvent("PLAYER_FLAGS_CHANGED");
+		self:UnregisterEvent("PLAYER_REGEN_DISABLED");
+		self:UnregisterEvent("UPDATE_BATTLEFIELD_STATUS");
 	end
 end
 
@@ -143,7 +143,7 @@ local function OnKeyDown(self, key)
 		Screenshot()
 	else
 		AFK:SetAFK(false);
-		AFK:ScheduleTimer('OnEvent', 60);
+		AFK:ScheduleTimer("OnEvent", 60);
 	end
 end
 
@@ -177,13 +177,13 @@ local function Chat_OnEvent(self, event, arg1, arg2, arg3, arg4, arg5, arg6, arg
 	end
 
 	local playerLink
-	if ( type ~= 'BN_WHISPER' and type ~= 'BN_CONVERSATION' ) then
-		playerLink = '|Hplayer:'..arg2..':'..arg11..':'..chatGroup..(chatTarget and ':'..chatTarget or '')..'|h';
+	if ( type ~= "BN_WHISPER" and type ~= "BN_CONVERSATION" ) then
+		playerLink = "|Hplayer:"..arg2..":"..arg11..":"..chatGroup..(chatTarget and ":"..chatTarget or "").."|h";
 	else
-		playerLink = '|HBNplayer:'..arg2..':'..arg13..':'..arg11..':'..chatGroup..(chatTarget and ':'..chatTarget or '')..'|h';
+		playerLink = "|HBNplayer:"..arg2..":"..arg13..":"..arg11..":"..chatGroup..(chatTarget and ":"..chatTarget or "").."|h";
 	end
 
-	body = format(_G['CHAT_'..type..'_GET']..arg1, playerLink..'['..coloredName..']'..'|h');
+	body = format(_G["CHAT_"..type.."_GET"]..arg1, playerLink.."["..coloredName.."]".."|h");
 
 	local accessID = ChatHistory_GetAccessID(chatGroup, chatTarget);
 	local typeID = ChatHistory_GetAccessID(type, chatTarget, arg12 == "" and arg13 or arg12);
@@ -192,7 +192,7 @@ local function Chat_OnEvent(self, event, arg1, arg2, arg3, arg4, arg5, arg6, arg
 		body = body:gsub("^(.-|h) "..L["whispers"], "%1");
 		body = body:gsub("<"..AFKString..">", "[|cffFF0000"..L["AFK"].."|r] ");
 		body = body:gsub("<"..DND..">", "[|cffE7E716"..L["DND"].."|r] ");
-		body = body:gsub("%[BN_CONVERSATION:", '%['.."");
+		body = body:gsub("%[BN_CONVERSATION:", "%[".."");
 	end
 
 	self:AddMessage(CH:ConcatenateTimeStamp(body), info.r, info.g, info.b, info.id, false, accessID, typeID);
@@ -201,61 +201,61 @@ end
 function AFK:Initialize()
 	local classColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass];
 
-	self.AFKMode = CreateFrame('Frame', 'ElvUIAFKFrame');
+	self.AFKMode = CreateFrame("Frame", "ElvUIAFKFrame");
 	self.AFKMode:SetScale(UIParent:GetScale());
 	self.AFKMode:SetAllPoints(UIParent);
 	self.AFKMode:Hide();
 	self.AFKMode:EnableKeyboard(true);
-	self.AFKMode:SetScript('OnKeyDown', OnKeyDown);
+	self.AFKMode:SetScript("OnKeyDown", OnKeyDown);
 
-	self.AFKMode.chat = CreateFrame('ScrollingMessageFrame', 'AFKChat', self.AFKMode);
+	self.AFKMode.chat = CreateFrame("ScrollingMessageFrame", "AFKChat", self.AFKMode);
 	self.AFKMode.chat:SetSize(500, 200);
-	self.AFKMode.chat:SetPoint('TOPLEFT', self.AFKMode, 'TOPLEFT', 4, -4);
+	self.AFKMode.chat:SetPoint("TOPLEFT", self.AFKMode, "TOPLEFT", 4, -4);
 	self.AFKMode.chat:FontTemplate();
-	self.AFKMode.chat:SetJustifyH('LEFT');
+	self.AFKMode.chat:SetJustifyH("LEFT");
 	self.AFKMode.chat:SetMaxLines(500);
 	self.AFKMode.chat:EnableMouseWheel(true);
 	self.AFKMode.chat:SetFading(false);
-	self.AFKMode.chat:SetScript('OnMouseWheel', Chat_OnMouseWheel);
-	self.AFKMode.chat:SetScript('OnEvent', CH.ChatFrame_OnEvent);
+	self.AFKMode.chat:SetScript("OnMouseWheel", Chat_OnMouseWheel);
+	self.AFKMode.chat:SetScript("OnEvent", CH.ChatFrame_OnEvent);
 
-	self.AFKMode.bottom = CreateFrame('Frame', nil, self.AFKMode);
-	self.AFKMode.bottom:SetTemplate('Transparent');
-	self.AFKMode.bottom:SetPoint('BOTTOM', self.AFKMode, 'BOTTOM', 0, -2);
+	self.AFKMode.bottom = CreateFrame("Frame", nil, self.AFKMode);
+	self.AFKMode.bottom:SetTemplate("Transparent");
+	self.AFKMode.bottom:SetPoint("BOTTOM", self.AFKMode, "BOTTOM", 0, -2);
 	self.AFKMode.bottom:SetWidth(GetScreenWidth());
 	self.AFKMode.bottom:SetHeight(GetScreenHeight() * (1 / 10));
 
-	self.AFKMode.bottom.logo = self.AFKMode.bottom:CreateTexture(nil, 'OVERLAY');
+	self.AFKMode.bottom.logo = self.AFKMode.bottom:CreateTexture(nil, "OVERLAY");
 	self.AFKMode.bottom.logo:SetSize(320, 150);
-	self.AFKMode.bottom.logo:SetPoint('CENTER', self.AFKMode.bottom, 'CENTER', 0, 50);
-	self.AFKMode.bottom.logo:SetTexture('Interface\\AddOns\\ElvUI\\media\\textures\\logo_elvui');
+	self.AFKMode.bottom.logo:SetPoint("CENTER", self.AFKMode.bottom, "CENTER", 0, 50);
+	self.AFKMode.bottom.logo:SetTexture("Interface\\AddOns\\ElvUI\\media\\textures\\logo_elvui");
 
-	local factionGroup = UnitFactionGroup('player');
-	self.AFKMode.bottom.faction = self.AFKMode.bottom:CreateTexture(nil, 'OVERLAY');
-	self.AFKMode.bottom.faction:SetPoint('BOTTOMLEFT', self.AFKMode.bottom, 'BOTTOMLEFT', -20, -16);
-	self.AFKMode.bottom.faction:SetTexture('Interface\\AddOns\\ElvUI\\media\\textures\\'..factionGroup..'-Logo');
+	local factionGroup = UnitFactionGroup("player");
+	self.AFKMode.bottom.faction = self.AFKMode.bottom:CreateTexture(nil, "OVERLAY");
+	self.AFKMode.bottom.faction:SetPoint("BOTTOMLEFT", self.AFKMode.bottom, "BOTTOMLEFT", -20, -16);
+	self.AFKMode.bottom.faction:SetTexture("Interface\\AddOns\\ElvUI\\media\\textures\\"..factionGroup.."-Logo");
 	self.AFKMode.bottom.faction:SetSize(140, 140);
 
-	self.AFKMode.bottom.name = self.AFKMode.bottom:CreateFontString(nil, 'OVERLAY');
+	self.AFKMode.bottom.name = self.AFKMode.bottom:CreateFontString(nil, "OVERLAY");
 	self.AFKMode.bottom.name:FontTemplate(nil, 20);
 	self.AFKMode.bottom.name:SetFormattedText("%s-%s", E.myname, E.myrealm);
-	self.AFKMode.bottom.name:SetPoint('TOPLEFT', self.AFKMode.bottom.faction, 'TOPRIGHT', -10, -28);
+	self.AFKMode.bottom.name:SetPoint("TOPLEFT", self.AFKMode.bottom.faction, "TOPRIGHT", -10, -28);
 	self.AFKMode.bottom.name:SetTextColor(classColor.r, classColor.g, classColor.b);
 
-	self.AFKMode.bottom.guild = self.AFKMode.bottom:CreateFontString(nil, 'OVERLAY');
+	self.AFKMode.bottom.guild = self.AFKMode.bottom:CreateFontString(nil, "OVERLAY");
 	self.AFKMode.bottom.guild:FontTemplate(nil, 20);
-	self.AFKMode.bottom.guild:SetText(L['No Guild']);
-	self.AFKMode.bottom.guild:SetPoint('TOPLEFT', self.AFKMode.bottom.name, 'BOTTOMLEFT', 0, -6);
+	self.AFKMode.bottom.guild:SetText(L["No Guild"]);
+	self.AFKMode.bottom.guild:SetPoint("TOPLEFT", self.AFKMode.bottom.name, "BOTTOMLEFT", 0, -6);
 	self.AFKMode.bottom.guild:SetTextColor(0.7, 0.7, 0.7);
 
-	self.AFKMode.bottom.time = self.AFKMode.bottom:CreateFontString(nil, 'OVERLAY');
+	self.AFKMode.bottom.time = self.AFKMode.bottom:CreateFontString(nil, "OVERLAY");
 	self.AFKMode.bottom.time:FontTemplate(nil, 20);
-	self.AFKMode.bottom.time:SetText('00:00');
-	self.AFKMode.bottom.time:SetPoint('TOPLEFT', self.AFKMode.bottom.guild, 'BOTTOMLEFT', 0, -6);
+	self.AFKMode.bottom.time:SetText("00:00");
+	self.AFKMode.bottom.time:SetPoint("TOPLEFT", self.AFKMode.bottom.guild, "BOTTOMLEFT", 0, -6);
 	self.AFKMode.bottom.time:SetTextColor(0.7, 0.7, 0.7);
 
-	self.AFKMode.bottom.model = CreateFrame('PlayerModel', 'ElvUIAFKPlayerModel', self.AFKMode.bottom);
-	self.AFKMode.bottom.model:SetPoint('BOTTOMRIGHT', self.AFKMode.bottom, 'BOTTOMRIGHT', 120, -100);
+	self.AFKMode.bottom.model = CreateFrame("PlayerModel", "ElvUIAFKPlayerModel", self.AFKMode.bottom);
+	self.AFKMode.bottom.model:SetPoint("BOTTOMRIGHT", self.AFKMode.bottom, "BOTTOMRIGHT", 120, -100);
 	self.AFKMode.bottom.model:SetSize(800, 800);
 	self.AFKMode.bottom.model:SetFacing(6);
 

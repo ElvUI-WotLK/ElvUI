@@ -1,5 +1,5 @@
 local E, L, DF = unpack(select(2, ...))
-local B = E:GetModule('Blizzard');
+local B = E:GetModule("Blizzard");
 
 function B:PositionVehicleFrame()
 	local function VehicleSeatIndicator_SetPosition(_,_, parent)
@@ -18,5 +18,5 @@ function B:PositionVehicleFrame()
 	end
 	hooksecurefunc(VehicleSeatIndicator, "SetPoint", VehicleSeatIndicator_SetPosition);
 
-	VehicleSeatIndicator:SetPoint('TOPLEFT', MinimapCluster, 'TOPLEFT', 2, 2);
+	VehicleSeatIndicator:SetPoint("TOPLEFT", MinimapCluster, "TOPLEFT", 2, 2);
 end
