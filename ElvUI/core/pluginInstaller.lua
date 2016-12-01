@@ -40,7 +40,7 @@
 			PluginInstallFrame.Option2:SetScript("OnClick", function() <Do Some Other Stuff> end)
 			PluginInstallFrame.Option2:SetText("Text 2")
 		end
-	StepTitles - a table to specify "titles" for your install steps. If specified and number of lines here = number of pages then you"ll get an additional frame to the right of main frame
+	StepTitles - a table to specify "titles" for your install steps. If specified and number of lines here = number of pages then you'll get an additional frame to the right of main frame
 	with a list of steps (current one being highlighted), clicking on those will open respective step. BenikUI style of doing stuff.
 	StepTitlesColor - a table with color values to color "titles" when they are not active
 	StepTitlesColorSelected - a table with color values to color "titles" when they are active

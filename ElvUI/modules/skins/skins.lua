@@ -543,7 +543,7 @@ function S:AddCallbackForAddon(addonName, eventName, loadFunc, forceLoad, bypass
 	if(forceLoad) then
 		E.callbacks:Fire(eventName);
 	else
-		--Insert eventName in this addons" registry
+		--Insert eventName in this addons' registry
 		self.addonCallbacks[addonName][eventName] = true;
 	end
 end

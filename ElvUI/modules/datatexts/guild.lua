@@ -12,7 +12,7 @@ local activezone, inactivezone = {r=0.3, g=1.0, b=0.3}, {r=0.65, g=0.65, b=0.65}
 local groupedTable = { "|cffaaaaaa*|r", "" }
 local displayString = ""
 local noGuildString = ""
-local guildInfoString = '%s'
+local guildInfoString = "%s"
 local guildInfoString2 = join("", GUILD, ": %d/%d")
 local guildMotDString = "%s |cffaaaaaa |cffffffff%s"
 local levelNameString = "|cff%02x%02x%02x%d|r |cff%02x%02x%02x%s|r %s"
