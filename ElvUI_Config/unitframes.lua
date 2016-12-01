@@ -4418,7 +4418,7 @@ E.Options.args.unitframe.args.party = {
 					name = L["Configure Auras"],
 					func = function()
 						if(E.db.unitframe.units["party"]["buffIndicator"].profileSpecific) then
-							E:SetToFilterConfig('Buff Indicator (Profile)');
+							E:SetToFilterConfig("Buff Indicator (Profile)");
 						else
 							E:SetToFilterConfig("Buff Indicator");
 						end
@@ -4989,7 +4989,7 @@ E.Options.args.unitframe.args["raid"] = {
 					name = L["Configure Auras"],
 					func = function()
 						if(E.db.unitframe.units["raid"]["buffIndicator"].profileSpecific) then
-							E:SetToFilterConfig('Buff Indicator (Profile)');
+							E:SetToFilterConfig("Buff Indicator (Profile)");
 						else
 							E:SetToFilterConfig("Buff Indicator");
 						end
@@ -5391,7 +5391,7 @@ E.Options.args.unitframe.args["raid40"] = {
 					name = L["Configure Auras"],
 					func = function()
 						if(E.db.unitframe.units["raid40"]["buffIndicator"].profileSpecific) then
-							E:SetToFilterConfig('Buff Indicator (Profile)');
+							E:SetToFilterConfig("Buff Indicator (Profile)");
 						else
 							E:SetToFilterConfig("Buff Indicator");
 						end
@@ -6112,7 +6112,7 @@ E.Options.args.unitframe.args.tank = { -- Танки
 					name = L["Configure Auras"],
 					func = function()
 						if E.db.unitframe.units["tank"]["buffIndicator"].profileSpecific then
-							E:SetToFilterConfig('Buff Indicator (Profile)')
+							E:SetToFilterConfig("Buff Indicator (Profile)")
 						else
 							E:SetToFilterConfig("Buff Indicator")
 						end
@@ -6295,7 +6295,7 @@ E.Options.args.unitframe.args.assist = { -- Помощники
 					name = L["Configure Auras"],
 					func = function()
 						if E.db.unitframe.units["assist"]["buffIndicator"].profileSpecific then
-							E:SetToFilterConfig('Buff Indicator (Profile)')
+							E:SetToFilterConfig("Buff Indicator (Profile)")
 						else
 							E:SetToFilterConfig("Buff Indicator")
 						end
