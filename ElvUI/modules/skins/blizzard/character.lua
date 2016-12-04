@@ -368,11 +368,12 @@ local function LoadSkin()
 	SkillFrame:StripTextures(true);
 
 	SkillDetailStatusBarUnlearnButton:StripTextures();
-	SkillDetailStatusBarUnlearnButton:Point("LEFT", SkillDetailStatusBarBorder, "RIGHT", 5, -1);
+	SkillDetailStatusBarUnlearnButton:Point("LEFT", SkillDetailStatusBarBorder, "RIGHT", 5, -4);
 
 	SkillDetailStatusBarUnlearnButton.texture = SkillDetailStatusBarUnlearnButton:CreateTexture(nil, "OVERLAY");
 	SkillDetailStatusBarUnlearnButton.texture:SetTexture("Interface\\Buttons\\UI-GroupLoot-Pass-Up");
-	SkillDetailStatusBarUnlearnButton.texture:SetInside(SkillDetailStatusBarUnlearnButton);
+	SkillDetailStatusBarUnlearnButton.texture:Point("TOPLEFT", 2, 3);
+	SkillDetailStatusBarUnlearnButton.texture:Point("BOTTOMRIGHT", -2, 6);
 
 	SkillFrameExpandButtonFrame:StripTextures();
 
