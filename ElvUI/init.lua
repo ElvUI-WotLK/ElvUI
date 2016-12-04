@@ -18,7 +18,7 @@ BINDING_HEADER_ELVUI = GetAddOnMetadata(..., "Title");
 local AddOnName, Engine = ...;
 local AddOn = LibStub("AceAddon-3.0"):NewAddon(AddOnName, "AceConsole-3.0", "AceEvent-3.0", "AceTimer-3.0", "AceHook-3.0");
 AddOn.callbacks = AddOn.callbacks or
-  LibStub("CallbackHandler-1.0"):New(AddOn);
+	LibStub("CallbackHandler-1.0"):New(AddOn);
 AddOn.DF = {}; AddOn.DF["profile"] = {}; AddOn.DF["global"] = {}; AddOn.privateVars = {}; AddOn.privateVars["profile"] = {}; -- Defaults
 AddOn.Options = {
 	type = "group",
@@ -236,5 +236,5 @@ function AddOn:ToggleConfig()
 		self.GUIFrame.bounce:Play();
 	end
 
-	GameTooltip:Hide() --Just in case you"re mouseovered something and it closes.
+	GameTooltip:Hide() --Just in case you're mouseovered something and it closes.
 end

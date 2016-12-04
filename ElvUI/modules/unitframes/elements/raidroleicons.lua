@@ -84,9 +84,9 @@ end
 
 function UF:RaidRoleUpdate()
 	local anchor = self:GetParent();
- 	local frame = anchor:GetParent():GetParent()
- 	local leader = frame.Leader
- 	local assistant = frame.Assistant
+	local frame = anchor:GetParent():GetParent()
+	local leader = frame.Leader
+	local assistant = frame.Assistant
 	local masterLooter = frame.MasterLooter
 
 	if(not leader or not masterLooter or not assistant) then return; end

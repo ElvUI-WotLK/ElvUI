@@ -71,7 +71,7 @@ local function LoadSkin()
 	end);
 
 	local function skinPulloutFrames()
-		for i = 1, NUM_RAID_PULLOUT_FRAMES 	do
+		for i = 1, NUM_RAID_PULLOUT_FRAMES do
 			local rp = _G["RaidPullout" .. i];
 			if(not rp.backdrop) then
 				_G["RaidPullout"..i.."MenuBackdrop"]:SetBackdrop(nil);

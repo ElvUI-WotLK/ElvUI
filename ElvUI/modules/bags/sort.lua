@@ -208,7 +208,7 @@ local function DefaultSort(a, b)
 	local _, _, aRarity, _, _, aType, aSubType, _, aEquipLoc = GetItemInfo(aID)
 	local _, _, bRarity, _, _, bType, bSubType, _, bEquipLoc = GetItemInfo(bID)
 
- 	aRarity = bagQualities[a]
+	aRarity = bagQualities[a]
 	bRarity = bagQualities[b]
 
 	if aRarity ~= bRarity and aRarity and bRarity then
@@ -797,7 +797,7 @@ function B:DoMoves()
 	twipe(moveTracker)
 
 	local success, moveID, targetID, moveSource, moveTarget, wasGuild
-	if #moves > 0 then 
+	if #moves > 0 then
 		for i = #moves, 1, -1 do
 			success, moveID, moveSource, targetID, moveTarget, wasGuild = B:DoMove(moves[i])
 			if not success then

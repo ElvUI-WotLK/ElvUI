@@ -23,7 +23,7 @@ local function LoadSkin()
 	tutorialbuttonIcon:SetTexture("INTERFACE\\ICONS\\INV_Letter_18")
 	tutorialbuttonIcon:ClearAllPoints()
 	tutorialbuttonIcon:SetPoint("TOPLEFT", TutorialFrameAlertButton, "TOPLEFT", 5, -5)
-	tutorialbuttonIcon:SetPoint("BOTTOMRIGHT", TutorialFrameAlertButton, "BOTTOMRIGHT",  -5, 5)
+	tutorialbuttonIcon:SetPoint("BOTTOMRIGHT", TutorialFrameAlertButton, "BOTTOMRIGHT", -5, 5)
 	tutorialbuttonIcon:SetTexCoord(unpack(E.TexCoords))
 
 	TutorialFrame:StripTextures()

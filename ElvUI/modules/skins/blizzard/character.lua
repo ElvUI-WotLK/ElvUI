@@ -72,7 +72,7 @@ local function LoadSkin()
 	local function SkinFrameFlyouts()
 		PaperDollFrameItemFlyoutButtons:StripTextures();
 	end
- 	PaperDollFrameItemFlyout:HookScript("OnShow", SkinFrameFlyouts)
+	PaperDollFrameItemFlyout:HookScript("OnShow", SkinFrameFlyouts)
 
 	GearManagerDialogPopup:StripTextures()
 	GearManagerDialogPopup:CreateBackdrop("Transparent")

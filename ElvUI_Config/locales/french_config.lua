@@ -50,7 +50,7 @@ Formats de la Vie / des Ressources:
 "percent" - Quantité en pourcentage
 "current-max" - Quantité actuelle maximale, n'affichera seulement la quantité maximale si la quantité actuelle est égale au maximum.
 "current-percent" - Quantité actuelle suivie par quantité en pourcentage, n'affichera seulement la quantité maximale si la quantité actuelle est égale au maximum
-"current-max-percent" -  Quantité actuelle, quantité maximale, suivie par quantité en pourcentage, n'affichera seulement la quantité maximale si la quantité actuelle est égale au maximum
+"current-max-percent" - Quantité actuelle, quantité maximale, suivie par quantité en pourcentage, n'affichera seulement la quantité maximale si la quantité actuelle est égale au maximum
 "deficit" - Affiche la valeur du déficit, n'affichera rien si il n'y a pas de déficit
 
 Format des Noms:
@@ -166,7 +166,7 @@ L["Icons and Text (Short)"] = true;
 L["Icons and Text"] = "Icônes et textes"
 L["Ignored Items and Search Syntax (Global)"] = true;
 L["Ignored Items and Search Syntax (Profile)"] = true;
-L["Item Count Font"] = "Police d'équipement du compteur";  --need review
+L["Item Count Font"] = "Police d'équipement du compteur"; --need review
 L["Item Level Threshold"] = "Seuil de niveau d'objet";
 L["Item Level"] = "Niveau d'objet";
 L["Money Format"] = "Format monétaire";
@@ -414,7 +414,7 @@ L["Hide At Max Level"] = true;
 L["Hide Error Text"] = "Cacher les textes d'erreurs"
 L["Hide In Vehicle"] = true;
 L["Hides the red error text at the top of the screen while in combat."] = "Cacher les textes d'erreurs en haut de l'écran en combat."
-L["Log Taints"] = "Journal  des corruptions"
+L["Log Taints"] = "Journal des corruptions"
 L["Login Message"] = "Message de connexion"
 L["Loot Roll"] = "Cadre de butin"
 L["Loot"] = "Butin"
@@ -762,7 +762,7 @@ L["Combat Icon"] = true;
 L["Combo Point"] = true;
 L["Configure Auras"] = "Configure les Auras"
 L["Copy From"] = "Copier depuis"
-L["Count Font Size"] = "Taille du texte du décompte" -- is  it count  when entering in the BattleGround? ;
+L["Count Font Size"] = "Taille du texte du décompte" -- is it count when entering in the BattleGround? ;
 L["Create a custom fontstring. Once you enter a name you will be able to select it from the elements dropdown list."] = "Créer une chaîne de caractères personnalisée. Une fois que vous aurez entré un nom, vous serez en mesure de la sélectionner au sein de la liste déroulante."
 L["Create a filter, once created a filter can be set inside the buffs/debuffs section of each unit."] = "Créer un filtre, chaque filtre créé peut être configuré dans la section Amélioration / Affaiblissements de chaque unité."
 L["Create Filter"] = "Créer un filtre"
@@ -959,7 +959,7 @@ L["Role Icon"] = "Icône de rôle"
 L["Seconds remaining on the aura duration before the bar starts moving. Set to 0 to disable."] = true
 L["Select a filter to use."] = "Sélectionner un filtre à utiliser."
 L["Select a unit to copy settings from."] = "Sélectionnez les réglages d'un cadre à copier."
-L["Select an additional filter to use. If the selected filter is a whitelist and no other filters are being used (with the exception of Block Non-Personal Auras) then it will block anything not on the whitelist, otherwise it will simply add auras on the whitelist in addition to any other filter settings."] =  "Sélectionnez un filtre additionnel à utiliser. Si le filtre sélectionné est une liste blanche et qu'aucun autres filtres sont utilisés (à l'exception du bloc des Auras Non-Personnels) alors il bloquera quoi que ce soit qui n'est pas dans la liste blanche, sinon il suffira d'ajouter les auras dans la liste blanche en plus de tous les autres paramètres des filtres." -- headache
+L["Select an additional filter to use. If the selected filter is a whitelist and no other filters are being used (with the exception of Block Non-Personal Auras) then it will block anything not on the whitelist, otherwise it will simply add auras on the whitelist in addition to any other filter settings."] = "Sélectionnez un filtre additionnel à utiliser. Si le filtre sélectionné est une liste blanche et qu'aucun autres filtres sont utilisés (à l'exception du bloc des Auras Non-Personnels) alors il bloquera quoi que ce soit qui n'est pas dans la liste blanche, sinon il suffira d'ajouter les auras dans la liste blanche en plus de tous les autres paramètres des filtres." -- headache
 L["Select Filter"] = "Sélectionner un filtre"
 L["Select Spell"] = "Sélectionner un sort"
 L["Select the display method of the portrait."] = "Sélectionnez la méthode d'affichage du portrait."
@@ -1005,14 +1005,14 @@ L["Tank Frames"] = "Cadre des Tanks"
 L["Tank Target"] = "Cible de Tank"
 L["Tapped"] = "Collé"
 L["Target Glow"] = true;
-L["Target On Mouse-Down"] =  "Cibler lors d'un appui sur le clic (et non pas en relachant le clic)" --Need review
+L["Target On Mouse-Down"] = "Cibler lors d'un appui sur le clic (et non pas en relachant le clic)" --Need review
 L["Target units on mouse down rather than mouse up. \n\n|cffFF0000Warning: If you are using the addon 'Clique' you may have to adjust your clique settings when changing this."] = "Cible les unités avec un appui sur le clic souris plutôt qu'au relâchement du clic. \n\n|cffFF0000Attention: Si vous utilisez l'addon 'Clique' vous devrez peut-être ajuster vos paramètres de clic lors du changement de celui-ci."
 L["Text Color"] = "Couleur du texte"
 L["Text Format"] = "Format du texte"
 L["Text Position"] = "Position du texte"
 L["Text Threshold"] = "Seuil du texte"
 L["Text Toggle On NPC"] = "Afficher le texte des PNJ"
-L["Text xOffset"] =  "Décalage de l'axe X du texte"
+L["Text xOffset"] = "Décalage de l'axe X du texte"
 L["Text yOffset"] = "Décalage de l'axe Y du texte"
 L["Text"] = "Texte"
 L["Textured Icon"] = "Texture de l'icône"
@@ -1029,7 +1029,7 @@ L["This opens the UnitFrames Color settings. These settings affect all unitframe
 L["Threat Display Mode"] = "Affichage du Mode de Menace."
 L["Threshold before text goes into decimal form. Set to -1 to disable decimals."] = "Seuil avant que le texte ne s'affiche sous forme décimale. Mettre à -1 pour désactiver l'affichage en décimal.";
 L["Ticks"] = "Ticks"
-L["Time Remaining Reverse"] =  "Temps restant inversé"
+L["Time Remaining Reverse"] = "Temps restant inversé"
 L["Time Remaining"] = "Temps restant"
 L["Toggles health text display"] = "Affiche le texte de la vie de l'unité"
 L["Transparent"] = "Transparent"

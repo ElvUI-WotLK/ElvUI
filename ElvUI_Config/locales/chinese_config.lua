@@ -360,7 +360,7 @@ L["The display format of the money text that is shown in the gold datatext and i
 L["Toggle 24-hour mode for the time datatext."] = "切换时间显示为24小时制."
 L["TopLeftMiniPanel"] = "小地图左上内侧"
 L["TopMiniPanel"] = "小地图顶部内侧"
-L["TopRightMiniPanel"] =  "小地图右上内侧"
+L["TopRightMiniPanel"] = "小地图右上内侧"
 L["When inside a battleground display personal scoreboard information on the main datatext bars."] = "处于战场时, 在主资讯文字条显示你的战场得分讯息."
 L["Word Wrap"] = "自动换行"
 

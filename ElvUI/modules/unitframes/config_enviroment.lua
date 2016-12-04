@@ -146,7 +146,7 @@ function UF:UnforceShow(frame)
 	end
 
 	frame.unit = frame.oldUnit or frame.unit
-	-- If we"re visible force an update so everything is properly in a
+	-- If we're visible force an update so everything is properly in a
 	-- non-config mode state
 	if frame:IsVisible() and frame.Update then
 		frame:Update()

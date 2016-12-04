@@ -16,7 +16,7 @@ function UF:Configure_PVPIcon(frame)
 
 	local scale = frame.db.pvpIcon.scale or 1
 	PvP:Size(30 * scale)
-	
+
 	if frame.db.pvpIcon.enable and not frame:IsElementEnabled("PvP") then
 		frame:EnableElement("PvP")
 	elseif not frame.db.pvpIcon.enable and frame:IsElementEnabled("PvP") then

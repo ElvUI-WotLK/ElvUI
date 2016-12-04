@@ -46,7 +46,7 @@ end
 function B:SizeAndPositionBagBar()
 	if not ElvUIBags then return; end
 
- 	local buttonSpacing = E.db.bags.bagBar.spacing
+	local buttonSpacing = E.db.bags.bagBar.spacing
 	local backdropSpacing = E.db.bags.bagBar.backdropSpacing
 
 	if E.db.bags.bagBar.mouseover then
@@ -97,10 +97,10 @@ function B:SizeAndPositionBagBar()
 	end
 
 	if E.db.bags.bagBar.growthDirection == "HORIZONTAL" then
- 		ElvUIBags:Width(E.db.bags.bagBar.size*(TOTAL_BAGS) + buttonSpacing*(TOTAL_BAGS-1) + ((E.db.bags.bagBar.showBackdrop == true and (E.Border + backdropSpacing) or E.Spacing)*2));
+		ElvUIBags:Width(E.db.bags.bagBar.size*(TOTAL_BAGS) + buttonSpacing*(TOTAL_BAGS-1) + ((E.db.bags.bagBar.showBackdrop == true and (E.Border + backdropSpacing) or E.Spacing)*2));
 		ElvUIBags:Height(E.db.bags.bagBar.size + ((E.db.bags.bagBar.showBackdrop == true and (E.Border + backdropSpacing) or E.Spacing)*2));
 	else
- 		ElvUIBags:Height(E.db.bags.bagBar.size*(TOTAL_BAGS) + buttonSpacing*(TOTAL_BAGS-1) + ((E.db.bags.bagBar.showBackdrop == true and (E.Border + backdropSpacing) or E.Spacing)*2));
+		ElvUIBags:Height(E.db.bags.bagBar.size*(TOTAL_BAGS) + buttonSpacing*(TOTAL_BAGS-1) + ((E.db.bags.bagBar.showBackdrop == true and (E.Border + backdropSpacing) or E.Spacing)*2));
 		ElvUIBags:Width(E.db.bags.bagBar.size + ((E.db.bags.bagBar.showBackdrop == true and (E.Border + backdropSpacing) or E.Spacing)*2));
 	end
 end

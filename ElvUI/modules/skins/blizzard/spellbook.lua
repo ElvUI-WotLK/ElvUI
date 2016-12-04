@@ -68,7 +68,7 @@ local function LoadSkin()
 		spellName:SetTextColor(1, 0.80, 0.10)
 		subSpellName:SetTextColor(1, 1, 1);
 
-		if (iconTexture)  then
+		if (iconTexture) then
 			if (highlight) then
 				highlight:SetTexture(1, 1, 1, 0.3)
 			end

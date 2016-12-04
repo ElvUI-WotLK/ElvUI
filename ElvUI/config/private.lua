@@ -33,7 +33,7 @@ V["nameplate"] = {
 V["auras"] = {
 	["enable"] = true,
 	["disableBlizzard"] = true,
-	
+
 	["lbf"] = {
 		enable = false,
 		skin = "Blizzard"

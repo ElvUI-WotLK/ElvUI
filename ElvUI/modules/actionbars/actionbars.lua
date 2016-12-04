@@ -113,15 +113,15 @@ function AB:PositionAndSizeBar(barName)
 	end
 
 	if(self.db[barName].backdrop == true) then
- 		bar.backdrop:Show();
- 	else
- 		bar.backdrop:Hide();
+		bar.backdrop:Show();
+	else
+		bar.backdrop:Hide();
 
- 		widthMult = 1
- 		heightMult = 1
+		widthMult = 1
+		heightMult = 1
 	end
 
- 	local barWidth = (size * (buttonsPerRow * widthMult)) + ((buttonSpacing * (buttonsPerRow - 1)) * widthMult) + (buttonSpacing * (widthMult-1)) + ((self.db[barName].backdrop == true and (E.Border + backdropSpacing) or E.Spacing)*2);
+	local barWidth = (size * (buttonsPerRow * widthMult)) + ((buttonSpacing * (buttonsPerRow - 1)) * widthMult) + (buttonSpacing * (widthMult-1)) + ((self.db[barName].backdrop == true and (E.Border + backdropSpacing) or E.Spacing)*2);
 	local barHeight = (size * (numColumns * heightMult)) + ((buttonSpacing * (numColumns - 1)) * heightMult) + (buttonSpacing * (heightMult-1)) + ((self.db[barName].backdrop == true and (E.Border + backdropSpacing) or E.Spacing)*2);
 	bar:Width(barWidth);
 	bar:Height(barHeight);
@@ -249,7 +249,7 @@ function AB:CreateBar(id)
 	bar.bindButtons = self["barDefaults"]["bar" .. id].bindButtons;
 	self:HookScript(bar, "OnEnter", "Bar_OnEnter");
 	self:HookScript(bar, "OnLeave", "Bar_OnLeave");
-	
+
 	for i = 1, 12 do
 		bar.buttons[i] = LAB:CreateButton(i, format(bar:GetName() .. "Button%d", i), bar, nil);
 		bar.buttons[i]:SetState(0, "action", i);
@@ -474,11 +474,11 @@ function AB:StyleButton(button, noBackdrop, useMasque)
 	local name = button:GetName();
 	local icon = _G[name.."Icon"];
 	local count = _G[name.."Count"];
-	local flash	 = _G[name.."Flash"];
+	local flash = _G[name.."Flash"];
 	local hotkey = _G[name.."HotKey"];
-	local border  = _G[name.."Border"];
+	local border = _G[name.."Border"];
 	local macroName = _G[name.."Name"];
-	local normal  = _G[name.."NormalTexture"];
+	local normal = _G[name.."NormalTexture"];
 	local normal2 = button:GetNormalTexture()
 	local buttonCooldown = _G[name.."Cooldown"];
 	local color = self.db.fontColor;

@@ -204,14 +204,14 @@ local function LoadSkin()
 				local quality = select(3, GetItemInfo(reagentLink));
 				if(quality and quality > 1) then
 					icon.backdrop:SetBackdropBorderColor(GetItemQualityColor(quality));
-					 if(playerReagentCount < reagentCount) then
+					if(playerReagentCount < reagentCount) then
 						name:SetTextColor(0.5, 0.5, 0.5);
 					else
 						name:SetTextColor(GetItemQualityColor(quality));
 					end
 				else
 					icon.backdrop:SetBackdropBorderColor(unpack(E["media"].bordercolor));
- 				end
+				end
 			end
 		end
 	end);

@@ -95,7 +95,7 @@ function AB:StyleShapeShift()
 end
 
 function AB:PositionAndSizeBarShapeShift()
- 	local buttonSpacing = E:Scale(self.db["barShapeShift"].buttonspacing);
+	local buttonSpacing = E:Scale(self.db["barShapeShift"].buttonspacing);
 	local backdropSpacing = E:Scale((self.db["barShapeShift"].backdropSpacing or self.db["barShapeShift"].buttonspacing));
 	local buttonsPerRow = self.db["barShapeShift"].buttonsPerRow;
 	local numButtons = self.db["barShapeShift"].buttons;
@@ -128,18 +128,18 @@ function AB:PositionAndSizeBarShapeShift()
 		numColumns = 1;
 	end
 
- 	if self.db["barShapeShift"].backdrop == true then
- 		bar.backdrop:Show();
- 	else
- 		bar.backdrop:Hide();
+	if self.db["barShapeShift"].backdrop == true then
+		bar.backdrop:Show();
+	else
+		bar.backdrop:Hide();
 
- 		widthMult = 1
- 		heightMult = 1
- 	end
- 
- 	local barWidth = (size * (buttonsPerRow * widthMult)) + ((buttonSpacing * (buttonsPerRow - 1)) * widthMult) + (buttonSpacing * (widthMult-1)) + ((self.db["barShapeShift"].backdrop == true and (E.Border + backdropSpacing) or E.Spacing)*2)
- 	local barHeight = (size * (numColumns * heightMult)) + ((buttonSpacing * (numColumns - 1)) * heightMult) + (buttonSpacing * (heightMult-1)) + ((self.db["barShapeShift"].backdrop == true and (E.Border + backdropSpacing) or E.Spacing)*2)
- 	bar:Width(barWidth);
+		widthMult = 1
+		heightMult = 1
+	end
+
+	local barWidth = (size * (buttonsPerRow * widthMult)) + ((buttonSpacing * (buttonsPerRow - 1)) * widthMult) + (buttonSpacing * (widthMult-1)) + ((self.db["barShapeShift"].backdrop == true and (E.Border + backdropSpacing) or E.Spacing)*2)
+	local barHeight = (size * (numColumns * heightMult)) + ((buttonSpacing * (numColumns - 1)) * heightMult) + (buttonSpacing * (heightMult-1)) + ((self.db["barShapeShift"].backdrop == true and (E.Border + backdropSpacing) or E.Spacing)*2)
+	bar:Width(barWidth);
 	bar:Height(barHeight);
 
 	if self.db["barShapeShift"].enabled then

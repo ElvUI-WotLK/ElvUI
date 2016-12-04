@@ -975,7 +975,7 @@ function B:ContructContainerFrame(name, isBank)
 		if(E.db.bags.disableBankSort) then
 			f.sortButton:Disable();
 		end
-	
+
 		f.bagsButton = CreateFrame("Button", name.."BagsButton", f.holderFrame);
 		f.bagsButton:SetSize(16 + E.Border, 16 + E.Border);
 		f.bagsButton:SetTemplate();

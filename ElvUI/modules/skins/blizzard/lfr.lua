@@ -23,15 +23,15 @@ local function LoadSkin()
 	LFRBrowseFrame:StripTextures()
 
 	for i=1, #buttons do
-	  S:HandleButton(_G[buttons[i]], true)
+		S:HandleButton(_G[buttons[i]], true)
 	end
 
 	--Close button doesn't have a fucking name, extreme hackage
 	for i=1, LFRParentFrame:GetNumChildren() do
-	  local child = select(i, LFRParentFrame:GetChildren())
-	  if child.GetPushedTexture and child:GetPushedTexture() and not child:GetName() then
-		S:HandleCloseButton(child)
-	  end
+		local child = select(i, LFRParentFrame:GetChildren())
+		if child.GetPushedTexture and child:GetPushedTexture() and not child:GetName() then
+			S:HandleCloseButton(child)
+		end
 	end
 
 	S:HandleTab(LFRParentFrameTab1)

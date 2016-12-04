@@ -2346,7 +2346,7 @@ E.Options.args.unitframe = {
 										local t = E.db.unitframe.colors.auraBarBuff;
 										local d = P.unitframe.colors.auraBarBuff;
 										return t.r, t.g, t.b, t.a, d.r, d.g, d.b;
- 									end,
+									end,
 									set = function(info, r, g, b)
 										if E:CheckClassColor(r, g, b) then
 											local classColor = E.myclass == "PRIEST" and E.PriestColors or (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass]);
@@ -2640,7 +2640,7 @@ E.Options.args.unitframe.args.player = {
 					type = "toggle",
 					name = L["Vertical Orientation"],
 					disabled = function() return not E.db.unitframe.units["player"]["classbar"].detachFromFrame end,
- 				},
+				},
 				detachedWidth = {
 					type = "range",
 					order = 7,
@@ -2707,50 +2707,50 @@ E.Options.args.unitframe.args.player = {
 				}
 			}
 		},
- 		pvpIcon = {
- 			order = 449,
- 			type = "group",
- 			name = L["PvP Icon"],
- 			get = function(info) return E.db.unitframe.units["player"]["pvpIcon"][ info[#info] ] end,
- 			set = function(info, value) E.db.unitframe.units["player"]["pvpIcon"][ info[#info] ] = value; UF:CreateAndUpdateUF("player") end,
- 			args = {
- 				enable = {
- 					order = 1,
- 					type = "toggle",
- 					name = L["Enable"]
- 				},
- 				scale = {
- 					order = 2,
- 					type = "range",
- 					name = L["Scale"],
- 					isPercent = true,
- 					min = 0.1, max = 2, step = 0.01
- 				},
- 				spacer = {
- 					order = 3,
- 					type = "description",
- 					name = " "
- 				},
- 				anchorPoint = {
- 					order = 4,
- 					type = "select",
- 					name = L["Anchor Point"],
- 					values = positionValues
- 				},
- 				xOffset = {
- 					order = 5,
- 					type = "range",
- 					name = L["X-Offset"],
- 					min = -100, max = 100, step = 1
- 				},
- 				yOffset = {
- 					order = 6,
- 					type = "range",
- 					name = L["Y-Offset"],
- 					min = -100, max = 100, step = 1
- 				}
- 			}
- 		},
+		pvpIcon = {
+			order = 449,
+			type = "group",
+			name = L["PvP Icon"],
+			get = function(info) return E.db.unitframe.units["player"]["pvpIcon"][ info[#info] ] end,
+			set = function(info, value) E.db.unitframe.units["player"]["pvpIcon"][ info[#info] ] = value; UF:CreateAndUpdateUF("player") end,
+			args = {
+				enable = {
+					order = 1,
+					type = "toggle",
+					name = L["Enable"]
+				},
+				scale = {
+					order = 2,
+					type = "range",
+					name = L["Scale"],
+					isPercent = true,
+					min = 0.1, max = 2, step = 0.01
+				},
+				spacer = {
+					order = 3,
+					type = "description",
+					name = " "
+				},
+				anchorPoint = {
+					order = 4,
+					type = "select",
+					name = L["Anchor Point"],
+					values = positionValues
+				},
+				xOffset = {
+					order = 5,
+					type = "range",
+					name = L["X-Offset"],
+					min = -100, max = 100, step = 1
+				},
+				yOffset = {
+					order = 6,
+					type = "range",
+					name = L["Y-Offset"],
+					min = -100, max = 100, step = 1
+				}
+			}
+		},
 		pvpText = {
 			order = 850,
 			type = "group",
@@ -2964,49 +2964,49 @@ E.Options.args.unitframe.args.target = {
 		aurabar = GetOptionsTable_AuraBars(false, UF.CreateAndUpdateUF, "target"),
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUF, "target"),
 		GPSArrow = GetOptionsTableForNonGroup_GPS("target"),
- 		pvpIcon = {
- 			order = 449,
- 			type = "group",
- 			name = L["PvP Icon"],
- 			get = function(info) return E.db.unitframe.units["target"]["pvpIcon"][ info[#info] ] end,
+		pvpIcon = {
+			order = 449,
+			type = "group",
+			name = L["PvP Icon"],
+			get = function(info) return E.db.unitframe.units["target"]["pvpIcon"][ info[#info] ] end,
 			set = function(info, value) E.db.unitframe.units["target"]["pvpIcon"][ info[#info] ] = value; UF:CreateAndUpdateUF("target") end,
- 			args = {
- 				enable = {
- 					order = 1,
- 					type = "toggle",
- 					name = L["Enable"]
- 				},
- 				scale = {
- 					order = 2,
- 					type = "range",
- 					name = L["Scale"],
- 					isPercent = true,
- 					min = 0.1, max = 2, step = 0.01
- 				},
- 				spacer = {
- 					order = 3,
- 					type = "description",
- 					name = " "
- 				},
- 				anchorPoint = {
- 					order = 4,
- 					type = "select",
- 					name = L["Anchor Point"],
- 					values = positionValues
- 				},
- 				xOffset = {
- 					order = 5,
- 					type = "range",
- 					name = L["X-Offset"],
- 					min = -100, max = 100, step = 1
- 				},
- 				yOffset = {
- 					order = 6,
- 					type = "range",
- 					name = L["Y-Offset"],
- 					min = -100, max = 100, step = 1
- 				}
- 			}
+			args = {
+				enable = {
+					order = 1,
+					type = "toggle",
+					name = L["Enable"]
+				},
+				scale = {
+					order = 2,
+					type = "range",
+					name = L["Scale"],
+					isPercent = true,
+					min = 0.1, max = 2, step = 0.01
+				},
+				spacer = {
+					order = 3,
+					type = "description",
+					name = " "
+				},
+				anchorPoint = {
+					order = 4,
+					type = "select",
+					name = L["Anchor Point"],
+					values = positionValues
+				},
+				xOffset = {
+					order = 5,
+					type = "range",
+					name = L["X-Offset"],
+					min = -100, max = 100, step = 1
+				},
+				yOffset = {
+					order = 6,
+					type = "range",
+					name = L["Y-Offset"],
+					min = -100, max = 100, step = 1
+				}
+			}
 		}
 	}
 };
@@ -4016,7 +4016,7 @@ E.Options.args.unitframe.args.arena = {
 			}
 		},
 		spacing = {
- 			order = 11,
+			order = 11,
 			type = "range",
 			name = L["Spacing"],
 			min = 0, max = 400, step = 1

@@ -59,8 +59,8 @@ E.Options.args.databars = {
 							set = function(info, value) mod.db.experience[ info[#info] ] = value; mod:UpdateExperience(); end
 						},
 						hideInCombat = {
- 							order = 4,
- 							type = "toggle",
+							order = 4,
+							type = "toggle",
 							name = L["Hide in Combat"],
 							set = function(info, value) mod.db.experience[ info[#info] ] = value; mod:UpdateExperience() end,
 						},
@@ -176,8 +176,8 @@ E.Options.args.databars = {
 							set = function(info, value) mod.db.reputation[ info[#info] ] = value; mod:UpdateReputation() end
 						},
 						hideInCombat = {
- 							order = 3,
- 							type = "toggle",
+							order = 3,
+							type = "toggle",
 							name = L["Hide in Combat"],
 							set = function(info, value) mod.db.reputation[ info[#info] ] = value; mod:UpdateReputation() end,
 						},

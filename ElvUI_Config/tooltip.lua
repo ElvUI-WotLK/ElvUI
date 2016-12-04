@@ -185,8 +185,8 @@ E.Options.args.tooltip = {
 					name = L["Visibility"]
 				},
 				actionbars = {
- 					order = 1,
- 					type = "select",
+					order = 1,
+					type = "select",
 					name = L["ActionBars"],
 					desc = L["Choose when you want the tooltip to show. If a modifer is chosen, then you need to hold that down to show the tooltip."],
 					values = {

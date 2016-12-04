@@ -1094,9 +1094,9 @@ function mod:Initialize()
 	self.glowIndicator:SetFrameLevel(0);
 	self.glowIndicator:SetFrameStrata("BACKGROUND");
 	self.glowIndicator:SetBackdrop( {
- 		edgeFile = LSM:Fetch("border", "ElvUI GlowBorder"), edgeSize = 3,
- 		insets = {left = 5, right = 5, top = 5, bottom = 5}
- 	});
+		edgeFile = LSM:Fetch("border", "ElvUI GlowBorder"), edgeSize = 3,
+		insets = {left = 5, right = 5, top = 5, bottom = 5}
+	});
 	self.glowIndicator:SetBackdropColor(0, 0, 0, 0);
 	self.glowIndicator:SetScale(E.PixelMode and 2.5 or 3);
 	self.glowIndicator:Hide();

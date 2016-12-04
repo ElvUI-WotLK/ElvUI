@@ -221,14 +221,14 @@ function B:EnhanceColorPicker()
 	b:Width(60)
 	b:Height(22)
 	b:Point("TOPLEFT", "ColorPPCopy", "TOPRIGHT", 2, 0)
-	b:Disable()  -- enable when something has been copied
+	b:Disable() -- enable when something has been copied
 
 	-- paste color on button click, updating frame components
 	b:SetScript("OnClick", function(self)
 		ColorPickerFrame:SetColorRGB(colorBuffer.r, colorBuffer.g, colorBuffer.b)
 		ColorSwatch:SetTexture(colorBuffer.r, colorBuffer.g, colorBuffer.b)
 		if ColorPickerFrame.hasOpacity then
-			if colorBuffer.a then  --color copied had an alpha value
+			if colorBuffer.a then --color copied had an alpha value
 				OpacitySliderFrame:SetValue(colorBuffer.a)
 			end
 		end
@@ -241,7 +241,7 @@ function B:EnhanceColorPicker()
 	b:Width(80)
 	b:Height(22)
 	b:Point("TOPLEFT", "ColorPPClass", "BOTTOMLEFT", 0, -7)
-	b:Disable()  -- enable when something has been copied
+	b:Disable() -- enable when something has been copied
 	b:SetScript("OnHide", function(self)
 		self.colors = nil
 	end)

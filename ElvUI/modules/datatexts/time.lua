@@ -35,10 +35,10 @@ E["valueColorUpdateFuncs"][ValueColorUpdate] = true;
 
 local function Click(_, btn)
 	if(btn == "RightButton") then
- 		TimeManagerClockButton_OnClick(TimeManagerClockButton);
- 	else
- 		GameTimeFrame:Click();
- 	end
+		TimeManagerClockButton_OnClick(TimeManagerClockButton);
+	else
+		GameTimeFrame:Click();
+	end
 end
 
 local function OnLeave()

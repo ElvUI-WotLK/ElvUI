@@ -67,13 +67,13 @@ E.Options.args.bags = {
 					set = function(info, value) E.db.bags[ info[#info] ] = value; B:UpdateGoldText(); end
 				},
 				clearSearchOnClose = {
- 					order = 4,
+					order = 4,
 					type = "toggle",
 					name = L["Clear Search On Close"],
 					set = function(info, value) E.db.bags[info[#info]] = value; end
 				},
 				disableBagSort = {
- 					order = 5,
+					order = 5,
 					type = "toggle",
 					name = L["Disable Bag Sort"],
 					set = function(info, value) E.db.bags[info[#info]] = value; B:ToggleSortButtonState(false); end
@@ -256,18 +256,18 @@ E.Options.args.bags = {
 					get = function(info) return E.private.bags.bagBar end,
 					set = function(info, value) E.private.bags.bagBar = value; E:StaticPopup_Show("PRIVATE_RL"); end
 				},
- 				showBackdrop = {
+				showBackdrop = {
 					order = 2,
- 					type = "toggle",
- 					name = L["Backdrop"]
- 				},
- 				mouseover = {
- 					order = 3,
- 					name = L["Mouse Over"],
- 					desc = L["The frame is not shown unless you mouse over the frame."],
- 					type = "toggle"
- 				},
- 				size = {
+					type = "toggle",
+					name = L["Backdrop"]
+				},
+				mouseover = {
+					order = 3,
+					name = L["Mouse Over"],
+					desc = L["The frame is not shown unless you mouse over the frame."],
+					type = "toggle"
+				},
+				size = {
 					order = 4,
 					type = "range",
 					name = L["Button Size"],
@@ -281,12 +281,12 @@ E.Options.args.bags = {
 					desc = L["The spacing between buttons."],
 					min = 1, max = 10, step = 1
 				},
- 				backdropSpacing = {
- 					order = 6,
- 					type = "range",
- 					name = L["Backdrop Spacing"],
- 					desc = L["The spacing between the backdrop and the buttons."],
- 					min = 0, max = 10, step = 1,
+				backdropSpacing = {
+					order = 6,
+					type = "range",
+					name = L["Backdrop Spacing"],
+					desc = L["The spacing between the backdrop and the buttons."],
+					min = 0, max = 10, step = 1,
 					disabled = function() return not E.private.actionbar.enable end
 				},
 				sortDirection = {

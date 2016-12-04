@@ -63,7 +63,7 @@ local function BuildABConfig()
 					desc = L["The frame is not shown unless you mouse over the frame."]
 				},
 				inheritGlobalFade = {
- 					order = 7,
+					order = 7,
 					type = "toggle",
 					name = L["Inherit Global Fade"],
 					desc = L["Inherit the global fade, mousing over, targetting, setting focus, losing health, entering combat will set the remove transparency. Otherwise it will use the transparency level in the general actionbar settings for global fade alpha."]
@@ -211,7 +211,7 @@ local function BuildABConfig()
 				type = "toggle",
 			},
 			inheritGlobalFade = {
- 				order = 6,
+				order = 6,
 				type = "toggle",
 				name = L["Inherit Global Fade"],
 				desc = L["Inherit the global fade, mousing over, targetting, setting focus, losing health, entering combat will set the remove transparency. Otherwise it will use the transparency level in the general actionbar settings for global fade alpha."]
@@ -327,7 +327,7 @@ local function BuildABConfig()
 				type = "toggle",
 			},
 			inheritGlobalFade = {
- 				order = 6,
+				order = 6,
 				type = "toggle",
 				name = L["Inherit Global Fade"],
 				desc = L["Inherit the global fade, mousing over, targetting, setting focus, losing health, entering combat will set the remove transparency. Otherwise it will use the transparency level in the general actionbar settings for global fade alpha."]
@@ -536,7 +536,7 @@ E.Options.args.actionbar = {
 			end
 		},
 		globalFadeAlpha = {
- 			order = 9,
+			order = 9,
 			type = "range",
 			name = L["Global Fade Transparency"],
 			desc = L["Transparency level when not in combat, no target exists, full health, not casting, and no focus target exists."],

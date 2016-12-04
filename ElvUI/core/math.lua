@@ -208,17 +208,17 @@ function E:GetFormattedText(style, min, max)
 end
 
 function E:AbbreviateString(string, allUpper)
-    local newString = ""
-    local words = {split(" ", string)}
-    for _, word in pairs(words) do
-        word = sub(word, 1, 1)
-        if(allUpper) then
-            word = word:upper()
-        end
-        newString = newString .. word
-    end
+	local newString = ""
+	local words = {split(" ", string)}
+	for _, word in pairs(words) do
+		word = sub(word, 1, 1)
+		if(allUpper) then
+			word = word:upper()
+		end
+		newString = newString .. word
+	end
 
-    return newString
+	return newString
 end
 
 function E:ShortenString(string, numChars, dots)

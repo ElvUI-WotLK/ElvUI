@@ -21,7 +21,7 @@ local function LoadSkin()
 	GossipFrameGreetingPanel:StripTextures();
 
 	GossipFramePortrait:Kill();
-	
+
 	S:HandleButton(GossipFrameGreetingGoodbyeButton);
 	GossipFrameGreetingGoodbyeButton:Point("BOTTOMRIGHT", GossipFrame, -34, 71);
 

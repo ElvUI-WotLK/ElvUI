@@ -79,17 +79,17 @@ function UF:Configure_ComboPoints(frame)
 			CPoints.Holder = CreateFrame("Frame", nil, CPoints);
 			CPoints.Holder:Point("BOTTOM", E.UIParent, "BOTTOM", 0, 150);
 			CPoints.Holder:Size(db.combobar.detachedWidth, db.combobar.height);
- 			CPoints:Width(CLASSBAR_WIDTH);
+			CPoints:Width(CLASSBAR_WIDTH);
 			CPoints:Height(frame.CLASSBAR_HEIGHT - ((frame.BORDER + frame.SPACING)*2));
- 			CPoints:ClearAllPoints();
+			CPoints:ClearAllPoints();
 			CPoints:Point("BOTTOMLEFT", CPoints.Holder, "BOTTOMLEFT", frame.BORDER + frame.SPACING, frame.BORDER + frame.SPACING);
 			E:CreateMover(CPoints.Holder, "ComboBarMover", L["Combobar"], nil, nil, nil, "ALL,SOLO");
- 		else
+		else
 			CPoints.Holder:Size(db.combobar.detachedWidth, db.combobar.height);
- 			CPoints:ClearAllPoints();
+			CPoints:ClearAllPoints();
 			CPoints:Point("BOTTOMLEFT", CPoints.Holder.mover, "BOTTOMLEFT", frame.BORDER+frame.SPACING, frame.BORDER+frame.SPACING);
 			E:EnableMover(CPoints.Holder.mover:GetName());
- 		end
+		end
 
 		CPoints:SetFrameStrata("LOW");
 	end

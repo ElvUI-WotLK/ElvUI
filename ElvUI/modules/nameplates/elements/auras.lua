@@ -179,7 +179,7 @@ function mod:UpdateElement_AurasByUnitID(unit)
 end
 
 function mod:UpdateElement_AurasByLookup(guid)
- 	if(guid == UnitGUID("target")) then
+	if(guid == UnitGUID("target")) then
 		self:UpdateElement_AurasByUnitID("target");
 	elseif(guid == UnitGUID("mouseover")) then
 		self:UpdateElement_AurasByUnitID("mouseover");

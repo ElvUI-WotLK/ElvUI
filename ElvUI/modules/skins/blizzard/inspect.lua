@@ -51,7 +51,7 @@ local function LoadSkin()
 		slot.backdrop:SetAllPoints()
 	end
 
- 	hooksecurefunc("InspectPaperDollItemSlotButton_Update", function(button)
+	hooksecurefunc("InspectPaperDollItemSlotButton_Update", function(button)
 		if(button.hasItem) then
 			local itemID = GetInventoryItemID(InspectFrame.unit, button:GetID())
 			if(itemID) then
@@ -70,7 +70,7 @@ local function LoadSkin()
 			end
 		end
 		button.backdrop:SetBackdropBorderColor(unpack(E.media.bordercolor));
- 	end)
+	end)
 
 	S:HandleRotateButton(InspectModelRotateLeftButton)
 	S:HandleRotateButton(InspectModelRotateRightButton)

@@ -106,7 +106,7 @@ local function createSlot(id)
 	frame.icon = icon
 
 	local count = iconFrame:CreateFontString(nil, "OVERLAY")
-	count:SetJustifyH"RIGHT"
+	count:SetJustifyH("RIGHT")
 	count:Point("BOTTOMRIGHT", iconFrame, -2, 2)
 	count:FontTemplate(nil, nil, "OUTLINE")
 	count:SetText(1)
@@ -121,7 +121,7 @@ local function createSlot(id)
 	frame.name = name
 
 	local drop = frame:CreateTexture(nil, "ARTWORK")
-	drop:SetTexture"Interface\\QuestFrame\\UI-QuestLogTitleHighlight"
+	drop:SetTexture("Interface\\QuestFrame\\UI-QuestLogTitleHighlight")
 	drop:SetPoint("LEFT", icon, "RIGHT", 0, 0)
 	drop:SetPoint("RIGHT", frame)
 	drop:SetAllPoints(frame)
@@ -167,7 +167,7 @@ function M:LOOT_OPENED(_, autoloot)
 
 	if(IsFishingLoot()) then
 		lootFrame.title:SetText(L["Fishy Loot"])
-	elseif(not UnitIsFriend("player", "target") and UnitIsDead"target") then
+	elseif(not UnitIsFriend("player", "target") and UnitIsDead("target")) then
 		lootFrame.title:SetText(UnitName("target"))
 	else
 		lootFrame.title:SetText(LOOT)
@@ -270,14 +270,14 @@ function M:LoadLoot()
 	lootFrame:SetPoint("TOPLEFT")
 	lootFrame:Size(256, 64)
 	lootFrame:SetTemplate("Transparent")
-	lootFrame:SetFrameStrata"FULLSCREEN"
+	lootFrame:SetFrameStrata("FULLSCREEN")
 	lootFrame:SetToplevel(true)
 	lootFrame.title = lootFrame:CreateFontString(nil, "OVERLAY")
 	lootFrame.title:FontTemplate(nil, nil, "OUTLINE")
 	lootFrame.title:Point("BOTTOMLEFT", lootFrame, "TOPLEFT", 0, 1);
 	lootFrame.slots = {}
 	lootFrame:SetScript("OnHide", function()
-		StaticPopup_Hide"CONFIRM_LOOT_DISTRIBUTION"
+		StaticPopup_Hide("CONFIRM_LOOT_DISTRIBUTION")
 		CloseLoot()
 	end)
 	E["frames"][lootFrame] = nil;

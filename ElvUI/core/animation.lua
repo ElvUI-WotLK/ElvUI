@@ -187,7 +187,7 @@ function E:UIFrameFade_OnUpdate(elapsed)
 			if ( fadeInfo.mode == "IN" ) then
 				frame:SetAlpha((fadeInfo.fadeTimer / fadeInfo.timeToFade) * (fadeInfo.endAlpha - fadeInfo.startAlpha) + fadeInfo.startAlpha);
 			elseif ( fadeInfo.mode == "OUT" ) then
-				frame:SetAlpha(((fadeInfo.timeToFade - fadeInfo.fadeTimer) / fadeInfo.timeToFade) * (fadeInfo.startAlpha - fadeInfo.endAlpha)  + fadeInfo.endAlpha);
+				frame:SetAlpha(((fadeInfo.timeToFade - fadeInfo.fadeTimer) / fadeInfo.timeToFade) * (fadeInfo.startAlpha - fadeInfo.endAlpha) + fadeInfo.endAlpha);
 			end
 		else
 			frame:SetAlpha(fadeInfo.endAlpha);

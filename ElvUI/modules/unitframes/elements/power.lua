@@ -135,12 +135,12 @@ function UF:Configure_Power(frame)
 			end
 			power:SetFrameLevel(frame.Health:GetFrameLevel() -5);
 		elseif(frame.USE_INSET_POWERBAR) then
-			power:Height(frame.POWERBAR_HEIGHT  - ((frame.BORDER + frame.SPACING)*2));
+			power:Height(frame.POWERBAR_HEIGHT - ((frame.BORDER + frame.SPACING)*2));
 			power:Point("BOTTOMLEFT", frame.Health, "BOTTOMLEFT", frame.BORDER + (frame.BORDER*2), frame.BORDER + (frame.BORDER*2));
 			power:Point("BOTTOMRIGHT", frame.Health, "BOTTOMRIGHT", -(frame.BORDER + (frame.BORDER*2)), frame.BORDER + (frame.BORDER*2));
 			power:SetFrameLevel(50);
 		elseif(frame.USE_MINI_POWERBAR) then
-			power:Height(frame.POWERBAR_HEIGHT  - ((frame.BORDER + frame.SPACING)*2));
+			power:Height(frame.POWERBAR_HEIGHT - ((frame.BORDER + frame.SPACING)*2));
 
 			if(frame.ORIENTATION == "LEFT") then
 				power:Width(frame.POWERBAR_WIDTH - frame.BORDER*2);
@@ -157,7 +157,7 @@ function UF:Configure_Power(frame)
 		else
 			power:Point("TOPRIGHT", frame.Health.backdrop, "BOTTOMRIGHT", -frame.BORDER, -frame.SPACING*3);
 			power:Point("TOPLEFT", frame.Health.backdrop, "BOTTOMLEFT", frame.BORDER, -frame.SPACING*3);
-			power:Height(frame.POWERBAR_HEIGHT  - ((frame.BORDER + frame.SPACING)*2));
+			power:Height(frame.POWERBAR_HEIGHT - ((frame.BORDER + frame.SPACING)*2));
 
 			power:SetFrameLevel(frame.Health:GetFrameLevel() - 5);
 		end
@@ -171,7 +171,7 @@ function UF:Configure_Power(frame)
 
 		if(db.power.strataAndLevel and db.power.strataAndLevel.useCustomStrata) then
 			power:SetFrameStrata(db.power.strataAndLevel.frameStrata);
- 		else
+		else
 			power:SetFrameStrata("LOW");
 		end
 

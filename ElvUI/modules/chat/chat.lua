@@ -191,7 +191,7 @@ local function ChatFrame_OnMouseScroll(frame, delta)
 				if frame.ScrollTimer then
 					CH:CancelTimer(frame.ScrollTimer, true)
 				end
-			
+
 				frame.ScrollTimer = CH:ScheduleTimer("ScrollToTop", CH.db.scrollDownInterval, frame)
 			end
 		end
@@ -543,7 +543,7 @@ function CH:UpdateAnchors()
 				frame:SetPoint("BOTTOMLEFT", ChatFrame1, "TOPLEFT");
 				frame:SetPoint("TOPRIGHT", ChatFrame1, "TOPRIGHT", 0, LeftChatTab:GetHeight());
 			end
- 		else
+		else
 			if(E.db.datatexts.leftChatPanel and E.db.chat.editBoxPosition == "BELOW_CHAT") then
 				frame:SetAllPoints(LeftChatDataPanel);
 			else
@@ -647,7 +647,7 @@ function CH:PositionChat(override)
 			chat:ClearAllPoints()
 
 			if(E.global.tukuiMode) then
- 				chat:Point("BOTTOMLEFT", RightChatDataPanel, "TOPLEFT", 1, 3)
+				chat:Point("BOTTOMLEFT", RightChatDataPanel, "TOPLEFT", 1, 3)
 				if id ~= 2 then
 					chat:SetSize((E.db.chat.separateSizes and E.db.chat.panelWidthRight or E.db.chat.panelWidth) - 11 - LeftChatToggleButton:GetWidth(), (E.db.chat.separateSizes and E.db.chat.panelHeightRight or E.db.chat.panelHeight) - BASE_OFFSET)
 				else
@@ -939,7 +939,7 @@ function CH:ChatFrame_MessageEventHandler(event, ...)
 			if ( arg1 == "WRONG_PASSWORD" ) then
 				local staticPopup = _G[StaticPopup_Visible("CHAT_CHANNEL_PASSWORD") or ""];
 				if ( staticPopup and strupper(staticPopup.data) == strupper(arg9) ) then
-					-- Don't display invalid password messages if we"re going to prompt for a password (bug 102312)
+					-- Don't display invalid password messages if we're going to prompt for a password (bug 102312)
 					return;
 				end
 			end
@@ -1266,7 +1266,7 @@ function CH:SetupChat()
 			--Use this instead for the time being
 			if id ~= 2 then
 				frame:SetScript("OnEvent", CH.FloatingChatFrame_OnEvent)
- 			end
+			end
 
 			hooksecurefunc(frame, "SetScript", function(f, script, func)
 				if script == "OnMouseWheel" and func ~= ChatFrame_OnMouseScroll then
@@ -1845,8 +1845,8 @@ function CH:Initialize()
 
 	S:HandleCloseButton(close)
 
- 	CombatLogQuickButtonFrame_CustomAdditionalFilterButton:Size(20, 22)
- 	CombatLogQuickButtonFrame_CustomAdditionalFilterButton:Point("TOPRIGHT", CombatLogQuickButtonFrame_Custom, "TOPRIGHT", 0, -1)
+	CombatLogQuickButtonFrame_CustomAdditionalFilterButton:Size(20, 22)
+	CombatLogQuickButtonFrame_CustomAdditionalFilterButton:Point("TOPRIGHT", CombatLogQuickButtonFrame_Custom, "TOPRIGHT", 0, -1)
 end
 
 E:RegisterModule(CH:GetName())

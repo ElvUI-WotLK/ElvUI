@@ -70,7 +70,7 @@ local function LoadSkin()
 	end
 
 	S:HandleDropDownBox(WhoFrameDropDown);
-	
+
 	for i = 1, 17 do
 		local button = _G["WhoFrameButton" .. i];
 

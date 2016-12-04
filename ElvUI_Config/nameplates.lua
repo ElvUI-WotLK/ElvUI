@@ -105,7 +105,7 @@ E.Options.args.nameplate = {
 			disabled = function() return not E.NamePlates; end,
 			args = {
 				header = {
- 					order = 1,
+					order = 1,
 					type = "header",
 					name = L["General"]
 				},
@@ -163,7 +163,7 @@ E.Options.args.nameplate = {
 					min = 0, max = 1, step = 0.01
 				},
 				healthAnimationSpeed = {
- 					order = 8,
+					order = 8,
 					type = "range",
 					name = L["Health Animation Speed"],
 					min = 0, max = 1, step = 0.01
@@ -307,7 +307,7 @@ E.Options.args.nameplate = {
 			set = function(info, value) E.db.nameplate.healthBar[ info[#info] ] = value; NP:UpdateAllPlates() end,
 			args = {
 				header = {
- 					order = 1,
+					order = 1,
 					type = "header",
 					name = L["Health Bar"]
 				},
@@ -433,7 +433,7 @@ E.Options.args.nameplate = {
 			set = function(info, value) E.db.nameplate.castBar[ info[#info] ] = value; NP:UpdateAllPlates() end,
 			args = {
 				header = {
- 					order = 1,
+					order = 1,
 					type = "header",
 					name = L["Cast Bar"]
 				},
@@ -489,7 +489,7 @@ E.Options.args.nameplate = {
 			set = function(info, value) E.db.nameplate.targetIndicator[ info[#info] ] = value; WorldFrame.elapsed = 3; NP:UpdateAllPlates() end,
 			args = {
 				header = {
- 					order = 1,
+					order = 1,
 					type = "header",
 					name = L["Target Indicator"]
 				},
@@ -582,7 +582,7 @@ E.Options.args.nameplate = {
 			set = function(info, value) E.db.nameplate.raidIcon[ info[#info] ] = value; NP:UpdateAllPlates() end,
 			args = {
 				header = {
- 					order = 1,
+					order = 1,
 					type = "header",
 					name = L["Raid Icon"]
 				},
@@ -620,7 +620,7 @@ E.Options.args.nameplate = {
 			set = function(info, value) E.db.nameplate.buffs[ info[#info] ] = value; NP:UpdateAllPlates(); end,
 			args = {
 				header = {
- 					order = 1,
+					order = 1,
 					type = "header",
 					name = L["Buffs"]
 				},
@@ -687,7 +687,7 @@ E.Options.args.nameplate = {
 			set = function(info, value) E.db.nameplate.debuffs[ info[#info] ] = value; NP:UpdateAllPlates(); end,
 			args = {
 				header = {
- 					order = 1,
+					order = 1,
 					type = "header",
 					name = L["Debuffs"]
 				},
@@ -762,7 +762,7 @@ E.Options.args.nameplate = {
 			end,
 			args = {
 				header = {
- 					order = 1,
+					order = 1,
 					type = "header",
 					name = L["Threat"]
 				},
@@ -822,7 +822,7 @@ E.Options.args.nameplate = {
 			disabled = function() return not E.NamePlates; end,
 			args = {
 				header = {
- 					order = 1,
+					order = 1,
 					type = "header",
 					name = L["Filters"]
 				},

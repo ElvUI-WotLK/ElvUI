@@ -63,7 +63,7 @@ local function LoadSkin()
 			ButtonIcon:SetInside();
 		end
 	end
-	
+
 	S:HandleIconSelectionFrame(MacroPopupFrame, NUM_MACRO_ICONS_SHOWN, "MacroPopupButton", "MacroPopup")
 end
 

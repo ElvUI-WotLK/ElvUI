@@ -530,7 +530,7 @@ function S:AddCallbackForAddon(addonName, eventName, loadFunc, forceLoad, bypass
 	if(not self.addonCallbacks[addonName]) then
 		self.addonCallbacks[addonName] = {};
 	end
-	
+
 	if(self.addonCallbacks[addonName][eventName]) then
 		--Don't allow a registered callback to be overwritten
 		E:Print("Invalid argument #2 to S:AddCallbackForAddon (event name is already registered, please use a unique event name)");

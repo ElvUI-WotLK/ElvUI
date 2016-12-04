@@ -1,4 +1,4 @@
-﻿## Interface: 30300
+## Interface: 30300
 ## X-Curse-Packaged-Version: r57-release
 ## X-Curse-Project-Name: AceGUI-3.0-SharedMediaWidgets
 ## X-Curse-Project-ID: ace-gui-3-0-shared-media-widgets

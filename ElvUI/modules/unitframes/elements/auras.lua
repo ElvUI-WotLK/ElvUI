@@ -151,7 +151,7 @@ function UF:Configure_Auras(frame, auraType)
 	auras:Point(E.InversePoints[db[auraType].anchorPoint], attachTo, db[auraType].anchorPoint, x + db[auraType].xOffset, y + db[auraType].yOffset);
 	auras:Height((auras.size * rows));
 	auras["growth-y"] = db[auraType].anchorPoint:find("TOP") and "UP" or "DOWN";
-	auras["growth-x"] = db[auraType].anchorPoint == "LEFT" and "LEFT" or  db[auraType].anchorPoint == "RIGHT" and "RIGHT" or (db[auraType].anchorPoint:find("LEFT") and "RIGHT" or "LEFT");
+	auras["growth-x"] = db[auraType].anchorPoint == "LEFT" and "LEFT" or db[auraType].anchorPoint == "RIGHT" and "RIGHT" or (db[auraType].anchorPoint:find("LEFT") and "RIGHT" or "LEFT");
 	auras.initialAnchor = E.InversePoints[db[auraType].anchorPoint];
 
 	auras.attachTo = attachTo;
