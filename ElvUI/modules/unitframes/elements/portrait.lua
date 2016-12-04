@@ -3,19 +3,6 @@ local UF = E:GetModule("UnitFrames");
 
 local CreateFrame = CreateFrame;
 
-local function IsWodModels()
-	local f = CreateFrame("frame", nil)
-	local t = f:CreateTexture()
-	t:SetPoint("CENTER", WorldFrame)
-	t:SetTexture("Character\\Tauren\\Male\\TaurenMaleFaceLower00_00_HD")
-	t:SetSize(0, 0)
-	local exist = t:GetTexture() and true or false
-	t:SetTexture(nil)
-	f:Kill()
-	return exist
-end
-local WoDModels = IsWodModels()
-
 function UF:Construct_Portrait(frame, type)
 	local portrait;
 	if(type == "texture") then
@@ -121,21 +108,5 @@ function UF:PortraitUpdate()
 		self:SetAlpha(0.35);
 	else
 		self:SetAlpha(1)
-	end
-
-	if(WoDModels) then
-		if(self:IsObjectType("Model")) then
-			local model = self:GetModel();
-			if(not model or type(model) ~= "string") then return; end
-
-			if(model:find("worgenmale.m2"))
-			or(model:find("dwarfmale.m2"))
-			or(model:find("humanfemale.m2"))
-			or(model:find("scourgemale.m2"))
-			or(model:find("scourgefemale.m2"))
-			then
-				self:SetCamera(1);
-			end
-		end
 	end
 end
