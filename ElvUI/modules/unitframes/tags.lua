@@ -172,8 +172,10 @@ end
 
 ElvUF.TagEvents["health:deficit-percent:name"] = "UNIT_HEALTH UNIT_MAXHEALTH";
 ElvUF.Tags["health:deficit-percent:name"] = function(unit)
+	local currentHealth = UnitHealth(unit)
 	local deficit = UnitHealthMax(unit) - UnitHealth(unit);
-	if(deficit > 0) then
+
+	if(deficit > 0 and currentHealth > 0) then
 		return _TAGS["health:percent-nostatus"](unit);
 	else
 		return _TAGS["name"](unit);
