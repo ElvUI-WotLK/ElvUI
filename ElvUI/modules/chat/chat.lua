@@ -1512,7 +1512,6 @@ function CH:DisplayChatHistory()
 			CH.timeOverride = temp[i]
 
 			CH.ChatFrame_MessageEventHandler(DEFAULT_CHAT_FRAME, data[20], unpack(data))
-			CH.ChatFrame_MessageEventHandler(ChatFrame3, data[20], unpack(data))
 		end
 	end
 end
