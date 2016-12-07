@@ -675,6 +675,7 @@ L["Calendar Frame"] = "달력"
 L["Character Frame"] = "캐릭터 창"
 L["Debug Tools"] = "오류 확인 창"
 L["Dressing Room"] = "아이템 미리보기 창"
+L["GM Chat"] = true;
 L["Gossip Frame"] = "NPC 대화 창"
 L["Greeting Frame"] = true;
 L["Guild Bank"] = "길드 은행"

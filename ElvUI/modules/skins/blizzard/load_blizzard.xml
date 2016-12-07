@@ -16,6 +16,7 @@
 	<Script file="friends.lua"/>
 	<Script file="gbank.lua"/>
 	<Script file="glyph.lua"/>
+	<Script file="gmchat.lua"/>
 	<Script file="gossip.lua"/>
 	<Script file="greeting.lua"/>
 	<Script file="guildregistrar.lua"/>

@@ -627,6 +627,7 @@ L["Calendar Frame"] = "Календарь"
 L["Character Frame"] = "Окно персонажа"
 L["Debug Tools"] = "Инструменты отладки"
 L["Dressing Room"] = "Примерочная"
+L["GM Chat"] = "ГМ чат";
 L["Gossip Frame"] = "Диалоги"
 L["Greeting Frame"] = "Приветствия"
 L["Guild Bank"] = "Банк гильдии"

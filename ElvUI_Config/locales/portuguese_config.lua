@@ -627,6 +627,7 @@ L["Calendar Frame"] = "Calendário"
 L["Character Frame"] = "Personagem"
 L["Debug Tools"] = "Ferramentas de Depuração"
 L["Dressing Room"] = "Provador"
+L["GM Chat"] = true;
 L["Gossip Frame"] = "Fofocas"
 L["Greeting Frame"] = true;
 L["Guild Bank"] = "Banco da Guilda"

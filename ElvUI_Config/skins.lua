@@ -121,6 +121,11 @@ E.Options.args.skins = {
 					name = L["Guild Bank"],
 					desc = L["TOGGLESKIN_DESC"]
 				},
+				gmchat = {
+					type = "toggle",
+					name = L["GM Chat"],
+					desc = L["TOGGLESKIN_DESC"]
+				},
 				gossip = {
 					type = "toggle",
 					name = L["Gossip Frame"],

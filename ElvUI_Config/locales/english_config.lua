@@ -616,6 +616,7 @@ L["Calendar Frame"] = true;
 L["Character Frame"] = true;
 L["Debug Tools"] = true;
 L["Dressing Room"] = true;
+L["GM Chat"] = true;
 L["Gossip Frame"] = true;
 L["Greeting Frame"] = true;
 L["Guild Bank"] = true;

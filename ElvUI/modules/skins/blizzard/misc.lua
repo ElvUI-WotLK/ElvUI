@@ -204,6 +204,24 @@ local function LoadSkin()
 		self:StopMovingOrSizing()
 	end)
 
+	-- Declension frame
+	if GetLocale() == "ruRU" then
+		DeclensionFrame:SetTemplate("Transparent");
+
+		S:HandleNextPrevButton(DeclensionFrameSetPrev);
+		S:HandleNextPrevButton(DeclensionFrameSetNext);
+		S:HandleButton(DeclensionFrameOkayButton);
+		S:HandleButton(DeclensionFrameCancelButton);
+
+		for i = 1, RUSSIAN_DECLENSION_PATTERNS do
+			local editBox = _G["DeclensionFrameDeclension"..i.."Edit"];
+			if editBox then
+				editBox:StripTextures();
+				S:HandleEditBox(editBox);
+			end
+		end
+	end
+
 	-- mac menu/option panel, made by affli.
 	if IsMacClient() then
 		S:HandleButton(GameMenuButtonMacOptions);
