@@ -3,7 +3,7 @@ local E, L, V, P, G = unpack(select(2, ...));
 local select, unpack, assert, tonumber, type, pairs = select, unpack, assert, tonumber, type, pairs;
 local tinsert, tremove = tinsert, tremove;
 local abs, ceil, floor, modf, mod = math.abs, math.ceil, math.floor, math.modf, mod;
-local format, split, sub, upper = format, string.split, string.sub, string.upper;
+local format, sub, upper, split, utf8sub = string.format, string.sub, string.upper, string.split, string.utf8sub;
 
 local GetScreenWidth, GetScreenHeight = GetScreenWidth, GetScreenHeight;
 local CreateFrame = CreateFrame;
@@ -211,7 +211,7 @@ function E:AbbreviateString(string, allUpper)
 	local newString = ""
 	local words = {split(" ", string)}
 	for _, word in pairs(words) do
-		word = sub(word, 1, 1)
+		word = utf8sub(word, 1, 1)
 		if(allUpper) then
 			word = word:upper()
 		end
