@@ -36,8 +36,7 @@ local function OnEnter(self)
 	for i = 1, MAX_WATCHED_TOKENS do
 		local name, count, _, icon = GetBackpackCurrencyInfo(i);
 		if(name and i == 1) then
-			DT.tooltip:AddLine(CURRENCY);
-			DT.tooltip:AddLine(" ");
+			DT.tooltip:AddLine(CURRENCY .. ":");
 		end
 		if(name and count) then DT.tooltip:AddDoubleLine(currencyString:format(icon, name), count, 1, 1, 1); end
 	end
