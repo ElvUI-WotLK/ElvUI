@@ -22,9 +22,8 @@ function DT:PanelLayoutOptions()
 			table[pointLoc] = {
 				order = order,
 				type = "group",
-				args = {},
 				name = L[pointLoc] or pointLoc,
-				guiInline = true
+				args = {}
 			};
 			for option, value in pairs(tab) do
 				table[pointLoc].args[option] = {
@@ -80,40 +79,14 @@ E.Options.args.datatexts = {
 					guiInline = true,
 					name = L["General"],
 					args = {
-						timeFormat = {
-							order = 1,
-							type = "select",
-							name = L["Time Format"],
-							values = {
-								[""] = NONE,
-								["%I:%M"] = "03:27",
-								["%I:%M:%S"] = "03:27:32",
-								["%I:%M %p"] = "03:27 PM",
-								["%I:%M:%S %p"] = "03:27:32 PM",
-								["%H:%M"] = "15:27",
-								["%H:%M:%S"] ="15:27:32",
-							}
-						},
-						dateFormat = {
-							order = 2,
-							type = "select",
-							name = L["Date Format"],
-							values = {
-								[""] = NONE,
-								["%d/%m/%y "] = "27/03/16",
-								["%m/%d/%y "] = "03/27/16",
-								["%y/%m/%d "] = "16/03/27",
-								["%d.%m.%y "] = "27.03.32",
-							}
-						},
 						battleground = {
-							order = 3,
+							order = 1,
 							type = "toggle",
 							name = L["Battleground Texts"],
 							desc = L["When inside a battleground display personal scoreboard information on the main datatext bars."]
 						},
 						panelTransparency = {
-							order = 4,
+							order = 2,
 							name = L["Panel Transparency"],
 							type = "toggle",
 							set = function(info, value)
@@ -122,19 +95,19 @@ E.Options.args.datatexts = {
 							end
 						},
 						noCombatClick = {
-							order = 5,
+							order = 3,
 							type = "toggle",
 							name = L["Block Combat Click"],
 							desc = L["Blocks all click events while in combat."]
 						},
 						noCombatHover = {
-							order = 6,
+							order = 4,
 							type = "toggle",
 							name = L["Block Combat Hover"],
 							desc = L["Blocks datatext tooltip from showing in combat."]
 						},
 						goldFormat = {
-							order = 7,
+							order = 5,
 							type = "select",
 							name = L["Gold Format"],
 							desc = L["The display format of the money text that is shown in the gold datatext and its tooltip."],
@@ -148,7 +121,7 @@ E.Options.args.datatexts = {
 							}
 						},
 						goldCoins = {
-							order = 8,
+							order = 6,
 							type = "toggle",
 							name = L["Show Coins"],
 							desc = L["Use coin icons instead of colored text."]
@@ -308,6 +281,44 @@ E.Options.args.datatexts = {
 					type = "group",
 					name = L["Small Panels"],
 					args = {}
+				}
+			}
+		},
+		time = {
+			order = 5,
+			type = "group",
+			name = "Time",
+			args = {
+				header = {
+					order = 1,
+					type = "header",
+					name = "Time"
+				},
+				timeFormat = {
+					order = 2,
+					type = "select",
+					name = L["Time Format"],
+					values = {
+						[""] = NONE,
+						["%I:%M"] = "03:27",
+						["%I:%M:%S"] = "03:27:32",
+						["%I:%M %p"] = "03:27 PM",
+						["%I:%M:%S %p"] = "03:27:32 PM",
+						["%H:%M"] = "15:27",
+						["%H:%M:%S"] ="15:27:32"
+					}
+				},
+				dateFormat = {
+					order = 3,
+					type = "select",
+					name = L["Date Format"],
+					values = {
+						[""] = NONE,
+						["%d/%m/%y "] = "27/03/16",
+						["%m/%d/%y "] = "03/27/16",
+						["%y/%m/%d "] = "16/03/27",
+						["%d.%m.%y "] = "27.03.32"
+					}
 				}
 			}
 		}

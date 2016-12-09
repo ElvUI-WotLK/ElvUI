@@ -109,6 +109,7 @@ E.Options.args.maps = {
 			type = "group",
 			name = MINIMAP_LABEL,
 			get = function(info) return E.db.general.minimap[ info[#info] ]; end,
+			childGroups = "tab",
 			args = {
 				header = {
 					order = 0,
@@ -217,7 +218,7 @@ E.Options.args.maps = {
 					}
 				},
 				icons = {
-					order = 5,
+					order = 4,
 					type = "group",
 					name = L["Minimap Buttons"],
 					args = {
@@ -225,15 +226,15 @@ E.Options.args.maps = {
 							order = 1,
 							type = "group",
 							name = L["Calendar"],
-							get = function(info) return E.db.general.minimap.icons.calendar[ info[#info] ] end,
-							set = function(info, value) E.db.general.minimap.icons.calendar[ info[#info] ] = value; E:GetModule("Minimap"):UpdateSettings() end,
+							get = function(info) return E.db.general.minimap.icons.calendar[ info[#info] ]; end,
+							set = function(info, value) E.db.general.minimap.icons.calendar[ info[#info] ] = value; MM:UpdateSettings(); end,
 							args = {
 								hideCalendar = {
 									order = 1,
 									type = "toggle",
 									name = L["Hide"],
-									get = function(info) return E.private.general.minimap.hideCalendar end,
-									set = function(info, value) E.private.general.minimap.hideCalendar = value; E:GetModule("Minimap"):UpdateSettings() end,
+									get = function(info) return E.private.general.minimap.hideCalendar; end,
+									set = function(info, value) E.private.general.minimap.hideCalendar = value; MM:UpdateSettings(); end,
 									width = "full"
 								},
 								spacer = {
@@ -246,7 +247,7 @@ E.Options.args.maps = {
 									order = 3,
 									type = "select",
 									name = L["Position"],
-									disabled = function() return E.private.general.minimap.hideCalendar end,
+									disabled = function() return E.private.general.minimap.hideCalendar; end,
 									values = {
 										["LEFT"] = L["Left"],
 										["RIGHT"] = L["Right"],
@@ -255,37 +256,37 @@ E.Options.args.maps = {
 										["TOPLEFT"] = L["Top Left"],
 										["TOPRIGHT"] = L["Top Right"],
 										["BOTTOMLEFT"] = L["Bottom Left"],
-										["BOTTOMRIGHT"] = L["Bottom Right"],
-									},
+										["BOTTOMRIGHT"] = L["Bottom Right"]
+									}
 								},
 								scale = {
 									order = 4,
 									type = "range",
 									name = L["Scale"],
-									min = 0.5, max = 2, step = 0.05,
+									min = 0.5, max = 2, step = 0.05
 								},
 								xOffset = {
 									order = 5,
 									type = "range",
 									name = L["xOffset"],
 									min = -50, max = 50, step = 1,
-									disabled = function() return E.private.general.minimap.hideCalendar end,
+									disabled = function() return E.private.general.minimap.hideCalendar; end
 								},
 								yOffset = {
 									order = 6,
 									type = "range",
 									name = L["yOffset"],
 									min = -50, max = 50, step = 1,
-									disabled = function() return E.private.general.minimap.hideCalendar end,
-								},
-							},
+									disabled = function() return E.private.general.minimap.hideCalendar; end
+								}
+							}
 						},
 						mail = {
 							order = 2,
 							type = "group",
 							name = MAIL_LABEL,
-							get = function(info) return E.db.general.minimap.icons.mail[ info[#info] ] end,
-							set = function(info, value) E.db.general.minimap.icons.mail[ info[#info] ] = value; E:GetModule("Minimap"):UpdateSettings() end,
+							get = function(info) return E.db.general.minimap.icons.mail[ info[#info] ]; end,
+							set = function(info, value) E.db.general.minimap.icons.mail[ info[#info] ] = value; MM:UpdateSettings(); end,
 							args = {
 								position = {
 									order = 1,
@@ -299,35 +300,35 @@ E.Options.args.maps = {
 										["TOPLEFT"] = L["Top Left"],
 										["TOPRIGHT"] = L["Top Right"],
 										["BOTTOMLEFT"] = L["Bottom Left"],
-										["BOTTOMRIGHT"] = L["Bottom Right"],
-									},
+										["BOTTOMRIGHT"] = L["Bottom Right"]
+									}
 								},
 								scale = {
 									order = 2,
 									type = "range",
 									name = L["Scale"],
-									min = 0.5, max = 2, step = 0.05,
+									min = 0.5, max = 2, step = 0.05
 								},
 								xOffset = {
 									order = 3,
 									type = "range",
 									name = L["xOffset"],
-									min = -50, max = 50, step = 1,
+									min = -50, max = 50, step = 1
 								},
 								yOffset = {
 									order = 4,
 									type = "range",
 									name = L["yOffset"],
-									min = -50, max = 50, step = 1,
-								},
-							},
+									min = -50, max = 50, step = 1
+								}
+							}
 						},
 						lfgEye = {
 							order = 3,
 							type = "group",
 							name = L["LFG Queue"],
-							get = function(info) return E.db.general.minimap.icons.lfgEye[ info[#info] ] end,
-							set = function(info, value) E.db.general.minimap.icons.lfgEye[ info[#info] ] = value; E:GetModule("Minimap"):UpdateSettings() end,
+							get = function(info) return E.db.general.minimap.icons.lfgEye[ info[#info] ]; end,
+							set = function(info, value) E.db.general.minimap.icons.lfgEye[ info[#info] ] = value; MM:UpdateSettings(); end,
 							args = {
 								position = {
 									order = 1,
@@ -341,35 +342,35 @@ E.Options.args.maps = {
 										["TOPLEFT"] = L["Top Left"],
 										["TOPRIGHT"] = L["Top Right"],
 										["BOTTOMLEFT"] = L["Bottom Left"],
-										["BOTTOMRIGHT"] = L["Bottom Right"],
-									},
+										["BOTTOMRIGHT"] = L["Bottom Right"]
+									}
 								},
 								scale = {
 									order = 2,
 									type = "range",
 									name = L["Scale"],
-									min = 0.5, max = 2, step = 0.05,
+									min = 0.5, max = 2, step = 0.05
 								},
 								xOffset = {
 									order = 3,
 									type = "range",
 									name = L["xOffset"],
-									min = -50, max = 50, step = 1,
+									min = -50, max = 50, step = 1
 								},
 								yOffset = {
 									order = 4,
 									type = "range",
 									name = L["yOffset"],
-									min = -50, max = 50, step = 1,
-								},
-							},
+									min = -50, max = 50, step = 1
+								}
+							}
 						},
 						battlefield = {
 							order = 4,
 							type = "group",
 							name = L["PvP Queue"],
-							get = function(info) return E.db.general.minimap.icons.battlefield[ info[#info] ] end,
-							set = function(info, value) E.db.general.minimap.icons.battlefield[ info[#info] ] = value; E:GetModule("Minimap"):UpdateSettings() end,
+							get = function(info) return E.db.general.minimap.icons.battlefield[ info[#info] ]; end,
+							set = function(info, value) E.db.general.minimap.icons.battlefield[ info[#info] ] = value; MM:UpdateSettings(); end,
 							args = {
 								position = {
 									order = 1,
@@ -383,35 +384,35 @@ E.Options.args.maps = {
 										["TOPLEFT"] = L["Top Left"],
 										["TOPRIGHT"] = L["Top Right"],
 										["BOTTOMLEFT"] = L["Bottom Left"],
-										["BOTTOMRIGHT"] = L["Bottom Right"],
-									},
+										["BOTTOMRIGHT"] = L["Bottom Right"]
+									}
 								},
 								scale = {
 									order = 2,
 									type = "range",
 									name = L["Scale"],
-									min = 0.5, max = 2, step = 0.05,
+									min = 0.5, max = 2, step = 0.05
 								},
 								xOffset = {
 									order = 3,
 									type = "range",
 									name = L["xOffset"],
-									min = -50, max = 50, step = 1,
+									min = -50, max = 50, step = 1
 								},
 								yOffset = {
 									order = 4,
 									type = "range",
 									name = L["yOffset"],
-									min = -50, max = 50, step = 1,
-								},
-							},
+									min = -50, max = 50, step = 1
+								}
+							}
 						},
 						difficulty = {
 							order = 5,
 							type = "group",
 							name = L["Instance Difficulty"],
-							get = function(info) return E.db.general.minimap.icons.difficulty[ info[#info] ] end,
-							set = function(info, value) E.db.general.minimap.icons.difficulty[ info[#info] ] = value; E:GetModule("Minimap"):UpdateSettings() end,
+							get = function(info) return E.db.general.minimap.icons.difficulty[ info[#info] ]; end,
+							set = function(info, value) E.db.general.minimap.icons.difficulty[ info[#info] ] = value; MM:UpdateSettings(); end,
 							args = {
 								position = {
 									order = 1,
@@ -425,40 +426,40 @@ E.Options.args.maps = {
 										["TOPLEFT"] = L["Top Left"],
 										["TOPRIGHT"] = L["Top Right"],
 										["BOTTOMLEFT"] = L["Bottom Left"],
-										["BOTTOMRIGHT"] = L["Bottom Right"],
-									},
+										["BOTTOMRIGHT"] = L["Bottom Right"]
+									}
 								},
 								scale = {
 									order = 2,
 									type = "range",
 									name = L["Scale"],
-									min = 0.5, max = 2, step = 0.05,
+									min = 0.5, max = 2, step = 0.05
 								},
 								xOffset = {
 									order = 3,
 									type = "range",
 									name = L["xOffset"],
-									min = -50, max = 50, step = 1,
+									min = -50, max = 50, step = 1
 								},
 								yOffset = {
 									order = 4,
 									type = "range",
 									name = L["yOffset"],
-									min = -50, max = 50, step = 1,
-								},
-							},
+									min = -50, max = 50, step = 1
+								}
+							}
 						},
 						vehicleLeave = {
 							order = 6,
 							type = "group",
 							name = LEAVE_VEHICLE,
-							get = function(info) return E.db.general.minimap.icons.vehicleLeave[ info[#info] ] end,
-							set = function(info, value) E.db.general.minimap.icons.vehicleLeave[ info[#info] ] = value; E:GetModule("ActionBars"):UpdateVehicleLeave() end,
+							get = function(info) return E.db.general.minimap.icons.vehicleLeave[ info[#info] ]; end,
+							set = function(info, value) E.db.general.minimap.icons.vehicleLeave[ info[#info] ] = value; E:GetModule("ActionBars"):UpdateVehicleLeave(); end,
 							args = {
 								hide = {
 									order = 1,
 									type = "toggle",
-									name = L["Hide"],
+									name = L["Hide"]
 								},
 								spacer = {
 									order = 2,
@@ -478,32 +479,32 @@ E.Options.args.maps = {
 										["TOPLEFT"] = L["Top Left"],
 										["TOPRIGHT"] = L["Top Right"],
 										["BOTTOMLEFT"] = L["Bottom Left"],
-										["BOTTOMRIGHT"] = L["Bottom Right"],
-									},
+										["BOTTOMRIGHT"] = L["Bottom Right"]
+									}
 								},
 								size = {
 									order = 4,
 									type = "range",
 									name = L["Size"],
-									min = 1, max = 50, step = 1,
+									min = 1, max = 50, step = 1
 								},
 								xOffset = {
 									order = 5,
 									type = "range",
 									name = L["xOffset"],
-									min = -50, max = 50, step = 1,
+									min = -50, max = 50, step = 1
 								},
 								yOffset = {
 									order = 6,
 									type = "range",
 									name = L["yOffset"],
-									min = -50, max = 50, step = 1,
-								},
-							},
-						},
-					},
-				},
-			},
-		},
-	},
+									min = -50, max = 50, step = 1
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 };
