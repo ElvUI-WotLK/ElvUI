@@ -35,6 +35,7 @@ E["valueColorUpdateFuncs"][ValueColorUpdate] = true;
 
 local function Click(_, btn)
 	if(btn == "RightButton") then
+		if(not IsAddonLoaded("Blizzard_TimeManager")) then LoadAddon("Blizzard_TimeManager"); end
 		TimeManagerClockButton_OnClick(TimeManagerClockButton);
 	else
 		GameTimeFrame:Click();
