@@ -6,7 +6,7 @@ local CH = E:GetModule("Chat");
 local _G = _G;
 local GetTime = GetTime;
 local tostring = tostring;
-local floor = floor;
+local floor = math.floor;
 local format, strsub = string.format, string.sub;
 
 local CreateFrame = CreateFrame;
@@ -46,20 +46,27 @@ end
 
 function AFK:UpdateTimer()
 	local time = GetTime() - self.startTime;
-	self.AFKMode.bottom.time:SetFormattedText("%02d:%02d", floor(time/60), time % 60);
+	self.AFKMode.bottom.time:SetFormattedText("%02d:%02d", floor(time / 60), time % 60);
 end
 
-function AFK:UpdateAnimation(elapsed)
-	if(self:GetModelScale() == 1) then
-		self:SetModelScale(0.6);
-	end
+local function StopAnimation(self)
+	self:SetSequenceTime(0, 0);
+	self:SetScript("OnUpdate", nil);
+	self:SetScript("OnAnimFinished", nil);
+end
 
+local function UpdateAnimation(self, elapsed)
 	self.animTime = self.animTime + (elapsed * 1000);
 	self:SetSequenceTime(67, self.animTime);
 
-	if(self.animTime > 2000) then
-		self:SetSequenceTime(0, 0);
-		self:SetScript("OnUpdate", nil);
+	if(self.animTime >= 3000) then
+		StopAnimation(self);
+	end
+end
+
+local function OnAnimFinished(self)
+	if(self.animTime > 500) then
+		StopAnimation(self);
 	end
 end
 
@@ -70,10 +77,11 @@ function AFK:SetAFK(status)
 		if(InspectFrame) then
 			InspectPaperDollFrame:Hide();
 		end
+
 		UIParent:Hide();
+		self.AFKMode:Show();
 
 		MoveViewLeftStart(CAMERA_SPEED);
-		self.AFKMode:Show();
 
 		if(IsInGuild()) then
 			local guildName, guildRankName = GetGuildInfo("player");
@@ -89,17 +97,21 @@ function AFK:SetAFK(status)
 		self.AFKMode.chat:RegisterEvent("CHAT_MSG_BN_WHISPER");
 		self.AFKMode.chat:RegisterEvent("CHAT_MSG_BN_CONVERSATION");
 		self.AFKMode.chat:RegisterEvent("CHAT_MSG_GUILD");
+
 		self.AFKMode.bottom.model:SetModelScale(1);
 		self.AFKMode.bottom.model:RefreshUnit();
+		self.AFKMode.bottom.model:SetModelScale(0.8);
 
-		self.AFKMode.bottom.model.animTime = 1;
-		self.AFKMode.bottom.model:SetScript("OnUpdate", AFK.UpdateAnimation);
+		self.AFKMode.bottom.model.animTime = 0;
+		self.AFKMode.bottom.model:SetScript("OnUpdate", UpdateAnimation);
+		self.AFKMode.bottom.model:SetScript("OnAnimFinished", OnAnimFinished);
 
 		self.isAFK = true;
 	elseif(not status and self.isAFK) then
-		MoveViewLeftStop();
 		self.AFKMode:Hide();
 		UIParent:Show();
+
+		MoveViewLeftStop();
 
 		self:CancelTimer(self.timer);
 		self.AFKMode.bottom.time:SetText("00:00");
@@ -223,7 +235,7 @@ function AFK:Initialize()
 
 	self.AFKMode.chat = CreateFrame("ScrollingMessageFrame", "AFKChat", self.AFKMode);
 	self.AFKMode.chat:Size(500, 200);
-	self.AFKMode.chat:Point("TOPLEFT", self.AFKMode, "TOPLEFT", 4, -4);
+	self.AFKMode.chat:Point("TOPLEFT", self.AFKMode, "TOPLEFT", 4, -3);
 	self.AFKMode.chat:FontTemplate();
 	self.AFKMode.chat:SetJustifyH("LEFT");
 	self.AFKMode.chat:SetMaxLines(500);
@@ -232,6 +244,7 @@ function AFK:Initialize()
 	self.AFKMode.chat:SetMovable(true);
 	self.AFKMode.chat:EnableMouse(true);
 	self.AFKMode.chat:SetClampedToScreen(true);
+	self.AFKMode.chat:SetClampRectInsets(-4, 3, 3, -4);
 	self.AFKMode.chat:RegisterForDrag("LeftButton");
 	self.AFKMode.chat:SetScript("OnDragStart", self.AFKMode.chat.StartMoving);
 	self.AFKMode.chat:SetScript("OnDragStop", self.AFKMode.chat.StopMovingOrSizing);
