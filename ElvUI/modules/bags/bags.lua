@@ -602,6 +602,14 @@ function B:Layout(isBank)
 				f.keyFrame.slots[i].cooldown = _G[f.keyFrame.slots[i]:GetName().."Cooldown"];
 				E:RegisterCooldown(f.keyFrame.slots[i].cooldown)
 
+				if not(f.keyFrame.slots[i].questIcon) then
+					f.keyFrame.slots[i].questIcon = _G[f.keyFrame.slots[i]:GetName().."IconQuestTexture"] or _G[f.keyFrame.slots[i]:GetName()].IconQuestTexture
+					f.keyFrame.slots[i].questIcon:SetTexture(TEXTURE_ITEM_QUEST_BANG);
+					f.keyFrame.slots[i].questIcon:SetInside(f.keyFrame.slots[i]);
+					f.keyFrame.slots[i].questIcon:SetTexCoord(unpack(E.TexCoords));
+					f.keyFrame.slots[i].questIcon:Hide();
+				end
+
 				f.keyFrame.slots[i].iconTexture = _G[f.keyFrame.slots[i]:GetName().."IconTexture"];
 				f.keyFrame.slots[i].iconTexture:SetInside(f.keyFrame.slots[i]);
 				f.keyFrame.slots[i].iconTexture:SetTexCoord(unpack(E.TexCoords));
@@ -643,6 +651,9 @@ function B:UpdateKeySlot(slotID)
 	if not slot then return; end
 
 	slot:Show();
+	if(slot.questIcon) then
+		slot.questIcon:Hide();
+	end
 	slot.name, slot.rarity = nil, nil;
 
 	local start, duration, enable = GetContainerItemCooldown(bagID, slotID)
@@ -657,7 +668,7 @@ function B:UpdateKeySlot(slotID)
 		local _;
 		slot.name, _, slot.rarity = GetItemInfo(clink);
 
-		local isQuestItem, questId = GetContainerItemQuestInfo(bagID, slotID);
+		local isQuestItem, questId, isActiveQuest = GetContainerItemQuestInfo(bagID, slotID);
 		local r, g, b;
 
 		if(slot.rarity) then
@@ -665,8 +676,11 @@ function B:UpdateKeySlot(slotID)
 		end
 
 		-- color slot according to item quality
-		if questId and not isActive then
-			slot:SetBackdropBorderColor(1.0, 0.3, 0.3);
+		if questId and not isActiveQuest then
+			slot:SetBackdropBorderColor(1.0, 1.0, 0.0);
+			if(slot.questIcon) then
+				slot.questIcon:Show();
+			end
 		elseif questId or isQuestItem then
 			slot:SetBackdropBorderColor(1.0, 0.3, 0.3);
 		elseif slot.rarity and slot.rarity > 1 then
@@ -727,6 +741,9 @@ function B:OnEvent(event, ...)
 		self:UpdateAllSlots()
 	elseif (event == "QUEST_ACCEPTED" or event == "QUEST_LOG_UPDATE") and self:IsShown() then
 		self:UpdateAllSlots()
+		for slotID = 1, GetKeyRingSize() do
+			B:UpdateKeySlot(slotID);
+		end
 	end
 end
 
