@@ -75,10 +75,12 @@ local function LoadSkin()
 		local button = _G["WhoFrameButton" .. i];
 
 		button.icon = button:CreateTexture("$parentIcon", "ARTWORK");
-		button.icon:SetPoint("LEFT", 48, -3);
-		button.icon:SetSize(16, 16);
-		button.icon:SetTexture("Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes");
-		button.icon:SetTexCoord(0, 0.25, 0, 0.25);
+		button.icon:Point("LEFT", 48, -3);
+		button.icon:Size(17);
+		button.icon:SetTexture("Interface\\WorldStateFrame\\Icons-Classes");
+
+		button:CreateBackdrop("Default", true);
+		button.backdrop:SetInside(button.icon);
 
 		_G["WhoFrameButton" .. i .. "Level"]:ClearAllPoints();
 		_G["WhoFrameButton" .. i .. "Level"]:SetPoint("TOPLEFT", 10, -3);
@@ -148,10 +150,12 @@ local function LoadSkin()
 		local button = _G["GuildFrameButton"..i];
 
 		button.icon = button:CreateTexture("$parentIcon", "ARTWORK");
-		button.icon:SetPoint("LEFT", 48, -3);
-		button.icon:SetSize(16, 16);
-		button.icon:SetTexture("Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes");
-		button.icon:SetTexCoord(0, 0.25, 0, 0.25);
+		button.icon:Point("LEFT", 48, -3);
+		button.icon:Size(17);
+		button.icon:SetTexture("Interface\\WorldStateFrame\\Icons-Classes");
+
+		button:CreateBackdrop("Default", true);
+		button.backdrop:SetInside(button.icon);
 
 		_G["GuildFrameButton" .. i .. "Level"]:ClearAllPoints();
 		_G["GuildFrameButton" .. i .. "Level"]:SetPoint("TOPLEFT", 10, -3);
