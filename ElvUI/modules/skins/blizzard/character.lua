@@ -69,11 +69,6 @@ local function LoadSkin()
 	end
 	hooksecurefunc("PaperDollFrameItemFlyout_DisplayButton", SkinItemFlyouts);
 
-	local function SkinFrameFlyouts()
-		PaperDollFrameItemFlyoutButtons:StripTextures();
-	end
-	PaperDollFrameItemFlyout:HookScript("OnShow", SkinFrameFlyouts)
-
 	GearManagerDialogPopup:StripTextures()
 	GearManagerDialogPopup:CreateBackdrop("Transparent")
 	GearManagerDialogPopup.backdrop:Point("TOPLEFT", 5, -2)
@@ -84,7 +79,7 @@ local function LoadSkin()
 	GearManagerDialogPopupScrollFrame:StripTextures()
 	S:HandleScrollBar(GearManagerDialogPopupScrollFrameScrollBar)
 
-	for i=1, NUM_GEARSET_ICONS_SHOWN do
+	for i = 1, NUM_GEARSET_ICONS_SHOWN do
 		local button = _G["GearManagerDialogPopupButton"..i]
 		local icon = button.icon
 
@@ -146,6 +141,7 @@ local function LoadSkin()
 	for _, slot in pairs(slots) do
 		local icon = _G["Character"..slot.."IconTexture"];
 		local cooldown = _G["Character"..slot.."Cooldown"];
+		local popout = _G["Character" .. slot .. "PopoutButton"];
 
 		slot = _G["Character"..slot];
 		slot:StripTextures();
@@ -160,7 +156,54 @@ local function LoadSkin()
 		if(cooldown) then
 			E:RegisterCooldown(cooldown);
 		end
+
+		if(popout) then
+			popout:StripTextures();
+			popout:SetTemplate();
+			popout:HookScript("OnEnter", S.SetModifiedBackdrop);
+			popout:HookScript("OnLeave", S.SetOriginalBackdrop);
+
+			popout.icon = popout:CreateTexture(nil, "ARTWORK");
+			popout.icon:Size(14);
+			popout.icon:Point("CENTER");
+			popout.icon:SetTexture([[Interface\AddOns\ElvUI\media\textures\SquareButtonTextures.blp]]);
+
+			if(slot.verticalFlyout) then
+				popout:Size(23, 9);
+				S:SquareButton_SetIcon(popout, "DOWN");
+				popout:SetPoint("TOP", slot, "BOTTOM", 0, 5);
+			else
+				popout:Size(9, 23);
+				S:SquareButton_SetIcon(popout, "RIGHT");
+				popout:SetPoint("LEFT", slot, "RIGHT", -5, 0);
+			end
+		end
 	end
+
+	hooksecurefunc("PaperDollFrameItemFlyout_Show", function(self)
+		PaperDollFrameItemFlyoutButtons:StripTextures()
+		if(self.verticalFlyout) then
+			PaperDollFrameItemFlyout.buttonFrame:Point("TOPLEFT", self.popoutButton, "BOTTOMLEFT", -10, 0);
+		else
+			PaperDollFrameItemFlyout.buttonFrame:Point("TOPLEFT", self.popoutButton, "TOPRIGHT", 0, 10);
+		end
+	end)
+
+	hooksecurefunc("PaperDollFrameItemPopoutButton_SetReversed", function(self, isReversed)
+		if(self:GetParent().verticalFlyout) then
+			if(isReversed) then
+				S:SquareButton_SetIcon(self, "UP");
+			else
+				S:SquareButton_SetIcon(self, "DOWN");
+			end
+		else
+			if(isReversed) then
+				S:SquareButton_SetIcon(self, "LEFT");
+			else
+				S:SquareButton_SetIcon(self, "RIGHT");
+			end
+		end
+	end);
 
 	local function ColorItemBorder()
 		for _, slot in pairs(slots) do
