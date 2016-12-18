@@ -5,8 +5,8 @@ local format, join = string.format, string.join;
 
 local GetContainerNumFreeSlots = GetContainerNumFreeSlots;
 local GetContainerNumSlots = GetContainerNumSlots;
-local ToggleBackpack = ToggleBackpack;
 local GetBackpackCurrencyInfo = GetBackpackCurrencyInfo;
+
 local CURRENCY = CURRENCY;
 local NUM_BAG_SLOTS = NUM_BAG_SLOTS;
 local MAX_WATCHED_TOKENS = MAX_WATCHED_TOKENS;
@@ -27,7 +27,7 @@ local function OnEvent(self)
 end
 
 local function OnClick()
-	ToggleBackpack();
+	OpenAllBags();
 end
 
 local function OnEnter(self)

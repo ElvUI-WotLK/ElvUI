@@ -7,7 +7,6 @@ local join = string.join;
 local IsLoggedIn = IsLoggedIn;
 local GetMoney = GetMoney;
 local IsShiftKeyDown = IsShiftKeyDown;
-local OpenAllBags = OpenAllBags;
 local GetBackpackCurrencyInfo = GetBackpackCurrencyInfo;
 
 local MAX_WATCHED_TOKENS = MAX_WATCHED_TOKENS;
@@ -21,15 +20,15 @@ local resetInfoFormatter = join("", "|cffaaaaaa", L["Reset Data: Hold Shift + Ri
 local function OnEvent(self)
 	if(not IsLoggedIn()) then return; end
 	local NewMoney = GetMoney();
-	ElvDB = ElvDB or { };
+	ElvDB = ElvDB or {};
 	ElvDB["gold"] = ElvDB["gold"] or {};
 	ElvDB["gold"][E.myrealm] = ElvDB["gold"][E.myrealm] or {};
 	ElvDB["gold"][E.myrealm][E.myname] = ElvDB["gold"][E.myrealm][E.myname] or NewMoney;
 
 	local OldMoney = ElvDB["gold"][E.myrealm][E.myname] or NewMoney;
 
-	local Change = NewMoney-OldMoney;
-	if(OldMoney>NewMoney) then
+	local Change = NewMoney - OldMoney;
+	if(OldMoney > NewMoney) then
 		Spent = Spent - Change;
 	else
 		Profit = Profit + Change;
@@ -40,7 +39,7 @@ local function OnEvent(self)
 	ElvDB["gold"][E.myrealm][E.myname] = NewMoney;
 end
 
-local function Click(self, btn)
+local function OnClick(self, btn)
 	if(btn == "RightButton" and IsShiftKeyDown()) then
 		ElvDB.gold = nil;
 		OnEvent(self);
@@ -60,7 +59,7 @@ local function OnEnter(self)
 	DT.tooltip:AddDoubleLine(L["Spent:"], E:FormatMoney(Spent, style, textOnly), 1, 1, 1, 1, 1, 1);
 	if(Profit < Spent) then
 		DT.tooltip:AddDoubleLine(L["Deficit:"], E:FormatMoney(Profit-Spent, style, textOnly), 1, 0, 0, 1, 1, 1);
-	elseif((Profit-Spent) > 0) then
+	elseif((Profit - Spent) > 0) then
 		DT.tooltip:AddDoubleLine(L["Profit:"], E:FormatMoney(Profit-Spent, style, textOnly), 0, 1, 0, 1, 1, 1);
 	end
 	DT.tooltip:AddLine(" ");
@@ -68,7 +67,7 @@ local function OnEnter(self)
 	local totalGold = 0;
 	DT.tooltip:AddLine(L["Character: "]);
 
-	for k,_ in pairs(ElvDB["gold"][E.myrealm]) do
+	for k, _ in pairs(ElvDB["gold"][E.myrealm]) do
 		if(ElvDB["gold"][E.myrealm][k]) then
 			DT.tooltip:AddDoubleLine(k, E:FormatMoney(ElvDB["gold"][E.myrealm][k], style, textOnly), 1, 1, 1, 1, 1, 1);
 			totalGold = totalGold + ElvDB["gold"][E.myrealm][k];
@@ -94,4 +93,4 @@ local function OnEnter(self)
 	DT.tooltip:Show();
 end
 
-DT:RegisterDatatext("Gold", {"PLAYER_ENTERING_WORLD", "PLAYER_MONEY", "SEND_MAIL_MONEY_CHANGED", "SEND_MAIL_COD_CHANGED", "PLAYER_TRADE_MONEY", "TRADE_MONEY_CHANGED"}, OnEvent, nil, Click, OnEnter);
+DT:RegisterDatatext("Gold", {"PLAYER_ENTERING_WORLD", "PLAYER_MONEY", "SEND_MAIL_MONEY_CHANGED", "SEND_MAIL_COD_CHANGED", "PLAYER_TRADE_MONEY", "TRADE_MONEY_CHANGED"}, OnEvent, nil, OnClick, OnEnter);

@@ -48,10 +48,6 @@ function M:SetLargeWorldMap()
 	WorldMapFrame:SetScale(1);
 	WorldMapFrame:EnableMouse(false);
 
-	WorldMapTooltip:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 110);
-	WorldMapCompareTooltip1:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 110);
-	WorldMapCompareTooltip2:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 110);
-
 	if(WorldMapFrame:GetAttribute("UIPanelLayout-area") ~= "center") then
 		SetUIPanelAttribute(WorldMapFrame, "area", "center");
 	end
@@ -66,8 +62,6 @@ end
 
 function M:SetSmallWorldMap()
 	if(InCombatLockdown()) then return; end
-
-	WorldMapTooltip:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 110);
 
 	WorldMapFrameSizeUpButton:Show();
 	WorldMapFrameSizeDownButton:Hide();
@@ -179,6 +173,10 @@ function M:Initialize()
 			end
 		end);
 	end
+
+	WorldMapTooltip:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 110);
+	WorldMapCompareTooltip1:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 110);
+	WorldMapCompareTooltip2:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 110);
 end
 
 E:RegisterInitialModule(M:GetName());
