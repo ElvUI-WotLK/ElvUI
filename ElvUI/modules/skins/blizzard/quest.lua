@@ -138,6 +138,7 @@ local function LoadSkin()
 	end);
 
 	QuestLogScrollFrame:SetTemplate("Default");
+	QuestLogDetailScrollFrame:StripTextures();
 	QuestLogDetailScrollFrame:SetTemplate("Default");
 
 	QuestFrame:CreateBackdrop("Transparent");
