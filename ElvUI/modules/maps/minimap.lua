@@ -151,7 +151,7 @@ function M:UpdateSettings()
 	E.MinimapHeight = E.MinimapSize;
 
 	if(E.db.general.reminder.enable and not E.global.tukuiMode) then
-		E.RBRWidth = (E.MinimapHeight + (5*E.Border) + E.Border*2 - (E.Spacing*5)) / (5 + 1);
+		E.RBRWidth = (E.MinimapHeight + ((E.Border - E.Spacing*3) * 5) + E.Border*2) / 6;
 	else
 		E.RBRWidth = 0;
 	end
