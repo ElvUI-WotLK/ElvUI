@@ -31,16 +31,16 @@ L["Trigger"] = "묶음을 펼치고 각 주문에 지정하세요."
 
 --Bags
 L["Bank"] = "은행"
-L["Deposit Reagents"] = REAGENTBANK_DEPOSIT
 L["Hold Control + Right Click:"] = "Shift 우클릭:"
+L["Hold Shift + Drag:"] = true;
 L["Purchase Bags"] = "가방 슬롯 구입"
 L["Purchase"] = "구입"
-L["Reagent Bank"] = REAGENT_BANK
 L["Reset Position"] = "위치 초기화"
-L["Show/Hide Reagents"] = "재료은행 표시";
+L["Sort Bags"] = true;
 L["Sort Tab"] = "탭 정렬" --Not used, yet?
 L["Temporary Move"] = "임시 이동"
 L["Toggle Bags"] = "가방슬롯 보기"
+L["Toggle Key"] = true;
 L["Vendor Grays"] = "잡동사니 자동판매"
 
 --Chat
@@ -115,9 +115,8 @@ L["Total Memory:"] = "전체 메모리:"
 L["Total: "] = "합계:"
 L["Unhittable:"] = "100% 방어행동까지"
 L["Waist"] = "허리"
+L["Wintergrasp"] = true;
 L["Wrist"] = "손목"
-L["|cffFFFFFFLeft Click:|r Change Talent Specialization"] = "클릭 : 전문화 교체"
-L["|cffFFFFFFRight Click:|r Change Loot Specialization"] = "우클릭 : 전리품 전문화 변경"
 
 --DebugTools
 L["%s: %s tried to call the protected function '%s'."] = "%s: %s 기능이 사용할 수 없는 %s 함수를 사용하려 합니다."
@@ -208,7 +207,7 @@ L["Can't Roll"] = "주사위를 굴릴 수 없습니다."
 L["Disband Group"] = "그룹 해산"
 L["Enable"] = "사용"
 L["Experience"] = "경험치"
-L["Fishy Loot"] = "낚시 전리품"
+L["Farm Mode"] = true;
 L["iLvl"] = "템렙" --Column header in raidbrowser
 L["Important Group Members:"] = "중요 멤버"
 L["Left Click:"] = "왼 클릭 :"
@@ -280,8 +279,12 @@ L["Target Frame"] = "대상 프레임"
 L["Target Powerbar"] = true;
 L["TargetTarget Frame"] = "대상의대상 프레임"
 L["TargetTargetTarget Frame"] = "대상의대상의대상 프레임"
+L["Time Manager Frame"] = true;
 L["Tooltip"] = "툴팁"
+L["Totems"] = true;
 L["Vehicle Seat Frame"] = "차량 좌석 프레임"
+L["Watch Frame"] = true;
+L["Weapons"] = true;
 L["DESC_MOVERCONFIG"] = [=[프레임을 드래그로 원하는 위치로 이동시키세요.|n[잠금] 버튼을 누르면 이동모드가 종료됩니다.
 
 Options:

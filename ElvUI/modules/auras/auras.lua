@@ -530,7 +530,7 @@ function A:Initialize()
 			end
 		end
 	end);
-	E:CreateMover(self.WeaponFrame, "WeaponsMover", L["Player Weapons"]);
+	E:CreateMover(self.WeaponFrame, "WeaponsMover", L["Weapons"]);
 end
 
 E:RegisterModule(A:GetName());

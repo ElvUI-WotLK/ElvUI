@@ -31,16 +31,16 @@ L["Trigger"] = "Триггер"
 
 --Bags
 L["Bank"] = "Банк"
-L["Deposit Reagents"] = "Сложить материалы"
 L["Hold Control + Right Click:"] = "Зажать Control + ПКМ:"
+L["Hold Shift + Drag:"] = "Зажать shift и перетаскивать:";
 L["Purchase Bags"] = "Приобрести слот"
 L["Purchase"] = "Приобрести слот"
-L["Reagent Bank"] = "Банк материалов"
 L["Reset Position"] = "Сбросить позицию"
-L["Show/Hide Reagents"] = "Показать/скрыть материалы"
+L["Sort Bags"] = "Сортировать";
 L["Sort Tab"] = "Сортировать вкладки"; --Not used, yet?
 L["Temporary Move"] = "Временное перемещение"
 L["Toggle Bags"] = "Показать сумки"
+L["Toggle Key"] = "Показать ключи"
 L["Vendor Grays"] = "Продавать серые предметы"
 
 --Chat
@@ -72,6 +72,7 @@ L["Building(s) Report:"] = "Отчет зданий:"
 L["Character: "] = "Персонаж: "
 L["Chest"] = "Грудь"
 L["Combat"] = "Бой"
+L["copperabbrev"] = "|cffeda55fм|r" --Also used in Bags
 L["DPS"] = "УВС"
 L["Defeated"] = "Убит"
 L["Deficit:"] = "Убыток:"
@@ -81,6 +82,7 @@ L["Feet"] = "Ступни"
 L["Friends List"] = "Список друзей"
 L["Friends"] = "Друзья" --Also in Skins
 L["Gold:"] = "Золото:"
+L["goldabbrev"] = "|cffffd700з|r" --Also used in Bags
 L["HP"] = "+ Исцел."
 L["HPS"] = "ИВС"
 L["Hands"] = "Кисти рук"
@@ -89,6 +91,7 @@ L["Hit"] = "Метк."
 L["Hold Shift + Right Click:"] = "Shift + ПКМ:"
 L["Home Latency:"] = "Локальная задержка: "
 L["Legs"] = "Ноги"
+L["lvl"] = "ур."
 L["Main Hand"] = "Правая рука"
 L["Mission(s) Report:"] = "Отчет миссий:"
 L["Mitigation By Level: "] = "Снижение на уровне: "
@@ -98,6 +101,7 @@ L["Offhand"] = "Левая рука"
 L["Profit:"] = "Прибыль:"
 L["Reset Data: Hold Shift + Right Click"] = "Сбросить данные: Shift + ПКМ"
 L["Right Click: Reset CPU Usage"] = "ПКМ: Сбросить использование процессора";
+L["silverabbrev"] = "|cffc7c7cfс|r" --Also used in Bags
 L["SP"] = "+ Закл."
 L["Saved Raid(s)"] = "Сохраненные рейды"
 L["Server: "] = "На сервере:"
@@ -111,13 +115,8 @@ L["Total Memory:"] = "Всего памяти:"
 L["Total: "] = "Всего: "
 L["Unhittable:"] = "Полная защита от ударов"
 L["Waist"] = "Пояс"
+L["Wintergrasp"] = "Озеро Ледяных Оков";
 L["Wrist"] = "Запястья"
-L["copperabbrev"] = "|cffeda55fм|r" --Also used in Bags
-L["goldabbrev"] = "|cffffd700з|r" --Also used in Bags
-L["lvl"] = "ур."
-L["silverabbrev"] = "|cffc7c7cfс|r" --Also used in Bags
-L["|cffFFFFFFLeft Click:|r Change Talent Specialization"] = "|cffFFFFFFЛКМ:|r Изменить набор талантов"
-L["|cffFFFFFFRight Click:|r Change Loot Specialization"] = "|cffFFFFFFПКМ:|r Изменить специализацию для получения добычи"
 
 --DebugTools
 L["%s: %s tried to call the protected function '%s'."] = "%s: %s tried to call the protected function '%s'."
@@ -208,6 +207,7 @@ L["Can't Roll"] = "Не могу бросить кости"
 L["Disband Group"] = "Распустить группу"
 L["Enable"] = "Включить" --Doesn't fit a section since it's used a lot of places
 L["Experience"] = "Опыт"
+L["Farm Mode"] = "Режим фарма";
 L["Fishy Loot"] = "Улов"
 L["iLvl"] = true --Column header in raidbrowser/don't need translation in ru, ppl understand it as is
 L["Important Group Members:"] = "Важные члены группы:"
@@ -280,8 +280,12 @@ L["Target Frame"] = "Цель" --Also used in UnitFrames
 L["Target Powerbar"] = "Полоса ресурса цели"
 L["TargetTarget Frame"] = "Цель цели" --Also used in UnitFrames
 L["TargetTargetTarget Frame"] = "Цель цели цели"
+L["Time Manager Frame"] = true;
 L["Tooltip"] = "Подсказка"
+L["Totems"] = "Тотемы";
 L["Vehicle Seat Frame"] = "Техника"
+L["Watch Frame"] = "Задания";
+L["Weapons"] = "Оружие";
 L["DESC_MOVERCONFIG"] = [=[Блокировка отключена. Передвиньте фреймы и нажмите 'Закрепить', когда закончите.
 
 Options:

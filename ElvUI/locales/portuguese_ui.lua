@@ -31,16 +31,16 @@ L["Trigger"] = "Gatilho"
 
 --Bags
 L["Bank"] = true;
-L["Deposit Reagents"] = true;
 L["Hold Control + Right Click:"] = "Segurar Control + Clique Direito:"
+L["Hold Shift + Drag:"] = true;
 L["Purchase Bags"] = true;
 L["Purchase"] = "Comprar"
-L["Reagent Bank"] = true;
 L["Reset Position"] = "Redefinir Posição"
-L["Show/Hide Reagents"] = true;
+L["Sort Bags"] = true;
 L["Sort Tab"] = "Aba de Organização"
 L["Temporary Move"] = "Mover Temporariamente"
 L["Toggle Bags"] = "Mostrar/Ocultar Bolsas"
+L["Toggle Key"] = true;
 L["Vendor Grays"] = "Vender Itens Cinzentos"
 
 --Chat
@@ -115,9 +115,8 @@ L["Total Memory:"] = "Memória Total:"
 L["Total: "] = "Total: "
 L["Unhittable:"] = "Inacertável"
 L["Waist"] = "Cintura"
+L["Wintergrasp"] = true;
 L["Wrist"] = "Pulsos"
-L["|cffFFFFFFLeft Click:|r Change Talent Specialization"] = "|cffFFFFFFClique Esquerdo:|r Altera Especialização de Talento";
-L["|cffFFFFFFRight Click:|r Change Loot Specialization"] = "|cffFFFFFFClique Direito:|r Altera a Especialização de Saque";
 
 --DebugTools
 L["%s: %s tried to call the protected function '%s'."] = "%s: %s tentou chamar a função protegida '%s'."
@@ -208,7 +207,7 @@ L["Can't Roll"] = "Não pode rolar"
 L["Disband Group"] = "Dissolver Grupo"
 L["Enable"] = "Ativar"
 L["Experience"] = "Experiência"
-L["Fishy Loot"] = "Saque de Peixes"
+L["Farm Mode"] = true;
 L["iLvl"] = true; --Column header in raidbrowser
 L["Important Group Members:"] = true;
 L["Left Click:"] = "Clique Esquerdo:"
@@ -280,8 +279,12 @@ L["Target Frame"] = "Quadro do Alvo"
 L["Target Powerbar"] = true;
 L["TargetTarget Frame"] = "Quadro do Alvo do Alvo"
 L["TargetTargetTarget Frame"] = true;
+L["Time Manager Frame"] = true;
 L["Tooltip"] = "Tooltip"
+L["Totems"] = true;
 L["Vehicle Seat Frame"] = "Quadro de Assento de Veículo"
+L["Watch Frame"] = true;
+L["Weapons"] = true;
 L["DESC_MOVERCONFIG"] = [=[Movedores destravados. Mova-os agora e clique Travar quando acabar.
 
 Options:
@@ -330,7 +333,7 @@ L["Disable Warning"] = "Desativar Aviso"
 L["Discard"] = "Descartar"
 L["Do you enjoy the new ElvUI?"] = true;
 L["Do you swear not to post in technical support about something not working without first disabling the addon/module combination first?"] = "Você jura não postar no suporte técnico sobre alguma coisa não funcionando sem antes desabilitar a combinação addon/módulo?"
-L["ElvUI is five or more revisions out of date. You can download the newest version from www.tukui.org. Get premium membership and have ElvUI automatically updated with the Tukui Client!"] = true;
+L["ElvUI is five or more revisions out of date. You can download the newest version from https://github.com/ElvUI-WotLK/ElvUI/"] = true;
 L["ElvUI is out of date. You can download the newest version from https://github.com/ElvUI-WotLK/ElvUI/"] = true;
 L["ElvUI needs to perform database optimizations please be patient."] = true;
 L["Enabling/Disabling Bar #6 will toggle a paging option from your main actionbar to prevent duplicating bars, are you sure you want to do this?"] = "Habilitar/Desabilitar a Barra #6 fará o mesmo com a opção de paginação da sua barra de acção principal para previnir a dublicação de barras, está certo de que deseja isso?";

@@ -31,16 +31,16 @@ L["Trigger"] = true;
 
 --Bags
 L["Bank"] = true;
-L["Deposit Reagents"] = true;
 L["Hold Control + Right Click:"] = true;
+L["Hold Shift + Drag:"] = true;
 L["Purchase Bags"] = true;
 L["Purchase"] = true;
-L["Reagent Bank"] = true;
 L["Reset Position"] = true;
-L["Show/Hide Reagents"] = true;
+L["Sort Bags"] = true;
 L["Sort Tab"] = true; --Not used, yet?
 L["Temporary Move"] = true;
 L["Toggle Bags"] = true;
+L["Toggle Key"] = true;
 L["Vendor Grays"] = true;
 
 --Chat
@@ -115,9 +115,8 @@ L["Total Memory:"] = true;
 L["Total: "] = true;
 L["Unhittable:"] = true;
 L["Waist"] = true;
+L["Wintergrasp"] = true;
 L["Wrist"] = true;
-L["|cffFFFFFFLeft Click:|r Change Talent Specialization"] = true;
-L["|cffFFFFFFRight Click:|r Change Loot Specialization"] = true;
 
 --DebugTools
 L["%s: %s tried to call the protected function '%s'."] = true;
@@ -167,7 +166,6 @@ L["Layout"] = true;
 L["Lock"] = true;
 L["Low Resolution"] = true;
 L["low"] = true;
-L["Movers unlocked. Move them now and click Lock when you are done."] = true;
 L["Nudge"] = true;
 L["Physical DPS"] = true;
 L["Please click the button below so you can setup variables and ReloadUI."] = true;
@@ -209,7 +207,7 @@ L["Can't Roll"] = true;
 L["Disband Group"] = true;
 L["Enable"] = true; --Doesn't fit a section since it's used a lot of places
 L["Experience"] = true;
-L["Fishy Loot"] = true;
+L["Farm Mode"] = true;
 L["iLvl"] = true; --Column header in raidbrowser
 L["Important Group Members:"] = true;
 L["Left Click:"] = true; --layout\layout.lua
@@ -269,6 +267,7 @@ L["Player Debuffs"] = true;
 L["Player Frame"] = true; --Also used in UnitFrames
 L["Player Nameplate"] = true;
 L["Player Powerbar"] = true;
+L["Player Weapons"] = true;
 L["Raid Frames"] = true;
 L["Raid Pet Frames"] = true;
 L["Raid-40 Frames"] = true;
@@ -281,8 +280,12 @@ L["Target Frame"] = true; --Also used in UnitFrames
 L["Target Powerbar"] = true;
 L["TargetTarget Frame"] = true; --Also used in UnitFrames
 L["TargetTargetTarget Frame"] = true; --Also used in UnitFrames
+L["Time Manager Frame"] = true;
 L["Tooltip"] = true;
+L["Totems"] = true;
 L["Vehicle Seat Frame"] = true;
+L["Watch Frame"] = true;
+L["Weapons"] = true;
 L["DESC_MOVERCONFIG"] = [=[Movers unlocked. Move them now and click Lock when you are done.
 
 Options:

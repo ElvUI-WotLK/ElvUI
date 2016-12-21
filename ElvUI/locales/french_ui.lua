@@ -31,16 +31,16 @@ L["Trigger"] = "Déclencheur"
 
 --Bags
 L["Bank"] = "Banque";
-L["Deposit Reagents"] = "Déposer les composants";
 L["Hold Control + Right Click:"] = "Contrôle enfoncé + Clique droit"
+L["Hold Shift + Drag:"] = true;
 L["Purchase Bags"] = "Acheter des sacs";
 L["Purchase"] = "Acheter"
-L["Reagent Bank"] = "Banque de composants";
 L["Reset Position"] = "Réinitialiser la position"
-L["Show/Hide Reagents"] = "Afficher / Masquer les composants";
+L["Sort Bags"] = true;
 L["Sort Tab"] = "Organiser les onglets" --Not used, yet?
 L["Temporary Move"] = "Déplacer temporairement";
 L["Toggle Bags"] = "Afficher les sacs"
+L["Toggle Key"] = true;
 L["Vendor Grays"] = "Vendre les objets gris"
 
 --Chat
@@ -115,9 +115,8 @@ L["Total Memory:"] = "Mémoire totale:"
 L["Total: "] = "Total: "
 L["Unhittable:"] = "Intouchable:"
 L["Waist"] = "Ceinture"
+L["Wintergrasp"] = true;
 L["Wrist"] = "Poignets"
-L["|cffFFFFFFLeft Click:|r Change Talent Specialization"] = "|cffFFFFFFClick Gauche:|r Changer de spécialisation des talents"
-L["|cffFFFFFFRight Click:|r Change Loot Specialization"] = "|cffFFFFFFClick Droit:|r Changer la spécialisation de butin"
 
 --DebugTools
 L["%s: %s tried to call the protected function '%s'."] = "%s: %s a essayé d'appeler la fonction protégée '%s'."
@@ -208,7 +207,7 @@ L["Can't Roll"] = "Ne peut pas jeter les dés"
 L["Disband Group"] = "Dissoudre le groupe"
 L["Enable"] = "Activer" --Doesn't fit a section since it's used a lot of places
 L["Experience"] = "Expérience"
-L["Fishy Loot"] = "Butin de pêche"
+L["Farm Mode"] = true;
 L["iLvl"] = "iLvl"; --Column header in raidbrowser
 L["Important Group Members:"] = "Membres importants du groupe";
 L["Left Click:"] = "Clique Gauche:" --layout\layout.lua
@@ -280,8 +279,12 @@ L["Target Frame"] = "Cadre de la cible" --Also used in UnitFrames
 L["Target Powerbar"] = "Barre de pouvoir de la cible"; -- need review.
 L["TargetTarget Frame"] = "Cadre de la cible de votre cible" --Also used in UnitFrames
 L["TargetTargetTarget Frame"] = "Cadre de la cible de la cible de la cible";
+L["Time Manager Frame"] = true;
 L["Tooltip"] = "Infobulle"
+L["Totems"] = true;
 L["Vehicle Seat Frame"] = "Cadre de siège du véhicule"
+L["Watch Frame"] = true;
+L["Weapons"] = true;
 L["DESC_MOVERCONFIG"] = [=[Cadres déverrouillés. Déplacez-les et cliquez sur Verrouiller une fois terminé.
 
 Options:

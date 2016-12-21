@@ -31,16 +31,16 @@ L["Trigger"] = "觸發器"
 
 --Bags
 L["Bank"] = true;
-L["Deposit Reagents"] = true;
 L["Hold Control + Right Click:"] = "按住 Ctrl 並按滑鼠右鍵："
+L["Hold Shift + Drag:"] = true;
 L["Purchase Bags"] = true;
 L["Purchase"] = "購買銀行欄位"
-L["Reagent Bank"] = true;
 L["Reset Position"] = "重設位置"
-L["Show/Hide Reagents"] = true;
+L["Sort Bags"] = true;
 L["Sort Tab"] = true; --Not used, yet?
 L["Temporary Move"] = "移動背包"
 L["Toggle Bags"] = "開啟/關閉背包"
+L["Toggle Key"] = true;
 L["Vendor Grays"] = "出售灰色物品"
 
 --Chat
@@ -115,9 +115,8 @@ L["Total Memory:"] = "總記憶體:"
 L["Total: "] = "合計: "
 L["Unhittable:"] = "未命中:"
 L["Waist"] = "腰部"
+L["Wintergrasp"] = true;
 L["Wrist"] = "護腕"
-L["|cffFFFFFFLeft Click:|r Change Talent Specialization"] = true;
-L["|cffFFFFFFRight Click:|r Change Loot Specialization"] = true;
 
 --DebugTools
 L["%s: %s tried to call the protected function '%s'."] = "%s: %s 嘗試調用保護函數'%s'."
@@ -208,7 +207,7 @@ L["Can't Roll"] = "無法需求此裝備"
 L["Disband Group"] = "解散隊伍"
 L["Enable"] = "啟用" --Doesn't fit a section since it's used a lot of places
 L["Experience"] = "經驗/聲望條"
-L["Fishy Loot"] = "貪婪"
+L["Farm Mode"] = true;
 L["iLvl"] = true; --Column header in raidbrowser
 L["Important Group Members:"] = true;
 L["Left Click:"] = "滑鼠左鍵：" --layout\layout.lua
@@ -280,8 +279,12 @@ L["Target Frame"] = "目標框架" --Also used in UnitFrames
 L["Target Powerbar"] = true;
 L["TargetTarget Frame"] = "目標的目標框架" --Also used in UnitFrames
 L["TargetTargetTarget Frame"] = true;
+L["Time Manager Frame"] = true;
 L["Tooltip"] = "浮動提示"
+L["Totems"] = true;
 L["Vehicle Seat Frame"] = "載具座位框"
+L["Watch Frame"] = true;
+L["Weapons"] = true;
 L["DESC_MOVERCONFIG"] = [=[解除框架移動鎖定. 現在可以移動它們, 移好後請點擊「鎖定」.
 
 Options:

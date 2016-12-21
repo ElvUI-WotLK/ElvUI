@@ -31,16 +31,16 @@ L["Trigger"] = "触发器"
 
 --Bags
 L["Bank"] = "银行"
-L["Deposit Reagents"] = "导入材料"
 L["Hold Control + Right Click:"] = "按住 Ctrl 并按鼠标右键："
+L["Hold Shift + Drag:"] = true;
 L["Purchase Bags"] = "购买背包"
 L["Purchase"] = "购买"
-L["Reagent Bank"] = "材料银行"
 L["Reset Position"] = "重设位置"
-L["Show/Hide Reagents"] = "显示/隐藏材料"
+L["Sort Bags"] = true;
 L["Sort Tab"] = "选项排列" --Not used, yet?
 L["Temporary Move"] = "移动背包"
 L["Toggle Bags"] = "背包开关"
+L["Toggle Key"] = true;
 L["Vendor Grays"] = "出售灰色物品"
 
 --Chat
@@ -115,9 +115,8 @@ L["Total Memory:"] = "总内存:"
 L["Total: "] = "合计: "
 L["Unhittable:"] = "未命中:"
 L["Waist"] = "腰"
+L["Wintergrasp"] = true;
 L["Wrist"] = "护腕"
-L["|cffFFFFFFLeft Click:|r Change Talent Specialization"] = "|cffFFFFFF左键点击:|r 更改当前专精"
-L["|cffFFFFFFRight Click:|r Change Loot Specialization"] = "|cffFFFFFF右键点击:|r 更改拾取专精"
 
 --DebugTools
 L["%s: %s tried to call the protected function '%s'."] = "%s: %s 尝试调用保护函数 '%s'."
@@ -208,7 +207,7 @@ L["Can't Roll"] = "无法需求此装备"
 L["Disband Group"] = "解散队伍"
 L["Enable"] = "启用"
 L["Experience"] = "经验/声望条"
-L["Fishy Loot"] = "贪婪"
+L["Farm Mode"] = true;
 L["iLvl"] = "装等" --Column header in raidbrowser
 L["Important Group Members:"] = "重要小队成员"
 L["Left Click:"] = "鼠标左键："
@@ -280,8 +279,12 @@ L["Target Frame"] = "目标框架"
 L["Target Powerbar"] = "目标能量条"
 L["TargetTarget Frame"] = "目标的目标框架"
 L["TargetTargetTarget Frame"] = "目标的目标的目标框架"
+L["Time Manager Frame"] = true;
 L["Tooltip"] = "鼠标提示"
+L["Totems"] = true;
 L["Vehicle Seat Frame"] = "载具座位框"
+L["Watch Frame"] = true;
+L["Weapons"] = true;
 L["DESC_MOVERCONFIG"] = [=[解除框架移动锁定. 现在可以移动它们, 移好后请点击「锁定」.
 
 Options:

@@ -31,16 +31,16 @@ L["Trigger"] = "Disparador"
 
 --Bags
 L["Bank"] = true;
-L["Deposit Reagents"] = true;
 L["Hold Control + Right Click:"] = "Mantén Control y Haz Clic Derecho:"
+L["Hold Shift + Drag:"] = true;
 L["Purchase Bags"] = true;
 L["Purchase"] = "Comprar"
-L["Reagent Bank"] = true;
 L["Reset Position"] = "Reestablecer Posición"
-L["Show/Hide Reagents"] = true;
+L["Sort Bags"] = true;
 L["Sort Tab"] = true
 L["Temporary Move"] = "Movimiento Temporal"
 L["Toggle Bags"] = "Mostrar/Ocultar Bolsas"
+L["Toggle Key"] = true;
 L["Vendor Grays"] = "Vender Objetos Grises"
 
 --Chat
@@ -115,9 +115,8 @@ L["Total Memory:"] = "Memoria Total:"
 L["Total: "] = "Total: "
 L["Unhittable:"] = "Imbatible:"
 L["Waist"] = "Cintura"
+L["Wintergrasp"] = true;
 L["Wrist"] = "Muñeca"
-L["|cffFFFFFFLeft Click:|r Change Talent Specialization"] = true;
-L["|cffFFFFFFRight Click:|r Change Loot Specialization"] = true;
 
 --DebugTools
 L["%s: %s tried to call the protected function '%s'."] = "%s: %s intentó llamar a la función protegida '%s'."
@@ -208,7 +207,7 @@ L["Can't Roll"] = "No puede tirar dados"
 L["Disband Group"] = "Disolver Grupo"
 L["Enable"] = "Habilitar"
 L["Experience"] = "Experiencia"
-L["Fishy Loot"] = "Botín Sospechoso"
+L["Farm Mode"] = true;
 L["iLvl"] = true; --Column header in raidbrowser
 L["Important Group Members:"] = true;
 L["Left Click:"] = "Click Izquierdo"
@@ -280,8 +279,12 @@ L["Target Frame"] = "Marco de Objetivo"
 L["Target Powerbar"] = true;
 L["TargetTarget Frame"] = "Marco de Objetivo de Objetivo"
 L["TargetTargetTarget Frame"] = true;
+L["Time Manager Frame"] = true;
 L["Tooltip"] = "Descripción Emergente"
+L["Totems"] = true;
 L["Vehicle Seat Frame"] = "Marco del Asiento del Vehículo"
+L["Watch Frame"] = true;
+L["Weapons"] = true;
 L["DESC_MOVERCONFIG"] = [=[Fijadores desbloqueados. Muévelos ahora y haz click en Bloquear cuando termines.
 
 Options:

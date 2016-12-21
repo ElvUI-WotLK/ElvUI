@@ -31,16 +31,16 @@ L["Trigger"] = "Auslöser"
 
 --Bags
 L["Bank"] = true;
-L["Deposit Reagents"] = "Reagenzien einlagern"
 L["Hold Control + Right Click:"] = "Halte Steuerung + Rechtsklick:"
+L["Hold Shift + Drag:"] = true;
 L["Purchase Bags"] = "Taschen kaufen"
 L["Purchase"] = "Kaufen"
-L["Reagent Bank"] = "Reagenzien Bank"
 L["Reset Position"] = "Position zurücksetzen"
-L["Show/Hide Reagents"] = "Reagenzien anzeigen/ausblenden"
+L["Sort Bags"] = true;
 L["Sort Tab"] = "Tab sortieren" --Not used, yet?
 L["Temporary Move"] = "Temporäres Bewegen"
 L["Toggle Bags"] = "Taschen umschalten"
+L["Toggle Key"] = true;
 L["Vendor Grays"] = "Graue Gegenstände verkaufen"
 
 --Chat
@@ -115,9 +115,8 @@ L["Total Memory:"] = "Gesamte Speichernutzung:"
 L["Total: "] = "Gesamt: "
 L["Unhittable:"] = "Unhittable:"
 L["Waist"] = "Taille"
+L["Wintergrasp"] = true;
 L["Wrist"] = "Handgelenke"
-L["|cffFFFFFFLeft Click:|r Change Talent Specialization"] = "|cffFFFFFFRechtsklick:|r Talentspezialisierung ändern"
-L["|cffFFFFFFRight Click:|r Change Loot Specialization"] = "|cffFFFFFFRechtsklick:|r Beutespezialisierung ändern"
 
 --DebugTools
 L["%s: %s tried to call the protected function '%s'."] = "%s: %s versucht die geschützte Funktion aufrufen '%s'."
@@ -208,7 +207,7 @@ L["Can't Roll"] = "Es kann nicht gewürfelt werden."
 L["Disband Group"] = "Gruppe auflösen"
 L["Enable"] = "Eingeschaltet" --Doesn't fit a section since it's used a lot of places
 L["Experience"] = "Erfahrung"
-L["Fishy Loot"] = "Faule Beute"
+L["Farm Mode"] = true;
 L["iLvl"] = "iLvl" --Column header in raidbrowse
 L["Important Group Members:"] = "Wichtige Gruppenmitglieder:"
 L["Left Click:"] = "Linksklick:" --layout\layout.lua
@@ -280,8 +279,12 @@ L["Target Frame"] = "Zielfenster" --Also used in UnitFrames
 L["Target Powerbar"] = "Ziel Kraftleiste"
 L["TargetTarget Frame"] = "Ziel des Ziels Fenster" --Also used in UnitFrames
 L["TargetTargetTarget Frame"] = "Ziel des Ziels des Ziels Fenster"
+L["Time Manager Frame"] = true;
 L["Tooltip"] = "Tooltip"
+L["Totems"] = true;
 L["Vehicle Seat Frame"] = "Fahrzeugfenster"
+L["Watch Frame"] = true;
+L["Weapons"] = true;
 L["DESC_MOVERCONFIG"] = [=[Ankerpunkte entriegelt. Bewege die Ankerpunkte und klicke 'sperren', wenn du fertig bist.
 
 Options:
