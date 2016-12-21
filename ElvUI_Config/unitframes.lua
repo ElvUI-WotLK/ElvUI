@@ -145,7 +145,7 @@ local function GetOptionsTable_Health(isGroupFrame, updateFunc, groupName, numUn
 				values = {
 					["Health"] = L["Health"],
 					["Power"] = L["Power"],
-					["InfoPanel"] = L["Information Bar"],
+					["InfoPanel"] = L["Information Panel"],
 					["Frame"] = L["Frame"]
 				}
 			},
@@ -301,7 +301,7 @@ local function GetOptionsTable_Power(hasDetatchOption, updateFunc, groupName, nu
 				values = {
 					["Health"] = L["Health"],
 					["Power"] = L["Power"],
-					["InfoPanel"] = L["Information Bar"],
+					["InfoPanel"] = L["Information Panel"],
 					["Frame"] = L["Frame"]
 				}
 			}
@@ -419,7 +419,7 @@ local function GetOptionsTable_Name(updateFunc, groupName, numUnits)
 				values = {
 					["Health"] = L["Health"],
 					["Power"] = L["Power"],
-					["InfoPanel"] = L["Information Bar"],
+					["InfoPanel"] = L["Information Panel"],
 					["Frame"] = L["Frame"]
 				}
 			},
@@ -1370,7 +1370,7 @@ local function GetOptionsTable_RaidIcon(updateFunc, groupName, numUnits)
 				values = {
 					["Health"] = L["Health"],
 					["Power"] = L["Power"],
-					["InfoPanel"] = L["Information Bar"],
+					["InfoPanel"] = L["Information Panel"],
 					["Frame"] = L["Frame"]
 				}
 			},
@@ -1700,7 +1700,7 @@ function UF:CreateCustomTextGroup(unit, objectName)
 				values = {
 					["Health"] = L["Health"],
 					["Power"] = L["Power"],
-					["InfoPanel"] = L["Information Bar"],
+					["InfoPanel"] = L["Information Panel"],
 					["Frame"] = L["Frame"]
 				}
 			},
@@ -4451,7 +4451,7 @@ E.Options.args.unitframe.args.party = {
 					values = {
 						["Health"] = L["Health"],
 						["Power"] = L["Power"],
-						["InfoPanel"] = L["Information Bar"],
+						["InfoPanel"] = L["Information Panel"],
 						["Frame"] = L["Frame"]
 					}
 				},
@@ -5022,7 +5022,7 @@ E.Options.args.unitframe.args["raid"] = {
 					values = {
 						["Health"] = L["Health"],
 						["Power"] = L["Power"],
-						["InfoPanel"] = L["Information Bar"],
+						["InfoPanel"] = L["Information Panel"],
 						["Frame"] = L["Frame"]
 					}
 				},
@@ -5424,7 +5424,7 @@ E.Options.args.unitframe.args["raid40"] = {
 					values = {
 						["Health"] = L["Health"],
 						["Power"] = L["Power"],
-						["InfoPanel"] = L["Information Bar"],
+						["InfoPanel"] = L["Information Panel"],
 						["Frame"] = L["Frame"]
 					}
 				},
@@ -5508,9 +5508,7 @@ E.Options.args.unitframe.args.raidpet = {
 			desc = L["Select a unit to copy settings from."],
 			values = {
 				["party"] = L["Party Frames"],
-				["raid10"] = L["Raid-10 Frames"],
-				["raid25"] = L["Raid-25 Frames"],
-				["raid40"] = L["Raid-40 Frames"],
+				["raid"] = L["Raid Frames"],
 			},
 			set = function(info, value) UF:MergeUnitSettings(value, "raidpet", true); end,
 		},
