@@ -140,7 +140,7 @@ function AB:BindUpdate(button, spellmacro)
 		if not bind.button.id or bind.button.id < 1 or bind.button.id > (spellmacro=="SHAPESHIFT" and 10 or 12) then
 			bind.button.bindstring = "CLICK "..bind.button.name..":LeftButton";
 		else
-			bind.button.bindstring = (spellmacro=="SHAPESHIFT" and "ShapeshiftButton" or "BONUSACTIONBUTTON")..bind.button.id;
+			bind.button.bindstring = (spellmacro=="SHAPESHIFT" and "SHAPESHIFTBUTTON" or "BONUSACTIONBUTTON")..bind.button.id;
 		end
 
 		GameTooltip:AddLine(L["Trigger"]);
