@@ -2278,12 +2278,20 @@ E.Options.args.unitframe = {
 									order = 1,
 									type = "toggle",
 									name = L["Class Castbars"],
-									desc = L["Color castbars by the class or reaction type of the unit."],
+									desc = L["Color castbars by the class of player units."],
 									get = function(info) return E.db.unitframe.colors[ info[#info] ] end,
 									set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames(); end
 								},
-								transparentCastbar = {
+								castReactionColor = {
 									order = 2,
+									type = "toggle",
+									name = L["Reaction Castbars"],
+									desc = L["Color castbars by the reaction type of non-player units."],
+									get = function(info) return E.db.unitframe.colors[ info[#info] ]; end,
+									set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames(); end
+								},
+								transparentCastbar = {
+									order = 3,
 									type = "toggle",
 									name = L["Transparent"],
 									desc = L["Make textures transparent."],
@@ -2291,22 +2299,22 @@ E.Options.args.unitframe = {
 									set = function(info, value) E.db.unitframe.colors[ info[#info] ] = value; UF:Update_AllFrames(); end
 								},
 								castColor = {
-									order = 3,
+									order = 4,
 									name = L["Interruptable"],
 									type = "color"
 								},
 								castNoInterrupt = {
-									order = 4,
+									order = 5,
 									name = L["Non-Interruptable"],
 									type = "color"
 								},
 								castCompleteColor = {
-									order = 5,
+									order = 6,
 									name = L["Complete"],
 									type = "color"
 								},
 								castFailColor = {
-									order = 6,
+									order = 7,
 									name = L["Fail"],
 									type = "color"
 								}
