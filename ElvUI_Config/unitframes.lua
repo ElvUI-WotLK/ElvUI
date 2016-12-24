@@ -447,7 +447,8 @@ local function GetOptionsTable_Portrait(updateFunc, groupName, numUnits)
 			enable = {
 				type = "toggle",
 				order = 1,
-				name = L["Enable"]
+				name = L["Enable"],
+				desc = L["If you have a lot of 3D Portraits active then it will likely have a big impact on your FPS. Disable some portraits if you experience FPS issues."]
 			},
 			width = {
 				type = "range",
