@@ -5,9 +5,6 @@ function UF:Construct_InfoPanel(frame)
 	local infoPanel = CreateFrame("Frame", nil, frame);
 	infoPanel:SetFrameLevel(7);
 	local thinBorders = self.thinBorders;
-	if(E.global.tukuiMode) then
-		thinBorders = false;
-	end
 	infoPanel:CreateBackdrop("Default", true, nil, thinBorders);
 
 	return infoPanel;
@@ -22,26 +19,22 @@ function UF:Configure_InfoPanel(frame)
 		frame.InfoPanel:ClearAllPoints();
 
 		if(frame.ORIENTATION == "RIGHT" and not (frame.unitframeType == "arena")) then
-			frame.InfoPanel:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -frame.BORDER - frame.SPACING - (E.global.tukuiMode and frame.BORDER*2 or 0), frame.BORDER + frame.SPACING + (E.global.tukuiMode and frame.BORDER*2 or 0));
+			frame.InfoPanel:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -frame.BORDER - frame.SPACING, frame.BORDER + frame.SPACING);
 			if(frame.USE_POWERBAR and not frame.USE_INSET_POWERBAR and not frame.POWERBAR_DETACHED) then
-				frame.InfoPanel:Point("TOPLEFT", frame.Power.backdrop, "BOTTOMLEFT", frame.BORDER + (E.global.tukuiMode and frame.BORDER*2 or 0), -(frame.SPACING*3) - (E.global.tukuiMode and frame.BORDER*2 or 0));
+				frame.InfoPanel:Point("TOPLEFT", frame.Power.backdrop, "BOTTOMLEFT", frame.BORDER, -(frame.SPACING*3));
 			else
-				frame.InfoPanel:Point("TOPLEFT", frame.Health.backdrop, "BOTTOMLEFT", frame.BORDER + (E.global.tukuiMode and frame.BORDER*2 or 0), -(frame.SPACING*3) - (E.global.tukuiMode and frame.BORDER*2 or 0));
+				frame.InfoPanel:Point("TOPLEFT", frame.Health.backdrop, "BOTTOMLEFT", frame.BORDER, -(frame.SPACING*3));
 			end
 		else
-			frame.InfoPanel:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", frame.BORDER + frame.SPACING + (E.global.tukuiMode and frame.BORDER*2 or 0), frame.BORDER + frame.SPACING + (E.global.tukuiMode and frame.BORDER*2 or 0));
+			frame.InfoPanel:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", frame.BORDER + frame.SPACING, frame.BORDER + frame.SPACING);
 			if(frame.USE_POWERBAR and not frame.USE_INSET_POWERBAR and not frame.POWERBAR_DETACHED) then
-				frame.InfoPanel:Point("TOPRIGHT", frame.Power.backdrop, "BOTTOMRIGHT", -frame.BORDER - (E.global.tukuiMode and frame.BORDER*2 or 0), -(frame.SPACING*3) - (E.global.tukuiMode and frame.BORDER*2 or 0));
+				frame.InfoPanel:Point("TOPRIGHT", frame.Power.backdrop, "BOTTOMRIGHT", -frame.BORDER, -(frame.SPACING*3));
 			else
-				frame.InfoPanel:Point("TOPRIGHT", frame.Health.backdrop, "BOTTOMRIGHT", -frame.BORDER - (E.global.tukuiMode and frame.BORDER*2 or 0), -(frame.SPACING*3) - (E.global.tukuiMode and frame.BORDER*2 or 0));
+				frame.InfoPanel:Point("TOPRIGHT", frame.Health.backdrop, "BOTTOMRIGHT", -frame.BORDER, -(frame.SPACING*3));
 			end
 		end
 
 		local thinBorders = self.thinBorders;
-		if(E.global.tukuiMode) then
-			thinBorders = false;
-		end
-
 		if(db.infoPanel.transparent) then
 			frame.InfoPanel.backdrop:SetTemplate("Transparent", nil, nil, thinBorders);
 		else

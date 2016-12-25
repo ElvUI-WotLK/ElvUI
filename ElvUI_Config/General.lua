@@ -31,7 +31,7 @@ E.Options.args.general = {
 		intro = {
 			order = 4,
 			type = "description",
-			name = L["ELVUI_DESC"]:gsub("ElvUI", E.UIName),
+			name = L["ELVUI_DESC"],
 		},
 		general = {
 			order = 5,

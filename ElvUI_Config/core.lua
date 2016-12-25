@@ -26,7 +26,6 @@ function E:RefreshGUI()
 	ACR:NotifyChange("ElvUI");
 end
 
-E.Options.name = E.UIName;
 E.Options.args = {
 	ElvUI_Header = {
 		order = 1,

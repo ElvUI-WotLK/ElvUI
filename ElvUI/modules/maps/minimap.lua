@@ -152,7 +152,7 @@ function M:UpdateSettings()
 	E.MinimapWidth = E.MinimapSize;
 	E.MinimapHeight = E.MinimapSize;
 
-	if(E.db.general.reminder.enable and not E.global.tukuiMode) then
+	if(E.db.general.reminder.enable) then
 		E.RBRWidth = (E.MinimapHeight + ((E.Border - E.Spacing*3) * 5) + E.Border*2) / 6;
 	else
 		E.RBRWidth = 0;
@@ -293,7 +293,7 @@ function M:UpdateSettings()
 	end
 
 	if(ElvConfigToggle) then
-		if(E.db.general.reminder.enable and E.db.datatexts.minimapPanels and E.private.general.minimap.enable and not E.global.tukuiMode) then
+		if(E.db.general.reminder.enable and E.db.datatexts.minimapPanels and E.private.general.minimap.enable) then
 			ElvConfigToggle:Show();
 			ElvConfigToggle:Width(E.RBRWidth);
 		else

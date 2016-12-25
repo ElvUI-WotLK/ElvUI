@@ -477,7 +477,7 @@ function UF.groupPrototype:Configure_Groups(self)
 	local width, height, newCols, newRows = 0, 0, 0, 0;
 	local direction = db.growthDirection;
 	local xMult, yMult = DIRECTION_TO_HORIZONTAL_SPACING_MULTIPLIER[direction], DIRECTION_TO_VERTICAL_SPACING_MULTIPLIER[direction];
-	local UNIT_HEIGHT = (E.global.tukuiMode and db.infoPanel) and (db.height + db.infoPanel.height) or db.height;
+	local UNIT_HEIGHT = db.infoPanel and (db.height + db.infoPanel.height) or db.height;
 
 	local numGroups = self.numGroups;
 
@@ -508,7 +508,6 @@ function UF.groupPrototype:Configure_Groups(self)
 			end]]
 
 			group:ClearAllPoints();
-
 			if(db.raidWideSorting and db.invertGroupingOrder) then
 				group:SetAttribute("columnAnchorPoint", INVERTED_DIRECTION_TO_COLUMN_ANCHOR_POINT[direction]);
 			else
@@ -1057,7 +1056,7 @@ end
 function UF:Initialize()
 	self.db = E.db["unitframe"];
 
-	self.thinBorders = E.global.tukuiMode or self.db.thinBorders or E.PixelMode;
+	self.thinBorders = self.db.thinBorders or E.PixelMode;
 	if(E.private["unitframe"].enable ~= true) then return; end
 	E.UnitFrames = UF;
 

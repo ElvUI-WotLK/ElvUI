@@ -43,13 +43,13 @@ function UF:Construct_Debuffs(frame)
 end
 
 function UF:Construct_AuraIcon(button)
-	local offset = (UF.thinBorders and not E.global.tukuiMode) and E.mult or E.Border;
+	local offset = UF.thinBorders and E.mult or E.Border;
 
 	button.text = button.cd:CreateFontString(nil, "OVERLAY");
 	button.text:Point("CENTER", 1, 1);
 	button.text:SetJustifyH("CENTER");
 
-	button:SetTemplate("Default", nil, nil, (UF.thinBorders and not E.global.tukuiMode));
+	button:SetTemplate("Default", nil, nil, UF.thinBorders);
 
 	button.cd.noOCC = true;
 	button.cd.noCooldownCount = true;
@@ -129,7 +129,7 @@ function UF:Configure_Auras(frame, auraType)
 	end
 
 	local attachTo = self:GetAuraAnchorFrame(frame, db[auraType].attachTo, db.debuffs.attachTo == "BUFFS" and db.buffs.attachTo == "DEBUFFS");
-	local x, y = E:GetXYOffset(db[auraType].anchorPoint, (not E.global.tukuiMode and frame.SPACING));
+	local x, y = E:GetXYOffset(db[auraType].anchorPoint, frame.SPACING);
 
 	if(db[auraType].attachTo == "FRAME") then
 		y = 0;

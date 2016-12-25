@@ -71,7 +71,7 @@ function UF:Construct_Castbar(frame, moverName)
 
 	local button = CreateFrame("Frame", nil, castbar);
 	local holder = CreateFrame("Frame", nil, castbar);
-	button:SetTemplate("Default", nil, nil, self.thinBorders and not E.global.tukuiMode);
+	button:SetTemplate("Default", nil, nil, self.thinBorders);
 
 	castbar.Holder = holder;
 
@@ -84,7 +84,7 @@ function UF:Construct_Castbar(frame, moverName)
 	end
 
 	local icon = button:CreateTexture(nil, "ARTWORK");
-	local offset = (not E.global.tukuiMode and frame.BORDER or E.Border);
+	local offset = frame.BORDER;
 	icon:SetInside(nil, offset, offset);
 	icon:SetTexCoord(unpack(E.TexCoords));
 	icon.bg = button;
@@ -117,7 +117,7 @@ function UF:Configure_Castbar(frame)
 
 	if(db.castbar.icon) then
 		castbar.Icon = castbar.ButtonIcon;
-		if((not db.castbar.iconAttached) or E.global.tukuiMode) then
+		if(not db.castbar.iconAttached) then
 			castbar.Icon.bg:Size(db.castbar.iconSize);
 		else
 			if(db.castbar.insideInfoPanel and frame.USE_INFO_PANEL) then
@@ -141,9 +141,9 @@ function UF:Configure_Castbar(frame)
 	end
 
 	castbar:ClearAllPoints();
-	if((db.castbar.insideInfoPanel and frame.USE_INFO_PANEL) or E.global.tukuiMode) then
+	if(db.castbar.insideInfoPanel and frame.USE_INFO_PANEL) then
 		castbar:Size(frame.InfoPanel:GetSize());
-		if((not db.castbar.iconAttached) or E.global.tukuiMode) then
+		if(not db.castbar.iconAttached) then
 			castbar:SetInside(frame.InfoPanel, 0, 0);
 		else
 			local iconWidth = db.castbar.icon and (castbar.Icon.bg:GetWidth() - frame.BORDER) or 0;
@@ -182,14 +182,7 @@ function UF:Configure_Castbar(frame)
 		end
 	end
 
-	if(E.global.tukuiMode and db.castbar.icon) then
-		castbar.Icon.bg:ClearAllPoints();
-		if(frame.ORIENTATION == "LEFT") then
-			castbar.Icon.bg:Point("RIGHT", frame, "LEFT", -10, 0);
-		else
-			castbar.Icon.bg:Point("LEFT", frame, "RIGHT", 10, 0);
-		end
-	elseif(not db.castbar.iconAttached and db.castbar.icon) then
+	if(not db.castbar.iconAttached and db.castbar.icon) then
 		local attachPoint = db.castbar.iconAttachedTo == "Frame" and frame or frame.Castbar;
 		local anchorPoint = db.castbar.iconPosition;
 		castbar.Icon.bg:ClearAllPoints();

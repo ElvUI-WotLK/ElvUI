@@ -34,7 +34,6 @@ Engine[4] = AddOn.DF["profile"];
 Engine[5] = AddOn.DF["global"];
 
 _G[AddOnName] = Engine;
-Engine[1].UIName = AddOnName;
 local tcopy = table.copy
 function AddOn:OnInitialize()
 	if not ElvCharacterDB then
@@ -74,7 +73,7 @@ function AddOn:OnInitialize()
 		end
 	end
 
-	if(self.private.general.pixelPerfect and not self.global.tukuiMode) then
+	if(self.private.general.pixelPerfect) then
 		self.Border = self.mult;
 		self.Spacing = 0;
 		self.PixelMode = true;
