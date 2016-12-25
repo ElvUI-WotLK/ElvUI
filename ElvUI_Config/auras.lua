@@ -260,7 +260,8 @@ E.Options.args.auras = {
 						},
 						reverse = {
 							order = 2,
-							name = L["Reverse highlight"],
+							name = L["Reverse Style"],
+							desc = L["When enabled active buff icons will light up instead of becoming darker, while inactive buff icons will become darker instead of being lit up."],
 							type = "toggle"
 						},
 						position = {
