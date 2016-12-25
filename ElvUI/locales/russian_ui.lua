@@ -80,6 +80,7 @@ L["lvl"] = "ур."
 L["Mitigation By Level: "] = "Снижение на уровне: "
 L["No Guild"] = "Нет гильдии"
 L["Profit:"] = "Прибыль:"
+L["Reload UI"] = "Перезагрузка";
 L["Reset Data: Hold Shift + Right Click"] = "Сбросить данные: Shift + ПКМ"
 L["Right Click: Reset CPU Usage"] = "ПКМ: Сбросить использование процессора";
 L["silverabbrev"] = "|cffc7c7cfс|r" --Also used in Bags

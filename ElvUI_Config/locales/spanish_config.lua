@@ -420,6 +420,7 @@ L["The Thin Border Theme option will change the overall apperance of your UI. Us
 L["Thin Border Theme"] = true;
 L["Toggle Tutorials"] = "Mostrar/Ocultar Tutoriales"
 L["Top Panel"] = "Panel Superior"
+L["Version Check"] = true;
 L["Watch Frame Height"] = true;
 L["When you go AFK display the AFK screen."] = true;
 
@@ -901,6 +902,7 @@ L["Sort By"] = true;
 L["Spaced"] = "Separadas"
 L["Spacing"] = true;
 L["Spark"] = "Desatar"
+L["Speed in seconds"] = true;
 L["Stack Counter"] = true;
 L["Stack Threshold"] = true;
 L["Start Near Center"] = "Comenzar Cerca del Centro"

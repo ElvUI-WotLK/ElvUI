@@ -467,6 +467,7 @@ L["The Thin Border Theme option will change the overall apperance of your UI. Us
 L["Thin Border Theme"] = true;
 L["Toggle Tutorials"] = "애드온 튜토리얼 확인"
 L["Top Panel"] = "상단 패널 표시"
+L["Version Check"] = true;
 L["Watch Frame Height"] = "퀘스트프레임 세로길이"
 L["When you go AFK display the AFK screen."] = "자리비움 시 UI가 자리비움모드로 전환됩니다."
 
@@ -948,6 +949,7 @@ L["Sort By"] = true;
 L["Spaced"] = "외부에 작게 분리"
 L["Spacing"] = true;
 L["Spark"] = "반짝임"
+L["Speed in seconds"] = true;
 L["Stack Counter"] = true;
 L["Stack Threshold"] = "중첩 기준점"
 L["Start Near Center"] = "가운데 정렬"

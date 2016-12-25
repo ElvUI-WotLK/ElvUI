@@ -421,6 +421,7 @@ L["The Thin Border Theme option will change the overall apperance of your UI. Us
 L["Thin Border Theme"] = "Тонкие границы"
 L["Toggle Tutorials"] = "Показать помощь"
 L["Top Panel"] = "Верхняя панель"
+L["Version Check"] = "Проверка версии";
 L["Watch Frame Height"] = "Высота списка заданий";
 L["When you go AFK display the AFK screen."] = "Отображать специальный экран, когда вы переходите в состояние \"Отсутствует\"."
 
@@ -902,6 +903,7 @@ L["Sort By"] = "Сортировать по"
 L["Spaced"] = "Раздельно"
 L["Spacing"] = "Отступ"
 L["Spark"] = "Искра"
+L["Speed in seconds"] = "Скорость в секундах";
 L["Stack Counter"] = "Количество стаков"
 L["Stack Threshold"] = "Стаки"
 L["Start Near Center"] = "Начинать от центра"

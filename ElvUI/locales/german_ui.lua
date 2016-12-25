@@ -81,6 +81,7 @@ L["lvl"] = "lvl"
 L["Mitigation By Level: "] = "Milderung durch Stufe:"
 L["No Guild"] = "Keine Gilde"
 L["Profit:"] = "Gewinn:"
+L["Reload UI"] = true;
 L["Reset Data: Hold Shift + Right Click"] = "Daten zurücksetzen: Halte Shift + Rechtsklick"
 L["Saved Raid(s)"] = "Gespeicherte Schlachtzüge"
 L["Server: "] = "Server: "

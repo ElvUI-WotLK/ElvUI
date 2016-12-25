@@ -80,6 +80,7 @@ L["lvl"] = "nível"
 L["Mitigation By Level: "] = "Mitigação por nível"
 L["No Guild"] = "Sem Guilda"
 L["Profit:"] = "Lucro:"
+L["Reload UI"] = true;
 L["Reset Data: Hold Shift + Right Click"] = "Redefinir Dados: Segurar Shifr + Clique Direito"
 L["Right Click: Reset CPU Usage"] = true;
 L["Saved Raid(s)"] = "Raide(s) Salva(s)"

@@ -420,6 +420,7 @@ L["The Thin Border Theme option will change the overall apperance of your UI. Us
 L["Thin Border Theme"] = "Dünner Rahmen Theme"
 L["Toggle Tutorials"] = "Tutorial starten"
 L["Top Panel"] = "Obere Leiste"
+L["Version Check"] = true;
 L["Watch Frame Height"] = "Questfenster Höhe"
 L["When you go AFK display the AFK screen."] = "AFK Bildschirm anzeigen wenn du AFK bist."
 
@@ -902,6 +903,7 @@ L["Sort By"] = "Sortieren nach"
 L["Spaced"] = "Abgetrennt"
 L["Spacing"] = "Abstand"
 L["Spark"] = "Funken"
+L["Speed in seconds"] = true;
 L["Stack Counter"] = "Stapel Zähler"
 L["Stack Threshold"] = "Stapel Schwellenwert"
 L["Start Near Center"] = "Starte nahe der Mitte"
