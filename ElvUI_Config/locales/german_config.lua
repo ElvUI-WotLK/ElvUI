@@ -484,7 +484,6 @@ L["X-Offset"] = "X-Versatz"
 L["Y-Offset"] = "Y-Versatz"
 
 --Misc
-L["Enable"] = "Eingeschaltet"
 L["Install"] = "Installation"
 L["Run the installation process."] = "Startet den Installationsprozess."
 L["Toggle Anchors"] = "Ankerpunkte umschalten"
