@@ -76,6 +76,7 @@ V["skins"] = {
 		["inspect"] = true,
 		["lfd"] = true,
 		["lfr"] = true,
+		["loot"] = true,
 		["macro"] = true,
 		["mail"] = true,
 		["merchant"] = true,

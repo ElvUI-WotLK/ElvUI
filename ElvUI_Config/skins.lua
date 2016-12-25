@@ -161,6 +161,11 @@ E.Options.args.skins = {
 					name = L["LFR Frame"],
 					desc = L["TOGGLESKIN_DESC"]
 				},
+				loot = {
+					type = "toggle",
+					name = L["Loot Frames"],
+					desc = L["TOGGLESKIN_DESC"]
+				},
 				macro = {
 					type = "toggle",
 					name = L["Macro Frame"],
