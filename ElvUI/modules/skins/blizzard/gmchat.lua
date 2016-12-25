@@ -23,9 +23,7 @@ local function LoadChatSkin()
 	GMChatTabText:Point("LEFT", GMChatTab, 17, 2);
 	GMChatTabText:FontTemplate(LSM:Fetch("font", E.db.chat.tabFont), E.db.chat.tabFontSize, E.db.chat.tabFontOutline);
 
-	if (not E.global.tukuiMode) then
-		GMChatTabText:SetTextColor(unpack(E["media"].rgbvaluecolor));
-	end
+	GMChatTabText:SetTextColor(unpack(E["media"].rgbvaluecolor));
 
 	GMChatFrameCloseButton:Point("TOPRIGHT", GMChatTab, 6, 4);
 	S:HandleCloseButton(GMChatFrameCloseButton);
