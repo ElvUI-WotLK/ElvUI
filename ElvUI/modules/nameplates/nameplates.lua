@@ -199,7 +199,7 @@ function mod:OnUpdate(elapsed)
 end
 
 function mod:CheckFilter()
-	local name = gsub(self.oldName:GetText(), FSPAT, "");
+	local name = gsub(self.oldname:GetText(), FSPAT, "");
 	local db = E.global.nameplate["filter"][name];
 
 	if(db and db.enable) then
@@ -277,7 +277,7 @@ function mod:UpdateLevelAndName()
 		self.Name:SetText("");
 		self.Name:Hide();
 	else
-		self.Name:SetText(self.oldName:GetText());
+		self.Name:SetText(self.oldname:GetText());
 		if(not self.Name:IsShown()) then self.Name:Show(); end
 	end
 end
@@ -434,7 +434,7 @@ function mod:ColorizeAndScale()
 end
 
 function mod:SetUnitInfo()
-	local plateName = gsub(self.oldName:GetText(), FSPAT,"");
+	local plateName = gsub(self.oldname:GetText(), FSPAT,"");
 	if(self:GetAlpha() == 1 and mod.targetName and (mod.targetName == plateName)) then
 		self.guid = UnitGUID("target");
 		self.unit = "target";
@@ -509,7 +509,7 @@ function mod:OnShow()
 	mod.ColorizeAndScale(self);
 
 	mod.UpdateElement_HealthOnValueChanged(self.oldHealthBar, self.oldHealthBar:GetValue());
-	self.NameText = gsub(self.oldName:GetText(), FSPAT, "");
+	self.NameText = gsub(self.oldname:GetText(), FSPAT, "");
 
 	mod:CheckRaidIcon(self);
 
@@ -602,7 +602,7 @@ function mod:CreatePlate(frame)
 	frame.Threat = Threat;
 	frame.oldCastBar.Shield = CastBarShield;
 	frame.oldCastBar.Icon = CastBarIcon;
-	frame.oldName = Name;
+	frame.oldname = Name;
 	frame.oldHighlight = Highlight;
 	frame.oldLevel = Level;
 	frame.BossIcon = BossIcon;

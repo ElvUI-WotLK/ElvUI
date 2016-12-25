@@ -47,7 +47,7 @@ function mod:UpdateElement_Auras(frame)
 
 	if(not guid) then
 		if(RAID_CLASS_COLORS[frame.unitType]) then
-			local name = gsub(frame.oldName:GetText(), "%s%(%*%)","");
+			local name = gsub(frame.oldname:GetText(), "%s%(%*%)","");
 			guid = self.ByName[name];
 		elseif(frame.RaidIcon:IsShown()) then
 			guid = self.ByRaidIcon[frame.raidIconType];
