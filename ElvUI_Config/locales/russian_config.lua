@@ -127,11 +127,11 @@ L["Usable"] = "Можно использовать"
 L["Visibility State"] = "Статус отображения"
 L["Width Multiplier"] = "Множитель ширины"
 L[ [=[This works like a macro, you can run different situations to get the actionbar to page differently.
- Example: "[combat] 2;"]=] ] = [=[Работает как макрос. Вы можете задать различные условия для отображения разных панелей.
- Пример: "[combat] 2;"]=]
+ Example: [combat] 2;]=] ] = [=[Работает как макрос. Вы можете задать различные условия для отображения разных панелей.
+ Пример: [combat] 2;]=]
 L[ [=[This works like a macro, you can run different situations to get the actionbar to show/hide differently.
- Example: "[combat] show;hide"]=] ] = [=[Работает как макрос. Вы можете задать различные условия для показа/скрытия панели.
- Пример: "[combat] show;hide"]=]
+ Example: [combat] show;hide]=] ] = [=[Работает как макрос. Вы можете задать различные условия для показа/скрытия панели.
+ Пример: [combat] show;hide]=]
 
 --Bags
 L["Add an item or search syntax to the ignored list. Items matching the search syntax will be ignored."] = "Добавить предмет или синтаксис поиска в список игнорируемых. Предметы, соответствующие синтаксису, буду игнорироваться."

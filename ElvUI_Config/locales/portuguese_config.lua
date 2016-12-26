@@ -127,11 +127,11 @@ L["Usable"] = true;
 L["Visibility State"] = "Estado de Visibilidade"
 L["Width Multiplier"] = "Multiplicador de Comprimento"
 L[ [=[This works like a macro, you can run different situations to get the actionbar to page differently.
-Example: "[combat] 2;"]=] ] = [=[Isto funciona como uma macro, você pode executar várias situações para que a barra de ação pagine de forma diferente.
-Exemplo: "[combat] 2;"]=];
+Example: [combat] 2;]=] ] = [=[Isto funciona como uma macro, você pode executar várias situações para que a barra de ação pagine de forma diferente.
+Exemplo: [combat] 2;]=];
 L[ [=[This works like a macro, you can run different situations to get the actionbar to show/hide differently.
-Example: "[combat] show;hide"]=] ] = [=[Isto funciona como uma macro, você pode executar várias situações para mostrar/ocultar a barra de ação de forma diferente.
-Exemplo: "[combat] show;hide"]=];
+Example: [combat] show;hide]=] ] = [=[Isto funciona como uma macro, você pode executar várias situações para mostrar/ocultar a barra de ação de forma diferente.
+Exemplo: [combat] show;hide]=];
 
 --Bags
 L["Add an item or search syntax to the ignored list. Items matching the search syntax will be ignored."] = true;

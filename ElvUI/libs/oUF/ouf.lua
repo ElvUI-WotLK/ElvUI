@@ -540,12 +540,6 @@ function oUF:SpawnHeader(overrideName, template, visibility, ...)
 	header.initialConfigFunction = initialConfigFunction;
 	header.headerType = isPetHeader and "pet" or "group";
 
-	for i = 1, select("#", ...), 2 do
-		local att, val = select(i, ...)
-		if(not att) then break end
-		header:SetAttribute(att, val)
-	end
-
 	if(header:GetAttribute("showParty")) then
 		self:DisableBlizzard("party");
 	end

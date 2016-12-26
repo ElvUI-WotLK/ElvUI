@@ -15,7 +15,6 @@ local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
 local CALENDAR_COPY_EVENT, CALENDAR_PASTE_EVENT = CALENDAR_COPY_EVENT, CALENDAR_PASTE_EVENT;
 local CLASS, DEFAULT = CLASS, DEFAULT;
 
-local initialized = nil
 local colorBuffer = {}
 local editingText
 
@@ -132,7 +131,7 @@ function B:EnhanceColorPicker()
 
 	--Memory Fix, Colorpicker will call the self.func() 100x per second, causing fps/memory issues,
 	--this little script will make you have to press ok for you to notice any changes.
-	ColorPickerFrame:SetScript("OnColorSelect", function(s, r, g, b)
+	ColorPickerFrame:SetScript("OnColorSelect", function(_, r, g, b)
 		ColorSwatch:SetTexture(r, g, b)
 		if not editingText then
 			UpdateColorTexts(r, g, b)
