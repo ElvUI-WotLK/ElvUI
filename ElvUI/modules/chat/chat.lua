@@ -437,7 +437,7 @@ local function colorizeLine(text, r, g, b)
 	text = format("%s%s|r", hexCode, text) -- Add message color
 
 	return text
- end
+end
 
 function CH:GetLines(...)
 	local index = 1
