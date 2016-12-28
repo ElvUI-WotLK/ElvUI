@@ -1,4 +1,4 @@
-local E, L, P, G = unpack(select(2, ...));
+local E, L, V, P, G = unpack(select(2, ...));
 local DT = E:GetModule("DataTexts");
 
 local type, pairs, select = type, pairs, select;
@@ -108,7 +108,7 @@ local function OnEvent(self, event, ...)
 	lastPanel = self;
 end
 
-local function Click(self, btn)
+local function OnClick(self, btn)
 	DT.tooltip:Hide();
 
 	if(btn == "RightButton") then
@@ -152,7 +152,7 @@ local function OnEnter(self)
 	end
 
 	local zonec, classc, levelc, info, grouped;
-	DT.tooltip:AddDoubleLine(L["Friends List"], format(totalOnlineString, onlineFriends, numberOfFriends), tthead.r,tthead.g,tthead.b, tthead.r,tthead.g,tthead.b);
+	DT.tooltip:AddDoubleLine(L["Friends List"], format(totalOnlineString, onlineFriends, numberOfFriends), tthead.r, tthead.g, tthead.b, tthead.r, tthead.g, tthead.b);
 	if(onlineFriends > 0) then
 		DT.tooltip:AddLine(" ");
 		DT.tooltip:AddLine(worldOfWarcraftString);
@@ -181,4 +181,4 @@ local function ValueColorUpdate(hex)
 end
 E["valueColorUpdateFuncs"][ValueColorUpdate] = true;
 
-DT:RegisterDatatext("Friends", {"PLAYER_ENTERING_WORLD", "FRIENDLIST_UPDATE", "CHAT_MSG_SYSTEM"}, OnEvent, nil, Click, OnEnter);
+DT:RegisterDatatext("Friends", {"PLAYER_ENTERING_WORLD", "FRIENDLIST_UPDATE", "CHAT_MSG_SYSTEM"}, OnEvent, nil, OnClick, OnEnter);

@@ -159,6 +159,8 @@ function AFK:Toggle()
 		self:UnregisterEvent("PLAYER_FLAGS_CHANGED");
 		self:UnregisterEvent("PLAYER_REGEN_DISABLED");
 		self:UnregisterEvent("UPDATE_BATTLEFIELD_STATUS");
+
+		self:CancelAllTimers()
 	end
 end
 

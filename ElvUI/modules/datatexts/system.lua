@@ -34,9 +34,9 @@ local megaByteString = "%.2f mb";
 local totalMemory = 0;
 
 local function formatMem(memory)
-	local mult = 10^1;
+	local mult = 10 ^ 1;
 	if(memory > 999) then
-		local mem = ((memory/1024) * mult) / mult;
+		local mem = ((memory / 1024) * mult) / mult;
 		return format(megaByteString, mem);
 	else
 		local mem = (memory * mult) / mult;
@@ -89,7 +89,17 @@ local function UpdateCPU()
 	return totalCPU;
 end
 
-local function Click(_, btn)
+local function ToggleGameMenuFrame()
+	if GameMenuFrame:IsShown() then
+		PlaySound("igMainMenuQuit");
+		HideUIPanel(GameMenuFrame);
+	else
+		PlaySound("igMainMenuOpen");
+		ShowUIPanel(GameMenuFrame);
+	end
+end
+
+local function OnClick(_, btn)
 	if(btn == "RightButton") then
 		collectgarbage("collect");
 		ResetCPUUsage();
@@ -105,13 +115,13 @@ local function OnEnter(self)
 
 	UpdateMemory();
 
-	DT.tooltip:AddDoubleLine(L["Home Latency:"], format(homeLatencyString, select(3, GetNetStats())), 0.69, 0.31, 0.31,0.84, 0.75, 0.65);
+	DT.tooltip:AddDoubleLine(L["Home Latency:"], format(homeLatencyString, select(3, GetNetStats())), 0.69, 0.31, 0.31, 0.84, 0.75, 0.65);
 
 	local totalCPU = nil;
-	DT.tooltip:AddDoubleLine(L["Total Memory:"], formatMem(totalMemory), 0.69, 0.31, 0.31,0.84, 0.75, 0.65);
+	DT.tooltip:AddDoubleLine(L["Total Memory:"], formatMem(totalMemory), 0.69, 0.31, 0.31, 0.84, 0.75, 0.65);
 	if(cpuProfiling) then
 		totalCPU = UpdateCPU();
-		DT.tooltip:AddDoubleLine(L["Total CPU:"], format(homeLatencyString, totalCPU), 0.69, 0.31, 0.31,0.84, 0.75, 0.65);
+		DT.tooltip:AddDoubleLine(L["Total CPU:"], format(homeLatencyString, totalCPU), 0.69, 0.31, 0.31, 0.84, 0.75, 0.65);
 	end
 
 	local red, green;
@@ -147,7 +157,7 @@ local function OnLeave()
 	DT.tooltip:Hide();
 end
 
-local function Update(self, t)
+local function OnUpdate(self, t)
 	int = int - t;
 	int2 = int2 - t;
 
@@ -171,4 +181,4 @@ local function Update(self, t)
 	end
 end
 
-DT:RegisterDatatext("System", nil, nil, Update, Click, OnEnter, OnLeave);
+DT:RegisterDatatext("System", nil, nil, OnUpdate, OnClick, OnEnter, OnLeave);
