@@ -658,7 +658,9 @@ L["Add a spell to the filter. Use spell ID if you don't want to match all auras 
 L["Add a spell to the filter."] = "Добавить заклинание в фильтр"
 L["Add Spell ID or Name"] = "Добавить ID или имя заклинания"
 L["Add SpellID"] = "Добавить ID заклинания"
+L["Additional Filter Override"] = "Принудительный доп. фильтр.";
 L["Additional Filter"] = "Дополнительный фильтр"
+L["Allow non-personal auras from additional filter when 'Block Non-Personal Auras' is enabled."] = "Пропускает не личные ауры из дополнительного фильтра, когда включено блокирование не персональных аур.";
 L["Allow Whitelisted Auras"] = "Разрешиь ауры из белого списка"
 L["An X offset (in pixels) to be used when anchoring new frames."] = "Отступ по оси X (в пикселях) при фиксации новой рамки."
 L["An Y offset (in pixels) to be used when anchoring new frames."] = "Отступ по оси Y (в пикселях) при фиксации новой рамки."
@@ -680,7 +682,7 @@ L["Block Auras Without Duration"] = "Блокировать ауры без дл
 L["Block Blacklisted Auras"] = "Блокировать ауры из черного списка"
 L["Block Non-Dispellable Auras"] = "Блокировать не развеиваемые ауры"
 L["Block Non-Personal Auras"] = "Блокировать чужие ауры"
-L["Block Raid Buffs"] = true;
+L["Block Raid Buffs"] = "Блокировать рейдовые баффы";
 L["Blood"] = "Кровь"
 L["Borders"] = "Границы"
 L["Buff Indicator"] = "Индикатор баффов"
@@ -762,6 +764,7 @@ L["Don't display auras that are longer than this duration (in seconds). Set to z
 L["Don't display auras that are not yours."] = "Не отображать ауры, наложенные не вами."
 L["Don't display auras that cannot be purged or dispelled by your class."] = "Не отображать ауры, которые не могут быть развеяны вашим классом."
 L["Don't display auras that have no duration."] = "Не отображать ауры без длительности"
+L["Don't display raid buffs such as Blessing of Kings or Mark of the Wild."] = "Не отображать рейдовые баффы, такие как Каска или Лапа.";
 L["Down"] = "Вниз"
 L["Duration Reverse"] = "Длительность, обратное"
 L["Duration Text"] = "Текст длительности"

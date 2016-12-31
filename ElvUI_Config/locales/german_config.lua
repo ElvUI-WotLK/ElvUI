@@ -658,7 +658,9 @@ L["Add a spell to the filter. Use spell ID if you don't want to match all auras 
 L["Add a spell to the filter."] = "Zauber zum Filter hinzufügen"
 L["Add Spell ID or Name"] = "Zauber ID oder Name hinzufügen"
 L["Add SpellID"] = "ZauberID hinzufügen"
+L["Additional Filter Override"] = true;
 L["Additional Filter"] = "Zusätzlicher Filter"
+L["Allow non-personal auras from additional filter when 'Block Non-Personal Auras' is enabled."] = true;
 L["Allow Whitelisted Auras"] = "Erlaube Whitelisted Auren"
 L["An X offset (in pixels) to be used when anchoring new frames."] = "X-Versatz (in Pixeln) der verwendet werden soll um neue Fenster zu ankern"
 L["An Y offset (in pixels) to be used when anchoring new frames."] = "Y-Versatz (in Pixeln) der verwendet werden soll um neue Fenster zu ankern"
@@ -762,6 +764,7 @@ L["Don't display auras that are longer than this duration (in seconds). Set to z
 L["Don't display auras that are not yours."] = "Zeige keine Auren die nicht von dir sind."
 L["Don't display auras that cannot be purged or dispelled by your class."] = "Zeige keine Auren die nicht von deiner Klasse entzaubert oder gereinigt werden kann."
 L["Don't display auras that have no duration."] = "Zeige keine Auren die keine Laufzeit haben."
+L["Don't display raid buffs such as Blessing of Kings or Mark of the Wild."] = true;
 L["Down"] = "Hinunter"
 L["Duration Reverse"] = "Dauer umkehren"
 L["Duration Text"] = "Dauer Text"

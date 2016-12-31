@@ -660,6 +660,12 @@ local function GetOptionsTable_Auras(friendlyUnitOnly, auraType, isGroupFrame, u
 				return filters;
 			end
 		};
+		config.args.filters.args.additionalFilterAllowNonPersonal = {
+			order = 20,
+			type = "toggle",
+			name = L["Additional Filter Override"],
+			desc = L["Allow non-personal auras from additional filter when 'Block Non-Personal Auras' is enabled."]
+		};
 	else
 		config.args.filters.args.playerOnly = {
 			order = 14,
@@ -821,6 +827,12 @@ local function GetOptionsTable_Auras(friendlyUnitOnly, auraType, isGroupFrame, u
 				end
 				return filters;
 			end
+		};
+		config.args.filters.args.additionalFilterAllowNonPersonal = {
+			order = 20,
+			type = "toggle",
+			name = L["Additional Filter Override"],
+			desc = L["Allow non-personal auras from additional filter when 'Block Non-Personal Auras' is enabled."]
 		};
 	end
 
@@ -1172,6 +1184,12 @@ local function GetOptionsTable_AuraBars(friendlyOnly, updateFunc, groupName)
 				return filters;
 			end
 		};
+		config.args.filters.args.additionalFilterAllowNonPersonal = {
+			order = 17,
+			type = "toggle",
+			name = L["Additional Filter Override"],
+			desc = L["Allow non-personal auras from additional filter when 'Block Non-Personal Auras' is enabled."]
+		};
 	else
 		config.args.filters.args.playerOnly = {
 			order = 10,
@@ -1330,6 +1348,12 @@ local function GetOptionsTable_AuraBars(friendlyOnly, updateFunc, groupName)
 				end
 				return filters;
 			end
+		};
+		config.args.filters.args.additionalFilterAllowNonPersonal = {
+			order = 17,
+			type = "toggle",
+			name = L["Additional Filter Override"],
+			desc = L["Allow non-personal auras from additional filter when 'Block Non-Personal Auras' is enabled."]
 		};
 	end
 

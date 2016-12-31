@@ -658,7 +658,9 @@ L["Add a spell to the filter. Use spell ID if you don't want to match all auras 
 L["Add a spell to the filter."] = "添加一個技能到過濾器"
 L["Add Spell ID or Name"] = true;
 L["Add SpellID"] = "添加技能ID"
+L["Additional Filter Override"] = true;
 L["Additional Filter"] = "額外的過濾器"
+L["Allow non-personal auras from additional filter when 'Block Non-Personal Auras' is enabled."] = true;
 L["Allow Whitelisted Auras"] = "允許白名單中的光環"
 L["An X offset (in pixels) to be used when anchoring new frames."] = true;
 L["An Y offset (in pixels) to be used when anchoring new frames."] = true;
@@ -762,6 +764,7 @@ L["Don't display auras that are longer than this duration (in seconds). Set to z
 L["Don't display auras that are not yours."] = "不顯示不是你施放的光環."
 L["Don't display auras that cannot be purged or dispelled by your class."] = "不顯示你不能驅散的光環."
 L["Don't display auras that have no duration."] = "不限時沒有持續時間的光環."
+L["Don't display raid buffs such as Blessing of Kings or Mark of the Wild."] = true;
 L["Down"] = "下"
 L["Duration Reverse"] = "持續時間反轉"
 L["Duration Text"] = true;

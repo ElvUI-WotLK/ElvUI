@@ -193,8 +193,9 @@ function UF:AuraBarFilter(unit, name, _, _, _, debuffType, duration, _, unitCast
 		else
 			returnValue = false;
 		end
-
-		passPlayerOnlyCheck = returnValue;
+		if(not db.additionalFilterAllowNonPersonal) then
+			passPlayerOnlyCheck = returnValue;
+		end
 		playerOnlyFilter = true;
 	end
 

@@ -658,7 +658,9 @@ L["Add a spell to the filter. Use spell ID if you don't want to match all auras 
 L["Add a spell to the filter."] = "Añade un hechizo al filtro."
 L["Add Spell ID or Name"] = true;
 L["Add SpellID"] = "Añadir ID de Hechizo"
+L["Additional Filter Override"] = true;
 L["Additional Filter"] = "Filtro Adicional"
+L["Allow non-personal auras from additional filter when 'Block Non-Personal Auras' is enabled."] = true;
 L["Allow Whitelisted Auras"] = "Permitir Auras de la Lista Blanca"
 L["An X offset (in pixels) to be used when anchoring new frames."] = true;
 L["An Y offset (in pixels) to be used when anchoring new frames."] = true;
@@ -762,6 +764,7 @@ L["Don't display auras that are longer than this duration (in seconds). Set to z
 L["Don't display auras that are not yours."] = "No mostrar auras que no sean tuyas."
 L["Don't display auras that cannot be purged or dispelled by your class."] = "No mostrar auras que no puedan ser purgadas o disipadas por tu clase."
 L["Don't display auras that have no duration."] = "No mostrar auras sin duración."
+L["Don't display raid buffs such as Blessing of Kings or Mark of the Wild."] = true;
 L["Down"] = "Abajo"
 L["Duration Reverse"] = "Revertir Duración"
 L["Duration Text"] = true;

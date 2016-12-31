@@ -706,7 +706,9 @@ L["Add a spell to the filter. Use spell ID if you don't want to match all auras 
 L["Add a spell to the filter."] = "필터에 주문을 추가합니다."
 L["Add Spell ID or Name"] = true;
 L["Add SpellID"] = "주문 ID 추가"
+L["Additional Filter Override"] = true;
 L["Additional Filter"] = "추가적용할 필터"
+L["Allow non-personal auras from additional filter when 'Block Non-Personal Auras' is enabled."] = true;
 L["Allow Whitelisted Auras"] = "요구목록에 있는건 표시"
 L["An X offset (in pixels) to be used when anchoring new frames."] = "기준 프레임에서 가로로 얼마만큼 떨어져 있을지를 결정합니다."
 L["An Y offset (in pixels) to be used when anchoring new frames."] = "기준 프레임에서 세로로 얼마만큼 떨어져 있을지를 결정합니다."
@@ -810,6 +812,7 @@ L["Don't display auras that are longer than this duration (in seconds). Set to z
 L["Don't display auras that are not yours."] = "플레이어가 직접 건 것이 아닌 효과들을 표시하지 않게 합니다."
 L["Don't display auras that cannot be purged or dispelled by your class."] = "플레이어가 직접 끄거나 해제할 수 없는 종류의 효과들을 표시하지 않게 합니다."
 L["Don't display auras that have no duration."] = "지속시간이 무한인 효과들을 표시하지 않게 합니다.|n|n즉, 유효시간이 있는 효과들만 보이게 됩니다."
+L["Don't display raid buffs such as Blessing of Kings or Mark of the Wild."] = true;
 L["Down"] = "아래로"
 L["Duration Reverse"] = "총 지속시간이 짧은 순"
 L["Duration Text"] = true;
