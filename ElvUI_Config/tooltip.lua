@@ -178,6 +178,7 @@ E.Options.args.tooltip = {
 			name = L["Visibility"],
 			get = function(info) return E.db.tooltip.visibility[ info[#info] ]; end,
 			set = function(info, value) E.db.tooltip.visibility[ info[#info] ] = value; end,
+			disabled = function() return not E.Tooltip; end,
 			args = {
 				header = {
 					order = 0,
@@ -237,6 +238,7 @@ E.Options.args.tooltip = {
 			name = L["Health Bar"],
 			get = function(info) return E.db.tooltip.healthBar[ info[#info] ]; end,
 			set = function(info, value) E.db.tooltip.healthBar[ info[#info] ] = value; end,
+			disabled = function() return not E.Tooltip; end,
 			args = {
 				header = {
 					order = 0,

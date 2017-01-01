@@ -487,6 +487,7 @@ E.Options.args.nameplate = {
 			name = L["Target Indicator"],
 			get = function(info) return E.db.nameplate.targetIndicator[ info[#info] ] end,
 			set = function(info, value) E.db.nameplate.targetIndicator[ info[#info] ] = value; WorldFrame.elapsed = 3; NP:UpdateAllPlates() end,
+			disabled = function() return not E.NamePlates; end,
 			args = {
 				header = {
 					order = 1,
@@ -580,6 +581,7 @@ E.Options.args.nameplate = {
 			name = L["Raid Icon"],
 			get = function(info) return E.db.nameplate.raidIcon[ info[#info] ] end,
 			set = function(info, value) E.db.nameplate.raidIcon[ info[#info] ] = value; NP:UpdateAllPlates() end,
+			disabled = function() return not E.NamePlates; end,
 			args = {
 				header = {
 					order = 1,
@@ -618,6 +620,7 @@ E.Options.args.nameplate = {
 			name = L["Buffs"],
 			get = function(info) return E.db.nameplate.buffs[ info[#info] ]; end,
 			set = function(info, value) E.db.nameplate.buffs[ info[#info] ] = value; NP:UpdateAllPlates(); end,
+			disabled = function() return not E.NamePlates; end,
 			args = {
 				header = {
 					order = 1,
@@ -685,6 +688,7 @@ E.Options.args.nameplate = {
 			name = L["Debuffs"],
 			get = function(info) return E.db.nameplate.debuffs[ info[#info] ]; end,
 			set = function(info, value) E.db.nameplate.debuffs[ info[#info] ] = value; NP:UpdateAllPlates(); end,
+			disabled = function() return not E.NamePlates; end,
 			args = {
 				header = {
 					order = 1,
@@ -760,6 +764,7 @@ E.Options.args.nameplate = {
 				local t = E.db.nameplate.threat[ info[#info] ]
 				t.r, t.g, t.b = r, g, b
 			end,
+			disabled = function() return not E.NamePlates; end,
 			args = {
 				header = {
 					order = 1,

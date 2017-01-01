@@ -9,10 +9,10 @@ local floor = floor;
 local format, find, match, strrep, len, sub, gsub = string.format, string.find, string.match, strrep, string.len, string.sub, string.gsub;
 
 local CreateFrame = CreateFrame;
-local GetBonusBarOffset = GetBonusBarOffset;
 local GetCVar = GetCVar;
 local GetCombatRatingBonus = GetCombatRatingBonus;
 local GetFunctionCPUUsage = GetFunctionCPUUsage;
+local GetShapeshiftForm = GetShapeshiftForm;
 local GetSpellInfo = GetSpellInfo;
 local InCombatLockdown = InCombatLockdown;
 local IsAddOnLoaded = IsAddOnLoaded;
@@ -316,20 +316,22 @@ E["snapBars"][#E["snapBars"] + 1] = E.UIParent;
 E.HiddenFrame = CreateFrame("Frame");
 E.HiddenFrame:Hide();
 
-function E:CheckRole()
+function E:CheckRole(event, unit)
 	if event == "UNIT_AURA" and unit ~= "player" then return end
-	if (E.myclass == "PALADIN" and UnitBuff("player", GetSpellInfo(25780))) and GetCombatRatingBonus(CR_DEFENSE_SKILL) > 100 or
-	(E.myclass == "WARRIOR" and GetBonusBarOffset() == 2) or
-	(E.myclass == "DEATHKNIGHT" and UnitBuff("player", GetSpellInfo(48263))) or
-	(E.myclass == "DRUID" and GetBonusBarOffset() == 3) then
+
+	if (E.myclass == "PALADIN" and UnitBuff("player", GetSpellInfo(25780))) and GetCombatRatingBonus(CR_DEFENSE_SKILL) >= 100
+	or (E.myclass == "WARRIOR" and GetShapeshiftForm() == 2)
+	or (E.myclass == "DEATHKNIGHT" and GetShapeshiftForm() == 2)
+	or (E.myclass == "DRUID" and GetShapeshiftForm() == 1)
+	then
 		E.Role = "Tank"
 	else
-		local playerint = select(2, UnitStat("player", 4))
-		local playeragi	= select(2, UnitStat("player", 2))
+		local int = select(2, UnitStat("player", 4))
+		local agi = select(2, UnitStat("player", 2))
 		local base, posBuff, negBuff = UnitAttackPower("player");
-		local playerap = base + posBuff + negBuff;
+		local ap = base + posBuff + negBuff;
 
-		if ((playerap > playerint) or (playeragi > playerint)) and not (UnitBuff("player", GetSpellInfo(24858)) or UnitBuff("player", GetSpellInfo(65139))) then
+		if ((ap > int) or (agi > int)) and not (UnitBuff("player", GetSpellInfo(24858)) or UnitBuff("player", GetSpellInfo(65139))) then
 			E.Role = "Melee"
 		else
 			E.Role = "Caster"

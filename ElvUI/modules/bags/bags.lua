@@ -356,7 +356,7 @@ function B:UpdateCooldowns()
 		for slotID = 1, GetContainerNumSlots(bagID) do
 			local start, duration, enable = GetContainerItemCooldown(bagID, slotID)
 			CooldownFrame_SetTimer(self.Bags[bagID][slotID].cooldown, start, duration, enable)
-			if ( duration > 0 and enable == 0 ) then
+			if (duration > 0 and enable == 0) then
 				SetItemButtonTextureVertexColor(self.Bags[bagID][slotID], 0.4, 0.4, 0.4);
 			else
 				SetItemButtonTextureVertexColor(self.Bags[bagID][slotID], 1, 1, 1);
@@ -736,6 +736,7 @@ function B:OnEvent(event, ...)
 			B:SetSearch(SEARCH_STRING);
 		end
 	elseif event == "BAG_UPDATE_COOLDOWN" then
+		if not self:IsShown() then return; end
 		self:UpdateCooldowns();
 	elseif event == "PLAYERBANKSLOTS_CHANGED" then
 		self:UpdateAllSlots()
@@ -1213,6 +1214,10 @@ function B:ContructContainerFrame(name, isBank)
 			end
 		end)
 	end
+
+	f:SetScript("OnShow", function(self)
+		self:UpdateCooldowns();
+	end);
 
 	tinsert(UISpecialFrames, f:GetName()) --Keep an eye on this for taints..
 	tinsert(self.BagFrames, f)

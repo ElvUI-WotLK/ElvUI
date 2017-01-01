@@ -227,14 +227,14 @@ local function ExportImport_Open(mode)
 	local label1 = AceGUI:Create("Label");
 	local font = GameFontHighlightSmall:GetFont();
 	label1:SetFont(font, 14);
-	label1:SetText(".");
+	label1:SetText(" ");
 	label1:SetWidth(800);
 	frame:AddChild(label1);
 
 	local label2 = AceGUI:Create("Label");
 	local font = GameFontHighlightSmall:GetFont();
 	label2:SetFont(font, 14);
-	label2:SetText(".\n.")
+	label2:SetText(" \n ")
 	label2:SetWidth(800);
 	frame:AddChild(label2);
 
@@ -260,8 +260,8 @@ local function ExportImport_Open(mode)
 		exportButton:SetText(L["Export Now"]);
 		exportButton:SetAutoWidth(true);
 		local function OnClick(self)
-			label1:SetText("");
-			label2:SetText("");
+			label1:SetText(" ");
+			label2:SetText(" ");
 
 			local profileType, exportFormat = profileTypeDropdown:GetValue(), exportFormatDropdown:GetValue();
 			local profileKey, profileExport = D:ExportProfile(profileType, exportFormat);
@@ -295,8 +295,8 @@ local function ExportImport_Open(mode)
 		importButton:SetText(L["Import Now"]);
 		importButton:SetAutoWidth(true);
 		importButton:SetCallback("OnClick", function()
-			label1:SetText("");
-			label2:SetText("");
+			label1:SetText(" ");
+			label2:SetText(" ");
 
 			local text;
 			local success = D:ImportProfile(box:GetText());
@@ -314,8 +314,8 @@ local function ExportImport_Open(mode)
 		decodeButton:SetText(L["Decode Text"]);
 		decodeButton:SetAutoWidth(true);
 		decodeButton:SetCallback("OnClick", function()
-			label1:SetText("");
-			label2:SetText("");
+			label1:SetText(" ");
+			label2:SetText(" ");
 			local decodedText;
 			local profileType, profileKey, profileData = D:Decode(box:GetText());
 			if(profileData) then
@@ -330,8 +330,8 @@ local function ExportImport_Open(mode)
 		local function OnTextChanged()
 			local text = box:GetText();
 			if(text == "") then
-				label1:SetText("");
-				label2:SetText("");
+				label1:SetText(" ");
+				label2:SetText(" ");
 				importButton:SetDisabled(true);
 				decodeButton:SetDisabled(true)
 			elseif(oldText ~= text) then
@@ -345,7 +345,7 @@ local function ExportImport_Open(mode)
 				local profileType, profileKey = D:Decode(text);
 				if not profileType or (profileType and profileType == "profile" and not profileKey) then
 					label1:SetText(L["Error decoding data. Import string may be corrupted!"]);
-					label2:SetText("");
+					label2:SetText(" ");
 					importButton:SetDisabled(true);
 					decodeButton:SetDisabled(true);
 				else
@@ -381,8 +381,8 @@ local function ExportImport_Open(mode)
 		ACD:Open("ElvUI");
 	end);
 
-	label1:SetText("");
-	label2:SetText("");
+	label1:SetText(" ");
+	label2:SetText(" ");
 
 	ACD:Close("ElvUI");
 

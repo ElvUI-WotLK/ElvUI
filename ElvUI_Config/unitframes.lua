@@ -6165,7 +6165,7 @@ E.Options.args.unitframe.args.assist = { -- Помощники
 	args = {
 		resetSettings = {
 			type = "execute",
-			order = 2,
+			order = 1,
 			name = L["Restore Defaults"],
 			func = function(info, value) UF:ResetUnitSettings("assist"); end,
 		},
