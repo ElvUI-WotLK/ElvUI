@@ -12,6 +12,7 @@ RB.Spell1Buffs = {
 	53755, --"Flask of the Frost Wyrm",
 	54212, --"Flask of Pure Mojo",
 	53760, --"Flask of Endless Rage",
+	53752, --"Lesser Flask of Toughness" (50 Resilience),
 	17627, --"Flask of Distilled Wisdom",
 
 	33721, --"Spellpower Elixir",
