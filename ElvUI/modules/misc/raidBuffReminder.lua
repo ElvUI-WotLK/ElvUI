@@ -105,14 +105,12 @@ function RB:UpdateReminderTime(elapsed)
 
 	if(self.nextupdate > 0) then
 		self.nextupdate = self.nextupdate - elapsed;
-
 		return;
 	end
 
 	if(self.expiration <= 0) then
 		self.timer:SetText("");
 		self:SetScript("OnUpdate", nil);
-
 		return;
 	end
 
@@ -122,23 +120,11 @@ function RB:UpdateReminderTime(elapsed)
 end
 
 function RB:UpdateReminder(event, unit)
-	if(event == "UNIT_AURA" and unit ~= "player") then
-		return;
-	end
-
-	local frame = self.frame;
-
-	if(E.Role == "Caster") then
-		self.Spell5Buffs = self.CasterSpell5Buffs;
-		self.Spell6Buffs = self.CasterSpell6Buffs;
-	else
-		self.Spell5Buffs = self.MeleeSpell5Buffs;
-		self.Spell6Buffs = self.MeleeSpell6Buffs;
-	end
+	if(event == "UNIT_AURA" and unit ~= "player") then return; end
 
 	for i = 1, 6 do
-		local hasBuff, texture, duration, expirationTime = self:CheckFilterForActiveBuff(self["Spell"..i.."Buffs"]);
-		local button = frame[i];
+		local hasBuff, texture, duration, expirationTime = self:CheckFilterForActiveBuff(self["Spell" .. i .. "Buffs"]);
+		local button = self.frame[i];
 
 		if(hasBuff) then
 			button.expiration = expirationTime - GetTime();
@@ -187,35 +173,27 @@ function RB:CreateButton()
 end
 
 function RB:EnableRB()
-	ElvUI_ReminderBuffs:Show()
-	self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", "UpdateReminder");
-	self:RegisterEvent("UNIT_INVENTORY_CHANGED", "UpdateReminder");
+	ElvUI_ReminderBuffs:Show();
 	self:RegisterEvent("UNIT_AURA", "UpdateReminder");
-	self:RegisterEvent("PLAYER_REGEN_ENABLED", "UpdateReminder");
-	self:RegisterEvent("PLAYER_REGEN_DISABLED", "UpdateReminder");
-	self:RegisterEvent("PLAYER_ENTERING_WORLD", "UpdateReminder");
-	self:RegisterEvent("UPDATE_BONUS_ACTIONBAR", "UpdateReminder");
+	self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", "UpdateReminder");
 	self:RegisterEvent("CHARACTER_POINTS_CHANGED", "UpdateReminder");
-	self:RegisterEvent("ZONE_CHANGED_NEW_AREA", "UpdateReminder");
+	E.RegisterCallback(self, "RoleChanged", "UpdateSettings");
 	self:UpdateReminder();
 end
 
 function RB:DisableRB()
-	ElvUI_ReminderBuffs:Hide()
-	self:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED");
-	self:UnregisterEvent("UNIT_INVENTORY_CHANGED");
+	ElvUI_ReminderBuffs:Hide();
 	self:UnregisterEvent("UNIT_AURA");
-	self:UnregisterEvent("PLAYER_REGEN_ENABLED");
-	self:UnregisterEvent("PLAYER_REGEN_DISABLED");
-	self:UnregisterEvent("PLAYER_ENTERING_WORLD");
-	self:UnregisterEvent("UPDATE_BONUS_ACTIONBAR");
+	self:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED");
 	self:UnregisterEvent("CHARACTER_POINTS_CHANGED");
-	self:UnregisterEvent("ZONE_CHANGED_NEW_AREA");
+	E.UnregisterCallback(self, "RoleChanged", "UpdateSettings");
 end
 
 function RB:UpdateSettings(isCallback)
 	local frame = self.frame;
 	frame:Width(E.RBRWidth);
+
+	self:UpdateDefaultIcons();
 
 	for i = 1, 6 do
 		local button = frame[i];
@@ -251,6 +229,8 @@ function RB:UpdateSettings(isCallback)
 		else
 			RB:DisableRB();
 		end
+	else
+		self:UpdateReminder();
 	end
 end
 
@@ -273,9 +253,7 @@ function RB:UpdatePosition()
 	end
 end
 
-function RB:Initialize()
-	self.db = E.db.general.reminder;
-
+function RB:UpdateDefaultIcons()
 	self.DefaultIcons = {
 		[1] = "Interface\\Icons\\INV_Potion_97",
 		[2] = "Interface\\Icons\\Spell_Misc_Food",
@@ -285,8 +263,19 @@ function RB:Initialize()
 		[6] = (E.Role == "Caster" and "Interface\\Icons\\Spell_Holy_GreaterBlessingofWisdom") or "Interface\\Icons\\Ability_Warrior_BattleShout"
 	};
 
+	if(E.Role == "Caster") then
+		self.Spell5Buffs = self.CasterSpell5Buffs;
+		self.Spell6Buffs = self.CasterSpell6Buffs;
+	else
+		self.Spell5Buffs = self.MeleeSpell5Buffs;
+		self.Spell6Buffs = self.MeleeSpell6Buffs;
+	end
+end
+
+function RB:Initialize()
+	self.db = E.db.general.reminder;
+
 	local frame = CreateFrame("Frame", "ElvUI_ReminderBuffs", Minimap);
-	--frame:SetTemplate("Default");
 	frame:Width(E.RBRWidth);
 	if(E.db.general.reminder.position == "LEFT") then
 		frame:Point("TOPRIGHT", Minimap.backdrop, "TOPLEFT", E.Border - E.Spacing*3, 0);

@@ -9,20 +9,19 @@ local floor = floor;
 local format, find, match, strrep, len, sub, gsub = string.format, string.find, string.match, strrep, string.len, string.sub, string.gsub;
 
 local CreateFrame = CreateFrame;
+local GetActiveTalentGroup = GetActiveTalentGroup;
 local GetCVar = GetCVar;
-local GetCombatRatingBonus = GetCombatRatingBonus;
 local GetFunctionCPUUsage = GetFunctionCPUUsage;
-local GetShapeshiftForm = GetShapeshiftForm;
-local GetSpellInfo = GetSpellInfo;
+local GetTalentTabInfo = GetTalentTabInfo;
 local InCombatLockdown = InCombatLockdown;
 local IsAddOnLoaded = IsAddOnLoaded;
 local IsInInstance, GetNumPartyMembers, GetNumRaidMembers = IsInInstance, GetNumPartyMembers, GetNumRaidMembers;
 local RequestBattlefieldScoreData = RequestBattlefieldScoreData;
 local SendAddonMessage = SendAddonMessage;
-local UnitStat, UnitAttackPower, UnitBuff = UnitStat, UnitAttackPower, UnitBuff;
-local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
 local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
 local ERR_NOT_IN_COMBAT = ERR_NOT_IN_COMBAT;
+local MAX_TALENT_TABS = MAX_TALENT_TABS;
+local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
 
 E.myclass = select(2, UnitClass("player")); -- Constants
 E.myrace = select(2, UnitRace("player"));
@@ -87,6 +86,46 @@ E.DispelClasses = {
 		["Poison"] = true
 	},
 };
+
+E.HealingClasses = {
+	PALADIN = 1,
+	SHAMAN = 3,
+	DRUID = 3,
+	PRIEST = {1, 2}
+};
+
+E.ClassRole = {
+	PALADIN = {
+		[1] = "Caster",
+		[2] = "Tank",
+		[3] = "Melee"
+	},
+	PRIEST = "Caster",
+	WARLOCK = "Caster",
+	WARRIOR = {
+		[1] = "Melee",
+		[2] = "Melee",
+		[3] = "Tank"
+	},
+	HUNTER = "Melee",
+	SHAMAN = {
+		[1] = "Caster",
+		[2] = "Melee",
+		[3] = "Caster"
+	},
+	ROGUE = "Melee",
+	MAGE = "Caster",
+	DEATHKNIGHT = {
+		[1] = "Tank",
+		[2] = "Melee",
+		[3] = "Melee"
+	},
+	DRUID = {
+		[1] = "Caster",
+		[2] = "Melee",
+		[3] = "Caster"
+	}
+}
 
 E.noop = function() end;
 
@@ -316,34 +355,56 @@ E["snapBars"][#E["snapBars"] + 1] = E.UIParent;
 E.HiddenFrame = CreateFrame("Frame");
 E.HiddenFrame:Hide();
 
-function E:CheckRole(event, unit)
-	if event == "UNIT_AURA" and unit ~= "player" then return end
+function E:IsDispellableByMe(debuffType)
+	if(not self.DispelClasses[self.myclass]) then return; end
 
-	if (E.myclass == "PALADIN" and UnitBuff("player", GetSpellInfo(25780))) and GetCombatRatingBonus(CR_DEFENSE_SKILL) >= 100
-	or (E.myclass == "WARRIOR" and GetShapeshiftForm() == 2)
-	or (E.myclass == "DEATHKNIGHT" and GetShapeshiftForm() == 2)
-	or (E.myclass == "DRUID" and GetShapeshiftForm() == 1)
-	then
-		E.Role = "Tank"
-	else
-		local int = select(2, UnitStat("player", 4))
-		local agi = select(2, UnitStat("player", 2))
-		local base, posBuff, negBuff = UnitAttackPower("player");
-		local ap = base + posBuff + negBuff;
-
-		if ((ap > int) or (agi > int)) and not (UnitBuff("player", GetSpellInfo(24858)) or UnitBuff("player", GetSpellInfo(65139))) then
-			E.Role = "Melee"
-		else
-			E.Role = "Caster"
-		end
+	if(self.DispelClasses[self.myclass][debuffType]) then
+		return true;
 	end
 end
 
-function E:IsDispellableByMe(debuffType)
-	if not self.DispelClasses[E.myclass] then return; end
+function E:GetPrimaryTalentTree(talantGroup)
+	local maxPoints, specIdx, specName, specIcon = 0
 
-	if self.DispelClasses[E.myclass][debuffType] then
-		return true;
+	for i = 1, MAX_TALENT_TABS do
+		local name, icon, pointsSpent = GetTalentTabInfo(i, nil, nil, talantGroup)
+		if maxPoints < pointsSpent then
+			maxPoints = pointsSpent
+			specIdx = i
+			specName = name
+			specIcon = icon
+		end
+	end
+
+	if not specName then
+		specName = "None"
+	end
+	if not specIcon then
+		specIcon = "Interface\\Icons\\INV_Misc_QuestionMark"
+	end
+
+	return specIdx, specName, specIcon
+end
+
+function E:CheckRole()
+	local talentTree = self:GetPrimaryTalentTree(GetActiveTalentGroup());
+	local role;
+
+	if(type(self.ClassRole[self.myclass]) == "string") then
+		role = self.ClassRole[self.myclass];
+	elseif(talentTree) then
+		if(self.myclass == "DRUID" and talentTree == 2) then
+			role = select(5, GetTalentInfo(talentTree, 22)) > 0 and "Tank" or "Melee";
+		else
+			role = self.ClassRole[self.myclass][talentTree];
+		end
+	end
+
+	if(not role) then role = "Melee"; end
+
+	if(self.Role ~= role) then
+		self.Role = role;
+		self.callbacks:Fire("RoleChanged");
 	end
 end
 
@@ -970,11 +1031,8 @@ function E:Initialize()
 
 	self:UpdateMedia();
 	self:UpdateFrameTemplates();
-	self:RegisterEvent("UNIT_AURA", "CheckRole");
-	self:RegisterEvent("UPDATE_BONUS_ACTIONBAR", "CheckRole");
 	self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", "CheckRole");
 	self:RegisterEvent("CHARACTER_POINTS_CHANGED", "CheckRole");
-	self:RegisterEvent("UNIT_INVENTORY_CHANGED", "CheckRole");
 	self:RegisterEvent("UPDATE_FLOATING_CHAT_WINDOWS", "UIScale");
 	self:RegisterEvent("PLAYER_ENTERING_WORLD");
 
