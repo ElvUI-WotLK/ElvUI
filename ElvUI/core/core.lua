@@ -259,10 +259,11 @@ function E:RequestBGInfo()
 end
 
 function E:PLAYER_ENTERING_WORLD()
-	self:CheckRole()
 	if(not self.MediaUpdated) then
 		self:UpdateMedia();
 		self.MediaUpdated = true;
+	else
+		self:ScheduleTimer("CheckRole", 0.01);
 	end
 
 	local _, instanceType = IsInInstance();
@@ -365,9 +366,9 @@ end
 
 function E:GetTalentSpecInfo(isInspect)
 	local talantGroup = GetActiveTalentGroup(isInspect)
-	local maxPoints, specIdx, specName, specIcon = 0
-
-	for i = 1, MAX_TALENT_TABS do
+	local maxPoints, specIdx, specName, specIcon = 0, 0
+	if(not IsAddOnLoaded("Blizzard_TalentUI")) then LoadAddOn("Blizzard_TalentUI"); end
+	for i = 1, 3 do
 		local name, icon, pointsSpent = GetTalentTabInfo(i, isInspect, nil, talantGroup)
 		if maxPoints < pointsSpent then
 			maxPoints = pointsSpent
@@ -1009,7 +1010,7 @@ function E:Initialize()
 	self:CheckIncompatible();
 	self:DBConversions();
 
-	self:CheckRole();
+	self:ScheduleTimer("CheckRole", 0.01);
 	self:UIScale("PLAYER_LOGIN");
 
 	self:LoadCommands();
