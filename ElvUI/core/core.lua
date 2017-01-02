@@ -367,7 +367,7 @@ end
 function E:GetTalentSpecInfo(isInspect)
 	local talantGroup = GetActiveTalentGroup(isInspect)
 	local maxPoints, specIdx, specName, specIcon = 0, 0
-	if(not IsAddOnLoaded("Blizzard_TalentUI")) then LoadAddOn("Blizzard_TalentUI"); end
+
 	for i = 1, 3 do
 		local name, icon, pointsSpent = GetTalentTabInfo(i, isInspect, nil, talantGroup)
 		if maxPoints < pointsSpent then
