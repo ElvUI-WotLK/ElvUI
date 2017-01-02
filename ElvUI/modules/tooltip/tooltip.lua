@@ -356,21 +356,6 @@ function TT:GetLevelLine(tt, offset)
 	end
 end
 
-local tree = {};
-function TT:GetTalentSpec(unit, isInspect)
-	local group = GetActiveTalentGroup(isInspect);
-	local maxTree, _ = 1;
-	for i = 1, 3 do
-		_, _, tree[i] = GetTalentTabInfo(i, isInspect, nil, group);
-		if(tree[i] > tree[maxTree]) then
-			maxTree = i;
-		end
-	end
-	local name = GetTalentTabInfo(maxTree, isInspect, nil, group);
-
-	return name;
-end
-
 function TT:INSPECT_TALENT_READY()
 	local GUID = UnitGUID("mouseover");
 	if(self.lastGUID ~= GUID) then return end
@@ -378,7 +363,7 @@ function TT:INSPECT_TALENT_READY()
 	local unit = "mouseover"
 	if(UnitExists(unit)) then
 		local itemLevel = self:GetItemLvL(unit)
-		local talentName = self:GetTalentSpec(unit, 1)
+		local _, talentName = E:GetTalentSpecInfo(1)
 		inspectCache[GUID] = {time = GetTime()}
 
 		if(talentName) then
@@ -400,7 +385,7 @@ function TT:ShowInspectInfo(tt, unit, level, r, g, b, numTries)
 
 	local GUID = UnitGUID(unit)
 	if(GUID == playerGUID) then
-		tt:AddDoubleLine(L["Talent Specialization:"], self:GetTalentSpec(unit), nil, nil, nil, r, g, b)
+		tt:AddDoubleLine(L["Talent Specialization:"], select(2, E:GetTalentSpecInfo()), nil, nil, nil, r, g, b)
 		tt:AddDoubleLine(L["Item Level:"], self:GetItemLvL("player"), nil, nil, nil, 1, 1, 1)
 	elseif(inspectCache[GUID]) then
 		local talent = inspectCache[GUID].talent
@@ -501,7 +486,6 @@ function TT:GameTooltip_OnTooltipSetUnit(tt)
 		end
 
 		if(self.db.inspectInfo and isShiftKeyDown) then
-			twipe(tree);
 			self:ShowInspectInfo(tt, unit, level, color.r, color.g, color.b, 0)
 		end
 	else
