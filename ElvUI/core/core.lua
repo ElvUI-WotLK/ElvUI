@@ -363,11 +363,12 @@ function E:IsDispellableByMe(debuffType)
 	end
 end
 
-function E:GetPrimaryTalentTree(talantGroup)
+function E:GetTalentSpecInfo(isInspect)
+	local talantGroup = GetActiveTalentGroup(isInspect)
 	local maxPoints, specIdx, specName, specIcon = 0
 
 	for i = 1, MAX_TALENT_TABS do
-		local name, icon, pointsSpent = GetTalentTabInfo(i, nil, nil, talantGroup)
+		local name, icon, pointsSpent = GetTalentTabInfo(i, isInspect, nil, talantGroup)
 		if maxPoints < pointsSpent then
 			maxPoints = pointsSpent
 			specIdx = i
@@ -387,7 +388,7 @@ function E:GetPrimaryTalentTree(talantGroup)
 end
 
 function E:CheckRole()
-	local talentTree = self:GetPrimaryTalentTree(GetActiveTalentGroup());
+	local talentTree = self:GetTalentSpecInfo();
 	local role;
 
 	if(type(self.ClassRole[self.myclass]) == "string") then
