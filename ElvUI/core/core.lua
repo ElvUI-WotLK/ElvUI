@@ -368,7 +368,7 @@ function E:GetTalentSpecInfo(isInspect)
 	local talantGroup = GetActiveTalentGroup(isInspect)
 	local maxPoints, specIdx, specName, specIcon = 0, 0
 
-	for i = 1, 3 do
+	for i = 1, MAX_TALENT_TABS do
 		local name, icon, pointsSpent = GetTalentTabInfo(i, isInspect, nil, talantGroup)
 		if maxPoints < pointsSpent then
 			maxPoints = pointsSpent
