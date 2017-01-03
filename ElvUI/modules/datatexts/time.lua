@@ -23,7 +23,7 @@ local lockoutColorExtended, lockoutColorNormal = {r = 0.3, g = 1, b = 0.3}, {r =
 
 local function OnClick(_, btn)
 	if(btn == "RightButton") then
-		if(not IsAddOnLoaded("Blizzard_TimeManager")) then LoadAddon("Blizzard_TimeManager"); end
+		if(not IsAddOnLoaded("Blizzard_TimeManager")) then LoadAddOn("Blizzard_TimeManager"); end
 		TimeManagerClockButton_OnClick(TimeManagerClockButton);
 	else
 		GameTimeFrame:Click();
