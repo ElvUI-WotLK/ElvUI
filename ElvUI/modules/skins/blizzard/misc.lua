@@ -307,20 +307,6 @@ local function LoadSkin()
 
 	S:HandleSliderFrame(OpacityFrameSlider);
 
-	WatchFrameCollapseExpandButton:StripTextures()
-	S:HandleCloseButton(WatchFrameCollapseExpandButton)
-	WatchFrameCollapseExpandButton.backdrop:SetAllPoints()
-	WatchFrameCollapseExpandButton.text:SetText("-")
-	WatchFrameCollapseExpandButton:SetFrameStrata("MEDIUM")
-
-	hooksecurefunc("WatchFrame_Expand", function()
-		WatchFrameCollapseExpandButton.text:SetText("-")
-	end)
-
-	hooksecurefunc("WatchFrame_Collapse", function()
-		WatchFrameCollapseExpandButton.text:SetText("+")
-	end)
-
 	--Chat Config
 	ChatConfigFrame:StripTextures();
 	ChatConfigFrame:SetTemplate("Transparent");
@@ -489,24 +475,6 @@ local function LoadSkin()
 			_G["DropDownList"..i.."MenuBackdrop"]:SetTemplate("Default", true)
 		end
 	end)
-
-	local function SkinWatchFrameItems()
-		for i=1, WATCHFRAME_NUM_ITEMS do
-			local button = _G["WatchFrameItem"..i]
-			if not button.skinned then
-				button:CreateBackdrop("Default")
-				button.backdrop:SetAllPoints()
-				button:StyleButton()
-				_G["WatchFrameItem"..i.."NormalTexture"]:SetAlpha(0)
-				_G["WatchFrameItem"..i.."IconTexture"]:SetInside()
-				_G["WatchFrameItem"..i.."IconTexture"]:SetTexCoord(unpack(E.TexCoords))
-				E:RegisterCooldown(_G["WatchFrameItem"..i.."Cooldown"])
-				button.skinned = true
-			end
-		end
-	end
-
-	WatchFrame:HookScript("OnEvent", SkinWatchFrameItems)
 
 	local frames = {
 		"VideoOptionsFrameCategoryFrame",
