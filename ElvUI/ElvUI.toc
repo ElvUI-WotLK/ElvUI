@@ -9,7 +9,7 @@
 ## X-oUF: ElvUF
 
 developer\load_developer.xml
-libs\load_libs.xml
+Libraries\Load_Libraries.xml
 locales\load_locales.xml
 media\load_media.xml
 init.lua
