@@ -264,6 +264,7 @@ L["Require holding the Alt key down to move cursor or cycle through messages in 
 L["Right Only"] = "Somente Direita"
 L["Right Panel Height"] = true;
 L["Right Panel Width"] = true;
+L["Scroll Direction"] = true;
 L["Scroll Interval"] = "Intervalo de Rolar"
 L["Scroll Messages"] = true;
 L["Separate Panel Sizes"] = true;

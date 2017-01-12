@@ -201,14 +201,13 @@ E.Options.args.chat = {
 						t.r, t.g, t.b = r, g, b;
 					end
 				},
-				chatDirection = {
+				scrollDirection = {
 					order = 19,
 					type = "select",
-					name = "Chat Direction",
-					desc = "Controls where text is added to the chat frame.",
+					name = L["Scroll Direction"],
 					values = {
-						["BOTTOM"] = "Bottom to top",
-						["TOP"] = "Top to bottom"
+						["BOTTOM"] = L["Bottom to Top"],
+						["TOP"] = L["Top to Bottom"]
 					}
 				},
 				chatHistoryLines = {

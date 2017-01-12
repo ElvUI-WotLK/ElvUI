@@ -169,7 +169,7 @@ CH.ClassNames = {};
 local numScrollMessages
 local function ChatFrame_OnMouseScroll(frame, delta)
 	numScrollMessages = CH.db.numScrollMessages or 3
-	if CH.db.chatDirection == "TOP" then
+	if CH.db.scrollDirection == "TOP" then
 		if delta < 0 then
 			if IsShiftKeyDown() then
 				frame:ScrollToTop()
@@ -192,7 +192,7 @@ local function ChatFrame_OnMouseScroll(frame, delta)
 					CH:CancelTimer(frame.ScrollTimer, true)
 				end
 
-				frame.ScrollTimer = CH:ScheduleTimer("ScrollToTop", CH.db.scrollDownInterval, frame)
+				frame.ScrollTimer = CH:ScheduleTimer("ScrollToBottom", CH.db.scrollDownInterval, frame)
 			end
 		end
 	else
@@ -1208,11 +1208,6 @@ function CH:SetupChat()
 	if E.private.chat.enable ~= true then return end
 	for _, frameName in pairs(CHAT_FRAMES) do
 		local frame = _G[frameName]
-
-		if CH.db.chatDirection == "TOP" then
-			frame:SetInsertMode("TOP")
-		end
-
 		local id = frame:GetID();
 		local _, fontSize = FCF_GetChatWindowInfo(id);
 		self:StyleChat(frame)

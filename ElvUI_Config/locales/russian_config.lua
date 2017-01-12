@@ -264,6 +264,7 @@ L["Require holding the Alt key down to move cursor or cycle through messages in 
 L["Right Only"] = "Только правый"
 L["Right Panel Height"] = "Высота правого чата"
 L["Right Panel Width"] = "Ширина правого чата"
+L["Scroll Direction"] = true;
 L["Scroll Interval"] = "Интервал прокрутки"
 L["Scroll Messages"] = "Прокручивание сообщений"
 L["Separate Panel Sizes"] = "Разные размеры панелей"

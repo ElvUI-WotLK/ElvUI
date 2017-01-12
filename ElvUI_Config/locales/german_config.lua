@@ -264,6 +264,7 @@ L["Require holding the Alt key down to move cursor or cycle through messages in 
 L["Right Only"] = "Nur Rechts"
 L["Right Panel Height"] = "Rechte Fensterhöhe"
 L["Right Panel Width"] = "Rechte Fensterbreite"
+L["Scroll Direction"] = true;
 L["Scroll Interval"] = "Scroll-Interval"
 L["Scroll Messages"] = "Scroll Nachrichten"
 L["Separate Panel Sizes"] = "Getrennte Chatfenster Größenoptionen"
