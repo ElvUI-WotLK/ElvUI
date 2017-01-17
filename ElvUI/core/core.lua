@@ -428,6 +428,11 @@ function E:CheckIncompatible()
 		E:IncompatibleAddOn("Chatter", "Chat");
 	end
 
+	if(IsAddOnLoaded("SnowfallKeyPress") and E.private.actionbar.enable) then
+		E.private.actionbar.keyDown = true
+		E:IncompatibleAddOn("SnowfallKeyPress", "ActionBars");
+	end
+
 	if(IsAddOnLoaded("TidyPlates") and E.private.nameplate.enable) then
 		E:IncompatibleAddOn("TidyPlates", "NamePlate");
 	end
