@@ -15,7 +15,7 @@ local function OnEvent(self)
 	lastPanel = self;
 end
 
-local function Click()
+local function OnClick()
 	ToggleAchievementFrame();
 end
 
@@ -28,4 +28,4 @@ local function ValueColorUpdate(hex)
 end
 E["valueColorUpdateFuncs"][ValueColorUpdate] = true;
 
-DT:RegisterDatatext("Achievement", {"ACHIEVEMENT_EARNED"}, OnEvent, nil, Click);
+DT:RegisterDatatext("Achievement", {"ACHIEVEMENT_EARNED"}, OnEvent, nil, OnClick);

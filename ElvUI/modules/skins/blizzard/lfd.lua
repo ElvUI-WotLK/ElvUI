@@ -38,7 +38,7 @@ local function LoadSkin()
 		local ItemIconTexture = _G["LFDQueueFrameRandomScrollFrameChildFrameItem"..i.."IconTexture"];
 		local ItemCount = _G["LFDQueueFrameRandomScrollFrameChildFrameItem"..i.."Count"];
 
-		if(Item ) then
+		if(Item) then
 			Item:StripTextures();
 			Item:SetTemplate("Default");
 

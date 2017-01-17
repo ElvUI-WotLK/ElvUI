@@ -192,6 +192,7 @@ local function Chat_OnMouseWheel(self, delta)
 	end
 end
 
+--[[
 local function Chat_OnEvent(self, event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13)
 	local coloredName = GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
 	local type = strsub(event, 10);
@@ -199,9 +200,9 @@ local function Chat_OnEvent(self, event, arg1, arg2, arg3, arg4, arg5, arg6, arg
 
 	local chatGroup = Chat_GetChatCategory(type);
 	local chatTarget, body;
-	if ( chatGroup == "BN_CONVERSATION" ) then
+	if(chatGroup == "BN_CONVERSATION") then
 		chatTarget = tostring(arg8);
-	elseif ( chatGroup == "WHISPER" or chatGroup == "BN_WHISPER" ) then
+	elseif(chatGroup == "WHISPER" or chatGroup == "BN_WHISPER") then
 		if(not(strsub(arg2, 1, 2) == "|K")) then
 			chatTarget = arg2:upper()
 		else
@@ -210,7 +211,7 @@ local function Chat_OnEvent(self, event, arg1, arg2, arg3, arg4, arg5, arg6, arg
 	end
 
 	local playerLink
-	if ( type ~= "BN_WHISPER" and type ~= "BN_CONVERSATION" ) then
+	if(type ~= "BN_WHISPER" and type ~= "BN_CONVERSATION") then
 		playerLink = "|Hplayer:"..arg2..":"..arg11..":"..chatGroup..(chatTarget and ":"..chatTarget or "").."|h";
 	else
 		playerLink = "|HBNplayer:"..arg2..":"..arg13..":"..arg11..":"..chatGroup..(chatTarget and ":"..chatTarget or "").."|h";
@@ -230,6 +231,7 @@ local function Chat_OnEvent(self, event, arg1, arg2, arg3, arg4, arg5, arg6, arg
 
 	self:AddMessage(CH:ConcatenateTimeStamp(body), info.r, info.g, info.b, info.id, false, accessID, typeID);
 end
+]]
 
 function AFK:Initialize()
 	local classColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass];

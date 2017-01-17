@@ -48,7 +48,7 @@ local function OnEnter(self)
 	DT.tooltip:Show();
 end
 
-local function Click(_, button)
+local function OnClick(_, button)
 	if(button == "LeftButton" or (button == "RightButton" and not IsShiftKeyDown())) then
 		E:ToggleConfig();
 	elseif(button == "RightButton" and IsShiftKeyDown()) then
@@ -65,4 +65,4 @@ local function ValueColorUpdate(hex)
 end
 E["valueColorUpdateFuncs"][ValueColorUpdate] = true;
 
-DT:RegisterDatatext("ElvUI Config", {"PLAYER_ENTERING_WORLD"}, OnEvent, nil, Click, OnEnter);
+DT:RegisterDatatext("ElvUI Config", {"PLAYER_ENTERING_WORLD"}, OnEvent, nil, OnClick, OnEnter);

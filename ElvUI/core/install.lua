@@ -119,10 +119,6 @@ local function SetupChat()
 	ChatFrame_RemoveChannel(ChatFrame1, L["Trade"])
 	ChatFrame_AddChannel(ChatFrame3, L["Trade"])
 
-	if E.myname == "Elvz" then
-		SetCVar("scriptErrors", 1)
-	end
-
 	-- enable classcolor automatically on login and on each character without doing /configure each time.
 	ToggleChatColorNamesByClassGroup(true, "SAY")
 	ToggleChatColorNamesByClassGroup(true, "EMOTE")
