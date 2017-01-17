@@ -2,9 +2,32 @@ local E, L, V, P, G = unpack(select(2, ...));
 local M = E:NewModule("Misc", "AceEvent-3.0", "AceTimer-3.0");
 E.Misc = M;
 
-local format, gsub = string.format, string.gsub;
+local CanGuildBankRepair = CanGuildBankRepair
+local CanMerchantRepair = CanMerchantRepair
+local GetCoinTextureString = GetCoinTextureString
+local GetFriendInfo = GetFriendInfo
+local GetGuildBankWithdrawMoney = GetGuildBankWithdrawMoney
+local GetGuildRosterInfo = GetGuildRosterInfo
+local GetMouseFocus = GetMouseFocus
+local GetNumFriends = GetNumFriends
+local GetNumGuildMembers = GetNumGuildMembers
+local GetNumPartyMembers = GetNumPartyMembers
+local GetNumRaidMembers = GetNumRaidMembers
+local GetPartyMember = GetPartyMember
+local GetRepairAllCost = GetRepairAllCost
+local GetUnitSpeed = GetUnitSpeed
+local GuildRoster = GuildRoster
+local InCombatLockdown = InCombatLockdown
+local IsInGuild = IsInGuild
+local IsInInstance = IsInInstance
+local IsShiftKeyDown = IsShiftKeyDown
+local RepairAllItems = RepairAllItems
+local UninviteUnit = UninviteUnit
+local UnitInRaid = UnitInRaid
+local UnitName = UnitName
 local UIErrorsFrame = UIErrorsFrame;
 local MAX_PARTY_MEMBERS = MAX_PARTY_MEMBERS;
+local format, gsub = string.format, string.gsub;
 
 local interruptMsg = INTERRUPTED.." %s's \124cff71d5ff\124Hspell:%d\124h[%s]\124h\124r!";
 
@@ -160,11 +183,12 @@ function M:AutoInvite(event, leaderName)
 		hideStatic = true
 
 		-- Update Guild and Friendlist
-		if GetNumFriends() > 0 then ShowFriends() end
+		local numFriends = GetNumFriends()
+		if numFriends > 0 then ShowFriends() end
 		if IsInGuild() then GuildRoster() end
 		local inGroup = false;
 
-		for friendIndex = 1, GetNumFriends() do
+		for friendIndex = 1, numFriends do
 			local friendName = gsub(GetFriendInfo(friendIndex), "-.*", "")
 			if friendName == leaderName then
 				AcceptGroup()

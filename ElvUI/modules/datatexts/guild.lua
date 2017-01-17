@@ -1,11 +1,30 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local DT = E:GetModule("DataTexts")
 
-local join = string.join
-local format = string.format
-local find = string.find
-local gsub = string.gsub
-local sort = table.sort
+local select, unpack = select, unpack
+local format, join = string.format, string.join
+local sort, wipe = table.sort, wipe
+
+local EasyMenu = EasyMenu
+local GetGuildInfo = GetGuildInfo
+local GetGuildRosterInfo = GetGuildRosterInfo
+local GetGuildRosterMOTD = GetGuildRosterMOTD
+local GetMouseFocus = GetMouseFocus
+local GetNumGuildMembers = GetNumGuildMembers
+local GetQuestDifficultyColor = GetQuestDifficultyColor
+local GetRealZoneText = GetRealZoneText
+local GuildRoster = GuildRoster
+local InviteUnit = InviteUnit
+local IsInGuild = IsInGuild
+local IsShiftKeyDown = IsShiftKeyDown
+local LoadAddOn = LoadAddOn
+local SetItemRef = SetItemRef
+local ToggleFriendsFrame = ToggleFriendsFrame
+local UnitInParty = UnitInParty
+local UnitInRaid = UnitInRaid
+local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS
+local RAID_CLASS_COLORS = RAID_CLASS_COLORS
+local MOTD_COLON = MOTD_COLON
 
 local tthead, ttsubh, ttoff = {r=0.4, g=0.78, b=1}, {r=0.75, g=0.9, b=1}, {r=.3,g=1,b=.3}
 local activezone, inactivezone = {r=0.3, g=1.0, b=0.3}, {r=0.65, g=0.65, b=0.65}
@@ -61,7 +80,8 @@ local eventHandlers = {
 	-- when we enter the world and guildframe is not available then
 	-- load guild frame, update guild message and guild xp
 	["PLAYER_ENTERING_WORLD"] = function (self)
-		if not IsInGuild() then
+		if not GuildFrame and IsInGuild() then
+			LoadAddOn("Blizzard_GuildUI")
 			GuildRoster()
 		end
 	end,
@@ -112,10 +132,10 @@ end
 
 local function whisperClick(_, playerName)
 	menuFrame:Hide()
-	SetItemRef( "player:"..playerName, ("|Hplayer:%1$s|h[%1$s]|h"):format(playerName), "LeftButton" )
+	SetItemRef("player:"..playerName, ("|Hplayer:%1$s|h[%1$s]|h"):format(playerName), "LeftButton")
 end
 
-local function Click(_, btn)
+local function OnClick(_, btn)
 	if btn == "RightButton" and IsInGuild() then
 		DT.tooltip:Hide()
 
@@ -216,16 +236,4 @@ local function ValueColorUpdate(hex)
 end
 E["valueColorUpdateFuncs"][ValueColorUpdate] = true
 
---[[
-	DT:RegisterDatatext(name, events, eventFunc, updateFunc, clickFunc, onEnterFunc, onLeaveFunc)
-
-	name - name of the datatext (required)
-	events - must be a table with string values of event names to register
-	eventFunc - function that gets fired when an event gets triggered
-	updateFunc - onUpdate script target function
-	click - function to fire when clicking the datatext
-	onEnterFunc - function to fire OnEnter
-	onLeaveFunc - function to fire OnLeave, if not provided one will be set for you that hides the tooltip.
-]]
-
-DT:RegisterDatatext("Guild", {"PLAYER_ENTERING_WORLD", "CHAT_MSG_SYSTEM", "GUILD_ROSTER_UPDATE", "PLAYER_GUILD_UPDATE", "GUILD_MOTD"}, OnEvent, nil, Click, OnEnter)
+DT:RegisterDatatext("Guild", {"PLAYER_ENTERING_WORLD", "CHAT_MSG_SYSTEM", "GUILD_ROSTER_UPDATE", "PLAYER_GUILD_UPDATE", "GUILD_MOTD"}, OnEvent, nil, OnClick, OnEnter)

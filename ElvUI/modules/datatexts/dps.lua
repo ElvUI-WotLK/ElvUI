@@ -48,7 +48,6 @@ local function OnEvent(self, event, ...)
 		if(not events[select(2, ...)]) then return; end
 
 		local id = select(3, ...);
-
 		if(id == playerID or id == petID) then
 			if(timeStamp == 0) then timeStamp = select(1, ...); end
 			lastSegment = timeStamp;
@@ -61,7 +60,7 @@ local function OnEvent(self, event, ...)
 
 			DMGTotal = DMGTotal + lastDMGAmount;
 		end
-	elseif(event == UNIT_PET) then
+	elseif(event == "UNIT_PET") then
 		petID = UnitGUID("pet");
 	end
 
@@ -74,7 +73,7 @@ local function OnClick(self)
 end
 
 local function ValueColorUpdate(hex)
-	displayString = join("", "%s :", hex, "%.1f|r");
+	displayString = join("", "%s: ", hex, "%.1f|r");
 
 	if(lastPanel ~= nil) then
 		OnEvent(lastPanel);

@@ -1,16 +1,34 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local M = E:GetModule("Misc");
 
-local unpack, pairs = unpack, pairs;
+local CloseLoot = CloseLoot
+local CursorOnUpdate = CursorOnUpdate
+local CursorUpdate = CursorUpdate
+local GetCVar = GetCVar
+local GetCursorPosition = GetCursorPosition
+local GetLootSlotInfo = GetLootSlotInfo
+local GetLootSlotLink = GetLootSlotLink
+local GetNumLootItems = GetNumLootItems
+local GiveMasterLoot = GiveMasterLoot
+local IsFishingLoot = IsFishingLoot
+local IsModifiedClick = IsModifiedClick
+local LootSlot = LootSlot
+local LootSlotIsCoin = LootSlotIsCoin
+local LootSlotIsItem = LootSlotIsItem
+local ResetCursor = ResetCursor
+local UnitIsDead = UnitIsDead
+local UnitIsFriend = UnitIsFriend
+local UnitName = UnitName
 local ITEM_QUALITY_COLORS = ITEM_QUALITY_COLORS;
 local LOOT = LOOT;
+
+local max = math.max
+local tinsert = table.insert
+local unpack, pairs = unpack, pairs;
 
 -- Credit Haste
 local lootFrame, lootFrameHolder
 local iconSize = 30;
-
-local max = math.max
-local tinsert = table.insert
 
 local sq, ss, sn;
 local OnEnter = function(self)
@@ -63,26 +81,24 @@ local OnShow = function(self)
 end
 
 local function anchorSlots(self)
-	local iconsize = iconSize
 	local shownSlots = 0
-	for i=1, #self.slots do
+	for i = 1, #self.slots do
 		local frame = self.slots[i]
 		if(frame:IsShown()) then
 			shownSlots = shownSlots + 1
 
-			frame:Point("TOP", lootFrame, 4, (-8 + iconsize) - (shownSlots * iconsize))
+			frame:Point("TOP", lootFrame, 4, (-8 + iconSize) - (shownSlots * iconSize))
 		end
 	end
 
-	self:Height(max(shownSlots * iconsize + 16, 20))
+	self:Height(max(shownSlots * iconSize + 16, 20))
 end
 
 local function createSlot(id)
-	local iconsize = iconSize-2
 	local frame = CreateFrame("Button", "ElvLootSlot"..id, lootFrame)
 	frame:Point("LEFT", 8, 0)
 	frame:Point("RIGHT", -8, 0)
-	frame:Height(iconsize)
+	frame:Height(iconSize - 2)
 	frame:SetID(id)
 
 	frame:RegisterForClicks("LeftButtonUp", "RightButtonUp")
@@ -93,8 +109,7 @@ local function createSlot(id)
 	frame:SetScript("OnShow", OnShow)
 
 	local iconFrame = CreateFrame("Frame", nil, frame)
-	iconFrame:Height(iconsize)
-	iconFrame:Width(iconsize)
+	iconFrame:Size(iconSize - 2)
 	iconFrame:SetPoint("RIGHT", frame)
 	iconFrame:SetTemplate("Default")
 	frame.iconFrame = iconFrame
@@ -192,7 +207,7 @@ function M:LOOT_OPENED(_, autoloot)
 
 	local m, w, t = 0, 0, lootFrame.title:GetStringWidth()
 	if(items > 0) then
-		for i=1, items do
+		for i = 1, items do
 			local slot = lootFrame.slots[i] or createSlot(i)
 			local texture, item, quantity, quality = GetLootSlotInfo(i)
 			local color = ITEM_QUALITY_COLORS[quality]
@@ -262,8 +277,7 @@ function M:LoadLoot()
 	if not E.private.general.loot then return end
 	lootFrameHolder = CreateFrame("Frame", "ElvLootFrameHolder", E.UIParent)
 	lootFrameHolder:Point("TOPLEFT", 36, -195)
-	lootFrameHolder:Width(150)
-	lootFrameHolder:Height(22)
+	lootFrameHolder:Size(150, 22)
 
 	lootFrame = CreateFrame("Button", "ElvLootFrame", lootFrameHolder)
 	lootFrame:SetClampedToScreen(true)
@@ -299,7 +313,7 @@ function M:LoadLoot()
 	tinsert(UISpecialFrames, "ElvLootFrame")
 
 	function _G.GroupLootDropDown_GiveLoot(self)
-		if ( sq >= MASTER_LOOT_THREHOLD ) then
+		if(sq >= MASTER_LOOT_THREHOLD) then
 			local dialog = StaticPopup_Show("CONFIRM_LOOT_DISTRIBUTION", ITEM_QUALITY_COLORS[sq].hex..sn..FONT_COLOR_CODE_CLOSE, self:GetText())
 			if (dialog) then
 				dialog.data = self.value

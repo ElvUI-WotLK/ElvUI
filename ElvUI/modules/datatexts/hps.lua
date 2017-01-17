@@ -1,6 +1,13 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local DT = E:GetModule("DataTexts")
 
+local time = time
+local select = select
+local max = math.max
+local join = string.join
+
+local UnitGUID = UnitGUID
+
 local events = {SPELL_HEAL = true, SPELL_PERIODIC_HEAL = true}
 local playerID, petID
 local healTotal, lastHealAmount = 0, 0
@@ -24,7 +31,7 @@ local function GetHPS(self)
 	else
 		hps = healTotal / combatTime
 	end
-	self.text:SetFormattedText(displayString, L["HPS"]..": ", hps)
+	self.text:SetFormattedText(displayString, L["HPS"], hps)
 end
 
 local function OnEvent(self, event, ...)
@@ -48,9 +55,9 @@ local function OnEvent(self, event, ...)
 			lastSegment = timeStamp
 			combatTime = select(1, ...) - timeStamp
 			lastHealAmount = select(12, ...)
-			healTotal = healTotal + math.max(0, lastHealAmount - overHeal)
+			healTotal = healTotal + max(0, lastHealAmount - overHeal)
 		end
-	elseif event == UNIT_PET then
+	elseif event == "UNIT_PET" then
 		petID = UnitGUID("pet")
 	end
 
@@ -63,7 +70,7 @@ local function OnClick(self)
 end
 
 local function ValueColorUpdate(hex)
-	displayString = string.join("", '%s', hex, "%.1f|r")
+	displayString = join("", "%s: ", hex, "%.1f|r")
 
 	if lastPanel ~= nil then
 		OnEvent(lastPanel)
@@ -71,14 +78,4 @@ local function ValueColorUpdate(hex)
 end
 E["valueColorUpdateFuncs"][ValueColorUpdate] = true;
 
---[[
-	DT:RegisterDatatext(name, events, eventFunc, updateFunc, clickFunc, onEnterFunc)
-
-	name - name of the datatext (required)
-	events - must be a table with string values of event names to register
-	eventFunc - function that gets fired when an event gets triggered
-	updateFunc - onUpdate script target function
-	click - function to fire when clicking the datatext
-	onEnterFunc - function to fire OnEnter
-]]
 DT:RegisterDatatext("HPS", {"PLAYER_ENTERING_WORLD", "COMBAT_LOG_EVENT_UNFILTERED", "PLAYER_LEAVE_COMBAT", "PLAYER_REGEN_DISABLED", "UNIT_PET"}, OnEvent, nil, OnClick)
