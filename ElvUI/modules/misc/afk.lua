@@ -71,8 +71,6 @@ local function OnAnimFinished(self)
 end
 
 function AFK:SetAFK(status)
-	if(InCombatLockdown()) then return; end
-
 	if(status and not self.isAFK) then
 		if(InspectFrame) then
 			InspectPaperDollFrame:Hide();
@@ -143,6 +141,14 @@ function AFK:OnEvent(event, ...)
 
 	if(event == "PLAYER_REGEN_ENABLED") then
 		self:UnregisterEvent("PLAYER_REGEN_ENABLED");
+	end
+
+	if(not E.db.general.afk) then return; end
+	if(InCombatLockdown() or CinematicFrame:IsShown() or MovieFrame:IsShown()) then return; end
+	if(UnitCastingInfo("player") ~= nil) then
+		--Don't activate afk if player is crafting stuff, check back in 30 seconds
+		self:ScheduleTimer("OnEvent", 30);
+		return;
 	end
 
 	self:SetAFK(UnitIsAFK("player"));
