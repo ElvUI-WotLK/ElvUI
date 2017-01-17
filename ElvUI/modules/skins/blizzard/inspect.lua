@@ -109,7 +109,6 @@ local function LoadSkin()
 			icon:SetInside()
 
 			rank:SetFont(E.LSM:Fetch("font", E.db["general"].font), 12, "OUTLINE")
-			rank:Point("BOTTOMRIGHT", 10, -9)
 		end
 	end
 

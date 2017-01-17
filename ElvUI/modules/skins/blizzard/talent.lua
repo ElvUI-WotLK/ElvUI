@@ -45,6 +45,7 @@ local function LoadSkin()
 	for i = 1, MAX_NUM_TALENTS do
 		local talent = _G["PlayerTalentFrameTalent" .. i];
 		local icon = _G["PlayerTalentFrameTalent" .. i .. "IconTexture"];
+		local rank = _G["PlayerTalentFrameTalent"..i.."Rank"];
 
 		talent:StripTextures();
 		talent:StyleButton();
@@ -52,6 +53,8 @@ local function LoadSkin()
 
 		icon:SetInside();
 		icon:SetTexCoord(unpack(E.TexCoords));
+
+		rank:SetFont(E.LSM:Fetch("font", E.db["general"].font), 12, "OUTLINE");
 	end
 
 	for i = 1, 4 do
