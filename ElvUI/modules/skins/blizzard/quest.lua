@@ -1,35 +1,56 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local S = E:GetModule("Skins")
 
+local _G = _G;
+local unpack = unpack;
 local find = string.find;
 
 local function LoadSkin()
 	if(E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.quest ~= true) then return; end
 
-	local QuestStrip = {"QuestFrame", "QuestLogFrame", "QuestLogCount", "EmptyQuestLogFrame", "QuestFrameDetailPanel", "QuestDetailScrollFrame", "QuestDetailScrollChildFrame", "QuestRewardScrollFrame", "QuestRewardScrollChildFrame", "QuestFrameProgressPanel", "QuestFrameRewardPanel", "QuestFrameGreetingPanel"};
+	local QuestStrip = {
+		"QuestFrame",
+		"QuestLogFrame",
+		"QuestLogCount",
+		"EmptyQuestLogFrame",
+		"QuestFrameDetailPanel",
+		"QuestDetailScrollFrame",
+		"QuestDetailScrollChildFrame",
+		"QuestRewardScrollFrame",
+		"QuestRewardScrollChildFrame",
+		"QuestFrameProgressPanel",
+		"QuestFrameRewardPanel",
+		"QuestFrameGreetingPanel"
+	};
+
 	for _, object in pairs(QuestStrip) do
 		_G[object]:StripTextures(true);
 	end
 
-	local QuestButtons = {"QuestLogFrameAbandonButton", "QuestLogFramePushQuestButton", "QuestLogFrameTrackButton", "QuestLogFrameCancelButton"};
-	for i = 1, #QuestButtons do
-		_G[QuestButtons[i]]:StripTextures();
-		S:HandleButton(_G[QuestButtons[i]]);
+	local QuestButtons = {
+		"QuestLogFrameAbandonButton",
+		"QuestLogFrameCancelButton",
+		"QuestLogFramePushQuestButton",
+		"QuestLogFrameShowMapButton",
+		"QuestLogFrameTrackButton"
+	};
+
+	for _, button in pairs(QuestButtons) do
+		_G[button]:StripTextures();
+		S:HandleButton(_G[button]);
 	end
 
 	S:HandleButton(QuestFrameAcceptButton);
 	QuestFrameAcceptButton:Point("BOTTOMLEFT", QuestFrame, 19, 71);
 	S:HandleButton(QuestFrameDeclineButton);
 	QuestFrameDeclineButton:Point("BOTTOMRIGHT", QuestFrame, -34, 71);
+
 	S:HandleButton(QuestFrameCompleteButton);
 	S:HandleButton(QuestFrameGoodbyeButton);
 	S:HandleButton(QuestFrameCompleteQuestButton);
 	S:HandleButton(QuestFrameCancelButton);
-
 	S:HandleButton(QuestFrameGreetingGoodbyeButton);
 
-	QuestLogFrameShowMapButton:StripTextures();
-	S:HandleButton(QuestLogFrameShowMapButton);
 	QuestLogFrameShowMapButton.text:ClearAllPoints();
 	QuestLogFrameShowMapButton.text:SetPoint("CENTER");
 	QuestLogFrameShowMapButton:Size(QuestLogFrameShowMapButton:GetWidth() - 30, QuestLogFrameShowMapButton:GetHeight(), - 40);

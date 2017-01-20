@@ -10,9 +10,6 @@ local GetPlayerMapPosition = GetPlayerMapPosition;
 local GetCursorPosition = GetCursorPosition;
 local PLAYER = PLAYER;
 local MOUSE_LABEL = MOUSE_LABEL;
-local WORLDMAP_FULLMAP_SIZE = WORLDMAP_FULLMAP_SIZE;
-local WORLDMAP_QUESTLIST_SIZE = WORLDMAP_QUESTLIST_SIZE;
-local WORLDMAP_WINDOWED_SIZE = WORLDMAP_WINDOWED_SIZE;
 local WORLDMAP_POI_FRAMELEVEL = WORLDMAP_POI_FRAMELEVEL;
 
 local INVERTED_POINTS = {
@@ -61,28 +58,52 @@ function M:SetLargeWorldMap()
 end
 
 function M:SetSmallWorldMap()
-	if(InCombatLockdown()) then return; end
-
 	WorldMapFrameSizeUpButton:Show();
 	WorldMapFrameSizeDownButton:Hide();
 end
 
 function M:PLAYER_REGEN_ENABLED()
-	WorldMapFrameSizeDownButton:Enable();
 	WorldMapFrameSizeUpButton:Enable();
+	WorldMapQuestShowObjectives:Enable();
 
-	if(not GetCVarBool("miniWorldMap")) then
-		WorldMapQuestShowObjectives:Enable();
+	WorldMapBlobFrame:SetParent(WorldMapFrame);
+	WorldMapBlobFrame:ClearAllPoints();
+	WorldMapBlobFrame:SetPoint("TOPLEFT", WorldMapDetailFrame);
+	WorldMapBlobFrame.Hide = nil;
+	WorldMapBlobFrame.Show = nil;
+
+	if (self.blobWasVisible) then
+		WorldMapBlobFrame:Show();
+	end
+
+	if (WorldMapQuestScrollChildFrame.selected) then
+		WorldMapBlobFrame:DrawQuestBlob(WorldMapQuestScrollChildFrame.selected.questId, false);
+	end
+
+	if (self.blobWasVisible) then
+		WorldMapBlobFrame_CalculateHitTranslations();
+
+		if (WorldMapQuestScrollChildFrame.selected and not WorldMapQuestScrollChildFrame.selected.completed) then
+			WorldMapBlobFrame:DrawQuestBlob(WorldMapQuestScrollChildFrame.selected.questId, true);
+		end
 	end
 end
 
 function M:PLAYER_REGEN_DISABLED()
-	WorldMapFrameSizeDownButton:Disable();
 	WorldMapFrameSizeUpButton:Disable();
 
 	if(not GetCVarBool("miniWorldMap")) then
 		WorldMapQuestShowObjectives:Disable();
 	end
+
+	self.blobWasVisible = WorldMapBlobFrame:IsShown();
+
+	WorldMapBlobFrame:SetParent(nil);
+	WorldMapBlobFrame:ClearAllPoints();
+	WorldMapBlobFrame:SetPoint("TOP", UIParent, "BOTTOM");
+	WorldMapBlobFrame:Hide();
+	WorldMapBlobFrame.Hide = function() M.blobWasVisible = nil end;
+	WorldMapBlobFrame.Show = function() M.blobWasVisible = true end;
 end
 
 function M:UpdateCoords()
@@ -133,7 +154,7 @@ end
 function M:Initialize()
 	if(E.global.general.WorldMapCoordinates.enable) then
 		local coordsHolder = CreateFrame("Frame", "CoordsHolder", WorldMapFrame);
-		coordsHolder:SetFrameLevel(WorldMapDetailFrame:GetFrameLevel() + 1);
+		coordsHolder:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 100);
 		coordsHolder:SetFrameStrata(WorldMapDetailFrame:GetFrameStrata());
 		coordsHolder.playerCoords = coordsHolder:CreateFontString(nil, "OVERLAY");
 		coordsHolder.mouseCoords = coordsHolder:CreateFontString(nil, "OVERLAY");
@@ -146,14 +167,13 @@ function M:Initialize()
 		coordsHolder.mouseCoords:SetPoint("BOTTOMLEFT", coordsHolder.playerCoords, "TOPLEFT", 0, 5);
 		coordsHolder.mouseCoords:SetText(MOUSE_LABEL .. ":   0, 0");
 
-		self:ScheduleRepeatingTimer("UpdateCoords", 0.05);
+		coordsHolder:SetScript("OnUpdate", function() M:UpdateCoords(); end);
+
 		self:PositionCoords();
 	end
 
 	if(E.global.general.smallerWorldMap) then
 		BlackoutWorld:SetTexture(nil);
-		WorldMapBlobFrame.Show = E.noop;
-		WorldMapBlobFrame.Hide = E.noop;
 		self:SecureHook("WorldMap_ToggleSizeDown", "SetSmallWorldMap");
 		self:SecureHook("WorldMap_ToggleSizeUp", "SetLargeWorldMap");
 		self:RegisterEvent("PLAYER_REGEN_ENABLED");
