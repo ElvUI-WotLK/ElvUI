@@ -63,7 +63,7 @@ L["TEXT_FORMAT_DESC"] = [=[Строка для изменения вида те�
 --ActionBars
 L["Action Paging"] = "Переключение панелей"
 L["ActionBars"] = "Панели команд"
-L["Action button keybinds will respond on key down, rather than on key up"] = true;
+L["Action button keybinds will respond on key down, rather than on key up"] = "Способности будут задействоваться, когда пользователь нажимает, а не отпускает клавишу.";
 L["Allow LBF to handle the skinning of this element."] = "Разрешить LBF обрабатывать этот элемент."
 L["Alpha"] = "Прозрачность"
 L["Anchor Point"] = "Точка фиксации"
@@ -108,7 +108,7 @@ L["Multiply the backdrops height or width by this value. This is usefull if you 
 L["Not Usable"] = "Нельзя использовать"
 L["Out of Power"] = "Мало ресурса"
 L["Out of Range"] = "Вне радиуса"
-L["Pick Up Action Key"] = true;
+L["Pick Up Action Key"] = "Клавиша перетаскивания";
 L["Restore Bar"] = "Восстановить панель"
 L["Restore the actionbars default settings"] = "Восстанавливает настройки панели по умолчанию."
 L["Seconds"] = "Секунды"
