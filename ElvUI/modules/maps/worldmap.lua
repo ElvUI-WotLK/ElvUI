@@ -167,7 +167,7 @@ function M:Initialize()
 		coordsHolder.mouseCoords:SetPoint("BOTTOMLEFT", coordsHolder.playerCoords, "TOPLEFT", 0, 5);
 		coordsHolder.mouseCoords:SetText(MOUSE_LABEL .. ":   0, 0");
 
-		coordsHolder:SetScript("OnUpdate", function() M:UpdateCoords(); end);
+		coordsHolder:SetScript("OnUpdate", self.UpdateCoords);
 
 		self:PositionCoords();
 	end
