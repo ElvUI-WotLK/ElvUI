@@ -234,25 +234,6 @@ function M:ForceCVars()
 	end
 end
 
-function M:PLAYER_ENTERING_WORLD()
-	self:ForceCVars()
-end
-
-function M:ADDON_LOADED(_, addon)
-	if addon == "Blizzard_TradeSkillUI" then
-		TradeSkillLinkButton:SetScript("OnClick", function()
-			local link = GetTradeSkillListLink()
-			local ChatFrameEditBox = ChatEdit_ChooseBoxForSend()
-
-			if not ChatFrameEditBox:IsShown() then
-				ChatEdit_ActivateChat(ChatFrameEditBox)
-			end
-
-			ChatFrameEditBox:Insert(link)
-		end)
-	end
-end
-
 function M:Initialize()
 	self:LoadRaidMarker();
 	self:LoadLoot()
@@ -268,8 +249,7 @@ function M:Initialize()
 	self:RegisterEvent("PARTY_INVITE_REQUEST", "AutoInvite")
 	self:RegisterEvent("PARTY_MEMBERS_CHANGED", "AutoInvite")
 	self:RegisterEvent("CVAR_UPDATE", "ForceCVars")
-	self:RegisterEvent("PLAYER_ENTERING_WORLD")
-	self:RegisterEvent("ADDON_LOADED")
+	self:RegisterEvent("PLAYER_ENTERING_WORLD", "ForceCVars")
 
 	if(E.global.general.mapAlphaWhenMoving < 1) then
 		self.MovingTimer = self:ScheduleRepeatingTimer("CheckMovement", 0.1)
