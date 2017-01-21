@@ -49,6 +49,15 @@ function B:Initialize()
 			Minimap_SetPing(Minimap:GetPingPosition());
 		end
 	end);
+
+	QuestLogFrame:HookScript("OnShow", function()
+		local questFrame = QuestLogFrame:GetFrameLevel();
+		local controlPanel = QuestLogControlPanel:GetFrameLevel();
+
+		if (questFrame >= controlPanel) then
+			QuestLogControlPanel:SetFrameLevel(questFrame + 1);
+		end
+	end);
 end
 
 E:RegisterModule(B:GetName());
