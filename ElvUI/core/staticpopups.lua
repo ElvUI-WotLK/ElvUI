@@ -29,7 +29,7 @@ E.PopupDialogs["ELVUI_UPDATE_AVAILABLE"] = {
 		self.editBox:SetAutoFocus(false);
 		self.editBox.width = self.editBox:GetWidth();
 		self.editBox:SetWidth(220);
-		self.editBox:SetText("https://github.com/ElvUI-WotLK/ElvUI/archive/master.zip");
+		self.editBox:SetText("https://github.com/ElvUI-WotLK/ElvUI");
 		self.editBox:HighlightText();
 		ChatEdit_FocusActiveWindow();
 	end,
@@ -49,8 +49,8 @@ E.PopupDialogs["ELVUI_UPDATE_AVAILABLE"] = {
 		self:GetParent():Hide();
 	end,
 	EditBoxOnTextChanged = function(self)
-		if(self:GetText() ~= "http://www.tukui.org/dl.php") then
-			self:SetText("http://www.tukui.org/dl.php");
+		if(self:GetText() ~= "https://github.com/ElvUI-WotLK/ElvUI") then
+			self:SetText("https://github.com/ElvUI-WotLK/ElvUI");
 		end
 		self:HighlightText();
 		self:ClearFocus();

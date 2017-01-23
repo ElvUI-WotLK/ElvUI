@@ -7,7 +7,7 @@ if not L then return end
 L["INCOMPATIBLE_ADDON"] = "%s 애드온의 기능이 ElvUI의 %s 모듈과 상충됩니다. 그 애드온을 쓰지 않거나 ElvUI의 기능을 사용해제하세요."
 
 --*_MSG locales
-L["LOGIN_MSG"] = "%sElvUI|r 버전 %s%s|r 을 사용해 주셔서 감사합니다. /ec 를 입력하면 설정창을 열 수 있습니다. 궁금한 점이나 기술지원은 www.tukui.org 에서 해결하세요"
+L["LOGIN_MSG"] = "%sElvUI|r 버전 %s%s|r 을 사용해 주셔서 감사합니다. /ec 를 입력하면 설정창을 열 수 있습니다. 궁금한 점이나 기술지원은 https://github.com/ElvUI-WotLK/ElvUI 에서 해결하세요"
 
 --ActionBars
 L["Binding"] = " "
@@ -170,7 +170,7 @@ L["This resolution requires that you change some settings to get everything to f
 L["This will change the layout of your unitframes and actionbars."] = "역할에 따라서 유닛프레임과 행동단축바의 레이아웃이 알맞게 바뀝니다."
 L["Trade"] = "거래"
 L["Welcome to ElvUI version %s!"] = "ElvUI 버전 %s에 오신 것을 환영합니다!"
-L["You are now finished with the installation process. If you are in need of technical support please visit us at http://www.tukui.org."] = "설치 과정이 끝났습니다.|n궁금한 점 해결이나 기술지원이 필요하면 |cff2eb7e4www.tukui.org|r 를 방문하세요."
+L["You are now finished with the installation process. If you are in need of technical support please visit us at https://github.com/ElvUI-WotLK/ElvUI"] = "설치 과정이 끝났습니다.|n궁금한 점 해결이나 기술지원이 필요하면 |cff2eb7e4https://github.com/ElvUI-WotLK/ElvUI|r 를 방문하세요."
 L["You can always change fonts and colors of any element of ElvUI from the in-game configuration."] = "ElvUI에서 표시하는 폰트나 색상은 설정에서 언제든지 바꿀 수 있습니다."
 L["You can now choose what layout you wish to use based on your combat role."] = "게임 안에서 주로 플레이하는 전문화 역할을 선택하세요."
 L["You may need to further alter these settings depending how low you resolution is."] = "당신의 해상도가 얼마나 낮은지에 따라 설정을 더 조절해야할 수도 있습니다."
@@ -325,7 +325,7 @@ L["Targeted By:"] = "선택됨:"
 --Tutorials
 L["A raid marker feature is available by pressing Escape -> Keybinds scroll to the bottom under ElvUI and setting a keybind for the raid marker."] = "단축키 설정의 맨 아래에 있는 ElvUI 부분에서 |cff2eb7e4[Raid Marker]|r 기능을 사용하면 대상에게 징표를 간단히 찍을 수 있습니다."
 L["ElvUI has a dual spec feature which allows you to load different profiles based on your current spec on the fly. You can enable this from the profiles tab."] = "각 전문화별로 ElvUI 설정을 따로 지정할 수 있습니다. 설정의 프로필 항목에 |cff2eb7e4[이중 프로필 사용]|r 기능을 확인하세요."
-L["For technical support visit us at http://www.tukui.org."] = "궁금한 사항이나 기술지원은 |cff2eb7e4www.tukui.org|r에서 해결하세요."
+L["For technical support visit us at https://github.com/ElvUI-WotLK/ElvUI"] = "궁금한 사항이나 기술지원은 |cff2eb7e4https://github.com/ElvUI-WotLK/ElvUI|r에서 해결하세요."
 L["If you accidently remove a chat frame you can always go the in-game configuration menu, press install, go to the chat portion and reset them."] = "ElvUI 에서 지원하는 대부분의 기능은 |cff2eb7e4/ec|r 에서 조정이 가능합니다. 하고 싶은 조절 기능이 없다면 직접 lua수정으로 고쳐야 합니다."
 L["If you are experiencing issues with ElvUI try disabling all your addons except ElvUI, remember ElvUI is a full UI replacement addon, you cannot run two addons that do the same thing."] = "ElvUI에서 지원하는 기능과 겹치는 다른 애드온을 쓰고 싶으면 ElvUI 설정에서 해당 기능을 사용 체크해제 해야합니다. (예: Bartender, Dominos)"
 L["The focus unit can be set by typing /focus when you are targeting the unit you want to focus. It is recommended you make a macro to do this."] = "ElvUI의 특정 기능만 따로 독립애드온으로 분리하는 것은 불가능합니다."

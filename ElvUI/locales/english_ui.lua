@@ -7,7 +7,7 @@ if not L then return; end
 L["INCOMPATIBLE_ADDON"] = "The addon %s is not compatible with ElvUI's %s module. Please select either the addon or the ElvUI module to disable."
 
 --*_MSG locales
-L["LOGIN_MSG"] = "Welcome to %sElvUI|r version %s%s|r, type /ec to access the in-game configuration menu. If you are in need of technical support you can visit us at http://www.tukui.org"
+L["LOGIN_MSG"] = "Welcome to %sElvUI|r version %s%s|r, type /ec to access the in-game configuration menu. If you are in need of technical support you can visit us at https://github.com/ElvUI-WotLK/ElvUI"
 
 --ActionBars
 L["Binding"] = true;
@@ -170,7 +170,7 @@ L["This resolution requires that you change some settings to get everything to f
 L["This will change the layout of your unitframes and actionbars."] = true;
 L["Trade"] = true;
 L["Welcome to ElvUI version %s!"] = true;
-L["You are now finished with the installation process. If you are in need of technical support please visit us at http://www.tukui.org."] = true;
+L["You are now finished with the installation process. If you are in need of technical support please visit us at https://github.com/ElvUI-WotLK/ElvUI"] = true;
 L["You can always change fonts and colors of any element of ElvUI from the in-game configuration."] = true;
 L["You can now choose what layout you wish to use based on your combat role."] = true;
 L["You may need to further alter these settings depending how low you resolution is."] = true;
@@ -325,7 +325,7 @@ L["Targeted By:"] = true;
 --Tutorials
 L["A raid marker feature is available by pressing Escape -> Keybinds scroll to the bottom under ElvUI and setting a keybind for the raid marker."] = true;
 L["ElvUI has a dual spec feature which allows you to load different profiles based on your current spec on the fly. You can enable this from the profiles tab."] = true;
-L["For technical support visit us at http://www.tukui.org."] = true;
+L["For technical support visit us at https://github.com/ElvUI-WotLK/ElvUI"] = true;
 L["If you accidently remove a chat frame you can always go the in-game configuration menu, press install, go to the chat portion and reset them."] = true
 L["If you are experiencing issues with ElvUI try disabling all your addons except ElvUI, remember ElvUI is a full UI replacement addon, you cannot run two addons that do the same thing."] = true;
 L["The focus unit can be set by typing /focus when you are targeting the unit you want to focus. It is recommended you make a macro to do this."] = true;

@@ -807,7 +807,7 @@ local function SetPage(PageNum)
 		InstallOption2Button:SetText(L["Icons Only"])
 	elseif PageNum == 8 then
 		f.SubTitle:SetText(L["Installation Complete"])
-		f.Desc1:SetText(L["You are now finished with the installation process. If you are in need of technical support please visit us at http://www.tukui.org."])
+		f.Desc1:SetText(L["You are now finished with the installation process. If you are in need of technical support please visit us at https://github.com/ElvUI-WotLK/ElvUI"])
 		f.Desc2:SetText(L["Please click the button below so you can setup variables and ReloadUI."])
 		InstallOption1Button:Show()
 		InstallOption1Button:SetScript("OnClick", InstallComplete)

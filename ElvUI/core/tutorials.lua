@@ -7,7 +7,7 @@ local DISABLE = DISABLE;
 local HIDE = HIDE;
 
 E.TutorialList = {
-	L["For technical support visit us at http://www.tukui.org."],
+	L["For technical support visit us at https://github.com/ElvUI-WotLK/ElvUI"],
 	L["You can toggle the microbar by using your middle mouse button on the minimap you can also accomplish this by enabling the actual microbar located in the actionbar settings."],
 	L["A raid marker feature is available by pressing Escape -> Keybinds scroll to the bottom under ElvUI and setting a keybind for the raid marker."],
 	L["You can set your keybinds quickly by typing /kb."],
