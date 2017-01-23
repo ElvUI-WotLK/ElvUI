@@ -232,6 +232,29 @@ local function LoadSkin()
 			end
 		end);
 	end
+
+	local function questlevel()
+		if(not E.private.skins.showQuestLevel) then return; end
+
+		local buttons = QuestLogScrollFrame.buttons;
+		local numButtons = #buttons;
+		local scrollOffset = HybridScrollFrame_GetOffset(QuestLogScrollFrame);
+		local numEntries, numQuests = GetNumQuestLogEntries();
+
+		for i = 1, numButtons do
+			local questIndex = i + scrollOffset;
+			local questLogTitle = buttons[i];
+			if(questIndex <= numEntries) then
+				local title, level, _, _, isHeader = GetQuestLogTitle(questIndex);
+				if(not isHeader) then
+					questLogTitle:SetText("[" .. level .. "] " .. title);
+					QuestLogTitleButton_Resize(questLogTitle);
+				end
+			end
+		end
+	end
+	hooksecurefunc("QuestLog_Update", questlevel)
+	QuestLogScrollFrameScrollBar:HookScript("OnValueChanged", questlevel)
 end
 
 S:AddCallback("Quest", LoadSkin);

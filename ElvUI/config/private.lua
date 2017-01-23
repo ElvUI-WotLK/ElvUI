@@ -46,6 +46,7 @@ V["chat"] = {
 
 V["skins"] = {
 	["animations"] = true,
+	["showQuestLevel"] = true,
 	["ace3"] = {
 		["enable"] = true,
 	},
