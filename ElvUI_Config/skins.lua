@@ -32,6 +32,15 @@ E.Options.args.skins = {
 			get = function(info) return E.private.skins.animations; end,
 			set = function(info, value) E.private.skins.animations = value; end,
 		},
+		showQuestLevel = {
+			order = 5,
+			type = "toggle",
+			name = L["Show Quest Level"],
+			desc = L["Display quest levels at Quest Log."],
+			get = function(info) return E.private.skins.showQuestLevel; end,
+			set = function(info, value) E.private.skins.showQuestLevel = value; end,
+			disabled = function() return not E.private.skins.blizzard.quest or not E.private.skins.blizzard.enable end
+		},
 		blizzard = {
 			order = 100,
 			type = "group",
