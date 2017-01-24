@@ -469,9 +469,10 @@ local function LoadSkin()
 	end
 
 	SkillDetailStatusBar:StripTextures();
-	SkillDetailStatusBar:SetTemplate("Default");
+	SkillDetailStatusBar:SetParent(SkillDetailScrollFrame);
+	SkillDetailStatusBar:CreateBackdrop("Default");
 	SkillDetailStatusBar:SetStatusBarTexture(E["media"].normTex);
-	SkillDetailStatusBar:EnableDrawLayer("ARTWORK");
+	SkillDetailStatusBar:SetParent(SkillDetailScrollFrame);
 	E:RegisterStatusBar(SkillDetailStatusBar);
 
 	SkillListScrollFrame:StripTextures();
