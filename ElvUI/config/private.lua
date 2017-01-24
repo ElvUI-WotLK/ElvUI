@@ -45,7 +45,6 @@ V["chat"] = {
 }
 
 V["skins"] = {
-	["animations"] = true,
 	["ace3"] = {
 		["enable"] = true,
 	},

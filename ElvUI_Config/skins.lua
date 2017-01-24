@@ -25,13 +25,6 @@ E.Options.args.skins = {
 			get = function(info) return E.private.skins.ace3.enable; end,
 			set = function(info, value) E.private.skins.ace3.enable = value; E:StaticPopup_Show("PRIVATE_RL"); end,
 		},
-		animations = {
-			order = 4,
-			type = "toggle",
-			name = "Animations",
-			get = function(info) return E.private.skins.animations; end,
-			set = function(info, value) E.private.skins.animations = value; end,
-		},
 		blizzard = {
 			order = 100,
 			type = "group",

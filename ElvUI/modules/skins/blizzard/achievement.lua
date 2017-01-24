@@ -160,47 +160,6 @@ local function LoadSkin(event)
 		S:HandleTab(_G["AchievementFrameTab" .. i]);
 	end
 
-	local function AnimationStatusBar(bar, noNumber)
-		bar.anim = CreateAnimationGroup(bar);
-		bar.anim.progress = bar.anim:CreateAnimation("Progress");
-		bar.anim.progress:SetSmoothing("Out");
-		bar.anim.progress:SetDuration(1.7);
-
-		bar.anim.color = bar.anim:CreateAnimation("Color");
-		bar.anim.color:SetSmoothing("Out");
-		bar.anim.color:SetColorType("Statusbar");
-		bar.anim.color:SetDuration(1.7);
-		bar.anim.color.StartR, bar.anim.color.StartG, bar.anim.color.StartB = 1, 0, 0;
-
-		if(not noNumber) then
-			bar.anim2 = CreateAnimationGroup(_G[bar:GetName() .. "Text"]);
-			bar.anim2.number = bar.anim2:CreateAnimation("Number");
-			bar.anim2.number:SetDuration(1.7);
-		end
-	end
-
-	local function PlayAnimationStatusBar(bar, max, value, noNumber)
-		if(bar.anim:IsPlaying() or (bar.anim2 and bar.anim2:IsPlaying())) then
-			bar.anim:Stop();
-			if(not noNumber) then
-				bar.anim2:Stop();
-			end
-		end
-		bar:SetValue(0);
-		bar.anim.progress:SetChange(value);
-
-		local r, g, b = E:ColorGradient(value / max, 1, 0, 0, 1, 1, 0, 0, 1, 0);
-		bar.anim.color:Reset();
-		bar.anim.color:SetChange(r, g, b);
-		bar.anim:Play();
-
-		if(not noNumber) then
-			bar.anim2.number:SetPostfix("/" .. max);
-			bar.anim2.number:SetChange(value);
-			bar.anim2:Play();
-		end
-	end
-
 	local function SkinStatusBar(bar)
 		bar:StripTextures();
 		bar:SetStatusBarTexture(E["media"].normTex);
@@ -220,8 +179,6 @@ local function LoadSkin(event)
 		if(_G[barName .. "Text"]) then
 			_G[barName .. "Text"]:Point("RIGHT", -4, 0);
 		end
-
-		AnimationStatusBar(bar);
 	end
 
 	SkinStatusBar(AchievementFrameSummaryCategoriesStatusBar);
@@ -242,47 +199,6 @@ local function LoadSkin(event)
 		_G[highlight:GetName() .. "Middle"]:SetTexture(1, 1, 1, 0.3);
 		_G[highlight:GetName() .. "Middle"]:SetAllPoints(frame);
 	end
-
-	hooksecurefunc("AchievementFrameCategory_StatusBarTooltip", function(self)
-		if(not E.private.skins.animations) then return; end
-
-		local index = GameTooltip.shownStatusBars;
-		local name = GameTooltip:GetName().."StatusBar"..index;
-		local statusBar = _G[name];
-		if(not statusBar) then return; end
-
-		if(not statusBar.anim) then
-			AnimationStatusBar(statusBar);
-		end
-
-		PlayAnimationStatusBar(statusBar, self.numAchievements, self.numCompleted);
-	end);
-
-	hooksecurefunc("AchievementFrameComparison_UpdateStatusBars", function(id)
-		if(not E.private.skins.animations) then return; end
-
-		local numAchievements, numCompleted = GetCategoryNumAchievements(id);
-		local statusBar = AchievementFrameComparisonSummaryPlayerStatusBar;
-		PlayAnimationStatusBar(statusBar, numAchievements, numCompleted);
-
-		local friendCompleted = GetComparisonCategoryNumAchievements(id);
-		statusBar = AchievementFrameComparisonSummaryFriendStatusBar;
-		PlayAnimationStatusBar(statusBar, numAchievements, friendCompleted);
-	end);
-
-	hooksecurefunc("AchievementFrameSummaryCategoriesStatusBar_Update", function()
-		if(not E.private.skins.animations) then return; end
-
-		local total, completed = GetNumCompletedAchievements();
-		PlayAnimationStatusBar(AchievementFrameSummaryCategoriesStatusBar, total, completed);
-	end);
-
-	hooksecurefunc("AchievementFrameSummaryCategory_OnShow", function(self)
-		if(not E.private.skins.animations) then return; end
-
-		local totalAchievements, totalCompleted = AchievementFrame_GetCategoryTotalNumAchievements(self:GetID(), true);
-		PlayAnimationStatusBar(self, totalAchievements, totalCompleted);
-	end);
 
 	hooksecurefunc("AchievementFrameSummary_UpdateAchievements", function()
 		for i = 1, ACHIEVEMENTUI_MAX_SUMMARY_ACHIEVEMENTS do
@@ -344,8 +260,6 @@ local function LoadSkin(event)
 					frame.ClearAllPoints = E.noop;
 				end
 
-				AnimationStatusBar(frame, true);
-
 				frame.skinned = true;
 			end
 		end
@@ -353,9 +267,9 @@ local function LoadSkin(event)
 
 	hooksecurefunc("AchievementObjectives_DisplayCriteria", function(objectivesFrame, id)
 		local numCriteria = GetAchievementNumCriteria(id);
-		local textStrings, metas, progressBars = 0, 0, 0;
+		local textStrings, metas = 0, 0;
 		for i = 1, numCriteria do
-			local _, criteriaType, completed, quantity, reqQuantity, _, flags, assetID = GetAchievementCriteriaInfo(id, i);
+			local _, criteriaType, completed, _, _, _, _, assetID = GetAchievementCriteriaInfo(id, i);
 			if(criteriaType == CRITERIA_TYPE_ACHIEVEMENT and assetID) then
 				metas = metas + 1;
 				local metaCriteria = AchievementButton_GetMeta(metas);
@@ -377,10 +291,6 @@ local function LoadSkin(event)
 					metaCriteria.label:SetShadowOffset(1, -1)
 					metaCriteria.label:SetTextColor(.6, .6, .6, 1);
 				end
-			elseif(E.private.skins.animations and bit.band(flags, ACHIEVEMENT_CRITERIA_PROGRESS_BAR) == ACHIEVEMENT_CRITERIA_PROGRESS_BAR) then
-				progressBars = progressBars + 1;
-				local progressBar = AchievementButton_GetProgressBar(progressBars);
-				PlayAnimationStatusBar(progressBar, reqQuantity, quantity, true);
 			elseif(criteriaType ~= 1) then
 				textStrings = textStrings + 1;
 				local criteria = AchievementButton_GetCriteria(textStrings);
