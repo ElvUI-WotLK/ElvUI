@@ -468,22 +468,11 @@ local function LoadSkin()
 		end);
 	end
 
-	hooksecurefunc("SkillDetailFrame_SetStatusBar", function()
-		local StatusBar = _G["SkillDetailStatusBar"];
-		local StatusBarBorder = _G["SkillDetailStatusBarBorder"];
-		local StatusBarBackground = _G["SkillDetailStatusBarBackground"];
-
-		if(not StatusBar.skinned) then
-			StatusBar:SetStatusBarTexture(E["media"].normTex);
-			E:RegisterStatusBar(StatusBar);
-			StatusBar.skinned = true;
-		end
-
-		StatusBar:SetTemplate("Default");
-
-		StatusBarBorder:SetTexture(nil);
-		StatusBarBackground:SetTexture(nil);
-	end)
+	SkillDetailStatusBar:StripTextures();
+	SkillDetailStatusBar:SetTemplate("Default");
+	SkillDetailStatusBar:SetStatusBarTexture(E["media"].normTex);
+	SkillDetailStatusBar:EnableDrawLayer("ARTWORK");
+	E:RegisterStatusBar(SkillDetailStatusBar);
 
 	SkillListScrollFrame:StripTextures();
 	S:HandleScrollBar(SkillListScrollFrameScrollBar);
