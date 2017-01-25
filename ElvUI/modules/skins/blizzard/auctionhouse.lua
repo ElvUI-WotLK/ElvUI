@@ -191,9 +191,12 @@ local function LoadSkin()
 		local button = _G["BrowseButton"..i]
 		local icon = _G["BrowseButton"..i.."Item"]
 		local name = _G["BrowseButton"..i.."Name"];
+		local texture = _G["BrowseButton"..i.."ItemIconTexture"];
 
-		_G["BrowseButton"..i.."ItemIconTexture"]:SetTexCoord(unpack(E.TexCoords));
-		_G["BrowseButton"..i.."ItemIconTexture"]:SetInside();
+		if(texture) then
+			texture:SetTexCoord(unpack(E.TexCoords));
+			texture:SetInside();
+		end
 
 		if(icon) then
 			icon:StyleButton();
