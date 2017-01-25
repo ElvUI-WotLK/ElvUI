@@ -94,21 +94,20 @@ local function LoadSkin()
 	end
 
 	for i = 1, MAX_NUM_TALENTS do
-		local button = _G["InspectTalentFrameTalent"..i];
+		local talent = _G["InspectTalentFrameTalent"..i];
 		local icon = _G["InspectTalentFrameTalent"..i.."IconTexture"];
 		local rank = _G["InspectTalentFrameTalent"..i.."Rank"];
 
-		if (button) then
-			button:StripTextures()
-			button:SetTemplate("Default", true)
-			button:StyleButton()
+		if (talent) then
+			talent:StripTextures();
+			talent:SetTemplate("Default");
+			talent:StyleButton();
 
-			icon:SetTexCoord(unpack(E.TexCoords))
-			icon:SetDrawLayer("ARTWORK")
-			icon:ClearAllPoints()
-			icon:SetInside()
+			icon:SetInside();
+			icon:SetTexCoord(unpack(E.TexCoords));
+			icon:SetDrawLayer("ARTWORK");
 
-			rank:SetFont(E.LSM:Fetch("font", E.db["general"].font), 12, "OUTLINE")
+			rank:SetFont(E.LSM:Fetch("font", E.db["general"].font), 12, "OUTLINE");
 		end
 	end
 

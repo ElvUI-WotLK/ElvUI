@@ -43,18 +43,21 @@ local function LoadSkin()
 	S:HandleScrollBar(PlayerTalentFrameScrollFrameScrollBar);
 
 	for i = 1, MAX_NUM_TALENTS do
-		local talent = _G["PlayerTalentFrameTalent" .. i];
-		local icon = _G["PlayerTalentFrameTalent" .. i .. "IconTexture"];
+		local talent = _G["PlayerTalentFrameTalent"..i];
+		local icon = _G["PlayerTalentFrameTalent"..i.."IconTexture"];
 		local rank = _G["PlayerTalentFrameTalent"..i.."Rank"];
 
-		talent:StripTextures();
-		talent:StyleButton();
-		talent:SetTemplate("Default");
+		if (talent) then
+			talent:StripTextures();
+			talent:SetTemplate("Default");
+			talent:StyleButton();
 
-		icon:SetInside();
-		icon:SetTexCoord(unpack(E.TexCoords));
+			icon:SetInside();
+			icon:SetTexCoord(unpack(E.TexCoords));
+			icon:SetDrawLayer("ARTWORK");
 
-		rank:SetFont(E.LSM:Fetch("font", E.db["general"].font), 12, "OUTLINE");
+			rank:SetFont(E.LSM:Fetch("font", E.db["general"].font), 12, "OUTLINE");
+		end
 	end
 
 	for i = 1, 4 do

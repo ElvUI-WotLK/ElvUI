@@ -192,11 +192,11 @@ function M:Initialize()
 				DropDownList1:SetScale(UIParent:GetScale());
 			end
 		end);
-	end
 
-	WorldMapTooltip:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 110);
-	WorldMapCompareTooltip1:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 110);
-	WorldMapCompareTooltip2:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 110);
+		WorldMapTooltip:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 110);
+		WorldMapCompareTooltip1:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 110);
+		WorldMapCompareTooltip2:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 110);
+	end
 end
 
 E:RegisterInitialModule(M:GetName());
