@@ -96,14 +96,12 @@ function M:PLAYER_REGEN_DISABLED()
 		WorldMapQuestShowObjectives:Disable();
 	end
 
-	self.blobWasVisible = WorldMapBlobFrame:IsShown();
-
 	WorldMapBlobFrame:SetParent(nil);
 	WorldMapBlobFrame:ClearAllPoints();
 	WorldMapBlobFrame:SetPoint("TOP", UIParent, "BOTTOM");
-	WorldMapBlobFrame:Hide();
 	WorldMapBlobFrame.Hide = function() M.blobWasVisible = nil end;
 	WorldMapBlobFrame.Show = function() M.blobWasVisible = true end;
+	WorldMapBlobFrame:Hide();
 end
 
 function M:UpdateCoords()
