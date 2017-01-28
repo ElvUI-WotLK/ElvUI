@@ -170,7 +170,7 @@ E.Options.args.bags = {
 							order = 4,
 							type = "range",
 							name = L["Font Size"],
-							min = 6, max = 212, step = 1,
+							min = 6, max = 33, step = 1,
 							disabled = function() return not E.db.bags.itemLevel; end,
 							set = function(info, value) E.db.bags.itemLevelFontSize = value; B:UpdateItemLevelDisplay(); end
 						},
