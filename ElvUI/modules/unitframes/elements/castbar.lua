@@ -123,7 +123,7 @@ function UF:Configure_Castbar(frame)
 			if(db.castbar.insideInfoPanel and frame.USE_INFO_PANEL) then
 				castbar.Icon.bg:Size(db.infoPanel.height - frame.SPACING*2);
 			else
-				castbar.Icon.bg:Size(db.castbar.height-frame.SPACING*2);
+				castbar.Icon.bg:Size(db.castbar.height - frame.SPACING*2);
 			end
 			castbar:Width(db.castbar.width - castbar.Icon.bg:GetWidth() - (frame.BORDER + frame.SPACING*5));
 		end
@@ -142,7 +142,6 @@ function UF:Configure_Castbar(frame)
 
 	castbar:ClearAllPoints();
 	if(db.castbar.insideInfoPanel and frame.USE_INFO_PANEL) then
-		castbar:Size(frame.InfoPanel:GetSize());
 		if(not db.castbar.iconAttached) then
 			castbar:SetInside(frame.InfoPanel, 0, 0);
 		else
