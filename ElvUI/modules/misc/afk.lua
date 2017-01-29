@@ -237,6 +237,7 @@ function AFK:Initialize()
 	local classColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass];
 
 	self.AFKMode = CreateFrame("Frame", "ElvUIAFKFrame");
+	self.AFKMode:SetFrameLevel(1);
 	self.AFKMode:SetScale(UIParent:GetScale());
 	self.AFKMode:SetAllPoints(UIParent);
 	self.AFKMode:Hide();
@@ -262,12 +263,13 @@ function AFK:Initialize()
 	self.AFKMode.chat:SetScript("OnEvent", CH.ChatFrame_OnEvent);
 
 	self.AFKMode.bottom = CreateFrame("Frame", nil, self.AFKMode);
+	self.AFKMode.bottom:SetFrameLevel(0);
 	self.AFKMode.bottom:SetTemplate("Transparent");
-	self.AFKMode.bottom:Point("BOTTOM", self.AFKMode, "BOTTOM", 0, -2);
-	self.AFKMode.bottom:Width(GetScreenWidth());
+	self.AFKMode.bottom:Point("BOTTOM", self.AFKMode, "BOTTOM", 0, -E.Border);
+	self.AFKMode.bottom:Width(GetScreenWidth() + (E.Border*2));
 	self.AFKMode.bottom:Height(GetScreenHeight() * 0.1);
 
-	self.AFKMode.bottom.logo = self.AFKMode.bottom:CreateTexture(nil, "OVERLAY");
+	self.AFKMode.bottom.logo = self.AFKMode:CreateTexture(nil, "OVERLAY");
 	self.AFKMode.bottom.logo:Size(320, 150);
 	self.AFKMode.bottom.logo:Point("CENTER", self.AFKMode.bottom, "CENTER", 0, 50);
 	self.AFKMode.bottom.logo:SetTexture("Interface\\AddOns\\ElvUI\\media\\textures\\logo_elvui");
