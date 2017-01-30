@@ -726,7 +726,6 @@ function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdat
 
 			if(maxPlayers > 0) then
 				numGroups = E:Round(maxPlayers/5);
-				E:Print(group, "Forcing maxGroups to: " .. numGroups .. " because maxPlayers is: " .. maxPlayers);
 			end
 		end
 	end
@@ -1105,10 +1104,8 @@ function UF:Initialize()
 	if(E.private["unitframe"]["disabledBlizzardFrames"].party) then
 		InterfaceOptionsStatusTextPanelParty:SetScale(0.0001);
 		InterfaceOptionsStatusTextPanelParty:SetAlpha(0);
-	end
-
-	if(E.private["unitframe"]["disabledBlizzardFrames"].party) then
 		InterfaceOptionsFrameCategoriesButton11:SetScale(0.0001);
+		SetCVar("showPartyBackground", 0);
 	end
 
 	if(E.private["unitframe"]["disabledBlizzardFrames"].arena) then
