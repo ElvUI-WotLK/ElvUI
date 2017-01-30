@@ -1016,6 +1016,7 @@ function ElvUF:DisableBlizzard(unit)
 				HandleFrame(("PartyMemberFrame%d"):format(i));
 			end
 		end
+		HandleFrame(PartyMemberBackground);
 	elseif((unit:match"(arena)%d?$" == "arena") and E.private["unitframe"]["disabledBlizzardFrames"].arena) then
 		local id = unit:match"arena(%d)";
 		if(id) then
@@ -1105,7 +1106,6 @@ function UF:Initialize()
 		InterfaceOptionsStatusTextPanelParty:SetScale(0.0001);
 		InterfaceOptionsStatusTextPanelParty:SetAlpha(0);
 		InterfaceOptionsFrameCategoriesButton11:SetScale(0.0001);
-		SetCVar("showPartyBackground", 0);
 	end
 
 	if(E.private["unitframe"]["disabledBlizzardFrames"].arena) then
