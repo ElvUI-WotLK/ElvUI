@@ -50,44 +50,44 @@ RB.Spell2Buffs = {
 	57373, -- Выслеживание животных;
 	57399, -- 80 Силы, 46 Силы заклинаний (Рыбный пир);
 	59230, -- 40 Рейтинг уклонений;
-	65247 -- 20 Силы;
+	65247, -- 20 Силы;
 };
 
 RB.Spell3Buffs = {
 	48469, -- Знак дикой природы;
-	72588 -- Дар дикой природы;
+	72588, -- Дар дикой природы;
 };
 
 RB.Spell4Buffs = {
 	20217, -- Благословение королей;
-	25898 -- Великое благословение королей;
+	25898, -- Великое благословение королей;
 };
 
 RB.CasterSpell5Buffs = {
 	42995, -- Чародейский интелект;
 	43002, -- Чародейская гениальность;
-	61316 -- Чародейская гениальность Даларана;
+	61316, -- Чародейская гениальность Даларана;
 };
 
 RB.MeleeSpell5Buffs = {
 	48161, -- Слово силы: Стойкость;
-	48162 -- Молитва стойкости;
+	48162, -- Молитва стойкости;
 };
 
 RB.CasterSpell6Buffs = {
 	48936, -- Благословение мудрости;
 	48938, -- Великое благословение мудрости;
-	58777 -- Источник маны;
+	58777, -- Источник маны;
 };
 
 RB.MeleeSpell6Buffs = {
 	48932, -- Благословение могущества;
 	48934, -- Великое благословение могущества;
-	47436 -- Боевой крик;
+	47436, -- Боевой крик;
 };
 
 function RB:CheckFilterForActiveBuff(filter)
-	local spellName, texture, name, duration, expirationTime;
+	local spellName, name, texture, duration, expirationTime;
 
 	for _, spell in pairs(filter) do
 		spellName = GetSpellInfo(spell);
@@ -104,8 +104,8 @@ end
 function RB:UpdateReminderTime(elapsed)
 	self.expiration = self.expiration - elapsed;
 
-	if(self.nextupdate > 0) then
-		self.nextupdate = self.nextupdate - elapsed;
+	if(self.nextUpdate > 0) then
+		self.nextUpdate = self.nextUpdate - elapsed;
 		return;
 	end
 
@@ -116,7 +116,7 @@ function RB:UpdateReminderTime(elapsed)
 	end
 
 	local timervalue, formatid;
-	timervalue, formatid, self.nextupdate = E:GetTimeInfo(self.expiration, 4);
+	timervalue, formatid, self.nextUpdate = E:GetTimeInfo(self.expiration, 4);
 	self.timer:SetFormattedText(("%s%s|r"):format(E.TimeColors[formatid], E.TimeFormats[formatid][1]), timervalue);
 end
 
@@ -128,16 +128,16 @@ function RB:UpdateReminder(event, unit)
 		local button = self.frame[i];
 
 		if(hasBuff) then
-			button.expiration = expirationTime - GetTime();
-			button.nextupdate = 0;
 			button.t:SetTexture(texture);
 
 			if(duration == 0 and expirationTime == 0) then
-			--	button.t:SetAlpha(0.3);
+				button.t:SetAlpha(1);
 				button:SetScript("OnUpdate", nil);
 				button.timer:SetText(nil);
 				CooldownFrame_SetTimer(button.cd, 0, 0, 0);
 			else
+				button.expiration = expirationTime - GetTime();
+				button.nextUpdate = 0;
 				button.t:SetAlpha(1)
 				CooldownFrame_SetTimer(button.cd, expirationTime - duration, duration, 1);
 				button:SetScript("OnUpdate", self.UpdateReminderTime);
