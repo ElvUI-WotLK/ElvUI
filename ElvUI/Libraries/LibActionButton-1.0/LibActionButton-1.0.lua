@@ -1131,28 +1131,27 @@ end
 
 function UpdateOverlayGlow(self)
 	if(not CheeseLoaded) then return; end
+	if(not self._state_action) then return; end
+
+	if(self:HasAction()) then
+		if(not self.cheeseEventsRegistered) then
+			Cheese_RegisterEvent("CHEESE_SPELL_ACTIVATION_OVERLAY_GLOW_SHOW", self, OnEventOverlayGlowShow);
+			Cheese_RegisterEvent("CHEESE_SPELL_ACTIVATION_OVERLAY_GLOW_HIDE", self, OnEventOverlayGlowHide);
+			self.cheeseEventsRegistered = true;
+		end
+	else
+		if(self.cheeseEventsRegistered) then
+			Cheese_UnregisterEvent("CHEESE_SPELL_ACTIVATION_OVERLAY_GLOW_SHOW", self);
+			Cheese_UnregisterEvent("CHEESE_SPELL_ACTIVATION_OVERLAY_GLOW_HIDE", self);
+			self.cheeseEventsRegistered = nil;
+		end
+	end
 
 	local spellId = self:GetSpellId();
-	if(self._state_action and spellId) then
-		if(self:HasAction()) then
-			if(not self.cheeseEventsRegistered) then
-				Cheese_RegisterEvent("CHEESE_SPELL_ACTIVATION_OVERLAY_GLOW_SHOW", self, OnEventOverlayGlowShow);
-				Cheese_RegisterEvent("CHEESE_SPELL_ACTIVATION_OVERLAY_GLOW_HIDE", self, OnEventOverlayGlowHide);
-				self.cheeseEventsRegistered = true;
-			end
-		else
-			if(self.cheeseEventsRegistered) then
-				Cheese_UnregisterEvent("CHEESE_SPELL_ACTIVATION_OVERLAY_GLOW_SHOW", self);
-				Cheese_UnregisterEvent("CHEESE_SPELL_ACTIVATION_OVERLAY_GLOW_HIDE", self);
-				self.cheeseEventsRegistered = nil;
-			end
-		end
-
-		if(Cheese_IsSpellOverlayed(spellId)) then
-			CheeseActionButton_ShowOverlayGlow(self);
-		else
-			CheeseActionButton_HideOverlayGlow(self);
-		end
+	if(spellId and Cheese_IsSpellOverlayed(spellId)) then
+		CheeseActionButton_ShowOverlayGlow(self);
+	else
+		CheeseActionButton_HideOverlayGlow(self);
 	end
 end
 
