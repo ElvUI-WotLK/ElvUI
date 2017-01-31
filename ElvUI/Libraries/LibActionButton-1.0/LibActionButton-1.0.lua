@@ -89,6 +89,7 @@ local ButtonRegistry, ActiveButtons, ActionButtons, NonActionButtons = lib.butto
 local Update, UpdateButtonState, UpdateUsable, UpdateCount, UpdateCooldown, UpdateTooltip
 local StartFlash, StopFlash, UpdateFlash, UpdateHotkeys, UpdateRangeTimer
 local ShowGrid, HideGrid, UpdateGrid, SetupSecureSnippets, WrapOnClick
+local OnEventOverlayGlowShow, OnEventOverlayGlowHide, UpdateOverlayGlow
 
 local InitializeEventHandler, OnEvent, ForAllButtons, OnUpdate
 
@@ -994,6 +995,8 @@ function Update(self)
 
 	UpdateCount(self)
 
+	UpdateOverlayGlow(self)
+
 	if GameTooltip:GetOwner() == self then
 		UpdateTooltip(self)
 	end
@@ -1123,6 +1126,47 @@ end
 
 function UpdateRangeTimer()
 	rangeTimer = -1
+end
+
+function UpdateOverlayGlow(self)
+	if(not IsAddOnLoaded("Cheese")) then return; end
+
+	if(self._state_action) then
+		if(self:HasAction(self.action)) then
+			if(not self.cheeseEventsRegistered) then
+				Cheese_RegisterEvent("CHEESE_SPELL_ACTIVATION_OVERLAY_GLOW_SHOW", self, OnEventOverlayGlowShow);
+				Cheese_RegisterEvent("CHEESE_SPELL_ACTIVATION_OVERLAY_GLOW_HIDE", self, OnEventOverlayGlowHide);
+				self.cheeseEventsRegistered = true;
+			end
+		else
+			if(self.cheeseEventsRegistered) then
+				Cheese_UnregisterEvent("CHEESE_SPELL_ACTIVATION_OVERLAY_GLOW_SHOW", self);
+				Cheese_UnregisterEvent("CHEESE_SPELL_ACTIVATION_OVERLAY_GLOW_HIDE", self);
+				self.cheeseEventsRegistered = nil;
+			end
+		end
+
+		local spellType, id, subType, globalID = GetActionInfo(self._state_action);
+		if(spellType == "spell" and Cheese_IsSpellOverlayed(globalID)) then
+			CheeseActionButton_ShowOverlayGlow(self);
+		else
+			CheeseActionButton_HideOverlayGlow(self);
+		end
+	end
+end
+
+function OnEventOverlayGlowShow(self, arg1)
+	local actionType, id, subType, globalID = GetActionInfo(self._state_action);
+	if(actionType == "spell" and globalID == arg1) then
+		CheeseActionButton_ShowOverlayGlow(self);
+	end
+end
+
+function OnEventOverlayGlowHide(self, arg1)
+	local actionType, id, subType, globalID = GetActionInfo(self._state_action);
+	if(actionType == "spell" and globalID == arg1) then
+		CheeseActionButton_HideOverlayGlow(self);
+	end
 end
 
 local function GetSpellIdByName(spellName)
