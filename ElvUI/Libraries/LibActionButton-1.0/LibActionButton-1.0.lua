@@ -1129,9 +1129,7 @@ function UpdateRangeTimer()
 end
 
 function UpdateOverlayGlow(self)
-	if(not IsAddOnLoaded("Cheese")) then return; end
-
-	if(self._state_action) then
+	if(self._state_action and IsAddOnLoaded("Cheese")) then
 		if(self:HasAction(self.action)) then
 			if(not self.cheeseEventsRegistered) then
 				Cheese_RegisterEvent("CHEESE_SPELL_ACTIVATION_OVERLAY_GLOW_SHOW", self, OnEventOverlayGlowShow);
