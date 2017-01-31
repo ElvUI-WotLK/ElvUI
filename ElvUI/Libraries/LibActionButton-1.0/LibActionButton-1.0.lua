@@ -1133,8 +1133,8 @@ function UpdateOverlayGlow(self)
 	if(not CheeseLoaded) then return; end
 
 	local spellId = self:GetSpellId();
-	if(spellId) then
-		if(self:HasAction(self.action)) then
+	if(self._state_action and spellId) then
+		if(self:HasAction()) then
 			if(not self.cheeseEventsRegistered) then
 				Cheese_RegisterEvent("CHEESE_SPELL_ACTIVATION_OVERLAY_GLOW_SHOW", self, OnEventOverlayGlowShow);
 				Cheese_RegisterEvent("CHEESE_SPELL_ACTIVATION_OVERLAY_GLOW_HIDE", self, OnEventOverlayGlowHide);
