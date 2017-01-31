@@ -42,6 +42,7 @@ local match, format = string.match, format
 
 local KeyBound = LibStub("LibKeyBound-1.0", true)
 local CBH = LibStub("CallbackHandler-1.0")
+local CheeseLoaded = IsAddOnLoaded("Cheese")
 
 lib.eventFrame = lib.eventFrame or CreateFrame("Frame")
 lib.eventFrame:UnregisterAllEvents()
@@ -1129,7 +1130,10 @@ function UpdateRangeTimer()
 end
 
 function UpdateOverlayGlow(self)
-	if(self._state_action and IsAddOnLoaded("Cheese")) then
+	if(not CheeseLoaded) then return; end
+
+	local spellId = self:GetSpellId();
+	if(spellId) then
 		if(self:HasAction(self.action)) then
 			if(not self.cheeseEventsRegistered) then
 				Cheese_RegisterEvent("CHEESE_SPELL_ACTIVATION_OVERLAY_GLOW_SHOW", self, OnEventOverlayGlowShow);
@@ -1144,8 +1148,7 @@ function UpdateOverlayGlow(self)
 			end
 		end
 
-		local spellType, id, subType, globalID = GetActionInfo(self._state_action);
-		if(spellType == "spell" and Cheese_IsSpellOverlayed(globalID)) then
+		if(Cheese_IsSpellOverlayed(spellId)) then
 			CheeseActionButton_ShowOverlayGlow(self);
 		else
 			CheeseActionButton_HideOverlayGlow(self);
@@ -1154,15 +1157,13 @@ function UpdateOverlayGlow(self)
 end
 
 function OnEventOverlayGlowShow(self, arg1)
-	local actionType, id, subType, globalID = GetActionInfo(self._state_action);
-	if(actionType == "spell" and globalID == arg1) then
+	if(self:GetSpellId() == arg1) then
 		CheeseActionButton_ShowOverlayGlow(self);
 	end
 end
 
 function OnEventOverlayGlowHide(self, arg1)
-	local actionType, id, subType, globalID = GetActionInfo(self._state_action);
-	if(actionType == "spell" and globalID == arg1) then
+	if(self:GetSpellId() == arg1) then
 		CheeseActionButton_HideOverlayGlow(self);
 	end
 end
@@ -1220,9 +1221,9 @@ Action.IsConsumableOrStackable = function(self) return IsConsumableAction(self._
 Action.IsUnitInRange           = function(self, unit) return IsActionInRange(self._state_action, unit) end
 Action.SetTooltip              = function(self) return GameTooltip:SetAction(self._state_action) end
 Action.GetSpellId              = function(self)
-	local actionType, id, subType = GetActionInfo(self._state_action)
+	local actionType, id, subType, globalID = GetActionInfo(self._state_action)
 	if actionType == "spell" then
-		return id
+		return globalID, id;
 	elseif actionType == "macro" then
 		return GetSpellIdByName(GetMacroSpell(id))
 	end
