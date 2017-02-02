@@ -42,7 +42,6 @@ local match, format = string.match, format
 
 local KeyBound = LibStub("LibKeyBound-1.0", true)
 local CBH = LibStub("CallbackHandler-1.0")
-local CheeseLoaded = IsAddOnLoaded("Cheese")
 
 lib.eventFrame = lib.eventFrame or CreateFrame("Frame")
 lib.eventFrame:UnregisterAllEvents()
@@ -90,7 +89,6 @@ local ButtonRegistry, ActiveButtons, ActionButtons, NonActionButtons = lib.butto
 local Update, UpdateButtonState, UpdateUsable, UpdateCount, UpdateCooldown, UpdateTooltip
 local StartFlash, StopFlash, UpdateFlash, UpdateHotkeys, UpdateRangeTimer
 local ShowGrid, HideGrid, UpdateGrid, SetupSecureSnippets, WrapOnClick
-local OnEventOverlayGlowShow, OnEventOverlayGlowHide, UpdateOverlayGlow
 
 local InitializeEventHandler, OnEvent, ForAllButtons, OnUpdate
 
@@ -996,8 +994,6 @@ function Update(self)
 
 	UpdateCount(self)
 
-	UpdateOverlayGlow(self)
-
 	if GameTooltip:GetOwner() == self then
 		UpdateTooltip(self)
 	end
@@ -1129,44 +1125,6 @@ function UpdateRangeTimer()
 	rangeTimer = -1
 end
 
-function UpdateOverlayGlow(self)
-	if(not CheeseLoaded) then return; end
-	if(not self._state_action) then return; end
-
-	if(self:HasAction()) then
-		if(not self.cheeseEventsRegistered) then
-			Cheese_RegisterEvent("CHEESE_SPELL_ACTIVATION_OVERLAY_GLOW_SHOW", self, OnEventOverlayGlowShow);
-			Cheese_RegisterEvent("CHEESE_SPELL_ACTIVATION_OVERLAY_GLOW_HIDE", self, OnEventOverlayGlowHide);
-			self.cheeseEventsRegistered = true;
-		end
-	else
-		if(self.cheeseEventsRegistered) then
-			Cheese_UnregisterEvent("CHEESE_SPELL_ACTIVATION_OVERLAY_GLOW_SHOW", self);
-			Cheese_UnregisterEvent("CHEESE_SPELL_ACTIVATION_OVERLAY_GLOW_HIDE", self);
-			self.cheeseEventsRegistered = nil;
-		end
-	end
-
-	local spellId = self:GetSpellId();
-	if(spellId and Cheese_IsSpellOverlayed(spellId)) then
-		CheeseActionButton_ShowOverlayGlow(self);
-	else
-		CheeseActionButton_HideOverlayGlow(self);
-	end
-end
-
-function OnEventOverlayGlowShow(self, arg1)
-	if(self:GetSpellId() == arg1) then
-		CheeseActionButton_ShowOverlayGlow(self);
-	end
-end
-
-function OnEventOverlayGlowHide(self, arg1)
-	if(self:GetSpellId() == arg1) then
-		CheeseActionButton_HideOverlayGlow(self);
-	end
-end
-
 local function GetSpellIdByName(spellName)
 	if not spellName then return end
 	local spellLink = GetSpellLink(spellName)
@@ -1222,7 +1180,7 @@ Action.SetTooltip              = function(self) return GameTooltip:SetAction(sel
 Action.GetSpellId              = function(self)
 	local actionType, id, subType, globalID = GetActionInfo(self._state_action)
 	if actionType == "spell" then
-		return globalID, id;
+		return globalID
 	elseif actionType == "macro" then
 		return GetSpellIdByName(GetMacroSpell(id))
 	end
