@@ -77,6 +77,7 @@ L["Home Latency:"] = true;
 L["HP"] = true;
 L["HPS"] = true;
 L["lvl"] = true;
+L["Miss Chance"] = true;
 L["Mitigation By Level: "] = true;
 L["No Guild"] = true;
 L["Profit:"] = true;

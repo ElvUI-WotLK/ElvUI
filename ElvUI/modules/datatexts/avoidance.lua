@@ -101,7 +101,7 @@ local function OnEnter(self)
 	DT.tooltip:AddDoubleLine(DODGE_CHANCE, format(chanceString, dodge), 1, 1, 1);
 	DT.tooltip:AddDoubleLine(PARRY_CHANCE, format(chanceString, parry), 1, 1, 1);
 	DT.tooltip:AddDoubleLine(BLOCK_CHANCE, format(chanceString, block), 1, 1, 1);
-	DT.tooltip:AddDoubleLine("MISS_CHANCE", format(chanceString, baseMissChance), 1, 1, 1);
+	DT.tooltip:AddDoubleLine(L["Miss Chance"], format(chanceString, baseMissChance), 1, 1, 1);
 	DT.tooltip:AddLine(" ");
 
 	if(unhittable > 0) then

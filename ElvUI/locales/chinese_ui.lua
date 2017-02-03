@@ -77,6 +77,7 @@ L["Home Latency:"] = "本机延迟:"
 L["HP"] = "生命值"
 L["HPS"] = "治疗输出"
 L["lvl"] = "等级"
+L["Miss Chance"] = true;
 L["Mitigation By Level: "] = "等级减伤: "
 L["No Guild"] = "没有公会"
 L["Profit:"] = "利润:"

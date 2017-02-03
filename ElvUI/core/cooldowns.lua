@@ -78,7 +78,8 @@ function E:CreateCooldownTimer(parent)
 	local scaler = CreateFrame("Frame", nil, parent)
 	scaler:SetAllPoints()
 
-	local timer = CreateFrame("Frame", nil, scaler); timer:Hide()
+	local timer = CreateFrame("Frame", nil, scaler);
+	timer:Hide()
 	timer:SetAllPoints()
 	timer:SetScript("OnUpdate", Cooldown_OnUpdate)
 

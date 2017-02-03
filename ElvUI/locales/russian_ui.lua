@@ -77,6 +77,7 @@ L["Hit"] = "Метк."
 L["Hold Shift + Right Click:"] = "Shift + ПКМ:"
 L["Home Latency:"] = "Локальная задержка: "
 L["lvl"] = "ур."
+L["Miss Chance"] = "Вероятность промаха";
 L["Mitigation By Level: "] = "Снижение на уровне: "
 L["No Guild"] = "Нет гильдии"
 L["Profit:"] = "Прибыль:"

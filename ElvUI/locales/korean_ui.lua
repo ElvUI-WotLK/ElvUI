@@ -77,6 +77,7 @@ L["Home Latency:"] = "지연 시간:"
 L["HP"] = "주문력"
 L["HPS"] = "HPS"
 L["lvl"] = "레벨"
+L["Miss Chance"] = true;
 L["Mitigation By Level: "] = "레벨별 데미지 경감률"
 L["No Guild"] = "길드 없음"
 L["Profit:"] = "이익:"

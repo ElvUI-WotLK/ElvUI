@@ -77,6 +77,7 @@ L["Home Latency:"] = "Latencia Local:"
 L["HP"] = "Salud"
 L["HPS"] = "VPS"
 L["lvl"] = "Niv"
+L["Miss Chance"] = true;
 L["Mitigation By Level: "] = "Mitigación Por Nivel: "
 L["No Guild"] = "Sin Hermandad"
 L["Profit:"] = "Ganancia:"
