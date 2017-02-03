@@ -184,6 +184,9 @@ local function LoadSkin()
 	ReadyCheckFrameText:SetPoint("TOP", 0, -12)
 
 	-- others
+	ZoneTextFrame:ClearAllPoints()
+	ZoneTextFrame:Point("TOP", UIParent, 0, -128)
+
 	CoinPickupFrame:StripTextures();
 	CoinPickupFrame:SetTemplate("Transparent");
 
