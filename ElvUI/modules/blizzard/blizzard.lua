@@ -53,9 +53,13 @@ function B:Initialize()
 	QuestLogFrame:HookScript("OnShow", function()
 		local questFrame = QuestLogFrame:GetFrameLevel();
 		local controlPanel = QuestLogControlPanel:GetFrameLevel();
+		local scrollFrame = QuestLogDetailScrollFrame:GetFrameLevel();
 
 		if (questFrame >= controlPanel) then
 			QuestLogControlPanel:SetFrameLevel(questFrame + 1);
+		end
+		if (questFrame >= scrollFrame) then
+			QuestLogDetailScrollFrame:SetFrameLevel(questFrame + 1);
 		end
 	end);
 end
