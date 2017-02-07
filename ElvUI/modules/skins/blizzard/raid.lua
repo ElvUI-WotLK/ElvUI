@@ -45,27 +45,32 @@ local function LoadSkin()
 		for index, value in pairs(RAID_CLASS_BUTTONS) do
 			button = _G["RaidClassButton" .. value.button];
 			icon = _G["RaidClassButton" .. value.button .. "IconTexture"];
+			count = _G["RaidClassButton" .. value.button .. "Count"];
 
 			button:StripTextures();
 
 			if(not button.backdrop) then
 				button:CreateBackdrop("Default");
-				button.backdrop:Point("TOPLEFT", 1, -7);
-				button.backdrop:Point("BOTTOMRIGHT", 3, -9);
+				button.backdrop:SetOutside(icon);
 			end
 
 			if(button:GetID() == value.button) then
 				button.class = index;
 				if(index == "PETS") then
 					icon:SetTexture("Interface\\RaidFrame\\UI-RaidFrame-Pets");
+					icon:SetTexCoord(unpack(E.TexCoords));
 				elseif(index == "MAINTANK") then
 					icon:SetTexture("Interface\\RaidFrame\\UI-RaidFrame-MainTank");
+					icon:SetTexCoord(unpack(E.TexCoords));
 				elseif(index == "MAINASSIST") then
 					icon:SetTexture("Interface\\RaidFrame\\UI-RaidFrame-MainAssist");
+					icon:SetTexCoord(unpack(E.TexCoords));
 				else
-					icon:SetTexture("Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes");
+					icon:SetTexture("Interface\\WorldStateFrame\\Icons-Classes");
+					icon:SetTexCoord(value.coords[1] + 0.015, value.coords[2] - 0.02, value.coords[3] + 0.018, value.coords[4] - 0.02);
 				end
-				icon:SetTexCoord(value.coords[1] + 0.015, value.coords[2] - 0.02, value.coords[3] + 0.018, value.coords[4] - 0.02);
+				icon:Size(20);
+				count:FontTemplate(nil, 12, "OUTLINE");
 			end
 		end
 	end);
