@@ -1,5 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Button name="ELVUI_UNITTARGET" inherits="SecureUnitButtonTemplate" hidden="true" virtual="true">
+	<Button name="ELVUI_UNITTARGET" inherits="SecureUnitButtonTemplate" virtual="true">
 		<Frames>
 			<Button name="$parentTarget" inherits="SecureUnitButtonTemplate">
 				<Anchors>
@@ -19,7 +19,7 @@
 		</Frames>
 	</Button>
 
-	<Button name="ELVUI_UNITPET" inherits="SecureUnitButtonTemplate" hidden="true" virtual="true">
+	<Button name="ELVUI_UNITPET" inherits="SecureUnitButtonTemplate" virtual="true">
 		<Frames>
 			<Button name="$parentPet" inherits="SecureUnitButtonTemplate">
 				<Anchors>
