@@ -191,9 +191,6 @@ function UF:Update_PartyFrames(frame, db)
 			else
 				frame:SetParent(E.HiddenFrame);
 			end
-		else
-			frame:SetAttribute("initial-height", childDB.height);
-			frame:SetAttribute("initial-width", childDB.width);
 		end
 
 		UF:Configure_HealthBar(frame);
