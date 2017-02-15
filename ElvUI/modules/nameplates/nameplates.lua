@@ -543,7 +543,7 @@ function mod:OnHide()
 	self.Glow.r, self.Glow.g, self.Glow.b = nil, nil, nil;
 	self.Glow:Hide();
 
-	mod:HideComboPoints(self);
+	mod.HideComboPoints(self);
 end
 
 function mod:UpdateSettings()
@@ -1057,6 +1057,7 @@ end
 
 function mod:UNIT_COMBO_POINTS(_, unit)
 	if(unit == "player" or unit == "vehicle") then
+		self:ForEachPlate("HideComboPoints");
 		self:UpdateElement_CPointsByUnitID("target");
 	end
 end

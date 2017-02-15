@@ -5,9 +5,9 @@ local GetComboPoints = GetComboPoints;
 local UnitHasVehicleUI = UnitHasVehicleUI;
 local MAX_COMBO_POINTS = MAX_COMBO_POINTS;
 
-function mod:HideComboPoints(frame)
+function mod:HideComboPoints()
 	for i = 1, MAX_COMBO_POINTS do
-		frame.CPoints[i]:Hide();
+		self.CPoints[i]:Hide();
 	end
 end
 
