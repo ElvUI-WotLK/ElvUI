@@ -5,6 +5,15 @@ local GetComboPoints = GetComboPoints;
 local UnitHasVehicleUI = UnitHasVehicleUI;
 local MAX_COMBO_POINTS = MAX_COMBO_POINTS;
 
+function mod:ToggleComboPoints()
+	if(self.db.comboPoints) then
+		self:RegisterEvent("UNIT_COMBO_POINTS");
+	else
+		self:ForEachPlate("HideComboPoints");
+		self:UnregisterEvent("UNIT_COMBO_POINTS");
+	end
+end
+
 function mod:HideComboPoints()
 	for i = 1, MAX_COMBO_POINTS do
 		self.CPoints[i]:Hide();
@@ -12,6 +21,8 @@ function mod:HideComboPoints()
 end
 
 function mod:UpdateElement_CPoints(frame)
+	if(not self.db.comboPoints) then return; end
+
 	local numPoints = mod.ComboPoints[frame.guid];
 	if(not numPoints) then
 		for i = 1, MAX_COMBO_POINTS do

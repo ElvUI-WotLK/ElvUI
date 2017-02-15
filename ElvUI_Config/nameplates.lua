@@ -148,6 +148,7 @@ E.Options.args.nameplate = {
 					order = 5,
 					name = L["Combo Points"],
 					desc = L["Display combo points on nameplates."],
+					set = function(info, value) E.db.nameplate[ info[#info] ] = value; NP:ToggleComboPoints(); end
 				},
 				colorNameByValue = {
 					type = "toggle",

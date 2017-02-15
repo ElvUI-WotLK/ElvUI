@@ -517,7 +517,7 @@ function mod:OnShow()
 		mod:UpdateElement_Auras(self);
 	end
 
-	mod:UpdateElement_CPoints(self);
+	--mod:UpdateElement_CPoints(self);
 
 	if(not mod.db.targetIndicator.colorMatchHealthBar) then
 		mod:ColorTargetIndicator(mod.db.targetIndicator.color.r, mod.db.targetIndicator.color.g, mod.db.targetIndicator.color.b);
@@ -1077,7 +1077,7 @@ function mod:Initialize()
 	self:RegisterEvent("UNIT_AURA");
 	self:RegisterEvent("PLAYER_TARGET_CHANGED");
 	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT");
-	self:RegisterEvent("UNIT_COMBO_POINTS");
+	self:ToggleComboPoints();
 
 	self.arrowIndicator = CreateFrame("Frame", nil, WorldFrame);
 	self.arrowIndicator.arrow = self.arrowIndicator:CreateTexture(nil, "BORDER");
