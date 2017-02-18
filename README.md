@@ -1,5 +1,5 @@
 # ElvUI WotLK
-This is backported version of ElvUI for World of Warcraft 3.3.5a.
+This is the backported version of ElvUI for World of Warcraft 3.3.5a.
 <br />
 ElvUI is a full UI replacement.
 It completely replaces the default Blizzard UI at every level with a new and better interface.
@@ -19,9 +19,9 @@ This UI will arrange your interface to be more flexible and practical.
 ## FAQ:
 
 ### I would like to report a bug. What i need to do?
-Make sure you're using latest version of [ElvUI](https://github.com/ElvUI-WotLK/ElvUI/releases/latest)
+Make sure you're using the latest version of [ElvUI](https://github.com/ElvUI-WotLK/ElvUI/releases/latest)
 <br />
-Describe your issue with as much detail as possible.
+Describe your issue in as much detail as possible.
 <br />
 If your issue is graphical, please take some screenshots to illustrate it.
 <br />
@@ -32,20 +32,20 @@ Explain how people can reproduce the issue.
 The more info you provide, the better and faster support you will receive.
 
 ### I would like to request a feature. Where do I go?
-This repository created to reproduce original functional of ElvUI.
+This repository has been created to reproduce the original functions of ElvUI.
 <br />
-If you want to request some feature post in the [ElvUI_Enhanced](https://github.com/ElvUI-WotLK/ElvUI_Enhanced/issues)
+If you want to request a feature, post in the [ElvUI_Enhanced](https://github.com/ElvUI-WotLK/ElvUI_Enhanced/issues)
 <br />
-If you want to request for changes of the existing **ElvUI** functional post in the [ElvUI_CustomTweaks](https://github.com/ElvUI-WotLK/ElvUI_CustomTweaks/issues)
+If you want to request for a change of an existing **ElvUI** function, post in the [ElvUI_CustomTweaks](https://github.com/ElvUI-WotLK/ElvUI_CustomTweaks/issues)
 
 ### I have a suggestation/problem with ElvUI_"PluginName". Where do I go?
-Create issue in the bug tracker of [ElvUI](https://github.com/ElvUI-WotLK)_"PluginName" repository.
+Create an issue at the bug tracker of [ElvUI](https://github.com/ElvUI-WotLK)_"PluginName" repository.
 
 ### ElvUI conflicting with "AddonName".
-Make sure you're using latest available version of "AddonName" for WotLK before creating ticket about it.
+Make sure you're using the latest available version of "AddonName" for WotLK before creating a ticket about it.
 
 ### Can you backport "AddonName" to WotLK?
-The only purpose of the ElvUI-WotLK is to improve the backported version of ElvUI and its plugins.
+The only purpose of ElvUI-WotLK is to improve the backported version of ElvUI and its plugins.
 
 
 ## FAQ RU:
