@@ -32,7 +32,7 @@ Explain how people can reproduce the issue.
 The more info you provide, the better and faster support you will receive.
 
 ### I would like to request a feature. Where do I go?
-This repository has been created to reproduce the original functions of ElvUI.
+This repository has been created to reproduce the original ElvUI functions.
 <br />
 If you want to request a feature, post in the [ElvUI_Enhanced](https://github.com/ElvUI-WotLK/ElvUI_Enhanced/issues)
 <br />
