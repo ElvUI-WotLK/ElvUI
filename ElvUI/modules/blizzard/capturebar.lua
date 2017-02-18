@@ -11,32 +11,30 @@ function B:WorldStateAlwaysUpFrame_Update()
 		captureBar = _G["WorldStateCaptureBar" .. i];
 		if(captureBar and captureBar:IsShown()) then
 			captureBar:ClearAllPoints();
-			captureBar:SetPoint("TOP", WorldStateAlwaysUpFrame, "BOTTOM", 0, -50)
+			captureBar:Point("TOP", WorldStateAlwaysUpFrame, "BOTTOM", 0, -80)
 		end
 	end
 
 	WorldStateAlwaysUpFrame:ClearAllPoints()
-	WorldStateAlwaysUpFrame:SetPoint("CENTER", pvpHolder, "CENTER", 0, 10)
+	WorldStateAlwaysUpFrame:Point("CENTER", pvpHolder, "CENTER", 0, 10)
 
-	local alwaysUpShown = 1
 	local offset = 0
 
-	for i = alwaysUpShown, NUM_ALWAYS_UP_UI_FRAMES do
-		local frame = _G["AlwaysUpFrame"..i]
+	for i = 1, NUM_ALWAYS_UP_UI_FRAMES do
 		local frameText = _G["AlwaysUpFrame"..i.."Text"]
 		local frameIcon = _G["AlwaysUpFrame"..i.."Icon"]
 		local frameIcon2 = _G["AlwaysUpFrame"..i.."DynamicIconButton"]
 
-		frame:ClearAllPoints()
 		frameText:ClearAllPoints()
-		frameIcon:ClearAllPoints()
-		frameIcon2:ClearAllPoints()
-
-		frameText:SetPoint("CENTER", WorldStateAlwaysUpFrame, "CENTER", 0, offset)
+		frameText:Point("CENTER", WorldStateAlwaysUpFrame, "CENTER", 0, offset)
 		frameText:SetJustifyH("CENTER")
-		frameIcon:SetPoint("CENTER", frameText, "LEFT", -7, -9)
+
+		frameIcon:ClearAllPoints()
+		frameIcon:Point("CENTER", frameText, "LEFT", -7, -9)
 		frameIcon:Size(38)
-		frameIcon2:SetPoint("LEFT", frameText, "RIGHT", 5, 0)
+
+		frameIcon2:ClearAllPoints()
+		frameIcon2:Point("LEFT", frameText, "RIGHT", 5, 0)
 		frameIcon2:Size(38)
 
 		offset = offset - 25
@@ -45,7 +43,9 @@ end
 
 function B:PositionCaptureBar()
 	self:SecureHook("WorldStateAlwaysUpFrame_Update");
-	pvpHolder:SetSize(30, 70)
-	pvpHolder:SetPoint("TOP", E.UIParent, "TOP", 0, -4)
+
+	pvpHolder:Size(30, 70)
+	pvpHolder:Point("TOP", E.UIParent, "TOP", 0, -4)
+
 	E:CreateMover(pvpHolder, "PvPMover", L["PvP"], nil, nil, nil, "ALL")
 end
