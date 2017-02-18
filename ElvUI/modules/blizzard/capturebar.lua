@@ -19,14 +19,13 @@ function B:WorldStateAlwaysUpFrame_Update()
 	WorldStateAlwaysUpFrame:SetPoint("CENTER", pvpHolder, "CENTER", 0, 10)
 
 	local alwaysUpShown = 1
-	local frame = "AlwaysUpFrame"..alwaysUpShown
 	local offset = 0
 
 	for i = alwaysUpShown, NUM_ALWAYS_UP_UI_FRAMES do
-		frame = _G["AlwaysUpFrame"..i]
-		frameText = _G["AlwaysUpFrame"..i.."Text"]
-		frameIcon = _G["AlwaysUpFrame"..i.."Icon"]
-		frameIcon2 = _G["AlwaysUpFrame"..i.."DynamicIconButton"]
+		local frame = _G["AlwaysUpFrame"..i]
+		local frameText = _G["AlwaysUpFrame"..i.."Text"]
+		local frameIcon = _G["AlwaysUpFrame"..i.."Icon"]
+		local frameIcon2 = _G["AlwaysUpFrame"..i.."DynamicIconButton"]
 
 		frame:ClearAllPoints()
 		frameText:ClearAllPoints()
