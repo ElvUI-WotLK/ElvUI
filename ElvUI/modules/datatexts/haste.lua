@@ -25,7 +25,7 @@ local function OnEvent(self)
 	else
 		hasteRating = GetCombatRating(CR_HASTE_MELEE);
 	end
-	self.text:SetFormattedText(displayNumberString, SPEED, hasteRating);
+	self.text:SetFormattedText(displayNumberString, ITEM_MOD_HASTE_RATING_SHORT, hasteRating);
 	lastPanel = self;
 end
 
