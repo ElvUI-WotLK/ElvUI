@@ -7,8 +7,8 @@ local CR_HASTE_RANGED = CR_HASTE_RANGED;
 local CR_HASTE_RATING_TOOLTIP = CR_HASTE_RATING_TOOLTIP;
 local CR_HASTE_SPELL = CR_HASTE_SPELL;
 local PAPERDOLLFRAME_TOOLTIP_FORMAT = PAPERDOLLFRAME_TOOLTIP_FORMAT;
-local ITEM_MOD_HASTE_RATING_SHORT = ITEM_MOD_HASTE_RATING_SHORT;
 local SPELL_HASTE = SPELL_HASTE;
+local SPELL_HASTE_ABBR = SPELL_HASTE_ABBR;
 local SPELL_HASTE_TOOLTIP = SPELL_HASTE_TOOLTIP;
 
 local displayNumberString = "";
@@ -25,7 +25,7 @@ local function OnEvent(self)
 	else
 		hasteRating = GetCombatRating(CR_HASTE_MELEE);
 	end
-	self.text:SetFormattedText(displayNumberString, ITEM_MOD_HASTE_RATING_SHORT, hasteRating);
+	self.text:SetFormattedText(displayNumberString, SPELL_HASTE_ABBR, hasteRating);
 	lastPanel = self;
 end
 
