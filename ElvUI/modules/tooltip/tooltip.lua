@@ -341,8 +341,7 @@ function TT:RemoveTrashLines(tt)
 		local linetext = tiptext:GetText();
 
 		if(linetext == PVP or linetext == FACTION_ALLIANCE or linetext == FACTION_HORDE) then
-			tiptext:SetText(nil);
-			tiptext:Hide();
+			tiptext:SetText();
 		end
 	end
 end
@@ -428,7 +427,7 @@ function TT:GameTooltip_OnTooltipSetUnit(tt)
 		end
 	end
 
-	self:RemoveTrashLines(tt) --keep an eye on this may be buggy
+	self:RemoveTrashLines(tt)
 	local level = UnitLevel(unit)
 	local isShiftKeyDown = IsShiftKeyDown()
 
