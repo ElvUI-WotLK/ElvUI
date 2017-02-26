@@ -306,6 +306,14 @@ local function LoadSkin()
 		S:HandleButton(MacOptionsCancelFrameYes);
 	end
 
+	if GetLocale() == "koKR" then
+		S:HandleButton(GameMenuButtonRatings);
+
+		RatingMenuFrame:SetTemplate("Transparent");
+		RatingMenuFrameHeader:Kill()
+		S:HandleButton(RatingMenuButtonOkay);
+	end
+
 	BNToastFrameCloseButton:Size(32);
 	BNToastFrameCloseButton:Point("TOPRIGHT", "BNToastFrame", 4, 4);
 	S:HandleCloseButton(BNToastFrameCloseButton);
