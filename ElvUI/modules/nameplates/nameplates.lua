@@ -652,73 +652,73 @@ function mod:StyleFrame(parent, noBackdrop, point)
 	end
 
 	if(E.PixelMode) then
-		point.bordertop = parent:CreateTexture(nil, "BORDER");
+		point.bordertop = parent:CreateTexture(nil, "BACKGROUND");
 		point.bordertop:SetPoint("TOPLEFT", point, "TOPLEFT", -noscalemult, noscalemult);
 		point.bordertop:SetPoint("TOPRIGHT", point, "TOPRIGHT", noscalemult, noscalemult);
 		point.bordertop:SetHeight(noscalemult);
 		point.bordertop:SetTexture(unpack(E["media"].bordercolor));
 
-		point.borderbottom = parent:CreateTexture(nil, "BORDER");
+		point.borderbottom = parent:CreateTexture(nil, "BACKGROUND");
 		point.borderbottom:SetPoint("BOTTOMLEFT", point, "BOTTOMLEFT", -noscalemult, -noscalemult);
 		point.borderbottom:SetPoint("BOTTOMRIGHT", point, "BOTTOMRIGHT", noscalemult, -noscalemult)
 		point.borderbottom:SetHeight(noscalemult);
 		point.borderbottom:SetTexture(unpack(E["media"].bordercolor));
 
-		point.borderleft = parent:CreateTexture(nil, "BORDER");
+		point.borderleft = parent:CreateTexture(nil, "BACKGROUND");
 		point.borderleft:SetPoint("TOPLEFT", point, "TOPLEFT", -noscalemult, noscalemult);
 		point.borderleft:SetPoint("BOTTOMLEFT", point, "BOTTOMLEFT", noscalemult, -noscalemult);
 		point.borderleft:SetWidth(noscalemult);
 		point.borderleft:SetTexture(unpack(E["media"].bordercolor));
 
-		point.borderright = parent:CreateTexture(nil, "BORDER");
+		point.borderright = parent:CreateTexture(nil, "BACKGROUND");
 		point.borderright:SetPoint("TOPRIGHT", point, "TOPRIGHT", noscalemult, noscalemult);
 		point.borderright:SetPoint("BOTTOMRIGHT", point, "BOTTOMRIGHT", -noscalemult, -noscalemult);
 		point.borderright:SetWidth(noscalemult);
 		point.borderright:SetTexture(unpack(E["media"].bordercolor));
 	else
-		point.bordertop = parent:CreateTexture(nil, "OVERLAY");
-		point.bordertop:SetPoint("TOPLEFT", point, "TOPLEFT", -noscalemult*2, noscalemult*2);
-		point.bordertop:SetPoint("TOPRIGHT", point, "TOPRIGHT", noscalemult*2, noscalemult*2);
+		point.bordertop = parent:CreateTexture(nil, "BORDER");
+		point.bordertop:SetPoint("TOPLEFT", point, "TOPLEFT", -noscalemult, noscalemult*2);
+		point.bordertop:SetPoint("TOPRIGHT", point, "TOPRIGHT", noscalemult, noscalemult*2);
 		point.bordertop:SetHeight(noscalemult);
 		point.bordertop:SetTexture(unpack(E.media.bordercolor));
 
-		point.bordertop.backdrop = parent:CreateTexture(nil, "BORDER")
-		point.bordertop.backdrop:SetPoint("TOPLEFT", point.bordertop, "TOPLEFT", -noscalemult, noscalemult);
-		point.bordertop.backdrop:SetPoint("TOPRIGHT", point.bordertop, "TOPRIGHT", noscalemult, noscalemult);
+		point.bordertop.backdrop = parent:CreateTexture(nil, "BACKGROUND")
+		point.bordertop.backdrop:SetPoint("TOPLEFT", point.bordertop, "TOPLEFT", noscalemult, noscalemult);
+		point.bordertop.backdrop:SetPoint("TOPRIGHT", point.bordertop, "TOPRIGHT", -noscalemult, noscalemult);
 		point.bordertop.backdrop:SetHeight(noscalemult * 3);
 		point.bordertop.backdrop:SetTexture(0, 0, 0);
 
-		point.borderbottom = parent:CreateTexture(nil, "OVERLAY");
-		point.borderbottom:SetPoint("BOTTOMLEFT", point, "BOTTOMLEFT", -noscalemult*2, -noscalemult*2);
-		point.borderbottom:SetPoint("BOTTOMRIGHT", point, "BOTTOMRIGHT", noscalemult*2, -noscalemult*2);
+		point.borderbottom = parent:CreateTexture(nil, "BORDER");
+		point.borderbottom:SetPoint("BOTTOMLEFT", point, "BOTTOMLEFT", -noscalemult, -noscalemult*2);
+		point.borderbottom:SetPoint("BOTTOMRIGHT", point, "BOTTOMRIGHT", noscalemult, -noscalemult*2);
 		point.borderbottom:SetHeight(noscalemult);
 		point.borderbottom:SetTexture(unpack(E.media.bordercolor));
 
-		point.borderbottom.backdrop = parent:CreateTexture(nil, "BORDER");
-		point.borderbottom.backdrop:SetPoint("BOTTOMLEFT", point.borderbottom, "BOTTOMLEFT", -noscalemult, -noscalemult);
-		point.borderbottom.backdrop:SetPoint("BOTTOMRIGHT", point.borderbottom, "BOTTOMRIGHT", noscalemult, -noscalemult);
+		point.borderbottom.backdrop = parent:CreateTexture(nil, "BACKGROUND");
+		point.borderbottom.backdrop:SetPoint("BOTTOMLEFT", point.borderbottom, "BOTTOMLEFT", noscalemult, -noscalemult);
+		point.borderbottom.backdrop:SetPoint("BOTTOMRIGHT", point.borderbottom, "BOTTOMRIGHT", -noscalemult, -noscalemult);
 		point.borderbottom.backdrop:SetHeight(noscalemult * 3);
 		point.borderbottom.backdrop:SetTexture(0, 0, 0);
 
-		point.borderleft = parent:CreateTexture(nil, "OVERLAY");
+		point.borderleft = parent:CreateTexture(nil, "BORDER");
 		point.borderleft:SetPoint("TOPLEFT", point, "TOPLEFT", -noscalemult*2, noscalemult*2);
 		point.borderleft:SetPoint("BOTTOMLEFT", point, "BOTTOMLEFT", noscalemult*2, -noscalemult*2);
 		point.borderleft:SetWidth(noscalemult);
 		point.borderleft:SetTexture(unpack(E.media.bordercolor));
 
-		point.borderleft.backdrop = parent:CreateTexture(nil, "BORDER");
+		point.borderleft.backdrop = parent:CreateTexture(nil, "BACKGROUND");
 		point.borderleft.backdrop:SetPoint("TOPLEFT", point.borderleft, "TOPLEFT", -noscalemult, noscalemult);
 		point.borderleft.backdrop:SetPoint("BOTTOMLEFT", point.borderleft, "BOTTOMLEFT", -noscalemult, -noscalemult);
 		point.borderleft.backdrop:SetWidth(noscalemult * 3);
 		point.borderleft.backdrop:SetTexture(0, 0, 0);
 
-		point.borderright = parent:CreateTexture(nil, "OVERLAY");
+		point.borderright = parent:CreateTexture(nil, "BORDER");
 		point.borderright:SetPoint("TOPRIGHT", point, "TOPRIGHT", noscalemult*2, noscalemult*2);
 		point.borderright:SetPoint("BOTTOMRIGHT", point, "BOTTOMRIGHT", -noscalemult*2, -noscalemult*2);
 		point.borderright:SetWidth(noscalemult);
 		point.borderright:SetTexture(unpack(E.media.bordercolor));
 
-		point.borderright.backdrop = parent:CreateTexture(nil, "BORDER");
+		point.borderright.backdrop = parent:CreateTexture(nil, "BACKGROUND");
 		point.borderright.backdrop:SetPoint("TOPRIGHT", point.borderright, "TOPRIGHT", noscalemult, noscalemult);
 		point.borderright.backdrop:SetPoint("BOTTOMRIGHT", point.borderright, "BOTTOMRIGHT", noscalemult, -noscalemult);
 		point.borderright.backdrop:SetWidth(noscalemult * 3);
