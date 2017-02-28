@@ -101,6 +101,13 @@ function AddOn:OnInitialize()
 	end);
 	GameMenuFrame[AddOnName] = GameMenuButton;
 
+	GameMenuButtonRatings:HookScript("OnShow", function(self)
+		GameMenuFrame:SetHeight(GameMenuFrame:GetHeight() + self:GetHeight());
+	end)
+	GameMenuButtonRatings:HookScript("OnHide", function(self)
+		GameMenuFrame:SetHeight(GameMenuFrame:GetHeight() - self:GetHeight());
+	end)
+
 	GameMenuFrame:HookScript("OnShow", function()
 		if(not GameMenuFrame.isElvUI) then
 			GameMenuFrame:SetHeight(GameMenuFrame:GetHeight() + GameMenuButtonLogout:GetHeight() + 1);

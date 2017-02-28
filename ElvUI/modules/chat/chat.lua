@@ -273,6 +273,7 @@ function CH:StyleChat(frame)
 
 	local tab = _G[name.."Tab"]
 	local editbox = _G[name.."EditBox"]
+	local language = _G[name.."EditBoxLanguage"]
 
 	for _, texName in pairs(tabTexs) do
 		_G[tab:GetName()..texName.."Left"]:SetTexture(nil)
@@ -376,6 +377,11 @@ function CH:StyleChat(frame)
 			editbox:SetBackdropBorderColor(ChatTypeInfo[type].r,ChatTypeInfo[type].g,ChatTypeInfo[type].b)
 		end
 	end)
+
+	language:Height(22)
+	language:StripTextures()
+	language:SetTemplate("Transparent")
+	language:Point("LEFT", editbox, "RIGHT", -32, 0)
 
 	--copy chat button
 	frame.button = CreateFrame("Button", format("CopyChatButton%d", id), frame)
