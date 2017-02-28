@@ -76,11 +76,11 @@ local function LoadSkin()
 
 		button.icon = button:CreateTexture("$parentIcon", "ARTWORK");
 		button.icon:Point("LEFT", 48, -3);
-		button.icon:Size(17);
+		button.icon:Size(15);
 		button.icon:SetTexture("Interface\\WorldStateFrame\\Icons-Classes");
 
 		button:CreateBackdrop("Default", true);
-		button.backdrop:SetInside(button.icon);
+		button.backdrop:SetAllPoints(button.icon);
 
 		_G["WhoFrameButton" .. i .. "Level"]:ClearAllPoints();
 		_G["WhoFrameButton" .. i .. "Level"]:SetPoint("TOPLEFT", 10, -3);
@@ -151,11 +151,11 @@ local function LoadSkin()
 
 		button.icon = button:CreateTexture("$parentIcon", "ARTWORK");
 		button.icon:Point("LEFT", 48, -3);
-		button.icon:Size(17);
+		button.icon:Size(15);
 		button.icon:SetTexture("Interface\\WorldStateFrame\\Icons-Classes");
 
 		button:CreateBackdrop("Default", true);
-		button.backdrop:SetInside(button.icon);
+		button.backdrop:SetAllPoints(button.icon);
 
 		_G["GuildFrameButton" .. i .. "Level"]:ClearAllPoints();
 		_G["GuildFrameButton" .. i .. "Level"]:SetPoint("TOPLEFT", 10, -3);
