@@ -1,0 +1,28 @@
+.github         export-ignore
+.gitattributes  export-ignore
+*readme.md      export-ignore
+*README.md      export-ignore
+
+* text=auto
+
+# GitHub
+.github         text
+.gitattributes  text
+*.md            text
+
+# Source files
+*.lua           text
+*.xml           text
+*.toc           text
+
+# Fonts
+*.ttf           binary
+
+# Sounds
+*.ogg           binary
+*.mp3           binary
+*.wav           binary
+
+# Textures
+*.blp           binary
+*.tga           binary
