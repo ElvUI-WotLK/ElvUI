@@ -358,9 +358,16 @@ function D:Decode(dataString)
 
 		local serializedData, success;
 		serializedData, profileInfo = E:StringSplitMultiDelim(decompressedData, "^^::");
+
+		if not profileInfo then
+			E:Print("Error importing profile. String is invalid or corrupted!")
+			return
+		end
+
 		serializedData = format("%s%s", serializedData, "^^");
 		profileType, profileKey = E:StringSplitMultiDelim(profileInfo, "::");
 		success, profileData = D:Deserialize(serializedData);
+
 		if(not success) then
 			E:Print("Error deserializing:", profileData);
 			return;
@@ -370,6 +377,7 @@ function D:Decode(dataString)
 		profileDataAsString, profileInfo = E:StringSplitMultiDelim(dataString, "}::");
 		profileDataAsString = format("%s%s", profileDataAsString, "}");
 		profileType, profileKey = E:StringSplitMultiDelim(profileInfo, "::");
+
 		if(not profileDataAsString) then
 			E:Print("Error extracting profile data. Invalid import string!");
 			return;

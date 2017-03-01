@@ -315,6 +315,7 @@ L["ELVUI_CREDITS"] = "Ich möchte mich hier bei folgenden Personen bedanken, die
 L["Testing:"] = "Tester:"
 
 --DataBars
+L["Current - Percent (Remaining)"] = "Aktuell - Prozent (Verleibend)"
 L["DATABAR_DESC"] = "Einstellung der Informationsleisten."
 L["Current - Remaining"] = "Aktuell - Verbleibend"
 L["DataBars"] = "Informationsleisten"

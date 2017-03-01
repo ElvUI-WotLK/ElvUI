@@ -131,6 +131,7 @@ E.Options.args.databars = {
 							order = 4,
 							type = "select",
 							name = L["Text Format"],
+							width = "double",
 							values = {
 								NONE = NONE,
 								PERCENT = L["Percent"],
@@ -138,7 +139,8 @@ E.Options.args.databars = {
 								REM = L["Remaining"],
 								CURMAX = L["Current - Max"],
 								CURPERC = L["Current - Percent"],
-								CURREM = L["Current - Remaining"]
+								CURREM = L["Current - Remaining"],
+								CURPERCREM = L["Current - Percent (Remaining)"]
 							},
 							set = function(info, value) mod.db.experience[ info[#info] ] = value; mod:UpdateExperience(); end
 						}
@@ -251,6 +253,7 @@ E.Options.args.databars = {
 							order = 4,
 							type = "select",
 							name = L["Text Format"],
+							width = "double",
 							values = {
 								NONE = NONE,
 								CUR = L["Current"],
@@ -258,7 +261,8 @@ E.Options.args.databars = {
 								PERCENT = L["Percent"],
 								CURMAX = L["Current - Max"],
 								CURPERC = L["Current - Percent"],
-								CURREM = L["Current - Remaining"]
+								CURREM = L["Current - Remaining"],
+								CURPERCREM = L["Current - Percent (Remaining)"]
 							},
 							set = function(info, value) mod.db.reputation[ info[#info] ] = value; mod:UpdateReputation(); end
 						}

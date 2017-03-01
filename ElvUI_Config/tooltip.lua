@@ -261,39 +261,49 @@ E.Options.args.tooltip = {
 						["TOP"] = L["Top"]
 					}
 				},
-				fontGroup = {
+				text = {
 					order = 3,
-					type = "group",
-					name = L["Fonts"],
-					guiInline = true,
-					args = {
-						text = {
-							order = 1,
-							type = "toggle",
-							name = L["Text"],
-							set = function(info, value) E.db.tooltip.healthBar.text = value; if(value) then GameTooltipStatusBar.text:Show(); else GameTooltipStatusBar.text:Hide(); end end
-						},
-						font = {
-							type = "select", dialogControl = "LSM30_Font",
-							order = 2,
-							name = L["Font"],
-							values = AceGUIWidgetLSMlists.font,
-							set = function(info, value)
-								E.db.tooltip.healthBar.font = value;
-								GameTooltipStatusBar.text:FontTemplate(E.LSM:Fetch("font", E.db.tooltip.healthBar.font), E.db.tooltip.healthBar.fontSize, "OUTLINE");
-							end
-						},
-						fontSize = {
-							order = 3,
-							name = L["Font Size"],
-							type = "range",
-							min = 6, max = 500, step = 1,
-							set = function(info, value)
-								E.db.tooltip.healthBar.fontSize = value;
-								GameTooltipStatusBar.text:FontTemplate(E.LSM:Fetch("font", E.db.tooltip.healthBar.font), E.db.tooltip.healthBar.fontSize, "OUTLINE");
-							end
-						}
-					}
+					type = "toggle",
+					name = L["Text"],
+					set = function(info, value) E.db.tooltip.healthBar.text = value; if(value) then GameTooltipStatusBar.text:Show(); else GameTooltipStatusBar.text:Hide() end end
+				},
+				font = {
+					order = 4,
+					type = "select", dialogControl = "LSM30_Font",
+					name = L["Font"],
+					values = AceGUIWidgetLSMlists.font,
+					set = function(info, value)
+						E.db.tooltip.healthBar.font = value;
+						GameTooltipStatusBar.text:FontTemplate(E.LSM:Fetch("font", E.db.tooltip.healthBar.font), E.db.tooltip.healthBar.fontSize, E.db.tooltip.healthBar.fontOutline);
+					end,
+					disabled = function() return not E.db.tooltip.healthBar.text end
+				},
+				fontSize = {
+					order = 5,
+					type = "range",
+					name = L["Font Size"],
+					min = 6, max = 500, step = 1,
+					set = function(info, value)
+						E.db.tooltip.healthBar.fontSize = value;
+						GameTooltipStatusBar.text:FontTemplate(E.LSM:Fetch("font", E.db.tooltip.healthBar.font), E.db.tooltip.healthBar.fontSize, E.db.tooltip.healthBar.fontOutline);
+					end,
+					disabled = function() return not E.db.tooltip.healthBar.text end
+				},
+				fontOutline = {
+					order = 6,
+					type = "select",
+					name = L["Font Outline"],
+					values = {
+						["NONE"] = L["None"],
+						["OUTLINE"] = "OUTLINE",
+						["MONOCHROMEOUTLINE"] = "MONOCROMEOUTLINE",
+						["THICKOUTLINE"] = "THICKOUTLINE"
+					},
+					set = function(info, value)
+						E.db.tooltip.healthBar.fontOutline = value;
+						GameTooltipStatusBar.text:FontTemplate(E.LSM:Fetch("font", E.db.tooltip.healthBar.font), E.db.tooltip.healthBar.fontSize, E.db.tooltip.healthBar.fontOutline);
+					end,
+					disabled = function() return not E.db.tooltip.healthBar.text end
 				}
 			}
 		}

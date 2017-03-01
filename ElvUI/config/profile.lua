@@ -2367,7 +2367,7 @@ P["auras"] = {
 	},
 }
 
-P["chat"] = { -- Чат
+P["chat"] = {
 	["lockPositions"] = true,
 	["url"] = true,
 	["shortChannels"] = true,
@@ -2482,6 +2482,7 @@ P["tooltip"] = {
 		["height"] = 7,
 		["font"] = "Homespun",
 		["fontSize"] = 10,
+		["fontOutline"] = "OUTLINE",
 		["statusPosition"] = "BOTTOM"
 	},
 	["useCustomFactionColors"] = false,
