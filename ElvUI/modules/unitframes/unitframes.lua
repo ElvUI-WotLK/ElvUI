@@ -1122,7 +1122,7 @@ function UF:Initialize()
 	if(not ORD) then return; end
 	ORD.ShowDispelableDebuff = true;
 	ORD.FilterDispellableDebuff = true;
-	ORD.MatchBySpellName = false;
+	ORD.MatchBySpellName = true;
 end
 
 function UF:ResetUnitSettings(unit)
