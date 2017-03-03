@@ -6,7 +6,10 @@ local format = string.format
 local floor, huge, min = math.floor, math.huge, math.min
 local tsort = table.sort
 local tremove = table.remove
-local random = math.random
+
+local CreateFrame = CreateFrame
+local UnitAura = UnitAura
+local UnitIsFriend = UnitIsFriend
 
 local function Round(number, decimalPlaces)
 	if decimalPlaces and decimalPlaces > 0 then

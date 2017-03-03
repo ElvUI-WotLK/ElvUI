@@ -2,6 +2,9 @@ local _, ns = ...;
 local oUF = ns.oUF or oUF;
 assert(oUF, "oUF_HealComm4 was unable to locate oUF install");
 
+local UnitGUID = UnitGUID
+local UnitHealth, UnitHealthMax = UnitHealth, UnitHealthMax
+
 local healComm = LibStub("LibHealComm-4.0");
 
 local function Update(self, ...)

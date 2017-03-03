@@ -1,6 +1,12 @@
 --By Elv, for E.
 local parent, ns = ...
 local oUF = ns.oUF
+
+local UnitAffectingCombat = UnitAffectingCombat
+local UnitHealth, UnitHealthMax = UnitHealth, UnitHealthMax
+local UnitCastingInfo, UnitChannelInfo = UnitCastingInfo, UnitChannelInfo
+local UnitExists = UnitExists
+
 local frames, allFrames = {}, {}
 local showStatus
 

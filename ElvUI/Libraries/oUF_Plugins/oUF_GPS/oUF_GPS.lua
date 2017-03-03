@@ -3,9 +3,17 @@ local oUF = ns.oUF or oUF;
 assert(oUF, "oUF not loaded");
 
 local cos, sin, sqrt2, max, atan2 = math.cos, math.sin, math.sqrt(2), math.max, math.atan2;
-local pi2 = 3.141592653589793 / 2;
-local _FRAMES, OnUpdateFrame = {};
 local tinsert, tremove = table.insert, table.remove;
+local pi2 = 3.141592653589793 / 2;
+
+local GetPlayerMapPosition = GetPlayerMapPosition
+local UnitInParty = UnitInParty
+local UnitInRaid = UnitInRaid
+local UnitInRange = UnitInRange
+local UnitIsConnected = UnitIsConnected
+local UnitIsUnit = UnitIsUnit
+
+local _FRAMES, OnUpdateFrame = {};
 
 local function CalculateCorner(r) return .5 + cos(r) / sqrt2, .5 + sin(r) / sqrt2; end
 local function RotateTexture(texture, angle)

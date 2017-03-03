@@ -110,6 +110,8 @@ local _, ns = ...
 local oUF = oUF or ns.oUF
 assert(oUF, "oUF_AuraWatch cannot find an instance of oUF. If your oUF is embedded into a layout, it may not be embedded properly.")
 
+local CreateFrame = CreateFrame
+local GetSpellInfo = GetSpellInfo
 local UnitBuff, UnitDebuff, UnitGUID = UnitBuff, UnitDebuff, UnitGUID
 local GUIDs = {}
 
