@@ -31,11 +31,12 @@ end
 function UF:Configure_RaidDebuffs(frame)
 	if(not frame.VARIABLES_SET) then return; end
 	local db = frame.db;
-	local rdebuffs = frame.RaidDebuffs;
-	local stackColor = db.rdebuffs.stack.color;
-	local durationColor = db.rdebuffs.duration.color;
 
 	if(db.rdebuffs.enable) then
+		local rdebuffs = frame.RaidDebuffs;
+		local stackColor = db.rdebuffs.stack.color;
+		local durationColor = db.rdebuffs.duration.color;
+
 		local rdebuffsFont = UF.LSM:Fetch("font", db.rdebuffs.font);
 		if(not frame:IsElementEnabled("RaidDebuffs")) then
 			frame:EnableElement("RaidDebuffs");
@@ -57,6 +58,5 @@ function UF:Configure_RaidDebuffs(frame)
 		rdebuffs.time:SetTextColor(durationColor.r, durationColor.g, durationColor.b);
 	elseif(frame:IsElementEnabled("RaidDebuffs")) then
 		frame:DisableElement("RaidDebuffs");
-		rdebuffs:Hide();
 	end
 end
