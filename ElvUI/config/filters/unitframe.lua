@@ -32,7 +32,7 @@ G.unitframe.aurafilters["CCDebuffs"] = {
 		[2637] = Defaults(), -- Спячка
 		[5211] = Defaults(), -- Оглушить
 		[9005] = Defaults(), -- Наскок
-		[22570] = Defaults(), -- Колечение
+		[22570] = Defaults(), -- Калечение
 		[33786] = Defaults(), -- Смерч
 		[45334] = Defaults(), -- Звериная атака - эффект
 	-- Охотник
@@ -45,12 +45,12 @@ G.unitframe.aurafilters["CCDebuffs"] = {
 		[50245] = Defaults(), -- Шип
 		[50519] = Defaults(), -- Ультразвук
 		[50541] = Defaults(), -- Хватка
-		[54706] = Defaults(), -- Ядовитая поутина
+		[54706] = Defaults(), -- Ядовитая паутина
 		[56626] = Defaults(), -- Ужалить
 		[60210] = Defaults(), -- Эффект замораживающей стрелы
 		[64803] = Defaults(), -- Удержание
 	-- Маг
-		[118] = Defaults(), -- Преврашение
+		[118] = Defaults(), -- Превращение
 		[122] = Defaults(), -- Кольцо льда
 		[18469] = Defaults(), -- Антимагия - немота
 		[31589] = Defaults(), -- Замедление
@@ -96,7 +96,7 @@ G.unitframe.aurafilters["CCDebuffs"] = {
 		[24259] = Defaults(), -- Запрет чар
 		[30283] = Defaults(), -- Неистовство Тьмы
 	-- Воин
-		[676] = Defaults(), -- Разоружие
+		[676] = Defaults(), -- Разоружение
 		[7922] = Defaults(), -- Наскок и оглушение
 		[18498] = Defaults(), -- Обет молчания - немота
 		[20511] = Defaults(), -- Устрашающий крик
@@ -105,7 +105,7 @@ G.unitframe.aurafilters["CCDebuffs"] = {
 		[20549] = Defaults(), -- Громовой поступь
 	--PVE Дебаффы
 
-	-- Король лич
+	-- The Lich King
 		[73787] = Defaults() -- Мертвящая чума
 	}
 };
@@ -115,7 +115,7 @@ G.unitframe.aurafilters["TurtleBuffs"] = {
 	["spells"] = {
 	-- Маг
 		[45438] = Defaults(5), -- Ледяная глыба
-	-- Рыцарь сперти
+	-- Рыцарь смерти
 		[48707] = Defaults(5), -- Антимагический панцирь
 		[48792] = Defaults(), -- Незыблемость льда
 		[49039] = Defaults(), -- Перерождение
@@ -135,7 +135,7 @@ G.unitframe.aurafilters["TurtleBuffs"] = {
 		[53480] = Defaults(), -- Рев самопожертвования
 	-- Разбойник
 		[5277] = Defaults(5), -- Ускользание
-		[31224] = Defaults(), -- Плащь Теней
+		[31224] = Defaults(), -- Плащ Теней
 		[45182] = Defaults(), -- Обман смерти
 	-- Шаман
 		[30823] = Defaults(), -- Ярость шамана
@@ -160,7 +160,7 @@ G.unitframe.aurafilters["PlayerBuffs"] = {
 		[12472] = Defaults(), -- Стальная кровь
 		[32612] = Defaults(), -- Невидимость
 		[45438] = Defaults(), -- Ледяная глыба
-	-- Рыцарь сперти
+	-- Рыцарь смерти
 		[48707] = Defaults(), -- Антимагический панцирь
 		[48792] = Defaults(), -- Незыблемость льда
 		[49016] = Defaults(), -- Истерия
@@ -172,7 +172,7 @@ G.unitframe.aurafilters["PlayerBuffs"] = {
 	-- Жрец
 		[6346] = Defaults(), -- Защита от страха
 		[10060] = Defaults(), -- Придание сил
-		[27827] = Defaults(), -- Дух воздания
+		[27827] = Defaults(), -- Дух воздаяния
 		[33206] = Defaults(), -- Подавление боли
 		[47585] = Defaults(), -- Слияние с тьмой
 		[47788] = Defaults(), -- Оберегающий дух
@@ -198,7 +198,7 @@ G.unitframe.aurafilters["PlayerBuffs"] = {
 	-- Шаман
 		[2825] = Defaults(), -- Жажда крови
 		[8178] = Defaults(), -- Эффект тотема заземления
-		[16166] = Defaults(), -- Покорение стехий
+		[16166] = Defaults(), -- Покорение стихий
 		[16188] = Defaults(), -- Природная стремительность
 		[16191] = Defaults(), -- Тотем прилива маны
 		[30823] = Defaults(), -- Ярость шамана
@@ -242,8 +242,8 @@ G.unitframe.aurafilters["Blacklist"] = {
 		[26013] = Defaults(), -- Дезертир
 		[36032] = Defaults(), -- Чародейская вспышка
 		[36893] = Defaults(), -- Неисправность транспортера
-		[36900] = Defaults(), -- Расщипление души: Зло!
-		[36901] = Defaults(), -- Расщипление души: Добро
+		[36900] = Defaults(), -- Расщепление души: Зло!
+		[36901] = Defaults(), -- Расщепление души: Добро
 		[41425] = Defaults(), -- Гипотермия
 		[55711] = Defaults(), -- Сердце феникса
 		[57723] = Defaults(), -- Изнеможение
@@ -284,92 +284,154 @@ G.unitframe.aurafilters["Whitelist"] = {
 	-- Turtling abilities
 		[871] = Defaults(), -- Глухая оборона
 		[19263] = Defaults(), -- Сдерживание
-		[31224] = Defaults(), -- Плащь Теней
+		[31224] = Defaults(), -- Плащ Теней
 		[48707] = Defaults(), -- Антимагический панцирь
-	-- Imm
+	-- Immunities
 		[642] = Defaults(), -- Божественный щит
 		[45438] = Defaults(), -- Ледяная глыба
-	-- Offensive Shit
+	-- Offensive
 		[31884] = Defaults(), -- Гнев карателя
 		[34471] = Defaults(), -- Зверь внутри
 	}
 };
 
-G.unitframe.aurafilters["RaidDebuffs"] = { -- Рейд дебаффы
+G.unitframe.aurafilters["RaidDebuffs"] = {
 	["type"] = "Whitelist",
 	["spells"] = {
-	-- Наксрамас
-		[27808] = Defaults(), -- Ледяной взрыв
-		[28408] = Defaults(), -- Цепи Кел"Тузада
-		[32407] = Defaults(), -- Странная аура
-	-- Ульдуар
-		[66313] = Defaults(), -- Огненная бомба
-		[63134] = Defaults(), -- Благословение Сары
-		[62717] = Defaults(), -- Шлаковый ковш
-		[63018] = Defaults(), -- Опаляющий свет
-		[64233] = Defaults(), -- Гравитационная бомба
-		[63495] = Defaults(), -- Статический сбой
-	-- Испытание крестоносца
-		[66406] = Defaults(), -- Получи снобольда!
-		[67574] = Defaults(), -- Вас преследует Ануб"арак
-		[68509] = Defaults(), -- Пронизывающий холод
-		[67651] = Defaults(), -- Арктическое дыхание
-		[68127] = Defaults(), -- Пламя Легиона
-		[67049] = Defaults(), -- Испепеление плоти
-		[66869] = Defaults(), -- Горящая желчь
-		[66823] = Defaults(), -- Паралитический токсин
-	-- Цитадель Ледяной Кароны
-		[71224] = Defaults(), -- Мутировавшая инфекция
-		[71822] = Defaults(), -- Теневой резонанс
-		[70447] = Defaults(), -- Выделение неустойчивого слизнюка
-		[72293] = Defaults(), -- Метка падшего воителя
-		[72448] = Defaults(), -- Руна крови
-		[71473] = Defaults(), -- Сущность Кровавой королевы
-		[71624] = Defaults(), -- Безумный выпад
-		[70923] = Defaults(), -- Неконтролируемое бешенство
-		[70588] = Defaults(), -- Падавление
-		[71738] = Defaults(), -- Коррозия
-		[71733] = Defaults(), -- Кислотный взрыв
-		[72108] = Defaults(), -- Смерть и разложение
-		[71289] = Defaults(), -- Господство над разумом
-		[69762] = Defaults(), -- Освобожденная магия
-		[69651] = Defaults(), -- Ранящий удар
-		[69065] = Defaults(), -- Прокалывание
-		[71218] = Defaults(), -- Губительный газ
-		[72442] = Defaults(), -- Кипящая кровь
-		[72769] = Defaults(), -- Запах крови
-		[69279] = Defaults(), -- Газообразные споры
-		[70949] = Defaults(), -- Сущность Кровавой королевы
-		[72151] = Defaults(), -- Бешеная кровожадность
-		[71474] = Defaults(), -- Бешеная кровожадность
-		[71340] = Defaults(), -- Пакт Омраченных
-		[72985] = Defaults(), -- Роящиеся тени
-		[71267] = Defaults(), -- Роящиеся тени
-		[71264] = Defaults(), -- Роящиеся тени
-		[71807] = Defaults(), -- Ослепительные искры
-		[70873] = Defaults(), -- Изумрудная энергия
-		[71283] = Defaults(), -- Выброс внутренностей
-		[69766] = Defaults(), -- Неустойчивость
-		[70126] = Defaults(), -- Ледяная метка
-		[70157] = Defaults(), -- Ледяной склеп
-		[71056] = Defaults(), -- Ледяное дыхание
-		[70106] = Defaults(), -- Обморожение
-		[70128] = Defaults(), -- Таинственная энергия
-		[73785] = Defaults(), -- Мертвящая чума
-		[73779] = Defaults(), -- Заражение
-		[73800] = Defaults(), -- Визг души
-		[73797] = Defaults(), -- Жнец душ
-		[73708] = Defaults(), -- Осквернение
-		[74322] = Defaults(), -- Жнец душ
-	-- Рубиновое святилище
-		[74502] = Defaults(), -- Ослабляющее прижигание
-		[75887] = Defaults(), -- Пылающая аура
-		[74562] = Defaults(), -- Пылающий огонь
-		[74567] = Defaults(), -- Метка пылающего огня
-		[74792] = Defaults(), -- Пожирание души
-		[74795] = Defaults(), -- Метка пожирания
-	-- Разные
-		[67479] = Defaults() -- Прокалывание
+	-- Naxxramas
+		-- Kel'Thuzad
+		[28410] = Defaults(), -- Chains of Kel'Thuzad
+		[27819] = Defaults(), -- Detonate Mana
+		[27808] = Defaults(), -- Frost Blast
+
+	-- Ulduar
+		-- Ignis the Furnace Master
+		[62717] = Defaults(), -- Slag Pot
+
+		-- XT-002
+		[63024] = Defaults(), -- Gravity Bomb
+		[63018] = Defaults(), -- Light Bomb
+
+		-- The Assembly of Iron
+		[61903] = Defaults(), -- Fusion Punch
+		[61912] = Defaults(), -- Static Disruption
+
+		-- Kologarn
+		[64290] = Defaults(), -- Stone Grip
+
+		-- Thorim
+		[62130] = Defaults(), -- Unbalancing Strike
+
+		-- Yogg-Saron
+		[63134] = Defaults(), -- Sara's Blessing
+		[64157] = Defaults(), -- Curse of Doom
+
+		-- Algalon
+		[64412] = Defaults(), -- Phase Punch
+
+	-- Trial of the Crusader
+		-- Beast of Northrend
+		-- Gormok the Impaler
+		[66331] = Defaults(), -- Impale
+		[66406] = Defaults(), -- Snowbolled!
+		-- Jormungar Behemoth
+		[66869] = Defaults(), -- Burning Bile
+		[67618] = Defaults(), -- Paralytic Toxin
+		-- Icehowl
+		[66689] = Defaults(), -- Arctic Breathe
+
+		-- Lord Jaraxxus
+		[66237] = Defaults(), -- Incinerate Flesh
+		[66197] = Defaults(), -- Legion Flame
+
+		-- Faction Champions
+		[65812] = Defaults(), -- Unstable Affliction
+
+		-- The Twin Val'kyr
+		[67309] = Defaults(), -- Twin Spike
+
+		-- Anub'arak
+		[66013] = Defaults(), -- Penetrating Cold
+		[67574] = Defaults(), -- Pursued by Anub'arak
+		[67847] = Defaults(), -- Expose Weakness
+
+	-- Icecrown Citadel
+		-- Lord Marrowgar
+		[69065] = Defaults(), -- Impaled
+
+		-- Lady Deathwhisper
+		[72109] = Defaults(), -- Death and Decay
+		[71289] = Defaults(), -- Dominate Mind
+		[71237] = Defaults(), -- Curse of Torpor
+
+		-- Deathbringer Saurfang
+		[72293] = Defaults(), -- Mark of the Fallen Champion
+		[72442] = Defaults(), -- Boiling Blood
+		[72449] = Defaults(), -- Rune of Blood
+		[72769] = Defaults(), -- Scent of Blood
+
+		-- Festergut
+		[71218] = Defaults(), -- Vile Gas
+		[72219] = Defaults(), -- Gastric Bloat
+		[69279] = Defaults(), -- Gas Spore
+
+		-- Rotface
+		[71224] = Defaults(), -- Mutated Infection
+
+		-- Proffessor
+		[71278] = Defaults(), -- Choking Gas Bomb
+		[70215] = Defaults(), -- Gaseous Bloat
+		[72549] = Defaults(), -- Malleable Goo
+		[70953] = Defaults(), -- Plague Sickness
+		[72856] = Defaults(), -- Unbound Plague
+		[70447] = Defaults(), -- Volatile Ooze Adhesive
+
+		-- Blood Prince Council
+		[72796] = Defaults(), -- Glittering Sparks
+		[71822] = Defaults(), -- Shadow Resonance
+
+		-- Blood-Queen Lana'thel
+		[72265] = Defaults(), -- Delirious Slash
+		[71473] = Defaults(), -- Essence of the Blood Queen
+		[71474] = Defaults(), -- Frenzied Bloodthirst
+		[71340] = Defaults(), -- Pact of the Darkfallen
+		[71265] = Defaults(), -- Swarming Shadows
+		[70923] = Defaults(), -- Uncontrollable Frenzy
+
+		-- Valithria Dreamwalker
+		[71733] = Defaults(), -- Acid Burst
+		[71738] = Defaults(), -- Corrosion
+		[70873] = Defaults(), -- Emerald Vigor
+		[71283] = Defaults(), -- Gut Spray
+
+		-- Sindragosa
+		[70106] = Defaults(), -- Chilled to the Bone
+		[70126] = Defaults(), -- Frost Beacon
+		[70157] = Defaults(), -- Ice Tomb
+		[69766] = Defaults(), -- Instability
+		[69762] = Defaults(), -- Unchained Magic
+
+		-- The Lich King
+		[72762] = Defaults(), -- Defile
+		[70541] = Defaults(), -- Infest
+		[70337] = Defaults(), -- Necrotic plague
+		[72149] = Defaults(), -- Shockwave
+		[69409] = Defaults(), -- Soul Reaper
+		[69242] = Defaults(), -- Soul Shriek
+
+	-- The Ruby Sanctum
+		-- Trash
+		-- Baltharus the Warborn
+		[75887] = Defaults(), -- Blazing Aura
+		[74502] = Defaults(), -- Enervating Brand
+		-- General Zarithrian
+		[74367] = Defaults(), -- Cleave Armor
+
+		-- Halion
+		[74562] = Defaults(), -- Fiery Combustion
+		[74567] = Defaults(), -- Mark of Combustion
+		[74792] = Defaults(), -- Soul Consumption
+		[74795] = Defaults(), -- Mark of Consumption
 	}
 };
 
@@ -392,7 +454,7 @@ local function ClassBuff(id, point, color, anyUnit, onlyShowMissing, style, disp
 	["textColor"] = {["r"] = r2, ["g"] = g2, ["b"] = b2}, ["textThreshold"] = textThreshold or -1, ["xOffset"] = xOffset or 0, ["yOffset"] = yOffset or 0, ["sizeOverride"] = sizeOverride or 0};
 end
 
-G.unitframe.buffwatch = { -- Индикатор баффов
+G.unitframe.buffwatch = {
 	PRIEST = {
 		[6788] = ClassBuff(6788, "TOPLEFT", {1, 0, 0}, true), -- Ослабленная душа
 		[10060] = ClassBuff(10060 , "RIGHT", {227/255, 23/255, 13/255}), -- Придание сил
@@ -402,7 +464,7 @@ G.unitframe.buffwatch = { -- Индикатор баффов
 	},
 	DRUID = {
 		[48441] = ClassBuff(48441, "TOPRIGHT", {0.8, 0.4, 0.8}), -- Омоложение
-		[48443] = ClassBuff(48443, "BOTTOMLEFT", {0.2, 0.8, 0.2}), -- Востановление
+		[48443] = ClassBuff(48443, "BOTTOMLEFT", {0.2, 0.8, 0.2}), -- Восстановление
 		[48451] = ClassBuff(48451, "TOPLEFT", {0.4, 0.8, 0.2}), -- Жизнецвет
 		[53251] = ClassBuff(53251, "BOTTOMRIGHT", {0.8, 0.4, 0}), -- Буйный рост
 	},
@@ -440,24 +502,24 @@ P["unitframe"]["filters"] = {
 	["buffwatch"] = {}
 };
 
-G.unitframe.ChannelTicks = { -- Тики
+G.unitframe.ChannelTicks = {
 	-- Чернокнижник
-	[SpellName(1120)] = 5, -- "Похищение душы"
-	[SpellName(689)] = 5, -- "Похишение жызни"
-	[SpellName(5138)] = 5, -- "Похишение маны"
-	[SpellName(5740)] = 4, -- "Огненный ливень"
-	[SpellName(755)] = 10, -- "Канал здоровья"
+	[SpellName(1120)] = 5, -- Похищение души
+	[SpellName(689)] = 5, -- Похищение жизни
+	[SpellName(5138)] = 5, -- Похищение маны
+	[SpellName(5740)] = 4, -- Огненный ливень
+	[SpellName(755)] = 10, -- Канал здоровья
 	-- Друид
-	[SpellName(44203)] = 4, -- "Спокайствие"
-	[SpellName(16914)] = 10, -- "Гроза"
+	[SpellName(44203)] = 4, -- Спокойствие
+	[SpellName(16914)] = 10, -- Гроза
 	-- Жрец
-	[SpellName(15407)] = 3, -- "Пытка разума"
-	[SpellName(48045)] = 5, -- "Искушение разума"
-	[SpellName(47540)] = 3, -- "Исповедь"
+	[SpellName(15407)] = 3, -- Пытка разума
+	[SpellName(48045)] = 5, -- Искушение разума
+	[SpellName(47540)] = 3, -- Исповедь
 	-- Маг
-	[SpellName(5143)] = 5, -- "Чародейские стрелы"
-	[SpellName(10)] = 8, -- "Снежная буря"
-	[SpellName(12051)] = 4 -- "Прилив сил"
+	[SpellName(5143)] = 5, -- Чародейские стрелы
+	[SpellName(10)] = 8, -- Снежная буря
+	[SpellName(12051)] = 4 -- Прилив сил
 };
 
 G.unitframe.AuraBarColors = {
@@ -505,7 +567,7 @@ G.oldBuffWatch = {
 		ClassBuff(57933, "TOPRIGHT", {227/255, 23/255, 13/255}), -- Маленькие хитрости
 	},
 	MAGE = {
-		ClassBuff(54646, "TOPRIGHT", {0.2, 0.2, 1}), -- Магическая консетрация
+		ClassBuff(54646, "TOPRIGHT", {0.2, 0.2, 1}), -- Магическая концентрация
 	},
 	WARRIOR = {
 		ClassBuff(3411, "TOPRIGHT", {227/255, 23/255, 13/255}), -- Вмешательство
