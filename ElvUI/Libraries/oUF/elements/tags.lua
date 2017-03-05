@@ -10,15 +10,12 @@ local unpack = unpack
 local format = string.format
 local tinsert, tremove = table.insert, table.remove
 
-local UnitHealth = UnitHealth
-local UnitPower = UnitPower
-local UnitHealthMax = UnitHealthMax
-local UnitPowerMax = UnitPowerMax
-local UnitClass = UnitClass
+local UnitClass, UnitRace = UnitClass, UnitRace
 local UnitFactionGroup = UnitFactionGroup
-local UnitRace = UnitRace
+local UnitHealth, UnitHealthMax = UnitHealth, UnitHealthMax
+local UnitPower, UnitPowerMax = UnitPower, UnitPowerMax
 
-local _PATTERN = '%[..-%]+'
+local _PATTERN = "%[..-%]+"
 
 local _ENV = {
 	Hex = function(r, g, b)
@@ -41,9 +38,9 @@ local tagStrings = {
 
 	["dead"] = [[function(u)
 		if(UnitIsDead(u)) then
-			return 'Dead'
+			return "Dead"
 		elseif(UnitIsGhost(u)) then
-			return 'Ghost'
+			return "Ghost"
 		end
 	end]],
 
@@ -56,13 +53,13 @@ local tagStrings = {
 
 	["leader"] = [[function(u)
 		if(UnitIsPartyLeader(u)) then
-			return 'L'
+			return "L"
 		end
 	end]],
 
 	["leaderlong"]  = [[function(u)
 		if(UnitIsPartyLeader(u)) then
-			return 'Leader'
+			return "Leader"
 		end
 	end]],
 
@@ -71,7 +68,7 @@ local tagStrings = {
 		if(l > 0) then
 			return l
 		else
-			return '??'
+			return "??"
 		end
 	end]],
 
@@ -95,7 +92,7 @@ local tagStrings = {
 
 	["offline"] = [[function(u)
 		if(not UnitIsConnected(u)) then
-			return 'Offline'
+			return "Offline"
 		end
 	end]],
 
@@ -128,14 +125,14 @@ local tagStrings = {
 
 	["plus"] = [[function(u)
 		local c = UnitClassification(u)
-		if(c == 'elite' or c == 'rareelite') then
-			return '+'
+		if(c == "elite" or c == "rareelite") then
+			return "+"
 		end
 	end]],
 
 	["pvp"] = [[function(u)
 		if(UnitIsPVP(u)) then
-			return 'PvP'
+			return "PvP"
 		end
 	end]],
 
@@ -148,54 +145,54 @@ local tagStrings = {
 
 	["rare"] = [[function(u)
 		local c = UnitClassification(u)
-		if(c == 'rare' or c == 'rareelite') then
-			return 'Rare'
+		if(c == "rare" or c == "rareelite") then
+			return "Rare"
 		end
 	end]],
 
 	["resting"] = [[function(u)
-		if(u == 'player' and IsResting()) then
-			return 'zzz'
+		if(u == "player" and IsResting()) then
+			return "zzz"
 		end
 	end]],
 
 	["sex"] = [[function(u)
 		local s = UnitSex(u)
 		if(s == 2) then
-			return 'Male'
+			return "Male"
 		elseif(s == 3) then
-			return 'Female'
+			return "Female"
 		end
 	end]],
 
 	["smartclass"] = [[function(u)
 		if(UnitIsPlayer(u)) then
-			return _TAGS['class'](u)
+			return _TAGS["class"](u)
 		end
 
-		return _TAGS['creature'](u)
+		return _TAGS["creature"](u)
 	end]],
 
 	["status"] = [[function(u)
 		if(UnitIsDead(u)) then
-			return 'Dead'
+			return "Dead"
 		elseif(UnitIsGhost(u)) then
-			return 'Ghost'
+			return "Ghost"
 		elseif(not UnitIsConnected(u)) then
-			return 'Offline'
+			return "Offline"
 		else
-			return _TAGS['resting'](u)
+			return _TAGS["resting"](u)
 		end
 	end]],
 
 	["threat"] = [[function(u)
 		local s = UnitThreatSituation(u)
 		if(s == 1) then
-			return '++'
+			return "++"
 		elseif(s == 2) then
-			return '--'
+			return "--"
 		elseif(s == 3) then
-			return 'Aggro'
+			return "Aggro"
 		end
 	end]],
 
@@ -205,10 +202,10 @@ local tagStrings = {
 
 	["cpoints"] = [[function(u)
 		local cp
-		if(UnitExists'vehicle') then
-			cp = GetComboPoints('vehicle', 'target')
+		if(UnitExists"vehicle") then
+			cp = GetComboPoints("vehicle", "target")
 		else
-			cp = GetComboPoints('player', 'target')
+			cp = GetComboPoints("player", "target")
 		end
 
 		if(cp > 0) then
@@ -216,13 +213,13 @@ local tagStrings = {
 		end
 	end]],
 
-	['smartlevel'] = [[function(u)
+	["smartlevel"] = [[function(u)
 		local c = UnitClassification(u)
-		if(c == 'worldboss') then
-			return 'Boss'
+		if(c == "worldboss") then
+			return "Boss"
 		else
-			local plus = _TAGS['plus'](u)
-			local level = _TAGS['level'](u)
+			local plus = _TAGS["plus"](u)
+			local level = _TAGS["level"](u)
 			if(plus) then
 				return level .. plus
 			else
@@ -233,27 +230,27 @@ local tagStrings = {
 
 	["classification"] = [[function(u)
 		local c = UnitClassification(u)
-		if(c == 'rare') then
-			return 'Rare'
-		elseif(c == 'eliterare') then
-			return 'Rare Elite'
-		elseif(c == 'elite') then
-			return 'Elite'
-		elseif(c == 'worldboss') then
-			return 'Boss'
+		if(c == "rare") then
+			return "Rare"
+		elseif(c == "eliterare") then
+			return "Rare Elite"
+		elseif(c == "elite") then
+			return "Elite"
+		elseif(c == "worldboss") then
+			return "Boss"
 		end
 	end]],
 
 	["shortclassification"] = [[function(u)
 		local c = UnitClassification(u)
-		if(c == 'rare') then
-			return 'R'
-		elseif(c == 'eliterare') then
-			return 'R+'
-		elseif(c == 'elite') then
-			return '+'
-		elseif(c == 'worldboss') then
-			return 'B'
+		if(c == "rare") then
+			return "R"
+		elseif(c == "eliterare") then
+			return "R+"
+		elseif(c == "elite") then
+			return "+"
+		elseif(c == "worldboss") then
+			return "B"
 		end
 	end]],
 
@@ -272,16 +269,16 @@ local tagStrings = {
 	end]],
 
 	["defict:name"] = [[function(u)
-		local missinghp = _TAGS['missinghp'](u)
+		local missinghp = _TAGS["missinghp"](u)
 		if(missinghp) then
-			return '-' .. missinghp
+			return "-" .. missinghp
 		else
-			return _TAGS['name'](u)
+			return _TAGS["name"](u)
 		end
 	end]],
 
-	['happiness'] = [[function(u)
-		if(UnitIsUnit(u, 'pet')) then
+	["happiness"] = [[function(u)
+		if(UnitIsUnit(u, "pet")) then
 			local happiness = GetPetHappiness()
 			if(happiness == 1) then
 				return ":<"
@@ -295,47 +292,48 @@ local tagStrings = {
 }
 
 local tags = setmetatable(
-{
-	curhp = UnitHealth,
-	curpp = UnitPower,
-	maxhp = UnitHealthMax,
-	maxpp = UnitPowerMax,
-	class = UnitClass,
-	faction = UnitFactionGroup,
-	race = UnitRace,
-},
+	{
+		curhp = UnitHealth,
+		curpp = UnitPower,
+		maxhp = UnitHealthMax,
+		maxpp = UnitPowerMax,
+		class = UnitClass,
+		faction = UnitFactionGroup,
+		race = UnitRace
+	},
 
-{
-	__index = function(self, key)
-		local tagFunc = tagStrings[key]
-		if(tagFunc) then
-			local func, err = loadstring('return ' .. tagFunc)
-			if(func) then
-				func = func()
+	{
+		__index = function(self, key)
+			local tagFunc = tagStrings[key]
+			if(tagFunc) then
+				local func, err = loadstring("return " .. tagFunc)
+				if(func) then
+					func = func()
 
-				-- Want to trigger __newindex, so no rawset.
-				self[key] = func
-				tagStrings[key] = nil
+					-- Want to trigger __newindex, so no rawset.
+					self[key] = func
+					tagStrings[key] = nil
 
-				return func
-			else
-				error(err, 3)
+					return func
+				else
+					error(err, 3)
+				end
 			end
-		end
-	end,
-	__newindex = function(self, key, val)
-		if(type(val) == 'string') then
-			tagStrings[key] = val
-		elseif(type(val) == 'function') then
-			-- So we don't clash with any custom envs.
-			if(getfenv(val) == _G) then
-				setfenv(val, _PROXY)
-			end
+		end,
+		__newindex = function(self, key, val)
+			if(type(val) == "string") then
+				tagStrings[key] = val
+			elseif(type(val) == "function") then
+				-- So we don"t clash with any custom envs.
+				if(getfenv(val) == _G) then
+					setfenv(val, _PROXY)
+				end
 
-			rawset(self, key, val)
-		end
-	end,
-})
+				rawset(self, key, val)
+			end
+		end,
+	}
+)
 
 _ENV._TAGS = tags
 
@@ -362,12 +360,12 @@ local tagEvents = {
 	["smartlevel"]          = "UNIT_LEVEL PLAYER_LEVEL_UP UNIT_CLASSIFICATION_CHANGED",
 	["threat"]              = "UNIT_THREAT_SITUATION_UPDATE",
 	["threatcolor"]         = "UNIT_THREAT_SITUATION_UPDATE",
-	['cpoints']             = 'UNIT_COMBO_POINTS PLAYER_TARGET_CHANGED',
-	['rare']                = 'UNIT_CLASSIFICATION_CHANGED',
-	['classification']      = 'UNIT_CLASSIFICATION_CHANGED',
-	['shortclassification'] = 'UNIT_CLASSIFICATION_CHANGED',
+	["cpoints"]             = "UNIT_COMBO_POINTS PLAYER_TARGET_CHANGED",
+	["rare"]                = "UNIT_CLASSIFICATION_CHANGED",
+	["classification"]      = "UNIT_CLASSIFICATION_CHANGED",
+	["shortclassification"] = "UNIT_CLASSIFICATION_CHANGED",
 	["group"]               = "RAID_ROSTER_UPDATE",
-	['happiness']           = 'UNIT_HAPPINESS',
+	["happiness"]           = "UNIT_HAPPINESS",
 }
 
 local unitlessEvents = {
@@ -384,7 +382,7 @@ local unitlessEvents = {
 
 local events = {}
 local frame = CreateFrame"Frame"
-frame:SetScript('OnEvent', function(_, event, unit)
+frame:SetScript("OnEvent", function(_, event, unit)
 	local strings = events[event]
 	if(strings) then
 		for k, fontstring in next, strings do
@@ -403,10 +401,10 @@ local createOnUpdate = function(timer)
 
 	if(not OnUpdate) then
 		local total = timer
-		local frame = CreateFrame'Frame'
+		local frame = CreateFrame("Frame")
 		local strings = eventlessUnits[timer]
 
-		frame:SetScript('OnUpdate', function(_, elapsed)
+		frame:SetScript("OnUpdate", function(_, elapsed)
 			if(total >= timer) then
 				for k, fs in next, strings do
 					if(fs.parent:IsShown() and UnitExists(fs.parent.unit)) then
@@ -431,8 +429,8 @@ local OnShow = function(self)
 end
 
 local getTagName = function(tag)
-	local s = (tag:match('>+()') or 2)
-	local e = tag:match('.*()<+')
+	local s = (tag:match(">+()") or 2)
+	local e = tag:match(".*()<+")
 	e = (e and e - 1) or -2
 
 	return tag:sub(s, e), s, e
@@ -450,7 +448,7 @@ local RegisterEvents = function(fontstr, tagstr)
 		tag = getTagName(tag)
 		local tagevents = tagEvents[tag]
 		if(tagevents) then
-			for event in tagevents:gmatch'%S+' do
+			for event in tagevents:gmatch("%S+") do
 				RegisterEvent(fontstr, event)
 			end
 		end
@@ -501,11 +499,11 @@ local Tag = function(self, fs, tagstr)
 		self.__mousetags = {}
 		tinsert(self.__elements, OnShow)
 	else
-		-- Since people ignore everything that's good practice - unregister the tag
+		-- Since people ignore everything that"s good practice - unregister the tag
 		-- if it already exists.
 		for _, tag in pairs(self.__tags) do
 			if(fs == tag) then
-				-- We don't need to remove it from the __tags table as Untag handles
+				-- We don"t need to remove it from the __tags table as Untag handles
 				-- that for us.
 				self:Untag(fs)
 			end
@@ -520,19 +518,19 @@ local Tag = function(self, fs, tagstr)
 		end
 	end
 
-	if tagstr:find('%[mouseover%]') then
+	if tagstr:find("%[mouseover%]") then
 		tinsert(self.__mousetags, fs)
 		fs:SetAlpha(0)
 		if not self.__HookFunc then
-			self:HookScript('OnEnter', OnEnter)
-			self:HookScript('OnLeave', OnLeave)
-			self.__HookFunc = true;
+			self:HookScript("OnEnter", OnEnter)
+			self:HookScript("OnLeave", OnLeave)
+			self.__HookFunc = true
 		end
-		tagstr = tagstr:gsub('%[mouseover%]', '')
+		tagstr = tagstr:gsub("%[mouseover%]", "")
 	else
 		for index, fontString in pairs(self.__mousetags) do
 			if fontString == fs then
-				self.__mousetags[index] = nil;
+				self.__mousetags[index] = nil
 				fs:SetAlpha(1)
 			end
 		end
@@ -541,13 +539,13 @@ local Tag = function(self, fs, tagstr)
 	local containsOnUpdate
 	for tag in tagstr:gmatch(_PATTERN) do
 		if not tagEvents[tag:sub(2, -2)] then
-			containsOnUpdate = onUpdateDelay[tag:sub(2, -2)] or 0.15;
+			containsOnUpdate = onUpdateDelay[tag:sub(2, -2)] or 0.15
 		end
 	end
 
 	local func = tagPool[tagstr]
 	if(not func) then
-		local format = tagstr:gsub('%%', '%%%%'):gsub(_PATTERN, '%%s')
+		local format, numTags = tagstr:gsub("%%", "%%%%"):gsub(_PATTERN, "%%s")
 		local args = {}
 
 		for bracket in tagstr:gmatch(_PATTERN) do
@@ -597,20 +595,74 @@ local Tag = function(self, fs, tagstr)
 			if(tagFunc) then
 				tinsert(args, tagFunc)
 			else
-				return error(('Attempted to use invalid tag %s.'):format(bracket), 3)
+				return error(("Attempted to use invalid tag %s."):format(bracket), 3)
 			end
 		end
 
-		func = function(self)
-			local unit = self.parent.unit
-			local __unit = self.parent.realUnit
+		if(numTags == 1) then
+			func = function(self)
+				local parent = self.parent
+				local realUnit
+				if(self.overrideUnit) then
+					realUnit = parent.realUnit
+				end
 
-			_ENV._COLORS = self.parent.colors
-			for i, func in next, args do
-				tmp[i] = func(unit, __unit) or ''
+				_ENV._COLORS = parent.colors
+				return self:SetFormattedText(
+					format,
+					args[1](parent.unit, realUnit) or ""
+				)
 			end
+		elseif(numTags == 2) then
+			func = function(self)
+				local parent = self.parent
+				local unit = parent.unit
+				local realUnit
+				if(self.overrideUnit) then
+					realUnit = parent.realUnit
+				end
 
-			self:SetFormattedText(format, unpack(tmp))
+				_ENV._COLORS = parent.colors
+				return self:SetFormattedText(
+					format,
+					args[1](unit, realUnit) or "",
+					args[2](unit, realUnit) or ""
+				)
+			end
+		elseif(numTags == 3) then
+			func = function(self)
+				local parent = self.parent
+				local unit = parent.unit
+				local realUnit
+				if(self.overrideUnit) then
+					realUnit = parent.realUnit
+				end
+
+				_ENV._COLORS = parent.colors
+				return self:SetFormattedText(
+					format,
+					args[1](unit, realUnit) or "",
+					args[2](unit, realUnit) or "",
+					args[3](unit, realUnit) or ""
+				)
+			end
+		else
+			func = function(self)
+				local parent = self.parent
+				local unit = parent.unit
+				local realUnit
+				if(self.overrideUnit) then
+					realUnit = parent.realUnit
+				end
+
+				_ENV._COLORS = parent.colors
+				for i, func in next, args do
+					tmp[i] = func(unit, realUnit) or ""
+				end
+
+				-- We do 1, numTags because tmp can hold several unneeded variables.
+				return self:SetFormattedText(format, unpack(tmp, 1, numTags))
+			end
 		end
 
 		tagPool[tagstr] = func
@@ -618,9 +670,9 @@ local Tag = function(self, fs, tagstr)
 	fs.UpdateTag = func
 
 	local unit = self.unit
-	if((unit and unit:match'%w+target') or fs.frequentUpdates) or containsOnUpdate then
+	if((unit and unit:match("%w+target")) or fs.frequentUpdates) or containsOnUpdate then
 		local timer
-		if(type(fs.frequentUpdates) == 'number') then
+		if(type(fs.frequentUpdates) == "number") then
 			timer = fs.frequentUpdates
 		elseif containsOnUpdate then
 			timer = containsOnUpdate
@@ -665,5 +717,5 @@ oUF.TagEvents = tagEvents
 oUF.UnitlessTagEvents = unitlessEvents
 oUF.OnUpdateThrottle = onUpdateDelay,
 
-oUF:RegisterMetaFunction('Tag', Tag)
-oUF:RegisterMetaFunction('Untag', Untag)
+oUF:RegisterMetaFunction("Tag", Tag)
+oUF:RegisterMetaFunction("Untag", Untag)

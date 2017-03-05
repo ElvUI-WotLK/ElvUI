@@ -4,16 +4,15 @@ local oUF = ns.oUF
 local unpack = unpack
 
 local GetPetHappiness = GetPetHappiness
-local UnitHealth = UnitHealth
-local UnitHealthMax = UnitHealthMax
-local UnitIsConnected = UnitIsConnected
-local UnitIsUnit = UnitIsUnit
-local UnitIsPlayer = UnitIsPlayer
-local UnitPlayerControlled = UnitPlayerControlled
 local UnitClass = UnitClass
-local UnitReaction = UnitReaction
+local UnitHealth, UnitHealthMax = UnitHealth, UnitHealthMax
+local UnitIsConnected = UnitIsConnected
+local UnitIsPlayer = UnitIsPlayer
 local UnitIsTapped = UnitIsTapped
 local UnitIsTappedByPlayer = UnitIsTappedByPlayer
+local UnitIsUnit = UnitIsUnit
+local UnitPlayerControlled = UnitPlayerControlled
+local UnitReaction = UnitReaction
 
 oUF.colors.health = {49/255, 207/255, 37/255}
 
@@ -47,7 +46,7 @@ local Update = function(self, event, unit)
 		(health.colorClassPet and UnitPlayerControlled(unit) and not UnitIsPlayer(unit)) then
 		local _, class = UnitClass(unit)
 		t = self.colors.class[class]
-	elseif(health.colorReaction and UnitReaction(unit, 'player')) then
+	elseif(health.colorReaction and UnitReaction(unit, "player")) then
 		t = self.colors.reaction[UnitReaction(unit, "player")]
 	elseif(health.colorSmooth) then
 		r, g, b = self.ColorGradient(min, max, unpack(health.smoothGradient or self.colors.smooth))
@@ -79,7 +78,7 @@ local Path = function(self, ...)
 end
 
 local ForceUpdate = function(element)
-	return Path(element.__owner, 'ForceUpdate', element.__owner.unit)
+	return Path(element.__owner, "ForceUpdate", element.__owner.unit)
 end
 
 local OnHealthUpdate
@@ -104,11 +103,11 @@ local Enable = function(self, unit)
 		health.__owner = self
 		health.ForceUpdate = ForceUpdate
 
-		if(health.frequentUpdates and (unit and not unit:match'%w+target$')) then
-			health:SetScript('OnUpdate', OnHealthUpdate)
+		if(health.frequentUpdates and (unit and not unit:match("%w+target$"))) then
+			health:SetScript("OnUpdate", OnHealthUpdate)
 
 			-- The party frames need this to handle disconnect states correctly.
-			if(unit == 'party') then
+			if(unit == "party") then
 				self:RegisterEvent("UNIT_HEALTH", Path)
 			end
 		else
@@ -116,14 +115,14 @@ local Enable = function(self, unit)
 		end
 
 		self:RegisterEvent("UNIT_MAXHEALTH", Path)
-		self:RegisterEvent('UNIT_HAPPINESS', Path)
-		self:RegisterEvent('UNIT_CONNECTION', Path)
+		self:RegisterEvent("UNIT_HAPPINESS", Path)
+		self:RegisterEvent("UNIT_CONNECTION", Path)
 
 		-- For tapping.
-		self:RegisterEvent('UNIT_FACTION', Path)
+		self:RegisterEvent("UNIT_FACTION", Path)
 
 		if(not health:GetStatusBarTexture()) then
-			health:SetStatusBarTexture[[Interface\TargetingFrame\UI-StatusBar]]
+			health:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
 		end
 
 		return true
@@ -133,17 +132,17 @@ end
 local Disable = function(self)
 	local health = self.Health
 	if(health) then
-		if(health:GetScript'OnUpdate') then
-			health:SetScript('OnUpdate', nil)
+		if(health:GetScript("OnUpdate")) then
+			health:SetScript("OnUpdate", nil)
 		end
 
-		self:UnregisterEvent('UNIT_HEALTH', Path)
-		self:UnregisterEvent('UNIT_MAXHEALTH', Path)
-		self:UnregisterEvent('UNIT_HAPPINESS', Path)
-		self:UnregisterEvent('UNIT_CONNECTION', Path)
+		self:UnregisterEvent("UNIT_HEALTH", Path)
+		self:UnregisterEvent("UNIT_MAXHEALTH", Path)
+		self:UnregisterEvent("UNIT_HAPPINESS", Path)
+		self:UnregisterEvent("UNIT_CONNECTION", Path)
 
-		self:UnregisterEvent('UNIT_FACTION', Path)
+		self:UnregisterEvent("UNIT_FACTION", Path)
 	end
 end
 
-oUF:AddElement('Health', Update, Enable, Disable)
+oUF:AddElement("Health", Update, Enable, Disable)

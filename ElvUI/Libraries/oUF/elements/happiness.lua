@@ -5,7 +5,7 @@ local GetPetHappiness = GetPetHappiness
 local HasPetUI = HasPetUI
 
 local Update = function(self, event, unit)
-	if(self.unit ~= unit) then return end
+	if(not unit or self.unit ~= unit) then return end
 
 	local happ = self.Happiness
 	if(happ) then
@@ -36,8 +36,8 @@ local Enable = function(self)
 	if(happiness) then
 		self:RegisterEvent("UNIT_HAPPINESS", happiness.Update or Update)
 
-		if(happiness:IsObjectType"Texture" and not happiness:GetTexture()) then
-			happiness:SetTexture[[Interface\PetPaperDollFrame\UI-PetHappiness]]
+		if(happiness:IsObjectType("Texture") and not happiness:GetTexture()) then
+			happiness:SetTexture([[Interface\PetPaperDollFrame\UI-PetHappiness]])
 		end
 
 		return true
@@ -51,4 +51,4 @@ local Disable = function(self)
 	end
 end
 
-oUF:AddElement('Happiness', Update, Enable, Disable)
+oUF:AddElement("Happiness", Update, Enable, Disable)

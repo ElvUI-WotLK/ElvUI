@@ -1,64 +1,64 @@
-local _, ns = ...;
-local oUF = ns.oUF;
+local _, ns = ...
+local oUF = ns.oUF
 
-local UnitFactionGroup = UnitFactionGroup;
-local UnitIsPVPFreeForAll = UnitIsPVPFreeForAll;
-local UnitIsPVP = UnitIsPVP;
+local UnitFactionGroup = UnitFactionGroup
+local UnitIsPVP = UnitIsPVP
+local UnitIsPVPFreeForAll = UnitIsPVPFreeForAll
 
 local Update = function(self, event, unit)
-	if(unit ~= self.unit) then return; end
+	if(unit ~= self.unit) then return end
 
-	local pvp = self.PvP;
+	local pvp = self.PvP
 	if(pvp.PreUpdate) then
-		pvp:PreUpdate();
+		pvp:PreUpdate()
 	end
 
-	local status;
-	local factionGroup = UnitFactionGroup(unit);
+	local status
+	local factionGroup = UnitFactionGroup(unit)
 	if(UnitIsPVPFreeForAll(unit)) then
-		pvp:SetTexture([[Interface\TargetingFrame\UI-PVP-FFA]]);
-		status = "ffa";
+		pvp:SetTexture([[Interface\TargetingFrame\UI-PVP-FFA]])
+		status = "ffa"
 	elseif(factionGroup and UnitIsPVP(unit)) then
-		pvp:SetTexture([[Interface\TargetingFrame\UI-PVP-]] .. factionGroup);
-		status = factionGroup;
+		pvp:SetTexture([[Interface\TargetingFrame\UI-PVP-]]..factionGroup)
+		status = factionGroup
 	end
 
 	if(status) then
-		pvp:Show();
+		pvp:Show()
 	else
-		pvp:Hide();
+		pvp:Hide()
 	end
 
 	if(pvp.PostUpdate) then
-		return pvp:PostUpdate(status);
+		return pvp:PostUpdate(status)
 	end
 end
 
 local Path = function(self, ...)
-	return (self.PvP.Override or Update) (self, ...);
+	return (self.PvP.Override or Update) (self, ...)
 end
 
 local ForceUpdate = function(element)
-	return Path(element.__owner, "ForceUpdate", element.__owner.unit);
+	return Path(element.__owner, "ForceUpdate", element.__owner.unit)
 end
 
 local Enable = function(self)
-	local pvp = self.PvP;
+	local pvp = self.PvP
 	if(pvp) then
-		pvp.__owner = self;
-		pvp.ForceUpdate = ForceUpdate;
+		pvp.__owner = self
+		pvp.ForceUpdate = ForceUpdate
 
-		self:RegisterEvent("UNIT_FACTION", Path);
+		self:RegisterEvent("UNIT_FACTION", Path)
 
-		return true;
+		return true
 	end
 end
 
 local Disable = function(self)
-	local pvp = self.PvP;
+	local pvp = self.PvP
 	if(pvp) then
-		self:UnregisterEvent("UNIT_FACTION", Path);
+		self:UnregisterEvent("UNIT_FACTION", Path)
 	end
 end
 
-oUF:AddElement("PvP", Path, Enable, Disable);
+oUF:AddElement("PvP", Path, Enable, Disable)

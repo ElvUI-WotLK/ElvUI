@@ -4,21 +4,20 @@ local oUF = ns.oUF
 local unpack = unpack
 
 local GetPetHappiness = GetPetHappiness
-local UnitPower = UnitPower
-local UnitPowerMax = UnitPowerMax
-local UnitIsConnected = UnitIsConnected
-local UnitIsUnit = UnitIsUnit
-local UnitPowerType = UnitPowerType
-local UnitIsPlayer = UnitIsPlayer
-local UnitPlayerControlled = UnitPlayerControlled
 local UnitClass = UnitClass
-local UnitReaction = UnitReaction
+local UnitIsConnected = UnitIsConnected
+local UnitIsPlayer = UnitIsPlayer
 local UnitIsTapped = UnitIsTapped
 local UnitIsTappedByPlayer = UnitIsTappedByPlayer
+local UnitIsUnit = UnitIsUnit
+local UnitPlayerControlled = UnitPlayerControlled
+local UnitPower, UnitPowerMax = UnitPower, UnitPowerMax
+local UnitPowerType = UnitPowerType
+local UnitReaction = UnitReaction
 
 oUF.colors.power = {}
 for power, color in next, PowerBarColor do
-	if(type(power) == 'string') then
+	if(type(power) == "string") then
 		oUF.colors.power[power] = {color.r, color.g, color.b}
 	end
 end
@@ -60,7 +59,7 @@ local Update = function(self, event, unit)
 		(power.colorClassPet and UnitPlayerControlled(unit) and not UnitIsPlayer(unit)) then
 		local _, class = UnitClass(unit)
 		t = self.colors.class[class]
-	elseif(power.colorReaction and UnitReaction(unit, 'player')) then
+	elseif(power.colorReaction and UnitReaction(unit, "player")) then
 		t = self.colors.reaction[UnitReaction(unit, "player")]
 	elseif(power.colorSmooth) then
 		r, g, b = self.ColorGradient(min, max, unpack(power.smoothGradient or self.colors.smooth))
@@ -90,7 +89,7 @@ local Path = function(self, ...)
 end
 
 local ForceUpdate = function(element)
-	return Path(element.__owner, 'ForceUpdate', element.__owner.unit)
+	return Path(element.__owner, "ForceUpdate", element.__owner.unit)
 end
 
 local OnPowerUpdate
@@ -104,7 +103,7 @@ do
 		if(power ~= self.min) then
 			self.min = power
 
-			return Path(self.__owner, 'OnPowerUpdate', unit)
+			return Path(self.__owner, "OnPowerUpdate", unit)
 		end
 	end
 end
@@ -132,14 +131,14 @@ local Enable = function(self, unit)
 		self:RegisterEvent("UNIT_DISPLAYPOWER", Path)
 		self:RegisterEvent("UNIT_MAXRUNIC_POWER", Path)
 
-		self:RegisterEvent('UNIT_CONNECTION', Path)
-		self:RegisterEvent('UNIT_HAPPINESS', Path)
+		self:RegisterEvent("UNIT_CONNECTION", Path)
+		self:RegisterEvent("UNIT_HAPPINESS", Path)
 
 		-- For tapping.
-		self:RegisterEvent('UNIT_FACTION', Path)
+		self:RegisterEvent("UNIT_FACTION", Path)
 
 		if(not power:GetStatusBarTexture()) then
-			power:SetStatusBarTexture[[Interface\TargetingFrame\UI-StatusBar]]
+			power:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
 		end
 
 		return true
@@ -149,7 +148,7 @@ end
 local Disable = function(self)
 	local power = self.Power
 	if(power) then
-		if(power:GetScript'OnUpdate') then
+		if(power:GetScript("OnUpdate")) then
 			power:SetScript("OnUpdate", nil)
 		else
 			self:UnregisterEvent("UNIT_MANA", Path)
@@ -166,10 +165,10 @@ local Disable = function(self)
 		self:UnregisterEvent("UNIT_DISPLAYPOWER", Path)
 		self:UnregisterEvent("UNIT_MAXRUNIC_POWER", Path)
 
-		self:UnregisterEvent('UNIT_CONNECTION', Path)
-		self:UnregisterEvent('UNIT_HAPPINESS', Path)
-		self:UnregisterEvent('UNIT_FACTION', Path)
+		self:UnregisterEvent("UNIT_CONNECTION", Path)
+		self:UnregisterEvent("UNIT_HAPPINESS", Path)
+		self:UnregisterEvent("UNIT_FACTION", Path)
 	end
 end
 
-oUF:AddElement('Power', Path, Enable, Disable)
+oUF:AddElement("Power", Path, Enable, Disable)

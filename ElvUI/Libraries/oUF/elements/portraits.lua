@@ -1,64 +1,64 @@
-local _, ns = ...;
-local oUF = ns.oUF;
+local _, ns = ...
+local oUF = ns.oUF
 
-local UnitIsUnit = UnitIsUnit;
-local UnitGUID = UnitGUID;
-local UnitExists = UnitExists;
-local UnitIsConnected = UnitIsConnected;
-local UnitIsVisible = UnitIsVisible;
-local SetPortraitTexture = SetPortraitTexture;
+local UnitExists = UnitExists
+local UnitGUID = UnitGUID
+local UnitIsConnected = UnitIsConnected
+local UnitIsUnit = UnitIsUnit
+local UnitIsVisible = UnitIsVisible
+local SetPortraitTexture = SetPortraitTexture
 
 local Update = function(self, event, unit)
-	if(not unit or not UnitIsUnit(self.unit, unit)) then return; end
+	if(not unit or not UnitIsUnit(self.unit, unit)) then return end
 
-	local portrait = self.Portrait;
-	if(portrait.PreUpdate) then portrait:PreUpdate(unit); end
+	local portrait = self.Portrait
+	if(portrait.PreUpdate) then portrait:PreUpdate(unit) end
 
 	if(portrait:IsObjectType("Model")) then
-		local guid = UnitGUID(unit);
+		local guid = UnitGUID(unit)
 		if(not UnitExists(unit) or not UnitIsConnected(unit) or not UnitIsVisible(unit)) then
-			portrait:SetModelScale(4.25);
-			portrait:SetCamera(0);
-			portrait:SetPosition(0, 0, -1.5);
-			portrait:SetModel("Interface\\Buttons\\talktomequestionmark.mdx");
-			portrait.guid = nil;
+			portrait:SetModelScale(4.25)
+			portrait:SetCamera(0)
+			portrait:SetPosition(0, 0, -1.5)
+			portrait:SetModel("Interface\\Buttons\\talktomequestionmark.mdx")
+			portrait.guid = nil
 		elseif(portrait.guid ~= guid or event == "UNIT_MODEL_CHANGED") then
-			portrait:ClearModel();
-			portrait:SetUnit(unit);
-			portrait:SetModelScale(1);
-			portrait:SetCamera(0);
-			portrait:SetPosition(0, 0, 0);
-			portrait.guid = guid;
+			portrait:ClearModel()
+			portrait:SetUnit(unit)
+			portrait:SetModelScale(1)
+			portrait:SetCamera(0)
+			portrait:SetPosition(0, 0, 0)
+			portrait.guid = guid
 		else
-			portrait:SetCamera(0);
+			portrait:SetCamera(0)
 		end
 	else
-		SetPortraitTexture(portrait, unit);
+		SetPortraitTexture(portrait, unit)
 	end
 
 	if(portrait.PostUpdate) then
-		return portrait:PostUpdate(unit);
+		return portrait:PostUpdate(unit)
 	end
 end
 
 local Path = function(self, ...)
-	return (self.Portrait.Override or Update) (self, ...);
+	return (self.Portrait.Override or Update) (self, ...)
 end
 
 local ForceUpdate = function(element)
-	return Path(element.__owner, "ForceUpdate", element.__owner.unit);
+	return Path(element.__owner, "ForceUpdate", element.__owner.unit)
 end
 
 local Enable = function(self, unit)
-	local portrait = self.Portrait;
+	local portrait = self.Portrait
 	if(portrait) then
-		portrait:Show();
-		portrait.__owner = self;
-		portrait.ForceUpdate = ForceUpdate;
+		portrait:Show()
+		portrait.__owner = self
+		portrait.ForceUpdate = ForceUpdate
 
-		self:RegisterEvent("UNIT_PORTRAIT_UPDATE", Path);
-		self:RegisterEvent("UNIT_MODEL_CHANGED", Path);
-		self:RegisterEvent("UNIT_CONNECTION", Path);
+		self:RegisterEvent("UNIT_PORTRAIT_UPDATE", Path)
+		self:RegisterEvent("UNIT_MODEL_CHANGED", Path)
+		self:RegisterEvent("UNIT_CONNECTION", Path)
 
 		-- The quest log uses PARTY_MEMBER_{ENABLE,DISABLE} to handle updating of
 		-- party members overlapping quests. This will probably be enough to handle
@@ -67,22 +67,22 @@ local Enable = function(self, unit)
 		-- DISABLE isn"t used as it fires when we most likely don"t have the
 		-- information we want.
 		if(unit == "party") then
-			self:RegisterEvent("PARTY_MEMBER_ENABLE", Update);
+			self:RegisterEvent("PARTY_MEMBER_ENABLE", Update)
 		end
 
-		return true;
+		return true
 	end
 end
 
 local Disable = function(self)
-	local portrait = self.Portrait;
+	local portrait = self.Portrait
 	if(portrait) then
-		portrait:Hide();
-		self:UnregisterEvent("UNIT_PORTRAIT_UPDATE", Path);
-		self:UnregisterEvent("UNIT_MODEL_CHANGED", Path);
-		self:UnregisterEvent("PARTY_MEMBER_ENABLE", Path);
-		self:UnregisterEvent("UNIT_CONNECTION", Path);
+		portrait:Hide()
+		self:UnregisterEvent("UNIT_PORTRAIT_UPDATE", Path)
+		self:UnregisterEvent("UNIT_MODEL_CHANGED", Path)
+		self:UnregisterEvent("PARTY_MEMBER_ENABLE", Path)
+		self:UnregisterEvent("UNIT_CONNECTION", Path)
 	end
 end
 
-oUF:AddElement("Portrait", Path, Enable, Disable);
+oUF:AddElement("Portrait", Path, Enable, Disable)

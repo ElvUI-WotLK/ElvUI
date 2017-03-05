@@ -1,5 +1,9 @@
-local parent, ns = ...
+local _, ns = ...
 local oUF = ns.oUF
+
+local GetRaidRosterInfo = GetRaidRosterInfo
+local UnitHasVehicleUI = UnitHasVehicleUI
+local UnitInRaid = UnitInRaid
 
 local Update = function(self, event)
 	local raidID = UnitInRaid(self.unit)
@@ -11,10 +15,10 @@ local Update = function(self, event)
 	end
 
 	local _, _, _, _, _, _, _, _, _, rinfo = GetRaidRosterInfo(raidID)
-	if(rinfo == 'MAINTANK' and not UnitHasVehicleUI(self.unit)) then
-		self.MainTank:Show()
+	if(rinfo == "MAINTANK" and not UnitHasVehicleUI(self.unit)) then
+		maintank:Show()
 	else
-		self.MainTank:Hide()
+		maintank:Hide()
 	end
 
 	if(maintank.PostUpdate) then
@@ -27,21 +31,20 @@ local Path = function(self, ...)
 end
 
 local ForceUpdate = function(element)
-	return Path(element.__owner, 'ForceUpdate')
+	return Path(element.__owner, "ForceUpdate")
 end
 
 local Enable = function(self)
 	local mt = self.MainTank
-
 	if(mt) then
 		mt.__owner = self
 		mt.ForceUpdate = ForceUpdate
 
-		self:RegisterEvent('PARTY_MEMBERS_CHANGED', Path, true)
-		self:RegisterEvent('RAID_ROSTER_UPDATE', Path, true)
+		self:RegisterEvent("PARTY_MEMBERS_CHANGED", Path, true)
+		self:RegisterEvent("RAID_ROSTER_UPDATE", Path, true)
 
-		if(mt:IsObjectType'Texture' and not mt:GetTexture()) then
-			mt:SetTexture[[Interface\GROUPFRAME\UI-GROUP-MAINTANKICON]]
+		if(mt:IsObjectType("Texture") and not mt:GetTexture()) then
+			mt:SetTexture([[Interface\GROUPFRAME\UI-GROUP-MAINTANKICON]])
 		end
 
 		return true
@@ -50,11 +53,10 @@ end
 
 local Disable = function(self)
 	local mt = self.MainTank
-
-	if (mt) then
-		self:UnregisterEvent('PARTY_MEMBERS_CHANGED', Path)
-		self:UnregisterEvent('RAID_ROSTER_UPDATE', Path)
+	if(mt) then
+		self:UnregisterEvent("PARTY_MEMBERS_CHANGED", Path)
+		self:UnregisterEvent("RAID_ROSTER_UPDATE", Path)
 	end
 end
 
-oUF:AddElement('MainTank', Path, Enable, Disable)
+oUF:AddElement("MainTank", Path, Enable, Disable)

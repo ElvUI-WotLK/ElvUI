@@ -1,49 +1,49 @@
-local _, ns = ...;
-local oUF = ns.oUF;
+local _, ns = ...
+local oUF = ns.oUF
 
-local UnitIsPartyLeader = UnitIsPartyLeader
 local UnitInParty = UnitInParty
 local UnitInRaid = UnitInRaid
+local UnitIsPartyLeader = UnitIsPartyLeader
 
 local Update = function(self, event)
-	local leader = self.Leader;
+	local leader = self.Leader
 	if(leader.PreUpdate) then
-		leader:PreUpdate();
+		leader:PreUpdate()
 	end
 
-	local unit = self.unit;
-	local isLeader =  UnitIsPartyLeader(unit) and (UnitInParty(unit) or UnitInRaid(unit));
+	local unit = self.unit
+	local isLeader =  UnitIsPartyLeader(unit) and (UnitInParty(unit) or UnitInRaid(unit))
 	if(isLeader) then
-		leader:Show();
+		leader:Show()
 	else
-		leader:Hide();
+		leader:Hide()
 	end
 
 	if(leader.PostUpdate) then
-		return leader:PostUpdate(isLeader);
+		return leader:PostUpdate(isLeader)
 	end
 end
 
 local Path = function(self, ...)
-	return (self.Leader.Override or Update) (self, ...);
+	return (self.Leader.Override or Update) (self, ...)
 end
 
 local ForceUpdate = function(element)
-	return Path(element.__owner, 'ForceUpdate');
+	return Path(element.__owner, "ForceUpdate")
 end
 
 local Enable = function(self)
-	local leader = self.Leader;
+	local leader = self.Leader
 	if(leader) then
-		leader.__owner = self;
-		leader.ForceUpdate = ForceUpdate;
+		leader.__owner = self
+		leader.ForceUpdate = ForceUpdate
 
-		self:RegisterEvent('RAID_ROSTER_UPDATE', Path, true);
-		self:RegisterEvent('PARTY_MEMBERS_CHANGED', Path, true);
-		self:RegisterEvent('PARTY_LEADER_CHANGED', Path, true);
+		self:RegisterEvent("RAID_ROSTER_UPDATE", Path, true)
+		self:RegisterEvent("PARTY_MEMBERS_CHANGED", Path, true)
+		self:RegisterEvent("PARTY_LEADER_CHANGED", Path, true)
 
-		if(leader:IsObjectType"Texture" and not leader:GetTexture()) then
-			leader:SetTexture[[Interface\GroupFrame\UI-Group-LeaderIcon]];
+		if(leader:IsObjectType("Texture") and not leader:GetTexture()) then
+			leader:SetTexture([[Interface\GroupFrame\UI-Group-LeaderIcon]])
 		end
 
 		return true
@@ -51,12 +51,12 @@ local Enable = function(self)
 end
 
 local Disable = function(self)
-	local leader = self.Leader;
+	local leader = self.Leader
 	if(leader) then
-		self:UnregisterEvent('RAID_ROSTER_UPDATE', Path);
-		self:UnregisterEvent('PARTY_MEMBERS_CHANGED', Path);
-		self:UnregisterEvent('PARTY_LEADER_CHANGED', Path);
+		self:UnregisterEvent("RAID_ROSTER_UPDATE", Path)
+		self:UnregisterEvent("PARTY_MEMBERS_CHANGED", Path)
+		self:UnregisterEvent("PARTY_LEADER_CHANGED", Path)
 	end
 end
 
-oUF:AddElement('Leader', Path, Enable, Disable);
+oUF:AddElement("Leader", Path, Enable, Disable)

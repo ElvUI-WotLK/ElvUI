@@ -1,60 +1,60 @@
-local _, ns = ...;
-local oUF = ns.oUF;
+local _, ns = ...
+local oUF = ns.oUF
 
-local UnitIsPartyLeader = UnitIsPartyLeader;
-local UnitInRaid = UnitInRaid;
-local UnitIsRaidOfficer = UnitIsRaidOfficer;
+local UnitInRaid = UnitInRaid
+local UnitIsPartyLeader = UnitIsPartyLeader
+local UnitIsRaidOfficer = UnitIsRaidOfficer
 
 local Update = function(self)
-	if(not self.unit) then return; end
-	local assistant = self.Assistant;
+	if(not self.unit) then return end
+	local assistant = self.Assistant
 
 	if(assistant.PreUpdate) then
-		assistant:PreUpdate();
+		assistant:PreUpdate()
 	end
 
-	local unit = self.unit;
-	local isAssistant = UnitInRaid(unit) and UnitIsRaidOfficer(unit) and not UnitIsPartyLeader(unit);
+	local unit = self.unit
+	local isAssistant = UnitInRaid(unit) and UnitIsRaidOfficer(unit) and not UnitIsPartyLeader(unit)
 	if(isAssistant) then
-		assistant:Show();
+		assistant:Show()
 	else
-		assistant:Hide();
+		assistant:Hide()
 	end
 
 	if(assistant.PostUpdate) then
-		return assistant:PostUpdate(isAssistant);
+		return assistant:PostUpdate(isAssistant)
 	end
 end
 
 local Path = function(self, ...)
-	return (self.Assistant.Override or Update) (self, ...);
+	return (self.Assistant.Override or Update) (self, ...)
 end
 
 local ForceUpdate = function(element)
-	return Path(element.__owner, "ForceUpdate");
+	return Path(element.__owner, "ForceUpdate")
 end
 
 local Enable = function(self)
 	local assistant = self.Assistant
 	if(assistant) then
-		self:RegisterEvent("PARTY_MEMBERS_CHANGED", Path, true);
+		self:RegisterEvent("PARTY_MEMBERS_CHANGED", Path, true)
 
 		if(assistant:IsObjectType("Texture") and not assistant:GetTexture()) then
-			assistant:SetTexture([[Interface\GroupFrame\UI-Group-AssistantIcon]]);
+			assistant:SetTexture([[Interface\GroupFrame\UI-Group-AssistantIcon]])
 		end
 
-		assistant.__owner = self;
-		assistant.ForceUpdate = ForceUpdate;
+		assistant.__owner = self
+		assistant.ForceUpdate = ForceUpdate
 
-		return true;
+		return true
 	end
 end
 
 local Disable = function(self)
-	local assistant = self.Assistant;
+	local assistant = self.Assistant
 	if(assistant) then
-		self:UnregisterEvent("PARTY_MEMBERS_CHANGED", Path);
+		self:UnregisterEvent("PARTY_MEMBERS_CHANGED", Path)
 	end
 end
 
-oUF:AddElement("Assistant", Path, Enable, Disable);
+oUF:AddElement("Assistant", Path, Enable, Disable)
