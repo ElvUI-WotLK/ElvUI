@@ -292,8 +292,6 @@ P["unitframe"] = {
 		["transparentAurabars"] = false,
 		["castColor"] = { r = .31,g = .31,b = .31 },
 		["castNoInterrupt"] = { r = 0.78, g = 0.25, b = 0.25 },
-		["castCompleteColor"] = { r = 0.12, g = 0.86, b =0.15 },
-		["castFailColor"] = { r = 1.0, g = 0.09, b = 0 },
 		["castClassColor"] = false,
 		["castReactionColor"] = false,
 

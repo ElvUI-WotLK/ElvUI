@@ -354,8 +354,6 @@ function UF:UpdateColors()
 
 	ElvUF.colors.castColor = E:GetColorTable(db.castColor);
 	ElvUF.colors.castNoInterrupt = E:GetColorTable(db.castNoInterrupt);
-	ElvUF.colors.castCompleteColor = E:GetColorTable(db.castCompleteColor);
-	ElvUF.colors.castFailColor = E:GetColorTable(db.castFailColor);
 end
 
 function UF:Update_StatusBars()
