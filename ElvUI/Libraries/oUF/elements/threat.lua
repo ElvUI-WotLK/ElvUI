@@ -1,11 +1,11 @@
-local _, ns = ...
+local parent, ns = ...
 local oUF = ns.oUF
 
-local GetThreatStatusColor = GetThreatStatusColor
 local UnitThreatSituation = UnitThreatSituation
+local GetThreatStatusColor = GetThreatStatusColor
 
 local Update = function(self, event, unit)
-	if(unit ~= self.unit) then return end
+	if(not unit or self.unit ~= unit) then return end
 
 	local threat = self.Threat
 	if(threat.PreUpdate) then threat:PreUpdate(unit) end
@@ -20,6 +20,7 @@ local Update = function(self, event, unit)
 		if threat:IsObjectType("Texture") then
 			threat:SetVertexColor(r, g, b)
 		end
+
 		threat:Show()
 	else
 		threat:Hide()
@@ -49,7 +50,7 @@ local Enable = function(self)
 
 		if(threat:IsObjectType("Texture") and not threat:GetTexture()) then
 			threat:SetTexture([[Interface\Minimap\ObjectIcons]])
-			threat:SetTexCoord(1/4, 3/8, 0, 1/4)
+			threat:SetTexCoord(6/8, 7/8, 1/8, 2/8)
 		end
 
 		return true

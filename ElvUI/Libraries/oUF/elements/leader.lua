@@ -1,4 +1,4 @@
-local _, ns = ...
+local parent, ns = ...
 local oUF = ns.oUF
 
 local UnitInParty = UnitInParty
@@ -12,7 +12,7 @@ local Update = function(self, event)
 	end
 
 	local unit = self.unit
-	local isLeader =  UnitIsPartyLeader(unit) and (UnitInParty(unit) or UnitInRaid(unit))
+	local isLeader = (UnitInParty(unit) or UnitInRaid(unit)) and UnitIsPartyLeader(unit)
 	if(isLeader) then
 		leader:Show()
 	else
@@ -53,9 +53,10 @@ end
 local Disable = function(self)
 	local leader = self.Leader
 	if(leader) then
+		leader:Hide()
 		self:UnregisterEvent("RAID_ROSTER_UPDATE", Path)
-		self:UnregisterEvent("PARTY_MEMBERS_CHANGED", Path)
 		self:UnregisterEvent("PARTY_LEADER_CHANGED", Path)
+		self:UnregisterEvent("GROUP_ROSTER_UPDATE", Path)
 	end
 end
 

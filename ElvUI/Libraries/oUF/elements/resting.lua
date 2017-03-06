@@ -1,4 +1,4 @@
-local _, ns = ...
+local parent, ns = ...
 local oUF = ns.oUF
 
 local IsResting = IsResting
@@ -49,6 +49,7 @@ end
 local Disable = function(self)
 	local resting = self.Resting
 	if(resting) then
+		resting:Hide()
 		self:UnregisterEvent("PLAYER_UPDATE_RESTING", Path)
 	end
 end

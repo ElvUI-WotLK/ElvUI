@@ -1,47 +1,47 @@
-local parent, ns = ...;
-local oUF = ns.oUF;
-local Private = oUF.Private;
+local parent, ns = ...
+local oUF = ns.oUF
+local Private = oUF.Private
 
-local argcheck = Private.argcheck;
-local tinsert = table.insert;
+local argcheck = Private.argcheck
+local tinsert = table.insert
 
-local _QUEUE = {};
+local _QUEUE = {}
 local _FACTORY = CreateFrame("Frame")
 _FACTORY:SetScript("OnEvent", function(self, event, ...)
-	return self[event](self, event, ...);
+	return self[event](self, event, ...)
 end)
 
 _FACTORY:RegisterEvent("PLAYER_LOGIN")
-_FACTORY.active = true;
+_FACTORY.active = true
 
 function _FACTORY:PLAYER_LOGIN()
-	if(not self.active) then return; end
+	if(not self.active) then return end
 
 	for _, func in next, _QUEUE do
-		func(oUF);
+		func(oUF)
 	end
 
-	wipe(_QUEUE);
+	wipe(_QUEUE)
 end
 
 function oUF:Factory(func)
-	argcheck(func, 2, "function");
+	argcheck(func, 2, "function")
 
 	if(IsLoggedIn() and _FACTORY.active) then
-		return func(self);
+		return func(self)
 	else
-		tinsert(_QUEUE, func);
+		tinsert(_QUEUE, func)
 	end
 end
 
 function oUF:EnableFactory()
-	_FACTORY.active = true;
+	_FACTORY.active = true
 end
 
 function oUF:DisableFactory()
-	_FACTORY.active = nil;
+	_FACTORY.active = nil
 end
 
 function oUF:RunFactoryQueue()
-	_FACTORY:PLAYER_LOGIN();
+	_FACTORY:PLAYER_LOGIN()
 end

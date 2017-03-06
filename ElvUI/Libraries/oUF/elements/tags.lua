@@ -10,10 +10,36 @@ local unpack = unpack
 local format = string.format
 local tinsert, tremove = table.insert, table.remove
 
-local UnitClass, UnitRace = UnitClass, UnitRace
+local GetComboPoints = GetComboPoints
+local GetNumRaidMembers = GetNumRaidMembers
+local GetPetHappiness = GetPetHappiness
+local GetQuestDifficultyColor = GetQuestDifficultyColor
+local GetRaidRosterInfo = GetRaidRosterInfo
+local GetThreatStatusColor = GetThreatStatusColor
+local IsResting = IsResting
+local UnitCanAttack = UnitCanAttack
+local UnitClass = UnitClass
+local UnitClassification = UnitClassification
+local UnitCreatureFamily = UnitCreatureFamily
+local UnitCreatureType = UnitCreatureType
 local UnitFactionGroup = UnitFactionGroup
-local UnitHealth, UnitHealthMax = UnitHealth, UnitHealthMax
-local UnitPower, UnitPowerMax = UnitPower, UnitPowerMax
+local UnitHasVehicleUI = UnitHasVehicleUI
+local UnitHealth = UnitHealth
+local UnitHealthMax = UnitHealthMax
+local UnitIsConnected = UnitIsConnected
+local UnitIsDead = UnitIsDead
+local UnitIsGhost = UnitIsGhost
+local UnitIsPVP = UnitIsPVP
+local UnitIsPartyLeader = UnitIsPartyLeader
+local UnitIsPlayer = UnitIsPlayer
+local UnitLevel = UnitLevel
+local UnitName = UnitName
+local UnitPower = UnitPower
+local UnitPowerMax = UnitPowerMax
+local UnitPowerType = UnitPowerType
+local UnitRace = UnitRace
+local UnitSex = UnitSex
+local UnitThreatSituation = UnitThreatSituation
 
 local _PATTERN = "%[..-%]+"
 
@@ -47,7 +73,7 @@ local tagStrings = {
 	["difficulty"] = [[function(u)
 		if UnitCanAttack("player", u) then
 			local l = UnitLevel(u)
-			return Hex(GetQuestDifficultyColor((l > 0) and l or 99))
+			return Hex(GetQuestDifficultyColor((l > 0) and l or 999))
 		end
 	end]],
 
@@ -57,7 +83,7 @@ local tagStrings = {
 		end
 	end]],
 
-	["leaderlong"]  = [[function(u)
+	["leaderlong"] = [[function(u)
 		if(UnitIsPartyLeader(u)) then
 			return "Leader"
 		end
@@ -111,15 +137,6 @@ local tagStrings = {
 			return 0
 		else
 			return math.floor(UnitPower(u)/m*100+.5)
-		end
-	end]],
-
-	["manapp"] = [[function(u)
-		local m = UnitPowerMax(u, 0);
-		if(m == 0) then
-			return 0
-		else
-			return math.floor(UnitPower(u, 0)/m*100+.5)
 		end
 	end]],
 
@@ -202,7 +219,7 @@ local tagStrings = {
 
 	["cpoints"] = [[function(u)
 		local cp
-		if(UnitExists"vehicle") then
+		if(UnitHasVehicleUI("player")) then
 			cp = GetComboPoints("vehicle", "target")
 		else
 			cp = GetComboPoints("player", "target")
@@ -232,7 +249,7 @@ local tagStrings = {
 		local c = UnitClassification(u)
 		if(c == "rare") then
 			return "Rare"
-		elseif(c == "eliterare") then
+		elseif(c == "rareelite") then
 			return "Rare Elite"
 		elseif(c == "elite") then
 			return "Elite"
@@ -245,7 +262,7 @@ local tagStrings = {
 		local c = UnitClassification(u)
 		if(c == "rare") then
 			return "R"
-		elseif(c == "eliterare") then
+		elseif(c == "rareelite") then
 			return "R+"
 		elseif(c == "elite") then
 			return "+"
@@ -257,23 +274,40 @@ local tagStrings = {
 	["group"] = [[function(unit)
 		local name, server = UnitName(unit)
 		if(server and server ~= "") then
-			name = string.format("%s-%s", name, server)
+			name = format("%s-%s", name, server)
 		end
 
 		for i=1, GetNumRaidMembers() do
 			local raidName, _, group = GetRaidRosterInfo(i)
-			if( raidName == name ) then
+			if(raidName == name) then
 				return group
 			end
 		end
 	end]],
 
-	["defict:name"] = [[function(u)
+	["deficit:name"] = [[function(u)
 		local missinghp = _TAGS["missinghp"](u)
 		if(missinghp) then
 			return "-" .. missinghp
 		else
 			return _TAGS["name"](u)
+		end
+	end]],
+
+	["curmana"] = [[function(unit)
+		return UnitPower(unit, SPELL_POWER_MANA)
+	end]],
+
+	["maxmana"] = [[function(unit)
+		return UnitPowerMax(unit, SPELL_POWER_MANA)
+	end]],
+
+	["manapp"] = [[function(u)
+		local m = UnitPowerMax(u, 0);
+		if(m == 0) then
+			return 0
+		else
+			return math.floor(UnitPower(u, 0)/m*100+.5)
 		end
 	end]],
 
@@ -289,6 +323,25 @@ local tagStrings = {
 			end
 		end
 	end]],
+
+	["powercolor"] = [[function(u)
+		local pType, pToken, altR, altG, altB = UnitPowerType(u)
+		local t = _COLORS.power[pToken]
+
+		if(not t) then
+			if(altR) then
+				if(altR > 1 or altG > 1 or altB > 1) then
+					return Hex(altR / 255, altG / 255, altB / 255)
+				else
+					return Hex(altR, altG, altB)
+				end
+			else
+				return Hex(_COLORS.power[pType])
+			end
+		end
+
+		return Hex(t)
+	end]],
 }
 
 local tags = setmetatable(
@@ -299,7 +352,7 @@ local tags = setmetatable(
 		maxpp = UnitPowerMax,
 		class = UnitClass,
 		faction = UnitFactionGroup,
-		race = UnitRace
+		race = UnitRace,
 	},
 
 	{
@@ -324,7 +377,7 @@ local tags = setmetatable(
 			if(type(val) == "string") then
 				tagStrings[key] = val
 			elseif(type(val) == "function") then
-				-- So we don"t clash with any custom envs.
+				-- So we don't clash with any custom envs.
 				if(getfenv(val) == _G) then
 					setfenv(val, _PROXY)
 				end
@@ -337,35 +390,38 @@ local tags = setmetatable(
 
 _ENV._TAGS = tags
 
-local onUpdateDelay = {}
 local tagEvents = {
-	["curhp"]               = "UNIT_HEALTH",
-	["curpp"]               = "UNIT_ENERGY UNIT_FOCUS UNIT_MANA UNIT_RAGE UNIT_RUNIC_POWER",
-	["dead"]                = "UNIT_HEALTH",
-	["leader"]              = "PARTY_LEADER_CHANGED",
-	["leaderlong"]          = "PARTY_LEADER_CHANGED",
-	["level"]               = "UNIT_LEVEL PLAYER_LEVEL_UP",
-	["maxhp"]               = "UNIT_MAXHEALTH",
-	["maxpp"]               = "UNIT_MAXENERGY UNIT_MAXFOCUS UNIT_MAXMANA UNIT_MAXRAGE UNIT_MAXRUNIC_POWER",
-	["missinghp"]           = "UNIT_HEALTH UNIT_MAXHEALTH",
-	["missingpp"]           = "UNIT_MAXENERGY UNIT_MAXFOCUS UNIT_MAXMANA UNIT_MAXRAGE UNIT_ENERGY UNIT_FOCUS UNIT_MANA UNIT_RAGE UNIT_MAXRUNIC_POWER UNIT_RUNIC_POWER",
-	["name"]                = "UNIT_NAME_UPDATE",
-	["offline"]             = "UNIT_HEALTH",
-	["perhp"]               = "UNIT_HEALTH UNIT_MAXHEALTH",
-	["perpp"]               = "UNIT_MAXENERGY UNIT_MAXFOCUS UNIT_MAXMANA UNIT_MAXRAGE UNIT_ENERGY UNIT_FOCUS UNIT_MANA UNIT_RAGE UNIT_MAXRUNIC_POWER UNIT_RUNIC_POWER",
-	["manapp"]              = "UNIT_MANA UNIT_MAXMANA",
-	["pvp"]                 = "UNIT_FACTION",
-	["resting"]             = "PLAYER_UPDATE_RESTING",
-	["status"]              = "UNIT_HEALTH PLAYER_UPDATE_RESTING",
-	["smartlevel"]          = "UNIT_LEVEL PLAYER_LEVEL_UP UNIT_CLASSIFICATION_CHANGED",
-	["threat"]              = "UNIT_THREAT_SITUATION_UPDATE",
-	["threatcolor"]         = "UNIT_THREAT_SITUATION_UPDATE",
-	["cpoints"]             = "UNIT_COMBO_POINTS PLAYER_TARGET_CHANGED",
-	["rare"]                = "UNIT_CLASSIFICATION_CHANGED",
-	["classification"]      = "UNIT_CLASSIFICATION_CHANGED",
-	["shortclassification"] = "UNIT_CLASSIFICATION_CHANGED",
-	["group"]               = "RAID_ROSTER_UPDATE",
-	["happiness"]           = "UNIT_HAPPINESS",
+	["curhp"]				= "UNIT_HEALTH",
+	["maxhp"]				= "UNIT_MAXHEALTH",
+	["curpp"]				= "UNIT_ENERGY UNIT_FOCUS UNIT_MANA UNIT_RAGE UNIT_RUNIC_POWER",
+	["maxpp"]				= "UNIT_MAXENERGY UNIT_MAXFOCUS UNIT_MAXMANA UNIT_MAXRAGE UNIT_MAXRUNIC_POWER",
+	["dead"]				= "UNIT_HEALTH",
+	["leader"]				= "PARTY_LEADER_CHANGED",
+	["leaderlong"]			= "PARTY_LEADER_CHANGED",
+	["level"]				= "UNIT_LEVEL PLAYER_LEVEL_UP",
+	["missinghp"]			= "UNIT_HEALTH UNIT_MAXHEALTH",
+	["missingpp"]			= "UNIT_MAXENERGY UNIT_MAXFOCUS UNIT_MAXMANA UNIT_MAXRAGE UNIT_ENERGY UNIT_FOCUS UNIT_MANA UNIT_RAGE UNIT_MAXRUNIC_POWER UNIT_RUNIC_POWER",
+	["name"]				= "UNIT_NAME_UPDATE",
+	["offline"]				= "UNIT_HEALTH",
+	["perhp"]				= "UNIT_HEALTH UNIT_MAXHEALTH",
+	["perpp"]				= "UNIT_MAXENERGY UNIT_MAXFOCUS UNIT_MAXMANA UNIT_MAXRAGE UNIT_ENERGY UNIT_FOCUS UNIT_MANA UNIT_RAGE UNIT_MAXRUNIC_POWER UNIT_RUNIC_POWER",
+	["plus"]				= "UNIT_CLASSIFICATION_CHANGED",
+	["pvp"]					= "UNIT_FACTION",
+	["rare"]				= "UNIT_CLASSIFICATION_CHANGED",
+	["resting"]				= "PLAYER_UPDATE_RESTING",
+	["status"]				= "UNIT_HEALTH PLAYER_UPDATE_RESTING",
+	["threat"]				= "UNIT_THREAT_SITUATION_UPDATE",
+	["threatcolor"]			= "UNIT_THREAT_SITUATION_UPDATE",
+	["cpoints"]				= "UNIT_COMBO_POINTS PLAYER_TARGET_CHANGED",
+	["smartlevel"]			= "UNIT_LEVEL PLAYER_LEVEL_UP UNIT_CLASSIFICATION_CHANGED",
+	["classification"]		= "UNIT_CLASSIFICATION_CHANGED",
+	["shortclassification"]	= "UNIT_CLASSIFICATION_CHANGED",
+	["group"]				= "PARTY_MEMBERS_CHANGED RAID_ROSTER_UPDATE",
+	["curmana"]				= "UNIT_POWER UNIT_MAXPOWER",
+	["maxmana"]				= "UNIT_POWER UNIT_MAXPOWER",
+	["manapp"]				= "UNIT_MANA UNIT_MAXMANA",
+	["happiness"]			= "UNIT_HAPPINESS",
+	["powercolor"]			= "UNIT_DISPLAYPOWER",
 }
 
 local unitlessEvents = {
@@ -373,16 +429,16 @@ local unitlessEvents = {
 	PLAYER_UPDATE_RESTING = true,
 	PLAYER_TARGET_CHANGED = true,
 
+	RAID_ROSTER_UPDATE = true,
+	PARTY_MEMBERS_CHANGED = true,
 	PARTY_LEADER_CHANGED = true,
 
-	RAID_ROSTER_UPDATE = true,
-
-	UNIT_COMBO_POINTS = true
+	UNIT_COMBO_POINTS = true,
 }
 
 local events = {}
 local frame = CreateFrame"Frame"
-frame:SetScript("OnEvent", function(_, event, unit)
+frame:SetScript("OnEvent", function(self, event, unit)
 	local strings = events[event]
 	if(strings) then
 		for k, fontstring in next, strings do
@@ -404,10 +460,10 @@ local createOnUpdate = function(timer)
 		local frame = CreateFrame("Frame")
 		local strings = eventlessUnits[timer]
 
-		frame:SetScript("OnUpdate", function(_, elapsed)
+		frame:SetScript("OnUpdate", function(self, elapsed)
 			if(total >= timer) then
 				for k, fs in next, strings do
-					if(fs.parent:IsShown() and UnitExists(fs.parent.unit)) then
+					if(fs.parent:IsVisible() and UnitExists(fs.parent.unit)) then
 						fs:UpdateTag()
 					end
 				end
@@ -481,15 +537,17 @@ local OnLeave = function(self)
 	end
 end
 
-local tagPool = {}
-local funcPool = {}
-local tmp = {}
 local escapeSequences = {
 	["||c"] = "|c",
 	["||r"] = "|r",
 	["||T"] = "|T",
 	["||t"] = "|t",
 }
+
+local onUpdateDelay = {}
+local tagPool = {}
+local funcPool = {}
+local tmp = {}
 
 local Tag = function(self, fs, tagstr)
 	if(not fs or not tagstr) then return end
@@ -499,11 +557,11 @@ local Tag = function(self, fs, tagstr)
 		self.__mousetags = {}
 		tinsert(self.__elements, OnShow)
 	else
-		-- Since people ignore everything that"s good practice - unregister the tag
+		-- Since people ignore everything that's good practice - unregister the tag
 		-- if it already exists.
 		for _, tag in pairs(self.__tags) do
 			if(fs == tag) then
-				-- We don"t need to remove it from the __tags table as Untag handles
+				-- We don't need to remove it from the __tags table as Untag handles
 				-- that for us.
 				self:Untag(fs)
 			end
@@ -524,13 +582,13 @@ local Tag = function(self, fs, tagstr)
 		if not self.__HookFunc then
 			self:HookScript("OnEnter", OnEnter)
 			self:HookScript("OnLeave", OnLeave)
-			self.__HookFunc = true
+			self.__HookFunc = true;
 		end
 		tagstr = tagstr:gsub("%[mouseover%]", "")
 	else
 		for index, fontString in pairs(self.__mousetags) do
 			if fontString == fs then
-				self.__mousetags[index] = nil
+				self.__mousetags[index] = nil;
 				fs:SetAlpha(1)
 			end
 		end
@@ -539,7 +597,7 @@ local Tag = function(self, fs, tagstr)
 	local containsOnUpdate
 	for tag in tagstr:gmatch(_PATTERN) do
 		if not tagEvents[tag:sub(2, -2)] then
-			containsOnUpdate = onUpdateDelay[tag:sub(2, -2)] or 0.15
+			containsOnUpdate = onUpdateDelay[tag:sub(2, -2)] or 0.15;
 		end
 	end
 
@@ -595,7 +653,10 @@ local Tag = function(self, fs, tagstr)
 			if(tagFunc) then
 				tinsert(args, tagFunc)
 			else
-				return error(("Attempted to use invalid tag %s."):format(bracket), 3)
+				numTags = -1
+				func = function(self)
+					return self:SetFormattedText('[invalid tag]')
+				end
 			end
 		end
 
@@ -646,7 +707,7 @@ local Tag = function(self, fs, tagstr)
 					args[3](unit, realUnit) or ""
 				)
 			end
-		else
+		elseif numTags ~= -1 then
 			func = function(self)
 				local parent = self.parent
 				local unit = parent.unit
@@ -665,19 +726,21 @@ local Tag = function(self, fs, tagstr)
 			end
 		end
 
-		tagPool[tagstr] = func
+		if numTags ~= -1 then
+			tagPool[tagstr] = func
+		end
 	end
 	fs.UpdateTag = func
 
 	local unit = self.unit
-	if((unit and unit:match("%w+target")) or fs.frequentUpdates) or containsOnUpdate then
+	if(self.__eventless or fs.frequentUpdates) or containsOnUpdate then
 		local timer
 		if(type(fs.frequentUpdates) == "number") then
 			timer = fs.frequentUpdates
 		elseif containsOnUpdate then
 			timer = containsOnUpdate
 		else
-			timer = .1
+			timer = .5
 		end
 
 		if(not eventlessUnits[timer]) then eventlessUnits[timer] = {} end
@@ -712,10 +775,12 @@ local Untag = function(self, fs)
 	fs.UpdateTag = nil
 end
 
-oUF.Tags = tags
-oUF.TagEvents = tagEvents
-oUF.UnitlessTagEvents = unitlessEvents
-oUF.OnUpdateThrottle = onUpdateDelay,
+oUF.Tags = {
+	Methods = tags,
+	Events = tagEvents,
+	SharedEvents = unitlessEvents,
+	OnUpdateThrottle = onUpdateDelay,
+}
 
 oUF:RegisterMetaFunction("Tag", Tag)
 oUF:RegisterMetaFunction("Untag", Untag)

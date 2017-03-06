@@ -1,12 +1,12 @@
-local _, ns = ...
+local parent, ns = ...
 local oUF = ns.oUF
 
+local SetPortraitTexture = SetPortraitTexture
 local UnitExists = UnitExists
 local UnitGUID = UnitGUID
 local UnitIsConnected = UnitIsConnected
 local UnitIsUnit = UnitIsUnit
 local UnitIsVisible = UnitIsVisible
-local SetPortraitTexture = SetPortraitTexture
 
 local Update = function(self, event, unit)
 	if(not unit or not UnitIsUnit(self.unit, unit)) then return end
@@ -64,10 +64,10 @@ local Enable = function(self, unit)
 		-- party members overlapping quests. This will probably be enough to handle
 		-- model updating.
 		--
-		-- DISABLE isn"t used as it fires when we most likely don"t have the
+		-- DISABLE isn't used as it fires when we most likely don't have the
 		-- information we want.
 		if(unit == "party") then
-			self:RegisterEvent("PARTY_MEMBER_ENABLE", Update)
+			self:RegisterEvent("PARTY_MEMBER_ENABLE", Path)
 		end
 
 		return true

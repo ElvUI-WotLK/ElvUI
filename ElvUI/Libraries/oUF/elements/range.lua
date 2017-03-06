@@ -231,8 +231,8 @@ local Enable = function(self)
 
 		if(not OnRangeFrame) then
 			OnRangeFrame = CreateFrame"Frame"
-			OnRangeFrame:RegisterEvent("LEARNED_SPELL_IN_TAB");
-			OnRangeFrame:RegisterEvent("PLAYER_ENTERING_WORLD");
+			OnRangeFrame:RegisterEvent("LEARNED_SPELL_IN_TAB")
+			OnRangeFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 			OnRangeFrame:SetScript("OnUpdate", OnRangeUpdate)
 			OnRangeFrame:SetScript("OnEvent", UpdateSpellList)
 		end
@@ -249,10 +249,10 @@ local Disable = function(self)
 		for k, frame in next, _FRAMES do
 			if(frame == self) then
 				tremove(_FRAMES, k)
-				frame:SetAlpha(1)
 				break
 			end
 		end
+		self:SetAlpha(1)
 
 		if(#_FRAMES == 0) then
 			OnRangeFrame:Hide()
@@ -260,4 +260,4 @@ local Disable = function(self)
 	end
 end
 
-oUF:AddElement('Range', nil, Enable, Disable)
+oUF:AddElement("Range", nil, Enable, Disable)

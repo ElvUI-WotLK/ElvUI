@@ -1,4 +1,4 @@
-local _, ns = ...
+local parent, ns = ...
 local oUF = ns.oUF
 
 local UnitFactionGroup = UnitFactionGroup
@@ -9,17 +9,21 @@ local Update = function(self, event, unit)
 	if(unit ~= self.unit) then return end
 
 	local pvp = self.PvP
+
 	if(pvp.PreUpdate) then
-		pvp:PreUpdate()
+		pvp:PreUpdate(unit)
 	end
 
 	local status
 	local factionGroup = UnitFactionGroup(unit)
+
 	if(UnitIsPVPFreeForAll(unit)) then
-		pvp:SetTexture([[Interface\TargetingFrame\UI-PVP-FFA]])
+		pvp:SetTexture("Interface\\TargetingFrame\\UI-PVP-FFA")
+		pvp:SetTexCoord(0, 0.65625, 0, 0.65625)
 		status = "ffa"
 	elseif(factionGroup and UnitIsPVP(unit)) then
-		pvp:SetTexture([[Interface\TargetingFrame\UI-PVP-]]..factionGroup)
+		pvp:SetTexture("Interface\\TargetingFrame\\UI-PVP-" .. factionGroup)
+		pvp:SetTexCoord(0, 0.65625, 0, 0.65625)
 		status = factionGroup
 	end
 
@@ -30,7 +34,7 @@ local Update = function(self, event, unit)
 	end
 
 	if(pvp.PostUpdate) then
-		return pvp:PostUpdate(status)
+		return pvp:PostUpdate(unit, status)
 	end
 end
 
@@ -57,6 +61,7 @@ end
 local Disable = function(self)
 	local pvp = self.PvP
 	if(pvp) then
+		pvp:Hide()
 		self:UnregisterEvent("UNIT_FACTION", Path)
 	end
 end

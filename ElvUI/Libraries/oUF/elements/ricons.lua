@@ -1,4 +1,4 @@
-local _, ns = ...
+local parent, ns = ...
 local oUF = ns.oUF
 
 local GetRaidTargetIndex = GetRaidTargetIndex
@@ -51,6 +51,7 @@ end
 local Disable = function(self)
 	local ricon = self.RaidIcon
 	if(ricon) then
+		ricon:Hide()
 		self:UnregisterEvent("RAID_TARGET_UPDATE", Path)
 	end
 end

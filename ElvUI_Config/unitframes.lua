@@ -867,7 +867,6 @@ local function GetOptionsTable_Castbar(hasTicks, updateFunc, groupName, numUnits
 							if(not castbar.oldHide) then
 								castbar.oldHide = castbar.Hide;
 								castbar.Hide = castbar.Show;
-								castbar:SetAlpha(1);
 								castbar:Show();
 							else
 								castbar.Hide = castbar.oldHide;
@@ -880,7 +879,6 @@ local function GetOptionsTable_Castbar(hasTicks, updateFunc, groupName, numUnits
 						if(not castbar.oldHide) then
 							castbar.oldHide = castbar.Hide;
 							castbar.Hide = castbar.Show;
-							castbar:SetAlpha(1);
 							castbar:Show();
 						else
 							castbar.Hide = castbar.oldHide;
@@ -2331,16 +2329,6 @@ E.Options.args.unitframe = {
 								castNoInterrupt = {
 									order = 5,
 									name = L["Non-Interruptable"],
-									type = "color"
-								},
-								castCompleteColor = {
-									order = 6,
-									name = L["Complete"],
-									type = "color"
-								},
-								castFailColor = {
-									order = 7,
-									name = L["Fail"],
 									type = "color"
 								}
 							}

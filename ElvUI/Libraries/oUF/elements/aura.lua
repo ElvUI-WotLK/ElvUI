@@ -1,4 +1,4 @@
-local _, ns = ...
+local parent, ns = ...
 local oUF = ns.oUF
 
 local tinsert = table.insert
@@ -73,12 +73,12 @@ local customFilter = function(icons, unit, icon, name)
 end
 
 local updateIcon = function(unit, icons, index, offset, filter, isDebuff, visible)
-	local name, rank, texture, count, dtype, duration, expirationTime, caster, isStealable, shouldConsolidate, spellID = UnitAura(unit, index, filter)
+	local name, rank, texture, count, dispelType, duration, expiration, caster, isStealable, shouldConsolidate, spellID = UnitAura(unit, index, filter)
 
 	if icons.forceShow then
 		spellID = 47540
 		name, rank, texture = GetSpellInfo(spellID)
-		count, dtype, duration, expirationTime, caster, isStealable, shouldConsolidate = 5, "Magic", 0, 60, "player", nil, nil
+		count, dispelType, duration, expiration, caster, isStealable, shouldConsolidate = 5, "Magic", 0, 60, "player", nil, nil
 	end
 
 	if(name) then
@@ -106,13 +106,14 @@ local updateIcon = function(unit, icons, index, offset, filter, isDebuff, visibl
 
 		local show = true
 		if not icons.forceShow then
-			show = (icons.CustomFilter or customFilter) (icons, unit, icon, name, rank, texture, count, dtype, duration, expirationTime, caster, isStealable, shouldConsolidate, spellID)
+			show = (icons.CustomFilter or customFilter) (icons, unit, icon, name, rank, texture, count, dispelType, duration, expiration, caster, isStealable, shouldConsolidate, spellID)
 		end
+
 		if(show) then
 			local cd = icon.cd
 			if(cd and not icons.disableCooldown) then
 				if(duration and duration > 0) then
-					cd:SetCooldown(expirationTime - duration, duration)
+					cd:SetCooldown(expiration - duration, duration)
 					cd:Show()
 				else
 					cd:Hide()
@@ -120,7 +121,7 @@ local updateIcon = function(unit, icons, index, offset, filter, isDebuff, visibl
 			end
 
 			if((isDebuff and icons.showDebuffType) or (not isDebuff and icons.showBuffType) or icons.showType) then
-				local color = DebuffTypeColor[dtype] or DebuffTypeColor.none
+				local color = DebuffTypeColor[dispelType] or DebuffTypeColor.none
 
 				icon.overlay:SetVertexColor(color.r, color.g, color.b)
 				icon.overlay:Show()
@@ -225,6 +226,7 @@ local UpdateAuras = function(self, event, unit)
 			if(not icon) then
 				local prev = auras.createdIcons
 				icon = (auras.CreateIcon or createAuraIcon) (auras, visibleBuffs)
+
 				if(prev == auras.createdIcons) then
 					tinsert(auras, icon)
 					auras.createdIcons = auras.createdIcons + 1

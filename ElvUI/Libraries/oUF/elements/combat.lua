@@ -1,4 +1,4 @@
-local _, ns = ...
+local parent, ns = ...
 local oUF = ns.oUF
 
 local UnitAffectingCombat = UnitAffectingCombat
@@ -49,6 +49,7 @@ end
 
 local Disable = function(self)
 	if(self.Combat) then
+		self.Combat:Hide()
 		self:UnregisterEvent("PLAYER_REGEN_DISABLED", Path)
 		self:UnregisterEvent("PLAYER_REGEN_ENABLED", Path)
 	end

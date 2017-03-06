@@ -1,4 +1,4 @@
-local _, ns = ...
+local parent, ns = ...
 local oUF = ns.oUF
 
 local unpack = unpack
@@ -11,16 +11,34 @@ local UnitIsTapped = UnitIsTapped
 local UnitIsTappedByPlayer = UnitIsTappedByPlayer
 local UnitIsUnit = UnitIsUnit
 local UnitPlayerControlled = UnitPlayerControlled
-local UnitPower, UnitPowerMax = UnitPower, UnitPowerMax
+local UnitPower = UnitPower
+local UnitPowerMax = UnitPowerMax
 local UnitPowerType = UnitPowerType
 local UnitReaction = UnitReaction
 
 oUF.colors.power = {}
 for power, color in next, PowerBarColor do
-	if(type(power) == "string") then
-		oUF.colors.power[power] = {color.r, color.g, color.b}
+	if (type(power) == "string") then
+		if(type(select(2, next(color))) == "table") then
+			oUF.colors.power[power] = {}
+
+			for index, color in next, color do
+				oUF.colors.power[power][index] = {color.r, color.g, color.b}
+			end
+		else
+			oUF.colors.power[power] = {color.r, color.g, color.b}
+		end
 	end
 end
+
+-- sourced from FrameXML/Constants.lua
+oUF.colors.power[0] = oUF.colors.power.MANA
+oUF.colors.power[1] = oUF.colors.power.RAGE
+oUF.colors.power[2] = oUF.colors.power.FOCUS
+oUF.colors.power[3] = oUF.colors.power.ENERGY
+oUF.colors.power[4] = oUF.colors.power.HAPPINESS
+oUF.colors.power[5] = oUF.colors.power.RUNES
+oUF.colors.power[6] = oUF.colors.power.RUNIC_POWER
 
 local Update = function(self, event, unit)
 	if(self.unit ~= unit) then return end
@@ -28,27 +46,30 @@ local Update = function(self, event, unit)
 
 	if(power.PreUpdate) then power:PreUpdate(unit) end
 
-	local min, max = UnitPower(unit), UnitPowerMax(unit)
+	local cur, max = UnitPower(unit), UnitPowerMax(unit)
 	local disconnected = not UnitIsConnected(unit)
+	local tapped = not UnitPlayerControlled(unit) and (UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) and not UnitIsTappedByAllThreatList(unit))
 	power:SetMinMaxValues(0, max)
 
 	if(disconnected) then
 		power:SetValue(max)
 	else
-		power:SetValue(min)
+		power:SetValue(cur)
 	end
 
 	power.disconnected = disconnected
+	power.tapped = tapped
 
 	local r, g, b, t
-	if(power.colorTapping and UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit)) then
+
+	if(power.colorTapping and not UnitPlayerControlled(unit) and (UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) and not UnitIsTappedByAllThreatList(unit))) then
 		t = self.colors.tapped
-	elseif(power.colorDisconnected and not UnitIsConnected(unit)) then
+	elseif(power.colorDisconnected and disconnected) then
 		t = self.colors.disconnected
 	elseif(power.colorHappiness and UnitIsUnit(unit, "pet") and GetPetHappiness()) then
 		t = self.colors.happiness[GetPetHappiness()]
 	elseif(power.colorPower) then
-		local ptype, ptoken, altR, altG, altB  = UnitPowerType(unit)
+		local ptype, ptoken, altR, altG, altB = UnitPowerType(unit)
 
 		t = self.colors.power[ptoken]
 		if(not t and altR) then
@@ -62,7 +83,7 @@ local Update = function(self, event, unit)
 	elseif(power.colorReaction and UnitReaction(unit, "player")) then
 		t = self.colors.reaction[UnitReaction(unit, "player")]
 	elseif(power.colorSmooth) then
-		r, g, b = self.ColorGradient(min, max, unpack(power.smoothGradient or self.colors.smooth))
+		r, g, b = self.ColorGradient(cur, max, unpack(power.smoothGradient or self.colors.smooth))
 	end
 
 	if(t) then
@@ -80,7 +101,7 @@ local Update = function(self, event, unit)
 	end
 
 	if(power.PostUpdate) then
-		return power:PostUpdate(unit, min, max)
+		return power:PostUpdate(unit, cur, max)
 	end
 end
 
@@ -92,19 +113,16 @@ local ForceUpdate = function(element)
 	return Path(element.__owner, "ForceUpdate", element.__owner.unit)
 end
 
-local OnPowerUpdate
-do
-	local UnitPower = UnitPower
-	OnPowerUpdate = function(self)
-		if(self.disconnected) then return end
-		local unit = self.__owner.unit
-		local power = UnitPower(unit)
+local UnitPower = UnitPower
+local OnPowerUpdate = function(self)
+	if(self.disconnected) then return end
+	local unit = self.__owner.unit
+	local power = UnitPower(unit)
 
-		if(power ~= self.min) then
-			self.min = power
+	if(power ~= self.min) then
+		self.min = power
 
-			return Path(self.__owner, "OnPowerUpdate", unit)
-		end
+		return Path(self.__owner, "OnPowerUpdate", unit)
 	end
 end
 
@@ -114,7 +132,7 @@ local Enable = function(self, unit)
 		power.__owner = self
 		power.ForceUpdate = ForceUpdate
 
-		if(power.frequentUpdates) then
+		if(power.frequentUpdates and (unit == "player" or unit == "pet")) then
 			power:SetScript("OnUpdate", OnPowerUpdate)
 		else
 			self:RegisterEvent("UNIT_MANA", Path)
@@ -128,8 +146,8 @@ local Enable = function(self, unit)
 		self:RegisterEvent("UNIT_MAXRAGE", Path)
 		self:RegisterEvent("UNIT_MAXFOCUS", Path)
 		self:RegisterEvent("UNIT_MAXENERGY", Path)
-		self:RegisterEvent("UNIT_DISPLAYPOWER", Path)
 		self:RegisterEvent("UNIT_MAXRUNIC_POWER", Path)
+		self:RegisterEvent("UNIT_DISPLAYPOWER", Path)
 
 		self:RegisterEvent("UNIT_CONNECTION", Path)
 		self:RegisterEvent("UNIT_HAPPINESS", Path)
@@ -137,8 +155,9 @@ local Enable = function(self, unit)
 		-- For tapping.
 		self:RegisterEvent("UNIT_FACTION", Path)
 
-		if(not power:GetStatusBarTexture()) then
-			power:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
+		if(power:IsObjectType("StatusBar")) then
+			power.texture = power:GetStatusBarTexture() and power:GetStatusBarTexture():GetTexture() or [[Interface\TargetingFrame\UI-StatusBar]]
+			power:SetStatusBarTexture(power.texture)
 		end
 
 		return true
@@ -162,8 +181,8 @@ local Disable = function(self)
 		self:UnregisterEvent("UNIT_MAXRAGE", Path)
 		self:UnregisterEvent("UNIT_MAXFOCUS", Path)
 		self:UnregisterEvent("UNIT_MAXENERGY", Path)
-		self:UnregisterEvent("UNIT_DISPLAYPOWER", Path)
 		self:UnregisterEvent("UNIT_MAXRUNIC_POWER", Path)
+		self:UnregisterEvent("UNIT_DISPLAYPOWER", Path)
 
 		self:UnregisterEvent("UNIT_CONNECTION", Path)
 		self:UnregisterEvent("UNIT_HAPPINESS", Path)
