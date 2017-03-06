@@ -135,7 +135,7 @@ function M:SkinBubble(frame)
 			frame:SetBackdropBorderColor(r, g, b);
 		end
 
-		frame.text:FontTemplate(E.LSM:Fetch("font", E.private.general.chatBubbleFont), E.private.general.chatBubbleFontSize);
+		frame.text:FontTemplate(E.LSM:Fetch("font", E.private.general.chatBubbleFont), E.private.general.chatBubbleFontSize, E.private.general.chatBubbleFontOutline);
 	elseif(E.private.general.chatBubbles == "backdrop_noborder") then
 		frame:SetBackdrop(nil);
 
@@ -144,12 +144,12 @@ function M:SkinBubble(frame)
 			frame.backdrop:SetInside(frame, 4, 4);
 			frame.backdrop:SetTexture(unpack(E.media.backdropfadecolor));
 		end
-		frame.text:FontTemplate(E.LSM:Fetch("font", E.private.general.chatBubbleFont), E.private.general.chatBubbleFontSize);
+		frame.text:FontTemplate(E.LSM:Fetch("font", E.private.general.chatBubbleFont), E.private.general.chatBubbleFontSize, E.private.general.chatBubbleFontOutline);
 
 		frame:SetClampedToScreen(false);
 	elseif E.private.general.chatBubbles == "nobackdrop" then
 		frame:SetBackdrop(nil);
-		frame.text:FontTemplate(E.LSM:Fetch("font", E.private.general.chatBubbleFont), E.private.general.chatBubbleFontSize);
+		frame.text:FontTemplate(E.LSM:Fetch("font", E.private.general.chatBubbleFont), E.private.general.chatBubbleFontSize, E.private.general.chatBubbleFontOutline);
 		frame:SetClampedToScreen(false);
 	end
 
