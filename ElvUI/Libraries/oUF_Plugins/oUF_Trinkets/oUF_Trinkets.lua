@@ -1,6 +1,12 @@
 local _, ns = ...
 local oUF = ns.oUF or oUF
-assert(oUF, 'oUF not loaded')
+assert(oUF, "oUF not loaded")
+
+local GetTime = GetTime
+local IsInInstance = IsInInstance
+local UnitExists = UnitExists
+local UnitFactionGroup = UnitFactionGroup
+local UnitIsPlayer = UnitIsPlayer
 
 local trinketSpells = {
 	[59752] = 120,
@@ -18,7 +24,7 @@ end
 
 local Update = function(self, event, ...)
 	local _, instanceType = IsInInstance();
-	if instanceType ~= 'arena' then
+	if instanceType ~= "arena" then
 		self.Trinket:Hide();
 		return;
 	else
@@ -28,7 +34,7 @@ local Update = function(self, event, ...)
 	if(self.Trinket.PreUpdate) then self.Trinket:PreUpdate(event) end
 
 	if event == "COMBAT_LOG_EVENT_UNFILTERED" then
-		local timestamp, eventType, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags, spellID, spellName = ...
+		local _, eventType, sourceGUID, _, _, _, _, _, spellID = ...
 		if eventType == "SPELL_CAST_SUCCESS" and sourceGUID == UnitGUID(self.unit) and trinketSpells[spellID] then
 			CooldownFrame_SetTimer(self.Trinket.cooldownFrame, GetTime(), trinketSpells[spellID], 1)
 		end
@@ -39,7 +45,7 @@ local Update = function(self, event, ...)
 				self.Trinket.Icon:SetTexture(GetTrinketIcon(unit))
 			end
 		end
-	elseif event == 'PLAYER_ENTERING_WORLD' then
+	elseif event == "PLAYER_ENTERING_WORLD" then
 		CooldownFrame_SetTimer(self.Trinket.cooldownFrame, 1, 1, 1)
 	end
 
@@ -62,7 +68,7 @@ local Enable = function(self)
 			self.Trinket.Icon = self.Trinket:CreateTexture(nil, "BORDER")
 			self.Trinket.Icon:SetAllPoints(self.Trinket)
 			self.Trinket.Icon:SetTexCoord(0.07, 0.93, 0.07, 0.93)
-			self.Trinket.Icon:SetTexture(GetTrinketIcon('player'))
+			self.Trinket.Icon:SetTexture(GetTrinketIcon("player"))
 		end
 
 		return true
@@ -78,4 +84,4 @@ local Disable = function(self)
 	end
 end
 
-oUF:AddElement('Trinket', Update, Enable, Disable)
+oUF:AddElement("Trinket", Update, Enable, Disable)

@@ -83,7 +83,6 @@ local ForceUpdate = function(element)
 	return Path(element.__owner, "ForceUpdate", element.__owner.unit)
 end
 
-local UnitHealth = UnitHealth
 local OnHealthUpdate = function(self)
 	if(self.disconnected) then return end
 	local unit = self.__owner.unit

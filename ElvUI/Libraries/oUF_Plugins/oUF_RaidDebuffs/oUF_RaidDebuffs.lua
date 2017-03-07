@@ -136,6 +136,7 @@ local function UpdateDebuff(self, name, icon, count, debuffType, duration, endTi
 	if(name and (count >= stackThreshold)) then
 		f.icon:SetTexture(icon)
 		f.icon:Show()
+		f.duration = duration
 
 		if(f.count) then
 			if(count and (count > 1)) then

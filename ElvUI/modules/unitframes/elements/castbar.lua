@@ -37,8 +37,6 @@ function UF:Construct_Castbar(frame, moverName)
 	castbar.CustomTimeText = self.CustomTimeText
 	castbar.PostCastStart = self.PostCastStart
 	castbar.PostChannelStart = self.PostCastStart
-	castbar.PostCastStop = self.PostCastStop
-	castbar.PostChannelStop = self.PostCastStop
 	castbar.PostChannelUpdate = self.PostChannelUpdate
 	castbar.PostCastInterruptible = self.PostCastInterruptible
 	castbar.PostCastNotInterruptible = self.PostCastNotInterruptible
@@ -301,7 +299,6 @@ function UF:PostCastStart(unit, name)
 		self.Text:SetText(name);
 	end
 
---[[
 	-- Get length of Time, then calculate available length for Text
 	local timeWidth = self.Time:GetStringWidth()
 	local textWidth = self:GetWidth() - timeWidth - 10
@@ -316,7 +313,6 @@ function UF:PostCastStart(unit, name)
 	else
 		self.Text:SetWidth(min(textWidth, textStringWidth))
 	end
-]]
 
 	self.Spark:Height(self:GetHeight() * 2)
 
@@ -359,11 +355,6 @@ function UF:PostCastStart(unit, name)
 		local _, _, _, alpha = self.backdrop:GetBackdropColor();
 		self.backdrop:SetBackdropColor(r * 0.58, g * 0.58, b * 0.58, alpha);
 	end
-end
-
-function UF:PostCastStop()
-	self.chainChannel = nil
-	self.prevSpellCast = nil
 end
 
 function UF:PostChannelUpdate(unit, name)

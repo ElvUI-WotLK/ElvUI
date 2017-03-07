@@ -1,10 +1,11 @@
 local _, ns = ...
-local oUF = ns.oUF or oUF
+local oUF = oUF or ns.oUF
+if not oUF then return end
 
 local UnitAura = UnitAura
 local UnitCanAssist = UnitCanAssist
 
-local playerClass = select(2,UnitClass("player"))
+local playerClass = select(2, UnitClass("player"))
 local CanDispel = {
 	PRIEST = { Magic = true, Disease = true, },
 	SHAMAN = { Poison = true, Disease = true, Curse = true, },
@@ -12,19 +13,23 @@ local CanDispel = {
 	MAGE = { Curse = true, },
 	DRUID = { Curse = true, Poison = true, }
 }
+
 local dispellist = CanDispel[playerClass] or {}
 local origColors = {}
 local origBorderColors = {}
 local origPostUpdateAura = {}
 
 local function GetDebuffType(unit, filter, filterTable)
-	if not UnitCanAssist("player", unit) then return nil end
+	if not unit or not UnitCanAssist("player", unit) then return nil end
 	local i = 1
 	while true do
-		local name, _, texture, _, debufftype = UnitAura(unit, i, "HARMFUL")
+		local name, _, texture, _, debufftype, _, _, _, _, _, spellID = UnitAura(unit, i, "HARMFUL")
 		if not texture then break end
-		if(filterTable and filterTable[name] and filterTable[name].enable) then
-			return debufftype, texture, true, filterTable[name].style, filterTable[name].color;
+
+		local filterSpell = filterTable[spellID] or filterTable[name]
+
+		if(filterTable and filterSpell and filterSpell.enable) then
+			return debufftype, texture, true, filterSpell.style, filterSpell.color
 		elseif(debufftype and (not filter or (filter and dispellist[debufftype]))) then
 			return debufftype, texture;
 		end
@@ -33,7 +38,7 @@ local function GetDebuffType(unit, filter, filterTable)
 end
 
 local function Update(object, event, unit)
-	if(object.unit ~= unit) then return; end
+	if(unit ~= object.unit) then return; end
 
 	local debuffType, texture, wasFiltered, style, color = GetDebuffType(unit, object.DebuffHighlightFilter, object.DebuffHighlightFilterTable);
 	if(wasFiltered) then
@@ -84,22 +89,18 @@ local function Enable(object)
 end
 
 local function Disable(object)
-	if object.DebuffHighlightBackdrop or object.DebuffHighlight or object.DBHGlow then
-		object:UnregisterEvent("UNIT_AURA", Update)
+	object:UnregisterEvent("UNIT_AURA", Update)
 
-		if(object.DBHGlow) then
-			object.DBHGlow:Hide();
-		end
+	if(object.DBHGlow) then
+		object.DBHGlow:Hide();
+	end
 
-		if(object.DebuffHighlight) then
-			local color = origColors[object];
-			if(color) then
-				object.DebuffHighlight:SetVertexColor(color.r, color.g, color.b, color.a);
-			end
+	if(object.DebuffHighlight) then
+		local color = origColors[object];
+		if(color) then
+			object.DebuffHighlight:SetVertexColor(color.r, color.g, color.b, color.a);
 		end
 	end
 end
 
-oUF:AddElement('DebuffHighlight', Update, Enable, Disable)
-
-for i, frame in ipairs(oUF.objects) do Enable(frame) end
+oUF:AddElement("DebuffHighlight", Update, Enable, Disable)

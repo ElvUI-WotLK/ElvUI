@@ -25,11 +25,11 @@ local FadeFramesInOut = function(fade, unit)
 		if not UnitExists(unit) then return end
 		if fade then
 			if frame:GetAlpha() ~= 1 or (frame.fadeInfo and frame.fadeInfo.endAlpha == 0) then
-				E:UIFrameFadeIn(frame, 0.35)
+				E:UIFrameFadeIn(frame, 0.15)
 			end
 		else
 			if frame:GetAlpha() ~= 0 then
-				E:UIFrameFadeOut(frame, 0.35)
+				E:UIFrameFadeOut(frame, 0.15)
 				frame.fadeInfo.finishedFunc = CheckForReset
 			else
 				showStatus = false;
@@ -38,26 +38,26 @@ local FadeFramesInOut = function(fade, unit)
 		end
 	end
 
-	if unit == 'player' then
+	if unit == "player" then
 		showStatus = fade
 	end
 end
 
 local Update = function(self, arg1, arg2)
 	if arg1 == "UNIT_HEALTH" and self and self.unit ~= arg2 then return end
-	if type(arg1) == 'boolean' and not frames[self] then
+	if type(arg1) == "boolean" and not frames[self] then
 		return
 	end
 
 	local E = unpack(ElvUI)
 
 	if not frames[self] then
-		E:UIFrameFadeIn(self, 0.35)
+		E:UIFrameFadeIn(self, 0.15)
 		self.fadeInfo.reset = true
 		return
 	end
 
-	local combat = UnitAffectingCombat("player");
+	local combat = UnitAffectingCombat("player")
 	local cur, max = UnitHealth("player"), UnitHealthMax("player")
 	local cast, channel = UnitCastingInfo("player"), UnitChannelInfo("player")
 	local target, focus = UnitExists("target"), UnitExists("focus")
@@ -84,7 +84,7 @@ local Enable = function(self, unit)
 		frames[self] = self.unit
 		allFrames[self] = self.unit
 
-		if unit == 'player' then
+		if unit == "player" then
 			showStatus = false;
 		end
 
@@ -130,4 +130,4 @@ local Disable = function(self)
 	end
 end
 
-oUF:AddElement('CombatFade', Update, Enable, Disable)
+oUF:AddElement("CombatFade", Update, Enable, Disable)

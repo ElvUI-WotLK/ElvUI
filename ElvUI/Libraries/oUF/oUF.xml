@@ -29,7 +29,9 @@
 	<Script file="elements\lfdrole.lua"/>
 	<Script file="elements\readycheck.lua"/>
 	<Script file="elements\happiness.lua"/>
-<!--	<Script file="elements\raidrole.lua"/> -->
+<!--
+	<Script file="elements\raidrole.lua"/>
+-->
 
 	<!-- Clique support -->
 	<Button name="oUF_ClickCastUnitTemplate" virtual="true" inherits="SecureUnitButtonTemplate,SecureHandlerEnterLeaveTemplate">
