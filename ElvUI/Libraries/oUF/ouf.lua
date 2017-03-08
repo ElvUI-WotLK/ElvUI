@@ -58,13 +58,15 @@ local updateActiveUnit = function(self, event, unit)
 		modUnit = "vehicle"
 	end
 
-	if(not UnitExists(modUnit)) then
+	if(not UnitExists(modUnit)) then return end
+
+	--[[if(not UnitExists(modUnit)) then
 		if(modUnit) then
 			modUnit = realUnit
 		else
 			return
 		end
-	end
+	end]]
 
 	if(Private.UpdateUnits(self, modUnit, realUnit)) then
 		self:UpdateAllElements("RefreshUnit")
