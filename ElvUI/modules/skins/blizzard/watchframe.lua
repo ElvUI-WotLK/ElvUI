@@ -14,20 +14,20 @@ local function LoadSkin()
 	WatchFrameCollapseExpandButton.text:SetText("-");
 	WatchFrameCollapseExpandButton.text:Point("CENTER")
 	WatchFrameCollapseExpandButton:SetFrameStrata("MEDIUM");
-	WatchFrameCollapseExpandButton:Point("TOPRIGHT", -20, -5);
+	WatchFrameCollapseExpandButton:Point("TOPRIGHT", -60, -3);
 
-	WatchFrame:Width(205);
+	WatchFrame:Width(240);
 
 	hooksecurefunc("WatchFrame_Expand", function()
 		WatchFrameCollapseExpandButton.text:SetText("-");
 
-		WatchFrame:Width(205);
+		WatchFrame:Width(240);
 	end)
 
 	hooksecurefunc("WatchFrame_Collapse", function()
 		WatchFrameCollapseExpandButton.text:SetText("+");
 
-		WatchFrame:Width(205);
+		WatchFrame:Width(240);
 	end)
 
 	hooksecurefunc("WatchFrame_Update", function()
