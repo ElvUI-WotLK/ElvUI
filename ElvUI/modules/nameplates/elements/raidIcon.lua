@@ -1,8 +1,12 @@
-local E, L, V, P, G = unpack(select(2, ...));
-local mod = E:GetModule("NamePlates");
+local E, L, V, P, G = unpack(select(2, ...))
+local mod = E:GetModule("NamePlates")
 
-function mod:ConfigureElement_RaidIcon(frame)
-	frame.RaidIcon:ClearAllPoints();
-	frame.RaidIcon:SetPoint(E.InversePoints[self.db.raidIcon.attachTo], frame.HealthBar, self.db.raidIcon.attachTo, self.db.raidIcon.xOffset, self.db.raidIcon.yOffset);
-	frame.RaidIcon:SetSize(self.db.raidIcon.size, self.db.raidIcon.size);
+function mod:UpdateElement_RaidIcon(frame)
+	local icon = frame.RaidIcon
+	icon:ClearAllPoints()
+	if frame.HealthBar:IsShown() then
+		icon:SetPoint("RIGHT", frame.HealthBar, "LEFT", -6, 0)
+	else
+		icon:SetPoint("BOTTOM", frame.Name, "TOP", 0, 3)
+	end
 end
