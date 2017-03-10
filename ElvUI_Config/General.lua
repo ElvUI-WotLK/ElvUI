@@ -603,7 +603,7 @@ E.Options.args.general = {
 					name = L["Watch Frame Height"],
 					desc = L["Height of the watch tracker. Increase size to be able to see more objectives."],
 					min = 400, max = E.screenheight, step = 1,
-					set = function(info, value) E.db.general.watchFrameHeight = value; E:GetModule("Blizzard"):WatchFrameHeight(); end
+					set = function(info, value) E.db.general[ info[#info] ] = value; E:GetModule("Blizzard"):SetWatchFrameHeight(); end
 				}
 			}
 		},
