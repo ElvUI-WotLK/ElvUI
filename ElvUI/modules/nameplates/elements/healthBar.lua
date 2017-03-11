@@ -63,7 +63,11 @@ function mod:UpdateElement_HealthOnValueChanged(health)
 			if reactionType == 4 then
 				r, g, b = mod.db.reactions.neutral.r, mod.db.reactions.neutral.g, mod.db.reactions.neutral.b
 			elseif reactionType > 4 then
-				r, g, b = mod.db.reactions.good.r, mod.db.reactions.good.g, mod.db.reactions.good.b
+				if frame.UnitType == "FRIENDLY_PLAYER" then
+					r, g, b = mod.db.reactions.friendlyPlayer.r, mod.db.reactions.friendlyPlayer.g, mod.db.reactions.friendlyPlayer.b
+				else
+					r, g, b = mod.db.reactions.good.r, mod.db.reactions.good.g, mod.db.reactions.good.b
+				end
 			else
 				r, g, b = mod.db.reactions.bad.r, mod.db.reactions.bad.g, mod.db.reactions.bad.b
 			end

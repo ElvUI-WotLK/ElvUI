@@ -14,8 +14,7 @@ function mod:UpdateElement_Name(frame)
 		if class and color then
 			frame.Name:SetTextColor(color.r, color.g, color.b)
 		else
-			-- Need color for FRIENDLY_PLAYER not group !!!
-			frame.Name:SetTextColor(self.db.reactions.good.r, self.db.reactions.good.g, self.db.reactions.good.b)
+			frame.Name:SetTextColor(self.db.reactions.friendlyPlayer.r, self.db.reactions.friendlyPlayer.g, self.db.reactions.friendlyPlayer.b)
 		end
 	elseif not (self.db.units[frame.UnitType].healthbar.enable and frame.isTarget) then
 		local reactionType = frame.UnitReaction

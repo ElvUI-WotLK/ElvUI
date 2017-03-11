@@ -813,8 +813,7 @@ E.Options.args.nameplate = {
 						E.db.nameplates.reactions[ info[#info] ] = {};
 						local t = E.db.nameplates.reactions[ info[#info] ];
 						t.r, t.g, t.b = r, g, b;
-						NP:ForEachPlate("UpdateElement_HealthColor", true);
-						NP:ForEachPlate("UpdateElement_Name", true);
+						NP:ConfigureAll();
 					end,
 					args = {
 						bad = {
@@ -839,6 +838,12 @@ E.Options.args.nameplate = {
 							order = 4,
 							type = "color",
 							name = L["Tagged NPC"],
+							hasAlpha = false
+						},
+						friendlyPlayer = {
+							order = 5,
+							type = "color",
+							name = L["Friendly Player"],
 							hasAlpha = false
 						}
 					}

@@ -616,8 +616,8 @@ function mod:PLAYER_REGEN_ENABLED()
 end
 
 function mod:Initialize()
-	if E.private["nameplates"].enable ~= true then return end
 	self.db = E.db["nameplates"]
+	if E.private["nameplates"].enable ~= true then return end
 
 	self:UpdateCVars()
 
