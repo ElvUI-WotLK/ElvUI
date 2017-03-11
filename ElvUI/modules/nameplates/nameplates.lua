@@ -71,9 +71,9 @@ function mod:SetTargetFrame(frame)
 		frame.guid = UnitGUID("target")
 
 		if frame.UnitType == "FRIENDLY_PLAYER" then
-			local _, class = UnitClass("target")
-			frame.UnitClass = class
-			mod:UpdateElement_Name(frame)
+		--	local _, class = UnitClass("target")
+		--	frame.UnitClass = class
+		--	mod:UpdateElement_Name(frame)
 		end
 		
 		if self.db.units[frame.UnitType].healthbar.enable ~= true then
