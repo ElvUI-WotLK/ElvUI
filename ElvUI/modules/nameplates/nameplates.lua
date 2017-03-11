@@ -98,6 +98,7 @@ function mod:SetTargetFrame(frame)
 		end
 		frame.isTarget = nil
 		frame.unit = nil
+		frame.guid = nil
 		if self.db.units[frame.UnitType].healthbar.enable ~= true then
 			self:UpdateAllFrame(frame)
 		end
@@ -277,7 +278,7 @@ function mod:GetUnitInfo(frame)
 end
 
 function mod:OnShow()
-	mod.VisiblePlates[self] = true
+	mod.VisiblePlates[self.UnitFrame] = true
 
 	self.UnitFrame.UnitName = gsub(self.UnitFrame.oldName:GetText(), FSPAT, "")
 	local unitReaction, unitType = mod:GetUnitInfo(self.UnitFrame)
@@ -323,7 +324,7 @@ function mod:OnShow()
 end
 
 function mod:OnHide()
-	mod.VisiblePlates[self] = nil
+	mod.VisiblePlates[self.UnitFrame] = nil
 
 	self.UnitFrame.unit = nil
 
@@ -445,7 +446,7 @@ function mod:OnCreated(frame)
 	CastBar:HookScript("OnValueChanged", self.UpdateElement_CastBarOnValueChanged)
 
 	self.CreatedPlates[frame] = true
-	self.VisiblePlates[frame] = true
+	self.VisiblePlates[frame.UnitFrame] = true
 end
 
 function mod:QueueObject(object)
@@ -476,10 +477,30 @@ function mod:OnUpdate(elapsed)
 	end
 
 	for frame in pairs(mod.VisiblePlates) do
-		if frame.UnitFrame:IsShown() then
-			if not frame.isTarget and frame:GetAlpha() ~= 1 then
-				frame:SetAlpha(1)
+		if frame.oldHighlight:IsShown() then
+			if not frame.isMouseover then
+				frame.isMouseover = true
+				frame.unit = "mouseover"
+				frame.guid = UnitGUID("mouseover")
+
+				if frame.UnitType == "FRIENDLY_PLAYER" then
+					local _, class = UnitClass("mouseover")
+					frame.UnitClass = class
+					mod:UpdateElement_Name(frame)
+
+					if mod.db.units[frame.UnitType].healthbar.enable then
+						mod.UpdateElement_HealthOnValueChanged(frame.oldHealthBar, frame.oldHealthBar:GetValue())
+					end
+				end
 			end
+		elseif frame.isMouseover then
+			frame.isMouseover = false
+			frame.unit = nil
+			frame.guid = nil
+		end
+
+		if not frame.isTarget and frame:GetParent():GetAlpha() ~= 1 then
+			frame:GetParent():SetAlpha(1)
 		end
 	end
 end
@@ -495,8 +516,8 @@ end
 
 function mod:SearchNameplateByGUID(guid)
 	for frame in pairs(self.VisiblePlates) do
-		if frame.UnitFrame and frame.UnitFrame:IsShown() and frame.UnitFrame.guid == guid then
-			return frame.UnitFrame
+		if frame and frame:IsShown() and frame.guid == guid then
+			return frame
 		end
 	end
 end
@@ -505,17 +526,17 @@ function mod:SearchNameplateByName(sourceName)
 	if not sourceName then return end
 	local SearchFor = strsplit("-", sourceName)
 	for frame in pairs(self.VisiblePlates) do
-		if frame.UnitFrame and frame.UnitFrame:IsShown() and frame.UnitFrame.UnitName == SearchFor and RAID_CLASS_COLORS[frame.UnitFrame.UnitClass] then
-			return frame.UnitFrame
+		if frame and frame:IsShown() and frame.UnitName == SearchFor and RAID_CLASS_COLORS[frame.UnitClass] then
+			return frame
 		end
 	end
 end
 
 function mod:SearchNameplateByIconName(raidIcon)
 	for frame in pairs(self.VisiblePlates) do
-		self:CheckRaidIcon(frame.UnitFrame)
-		if frame.UnitFrame and frame.UnitFrame:IsShown() and frame.UnitFrame.RaidIcon:IsShown() and (frame.UnitFrame.raidIconType == raidIcon) then
-			return frame.UnitFrame
+		self:CheckRaidIcon(frame)
+		if frame and frame:IsShown() and frame.RaidIcon:IsShown() and (frame.raidIconType == raidIcon) then
+			return frame
 		end
 	end
 end
