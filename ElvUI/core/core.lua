@@ -759,10 +759,10 @@ function E:UpdateAll(ignoreInstall)
 	DT.db = self.db.datatexts;
 	DT:LoadDataTexts();
 
-	local NP = self:GetModule("NamePlates");
-	NP.db = self.db.nameplate;
-	NP:UpdateAllPlates();
-	NP:ToggleComboPoints();
+	--local NP = self:GetModule("NamePlates");
+	--NP.db = self.db.nameplate;
+	--NP:UpdateAllPlates();
+	--NP:ToggleComboPoints();
 
 	local DataBars = self:GetModule("DataBars");
 	DataBars.db = E.db.databars;
