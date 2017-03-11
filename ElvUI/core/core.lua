@@ -759,9 +759,9 @@ function E:UpdateAll(ignoreInstall)
 	DT.db = self.db.datatexts;
 	DT:LoadDataTexts();
 
-	--local NP = self:GetModule("NamePlates");
-	--NP.db = self.db.nameplate;
-	--NP:ConfigureAll();
+	local NP = self:GetModule("NamePlates");
+	NP.db = self.db.nameplates;
+	NP:ConfigureAll();
 
 	local DataBars = self:GetModule("DataBars");
 	DataBars.db = E.db.databars;
