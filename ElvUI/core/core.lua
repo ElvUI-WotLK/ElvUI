@@ -434,7 +434,7 @@ function E:CheckIncompatible()
 		E:IncompatibleAddOn("SnowfallKeyPress", "ActionBar");
 	end
 
-	if(IsAddOnLoaded("TidyPlates") and E.private.nameplate.enable) then
+	if(IsAddOnLoaded("TidyPlates") and E.private.nameplates.enable) then
 		E:IncompatibleAddOn("TidyPlates", "NamePlate");
 	end
 end
@@ -932,7 +932,7 @@ end
 
 --DATABASE CONVERSIONS
 function E:DBConversions()
-
+	if E.db.nameplate then E.db.nameplate = nil; end
 end
 
 local CPU_USAGE = {};

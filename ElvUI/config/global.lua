@@ -18,7 +18,7 @@ G["general"] = {
 
 G["classtimer"] = {};
 
-G["nameplate"] = {};
+G["nameplates"] = {};
 
 G["unitframe"] = {
 	["aurafilters"] = {},

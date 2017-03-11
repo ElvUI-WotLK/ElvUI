@@ -5,7 +5,7 @@
 ]]
 local E, L, V, P, G, _ = unpack(select(2, ...)); --Engine
 
-G["nameplate"]["filter"] = {
+G["nameplates"]["filter"] = {
 	--Army of the Dead
 	["Army of the Dead Ghoul"] = {
 		["enable"] = true,
