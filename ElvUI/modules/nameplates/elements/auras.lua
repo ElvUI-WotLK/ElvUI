@@ -11,7 +11,7 @@ local tinsert, tremove, wipe = table.insert, table.remove, table.wipe
 local CreateFrame = CreateFrame
 local UnitAura = UnitAura
 local UnitGUID = UnitGUID
-local GetSpellInfo = GetSpellInfo
+local GetSpellTexture = GetSpellTexture
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS
 
 local RaidIconBit = {
@@ -52,7 +52,6 @@ local auraCaster = {}
 local auraDuration = {}
 local auraTexture = {}
 local auraType = {}
-local auraTarget = {}
 local cachedAuraDurations = {}
 
 local TimeColors = {
@@ -138,7 +137,6 @@ local function RemoveAuraInstance(guid, spellID, caster)
 			auraDuration[instanceID] = nil
 			auraTexture[instanceID] = nil
 			auraType[instanceID] = nil
-			auraTarget[instanceID] = nil
 			auraList[guid][auraID] = nil
 		end
 	end
@@ -151,11 +149,20 @@ end
 local function GetAuraInstance(guid, auraID)
 	if guid and auraID then
 		local instanceID = guid..auraID
-		return auraSpellID[instanceID], auraName[instanceID], auraExpiration[instanceID], auraStacks[instanceID], auraCaster[instanceID], auraDuration[instanceID], auraTexture[instanceID], auraType[instanceID], auraTarget[instanceID]
+		local spellID, name, expiration, stacks, caster, duration, texture, type
+		spellID = auraSpellID[instanceID]
+		name = auraName[instanceID]
+		expiration = auraExpiration[instanceID]
+		stacks = auraStacks[instanceID]
+		caster = auraCaster[instanceID]
+		duration = auraDuration[instanceID]
+		texture = auraTexture[instanceID]
+		type = auraType[instanceID]
+		return spellID, name, expiration, stacks, caster, duration, texture, type
 	end
 end
 
-local function SetAuraInstance(guid, name, spellID, expiration, stacks, caster, duration, texture, type, target)
+local function SetAuraInstance(guid, name, spellID, expiration, stacks, caster, duration, texture, type)
 	if guid and spellID and caster and texture then
 		local auraID = spellID..(tostring(caster or "UNKNOWN_CASTER"))
 		local instanceID = guid..auraID
@@ -169,7 +176,6 @@ local function SetAuraInstance(guid, name, spellID, expiration, stacks, caster, 
 		auraDuration[instanceID] = duration
 		auraTexture[instanceID] = texture
 		auraType[instanceID] = type
-		auraTarget[instanceID] = target
 	end
 end
 
@@ -185,7 +191,6 @@ local function WipeAuraList(guid)
 			auraDuration[instanceID] = nil
 			auraTexture[instanceID] = nil
 			auraType[instanceID] = nil
-			auraTarget[instanceID] = nil
 			unitAuraList[auraID] = nil
 		end
 	end
@@ -248,7 +253,7 @@ function mod:UpdateElement_Auras(frame)
 			numAuras = (numDebuff + numBuff) + 1
 			aura = wipe(currentAura[numAuras] or {})
 
-			aura.spellID, aura.name, aura.expirationTime, aura.count, aura.caster, aura.duration, aura.icon, aura.type, aura.target = GetAuraInstance(guid, instanceid)
+			aura.spellID, aura.name, aura.expirationTime, aura.count, aura.caster, aura.duration, aura.icon, aura.type = GetAuraInstance(guid, instanceid)
 
 			local db
 			if aura.type == AURA_TYPE_BUFF then
@@ -260,14 +265,16 @@ function mod:UpdateElement_Auras(frame)
 			if not db.personal or (db.personal and aura.caster == UnitGUID("player")) then
 				local trackFilter = E.global["unitframe"]["aurafilters"][db.filter]
 				if db.filter and trackFilter then
-					local spell = trackFilter.spells[spellID] or trackFilter.spells[name]
+					local spell = trackFilter.spells[aura.spellID] or trackFilter.spells[aura.name]
 					if spell and spell.enable and trackFilter.type ~= "Whitelist" then
 						numAuras = numAuras - 1
+						RemoveAuraInstance(guid, aura.spellID, aura.caster)
 						wipe(aura)
 					end
 				end
 			else
 				numAuras = numAuras - 1
+				RemoveAuraInstance(guid, aura.spellID, aura.caster)
 				wipe(aura)
 			end
 
@@ -385,14 +392,15 @@ function mod:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, sourceGUID, _, _, ...)
 	if not (event == "SPELL_AURA_APPLIED" or event == "SPELL_AURA_REFRESH" or event == "SPELL_AURA_APPLIED_DOSE" or event == "SPELL_AURA_REMOVED_DOSE" or event == "SPELL_AURA_BROKEN" or event == "SPELL_AURA_BROKEN_SPELL" or event == "SPELL_AURA_REMOVED") then return end
 
 	local destGUID, destName, destFlags, spellID, spellName, _, auraType, stackCount = ...
-	local _, _, texture = GetSpellInfo(spellID)
 
 	if event == "SPELL_AURA_APPLIED" or event == "SPELL_AURA_REFRESH" then
 		local duration = GetSpellDuration(spellID)
-		SetAuraInstance(destGUID, spellName, spellID, GetTime() + (duration or 0), 1, sourceGUID, duration, texture, auraType, AURA_TARGET_HOSTILE)
+		local texture = GetSpellTexture(spellID)
+		SetAuraInstance(destGUID, spellName, spellID, GetTime() + (duration or 0), 1, sourceGUID, duration, texture, auraType)
 	elseif event == "SPELL_AURA_APPLIED_DOSE" or event == "SPELL_AURA_REMOVED_DOSE" then
 		local duration = GetSpellDuration(spellID)
-		SetAuraInstance(destGUID, spellName, spellID, GetTime() + (duration or 0), stackCount, sourceGUID, duration, texture, auraType, AURA_TARGET_HOSTILE)
+		local texture = GetSpellTexture(spellID)
+		SetAuraInstance(destGUID, spellName, spellID, GetTime() + (duration or 0), stackCount, sourceGUID, duration, texture, auraType)
 	elseif event == "SPELL_AURA_BROKEN" or event == "SPELL_AURA_BROKEN_SPELL" or event == "SPELL_AURA_REMOVED" then
 		RemoveAuraInstance(destGUID, spellID, sourceGUID)
 	end
