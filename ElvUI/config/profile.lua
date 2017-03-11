@@ -148,8 +148,6 @@ P["nameplates"] = {
 	["clampToScreen"] = false,
 	["useTargetGlow"] = true,
 
-	["healthBarLayer"] = "BORDER",
-
 	["castColor"] = {r = 1, g = 208/255, b = 0},
 	["castNoInterruptColor"] = {r = 0.78, g = 0.25, b = 0.25},
 	["reactions"] = {

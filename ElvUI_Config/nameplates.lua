@@ -650,20 +650,6 @@ E.Options.args.nameplate = {
 								E.db.nameplates[ info[#info] ] = value;
 								NP:PLAYER_REGEN_ENABLED();
 							end
-						},
-						healthBarLayer = {
-							type = "select",
-							order = 12,
-							name = L["Health Bar Layer"],
-							values = {
-								["BORDER"] = "BORDER",
-								["ARTWORK"] = "ARTWORK",
-								["OVERLAY"] = "OVERLAY"
-							},
-							set = function(info, value)
-								E.db.nameplates[ info[#info] ] = value;
-								NP:ConfigureAll();
-							end
 						}
 					}
 				},

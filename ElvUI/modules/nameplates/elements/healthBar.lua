@@ -101,8 +101,7 @@ function mod:ConfigureElement_HealthBar(frame, configuring)
 		healthBar:SetWidth(self.db.units[frame.UnitType].healthbar.width)
 	end
 
-	healthBar:SetStatusBarTexture(LSM:Fetch("statusbar", self.db.statusbar))
-	healthBar:GetStatusBarTexture():SetDrawLayer(self.db.healthBarLayer)
+	healthBar:SetStatusBarTexture(LSM:Fetch("statusbar", self.db.statusbar), "BORDER")
 	if(not configuring) and (self.db.units[frame.UnitType].healthbar.enable or frame.isTarget) then
 		healthBar:Show()
 	end
