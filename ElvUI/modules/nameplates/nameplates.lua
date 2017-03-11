@@ -477,28 +477,6 @@ function mod:OnUpdate(elapsed)
 	end
 
 	for frame in pairs(mod.VisiblePlates) do
-		if frame.oldHighlight:IsShown() then
-			if not frame.isMouseover then
-				frame.isMouseover = true
-				frame.unit = "mouseover"
-				frame.guid = UnitGUID("mouseover")
-
-				if frame.UnitType == "FRIENDLY_PLAYER" then
-					local _, class = UnitClass("mouseover")
-					frame.UnitClass = class
-					mod:UpdateElement_Name(frame)
-
-					if mod.db.units[frame.UnitType].healthbar.enable then
-						mod.UpdateElement_HealthOnValueChanged(frame.oldHealthBar, frame.oldHealthBar:GetValue())
-					end
-				end
-			end
-		elseif frame.isMouseover then
-			frame.isMouseover = false
-			frame.unit = nil
-			frame.guid = nil
-		end
-
 		if not frame.isTarget and frame:GetParent():GetAlpha() ~= 1 then
 			frame:GetParent():SetAlpha(1)
 		end
