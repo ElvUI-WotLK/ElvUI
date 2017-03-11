@@ -23,7 +23,11 @@ function mod:UpdateElement_Name(frame)
 		if reactionType == 4 then
 			r, g, b = self.db.reactions.neutral.r, self.db.reactions.neutral.g, self.db.reactions.neutral.b
 		elseif reactionType > 4 then
-			r, g, b = self.db.reactions.good.r, self.db.reactions.good.g, self.db.reactions.good.b
+			if frame.UnitType == "FRIENDLY_PLAYER" then
+				r, g, b = mod.db.reactions.friendlyPlayer.r, mod.db.reactions.friendlyPlayer.g, mod.db.reactions.friendlyPlayer.b
+			else
+				r, g, b = mod.db.reactions.good.r, mod.db.reactions.good.g, mod.db.reactions.good.b
+			end
 		else
 			r, g, b = self.db.reactions.bad.r, self.db.reactions.bad.g, self.db.reactions.bad.b
 		end	
