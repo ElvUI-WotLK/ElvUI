@@ -399,6 +399,7 @@ function mod:OnCreated(frame)
 
 	frame.UnitFrame.HealthBar = self:ConstructElement_HealthBar(frame.UnitFrame)
 	frame.UnitFrame.CastBar = self:ConstructElement_CastBar(frame.UnitFrame)
+	frame.UnitFrame.CastBar:SetParent(CastBar)
 	frame.UnitFrame.Level = self:ConstructElement_Level(frame.UnitFrame)
 	frame.UnitFrame.Name = self:ConstructElement_Name(frame.UnitFrame)
 	frame.UnitFrame.Glow = self:ConstructElement_Glow(frame.UnitFrame)
