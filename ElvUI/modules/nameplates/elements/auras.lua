@@ -255,24 +255,29 @@ function mod:UpdateElement_Auras(frame)
 
 			aura.spellID, aura.name, aura.expirationTime, aura.count, aura.caster, aura.duration, aura.icon, aura.type = GetAuraInstance(guid, instanceid)
 
-			local db
-			if aura.type == AURA_TYPE_BUFF then
-				db = self.db.units[frame.UnitType].buffs.filters
-			else
+			local filter = false
+			local db = self.db.units[frame.UnitType].buffs.filters
+			if aura.type == AURA_TYPE_DEBUFF then
 				db = self.db.units[frame.UnitType].debuffs.filters
 			end
 
-			if not db.personal or (db.personal and aura.caster == UnitGUID("player")) then
-				local trackFilter = E.global["unitframe"]["aurafilters"][db.filter]
-				if db.filter and trackFilter then
-					local spell = trackFilter.spells[aura.spellID] or trackFilter.spells[aura.name]
-					if spell and spell.enable and trackFilter.type ~= "Whitelist" then
-						numAuras = numAuras - 1
-						RemoveAuraInstance(guid, aura.spellID, aura.caster)
-						wipe(aura)
+			if db.personal and aura.caster == UnitGUID("player") then
+				filter = true
+			end
+
+			local trackFilter = E.global["unitframe"]["aurafilters"][db.filter]
+			if db.filter and trackFilter then
+				local spell = trackFilter.spells[tonumber(aura.spellID)] or trackFilter.spells[aura.name]
+				if trackFilter.type == "Whitelist" then
+					if spell and spell.enable then
+						filter = true
 					end
+				elseif trackFilter.type == "Blacklist" and spell and spell.enable then
+					filter = false
 				end
-			else
+			end
+
+			if filter ~= true then
 				numAuras = numAuras - 1
 				RemoveAuraInstance(guid, aura.spellID, aura.caster)
 				wipe(aura)
