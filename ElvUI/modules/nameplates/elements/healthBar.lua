@@ -104,8 +104,8 @@ function mod:ConfigureElement_HealthBar(frame, configuring)
 
 	healthBar:SetPoint("TOP", frame, "CENTER", 0, self.db.units[frame.UnitType].castbar.height + 3)
 	if frame.isTarget and self.db.useTargetScale then
-		healthBar:SetHeight(self.db.units[frame.UnitType].healthbar.height * (frame.CustomScale and frame.CustomScale * self.db.targetScale) or self.db.targetScale)
-		healthBar:SetWidth(self.db.units[frame.UnitType].healthbar.width * (frame.CustomScale and frame.CustomScale * self.db.targetScale) or self.db.targetScale)
+		healthBar:SetHeight(self.db.units[frame.UnitType].healthbar.height * ((frame.CustomScale and frame.CustomScale * self.db.targetScale) or self.db.targetScale))
+		healthBar:SetWidth(self.db.units[frame.UnitType].healthbar.width * ((frame.CustomScale and frame.CustomScale * self.db.targetScale) or self.db.targetScale))
 	else
 		healthBar:SetHeight((frame.CustomScale and frame.CustomScale * self.db.units[frame.UnitType].healthbar.height) or self.db.units[frame.UnitType].healthbar.height)
 		healthBar:SetWidth((frame.CustomScale and frame.CustomScale * self.db.units[frame.UnitType].healthbar.width) or self.db.units[frame.UnitType].healthbar.width)
