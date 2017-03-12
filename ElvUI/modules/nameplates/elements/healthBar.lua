@@ -85,7 +85,7 @@ function mod:UpdateElement_HealthOnValueChanged(health)
 		end
 	end
 
-	if not frame.isTarget or not mod.db.useTargetScale or not frame.CustomScale then
+	if (not frame.isTarget or not mod.db.useTargetScale) and not frame.CustomScale then
 		frame.ThreatScale = scale
 		mod:SetFrameScale(frame, scale)
 	end
@@ -104,11 +104,11 @@ function mod:ConfigureElement_HealthBar(frame, configuring)
 
 	healthBar:SetPoint("TOP", frame, "CENTER", 0, self.db.units[frame.UnitType].castbar.height + 3)
 	if frame.isTarget and self.db.useTargetScale then
-		healthBar:SetHeight(self.db.units[frame.UnitType].healthbar.height * self.db.targetScale)
-		healthBar:SetWidth(self.db.units[frame.UnitType].healthbar.width * self.db.targetScale)
+		healthBar:SetHeight(self.db.units[frame.UnitType].healthbar.height * (frame.CustomScale and frame.CustomScale * self.db.targetScale) or self.db.targetScale)
+		healthBar:SetWidth(self.db.units[frame.UnitType].healthbar.width * (frame.CustomScale and frame.CustomScale * self.db.targetScale) or self.db.targetScale)
 	else
-		healthBar:SetHeight(self.db.units[frame.UnitType].healthbar.height)
-		healthBar:SetWidth(self.db.units[frame.UnitType].healthbar.width)
+		healthBar:SetHeight((frame.CustomScale and frame.CustomScale * self.db.units[frame.UnitType].healthbar.height) or self.db.units[frame.UnitType].healthbar.height)
+		healthBar:SetWidth((frame.CustomScale and frame.CustomScale * self.db.units[frame.UnitType].healthbar.width) or self.db.units[frame.UnitType].healthbar.width)
 	end
 
 	healthBar:SetStatusBarTexture(LSM:Fetch("statusbar", self.db.statusbar), "BORDER")

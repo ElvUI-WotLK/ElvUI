@@ -52,8 +52,7 @@ function mod:CheckFilter(frame)
 			end
 
 			if db.customScale and db.customScale ~= 1 then
-				mod:SetFrameScale(frame, db.customScale)
-				frame.CustomScale = true
+				frame.CustomScale = db.customScale
 			else
 				frame.CustomScale = nil
 			end
@@ -95,7 +94,7 @@ function mod:SetTargetFrame(frame)
 	local targetExists = UnitExists("target") == 1
 	if targetExists and frame:GetParent():IsShown() and frame:GetParent():GetAlpha() == 1 and not frame.isTarget then
 		if self.db.useTargetScale then
-			self:SetFrameScale(frame, self.db.targetScale)
+			self:SetFrameScale(frame, (frame.CustomScale and frame.CustomScale * self.db.targetScale) or self.db.targetScale)
 		end
 		frame.isTarget = true
 		frame.unit = "target"
@@ -119,7 +118,7 @@ function mod:SetTargetFrame(frame)
 		mod:UpdateElement_AurasByUnitID("target")
 	elseif frame.isTarget then
 		if self.db.useTargetScale then
-			self:SetFrameScale(frame, frame.ThreatScale or 1)
+			self:SetFrameScale(frame, frame.CustomScale or frame.ThreatScale or 1)
 		end
 		frame.isTarget = nil
 		frame.unit = nil
