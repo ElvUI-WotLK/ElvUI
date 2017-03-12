@@ -224,7 +224,7 @@ function mod:UpdateElement_Auras(frame)
 			local name = gsub(frame.oldName:GetText(), "%s%(%*%)","")
 			guid = ByName[name]
 		elseif frame.RaidIcon:IsShown() then
-			guid = ByRaidIcon[frame.raidIconType]
+			guid = ByRaidIcon[frame.RaidIconType]
 		end
 
 		if guid then

@@ -39,7 +39,7 @@ function mod:CheckBGHealers()
 		name, _, _, _, _, _, _, _, _, _, damageDone, healingDone = GetBattlefieldScore(i)
 		if name then
 			name = name:match("(.+)%-.+") or name
-			if name and healingDone > damageDone then
+			if name and healingDone > (damageDone * 2) then
 				self.Healers[name] = true
 			elseif name and self.Healers[name] then
 				self.Healers[name] = nil
@@ -70,12 +70,6 @@ function mod:SetTargetFrame(frame)
 		frame.unit = "target"
 		frame.guid = UnitGUID("target")
 
-		if frame.UnitType == "FRIENDLY_PLAYER" then
-		--	local _, class = UnitClass("target")
-		--	frame.UnitClass = class
-		--	mod:UpdateElement_Name(frame)
-		end
-		
 		if self.db.units[frame.UnitType].healthbar.enable ~= true then
 			frame.Name:ClearAllPoints()
 			frame.Level:ClearAllPoints()
@@ -346,9 +340,9 @@ function mod:OnHide()
 	self.UnitFrame.UnitName = nil
 	self.UnitFrame.UnitType = nil
 
-	self.UnitFrame.threatReaction = nil
+	self.UnitFrame.ThreatReaction = nil
 	self.UnitFrame.guid = nil
-	self.UnitFrame.raidIconType = nil
+	self.UnitFrame.RaidIconType = nil
 	self.UnitFrame.customColor = nil
 	self.UnitFrame.customScale = nil
 	self.UnitFrame.allowCheck = nil
@@ -486,9 +480,9 @@ end
 function mod:CheckRaidIcon(frame)
 	if frame.RaidIcon:IsShown() then
 		local ux, uy = frame.RaidIcon:GetTexCoord()
-		frame.raidIconType = RaidIconCoordinate[ux][uy]
+		frame.RaidIconType = RaidIconCoordinate[ux][uy]
 	else
-		frame.raidIconType = nil
+		frame.RaidIconType = nil
 	end
 end
 
@@ -513,7 +507,7 @@ end
 function mod:SearchNameplateByIconName(raidIcon)
 	for frame in pairs(self.VisiblePlates) do
 		self:CheckRaidIcon(frame)
-		if frame and frame:IsShown() and frame.RaidIcon:IsShown() and (frame.raidIconType == raidIcon) then
+		if frame and frame:IsShown() and frame.RaidIcon:IsShown() and (frame.RaidIconType == raidIcon) then
 			return frame
 		end
 	end

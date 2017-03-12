@@ -186,36 +186,30 @@ local function GetUnitSettings(unit, name)
 				type = "group",
 				get = function(info) return E.db.nameplates.units[unit].castbar[ info[#info] ]; end,
 				set = function(info, value) E.db.nameplates.units[unit].castbar[ info[#info] ] = value; NP:ConfigureAll(); end,
-				disabled = function() return not E.db.nameplates.units[unit].healthbar.enable; end,
 				args = {
 					header = {
 						order = 0,
 						type = "header",
 						name = L["Cast Bar"]
 					},
-					enable = {
-						order = 1,
-						type = "toggle",
-						name = L["Enable"]
-					},
 					hideSpellName = {
-						order = 2,
+						order = 1,
 						type = "toggle",
 						name = L["Hide Spell Name"]
 					},
 					hideTime = {
-						order = 3,
+						order = 2,
 						type = "toggle",
 						name = L["Hide Time"]
 					},
 					height = {
-						order = 4,
+						order = 3,
 						type = "range",
 						name = L["Height"],
 						min = 4, max = 20, step = 1
 					},
 					castTimeFormat = {
-						order = 5,
+						order = 4,
 						type = "select",
 						name = L["Cast Time Format"],
 						values = {
@@ -225,7 +219,7 @@ local function GetUnitSettings(unit, name)
 						}
 					},
 					channelTimeFormat = {
-						order = 6,
+						order = 5,
 						type = "select",
 						name = L["Channel Time Format"],
 						values = {
@@ -235,7 +229,7 @@ local function GetUnitSettings(unit, name)
 						}
 					},
 					timeToHold = {
-						order = 7,
+						order = 6,
 						type = "range",
 						name = L["Time To Hold"],
 						desc = L["How many seconds the castbar should stay visible after the cast failed or was interrupted."],
