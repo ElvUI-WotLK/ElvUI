@@ -33,6 +33,37 @@ mod.CreatedPlates = {}
 mod.VisiblePlates = {}
 mod.Healers = {}
 
+function mod:CheckFilter(frame)
+	local db = E.global.nameplates["filter"][frame.UnitName]
+	if db and db.enable then
+		if db.hide then
+			frame:Hide()
+			return
+		else
+			if not frame:IsShown() then
+				frame:Show()
+			end
+
+			if db.customColor then
+				frame.CustomColor = db.color
+				frame.HealthBar:SetStatusBarColor(db.color.r, db.color.g, db.color.b)
+			else
+				frame.CustomColor = nil
+			end
+
+			if db.customScale and db.customScale ~= 1 then
+				mod:SetFrameScale(frame, db.customScale)
+				frame.CustomScale = true
+			else
+				frame.CustomScale = nil
+			end
+		end
+	elseif not frame:IsShown() then
+		frame:Show()
+	end
+	return true
+end
+
 function mod:CheckBGHealers()
 	local name, _, damageDone, healingDone
 	for i = 1, GetNumBattlefieldScores() do
@@ -279,6 +310,8 @@ function mod:OnShow()
 	self.UnitFrame.UnitClass = mod:UnitClass(self.UnitFrame, unitType)
 	self.UnitFrame.UnitReaction = unitReaction
 
+	if not mod:CheckFilter(self.UnitFrame) then return end
+
 	if unitType == "ENEMY_PLAYER" then
 		mod:UpdateElement_HealerIcon(self.UnitFrame)
 	end
@@ -345,6 +378,8 @@ function mod:OnHide()
 	self.UnitFrame.ThreatReaction = nil
 	self.UnitFrame.guid = nil
 	self.UnitFrame.RaidIconType = nil
+	self.UnitFrame.CustomColor = nil
+	self.UnitFrame.CustomScale = nil
 end
 
 function mod:UpdateAllFrame(frame)

@@ -18,20 +18,19 @@ local positionValues = {
 	BOTTOM = "BOTTOM"
 };
 
---[[This has not been implemented (yet?)
 local function UpdateFilterGroup()
-	if not selectedFilter or not E.global["nameplate"]["filter"][selectedFilter] then
-		E.Options.args.nameplate.args.filters.args.filterGroup = nil
+	if not selectedFilter or not E.global["nameplates"]["filter"][selectedFilter] then
+		E.Options.args.nameplate.args.generalGroup.args.filters.args.filterGroup = nil
 		return
 	end
 
-	E.Options.args.nameplate.args.filters.args.filterGroup = {
+	E.Options.args.nameplate.args.generalGroup.args.filters.args.filterGroup = {
 		type = "group",
 		name = selectedFilter,
 		guiInline = true,
 		order = -10,
-		get = function(info) return E.global["nameplate"]["filter"][selectedFilter][ info[#info] ] end,
-		set = function(info, value) E.global["nameplate"]["filter"][selectedFilter][ info[#info] ] = value; NP:ForEachPlate("CheckFilterAndHealers"); NP:UpdateAllPlates(); UpdateFilterGroup() end,
+		get = function(info) return E.global["nameplates"]["filter"][selectedFilter][ info[#info] ] end,
+		set = function(info, value) E.global["nameplates"]["filter"][selectedFilter][ info[#info] ] = value; NP:ForEachPlate("CheckFilter"); NP:ConfigureAll(); UpdateFilterGroup() end,
 		args = {
 			enable = {
 				type = "toggle",
@@ -56,32 +55,31 @@ local function UpdateFilterGroup()
 				order = 4,
 				name = L["Color"],
 				get = function(info)
-					local t = E.global["nameplate"]["filter"][selectedFilter][ info[#info] ]
+					local t = E.global["nameplates"]["filter"][selectedFilter][ info[#info] ]
 					if t then
 						return t.r, t.g, t.b, t.a
 					end
 				end,
 				set = function(info, r, g, b)
-					E.global["nameplate"]["filter"][selectedFilter][ info[#info] ] = {}
-					local t = E.global["nameplate"]["filter"][selectedFilter][ info[#info] ]
+					E.global["nameplates"]["filter"][selectedFilter][ info[#info] ] = {}
+					local t = E.global["nameplates"]["filter"][selectedFilter][ info[#info] ]
 					if t then
 						t.r, t.g, t.b = r, g, b
 						UpdateFilterGroup()
-						NP:ForEachPlate("CheckFilterAndHealers")
-						NP:UpdateAllPlates()
+						NP:ForEachPlate("CheckFilter")
+						NP:ConfigureAll()
 					end
-				end,
+				end
 			},
 			customScale = {
 				type = "range",
 				name = L["Custom Scale"],
 				desc = L["Set the scale of the nameplate."],
-				min = 0.67, max = 2, step = 0.01,
-			},
-		},
+				min = 0.67, max = 2, step = 0.01
+			}
+		}
 	}
 end
-]]
 
 local ORDER = 100;
 local function GetUnitSettings(unit, name)
@@ -839,6 +837,66 @@ E.Options.args.nameplate = {
 							type = "color",
 							name = L["Friendly Player"],
 							hasAlpha = false
+						}
+					}
+				},
+				filters = {
+					order = 300,
+					type = "group",
+					name = L["Filters"],
+					args = {
+						addname = {
+							order = 2,
+							type = "input",
+							name = L["Add Name"],
+							get = function(info) return "" end,
+							set = function(info, value)
+								if E.global["nameplates"]["filter"][value] then
+									E:Print(L["Filter already exists!"])
+									return
+								end
+
+								E.global["nameplates"]["filter"][value] = {
+									["enable"] = true,
+									["hide"] = false,
+									["customColor"] = false,
+									["customScale"] = 1,
+									["color"] = {r = 104/255, g = 138/255, b = 217/255}
+								}
+								UpdateFilterGroup()
+								NP:ConfigureAll()
+							end
+						},
+						deletename = {
+							order = 3,
+							type = "input",
+							name = L["Remove Name"],
+							get = function(info) return "" end,
+							set = function(info, value)
+								if G["nameplates"]["filter"][value] then
+									E.global["nameplates"]["filter"][value].enable = false;
+									E:Print(L["You can't remove a default name from the filter, disabling the name."])
+								else
+									E.global["nameplates"]["filter"][value] = nil;
+									E.Options.args.nameplates.args.filters.args.filterGroup = nil;
+								end
+								UpdateFilterGroup()
+								NP:ConfigureAll();
+							end
+						},
+						selectFilter = {
+							order = 3,
+							type = "select",
+							name = L["Select Filter"],
+							get = function(info) return selectedFilter end,
+							set = function(info, value) selectedFilter = value; UpdateFilterGroup() end,
+							values = function()
+								filters = {}
+								for filter in pairs(E.global["nameplates"]["filter"]) do
+									filters[filter] = filter
+								end
+								return filters
+							end
 						}
 					}
 				}
