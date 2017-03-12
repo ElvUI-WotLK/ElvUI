@@ -340,12 +340,13 @@ function mod:OnHide()
 	self.UnitFrame.UnitName = nil
 	self.UnitFrame.UnitType = nil
 
+	for i = 1, MAX_COMBO_POINTS do
+		self.UnitFrame.CPoints[i]:Hide()
+	end
+
 	self.UnitFrame.ThreatReaction = nil
 	self.UnitFrame.guid = nil
 	self.UnitFrame.RaidIconType = nil
-	self.UnitFrame.customColor = nil
-	self.UnitFrame.customScale = nil
-	self.UnitFrame.allowCheck = nil
 end
 
 function mod:UpdateAllFrame(frame)
