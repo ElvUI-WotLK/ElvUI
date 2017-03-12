@@ -156,7 +156,6 @@ P["nameplates"] = {
 		["good"] = {r = 75/255,  g = 175/255, b = 76/255},
 		["neutral"] = {r = 218/255, g = 197/255, b = 92/255},
 		["bad"] = {r = 0.78, g = 0.25, b = 0.25},
-		["offline"] = {r = 0.3, g = 0.3, b = 0.3},
 	},
 	["threat"] = {
 		["goodColor"] = {r = 75/255,  g = 175/255, b = 76/255},
@@ -176,7 +175,6 @@ P["nameplates"] = {
 				["enable"] = false,
 				["height"] = 10,
 				["width"] = 150,
-				["healPrediction"] = true,
 				["glowStyle"] = "TARGET_THREAT",
 				["text"] = {
 					["enable"] = false,
@@ -223,7 +221,6 @@ P["nameplates"] = {
 				["enable"] = true,
 				["height"] = 10,
 				["width"] = 150,
-				["healPrediction"] = true,
 				["glowStyle"] = "TARGET_THREAT",
 				["text"] = {
 					["enable"] = false,
@@ -270,7 +267,6 @@ P["nameplates"] = {
 				["enable"] = false,
 				["height"] = 10,
 				["width"] = 150,
-				["healPrediction"] = true,
 				["glowStyle"] = "TARGET_THREAT",
 				["text"] = {
 					["enable"] = false,
@@ -320,7 +316,6 @@ P["nameplates"] = {
 				["enable"] = true,
 				["height"] = 10,
 				["width"] = 150,
-				["healPrediction"] = true,
 				["glowStyle"] = "TARGET_THREAT",
 				["text"] = {
 					["enable"] = false,

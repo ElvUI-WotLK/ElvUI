@@ -823,7 +823,7 @@ E.Options.args.nameplate = {
 						good = {
 							order = 3,
 							type = "color",
-							name = L["Friendly"],
+							name = L["Friendly NPC"],
 							hasAlpha = false
 						},
 						tapped = {
