@@ -333,16 +333,13 @@ function mod:OnHide()
 	self.UnitFrame.Name:ClearAllPoints()
 	self.UnitFrame.Name:SetText("")
 	self.UnitFrame.Elite:Hide()
+	self.UnitFrame.CPoints:Hide()
 	self.UnitFrame:Hide()
 	self.UnitFrame.isTarget = nil
 	self.UnitFrame.displayedUnit = nil
 	self.ThreatData = nil
 	self.UnitFrame.UnitName = nil
 	self.UnitFrame.UnitType = nil
-
-	for i = 1, MAX_COMBO_POINTS do
-		self.UnitFrame.CPoints[i]:Hide()
-	end
 
 	self.UnitFrame.ThreatReaction = nil
 	self.UnitFrame.guid = nil

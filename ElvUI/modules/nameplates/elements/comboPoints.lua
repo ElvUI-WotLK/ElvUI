@@ -21,6 +21,7 @@ function mod:UpdateElement_CPoints(frame)
 	end
 
 	if numPoints and numPoints > 0 then
+		frame.CPoints:Show()
 		for i = 1, MAX_COMBO_POINTS do
 			if i <= numPoints then
 				frame.CPoints[i]:Show()
@@ -29,9 +30,7 @@ function mod:UpdateElement_CPoints(frame)
 			end
 		end
 	else
-		for i = 1, MAX_COMBO_POINTS do
-			frame.CPoints[i]:Hide()
-		end
+		frame.CPoints:Hide()
 	end
 end
 
@@ -47,6 +46,7 @@ function mod:ConstructElement_CPoints(parent)
 	local frame = CreateFrame("Frame", nil, parent.HealthBar)
 	frame:Point("CENTER", parent.HealthBar, "BOTTOM")
 	frame:SetSize(68, 1)
+	frame:Hide()
 
 	for i = 1, MAX_COMBO_POINTS do
 		frame[i] = frame:CreateTexture(nil, "OVERLAY")
@@ -59,8 +59,6 @@ function mod:ConstructElement_CPoints(parent)
 		else
 			frame[i]:SetPoint("LEFT", frame[i-1], "RIGHT", 2, 0)
 		end
-
-		frame[i]:Hide()
 	end
 	return frame
 end
