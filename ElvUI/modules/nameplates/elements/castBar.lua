@@ -68,10 +68,14 @@ end
 
 function mod:ConfigureElement_CastBar(frame)
 	local castBar = frame.CastBar
-
+	
+	castBar:SetPoint("TOPLEFT", frame.HealthBar, "BOTTOMLEFT", 0, -self.db.units[frame.UnitType].castbar.offset)
+	castBar:SetPoint("TOPRIGHT", frame.HealthBar, "BOTTOMRIGHT", 0, -self.db.units[frame.UnitType].castbar.offset)
 	castBar:SetHeight(self.db.units[frame.UnitType].castbar.height)
 
-	castBar.Icon:SetWidth(self.db.units[frame.UnitType].castbar.height + self.db.units[frame.UnitType].healthbar.height + E.Border + E.Spacing*3)
+	castBar.Icon:SetPoint("TOPLEFT", frame.HealthBar, "TOPRIGHT", self.db.units[frame.UnitType].castbar.offset, 0);
+	castBar.Icon:SetPoint("BOTTOMLEFT", castBar, "BOTTOMRIGHT", self.db.units[frame.UnitType].castbar.offset, 0);
+	castBar.Icon:SetWidth(self.db.units[frame.UnitType].castbar.height + self.db.units[frame.UnitType].healthbar.height + self.db.units[frame.UnitType].castbar.offset)
 
 	castBar.Name:SetJustifyH("LEFT")
 	castBar.Name:SetJustifyV("TOP")
@@ -99,14 +103,10 @@ end
 
 function mod:ConstructElement_CastBar(parent)
 	local frame = CreateFrame("StatusBar", nil, parent)
-	frame:SetPoint("TOPLEFT", parent.HealthBar, "BOTTOMLEFT", 0, -E.Border - E.Spacing*3)
-	frame:SetPoint("TOPRIGHT", parent.HealthBar, "BOTTOMRIGHT", 0, -E.Border - E.Spacing*3)
 	self:StyleFrame(frame)
 	frame:SetFrameLevel(parent:GetFrameLevel())
 
 	frame.Icon = CreateFrame("Frame", nil, frame)
-	frame.Icon:SetPoint("TOPLEFT", parent.HealthBar, "TOPRIGHT", E.Border + E.Spacing*3, 0)
-	frame.Icon:SetPoint("BOTTOMLEFT", frame, "BOTTOMRIGHT", E.Border + E.Spacing*3, 0)
 	frame.Icon.texture = frame.Icon:CreateTexture(nil, "BORDER")
 	frame.Icon.texture:SetAllPoints()
 	frame.Icon.texture:SetTexCoord(unpack(E.TexCoords))

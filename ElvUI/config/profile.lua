@@ -188,9 +188,9 @@ P["nameplates"] = {
 				["height"] = 8,
 				["hideSpellName"] = false,
 				["hideTime"] = false,
+				["offset"] = 1,
 				["castTimeFormat"] = "CURRENT",
-				["channelTimeFormat"] = "CURRENT",
-				["timeToHold"] = 0,
+				["channelTimeFormat"] = "CURRENT"
 			},
 			["buffs"] = {
 				["enable"] = true,
@@ -234,9 +234,9 @@ P["nameplates"] = {
 				["height"] = 8,
 				["hideSpellName"] = false,
 				["hideTime"] = false,
+				["offset"] = 1,
 				["castTimeFormat"] = "CURRENT",
-				["channelTimeFormat"] = "CURRENT",
-				["timeToHold"] = 0,
+				["channelTimeFormat"] = "CURRENT"
 			},
 			["buffs"] = {
 				["enable"] = true,
@@ -279,9 +279,9 @@ P["nameplates"] = {
 				["height"] = 8,
 				["hideSpellName"] = false,
 				["hideTime"] = false,
+				["offset"] = 1,
 				["castTimeFormat"] = "CURRENT",
 				["channelTimeFormat"] = "CURRENT",
-				["timeToHold"] = 0,
 			},
 			["buffs"] = {
 				["enable"] = true,
@@ -328,9 +328,9 @@ P["nameplates"] = {
 				["height"] = 8,
 				["hideSpellName"] = false,
 				["hideTime"] = false,
+				["offset"] = 1,
 				["castTimeFormat"] = "CURRENT",
-				["channelTimeFormat"] = "CURRENT",
-				["timeToHold"] = 0,
+				["channelTimeFormat"] = "CURRENT"
 			},
 			["buffs"] = {
 				["enable"] = true,

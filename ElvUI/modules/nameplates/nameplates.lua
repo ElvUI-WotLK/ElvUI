@@ -235,14 +235,13 @@ function mod:RoundColors(r, g, b)
 end
 
 function mod:UnitClass(frame, type)
-	local r, g, b = self:RoundColors(frame.oldHealthBar:GetStatusBarColor())
-
 	if type == "FRIENDLY_PLAYER" then
 		if UnitInParty("player") or UnitInRaid("player") then -- FRIENDLY_PLAYER
 			local _, class = UnitClass(frame.UnitName)
 			if class then return class end
 		end
 	elseif type == "ENEMY_PLAYER" then
+		local r, g, b = self:RoundColors(frame.oldHealthBar:GetStatusBarColor())
 		for class, _ in pairs(RAID_CLASS_COLORS) do -- ENEMY_PLAYER
 			if RAID_CLASS_COLORS[class].r == r and RAID_CLASS_COLORS[class].g == g and RAID_CLASS_COLORS[class].b == b then
 				return class
@@ -252,19 +251,15 @@ function mod:UnitClass(frame, type)
 end
 
 function mod:UnitDetailedThreatSituation(frame)
-	if frame.Threat:IsShown() then
-		local _, g, b = frame.Threat:GetVertexColor()
-		if g + b == 0 then
-			return 3
-		else
-			if self.ThreatReaction == 3 then
-				return 2
-			else
-				return 1
-			end
+	if not frame.Threat:IsShown() then return false end
+
+	local r, g, b = threatRegion:GetVertexColor()
+	if r > 0 then
+		if g > 0 then
+			if b > 0 then return 1 end
+			return 2
 		end
-	else
-		return false
+		return 3
 	end
 end
 
@@ -457,6 +452,7 @@ function mod:OnCreated(frame)
 	frame.UnitFrame.oldLevel = Level
 
 	frame.UnitFrame.Threat = Threat
+	RaidIcon:SetParent(frame.UnitFrame)
 	frame.UnitFrame.RaidIcon = RaidIcon
 
 	frame.UnitFrame.BossIcon = BossIcon

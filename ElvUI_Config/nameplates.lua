@@ -206,8 +206,14 @@ local function GetUnitSettings(unit, name)
 						name = L["Height"],
 						min = 4, max = 20, step = 1
 					},
-					castTimeFormat = {
+					offset = {
 						order = 4,
+						type = "range",
+						name = L["Offset"],
+						min = 0, max = 30, step = 1
+					},
+					castTimeFormat = {
+						order = 5,
 						type = "select",
 						name = L["Cast Time Format"],
 						values = {
@@ -217,7 +223,7 @@ local function GetUnitSettings(unit, name)
 						}
 					},
 					channelTimeFormat = {
-						order = 5,
+						order = 6,
 						type = "select",
 						name = L["Channel Time Format"],
 						values = {
@@ -225,13 +231,6 @@ local function GetUnitSettings(unit, name)
 							["CURRENT_MAX"] = L["Current / Max"],
 							["REMAINING"] = L["Remaining"]
 						}
-					},
-					timeToHold = {
-						order = 6,
-						type = "range",
-						name = L["Time To Hold"],
-						desc = L["How many seconds the castbar should stay visible after the cast failed or was interrupted."],
-						min = 0, max = 4, step = 0.1
 					}
 				}
 			},
