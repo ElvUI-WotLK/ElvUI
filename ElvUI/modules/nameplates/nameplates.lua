@@ -251,7 +251,14 @@ function mod:UnitClass(frame, type)
 end
 
 function mod:UnitDetailedThreatSituation(frame)
-	if not frame.Threat:IsShown() then return false end
+	if not frame.Threat:IsShown() then
+		if frame.UnitType == "ENEMY_NPC" then
+			local r, g, b = frame.oldName:GetTextColor()
+			return (r > .5 and g < .5) and 0 or false
+		else
+			return false
+		end
+	end
 
 	local r, g, b = frame.Threat:GetVertexColor()
 	if r > 0 then
@@ -368,6 +375,7 @@ function mod:OnHide()
 	self.ThreatData = nil
 	self.UnitFrame.UnitName = nil
 	self.UnitFrame.UnitType = nil
+	self.UnitFrame.ThreatScale = nil
 
 	self.UnitFrame.ThreatReaction = nil
 	self.UnitFrame.guid = nil

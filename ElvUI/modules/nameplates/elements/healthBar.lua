@@ -46,7 +46,7 @@ function mod:UpdateElement_HealthOnValueChanged(health)
 					r, g, b = mod.db.threat.badTransition.r, mod.db.threat.badTransition.g, mod.db.threat.badTransition.b
 				end
 				scale = 1
-			else
+			elseif status == 0 then
 				if E.Role == "Tank" then
 					r, g, b = mod.db.threat.badColor.r, mod.db.threat.badColor.g, mod.db.threat.badColor.b
 					scale = mod.db.threat.badScale
@@ -55,7 +55,6 @@ function mod:UpdateElement_HealthOnValueChanged(health)
 					scale = mod.db.threat.goodScale
 				end
 			end
-			frame.ThreatReaction = status
 		end
 
 		if (not status) or (status and not mod.db.threat.useThreatColor) then
