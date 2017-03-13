@@ -253,7 +253,7 @@ end
 function mod:UnitDetailedThreatSituation(frame)
 	if not frame.Threat:IsShown() then return false end
 
-	local r, g, b = threatRegion:GetVertexColor()
+	local r, g, b = frame.Threat:GetVertexColor()
 	if r > 0 then
 		if g > 0 then
 			if b > 0 then return 1 end
