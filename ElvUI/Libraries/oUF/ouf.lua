@@ -58,8 +58,6 @@ local updateActiveUnit = function(self, event, unit)
 		modUnit = "vehicle"
 	end
 
-	--if(not UnitExists(modUnit)) then return end
-
 	if(not UnitExists(modUnit)) then
 		if(modUnit ~= realUnit) then
 			modUnit = realUnit

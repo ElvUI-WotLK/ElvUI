@@ -302,15 +302,6 @@ local tagStrings = {
 		return UnitPowerMax(unit, SPELL_POWER_MANA)
 	end]],
 
-	["manapp"] = [[function(u)
-		local m = UnitPowerMax(u, 0);
-		if(m == 0) then
-			return 0
-		else
-			return math.floor(UnitPower(u, 0)/m*100+.5)
-		end
-	end]],
-
 	["happiness"] = [[function(u)
 		if(UnitIsUnit(u, "pet")) then
 			local happiness = GetPetHappiness()
@@ -419,7 +410,6 @@ local tagEvents = {
 	["group"]				= "PARTY_MEMBERS_CHANGED RAID_ROSTER_UPDATE",
 	["curmana"]				= "UNIT_POWER UNIT_MAXPOWER",
 	["maxmana"]				= "UNIT_POWER UNIT_MAXPOWER",
-	["manapp"]				= "UNIT_MANA UNIT_MAXMANA",
 	["happiness"]			= "UNIT_HAPPINESS",
 	["powercolor"]			= "UNIT_DISPLAYPOWER",
 }
