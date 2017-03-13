@@ -4,11 +4,15 @@ local LSM = LibStub("LibSharedMedia-3.0")
 
 function mod:UpdateElement_HealthOnValueChanged(health)
 	local frame = self:GetParent().UnitFrame
-	if not frame.HealthBar:IsShown() then return end
+	if not frame.UnitType then return end -- Bugs
 
-	local minHealth, maxHealth = self:GetMinMaxValues()
-	frame.HealthBar:SetMinMaxValues(minHealth, maxHealth)
-	frame.HealthBar:SetValue(health)
+	mod:UpdateElement_Health(frame)
+	mod:UpdateElement_HealthColor(frame)
+	mod:UpdateElement_Glow(frame)
+end
+
+function mod:UpdateElement_HealthColor(frame)
+	if(not frame.HealthBar:IsShown()) then return end
 
 	local r, g, b
 	local scale = 1
@@ -88,11 +92,17 @@ function mod:UpdateElement_HealthOnValueChanged(health)
 		frame.ThreatScale = scale
 		mod:SetFrameScale(frame, scale)
 	end
+end
 
-	mod:UpdateElement_Glow(frame)
+function mod:UpdateElement_Health(frame)
+	local health = frame.oldHealthBar:GetValue()
+	local _, maxHealth = frame.oldHealthBar:GetMinMaxValues()
+	frame.HealthBar:SetMinMaxValues(0, maxHealth)
 
-	if mod.db.units[frame.UnitType].healthbar.text.enable then
-		frame.HealthBar.text:SetText(E:GetFormattedText(mod.db.units[frame.UnitType].healthbar.text.format, health, maxHealth))
+	frame.HealthBar:SetValue(health)
+
+	if self.db.units[frame.UnitType].healthbar.text.enable then
+		frame.HealthBar.text:SetText(E:GetFormattedText(self.db.units[frame.UnitType].healthbar.text.format, health, maxHealth))
 	else
 		frame.HealthBar.text:SetText("")
 	end

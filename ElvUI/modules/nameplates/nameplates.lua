@@ -139,7 +139,8 @@ function mod:SetTargetFrame(frame)
 		end
 	end
 
-	mod.UpdateElement_HealthOnValueChanged(frame.oldHealthBar, frame.oldHealthBar:GetValue())
+	mod:UpdateElement_HealthColor(frame)
+	mod:UpdateElement_Glow(frame)
 	mod:UpdateElement_CPoints(frame)
 end
 
@@ -406,7 +407,8 @@ end
 
 function mod:UpdateElement_All(frame, noTargetFrame)
 	if self.db.units[frame.UnitType].healthbar.enable or frame.isTarget then
-		mod.UpdateElement_HealthOnValueChanged(frame.oldHealthBar, frame.oldHealthBar:GetValue())
+		mod:UpdateElement_Health(frame)
+		mod:UpdateElement_HealthColor(frame)
 		mod:UpdateElement_Auras(frame)
 	end
 	mod:UpdateElement_RaidIcon(frame)
