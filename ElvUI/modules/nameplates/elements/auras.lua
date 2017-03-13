@@ -196,6 +196,32 @@ local function WipeAuraList(guid)
 	end
 end
 
+function mod:CleanAuraLists()
+	local currentTime = GetTime()
+	for guid, instanceList in pairs(auraList) do
+		local auraCount = 0
+		for auraID, instanceID in pairs(instanceList) do
+			local expiration = auraExpiration[instanceID]
+			if expiration and expiration < currentTime then
+				auraList[guid][auraID] = nil
+				auraSpellID[instanceID] = nil
+				auraName[instanceID] = nil
+				auraExpiration[instanceID] = nil
+				auraStacks[instanceID] = nil
+				auraCaster[instanceID] = nil
+				auraDuration[instanceID] = nil
+				auraTexture[instanceID] = nil
+				auraType[instanceID] = nil
+			else
+				auraCount = auraCount + 1
+			end
+		end
+		if auraCount == 0 then
+			auraList[guid] = nil
+		end
+	end
+end
+
 function mod:SetAura(aura, icon, count, expirationTime)
 	aura.icon:SetTexture(icon)
 	if count > 1 then

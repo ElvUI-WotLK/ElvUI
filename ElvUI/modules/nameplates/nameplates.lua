@@ -589,6 +589,7 @@ function mod:CopySettings(from, to)
 end
 
 function mod:PLAYER_ENTERING_WORLD()
+	self:CleanAuraLists()
 	twipe(self.Healers)
 	local inInstance, instanceType = IsInInstance()
 	if inInstance and instanceType == "pvp" and self.db.units.ENEMY_PLAYER.markHealers then
@@ -635,6 +636,7 @@ function mod:PLAYER_REGEN_DISABLED()
 end
 
 function mod:PLAYER_REGEN_ENABLED()
+	self:CleanAuraLists()
 	if self.db.showFriendlyCombat == "TOGGLE_ON" then
 		SetCVar("nameplateShowFriends", 0)
 	elseif self.db.showFriendlyCombat == "TOGGLE_OFF" then

@@ -50,7 +50,7 @@ function mod:UpdateElement_HealthColor(frame)
 					r, g, b = mod.db.threat.badTransition.r, mod.db.threat.badTransition.g, mod.db.threat.badTransition.b
 				end
 				scale = 1
-			elseif status == 0 then
+			else
 				if E.Role == "Tank" then
 					r, g, b = mod.db.threat.badColor.r, mod.db.threat.badColor.g, mod.db.threat.badColor.b
 					scale = mod.db.threat.badScale
