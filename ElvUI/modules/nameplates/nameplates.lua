@@ -449,7 +449,7 @@ function mod:OnCreated(frame)
 	self:QueueObject(CastBarBorder)
 	self:QueueObject(CastBarShield)
 	self:QueueObject(Highlight)
-	self:QueueObject(CastBarIcon)
+	CastBarIcon:SetParent(E.HiddenFrame);
 	BossIcon:SetAlpha(0)
 	EliteIcon:SetAlpha(0)
 
