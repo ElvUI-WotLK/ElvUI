@@ -13,6 +13,8 @@ local UnitAura = UnitAura
 local UnitGUID = UnitGUID
 local GetSpellTexture = GetSpellTexture
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS
+local AURA_TYPE_BUFF = AURA_TYPE_BUFF
+local AURA_TYPE_DEBUFF = AURA_TYPE_DEBUFF
 
 local RaidIconBit = {
 	["STAR"] = 0x00100000,
@@ -63,7 +65,6 @@ local TimeColors = {
 }
 
 local AURA_UPDATE_INTERVAL = 0.1
-local AURA_TARGET_HOSTILE = 1
 
 local PolledHideIn
 do
@@ -360,6 +361,9 @@ function mod:UpdateElement_Auras(frame)
 		end
 	end
 
+	debuffCache = wipe(debuffCache)
+	buffCache = wipe(buffCache)
+
 	local TopLevel = frame.HealthBar
 	local TopOffset = ((self.db.units[frame.UnitType].showName and select(2, frame.Name:GetFont()) + 5) or 0)
 	if hasDebuffs then
@@ -419,10 +423,12 @@ function mod:UpdateElement_AurasByUnitID(unit)
 	end
 end
 
-function mod:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, sourceGUID, _, _, ...)
+function mod:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, sourceGUID, _, _, destGUID, destName, destFlags, ...)
+	if destGUID == UnitGUID("target") then return end
+	--if band(destFlags, COMBATLOG_OBJECT_REACTION_FRIENDLY) ~= 0 then then return
 	if not (event == "SPELL_AURA_APPLIED" or event == "SPELL_AURA_REFRESH" or event == "SPELL_AURA_APPLIED_DOSE" or event == "SPELL_AURA_REMOVED_DOSE" or event == "SPELL_AURA_BROKEN" or event == "SPELL_AURA_BROKEN_SPELL" or event == "SPELL_AURA_REMOVED") then return end
 
-	local destGUID, destName, destFlags, spellID, spellName, _, auraType, stackCount = ...
+	local spellID, spellName, _, auraType, stackCount = ...
 
 	if event == "SPELL_AURA_APPLIED" or event == "SPELL_AURA_REFRESH" then
 		local duration = GetSpellDuration(spellID)
@@ -437,7 +443,7 @@ function mod:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, sourceGUID, _, _, ...)
 	end
 
 	local name, raidIcon
-	if band(destFlags, COMBATLOG_OBJECT_CONTROL_PLAYER) > 0 and destName then
+	if band(destFlags, COMBATLOG_OBJECT_CONTROL_PLAYER) > 0 then
 		local rawName = strsplit("-", destName)
 		ByName[rawName] = destGUID
 		name = rawName
