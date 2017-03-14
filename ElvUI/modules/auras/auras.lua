@@ -3,6 +3,7 @@ local A = E:NewModule("Auras", "AceHook-3.0", "AceEvent-3.0");
 local LSM = LibStub("LibSharedMedia-3.0");
 
 local GetTime = GetTime;
+local _G = _G
 local select, unpack, pairs, ipairs, tostring = select, unpack, pairs, ipairs, tostring;
 local floor, min, max, huge = math.floor, math.min, math.max, math.huge;
 local format = string.format;
@@ -136,19 +137,19 @@ function A:CreateIcon(button)
 	button:SetScript("OnLeave", OnLeave);
 	button:SetScript("OnClick", OnClick);
 
-	local ButtonData = {
-		Icon = button.texture,
-		Flash = nil,
-		Cooldown = nil,
-		AutoCast = nil,
-		AutoCastable = nil,
-		HotKey = nil,
-		Count = false,
-		Name = nil,
-		Highlight = button.highlight,
-	};
-
 	if(self.LBFGroup and E.private.auras.lbf.enable) then
+		local ButtonData = {
+			Icon = button.texture,
+			Flash = nil,
+			Cooldown = nil,
+			AutoCast = nil,
+			AutoCastable = nil,
+			HotKey = nil,
+			Count = false,
+			Name = nil,
+			Highlight = button.highlight,
+		};
+
 		self.LBFGroup:AddButton(button, ButtonData);
 	else
 		button:SetTemplate("Default");
@@ -157,6 +158,8 @@ end
 
 local buttons = {};
 function A:ConfigureAuras(header, auraTable)
+	local headerName = header:GetName()
+
 	local db = self.db.debuffs;
 	if(header.filter == "HELPFUL") then
 		db = self.db.buffs;
@@ -191,7 +194,7 @@ function A:ConfigureAuras(header, auraTable)
 
 	wipe(buttons);
 	for i = 1, #auraTable do
-		local button = select(i, header:GetChildren());
+		local button = _G[headerName.."AuraButton"..i]
 		if(button) then
 			if(button:IsShown()) then button:Hide(); end
 		else
@@ -269,11 +272,11 @@ function A:ConfigureAuras(header, auraTable)
 		bottom = min(bottom, button:GetBottom() or huge);
 	end
 	local deadIndex = #(auraTable) + 1;
-	local button = select(deadIndex, header:GetChildren());
+	local button = _G[headerName.."AuraButton"..deadIndex]
 	while(button) do
 		if(button:IsShown()) then button:Hide(); end
 		deadIndex = deadIndex + 1;
-		button = select(deadIndex, header:GetChildren());
+		button = _G[headerName.."AuraButton"..deadIndex]
 	end
 
 	if(display >= 1) then
