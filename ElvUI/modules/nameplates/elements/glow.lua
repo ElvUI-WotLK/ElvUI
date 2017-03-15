@@ -12,7 +12,8 @@ function mod:UpdateElement_Glow(frame)
 		r, g, b = 1, 1, 1
 		shouldShow = true
 	else
-		local health, maxHealth = frame.HealthBar:GetValue(), select(2, frame.HealthBar:GetMinMaxValues())
+		local health = frame.oldHealthBar:GetValue()
+		local _, maxHealth = frame.oldHealthBar:GetMinMaxValues()
 		local perc = health / maxHealth
 		if perc <= self.db.lowHealthThreshold then
 			if perc <= self.db.lowHealthThreshold / 2 then
