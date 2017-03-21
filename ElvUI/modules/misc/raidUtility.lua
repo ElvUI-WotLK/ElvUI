@@ -85,6 +85,8 @@ function RU:ToggleRaidUtil(event)
 end
 
 function RU:Initialize()
+	if not E.private.general.raidUtility then return end
+
 	local RaidUtilityPanel = CreateFrame("Frame", "RaidUtilityPanel", E.UIParent, "SecureHandlerClickTemplate");
 	RaidUtilityPanel:SetTemplate("Transparent");
 	RaidUtilityPanel:Width(230);
