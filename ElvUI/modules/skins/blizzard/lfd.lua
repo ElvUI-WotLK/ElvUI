@@ -33,7 +33,7 @@ local function LoadSkin()
 
 	S:HandleDropDownBox(LFDQueueFrameTypeDropDown);
 
-	for i=1, LFD_MAX_REWARDS do
+	for i = 1, LFD_MAX_REWARDS do
 		local Item = _G["LFDQueueFrameRandomScrollFrameChildFrameItem"..i];
 		local ItemIconTexture = _G["LFDQueueFrameRandomScrollFrameChildFrameItem"..i.."IconTexture"];
 		local ItemCount = _G["LFDQueueFrameRandomScrollFrameChildFrameItem"..i.."Count"];
@@ -48,6 +48,12 @@ local function LoadSkin()
 			ItemCount:SetDrawLayer("OVERLAY");
 		end
 	end
+
+	hooksecurefunc("LFDQueueFrameRandomCooldownFrame_Update", function()
+		if LFDQueueFrameCooldownFrame:IsShown() then
+			LFDQueueFrameCooldownFrame:SetFrameLevel(LFDQueueFrameCooldownFrame:GetParent():GetFrameLevel() + 5)
+		end
+	end)
 
 	LFDQueueFrameSpecificListScrollFrame:StripTextures();
 	S:HandleScrollBar(LFDQueueFrameSpecificListScrollFrameScrollBar);
@@ -82,9 +88,9 @@ local function LoadSkin()
 	S:HandleButton(LFDQueueFramePartyBackfillBackfillButton);
 	S:HandleButton(LFDQueueFramePartyBackfillNoBackfillButton);
 
-	LFDSearchStatus:SetTemplate("Transparent"); -- LFDSearchStatus
+	LFDSearchStatus:SetTemplate("Transparent");
 
-	LFDRoleCheckPopup:SetTemplate("Transparent"); -- LFDRoleCheckPopup
+	LFDRoleCheckPopup:SetTemplate("Transparent");
 
 	S:HandleCheckBox(LFDRoleCheckPopupRoleButtonTank.checkButton);
 	S:HandleCheckBox(LFDRoleCheckPopupRoleButtonHealer.checkButton);
@@ -93,14 +99,14 @@ local function LoadSkin()
 	S:HandleButton(LFDRoleCheckPopupAcceptButton);
 	S:HandleButton(LFDRoleCheckPopupDeclineButton);
 
-	LFDDungeonReadyDialog:SetTemplate("Transparent"); -- LFDDungeonReadyDialog
+	LFDDungeonReadyDialog:SetTemplate("Transparent");
 
 	S:HandleCloseButton(LFDDungeonReadyDialogCloseButton, nil, "-");
 
 	S:HandleButton(LFDDungeonReadyDialogEnterDungeonButton);
 	S:HandleButton(LFDDungeonReadyDialogLeaveQueueButton);
 
-	LFDDungeonReadyStatus:SetTemplate("Transparent"); -- LFDDungeonReadyStatus
+	LFDDungeonReadyStatus:SetTemplate("Transparent");
 
 	S:HandleCloseButton(LFDDungeonReadyStatusCloseButton, nil, "-");
 end
