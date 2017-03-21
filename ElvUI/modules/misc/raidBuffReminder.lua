@@ -5,85 +5,87 @@ local LSM = LibStub("LibSharedMedia-3.0");
 E.ReminderBuffs = RB;
 
 RB.Spell1Buffs = {
-	67016, --"Flask of the North-SP"
-	67017, --"Flask of the North-AP"
-	67018, --"Flask of the North-STR"
-	53758, --"Flask of Stoneblood"
-	53755, --"Flask of the Frost Wyrm",
-	54212, --"Flask of Pure Mojo",
-	53760, --"Flask of Endless Rage",
-	53752, --"Lesser Flask of Toughness" (50 Resilience),
-	17627, --"Flask of Distilled Wisdom",
+	67016, -- Flask of the North (SP)
+	67017, -- Flask of the North (AP)
+	67018, -- Flask of the North (STR)
+	53755, -- Flask of the Frost Wyrm
+	53758, -- Flask of Stoneblood
+	53760, -- Flask of Endless Rage
+	54212, -- Flask of Pure Mojo
+	53752, -- Lesser Flask of Toughness (50 Resilience)
+	17627, -- Flask of Distilled Wisdom
 
-	33721, --"Spellpower Elixir",
-	53746, --"Wrath Elixir",
-	28497, --"Elixir of Mighty Agility",
-	53748, --"Elixir of Mighty Strength",
-	60346, --"Elixir of Lightning Speed",
-	60344, --"Elixir of Expertise",
-	60341, --"Elixir of Deadly Strikes",
-	60345, --"Elixir of Armor Piercing",
-	60340, --"Elixir of Accuracy",
-	53749, --"Guru's Elixir",
+	33721, -- Spellpower Elixir
+	53746, -- Wrath Elixir
+	28497, -- Elixir of Mighty Agility
+	53748, -- Elixir of Mighty Strength
+	60346, -- Elixir of Lightning Speed
+	60344, -- Elixir of Expertise
+	60341, -- Elixir of Deadly Strikes
+	60345, -- Elixir of Armor Piercing
+	60340, -- Elixir of Accuracy
+	53749, -- Guru's Elixir
 
-	60343, --"Elixir of Mighty Defense",
-	53751, --"Elixir of Mighty Fortitude",
-	53764, --"Elixir of Mighty Mageblood",
-	60347, --"Elixir of Mighty Thoughts",
-	53763, --"Elixir of Protection",
-	53747, --"Elixir of Spirit",
+	60343, -- Elixir of Mighty Defense
+	53751, -- Elixir of Mighty Fortitude
+	53764, -- Elixir of Mighty Mageblood
+	60347, -- Elixir of Mighty Thoughts
+	53763, -- Elixir of Protection
+	53747, -- Elixir of Spirit
 };
 
 RB.Spell2Buffs = {
-	57325, -- 80 Силы атаки;
-	57327, -- 46 Силы заклинаний;
-	57329, -- 40 Критического удара;
-	57332, -- 40 Скорости;
-	57334, -- 20 Восполнение маны;
-	57356, -- 40 Мастерства;
-	57358, -- 40 Пробивание брони;
-	57360, -- 40 Меткости;
-	57363, -- Выслеживание гуманойдов;
-	57365, -- 40 Духа;
-	57367, -- 40 Ловкости;
-	57371, -- 40 Силы;
-	57373, -- Выслеживание животных;
-	57399, -- 80 Силы, 46 Силы заклинаний (Рыбный пир);
-	59230, -- 40 Рейтинг уклонений;
-	65247, -- 20 Силы;
+	57325, -- 80 AP
+	57327, -- 46 SP
+	57329, -- 40 Critical Strike Rating
+	57332, -- 40 Haste Rating
+	57334, -- 20 MP5
+	57356, -- 40 Expertise Rating
+	57358, -- 40 ARP
+	57360, -- 40 Hit Rating
+	57363, -- Tracking Humanoids
+	57365, -- 40 Spirit
+	57367, -- 40 AGI
+	57371, -- 40 STR
+	57373, -- Tracking Beasts
+	57399, -- 80 AP, 46 SP
+	59230, -- 40 Dodge Rating
+	65247, -- 20 STR
 };
 
 RB.Spell3Buffs = {
-	48469, -- Знак дикой природы;
-	72588, -- Дар дикой природы;
+	72588, -- Gift of the Wild
+	48469, -- Mark of the Wild
 };
 
 RB.Spell4Buffs = {
-	20217, -- Благословение королей;
-	25898, -- Великое благословение королей;
+	25898, -- Greater Blessing of Kings
+	20217, -- Blessing of Kings
+	72586, -- Blessing of Forgotten Kings
 };
 
 RB.CasterSpell5Buffs = {
-	42995, -- Чародейский интелект;
-	43002, -- Чародейская гениальность;
-	61316, -- Чародейская гениальность Даларана;
+	61316, -- Dalaran Brilliance
+	43002, -- Arcane Brilliance
+	42995, -- Arcane Intellect
 };
 
 RB.MeleeSpell5Buffs = {
-	48161, -- Слово силы: Стойкость;
-	48162, -- Молитва стойкости;
+	48162, -- Prayer of Fortitude
+	48161, -- Power Word: Fortitude
+	72590, -- Fortitude
 };
 
 RB.CasterSpell6Buffs = {
-	48936, -- Благословение мудрости;
-	48938, -- Великое благословение мудрости;
-	58777, -- Источник маны;
+	48938, -- Greater Blessing of Wisdom
+	48936, -- Blessing of Wisdom
+	58777, -- Mana Spring
 };
 
 RB.MeleeSpell6Buffs = {
-	48932, -- Благословение могущества;
-	48934, -- Великое благословение могущества;
-	47436, -- Боевой крик;
+	48934, -- Greater Blessing of Might
+	48932, -- Blessing of Might
+	47436, -- Battle Shout
 };
 
 function RB:CheckFilterForActiveBuff(filter)
