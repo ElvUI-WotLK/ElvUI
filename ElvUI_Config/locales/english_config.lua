@@ -381,6 +381,7 @@ L["Display emotion icons in chat."] = true;
 L["Emotion Icons"] = true;
 L["Enable/Disable the loot frame."] = true;
 L["Enable/Disable the loot roll frame."] = true;
+L["Enables the ElvUI Raid Control panel."] = true;
 L["Enhanced PVP Messages"] = true;
 L["General"] = true;
 L["Height of the watch tracker. Increase size to be able to see more objectives."] = true;

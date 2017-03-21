@@ -161,8 +161,16 @@ E.Options.args.general = {
 					name = L["Enhanced PVP Messages"],
 					desc = L["Display battleground messages in the middle of the screen."],
 				},
-				autoScale = {
+				raidUtility = {
 					order = 17,
+					type = "toggle",
+					name = RAID_CONTROL,
+					desc = L["Enables the ElvUI Raid Control panel."],
+					get = function(info) return E.private.general.raidUtility end,
+					set = function(info, value) E.private.general.raidUtility = value; E:StaticPopup_Show("PRIVATE_RL") end
+				},
+				autoScale = {
+					order = 18,
 					name = L["Auto Scale"],
 					desc = L["Automatically scale the User Interface based on your screen resolution"],
 					type = "toggle",
@@ -170,7 +178,7 @@ E.Options.args.general = {
 					set = function(info, value) E.global.general[ info[#info] ] = value; E:StaticPopup_Show("GLOBAL_RL") end
 				},
 				minUiScale = {
-					order = 18,
+					order = 19,
 					type = "range",
 					name = L["Lowest Allowed UI Scale"],
 					min = 0.32, max = 0.64, step = 0.01,
@@ -178,7 +186,7 @@ E.Options.args.general = {
 					set = function(info, value) E.global.general.minUiScale = value; E:StaticPopup_Show("GLOBAL_RL"); end
 				},
 				numberPrefixStyle = {
-					order = 22,
+					order = 20,
 					type = "select",
 					name = L["Number Prefix"],
 					get = function(info) return E.db.general.numberPrefixStyle; end,

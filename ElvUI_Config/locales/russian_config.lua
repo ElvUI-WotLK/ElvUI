@@ -392,6 +392,7 @@ L["Display emotion icons in chat."] = "Показывать смайлы в ча
 L["Emotion Icons"] = "Иконки эмоций"
 L["Enable/Disable the loot frame."] = "Включить/выключить окно добычи ElvUI."
 L["Enable/Disable the loot roll frame."] = "Включить/выключить фрейм распределения добычи ElvUI."
+L["Enables the ElvUI Raid Control panel."] = true;
 L["Enhanced PVP Messages"] = "Улущенные PvP сообщения"
 L["General"] = "Общие"
 L["Height of the watch tracker. Increase size to be able to see more objectives."] = "Высота списка заданий. Увеличение размера позволить видеть большее количество."
