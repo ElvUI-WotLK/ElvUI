@@ -13,6 +13,7 @@ local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
 
 local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.friends ~= true then return end
+
 	-- Friends Frame
 	FriendsFrame:StripTextures(true);
 	FriendsFrame:CreateBackdrop("Transparent");
@@ -31,7 +32,8 @@ local function LoadSkin()
 		S:HandleTab(_G["FriendsFrameTab"..i]);
 	end
 
-	for i = 1, 2 do -- Friends List Frame
+	-- Friends List Frame
+	for i = 1, 2 do
 		local Tab = _G["FriendsTabHeaderTab"..i];
 		Tab:StripTextures();
 		Tab:CreateBackdrop("Default", true);
@@ -47,8 +49,10 @@ local function LoadSkin()
 	S:HandleButton(FriendsFrameAddFriendButton, true);
 	S:HandleButton(FriendsFrameSendMessageButton, true);
 
-	S:HandleButton(FriendsFrameIgnorePlayerButton, true); -- Ignore List Frame
+	-- Ignore List Frame
+	S:HandleButton(FriendsFrameIgnorePlayerButton, true);
 	S:HandleButton(FriendsFrameUnsquelchButton, true);
+
 	-- Who Frame
 	WhoFrameColumnHeader3:ClearAllPoints();
 	WhoFrameColumnHeader3:SetPoint("TOPLEFT", 20, -70);
@@ -130,6 +134,7 @@ local function LoadSkin()
 			buttonText:SetTextColor(1.0, 1.0, 1.0);
 		end
 	end);
+
 	-- Guild Frame
 	GuildFrameColumnHeader3:ClearAllPoints();
 	GuildFrameColumnHeader3:SetPoint("TOPLEFT", 20, -70);
@@ -223,7 +228,8 @@ local function LoadSkin()
 	S:HandleButton(GuildFrameAddMemberButton);
 	S:HandleButton(GuildFrameControlButton);
 
-	GuildMemberDetailFrame:StripTextures(); -- Member Detail Frame
+	-- Member Detail Frame
+	GuildMemberDetailFrame:StripTextures();
 	GuildMemberDetailFrame:CreateBackdrop("Transparent");
 
 	S:HandleCloseButton(GuildMemberDetailCloseButton);
@@ -240,7 +246,8 @@ local function LoadSkin()
 	GuildMemberNoteBackground:SetTemplate("Default");
 	GuildMemberOfficerNoteBackground:SetTemplate("Default");
 
-	GuildInfoFrame:StripTextures(); -- Info Frame
+	-- Info Frame
+	GuildInfoFrame:StripTextures();
 	GuildInfoFrame:CreateBackdrop("Transparent");
 	GuildInfoFrame.backdrop:Point("TOPLEFT", 3, -6);
 	GuildInfoFrame.backdrop:Point("BOTTOMRIGHT", -2, 3);
@@ -257,24 +264,52 @@ local function LoadSkin()
 	S:HandleButton(GuildInfoGuildEventButton);
 	GuildInfoGuildEventButton:SetPoint("RIGHT", GuildInfoSaveButton, "LEFT", -28, 0);
 
-	GuildEventLogFrame:StripTextures(); -- GuildEventLog Frame
+	-- GuildEventLog Frame
+	GuildEventLogFrame:StripTextures();
 	GuildEventLogFrame:CreateBackdrop("Transparent");
-	GuildEventLogFrame.backdrop:Point("TOPLEFT", 5, -6);
-	GuildEventLogFrame.backdrop:Point("BOTTOMRIGHT", -2, 6);
+	GuildEventLogFrame.backdrop:Point("TOPLEFT", 3, -6);
+	GuildEventLogFrame.backdrop:Point("BOTTOMRIGHT", -1, 5);
 
 	GuildEventFrame:SetTemplate("Default");
 
 	S:HandleScrollBar(GuildEventLogScrollFrameScrollBar);
 	S:HandleCloseButton(GuildEventLogCloseButton);
+
+	GuildEventLogCancelButton:Point("BOTTOMRIGHT", GuildEventLogFrame, "BOTTOMRIGHT", -9, 9)
 	S:HandleButton(GuildEventLogCancelButton);
 
-	GuildControlPopupFrame:StripTextures(); -- Control Frame
+	-- Control Frame
+	GuildControlPopupFrame:StripTextures();
 	GuildControlPopupFrame:CreateBackdrop("Transparent");
-	GuildControlPopupFrame.backdrop:Point("TOPLEFT", 3, -5);
+	GuildControlPopupFrame.backdrop:Point("TOPLEFT", 3, -6);
 	GuildControlPopupFrame.backdrop:Point("BOTTOMRIGHT", -27, 27);
 
 	S:HandleDropDownBox(GuildControlPopupFrameDropDown, 185);
 	GuildControlPopupFrameDropDownButton:Size(16, 16);
+
+	local function SkinPlusMinus(f, minus)
+		f:SetNormalTexture("")
+		f.SetNormalTexture = E.noop
+		f:SetPushedTexture("")
+		f.SetPushedTexture = E.noop
+		f:SetHighlightTexture("")
+		f.SetHighlightTexture = E.noop
+		f:SetDisabledTexture("")
+		f.SetDisabledTexture = E.noop
+
+		f.Text = f:CreateFontString(nil, "OVERLAY")
+		f.Text:FontTemplate(nil, 22)
+		f.Text:Point("LEFT", 5, 0)
+		if minus then
+			f.Text:SetText("-")
+		else
+			f.Text:SetText("+")
+		end
+	end
+
+	GuildControlPopupFrameAddRankButton:Point("LEFT", GuildControlPopupFrameDropDown, "RIGHT", -8, 3)
+	SkinPlusMinus(GuildControlPopupFrameAddRankButton)
+	SkinPlusMinus(GuildControlPopupFrameRemoveRankButton, true)
 
 	S:HandleEditBox(GuildControlPopupFrameEditBox);
 	GuildControlPopupFrameEditBox.backdrop:Point("TOPLEFT", 0, -5);
@@ -309,8 +344,9 @@ local function LoadSkin()
 	GuildControlWithdrawItemsEditBox.backdrop:Point("TOPLEFT", 0, -5);
 	GuildControlWithdrawItemsEditBox.backdrop:Point("BOTTOMRIGHT", 0, 5);
 
-	S:HandleCheckBox(GuildControlPopupAcceptButton);
-	S:HandleCheckBox(GuildControlPopupFrameCancelButton);
+	S:HandleButton(GuildControlPopupAcceptButton);
+	S:HandleButton(GuildControlPopupFrameCancelButton);
+
 	-- Channel Frame
 	ChannelFrameVerticalBar:Kill();
 
@@ -342,12 +378,14 @@ local function LoadSkin()
 
 	S:HandleButton(ChannelFrameDaughterFrameCancelButton);
 	S:HandleButton(ChannelFrameDaughterFrameOkayButton);
+
 	-- Raid Frame
 	S:HandleButton(RaidFrameConvertToRaidButton);
 	S:HandleButton(RaidFrameRaidInfoButton);
 	S:HandleButton(RaidFrameNotInRaidRaidBrowserButton);
 
-	RaidInfoFrame:StripTextures(true); -- Raid Info Frame
+	-- Raid Info Frame
+	RaidInfoFrame:StripTextures(true);
 	RaidInfoFrame:SetTemplate("Transparent");
 
 	RaidInfoInstanceLabel:StripTextures();
