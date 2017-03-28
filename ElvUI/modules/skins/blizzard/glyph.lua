@@ -32,23 +32,23 @@ local function LoadSkin()
 		PlayerTalentFrameScrollFrame:Hide();
 		PlayerTalentFrameStatusFrame:Hide();
 		PlayerTalentFrameActivateButton:Hide();
-
-		local preview = GetCVarBool("previewTalents");
-		if(preview) then
-			PlayerTalentFramePreviewBar:Hide();
-		end
 	end);
 
 	GlyphFrame:SetScript("OnHide", function()
 		PlayerTalentFrameTitleText:Show();
 		PlayerTalentFramePointsBar:Show();
 		PlayerTalentFrameScrollFrame:Show();
-
-		local preview = GetCVarBool("previewTalents");
-		if(preview) then
-			PlayerTalentFramePreviewBar:Show();
-		end
 	end);
+
+	hooksecurefunc(PlayerTalentFrame, "updateFunction", function()
+		if GlyphFrame:IsShown() then
+			PlayerTalentFramePreviewBar:Hide()
+		else
+			if GetCVarBool("previewTalents") then
+				PlayerTalentFramePreviewBar:Show()
+			end
+		end
+	end)
 end
 
 S:AddCallbackForAddon("Blizzard_GlyphUI", "Glyph", LoadSkin);

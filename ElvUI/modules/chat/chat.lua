@@ -98,7 +98,6 @@ local tabTexs = {
 	"Highlight"
 }
 
-
 local smileyPack = {
 	["Angry"] = [[Interface\AddOns\ElvUI\media\textures\smileys\angry.blp]],
 	["Grin"] = [[Interface\AddOns\ElvUI\media\textures\smileys\grin.blp]],
@@ -259,7 +258,6 @@ function CH:GetSmileyReplacementText(msg)
 
 	return outstr;
 end
-
 
 function CH:StyleChat(frame)
 	local name = frame:GetName()
@@ -975,7 +973,6 @@ function CH:ChatFrame_MessageEventHandler(event, ...)
 			end
 		end]]
 
-
 		if ( chatGroup == "WHISPER" or chatGroup == "BN_WHISPER" ) then
 			if ( self.privateMessageList and not self.privateMessageList[strlower(arg2)] ) then
 				return true;
@@ -1626,7 +1623,6 @@ function CH:Initialize()
 		return
 	end
 
-
 	if not ElvCharacterDB.ChatEditHistory then
 		ElvCharacterDB.ChatEditHistory = {};
 	end
@@ -1731,9 +1727,9 @@ function CH:Initialize()
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_BN_WHISPER_INFORM", CH.FindURL)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_BN_INLINE_TOAST_BROADCAST", CH.FindURL)
 
-
 	GeneralDockManagerOverflowButton:ClearAllPoints()
 	GeneralDockManagerOverflowButton:Point("BOTTOMRIGHT", LeftChatTab, "BOTTOMRIGHT", -2, 2)
+	GeneralDockManagerOverflowButton:SetTemplate("Default")
 	GeneralDockManagerOverflowButtonList:SetTemplate("Transparent")
 	hooksecurefunc(GeneralDockManagerScrollFrame, "SetPoint", function(self, point, anchor, attachTo, x, y)
 		if anchor == GeneralDockManagerOverflowButton and x == 0 and y == 0 then
@@ -1779,7 +1775,6 @@ function CH:Initialize()
 		end
 	end)
 	frame:SetFrameStrata("DIALOG")
-
 
 	local scrollArea = CreateFrame("ScrollFrame", "CopyChatScrollFrame", frame, "UIPanelScrollFrameTemplate")
 	scrollArea:Point("TOPLEFT", frame, "TOPLEFT", 8, -30)
