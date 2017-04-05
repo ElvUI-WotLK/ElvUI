@@ -375,13 +375,20 @@ function D:Decode(dataString)
 	elseif(stringType == "Table") then
 		local profileDataAsString;
 		profileDataAsString, profileInfo = E:StringSplitMultiDelim(dataString, "}::");
-		profileDataAsString = format("%s%s", profileDataAsString, "}");
-		profileType, profileKey = E:StringSplitMultiDelim(profileInfo, "::");
+
+		if not profileInfo then
+			E:Print("Error extracting profile info. Invalid import string!")
+			return
+		end
 
 		if(not profileDataAsString) then
 			E:Print("Error extracting profile data. Invalid import string!");
 			return;
 		end
+
+		profileDataAsString = format("%s%s", profileDataAsString, "}");
+		profileType, profileKey = E:StringSplitMultiDelim(profileInfo, "::");
+
 
 		local profileToTable = loadstring(format("%s %s", "return", profileDataAsString));
 		if(profileToTable) then
