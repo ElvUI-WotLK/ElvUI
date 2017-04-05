@@ -61,7 +61,7 @@ L["yells"] = true;
 --DataTexts
 L["(Hold Shift) Memory Usage"] = true;
 L["Avoidance Breakdown"] = true;
-L["Character: "] = true
+L["Character: "] = true;
 L["Chest"] = true;
 L["Combat Time"] = true;
 L["copperabbrev"] = "|cffeda55fc|r" --Also used in Bags
@@ -327,7 +327,7 @@ L["Targeted By:"] = true;
 L["A raid marker feature is available by pressing Escape -> Keybinds scroll to the bottom under ElvUI and setting a keybind for the raid marker."] = true;
 L["ElvUI has a dual spec feature which allows you to load different profiles based on your current spec on the fly. You can enable this from the profiles tab."] = true;
 L["For technical support visit us at https://github.com/ElvUI-WotLK/ElvUI"] = true;
-L["If you accidently remove a chat frame you can always go the in-game configuration menu, press install, go to the chat portion and reset them."] = true
+L["If you accidently remove a chat frame you can always go the in-game configuration menu, press install, go to the chat portion and reset them."] = true;
 L["If you are experiencing issues with ElvUI try disabling all your addons except ElvUI, remember ElvUI is a full UI replacement addon, you cannot run two addons that do the same thing."] = true;
 L["The focus unit can be set by typing /focus when you are targeting the unit you want to focus. It is recommended you make a macro to do this."] = true;
 L["To move abilities on the actionbars by default hold shift + drag. You can change the modifier key from the actionbar options menu."] = true;

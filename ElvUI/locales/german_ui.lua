@@ -32,7 +32,7 @@ L["Trigger"] = "Auslöser"
 --Bags
 L["Bank"] = true;
 L["Hold Control + Right Click:"] = "Halte Steuerung + Rechtsklick:"
-L["Hold Shift + Drag:"] = true;
+L["Hold Shift + Drag:"] = "Halte Shift + Ziehen:"
 L["Purchase Bags"] = "Taschen kaufen"
 L["Reset Position"] = "Position zurücksetzen"
 L["Sort Bags"] = true;
@@ -183,11 +183,11 @@ L["Bars"] = "Leisten" --Also used in UnitFrames
 L["Calendar"] = "Kalender"
 L["Can't Roll"] = "Es kann nicht gewürfelt werden."
 L["Disband Group"] = "Gruppe auflösen"
-L["Empty Slot"] = true;
+L["Empty Slot"] = "Leerer Platz"
 L["Enable"] = "Eingeschaltet" --Doesn't fit a section since it's used a lot of places
 L["Experience"] = "Erfahrung"
 L["Farm Mode"] = true;
-L["Fishy Loot"] = "Faule Beute";
+L["Fishy Loot"] = "Faule Beute"
 L["Left Click:"] = "Linksklick:" --layout\layout.lua
 L["Raid Menu"] = "Schlachtzugsmenü"
 L["Remaining:"] = "Verbleibend:"
@@ -339,6 +339,6 @@ L["You can toggle the microbar by using your middle mouse button on the minimap 
 L["You can use the /resetui command to reset all of your movers. You can also use the command to reset a specific mover, /resetui <mover name>.\nExample: /resetui Player Frame"] = "Du kannst durch benutzen von /resetui alle Ankerpunkte zurücksetzen. Du kannst das Kommando auch benutzen um spezielle Anker zurückzusetzen, /resetui <Anker Name>.\nBeispiel: /resetui Player Frame"
 
 --UnitFrames
-L["Dead"] = true;
+L["Dead"] = "Tot"
 L["Ghost"] = "Geist"
 L["Offline"] = "Offline"

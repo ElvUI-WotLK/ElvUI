@@ -32,10 +32,10 @@ L["Trigger"] = "Триггер"
 --Bags
 L["Bank"] = "Банк"
 L["Hold Control + Right Click:"] = "Зажать Control + ПКМ:"
-L["Hold Shift + Drag:"] = "Зажать shift и перетаскивать:";
+L["Hold Shift + Drag:"] = "Зажать shift и перетаскивать:"
 L["Purchase Bags"] = "Приобрести слот"
 L["Reset Position"] = "Сбросить позицию"
-L["Sort Bags"] = "Сортировать";
+L["Sort Bags"] = "Сортировать"
 L["Temporary Move"] = "Временное перемещение"
 L["Toggle Bags"] = "Показать сумки"
 L["Toggle Key"] = "Показать ключи"
@@ -43,8 +43,8 @@ L["Vendor Grays"] = "Продавать серые предметы"
 
 --Chat
 L["AFK"] = "АФК" --Also used in datatexts and tooltip
-L["BG"] = "ПБ";
-L["BGL"] = "Лидер ПБ";
+L["BG"] = "ПБ"
+L["BGL"] = "Лидер ПБ"
 L["DND"] = "ДНД" --Also used in datatexts and tooltip
 L["G"] = "Г"
 L["Invalid Target"] = "Неверная цель"
@@ -63,39 +63,39 @@ L["(Hold Shift) Memory Usage"] = "(Зажать Shift) Использовани�
 L["Avoidance Breakdown"] = "Распределение защиты"
 L["Character: "] = "Персонаж: "
 L["Chest"] = "Грудь"
-L["Combat Time"] = "В бою";
+L["Combat Time"] = "В бою"
 L["copperabbrev"] = "|cffeda55fм|r" --Also used in Bags
-L["DPS"] = "УВС"
 L["Deficit:"] = "Убыток:"
+L["DPS"] = "УВС"
 L["Earned:"] = "Заработано"
 L["Friends List"] = "Список друзей"
 L["Friends"] = "Друзья" --Also in Skins
 L["goldabbrev"] = "|cffffd700з|r" --Also used in Bags
-L["HP"] = "+ Исцел."
-L["HPS"] = "ИВС"
 L["Hit"] = "Метк."
 L["Hold Shift + Right Click:"] = "Shift + ПКМ:"
 L["Home Latency:"] = "Локальная задержка: "
+L["HP"] = "+ Исцел."
+L["HPS"] = "ИВС"
 L["lvl"] = "ур."
-L["Miss Chance"] = "Вероятность промаха";
+L["Miss Chance"] = "Вероятность промаха"
 L["Mitigation By Level: "] = "Снижение на уровне: "
 L["No Guild"] = "Нет гильдии"
 L["Profit:"] = "Прибыль:"
-L["Reload UI"] = "Перезагрузка";
+L["Reload UI"] = "Перезагрузка"
 L["Reset Data: Hold Shift + Right Click"] = "Сбросить данные: Shift + ПКМ"
-L["Right Click: Reset CPU Usage"] = "ПКМ: Сбросить использование процессора";
-L["silverabbrev"] = "|cffc7c7cfс|r" --Also used in Bags
-L["SP"] = "+ Закл."
+L["Right Click: Reset CPU Usage"] = "ПКМ: Сбросить использование процессора"
 L["Saved Raid(s)"] = "Сохраненные рейды"
 L["Server: "] = "На сервере:"
 L["Session:"] = "За сеанс:"
+L["silverabbrev"] = "|cffc7c7cfс|r" --Also used in Bags
+L["SP"] = "+ Закл."
 L["Spent:"] = "Потрачено:"
 L["Stats For:"] = "Статистика для:"
 L["Total CPU:"] = "Использование процессора:"
 L["Total Memory:"] = "Всего памяти:"
 L["Total: "] = "Всего: "
 L["Unhittable:"] = "Полная защита от ударов"
-L["Wintergrasp"] = "Озеро Ледяных Оков";
+L["Wintergrasp"] = "Озеро Ледяных Оков"
 
 --DebugTools
 L["%s: %s tried to call the protected function '%s'."] = "%s: %s tried to call the protected function '%s'."
@@ -116,7 +116,7 @@ L["Your profile was successfully recieved by the player."] = "Ваш профи�
 --Install
 L["Aura Bars & Icons"] = "Полосы аур и иконки"
 L["Auras Set"] = "Ауры установлены"
-L["Auras"] = "Ауры";
+L["Auras"] = "Ауры"
 L["Caster DPS"] = "Заклинатель"
 L["Chat Set"] = "Чат настроен"
 L["Chat"] = "Чат"
@@ -183,10 +183,10 @@ L["Bars"] = "Полосы" --Also used in UnitFrames
 L["Calendar"] = "Календарь"
 L["Can't Roll"] = "Не могу бросить кости"
 L["Disband Group"] = "Распустить группу"
-L["Empty Slot"] = "Пусто";
+L["Empty Slot"] = "Пустой слот"
 L["Enable"] = "Включить" --Doesn't fit a section since it's used a lot of places
 L["Experience"] = "Опыт"
-L["Farm Mode"] = "Режим фарма";
+L["Farm Mode"] = "Режим фарма"
 L["Fishy Loot"] = "Улов"
 L["Left Click:"] = "ЛКМ:" --layout\layout.lua
 L["Raid Menu"] = "Рейдовое меню"
@@ -247,10 +247,10 @@ L["TargetTarget Frame"] = "Цель цели" --Also used in UnitFrames
 L["TargetTargetTarget Frame"] = "Цель цели цели"
 L["Time Manager Frame"] = true;
 L["Tooltip"] = "Подсказка"
-L["Totems"] = "Тотемы";
+L["Totems"] = "Тотемы"
 L["Vehicle Seat Frame"] = "Техника"
-L["Watch Frame"] = "Задания";
-L["Weapons"] = "Оружие";
+L["Watch Frame"] = "Задания"
+L["Weapons"] = "Оружие"
 L["DESC_MOVERCONFIG"] = [=[Блокировка отключена. Передвиньте фреймы и нажмите 'Закрепить', когда закончите.
 
 Options:
@@ -287,7 +287,7 @@ L["|cFFE30000Lua error recieved. You can view the error message when you exit co
 
 --Static Popups
 L["A setting you have changed will change an option for this character only. This setting that you have changed will be uneffected by changing user profiles. Changing this setting requires that you reload your User Interface."] = "Настройка, которую Вы только что изменили, будет влиять только на этого персонажа. Она не будет изменяться при смене профиля. Также это изменение требует перезагрузки интерфейса для вступления в силу."
-L["Are you sure you want to apply this font to all ElvUI elements?"] = true;
+L["Are you sure you want to apply this font to all ElvUI elements?"] = "Вы уверены, что хоттите применить этот шрифт ко всем элементам ElvUI?"
 L["Are you sure you want to delete all your gray items?"] = "Вы уверены, что хотите удалить все предметы серого качества?"
 L["Are you sure you want to disband the group?"] = "Вы уверены, что хотите распустить группу?"
 L["Are you sure you want to reset all the settings on this profile?"] = "Вы уверены, что хотите сбросить все настройки для этого профиля?"
@@ -339,6 +339,6 @@ L["You can toggle the microbar by using your middle mouse button on the minimap 
 L["You can use the /resetui command to reset all of your movers. You can also use the command to reset a specific mover, /resetui <mover name>.\nExample: /resetui Player Frame"] = "Вы можете использовать команду /resetui чтобы сбросить положения всех фиксаторов. Вы также можете использовать команду /resetui <имя фиксатора> для сброса определенного фиксатора.\nПример: /resetui Player Frame"
 
 --UnitFrames
-L["Dead"] = "Труп";
+L["Dead"] = "Труп"
 L["Ghost"] = "Призрак"
 L["Offline"] = "Не в сети"
