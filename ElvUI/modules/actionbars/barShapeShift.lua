@@ -46,12 +46,12 @@ function AB:StyleShapeShift()
 		if i <= numForms then
 			texture, name, isActive, isCastable = GetShapeshiftFormInfo(i);
 
-			if not texture then
-				texture = "Interface\\Icons\\Spell_Nature_WispSplode"
+			if self.db.barShapeShift.style == "darkenInactive" then
+				_, _, texture = GetSpellInfo(name)
 			end
 
-			if (type(texture) == "string" and (lower(texture) == "interface\\icons\\spell_nature_wispsplode" or lower(texture) == "interface\\icons\\ability_rogue_envelopingshadows")) and self.db.barShapeShift.style == "darkenInactive" then
-				_, _, texture = GetSpellInfo(name)
+			if not texture then
+				texture = "Interface\\Icons\\Spell_Nature_WispSplode"
 			end
 
 			icon:SetTexture(texture);
