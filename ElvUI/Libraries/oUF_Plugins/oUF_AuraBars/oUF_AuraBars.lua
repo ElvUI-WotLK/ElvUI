@@ -222,7 +222,7 @@ local function Update(self, event, unit)
 		for index = 1, auraBars.maxBars do
 			local spellID = 47540
 			local name, rank, icon = GetSpellInfo(spellID)
-			local count, debuffType, duration, expirationTime, unitCaster, isStealable, shouldConsolidate, canApplyAura, isBossDebuff = 5, "Magic", 0, 0, "player", nil, nil, nil, nil
+			local count, debuffType, duration, expirationTime, unitCaster, isStealable, shouldConsolidate = 5, "Magic", 0, 0, "player", nil, nil
 			lastAuraIndex = lastAuraIndex + 1
 			auras[lastAuraIndex] = {}
 			auras[lastAuraIndex].spellID = spellID
