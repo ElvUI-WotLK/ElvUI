@@ -1287,7 +1287,7 @@ function B:OpenBank()
 	self:Layout(true)
 	self.BankFrame:Show();
 	self.BankFrame:UpdateAllSlots();
-	self.BagFrame:Show();
+	self:OpenBags()
 	self:UpdateTokens()
 end
 
