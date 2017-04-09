@@ -79,6 +79,7 @@ local auraSortMethodValues = {
 };
 
 local CUSTOMTEXT_CONFIGS = {};
+local filters;
 
 local function GetOptionsTable_InformationPanel(updateFunc, groupName, numUnits)
 	local config = {
@@ -652,7 +653,7 @@ local function GetOptionsTable_Auras(friendlyUnitOnly, auraType, isGroupFrame, u
 			desc = L["Select an additional filter to use. If the selected filter is a whitelist and no other filters are being used (with the exception of Block Non-Personal Auras) then it will block anything not on the whitelist, otherwise it will simply add auras on the whitelist in addition to any other filter settings."],
 			type = "select",
 			values = function()
-				local filters = {};
+				filters = {};
 				filters[""] = NONE;
 				for filter in pairs(E.global.unitframe["aurafilters"]) do
 					filters[filter] = filter;
@@ -820,7 +821,7 @@ local function GetOptionsTable_Auras(friendlyUnitOnly, auraType, isGroupFrame, u
 			desc = L["Select an additional filter to use. If the selected filter is a whitelist and no other filters are being used (with the exception of Block Non-Personal Auras) then it will block anything not on the whitelist, otherwise it will simply add auras on the whitelist in addition to any other filter settings."],
 			type = "select",
 			values = function()
-				local filters = {};
+				filters = {};
 				filters[""] = NONE;
 				for filter in pairs(E.global.unitframe["aurafilters"]) do
 					filters[filter] = filter;
@@ -1022,7 +1023,6 @@ local function GetOptionsTable_Castbar(hasTicks, updateFunc, groupName, numUnits
 	return config;
 end
 
-local filters;
 local function GetOptionsTable_AuraBars(friendlyOnly, updateFunc, groupName)
 	local config = {
 		order = 800,
