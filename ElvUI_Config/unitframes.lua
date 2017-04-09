@@ -5960,7 +5960,7 @@ E.Options.args.unitframe.args.raidpet = {
 	},
 }
 
-E.Options.args.unitframe.args.tank = { -- Танки
+E.Options.args.unitframe.args.tank = {
 	name = L["Tank Frames"],
 	type = "group",
 	order = 1500,
@@ -6143,7 +6143,7 @@ E.Options.args.unitframe.args.tank = { -- Танки
 	},
 }
 
-E.Options.args.unitframe.args.assist = { -- Помощники
+E.Options.args.unitframe.args.assist = {
 	name = L["Assist Frames"],
 	type = "group",
 	order = 1600,
@@ -6371,7 +6371,6 @@ for i = 1, 5 do
 		end,
 	};
 end
-
 
 if(P.unitframe.colors.classResources[E.myclass]) then
 	E.Options.args.unitframe.args.general.args.allColorsGroup.args.classResourceGroup.args.spacer2 = {

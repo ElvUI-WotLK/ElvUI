@@ -21,10 +21,10 @@ P["general"] = {
 	["fontSize"] = 12,
 	["font"] = "PT Sans Narrow",
 
-	["bordercolor"] = { r = 0.1, g = 0.1, b = 0.1 },
-	["backdropcolor"] = { r = 0.1, g = 0.1, b = 0.1 },
-	["backdropfadecolor"] = { r = .06, g = .06, b = .06, a = 0.8 },
-	["valuecolor"] = { r = 23/255, g = 132/255, b = 209/255 },
+	["bordercolor"] = {r = 0.1, g = 0.1, b = 0.1},
+	["backdropcolor"] = {r = 0.1, g = 0.1, b = 0.1},
+	["backdropfadecolor"] = {r = .06, g = .06, b = .06, a = 0.8},
+	["valuecolor"] = {r = 23/255, g = 132/255, b = 209/255},
 
 	["minimap"] = {
 		["size"] = 176,
@@ -427,21 +427,21 @@ P["unitframe"] = {
 		["transparentPower"] = false,
 		["transparentCastbar"] = false,
 		["transparentAurabars"] = false,
-		["castColor"] = { r = .31,g = .31,b = .31 },
-		["castNoInterrupt"] = { r = 0.78, g = 0.25, b = 0.25 },
+		["castColor"] = {r = .31,g = .31,b = .31},
+		["castNoInterrupt"] = {r = 0.78, g = 0.25, b = 0.25},
 		["castClassColor"] = false,
 		["castReactionColor"] = false,
 
-		["health"] = { r = .31,g = .31,b = .31 },
-		["health_backdrop"] = { r = .8,g = .01,b = .01 },
-		["health_backdrop_dead"] = { r = .8,g = .01,b = .01 },
-		["tapped"] = { r = 0.55, g = 0.57, b = 0.61},
-		["disconnected"] = { r = 0.84, g = 0.75, b = 0.65},
-		["auraBarBuff"] = { r = .31,g = .31,b = .31 },
+		["health"] = {r = .31,g = .31,b = .31},
+		["health_backdrop"] = {r = .8,g = .01,b = .01},
+		["health_backdrop_dead"] = {r = .8,g = .01,b = .01},
+		["tapped"] = {r = 0.55, g = 0.57, b = 0.61},
+		["disconnected"] = {r = 0.84, g = 0.75, b = 0.65},
+		["auraBarBuff"] = {r = .31,g = .31,b = .31},
 		["auraBarDebuff"] = {r = 0.8, g = 0.1, b = 0.1},
 		["healPrediction"] = {
-			["personal"] = { r = 0, g = 1, b = 0.5, a = 0.25 },
-			["others"] = { r = 0, g = 1, b = 0, a = 0.25 },
+			["personal"] = {r = 0, g = 1, b = 0.5, a = 0.25},
+			["others"] = {r = 0, g = 1, b = 0, a = 0.25},
 		},
 		["power"] = {
 			["MANA"] = {r = 0.31, g = 0.45, b = 0.63},
@@ -451,9 +451,9 @@ P["unitframe"] = {
 			["RUNIC_POWER"] = {r = 0, g = 0.82, b = 1}
 		},
 		["reaction"] = {
-			["BAD"] = { r = 0.78, g = 0.25, b = 0.25 },
-			["NEUTRAL"] = { r = 218/255, g = 197/255, b = 92/255 },
-			["GOOD"] = { r = 75/255, g = 175/255, b = 76/255 }
+			["BAD"] = {r = 0.78, g = 0.25, b = 0.25},
+			["NEUTRAL"] = {r = 218/255, g = 197/255, b = 92/255},
+			["GOOD"] = {r = 75/255, g = 175/255, b = 76/255}
 		},
 		["classResources"] = {
 			["bgColor"] = {r = 0.1,g = 0.1,b = 0.1, a = 1},
@@ -2622,24 +2622,24 @@ P["tooltip"] = {
 	},
 	["useCustomFactionColors"] = false,
 	["factionColors"] = {
-		["1"] = { r = 0.8, g = 0.3, b = 0.22 },
-		["2"] = { r = 0.8, g = 0.3, b = 0.22 },
-		["3"] = { r = 0.75, g = 0.27, b = 0 },
-		["4"] = { r = 0.9, g = 0.7, b = 0 },
-		["5"] = { r = 0, g = 0.6, b = 0.1 },
-		["6"] = { r = 0, g = 0.6, b = 0.1 },
-		["7"] = { r = 0, g = 0.6, b = 0.1 },
-		["8"] = { r = 0, g = 0.6, b = 0.1 }
+		["1"] = {r = 0.8, g = 0.3, b = 0.22},
+		["2"] = {r = 0.8, g = 0.3, b = 0.22},
+		["3"] = {r = 0.75, g = 0.27, b = 0},
+		["4"] = {r = 0.9, g = 0.7, b = 0},
+		["5"] = {r = 0, g = 0.6, b = 0.1},
+		["6"] = {r = 0, g = 0.6, b = 0.1},
+		["7"] = {r = 0, g = 0.6, b = 0.1},
+		["8"] = {r = 0, g = 0.6, b = 0.1}
 	}
 };
 
 P["cooldown"] = {
 	threshold = 3,
-	expiringColor = { r = 1, g = 0, b = 0 },
-	secondsColor = { r = 1, g = 1, b = 0 },
-	minutesColor = { r = 1, g = 1, b = 1 },
-	hoursColor = { r = 0.4, g = 1, b = 1 },
-	daysColor = { r = 0.4, g = 0.4, b = 1 },
+	expiringColor = {r = 1, g = 0, b = 0},
+	secondsColor = {r = 1, g = 1, b = 0},
+	minutesColor = {r = 1, g = 1, b = 1},
+	hoursColor = {r = 0.4, g = 1, b = 1},
+	daysColor = {r = 0.4, g = 0.4, b = 1},
 }
 
 P["actionbar"] = {

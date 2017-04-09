@@ -244,7 +244,6 @@ function UF:HeaderConfig(header, configMode)
 
 				OnAttributeChanged(group)
 
-
 				group:Update()
 			else
 				for key in pairs(attributeBlacklist) do

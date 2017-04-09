@@ -30,7 +30,6 @@ local function LoadSkin()
 		_G[frame:GetName().."Text"]:ClearAllPoints()
 		_G[frame:GetName().."Text"]:Point("RIGHT", button, "LEFT", -2, 0)
 
-
 		button:ClearAllPoints()
 		button:Point("RIGHT", frame, "RIGHT", -10, 3)
 		hooksecurefunc(button, "SetPoint", function(self, point, attachTo, anchorPoint, xOffset, yOffset)

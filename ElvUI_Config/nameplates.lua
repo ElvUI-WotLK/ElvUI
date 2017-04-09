@@ -168,7 +168,7 @@ local function GetUnitSettings(unit, name)
 								values = {
 									["CURRENT"] = L["Current"],
 									["CURRENT_MAX"] = L["Current / Max"],
-									["CURRENT_PERCENT"] =  L["Current - Percent"],
+									["CURRENT_PERCENT"] = L["Current - Percent"],
 									["CURRENT_MAX_PERCENT"] = L["Current - Max | Percent"],
 									["PERCENT"] = L["Percent"],
 									["DEFICIT"] = L["Deficit"]

@@ -105,7 +105,6 @@ local eventHandlers = {
 	["ELVUI_COLOR_UPDATE"] = function() end,
 }
 
-
 local function OnEvent(self, event, ...)
 	lastPanel = self
 

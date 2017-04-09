@@ -30,7 +30,7 @@ function mod:UpdateElement_Name(frame)
 			end
 		else
 			r, g, b = self.db.reactions.bad.r, self.db.reactions.bad.g, self.db.reactions.bad.b
-		end	
+		end
 
 		frame.Name:SetTextColor(r, g, b)
 	else

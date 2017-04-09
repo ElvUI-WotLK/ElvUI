@@ -195,7 +195,6 @@ function E:SetupTheme(theme, noDisplayMsg)
 	local classColor = E.myclass == "PRIEST" and E.PriestColors or (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass]);
 	E.private.theme = theme
 
-
 	--Set colors
 	if theme == "classic" then
 		E.db.general.bordercolor = E:GetColor(.31, .31, .31)

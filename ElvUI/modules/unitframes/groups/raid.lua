@@ -55,7 +55,6 @@ function UF:Construct_RaidFrames(unitGroup)
 	return self;
 end
 
-
 function UF:RaidSmartVisibility(event)
 	if(not self.db or (self.db and not self.db.enable) or (UF.db and not UF.db.smartRaidFilter) or self.isForced) then
 		self.blockVisibilityChanges = false;

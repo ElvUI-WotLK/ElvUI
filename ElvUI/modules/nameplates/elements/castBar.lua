@@ -68,7 +68,7 @@ end
 
 function mod:ConfigureElement_CastBar(frame)
 	local castBar = frame.CastBar
-	
+
 	castBar:SetPoint("TOPLEFT", frame.HealthBar, "BOTTOMLEFT", 0, -self.db.units[frame.UnitType].castbar.offset)
 	castBar:SetPoint("TOPRIGHT", frame.HealthBar, "BOTTOMRIGHT", 0, -self.db.units[frame.UnitType].castbar.offset)
 	castBar:SetHeight(self.db.units[frame.UnitType].castbar.height)

@@ -113,7 +113,6 @@ local function OnEnter(self)
 	DT.tooltip:Show();
 end
 
-
 local function ValueColorUpdate(hex)
 	displayString = join("", "%s: ", hex, "%.2f%%|r");
 

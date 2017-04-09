@@ -37,7 +37,6 @@ function D:ModifyErrorFrame()
 		self:HighlightText(0, 0)
 	end)
 
-
 	ScriptErrorsFrame:SetSize(500, 300)
 	ScriptErrorsFrameScrollFrame:SetSize(ScriptErrorsFrame:GetWidth() - 45, ScriptErrorsFrame:GetHeight() - 71)
 

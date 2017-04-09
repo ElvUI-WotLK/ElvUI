@@ -23,7 +23,7 @@ lib.prefix = "ElvUIPluginVC"
 -- MULTI Language Support (Default Language: English)
 local MSG_OUTDATED = "Your version of %s is out of date (latest is version %s). You can download the latest version from https://github.com/ElvUI-WotLK/ElvUI/"
 local HDR_CONFIG = "Plugins"
-local HDR_INFORMATION = "LibElvUIPlugin-1.0.%d - Plugins Loaded  (|cff2BC226Green|r means you have current version, |cffFF0000Red|r means out of date)"
+local HDR_INFORMATION = "LibElvUIPlugin-1.0.%d - Plugins Loaded (|cff2BC226Green|r means you have current version, |cffFF0000Red|r means out of date)"
 local INFO_BY = "by"
 local INFO_VERSION = "Version:"
 local INFO_NEW = "Newest:"
@@ -51,15 +51,15 @@ end
 
 --
 -- Plugin table format:
---   { name (string) - The name of the plugin,
---     version (string) - The version of the plugin,
---     optionCallback (string) - The callback to call when ElvUI_Config is loaded
---   }
+--	{ name (string) - The name of the plugin,
+--		version (string) - The version of the plugin,
+--		optionCallback (string) - The callback to call when ElvUI_Config is loaded
+--	}
 --
 
 --
 -- RegisterPlugin(name,callback)
---   Registers a module with the given name and option callback, pulls version info from metadata
+--	Registers a module with the given name and option callback, pulls version info from metadata
 --
 
 function lib:RegisterPlugin(name,callback, isLib)
@@ -108,23 +108,23 @@ end
 
 function lib:GetPluginOptions()
 	ElvUI[1].Options.args.plugins = {
-        order = -10,
-        type = "group",
-        name = HDR_CONFIG,
-        guiInline = false,
-        args = {
-            pluginheader = {
-                order = 1,
-                type = "header",
-                name = format(HDR_INFORMATION, MINOR),
-            },
-            plugins = {
-                order = 2,
-                type = "description",
-                name = lib:GeneratePluginList(),
-            },
-        }
-    }
+		order = -10,
+		type = "group",
+		name = HDR_CONFIG,
+		guiInline = false,
+		args = {
+			pluginheader = {
+			order = 1,
+			type = "header",
+				name = format(HDR_INFORMATION, MINOR),
+			},
+			plugins = {
+				order = 2,
+				type = "description",
+				name = lib:GeneratePluginList(),
+			},
+		}
+	}
 end
 
 function lib:GenerateVersionCheckMessage()
@@ -183,11 +183,11 @@ function lib:GeneratePluginList()
 			local color = plugin.old and E:RGBToHex(1,0,0) or E:RGBToHex(0,1,0)
 			list = list .. Pname
 			if author then
-			  list = list .. " ".. INFO_BY .." " .. author
+				list = list .. " ".. INFO_BY .." " .. author
 			end
 			list = list .. color .. " - " .. (plugin.isLib and LIBRARY or INFO_VERSION .." " .. plugin.version)
 			if plugin.old then
-			  list = list .. " (" .. INFO_NEW .." " .. plugin.newversion .. ")"
+				list = list .. " (" .. INFO_NEW .." " .. plugin.newversion .. ")"
 			end
 			list = list .. "|r\n"
 		end
