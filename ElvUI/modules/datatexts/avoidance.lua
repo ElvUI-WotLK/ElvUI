@@ -19,7 +19,7 @@ local BLOCK_CHANCE = BLOCK_CHANCE;
 
 local displayString, lastPanel;
 local targetlv, playerlv;
-local basemisschance, leveldifference, dodge, parry, block, avoidance, unhittable, avoided, blocked, numAvoidances, unhittableMax;
+local baseMissChance, levelDifference, dodge, parry, block, avoidance, unhittable, avoided, blocked, numAvoidances, unhittableMax;
 local chanceString = "%.2f%%";
 local AVD_DECAY_RATE = 1.5;
 

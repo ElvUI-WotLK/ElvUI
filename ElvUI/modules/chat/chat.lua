@@ -1018,7 +1018,7 @@ function CH:ChatFrame_MessageEventHandler(event, ...)
 				globalstring = _G["CHAT_"..arg1.."_NOTICE"];
 			end
 
-			globalString = CH:ConcatenateTimeStamp(globalstring);
+			globalstring = CH:ConcatenateTimeStamp(globalstring);
 
 			if(strlen(arg5) > 0) then
 				-- TWO users in this notice (E.G. x kicked y)
