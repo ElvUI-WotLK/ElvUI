@@ -495,8 +495,6 @@ local function UpdateFilterGroup()
 				}
 			};
 		end
-
-		buffs = nil;
 	elseif(selectedFilter == "Buff Indicator (Profile)") then
 		E.Options.args.filters.args.filterGroup = {
 			type = "group",
@@ -833,7 +831,7 @@ local function UpdateFilterGroup()
 					name = L["Enable"],
 					type = "toggle",
 					get = function()
-						if(selectedFolder or not (spellID or selectedSpell)) then
+						if(not (spellID or selectedSpell)) then
 							return false;
 						else
 							return E.global.unitframe["aurafilters"][selectedFilter]["spells"][(spellID or selectedSpell)].enable;
@@ -849,7 +847,7 @@ local function UpdateFilterGroup()
 				name = L["Priority"],
 				type = "range",
 				get = function()
-					if(selectedFolder or not selectedSpell) then
+					if(not selectedSpell) then
 						return 0;
 					else
 						return E.global.unitframe["aurafilters"][selectedFilter]["spells"][(spellID or selectedSpell)].priority;
@@ -864,7 +862,7 @@ local function UpdateFilterGroup()
 					name = L["Stack Threshold"],
 					type = "range",
 					get = function()
-						if(selectedFolder or not selectedSpell) then
+						if(not selectedSpell) then
 							return 0;
 						else
 							return E.global.unitframe["aurafilters"][selectedFilter]["spells"][(spellID or selectedSpell)].stackThreshold;
