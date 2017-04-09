@@ -53,7 +53,7 @@ local function UpdateSpellList()
 		AddSpell(resSpells, 20484) -- Rebirth
 	elseif class == "PALADIN" then
 		AddSpell(enemySpells, 20271) -- Judgement
-		AddSpell(enemySpells, 62124) -- Длань возмездия
+		AddSpell(enemySpells, 62124) -- Hand of Reckoning
 		AddSpell(friendlySpells, 635) -- Holy Light
 		AddSpell(resSpells, 7328) -- Redemption
 	elseif class == "SHAMAN" then
@@ -62,33 +62,33 @@ local function UpdateSpellList()
 		AddSpell(friendlySpells, 8004) -- Healing Surge
 		AddSpell(resSpells, 2008) -- Ancestral Spirit
 	elseif class == "WARLOCK" then
-		AddSpell(enemySpells, 5782) -- Страх
-		AddSpell(longEnemySpells, 172) -- Порча
-		AddSpell(longEnemySpells, 686) -- Стрела тьмы
-		AddSpell(longEnemySpells, 17962) -- Поджигание
-		AddSpell(petSpells, 755) -- Канал здоровья
-		AddSpell(friendlySpells, 5697) -- Бесконечное дыхание
+		AddSpell(enemySpells, 5782) -- Fear
+		AddSpell(longEnemySpells, 172) -- Corruption
+		AddSpell(longEnemySpells, 686) -- Shadow Bolt
+		AddSpell(longEnemySpells, 17962) -- Conflagrate
+		AddSpell(petSpells, 755) -- Health Funnel
+		AddSpell(friendlySpells, 5697) -- Unending Breath
 	elseif class == "MAGE" then
-		AddSpell(enemySpells, 12826) -- Превращение
-		AddSpell(longEnemySpells, 133) -- Огненный шар
-		AddSpell(longEnemySpells, 47610) -- Стрела ледяного огня
-		AddSpell(friendlySpells, 475) -- Снятие проклятия
+		AddSpell(enemySpells, 12826) -- Polymorph
+		AddSpell(longEnemySpells, 133) -- Fireball
+		AddSpell(longEnemySpells, 47610) -- Frostfire Bolt
+		AddSpell(friendlySpells, 475) -- Remove Curse
 	elseif class == "HUNTER" then
-		AddSpell(petSpells, 136) -- Лечение питомца
-		AddSpell(enemySpells, 75) -- Автоматическая стрельба
+		AddSpell(petSpells, 136) -- Mend Pet
+		AddSpell(enemySpells, 75) -- Auto Shot
 	elseif class == "DEATHKNIGHT" then
-		AddSpell(enemySpells, 49576) -- Хватка смерти
-		AddSpell(friendlySpells, 47541) -- Лик смерти
-		AddSpell(resSpells, 61999) -- Воскрешение союзника
+		AddSpell(enemySpells, 49576) -- Death Grip
+		AddSpell(friendlySpells, 47541) -- Death Coil
+		AddSpell(resSpells, 61999) -- Raise Ally
 	elseif class == "ROGUE" then
-		AddSpell(enemySpells, 2094) -- Ослепление
-		AddSpell(longEnemySpells, 1725) -- Отвлечение
-		AddSpell(friendlySpells, 57934) -- Маленькие хитрость
+		AddSpell(enemySpells, 2094) -- Blind
+		AddSpell(longEnemySpells, 1725) -- Distract
+		AddSpell(friendlySpells, 57934) -- Tricks of the Trade
 	elseif class == "WARRIOR" then
-		AddSpell(enemySpells, 5246) -- Устрашающий крик
-		AddSpell(enemySpells, 11578) -- Рывок
-		AddSpell(longEnemySpells, 355) -- Провокация
-		AddSpell(friendlySpells, 3411) -- Вмешательство
+		AddSpell(enemySpells, 5246) -- Intimidating Shout
+		AddSpell(enemySpells, 11578) -- Charge
+		AddSpell(longEnemySpells, 355) -- Taunt
+		AddSpell(friendlySpells, 3411) -- Intervene
 	end
 end
 
