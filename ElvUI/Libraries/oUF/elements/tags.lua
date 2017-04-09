@@ -408,8 +408,8 @@ local tagEvents = {
 	["classification"]		= "UNIT_CLASSIFICATION_CHANGED",
 	["shortclassification"]	= "UNIT_CLASSIFICATION_CHANGED",
 	["group"]				= "PARTY_MEMBERS_CHANGED RAID_ROSTER_UPDATE",
-	["curmana"]				= "UNIT_POWER UNIT_MAXPOWER",
-	["maxmana"]				= "UNIT_POWER UNIT_MAXPOWER",
+	["curmana"]				= "UNIT_MANA UNIT_MAXMANA",
+	["maxmana"]				= "UNIT_MANA UNIT_MAXMANA",
 	["happiness"]			= "UNIT_HAPPINESS",
 	["powercolor"]			= "UNIT_DISPLAYPOWER",
 }
