@@ -1,6 +1,10 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local DT = E:GetModule("DataTexts");
 
+local GetCombatRating = GetCombatRating
+local GetCombatRatingBonus = GetCombatRatingBonus
+local UnitAttackSpeed = UnitAttackSpeed
+local UnitRangedDamage = UnitRangedDamage
 local ATTACK_SPEED = ATTACK_SPEED;
 local CR_HASTE_MELEE = CR_HASTE_MELEE;
 local CR_HASTE_RANGED = CR_HASTE_RANGED;
