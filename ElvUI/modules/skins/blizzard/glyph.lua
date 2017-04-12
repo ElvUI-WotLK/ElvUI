@@ -51,10 +51,6 @@ local function LoadSkin()
 	hooksecurefunc(PlayerTalentFrame, "updateFunction", function()
 		if GlyphFrame:IsShown() then
 			PlayerTalentFramePreviewBar:Hide()
-		else
-			if GetCVarBool("previewTalents") then
-				PlayerTalentFramePreviewBar:Show()
-			end
 		end
 	end)
 end
