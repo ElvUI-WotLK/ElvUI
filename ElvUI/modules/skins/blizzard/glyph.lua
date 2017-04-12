@@ -9,21 +9,29 @@ local function LoadSkin()
 	GlyphFrame:StripTextures();
 
 	GlyphFrame:CreateBackdrop();
-	GlyphFrame.backdrop:Point("TOPLEFT", 21, -60);
-	GlyphFrame.backdrop:Point("BOTTOMRIGHT", -38, 100);
-	GlyphFrame.backdrop:SetBackdropBorderColor(0, 0, 0, 0);
-	GlyphFrame.backdrop:CreateShadow();
+	GlyphFrame.backdrop:Size(328, 353)
+	GlyphFrame.backdrop:ClearAllPoints()
+	GlyphFrame.backdrop:Point("CENTER", PlayerTalentFrame.backdrop, 0, -16)
 
-	GlyphFrame.texture = GlyphFrame:CreateTexture(nil, "OVERLAY");
+	GlyphFrame.texture = GlyphFrame.backdrop:CreateTexture(nil, "OVERLAY");
+	GlyphFrame.texture:SetInside();
 	GlyphFrame.texture:SetTexture("Interface\\Spellbook\\UI-GlyphFrame");
-	GlyphFrame.texture:SetTexCoord(0.075, 0.630, 0.154, 0.770);
-	GlyphFrame.texture:SetInside(GlyphFrame.backdrop);
-	GlyphFrame.texture:SetDesaturated(true);
+	GlyphFrame.texture:SetTexCoord(0.0390625, 0.65625, 0.140625, 0.8046875);
+
+	local glyphPositions = {
+		{"CENTER", 0, 122},
+		{"CENTER", 0, -127},
+		{"TOPLEFT", 0, -53},
+		{"BOTTOMRIGHT", -10, 70},
+		{"TOPRIGHT", 0, -53},
+		{"BOTTOMLEFT", 10, 70}
+	}
 
 	for i = 1, 6 do
-		_G["GlyphFrameGlyph" .. i .. "Shine"]:SetDesaturated(true);
-		_G["GlyphFrameGlyph" .. i .. "Ring"]:SetDesaturated(true);
-		_G["GlyphFrameGlyph" .. i .. "Setting"]:SetDesaturated(true);
+		local frame = _G["GlyphFrameGlyph"..i]
+		frame:SetScale(1.0379747)
+		frame:SetParent(GlyphFrame.backdrop)
+		frame:SetPoint(unpack(glyphPositions[i]))
 	end
 
 	GlyphFrame:HookScript("OnShow", function()
