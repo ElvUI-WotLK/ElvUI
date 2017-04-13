@@ -418,7 +418,7 @@ function mod:UpdateElement_All(frame, noTargetFrame)
 	mod:UpdateElement_Elite(frame)
 
 	if not noTargetFrame then
-		mod:ScheduleTimer("SetTargetFrame", 0.1, frame)
+		mod:ScheduleTimer("SetTargetFrame", 0.17, frame)
 	end
 end
 
@@ -604,7 +604,7 @@ function mod:PLAYER_ENTERING_WORLD()
 end
 
 function mod:PLAYER_TARGET_CHANGED()
-	mod:ScheduleTimer("ForEachPlate", 0.1, "SetTargetFrame")
+	mod:ScheduleTimer("ForEachPlate", 0.17, "SetTargetFrame")
 end
 
 function mod:UNIT_AURA(_, unit)
