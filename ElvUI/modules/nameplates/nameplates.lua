@@ -604,7 +604,7 @@ function mod:PLAYER_ENTERING_WORLD()
 end
 
 function mod:PLAYER_TARGET_CHANGED()
-	mod:ScheduleTimer("ForEachPlate", 0.17, "SetTargetFrame")
+	mod:ScheduleTimer("ForEachPlate", 0, "SetTargetFrame")
 end
 
 function mod:UNIT_AURA(_, unit)
