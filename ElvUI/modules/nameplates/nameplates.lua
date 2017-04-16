@@ -92,7 +92,7 @@ end
 
 function mod:SetTargetFrame(frame)
 	local targetExists = UnitExists("target") == 1
-	if targetExists and frame:GetParent():IsShown() and frame:GetParent():GetAlpha() == 1 and not frame.isTarget then
+	if targetExists and frame:GetParent():IsShown() and frame:GetParent():GetFrameLevel() == 20 and not frame.isTarget then
 		if self.db.useTargetScale then
 			self:SetFrameScale(frame, (frame.CustomScale and frame.CustomScale * self.db.targetScale) or self.db.targetScale)
 		end
@@ -117,19 +117,21 @@ function mod:SetTargetFrame(frame)
 
 		mod:UpdateElement_AurasByUnitID("target")
 	elseif frame.isTarget then
-		if self.db.useTargetScale then
-			self:SetFrameScale(frame, frame.CustomScale or frame.ThreatScale or 1)
-		end
-		frame.isTarget = nil
-		frame.unit = nil
-		if self.db.units[frame.UnitType].healthbar.enable ~= true then
-			self:UpdateAllFrame(frame)
-		end
+		if frame:GetParent():GetFrameLevel() ~= 20 then
+			if self.db.useTargetScale then
+				self:SetFrameScale(frame, frame.CustomScale or frame.ThreatScale or 1)
+			end
+			frame.isTarget = nil
+			frame.unit = nil
+			if self.db.units[frame.UnitType].healthbar.enable ~= true then
+				self:UpdateAllFrame(frame)
+			end
 
-		if targetExists then
-			frame:SetAlpha(self.db.nonTargetTransparency)
-		else
-			frame:SetAlpha(1)
+			if targetExists then
+				frame:SetAlpha(self.db.nonTargetTransparency)
+			else
+				frame:SetAlpha(1)
+			end
 		end
 	else
 		if targetExists then
@@ -418,7 +420,7 @@ function mod:UpdateElement_All(frame, noTargetFrame)
 	mod:UpdateElement_Elite(frame)
 
 	if not noTargetFrame then
-		mod:ScheduleTimer("SetTargetFrame", 0.17, frame)
+		mod:SetTargetFrame(frame)
 	end
 end
 
@@ -512,6 +514,7 @@ function mod:OnUpdate(elapsed)
 		if not frame.isTarget and frame:GetParent():GetAlpha() ~= 1 then
 			frame:GetParent():SetAlpha(1)
 		end
+		mod:SetTargetFrame(frame)
 	end
 end
 
@@ -604,7 +607,7 @@ function mod:PLAYER_ENTERING_WORLD()
 end
 
 function mod:PLAYER_TARGET_CHANGED()
-	mod:ScheduleTimer("ForEachPlate", 0, "SetTargetFrame")
+	--mod:ScheduleTimer("ForEachPlate", 0, "SetTargetFrame")
 end
 
 function mod:UNIT_AURA(_, unit)
