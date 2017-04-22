@@ -34,17 +34,12 @@ function UF:Configure_ClassBar(frame)
 
 	local CLASSBAR_WIDTH = frame.CLASSBAR_WIDTH;
 
-	local c = self.db.colors.classResources.bgColor;
+	local color = self.db.colors.classResources.bgColor;
 	bars.backdrop.ignoreUpdates = true;
-	bars.backdrop:SetBackdropColor(c.r, c.g, c.b);
-	if(not E.PixelMode) then
-		c = E.db.general.bordercolor;
-		if(self.thinBorders) then
-			bars.backdrop:SetBackdropBorderColor(0, 0, 0);
-		else
-			bars.backdrop:SetBackdropBorderColor(c.r, c.g, c.b);
-		end
-	end
+	bars.backdrop:SetBackdropColor(color.r, color.g, color.b)
+
+	color = E.db.general.bordercolor
+	bars.backdrop:SetBackdropBorderColor(color.r, color.g, color.b)
 
 	if(frame.USE_MINI_CLASSBAR and not frame.CLASSBAR_DETACHED) then
 		bars:ClearAllPoints();
@@ -116,11 +111,11 @@ function UF:Configure_ClassBar(frame)
 
 			if(i <= frame.MAX_CLASS_BAR) then
 				bars[i].backdrop.ignoreUpdates = true;
-				bars[i].backdrop:SetBackdropColor(c.r, c.g, c.b);
-				if(not E.PixelMode) then
-					c = E.db.general.bordercolor;
-					bars[i].backdrop:SetBackdropBorderColor(c.r, c.g, c.b);
-				end
+				bars[i].backdrop:SetBackdropColor(color.r, color.g, color.b);
+
+				color = E.db.general.bordercolor;
+				bars[i].backdrop:SetBackdropBorderColor(color.r, color.g, color.b);
+
 				bars[i]:Height(bars:GetHeight());
 				if(frame.MAX_CLASS_BAR == 1) then
 					bars[i]:SetWidth(CLASSBAR_WIDTH);
@@ -230,7 +225,7 @@ UF.ToggleResourceBar = ToggleResourceBar;
 
 function UF:Construct_DeathKnightResourceBar(frame)
 	local runes = CreateFrame("Frame", nil, frame);
-	runes:CreateBackdrop("Default", nil, nil, self.thinBorders);
+	runes:CreateBackdrop("Default", nil, nil, self.thinBorders, true);
 
 	for i = 1, self["classMaxResourceBar"][E.myclass] do
 		runes[i] = CreateFrame("StatusBar", nil, runes);
@@ -238,7 +233,7 @@ function UF:Construct_DeathKnightResourceBar(frame)
 		runes[i]:SetStatusBarTexture(E["media"].blankTex);
 		runes[i]:GetStatusBarTexture():SetHorizTile(false);
 
-		runes[i]:CreateBackdrop("Default", nil, nil, self.thinBorders);
+		runes[i]:CreateBackdrop("Default", nil, nil, self.thinBorders, true);
 		runes[i].backdrop:SetParent(runes);
 
 		runes[i].bg = runes[i]:CreateTexture(nil, "BORDER");
@@ -252,7 +247,7 @@ end
 
 function UF:Construct_DruidAltManaBar(frame)
 	local dpower = CreateFrame("Frame", nil, frame);
-	dpower:CreateBackdrop("Default", nil, nil, self.thinBorders);
+	dpower:CreateBackdrop("Default", nil, nil, self.thinBorders, true);
 	dpower.colorPower = true;
 	dpower.PostUpdateVisibility = ToggleResourceBar;
 

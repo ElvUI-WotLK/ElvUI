@@ -685,7 +685,6 @@ E.Options.args.nameplate = {
 						return t.r, t.g, t.b, t.a, d.r, d.g, d.b;
 					end,
 					set = function(info, r, g, b)
-						E.db.nameplates[ info[#info] ] = {};
 						local t = E.db.nameplates.threat[ info[#info] ];
 						t.r, t.g, t.b = r, g, b;
 					end,
@@ -771,7 +770,6 @@ E.Options.args.nameplate = {
 						return t.r, t.g, t.b, t.a, d.r, d.g, d.b;
 					end,
 					set = function(info, r, g, b)
-						E.db.nameplates[ info[#info] ] = {};
 						local t = E.db.nameplates[ info[#info] ];
 						t.r, t.g, t.b = r, g, b;
 						NP:ForEachPlate("ConfigureElement_CastBar");
@@ -801,7 +799,6 @@ E.Options.args.nameplate = {
 						return t.r, t.g, t.b, t.a, d.r, d.g, d.b;
 					end,
 					set = function(info, r, g, b)
-						E.db.nameplates.reactions[ info[#info] ] = {};
 						local t = E.db.nameplates.reactions[ info[#info] ];
 						t.r, t.g, t.b = r, g, b;
 						NP:ConfigureAll();

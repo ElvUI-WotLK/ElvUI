@@ -13,7 +13,7 @@ local UnitIsFriend = UnitIsFriend;
 function UF:Construct_AuraBars()
 	local bar = self.statusBar;
 
-	self:SetTemplate("Default", nil, nil, UF.thinBorders);
+	self:SetTemplate("Default", nil, nil, UF.thinBorders, true);
 	local inset = UF.thinBorders and E.mult or nil;
 	bar:SetInside(self, inset, inset);
 	UF["statusbars"][bar] = true;
@@ -29,7 +29,7 @@ function UF:Construct_AuraBars()
 	bar.spellname:Point("RIGHT", bar.spelltime, "LEFT", -4, 0);
 	bar.spellname:SetWordWrap(false);
 
-	bar.iconHolder:SetTemplate("Default", nil, nil, UF.thinBorders);
+	bar.iconHolder:SetTemplate("Default", nil, nil, UF.thinBorders, true);
 	bar.icon:SetInside(bar.iconHolder, inset, inset);
 	bar.icon:SetDrawLayer("OVERLAY");
 
