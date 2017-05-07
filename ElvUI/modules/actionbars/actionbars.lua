@@ -225,7 +225,9 @@ function AB:PositionAndSizeBar(barName)
 			AB:PositionAndSizeBar(barName);
 			return;
 		end
+		E:EnableMover(bar.mover:GetName())
 	else
+		E:DisableMover(bar.mover:GetName())
 		bar:Hide();
 		UnregisterStateDriver(bar, "visibility");
 	end
