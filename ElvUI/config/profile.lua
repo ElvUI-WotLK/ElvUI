@@ -1846,6 +1846,14 @@ P["unitframe"] = {
 				["yOffset"] = 0,
 				["onMouseOver"] = true,
 				["outOfRange"] = true
+			},
+			["readycheckIcon"] = {
+				["enable"] = true,
+				["size"] = 12,
+				["attachTo"] = "Health",
+				["position"] = "BOTTOM",
+				["xOffset"] = 0,
+				["yOffset"] = 2
 			}
 		},
 		["raid"] = {
@@ -2003,6 +2011,14 @@ P["unitframe"] = {
 				["yOffset"] = 0,
 				["onMouseOver"] = true,
 				["outOfRange"] = true
+			},
+			["readycheckIcon"] = {
+				["enable"] = true,
+				["size"] = 12,
+				["attachTo"] = "Health",
+				["position"] = "BOTTOM",
+				["xOffset"] = 0,
+				["yOffset"] = 2
 			}
 		},
 		["raid40"] = {
@@ -2160,6 +2176,14 @@ P["unitframe"] = {
 				["yOffset"] = 0,
 				["onMouseOver"] = true,
 				["outOfRange"] = true
+			},
+			["readycheckIcon"] = {
+				["enable"] = true,
+				["size"] = 12,
+				["attachTo"] = "Health",
+				["position"] = "BOTTOM",
+				["xOffset"] = 0,
+				["yOffset"] = 2
 			}
 		},
 		["raidpet"] = {
