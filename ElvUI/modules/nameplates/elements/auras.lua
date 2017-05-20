@@ -13,8 +13,6 @@ local UnitAura = UnitAura
 local UnitGUID = UnitGUID
 local GetSpellTexture = GetSpellTexture
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS
-local AURA_TYPE_BUFF = AURA_TYPE_BUFF
-local AURA_TYPE_DEBUFF = AURA_TYPE_DEBUFF
 
 local RaidIconBit = {
 	["STAR"] = 0x00100000,
