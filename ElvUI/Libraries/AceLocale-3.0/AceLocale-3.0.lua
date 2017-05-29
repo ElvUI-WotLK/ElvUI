@@ -97,7 +97,7 @@ function AceLocale:NewLocale(application, locale, isDefault, silent)
 
 	local app = AceLocale.apps[application]
 
-	if silent and app and getmetatable(app) ~= readmetasilent then
+	if silent and app and getmetatable(app) ~= readmetasilent and not isDefault then
 		geterrorhandler()("Usage: NewLocale(application, locale[, isDefault[, silent]]): 'silent' must be specified for the first locale registered")
 	end
 
