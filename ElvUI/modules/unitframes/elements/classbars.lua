@@ -38,7 +38,7 @@ function UF:Configure_ClassBar(frame)
 	bars.backdrop.ignoreUpdates = true;
 	bars.backdrop:SetBackdropColor(color.r, color.g, color.b)
 
-	color = E.db.general.bordercolor
+	color = E.db.unitframe.colors.borderColor
 	bars.backdrop:SetBackdropBorderColor(color.r, color.g, color.b)
 
 	if(frame.USE_MINI_CLASSBAR and not frame.CLASSBAR_DETACHED) then
@@ -113,7 +113,7 @@ function UF:Configure_ClassBar(frame)
 				bars[i].backdrop.ignoreUpdates = true;
 				bars[i].backdrop:SetBackdropColor(color.r, color.g, color.b);
 
-				color = E.db.general.bordercolor;
+				color = E.db.unitframe.colors.borderColor;
 				bars[i].backdrop:SetBackdropBorderColor(color.r, color.g, color.b);
 
 				bars[i]:Height(bars:GetHeight());

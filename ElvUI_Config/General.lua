@@ -341,7 +341,6 @@ E.Options.args.general = {
 						E:UpdateMedia();
 						E:UpdateBorderColors();
 					end,
-					disabled = function() return E.PixelMode; end
 				},
 				backdropcolor = {
 					type = "color",
