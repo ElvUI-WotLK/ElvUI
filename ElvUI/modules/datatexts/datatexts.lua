@@ -17,10 +17,12 @@ function DT:Initialize()
 	self.tooltip = CreateFrame("GameTooltip", "DatatextTooltip", E.UIParent, "GameTooltipTemplate");
 	TT:HookScript(self.tooltip, "OnShow", "SetStyle");
 
-	self:RegisterLDB();
+	self:RegisterLDB()
+	LDB.RegisterCallback(E, "LibDataBroker_DataObjectCreated", DT.SetupObjectLDB)
+
 	self:LoadDataTexts();
 
-	self:RegisterEvent("PLAYER_ENTERING_WORLD", "LoadDataTexts");
+	self:RegisterEvent("PLAYER_ENTERING_WORLD");
 end
 
 DT.RegisteredPanels = {};
@@ -32,55 +34,74 @@ DT.PointLocation = {
 	[3] = "right"
 };
 
+local hasEnteredWorld = false
+function DT:PLAYER_ENTERING_WORLD()
+	hasEnteredWorld = true
+	self:LoadDataTexts()
+end
+
+local function LoadDataTextsDelayed()
+	E.Delay(0.5, function() DT:LoadDataTexts() end)
+end
+
 local hex = "|cffFFFFFF";
+
+function DT:SetupObjectLDB(name, obj)
+	local curFrame = nil
+
+	local function OnEnter(self)
+		DT:SetupTooltip(self)
+		if obj.OnTooltipShow then
+			obj.OnTooltipShow(DT.tooltip)
+		end
+		if obj.OnEnter then
+			obj.OnEnter(self)
+		end
+		DT.tooltip:Show()
+	end
+
+	local function OnLeave(self)
+		if obj.OnLeave then
+			obj.OnLeave(self)
+		end
+		DT.tooltip:Hide()
+	end
+
+	local function OnClick(self, button)
+		if obj.OnClick then
+			obj.OnClick(self, button)
+		end
+	end
+
+	local function textUpdate(_, name, _, value)
+		if value == nil or (len(value) >= 3) or value == "n/a" or name == value then
+			curFrame.text:SetText(value ~= "n/a" and value or name)
+		else
+			curFrame.text:SetFormattedText("%s: %s%s|r", name, hex, value)
+		end
+	end
+
+	local function OnEvent(self)
+		curFrame = self
+		LDB:RegisterCallback("LibDataBroker_AttributeChanged_"..name.."_text", textUpdate)
+		LDB:RegisterCallback("LibDataBroker_AttributeChanged_"..name.."_value", textUpdate)
+		LDB.callbacks:Fire("LibDataBroker_AttributeChanged_"..name.."_text", name, nil, obj.text, obj)
+	end
+
+	DT:RegisterDatatext(name, {"PLAYER_ENTER_WORLD"}, OnEvent, nil, OnClick, OnEnter, OnLeave)
+
+	if DT.PanelLayoutOptions then
+		DT:PanelLayoutOptions()
+	end
+
+	if hasEnteredWorld then
+		LoadDataTextsDelayed()
+	end
+end
+
 function DT:RegisterLDB()
 	for name, obj in LDB:DataObjectIterator() do
-		local OnEnter = nil;
-		local OnLeave = nil;
-		local curFrame = nil;
-		if(obj.OnTooltipShow) then
-			function OnEnter(self)
-				DT:SetupTooltip(self);
-				obj.OnTooltipShow(DT.tooltip);
-				DT.tooltip:Show();
-			end
-		end
-
-		if(obj.OnEnter) then
-			function OnEnter(self)
-				DT:SetupTooltip(self);
-				obj.OnEnter(self);
-				DT.tooltip:Show();
-			end
-		end
-
-		if(obj.OnLeave) then
-			function OnLeave(self)
-				obj.OnLeave(self);
-				DT.tooltip:Hide();
-			end
-		end
-
-		local function OnClick(self, button)
-			obj.OnClick(self, button);
-		end
-
-		local function textUpdate(_, name, _, value)
-			if(value == nil or (len(value) >= 3) or value == "n/a" or name == value) then
-				curFrame.text:SetText(value ~= "n/a" and value or name);
-			else
-				curFrame.text:SetFormattedText("%s: %s%s|r", name, hex, value);
-			end
-		end
-
-		local function OnEvent(self)
-			curFrame = self;
-			LDB:RegisterCallback("LibDataBroker_AttributeChanged_" .. name .. "_text", textUpdate);
-			LDB:RegisterCallback("LibDataBroker_AttributeChanged_" .. name .. "_value", textUpdate);
-			LDB.callbacks:Fire("LibDataBroker_AttributeChanged_" .. name .. "_text", name, nil, obj.text, obj);
-		end
-
-		self:RegisterDatatext(name, {"PLAYER_ENTER_WORLD"}, OnEvent, nil, OnClick, OnEnter, OnLeave);
+		self:SetupObjectLDB(name, obj)
 	end
 end
 
@@ -145,7 +166,7 @@ function DT:RegisterPanel(panel, numPoints, anchor, xOff, yOff)
 			panel.dataPanels[pointIndex].text:SetAllPoints();
 			panel.dataPanels[pointIndex].text:FontTemplate();
 			panel.dataPanels[pointIndex].text:SetJustifyH("CENTER");
-			panel.dataPanels[pointIndex].text:SetJustifyV("middle");
+			panel.dataPanels[pointIndex].text:SetJustifyV("MIDDLE");
 		end
 
 		panel.dataPanels[pointIndex]:Point(DT:GetDataPanelPoint(panel, i, numPoints));
