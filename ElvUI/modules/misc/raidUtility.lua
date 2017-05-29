@@ -211,4 +211,8 @@ function RU:Initialize()
 	self:RegisterEvent("PARTY_MEMBERS_CHANGED", "ToggleRaidUtil");
 end
 
-E:RegisterInitialModule(RU:GetName());
+local function InitializeCallback()
+	RU:Initialize()
+end
+
+E:RegisterInitialModule(RU:GetName(), InitializeCallback)

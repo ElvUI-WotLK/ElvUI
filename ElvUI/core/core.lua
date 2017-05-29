@@ -45,6 +45,8 @@ E["texts"] = {};
 E["snapBars"] = {};
 E["RegisteredModules"] = {};
 E["RegisteredInitialModules"] = {};
+E["ModuleCallbacks"] = {["CallPriority"] = {}}
+E["InitialModuleCallbacks"] = {["CallPriority"] = {}}
 E["valueColorUpdateFuncs"] = {};
 E.TexCoords = {.08, .92, .08, .92};
 E.FrameLocks = {};
@@ -940,19 +942,65 @@ function E:ResetUI(...)
 	self:ResetMovers(...);
 end
 
-function E:RegisterModule(name)
-	if(self.initialized) then
-		self:GetModule(name):Initialize();
+function E:RegisterModule(name, loadFunc)
+	--New method using callbacks
+	if (loadFunc and type(loadFunc) == "function") then
+		if self.initialized then
+			loadFunc()
+		else
+			if self.ModuleCallbacks[name] then
+				--Don't allow a registered module name to be overwritten
+				E:Print("Invalid argument #1 to E:RegisterModule (module name:", name, "is already registered, please use a unique name)")
+				return
+			end
+
+			--Add module name to registry
+			self.ModuleCallbacks[name] = true
+			self.ModuleCallbacks["CallPriority"][#self.ModuleCallbacks["CallPriority"] + 1] = name
+
+			--Register loadFunc to be called when event is fired
+			E:RegisterCallback(name, loadFunc, E:GetModule(name))
+		end
+	--Old deprecated initialize method
 	else
-		self["RegisteredModules"][#self["RegisteredModules"] + 1] = name;
+		if self.initialized then
+			self:GetModule(name):Initialize()
+		else
+			self["RegisteredModules"][#self["RegisteredModules"] + 1] = name
+		end
 	end
 end
 
-function E:RegisterInitialModule(name)
-	self["RegisteredInitialModules"][#self["RegisteredInitialModules"] + 1] = name;
+function E:RegisterInitialModule(name, loadFunc)
+	--New method using callbacks
+	if (loadFunc and type(loadFunc) == "function") then
+		if self.InitialModuleCallbacks[name] then
+			--Don't allow a registered module name to be overwritten
+			E:Print("Invalid argument #1 to E:RegisterInitialModule (module name:", name, "is already registered, please use a unique name)")
+			return
+		end
+
+		--Add module name to registry
+		self.InitialModuleCallbacks[name] = true
+		self.InitialModuleCallbacks["CallPriority"][#self.InitialModuleCallbacks["CallPriority"] + 1] = name
+
+		--Register loadFunc to be called when event is fired
+		E:RegisterCallback(name, loadFunc, E:GetModule(name))
+	--Old deprecated initialize method
+	else
+		self["RegisteredInitialModules"][#self["RegisteredInitialModules"] + 1] = name;
+	end
 end
 
 function E:InitializeInitialModules()
+	--Fire callbacks for any module using the new system
+	for index, moduleName in ipairs(self.InitialModuleCallbacks["CallPriority"]) do
+		self.InitialModuleCallbacks[moduleName] = nil
+		self.InitialModuleCallbacks["CallPriority"][index] = nil
+		E.callbacks:Fire(moduleName)
+	end
+
+	--Old deprecated initialize method, we keep it for any plugins that may need it
 	for _, module in pairs(E["RegisteredInitialModules"]) do
 		local module = self:GetModule(module, true);
 		if(module and module.Initialize) then
@@ -971,6 +1019,14 @@ function E:RefreshModulesDB()
 end
 
 function E:InitializeModules()
+	--Fire callbacks for any module using the new system
+	for index, moduleName in ipairs(self.ModuleCallbacks["CallPriority"]) do
+		self.ModuleCallbacks[moduleName] = nil
+		self.ModuleCallbacks["CallPriority"][index] = nil
+		E.callbacks:Fire(moduleName)
+	end
+
+	--Old deprecated initialize method, we keep it for any plugins that may need it
 	for _, module in pairs(E["RegisteredModules"]) do
 		local module = self:GetModule(module);
 		if(module.Initialize) then

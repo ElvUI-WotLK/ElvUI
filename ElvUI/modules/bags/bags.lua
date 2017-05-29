@@ -1397,4 +1397,8 @@ function B:Initialize()
 	StackSplitFrame:SetFrameStrata("DIALOG")
 end
 
-E:RegisterModule(B:GetName())
+local function InitializeCallback()
+	B:Initialize()
+end
+
+E:RegisterModule(B:GetName(), InitializeCallback)

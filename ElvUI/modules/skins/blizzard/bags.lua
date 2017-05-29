@@ -206,4 +206,4 @@ local function LoadSkin()
 	hooksecurefunc("BankFrameItemButton_Update", UpdateBankFrameIcon)
 end
 
-S:AddCallback("Bags", LoadSkin)
+S:AddCallback("SkinBags", LoadSkin)
