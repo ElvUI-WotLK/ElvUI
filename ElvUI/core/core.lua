@@ -185,12 +185,16 @@ end
 function E:UpdateMedia()
 	if(not self.db["general"] or not self.private["general"]) then return; end
 
+	-- Fonts
 	self["media"].normFont = LSM:Fetch("font", self.db["general"].font);
 	self["media"].combatFont = LSM:Fetch("font", self.db["general"].dmgfont);
+
+	-- Textures
 	self["media"].blankTex = LSM:Fetch("background", "ElvUI Blank");
 	self["media"].normTex = LSM:Fetch("statusbar", self.private["general"].normTex);
 	self["media"].glossTex = LSM:Fetch("statusbar", self.private["general"].glossTex);
 
+	-- Border Color
 	local border = E.db["general"].bordercolor;
 	if(self:CheckClassColor(border.r, border.g, border.b)) then
 		local classColor = E.myclass == "PRIEST" and E.PriestColors or (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass]);
@@ -200,6 +204,8 @@ function E:UpdateMedia()
 	end
 
 	self["media"].bordercolor = {border.r, border.g, border.b};
+
+	-- UnitFrame Border Color
 	border = E.db["unitframe"].colors.borderColor
 	if self:CheckClassColor(border.r, border.g, border.b) then
 		local classColor = E.myclass == "PRIEST" and E.PriestColors or (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass])
@@ -208,9 +214,14 @@ function E:UpdateMedia()
 		E.db["unitframe"].colors.borderColor.b = classColor.b
 	end
 	self["media"].unitframeBorderColor = {border.r, border.g, border.b}
+
+	-- Backdrop Color
 	self["media"].backdropcolor = E:GetColorTable(self.db["general"].backdropcolor);
+
+	-- Backdrop Fade Color
 	self["media"].backdropfadecolor = E:GetColorTable(self.db["general"].backdropfadecolor);
 
+	-- Value Color
 	local value = self.db["general"].valuecolor;
 	if(self:CheckClassColor(value.r, value.g, value.b)) then
 		value = E.myclass == "PRIEST" and E.PriestColors or (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass]);
