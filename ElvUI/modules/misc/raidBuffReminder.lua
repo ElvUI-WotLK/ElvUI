@@ -299,4 +299,8 @@ function RB:Initialize()
 	self:UpdateSettings();
 end
 
-E:RegisterModule(RB:GetName());
+local function InitializeCallback()
+	RB:Initialize()
+end
+
+E:RegisterModule(RB:GetName(), InitializeCallback)

@@ -132,4 +132,4 @@ local function LoadSkin()
 	hooksecurefunc("WorldMap_ToggleSizeUp", FixSkin);
 end
 
-S:AddCallback("WorldMap", LoadSkin);
+S:AddCallback("SkinWorldMap", LoadSkin);

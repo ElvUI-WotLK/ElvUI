@@ -538,4 +538,8 @@ E.PopupDialogs["IMPORT_RL"] = {
 	preferredIndex = 3
 };
 
-E:RegisterModule(D:GetName())
+local function InitializeCallback()
+	D:Initialize()
+end
+
+E:RegisterModule(D:GetName(), InitializeCallback)

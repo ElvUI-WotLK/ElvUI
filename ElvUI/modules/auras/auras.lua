@@ -536,4 +536,8 @@ function A:Initialize()
 	E:CreateMover(self.WeaponFrame, "WeaponsMover", L["Weapons"]);
 end
 
-E:RegisterModule(A:GetName());
+local function InitializeCallback()
+	A:Initialize()
+end
+
+E:RegisterModule(A:GetName(), InitializeCallback)

@@ -42,9 +42,9 @@ local function LoadSkin()
 	--
 	for i = 1, #ChatMenus do
 		if _G[ChatMenus[i]] == _G["ChatMenu"] then
-			_G[ChatMenus[i]]:HookScript("OnShow", function(self) self:SetTemplate("Default", true) self:SetBackdropColor(unpack(E["media"].backdropfadecolor)) self:ClearAllPoints() self:Point("BOTTOMLEFT", ChatFrame1, "TOPLEFT", 0, 30) end)
+			_G[ChatMenus[i]]:HookScript("OnShow", function(self) self:SetTemplate("Transparent", true) self:SetBackdropColor(unpack(E["media"].backdropfadecolor)) self:ClearAllPoints() self:Point("BOTTOMLEFT", ChatFrame1, "TOPLEFT", 0, 30) end)
 		else
-			_G[ChatMenus[i]]:HookScript("OnShow", function(self) self:SetTemplate("Default", true) self:SetBackdropColor(unpack(E["media"].backdropfadecolor)) end)
+			_G[ChatMenus[i]]:HookScript("OnShow", function(self) self:SetTemplate("Transparent", true) self:SetBackdropColor(unpack(E["media"].backdropfadecolor)) end)
 		end
 	end
 
@@ -204,12 +204,12 @@ local function LoadSkin()
 	InterfaceOptionsFrame:SetScript("OnDragStart", function(self)
 		if InCombatLockdown() then return end
 
-		if IsShiftKeyDown() then
-			self:StartMoving()
-		end
+		self:StartMoving()
+		self.isMoving = true
 	end)
 	InterfaceOptionsFrame:SetScript("OnDragStop", function(self)
 		self:StopMovingOrSizing()
+		self.isMoving = false
 	end)
 
 	-- Declension frame
@@ -807,4 +807,4 @@ local function LoadSkin()
 	end
 end
 
-S:AddCallback("Misc", LoadSkin);
+S:AddCallback("SkinMisc", LoadSkin);
