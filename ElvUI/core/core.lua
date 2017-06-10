@@ -73,7 +73,7 @@ E.DispelClasses = {
 	["SHAMAN"] = {
 		["Poison"] = true,
 		["Disease"] = true,
-		["Curse"] = true
+		["Curse"] = false
 	},
 	["PALADIN"] = {
 		["Poison"] = true,
@@ -460,6 +460,12 @@ function E:CheckRole()
 	if(self.Role ~= role) then
 		self.Role = role;
 		self.callbacks:Fire("RoleChanged");
+	end
+
+	if self.myclass == "SHAMAN" and talentTree == 3 then
+		self.DispelClasses[self.myclass].Curse = true
+	else
+		self.DispelClasses[self.myclass].Curse = false
 	end
 end
 
