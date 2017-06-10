@@ -270,30 +270,19 @@ function B:UpdateCountDisplay()
 end
 
 function B:UpdateSlot(bagID, slotID)
-	if (self.Bags[bagID] and self.Bags[bagID].numSlots ~= GetContainerNumSlots(bagID)) or not self.Bags[bagID] or not self.Bags[bagID][slotID] then
-		return;
-	end
+	if (self.Bags[bagID] and self.Bags[bagID].numSlots ~= GetContainerNumSlots(bagID)) or not self.Bags[bagID] or not self.Bags[bagID][slotID] then return; end
 
 	local slot, _ = self.Bags[bagID][slotID], nil;
 	local bagType = self.Bags[bagID].type;
-	local texture, count, locked = GetContainerItemInfo(bagID, slotID);
+	local texture, count, locked, _, readable = GetContainerItemInfo(bagID, slotID);
 	local clink = GetContainerItemLink(bagID, slotID);
 
-	slot:Show();
-	if(slot.questIcon) then
-		slot.questIcon:Hide();
-	end
 	slot.name, slot.rarity = nil, nil;
 
-	local start, duration, enable = GetContainerItemCooldown(bagID, slotID)
-	CooldownFrame_SetTimer(slot.cooldown, start, duration, enable)
-	if ( duration > 0 and enable == 0 ) then
-		SetItemButtonTextureVertexColor(slot, 0.4, 0.4, 0.4);
-	else
-		SetItemButtonTextureVertexColor(slot, 1, 1, 1);
-	end
-
+	slot:Show();
+	slot.questIcon:Hide();
 	slot.itemLevel:SetText("")
+
 	if(B.ProfessionColors[bagType]) then
 		slot:SetBackdropBorderColor(unpack(B.ProfessionColors[bagType]))
 	elseif(clink) then
@@ -315,12 +304,9 @@ function B:UpdateSlot(bagID, slotID)
 			end
 		end
 
-		-- color slot according to item quality
 		if questId and not isActiveQuest then
 			slot:SetBackdropBorderColor(1.0, 1.0, 0.0);
-			if(slot.questIcon) then
-				slot.questIcon:Show();
-			end
+			slot.questIcon:Show();
 		elseif questId or isQuestItem then
 			slot:SetBackdropBorderColor(1.0, 0.3, 0.3);
 		elseif slot.rarity and slot.rarity > 1 then
@@ -331,6 +317,22 @@ function B:UpdateSlot(bagID, slotID)
 	else
 		slot:SetBackdropBorderColor(unpack(E.media.bordercolor));
 	end
+
+	if(texture) then
+		local start, duration, enable = GetContainerItemCooldown(bagID, slotID)
+		CooldownFrame_SetTimer(slot.cooldown, start, duration, enable)
+		if duration > 0 and enable == 0 then
+			SetItemButtonTextureVertexColor(slot, 0.4, 0.4, 0.4);
+		else
+			SetItemButtonTextureVertexColor(slot, 1, 1, 1);
+		end
+		slot.hasItem = 1
+	else
+		slot.cooldown:Hide()
+		slot.hasItem = nil
+	end
+
+	slot.readable = readable
 
 	SetItemButtonTexture(slot, texture);
 	SetItemButtonCount(slot, count);
@@ -449,7 +451,6 @@ function B:Layout(isBank)
 				f.ContainerHolder[i].id = isBank and bagID or bagID + 1
 				f.ContainerHolder[i]:HookScript("OnEnter", function(self) B.SetSlotAlphaForBag(self, f) end)
 				f.ContainerHolder[i]:HookScript("OnLeave", function(self) B.ResetSlotAlphaForBags(self, f) end)
-
 
 				if isBank then
 					f.ContainerHolder[i]:SetID(bagID)
@@ -650,19 +651,10 @@ function B:UpdateKeySlot(slotID)
 	local slot = _G["ElvUIKeyFrameItem"..slotID]
 	if not slot then return; end
 
-	slot:Show();
-	if(slot.questIcon) then
-		slot.questIcon:Hide();
-	end
 	slot.name, slot.rarity = nil, nil;
 
-	local start, duration, enable = GetContainerItemCooldown(bagID, slotID)
-	CooldownFrame_SetTimer(slot.cooldown, start, duration, enable)
-	if(duration > 0 and enable == 0) then
-		SetItemButtonTextureVertexColor(slot, 0.4, 0.4, 0.4);
-	else
-		SetItemButtonTextureVertexColor(slot, 1, 1, 1);
-	end
+	slot:Show();
+	slot.questIcon:Hide();
 
 	if(clink) then
 		local _;
@@ -675,12 +667,9 @@ function B:UpdateKeySlot(slotID)
 			r, g, b = GetItemQualityColor(slot.rarity);
 		end
 
-		-- color slot according to item quality
 		if questId and not isActiveQuest then
 			slot:SetBackdropBorderColor(1.0, 1.0, 0.0);
-			if(slot.questIcon) then
-				slot.questIcon:Show();
-			end
+			slot.questIcon:Show();
 		elseif questId or isQuestItem then
 			slot:SetBackdropBorderColor(1.0, 0.3, 0.3);
 		elseif slot.rarity and slot.rarity > 1 then
@@ -690,6 +679,18 @@ function B:UpdateKeySlot(slotID)
 		end
 	else
 		slot:SetBackdropBorderColor(unpack(E.media.bordercolor));
+	end
+
+	if(texture) then
+		local start, duration, enable = GetContainerItemCooldown(bagID, slotID)
+		CooldownFrame_SetTimer(slot.cooldown, start, duration, enable)
+		if(duration > 0 and enable == 0) then
+			SetItemButtonTextureVertexColor(slot, 0.4, 0.4, 0.4);
+		else
+			SetItemButtonTextureVertexColor(slot, 1, 1, 1);
+		end
+	else
+		slot.cooldown:Hide()
 	end
 
 	SetItemButtonTexture(slot, texture);
