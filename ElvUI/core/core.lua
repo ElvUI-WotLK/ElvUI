@@ -462,10 +462,12 @@ function E:CheckRole()
 		self.callbacks:Fire("RoleChanged");
 	end
 
-	if self.myclass == "SHAMAN" and talentTree == 3 then
-		self.DispelClasses[self.myclass].Curse = true
-	else
-		self.DispelClasses[self.myclass].Curse = false
+	if self.HealingClasses[self.myclass] ~= nil and E.myclass == "SHAMAN" then
+		if talentTree == 3 then
+			self.DispelClasses[self.myclass].Curse = true
+		else
+			self.DispelClasses[self.myclass].Curse = false
+		end
 	end
 end
 
