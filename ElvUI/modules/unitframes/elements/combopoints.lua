@@ -9,7 +9,7 @@ local MAX_COMBO_POINTS = MAX_COMBO_POINTS;
 
 function UF:Construct_Combobar(frame)
 	local CPoints = CreateFrame("Frame", nil, frame);
-	CPoints:CreateBackdrop("Default", nil, nil, UF.thinBorders);
+	CPoints:CreateBackdrop("Default", nil, nil, UF.thinBorders, true);
 	CPoints.Override = UF.UpdateComboDisplay;
 	CPoints.origParent = frame;
 
@@ -19,7 +19,7 @@ function UF:Construct_Combobar(frame)
 		CPoints[i]:SetStatusBarTexture(E["media"].blankTex);
 		CPoints[i]:GetStatusBarTexture():SetHorizTile(false);
 		CPoints[i]:SetAlpha(0.15);
-		CPoints[i]:CreateBackdrop("Default", nil, nil, UF.thinBorders);
+		CPoints[i]:CreateBackdrop("Default", nil, nil, UF.thinBorders, true);
 		CPoints[i].backdrop:SetParent(CPoints);
 	end
 
@@ -96,6 +96,9 @@ function UF:Configure_ComboPoints(frame)
 
 	CPoints:Width(CLASSBAR_WIDTH);
 	CPoints:Height(frame.CLASSBAR_HEIGHT - ((frame.BORDER + frame.SPACING)*2));
+
+	local color = E.db.unitframe.colors.borderColor
+	CPoints.backdrop:SetBackdropBorderColor(color.r, color.g, color.b)
 
 	for i = 1, frame.MAX_CLASS_BAR do
 		CPoints[i]:SetStatusBarColor(unpack(ElvUF.colors.ComboPoints[i]));
