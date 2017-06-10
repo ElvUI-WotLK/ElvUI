@@ -156,7 +156,7 @@ local smileyKeys = {
 };
 
 local specialChatIcons = {
-	["WoW Circle 3.3.5a x10"] = {
+	["WoW".."Circle".."3.3.5a".."x10"] = {
 		["Крольченок"] = "|TInterface\\AddOns\\ElvUI\\media\\textures\\ElvUI_Chat_Logo:13:22|t",
 		["Неумеряющый"] = "|TInterface\\AddOns\\ElvUI\\media\\textures\\ElvUI_Chat_Logo:13:22|t"
 	}
@@ -221,6 +221,20 @@ local function ChatFrame_OnMouseScroll(frame, delta)
 			end
 		end
 	end
+end
+
+function CH:GetGroupDistribution()
+	local inInstance, kind = IsInInstance()
+	if inInstance and (kind == "pvp") then
+		return "/bg "
+	end
+	if GetNumRaidMembers() > 0 then
+		return "/ra "
+	end
+	if GetNumPartyMembers() > 0 then
+		return "/p "
+	end
+	return "/s "
 end
 
 function CH:InsertEmotions(msg)
@@ -333,6 +347,11 @@ function CH:StyleChat(frame)
 					unitname = unitname .. "-" .. realm:gsub(" ", "")
 				end
 				ChatFrame_SendTell((unitname or L["Invalid Target"]), ChatFrame1)
+			end
+
+			if text:sub(1, 4) == "/gr " then
+				self:SetText(CH:GetGroupDistribution() .. text:sub(5))
+				ChatEdit_ParseText(self, 0)
 			end
 		end
 
@@ -889,6 +908,18 @@ function GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, a
 	return arg2;
 end
 
+local function GetChatIcons(sender)
+	if(specialChatIcons[PLAYER_REALM] and specialChatIcons[PLAYER_REALM][E.myname] ~= true) then
+		for realm, _ in pairs(specialChatIcons) do
+			for character, texture in pairs(specialChatIcons[realm]) do
+				if sender == character or sender == character.."-"..realm then
+					return texture
+				end
+			end
+		end
+	end
+end
+
 function CH:ChatFrame_MessageEventHandler(event, ...)
 	if ( strsub(event, 1, 8) == "CHAT_MSG" ) then
 		local arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12 = ...;
@@ -1051,38 +1082,31 @@ function CH:ChatFrame_MessageEventHandler(event, ...)
 			end
 
 			-- Add AFK/DND flags
-			local pflag;
-			if(strlen(arg6) > 0) then
-				if ( arg6 == "GM" ) then
+			local pflag = GetChatIcons(arg2);
+			if(arg6 ~= "") then
+				if (arg6 == "GM") then
 					--If it was a whisper, dispatch it to the GMChat addon.
-					if ( type == "WHISPER" ) then
+					if (type == "WHISPER") then
 						return;
 					end
 					--Add Blizzard Icon, this was sent by a GM
 					pflag = "|TInterface\\ChatFrame\\UI-ChatIcon-Blizz.blp:0:2:0:-3|t ";
-				elseif ( arg6 == "DEV" ) then
+				elseif (arg6 == "DEV") then
 					--Add Blizzard Icon, this was sent by a Dev
 					pflag = "|TInterface\\ChatFrame\\UI-ChatIcon-Blizz.blp:0:2:0:-3|t ";
+				elseif (arg6 == "DND" or arg6 == "AFK") then
+					pflag = (pflag or "").._G["CHAT_FLAG_"..arg6];
 				else
 					pflag = _G["CHAT_FLAG_"..arg6];
 				end
 			else
-				if(specialChatIcons[PLAYER_REALM] == nil or (specialChatIcons[PLAYER_REALM] and specialChatIcons[PLAYER_REALM][E.myname] ~= true)) then
-					for realm, _ in pairs(specialChatIcons) do
-						for character, texture in pairs(specialChatIcons[realm]) do
-							if arg2 == character then
-								pflag = texture
-							end
-						end
-					end
-				end
-
 				if(pflag == true) then
-					pflag = nil
+					pflag = ""
 				end
-
-				pflag = pflag or ""
 			end
+
+			pflag = pflag or ""
+
 			if ( type == "WHISPER_INFORM" and GMChatFrame_IsGM and GMChatFrame_IsGM(arg2) ) then
 				return;
 			end
@@ -1506,7 +1530,7 @@ local function GetTimeForSavedMessage()
 end
 
 function CH:SaveChatHistory(event, ...)
-	if self.db.throttleInterval ~= 0 and (event == "CHAT_MESSAGE_SAY" or event == "CHAT_MESSAGE_YELL" or event == "CHAT_MSG_CHANNEL") then
+	if self.db.throttleInterval ~= 0 and (event == "CHAT_MESSAGE_SAY" or event == "CHAT_MESSAGE_YELL" or event == "CHAT_MESSAGE_CHANNEL") then
 		self:ChatThrottleHandler(event, ...)
 
 		local message, author = ...
@@ -1589,21 +1613,17 @@ end)
 local cachedMsg = GetGuildRosterMOTD()
 if cachedMsg == "" then cachedMsg = nil end
 function CH:DelayGMOTD()
-	if(self.db.chatHistory) then
-		self.SoundPlayed = true;
-		self:DisplayChatHistory();
-		self.SoundPlayed = nil;
-	end
+	E:Delay(5, function()
+		stopScript = true
+		DEFAULT_CHAT_FRAME:RegisterEvent("GUILD_MOTD")
+		local msg = cachedMsg or GetGuildRosterMOTD()
+		if msg == "" then msg = nil end
 
-	stopScript = true
-	DEFAULT_CHAT_FRAME:RegisterEvent("GUILD_MOTD")
-	local msg = cachedMsg or GetGuildRosterMOTD()
-	if msg == "" then msg = nil end
-
-	if msg then
-		ChatFrame_SystemEventHandler(DEFAULT_CHAT_FRAME, "GUILD_MOTD", msg)
-	end
-	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+		if msg then
+			ChatFrame_SystemEventHandler(DEFAULT_CHAT_FRAME, "GUILD_MOTD", msg)
+		end
+		self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+	end)
 end
 
 function CH:ON_FCF_SavePositionAndDimensions(_, noLoop)
@@ -1749,6 +1769,12 @@ function CH:Initialize()
 			self:SetPoint(point, anchor, attachTo, -2, -6)
 		end
 	end)
+
+	if self.db.chatHistory then
+		self.SoundPlayed = true
+		self:DisplayChatHistory()
+		self.SoundPlayed = nil
+	end
 
 	local S = E:GetModule("Skins")
 	S:HandleNextPrevButton(CombatLogQuickButtonFrame_CustomAdditionalFilterButton, true)
