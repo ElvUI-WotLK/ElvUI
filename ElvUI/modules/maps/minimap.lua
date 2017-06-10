@@ -296,6 +296,13 @@ function M:UpdateSettings()
 	end
 end
 
+local function MinimapPostDrag()
+	MinimapCluster:ClearAllPoints()
+	MinimapCluster:SetAllPoints(Minimap)
+	MinimapBackdrop:ClearAllPoints()
+	MinimapBackdrop:SetAllPoints(Minimap)
+end
+
 function M:Initialize()
 	menuFrame:SetTemplate("Transparent", true);
 
@@ -371,7 +378,7 @@ function M:Initialize()
 		TimeManagerClockButton:Kill()
 	end
 
-	E:CreateMover(MMHolder, "MinimapMover", L["Minimap"]);
+	E:CreateMover(MMHolder, "MinimapMover", L["Minimap"], nil, nil, MinimapPostDrag)
 
 	Minimap:EnableMouseWheel(true);
 	Minimap:SetScript("OnMouseWheel", M.Minimap_OnMouseWheel);
@@ -382,11 +389,6 @@ function M:Initialize()
 	self:RegisterEvent("ZONE_CHANGED_INDOORS", "Update_ZoneText")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", "Update_ZoneText")
 	self:RegisterEvent("ADDON_LOADED");
-
-	MinimapCluster:ClearAllPoints();
-	MinimapCluster:SetAllPoints(Minimap);
-	MinimapBackdrop:ClearAllPoints();
-	MinimapBackdrop:SetAllPoints(Minimap);
 
 	local fm = CreateFrame("Minimap", "FarmModeMap", E.UIParent);
 	fm:Size(E.db.farmSize);
