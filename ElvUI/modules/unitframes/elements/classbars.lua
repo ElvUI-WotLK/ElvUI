@@ -173,10 +173,8 @@ function UF:Configure_ClassBar(frame)
 	end
 
 	if(frame.CLASSBAR_DETACHED and db.classbar.parent == "UIPARENT") then
-		E.FrameLocks[bars] = true;
 		bars:SetParent(E.UIParent);
 	else
-		E.FrameLocks[bars] = nil;
 		bars:SetParent(frame);
 	end
 

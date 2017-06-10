@@ -95,7 +95,6 @@ function RU:Initialize()
 	RaidUtilityPanel:SetFrameLevel(3);
 	RaidUtilityPanel.toggled = false;
 	RaidUtilityPanel:SetFrameStrata("HIGH");
-	E.FrameLocks["RaidUtilityPanel"] = true;
 
 	self:CreateUtilButton("RaidUtility_ShowButton", E.UIParent, "SecureHandlerClickTemplate", 136, 18, "TOP", E.UIParent, "TOP", -400, E.Border, RAID_CONTROL, nil)
 	RaidUtility_ShowButton:SetFrameRef("RaidUtilityPanel", RaidUtilityPanel);
@@ -134,8 +133,6 @@ function RU:Initialize()
 		if(InCombatLockdown()) then E:Print(ERR_NOT_IN_COMBAT); return; end
 		self:StartMoving();
 	end);
-
-	E.FrameLocks["RaidUtility_ShowButton"] = true;
 
 	RaidUtility_ShowButton:SetScript("OnDragStop", function(self)
 		if(InCombatLockdown()) then E:Print(ERR_NOT_IN_COMBAT); return; end

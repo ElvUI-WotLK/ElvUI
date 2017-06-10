@@ -403,7 +403,6 @@ function M:Initialize()
 	fm:SetScript("OnDragStart", function(self) self:StartMoving(); end);
 	fm:SetScript("OnDragStop", function(self) self:StopMovingOrSizing(); end);
 	fm:Hide();
-	E.FrameLocks["FarmModeMap"] = true;
 
 	FarmModeMap:SetScript("OnShow", function()
 		if(BuffsMover and not E:HasMoverBeenMoved("BuffsMover")) then
