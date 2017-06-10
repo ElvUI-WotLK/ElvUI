@@ -1240,6 +1240,8 @@ function UF:ToggleTransparentStatusBar(isTransparent, statusBar, backdropTex, ad
 		end
 
 		statusBar:SetStatusBarTexture("");
+		if statusBar.texture then statusBar.texture = statusBar:GetStatusBarTexture() end
+
 		backdropTex:ClearAllPoints();
 		if(statusBarOrientation == "VERTICAL") then
 			backdropTex:SetPoint("TOPLEFT", statusBar, "TOPLEFT");
@@ -1273,6 +1275,8 @@ function UF:ToggleTransparentStatusBar(isTransparent, statusBar, backdropTex, ad
 		end
 
 		statusBar:SetStatusBarTexture(LSM:Fetch("statusbar", self.db.statusbar));
+		if statusBar.texture then statusBar.texture = statusBar:GetStatusBarTexture() end
+
 		if(adjustBackdropPoints) then
 			backdropTex:ClearAllPoints();
 			backdropTex:SetAllPoints(statusBar);
