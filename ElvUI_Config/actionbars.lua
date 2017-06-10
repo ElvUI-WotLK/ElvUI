@@ -121,14 +121,14 @@ local function BuildABConfig()
 					min = 1, max = 5, step = 1
 				},
 				alpha = {
-					order = 14,
+					order = 15,
 					type = "range",
 					name = L["Alpha"],
 					isPercent = true,
 					min = 0, max = 1, step = 0.01
 				},
 				paging = {
-					order = 15,
+					order = 16,
 					type = "input",
 					name = L["Action Paging"],
 					desc = L["This works like a macro, you can run different situations to get the actionbar to page differently.\n Example: [combat] 2;"],
@@ -146,7 +146,7 @@ local function BuildABConfig()
 				},
 				visibility = {
 					type = "input",
-					order = 16,
+					order = 17,
 					name = L["Visibility State"],
 					desc = L["This works like a macro, you can run different situations to get the actionbar to show/hide differently.\n Example: [combat] show;hide"],
 					width = "full",
@@ -657,6 +657,7 @@ E.Options.args.actionbar = {
 			name = L["Micro Bar"],
 			get = function(info) return E.db.actionbar.microbar[ info[#info] ] end,
 			set = function(info, value) E.db.actionbar.microbar[ info[#info] ] = value; AB:UpdateMicroPositionDimensions() end,
+			disabled = function() return not E.private.actionbar.enable end,
 			args = {
 				enabled = {
 					order = 1,
