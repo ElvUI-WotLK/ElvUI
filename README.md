@@ -37,7 +37,7 @@ If you want to request a feature, post in the [ElvUI_Enhanced](https://github.co
 <br />
 If you want to request for a change to an existing **ElvUI** function, post in the [ElvUI_CustomTweaks](https://github.com/ElvUI-WotLK/ElvUI_CustomTweaks/issues)
 
-### I have a suggestation/problem with ElvUI_"PluginName". Where do I go?
+### I have a suggestion/problem with ElvUI_"PluginName". Where do I go?
 Create an issue at the bug tracker of [ElvUI](https://github.com/ElvUI-WotLK)_"PluginName" repository.
 
 ### ElvUI conflicting with "AddonName".
