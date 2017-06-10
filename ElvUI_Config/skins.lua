@@ -62,7 +62,8 @@ E.Options.args.skins = {
 				bags = {
 					type = "toggle",
 					name = L["Bags"],
-					desc = L["TOGGLESKIN_DESC"]
+					desc = L["TOGGLESKIN_DESC"],
+					disabled = function() return E.private.bags.enable end
 				},
 				barber = {
 					type = "toggle",
