@@ -128,12 +128,13 @@ function RB:UpdateReminder(event, unit)
 	for i = 1, 6 do
 		local hasBuff, texture, duration, expirationTime = self:CheckFilterForActiveBuff(self["Spell" .. i .. "Buffs"]);
 		local button = self.frame[i];
+		local reverseStyle = E.db.general.reminder.reverse
 
 		if(hasBuff) then
 			button.t:SetTexture(texture);
 
-			if(duration == 0 and expirationTime == 0) then
-				button.t:SetAlpha(1);
+			if(duration == 0 and expirationTime == 0) or E.db.general.reminder.durations ~= true then
+				button.t:SetAlpha(reverseStyle == true and 1 or 0.3)
 				button:SetScript("OnUpdate", nil);
 				button.timer:SetText(nil);
 				CooldownFrame_SetTimer(button.cd, 0, 0, 0);
@@ -142,11 +143,12 @@ function RB:UpdateReminder(event, unit)
 				button.nextUpdate = 0;
 				button.t:SetAlpha(1)
 				CooldownFrame_SetTimer(button.cd, expirationTime - duration, duration, 1);
+				button.cd:SetReverse(reverseStyle == true and true or false)
 				button:SetScript("OnUpdate", self.UpdateReminderTime);
 			end
 		else
 			CooldownFrame_SetTimer(button.cd, 0, 0, 0);
-			button.t:SetAlpha(0.3);
+			button.t:SetAlpha(reverseStyle == true and 0.3 or 1)
 			button:SetScript("OnUpdate", nil);
 			button.timer:SetText(nil);
 			button.t:SetTexture(self.DefaultIcons[i]);
@@ -167,7 +169,6 @@ function RB:CreateButton()
 	button.cd:SetInside();
 	button.cd.noOCC = true;
 	button.cd.noCooldownCount = true;
-	button.cd:SetReverse(true);
 
 	button.timer = button.cd:CreateFontString(nil, "OVERLAY");
 	button.timer:SetPoint("CENTER");
@@ -219,8 +220,6 @@ function RB:UpdateSettings(isCallback)
 		else
 			button.cd:SetAlpha(0);
 		end
-
-		button.cd:SetReverse(E.db.general.reminder.reverse);
 
 		local font = LSM:Fetch("font", E.db.general.reminder.font);
 		button.timer:FontTemplate(font, E.db.general.reminder.fontSize, E.db.general.reminder.fontOutline);
