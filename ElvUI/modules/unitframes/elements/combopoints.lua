@@ -19,7 +19,7 @@ function UF:Construct_Combobar(frame)
 		CPoints[i]:SetStatusBarTexture(E["media"].blankTex);
 		CPoints[i]:GetStatusBarTexture():SetHorizTile(false);
 		CPoints[i]:SetAlpha(0.15);
-		CPoints[i]:CreateBackdrop("Default", nil, nil, UF.thinBorders, true);
+		CPoints[i]:CreateBackdrop("Default", nil, nil, UF.thinBorders);
 		CPoints[i].backdrop:SetParent(CPoints);
 	end
 

@@ -42,6 +42,9 @@ function UF:Configure_Portrait(frame, dontHide)
 			frame:EnableElement("Portrait");
 		end
 
+		local color = E.db.unitframe.colors.borderColor
+		portrait.backdrop:SetBackdropBorderColor(color.r, color.g, color.b)
+
 		portrait:ClearAllPoints();
 		portrait.backdrop:ClearAllPoints();
 		if(frame.USE_PORTRAIT_OVERLAY) then
