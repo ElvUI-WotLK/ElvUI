@@ -161,7 +161,7 @@ function UF:Configure_Power(frame)
 
 		if(not frame.POWERBAR_DETACHED) then
 			if(power.Holder and power.Holder.mover) then
-				power.Holder.mover:SetScale(0.000001);
+				power.Holder.mover:SetScale(0.0001);
 				power.Holder.mover:SetAlpha(0);
 			end
 		end
