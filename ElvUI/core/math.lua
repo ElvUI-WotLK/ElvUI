@@ -46,11 +46,9 @@ end
 
 function E:ColorGradient(perc, ...)
 	if(perc >= 1) then
-		local r, g, b = select(select("#", ...) - 2, ...);
-		return r, g, b;
+		return select(select("#", ...) - 2, ...)
 	elseif(perc <= 0) then
-		local r, g, b = ...;
-		return r, g, b;
+		return ...
 	end
 
 	local num = select("#", ...) / 3;
@@ -301,7 +299,7 @@ E.TimeFormats = {
 };
 
 local DAY, HOUR, MINUTE = 86400, 3600, 60;
-local DAYISH, HOURISH, MINUTEISH = 3600 * 23.5, 60 * 59.5, 59.5;
+local DAYISH, HOURISH, MINUTEISH = HOUR * 23.5, MINUTE * 59.5, 59.5;
 local HALFDAYISH, HALFHOURISH, HALFMINUTEISH = DAY/2 + 0.5, HOUR/2 + 0.5, MINUTE/2 + 0.5;
 
 function E:GetTimeInfo(s, threshhold)

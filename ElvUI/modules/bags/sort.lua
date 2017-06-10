@@ -3,7 +3,6 @@ local B = E:GetModule("Bags");
 
 local Search = LibStub("LibItemSearch-1.2");
 
-local GetTime = GetTime;
 local ipairs, pairs, tonumber, select, unpack = ipairs, pairs, tonumber, select, unpack;
 local tinsert, tremove, tsort, twipe = table.insert, table.remove, table.sort, table.wipe;
 local floor = math.floor;
