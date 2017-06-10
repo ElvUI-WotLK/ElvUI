@@ -131,31 +131,52 @@ function AB:MultiCastRecallSpellButton_Update(self)
 	end
 end
 
-function AB:Totem_OnEnter()
-	if(bar:GetParent() == self.fadeParent) then
-		if(not self.fadeParent.mouseLock) then
-			E:UIFrameFadeIn(self.fadeParent, 0.2, self.fadeParent:GetAlpha(), 1);
-		end
-	elseif(bar.mouseover) then
-		E:UIFrameFadeIn(bar, 0.2, bar:GetAlpha(), bar.db.alpha);
-	end
+function AB:TotemOnEnter()
+	E:UIFrameFadeIn(bar, 0.2, bar:GetAlpha(), self.db["barTotem"].alpha)
 end
 
-function AB:Totem_OnLeave()
-	if(bar:GetParent() == self.fadeParent) then
-		if(not self.fadeParent.mouseLock) then
-			E:UIFrameFadeOut(self.fadeParent, 0.2, self.fadeParent:GetAlpha(), 1 - self.db.globalFadeAlpha);
-		end
-	elseif(bar.mouseover) then
-		E:UIFrameFadeOut(bar, 0.2, bar:GetAlpha(), 0);
-	end
+function AB:TotemOnLeave()
+	E:UIFrameFadeOut(bar, 0.2, bar:GetAlpha(), 0)
 end
 
 function AB:AdjustTotemSettings()
+	local combat = InCombatLockdown()
+
+	if self.db["barTotem"].enabled and not combat then
+		bar:Show()
+	elseif not combat then
+		bar:Hide()
+	end
+
+	if(self.db["barTotem"].inheritGlobalFade) then
+		bar:SetParent(self.fadeParent)
+	else
+		bar:SetParent(E.UIParent)
+	end
+
 	for button, _ in pairs(bar.buttons) do
-		if(not self.hooks[button]) then
-			button:HookScript("OnEnter", function() AB:Totem_OnEnter(); end);
-			button:HookScript("OnLeave", function() AB:Totem_OnLeave(); end);
+		if self.db["barTotem"].mouseover == true then
+			bar:SetAlpha(0)
+			if not self.hooks[bar] then
+				self:HookScript(bar, "OnEnter", "TotemOnEnter")
+				self:HookScript(bar, "OnLeave", "TotemOnLeave")
+			end
+
+			if not self.hooks[button] then
+				self:HookScript(button, "OnEnter", "TotemOnEnter")
+				self:HookScript(button, "OnLeave", "TotemOnLeave")
+			end
+		else
+			bar:SetAlpha(self.db["barTotem"].alpha)
+			if self.hooks[bar] then
+				self:Unhook(bar, "OnEnter")
+				self:Unhook(bar, "OnLeave")
+			end
+
+			if self.hooks[button] then
+				self:Unhook(button, "OnEnter")
+				self:Unhook(button, "OnLeave")
+			end
 		end
 	end
 end
@@ -174,19 +195,6 @@ function AB:PositionAndSizeBarTotem()
 	bar:Height(size);
 	MultiCastActionBarFrame:Height(size);
 	bar.db = self.db["barTotem"];
-
-	bar.mouseover = self.db["barTotem"].mouseover;
-	if(self.db["barTotem"].inheritGlobalFade) then
-		bar:SetParent(self.fadeParent);
-	else
-		bar:SetParent(E.UIParent);
-	end
-
-	if(self.db["barTotem"].mouseover == true) then
-		bar:SetAlpha(0);
-	else
-		bar:SetAlpha(self.db["barTotem"].alpha);
-	end
 
 	MultiCastSummonSpellButton:ClearAllPoints();
 	MultiCastSummonSpellButton:Size(size);
@@ -223,9 +231,6 @@ function AB:CreateTotemBar()
 		AB:PositionAndSizeBarTotem();
 		self:UnregisterEvent("PLAYER_REGEN_ENABLED");
 	end);
-
-	bar:HookScript("OnEnter", AB.Bar_OnEnter);
-	bar:HookScript("OnLeave", AB.Bar_OnLeave);
 
 	MultiCastActionBarFrame:SetParent(bar);
 	MultiCastActionBarFrame:ClearAllPoints();
