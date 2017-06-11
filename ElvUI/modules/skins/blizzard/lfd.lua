@@ -30,60 +30,40 @@ local function LoadSkin()
 	S:HandleButton(LFDQueueFrameFindGroupButton, true)
 	S:HandleButton(LFDQueueFrameCancelButton, true)
 
+	LFDQueueFrameRoleButtonTank:Point("TOPLEFT", LFDQueueFrame, "TOPLEFT", 40, -60)
+	LFDQueueFrameRoleButtonHealer:Point("LEFT", LFDQueueFrameRoleButtonTank,"RIGHT", 23, 0)
+	LFDQueueFrameRoleButtonLeader:Point("LEFT", LFDQueueFrameRoleButtonDPS, "RIGHT", 50, 0)
+
 	local tankIcon = "Interface\\Icons\\Ability_Defend"
 	local healerIcon = "Interface\\Icons\\SPELL_NATURE_HEALINGTOUCH"
 	local damagerIcon = "Interface\\Icons\\Ability_Warrior_PunishingBlow"
 	local leaderIcon = "Interface\\Icons\\Ability_Vehicle_LaunchPlayer"
 
-	S:HandleCheckBox(LFDQueueFrameRoleButtonTank.checkButton)
-	S:HandleCheckBox(LFDQueueFrameRoleButtonHealer.checkButton)
-	S:HandleCheckBox(LFDQueueFrameRoleButtonDPS.checkButton)
-	S:HandleCheckBox(LFDQueueFrameRoleButtonLeader.checkButton)
+	local lfdRoleIcons = {
+		"LFDQueueFrameRoleButtonTank",
+		"LFDQueueFrameRoleButtonHealer",
+		"LFDQueueFrameRoleButtonDPS",
+		"LFDQueueFrameRoleButtonLeader"
+	}
 
-	LFDQueueFrameRoleButtonTank.checkButton:SetFrameLevel(LFDQueueFrameRoleButtonTank.checkButton:GetFrameLevel() + 2)
-	LFDQueueFrameRoleButtonHealer.checkButton:SetFrameLevel(LFDQueueFrameRoleButtonHealer.checkButton:GetFrameLevel() + 2)
-	LFDQueueFrameRoleButtonDPS.checkButton:SetFrameLevel(LFDQueueFrameRoleButtonDPS.checkButton:GetFrameLevel() + 2)
-	LFDQueueFrameRoleButtonLeader.checkButton:SetFrameLevel(LFDQueueFrameRoleButtonLeader.checkButton:GetFrameLevel() + 2)
+	for i = 1, #lfdRoleIcons do
+		S:HandleCheckBox(_G[lfdRoleIcons[i]].checkButton)
+		_G[lfdRoleIcons[i]].checkButton:SetFrameLevel(_G[lfdRoleIcons[i]].checkButton:GetFrameLevel() + 2)
 
-	LFDQueueFrameRoleButtonTank:Point("TOPLEFT", LFDQueueFrame, "TOPLEFT", 40, -60)
-	LFDQueueFrameRoleButtonHealer:Point("LEFT", LFDQueueFrameRoleButtonTank,"RIGHT", 23, 0)
-	LFDQueueFrameRoleButtonLeader:Point("LEFT", LFDQueueFrameRoleButtonDPS, "RIGHT", 50, 0)
+		_G[lfdRoleIcons[i]]:StripTextures()
+		_G[lfdRoleIcons[i]]:CreateBackdrop()
+		_G[lfdRoleIcons[i]].backdrop:Point("TOPLEFT", 3, -3)
+		_G[lfdRoleIcons[i]].backdrop:Point("BOTTOMRIGHT", -3, 3)
 
-	LFDQueueFrameRoleButtonTank:StripTextures()
-	LFDQueueFrameRoleButtonTank:CreateBackdrop()
-	LFDQueueFrameRoleButtonTank.backdrop:Point("TOPLEFT", 3, -3)
-	LFDQueueFrameRoleButtonTank.backdrop:Point("BOTTOMRIGHT", -3, 3)
-	LFDQueueFrameRoleButtonTank.icon = LFDQueueFrameRoleButtonTank:CreateTexture(nil, "OVERLAY");
-	LFDQueueFrameRoleButtonTank.icon:SetTexCoord(unpack(E.TexCoords))
-	LFDQueueFrameRoleButtonTank.icon:SetTexture(tankIcon);
-	LFDQueueFrameRoleButtonTank.icon:SetInside(LFDQueueFrameRoleButtonTank.backdrop)
+		_G[lfdRoleIcons[i]].icon = _G[lfdRoleIcons[i]]:CreateTexture(nil, "OVERLAY")
+		_G[lfdRoleIcons[i]].icon:SetTexCoord(unpack(E.TexCoords))
+		_G[lfdRoleIcons[i]].icon:SetInside(_G[lfdRoleIcons[i]].backdrop)
+	end
 
-	LFDQueueFrameRoleButtonHealer:StripTextures()
-	LFDQueueFrameRoleButtonHealer:CreateBackdrop()
-	LFDQueueFrameRoleButtonHealer.backdrop:Point("TOPLEFT", 3, -3)
-	LFDQueueFrameRoleButtonHealer.backdrop:Point("BOTTOMRIGHT", -3, 3)
-	LFDQueueFrameRoleButtonHealer.icon = LFDQueueFrameRoleButtonHealer:CreateTexture(nil, "OVERLAY");
-	LFDQueueFrameRoleButtonHealer.icon:SetTexCoord(unpack(E.TexCoords))
-	LFDQueueFrameRoleButtonHealer.icon:SetTexture(healerIcon);
-	LFDQueueFrameRoleButtonHealer.icon:SetInside(LFDQueueFrameRoleButtonHealer.backdrop)
-
-	LFDQueueFrameRoleButtonDPS:StripTextures()
-	LFDQueueFrameRoleButtonDPS:CreateBackdrop()
-	LFDQueueFrameRoleButtonDPS.backdrop:Point("TOPLEFT", 3, -3)
-	LFDQueueFrameRoleButtonDPS.backdrop:Point("BOTTOMRIGHT", -3, 3)
-	LFDQueueFrameRoleButtonDPS.icon = LFDQueueFrameRoleButtonDPS:CreateTexture(nil, "OVERLAY");
-	LFDQueueFrameRoleButtonDPS.icon:SetTexCoord(unpack(E.TexCoords))
-	LFDQueueFrameRoleButtonDPS.icon:SetTexture(damagerIcon);
-	LFDQueueFrameRoleButtonDPS.icon:SetInside(LFDQueueFrameRoleButtonDPS.backdrop)
-
-	LFDQueueFrameRoleButtonLeader:StripTextures()
-	LFDQueueFrameRoleButtonLeader:CreateBackdrop("Default")
-	LFDQueueFrameRoleButtonLeader.backdrop:Point("TOPLEFT", 3, -3)
-	LFDQueueFrameRoleButtonLeader.backdrop:Point("BOTTOMRIGHT", -3, 3)
-	LFDQueueFrameRoleButtonLeader.icon = LFDQueueFrameRoleButtonLeader:CreateTexture(nil, "OVERLAY");
-	LFDQueueFrameRoleButtonLeader.icon:SetTexCoord(unpack(E.TexCoords))
-	LFDQueueFrameRoleButtonLeader.icon:SetTexture(leaderIcon);
-	LFDQueueFrameRoleButtonLeader.icon:SetInside(LFDQueueFrameRoleButtonLeader.backdrop)
+	LFDQueueFrameRoleButtonTank.icon:SetTexture(tankIcon)
+	LFDQueueFrameRoleButtonHealer.icon:SetTexture(healerIcon)
+	LFDQueueFrameRoleButtonDPS.icon:SetTexture(damagerIcon)
+	LFDQueueFrameRoleButtonLeader.icon:SetTexture(leaderIcon)
 
 	hooksecurefunc("LFG_PermanentlyDisableRoleButton", function(button)
 		if button.icon then
