@@ -120,8 +120,13 @@ E.Options.args.chat = {
 						CH:UpdateSettings();
 					end
 				},
-				throttleInterval = {
+				spacer = {
 					order = 11,
+					type = "description",
+					name = " ",
+				},
+				throttleInterval = {
+					order = 12,
 					type = "range",
 					name = L["Spam Interval"],
 					desc = L["Prevent the same messages from displaying in chat more than once within this set amount of seconds, set to zero to disable."],
@@ -134,7 +139,7 @@ E.Options.args.chat = {
 					end
 				},
 				scrollDownInterval = {
-					order = 12,
+					order = 13,
 					type = "range",
 					name = L["Scroll Interval"],
 					desc = L["Number of time in seconds to scroll down to the bottom of the chat window if you are not scrolled down completely."],
@@ -144,21 +149,47 @@ E.Options.args.chat = {
 					end
 				},
 				numAllowedCombatRepeat = {
-					order = 13,
+					order = 14,
 					type = "range",
 					name = L["Allowed Combat Repeat"],
 					desc = L["Number of repeat characters while in combat before the chat editbox is automatically closed."],
 					min = 2, max = 10, step = 1
 				},
 				numScrollMessages = {
-					order = 14,
+					order = 15,
 					type = "range",
 					name = L["Scroll Messages"],
 					desc = L["Number of messages you scroll for each step."],
 					min = 1, max = 10, step = 1,
 				},
+				scrollDirection = {
+					order = 16,
+					type = "select",
+					name = L["Scroll Direction"],
+					values = {
+						["BOTTOM"] = L["Bottom to Top"],
+						["TOP"] = L["Top to Bottom"]
+					}
+				},
+				chatHistoryLines = {
+					order = 17,
+					type = "range",
+					name = L["Chat History Lines"],
+					desc = L["Number of chat messages to be stores in the chat history."],
+					disabled = function() return not E.db.chat.chatHistory; end,
+					hidden = function() return not E.db.chat.chatHistory; end,
+					min = 250, max = 10000, step = 10,
+					set = function(info, value)
+						E.db.chat.chatHistoryLines = value;
+					end
+				},
+				spacer2 = {
+					order = 18,
+					type = "description",
+					name = " ",
+				},
 				timeStampFormat = {
-					order = 15,
+					order = 19,
 					type = "select",
 					name = TIMESTAMPS_LABEL,
 					desc = OPTION_TOOLTIP_TIMESTAMPS,
@@ -173,13 +204,13 @@ E.Options.args.chat = {
 					}
 				},
 				useCustomTimeColor = {
-					order = 16,
+					order = 20,
 					type = "toggle",
 					name = L["Custom Timestamp Color"],
 					disabled = function() return not E.db.chat.timeStampFormat == "NONE"; end
 				},
 				customTimeColor = {
-					order = 17,
+					order = 21,
 					type = "color",
 					hasAlpha = false,
 					name = L["Timestamp Color"],
@@ -192,27 +223,6 @@ E.Options.args.chat = {
 					set = function(info, r, g, b)
 						local t = E.db.chat.customTimeColor;
 						t.r, t.g, t.b = r, g, b;
-					end
-				},
-				scrollDirection = {
-					order = 18,
-					type = "select",
-					name = L["Scroll Direction"],
-					values = {
-						["BOTTOM"] = L["Bottom to Top"],
-						["TOP"] = L["Top to Bottom"]
-					}
-				},
-				chatHistoryLines = {
-					order = 19,
-					type = "range",
-					name = L["Chat History Lines"],
-					desc = L["Number of chat messages to be stores in the chat history."],
-					disabled = function() return not E.db.chat.chatHistory; end,
-					hidden = function() return not E.db.chat.chatHistory; end,
-					min = 250, max = 10000, step = 10,
-					set = function(info, value)
-						E.db.chat.chatHistoryLines = value;
 					end
 				}
 			}
