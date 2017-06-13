@@ -846,10 +846,8 @@ function E:UpdateAll(ignoreInstall)
 		E:GetModule("Auras"):UpdateHeader(ElvUIPlayerDebuffs);
 	end
 
-	if(self.private.install_complete == nil or (self.private.install_complete and type(self.private.install_complete) == "boolean") or (self.private.install_complete and type(tonumber(self.private.install_complete)) == "number" and tonumber(self.private.install_complete) <= 3.83)) then
-		if(not ignoreInstall) then
-			self:Install();
-		end
+	if not (self.private.install_complete or ignoreInstall) then
+		self:Install()
 	end
 
 	self:GetModule("Minimap"):UpdateSettings();

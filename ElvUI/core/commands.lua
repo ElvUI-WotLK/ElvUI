@@ -159,7 +159,7 @@ function E:LoadCommands()
 	self:RegisterChatCommand("farmmode", "FarmMode");
 	--self:RegisterChatCommand("aprilfools", "");
 
-	if(E:GetModule("ActionBars")) then
+	if E:GetModule("ActionBars") and E.private.actionbar.enable then
 		self:RegisterChatCommand("kb", E:GetModule("ActionBars").ActivateBindMode);
 	end
 end
