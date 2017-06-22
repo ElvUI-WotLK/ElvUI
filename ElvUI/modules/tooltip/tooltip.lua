@@ -103,6 +103,7 @@ local SlotName = {
 	"Trinket0","Trinket1","MainHand","SecondaryHand","Ranged"
 }
 
+--[[
 --All this does is increase the spacing between tooltips when you compare items
 function TT:GameTooltip_ShowCompareItem(tt, shift)
 	if ( not tt ) then
@@ -217,6 +218,7 @@ function TT:GameTooltip_ShowCompareItem(tt, shift)
 		end
 	end
 end
+]]
 
 function TT:GameTooltip_SetDefaultAnchor(tt, parent)
 	if E.private.tooltip.enable ~= true then return end
@@ -782,7 +784,7 @@ function TT:Initialize()
 	self:SecureHook("GameTooltip_SetDefaultAnchor")
 	self:SecureHook("GameTooltip_ShowStatusBar")
 	self:SecureHook("SetItemRef")
-	self:SecureHook("GameTooltip_ShowCompareItem")
+	--self:SecureHook("GameTooltip_ShowCompareItem")
 	self:SecureHook(GameTooltip, "SetUnitAura")
 	self:SecureHook(GameTooltip, "SetUnitBuff", "SetUnitAura")
 	self:SecureHook(GameTooltip, "SetUnitDebuff", "SetUnitAura")
