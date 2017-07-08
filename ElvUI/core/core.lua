@@ -1045,20 +1045,8 @@ end
 
 --DATABASE CONVERSIONS
 function E:DBConversions()
-	if E.db.nameplate then
-		E.db.nameplate = nil
-	end
-
-	if E.global.nameplate then
-		E.global.nameplates = E.global.nameplate
-		E.global.nameplate = nil
-	end
-
-	if not E.db.thinBorderColorSet then
-		if E.PixelMode then
-			E.db.general.bordercolor = {r = 0, g = 0, b = 0}
-		end
-		E.db.thinBorderColorSet = true
+	if E.db.thinBorderColorSet then
+		E.db.thinBorderColorSet = nil
 	end
 end
 
