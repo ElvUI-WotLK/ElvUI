@@ -141,6 +141,7 @@ function B:LoadBagBar()
 
 	ElvUIKeyRingButton:SetTemplate()
 	ElvUIKeyRingButton:StyleButton(true);
+	_G[ElvUIKeyRingButton:GetName().."IconTexture"]:SetInside()
 	ElvUIKeyRingButton:SetParent(ElvUIBags);
 	ElvUIKeyRingButton.SetParent = E.dummy;
 	ElvUIKeyRingButton:HookScript("OnEnter", OnEnter);
