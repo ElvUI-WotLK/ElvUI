@@ -156,7 +156,7 @@ local smileyKeys = {
 };
 
 local specialChatIcons = {
-	["WoW".."Circle".."3.3.5a".."x10"] = {
+	["WoW Circle 3.3.5a x10"] = {
 		["Крольченок"] = "|TInterface\\AddOns\\ElvUI\\media\\textures\\ElvUI_Chat_Logo:13:22|t",
 		["Неумеряющый"] = "|TInterface\\AddOns\\ElvUI\\media\\textures\\ElvUI_Chat_Logo:13:22|t"
 	}
@@ -742,7 +742,6 @@ end
 
 function CH:FindURL(event, msg, ...)
 	if (event == "CHAT_MSG_WHISPER" or event == "CHAT_MSG_BN_WHISPER") and CH.db.whisperSound ~= "None" and not CH.SoundPlayed then
-		if (msg:sub(1,3) == "OQ,") then return false, msg, ... end
 		if (CH.db.noAlertInCombat and not InCombatLockdown()) or not CH.db.noAlertInCombat then
 			PlaySoundFile(LSM:Fetch("sound", CH.db.whisperSound), "Master")
 		end
@@ -1530,7 +1529,7 @@ local function GetTimeForSavedMessage()
 end
 
 function CH:SaveChatHistory(event, ...)
-	if self.db.throttleInterval ~= 0 and (event == "CHAT_MESSAGE_SAY" or event == "CHAT_MESSAGE_YELL" or event == "CHAT_MESSAGE_CHANNEL") then
+	if self.db.throttleInterval ~= 0 and (event == "CHAT_MESSAGE_SAY" or event == "CHAT_MESSAGE_YELL" or event == "CHAT_MSG_CHANNEL") then
 		self:ChatThrottleHandler(event, ...)
 
 		local message, author = ...
