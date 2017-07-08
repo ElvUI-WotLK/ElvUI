@@ -122,7 +122,6 @@ local function ItemOnUpdate(self)
 	CursorOnUpdate(self);
 end
 
-
 local function LootClick(frame)
 	if(IsControlKeyDown()) then
 		DressUpItemLink(frame.link);

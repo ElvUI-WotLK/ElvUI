@@ -114,8 +114,8 @@ function lib:GetPluginOptions()
 		guiInline = false,
 		args = {
 			pluginheader = {
-			order = 1,
-			type = "header",
+				order = 1,
+				type = "header",
 				name = format(HDR_INFORMATION, MINOR),
 			},
 			plugins = {
