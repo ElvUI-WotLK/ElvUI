@@ -124,7 +124,7 @@ L["Auras Set"] = "光环样式设置"
 L["Auras"] = "光环"
 L["Caster DPS"] = "法系输出"
 L["Chat Set"] = "对话设定"
-L["Chat"] = "聊天框设定"
+L["Chat"] = "聊天框"
 L["Choose a theme layout you wish to use for your initial setup."] = "为你的个人设置选择一个你喜欢的皮肤主题."
 L["Classic"] = "经典"
 L["Click the button below to resize your chat frames, unitframes, and reposition your actionbars."] = "点击下面的按钮调整聊天框、单位框架的尺寸, 以及移动动作条位置"
@@ -188,7 +188,7 @@ L["Bars"] = "条"
 L["Calendar"] = "日历"
 L["Can't Roll"] = "无法需求此装备"
 L["Disband Group"] = "解散队伍"
-L["Empty Slot"] = true;
+L["Empty Slot"] = "空拾取位"
 L["Enable"] = "启用"
 L["Experience"] = "经验/声望条"
 L["Farm Mode"] = true;
@@ -218,9 +218,9 @@ L["Boss Frames"] = "首领框架"
 L["Classbar"] = "职业特有条"
 L["Experience Bar"] = "经验条"
 L["Focus Castbar"] = "焦点目标施法条"
-L["Focus Frame"] = "专注目标框架"
-L["FocusTarget Frame"] = "专注目标的目标框架"
-L["GM Ticket Frame"] = "GM 对话框"
+L["Focus Frame"] = "焦点目标框架"
+L["FocusTarget Frame"] = "焦点目标的目标框架"
+L["GM Ticket Frame"] = "GM对话框"
 L["Left Chat"] = "左侧对话框"
 L["Loot / Alert Frames"] = "拾取/提醒框"
 L["Loot Frame"] = "拾取框架"
@@ -258,9 +258,9 @@ L["Watch Frame"] = true;
 L["Weapons"] = true;
 L["DESC_MOVERCONFIG"] = [=[解除框架移动锁定. 现在可以移动它们, 移好后请点击「锁定」.
 
-Options:
-  Shift + RightClick - Hides mover temporarily.
-  Ctrl + RightClick - Resets mover position to default.
+选项：
+  Shift + 右键 - 暂时隐藏定位开关
+  Ctrl + 右键 - 重置定位开关位置
 ]=]
 
 --Plugin Installer
@@ -306,7 +306,7 @@ L["Do you swear not to post in technical support about something not working wit
 L["ElvUI is five or more revisions out of date. You can download the newest version from https://github.com/ElvUI-WotLK/ElvUI/"] = "ElvUI每天有5个或者更多的版本.你可以在 https://github.com/ElvUI-WotLK/ElvUI/ 下载到最新的版本"
 L["ElvUI is out of date. You can download the newest version from https://github.com/ElvUI-WotLK/ElvUI/"] = true;
 L["ElvUI needs to perform database optimizations please be patient."] = "ElvUI需要进行数据库优化, 请耐性等待."
-L["Hover your mouse over any actionbutton or spellbook button to bind it. Press the escape key or right click to clear the current actionbutton's keybinding."] = "移动滑鼠到动作条或技能书按钮上绑定快捷键. 按ESC或滑鼠右键取消目前快捷键"
+L["Hover your mouse over any actionbutton or spellbook button to bind it. Press the escape key or right click to clear the current actionbutton's keybinding."] = "移动鼠标到动作条或技能书按钮上绑定快捷键. 按ESC或鼠标右键取消目前快捷键"
 L["I Swear"] = "我承诺"
 L["No, Revert Changes!"] = "不, 撤销修改！"
 L["Oh lord, you have got ElvUI and Tukui both enabled at the same time. Select an addon to disable."] = "你不能同时使用Elvui和Tukui, 请选择一个禁用."

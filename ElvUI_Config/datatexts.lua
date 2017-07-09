@@ -287,12 +287,12 @@ E.Options.args.datatexts = {
 		time = {
 			order = 5,
 			type = "group",
-			name = "Time",
+			name = L["Time"],
 			args = {
 				header = {
 					order = 1,
 					type = "header",
-					name = "Time"
+					name = L["Time"],
 				},
 				timeFormat = {
 					order = 2,
