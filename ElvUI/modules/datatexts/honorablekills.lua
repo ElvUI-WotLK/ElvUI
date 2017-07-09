@@ -4,6 +4,7 @@ local DT = E:GetModule("DataTexts");
 local join = string.join;
 
 local GetPVPLifetimeStats = GetPVPLifetimeStats;
+local KILLS = KILLS;
 local HONORABLE_KILLS = HONORABLE_KILLS;
 
 local lastPanel;
@@ -12,7 +13,7 @@ local displayNumberString = "";
 local function OnEvent(self)
 	local hk = GetPVPLifetimeStats();
 
-	self.text:SetFormattedText(displayNumberString, HONORABLE_KILLS, hk);
+	self.text:SetFormattedText(displayNumberString, KILLS, hk);
 
 	lastPanel = self;
 end
@@ -26,4 +27,4 @@ local function ValueColorUpdate(hex)
 end
 E["valueColorUpdateFuncs"][ValueColorUpdate] = true;
 
-DT:RegisterDatatext("Honorable Kills", {"PLAYER_PVP_KILLS_CHANGED", "PLAYER_PVP_RANK_CHANGED"}, OnEvent);
+DT:RegisterDatatext("Honorable Kills", {"PLAYER_PVP_KILLS_CHANGED", "PLAYER_PVP_RANK_CHANGED"}, OnEvent, nil, nil, nil, nil, HONORABLE_KILLS)

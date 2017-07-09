@@ -6,6 +6,7 @@ local select = select;
 local join = string.join;
 
 local UnitGUID = UnitGUID;
+local STAT_DPS_SHORT = STAT_DPS_SHORT
 
 local events = {SWING_DAMAGE = true, RANGE_DAMAGE = true, SPELL_DAMAGE = true, SPELL_PERIODIC_DAMAGE = true, DAMAGE_SHIELD = true, DAMAGE_SPLIT = true, SPELL_EXTRA_ATTACKS = true};
 local playerID, petID;
@@ -81,4 +82,4 @@ local function ValueColorUpdate(hex)
 end
 E["valueColorUpdateFuncs"][ValueColorUpdate] = true;
 
-DT:RegisterDatatext("DPS", {"PLAYER_ENTERING_WORLD", "COMBAT_LOG_EVENT_UNFILTERED", "PLAYER_LEAVE_COMBAT", "PLAYER_REGEN_DISABLED", "UNIT_PET"}, OnEvent, nil, OnClick);
+DT:RegisterDatatext("DPS", {"PLAYER_ENTERING_WORLD", "COMBAT_LOG_EVENT_UNFILTERED", "PLAYER_LEAVE_COMBAT", "PLAYER_REGEN_DISABLED", "UNIT_PET"}, OnEvent, nil, OnClick, nil, nil, STAT_DPS_SHORT)

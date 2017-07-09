@@ -13,7 +13,7 @@ local lastPanel;
 
 local function OnUpdate(self)
 	timer = GetTime() - startTime;
-	self.text:SetFormattedText(displayNumberString, L["Combat Time"], format("%02d:%02d:%02d", floor(timer / 60), timer % 60, (timer - floor(timer)) * 100));
+	self.text:SetFormattedText(displayNumberString, L["Combat"], format("%02d:%02d:%02d", floor(timer / 60), timer % 60, (timer - floor(timer)) * 100));
 end
 
 local function OnEvent(self, event)
@@ -24,7 +24,7 @@ local function OnEvent(self, event)
 	elseif(event == "PLAYER_REGEN_ENABLED") then
 		self:SetScript("OnUpdate", nil);
 	else
-		self.text:SetFormattedText(displayNumberString, L["Combat Time"], "00:00:00");
+		self.text:SetFormattedText(displayNumberString, L["Combat"], "00:00:00");
 	end
 
 	lastPanel = self;
@@ -39,4 +39,4 @@ local function ValueColorUpdate(hex)
 end
 E["valueColorUpdateFuncs"][ValueColorUpdate] = true;
 
-DT:RegisterDatatext("Combat Time", {"PLAYER_REGEN_ENABLED", "PLAYER_REGEN_DISABLED"}, OnEvent);
+DT:RegisterDatatext("Combat Time", {"PLAYER_REGEN_ENABLED", "PLAYER_REGEN_DISABLED"}, OnEvent, nil, nil, nil, nil, L["Combat Time"])

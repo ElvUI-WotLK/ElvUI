@@ -30,4 +30,4 @@ local function ValueColorUpdate(hex)
 end
 E["valueColorUpdateFuncs"][ValueColorUpdate] = true;
 
-DT:RegisterDatatext("Spell/Heal Power", {"PLAYER_DAMAGE_DONE_MODS"}, OnEvent);
+DT:RegisterDatatext("Spell/Heal Power", {"PLAYER_DAMAGE_DONE_MODS"}, OnEvent, nil, nil, nil, nil, L["Spell/Heal Power"])

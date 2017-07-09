@@ -5,13 +5,13 @@ local join = string.join;
 
 local GetTotalAchievementPoints = GetTotalAchievementPoints;
 local ToggleAchievementFrame = ToggleAchievementFrame;
-local ACHIEVEMENT_TITLE = ACHIEVEMENT_TITLE;
+local ACHIEVEMENTS = ACHIEVEMENTS;
 
 local lastPanel;
 local displayNumberString = "";
 
 local function OnEvent(self)
-	self.text:SetFormattedText(displayNumberString, ACHIEVEMENT_TITLE, GetTotalAchievementPoints());
+	self.text:SetFormattedText(displayNumberString, ACHIEVEMENTS, GetTotalAchievementPoints());
 	lastPanel = self;
 end
 
@@ -28,4 +28,4 @@ local function ValueColorUpdate(hex)
 end
 E["valueColorUpdateFuncs"][ValueColorUpdate] = true;
 
-DT:RegisterDatatext("Achievement", {"ACHIEVEMENT_EARNED"}, OnEvent, nil, OnClick);
+DT:RegisterDatatext("Achievement", {"ACHIEVEMENT_EARNED"}, OnEvent, nil, OnClick, nil, nil, ACHIEVEMENTS)

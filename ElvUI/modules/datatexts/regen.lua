@@ -29,4 +29,4 @@ local function ValueColorUpdate(hex)
 end
 E["valueColorUpdateFuncs"][ValueColorUpdate] = true;
 
-DT:RegisterDatatext("Mana Regen", {"PLAYER_DAMAGE_DONE_MODS", "PLAYER_REGEN_DISABLED", "PLAYER_REGEN_ENABLED"}, OnEvent);
+DT:RegisterDatatext("Mana Regen", {"PLAYER_DAMAGE_DONE_MODS", "PLAYER_REGEN_DISABLED", "PLAYER_REGEN_ENABLED"}, OnEvent, nil, nil, nil, nil, MANA_REGEN)

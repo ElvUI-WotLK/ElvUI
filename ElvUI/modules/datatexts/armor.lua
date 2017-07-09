@@ -52,4 +52,4 @@ local function ValueColorUpdate(hex)
 end
 E["valueColorUpdateFuncs"][ValueColorUpdate] = true;
 
-DT:RegisterDatatext("Armor", {"UNIT_RESISTANCES"}, OnEvent, nil, nil, OnEnter);
+DT:RegisterDatatext("Armor", {"UNIT_RESISTANCES"}, OnEvent, nil, nil, OnEnter, nil, ARMOR)

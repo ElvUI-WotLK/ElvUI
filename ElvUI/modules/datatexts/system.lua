@@ -181,4 +181,4 @@ local function OnUpdate(self, t)
 	end
 end
 
-DT:RegisterDatatext("System", nil, nil, OnUpdate, OnClick, OnEnter, OnLeave);
+DT:RegisterDatatext("System", nil, nil, OnUpdate, OnClick, OnEnter, OnLeave, L["System"])
