@@ -239,8 +239,10 @@ local function onPowerUpdate(self)
 end
 
 function updateFrequentUpdates(self, unit)
+	if(not unit or (unit ~= 'player' and unit ~= 'pet')) then return end
+
 	local element = self.Power
-	if(element.frequentUpdates and (unit == 'player' or unit == 'pet') and not element:GetScript('OnUpdate')) then
+	if(element.frequentUpdates and not element:GetScript('OnUpdate')) then
 		element:SetScript('OnUpdate', onPowerUpdate)
 
 		self:UnregisterEvent('UNIT_MANA', Path)

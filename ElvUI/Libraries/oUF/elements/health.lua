@@ -217,6 +217,8 @@ local function onHealthUpdate(self)
 end
 
 function updateFrequentUpdates(self, unit)
+	if(not unit or unit:match('%w+target$')) then return end
+
 	local element = self.Health
 	if(element.frequentUpdates and not element:GetScript('OnUpdate')) then
 		element:SetScript('OnUpdate', onHealthUpdate)
