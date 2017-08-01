@@ -16,7 +16,7 @@ local roleIconTextures = {
 };
 
 function UF:UpdateRoleIcon()
-	local lfdrole = self.LFDRole;
+	local lfdrole = self.GroupRoleIndicator;
 	if(not self.db) then return; end
 	local db = self.db.roleIcon;
 
@@ -49,18 +49,18 @@ function UF:UpdateRoleIcon()
 end
 
 function UF:Configure_RoleIcon(frame)
-	local role = frame.LFDRole;
+	local role = frame.GroupRoleIndicator;
 	local db = frame.db;
 
 	if(db.roleIcon.enable) then
-		frame:EnableElement("LFDRole");
+		frame:EnableElement("GroupRoleIndicator");
 		local attachPoint = self:GetObjectAnchorPoint(frame, db.roleIcon.attachTo);
 
 		role:ClearAllPoints();
 		role:Point(db.roleIcon.position, attachPoint, db.roleIcon.position, db.roleIcon.xOffset, db.roleIcon.yOffset);
 		role:Size(db.roleIcon.size);
 	else
-		frame:DisableElement("LFDRole");
+		frame:DisableElement("GroupRoleIndicator");
 		role:Hide();
 	end
 end

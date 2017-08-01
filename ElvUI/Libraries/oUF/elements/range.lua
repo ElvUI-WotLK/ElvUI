@@ -1,222 +1,97 @@
+--[[
+# Element: Range Fader
+
+Changes the opacity of a unit frame based on whether the frame's unit is in the player's range.
+
+## Widget
+
+Range - A table containing opacity values.
+
+## Notes
+
+Offline units are handled as if they are in range.
+
+## Options
+
+.outsideAlpha - Opacity when the unit is out of range. Defaults to 0.55 (number)[0-1].
+.insideAlpha  - Opacity when the unit is within range. Defaults to 1 (number)[0-1].
+
+## Examples
+
+    -- Register with oUF
+    self.Range = {
+        insideAlpha = 1,
+        outsideAlpha = 1/2,
+    }
+--]]
+
 local _, ns = ...
 local oUF = ns.oUF
-
-local ipairs = ipairs
-local tinsert, tremove, twipe = table.insert, table.remove, table.wipe
-
-local UnitIsConnected = UnitIsConnected
-local GetSpellInfo = GetSpellInfo
-local IsUsableSpell = IsUsableSpell
-local UnitClass = UnitClass
-local UnitIsUnit = UnitIsUnit
-local CheckInteractDistance = CheckInteractDistance
-local UnitIsDeadOrGhost = UnitIsDeadOrGhost
-local IsSpellInRange = IsSpellInRange
-local UnitInParty = UnitInParty
-local UnitInRaid = UnitInRaid
-local UnitInRange = UnitInRange
-local UnitCanAttack = UnitCanAttack
 
 local _FRAMES = {}
 local OnRangeFrame
 
-local friendlySpells, resSpells, longEnemySpells, enemySpells, petSpells = {}, {}, {}, {}, {}
+local UnitInRange, UnitIsConnected = UnitInRange, UnitIsConnected
 
-local function AddSpell(table, spellID)
-	local name = GetSpellInfo(spellID)
-	if name then
-		local usable, nomana = IsUsableSpell(name)
-		if((usable or nomana) or (spellID == 20271)) then
-			table[#table + 1] = name
-		end
+local function Update(self, event)
+	local element = self.Range
+	local unit = self.unit
+
+	--[[ Callback: Range:PreUpdate()
+	Called before the element has been updated.
+
+	* self - the Range element
+	--]]
+	if(element.PreUpdate) then
+		element:PreUpdate()
 	end
-end
 
-local _,class = UnitClass("player")
-local function UpdateSpellList()
-	twipe(friendlySpells)
-	twipe(resSpells)
-	twipe(longEnemySpells)
-	twipe(enemySpells)
-	twipe(petSpells)
+	local inRange
+	local connected = UnitIsConnected(unit)
+	if(connected) then
+		inRange = UnitInRange(unit)
 
-	if class == "PRIEST" then
-		AddSpell(enemySpells, 585) -- Smite
-		AddSpell(longEnemySpells, 589) -- Shadow Word: Pain
-		AddSpell(friendlySpells, 2061) -- Flash Heal
-		AddSpell(resSpells, 2006) -- Resurrection
-	elseif class == "DRUID" then
-		AddSpell(enemySpells, 33786) -- Cyclone
-		AddSpell(longEnemySpells, 5176) -- Wrath
-		AddSpell(friendlySpells, 774) -- Rejuvenation
-		AddSpell(resSpells, 50769) -- Revive
-		AddSpell(resSpells, 20484) -- Rebirth
-	elseif class == "PALADIN" then
-		AddSpell(enemySpells, 20271) -- Judgement
-		AddSpell(enemySpells, 62124) -- Hand of Reckoning
-		AddSpell(friendlySpells, 635) -- Holy Light
-		AddSpell(resSpells, 7328) -- Redemption
-	elseif class == "SHAMAN" then
-		AddSpell(enemySpells, 8042) -- Earth Shock
-		AddSpell(longEnemySpells, 403) -- Lightning Bolt
-		AddSpell(friendlySpells, 8004) -- Healing Surge
-		AddSpell(resSpells, 2008) -- Ancestral Spirit
-	elseif class == "WARLOCK" then
-		AddSpell(enemySpells, 5782) -- Fear
-		AddSpell(longEnemySpells, 172) -- Corruption
-		AddSpell(longEnemySpells, 686) -- Shadow Bolt
-		AddSpell(longEnemySpells, 17962) -- Conflagrate
-		AddSpell(petSpells, 755) -- Health Funnel
-		AddSpell(friendlySpells, 5697) -- Unending Breath
-	elseif class == "MAGE" then
-		AddSpell(enemySpells, 12826) -- Polymorph
-		AddSpell(longEnemySpells, 133) -- Fireball
-		AddSpell(longEnemySpells, 47610) -- Frostfire Bolt
-		AddSpell(friendlySpells, 475) -- Remove Curse
-	elseif class == "HUNTER" then
-		AddSpell(petSpells, 136) -- Mend Pet
-		AddSpell(enemySpells, 75) -- Auto Shot
-	elseif class == "DEATHKNIGHT" then
-		AddSpell(enemySpells, 49576) -- Death Grip
-		AddSpell(friendlySpells, 47541) -- Death Coil
-		AddSpell(resSpells, 61999) -- Raise Ally
-	elseif class == "ROGUE" then
-		AddSpell(enemySpells, 2094) -- Blind
-		AddSpell(longEnemySpells, 1725) -- Distract
-		AddSpell(friendlySpells, 57934) -- Tricks of the Trade
-	elseif class == "WARRIOR" then
-		AddSpell(enemySpells, 5246) -- Intimidating Shout
-		AddSpell(enemySpells, 11578) -- Charge
-		AddSpell(longEnemySpells, 355) -- Taunt
-		AddSpell(friendlySpells, 3411) -- Intervene
-	end
-end
-
-local function getUnit(unit)
-	if not unit:find("party") or not unit:find("raid") then
-		for i=1, 4 do
-			if UnitIsUnit(unit, "party"..i) then
-				return "party"..i
-			end
-		end
-
-		for i=1, 40 do
-			if UnitIsUnit(unit, "raid"..i) then
-				return "raid"..i
-			end
+		if(not inRange) then
+			self:SetAlpha(element.outsideAlpha)
+		else
+			self:SetAlpha(element.insideAlpha)
 		end
 	else
-		return unit
+		self:SetAlpha(element.insideAlpha)
+	end
+
+	--[[ Callback: Range:PostUpdate(object, inRange, isConnected)
+	Called after the element has been updated.
+
+	* self         - the Range element
+	* object       - the parent object
+	* inRange      - indicates if the unit was within 40 yards of the player (boolean)
+	* isConnected  - indicates if the unit is online (boolean)
+	--]]
+	if(element.PostUpdate) then
+		return element:PostUpdate(self, inRange, connected)
 	end
 end
 
-local function friendlyIsInRange(unit)
-	if CheckInteractDistance(unit, 1) then
-		return true
-	end
+local function Path(self, ...)
+	--[[ Override: Range.Override(self, event)
+	Used to completely override the internal update function.
 
-	if UnitIsDeadOrGhost(unit) and #resSpells > 0 then
-		for _, name in ipairs(resSpells) do
-			if IsSpellInRange(name, unit) == 1 then
-				return true
-			end
-		end
-
-		return false
-	end
-
-	if #friendlySpells == 0 and (UnitInRaid(unit) or UnitInParty(unit)) then
-		unit = getUnit(unit)
-		return unit and UnitInRange(unit)
-	else
-		for _, name in ipairs(friendlySpells) do
-			if IsSpellInRange(name, unit) == 1 then
-				return true
-			end
-		end
-	end
-
-	return false
+	* self  - the parent object
+	* event - the event triggering the update (string)
+	--]]
+	return (self.Range.Override or Update) (self, ...)
 end
 
-local function petIsInRange(unit)
-	if CheckInteractDistance(unit, 2) then
-		return true
-	end
-
-	for _, name in ipairs(friendlySpells) do
-		if IsSpellInRange(name, unit) == 1 then
-			return true
-		end
-	end
-	for _, name in ipairs(petSpells) do
-		if IsSpellInRange(name, unit) == 1 then
-			return true
-		end
-	end
-
-	return false
-end
-
-local function enemyIsInRange(unit)
-	if CheckInteractDistance(unit, 2) then
-		return true
-	end
-
-	for _, name in ipairs(enemySpells) do
-		if IsSpellInRange(name, unit) == 1 then
-			return true
-		end
-	end
-
-	return false
-end
-
-local function enemyIsInLongRange(unit)
-	for _, name in ipairs(longEnemySpells) do
-		if IsSpellInRange(name, unit) == 1 then
-			return true
-		end
-	end
-
-	return false
-end
-
--- updating of range.
+-- Internal updating method
 local timer = 0
-local OnRangeUpdate = function(_, elapsed)
+local function OnRangeUpdate(_, elapsed)
 	timer = timer + elapsed
 
 	if(timer >= .20) then
 		for _, object in next, _FRAMES do
 			if(object:IsShown()) then
-				local range = object.Range
-				local unit = object.unit
-				if(unit) then
-					if UnitCanAttack("player", unit) then
-						if enemyIsInRange(unit) then
-							object:SetAlpha(range.insideAlpha)
-						elseif enemyIsInLongRange(unit) then
-							object:SetAlpha(range.insideAlpha)
-						else
-							object:SetAlpha(range.outsideAlpha)
-						end
-					elseif UnitIsUnit(unit, "pet") then
-						if petIsInRange(unit) then
-							object:SetAlpha(range.insideAlpha)
-						else
-							object:SetAlpha(range.outsideAlpha)
-						end
-					else
-						if friendlyIsInRange(unit) and UnitIsConnected(unit) then
-							object:SetAlpha(range.insideAlpha)
-						else
-							object:SetAlpha(range.outsideAlpha)
-						end
-					end
-				else
-					object:SetAlpha(range.insideAlpha)
-				end
+				Path(object, 'OnUpdate')
 			end
 		end
 
@@ -224,35 +99,38 @@ local OnRangeUpdate = function(_, elapsed)
 	end
 end
 
-local Enable = function(self)
-	local range = self.Range
-	if(range and range.insideAlpha and range.outsideAlpha) then
-		tinsert(_FRAMES, self)
+local function Enable(self)
+	local element = self.Range
+	if(element) then
+		element.__owner = self
+		element.insideAlpha = element.insideAlpha or 1
+		element.outsideAlpha = element.outsideAlpha or 0.55
 
 		if(not OnRangeFrame) then
-			OnRangeFrame = CreateFrame"Frame"
-			OnRangeFrame:RegisterEvent("LEARNED_SPELL_IN_TAB")
-			OnRangeFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
-			OnRangeFrame:SetScript("OnUpdate", OnRangeUpdate)
-			OnRangeFrame:SetScript("OnEvent", UpdateSpellList)
+			OnRangeFrame = CreateFrame('Frame')
+			OnRangeFrame:RegisterEvent('LEARNED_SPELL_IN_TAB')
+			OnRangeFrame:RegisterEvent('PLAYER_ENTERING_WORLD')
+			OnRangeFrame:SetScript('OnUpdate', OnRangeUpdate)
+			OnRangeFrame:SetScript('OnEvent', UpdateSpellList)
 		end
 
+		tinsert(_FRAMES, self)
 		OnRangeFrame:Show()
 
 		return true
 	end
 end
 
-local Disable = function(self)
-	local range = self.Range
-	if(range) then
-		for k, frame in next, _FRAMES do
+local function Disable(self)
+	local element = self.Range
+	if(element) then
+		for index, frame in next, _FRAMES do
 			if(frame == self) then
-				tremove(_FRAMES, k)
+				tremove(_FRAMES, index)
 				break
 			end
 		end
-		self:SetAlpha(1)
+		self:SetAlpha(element.insideAlpha)
 
 		if(#_FRAMES == 0) then
 			OnRangeFrame:Hide()
@@ -260,4 +138,4 @@ local Disable = function(self)
 	end
 end
 
-oUF:AddElement("Range", nil, Enable, Disable)
+oUF:AddElement('Range', nil, Enable, Disable)

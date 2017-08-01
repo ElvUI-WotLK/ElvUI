@@ -22,9 +22,9 @@ function UF:Construct_FocusFrame(frame)
 	frame.Debuffs = self:Construct_Debuffs(frame);
 	frame.AuraBars = self:Construct_AuraBarHeader(frame);
 	frame.HealCommBar = UF:Construct_HealComm(frame);
-	frame.RaidIcon = UF:Construct_RaidIcon(frame);
+	frame.RaidTargetIndicator = UF:Construct_RaidIcon(frame);
 	frame.Range = UF:Construct_Range(frame);
-	frame.Threat = UF:Construct_Threat(frame);
+	frame.ThreatIndicator = UF:Construct_Threat(frame);
 	frame.GPS = UF:Construct_GPS(frame);
 	frame.InfoPanel = self:Construct_InfoPanel(frame);
 	frame.customTexts = {};

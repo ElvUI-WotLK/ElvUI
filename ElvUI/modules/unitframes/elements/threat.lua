@@ -32,12 +32,12 @@ function UF:Construct_Threat(frame)
 end
 
 function UF:Configure_Threat(frame)
-	local threat = frame.Threat;
+	local threat = frame.ThreatIndicator;
 	local db = frame.db;
 
 	if(db.threatStyle ~= "NONE" and db.threatStyle ~= nil) then
-		if(not frame:IsElementEnabled("Threat")) then
-			frame:EnableElement("Threat");
+		if(not frame:IsElementEnabled("ThreatIndicator")) then
+			frame:EnableElement("ThreatIndicator");
 		end
 
 		if(db.threatStyle == "GLOW") then
@@ -84,8 +84,8 @@ function UF:Configure_Threat(frame)
 				frame.InfoPanel:SetFrameLevel(frame.Health:GetFrameLevel() + 3);
 			end
 		end
-	elseif(frame:IsElementEnabled("Threat")) then
-		frame:DisableElement("Threat");
+	elseif(frame:IsElementEnabled("ThreatIndicator")) then
+		frame:DisableElement("ThreatIndicator");
 	end
 end
 

@@ -30,7 +30,7 @@ function UF:Construct_BossFrames(frame)
 	frame:RegisterEvent("PLAYER_ENTERING_WORLD", UF.UpdateTargetGlow);
 	frame:RegisterEvent("GROUP_ROSTER_UPDATE", UF.UpdateTargetGlow);
 	frame.Castbar = self:Construct_Castbar(frame);
-	frame.RaidIcon = UF:Construct_RaidIcon(frame);
+	frame.RaidTargetIndicator = UF:Construct_RaidIcon(frame);
 	frame.Range = UF:Construct_Range(frame);
 	frame:SetAttribute("type2", "focus");
 	frame.customTexts = {};

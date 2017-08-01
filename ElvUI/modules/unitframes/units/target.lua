@@ -21,19 +21,19 @@ function UF:Construct_TargetFrame(frame)
 	frame.Portrait2D = self:Construct_Portrait(frame, "texture");
 	frame.Buffs = self:Construct_Buffs(frame);
 	frame.Debuffs = self:Construct_Debuffs(frame);
-	frame.Threat = self:Construct_Threat(frame);
+	frame.ThreatIndicator = self:Construct_Threat(frame);
 	frame.Castbar = self:Construct_Castbar(frame, L["Target Castbar"]);
 	frame.Castbar.SafeZone = nil;
 	frame.Castbar.LatencyTexture:Hide();
-	frame.RaidIcon = UF:Construct_RaidIcon(frame);
-	frame.CPoints = self:Construct_Combobar(frame);
+	frame.RaidTargetIndicator = UF:Construct_RaidIcon(frame);
+	frame.ComboPoints = self:Construct_Combobar(frame);
 	frame.HealCommBar = self:Construct_HealComm(frame);
 	frame.DebuffHighlight = self:Construct_DebuffHighlight(frame);
 	frame.GPS = self:Construct_GPS(frame);
 	frame.InfoPanel = self:Construct_InfoPanel(frame);
 	frame.AuraBars = self:Construct_AuraBarHeader(frame);
 	frame.Range = UF:Construct_Range(frame);
-	frame.PvP = UF:Construct_PvPIcon(frame);
+	frame.PvPIndicator = UF:Construct_PvPIcon(frame);
 	frame.customTexts = {};
 
 	frame:Point("BOTTOMRIGHT", E.UIParent, "BOTTOM", 413, 68);
@@ -66,7 +66,7 @@ function UF:Update_TargetFrame(frame, db)
 		frame.CAN_HAVE_CLASSBAR = db.combobar.enable;
 		frame.MAX_CLASS_BAR = MAX_COMBO_POINTS;
 		frame.USE_CLASSBAR = db.combobar.enable;
-		frame.CLASSBAR_SHOWN = frame.CAN_HAVE_CLASSBAR and frame.CPoints:IsShown();
+		frame.CLASSBAR_SHOWN = frame.CAN_HAVE_CLASSBAR and frame.ComboPoints:IsShown();
 		frame.CLASSBAR_DETACHED = db.combobar.detachFromFrame;
 		frame.USE_MINI_CLASSBAR = db.combobar.fill == "spaced" and frame.USE_CLASSBAR;
 		frame.CLASSBAR_HEIGHT = frame.USE_CLASSBAR and db.combobar.height or 0;

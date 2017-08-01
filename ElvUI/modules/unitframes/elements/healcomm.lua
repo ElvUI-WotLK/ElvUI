@@ -12,12 +12,15 @@ function UF:Construct_HealComm(frame)
 	ohpb:SetStatusBarTexture(E["media"].blankTex);
 	ohpb:Hide();
 
-	return {
+	local HealthPrediction = {
 		myBar = mhpb,
 		otherBar = ohpb,
 		maxOverflow = 1,
 		PostUpdate = UF.UpdateHealComm,
-	};
+	}
+	HealthPrediction.parent = frame
+
+	return HealthPrediction
 end
 
 function UF:Configure_HealComm(frame)

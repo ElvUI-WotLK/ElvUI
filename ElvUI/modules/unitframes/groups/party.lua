@@ -46,16 +46,16 @@ function UF:Construct_PartyFrames(unitGroup)
 		self.AuraWatch = UF:Construct_AuraWatch(self);
 		self.RaidDebuffs = UF:Construct_RaidDebuffs(self);
 		self.DebuffHighlight = UF:Construct_DebuffHighlight(self);
-		self.LFDRole = UF:Construct_RoleIcon(self);
+		self.GroupRoleIndicator = UF:Construct_RoleIcon(self);
 		self.TargetGlow = UF:Construct_TargetGlow(self);
 		self.RaidRoleFramesAnchor = UF:Construct_RaidRoleFrames(self);
 		tinsert(self.__elements, UF.UpdateTargetGlow);
 		self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetGlow);
 		self:RegisterEvent("PLAYER_ENTERING_WORLD", UF.UpdateTargetGlow);
 		self:RegisterEvent("RAID_ROSTER_UPDATE", UF.UpdateTargetGlow);
-		self.Threat = UF:Construct_Threat(self);
-		self.RaidIcon = UF:Construct_RaidIcon(self);
-		self.ReadyCheck = UF:Construct_ReadyCheckIcon(self);
+		self.ThreatIndicator = UF:Construct_Threat(self);
+		self.RaidTargetIndicator = UF:Construct_RaidIcon(self);
+		self.ReadyCheckIndicator = UF:Construct_ReadyCheckIcon(self);
 		self.HealCommBar = UF:Construct_HealComm(self);
 		self.GPS = UF:Construct_GPS(self);
 		self.customTexts = {};
@@ -80,11 +80,11 @@ function UF:Update_PartyHeader(header, db)
 		header:Point("BOTTOMLEFT", E.UIParent, "BOTTOMLEFT", 4, 195);
 
 		E:CreateMover(header, header:GetName() .. "Mover", L["Party Frames"], nil, nil, nil, "ALL,PARTY,ARENA");
+		header.positioned = true;
 
 		header:RegisterEvent("PLAYER_LOGIN");
 		header:RegisterEvent("ZONE_CHANGED_NEW_AREA");
 		header:SetScript("OnEvent", UF["PartySmartVisibility"]);
-		header.positioned = true;
 	end
 
 	UF.PartySmartVisibility(header);
@@ -170,8 +170,6 @@ function UF:Update_PartyFrames(frame, db)
 
 		frame.POWERBAR_HEIGHT = 0;
 		frame.POWERBAR_WIDTH = 0;
-		frame.BOTTOM_OFFSET = 0;
-
 		frame.BOTTOM_OFFSET = 0;
 
 		local childDB = db.petsGroup;

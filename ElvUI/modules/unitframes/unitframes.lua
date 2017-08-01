@@ -327,11 +327,11 @@ function UF:UpdateColors()
 	ElvUF.colors.power.ENERGY = E:GetColorTable(db.power.ENERGY);
 	ElvUF.colors.power.RUNIC_POWER = E:GetColorTable(db.power.RUNIC_POWER);
 
-	ElvUF.colors.Runes = {};
-	ElvUF.colors.Runes[1] = E:GetColorTable(db.classResources.DEATHKNIGHT[1]);
-	ElvUF.colors.Runes[2] = E:GetColorTable(db.classResources.DEATHKNIGHT[2]);
-	ElvUF.colors.Runes[3] = E:GetColorTable(db.classResources.DEATHKNIGHT[3]);
-	ElvUF.colors.Runes[4] = E:GetColorTable(db.classResources.DEATHKNIGHT[4]);
+	ElvUF.colors.runes = {};
+	ElvUF.colors.runes[1] = E:GetColorTable(db.classResources.DEATHKNIGHT[1]);
+	ElvUF.colors.runes[2] = E:GetColorTable(db.classResources.DEATHKNIGHT[2]);
+	ElvUF.colors.runes[3] = E:GetColorTable(db.classResources.DEATHKNIGHT[3]);
+	ElvUF.colors.runes[4] = E:GetColorTable(db.classResources.DEATHKNIGHT[4]);
 
 	ElvUF.colors.ComboPoints = {};
 	ElvUF.colors.ComboPoints[1] = E:GetColorTable(db.classResources.comboPoints[1]);
@@ -1076,6 +1076,15 @@ function UF:Initialize()
 		end
 	end
 
+--[[
+	hooksecurefunc("UIDropDownMenu_EnableButton", function(level, id)
+		local button = _G["DropDownList"..level.."Button"..id]
+		if button.value == "SET_FOCUS" or button.value == "CLEAR_FOCUS" then
+			button:Disable()
+		end
+	end)
+]]
+
 	if(E.private["unitframe"]["disabledBlizzardFrames"].arena and E.private["unitframe"]["disabledBlizzardFrames"].focus and E.private["unitframe"]["disabledBlizzardFrames"].party) then
 		InterfaceOptionsFrameCategoriesButton10:SetScale(0.0001);
 	end
@@ -1121,6 +1130,8 @@ function UF:Initialize()
 	ORD.ShowDispelableDebuff = true;
 	ORD.FilterDispellableDebuff = true;
 	ORD.MatchBySpellName = true;
+
+	self:UpdateRangeCheckSpells()
 end
 
 function UF:ResetUnitSettings(unit)

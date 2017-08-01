@@ -2,160 +2,163 @@ local E, L, V, P, G = unpack(select(2, ...));
 local UF = E:GetModule("UnitFrames");
 
 local CreateFrame = CreateFrame;
-local UnitHasVehicleUI = UnitHasVehicleUI;
-local GetShapeshiftForm = GetShapeshiftForm;
 local GetComboPoints = GetComboPoints;
+local GetShapeshiftForm = GetShapeshiftForm;
+local UnitHasVehicleUI = UnitHasVehicleUI;
 local MAX_COMBO_POINTS = MAX_COMBO_POINTS;
 
 function UF:Construct_Combobar(frame)
-	local CPoints = CreateFrame("Frame", nil, frame);
-	CPoints:CreateBackdrop("Default", nil, nil, UF.thinBorders, true);
-	CPoints.Override = UF.UpdateComboDisplay;
-	CPoints.origParent = frame;
+	local ComboPoints = CreateFrame("Frame", nil, frame);
+	ComboPoints:CreateBackdrop("Default", nil, nil, UF.thinBorders, true);
+	ComboPoints.Override = UF.UpdateComboDisplay;
+	ComboPoints.origParent = frame;
 
 	for i = 1, MAX_COMBO_POINTS do
-		CPoints[i] = CreateFrame("StatusBar", frame:GetName() .. "ComboBarButton" .. i, CPoints);
-		UF["statusbars"][CPoints[i]] = true;
-		CPoints[i]:SetStatusBarTexture(E["media"].blankTex);
-		CPoints[i]:GetStatusBarTexture():SetHorizTile(false);
-		CPoints[i]:SetAlpha(0.15);
-		CPoints[i]:CreateBackdrop("Default", nil, nil, UF.thinBorders);
-		CPoints[i].backdrop:SetParent(CPoints);
+		ComboPoints[i] = CreateFrame("StatusBar", frame:GetName() .. "ComboBarButton" .. i, ComboPoints);
+		UF["statusbars"][ComboPoints[i]] = true;
+		ComboPoints[i]:SetStatusBarTexture(E["media"].blankTex);
+		ComboPoints[i]:GetStatusBarTexture():SetHorizTile(false);
+		ComboPoints[i]:SetAlpha(0.15);
+		ComboPoints[i]:CreateBackdrop("Default", nil, nil, UF.thinBorders, true);
+		ComboPoints[i].backdrop:SetParent(ComboPoints);
 	end
 
 	if(E.myclass == "DRUID") then
 		frame:RegisterEvent("UPDATE_SHAPESHIFT_FORM", UF.UpdateComboDisplay);
 	end
 
-	CPoints:SetScript("OnShow", UF.ToggleResourceBar);
-	CPoints:SetScript("OnHide", UF.ToggleResourceBar);
+	ComboPoints:SetScript("OnShow", UF.ToggleResourceBar);
+	ComboPoints:SetScript("OnHide", UF.ToggleResourceBar);
 
-	return CPoints;
+	return ComboPoints;
 end
 
 function UF:Configure_ComboPoints(frame)
 	if(not frame.VARIABLES_SET) then return; end
-	local CPoints = frame.CPoints;
-	CPoints:ClearAllPoints();
+
+	local ComboPoints = frame.ComboPoints;
+	ComboPoints:ClearAllPoints();
 	local db = frame.db;
 	if(not frame.CLASSBAR_DETACHED) then
-		CPoints:SetParent(frame);
+		ComboPoints:SetParent(frame);
 	else
-		CPoints:SetParent(E.UIParent);
+		ComboPoints:SetParent(E.UIParent);
 	end
 
 	if((not self.thinBorders and not E.PixelMode) and frame.CLASSBAR_HEIGHT > 0 and frame.CLASSBAR_HEIGHT < 7) then
 		frame.CLASSBAR_HEIGHT = 7;
 		if(db.combobar) then db.combobar.height = 7; end
-		UF.ToggleResourceBar(CPoints);
+		UF.ToggleResourceBar(ComboPoints);
 	elseif((self.thinBorders or E.PixelMode) and frame.CLASSBAR_HEIGHT > 0 and frame.CLASSBAR_HEIGHT < 3) then
 		frame.CLASSBAR_HEIGHT = 3;
 		if(db.combobar) then db.combobar.height = 3; end
-		UF.ToggleResourceBar(CPoints);
+		UF.ToggleResourceBar(ComboPoints);
 	end
 
 	if(not frame.USE_CLASSBAR) then
-		CPoints:Hide();
+		ComboPoints:Hide();
 	end
 
 	local CLASSBAR_WIDTH = frame.CLASSBAR_WIDTH;
 	if(frame.USE_MINI_CLASSBAR and not frame.CLASSBAR_DETACHED) then
-		CPoints:Point("CENTER", frame.Health.backdrop, "TOP", 0, 0);
+		ComboPoints:Point("CENTER", frame.Health.backdrop, "TOP", 0, 0);
 		CLASSBAR_WIDTH = CLASSBAR_WIDTH * (frame.MAX_CLASS_BAR - 1) / frame.MAX_CLASS_BAR;
-		CPoints:SetFrameStrata("MEDIUM");
-		if(CPoints.Holder and CPoints.Holder.mover) then
-			E:DisableMover(CPoints.Holder.mover:GetName());
+		ComboPoints:SetFrameStrata("MEDIUM");
+		if(ComboPoints.Holder and ComboPoints.Holder.mover) then
+			E:DisableMover(ComboPoints.Holder.mover:GetName());
 		end
 	elseif(not frame.CLASSBAR_DETACHED) then
-		CPoints:Point("BOTTOMLEFT", frame.Health.backdrop, "TOPLEFT", frame.BORDER, (frame.SPACING*3));
-		CPoints:SetFrameStrata("LOW");
-		if(CPoints.Holder and CPoints.Holder.mover) then
-			E:DisableMover(CPoints.Holder.mover:GetName());
+		ComboPoints:Point("BOTTOMLEFT", frame.Health.backdrop, "TOPLEFT", frame.BORDER, (frame.SPACING*3));
+		ComboPoints:SetFrameStrata("LOW");
+		if(ComboPoints.Holder and ComboPoints.Holder.mover) then
+			E:DisableMover(ComboPoints.Holder.mover:GetName());
 		end
 	else
 		CLASSBAR_WIDTH = db.combobar.detachedWidth - ((frame.BORDER+frame.SPACING)*2);
 
-		if(not CPoints.Holder or (CPoints.Holder and not CPoints.Holder.mover)) then
-			CPoints.Holder = CreateFrame("Frame", nil, CPoints);
-			CPoints.Holder:Point("BOTTOM", E.UIParent, "BOTTOM", 0, 150);
-			CPoints.Holder:Size(db.combobar.detachedWidth, db.combobar.height);
-			CPoints:Width(CLASSBAR_WIDTH);
-			CPoints:Height(frame.CLASSBAR_HEIGHT - ((frame.BORDER + frame.SPACING)*2));
-			CPoints:ClearAllPoints();
-			CPoints:Point("BOTTOMLEFT", CPoints.Holder, "BOTTOMLEFT", frame.BORDER + frame.SPACING, frame.BORDER + frame.SPACING);
-			E:CreateMover(CPoints.Holder, "ComboBarMover", L["Combobar"], nil, nil, nil, "ALL,SOLO");
+		if(not ComboPoints.Holder or (ComboPoints.Holder and not ComboPoints.Holder.mover)) then
+			ComboPoints.Holder = CreateFrame("Frame", nil, ComboPoints);
+			ComboPoints.Holder:Point("BOTTOM", E.UIParent, "BOTTOM", 0, 150);
+			ComboPoints.Holder:Size(db.combobar.detachedWidth, db.combobar.height);
+			ComboPoints:Width(CLASSBAR_WIDTH);
+			ComboPoints:Height(frame.CLASSBAR_HEIGHT - ((frame.BORDER + frame.SPACING)*2));
+			ComboPoints:ClearAllPoints();
+			ComboPoints:Point("BOTTOMLEFT", ComboPoints.Holder, "BOTTOMLEFT", frame.BORDER + frame.SPACING, frame.BORDER + frame.SPACING);
+			E:CreateMover(ComboPoints.Holder, "ComboBarMover", L["Combobar"], nil, nil, nil, "ALL,SOLO");
 		else
-			CPoints.Holder:Size(db.combobar.detachedWidth, db.combobar.height);
-			CPoints:ClearAllPoints();
-			CPoints:Point("BOTTOMLEFT", CPoints.Holder.mover, "BOTTOMLEFT", frame.BORDER+frame.SPACING, frame.BORDER+frame.SPACING);
-			E:EnableMover(CPoints.Holder.mover:GetName());
+			ComboPoints.Holder:Size(db.combobar.detachedWidth, db.combobar.height);
+			ComboPoints:ClearAllPoints();
+			ComboPoints:Point("BOTTOMLEFT", ComboPoints.Holder.mover, "BOTTOMLEFT", frame.BORDER+frame.SPACING, frame.BORDER+frame.SPACING);
+			E:EnableMover(ComboPoints.Holder.mover:GetName());
 		end
 
-		CPoints:SetFrameStrata("LOW");
+		ComboPoints:SetFrameStrata("LOW");
 	end
 
-	CPoints:Width(CLASSBAR_WIDTH);
-	CPoints:Height(frame.CLASSBAR_HEIGHT - ((frame.BORDER + frame.SPACING)*2));
+	ComboPoints:Width(CLASSBAR_WIDTH);
+	ComboPoints:Height(frame.CLASSBAR_HEIGHT - ((frame.BORDER + frame.SPACING)*2));
 
 	local color = E.db.unitframe.colors.borderColor
-	CPoints.backdrop:SetBackdropBorderColor(color.r, color.g, color.b)
+	ComboPoints.backdrop:SetBackdropBorderColor(color.r, color.g, color.b)
 
 	for i = 1, frame.MAX_CLASS_BAR do
-		CPoints[i]:SetStatusBarColor(unpack(ElvUF.colors.ComboPoints[i]));
-		CPoints[i]:Height(CPoints:GetHeight());
+		ComboPoints[i]:SetStatusBarColor(unpack(ElvUF.colors.ComboPoints[i]));
+		ComboPoints[i].backdrop:SetBackdropBorderColor(color.r, color.g, color.b)
+		ComboPoints[i]:Height(ComboPoints:GetHeight());
+
 		if(frame.USE_MINI_CLASSBAR) then
-			CPoints[i]:SetWidth((CLASSBAR_WIDTH - ((5 + (frame.BORDER*2 + frame.SPACING*2))*(frame.MAX_CLASS_BAR - 1)))/frame.MAX_CLASS_BAR);
+			ComboPoints[i]:SetWidth((CLASSBAR_WIDTH - ((5 + (frame.BORDER*2 + frame.SPACING*2))*(frame.MAX_CLASS_BAR - 1)))/frame.MAX_CLASS_BAR);
 		elseif(i ~= MAX_COMBO_POINTS) then
-			CPoints[i]:Width((CLASSBAR_WIDTH - ((frame.MAX_CLASS_BAR-1)*(frame.BORDER-frame.SPACING))) / frame.MAX_CLASS_BAR);
+			ComboPoints[i]:Width((CLASSBAR_WIDTH - ((frame.MAX_CLASS_BAR-1)*(frame.BORDER-frame.SPACING))) / frame.MAX_CLASS_BAR);
 		end
 
-		CPoints[i]:ClearAllPoints();
+		ComboPoints[i]:ClearAllPoints();
 		if(i == 1) then
-			CPoints[i]:Point("LEFT", CPoints);
+			ComboPoints[i]:Point("LEFT", ComboPoints);
 		else
 			if(frame.USE_MINI_CLASSBAR) then
-				CPoints[i]:Point("LEFT", CPoints[i-1], "RIGHT", (5 + frame.BORDER*2 + frame.SPACING*2), 0);
+				ComboPoints[i]:Point("LEFT", ComboPoints[i-1], "RIGHT", (5 + frame.BORDER*2 + frame.SPACING*2), 0);
 			elseif(i == frame.MAX_CLASS_BAR) then
-				CPoints[i]:Point("LEFT", CPoints[i-1], "RIGHT", frame.BORDER-frame.SPACING, 0);
-				CPoints[i]:Point("RIGHT", CPoints);
+				ComboPoints[i]:Point("LEFT", ComboPoints[i-1], "RIGHT", frame.BORDER-frame.SPACING, 0);
+				ComboPoints[i]:Point("RIGHT", ComboPoints);
 			else
-				CPoints[i]:Point("LEFT", CPoints[i-1], "RIGHT", frame.BORDER-frame.SPACING, 0);
+				ComboPoints[i]:Point("LEFT", ComboPoints[i-1], "RIGHT", frame.BORDER-frame.SPACING, 0);
 			end
 		end
 
 		if(not frame.USE_MINI_CLASSBAR) then
-			CPoints[i].backdrop:Hide();
+			ComboPoints[i].backdrop:Hide();
 		else
-			CPoints[i].backdrop:Show();
+			ComboPoints[i].backdrop:Show();
 		end
 	end
 
 	if(not frame.USE_MINI_CLASSBAR) then
-		CPoints.backdrop:Show();
+		ComboPoints.backdrop:Show();
 	else
-		CPoints.backdrop:Hide();
+		ComboPoints.backdrop:Hide();
 	end
 
-	if(frame.USE_CLASSBAR and not frame:IsElementEnabled("CPoints")) then
-		frame:EnableElement("CPoints");
-	elseif(not frame.USE_CLASSBAR and frame:IsElementEnabled("CPoints")) then
-		frame:DisableElement("CPoints");
-		CPoints:Hide();
+	if(frame.USE_CLASSBAR and not frame:IsElementEnabled("ComboPoints")) then
+		frame:EnableElement("ComboPoints");
+	elseif(not frame.USE_CLASSBAR and frame:IsElementEnabled("ComboPoints")) then
+		frame:DisableElement("ComboPoints");
+		ComboPoints:Hide();
 	end
 
 	if(not frame:IsShown()) then
-		CPoints:ForceUpdate();
+		ComboPoints:ForceUpdate();
 	end
 end
 
 function UF:UpdateComboDisplay(event, unit)
 	if(unit == "pet") then return; end
-	if(event == "UPDATE_SHAPESHIFT_FORM" and GetShapeshiftForm() ~= 3) then return self.CPoints:Hide(); end
-	if(E.myclass ~= "ROGUE" and (E.myclass ~= "DRUID" or (E.myclass == "DRUID" and GetShapeshiftForm() ~= 3)) and not (UnitHasVehicleUI("player") or UnitHasVehicleUI("vehicle"))) then return self.CPoints:Hide(); end
+	if(event == "UPDATE_SHAPESHIFT_FORM" and GetShapeshiftForm() ~= 3) then return self.ComboPoints:Hide(); end
+	if(E.myclass ~= "ROGUE" and (E.myclass ~= "DRUID" or (E.myclass == "DRUID" and GetShapeshiftForm() ~= 3)) and not (UnitHasVehicleUI("player") or UnitHasVehicleUI("vehicle"))) then return self.ComboPoints:Hide(); end
 
 	local db = self.db;
 	if(not db) then return; end
-	local cpoints = self.CPoints;
+	local cpoints = self.ComboPoints;
 	local cp;
 	if (UnitHasVehicleUI("player") or UnitHasVehicleUI("vehicle")) then
 		cp = GetComboPoints("vehicle", "target");

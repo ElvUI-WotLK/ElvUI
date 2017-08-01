@@ -32,15 +32,15 @@ function UF:Construct_RaidFrames(unitGroup)
 	self.AuraWatch = UF:Construct_AuraWatch(self);
 	self.RaidDebuffs = UF:Construct_RaidDebuffs(self);
 	self.DebuffHighlight = UF:Construct_DebuffHighlight(self);
-	self.LFDRole = UF:Construct_RoleIcon(self);
+	self.GroupRoleIndicator = UF:Construct_RoleIcon(self);
 	self.RaidRoleFramesAnchor = UF:Construct_RaidRoleFrames(self);
 	self.TargetGlow = UF:Construct_TargetGlow(self);
 	tinsert(self.__elements, UF.UpdateTargetGlow);
 	self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetGlow);
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", UF.UpdateTargetGlow);
-	self.Threat = UF:Construct_Threat(self)
-	self.RaidIcon = UF:Construct_RaidIcon(self);
-	self.ReadyCheck = UF:Construct_ReadyCheckIcon(self);
+	self.ThreatIndicator = UF:Construct_Threat(self)
+	self.RaidTargetIndicator = UF:Construct_RaidIcon(self);
+	self.ReadyCheckIndicator = UF:Construct_ReadyCheckIcon(self);
 	self.HealCommBar = UF:Construct_HealComm(self);
 	self.GPS = UF:Construct_GPS(self);
 	self.Range = UF:Construct_Range(self);

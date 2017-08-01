@@ -3,45 +3,69 @@ local oUF = ns.oUF
 local Private = oUF.Private
 
 local argcheck = Private.argcheck
-local tinsert = table.insert
 
-local _QUEUE = {}
-local _FACTORY = CreateFrame("Frame")
-_FACTORY:SetScript("OnEvent", function(self, event, ...)
+local queue = {}
+local factory = CreateFrame('Frame')
+factory:SetScript('OnEvent', function(self, event, ...)
 	return self[event](self, event, ...)
 end)
 
-_FACTORY:RegisterEvent("PLAYER_LOGIN")
-_FACTORY.active = true
+factory:RegisterEvent('PLAYER_LOGIN')
+factory.active = true
 
-function _FACTORY:PLAYER_LOGIN()
+function factory:PLAYER_LOGIN()
 	if(not self.active) then return end
 
-	for _, func in next, _QUEUE do
+	for _, func in next, queue do
 		func(oUF)
 	end
 
-	wipe(_QUEUE)
+	-- Avoid creating dupes.
+	wipe(queue)
 end
 
-function oUF:Factory(func)
-	argcheck(func, 2, "function")
+--[[ Factory: oUF:Factory(func)
+Used to call a function directly if the current character is logged in and the factory is active. Else the function is
+queued up to be executed at a later time (upon PLAYER_LOGIN by default).
 
-	if(IsLoggedIn() and _FACTORY.active) then
+* self - the global oUF object
+* func - function to be executed or delayed (function)
+--]]
+function oUF:Factory(func)
+	argcheck(func, 2, 'function')
+
+	-- Call the function directly if we're active and logged in.
+	if(IsLoggedIn() and factory.active) then
 		return func(self)
 	else
-		tinsert(_QUEUE, func)
+		table.insert(queue, func)
 	end
 end
 
+--[[ Factory: oUF:EnableFactory()
+Used to enable the factory.
+
+* self - the global oUF object
+--]]
 function oUF:EnableFactory()
-	_FACTORY.active = true
+	factory.active = true
 end
 
+--[[ Factory: oUF:DisableFactory()
+Used to disable the factory.
+
+* self - the global oUF object
+--]]
 function oUF:DisableFactory()
-	_FACTORY.active = nil
+	factory.active = nil
 end
 
+--[[ Factory: oUF:RunFactoryQueue()
+Used to try to execute queued up functions. The current player must be logged in and the factory must be active for
+this to succeed.
+
+* self - the global oUF object
+--]]
 function oUF:RunFactoryQueue()
-	_FACTORY:PLAYER_LOGIN()
+	factory:PLAYER_LOGIN()
 end
