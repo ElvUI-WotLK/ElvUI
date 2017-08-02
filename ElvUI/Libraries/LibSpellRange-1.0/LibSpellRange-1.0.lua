@@ -117,10 +117,14 @@ if not Lib.updaterFrame then
 end
 Lib.updaterFrame:UnregisterAllEvents()
 Lib.updaterFrame:RegisterEvent("LEARNED_SPELL_IN_TAB")
+Lib.updaterFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 
-local function UpdateSpells()
+local function UpdateSpells(_, event)
 	UpdateBook("spell")
 	UpdateBook("pet")
+	if event == "PLAYER_ENTERING_WORLD" then
+		Lib.updaterFrame:UnregisterEvent(event)
+	end
 end
 
 Lib.updaterFrame:SetScript("OnEvent", UpdateSpells)
