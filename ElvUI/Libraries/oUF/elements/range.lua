@@ -50,7 +50,6 @@ local function Update(self, event)
 	local connected = UnitIsConnected(unit)
 	if(connected) then
 		inRange = UnitInRange(unit)
-
 		if(not inRange) then
 			self:SetAlpha(element.outsideAlpha)
 		else
@@ -108,13 +107,10 @@ local function Enable(self)
 
 		if(not OnRangeFrame) then
 			OnRangeFrame = CreateFrame('Frame')
-			OnRangeFrame:RegisterEvent('LEARNED_SPELL_IN_TAB')
-			OnRangeFrame:RegisterEvent('PLAYER_ENTERING_WORLD')
 			OnRangeFrame:SetScript('OnUpdate', OnRangeUpdate)
-			OnRangeFrame:SetScript('OnEvent', UpdateSpellList)
 		end
 
-		tinsert(_FRAMES, self)
+		table.insert(_FRAMES, self)
 		OnRangeFrame:Show()
 
 		return true
@@ -126,7 +122,7 @@ local function Disable(self)
 	if(element) then
 		for index, frame in next, _FRAMES do
 			if(frame == self) then
-				tremove(_FRAMES, index)
+				table.remove(_FRAMES, index)
 				break
 			end
 		end

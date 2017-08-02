@@ -1132,6 +1132,7 @@ function UF:Initialize()
 	ORD.MatchBySpellName = true;
 
 	self:UpdateRangeCheckSpells()
+	self:RegisterEvent("LEARNED_SPELL_IN_TAB", "UpdateRangeCheckSpells")
 end
 
 function UF:ResetUnitSettings(unit)
