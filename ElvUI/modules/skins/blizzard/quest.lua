@@ -111,6 +111,22 @@ local function LoadSkin()
 		end
 	end
 
+	local function QuestQualityColors(frame, text, quality, link)
+		if link and not quality then
+			quality = select(3, GetItemInfo(link))
+		end
+
+		if quality and quality > 1 then
+			frame:SetBackdropBorderColor(GetItemQualityColor(quality))
+			frame.backdrop:SetBackdropBorderColor(GetItemQualityColor(quality))
+			text:SetTextColor(GetItemQualityColor(quality))
+		else
+			frame:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+			frame.backdrop:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+			text:SetTextColor(1, 1, 1)
+		end
+	end
+
 	hooksecurefunc("QuestInfo_Display", function()
 		local textColor = {1, 1, 1};
 		local titleTextColor = {1, 1, 0};
@@ -146,7 +162,15 @@ local function LoadSkin()
 			_G["QuestInfoObjective"..i]:SetTextColor(1 - r, 1 - g, 1 - b);
 		end
 
-		QuestObjectiveText();
+		QuestObjectiveText()
+
+		for i = 1, MAX_NUM_ITEMS do
+			local questItem = _G["QuestInfoItem"..i]
+			local questName = _G["QuestInfoItem"..i.."Name"]
+			local link = questItem.type and (QuestInfoFrame.questLog and GetQuestLogItemLink or GetQuestItemLink)(questItem.type, questItem:GetID())
+
+			QuestQualityColors(questItem, questName, nil, link)
+		end
 	end);
 
 	QuestInfoTimerText:SetTextColor(1, 1, 1);
@@ -208,6 +232,14 @@ local function LoadSkin()
 		QuestProgressText:SetTextColor(1, 1, 1);
 		QuestProgressRequiredItemsText:SetTextColor(1, 1, 0);
 		QuestProgressRequiredMoneyText:SetTextColor(1, 1, 0);
+
+		for i = 1, MAX_REQUIRED_ITEMS do
+			local item = _G["QuestProgressItem"..i]
+			local name = _G["QuestProgressItem"..i.."Name"]
+			local link = item.type and GetQuestItemLink(item.type, item:GetID())
+
+			QuestQualityColors(item, name, nil, link)
+		end
 	end);
 
 	for i = 1, #QuestLogScrollFrame.buttons do
