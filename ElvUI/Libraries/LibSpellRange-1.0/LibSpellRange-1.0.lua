@@ -22,9 +22,10 @@ local strlower = _G.strlower
 local wipe = _G.wipe
 local type = _G.type
 
-local GetSpellTabInfo = _G.GetSpellTabInfo
+local GetSpellInfo = _G.GetSpellInfo
 local GetSpellLink = _G.GetSpellLink
 local GetSpellName = _G.GetSpellName
+local GetSpellTabInfo = _G.GetSpellTabInfo
 
 local IsSpellInRange = _G.IsSpellInRange
 local SpellHasRange = _G.SpellHasRange
@@ -73,6 +74,8 @@ local spellsByName_pet = Lib.spellsByName_pet
 Lib.spellsByID_pet = Lib.spellsByID_pet or {}
 local spellsByID_pet = Lib.spellsByID_pet
 
+local blacklistedIDs = {}
+
 -- Updates spellsByName and spellsByID
 local function UpdateBook(bookType)
 	local _, offs, numspells
@@ -92,6 +95,7 @@ local function UpdateBook(bookType)
 
 	wipe(spellsByName)
 	wipe(spellsByID)
+	wipe(blacklistedIDs)
 
 	for spellBookID = 1, max do
 		local spellName, rank = GetSpellName(spellBookID, bookType)
@@ -153,10 +157,27 @@ function Lib.IsSpellInRange(spellInput, unit)
 			spell = spellsByID_pet[spellInput]
 			if spell then
 				return IsSpellInRange(spell, "pet", unit)
+			elseif not blacklistedIDs[spellInput] then
+				spell = GetSpellInfo(spellInput)
+				if spell then
+					spell = strlowerCache[spell]
+					if spellsByName_spell[spell] then
+						local spellBookID = spellsByName_spell[spell]
+						Lib["spellsByID_spell"][spellInput] = spellBookID
+						return IsSpellInRange(spellBookID, "spell", unit)
+					elseif spellsByName_pet[spell] then
+						local spellBookID = spellsByName_pet[spell]
+						Lib["spellsByID_pet"][spellInput] = spellBookID
+						return IsSpellInRange(spellBookID, "pet", unit)
+					end
+				end
+
+				blacklistedIDs[spellInput] = true
+				return
 			end
 		end
 	else
-		local spellInput = strlowerCache[spellInput]
+		spellInput = strlowerCache[spellInput]
 
 		local spell = spellsByName_spell[spellInput]
 		if spell then
@@ -170,7 +191,6 @@ function Lib.IsSpellInRange(spellInput, unit)
 
 		return IsSpellInRange(spellInput, unit)
 	end
-
 end
 
 --- Improved SpellHasRange.
@@ -198,7 +218,7 @@ function Lib.SpellHasRange(spellInput)
 			end
 		end
 	else
-		local spellInput = strlowerCache[spellInput]
+		spellInput = strlowerCache[spellInput]
 
 		local spell = spellsByName_spell[spellInput]
 		if spell then
