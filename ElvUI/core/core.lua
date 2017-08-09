@@ -1048,6 +1048,12 @@ function E:DBConversions()
 	if E.db.thinBorderColorSet then
 		E.db.thinBorderColorSet = nil
 	end
+	if E.db.unitframe.units.raid.groupBy == "ROLE" then
+		E.db.unitframe.units.raid.groupBy = "GROUP"
+	end
+	if E.db.unitframe.units.raid40.groupBy == "ROLE" then
+		E.db.unitframe.units.raid40.groupBy = "GROUP"
+	end
 end
 
 local CPU_USAGE = {};
