@@ -129,6 +129,15 @@ E.ClassRole = {
 	}
 }
 
+E.DEFAULT_FILTER = {
+	["CCDebuffs"] = "Whitelist",
+	["TurtleBuffs"] = "Whitelist",
+	["PlayerBuffs"] = "Whitelist",
+	["Blacklist"] = "Blacklist",
+	["Whitelist"] = "Whitelist",
+	["RaidDebuffs"] = "Whitelist",
+}
+
 E.noop = function() end;
 
 local colorizedName;
@@ -1053,6 +1062,11 @@ function E:DBConversions()
 	end
 	if E.db.unitframe.units.raid40.groupBy == "ROLE" then
 		E.db.unitframe.units.raid40.groupBy = "GROUP"
+	end
+
+	--Make sure default filters use the correct filter type
+	for filter, filterType in pairs(E.DEFAULT_FILTER) do
+		E.global.unitframe.aurafilters[filter].type = filterType
 	end
 end
 

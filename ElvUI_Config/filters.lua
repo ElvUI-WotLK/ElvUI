@@ -811,6 +811,12 @@ local function UpdateFilterGroup()
 			}
 		};
 
+		--Disable and hide filter type option for default filters
+		if (E.DEFAULT_FILTER[selectedFilter]) then
+			E.Options.args.filters.args.filterGroup.args.filterType.disabled = true
+			E.Options.args.filters.args.filterGroup.args.filterType.hidden = true
+		end
+
 		local spellID = selectedSpell and string.match(selectedSpell, "(%d+)");
 		if(spellID) then spellID = tonumber(spellID); end
 
