@@ -1054,9 +1054,6 @@ end
 
 --DATABASE CONVERSIONS
 function E:DBConversions()
-	if E.db.thinBorderColorSet then
-		E.db.thinBorderColorSet = nil
-	end
 	if E.db.unitframe.units.raid.groupBy == "ROLE" then
 		E.db.unitframe.units.raid.groupBy = "GROUP"
 	end
