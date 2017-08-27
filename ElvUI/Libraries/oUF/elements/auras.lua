@@ -492,7 +492,7 @@ local function Enable(self)
 			buffs.createdIcons = buffs.createdIcons or 0
 			buffs.anchoredIcons = 0
 
-			buffs:Show()
+			--buffs:Show()
 		end
 
 		local debuffs = self.Debuffs
@@ -503,7 +503,7 @@ local function Enable(self)
 			debuffs.createdIcons = debuffs.createdIcons or 0
 			debuffs.anchoredIcons = 0
 
-			debuffs:Show()
+			--debuffs:Show()
 		end
 
 		local auras = self.Auras
@@ -514,7 +514,7 @@ local function Enable(self)
 			auras.createdIcons = auras.createdIcons or 0
 			auras.anchoredIcons = 0
 
-			auras:Show()
+			--auras:Show()
 		end
 
 		return true
