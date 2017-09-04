@@ -325,7 +325,7 @@ local unstableAffliction = GetSpellInfo(30108);
 local vampiricTouch = GetSpellInfo(34914);
 function UF:PostUpdateAura(unit, button, index)
 	local name, _, _, _, dtype, duration, expiration, _, isStealable = UnitAura(unit, index, button.filter);
-	local isFriend = UnitIsFriend("player", unit) == 1 and true or false;
+	local isFriend = UnitIsFriend("player", unit)
 
 	local auras = button:GetParent();
 	local frame = auras:GetParent();
@@ -439,7 +439,7 @@ function UF:CheckFilter(filterType, isFriend)
 	return false;
 end
 
-function UF:AuraFilter(unit, icon, name, _, _, _, dtype, duration, _, _, isStealable, shouldConsolidate, spellID)
+function UF:AuraFilter(unit, icon, name, _, _, _, dtype, duration, _, unitCaster, isStealable, shouldConsolidate, spellID)
 	local db = self:GetParent().db;
 	if(not db or not db[self.type]) then return true; end
 
@@ -449,10 +449,13 @@ function UF:AuraFilter(unit, icon, name, _, _, _, dtype, duration, _, _, isSteal
 	local passPlayerOnlyCheck = true;
 	local anotherFilterExists = false;
 	local playerOnlyFilter = false;
-	local isFriend = UnitIsFriend("player", unit) == 1 and true or false;
+	local isPlayer = unitCaster == "player" or unitCaster == "vehicle"
+	local isFriend = UnitIsFriend("player", unit)
 
-	icon.name = name;
-	icon.priority = 0;
+	icon.isPlayer = isPlayer
+	icon.owner = unitCaster
+	icon.name = name
+	icon.priority = 0
 
 	local turtleBuff = (E.global["unitframe"]["aurafilters"]["TurtleBuffs"].spells[spellID] or E.global["unitframe"]["aurafilters"]["TurtleBuffs"].spells[name]);
 	if(turtleBuff and turtleBuff.enable) then
@@ -460,7 +463,7 @@ function UF:AuraFilter(unit, icon, name, _, _, _, dtype, duration, _, _, isSteal
 	end
 
 	if(UF:CheckFilter(db.playerOnly, isFriend)) then
-		if(icon.isPlayer) then
+		if isPlayer then
 			returnValue = true;
 		else
 			returnValue = false;
