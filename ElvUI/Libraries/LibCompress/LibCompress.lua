@@ -5,12 +5,12 @@
 -- Authors: jjsheets and Galmok of European Stormrage (Horde)
 -- Email : sheets.jeff@gmail.com and galmok@gmail.com
 -- Licence: GPL version 2 (General Public License)
--- Revision: $Revision: 75 $
--- Date: $Date: 2016-11-06 13:02:36 +0000 (Sun, 06 Nov 2016) $
+-- Revision: $Revision: 77 $
+-- Date: $Date: 2017-07-13 14:54:12 -0500 (Thu, 13 Jul 2017) $
 ----------------------------------------------------------------------------------
 
 
-local LibCompress = LibStub:NewLibrary("LibCompress", 90000 + tonumber(("$Revision: 75 $"):match("%d+")))
+local LibCompress = LibStub:NewLibrary("LibCompress", 90000 + tonumber(("$Revision: 77 $"):match("%d+")))
 
 if not LibCompress then return end
 
@@ -654,7 +654,7 @@ function LibCompress:DecompressHuffman(compressed)
 	local c, cl
 	local minCodeLen = 1000
 	local maxCodeLen = 0
-	local symbol, code_high, code, code_len, temp_high, temp
+	local symbol, code_high, code, code_len, temp_high, temp, _bitfield_high, _bitfield, _bitfield_len
 	local n = 0
 	local state = 0 -- 0 = get symbol (8 bits),  1 = get code (varying bits, ends with 2 bits set)
 	while n < num_symbols do
