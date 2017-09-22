@@ -312,7 +312,6 @@ L["Require holding the Alt key down to move cursor or cycle through messages in 
 L["Right Only"] = "우측 배경만 표시"
 L["Right Panel Height"] = "우측 패널 세로길이"
 L["Right Panel Width"] = "우측 패널 가로길이"
-L["Scroll Direction"] = true;
 L["Scroll Interval"] = "자동 스크롤링 시간"
 L["Scroll Messages"] = true;
 L["Separate Panel Sizes"] = "좌우패널 크기 따로설정"

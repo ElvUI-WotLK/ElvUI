@@ -48,6 +48,8 @@ function UF:Configure_HealComm(frame)
 
 		healCommBar.myBar:SetStatusBarColor(c.personal.r, c.personal.g, c.personal.b, c.personal.a);
 		healCommBar.otherBar:SetStatusBarColor(c.others.r, c.others.g, c.others.b, c.others.a);
+
+		healCommBar.maxOverflow = (1 + (c.maxOverflow or 0))
 	else
 		if(frame:IsElementEnabled("HealComm4")) then
 			frame:DisableElement("HealComm4");

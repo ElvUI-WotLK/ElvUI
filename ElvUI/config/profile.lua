@@ -131,6 +131,39 @@ P["databars"] = {
 	}
 };
 
+P["bags"] = {
+	["sortInverted"] = true,
+	["bagSize"] = 34,
+	["bankSize"] = 34,
+	["bagWidth"] = 406,
+	["bankWidth"] = 406,
+	["currencyFormat"] = "ICON_TEXT",
+	["moneyFormat"] = "SMART",
+	["moneyCoins"] = true,
+	["ignoredItems"] = {},
+	["itemLevel"] = true,
+	["itemLevelThreshold"] = 1,
+	["itemLevelFont"] = "Homespun",
+	["itemLevelFontSize"] = 10,
+	["itemLevelFontOutline"] = "MONOCHROMEOUTLINE",
+	["countFont"] = "Homespun",
+	["countFontSize"] = 10,
+	["countFontOutline"] = "MONOCHROMEOUTLINE",
+	["countFontColor"] = {r = 1, g = 1, b = 1},
+	["clearSearchOnClose"] = false,
+	["disableBagSort"] = false,
+	["disableBankSort"] = false,
+	["bagBar"] = {
+		["growthDirection"] = "VERTICAL",
+		["sortDirection"] = "ASCENDING",
+		["size"] = 30,
+		["spacing"] = 4,
+		["backdropSpacing"] = 4,
+		["showBackdrop"] = false,
+		["mouseover"] = false,
+	},
+};
+
 P["nameplates"] = {
 	["statusbar"] = "ElvUI Norm",
 	["font"] = "Homespun",
@@ -366,39 +399,179 @@ P["nameplates"] = {
 	}
 };
 
-P["bags"] = {
-	["sortInverted"] = true,
-	["bagSize"] = 34,
-	["bankSize"] = 34,
-	["bagWidth"] = 406,
-	["bankWidth"] = 406,
-	["currencyFormat"] = "ICON_TEXT",
-	["moneyFormat"] = "SMART",
-	["moneyCoins"] = true,
-	["ignoredItems"] = {},
-	["itemLevel"] = true,
-	["itemLevelThreshold"] = 1,
-	["itemLevelFont"] = "Homespun",
-	["itemLevelFontSize"] = 10,
-	["itemLevelFontOutline"] = "MONOCHROMEOUTLINE",
-	["countFont"] = "Homespun",
-	["countFontSize"] = 10,
-	["countFontOutline"] = "MONOCHROMEOUTLINE",
-	["countFontColor"] = {r = 1, g = 1, b = 1},
-	["clearSearchOnClose"] = false,
-	["disableBagSort"] = false,
-	["disableBankSort"] = false,
-	["bagBar"] = {
-		["growthDirection"] = "VERTICAL",
-		["sortDirection"] = "ASCENDING",
-		["size"] = 30,
-		["spacing"] = 4,
-		["backdropSpacing"] = 4,
-		["showBackdrop"] = false,
-		["mouseover"] = false
-	}
-};
+P["auras"] = {
+	["font"] = "Homespun",
+	["fontSize"] = 10,
+	["fontOutline"] = "MONOCHROMEOUTLINE",
+	["countYOffset"] = 0,
+	["countXOffset"] = 0,
+	["timeYOffset"] = 0,
+	["timeXOffset"] = 0,
 
+	["fadeThreshold"] = 5,
+	["buffs"] = {
+		["growthDirection"] = "LEFT_DOWN",
+		["wrapAfter"] = 12,
+		["maxWraps"] = 3,
+		["horizontalSpacing"] = 6,
+		["verticalSpacing"] = 16,
+		["sortMethod"] = "TIME",
+		["sortDir"] = "-",
+		["seperateOwn"] = 1,
+		["size"] = 32,
+	},
+	["debuffs"] = {
+		["growthDirection"] = "LEFT_DOWN",
+		["wrapAfter"] = 12,
+		["maxWraps"] = 1,
+		["horizontalSpacing"] = 6,
+		["verticalSpacing"] = 16,
+		["sortMethod"] = "TIME",
+		["sortDir"] = "-",
+		["seperateOwn"] = 1,
+		["size"] = 32,
+	},
+}
+
+--Chat
+P["chat"] = {
+	["lockPositions"] = true,
+	["url"] = true,
+	["shortChannels"] = true,
+	["hyperlinkHover"] = true,
+	["throttleInterval"] = 45,
+	["scrollDownInterval"] = 15,
+	["fade"] = true,
+	["font"] = "PT Sans Narrow",
+	["fontOutline"] = "NONE",
+	["sticky"] = true,
+	["emotionIcons"] = true,
+	["keywordSound"] = "None",
+	["whisperSound"] = "Whisper Alert",
+	["noAlertInCombat"] = false,
+	["chatHistory"] = true,
+	["timeStampFormat"] = "NONE",
+	["keywords"] = "ElvUI",
+	["separateSizes"] = false,
+	["panelWidth"] = 412,
+	["panelHeight"] = 180,
+	["panelWidthRight"] = 412,
+	["panelHeightRight"] = 180,
+	["panelBackdropNameLeft"] = "",
+	["panelBackdropNameRight"] = "",
+	["panelBackdrop"] = "SHOWBOTH",
+	["panelTabBackdrop"] = false,
+	["panelTabTransparency"] = false,
+	["editBoxPosition"] = "BELOW_CHAT",
+	["fadeUndockedTabs"] = true,
+	["fadeTabsNoBackdrop"] = true,
+	["useAltKey"] = false,
+	["classColorMentionsChat"] = true,
+	["numAllowedCombatRepeat"] = 5,
+	["useCustomTimeColor"] = true,
+	["customTimeColor"] = {r = 0.7, g = 0.7, b = 0.7},
+	["numScrollMessages"] = 3,
+
+	["tabFont"] = "PT Sans Narrow",
+	["tabFontSize"] = 12,
+	["tabFontOutline"] = "NONE",
+}
+
+--Datatexts
+P["datatexts"] = {
+	["font"] = "PT Sans Narrow",
+	["fontSize"] = 12,
+	["fontOutline"] = "NONE",
+	["wordWrap"] = false,
+
+	["panels"] = {
+		["LeftChatDataPanel"] = {
+			["left"] = "Armor",
+			["middle"] = "Durability",
+			["right"] = "Avoidance",
+		},
+		["RightChatDataPanel"] = {
+			["left"] = "System",
+			["middle"] = "Time",
+			["right"] = "Gold",
+		},
+		["LeftMiniPanel"] = "Guild",
+		["RightMiniPanel"] = "Friends",
+		["BottomMiniPanel"] = "",
+		["TopMiniPanel"] = "",
+		["BottomLeftMiniPanel"] = "",
+		["BottomRightMiniPanel"] = "",
+		["TopRightMiniPanel"] = "",
+		["TopLeftMiniPanel"] = "",
+	},
+	["battleground"] = true,
+	["panelTransparency"] = false,
+	["panelBackdrop"] = true,
+	["noCombatClick"] = false,
+	["noCombatHover"] = false,
+
+	--Datatext Options
+	--General
+	["goldFormat"] = "BLIZZARD",
+	["goldCoins"] = false,
+	--Time Datatext
+	["timeFormat"] = "%I:%M",
+	["dateFormat"] = "",
+
+	--Enabled/Disabled Panels
+	["minimapPanels"] = true,
+	["leftChatPanel"] = true,
+	["rightChatPanel"] = true,
+	["minimapTop"] = false,
+	["minimapTopLeft"] = false,
+	["minimapTopRight"] = false,
+	["minimapBottom"] = false,
+	["minimapBottomLeft"] = false,
+	["minimapBottomRight"] = false,
+}
+
+--Tooltip
+P["tooltip"] = {
+	["cursorAnchor"] = false,
+	["targetInfo"] = true,
+	["playerTitles"] = true,
+	["guildRanks"] = true,
+	["inspectInfo"] = true,
+	["itemCount"] = "BAGS_ONLY",
+	["spellID"] = true,
+	["font"] = "PT Sans Narrow",
+	["fontOutline"] = "NONE",
+	["headerFontSize"] = 12,
+	["textFontSize"] = 12,
+	["smallTextFontSize"] = 12,
+	["colorAlpha"] = 0.8,
+	["visibility"] = {
+		["unitFrames"] = "NONE",
+		["bags"] = "NONE",
+		["actionbars"] = "NONE",
+		["combat"] = false
+	},
+	["healthBar"] = {
+		["text"] = true,
+		["height"] = 7,
+		["font"] = "Homespun",
+		["fontSize"] = 10,
+		["fontOutline"] = "OUTLINE",
+		["statusPosition"] = "BOTTOM",
+	},
+	["useCustomFactionColors"] = false,
+	["factionColors"] = {
+		["1"] = {r = 0.8, g = 0.3, b = 0.22},
+		["2"] = {r = 0.8, g = 0.3, b = 0.22},
+		["3"] = {r = 0.75, g = 0.27, b = 0},
+		["4"] = {r = 0.9, g = 0.7, b = 0},
+		["5"] = {r = 0, g = 0.6, b = 0.1},
+		["6"] = {r = 0, g = 0.6, b = 0.1},
+		["7"] = {r = 0, g = 0.6, b = 0.1},
+		["8"] = {r = 0, g = 0.6, b = 0.1},
+	}
+}
+--UnitFrame
 P["unitframe"] = {
 	["smoothbars"] = false,
 	["smoothSpeed"] = 0.3,
@@ -433,6 +606,7 @@ P["unitframe"] = {
 		["castClassColor"] = false,
 		["castReactionColor"] = false,
 
+
 		["health"] = {r = .31,g = .31,b = .31},
 		["health_backdrop"] = {r = .8,g = .01,b = .01},
 		["health_backdrop_dead"] = {r = .8,g = .01,b = .01},
@@ -440,21 +614,22 @@ P["unitframe"] = {
 		["disconnected"] = {r = 0.84, g = 0.75, b = 0.65},
 		["auraBarBuff"] = {r = .31,g = .31,b = .31},
 		["auraBarDebuff"] = {r = 0.8, g = 0.1, b = 0.1},
-		["healPrediction"] = {
-			["personal"] = {r = 0, g = 1, b = 0.5, a = 0.25},
-			["others"] = {r = 0, g = 1, b = 0, a = 0.25},
-		},
 		["power"] = {
 			["MANA"] = {r = 0.31, g = 0.45, b = 0.63},
 			["RAGE"] = {r = 0.78, g = 0.25, b = 0.25},
 			["FOCUS"] = {r = 0.71, g = 0.43, b = 0.27},
 			["ENERGY"] = {r = 0.65, g = 0.63, b = 0.35},
-			["RUNIC_POWER"] = {r = 0, g = 0.82, b = 1}
+			["RUNIC_POWER"] = {r = 0, g = 0.82, b = 1},
 		},
 		["reaction"] = {
 			["BAD"] = {r = 0.78, g = 0.25, b = 0.25},
 			["NEUTRAL"] = {r = 218/255, g = 197/255, b = 92/255},
 			["GOOD"] = {r = 75/255, g = 175/255, b = 76/255}
+		},
+		["healPrediction"] = {
+			["personal"] = {r = 0, g = 1, b = 0.5, a = 0.25},
+			["others"] = {r = 0, g = 1, b = 0, a = 0.25},
+			["maxOverflow"] = 0,
 		},
 		["classResources"] = {
 			["bgColor"] = {r = 0.1,g = 0.1,b = 0.1, a = 1},
@@ -493,7 +668,7 @@ P["unitframe"] = {
 				["position"] = "LEFT",
 				["xOffset"] = 2,
 				["yOffset"] = 0,
-				["attachTextTo"] = "Health"
+				["attachTextTo"] = "Health",
 			},
 			["power"] = {
 				["enable"] = true,
@@ -513,27 +688,27 @@ P["unitframe"] = {
 					["useCustomStrata"] = false,
 					["frameStrata"] = "LOW",
 					["useCustomLevel"] = false,
-					["frameLevel"] = 1
+					["frameLevel"] = 1,
 				},
-				["parent"] = "FRAME"
+				["parent"] = "FRAME",
 			},
 			["infoPanel"] = {
 				["enable"] = false,
 				["height"] = 20,
-				["transparent"] = false
+				["transparent"] = false,
 			},
 			["name"] = {
 				["position"] = "CENTER",
 				["text_format"] = "",
 				["xOffset"] = 0,
 				["yOffset"] = 0,
-				["attachTextTo"] = "Health"
+				["attachTextTo"] = "Health",
 			},
 			["pvp"] = {
 				["position"] = "BOTTOM",
 				["text_format"] = "||cFFB04F4F[pvptimer][mouseover]||r",
 				["xOffset"] = 0,
-				["yOffset"] = 0
+				["yOffset"] = 0,
 			},
 			["pvpIcon"] = {
 				["enable"] = false,
@@ -546,7 +721,7 @@ P["unitframe"] = {
 				["enable"] = false,
 				["width"] = 45,
 				["overlay"] = false,
-				["style"] = "3D"
+				["style"] = "3D",
 			},
 			["buffs"] = {
 				["enable"] = false,
@@ -567,7 +742,7 @@ P["unitframe"] = {
 				["additionalFilterAllowNonPersonal"] = false,
 				["useFilter"] = "",
 				["xOffset"] = 0,
-				["yOffset"] = 0
+				["yOffset"] = 0,
 			},
 			["debuffs"] = {
 				["enable"] = true,
@@ -587,7 +762,7 @@ P["unitframe"] = {
 				["additionalFilterAllowNonPersonal"] = false,
 				["useFilter"] = "",
 				["xOffset"] = 0,
-				["yOffset"] = 0
+				["yOffset"] = 0,
 			},
 			["castbar"] = {
 				["enable"] = true,
@@ -605,7 +780,7 @@ P["unitframe"] = {
 				["iconAttachedTo"] = "Frame",
 				["iconPosition"] = "LEFT",
 				["iconXOffset"] = -10,
-				["iconYOffset"] = 0
+				["iconYOffset"] = 0,
 			},
 			["classbar"] = {
 				["enable"] = true,
@@ -620,7 +795,7 @@ P["unitframe"] = {
 					["useCustomStrata"] = false,
 					["frameStrata"] = "LOW",
 					["useCustomLevel"] = false,
-					["frameLevel"] = 1
+					["frameLevel"] = 1,
 				},
 			},
 			["aurabar"] = {
@@ -642,7 +817,7 @@ P["unitframe"] = {
 				["height"] = 20,
 				["sort"] = "TIME_REMAINING",
 				["uniformThreshold"] = 0,
-				["yOffset"] = 0
+				["yOffset"] = 0,
 			},
 			["raidicon"] = {
 				["enable"] = true,
@@ -650,7 +825,7 @@ P["unitframe"] = {
 				["attachTo"] = "TOP",
 				["attachToObject"] = "Frame",
 				["xOffset"] = 0,
-				["yOffset"] = 8
+				["yOffset"] = 8,
 			}
 		},
 		["target"] = {
@@ -670,7 +845,7 @@ P["unitframe"] = {
 				["position"] = "RIGHT",
 				["xOffset"] = -2,
 				["yOffset"] = 0,
-				["attachTextTo"] = "Health"
+				["attachTextTo"] = "Health",
 			},
 			["power"] = {
 				["enable"] = true,
@@ -689,21 +864,21 @@ P["unitframe"] = {
 					["useCustomStrata"] = false,
 					["frameStrata"] = "LOW",
 					["useCustomLevel"] = false,
-					["frameLevel"] = 1
+					["frameLevel"] = 1,
 				},
-				["parent"] = "FRAME"
+				["parent"] = "FRAME",
 			},
 			["infoPanel"] = {
 				["enable"] = false,
 				["height"] = 20,
-				["transparent"] = false
+				["transparent"] = false,
 			},
 			["name"] = {
 				["position"] = "CENTER",
 				["text_format"] = "[namecolor][name:medium] [difficultycolor][smartlevel] [shortclassification]",
 				["xOffset"] = 0,
 				["yOffset"] = 0,
-				["attachTextTo"] = "Health"
+				["attachTextTo"] = "Health",
 			},
 			["pvpIcon"] = {
 				["enable"] = false,
@@ -716,7 +891,7 @@ P["unitframe"] = {
 				["enable"] = false,
 				["width"] = 45,
 				["overlay"] = false,
-				["style"] = "3D"
+				["style"] = "3D",
 			},
 			["buffs"] = {
 				["enable"] = true,
@@ -737,7 +912,7 @@ P["unitframe"] = {
 				["additionalFilterAllowNonPersonal"] = false,
 				["useFilter"] = "",
 				["xOffset"] = 0,
-				["yOffset"] = 0
+				["yOffset"] = 0,
 			},
 			["debuffs"] = {
 				["enable"] = true,
@@ -757,7 +932,7 @@ P["unitframe"] = {
 				["additionalFilterAllowNonPersonal"] = false,
 				["useFilter"] = "",
 				["xOffset"] = 0,
-				["yOffset"] = 0
+				["yOffset"] = 0,
 			},
 			["castbar"] = {
 				["enable"] = true,
@@ -772,7 +947,7 @@ P["unitframe"] = {
 				["iconAttachedTo"] = "Frame",
 				["iconPosition"] = "LEFT",
 				["iconXOffset"] = -10,
-				["iconYOffset"] = 0
+				["iconYOffset"] = 0,
 			},
 			["combobar"] = {
 				["enable"] = true,
@@ -801,7 +976,7 @@ P["unitframe"] = {
 				["height"] = 20,
 				["sort"] = "TIME_REMAINING",
 				["uniformThreshold"] = 0,
-				["yOffset"] = 0
+				["yOffset"] = 0,
 			},
 			["raidicon"] = {
 				["enable"] = true,
@@ -809,7 +984,7 @@ P["unitframe"] = {
 				["attachTo"] = "TOP",
 				["attachToObject"] = "Frame",
 				["xOffset"] = 0,
-				["yOffset"] = 8
+				["yOffset"] = 8,
 			},
 			["GPSArrow"] = {
 				["enable"] = false,
@@ -817,8 +992,8 @@ P["unitframe"] = {
 				["xOffset"] = 0,
 				["yOffset"] = 0,
 				["onMouseOver"] = true,
-				["outOfRange"] = true
-			}
+				["outOfRange"] = true,
+			},
 		},
 		["targettarget"] = {
 			["enable"] = true,
@@ -833,7 +1008,7 @@ P["unitframe"] = {
 				["text_format"] = "",
 				["position"] = "RIGHT",
 				["xOffset"] = -2,
-				["yOffset"] = 0
+				["yOffset"] = 0,
 			},
 			["power"] = {
 				["enable"] = true,
@@ -844,25 +1019,25 @@ P["unitframe"] = {
 				["position"] = "LEFT",
 				["hideonnpc"] = false,
 				["xOffset"] = 2,
-				["yOffset"] = 0
+				["yOffset"] = 0,
 			},
 			["infoPanel"] = {
 				["enable"] = false,
 				["height"] = 14,
-				["transparent"] = false
+				["transparent"] = false,
 			},
 			["name"] = {
 				["position"] = "CENTER",
 				["text_format"] = "[namecolor][name:medium]",
 				["xOffset"] = 0,
 				["yOffset"] = 0,
-				["attachTextTo"] = "Health"
+				["attachTextTo"] = "Health",
 			},
 			["portrait"] = {
 				["enable"] = false,
 				["width"] = 45,
 				["overlay"] = false,
-				["style"] = "3D"
+				["style"] = "3D",
 			},
 			["buffs"] = {
 				["enable"] = false,
@@ -883,7 +1058,7 @@ P["unitframe"] = {
 				["additionalFilterAllowNonPersonal"] = false,
 				["useFilter"] = "",
 				["xOffset"] = 0,
-				["yOffset"] = 0
+				["yOffset"] = 0,
 			},
 			["debuffs"] = {
 				["enable"] = true,
@@ -903,7 +1078,7 @@ P["unitframe"] = {
 				["additionalFilterAllowNonPersonal"] = false,
 				["useFilter"] = "",
 				["xOffset"] = 0,
-				["yOffset"] = 0
+				["yOffset"] = 0,
 			},
 			["raidicon"] = {
 				["enable"] = true,
@@ -911,8 +1086,8 @@ P["unitframe"] = {
 				["attachTo"] = "TOP",
 				["attachToObject"] = "Frame",
 				["xOffset"] = 0,
-				["yOffset"] = 8
-			}
+				["yOffset"] = 8,
+			},
 		},
 		["targettargettarget"] = {
 			["enable"] = false,
@@ -927,7 +1102,7 @@ P["unitframe"] = {
 				["text_format"] = "",
 				["position"] = "RIGHT",
 				["xOffset"] = -2,
-				["yOffset"] = 0
+				["yOffset"] = 0,
 			},
 			["power"] = {
 				["enable"] = true,
@@ -938,24 +1113,24 @@ P["unitframe"] = {
 				["position"] = "LEFT",
 				["hideonnpc"] = false,
 				["xOffset"] = 2,
-				["yOffset"] = 0
+				["yOffset"] = 0,
 			},
 			["infoPanel"] = {
 				["enable"] = false,
 				["height"] = 12,
-				["transparent"] = false
+				["transparent"] = false,
 			},
 			["name"] = {
 				["position"] = "CENTER",
 				["text_format"] = "[namecolor][name:medium]",
 				["xOffset"] = 0,
-				["yOffset"] = 0
+				["yOffset"] = 0,
 			},
 			["portrait"] = {
 				["enable"] = false,
 				["width"] = 45,
 				["overlay"] = false,
-				["style"] = "3D"
+				["style"] = "3D",
 			},
 			["buffs"] = {
 				["enable"] = false,
@@ -996,7 +1171,7 @@ P["unitframe"] = {
 				["additionalFilterAllowNonPersonal"] = false,
 				["useFilter"] = "",
 				["xOffset"] = 0,
-				["yOffset"] = 0
+				["yOffset"] = 0,
 			},
 			["raidicon"] = {
 				["enable"] = true,
@@ -1004,8 +1179,8 @@ P["unitframe"] = {
 				["attachTo"] = "TOP",
 				["attachToObject"] = "Frame",
 				["xOffset"] = 0,
-				["yOffset"] = 8
-			}
+				["yOffset"] = 8,
+			},
 		},
 		["focus"] = {
 			["enable"] = true,
@@ -1022,7 +1197,7 @@ P["unitframe"] = {
 				["position"] = "RIGHT",
 				["xOffset"] = -2,
 				["yOffset"] = 0,
-				["attachTextTo"] = "Health"
+				["attachTextTo"] = "Health",
 			},
 			["power"] = {
 				["enable"] = true,
@@ -1034,25 +1209,25 @@ P["unitframe"] = {
 				["hideonnpc"] = false,
 				["xOffset"] = 2,
 				["yOffset"] = 0,
-				["attachTextTo"] = "Health"
+				["attachTextTo"] = "Health",
 			},
 			["infoPanel"] = {
 				["enable"] = false,
 				["height"] = 14,
-				["transparent"] = false
+				["transparent"] = false,
 			},
 			["name"] = {
 				["position"] = "CENTER",
 				["text_format"] = "[namecolor][name:medium]",
 				["xOffset"] = 0,
 				["yOffset"] = 0,
-				["attachTextTo"] = "Health"
+				["attachTextTo"] = "Health",
 			},
 			["portrait"] = {
 				["enable"] = false,
 				["width"] = 45,
 				["overlay"] = false,
-				["style"] = "3D"
+				["style"] = "3D",
 			},
 			["buffs"] = {
 				["enable"] = false,
@@ -1073,7 +1248,7 @@ P["unitframe"] = {
 				["additionalFilterAllowNonPersonal"] = false,
 				["useFilter"] = "",
 				["xOffset"] = 0,
-				["yOffset"] = 0
+				["yOffset"] = 0,
 			},
 			["debuffs"] = {
 				["enable"] = true,
@@ -1093,7 +1268,7 @@ P["unitframe"] = {
 				["additionalFilterAllowNonPersonal"] = false,
 				["useFilter"] = "",
 				["xOffset"] = 0,
-				["yOffset"] = 0
+				["yOffset"] = 0,
 			},
 			["castbar"] = {
 				["enable"] = true,
@@ -1108,7 +1283,7 @@ P["unitframe"] = {
 				["iconAttachedTo"] = "Frame",
 				["iconPosition"] = "LEFT",
 				["iconXOffset"] = -10,
-				["iconYOffset"] = 0
+				["iconYOffset"] = 0,
 			},
 			["aurabar"] = {
 				["enable"] = false,
@@ -1129,7 +1304,7 @@ P["unitframe"] = {
 				["height"] = 20,
 				["sort"] = "TIME_REMAINING",
 				["uniformThreshold"] = 0,
-				["yOffset"] = 0
+				["yOffset"] = 0,
 			},
 			["raidicon"] = {
 				["enable"] = true,
@@ -1137,7 +1312,7 @@ P["unitframe"] = {
 				["attachTo"] = "TOP",
 				["attachToObject"] = "Frame",
 				["xOffset"] = 0,
-				["yOffset"] = 8
+				["yOffset"] = 8,
 			},
 			["GPSArrow"] = {
 				["enable"] = true,
@@ -1145,8 +1320,8 @@ P["unitframe"] = {
 				["xOffset"] = 0,
 				["yOffset"] = 0,
 				["onMouseOver"] = true,
-				["outOfRange"] = true
-			}
+				["outOfRange"] = true,
+			},
 		},
 		["focustarget"] = {
 			["enable"] = false,
@@ -1161,7 +1336,7 @@ P["unitframe"] = {
 				["text_format"] = "",
 				["position"] = "RIGHT",
 				["xOffset"] = -2,
-				["yOffset"] = 0
+				["yOffset"] = 0,
 			},
 			["power"] = {
 				["enable"] = false,
@@ -1172,12 +1347,12 @@ P["unitframe"] = {
 				["position"] = "LEFT",
 				["hideonnpc"] = false,
 				["xOffset"] = 2,
-				["yOffset"] = 0
+				["yOffset"] = 0,
 			},
 			["infoPanel"] = {
 				["enable"] = false,
 				["height"] = 12,
-				["transparent"] = false
+				["transparent"] = false,
 			},
 			["name"] = {
 				["position"] = "CENTER",
@@ -1189,7 +1364,7 @@ P["unitframe"] = {
 				["enable"] = false,
 				["width"] = 45,
 				["overlay"] = false,
-				["style"] = "3D"
+				["style"] = "3D",
 			},
 			["buffs"] = {
 				["enable"] = false,
@@ -1210,7 +1385,7 @@ P["unitframe"] = {
 				["additionalFilterAllowNonPersonal"] = false,
 				["useFilter"] = "",
 				["xOffset"] = 0,
-				["yOffset"] = 0
+				["yOffset"] = 0,
 			},
 			["debuffs"] = {
 				["enable"] = false,
@@ -1230,7 +1405,7 @@ P["unitframe"] = {
 				["additionalFilterAllowNonPersonal"] = false,
 				["useFilter"] = "",
 				["xOffset"] = 0,
-				["yOffset"] = 0
+				["yOffset"] = 0,
 			},
 			["raidicon"] = {
 				["enable"] = true,
@@ -1238,8 +1413,8 @@ P["unitframe"] = {
 				["attachTo"] = "TOP",
 				["attachToObject"] = "Frame",
 				["xOffset"] = 0,
-				["yOffset"] = 8
-			}
+				["yOffset"] = 8,
+			},
 		},
 		["pet"] = {
 			["enable"] = true,
@@ -1255,7 +1430,7 @@ P["unitframe"] = {
 				["text_format"] = "",
 				["position"] = "RIGHT",
 				["yOffset"] = 0,
-				["xOffset"] = -2
+				["xOffset"] = -2,
 			},
 			["power"] = {
 				["enable"] = true,
@@ -1266,24 +1441,24 @@ P["unitframe"] = {
 				["position"] = "LEFT",
 				["hideonnpc"] = false,
 				["yOffset"] = 0,
-				["xOffset"] = 2
+				["xOffset"] = 2,
 			},
 			["infoPanel"] = {
 				["enable"] = false,
 				["height"] = 12,
-				["transparent"] = false
+				["transparent"] = false,
 			},
 			["name"] = {
 				["position"] = "CENTER",
 				["text_format"] = "[namecolor][name:medium]",
 				["yOffset"] = 0,
-				["xOffset"] = 0
+				["xOffset"] = 0,
 			},
 			["portrait"] = {
 				["enable"] = false,
 				["width"] = 45,
 				["overlay"] = false,
-				["style"] = "3D"
+				["style"] = "3D",
 			},
 			["buffs"] = {
 				["enable"] = false,
@@ -1304,7 +1479,7 @@ P["unitframe"] = {
 				["additionalFilterAllowNonPersonal"] = false,
 				["useFilter"] = "",
 				["xOffset"] = 0,
-				["yOffset"] = 0
+				["yOffset"] = 0,
 			},
 			["debuffs"] = {
 				["enable"] = false,
@@ -1324,12 +1499,12 @@ P["unitframe"] = {
 				["additionalFilterAllowNonPersonal"] = false,
 				["useFilter"] = "",
 				["xOffset"] = 0,
-				["yOffset"] = 0
+				["yOffset"] = 0,
 			},
 			["buffIndicator"] = {
 				["enable"] = true,
 				["size"] = 8,
-				["fontSize"] = 10
+				["fontSize"] = 10,
 			},
 			["castbar"] = {
 				["enable"] = true,
@@ -1344,8 +1519,8 @@ P["unitframe"] = {
 				["iconAttachedTo"] = "Frame",
 				["iconPosition"] = "LEFT",
 				["iconXOffset"] = -10,
-				["iconYOffset"] = 0
-			}
+				["iconYOffset"] = 0,
+			},
 		},
 		["pettarget"] = {
 			["enable"] = false,
@@ -1360,7 +1535,7 @@ P["unitframe"] = {
 				["text_format"] = "",
 				["position"] = "RIGHT",
 				["yOffset"] = 0,
-				["xOffset"] = -2
+				["xOffset"] = -2,
 			},
 			["power"] = {
 				["enable"] = false,
@@ -1371,24 +1546,24 @@ P["unitframe"] = {
 				["position"] = "LEFT",
 				["hideonnpc"] = false,
 				["yOffset"] = 0,
-				["xOffset"] = 2
+				["xOffset"] = 2,
 			},
 			["infoPanel"] = {
 				["enable"] = false,
 				["height"] = 12,
-				["transparent"] = false
+				["transparent"] = false,
 			},
 			["name"] = {
 				["position"] = "CENTER",
 				["text_format"] = "[namecolor][name:medium]",
 				["yOffset"] = 0,
-				["xOffset"] = 0
+				["xOffset"] = 0,
 			},
 			["portrait"] = {
 				["enable"] = false,
 				["width"] = 45,
 				["overlay"] = false,
-				["style"] = "3D"
+				["style"] = "3D",
 			},
 			["buffs"] = {
 				["enable"] = false,
@@ -1409,7 +1584,7 @@ P["unitframe"] = {
 				["additionalFilterAllowNonPersonal"] = false,
 				["useFilter"] = "",
 				["xOffset"] = 0,
-				["yOffset"] = 0
+				["yOffset"] = 0,
 			},
 			["debuffs"] = {
 				["enable"] = false,
@@ -1429,8 +1604,8 @@ P["unitframe"] = {
 				["additionalFilterAllowNonPersonal"] = false,
 				["useFilter"] = "",
 				["xOffset"] = 0,
-				["yOffset"] = 0
-			}
+				["yOffset"] = 0,
+			},
 		},
 		["boss"] = {
 			["enable"] = true,
@@ -1448,7 +1623,7 @@ P["unitframe"] = {
 				["position"] = "LEFT",
 				["yOffset"] = 0,
 				["xOffset"] = 2,
-				["attachTextTo"] = "Health"
+				["attachTextTo"] = "Health",
 			},
 			["power"] = {
 				["enable"] = true,
@@ -1460,25 +1635,25 @@ P["unitframe"] = {
 				["hideonnpc"] = false,
 				["yOffset"] = 0,
 				["xOffset"] = -2,
-				["attachTextTo"] = "Health"
+				["attachTextTo"] = "Health",
 			},
 			["portrait"] = {
 				["enable"] = false,
 				["width"] = 35,
 				["overlay"] = false,
-				["style"] = "3D"
+				["style"] = "3D",
 			},
 			["infoPanel"] = {
 				["enable"] = false,
 				["height"] = 16,
-				["transparent"] = false
+				["transparent"] = false,
 			},
 			["name"] = {
 				["position"] = "CENTER",
 				["text_format"] = "[namecolor][name:medium]",
 				["yOffset"] = 0,
 				["xOffset"] = 0,
-				["attachTextTo"] = "Health"
+				["attachTextTo"] = "Health",
 			},
 			["buffs"] = {
 				["enable"] = true,
@@ -1500,7 +1675,7 @@ P["unitframe"] = {
 				["useFilter"] = "",
 				["xOffset"] = 0,
 				["yOffset"] = 20,
-				["sizeOverride"] = 22
+				["sizeOverride"] = 22,
 			},
 			["debuffs"] = {
 				["enable"] = true,
@@ -1521,7 +1696,7 @@ P["unitframe"] = {
 				["useFilter"] = "",
 				["xOffset"] = 0,
 				["yOffset"] = -3,
-				["sizeOverride"] = 22
+				["sizeOverride"] = 22,
 			},
 			["castbar"] = {
 				["enable"] = true,
@@ -1536,7 +1711,7 @@ P["unitframe"] = {
 				["iconAttachedTo"] = "Frame",
 				["iconPosition"] = "LEFT",
 				["iconXOffset"] = -10,
-				["iconYOffset"] = 0
+				["iconYOffset"] = 0,
 			},
 			["raidicon"] = {
 				["enable"] = true,
@@ -1544,8 +1719,8 @@ P["unitframe"] = {
 				["attachTo"] = "TOP",
 				["attachToObject"] = "Frame",
 				["xOffset"] = 0,
-				["yOffset"] = 8
-			}
+				["yOffset"] = 8,
+			},
 		},
 		["arena"] = {
 			["enable"] = true,
@@ -1564,7 +1739,7 @@ P["unitframe"] = {
 				["position"] = "LEFT",
 				["yOffset"] = 0,
 				["xOffset"] = 2,
-				["attachTextTo"] = "Health"
+				["attachTextTo"] = "Health",
 			},
 			["power"] = {
 				["enable"] = true,
@@ -1576,25 +1751,25 @@ P["unitframe"] = {
 				["position"] = "RIGHT",
 				["hideonnpc"] = false,
 				["yOffset"] = 0,
-				["xOffset"] = -2
+				["xOffset"] = -2,
 			},
 			["infoPanel"] = {
 				["enable"] = false,
-				["height"] = 12,
-				["transparent"] = false
+				["height"] = 17,
+				["transparent"] = false,
 			},
 			["name"] = {
 				["position"] = "CENTER",
 				["text_format"] = "[namecolor][name:medium]",
 				["yOffset"] = 0,
 				["xOffset"] = 0,
-				["attachTextTo"] = "Health"
+				["attachTextTo"] = "Health",
 			},
 			["portrait"] = {
 				["enable"] = false,
-				["width"] = 35,
+				["width"] = 45,
 				["overlay"] = false,
-				["style"] = "3D"
+				["style"] = "3D",
 			},
 			["buffs"] = {
 				["enable"] = true,
@@ -1616,7 +1791,7 @@ P["unitframe"] = {
 				["useFilter"] = "TurtleBuffs",
 				["sizeOverride"] = 27,
 				["xOffset"] = 0,
-				["yOffset"] = 16
+				["yOffset"] = 16,
 			},
 			["debuffs"] = {
 				["enable"] = true,
@@ -1637,11 +1812,11 @@ P["unitframe"] = {
 				["useFilter"] = "CCDebuffs",
 				["sizeOverride"] = 27,
 				["xOffset"] = 0,
-				["yOffset"] = -16
+				["yOffset"] = -16,
 			},
 			["castbar"] = {
 				["enable"] = true,
-				["width"] = 240,
+				["width"] = 256,
 				["height"] = 18,
 				["icon"] = true,
 				["format"] = "REMAINING",
@@ -1652,15 +1827,15 @@ P["unitframe"] = {
 				["iconAttachedTo"] = "Frame",
 				["iconPosition"] = "LEFT",
 				["iconXOffset"] = -10,
-				["iconYOffset"] = 0
+				["iconYOffset"] = 0,
 			},
 			["pvpTrinket"] = {
 				["enable"] = true,
 				["position"] = "RIGHT",
 				["size"] = 46,
 				["xOffset"] = 1,
-				["yOffset"] = 0
-			}
+				["yOffset"] = 0,
+			},
 		},
 		["party"] = {
 			["enable"] = true,
@@ -1690,7 +1865,7 @@ P["unitframe"] = {
 				["attachTextTo"] = "Health",
 				["frequentUpdates"] = false,
 				["yOffset"] = 0,
-				["xOffset"] = 2
+				["xOffset"] = 2,
 			},
 			["power"] = {
 				["enable"] = true,
@@ -1702,29 +1877,29 @@ P["unitframe"] = {
 				["position"] = "RIGHT",
 				["hideonnpc"] = false,
 				["yOffset"] = 0,
-				["xOffset"] = -2
+				["xOffset"] = -2,
 			},
 			["infoPanel"] = {
 				["enable"] = false,
 				["height"] = 15,
-				["transparent"] = false
+				["transparent"] = false,
 			},
 			["name"] = {
 				["position"] = "CENTER",
 				["attachTextTo"] = "Health",
 				["text_format"] = "[namecolor][name:medium] [difficultycolor][smartlevel]",
 				["yOffset"] = 0,
-				["xOffset"] = 0
+				["xOffset"] = 0,
 			},
 			["portrait"] = {
 				["enable"] = false,
 				["width"] = 45,
 				["overlay"] = false,
-				["style"] = "3D"
+				["style"] = "3D",
 			},
 			["buffs"] = {
 				["enable"] = false,
-				["perrow"] = 3,
+				["perrow"] = 4,
 				["numrows"] = 1,
 				["attachTo"] = "FRAME",
 				["anchorPoint"] = "LEFT",
@@ -1742,11 +1917,11 @@ P["unitframe"] = {
 				["additionalFilterAllowNonPersonal"] = false,
 				["useFilter"] = "",
 				["xOffset"] = 0,
-				["yOffset"] = 0
+				["yOffset"] = 0,
 			},
 			["debuffs"] = {
 				["enable"] = true,
-				["perrow"] = 3,
+				["perrow"] = 4,
 				["numrows"] = 1,
 				["attachTo"] = "FRAME",
 				["anchorPoint"] = "RIGHT",
@@ -1764,20 +1939,20 @@ P["unitframe"] = {
 				["useFilter"] = "",
 				["xOffset"] = 0,
 				["yOffset"] = 0,
-				["sizeOverride"] = 52
+				["sizeOverride"] = 52,
 			},
 			["buffIndicator"] = {
 				["enable"] = true,
 				["size"] = 8,
 				["fontSize"] = 10,
-				["profileSpecific"] = false
+				["profileSpecific"] = false,
 			},
 			["rdebuffs"] = {
 				["enable"] = false,
 				["showDispellableDebuff"] = true,
 				["fontSize"] = 10,
-				["font"] = "PT Sans Narrow",
-				["fontOutline"] = "OUTLINE",
+				["font"] = "Homespun",
+				["fontOutline"] = "MONOCHROMEOUTLINE",
 				["size"] = 26,
 				["xOffset"] = 0,
 				["yOffset"] = 0,
@@ -1785,26 +1960,26 @@ P["unitframe"] = {
 					["position"] = "CENTER",
 					["xOffset"] = 0,
 					["yOffset"] = 0,
-					["color"] = {r = 1, g = 0.9, b = 0}
+					["color"] = {r = 1, g = 0.9, b = 0, a = 1}
 				},
 				["stack"] = {
 					["position"] = "BOTTOMRIGHT",
 					["xOffset"] = 0,
 					["yOffset"] = 2,
-					["color"] = {r = 1, g = 0.9, b = 0}
-				}
+					["color"] = {r = 1, g = 0.9, b = 0, a = 1}
+				},
 			},
 			["roleIcon"] = {
 				["enable"] = true,
-				["position"] = "CENTER",
+				["position"] = "TOPRIGHT",
 				["attachTo"] = "Health",
 				["xOffset"] = 0,
 				["yOffset"] = 0,
-				["size"] = 15
+				["size"] = 15,
 			},
 			["raidRoleIcons"] = {
 				["enable"] = true,
-				["position"] = "TOPLEFT"
+				["position"] = "TOPLEFT",
 			},
 			["petsGroup"] = {
 				["enable"] = false,
@@ -1817,8 +1992,8 @@ P["unitframe"] = {
 					["position"] = "CENTER",
 					["text_format"] = "[namecolor][name:short]",
 					["yOffset"] = 0,
-					["xOffset"] = 0
-				}
+					["xOffset"] = 0,
+				},
 			},
 			["targetsGroup"] = {
 				["enable"] = false,
@@ -1831,8 +2006,8 @@ P["unitframe"] = {
 					["position"] = "CENTER",
 					["text_format"] = "[namecolor][name:short]",
 					["yOffset"] = 0,
-					["xOffset"] = 0
-				}
+					["xOffset"] = 0,
+				},
 			},
 			["raidicon"] = {
 				["enable"] = true,
@@ -1840,7 +2015,7 @@ P["unitframe"] = {
 				["attachTo"] = "TOP",
 				["attachToObject"] = "Frame",
 				["xOffset"] = 0,
-				["yOffset"] = 8
+				["yOffset"] = 8,
 			},
 			["GPSArrow"] = {
 				["enable"] = true,
@@ -1848,7 +2023,7 @@ P["unitframe"] = {
 				["xOffset"] = 0,
 				["yOffset"] = 0,
 				["onMouseOver"] = true,
-				["outOfRange"] = true
+				["outOfRange"] = true,
 			},
 			["readycheckIcon"] = {
 				["enable"] = true,
@@ -1856,8 +2031,8 @@ P["unitframe"] = {
 				["attachTo"] = "Health",
 				["position"] = "BOTTOM",
 				["xOffset"] = 0,
-				["yOffset"] = 2
-			}
+				["yOffset"] = 2,
+			},
 		},
 		["raid"] = {
 			["enable"] = true,
@@ -1884,8 +2059,8 @@ P["unitframe"] = {
 				["orientation"] = "HORIZONTAL",
 				["attachTextTo"] = "Health",
 				["frequentUpdates"] = false,
-				["yOffset"] = 0,
-				["xOffset"] = 0
+				["yOffset"] = 2,
+				["xOffset"] = 0,
 			},
 			["power"] = {
 				["enable"] = true,
@@ -1895,26 +2070,26 @@ P["unitframe"] = {
 				["offset"] = 0,
 				["position"] = "BOTTOMRIGHT",
 				["hideonnpc"] = false,
-				["yOffset"] = 0,
-				["xOffset"] = -2
+				["yOffset"] = 2,
+				["xOffset"] = -2,
 			},
 			["infoPanel"] = {
 				["enable"] = false,
 				["height"] = 12,
-				["transparent"] = false
+				["transparent"] = false,
 			},
 			["name"] = {
 				["position"] = "CENTER",
 				["attachTextTo"] = "Health",
 				["text_format"] = "[namecolor][name:short]",
 				["yOffset"] = 0,
-				["xOffset"] = 0
+				["xOffset"] = 0,
 			},
 			["portrait"] = {
 				["enable"] = false,
 				["width"] = 45,
 				["overlay"] = false,
-				["style"] = "3D"
+				["style"] = "3D",
 			},
 			["buffs"] = {
 				["enable"] = false,
@@ -1936,7 +2111,7 @@ P["unitframe"] = {
 				["additionalFilterAllowNonPersonal"] = false,
 				["useFilter"] = "",
 				["xOffset"] = 0,
-				["yOffset"] = 0
+				["yOffset"] = 0,
 			},
 			["debuffs"] = {
 				["enable"] = false,
@@ -1957,47 +2132,47 @@ P["unitframe"] = {
 				["additionalFilterAllowNonPersonal"] = false,
 				["useFilter"] = "",
 				["xOffset"] = 0,
-				["yOffset"] = 0
+				["yOffset"] = 0,
 			},
 			["buffIndicator"] = {
 				["enable"] = true,
 				["size"] = 8,
 				["fontSize"] = 10,
-				["profileSpecific"] = false
+				["profileSpecific"] = false,
 			},
 			["rdebuffs"] = {
 				["enable"] = true,
 				["showDispellableDebuff"] = true,
 				["fontSize"] = 10,
-				["font"] = "PT Sans Narrow",
-				["fontOutline"] = "OUTLINE",
+				["font"] = "Homespun",
+				["fontOutline"] = "MONOCHROMEOUTLINE",
 				["size"] = 26,
 				["xOffset"] = 0,
-				["yOffset"] = 2,
+				["yOffset"] = 0,
 				["duration"] = {
 					["position"] = "CENTER",
 					["xOffset"] = 0,
 					["yOffset"] = 0,
-					["color"] = {r = 1, g = 0.9, b = 0}
+					["color"] = {r = 1, g = 0.9, b = 0, a = 1}
 				},
 				["stack"] = {
 					["position"] = "BOTTOMRIGHT",
 					["xOffset"] = 0,
 					["yOffset"] = 2,
-					["color"] = {r = 1, g = 0.9, b = 0}
-				}
+					["color"] = {r = 1, g = 0.9, b = 0, a = 1}
+				},
 			},
 			["roleIcon"] = {
 				["enable"] = true,
-				["position"] = "BOTTOMRIGHT",
+				["position"] = "TOPLEFT",
 				["attachTo"] = "Health",
-				["xOffset"] = 0,
-				["yOffset"] = 0,
-				["size"] = 15
+				["xOffset"] = 1,
+				["yOffset"] = -1,
+				["size"] = 15,
 			},
 			["raidRoleIcons"] = {
 				["enable"] = true,
-				["position"] = "TOPLEFT"
+				["position"] = "TOPLEFT",
 			},
 			["raidicon"] = {
 				["enable"] = true,
@@ -2005,7 +2180,7 @@ P["unitframe"] = {
 				["attachTo"] = "TOP",
 				["attachToObject"] = "Frame",
 				["xOffset"] = 0,
-				["yOffset"] = 8
+				["yOffset"] = 8,
 			},
 			["GPSArrow"] = {
 				["enable"] = true,
@@ -2013,7 +2188,7 @@ P["unitframe"] = {
 				["xOffset"] = 0,
 				["yOffset"] = 0,
 				["onMouseOver"] = true,
-				["outOfRange"] = true
+				["outOfRange"] = true,
 			},
 			["readycheckIcon"] = {
 				["enable"] = true,
@@ -2021,8 +2196,8 @@ P["unitframe"] = {
 				["attachTo"] = "Health",
 				["position"] = "BOTTOM",
 				["xOffset"] = 0,
-				["yOffset"] = 2
-			}
+				["yOffset"] = 2,
+			},
 		},
 		["raid40"] = {
 			["enable"] = true,
@@ -2050,7 +2225,7 @@ P["unitframe"] = {
 				["frequentUpdates"] = false,
 				["attachTextTo"] = "Health",
 				["yOffset"] = 2,
-				["xOffset"] = 0
+				["xOffset"] = 0,
 			},
 			["power"] = {
 				["enable"] = false,
@@ -2061,25 +2236,25 @@ P["unitframe"] = {
 				["position"] = "BOTTOMRIGHT",
 				["hideonnpc"] = false,
 				["yOffset"] = 2,
-				["xOffset"] = -2
+				["xOffset"] = -2,
 			},
 			["infoPanel"] = {
 				["enable"] = false,
 				["height"] = 12,
-				["transparent"] = false
+				["transparent"] = false,
 			},
 			["name"] = {
 				["position"] = "CENTER",
 				["text_format"] = "[namecolor][name:short]",
 				["yOffset"] = 0,
 				["xOffset"] = 0,
-				["attachTextTo"] = "Health"
+				["attachTextTo"] = "Health",
 			},
 			["portrait"] = {
 				["enable"] = false,
 				["width"] = 45,
 				["overlay"] = false,
-				["style"] = "3D"
+				["style"] = "3D",
 			},
 			["buffs"] = {
 				["enable"] = false,
@@ -2101,7 +2276,7 @@ P["unitframe"] = {
 				["additionalFilterAllowNonPersonal"] = false,
 				["useFilter"] = "",
 				["xOffset"] = 0,
-				["yOffset"] = 0
+				["yOffset"] = 0,
 			},
 			["debuffs"] = {
 				["enable"] = false,
@@ -2122,47 +2297,47 @@ P["unitframe"] = {
 				["additionalFilterAllowNonPersonal"] = false,
 				["useFilter"] = "",
 				["xOffset"] = 0,
-				["yOffset"] = 0
+				["yOffset"] = 0,
 			},
 			["rdebuffs"] = {
 				["enable"] = false,
 				["showDispellableDebuff"] = true,
 				["fontSize"] = 10,
-				["font"] = "PT Sans Narrow",
-				["fontOutline"] = "OUTLINE",
+				["font"] = "Homespun",
+				["fontOutline"] = "MONOCHROMEOUTLINE",
 				["size"] = 22,
 				["xOffset"] = 0,
-				["yOffset"] = 2,
+				["yOffset"] = 0,
 				["duration"] = {
 					["position"] = "CENTER",
 					["xOffset"] = 0,
 					["yOffset"] = 0,
-					["color"] = {r = 1, g = 0.9, b = 0}
+					["color"] = {r = 1, g = 0.9, b = 0, a = 1}
 				},
 				["stack"] = {
 					["position"] = "BOTTOMRIGHT",
 					["xOffset"] = 0,
 					["yOffset"] = 2,
-					["color"] = {r = 1, g = 0.9, b = 0}
-				}
+					["color"] = {r = 1, g = 0.9, b = 0, a = 1}
+				},
 			},
 			["roleIcon"] = {
 				["enable"] = false,
 				["position"] = "BOTTOMRIGHT",
 				["attachTo"] = "Health",
-				["xOffset"] = 0,
-				["yOffset"] = 0,
-				["size"] = 15
+				["xOffset"] = -1,
+				["yOffset"] = 1,
+				["size"] = 15,
 			},
 			["raidRoleIcons"] = {
 				["enable"] = true,
-				["position"] = "TOPLEFT"
+				["position"] = "TOPLEFT",
 			},
 			["buffIndicator"] = {
 				["enable"] = true,
 				["size"] = 8,
 				["fontSize"] = 10,
-				["profileSpecific"] = false
+				["profileSpecific"] = false,
 			},
 			["raidicon"] = {
 				["enable"] = true,
@@ -2170,7 +2345,7 @@ P["unitframe"] = {
 				["attachTo"] = "TOP",
 				["attachToObject"] = "Frame",
 				["xOffset"] = 0,
-				["yOffset"] = 8
+				["yOffset"] = 8,
 			},
 			["GPSArrow"] = {
 				["enable"] = true,
@@ -2178,7 +2353,7 @@ P["unitframe"] = {
 				["xOffset"] = 0,
 				["yOffset"] = 0,
 				["onMouseOver"] = true,
-				["outOfRange"] = true
+				["outOfRange"] = true,
 			},
 			["readycheckIcon"] = {
 				["enable"] = true,
@@ -2186,8 +2361,8 @@ P["unitframe"] = {
 				["attachTo"] = "Health",
 				["position"] = "BOTTOM",
 				["xOffset"] = 0,
-				["yOffset"] = 2
-			}
+				["yOffset"] = 2,
+			},
 		},
 		["raidpet"] = {
 			["enable"] = false,
@@ -2217,20 +2392,20 @@ P["unitframe"] = {
 				["frequentUpdates"] = true,
 				["yOffset"] = 2,
 				["xOffset"] = 0,
-				["attachTextTo"] = "Health"
+				["attachTextTo"] = "Health",
 			},
 			["name"] = {
 				["position"] = "TOP",
 				["text_format"] = "[namecolor][name:short]",
 				["yOffset"] = -2,
 				["xOffset"] = 0,
-				["attachTextTo"] = "Health"
+				["attachTextTo"] = "Health",
 			},
 			["portrait"] = {
 				["enable"] = false,
 				["width"] = 45,
 				["overlay"] = false,
-				["style"] = "3D"
+				["style"] = "3D",
 			},
 			["buffs"] = {
 				["enable"] = false,
@@ -2252,7 +2427,7 @@ P["unitframe"] = {
 				["additionalFilterAllowNonPersonal"] = false,
 				["useFilter"] = "",
 				["xOffset"] = 0,
-				["yOffset"] = 0
+				["yOffset"] = 0,
 			},
 			["debuffs"] = {
 				["enable"] = false,
@@ -2273,7 +2448,7 @@ P["unitframe"] = {
 				["additionalFilterAllowNonPersonal"] = false,
 				["useFilter"] = "",
 				["xOffset"] = 0,
-				["yOffset"] = 0
+				["yOffset"] = 0,
 			},
 			["buffIndicator"] = {
 				["enable"] = true,
@@ -2284,8 +2459,8 @@ P["unitframe"] = {
 				["enable"] = true,
 				["showDispellableDebuff"] = true,
 				["fontSize"] = 10,
-				["font"] = "PT Sans Narrow",
-				["fontOutline"] = "OUTLINE",
+				["font"] = "Homespun",
+				["fontOutline"] = "MONOCHROMEOUTLINE",
 				["size"] = 26,
 				["xOffset"] = 0,
 				["yOffset"] = 2,
@@ -2293,14 +2468,14 @@ P["unitframe"] = {
 					["position"] = "CENTER",
 					["xOffset"] = 0,
 					["yOffset"] = 0,
-					["color"] = {r = 1, g = 0.9, b = 0}
+					["color"] = {r = 1, g = 0.9, b = 0, a = 1}
 				},
 				["stack"] = {
 					["position"] = "BOTTOMRIGHT",
 					["xOffset"] = 0,
 					["yOffset"] = 2,
-					["color"] = {r = 1, g = 0.9, b = 0}
-				}
+					["color"] = {r = 1, g = 0.9, b = 0, a = 1}
+				},
 			},
 			["raidicon"] = {
 				["enable"] = true,
@@ -2308,8 +2483,8 @@ P["unitframe"] = {
 				["attachTo"] = "TOP",
 				["attachToObject"] = "Frame",
 				["xOffset"] = 0,
-				["yOffset"] = 8
-			}
+				["yOffset"] = 8,
+			},
 		},
 		["tank"] = {
 			["enable"] = true,
@@ -2341,7 +2516,7 @@ P["unitframe"] = {
 				["additionalFilterAllowNonPersonal"] = false,
 				["useFilter"] = "",
 				["xOffset"] = 0,
-				["yOffset"] = 2
+				["yOffset"] = 2,
 			},
 			["debuffs"] = {
 				["enable"] = false,
@@ -2362,20 +2537,20 @@ P["unitframe"] = {
 				["additionalFilterAllowNonPersonal"] = false,
 				["useFilter"] = "",
 				["xOffset"] = 0,
-				["yOffset"] = 1
+				["yOffset"] = 1,
 			},
 			["buffIndicator"] = {
 				["enable"] = true,
 				["size"] = 8,
 				["fontSize"] = 10,
-				["profileSpecific"] = false
+				["profileSpecific"] = false,
 			},
 			["rdebuffs"] = {
 				["enable"] = true,
 				["showDispellableDebuff"] = true,
 				["fontSize"] = 10,
-				["font"] = "PT Sans Narrow",
-				["fontOutline"] = "OUTLINE",
+				["font"] = "Homespun",
+				["fontOutline"] = "MONOCHROMEOUTLINE",
 				["size"] = 26,
 				["xOffset"] = 0,
 				["yOffset"] = 0,
@@ -2383,14 +2558,14 @@ P["unitframe"] = {
 					["position"] = "CENTER",
 					["xOffset"] = 0,
 					["yOffset"] = 0,
-					["color"] = {r = 1, g = 0.9, b = 0}
+					["color"] = {r = 1, g = 0.9, b = 0, a = 1}
 				},
 				["stack"] = {
 					["position"] = "BOTTOMRIGHT",
 					["xOffset"] = 0,
 					["yOffset"] = 2,
-					["color"] = {r = 1, g = 0.9, b = 0}
-				}
+					["color"] = {r = 1, g = 0.9, b = 0, a = 1}
+				},
 			},
 			["targetsGroup"] = {
 				["enable"] = true,
@@ -2399,8 +2574,8 @@ P["unitframe"] = {
 				["yOffset"] = 0,
 				["width"] = 120,
 				["height"] = 28,
-				["colorOverride"] = "USE_DEFAULT"
-			}
+				["colorOverride"] = "USE_DEFAULT",
+			},
 		},
 		["assist"] = {
 			["enable"] = true,
@@ -2432,7 +2607,7 @@ P["unitframe"] = {
 				["additionalFilterAllowNonPersonal"] = false,
 				["useFilter"] = "",
 				["xOffset"] = 0,
-				["yOffset"] = 2
+				["yOffset"] = 2,
 			},
 			["debuffs"] = {
 				["enable"] = false,
@@ -2453,20 +2628,20 @@ P["unitframe"] = {
 				["additionalFilterAllowNonPersonal"] = false,
 				["useFilter"] = "",
 				["xOffset"] = 0,
-				["yOffset"] = 1
+				["yOffset"] = 1,
 			},
 			["buffIndicator"] = {
 				["enable"] = true,
 				["size"] = 8,
 				["fontSize"] = 10,
-				["profileSpecific"] = false
+				["profileSpecific"] = false,
 			},
 			["rdebuffs"] = {
 				["enable"] = true,
 				["showDispellableDebuff"] = true,
 				["fontSize"] = 10,
-				["font"] = "PT Sans Narrow",
-				["fontOutline"] = "OUTLINE",
+				["font"] = "Homespun",
+				["fontOutline"] = "MONOCHROMEOUTLINE",
 				["size"] = 26,
 				["xOffset"] = 0,
 				["yOffset"] = 0,
@@ -2474,14 +2649,14 @@ P["unitframe"] = {
 					["position"] = "CENTER",
 					["xOffset"] = 0,
 					["yOffset"] = 0,
-					["color"] = {r = 1, g = 0.9, b = 0}
+					["color"] = {r = 1, g = 0.9, b = 0, a = 1}
 				},
 				["stack"] = {
 					["position"] = "BOTTOMRIGHT",
 					["xOffset"] = 0,
 					["yOffset"] = 2,
-					["color"] = {r = 1, g = 0.9, b = 0}
-				}
+					["color"] = {r = 1, g = 0.9, b = 0, a = 1}
+				},
 			},
 			["targetsGroup"] = {
 				["enable"] = true,
@@ -2490,176 +2665,11 @@ P["unitframe"] = {
 				["yOffset"] = 0,
 				["width"] = 120,
 				["height"] = 28,
-				["colorOverride"] = "USE_DEFAULT"
-			}
-		}
-	}
-};
-
-P["auras"] = {
-	["font"] = "Homespun",
-	["fontSize"] = 10,
-	["fontOutline"] = "MONOCHROMEOUTLINE",
-	["countYOffset"] = 0,
-	["countXOffset"] = 0,
-	["timeYOffset"] = 0,
-	["timeXOffset"] = 0,
-
-	["fadeThreshold"] = 5,
-	["buffs"] = {
-		["growthDirection"] = "LEFT_DOWN",
-		["wrapAfter"] = 12,
-		["maxWraps"] = 3,
-		["horizontalSpacing"] = 6,
-		["verticalSpacing"] = 16,
-		["sortMethod"] = "TIME",
-		["sortDir"] = "-",
-		["seperateOwn"] = 1,
-		["size"] = 32
-	},
-	["debuffs"] = {
-		["growthDirection"] = "LEFT_DOWN",
-		["wrapAfter"] = 12,
-		["maxWraps"] = 1,
-		["horizontalSpacing"] = 6,
-		["verticalSpacing"] = 16,
-		["sortMethod"] = "TIME",
-		["sortDir"] = "-",
-		["seperateOwn"] = 1,
-		["size"] = 32
+				["colorOverride"] = "USE_DEFAULT",
+			},
+		},
 	},
 }
-
-P["chat"] = {
-	["lockPositions"] = true,
-	["url"] = true,
-	["shortChannels"] = true,
-	["hyperlinkHover"] = true,
-	["throttleInterval"] = 45,
-	["scrollDownInterval"] = 15,
-	["fade"] = true,
-	["font"] = "PT Sans Narrow",
-	["fontOutline"] = "NONE",
-	["sticky"] = true,
-	["emotionIcons"] = true,
-	["keywordSound"] = "None",
-	["whisperSound"] = "ElvUI Aska",
-	["noAlertInCombat"] = false,
-	["chatHistory"] = true,
-	["timeStampFormat"] = "NONE",
-	["scrollDirection"] = "BOTTOM",
-	["chatHistoryLines"] = 250,
-	["keywords"] = "%MYNAME%, ElvUI",
-	["separateSizes"] = false,
-	["panelWidth"] = 412,
-	["panelHeight"] = 180,
-	["panelWidthRight"] = 412,
-	["panelHeightRight"] = 180,
-	["panelBackdropNameLeft"] = "",
-	["panelBackdropNameRight"] = "",
-	["panelBackdrop"] = "SHOWBOTH",
-	["panelTabBackdrop"] = false,
-	["panelTabTransparency"] = false,
-	["editBoxPosition"] = "BELOW_CHAT",
-	["fadeUndockedTabs"] = true,
-	["fadeTabsNoBackdrop"] = true,
-	["useAltKey"] = false,
-	["classColorMentionsChat"] = true,
-	["numAllowedCombatRepeat"] = 3,
-	["useCustomTimeColor"] = true,
-	["customTimeColor"] = {r = 0.7, g = 0.7, b = 0.7},
-	["numScrollMessages"] = 3,
-
-	["tabFont"] = "PT Sans Narrow",
-	["tabFontSize"] = 12,
-	["tabFontOutline"] = "NONE",
-}
-
-P["datatexts"] = {
-	["font"] = "Homespun",
-	["fontSize"] = 10,
-	["fontOutline"] = "NONE",
-	["wordWrap"] = false,
-	["panels"] = {
-		["LeftChatDataPanel"] = {
-			["left"] = "Armor",
-			["middle"] = "Durability",
-			["right"] = "Avoidance"
-		},
-		["RightChatDataPanel"] = {
-			["left"] = "System",
-			["middle"] = "Time",
-			["right"] = "Gold"
-		},
-		["LeftMiniPanel"] = "Guild",
-		["RightMiniPanel"] = "Friends",
-		["BottomMiniPanel"] = "",
-		["TopMiniPanel"] = "",
-		["BottomLeftMiniPanel"] = "",
-		["BottomRightMiniPanel"] = "",
-		["TopRightMiniPanel"] = "",
-		["TopLeftMiniPanel"] = "",
-	},
-	["timeFormat"] = "%I:%M",
-	["dateFormat"] = "",
-	["battleground"] = true,
-	["panelTransparency"] = false,
-	["goldFormat"] = "BLIZZARD",
-	["goldCoins"] = false,
-	["noCombatClick"] = false,
-	["noCombatHover"] = false,
-
-	["minimapPanels"] = true,
-	["leftChatPanel"] = true,
-	["rightChatPanel"] = true,
-	["minimapTop"] = false,
-	["minimapTopLeft"] = false,
-	["minimapTopRight"] = false,
-	["minimapBottom"] = false,
-	["minimapBottomLeft"] = false,
-	["minimapBottomRight"] = false
-};
-
-P["tooltip"] = {
-	["cursorAnchor"] = false,
-	["targetInfo"] = true,
-	["playerTitles"] = true,
-	["guildRanks"] = true,
-	["inspectInfo"] = true,
-	["itemCount"] = "BAGS_ONLY",
-	["spellID"] = true,
-	["font"] = "PT Sans Narrow",
-	["fontOutline"] = "NONE",
-	["headerFontSize"] = 12,
-	["textFontSize"] = 12,
-	["smallTextFontSize"] = 12,
-	["colorAlpha"] = 0.8,
-	["visibility"] = {
-		["unitFrames"] = "NONE",
-		["bags"] = "NONE",
-		["actionbars"] = "NONE",
-		["combat"] = false
-	},
-	["healthBar"] = {
-		["text"] = true,
-		["height"] = 7,
-		["font"] = "Homespun",
-		["fontSize"] = 10,
-		["fontOutline"] = "OUTLINE",
-		["statusPosition"] = "BOTTOM"
-	},
-	["useCustomFactionColors"] = false,
-	["factionColors"] = {
-		["1"] = {r = 0.8, g = 0.3, b = 0.22},
-		["2"] = {r = 0.8, g = 0.3, b = 0.22},
-		["3"] = {r = 0.75, g = 0.27, b = 0},
-		["4"] = {r = 0.9, g = 0.7, b = 0},
-		["5"] = {r = 0, g = 0.6, b = 0.1},
-		["6"] = {r = 0, g = 0.6, b = 0.1},
-		["7"] = {r = 0, g = 0.6, b = 0.1},
-		["8"] = {r = 0, g = 0.6, b = 0.1}
-	}
-};
 
 P["cooldown"] = {
 	threshold = 3,
@@ -2670,6 +2680,7 @@ P["cooldown"] = {
 	daysColor = {r = 0.4, g = 0.4, b = 1},
 }
 
+--Actionbar
 P["actionbar"] = {
 	["font"] = "Homespun",
 	["fontSize"] = 10,
@@ -2705,13 +2716,13 @@ P["actionbar"] = {
 		["buttons"] = 12,
 		["mouseover"] = false,
 		["buttonsPerRow"] = 12,
-		["buttonsize"] = 32,
-		["buttonspacing"] = 2,
-		["backdropSpacing"] = 2,
 		["point"] = "BOTTOMLEFT",
 		["backdrop"] = false,
 		["heightMult"] = 1,
 		["widthMult"] = 1,
+		["buttonsize"] = 32,
+		["buttonspacing"] = 2,
+		["backdropSpacing"] = 2,
 		["alpha"] = 1,
 		["inheritGlobalFade"] = false,
 		["showGrid"] = true,
@@ -2721,43 +2732,43 @@ P["actionbar"] = {
 			["PRIEST"] = "[bonusbar:1] 7;",
 			["ROGUE"] = "[bonusbar:1] 7; [form:3] 7;"
 		},
-		["visibility"] = ""
+		["visibility"] = "",
 	},
 	["bar2"] = {
 		["enabled"] = false,
 		["mouseover"] = false,
 		["buttons"] = 12,
 		["buttonsPerRow"] = 12,
-		["buttonsize"] = 32,
-		["buttonspacing"] = 2,
-		["backdropSpacing"] = 2,
 		["point"] = "BOTTOMLEFT",
 		["backdrop"] = false,
 		["heightMult"] = 1,
 		["widthMult"] = 1,
+		["buttonsize"] = 32,
+		["buttonspacing"] = 2,
+		["backdropSpacing"] = 2,
 		["alpha"] = 1,
 		["inheritGlobalFade"] = false,
 		["showGrid"] = true,
 		["paging"] = {},
-		["visibility"] = "[vehicleui] hide;show"
+		["visibility"] = "[vehicleui] hide;show",
 	},
 	["bar3"] = {
 		["enabled"] = true,
 		["mouseover"] = false,
 		["buttons"] = 6,
 		["buttonsPerRow"] = 6,
-		["buttonsize"] = 32,
-		["buttonspacing"] = 2,
-		["backdropSpacing"] = 2,
 		["point"] = "BOTTOMLEFT",
 		["backdrop"] = false,
 		["heightMult"] = 1,
 		["widthMult"] = 1,
+		["buttonsize"] = 32,
+		["buttonspacing"] = 2,
+		["backdropSpacing"] = 2,
 		["alpha"] = 1,
 		["inheritGlobalFade"] = false,
 		["showGrid"] = true,
 		["paging"] = {},
-		["visibility"] = "[vehicleui] hide;show"
+		["visibility"] = "[vehicleui] hide;show",
 	},
 	["bar4"] = {
 		["enabled"] = true,
@@ -2775,7 +2786,7 @@ P["actionbar"] = {
 		["inheritGlobalFade"] = false,
 		["showGrid"] = true,
 		["paging"] = {},
-		["visibility"] = "[vehicleui] hide;show"
+		["visibility"] = "[vehicleui] hide;show",
 	},
 	["bar5"] = {
 		["enabled"] = true,
@@ -2793,7 +2804,7 @@ P["actionbar"] = {
 		["inheritGlobalFade"] = false,
 		["showGrid"] = true,
 		["paging"] = {},
-		["visibility"] = "[vehicleui] hide;show"
+		["visibility"] = "[vehicleui] hide;show",
 	},
 	["bar6"] = {
 		["enabled"] = false,
@@ -2811,7 +2822,7 @@ P["actionbar"] = {
 		["inheritGlobalFade"] = false,
 		["showGrid"] = true,
 		["paging"] = {},
-		["visibility"] = "[vehicleui] hide;show"
+		["visibility"] = "[vehicleui] hide;show",
 	},
 	["barPet"] = {
 		["enabled"] = true,
@@ -2851,6 +2862,6 @@ P["actionbar"] = {
 		["buttonsize"] = 32,
 		["buttonspacing"] = 2,
 		["alpha"] = 1,
-		["inheritGlobalFade"] = false
-	}
+		["inheritGlobalFade"] = false,
+	},
 };

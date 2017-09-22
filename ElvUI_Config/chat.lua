@@ -162,34 +162,13 @@ E.Options.args.chat = {
 					desc = L["Number of messages you scroll for each step."],
 					min = 1, max = 10, step = 1,
 				},
-				scrollDirection = {
-					order = 16,
-					type = "select",
-					name = L["Scroll Direction"],
-					values = {
-						["BOTTOM"] = L["Bottom to Top"],
-						["TOP"] = L["Top to Bottom"]
-					}
-				},
-				chatHistoryLines = {
-					order = 17,
-					type = "range",
-					name = L["Chat History Lines"],
-					desc = L["Number of chat messages to be stores in the chat history."],
-					disabled = function() return not E.db.chat.chatHistory; end,
-					hidden = function() return not E.db.chat.chatHistory; end,
-					min = 250, max = 10000, step = 10,
-					set = function(info, value)
-						E.db.chat.chatHistoryLines = value;
-					end
-				},
 				spacer2 = {
-					order = 18,
+					order = 16,
 					type = "description",
 					name = " ",
 				},
 				timeStampFormat = {
-					order = 19,
+					order = 17,
 					type = "select",
 					name = TIMESTAMPS_LABEL,
 					desc = OPTION_TOOLTIP_TIMESTAMPS,
@@ -204,13 +183,13 @@ E.Options.args.chat = {
 					}
 				},
 				useCustomTimeColor = {
-					order = 20,
+					order = 18,
 					type = "toggle",
 					name = L["Custom Timestamp Color"],
 					disabled = function() return not E.db.chat.timeStampFormat == "NONE"; end
 				},
 				customTimeColor = {
-					order = 21,
+					order = 19,
 					type = "color",
 					hasAlpha = false,
 					name = L["Timestamp Color"],

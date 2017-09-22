@@ -142,7 +142,12 @@ function LO:SetChatTabStyle()
 end
 
 function LO:SetDataPanelStyle()
-	if E.db.datatexts.panelTransparency then
+	if not E.db.datatexts.panelBackdrop then
+		LeftChatDataPanel:SetTemplate("NoBackdrop")
+		LeftChatToggleButton:SetTemplate("NoBackdrop")
+		RightChatDataPanel:SetTemplate("NoBackdrop")
+		RightChatToggleButton:SetTemplate("NoBackdrop")
+	elseif E.db.datatexts.panelTransparency then
 		LeftChatDataPanel:SetTemplate("Transparent")
 		LeftChatToggleButton:SetTemplate("Transparent")
 		LeftMiniPanel:SetTemplate("Transparent")

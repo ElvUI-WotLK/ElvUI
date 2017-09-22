@@ -267,7 +267,6 @@ L["Require holding the Alt key down to move cursor or cycle through messages in 
 L["Right Only"] = "僅顯示右框背景"
 L["Right Panel Height"] = "右面板高度"
 L["Right Panel Width"] = "右面板寬度"
-L["Scroll Direction"] = true;
 L["Scroll Interval"] = "滾動間隔"
 L["Scroll Messages"] = true;
 L["Separate Panel Sizes"] = "分離框體大小"

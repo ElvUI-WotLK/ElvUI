@@ -168,57 +168,29 @@ CH.ClassNames = {};
 local numScrollMessages
 local function ChatFrame_OnMouseScroll(frame, delta)
 	numScrollMessages = CH.db.numScrollMessages or 3
-	if CH.db.scrollDirection == "TOP" then
-		if delta < 0 then
-			if IsShiftKeyDown() then
-				frame:ScrollToTop()
-			else
-				for i = 1, numScrollMessages do
-					frame:ScrollUp()
-				end
-			end
-		elseif delta > 0 then
-			if IsShiftKeyDown() then
-				frame:ScrollToBottom()
-			else
-				for i = 1, numScrollMessages do
-					frame:ScrollDown()
-				end
-			end
-
-			if CH.db.scrollDownInterval ~= 0 then
-				if frame.ScrollTimer then
-					CH:CancelTimer(frame.ScrollTimer, true)
-				end
-
-				frame.ScrollTimer = CH:ScheduleTimer("ScrollToBottom", CH.db.scrollDownInterval, frame)
+	if delta < 0 then
+		if IsShiftKeyDown() then
+			frame:ScrollToBottom()
+		else
+			for i = 1, numScrollMessages do
+				frame:ScrollDown()
 			end
 		end
-	else
-		if delta < 0 then
-			if IsShiftKeyDown() then
-				frame:ScrollToBottom()
-			else
-				for i = 1, numScrollMessages do
-					frame:ScrollDown()
-				end
+	elseif delta > 0 then
+		if IsShiftKeyDown() then
+			frame:ScrollToTop()
+		else
+			for i = 1, numScrollMessages do
+				frame:ScrollUp()
 			end
-		elseif delta > 0 then
-			if IsShiftKeyDown() then
-				frame:ScrollToTop()
-			else
-				for i = 1, numScrollMessages do
-					frame:ScrollUp()
-				end
+		end
+
+		if CH.db.scrollDownInterval ~= 0 then
+			if frame.ScrollTimer then
+				CH:CancelTimer(frame.ScrollTimer, true)
 			end
 
-			if CH.db.scrollDownInterval ~= 0 then
-				if frame.ScrollTimer then
-					CH:CancelTimer(frame.ScrollTimer, true)
-				end
-
-				frame.ScrollTimer = CH:ScheduleTimer("ScrollToBottom", CH.db.scrollDownInterval, frame)
-			end
+			frame.ScrollTimer = CH:ScheduleTimer("ScrollToBottom", CH.db.scrollDownInterval, frame)
 		end
 	end
 end
@@ -1558,8 +1530,8 @@ function CH:SaveChatHistory(event, ...)
 			end
 		end
 
-		if(c > CH.db.chatHistoryLines) then
-			ElvCharacterDB.ChatLog[k] = nil;
+		if c > 128 then
+			ElvCharacterDB.ChatLog[k] = nil
 		end
 	end
 end

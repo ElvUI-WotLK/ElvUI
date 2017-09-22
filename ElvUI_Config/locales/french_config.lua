@@ -267,7 +267,6 @@ L["Require holding the Alt key down to move cursor or cycle through messages in 
 L["Right Only"] = "Droite seulement"
 L["Right Panel Height"] = "Hauteur de la fenêtre de discussion de droite"
 L["Right Panel Width"] = "Largeur de la fenêtre de discussion de droite"
-L["Scroll Direction"] = true;
 L["Scroll Interval"] = "Intervalle de défilement"
 L["Scroll Messages"] = true;
 L["Separate Panel Sizes"] = "Séparer la taille des fenêtres de discussion."

@@ -2518,7 +2518,17 @@ E.Options.args.unitframe = {
 									name = L["Others"],
 									type = "color",
 									hasAlpha = true,
-								}
+								},
+								maxOverflow = {
+									order = 3,
+									type = "range",
+									name = L["Max Overflow"],
+									desc = L["Max amount of overflow allowed to extend past the end of the health bar."],
+									isPercent = true,
+									min = 0, max = 1, step = 0.01,
+									get = function(info) return E.db.unitframe.colors.healPrediction.maxOverflow end,
+									set = function(info, value) E.db.unitframe.colors.healPrediction.maxOverflow = value; UF:Update_AllFrames() end,
+								},
 							}
 						}
 					}
