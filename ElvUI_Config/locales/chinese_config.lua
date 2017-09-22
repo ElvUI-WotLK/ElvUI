@@ -318,10 +318,10 @@ L["Testing:"] = "测试:"
 
 --DataBars
 L["Current - Percent (Remaining)"] = "当前值 - 百分百(剩余)"
-L["DATABAR_DESC"] = "设置各种数据条"
 L["Current - Remaining"] = "当前值 - 剩余值"
 L["DataBars"] = "数据条"
 L["Hide in Combat"] = "战斗中隐藏"
+L["Setup on-screen display of information bars."] = "设置各种数据条"
 
 --DataTexts
 L["Battleground Texts"] = "战场信息"

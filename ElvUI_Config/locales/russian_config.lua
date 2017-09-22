@@ -318,10 +318,10 @@ L["Testing:"] = "Тестирование:"
 
 --DataBars
 L["Current - Percent (Remaining)"] = "Текущий - Процент (Осталось)"
-L["DATABAR_DESC"] = "Контролирует отображение информационных полос."
 L["Current - Remaining"] = "Текущий - Осталось"
 L["DataBars"] = "Инфо-полосы"
 L["Hide in Combat"] = "Скрывать в бою"
+L["Setup on-screen display of information bars."] = "Контролирует отображение информационных полос."
 
 --DataTexts
 L["Battleground Texts"] = "Текст ПБ"

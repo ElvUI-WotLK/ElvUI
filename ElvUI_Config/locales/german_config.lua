@@ -318,10 +318,10 @@ L["Testing:"] = "Tester:"
 
 --DataBars
 L["Current - Percent (Remaining)"] = "Aktuell - Prozent (Verleibend)"
-L["DATABAR_DESC"] = "Einstellung der Informationsleisten."
 L["Current - Remaining"] = "Aktuell - Verbleibend"
 L["DataBars"] = "Informationsleisten"
 L["Hide in Combat"] = "Im Kampf ausblenden"
+L["Setup on-screen display of information bars."] = "Einstellung der Informationsleisten."
 
 --DataTexts
 L["Battleground Texts"] = "Schlachtfeld-Infotexte"
