@@ -107,30 +107,30 @@ P["databars"] = {
 		["enable"] = true,
 		["width"] = 10,
 		["height"] = 180,
-		["textSize"] = 10,
-		["textFont"] = "Homespun",
 		["textFormat"] = "NONE",
-		["textOutline"] = "MONOCHROMEOUTLINE",
+		["textSize"] = 11,
+		["font"] = "PT Sans Narrow",
+		["fontOutline"] = "NONE",
 		["mouseover"] = false,
 		["orientation"] = "VERTICAL",
 		["hideAtMaxLevel"] = true,
 		["hideInVehicle"] = false,
-		["hideInCombat"] = false
+		["hideInCombat"] = false,
 	},
 	["reputation"] = {
 		["enable"] = false,
 		["width"] = 10,
 		["height"] = 180,
-		["textSize"] = 10,
-		["textFont"] = "Homespun",
 		["textFormat"] = "NONE",
-		["textOutline"] = "MONOCHROMEOUTLINE",
+		["textSize"] = 11,
+		["font"] = "PT Sans Narrow",
+		["fontOutline"] = "NONE",
 		["mouseover"] = false,
 		["orientation"] = "VERTICAL",
 		["hideInVehicle"] = false,
-		["hideInCombat"] = false
-	}
-};
+		["hideInCombat"] = false,
+	},
+}
 
 P["bags"] = {
 	["sortInverted"] = true,
@@ -138,7 +138,7 @@ P["bags"] = {
 	["bankSize"] = 34,
 	["bagWidth"] = 406,
 	["bankWidth"] = 406,
-	["currencyFormat"] = "ICON_TEXT",
+	["currencyFormat"] = "ICON_TEXT_ABBR",
 	["moneyFormat"] = "SMART",
 	["moneyCoins"] = true,
 	["ignoredItems"] = {},
