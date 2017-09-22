@@ -4,7 +4,7 @@ P.gridSize = 64
 P.farmSize = 340
 
 P["general"] = {
-	["taingLog"] = false,
+	["taintLog"] = false,
 	["stickyFrames"] = true,
 	["loginmessage"] = true,
 	["interruptAnnounce"] = "NONE",
