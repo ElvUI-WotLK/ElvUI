@@ -3,6 +3,7 @@ local E, L, V, P, G = unpack(select(2, ...));
 P.gridSize = 64
 P.farmSize = 340
 
+--Core
 P["general"] = {
 	["taintLog"] = false,
 	["stickyFrames"] = true,
@@ -17,7 +18,7 @@ P["general"] = {
 	["enhancedPvpMessages"] = true,
 	["watchFrameHeight"] = 480,
 	["afk"] = true,
-	["numberPrefixStyle"] = "METRIC",
+	["numberPrefixStyle"] = "ENGLISH",
 	["fontSize"] = 12,
 	["font"] = "PT Sans Narrow",
 
@@ -34,7 +35,7 @@ P["general"] = {
 		["locationFont"] = "PT Sans Narrow",
 		["resetZoom"] = {
 			["enable"] = false,
-			["time"] = 3
+			["time"] = 3,
 		},
 		["icons"] = {
 			["calendar"] = {
@@ -69,7 +70,7 @@ P["general"] = {
 				["yOffset"] = 0,
 			},
 			["vehicleLeave"] = {
-				["size"] = 26,
+				["scale"] = 1,
 				["position"] = "BOTTOMLEFT",
 				["xOffset"] = 2,
 				["yOffset"] = 2,

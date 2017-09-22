@@ -312,14 +312,14 @@ local function Vehicle_OnClick()
 end
 
 function AB:UpdateVehicleLeave()
-	local button = LeaveVehicleButton;
-	if(not button) then return; end
+	local button = LeaveVehicleButton
+	if not button then return; end
 
-	local pos = E.db.general.minimap.icons.vehicleLeave.position or "BOTTOMLEFT";
-	local size = E.db.general.minimap.icons.vehicleLeave.size or 26;
-	button:ClearAllPoints();
-	button:Point(pos, Minimap, pos, E.db.general.minimap.icons.vehicleLeave.xOffset or 2, E.db.general.minimap.icons.vehicleLeave.yOffset or 2);
-	button:SetSize(size, size);
+	local pos = E.db.general.minimap.icons.vehicleLeave.position or "BOTTOMLEFT"
+	local scale = 26 * (E.db.general.minimap.icons.vehicleLeave.scale or 1)
+	button:ClearAllPoints()
+	button:Point(pos, Minimap, pos, E.db.general.minimap.icons.vehicleLeave.xOffset or 2, E.db.general.minimap.icons.vehicleLeave.yOffset or 2)
+	button:SetSize(scale, scale)
 end
 
 function AB:CreateVehicleLeave()
