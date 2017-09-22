@@ -1448,26 +1448,32 @@ local function GetOptionsTable_RaidDebuff(updateFunc, groupName)
 				type = "toggle",
 				name = L["Show Dispellable Debuffs"]
 			},
-			size = {
+			onlyMatchSpellID = {
 				order = 3,
+				type = "toggle",
+				name = L["Only Match SpellID"],
+				desc = L["When enabled it will only show spells that were added to the filter using a spell ID and not a name."],
+			},
+			size = {
+				order = 4,
 				type = "range",
 				name = L["Size"],
 				min = 8, max = 100, step = 1
 			},
 			font = {
-				order = 4,
+				order = 5,
 				type = "select", dialogControl = "LSM30_Font",
 				name = L["Font"],
 				values = AceGUIWidgetLSMlists.font
 			},
 			fontSize = {
-				order = 5,
+				order = 6,
 				type = "range",
 				name = L["Font Size"],
 				min = 7, max = 22, step = 1
 			},
 			fontOutline = {
-				order = 6,
+				order = 7,
 				type = "select",
 				name = L["Font Outline"],
 				values = {
@@ -1478,19 +1484,19 @@ local function GetOptionsTable_RaidDebuff(updateFunc, groupName)
 				}
 			},
 			xOffset = {
-				order = 7,
+				order = 8,
 				type = "range",
 				name = L["xOffset"],
 				min = -300, max = 300, step = 1
 			},
 			yOffset = {
-				order = 8,
+				order = 9,
 				type = "range",
 				name = L["yOffset"],
 				min = -300, max = 300, step = 1
 			},
 			configureButton = {
-				order = 9,
+				order = 10,
 				type = "execute",
 				name = L["Configure Auras"],
 				func = function() E:SetToFilterConfig("RaidDebuffs"); end
@@ -1549,7 +1555,7 @@ local function GetOptionsTable_RaidDebuff(updateFunc, groupName)
 				}
 			},
 			stack = {
-				order = 11,
+				order = 12,
 				type = "group",
 				guiInline = true,
 				name = L["Stack Counter"],
