@@ -1,24 +1,29 @@
 local E, L, V, P, G, _ = unpack(select(2, ...));
 
-local print, unpack = print, unpack;
+local E, L, V, P, G, _ = unpack(select(2, ...)); --Engine
 
-local GetSpellInfo = GetSpellInfo;
+--Cache global variables
+--Lua functions
+local print, unpack = print, unpack
+local lower = string.lower
+--WoW API / Variables
+local GetSpellInfo = GetSpellInfo
 
 local function SpellName(id)
-	local name, _, _, _, _, _, _, _, _ = GetSpellInfo(id);
-	if(not name) then
-		print("|cff1784d1ElvUI:|r SpellID is not valid: "..id..". Please check for an updated version, if none exists report to ElvUI author.");
-		return "Impale";
+	local name, _, _, _, _, _, _, _, _ = GetSpellInfo(id)
+	if not name then
+		print("|cff1784d1ElvUI:|r SpellID is not valid: "..id..". Please check for an updated version, if none exists report to ElvUI author.")
+		return "Impale"
 	else
-		return name;
+		return name
 	end
 end
 
 local function Defaults(priorityOverride)
-	return {["enable"] = true, ["priority"] = priorityOverride or 0, ["stackThreshold"] = 0};
+	return {["enable"] = true, ["priority"] = priorityOverride or 0, ["stackThreshold"] = 0}
 end
 
-G.unitframe.aurafilters = {};
+G.unitframe.aurafilters = {}
 
 G.unitframe.aurafilters["CCDebuffs"] = {
 	["type"] = "Whitelist",
@@ -104,9 +109,9 @@ G.unitframe.aurafilters["CCDebuffs"] = {
 		[25046] = Defaults(), -- Arcane Torrent
 		[20549] = Defaults(), -- War Stomp
 	-- The Lich King
-		[73787] = Defaults() -- Necrotic Plague
-	}
-};
+		[73787] = Defaults(), -- Necrotic Plague
+	},
+}
 
 G.unitframe.aurafilters["TurtleBuffs"] = {
 	["type"] = "Whitelist",
@@ -145,9 +150,9 @@ G.unitframe.aurafilters["TurtleBuffs"] = {
 		[31821] = Defaults(3), -- Aura Mastery
 	-- Warrior
 		[871] = Defaults(3), -- Shield Wall
-		[55694] = Defaults() -- Enraged Regeneration
-	}
-};
+		[55694] = Defaults(), -- Enraged Regeneration
+	},
+}
 
 G.unitframe.aurafilters["PlayerBuffs"] = {
 	["type"] = "Whitelist",
@@ -225,9 +230,9 @@ G.unitframe.aurafilters["PlayerBuffs"] = {
 		[20594] = Defaults(), -- Stoneform
 		[59545] = Defaults(), -- Gift of the Naaru
 		[20572] = Defaults(), -- Blood Fury
-		[26297] = Defaults() -- Berserking
-	}
-};
+		[26297] = Defaults(), -- Berserking
+	},
+}
 
 G.unitframe.aurafilters["Blacklist"] = {
 	["type"] = "Blacklist",
@@ -261,9 +266,9 @@ G.unitframe.aurafilters["Blacklist"] = {
 		[72460] = Defaults(), -- Choking Gas
 		[72511] = Defaults(), -- Mutated Transformation
 	-- Blood Prince Council
-		[71911] = Defaults() -- Shadow Resonance
-	}
-};
+		[71911] = Defaults(), -- Shadow Resonance
+	},
+}
 
 G.unitframe.aurafilters["Whitelist"] = {
 	["type"] = "Whitelist",
@@ -291,9 +296,9 @@ G.unitframe.aurafilters["Whitelist"] = {
 	-- Offensive
 		[12292] = Defaults(), -- Death Wish
 		[31884] = Defaults(), -- Avenging Wrath
-		[34471] = Defaults() -- The Beast Within
-	}
-};
+		[34471] = Defaults(), -- The Beast Within
+	},
+}
 
 G.unitframe.aurafilters["RaidDebuffs"] = {
 	["type"] = "Whitelist",
@@ -432,8 +437,8 @@ G.unitframe.aurafilters["RaidDebuffs"] = {
 		[74567] = Defaults(), -- Mark of Combustion
 		[74792] = Defaults(), -- Soul Consumption
 		[74795] = Defaults(), -- Mark of Consumption
-	}
-};
+	},
+}
 
 --Spells that we want to show the duration backwards
 E.ReverseTimer = {
@@ -443,15 +448,16 @@ E.ReverseTimer = {
 --BuffWatch
 --List of personal spells to show on unitframes as icon
 local function ClassBuff(id, point, color, anyUnit, onlyShowMissing, style, displayText, decimalThreshold, textColor, textThreshold, xOffset, yOffset, sizeOverride)
-	local r, g, b = unpack(color);
-	local r2, g2, b2 = 1, 1, 1;
-	if(textColor) then
-		r2, g2, b2 = unpack(textColor);
+	local r, g, b = unpack(color)
+
+	local r2, g2, b2 = 1, 1, 1
+	if textColor then
+		r2, g2, b2 = unpack(textColor)
 	end
 
 	return {["enabled"] = true, ["id"] = id, ["point"] = point, ["color"] = {["r"] = r, ["g"] = g, ["b"] = b},
 	["anyUnit"] = anyUnit, ["onlyShowMissing"] = onlyShowMissing, ["style"] = style or "coloredIcon", ["displayText"] = displayText or false, ["decimalThreshold"] = decimalThreshold or 5,
-	["textColor"] = {["r"] = r2, ["g"] = g2, ["b"] = b2}, ["textThreshold"] = textThreshold or -1, ["xOffset"] = xOffset or 0, ["yOffset"] = yOffset or 0, ["sizeOverride"] = sizeOverride or 0};
+	["textColor"] = {["r"] = r2, ["g"] = g2, ["b"] = b2}, ["textThreshold"] = textThreshold or -1, ["xOffset"] = xOffset or 0, ["yOffset"] = yOffset or 0, ["sizeOverride"] = sizeOverride or 0}
 end
 
 G.unitframe.buffwatch = {
@@ -495,12 +501,12 @@ G.unitframe.buffwatch = {
 	DEATHKNIGHT = {
 		[49016] = ClassBuff(49016, "TOPRIGHT", {227/255, 23/255, 13/255}) -- Hysteria
 	},
-	HUNTER = {}
-};
+	HUNTER = {},
+}
 
 P["unitframe"]["filters"] = {
-	["buffwatch"] = {}
-};
+	["buffwatch"] = {},
+}
 
 G.unitframe.ChannelTicks = {
 	-- Warlock
@@ -519,18 +525,18 @@ G.unitframe.ChannelTicks = {
 	-- Mage
 	[SpellName(5143)] = 5, -- Arcane Missiles
 	[SpellName(10)] = 8, -- Blizzard
-	[SpellName(12051)] = 4 -- Evocation
-};
+	[SpellName(12051)] = 4, -- Evocation
+}
 
 G.unitframe.AuraBarColors = {
 	[SpellName(2825)] = {r = 250/255, g = 146/255, b = 27/255},	-- Bloodlust
-	[SpellName(32182)] = {r = 250/255, g = 146/255, b = 27/255} -- Heroism
-};
+	[SpellName(32182)] = {r = 250/255, g = 146/255, b = 27/255}, -- Heroism
+}
 
 G.unitframe.InvalidSpells = {
 
-};
+}
 
 G.unitframe.DebuffHighlightColors = {
-	[SpellName(25771)] = {enable = false, style = "FILL", color = {r = 0.85, g = 0, b = 0, a = 0.85}} -- Forbearance
-};
+	[25771] = {enable = false, style = "FILL", color = {r = 0.85, g = 0, b = 0, a = 0.85}}, -- Forbearance
+}

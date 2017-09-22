@@ -1,5 +1,6 @@
-local E, L, V, P, G = unpack(select(2, ...));
+local E, L, V, P, G = unpack(select(2, ...))
 
+--Global Settings
 G["general"] = {
 	["autoScale"] = true,
 	["minUiScale"] = 0.64,
@@ -10,27 +11,31 @@ G["general"] = {
 		["enable"] = true,
 		["position"] = "BOTTOMLEFT",
 		["xOffset"] = 0,
-		["yOffset"] = 0
+		["yOffset"] = 0,
 	},
 	["animateConfig"] = true,
-	["versionCheck"] = true
-};
+	["versionCheck"] = true,
+}
 
-G["classtimer"] = {};
-
-G["nameplates"] = {};
+G["classtimer"] = {}
 
 G["chat"] = {
 	["classColorMentionExcludedNames"] = {},
 }
 
 G["bags"] = {
-	["ignoredItems"] = {}
-};
+	["ignoredItems"] = {},
+}
+
+G["nameplates"] = {}
 
 G["unitframe"] = {
 	["aurafilters"] = {},
 	["buffwatch"] = {},
+	["raidDebuffIndicator"] = {
+		["instanceFilter"] = "RaidDebuffs",
+		["otherFilter"] = "CCDebuffs",
+	},
 	["spellRangeCheck"] = {
 		["PRIEST"] = {
 			["enemySpells"] = {

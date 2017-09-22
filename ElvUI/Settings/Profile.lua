@@ -132,6 +132,7 @@ P["databars"] = {
 	},
 }
 
+--Bags
 P["bags"] = {
 	["sortInverted"] = true,
 	["bagSize"] = 34,
@@ -165,6 +166,7 @@ P["bags"] = {
 	},
 };
 
+--NamePlate
 P["nameplates"] = {
 	["statusbar"] = "ElvUI Norm",
 	["font"] = "Homespun",
@@ -224,7 +226,7 @@ P["nameplates"] = {
 				["hideTime"] = false,
 				["offset"] = 1,
 				["castTimeFormat"] = "CURRENT",
-				["channelTimeFormat"] = "CURRENT"
+				["channelTimeFormat"] = "CURRENT",
 			},
 			["buffs"] = {
 				["enable"] = true,
@@ -270,7 +272,7 @@ P["nameplates"] = {
 				["hideTime"] = false,
 				["offset"] = 1,
 				["castTimeFormat"] = "CURRENT",
-				["channelTimeFormat"] = "CURRENT"
+				["channelTimeFormat"] = "CURRENT",
 			},
 			["buffs"] = {
 				["enable"] = true,
@@ -364,7 +366,7 @@ P["nameplates"] = {
 				["hideTime"] = false,
 				["offset"] = 1,
 				["castTimeFormat"] = "CURRENT",
-				["channelTimeFormat"] = "CURRENT"
+				["channelTimeFormat"] = "CURRENT",
 			},
 			["buffs"] = {
 				["enable"] = true,
@@ -395,11 +397,12 @@ P["nameplates"] = {
 			},
 			["detection"] = {
 				["enable"] = true,
-			}
-		}
-	}
+			},
+		},
+	},
 };
 
+--Auras
 P["auras"] = {
 	["font"] = "Homespun",
 	["fontSize"] = 10,
@@ -408,7 +411,6 @@ P["auras"] = {
 	["countXOffset"] = 0,
 	["timeYOffset"] = 0,
 	["timeXOffset"] = 0,
-
 	["fadeThreshold"] = 5,
 	["buffs"] = {
 		["growthDirection"] = "LEFT_DOWN",
@@ -2782,13 +2784,13 @@ P["actionbar"] = {
 		["mouseover"] = false,
 		["buttons"] = 12,
 		["buttonsPerRow"] = 1,
-		["buttonsize"] = 32,
-		["buttonspacing"] = 2,
-		["backdropSpacing"] = 2,
 		["point"] = "TOPRIGHT",
 		["backdrop"] = true,
 		["heightMult"] = 1,
 		["widthMult"] = 1,
+		["buttonsize"] = 32,
+		["buttonspacing"] = 2,
+		["backdropSpacing"] = 2,
 		["alpha"] = 1,
 		["inheritGlobalFade"] = false,
 		["showGrid"] = true,
@@ -2800,13 +2802,13 @@ P["actionbar"] = {
 		["mouseover"] = false,
 		["buttons"] = 6,
 		["buttonsPerRow"] = 6,
-		["buttonsize"] = 32,
-		["buttonspacing"] = 2,
-		["backdropSpacing"] = 2,
 		["point"] = "BOTTOMLEFT",
 		["backdrop"] = false,
 		["heightMult"] = 1,
 		["widthMult"] = 1,
+		["buttonsize"] = 32,
+		["buttonspacing"] = 2,
+		["backdropSpacing"] = 2,
 		["alpha"] = 1,
 		["inheritGlobalFade"] = false,
 		["showGrid"] = true,
@@ -2818,13 +2820,13 @@ P["actionbar"] = {
 		["mouseover"] = false,
 		["buttons"] = 12,
 		["buttonsPerRow"] = 12,
-		["buttonsize"] = 32,
-		["buttonspacing"] = 2,
-		["backdropSpacing"] = 2,
 		["point"] = "BOTTOMLEFT",
 		["backdrop"] = false,
 		["heightMult"] = 1,
 		["widthMult"] = 1,
+		["buttonsize"] = 32,
+		["buttonspacing"] = 2,
+		["backdropSpacing"] = 2,
 		["alpha"] = 1,
 		["inheritGlobalFade"] = false,
 		["showGrid"] = true,
@@ -2836,13 +2838,13 @@ P["actionbar"] = {
 		["mouseover"] = false,
 		["buttons"] = NUM_PET_ACTION_SLOTS,
 		["buttonsPerRow"] = 1,
-		["buttonsize"] = 28,
-		["buttonspacing"] = 2,
-		["backdropSpacing"] = 2,
 		["point"] = "TOPRIGHT",
 		["backdrop"] = true,
 		["heightMult"] = 1,
 		["widthMult"] = 1,
+		["buttonsize"] = 32,
+		["buttonspacing"] = 2,
+		["backdropSpacing"] = 2,
 		["alpha"] = 1,
 		["inheritGlobalFade"] = false,
 		["visibility"] = "[pet,novehicleui,nobonusbar:5] show;hide"
@@ -2861,7 +2863,7 @@ P["actionbar"] = {
 		["buttonspacing"] = 2,
 		["backdropSpacing"] = 2,
 		["alpha"] = 1,
-		["inheritGlobalFade"] = false
+		["inheritGlobalFade"] = false,
 	},
 	["barTotem"] = {
 		["enabled"] = true,

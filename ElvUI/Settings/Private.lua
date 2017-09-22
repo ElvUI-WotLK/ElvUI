@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...))
 
 --Locked Settings, These settings are stored for your character only regardless of profile options.
 
@@ -7,7 +7,7 @@ V["general"] = {
 	["lootRoll"] = true,
 	["normTex"] = "ElvUI Norm",
 	["glossTex"] = "ElvUI Norm",
-	["dmgfont"] = "Homespun",
+	["dmgfont"] = "PT Sans Narrow",
 	["namefont"] = "PT Sans Narrow",
 	["chatBubbles"] = "backdrop",
 	["chatBubbleFont"] = "PT Sans Narrow",
@@ -116,15 +116,16 @@ V["unitframe"] = {
 		["focus"] = true,
 		["boss"] = true,
 		["arena"] = true,
-		["party"] = true
-	}
+		["party"] = true,
+	},
 }
 
 V["actionbar"] = {
 	["enable"] = true,
+
 	["lbf"] = {
 		enable = false,
-		skin = "Blizzard"
+		skin = "Blizzard",
 	},
 }
 
