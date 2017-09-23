@@ -218,7 +218,8 @@ function UF:Construct_UF(frame, unit)
 	frame.BOTTOM_OFFSET = 0;
 
 	frame.RaisedElementParent = CreateFrame("Frame", nil, frame);
-	frame.RaisedElementParent:SetFrameLevel(frame:GetFrameLevel() + 100);
+	frame.RaisedElementParent.TextureParent = CreateFrame("Frame", nil, frame.RaisedElementParent)
+	frame.RaisedElementParent:SetFrameLevel(frame:GetFrameLevel() + 100)
 
 	if(not self["groupunits"][unit]) then
 		local stringTitle = E:StringTitle(unit);
@@ -337,8 +338,6 @@ function UF:UpdateColors()
 	ElvUF.colors.ComboPoints[1] = E:GetColorTable(db.classResources.comboPoints[1]);
 	ElvUF.colors.ComboPoints[2] = E:GetColorTable(db.classResources.comboPoints[2]);
 	ElvUF.colors.ComboPoints[3] = E:GetColorTable(db.classResources.comboPoints[3]);
-	ElvUF.colors.ComboPoints[4] = E:GetColorTable(db.classResources.comboPoints[4]);
-	ElvUF.colors.ComboPoints[5] = E:GetColorTable(db.classResources.comboPoints[5]);
 
 	ElvUF.colors.reaction[1] = bad;
 	ElvUF.colors.reaction[2] = bad;

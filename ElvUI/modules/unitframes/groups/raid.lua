@@ -19,6 +19,7 @@ function UF:Construct_RaidFrames(unitGroup)
 	self:SetScript("OnLeave", UnitFrame_OnLeave);
 
 	self.RaisedElementParent = CreateFrame("Frame", nil, self);
+	self.RaisedElementParent.TextureParent = CreateFrame("Frame", nil, self.RaisedElementParent)
 	self.RaisedElementParent:SetFrameLevel(self:GetFrameLevel() + 100);
 
 	self.Health = UF:Construct_HealthBar(self, true, true, "RIGHT");

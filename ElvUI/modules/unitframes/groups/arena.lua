@@ -14,6 +14,7 @@ local ArenaHeader = CreateFrame("Frame", "ArenaHeader", UIParent);
 
 function UF:Construct_ArenaFrames(frame)
 	frame.RaisedElementParent = CreateFrame("Frame", nil, frame);
+	frame.RaisedElementParent.TextureParent = CreateFrame("Frame", nil, frame.RaisedElementParent)
 	frame.RaisedElementParent:SetFrameLevel(frame:GetFrameLevel() + 100);
 
 	frame.Health = self:Construct_HealthBar(frame, true, true, "RIGHT");

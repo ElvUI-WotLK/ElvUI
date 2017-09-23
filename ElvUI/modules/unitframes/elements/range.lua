@@ -1,12 +1,14 @@
-local E, L, V, P, G = unpack(select(2, ...));
+local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local UF = E:GetModule("UnitFrames");
 local SpellRange = LibStub("SpellRange-1.0")
 
 local _, class = UnitClass("player")
 
+--Cache global variables
+--Lua functions
 local pairs, ipairs = pairs, ipairs
 local tinsert, tremove, twipe = table.insert, table.remove, table.wipe
-
+--WoW API / Variables
 local CheckInteractDistance = CheckInteractDistance
 local GetSpellInfo = GetSpellInfo
 local IsSpellInRange = IsSpellInRange
@@ -54,10 +56,10 @@ end
 
 function UF:UpdateRangeCheckSpells()
 	for tbl, spells in pairs(E.global.unitframe.spellRangeCheck[class]) do
-		AddTable(tbl) -- Create the table holding spells, even if it ends up being an empty table
+		AddTable(tbl) --Create the table holding spells, even if it ends up being an empty table
 		for spellID in pairs(spells) do
 			local enabled = spells[spellID]
-			if enabled then -- We will allow value to be false to disable this spell from being used
+			if enabled then --We will allow value to be false to disable this spell from being used
 				AddSpell(tbl, spellID)
 			end
 		end

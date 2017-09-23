@@ -1,8 +1,13 @@
-local E, L, V, P, G = unpack(select(2, ...));
+local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local UF = E:GetModule("UnitFrames");
 
+--Cache global variables
+--Lua functions
+
+--WoW API / Variables
+
 function UF:Construct_PvPIcon(frame)
-	local PvPIndicator = frame.RaisedElementParent:CreateTexture(nil, "ARTWORK")
+	local PvPIndicator = frame.RaisedElementParent.TextureParent:CreateTexture(nil, "ARTWORK")
 	PvPIndicator:SetSize(30, 30)
 	PvPIndicator:SetPoint("CENTER", frame, "CENTER")
 
@@ -21,6 +26,5 @@ function UF:Configure_PVPIcon(frame)
 		frame:EnableElement("PvPIndicator")
 	elseif not frame.db.pvpIcon.enable and frame:IsElementEnabled("PvPIndicator") then
 		frame:DisableElement("PvPIndicator")
-		PvPIndicator:Hide();
 	end
 end
