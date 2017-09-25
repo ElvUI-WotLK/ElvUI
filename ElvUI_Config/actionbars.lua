@@ -25,7 +25,7 @@ local function BuildABConfig()
 		type = "group",
 		name = L["General Options"],
 		childGroups = "tab",
-		disabled = function() return not E.private.actionbar.enable end,
+		disabled = function() return not E.ActionBars end,
 		args = {
 			info = {
 				order = 1,
@@ -208,12 +208,81 @@ local function BuildABConfig()
 			}
 		}
 	}
+	if E.myclass == "SHAMAN" then
+		group["barTotem"] = {
+			order = 2,
+			type = "group",
+			name = L["Totem Bar"],
+			guiInline = false,
+			disabled = function() return not E.ActionBars or not E.myclass == "SHAMAN" end,
+			get = function(info) return E.db.actionbar["barTotem"][ info[#info] ] end,
+			set = function(info, value) E.db.actionbar["barTotem"][ info[#info] ] = value AB:AdjustTotemSettings() AB:PositionAndSizeBarTotem() end,
+			args = {
+				info = {
+					order = 1,
+					type = "header",
+					name = L["Totem Bar"]
+				},
+				enabled = {
+					order = 2,
+					type = "toggle",
+					name = L["Enable"]
+				},
+				restorePosition = {
+					order = 3,
+					type = "execute",
+					name = L["Restore Bar"],
+					desc = L["Restore the actionbars default settings"],
+					func = function() E:CopyTable(E.db.actionbar["barTotem"], P.actionbar["barTotem"]) E:ResetMovers(L["Totem Bar"]) AB:AdjustTotemSettings() AB:PositionAndSizeBarTotem() end,
+					disabled = function() return not E.db.actionbar.barTotem.enabled end
+				},
+				mouseover = {
+					order = 4,
+					type = "toggle",
+					name = L["Mouse Over"],
+					desc = L["The frame is not shown unless you mouse over the frame."],
+					disabled = function() return not E.db.actionbar.barTotem.enabled end
+				},
+				buttonsize = {
+					order = 5,
+					type = "range",
+					name = L["Button Size"],
+					desc = L["The size of the action buttons."],
+					min = 15, max = 60, step = 1,
+					disabled = function() return not E.db.actionbar.barTotem.enabled end
+				},
+				buttonspacing = {
+					order = 6,
+					type = "range",
+					name = L["Button Spacing"],
+					desc = L["The spacing between buttons."],
+					min = 0, max = 20, step = 1,
+					disabled = function() return not E.db.actionbar.barTotem.enabled end
+				},
+				inheritGlobalFade = {
+					order = 7,
+					type = "toggle",
+					name = L["Inherit Global Fade"],
+					desc = L["Inherit the global fade, mousing over, targetting, setting focus, losing health, entering combat will set the remove transparency. Otherwise it will use the transparency level in the general actionbar settings for global fade alpha."],
+					disabled = function() return not E.db.actionbar.barTotem.enabled end
+				},
+				alpha = {
+					order = 8,
+					type = "range",
+					name = L["Alpha"],
+					isPercent = true,
+					min = 0, max = 1, step = 0.01,
+					disabled = function() return not E.db.actionbar.barTotem.enabled end
+				}
+			}
+		}
+	end
 	group["barPet"] = {
-		order = 2,
+		order = 3,
 		name = L["Pet Bar"],
 		type = "group",
 		guiInline = false,
-		disabled = function() return not E.private.actionbar.enable end,
+		disabled = function() return not E.ActionBars end,
 		get = function(info) return E.db.actionbar["barPet"][ info[#info] ] end,
 		set = function(info, value) E.db.actionbar["barPet"][ info[#info] ] = value AB:PositionAndSizeBarPet() end,
 		args = {
@@ -349,11 +418,11 @@ local function BuildABConfig()
 		}
 	}
 	group["stanceBar"] = {
-		order = 3,
+		order = 4,
 		name = L["Stance Bar"],
 		type = "group",
 		guiInline = false,
-		disabled = function() return not E.private.actionbar.enable end,
+		disabled = function() return not E.ActionBars end,
 		get = function(info) return E.db.actionbar["barShapeShift"][ info[#info] ] end,
 		set = function(info, value) E.db.actionbar["barShapeShift"][ info[#info] ] = value AB:PositionAndSizeBarShapeShift() end,
 		args = {
@@ -487,12 +556,12 @@ local function BuildABConfig()
 		}
 	}
 	group["microbar"] = {
-		order = 4,
+		order = 5,
 		type = "group",
 		name = L["Micro Bar"],
 		get = function(info) return E.db.actionbar.microbar[ info[#info] ] end,
 		set = function(info, value) E.db.actionbar.microbar[ info[#info] ] = value AB:UpdateMicroPositionDimensions() end,
-		disabled = function() return not E.private.actionbar.enable end,
+		disabled = function() return not E.ActionBars end,
 		args = {
 			info = {
 				order = 1,
@@ -564,7 +633,7 @@ local function BuildABConfig()
 			name = name,
 			type = "group",
 			guiInline = false,
-			disabled = function() return not E.private.actionbar.enable end,
+			disabled = function() return not E.ActionBars end,
 			get = function(info) return E.db.actionbar["bar"..i][ info[#info] ] end,
 			set = function(info, value) E.db.actionbar["bar"..i][ info[#info] ] = value AB:PositionAndSizeBar("bar"..i) end,
 			args = {
@@ -776,7 +845,7 @@ E.Options.args.actionbar = {
 			name = L["General"],
 			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "actionbar", "general") end,
-			disabled = function() return not E.private.actionbar.enable end
+			disabled = function() return not E.ActionBars end
 		},
 		petBarShortcut = {
 			order = 6,
@@ -784,7 +853,7 @@ E.Options.args.actionbar = {
 			name = L["Pet Bar"],
 			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "actionbar", "barPet") end,
-			disabled = function() return not E.private.actionbar.enable end
+			disabled = function() return not E.ActionBars end
 		},
 		stanceBarShortcut = {
 			order = 7,
@@ -792,78 +861,86 @@ E.Options.args.actionbar = {
 			name = L["Stance Bar"],
 			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "actionbar", "stanceBar") end,
-			disabled = function() return not E.private.actionbar.enable end
+			disabled = function() return not E.ActionBars end
 		},
 		spacer2 = {
 			order = 8,
 			type = "description",
 			name = " "
 		},
-		microbarShortcut = {
+		totemBarShortcut = {
 			order = 9,
+			type = "execute",
+			name = L["Totem Bar"],
+			buttonElvUI = true,
+			func = function() ACD:SelectGroup("ElvUI", "actionbar", "barTotem") end,
+			disabled = function() return not E.ActionBars or E.myclass ~= "SHAMAN" end
+		},
+		microbarShortcut = {
+			order = 10,
 			type = "execute",
 			name = L["Micro Bar"],
 			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "actionbar", "microbar") end,
-			disabled = function() return not E.private.actionbar.enable end
+			disabled = function() return not E.ActionBars end
 		},
 		bar1Shortcut = {
-			order = 10,
+			order = 11,
 			type = "execute",
 			name = L["Bar "]..1,
 			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "actionbar", "bar1") end,
-			disabled = function() return not E.private.actionbar.enable end
-		},
-		bar2Shortcut = {
-			order = 11,
-			type = "execute",
-			name = L["Bar "]..2,
-			buttonElvUI = true,
-			func = function() ACD:SelectGroup("ElvUI", "actionbar", "bar2") end,
-			disabled = function() return not E.private.actionbar.enable end
+			disabled = function() return not E.ActionBars end
 		},
 		spacer3 = {
 			order = 12,
 			type = "description",
 			name = " "
 		},
-		bar3Shortcut = {
+		bar2Shortcut = {
 			order = 13,
+			type = "execute",
+			name = L["Bar "]..2,
+			buttonElvUI = true,
+			func = function() ACD:SelectGroup("ElvUI", "actionbar", "bar2") end,
+			disabled = function() return not E.ActionBars end
+		},
+		bar3Shortcut = {
+			order = 14,
 			type = "execute",
 			name = L["Bar "]..3,
 			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "actionbar", "bar3") end,
-			disabled = function() return not E.private.actionbar.enable end
+			disabled = function() return not E.ActionBars end
 		},
 		bar4Shortcut = {
-			order = 14,
+			order = 15,
 			type = "execute",
 			name = L["Bar "]..4,
 			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "actionbar", "bar4") end,
-			disabled = function() return not E.private.actionbar.enable end
-		},
-		bar5Shortcut = {
-			order = 15,
-			type = "execute",
-			name = L["Bar "]..5,
-			buttonElvUI = true,
-			func = function() ACD:SelectGroup("ElvUI", "actionbar", "bar5") end,
-			disabled = function() return not E.private.actionbar.enable end
+			disabled = function() return not E.ActionBars end
 		},
 		spacer4 = {
 			order = 16,
 			type = "description",
 			name = " "
 		},
-		bar6Shortcut = {
+		bar5Shortcut = {
 			order = 17,
+			type = "execute",
+			name = L["Bar "]..5,
+			buttonElvUI = true,
+			func = function() ACD:SelectGroup("ElvUI", "actionbar", "bar5") end,
+			disabled = function() return not E.ActionBars end
+		},
+		bar6Shortcut = {
+			order = 18,
 			type = "execute",
 			name = L["Bar "]..6,
 			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "actionbar", "bar6") end,
-			disabled = function() return not E.private.actionbar.enable end
+			disabled = function() return not E.ActionBars end
 		}
 	}
 }

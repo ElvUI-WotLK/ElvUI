@@ -35,7 +35,6 @@ local LSM = LibStub("LibSharedMedia-3.0");
 
 local LBF = LibStub("LibButtonFacade", true);
 
-E.ActionBars = AB;
 AB["handledBars"] = {};
 AB["handledbuttons"] = {};
 AB["barDefaults"] = {
@@ -388,9 +387,9 @@ end
 
 function AB:UpdateBar1Paging()
 	if(self.db.bar6.enabled) then
-		E.ActionBars.barDefaults.bar1.conditions = "[bonusbar:5] 11; [bar:3] 3; [bar:4] 4; [bar:5] 5; [bar:6] 6;";
+		AB.barDefaults.bar1.conditions = "[bonusbar:5] 11; [bar:3] 3; [bar:4] 4; [bar:5] 5; [bar:6] 6;";
 	else
-		E.ActionBars.barDefaults.bar1.conditions = "[bonusbar:5] 11; [bar:2] 2; [bar:3] 3; [bar:4] 4; [bar:5] 5; [bar:6] 6;";
+		AB.ActionBars.barDefaults.bar1.conditions = "[bonusbar:5] 11; [bar:2] 2; [bar:3] 3; [bar:4] 4; [bar:5] 5; [bar:6] 6;";
 	end
 
 	if((E.private.actionbar.enable ~= true or InCombatLockdown()) or not self.isInitialized) then return; end
