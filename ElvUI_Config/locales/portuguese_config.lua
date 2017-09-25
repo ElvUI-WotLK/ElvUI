@@ -4,6 +4,7 @@ local L = AceLocale:NewLocale("ElvUI", "ptBR")
 if not L then return end
 
 -- *_DESC locales
+L["ACTIONBARS_DESC"] = "Modify the actionbar settings."
 L["AURAS_DESC"] = "Configurar os ícones das auras que aparecem perto do minimapa."
 L["BAGS_DESC"] = "Ajustar definições das bolsas para a ElvUI."
 L["CHAT_DESC"] = "Adjustar definições do bate-papo para o ElvUI."

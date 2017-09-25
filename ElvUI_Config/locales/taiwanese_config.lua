@@ -4,6 +4,7 @@ local L = AceLocale:NewLocale("ElvUI", "zhTW")
 if not L then return end
 
 -- *_DESC locales
+L["ACTIONBARS_DESC"] = "Modify the actionbar settings."
 L["AURAS_DESC"] = "小地圖旁的光環圖示設定."
 L["BAGS_DESC"] = "調整 ElvUI 背包設定."
 L["CHAT_DESC"] = "對話框架設定."

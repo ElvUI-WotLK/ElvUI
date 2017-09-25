@@ -4,6 +4,7 @@ local L = AceLocale:NewLocale("ElvUI", "koKR")
 if not L then return end
 
 -- *_DESC locales
+L["ACTIONBARS_DESC"] = "Modify the actionbar settings."
 L["AURAS_DESC"] = "미니맵 근처에 표시되는 버프/디버프 아이콘에 관련된 옵션들입니다."
 L["BAGS_DESC"] = "통합가방과 가방바에 관련된 옵션들입니다."
 L["CHAT_DESC"] = "채팅과 패널에 관련된 옵션들입니다."

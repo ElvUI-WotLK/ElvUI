@@ -4,6 +4,7 @@ local L = AceLocale:NewLocale("ElvUI", "deDE")
 if not L then return end
 
 -- *_DESC locales
+L["ACTIONBARS_DESC"] = "Konfiguriere die Einstellungen für die Aktionsleisten."
 L["AURAS_DESC"] = "Konfiguriere die Symbole für die Stärkungs- und Schwächungszauber nahe der Minimap."
 L["BAGS_DESC"] = "Konfiguriere die Einstellungen für die Taschen."
 L["CHAT_DESC"] = "Anpassen der Chateinstellungen für ElvUI."
