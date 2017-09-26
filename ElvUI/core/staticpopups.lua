@@ -193,6 +193,28 @@ E.PopupDialogs["PRIVATE_RL"] = {
 	hideOnEscape = false
 };
 
+E.PopupDialogs["RESET_UF_AF"] = {
+	text = L["Accepting this will reset your Filter Priority lists for all auras on UnitFrames. Are you sure?"],
+	button1 = ACCEPT,
+	button2 = CANCEL,
+	OnAccept = function()
+		for unitName, content in pairs(E.db.unitframe.units) do
+			if content.buffs then
+				content.buffs.priority = P.unitframe.units[unitName].buffs.priority
+			end
+			if content.debuffs then
+				content.debuffs.priority = P.unitframe.units[unitName].debuffs.priority
+			end
+			if content.aurabar then
+				content.aurabar.priority = P.unitframe.units[unitName].aurabar.priority
+			end
+		end
+	end,
+	timeout = 0,
+	whileDead = 1,
+	hideOnEscape = false,
+}
+
 E.PopupDialogs["KEYBIND_MODE"] = {
 	text = L["Hover your mouse over any actionbutton or spellbook button to bind it. Press the escape key or right click to clear the current actionbutton's keybinding."],
 	button1 = L["Save"],
