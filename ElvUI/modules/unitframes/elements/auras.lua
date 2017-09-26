@@ -463,7 +463,7 @@ function UF:UpdateAuraTimer(elapsed)
 	end
 end
 
-function UF:AuraFilter(unit, button, name, rank, texture, count, dispelType, duration, expiration, caster, isStealable, spellID)
+function UF:AuraFilter(unit, button, name, rank, texture, count, dispelType, duration, expiration, caster, isStealable, _, spellID)
 	local db = self:GetParent().db
 	if not db or not db[self.type] then return true; end
 
