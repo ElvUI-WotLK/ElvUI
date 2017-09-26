@@ -16,7 +16,7 @@ function UF:Construct_AuraWatch(frame)
 	auras:SetInside(frame.Health)
 	auras.presentAlpha = 1
 	auras.missingAlpha = 0
-	auras.strictMatching = true;
+	auras.strictMatching = false;
 	auras.icons = {}
 
 	return auras
