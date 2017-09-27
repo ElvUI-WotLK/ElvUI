@@ -15,6 +15,7 @@ L["PANEL_DESC"] = "Adjust the size of your left and right panels, this will effe
 L["SKINS_DESC"] = "Adjust Skin settings."
 L["TOGGLESKIN_DESC"] = "Enable/Disable this skin."
 L["TOOLTIP_DESC"] = "Setup options for the Tooltip."
+L["UNITFRAME_DESC"] = "Modify the unitframe settings."
 L["SEARCH_SYNTAX_DESC"] = [=[With the new addition of LibItemSearch, you now have access to much more advanced item searches. The following is a documentation of the search syntax. See the full explanation at: https://github.com/Jaliborc/LibItemSearch-1.2/wiki/Search-Syntax.
 
 Specific Searching:
@@ -357,6 +358,9 @@ L["Share Filters"] = true;
 L["This feature will allow you to transfer settings to other characters."] = true;
 L["You must be targeting a player."] = true;
 
+--Filters
+L["Reset Aura Filters"] = true --Used in Nameplates/UnitFrames general options
+
 --General
 L["Accept Invites"] = true;
 L["Adjust the position of the threat bar to either the left or right datatext panels."] = true;
@@ -488,6 +492,8 @@ L["Version"] = true;
 --NamePlates
 L["# Displayed Auras"] = true;
 L["Add Name"] = true;
+L["Add Regular Filter"] = true
+L["Add Special Filter"] = true
 L["Bad Color"] = true;
 L["Bad Scale"] = true;
 L["Bad Transition Color"] = true;
@@ -515,7 +521,9 @@ L["Enemy NPC Frames"] = true;
 L["Enemy Player Frames"] = true;
 L["Enemy"] = true; --Also used in UnitFrames
 L["Filter already exists!"] = true;
+L["Filter Priority"] = true;
 L["Filter"] = true;
+L["Filters Page"] = true;
 L["Filters"] = true; --Also used in UnitFrames
 L["Friendly Combat Toggle"] = true;
 L["Friendly NPC Frames"] = true;
@@ -541,20 +549,27 @@ L["Personal Auras"] = true;
 L["Prevent any nameplate with this unit name from showing."] = true;
 L["Reaction Colors"] = true;
 L["Remove Name"] = true;
+L["Reset filter priority to the default state."] = true;
+L["Reset Priority"] = true;
 L["Scale of the nameplate that is targetted."] = true;
 L["Set Settings to Default"] = true;
 L["Set the scale of the nameplate."] = true;
 L["Set the transparency level of nameplates that are not the target nameplate."] = true;
 L["Set to either stack nameplates vertically or allow them to overlap."] = true;
+L["Shortcut to 'Filters' section of the config."] = true;
 L["Shortcuts"] = true;
 L["Stacking Nameplates"] = true;
 L["Tagged NPC"] = true;
 L["Tanked Color"] = true;
 L["Target Scale"] = true;
+L["These filters don't use a list of spells like the regular filters. Instead they use the WoW API and some code logic to determine if an aura should be allowed or blocked."] = true;
+L["These filters use a list of spells to determine if an aura should be allowed or blocked. The content of these filters can be modified in the 'Filters' section of the config."] = true;
 L["Threat"] = true;
 L["Toggle Off While In Combat"] = true;
 L["Toggle On While In Combat"] = true;
 L["Use Class Color"] = true;
+L["Use drag and drop to rearrange filter priority or right click to remove a filter."] = true;
+L["Use Shift+LeftClick to toggle between friendly or enemy or normal state. Normal state will allow the filter to be checked on all units. Friendly state is for friendly units only and enemy state is for enemy units."] = true;
 L["Use Tanked Color when a nameplate is being effectively tanked by another tank."] = true;
 L["Use Target Glow"] = true;
 L["Use Target Scale"] = true;
@@ -776,10 +791,12 @@ L["Display tick marks on the castbar for channelled spells. This will adjust aut
 L["Don't display any auras found on the 'Blacklist' filter."] = true;
 L["Don't display auras that are longer than this duration (in seconds). Set to zero to disable."] = true;
 L["Don't display auras that are not yours."] = true;
+L["Don't display auras that are shorter than this duration (in seconds). Set to zero to disable."] = true;
 L["Don't display auras that cannot be purged or dispelled by your class."] = true;
 L["Don't display auras that have no duration."] = true;
 L["Don't display raid buffs such as Blessing of Kings or Mark of the Wild."] = true;
 L["Down"] = true;
+L["Dungeon & Raid Filter"] = true;
 L["Duration Reverse"] = true;
 L["Duration Text"] = true;
 L["Duration"] = true;
@@ -857,6 +874,7 @@ L["Method to sort by."] = true;
 L["Middle Click - Set Focus"] = true;
 L["Middle clicking the unit frame will cause your focus to match the unit."] = true;
 L["Middle"] = true;
+L["Minimum Duration"] = true;
 L["Mouseover"] = true;
 L["Name"] = true; --Also used in Buffs and Debuffs
 L["Neutral"] = true;
@@ -871,6 +889,7 @@ L["Offset"] = true;
 L["Only show when the unit is not in range."] = true;
 L["Only show when you are mousing over a frame."] = true;
 L["OOR Alpha"] = true;
+L["Other Filter"] = true;
 L["Others"] = true;
 L["Overlay the healthbar"] = true;
 L["Overlay"] = true;

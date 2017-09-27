@@ -15,6 +15,7 @@ L["PANEL_DESC"] = "좌우 패널의 크기를 조절합니다. 이 값에 따라
 L["SKINS_DESC"] = "다른 애드온이나 게임 내 여러 프레임에 체크 시 스킨을 적용합니다."
 L["TOGGLESKIN_DESC"] = "체크 시 해당 프레임에 스킨을 사용합니다."
 L["TOOLTIP_DESC"] = "툴팁에 관련된 옵션들입니다."
+L["UNITFRAME_DESC"] = "Modify the unitframe settings."
 L["SEARCH_SYNTAX_DESC"] = [=[
 
   각종 가방에서 검색기능을 사용할 때, 다음의 명령어들을 활용하면
@@ -416,6 +417,9 @@ L["Share Filters"] = "필터설정 전송"
 L["This feature will allow you to transfer settings to other characters."] = "전송 기능을 통해 대상에게 자신의 설정을 넘겨줄 수 있습니다."
 L["You must be targeting a player."] = "유저를 대상으로 잡은 후에 시도해야 합니다."
 
+--Filters
+L["Reset Aura Filters"] = true --Used in Nameplates/UnitFrames general options
+
 --General
 L["Accept Invites"] = "지인의 초대 자동수락"
 L["Adjust the position of the threat bar to either the left or right datatext panels."] = "위협수치 바를 어느 패널의 정보문자 탭에 배치할지 결정합니다."
@@ -547,6 +551,8 @@ L["Version"] = "버전"
 --NamePlates
 L["# Displayed Auras"] = true;
 L["Add Name"] = "이름표 필터 추가"
+L["Add Regular Filter"] = true
+L["Add Special Filter"] = true
 L["Bad Color"] = true;
 L["Bad Scale"] = true;
 L["Bad Transition Color"] = true;
@@ -574,7 +580,9 @@ L["Enemy NPC Frames"] = true;
 L["Enemy Player Frames"] = true;
 L["Enemy"] = "적군" --Also used in UnitFrames
 L["Filter already exists!"] = "이미 그 이름의 필터가 존재합니다!"
+L["Filter Priority"] = true;
 L["Filter"] = true;
+L["Filters Page"] = true;
 L["Filters"] = "필터" --Also used in UnitFrames
 L["Friendly Combat Toggle"] = true;
 L["Friendly NPC Frames"] = true;
@@ -600,20 +608,27 @@ L["Personal Auras"] = true;
 L["Prevent any nameplate with this unit name from showing."] = "필터 이름과 같은 유닛의 이름표는 보이지 않게 숨깁니다.|n|n다만 이 기능은 보이지만 않을 뿐 클릭은 여전히 받습니다."
 L["Reaction Colors"] = true;
 L["Remove Name"] = "이름표 필터 제거"
+L["Reset filter priority to the default state."] = true;
+L["Reset Priority"] = true;
 L["Scale of the nameplate that is targetted."] = true;
 L["Set Settings to Default"] = true;
 L["Set the scale of the nameplate."] = "필터 이름과 같은 유닛의 이름표는 특별히 생명력바 크기를 이 값 만큼 확대하거나 축소하게 합니다."
 L["Set the transparency level of nameplates that are not the target nameplate."] = true;
 L["Set to either stack nameplates vertically or allow them to overlap."] = true;
+L["Shortcut to 'Filters' section of the config."] = true;
 L["Shortcuts"] = true;
 L["Stacking Nameplates"] = true;
 L["Tagged NPC"] = "선점된 유닛"
 L["Tanked Color"] = true;
 L["Target Scale"] = true;
+L["These filters don't use a list of spells like the regular filters. Instead they use the WoW API and some code logic to determine if an aura should be allowed or blocked."] = true;
+L["These filters use a list of spells to determine if an aura should be allowed or blocked. The content of these filters can be modified in the 'Filters' section of the config."] = true;
 L["Threat"] = "위협"
 L["Toggle Off While In Combat"] = true;
 L["Toggle On While In Combat"] = true;
 L["Use Class Color"] = true;
+L["Use drag and drop to rearrange filter priority or right click to remove a filter."] = true;
+L["Use Shift+LeftClick to toggle between friendly or enemy or normal state. Normal state will allow the filter to be checked on all units. Friendly state is for friendly units only and enemy state is for enemy units."] = true;
 L["Use Tanked Color when a nameplate is being effectively tanked by another tank."] = true;
 L["Use Target Glow"] = true;
 L["Use Target Scale"] = true;
@@ -835,10 +850,12 @@ L["Display tick marks on the castbar for channelled spells. This will adjust aut
 L["Don't display any auras found on the 'Blacklist' filter."] = "차단 목록에 등록되어 있는 효과들을 표시하지 않게 합니다."
 L["Don't display auras that are longer than this duration (in seconds). Set to zero to disable."] = "이 값보다 긴 시간(초단위)의 효과들을 표시하지 않습니다.|n|n0으로 설정하면 이 기능을 사용하지 않습니다."
 L["Don't display auras that are not yours."] = "플레이어가 직접 건 것이 아닌 효과들을 표시하지 않게 합니다."
+L["Don't display auras that are shorter than this duration (in seconds). Set to zero to disable."] = true;
 L["Don't display auras that cannot be purged or dispelled by your class."] = "플레이어가 직접 끄거나 해제할 수 없는 종류의 효과들을 표시하지 않게 합니다."
 L["Don't display auras that have no duration."] = "지속시간이 무한인 효과들을 표시하지 않게 합니다.|n|n즉, 유효시간이 있는 효과들만 보이게 됩니다."
 L["Don't display raid buffs such as Blessing of Kings or Mark of the Wild."] = true;
 L["Down"] = "아래로"
+L["Dungeon & Raid Filter"] = true;
 L["Duration Reverse"] = "총 지속시간이 짧은 순"
 L["Duration Text"] = true;
 L["Duration"] = "총 지속시간이 긴 순"
@@ -916,6 +933,7 @@ L["Method to sort by."] = true;
 L["Middle Click - Set Focus"] = "휠클릭으로 주시 설정"
 L["Middle clicking the unit frame will cause your focus to match the unit."] = "마우스 휠로 이 프레임을 클릭하면 유닛을 주시 대상으로 잡습니다."
 L["Middle"] = true;
+L["Minimum Duration"] = true;
 L["Mouseover"] = "마우스오버 시 표시"
 L["Name"] = "이름"
 L["Neutral"] = "중립"
@@ -930,6 +948,7 @@ L["Offset"] = "생명력바와 겹쳐 표시"
 L["Only show when the unit is not in range."] = "사정거리 밖에 있을 때에만 이 기능을 보이게 합니다."
 L["Only show when you are mousing over a frame."] = "마우스를 갖다 댔을(마우스오버) 때에만 이 기능을 보이게 합니다."
 L["OOR Alpha"] = "사거리 밖 투명도"
+L["Other Filter"] = true;
 L["Others"] = "다른 유저"
 L["Overlay the healthbar"] = "생명력바에 덮어 씌워 표시합니다."
 L["Overlay"] = "덮어씌우기"
