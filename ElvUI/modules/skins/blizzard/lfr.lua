@@ -22,12 +22,11 @@ local function LoadSkin()
 	LFRQueueFrame:StripTextures()
 	LFRBrowseFrame:StripTextures()
 
-	for i=1, #buttons do
+	for i = 1, #buttons do
 		S:HandleButton(_G[buttons[i]], true)
 	end
 
-	--Close button doesn't have a fucking name, extreme hackage
-	for i=1, LFRParentFrame:GetNumChildren() do
+	for i = 1, LFRParentFrame:GetNumChildren() do
 		local child = select(i, LFRParentFrame:GetChildren())
 		if child.GetPushedTexture and child:GetPushedTexture() and not child:GetName() then
 			S:HandleCloseButton(child)
@@ -40,10 +39,13 @@ local function LoadSkin()
 	S:HandleDropDownBox(LFRBrowseFrameRaidDropDown)
 	S:HandleScrollBar(LFRQueueFrameSpecificListScrollFrameScrollBar)
 
+	LFRQueueFrameNoLFRWhileLFDLeaveQueueButton:StripTextures(true)
+	S:HandleButton(LFRQueueFrameNoLFRWhileLFDLeaveQueueButton)
+
 	LFRQueueFrameCommentTextButton:CreateBackdrop("Default")
 	LFRQueueFrameCommentTextButton:Height(35)
 
-	for i=1, 7 do
+	for i = 1, 7 do
 		local button = "LFRBrowseFrameColumnHeader"..i
 		_G[button.."Left"]:Kill()
 		_G[button.."Middle"]:Kill()
@@ -51,11 +53,11 @@ local function LoadSkin()
 		_G[button]:StyleButton()
 	end
 
-	for i=1, NUM_LFR_CHOICE_BUTTONS do
+	LFRQueueFrameSpecificListScrollFrame:StripTextures()
+
+	for i = 1, NUM_LFR_CHOICE_BUTTONS do
 		local button = _G["LFRQueueFrameSpecificListButton" .. i];
-		button.enableButton:StripTextures();
-		button.enableButton:CreateBackdrop("Default");
-		button.enableButton.backdrop:SetInside(nil, 4, 4);
+		S:HandleCheckBox(button.enableButton);
 
 		button.expandOrCollapseButton:SetNormalTexture("");
 		button.expandOrCollapseButton.SetNormalTexture = E.noop;
@@ -75,18 +77,53 @@ local function LoadSkin()
 		end);
 	end
 
-	--DPS, Healer, Tank check button's don't have a name, use it's parent as a referance.
+	--Raid Finder Role Icons
+	LFRQueueFrameRoleButtonTank:GetChildren():SetFrameLevel(LFRQueueFrameRoleButtonTank:GetChildren():GetFrameLevel() + 2)
+	LFRQueueFrameRoleButtonTank:Point("TOPLEFT", RaidFinderQueueFrame, "TOPLEFT", 60, -60)
+
+	LFRQueueFrameRoleButtonHealer:GetChildren():SetFrameLevel(LFRQueueFrameRoleButtonHealer:GetChildren():GetFrameLevel() + 2)
+	LFRQueueFrameRoleButtonHealer:Point("LEFT", LFRQueueFrameRoleButtonTank, "RIGHT", 45, 0);
+
+	LFRQueueFrameRoleButtonDPS:GetChildren():SetFrameLevel(LFRQueueFrameRoleButtonDPS:GetChildren():GetFrameLevel() + 2)
+	LFRQueueFrameRoleButtonDPS:Point("LEFT", LFRQueueFrameRoleButtonHealer, "RIGHT", 45, 0);
+
 	S:HandleCheckBox(LFRQueueFrameRoleButtonTank:GetChildren())
 	S:HandleCheckBox(LFRQueueFrameRoleButtonHealer:GetChildren())
 	S:HandleCheckBox(LFRQueueFrameRoleButtonDPS:GetChildren())
-	LFRQueueFrameRoleButtonTank:GetChildren():SetFrameLevel(LFRQueueFrameRoleButtonTank:GetChildren():GetFrameLevel() + 2)
-	LFRQueueFrameRoleButtonHealer:GetChildren():SetFrameLevel(LFRQueueFrameRoleButtonHealer:GetChildren():GetFrameLevel() + 2)
-	LFRQueueFrameRoleButtonDPS:GetChildren():SetFrameLevel(LFRQueueFrameRoleButtonDPS:GetChildren():GetFrameLevel() + 2)
 
-	LFRQueueFrameSpecificListScrollFrame:StripTextures()
+	local tankIcon = "Interface\\Icons\\Ability_Defend"
+	local healerIcon = "Interface\\Icons\\SPELL_NATURE_HEALINGTOUCH"
+	local damagerIcon = "Interface\\Icons\\Ability_Warrior_PunishingBlow"
 
-	--Skill Line Tabs
-	for i=1, 2 do
+	LFRQueueFrameRoleButtonTank:StripTextures()
+	LFRQueueFrameRoleButtonTank:CreateBackdrop()
+	LFRQueueFrameRoleButtonTank.backdrop:Point("TOPLEFT", 3, -3)
+	LFRQueueFrameRoleButtonTank.backdrop:Point("BOTTOMRIGHT", -3, 3)
+	LFRQueueFrameRoleButtonTank.icon = LFRQueueFrameRoleButtonTank:CreateTexture(nil, "OVERLAY")
+	LFRQueueFrameRoleButtonTank.icon:SetTexCoord(unpack(E.TexCoords))
+	LFRQueueFrameRoleButtonTank.icon:SetTexture(tankIcon)
+	LFRQueueFrameRoleButtonTank.icon:SetInside(LFRQueueFrameRoleButtonTank.backdrop)
+
+	LFRQueueFrameRoleButtonHealer:StripTextures()
+	LFRQueueFrameRoleButtonHealer:CreateBackdrop()
+	LFRQueueFrameRoleButtonHealer.backdrop:Point("TOPLEFT", 3, -3)
+	LFRQueueFrameRoleButtonHealer.backdrop:Point("BOTTOMRIGHT", -3, 3)
+	LFRQueueFrameRoleButtonHealer.icon = LFRQueueFrameRoleButtonHealer:CreateTexture(nil, "OVERLAY");
+	LFRQueueFrameRoleButtonHealer.icon:SetTexCoord(unpack(E.TexCoords))
+	LFRQueueFrameRoleButtonHealer.icon:SetTexture(healerIcon)
+	LFRQueueFrameRoleButtonHealer.icon:SetInside(LFRQueueFrameRoleButtonHealer.backdrop)
+
+	LFRQueueFrameRoleButtonDPS:StripTextures()
+	LFRQueueFrameRoleButtonDPS:CreateBackdrop()
+	LFRQueueFrameRoleButtonDPS.backdrop:Point("TOPLEFT", 3, -3)
+	LFRQueueFrameRoleButtonDPS.backdrop:Point("BOTTOMRIGHT", -3, 3)
+	LFRQueueFrameRoleButtonDPS.icon = LFRQueueFrameRoleButtonDPS:CreateTexture(nil, "OVERLAY");
+	LFRQueueFrameRoleButtonDPS.icon:SetTexCoord(unpack(E.TexCoords))
+	LFRQueueFrameRoleButtonDPS.icon:SetTexture(damagerIcon)
+	LFRQueueFrameRoleButtonDPS.icon:SetInside(LFRQueueFrameRoleButtonDPS.backdrop)
+
+	-- Line Tabs
+	for i = 1, 2 do
 		local tab = _G["LFRParentFrameSideTab"..i]
 		if tab then
 			local tex = tab:GetNormalTexture():GetTexture()
@@ -106,7 +143,8 @@ local function LoadSkin()
 		end
 	end
 
-	for i=1, 1 do
+	-- Raid Finder Queue Scroll Frame
+	for i = 1, 1 do
 		local button = _G["RaidFinderQueueFrameScrollFrameChildFrameItem"..i]
 		local icon = _G["RaidFinderQueueFrameScrollFrameChildFrameItem"..i.."IconTexture"]
 		local count = _G["RaidFinderQueueFrameScrollFrameChildFrameItem"..i.."Count"]
