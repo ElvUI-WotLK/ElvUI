@@ -20,8 +20,8 @@ local function LoadSkin()
 	-- Inbox Frame
 	MailFrame:StripTextures(true)
 	MailFrame:CreateBackdrop("Transparent")
-	MailFrame.backdrop:Point("TOPLEFT", 4, 0)
-	MailFrame.backdrop:Point("BOTTOMRIGHT", -25, 74)
+	MailFrame.backdrop:Point("TOPLEFT", 16, -12)
+	MailFrame.backdrop:Point("BOTTOMRIGHT", -32, 74)
 
 	for i = 1, INBOXITEMS_TO_DISPLAY do
 		local mail = _G["MailItem"..i]
@@ -76,7 +76,6 @@ local function LoadSkin()
 	S:HandleNextPrevButton(InboxNextPageButton)
 
 	S:HandleCloseButton(InboxCloseButton)
-	InboxCloseButton:Point("CENTER", MailFrame, "TOPRIGHT", -40, -13)
 
 	for i = 1, 2 do
 		local tab = _G["MailFrameTab"..i]
@@ -151,8 +150,8 @@ local function LoadSkin()
 	-- Open Mail Frame
 	OpenMailFrame:StripTextures(true)
 	OpenMailFrame:CreateBackdrop("Transparent")
-	OpenMailFrame.backdrop:Point("TOPLEFT", 4, 0)
-	OpenMailFrame.backdrop:Point("BOTTOMRIGHT", -27, 74)
+	OpenMailFrame.backdrop:Point("TOPLEFT", 12, -12)
+	OpenMailFrame.backdrop:Point("BOTTOMRIGHT", -34, 74)
 
 	for i = 1, ATTACHMENTS_MAX_SEND do
 		local button = _G["OpenMailAttachmentButton"..i]
@@ -191,7 +190,6 @@ local function LoadSkin()
 	end)
 
 	S:HandleCloseButton(OpenMailCloseButton)
-	OpenMailCloseButton:Point("CENTER", OpenMailFrame, "TOPRIGHT", -40, -13)
 
 	S:HandleButton(OpenMailReportSpamButton)
 
