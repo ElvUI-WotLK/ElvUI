@@ -15,6 +15,8 @@ local function LoadSkin()
 	BidScrollFrame:StripTextures()
 
 	S:HandleDropDownBox(BrowseDropDown)
+	S:HandleDropDownBox(PriceDropDown)
+	S:HandleDropDownBox(DurationDropDown)
 
 	S:HandleScrollBar(BrowseFilterScrollFrameScrollBar)
 	S:HandleScrollBar(BrowseScrollFrameScrollBar)
@@ -51,12 +53,41 @@ local function LoadSkin()
 		"AuctionsCloseButton",
 		"AuctionsCancelAuctionButton",
 		"AuctionsCreateAuctionButton",
+		"AuctionsNumStacksMaxButton",
+		"AuctionsStackSizeMaxButton",
 		"BrowseResetButton"
 	}
 
 	for _, button in pairs(buttons) do
 		S:HandleButton(_G[button])
 	end
+
+	--Progress Frame
+	AuctionProgressFrame:StripTextures()
+	AuctionProgressFrame:SetTemplate("Transparent")
+	AuctionProgressFrameCancelButton:StyleButton()
+	AuctionProgressFrameCancelButton:SetTemplate("Default")
+	AuctionProgressFrameCancelButton:SetHitRectInsets(0, 0, 0, 0)
+	AuctionProgressFrameCancelButton:GetNormalTexture():SetInside()
+	AuctionProgressFrameCancelButton:GetNormalTexture():SetTexCoord(0.67, 0.37, 0.61, 0.26)
+	AuctionProgressFrameCancelButton:Size(28, 28)
+	AuctionProgressFrameCancelButton:Point("LEFT", AuctionProgressBar, "RIGHT", 8, 0)
+
+	AuctionProgressBarIcon:SetTexCoord(0.67, 0.37, 0.61, 0.26)
+
+	local backdrop = CreateFrame("Frame", nil, AuctionProgressBarIcon:GetParent())
+	backdrop:SetOutside(AuctionProgressBarIcon)
+	backdrop:SetTemplate("Default")
+	AuctionProgressBarIcon:SetParent(backdrop)
+
+	AuctionProgressBarText:ClearAllPoints()
+	AuctionProgressBarText:SetPoint("CENTER")
+
+	AuctionProgressBar:StripTextures()
+	AuctionProgressBar:CreateBackdrop("Default")
+	AuctionProgressBar:SetStatusBarTexture(E["media"].normTex)
+	E:RegisterStatusBar(AuctionProgressBar);
+	AuctionProgressBar:SetStatusBarColor(1, 1, 0)
 
 	--Fix Button Positions
 	AuctionsCloseButton:Point("BOTTOMRIGHT", AuctionFrameAuctions, "BOTTOMRIGHT", 66, 14)
@@ -150,6 +181,8 @@ local function LoadSkin()
 		"BidBidPriceGold",
 		"BidBidPriceSilver",
 		"BidBidPriceCopper",
+		"AuctionsStackSizeEntry",
+		"AuctionsNumStacksEntry",
 		"StartPriceGold",
 		"StartPriceSilver",
 		"StartPriceCopper",
@@ -162,6 +195,9 @@ local function LoadSkin()
 		S:HandleEditBox(_G[editbox])
 		_G[editbox]:SetTextInsets(1, 1, -1, 1)
 	end
+
+	AuctionsStackSizeEntry.backdrop:SetAllPoints()
+  	AuctionsNumStacksEntry.backdrop:SetAllPoints()
 
 	BrowseBidPrice:Point("BOTTOM", -15, 18)
 	BrowseBidText:Point("BOTTOMRIGHT", AuctionFrameBrowse, "BOTTOM", -116, 21)
