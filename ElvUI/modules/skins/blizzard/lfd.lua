@@ -181,7 +181,9 @@ local function LoadSkin()
 			local link = GetLFGDungeonRewardLinkFix(dungeonID, i)
 			if link then
 				local _, _, quality = GetItemInfo(link)
-				frame.backdrop:SetBackdropBorderColor(GetItemQualityColor(quality))
+				if quality then
+					frame.backdrop:SetBackdropBorderColor(GetItemQualityColor(quality))
+				end
 			else
 				frame.backdrop:SetBackdropBorderColor(unpack(E["media"].bordercolor))
 			end
