@@ -10,6 +10,7 @@ local function LoadSkin()
 
 	ArenaFrame:StripTextures(true);
 
+	ArenaFrameNameHeader:Point("TOPLEFT", 28, -55)
 	ArenaFrameZoneDescription:SetTextColor(1, 1, 1);
 
 	S:HandleButton(ArenaFrameCancelButton);
