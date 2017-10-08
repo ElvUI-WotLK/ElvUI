@@ -18,6 +18,8 @@ function LO:Initialize()
 	self:CreateChatPanels()
 	self:CreateMinimapPanels()
 
+	self:SetDataPanelStyle()
+
 	self.BottomPanel = CreateFrame("Frame", "ElvUI_BottomPanel", E.UIParent)
 	self.BottomPanel:SetTemplate("Transparent")
 	self.BottomPanel:Point("BOTTOMLEFT", E.UIParent, "BOTTOMLEFT", -1, -1)

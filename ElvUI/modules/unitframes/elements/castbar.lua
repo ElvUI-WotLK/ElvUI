@@ -202,13 +202,15 @@ function UF:Configure_Castbar(frame)
 	--Adjust tick heights
 	castbar.tickHeight = castbar:GetHeight()
 
-	--Set tick width and color
-	castbar.tickWidth = db.castbar.tickWidth
-	castbar.tickColor = db.castbar.tickColor
-
-	for i = 1, #ticks do
-		ticks[i]:SetVertexColor(castbar.tickColor.r, castbar.tickColor.g, castbar.tickColor.b, castbar.tickColor.a)
-		ticks[i]:Width(castbar.tickWidth)
+	if db.castbar.ticks then --Only player unitframe has this
+		--Set tick width and color
+		castbar.tickWidth = db.castbar.tickWidth
+		castbar.tickColor = db.castbar.tickColor
+		
+		for i = 1, #ticks do
+			ticks[i]:SetVertexColor(castbar.tickColor.r, castbar.tickColor.g, castbar.tickColor.b, castbar.tickColor.a)
+			ticks[i]:Width(castbar.tickWidth)
+		end
 	end
 
 	if db.castbar.enable and not frame:IsElementEnabled("Castbar") then
