@@ -1,6 +1,7 @@
 local E, L, V, P, G = unpack(select(2, ...))
 local S = E:GetModule("Skins")
 
+local _G = _G
 local find = string.find
 
 local function LoadSkin()
@@ -128,8 +129,8 @@ local function LoadSkin()
 	_G["GearManagerToggleButton"]:Size(26, 32)
 	_G["GearManagerToggleButton"]:CreateBackdrop("Default")
 
-	GearManagerToggleButton:GetNormalTexture():SetTexCoord(0.1875, 0.796875, 0.125, 0.890625)
-	GearManagerToggleButton:GetPushedTexture():SetTexCoord(0.1875, 0.796875, 0.125, 0.890625)
+	GearManagerToggleButton:GetNormalTexture():SetTexCoord(0.1875, 0.8125, 0.125, 0.90625)
+	GearManagerToggleButton:GetPushedTexture():SetTexCoord(0.1875, 0.8125, 0.125, 0.90625)
 	GearManagerToggleButton:GetHighlightTexture():SetTexture(1, 1, 1, 0.3)
 	GearManagerToggleButton:GetHighlightTexture():SetAllPoints()
 
@@ -235,21 +236,30 @@ local function LoadSkin()
 	S:HandleRotateButton(CharacterModelFrameRotateRightButton)
 	CharacterModelFrameRotateRightButton:SetPoint("TOPLEFT", CharacterModelFrameRotateLeftButton, "TOPRIGHT", 3, 0)
 
-	CharacterResistanceFrame:CreateBackdrop("Default")
-	CharacterResistanceFrame.backdrop:SetOutside(MagicResFrame1, nil, nil, MagicResFrame5)
+	local function HandleResistanceFrame(frameName)
+		for i = 1, 5 do
+			local frame = _G[frameName..i]
+			frame:Size(24)
+			frame:SetTemplate("Default")
 
-	for i = 1, 5 do
-		local frame = _G["MagicResFrame" .. i]
-		frame:Size(24)
-		frame = _G["PetMagicResFrame" .. i]
-		frame:Size(24)
+			if i ~= 1 then
+				frame:ClearAllPoints()
+				frame:Point("TOP", _G[frameName..i-1], "BOTTOM", 0, -(E.Border + E.Spacing))
+			end
+
+			select(1, _G[frameName..i]:GetRegions()):SetInside()
+			select(1, _G[frameName..i]:GetRegions()):SetDrawLayer("ARTWORK")
+			select(2, _G[frameName..i]:GetRegions()):SetDrawLayer("OVERLAY")
+		end
 	end
 
-	select(1, MagicResFrame1:GetRegions()):SetTexCoord(0.21875, 0.78125, 0.25, 0.3203125)
-	select(1, MagicResFrame2:GetRegions()):SetTexCoord(0.21875, 0.78125, 0.0234375, 0.09375)
-	select(1, MagicResFrame3:GetRegions()):SetTexCoord(0.21875, 0.78125, 0.13671875, 0.20703125)
-	select(1, MagicResFrame4:GetRegions()):SetTexCoord(0.21875, 0.78125, 0.36328125, 0.43359375)
-	select(1, MagicResFrame5:GetRegions()):SetTexCoord(0.21875, 0.78125, 0.4765625, 0.546875)
+	HandleResistanceFrame("MagicResFrame")
+
+	select(1, MagicResFrame1:GetRegions()):SetTexCoord(0.21875, 0.8125, 0.25, 0.32421875) --Arcane
+	select(1, MagicResFrame2:GetRegions()):SetTexCoord(0.21875, 0.8125, 0.0234375, 0.09765625) --Fire
+	select(1, MagicResFrame3:GetRegions()):SetTexCoord(0.21875, 0.8125, 0.13671875, 0.2109375) --Nature
+	select(1, MagicResFrame4:GetRegions()):SetTexCoord(0.21875, 0.8125, 0.36328125, 0.4375) --Frost
+	select(1, MagicResFrame5:GetRegions()):SetTexCoord(0.21875, 0.8125, 0.4765625, 0.55078125) --Shadow
 
 	S:HandleDropDownBox(PlayerStatFrameLeftDropDown, 140)
 	S:HandleDropDownBox(PlayerStatFrameRightDropDown, 140)
@@ -272,14 +282,13 @@ local function LoadSkin()
 	S:HandleRotateButton(PetModelFrameRotateRightButton)
 	PetModelFrameRotateRightButton:SetPoint("TOPLEFT", PetModelFrameRotateLeftButton, "TOPRIGHT", 3, 0)
 
-	PetResistanceFrame:CreateBackdrop("Default")
-	PetResistanceFrame.backdrop:SetOutside(PetMagicResFrame1, nil, nil, PetMagicResFrame5)
+	HandleResistanceFrame("PetMagicResFrame")
 
-	select(1, PetMagicResFrame1:GetRegions()):SetTexCoord(0.21875, 0.78125, 0.25, 0.3203125)
-	select(1, PetMagicResFrame2:GetRegions()):SetTexCoord(0.21875, 0.78125, 0.0234375, 0.09375)
-	select(1, PetMagicResFrame3:GetRegions()):SetTexCoord(0.21875, 0.78125, 0.13671875, 0.20703125)
-	select(1, PetMagicResFrame4:GetRegions()):SetTexCoord(0.21875, 0.78125, 0.36328125, 0.43359375)
-	select(1, PetMagicResFrame5:GetRegions()):SetTexCoord(0.21875, 0.78125, 0.4765625, 0.546875)
+	select(1, PetMagicResFrame1:GetRegions()):SetTexCoord(0.21875, 0.8125, 0.25, 0.32421875) --Arcane
+	select(1, PetMagicResFrame2:GetRegions()):SetTexCoord(0.21875, 0.8125, 0.0234375, 0.09765625) --Fire
+	select(1, PetMagicResFrame3:GetRegions()):SetTexCoord(0.21875, 0.8125, 0.13671875, 0.2109375) --Nature
+	select(1, PetMagicResFrame4:GetRegions()):SetTexCoord(0.21875, 0.8125, 0.36328125, 0.4375) --Frost
+	select(1, PetMagicResFrame5:GetRegions()):SetTexCoord(0.21875, 0.8125, 0.4765625, 0.55078125) --Shadow
 
 	PetAttributesFrame:StripTextures()
 
