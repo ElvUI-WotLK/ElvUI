@@ -329,6 +329,7 @@ function mod:OnShow()
 end
 
 function mod:OnHide()
+	isTarget = false
 	mod.VisiblePlates[self.UnitFrame] = nil
 
 	self.UnitFrame.unit = nil
