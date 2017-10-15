@@ -1,5 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="nameplates.lua"/>
+	<Script file="StyleFilter.lua"/>
 	<Script file="elements\auras.lua"/>
 	<Script file="elements\castBar.lua"/>
 	<Script file="elements\comboPoints.lua"/>

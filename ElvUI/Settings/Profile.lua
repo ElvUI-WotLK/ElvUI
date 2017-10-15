@@ -204,6 +204,13 @@ P["nameplates"] = {
 		["badScale"] = 1.2,
 		["useThreatColor"] = true,
 	},
+	["filters"] = {
+		["Boss"] = {
+			["triggers"] = {
+				["enable"] = true,
+			},
+		},
+	},
 
 	["units"] = {
 		["FRIENDLY_PLAYER"] = {

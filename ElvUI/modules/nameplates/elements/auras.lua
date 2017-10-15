@@ -229,6 +229,7 @@ function mod:SetAura(aura, index, name, icon, count, expirationTime, spellID)
 	aura.icon:SetTexture(icon)
 	aura.name = name
 	aura.spellID = spellID
+	aura.expirationTime = expirationTime
 	if count > 1 then
 		aura.count:SetText(count)
 	else
@@ -373,6 +374,8 @@ function mod:UpdateElement_Auras(frame)
 				showAura = mod:AuraFilter(frame, frameNum, index, buffType, minDuration, maxDuration, priority, aura.name, aura.icon, aura.count, aura.duration, aura.expirationTime, aura.caster, tonumber(aura.spellID))
 				if showAura == nil then
 					break -- used to break the while loop when index is over the limit of auras we have (unitaura name will pass nil)
+				elseif showAura == false then
+					RemoveAuraInstance(guid, aura.spellID, aura.caster)
 				elseif showAura == true then -- has aura and passes checks
 					if i == 1 then hasBuffs = true else hasDebuffs = true end
 					frameNum = frameNum + 1

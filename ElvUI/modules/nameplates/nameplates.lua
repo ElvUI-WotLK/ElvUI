@@ -19,8 +19,9 @@ local WorldFrame = WorldFrame
 local WorldGetNumChildren, WorldGetChildren = WorldFrame.GetNumChildren, WorldFrame.GetChildren
 
 local numChildren = 0
+local isTarget = false
 local OVERLAY = [=[Interface\TargetingFrame\UI-TargetingFrame-Flash]=]
-local FSPAT = "%s*" .. ((_G.FOREIGN_SERVER_LABEL:gsub("^%s", "")):gsub("[%*()]", "%%%1")) .. "$"
+local FSPAT = "%s*"..((_G.FOREIGN_SERVER_LABEL:gsub("^%s", "")):gsub("[%*()]", "%%%1")).."$"
 
 local RaidIconCoordinate = {
 	[0] = {[0] = "STAR", [0.25] = "MOON"},
@@ -32,36 +33,6 @@ local RaidIconCoordinate = {
 mod.CreatedPlates = {}
 mod.VisiblePlates = {}
 mod.Healers = {}
-
-function mod:CheckFilters(frame)
-	local db = E.global.nameplates["filter"][frame.UnitName]
-	if db and db.enable then
-		if db.hide then
-			frame:Hide()
-			return
-		else
-			if not frame:IsShown() then
-				frame:Show()
-			end
-
-			if db.customColor then
-				frame.CustomColor = db.color
-				frame.HealthBar:SetStatusBarColor(db.color.r, db.color.g, db.color.b)
-			else
-				frame.CustomColor = nil
-			end
-
-			if db.customScale and db.customScale ~= 1 then
-				frame.CustomScale = db.customScale
-			else
-				frame.CustomScale = nil
-			end
-		end
-	elseif not frame:IsShown() then
-		frame:Show()
-	end
-	return true
-end
 
 function mod:CheckBGHealers()
 	local name, _, damageDone, healingDone
@@ -91,10 +62,12 @@ function mod:SetFrameScale(frame, scale)
 end
 
 function mod:SetTargetFrame(frame)
+	if isTarget then return end
+
 	local targetExists = UnitExists("target") == 1
-	if targetExists and frame:GetParent():IsShown() and frame:GetParent():GetFrameLevel() == 20 and not frame.isTarget then
+	if targetExists and frame:GetParent():IsShown() and frame:GetParent():GetAlpha() == 1 and not frame.isTarget then
 		if self.db.useTargetScale then
-			self:SetFrameScale(frame, (frame.CustomScale and frame.CustomScale * self.db.targetScale) or self.db.targetScale)
+			self:SetFrameScale(frame, self.db.targetScale)
 		end
 		frame.isTarget = true
 		frame.unit = "target"
@@ -117,21 +90,19 @@ function mod:SetTargetFrame(frame)
 
 		mod:UpdateElement_AurasByUnitID("target")
 	elseif frame.isTarget then
-		if frame:GetParent():GetFrameLevel() ~= 20 then
-			if self.db.useTargetScale then
-				self:SetFrameScale(frame, frame.CustomScale or frame.ThreatScale or 1)
-			end
-			frame.isTarget = nil
-			frame.unit = nil
-			if self.db.units[frame.UnitType].healthbar.enable ~= true then
-				self:UpdateAllFrame(frame)
-			end
+		if self.db.useTargetScale then
+			self:SetFrameScale(frame, frame.ThreatScale or 1)
+		end
+		frame.isTarget = nil
+		frame.unit = nil
+		if self.db.units[frame.UnitType].healthbar.enable ~= true then
+			self:UpdateAllFrame(frame)
+		end
 
-			if targetExists then
-				frame:SetAlpha(self.db.nonTargetTransparency)
-			else
-				frame:SetAlpha(1)
-			end
+		if targetExists then
+			frame:SetAlpha(self.db.nonTargetTransparency)
+		else
+			frame:SetAlpha(1)
 		end
 	else
 		if targetExists then
@@ -141,9 +112,17 @@ function mod:SetTargetFrame(frame)
 		end
 	end
 
-	mod:UpdateElement_HealthColor(frame)
-	mod:UpdateElement_Glow(frame)
-	mod:UpdateElement_CPoints(frame)
+	mod:UpdateElement_Filters(frame, "PLAYER_TARGET_CHANGED")
+
+	return frame.isTarget
+end
+
+function mod:GetNumVisiblePlates()
+	local i = 0
+	for _ in pairs(mod.VisiblePlates) do
+		i = i + 1
+	end
+	return i
 end
 
 function mod:StyleFrame(parent, noBackdrop, point)
@@ -314,7 +293,7 @@ function mod:OnShow()
 	self.UnitFrame.UnitClass = mod:UnitClass(self.UnitFrame, unitType)
 	self.UnitFrame.UnitReaction = unitReaction
 
-	if not mod:CheckFilters(self.UnitFrame) then return end
+	--mod:UpdateElement_Filters(self.UnitFrame, "UpdateElement_All")
 
 	if unitType == "ENEMY_PLAYER" then
 		mod:UpdateElement_HealerIcon(self.UnitFrame)
@@ -339,18 +318,15 @@ function mod:OnShow()
 		end
 	end
 
-	if mod.db.units[unitType].healthbar.enable then
-		mod:ConfigureElement_Name(self.UnitFrame)
-		mod:ConfigureElement_Level(self.UnitFrame)
-	else
-		mod:ConfigureElement_Level(self.UnitFrame)
-		mod:ConfigureElement_Name(self.UnitFrame)
-	end
+	mod:ConfigureElement_Level(self.UnitFrame)
+	mod:ConfigureElement_Name(self.UnitFrame)
 	mod:ConfigureElement_Elite(self.UnitFrame)
 
 	mod:UpdateElement_All(self.UnitFrame)
 
 	self.UnitFrame:Show()
+
+	mod:UpdateElement_Filters(self.UnitFrame, "UpdateElement_All")
 end
 
 function mod:OnHide()
@@ -510,11 +486,18 @@ function mod:OnUpdate(elapsed)
 		numChildren = count
 	end
 
+	local i = 0
 	for frame in pairs(mod.VisiblePlates) do
-		if not frame.isTarget and frame:GetParent():GetAlpha() ~= 1 then
+		i = i + 1
+
+		local getTarget = mod:SetTargetFrame(frame)
+		if not getTarget then
 			frame:GetParent():SetAlpha(1)
 		end
-		mod:SetTargetFrame(frame)
+
+		if i == mod:GetNumVisiblePlates() then
+			isTarget = true
+		end
 	end
 end
 
@@ -608,6 +591,7 @@ end
 
 function mod:PLAYER_TARGET_CHANGED()
 	--mod:ScheduleTimer("ForEachPlate", 0, "SetTargetFrame")
+	isTarget = false
 end
 
 function mod:UNIT_AURA(_, unit)
@@ -656,6 +640,13 @@ end
 function mod:Initialize()
 	self.db = E.db["nameplates"]
 	if E.private["nameplates"].enable ~= true then return end
+
+	--Add metatable to all our StyleFilters so they can grab default values if missing
+	for _, filterTable in pairs(E.global.nameplates.filters) do
+		self:StyleFilterInitializeFilter(filterTable);
+	end
+
+	self:StyleFilterConfigureEvents()
 
 	self:UpdateCVars()
 
