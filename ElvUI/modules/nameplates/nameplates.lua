@@ -65,7 +65,7 @@ function mod:SetTargetFrame(frame)
 	if isTarget then return end
 
 	local targetExists = UnitExists("target") == 1
-	if targetExists and frame:GetParent():IsShown() and frame:GetParent():GetAlpha() == 1 and not frame.isTarget then
+	if targetExists and frame:GetParent():IsShown() and frame:GetParent():GetAlpha() == 1 then
 		if self.db.useTargetScale then
 			self:SetFrameScale(frame, self.db.targetScale)
 		end
@@ -285,6 +285,7 @@ function mod:GetUnitInfo(frame)
 end
 
 function mod:OnShow()
+	isTarget = false
 	mod.VisiblePlates[self.UnitFrame] = true
 
 	self.UnitFrame.UnitName = gsub(self.UnitFrame.oldName:GetText(), FSPAT, "")
@@ -292,8 +293,6 @@ function mod:OnShow()
 	self.UnitFrame.UnitType = unitType
 	self.UnitFrame.UnitClass = mod:UnitClass(self.UnitFrame, unitType)
 	self.UnitFrame.UnitReaction = unitReaction
-
-	--mod:UpdateElement_Filters(self.UnitFrame, "UpdateElement_All")
 
 	if unitType == "ENEMY_PLAYER" then
 		mod:UpdateElement_HealerIcon(self.UnitFrame)
@@ -322,11 +321,11 @@ function mod:OnShow()
 	mod:ConfigureElement_Name(self.UnitFrame)
 	mod:ConfigureElement_Elite(self.UnitFrame)
 
-	mod:UpdateElement_All(self.UnitFrame)
+	mod:UpdateElement_All(self.UnitFrame, nil, true)
 
 	self.UnitFrame:Show()
 
-	mod:UpdateElement_Filters(self.UnitFrame, "UpdateElement_All")
+	mod:UpdateElement_Filters(self.UnitFrame, "NAME_PLATE_UNIT_ADDED")
 end
 
 function mod:OnHide()
@@ -383,7 +382,7 @@ function mod:ForEachPlate(functionToRun, ...)
 	end
 end
 
-function mod:UpdateElement_All(frame, noTargetFrame)
+function mod:UpdateElement_All(frame, noTargetFrame, filterIgnore)
 	if self.db.units[frame.UnitType].healthbar.enable or frame.isTarget then
 		mod:UpdateElement_Health(frame)
 		mod:UpdateElement_HealthColor(frame)
@@ -398,9 +397,14 @@ function mod:UpdateElement_All(frame, noTargetFrame)
 	if not noTargetFrame then
 		mod:SetTargetFrame(frame)
 	end
+
+	if not filterIgnore then
+		mod:UpdateElement_Filters(frame, "UpdateElement_All")
+	end
 end
 
 function mod:OnCreated(frame)
+	isTarget = false
 	local HealthBar, CastBar = frame:GetChildren()
 	local Threat, Border, CastBarBorder, CastBarShield, CastBarIcon, Highlight, Name, Level, BossIcon, RaidIcon, EliteIcon = frame:GetRegions()
 
