@@ -39,3 +39,10 @@ G["nameplates"]["filter"] = {
 		color = {r = 255/255, g = 140/255, b = 200/255}
 	}
 }
+
+G.nameplates.specialFilters = {
+	["Personal"] = true,
+	["nonPersonal"] = true,
+	["blockNonPersonal"] = true,
+	["blockNoDuration"] = true,
+};

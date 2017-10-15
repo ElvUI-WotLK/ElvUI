@@ -33,7 +33,7 @@ mod.CreatedPlates = {}
 mod.VisiblePlates = {}
 mod.Healers = {}
 
-function mod:CheckFilter(frame)
+function mod:CheckFilters(frame)
 	local db = E.global.nameplates["filter"][frame.UnitName]
 	if db and db.enable then
 		if db.hide then
@@ -314,7 +314,7 @@ function mod:OnShow()
 	self.UnitFrame.UnitClass = mod:UnitClass(self.UnitFrame, unitType)
 	self.UnitFrame.UnitReaction = unitReaction
 
-	if not mod:CheckFilter(self.UnitFrame) then return end
+	if not mod:CheckFilters(self.UnitFrame) then return end
 
 	if unitType == "ENEMY_PLAYER" then
 		mod:UpdateElement_HealerIcon(self.UnitFrame)

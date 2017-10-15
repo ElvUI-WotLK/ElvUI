@@ -232,9 +232,9 @@ P["nameplates"] = {
 				["enable"] = true,
 				["numAuras"] = 4,
 				["filters"] = {
-					["personal"] = true,
-					["maxDuration"] = 120,
-					["filter"] = "TurtleBuffs"
+					["minDuration"] = 0,
+					["maxDuration"] = 0,
+					["priority"] = "Blacklist,blockNoDuration,Personal,TurtleBuffs" --NamePlate FriendlyPlayer Buffs
 				},
 			},
 			["debuffs"] = {
@@ -242,9 +242,9 @@ P["nameplates"] = {
 				["numAuras"] = 4,
 				["baseHeight"] = 18,
 				["filters"] = {
-					["personal"] = true,
-					["maxDuration"] = 120,
-					["filter"] = "CCDebuffs"
+					["minDuration"] = 0,
+					["maxDuration"] = 0,
+					["priority"] = "Blacklist,blockNoDuration,Personal,CCDebuffs" --NamePlate FriendlyPlayer Debuffs
 				},
 			},
 			["name"] = {
@@ -279,9 +279,9 @@ P["nameplates"] = {
 				["numAuras"] = 4,
 				["baseHeight"] = 18,
 				["filters"] = {
-					["personal"] = true,
-					["maxDuration"] = 120,
-					["filter"] = "TurtleBuffs"
+					["minDuration"] = 0,
+					["maxDuration"] = 0,
+					["priority"] = "Blacklist,PlayerBuffs,TurtleBuffs" --NamePlate EnemyPlayer Buffs
 				},
 			},
 			["debuffs"] = {
@@ -289,9 +289,9 @@ P["nameplates"] = {
 				["numAuras"] = 4,
 				["baseHeight"] = 18,
 				["filters"] = {
-					["personal"] = true,
-					["maxDuration"] = 120,
-					["filter"] = "CCDebuffs"
+					["minDuration"] = 0,
+					["maxDuration"] = 0,
+					["priority"] = "Blacklist,blockNoDuration,Personal,CCDebuffs,RaidDebuffs" --NamePlate EnemyPlayer Debuffs
 				},
 			},
 			["name"] = {
@@ -324,9 +324,9 @@ P["nameplates"] = {
 				["numAuras"] = 4,
 				["baseHeight"] = 18,
 				["filters"] = {
-					["personal"] = true,
-					["maxDuration"] = 120,
-					["filter"] = "TurtleBuffs"
+					["minDuration"] = 0,
+					["maxDuration"] = 0,
+					["priority"] = "Blacklist,blockNoDuration,Personal,TurtleBuffs" --NamePlate FriendlyNPC Buffs
 				},
 			},
 			["debuffs"] = {
@@ -334,9 +334,9 @@ P["nameplates"] = {
 				["numAuras"] = 4,
 				["baseHeight"] = 18,
 				["filters"] = {
-					["personal"] = true,
-					["maxDuration"] = 120,
-					["filter"] = "CCDebuffs"
+					["minDuration"] = 0,
+					["maxDuration"] = 0,
+					["priority"] = "Blacklist,CCDebuffs,RaidDebuffs" --NamePlate FriendlyNPC Debuffs
 				},
 			},
 			["eliteIcon"] = {
@@ -373,9 +373,9 @@ P["nameplates"] = {
 				["numAuras"] = 4,
 				["baseHeight"] = 18,
 				["filters"] = {
-					["personal"] = true,
-					["maxDuration"] = 120,
-					["filter"] = "TurtleBuffs"
+					["minDuration"] = 0,
+					["maxDuration"] = 0,
+					["priority"] = "Blacklist,blockNoDuration,PlayerBuffs,TurtleBuffs" --NamePlate EnemyNPC Buffs
 				},
 			},
 			["debuffs"] = {
@@ -383,9 +383,9 @@ P["nameplates"] = {
 				["numAuras"] = 4,
 				["baseHeight"] = 18,
 				["filters"] = {
-					["personal"] = true,
-					["maxDuration"] = 120,
-					["filter"] = "CCDebuffs"
+					["minDuration"] = 0,
+					["maxDuration"] = 0,
+					["priority"] = "Blacklist,Personal,CCDebuffs" --NamePlate EnemyNPC Debuffs
 				},
 			},
 			["eliteIcon"] = {

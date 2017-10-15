@@ -8,6 +8,10 @@ local band = bit.band
 local gsub = string.gsub
 local tinsert, tremove, wipe = table.insert, table.remove, table.wipe
 
+local strlower, strsplit = string.lower, strsplit
+local next, ipairs = next, ipairs
+local match = string.match
+
 local CreateFrame = CreateFrame
 local UnitAura = UnitAura
 local UnitGUID = UnitGUID
@@ -221,13 +225,16 @@ function mod:CleanAuraLists()
 	end
 end
 
-function mod:SetAura(aura, icon, count, expirationTime)
+function mod:SetAura(aura, index, name, icon, count, expirationTime, spellID)
 	aura.icon:SetTexture(icon)
+	aura.name = name
+	aura.spellID = spellID
 	if count > 1 then
 		aura.count:SetText(count)
 	else
 		aura.count:SetText("")
 	end
+	aura:SetID(index)
 	aura:Show()
 	PolledHideIn(aura, expirationTime)
 end
@@ -236,6 +243,56 @@ function mod:HideAuraIcons(auras)
 	for i = 1, #auras.icons do
 		PolledHideIn(auras.icons[i], 0)
 	end
+end
+
+function mod:CheckFilter(name, caster, spellID, isPlayer, allowDuration, noDuration, ...)
+	local filterName, filter, filterType, spellList, spell = false, false
+	for i = 1, select("#", ...) do
+		filterName = select(i, ...)
+		if G.nameplates.specialFilters[filterName] or E.global.unitframe.aurafilters[filterName] then
+			filter = E.global.unitframe.aurafilters[filterName]
+			if filter then
+				filterType = filter.type
+				spellList = filter.spells
+				spell = spellList and (spellList[spellID] or spellList[name])
+
+				if filterType and (filterType == "Whitelist") and (spell and spell.enable) and allowDuration then
+					return true
+				elseif filterType and (filterType == "Blacklist") and (spell and spell.enable) then
+					return false
+				end
+			elseif filterName == "Personal" and isPlayer and allowDuration then
+				return true
+			elseif filterName == "nonPersonal" and (not isPlayer) and allowDuration then
+				return true
+			elseif filterName == "blockNoDuration" and noDuration then
+				return false
+			elseif filterName == "blockNonPersonal" and (not isPlayer) then
+				return false
+			end
+		end
+	end
+end
+
+function mod:AuraFilter(frame, frameNum, index, buffType, minDuration, maxDuration, priority, name, texture, count, duration, expiration, caster, spellID)
+	if not name then return nil end -- checking for an aura that is not there, pass nil to break while loop
+	local filterCheck, isPlayer, allowDuration, noDuration = false, false, false, false, false, false
+
+	if priority ~= "" then
+		noDuration = (not duration or duration == 0)
+		isPlayer = (caster == UnitGUID("player"))
+		allowDuration = noDuration or (duration and (duration > 0) and (maxDuration == 0 or duration <= maxDuration) and (minDuration == 0 or duration >= minDuration))
+		filterCheck = mod:CheckFilter(name, caster, spellID, isPlayer, allowDuration, noDuration, strsplit(",", priority))
+	else
+		filterCheck = true -- Allow all auras to be shown when the filter list is empty
+	end
+
+	if filterCheck == true then
+		mod:SetAura(frame[buffType].icons[frameNum], index, name, texture, count, expiration, spellID)
+		return true
+	end
+
+	return false
 end
 
 local currentAura = {}
@@ -259,9 +316,6 @@ function mod:UpdateElement_Auras(frame)
 		end
 	end
 
-	local hasDebuffs = false
-	local hasBuffs = false
-
 	local numDebuff = 0
 	local numBuff = 0
 
@@ -269,6 +323,9 @@ function mod:UpdateElement_Auras(frame)
 
 	debuffCache = wipe(debuffCache)
 	buffCache = wipe(buffCache)
+
+	local hasBuffs, hasDebuffs, showAura = false, false
+	local filterType, buffType, buffTypeLower, index, frameNum, maxAuras, minDuration, maxDuration, priority
 
 	if aurasOnUnit then
 		local numAuras = 0
@@ -279,34 +336,6 @@ function mod:UpdateElement_Auras(frame)
 			aura = wipe(currentAura[numAuras] or {})
 
 			aura.spellID, aura.name, aura.expirationTime, aura.count, aura.caster, aura.duration, aura.icon, aura.type = GetAuraInstance(guid, instanceid)
-
-			local filter = false
-			local db = self.db.units[frame.UnitType].buffs.filters
-			if aura.type == AURA_TYPE_DEBUFF then
-				db = self.db.units[frame.UnitType].debuffs.filters
-			end
-
-			if db.personal and aura.caster == UnitGUID("player") then
-				filter = true
-			end
-
-			local trackFilter = E.global["unitframe"]["aurafilters"][db.filter]
-			if db.filter and trackFilter then
-				local spell = trackFilter.spells[tonumber(aura.spellID)] or trackFilter.spells[aura.name]
-				if trackFilter.type == "Whitelist" then
-					if spell and spell.enable then
-						filter = true
-					end
-				elseif trackFilter.type == "Blacklist" and spell and spell.enable then
-					filter = false
-				end
-			end
-
-			if filter ~= true then
-				numAuras = numAuras - 1
-				RemoveAuraInstance(guid, aura.spellID, aura.caster)
-				wipe(aura)
-			end
 
 			if tonumber(aura.spellID) then
 				aura.unit = frame.unit
@@ -325,40 +354,34 @@ function mod:UpdateElement_Auras(frame)
 		wipe(currentAura)
 	end
 
-	local frameNum = 1
-	local maxAuras = #frame.Debuffs.icons
-	local maxDuration = self.db.units[frame.UnitType].debuffs.filters.maxDuration
+	for i = 1, 2 do
+		filterType = (i == 1 and buffCache or debuffCache)
+		buffType = (i == 1 and "Buffs" or "Debuffs")
+		buffTypeLower = strlower(buffType)
+		index = 1
+		frameNum = 1
+		maxAuras = #frame[buffType].icons
+		minDuration = self.db.units[frame.UnitType][buffTypeLower].filters.minDuration
+		maxDuration = self.db.units[frame.UnitType][buffTypeLower].filters.maxDuration
+		priority = self.db.units[frame.UnitType][buffTypeLower].filters.priority
 
-	self:HideAuraIcons(frame.Debuffs)
-	if numDebuff > 0 and self.db.units[frame.UnitType].debuffs.enable then
-		for index = 1, #debuffCache do
-			if frameNum > maxAuras then break end
-			local debuff = debuffCache[index]
-			if debuff.spellID and debuff.expirationTime and debuff.duration <= maxDuration then
-				self:SetAura(frame.Debuffs.icons[frameNum], debuff.icon, debuff.count, debuff.expirationTime)
-				frameNum = frameNum + 1
-				hasDebuffs = true
+		self:HideAuraIcons(frame[buffType])
+		if self.db.units[frame.UnitType][buffTypeLower].enable then
+			while frameNum <= maxAuras do
+				local aura = filterType[index]
+				if not aura then break end
+				showAura = mod:AuraFilter(frame, frameNum, index, buffType, minDuration, maxDuration, priority, aura.name, aura.icon, aura.count, aura.duration, aura.expirationTime, aura.caster, tonumber(aura.spellID))
+				if showAura == nil then
+					break -- used to break the while loop when index is over the limit of auras we have (unitaura name will pass nil)
+				elseif showAura == true then -- has aura and passes checks
+					if i == 1 then hasBuffs = true else hasDebuffs = true end
+					frameNum = frameNum + 1
+				end
+				index = index + 1
 			end
 		end
 	end
-
-	frameNum = 1
-	maxAuras = #frame.Buffs.icons
-	maxDuration = self.db.units[frame.UnitType].buffs.filters.maxDuration
-
-	self:HideAuraIcons(frame.Buffs)
-	if numBuff > 0 and self.db.units[frame.UnitType].buffs.enable then
-		for index = 1, #buffCache do
-			if frameNum > maxAuras then break end
-			local buff = buffCache[index]
-			if buff.spellID and buff.expirationTime and buff.duration <= maxDuration then
-				self:SetAura(frame.Buffs.icons[frameNum], buff.icon, buff.count, buff.expirationTime)
-				frameNum = frameNum + 1
-				hasBuffs = true
-			end
-		end
-	end
-
+	
 	debuffCache = wipe(debuffCache)
 	buffCache = wipe(buffCache)
 
@@ -422,7 +445,7 @@ function mod:UpdateElement_AurasByUnitID(unit)
 end
 
 function mod:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, sourceGUID, _, _, destGUID, destName, destFlags, ...)
-	if destGUID == UnitGUID("target") then return end
+	--if destGUID == UnitGUID("target") then return end
 	--if band(destFlags, COMBATLOG_OBJECT_REACTION_FRIENDLY) ~= 0 then then return
 	if not (event == "SPELL_AURA_APPLIED" or event == "SPELL_AURA_REFRESH" or event == "SPELL_AURA_APPLIED_DOSE" or event == "SPELL_AURA_REMOVED_DOSE" or event == "SPELL_AURA_BROKEN" or event == "SPELL_AURA_BROKEN_SPELL" or event == "SPELL_AURA_REMOVED") then return end
 
@@ -533,7 +556,7 @@ function mod:ConstructElement_Auras(frame, side)
 	local auras = CreateFrame("Frame", nil, frame)
 
 	auras:SetScript("OnSizeChanged", mod.Auras_SizeChanged)
-	auras:SetHeight(18)
+	auras:SetHeight(18) -- this really doesn't matter
 	auras.side = side
 	auras.PollFunction = UpdateAuraTime
 	auras.icons = {}

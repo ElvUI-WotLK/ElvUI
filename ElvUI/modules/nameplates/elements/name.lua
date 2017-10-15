@@ -58,6 +58,7 @@ end
 
 function mod:ConstructElement_Name(frame)
 	local name = frame:CreateFontString(nil, "OVERLAY")
+	name:SetFont(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline)
 	name:SetWordWrap(false)
 
 	return name

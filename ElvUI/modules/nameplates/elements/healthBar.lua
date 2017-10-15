@@ -135,6 +135,7 @@ function mod:ConstructElement_HealthBar(parent)
 	frame:SetFrameLevel(parent:GetFrameLevel())
 
 	frame.text = frame:CreateFontString(nil, "OVERLAY")
+	frame.text:SetFont(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline)
 	frame.text:SetWordWrap(false)
 	frame.scale = CreateAnimationGroup(frame)
 

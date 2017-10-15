@@ -1,6 +1,16 @@
 local E, L, V, P, G = unpack(ElvUI);
 local NP = E:GetModule("NamePlates");
 
+local next = next
+local ipairs = ipairs
+local tremove = tremove
+local tinsert = tinsert
+local tsort = table.sort
+local tonumber = tonumber
+local tconcat = table.concat
+local format = string.format
+local pairs, type, strsplit, match, gsub = pairs, type, strsplit, string.match, string.gsub
+
 local selectedFilter;
 local filters;
 
@@ -17,6 +27,36 @@ local positionValues = {
 	TOP = "TOP",
 	BOTTOM = "BOTTOM"
 };
+
+local carryFilterFrom, carryFilterTo
+local function filterValue(value)
+	return gsub(value,"([%(%)%.%%%+%-%*%?%[%^%$])","%%%1")
+end
+
+local function filterMatch(s,v)
+	local m1, m2, m3, m4 = "^"..v.."$", "^"..v..",", ","..v.."$", ","..v..","
+	return (match(s, m1) and m1) or (match(s, m2) and m2) or (match(s, m3) and m3) or (match(s, m4) and v..",")
+end
+
+local function filterPriority(auraType, unit, value, remove, movehere)
+	if not auraType or not value then return end
+	local filter = E.db.nameplates.units[unit] and E.db.nameplates.units[unit][auraType] and E.db.nameplates.units[unit][auraType].filters and E.db.nameplates.units[unit][auraType].filters.priority
+	if not filter then return end
+	local found = filterMatch(filter, filterValue(value))
+	if found and movehere then
+		local tbl, sv, sm = {strsplit(",",filter)}
+		for i in ipairs(tbl) do
+			if tbl[i] == value then sv = i elseif tbl[i] == movehere then sm = i end
+			if sv and sm then break end
+		end
+		tremove(tbl, sm);tinsert(tbl, sv, movehere);
+		E.db.nameplates.units[unit][auraType].filters.priority = tconcat(tbl,",")
+	elseif found and remove then
+		E.db.nameplates.units[unit][auraType].filters.priority = gsub(filter, found, "")
+	elseif not found and not remove then
+		E.db.nameplates.units[unit][auraType].filters.priority = (filter == "" and value) or (filter..","..value)
+	end
+end
 
 local function UpdateFilterGroup()
 	if not selectedFilter or not E.global["nameplates"]["filter"][selectedFilter] then
@@ -238,145 +278,323 @@ local function GetUnitSettings(unit, name)
 				order = 4,
 				name = L["Buffs"],
 				type = "group",
-				get = function(info) return E.db.nameplates.units[unit].buffs.filters[ info[#info] ]; end,
-				set = function(info, value) E.db.nameplates.units[unit].buffs.filters[ info[#info] ] = value; NP:ConfigureAll(); end,
-				disabled = function() return not E.db.nameplates.units[unit].healthbar.enable; end,
+				get = function(info) return E.db.nameplates.units[unit].buffs.filters[ info[#info] ] end,
+				set = function(info, value) E.db.nameplates.units[unit].buffs.filters[ info[#info] ] = value; NP:ConfigureAll() end,
+				disabled = function() return not E.db.nameplates.units[unit].healthbar.enable end,
 				args = {
 					header = {
 						order = 0,
 						type = "header",
-						name = L["Buffs"]
+						name = L["Buffs"],
 					},
 					enable = {
 						order = 1,
-						type = "toggle",
 						name = L["Enable"],
-						get = function(info) return E.db.nameplates.units[unit].buffs[ info[#info] ]; end,
-						set = function(info, value) E.db.nameplates.units[unit].buffs[ info[#info] ] = value; NP:ConfigureAll(); end
+						type = "toggle",
+						get = function(info) return E.db.nameplates.units[unit].buffs[ info[#info] ] end,
+						set = function(info, value) E.db.nameplates.units[unit].buffs[ info[#info] ] = value; NP:ConfigureAll() end,
 					},
 					numAuras = {
 						order = 2,
-						type = "range",
 						name = L["# Displayed Auras"],
 						desc = L["Controls how many auras are displayed, this will also affect the size of the auras."],
+						type = "range",
 						min = 1, max = 8, step = 1,
-						get = function(info) return E.db.nameplates.units[unit].buffs[ info[#info] ]; end,
-						set = function(info, value) E.db.nameplates.units[unit].buffs[ info[#info] ] = value; NP:ConfigureAll(); end
+						get = function(info) return E.db.nameplates.units[unit].buffs[ info[#info] ] end,
+						set = function(info, value) E.db.nameplates.units[unit].buffs[ info[#info] ] = value; NP:ConfigureAll() end,
 					},
 					baseHeight = {
 						order = 3,
-						type = "range",
 						name = L["Icon Base Height"],
 						desc = L["Base Height for the Aura Icon"],
+						type = "range",
 						min = 6, max = 60, step = 1,
-						get = function(info) return E.db.nameplates.units[unit].buffs[ info[#info] ]; end,
-						set = function(info, value) E.db.nameplates.units[unit].buffs[ info[#info] ] = value; NP:ConfigureAll(); end
+						get = function(info) return E.db.nameplates.units[unit].buffs[ info[#info] ] end,
+						set = function(info, value) E.db.nameplates.units[unit].buffs[ info[#info] ] = value; NP:ConfigureAll() end,
 					},
 					filtersGroup = {
-						name = L["Filters"],
+						name = FILTERS,
 						order = 4,
 						type = "group",
 						guiInline = true,
 						args = {
-							personal = {
+							minDuration = {
 								order = 1,
-								type = "toggle",
-								name = L["Personal Auras"]
+								type = "range",
+								name = L["Minimum Duration"],
+								desc = L["Don't display auras that are shorter than this duration (in seconds). Set to zero to disable."],
+								min = 0, max = 10800, step = 1,
 							},
 							maxDuration = {
 								order = 2,
 								type = "range",
 								name = L["Maximum Duration"],
-								min = 5, max = 3000, step = 1
+								desc = L["Don't display auras that are longer than this duration (in seconds). Set to zero to disable."],
+								min = 0, max = 10800, step = 1,
 							},
-							filter = {
+							jumpToFilter = {
 								order = 3,
+								name = L["Filters Page"],
+								desc = L["Shortcut to global filters."],
+								type = "execute",
+								func = function() ACD:SelectGroup("ElvUI", "filters") end,
+							},
+							spacer1 = {
+								order = 4,
+								type = "description",
+								name = " ",
+							},
+							specialFilters = {
+								order = 5,
 								type = "select",
-								name = L["Filter"],
+								name = L["Add Special Filter"],
+								desc = L["These filters don't use a list of spells like the regular filters. Instead they use the WoW API and some code logic to determine if an aura should be allowed or blocked."],
 								values = function()
 									local filters = {}
-									filters[""] = NONE
-									for filter in pairs(E.global.unitframe["aurafilters"]) do
+									local list = E.global.nameplates["specialFilters"]
+									if not list then return end
+									for filter in pairs(list) do
 										filters[filter] = filter
 									end
 									return filters
+								end,
+								set = function(info, value)
+									filterPriority("buffs", unit, value)
+									NP:ConfigureAll()
 								end
-							}
-						}
-					}
-				}
+							},
+							filter = {
+								order = 6,
+								type = "select",
+								name = L["Add Regular Filter"],
+								desc = L["These filters use a list of spells to determine if an aura should be allowed or blocked. The content of these filters can be modified in the 'Filters' section of the config."],
+								values = function()
+									local filters = {}
+									local list = E.global.unitframe["aurafilters"]
+									if not list then return end
+									for filter in pairs(list) do
+										filters[filter] = filter
+									end
+									return filters
+								end,
+								set = function(info, value)
+									filterPriority("buffs", unit, value)
+									NP:ConfigureAll()
+								end
+							},
+							resetPriority = {
+								order = 7,
+								name = L["Reset Priority"],
+								desc = L["Reset filter priority to the default state."],
+								type = "execute",
+								func = function()
+									E.db.nameplates.units[unit].buffs.filters.priority = P.nameplates.units[unit].buffs.filters.priority
+									NP:ConfigureAll()
+								end,
+							},
+							filterPriority = {
+								order = 8,
+								name = L["Filter Priority"],
+								type = "multiselect",
+								dragdrop = true,
+								dragOnLeave = function() end, --keep this here
+								dragOnEnter = function(info, value)
+									carryFilterTo = info.obj.value
+								end,
+								dragOnMouseDown = function(info, value)
+									carryFilterFrom, carryFilterTo = info.obj.value, nil
+								end,
+								dragOnMouseUp = function(info, value)
+									filterPriority("buffs", unit, carryFilterTo, nil, carryFilterFrom) --add it in the new spot
+									carryFilterFrom, carryFilterTo = nil, nil
+								end,
+								dragOnClick = function(info, value)
+									filterPriority("buffs", unit, carryFilterFrom, true)
+								end,
+								values = function()
+									local str = E.db.nameplates.units[unit].buffs.filters.priority
+									if str == "" then return nil end
+									return {strsplit(",",str)}
+								end,
+								get = function(info, value)
+									local str = E.db.nameplates.units[unit].buffs.filters.priority
+									if str == "" then return nil end
+									local tbl = {strsplit(",",str)}
+									return tbl[value]
+								end,
+								set = function(info, value)
+									NP:ConfigureAll()
+								end
+							},
+							spacer3 = {
+								order = 9,
+								type = "description",
+								name = L["Use drag and drop to rearrange filter priority or right click to remove a filter."],
+							},
+						},
+					},
+				},
 			},
 			debuffsGroup = {
 				order = 5,
 				name = L["Debuffs"],
 				type = "group",
-				get = function(info) return E.db.nameplates.units[unit].debuffs.filters[ info[#info] ]; end,
-				set = function(info, value) E.db.nameplates.units[unit].debuffs.filters[ info[#info] ] = value; NP:ConfigureAll(); end,
-				disabled = function() return not E.db.nameplates.units[unit].healthbar.enable; end,
+				get = function(info) return E.db.nameplates.units[unit].debuffs.filters[ info[#info] ] end,
+				set = function(info, value) E.db.nameplates.units[unit].debuffs.filters[ info[#info] ] = value; NP:ConfigureAll() end,
+				disabled = function() return not E.db.nameplates.units[unit].healthbar.enable end,
 				args = {
 					header = {
 						order = 0,
 						type = "header",
-						name = L["Debuffs"]
+						name = L["Debuffs"],
 					},
 					enable = {
 						order = 1,
-						type = "toggle",
 						name = L["Enable"],
-						get = function(info) return E.db.nameplates.units[unit].debuffs[ info[#info] ]; end,
-						set = function(info, value) E.db.nameplates.units[unit].debuffs[ info[#info] ] = value; NP:ConfigureAll(); end
+						type = "toggle",
+						get = function(info) return E.db.nameplates.units[unit].debuffs[ info[#info] ] end,
+						set = function(info, value) E.db.nameplates.units[unit].debuffs[ info[#info] ] = value; NP:ConfigureAll() end,
 					},
 					numAuras = {
 						order = 2,
-						type = "range",
 						name = L["# Displayed Auras"],
 						desc = L["Controls how many auras are displayed, this will also affect the size of the auras."],
+						type = "range",
 						min = 1, max = 8, step = 1,
-						get = function(info) return E.db.nameplates.units[unit].debuffs[ info[#info] ]; end,
-						set = function(info, value) E.db.nameplates.units[unit].debuffs[ info[#info] ] = value; NP:ConfigureAll(); end
+						get = function(info) return E.db.nameplates.units[unit].debuffs[ info[#info] ] end,
+						set = function(info, value) E.db.nameplates.units[unit].debuffs[ info[#info] ] = value; NP:ConfigureAll() end,
 					},
 					baseHeight = {
 						order = 3,
-						type = "range",
 						name = L["Icon Base Height"],
 						desc = L["Base Height for the Aura Icon"],
+						type = "range",
 						min = 6, max = 60, step = 1,
-						get = function(info) return E.db.nameplates.units[unit].debuffs[ info[#info] ]; end,
-						set = function(info, value) E.db.nameplates.units[unit].debuffs[ info[#info] ] = value; NP:ConfigureAll(); end
+						get = function(info) return E.db.nameplates.units[unit].debuffs[ info[#info] ] end,
+						set = function(info, value) E.db.nameplates.units[unit].debuffs[ info[#info] ] = value; NP:ConfigureAll() end,
 					},
 					filtersGroup = {
-						name = L["Filters"],
+						name = FILTERS,
 						order = 4,
 						type = "group",
 						guiInline = true,
 						args = {
-							personal = {
+							minDuration = {
 								order = 1,
-								type = "toggle",
-								name = L["Personal Auras"]
+								type = "range",
+								name = L["Minimum Duration"],
+								desc = L["Don't display auras that are shorter than this duration (in seconds). Set to zero to disable."],
+								min = 0, max = 10800, step = 1,
 							},
 							maxDuration = {
 								order = 2,
 								type = "range",
 								name = L["Maximum Duration"],
-								min = 5, max = 3000, step = 1
+								desc = L["Don't display auras that are longer than this duration (in seconds). Set to zero to disable."],
+								min = 0, max = 10800, step = 1,
 							},
-							filter = {
+							jumpToFilter = {
 								order = 3,
+								name = L["Filters Page"],
+								desc = L["Shortcut to global filters."],
+								type = "execute",
+								func = function() ACD:SelectGroup("ElvUI", "filters") end,
+							},
+							spacer1 = {
+								order = 4,
+								type = "description",
+								name = " ",
+							},
+							specialFilters = {
+								order = 5,
 								type = "select",
-								name = L["Filter"],
+								name = L["Add Special Filter"],
+								desc = L["These filters don't use a list of spells like the regular filters. Instead they use the WoW API and some code logic to determine if an aura should be allowed or blocked."],
 								values = function()
 									local filters = {}
-									filters[""] = NONE
-									for filter in pairs(E.global.unitframe["aurafilters"]) do
+									local list = E.global.nameplates["specialFilters"]
+									if not list then return end
+									for filter in pairs(list) do
 										filters[filter] = filter
 									end
 									return filters
+								end,
+								set = function(info, value)
+									filterPriority("debuffs", unit, value)
+									NP:ConfigureAll()
 								end
-							}
-						}
-					}
-				}
+							},
+							filter = {
+								order = 6,
+								type = "select",
+								name = L["Add Regular Filter"],
+								desc = L["These filters use a list of spells to determine if an aura should be allowed or blocked. The content of these filters can be modified in the 'Filters' section of the config."],
+								values = function()
+									local filters = {}
+									local list = E.global.unitframe["aurafilters"]
+									if not list then return end
+									for filter in pairs(list) do
+										filters[filter] = filter
+									end
+									return filters
+								end,
+								set = function(info, value)
+									filterPriority("debuffs", unit, value)
+									NP:ConfigureAll()
+								end
+							},
+							resetPriority = {
+								order = 7,
+								name = L["Reset Priority"],
+								desc = L["Reset filter priority to the default state."],
+								type = "execute",
+								func = function()
+									E.db.nameplates.units[unit].debuffs.filters.priority = P.nameplates.units[unit].debuffs.filters.priority
+									NP:ConfigureAll()
+								end,
+							},
+							filterPriority = {
+								order = 8,
+								dragdrop = true,
+								type = "multiselect",
+								name = L["Filter Priority"],
+								dragOnLeave = function() end, --keep this here
+								dragOnEnter = function(info, value)
+									carryFilterTo = info.obj.value
+								end,
+								dragOnMouseDown = function(info, value)
+									carryFilterFrom, carryFilterTo = info.obj.value, nil
+								end,
+								dragOnMouseUp = function(info, value)
+									filterPriority("debuffs", unit, carryFilterTo, nil, carryFilterFrom) --add it in the new spot
+									carryFilterFrom, carryFilterTo = nil, nil
+								end,
+								dragOnClick = function(info, value)
+									filterPriority("debuffs", unit, carryFilterFrom, true)
+								end,
+								values = function()
+									local str = E.db.nameplates.units[unit].debuffs.filters.priority
+									if str == "" then return nil end
+									return {strsplit(",",str)}
+								end,
+								get = function(info, value)
+									local str = E.db.nameplates.units[unit].debuffs.filters.priority
+									if str == "" then return nil end
+									local tbl = {strsplit(",",str)}
+									return tbl[value]
+								end,
+								set = function(info, value)
+									NP:ConfigureAll()
+								end
+							},
+							spacer3 = {
+								order = 9,
+								type = "description",
+								name = L["Use drag and drop to rearrange filter priority or right click to remove a filter."],
+							},
+						},
+					},
+				},
 			},
 			levelGroup = {
 				order = 6,

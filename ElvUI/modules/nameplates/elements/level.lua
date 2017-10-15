@@ -31,5 +31,7 @@ function mod:ConfigureElement_Level(frame)
 end
 
 function mod:ConstructElement_Level(frame)
-	return frame:CreateFontString(nil, "OVERLAY")
+	local level = frame:CreateFontString(nil, "OVERLAY")
+	level:SetFont(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline)
+	return level
 end
