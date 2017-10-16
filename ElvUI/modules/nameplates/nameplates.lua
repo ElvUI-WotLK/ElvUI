@@ -111,6 +111,9 @@ function mod:SetTargetFrame(frame)
 		end
 	end
 
+	mod:UpdateElement_Glow(frame)
+	mod:UpdateElement_HealthColor(frame)
+	mod:UpdateElement_CPoints(frame)
 	mod:UpdateElement_Filters(frame, "PLAYER_TARGET_CHANGED")
 
 	return frame.isTarget
@@ -118,7 +121,7 @@ end
 
 function mod:GetNumVisiblePlates()
 	local i = 0
-	for _ in pairs(mod.VisiblePlates) do
+	for _ in pairs(self.VisiblePlates) do
 		i = i + 1
 	end
 	return i
@@ -407,6 +410,8 @@ function mod:UpdateElement_All(frame, noTargetFrame, filterIgnore)
 	end
 end
 
+local maxFrameLevel = 40
+local currentFrameLevel = 10
 function mod:OnCreated(frame)
 	self.isTargetChanged = false
 
@@ -415,6 +420,14 @@ function mod:OnCreated(frame)
 
 	frame.UnitFrame = CreateFrame("Frame", nil, frame)
 	frame.UnitFrame:SetAllPoints()
+
+	frame.UnitFrame:SetFrameLevel(currentFrameLevel)
+
+	if currentFrameLevel == maxFrameLevel then
+		currentFrameLevel = currentFrameLevel - 30
+	else
+		currentFrameLevel = currentFrameLevel + 1
+	end
 
 	frame.UnitFrame.HealthBar = self:ConstructElement_HealthBar(frame.UnitFrame)
 	frame.UnitFrame.CastBar = self:ConstructElement_CastBar(frame.UnitFrame)
