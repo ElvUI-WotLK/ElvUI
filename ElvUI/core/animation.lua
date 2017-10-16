@@ -136,14 +136,18 @@ function E:Flash(object, duration, loop)
 		E:SetUpAnimGroup(object, loop and "FlashLoop" or "Flash")
 	end
 
-	object.anim.fadein:SetDuration(duration)
-	object.anim.fadeout:SetDuration(duration)
-	object.anim:Play()
+	if not object.anim.playing then
+		object.anim.fadein:SetDuration(duration)
+		object.anim.fadeout:SetDuration(duration)
+		object.anim:Play()
+		object.anim.playing = true
+	end
 end
 
 function E:StopFlash(object)
-	if object.anim then
-		object.anim:Finish()
+	if object.anim and object.anim.playing then
+		object.anim:Stop()
+		object.anim.playing = nil;
 	end
 end
 

@@ -192,7 +192,7 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 	end
 	if FlashingHealth then
 		frame.FlashingHealth = nil
-	--	E:StopFlash(frame.FlashTexture)
+		E:StopFlash(frame.FlashTexture)
 		frame.FlashTexture:Hide()
 	end
 	if TextureChanged then
