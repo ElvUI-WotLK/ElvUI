@@ -19,7 +19,6 @@ local WorldFrame = WorldFrame
 local WorldGetNumChildren, WorldGetChildren = WorldFrame.GetNumChildren, WorldFrame.GetChildren
 
 local numChildren = 0
-local isTarget = false
 local OVERLAY = [=[Interface\TargetingFrame\UI-TargetingFrame-Flash]=]
 local FSPAT = "%s*"..((_G.FOREIGN_SERVER_LABEL:gsub("^%s", "")):gsub("[%*()]", "%%%1")).."$"
 
@@ -62,7 +61,7 @@ function mod:SetFrameScale(frame, scale)
 end
 
 function mod:SetTargetFrame(frame)
-	if isTarget then return end
+	if self.isTargetChanged then return end
 
 	local targetExists = UnitExists("target") == 1
 	if targetExists and frame:GetParent():IsShown() and frame:GetParent():GetAlpha() == 1 then
@@ -285,7 +284,8 @@ function mod:GetUnitInfo(frame)
 end
 
 function mod:OnShow()
-	isTarget = false
+	mod.isTargetChanged = false
+
 	mod.VisiblePlates[self.UnitFrame] = true
 
 	self.UnitFrame.UnitName = gsub(self.UnitFrame.oldName:GetText(), FSPAT, "")
@@ -329,7 +329,8 @@ function mod:OnShow()
 end
 
 function mod:OnHide()
-	isTarget = false
+	mod.isTargetChanged = false
+
 	mod.VisiblePlates[self.UnitFrame] = nil
 
 	self.UnitFrame.unit = nil
@@ -405,7 +406,8 @@ function mod:UpdateElement_All(frame, noTargetFrame, filterIgnore)
 end
 
 function mod:OnCreated(frame)
-	isTarget = false
+	self.isTargetChanged = false
+
 	local HealthBar, CastBar = frame:GetChildren()
 	local Threat, Border, CastBarBorder, CastBarShield, CastBarIcon, Highlight, Name, Level, BossIcon, RaidIcon, EliteIcon = frame:GetRegions()
 
@@ -501,7 +503,7 @@ function mod:OnUpdate(elapsed)
 		end
 
 		if i == mod:GetNumVisiblePlates() then
-			isTarget = true
+			mod.isTargetChanged = true
 		end
 	end
 end
@@ -595,8 +597,7 @@ function mod:PLAYER_ENTERING_WORLD()
 end
 
 function mod:PLAYER_TARGET_CHANGED()
-	--mod:ScheduleTimer("ForEachPlate", 0, "SetTargetFrame")
-	isTarget = false
+	self.isTargetChanged = false
 end
 
 function mod:UNIT_AURA(_, unit)
@@ -645,6 +646,8 @@ end
 function mod:Initialize()
 	self.db = E.db["nameplates"]
 	if E.private["nameplates"].enable ~= true then return end
+
+	self.isTargetChanged = false
 
 	--Add metatable to all our StyleFilters so they can grab default values if missing
 	for _, filterTable in pairs(E.global.nameplates.filters) do

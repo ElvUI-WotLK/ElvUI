@@ -594,7 +594,7 @@ end
 function mod:UpdateElement_Filters(frame, event)
 	if not self.StyleFilterEvents[event] then return end
 
-	if self.StyleFilterEvents[event] == true then
+	--[[if self.StyleFilterEvents[event] == true then
 		if not frame.StyleFilterWaitTime then
 			frame.StyleFilterWaitTime = GetTime()
 		elseif GetTime() > (frame.StyleFilterWaitTime + 0.1) then
@@ -602,7 +602,7 @@ function mod:UpdateElement_Filters(frame, event)
 		else
 			return --block calls faster than 0.1 second
 		end
-	end
+	end]]
 
 	self:ClearStyledPlate(frame)
 
