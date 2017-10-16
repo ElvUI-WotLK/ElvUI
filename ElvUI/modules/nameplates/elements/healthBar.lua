@@ -9,6 +9,7 @@ function mod:UpdateElement_HealthOnValueChanged(health)
 	mod:UpdateElement_Health(frame)
 	mod:UpdateElement_HealthColor(frame)
 	mod:UpdateElement_Glow(frame)
+	mod:UpdateElement_Filters(frame, "UNIT_HEALTH")
 end
 
 function mod:UpdateElement_HealthColor(frame)

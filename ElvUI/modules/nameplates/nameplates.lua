@@ -348,13 +348,13 @@ function mod:OnHide()
 	self.UnitFrame.CastBar:Hide()
 	self.UnitFrame.Level:ClearAllPoints()
 	self.UnitFrame.Level:SetText("")
+	self.UnitFrame.Name.r, self.UnitFrame.Name.g, self.UnitFrame.Name.b = nil, nil, nil
 	self.UnitFrame.Name:ClearAllPoints()
 	self.UnitFrame.Name:SetText("")
 	self.UnitFrame.Elite:Hide()
 	self.UnitFrame.CPoints:Hide()
 	self.UnitFrame:Hide()
 	self.UnitFrame.isTarget = nil
-	self.UnitFrame.displayedUnit = nil
 	self.ThreatData = nil
 	self.UnitFrame.UnitName = nil
 	self.UnitFrame.UnitType = nil
@@ -363,8 +363,6 @@ function mod:OnHide()
 	self.UnitFrame.ThreatReaction = nil
 	self.UnitFrame.guid = nil
 	self.UnitFrame.RaidIconType = nil
-	self.UnitFrame.CustomColor = nil
-	self.UnitFrame.CustomScale = nil
 end
 
 function mod:UpdateAllFrame(frame)

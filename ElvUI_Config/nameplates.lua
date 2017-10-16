@@ -646,7 +646,7 @@ local function UpdateFilterGroup()
 					order = 10,
 					type = 'group',
 					name = L["Health Threshold"],
-					disabled = function() return true end,
+					disabled = function() return not (E.db.nameplates and E.db.nameplates.filters and E.db.nameplates.filters[selectedNameplateFilter] and E.db.nameplates.filters[selectedNameplateFilter].triggers and E.db.nameplates.filters[selectedNameplateFilter].triggers.enable) end,
 					args = {
 						enable = {
 							type = 'toggle',
@@ -2502,7 +2502,8 @@ E.Options.args.nameplate = {
 					set = function(info, r, g, b)
 						local t = E.db.nameplates.reactions[ info[#info] ];
 						t.r, t.g, t.b = r, g, b;
-						NP:ConfigureAll();
+						NP:ForEachPlate("UpdateElement_HealthColor", true)
+						NP:ForEachPlate("UpdateElement_Name", true)
 					end,
 					args = {
 						bad = {

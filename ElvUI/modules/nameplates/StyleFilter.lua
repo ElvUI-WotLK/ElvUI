@@ -243,7 +243,7 @@ function mod:StyleFilterConditionCheck(frame, filter, trigger, failed)
 	local condition, name, inCombat, reaction, spell, classification;
 	local talentSelected, talentFunction, talentRows, instanceName, instanceType, instanceDifficulty;
 	local level, myLevel, curLevel, minLevel, maxLevel, matchMyLevel, mySpecID;
-	local health, maxHealth, percHealth, underHealthThreshold, overHealthThreshold, healthUnit;
+	local health, maxHealth, percHealth, underHealthThreshold, overHealthThreshold;
 
 	local castbarShown = frame.CastBar:IsShown()
 	local castbarTriggered = false --We use this to prevent additional calls to `UpdateElement_All` when the castbar hides
@@ -305,8 +305,8 @@ function mod:StyleFilterConditionCheck(frame, filter, trigger, failed)
 	--Try to match by player health conditions
 	if not failed and trigger.healthThreshold then
 		condition = false
-		healthUnit = (trigger.healthUsePlayer and "player") or frame.displayedUnit
-		health, maxHealth = UnitHealth(healthUnit), UnitHealthMax(healthUnit)
+		health = (trigger.healthUsePlayer and UnitHealth("player")) or frame.oldHealthBar:GetValue() or 0
+		maxHealth = (trigger.healthUsePlayer and UnitHealthMax("player")) or select(2, frame.oldHealthBar:GetMinMaxValues()) or 0
 		percHealth = (maxHealth and (maxHealth > 0) and health/maxHealth) or 0
 		underHealthThreshold = trigger.underHealthThreshold and (trigger.underHealthThreshold ~= 0) and (trigger.underHealthThreshold > percHealth)
 		overHealthThreshold = trigger.overHealthThreshold and (trigger.overHealthThreshold ~= 0) and (trigger.overHealthThreshold < percHealth)
