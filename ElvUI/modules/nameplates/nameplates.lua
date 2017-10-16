@@ -64,7 +64,7 @@ function mod:SetTargetFrame(frame)
 	if self.isTargetChanged then return end
 
 	local targetExists = UnitExists("target") == 1
-	if targetExists and frame:GetParent():IsShown() and frame:GetParent():GetAlpha() == 1 then
+	if targetExists and frame:GetParent():IsShown() and frame:GetParent():GetFrameLevel() == 20 then
 		if self.db.useTargetScale then
 			self:SetFrameScale(frame, self.db.targetScale)
 		end
@@ -94,6 +94,8 @@ function mod:SetTargetFrame(frame)
 		end
 		frame.isTarget = nil
 		frame.unit = nil
+		frame.guid = nil
+
 		if self.db.units[frame.UnitType].healthbar.enable ~= true then
 			self:UpdateAllFrame(frame)
 		end
@@ -332,7 +334,7 @@ function mod:OnShow()
 end
 
 function mod:OnHide()
-	mod.isTargetChanged = false
+	--mod.isTargetChanged = false
 
 	mod.VisiblePlates[self.UnitFrame] = nil
 
@@ -373,7 +375,6 @@ end
 function mod:ConfigureAll()
 	if E.private.nameplates.enable ~= true then return end
 
-	self.isTargetChanged = false
 	self:StyleFilterConfigureEvents()
 	self:ForEachPlate("UpdateAllFrame")
 	self:UpdateCVars()
