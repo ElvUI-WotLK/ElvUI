@@ -372,6 +372,8 @@ end
 function mod:ConfigureAll()
 	if E.private.nameplates.enable ~= true then return end
 
+	self.isTargetChanged = false
+	self:StyleFilterConfigureEvents()
 	self:ForEachPlate("UpdateAllFrame")
 	self:UpdateCVars()
 end
@@ -663,6 +665,7 @@ function mod:Initialize()
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
+	self:RegisterEvent("PLAYER_LOGOUT") -- used in the StyleFilter
 	self:RegisterEvent("PLAYER_TARGET_CHANGED")
 	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	self:RegisterEvent("UNIT_AURA")
