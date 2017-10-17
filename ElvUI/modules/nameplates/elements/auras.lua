@@ -304,7 +304,7 @@ function mod:UpdateElement_Auras(frame)
 
 	if not guid then
 		if RAID_CLASS_COLORS[frame.UnitClass] then
-			local name = gsub(frame.oldName:GetText(), "%s%(%*%)","")
+			local name = frame.UnitName
 			guid = ByName[name]
 		elseif frame.RaidIcon:IsShown() then
 			guid = ByRaidIcon[frame.RaidIconType]
@@ -429,7 +429,7 @@ function mod:UpdateElement_AurasByUnitID(unit)
 	end
 
 	index = 1
-	local name, _, texture, count, _, duration, expirationTime, unitCaster, _, _, spellID = UnitAura(unit, index, "HELPFUL")
+	name, _, texture, count, _, duration, expirationTime, unitCaster, _, _, spellID = UnitAura(unit, index, "HELPFUL")
 	while name do
 		SetSpellDuration(spellID, duration)
 		SetAuraInstance(guid, name, spellID, expirationTime, count, UnitGUID(unitCaster or ""), duration, texture, AURA_TYPE_BUFF)
@@ -437,12 +437,12 @@ function mod:UpdateElement_AurasByUnitID(unit)
 		name, _, texture, count, _, duration, expirationTime, unitCaster, _, _, spellID = UnitAura(unit, index, "HELPFUL")
 	end
 
-	local raidIcon, name
-	if UnitPlayerControlled(unit) then name = UnitName(unit) end
+	local raidIcon, unitName
+	if UnitPlayerControlled(unit) then unitName = UnitName(unit) end
 	raidIcon = RaidIconIndex[GetRaidTargetIndex(unit) or ""]
 	if raidIcon then ByRaidIcon[raidIcon] = guid end
 
-	local frame = self:SearchForFrame(guid, raidIcon, name)
+	local frame = self:SearchForFrame(guid, raidIcon, unitName)
 	if frame then
 		self:UpdateElement_Auras(frame)
 	end
