@@ -5,13 +5,14 @@ local LSM = LibStub("LibSharedMedia-3.0")
 local CreateFrame = CreateFrame
 
 function mod:UpdateElement_Glow(frame)
+	if frame.Glow:IsShown() then frame.Glow:Hide() end
 	if not frame.HealthBar:IsShown() then return end
 
-	local r, g, b, shouldShow
+	local shouldShow, r, g, b
 	if frame.isTarget and self.db.useTargetGlow then
 		r, g, b = 1, 1, 1
 		shouldShow = true
-	else
+	elseif self.db.lowHealthThreshold > 0 then
 		local health = frame.oldHealthBar:GetValue()
 		local _, maxHealth = frame.oldHealthBar:GetMinMaxValues()
 		local perc = health / maxHealth
@@ -32,8 +33,6 @@ function mod:UpdateElement_Glow(frame)
 			frame.Glow:SetBackdropBorderColor(r, g, b)
 			frame.Glow.r, frame.Glow.g, frame.Glow.b = r, g, b
 		end
-	elseif frame.Glow:IsShown() then
-		frame.Glow:Hide()
 	end
 end
 
