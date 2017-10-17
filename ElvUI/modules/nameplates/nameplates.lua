@@ -16,7 +16,7 @@ local UnitInParty = UnitInParty
 local UnitInRaid = UnitInRaid
 local SetCVar = SetCVar
 local WorldFrame = WorldFrame
-local WorldGetNumChildren, WorldGetChildren = WorldFrame.GetNumChildren, WorldFrame.GetChildren
+local WorldGetChildren = WorldFrame.GetChildren
 
 local numChildren = 0
 local OVERLAY = [=[Interface\TargetingFrame\UI-TargetingFrame-Flash]=]
@@ -63,6 +63,9 @@ end
 function mod:SetTargetFrame(frame)
 	if self.isTargetChanged then return end
 
+	if frame.unit then frame.unit = nil end
+	if frame.guid then frame.guid = nil end
+
 	local targetExists = UnitExists("target") == 1
 	if targetExists and frame:GetParent():IsShown() and frame:GetParent():GetFrameLevel() == 20 then
 		if self.db.useTargetScale then
@@ -93,8 +96,6 @@ function mod:SetTargetFrame(frame)
 			self:SetFrameScale(frame, frame.ThreatScale or 1)
 		end
 		frame.isTarget = nil
-		frame.unit = nil
-		frame.guid = nil
 
 		if self.db.units[frame.UnitType].healthbar.enable ~= true then
 			self:UpdateAllFrame(frame)
@@ -505,13 +506,14 @@ function mod:QueueObject(object)
 end
 
 function mod:OnUpdate(elapsed)
-	local count = WorldGetNumChildren(WorldFrame)
+	local count = select("#", WorldGetChildren(WorldFrame))
 	if count ~= numChildren then
+		local frame, region
 		for i = numChildren + 1, count do
-			local frame = select(i, WorldGetChildren(WorldFrame))
-			local region = frame:GetRegions()
+			frame = select(i, WorldGetChildren(WorldFrame))
+			region = frame:GetRegions()
 
-			if(not mod.CreatedPlates[frame] and region and region:GetObjectType() == "Texture" and region:GetTexture() == OVERLAY) then
+			if not mod.CreatedPlates[frame] and region and region:GetObjectType() == "Texture" and region:GetTexture() == OVERLAY then
 				mod:OnCreated(frame)
 			end
 		end
@@ -522,8 +524,8 @@ function mod:OnUpdate(elapsed)
 	for frame in pairs(mod.VisiblePlates) do
 		i = i + 1
 
-		local getTarget = mod:SetTargetFrame(frame)
-		if not getTarget then
+		local isTarget = mod:SetTargetFrame(frame)
+		if not isTarget then
 			frame:GetParent():SetAlpha(1)
 		end
 

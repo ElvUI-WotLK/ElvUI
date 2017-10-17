@@ -447,23 +447,29 @@ function mod:UpdateElement_AurasByUnitID(unit)
 	end
 end
 
+local function GuidIsLocalUnitId(guid)
+	if guid == UnitGUID("player") or guid == UnitGUID("target") or guid == UnitGUID("mouseover") or guid == UnitGUID("focus") then
+		return true
+	end
+end
+
 function mod:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, sourceGUID, _, _, destGUID, destName, destFlags, ...)
-	--if destGUID == UnitGUID("target") then return end
-	--if band(destFlags, COMBATLOG_OBJECT_REACTION_FRIENDLY) ~= 0 then then return
 	if not (event == "SPELL_AURA_APPLIED" or event == "SPELL_AURA_REFRESH" or event == "SPELL_AURA_APPLIED_DOSE" or event == "SPELL_AURA_REMOVED_DOSE" or event == "SPELL_AURA_BROKEN" or event == "SPELL_AURA_BROKEN_SPELL" or event == "SPELL_AURA_REMOVED") then return end
 
-	local spellID, spellName, _, auraType, stackCount = ...
+	if not GuidIsLocalUnitId(destGUID) then -- Skip over the aura update if the unit is accessible by a local unitid.
+		local spellID, spellName, _, auraType, stackCount = ...
 
-	if event == "SPELL_AURA_APPLIED" or event == "SPELL_AURA_REFRESH" then
-		local duration = GetSpellDuration(spellID)
-		local texture = GetSpellTexture(spellID)
-		SetAuraInstance(destGUID, spellName, spellID, GetTime() + (duration or 0), 1, sourceGUID, duration, texture, auraType)
-	elseif event == "SPELL_AURA_APPLIED_DOSE" or event == "SPELL_AURA_REMOVED_DOSE" then
-		local duration = GetSpellDuration(spellID)
-		local texture = GetSpellTexture(spellID)
-		SetAuraInstance(destGUID, spellName, spellID, GetTime() + (duration or 0), stackCount, sourceGUID, duration, texture, auraType)
-	elseif event == "SPELL_AURA_BROKEN" or event == "SPELL_AURA_BROKEN_SPELL" or event == "SPELL_AURA_REMOVED" then
-		RemoveAuraInstance(destGUID, spellID, sourceGUID)
+		if event == "SPELL_AURA_APPLIED" or event == "SPELL_AURA_REFRESH" then
+			local duration = GetSpellDuration(spellID)
+			local texture = GetSpellTexture(spellID)
+			SetAuraInstance(destGUID, spellName, spellID, GetTime() + (duration or 0), 1, sourceGUID, duration, texture, auraType)
+		elseif event == "SPELL_AURA_APPLIED_DOSE" or event == "SPELL_AURA_REMOVED_DOSE" then
+			local duration = GetSpellDuration(spellID)
+			local texture = GetSpellTexture(spellID)
+			SetAuraInstance(destGUID, spellName, spellID, GetTime() + (duration or 0), stackCount, sourceGUID, duration, texture, auraType)
+		elseif event == "SPELL_AURA_BROKEN" or event == "SPELL_AURA_BROKEN_SPELL" or event == "SPELL_AURA_REMOVED" then
+			RemoveAuraInstance(destGUID, spellID, sourceGUID)
+		end
 	end
 
 	local name, raidIcon
@@ -477,7 +483,6 @@ function mod:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, sourceGUID, _, _, destGUID
 		if band(destFlags, bitmask) > 0 then
 			ByRaidIcon[iconName] = destGUID
 			raidIcon = iconName
-
 			break
 		end
 	end
