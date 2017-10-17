@@ -166,7 +166,7 @@ local function GetAuraInstance(guid, auraID)
 end
 
 local function SetAuraInstance(guid, name, spellID, expiration, stacks, caster, duration, texture, type)
-	if guid and spellID and caster and texture then
+	if guid and spellID and texture then
 		local auraID = spellID..(tostring(caster or "UNKNOWN_CASTER"))
 		local instanceID = guid..auraID
 		auraList[guid] = auraList[guid] or {}
@@ -345,6 +345,7 @@ function mod:UpdateElement_Auras(frame)
 						numBuff = numBuff + 1
 						buffCache[numBuff] = aura
 					else
+						
 						numDebuff = numDebuff + 1
 						debuffCache[numDebuff] = aura
 					end
