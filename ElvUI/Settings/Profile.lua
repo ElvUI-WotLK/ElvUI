@@ -182,8 +182,8 @@ P["nameplates"] = {
 	["showEnemyCombat"] = "DISABLED",
 
 	["clampToScreen"] = false,
-	["useTargetGlow"] = true,
-
+	["targetGlow"] = "style2",
+	["glowColor"] = {r = 77/255, g = 179/255, b = 255/255, a = 1},
 	["castColor"] = {r = 1, g = 208/255, b = 0},
 	["castNoInterruptColor"] = {r = 0.78, g = 0.25, b = 0.25},
 	["reactions"] = {
@@ -198,7 +198,7 @@ P["nameplates"] = {
 		["badColor"] = {r = 0.78, g = 0.25, b = 0.25},
 		["goodTransition"] = {r = 218/255, g = 197/255, b = 92/255},
 		["badTransition"] = {r = 235/255, g = 163/255, b = 40/255},
-		["beingTankedByTankColor"] = {r = .8, g = 0.1,b = 1},
+		["beingTankedByTankColor"] = {r = .8, g = 0.1, b = 1},
 		["beingTankedByTank"] = true,
 		["goodScale"] = 0.8,
 		["badScale"] = 1.2,

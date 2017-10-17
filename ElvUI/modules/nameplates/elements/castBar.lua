@@ -58,12 +58,34 @@ function mod:UpdateElement_CastBarOnValueChanged(value)
 	frame.CastBar:SetStatusBarColor(color.r, color.g, color.b)
 end
 
+local function updateGlowPosition(frame)
+	if not frame.Glow2 then return end
+	local scale = 1
+	if mod.db.useTargetScale then
+		if mod.db.targetScale >= 0.75 then
+			scale = mod.db.targetScale
+		else
+			scale = 0.75
+		end
+	end
+	local size = (E.Border*10)*scale
+	if frame.CastBar:IsShown() then
+		frame.Glow2:SetPoint("TOPLEFT", frame.HealthBar, "TOPLEFT", -E:Scale(2+size*2), E:Scale(2+size))
+		frame.Glow2:SetPoint("BOTTOMRIGHT", frame.CastBar, "BOTTOMRIGHT", E:Scale(4+size*2), -E:Scale(4+size))
+	else
+		frame.Glow2:SetPoint("TOPLEFT", frame.HealthBar, "TOPLEFT", -E:Scale(size*2), E:Scale(size))
+		frame.Glow2:SetPoint("BOTTOMRIGHT", frame.HealthBar, "BOTTOMRIGHT", E:Scale(size*2), -E:Scale(size))
+	end
+end
+
 function mod:UpdateElement_CastBarOnShow()
 	self:GetParent().UnitFrame.CastBar:Show()
+	updateGlowPosition(self:GetParent().UnitFrame)
 end
 
 function mod:UpdateElement_CastBarOnHide()
 	self:GetParent().UnitFrame.CastBar:Hide()
+	updateGlowPosition(self:GetParent().UnitFrame)
 end
 
 function mod:ConfigureElement_CastBar(frame)
@@ -104,7 +126,6 @@ end
 function mod:ConstructElement_CastBar(parent)
 	local frame = CreateFrame("StatusBar", nil, parent)
 	self:StyleFrame(frame)
-	frame:SetFrameLevel(parent:GetFrameLevel())
 
 	frame.Icon = CreateFrame("Frame", nil, frame)
 	frame.Icon.texture = frame.Icon:CreateTexture(nil, "BORDER")

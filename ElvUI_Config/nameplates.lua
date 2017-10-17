@@ -2277,36 +2277,8 @@ E.Options.args.nameplate = {
 								["OVERLAP"] = L["Overlapping Nameplates"],
 							},
 						},
-						useTargetGlow = {
-							order = 2,
-							type = "toggle",
-							name = L["Use Target Glow"],
-						},
-						useTargetScale = {
-							order = 3,
-							type = "toggle",
-							name = L["Use Target Scale"],
-							desc = L["Enable/Disable the scaling of targetted nameplates."],
-						},
-						targetScale = {
-							order = 4,
-							type = "range",
-							name = L["Target Scale"],
-							desc = L["Scale of the nameplate that is targetted."],
-							min = 0.3, max = 2, step = 0.01,
-							isPercent = true,
-							disabled = function() return E.db.nameplates.useTargetScale ~= true end,
-						},
-						nonTargetTransparency = {
-							name = L["Non-Target Transparency"],
-							desc = L["Set the transparency level of nameplates that are not the target nameplate."],
-							type = "range",
-							min = 0, max = 1, step = 0.01,
-							isPercent = true,
-							order = 8,
-						},
 						lowHealthThreshold = {
-							order = 9,
+							order = 2,
 							name = L["Low Health Threshold"],
 							desc = L["Make the unitframe glow yellow when it is below this percent of health, it will glow red when the health value is half of this value."],
 							type = "range",
@@ -2314,7 +2286,7 @@ E.Options.args.nameplate = {
 							min = 0, max = 1, step = 0.01,
 						},
 						showEnemyCombat = {
-							order = 10,
+							order = 3,
 							type = "select",
 							name = L["Enemy Combat Toggle"],
 							desc = L["Control enemy nameplates toggling on or off when in combat."],
@@ -2329,7 +2301,7 @@ E.Options.args.nameplate = {
 							end,
 						},
 						showFriendlyCombat = {
-							order = 11,
+							order = 4,
 							type = "select",
 							name = L["Friendly Combat Toggle"],
 							desc = L["Control friendly nameplates toggling on or off when in combat."],
@@ -2342,6 +2314,79 @@ E.Options.args.nameplate = {
 								E.db.nameplates[ info[#info] ] = value;
 								NP:PLAYER_REGEN_ENABLED();
 							end
+						},
+						targetedNamePlate = {
+							order = 5,
+							type = "group",
+							guiInline = true,
+							name = L["Targeted Nameplate"],
+							get = function(info) return E.db.nameplates[ info[#info] ] end,
+							set = function(info, value) E.db.nameplates[ info[#info] ] = value; NP:ConfigureAll() end,
+							args = {
+								useTargetScale = {
+									order = 1,
+									type = "toggle",
+									name = L["Use Target Scale"],
+									desc = L["Enable/Disable the scaling of targetted nameplates."],
+								},
+								targetScale = {
+									order = 2,
+									type = "range",
+									isPercent = true,
+									name = L["Target Scale"],
+									desc = L["Scale of the nameplate that is targetted."],
+									min = 0.3, max = 2, step = 0.01,
+									disabled = function() return E.db.nameplates.useTargetScale ~= true end,
+								},
+								nonTargetTransparency = {
+									order = 3,
+									type = "range",
+									isPercent = true,
+									name = L["Non-Target Transparency"],
+									desc = L["Set the transparency level of nameplates that are not the target nameplate."],
+									min = 0, max = 1, step = 0.01,
+								},
+								spacer1 = {
+									order = 4,
+									type = "description",
+									name = " ",
+								},
+								glowColor = {
+									order = 5,
+									type = "color",
+									name = L["Target Indicator Color"],
+									hasAlpha = true,
+									get = function(info)
+										local t = E.db.nameplates.glowColor
+										local d = P.nameplates.glowColor
+										return t.r, t.g, t.b, t.a, d.r, d.g, d.b, d.a
+									end,
+									set = function(info, r, g, b, a)
+										local t = E.db.nameplates.glowColor
+										t.r, t.g, t.b, t.a = r, g, b, a
+										NP:ConfigureAll()
+									end,
+								},
+								targetGlow = {
+									order = 6,
+									type = "select",
+									name = L["Target Indicator"],
+									customWidth = 225,
+									get = function(info) return E.db.nameplates.targetGlow end,
+									set = function(info, value) E.db.nameplates.targetGlow = value; NP:ConfigureAll() end,
+									values = {
+										["none"] = NONE,
+										["style1"] = L["Border Glow"],
+										["style2"] = L["Background Glow"],
+										["style3"] = L["Top Arrow"],
+										["style4"] = L["Side Arrows"],
+										["style5"] = L["Border Glow"].." + "..L["Top Arrow"],
+										["style6"] = L["Background Glow"].." + "..L["Top Arrow"],
+										["style7"] = L["Border Glow"].." + "..L["Side Arrows"],
+										["style8"] = L["Background Glow"].." + "..L["Side Arrows"],
+									},
+								},
+							}
 						}
 					}
 				},

@@ -344,6 +344,10 @@ function mod:OnHide()
 	mod:HideAuraIcons(self.UnitFrame.Debuffs)
 	self.UnitFrame.Glow.r, self.UnitFrame.Glow.g, self.UnitFrame.Glow.b = nil, nil, nil
 	self.UnitFrame.Glow:Hide()
+	self.UnitFrame.Glow2:Hide()
+	self.UnitFrame.TopArrow:Hide()
+	self.UnitFrame.LeftArrow:Hide()
+	self.UnitFrame.RightArrow:Hide()
 	self.UnitFrame.HealthBar.r, self.UnitFrame.HealthBar.g, self.UnitFrame.HealthBar.b = nil, nil, nil
 	self.UnitFrame.HealthBar:Hide()
 	self.UnitFrame.oldCastBar:Hide()
@@ -393,6 +397,13 @@ function mod:UpdateElement_All(frame, noTargetFrame, filterIgnore)
 		mod:UpdateElement_Health(frame)
 		mod:UpdateElement_HealthColor(frame)
 		mod:UpdateElement_Auras(frame)
+	else
+		-- make sure we hide the arrows and/or glow after disabling the healthbar
+		if frame.TopArrow and frame.TopArrow:IsShown() then frame.TopArrow:Hide() end
+		if frame.LeftArrow and frame.LeftArrow:IsShown() then frame.LeftArrow:Hide() end
+		if frame.RightArrow and frame.RightArrow:IsShown() then frame.RightArrow:Hide() end
+		if frame.Glow2 and frame.Glow2:IsShown() then frame.Glow2:Hide() end
+		if frame.Glow and frame.Glow:IsShown() then frame.Glow:Hide() end
 	end
 	mod:UpdateElement_RaidIcon(frame)
 	mod:UpdateElement_HealerIcon(frame)
