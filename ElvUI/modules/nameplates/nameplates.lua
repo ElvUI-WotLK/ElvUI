@@ -69,7 +69,7 @@ function mod:SetTargetFrame(frame)
 	local targetExists = UnitExists("target") == 1
 	if targetExists and frame:GetParent():IsShown() and frame:GetParent():GetFrameLevel() == 20 then
 		if self.db.useTargetScale then
-			self:SetFrameScale(frame, (frame.ActionScale or 1) * self.db.targetScale * (frame.ThreatScale or 1))
+			self:SetFrameScale(frame, (frame.ActionScale or 1) * (frame.ThreatScale or 1) * self.db.targetScale)
 		end
 		frame.isTarget = true
 		frame.unit = "target"

@@ -208,7 +208,7 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 		frame.ActionScale = nil
 		if self.db.useTargetScale then
 			if frame.isTarget then
-				self:SetFrameScale(frame, self.db.targetScale * (frame.ThreatScale or 1))
+				self:SetFrameScale(frame, (frame.ThreatScale or 1) * self.db.targetScale)
 			else
 				self:SetFrameScale(frame, frame.ThreatScale or 1)
 			end
@@ -339,23 +339,6 @@ function mod:StyleFilterConditionCheck(frame, filter, trigger, failed)
 		failed = not condition
 	end
 
-	--Try to match by classification conditions
-	if not failed and (trigger.classification.worldboss or trigger.classification.rareelite or trigger.classification.elite or trigger.classification.rare or trigger.classification.normal or trigger.classification.trivial or trigger.classification.minus) then
-		condition = false
-		classification = UnitClassification(frame.displayedUnit)
-		if classification
-		and ((trigger.classification.worldboss and classification == "worldboss")
-		or (trigger.classification.rareelite   and classification == "rareelite")
-		or (trigger.classification.elite	   and classification == "elite")
-		or (trigger.classification.rare		   and classification == "rare")
-		or (trigger.classification.normal	   and classification == "normal")
-		or (trigger.classification.trivial	   and classification == "trivial")
-		or (trigger.classification.minus	   and classification == "minus")) then
-			condition = true
-		end
-		failed = not condition
-	end
-
 	--Try to match by instance conditions
 	if not failed and (trigger.instanceType.none or trigger.instanceType.scenario or trigger.instanceType.party or trigger.instanceType.raid or trigger.instanceType.arena or trigger.instanceType.pvp) then
 		condition = false
@@ -422,19 +405,14 @@ function mod:StyleFilterConditionCheck(frame, filter, trigger, failed)
 		failed = not condition
 	end
 
-	--Try to match by Reaction (or Reputation) type
+	--Try to match by Reaction type
 	if not failed and trigger.reactionType and trigger.reactionType.enable then
-		reaction = (trigger.reactionType.reputation and UnitReaction(frame.displayedUnit, 'player')) or UnitReaction('player', frame.displayedUnit)
+		reaction = frame.UnitReaction
 		condition = false
 
-		if (reaction==1 and trigger.reactionType.hated)
-		or (reaction==2 and trigger.reactionType.hostile)
-		or (reaction==3 and trigger.reactionType.unfriendly)
+		if ((reaction==1 or reaction==2 or reaction==3) and trigger.reactionType.hostile)
 		or (reaction==4 and trigger.reactionType.neutral)
-		or (reaction==5 and trigger.reactionType.friendly)
-		or (reaction==6 and trigger.reactionType.honored)
-		or (reaction==7 and trigger.reactionType.revered)
-		or (reaction==8 and trigger.reactionType.exalted) then
+		or (reaction==5 and trigger.reactionType.friendly) then
 			condition = true
 		end
 
@@ -472,7 +450,6 @@ function mod:StyleFilterConditionCheck(frame, filter, trigger, failed)
 
 	--If failed is nil it means the filter is empty so we dont run FilterStyle
 	if failed == false then --The conditions didn't fail so pass to FilterStyle
-	
 		self:StyleFilterPass(frame, filter.actions, castbarTriggered);
 	end
 end

@@ -15,12 +15,14 @@ end
 function mod:UpdateElement_HealthColor(frame)
 	if not frame.HealthBar:IsShown() then return end
 
-	local r, g, b
+	local r, g, b, classColor, useClassColor
 	local scale = 1
 
 	local class = frame.UnitClass
-	local classColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class]
-	local useClassColor = mod.db.units[frame.UnitType].healthbar.useClassColor
+	if class then
+		classColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class]
+		useClassColor = mod.db.units[frame.UnitType].healthbar.useClassColor
+	end
 
 	if classColor and ((frame.UnitType == "FRIENDLY_PLAYER" and useClassColor) or (frame.UnitType == "ENEMY_PLAYER" and useClassColor)) then
 		r, g, b = classColor.r, classColor.g, classColor.b
@@ -53,11 +55,22 @@ function mod:UpdateElement_HealthColor(frame)
 				scale = 1
 			else
 				if E.Role == "Tank" then
-					r, g, b = mod.db.threat.badColor.r, mod.db.threat.badColor.g, mod.db.threat.badColor.b
-					scale = mod.db.threat.badScale
+					--Check if it is being tanked by an offtank.
+					--if self.db.threat.beingTankedByTank then
+					--	r, g, b = self.db.threat.beingTankedByTankColor.r, self.db.threat.beingTankedByTankColor.g, self.db.threat.beingTankedByTankColor.b
+					--	scale = self.db.threat.goodScale
+					--else
+						r, g, b = self.db.threat.badColor.r, self.db.threat.badColor.g, self.db.threat.badColor.b
+						scale = self.db.threat.badScale
+					--end
 				else
-					r, g, b = mod.db.threat.goodColor.r, mod.db.threat.goodColor.g, mod.db.threat.goodColor.b
-					scale = mod.db.threat.goodScale
+					--if self.db.threat.beingTankedByTank then
+					--	r, g, b = self.db.threat.beingTankedByTankColor.r, self.db.threat.beingTankedByTankColor.g, self.db.threat.beingTankedByTankColor.b
+					--	scale = self.db.threat.goodScale
+					--else
+						r, g, b = self.db.threat.goodColor.r, self.db.threat.goodColor.g, self.db.threat.goodColor.b
+						scale = self.db.threat.goodScale
+					--end
 				end
 			end
 		end

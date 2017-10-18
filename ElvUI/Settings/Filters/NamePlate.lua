@@ -5,41 +5,6 @@
 ]]
 local E, L, V, P, G, _ = unpack(select(2, ...)); --Engine
 
-G["nameplates"]["filter"] = {
-	--Army of the Dead
-	["Army of the Dead Ghoul"] = {
-		["enable"] = true,
-		["hide"] = true,
-		["customColor"] = false,
-		["color"] = {r = 104/255, g = 138/255, b = 217/255},
-		["customScale"] = 1,
-	},
-
-	--Hunter Trap
-	["Venomous Snake"] = {
-		["enable"] = true,
-		["hide"] = true,
-		["customColor"] = false,
-		["color"] = {r = 104/255, g = 138/255, b = 217/255},
-		["customScale"] = 1,
-	},
-
-	["Healing Tide Totem"] = {
-		enable = true,
-		hide = false,
-		customColor = true,
-		customScale = 1.1,
-		color = {r = 104/255, g = 138/255, b = 217/255}
-	},
-	["Dragonmaw War Banner"] = {
-		enable = true,
-		hide = false,
-		customColor = true,
-		customScale = 1.1,
-		color = {r = 255/255, g = 140/255, b = 200/255}
-	}
-}
-
 G["nameplates"]["filters"] = {
 	["Boss"] = {
 		["triggers"] = {
@@ -64,18 +29,8 @@ E["StyleFilterDefaults"] = {
 		["level"] = false,
 		["casting"] = {
 			["interruptible"] = false,
-			["spells"] = {},
+			["spells"] = {}
 		},
-		["classification"] = {
-			["worldboss"] = false,
-			["rareelite"] = false,
-			["elite"] = false,
-			["rare"] = false,
-			["normal"] = false,
-			["trivial"] = false,
-			["minus"] = false,
-		},
-		["class"] = {}, --this can stay empty we only will accept values that exist
 		["curlevel"] = 0,
 		["maxlevel"] = 0,
 		["minlevel"] = 0,
@@ -93,55 +48,47 @@ E["StyleFilterDefaults"] = {
 		},
 		["reactionType"] = {
 			["enabled"] = false,
-			["reputation"] = false,
-			["hated"] = false,
 			["hostile"] = false,
-			["unfriendly"] = false,
 			["neutral"] = false,
-			["friendly"] = false,
-			["honored"] = false,
-			["revered"] = false,
-			["exalted"] = false
+			["friendly"] = false
 		},
 		["instanceType"] = {
 			["none"] = false,
 			["party"] = false,
 			["raid"] = false,
 			["arena"] = false,
-			["pvp"] = false,
+			["pvp"] = false
 		},
 		["instanceDifficulty"] = {
 			["dungeon"] = {
 				["normal"] = false,
-				["heroic"] = false,
+				["heroic"] = false
 			},
 			["raid"] = {
 				["normal"] = false,
-				["heroic"] = false,
+				["heroic"] = false
 			}
 		},
 		["cooldowns"] = {
 			["names"] = {},
-			["mustHaveAll"] = false,
+			["mustHaveAll"] = false
 		},
 		["buffs"] = {
 			["mustHaveAll"] = false,
 			["missing"] = false,
 			["names"] = {},
 			["minTimeLeft"] = 0,
-			["maxTimeLeft"] = 0,
+			["maxTimeLeft"] = 0
 		},
 		["debuffs"] = {
 			["mustHaveAll"] = false,
 			["missing"] = false,
 			["names"] = {},
 			["minTimeLeft"] = 0,
-			["maxTimeLeft"] = 0,
+			["maxTimeLeft"] = 0
 		},
 		["inCombat"] = false,
 		["outOfCombat"] = false,
-		["inCombatUnit"] = false,
-		["outOfCombatUnit"] = false,
 	},
 	["actions"] = {
 		["color"] = {
@@ -154,18 +101,18 @@ E["StyleFilterDefaults"] = {
 		},
 		["texture"] = {
 			["enable"] = false,
-			["texture"] = "ElvUI Norm",
+			["texture"] = "ElvUI Norm"
 		},
 		["flash"] = {
 			["enable"] = false,
 			["color"] = {r=1,g=1,b=1,a=1},
-			["speed"] = 4,
+			["speed"] = 4
 		},
 		["hide"] = false,
 		["nameOnly"] = false,
 		["scale"] = 1.0,
-		["alpha"] = -1,
-	},
+		["alpha"] = -1
+	}
 }
 
 G.nameplates.specialFilters = {
