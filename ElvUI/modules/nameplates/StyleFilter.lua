@@ -134,8 +134,11 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 		frame.StyleChanged = true
 		frame.ScaleChanged = true
 		local scale = actions.scale
+		frame.ActionScale = scale
 		if frame.isTarget and self.db.useTargetScale then
 			scale = scale * self.db.targetScale
+		else
+			scale = scale * (frame.ThreatScale or 1)
 		end
 		self:SetFrameScale(frame, scale)
 	end
@@ -202,9 +205,10 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 	end
 	if ScaleChanged then
 		frame.ScaleChanged = nil
+		frame.ActionScale = nil
 		if self.db.useTargetScale then
 			if frame.isTarget then
-				self:SetFrameScale(frame, self.db.targetScale)
+				self:SetFrameScale(frame, self.db.targetScale * (frame.ThreatScale or 1))
 			else
 				self:SetFrameScale(frame, frame.ThreatScale or 1)
 			end
@@ -214,7 +218,7 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 		frame.AlphaChanged = nil
 		if frame.isTarget then
 			frame:SetAlpha(1)
-		elseif not UnitIsUnit(frame.displayedUnit, "player") then
+		else
 			frame:SetAlpha(1 - self.db.nonTargetTransparency)
 		end
 	end

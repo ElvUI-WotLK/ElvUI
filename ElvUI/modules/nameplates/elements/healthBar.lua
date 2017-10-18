@@ -13,7 +13,7 @@ function mod:UpdateElement_HealthOnValueChanged(health)
 end
 
 function mod:UpdateElement_HealthColor(frame)
-	if(not frame.HealthBar:IsShown()) then return end
+	if not frame.HealthBar:IsShown() then return end
 
 	local r, g, b
 	local scale = 1
@@ -79,19 +79,13 @@ function mod:UpdateElement_HealthColor(frame)
 	end
 
 	if r ~= frame.HealthBar.r or g ~= frame.HealthBar.g or b ~= frame.HealthBar.b then
-		if not frame.CustomColor then
-			frame.HealthBar:SetStatusBarColor(r, g, b)
-			frame.HealthBar.r, frame.HealthBar.g, frame.HealthBar.b = r, g, b
-		else
-			local CustomColor = frame.CustomColor
-			frame.HealthBar:SetStatusBarColor(CustomColor.r, CustomColor.g, CustomColor.b)
-			frame.HealthBar.r, frame.HealthBar.g, frame.HealthBar.b = CustomColor.r, CustomColor.g, CustomColor.b
-		end
+		frame.HealthBar:SetStatusBarColor(r, g, b)
+		frame.HealthBar.r, frame.HealthBar.g, frame.HealthBar.b = r, g, b
 	end
 
-	if(not frame.isTarget or not self.db.useTargetScale) then
+	if frame.ThreatScale ~= scale and (not frame.isTarget or not self.db.useTargetScale) then
 		frame.ThreatScale = scale
-		self:SetFrameScale(frame, scale)
+		self:SetFrameScale(frame, (frame.ActionScale or 1) * scale)
 	end
 end
 
