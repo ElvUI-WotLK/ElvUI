@@ -117,7 +117,6 @@ function mod:SetTargetFrame(frame)
 	mod:UpdateElement_Glow(frame)
 	mod:UpdateElement_HealthColor(frame)
 	mod:UpdateElement_CPoints(frame)
-	--print(frame.ActionScale)
 	mod:UpdateElement_Filters(frame, "PLAYER_TARGET_CHANGED")
 
 	return frame.isTarget
