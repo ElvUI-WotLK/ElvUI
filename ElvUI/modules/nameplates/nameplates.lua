@@ -366,6 +366,7 @@ function mod:OnHide()
 	self.UnitFrame.UnitName = nil
 	self.UnitFrame.UnitType = nil
 	self.UnitFrame.ThreatScale = nil
+	self.UnitFrame.ActionScale = nil
 
 	self.UnitFrame.ThreatReaction = nil
 	self.UnitFrame.guid = nil
