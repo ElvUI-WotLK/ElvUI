@@ -44,7 +44,7 @@ local coordFrame = CreateFrame("Frame")
 coordFrame:SetScript("OnUpdate", UpdateCoords)
 coordFrame:Hide()
 
-local function CreateMover(parent, name, text, overlay, snapOffset, postdrag)
+local function CreateMover(parent, name, text, overlay, snapOffset, postdrag, shouldDisable)
 	if not parent then return end --If for some reason the parent isnt loaded yet
 	if E.CreatedMovers[name].Created then return end
 
@@ -69,6 +69,7 @@ local function CreateMover(parent, name, text, overlay, snapOffset, postdrag)
 	f.postdrag = postdrag
 	f.overlay = overlay
 	f.snapOffset = snapOffset or -2;
+	f.shouldDisable = shouldDisable
 
 	f:SetFrameLevel(parent:GetFrameLevel() + 1);
 	if(overlay == true) then
@@ -330,7 +331,7 @@ function E:SaveMoverDefaultPosition(name)
 	E.CreatedMovers[name]["postdrag"](_G[name], E:GetScreenQuadrant(_G[name]))
 end
 
-function E:CreateMover(parent, name, text, overlay, snapoffset, postdrag, moverTypes)
+function E:CreateMover(parent, name, text, overlay, snapoffset, postdrag, moverTypes, shouldDisable)
 	if not moverTypes then moverTypes = "ALL,GENERAL" end
 
 	if E.CreatedMovers[name] == nil then
@@ -341,6 +342,7 @@ function E:CreateMover(parent, name, text, overlay, snapoffset, postdrag, moverT
 		E.CreatedMovers[name]["postdrag"] = postdrag
 		E.CreatedMovers[name]["snapoffset"] = snapOffset
 		E.CreatedMovers[name]["point"] = GetPoint(parent)
+		E.CreatedMovers[name]["shouldDisable"] = shouldDisable
 
 		E.CreatedMovers[name]["type"] = {}
 		local types = {split(",", moverTypes)}
@@ -350,7 +352,7 @@ function E:CreateMover(parent, name, text, overlay, snapoffset, postdrag, moverT
 		end
 	end
 
-	CreateMover(parent, name, text, overlay, snapoffset, postdrag)
+	CreateMover(parent, name, text, overlay, snapoffset, postdrag, shouldDisable)
 end
 
 function E:ToggleMovers(show, moverType)
@@ -454,7 +456,10 @@ end
 --Profile Change
 function E:SetMoversPositions()
 	for name in pairs(E.DisabledMovers) do
-		E:EnableMover(name);
+		local shouldDisable = ((E.DisabledMovers[name].shouldDisable and E.DisabledMovers[name]["shouldDisable"]()) or false)
+		if not shouldDisable then
+			E:EnableMover(name)
+		end
 	end
 
 	for name, _ in pairs(E.CreatedMovers) do
