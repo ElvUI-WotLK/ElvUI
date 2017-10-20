@@ -304,10 +304,6 @@ function M:LoadLoot()
 
 	E:CreateMover(lootFrameHolder, "LootFrameMover", L["Loot Frame"])
 
-	if(GetCVar("lootUnderMouse") == "1") then
-		E:DisableMover("LootFrameMover");
-	end
-
 	-- Fuzz
 	LootFrame:UnregisterAllEvents()
 	tinsert(UISpecialFrames, "ElvLootFrame")
