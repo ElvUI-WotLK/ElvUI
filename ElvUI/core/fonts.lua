@@ -83,6 +83,6 @@ function E:UpdateBlizzardFonts()
 		SetFont(SubZoneTextString,					NORMAL, 25, MONOCHROME .. "OUTLINE");
 		SetFont(PVPInfoTextString,					NORMAL, 22, MONOCHROME .. "OUTLINE");
 		SetFont(PVPArenaTextString,					NORMAL, 22, MONOCHROME .. "OUTLINE");
-		SetFont(CombatTextFont,						COMBAT, 100, MONOCHROME .. "OUTLINE");
+		SetFont(CombatTextFont,						COMBAT, 25, MONOCHROME .. "OUTLINE");
 	end
 end
