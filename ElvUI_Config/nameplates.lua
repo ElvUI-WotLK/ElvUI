@@ -2398,7 +2398,7 @@ E.Options.args.nameplate = {
 						good = {
 							order = 3,
 							type = "color",
-							name = L["Friendly NPC"],
+							name = L["FRIENDLY_NPC"],
 							hasAlpha = false
 						},
 						tapped = {
@@ -2410,7 +2410,7 @@ E.Options.args.nameplate = {
 						friendlyPlayer = {
 							order = 5,
 							type = "color",
-							name = L["Friendly Player"],
+							name = L["FRIENDLY_PLAYER"],
 							hasAlpha = false
 						}
 					}
