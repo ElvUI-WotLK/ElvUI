@@ -133,12 +133,10 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 	if ScaleChanged then
 		frame.StyleChanged = true
 		frame.ScaleChanged = true
-		local scale = actions.scale
+		local scale = actions.scale * (frame.ThreatScale or 1)
 		frame.ActionScale = scale
 		if frame.isTarget and self.db.useTargetScale then
 			scale = scale * self.db.targetScale
-		else
-			scale = scale * (frame.ThreatScale or 1)
 		end
 		self:SetFrameScale(frame, scale)
 	end
@@ -206,13 +204,11 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 	if ScaleChanged then
 		frame.ScaleChanged = nil
 		frame.ActionScale = nil
-		if self.db.useTargetScale then
-			if frame.isTarget then
-				self:SetFrameScale(frame, (frame.ThreatScale or 1) * self.db.targetScale)
-			else
-				self:SetFrameScale(frame, frame.ThreatScale or 1)
-			end
+		local scale = frame.ThreatScale or 1
+		if frame.isTarget and self.db.useTargetScale then
+			scale = scale * self.db.targetScale
 		end
+		self:SetFrameScale(frame, scale)
 	end
 	if AlphaChanged then
 		frame.AlphaChanged = nil
