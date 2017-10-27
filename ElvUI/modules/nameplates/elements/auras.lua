@@ -503,12 +503,22 @@ function mod:CreateAuraIcon(parent)
 	aura.icon:SetTexCoord(unpack(E.TexCoords))
 
 	aura.timeLeft = aura:CreateFontString(nil, "OVERLAY")
-	aura.timeLeft:SetPoint("TOPLEFT", 2, 2)
-	aura.timeLeft:SetFont(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline)
+	aura.timeLeft:SetFont(LSM:Fetch("font", mod.db.durationFont), mod.db.durationFontSize, mod.db.durationFontOutline)
+	aura.timeLeft:ClearAllPoints()
+	if mod.db.durationPosition == "TOPLEFT" then
+		aura.timeLeft:Point("TOPLEFT", 1, 1)
+	elseif mod.db.durationPosition == "BOTTOMLEFT" then
+		aura.timeLeft:Point("BOTTOMLEFT", 1, 1)
+	elseif mod.db.durationPosition == "TOPRIGHT" then
+		aura.timeLeft:Point("TOPRIGHT", 1, 1)
+	else
+		aura.timeLeft:Point("CENTER", 0, 0)
+	end
 
 	aura.count = aura:CreateFontString(nil, "OVERLAY")
-	aura.count:SetPoint("BOTTOMRIGHT")
-	aura.count:SetFont(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline)
+	aura.count:SetFont(LSM:Fetch("font", self.db.stackFont), self.db.stackFontSize, self.db.stackFontOutline)
+	aura.count:Point("BOTTOMRIGHT", 1, 1)
+
 	aura.Poll = parent.PollFunction
 
 	return aura
@@ -544,6 +554,25 @@ function mod:UpdateAuraIcons(auras)
 		auras.icons[i]:ClearAllPoints()
 		auras.icons[i]:Hide()
 		auras.icons[i]:SetHeight(auras.db.baseHeight or 18)
+
+		if auras.icons[i].count then
+			auras.icons[i].count:SetFont(LSM:Fetch("font", self.db.stackFont), self.db.stackFontSize, self.db.stackFontOutline)
+		end
+
+		if auras.icons[i].timeLeft then
+			auras.icons[i].timeLeft:SetFont(LSM:Fetch("font", mod.db.durationFont), mod.db.durationFontSize, mod.db.durationFontOutline)
+
+			auras.icons[i].timeLeft:ClearAllPoints()
+			if mod.db.durationPosition == "TOPLEFT" then
+				auras.icons[i].timeLeft:Point("TOPLEFT", 1, 1)
+			elseif mod.db.durationPosition == "BOTTOMLEFT" then
+				auras.icons[i].timeLeft:Point("BOTTOMLEFT", 1, 1)
+			elseif mod.db.durationPosition == "TOPRIGHT" then
+				auras.icons[i].timeLeft:Point("TOPRIGHT", 1, 1)
+			else
+				auras.icons[i].timeLeft:Point("CENTER", 0, 0)
+			end
+		end
 
 		if(auras.side == "LEFT") then
 			if(i == 1) then

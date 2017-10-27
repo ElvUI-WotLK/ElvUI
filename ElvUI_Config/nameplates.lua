@@ -1525,34 +1525,46 @@ local function GetUnitSettings(unit, name)
 				set = function(info, value) E.db.nameplates.units[unit].castbar[ info[#info] ] = value; NP:ConfigureAll(); end,
 				args = {
 					header = {
-						order = 0,
+						order = 1,
 						type = "header",
 						name = L["Cast Bar"]
 					},
+					enable = {
+						order = 2,
+						type = "toggle",
+						name = L["Enable"]
+					},
 					hideSpellName = {
-						order = 1,
+						order = 3,
 						type = "toggle",
 						name = L["Hide Spell Name"]
 					},
 					hideTime = {
-						order = 2,
+						order = 4,
 						type = "toggle",
 						name = L["Hide Time"]
 					},
 					height = {
-						order = 3,
+						order = 5,
 						type = "range",
 						name = L["Height"],
 						min = 4, max = 20, step = 1
 					},
 					offset = {
-						order = 4,
+						order = 6,
 						type = "range",
 						name = L["Offset"],
 						min = 0, max = 30, step = 1
 					},
+					timeToHold = {
+						order = 7,
+						type = "range",
+						name = L["Time To Hold"],
+						desc = L["How many seconds the castbar should stay visible after the cast failed or was interrupted."],
+						min = 0, max = 4, step = 0.1
+					},
 					castTimeFormat = {
-						order = 5,
+						order = 8,
 						type = "select",
 						name = L["Cast Time Format"],
 						values = {
@@ -1562,13 +1574,22 @@ local function GetUnitSettings(unit, name)
 						}
 					},
 					channelTimeFormat = {
-						order = 6,
+						order = 9,
 						type = "select",
 						name = L["Channel Time Format"],
 						values = {
 							["CURRENT"] = L["Current"],
 							["CURRENT_MAX"] = L["Current / Max"],
 							["REMAINING"] = L["Remaining"]
+						}
+					},
+					iconPosition = {
+						order = 10,
+						type = "select",
+						name = L["Icon Position"],
+						values = {
+							["LEFT"] = L["Left"],
+							["RIGHT"] = L["Right"]
 						}
 					}
 				}
@@ -2012,17 +2033,17 @@ E.Options.args.nameplate = {
 	get = function(info) return E.db.nameplates[ info[#info] ] end,
 	set = function(info, value) E.db.nameplates[ info[#info] ] = value; NP:ConfigureAll(); end,
 	args = {
-		intro = {
-			order = 1,
-			type = "description",
-			name = L["NAMEPLATE_DESC"]
-		},
 		enable = {
-			order = 2,
+			order = 1,
 			type = "toggle",
 			name = L["Enable"],
-			get = function(info) return E.private.nameplates[ info[#info] ]; end,
-			set = function(info, value) E.private.nameplates[ info[#info] ] = value; E:StaticPopup_Show("PRIVATE_RL"); end
+			get = function(info) return E.private.nameplates[ info[#info] ] end,
+			set = function(info, value) E.private.nameplates[ info[#info] ] = value E:StaticPopup_Show("PRIVATE_RL") end
+		},
+		intro = {
+			order = 2,
+			type = "description",
+			name = L["NAMEPLATE_DESC"]
 		},
 		header = {
 			order = 3,
@@ -2037,40 +2058,97 @@ E.Options.args.nameplate = {
 		generalShortcut = {
 			order = 5,
 			type = "execute",
-			name = L["General Options"],
-			func = function() ACD:SelectGroup("ElvUI", "nameplate", "generalGroup"); end
+			name = L["General"],
+			buttonElvUI = true,
+			func = function() ACD:SelectGroup("ElvUI", "nameplate", "generalGroup", "general") end,
+			disabled = function() return not E.NamePlates end
 		},
-		friendlyPlayerShortcut = {
+		fontsShortcut = {
 			order = 6,
 			type = "execute",
-			name = L["Friendly Player Frames"],
-			func = function() ACD:SelectGroup("ElvUI", "nameplate", "friendlyPlayerGroup"); end
+			name = L["Fonts"],
+			buttonElvUI = true,
+			func = function() ACD:SelectGroup("ElvUI", "nameplate", "generalGroup", "fontGroup") end,
+			disabled = function() return not E.NamePlates end
 		},
-		enemyPlayerShortcut = {
+		threatShortcut = {
 			order = 7,
 			type = "execute",
-			name = L["Enemy Player Frames"],
-			func = function() ACD:SelectGroup("ElvUI", "nameplate", "enemyPlayerGroup"); end
+			name = L["Threat"],
+			buttonElvUI = true,
+			func = function() ACD:SelectGroup("ElvUI", "nameplate", "generalGroup", "threatGroup") end,
+			disabled = function() return not E.NamePlates end
 		},
-		friendlyNPCShortcut = {
+		spacer2 = {
 			order = 8,
-			type = "execute",
-			name = L["Friendly NPC Frames"],
-			func = function() ACD:SelectGroup("ElvUI", "nameplate", "friendlyNPCGroup"); end
+			type = "description",
+			name = " "
 		},
-		enemyNPCShortcut = {
+		castBarShortcut = {
 			order = 9,
 			type = "execute",
+			name = L["Cast Bar"],
+			buttonElvUI = true,
+			func = function() ACD:SelectGroup("ElvUI", "nameplate", "generalGroup", "castGroup") end,
+			disabled = function() return not E.NamePlates end
+		},
+		reactionShortcut = {
+			order = 10,
+			type = "execute",
+			name = L["Reaction Colors"],
+			buttonElvUI = true,
+			func = function() ACD:SelectGroup("ElvUI", "nameplate", "generalGroup", "reactions") end,
+			disabled = function() return not E.NamePlates end
+		},
+		friendlyPlayerShortcut = {
+			order = 11,
+			type = "execute",
+			name = L["Friendly Player Frames"],
+			buttonElvUI = true,
+			func = function() ACD:SelectGroup("ElvUI", "nameplate", "friendlyPlayerGroup") end,
+			disabled = function() return not E.NamePlates end
+		},
+		spacer3 = {
+			order = 12,
+			type = "description",
+			name = " "
+		},
+		enemyPlayerShortcut = {
+			order = 13,
+			type = "execute",
+			name = L["Enemy Player Frames"],
+			buttonElvUI = true,
+			func = function() ACD:SelectGroup("ElvUI", "nameplate", "enemyPlayerGroup") end,
+			disabled = function() return not E.NamePlates end
+		},
+		friendlyNPCShortcut = {
+			order = 14,
+			type = "execute",
+			name = L["Friendly NPC Frames"],
+			buttonElvUI = true,
+			func = function() ACD:SelectGroup("ElvUI", "nameplate", "friendlyNPCGroup") end,
+			disabled = function() return not E.NamePlates end
+		},
+		enemyNPCShortcut = {
+			order = 15,
+			type = "execute",
 			name = L["Enemy NPC Frames"],
-			func = function() ACD:SelectGroup("ElvUI", "nameplate", "enemyNPCGroup"); end
+			buttonElvUI = true,
+			func = function() ACD:SelectGroup("ElvUI", "nameplate", "enemyNPCGroup") end,
+			disabled = function() return not E.NamePlates end
+		},
+		spacer4 = {
+			order = 16,
+			type = "description",
+			name = " "
 		},
 		filtersShortcut = {
-			order = 10,
+			order = 17,
 			type = "execute",
 			name = L["Style Filter"],
 			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "nameplate", "filters") end,
-			disabled = function() return not E.NamePlates; end,
+			disabled = function() return not E.NamePlates end
 		},
 		generalGroup = {
 			order = 20,
@@ -2148,7 +2226,7 @@ E.Options.args.nameplate = {
 							end,
 						},
 						targetedNamePlate = {
-							order = 5,
+							order = 6,
 							type = "group",
 							guiInline = true,
 							name = L["Targeted Nameplate"],
@@ -2218,6 +2296,12 @@ E.Options.args.nameplate = {
 										["style8"] = L["Background Glow"].." + "..L["Side Arrows"],
 									},
 								},
+								alwaysShowTargetHealth = {
+									order = 7,
+									type = "toggle",
+									name = L["Always Show Target Health"],
+									customWidth = 200,
+								}
 							}
 						}
 					}
@@ -2227,28 +2311,122 @@ E.Options.args.nameplate = {
 					type = "group",
 					name = L["Fonts"],
 					args = {
-						font = {
+						header = {
+							order = 1,
+							type = "header",
+							name = L["Fonts"]
+						},
+						name = {
+							order = 2,
+							type = "group",
+							name = L["Default Font"],
+							guiInline = true,
+							args = {
+								font = {
+									order = 1,
+									type = "select", dialogControl = "LSM30_Font",
+									name = L["Font"],
+									values = AceGUIWidgetLSMlists.font
+								},
+								fontSize = {
+									order = 2,
+									type = "range",
+									name = FONT_SIZE,
+									min = 4, max = 23, step = 1
+								},
+								fontOutline = {
+									order = 3,
+									type = "select",
+									name = L["Font Outline"],
+									desc = L["Set the font outline."],
+									values = {
+										["NONE"] = NONE,
+										["OUTLINE"] = "OUTLINE",
+										["MONOCHROMEOUTLINE"] = "MONOCROMEOUTLINE",
+										["THICKOUTLINE"] = "THICKOUTLINE"
+									}
+								}
+							}
+						},
+						duration = {
+							order = 3,
+							type = "group",
+							name = L["Duration"],
+							guiInline = true,
+							args = {
+								durationFont = {
+									order = 1,
+									type = "select", dialogControl = "LSM30_Font",
+									name = L["Font"],
+									values = AceGUIWidgetLSMlists.font,
+									set = function(info, value) E.db.nameplates[ info[#info] ] = value; NP:UpdatePlateFonts() end
+								},
+								durationFontSize = {
+									order = 2,
+									name = FONT_SIZE,
+									type = "range",
+									min = 4, max = 20, step = 1,
+									set = function(info, value) E.db.nameplates[ info[#info] ] = value; NP:UpdatePlateFonts() end
+								},
+								durationFontOutline = {
+									order = 3,
+									type = "select",
+									name = L["Font Outline"],
+									desc = L["Set the font outline."],
+									values = {
+										["NONE"] = NONE,
+										["OUTLINE"] = "OUTLINE",
+										["MONOCHROMEOUTLINE"] = "MONOCROMEOUTLINE",
+										["THICKOUTLINE"] = "THICKOUTLINE",
+									},
+									set = function(info, value) E.db.nameplates[ info[#info] ] = value; NP:UpdatePlateFonts() end
+								},
+								durationPosition = {
+									order = 4,
+									type = "select",
+									name = L["Position"],
+									values = {
+										["CENTER"] = L["Center"],
+										["TOPLEFT"] = "TOPLEFT",
+										["BOTTOMLEFT"] = "BOTTOMLEFT",
+										["TOPRIGHT"] = "TOPRIGHT"
+									}
+								}
+							}
+						},
+						stacks = {
 							order = 4,
-							type = "select", dialogControl = "LSM30_Font",
-							name = L["Font"],
-							values = AceGUIWidgetLSMlists.font
-						},
-						fontSize = {
-							order = 5,
-							type = "range",
-							name = L["Font Size"],
-							min = 4, max = 34, step = 1,
-						},
-						fontOutline = {
-							order = 6,
-							type = "select",
-							name = L["Font Outline"],
-							desc = L["Set the font outline."],
-							values = {
-								["NONE"] = L["None"],
-								["OUTLINE"] = "OUTLINE",
-								["MONOCHROMEOUTLINE"] = "MONOCROMEOUTLINE",
-								["THICKOUTLINE"] = "THICKOUTLINE"
+							type = "group",
+							name = L["Stack Counter"],
+							guiInline = true,
+							args = {
+								stackFont = {
+									order = 1,
+									type = "select", dialogControl = "LSM30_Font",
+									name = L["Font"],
+									values = AceGUIWidgetLSMlists.font,
+									set = function(info, value) E.db.nameplates[ info[#info] ] = value; NP:UpdatePlateFonts() end
+								},
+								stackFontSize = {
+									order = 2,
+									type = "range",
+									name = FONT_SIZE,
+									min = 4, max = 20, step = 1,
+									set = function(info, value) E.db.nameplates[ info[#info] ] = value; NP:UpdatePlateFonts() end
+								},
+								stackFontOutline = {
+									order = 3,
+									type = "select",
+									name = L["Font Outline"],
+									desc = L["Set the font outline."],
+									values = {
+										["NONE"] = NONE,
+										["OUTLINE"] = "OUTLINE",
+										["MONOCHROMEOUTLINE"] = "MONOCROMEOUTLINE",
+										["THICKOUTLINE"] = "THICKOUTLINE",
+									},
+									set = function(info, value) E.db.nameplates[ info[#info] ] = value; NP:UpdatePlateFonts() end
+								}
 							}
 						}
 					}

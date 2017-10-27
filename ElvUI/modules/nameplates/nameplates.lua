@@ -1,5 +1,6 @@
 local E, L, V, P, G = unpack(select(2, ...))
 local mod = E:NewModule("NamePlates", "AceHook-3.0", "AceEvent-3.0", "AceTimer-3.0")
+local LSM = LibStub("LibSharedMedia-3.0")
 
 local _G = _G
 local pairs, tonumber = pairs, tonumber
@@ -75,7 +76,7 @@ function mod:SetTargetFrame(frame)
 		frame.unit = "target"
 		frame.guid = UnitGUID("target")
 
-		if self.db.units[frame.UnitType].healthbar.enable ~= true then
+		if self.db.units[frame.UnitType].healthbar.enable ~= true and self.db.alwaysShowTargetHealth then
 			frame.Name:ClearAllPoints()
 			frame.Level:ClearAllPoints()
 			frame.HealthBar.r, frame.HealthBar.g, frame.HealthBar.b = nil, nil, nil
@@ -88,7 +89,15 @@ function mod:SetTargetFrame(frame)
 			self:UpdateElement_All(frame, true)
 		end
 
-		frame:SetAlpha(1)
+		if UnitCastingInfo("target") then
+			frame:GetScript("OnEvent")(frame, "UNIT_SPELLCAST_START", "target")
+		elseif UnitChannelInfo("target") then
+			frame:GetScript("OnEvent")(frame, "UNIT_SPELLCAST_CHANNEL_START", "target")
+		end
+
+		if targetExists then
+			frame:SetAlpha(1)
+		end
 
 		mod:UpdateElement_AurasByUnitID("target")
 	elseif frame.isTarget then
@@ -96,7 +105,7 @@ function mod:SetTargetFrame(frame)
 			self:SetFrameScale(frame, (frame.ThreatScale or 1))
 		end
 		frame.isTarget = nil
-
+		frame.CastBar:Hide() -- Bug
 		if self.db.units[frame.UnitType].healthbar.enable ~= true then
 			self:UpdateAllFrame(frame)
 		end
@@ -307,8 +316,8 @@ function mod:OnShow()
 	self.UnitFrame.Level:ClearAllPoints()
 	self.UnitFrame.Name:ClearAllPoints()
 
-	mod:ConfigureElement_HealthBar(self.UnitFrame)
-	if mod.db.units[unitType].healthbar.enable then
+	if mod.db.units[unitType].healthbar.enable or mod.db.alwaysShowTargetHealth then
+		mod:ConfigureElement_HealthBar(self.UnitFrame)
 		mod:ConfigureElement_CastBar(self.UnitFrame)
 		mod:ConfigureElement_Glow(self.UnitFrame)
 
@@ -326,6 +335,19 @@ function mod:OnShow()
 	mod:ConfigureElement_Level(self.UnitFrame)
 	mod:ConfigureElement_Name(self.UnitFrame)
 	mod:ConfigureElement_Elite(self.UnitFrame)
+
+	if mod.db.units[unitType].castbar.enable then
+		self.UnitFrame:RegisterEvent("UNIT_SPELLCAST_START")
+		self.UnitFrame:RegisterEvent("UNIT_SPELLCAST_STOP")
+		self.UnitFrame:RegisterEvent("UNIT_SPELLCAST_FAILED")
+		self.UnitFrame:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED")
+		self.UnitFrame:RegisterEvent("UNIT_SPELLCAST_DELAYED")
+		self.UnitFrame:RegisterEvent("UNIT_SPELLCAST_CHANNEL_START")
+		self.UnitFrame:RegisterEvent("UNIT_SPELLCAST_CHANNEL_UPDATE")
+		self.UnitFrame:RegisterEvent("UNIT_SPELLCAST_CHANNEL_STOP")
+		self.UnitFrame:RegisterEvent("UNIT_SPELLCAST_INTERRUPTIBLE")
+		self.UnitFrame:RegisterEvent("UNIT_SPELLCAST_NOT_INTERRUPTIBLE")
+	end
 
 	mod:UpdateElement_All(self.UnitFrame, nil, true)
 
@@ -395,9 +417,10 @@ function mod:ForEachPlate(functionToRun, ...)
 end
 
 function mod:UpdateElement_All(frame, noTargetFrame, filterIgnore)
-	if self.db.units[frame.UnitType].healthbar.enable or frame.isTarget then
+	if self.db.units[frame.UnitType].healthbar.enable or (frame.isTarget and self.db.alwaysShowTargetHealth) then
 		mod:UpdateElement_Health(frame)
 		mod:UpdateElement_HealthColor(frame)
+		mod:UpdateElement_Cast(frame)
 		mod:UpdateElement_Auras(frame)
 	else
 		-- make sure we hide the arrows and/or glow after disabling the healthbar
@@ -432,6 +455,7 @@ function mod:OnCreated(frame)
 
 	frame.UnitFrame = CreateFrame("Frame", nil, frame)
 	frame.UnitFrame:SetAllPoints()
+	frame.UnitFrame:SetScript("OnEvent", self.OnEvent)
 
 	frame.UnitFrame:SetFrameLevel(currentFrameLevel)
 
@@ -442,9 +466,9 @@ function mod:OnCreated(frame)
 	end
 
 	frame.UnitFrame.HealthBar = self:ConstructElement_HealthBar(frame.UnitFrame)
-	frame.UnitFrame.CastBar = self:ConstructElement_CastBar(frame.UnitFrame)
 	frame.UnitFrame.Level = self:ConstructElement_Level(frame.UnitFrame)
 	frame.UnitFrame.Name = self:ConstructElement_Name(frame.UnitFrame)
+	frame.UnitFrame.CastBar = self:ConstructElement_CastBar(frame.UnitFrame)
 	frame.UnitFrame.Glow = self:ConstructElement_Glow(frame.UnitFrame)
 	frame.UnitFrame.Elite = self:ConstructElement_Elite(frame.UnitFrame)
 	frame.UnitFrame.Buffs = self:ConstructElement_Auras(frame.UnitFrame, "LEFT")
@@ -485,12 +509,15 @@ function mod:OnCreated(frame)
 	frame:HookScript("OnShow", self.OnShow)
 	frame:HookScript("OnHide", self.OnHide)
 	HealthBar:HookScript("OnValueChanged", self.UpdateElement_HealthOnValueChanged)
-	CastBar:HookScript("OnShow", self.UpdateElement_CastBarOnShow)
-	CastBar:HookScript("OnHide", self.UpdateElement_CastBarOnHide)
-	CastBar:HookScript("OnValueChanged", self.UpdateElement_CastBarOnValueChanged)
 
 	self.CreatedPlates[frame] = true
 	self.VisiblePlates[frame.UnitFrame] = true
+end
+
+function mod:OnEvent(event, unit, ...)
+	if not self.unit then return end
+
+	mod:UpdateElement_Cast(self, event, unit, ...)
 end
 
 function mod:QueueObject(object)
@@ -676,6 +703,36 @@ function mod:PLAYER_REGEN_ENABLED()
 	elseif self.db.showEnemyCombat == "TOGGLE_OFF" then
 		SetCVar("nameplateShowEnemies", 1)
 	end
+end
+
+function mod:UpdateFonts(plate)
+	if not plate then return end
+
+	if plate.Buffs and plate.Buffs.db and plate.Buffs.db.numAuras then
+		for i = 1, plate.Buffs.db.numAuras do
+			if plate.Buffs.icons[i] and plate.Buffs.icons[i].timeLeft then
+				plate.Buffs.icons[i].timeLeft:SetFont(LSM:Fetch("font", self.db.durationFont), self.db.durationFontSize, self.db.durationFontOutline)
+			end
+			if plate.Buffs.icons[i] and plate.Buffs.icons[i].count then
+				plate.Buffs.icons[i].count:SetFont(LSM:Fetch("font", self.db.stackFont), self.db.stackFontSize, self.db.stackFontOutline)
+			end
+		end
+	end
+
+	if plate.Debuffs and plate.Debuffs.db and plate.Debuffs.db.numAuras then
+		for i = 1, plate.Debuffs.db.numAuras do
+			if plate.Debuffs.icons[i] and plate.Debuffs.icons[i].timeLeft then
+				plate.Debuffs.icons[i].timeLeft:SetFont(LSM:Fetch("font", self.db.durationFont), self.db.durationFontSize, self.db.durationFontOutline)
+			end
+			if plate.Debuffs.icons[i] and plate.Debuffs.icons[i].count then
+				plate.Debuffs.icons[i].count:SetFont(LSM:Fetch("font", self.db.stackFont), self.db.stackFontSize, self.db.stackFontOutline)
+			end
+		end
+	end
+end
+
+function mod:UpdatePlateFonts()
+	self:ForEachPlate("UpdateFonts")
 end
 
 function mod:Initialize()

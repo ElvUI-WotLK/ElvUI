@@ -23,22 +23,15 @@ local FAILED = FAILED
 local INTERRUPTED = INTERRUPTED
 
 local GetInstanceInfo = GetInstanceInfo
-local GetSpellCharges = GetSpellCharges
 local GetSpellCooldown = GetSpellCooldown
 local GetSpellInfo = GetSpellInfo
-local GetTalentInfo = GetTalentInfo
 local GetTime = GetTime
 local UnitAffectingCombat = UnitAffectingCombat
-local UnitClassification = UnitClassification
 local UnitGUID = UnitGUID
 local UnitHealth = UnitHealth
 local UnitHealthMax = UnitHealthMax
-local UnitIsQuestBoss = UnitIsQuestBoss
-local UnitIsUnit = UnitIsUnit
 local UnitLevel = UnitLevel
 local UnitName = UnitName
-local UnitPower = UnitPower
-local UnitPowerMax = UnitPowerMax
 local UnitReaction = UnitReaction
 
 function mod:StyleFilterAuraCheck(names, icons, mustHaveAll, missing, minTimeLeft, maxTimeLeft)
@@ -225,7 +218,7 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 	if NameOnlyChanged then
 		frame.NameOnlyChanged = nil
 		frame.TopLevelFrame = nil --We can safely clear this here because it is set upon `UpdateElement_Auras` if needed
-		if self.db.units[frame.UnitType].healthbar.enable then
+		if self.db.units[frame.UnitType].healthbar.enable or (frame.isTarget and self.db.alwaysShowTargetHealth) then
 			frame.HealthBar:Show()
 			self:UpdateElement_Glow(frame)
 		end
@@ -240,14 +233,13 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 end
 
 function mod:StyleFilterConditionCheck(frame, filter, trigger, failed)
-	local condition, name, inCombat, reaction, spell, classification;
-	local talentSelected, talentFunction, talentRows, instanceName, instanceType, instanceDifficulty;
-	local level, myLevel, curLevel, minLevel, maxLevel, matchMyLevel, mySpecID;
+	local condition, name, inCombat, reaction, spell;
+	local instanceName, instanceType, instanceDifficulty;
+	local level, myLevel, curLevel, minLevel, maxLevel, matchMyLevel;
 	local health, maxHealth, percHealth, underHealthThreshold, overHealthThreshold;
 
 	local castbarShown = frame.CastBar:IsShown()
 	local castbarTriggered = false --We use this to prevent additional calls to `UpdateElement_All` when the castbar hides
-	local matchMyClass = false --Only check spec when we match the class condition
 
 	if not failed and trigger.names and next(trigger.names) then
 		condition = 0
@@ -497,7 +489,7 @@ function mod:StyleFilterConfigureEvents()
 				self.StyleFilterEvents["NAME_PLATE_UNIT_ADDED"] = 1
 
 				if next(filter.triggers.casting.spells) then
-					for name, value in pairs(filter.triggers.casting.spells) do
+					for _, value in pairs(filter.triggers.casting.spells) do
 						if value == true then
 							self.StyleFilterEvents["UpdateElement_Cast"] = 1
 							break
@@ -519,7 +511,7 @@ function mod:StyleFilterConfigureEvents()
 				end
 
 				if next(filter.triggers.names) then
-					for unitName, value in pairs(filter.triggers.names) do
+					for _, value in pairs(filter.triggers.names) do
 						if value == true then
 							self.StyleFilterEvents["UNIT_NAME_UPDATE"] = true
 							break
@@ -532,7 +524,7 @@ function mod:StyleFilterConfigureEvents()
 				end
 
 				if next(filter.triggers.cooldowns.names) then
-					for name, value in pairs(filter.triggers.cooldowns.names) do
+					for _, value in pairs(filter.triggers.cooldowns.names) do
 						if value == "ONCD" or value == "OFFCD" then
 							self.StyleFilterEvents["SPELL_UPDATE_COOLDOWN"] = true
 							break
@@ -541,7 +533,7 @@ function mod:StyleFilterConfigureEvents()
 				end
 
 				if next(filter.triggers.buffs.names) then
-					for name, value in pairs(filter.triggers.buffs.names) do
+					for _, value in pairs(filter.triggers.buffs.names) do
 						if value == true then
 							self.StyleFilterEvents["UNIT_AURA"] = true
 							break
@@ -550,7 +542,7 @@ function mod:StyleFilterConfigureEvents()
 				end
 
 				if next(filter.triggers.debuffs.names) then
-					for name, value in pairs(filter.triggers.debuffs.names) do
+					for _, value in pairs(filter.triggers.debuffs.names) do
 						if value == true then
 							self.StyleFilterEvents["UNIT_AURA"] = true
 							break
@@ -583,8 +575,9 @@ function mod:UpdateElement_Filters(frame, event)
 
 	self:ClearStyledPlate(frame)
 
-	for filterNum, filter in ipairs(self.StyleFilterList) do
-		filter = E.global.nameplates.filters[self.StyleFilterList[filterNum][1]];
+	local filter
+	for filterNum in ipairs(self.StyleFilterList) do
+		filter = E.global.nameplates.filters[self.StyleFilterList[filterNum][1]]
 		if filter then
 			self:StyleFilterConditionCheck(frame, filter, filter.triggers, nil)
 		end

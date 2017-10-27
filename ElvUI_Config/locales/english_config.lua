@@ -496,6 +496,7 @@ L["Add Name"] = true;
 L["Add Nameplate Filter"] = true
 L["Add Regular Filter"] = true
 L["Add Special Filter"] = true
+L["Always Show Target Health"] = true
 L["Apply this filter if a buff has remaining time greater than this. Set to zero to disable."] = true
 L["Apply this filter if a buff has remaining time less than this. Set to zero to disable."] = true
 L["Apply this filter if a debuff has remaining time greater than this. Set to zero to disable."] = true
