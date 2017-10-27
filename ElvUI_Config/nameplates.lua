@@ -2487,14 +2487,21 @@ E.Options.args.nameplate = {
 							desc = L["Use Tanked Color when a nameplate is being effectively tanked by another tank."],
 							get = function(info) return E.db.nameplates.threat[ info[#info] ]; end,
 							set = function(info, value) E.db.nameplates.threat[ info[#info] ] = value; end,
-							disabled = function() return not E.db.nameplates.threat.useThreatColor; end
+							--disabled = function() return not E.db.nameplates.threat.useThreatColor; end
+							hidden = true
 						},
 						beingTankedByTankColor = {
 							order = 7,
 							type = "color",
 							name = L["Tanked Color"],
 							hasAlpha = false,
-							disabled = function() return (not E.db.nameplates.threat.beingTankedByTank or not E.db.nameplates.threat.useThreatColor); end
+							--disabled = function() return (not E.db.nameplates.threat.beingTankedByTank or not E.db.nameplates.threat.useThreatColor); end
+							hidden = true
+						},
+						spacer = {
+							order = 7.1,
+							type = "description",
+							name = "",
 						},
 						goodScale = {
 							order = 8,
@@ -2583,7 +2590,8 @@ E.Options.args.nameplate = {
 							order = 4,
 							type = "color",
 							name = L["Tagged NPC"],
-							hasAlpha = false
+							hasAlpha = false,
+							hidden = true
 						},
 						friendlyPlayer = {
 							order = 5,
