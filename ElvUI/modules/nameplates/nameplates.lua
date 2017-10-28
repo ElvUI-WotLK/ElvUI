@@ -101,7 +101,7 @@ function mod:SetTargetFrame(frame)
 			self:SetFrameScale(frame, (frame.ThreatScale or 1))
 		end
 		frame.isTarget = nil
-	--	frame.CastBar:Hide() -- Bug
+		frame.CastBar:Hide() -- Bug
 		if self.db.units[frame.UnitType].healthbar.enable ~= true then
 			self:UpdateAllFrame(frame)
 		end
