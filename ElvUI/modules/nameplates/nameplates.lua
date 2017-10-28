@@ -89,8 +89,6 @@ function mod:SetTargetFrame(frame)
 			self:UpdateElement_All(frame, true)
 		end
 
-		self:UpdateElement_Cast(frame, "PLAYER_TARGET_CHANGED", "target")
-
 		if targetExists then
 			frame:SetAlpha(1)
 		end
@@ -101,7 +99,7 @@ function mod:SetTargetFrame(frame)
 			self:SetFrameScale(frame, (frame.ThreatScale or 1))
 		end
 		frame.isTarget = nil
-		frame.CastBar:Hide() -- Bug
+	--	frame.CastBar:Hide() -- Bug
 		if self.db.units[frame.UnitType].healthbar.enable ~= true then
 			self:UpdateAllFrame(frame)
 		end
