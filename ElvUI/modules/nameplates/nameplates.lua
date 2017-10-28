@@ -89,6 +89,8 @@ function mod:SetTargetFrame(frame)
 			self:UpdateElement_All(frame, true)
 		end
 
+		self:UpdateElement_Cast(frame, nil, "target")
+
 		if targetExists then
 			frame:SetAlpha(1)
 		end
