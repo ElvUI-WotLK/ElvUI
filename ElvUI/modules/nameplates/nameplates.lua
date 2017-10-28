@@ -89,11 +89,7 @@ function mod:SetTargetFrame(frame)
 			self:UpdateElement_All(frame, true)
 		end
 
-		if UnitCastingInfo("target") then
-			frame:GetScript("OnEvent")(frame, "UNIT_SPELLCAST_START", "target")
-		elseif UnitChannelInfo("target") then
-			frame:GetScript("OnEvent")(frame, "UNIT_SPELLCAST_CHANNEL_START", "target")
-		end
+		self:UpdateElement_Cast(frame, "PLAYER_TARGET_CHANGED", "target")
 
 		if targetExists then
 			frame:SetAlpha(1)
@@ -365,6 +361,7 @@ function mod:OnHide()
 
 	mod:HideAuraIcons(self.UnitFrame.Buffs)
 	mod:HideAuraIcons(self.UnitFrame.Debuffs)
+	self.UnitFrame:UnregisterAllEvents()
 	self.UnitFrame.Glow.r, self.UnitFrame.Glow.g, self.UnitFrame.Glow.b = nil, nil, nil
 	self.UnitFrame.Glow:Hide()
 	self.UnitFrame.Glow2:Hide()

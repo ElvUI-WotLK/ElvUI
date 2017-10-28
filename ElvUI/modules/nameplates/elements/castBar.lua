@@ -60,6 +60,16 @@ function mod:UpdateElement_Cast(frame, event, unit, ...)
 	if self.db.units[frame.UnitType].healthbar.enable ~= true and not (frame.isTarget and self.db.alwaysShowTargetHealth) then return end --Bug
 	if frame.unit ~= unit then return end
 
+	if event == "PLAYER_TARGET_CHANGED" then
+		if UnitChannelInfo(unit) then
+			event = "UNIT_SPELLCAST_CHANNEL_START"
+		elseif UnitCastingInfo(unit) then
+			event = "UNIT_SPELLCAST_START"
+		elseif frame.CastBar:IsShown() then
+		    frame.CastBar:Hide()
+		end
+	end
+
 	if event == "UNIT_SPELLCAST_START" then
 		local name, _, _, texture, startTime, endTime, _, castID, notInterruptible = UnitCastingInfo(unit)
 		if not name then
