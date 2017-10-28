@@ -31,6 +31,11 @@ E["StyleFilterDefaults"] = {
 			["interruptible"] = false,
 			["spells"] = {}
 		},
+		["role"] = {
+			["tank"] = false,
+			["healer"] = false,
+			["damager"] = false,
+		},
 		["curlevel"] = 0,
 		["maxlevel"] = 0,
 		["minlevel"] = 0,

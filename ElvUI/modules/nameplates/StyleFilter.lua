@@ -327,6 +327,16 @@ function mod:StyleFilterConditionCheck(frame, filter, trigger, failed)
 		failed = not condition
 	end
 
+	--Try to match by role conditions
+	if not failed and (trigger.role.tank or trigger.role.healer or trigger.role.damager) then
+		condition = false
+		myRole = E:GetPlayerRole()
+		if myRole and ((trigger.role.tank and myRole == "TANK" or myRole == "Tank") or (trigger.role.healer and myRole == "HEALER" or myRole == "Healer") or (trigger.role.damager and myRole == "DAMAGER" or myRole == "Damage")) then
+			condition = true
+		end
+		failed = not condition
+	end
+
 	--Try to match by instance conditions
 	if not failed and (trigger.instanceType.none or trigger.instanceType.scenario or trigger.instanceType.party or trigger.instanceType.raid or trigger.instanceType.arena or trigger.instanceType.pvp) then
 		condition = false

@@ -159,6 +159,18 @@ function E:Print(...)
 	print(colorizedName, ...);
 end
 
+function E:GetPlayerRole()
+    if self.HealingClasses[self.myclass] ~= nil then
+        if self:CheckTalentTree(self.HealingClasses[E.myclass]) then
+            return "HEALER"
+        end
+    elseif E.Role == "TANK" then
+        return "TANK"
+    else
+        return "DAMAGER"
+    end
+end
+
 E.PriestColors = {
 	r = 0.99,
 	g = 0.99,
