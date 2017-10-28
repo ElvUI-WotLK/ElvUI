@@ -331,7 +331,7 @@ function mod:StyleFilterConditionCheck(frame, filter, trigger, failed)
 	if not failed and (trigger.role.tank or trigger.role.healer or trigger.role.damager) then
 		condition = false
 		myRole = E:GetPlayerRole()
-		if myRole and ((trigger.role.tank and myRole == "TANK" or myRole == "Tank") or (trigger.role.healer and myRole == "HEALER" or myRole == "Healer") or (trigger.role.damager and myRole == "DAMAGER" or myRole == "Damage")) then
+		if myRole and ((trigger.role.tank and myRole == "TANK") or (trigger.role.healer and myRole == "HEALER") or (trigger.role.damager and myRole == "DAMAGER")) then
 			condition = true
 		end
 		failed = not condition
