@@ -164,7 +164,7 @@ function E:GetPlayerRole()
         if self:CheckTalentTree(self.HealingClasses[E.myclass]) then
             return "HEALER"
         end
-    elseif E.Role == "TANK" then
+    elseif E.Role == "Tank" then
         return "TANK"
     else
         return "DAMAGER"
