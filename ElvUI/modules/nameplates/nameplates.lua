@@ -87,9 +87,9 @@ function mod:SetTargetFrame(frame)
 			self:ConfigureElement_Level(frame)
 			self:ConfigureElement_Name(frame)
 			self:UpdateElement_All(frame, true)
+		else
+			self:UpdateElement_Cast(frame, nil, "target")
 		end
-
-		self:UpdateElement_Cast(frame, nil, "target")
 
 		if targetExists then
 			frame:SetAlpha(1)
@@ -304,6 +304,7 @@ function mod:OnShow()
 	self.UnitFrame.UnitType = unitType
 	self.UnitFrame.UnitClass = mod:UnitClass(self.UnitFrame, unitType)
 	self.UnitFrame.UnitReaction = unitReaction
+	self.UnitFrame.unit = nil
 
 	if unitType == "ENEMY_PLAYER" then
 		mod:UpdateElement_HealerIcon(self.UnitFrame)
@@ -417,7 +418,7 @@ function mod:UpdateElement_All(frame, noTargetFrame, filterIgnore)
 	if self.db.units[frame.UnitType].healthbar.enable or (frame.isTarget and self.db.alwaysShowTargetHealth) then
 		mod:UpdateElement_Health(frame)
 		mod:UpdateElement_HealthColor(frame)
-		mod:UpdateElement_Cast(frame)
+		mod:UpdateElement_Cast(frame, nil, frame.unit)
 		mod:UpdateElement_Auras(frame)
 	else
 		-- make sure we hide the arrows and/or glow after disabling the healthbar
