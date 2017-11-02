@@ -435,7 +435,7 @@ function UF:CreateAndUpdateUFGroup(group, numGroup)
 			self[unit]:SetID(i)
 		end
 
-		local frameName = E:StringTitle(group)
+		frameName = E:StringTitle(group)
 		frameName = frameName:gsub("t(arget)", "T%1")
 		self[unit].Update = function()
 			UF["Update_"..E:StringTitle(frameName).."Frames"](self, self[unit], self.db["units"][group])

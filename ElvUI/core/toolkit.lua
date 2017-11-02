@@ -156,7 +156,7 @@ local function SetTemplate(f, t, glossTex, ignoreUpdates, forcePixelMode, isUnit
 			f.iborder = border
 
 			if f.oborder then return end
-			local border = CreateFrame("Frame", nil, f)
+			border = CreateFrame("Frame", nil, f)
 			border:SetOutside(f, E.mult, E.mult)
 			border:SetFrameLevel(f:GetFrameLevel() + 1)
 			border:SetBackdrop({

@@ -384,7 +384,7 @@ end
 
 function PI:Queue(addon)
 	local addonIsQueued = false
-	for k, v in pairs(self.Installs) do
+	for _, v in pairs(self.Installs) do
 		if v.Name == addon.Name then
 			addonIsQueued = true
 		end

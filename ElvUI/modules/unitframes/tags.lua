@@ -629,9 +629,7 @@ end
 
 ElvUF.Tags.Events["guild"] = "PLAYER_GUILD_UPDATE"
 ElvUF.Tags.Methods["guild"] = function(unit)
-	local guildName = GetGuildInfo(unit)
-
-	return guildName or ""
+	return GetGuildInfo(unit) or ""
 end
 
 ElvUF.Tags.Events["guild:brackets"] = "PLAYER_GUILD_UPDATE"
