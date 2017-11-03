@@ -7,12 +7,8 @@ local _, class = UnitClass("player")
 --Cache global variables
 --Lua functions
 local pairs, ipairs = pairs, ipairs
-local tinsert, tremove, twipe = table.insert, table.remove, table.wipe
 --WoW API / Variables
 local CheckInteractDistance = CheckInteractDistance
-local GetSpellInfo = GetSpellInfo
-local IsSpellInRange = IsSpellInRange
-local IsUsableSpell = IsUsableSpell
 local UnitCanAttack = UnitCanAttack
 local UnitInParty = UnitInParty
 local UnitInRaid = UnitInRaid
@@ -156,7 +152,7 @@ local function enemyIsInLongRange(unit)
 	return false
 end
 
-function UF:UpdateRange(event)
+function UF:UpdateRange()
 	local range = self.Range
 	local unit = self.unit
 	if(unit) then

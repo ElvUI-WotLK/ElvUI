@@ -198,7 +198,7 @@ local function LoadSkin()
 
 		local numReagents = GetTradeSkillNumReagents(id);
 		for i = 1, numReagents, 1 do
-			local reagentName, reagentTexture, reagentCount, playerReagentCount = GetTradeSkillReagentInfo(id, i);
+			local _, _, reagentCount, playerReagentCount = GetTradeSkillReagentInfo(id, i);
 			local reagentLink = GetTradeSkillReagentItemLink(id, i);
 			local icon = _G["TradeSkillReagent" .. i .. "IconTexture"];
 			local name = _G["TradeSkillReagent" .. i .. "Name"];

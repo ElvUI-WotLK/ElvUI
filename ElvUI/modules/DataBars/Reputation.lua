@@ -136,7 +136,7 @@ function mod:LoadReputationBar()
 	self.repBar.eventFrame:Hide()
 	self.repBar.eventFrame:RegisterEvent("PLAYER_REGEN_DISABLED")
 	self.repBar.eventFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
-	self.repBar.eventFrame:SetScript("OnEvent", function(self, event) mod:UpdateReputation(event) end)
+	self.repBar.eventFrame:SetScript("OnEvent", function(_, event) mod:UpdateReputation(event) end)
 
 	self:UpdateReputationDimensions()
 

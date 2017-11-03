@@ -5,7 +5,6 @@ local _G = _G
 local unpack = unpack
 
 local GetItemQualityColor = GetItemQualityColor
-local GetContainerItemInfo = GetContainerItemInfo
 local GetContainerItemQuestInfo = GetContainerItemQuestInfo
 local NUM_CONTAINER_FRAMES = NUM_CONTAINER_FRAMES
 

@@ -2,7 +2,7 @@ local E, L, V, P, G = unpack(select(2, ...))
 local mod = E:GetModule("NamePlates")
 local LSM = LibStub("LibSharedMedia-3.0")
 
-local select, unpack = select, unpack
+local unpack = unpack
 
 local CreateFrame = CreateFrame
 local GetTime = GetTime
@@ -55,7 +55,7 @@ function mod:UpdateElement_CastBarOnUpdate(elapsed)
 	end
 end
 
-function mod:UpdateElement_Cast(frame, event, unit, ...)
+function mod:UpdateElement_Cast(frame, event, unit)
 	if self.db.units[frame.UnitType].castbar.enable ~= true then return end
 	if self.db.units[frame.UnitType].healthbar.enable ~= true and not (frame.isTarget and self.db.alwaysShowTargetHealth) then return end --Bug
 

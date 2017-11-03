@@ -73,11 +73,11 @@ E.PopupDialogs["CONFIRM_LOSE_BINDING_CHANGES"] = {
 	text = CONFIRM_LOSE_BINDING_CHANGES,
 	button1 = OKAY,
 	button2 = CANCEL,
-	OnAccept = function(self)
+	OnAccept = function()
 		E:GetModule("ActionBars"):ChangeBindingProfile();
 		E:GetModule("ActionBars").bindingsChanged = nil;
 	end,
-	OnCancel = function(self)
+	OnCancel = function()
 		if(ElvUIBindPopupWindowCheckButton:GetChecked()) then
 			ElvUIBindPopupWindowCheckButton:SetChecked();
 		else
@@ -113,8 +113,8 @@ E.PopupDialogs["DISABLE_INCOMPATIBLE_ADDON"] = {
 
 E.PopupDialogs["INCOMPATIBLE_ADDON"] = {
 	text = L["INCOMPATIBLE_ADDON"],
-	OnAccept = function(self) DisableAddOn(E.PopupDialogs["INCOMPATIBLE_ADDON"].addon); ReloadUI(); end,
-	OnCancel = function(self) E.private[lower(E.PopupDialogs["INCOMPATIBLE_ADDON"].module)].enable = false; ReloadUI(); end,
+	OnAccept = function() DisableAddOn(E.PopupDialogs["INCOMPATIBLE_ADDON"].addon); ReloadUI(); end,
+	OnCancel = function() E.private[lower(E.PopupDialogs["INCOMPATIBLE_ADDON"].module)].enable = false; ReloadUI(); end,
 	button3 = L["Disable Warning"],
 	OnAlt = function ()
 		E:StaticPopup_Hide("INCOMPATIBLE_ADDON");
@@ -290,7 +290,7 @@ E.PopupDialogs["RESETUI_CHECK"] = {
 	text = L["Are you sure you want to reset every mover back to it's default position?"],
 	button1 = ACCEPT,
 	button2 = CANCEL,
-	OnAccept = function(self)
+	OnAccept = function()
 		E:ResetAllUI();
 	end,
 	timeout = 0,

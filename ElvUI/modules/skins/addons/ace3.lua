@@ -208,7 +208,7 @@ function S:SkinAce3()
 			end
 			button:SetParent(frame.backdrop)
 			text:SetParent(frame.backdrop)
-			button:HookScript("OnClick", function(this, button)
+			button:HookScript("OnClick", function(this)
 				local dropdown = this.obj.dropdown
 				if dropdown then
 					dropdown:SetTemplate("Default", true)

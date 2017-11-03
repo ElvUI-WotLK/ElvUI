@@ -4,7 +4,7 @@ local LSM = LibStub("LibSharedMedia-3.0");
 
 local GetTime = GetTime;
 local _G = _G
-local select, unpack, pairs, ipairs, tostring = select, unpack, pairs, ipairs, tostring;
+local unpack, pairs, ipairs = unpack, pairs, ipairs
 local floor, min, max, huge = math.floor, math.min, math.max, math.huge;
 local format = string.format;
 local wipe, tinsert, tsort, tremove = table.wipe, table.insert, table.sort, table.remove;
@@ -70,7 +70,7 @@ function A:UpdateTime(elapsed)
 
 	local timerValue, formatID;
 	timerValue, formatID, self.nextUpdate = E:GetTimeInfo(self.timeLeft, A.db.fadeThreshold);
-	self.time:SetFormattedText(("%s%s|r"):format(E.TimeColors[formatID], E.TimeFormats[formatID][1]), timerValue);
+	self.time:SetFormattedText(format("%s%s|r", E.TimeColors[formatID], E.TimeFormats[formatID][1]), timerValue)
 
 	if(self.timeLeft > E.db.auras.fadeThreshold) then
 		E:StopFlash(self);
@@ -351,7 +351,7 @@ local function sortFactory(key, separateOwn, reverse)
 end
 
 local sorters = {};
-for i, key in ipairs{"index", "name", "expires"} do
+for _, key in ipairs{"index", "name", "expires"} do
 	local label = key:upper();
 	sorters[label] = {};
 	for bool in pairs{[true] = true, [false] = false} do

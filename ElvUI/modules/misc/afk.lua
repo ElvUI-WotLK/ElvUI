@@ -1,13 +1,10 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local AFKString = _G["AFK"];
 local AFK = E:NewModule("AFK", "AceEvent-3.0", "AceTimer-3.0");
 local CH = E:GetModule("Chat");
 
 local _G = _G;
 local GetTime = GetTime;
-local tostring = tostring;
 local floor = math.floor;
-local format, strsub = string.format, string.sub;
 
 --local ChatHistory_GetAccessID = ChatHistory_GetAccessID;
 --local Chat_GetChatCategory = Chat_GetChatCategory;
@@ -31,7 +28,6 @@ local UnitFactionGroup = UnitFactionGroup;
 local UnitIsAFK = UnitIsAFK;
 
 local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
-local DND = DND;
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
 
 local CAMERA_SPEED = 0.035;
@@ -180,7 +176,7 @@ function AFK:Toggle()
 	end
 end
 
-local function OnKeyDown(self, key)
+local function OnKeyDown(_, key)
 	if(ignoreKeys[key]) then return end
 	if printKeys[key] then
 		Screenshot()

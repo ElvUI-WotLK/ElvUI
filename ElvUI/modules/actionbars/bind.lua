@@ -76,7 +76,7 @@ function AB:BindListener(key)
 	then return; end
 
 	if key == "MiddleButton" then key = "BUTTON3"; end
-	if key:find("Button%d") then
+	if find(key, "Button%d") then
 		key = key:upper()
 	end
 

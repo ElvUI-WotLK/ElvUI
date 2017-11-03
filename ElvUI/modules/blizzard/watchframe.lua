@@ -4,7 +4,6 @@ local B = E:GetModule("Blizzard");
 local min = math.min
 
 local hooksecurefunc = hooksecurefunc;
-local GetScreenWidth = GetScreenWidth;
 local GetScreenHeight = GetScreenHeight;
 
 local WatchFrameHolder = CreateFrame("Frame", "WatchFrameHolder", E.UIParent);

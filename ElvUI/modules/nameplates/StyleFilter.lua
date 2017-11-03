@@ -13,11 +13,9 @@ local tonumber = tonumber
 local type = type
 local unpack = unpack
 
-local strsplit = string.split
 local tinsert = table.insert
 local tsort = table.sort
 local twipe = table.wipe
-local hooksecurefunc = hooksecurefunc
 
 local FAILED = FAILED
 local INTERRUPTED = INTERRUPTED
@@ -27,12 +25,9 @@ local GetSpellCooldown = GetSpellCooldown
 local GetSpellInfo = GetSpellInfo
 local GetTime = GetTime
 local UnitAffectingCombat = UnitAffectingCombat
-local UnitGUID = UnitGUID
 local UnitHealth = UnitHealth
 local UnitHealthMax = UnitHealthMax
 local UnitLevel = UnitLevel
-local UnitName = UnitName
-local UnitReaction = UnitReaction
 
 function mod:StyleFilterAuraCheck(names, icons, mustHaveAll, missing, minTimeLeft, maxTimeLeft)
 	local total, count = 0, 0

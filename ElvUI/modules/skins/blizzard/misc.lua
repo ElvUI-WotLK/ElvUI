@@ -419,7 +419,7 @@ local function LoadSkin()
 		local checkBoxNameString = frame:GetName().."CheckBox"
 		if(checkBoxTemplate == "ChatConfigCheckBoxTemplate") then
 			frame:SetTemplate("Transparent")
-			for index, value in ipairs(checkBoxTable) do
+			for index, _ in ipairs(checkBoxTable) do
 				local checkBoxName = checkBoxNameString..index
 				local checkbox = _G[checkBoxName]
 				if(not checkbox.backdrop) then
@@ -434,7 +434,7 @@ local function LoadSkin()
 			end
 		elseif(checkBoxTemplate == "ChatConfigCheckBoxWithSwatchTemplate") or (checkBoxTemplate == "ChatConfigCheckBoxWithSwatchAndClassColorTemplate") then
 			frame:SetTemplate("Transparent")
-			for index, value in ipairs(checkBoxTable) do
+			for index, _ in ipairs(checkBoxTable) do
 				local checkBoxName = checkBoxNameString..index
 				local checkbox = _G[checkBoxName]
 				if(not checkbox.backdrop) then
@@ -463,7 +463,7 @@ local function LoadSkin()
 				S:HandleCheckBox(_G[checkBoxName])
 				if(value.subTypes) then
 					local subCheckBoxNameString = checkBoxName.."_"
-					for k, v in ipairs(value.subTypes) do
+					for k, _ in ipairs(value.subTypes) do
 						local subCheckBoxName = subCheckBoxNameString..k
 						if(_G[subCheckBoxName]) then
 							S:HandleCheckBox(_G[subCheckBoxNameString..k])
@@ -477,7 +477,7 @@ local function LoadSkin()
 	S:SecureHook("ChatConfig_CreateColorSwatches", function(frame, swatchTable)
 		frame:SetTemplate("Transparent")
 		local nameString = frame:GetName().."Swatch"
-		for index, value in ipairs(swatchTable) do
+		for index, _ in ipairs(swatchTable) do
 			local swatchName = nameString..index
 			local swatch = _G[swatchName]
 			if(not swatch.backdrop) then

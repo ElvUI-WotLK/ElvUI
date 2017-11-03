@@ -3,7 +3,7 @@ local UF = E:GetModule("UnitFrames");
 
 --Cache global variables
 --Lua functions
-local unpack, tonumber = unpack, tonumber
+local unpack = unpack
 local abs, min = abs, math.min
 --WoW API / Variables
 local CreateFrame = CreateFrame

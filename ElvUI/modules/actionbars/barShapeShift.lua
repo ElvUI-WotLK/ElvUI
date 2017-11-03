@@ -3,7 +3,6 @@ local AB = E:GetModule("ActionBars");
 
 local _G = _G;
 local ceil = math.ceil;
-local lower = string.lower;
 
 local CreateFrame = CreateFrame;
 local GetShapeshiftForm = GetShapeshiftForm;

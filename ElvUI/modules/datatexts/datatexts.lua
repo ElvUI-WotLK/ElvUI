@@ -125,7 +125,7 @@ function DT:GetDataPanelPoint(panel, i, numPoints)
 end
 
 function DT:UpdateAllDimensions()
-	for panelName, panel in pairs(DT.RegisteredPanels) do
+	for _, panel in pairs(DT.RegisteredPanels) do
 		local width = (panel:GetWidth() / panel.numPoints) - 4;
 		local height = panel:GetHeight() - 4;
 		for i = 1, panel.numPoints do
@@ -221,9 +221,7 @@ end
 
 function DT:LoadDataTexts()
 	self.db = E.db.datatexts;
-	for name, obj in LDB:DataObjectIterator() do
-		LDB:UnregisterAllCallbacks(self);
-	end
+	LDB:UnregisterAllCallbacks(self)
 
 	local inInstance, instanceType = IsInInstance();
 	local fontTemplate = LSM:Fetch("font", self.db.font);

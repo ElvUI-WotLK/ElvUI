@@ -8,7 +8,7 @@ local _, ns = ...;
 local ElvUF = ns.oUF;
 assert(ElvUF, "ElvUI was unable to locate oUF.");
 
-function UF:Construct_TankFrames(unitGroup)
+function UF:Construct_TankFrames()
 	self:SetScript("OnEnter", UnitFrame_OnEnter);
 	self:SetScript("OnLeave", UnitFrame_OnLeave);
 

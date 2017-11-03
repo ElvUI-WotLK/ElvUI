@@ -172,7 +172,7 @@ function mod:LoadExperienceBar()
 	self.expBar.eventFrame:Hide()
 	self.expBar.eventFrame:RegisterEvent("PLAYER_REGEN_DISABLED")
 	self.expBar.eventFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
-	self.expBar.eventFrame:SetScript("OnEvent", function(self, event) mod:UpdateExperience(event) end)
+	self.expBar.eventFrame:SetScript("OnEvent", function(_, event) mod:UpdateExperience(event) end)
 
 	self:UpdateExperienceDimensions()
 

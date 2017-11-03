@@ -6,7 +6,7 @@ local _G = _G;
 local type, ipairs, pairs, unpack, select, assert = type, ipairs, pairs, unpack, select, assert;
 local tinsert = table.insert;
 local floor, ceil = math.floor, math.ceil;
-local len, sub, find, format, gsub = string.len, string.sub, string.find, string.format, string.gsub;
+local len, sub, find = string.len, string.sub, string.find
 
 local CreateFrame = CreateFrame;
 local GetContainerNumSlots = GetContainerNumSlots;
@@ -50,10 +50,6 @@ local MAX_CONTAINER_ITEMS = MAX_CONTAINER_ITEMS;
 local TEXTURE_ITEM_QUEST_BANG = TEXTURE_ITEM_QUEST_BANG;
 local MAX_WATCHED_TOKENS = MAX_WATCHED_TOKENS;
 local NUM_BAG_FRAMES = NUM_BAG_FRAMES;
-local CONTAINER_SCALE = CONTAINER_SCALE;
-local CONTAINER_OFFSET_X, CONTAINER_OFFSET_Y = CONTAINER_OFFSET_X, CONTAINER_OFFSET_Y;
-local CONTAINER_WIDTH = CONTAINER_WIDTH;
-local CONTAINER_SPACING, VISIBLE_CONTAINER_SPACING = CONTAINER_SPACING, VISIBLE_CONTAINER_SPACING;
 
 local SEARCH_STRING = ""
 

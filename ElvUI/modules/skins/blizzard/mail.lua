@@ -42,7 +42,7 @@ local function LoadSkin()
 	end
 
 	hooksecurefunc("InboxFrame_Update", function()
-		local numItems, totalItems = GetInboxNumItems()
+		local numItems = GetInboxNumItems()
 		local index = ((InboxFrame.pageNum - 1) * INBOXITEMS_TO_DISPLAY) + 1
 
 		for i = 1, INBOXITEMS_TO_DISPLAY do

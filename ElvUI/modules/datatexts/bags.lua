@@ -38,7 +38,7 @@ local function OnEnter(self)
 		if(name and i == 1) then
 			DT.tooltip:AddLine(CURRENCY .. ":");
 		end
-		if(name and count) then DT.tooltip:AddDoubleLine(currencyString:format(icon, name), count, 1, 1, 1); end
+		if(name and count) then DT.tooltip:AddDoubleLine(format(currencyString, icon, name), count, 1, 1, 1); end
 	end
 
 	DT.tooltip:Show();

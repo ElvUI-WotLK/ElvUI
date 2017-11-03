@@ -349,7 +349,7 @@ function CH:StyleChat(frame)
 	editbox.historyLines = ElvCharacterDB.ChatEditHistory;
 	editbox.historyIndex = 0;
 
-	for i, text in pairs(ElvCharacterDB.ChatEditHistory) do
+	for _, text in pairs(ElvCharacterDB.ChatEditHistory) do
 		editbox:AddHistoryLine(text)
 	end
 
@@ -1438,7 +1438,7 @@ function CH:ChatEdit_AddHistory(_, line)
 	if line:find("/rl") then return; end
 
 	if ( strlen(line) > 0 ) then
-		for i, text in pairs(ElvCharacterDB.ChatEditHistory) do
+		for _, text in pairs(ElvCharacterDB.ChatEditHistory) do
 			if text == line then
 				return
 			end
@@ -1523,7 +1523,7 @@ function CH:SaveChatHistory(event, ...)
 		ElvCharacterDB.ChatLog[timeForMessage] = temp;
 
 		local c, k = 0;
-		for id, data in pairs(ElvCharacterDB.ChatLog) do
+		for id, _ in pairs(ElvCharacterDB.ChatLog) do
 			c = c + 1;
 			if((not k) or k > id) then
 				k = id;
@@ -1541,7 +1541,7 @@ function CH:ChatFrame_AddMessageEventFilter (event, filter)
 
 	if ( chatFilters[event] ) then
 		-- Only allow a filter to be added once
-		for index, filterFunc in next, chatFilters[event] do
+		for _, filterFunc in next, chatFilters[event] do
 			if ( filterFunc == filter ) then
 				return;
 			end

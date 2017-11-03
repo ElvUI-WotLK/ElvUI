@@ -448,7 +448,7 @@ function AB:UpdateButtonSettings()
 
 	self:UpdatePetBindings();
 	self:UpdateStanceBindings();
-	for barName, bar in pairs(self["handledBars"]) do
+	for _, bar in pairs(self["handledBars"]) do
 		self:UpdateButtonConfig(bar, bar.bindButtons);
 	end
 

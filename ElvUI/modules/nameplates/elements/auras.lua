@@ -5,12 +5,9 @@ local LSM = LibStub("LibSharedMedia-3.0")
 local select, unpack, pairs = select, unpack, pairs
 local tonumber = tonumber
 local band = bit.band
-local gsub = string.gsub
 local tinsert, tremove, wipe = table.insert, table.remove, table.wipe
 
 local strlower, strsplit = string.lower, strsplit
-local next, ipairs = next, ipairs
-local match = string.match
 
 local CreateFrame = CreateFrame
 local UnitAura = UnitAura
@@ -246,7 +243,7 @@ function mod:HideAuraIcons(auras)
 	end
 end
 
-function mod:CheckFilter(name, caster, spellID, isPlayer, allowDuration, noDuration, ...)
+function mod:CheckFilter(name, spellID, isPlayer, allowDuration, noDuration, ...)
 	local filterName, filter, filterType, spellList, spell = false, false
 	for i = 1, select("#", ...) do
 		filterName = select(i, ...)
@@ -283,7 +280,7 @@ function mod:AuraFilter(frame, frameNum, index, buffType, minDuration, maxDurati
 		noDuration = (not duration or duration == 0)
 		isPlayer = (caster == UnitGUID("player"))
 		allowDuration = noDuration or (duration and (duration > 0) and (maxDuration == 0 or duration <= maxDuration) and (minDuration == 0 or duration >= minDuration))
-		filterCheck = mod:CheckFilter(name, caster, spellID, isPlayer, allowDuration, noDuration, strsplit(",", priority))
+		filterCheck = mod:CheckFilter(name, spellID, isPlayer, allowDuration, noDuration, strsplit(",", priority))
 	else
 		filterCheck = true -- Allow all auras to be shown when the filter list is empty
 	end

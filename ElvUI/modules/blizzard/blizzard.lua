@@ -38,7 +38,7 @@ function B:Initialize()
 		MINUTE_ONELETTER_ABBR = "%d m";
 	end
 
-	CreateFrame("Frame"):SetScript("OnUpdate", function(self, elapsed)
+	CreateFrame("Frame"):SetScript("OnUpdate", function()
 		if (LFRBrowseFrame.timeToClear) then
 			LFRBrowseFrame.timeToClear = nil;
 		end
