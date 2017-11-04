@@ -382,6 +382,7 @@ function mod:OnHide()
 	self.UnitFrame.CPoints:Hide()
 	self.UnitFrame:Hide()
 	self.UnitFrame.isTarget = nil
+	self.UnitFrame.isMouseover = nil
 	self.ThreatData = nil
 	self.UnitFrame.UnitName = nil
 	self.UnitFrame.UnitType = nil
@@ -552,6 +553,18 @@ function mod:OnUpdate(elapsed)
 		for frame in pairs(mod.VisiblePlates) do
 			i = i + 1
 
+			if frame.oldHighlight:IsShown() then
+				if not frame.isMouseover then
+					frame.isMouseover = true
+
+					frame.guid = UnitGUID("mouseover")
+					mod:UpdateElement_AurasByUnitID("mouseover")
+				end
+			elseif frame.isMouseover then
+				frame.isMouseover = nil
+				frame.guid = nil
+			end
+		
 			if mod:UnitDetailedThreatSituation(frame) then
 				mod:UpdateElement_HealthColor(frame)
 			end
