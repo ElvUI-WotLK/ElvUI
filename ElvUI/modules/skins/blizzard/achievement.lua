@@ -307,6 +307,43 @@ local function LoadSkin(event)
 			end
 		end
 	end);
+
+	hooksecurefunc("AchievementObjectives_DisplayProgressiveAchievement", function(objectivesFrame, id)
+		for i = 1, 12 do
+			local mini = _G["AchievementFrameMiniAchievement"..i]
+			local icon = _G["AchievementFrameMiniAchievement"..i.."Icon"]
+			local points = _G["AchievementFrameMiniAchievement"..i.."Points"]
+			local border = _G["AchievementFrameMiniAchievement"..i.."Border"]
+			local shield = _G["AchievementFrameMiniAchievement"..i.."Shield"]
+
+			if mini and not mini.isSkinned then
+				mini:SetTemplate()
+				mini:SetBackdropColor(0, 0, 0, 0)
+				mini:Size(32)
+
+				local prevFrame = _G["AchievementFrameMiniAchievement"..i - 1]
+				if i == 1 then
+					mini:Point("TOPLEFT", 6, -4)
+				elseif i == 7 then
+					mini:Point("TOPLEFT", AchievementFrameMiniAchievement1, "BOTTOMLEFT", 0, -20)
+				else
+					mini:Point("TOPLEFT", prevFrame, "TOPRIGHT", 10, 0)
+				end
+				mini.SetPoint = E.noop
+
+				icon:SetTexCoord(unpack(E.TexCoords))
+				icon:SetInside()
+
+				points:Point("BOTTOMRIGHT", -8, -15)
+				points:SetTextColor(1, 0.80, 0.10)
+
+				border:Kill()
+				shield:Kill()
+
+				mini.isSkinned = true
+			end
+		end
+	end)
 end
 
 local f = CreateFrame("Frame");
