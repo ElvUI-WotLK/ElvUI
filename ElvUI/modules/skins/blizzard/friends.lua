@@ -44,6 +44,12 @@ local function LoadSkin()
 		Tab:HookScript("OnLeave", S.SetOriginalBackdrop);
 	end
 
+	for i = 1, 11 do
+		_G["FriendsFrameFriendsScrollFrameButton"..i.."SummonButtonIcon"]:SetTexCoord(unpack(E.TexCoords))
+		_G["FriendsFrameFriendsScrollFrameButton"..i.."SummonButtonNormalTexture"]:SetAlpha(0)
+		_G["FriendsFrameFriendsScrollFrameButton"..i.."SummonButton"]:StyleButton()
+	end
+
 	S:HandleScrollBar(FriendsFrameFriendsScrollFrameScrollBar);
 
 	S:HandleButton(FriendsFrameAddFriendButton, true);
