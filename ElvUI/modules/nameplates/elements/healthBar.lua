@@ -109,7 +109,7 @@ function mod:UpdateElement_Health(frame)
 
 	frame.HealthBar.texture.value = health
 	frame.HealthBar.texture.maxValue = maxHealth
-	frame.HealthBar.texture:Width(frame.HealthBar.texture.width * (health / maxHealth))
+	frame.HealthBar.texture:Width((frame.HealthBar.texture.width or frame.HealthBar:GetWidth()) * (health / maxHealth))
 
 	if self.db.units[frame.UnitType].healthbar.text.enable then
 		frame.HealthBar.text:SetText(E:GetFormattedText(self.db.units[frame.UnitType].healthbar.text.format, health, maxHealth))
