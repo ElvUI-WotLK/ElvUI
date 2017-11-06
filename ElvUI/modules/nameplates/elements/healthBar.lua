@@ -109,7 +109,7 @@ function mod:UpdateElement_Health(frame)
 
 	frame.HealthBar.texture.value = health
 	frame.HealthBar.texture.maxValue = maxHealth
-	frame.HealthBar.texture:Width((frame.HealthBar.texture.width or frame.HealthBar:GetWidth()) * (health / maxHealth))
+	frame.HealthBar.texture:SetWidth((frame.HealthBar.texture.width or frame.HealthBar:GetWidth()) * (health / maxHealth) + 0.0001)
 
 	if self.db.units[frame.UnitType].healthbar.text.enable then
 		frame.HealthBar.text:SetText(E:GetFormattedText(self.db.units[frame.UnitType].healthbar.text.format, health, maxHealth))
@@ -149,13 +149,8 @@ function mod:ConstructElement_HealthBar(parent)
 	frame:SetScript("OnSizeChanged", function(self, width, height)
 		self.texture.width = width
 		self.texture.height = height
-		self.texture:Height(height)
-
-		if self.texture.value then
-			self.texture:Width(self.texture.width * (self.texture.value / self.texture.maxValue))
-		else
-			self.texture:Width(width)
-		end
+		self.texture:SetWidth((self.texture.value and width * (self.texture.value / self.texture.maxValue) or width) + 0.0001)
+		self.texture:SetHeight(height)
 	end)
 
 	parent.FlashTexture = frame:CreateTexture(nil, "OVERLAY")
