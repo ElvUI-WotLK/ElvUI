@@ -92,7 +92,7 @@ function mod:UpdateElement_HealthColor(frame)
 	end
 
 	if r ~= frame.HealthBar.r or g ~= frame.HealthBar.g or b ~= frame.HealthBar.b then
-		frame.HealthBar.texture:SetVertexColor(r, g, b)
+		frame.HealthBar:SetStatusBarColor(r, g, b)
 		frame.HealthBar.r, frame.HealthBar.g, frame.HealthBar.b = r, g, b
 	end
 
@@ -100,16 +100,15 @@ function mod:UpdateElement_HealthColor(frame)
 		frame.ThreatScale = scale
 		self:SetFrameScale(frame, (frame.ActionScale or 1) * scale)
 	end
-
 end
 
 function mod:UpdateElement_Health(frame)
 	local health = frame.oldHealthBar:GetValue()
 	local _, maxHealth = frame.oldHealthBar:GetMinMaxValues()
+	frame.HealthBar:SetMinMaxValues(0, maxHealth)
 
-	frame.HealthBar.texture.value = health
-	frame.HealthBar.texture.maxValue = maxHealth
-	frame.HealthBar.texture:SetWidth((frame.HealthBar.texture.width or frame.HealthBar:GetWidth()) * (health / maxHealth) + 0.0001)
+	frame.HealthBar:SetValue(health)
+	frame:GetParent().UnitFrame.FlashTexture:Point("TOPRIGHT", frame.HealthBar:GetStatusBarTexture(), "TOPRIGHT") --idk why this fixes this
 
 	if self.db.units[frame.UnitType].healthbar.text.enable then
 		frame.HealthBar.text:SetText(E:GetFormattedText(self.db.units[frame.UnitType].healthbar.text.format, health, maxHealth))
@@ -123,14 +122,14 @@ function mod:ConfigureElement_HealthBar(frame, configuring)
 
 	healthBar:SetPoint("TOP", frame, "CENTER", 0, self.db.units[frame.UnitType].castbar.height + 3)
 	if frame.isTarget and self.db.useTargetScale then
-		healthBar:Height(self.db.units[frame.UnitType].healthbar.height * self.db.targetScale)
-		healthBar:Width(self.db.units[frame.UnitType].healthbar.width * self.db.targetScale)
+		healthBar:SetHeight(self.db.units[frame.UnitType].healthbar.height * self.db.targetScale)
+		healthBar:SetWidth(self.db.units[frame.UnitType].healthbar.width * self.db.targetScale)
 	else
-		healthBar:Height(self.db.units[frame.UnitType].healthbar.height)
-		healthBar:Width(self.db.units[frame.UnitType].healthbar.width)
+		healthBar:SetHeight(self.db.units[frame.UnitType].healthbar.height)
+		healthBar:SetWidth(self.db.units[frame.UnitType].healthbar.width)
 	end
 
-	healthBar.texture:SetTexture(LSM:Fetch("statusbar", self.db.statusbar))
+	healthBar:SetStatusBarTexture(LSM:Fetch("statusbar", self.db.statusbar), "BORDER")
 	if(not configuring) and (self.db.units[frame.UnitType].healthbar.enable or frame.isTarget) then
 		healthBar:Show()
 	end
@@ -140,22 +139,19 @@ function mod:ConfigureElement_HealthBar(frame, configuring)
 end
 
 function mod:ConstructElement_HealthBar(parent)
-	local frame = CreateFrame("Frame", nil, parent)
+	local frame = CreateFrame("StatusBar", nil, parent)
 	self:StyleFrame(frame)
 
-	frame.texture = frame:CreateTexture(nil, "BORDER")
-	frame.texture:SetPoint("LEFT")
-
-	frame:SetScript("OnSizeChanged", function(self, width, height)
-		self.texture.width = width
-		self.texture.height = height
-		self.texture:SetWidth((self.texture.value and width * (self.texture.value / self.texture.maxValue) or width) + 0.0001)
-		self.texture:SetHeight(height)
+	frame:SetScript("OnSizeChanged", function(self, width)
+		local health = self:GetValue()
+		local _, maxHealth = self:GetMinMaxValues()
+		self:GetStatusBarTexture():SetPoint("TOPRIGHT", -(width * ((maxHealth - health) / maxHealth)), 0)
 	end)
 
 	parent.FlashTexture = frame:CreateTexture(nil, "OVERLAY")
 	parent.FlashTexture:SetTexture(LSM:Fetch("background", "ElvUI Blank"))
-	parent.FlashTexture:SetAllPoints(frame.texture)
+	parent.FlashTexture:Point("BOTTOMLEFT", frame:GetStatusBarTexture(), "BOTTOMLEFT")
+	parent.FlashTexture:Point("TOPRIGHT", frame:GetStatusBarTexture(), "TOPRIGHT")
 	parent.FlashTexture:Hide()
 
 	frame.text = frame:CreateFontString(nil, "OVERLAY")

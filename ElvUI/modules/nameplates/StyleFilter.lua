@@ -88,7 +88,7 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 	if HealthColorChanged then
 		frame.StyleChanged = true
 		frame.HealthColorChanged = true
-		frame.HealthBar.texture:SetVertexColor(actions.color.healthColor.r, actions.color.healthColor.g, actions.color.healthColor.b, actions.color.healthColor.a);
+		frame.HealthBar:SetStatusBarColor(actions.color.healthColor.r, actions.color.healthColor.g, actions.color.healthColor.b, actions.color.healthColor.a);
 	end
 	if BorderChanged then --Lets lock this to the values we want (needed for when the media border color changes)
 		frame.StyleChanged = true
@@ -113,7 +113,7 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 		frame.StyleChanged = true
 		frame.TextureChanged = true
 		--frame.Highlight.texture:SetTexture(LSM:Fetch("statusbar", actions.texture.texture))
-		frame.HealthBar.texture:SetTexture(LSM:Fetch("statusbar", actions.texture.texture))
+		frame.HealthBar:SetStatusBarTexture(LSM:Fetch("statusbar", actions.texture.texture))
 		if FlashingHealth then
 			frame.FlashTexture:SetTexture(LSM:Fetch("statusbar", actions.texture.texture))
 		end
@@ -170,7 +170,7 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 	end
 	if HealthColorChanged then
 		frame.HealthColorChanged = nil
-		frame.HealthBar.texture:SetVertexColor(frame.HealthBar.r, frame.HealthBar.g, frame.HealthBar.b);
+		frame.HealthBar:SetStatusBarColor(frame.HealthBar.r, frame.HealthBar.g, frame.HealthBar.b);
 	end
 	if BorderChanged then
 		frame.BorderChanged = nil
@@ -187,7 +187,7 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 	if TextureChanged then
 		frame.TextureChanged = nil
 	--	frame.Highlight.texture:SetTexture(LSM:Fetch("statusbar", self.db.statusbar))
-		frame.HealthBar.texture:SetTexture(LSM:Fetch("statusbar", self.db.statusbar))
+		frame.HealthBar:SetStatusBarTexture(LSM:Fetch("statusbar", self.db.statusbar))
 	end
 	if ScaleChanged then
 		frame.ScaleChanged = nil
