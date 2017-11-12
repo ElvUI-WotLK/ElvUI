@@ -51,7 +51,7 @@ function mod:UpdateTime(elapsed)
 
 	local timerValue, formatID
 	timerValue, formatID, self.nextUpdate = E:GetTimeInfo(self.timeLeft, 4)
-	if timerValue <= 0 then self:Hide(); LAI:RemoveAuraFromGUID(self:GetParent():GetParent().guid, self.spellID, nil, self:GetParent().filter) return end
+	if timerValue <= 0 then self:Hide(); LAI:RemoveAuraFromGUID(self:GetParent():GetParent().guid, self.spellID, nil, self:GetParent():GetParent().filter) return end
 	self.time:SetFormattedText(format("%s%s|r", E.TimeColors[formatID], E.TimeFormats[formatID][1]), timerValue)
 end
 
@@ -186,11 +186,7 @@ function mod:UpdateElement_Auras(frame)
 				if showAura == nil then
 					break -- used to break the while loop when index is over the limit of auras we have (unitaura name will pass nil)
 				elseif showAura == true then -- has aura and passes checks
-					if i == 1 then
-						hasBuffs = true
-					else
-						hasDebuffs = true
-					end
+					if i == 1 then hasBuffs = true else hasDebuffs = true end
 					frameNum = frameNum + 1
 				end
 				index = index + 1
