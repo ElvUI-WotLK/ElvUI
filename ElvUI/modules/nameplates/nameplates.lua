@@ -62,77 +62,75 @@ function mod:SetFrameScale(frame, scale)
 end
 
 function mod:SetTargetFrame(frame)
-	if self.isTargetChanged then return end
+	if frame.isTarget then
+		if not frame.isTargetChanged then
+			if self.db.useTargetScale then
+				self:SetFrameScale(frame, (frame.ThreatScale or 1) * self.db.targetScale)
+			end
+			frame:SetFrameLevel(frame:GetFrameLevel() + 50)
+			frame.unit = "target"
+			frame._unit = frame.unit
+			frame.guid = UnitGUID("target")
+			frame._guid = frame.guid
+			frame.isTargetChanged = true
 
-	if frame.unit then frame.unit = nil end
-	if frame.guid then frame.guid = nil end
+			if self.db.units[frame.UnitType].healthbar.enable ~= true and self.db.alwaysShowTargetHealth then
+				frame.Name:ClearAllPoints()
+				frame.Level:ClearAllPoints()
+				frame.HealthBar.r, frame.HealthBar.g, frame.HealthBar.b = nil, nil, nil
+				self:ConfigureElement_HealthBar(frame)
+				self:ConfigureElement_CastBar(frame)
+				self:ConfigureElement_Glow(frame)
+				self:ConfigureElement_Elite(frame)
+				self:ConfigureElement_Level(frame)
+				self:ConfigureElement_Name(frame)
+				self:UpdateElement_All(frame, true)
+			else
+				self:UpdateElement_Cast(frame, nil, "target")
+			end
 
-	local targetExists = UnitExists("target") == 1
-	if targetExists and frame:GetParent():IsShown() and frame:GetParent():GetFrameLevel() == 20 and UnitName("target") == frame.UnitName then
-		if self.db.useTargetScale then
-			self:SetFrameScale(frame, (frame.ThreatScale or 1) * self.db.targetScale)
+			if self.hasTarget then
+				frame:SetAlpha(1)
+			end
+
+			mod:UpdateElement_AurasByGUID(frame.guid)
+
+			-- TEST
+			mod:UpdateElement_Glow(frame)
+			mod:UpdateElement_HealthColor(frame)
+			mod:UpdateElement_CPoints(frame)
+			mod:UpdateElement_Filters(frame, "PLAYER_TARGET_CHANGED")
 		end
-		frame.isTarget = true
-		frame.unit = "target"
-		frame.guid = UnitGUID("target")
-
-		if self.db.units[frame.UnitType].healthbar.enable ~= true and self.db.alwaysShowTargetHealth then
-			frame.Name:ClearAllPoints()
-			frame.Level:ClearAllPoints()
-			frame.HealthBar.r, frame.HealthBar.g, frame.HealthBar.b = nil, nil, nil
-			self:ConfigureElement_HealthBar(frame)
-			self:ConfigureElement_CastBar(frame)
-			self:ConfigureElement_Glow(frame)
-			self:ConfigureElement_Elite(frame)
-			self:ConfigureElement_Level(frame)
-			self:ConfigureElement_Name(frame)
-			self:UpdateElement_All(frame, true)
-		else
-			self:UpdateElement_Cast(frame, nil, "target")
-		end
-
-		if targetExists then
-			frame:SetAlpha(1)
-		end
-
-		mod:UpdateElement_AurasByUnitID("target")
-	elseif frame.isTarget then
+	elseif frame.isTargetChanged then
 		if self.db.useTargetScale then
 			self:SetFrameScale(frame, (frame.ThreatScale or 1))
 		end
-		frame.isTarget = nil
-	--	frame.CastBar:Hide() -- Bug
+		frame:SetFrameLevel(frame:GetFrameLevel() - 50)
+		frame.unit = frame._unit
+		frame.guid = frame._guid
+		frame.isTargetChanged = false
 		if self.db.units[frame.UnitType].healthbar.enable ~= true then
 			self:UpdateAllFrame(frame)
 		end
 
-		if targetExists then
+		if self.hasTarget then
 			frame:SetAlpha(self.db.nonTargetTransparency)
 		else
 			frame:SetAlpha(1)
 		end
+
+		-- TEST
+		mod:UpdateElement_Glow(frame)
+		mod:UpdateElement_HealthColor(frame)
+		mod:UpdateElement_CPoints(frame)
+		mod:UpdateElement_Filters(frame, "PLAYER_TARGET_CHANGED")
 	else
-		if targetExists then
+		if self.hasTarget then
 			frame:SetAlpha(self.db.nonTargetTransparency)
 		else
 			frame:SetAlpha(1)
 		end
 	end
-
-	mod:UpdateElement_Glow(frame)
-	mod:UpdateElement_HealthColor(frame)
-	mod:UpdateElement_CPoints(frame)
-	mod:UpdateElement_Filters(frame, "PLAYER_TARGET_CHANGED")
-
-	return frame.isTarget
-end
-
-function mod:GetNumVisiblePlates()
-	local i = 0
-	for _ in pairs(self.VisiblePlates) do
-		i = i + 1
-	end
-	return i
 end
 
 function mod:StyleFrame(parent, noBackdrop, point)
@@ -295,8 +293,6 @@ function mod:GetUnitInfo(frame)
 end
 
 function mod:OnShow()
-	mod.isTargetChanged = false
-
 	mod.VisiblePlates[self.UnitFrame] = true
 
 	self.UnitFrame.UnitName = gsub(self.UnitFrame.oldName:GetText(), FSPAT, "")
@@ -304,7 +300,9 @@ function mod:OnShow()
 	self.UnitFrame.UnitType = unitType
 	self.UnitFrame.UnitClass = mod:UnitClass(self.UnitFrame, unitType)
 	self.UnitFrame.UnitReaction = unitReaction
-	self.UnitFrame.unit = nil
+
+	if not mod.hasTarget then self.UnitFrame.alpha = 1 end
+	self.UnitFrame.alpha = self.UnitFrame.alpha
 
 	if unitType == "ENEMY_PLAYER" then
 		mod:UpdateElement_HealerIcon(self.UnitFrame)
@@ -354,11 +352,10 @@ function mod:OnShow()
 end
 
 function mod:OnHide()
-	--mod.isTargetChanged = false
-
 	mod.VisiblePlates[self.UnitFrame] = nil
 
 	self.UnitFrame.unit = nil
+	self.UnitFrame._unit = nil
 
 	mod:HideAuraIcons(self.UnitFrame.Buffs)
 	mod:HideAuraIcons(self.UnitFrame.Debuffs)
@@ -382,8 +379,8 @@ function mod:OnHide()
 	self.UnitFrame.CPoints:Hide()
 	self.UnitFrame:Hide()
 	self.UnitFrame.isTarget = nil
+	self.UnitFrame.isTargetChanged = false
 	self.UnitFrame.isMouseover = nil
-	self.ThreatData = nil
 	self.UnitFrame.UnitName = nil
 	self.UnitFrame.UnitType = nil
 	self.UnitFrame.ThreatScale = nil
@@ -391,6 +388,7 @@ function mod:OnHide()
 
 	self.UnitFrame.ThreatReaction = nil
 	self.UnitFrame.guid = nil
+	self.UnitFrame._guid = nil
 	self.UnitFrame.RaidIconType = nil
 end
 
@@ -447,8 +445,6 @@ end
 local maxFrameLevel = 40
 local currentFrameLevel = 10
 function mod:OnCreated(frame)
-	self.isTargetChanged = false
-
 	local HealthBar, CastBar = frame:GetChildren()
 	local Threat, Border, CastBarBorder, CastBarShield, CastBarIcon, Highlight, Name, Level, BossIcon, RaidIcon, EliteIcon = frame:GetRegions()
 
@@ -547,36 +543,41 @@ function mod:OnUpdate(elapsed)
 		numChildren = count
 	end
 
-	local numVisiblePlates = mod:GetNumVisiblePlates()
-	if numVisiblePlates > 0 then
-		local i = 0
-		for frame in pairs(mod.VisiblePlates) do
-			i = i + 1
-
-			if frame.oldHighlight:IsShown() then
-				if not frame.isMouseover then
-					frame.isMouseover = true
-
-					frame.guid = UnitGUID("mouseover")
-					mod:UpdateElement_AurasByUnitID("mouseover")
-				end
-			elseif frame.isMouseover then
-				frame.isMouseover = nil
-				frame.guid = nil
-			end
+	for frame in pairs(mod.VisiblePlates) do
+		if mod.hasTarget then 
+			frame.alpha = frame:GetParent():GetAlpha()
+		else
+			frame.alpha = 1
+		end
+		frame:GetParent():SetAlpha(1)
 		
-			if mod:UnitDetailedThreatSituation(frame) then
-				mod:UpdateElement_HealthColor(frame)
-			end
+		frame.isTarget = mod.hasTarget and frame.alpha == 1
+		mod:SetTargetFrame(frame)
 
-			local isTarget = mod:SetTargetFrame(frame)
-			if not isTarget then
-				frame:GetParent():SetAlpha(1)
-			end
+		if frame.oldHighlight:IsShown() then
+			if not frame.isMouseover then
+				frame.isMouseover = true
 
-			if i == numVisiblePlates then
-				mod.isTargetChanged = true
+				frame.unit = "mouseover"
+				frame._unit = frame.unit
+				frame.guid = UnitGUID("mouseover")
+				frame._guid = frame.guid
+
+				mod:UpdateElement_AurasByGUID(frame.guid)
+
+				if frame.UnitType == "FRIENDLY_PLAYER" and not frame.UnitClass then
+					frame.UnitClass = select(2, UnitClass("mouseover"))
+					mod:UpdateElement_All(frame, true, true)
+				end
 			end
+		elseif frame.isMouseover then
+			frame.unit = frame._unit
+			frame.guid = frame._guid
+			frame.isMouseover = nil
+		end
+
+		if mod:UnitDetailedThreatSituation(frame) then
+			mod:UpdateElement_HealthColor(frame)
 		end
 	end
 end
@@ -655,7 +656,6 @@ function mod:CopySettings(from, to)
 end
 
 function mod:PLAYER_ENTERING_WORLD()
-	self:CleanAuraLists()
 	twipe(self.Healers)
 	local inInstance, instanceType = IsInInstance()
 	if inInstance and instanceType == "pvp" and self.db.units.ENEMY_PLAYER.markHealers then
@@ -670,7 +670,7 @@ function mod:PLAYER_ENTERING_WORLD()
 end
 
 function mod:PLAYER_TARGET_CHANGED()
-	self.isTargetChanged = false
+	self.hasTarget = UnitExists("target") == 1
 end
 
 function mod:UNIT_AURA(_, unit)
@@ -702,7 +702,6 @@ function mod:PLAYER_REGEN_DISABLED()
 end
 
 function mod:PLAYER_REGEN_ENABLED()
-	self:CleanAuraLists()
 	if self.db.showFriendlyCombat == "TOGGLE_ON" then
 		SetCVar("nameplateShowFriends", 0)
 	elseif self.db.showFriendlyCombat == "TOGGLE_OFF" then
@@ -745,12 +744,12 @@ end
 function mod:UpdatePlateFonts()
 	self:ForEachPlate("UpdateFonts")
 end
-
+local LAI = LibStub("LibAuraInfo-1.0-ElvUI", true)
 function mod:Initialize()
 	self.db = E.db["nameplates"]
 	if E.private["nameplates"].enable ~= true then return end
 
-	self.isTargetChanged = false
+	self.hasTarget = false
 
 	--Add metatable to all our StyleFilters so they can grab default values if missing
 	for _, filterTable in pairs(E.global.nameplates.filters) do
@@ -768,7 +767,14 @@ function mod:Initialize()
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
 	self:RegisterEvent("PLAYER_LOGOUT") -- used in the StyleFilter
 	self:RegisterEvent("PLAYER_TARGET_CHANGED")
-	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	--self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	LAI.UnregisterAllCallbacks(self)
+	LAI.RegisterCallback(self, "LibAuraInfo_AURA_APPLIED")
+	LAI.RegisterCallback(self, "LibAuraInfo_AURA_REMOVED")
+	LAI.RegisterCallback(self, "LibAuraInfo_AURA_REFRESH")
+	LAI.RegisterCallback(self, "LibAuraInfo_AURA_APPLIED_DOSE")
+	LAI.RegisterCallback(self, "LibAuraInfo_AURA_CLEAR")
+	LAI.RegisterCallback(self, "RemoveAuraFromGUID")
 	self:RegisterEvent("UNIT_AURA")
 	self:RegisterEvent("UNIT_COMBO_POINTS")
 

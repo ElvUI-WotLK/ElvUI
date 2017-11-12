@@ -1,6 +1,7 @@
 local E, L, V, P, G = unpack(select(2, ...))
 local mod = E:GetModule("NamePlates")
 local LSM = LibStub("LibSharedMedia-3.0")
+local LAI = LibStub("LibAuraInfo-1.0-ElvUI", true)
 
 local select, unpack, pairs = select, unpack, pairs
 local tonumber = tonumber
@@ -10,9 +11,7 @@ local tinsert, tremove, wipe = table.insert, table.remove, table.wipe
 local strlower, strsplit = string.lower, strsplit
 
 local CreateFrame = CreateFrame
-local UnitAura = UnitAura
 local UnitGUID = UnitGUID
-local GetSpellTexture = GetSpellTexture
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS
 
 local RaidIconBit = {
@@ -41,188 +40,22 @@ local ByRaidIcon = {}
 local ByName = {}
 
 local auraCache = {}
-local buffCache = {}
-local debuffCache = {}
 
-local auraList = {}
-local auraSpellID = {}
-local auraName = {}
-local auraExpiration = {}
-local auraStacks = {}
-local auraCaster = {}
-local auraDuration = {}
-local auraTexture = {}
-local auraType = {}
-local cachedAuraDurations = {}
+function mod:UpdateTime(elapsed)
+	self.timeLeft = self.timeLeft - elapsed
 
-local TimeColors = {
-	[0] = "|cffeeeeee",
-	[1] = "|cffeeeeee",
-	[2] = "|cffeeeeee",
-	[3] = "|cffFFEE00",
-	[4] = "|cfffe0000"
-}
-
-local AURA_UPDATE_INTERVAL = 0.1
-
-local PolledHideIn
-do
-	local Framelist = {}
-	local Watcherframe = CreateFrame("Frame")
-	local WatcherframeActive = false
-	local timeToUpdate = 0
-
-	local function CheckFramelist()
-		local curTime = GetTime()
-		if curTime < timeToUpdate then return end
-		local framecount = 0
-		timeToUpdate = curTime + AURA_UPDATE_INTERVAL
-
-		for frame, expiration in pairs(Framelist) do
-			if expiration < curTime then
-				frame:Hide()
-				Framelist[frame] = nil
-			else
-				if frame.Poll then frame:Poll(expiration) end
-				framecount = framecount + 1
-			end
-		end
-		if framecount == 0 then Watcherframe:SetScript("OnUpdate", nil); WatcherframeActive = false end
+	if self.nextUpdate > 0 then
+		self.nextUpdate = self.nextUpdate - elapsed
+		return
 	end
 
-	function PolledHideIn(frame, expiration)
-		if expiration == 0 then
-			frame:Hide()
-			Framelist[frame] = nil
-		else
-			Framelist[frame] = expiration
-			frame:Show()
-
-			if not WatcherframeActive then
-				Watcherframe:SetScript("OnUpdate", CheckFramelist)
-				WatcherframeActive = true
-			end
-		end
-	end
+	local timerValue, formatID
+	timerValue, formatID, self.nextUpdate = E:GetTimeInfo(self.timeLeft, 4)
+	if timerValue <= 0 then self:Hide(); LAI:RemoveAuraFromGUID(self:GetParent():GetParent().guid, self.spellID, nil, self:GetParent().filter) return end
+	self.time:SetFormattedText(format("%s%s|r", E.TimeColors[formatID], E.TimeFormats[formatID][1]), timerValue)
 end
 
-local function GetSpellDuration(spellID)
-	if spellID then return cachedAuraDurations[spellID] end
-end
-
-local function SetSpellDuration(spellID, duration)
-	if spellID then cachedAuraDurations[spellID] = duration end
-end
-
-local function UpdateAuraTime(frame, expiration)
-	local timeleft = expiration - GetTime()
-	local timervalue, formatid = E:GetTimeInfo(timeleft, 4)
-	local timeFormat = E.TimeFormats[3][2]
-	if timervalue < 4 then
-		timeFormat = E.TimeFormats[4][2]
-	end
-	frame.timeLeft:SetFormattedText(("%s%s|r"):format(TimeColors[formatid], timeFormat), timervalue)
-end
-
-local function RemoveAuraInstance(guid, spellID, caster)
-	if guid and spellID and auraList[guid] then
-		local instanceID = tostring(guid)..tostring(spellID)..(tostring(caster or "UNKNOWN_CASTER"))
-		local auraID = spellID..(tostring(caster or "UNKNOWN_CASTER"))
-		if auraList[guid][auraID] then
-			auraSpellID[instanceID] = nil
-			auraName[instanceID] = nil
-			auraExpiration[instanceID] = nil
-			auraStacks[instanceID] = nil
-			auraCaster[instanceID] = nil
-			auraDuration[instanceID] = nil
-			auraTexture[instanceID] = nil
-			auraType[instanceID] = nil
-			auraList[guid][auraID] = nil
-		end
-	end
-end
-
-local function GetAuraList(guid)
-	if guid and auraList[guid] then return auraList[guid] end
-end
-
-local function GetAuraInstance(guid, auraID)
-	if guid and auraID then
-		local instanceID = guid..auraID
-		local spellID, name, expiration, stacks, caster, duration, texture, type
-		spellID = auraSpellID[instanceID]
-		name = auraName[instanceID]
-		expiration = auraExpiration[instanceID]
-		stacks = auraStacks[instanceID]
-		caster = auraCaster[instanceID]
-		duration = auraDuration[instanceID]
-		texture = auraTexture[instanceID]
-		type = auraType[instanceID]
-		return spellID, name, expiration, stacks, caster, duration, texture, type
-	end
-end
-
-local function SetAuraInstance(guid, name, spellID, expiration, stacks, caster, duration, texture, type)
-	if guid and spellID and texture then
-		local auraID = spellID..(tostring(caster or "UNKNOWN_CASTER"))
-		local instanceID = guid..auraID
-		auraList[guid] = auraList[guid] or {}
-		auraList[guid][auraID] = instanceID
-		auraSpellID[instanceID] = spellID
-		auraName[instanceID] = name
-		auraExpiration[instanceID] = expiration
-		auraStacks[instanceID] = stacks
-		auraCaster[instanceID] = caster
-		auraDuration[instanceID] = duration
-		auraTexture[instanceID] = texture
-		auraType[instanceID] = type
-	end
-end
-
-local function WipeAuraList(guid)
-	if guid and auraList[guid] then
-		local unitAuraList = auraList[guid]
-		for auraID, instanceID in pairs(unitAuraList) do
-			auraSpellID[instanceID] = nil
-			auraName[instanceID] = nil
-			auraExpiration[instanceID] = nil
-			auraStacks[instanceID] = nil
-			auraCaster[instanceID] = nil
-			auraDuration[instanceID] = nil
-			auraTexture[instanceID] = nil
-			auraType[instanceID] = nil
-			unitAuraList[auraID] = nil
-		end
-	end
-end
-
-function mod:CleanAuraLists()
-	local currentTime = GetTime()
-	for guid, instanceList in pairs(auraList) do
-		local auraCount = 0
-		for auraID, instanceID in pairs(instanceList) do
-			local expiration = auraExpiration[instanceID]
-			if expiration and expiration < currentTime then
-				auraList[guid][auraID] = nil
-				auraSpellID[instanceID] = nil
-				auraName[instanceID] = nil
-				auraExpiration[instanceID] = nil
-				auraStacks[instanceID] = nil
-				auraCaster[instanceID] = nil
-				auraDuration[instanceID] = nil
-				auraTexture[instanceID] = nil
-				auraType[instanceID] = nil
-			else
-				auraCount = auraCount + 1
-			end
-		end
-		if auraCount == 0 then
-			auraList[guid] = nil
-		end
-	end
-end
-
-function mod:SetAura(aura, index, name, icon, count, expirationTime, spellID)
+function mod:SetAura(aura, index, name, icon, count, duration, expirationTime, spellID)
 	aura.icon:SetTexture(icon)
 	aura.name = name
 	aura.spellID = spellID
@@ -232,14 +65,31 @@ function mod:SetAura(aura, index, name, icon, count, expirationTime, spellID)
 	else
 		aura.count:SetText("")
 	end
+
+	if duration == 0 and expirationTime == 0 then
+		aura.timeLeft = nil
+		aura.time:SetText("")
+		aura:SetScript("OnUpdate", nil)
+	else
+		local timeLeft = expirationTime - GetTime()
+		if not aura.timeLeft then
+			aura.timeLeft = timeLeft
+			aura:SetScript("OnUpdate", self.UpdateTime)
+		else
+			aura.timeLeft = timeLeft
+		end
+
+		aura.nextUpdate = -1
+		self.UpdateTime(aura, 0)
+	end
+
 	aura:SetID(index)
 	aura:Show()
-	PolledHideIn(aura, expirationTime)
 end
 
 function mod:HideAuraIcons(auras)
 	for i = 1, #auras.icons do
-		PolledHideIn(auras.icons[i], 0)
+		auras.icons[i]:Hide()
 	end
 end
 
@@ -272,8 +122,8 @@ function mod:CheckFilter(name, spellID, isPlayer, allowDuration, noDuration, ...
 	end
 end
 
-function mod:AuraFilter(frame, frameNum, index, buffType, minDuration, maxDuration, priority, name, texture, count, duration, expiration, caster, spellID)
-	if not name then return nil end -- checking for an aura that is not there, pass nil to break while loop
+function mod:AuraFilter(frame, frameNum, index, buffType, minDuration, maxDuration, priority, isAura, name, texture, count, dispelType, duration, expiration, caster, spellID)
+	if not isAura then return nil end -- checking for an aura that is not there, pass nil to break while loop
 	local filterCheck, isPlayer, allowDuration, noDuration = false, false, false, false, false, false
 
 	if priority ~= "" then
@@ -286,7 +136,7 @@ function mod:AuraFilter(frame, frameNum, index, buffType, minDuration, maxDurati
 	end
 
 	if filterCheck == true then
-		mod:SetAura(frame[buffType].icons[frameNum], index, name, texture, count, expiration, spellID)
+		mod:SetAura(frame[buffType].icons[frameNum], index, name, texture, count, duration, expiration, spellID)
 		return true
 	end
 
@@ -314,47 +164,12 @@ function mod:UpdateElement_Auras(frame)
 		end
 	end
 
-	local numDebuff = 0
-	local numBuff = 0
-
-	local aurasOnUnit = GetAuraList(guid)
-
-	debuffCache = wipe(debuffCache)
-	buffCache = wipe(buffCache)
-
 	local hasBuffs, hasDebuffs, showAura = false, false
 	local filterType, buffType, buffTypeLower, index, frameNum, maxAuras, minDuration, maxDuration, priority
 
-	if aurasOnUnit then
-		local numAuras = 0
-		local aura
-
-		for instanceid in pairs(aurasOnUnit) do
-			numAuras = (numDebuff + numBuff) + 1
-			aura = wipe(currentAura[numAuras] or {})
-
-			aura.spellID, aura.name, aura.expirationTime, aura.count, aura.caster, aura.duration, aura.icon, aura.type = GetAuraInstance(guid, instanceid)
-
-			if tonumber(aura.spellID) then
-				aura.unit = frame.unit
-				if aura.expirationTime > GetTime() then
-					if aura.type == "BUFF" then
-						numBuff = numBuff + 1
-						buffCache[numBuff] = aura
-					else
-						
-						numDebuff = numDebuff + 1
-						debuffCache[numDebuff] = aura
-					end
-				end
-			end
-		end
-
-		wipe(currentAura)
-	end
-
 	for i = 1, 2 do
-		filterType = (i == 1 and buffCache or debuffCache)
+		filterType = (i == 1 and "HELPFUL" or "HARMFUL")
+		frame.filter = filterType
 		buffType = (i == 1 and "Buffs" or "Debuffs")
 		buffTypeLower = strlower(buffType)
 		index = 1
@@ -367,24 +182,21 @@ function mod:UpdateElement_Auras(frame)
 		self:HideAuraIcons(frame[buffType])
 		if self.db.units[frame.UnitType][buffTypeLower].enable then
 			while frameNum <= maxAuras do
-				local aura = filterType[index]
-				if not aura then break end
-				showAura = mod:AuraFilter(frame, frameNum, index, buffType, minDuration, maxDuration, priority, aura.name, aura.icon, aura.count, aura.duration, aura.expirationTime, aura.caster, tonumber(aura.spellID))
+				showAura = mod:AuraFilter(frame, frameNum, index, buffType, minDuration, maxDuration, priority, LAI:GUIDAura(guid, index, filterType))
 				if showAura == nil then
 					break -- used to break the while loop when index is over the limit of auras we have (unitaura name will pass nil)
-				elseif showAura == false then
-					RemoveAuraInstance(guid, aura.spellID, aura.caster)
 				elseif showAura == true then -- has aura and passes checks
-					if i == 1 then hasBuffs = true else hasDebuffs = true end
+					if i == 1 then
+						hasBuffs = true
+					else
+						hasDebuffs = true
+					end
 					frameNum = frameNum + 1
 				end
 				index = index + 1
 			end
 		end
 	end
-	
-	debuffCache = wipe(debuffCache)
-	buffCache = wipe(buffCache)
 
 	local TopLevel = frame.HealthBar
 	local TopOffset = ((self.db.units[frame.UnitType].showName and select(2, frame.Name:GetFont()) + 5) or 0)
@@ -413,27 +225,6 @@ function mod:UpdateElement_Auras(frame)
 end
 
 function mod:UpdateElement_AurasByUnitID(unit)
-	local guid = UnitGUID(unit)
-	WipeAuraList(guid)
-
-	local index = 1
-	local name, _, texture, count, _, duration, expirationTime, unitCaster, _, _, spellID = UnitAura(unit, index, "HARMFUL")
-	while name do
-		SetSpellDuration(spellID, duration)
-		SetAuraInstance(guid, name, spellID, expirationTime, count, UnitGUID(unitCaster or ""), duration, texture, AURA_TYPE_DEBUFF)
-		index = index + 1
-		name , _, texture, count, _, duration, expirationTime, unitCaster, _, _, spellID = UnitAura(unit, index, "HARMFUL")
-	end
-
-	index = 1
-	name, _, texture, count, _, duration, expirationTime, unitCaster, _, _, spellID = UnitAura(unit, index, "HELPFUL")
-	while name do
-		SetSpellDuration(spellID, duration)
-		SetAuraInstance(guid, name, spellID, expirationTime, count, UnitGUID(unitCaster or ""), duration, texture, AURA_TYPE_BUFF)
-		index = index + 1
-		name, _, texture, count, _, duration, expirationTime, unitCaster, _, _, spellID = UnitAura(unit, index, "HELPFUL")
-	end
-
 	local raidIcon, unitName
 	if UnitPlayerControlled(unit) then unitName = UnitName(unit) end
 	raidIcon = RaidIconIndex[GetRaidTargetIndex(unit) or ""]
@@ -445,50 +236,54 @@ function mod:UpdateElement_AurasByUnitID(unit)
 	end
 end
 
-local function GuidIsLocalUnitId(guid)
-	if guid == UnitGUID("player") or guid == UnitGUID("target") or guid == UnitGUID("mouseover") or guid == UnitGUID("focus") then
-		return true
+function mod:UpdateElement_AurasByGUID(guid)
+	local destName, destFlags = LAI:GetGUIDInfo(guid)
+
+	if destName then
+		destName = strsplit("-", destName)
+		ByName[destName] = guid
+	end
+
+	local raidIcon
+	if destFlags then
+		for iconName, bitmask in pairs(RaidIconBit) do
+			if band(destFlags, bitmask) > 0 then
+				ByRaidIcon[iconName] = destGUID
+				raidIcon = iconName
+				break
+			end
+		end
+	end
+
+	local frame = self:SearchForFrame(guid, raidIcon, destName)
+	if frame then
+		frame.guid = guid
+		self:UpdateElement_Auras(frame)
 	end
 end
 
-function mod:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, sourceGUID, _, _, destGUID, destName, destFlags, ...)
-	if not (event == "SPELL_AURA_APPLIED" or event == "SPELL_AURA_REFRESH" or event == "SPELL_AURA_APPLIED_DOSE" or event == "SPELL_AURA_REMOVED_DOSE" or event == "SPELL_AURA_BROKEN" or event == "SPELL_AURA_BROKEN_SPELL" or event == "SPELL_AURA_REMOVED") then return end
+function mod:LibAuraInfo_AURA_APPLIED(_, destGUID, spellID, srcGUID, _, auraType)
+	self:UpdateElement_AurasByGUID(destGUID)
+end
 
-	if not GuidIsLocalUnitId(destGUID) then -- Skip over the aura update if the unit is accessible by a local unitid.
-		local spellID, spellName, _, auraType, stackCount = ...
+function mod:LibAuraInfo_AURA_REMOVED(_, destGUID)
+	self:UpdateElement_AurasByGUID(destGUID)
+end
 
-		if event == "SPELL_AURA_APPLIED" or event == "SPELL_AURA_REFRESH" then
-			local duration = GetSpellDuration(spellID)
-			local texture = GetSpellTexture(spellID)
-			SetAuraInstance(destGUID, spellName, spellID, GetTime() + (duration or 0), 1, sourceGUID, duration, texture, auraType)
-		elseif event == "SPELL_AURA_APPLIED_DOSE" or event == "SPELL_AURA_REMOVED_DOSE" then
-			local duration = GetSpellDuration(spellID)
-			local texture = GetSpellTexture(spellID)
-			SetAuraInstance(destGUID, spellName, spellID, GetTime() + (duration or 0), stackCount, sourceGUID, duration, texture, auraType)
-		elseif event == "SPELL_AURA_BROKEN" or event == "SPELL_AURA_BROKEN_SPELL" or event == "SPELL_AURA_REMOVED" then
-			RemoveAuraInstance(destGUID, spellID, sourceGUID)
-		end
-	end
+function mod:LibAuraInfo_AURA_REFRESH(_, destGUID, spellID)
+	self:LibAuraInfo_AURA_APPLIED(_, destGUID, spellID)
+end
 
-	local name, raidIcon
-	if band(destFlags, COMBATLOG_OBJECT_CONTROL_PLAYER) > 0 then
-		local rawName = strsplit("-", destName)
-		ByName[rawName] = destGUID
-		name = rawName
-	end
+function mod:LibAuraInfo_AURA_APPLIED_DOSE(_, destGUID, spellID)
+	self:LibAuraInfo_AURA_APPLIED(_, destGUID, spellID)
+end
 
-	for iconName, bitmask in pairs(RaidIconBit) do
-		if band(destFlags, bitmask) > 0 then
-			ByRaidIcon[iconName] = destGUID
-			raidIcon = iconName
-			break
-		end
-	end
+function mod:LibAuraInfo_AURA_CLEAR(_, destGUID)
+	self:UpdateElement_AurasByGUID(destGUID)
+end
 
-	local frame = self:SearchForFrame(destGUID, raidIcon, name)
-	if frame then
-		self:UpdateElement_Auras(frame)
-	end
+function mod:RemoveAuraFromGUID(_, destGUID)
+	self:UpdateElement_AurasByGUID(destGUID)
 end
 
 function mod:CreateAuraIcon(parent)
@@ -499,24 +294,22 @@ function mod:CreateAuraIcon(parent)
 	aura.icon:SetAllPoints()
 	aura.icon:SetTexCoord(unpack(E.TexCoords))
 
-	aura.timeLeft = aura:CreateFontString(nil, "OVERLAY")
-	aura.timeLeft:SetFont(LSM:Fetch("font", mod.db.durationFont), mod.db.durationFontSize, mod.db.durationFontOutline)
-	aura.timeLeft:ClearAllPoints()
+	aura.time = aura:CreateFontString(nil, "OVERLAY")
+	aura.time:SetFont(LSM:Fetch("font", mod.db.durationFont), mod.db.durationFontSize, mod.db.durationFontOutline)
+	aura.time:ClearAllPoints()
 	if mod.db.durationPosition == "TOPLEFT" then
-		aura.timeLeft:Point("TOPLEFT", 1, 1)
+		aura.time:Point("TOPLEFT", 1, 1)
 	elseif mod.db.durationPosition == "BOTTOMLEFT" then
-		aura.timeLeft:Point("BOTTOMLEFT", 1, 1)
+		aura.time:Point("BOTTOMLEFT", 1, 1)
 	elseif mod.db.durationPosition == "TOPRIGHT" then
-		aura.timeLeft:Point("TOPRIGHT", 1, 1)
+		aura.time:Point("TOPRIGHT", 1, 1)
 	else
-		aura.timeLeft:Point("CENTER", 0, 0)
+		aura.time:Point("CENTER", 0, 0)
 	end
 
 	aura.count = aura:CreateFontString(nil, "OVERLAY")
 	aura.count:SetFont(LSM:Fetch("font", self.db.stackFont), self.db.stackFontSize, self.db.stackFontOutline)
 	aura.count:Point("BOTTOMRIGHT", 1, 1)
-
-	aura.Poll = parent.PollFunction
 
 	return aura
 end
@@ -556,18 +349,18 @@ function mod:UpdateAuraIcons(auras)
 			auras.icons[i].count:SetFont(LSM:Fetch("font", self.db.stackFont), self.db.stackFontSize, self.db.stackFontOutline)
 		end
 
-		if auras.icons[i].timeLeft then
-			auras.icons[i].timeLeft:SetFont(LSM:Fetch("font", mod.db.durationFont), mod.db.durationFontSize, mod.db.durationFontOutline)
+		if auras.icons[i].time then
+			auras.icons[i].time:SetFont(LSM:Fetch("font", mod.db.durationFont), mod.db.durationFontSize, mod.db.durationFontOutline)
 
-			auras.icons[i].timeLeft:ClearAllPoints()
+			auras.icons[i].time:ClearAllPoints()
 			if mod.db.durationPosition == "TOPLEFT" then
-				auras.icons[i].timeLeft:Point("TOPLEFT", 1, 1)
+				auras.icons[i].time:Point("TOPLEFT", 1, 1)
 			elseif mod.db.durationPosition == "BOTTOMLEFT" then
-				auras.icons[i].timeLeft:Point("BOTTOMLEFT", 1, 1)
+				auras.icons[i].time:Point("BOTTOMLEFT", 1, 1)
 			elseif mod.db.durationPosition == "TOPRIGHT" then
-				auras.icons[i].timeLeft:Point("TOPRIGHT", 1, 1)
+				auras.icons[i].time:Point("TOPRIGHT", 1, 1)
 			else
-				auras.icons[i].timeLeft:Point("CENTER", 0, 0)
+				auras.icons[i].time:Point("CENTER", 0, 0)
 			end
 		end
 
@@ -593,7 +386,6 @@ function mod:ConstructElement_Auras(frame, side)
 	auras:SetScript("OnSizeChanged", mod.Auras_SizeChanged)
 	auras:SetHeight(18) -- this really doesn't matter
 	auras.side = side
-	auras.PollFunction = UpdateAuraTime
 	auras.icons = {}
 
 	return auras
