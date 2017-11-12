@@ -565,10 +565,10 @@ function mod:OnUpdate(elapsed)
 
 				mod:UpdateElement_AurasByGUID(frame.guid)
 
-				if frame.UnitType == "FRIENDLY_PLAYER" and not frame.UnitClass then
+				--[[if frame.UnitType == "FRIENDLY_PLAYER" and not frame.UnitClass then
 					frame.UnitClass = select(2, UnitClass("mouseover"))
 					mod:UpdateElement_All(frame, true, true)
-				end
+				end]]
 			end
 		elseif frame.isMouseover then
 			frame.unit = frame._unit
