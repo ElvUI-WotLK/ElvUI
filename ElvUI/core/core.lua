@@ -168,13 +168,7 @@ E.PriestColors = {
 function E:GetPlayerRole()
 	local assignedRole = UnitGroupRolesAssigned("player")
 	if assignedRole == "NONE" or not assignedRole then
-		if self.HealingClasses[self.myclass] ~= nil and self:CheckTalentTree(self.HealingClasses[E.myclass]) then
-			return "HEALER"
-		elseif E.Role == "Tank" then
-			return "TANK"
-		else
-			return "DAMAGER"
-		end
+		return E.Role
 	else
 		return assignedRole
 	end
