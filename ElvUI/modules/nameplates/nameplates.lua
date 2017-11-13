@@ -35,6 +35,8 @@ mod.CreatedPlates = {}
 mod.VisiblePlates = {}
 mod.Healers = {}
 
+mod.ByName = {}
+
 function mod:CheckBGHealers()
 	local name, _, damageDone, healingDone
 	for i = 1, GetNumBattlefieldScores() do
@@ -223,11 +225,24 @@ function mod:RoundColors(r, g, b)
 	return floor(r*100+.5) / 100, floor(g*100+.5) / 100, floor(b*100+.5) / 100
 end
 
+function mod:GetUnitClassByGUID(frame, guid)
+	if not guid then guid = self.ByName[frame.UnitName] end
+	if guid then
+		local _, _, class = pcall(GetPlayerInfoByGUID, guid)
+		return class
+	end
+	return nil
+end
+
 function mod:UnitClass(frame, type)
-	if type == "FRIENDLY_PLAYER" then
+	if type == "FRIENDLY_PLAYER" then 
 		if UnitInParty("player") or UnitInRaid("player") then -- FRIENDLY_PLAYER
 			local _, class = UnitClass(frame.UnitName)
-			if class then return class end
+			if class then
+				return class
+			else
+				return mod:GetUnitClassByGUID(frame)
+			end
 		end
 	elseif type == "ENEMY_PLAYER" then
 		local r, g, b = self:RoundColors(frame.oldHealthBar:GetStatusBarColor())

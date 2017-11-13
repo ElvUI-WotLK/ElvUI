@@ -37,7 +37,6 @@ local RaidIconIndex = {
 }
 
 local ByRaidIcon = {}
-local ByName = {}
 
 local auraCache = {}
 
@@ -152,7 +151,7 @@ function mod:UpdateElement_Auras(frame)
 	if not guid then
 		if RAID_CLASS_COLORS[frame.UnitClass] then
 			local name = frame.UnitName
-			guid = ByName[name]
+			guid = self.ByName[name]
 		elseif frame.RaidIcon:IsShown() then
 			guid = ByRaidIcon[frame.RaidIconType]
 		end
@@ -237,7 +236,7 @@ function mod:UpdateElement_AurasByGUID(guid)
 
 	if destName then
 		destName = strsplit("-", destName)
-		ByName[destName] = guid
+		self.ByName[destName] = guid
 	end
 
 	local raidIcon
@@ -254,11 +253,18 @@ function mod:UpdateElement_AurasByGUID(guid)
 	local frame = self:SearchForFrame(guid, raidIcon, destName)
 	if frame then
 		frame.guid = guid
+
+		if frame.UnitType == "FRIENDLY_PLAYER" and not frame.UnitClass then
+			frame.UnitClass = mod:GetUnitClassByGUID(frame, guid)
+			if frame.UnitClass then
+				mod:UpdateElement_All(frame, true, true)
+			end
+		end
 		self:UpdateElement_Auras(frame)
 	end
 end
 
-function mod:LibAuraInfo_AURA_APPLIED(_, destGUID, spellID, srcGUID, _, auraType)
+function mod:LibAuraInfo_AURA_APPLIED(_, destGUID)
 	self:UpdateElement_AurasByGUID(destGUID)
 end
 
@@ -266,12 +272,12 @@ function mod:LibAuraInfo_AURA_REMOVED(_, destGUID)
 	self:UpdateElement_AurasByGUID(destGUID)
 end
 
-function mod:LibAuraInfo_AURA_REFRESH(_, destGUID, spellID)
-	self:LibAuraInfo_AURA_APPLIED(_, destGUID, spellID)
+function mod:LibAuraInfo_AURA_REFRESH(_, destGUID)
+	self:LibAuraInfo_AURA_APPLIED(_, destGUID)
 end
 
-function mod:LibAuraInfo_AURA_APPLIED_DOSE(_, destGUID, spellID)
-	self:LibAuraInfo_AURA_APPLIED(_, destGUID, spellID)
+function mod:LibAuraInfo_AURA_APPLIED_DOSE(_, destGUID)
+	self:LibAuraInfo_AURA_APPLIED(_, destGUID)
 end
 
 function mod:LibAuraInfo_AURA_CLEAR(_, destGUID)
