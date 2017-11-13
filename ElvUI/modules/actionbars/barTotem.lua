@@ -148,12 +148,6 @@ function AB:AdjustTotemSettings()
 		bar:Hide()
 	end
 
-	if(self.db["barTotem"].inheritGlobalFade) then
-		bar:SetParent(self.fadeParent)
-	else
-		bar:SetParent(E.UIParent)
-	end
-
 	for button, _ in pairs(bar.buttons) do
 		if self.db["barTotem"].mouseover == true then
 			bar:SetAlpha(0)
