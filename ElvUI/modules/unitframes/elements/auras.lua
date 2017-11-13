@@ -62,6 +62,7 @@ function UF:Construct_AuraIcon(button)
 	button.cd.noOCC = true
 	button.cd.noCooldownCount = true
 	button.cd:SetReverse(true)
+	button.cd:SetDrawEdge(true)
 	button.cd:SetInside(button, offset, offset)
 
 	button.icon:SetInside(button, offset, offset)

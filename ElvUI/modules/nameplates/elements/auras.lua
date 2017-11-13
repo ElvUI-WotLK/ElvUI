@@ -51,7 +51,7 @@ function mod:UpdateTime(elapsed)
 
 	local timerValue, formatID
 	timerValue, formatID, self.nextUpdate = E:GetTimeInfo(self.timeLeft, 4)
-	if timerValue <= 0 then self:Hide(); LAI:RemoveAuraFromGUID(self:GetParent():GetParent().guid, self.spellID, nil, self:GetParent():GetParent().filter) return end
+	if timerValue <= 0 then self:Hide(); LAI:RemoveAuraFromGUID(self:GetParent():GetParent().guid, self.spellID, nil, self:GetParent().filter) return end
 	self.time:SetFormattedText(format("%s%s|r", E.TimeColors[formatID], E.TimeFormats[formatID][1]), timerValue)
 end
 
@@ -169,8 +169,8 @@ function mod:UpdateElement_Auras(frame)
 
 	for i = 1, 2 do
 		filterType = (i == 1 and "HELPFUL" or "HARMFUL")
-		frame.filter = filterType
 		buffType = (i == 1 and "Buffs" or "Debuffs")
+		frame[buffType].filter = filterType
 		buffTypeLower = strlower(buffType)
 		index = 1
 		frameNum = 1
