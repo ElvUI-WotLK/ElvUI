@@ -121,12 +121,12 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 	if ScaleChanged then
 		frame.StyleChanged = true
 		frame.ScaleChanged = true
-		local scale = actions.scale * (frame.ThreatScale or 1)
-		frame.ActionScale = scale
+		local scale = (frame.ThreatScale or 1)
+		frame.ActionScale = actions.scale
 		if frame.isTarget and self.db.useTargetScale then
 			scale = scale * self.db.targetScale
 		end
-		self:SetFrameScale(frame, scale)
+		self:SetFrameScale(frame, scale * actions.scale)
 	end
 	if AlphaChanged then
 		frame.StyleChanged = true
