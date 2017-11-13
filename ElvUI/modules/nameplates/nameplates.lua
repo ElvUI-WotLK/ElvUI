@@ -1,6 +1,7 @@
 local E, L, V, P, G = unpack(select(2, ...))
 local mod = E:NewModule("NamePlates", "AceHook-3.0", "AceEvent-3.0", "AceTimer-3.0")
 local LSM = LibStub("LibSharedMedia-3.0")
+local LAI = LibStub("LibAuraInfo-1.0-ElvUI", true)
 
 local _G = _G
 local pairs, tonumber = pairs, tonumber
@@ -438,8 +439,8 @@ function mod:UpdateElement_All(frame, noTargetFrame, filterIgnore)
 	end
 end
 
-local maxFrameLevel = 40
-local currentFrameLevel = 10
+local maxFrameLevel = 30
+local currentFrameLevel = 1
 function mod:OnCreated(frame)
 	local HealthBar, CastBar = frame:GetChildren()
 	local Threat, Border, CastBarBorder, CastBarShield, CastBarIcon, Highlight, Name, Level, BossIcon, RaidIcon, EliteIcon = frame:GetRegions()
@@ -448,10 +449,10 @@ function mod:OnCreated(frame)
 	frame.UnitFrame:SetAllPoints()
 	frame.UnitFrame:SetScript("OnEvent", self.OnEvent)
 
-	frame.UnitFrame:SetFrameLevel(currentFrameLevel)
+	frame.UnitFrame:SetFrameLevel(frame.UnitFrame:GetFrameLevel() + currentFrameLevel)
 
 	if currentFrameLevel == maxFrameLevel then
-		currentFrameLevel = currentFrameLevel - 30
+		currentFrameLevel = 1
 	else
 		currentFrameLevel = currentFrameLevel + 1
 	end
@@ -553,11 +554,6 @@ function mod:OnUpdate(elapsed)
 					frame.guid = UnitGUID("mouseover")
 
 					mod:UpdateElement_AurasByGUID(frame.guid)
-
-					--[[if frame.UnitType == "FRIENDLY_PLAYER" and not frame.UnitClass then
-						frame.UnitClass = select(2, UnitClass("mouseover"))
-						mod:UpdateElement_All(frame, true, true)
-					end]]
 				end
 			elseif frame.isMouseover then
 				frame.unit = nil
@@ -739,7 +735,7 @@ end
 function mod:UpdatePlateFonts()
 	self:ForEachPlate("UpdateFonts")
 end
-local LAI = LibStub("LibAuraInfo-1.0-ElvUI", true)
+
 function mod:Initialize()
 	self.db = E.db["nameplates"]
 	if E.private["nameplates"].enable ~= true then return end
