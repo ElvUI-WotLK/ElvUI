@@ -69,9 +69,7 @@ function mod:SetTargetFrame(frame)
 			end
 			frame:SetFrameLevel(frame:GetFrameLevel() + 50)
 			frame.unit = "target"
-			frame._unit = frame.unit
 			frame.guid = UnitGUID("target")
-			frame._guid = frame.guid
 			frame.isTargetChanged = true
 
 			if self.db.units[frame.UnitType].healthbar.enable ~= true and self.db.alwaysShowTargetHealth then
@@ -106,8 +104,8 @@ function mod:SetTargetFrame(frame)
 			self:SetFrameScale(frame, (frame.ThreatScale or 1))
 		end
 		frame:SetFrameLevel(frame:GetFrameLevel() - 50)
-		frame.unit = frame._unit
-		frame.guid = frame._guid
+		frame.unit = nil
+		frame.guid = nil
 		frame.isTargetChanged = false
 		if self.db.units[frame.UnitType].healthbar.enable ~= true then
 			self:UpdateAllFrame(frame)
@@ -355,7 +353,6 @@ function mod:OnHide()
 	mod.VisiblePlates[self.UnitFrame] = nil
 
 	self.UnitFrame.unit = nil
-	self.UnitFrame._unit = nil
 
 	mod:HideAuraIcons(self.UnitFrame.Buffs)
 	mod:HideAuraIcons(self.UnitFrame.Debuffs)
@@ -388,7 +385,6 @@ function mod:OnHide()
 
 	self.UnitFrame.ThreatReaction = nil
 	self.UnitFrame.guid = nil
-	self.UnitFrame._guid = nil
 	self.UnitFrame.RaidIconType = nil
 end
 
@@ -548,33 +544,32 @@ function mod:OnUpdate(elapsed)
 			frame.alpha = frame:GetParent():GetAlpha()
 		else
 			frame.alpha = 1
+
+			if frame.oldHighlight:IsShown() then
+				if not frame.isMouseover then
+					frame.isMouseover = true
+
+					frame.unit = "mouseover"
+					frame.guid = UnitGUID("mouseover")
+
+					mod:UpdateElement_AurasByGUID(frame.guid)
+
+					--[[if frame.UnitType == "FRIENDLY_PLAYER" and not frame.UnitClass then
+						frame.UnitClass = select(2, UnitClass("mouseover"))
+						mod:UpdateElement_All(frame, true, true)
+					end]]
+				end
+			elseif frame.isMouseover then
+				frame.unit = nil
+				frame.guid = nil
+				frame.isMouseover = nil
+			end
 		end
+
 		frame:GetParent():SetAlpha(1)
 		
 		frame.isTarget = mod.hasTarget and frame.alpha == 1
 		mod:SetTargetFrame(frame)
-
-		if frame.oldHighlight:IsShown() then
-			if not frame.isMouseover then
-				frame.isMouseover = true
-
-				frame.unit = "mouseover"
-				frame._unit = frame.unit
-				frame.guid = UnitGUID("mouseover")
-				frame._guid = frame.guid
-
-				mod:UpdateElement_AurasByGUID(frame.guid)
-
-				--[[if frame.UnitType == "FRIENDLY_PLAYER" and not frame.UnitClass then
-					frame.UnitClass = select(2, UnitClass("mouseover"))
-					mod:UpdateElement_All(frame, true, true)
-				end]]
-			end
-		elseif frame.isMouseover then
-			frame.unit = frame._unit
-			frame.guid = frame._guid
-			frame.isMouseover = nil
-		end
 
 		if mod:UnitDetailedThreatSituation(frame) then
 			mod:UpdateElement_HealthColor(frame)
