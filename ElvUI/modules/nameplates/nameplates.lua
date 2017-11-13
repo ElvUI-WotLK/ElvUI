@@ -252,26 +252,23 @@ function mod:UnitClass(frame, type)
 	end
 end
 
-do
-	local r, g, b
-	function mod:UnitDetailedThreatSituation(frame)
-		if not frame.Threat:IsShown() then
-			if frame.UnitType == "ENEMY_NPC" then
-				r, g, b = frame.oldName:GetTextColor()
-				return (r > .5 and g < .5) and 0 or nil
-			end
-		else
-			r, g, b = frame.Threat:GetVertexColor()
-			if r > 0 then
-				if g > 0 then
-					if b > 0 then return 1 end
-					return 2
-				end
-				return 3
-			end
+function mod:UnitDetailedThreatSituation(frame)
+	if not frame.Threat:IsShown() then
+		if frame.UnitType == "ENEMY_NPC" then
+			local r, g, b = frame.oldName:GetTextColor()
+			return (r > .5 and g < .5) and 0 or nil
 		end
-		return nil
+	else
+		local r, g, b = frame.Threat:GetVertexColor()
+		if r > 0 then
+			if g > 0 then
+				if b > 0 then return 1 end
+				return 2
+			end
+			return 3
+		end
 	end
+	return nil
 end
 
 function mod:UnitLevel(frame)

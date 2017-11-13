@@ -32,7 +32,7 @@ function mod:UpdateElement_HealthColor(frame)
 		local status = mod:UnitDetailedThreatSituation(frame)
 		if status then
 			if status == 3 then
-				if E:GetPlayerRole() == "TANK" then
+				if E.Role == "Tank" then
 					r, g, b = mod.db.threat.goodColor.r, mod.db.threat.goodColor.g, mod.db.threat.goodColor.b
 					scale = mod.db.threat.goodScale
 				else
@@ -40,21 +40,21 @@ function mod:UpdateElement_HealthColor(frame)
 					scale = mod.db.threat.badScale
 				end
 			elseif status == 2 then
-				if E:GetPlayerRole() == "TANK" then
+				if E.Role == "Tank" then
 					r, g, b = mod.db.threat.badTransition.r, mod.db.threat.badTransition.g, mod.db.threat.badTransition.b
 				else
 					r, g, b = mod.db.threat.goodTransition.r, mod.db.threat.goodTransition.g, mod.db.threat.goodTransition.b
 				end
 				scale = 1
 			elseif status == 1 then
-				if E:GetPlayerRole() == "TANK" then
+				if E.Role == "Tank" then
 					r, g, b = mod.db.threat.goodTransition.r, mod.db.threat.goodTransition.g, mod.db.threat.goodTransition.b
 				else
 					r, g, b = mod.db.threat.badTransition.r, mod.db.threat.badTransition.g, mod.db.threat.badTransition.b
 				end
 				scale = 1
 			else
-				if E:GetPlayerRole() == "TANK" then
+				if E.Role == "Tank" then
 					--Check if it is being tanked by an offtank.
 					--if self.db.threat.beingTankedByTank then
 					--	r, g, b = self.db.threat.beingTankedByTankColor.r, self.db.threat.beingTankedByTankColor.g, self.db.threat.beingTankedByTankColor.b
