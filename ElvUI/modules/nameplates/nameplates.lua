@@ -252,23 +252,25 @@ function mod:UnitClass(frame, type)
 	end
 end
 
-function mod:UnitDetailedThreatSituation(frame)
-	if not frame.Threat:IsShown() then
-		if frame.UnitType == "ENEMY_NPC" then
-			local r, g, b = frame.oldName:GetTextColor()
-			return (r > .5 and g < .5) and 0 or false
+do
+	local r, g, b
+	function mod:UnitDetailedThreatSituation(frame)
+		if not frame.Threat:IsShown() then
+			if frame.UnitType == "ENEMY_NPC" then
+				r, g, b = frame.oldName:GetTextColor()
+				return (r > .5 and g < .5) and 0 or nil
+			end
 		else
-			return false
+			r, g, b = frame.Threat:GetVertexColor()
+			if r > 0 then
+				if g > 0 then
+					if b > 0 then return 1 end
+					return 2
+				end
+				return 3
+			end
 		end
-	end
-
-	local r, g, b = frame.Threat:GetVertexColor()
-	if r > 0 then
-		if g > 0 then
-			if b > 0 then return 1 end
-			return 2
-		end
-		return 3
+		return nil
 	end
 end
 
@@ -423,6 +425,12 @@ function mod:ForEachPlate(functionToRun, ...)
 	end
 end
 
+function mod:ForEachVisiblePlate(functionToRun, ...)
+	for frame in pairs(self.VisiblePlates) do
+		self[functionToRun](self, frame, ...)
+	end
+end
+
 function mod:UpdateElement_All(frame, noTargetFrame, filterIgnore)
 	if self.db.units[frame.UnitType].healthbar.enable or (frame.isTarget and self.db.alwaysShowTargetHealth) then
 		mod:UpdateElement_Health(frame)
@@ -569,10 +577,6 @@ function mod:OnUpdate(elapsed)
 		
 		frame.isTarget = mod.hasTarget and frame.alpha == 1
 		mod:SetTargetFrame(frame)
-
-		if mod:UnitDetailedThreatSituation(frame) then
-			mod:UpdateElement_HealthColor(frame)
-		end
 	end
 end
 
@@ -771,6 +775,8 @@ function mod:Initialize()
 	LAI.RegisterCallback(self, "RemoveAuraFromGUID")
 	self:RegisterEvent("UNIT_AURA")
 	self:RegisterEvent("UNIT_COMBO_POINTS")
+
+	self:ScheduleRepeatingTimer("ForEachVisiblePlate", 0.1, "UpdateElement_HealthColor")
 
 	E.NamePlates = self
 end
