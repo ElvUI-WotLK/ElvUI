@@ -117,6 +117,9 @@ function UF:Configure_Castbar(frame)
 	end
 
 	--Icon
+	local color = E.db.unitframe.colors.borderColor
+	castbar.ButtonIcon.bg:SetBackdropBorderColor(color.r, color.g, color.b)
+
 	if db.castbar.icon then
 		castbar.Icon = castbar.ButtonIcon
 		if (not db.castbar.iconAttached) then
