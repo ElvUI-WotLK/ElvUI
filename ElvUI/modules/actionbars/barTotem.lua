@@ -140,18 +140,10 @@ function AB:TotemOnLeave()
 end
 
 function AB:AdjustTotemSettings()
-	local combat = InCombatLockdown()
-
-	if self.db["barTotem"].enabled and not combat then
+	if self.db["barTotem"].enabled and not InCombatLockdown() then
 		bar:Show()
-	elseif not combat then
+	elseif not InCombatLockdown() then
 		bar:Hide()
-	end
-
-	if(self.db["barTotem"].inheritGlobalFade) then
-		bar:SetParent(self.fadeParent)
-	else
-		bar:SetParent(E.UIParent)
 	end
 
 	for button, _ in pairs(bar.buttons) do
