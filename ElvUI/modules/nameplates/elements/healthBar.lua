@@ -15,15 +15,12 @@ end
 function mod:UpdateElement_HealthColor(frame)
 	if not frame.HealthBar:IsShown() then return end
 
-	local r, g, b, classColor, useClassColor
+	local r, g, b
 	local scale = 1
 
 	local class = frame.UnitClass
-	if class then
-		classColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class]
-		useClassColor = mod.db.units[frame.UnitType].healthbar.useClassColor
-	end
-
+	local classColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class]
+	local useClassColor = mod.db.units[frame.UnitType].healthbar.useClassColor
 	if classColor and ((frame.UnitType == "FRIENDLY_PLAYER" and useClassColor) or (frame.UnitType == "ENEMY_PLAYER" and useClassColor)) then
 		r, g, b = classColor.r, classColor.g, classColor.b
 	elseif frame.UnitReaction == 1 then
@@ -96,11 +93,13 @@ function mod:UpdateElement_HealthColor(frame)
 		frame.HealthBar.r, frame.HealthBar.g, frame.HealthBar.b = r, g, b
 	end
 
-	frame.ThreatScale = scale
-	if frame.isTarget and self.db.useTargetScale then
-		scale = scale * self.db.targetScale
+	if frame.ThreatScale ~= scale then
+		frame.ThreatScale = scale
+		if frame.isTarget and self.db.useTargetScale then
+			scale = scale * self.db.targetScale
+		end
+		self:SetFrameScale(frame, scale * (frame.ActionScale or 1))
 	end
-	self:SetFrameScale(frame, scale * (frame.ActionScale or 1))
 end
 
 function mod:UpdateElement_Health(frame)

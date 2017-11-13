@@ -112,10 +112,12 @@ function mod:SetTargetFrame(frame)
 			self:UpdateAllFrame(frame)
 		end
 
-		if self.hasTarget then
-			frame:SetAlpha(self.db.nonTargetTransparency)
-		else
-			frame:SetAlpha(1)
+		if not frame.AlphaChanged then
+			if self.hasTarget then
+				frame:SetAlpha(self.db.nonTargetTransparency)
+			else
+				frame:SetAlpha(1)
+			end
 		end
 
 		-- TEST
@@ -124,10 +126,12 @@ function mod:SetTargetFrame(frame)
 		mod:UpdateElement_CPoints(frame)
 		mod:UpdateElement_Filters(frame, "PLAYER_TARGET_CHANGED")
 	else
-		if self.hasTarget then
-			frame:SetAlpha(self.db.nonTargetTransparency)
-		else
-			frame:SetAlpha(1)
+		if not frame.AlphaChanged then
+			if self.hasTarget then
+				frame:SetAlpha(self.db.nonTargetTransparency)
+			else
+				frame:SetAlpha(1)
+			end
 		end
 	end
 end
