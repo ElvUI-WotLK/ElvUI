@@ -140,11 +140,9 @@ function AB:TotemOnLeave()
 end
 
 function AB:AdjustTotemSettings()
-	local combat = InCombatLockdown()
-
-	if self.db["barTotem"].enabled and not combat then
+	if self.db["barTotem"].enabled and not InCombatLockdown() then
 		bar:Show()
-	elseif not combat then
+	elseif not InCombatLockdown() then
 		bar:Hide()
 	end
 
