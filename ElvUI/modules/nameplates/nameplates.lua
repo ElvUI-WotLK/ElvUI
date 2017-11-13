@@ -70,7 +70,6 @@ function mod:SetTargetFrame(frame)
 			if self.db.useTargetScale then
 				self:SetFrameScale(frame, (frame.ThreatScale or 1) * self.db.targetScale)
 			end
-			frame:SetFrameLevel(60)
 			frame.unit = "target"
 			frame.guid = UnitGUID("target")
 			frame.isTargetChanged = true
@@ -106,7 +105,6 @@ function mod:SetTargetFrame(frame)
 		if self.db.useTargetScale then
 			self:SetFrameScale(frame, (frame.ThreatScale or 1))
 		end
-		frame:SetFrameLevel(frame:GetFrameLevel() - 40)
 		frame.unit = nil
 		frame.guid = nil
 		frame.isTargetChanged = false
@@ -454,8 +452,6 @@ function mod:UpdateElement_All(frame, noTargetFrame, filterIgnore)
 	end
 end
 
-local maxFrameLevel = 30
-local currentFrameLevel = 10
 function mod:OnCreated(frame)
 	local HealthBar, CastBar = frame:GetChildren()
 	local Threat, Border, CastBarBorder, CastBarShield, CastBarIcon, Highlight, Name, Level, BossIcon, RaidIcon, EliteIcon = frame:GetRegions()
@@ -463,14 +459,6 @@ function mod:OnCreated(frame)
 	frame.UnitFrame = CreateFrame("Frame", nil, frame)
 	frame.UnitFrame:SetAllPoints()
 	frame.UnitFrame:SetScript("OnEvent", self.OnEvent)
-
-	frame.UnitFrame:SetFrameLevel(currentFrameLevel)
-
-	if currentFrameLevel == maxFrameLevel then
-		currentFrameLevel = currentFrameLevel - 20
-	else
-		currentFrameLevel = currentFrameLevel + 1
-	end
 
 	frame.UnitFrame.HealthBar = self:ConstructElement_HealthBar(frame.UnitFrame)
 	frame.UnitFrame.Level = self:ConstructElement_Level(frame.UnitFrame)
