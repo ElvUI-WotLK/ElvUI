@@ -125,6 +125,19 @@ function mod:SetTargetFrame(frame)
 		mod:UpdateElement_HealthColor(frame)
 		mod:UpdateElement_CPoints(frame)
 		mod:UpdateElement_Filters(frame, "PLAYER_TARGET_CHANGED")
+	elseif frame.oldHighlight:IsShown() then
+		if not frame.isMouseover then
+			frame.isMouseover = true
+
+			frame.unit = "mouseover"
+			frame.guid = UnitGUID("mouseover")
+
+			mod:UpdateElement_AurasByGUID(frame.guid)
+		end
+	elseif frame.isMouseover then
+		frame.unit = nil
+		frame.guid = nil
+		frame.isMouseover = nil
 	else
 		if not frame.AlphaChanged then
 			if self.hasTarget then
@@ -557,25 +570,10 @@ function mod:OnUpdate(elapsed)
 			frame.alpha = frame:GetParent():GetAlpha()
 		else
 			frame.alpha = 1
-
-			if frame.oldHighlight:IsShown() then
-				if not frame.isMouseover then
-					frame.isMouseover = true
-
-					frame.unit = "mouseover"
-					frame.guid = UnitGUID("mouseover")
-
-					mod:UpdateElement_AurasByGUID(frame.guid)
-				end
-			elseif frame.isMouseover then
-				frame.unit = nil
-				frame.guid = nil
-				frame.isMouseover = nil
-			end
 		end
 
 		frame:GetParent():SetAlpha(1)
-		
+
 		frame.isTarget = mod.hasTarget and frame.alpha == 1
 		mod:SetTargetFrame(frame)
 	end
