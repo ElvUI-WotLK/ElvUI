@@ -13,6 +13,7 @@ local GetComboPoints = GetComboPoints
 local MAX_COMBO_POINTS = MAX_COMBO_POINTS
 
 function mod:UpdateElement_CPoints(frame)
+	if not self.db.comboPoints then return end
 	if frame.UnitType == "FRIENDLY_PLAYER" or frame.UnitType == "FRIENDLY_NPC" then return end
 
 	local numPoints
