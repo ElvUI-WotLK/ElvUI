@@ -2,18 +2,19 @@ local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, Private
 local CH = E:NewModule("Chat", "AceTimer-3.0", "AceHook-3.0", "AceEvent-3.0")
 local LSM = LibStub("LibSharedMedia-3.0");
 
-local _G = _G;
-local time, difftime = time, difftime;
-local pairs, unpack, select, tostring, pcall, next, tonumber, type, assert = pairs, unpack, select, tostring, pcall, next, tonumber, type, assert;
-local tinsert, tremove, tsort, twipe, tconcat = table.insert, table.remove, table.sort, table.wipe, table.concat;
-local strtrim, strmatch = strtrim, strmatch
-local len, gsub, find, sub, gmatch, format, split = string.len, string.gsub, string.find, string.sub, string.gmatch, string.format, string.split;
-local strlower, strsub, strlen, strupper = strlower, strsub, strlen, strupper;
+local _G = _G
+local time, difftime = time, difftime
+local pairs, unpack, select, tostring, pcall, next, tonumber, type, assert = pairs, unpack, select, tostring, pcall, next, tonumber, type, assert
+local tinsert, tremove, tsort, twipe, tconcat = table.insert, table.remove, table.sort, table.wipe, table.concat
+local strmatch = strmatch
+local gsub, find, gmatch, format, split = string.gsub, string.find, string.gmatch, string.format, string.split
+local strlower, strsub, strlen, strupper = strlower, strsub, strlen, strupper
 
 local hooksecurefunc = hooksecurefunc;
 local CreateFrame = CreateFrame;
 local GetTime = GetTime;
 local UnitName = UnitName;
+local IsAltKeyDown = IsAltKeyDown
 local IsShiftKeyDown = IsShiftKeyDown;
 local InCombatLockdown = InCombatLockdown;
 local ChatFrame_SendTell = ChatFrame_SendTell;
@@ -172,6 +173,8 @@ local function ChatFrame_OnMouseScroll(frame, delta)
 	if delta < 0 then
 		if IsShiftKeyDown() then
 			frame:ScrollToBottom()
+		elseif IsAltKeyDown() then
+			frame:ScrollDown()
 		else
 			for i = 1, numScrollMessages do
 				frame:ScrollDown()
@@ -180,6 +183,8 @@ local function ChatFrame_OnMouseScroll(frame, delta)
 	elseif delta > 0 then
 		if IsShiftKeyDown() then
 			frame:ScrollToTop()
+		elseif IsAltKeyDown() then
+			frame:ScrollUp()
 		else
 			for i = 1, numScrollMessages do
 				frame:ScrollUp()
@@ -218,10 +223,9 @@ function CH:InsertEmotions(msg)
 end
 
 function CH:GetSmileyReplacementText(msg)
-	if not msg then return end
-	if not self.db.emotionIcons or msg:find("/run") or msg:find("/dump") or msg:find("/script") then return msg end
+	if not msg or not self.db.emotionIcons or find(msg, "/run") or find(msg, "/dump") or find(msg, "/script") then return msg end
 	local outstr = "";
-	local origlen = len(msg);
+	local origlen = strlen(msg);
 	local startpos = 1;
 	local endpos;
 
@@ -231,13 +235,13 @@ function CH:GetSmileyReplacementText(msg)
 		if(pos ~= nil) then
 			endpos = pos;
 		end
-		outstr = outstr .. CH:InsertEmotions(sub(msg,startpos,endpos)); --run replacement on this bit
+		outstr = outstr .. CH:InsertEmotions(strsub(msg,startpos,endpos)); --run replacement on this bit
 		startpos = endpos + 1;
 		if(pos ~= nil) then
 			endpos = find(msg,"|h]|r",startpos,-1) or find(msg,"|h",startpos,-1);
 			endpos = endpos or origlen;
 			if(startpos < endpos) then
-				outstr = outstr .. sub(msg,startpos,endpos); --don't run replacement on this bit
+				outstr = outstr .. strsub(msg,startpos,endpos); --don't run replacement on this bit
 				startpos = endpos + 1;
 			end
 		end
@@ -298,10 +302,10 @@ function CH:StyleChat(frame)
 
 		if InCombatLockdown() then
 			local MIN_REPEAT_CHARACTERS = E.db.chat.numAllowedCombatRepeat
-			if (len(text) > MIN_REPEAT_CHARACTERS) then
+			if (strlen(text) > MIN_REPEAT_CHARACTERS) then
 			local repeatChar = true;
 			for i=1, MIN_REPEAT_CHARACTERS, 1 do
-				if ( sub(text,(0-i), (0-i)) ~= sub(text,(-1-i),(-1-i)) ) then
+				if ( strsub(text,(0-i), (0-i)) ~= strsub(text,(-1-i),(-1-i)) ) then
 					repeatChar = false;
 					break;
 				end
@@ -313,8 +317,8 @@ function CH:StyleChat(frame)
 			end
 		end
 
-		if text:len() < 5 then
-			if text:sub(1, 4) == "/tt " then
+		if strlen(text) < 5 then
+			if strsub(text, 1, 4) == "/tt " then
 				local unitname, realm = UnitName("target")
 				if unitname and realm and not UnitIsSameServer("player", "target") then
 					unitname = unitname .. "-" .. realm:gsub(" ", "")
@@ -322,8 +326,8 @@ function CH:StyleChat(frame)
 				ChatFrame_SendTell((unitname or L["Invalid Target"]), ChatFrame1)
 			end
 
-			if text:sub(1, 4) == "/gr " then
-				self:SetText(CH:GetGroupDistribution() .. text:sub(5))
+			if strsub(text, 1, 4) == "/gr " then
+				self:SetText(CH:GetGroupDistribution() .. strsub(text, 5))
 				ChatEdit_ParseText(self, 0)
 			end
 		end
@@ -417,12 +421,12 @@ function CH:UpdateSettings()
 end
 
 local function removeIconFromLine(text)
-	for i = 1, 8 do
-		text = gsub(text, "|TInterface\\TargetingFrame\\UI%-RaidTargetingIcon_"..i..":0|t", "{"..strlower(_G["RAID_TARGET_"..i]).."}")
-	end
-	text = gsub(text, "(|TInterface(.*)|t)", "")
+	text = gsub(text, "|TInterface\\TargetingFrame\\UI%-RaidTargetingIcon_(%d+):0|t", function(x)
+		x = _G["RAID_TARGET_"..x];return "{"..strlower(x).."}"
+	end)
 
-	return text
+	text = gsub(text, "|H.-|h(.-)|h", "%1")
+	return gsub(text, "|T.-|t", "")
 end
 
 local function colorizeLine(text, r, g, b)
@@ -462,7 +466,7 @@ function CH:CopyChat(frame)
 		FCF_SetChatWindowFontSize(frame, frame, 0.01)
 		CopyChatFrame:Show()
 		local lineCt = self:GetLines(frame:GetRegions())
-		local text = tconcat(lines, "\n", 1, lineCt)
+		local text = tconcat(lines, " \n", 1, lineCt)
 		FCF_SetChatWindowFontSize(frame, frame, fontSize)
 		CopyChatFrameEditBox:SetText(text)
 	else
@@ -728,20 +732,26 @@ function CH:FindURL(event, msg, ...)
 		return false, msg, ...
 	end
 
+	local text, tag = msg, strmatch(msg, "{(.-)}")
+	if tag and ICON_TAG_LIST[strlower(tag)] then
+		text = gsub(gsub(text, "(%S)({.-})", "%1 %2"), "({.-})(%S)", "%1 %2")
+	end
+
+	text = gsub(gsub(text, "(%S)(|c.-|H.-|h.-|h|r)", '%1 %2'), "(|c.-|H.-|h.-|h|r)(%S)", "%1 %2")
 	-- http://example.com
-	local newMsg, found = gsub(msg, "(%a+)://(%S+)%s?", CH:PrintURL("%1://%2"))
+	local newMsg, found = gsub(text, "(%a+)://(%S+)%s?", CH:PrintURL("%1://%2"))
 	if found > 0 then return false, CH:GetSmileyReplacementText(CH:CheckKeyword(newMsg)), ... end
 	-- www.example.com
-	newMsg, found = gsub(msg, "www%.([_A-Za-z0-9-]+)%.(%S+)%s?", CH:PrintURL("www.%1.%2"))
+	newMsg, found = gsub(text, "www%.([_A-Za-z0-9-]+)%.(%S+)%s?", CH:PrintURL("www.%1.%2"))
 	if found > 0 then return false, CH:GetSmileyReplacementText(CH:CheckKeyword(newMsg)), ... end
 	-- example@example.com
-	newMsg, found = gsub(msg, "([_A-Za-z0-9-%.]+)@([_A-Za-z0-9-]+)(%.+)([_A-Za-z0-9-%.]+)%s?", CH:PrintURL("%1@%2%3%4"))
+	newMsg, found = gsub(text, "([_A-Za-z0-9-%.]+)@([_A-Za-z0-9-]+)(%.+)([_A-Za-z0-9-%.]+)%s?", CH:PrintURL("%1@%2%3%4"))
 	if found > 0 then return false, CH:GetSmileyReplacementText(CH:CheckKeyword(newMsg)), ... end
 	-- IP address with port 1.1.1.1:1
-	newMsg, found = gsub(msg, "(%d%d?%d?)%.(%d%d?%d?)%.(%d%d?%d?)%.(%d%d?%d?)(:%d+)%s?", CH:PrintURL("%1.%2.%3.%4%5"))
+	newMsg, found = gsub(text, "(%d%d?%d?)%.(%d%d?%d?)%.(%d%d?%d?)%.(%d%d?%d?)(:%d+)%s?", CH:PrintURL("%1.%2.%3.%4%5"))
 	if found > 0 then return false, CH:GetSmileyReplacementText(CH:CheckKeyword(newMsg)), ... end
 	-- IP address 1.1.1.1
-	newMsg, found = gsub(msg, "(%d%d?%d?)%.(%d%d?%d?)%.(%d%d?%d?)%.(%d%d?%d?)%s?", CH:PrintURL("%1.%2.%3.%4"))
+	newMsg, found = gsub(text, "(%d%d?%d?)%.(%d%d?%d?)%.(%d%d?%d?)%.(%d%d?%d?)%s?", CH:PrintURL("%1.%2.%3.%4"))
 	if found > 0 then return false, CH:GetSmileyReplacementText(CH:CheckKeyword(newMsg)), ... end
 
 	msg = CH:CheckKeyword(msg)
@@ -1243,7 +1253,7 @@ function CH:SetupChat()
 end
 
 local function PrepareMessage(author, message)
-	return format("%s%s", author:upper(), message)
+	return format("%s%s", strupper(author), message)
 end
 
 function CH:ChatThrottleHandler(_, ...)
@@ -1420,7 +1430,7 @@ function CH:SetChatFont(dropDown, chatFrame, fontSize)
 end
 
 function CH:ChatEdit_AddHistory(_, line)
-	if line:find("/rl") then return; end
+	if find(line, "/rl") then return end
 
 	if ( strlen(line) > 0 ) then
 		for _, text in pairs(ElvCharacterDB.ChatEditHistory) do
@@ -1439,7 +1449,7 @@ end
 function CH:UpdateChatKeywords()
 	twipe(CH.Keywords)
 	local keywords = self.db.keywords
-	keywords = keywords:gsub(",%s", ",")
+	keywords = gsub(keywords,",%s",",")
 
 	for i=1, #{split(",", keywords)} do
 		local stringValue = select(i, split(",", keywords));
