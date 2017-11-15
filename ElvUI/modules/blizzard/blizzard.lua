@@ -62,6 +62,8 @@ function B:Initialize()
 			QuestLogDetailScrollFrame:SetFrameLevel(questFrame + 1);
 		end
 	end);
+
+	WorldMapFrame:SetToplevel(true)
 end
 
 local function InitializeCallback()
