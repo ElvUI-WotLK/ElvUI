@@ -487,6 +487,8 @@ function E:CheckRole()
 	elseif(talentTree) then
 		if(self.myclass == "DRUID" and talentTree == 2) then
 			role = select(5, GetTalentInfo(talentTree, 22)) > 0 and "Tank" or "Melee";
+		elseif self.myclass == "DEATHKNIGHT" and talentTree == 2 then
+			role = select(5, GetTalentInfo(talentTree, 25)) > 0 and "Tank" or "Melee"
 		else
 			role = self.ClassRole[self.myclass][talentTree];
 		end
@@ -500,7 +502,7 @@ function E:CheckRole()
 		self.callbacks:Fire("RoleChanged");
 	end
 
-	if self.HealingClasses[self.myclass] ~= nil and E.myclass == "SHAMAN" then
+	if E.myclass == "SHAMAN" then
 		if talentTree == 3 then
 			self.DispelClasses[self.myclass].Curse = true
 		else
