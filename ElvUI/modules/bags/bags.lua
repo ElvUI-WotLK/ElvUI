@@ -185,15 +185,17 @@ function B:SetSearch(query)
 	if(ElvUIKeyFrameItem1) then
 		local numKey = GetKeyRingSize();
 		for slotID = 1, numKey do
-			local _, _, _, _, _, _, link = GetContainerItemInfo(KEYRING_CONTAINER, slotID);
-			local button = _G["ElvUIKeyFrameItem"..slotID];
-			local success, result = pcall(Search.Matches, Search, link, query);
-			if(empty or (success and result)) then
-				SetItemButtonDesaturated(button);
-				button:SetAlpha(1);
-			else
-				SetItemButtonDesaturated(button, 1);
-				button:SetAlpha(0.4);
+			local button = _G["ElvUIKeyFrameItem"..slotID]
+			if button then
+				local _, _, _, _, _, _, link = GetContainerItemInfo(KEYRING_CONTAINER, slotID);
+				local success, result = pcall(Search.Matches, Search, link, query);
+				if(empty or (success and result)) then
+					SetItemButtonDesaturated(button);
+					button:SetAlpha(1);
+				else
+					SetItemButtonDesaturated(button, 1);
+					button:SetAlpha(0.4);
+				end
 			end
 		end
 	end

@@ -97,7 +97,6 @@ function mod:SetTargetFrame(frame)
 
 			-- TEST
 			mod:UpdateElement_Glow(frame)
-			mod:UpdateElement_HealthColor(frame)
 			mod:UpdateElement_CPoints(frame)
 			mod:UpdateElement_Filters(frame, "PLAYER_TARGET_CHANGED")
 		end
@@ -108,6 +107,11 @@ function mod:SetTargetFrame(frame)
 		frame.unit = nil
 		frame.guid = nil
 		frame.isTargetChanged = false
+
+		if not frame.test then
+			frame.CastBar:Hide()
+		end
+
 		if self.db.units[frame.UnitType].healthbar.enable ~= true then
 			self:UpdateAllFrame(frame)
 		end
@@ -122,7 +126,6 @@ function mod:SetTargetFrame(frame)
 
 		-- TEST
 		mod:UpdateElement_Glow(frame)
-		mod:UpdateElement_HealthColor(frame)
 		mod:UpdateElement_CPoints(frame)
 		mod:UpdateElement_Filters(frame, "PLAYER_TARGET_CHANGED")
 	elseif frame.oldHighlight:IsShown() then
@@ -132,12 +135,17 @@ function mod:SetTargetFrame(frame)
 			frame.unit = "mouseover"
 			frame.guid = UnitGUID("mouseover")
 
+			mod:UpdateElement_Cast(frame, nil, frame.unit)
 			mod:UpdateElement_AurasByGUID(frame.guid)
 		end
 	elseif frame.isMouseover then
 		frame.unit = nil
 		frame.guid = nil
 		frame.isMouseover = nil
+
+		if not frame.test then
+			frame.CastBar:Hide()
+		end
 	else
 		if not frame.AlphaChanged then
 			if self.hasTarget then
@@ -147,6 +155,8 @@ function mod:SetTargetFrame(frame)
 			end
 		end
 	end
+
+	self:UpdateElement_HealthColor(frame)
 end
 
 function mod:StyleFrame(parent, noBackdrop, point)
@@ -329,9 +339,6 @@ function mod:OnShow()
 	self.UnitFrame.UnitClass = mod:UnitClass(self.UnitFrame, unitType)
 	self.UnitFrame.UnitReaction = unitReaction
 
-	if not mod.hasTarget then self.UnitFrame.alpha = 1 end
-	self.UnitFrame.alpha = self.UnitFrame.alpha
-
 	if unitType == "ENEMY_PLAYER" then
 		mod:UpdateElement_HealerIcon(self.UnitFrame)
 	end
@@ -386,7 +393,7 @@ function mod:OnHide()
 
 	mod:HideAuraIcons(self.UnitFrame.Buffs)
 	mod:HideAuraIcons(self.UnitFrame.Debuffs)
-	self.UnitFrame:UnregisterAllEvents()
+--	self.UnitFrame:UnregisterAllEvents()
 	self.UnitFrame.Glow.r, self.UnitFrame.Glow.g, self.UnitFrame.Glow.b = nil, nil, nil
 	self.UnitFrame.Glow:Hide()
 	self.UnitFrame.Glow2:Hide()
@@ -416,6 +423,7 @@ function mod:OnHide()
 	self.UnitFrame.ThreatReaction = nil
 	self.UnitFrame.guid = nil
 	self.UnitFrame.RaidIconType = nil
+	self.UnitFrame.test = nil
 end
 
 function mod:UpdateAllFrame(frame)
@@ -532,8 +540,21 @@ function mod:OnCreated(frame)
 end
 
 function mod:OnEvent(event, unit, ...)
-	if not self.unit then return end
+	if not self:IsShown() then return end
+	if not unit then return end
 
+	local checkCast
+	if (self.UnitType ~= "ENEMY_NPC" or self.UnitType ~= "FRIENDLY_NPC") then
+		if self.UnitName == UnitName(unit) then
+			self.test = true
+			checkCast = true
+		end
+	elseif frame.unit then
+		if self.test then self.test = false end
+		checkCast = true
+	end
+
+	if not checkCast then return end
 	mod:UpdateElement_Cast(self, event, unit, ...)
 end
 
@@ -575,7 +596,6 @@ function mod:OnUpdate(elapsed)
 		frame:GetParent():SetAlpha(1)
 
 		frame.isTarget = mod.hasTarget and frame.alpha == 1
-		mod:SetTargetFrame(frame)
 	end
 end
 
@@ -765,6 +785,7 @@ function mod:Initialize()
 	self:RegisterEvent("PLAYER_LOGOUT") -- used in the StyleFilter
 	self:RegisterEvent("PLAYER_TARGET_CHANGED")
 	--self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+
 	LAI.UnregisterAllCallbacks(self)
 	LAI.RegisterCallback(self, "LibAuraInfo_AURA_APPLIED")
 	LAI.RegisterCallback(self, "LibAuraInfo_AURA_REMOVED")
@@ -775,7 +796,7 @@ function mod:Initialize()
 	self:RegisterEvent("UNIT_AURA")
 	self:RegisterEvent("UNIT_COMBO_POINTS")
 
-	self:ScheduleRepeatingTimer("ForEachVisiblePlate", 0.1, "UpdateElement_HealthColor")
+	self:ScheduleRepeatingTimer("ForEachVisiblePlate", 0.1, "SetTargetFrame")
 
 	E.NamePlates = self
 end
