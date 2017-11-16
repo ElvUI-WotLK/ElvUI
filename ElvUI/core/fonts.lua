@@ -84,5 +84,12 @@ function E:UpdateBlizzardFonts()
 		SetFont(PVPInfoTextString,					NORMAL, 22, MONOCHROME .. "OUTLINE");
 		SetFont(PVPArenaTextString,					NORMAL, 22, MONOCHROME .. "OUTLINE");
 		SetFont(CombatTextFont,						COMBAT, 25, MONOCHROME .. "OUTLINE");
+		SetFont(SystemFont_OutlineThick_WTF,		NORMAL, 32, MONOCHROME.."OUTLINE")
+		SetFont(SubZoneTextFont,					NORMAL, 24, MONOCHROME.."OUTLINE")
+		SetFont(MailFont_Large,						NORMAL, 14)
+		SetFont(InvoiceFont_Med,					NORMAL, 12)
+		SetFont(InvoiceFont_Small,					NORMAL, self.db.general.fontSize)
+		SetFont(AchievementFont_Small,				NORMAL, self.db.general.fontSize)
+		SetFont(ReputationDetailFont,				NORMAL, self.db.general.fontSize)
 	end
 end

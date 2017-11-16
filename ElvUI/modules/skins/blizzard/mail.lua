@@ -207,6 +207,7 @@ local function LoadSkin()
 	S:HandleScrollBar(OpenMailScrollFrameScrollBar)
 
 	OpenMailBodyText:SetTextColor(1, 1, 1)
+	InvoiceTextFontNormal:SetFont(E.media.normFont, 13)
 	InvoiceTextFontNormal:SetTextColor(1, 1, 1)
 	OpenMailInvoiceBuyMode:SetTextColor(1, 0.80, 0.10)
 
