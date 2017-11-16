@@ -1169,6 +1169,7 @@ function UF:ToggleTransparentStatusBar(isTransparent, statusBar, backdropTex, ad
 		end
 
 		statusBar:SetStatusBarTexture("")
+		if statusBar.texture then statusBar.texture = statusBar:GetStatusBarTexture() end --Needed for Power element
 
 		backdropTex:ClearAllPoints()
 		if statusBarOrientation == "VERTICAL" then
