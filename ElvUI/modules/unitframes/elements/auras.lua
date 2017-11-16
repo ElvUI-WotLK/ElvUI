@@ -472,7 +472,7 @@ function UF:AuraFilter(unit, button, name, _, _, _, dispelType, duration, expira
 
 	if db.priority ~= "" then
 		noDuration = (not duration or duration == 0)
-		isUnit = unit and caster and UnitIsUnit(unit, caster)
+		isUnit = unit and caster and (UnitIsUnit(unit, caster) == 1 and true or false)
 		canDispell = (self.type == "buffs" and isStealable) or (self.type == "debuffs" and dispelType and E:IsDispellableByMe(dispelType))
 		allowDuration = noDuration or (duration and (duration > 0) and (db.maxDuration == 0 or duration <= db.maxDuration) and (db.minDuration == 0 or duration >= db.minDuration))
 		filterCheck, spellPriority = UF:CheckFilter(name, caster, spellID, isFriend, isPlayer, isUnit, allowDuration, noDuration, canDispell, strsplit(",", db.priority))

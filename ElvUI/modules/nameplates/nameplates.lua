@@ -549,7 +549,7 @@ function mod:OnEvent(event, unit, ...)
 			self.test = true
 			checkCast = true
 		end
-	elseif frame.unit then
+	elseif frame.unit and frame.unit == unit then
 		if self.test then self.test = false end
 		checkCast = true
 	end
