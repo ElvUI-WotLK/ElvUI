@@ -8,6 +8,7 @@ local twipe, tinsert, tremove, next = table.wipe, tinsert, tremove, next;
 local floor = floor;
 local format, find, match, strrep, len, sub, gsub = string.format, string.find, string.match, strrep, string.len, string.sub, string.gsub;
 
+local UnitGUID = UnitGUID
 local CreateFrame = CreateFrame;
 local GetActiveTalentGroup = GetActiveTalentGroup;
 local GetCVar = GetCVar;
@@ -27,7 +28,6 @@ E.myclass = select(2, UnitClass("player")); -- Constants
 E.myrace = select(2, UnitRace("player"));
 E.myfaction = select(2, UnitFactionGroup("player"));
 E.myname = UnitName("player");
-E.myguid = UnitGUID("player");
 E.version = GetAddOnMetadata("ElvUI", "Version");
 E.myrealm = GetRealmName();
 E.wowbuild = select(2, GetBuildInfo()); E.wowbuild = tonumber(E.wowbuild);
@@ -1164,6 +1164,7 @@ function E:Initialize()
 	twipe(self.global);
 	twipe(self.private)
 
+	self.myguid = UnitGUID("player")
 	self.data = LibStub("AceDB-3.0"):New("ElvDB", self.DF);
 	self.data.RegisterCallback(self, "OnProfileChanged", "UpdateAll");
 	self.data.RegisterCallback(self, "OnProfileCopied", "UpdateAll");

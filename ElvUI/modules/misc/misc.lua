@@ -40,9 +40,9 @@ function M:ErrorFrameToggle(event)
 	end
 end
 
-function M:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, _, sourceName, _, _, destName, _, _, _, _, spellID, spellName)
+function M:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, sourceGUID, _, _, _, destName, _, _, _, _, spellID, spellName)
 	if(E.db.general.interruptAnnounce == "NONE") then return; end
-	if not (event == "SPELL_INTERRUPT" and sourceName == UnitName("player")) then return; end
+	if not (event == "SPELL_INTERRUPT" and (sourceGUID == E.myguid or sourceGUID == UnitGUID("pet"))) then return; end
 
 	local party = GetNumPartyMembers();
 

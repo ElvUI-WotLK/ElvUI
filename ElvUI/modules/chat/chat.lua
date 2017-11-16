@@ -1469,29 +1469,24 @@ function CH:UpdateFading()
 end
 
 function CH:DisplayChatHistory()
-	local data, chat, d = ElvCharacterDB.ChatHistoryLog
-	for _, frame in pairs(CHAT_FRAMES) do
-		chat = _G[frame]
-		if not CH.defaultLanguage then
-			CH.defaultLanguage = GetDefaultLanguage()
-		end
-		if not chat.defaultLanguage then
-			chat.defaultLanguage = CH.defaultLanguage
-		end
-		if data and next(data) then
-			for i = 1, #data do
-				d = data[i]
-				if type(d) == "table" then
-					CH.timeOverride = d[51]
-					for _, messageType in pairs(chat.messageTypeList) do
-						if gsub(strsub(d[50],10),"_INFORM","") == messageType then
-							CH.ChatFrame_MessageEventHandler(chat,d[50],d[1],d[2],d[3],d[4],d[5],d[6],d[7],d[8],d[9],d[10],d[11],d[12],unpack(d,13))
-						end
+	local data, d = ElvCharacterDB.ChatHistoryLog
+	if not (data and next(data)) then return end
+
+	CH.SoundPlayed = true
+	for _, chat in pairs(CHAT_FRAMES) do
+		for i = 1, #data do
+			d = data[i]
+			if type(d) == "table" then
+				CH.timeOverride = d[51]
+				for _, messageType in pairs(_G[chat].messageTypeList) do
+					if gsub(strsub(d[50],10),"_INFORM","") == messageType then
+						CH.ChatFrame_MessageEventHandler(_G[chat],d[50],d[1],d[2],d[3],d[4],d[5],d[6],d[7],d[8],d[9],d[10],d[11],d[12],unpack(d,13))
 					end
 				end
 			end
 		end
 	end
+	CH.SoundPlayed = nil
 end
 
 tremove(ChatTypeGroup["GUILD"], 2)
@@ -1727,9 +1722,7 @@ function CH:Initialize()
 	end)
 
 	if self.db.chatHistory then
-		self.SoundPlayed = true
 		self:DisplayChatHistory()
-		self.SoundPlayed = nil
 	end
 
 	for _, event in pairs(FindURL_Events) do

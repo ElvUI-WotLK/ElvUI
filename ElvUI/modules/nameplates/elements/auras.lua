@@ -125,13 +125,14 @@ function mod:AuraFilter(frame, frameNum, index, buffType, minDuration, maxDurati
 	if not isAura then return nil end -- checking for an aura that is not there, pass nil to break while loop
 	local filterCheck, isPlayer, allowDuration, noDuration = false, false, false, false, false, false
 
+	noDuration = (not duration or duration == 0)
+	allowDuration = noDuration or (duration and (duration > 0) and (maxDuration == 0 or duration <= maxDuration) and (minDuration == 0 or duration >= minDuration))
+
 	if priority ~= "" then
-		noDuration = (not duration or duration == 0)
 		isPlayer = (caster == UnitGUID("player"))
-		allowDuration = noDuration or (duration and (duration > 0) and (maxDuration == 0 or duration <= maxDuration) and (minDuration == 0 or duration >= minDuration))
 		filterCheck = mod:CheckFilter(name, spellID, isPlayer, allowDuration, noDuration, strsplit(",", priority))
 	else
-		filterCheck = true -- Allow all auras to be shown when the filter list is empty
+		filterCheck = allowDuration and true -- Allow all auras to be shown when the filter list is empty, while obeying duration sliders
 	end
 
 	if filterCheck == true then

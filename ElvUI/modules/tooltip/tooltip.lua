@@ -59,7 +59,6 @@ local ID = ID;
 
 local GameTooltip, GameTooltipStatusBar = _G["GameTooltip"], _G["GameTooltipStatusBar"]
 local S_ITEM_LEVEL = ITEM_LEVEL:gsub( "%%d", "(%%d+)" )
-local playerGUID
 local targetList, inspectCache = {}, {}
 local TAPPED_COLOR = { r=.6, g=.6, b=.6 }
 local AFK_LABEL = " |cffFFFFFF[|r|cffE7E716"..L["AFK"].."|r|cffFFFFFF]|r"
@@ -245,7 +244,7 @@ function TT:ShowInspectInfo(tt, unit, level, r, g, b, numTries)
 	if(not canInspect or level < 10 or numTries > 1) then return end
 
 	local GUID = UnitGUID(unit)
-	if(GUID == playerGUID) then
+	if(GUID == E.myguid) then
 		tt:AddDoubleLine(L["Talent Specialization:"], select(2, E:GetTalentSpecInfo()), nil, nil, nil, r, g, b)
 		tt:AddDoubleLine(L["Item Level:"], self:GetItemLvL("player"), nil, nil, nil, 1, 1, 1)
 	elseif(inspectCache[GUID]) then
@@ -655,8 +654,6 @@ function TT:Initialize()
 	self:RegisterEvent("MODIFIER_STATE_CHANGED")
 
 	keybindFrame = ElvUI_KeyBinder
-
-	playerGUID = UnitGUID("player")
 end
 
 local function InitializeCallback()
