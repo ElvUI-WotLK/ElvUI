@@ -143,7 +143,6 @@ function mod:AuraFilter(frame, frameNum, index, buffType, minDuration, maxDurati
 	return false
 end
 
-local currentAura = {}
 function mod:UpdateElement_Auras(frame)
 	if not frame.HealthBar:IsShown() then return end
 

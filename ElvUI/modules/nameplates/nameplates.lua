@@ -81,12 +81,14 @@ function mod:SetTargetFrame(frame)
 				frame.Name:ClearAllPoints()
 				frame.Level:ClearAllPoints()
 				frame.HealthBar.r, frame.HealthBar.g, frame.HealthBar.b = nil, nil, nil
+				frame.CastBar:Hide()
 				self:ConfigureElement_HealthBar(frame)
 				self:ConfigureElement_CastBar(frame)
 				self:ConfigureElement_Glow(frame)
 				self:ConfigureElement_Elite(frame)
 				self:ConfigureElement_Level(frame)
 				self:ConfigureElement_Name(frame)
+				self:RegisterEvents(frame)
 				self:UpdateElement_All(frame, true)
 			else
 				self:UpdateElement_Cast(frame, nil, "target")
@@ -369,20 +371,7 @@ function mod:OnShow()
 	mod:ConfigureElement_Level(self.UnitFrame)
 	mod:ConfigureElement_Name(self.UnitFrame)
 	mod:ConfigureElement_Elite(self.UnitFrame)
-
-	if mod.db.units[unitType].castbar.enable then
-		self.UnitFrame:RegisterEvent("UNIT_SPELLCAST_START")
-		self.UnitFrame:RegisterEvent("UNIT_SPELLCAST_STOP")
-		self.UnitFrame:RegisterEvent("UNIT_SPELLCAST_FAILED")
-		self.UnitFrame:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED")
-		self.UnitFrame:RegisterEvent("UNIT_SPELLCAST_DELAYED")
-		self.UnitFrame:RegisterEvent("UNIT_SPELLCAST_CHANNEL_START")
-		self.UnitFrame:RegisterEvent("UNIT_SPELLCAST_CHANNEL_UPDATE")
-		self.UnitFrame:RegisterEvent("UNIT_SPELLCAST_CHANNEL_STOP")
-		self.UnitFrame:RegisterEvent("UNIT_SPELLCAST_INTERRUPTIBLE")
-		self.UnitFrame:RegisterEvent("UNIT_SPELLCAST_NOT_INTERRUPTIBLE")
-	end
-
+	mod:RegisterEvents(self.UnitFrame)
 	mod:UpdateElement_All(self.UnitFrame, nil, true)
 
 	self.UnitFrame:Show()
@@ -394,12 +383,11 @@ function mod:OnHide()
 	mod.VisiblePlates[self.UnitFrame] = nil
 
 	self.UnitFrame.unit = nil
-	self.UnitFrame._unit = nil
 	self.UnitFrame.isGroupUnit = nil
 
 	mod:HideAuraIcons(self.UnitFrame.Buffs)
 	mod:HideAuraIcons(self.UnitFrame.Debuffs)
---	self.UnitFrame:UnregisterAllEvents()
+	self.UnitFrame:UnregisterAllEvents()
 	self.UnitFrame.Glow.r, self.UnitFrame.Glow.g, self.UnitFrame.Glow.b = nil, nil, nil
 	self.UnitFrame.Glow:Hide()
 	self.UnitFrame.Glow2:Hide()
@@ -430,7 +418,6 @@ function mod:OnHide()
 
 	self.UnitFrame.ThreatReaction = nil
 	self.UnitFrame.guid = nil
-	self.UnitFrame._guid = nil
 	self.UnitFrame.RaidIconType = nil
 end
 
@@ -548,11 +535,29 @@ function mod:OnCreated(frame)
 end
 
 function mod:OnEvent(event, unit, ...)
-	if not self:IsShown() then return end
 	if not unit and not self.unit then return end
 	if self.unit ~= unit then return end
 
 	mod:UpdateElement_Cast(self, event, unit, ...)
+end
+
+function mod:RegisterEvents(frame)
+	if self.db.units[frame.UnitType].healthbar.enable or (frame.isTarget and self.db.alwaysShowTargetHealth) then
+		if self.db.units[frame.UnitType].castbar.enable then
+			frame:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED")
+			frame:RegisterEvent("UNIT_SPELLCAST_DELAYED")
+			frame:RegisterEvent("UNIT_SPELLCAST_CHANNEL_START")
+			frame:RegisterEvent("UNIT_SPELLCAST_CHANNEL_UPDATE")
+			frame:RegisterEvent("UNIT_SPELLCAST_CHANNEL_STOP")
+			frame:RegisterEvent("UNIT_SPELLCAST_INTERRUPTIBLE")
+			frame:RegisterEvent("UNIT_SPELLCAST_NOT_INTERRUPTIBLE")
+			frame:RegisterEvent("UNIT_SPELLCAST_START")
+			frame:RegisterEvent("UNIT_SPELLCAST_STOP")
+			frame:RegisterEvent("UNIT_SPELLCAST_FAILED")
+		end
+
+		mod.OnEvent(frame, nil, frame.unit)
+	end
 end
 
 function mod:QueueObject(object)
@@ -643,7 +648,7 @@ end
 
 function mod:UpdateCVars()
 	SetCVar("ShowClassColorInNameplate", "1")
-	SetCVar("showVKeyCastbar", "1")
+	SetCVar("showVKeyCastbar", "0")
 	SetCVar("nameplateAllowOverlap", self.db.motionType == "STACKED" and "0" or "1")
 end
 
