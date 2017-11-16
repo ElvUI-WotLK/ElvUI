@@ -70,9 +70,12 @@ function mod:SetTargetFrame(frame)
 			if self.db.useTargetScale then
 				self:SetFrameScale(frame, (frame.ThreatScale or 1) * self.db.targetScale)
 			end
-			frame.unit = "target"
-			frame.guid = UnitGUID("target")
+
 			frame.isTargetChanged = true
+			if not frame.isGroupUnit then
+				frame.unit = "target"
+				frame.guid = UnitGUID("target")
+			end
 
 			if self.db.units[frame.UnitType].healthbar.enable ~= true and self.db.alwaysShowTargetHealth then
 				frame.Name:ClearAllPoints()
@@ -104,11 +107,11 @@ function mod:SetTargetFrame(frame)
 		if self.db.useTargetScale then
 			self:SetFrameScale(frame, (frame.ThreatScale or 1))
 		end
-		frame.unit = nil
-		frame.guid = nil
-		frame.isTargetChanged = false
 
-		if not frame.test then
+		frame.isTargetChanged = false
+		if not frame.isGroupUnit then
+			frame.unit = nil
+			frame.guid = nil
 			frame.CastBar:Hide()
 		end
 
@@ -131,19 +134,19 @@ function mod:SetTargetFrame(frame)
 	elseif frame.oldHighlight:IsShown() then
 		if not frame.isMouseover then
 			frame.isMouseover = true
-
-			frame.unit = "mouseover"
-			frame.guid = UnitGUID("mouseover")
+			if not frame.isGroupUnit then
+				frame.unit = "mouseover"
+				frame.guid = UnitGUID("mouseover")
+			end
 
 			mod:UpdateElement_Cast(frame, nil, frame.unit)
 			mod:UpdateElement_AurasByGUID(frame.guid)
 		end
 	elseif frame.isMouseover then
-		frame.unit = nil
-		frame.guid = nil
 		frame.isMouseover = nil
-
-		if not frame.test then
+		if not frame.isGroupUnit then
+			frame.unit = nil
+			frame.guid = nil
 			frame.CastBar:Hide()
 		end
 	else
@@ -260,14 +263,15 @@ function mod:GetUnitClassByGUID(frame, guid)
 end
 
 function mod:UnitClass(frame, type)
-	if type == "FRIENDLY_PLAYER" then 
-		if UnitInParty("player") or UnitInRaid("player") then -- FRIENDLY_PLAYER
-			local _, class = UnitClass(frame.UnitName)
-			if class then
-				return class
-			else
-				return mod:GetUnitClassByGUID(frame)
-			end
+	if type == "FRIENDLY_PLAYER" then
+		local unit = self.GroupUnits[frame.UnitName]
+		if unit then
+			frame.unit = unit[1]
+			frame.guid = unit[3]
+			frame.isGroupUnit = true
+			return unit[2]
+		else
+			return mod:GetUnitClassByGUID(frame)
 		end
 	elseif type == "ENEMY_PLAYER" then
 		local r, g, b = self:RoundColors(frame.oldHealthBar:GetStatusBarColor())
@@ -390,6 +394,8 @@ function mod:OnHide()
 	mod.VisiblePlates[self.UnitFrame] = nil
 
 	self.UnitFrame.unit = nil
+	self.UnitFrame._unit = nil
+	self.UnitFrame.isGroupUnit = nil
 
 	mod:HideAuraIcons(self.UnitFrame.Buffs)
 	mod:HideAuraIcons(self.UnitFrame.Debuffs)
@@ -417,13 +423,15 @@ function mod:OnHide()
 	self.UnitFrame.isMouseover = nil
 	self.UnitFrame.UnitName = nil
 	self.UnitFrame.UnitType = nil
+	self.UnitFrame.UnitClass = nil
+	self.UnitFrame.UnitReaction = nil
 	self.UnitFrame.ThreatScale = nil
 	self.UnitFrame.ActionScale = nil
 
 	self.UnitFrame.ThreatReaction = nil
 	self.UnitFrame.guid = nil
+	self.UnitFrame._guid = nil
 	self.UnitFrame.RaidIconType = nil
-	self.UnitFrame.test = nil
 end
 
 function mod:UpdateAllFrame(frame)
@@ -541,20 +549,9 @@ end
 
 function mod:OnEvent(event, unit, ...)
 	if not self:IsShown() then return end
-	if not unit then return end
+	if not unit and not self.unit then return end
+	if self.unit ~= unit then return end
 
-	local checkCast
-	if (self.UnitType ~= "ENEMY_NPC" or self.UnitType ~= "FRIENDLY_NPC") then
-		if self.UnitName == UnitName(unit) then
-			self.test = true
-			checkCast = true
-		end
-	elseif frame.unit and frame.unit == unit then
-		if self.test then self.test = false end
-		checkCast = true
-	end
-
-	if not checkCast then return end
 	mod:UpdateElement_Cast(self, event, unit, ...)
 end
 
@@ -762,6 +759,34 @@ function mod:UpdatePlateFonts()
 	self:ForEachPlate("UpdateFonts")
 end
 
+function mod:CacheGroupUnits()
+	wipe(self.GroupUnits)
+
+	local _, unitID, name, class, guid
+	local numParty, numRaid = GetNumPartyMembers(), GetNumRaidMembers()
+	if numRaid > 0 then
+		for i = 1, numRaid do
+			unitID = format("raid%d", i)
+			name = UnitName(unitID)
+			if name then
+				_, class = UnitClass(unitID)
+				guid = UnitGUID(unitID)
+				self.GroupUnits[name] = {unitID, class, guid}
+			end
+		end
+	elseif numParty > 0 then
+		for i = 1, numParty do
+			unitID = format("party%d", i)
+			name = UnitName(unitID)
+			if name then
+				_, class = UnitClass(unitID)
+				guid = UnitGUID(unitID)
+				self.GroupUnits[name] = {unitID, class, guid}
+			end
+		end
+	end
+end
+
 function mod:Initialize()
 	self.db = E.db["nameplates"]
 	if E.private["nameplates"].enable ~= true then return end
@@ -784,8 +809,13 @@ function mod:Initialize()
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
 	self:RegisterEvent("PLAYER_LOGOUT") -- used in the StyleFilter
 	self:RegisterEvent("PLAYER_TARGET_CHANGED")
-	--self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 
+	self.GroupUnits = {}
+	self:CacheGroupUnits()
+	self:RegisterEvent("PARTY_MEMBERS_CHANGED", "CacheGroupUnits")
+	self:RegisterEvent("RAID_ROSTER_UPDATE", "CacheGroupUnits")
+	--self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	
 	LAI.UnregisterAllCallbacks(self)
 	LAI.RegisterCallback(self, "LibAuraInfo_AURA_APPLIED")
 	LAI.RegisterCallback(self, "LibAuraInfo_AURA_REMOVED")
