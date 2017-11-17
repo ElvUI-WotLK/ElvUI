@@ -40,6 +40,8 @@ if not lib.callbacks then	error(MAJOR .. " CallbackHandler-1.0.") return end
 
 lib.confirmedDur = {}
 
+lib.GUIDBlackList = {}
+
 lib.GUIDDurations = {}
 
 lib.GUIDData_name = {}
@@ -772,10 +774,8 @@ function lib:GetSpellTexture(spellID)
 end
 
 do
-	local timestamp, eventType, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags
-	function lib.frame:COMBAT_LOG_EVENT_UNFILTERED(event, ...)
-		--timestamp, eventType, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags
-		timestamp, eventType, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags = ...-- ***
+	function lib.frame:COMBAT_LOG_EVENT_UNFILTERED(event, timestamp, eventType, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, ...)
+		if lib.GUIDBlackList[dstGUID] then return end
 
 		if srcGUID and not lib.GUIDData_flags[srcGUID] then
 			SaveGUIDInfo(srcGUID, srcName, srcFlags)
@@ -785,7 +785,7 @@ do
 		end
 
 		if self[eventType] then
-			self[eventType](self, eventType, ...)
+			self[eventType](self, eventType, timestamp, eventType, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, ...)
 		end
 	end
 end

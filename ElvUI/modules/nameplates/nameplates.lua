@@ -11,12 +11,14 @@ local twipe = table.wipe
 local CreateFrame = CreateFrame
 local GetBattlefieldScore = GetBattlefieldScore
 local GetNumBattlefieldScores = GetNumBattlefieldScores
+local GetNumPartyMembers, GetNumRaidMembers = GetNumPartyMembers, GetNumRaidMembers
+local SetCVar = SetCVar
 local UnitClass = UnitClass
 local UnitExists = UnitExists
 local UnitGUID = UnitGUID
 local UnitInParty = UnitInParty
 local UnitInRaid = UnitInRaid
-local SetCVar = SetCVar
+local UnitName = UnitName
 local WorldFrame = WorldFrame
 local WorldGetChildren = WorldFrame.GetChildren
 
@@ -36,6 +38,11 @@ mod.VisiblePlates = {}
 mod.Healers = {}
 
 mod.ByName = {}
+
+mod.ENEMY_PLAYER = {}
+mod.FRIENDLY_PLAYER = {}
+mod.ENEMY_NPC = {}
+mod.FRIENDLY_NPC = {}
 
 function mod:CheckBGHealers()
 	local name, _, damageDone, healingDone
@@ -67,14 +74,18 @@ end
 function mod:SetTargetFrame(frame)
 	if frame.isTarget then
 		if not frame.isTargetChanged then
+			frame.isTargetChanged = true
+
 			if self.db.useTargetScale then
 				self:SetFrameScale(frame, (frame.ThreatScale or 1) * self.db.targetScale)
 			end
 
-			frame.isTargetChanged = true
 			if not frame.isGroupUnit then
 				frame.unit = "target"
 				frame.guid = UnitGUID("target")
+
+				self:RegisterEvents(frame)
+				self:UpdateElement_AurasByGUID(frame.guid)
 			end
 
 			if self.db.units[frame.UnitType].healthbar.enable ~= true and self.db.alwaysShowTargetHealth then
@@ -90,15 +101,11 @@ function mod:SetTargetFrame(frame)
 				self:ConfigureElement_Name(frame)
 				self:RegisterEvents(frame)
 				self:UpdateElement_All(frame, true)
-			else
-				self:UpdateElement_Cast(frame, nil, "target")
 			end
 
 			if self.hasTarget then
 				frame:SetAlpha(1)
 			end
-
-			mod:UpdateElement_AurasByGUID(frame.guid)
 
 			-- TEST
 			mod:UpdateElement_Glow(frame)
@@ -106,14 +113,16 @@ function mod:SetTargetFrame(frame)
 			mod:UpdateElement_Filters(frame, "PLAYER_TARGET_CHANGED")
 		end
 	elseif frame.isTargetChanged then
+		frame.isTargetChanged = false
+
 		if self.db.useTargetScale then
 			self:SetFrameScale(frame, (frame.ThreatScale or 1))
 		end
 
-		frame.isTargetChanged = false
 		if not frame.isGroupUnit then
 			frame.unit = nil
 			frame.guid = nil
+			frame:UnregisterAllEvents()
 			frame.CastBar:Hide()
 		end
 
@@ -136,16 +145,18 @@ function mod:SetTargetFrame(frame)
 	elseif frame.oldHighlight:IsShown() then
 		if not frame.isMouseover then
 			frame.isMouseover = true
+
 			if not frame.isGroupUnit then
 				frame.unit = "mouseover"
 				frame.guid = UnitGUID("mouseover")
-			end
 
-			mod:UpdateElement_Cast(frame, nil, frame.unit)
-			mod:UpdateElement_AurasByGUID(frame.guid)
+				mod:UpdateElement_Cast(frame, nil, frame.unit)
+				mod:UpdateElement_AurasByGUID(frame.guid)
+			end
 		end
 	elseif frame.isMouseover then
 		frame.isMouseover = nil
+
 		if not frame.isGroupUnit then
 			frame.unit = nil
 			frame.guid = nil
@@ -255,6 +266,14 @@ function mod:RoundColors(r, g, b)
 	return floor(r*100+.5) / 100, floor(g*100+.5) / 100, floor(b*100+.5) / 100
 end
 
+function mod:GetUnitByName(frame, type)
+	local unit = self[type][frame.UnitName]
+	if unit then
+		return unit[1], unit[2]
+	end
+	return nil, nil
+end
+
 function mod:GetUnitClassByGUID(frame, guid)
 	if not guid then guid = self.ByName[frame.UnitName] end
 	if guid then
@@ -266,12 +285,9 @@ end
 
 function mod:UnitClass(frame, type)
 	if type == "FRIENDLY_PLAYER" then
-		local unit = self.GroupUnits[frame.UnitName]
+		local unit = self[type][frame.UnitName]
 		if unit then
-			frame.unit = unit[1]
-			frame.guid = unit[3]
-			frame.isGroupUnit = true
-			return unit[2]
+			return unit[3]
 		else
 			return mod:GetUnitClassByGUID(frame)
 		end
@@ -344,6 +360,13 @@ function mod:OnShow()
 	self.UnitFrame.UnitType = unitType
 	self.UnitFrame.UnitClass = mod:UnitClass(self.UnitFrame, unitType)
 	self.UnitFrame.UnitReaction = unitReaction
+	self.UnitFrame.UnitReaction = unitReaction
+
+	local unit, guid = mod:GetUnitByName(self.UnitFrame, unitType)
+	if unit and guid then
+		self.UnitFrame.unit, self.UnitFrame.guid = unit, guid
+		self.UnitFrame.isGroupUnit = true
+	end
 
 	if unitType == "ENEMY_PLAYER" then
 		mod:UpdateElement_HealerIcon(self.UnitFrame)
@@ -542,6 +565,8 @@ function mod:OnEvent(event, unit, ...)
 end
 
 function mod:RegisterEvents(frame)
+	if not frame.unit then return end
+
 	if self.db.units[frame.UnitType].healthbar.enable or (frame.isTarget and self.db.alwaysShowTargetHealth) then
 		if self.db.units[frame.UnitType].castbar.enable then
 			frame:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED")
@@ -764,29 +789,63 @@ function mod:UpdatePlateFonts()
 	self:ForEachPlate("UpdateFonts")
 end
 
-function mod:CacheGroupUnits()
-	wipe(self.GroupUnits)
+function mod:CacheArenaUnits()
+	wipe(self.ENEMY_PLAYER)
+	wipe(self.ENEMY_NPC)
 
-	local _, unitID, name, class, guid
-	local numParty, numRaid = GetNumPartyMembers(), GetNumRaidMembers()
-	if numRaid > 0 then
-		for i = 1, numRaid do
-			unitID = format("raid%d", i)
-			name = UnitName(unitID)
-			if name then
-				_, class = UnitClass(unitID)
-				guid = UnitGUID(unitID)
-				self.GroupUnits[name] = {unitID, class, guid}
+	local unit
+	for i = 1, 5 do
+		if UnitExists("arena"..i) then
+			unit = format("arena%d", i)
+			self.ENEMY_PLAYER[UnitName(unit)] = {unit, UnitGUID(unit)}
+		end
+		if UnitExists("arenapet"..i) then
+			unit = format("arenapet%d", i)
+			self.ENEMY_NPC[UnitName(unit)] = {unit, UnitGUID(unit)}
+		end
+	end
+end
+
+function mod:CacheGroupUnits()
+	wipe(self.FRIENDLY_PLAYER)
+
+	local unit
+	local _, class
+	if GetNumRaidMembers() > 0 then
+		for i = 1, 40 do
+			if UnitExists("raid"..i) then
+				unit = format("raid%d", i)
+				_, class = UnitClass(unit)
+				self.FRIENDLY_PLAYER[UnitName(unit)] = {unit, UnitGUID(unit), class}
 			end
 		end
-	elseif numParty > 0 then
-		for i = 1, numParty do
-			unitID = format("party%d", i)
-			name = UnitName(unitID)
-			if name then
-				_, class = UnitClass(unitID)
-				guid = UnitGUID(unitID)
-				self.GroupUnits[name] = {unitID, class, guid}
+	elseif GetNumPartyMembers() > 0 then
+		for i = 1, 5 do
+			if UnitExists("party"..i) then
+				unit = format("party%d", i)
+				_, class = UnitClass(unit)
+				self.FRIENDLY_PLAYER[UnitName(unit)] = {unit, UnitGUID(unit), class}
+			end
+		end
+	end
+end
+
+function mod:CacheGroupPetUnits()
+	wipe(self.FRIENDLY_NPC)
+
+	local unit
+	if GetNumRaidMembers() > 0 then
+		for i = 1, 40 do
+			if UnitExists("raidpet"..i) then
+				unit = format("raidpet%d", i)
+				self.FRIENDLY_NPC[UnitName(unit)] = {unit, UnitGUID(unit)}
+			end
+		end
+	elseif GetNumPartyMembers() > 0 then
+		for i = 1, 5 do
+			if UnitExists("partypet"..i) then
+				unit = format("partypet%d", i)
+				self.FRIENDLY_NPC[UnitName(unit)] = {unit, UnitGUID(unit)}
 			end
 		end
 	end
@@ -815,10 +874,17 @@ function mod:Initialize()
 	self:RegisterEvent("PLAYER_LOGOUT") -- used in the StyleFilter
 	self:RegisterEvent("PLAYER_TARGET_CHANGED")
 
-	self.GroupUnits = {}
+	-- Arena & Arena Pets
+	self:CacheArenaUnits()
+	self:RegisterEvent("ARENA_OPPONENT_UPDATE", "CacheArenaUnits")
+	-- Group
 	self:CacheGroupUnits()
 	self:RegisterEvent("PARTY_MEMBERS_CHANGED", "CacheGroupUnits")
 	self:RegisterEvent("RAID_ROSTER_UPDATE", "CacheGroupUnits")
+	-- Group Pets
+	self:CacheGroupPetUnits()
+	self:RegisterEvent("UNIT_NAME_UPDATE", "CacheGroupPetUnits")
+
 	--self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	
 	LAI.UnregisterAllCallbacks(self)
