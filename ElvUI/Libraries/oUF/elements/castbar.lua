@@ -636,10 +636,6 @@ local function Disable(self)
 	if(element) then
 		element:Hide()
 
-		if(self.unit == 'player') then
-			CastingBarFrame_OnLoad(CastingBarFrame, 'player', true, false)
-		end
-
 		self:UnregisterEvent('UNIT_SPELLCAST_START', UNIT_SPELLCAST_START)
 		self:UnregisterEvent('UNIT_SPELLCAST_FAILED', UNIT_SPELLCAST_FAILED)
 		self:UnregisterEvent('UNIT_SPELLCAST_STOP', UNIT_SPELLCAST_STOP)

@@ -865,6 +865,10 @@ function UF:CreateAndUpdateUF(unit)
 	else
 		self[unit]:Disable()
 		E:DisableMover(self[unit].mover:GetName())
+
+		if unit == "player" then
+			CastingBarFrame_OnLoad(CastingBarFrame, "player", true, false)
+		end
 	end
 end
 
