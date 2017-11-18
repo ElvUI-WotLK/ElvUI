@@ -696,7 +696,7 @@ function UF:CreateHeader(parent, groupFilter, overrideName, template, groupName,
 			"initial-height", db.height,
 			"groupFilter", groupFilter,
 			"showParty", true,
-			"showRaid", true,
+			"showRaid", group == "party" and false or true,
 			"showSolo", true,
 			template and "template", template)
 
