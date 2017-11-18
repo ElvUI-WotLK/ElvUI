@@ -598,7 +598,7 @@ local function Enable(self, unit)
 
 		if(self.unit == 'player') then
 			CastingBarFrame:UnregisterAllEvents()
-			--CastingBarFrame.Show = CastingBarFrame.Hide
+			CastingBarFrame.Show = CastingBarFrame.Hide
 			CastingBarFrame:Hide()
 
 			PetCastingBarFrame:UnregisterAllEvents()
@@ -635,6 +635,14 @@ local function Disable(self)
 	local element = self.Castbar
 	if(element) then
 		element:Hide()
+
+		if(self.unit == 'player') then
+			CastingBarFrame_OnLoad(CastingBarFrame, "player", true, false)
+			CastingBarFrame.Show = nil
+
+			PetCastingBarFrame_OnLoad(PetCastingBarFrame)
+			PetCastingBarFrame.Show = nil
+		end
 
 		self:UnregisterEvent('UNIT_SPELLCAST_START', UNIT_SPELLCAST_START)
 		self:UnregisterEvent('UNIT_SPELLCAST_FAILED', UNIT_SPELLCAST_FAILED)
