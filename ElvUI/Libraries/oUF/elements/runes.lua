@@ -56,6 +56,8 @@ local UnitHasVehicleUI = UnitHasVehicleUI
 local runemap = {1, 2, 5, 6, 3, 4}
 local BLOOD_OF_THE_NORTH = GetSpellInfo(54637)
 
+local VisibilityPath
+
 local function onUpdate(self, elapsed)
 	local duration = self.duration + elapsed
 	self.duration = duration
@@ -204,7 +206,7 @@ local function Visibility(self, event, ...)
 	end
 end
 
-local VisibilityPath = function(self, ...)
+VisibilityPath = function(self, ...)
 	return (self.Runes.OverrideVisibility or Visibility) (self, ...)
 end
 
