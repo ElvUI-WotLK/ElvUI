@@ -350,7 +350,7 @@ function TT:GameTooltip_OnTooltipSetUnit(tt)
 		if(UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit)) then
 			color = TAPPED_COLOR
 		else
-			color = E.db.tooltip.useCustomFactionColors and E.db.tooltip.factionColors[""..UnitReaction(unit, "player")] or FACTION_BAR_COLORS[UnitReaction(unit, "player")]
+			color = E.db.tooltip.useCustomFactionColors and E.db.tooltip.factionColors[UnitReaction(unit, "player")] or FACTION_BAR_COLORS[UnitReaction(unit, "player")]
 		end
 
 		local levelLine = self:GetLevelLine(tt, 2)
@@ -375,7 +375,8 @@ function TT:GameTooltip_OnTooltipSetUnit(tt)
 			local _, class = UnitClass(unitTarget);
 			targetColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class];
 		else
-			targetColor = E.db.tooltip.useCustomFactionColors and E.db.tooltip.factionColors[""..UnitReaction(unitTarget, "player")] or FACTION_BAR_COLORS[UnitReaction(unitTarget, "player")]
+			local reaction = UnitReaction(unitTarget, "player") or 4
+			targetColor = E.db.tooltip.useCustomFactionColors and E.db.tooltip.factionColors[reaction] or FACTION_BAR_COLORS[reaction]
 		end
 
 		GameTooltip:AddDoubleLine(format("%s:", TARGET), format("|cff%02x%02x%02x%s|r", targetColor.r * 255, targetColor.g * 255, targetColor.b * 255, UnitName(unitTarget)))
