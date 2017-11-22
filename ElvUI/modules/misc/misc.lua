@@ -8,7 +8,6 @@ local GetCoinTextureString = GetCoinTextureString
 local GetFriendInfo = GetFriendInfo
 local GetGuildBankWithdrawMoney = GetGuildBankWithdrawMoney
 local GetGuildRosterInfo = GetGuildRosterInfo
-local GetMouseFocus = GetMouseFocus
 local GetNumFriends = GetNumFriends
 local GetNumGuildMembers = GetNumGuildMembers
 local GetNumPartyMembers = GetNumPartyMembers
@@ -126,31 +125,11 @@ function M:DisbandRaidGroup()
 	LeaveParty()
 end
 
-local function IsWorldMapFocused(frame)
-	if not frame then return; end
-
-	if(not GetCVarBool("miniWorldMap")) then
-		local frameName = frame:GetName();
-		if(frameName and frameName == "WorldMapFrame") then
-			return true;
-		end
-
-		if not frame:GetParent() or not frame:GetParent():GetName() then return; end
-
-		local parentName = frame:GetParent():GetName();
-		if(parentName and (parentName == "WorldMapFrame" or parentName == "WorldMapButton" or parentName == "WorldMapPOIFrame" or "WorldMapQuestScrollChildFrame")) then
-			return true
-		end
-	else
-		return WorldMapFrame:IsMouseOver();
-	end
-end
-
 function M:CheckMovement()
 	if(not WorldMapFrame:IsShown()) then return; end
 
 	if GetUnitSpeed("player") ~= 0 then
-		if(IsWorldMapFocused(GetMouseFocus())) then
+		if WorldMapPositioningGuide:IsMouseOver() then
 			WorldMapFrame:SetAlpha(1)
 		else
 			WorldMapFrame:SetAlpha(E.global.general.mapAlphaWhenMoving)
