@@ -140,8 +140,9 @@ local function LoadSkin()
 
 		if InCombatLockdown() then return end
 
-		WorldMapFrame:SetFrameStrata("HIGH")
-		WorldMapDetailFrame:SetFrameLevel(WorldMapFrame:GetFrameLevel() + 1)
+		--WorldMapFrame:SetFrameStrata("HIGH")
+		--WorldMapPOIFrame:SetFrameStrata("HIGH")
+		--WorldMapDetailFrame:SetFrameLevel(WorldMapFrame:GetFrameLevel() + 1)
 	end
 
 	WorldMapFrame:HookScript("OnShow", FixSkin)

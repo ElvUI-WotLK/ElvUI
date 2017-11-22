@@ -63,13 +63,8 @@ function B:Initialize()
 		end
 	end);
 
-	local function FixWorldMap()
-		if InCombatLockdown() then return end
-		WorldMapFrame:SetFrameStrata("HIGH")
-	end
-
-	WorldMapFrame:HookScript("OnShow", FixWorldMap)
-	hooksecurefunc("WorldMap_ToggleSizeUp", FixWorldMap)
+	WORLDMAP_POI_FRAMELEVEL = 300
+	WorldMapFrame:SetToplevel(true)
 end
 
 local function InitializeCallback()

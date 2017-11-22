@@ -193,9 +193,9 @@ function M:Initialize()
 			end
 		end);
 
-		WorldMapTooltip:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 110);
-		WorldMapCompareTooltip1:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 110);
-		WorldMapCompareTooltip2:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 110);
+		--WorldMapTooltip:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 110);
+		--WorldMapCompareTooltip1:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 110);
+		--WorldMapCompareTooltip2:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 110);
 
 		self:RawHook("WorldMapQuestPOI_OnLeave", function(self)
 			WorldMapPOIFrame.allowBlobTooltip = true
