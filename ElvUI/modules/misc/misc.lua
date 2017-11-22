@@ -138,7 +138,7 @@ local function IsWorldMapFocused(frame)
 		if not frame:GetParent() or not frame:GetParent():GetName() then return; end
 
 		local parentName = frame:GetParent():GetName();
-		if(parentName and (parentName == "WorldMapFrame" or parentName == "WorldMapButton" or parentName == "WorldMapPOIFrame")) then
+		if(parentName and (parentName == "WorldMapFrame" or parentName == "WorldMapButton" or parentName == "WorldMapPOIFrame" or "WorldMapQuestScrollChildFrame")) then
 			return true
 		end
 	else
