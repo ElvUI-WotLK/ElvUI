@@ -121,13 +121,7 @@ function mod:ConfigureElement_HealthBar(frame, configuring)
 	local healthBar = frame.HealthBar
 
 	healthBar:SetPoint("TOP", frame, "CENTER", 0, self.db.units[frame.UnitType].castbar.height + 3)
-	if frame.isTarget and self.db.useTargetScale then
-		healthBar:SetHeight(self.db.units[frame.UnitType].healthbar.height * self.db.targetScale)
-		healthBar:SetWidth(self.db.units[frame.UnitType].healthbar.width * self.db.targetScale)
-	else
-		healthBar:SetHeight(self.db.units[frame.UnitType].healthbar.height)
-		healthBar:SetWidth(self.db.units[frame.UnitType].healthbar.width)
-	end
+	self:SetFrameScale(frame, (frame.ThreatScale or 1) * (frame.isTarget and self.db.useTargetScale and self.db.targetScale or 1))
 
 	healthBar:SetStatusBarTexture(LSM:Fetch("statusbar", self.db.statusbar), "BORDER")
 	if(not configuring) and (self.db.units[frame.UnitType].healthbar.enable or frame.isTarget) then
