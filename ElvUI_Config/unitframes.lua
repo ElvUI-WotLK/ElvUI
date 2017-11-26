@@ -2973,14 +2973,9 @@ E.Options.args.unitframe.args.player = {
 					type = "toggle",
 					name = L["Auto-Hide"],
 				},
-				additionalPowerText = {
-					order = 6,
-					type = "toggle",
-					name = L["Additional Power Text"],
-				},
 				detachFromFrame = {
 					type = "toggle",
-					order = 7,
+					order = 6,
 					name = L["Detach From Frame"],
 					set = function(info, value)
 						if value == true then
@@ -2993,21 +2988,21 @@ E.Options.args.unitframe.args.player = {
 					end,
 				},
 				verticalOrientation = {
-					order = 8,
+					order = 7,
 					type = "toggle",
 					name = L["Vertical Orientation"],
 					disabled = function() return not E.db.unitframe.units["player"]["classbar"].detachFromFrame end,
 				},
 				detachedWidth = {
 					type = "range",
-					order = 9,
+					order = 8,
 					name = L["Detached Width"],
 					disabled = function() return not E.db.unitframe.units["player"]["classbar"].detachFromFrame end,
 					min = ((E.db.unitframe.thinBorders or E.PixelMode) and 3 or 7), max = 800, step = 1,
 				},
 				parent = {
 					type = "select",
-					order = 10,
+					order = 9,
 					name = L["Parent"],
 					desc = L["Choose UIPARENT to prevent it from hiding with the unitframe."],
 					disabled = function() return not E.db.unitframe.units["player"]["classbar"].detachFromFrame end,

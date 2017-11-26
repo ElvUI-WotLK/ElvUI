@@ -239,6 +239,7 @@ L["Player Castbar"] = "玩家施法條"
 L["Player Debuffs"] = "玩家減益"
 L["Player Frame"] = "玩家框架" --Also used in UnitFrames
 L["Player Powerbar"] = "玩家能量條"
+L["PvP"] = true;
 L["Raid Frames"] = "團隊框架"
 L["Raid Pet Frames"] = "團隊寵物框架"
 L["Raid-40 Frames"] = "40人團隊框架"
@@ -252,7 +253,6 @@ L["TargetTarget Frame"] = "目標的目標框架" --Also used in UnitFrames
 L["TargetTargetTarget Frame"] = "目標的目標的目標框架"
 L["Time Manager Frame"] = true;
 L["Tooltip"] = "浮動提示"
-L["Totems"] = true;
 L["Vehicle Seat Frame"] = "載具座位框"
 L["Watch Frame"] = true;
 L["Weapons"] = true;
@@ -292,6 +292,7 @@ L["|cFFE30000Lua error recieved. You can view the error message when you exit co
 
 --Static Popups
 L["A setting you have changed will change an option for this character only. This setting that you have changed will be uneffected by changing user profiles. Changing this setting requires that you reload your User Interface."] = "你所做的改動只會影響到使用這個插件的本角色, 你需要重新加載介面才能使改動生效."
+L["Accepting this will reset your Filter Priority lists for all auras on NamePlates. Are you sure?"] = true
 L["Accepting this will reset your Filter Priority lists for all auras on UnitFrames. Are you sure?"] = true
 L["Are you sure you want to apply this font to all ElvUI elements?"] = "你確定要將此字型應用到所有 ElvUI 元素嗎?"
 L["Are you sure you want to delete all your gray items?"] = "是否確定要刪除所有灰色物品?"

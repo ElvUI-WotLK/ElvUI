@@ -1,6 +1,6 @@
 -- English localization file for enUS and enGB.
 local AceLocale = LibStub:GetLibrary("AceLocale-3.0");
-local L = AceLocale:NewLocale("ElvUI", "enUS", true, true);
+local L = AceLocale:NewLocale("ElvUI", "enUS", true, false);
 if not L then return; end
 
 --*_ADDON locales
@@ -239,6 +239,7 @@ L["Player Castbar"] = true;
 L["Player Debuffs"] = true;
 L["Player Frame"] = true; --Also used in UnitFrames
 L["Player Powerbar"] = true;
+L["PvP"] = true;
 L["Raid Frames"] = true;
 L["Raid Pet Frames"] = true;
 L["Raid-40 Frames"] = true;
@@ -252,7 +253,6 @@ L["TargetTarget Frame"] = true; --Also used in UnitFrames
 L["TargetTargetTarget Frame"] = true; --Also used in UnitFrames
 L["Time Manager Frame"] = true;
 L["Tooltip"] = true;
-L["Totems"] = true;
 L["Vehicle Seat Frame"] = true;
 L["Watch Frame"] = true;
 L["Weapons"] = true;
@@ -292,6 +292,7 @@ L["|cFFE30000Lua error recieved. You can view the error message when you exit co
 
 --Static Popups
 L["A setting you have changed will change an option for this character only. This setting that you have changed will be uneffected by changing user profiles. Changing this setting requires that you reload your User Interface."] = true;
+L["Accepting this will reset your Filter Priority lists for all auras on NamePlates. Are you sure?"] = true
 L["Accepting this will reset your Filter Priority lists for all auras on UnitFrames. Are you sure?"] = true
 L["Are you sure you want to apply this font to all ElvUI elements?"] = true;
 L["Are you sure you want to delete all your gray items?"] = true;

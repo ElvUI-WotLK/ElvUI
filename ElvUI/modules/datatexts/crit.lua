@@ -18,7 +18,6 @@ local MELEE_CRIT_CHANCE = MELEE_CRIT_CHANCE;
 local PAPERDOLLFRAME_TOOLTIP_FORMAT = PAPERDOLLFRAME_TOOLTIP_FORMAT;
 local RANGED_CRIT_CHANCE = RANGED_CRIT_CHANCE;
 local SPELL_CRIT_CHANCE = SPELL_CRIT_CHANCE;
-local STAT_CRITICAL_STRIKE = STAT_CRITICAL_STRIKE
 
 local critRating;
 local displayModifierString = "";
@@ -69,4 +68,4 @@ local function ValueColorUpdate(hex)
 end
 E["valueColorUpdateFuncs"][ValueColorUpdate] = true;
 
-DT:RegisterDatatext("Crit Chance", {"PLAYER_DAMAGE_DONE_MODS"}, OnEvent, nil, nil, OnEnter, nil, STAT_CRITICAL_STRIKE)
+DT:RegisterDatatext("Crit Chance", {"PLAYER_DAMAGE_DONE_MODS"}, OnEvent, nil, nil, OnEnter, nil, MELEE_CRIT_CHANCE)

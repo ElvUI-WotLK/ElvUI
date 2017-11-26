@@ -127,7 +127,7 @@ local function BuildABConfig()
 						order = 2,
 						type = "color",
 						name = L["Out of Power"],
-						desc = L["Color of the actionbutton when out of power (Mana, Rage, Focus, Holy Power)."]
+						desc = L["Color of the actionbutton when out of power (Mana, Rage)."]
 					},
 					usableColor = {
 						order = 3,
@@ -212,7 +212,7 @@ local function BuildABConfig()
 		group["barTotem"] = {
 			order = 2,
 			type = "group",
-			name = L["Totem Bar"],
+			name = TUTORIAL_TITLE47,
 			guiInline = false,
 			disabled = function() return not E.ActionBars or not E.myclass == "SHAMAN" end,
 			get = function(info) return E.db.actionbar["barTotem"][ info[#info] ] end,
@@ -221,7 +221,7 @@ local function BuildABConfig()
 				info = {
 					order = 1,
 					type = "header",
-					name = L["Totem Bar"]
+					name = TUTORIAL_TITLE47
 				},
 				enabled = {
 					order = 2,
@@ -233,7 +233,7 @@ local function BuildABConfig()
 					type = "execute",
 					name = L["Restore Bar"],
 					desc = L["Restore the actionbars default settings"],
-					func = function() E:CopyTable(E.db.actionbar["barTotem"], P.actionbar["barTotem"]) E:ResetMovers(L["Totem Bar"]) AB:AdjustTotemSettings() AB:PositionAndSizeBarTotem() end,
+					func = function() E:CopyTable(E.db.actionbar["barTotem"], P.actionbar["barTotem"]) E:ResetMovers(TUTORIAL_TITLE47) AB:AdjustTotemSettings() AB:PositionAndSizeBarTotem() end,
 					disabled = function() return not E.db.actionbar.barTotem.enabled end
 				},
 				mouseover = {
@@ -399,7 +399,7 @@ local function BuildABConfig()
 				order = 17,
 				type = "input",
 				name = L["Visibility State"],
-				desc = L["This works like a macro, you can run different situations to get the actionbar to show/hide differently.\n Example: [combat] showhide"],
+				desc = L["This works like a macro, you can run different situations to get the actionbar to show/hide differently.\n Example: [combat] show;hide"],
 				width = "full",
 				multiline = true,
 				set = function(info, value)
@@ -761,7 +761,7 @@ local function BuildABConfig()
 					order = 18,
 					type = "input",
 					name = L["Action Paging"],
-					desc = L["This works like a macro, you can run different situations to get the actionbar to page differently.\n Example: [combat] 2"],
+					desc = L["This works like a macro, you can run different situations to get the actionbar to page differently.\n Example: [combat] 2;"],
 					width = "full",
 					multiline = true,
 					get = function(info) return E.db.actionbar["bar"..i]["paging"][E.myclass] end,
@@ -779,7 +779,7 @@ local function BuildABConfig()
 					order = 19,
 					type = "input",
 					name = L["Visibility State"],
-					desc = L["This works like a macro, you can run different situations to get the actionbar to show/hide differently.\n Example: [combat] showhide"],
+					desc = L["This works like a macro, you can run different situations to get the actionbar to show/hide differently.\n Example: [combat] show;hide"],
 					width = "full",
 					multiline = true,
 					set = function(info, value)
@@ -864,7 +864,7 @@ E.Options.args.actionbar = {
 		totemBarShortcut = {
 			order = 9,
 			type = "execute",
-			name = L["Totem Bar"],
+			name = TUTORIAL_TITLE47,
 			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "actionbar", "barTotem") end,
 			disabled = function() return not E.ActionBars or E.myclass ~= "SHAMAN" end

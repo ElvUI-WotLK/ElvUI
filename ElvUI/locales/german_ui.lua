@@ -239,6 +239,7 @@ L["Player Castbar"] = "Spieler Zauberbalken"
 L["Player Debuffs"] = "Spieler Debuffs"
 L["Player Frame"] = "Spielerfenster" --Also used in UnitFrames
 L["Player Powerbar"] = "Spieler Kraftleiste"
+L["PvP"] = true;
 L["Raid Frames"] = "Schlachtzugsfenster" --Also used in UnitFrames
 L["Raid Pet Frames"] = "Schlachtzugspets-Fenster"
 L["Raid-40 Frames"] = "40er Schlachtzugsfenster" --Also used in UnitFrames
@@ -252,7 +253,6 @@ L["TargetTarget Frame"] = "Ziel des Ziels Fenster" --Also used in UnitFrames
 L["TargetTargetTarget Frame"] = "Ziel des Ziels des Ziels Fenster"
 L["Time Manager Frame"] = true;
 L["Tooltip"] = "Tooltip"
-L["Totems"] = true;
 L["Vehicle Seat Frame"] = "Fahrzeugfenster"
 L["Watch Frame"] = true;
 L["Weapons"] = true;
@@ -292,6 +292,7 @@ L["|cFFE30000Lua error recieved. You can view the error message when you exit co
 
 --Static Popups
 L["A setting you have changed will change an option for this character only. This setting that you have changed will be uneffected by changing user profiles. Changing this setting requires that you reload your User Interface."] = "Eine Einstellung, die du geändert hast, betrifft nur einen Charakter. Diese Einstellung, die du verändert hast, wird die Benutzerprofile unbeeinflusst lassen. Eine Änderung dieser Einstellung erfordert, dass du dein Interface neu laden musst."
+L["Accepting this will reset your Filter Priority lists for all auras on NamePlates. Are you sure?"] = true
 L["Accepting this will reset your Filter Priority lists for all auras on UnitFrames. Are you sure?"] = "Wenn du aktzeptierst wird die Filter Priorität für alle Einheitenfenster auf Standard zurückgesetzt. Bist du sicher?"
 L["Are you sure you want to apply this font to all ElvUI elements?"] = "Bist du sicher, dass du diese Schrifart auf alle ElvUI Elemente anwenden möchtest?"
 L["Are you sure you want to delete all your gray items?"] = "Bist du sicher, dass du alle grauen Gegenstände löschen willst?"
