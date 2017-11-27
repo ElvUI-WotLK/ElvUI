@@ -121,6 +121,8 @@ function mod:ConfigureElement_HealthBar(frame, configuring)
 	local healthBar = frame.HealthBar
 
 	healthBar:SetPoint("TOP", frame, "CENTER", 0, self.db.units[frame.UnitType].castbar.height + 3)
+
+	healthBar.currentScale = nil
 	self:SetFrameScale(frame, (frame.ThreatScale or 1) * (frame.isTarget and self.db.useTargetScale and self.db.targetScale or 1))
 
 	healthBar:SetStatusBarTexture(LSM:Fetch("statusbar", self.db.statusbar), "BORDER")
