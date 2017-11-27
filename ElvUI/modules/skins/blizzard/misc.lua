@@ -734,7 +734,6 @@ local function LoadSkin()
 		local idropdown = _G["InterfaceOptions"..interfacedropdown[i]]
 		if idropdown then
 			S:HandleDropDownBox(idropdown)
-			DropDownList1:SetTemplate("Transparent")
 		end
 	end
 
@@ -783,8 +782,7 @@ local function LoadSkin()
 	for i = 1, #optiondropdown do
 		local odropdown = _G[optiondropdown[i]]
 		if odropdown then
-			S:HandleDropDownBox(odropdown,165)
-			DropDownList1:SetTemplate("Transparent")
+			S:HandleDropDownBox(odropdown, i == 3 and 195 or 165)
 		end
 	end
 
