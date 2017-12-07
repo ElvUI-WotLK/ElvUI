@@ -61,7 +61,7 @@ This UI will arrange your interface to be more flexible and practical.
     /moveui           Open the movable frames options.
     /bgstats          Toggles Battleground datatexts to display info when inside a battleground.
     /hellokitty       Enables the Hello Kitty theme (can be reverted by repeating the command).
-    /hellokittyfix    Fixes any colors or borders that didnt get fixed by settings default colors after using /hellokitty
+    /hellokittyfix    Fixes any colors or borders to default after using /hellokitty. Optional Use.
     /harlemshake      Enables Harlem Shake april fools joke. (DO THE HARLEM SHAKE!)
     /egrid            Toggles visibility of the grid for helping placement of thirdparty addons.
     /farmmode         Toggles the Minimap Farmmode.
