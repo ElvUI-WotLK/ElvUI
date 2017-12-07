@@ -1,9 +1,8 @@
 # ElvUI WotLK (3.3.5a)
-This is the backported version of ElvUI for World of Warcraft 3.3.5a.
+This is the backported version of ElvUI for World of Warcraft 2.4.3
 <br />
 ElvUI is a full UI replacement.
 It completely replaces the default Blizzard UI at every level with a new and better interface.
-It has multiple addons and plug-ins integrated into it, such as Dominos action bars and TidyPlates.
 As such, you'll only ever have to update ElvUI and not worry too much about its individual components.
 This UI will arrange your interface to be more flexible and practical.
 
