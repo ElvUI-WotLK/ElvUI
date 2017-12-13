@@ -165,7 +165,7 @@ end
 local CheckUnitAuras
 do
 	local i
-	local _, name, texture, dispelType, duration, isStealable, spellID, unitCaster, expirationTime, stackCount
+	local _, name, rank, texture, stackCount, dispelType, duration, expirationTime, unitCaster, isStealable, spellID
 	local dstGUID, dstName, srcGUID
 	function CheckUnitAuras(unitID, filterType)
 	--~ 	name, rank, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, shouldConsolidate, spellId  = UnitAura("unit", index or "name"[, "rank"[, "filter"]])
@@ -869,7 +869,7 @@ do
 			expirationTime = duration == 0 and 0 or currentTime + duration,
 			spellID = spellID,
 			srcGUID = srcGUID,
-			isDebuff = isDebuff,
+			isDebuff = filter,
 		})
 
 	--~ 	table.sort(self.GUIDAuras[dstGUID], function(a,b)

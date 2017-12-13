@@ -71,7 +71,7 @@ local math_min = math.min
 local math_max = math.max
 local next = next
 local strlen = string.len
-local GetFrameRate = GetFrameRate
+local GetFramerate = GetFramerate
 
 
 
@@ -262,7 +262,7 @@ function ChatThrottleLib:UpdateAvail()
 		-- First 5 seconds after startup/zoning: VERY hard clamping to avoid irritating the server rate limiter, it seems very cranky then
 		avail = math_min(avail + (newavail*0.1), MAX_CPS*0.5)
 		self.bChoking = true
-	elseif GetFramerate() < self.MIN_FPS then		-- GetFrameRate call takes ~0.002 secs
+	elseif GetFramerate() < self.MIN_FPS then		-- GetFramerate call takes ~0.002 secs
 		avail = math_min(MAX_CPS, avail + newavail*0.5)
 		self.bChoking = true		-- just a statistic
 	else

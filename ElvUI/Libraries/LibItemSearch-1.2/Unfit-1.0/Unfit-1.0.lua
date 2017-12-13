@@ -93,7 +93,6 @@ do
 		end
 
 		Unusable[class] = nil
-		subs = nil
 	end
 
 	Lib.unusable = Unusable
@@ -111,6 +110,6 @@ end
 
 function Lib:IsClassUnusable(subclass, slot)
 	if subclass then
-		return slot ~= '' and Unusable[subclass] or slot == 'INVTYPE_WEAPONOFFHAND' and Lib.cannotDual
+		return slot ~= '' and Lib.unusable[subclass] or slot == 'INVTYPE_WEAPONOFFHAND' and Lib.cannotDual
 	end
 end
