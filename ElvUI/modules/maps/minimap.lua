@@ -45,17 +45,10 @@ local menuList = {
 	func = function() ToggleFrame(PVPParentFrame); end},
 	{text = LFG_TITLE,
 	func = function() ToggleFrame(LFDParentFrame); end},
-	{text = L_LFRAID,
+	{text = LOOKING_FOR_RAID,
 	func = function() ToggleFrame(LFRParentFrame); end},
 	{text = HELP_BUTTON,
-	func = ToggleHelpFrame},
-	{text = L_CALENDAR,
-	func = function()
-		if(not CalendarFrame) then
-			LoadAddOn("Blizzard_Calendar");
-		end
-		Calendar_Toggle();
-	end}
+	func = ToggleHelpFrame}
 };
 
 function GetMinimapShape()

@@ -277,7 +277,7 @@ ElvUF.Tags.Events["power:deficit"] = "UNIT_ENERGY UNIT_FOCUS UNIT_MANA UNIT_RAGE
 ElvUF.Tags.Methods["power:deficit"] = function(unit)
 	local pType = UnitPowerType(unit)
 
-	return E:GetFormattedText("DEFICIT", UnitPower(unit, pType), UnitPowerMax(unit, pType), r, g, b)
+	return E:GetFormattedText("DEFICIT", UnitPower(unit, pType), UnitPowerMax(unit, pType))
 end
 
 ElvUF.Tags.Events["power:max"] = "UNIT_MAXENERGY UNIT_MAXFOCUS UNIT_MAXMANA UNIT_MAXRAGE UNIT_MAXRUNIC_POWER"

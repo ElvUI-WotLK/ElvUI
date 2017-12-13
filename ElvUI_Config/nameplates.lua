@@ -1458,7 +1458,6 @@ local function UpdateFilterGroup()
 			},
 		}
 
-		specListOrder = 50 -- reset this to 50
 		UpdateInstanceDifficulty()
 		UpdateStyleLists()
 	end

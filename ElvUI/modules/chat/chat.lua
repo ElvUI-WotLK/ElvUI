@@ -897,7 +897,7 @@ function CH:ChatFrame_MessageEventHandler(event, ...)
 		end
 
 		local _, _, englishClass, _, _, _, name, realm = pcall(GetPlayerInfoByGUID, arg12)
-		local coloredName = GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14)
+		local coloredName = GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12)
 
 		--Cache name->class
 		realm = (realm and realm ~= "") and gsub(realm, "[%s%-]", "")

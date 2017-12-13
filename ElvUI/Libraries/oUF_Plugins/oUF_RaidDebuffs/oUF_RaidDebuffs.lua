@@ -19,7 +19,6 @@ end
 local debuff_data = {}
 addon.DebuffData = debuff_data
 
-
 addon.ShowDispellableDebuff = true
 addon.FilterDispellableDebuff = true
 addon.MatchBySpellName = false

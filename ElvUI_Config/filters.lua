@@ -1081,7 +1081,7 @@ local function UpdateFilterGroup()
 							desc = L["Set the priority order of the spell, please note that prioritys are only used for the raid debuff module, not the standard buff/debuff module. If you want to disable set to zero."],
 							min = 0, max = 99, step = 1,
 							get = function()
-								if selectedFolder or not selectedSpell then
+								if not selectedSpell then
 									return 0
 								else
 									return E.global.unitframe['aurafilters'][selectedFilter]['spells'][(spellID or selectedSpell)].priority
@@ -1096,7 +1096,7 @@ local function UpdateFilterGroup()
 							desc = L["The debuff needs to reach this amount of stacks before it is shown. Set to 0 to always show the debuff."],
 							min = 0, max = 99, step = 1,
 							get = function()
-								if selectedFolder or not selectedSpell then
+								if not selectedSpell then
 									return 0
 								else
 									return E.global.unitframe['aurafilters'][selectedFilter]['spells'][(spellID or selectedSpell)].stackThreshold

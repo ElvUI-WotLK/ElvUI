@@ -55,7 +55,6 @@ end
 local lastPanel;
 local levelNameString = "|cff%02x%02x%02x%d|r |cff%02x%02x%02x%s|r";
 local levelNameClassString = "|cff%02x%02x%02x%d|r %s%s%s";
-local worldOfWarcraftString = WORLD_OF_WARCRAFT;
 local totalOnlineString = join("", FRIENDS_LIST_ONLINE, ": %s/%s");
 local tthead = {r = 0.4, g = 0.78, b = 1};
 local activezone, inactivezone = {r = 0.3, g = 1.0, b = 0.3}, {r = 0.65, g = 0.65, b = 0.65};
@@ -153,7 +152,6 @@ local function OnEnter(self)
 	DT.tooltip:AddDoubleLine(L["Friends List"], format(totalOnlineString, onlineFriends, numberOfFriends), tthead.r, tthead.g, tthead.b, tthead.r, tthead.g, tthead.b);
 	if(onlineFriends > 0) then
 		DT.tooltip:AddLine(" ");
-		DT.tooltip:AddLine(worldOfWarcraftString);
 		for i = 1, #friendTable do
 			info = friendTable[i];
 			if(info[5]) then

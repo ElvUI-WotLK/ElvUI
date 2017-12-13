@@ -219,18 +219,6 @@ function mod:UpdateElement_Auras(frame)
 	end
 end
 
-function mod:UpdateElement_AurasByUnitID(unit)
-	local raidIcon, unitName
-	if UnitPlayerControlled(unit) then unitName = UnitName(unit) end
-	raidIcon = RaidIconIndex[GetRaidTargetIndex(unit) or ""]
-	if raidIcon then ByRaidIcon[raidIcon] = guid end
-
-	local frame = self:SearchForFrame(guid, raidIcon, unitName)
-	if frame then
-		self:UpdateElement_Auras(frame)
-	end
-end
-
 function mod:UpdateElement_AurasByGUID(guid)
 	local destName, destFlags = LAI:GetGUIDInfo(guid)
 

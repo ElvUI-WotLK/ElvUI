@@ -12,14 +12,6 @@ local CreateFrame = CreateFrame
 local UnitAura = UnitAura
 local UnitIsFriend = UnitIsFriend
 
-local function Round(number, decimalPlaces)
-	if decimalPlaces and decimalPlaces > 0 then
-		local mult = 10^decimalPlaces
-		return floor(number * mult + .5) / mult
-	end
-	return floor(num + .5)
-end
-
 local DAY, HOUR, MINUTE = 86400, 3600, 60
 local function FormatTime(s)
 	if s < MINUTE then
@@ -192,7 +184,6 @@ local sort = function(a, b)
 	return compa > compb
 end
 
-
 local function Update(self, event, unit)
 	if self.unit ~= unit then return end
 	local auraBars = self.AuraBars
@@ -277,7 +268,6 @@ local function Update(self, event, unit)
 			end
 		end
 	end
-
 
 	if(auraBars.sort and not auraBars.forceShow) then
 		tsort(auras, type(auraBars.sort) == "function" and auraBars.sort or sort)
