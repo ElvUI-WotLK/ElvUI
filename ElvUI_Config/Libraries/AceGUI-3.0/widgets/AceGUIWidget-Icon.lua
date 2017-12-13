@@ -56,7 +56,7 @@ local methods = {
 	["SetImage"] = function(self, path, ...)
 		local image = self.image
 		image:SetTexture(path)
-		
+
 		if image:GetTexture() then
 			local n = select("#", ...)
 			if n == 4 or n == 8 then
@@ -132,7 +132,7 @@ local function Constructor()
 		widget[method] = func
 	end
 
-	widget.SetText = function(self, ...) print("AceGUI-3.0-Icon: SetText is deprecated! Use SetLabel instead!"); self:SetLabel(...) end
+	widget.SetText = widget.SetLabel
 
 	return AceGUI:RegisterAsWidget(widget)
 end

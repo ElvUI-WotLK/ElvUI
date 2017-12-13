@@ -188,7 +188,7 @@ local function Constructor()
 	local name = "AceGUI30KeybindingButton" .. AceGUI:GetNextWidgetNum(Type)
 
 	local frame = CreateFrame("Frame", nil, UIParent)
-	local button = CreateFrame("Button", name, frame, "UIPanelButtonTemplate")
+	local button = CreateFrame("Button", name, frame, "UIPanelButtonTemplate2")
 
 	button:EnableMouse(true)
 	button:EnableMouseWheel(false)

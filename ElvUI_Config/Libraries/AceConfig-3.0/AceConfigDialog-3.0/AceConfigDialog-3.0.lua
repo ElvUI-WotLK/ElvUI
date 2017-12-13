@@ -29,6 +29,7 @@ local rawset, tostring, tonumber = rawset, tostring, tonumber
 local math_min, math_max, math_floor = math.min, math.max, math.floor
 
 local OKAY = OKAY
+
 -- Global vars/functions that we don't upvalue since they might get hooked, or upgraded
 -- List them here for Mikk's FindGlobals script
 -- GLOBALS: NORMAL_FONT_COLOR, GameTooltip, StaticPopupDialogs, ACCEPT, CANCEL, StaticPopup_Show
@@ -244,21 +245,21 @@ local function GetOptionsMemberValue(membername, option, options, path, appName,
 		info.uiType = "dialog"
 		info.uiName = MAJOR
 
-		local a, b, c ,d, e, f, g, h
+		local a,b,c,d, e,f,g,h
 		--using 4 returns for the get of a color type, increase if a type needs more
 		if type(member) == "function" then
 			--Call the function
-			a,b,c,d, e, f, g, h = member(info, ...)
+			a,b,c,d, e,f,g,h = member(info, ...)
 		else
 			--Call the method
 			if handler and handler[member] then
-				a,b,c,d,e, f, g, h = handler[member](handler, info, ...)
+				a,b,c,d, e,f,g,h = handler[member](handler, info, ...)
 			else
 				error(format("Method %s doesn't exist in handler for type %s", member, membername))
 			end
 		end
 		del(info)
-		return a,b,c,d,e, f, g, h
+		return a,b,c,d, e,f,g,h
 	else
 		--The value isnt a function to call, return it
 		return member
@@ -544,10 +545,10 @@ local function OptionOnMouseOver(widget, event)
 
 	if descStyle and descStyle ~= "tooltip" then return end
 
-	GameTooltip:SetText(name, 1, .82, 0, true)
+	GameTooltip:SetText(name, 1, .82, 0, 1)
 
 	if opt.type == "multiselect" then
-		GameTooltip:AddLine(user.text, 0.5, 0.5, 0.8, 1)
+		GameTooltip:AddLine(user.text,0.5, 0.5, 0.8, 1)
 	end
 	if type(desc) == "string" then
 		GameTooltip:AddLine(desc, 1, 1, 1, 1)
@@ -746,6 +747,7 @@ local function ActivateControl(widget, event, ...)
 		del(info)
 		return true
 	else
+
 		local confirmText = option.confirmText
 		--call confirm func/method
 		if type(confirm) == "string" then
@@ -1112,7 +1114,7 @@ local function FeedOptions(appName, options,container,rootframe,path,group,inlin
 					local imageCoords = GetOptionsMemberValue("imageCoords",v, options, path, appName)
 					local image, width, height = GetOptionsMemberValue("image",v, options, path, appName)
 
-					if type(image) == "string" or type(image) == "number" then
+					if type(image) == "string" then
 						control = gui:Create("Icon")
 						if not width then
 							width = GetOptionsMemberValue("imageWidth",v, options, path, appName)
@@ -1180,7 +1182,7 @@ local function FeedOptions(appName, options,container,rootframe,path,group,inlin
 					local image = GetOptionsMemberValue("image", v, options, path, appName)
 					local imageCoords = GetOptionsMemberValue("imageCoords", v, options, path, appName)
 
-					if type(image) == "string" or type(image) == "number" then
+					if type(image) == "string" then
 						if type(imageCoords) == "table" then
 							control:SetImage(image, unpack(imageCoords))
 						else
@@ -1307,14 +1309,15 @@ local function FeedOptions(appName, options,container,rootframe,path,group,inlin
 							control:SetItemValue(key,value)
 						end
 					else
-						local width = GetOptionsMemberValue("width",v,options,path,appName)
-						local dragdrop = GetOptionsMemberValue("dragdrop",v,options,path,appName)
-
 						control = gui:Create("InlineGroup")
 						control:SetLayout("Flow")
 						control:SetTitle(name)
 						control.width = "fill"
+
 						control:PauseLayout()
+
+						local width = GetOptionsMemberValue("width",v,options,path,appName)
+						local dragdrop = GetOptionsMemberValue("dragdrop",v,options,path,appName)
 
 						for i = 1, #valuesort do
 							local value = valuesort[i]
@@ -1411,7 +1414,7 @@ local function FeedOptions(appName, options,container,rootframe,path,group,inlin
 					local imageCoords = GetOptionsMemberValue("imageCoords",v, options, path, appName)
 					local image, width, height = GetOptionsMemberValue("image",v, options, path, appName)
 
-					if type(image) == "string" or type(image) == "number" then
+					if type(image) == "string" then
 						if not width then
 							width = GetOptionsMemberValue("imageWidth",v, options, path, appName)
 						end
@@ -1886,6 +1889,7 @@ function AceConfigDialog:Open(appName, container, ...)
 		end
 		name = format("%s - %s", name, GetOptionsMemberValue("name", option, options, path, appName))
 	end
+
 	--if a container is given feed into that
 	if container then
 		f = container

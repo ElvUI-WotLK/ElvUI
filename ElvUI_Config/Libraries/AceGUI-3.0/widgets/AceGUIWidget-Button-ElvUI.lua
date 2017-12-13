@@ -2,7 +2,7 @@
 Button Widget (Modified to change text color on SetDisabled method)
 Graphical Button.
 -------------------------------------------------------------------------------]]
-local Type, Version = "Button-ElvUI", 2
+local Type, Version = "Button-ElvUI", 23
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
@@ -110,7 +110,7 @@ local methods = {
 			self:SetWidth(self.text:GetStringWidth() + 30)
 		end
 	end,
-	
+
 	["SetAutoWidth"] = function(self, autoWidth)
 		self.autoWidth = autoWidth
 		if self.autoWidth then
@@ -135,8 +135,9 @@ Constructor
 -------------------------------------------------------------------------------]]
 local function Constructor()
 	local name = "AceGUI30Button" .. AceGUI:GetNextWidgetNum(Type)
-	local frame = CreateFrame("Button", name, UIParent, "UIPanelButtonTemplate")
+	local frame = CreateFrame("Button", name, UIParent, "UIPanelButtonTemplate2")
 	frame:Hide()
+
 	frame:EnableMouse(true)
 	frame:RegisterForClicks("AnyUp")
 	frame:SetScript("OnClick", Button_OnClick)
