@@ -719,9 +719,9 @@ end
 
 function mod:UNIT_AURA(_, unit)
 	if unit == "target" then
-		self:UpdateElement_AurasByUnitID("target")
+		self:UpdateElement_AurasByGUID(UnitGUID(unit))
 	elseif unit == "focus" then
-		self:UpdateElement_AurasByUnitID("focus")
+		self:UpdateElement_AurasByGUID(UnitGUID(unit))
 	end
 end
 
