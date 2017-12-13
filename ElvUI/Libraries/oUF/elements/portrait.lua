@@ -43,7 +43,7 @@ local UnitIsUnit = UnitIsUnit
 local UnitIsVisible = UnitIsVisible
 
 local function Update(self, event, unit)
-	if(self.unit ~= unit) then return end
+	if(not unit or not UnitIsUnit(self.unit, unit)) then return end
 
 	local element = self.Portrait
 
@@ -55,26 +55,30 @@ local function Update(self, event, unit)
 	--]]
 	if(element.PreUpdate) then element:PreUpdate(unit) end
 
-	if(element:IsObjectType('PlayerModel')) then
-		local guid = UnitGUID(unit)
-		if(not UnitExists(unit) or not UnitIsConnected(unit) or not UnitIsVisible(unit)) then
-			element:SetModelScale(4.25)
-			element:SetCamera(0)
-			element:SetPosition(0, 0, -1.5)
-			element:SetModel([[Interface\Buttons\TalkToMeQuestionMark.m2]])
-			element.guid = nil
-		elseif(element.guid ~= guid or event == 'UNIT_MODEL_CHANGED') then
-			element:ClearModel()
-			element:SetUnit(unit)
-			element:SetModelScale(1)
-			element:SetCamera(0)
-			element:SetPosition(0, 0, 0)
-			element.guid = guid
+	local guid = UnitGUID(unit)
+	local isAvailable = UnitIsConnected(unit) and UnitIsVisible(unit)
+	if(event ~= 'OnUpdate' or element.guid ~= guid or element.state ~= isAvailable) then
+		if(element:IsObjectType('PlayerModel')) then
+			if(not isAvailable) then
+				element:SetModelScale(4.25)
+				element:SetCamera(0)
+				element:SetPosition(0, 0, -1.5)
+				element:SetModel([[Interface\Buttons\TalkToMeQuestionMark.m2]])
+			elseif(element.guid ~= guid or event == 'UNIT_MODEL_CHANGED') then
+				element:ClearModel()
+				element:SetUnit(unit)
+				element:SetModelScale(1)
+				element:SetCamera(0)
+				element:SetPosition(0, 0, 0)
+			else
+				element:SetCamera(0)
+			end
 		else
-			element:SetCamera(0)
+			SetPortraitTexture(element, unit)
 		end
-	else
-		SetPortraitTexture(element, unit)
+
+		element.guid = guid
+		element.state = isAvailable
 	end
 
 	--[[ Callback: Portrait:PostUpdate(unit)
