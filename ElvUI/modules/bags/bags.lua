@@ -32,7 +32,6 @@ local SetItemButtonTextureVertexColor = SetItemButtonTextureVertexColor;
 local CooldownFrame_SetTimer = CooldownFrame_SetTimer;
 local BankFrameItemButton_Update = BankFrameItemButton_Update;
 local BankFrameItemButton_UpdateLocked = BankFrameItemButton_UpdateLocked;
-local UpdateSlot = UpdateSlot;
 local GetContainerNumFreeSlots = GetContainerNumFreeSlots;
 local GetBackpackCurrencyInfo = GetBackpackCurrencyInfo;
 local IsModifiedClick = IsModifiedClick;
@@ -487,7 +486,7 @@ function B:Layout(isBank)
 				f.Bags[bagID] = CreateFrame("Frame", f:GetName().."Bag"..bagID, f);
 				f.Bags[bagID]:SetID(bagID);
 				f.Bags[bagID].UpdateBagSlots = B.UpdateBagSlots;
-				f.Bags[bagID].UpdateSlot = UpdateSlot;
+			--	f.Bags[bagID].UpdateSlot = B.UpdateSlot;
 			end
 
 			f.Bags[bagID].numSlots = numSlots;

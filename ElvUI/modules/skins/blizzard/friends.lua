@@ -23,7 +23,7 @@ local function LoadSkin()
 	S:HandleCloseButton(FriendsFrameCloseButton);
 
 	S:HandleDropDownBox(FriendsFrameStatusDropDown, 70);
-	FriendsFrameStatusDropDown:Point("TOPLEFT", FreindsListFrame, "TOPLEFT", 13, -44);
+	FriendsFrameStatusDropDown:Point("TOPLEFT", FriendsListFrame, "TOPLEFT", 13, -44);
 	S:HandleEditBox(FriendsFrameBroadcastInput);
 	FriendsFrameBroadcastInput:Width(224);
 	FriendsFrameBroadcastInput:Point("TOPLEFT", FriendsFrameStatusDropDown, "TOPRIGHT", 13, -3);

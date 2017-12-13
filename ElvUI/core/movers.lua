@@ -340,7 +340,7 @@ function E:CreateMover(parent, name, text, overlay, snapoffset, postdrag, moverT
 		E.CreatedMovers[name]["text"] = text
 		E.CreatedMovers[name]["overlay"] = overlay
 		E.CreatedMovers[name]["postdrag"] = postdrag
-		E.CreatedMovers[name]["snapoffset"] = snapOffset
+		E.CreatedMovers[name]["snapoffset"] = snapoffset
 		E.CreatedMovers[name]["point"] = GetPoint(parent)
 		E.CreatedMovers[name]["shouldDisable"] = shouldDisable
 

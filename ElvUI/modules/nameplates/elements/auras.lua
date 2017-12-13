@@ -243,7 +243,7 @@ function mod:UpdateElement_AurasByGUID(guid)
 	if destFlags then
 		for iconName, bitmask in pairs(RaidIconBit) do
 			if band(destFlags, bitmask) > 0 then
-				ByRaidIcon[iconName] = destGUID
+				ByRaidIcon[iconName] = guid
 				raidIcon = iconName
 				break
 			end
