@@ -1,17 +1,17 @@
-local MAJOR, MINOR = "LibElvUIPlugin-1.0", 13
+local MAJOR, MINOR = "LibElvUIPlugin-1.0", 15
 local lib, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
 if not lib then return end
 
 --Cache global variables
 --Lua functions
-local pairs, tonumber = pairs, tonumber;
-local format, strsplit = format, strsplit;
+local pairs, tonumber = pairs, tonumber
+local format, strsplit, gsub = format, strsplit, gsub
 --WoW API / Variables
-local CreateFrame = CreateFrame;
-local GetNumPartyMembers, GetNumRaidMembers = GetNumPartyMembers, GetNumRaidMembers;
-local GetAddOnMetadata = GetAddOnMetadata;
-local IsAddOnLoaded = IsAddOnLoaded;
-local SendAddonMessage = SendAddonMessage;
+local CreateFrame = CreateFrame
+local GetNumPartyMembers, GetNumRaidMembers = GetNumPartyMembers, GetNumRaidMembers
+local GetAddOnMetadata = GetAddOnMetadata
+local IsAddOnLoaded = IsAddOnLoaded
+local SendAddonMessage = SendAddonMessage
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
 -- GLOBALS: ElvUI
@@ -21,18 +21,18 @@ lib.index = 0
 lib.prefix = "ElvUIPluginVC"
 
 -- MULTI Language Support (Default Language: English)
-local MSG_OUTDATED = "Your version of %s is out of date (latest is version %s). You can download the latest version from https://github.com/ElvUI-WotLK/ElvUI/"
+local MSG_OUTDATED = "Your version of %s %s is out of date (latest is version %s). You can download the latest version from https://github.com/ElvUI-WotLK/ElvUI/"
 local HDR_CONFIG = "Plugins"
-local HDR_INFORMATION = "LibElvUIPlugin-1.0.%d - Plugins Loaded (|cff2BC226Green|r means you have current version, |cffFF0000Red|r means out of date)"
+local HDR_INFORMATION = "LibElvUIPlugin-1.0.%d - Plugins Loaded  (Green means you have current version, Red means out of date)"
 local INFO_BY = "by"
 local INFO_VERSION = "Version:"
 local INFO_NEW = "Newest:"
 local LIBRARY = "Library"
 
 if GetLocale() == "deDE" then -- German Translation
-	MSG_OUTDATED = "Deine Version von %s ist veraltet (akutelle Version ist %s). Du kannst die aktuelle Version von https://github.com/ElvUI-WotLK/ElvUI/ herunterrladen."
+	MSG_OUTDATED = "Deine Version von %s %s ist veraltet (akutelle Version ist %s). Du kannst die aktuelle Version von https://github.com/ElvUI-WotLK/ElvUI/ herunterrladen."
 	HDR_CONFIG = "Plugins"
-	HDR_INFORMATION = "LibElvUIPlugin-1.0.%d - Plugins geladen (|cff2BC226Grün|r bedeutet du hast die aktuelle Version, |cffFF0000Rot|r bedeutet es ist veraltet)"
+	HDR_INFORMATION = "LibElvUIPlugin-1.0.%d - Plugins geladen (Grün bedeutet du hast die aktuelle Version, Rot bedeutet es ist veraltet)"
 	INFO_BY = "von"
 	INFO_VERSION = "Version:"
 	INFO_NEW = "Neuste:"
@@ -40,9 +40,9 @@ if GetLocale() == "deDE" then -- German Translation
 end
 
 if GetLocale() == "ruRU" then -- Russian Translations
-	MSG_OUTDATED = "Ваша версия %s устарела (последняя версия %s). Вы можете скачать последнюю версию на https://github.com/ElvUI-WotLK/ElvUI/"
+	MSG_OUTDATED = "Ваша версия %s %s устарела (последняя версия %s). Вы можете скачать последнюю версию на https://github.com/ElvUI-WotLK/ElvUI/"
 	HDR_CONFIG = "Плагины"
-	HDR_INFORMATION = "LibElvUIPlugin-1.0.%d - Загруженные плагины (|cff2BC226Зеленый|r означает, что у вас последняя версия, |cffFF0000Красный|r - устаревшая)"
+	HDR_INFORMATION = "LibElvUIPlugin-1.0.%d - загруженные плагины (зеленый означает, что у вас последняя версия, красный - устаревшая)"
 	INFO_BY = "от"
 	INFO_VERSION = "Версия:"
 	INFO_NEW = "Последняя:"
@@ -147,22 +147,24 @@ local function SendPluginVersionCheck(self)
 end
 
 function lib:VersionCheck(event, prefix, message, channel, sender)
-	if(not ElvUI[1].global.general.versionCheck) then return; end
+	if not ElvUI[1].global.general.versionCheck then return end
 
 	local E = ElvUI[1]
-	if event == "CHAT_MSG_ADDON" then
-		if sender == E.myname or not sender or prefix ~= lib.prefix then return end
+	if event == "CHAT_MSG_ADDON" and sender and message and message ~= "" and prefix == lib.prefix then
+		if sender == E.myname then return end
 		if not E["pluginRecievedOutOfDateMessage"] then
 			for _, p in pairs({strsplit(";",message)}) do
-				local name, version = p:match("([%w_]+)=([%d%p]+)")
-				if lib.plugins[name] then
-					local plugin = lib.plugins[name]
-					if plugin.version ~= 'BETA' and version ~= nil and tonumber(version) ~= nil and plugin.version ~= nil and tonumber(plugin.version) ~= nil and tonumber(version) > tonumber(plugin.version) then
-						plugin.old = true
-						plugin.newversion = tonumber(version)
-						local Pname = GetAddOnMetadata(plugin.name, "Title")
-						E:Print(format(MSG_OUTDATED,Pname,plugin.newversion))
-						E["pluginRecievedOutOfDateMessage"] = true
+				if not p:match("^%s-$") then
+					local name, version = p:match("([%w_]+)=([%d%p]+)")
+					if lib.plugins[name] then
+						local plugin = lib.plugins[name]
+						if plugin.version ~= 'BETA' and version ~= nil and tonumber(version) ~= nil and plugin.version ~= nil and tonumber(plugin.version) ~= nil and tonumber(version) > tonumber(plugin.version) then
+							plugin.old = true
+							plugin.newversion = tonumber(version)
+							local Pname = GetAddOnMetadata(plugin.name, "Title")
+							E:Print(format(MSG_OUTDATED,Pname,plugin.version,plugin.newversion))
+							E["pluginRecievedOutOfDateMessage"] = true
+						end
 					end
 				end
 			end
@@ -185,7 +187,7 @@ function lib:GeneratePluginList()
 			if author then
 				list = list .. " ".. INFO_BY .." " .. author
 			end
-			list = list .. color .. " - " .. (plugin.isLib and LIBRARY or INFO_VERSION .." " .. plugin.version)
+			list = list .. color .. (plugin.isLib and " " .. LIBRARY or " - " .. INFO_VERSION .." " .. plugin.version)
 			if plugin.old then
 				list = list .. " (" .. INFO_NEW .." " .. plugin.newversion .. ")"
 			end
@@ -196,29 +198,33 @@ function lib:GeneratePluginList()
 end
 
 function lib:SendPluginVersionCheck(message)
+	if not message or (message == "") then return end
 	local plist = {strsplit(";",message)}
 	local m = ""
 	local delay = 1
 	local E = ElvUI[1]
 	for _, p in pairs(plist) do
-		if(#(m .. p .. ";") < 230) then
-			m = m .. p .. ";"
-		else
-			local numParty, numRaid = GetNumPartyMembers(), GetNumRaidMembers();
-			if(numRaid > 0) then
-				E:Delay(delay, SendAddonMessage(lib.prefix, m, "RAID"))
-			elseif(numParty > 0) then
-				E:Delay(delay, SendAddonMessage(lib.prefix, m, "PARTY"))
+		if not p:match("^%s-$") then
+			if(#(m .. p .. ";") < 230) then
+				m = m .. p .. ";"
+			else
+				local numParty, numRaid = GetNumPartyMembers(), GetNumRaidMembers();
+				if numRaid > 0 then
+					E:Delay(delay, SendAddonMessage(lib.prefix, m, "RAID"))
+				elseif numParty > 0 then
+					E:Delay(delay, SendAddonMessage(lib.prefix, m, "PARTY"))
+				end
+				m = p .. ";"
+				delay = delay + 1
 			end
-			m = p .. ";"
-			delay = delay + 1
 		end
 	end
+	if m == "" then return end
 	-- Send the last message
 	local numParty, numRaid = GetNumPartyMembers(), GetNumRaidMembers();
-	if(numRaid > 0) then
+	if numRaid > 0 then
 		E:Delay(delay+1, SendAddonMessage(lib.prefix, m, "RAID"))
-	elseif(numParty > 0) then
+	elseif numParty > 0 then
 		E:Delay(delay+1, SendAddonMessage(lib.prefix, m, "PARTY"))
 	end
 end
