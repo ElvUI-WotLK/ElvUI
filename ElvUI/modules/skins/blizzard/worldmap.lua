@@ -95,6 +95,9 @@ local function LoadSkin()
 	end
 
 	local function LargeSkin()
+		WorldMapFrame:EnableMouse(false)
+		WorldMapFrame:EnableKeyboard(false)
+
 		WorldMapFrame.backdrop:ClearAllPoints()
 		WorldMapFrame.backdrop:Point("TOPLEFT", WorldMapDetailFrame, "TOPLEFT", -10, 70)
 		WorldMapFrame.backdrop:Point("BOTTOMRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT", 12, -30)
@@ -138,7 +141,7 @@ local function LoadSkin()
 		WorldMapFrameSizeDownButton:ClearAllPoints()
 		WorldMapFrameSizeDownButton:Point("RIGHT", WorldMapFrameCloseButton, "LEFT", 4, 0)
 
-		if InCombatLockdown() then return end
+	--	if InCombatLockdown() then return end
 
 		--WorldMapFrame:SetFrameStrata("HIGH")
 		--WorldMapPOIFrame:SetFrameStrata("HIGH")
