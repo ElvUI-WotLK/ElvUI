@@ -3,9 +3,10 @@ local DT = E:GetModule("DataTexts");
 
 local format, join = string.format, string.join;
 
-local GetContainerNumFreeSlots = GetContainerNumFreeSlots;
-local GetContainerNumSlots = GetContainerNumSlots;
-local GetBackpackCurrencyInfo = GetBackpackCurrencyInfo;
+local GetBackpackCurrencyInfo = GetBackpackCurrencyInfo
+local GetContainerNumFreeSlots = GetContainerNumFreeSlots
+local GetContainerNumSlots = GetContainerNumSlots
+local UnitFactionGroup = UnitFactionGroup
 
 local CURRENCY = CURRENCY;
 local NUM_BAG_SLOTS = NUM_BAG_SLOTS;
@@ -34,11 +35,18 @@ local function OnEnter(self)
 	DT:SetupTooltip(self);
 
 	for i = 1, MAX_WATCHED_TOKENS do
-		local name, count, _, icon = GetBackpackCurrencyInfo(i);
-		if(name and i == 1) then
+		local name, count, extraCurrencyType, icon = GetBackpackCurrencyInfo(i)
+		if name and i == 1 then
 			DT.tooltip:AddLine(CURRENCY .. ":");
 		end
-		if(name and count) then DT.tooltip:AddDoubleLine(format(currencyString, icon, name), count, 1, 1, 1); end
+		if name and count then
+			if extraCurrencyType == 1 then
+				icon = "Interface\\PVPFrame\\PVP-ArenaPoints-Icon"
+			elseif extraCurrencyType == 2 then
+				icon = "Interface\\PVPFrame\\PVP-Currency-"..UnitFactionGroup("player")
+			end
+			DT.tooltip:AddDoubleLine(format(currencyString, icon, name), count, 1, 1, 1)
+		end
 	end
 
 	DT.tooltip:Show();

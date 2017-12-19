@@ -4,10 +4,11 @@ local DT = E:GetModule("DataTexts");
 local pairs = pairs;
 local join = string.join;
 
-local IsLoggedIn = IsLoggedIn;
-local GetMoney = GetMoney;
-local IsShiftKeyDown = IsShiftKeyDown;
-local GetBackpackCurrencyInfo = GetBackpackCurrencyInfo;
+local GetBackpackCurrencyInfo = GetBackpackCurrencyInfo
+local GetMoney = GetMoney
+local IsLoggedIn = IsLoggedIn
+local IsShiftKeyDown = IsShiftKeyDown
+local UnitFactionGroup = UnitFactionGroup
 
 local MAX_WATCHED_TOKENS = MAX_WATCHED_TOKENS;
 local CURRENCY = CURRENCY;
@@ -79,12 +80,19 @@ local function OnEnter(self)
 	DT.tooltip:AddDoubleLine(L["Total: "], E:FormatMoney(totalGold, style, textOnly), 1, 1, 1, 1, 1, 1);
 
 	for i = 1, MAX_WATCHED_TOKENS do
-		local name, count, _, icon = GetBackpackCurrencyInfo(i);
-		if(name and i == 1) then
+		local name, count, extraCurrencyType, icon = GetBackpackCurrencyInfo(i);
+		if name and i == 1 then
 			DT.tooltip:AddLine(" ");
 			DT.tooltip:AddLine(CURRENCY .. ":");
 		end
-		if(name and count) then DT.tooltip:AddDoubleLine(currencyString:format(icon, name), count, 1, 1, 1); end
+		if name and count then
+			if extraCurrencyType == 1 then
+				icon = "Interface\\PVPFrame\\PVP-ArenaPoints-Icon"
+			elseif extraCurrencyType == 2 then
+				icon = "Interface\\PVPFrame\\PVP-Currency-"..UnitFactionGroup("player")
+			end
+			DT.tooltip:AddDoubleLine(currencyString:format(icon, name), count, 1, 1, 1)
+		end
 	end
 
 	DT.tooltip:AddLine(" ");
