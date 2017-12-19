@@ -113,6 +113,7 @@ L["Out of Range"] = "超出施放範圍"
 L["Pick Up Action Key"] = true;
 L["Restore Bar"] = "還原快捷列"
 L["Restore the actionbars default settings"] = "恢復此快捷列的預設設定"
+L["RightClick Self-Cast"] = true
 L["Seconds"] = "秒"
 L["Show Empty Buttons"] = "顯示空白按鈕"
 L["The amount of buttons to display per row."] = "每行所顯示的按鈕數量."

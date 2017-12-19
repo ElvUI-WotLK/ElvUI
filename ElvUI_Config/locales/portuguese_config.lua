@@ -113,6 +113,7 @@ L["Out of Range"] = "Fora de Alcance"
 L["Pick Up Action Key"] = true;
 L["Restore Bar"] = "Restaurar Barra"
 L["Restore the actionbars default settings"] = "Restaurar as configurações padrões das barras de ações"
+L["RightClick Self-Cast"] = true
 L["Seconds"] = "Segundos"
 L["Show Empty Buttons"] = true;
 L["The amount of buttons to display per row."] = "Quantidade de botões a serem exibidos por linha."

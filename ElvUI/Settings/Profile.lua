@@ -914,7 +914,7 @@ P["unitframe"] = {
 				["sortMethod"] = "TIME_REMAINING",
 				["sortDirection"] = "DESCENDING",
 				["minDuration"] = 0,
-				["maxDuration"] = 300,
+				["maxDuration"] = 0,
 				["priority"] = "Blacklist,Personal,nonPersonal", --Target Buffs
 				["xOffset"] = 0,
 				["yOffset"] = 0,
@@ -2567,6 +2567,7 @@ P["actionbar"] = {
 
 	["keyDown"] = true,
 	["movementModifier"] = "SHIFT",
+	["rightClickSelfCast"] = false,
 
 	["microbar"] = {
 		["enabled"] = false,
