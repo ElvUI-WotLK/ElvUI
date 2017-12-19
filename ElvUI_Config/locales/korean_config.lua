@@ -149,6 +149,7 @@ L["Out of Range"] = "사정거리 밖"
 L["Pick Up Action Key"] = true;
 L["Restore Bar"] = "기본값으로 초기화"
 L["Restore the actionbars default settings"] = "이 행동단축바에 대한 모든 수치를 기본값으로 되돌립니다."
+L["RightClick Self-Cast"] = true
 L["Seconds"] = "초 단위 색상"
 L["Show Empty Buttons"] = true;
 L["The amount of buttons to display per row."] = "한 줄에 배치할 버튼의 수를 결정합니다."

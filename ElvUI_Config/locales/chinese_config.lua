@@ -113,6 +113,7 @@ L["Out of Range"] = "超出范围"
 L["Pick Up Action Key"] = true;
 L["Restore Bar"] = "重置动作条"
 L["Restore the actionbars default settings"] = "恢复此动作条的预设设定"
+L["RightClick Self-Cast"] = true
 L["Seconds"] = "秒"
 L["Show Empty Buttons"] = "显示空白按钮"
 L["The amount of buttons to display per row."] = "每行显示多少个按钮数"

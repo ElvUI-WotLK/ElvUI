@@ -113,6 +113,7 @@ L["Out of Range"] = "Вне радиуса"
 L["Pick Up Action Key"] = "Клавиша перетаскивания"
 L["Restore Bar"] = "Восстановить панель"
 L["Restore the actionbars default settings"] = "Восстанавливает настройки панели по умолчанию."
+L["RightClick Self-Cast"] = true
 L["Seconds"] = "Секунды"
 L["Show Empty Buttons"] = "Показывать пустые кнопки"
 L["The amount of buttons to display per row."] = "Количество кнопок в каждом ряду"

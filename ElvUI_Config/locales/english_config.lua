@@ -113,6 +113,7 @@ L["Out of Range"] = true;
 L["Pick Up Action Key"] = true;
 L["Restore Bar"] = true;
 L["Restore the actionbars default settings"] = true;
+L["RightClick Self-Cast"] = true
 L["Seconds"] = true;
 L["Show Empty Buttons"] = true;
 L["The amount of buttons to display per row."] = true;
