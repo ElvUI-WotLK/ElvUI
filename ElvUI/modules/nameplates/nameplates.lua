@@ -5,8 +5,9 @@ local LAI = LibStub("LibAuraInfo-1.0-ElvUI", true)
 
 local _G = _G
 local pairs, tonumber = pairs, tonumber
-local gsub = string.gsub
 local twipe = table.wipe
+local gsub = string.gsub
+local match = string.match
 
 local CreateFrame = CreateFrame
 local GetBattlefieldScore = GetBattlefieldScore
@@ -49,7 +50,7 @@ function mod:CheckBGHealers()
 	for i = 1, GetNumBattlefieldScores() do
 		name, _, _, _, _, _, _, _, _, _, damageDone, healingDone = GetBattlefieldScore(i)
 		if name then
-			name = name:match("(.+)%-.+") or name
+			name = match(name,"([^%-]+).*")
 			if name and healingDone > (damageDone * 2) then
 				self.Healers[name] = true
 			elseif name and self.Healers[name] then
