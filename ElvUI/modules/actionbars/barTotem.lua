@@ -8,6 +8,7 @@ local tonumber = tonumber;
 local match = string.match;
 
 local HasMultiCastActionBar = HasMultiCastActionBar;
+local RegisterStateDriver = RegisterStateDriver
 
 if(E.myclass ~= "SHAMAN") then return; end
 
@@ -178,6 +179,12 @@ function AB:ShowMultiCastActionBar()
 end
 
 function AB:PositionAndSizeBarTotem()
+	if InCombatLockdown() then
+		AB.NeedsPositionAndSizeBarTotem = true
+		self:RegisterEvent("PLAYER_REGEN_ENABLED")
+		return
+	end
+
 	local buttonSpacing = E:Scale(self.db["barTotem"].buttonspacing);
 	local size = E:Scale(self.db["barTotem"].buttonsize);
 	local numActiveSlots = MultiCastActionBarFrame.numActiveSlots;
@@ -187,6 +194,13 @@ function AB:PositionAndSizeBarTotem()
 	bar:Height(size);
 	MultiCastActionBarFrame:Height(size);
 	bar.db = self.db["barTotem"];
+
+	local visibility = bar.db.visibility
+	if visibility and visibility:match("[\n\r]") then
+		visibility = visibility:gsub("[\n\r]","")
+	end
+
+	RegisterStateDriver(bar, "visibility", visibility)
 
 	MultiCastSummonSpellButton:ClearAllPoints();
 	MultiCastSummonSpellButton:Size(size);

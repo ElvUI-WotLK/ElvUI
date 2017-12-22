@@ -277,6 +277,22 @@ local function BuildABConfig()
 					isPercent = true,
 					min = 0, max = 1, step = 0.01,
 					disabled = function() return not E.db.actionbar.barTotem.enabled end
+				},
+				visibility = {
+					order = 8,
+					type = "input",
+					name = L["Visibility State"],
+					desc = L["This works like a macro, you can run different situations to get the actionbar to show/hide differently.\n Example: '[combat] show;hide'"],
+					width = "full",
+					multiline = true,
+					set = function(info, value)
+						if value and value:match("[\n\r]") then
+							value = value:gsub("[\n\r]","")
+						end
+						E.db.actionbar["barTotem"][ info[#info] ] = value
+						AB:PositionAndSizeBarTotem()
+					end,
+					disabled = function() return not E.db.actionbar.barTotem.enabled end
 				}
 			}
 		}

@@ -2733,5 +2733,6 @@ P["actionbar"] = {
 		["buttonsize"] = 32,
 		["buttonspacing"] = 2,
 		["alpha"] = 1,
+		["visibility"] = "[vehicleui] hide;show"
 	},
 };

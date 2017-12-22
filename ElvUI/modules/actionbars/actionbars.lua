@@ -293,6 +293,12 @@ end
 
 function AB:PLAYER_REGEN_ENABLED()
 	self:UpdateButtonSettings();
+
+	if AB.NeedsPositionAndSizeBarTotem then
+		self:PositionAndSizeBarTotem()
+		AB.NeedsPositionAndSizeBarTotem = nil
+	end
+
 	self:UnregisterEvent("PLAYER_REGEN_ENABLED");
 end
 
