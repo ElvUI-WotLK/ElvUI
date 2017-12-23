@@ -572,6 +572,21 @@ local function BuildABConfig()
 					["classic"] = L["Classic"]
 				},
 				disabled = function() return not E.db.actionbar.barShapeShift.enabled end
+			},
+			visibility = {
+				order = 18,
+				type = "input",
+				name = L["Visibility State"],
+				desc = L["This works like a macro, you can run different situations to get the actionbar to show/hide differently.\n Example: '[combat] show;hide'"],
+				width = "full",
+				multiline = true,
+				set = function(info, value)
+					if value and value:match("[\n\r]") then
+						value = value:gsub("[\n\r]","")
+					end
+					E.db.actionbar["barShapeShift"]["visibility"] = value;
+					AB:UpdateButtonSettings()
+				end
 			}
 		}
 	}
@@ -642,6 +657,22 @@ local function BuildABConfig()
 				type = "toggle",
 				name = L["Mouse Over"],
 				desc = L["The frame is not shown unless you mouse over the frame."],
+				disabled = function() return not E.db.actionbar.microbar.enabled end
+			},
+			visibility = {
+				order = 10,
+				type = "input",
+				name = L["Visibility State"],
+				desc = L["This works like a macro, you can run different situations to get the actionbar to show/hide differently.\n Example: '[combat] show;hide'"],
+				width = "full",
+				multiline = true,
+				set = function(info, value)
+					if value and value:match("[\n\r]") then
+						value = value:gsub("[\n\r]","")
+					end
+					E.db.actionbar["microbar"]["visibility"] = value
+					AB:UpdateMicroPositionDimensions()
+				end,
 				disabled = function() return not E.db.actionbar.microbar.enabled end
 			}
 		}

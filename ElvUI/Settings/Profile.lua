@@ -163,6 +163,7 @@ P["bags"] = {
 		["backdropSpacing"] = 4,
 		["showBackdrop"] = false,
 		["mouseover"] = false,
+		["visibility"] = "",
 	},
 };
 
@@ -2576,7 +2577,8 @@ P["actionbar"] = {
 		["yOffset"] = 1,
 		["buttonsPerRow"] = 10,
 		["alpha"] = 1,
-		["mouseover"] = false
+		["mouseover"] = false,
+		["visibility"] = "show",
 	},
 
 	["globalFadeAlpha"] = 0,
@@ -2726,6 +2728,7 @@ P["actionbar"] = {
 		["backdropSpacing"] = 2,
 		["alpha"] = 1,
 		["inheritGlobalFade"] = false,
+		["visibility"] = "[vehicleui] hide;show"
 	},
 	["barTotem"] = {
 		["enabled"] = true,

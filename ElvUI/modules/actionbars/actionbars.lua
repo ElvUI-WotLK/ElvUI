@@ -292,8 +292,18 @@ function AB:CreateBar(id)
 end
 
 function AB:PLAYER_REGEN_ENABLED()
-	self:UpdateButtonSettings();
-
+	if AB.NeedsUpdateButtonSettings then
+		self:UpdateButtonSettings()
+		AB.NeedsUpdateButtonSettings = nil
+	end
+	if AB.NeedsUpdateMicroPositionDimensions then
+		self:UpdateMicroPositionDimensions()
+		AB.NeedsUpdateMicroPositionDimensions = nil
+	end
+	if AB.NeedsAdjustMaxStanceButtons then
+		AB:AdjustMaxStanceButtons(AB.NeedsAdjustMaxStanceButtons) --sometimes it holds the event, otherwise true. pass it before we nil it.
+		AB.NeedsAdjustMaxStanceButtons = nil
+	end
 	if AB.NeedsPositionAndSizeBarTotem then
 		self:PositionAndSizeBarTotem()
 		AB.NeedsPositionAndSizeBarTotem = nil
@@ -441,8 +451,13 @@ function AB:UpdateButtonSettingsForBar(barName)
 end
 
 function AB:UpdateButtonSettings()
-	if(E.private.actionbar.enable ~= true) then return; end
-	if(InCombatLockdown()) then self:RegisterEvent("PLAYER_REGEN_ENABLED"); return; end
+	if E.private.actionbar.enable ~= true then return end
+
+	if InCombatLockdown() then
+		AB.NeedsUpdateButtonSettings = true
+		self:RegisterEvent("PLAYER_REGEN_ENABLED")
+		return
+	end
 
 	for button, _ in pairs(self["handledbuttons"]) do
 		if(button) then
@@ -461,6 +476,7 @@ function AB:UpdateButtonSettings()
 	for i = 1, 6 do
 		self:PositionAndSizeBar("bar" .. i);
 	end
+	self:AdjustMaxStanceButtons()
 	self:PositionAndSizeBarPet();
 	self:PositionAndSizeBarShapeShift();
 end
@@ -715,7 +731,12 @@ function AB:DisableBlizzard()
 end
 
 function AB:UpdateButtonConfig(bar, buttonName)
-	if(InCombatLockdown()) then self:RegisterEvent("PLAYER_REGEN_ENABLED"); return; end
+	if InCombatLockdown() then
+		AB.NeedsUpdateButtonSettings = true
+		self:RegisterEvent("PLAYER_REGEN_ENABLED")
+		return
+	end
+
 	if(not bar.buttonConfig) then bar.buttonConfig = {hideElements = {}, colors = {}}; end
 	bar.buttonConfig.hideElements.macro = self.db.macrotext;
 	bar.buttonConfig.hideElements.hotkey = self.db.hotkeytext;
