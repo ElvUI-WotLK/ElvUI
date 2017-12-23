@@ -65,20 +65,20 @@ local function LoadSkin()
 	--Progress Frame
 	AuctionProgressFrame:StripTextures()
 	AuctionProgressFrame:SetTemplate("Transparent")
-	AuctionProgressFrameCancelButton:StyleButton()
-	AuctionProgressFrameCancelButton:SetTemplate("Default")
+
+	S:HandleNextPrevButton(AuctionProgressFrameCancelButton)
+	S:SquareButton_SetIcon(AuctionProgressFrameCancelButton, "DELETE")
 	AuctionProgressFrameCancelButton:SetHitRectInsets(0, 0, 0, 0)
-	AuctionProgressFrameCancelButton:GetNormalTexture():SetInside()
-	AuctionProgressFrameCancelButton:GetNormalTexture():SetTexCoord(0.67, 0.37, 0.61, 0.26)
+
 	AuctionProgressFrameCancelButton:Size(28, 28)
 	AuctionProgressFrameCancelButton:Point("LEFT", AuctionProgressBar, "RIGHT", 8, 0)
 
-	AuctionProgressBarIcon:SetTexCoord(0.67, 0.37, 0.61, 0.26)
+	AuctionProgressBarIcon.backdrop = CreateFrame("Frame", nil, AuctionProgressBarIcon:GetParent())
+	AuctionProgressBarIcon.backdrop:SetTemplate("Default")
+	AuctionProgressBarIcon.backdrop:SetOutside(AuctionProgressBarIcon)
 
-	local backdrop = CreateFrame("Frame", nil, AuctionProgressBarIcon:GetParent())
-	backdrop:SetOutside(AuctionProgressBarIcon)
-	backdrop:SetTemplate("Default")
-	AuctionProgressBarIcon:SetParent(backdrop)
+	AuctionProgressBarIcon:SetTexCoord(unpack(E.TexCoords))
+	AuctionProgressBarIcon:SetParent(AuctionProgressBarIcon.backdrop)
 
 	AuctionProgressBarText:ClearAllPoints()
 	AuctionProgressBarText:SetPoint("CENTER")
