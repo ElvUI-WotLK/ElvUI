@@ -685,8 +685,6 @@ P["unitframe"] = {
 			["lowmana"] = 30,
 			["combatfade"] = false,
 			["healPrediction"] = true,
-			["restIcon"] = true,
-			["combatIcon"] = true,
 			["threatStyle"] = "GLOW",
 			["smartAuraPosition"] = "DISABLED",
 			["colorOverride"] = "USE_DEFAULT",
@@ -736,6 +734,25 @@ P["unitframe"] = {
 				["text_format"] = "||cFFB04F4F[pvptimer][mouseover]||r",
 				["xOffset"] = 0,
 				["yOffset"] = 0,
+			},
+			["RestIcon"] = {
+				["enable"] = true,
+				["defaultColor"] = true,
+				["color"] = {r = 1, g = 1, b = 1, a = 1},
+				["anchorPoint"] = "TOPLEFT",
+				["xOffset"] = -3,
+				["yOffset"] = 6,
+				["size"] = 22
+			},
+			["CombatIcon"] = {
+				["enable"] = true,
+				["defaultColor"] = true,
+				["color"] = {r = 1, g = 0.2, b = 0.2, a = 1},
+				["anchorPoint"] = "CENTER",
+				["xOffset"] = 0,
+				["yOffset"] = 0,
+				["size"] = 20,
+				["texture"] = "DEFAULT"
 			},
 			["pvpIcon"] = {
 				["enable"] = false,

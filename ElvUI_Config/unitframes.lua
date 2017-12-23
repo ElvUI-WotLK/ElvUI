@@ -2867,26 +2867,14 @@ E.Options.args.unitframe.args.player = {
 					get = function(info) return E.db.unitframe.units["player"]["power"].hideonnpc end,
 					set = function(info, value) E.db.unitframe.units["player"]["power"].hideonnpc = value; UF:CreateAndUpdateUF("player") end,
 				},
-				restIcon = {
-					order = 10,
-					name = L["Rest Icon"],
-					desc = L["Display the rested icon on the unitframe."],
-					type = "toggle",
-				},
-				combatIcon = {
-					order = 11,
-					name = L["Combat Icon"],
-					desc = L["Display the combat icon on the unitframe."],
-					type = "toggle",
-				},
 				threatStyle = {
 					type = "select",
-					order = 12,
+					order = 10,
 					name = L["Threat Display Mode"],
 					values = threatValues,
 				},
 				smartAuraPosition = {
-					order = 13,
+					order = 11,
 					type = "select",
 					name = L["Smart Aura Position"],
 					desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
@@ -2899,7 +2887,7 @@ E.Options.args.unitframe.args.player = {
 					},
 				},
 				orientation = {
-					order = 14,
+					order = 12,
 					type = "select",
 					name = L["Frame Orientation"],
 					desc = L["Set the orientation of the UnitFrame."],
@@ -2911,7 +2899,7 @@ E.Options.args.unitframe.args.player = {
 					},
 				},
 				colorOverride = {
-					order = 15,
+					order = 13,
 					name = L["Class Color Override"],
 					desc = L["Override the default class color setting."],
 					type = "select",
@@ -3058,6 +3046,187 @@ E.Options.args.unitframe.args.player = {
 					},
 				},
 			},
+		},
+		RestIcon = {
+			order = 430,
+			type = "group",
+			name = L["Rest Icon"],
+			get = function(info) return E.db.unitframe.units["player"]["RestIcon"][ info[#info] ] end,
+			set = function(info, value) E.db.unitframe.units["player"]["RestIcon"][ info[#info] ] = value; UF:CreateAndUpdateUF("player"); end,
+			args = {
+				header = {
+					order = 1,
+					type = "header",
+					name = L["Rest Icon"],
+				},
+				enable = {
+					order = 2,
+					type = "toggle",
+					name = L["Enable"],
+				},
+				defaultColor = {
+					order = 3,
+					type = "toggle",
+					name = L["Default Color"],
+				},
+				color = {
+					order = 4,
+					type = "color",
+					name = L["Color"],
+					hasAlpha = true,
+					disabled = function()
+						return E.db.unitframe.units["player"]["RestIcon"].defaultColor
+					end,
+					get = function()
+						local c = E.db.unitframe.units["player"]["RestIcon"].color
+						local d = P.unitframe.units["player"]["RestIcon"].color
+						return c.r, c.g, c.b, c.a, d.r, d.g, d.b, d.a
+					end,
+					set = function(_, r, g, b, a)
+						local c = E.db.unitframe.units["player"]["RestIcon"].color
+						c.r, c.g, c.b, c.a = r, g, b, a
+						UF:CreateAndUpdateUF("player")
+					end
+				},
+				size = {
+					order = 5,
+					type = "range",
+					name = L["Size"],
+					min = 10, max = 60, step = 1
+				},
+				xOffset = {
+					order = 6,
+					type = "range",
+					name = L["X-Offset"],
+					min = -100, max = 100, step = 1
+				},
+				yOffset = {
+					order = 7,
+					type = "range",
+					name = L["Y-Offset"],
+					min = -100, max = 100, step = 1
+				},
+				spacer2 = {
+					order = 8,
+					type = "description",
+					name = " "
+				},
+				anchorPoint = {
+					order = 9,
+					type = "select",
+					name = L["Anchor Point"],
+					values = positionValues
+				},
+				customTexture = {
+					order = 10,
+					type = "input",
+					customWidth = 250,
+					name = L["Custom Texture"],
+					set = function(_, value)
+						E.db.unitframe.units["player"]["RestIcon"].customTexture = (value and (not value:match("^%s-$")) and value) or nil
+						UF:CreateAndUpdateUF("player")
+					end
+				}
+			}
+		},
+		CombatIcon = {
+			order = 440,
+			type = "group",
+			name = L["Combat Icon"],
+			get = function(info) return E.db.unitframe.units["player"]["CombatIcon"][ info[#info] ] end,
+			set = function(info, value) E.db.unitframe.units["player"]["CombatIcon"][ info[#info] ] = value; UF:CreateAndUpdateUF("player") end,
+			args = {
+				header = {
+					order = 1,
+					type = "header",
+					name = L["Combat Icon"]
+				},
+				enable = {
+					order = 2,
+					type = "toggle",
+					name = L["Enable"]
+				},
+				defaultColor = {
+					order = 3,
+					type = "toggle",
+					name = L["Default Color"],
+				},
+				color = {
+					order = 4,
+					type = "color",
+					name = COLOR,
+					hasAlpha = true,
+					disabled = function()
+						return E.db.unitframe.units["player"]["CombatIcon"].defaultColor
+					end,
+					get = function()
+						local c = E.db.unitframe.units["player"]["CombatIcon"].color
+						local d = P.unitframe.units["player"]["CombatIcon"].color
+						return c.r, c.g, c.b, c.a, d.r, d.g, d.b, d.a
+					end,
+					set = function(_, r, g, b, a)
+						local c = E.db.unitframe.units["player"]["CombatIcon"].color
+						c.r, c.g, c.b, c.a = r, g, b, a
+						UF:CreateAndUpdateUF("player")
+					end
+				},
+				size = {
+					order = 5,
+					type = "range",
+					name = L["Size"],
+					min = 10, max = 60, step = 1
+				},
+				xOffset = {
+					order = 6,
+					type = "range",
+					name = L["X-Offset"],
+					min = -100, max = 100, step = 1
+				},
+				yOffset = {
+					order = 7,
+					type = "range",
+					name = L["Y-Offset"],
+					min = -100, max = 100, step = 1
+				},
+				spacer2 = {
+					order = 8,
+					type = "description",
+					name = " ",
+				},
+				anchorPoint = {
+					order = 9,
+					type = "select",
+					name = L["Anchor Point"],
+					values = positionValues
+				},
+				texture = {
+					order = 10,
+					type = "select",
+					name = L["Texture"],
+					values = {
+						["CUSTOM"] = CUSTOM,
+						["DEFAULT"] = DEFAULT,
+						["ATTACK"] = [[|TInterface\CURSOR\Attack:14|t]],
+						["ALERT"] = [[|TInterface\DialogFrame\UI-Dialog-Icon-AlertNew:14|t]],
+						["ALERT2"] = [[|TInterface\OptionsFrame\UI-OptionsFrame-NewFeatureIcon:14|t]],
+						["ARTHAS"] =[[|TInterface\LFGFRAME\UI-LFR-PORTRAIT:14|t]],
+						["SKULL"] = [[|TInterface\LootFrame\LootPanel-Icon:14|t]]
+					}
+				},
+				customTexture = {
+					order = 11,
+					type = "input",
+					customWidth = 250,
+					name = L["Custom Texture"],
+					disabled = function()
+						return E.db.unitframe.units["player"]["CombatIcon"].texture ~= "CUSTOM"
+					end,
+					set = function(_, value)
+						E.db.unitframe.units["player"]["CombatIcon"].customTexture = (value and (not value:match("^%s-$")) and value) or nil
+						UF:CreateAndUpdateUF("player")
+					end
+				}
+			}
 		},
 		pvpIcon = {
 			order = 449,

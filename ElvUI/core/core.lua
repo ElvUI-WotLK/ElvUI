@@ -1078,6 +1078,16 @@ end
 
 --DATABASE CONVERSIONS
 function E:DBConversions()
+	--Combat & Resting Icon options update
+	if E.db.unitframe.units.player.combatIcon ~= nil then
+		E.db.unitframe.units.player.CombatIcon.enable = E.db.unitframe.units.player.combatIcon
+		E.db.unitframe.units.player.combatIcon = nil
+	end
+	if E.db.unitframe.units.player.restIcon ~= nil then
+		E.db.unitframe.units.player.RestIcon.enable = E.db.unitframe.units.player.restIcon
+		E.db.unitframe.units.player.restIcon = nil
+	end
+
 	if E.db.unitframe.units.raid.groupBy == "ROLE" then
 		E.db.unitframe.units.raid.groupBy = "GROUP"
 	end
