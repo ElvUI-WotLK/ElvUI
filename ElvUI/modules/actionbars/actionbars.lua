@@ -757,6 +757,8 @@ function AB:UpdateButtonConfig(bar, buttonName)
 		button:SetAttribute("checkfocuscast", true);
 		if self.db.rightClickSelfCast then
 			button:SetAttribute("unit2", "player")
+		else
+			button:SetAttribute("unit2", "target")
 		end
 
 		button:UpdateConfig(bar.buttonConfig);
