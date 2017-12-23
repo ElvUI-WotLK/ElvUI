@@ -131,7 +131,7 @@ function mod:ConfigureElement_HealthBar(frame, configuring)
 	end
 
 	healthBar.text:SetAllPoints(healthBar)
-	healthBar.text:SetFont(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline)
+	healthBar.text:SetFont(LSM:Fetch("font", self.db.healthFont), self.db.healthFontSize, self.db.healthFontOutline)
 end
 
 function mod:ConstructElement_HealthBar(parent)
