@@ -85,6 +85,7 @@ L["Mitigation By Level: "] = "Milderung durch Stufe:"
 L["No Guild"] = "Keine Gilde"
 L["Profit:"] = "Gewinn:"
 L["Reload UI"] = true;
+L["Reset Counters: Hold Shift + Left Click"] = "Zähler zurücksetzen: Halte Shift + Linksklick"
 L["Reset Data: Hold Shift + Right Click"] = "Daten zurücksetzen: Halte Shift + Rechtsklick"
 L["Right Click: Reset CPU Usage"] = true;
 L["Saved Raid(s)"] = "Gespeicherte Schlachtzüge"

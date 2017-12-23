@@ -85,6 +85,7 @@ L["Mitigation By Level: "] = "Réduction par niveau: "
 L["No Guild"] = "Pas de Guilde"
 L["Profit:"] = "Profit:"
 L["Reload UI"] = true;
+L["Reset Counters: Hold Shift + Left Click"] = true
 L["Reset Data: Hold Shift + Right Click"] = "RAZ des données: MAJ + Clic droit"
 L["Right Click: Reset CPU Usage"] = true;
 L["Saved Raid(s)"] = "Raid(s) Sauvegardé(s)"

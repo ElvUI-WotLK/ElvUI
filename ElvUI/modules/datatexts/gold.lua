@@ -16,6 +16,7 @@ local CURRENCY = CURRENCY;
 local currencyString = "|T%s:14:14:0:0:64:64:4:60:4:60|t %s";
 local Profit = 0;
 local Spent = 0;
+local resetCountersFormatter = join("", "|cffaaaaaa", L["Reset Counters: Hold Shift + Left Click"], "|r")
 local resetInfoFormatter = join("", "|cffaaaaaa", L["Reset Data: Hold Shift + Right Click"], "|r");
 
 local function OnEvent(self)
@@ -41,10 +42,16 @@ local function OnEvent(self)
 end
 
 local function OnClick(self, btn)
-	if(btn == "RightButton" and IsShiftKeyDown()) then
-		ElvDB.gold = nil;
-		OnEvent(self);
-		DT.tooltip:Hide();
+	if IsShiftKeyDown() then
+		if btn == "LeftButton" then
+			Profit = 0
+			Spent = 0
+			DT.tooltip:Hide();
+		elseif btn == "RightButton" then
+			ElvDB.gold = nil;
+			OnEvent(self)
+			DT.tooltip:Hide();
+		end
 	else
 		OpenAllBags();
 	end
@@ -96,6 +103,7 @@ local function OnEnter(self)
 	end
 
 	DT.tooltip:AddLine(" ");
+	DT.tooltip:AddLine(resetCountersFormatter)
 	DT.tooltip:AddLine(resetInfoFormatter);
 
 	DT.tooltip:Show();

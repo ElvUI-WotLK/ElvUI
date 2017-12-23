@@ -84,6 +84,7 @@ L["Miss Chance"] = true;
 L["Mitigation By Level: "] = "等级减伤: "
 L["No Guild"] = "没有公会"
 L["Profit:"] = "利润:"
+L["Reset Counters: Hold Shift + Left Click"] = "重置计数器: 按住Shift + 左键点击"
 L["Reload UI"] = true;
 L["Reset Data: Hold Shift + Right Click"] = "重置数据: 按住 Shift + 右键点击"
 L["Right Click: Reset CPU Usage"] = true;

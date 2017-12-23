@@ -85,6 +85,7 @@ L["Mitigation By Level: "] = "等級減傷: "
 L["No Guild"] = "沒有公會"
 L["Profit:"] = "利潤: "
 L["Reload UI"] = true;
+L["Reset Counters: Hold Shift + Left Click"] = true
 L["Reset Data: Hold Shift + Right Click"] = "重置數據: 按住 Shift + 右鍵點擊"
 L["Right Click: Reset CPU Usage"] = true;
 L["Saved Raid(s)"] = "已有進度的副本"
