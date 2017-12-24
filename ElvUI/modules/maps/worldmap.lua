@@ -41,9 +41,9 @@ function M:SetLargeWorldMap()
 	if(InCombatLockdown()) then return; end
 
 	WorldMapFrame:SetParent(E.UIParent);
-	WorldMapFrame:EnableKeyboard(false);
-	WorldMapFrame:SetScale(1);
-	WorldMapFrame:EnableMouse(false);
+	WorldMapFrame:SetScale(1)
+	WorldMapFrame:EnableKeyboard(false)
+	WorldMapFrame:EnableMouse(false)
 
 	if(WorldMapFrame:GetAttribute("UIPanelLayout-area") ~= "center") then
 		SetUIPanelAttribute(WorldMapFrame, "area", "center");
@@ -172,12 +172,15 @@ function M:Initialize()
 		self:PositionCoords();
 	end
 
+	if E.global.general.smallerWorldMap or (E.private.skins.blizzard.enable and E.private.skins.blizzard.worldmap) then
+		self:RegisterEvent("PLAYER_REGEN_ENABLED")
+		self:RegisterEvent("PLAYER_REGEN_DISABLED")
+	end
+
 	if(E.global.general.smallerWorldMap) then
 		BlackoutWorld:SetTexture(nil);
 		self:SecureHook("WorldMap_ToggleSizeDown", "SetSmallWorldMap");
 		self:SecureHook("WorldMap_ToggleSizeUp", "SetLargeWorldMap");
-		self:RegisterEvent("PLAYER_REGEN_ENABLED");
-		self:RegisterEvent("PLAYER_REGEN_DISABLED");
 
 		if(WORLDMAP_SETTINGS.size == WORLDMAP_FULLMAP_SIZE or WORLDMAP_SETTINGS.size == WORLDMAP_QUESTLIST_SIZE) then
 			SetCVar("miniWorldMap", 1);
@@ -193,14 +196,14 @@ function M:Initialize()
 			end
 		end);
 
-		--WorldMapTooltip:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 110);
-		--WorldMapCompareTooltip1:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 110);
-		--WorldMapCompareTooltip2:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 110);
-
 		self:RawHook("WorldMapQuestPOI_OnLeave", function(self)
 			WorldMapPOIFrame.allowBlobTooltip = true
 			WorldMapTooltip:Hide()
 		end, true)
+
+	--	WorldMapTooltip:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 110);
+	--	WorldMapCompareTooltip1:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 110);
+	--	WorldMapCompareTooltip2:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 110);
 	end
 end
 

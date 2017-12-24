@@ -95,8 +95,16 @@ local function LoadSkin()
 	end
 
 	local function LargeSkin()
-		WorldMapFrame:EnableMouse(false)
-		WorldMapFrame:EnableKeyboard(false)
+		if not InCombatLockdown() then
+			WorldMapFrame:EnableMouse(false)
+			WorldMapFrame:EnableKeyboard(false)
+		elseif not WorldMapFrame:IsEventRegistered("PLAYER_REGEN_ENABLED") then
+			WorldMapFrame:RegisterEvent("PLAYER_REGEN_ENABLED", function(self)
+				self:EnableMouse(false)
+				self:EnableKeyboard(false)
+				self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+			end)
+		end
 
 		WorldMapFrame.backdrop:ClearAllPoints()
 		WorldMapFrame.backdrop:Point("TOPLEFT", WorldMapDetailFrame, "TOPLEFT", -10, 70)
