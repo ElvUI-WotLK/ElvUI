@@ -143,7 +143,9 @@ function mod:ConstructElement_HealthBar(parent)
 	frame:SetScript("OnSizeChanged", function(self, width)
 		local health = self:GetValue()
 		local _, maxHealth = self:GetMinMaxValues()
-		self:GetStatusBarTexture():SetPoint("TOPRIGHT", -(width * ((maxHealth - health) / maxHealth)), 0)
+		if self:GetStatusBarTexture() then
+			self:GetStatusBarTexture():SetPoint("TOPRIGHT", -(width * ((maxHealth - health) / maxHealth)), 0)
+		end
 	end)
 
 	parent.FlashTexture = frame:CreateTexture(nil, "OVERLAY")
