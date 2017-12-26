@@ -152,10 +152,10 @@ function mod:SetTargetFrame(frame)
 				frame.unit = "mouseover"
 				frame.guid = UnitGUID("mouseover")
 
-				mod:UpdateElement_Highlight(frame)
 				mod:UpdateElement_Cast(frame, nil, frame.unit)
 				mod:UpdateElement_AurasByGUID(frame.guid)
 			end
+			mod:UpdateElement_Highlight(frame)
 		end
 	elseif frame.isMouseover then
 		frame.isMouseover = nil
@@ -165,6 +165,7 @@ function mod:SetTargetFrame(frame)
 			frame.guid = nil
 			frame.CastBar:Hide()
 		end
+		mod:UpdateElement_Highlight(frame)
 	else
 		if not frame.AlphaChanged then
 			if self.hasTarget then
