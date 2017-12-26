@@ -112,7 +112,7 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 	if TextureChanged then
 		frame.StyleChanged = true
 		frame.TextureChanged = true
-		--frame.Highlight.texture:SetTexture(LSM:Fetch("statusbar", actions.texture.texture))
+		frame.Highlight.texture:SetTexture(LSM:Fetch("statusbar", actions.texture.texture))
 		frame.HealthBar:SetStatusBarTexture(LSM:Fetch("statusbar", actions.texture.texture))
 		if FlashingHealth then
 			frame.FlashTexture:SetTexture(LSM:Fetch("statusbar", actions.texture.texture))
@@ -186,7 +186,7 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 	end
 	if TextureChanged then
 		frame.TextureChanged = nil
-	--	frame.Highlight.texture:SetTexture(LSM:Fetch("statusbar", self.db.statusbar))
+		frame.Highlight.texture:SetTexture(LSM:Fetch("statusbar", self.db.statusbar))
 		frame.HealthBar:SetStatusBarTexture(LSM:Fetch("statusbar", self.db.statusbar))
 	end
 	if ScaleChanged then

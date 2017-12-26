@@ -11,4 +11,5 @@
 	<Script file="elements\raidIcon.lua"/>
 	<Script file="elements\healerIcon.lua"/>
 	<Script file="elements\elite.lua"/>
+	<Script file="elements\highlight.lua"/>
 </Ui>
