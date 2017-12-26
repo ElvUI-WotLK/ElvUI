@@ -110,7 +110,7 @@ function mod:SetTargetFrame(frame)
 			end
 
 			-- TEST
-			mod:UpdateElement_Glow(frame)
+			mod:UpdateElement_Highlight(frame)
 			mod:UpdateElement_CPoints(frame)
 			mod:UpdateElement_Filters(frame, "PLAYER_TARGET_CHANGED")
 		end
@@ -141,7 +141,6 @@ function mod:SetTargetFrame(frame)
 		end
 
 		-- TEST
-		mod:UpdateElement_Glow(frame)
 		mod:UpdateElement_CPoints(frame)
 		mod:UpdateElement_Filters(frame, "PLAYER_TARGET_CHANGED")
 	elseif frame.oldHighlight:IsShown() then
@@ -176,6 +175,7 @@ function mod:SetTargetFrame(frame)
 		end
 	end
 
+	self:UpdateElement_Glow(frame)
 	self:UpdateElement_HealthColor(frame)
 end
 
