@@ -827,7 +827,7 @@ local function OnCooldownUpdate(_, button, start, duration)
 
 		button.icon:SetDesaturated(true)
 
-		Calculate when the cooldown is finished and manually trigger an update then
+		--Calculate when the cooldown is finished and manually trigger an update then
 		E:Delay(GetCooldownLeft(button), DelayedSaturate, button)
 	else
 		button.icon:SetDesaturated(false)
