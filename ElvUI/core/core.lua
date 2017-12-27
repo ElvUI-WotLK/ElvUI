@@ -140,23 +140,26 @@ E.DEFAULT_FILTER = {
 
 E.noop = function() end;
 
-local colorizedName;
-local length = len("ElvUI")
-for i = 1, length do
-	local letter = sub("ElvUI", i, i);
-	if(i == 1) then
-		colorizedName = format("|cffA11313%s", letter);
-	elseif(i == 2) then
-		colorizedName = format("%s|r|cffC4C4C4%s", colorizedName, letter);
-	elseif(i == length) then
-		colorizedName = format("%s%s|r|cffA11313:|r", colorizedName, letter);
-	else
-		colorizedName = colorizedName .. letter;
+local colorizedName
+function E:ColorizedName(name, arg2)
+	local length = len(name)
+	for i = 1, length do
+		local letter = sub(name, i, i)
+		if i == 1 then
+			colorizedName = format("|cffA11313%s", letter)
+		elseif i == 2 then
+			colorizedName = format("%s|r|cffC4C4C4%s", colorizedName, letter)
+		elseif i == length and arg2 then
+			colorizedName = format("%s%s|r|cffA11313:|r", colorizedName, letter)
+		else
+			colorizedName = colorizedName..letter
+		end
 	end
+	return colorizedName
 end
 
 function E:Print(...)
-	print(colorizedName, ...);
+	print(self:ColorizedName("ElvUI", true), ...)
 end
 
 E.PriestColors = {
