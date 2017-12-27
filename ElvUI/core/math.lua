@@ -248,34 +248,34 @@ function E:ShortenString(string, numChars, dots)
 	end
 end
 
-local waitTable = {};
-local waitFrame;
+local waitTable = {}
+local waitFrame
 function E:Delay(delay, func, ...)
-	if(type(delay) ~= "number" or type(func) ~= "function") then
-		return false;
+	if (type(delay) ~= "number") or (type(func) ~= "function") then
+		return false
 	end
-	if(waitFrame == nil) then
-		waitFrame = CreateFrame("Frame","WaitFrame", E.UIParent);
+	if waitFrame == nil then
+		waitFrame = CreateFrame("Frame","WaitFrame", E.UIParent)
 		waitFrame:SetScript("onUpdate",function (_, elapse)
-			local count = #waitTable;
-			local i = 1;
-			while(i <= count) do
-				local waitRecord = tremove(waitTable, i);
-				local d = tremove(waitRecord, 1);
-				local f = tremove(waitRecord, 1);
-				local p = tremove(waitRecord, 1);
-				if(d > elapse) then
-					tinsert(waitTable, i, {d-elapse, f, p});
-					i = i + 1;
+			local waitRecord, waitDelay, waitFunc, waitParams
+			local i, count = 1, #waitTable
+			while i <= count do
+				waitRecord = tremove(waitTable,i)
+				waitDelay = tremove(waitRecord,1)
+				waitFunc = tremove(waitRecord,1)
+				waitParams = tremove(waitRecord,1)
+				if waitDelay > elapse then
+					tinsert(waitTable,i,{waitDelay-elapse,waitFunc,waitParams})
+					i = i + 1
 				else
-					count = count - 1;
-					f(unpack(p));
+					count = count - 1
+					waitFunc(unpack(waitParams))
 				end
 			end
-		end);
+		end)
 	end
-	tinsert(waitTable, {delay, func, {...}});
-	return true;
+	tinsert(waitTable, {delay, func, {...}})
+	return true
 end
 
 function E:StringTitle(str)
