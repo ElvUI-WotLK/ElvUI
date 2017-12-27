@@ -582,6 +582,8 @@ L["If enabled then the filter will only activate if the level of the unit matche
 L["If enabled then the filter will only activate if the unit is casting interruptible spells."] = "如果選中則過濾器僅僅在單位施放可打斷技能的時候啟動"
 L["If enabled then the filter will only activate when you are in combat."] = "如果選中則過濾器僅僅在你在戰鬥中的時候啟動"
 L["If enabled then the filter will only activate when you are out of combat."] = "如果選中則過濾器僅僅在你不在戰鬥中的時候啟動"
+L["If enabled then the filter will only activate when you are targeting the unit."] = true
+L["If enabled then the filter will only activate when you are not targeting the unit."] = true
 L["If the aura is listed with a number then you need to use that to remove it from the list."] = "如果光環和一個數一起列出你需要用它來將其移出列表"
 L["If this list is empty, and if 'Interruptible' is checked, then the filter will activate on any type of cast that can be interrupted."] = "如果列表為空, 並且'可打斷'被選中, 那麼過濾器會在任何可被打斷的施法時啟動"
 L["If this threshold is used then the health of the unit needs to be higher than this value in order for the filter to activate. Set to 0 to disable."] = "如果這個閾值被設置則單位的血量需要比設定值更高才會將過濾器啟動. 設為0以禁用."

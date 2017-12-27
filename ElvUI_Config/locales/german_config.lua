@@ -582,6 +582,8 @@ L["If enabled then the filter will only activate if the level of the unit matche
 L["If enabled then the filter will only activate if the unit is casting interruptible spells."] = "Wenn eingeschaltet, wird der Filter nur aktiviert wenn die Einheit einen unterbrechbaren Zauber wirkt."
 L["If enabled then the filter will only activate when you are in combat."] = "Wenn eingeschaltet, wird der Filter nur aktiviert wenn du im Kampf bist."
 L["If enabled then the filter will only activate when you are out of combat."] = "Wenn eingeschaltet, wird der Filter nur aktiviert, wenn du nicht im Kampf bist."
+L["If enabled then the filter will only activate when you are targeting the unit."] = "Wenn eingeschaltet, wird der Filter nur aktiviert, wenn du die Einheit im Ziel hast."
+L["If enabled then the filter will only activate when you are not targeting the unit."] = "Wenn eingeschaltet, wird der Filter nur aktiviert, wenn du die Einheit nicht im Ziel hast."
 L["If the aura is listed with a number then you need to use that to remove it from the list."] = "Wenn die Aura mit einer Nummer aufgeführt ist, dann musst du sie benutzten um sie aus der Liste zu entfernen."
 L["If this list is empty, and if 'Interruptible' is checked, then the filter will activate on any type of cast that can be interrupted."] = "Wenn die Liste leer ist, und 'Unterbrechbar' ist ausgewählt, wird der Filter aktiviert bei jedem Zauber der unterbrechbar ist."
 L["If this threshold is used then the health of the unit needs to be higher than this value in order for the filter to activate. Set to 0 to disable."] = "Wenn dieser Schwellenwert genutzt wird, muss die Gesundheit höher sein als dieser Wert um den Filter zu aktivieren. Setze auf 0 um zu deaktiveren."
