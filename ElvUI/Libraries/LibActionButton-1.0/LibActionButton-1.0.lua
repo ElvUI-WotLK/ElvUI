@@ -1069,6 +1069,8 @@ end
 function UpdateCooldown(self)
 	local start, duration, enable = self:GetCooldown()
 	CooldownFrame_SetTimer(self.cooldown, start, duration, enable)
+
+	lib.callbacks:Fire("OnCooldownUpdate", self, start, duration, enable)
 end
 
 function StartFlash(self)

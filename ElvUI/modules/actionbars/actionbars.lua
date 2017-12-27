@@ -804,6 +804,56 @@ function AB:LAB_ButtonUpdate(button)
 end
 LAB.RegisterCallback(AB, "OnButtonUpdate", AB.LAB_ButtonUpdate);
 
+local cStart, cDuration, cLeft
+local function GetCooldownLeft(button)
+	cStart, cDuration = button:GetCooldown()
+	cLeft = (cStart + cDuration - GetTime())
+	return cLeft
+end
+
+local function DelayedSaturate(button)
+	--We probably need to check cooldown here again just in case something
+	--caused the action to come off cooldown early and we then activated it again
+	if GetCooldownLeft(button) <= 0.1 then --Allow some wiggle room
+		button.icon:SetDesaturated(false)
+	end
+end
+
+local function OnCooldownUpdate(_, button, start, duration)
+	if not button._state_type == "action" then return; end
+
+	if start and duration > 1.5 then
+		button.saturationLocked = true --Lock any new actions that are created after we activated desaturation option
+
+		button.icon:SetDesaturated(true)
+
+		Calculate when the cooldown is finished and manually trigger an update then
+		E:Delay(GetCooldownLeft(button), DelayedSaturate, button)
+	else
+		button.icon:SetDesaturated(false)
+	end
+end
+
+function AB:ToggleDesaturation(value)
+	value = value or self.db.desaturateOnCooldown
+
+	if value then
+		LAB.RegisterCallback(AB, "OnCooldownUpdate", OnCooldownUpdate)
+		local start, duration
+		for button in pairs(LAB.actionButtons) do
+			button.saturationLocked = true
+			start, duration = button:GetCooldown()
+			OnCooldownUpdate(nil, button, start, duration)
+		end
+	else
+		LAB.UnregisterCallback(AB, "OnCooldownUpdate")
+		for button in pairs(LAB.actionButtons) do
+			button.saturationLocked = nil
+			button.icon:SetDesaturated(false)
+		end
+	end
+end
+
 function AB:Initialize()
 	self.db = E.db.actionbar;
 	if(E.private.actionbar.enable ~= true) then return; end
@@ -846,6 +896,8 @@ function AB:Initialize()
 
 	SetCVar("lockActionBars", (self.db.lockActionBars == true and 1 or 0));
 	LOCK_ACTIONBAR = (self.db.lockActionBars == true and "1" or "0");
+
+	self:ToggleDesaturation()
 end
 
 local function InitializeCallback()

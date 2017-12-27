@@ -90,8 +90,17 @@ local function BuildABConfig()
 					end
 				end,
 			},
-			movementModifier = {
+			desaturateOnCooldown = {
 				order = 11,
+				type = "toggle",
+				name = L["Desaturate On Cooldown"],
+				set = function(info, value)
+					E.db.actionbar.desaturateOnCooldown = value;
+					AB:ToggleDesaturation(value)
+				end
+			},
+			movementModifier = {
+				order = 12,
 				type = "select",
 				name = L["Pick Up Action Key"],
 				desc = L["The button you must hold down in order to drag an ability to another action button."],
@@ -104,7 +113,7 @@ local function BuildABConfig()
 				}
 			},
 			globalFadeAlpha = {
-				order = 12,
+				order = 13,
 				type = "range",
 				name = L["Global Fade Transparency"],
 				desc = L["Transparency level when not in combat, no target exists, full health, not casting, and no focus target exists."],
@@ -113,7 +122,7 @@ local function BuildABConfig()
 				set = function(info, value) E.db.actionbar[ info[#info] ] = value AB.fadeParent:SetAlpha(1-value) end
 			},
 			colorGroup = {
-				order = 13,
+				order = 14,
 				type = "group",
 				name = COLORS,
 				guiInline = true,
@@ -155,7 +164,7 @@ local function BuildABConfig()
 				}
 			},
 			fontGroup = {
-				order = 14,
+				order = 15,
 				type = "group",
 				guiInline = true,
 				name = L["Fonts"],
@@ -202,7 +211,7 @@ local function BuildABConfig()
 				}
 			},
 			lbf = {
-				order = 15,
+				order = 16,
 				type = "group",
 				guiInline = true,
 				name = L["LBF Support"],

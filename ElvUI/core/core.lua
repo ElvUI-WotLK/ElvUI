@@ -833,6 +833,7 @@ function E:UpdateAll(ignoreInstall)
 	AB.db = self.db.actionbar;
 	AB:UpdateButtonSettings();
 	AB:UpdateMicroPositionDimensions();
+	AB:ToggleDesaturation()
 
 	local bags = E:GetModule("Bags");
 	bags.db = self.db.bags;
