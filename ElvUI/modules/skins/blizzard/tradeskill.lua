@@ -25,6 +25,18 @@ local function LoadSkin()
 	TradeSkillFrame.backdrop:Point("TOPLEFT", 10, -12);
 	TradeSkillFrame.backdrop:Point("BOTTOMRIGHT", -34, 0);
 
+	TradeSkillFrame.bg1 = CreateFrame("Frame", nil, TradeSkillFrame)
+	TradeSkillFrame.bg1:SetTemplate("Transparent")
+	TradeSkillFrame.bg1:Point("TOPLEFT", 14, -92)
+	TradeSkillFrame.bg1:Point("BOTTOMRIGHT", -367, 4)
+	TradeSkillFrame.bg1:SetFrameLevel(TradeSkillFrame.bg1:GetFrameLevel() - 1)
+
+	TradeSkillFrame.bg2 = CreateFrame("Frame", nil, TradeSkillFrame)
+	TradeSkillFrame.bg2:SetTemplate("Transparent")
+	TradeSkillFrame.bg2:Point("TOPLEFT", TradeSkillFrame.bg1, "TOPRIGHT", 3, 0)
+	TradeSkillFrame.bg2:Point("BOTTOMRIGHT", TradeSkillFrame, "BOTTOMRIGHT", -38, 4)
+	TradeSkillFrame.bg2:SetFrameLevel(TradeSkillFrame.bg2:GetFrameLevel() - 1)
+
 	TradeSkillRankFrame:StripTextures();
 	TradeSkillRankFrame:Size(447, 16);
 	TradeSkillRankFrame:ClearAllPoints();
