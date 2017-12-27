@@ -52,7 +52,7 @@ elseif LOCALE == "frFR" then
 --	L["Twisting Nether"] = "Néant distordu"
 --	L["Use Soulstone"] = "Utilisez Pierre d'âme"
 elseif LOCALE == "ruRU" then
-	L[CORPSE_OF] = "^" .. CORPSE_TOOLTIP:gsub("%|%S+%(%%s%)", "(.+)")
+	L.CORPSE_OF = "^" .. CORPSE_TOOLTIP:gsub("%|%S+%(%%s%)", "(.+)")
 
 --	L["Reincarnate"] = "Возродиться"
 	L["Soulstone"] = "Камень души"
