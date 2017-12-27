@@ -12,6 +12,7 @@ To load the AddOn engine inside another addon add this to the top of your file:
 
 local _G = _G;
 local pairs, unpack = pairs, unpack;
+local format = string.format
 
 BINDING_HEADER_ELVUI = GetAddOnMetadata(..., "Title");
 
@@ -94,7 +95,7 @@ function AddOn:OnInitialize()
 	local GameMenuButton = CreateFrame("Button", nil, GameMenuFrame, "GameMenuButtonTemplate");
 	GameMenuButton:Size(GameMenuButtonLogout:GetWidth(), GameMenuButtonLogout:GetHeight());
 
-	GameMenuButton:SetText(AddOnName);
+	GameMenuButton:SetText(format("|cfffe7b2c%s|r", AddOnName))
 	GameMenuButton:SetScript("OnClick", function()
 		AddOn:ToggleConfig();
 		HideUIPanel(GameMenuFrame);
