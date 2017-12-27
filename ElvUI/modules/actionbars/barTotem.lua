@@ -15,13 +15,33 @@ if(E.myclass ~= "SHAMAN") then return; end
 local bar = CreateFrame("Frame", "ElvUI_BarTotem", E.UIParent, "SecureHandlerStateTemplate");
 bar:SetFrameLevel(115);
 
-local bordercolors = {
-	{.23, .45, .13},
-	{.58, .23, .10},
-	{.19, .48, .60},
-	{.42, .18, .74},
-	{.39, .39, .12}
-};
+local SLOT_BORDER_COLORS = {
+	["summon"] = {
+		r = 0,
+		g = 0,
+		b = 0
+	},
+	[EARTH_TOTEM_SLOT] = {
+		r = 0.23,
+		g = 0.45,
+		b = 0.13
+	},
+	[FIRE_TOTEM_SLOT] = {
+		r = 0.58,
+		g = 0.23,
+		b = 0.10
+	},
+	[WATER_TOTEM_SLOT] = {
+		r = 0.19,
+		g = 0.48,
+		b = 0.60
+	},
+	[AIR_TOTEM_SLOT] = {
+		r = 0.42,
+		g = 0.18,
+		b = 0.74
+	}
+}
 
 local SLOT_EMPTY_TCOORDS = {
 	[EARTH_TOTEM_SLOT] = {
@@ -50,19 +70,33 @@ local SLOT_EMPTY_TCOORDS = {
 	}
 };
 
-function AB:MultiCastFlyoutFrameOpenButton_Show(button, _, parent)
-	button.backdrop:SetBackdropBorderColor(parent:GetBackdropBorderColor());
+function AB:MultiCastFlyoutFrameOpenButton_Show(button, type, parent)
+	local color
+	if type == "page" then
+		color = SLOT_BORDER_COLORS["summon"]
+	else
+		color = SLOT_BORDER_COLORS[parent:GetID()]
+	end
+
+	button.backdrop:SetBackdropBorderColor(color.r, color.g, color.b);
 end
 
-function AB:MultiCastActionButton_Update(button, _, index)
-	button:SetBackdropBorderColor(unpack(bordercolors[((index-1) % 5) + 1]));
+function AB:MultiCastActionButton_Update(button, _, index, slot)
+	local color = SLOT_BORDER_COLORS[slot]
+	if color then
+		button:SetBackdropBorderColor(color.r, color.g, color.b);
+	end
+
 	if(InCombatLockdown()) then bar.eventFrame:RegisterEvent("PLAYER_REGEN_ENABLED"); return; end
 	button:ClearAllPoints();
 	button:SetAllPoints(button.slotButton);
 end
 
-function AB:StyleTotemSlotButton(button, index)
-	button:SetBackdropBorderColor(unpack(bordercolors[((index-1) % 5) + 1]));
+function AB:StyleTotemSlotButton(button, slot)
+    local color = SLOT_BORDER_COLORS[slot]
+	if color then
+		button:SetBackdropBorderColor(color.r, color.g, color.b);
+	end
 end
 
 function AB:SkinSummonButton(button)
@@ -86,6 +120,7 @@ function AB:MultiCastFlyoutFrame_ToggleFlyout(self, type, parent)
 	self.top:SetTexture(nil);
 	self.middle:SetTexture(nil);
 
+	local color
 	local numButtons = 0;
 	for i, button in ipairs(self.buttons) do
 		if(not button.isSkinned) then
@@ -108,16 +143,27 @@ function AB:MultiCastFlyoutFrame_ToggleFlyout(self, type, parent)
 				button:Point("BOTTOM", self.buttons[i-1], "TOP", 0, AB.db["barTotem"].buttonspacing);
 			end
 
-			button:SetBackdropBorderColor(parent:GetBackdropBorderColor());
+ 			if type == "page" then
+				color = SLOT_BORDER_COLORS["summon"]
+			else
+				color = SLOT_BORDER_COLORS[parent:GetID()]
+			end
+			button:SetBackdropBorderColor(color.r, color.g, color.b);
 		end
 	end
 
-	if(type == "slot") then
+	if type == "slot" then
 		local tCoords = SLOT_EMPTY_TCOORDS[parent:GetID()];
 		self.buttons[1].icon:SetTexCoord(tCoords.left, tCoords.right, tCoords.top, tCoords.bottom);
+
+		color = SLOT_BORDER_COLORS[parent:GetID()];
+		self.buttons[1]:SetBackdropBorderColor(color.r, color.g, color.b);
+	elseif type == "page" then
+		color = SLOT_BORDER_COLORS["summon"]
 	end
 
-	MultiCastFlyoutFrameCloseButton.backdrop:SetBackdropBorderColor(parent:GetBackdropBorderColor());
+	MultiCastFlyoutFrameCloseButton.backdrop:SetBackdropBorderColor(color.r, color.g, color.b);
+
 	self:Height(((AB.db["barTotem"].buttonsize + AB.db["barTotem"].buttonspacing) * numButtons) + MultiCastFlyoutFrameCloseButton:GetHeight());
 end
 
@@ -307,7 +353,7 @@ function AB:CreateTotemBar()
 	self:SecureHook("MultiCastFlyoutFrameOpenButton_Show");
 	self:SecureHook("MultiCastActionButton_Update");
 
-	self:SecureHook("MultiCastSlotButton_Update", function(self) AB:StyleTotemSlotButton(self, tonumber(match(self:GetName(), "MultiCastSlotButton(%d)"))); end);
+	self:SecureHook("MultiCastSlotButton_Update", "StyleTotemSlotButton")
 	self:SecureHook("MultiCastFlyoutFrame_ToggleFlyout");
 	self:SecureHook("MultiCastRecallSpellButton_Update");
 	self:SecureHook("ShowMultiCastActionBar");
