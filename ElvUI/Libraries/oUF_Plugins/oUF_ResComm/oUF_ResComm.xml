@@ -1,0 +1,4 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="LibResComm-1.0\LibResComm-1.0.lua"/>
+	<Script file="oUF_ResComm.lua"/>
+</Ui>

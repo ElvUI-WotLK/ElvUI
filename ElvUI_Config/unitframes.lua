@@ -862,9 +862,7 @@ local function GetOptionsTable_Castbar(hasTicks, updateFunc, groupName, numUnits
 	return config
 end
 
-
 local function GetOptionsTable_InformationPanel(updateFunc, groupName, numUnits)
-
 	local config = {
 		order = 4000,
 		type = "group",
@@ -4883,14 +4881,20 @@ E.Options.args.unitframe.args.party = {
 					desc = L["Show an incoming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."],
 					type = "toggle",
 				},
+				resurrect = {
+					order = 6,
+					name = L["Resurrection Indicator"],
+					desc = L["Show an incoming resurection."],
+					type = "toggle",
+				},
 				threatStyle = {
 					type = "select",
-					order = 6,
+					order = 7,
 					name = L["Threat Display Mode"],
 					values = threatValues,
 				},
 				colorOverride = {
-					order = 7,
+					order = 8,
 					name = L["Class Color Override"],
 					desc = L["Override the default class color setting."],
 					type = "select",
@@ -4901,7 +4905,7 @@ E.Options.args.unitframe.args.party = {
 					},
 				},
 				orientation = {
-					order = 8,
+					order = 9,
 					type = "select",
 					name = L["Frame Orientation"],
 					desc = L["Set the orientation of the UnitFrame."],
@@ -4913,7 +4917,7 @@ E.Options.args.unitframe.args.party = {
 					},
 				},
 				targetGlow = {
-					order = 9,
+					order = 10,
 					type = "toggle",
 					name = L["Target Glow"],
 				},
@@ -5478,14 +5482,20 @@ E.Options.args.unitframe.args.raid = {
 					desc = L["Show an incoming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."],
 					type = "toggle",
 				},
+				resurrect = {
+					order = 6,
+					name = L["Resurrection Indicator"],
+					desc = L["Show an incoming resurection."],
+					type = "toggle",
+				},
 				threatStyle = {
 					type = "select",
-					order = 6,
+					order = 7,
 					name = L["Threat Display Mode"],
 					values = threatValues,
 				},
 				colorOverride = {
-					order = 7,
+					order = 8,
 					name = L["Class Color Override"],
 					desc = L["Override the default class color setting."],
 					type = "select",
@@ -5496,7 +5506,7 @@ E.Options.args.unitframe.args.raid = {
 					},
 				},
 				orientation = {
-					order = 8,
+					order = 9,
 					type = "select",
 					name = L["Frame Orientation"],
 					desc = L["Set the orientation of the UnitFrame."],
@@ -5508,7 +5518,7 @@ E.Options.args.unitframe.args.raid = {
 					},
 				},
 				targetGlow = {
-					order = 9,
+					order = 10,
 					type = "toggle",
 					name = L["Target Glow"],
 				},
@@ -5895,14 +5905,20 @@ E.Options.args.unitframe.args.raid40 = {
 					desc = L["Show an incoming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."],
 					type = "toggle",
 				},
+				resurrect = {
+					order = 6,
+					name = L["Resurrection Indicator"],
+					desc = L["Show an incoming resurection."],
+					type = "toggle",
+				},
 				threatStyle = {
 					type = "select",
-					order = 6,
+					order = 7,
 					name = L["Threat Display Mode"],
 					values = threatValues,
 				},
 				colorOverride = {
-					order = 7,
+					order = 8,
 					name = L["Class Color Override"],
 					desc = L["Override the default class color setting."],
 					type = "select",
@@ -5913,7 +5929,7 @@ E.Options.args.unitframe.args.raid40 = {
 					},
 				},
 				orientation = {
-					order = 8,
+					order = 9,
 					type = "select",
 					name = L["Frame Orientation"],
 					desc = L["Set the orientation of the UnitFrame."],
@@ -5925,7 +5941,7 @@ E.Options.args.unitframe.args.raid40 = {
 					},
 				},
 				targetGlow = {
-					order = 9,
+					order = 10,
 					type = "toggle",
 					name = L["Target Glow"],
 				},
@@ -6977,7 +6993,6 @@ for i = 1, 3 do
 		end,
 	}
 end
-
 
 if P.unitframe.colors.classResources[E.myclass] then
 	E.Options.args.unitframe.args.generalOptionsGroup.args.allColorsGroup.args.classResourceGroup.args.spacer2 = {
