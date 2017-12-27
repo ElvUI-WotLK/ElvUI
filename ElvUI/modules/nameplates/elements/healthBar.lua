@@ -141,9 +141,9 @@ function mod:ConstructElement_HealthBar(parent)
 	self:StyleFrame(frame)
 
 	frame:SetScript("OnSizeChanged", function(self, width)
-		local health = self:GetValue()
-		local _, maxHealth = self:GetMinMaxValues()
 		if self:GetStatusBarTexture() then
+			local health = self:GetValue()
+			local _, maxHealth = self:GetMinMaxValues()
 			self:GetStatusBarTexture():SetPoint("TOPRIGHT", -(width * ((maxHealth - health) / maxHealth)), 0)
 		end
 	end)
