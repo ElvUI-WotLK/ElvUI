@@ -204,7 +204,15 @@ local function LoadSkin()
 
 	ReadyCheckListenerFrame:SetAlpha(0)
 	ReadyCheckFrame:HookScript("OnShow", function(self) if UnitIsUnit("player", self.initiator) then self:Hide() end end) -- bug fix, don't show it if initiator
+
+	-- Stack Split Frame
 	StackSplitFrame:GetRegions():Hide()
+
+	StackSplitFrame.bg1 = CreateFrame("Frame", nil, StackSplitFrame)
+	StackSplitFrame.bg1:SetTemplate("Transparent")
+	StackSplitFrame.bg1:Point("TOPLEFT", 10, -15)
+	StackSplitFrame.bg1:Point("BOTTOMRIGHT", -10, 55)
+	StackSplitFrame.bg1:SetFrameLevel(StackSplitFrame.bg1:GetFrameLevel() - 1)
 
 	InterfaceOptionsFrame:SetClampedToScreen(true)
 	InterfaceOptionsFrame:SetMovable(true)
