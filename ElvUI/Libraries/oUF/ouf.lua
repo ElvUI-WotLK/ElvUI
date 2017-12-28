@@ -622,8 +622,8 @@ do
 				end
 
 				frame.menu = togglemenu
-				frame:SetAttribute('type1', 'target')
-				frame:SetAttribute('type2', 'menu')
+				frame:SetAttribute('*type1', 'target')
+				frame:SetAttribute('*type2', 'menu')
 				frame:SetAttribute('toggleForVehicle', true)
 				frame.guessUnit = unit
 			end

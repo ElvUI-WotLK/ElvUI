@@ -486,6 +486,8 @@ function UF.groupPrototype:Configure_Groups(self)
 		point = DIRECTION_TO_POINT[direction]
 
 		if group then
+			group:Hide()
+
 			UF:ConvertGroupDB(group)
 			if point == "LEFT" or point == "RIGHT" then
 				group:SetAttribute("xOffset", db.horizontalSpacing * DIRECTION_TO_HORIZONTAL_SPACING_MULTIPLIER[direction])
@@ -529,6 +531,8 @@ function UF.groupPrototype:Configure_Groups(self)
 			else
 				group:SetAttribute("groupFilter", tostring(i))
 			end
+
+			group:Show()
 		end
 
 		--MATH!! WOOT
@@ -692,8 +696,6 @@ function UF:CreateHeader(parent, groupFilter, overrideName, template, groupName,
 	local db = UF.db["units"][group]
 	ElvUF:SetActiveStyle("ElvUF_"..E:StringTitle(group))
 	local header = ElvUF:SpawnHeader(overrideName, headerTemplate, nil,
-			"initial-width", db.width,
-			"initial-height", db.height,
 			"groupFilter", groupFilter,
 			"showParty", true,
 			"showRaid", group == "party" and false or true,
