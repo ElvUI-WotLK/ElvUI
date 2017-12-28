@@ -704,7 +704,7 @@ function UF:CreateHeader(parent, groupFilter, overrideName, template, groupName,
 
 	header.groupName = group
 	header:SetParent(parent)
-	header:Show()
+	--header:Show()
 
 	for k, v in pairs(self.headerPrototype) do
 		header[k] = v
@@ -741,6 +741,7 @@ function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdat
 
 		if db.numGroups then
 			self[group] = CreateFrame("Frame", "ElvUF_"..stringTitle, E.UIParent, "SecureHandlerStateTemplate");
+			self[group]:Hide()
 			self[group].groups = {}
 			self[group].groupName = group
 			self[group].template = self[group].template or template
@@ -755,7 +756,7 @@ function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdat
 
 		self[group].db = db
 		self["headers"][group] = self[group]
-		self[group]:Show()
+		--self[group]:Show()
 	end
 
 	self[group].numGroups = numGroups
