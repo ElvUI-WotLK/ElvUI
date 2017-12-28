@@ -1091,18 +1091,6 @@ function E:DBConversions()
 		E.db.unitframe.units.player.RestIcon.enable = E.db.unitframe.units.player.restIcon
 		E.db.unitframe.units.player.restIcon = nil
 	end
-
-	if E.db.unitframe.units.raid.groupBy == "ROLE" then
-		E.db.unitframe.units.raid.groupBy = "GROUP"
-	end
-	if E.db.unitframe.units.raid40.groupBy == "ROLE" then
-		E.db.unitframe.units.raid40.groupBy = "GROUP"
-	end
-
-	--Make sure default filters use the correct filter type
-	for filter, filterType in pairs(E.DEFAULT_FILTER) do
-		E.global.unitframe.aurafilters[filter].type = filterType
-	end
 end
 
 local CPU_USAGE = {};
