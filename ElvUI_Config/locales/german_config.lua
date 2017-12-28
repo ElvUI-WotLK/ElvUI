@@ -93,6 +93,7 @@ L["Display bind names on action buttons."] = "Zeige Tastaturbelegungen auf der A
 L["Display cooldown text on anything with the cooldown spiral."] = "Zeige die Abklingzeit auf allen Tasten mit Hilfe iner animierten Spirale."
 L["Display macro names on action buttons."] = "Zeige Makronamen auf der Aktionsleiste an."
 L["Expiring"] = "Auslaufend"
+L["Flyout Spacing"] = true
 L["Global Fade Transparency"] = "Globales Transparenz verblassen"
 L["Height Multiplier"] = "Höhenmultiplikator"
 L["Hours"] = "Stunden"

@@ -279,8 +279,16 @@ local function BuildABConfig()
 					min = 0, max = 40, step = 1,
 					disabled = function() return not E.db.actionbar.barTotem.enabled end
 				},
-				alpha = {
+				flyoutSpacing = {
 					order = 7,
+					type = "range",
+					name = L["Flyout Spacing"],
+					desc = L["The spacing between buttons."],
+					min = 0, max = 40, step = 1,
+					disabled = function() return not E.db.actionbar.barTotem.enabled end
+				},
+				alpha = {
+					order = 8,
 					type = "range",
 					name = L["Alpha"],
 					isPercent = true,
@@ -288,7 +296,7 @@ local function BuildABConfig()
 					disabled = function() return not E.db.actionbar.barTotem.enabled end
 				},
 				visibility = {
-					order = 8,
+					order = 9,
 					type = "input",
 					name = L["Visibility State"],
 					desc = L["This works like a macro, you can run different situations to get the actionbar to show/hide differently.\n Example: '[combat] show;hide'"],

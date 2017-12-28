@@ -138,9 +138,9 @@ function AB:MultiCastFlyoutFrame_ToggleFlyout(self, type, parent)
 			numButtons = numButtons + 1;
 			button:Size(AB.db["barTotem"].buttonsize);
 			if(i == 1) then
-				button:Point("BOTTOM", parent, "TOP", 0, AB.db["barTotem"].buttonspacing);
+				button:Point("BOTTOM", parent, "TOP", 0, AB.db["barTotem"].flyoutSpacing);
 			else
-				button:Point("BOTTOM", self.buttons[i-1], "TOP", 0, AB.db["barTotem"].buttonspacing);
+				button:Point("BOTTOM", self.buttons[i-1], "TOP", 0, AB.db["barTotem"].flyoutSpacing);
 			end
 
  			if type == "page" then
@@ -164,7 +164,7 @@ function AB:MultiCastFlyoutFrame_ToggleFlyout(self, type, parent)
 
 	MultiCastFlyoutFrameCloseButton.backdrop:SetBackdropBorderColor(color.r, color.g, color.b);
 
-	self:Height(((AB.db["barTotem"].buttonsize + AB.db["barTotem"].buttonspacing) * numButtons) + MultiCastFlyoutFrameCloseButton:GetHeight());
+	self:Height(((AB.db["barTotem"].buttonsize + AB.db["barTotem"].flyoutSpacing) * numButtons) + MultiCastFlyoutFrameCloseButton:GetHeight());
 end
 
 function AB:MultiCastRecallSpellButton_Update(self)
