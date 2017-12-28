@@ -93,6 +93,7 @@ L["Display bind names on action buttons."] = "Exibir atalhos nos botões de aç�
 L["Display cooldown text on anything with the cooldown spiral."] = "Exibir texto do tempo de recarga para tudo que tenha espiral de recarga."
 L["Display macro names on action buttons."] = "Exibir nomes das macros nos botões de ação."
 L["Expiring"] = "Expirando"
+L["Flyout Direction"] = true
 L["Flyout Spacing"] = true
 L["Global Fade Transparency"] = true;
 L["Height Multiplier"] = "Multiplicador de Altura"

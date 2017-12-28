@@ -93,6 +93,7 @@ L["Display bind names on action buttons."] = "在动作条按钮上显示键位�
 L["Display cooldown text on anything with the cooldown spiral."] = "显示技能冷却时间"
 L["Display macro names on action buttons."] = "在动作条按钮上显示宏名称"
 L["Expiring"] = "即将冷却完毕"
+L["Flyout Direction"] = "飞出方向"
 L["Flyout Spacing"] = true
 L["Global Fade Transparency"] = "全局透明渐隐"
 L["Height Multiplier"] = "高度倍增"

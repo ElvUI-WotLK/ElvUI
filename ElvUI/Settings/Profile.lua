@@ -2753,6 +2753,7 @@ P["actionbar"] = {
 		["enabled"] = true,
 		["mouseover"] = false,
 		["buttonsize"] = 32,
+		["flyoutDirection"] = "UP",
 		["buttonspacing"] = 2,
 		["flyoutSpacing"] = 2,
 		["alpha"] = 1,
