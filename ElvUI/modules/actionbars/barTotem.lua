@@ -83,8 +83,10 @@ function AB:MultiCastFlyoutFrameOpenButton_Show(button, type, parent)
 	button:ClearAllPoints()
 	if AB.db["barTotem"].flyoutDirection == "UP" then
 		button:Point("BOTTOM", parent, "TOP")
+		button.icon:SetTexCoord(0.45312500, 0.64062500, 0.01562500, 0.20312500)
 	elseif AB.db["barTotem"].flyoutDirection == "DOWN" then
 		button:Point("TOP", parent, "BOTTOM")
+		button.icon:SetTexCoord(0.45312500, 0.64062500, 0.20312500, 0.01562500)
 	end
 end
 
@@ -186,9 +188,11 @@ function AB:MultiCastFlyoutFrame_ToggleFlyout(self, type, parent)
 	if AB.db["barTotem"].flyoutDirection == "UP" then
 		self:Point("BOTTOM", parent, "TOP")
 		MultiCastFlyoutFrameCloseButton:Point("TOP", self, "TOP")
+		MultiCastFlyoutFrameCloseButton.icon:SetTexCoord(0.45312500, 0.64062500, 0.20312500, 0.01562500)
 	elseif AB.db["barTotem"].flyoutDirection == "DOWN" then
 		self:Point("TOP", parent, "BOTTOM")
 		MultiCastFlyoutFrameCloseButton:Point("BOTTOM", self, "BOTTOM")
+		MultiCastFlyoutFrameCloseButton.icon:SetTexCoord(0.45312500, 0.64062500, 0.01562500, 0.20312500)
 	end
 
 	self:Height(((AB.db["barTotem"].buttonsize + AB.db["barTotem"].flyoutSpacing) * numButtons) + MultiCastFlyoutFrameCloseButton:GetHeight());
@@ -326,6 +330,11 @@ function AB:CreateTotemBar()
 	closeButton.backdrop:SetPoint("TOPLEFT", 0, -(E.Border + E.Spacing));
 	closeButton.backdrop:SetPoint("BOTTOMRIGHT", 0, E.Border + E.Spacing);
 
+	closeButton.icon = closeButton:CreateTexture(nil, "ARTWORK")
+	closeButton.icon:SetSize(14, 14)
+	closeButton.icon:SetPoint("CENTER")
+	closeButton.icon:SetTexture([[Interface\AddOns\ElvUI\media\textures\SquareButtonTextures.blp]])
+
 	closeButton.normalTexture:SetTexture("");
 
 	closeButton:StyleButton();
@@ -337,6 +346,11 @@ function AB:CreateTotemBar()
 	openButton:CreateBackdrop("Default", true, true);
 	openButton.backdrop:SetPoint("TOPLEFT", 0, -(E.Border + E.Spacing));
 	openButton.backdrop:SetPoint("BOTTOMRIGHT", 0, E.Border + E.Spacing);
+
+	openButton.icon = openButton:CreateTexture(nil, "ARTWORK")
+	openButton.icon:SetSize(14, 14)
+	openButton.icon:SetPoint("CENTER")
+	openButton.icon:SetTexture([[Interface\AddOns\ElvUI\media\textures\SquareButtonTextures.blp]])
 
 	openButton.normalTexture:SetTexture("");
 
