@@ -246,7 +246,8 @@ local function BuildABConfig()
 				enabled = {
 					order = 2,
 					type = "toggle",
-					name = L["Enable"]
+					name = L["Enable"],
+					set = function(info, value) E.db.actionbar["barTotem"][ info[#info] ] = value E:StaticPopup_Show("PRIVATE_RL") end
 				},
 				restorePosition = {
 					order = 3,
