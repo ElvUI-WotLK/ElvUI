@@ -763,52 +763,52 @@ function E:StringSplitMultiDelim(s, delim)
 end
 
 function E:SendMessage()
-	local numParty, numRaid = GetNumPartyMembers(), GetNumRaidMembers();
-	local inInstance, instanceType = IsInInstance();
-	if(inInstance and (instanceType == "pvp" or instanceType == "arena")) then
-		SendAddonMessage("ELVUI_VERSIONCHK", E.version, "BATTLEGROUND");
-	else
-		if(numRaid > 0) then
-			SendAddonMessage("ELVUI_VERSIONCHK", E.version, "RAID");
-		elseif(numParty > 0) then
-			SendAddonMessage("ELVUI_VERSIONCHK", E.version, "PARTY");
+	local numRaid, numParty = GetNumRaidMembers(), GetNumPartyMembers()
+	if numRaid > 1 then
+		local _, instanceType = IsInInstance()
+		if instanceType == "pvp" then
+			SendAddonMessage("ELVUI_VERSIONCHK", E.version, "BATTLEGROUND")
+		else
+			SendAddonMessage("ELVUI_VERSIONCHK", E.version, "RAID")
 		end
+	elseif numParty > 0 then
+		SendAddonMessage("ELVUI_VERSIONCHK", E.version, "PARTY")
 	end
 
-	if(E.SendMSGTimer) then
-		self:CancelTimer(E.SendMSGTimer);
-		E.SendMSGTimer = nil;
+	if E.SendMSGTimer then
+		self:CancelTimer(E.SendMSGTimer)
+		E.SendMSGTimer = nil
 	end
 end
 
-local myName = E.myname.."-"..E.myrealm;
-myName = myName:gsub("%s+", "");
 local function SendRecieve(_, event, prefix, message, _, sender)
-	if(not E.global.general.versionCheck) then return; end
+	if not E.global.general.versionCheck then return end
 
-	if(event == "CHAT_MSG_ADDON") then
-		if(sender == myName) then return; end
-		if(prefix == "ELVUI_VERSIONCHK" and not E.recievedOutOfDateMessage) then
-			if(tonumber(message) ~= nil and tonumber(message) > tonumber(E.version)) then
-				E:Print(L["ElvUI is out of date. You can download the newest version from https://github.com/ElvUI-WotLK/ElvUI/"]);
+	if event == "CHAT_MSG_ADDON" then
+		if prefix ~= "ELVUI_VERSIONCHK" then return end
+		if not sender or sender == E.myname or E.recievedOutOfDateMessage then return end
 
-				if((tonumber(message) - tonumber(E.version)) >= 0.05) then
-					E:StaticPopup_Show("ELVUI_UPDATE_AVAILABLE");
-				end
+		message = tonumber(message)
 
-				E.recievedOutOfDateMessage = true;
+		if message and message > tonumber(E.version) then
+			E:Print(L["ElvUI is out of date. You can download the newest version from https://github.com/ElvUI-WotLK/ElvUI/"])
+
+			if (message - tonumber(E.version)) >= 0.05 then
+				E:StaticPopup_Show("ELVUI_UPDATE_AVAILABLE")
 			end
+
+			E.recievedOutOfDateMessage = true
 		end
 	else
-		E.SendMSGTimer = E:ScheduleTimer("SendMessage", 12);
+		E.SendMSGTimer = E:ScheduleTimer("SendMessage", 12)
 	end
 end
 
-local f = CreateFrame("Frame");
-f:RegisterEvent("RAID_ROSTER_UPDATE");
-f:RegisterEvent("PARTY_MEMBERS_CHANGED");
-f:RegisterEvent("CHAT_MSG_ADDON");
-f:SetScript("OnEvent", SendRecieve);
+local f = CreateFrame("Frame")
+f:RegisterEvent("RAID_ROSTER_UPDATE")
+f:RegisterEvent("PARTY_MEMBERS_CHANGED")
+f:RegisterEvent("CHAT_MSG_ADDON")
+f:SetScript("OnEvent", SendRecieve)
 
 function E:UpdateAll(ignoreInstall)
 	self.private = self.charSettings.profile;
