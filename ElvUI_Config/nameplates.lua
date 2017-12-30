@@ -2286,7 +2286,8 @@ E.Options.args.nameplate = {
 						comboPoints = {
 							order = 5,
 							type = "toggle",
-							name = L["Combobar"]
+							name = L["Combo Points"],
+							desc = L["Display combo points on nameplates."]
 						},
 						resetFilters = {
 							order = 6,

@@ -532,6 +532,7 @@ L["Copy Settings From"] = true;
 L["Current Level"] = true
 L["Default Settings"] = true;
 L["Display a healer icon over known healers inside battlegrounds or arenas."] = true;
+L["Display combo points on nameplates."] = true
 L["Elite Icon"] = true
 L["Enable/Disable the scaling of targetted nameplates."] = true;
 L["Enabling this will check your health amount."] = true
