@@ -591,6 +591,7 @@ L["Copy Settings From"] = true;
 L["Current Level"] = true
 L["Default Settings"] = true;
 L["Display a healer icon over known healers inside battlegrounds or arenas."] = "전장이나 투기장에서 유닛이 힐러인 경우 이름표에 힐러 아이콘을 표시합니다."
+L["Display combo points on nameplates."] = "이름표에 연계점수를 표시합니다."
 L["Elite Icon"] = true
 L["Enable/Disable the scaling of targetted nameplates."] = true;
 L["Enabling this will check your health amount."] = true

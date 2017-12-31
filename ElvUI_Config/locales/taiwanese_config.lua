@@ -543,6 +543,7 @@ L["Copy Settings From"] = "複製設置"
 L["Current Level"] = "當前等級"
 L["Default Settings"] = "默認設置"
 L["Display a healer icon over known healers inside battlegrounds or arenas."] = "戰場或競技場中，為已確認為補職的玩家標上補職圖示."
+L["Display combo points on nameplates."] = "在血條上顯示連擊點."
 L["Elite Icon"] = "精英標誌"
 L["Enable/Disable the scaling of targetted nameplates."] = "啟用/禁用目標姓名板的縮放"
 L["Enabling this will check your health amount."] = true
