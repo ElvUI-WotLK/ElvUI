@@ -805,7 +805,7 @@ end
 LAB.RegisterCallback(AB, "OnButtonUpdate", AB.LAB_ButtonUpdate);
 
 local function Saturate(cooldown)
-	cooldown:GetParent().icon:SetDesaturated(false)
+	cooldown:GetParent():GetParent():GetParent().icon:SetDesaturated(false)
 end
 
 local function OnCooldownUpdate(_, button, start, duration)
@@ -819,12 +819,14 @@ local function OnCooldownUpdate(_, button, start, duration)
 		--Hook cooldown done and add colors back
 		if not button.onCooldownDoneHooked then
 			button.onCooldownDoneHooked = true
-			AB:HookScript(button.cooldown, "OnHide", Saturate)
+			AB:HookScript(button.cooldown.timer, "OnHide", Saturate)
 		end
 	end
 end
 
 function AB:ToggleDesaturation(value)
+	if not E.private.cooldown.enable then return end
+
 	value = value or self.db.desaturateOnCooldown
 
 	if value then
@@ -841,7 +843,7 @@ function AB:ToggleDesaturation(value)
 			button.saturationLocked = nil
 			button.icon:SetDesaturated(false)
 			if button.onCooldownDoneHooked then
-				AB:Unhook(button.cooldown, "OnHide")
+				AB:Unhook(button.cooldown.timer, "OnHide")
 				button.onCooldownDoneHooked = nil
 			end
 		end
