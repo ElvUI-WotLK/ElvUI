@@ -1108,7 +1108,7 @@ end
 
 function UpdateHotkeys(self)
 	local key = self:GetHotkey()
-	if not key or key == "" or not self.config.hideElements.hotkey then
+	if not key or key == "" or self.config.hideElements.hotkey then
 		self.hotkey:SetText(RANGE_INDICATOR)
 		self.hotkey:SetPoint("TOPRIGHT", 0, -3);
 		self.hotkey:Hide()
