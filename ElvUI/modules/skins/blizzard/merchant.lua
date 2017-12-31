@@ -9,6 +9,19 @@ local function LoadSkin()
 	MerchantFrame.backdrop:Point("TOPLEFT", 10, -11);
 	MerchantFrame.backdrop:Point("BOTTOMRIGHT", -28, 60);
 
+	MerchantFrame:EnableMouseWheel(true)
+	MerchantFrame:SetScript("OnMouseWheel", function(_, value)
+		if value > 0 then
+			if MerchantPrevPageButton:IsShown() and MerchantPrevPageButton:IsEnabled() == 1 then
+				MerchantPrevPageButton_OnClick()
+			end
+		else
+			if MerchantNextPageButton:IsShown() and MerchantNextPageButton:IsEnabled() == 1 then
+				MerchantNextPageButton_OnClick()
+			end	
+		end
+	end)
+
 	S:HandleCloseButton(MerchantFrameCloseButton, MerchantFrame.backdrop);
 
 	for i = 1, 12 do
