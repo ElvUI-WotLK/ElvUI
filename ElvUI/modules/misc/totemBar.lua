@@ -10,15 +10,28 @@ local GetTotemInfo = GetTotemInfo;
 local CooldownFrame_SetTimer = CooldownFrame_SetTimer;
 local MAX_TOTEMS = MAX_TOTEMS;
 
+local SLOT_BORDER_COLORS = {
+	[EARTH_TOTEM_SLOT]	= {r = 0.23, g = 0.45, b = 0.13},
+	[FIRE_TOTEM_SLOT]	= {r = 0.58, g = 0.23, b = 0.10},
+	[WATER_TOTEM_SLOT]	= {r = 0.19, g = 0.48, b = 0.60},
+	[AIR_TOTEM_SLOT]	= {r = 0.42, g = 0.18, b = 0.74}
+}
+
 function TOTEMS:Update()
 	local displayedTotems = 0;
 	for i = 1, MAX_TOTEMS do
+		local color
 		local haveTotem, _, startTime, duration, icon = GetTotemInfo(i);
 		if(haveTotem and icon and icon ~= "") then
 			self.bar[i]:Show();
 			self.bar[i].iconTexture:SetTexture(icon);
 			displayedTotems = displayedTotems + 1;
 			CooldownFrame_SetTimer(self.bar[i].cooldown, startTime, duration, 1);
+
+			if E.myclass == "SHAMAN" then
+				color = SLOT_BORDER_COLORS[self.bar[i]:GetID()]
+				self.bar[i]:SetBackdropBorderColor(color.r, color.g, color.b)
+			end
 
 			for d = 1, MAX_TOTEMS do
 				if(_G["TotemFrameTotem" .. d .. "IconTexture"]:GetTexture() == icon) then
