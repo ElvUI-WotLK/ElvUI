@@ -178,8 +178,8 @@ do
 			self.db.general.bordercolor = {r = 223/255, g = 217/255, b = 47/255};
 			self.db.general.valuecolor = {r = 223/255, g = 217/255, b = 47/255};
 
-			self.db.chat.panelBackdropNameLeft = [[Interface\AddOns\ElvUI\media\textures\helloKittyChat1.tga]];
-			self.db.chat.panelBackdropNameRight = [[Interface\AddOns\ElvUI\media\textures\helloKittyChat1.tga]];
+			self.db.chat.panelBackdropNameLeft = [[Interface\AddOns\ElvUI\media\textures\helloKittyChat.tga]];
+			self.db.chat.panelBackdropNameRight = [[Interface\AddOns\ElvUI\media\textures\helloKittyChat.tga]];
 
 			self.db.unitframe.colors.castColor = {r = 223/255, g = 76/255, b = 188/255};
 			self.db.unitframe.colors.transparentCastbar = true;

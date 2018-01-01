@@ -166,7 +166,7 @@ local function OnUpdate(self, t)
 		int = 10;
 	end
 	if(int2 < 0) then
-		local framerate = floor(GetFramerate());
+		local framerate = floor(GetFramerate() + .5);
 		local latency = select(3, GetNetStats());
 
 		self.text:SetFormattedText("FPS: %s%d|r MS: %s%d|r",

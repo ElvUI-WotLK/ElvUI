@@ -65,9 +65,6 @@ local lines = {};
 local msgList, msgCount, msgTime = {}, {}, {}
 local chatFilters = {};
 
-local PLAYER_REALM = gsub(E.myrealm,"[%s%-]","")
-local PLAYER_NAME = E.myname.."-"..PLAYER_REALM
-
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
 local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
 
@@ -160,10 +157,9 @@ local smileyKeys = {
 local specialChatIcons
 do --this can save some main file locals
 	local IconPath = "|TInterface\\AddOns\\ElvUI\\media\\textures\\chatLogos\\"
-	--local oldBlue = IconPath.."elvui.blp:13:22|t"
 	local ElvBlue = IconPath.."elvui_blue.tga:13:25|t"
-	--local ElvPink = IconPath.."elvui_pink.tga:13:25|t"
-	--local ElvRed = IconPath.."elvui_red.tga:13:25|t"
+	local ElvPink = IconPath.."elvui_pink.tga:13:25|t"
+	local ElvRed = IconPath.."elvui_red.tga:13:25|t"
 	--local ElvPurple = IconPath.."elvui_purple.tga:13:25|t"
 	--local ElvOrange = IconPath.."elvui_orange.tga:13:25|t"
 	--local Bathrobe = IconPath.."bathrobe.blp:15:15|t"
@@ -171,7 +167,8 @@ do --this can save some main file locals
 	specialChatIcons = {
 		["WoW Circle 3.3.5a x10"] = {
 			["Крольченок"] = ElvBlue,
-			["Неумеряющый"] = ElvBlue,
+			["Неумерающая"] = ElvPink,
+			["Крольчонык"] = ElvRed,
 		}
 	}
 end
@@ -880,7 +877,7 @@ end
 local function GetChatIcons(sender)
 	for realm, _ in pairs(specialChatIcons) do
 		for character, texture in pairs(specialChatIcons[realm]) do
-			if (realm == PLAYER_REALM and sender == character) or sender == character.."-"..realm then
+			if (realm == E.myrealm and sender == character) or sender == character.."-"..realm then
 				return texture
 			end
 		end
@@ -913,7 +910,7 @@ function CH:ChatFrame_MessageEventHandler(event, ...)
 		realm = (realm and realm ~= "") and gsub(realm, "[%s%-]", "")
 		if name and name ~= "" then
 			CH.ClassNames[name:lower()] = englishClass
-			local className = (realm and name.."-"..realm) or name.."-"..PLAYER_REALM
+			local className = (realm and name.."-"..realm) or name.."-"..E.myrealm
 			CH.ClassNames[className:lower()] = englishClass
 		end
 
@@ -1529,7 +1526,7 @@ function CH:SaveChatHistory(event, ...)
 
 		local message, author = ...
 		local msg = PrepareMessage(author, message)
-		if author ~= PLAYER_NAME and msgList[msg] then
+		if author ~= E.myname and msgList[msg] then
 			if difftime(time(), msgTime[msg]) <= CH.db.throttleInterval then
 				return;
 			end
