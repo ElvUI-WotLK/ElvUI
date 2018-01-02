@@ -1,91 +1,68 @@
-local E, L, V, P, G = unpack(select(2, ...));
+local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins");
 
-local _G = _G;
-local unpack, select = unpack, select;
+--Cache global variables
+--Lua functions
+local unpack = unpack
+--WoW API / Variables
+local CreateFrame = CreateFrame
 
-local CreateFrame = CreateFrame;
-local MAX_ACHIEVEMENT_ALERTS = MAX_ACHIEVEMENT_ALERTS;
+MAX_ACHIEVEMENT_ALERTS = 3 --Raise num AchievementAlertFrame
 
 local function LoadSkin()
-	if(E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.alertframes ~= true) then return; end
+	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.alertframes ~= true then return end
 
-	local function AchievementFixAnchors()
+	local function AchievementGetAlertFrame()
+		local name, frame, icon
 		for i = 1, MAX_ACHIEVEMENT_ALERTS do
-			local frame = _G["AchievementAlertFrame" .. i];
-			if(frame) then
-				local frameName = frame:GetName();
+			name = "AchievementAlertFrame"..i
+			frame = _G[name]
+			if frame and not frame.isSkinned then
+				frame:DisableDrawLayer("OVERLAY")
 
-				if(not frame.backdrop) then
-					frame:CreateBackdrop("Transparent");
-					frame.backdrop:Point("TOPLEFT", _G[frameName .. "Background"], "TOPLEFT", -2, -6);
-					frame.backdrop:Point("BOTTOMRIGHT", _G[frameName .. "Background"], "BOTTOMRIGHT", -2, 6);
-				end
+				frame:CreateBackdrop("Transparent")
+				frame.backdrop:Point("TOPLEFT", frame, "TOPLEFT", -2, -6)
+				frame.backdrop:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -2, 6)
 
-				_G[frameName .. "Background"]:SetTexture(nil);
-				_G[frameName .. "Glow"]:Kill();
-				_G[frameName .. "Shine"]:Kill();
+				_G[name.."Background"]:SetTexture(nil)
+				_G[name.."Unlocked"]:SetTextColor(1, 1, 1)
 
-				_G[frameName .. "Unlocked"]:FontTemplate(nil, 12);
-				_G[frameName .. "Unlocked"]:SetTextColor(1, 1, 1);
-				_G[frameName .. "Name"]:FontTemplate(nil, 12);
+				icon = _G[name.."Icon"]
+				icon:DisableDrawLayer("BACKGROUND")
+				icon:DisableDrawLayer("BACKGROUND")
+				icon:DisableDrawLayer("OVERLAY")
 
-				select(8, _G[frameName .. "Icon"]:GetRegions()):Hide();
+				icon.texture:ClearAllPoints()
+				icon.texture:Point("LEFT", frame, 7, 0)
+				icon.texture:SetTexCoord(unpack(E.TexCoords))
 
-				_G[frameName .. "IconTexture"]:SetTexCoord(unpack(E.TexCoords));
-				_G[frameName .. "IconOverlay"]:Kill();
+				icon:CreateBackdrop("Default")
+				icon.backdrop:SetOutside(icon.texture)
 
-				_G[frameName .. "IconTexture"]:ClearAllPoints();
-				_G[frameName .. "IconTexture"]:Point("LEFT", frame, 7, 0);
-
-				if(not _G[frameName .. "IconTexture"].b) then
-					_G[frameName .. "IconTexture"].b = CreateFrame("Frame", frameName .. "IconBackground", frame);
-					_G[frameName .. "IconTexture"].b:SetTemplate("Default");
-					_G[frameName .. "IconTexture"].b:SetOutside(_G[frameName .. "IconTexture"]);
-				end
+				frame.isSkinned = true
 			end
 		end
 	end
-	hooksecurefunc("AchievementAlertFrame_FixAnchors", AchievementFixAnchors);
+	hooksecurefunc("AchievementAlertFrame_GetAlertFrame", AchievementGetAlertFrame)
 
-	local function DungeonCompletionFixAnchors()
-		for i = 1, DUNGEON_COMPLETION_MAX_REWARDS do
-			local frame = _G["DungeonCompletionAlertFrame"..i];
-			if(frame) then
-				local frameName = frame:GetName();
+	local frame = DungeonCompletionAlertFrame1
+	frame:DisableDrawLayer("BORDER")
+	frame:DisableDrawLayer("OVERLAY")
 
-				if(not frame.backdrop) then
-					frame:CreateBackdrop("Transparent");
-					frame.backdrop:Point("TOPLEFT", frame, "TOPLEFT", -2, -6);
-					frame.backdrop:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -2, 6);
-				end
+	frame:CreateBackdrop("Transparent")
+	frame.backdrop:Point("TOPLEFT", frame, "TOPLEFT", -2, -6)
+	frame.backdrop:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -2, 6)
 
-				for i = 1, frame:GetNumRegions() do
-					local region = select(i, frame:GetRegions());
-					if(region and region:IsObjectType("Texture")) then
-						if(region:GetTexture() == "Interface\\LFGFrame\\UI-LFG-DUNGEONTOAST") then
-							region:Kill();
-						end
-					end
-				end
+	frame.dungeonTexture:ClearAllPoints()
+	frame.dungeonTexture:Point("LEFT", frame, 7, 0)
+	frame.dungeonTexture:SetTexCoord(unpack(E.TexCoords))
 
-				_G[frameName .. "Shine"]:Kill();
-				_G[frameName .. "GlowFrame"]:Kill();
-				_G[frameName .. "GlowFrame"].glow:Kill();
-				_G[frameName .. "DungeonTexture"]:SetTexCoord(unpack(E.TexCoords));
-				_G[frameName .. "DungeonTexture"]:ClearAllPoints();
-				_G[frameName .. "DungeonTexture"]:Point("LEFT", frame, 7, 0);
+	frame.dungeonTexture.backdrop = CreateFrame("Frame", "$parentDungeonTextureBackground", frame)
+	frame.dungeonTexture.backdrop:SetTemplate("Default")
+	frame.dungeonTexture.backdrop:SetOutside(frame.dungeonTexture)
+	frame.dungeonTexture.backdrop:SetFrameLevel(0)
 
-				if(not _G[frameName .. "DungeonTexture"].b) then
-					_G[frameName .. "DungeonTexture"].b = CreateFrame("Frame", frameName .. "DungeonBackground", frame);
-					_G[frameName .. "DungeonTexture"].b:SetFrameLevel(0);
-					_G[frameName .. "DungeonTexture"].b:SetTemplate("Default");
-					_G[frameName .. "DungeonTexture"].b:SetOutside(_G[frameName .. "DungeonTexture"]);
-				end
-			end
-		end
-	end
-	hooksecurefunc("DungeonCompletionAlertFrame_FixAnchors", DungeonCompletionFixAnchors);
+	frame.glowFrame:DisableDrawLayer("OVERLAY")
 end
 
-S:AddCallback("Alerts", LoadSkin);
+S:AddCallback("Alerts", LoadSkin)
