@@ -29,7 +29,6 @@ local function LoadSkin()
 
 				icon = _G[name.."Icon"]
 				icon:DisableDrawLayer("BACKGROUND")
-				icon:DisableDrawLayer("BACKGROUND")
 				icon:DisableDrawLayer("OVERLAY")
 
 				icon.texture:ClearAllPoints()
