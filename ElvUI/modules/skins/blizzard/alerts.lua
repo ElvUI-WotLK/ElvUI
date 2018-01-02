@@ -3,46 +3,47 @@ local S = E:GetModule("Skins");
 
 --Cache global variables
 --Lua functions
+local _G = _G
 local unpack = unpack
---WoW API / Variables
-local CreateFrame = CreateFrame
-
-MAX_ACHIEVEMENT_ALERTS = 3 --Raise num AchievementAlertFrame
+local tonumber = tonumber
 
 local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.alertframes ~= true then return end
 
-	local function AchievementGetAlertFrame()
-		local name, frame, icon
-		for i = 1, MAX_ACHIEVEMENT_ALERTS do
-			name = "AchievementAlertFrame"..i
-			frame = _G[name]
-			if frame and not frame.isSkinned then
-				frame:DisableDrawLayer("OVERLAY")
+	S:RawHook("AchievementAlertFrame_GetAlertFrame", function()
+		local frame = S.hooks.AchievementAlertFrame_GetAlertFrame()
+		if frame and not frame.isSkinned then
+			local name = frame:GetName()
 
-				frame:CreateBackdrop("Transparent")
-				frame.backdrop:Point("TOPLEFT", frame, "TOPLEFT", -2, -6)
-				frame.backdrop:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -2, 6)
+			frame:DisableDrawLayer("OVERLAY")
 
-				_G[name.."Background"]:SetTexture(nil)
-				_G[name.."Unlocked"]:SetTextColor(1, 1, 1)
+			frame:CreateBackdrop("Transparent")
+			frame.backdrop:Point("TOPLEFT", frame, "TOPLEFT", -2, -6)
+			frame.backdrop:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -2, 6)
 
-				icon = _G[name.."Icon"]
-				icon:DisableDrawLayer("BACKGROUND")
-				icon:DisableDrawLayer("OVERLAY")
+			_G[name.."Background"]:SetTexture(nil)
+			_G[name.."Unlocked"]:SetTextColor(1, 1, 1)
 
-				icon.texture:ClearAllPoints()
-				icon.texture:Point("LEFT", frame, 7, 0)
-				icon.texture:SetTexCoord(unpack(E.TexCoords))
+			icon = _G[name.."Icon"]
+			icon:DisableDrawLayer("BACKGROUND")
+			icon:DisableDrawLayer("OVERLAY")
 
-				icon:CreateBackdrop("Default")
-				icon.backdrop:SetOutside(icon.texture)
+			icon.texture:ClearAllPoints()
+			icon.texture:Point("LEFT", frame, 7, 0)
+			icon.texture:SetTexCoord(unpack(E.TexCoords))
 
-				frame.isSkinned = true
+			icon:CreateBackdrop("Default")
+			icon.backdrop:SetOutside(icon.texture)
+
+			frame.isSkinned = true
+
+			if tonumber(name:match(".+(%d+)")) == MAX_ACHIEVEMENT_ALERTS then
+				S:Unhook("AchievementAlertFrame_GetAlertFrame")
 			end
 		end
-	end
-	hooksecurefunc("AchievementAlertFrame_GetAlertFrame", AchievementGetAlertFrame)
+
+		return frame
+	end, true)
 
 	local frame = DungeonCompletionAlertFrame1
 	frame:DisableDrawLayer("BORDER")

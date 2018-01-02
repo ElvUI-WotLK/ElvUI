@@ -5,7 +5,6 @@ local _G = _G;
 local pairs = pairs;
 
 local AlertFrame_FixAnchors = AlertFrame_FixAnchors;
-local MAX_ACHIEVEMENT_ALERTS = MAX_ACHIEVEMENT_ALERTS;
 local NUM_GROUP_LOOT_FRAMES = NUM_GROUP_LOOT_FRAMES;
 
 local AlertFrameHolder = CreateFrame("Frame", "AlertFrameHolder", E.UIParent);
