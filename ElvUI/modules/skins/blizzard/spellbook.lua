@@ -1,16 +1,22 @@
-local E, L, V, P, G = unpack(select(2, ...));
+local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins");
 
-local _G = _G;
-local select, unpack = select, unpack;
+--Cache global variables
+--Lua functions
+local _G = _G
+local unpack = unpack
+--WoW API / Variables
+local SpellBook_GetCurrentPage = SpellBook_GetCurrentPage
+local BOOKTYPE_SPELL = BOOKTYPE_SPELL
+local MAX_SKILLLINE_TABS = MAX_SKILLLINE_TABS
 
 local function LoadSkin()
-	if(E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.spellbook ~= true) then return; end
+	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.spellbook ~= true then return end
 
-	SpellBookFrame:StripTextures(true);
-	SpellBookFrame:CreateBackdrop("Transparent");
-	SpellBookFrame.backdrop:Point("TOPLEFT", 10, -12);
-	SpellBookFrame.backdrop:Point("BOTTOMRIGHT", -31, 75);
+	SpellBookFrame:StripTextures(true)
+	SpellBookFrame:CreateBackdrop("Transparent")
+	SpellBookFrame.backdrop:Point("TOPLEFT", 10, -12)
+	SpellBookFrame.backdrop:Point("BOTTOMRIGHT", -31, 75)
 
 	SpellBookFrame:EnableMouseWheel(true)
 	SpellBookFrame:SetScript("OnMouseWheel", function(_, value)
@@ -33,105 +39,57 @@ local function LoadSkin()
 	end)
 	
 	for i = 1, 3 do
-		local tab = _G["SpellBookFrameTabButton" .. i];
+		local tab = _G["SpellBookFrameTabButton"..i]
 
-		tab:GetNormalTexture():SetTexture(nil);
-		tab:GetDisabledTexture():SetTexture(nil);
+		tab:GetNormalTexture():SetTexture(nil)
+		tab:GetDisabledTexture():SetTexture(nil)
 
-		S:HandleTab(tab);
+		S:HandleTab(tab)
 
-		tab.backdrop:Point("TOPLEFT", 14, E.PixelMode and -17 or -19);
-		tab.backdrop:Point("BOTTOMRIGHT", -14, 19);
+		tab.backdrop:Point("TOPLEFT", 14, E.PixelMode and -17 or -19)
+		tab.backdrop:Point("BOTTOMRIGHT", -14, 19)
 	end
 
-	S:HandleNextPrevButton(SpellBookPrevPageButton);
-	S:HandleNextPrevButton(SpellBookNextPageButton);
+	S:HandleNextPrevButton(SpellBookPrevPageButton)
+	S:HandleNextPrevButton(SpellBookNextPageButton)
 
-	S:HandleCloseButton(SpellBookCloseButton);
+	S:HandleCloseButton(SpellBookCloseButton)
 
-	S:HandleCheckBox(ShowAllSpellRanksCheckBox);
+	S:HandleCheckBox(ShowAllSpellRanksCheckBox)
 
 	for i = 1, SPELLS_PER_PAGE do
-		local button = _G["SpellButton" .. i];
-		local iconTexture = _G["SpellButton" .. i .. "IconTexture"];
-		local cooldown = _G["SpellButton"..i.."Cooldown"];
+		local button = _G["SpellButton"..i]
+		button:StripTextures()
 
-		for i = 1, button:GetNumRegions() do
-			local region = select(i, button:GetRegions());
-			if(region:GetObjectType() == "Texture") then
-				if(region:GetTexture() ~= "Interface\\Buttons\\ActionBarFlyoutButton") then
-					region:SetTexture(nil);
-				end
-			end
-		end
+		_G["SpellButton"..i.."AutoCastable"]:SetTexture("Interface\\Buttons\\UI-AutoCastableOverlay")
+		_G["SpellButton"..i.."AutoCastable"]:SetOutside(button, 16, 16)
 
-		if(iconTexture) then
-			iconTexture:SetTexCoord(unpack(E.TexCoords))
+		button:CreateBackdrop("Default", true)
 
-			if not button.backdrop then
-				button:CreateBackdrop("Default", true)
-			end
-		end
+		_G["SpellButton"..i.."IconTexture"]:SetTexCoord(unpack(E.TexCoords))
 
-		if(cooldown) then
-			E:RegisterCooldown(cooldown);
-		end
+		E:RegisterCooldown(_G["SpellButton"..i.."Cooldown"])
 	end
 
 	hooksecurefunc("SpellButton_UpdateButton", function(self)
-		local name = self:GetName();
-		local spellName = _G[name .. "SpellName"];
-		local subSpellName = _G[name .. "SubSpellName"];
-		local iconTexture = _G[name .. "IconTexture"];
-		local highlight = _G[name .. "Highlight"];
-
-		spellName:SetTextColor(1, 0.80, 0.10)
-		subSpellName:SetTextColor(1, 1, 1);
-
-		if (iconTexture) then
-			if (highlight) then
-				highlight:SetTexture(1, 1, 1, 0.3)
-			end
-		end
-	end);
+		local name = self:GetName()
+		_G[name.."SpellName"]:SetTextColor(1, 0.80, 0.10)
+		_G[name.."SubSpellName"]:SetTextColor(1, 1, 1)
+		_G[name.."Highlight"]:SetTexture(1, 1, 1, 0.3)
+	end)
 
 	for i = 1, MAX_SKILLLINE_TABS do
-		local tab = _G["SpellBookSkillLineTab" .. i];
+		local tab = _G["SpellBookSkillLineTab"..i]
 
-		tab:StripTextures();
-		tab:StyleButton(nil, true);
-		tab:SetTemplate("Default", true);
+		tab:StripTextures()
+		tab:StyleButton(nil, true)
+		tab:SetTemplate("Default", true)
 
-		tab:GetNormalTexture():SetTexCoord(unpack(E.TexCoords));
-		tab:GetNormalTexture():SetInside();
+		tab:GetNormalTexture():SetInside()
+		tab:GetNormalTexture():SetTexCoord(unpack(E.TexCoords))
 	end
-
-	for i = 1, 12 do
-		_G["SpellButton" .. i]:CreateBackdrop("Transparent", true);
-		_G["SpellButton" .. i].backdrop:Point("TOPLEFT", -7, 6);
-		_G["SpellButton" .. i].backdrop:Point("BOTTOMRIGHT", 116, -5);
-	end
-
-	ShowAllSpellRanksCheckBox:SetPoint("TOPLEFT", SpellBookFrame, "TOPLEFT", 30, -38)
-
-	SpellButton1:SetPoint("TOPLEFT", SpellBookFrame, "TOPLEFT", 25, -75)
-	SpellButton2:SetPoint("TOPLEFT", SpellButton1, "TOPLEFT", 167, 0)
-	SpellButton3:SetPoint("TOPLEFT", SpellButton1, "BOTTOMLEFT", 0, -17)
-	SpellButton4:SetPoint("TOPLEFT", SpellButton3, "TOPLEFT", 167, 0)
-	SpellButton5:SetPoint("TOPLEFT", SpellButton3, "BOTTOMLEFT", 0, -17)
-	SpellButton6:SetPoint("TOPLEFT", SpellButton5, "TOPLEFT", 167, 0)
-	SpellButton7:SetPoint("TOPLEFT", SpellButton5, "BOTTOMLEFT", 0, -17)
-	SpellButton8:SetPoint("TOPLEFT", SpellButton7, "TOPLEFT", 167, 0)
-	SpellButton9:SetPoint("TOPLEFT", SpellButton7, "BOTTOMLEFT", 0, -17)
-	SpellButton10:SetPoint("TOPLEFT", SpellButton9, "TOPLEFT", 167, 0)
-	SpellButton11:SetPoint("TOPLEFT", SpellButton9, "BOTTOMLEFT", 0, -17)
-	SpellButton12:SetPoint("TOPLEFT", SpellButton11, "TOPLEFT", 167, 0)
-
-	SpellBookPrevPageButton:SetPoint("CENTER", SpellBookFrame, "BOTTOMLEFT", 30, 100)
-	SpellBookNextPageButton:SetPoint("CENTER", SpellBookFrame, "BOTTOMLEFT", 330, 100)
 
 	SpellBookPageText:SetTextColor(1, 1, 1)
-	SpellBookPageText:SetPoint("CENTER", SpellBookFrame, "BOTTOMLEFT", 185, 0)
 end
 
-S:AddCallback("Spellbook", LoadSkin);
+S:AddCallback("Spellbook", LoadSkin)
