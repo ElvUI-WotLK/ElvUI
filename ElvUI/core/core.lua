@@ -781,6 +781,7 @@ function E:SendMessage()
 	end
 end
 
+local SendRecieveGroupSize
 local function SendRecieve(_, event, prefix, message, _, sender)
 	if not E.global.general.versionCheck then return end
 
@@ -800,7 +801,14 @@ local function SendRecieve(_, event, prefix, message, _, sender)
 			E.recievedOutOfDateMessage = true
 		end
 	else
-		E.SendMSGTimer = E:ScheduleTimer("SendMessage", 12)
+		local numRaid, numParty = GetNumRaidMembers(), GetNumPartyMembers() + 1
+		local num = numRaid > 0 and numRaid or numParty
+		if num ~= SendRecieveGroupSize then
+			if num > 1 and SendRecieveGroupSize and num > SendRecieveGroupSize then
+				E.SendMSGTimer = E:ScheduleTimer("SendMessage", 12)
+			end
+			SendRecieveGroupSize = num
+		end
 	end
 end
 
