@@ -1288,6 +1288,19 @@ local function UpdateFilterGroup()
 					end,
 					min=-1, max = 100, step = 1,
 				},
+				frameLevel = {
+					order = 6,
+					name = L["Frame Level"],
+					desc = L["NAMEPLATE_FRAMELEVEL_DESC"],
+					type = "range",
+					min = 0, max = 10, step = 1,
+					disabled = function() return E.global.nameplates.filters[selectedNameplateFilter].actions.hide end,
+					get = function(info) return E.global.nameplates.filters[selectedNameplateFilter].actions.frameLevel or 0 end,
+					set = function(info, value)
+						E.global.nameplates.filters[selectedNameplateFilter].actions.frameLevel = value
+						NP:ConfigureAll()
+					end,
+				},
 				color = {
 					order = 10,
 					type = "group",

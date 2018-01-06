@@ -78,12 +78,16 @@ function mod:StyleFilterCooldownCheck(names, mustHaveAll)
 	end
 end
 
-function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderChanged, FlashingHealth, TextureChanged, ScaleChanged, AlphaChanged, NameColorChanged, NameOnlyChanged, VisibilityChanged)
+function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderChanged, FlashingHealth, TextureChanged, ScaleChanged, AlphaChanged, NameColorChanged, NameOnlyChanged, VisibilityChanged, FrameLevelChanged)
 	if VisibilityChanged then
 		frame.StyleChanged = true
 		frame.VisibilityChanged = true
 		frame:Hide()
 		return --We hide it. Lets not do other things (no point)
+	end
+	if FrameLevelChanged then
+		frame.StyleChanged = true
+		frame.FrameLevelChanged = actions.frameLevel -- we pass this to `ResetNameplateFrameLevel`
 	end
 	if HealthColorChanged then
 		frame.StyleChanged = true
@@ -162,11 +166,14 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 	end
 end
 
-function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, FlashingHealth, TextureChanged, ScaleChanged, AlphaChanged, NameColorChanged, NameOnlyChanged, VisibilityChanged)
+function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, FlashingHealth, TextureChanged, ScaleChanged, AlphaChanged, NameColorChanged, NameOnlyChanged, VisibilityChanged, FrameLevelChanged)
 	frame.StyleChanged = nil
 	if VisibilityChanged then
 		frame.VisibilityChanged = nil
 		frame:Show()
+	end
+	if FrameLevelChanged then
+		frame.FrameLevelChanged = nil
 	end
 	if HealthColorChanged then
 		frame.HealthColorChanged = nil
@@ -313,7 +320,7 @@ function mod:StyleFilterConditionCheck(frame, filter, trigger, failed)
 		failed = not condition
 	end
 
-	--Try to match by target conditions
+	--Try to match by player target conditions
 	if not failed and (trigger.isTarget or trigger.notTarget) then
 		condition = false
 		if (trigger.isTarget and frame.isTarget) or (trigger.notTarget and not frame.isTarget) then
@@ -462,13 +469,14 @@ function mod:StyleFilterPass(frame, actions, castbarTriggered)
 		(actions.alpha and actions.alpha ~= -1), --AlphaChanged
 		(actions.color and actions.color.name), --NameColorChanged
 		(actions.nameOnly), --NameOnlyChanged
-		(actions.hide) --VisibilityChanged
+		(actions.hide), --VisibilityChanged
+		(actions.frameLevel and actions.frameLevel ~= 0) --FrameLevelChanged
 	)
 end
 
 function mod:ClearStyledPlate(frame)
 	if frame.StyleChanged then
-		self:StyleFilterClearChanges(frame, frame.HealthColorChanged, frame.BorderChanged, frame.FlashingHealth, frame.TextureChanged, frame.ScaleChanged, frame.AlphaChanged, frame.NameColorChanged, frame.NameOnlyChanged, frame.VisibilityChanged)
+		self:StyleFilterClearChanges(frame, frame.HealthColorChanged, frame.BorderChanged, frame.FlashingHealth, frame.TextureChanged, frame.ScaleChanged, frame.AlphaChanged, frame.NameColorChanged, frame.NameOnlyChanged, frame.VisibilityChanged, frame.FrameLevelChanged)
 	end
 end
 

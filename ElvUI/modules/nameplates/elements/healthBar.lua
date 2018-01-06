@@ -123,9 +123,8 @@ function mod:ConfigureElement_HealthBar(frame, configuring)
 	local healthBar = frame.HealthBar
 
 	healthBar:SetPoint("TOP", frame, "CENTER", 0, self.db.units[frame.UnitType].castbar.height + 3)
-
-	healthBar.currentScale = nil
-	self:SetFrameScale(frame, (frame.ThreatScale or 1) * (frame.isTarget and self.db.useTargetScale and self.db.targetScale or 1))
+	healthBar:SetWidth(self.db.units[frame.UnitType].healthbar.width * (frame.ThreatScale or 1) * (frame.isTarget and self.db.useTargetScale and self.db.targetScale or 1))
+	healthBar:SetHeight(self.db.units[frame.UnitType].healthbar.height * (frame.ThreatScale or 1) * (frame.isTarget and self.db.useTargetScale and self.db.targetScale or 1))
 
 	healthBar:SetStatusBarTexture(LSM:Fetch("statusbar", self.db.statusbar), "BORDER")
 	if(not configuring) and (self.db.units[frame.UnitType].healthbar.enable or frame.isTarget) then
@@ -138,14 +137,13 @@ end
 
 function mod:ConstructElement_HealthBar(parent)
 	local frame = CreateFrame("StatusBar", nil, parent)
+	frame:SetStatusBarTexture(LSM:Fetch("statusbar", self.db.statusbar), "BORDER")
 	self:StyleFrame(frame)
 
 	frame:SetScript("OnSizeChanged", function(self, width)
-		if self:GetStatusBarTexture() then
-			local health = self:GetValue()
-			local _, maxHealth = self:GetMinMaxValues()
-			self:GetStatusBarTexture():SetPoint("TOPRIGHT", -(width * ((maxHealth - health) / maxHealth)), 0)
-		end
+		local health = self:GetValue()
+		local _, maxHealth = self:GetMinMaxValues()
+		self:GetStatusBarTexture():SetPoint("TOPRIGHT", -(width * ((maxHealth - health) / maxHealth)), 0)
 	end)
 
 	parent.FlashTexture = frame:CreateTexture(nil, "OVERLAY")

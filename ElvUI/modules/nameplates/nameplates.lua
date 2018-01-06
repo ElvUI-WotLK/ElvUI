@@ -72,10 +72,50 @@ function mod:SetFrameScale(frame, scale)
 	end
 end
 
+function mod:GetPlateFrameLevel(frame)
+	local plateLevel
+	if frame.plateID then
+		plateLevel = frame.plateID*mod.levelStep
+	end
+	return plateLevel
+end
+
+function mod:SetPlateFrameLevel(frame, level, isTarget)
+	if frame and level then
+		if isTarget then
+			level = 890 --10 higher than the max calculated level of 880
+		elseif frame.FrameLevelChanged then
+			--calculate Style Filter FrameLevelChanged leveling
+			--level method: (10*(40*2)) max 800 + max 80 (40*2) = max 880
+			--highest possible should be level 880 and we add 1 to all so 881
+			local leveledCount = mod.CollectedFrameLevelCount or 1
+			level = (frame.FrameLevelChanged*(40*mod.levelStep)) + (leveledCount*mod.levelStep)
+		end
+
+		frame:SetFrameLevel(level+1)
+		frame.Glow:SetFrameLevel(level)
+		frame.Buffs:SetFrameLevel(level+1)
+		frame.Debuffs:SetFrameLevel(level+1)
+	end
+end
+
+function mod:ResetNameplateFrameLevel(frame)
+	local isTarget = frame.isTarget --frame.isTarget is not the same here so keep this.
+	local plateLevel = mod:GetPlateFrameLevel(frame)
+	if plateLevel then
+		if frame.FrameLevelChanged then --keep how many plates we change, this is reset to 1 post-ResetNameplateFrameLevel
+			mod.CollectedFrameLevelCount = (mod.CollectedFrameLevelCount and mod.CollectedFrameLevelCount + 1) or 1
+		end
+		self:SetPlateFrameLevel(frame, plateLevel, isTarget)
+	end
+end
+
 function mod:SetTargetFrame(frame)
 	if frame.isTarget then
 		if not frame.isTargetChanged then
 			frame.isTargetChanged = true
+
+			mod:SetPlateFrameLevel(frame, mod:GetPlateFrameLevel(frame), true)
 
 			if self.db.useTargetScale then
 				self:SetFrameScale(frame, (frame.ThreatScale or 1) * self.db.targetScale)
@@ -113,9 +153,12 @@ function mod:SetTargetFrame(frame)
 			mod:UpdateElement_Highlight(frame)
 			mod:UpdateElement_CPoints(frame)
 			mod:UpdateElement_Filters(frame, "PLAYER_TARGET_CHANGED")
+			mod:ForEachPlate("ResetNameplateFrameLevel") --keep this after `UpdateElement_Filters`
 		end
 	elseif frame.isTargetChanged then
 		frame.isTargetChanged = false
+
+		mod:SetPlateFrameLevel(frame, mod:GetPlateFrameLevel(frame))
 
 		if self.db.useTargetScale then
 			self:SetFrameScale(frame, (frame.ThreatScale or 1))
@@ -143,6 +186,7 @@ function mod:SetTargetFrame(frame)
 		-- TEST
 		mod:UpdateElement_CPoints(frame)
 		mod:UpdateElement_Filters(frame, "PLAYER_TARGET_CHANGED")
+		mod:ForEachPlate("ResetNameplateFrameLevel") --keep this after `UpdateElement_Filters`
 	elseif frame.oldHighlight:IsShown() then
 		if not frame.isMouseover then
 			frame.isMouseover = true
@@ -406,6 +450,7 @@ function mod:OnShow()
 	self.UnitFrame:Show()
 
 	mod:UpdateElement_Filters(self.UnitFrame, "NAME_PLATE_UNIT_ADDED")
+	mod:ForEachPlate("ResetNameplateFrameLevel") --keep this after `UpdateElement_Filters`
 end
 
 function mod:OnHide()
@@ -416,6 +461,7 @@ function mod:OnHide()
 
 	mod:HideAuraIcons(self.UnitFrame.Buffs)
 	mod:HideAuraIcons(self.UnitFrame.Debuffs)
+	mod:ClearStyledPlate(self.UnitFrame)
 	self.UnitFrame:UnregisterAllEvents()
 	self.UnitFrame.Glow.r, self.UnitFrame.Glow.g, self.UnitFrame.Glow.b = nil, nil, nil
 	self.UnitFrame.Glow:Hide()
@@ -444,6 +490,8 @@ function mod:OnHide()
 	self.UnitFrame.UnitType = nil
 	self.UnitFrame.UnitClass = nil
 	self.UnitFrame.UnitReaction = nil
+	self.UnitFrame.TopLevelFrame = nil
+	self.UnitFrame.TopOffset = nil
 	self.UnitFrame.ThreatScale = nil
 	self.UnitFrame.ActionScale = nil
 
@@ -470,6 +518,10 @@ function mod:ForEachPlate(functionToRun, ...)
 		if frame and frame.UnitFrame then
 			self[functionToRun](self, frame.UnitFrame, ...)
 		end
+	end
+
+	if functionToRun == "ResetNameplateFrameLevel" then
+		mod.CollectedFrameLevelCount = 1
 	end
 end
 
@@ -509,13 +561,16 @@ function mod:UpdateElement_All(frame, noTargetFrame, filterIgnore)
 	end
 end
 
+local plateID = 0
 function mod:OnCreated(frame)
+	plateID = plateID + 1
 	local HealthBar, CastBar = frame:GetChildren()
 	local Threat, Border, CastBarBorder, CastBarShield, CastBarIcon, Highlight, Name, Level, BossIcon, RaidIcon, EliteIcon = frame:GetRegions()
 
-	frame.UnitFrame = CreateFrame("Frame", nil, frame)
-	frame.UnitFrame:SetAllPoints()
+	frame.UnitFrame = CreateFrame("Frame", format("ElvUI_NamePlate%d", plateID), frame)
+	frame.UnitFrame:SetAllPoints(frame)
 	frame.UnitFrame:SetScript("OnEvent", self.OnEvent)
+	frame.UnitFrame.plateID = plateID
 
 	frame.UnitFrame.HealthBar = self:ConstructElement_HealthBar(frame.UnitFrame)
 	frame.UnitFrame.Level = self:ConstructElement_Level(frame.UnitFrame)
@@ -879,6 +934,8 @@ function mod:Initialize()
 	end
 
 	self:StyleFilterConfigureEvents()
+
+	self.levelStep = 2
 
 	self:UpdateCVars()
 

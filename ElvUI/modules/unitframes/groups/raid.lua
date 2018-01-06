@@ -229,6 +229,7 @@ function UF:Update_RaidFrames(frame, db)
 	--GPS Arrow
 	UF:Configure_GPS(frame)
 
+	--Raid Roles
 	UF:Configure_RaidRoleIcons(frame)
 
 	--Range
