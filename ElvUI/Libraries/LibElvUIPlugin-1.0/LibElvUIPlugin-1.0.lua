@@ -223,24 +223,22 @@ function lib:SendPluginVersionCheck(message)
 	end
 	if not ChatType then return end
 
-	local E = ElvUI[1]
-	local delay, msg = 0, ""
+	local maxChar, msgLength = 254 - strlen(lib.prefix), strlen(message)
+	if msgLength > maxChar then
+		local delay, splitMessage = 0
 
-	for _, part in pairs({strsplit(";", message)}) do
-		if not strmatch(part, "^%s-$") then
-			if #(msg .. part .. ";") < 230 then
-				msg = msg .. part .. ";"
-			else
-				E:Delay(delay, SendAddonMessage, lib.prefix, msg, ChatType)
-				msg = part .. ";"
+		for _ = 1, ceil(msgLength/maxChar) do
+			splitMessage = strmatch(strsub(message, 1, maxChar), ".+;")
+
+			if splitMessage then -- incase the string is over `maxChar` but doesnt contain `;`
+				message = gsub(message, "^"..gsub(splitMessage, '([%-%.%+%[%]%(%)%$%^%%%?%*])','%%%1'), "")
+				ElvUI[1]:Delay(delay, SendAddonMessage, lib.prefix, splitMessage, ChatType)
 				delay = delay + 1
 			end
 		end
+	else
+		SendAddonMessage(lib.prefix, message, ChatType)
 	end
-	if msg == "" then return end
-
-	-- Send the last message
-	E:Delay(delay, SendAddonMessage, lib.prefix, msg, ChatType)
 end
 
 lib:RegisterPlugin(MAJOR, lib.GetPluginOptions)
