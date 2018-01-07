@@ -1177,8 +1177,10 @@ function CH:ChatFrame_MessageEventHandler(event, ...)
 
 		if ( not self:IsShown() ) then
 			if ( (self == DEFAULT_CHAT_FRAME and info.flashTabOnGeneral) or (self ~= DEFAULT_CHAT_FRAME and info.flashTab) ) then
-				if ( not CHAT_OPTIONS.HIDE_FRAME_ALERTS or type == "WHISPER" or type == "BN_WHISPER" ) then
-					FCF_StartAlertFlash(self);
+				if ( not CHAT_OPTIONS.HIDE_FRAME_ALERTS or type == "WHISPER" or type == "BN_WHISPER" ) then	--BN_WHISPER FIXME
+					if not CH.SuppressFlash then
+						FCF_StartAlertFlash(self); --This would taint if we were not using LibChatAnims
+					end
 				end
 			end
 		end
@@ -1480,6 +1482,7 @@ function CH:DisplayChatHistory()
 	if not (data and next(data)) then return end
 
 	CH.SoundPlayed = true
+	CH.SuppressFlash = true
 	for _, chat in pairs(CHAT_FRAMES) do
 		for i = 1, #data do
 			d = data[i]
@@ -1494,6 +1497,7 @@ function CH:DisplayChatHistory()
 		end
 	end
 	CH.SoundPlayed = nil
+	CH.SuppressFlash = nil
 end
 
 tremove(ChatTypeGroup["GUILD"], 2)
