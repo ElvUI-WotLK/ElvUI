@@ -191,12 +191,12 @@ function UF:Configure_ClassBar(frame)
 	end
 end
 
-local function ToggleResourceBar(bars)
+local function ToggleResourceBar(bars, overrideVisibility)
 	local frame = bars.origParent or bars:GetParent()
 	local db = frame.db
 	if not db then return end
 
-	frame.CLASSBAR_SHOWN = (not not overrideVisibility) or frame[frame.ClassBar]:IsShown()
+	frame.CLASSBAR_SHOWN = (not not overrideVisibility) or bars:IsShown()
 
 	local height
 	if db.classbar then
