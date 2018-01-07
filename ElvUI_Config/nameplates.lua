@@ -92,7 +92,7 @@ local function UpdateInstanceDifficulty()
 			order = 11,
 			type = "group",
 			name = L["Raid Difficulty"],
-			desc = L["Check these to only have the filter active in certain difficulties.  If none are checked, it is active in all difficulties."],
+			desc = L["Check these to only have the filter active in certain difficulties. If none are checked, it is active in all difficulties."],
 			guiInline = true,
 			get = function(info) return E.global.nameplates.filters[selectedNameplateFilter].triggers.instanceDifficulty.raid[info[#info]] end,
 			set = function(info, value)

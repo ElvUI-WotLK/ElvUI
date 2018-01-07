@@ -1,41 +1,64 @@
 local E, L, V, P, G = unpack(select(2, ...));
 
 local select, unpack, assert, tonumber, type, pairs = select, unpack, assert, tonumber, type, pairs;
-local tinsert, tremove = tinsert, tremove;
+local tinsert, tremove = tinsert, tremove
 local abs, ceil, floor, modf, mod = math.abs, math.ceil, math.floor, math.modf, mod;
 local format, sub, upper, split, utf8sub = string.format, string.sub, string.upper, string.split, string.utf8sub;
 
 local GetScreenWidth, GetScreenHeight = GetScreenWidth, GetScreenHeight;
 local CreateFrame = CreateFrame;
 
+--Return short value of a number
+local shortValueDec
 function E:ShortValue(v)
-	if(E.db.general.numberPrefixStyle == "METRIC") then
-		if(abs(v) >= 1e9) then
-			return format("%.1fG", v / 1e9);
-		elseif(abs(v) >= 1e6) then
-			return format("%.1fM", v / 1e6);
-		elseif(abs(v) >= 1e3) then
-			return format("%.1fk", v / 1e3);
+	shortValueDec = format("%%.%df", E.db.general.decimalLength or 1)
+	if E.db.general.numberPrefixStyle == "METRIC" then
+		if abs(v) >= 1e9 then
+			return format(shortValueDec.."G", v / 1e9)
+		elseif abs(v) >= 1e6 then
+			return format(shortValueDec.."M", v / 1e6)
+		elseif abs(v) >= 1e3 then
+			return format(shortValueDec.."k", v / 1e3)
 		else
-			return format("%d", v);
+			return format("%s", v)
 		end
-	elseif(E.db.general.numberPrefixStyle == "CHINESE") then
-		if(abs(v) >= 1e8) then
-			return format("%.1fY", v / 1e8);
-		elseif(abs(v) >= 1e4) then
-			return format("%.1fW", v / 1e4);
+	elseif E.db.general.numberPrefixStyle == "CHINESE" then
+		if abs(v) >= 1e8 then
+			return format(shortValueDec.."Y", v / 1e8)
+		elseif abs(v) >= 1e4 then
+			return format(shortValueDec.."W", v / 1e4)
 		else
-			return format("%d", v);
+			return format("%s", v)
+		end
+	elseif E.db.general.numberPrefixStyle == "KOREAN" then
+		if abs(v) >= 1e8 then
+			return format(shortValueDec.."억", v / 1e8)
+		elseif abs(v) >= 1e4 then
+			return format(shortValueDec.."만", v / 1e4)
+		elseif abs(v) >= 1e3 then
+			return format(shortValueDec.."천", v / 1e3)
+		else
+			return format("%s", v)
+		end
+	elseif E.db.general.numberPrefixStyle == "GERMAN" then
+		if abs(v) >= 1e9 then
+			return format(shortValueDec.."Mrd", v / 1e9)
+		elseif abs(v) >= 1e6 then
+			return format(shortValueDec.."Mio", v / 1e6)
+		elseif abs(v) >= 1e3 then
+			return format(shortValueDec.."Tsd", v / 1e3)
+		else
+			return format("%s", v)
 		end
 	else
-		if(abs(v) >= 1e9) then
-			return format("%.1fB", v / 1e9);
-		elseif(abs(v) >= 1e6) then
-			return format("%.1fM", v / 1e6);
-		elseif(abs(v) >= 1e3) then
-			return format("%.1fK", v / 1e3);
+		if abs(v) >= 1e9 then
+			return format(shortValueDec.."B", v / 1e9)
+		elseif abs(v) >= 1e6 then
+			return format(shortValueDec.."M", v / 1e6)
+		elseif abs(v) >= 1e3 then
+			return format(shortValueDec.."K", v / 1e3)
 		else
-			return format("%d", v);
+			return format("%s", v)
 		end
 	end
 end
@@ -165,43 +188,44 @@ function E:GetXYOffset(position, override)
 end
 
 local styles = {
+	-- keep percents in this table with `PERCENT` in the key, and `%.1f%%` in the value somewhere.
+	-- we use these two things to follow our setting for decimal length. they need to be EXACT.
 	["CURRENT"] = "%s",
 	["CURRENT_MAX"] = "%s - %s",
 	["CURRENT_PERCENT"] = "%s - %.1f%%",
 	["CURRENT_MAX_PERCENT"] = "%s - %s | %.1f%%",
 	["PERCENT"] = "%.1f%%",
 	["DEFICIT"] = "-%s"
-};
+}
 
+local gftDec, gftUseStyle, gftDeficit
 function E:GetFormattedText(style, min, max)
-	assert(styles[style], "Invalid format style: "..style);
-	assert(min, "You need to provide a current value. Usage: E:GetFormattedText(style, min, max)");
-	assert(max, "You need to provide a maximum value. Usage: E:GetFormattedText(style, min, max)");
+	assert(styles[style], "Invalid format style: "..style)
+	assert(min, "You need to provide a current value. Usage: E:GetFormattedText(style, min, max)")
+	assert(max, "You need to provide a maximum value. Usage: E:GetFormattedText(style, min, max)")
 
-	if(max == 0) then max = 1; end
+	if max == 0 then max = 1 end
 
-	local useStyle = styles[style];
+	gftDec = (E.db.general.decimalLength or 1)
+	if (gftDec ~= 1) and style:find("PERCENT") then
+		gftUseStyle = styles[style]:gsub("%%%.1f%%%%", "%%."..gftDec.."f%%%%")
+	else
+		gftUseStyle = styles[style]
+	end
 
-	if(style == "DEFICIT") then
-		local deficit = max - min;
-		if(deficit <= 0) then
-			return "";
-		else
-			return format(useStyle, E:ShortValue(deficit));
-		end
-	elseif(style == "PERCENT") then
-		local s = format(useStyle, min / max * 100);
-		return s;
-	elseif(style == "CURRENT" or ((style == "CURRENT_MAX" or style == "CURRENT_MAX_PERCENT" or style == "CURRENT_PERCENT") and min == max)) then
-		return format(styles["CURRENT"], E:ShortValue(min));
-	elseif(style == "CURRENT_MAX") then
-		return format(useStyle, E:ShortValue(min), E:ShortValue(max));
-	elseif(style == "CURRENT_PERCENT") then
-		local s = format(useStyle, E:ShortValue(min), min / max * 100);
-		return s;
-	elseif(style == "CURRENT_MAX_PERCENT") then
-		local s = format(useStyle, E:ShortValue(min), E:ShortValue(max), min / max * 100);
-		return s;
+	if style == "DEFICIT" then
+		gftDeficit = max - min
+		return ((gftDeficit > 0) and format(gftUseStyle, E:ShortValue(gftDeficit))) or ""
+	elseif style == "PERCENT" then
+		return format(gftUseStyle, min / max * 100)
+	elseif style == "CURRENT" or ((style == "CURRENT_MAX" or style == "CURRENT_MAX_PERCENT" or style == "CURRENT_PERCENT") and min == max) then
+		return format(styles["CURRENT"],  E:ShortValue(min))
+	elseif style == "CURRENT_MAX" then
+		return format(gftUseStyle,  E:ShortValue(min), E:ShortValue(max))
+	elseif style == "CURRENT_PERCENT" then
+		return format(gftUseStyle, E:ShortValue(min), min / max * 100)
+	elseif style == "CURRENT_MAX_PERCENT" then
+		return format(gftUseStyle, E:ShortValue(min), E:ShortValue(max), min / max * 100)
 	end
 end
 

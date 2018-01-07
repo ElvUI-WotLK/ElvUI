@@ -19,6 +19,8 @@ P["general"] = {
 	["watchFrameHeight"] = 480,
 	["afk"] = true,
 	["numberPrefixStyle"] = "ENGLISH",
+	["decimalLength"] = 1,
+
 	["fontSize"] = 12,
 	["font"] = "PT Sans Narrow",
 

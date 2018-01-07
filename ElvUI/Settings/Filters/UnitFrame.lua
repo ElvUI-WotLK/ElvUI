@@ -489,13 +489,13 @@ G.unitframe.buffwatch = {
 		[61301] = ClassBuff(61301, "TOPLEFT", {0.7, 0.3, 0.7}), -- Riptide
 	},
 	ROGUE = {
-		[57933] = ClassBuff(57933, "TOPRIGHT", {227/255, 23/255, 13/255}), -- Tricks of the Trade
+		[57933] = ClassBuff(57933, "TOPRIGHT", {0.89, 0.09, 0.05}), -- Tricks of the Trade
 	},
 	MAGE = {
 		[54646] = ClassBuff(54646, "TOPRIGHT", {0.2, 0.2, 1}), -- Focus Magic
 	},
 	WARRIOR = {
-		[3411] = ClassBuff(3411, "TOPRIGHT", {227/255, 23/255, 13/255}), -- Intervene
+		[3411] = ClassBuff(3411, "TOPRIGHT", {0.89, 0.09, 0.05}), -- Intervene
 		[59665] = ClassBuff(59665, "TOPLEFT", {0.2, 0.2, 1}), -- Vigilance
 	},
 	DEATHKNIGHT = {
@@ -529,8 +529,8 @@ G.unitframe.ChannelTicks = {
 }
 
 G.unitframe.AuraBarColors = {
-	[SpellName(2825)] = {r = 250/255, g = 146/255, b = 27/255},	-- Bloodlust
-	[SpellName(32182)] = {r = 250/255, g = 146/255, b = 27/255}, -- Heroism
+	[SpellName(2825)] = {r = 0.98, g = 0.57, b = 0.10},	-- Bloodlust
+	[SpellName(32182)] = {r = 0.98, g = 0.57, b = 0.10}, -- Heroism
 }
 
 G.unitframe.InvalidSpells = {
