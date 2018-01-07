@@ -194,20 +194,19 @@ end
 local function ToggleResourceBar(bars)
 	local frame = bars.origParent or bars:GetParent()
 	local db = frame.db
-	if(not db) then return end
-	frame.CLASSBAR_SHOWN = bars:IsShown()
+	if not db then return end
+
+	frame.CLASSBAR_SHOWN = (not not overrideVisibility) or frame[frame.ClassBar]:IsShown()
 
 	local height
-	if(db.classbar) then
+	if db.classbar then
 		height = db.classbar.height
-	elseif(db.combobar) then
+	elseif db.combobar then
 		height = db.combobar.height
-	elseif(frame.AltPowerBar) then
-		height = db.power.height
 	end
 
-	if(bars.text) then
-		if(frame.CLASSBAR_SHOWN) then
+	if bars.text then
+		if frame.CLASSBAR_SHOWN then
 			bars.text:SetAlpha(1)
 		else
 			bars.text:SetAlpha(0)
@@ -217,9 +216,9 @@ local function ToggleResourceBar(bars)
 	frame.CLASSBAR_HEIGHT = (frame.USE_CLASSBAR and (frame.CLASSBAR_SHOWN and height) or 0)
 	frame.CLASSBAR_YOFFSET = (not frame.USE_CLASSBAR or not frame.CLASSBAR_SHOWN or frame.CLASSBAR_DETACHED) and 0 or (frame.USE_MINI_CLASSBAR and ((frame.SPACING+(frame.CLASSBAR_HEIGHT/2))) or (frame.CLASSBAR_HEIGHT - (frame.BORDER-frame.SPACING)))
 
-	if(not frame.CLASSBAR_DETACHED) then
+	if not frame.CLASSBAR_DETACHED then --Only update when necessary
 		UF:Configure_HealthBar(frame)
-		UF:Configure_Portrait(frame, true)
+		UF:Configure_Portrait(frame, true) --running :Hide on portrait makes the frame all funky
 		UF:Configure_Threat(frame)
 	end
 end
@@ -244,7 +243,25 @@ function UF:Construct_DeathKnightResourceBar(frame)
 		runes[i].bg.multiplier = 0.2
 	end
 
+	runes.PostUpdateVisibility = UF.PostVisibilityRunes
+	runes.UpdateColor = E.noop --We handle colors on our own in Configure_ClassBar
+	runes:SetScript("OnShow", ToggleResourceBar)
+	runes:SetScript("OnHide", ToggleResourceBar)
+
 	return runes
+end
+
+function UF:PostVisibilityRunes(enabled, stateChanged)
+	local frame = self.origParent or self:GetParent()
+
+	if enabled and stateChanged then
+		frame.MAX_CLASS_BAR = #self
+		ToggleResourceBar(frame[frame.ClassBar])
+		UF:Configure_ClassBar(frame)
+		UF:Configure_HealthBar(frame)
+		UF:Configure_Power(frame)
+		UF:Configure_InfoPanel(frame, true) --2nd argument is to prevent it from setting template, which removes threat border
+	end
 end
 
 function UF:Construct_DruidAltManaBar(frame)
