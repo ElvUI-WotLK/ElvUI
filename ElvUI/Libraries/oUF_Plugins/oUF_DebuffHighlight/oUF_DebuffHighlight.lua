@@ -8,7 +8,7 @@ local UnitCanAssist = UnitCanAssist
 local playerClass = select(2, UnitClass("player"))
 local CanDispel = {
 	PRIEST = { Magic = true, Disease = true, },
-	SHAMAN = { Poison = true, Disease = true, Curse = true, },
+	SHAMAN = { Poison = true, Disease = true, Curse = false, },
 	PALADIN = { Magic = true, Poison = true, Disease = true, },
 	MAGE = { Curse = true, },
 	DRUID = { Curse = true, Poison = true, }
@@ -34,6 +34,39 @@ local function GetDebuffType(unit, filter, filterTable)
 			return debufftype, texture;
 		end
 		i = i + 1
+	end
+end
+
+local function CheckForKnownTalent(spellid)
+	local wanted_name = GetSpellInfo(spellid)
+	if not wanted_name then return nil end
+
+	local num_tabs = GetNumTalentTabs()
+	for t = 1, num_tabs do
+		local num_talents = GetNumTalents(t)
+		for i = 1, num_talents do
+			local name_talent, _, _, _, current_rank = GetTalentInfo(t, i)
+			if name_talent and (name_talent == wanted_name) then
+				if current_rank and (current_rank > 0) then
+					return true
+				else
+					return false
+				end
+			end
+		end
+	end
+	return false
+end
+
+local function CheckSpec(self, event, levels)
+	if event == "CHARACTER_POINTS_CHANGED" and levels > 0 then return end
+
+	if playerClass == "SHAMAN" then
+		if CheckForKnownTalent(51886) then
+			dispellist.Curse = true
+		else
+			dispellist.Curse = false
+		end
 	end
 end
 
@@ -84,12 +117,16 @@ local function Enable(object)
 
 	-- make sure aura scanning is active for this object
 	object:RegisterEvent("UNIT_AURA", Update)
+	object:RegisterEvent("PLAYER_TALENT_UPDATE", CheckSpec)
+	object:RegisterEvent("CHARACTER_POINTS_CHANGED", CheckSpec)
 
 	return true
 end
 
 local function Disable(object)
 	object:UnregisterEvent("UNIT_AURA", Update)
+	object:UnregisterEvent("PLAYER_TALENT_UPDATE", CheckSpec)
+	object:UnregisterEvent("CHARACTER_POINTS_CHANGED", CheckSpec)
 
 	if(object.DBHGlow) then
 		object.DBHGlow:Hide();
