@@ -20,35 +20,21 @@ This UI will arrange your interface to be more flexible and practical.
 5. Restart WoW
 
 ## Plugins:
-[ElvUI_AddOnSkins](https://github.com/ElvUI-Wotlk/ElvUI_AddOnSkins)
-<br />
-[ElvUI_AuraBarsMovers](https://github.com/ElvUI-Wotlk/ElvUI_AuraBarsMovers)
-<br />
-[ElvUI_BagControl](https://github.com/ElvUI-Wotlk/ElvUI_BagControl)
-<br />
-[ElvUI_CastBarOverlay](https://github.com/ElvUI-Wotlk/ElvUI_CastBarOverlay)
-<br />
-[ElvUI_CustomTweaks](https://github.com/ElvUI-Wotlk/ElvUI_CustomTweaks)
-<br />
-[ElvUI_DataTextColors](https://github.com/ElvUI-Wotlk/ElvUI_DataTextColors)
-<br />
-[ElvUI_DTBars](https://github.com/ElvUI-Wotlk/ElvUI_DTBars)
-<br />
-[ElvUI_Enhanced](https://github.com/ElvUI-Wotlk/ElvUI_Enhanced)
-<br />
-[ElvUI_EnhancedFriendsList](https://github.com/ElvUI-Wotlk/ElvUI_EnhancedFriendsList)
-<br />
-[ElvUI_ExtraActionBars](https://github.com/ElvUI-Wotlk/ElvUI_ExtraActionBars)
-<br />
-[ElvUI_LocPlus](https://github.com/ElvUI-Wotlk/ElvUI_LocPlus)
-<br />
-[ElvUI_Microbar](https://github.com/ElvUI-Wotlk/ElvUI_Microbar)
-<br />
-[ElvUI_MinimapButtons](https://github.com/ElvUI-Wotlk/ElvUI_MinimapButtons)
-<br />
-[ElvUI_RaidMarkers](https://github.com/ElvUI-Wotlk/ElvUI_RaidMarkers)
-<br />
-[ElvUI_SwingBar](https://github.com/ElvUI-Wotlk/ElvUI_SwingBar)
+[ElvUI_AddOnSkins](https://github.com/ElvUI-WotLK/ElvUI_AddOnSkins)
+[ElvUI_CastBarOverlay](https://github.com/ElvUI-WotLK/ElvUI_CastBarOverlay)
+[ElvUI_CustomTags](https://github.com/ElvUI-WotLK/ElvUI_CustomTags)
+[ElvUI_CustomTweaks](https://github.com/ElvUI-WotLK/ElvUI_CustomTweaks)
+[ElvUI_DTBars](https://github.com/ElvUI-WotLK/ElvUI_DTBars)
+[ElvUI_Enhanced](https://github.com/ElvUI-WotLK/ElvUI_Enhanced)
+[ElvUI_EnhancedFriendsList](https://github.com/ElvUI-WotLK/ElvUI_EnhancedFriendsList)
+[ElvUI_ExtraActionBars](https://github.com/ElvUI-WotLK/ElvUI_ExtraActionBars)
+[ElvUI_LocPlus](https://github.com/ElvUI-WotLK/ElvUI_LocPlus)
+[ElvUI_Microbar](https://github.com/ElvUI-WotLK/ElvUI_Microbar)
+[ElvUI_MinimapButtons](https://github.com/ElvUI-WotLK/ElvUI_MinimapButtons)
+[ElvUI_RaidMarkers](https://github.com/ElvUI-WotLK/ElvUI_RaidMarkers)
+[ElvUI_SwingBar](https://github.com/ElvUI-WotLK/ElvUI_SwingBar)
+[ElvUI_VisualAuraTimers](https://github.com/ElvUI-WotLK/ElvUI_VisualAuraTimers)
+[ElvUI_VisualProcs](https://github.com/ElvUI-WotLK/ElvUI_VisualProcs)
 
 -- Please Note: These plugins will not function without ElvUI installed.
 
