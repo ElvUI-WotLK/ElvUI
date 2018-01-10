@@ -50,7 +50,7 @@ function mod:UpdateTime(elapsed)
 
 	local timerValue, formatID
 	timerValue, formatID, self.nextUpdate = E:GetTimeInfo(self.timeLeft, 4)
-	if timerValue <= 0 then self:Hide(); LAI:RemoveAuraFromGUID(self:GetParent():GetParent().guid, self.spellID, nil, self:GetParent().filter) return end
+	if timerValue <= 0 then self:Hide(); LAI:RemoveAuraFromGUID(self:GetParent():GetParent().guid, self.spellID, nil, self:GetParent().filter); mod:UpdateElement_Filters(self:GetParent():GetParent(), "UNIT_AURA") return end
 	self.time:SetFormattedText(format("%s%s|r", E.TimeColors[formatID], E.TimeFormats[formatID][1]), timerValue)
 end
 
