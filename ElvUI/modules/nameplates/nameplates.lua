@@ -834,6 +834,10 @@ function mod:PLAYER_REGEN_ENABLED()
 	mod:ForEachPlate("UpdateElement_Filters", "PLAYER_REGEN_ENABLED")
 end
 
+function mod:SPELL_UPDATE_COOLDOWN()
+	mod:ForEachPlate("UpdateElement_Filters", "SPELL_UPDATE_COOLDOWN")
+end
+
 function mod:UpdateFonts(plate)
 	if not plate then return end
 
@@ -950,6 +954,7 @@ function mod:Initialize()
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
 	self:RegisterEvent("PLAYER_LOGOUT") -- used in the StyleFilter
 	self:RegisterEvent("PLAYER_TARGET_CHANGED")
+	self:RegisterEvent("SPELL_UPDATE_COOLDOWN")
 
 	-- Arena & Arena Pets
 	self:CacheArenaUnits()
