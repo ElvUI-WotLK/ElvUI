@@ -481,6 +481,27 @@ function E:CheckTalentTree(tree)
 	end
 end
 
+function E:CheckForKnownTalent(spellid)
+	local wanted_name = GetSpellInfo(spellid)
+	if not wanted_name then return nil end
+
+	local num_tabs = GetNumTalentTabs()
+	for t = 1, num_tabs do
+		local num_talents = GetNumTalents(t)
+		for i = 1, num_talents do
+			local name_talent, _, _, _, current_rank = GetTalentInfo(t, i)
+			if name_talent and (name_talent == wanted_name) then
+				if current_rank and (current_rank > 0) then
+					return true
+				else
+					return false
+				end
+			end
+		end
+	end
+	return false
+end
+
 function E:CheckRole()
 	local talentTree = self:GetTalentSpecInfo();
 	local role;
@@ -505,8 +526,8 @@ function E:CheckRole()
 		self.callbacks:Fire("RoleChanged");
 	end
 
-	if E.myclass == "SHAMAN" then
-		if talentTree == 3 then
+	if E.myclass == "SHAMAN" and talentTree == 3 then
+		if self:CheckForKnownTalent(51886) then
 			self.DispelClasses[self.myclass].Curse = true
 		else
 			self.DispelClasses[self.myclass].Curse = false

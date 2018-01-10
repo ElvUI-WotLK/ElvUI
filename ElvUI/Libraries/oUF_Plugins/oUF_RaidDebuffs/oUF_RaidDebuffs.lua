@@ -83,7 +83,7 @@ do
 		["SHAMAN"] = {
 			["Poison"] = true,
 			["Disease"] = true,
-			["Curse"] = true
+			["Curse"] = false
 		},
 		["PALADIN"] = {
 			["Poison"] = true,
@@ -100,6 +100,39 @@ do
 	}
 
 	DispellFilter = dispellClasses[select(2, UnitClass("player"))] or {}
+end
+
+local function CheckForKnownTalent(spellid)
+	local wanted_name = GetSpellInfo(spellid)
+	if not wanted_name then return nil end
+
+	local num_tabs = GetNumTalentTabs()
+	for t = 1, num_tabs do
+		local num_talents = GetNumTalents(t)
+		for i = 1, num_talents do
+			local name_talent, _, _, _, current_rank = GetTalentInfo(t,i)
+			if name_talent and (name_talent == wanted_name) then
+				if current_rank and (current_rank > 0) then
+					return true
+				else
+					return false
+				end
+			end
+		end
+	end
+	return false
+end
+
+local function CheckSpec(self, event, levels)
+	if event == "CHARACTER_POINTS_CHANGED" and levels > 0 then return end
+
+	if select(2, UnitClass("player")) == "SHAMAN" then
+		if CheckForKnownTalent(53551) then
+			DispellFilter.Curse = true
+		else
+			DispellFilter.Curse = false	
+		end
+	end
 end
 
 local function formatTime(s)
@@ -256,6 +289,8 @@ local function Enable(self)
 		self:RegisterEvent("UNIT_AURA", Update)
 		return true
 	end
+	self:RegisterEvent("PLAYER_TALENT_UPDATE", CheckSpec)
+	self:RegisterEvent("CHARACTER_POINTS_CHANGED", CheckSpec)
 end
 
 local function Disable(self)
@@ -263,6 +298,8 @@ local function Disable(self)
 		self:UnregisterEvent("UNIT_AURA", Update)
 		self.RaidDebuffs:Hide()
 	end
+	self:UnregisterEvent("PLAYER_TALENT_UPDATE", CheckSpec)
+	self:UnregisterEvent("CHARACTER_POINTS_CHANGED", CheckSpec)
 end
 
 oUF:AddElement("RaidDebuffs", Update, Enable, Disable)
