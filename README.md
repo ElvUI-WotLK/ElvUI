@@ -21,20 +21,35 @@ This UI will arrange your interface to be more flexible and practical.
 
 ## Plugins:
 [ElvUI_AddOnSkins](https://github.com/ElvUI-WotLK/ElvUI_AddOnSkins)
+<br />
 [ElvUI_CastBarOverlay](https://github.com/ElvUI-WotLK/ElvUI_CastBarOverlay)
+<br />
 [ElvUI_CustomTags](https://github.com/ElvUI-WotLK/ElvUI_CustomTags)
+<br />
 [ElvUI_CustomTweaks](https://github.com/ElvUI-WotLK/ElvUI_CustomTweaks)
+<br />
 [ElvUI_DTBars](https://github.com/ElvUI-WotLK/ElvUI_DTBars)
+<br />
 [ElvUI_Enhanced](https://github.com/ElvUI-WotLK/ElvUI_Enhanced)
+<br />
 [ElvUI_EnhancedFriendsList](https://github.com/ElvUI-WotLK/ElvUI_EnhancedFriendsList)
+<br />
 [ElvUI_ExtraActionBars](https://github.com/ElvUI-WotLK/ElvUI_ExtraActionBars)
+<br />
 [ElvUI_LocPlus](https://github.com/ElvUI-WotLK/ElvUI_LocPlus)
+<br />
 [ElvUI_Microbar](https://github.com/ElvUI-WotLK/ElvUI_Microbar)
+<br />
 [ElvUI_MinimapButtons](https://github.com/ElvUI-WotLK/ElvUI_MinimapButtons)
+<br />
 [ElvUI_RaidMarkers](https://github.com/ElvUI-WotLK/ElvUI_RaidMarkers)
+<br />
 [ElvUI_SwingBar](https://github.com/ElvUI-WotLK/ElvUI_SwingBar)
+<br />
 [ElvUI_VisualAuraTimers](https://github.com/ElvUI-WotLK/ElvUI_VisualAuraTimers)
+<br />
 [ElvUI_VisualProcs](https://github.com/ElvUI-WotLK/ElvUI_VisualProcs)
+<br />
 
 -- Please Note: These plugins will not function without ElvUI installed.
 
