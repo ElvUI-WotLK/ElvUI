@@ -263,16 +263,16 @@ function mod:StyleFilterConditionCheck(frame, filter, trigger, failed)
 	--Try to match by casting spell name or spell id
 	if not failed and (trigger.casting and trigger.casting.spells) and next(trigger.casting.spells) then
 		condition = 0
-		for name, value in pairs(trigger.casting.spells) do
+		for spellName, value in pairs(trigger.casting.spells) do
 			if value == true then --only check spell that are checked
 				condition = 1
 				if castbarShown then
 					spell = frame.CastBar.Name:GetText() --Make sure we can check spell name
 					if spell and spell ~= "" and spell ~= FAILED and spell ~= INTERRUPTED then
-						if tonumber(name) then
-							name = GetSpellInfo(name)
+						if tonumber(spellName) then
+							spellName = GetSpellInfo(spellName)
 						end
-						if name and name == spell then
+						if spellName and spellName == spell then
 							condition = 2
 							break
 						end
@@ -533,7 +533,8 @@ function mod:StyleFilterConfigureEvents()
 				end
 
 				if filter.triggers.inCombat or filter.triggers.outOfCombat or filter.triggers.inCombatUnit or filter.triggers.outOfCombatUnit then
-					self.StyleFilterEvents["UNIT_THREAT_LIST_UPDATE"] = true
+					self.StyleFilterEvents["PLAYER_REGEN_DISABLED"] = true
+					self.StyleFilterEvents["PLAYER_REGEN_ENABLED"] = true
 				end
 
 				if next(filter.triggers.cooldowns.names) then

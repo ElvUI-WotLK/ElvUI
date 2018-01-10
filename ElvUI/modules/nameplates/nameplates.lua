@@ -814,6 +814,8 @@ function mod:PLAYER_REGEN_DISABLED()
 	elseif self.db.showEnemyCombat == "TOGGLE_OFF" then
 		SetCVar("nameplateShowEnemies", 0)
 	end
+
+	mod:ForEachPlate("UpdateElement_Filters", "PLAYER_REGEN_DISABLED")
 end
 
 function mod:PLAYER_REGEN_ENABLED()
@@ -828,6 +830,8 @@ function mod:PLAYER_REGEN_ENABLED()
 	elseif self.db.showEnemyCombat == "TOGGLE_OFF" then
 		SetCVar("nameplateShowEnemies", 1)
 	end
+
+	mod:ForEachPlate("UpdateElement_Filters", "PLAYER_REGEN_ENABLED")
 end
 
 function mod:UpdateFonts(plate)
