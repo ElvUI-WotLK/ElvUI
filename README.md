@@ -22,17 +22,23 @@ This UI will arrange your interface to be more flexible and practical.
 ## Plugins:
 [ElvUI_AddOnSkins](https://github.com/ElvUI-WotLK/ElvUI_AddOnSkins)
 <br />
+[ElvUI_AuraBarsMovers](https://github.com/ElvUI-WotLK/ElvUI_AuraBarsMovers)
+<br />
+[ElvUI_BagControl](https://github.com/ElvUI-WotLK/ElvUI_BagControl)
+<br />
 [ElvUI_CastBarOverlay](https://github.com/ElvUI-WotLK/ElvUI_CastBarOverlay)
 <br />
-[ElvUI_CustomTags](https://github.com/ElvUI-WotLK/ElvUI_CustomTags)
-<br />
 [ElvUI_CustomTweaks](https://github.com/ElvUI-WotLK/ElvUI_CustomTweaks)
+<br />
+[ElvUI_DataTextColors](https://github.com/ElvUI-WotLK/ElvUI_DataTextColors)
 <br />
 [ElvUI_DTBars](https://github.com/ElvUI-WotLK/ElvUI_DTBars)
 <br />
 [ElvUI_Enhanced](https://github.com/ElvUI-WotLK/ElvUI_Enhanced)
 <br />
 [ElvUI_EnhancedFriendsList](https://github.com/ElvUI-WotLK/ElvUI_EnhancedFriendsList)
+<br />
+[ElvUI_EverySecondCounts](https://github.com/ElvUI-WotLK/ElvUI_EverySecondCounts)
 <br />
 [ElvUI_ExtraActionBars](https://github.com/ElvUI-WotLK/ElvUI_ExtraActionBars)
 <br />
