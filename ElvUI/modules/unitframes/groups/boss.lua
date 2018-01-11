@@ -11,6 +11,8 @@ local ElvUF = ns.oUF;
 assert(ElvUF, "ElvUI was unable to locate oUF.");
 
 local BossHeader = CreateFrame("Frame", "BossHeader", UIParent);
+BossHeader:SetFrameStrata("LOW")
+
 function UF:Construct_BossFrames(frame)
 	frame.RaisedElementParent = CreateFrame("Frame", nil, frame);
 	frame.RaisedElementParent.TextureParent = CreateFrame("Frame", nil, frame.RaisedElementParent)

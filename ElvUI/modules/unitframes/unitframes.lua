@@ -205,6 +205,7 @@ end
 
 
 function UF:Construct_UF(frame, unit)
+	frame:SetFrameStrata("LOW")
 	frame:SetScript("OnEnter", UnitFrame_OnEnter)
 	frame:SetScript("OnLeave", UnitFrame_OnLeave)
 
@@ -704,6 +705,7 @@ function UF:CreateHeader(parent, groupFilter, overrideName, template, groupName,
 
 	header.groupName = group
 	header:SetParent(parent)
+	header:SetFrameStrata("LOW")
 	--header:Show()
 
 	for k, v in pairs(self.headerPrototype) do
@@ -741,6 +743,7 @@ function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdat
 
 		if db.numGroups then
 			self[group] = CreateFrame("Frame", "ElvUF_"..stringTitle, E.UIParent, "SecureHandlerStateTemplate");
+			self[group]:SetFrameStrata("LOW")
 			self[group]:Hide()
 			self[group].groups = {}
 			self[group].groupName = group
