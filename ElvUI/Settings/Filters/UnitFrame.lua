@@ -526,6 +526,8 @@ G.unitframe.ChannelTicks = {
 	[SpellName(5143)] = 5, -- Arcane Missiles
 	[SpellName(10)] = 8, -- Blizzard
 	[SpellName(12051)] = 4, -- Evocation
+	-- Hunter
+	[SpellName(58434)] = 6, -- Volley
 }
 
 G.unitframe.AuraBarColors = {
