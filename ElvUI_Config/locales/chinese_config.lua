@@ -914,6 +914,7 @@ L["Grouping & Sorting"] = "分组与排序"
 L["Groups Per Row/Column"] = "每行/列的组数"
 L["Growth direction from the first unitframe."] = "增长方向从第一个头像框架开始"
 L["Growth Direction"] = "增长方向"
+L["Happiness"] = true
 L["Heal Prediction"] = "治疗量预测"
 L["Health Backdrop"] = "生命条背景"
 L["Health Border"] = "生命条边框"

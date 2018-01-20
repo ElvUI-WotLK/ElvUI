@@ -1436,6 +1436,11 @@ P["unitframe"] = {
 				["overlay"] = false,
 				["style"] = "3D",
 			},
+			["happiness"] = {
+				["enable"] = false,
+				["autoHide"] = false,
+				["width"] = 10,
+			},
 			["buffs"] = {
 				["enable"] = false,
 				["perrow"] = 7,

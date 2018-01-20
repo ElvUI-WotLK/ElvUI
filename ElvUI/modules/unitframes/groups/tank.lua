@@ -109,6 +109,7 @@ function UF:Update_TankFrames(frame, db)
 		frame.PORTRAIT_WIDTH = 0
 
 		frame.CLASSBAR_YOFFSET = 0
+		frame.HAPPINESS_WIDTH = 0
 		frame.BOTTOM_OFFSET = 0
 
 		frame.VARIABLES_SET = true

@@ -128,6 +128,7 @@ function UF:Update_RaidpetFrames(frame, db)
 		frame.PORTRAIT_WIDTH = (frame.USE_PORTRAIT_OVERLAY or not frame.USE_PORTRAIT) and 0 or db.portrait.width
 
 		frame.CLASSBAR_YOFFSET = 0
+		frame.HAPPINESS_WIDTH = 0
 		frame.BOTTOM_OFFSET = 0
 
 		frame.USE_TARGET_GLOW = db.targetGlow

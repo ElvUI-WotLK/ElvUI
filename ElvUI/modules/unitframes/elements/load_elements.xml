@@ -9,6 +9,7 @@
 	<Script file="customtext.lua"/>
 	<Script file="debuffhighlight.lua"/>
 	<Script file="gps.lua"/>
+	<Script file="Happiness.lua"/>
 	<Script file="healcomm.lua"/>
 	<Script file="health.lua"/>
 	<Script file="infopanel.lua"/>

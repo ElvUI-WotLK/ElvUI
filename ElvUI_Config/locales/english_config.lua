@@ -903,6 +903,7 @@ L["Grouping & Sorting"] = true;
 L["Groups Per Row/Column"] = true;
 L["Growth direction from the first unitframe."] = true;
 L["Growth Direction"] = true;
+L["Happiness"] = true
 L["Heal Prediction"] = true;
 L["Health Backdrop"] = true;
 L["Health Border"] = true;

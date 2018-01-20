@@ -915,6 +915,7 @@ L["Grouping & Sorting"] = "Gruppierung und Sortierung"
 L["Groups Per Row/Column"] = "Gruppen per Reihe/Spalte"
 L["Growth direction from the first unitframe."] = "Wachstumsrichtung von dem ersten Einheitenfenster."
 L["Growth Direction"] = "Wachstumsrichtung"
+L["Happiness"] = true
 L["Heal Prediction"] = "Eingehende Heilung"
 L["Health Backdrop"] = "Gesundheitshintergrund"
 L["Health Border"] = "Gesundheitsumrandung"

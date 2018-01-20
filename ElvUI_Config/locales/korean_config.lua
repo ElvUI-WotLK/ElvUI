@@ -962,6 +962,7 @@ L["Grouping & Sorting"] = "그룹/정렬 방법"
 L["Groups Per Row/Column"] = "한 줄 당 그룹 배치수"
 L["Growth direction from the first unitframe."] = "이 그룹에 속한 유닛들이 1번을 기준으로 어느 방향을 향해 나열될지 결정합니다."
 L["Growth Direction"] = "나열 방향"
+L["Happiness"] = true
 L["Heal Prediction"] = "예상 치유량"
 L["Health Backdrop"] = "생명력 배경"
 L["Health Border"] = "체력바 테두리만"
