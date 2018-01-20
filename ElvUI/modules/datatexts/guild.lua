@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local DT = E:GetModule("DataTexts")
+local DT = E:GetModule("DataTexts");
 
 --Cache global variables
 --Lua functions
@@ -17,6 +17,7 @@ local GuildRoster = GuildRoster
 local GetMouseFocus = GetMouseFocus
 local InviteUnit = InviteUnit
 local SetItemRef = SetItemRef
+local ToggleFriendsFrame = ToggleFriendsFrame
 local GetQuestDifficultyColor = GetQuestDifficultyColor
 local UnitInParty = UnitInParty
 local UnitInRaid = UnitInRaid
