@@ -31,6 +31,9 @@ local function LoadSkin()
 	GossipFrame.backdrop:Point("TOPLEFT", 15, -11)
 	GossipFrame.backdrop:Point("BOTTOMRIGHT", -30, 0)
 
+	GossipFrameNpcNameText:ClearAllPoints()
+	GossipFrameNpcNameText:Point("TOP", GossipFrame, "TOP", -5, -19)
+
 	GossipGreetingScrollFrame:Height(403)
 
 	S:HandleButton(GossipFrameGreetingGoodbyeButton)
