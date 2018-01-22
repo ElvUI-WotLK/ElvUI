@@ -1,89 +1,146 @@
-local E, L, V, P, G = unpack(select(2, ...));
-local S = E:GetModule("Skins");
+local E, L, V, P, G = unpack(select(2, ...))
+local S = E:GetModule("Skins")
 
-local _G = _G;
-local unpack = unpack;
-local find = string.find;
+local _G = _G
+local unpack = unpack
+local find = string.find
 
 local function LoadSkin()
-	if(E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.trainer ~= true) then return; end
+	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.trainer ~= true then return end
 
-	ClassTrainerFrame:CreateBackdrop("Transparent");
-	ClassTrainerFrame.backdrop:Point("TOPLEFT", 10, -11);
-	ClassTrainerFrame.backdrop:Point("BOTTOMRIGHT", -32, 74);
+	ClassTrainerFrame:SetAttribute("UIPanelLayout-width", E:Scale(710))
+	ClassTrainerFrame:SetAttribute("UIPanelLayout-height", E:Scale(470))
+	ClassTrainerFrame:Size(710, 470)
+	ClassTrainerFrame:StripTextures(true)
+	ClassTrainerFrame:CreateBackdrop("Transparent")
+	ClassTrainerFrame.backdrop:Point("TOPLEFT", 15, -11)
+	ClassTrainerFrame.backdrop:Point("BOTTOMRIGHT", -35, 74)
 
-	ClassTrainerFrame:StripTextures(true);
+	ClassTrainerListScrollFrame:StripTextures()
+	ClassTrainerListScrollFrame:Size(300)
+	ClassTrainerListScrollFrame.SetHeight = E.noop
+	ClassTrainerListScrollFrame:ClearAllPoints()
+	ClassTrainerListScrollFrame:Point("TOPLEFT", 17, -85)
 
-	ClassTrainerExpandButtonFrame:StripTextures();
+	ClassTrainerDetailScrollFrame:StripTextures()
+	ClassTrainerDetailScrollFrame:Size(295, 280)
+	ClassTrainerDetailScrollFrame.SetHeight = E.noop
+	ClassTrainerDetailScrollFrame:ClearAllPoints()
+	ClassTrainerDetailScrollFrame:Point("TOPRIGHT", ClassTrainerFrame, -64, -85)
+	ClassTrainerDetailScrollFrame.scrollBarHideable = nil
 
-	S:HandleDropDownBox(ClassTrainerFrameFilterDropDown);
+	ClassTrainerFrame.bg1 = CreateFrame("Frame", nil, ClassTrainerFrame)
+	ClassTrainerFrame.bg1:SetTemplate("Transparent")
+	ClassTrainerFrame.bg1:Point("TOPLEFT", 18, -77)
+	ClassTrainerFrame.bg1:Point("BOTTOMRIGHT", -367, 77)
+	ClassTrainerFrame.bg1:SetFrameLevel(ClassTrainerFrame.bg1:GetFrameLevel() - 1)
 
-	ClassTrainerListScrollFrame:StripTextures();
+	ClassTrainerFrame.bg2 = CreateFrame("Frame", nil, ClassTrainerFrame)
+	ClassTrainerFrame.bg2:SetTemplate("Transparent")
+	ClassTrainerFrame.bg2:Point("TOPLEFT", ClassTrainerFrame.bg1, "TOPRIGHT", 1, 0)
+	ClassTrainerFrame.bg2:Point("BOTTOMRIGHT", ClassTrainerFrame, "BOTTOMRIGHT", -38, 77)
+	ClassTrainerFrame.bg2:SetFrameLevel(ClassTrainerFrame.bg2:GetFrameLevel() - 1)
+
+	ClassTrainerDetailScrollChildFrame:StripTextures()
+	ClassTrainerDetailScrollChildFrame:Size(300, 150)
+
+	ClassTrainerExpandButtonFrame:StripTextures()
+
+	S:HandleDropDownBox(ClassTrainerFrameFilterDropDown)
+	ClassTrainerFrameFilterDropDown:Point("TOPRIGHT", -55, -40)
+
 	S:HandleScrollBar(ClassTrainerListScrollFrameScrollBar);
-
-	ClassTrainerDetailScrollFrame:StripTextures();
 	S:HandleScrollBar(ClassTrainerDetailScrollFrameScrollBar);
 
-	ClassTrainerSkillIcon:StripTextures();
+	ClassTrainerCancelButton:ClearAllPoints()
+	ClassTrainerCancelButton:Point("TOPRIGHT", ClassTrainerDetailScrollFrame, "BOTTOMRIGHT", 23, -3)
+	S:HandleButton(ClassTrainerCancelButton)
 
-	S:HandleButton(ClassTrainerTrainButton);
-	S:HandleButton(ClassTrainerCancelButton);
+	ClassTrainerTrainButton:ClearAllPoints()
+	ClassTrainerTrainButton:Point("TOPRIGHT", ClassTrainerCancelButton, "TOPLEFT", -3, 0)
+	S:HandleButton(ClassTrainerTrainButton)
 
-	S:HandleCloseButton(ClassTrainerFrameCloseButton);
+	ClassTrainerMoneyFrame:ClearAllPoints()
+	ClassTrainerMoneyFrame:Point("BOTTOMLEFT", ClassTrainerFrame, "BOTTOMRIGHT", -180, 107)
+
+	S:HandleCloseButton(ClassTrainerFrameCloseButton)
+
+	ClassTrainerSkillIcon:StripTextures()
+	ClassTrainerSkillIcon:StyleButton(nil, true)
 
 	hooksecurefunc("ClassTrainer_SetSelection", function()
-		local skillIcon = ClassTrainerSkillIcon:GetNormalTexture();
-		if(skillIcon) then
-			skillIcon:SetInside();
-			skillIcon:SetTexCoord(unpack(E.TexCoords));
+		local skillIcon = ClassTrainerSkillIcon:GetNormalTexture()
+		if skillIcon then
+			skillIcon:SetInside()
+			skillIcon:SetTexCoord(unpack(E.TexCoords))
 
-			ClassTrainerSkillIcon:SetTemplate("Default");
+			ClassTrainerSkillIcon:SetTemplate("Default")
 		end
-	end);
+	end)
 
-	for i = 1, CLASS_TRAINER_SKILLS_DISPLAYED do
-		local skillButton = _G["ClassTrainerSkill" .. i];
-		skillButton:SetNormalTexture("");
-		skillButton.SetNormalTexture = E.noop;
+	CLASS_TRAINER_SKILLS_DISPLAYED = 19
 
-		_G["ClassTrainerSkill" .. i .. "Highlight"]:SetTexture("");
-		_G["ClassTrainerSkill" .. i .. "Highlight"].SetTexture = E.noop;
+	hooksecurefunc("ClassTrainer_SetToTradeSkillTrainer", function()
+		CLASS_TRAINER_SKILLS_DISPLAYED = 19
+	end)
 
-		skillButton.Text = skillButton:CreateFontString(nil, "OVERLAY");
-		skillButton.Text:FontTemplate(nil, 22);
-		skillButton.Text:Point("LEFT", 3, 0);
-		skillButton.Text:SetText("+");
+	hooksecurefunc("ClassTrainer_SetToClassTrainer", function()
+		CLASS_TRAINER_SKILLS_DISPLAYED = 19
+	end)
 
-		hooksecurefunc(skillButton, "SetNormalTexture", function(self, texture)
-			if(find(texture, "MinusButton")) then
-				self.Text:SetText("-");
-			elseif(find(texture, "PlusButton")) then
-				self.Text:SetText("+");
-			else
-				self.Text:SetText("");
-			end
-		end);
+	for i = 12, 19 do
+		CreateFrame("Button", "ClassTrainerSkill" .. i, ClassTrainerFrame, "ClassTrainerSkillButtonTemplate"):Point("TOPLEFT", _G["ClassTrainerSkill" .. i - 1], "BOTTOMLEFT")
 	end
 
-	ClassTrainerCollapseAllButton:SetNormalTexture("");
-	ClassTrainerCollapseAllButton.SetNormalTexture = E.noop;
-	ClassTrainerCollapseAllButton:SetHighlightTexture("");
-	ClassTrainerCollapseAllButton.SetHighlightTexture = E.noop;
-	ClassTrainerCollapseAllButton:SetDisabledTexture("");
-	ClassTrainerCollapseAllButton.SetDisabledTexture = E.noop;
+	ClassTrainerSkill1:Point("TOPLEFT", 22, -80)
 
-	ClassTrainerCollapseAllButton.Text = ClassTrainerCollapseAllButton:CreateFontString(nil, "OVERLAY");
-	ClassTrainerCollapseAllButton.Text:FontTemplate(nil, 22);
-	ClassTrainerCollapseAllButton.Text:Point("LEFT", 3, 0);
-	ClassTrainerCollapseAllButton.Text:SetText("+");
+	for i = 1, CLASS_TRAINER_SKILLS_DISPLAYED do
+		local skillButton = _G["ClassTrainerSkill"..i]
+		local highlight = _G["ClassTrainerSkill"..i.."Highlight"]
+
+		skillButton:SetNormalTexture("")
+		skillButton.SetNormalTexture = E.noop
+
+		highlight:SetTexture("")
+		highlight.SetTexture = E.noop
+
+		skillButton.Text = skillButton:CreateFontString(nil, "OVERLAY")
+		skillButton.Text:FontTemplate(nil, 22)
+		skillButton.Text:Point("LEFT", 3, 0)
+		skillButton.Text:SetText("+")
+
+		hooksecurefunc(skillButton, "SetNormalTexture", function(self, texture)
+			if find(texture, "MinusButton") then
+				self.Text:SetText("-")
+			elseif find(texture, "PlusButton") then
+				self.Text:SetText("+")
+			else
+				self.Text:SetText("")
+			end
+		end)
+	end
+
+	ClassTrainerCollapseAllButton:Point("LEFT", ClassTrainerExpandTabLeft, "RIGHT", 5, 20)
+
+	ClassTrainerCollapseAllButton:SetNormalTexture("")
+	ClassTrainerCollapseAllButton.SetNormalTexture = E.noop
+	ClassTrainerCollapseAllButton:SetHighlightTexture("")
+	ClassTrainerCollapseAllButton.SetHighlightTexture = E.noop
+	ClassTrainerCollapseAllButton:SetDisabledTexture("")
+	ClassTrainerCollapseAllButton.SetDisabledTexture = E.noop
+
+	ClassTrainerCollapseAllButton.Text = ClassTrainerCollapseAllButton:CreateFontString(nil, "OVERLAY")
+	ClassTrainerCollapseAllButton.Text:FontTemplate(nil, 22)
+	ClassTrainerCollapseAllButton.Text:Point("LEFT", 3, 0)
+	ClassTrainerCollapseAllButton.Text:SetText("+")
 
 	hooksecurefunc(ClassTrainerCollapseAllButton, "SetNormalTexture", function(self, texture)
-		if(find(texture, "MinusButton")) then
-			self.Text:SetText("-");
+		if find(texture, "MinusButton") then
+			self.Text:SetText("-")
 		else
-			self.Text:SetText("+");
+			self.Text:SetText("+")
 		end
-	end);
+	end)
 end
 
-S:AddCallbackForAddon("Blizzard_TrainerUI", "Trainer", LoadSkin);
+S:AddCallbackForAddon("Blizzard_TrainerUI", "Trainer", LoadSkin)

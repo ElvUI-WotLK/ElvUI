@@ -409,8 +409,10 @@ local function LoadSkin()
 
 	ReputationDetailFrame:StripTextures()
 	ReputationDetailFrame:SetTemplate("Transparent")
+	ReputationDetailFrame:Point("TOPLEFT", ReputationFrame, "TOPRIGHT", -32, -12)
 
 	S:HandleCloseButton(ReputationDetailCloseButton)
+	ReputationDetailCloseButton:Point("TOPRIGHT", 3, 4)
 
 	S:HandleCheckBox(ReputationDetailAtWarCheckBox)
 	ReputationDetailAtWarCheckBox:SetCheckedTexture("Interface\\Buttons\\UI-CheckBox-SwordCheck")
@@ -429,6 +431,7 @@ local function LoadSkin()
 
 	SkillFrameExpandButtonFrame:StripTextures()
 
+	SkillFrameCollapseAllButton:Point("LEFT", SkillFrameExpandTabLeft, "RIGHT", -40, -3)
 	SkillFrameCollapseAllButton:SetNormalTexture("")
 	SkillFrameCollapseAllButton.SetNormalTexture = E.noop
 	SkillFrameCollapseAllButton:SetHighlightTexture(nil)
