@@ -1,33 +1,31 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local DT = E:GetModule("DataTexts");
+local E, L, V, P, G = unpack(select(2, ...))
+local DT = E:GetModule("DataTexts")
 
 --Cache global variables
 --Lua functions
 local select, unpack = select, unpack
+local format, find, join = string.format, string.find, string.join
 local sort, wipe = table.sort, wipe
-local ceil = math.ceil
-local format, find, join, split = string.format, string.find, string.join, string.split
 --WoW API / Variables
-local GetNumGuildMembers = GetNumGuildMembers
+local EasyMenu = EasyMenu
+local GetGuildInfo = GetGuildInfo
 local GetGuildRosterInfo = GetGuildRosterInfo
 local GetGuildRosterMOTD = GetGuildRosterMOTD
-local IsInGuild = IsInGuild
-local LoadAddOn = LoadAddOn
-local GuildRoster = GuildRoster
 local GetMouseFocus = GetMouseFocus
+local GetNumGuildMembers = GetNumGuildMembers
+local GetQuestDifficultyColor = GetQuestDifficultyColor
+local GetRealZoneText = GetRealZoneText
+local GuildRoster = GuildRoster
 local InviteUnit = InviteUnit
+local IsInGuild = IsInGuild
+local IsShiftKeyDown = IsShiftKeyDown
 local SetItemRef = SetItemRef
 local ToggleFriendsFrame = ToggleFriendsFrame
-local GetQuestDifficultyColor = GetQuestDifficultyColor
 local UnitInParty = UnitInParty
 local UnitInRaid = UnitInRaid
-local EasyMenu = EasyMenu
-local IsShiftKeyDown = IsShiftKeyDown
-local GetGuildInfo = GetGuildInfo
-local RAID_CLASS_COLORS = RAID_CLASS_COLORS
-local GUILD_MOTD = GUILD_MOTD
-local COMBAT_FACTION_CHANGE = COMBAT_FACTION_CHANGE
 local GUILD = GUILD
+local GUILD_MOTD = GUILD_MOTD
+local RAID_CLASS_COLORS = RAID_CLASS_COLORS
 
 local tthead, ttsubh, ttoff = {r=0.4, g=0.78, b=1}, {r=0.75, g=0.9, b=1}, {r=.3,g=1,b=.3}
 local activezone, inactivezone = {r=0.3, g=1.0, b=0.3}, {r=0.65, g=0.65, b=0.65}
@@ -75,61 +73,41 @@ local onlinestatus = {
 
 local function BuildGuildTable()
 	wipe(guildTable)
-	local statusInfo
-	local _, name, rank, rankIndex, level, zone, note, officernote, connected, memberstatus, class
+	local _, name, rank, rankIndex, level, zone, note, officernote, connected, status, englishClass
 
 	local totalMembers = GetNumGuildMembers()
 	for i = 1, totalMembers do
-		name, rank, rankIndex, level, _, zone, note, officernote, connected, memberstatus, class = GetGuildRosterInfo(i)
-		if not name then return end
-
-		statusInfo = onlinestatus[memberstatus]
+		name, rank, rankIndex, level, _, zone, note, officernote, connected, status, englishClass = GetGuildRosterInfo(i)
+		if not name then break end
 
 		if connected then
-			guildTable[#guildTable + 1] = { name, rank, level, zone, note, officernote, connected, statusInfo, class, rankIndex }
+			guildTable[#guildTable + 1] = {name, rank, level, zone, note, officernote, connected, onlinestatus[status], englishClass, rankIndex}
 		end
 	end
 end
 
-local function UpdateGuildMessage()
-	guildMotD = GetGuildRosterMOTD()
-end
-
-local FRIEND_ONLINE = select(2, split(" ", ERR_FRIEND_ONLINE_SS, 2))
-local resendRequest = false
 local eventHandlers = {
-	["CHAT_MSG_SYSTEM"] = function(_, arg1)
-		if FRIEND_ONLINE ~= nil and arg1 and find(arg1, FRIEND_ONLINE) then
-			resendRequest = true
-		end
-	end,
 	-- when we enter the world and guildframe is not available then
-	-- load guild frame, update guild message and guild xp
+	-- load guild frame, update guild message
 	["PLAYER_ENTERING_WORLD"] = function()
-		if not GuildFrame and IsInGuild() then
-			LoadAddOn("Blizzard_GuildUI")
-			GuildRoster()
-		end
+		guildMotD = GetGuildRosterMOTD()
 	end,
 	-- Guild Roster updated, so rebuild the guild table
 	["GUILD_ROSTER_UPDATE"] = function(self)
-		if resendRequest then
-			resendRequest = false;
-			return GuildRoster()
-		else
-			BuildGuildTable()
-			UpdateGuildMessage()
-			if GetMouseFocus() == self then
-				self:GetScript("OnEnter")(self, nil, true)
-			end
+		GuildRoster()
+		BuildGuildTable()
+		guildMotD = GetGuildRosterMOTD()
+
+		if GetMouseFocus() == self then
+			self:GetScript("OnEnter")(self, nil, true)
 		end
 	end,
 	["PLAYER_GUILD_UPDATE"] = GuildRoster,
 	-- our guild message of the day changed
-	["GUILD_MOTD"] = function(_, arg1)
-		guildMotD = arg1
+	["GUILD_MOTD"] = function(_, msg)
+		guildMotD = msg
 	end,
-	["ELVUI_FORCE_RUN"] = E.noop,
+	["ELVUI_FORCE_RUN"] = GuildRoster,
 	["ELVUI_COLOR_UPDATE"] = E.noop,
 }
 
@@ -137,7 +115,7 @@ local function OnEvent(self, event, ...)
 	lastPanel = self
 
 	if IsInGuild() then
-		eventHandlers[event](self, select(1, ...))
+		eventHandlers[event](self, ...)
 
 		self.text:SetFormattedText(displayString, #guildTable)
 	else
@@ -147,9 +125,9 @@ end
 
 local menuFrame = CreateFrame("Frame", "GuildDatatTextRightClickMenu", E.UIParent, "UIDropDownMenuTemplate")
 local menuList = {
-	{ text = OPTIONS_MENU, isTitle = true, notCheckable = true},
-	{ text = INVITE, hasArrow = true, notCheckable = true,},
-	{ text = CHAT_MSG_WHISPER_INFORM, hasArrow = true, notCheckable = true,}
+	{text = OPTIONS_MENU, isTitle = true, notCheckable = true},
+	{text = INVITE, hasArrow = true, notCheckable = true},
+	{text = CHAT_MSG_WHISPER_INFORM, hasArrow = true, notCheckable = true}
 }
 
 local function inviteClick(_, playerName)
@@ -263,4 +241,4 @@ local function ValueColorUpdate(hex)
 end
 E["valueColorUpdateFuncs"][ValueColorUpdate] = true
 
-DT:RegisterDatatext("Guild", {"PLAYER_ENTERING_WORLD", "CHAT_MSG_SYSTEM", "GUILD_ROSTER_UPDATE", "PLAYER_GUILD_UPDATE", "GUILD_MOTD"}, OnEvent, nil, OnClick, OnEnter, nil, GUILD)
+DT:RegisterDatatext("Guild", {"PLAYER_ENTERING_WORLD", "GUILD_ROSTER_UPDATE", "PLAYER_GUILD_UPDATE", "GUILD_MOTD"}, OnEvent, nil, OnClick, OnEnter, nil, GUILD)
