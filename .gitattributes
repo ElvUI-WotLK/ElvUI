@@ -1,7 +1,8 @@
-.github         export-ignore
-.gitattributes  export-ignore
-*readme.md      export-ignore
-*README.md      export-ignore
+.github             export-ignore
+.gitattributes      export-ignore
+*ISSUE_TEMPLATE.md  export-ignore
+*readme.md          export-ignore
+*README.md          export-ignore
 
 * text=auto
 
