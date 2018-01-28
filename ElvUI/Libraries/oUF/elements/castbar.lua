@@ -104,12 +104,13 @@ local function updateSafeZone(self)
 	end
 end
 
-local function UNIT_SPELLCAST_SENT(self, event, unit, spell, rank, target, castID)
+local function UNIT_SPELLCAST_SENT(self, event, unit, spell, rank, target)
 	local element = self.Castbar
 	element.curTarget = (target and target ~= '') and target or nil
 
 	if element.isTradeSkill then
-		element.tradeSkillCastID = castID
+		local castID = element.castID + 1
+		element.tradeSkillCastID = castID > 255 and 1 or castID
 	end
 end
 
