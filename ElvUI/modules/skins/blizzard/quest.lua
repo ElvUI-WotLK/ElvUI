@@ -145,14 +145,26 @@ local function LoadSkin()
 			_G["QuestInfoReputation"..i.."Faction"]:SetTextColor(unpack(textColor))
 		end
 
-		if GetQuestLogRequiredMoney() > GetMoney() then
-			QuestInfoRequiredMoneyText:SetTextColor(1, 0, 0)
-		else
-			QuestInfoRequiredMoneyText:SetTextColor(1, 0.80, 0.10)
+		if GetQuestLogRequiredMoney() > 0 then
+			if GetQuestLogRequiredMoney() > GetMoney() then
+				QuestInfoRequiredMoneyText:SetTextColor(0.6, 0.6, 0.6)
+			else
+				QuestInfoRequiredMoneyText:SetTextColor(1, 0.80, 0.10)
+			end
 		end
 
 		QuestObjectiveText()
 
+		for i = 1, MAX_NUM_ITEMS do
+			local questItem = _G["QuestInfoItem"..i]
+			local questName = _G["QuestInfoItem"..i.."Name"]
+			local link = questItem.type and (QuestInfoFrame.questLog and GetQuestLogItemLink or GetQuestItemLink)(questItem.type, questItem:GetID())
+
+			QuestQualityColors(questItem, questName, nil, link)
+		end
+	end)
+
+	hooksecurefunc("QuestInfo_ShowRewards", function()
 		for i = 1, MAX_NUM_ITEMS do
 			local questItem = _G["QuestInfoItem"..i]
 			local questName = _G["QuestInfoItem"..i.."Name"]
@@ -300,7 +312,14 @@ local function LoadSkin()
 		QuestProgressTitleText:SetTextColor(1, 0.80, 0.10)
 		QuestProgressText:SetTextColor(1, 1, 1)
 		QuestProgressRequiredItemsText:SetTextColor(1, 0.80, 0.10)
-		QuestProgressRequiredMoneyText:SetTextColor(1, 0.80, 0.10)
+
+		if GetQuestMoneyToGet() > 0 then
+			if GetQuestMoneyToGet() > GetMoney() then
+				QuestProgressRequiredMoneyText:SetTextColor(0.6, 0.6, 0.6)
+			else
+				QuestProgressRequiredMoneyText:SetTextColor(1, 0.80, 0.10)
+			end
+		end
 
 		for i = 1, MAX_REQUIRED_ITEMS do
 			local item = _G["QuestProgressItem"..i]
