@@ -248,7 +248,7 @@ end
 
 function E:SetupResolution(noDataReset)
 	if not noDataReset then
-		E:ResetMovers("")
+		E:ResetMovers()
 	end
 
 	if self == "low" then
@@ -348,7 +348,7 @@ function E:SetupLayout(layout, noDataReset)
 	end
 
 	if not noDataReset then
-		E:ResetMovers("")
+		E:ResetMovers()
 		if not E.db.movers then E.db.movers = {} end
 
 		E.db.actionbar.bar2.enabled = E.db.lowresolutionset
