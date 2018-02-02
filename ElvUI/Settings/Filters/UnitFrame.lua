@@ -1,6 +1,4 @@
-local E, L, V, P, G, _ = unpack(select(2, ...));
-
-local E, L, V, P, G, _ = unpack(select(2, ...)); --Engine
+local E, L, V, P, G = unpack(select(2, ...))
 
 --Cache global variables
 --Lua functions
@@ -462,46 +460,51 @@ end
 
 G.unitframe.buffwatch = {
 	PRIEST = {
-		[6788] = ClassBuff(6788, "TOPLEFT", {1, 0, 0}, true), -- Weakened Soul
-		[10060] = ClassBuff(10060 , "RIGHT", {227/255, 23/255, 13/255}), -- Power Infusion
+		[6788] = ClassBuff(6788, "TOPLEFT", {1, 0, 0}, true),				-- Weakened Soul
+		[10060] = ClassBuff(10060 , "RIGHT", {0.89, 0.09, 0.05}),			-- Power Infusion
 		[48066] = ClassBuff(48066, "BOTTOMRIGHT", {0.81, 0.85, 0.1}, true), -- Power Word: Shield
-		[48068] = ClassBuff(48068, "BOTTOMLEFT", {0.4, 0.7, 0.2}), -- Renew
-		[48111] = ClassBuff(48111, "TOPRIGHT", {0.2, 0.7, 0.2}), -- Prayer of Mending
+		[48068] = ClassBuff(48068, "BOTTOMLEFT", {0.4, 0.7, 0.2}),			-- Renew
+		[48111] = ClassBuff(48111, "TOPRIGHT", {0.2, 0.7, 0.2}),			-- Prayer of Mending
 	},
 	DRUID = {
-		[48441] = ClassBuff(48441, "TOPRIGHT", {0.8, 0.4, 0.8}), -- Rejuvenation
-		[48443] = ClassBuff(48443, "BOTTOMLEFT", {0.2, 0.8, 0.2}), -- Regrowth
-		[48451] = ClassBuff(48451, "TOPLEFT", {0.4, 0.8, 0.2}), -- Lifebloom
-		[53251] = ClassBuff(53251, "BOTTOMRIGHT", {0.8, 0.4, 0}), -- Wild Growth
+		[48441] = ClassBuff(48441, "TOPRIGHT", {0.8, 0.4, 0.8}),			-- Rejuvenation
+		[48443] = ClassBuff(48443, "BOTTOMLEFT", {0.2, 0.8, 0.2}),			-- Regrowth
+		[48451] = ClassBuff(48451, "TOPLEFT", {0.4, 0.8, 0.2}),				-- Lifebloom
+		[53251] = ClassBuff(53251, "BOTTOMRIGHT", {0.8, 0.4, 0}),			-- Wild Growth
 	},
 	PALADIN = {
-		[1038] = ClassBuff(1038, "BOTTOMRIGHT", {238/255, 201/255, 0}, true), -- Hand of Salvation
-		[1044] = ClassBuff(1044, "BOTTOMRIGHT", {221/255, 117/255, 0}, true), -- Hand of Freedom
-		[6940] = ClassBuff(6940, "BOTTOMRIGHT", {227/255, 23/255, 13/255}, true), -- Hand of Sacrifice
-		[10278] = ClassBuff(10278, "BOTTOMRIGHT", {0.2, 0.2, 1}, true), -- Hand of Protection
-		[53563] = ClassBuff(53563, "TOPLEFT", {0.7, 0.3, 0.7}), -- Beacon of Light
-		[53601] = ClassBuff(53601, "TOPRIGHT", {0.4, 0.7, 0.2}), -- Sacred Shield
+		[1038] = ClassBuff(1038, "BOTTOMRIGHT", {0.9, 0.78, 0}, true),		-- Hand of Salvation
+		[1044] = ClassBuff(1044, "BOTTOMRIGHT", {0.86, 0.45, 0}, true),		-- Hand of Freedom
+		[6940] = ClassBuff(6940, "BOTTOMRIGHT", {0.89, 0.09, 0.05}, true),	-- Hand of Sacrifice
+		[10278] = ClassBuff(10278, "BOTTOMRIGHT", {0.2, 0.2, 1}, true),		-- Hand of Protection
+		[53563] = ClassBuff(53563, "TOPLEFT", {0.7, 0.3, 0.7}),				-- Beacon of Light
+		[53601] = ClassBuff(53601, "TOPRIGHT", {0.4, 0.7, 0.2}),			-- Sacred Shield
 	},
 	SHAMAN = {
-		[16237] = ClassBuff(16237, "BOTTOMLEFT", {0.4, 0.7, 0.2}), -- Ancestral Fortitude
-		[49284] = ClassBuff(49284, "TOPRIGHT", {0.2, 0.7, 0.2}), -- Earth Shield
-		[52000] = ClassBuff(52000, "BOTTOMRIGHT", {0.7, 0.4, 0}), -- Earthliving
-		[61301] = ClassBuff(61301, "TOPLEFT", {0.7, 0.3, 0.7}), -- Riptide
+		[16237] = ClassBuff(16237, "BOTTOMLEFT", {0.4, 0.7, 0.2}),			-- Ancestral Fortitude
+		[49284] = ClassBuff(49284, "TOPRIGHT", {0.2, 0.7, 0.2}),			-- Earth Shield
+		[52000] = ClassBuff(52000, "BOTTOMRIGHT", {0.7, 0.4, 0}),			-- Earthliving
+		[61301] = ClassBuff(61301, "TOPLEFT", {0.7, 0.3, 0.7}),				-- Riptide
 	},
 	ROGUE = {
-		[57933] = ClassBuff(57933, "TOPRIGHT", {0.89, 0.09, 0.05}), -- Tricks of the Trade
+		[57933] = ClassBuff(57933, "TOPRIGHT", {0.89, 0.09, 0.05}),			-- Tricks of the Trade
 	},
 	MAGE = {
-		[54646] = ClassBuff(54646, "TOPRIGHT", {0.2, 0.2, 1}), -- Focus Magic
+		[54646] = ClassBuff(54646, "TOPRIGHT", {0.2, 0.2, 1}),				-- Focus Magic
 	},
 	WARRIOR = {
-		[3411] = ClassBuff(3411, "TOPRIGHT", {0.89, 0.09, 0.05}), -- Intervene
-		[59665] = ClassBuff(59665, "TOPLEFT", {0.2, 0.2, 1}), -- Vigilance
+		[3411] = ClassBuff(3411, "TOPRIGHT", {0.89, 0.09, 0.05}),			-- Intervene
+		[59665] = ClassBuff(59665, "TOPLEFT", {0.2, 0.2, 1}),				-- Vigilance
 	},
 	DEATHKNIGHT = {
-		[49016] = ClassBuff(49016, "TOPRIGHT", {227/255, 23/255, 13/255}) -- Hysteria
+		[49016] = ClassBuff(49016, "TOPRIGHT", {0.89, 0.09, 0.05})			-- Hysteria
+	},
+	PET = {
+		[1539] = ClassBuff(1539, "TOPLEFT", {0.81, 0.85, 0.1}, true),		-- Feed Pet
+		[48990] = ClassBuff(48990, "TOPRIGHT", {0.2, 0.8, 0.2}, true)		-- Mend Pet
 	},
 	HUNTER = {},
+	WARLOCK = {},
 }
 
 P["unitframe"]["filters"] = {

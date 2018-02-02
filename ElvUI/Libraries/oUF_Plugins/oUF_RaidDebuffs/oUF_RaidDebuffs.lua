@@ -109,9 +109,9 @@ local function CheckSpec(self, event, levels)
 	if(event == "CHARACTER_POINTS_CHANGED" and levels > 0) then return end
 
 	if(IsSpellKnown(51886)) then
-		dispellist.Curse = true
+		DispellFilter.Curse = true
 	else
-		dispellist.Curse = false
+		DispellFilter.Curse = false
 	end
 end
 
