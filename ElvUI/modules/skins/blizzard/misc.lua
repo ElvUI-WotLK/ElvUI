@@ -353,6 +353,7 @@ local function LoadSkin()
 
 	ChatConfigCombatSettingsFiltersScrollFrame:StripTextures()
 	S:HandleScrollBar(ChatConfigCombatSettingsFiltersScrollFrameScrollBar)
+	ChatConfigCombatSettingsFiltersScrollFrameScrollBarBorder:Kill()
 
 	S:HandleButton(ChatConfigCombatSettingsFiltersDeleteButton)
 	S:HandleButton(ChatConfigCombatSettingsFiltersAddFilterButton)
@@ -364,9 +365,12 @@ local function LoadSkin()
 	S:SquareButton_SetIcon(ChatConfigMoveFilterUpButton, "UP")
 	ChatConfigMoveFilterUpButton:Size(26)
 	ChatConfigMoveFilterUpButton:Point("TOPLEFT", ChatConfigCombatSettingsFilters, "BOTTOMLEFT", 3, -1)
+	ChatConfigMoveFilterUpButton:SetHitRectInsets(0, 0, 0, 0)
+
 	S:HandleNextPrevButton(ChatConfigMoveFilterDownButton, true)
 	ChatConfigMoveFilterDownButton:Size(26)
 	ChatConfigMoveFilterDownButton:Point("LEFT", ChatConfigMoveFilterUpButton, "RIGHT", 1, 0)
+	ChatConfigMoveFilterDownButton:SetHitRectInsets(0, 0, 0, 0)
 
 	CombatConfigColorsHighlighting:StripTextures()
 	CombatConfigColorsColorizeUnitName:StripTextures()

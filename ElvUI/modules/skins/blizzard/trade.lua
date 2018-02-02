@@ -14,10 +14,13 @@ local function LoadSkin()
 
 	TradeFrame:StripTextures(true);
 	TradeFrame:CreateBackdrop("Transparent");
-	TradeFrame.backdrop:Point("TOPLEFT", 10, -11);
-	TradeFrame.backdrop:Point("BOTTOMRIGHT", -28, 48);
+	TradeFrame.backdrop:Point("TOPLEFT", 14, -4)
+	TradeFrame.backdrop:Point("BOTTOMRIGHT", -20, 48)
 
 	S:HandleCloseButton(TradeFrameCloseButton, TradeFrame.backdrop);
+
+	S:HandleButton(TradeFrameTradeButton)
+	S:HandleButton(TradeFrameCancelButton)
 
 	S:HandleEditBox(TradePlayerInputMoneyFrameGold);
 	S:HandleEditBox(TradePlayerInputMoneyFrameSilver);
@@ -47,6 +50,18 @@ local function LoadSkin()
 
 		recipientButtonIcon:SetInside();
 		recipientButtonIcon:SetTexCoord(unpack(E.TexCoords));
+
+		playerButton.bg = CreateFrame("Frame", nil, playerButton)
+		playerButton.bg:SetTemplate("Default")
+		playerButton.bg:Point("TOPLEFT", playerButton, "TOPRIGHT", 4, 0)
+		playerButton.bg:Point("BOTTOMRIGHT", _G["TradePlayerItem"..i.."NameFrame"], "BOTTOMRIGHT", 0, 14)
+		playerButton.bg:SetFrameLevel(playerButton:GetFrameLevel() - 3)
+
+		recipientButton.bg = CreateFrame("Frame", nil, recipientButton)
+		recipientButton.bg:SetTemplate("Default")
+		recipientButton.bg:Point("TOPLEFT", recipientButton, "TOPRIGHT", 4, 0)
+		recipientButton.bg:Point("BOTTOMRIGHT", _G["TradeRecipientItem"..i.."NameFrame"], "BOTTOMRIGHT", 0, 14)
+		recipientButton.bg:SetFrameLevel(recipientButton:GetFrameLevel() - 3)
 	end
 
 	TradeHighlightPlayerTop:SetTexture(0, 1, 0, 0.2);
@@ -65,8 +80,13 @@ local function LoadSkin()
 	TradeHighlightRecipientEnchantBottom:SetTexture(0, 1, 0, 0.2);
 	TradeHighlightRecipientEnchantMiddle:SetTexture(0, 1, 0, 0.2);
 
-	S:HandleButton(TradeFrameTradeButton);
-	S:HandleButton(TradeFrameCancelButton);
+	TradeHighlightPlayer:Point("TOPLEFT", 23, -100)
+	TradeHighlightRecipient:Point("TOPLEFT", 192, -100)
+
+	TradeHighlightPlayer:SetFrameStrata("HIGH")
+	TradeHighlightRecipient:SetFrameStrata("HIGH")
+	TradeHighlightPlayerEnchant:SetFrameStrata("HIGH")
+	TradeHighlightRecipientEnchant:SetFrameStrata("HIGH")
 
 	hooksecurefunc("TradeFrame_UpdatePlayerItem", function(id)
 		local tradeItemButton = _G["TradePlayerItem"..id.."ItemButton"]

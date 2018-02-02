@@ -20,6 +20,9 @@ local NUM_BANKGENERIC_SLOTS = NUM_BANKGENERIC_SLOTS
 local NUM_CONTAINER_FRAMES = NUM_CONTAINER_FRAMES
 
 local ProfessionColors = {
+	[0x0001] = {225/255, 175/255, 105/255}, -- Quiver
+	[0x0002] = {225/255, 175/255, 105/255}, -- Ammo Pouch
+	[0x0004] = {225/255, 175/255, 105/255}, -- Soul Bag
 	[0x0008] = {224/255, 187/255, 74/255}, -- Leatherworking
 	[0x0010] = {74/255, 77/255, 224/255}, -- Inscription
 	[0x0020] = {18/255, 181/255, 32/255}, -- Herbs
@@ -103,7 +106,7 @@ local function LoadSkin()
 				elseif questId or isQuestItem then
 					itemButton:SetBackdropBorderColor(1.0, 0.3, 0.3)
 					questTexture:SetAlpha(0)
-				elseif quality then
+				elseif quality and quality > 1 then
 					itemButton:SetBackdropBorderColor(GetItemQualityColor(quality))
 				else
 					itemButton:SetBackdropBorderColor(unpack(E["media"].bordercolor))
@@ -186,7 +189,7 @@ local function LoadSkin()
 			elseif questId or isQuestItem then
 				button:SetBackdropBorderColor(1.0, 0.3, 0.3)
 				questTexture:SetAlpha(0)
-			elseif quality then
+			elseif quality and quality > 1 then
 				button:SetBackdropBorderColor(GetItemQualityColor(quality))
 			else
 				button:SetBackdropBorderColor(unpack(E["media"].bordercolor))

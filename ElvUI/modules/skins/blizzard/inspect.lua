@@ -90,8 +90,22 @@ local function LoadSkin()
 	S:HandleCloseButton(InspectTalentFrameCloseButton)
 
 	for i = 1, MAX_TALENT_TABS do
-		_G["InspectTalentFrameTab"..i]:StripTextures()
+		local headerTab = _G["InspectTalentFrameTab"..i]
+
+		headerTab:StripTextures()
+		headerTab:CreateBackdrop("Default", true)
+		headerTab.backdrop:Point("TOPLEFT", 3, -7)
+		headerTab.backdrop:Point("BOTTOMRIGHT", 2, -1)
+
+		headerTab:Width(101)
+		headerTab.SetWidth = E.noop
+
+		headerTab:HookScript("OnEnter", S.SetModifiedBackdrop)
+		headerTab:HookScript("OnLeave", S.SetOriginalBackdrop)
+		headerTab:SetHitRectInsets(1, 0, 7, -1)
 	end
+
+	InspectTalentFrameTab1:Point("TOPLEFT", 19, -40)
 
 	for i = 1, MAX_NUM_TALENTS do
 		local talent = _G["InspectTalentFrameTalent"..i];

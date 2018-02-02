@@ -176,6 +176,7 @@ local function LoadSkin()
 		local _, _, _, _, _, numRewards = GetLFGDungeonRewards(dungeonID)
 		for i = 1, numRewards do
 			local frame = _G["LFDQueueFrameRandomScrollFrameChildFrameItem"..i]
+			local name = _G["LFDQueueFrameRandomScrollFrameChildFrameItem"..i.."Name"]
 			SkinLFDRandomDungeonLoot(frame)
 
 			local link = GetLFGDungeonRewardLinkFix(dungeonID, i)
@@ -183,9 +184,11 @@ local function LoadSkin()
 				local _, _, quality = GetItemInfo(link)
 				if quality then
 					frame.backdrop:SetBackdropBorderColor(GetItemQualityColor(quality))
+					name:SetTextColor(GetItemQualityColor(quality))
 				end
 			else
 				frame.backdrop:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+				name:SetTextColor(1, 1, 1)
 			end
 		end
 	end)

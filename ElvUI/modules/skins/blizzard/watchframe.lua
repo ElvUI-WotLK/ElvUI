@@ -4,17 +4,19 @@ local S = E:GetModule("Skins");
 local _G = _G;
 local unpack = unpack;
 
+local WATCHFRAME_EXPANDEDWIDTH = WATCHFRAME_EXPANDEDWIDTH
+
 local function LoadSkin()
 	if(E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.watchframe ~= true) then return end
 
 	WatchFrameCollapseExpandButton:StripTextures();
 	S:HandleCloseButton(WatchFrameCollapseExpandButton);
-	WatchFrameCollapseExpandButton.backdrop:SetAllPoints();
-	WatchFrameCollapseExpandButton:Size(16);
+	WatchFrameCollapseExpandButton:Size(32)
 	WatchFrameCollapseExpandButton.text:SetText("-");
-	WatchFrameCollapseExpandButton.text:Point("CENTER")
+	WatchFrameCollapseExpandButton.text:Point("CENTER", -1, 0)
 	WatchFrameCollapseExpandButton:SetFrameStrata("MEDIUM");
-	WatchFrameCollapseExpandButton:Point("TOPRIGHT", -20, -3);
+	WatchFrameCollapseExpandButton:Point("TOPRIGHT", -20, 4)
+	WatchFrameCollapseExpandButton:SetHitRectInsets(6, 6, 7, 7)
 
 	hooksecurefunc("WatchFrame_Expand", function()
 		WatchFrameCollapseExpandButton.text:SetText("-");
