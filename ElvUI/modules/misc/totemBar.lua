@@ -31,6 +31,7 @@ function TOTEMS:Update()
 			if E.myclass == "SHAMAN" then
 				color = SLOT_BORDER_COLORS[self.bar[i]:GetID()]
 				self.bar[i]:SetBackdropBorderColor(color.r, color.g, color.b)
+				self.bar[i].ignoreBorderColors = true
 			end
 
 			for d = 1, MAX_TOTEMS do

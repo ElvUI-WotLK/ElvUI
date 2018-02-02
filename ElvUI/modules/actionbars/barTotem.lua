@@ -105,6 +105,7 @@ function AB:StyleTotemSlotButton(button, slot)
     local color = SLOT_BORDER_COLORS[slot]
 	if color then
 		button:SetBackdropBorderColor(color.r, color.g, color.b);
+		button.ignoreBorderColors = true
 	end
 end
 

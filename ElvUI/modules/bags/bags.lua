@@ -285,6 +285,7 @@ function B:UpdateSlot(bagID, slotID)
 
 	if(B.ProfessionColors[bagType]) then
 		slot:SetBackdropBorderColor(unpack(B.ProfessionColors[bagType]))
+		slot.ignoreBorderColors = true
 	elseif(clink) then
 		local iLvl, itemEquipLoc;
 		slot.name, _, slot.rarity, iLvl, _, _, _, _, itemEquipLoc = GetItemInfo(clink);
@@ -306,16 +307,21 @@ function B:UpdateSlot(bagID, slotID)
 
 		if questId and not isActiveQuest then
 			slot:SetBackdropBorderColor(1.0, 1.0, 0.0);
+			slot.ignoreBorderColors = true
 			slot.questIcon:Show();
 		elseif questId or isQuestItem then
 			slot:SetBackdropBorderColor(1.0, 0.3, 0.3);
+			slot.ignoreBorderColors = true
 		elseif slot.rarity and slot.rarity > 1 then
 			slot:SetBackdropBorderColor(r, g, b);
+			slot.ignoreBorderColors = true
 		else
 			slot:SetBackdropBorderColor(unpack(E.media.bordercolor));
+			slot.ignoreBorderColors = true
 		end
 	else
 		slot:SetBackdropBorderColor(unpack(E.media.bordercolor));
+		slot.ignoreBorderColors = true
 	end
 
 	if(texture) then
@@ -669,16 +675,21 @@ function B:UpdateKeySlot(slotID)
 
 		if questId and not isActiveQuest then
 			slot:SetBackdropBorderColor(1.0, 1.0, 0.0);
+			slot.ignoreBorderColors = true
 			slot.questIcon:Show();
 		elseif questId or isQuestItem then
 			slot:SetBackdropBorderColor(1.0, 0.3, 0.3);
+			slot.ignoreBorderColors = true
 		elseif slot.rarity and slot.rarity > 1 then
 			slot:SetBackdropBorderColor(r, g, b);
+			slot.ignoreBorderColors = true
 		else
 			slot:SetBackdropBorderColor(unpack(E.media.bordercolor));
+			slot.ignoreBorderColors = true
 		end
 	else
 		slot:SetBackdropBorderColor(unpack(E.media.bordercolor));
+		slot.ignoreBorderColors = true
 	end
 
 	if(texture) then
