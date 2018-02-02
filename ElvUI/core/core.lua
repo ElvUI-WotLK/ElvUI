@@ -6,7 +6,7 @@ local tonumber, pairs, ipairs, error, unpack, select, tostring = tonumber, pairs
 local assert, print, type, collectgarbage, pcall, date = assert, print, type, collectgarbage, pcall, date;
 local twipe, tinsert, tremove, next = table.wipe, tinsert, tremove, next;
 local floor = floor;
-local format, find, match, strrep, len, sub, gsub = string.format, string.find, string.match, strrep, string.len, string.sub, string.gsub;
+local format, find, match, strrep, len, sub, gsub, trim = string.format, string.find, string.match, strrep, string.len, string.sub, string.gsub, string.trim;
 
 local UnitGUID = UnitGUID
 local CreateFrame = CreateFrame;
@@ -985,7 +985,7 @@ end
 function E:ResetUI(moverName)
 	if InCombatLockdown() then E:Print(ERR_NOT_IN_COMBAT) return end
 
-	if not moverName or moverName == "" or moverName == " " then
+	if not moverName or trim(moverName) == "" then
 		E:StaticPopup_Show("RESETUI_CHECK")
 		return
 	end

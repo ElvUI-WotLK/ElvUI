@@ -3,7 +3,7 @@ local Sticky = LibStub("LibSimpleSticky-1.0")
 
 local _G = _G
 local type, unpack, pairs = type, unpack, pairs
-local find, format, split = string.find, string.format, string.split
+local find, format, split, trim = string.find, string.format, string.split, string.trim
 
 local CreateFrame = CreateFrame
 local InCombatLockdown = InCombatLockdown
@@ -412,7 +412,7 @@ function E:EnableMover(name)
 end
 
 function E:ResetMovers(arg)
-	if not arg or arg == "" then
+	if not arg or trim(arg) == "" then
 		for name in pairs(E.CreatedMovers) do
 			local f = _G[name]
 			local point, anchor, secondaryPoint, x, y = split(",", E.CreatedMovers[name]["point"])
