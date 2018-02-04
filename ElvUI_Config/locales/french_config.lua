@@ -518,7 +518,6 @@ L["Version"] = "Version"
 L["# Displayed Auras"] = "Auras affichées"
 L["Actions"] = "Actions"
 L["Add Name"] = "Ajouter un nom"
-L["Add Nameplate Filter"] = true
 L["Add Regular Filter"] = "Ajouter un filtre"
 L["Add Special Filter"] = "Ajouter un filtre spécial"
 L["Always Show Target Health"] = "Toujours voir la vie de la cible"
@@ -630,13 +629,11 @@ L["Reaction Colors"] = "Coloration de la réaction"
 L["Reaction Type"] = true
 L["Remove a Name from the list."] = true
 L["Remove Name"] = "Supprimer un nom"
-L["Remove Nameplate Filter"] = true
 L["Require All"] = true
 L["Reset filter priority to the default state."] = true
 L["Reset Priority"] = true
 L["Return filter to its default state."] = true
 L["Scale of the nameplate that is targetted."] = true;
-L["Select Nameplate Filter"] = true
 L["Set Settings to Default"] = true;
 L["Set the transparency level of nameplates that are not the target nameplate."] = true;
 L["Set to either stack nameplates vertically or allow them to overlap."] = true;
@@ -670,7 +667,6 @@ L["Use Shift+LeftClick to toggle between friendly or enemy or normal state. Norm
 L["Use Tanked Color when a nameplate is being effectively tanked by another tank."] = true;
 L["Use Target Scale"] = true;
 L["Use Threat Color"] = true;
-L["You can't remove a default name from the filter, disabling the name."] = "Vous ne pouvez pas supprimer un nom qui est par défaut, cependant celui-ci est désormais désactivé."
 
 --Profiles Export/Import
 L["Choose Export Format"] = "Choisissez le format d'exportation"
@@ -1120,6 +1116,5 @@ L["Width"] = "Largeur" --Also used in NamePlates module
 L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."] = true;
 L["xOffset"] = "Décalage de l'axe X"
 L["yOffset"] = "Décalage de l'axe Y" --Another variation in bags section Y Offset
-L["You can't remove a pre-existing filter."] = "Vous ne pouvez pas supprimer un filtre préexistant."
 L["You may not remove a spell from a default filter that is not customly added. Setting spell to false instead."] = "Vous ne pouvez pas supprimer un sort du filtre qui est par défaut.configurer le sort en 'désactivé'."
 L["You need to hold this modifier down in order to blacklist an aura by right-clicking the icon. Set to None to disable the blacklist functionality."] = true;
