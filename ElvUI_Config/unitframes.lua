@@ -3115,11 +3115,25 @@ E.Options.args.unitframe.args.player = {
 					name = L["Anchor Point"],
 					values = positionValues
 				},
-				customTexture = {
+				texture = {
 					order = 10,
+					type = "select",
+					sortByValue = true,
+					name = L["Texture"],
+					values = {
+						["CUSTOM"] = CUSTOM,
+						["DEFAULT"] = DEFAULT,
+						["RESTING"] = [[|TInterface\AddOns\ElvUI\media\textures\resting:14|t]]
+					}
+				},
+				customTexture = {
+					order = 11,
 					type = "input",
 					customWidth = 250,
 					name = L["Custom Texture"],
+					disabled = function()
+						return E.db.unitframe.units['player']['RestIcon'].texture ~= "CUSTOM"
+					end,
 					set = function(_, value)
 						E.db.unitframe.units["player"]["RestIcon"].customTexture = (value and (not value:match("^%s-$")) and value) or nil
 						UF:CreateAndUpdateUF("player")
@@ -3200,10 +3214,12 @@ E.Options.args.unitframe.args.player = {
 				texture = {
 					order = 10,
 					type = "select",
+					sortByValue = true,
 					name = L["Texture"],
 					values = {
 						["CUSTOM"] = CUSTOM,
 						["DEFAULT"] = DEFAULT,
+						["COMBAT"] = [[|TInterface\AddOns\ElvUI\media\textures\combat:14|t]],
 						["ATTACK"] = [[|TInterface\CURSOR\Attack:14|t]],
 						["ALERT"] = [[|TInterface\DialogFrame\UI-Dialog-Icon-AlertNew:14|t]],
 						["ALERT2"] = [[|TInterface\OptionsFrame\UI-OptionsFrame-NewFeatureIcon:14|t]],

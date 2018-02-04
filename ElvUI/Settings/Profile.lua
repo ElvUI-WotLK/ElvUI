@@ -744,7 +744,8 @@ P["unitframe"] = {
 				["anchorPoint"] = "TOPLEFT",
 				["xOffset"] = -3,
 				["yOffset"] = 6,
-				["size"] = 22
+				["size"] = 22,
+				["texture"] = "DEFAULT"
 			},
 			["CombatIcon"] = {
 				["enable"] = true,

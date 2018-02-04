@@ -8,6 +8,7 @@ local UF = E:GetModule("UnitFrames");
 
 local CombatTextures = {
 	["DEFAULT"] = [[Interface\CharacterFrame\UI-StateIcon]],
+	["COMBAT"] = [[Interface\AddOns\ElvUI\media\textures\combat]],
 	["ATTACK"] = [[Interface\CURSOR\Attack]],
 	["ALERT"] = [[Interface\DialogFrame\UI-Dialog-Icon-AlertNew]],
 	["ALERT2"] = [[Interface\OptionsFrame\UI-OptionsFrame-NewFeatureIcon]],
