@@ -16,7 +16,6 @@ local function LoadSkin()
 	WatchFrameCollapseExpandButton.text:Point("CENTER", -1, 0)
 	WatchFrameCollapseExpandButton:SetFrameStrata("MEDIUM");
 	WatchFrameCollapseExpandButton:Point("TOPRIGHT", -20, 4)
-	WatchFrameCollapseExpandButton:SetHitRectInsets(6, 6, 7, 7)
 
 	hooksecurefunc("WatchFrame_Expand", function()
 		WatchFrameCollapseExpandButton.text:SetText("-");

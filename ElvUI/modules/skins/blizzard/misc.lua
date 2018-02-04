@@ -13,6 +13,9 @@ local function LoadSkin()
 	GameMenuFrame:StripTextures()
 	GameMenuFrame:CreateBackdrop("Transparent")
 
+	GameMenuFrameHeader:ClearAllPoints()
+	GameMenuFrameHeader:Point("TOP", GameMenuFrame, 0, 7)
+
 	local BlizzardMenuButtons = {
 		"Options",
 		"UIOptions",
@@ -139,7 +142,7 @@ local function LoadSkin()
 	S:HandleButton(CoinPickupOkayButton)
 	S:HandleButton(CoinPickupCancelButton)
 
-	-- Other Frames
+	-- Zone Text Frame
 	ZoneTextFrame:ClearAllPoints()
 	ZoneTextFrame:Point("TOP", UIParent, 0, -128)
 
