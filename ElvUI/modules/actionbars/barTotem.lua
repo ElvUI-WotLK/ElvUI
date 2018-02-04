@@ -16,58 +16,18 @@ local bar = CreateFrame("Frame", "ElvUI_BarTotem", E.UIParent, "SecureHandlerSta
 bar:SetFrameLevel(115);
 
 local SLOT_BORDER_COLORS = {
-	["summon"] = {
-		r = 0,
-		g = 0,
-		b = 0
-	},
-	[EARTH_TOTEM_SLOT] = {
-		r = 0.23,
-		g = 0.45,
-		b = 0.13
-	},
-	[FIRE_TOTEM_SLOT] = {
-		r = 0.58,
-		g = 0.23,
-		b = 0.10
-	},
-	[WATER_TOTEM_SLOT] = {
-		r = 0.19,
-		g = 0.48,
-		b = 0.60
-	},
-	[AIR_TOTEM_SLOT] = {
-		r = 0.42,
-		g = 0.18,
-		b = 0.74
-	}
+	["summon"]			= {r = 0, g = 0, b = 0},
+	[EARTH_TOTEM_SLOT]	= {r = 0.23, g = 0.45, b = 0.13},
+	[FIRE_TOTEM_SLOT]	= {r = 0.58, g = 0.23, b = 0.10},
+	[WATER_TOTEM_SLOT]	= {r = 0.19, g = 0.48, b = 0.60},
+	[AIR_TOTEM_SLOT]	= {r = 0.42, g = 0.18, b = 0.74}
 }
 
 local SLOT_EMPTY_TCOORDS = {
-	[EARTH_TOTEM_SLOT] = {
-		left	= 66 / 128,
-		right	= 96 / 128,
-		top		= 3 / 256,
-		bottom	= 33 / 256
-	},
-	[FIRE_TOTEM_SLOT] = {
-		left	= 67 / 128,
-		right	= 97 / 128,
-		top		= 100 / 256,
-		bottom	= 130 / 256
-	},
-	[WATER_TOTEM_SLOT] = {
-		left	= 39 / 128,
-		right	= 69 / 128,
-		top		= 209 / 256,
-		bottom	= 239 / 256
-	},
-	[AIR_TOTEM_SLOT] = {
-		left	= 66 / 128,
-		right	= 96 / 128,
-		top		= 36 / 256,
-		bottom	= 66 / 256
-	}
+	[EARTH_TOTEM_SLOT]	= {left = 66/128, right = 96/128, top = 3/256, bottom = 33/256},
+	[FIRE_TOTEM_SLOT]	= {left = 67/128, right = 97/128, top = 100/256, bottom = 130/256},
+	[WATER_TOTEM_SLOT]	= {left = 39/128, right = 69/128, top = 209/256, bottom = 239/256},
+	[AIR_TOTEM_SLOT]	= {left = 66/128, right = 96/128, top = 36/256, bottom = 66/256}
 };
 
 function AB:MultiCastFlyoutFrameOpenButton_Show(button, type, parent)
