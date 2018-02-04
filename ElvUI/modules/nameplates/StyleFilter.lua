@@ -470,7 +470,7 @@ function mod:StyleFilterPass(frame, actions, castbarTriggered)
 		(actions.alpha and actions.alpha ~= -1), --AlphaChanged
 		(actions.color and actions.color.name), --NameColorChanged
 		(actions.nameOnly), --NameOnlyChanged
-		(actions.hide), --VisibilityChanged
+		(actions.hide) --VisibilityChanged
 	)
 end
 
