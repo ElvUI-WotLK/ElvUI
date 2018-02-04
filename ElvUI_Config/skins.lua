@@ -85,6 +85,11 @@ E.Options.args.skins = {
 					name = L["KeyBinding Frame"],
 					desc = L["TOGGLESKIN_DESC"]
 				},
+				BlizzardOptions = {
+					type = "toggle",
+					name = INTERFACE_OPTIONS,
+					desc = L["TOGGLESKIN_DESC"]
+				},
 				calendar = {
 					type = "toggle",
 					name = L["Calendar Frame"],

@@ -9,6 +9,7 @@
 	<Script file="bgmap.lua"/>
 	<Script file="bgscore.lua"/>
 	<Script file="binding.lua"/>
+	<Script file="BlizzardOptions.lua"/>
 	<Script file="calendar.lua"/>
 	<Script file="character.lua"/>
 	<Script file="debug.lua"/>

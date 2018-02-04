@@ -62,6 +62,7 @@ V["skins"] = {
 		["bgmap"] = true,
 		["bgscore"] = true,
 		["binding"] = true,
+		["BlizzardOptions"] = true,
 		["calendar"] = true,
 		["character"] = true,
 		["debug"] = true,
