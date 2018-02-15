@@ -219,6 +219,8 @@ local function ToggleResourceBar(bars, overrideVisibility)
 	local height
 	if db.classbar then
 		height = db.classbar.height
+	elseif db.combobar then
+		height = db.combobar.height
 	elseif frame.AlternativePower then
 		height = db.power.height
 	end
