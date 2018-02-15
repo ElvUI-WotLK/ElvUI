@@ -778,6 +778,7 @@ L["Add a spell to the filter. Use spell ID if you don't want to match all auras 
 L["Add a spell to the filter."] = "添加一個技能到過濾器"
 L["Add Spell ID or Name"] = "添加技能ID或者名字"
 L["Add SpellID"] = "添加技能ID"
+L["Additional Power Text"] = "額外能量文字"
 L["An X offset (in pixels) to be used when anchoring new frames."] = "錨定新框架時的X偏移(單位:像素)"
 L["An Y offset (in pixels) to be used when anchoring new frames."] = "錨定新框架時的Y偏移(單位:像素)"
 L["Animation Speed"] = true;
@@ -1100,7 +1101,7 @@ L["Use the profile specific filter 'Buff Indicator (Profile)' instead of the glo
 L["Use thin borders on certain unitframe elements."] = "使用細邊框"
 L["Use this backdrop color for units that are dead or ghosts."] = "死亡或靈魂狀態背景"
 L["Value must be a number"] = "數值必須為一個數字"
-L["Vertical Orientation"] = "垂直方向"
+L["Vertical Fill Direction"] = true
 L["Vertical Spacing"] = "垂直間隔"
 L["Vertical"] = "垂直"
 L["Visibility"] = "可見性"

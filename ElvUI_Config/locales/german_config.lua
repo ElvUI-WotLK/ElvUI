@@ -779,6 +779,7 @@ L["Add a spell to the filter. Use spell ID if you don't want to match all auras 
 L["Add a spell to the filter."] = "Zauber zum Filter hinzufügen"
 L["Add Spell ID or Name"] = "Zauber ID oder Name hinzufügen"
 L["Add SpellID"] = "ZauberID hinzufügen"
+L["Additional Power Text"] = "Zusätzlicher Kraft Text"
 L["An X offset (in pixels) to be used when anchoring new frames."] = "X-Versatz (in Pixeln) der verwendet werden soll um neue Fenster zu ankern"
 L["An Y offset (in pixels) to be used when anchoring new frames."] = "Y-Versatz (in Pixeln) der verwendet werden soll um neue Fenster zu ankern"
 L["Animation Speed"] = true;
@@ -1101,7 +1102,7 @@ L["Use the profile specific filter 'Buff Indicator (Profile)' instead of the glo
 L["Use thin borders on certain unitframe elements."] = "Benutze dünne Rahmen auf bestimmten Einheitenfenster Elementen."
 L["Use this backdrop color for units that are dead or ghosts."] = "Benutze diese Hintergrundfarbe für Einheiten die Tod oder als Geist sind."
 L["Value must be a number"] = "Der Wert muss eine Zahl sein"
-L["Vertical Orientation"] = "Vertikale Ausrichtung"
+L["Vertical Fill Direction"] = "Vertikale Füllausrichtung"
 L["Vertical Spacing"] = "Vertikaler Abstand"
 L["Vertical"] = "Vertikal" --Also used in bags section
 L["Visibility"] = "Sichtbarkeit"

@@ -26,8 +26,8 @@ function UF:Construct_PlayerFrame(frame)
 		frame.Runes = self:Construct_DeathKnightResourceBar(frame);
 		frame.ClassBar = "Runes";
 	elseif(E.myclass == "DRUID") then
-		frame.DruidAltMana = self:Construct_DruidAltManaBar(frame);
-		frame.ClassBar = "DruidAltMana";
+		frame.AdditionalPower = self:Construct_AdditionalPowerBar(frame, nil, UF.UpdateClassBar)
+		frame.ClassBar = "AdditionalPower"
 	end
 
 	frame.RaidTargetIndicator = UF:Construct_RaidIcon(frame);
@@ -147,3 +147,18 @@ function UF:Update_PlayerFrame(frame, db)
 end
 
 tinsert(UF["unitstoload"], "player");
+
+local function UpdateClassBar()
+	local frame = _G["ElvUF_Player"]
+	if frame and frame.ClassBar then
+		frame:UpdateElement(frame.ClassBar)
+		UF.ToggleResourceBar(frame[frame.ClassBar])
+	end
+end
+
+local f = CreateFrame("Frame")
+f:RegisterEvent("PLAYER_ENTERING_WORLD")
+f:SetScript("OnEvent", function(self, event)
+	self:UnregisterEvent(event)
+	UpdateClassBar()
+end)

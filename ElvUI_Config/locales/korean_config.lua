@@ -826,6 +826,7 @@ L["Add a spell to the filter. Use spell ID if you don't want to match all auras 
 L["Add a spell to the filter."] = "필터에 주문을 추가합니다."
 L["Add Spell ID or Name"] = true;
 L["Add SpellID"] = "주문 ID 추가"
+L["Additional Power Text"] = true
 L["An X offset (in pixels) to be used when anchoring new frames."] = "기준 프레임에서 가로로 얼마만큼 떨어져 있을지를 결정합니다."
 L["An Y offset (in pixels) to be used when anchoring new frames."] = "기준 프레임에서 세로로 얼마만큼 떨어져 있을지를 결정합니다."
 L["Animation Speed"] = true;
@@ -1148,7 +1149,7 @@ L["Use the profile specific filter 'Buff Indicator (Profile)' instead of the glo
 L["Use thin borders on certain unitframe elements."] = true;
 L["Use this backdrop color for units that are dead or ghosts."] = true;
 L["Value must be a number"] = "값으로 숫자만 입력할 수 있습니다."
-L["Vertical Orientation"] = true;
+L["Vertical Fill Direction"] = true
 L["Vertical Spacing"] = "수직 간격"
 L["Vertical"] = "세로"
 L["Visibility"] = "표시"

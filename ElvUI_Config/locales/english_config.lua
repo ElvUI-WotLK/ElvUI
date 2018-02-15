@@ -767,6 +767,7 @@ L["Add a spell to the filter. Use spell ID if you don't want to match all auras 
 L["Add a spell to the filter."] = true;
 L["Add Spell ID or Name"] = true;
 L["Add SpellID"] = true;
+L["Additional Power Text"] = true
 L["An X offset (in pixels) to be used when anchoring new frames."] = true;
 L["An Y offset (in pixels) to be used when anchoring new frames."] = true;
 L["Animation Speed"] = true;
@@ -1089,7 +1090,7 @@ L["Use the profile specific filter 'Buff Indicator (Profile)' instead of the glo
 L["Use thin borders on certain unitframe elements."] = true;
 L["Use this backdrop color for units that are dead or ghosts."] = true;
 L["Value must be a number"] = true;
-L["Vertical Orientation"] = true;
+L["Vertical Fill Direction"] = true
 L["Vertical Spacing"] = true;
 L["Vertical"] = true; --Also used in bags section
 L["Visibility"] = true;

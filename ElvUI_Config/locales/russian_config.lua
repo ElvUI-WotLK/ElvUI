@@ -778,6 +778,7 @@ L["Add a spell to the filter. Use spell ID if you don't want to match all auras 
 L["Add a spell to the filter."] = "Добавить заклинание в фильтр"
 L["Add Spell ID or Name"] = "Добавить ID или имя заклинания"
 L["Add SpellID"] = "Добавить ID заклинания"
+L["Additional Power Text"] = "Текст дополнительного ресурса"
 L["An X offset (in pixels) to be used when anchoring new frames."] = "Отступ по оси X (в пикселях) при фиксации новой рамки."
 L["An Y offset (in pixels) to be used when anchoring new frames."] = "Отступ по оси Y (в пикселях) при фиксации новой рамки."
 L["Animation Speed"] = "Скорость анимации"
@@ -1100,7 +1101,7 @@ L["Use the profile specific filter 'Buff Indicator (Profile)' instead of the glo
 L["Use thin borders on certain unitframe elements."] = "Использовать тонкие границы на некоторых элементах рамок юнитов."
 L["Use this backdrop color for units that are dead or ghosts."] = "Использовать этот цвет фона для юнитов, которые мертвы или бегут с кладбища."
 L["Value must be a number"] = "Значение должно быть числом"
-L["Vertical Orientation"] = "Заполнение по вертикали"
+L["Vertical Fill Direction"] = true
 L["Vertical Spacing"] = "Отступ по вертикали"
 L["Vertical"] = "Вертикально" --Also used in bags section
 L["Visibility"] = "Видимость"

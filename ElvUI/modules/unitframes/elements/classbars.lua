@@ -11,7 +11,7 @@ local _, ns = ...
 local ElvUF = ns.oUF
 assert(ElvUF, "ElvUI was unable to locate oUF.")
 
-local find = string.find
+local find, sub, gsub = string.find, string.sub, string.gsub
 
 function UF:Configure_ClassBar(frame)
 	if(not frame.VARIABLES_SET) then return end
@@ -35,7 +35,8 @@ function UF:Configure_ClassBar(frame)
 	elseif (not frame.CLASSBAR_DETACHED and frame.CLASSBAR_HEIGHT > 30) then
 		frame.CLASSBAR_HEIGHT = 10
 		if db.classbar then db.classbar.height = 10 end
-		UF.ToggleResourceBar(bars)
+		local overrideVisibility = frame.ClassBar == "AdditionalPower"
+		UF.ToggleResourceBar(bars, overrideVisibility)
 	end
 
 	local CLASSBAR_WIDTH = frame.CLASSBAR_WIDTH
@@ -50,7 +51,7 @@ function UF:Configure_ClassBar(frame)
 	if(frame.USE_MINI_CLASSBAR and not frame.CLASSBAR_DETACHED) then
 		bars:ClearAllPoints()
 		bars:Point("CENTER", frame.Health.backdrop, "TOP", 0, 0)
-		if(E.myclass == "DRUID") then
+		if frame.ClassBar == "AdditionalPower" then
 			CLASSBAR_WIDTH = CLASSBAR_WIDTH * 2/3
 		else
 			CLASSBAR_WIDTH = CLASSBAR_WIDTH * (frame.MAX_CLASS_BAR - 1) / frame.MAX_CLASS_BAR
@@ -126,7 +127,13 @@ function UF:Configure_ClassBar(frame)
 				if(frame.MAX_CLASS_BAR == 1) then
 					bars[i]:SetWidth(CLASSBAR_WIDTH)
 				elseif(frame.USE_MINI_CLASSBAR) then
-					bars[i]:SetWidth((CLASSBAR_WIDTH - ((5 + (frame.BORDER*2 + frame.SPACING*2))*(frame.MAX_CLASS_BAR - 1)))/frame.MAX_CLASS_BAR)
+					if frame.CLASSBAR_DETACHED and db.classbar.orientation == "VERTICAL" then
+						bars[i]:SetWidth(CLASSBAR_WIDTH)
+						bars.Holder:SetHeight(((frame.CLASSBAR_HEIGHT + db.classbar.spacing)* frame.MAX_CLASS_BAR) - db.classbar.spacing) -- fix the holder height
+					else
+						bars[i]:SetWidth((CLASSBAR_WIDTH - ((5 + (frame.BORDER*2 + frame.SPACING*2))*(frame.MAX_CLASS_BAR - 1)))/frame.MAX_CLASS_BAR) --Width accounts for 5px spacing between each button, excluding borders
+						bars.Holder:SetHeight(frame.CLASSBAR_HEIGHT) -- set the holder height to default
+					end
 				elseif(i ~= frame.MAX_CLASS_BAR) then
 					bars[i]:Width((CLASSBAR_WIDTH - ((frame.MAX_CLASS_BAR-1)*(frame.BORDER-frame.SPACING))) / frame.MAX_CLASS_BAR)
 				end
@@ -137,7 +144,11 @@ function UF:Configure_ClassBar(frame)
 					bars[i]:Point("LEFT", bars)
 				else
 					if(frame.USE_MINI_CLASSBAR) then
-						bars[i]:Point("LEFT", bars[i-1], "RIGHT", (5 + frame.BORDER*2 + frame.SPACING*2), 0)
+						if frame.CLASSBAR_DETACHED and db.classbar.orientation == "VERTICAL" then
+							bars[i]:Point("BOTTOM", bars[i-1], "TOP", 0, (db.classbar.spacing + frame.BORDER*2 + frame.SPACING*2))
+						else
+							bars[i]:Point("LEFT", bars[i-1], "RIGHT", (db.classbar.spacing + frame.BORDER*2 + frame.SPACING*2), 0) --5px spacing between borders of each button(replaced with Detached Spacing option)
+						end
 					elseif i == frame.MAX_CLASS_BAR then
 						bars[i]:Point("LEFT", bars[i-1], "RIGHT", frame.BORDER-frame.SPACING, 0)
 						bars[i]:Point("RIGHT", bars)
@@ -174,6 +185,13 @@ function UF:Configure_ClassBar(frame)
 		else
 			bars.backdrop:Hide()
 		end
+
+	elseif frame.ClassBar == "AdditionalPower" then
+		if frame.CLASSBAR_DETACHED and db.classbar.verticalOrientation then
+			bars:SetOrientation("VERTICAL")
+		else
+			bars:SetOrientation("HORIZONTAL")
+		end
 	end
 
 	if(frame.CLASSBAR_DETACHED and db.classbar.parent == "UIPARENT") then
@@ -201,8 +219,8 @@ local function ToggleResourceBar(bars, overrideVisibility)
 	local height
 	if db.classbar then
 		height = db.classbar.height
-	elseif db.combobar then
-		height = db.combobar.height
+	elseif frame.AlternativePower then
+		height = db.power.height
 	end
 
 	if bars.text then
@@ -264,71 +282,99 @@ function UF:PostVisibilityRunes(enabled, stateChanged)
 	end
 end
 
-function UF:Construct_DruidAltManaBar(frame)
-	local dpower = CreateFrame("Frame", nil, frame)
-	dpower:CreateBackdrop("Default", nil, nil, self.thinBorders, true)
-	dpower.colorPower = true
-	dpower.PostUpdateVisibility = UF.DruidManaPostUpdateVisibility
-	dpower.PostUpdatePower = UF.DruidPostUpdateAltPower
+function UF:Construct_AdditionalPowerBar(frame)
+	local additionalPower = CreateFrame("StatusBar", "AdditionalPowerBar", frame)
+	additionalPower:SetFrameLevel(additionalPower:GetFrameLevel() + 1)
+	additionalPower.colorPower = true
+	additionalPower.PostUpdate = UF.PostUpdateAdditionalPower
+	additionalPower.PostUpdateVisibility = UF.PostVisibilityAdditionalPower
+	additionalPower:CreateBackdrop("Default")
+	UF["statusbars"][additionalPower] = true
+	additionalPower:SetStatusBarTexture(E["media"].blankTex)
 
-	dpower.ManaBar = CreateFrame("StatusBar", nil, dpower)
-	UF["statusbars"][dpower.ManaBar] = true
-	dpower.ManaBar:SetStatusBarTexture(E["media"].blankTex)
-	dpower.ManaBar:SetAllPoints(dpower)
+	additionalPower.bg = additionalPower:CreateTexture(nil, "BORDER")
+	additionalPower.bg:SetAllPoints(additionalPower)
+	additionalPower.bg:SetTexture(E["media"].blankTex)
+	additionalPower.bg.multiplier = 0.3
 
-	dpower.bg = dpower:CreateTexture(nil, "BORDER")
-	dpower.bg:SetAllPoints(dpower.ManaBar)
-	dpower.bg:SetTexture(E["media"].blankTex)
-	dpower.bg.multiplier = 0.3
+	additionalPower.text = additionalPower:CreateFontString(nil, "OVERLAY")
+	UF:Configure_FontString(additionalPower.text)
 
-	dpower.Text = dpower:CreateFontString(nil, "OVERLAY")
-	UF:Configure_FontString(dpower.Text)
+	additionalPower:SetScript("OnShow", ToggleResourceBar)
+	additionalPower:SetScript("OnHide", ToggleResourceBar)
 
-	return dpower
+	return additionalPower
 end
 
-function UF:DruidManaPostUpdateVisibility()
+function UF:PostUpdateAdditionalPower(_, min, max, event)
 	local frame = self.origParent or self:GetParent()
-
-	ToggleResourceBar(frame[frame.ClassBar])
-end
-
-function UF:DruidPostUpdateAltPower(unit, min, max)
-	local frame = self.origParent or self:GetParent()
-	local powerText = frame.Power.value
-	local powerTextParent = powerText:GetParent()
 	local db = frame.db
 
-	local powerTextPosition = db.power.position
+	if frame.USE_CLASSBAR and ((min ~= max or (not db.classbar.autoHide)) and (event ~= "ElementDisable")) then
+		if db.classbar.additionalPowerText then
+			local powerValue = frame.Power.value
+			local powerValueText = powerValue:GetText()
+			local powerValueParent = powerValue:GetParent()
+			local powerTextPosition = db.power.position
+			local color = ElvUF["colors"].power["MANA"]
+			color = E:RGBToHex(color[1], color[2], color[3])
 
-	if min ~= max and frame[frame.ClassBar]:IsShown() then
-		local color = ElvUF["colors"].power["MANA"]
-		color = E:RGBToHex(color[1], color[2], color[3])
-
-		self.Text:SetParent(powerTextParent)
-		self.Text:ClearAllPoints()
-
-		if powerText:GetText() then
-			if find(powerTextPosition, "RIGHT") then
-				self.Text:Point("RIGHT", powerText, "LEFT", 3, 0)
-				self.Text:SetFormattedText(color.."%d%%|r |cffD7BEA5- |r", floor(min / max * 100))
-			elseif find(powerTextPosition, "LEFT") then
-				self.Text:Point("LEFT", powerText, "RIGHT", -3, 0)
-				self.Text:SetFormattedText("|cffD7BEA5 -|r"..color.." %d%%|r", floor(min / max * 100))
-			else
-				if select(4, powerText:GetPoint()) <= 0 then
-					self.Text:Point("LEFT", powerText, "RIGHT", -3, 0)
-					self.Text:SetFormattedText(" |cffD7BEA5-|r"..color.." %d%%|r", floor(min / max * 100))
-				else
-					self.Text:Point("RIGHT", powerText, "LEFT", 3, 0)
-					self.Text:SetFormattedText(color.."%d%%|r |cffD7BEA5- |r", floor(min / max * 100))
+			--Attempt to remove |cFFXXXXXX color codes in order to determine if power text is really empty
+			if powerValueText then
+				local _, endIndex = find(powerValueText, "|cff")
+				if endIndex then
+					endIndex = endIndex + 7 --Add hex code
+					powerValueText = sub(powerValueText, endIndex)
+					powerValueText = gsub(powerValueText, "%s+", "")
 				end
 			end
-		else
-			self.Text:Point(powerText:GetPoint())
-			self.Text:SetFormattedText(color.."%d%%|r", floor(min / max * 100))
+
+			self.text:ClearAllPoints()
+			if not frame.CLASSBAR_DETACHED then
+				self.text:SetParent(powerValueParent)
+				if (powerValueText and (powerValueText ~= "" and powerValueText ~= " ")) then
+					if find(powerTextPosition, "RIGHT") then
+						self.text:Point("RIGHT", powerValue, "LEFT", 3, 0)
+						self.text:SetFormattedText(color.."%d%%|r |cffD7BEA5- |r", floor(min / max * 100))
+					elseif find(powerTextPosition, "LEFT") then
+						self.text:Point("LEFT", powerValue, "RIGHT", -3, 0)
+						self.text:SetFormattedText("|cffD7BEA5 -|r"..color.." %d%%|r", floor(min / max * 100))
+					else
+						if select(4, powerValue:GetPoint()) <= 0 then
+							self.text:Point("LEFT", powerValue, "RIGHT", -3, 0)
+							self.text:SetFormattedText(" |cffD7BEA5-|r"..color.." %d%%|r", floor(min / max * 100))
+						else
+							self.text:Point("RIGHT", powerValue, "LEFT", 3, 0)
+							self.text:SetFormattedText(color.."%d%%|r |cffD7BEA5- |r", floor(min / max * 100))
+						end
+					end
+				else
+					self.text:Point(powerValue:GetPoint())
+					self.text:SetFormattedText(color.."%d%%|r", floor(min / max * 100))
+				end
+			else
+				self.text:SetParent(self)
+				self.text:Point("CENTER", self)
+				self.text:SetFormattedText(color.."%d%%|r", floor(min / max * 100))
+			end
+		else --Text disabled
+			self.text:SetText()
 		end
-	else
-		self.Text:SetText()
+		self:Show()
+	else --Bar disabled
+		self.text:SetText()
+		self:Hide()
+	end
+end
+
+function UF:PostVisibilityAdditionalPower(enabled, stateChanged)
+	local frame = self.origParent or self:GetParent()
+
+	if stateChanged then
+		ToggleResourceBar(frame[frame.ClassBar])
+		UF:Configure_ClassBar(frame)
+		UF:Configure_HealthBar(frame)
+		UF:Configure_Power(frame)
+		UF:Configure_InfoPanel(frame, true) --2nd argument is to prevent it from setting template, which removes threat border
 	end
 end
