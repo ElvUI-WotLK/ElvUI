@@ -22,6 +22,11 @@ function UF:Construct_PlayerFrame(frame)
 	frame.Debuffs = self:Construct_Debuffs(frame);
 	frame.Castbar = self:Construct_Castbar(frame, L["Player Castbar"]);
 
+	if CAN_HAVE_CLASSBAR then
+		frame.ClassBarHolder = CreateFrame("Frame", nil, frame)
+		frame.ClassBarHolder:Point("BOTTOM", E.UIParent, "BOTTOM", 0, 150)
+	end
+
 	if(E.myclass == "DEATHKNIGHT") then
 		frame.Runes = self:Construct_DeathKnightResourceBar(frame);
 		frame.ClassBar = "Runes";

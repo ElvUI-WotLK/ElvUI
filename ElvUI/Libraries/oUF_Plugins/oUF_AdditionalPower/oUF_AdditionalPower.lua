@@ -7,7 +7,6 @@ local function UpdateColor(element, cur, max)
 	local parent = element.__owner
 
 	local r, g, b, t
-	local ptype, ptoken, altR, altG, altB = UnitPowerType('player')
 	if(element.colorClass) then
 		t = self.colors.class['DRUID']
 	elseif(element.colorSmooth) then
@@ -86,14 +85,8 @@ end
 local function Visibility(self, event, unit)
 	local shouldEnable
 
-	if(not UnitHasVehicleUI('player')) then
-		if(UnitPowerType('player') == SPELL_POWER_MANA) then
-			shouldEnable = false
-		else
-			shouldEnable = true
-		end
-	else
-		shouldEnable = false
+	if(UnitPowerType('player') ~= SPELL_POWER_MANA) then
+		shouldEnable = true
 	end
 
 	if(shouldEnable) then
