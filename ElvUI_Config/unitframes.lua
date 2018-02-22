@@ -24,8 +24,8 @@ local FRIEND, ENEMY, SHOW, HIDE, DELETE, NONE, FILTERS, FONT_SIZE, COLOR = FRIEN
 
 local SHIFT_KEY, ALT_KEY, CTRL_KEY = SHIFT_KEY, ALT_KEY, CTRL_KEY
 local HEALTH, MANA, NAME, PLAYER, CLASS, ROLE, GROUP = HEALTH, MANA, NAME, PLAYER, CLASS, ROLE, GROUP
-local RAGE, FOCUS, ENERGY, PAIN, FURY, INSANITY, MAELSTROM, RUNIC_POWER, HOLY_POWER, LUNAR_POWER = RAGE, FOCUS, ENERGY, PAIN, FURY, INSANITY, MAELSTROM, RUNIC_POWER, HOLY_POWER, LUNAR_POWER
-local POWER_TYPE_ARCANE_CHARGES, SOUL_SHARDS, RUNES = POWER_TYPE_ARCANE_CHARGES, SOUL_SHARDS, RUNES
+local RAGE, FOCUS, ENERGY, RUNIC_POWER = RAGE, FOCUS, ENERGY, RUNIC_POWER
+local RUNES, COMBAT_TEXT_RUNE_BLOOD, COMBAT_TEXT_RUNE_UNHOLY, COMBAT_TEXT_RUNE_FROST, COMBAT_TEXT_RUNE_DEATH = RUNES, COMBAT_TEXT_RUNE_BLOOD, COMBAT_TEXT_RUNE_UNHOLY, COMBAT_TEXT_RUNE_FROST, COMBAT_TEXT_RUNE_DEATH
 ------------------------------
 
 local ACD = LibStub("AceConfigDialog-3.0-ElvUI")
@@ -2647,6 +2647,52 @@ E.Options.args.unitframe = {
 								},
 							},
 						},
+						debuffHighlight = {
+							order = 8,
+							type = "group",
+							name = L["Debuff Highlighting"],
+							get = function(info)
+								local t = E.db.unitframe.colors.debuffHighlight[ info[#info] ]
+								local d = P.unitframe.colors.debuffHighlight[ info[#info] ]
+								return t.r, t.g, t.b, t.a, d.r, d.g, d.b, d.a
+							end,
+							set = function(info, r, g, b, a)
+								local t = E.db.unitframe.colors.debuffHighlight[ info[#info] ]
+								t.r, t.g, t.b, t.a = r, g, b, a
+								UF:Update_AllFrames()
+							end,
+							args = {
+								header = {
+									order = 1,
+									type = "header",
+									name = L["Debuff Highlighting"]
+								},
+								Magic = {
+									order = 2,
+									type = "color",
+									name = L["Magic Effect"],
+									hasAlpha = true,
+								},
+								Curse = {
+									order = 3,
+									type = "color",
+									name = L["Curse Effect"],
+									hasAlpha = true,
+								},
+								Disease = {
+									order = 4,
+									type = "color",
+									name = L["Disease Effect"],
+									hasAlpha = true,
+								},
+								Poison = {
+									order = 5,
+									type = "color",
+									name = L["Poison Effect"],
+									hasAlpha = true,
+								}
+							}
+						}
 					},
 				},
 				disabledBlizzardFrames = {
@@ -7087,10 +7133,10 @@ if P.unitframe.colors.classResources[E.myclass] then
 	local ORDER = 20
 	if E.myclass == "DEATHKNIGHT" then
 		local names = {
-			[1] = L["Blood"],
-			[2] = L["Unholy"],
-			[3] = L["Frost"],
-			[4] = L["Death"]
+			[1] = COMBAT_TEXT_RUNE_BLOOD,
+			[2] = COMBAT_TEXT_RUNE_UNHOLY,
+			[3] = COMBAT_TEXT_RUNE_FROST,
+			[4] = COMBAT_TEXT_RUNE_DEATH
 		}
 		for i = 1, 4 do
 			E.Options.args.unitframe.args.generalOptionsGroup.args.allColorsGroup.args.classResourceGroup.args["resource"..i] = {

@@ -351,12 +351,16 @@ function UF:UpdateColors()
 	ElvUF.colors.reaction[6] = good;
 	ElvUF.colors.reaction[7] = good;
 	ElvUF.colors.reaction[8] = good;
-	ElvUF.colors.smooth = {1, 0, 0,
-	1, 1, 0,
-	unpack(E:GetColorTable(db.health))}
+	ElvUF.colors.smooth = {1, 0, 0, 1, 1, 0, unpack(E:GetColorTable(db.health))}
 
 	ElvUF.colors.castColor = E:GetColorTable(db.castColor);
 	ElvUF.colors.castNoInterrupt = E:GetColorTable(db.castNoInterrupt);
+
+	ElvUF.colors.DebuffHighlight = {}
+	ElvUF.colors.DebuffHighlight["Magic"] = E:GetColorTable(db.debuffHighlight.Magic)
+	ElvUF.colors.DebuffHighlight["Curse"] = E:GetColorTable(db.debuffHighlight.Curse)
+	ElvUF.colors.DebuffHighlight["Disease"] = E:GetColorTable(db.debuffHighlight.Disease)
+	ElvUF.colors.DebuffHighlight["Poison"] = E:GetColorTable(db.debuffHighlight.Poison)
 end
 
 function UF:Update_StatusBars()
