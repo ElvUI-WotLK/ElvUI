@@ -496,6 +496,10 @@ local function GetOptionsTable_Auras(friendlyUnitOnly, auraType, isGroupFrame, u
 				["HEALTH"] = L["Health"],
 				["POWER"] = L["Power"],
 			},
+			disabled = function()
+				local smartAuraPosition = E.db.unitframe.units[groupName].smartAuraPosition
+				return (smartAuraPosition and (smartAuraPosition == "BUFFS_ON_DEBUFFS" or smartAuraPosition == "FLUID_BUFFS_ON_DEBUFFS"))
+			end
 		}
 	else
 		config.args.attachTo = {
@@ -509,6 +513,10 @@ local function GetOptionsTable_Auras(friendlyUnitOnly, auraType, isGroupFrame, u
 				["HEALTH"] = L["Health"],
 				["POWER"] = L["Power"],
 			},
+			disabled = function()
+				local smartAuraPosition = E.db.unitframe.units[groupName].smartAuraPosition
+				return (smartAuraPosition and (smartAuraPosition == "DEBUFFS_ON_BUFFS" or smartAuraPosition == "FLUID_DEBUFFS_ON_BUFFS"))
+			end
 		}
 	end
 
