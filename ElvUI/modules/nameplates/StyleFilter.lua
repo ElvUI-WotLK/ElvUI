@@ -539,8 +539,11 @@ function mod:StyleFilterConfigureEvents()
 				end
 
 				if filter.triggers.powerThreshold then
-					self.StyleFilterEvents["UNIT_POWER"] = true
-					self.StyleFilterEvents["UNIT_POWER_FREQUENT"] = true
+					self.StyleFilterEvents["UNIT_MANA"] = true
+					self.StyleFilterEvents["UNIT_ENERGY"] = true
+					self.StyleFilterEvents["UNIT_FOCUS"] = true
+					self.StyleFilterEvents["UNIT_RAGE"] = true
+					self.StyleFilterEvents["UNIT_RUNIC_POWER"] = true
 					self.StyleFilterEvents["UNIT_DISPLAYPOWER"] = true
 				end
 

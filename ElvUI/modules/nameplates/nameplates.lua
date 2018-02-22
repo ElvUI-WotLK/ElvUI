@@ -838,8 +838,24 @@ function mod:UNIT_HEALTH()
 	mod:ForEachPlate("UpdateElement_Filters", "UNIT_HEALTH")
 end
 
-function mod:UNIT_POWER()
-	mod:ForEachPlate("UpdateElement_Filters", "UNIT_POWER")
+function mod:UNIT_MANA()
+	mod:ForEachPlate("UpdateElement_Filters", "UNIT_MANA")
+end
+
+function mod:UNIT_ENERGY()
+	mod:ForEachPlate("UpdateElement_Filters", "UNIT_ENERGY")
+end
+
+function mod:UNIT_FOCUS()
+	mod:ForEachPlate("UpdateElement_Filters", "UNIT_FOCUS")
+end
+
+function mod:UNIT_RAGE()
+	mod:ForEachPlate("UpdateElement_Filters", "UNIT_RAGE")
+end
+
+function mod:UNIT_RUNIC_POWER()
+	mod:ForEachPlate("UpdateElement_Filters", "UNIT_RUNIC_POWER")
 end
 
 function mod:SPELL_UPDATE_COOLDOWN()
@@ -963,7 +979,11 @@ function mod:Initialize()
 	self:RegisterEvent("PLAYER_LOGOUT") -- used in the StyleFilter
 	self:RegisterEvent("PLAYER_TARGET_CHANGED")
 	self:RegisterEvent("UNIT_HEALTH")
-	self:RegisterEvent("UNIT_POWER")
+	self:RegisterEvent("UNIT_MANA")
+	self:RegisterEvent("UNIT_ENERGY")
+	self:RegisterEvent("UNIT_FOCUS")
+	self:RegisterEvent("UNIT_RAGE")
+	self:RegisterEvent("UNIT_RUNIC_POWER")
 	self:RegisterEvent("SPELL_UPDATE_COOLDOWN")
 
 	-- Arena & Arena Pets
