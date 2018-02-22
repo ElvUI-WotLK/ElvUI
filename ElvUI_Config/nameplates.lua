@@ -677,6 +677,7 @@ local function UpdateFilterGroup()
 				},
 				power = {
 					order = 10,
+					type = "group",
 					name = L["Power Threshold"],
 					disabled = function() return not (E.db.nameplates and E.db.nameplates.filters and E.db.nameplates.filters[selectedNameplateFilter] and E.db.nameplates.filters[selectedNameplateFilter].triggers and E.db.nameplates.filters[selectedNameplateFilter].triggers.enable) end,
 					args = {
@@ -734,7 +735,6 @@ local function UpdateFilterGroup()
 				},
 				levels = {
 					order = 11,
-					type = "group",
 					type = "group",
 					name = LEVEL,
 					disabled = function() return not (E.db.nameplates and E.db.nameplates.filters and E.db.nameplates.filters[selectedNameplateFilter] and E.db.nameplates.filters[selectedNameplateFilter].triggers and E.db.nameplates.filters[selectedNameplateFilter].triggers.enable) end,
