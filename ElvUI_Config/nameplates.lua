@@ -675,8 +675,66 @@ local function UpdateFilterGroup()
 						},
 					},
 				},
-				levels = {
+				power = {
 					order = 10,
+					name = L["Power Threshold"],
+					disabled = function() return not (E.db.nameplates and E.db.nameplates.filters and E.db.nameplates.filters[selectedNameplateFilter] and E.db.nameplates.filters[selectedNameplateFilter].triggers and E.db.nameplates.filters[selectedNameplateFilter].triggers.enable) end,
+					args = {
+						powerThreshold = {
+							order = 1,
+							type = "toggle",
+							name = L["Enable"],
+							desc = L["Enabling this will check your power amount."],
+							get = function(info)
+								return E.global.nameplates.filters[selectedNameplateFilter].triggers.powerThreshold
+							end,
+							set = function(info, value)
+								E.global.nameplates.filters[selectedNameplateFilter].triggers.powerThreshold = value
+								NP:ConfigureAll()
+							end
+						},
+						spacer1 = {
+							order = 2,
+							type = "description",
+							name = " "
+						},
+						underPowerThreshold = {
+							order = 3,
+							type = "range",
+							name = L["Under Power Threshold"],
+							desc = L["If this threshold is used then the power of the unit needs to be lower than this value in order for the filter to activate. Set to 0 to disable."],
+							min = 0, max = 1, step = 0.01,
+							isPercent = true,
+							disabled = function() return not E.global.nameplates.filters[selectedNameplateFilter].triggers.powerThreshold end,
+							get = function(info)
+								return E.global.nameplates.filters[selectedNameplateFilter].triggers.underPowerThreshold or 0
+							end,
+							set = function(info, value)
+								E.global.nameplates.filters[selectedNameplateFilter].triggers.underPowerThreshold = value
+								NP:ConfigureAll()
+							end
+						},
+						overPowerThreshold = {
+							order = 4,
+							type = "range",
+							name = L["Over Power Threshold"],
+							desc = L["If this threshold is used then the power of the unit needs to be higher than this value in order for the filter to activate. Set to 0 to disable."],
+							min = 0, max = 1, step = 0.01,
+							isPercent = true,
+							disabled = function() return not E.global.nameplates.filters[selectedNameplateFilter].triggers.powerThreshold end,
+							get = function(info)
+								return E.global.nameplates.filters[selectedNameplateFilter].triggers.overPowerThreshold or 0
+							end,
+							set = function(info, value)
+								E.global.nameplates.filters[selectedNameplateFilter].triggers.overPowerThreshold = value
+								NP:ConfigureAll()
+							end
+						}
+					}
+				},
+				levels = {
+					order = 11,
+					type = "group",
 					type = "group",
 					name = LEVEL,
 					disabled = function() return not (E.db.nameplates and E.db.nameplates.filters and E.db.nameplates.filters[selectedNameplateFilter] and E.db.nameplates.filters[selectedNameplateFilter].triggers and E.db.nameplates.filters[selectedNameplateFilter].triggers.enable) end,
@@ -761,7 +819,7 @@ local function UpdateFilterGroup()
 				},
 				cooldowns = {
 					name = L["Cooldowns"],
-					order = 11,
+					order = 12,
 					type = "group",
 					disabled = function() return not (E.db.nameplates and E.db.nameplates.filters and E.db.nameplates.filters[selectedNameplateFilter] and E.db.nameplates.filters[selectedNameplateFilter].triggers and E.db.nameplates.filters[selectedNameplateFilter].triggers.enable) end,
 					args = {
@@ -817,7 +875,7 @@ local function UpdateFilterGroup()
 				},
 				buffs = {
 					name = L["Buffs"],
-					order = 12,
+					order = 13,
 					type = "group",
 					disabled = function() return not (E.db.nameplates and E.db.nameplates.filters and E.db.nameplates.filters[selectedNameplateFilter] and E.db.nameplates.filters[selectedNameplateFilter].triggers and E.db.nameplates.filters[selectedNameplateFilter].triggers.enable) end,
 					args = {
@@ -915,7 +973,7 @@ local function UpdateFilterGroup()
 				},
 				debuffs = {
 					name = L["Debuffs"],
-					order = 13,
+					order = 14,
 					type = "group",
 					disabled = function() return not (E.db.nameplates and E.db.nameplates.filters and E.db.nameplates.filters[selectedNameplateFilter] and E.db.nameplates.filters[selectedNameplateFilter].triggers and E.db.nameplates.filters[selectedNameplateFilter].triggers.enable) end,
 					args = {
@@ -1012,7 +1070,7 @@ local function UpdateFilterGroup()
 					},
 				},
 				nameplateType = {
-					order = 14,
+					order = 15,
 					type = "group",
 					name = L["Unit Type"],
 					disabled = function() return not (E.db.nameplates and E.db.nameplates.filters and E.db.nameplates.filters[selectedNameplateFilter] and E.db.nameplates.filters[selectedNameplateFilter].triggers and E.db.nameplates.filters[selectedNameplateFilter].triggers.enable) end,
@@ -1090,7 +1148,7 @@ local function UpdateFilterGroup()
 				},
 				reactionType = {
 					name = L["Reaction Type"],
-					order = 15,
+					order = 16,
 					type = "group",
 					disabled = function() return not (E.db.nameplates and E.db.nameplates.filters and E.db.nameplates.filters[selectedNameplateFilter] and E.db.nameplates.filters[selectedNameplateFilter].triggers and E.db.nameplates.filters[selectedNameplateFilter].triggers.enable) end,
 					args = {
@@ -1154,7 +1212,7 @@ local function UpdateFilterGroup()
 					},
 				},
 				instanceType = {
-					order = 16,
+					order = 17,
 					type = "group",
 					name = L["Instance Type"],
 					disabled = function() return not (E.db.nameplates and E.db.nameplates.filters and E.db.nameplates.filters[selectedNameplateFilter] and E.db.nameplates.filters[selectedNameplateFilter].triggers and E.db.nameplates.filters[selectedNameplateFilter].triggers.enable) end,

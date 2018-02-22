@@ -238,6 +238,7 @@ function mod:StyleFilterConditionCheck(frame, filter, trigger, failed)
 	local condition, name, inCombat, reaction, spell;
 	local _, instanceType, instanceDifficulty;
 	local level, myLevel, curLevel, minLevel, maxLevel, matchMyLevel, myRole;
+	local power, maxPower, percPower, underPowerThreshold, overPowerThreshold
 	local health, maxHealth, percHealth, underHealthThreshold, overHealthThreshold;
 
 	local castbarShown = frame.CastBar:IsShown()
@@ -305,6 +306,20 @@ function mod:StyleFilterConditionCheck(frame, filter, trigger, failed)
 		underHealthThreshold = trigger.underHealthThreshold and (trigger.underHealthThreshold ~= 0) and (trigger.underHealthThreshold > percHealth)
 		overHealthThreshold = trigger.overHealthThreshold and (trigger.overHealthThreshold ~= 0) and (trigger.overHealthThreshold < percHealth)
 		if underHealthThreshold or overHealthThreshold then
+			condition = true
+		end
+		failed = not condition
+	end
+
+	--Try to match by power conditions
+	if not failed and trigger.powerThreshold then
+		condition = false
+		power = (trigger.powerThreshold and UnitPower("player")) or 0
+		maxPower = (trigger.powerThreshold and UnitPowerMax("player")) or 0
+		percPower = (maxPower and (maxPower > 0) and power/maxPower) or 0
+		underPowerThreshold = trigger.underPowerThreshold and (trigger.underPowerThreshold ~= 0) and (trigger.underPowerThreshold > percPower)
+		overPowerThreshold = trigger.overPowerThreshold and (trigger.overPowerThreshold ~= 0) and (trigger.overPowerThreshold < percPower)
+		if underPowerThreshold or overPowerThreshold then
 			condition = true
 		end
 		failed = not condition
@@ -521,6 +536,12 @@ function mod:StyleFilterConfigureEvents()
 					self.StyleFilterEvents["UNIT_HEALTH"] = true
 					self.StyleFilterEvents["UNIT_MAXHEALTH"] = true
 					self.StyleFilterEvents["UNIT_HEALTH_FREQUENT"] = true
+				end
+
+				if filter.triggers.powerThreshold then
+					self.StyleFilterEvents["UNIT_POWER"] = true
+					self.StyleFilterEvents["UNIT_POWER_FREQUENT"] = true
+					self.StyleFilterEvents["UNIT_DISPLAYPOWER"] = true
 				end
 
 				if next(filter.triggers.names) then
