@@ -71,7 +71,6 @@ L["Deficit:"] = "赤字:"
 L["DPS"] = "伤害输出"
 L["Earned:"] = "赚取:"
 L["Friends List"] = "好友列表"
-L["Friends"] = "好友" --Also in Skins
 L["Gold"] = "金"
 L["goldabbrev"] = "|cffffd700金|r"
 L["Hit"] = "命中"
@@ -175,7 +174,6 @@ L["This part of the installation process sets up your World of Warcraft default 
 L["This resolution doesn't require that you change settings for the UI to fit on your screen."] = "这个分辨率不需要你改动任何设置以适应你的屏幕."
 L["This resolution requires that you change some settings to get everything to fit on your screen."] = "这个分辨率需要你改变一些设置才能适应你的屏幕."
 L["This will change the layout of your unitframes and actionbars."] = "这将会改变你单位框架和动作条的构架."
-L["Trade"] = "拾取/交易"
 L["Welcome to ElvUI version %s!"] = "欢迎使用 ElvUI 版本 %s!"
 L["You are now finished with the installation process. If you are in need of technical support please visit us at https://github.com/ElvUI-WotLK/ElvUI"] = "你已经完成安装过程. 如果你需要技术支持请访问 https://github.com/ElvUI-WotLK/ElvUI"
 L["You can always change fonts and colors of any element of ElvUI from the in-game configuration."] = "你可以在游戏内的设定选项内更改ElvUI的字体、颜色等设定."
@@ -252,11 +250,9 @@ L["Target Frame"] = "目标框架"
 L["Target Powerbar"] = "目标能量条"
 L["TargetTarget Frame"] = "目标的目标框架"
 L["TargetTargetTarget Frame"] = "目标的目标的目标框架"
-L["Time Manager Frame"] = true;
 L["Tooltip"] = "鼠标提示"
 L["Vehicle Seat Frame"] = "载具座位框"
 L["Watch Frame"] = true;
-L["Weapons"] = true;
 L["DESC_MOVERCONFIG"] = [=[解除框架移动锁定. 现在可以移动它们, 移好后请点击「锁定」.
 
 选项：

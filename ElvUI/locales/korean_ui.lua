@@ -71,7 +71,6 @@ L["Deficit:"] = "손해:"
 L["DPS"] = "DPS"
 L["Earned:"] = "수입:"
 L["Friends List"] = "친구 목록"
-L["Friends"] = "친구"
 L["Gold"] = true;
 L["goldabbrev"] = "|TInterface\\MoneyFrame\\UI-MoneyIcons:0:0:1:0:64:16:1:16:1:16|t" --"|cffffd700●|r"
 L["Hit"] = "적중도"
@@ -175,7 +174,6 @@ L["This part of the installation process sets up your World of Warcraft default 
 L["This resolution doesn't require that you change settings for the UI to fit on your screen."] = "현재 해상도에 알맞게 UI가 배치될 것이니 설정을 변경할 필요는 없습니다."
 L["This resolution requires that you change some settings to get everything to fit on your screen."] = "해상도에 알맞는 UI 배치를 적용하려면 몇가지 설정을 변경할 필요가 있습니다."
 L["This will change the layout of your unitframes and actionbars."] = "역할에 따라서 유닛프레임과 행동단축바의 레이아웃이 알맞게 바뀝니다."
-L["Trade"] = "거래"
 L["Welcome to ElvUI version %s!"] = "ElvUI 버전 %s에 오신 것을 환영합니다!"
 L["You are now finished with the installation process. If you are in need of technical support please visit us at https://github.com/ElvUI-WotLK/ElvUI"] = "설치 과정이 끝났습니다.|n궁금한 점 해결이나 기술지원이 필요하면 |cff2eb7e4https://github.com/ElvUI-WotLK/ElvUI|r 를 방문하세요."
 L["You can always change fonts and colors of any element of ElvUI from the in-game configuration."] = "ElvUI에서 표시하는 폰트나 색상은 설정에서 언제든지 바꿀 수 있습니다."
@@ -252,11 +250,9 @@ L["Target Frame"] = "대상 프레임"
 L["Target Powerbar"] = true;
 L["TargetTarget Frame"] = "대상의대상 프레임"
 L["TargetTargetTarget Frame"] = "대상의대상의대상 프레임"
-L["Time Manager Frame"] = true;
 L["Tooltip"] = "툴팁"
 L["Vehicle Seat Frame"] = "차량 좌석 프레임"
 L["Watch Frame"] = true;
-L["Weapons"] = true;
 L["DESC_MOVERCONFIG"] = [=[프레임을 드래그로 원하는 위치로 이동시키세요.|n[잠금] 버튼을 누르면 이동모드가 종료됩니다.
 
 Options:

@@ -22,10 +22,6 @@ function UF:Configure_ClassBar(frame)
 	bars.Holder = frame.ClassBarHolder
 	bars.origParent = frame
 
-	if(bars.UpdateAllRuneTypes) then
-		bars.UpdateAllRuneTypes(frame) --????
-	end
-
 	--Fix height in case it is lower than the theme allows, or in case it's higher than 30px when not detached
 	if (not self.thinBorders and not E.PixelMode) and frame.CLASSBAR_HEIGHT > 0 and frame.CLASSBAR_HEIGHT < 7 then --A height of 7 means 6px for borders and just 1px for the actual power statusbar
 		frame.CLASSBAR_HEIGHT = 7

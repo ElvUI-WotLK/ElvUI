@@ -71,7 +71,6 @@ L["Deficit:"] = "Défice:"
 L["DPS"] = "DPS"
 L["Earned:"] = "Ganho:"
 L["Friends List"] = "Lista de Amigos"
-L["Friends"] = "Amigos"
 L["Gold"] = true;
 L["goldabbrev"] = "|cffffd700g|r"
 L["Hit"] = "Acerto"
@@ -175,7 +174,6 @@ L["This part of the installation process sets up your World of Warcraft default 
 L["This resolution doesn't require that you change settings for the UI to fit on your screen."] = "Esta resolução não exige que altere as definições para que a interface caiba no seu ecrã (monitor)."
 L["This resolution requires that you change some settings to get everything to fit on your screen."] = "Esta resolução requer que altere algumas definições para que tudo caiba no seu ecrã (monitor)."
 L["This will change the layout of your unitframes and actionbars."] = true;
-L["Trade"] = "Comércio"
 L["Welcome to ElvUI version %s!"] = "Bem-vindo à versão %s da ElvUI!"
 L["You are now finished with the installation process. If you are in need of technical support please visit us at https://github.com/ElvUI-WotLK/ElvUI"] = "O processo de instalação está agora terminado. Se precisar de suporte técnico por favor visite-nos no site https://github.com/ElvUI-WotLK/ElvUI"
 L["You can always change fonts and colors of any element of ElvUI from the in-game configuration."] = "As cores e fontes da ElvUI podem ser mudadas em qualquer momento no modo de configuração demtro do jogo."
@@ -252,11 +250,9 @@ L["Target Frame"] = "Quadro do Alvo"
 L["Target Powerbar"] = true;
 L["TargetTarget Frame"] = "Quadro do Alvo do Alvo"
 L["TargetTargetTarget Frame"] = true;
-L["Time Manager Frame"] = true;
 L["Tooltip"] = "Tooltip"
 L["Vehicle Seat Frame"] = "Quadro de Assento de Veículo"
 L["Watch Frame"] = true;
-L["Weapons"] = true;
 L["DESC_MOVERCONFIG"] = [=[Movedores destravados. Mova-os agora e clique Travar quando acabar.
 
 Options:

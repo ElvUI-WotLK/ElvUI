@@ -25,7 +25,7 @@ local FRIEND, ENEMY, SHOW, HIDE, DELETE, NONE, FILTERS, FONT_SIZE, COLOR = FRIEN
 local SHIFT_KEY, ALT_KEY, CTRL_KEY = SHIFT_KEY, ALT_KEY, CTRL_KEY
 local HEALTH, MANA, NAME, PLAYER, CLASS, ROLE, GROUP = HEALTH, MANA, NAME, PLAYER, CLASS, ROLE, GROUP
 local RAGE, FOCUS, ENERGY, RUNIC_POWER = RAGE, FOCUS, ENERGY, RUNIC_POWER
-local RUNES, COMBAT_TEXT_RUNE_BLOOD, COMBAT_TEXT_RUNE_UNHOLY, COMBAT_TEXT_RUNE_FROST, COMBAT_TEXT_RUNE_DEATH = RUNES, COMBAT_TEXT_RUNE_BLOOD, COMBAT_TEXT_RUNE_UNHOLY, COMBAT_TEXT_RUNE_FROST, COMBAT_TEXT_RUNE_DEATH
+local COMBAT_TEXT_RUNE_BLOOD, COMBAT_TEXT_RUNE_UNHOLY, COMBAT_TEXT_RUNE_FROST, COMBAT_TEXT_RUNE_DEATH = COMBAT_TEXT_RUNE_BLOOD, COMBAT_TEXT_RUNE_UNHOLY, COMBAT_TEXT_RUNE_FROST, COMBAT_TEXT_RUNE_DEATH
 ------------------------------
 
 local ACD = LibStub("AceConfigDialog-3.0-ElvUI")
@@ -3062,7 +3062,11 @@ E.Options.args.unitframe.args.player = {
 							order = 3,
 							type = "select",
 							name = L["Frame Orientation"],
-							disabled = function() return not E.db.unitframe.units["player"]["classbar"].detachFromFrame or not E.db.unitframe.units["player"]["classbar"].enable end,
+							disabled = function()
+								return (E.db.unitframe.units["player"]["classbar"].fill and (E.db.unitframe.units["player"]["classbar"].fill == "fill"))
+								or not E.db.unitframe.units["player"]["classbar"].detachFromFrame
+								or not E.db.unitframe.units["player"]["classbar"].enable
+							end,
 							values = {
 								["HORIZONTAL"] = L["Horizontal"],
 								["VERTICAL"] = L["Vertical"]
@@ -3224,7 +3228,8 @@ E.Options.args.unitframe.args.player = {
 					values = {
 						["CUSTOM"] = CUSTOM,
 						["DEFAULT"] = DEFAULT,
-						["RESTING"] = [[|TInterface\AddOns\ElvUI\media\textures\resting:14|t]]
+						["RESTING"] = [[|TInterface\AddOns\ElvUI\media\textures\resting:14|t]],
+						["RESTING1"] = [[|TInterface\AddOns\ElvUI\media\textures\resting1:14|t]]
 					}
 				},
 				customTexture = {
@@ -4413,7 +4418,7 @@ E.Options.args.unitframe.args.pet = {
 		happiness = {
 			order = 700,
 			type = "group",
-			name = L["Happiness"],
+			name = HAPPINESS,
 			get = function(info) return E.db.unitframe.units["pet"]["happiness"][ info[#info] ] end,
 			set = function(info, value) E.db.unitframe.units["pet"]["happiness"][ info[#info] ] = value; UF:CreateAndUpdateUF("pet") end,
 			disabled = E.myclass ~= "HUNTER",
@@ -4421,7 +4426,7 @@ E.Options.args.unitframe.args.pet = {
 				header = {
 					order = 1,
 					type = "header",
-					name = L["Happiness"],
+					name = HAPPINESS,
 				},
 				enable = {
 					order = 2,
