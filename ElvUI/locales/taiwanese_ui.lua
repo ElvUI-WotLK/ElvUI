@@ -87,6 +87,7 @@ L["Reload UI"] = true;
 L["Reset Counters: Hold Shift + Left Click"] = true
 L["Reset Data: Hold Shift + Right Click"] = "重置數據: 按住 Shift + 右鍵點擊"
 L["Right Click: Reset CPU Usage"] = true;
+L["Saved Dungeon(s)"] = "已有進度地城"
 L["Saved Raid(s)"] = "已有進度的副本"
 L["Server: "] = "伺服器: "
 L["Session:"] = "本次登入:"

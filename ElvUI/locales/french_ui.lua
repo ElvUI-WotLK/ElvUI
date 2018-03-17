@@ -87,6 +87,7 @@ L["Reload UI"] = true;
 L["Reset Counters: Hold Shift + Left Click"] = true
 L["Reset Data: Hold Shift + Right Click"] = "RAZ des données: MAJ + Clic droit"
 L["Right Click: Reset CPU Usage"] = true;
+L["Saved Dungeon(s)"] = "Donjon(s) sauvegardé(s)"
 L["Saved Raid(s)"] = "Raid(s) Sauvegardé(s)"
 L["Server: "] = "Serveur: "
 L["Session:"] = "Session:"
