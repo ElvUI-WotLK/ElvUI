@@ -20,7 +20,6 @@ local timeDisplayFormat = "";
 local dateDisplayFormat = "";
 local europeDisplayFormat_nocolor = join("", "%02d", ":|r%02d");
 local lockoutInfoFormat = "%s%s %s |cffaaaaaa(%s)"
-local difficultyInfo = {"N", "N", "H", "H"};
 local lockoutColorExtended, lockoutColorNormal = {r = 0.3, g = 1, b = 0.3}, {r = .8, g = .8, b = .8};
 
 local function OnClick(_, btn)
@@ -85,20 +84,18 @@ local function OnEnter(self)
 	DT.tooltip:AddDoubleLine(L["Wintergrasp"], wgtime, 1, 1, 1, lockoutColorNormal.r, lockoutColorNormal.g, lockoutColorNormal.b);
 
 	local lockedInstances = {raids = {}, dungeons = {}}
-	local name, reset, difficulty, locked, extended, isRaid, maxPlayers, difficultyName
-	local isHeroicDungeon, difficultyLetter, buttonImg
+	local name, reset, difficulty, locked, extended, isRaid, maxPlayers
+	local difficultyLetter, buttonImg
 	
 	for i = 1, GetNumSavedInstances() do
-		name, _, reset, difficulty, locked, extended, _, isRaid, maxPlayers, difficultyName = GetSavedInstanceInfo(i);
+		name, _, reset, difficulty, locked, extended, _, isRaid, maxPlayers = GetSavedInstanceInfo(i)
 		if (locked or extended) and name then
-			isHeroicDungeon = difficulty == 2
-
-			difficultyLetter = difficultyTag[difficulty]
+			difficultyLetter = difficultyTag[(isRaid and difficulty == 2 and 3 or 4) or difficulty]
 			buttonImg = instanceIconByName[name] and format("|T%s:22:22:0:0:96:96:0:64:0:64|t ", "Interface\\LFGFrame\\LFGIcon-"..instanceIconByName[name]) or ""
 
 			if isRaid then
 				tinsert(lockedInstances["raids"], {name, buttonImg, reset, difficultyLetter, extended, maxPlayers})
-			elseif isHeroicDungeon then
+			elseif difficulty == 2 then
 				tinsert(lockedInstances["dungeons"], {name, buttonImg, reset, difficultyLetter, extended, maxPlayers})
 			end
 		end
@@ -114,6 +111,8 @@ local function OnEnter(self)
 			lockoutColor = extended and lockoutColorExtended or lockoutColorNormal
 			DT.tooltip:AddDoubleLine(format(lockoutInfoFormat, buttonImg, maxPlayers, difficultyLetter, name), SecondsToTime(reset, false, nil, 3), 1, 1, 1, lockoutColor.r, lockoutColor.g, lockoutColor.b)
 		end
+
+		DT.tooltip:Show()
 	end
 
 	if next(lockedInstances["dungeons"]) then
@@ -126,6 +125,8 @@ local function OnEnter(self)
 			lockoutColor = extended and lockoutColorExtended or lockoutColorNormal
 			DT.tooltip:AddDoubleLine(format(lockoutInfoFormat, buttonImg, maxPlayers, difficultyLetter, name), SecondsToTime(reset, false, nil, 3), 1, 1, 1, lockoutColor.r, lockoutColor.g, lockoutColor.b)
 		end
+
+		DT.tooltip:Show()
 	end
 
 	DT.tooltip:AddLine(" ");
