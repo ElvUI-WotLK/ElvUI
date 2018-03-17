@@ -7,7 +7,7 @@ local LBF = LibStub("LibButtonFacade", true);
 --Lua functions
 local GetTime = GetTime
 local _G = _G
-local unpack, select, pairs, ipairs = unpack, select, pairs, ipairs
+local unpack, pairs, ipairs = unpack, pairs, ipairs
 local floor, min, max, huge = math.floor, math.min, math.max, math.huge
 local format = string.format
 local wipe, tinsert, tsort, tremove = table.wipe, table.insert, table.sort, table.remove
@@ -61,9 +61,11 @@ local IS_HORIZONTAL_GROWTH = {
 	LEFT_UP = true
 }
 
+A.EnchanData = {}
+
 function A:UpdateTime(elapsed)
-	if self.offset then
-		local expiration = select(self.offset, GetWeaponEnchantInfo())
+	if self.IsWeapon then
+		local expiration = A.EnchanData[self:GetID()].expiration
 		if expiration then
 			self.timeLeft = expiration / 1e3
 		else
@@ -74,7 +76,7 @@ function A:UpdateTime(elapsed)
 	end
 
 	if self.nextUpdate > 0 then
-		self.nextUpdate = not self.offset and self.nextUpdate - elapsed or 1
+		self.nextUpdate = self.nextUpdate - elapsed
 		return
 	end
 
@@ -90,8 +92,8 @@ function A:UpdateTime(elapsed)
 end
 
 local UpdateTooltip = function(self)
-	if self.offset then
-		GameTooltip:SetInventoryItem("player", self.offset == 2 and 16 or 17)
+	if self.IsWeapon then
+		GameTooltip:SetInventoryItem("player", self:GetID() == 1 and 16 or 17)
 	else
 		GameTooltip:SetUnitAura("player", self:GetID(), self:GetParent().filter)
 	end
@@ -109,10 +111,10 @@ local OnLeave = function()
 end
 
 local OnClick = function(self)
-	if self.offset then
-		if self.offset == 2 then
+	if self.IsWeapon then
+		if self:GetID() == 1 then
 			CancelItemTempEnchantment(1)
-		elseif self.offset == 5 then
+		elseif self:GetID() == 2 then
 			CancelItemTempEnchantment(2)
 		end
 	else
@@ -170,6 +172,21 @@ local enchantableSlots = {
   [1] = 16,
   [2] = 17
 }
+
+function A:HasEnchant(type, weapon, expiration)
+	if weapon and (not self.EnchanData[type] or self.EnchanData[type].expiration < expiration) then
+		self.EnchanData[type] = {}
+		self.EnchanData[type].expiration = expiration
+		return true
+	elseif self.EnchanData[type] then
+		if weapon then
+			self.EnchanData[type].expiration = expiration
+		else
+			self.EnchanData[type] = nil
+			return true
+		end
+	end
+end
 
 local buttons = {}
 function A:ConfigureAuras(header, auraTable, weaponPosition)
@@ -256,17 +273,18 @@ function A:ConfigureAuras(header, auraTable, weaponPosition)
 	end
 
 	if weaponPosition then
-		local hasMainHandEnchant, mainHandExpiration, _, hasOffHandEnchant, offHandExpiration = GetWeaponEnchantInfo()
 		for weapon = 2, 1, -1 do
 			button = _G["ElvUIPlayerBuffsTempEnchant"..weapon]
-			if select(weapon, hasMainHandEnchant, hasOffHandEnchant) then
+			if A.EnchanData[weapon] then
 				if not button then
 					button = CreateFrame("Button", "$parentTempEnchant"..weapon, header)
+					button.IsWeapon = true
 					self:CreateIcon(button)
 				end
 				if button then
 					if button:IsShown() then button:Hide() end
 
+					button:SetID(weapon)
 					local index = enchantableSlots[weapon]
 					local quality = GetInventoryItemQuality("player", index)
 					button.texture:SetTexture(GetInventoryItemTexture("player", index))
@@ -275,17 +293,20 @@ function A:ConfigureAuras(header, auraTable, weaponPosition)
 						button:SetBackdropBorderColor(GetItemQualityColor(quality))
 					end
 
-					local expirationTime = select(weapon, mainHandExpiration, offHandExpiration)
+					local expirationTime = A.EnchanData[weapon].expiration
 					if expirationTime then
-						button.offset = select(weapon, 2, 5)
-						button:SetScript("OnUpdate", A.UpdateTime)
+						if not button.timeLeft then
+							button.timeLeft = expirationTime / 1e3
+							button:SetScript("OnUpdate", self.UpdateTime)
+						else
+							button.timeLeft = expirationTime / 1e3
+						end
 						button.nextUpdate = -1
 						A.UpdateTime(button, 0)
 					else
 						button.timeLeft = nil
-						button.offset = nil
-						button:SetScript("OnUpdate", nil)
 						button.time:SetText("")
+						button:SetScript("OnUpdate", nil)
 					end
 
 					if weaponPosition == 0 then
@@ -296,7 +317,6 @@ function A:ConfigureAuras(header, auraTable, weaponPosition)
 				end
 			else
 				if button and type(button.Hide) == "function" then
-					button.offset = nil
 					button:Hide()
 				end
 			end
@@ -510,25 +530,11 @@ function A:Initialize()
 	self.BuffFrame:Point("TOPRIGHT", MMHolder, "TOPLEFT", -(6 + E.Border), -E.Border - E.Spacing)
 	E:CreateMover(self.BuffFrame, "BuffsMover", L["Player Buffs"])
 
-	self.BuffFrame.GetUpdateWeaponEnchant = function(self)
-		local hasMainHandEnchant, _, _, hasOffHandEnchant = GetWeaponEnchantInfo()
-		if hasMainHandEnchant and not self.hasMainHandEnchant then
-			self.hasMainHandEnchant = true
-			return true
-		elseif hasOffHandEnchant and not self.hasOffHandEnchant then
-			self.hasOffHandEnchant = true
-			return true
-		elseif self.hasMainHandEnchant and not hasMainHandEnchant then
-			self.hasMainHandEnchant = false
-			return true
-		elseif self.hasOffHandEnchant and not hasOffHandEnchant then
-			self.hasOffHandEnchant = false
-			return true
-		end
-	end
-	
 	self.BuffFrame:SetScript("OnUpdate", function(self)
-		if self:GetUpdateWeaponEnchant() then A:UpdateHeader(self) end
+		local hasMainHandEnchant, mainHandExpiration, _, hasOffHandEnchant, offHandExpiration = GetWeaponEnchantInfo()
+		if A:HasEnchant(1, hasMainHandEnchant, mainHandExpiration) or A:HasEnchant(2, hasOffHandEnchant, offHandExpiration) then
+			A:UpdateHeader(self)
+		end
 	end)
 
 	self.DebuffFrame = self:CreateAuraHeader("HARMFUL")
