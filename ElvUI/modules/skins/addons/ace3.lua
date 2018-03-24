@@ -306,7 +306,7 @@ function S:SkinAce3()
 
 	local oldRegisterAsContainer = AceGUI.RegisterAsContainer
 	RegisterAsContainer = function(self, widget)
-		if not E.private.skins.ace3.enable then
+		if not E.private.skins.ace3.enable or widget.barre then
 			return oldRegisterAsContainer(self, widget)
 		end
 		local TYPE = widget.type
