@@ -86,7 +86,6 @@ L["Profit:"] = "Ganancia:"
 L["Reload UI"] = true;
 L["Reset Counters: Hold Shift + Left Click"] = true
 L["Reset Data: Hold Shift + Right Click"] = "Restablecer Datos: Mantén Shift + Clic Derecho"
-L["Right Click: Reset CPU Usage"] = true;
 L["Saved Dungeon(s)"] = true
 L["Saved Raid(s)"] = "Banda(s) Guardada(s)"
 L["Server: "] = "Servidor: "

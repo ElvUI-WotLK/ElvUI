@@ -65,7 +65,7 @@ local function BuildABConfig()
 				order = 8,
 				type = "toggle",
 				name = L["Key Down"],
-				desc = OPTION_TOOLTIP_ACTION_BUTTON_USE_KEY_DOWN
+				desc = L["Action button keybinds will respond on key down, rather than on key up"]
 			},
 			lockActionBars = {
 				order = 9,

@@ -86,7 +86,6 @@ L["Profit:"] = "이익:"
 L["Reload UI"] = true;
 L["Reset Counters: Hold Shift + Left Click"] = true
 L["Reset Data: Hold Shift + Right Click"] = "기록 리셋: Shift + 우클릭"
-L["Right Click: Reset CPU Usage"] = true;
 L["Saved Dungeon(s)"] = true
 L["Saved Raid(s)"] = "귀속된 던전"
 L["Server: "] = "서버:"

@@ -86,7 +86,6 @@ L["Profit:"] = "Gewinn:"
 L["Reload UI"] = true;
 L["Reset Counters: Hold Shift + Left Click"] = "Zähler zurücksetzen: Halte Shift + Linksklick"
 L["Reset Data: Hold Shift + Right Click"] = "Daten zurücksetzen: Halte Shift + Rechtsklick"
-L["Right Click: Reset CPU Usage"] = true;
 L["Saved Dungeon(s)"] = "Gespeicherte Instanz(en)"
 L["Saved Raid(s)"] = "Gespeicherte Schlachtzüge"
 L["Server: "] = "Server: "

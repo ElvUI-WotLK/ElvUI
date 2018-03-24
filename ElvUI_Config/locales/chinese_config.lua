@@ -590,6 +590,7 @@ L["If enabled then the filter will only activate if the level of the unit is equ
 L["If enabled then the filter will only activate if the level of the unit matches this value."] = "启用后过滤器仅仅在单位等级符合该值的时候激活"
 L["If enabled then the filter will only activate if the level of the unit matches your own."] = "启用后过滤器仅仅在单位等级符合你的等级的时候激活"
 L["If enabled then the filter will only activate if the unit is casting interruptible spells."] = "启用后过滤器仅仅在单位施放可打断技能的时候激活"
+L["If enabled then the filter will only activate if the unit is casting not interruptible spells."] = "启用后过滤器仅仅在单位施放不可打断技能的时候激活"
 L["If enabled then the filter will only activate when you are in combat."] = "启用后过滤器仅仅在你在战斗中的时候激活"
 L["If enabled then the filter will only activate when you are out of combat."] = "启用后过滤器仅仅在你不在战斗中的时候激活"
 L["If enabled then the filter will only activate when you are targeting the unit."] = "启用后过滤器仅仅对当前目标激活"

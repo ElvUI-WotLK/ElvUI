@@ -581,6 +581,7 @@ L["If enabled then the filter will only activate if the level of the unit is equ
 L["If enabled then the filter will only activate if the level of the unit matches this value."] = true
 L["If enabled then the filter will only activate if the level of the unit matches your own."] = true
 L["If enabled then the filter will only activate if the unit is casting interruptible spells."] = true
+L["If enabled then the filter will only activate if the unit is casting not interruptible spells."] = true
 L["If enabled then the filter will only activate when you are in combat."] = true
 L["If enabled then the filter will only activate when you are out of combat."] = true
 L["If enabled then the filter will only activate when you are targeting the unit."] = true
