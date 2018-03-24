@@ -556,13 +556,8 @@ E.Options.args.general = {
 						["disabled"] = L["Disabled"]
 					}
 				},
-				spacer = {
-					order = 3,
-					type = "description",
-					name = " ",
-				},
 				font = {
-					order = 4,
+					order = 3,
 					type = "select",
 					name = L["Font"],
 					dialogControl = "LSM30_Font",
@@ -572,7 +567,7 @@ E.Options.args.general = {
 					disabled = function() return E.private.general.chatBubbles == "disabled"; end
 				},
 				fontSize = {
-					order = 5,
+					order = 4,
 					type = "range",
 					name = L["Font Size"],
 					get = function(info) return E.private.general.chatBubbleFontSize; end,
@@ -581,7 +576,7 @@ E.Options.args.general = {
 					disabled = function() return E.private.general.chatBubbles == "disabled"; end
 				},
 				fontOutline = {
-					order = 6,
+					order = 5,
 					type = "select",
 					name = L["Font Outline"],
 					get = function(info) return E.private.general.chatBubbleFontOutline end,
@@ -593,7 +588,15 @@ E.Options.args.general = {
 						["MONOCHROMEOUTLINE"] = "MONOCROMEOUTLINE",
 						["THICKOUTLINE"] = "THICKOUTLINE",
 					}
-				}
+				},
+				name = {
+					order = 6,
+					type = "toggle",
+					name = L["Chat Bubble Names"],
+					desc = L["Display the name of the unit on the chat bubble."],
+					get = function(info) return E.private.general.chatBubbleName end,
+					set = function(info, value) E.private.general.chatBubbleName = value; E:StaticPopup_Show("PRIVATE_RL") end,
+				},
 			}
 		},
 		watchFrame = {
