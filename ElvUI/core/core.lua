@@ -6,7 +6,7 @@ local tonumber, pairs, ipairs, error, unpack, select, tostring = tonumber, pairs
 local assert, print, type, collectgarbage, pcall, date = assert, print, type, collectgarbage, pcall, date;
 local twipe, tinsert, tremove, next = table.wipe, tinsert, tremove, next;
 local floor = floor;
-local format, find, match, strrep, len, sub, gsub = string.format, string.find, string.match, strrep, string.len, string.sub, string.gsub;
+local format, find, match, strrep, len, sub, gsub, trim = string.format, string.find, string.match, strrep, string.len, string.sub, string.gsub, string.trim;
 
 local UnitGUID = UnitGUID
 local CreateFrame = CreateFrame;
@@ -983,26 +983,26 @@ function E:UnregisterObjectForVehicleLock(object)
 end
 
 function E:ResetAllUI()
-	self:ResetMovers();
+	self:ResetMovers()
 
-	if(E.db.lowresolutionset) then
+	if E.db.lowresolutionset then
 		E:SetupResolution(true)
 	end
 
-	if(E.db.layoutSet) then
-		E:SetupLayout(E.db.layoutSet, true);
+	if E.db.layoutSet then
+		E:SetupLayout(E.db.layoutSet, true)
 	end
 end
 
-function E:ResetUI(...)
-	if(InCombatLockdown()) then E:Print(ERR_NOT_IN_COMBAT) return; end
+function E:ResetUI(moverName)
+	if InCombatLockdown() then E:Print(ERR_NOT_IN_COMBAT) return end
 
-	if(... == "" or ... == " " or ... == nil) then
-		E:StaticPopup_Show("RESETUI_CHECK");
-		return;
+	if not moverName or trim(moverName) == "" then
+		E:StaticPopup_Show("RESETUI_CHECK")
+		return
 	end
 
-	self:ResetMovers(...);
+	self:ResetMovers(moverName)
 end
 
 function E:RegisterModule(name, loadFunc)
