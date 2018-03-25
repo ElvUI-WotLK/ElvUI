@@ -758,7 +758,7 @@ function AB:UpdateButtonConfig(bar, buttonName)
 		if self.db.rightClickSelfCast then
 			button:SetAttribute("unit2", "player")
 		else
-			button:SetAttribute("unit2", "target")
+			button:SetAttribute("unit2", nil)
 		end
 
 		button:UpdateConfig(bar.buttonConfig);
