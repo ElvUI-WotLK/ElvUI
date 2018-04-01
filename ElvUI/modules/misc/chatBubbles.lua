@@ -72,7 +72,7 @@ end
 function M:AddChatBubbleName(chatBubble, guid, name)
 	if not name then return end
 
-	local defaultColor, color = "ffffffff"
+	local defaultColor, color = "|cffffffff"
 	if guid ~= nil and guid ~= "" then
 		local _, class = GetPlayerInfoByGUID(guid)
 		if class then
