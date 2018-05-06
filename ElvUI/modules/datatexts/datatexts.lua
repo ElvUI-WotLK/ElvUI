@@ -88,7 +88,7 @@ function DT:SetupObjectLDB(name, obj)
 		LDB.callbacks:Fire("LibDataBroker_AttributeChanged_"..name.."_text", name, nil, obj.text, obj)
 	end
 
-	DT:RegisterDatatext(name, {"PLAYER_ENTER_WORLD"}, OnEvent, nil, OnClick, OnEnter, OnLeave)
+	DT:RegisterDatatext(name, {"PLAYER_ENTERING_WORLD"}, OnEvent, nil, OnClick, OnEnter, OnLeave)
 
 	if DT.PanelLayoutOptions then
 		DT:PanelLayoutOptions()

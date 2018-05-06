@@ -160,7 +160,7 @@ local function LoadSkin()
 
 		if(popout) then
 			popout:StripTextures()
-			popout:SetTemplate()
+			popout:SetTemplate("Default", true)
 			popout:HookScript("OnEnter", S.SetModifiedBackdrop)
 			popout:HookScript("OnLeave", S.SetOriginalBackdrop)
 
