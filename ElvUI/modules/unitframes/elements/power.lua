@@ -34,6 +34,8 @@ function UF:Construct_PowerBar(frame, bg, text, textPos)
 		end
 
 		power.value:Point(textPos, frame.Health, textPos, x, 0)
+
+		power.value.frequentUpdates = true
 	end
 
 	power.colorDisconnected = false
