@@ -5,8 +5,8 @@ local Search = LibStub("LibItemSearch-1.2");
 local _G = _G;
 local type, ipairs, pairs, unpack, select, assert = type, ipairs, pairs, unpack, select, assert;
 local tinsert = table.insert;
-local floor, ceil = math.floor, math.ceil;
-local len, sub, find = string.len, string.sub, string.find
+local floor, ceil, abs, mod = math.floor, math.ceil, math.abs, math.fmod
+local format, len, sub, gsub = string.format, string.len, string.sub, string.gsub
 
 local CreateFrame = CreateFrame;
 local GetContainerNumSlots = GetContainerNumSlots;
@@ -26,6 +26,7 @@ local GetItemInfo = GetItemInfo;
 local GetContainerItemQuestInfo = GetContainerItemQuestInfo;
 local GetItemQualityColor = GetItemQualityColor;
 local GetContainerItemCooldown = GetContainerItemCooldown;
+local GetContainerItemID = GetContainerItemID
 local SetItemButtonCount = SetItemButtonCount;
 local SetItemButtonTexture = SetItemButtonTexture;
 local SetItemButtonTextureVertexColor = SetItemButtonTextureVertexColor;
@@ -39,7 +40,6 @@ local GetMoney = GetMoney;
 local PickupContainerItem = PickupContainerItem;
 local DeleteCursorItem = DeleteCursorItem;
 local UseContainerItem = UseContainerItem;
-local PickupMerchantItem = PickupMerchantItem;
 local IsControlKeyDown = IsControlKeyDown;
 local GetKeyRingSize = GetKeyRingSize;
 local SEARCH = SEARCH;
@@ -837,67 +837,84 @@ function B:UpdateGoldText()
 	self.BagFrame.goldText:SetText(E:FormatMoney(GetMoney(), E.db["bags"].moneyFormat, not E.db["bags"].moneyCoins));
 end
 
-function B:GetGraysValue()
-	local c = 0;
+function B:FormatMoney(amount)
+	local coppername = "|cffeda55fc|r"
+	local silvername = "|cffc7c7cfs|r"
+	local goldname = "|cffffd700g|r"
+	local value = abs(amount)
+	local gold = floor(value / 10000)
+	local silver = floor(mod(value / 100, 100))
+	local copper = floor(mod(value, 100))
 
-	for b = 0, 4 do
-		for s = 1, GetContainerNumSlots(b) do
-			local l = GetContainerItemLink(b, s);
-			if(l and select(11, GetItemInfo(l))) then
-				local p = select(11, GetItemInfo(l)) * select(2, GetContainerItemInfo(b, s));
-				if(select(3, GetItemInfo(l)) == 0 and p > 0) then
-					c = c + p;
+	local str = ""
+	if gold > 0 then
+		str = format("%d%s%s", gold, goldname, (silver > 0 or copper > 0) and " " or "")
+	end
+	if silver > 0 then
+		str = format("%s%d%s%s", str, silver, silvername, copper > 0 and " " or "")
+	end
+	if copper > 0 or value == 0 then
+		str = format("%s%d%s", str, copper, coppername)
+	end
+
+	return str
+end
+
+function B:GetGraysValue()
+	local value, itemID, rarity, itype, itemPrice, stackCount, stackPrice, _ = 0
+
+	for bag = 0, 4 do
+		for slot = 1, GetContainerNumSlots(bag) do
+			itemID = GetContainerItemID(bag, slot)
+			if itemID then
+				_, _, rarity, _, _, itype, _, _, _, _, itemPrice = GetItemInfo(itemID)
+				if itemPrice then
+					stackCount = select(2, GetContainerItemInfo(bag, slot)) or 1
+					stackPrice = itemPrice * stackCount
+					if (rarity and rarity == 0) and (itype and itype ~= "Quest") and (stackPrice > 0) then
+						value = value + stackPrice
+					end
 				end
 			end
 		end
 	end
 
-	return c;
+	return value
 end
 
-function B:VendorGrays(delete, _, getValue)
-	if (not MerchantFrame or not MerchantFrame:IsShown()) and not delete and not getValue then
+function B:VendorGrays(delete)
+	if (not MerchantFrame or not MerchantFrame:IsShown()) and not delete then
 		E:Print(L["You must be at a vendor."])
 		return
 	end
 
-	local c = 0
-	local count = 0
-	for b=0,4 do
-		for s=1,GetContainerNumSlots(b) do
-			local l = GetContainerItemLink(b, s)
-			if l and select(11, GetItemInfo(l)) then
-				local p = select(11, GetItemInfo(l))*select(2, GetContainerItemInfo(b, s))
+	local goldGained, itemID, link, itype, rarity, itemPrice, stackCount, stackPrice, _ = 0
+	for bag = 0, 4, 1 do
+		for slot = 1, GetContainerNumSlots(bag), 1 do
+			itemID = GetContainerItemID(bag, slot)
+			if itemID then
+				_, link, rarity, _, _, itype, _, _, _, _, itemPrice = GetItemInfo(itemID)
+				stackCount = select(2, GetContainerItemInfo(bag, slot)) or 1
 
-				if delete then
-					if find(l,"ff9d9d9d") then
-						if not getValue then
-							PickupContainerItem(b, s)
-							DeleteCursorItem()
+				if (rarity and rarity == 0) and (itype and itype ~= "Quest") then
+					if delete then
+						PickupContainerItem(bag, slot)
+						DeleteCursorItem()
+					else
+						stackPrice = (itemPrice or 0) * stackCount
+						goldGained = goldGained + stackPrice
+						if E.db.general.vendorGraysDetails and link then
+							E:Print(format("%s|cFF00DDDDx%d|r %s", link, stackCount, B:FormatMoney(stackPrice)))
 						end
-						c = c+p
-						count = count + 1
-					end
-				else
-					if select(3, GetItemInfo(l))==0 and p>0 then
-						if not getValue then
-							UseContainerItem(b, s)
-							PickupMerchantItem()
-						end
-						c = c+p
+						UseContainerItem(bag, slot)
 					end
 				end
 			end
 		end
 	end
 
-	if getValue then
-		return c
-	end
-
-	if c>0 and not delete then
-		local g, s, c = floor(c/10000) or 0, floor((c%10000)/100) or 0, c%100
-		E:Print(L["Vendored gray items for:"].." |cffffffff"..g..L.goldabbrev.." |cffffffff"..s..L.silverabbrev.." |cffffffff"..c..L.copperabbrev..".")
+	if goldGained > 0 then
+		E:Print((L["Vendored gray items for: %s"]):format(B:FormatMoney(goldGained)))
 	end
 end
 
@@ -1160,7 +1177,7 @@ function B:ContructContainerFrame(name, isBank)
 		f.vendorGraysButton:GetPushedTexture():SetTexCoord(unpack(E.TexCoords));
 		f.vendorGraysButton:GetPushedTexture():SetInside();
 		f.vendorGraysButton:StyleButton(nil, true);
-		f.vendorGraysButton.ttText = L["Vendor Grays"];
+		f.vendorGraysButton.ttText = L["Vendor / Delete Grays"]
 		f.vendorGraysButton:SetScript("OnEnter", self.Tooltip_Show);
 		f.vendorGraysButton:SetScript("OnLeave", self.Tooltip_Hide);
 		f.vendorGraysButton:SetScript("OnClick", B.VendorGrayCheck);
