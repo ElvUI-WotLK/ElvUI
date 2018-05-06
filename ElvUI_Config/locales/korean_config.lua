@@ -498,6 +498,7 @@ L["Toggle Tutorials"] = "애드온 튜토리얼 확인"
 L["Top Panel"] = "상단 패널 표시"
 L["Version Check"] = true;
 L["Watch Frame Height"] = "퀘스트프레임 세로길이"
+L["Vendor Grays"] = "잡동사니 자동판매"
 L["Vendor Gray Detailed Report"] = "자동판매시 목록 보기"
 L["When you go AFK display the AFK screen."] = "자리비움 시 UI가 자리비움모드로 전환됩니다."
 
