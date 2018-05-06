@@ -382,6 +382,8 @@ L["You must be targeting a player."] = "Debes enfocar a un jugador."
 
 --Filters
 L["Reset Aura Filters"] = true --Used in Nameplates/UnitFrames general options
+L["Reset Filter"] = true
+L["Used as RaidDebuff Indicator"] = true
 
 --General
 L["Accept Invites"] = "Aceptar Invitaciones"
@@ -406,6 +408,7 @@ L["Chat Bubble Names"] = true
 L["Controls the amount of decimals used in values displayed on elements like NamePlates and UnitFrames."] = true
 L["Decimal Length"] = true
 L["Direction the bar moves on gains/losses"] = true;
+L["Displays a detailed report of every item sold when enabled."] = true
 L["Display a panel across the bottom of the screen. This is for cosmetic only."] = "Despliega un panel a través de la parte inferior de la pantalla. Es es sólo algo cosmético."
 L["Display a panel across the top of the screen. This is for cosmetic only."] = "Despliega un panel a través de la parte superior de la pantalla. Es es sólo algo cosmético."
 L["Display battleground messages in the middle of the screen."] = true;
@@ -447,6 +450,7 @@ L["Toggle Tutorials"] = "Mostrar/Ocultar Tutoriales"
 L["Top Panel"] = "Panel Superior"
 L["Version Check"] = true;
 L["Watch Frame Height"] = true;
+L["Vendor Gray Detailed Report"] = true
 L["When you go AFK display the AFK screen."] = true;
 
 --Media

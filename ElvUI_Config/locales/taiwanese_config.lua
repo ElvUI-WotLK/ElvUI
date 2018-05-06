@@ -382,6 +382,8 @@ L["You must be targeting a player."] = "你必須以一名玩家為目標."
 
 --Filters
 L["Reset Aura Filters"] = true --Used in Nameplates/UnitFrames general options
+L["Reset Filter"] = true
+L["Used as RaidDebuff Indicator"] = true
 
 --General
 L["Accept Invites"] = "接受組隊邀請"
@@ -406,6 +408,7 @@ L["Chat Bubble Names"] = true
 L["Controls the amount of decimals used in values displayed on elements like NamePlates and UnitFrames."] = true
 L["Decimal Length"] = true
 L["Direction the bar moves on gains/losses"] = true;
+L["Displays a detailed report of every item sold when enabled."] = true
 L["Display a panel across the bottom of the screen. This is for cosmetic only."] = "顯示跨越螢幕底部的面板,僅僅是用于裝飾."
 L["Display a panel across the top of the screen. This is for cosmetic only."] = "顯示跨越螢幕頂部的面板,僅僅是用于裝飾."
 L["Display battleground messages in the middle of the screen."] = "屏幕中間顯示戰場信息"
@@ -447,6 +450,7 @@ L["Toggle Tutorials"] = "教學開關"
 L["Top Panel"] = "頂部面板"
 L["Version Check"] = true;
 L["Watch Frame Height"] = true;
+L["Vendor Gray Detailed Report"] = true
 L["When you go AFK display the AFK screen."] = "當你離開時顯示AFK界面"
 
 --Media

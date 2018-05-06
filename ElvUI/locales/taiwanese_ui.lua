@@ -39,7 +39,7 @@ L["Sort Bags"] = "整理背包"
 L["Temporary Move"] = "移動背包"
 L["Toggle Bags"] = "開啟/關閉背包"
 L["Toggle Key"] = true;
-L["Vendor Grays"] = "出售灰色物品"
+L["Vendor / Delete Grays"] = true
 
 --Chat
 L["AFK"] = "暫離" --Also used in datatexts and tooltip
@@ -280,7 +280,7 @@ L["Confused.. Try Again!"] = "請再試一次！"
 L["No gray items to delete."] = "沒有可刪除的灰色物品."
 L["The spell '%s' has been added to the Blacklist unitframe aura filter."] = "法術'%s'已經被添加到單位框架的光環過濾器中."
 L["This setting caused a conflicting anchor point, where '%s' would be attached to itself. Please check your anchor points. Setting '%s' to be attached to '%s'."] = "此設定造成了錨點衝突, '%s' 框架會依附於自己, 請檢查你的錨點. 將 '%s' 依附於 '%s'."
-L["Vendored gray items for:"] = "已售出灰色物品，共得："
+L["Vendored gray items for: %s"] = "已售出灰色物品，共得： %s"
 L["You don't have enough money to repair."] = "沒有足夠的資金來修復."
 L["You must be at a vendor."] = "你必須與商人對話."
 L["Your items have been repaired for: "] = "裝備已修復，共支出："
@@ -292,12 +292,12 @@ L["A setting you have changed will change an option for this character only. Thi
 L["Accepting this will reset your Filter Priority lists for all auras on NamePlates. Are you sure?"] = true
 L["Accepting this will reset your Filter Priority lists for all auras on UnitFrames. Are you sure?"] = true
 L["Are you sure you want to apply this font to all ElvUI elements?"] = "你確定要將此字型應用到所有 ElvUI 元素嗎?"
-L["Are you sure you want to delete all your gray items?"] = "是否確定要刪除所有灰色物品?"
 L["Are you sure you want to disband the group?"] = "確定要解散隊伍?"
 L["Are you sure you want to reset all the settings on this profile?"] = "確定需要重置這個設定檔中的所有設定?"
 L["Are you sure you want to reset every mover back to it's default position?"] = "確定需要重置所有框架至預設位置?"
 L["Because of the mass confusion caused by the new aura system I've implemented a new step to the installation process. This is optional. If you like how your auras are setup go to the last step and click finished to not be prompted again. If for some reason you are prompted repeatedly please restart your game."] = "因為新的光環系統造成了大量的混亂因此我導入了一個新的步驟到安裝過程中. 這是可選的, 如果你喜歡你現在的設定請跳到最後一個步驟並點擊「完成」將不會再提示. 如果由於某些原因反復提示, 請重新開啟遊戲."
 L["Can't buy anymore slots!"] = "無法再購買更多銀行欄位!"
+L["Delete gray items?"] = true
 L["Disable Warning"] = "停用警告"
 L["Discard"] = "取消"
 L["Do you enjoy the new ElvUI?"] = "你享受新版的 ElvUI嗎?"

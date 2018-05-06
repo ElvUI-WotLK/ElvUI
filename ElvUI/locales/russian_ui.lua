@@ -39,7 +39,7 @@ L["Sort Bags"] = "Сортировать"
 L["Temporary Move"] = "Временное перемещение"
 L["Toggle Bags"] = "Показать сумки"
 L["Toggle Key"] = "Показать ключи"
-L["Vendor Grays"] = "Продавать серые предметы"
+L["Vendor / Delete Grays"] = true
 
 --Chat
 L["AFK"] = "АФК" --Also used in datatexts and tooltip
@@ -280,7 +280,7 @@ L["Confused.. Try Again!"] = "Что за?.. Попробуйте еще раз!
 L["No gray items to delete."] = "Нет предметов серого качества для удаления."
 L["The spell '%s' has been added to the Blacklist unitframe aura filter."] = "Заклинание '%s' было добавлено в фильтр 'Blacklist' аур рамок юнитов."
 L["This setting caused a conflicting anchor point, where '%s' would be attached to itself. Please check your anchor points. Setting '%s' to be attached to '%s'."] = "Эта опция вызвала конфликт точек фиксации, в результате которого \"%s\" крепится к самому себе. Пожалуйста, проверье настройки точек фиксации. \"%s\" будет прикреплено к \"%s\"."
-L["Vendored gray items for:"] = "Проданы серые предметы на сумму:"
+L["Vendored gray items for: %s"] = "Проданы серые предметы на сумму: %s"
 L["You don't have enough money to repair."] = "У вас недостаточно денег для ремонта."
 L["You must be at a vendor."] = "Вы должны находиться у торговца"
 L["Your items have been repaired for: "] = "Ремонт обошелся в "
@@ -292,12 +292,12 @@ L["A setting you have changed will change an option for this character only. Thi
 L["Accepting this will reset your Filter Priority lists for all auras on NamePlates. Are you sure?"] = "Приняв это вы сбросите ваши списки приоритетов для всех аур на индикаторах здоровья. Вы уверены?"
 L["Accepting this will reset your Filter Priority lists for all auras on UnitFrames. Are you sure?"] = "Приняв это вы сбросите ваши списки приоритетов для всех аур на рамках юнитов. Вы уверены?"
 L["Are you sure you want to apply this font to all ElvUI elements?"] = "Вы уверены, что хоттите применить этот шрифт ко всем элементам ElvUI?"
-L["Are you sure you want to delete all your gray items?"] = "Вы уверены, что хотите удалить все предметы серого качества?"
 L["Are you sure you want to disband the group?"] = "Вы уверены, что хотите распустить группу?"
 L["Are you sure you want to reset all the settings on this profile?"] = "Вы уверены, что хотите сбросить все настройки для этого профиля?"
 L["Are you sure you want to reset every mover back to it's default position?"] = "Вы уверены, что хотите сбросить все фиксаторы на позиции по умолчанию?"
 L["Because of the mass confusion caused by the new aura system I've implemented a new step to the installation process. This is optional. If you like how your auras are setup go to the last step and click finished to not be prompted again. If for some reason you are prompted repeatedly please restart your game."] = "Из-за массового непонимания новой системы аур, я добавил новый шаг в установку. Он опционален. Если Вам нравится, как сейчас настроены Ваши ауры, перейдите до последнюю страницу установки и нажмите \"Завершить\", чтобы это сообщение больше не появлялось. Если же оно появится снова, пожалуйста, перезапустите игру."
 L["Can't buy anymore slots!"] = "Невозможно приобрести больше слотов!"
+L["Delete gray items?"] = true
 L["Disable Warning"] = "Отключить предупреждение"
 L["Discard"] = "Отменить"
 L["Do you enjoy the new ElvUI?"] = "Вам нравится ElvUI?"

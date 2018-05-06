@@ -239,7 +239,7 @@ L["Attempt to create URL links inside the chat."] = "在聊天框中创建超链
 L["Attempt to lock the left and right chat frame positions. Disabling this option will allow you to move the main chat frame anywhere you wish."] = "锁定左右聊天框架的位置.禁用此选项将允许你移动聊天框架到任意位置"
 L["Below Chat"] = "聊天框下方"
 L["Chat EditBox Position"] = "对话輸入框位置"
-L["Chat History"] = "聊天历史"
+L["Chat History"] = "聊天记录"
 L["Class Color Mentions"] = "职业颜色提示"
 L["Custom Timestamp Color"] = "自定义时间戳颜色"
 L["Display the hyperlink tooltip while hovering over a hyperlink."] = "鼠标悬停在链接上时显示鼠标提示"
@@ -262,7 +262,7 @@ L["Keywords"] = "关键字"
 L["Left Only"] = "仅显示左边"
 L["List of words to color in chat if found in a message. If you wish to add multiple words you must seperate the word with a comma. To search for your current name you can use %MYNAME%.\n\nExample:\n%MYNAME%, ElvUI, RBGs, Tank"] = "如果在对话信息中发现如下文字会自动上色该文字. 如果你需要添加多个词必须用逗号分开. 搜索你的名字可使用 %MYNAME%.\n\n例如:\n%MYNAME%, ElvUI, RBGs, Tank"
 L["Lock Positions"] = "锁定位置"
-L["Log the main chat frames history. So when you reloadui or log in and out you see the history from your last session."] = "记录对话历史,当你重载,登录和退出时会恢复你最后一次会话"
+L["Log the main chat frames history. So when you reloadui or log in and out you see the history from your last session."] = "进行聊天记录,当你重载,登录和退出时会恢复你最后一次会话"
 L["No Alert In Combat"] = "战斗中不警报"
 L["Number of messages you scroll for each step."] = "每次滚动的聊天信息数目"
 L["Number of repeat characters while in combat before the chat editbox is automatically closed."] = "当你在战斗中按下技能键时,有可能你的输入框还处于打开状态,这个功能可以在你按下技能键并且在输入框中输入下列个数字符串却没有放出技能时帮你自动关闭输入框"
@@ -380,6 +380,8 @@ L["You must be targeting a player."] = "你必须以一名玩家为目标"
 
 --Filters
 L["Reset Aura Filters"] = "重置光环过滤器" --Used in Nameplates/UnitFrames general options
+L["Reset Filter"] = "重置过滤器"
+L["Used as RaidDebuff Indicator"] = "作为团队减益指示器"
 
 --General
 L["Accept Invites"] = "自动接受邀请"
@@ -404,6 +406,7 @@ L["Chat Bubble Names"] = "聊天气泡名字"
 L["Controls the amount of decimals used in values displayed on elements like NamePlates and UnitFrames."] = "控制像姓名版和团队框架中各数值的小数位数"
 L["Decimal Length"] = "小数位数"
 L["Direction the bar moves on gains/losses"] = "条增加/减少时的方向"
+L["Displays a detailed report of every item sold when enabled."] = "启用后显示包含每个物品金额的详细报告"
 L["Display a panel across the bottom of the screen. This is for cosmetic only."] = "显示跨越屏幕底部的面板,仅仅是用于装饰."
 L["Display a panel across the top of the screen. This is for cosmetic only."] = "显示跨越屏幕顶部的面板,仅仅是用于装饰."
 L["Display battleground messages in the middle of the screen."] = "屏幕中间显示战场信息"
@@ -445,6 +448,7 @@ L["Toggle Tutorials"] = "教学开关"
 L["Top Panel"] = "顶部面板"
 L["Version Check"] = true;
 L["Watch Frame Height"] = "任务框架高度"
+L["Vendor Gray Detailed Report"] = "出售灰色物品详细报告"
 L["When you go AFK display the AFK screen."] = "当你离开时显示AFK界面"
 
 --Media

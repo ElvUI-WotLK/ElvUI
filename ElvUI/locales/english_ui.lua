@@ -39,7 +39,7 @@ L["Sort Bags"] = true;
 L["Temporary Move"] = true;
 L["Toggle Bags"] = true;
 L["Toggle Key"] = true;
-L["Vendor Grays"] = true;
+L["Vendor / Delete Grays"] = true
 
 --Chat
 L["AFK"] = true; --Also used in datatexts
@@ -280,7 +280,7 @@ L["Confused.. Try Again!"] = true;
 L["No gray items to delete."] = true;
 L["The spell '%s' has been added to the Blacklist unitframe aura filter."] = true;
 L["This setting caused a conflicting anchor point, where '%s' would be attached to itself. Please check your anchor points. Setting '%s' to be attached to '%s'."] = true;
-L["Vendored gray items for:"] = true;
+L["Vendored gray items for: %s"] = true
 L["You don't have enough money to repair."] = true;
 L["You must be at a vendor."] = true;
 L["Your items have been repaired for: "] = true;
@@ -292,12 +292,12 @@ L["A setting you have changed will change an option for this character only. Thi
 L["Accepting this will reset your Filter Priority lists for all auras on NamePlates. Are you sure?"] = true
 L["Accepting this will reset your Filter Priority lists for all auras on UnitFrames. Are you sure?"] = true
 L["Are you sure you want to apply this font to all ElvUI elements?"] = true;
-L["Are you sure you want to delete all your gray items?"] = true;
 L["Are you sure you want to disband the group?"] = true;
 L["Are you sure you want to reset all the settings on this profile?"] = true;
 L["Are you sure you want to reset every mover back to it's default position?"] = true;
 L["Because of the mass confusion caused by the new aura system I've implemented a new step to the installation process. This is optional. If you like how your auras are setup go to the last step and click finished to not be prompted again. If for some reason you are prompted repeatedly please restart your game."] = true;
 L["Can't buy anymore slots!"] = true;
+L["Delete gray items?"] = true
 L["Disable Warning"] = true;
 L["Discard"] = true;
 L["Do you enjoy the new ElvUI?"] = true;
