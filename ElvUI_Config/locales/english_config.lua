@@ -816,6 +816,7 @@ L["Coloring (Specific)"] = true;
 L["Coloring"] = true;
 L["Combat Fade"] = true;
 L["Combat Icon"] = true;
+L["Combo Points"] = true
 L["Combo Point"] = true;
 L["Combobar"] = true;
 L["Configure Auras"] = true;

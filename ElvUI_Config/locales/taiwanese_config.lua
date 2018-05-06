@@ -828,6 +828,7 @@ L["Coloring (Specific)"] = "著色（具體）"
 L["Coloring"] = "著色"
 L["Combat Fade"] = "戰鬥隱藏"
 L["Combat Icon"] = "戰鬥按鈕"
+L["Combo Points"] = "連擊點"
 L["Combo Point"] = "連擊點"
 L["Combobar"] = true;
 L["Configure Auras"] = "設置光環"

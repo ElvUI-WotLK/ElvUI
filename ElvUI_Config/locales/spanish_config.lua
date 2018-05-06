@@ -828,6 +828,7 @@ L["Coloring (Specific)"] = "Coloreado (Específico)"
 L["Coloring"] = "Coloreado"
 L["Combat Fade"] = "Desvanecer en Combate"
 L["Combat Icon"] = true;
+L["Combo Points"] = "Puntos de Combo"
 L["Combo Point"] = true;
 L["Combobar"] = true;
 L["Configure Auras"] = "Configurar Auras"

@@ -876,6 +876,7 @@ L["Coloring (Specific)"] = "색상 설정 (지정)"
 L["Coloring"] = "색상 설정 (공통)"
 L["Combat Fade"] = "평상시 숨기기"
 L["Combat Icon"] = "전투 아이콘"
+L["Combo Points"] = true
 L["Combo Point"] = "연계 점수"
 L["Combobar"] = "연계점수 바"
 L["Configure Auras"] = "오라 설정"
