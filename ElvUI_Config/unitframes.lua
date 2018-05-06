@@ -1039,49 +1039,58 @@ local function CreateCustomTextGroup(unit, objectName)
 					if unit == "boss" or unit == "arena" then
 						for i=1, 5 do
 							if UF[unit..i] then
-								UF[unit..i]:Tag(UF[unit..i]["customTexts"][objectName], "");
+								UF[unit..i]:Untag(UF[unit..i]["customTexts"][objectName])
 								UF[unit..i]["customTexts"][objectName]:Hide();
+								UF[unit..i]["customTexts"][objectName] = nil
 							end
 						end
 					elseif unit == "party" or unit:find("raid") then
 						for i=1, UF[unit]:GetNumChildren() do
 							local child = select(i, UF[unit]:GetChildren())
-							if child.Tag then
-								child:Tag(child["customTexts"][objectName], "");
+							if child.Untag then
+								child:Untag(child["customTexts"][objectName])
 								child["customTexts"][objectName]:Hide();
+								child["customTexts"][objectName] = nil
 							else
 								for x=1, child:GetNumChildren() do
 									local c2 = select(x, child:GetChildren())
-									if(c2.Tag) then
-										c2:Tag(c2["customTexts"][objectName], "");
+									if(c2.Untag) then
+										c2:Untag(c2["customTexts"]
 										c2["customTexts"][objectName]:Hide();
+										c2["customTexts"][objectName] = nil
 									end
 								end
 							end
 						end
 					elseif UF[unit] then
-						UF[unit]:Tag(UF[unit]["customTexts"][objectName], "");
+						UF[unit]:Untag(UF[unit]["customTexts"][objectName]);
 						UF[unit]["customTexts"][objectName]:Hide();
+						UF[unit]["customTexts"][objectName] = nil
 					end
 				end,
 			},
-			font = {
-				type = "select", dialogControl = "LSM30_Font",
+			enable = {
 				order = 3,
+				type = "toggle",
+				name = L["Enable"],
+			},
+			font = {
+				order = 4,
+				type = "select", dialogControl = "LSM30_Font",
 				name = L["Font"],
 				values = AceGUIWidgetLSMlists.font,
 			},
 			size = {
-				order = 4,
-				name = FONT_SIZE,
+				order = 5,
 				type = "range",
+				name = FONT_SIZE,
 				min = 4, max = 212, step = 1,
 			},
 			fontOutline = {
-				order = 5,
+				order = 6,
+				type = "select",
 				name = L["Font Outline"],
 				desc = L["Set the font outline."],
-				type = "select",
 				values = {
 					["NONE"] = NONE,
 					["OUTLINE"] = "OUTLINE",
@@ -1091,7 +1100,7 @@ local function CreateCustomTextGroup(unit, objectName)
 				},
 			},
 			justifyH = {
-				order = 6,
+				order = 7,
 				type = "select",
 				name = L["JustifyH"],
 				desc = L["Sets the font instance's horizontal text alignment style."],
@@ -1102,20 +1111,20 @@ local function CreateCustomTextGroup(unit, objectName)
 				},
 			},
 			xOffset = {
-				order = 7,
+				order = 8,
 				type = "range",
 				name = L["xOffset"],
 				min = -400, max = 400, step = 1,
 			},
 			yOffset = {
-				order = 8,
+				order = 9,
 				type = "range",
 				name = L["yOffset"],
 				min = -400, max = 400, step = 1,
 			},
 			attachTextTo = {
+				order = 10,
 				type = "select",
-				order = 9,
 				name = L["Attach Text To"],
 				values = {
 					["Health"] = L["Health"],
