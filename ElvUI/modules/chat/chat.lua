@@ -1502,22 +1502,27 @@ end
 
 tremove(ChatTypeGroup["GUILD"], 2)
 function CH:DelayGuildMOTD()
-	local delay, delayFrame, chat = 0, CreateFrame("Frame")
+	local delay, checks, delayFrame, chat = 0, 0, CreateFrame("Frame")
 	tinsert(ChatTypeGroup["GUILD"], 2, "GUILD_MOTD")
 	delayFrame:SetScript("OnUpdate", function(df, elapsed)
 		delay = delay + elapsed
 		if delay < 5 then return end
 		local msg = GetGuildRosterMOTD()
-		for _, frame in pairs(CHAT_FRAMES) do
-			chat = _G[frame]
-			if chat and chat:IsEventRegistered("CHAT_MSG_GUILD") then
-				if msg and strlen(msg) > 0 then
+		if msg and strlen(msg) > 0 then
+			for _, frame in pairs(CHAT_FRAMES) do
+				chat = _G[frame]
+				if chat and chat:IsEventRegistered("CHAT_MSG_GUILD") then
 					ChatFrame_SystemEventHandler(chat, "GUILD_MOTD", msg)
+					chat:RegisterEvent("GUILD_MOTD")
 				end
-				chat:RegisterEvent("GUILD_MOTD")
+			end
+			df:SetScript("OnUpdate", nil)
+		else -- 5 seconds can be too fast for the API response. let's try once every 5 seconds (max 5 checks).
+			delay, checks = 0, checks + 1
+			if checks >= 5 then
+				df:SetScript("OnUpdate", nil)
 			end
 		end
-		df:SetScript("OnUpdate", nil)
 	end)
 end
 
@@ -1712,16 +1717,16 @@ function CH:Initialize()
 		end
 	end)
 
-	if self.db.chatHistory then
-		self:DisplayChatHistory()
-	end
-
 	for _, event in pairs(FindURL_Events) do
 		ChatFrame_AddMessageEventFilter(event, CH[event] or CH.FindURL)
 		local nType = strsub(event, 10)
 		if nType ~= "AFK" and nType ~= "DND" then
 			self:RegisterEvent(event, "SaveChatHistory")
 		end
+	end
+
+	if self.db.chatHistory then
+		self:DisplayChatHistory()
 	end
 
 	local S = E:GetModule("Skins")

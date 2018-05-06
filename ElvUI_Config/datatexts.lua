@@ -323,10 +323,12 @@ E.Options.args.datatexts = {
 					name = L["Date Format"],
 					values = {
 						[""] = NONE,
-						["%d/%m/%y "] = "27/03/16",
-						["%m/%d/%y "] = "03/27/16",
-						["%y/%m/%d "] = "16/03/27",
-						["%d.%m.%y "] = "27.03.16"
+						["%d/%m/%y "] = "DD/MM/YY",
+						["%m/%d/%y "] = "MM/DD/YY",
+						["%y/%m/%d "] = "YY/MM/DD",
+						["%d.%m.%y "] = "DD.MM.YY",
+						["%m.%d.%y "] = "MM.DD.YY",
+						["%y.%m.%d "] = "YY.MM.DD"
 					}
 				}
 			}
