@@ -156,6 +156,9 @@ local function LoadSkin()
 	StackSplitFrame.bg1:Point("BOTTOMRIGHT", -10, 55)
 	StackSplitFrame.bg1:SetFrameLevel(StackSplitFrame.bg1:GetFrameLevel() - 1)
 
+	S:HandleButton(StackSplitOkayButton)
+	S:HandleButton(StackSplitCancelButton)
+
 	-- Opacity Frame
 	OpacityFrame:StripTextures()
 	OpacityFrame:SetTemplate("Transparent")
