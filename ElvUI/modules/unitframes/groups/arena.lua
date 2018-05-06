@@ -34,7 +34,7 @@ function UF:Construct_ArenaFrames(frame)
 	tinsert(frame.__elements, UF.UpdateTargetGlow);
 	frame:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetGlow);
 	frame:RegisterEvent("PLAYER_ENTERING_WORLD", UF.UpdateTargetGlow);
-	frame:RegisterEvent("GROUP_ROSTER_UPDATE", UF.UpdateTargetGlow);
+	frame:RegisterEvent("RAID_ROSTER_UPDATE", UF.UpdateTargetGlow);
 	frame.customTexts = {};
 	frame.InfoPanel = self:Construct_InfoPanel(frame);
 	frame.unitframeType = "arena";
