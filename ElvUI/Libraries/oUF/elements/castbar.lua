@@ -84,33 +84,27 @@ local UnitCastingInfo = UnitCastingInfo
 local UnitChannelInfo = UnitChannelInfo
 local UnitIsUnit = UnitIsUnit
 
-local tradeskillCurrent, tradeskillTotal, mergeTradeskill = 0, 0, false
+local tradeskillCastTime, tradeskillCastDuration, tradeskillCurrent, tradeskillTotal, mergeTradeskill = 0, 0, 0, 0, false
 
 local function updateSafeZone(self)
 	local safeZone = self.SafeZone
 	local width = self:GetWidth()
 	local _, _, ms = GetNetStats()
 
-	-- Guard against GetNetStats returning latencies of 0.
-	if(ms ~= 0) then
-		local safeZoneRatio = (ms / 1e3) / self.max
-		if(safeZoneRatio > 1) then
-			safeZoneRatio = 1
-		end
-		safeZone:SetWidth(width * safeZoneRatio)
-		safeZone:Show()
-	else
-		safeZone:Hide()
+	local safeZoneRatio = (ms / 1e3) / self.max
+	if(safeZoneRatio > 1) then
+		safeZoneRatio = 1
 	end
+
+	safeZone:SetWidth(width * safeZoneRatio)
 end
 
-local function UNIT_SPELLCAST_SENT(self, event, unit, spell, rank, target)
+local function UNIT_SPELLCAST_SENT(self, event, unit, spell, rank, target, castID)
 	local element = self.Castbar
 	element.curTarget = (target and target ~= '') and target or nil
 
 	if element.isTradeSkill then
-		local castID = element.castID + 1
-		element.tradeSkillCastID = castID > 255 and 1 or castID
+		element.tradeSkillCastID = castID
 	end
 end
 
@@ -142,8 +136,9 @@ local function UNIT_SPELLCAST_START(self, event, unit)
 
 		if(unit == 'player') then
 			tradeskillCurrent = tradeskillCurrent + 1
+			tradeskillCastTime = max
+			tradeskillCastDuration = element.duration
 		end
-
 		element:SetValue(element.duration)
 	else
 		element:SetValue(0)
@@ -491,9 +486,10 @@ end
 local function onUpdate(self, elapsed)
 	if(self.casting) then
 		local duration = self.duration + elapsed
-		if(duration >= self.max) then
+		if(duration >= self.max or (tradeskillTotal > 1 and duration >= (tradeskillCastDuration + tradeskillCastTime * 1.25))) then
 			self.casting = nil
 			self:Hide()
+			tradeskillTotal = 0
 
 			if(self.PostCastStop) then self:PostCastStop(self.__owner.unit) end
 			return
@@ -559,6 +555,7 @@ local function onUpdate(self, elapsed)
 		self.casting = nil
 		self.castID = nil
 		self.channeling = nil
+		tradeskillTotal = 0
 
 		self:Hide()
 	end
@@ -663,6 +660,8 @@ local function Disable(self)
 end
 
 hooksecurefunc('DoTradeSkill', function(_, num)
+	tradeskillCastTime = 0
+	tradeskillCastDuration = 0
 	tradeskillCurrent = 0
 	tradeskillTotal = num or 1
 	mergeTradeskill = true
