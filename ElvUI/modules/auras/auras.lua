@@ -124,6 +124,12 @@ end
 
 function A:CreateIcon(button)
 	local font = LSM:Fetch("font", self.db.font)
+	local headerName = button:GetName()
+	local db = self.db.debuffs
+	if headerName == "HELPFUL" then
+		db = self.db.buffs
+	end
+
 	button:RegisterForClicks("RightButtonUp")
 
 	button.texture = button:CreateTexture(nil, "BORDER")
@@ -132,11 +138,11 @@ function A:CreateIcon(button)
 
 	button.count = button:CreateFontString(nil, "ARTWORK")
 	button.count:SetPoint("BOTTOMRIGHT", -1 + self.db.countXOffset, 1 + self.db.countYOffset)
-	button.count:FontTemplate(font, self.db.fontSize, self.db.fontOutline)
+	button.count:FontTemplate(font, db.countFontSize, self.db.fontOutline)
 
 	button.time = button:CreateFontString(nil, "ARTWORK")
 	button.time:SetPoint("TOP", button, "BOTTOM", 1 + self.db.timeXOffset, 0 + self.db.timeYOffset)
-	button.time:FontTemplate(font, self.db.fontSize, self.db.fontOutline)
+	button.time:FontTemplate(font, db.durationFontSize, self.db.fontOutline)
 
 	button.highlight = button:CreateTexture(nil, "HIGHLIGHT")
 	button.highlight:SetTexture(1, 1, 1, 0.45)
@@ -191,7 +197,6 @@ end
 local buttons = {}
 function A:ConfigureAuras(header, auraTable, weaponPosition)
 	local headerName = header:GetName()
-
 	local db = self.db.debuffs
 	if header.filter == "HELPFUL" then
 		db = self.db.buffs
@@ -341,11 +346,11 @@ function A:ConfigureAuras(header, auraTable, weaponPosition)
 			local font = LSM:Fetch("font", self.db.font)
 			button.time:ClearAllPoints()
 			button.time:SetPoint("TOP", button, "BOTTOM", 1 + self.db.timeXOffset, 0 + self.db.timeYOffset)
-			button.time:FontTemplate(font, self.db.fontSize, self.db.fontOutline)
+			button.time:FontTemplate(font, db.durationFontSize, self.db.fontOutline)
 
 			button.count:ClearAllPoints()
 			button.count:SetPoint("BOTTOMRIGHT", -1 + self.db.countXOffset, 0 + self.db.countYOffset)
-			button.count:FontTemplate(font, self.db.fontSize, self.db.fontOutline)
+			button.count:FontTemplate(font, db.countFontSize, self.db.fontOutline)
 		end
 
 		button:Show()

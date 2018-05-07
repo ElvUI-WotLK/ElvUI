@@ -208,6 +208,7 @@ L["Count yOffset"] = "Den Versatz auf der Y-Achse zählen"
 L["Defines how the group is sorted."] = "Lege fest, wie die Gruppe sortiert wird."
 L["Defines the sort order of the selected sort method."] = "Legt die Sortierreihenfolge der ausgewählten Sortiermethode fest."
 L["Disabled Blizzard"] = "Blizzard deaktivieren"
+L["Duration Font Size"] = "Dauer Schriftgröße"
 L["Display reminder bar on the minimap."] = true
 L["Fade Threshold"] = "Zeit bis zum verblassen"
 L["Index"] = "Index"

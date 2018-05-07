@@ -206,6 +206,7 @@ L["Count yOffset"] = "计数Y偏移"
 L["Defines how the group is sorted."] = "定义组排序方式"
 L["Defines the sort order of the selected sort method."] = "定义排序方式的排序方向"
 L["Disabled Blizzard"] = "禁用暴雪框架"
+L["Duration Font Size"] = "持续时间字体大小"
 L["Display reminder bar on the minimap."] = true
 L["Fade Threshold"] = "阈值渐隐"
 L["Index"] = "索引"

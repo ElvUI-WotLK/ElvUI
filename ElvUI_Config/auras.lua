@@ -4,19 +4,31 @@ local A = E:GetModule("Auras");
 local function GetAuraOptions(headerName)
 	local auraOptions = {
 		header = {
-			order = 0,
+			order = 1,
 			type = "header",
 			name = headerName
 		},
 		size = {
-			order = 1,
+			order = 2,
 			type = "range",
 			name = L["Size"],
 			desc = L["Set the size of the individual auras."],
 			min = 16, max = 60, step = 2
 		},
+		durationFontSize = {
+			order = 3,
+			type = "range",
+			name = L["Duration Font Size"],
+			min = 4, max = 32, step = 1,
+		},
+		countFontSize = {
+			order = 4,
+			type = "range",
+			name = L["Count Font Size"],
+			min = 4, max = 32, step = 1,
+		},
 		growthDirection = {
-			order = 2,
+			order = 5,
 			type = "select",
 			name = L["Growth Direction"],
 			desc = L["The direction the auras will grow and then the direction they will grow after they reach the wrap after limit."],
@@ -32,33 +44,33 @@ local function GetAuraOptions(headerName)
 			}
 		},
 		wrapAfter = {
-			order = 3,
+			order = 6,
 			type = "range",
 			name = L["Wrap After"],
 			desc = L["Begin a new row or column after this many auras."],
 			min = 1, max = 32, step = 1
 		},
 		maxWraps = {
-			order = 4,
+			order = 7,
 			type = "range",
 			name = L["Max Wraps"],
 			desc = L["Limit the number of rows or columns."],
 			min = 1, max = 32, step = 1
 		},
 		horizontalSpacing = {
-			order = 5,
+			order = 8,
 			type = "range",
 			name = L["Horizontal Spacing"],
 			min = 0, max = 50, step = 1
 		},
 		verticalSpacing = {
-			order = 6,
+			order = 9,
 			type = "range",
 			name = L["Vertical Spacing"],
 			min = 0, max = 50, step = 1
 		},
 		sortMethod = {
-			order = 7,
+			order = 10,
 			type = "select",
 			name = L["Sort Method"],
 			desc = L["Defines how the group is sorted."],
@@ -69,7 +81,7 @@ local function GetAuraOptions(headerName)
 			}
 		},
 		sortDir = {
-			order = 8,
+			order = 11,
 			type = "select",
 			name = L["Sort Direction"],
 			desc = L["Defines the sort order of the selected sort method."],
@@ -79,7 +91,7 @@ local function GetAuraOptions(headerName)
 			}
 		},
 		seperateOwn = {
-			order = 9,
+			order = 12,
 			type = "select",
 			name = L["Seperate"],
 			desc = L["Indicate whether buffs you cast yourself should be separated before or after."],
@@ -147,12 +159,6 @@ E.Options.args.auras = {
 					type = "select", dialogControl = "LSM30_Font",
 					name = L["Font"],
 					values = AceGUIWidgetLSMlists.font
-				},
-				fontSize = {
-					order = 3,
-					name = L["Font Size"],
-					type = "range",
-					min = 6, max = 33, step = 1
 				},
 				fontOutline = {
 					order = 4,
