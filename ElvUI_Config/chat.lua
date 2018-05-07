@@ -402,21 +402,21 @@ E.Options.args.chat = {
 			set = function(info, value) E.db.chat[ info[#info] ] = value; CH:SetupChat(); end,
 			args = {
 				header = {
-					order = 0,
+					order = 1,
 					type = "header",
 					name = L["Fonts"]
 				},
 				font = {
-					order = 1,
+					order = 2,
 					type = "select", dialogControl = "LSM30_Font",
 					name = L["Font"],
 					values = AceGUIWidgetLSMlists.font
 				},
 				fontOutline = {
-					order = 2,
+					order = 3,
+					type = "select",
 					name = L["Font Outline"],
 					desc = L["Set the font outline."],
-					type = "select",
 					values = {
 						["NONE"] = L["None"],
 						["OUTLINE"] = "OUTLINE",
@@ -424,23 +424,28 @@ E.Options.args.chat = {
 						["THICKOUTLINE"] = "THICKOUTLINE"
 					}
 				},
-				tabFont = {
-					type = "select", dialogControl = "LSM30_Font",
+				spacer = {
 					order = 4,
+					type = "description",
+					name = " ",
+				},
+				tabFont = {
+					order = 5,
+					type = "select", dialogControl = "LSM30_Font",
 					name = L["Tab Font"],
 					values = AceGUIWidgetLSMlists.font
 				},
 				tabFontSize = {
-					order = 5,
+					order = 6,
 					type = "range",
 					name = L["Tab Font Size"],
 					min = 6, max = 22, step = 1
 				},
 				tabFontOutline = {
-					order = 6,
+					order = 7,
+					type = "select",
 					name = L["Tab Font Outline"],
 					desc = L["Set the font outline."],
-					type = "select",
 					values = {
 						["NONE"] = L["None"],
 						["OUTLINE"] = "OUTLINE",

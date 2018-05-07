@@ -2261,7 +2261,7 @@ E.Options.args.unitframe = {
 									name = FONT_SIZE,
 									desc = L["Set the font size for unitframes."],
 									type = "range",
-									min = 4, max = 212, step = 1,
+									min = 4, max = 36, step = 1,
 									set = function(info, value) E.db.unitframe[ info[#info] ] = value; UF:Update_FontStrings() end,
 								},
 								fontOutline = {
