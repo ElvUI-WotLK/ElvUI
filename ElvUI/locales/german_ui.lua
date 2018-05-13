@@ -38,7 +38,6 @@ L["Reset Position"] = "Position zurücksetzen"
 L["Sort Bags"] = "Taschen sortieren"
 L["Temporary Move"] = "Temporäres Bewegen"
 L["Toggle Bags"] = "Taschen umschalten"
-L["Toggle Key"] = true;
 L["Vendor / Delete Grays"] = "Verkaufe / Lösche graue Gegenstände"
 
 --Chat

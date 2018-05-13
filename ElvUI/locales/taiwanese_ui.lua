@@ -38,7 +38,6 @@ L["Reset Position"] = "重設位置"
 L["Sort Bags"] = "整理背包"
 L["Temporary Move"] = "移動背包"
 L["Toggle Bags"] = "開啟/關閉背包"
-L["Toggle Key"] = true;
 L["Vendor / Delete Grays"] = true
 
 --Chat

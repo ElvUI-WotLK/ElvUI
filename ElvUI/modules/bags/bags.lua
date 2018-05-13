@@ -49,6 +49,7 @@ local MAX_CONTAINER_ITEMS = MAX_CONTAINER_ITEMS;
 local TEXTURE_ITEM_QUEST_BANG = TEXTURE_ITEM_QUEST_BANG;
 local MAX_WATCHED_TOKENS = MAX_WATCHED_TOKENS;
 local NUM_BAG_FRAMES = NUM_BAG_FRAMES;
+local BINDING_NAME_TOGGLEKEYRING = BINDING_NAME_TOGGLEKEYRING
 
 local SEARCH_STRING = ""
 
@@ -1145,7 +1146,7 @@ function B:ContructContainerFrame(name, isBank)
 		f.keyButton:GetPushedTexture():SetTexCoord(unpack(E.TexCoords));
 		f.keyButton:GetPushedTexture():SetInside();
 		f.keyButton:StyleButton(nil, true);
-		f.keyButton.ttText = L["Toggle Key"];
+		f.keyButton.ttText = BINDING_NAME_TOGGLEKEYRING
 		f.keyButton:SetScript("OnEnter", self.Tooltip_Show);
 		f.keyButton:SetScript("OnLeave", self.Tooltip_Hide);
 		f.keyButton:SetScript("OnClick", function() ToggleFrame(f.keyFrame); end);

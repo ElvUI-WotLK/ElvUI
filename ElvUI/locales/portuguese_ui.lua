@@ -38,7 +38,6 @@ L["Reset Position"] = "Redefinir Posição"
 L["Sort Bags"] = "Organizar Bolsas"
 L["Temporary Move"] = "Mover Temporariamente"
 L["Toggle Bags"] = "Mostrar/Ocultar Bolsas"
-L["Toggle Key"] = true;
 L["Vendor / Delete Grays"] = true
 
 --Chat

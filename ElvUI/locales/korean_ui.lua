@@ -38,7 +38,6 @@ L["Reset Position"] = "위치 초기화"
 L["Sort Bags"] = "가방 정렬"
 L["Temporary Move"] = "임시 이동"
 L["Toggle Bags"] = "가방슬롯 보기"
-L["Toggle Key"] = true;
 L["Vendor / Delete Grays"] = true
 
 --Chat

@@ -38,7 +38,6 @@ L["Reset Position"] = true;
 L["Sort Bags"] = true;
 L["Temporary Move"] = true;
 L["Toggle Bags"] = true;
-L["Toggle Key"] = true;
 L["Vendor / Delete Grays"] = true
 
 --Chat
