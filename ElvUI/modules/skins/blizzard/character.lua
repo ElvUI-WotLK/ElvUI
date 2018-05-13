@@ -209,7 +209,7 @@ local function LoadSkin()
 	local function ColorItemBorder()
 		for _, slot in pairs(slots) do
 			local target = _G["Character"..slot]
-			local slotId, _, _ = GetInventorySlotInfo(slot)
+			local slotId = GetInventorySlotInfo(slot)
 			local itemId = GetInventoryItemID("player", slotId)
 
 			if itemId then
@@ -375,14 +375,10 @@ local function LoadSkin()
 		E:RegisterStatusBar(factionBar)
 		factionBar:CreateBackdrop("Default")
 
-		factionButton:StripTextures(true)
-		factionButton:SetNormalTexture(nil)
+		factionButton:SetNormalTexture("Interface\\AddOns\\ElvUI\\media\\textures\\PlusMinusButton")
 		factionButton.SetNormalTexture = E.noop
-
-		factionButton.Text = factionButton:CreateFontString(nil, "OVERLAY")
-		factionButton.Text:FontTemplate(nil, 22)
-		factionButton.Text:Point("CENTER")
-		factionButton.Text:SetText("+")
+		factionButton:GetNormalTexture():Size(15)
+		factionButton:SetHighlightTexture(nil)
 	end
 
 	local function UpdateFaction()
@@ -395,9 +391,9 @@ local function LoadSkin()
 			factionIndex = factionOffset + i
 			if(factionIndex <= numFactions) then
 				if(factionRow.isCollapsed) then
-					factionButton.Text:SetText("+")
+					factionButton:GetNormalTexture():SetTexCoord(0.045, 0.475, 0.085, 0.925)
 				else
-					factionButton.Text:SetText("-")
+					factionButton:GetNormalTexture():SetTexCoord(0.545, 0.975, 0.085, 0.925)
 				end
 			end
 		end
@@ -429,21 +425,17 @@ local function LoadSkin()
 
 	SkillFrameExpandButtonFrame:StripTextures()
 
-	SkillFrameCollapseAllButton:Point("LEFT", SkillFrameExpandTabLeft, "RIGHT", -40, -3)
-	SkillFrameCollapseAllButton:SetNormalTexture("")
+	SkillFrameCollapseAllButton:SetNormalTexture("Interface\\AddOns\\ElvUI\\media\\textures\\PlusMinusButton")
 	SkillFrameCollapseAllButton.SetNormalTexture = E.noop
+	SkillFrameCollapseAllButton:GetNormalTexture():Size(15)
+	SkillFrameCollapseAllButton:Point("LEFT", SkillFrameExpandTabLeft, "RIGHT", -40, -3)
 	SkillFrameCollapseAllButton:SetHighlightTexture(nil)
 
-	SkillFrameCollapseAllButton.Text = SkillFrameCollapseAllButton:CreateFontString(nil, "OVERLAY")
-	SkillFrameCollapseAllButton.Text:FontTemplate(nil, 22)
-	SkillFrameCollapseAllButton.Text:Point("CENTER", -10, 0)
-	SkillFrameCollapseAllButton.Text:SetText("+")
-
 	hooksecurefunc(SkillFrameCollapseAllButton, "SetNormalTexture", function(self, texture)
-		if(find(texture, "MinusButton")) then
-			self.Text:SetText("-")
+		if find(texture, "MinusButton") then
+			SkillFrameCollapseAllButton:GetNormalTexture():SetTexCoord(0.545, 0.975, 0.085, 0.925)
 		else
-			self.Text:SetText("+")
+			SkillFrameCollapseAllButton:GetNormalTexture():SetTexCoord(0.045, 0.475, 0.085, 0.925)
 		end
 	end)
 
@@ -460,20 +452,16 @@ local function LoadSkin()
 		statusBarBackground:SetTexture(nil)
 
 		local skillTypeLabelText = _G["SkillTypeLabel" .. i]
-		skillTypeLabelText:SetNormalTexture("")
+		skillTypeLabelText:SetNormalTexture("Interface\\AddOns\\ElvUI\\media\\textures\\PlusMinusButton")
 		skillTypeLabelText.SetNormalTexture = E.noop
+		skillTypeLabelText:GetNormalTexture():Size(13)
 		skillTypeLabelText:SetHighlightTexture(nil)
 
-		skillTypeLabelText.Text = skillTypeLabelText:CreateFontString(nil, "OVERLAY")
-		skillTypeLabelText.Text:FontTemplate(nil, 22)
-		skillTypeLabelText.Text:Point("LEFT", 3, 0)
-		skillTypeLabelText.Text:SetText("+")
-
 		hooksecurefunc(skillTypeLabelText, "SetNormalTexture", function(self, texture)
-			if(find(texture, "MinusButton")) then
-				self.Text:SetText("-")
+			if find(texture, "MinusButton") then
+				self:GetNormalTexture():SetTexCoord(0.545, 0.975, 0.085, 0.925)
 			else
-				self.Text:SetText("+")
+				self:GetNormalTexture():SetTexCoord(0.045, 0.475, 0.085, 0.925)
 			end
 		end)
 	end
@@ -511,33 +499,30 @@ local function LoadSkin()
 			name, isHeader, isExpanded, _, _, _, extraCurrencyType, icon = GetCurrencyListInfo(index)
 			button = buttons[i]
 
-			if(not button.isSkinned) then
+			if not button.isSkinned then
 				button.categoryLeft:Kill()
 				button.categoryRight:Kill()
 				button.highlight:Kill()
-				button.expandIcon:Kill()
 
-				button.Text = button:CreateFontString(nil, "OVERLAY")
-				button.Text:FontTemplate(nil, 22)
-				button.Text:Point("RIGHT", -5, 0)
-				button.Text:SetText("+")
+				button.expandIcon:SetTexture("Interface\\AddOns\\ElvUI\\media\\textures\\PlusMinusButton")
+				button.expandIcon:Size(15)
+
 				button.isSkinned = true
 			end
 
-			if(name or name == "") then
-				if(isHeader) then
-					if(isExpanded) then
-						button.Text:SetText("-")
+			if name or name == "" then
+				if isHeader then
+					if isExpanded then
+						button.expandIcon:SetTexCoord(0.545, 0.975, 0.085, 0.925)
 					else
-						button.Text:SetText("+")
+						button.expandIcon:SetTexCoord(0.045, 0.475, 0.085, 0.925)
 					end
 				else
-					button.Text:SetText("")
-					if ( extraCurrencyType == 1 ) then
+					if extraCurrencyType == 1 then
 						button.icon:SetTexCoord(unpack(E.TexCoords))
-					elseif ( extraCurrencyType == 2 ) then
+					elseif extraCurrencyType == 2 then
 						local factionGroup = UnitFactionGroup("player")
-						if ( factionGroup ) then
+						if factionGroup then
 							button.icon:SetTexture("Interface\\TargetingFrame\\UI-PVP-"..factionGroup)
 							button.icon:SetTexCoord( 0.03125, 0.59375, 0.03125, 0.59375 )
 						else

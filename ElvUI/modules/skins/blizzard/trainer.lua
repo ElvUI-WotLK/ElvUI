@@ -98,47 +98,46 @@ local function LoadSkin()
 		local skillButton = _G["ClassTrainerSkill"..i]
 		local highlight = _G["ClassTrainerSkill"..i.."Highlight"]
 
-		skillButton:SetNormalTexture("")
+		skillButton:SetNormalTexture("Interface\\AddOns\\ElvUI\\media\\textures\\PlusMinusButton")
 		skillButton.SetNormalTexture = E.noop
+		skillButton:GetNormalTexture():Size(13)
 
 		highlight:SetTexture("")
 		highlight.SetTexture = E.noop
 
-		skillButton.Text = skillButton:CreateFontString(nil, "OVERLAY")
-		skillButton.Text:FontTemplate(nil, 22)
-		skillButton.Text:Point("LEFT", 3, 0)
-		skillButton.Text:SetText("+")
-
 		hooksecurefunc(skillButton, "SetNormalTexture", function(self, texture)
 			if find(texture, "MinusButton") then
-				self.Text:SetText("-")
+				self:GetNormalTexture():SetTexCoord(0.545, 0.975, 0.085, 0.925)
 			elseif find(texture, "PlusButton") then
-				self.Text:SetText("+")
+				self:GetNormalTexture():SetTexCoord(0.045, 0.475, 0.085, 0.925)
 			else
-				self.Text:SetText("")
+				self:GetNormalTexture():SetTexCoord(0, 0, 0, 0)
 			end
 		end)
 	end
 
 	ClassTrainerCollapseAllButton:Point("LEFT", ClassTrainerExpandTabLeft, "RIGHT", 5, 20)
 
-	ClassTrainerCollapseAllButton:SetNormalTexture("")
+	ClassTrainerCollapseAllButton:SetNormalTexture("Interface\\AddOns\\ElvUI\\media\\textures\\PlusMinusButton")
 	ClassTrainerCollapseAllButton.SetNormalTexture = E.noop
+	ClassTrainerCollapseAllButton:GetNormalTexture():Point("LEFT", 3, 2)
+	ClassTrainerCollapseAllButton:GetNormalTexture():Size(15)
+
 	ClassTrainerCollapseAllButton:SetHighlightTexture("")
 	ClassTrainerCollapseAllButton.SetHighlightTexture = E.noop
-	ClassTrainerCollapseAllButton:SetDisabledTexture("")
-	ClassTrainerCollapseAllButton.SetDisabledTexture = E.noop
 
-	ClassTrainerCollapseAllButton.Text = ClassTrainerCollapseAllButton:CreateFontString(nil, "OVERLAY")
-	ClassTrainerCollapseAllButton.Text:FontTemplate(nil, 22)
-	ClassTrainerCollapseAllButton.Text:Point("LEFT", 3, 0)
-	ClassTrainerCollapseAllButton.Text:SetText("+")
+	ClassTrainerCollapseAllButton:SetDisabledTexture("Interface\\AddOns\\ElvUI\\media\\textures\\PlusMinusButton")
+	ClassTrainerCollapseAllButton.SetDisabledTexture = E.noop
+	ClassTrainerCollapseAllButton:GetDisabledTexture():Point("LEFT", 3, 2)
+	ClassTrainerCollapseAllButton:GetDisabledTexture():Size(15)
+	ClassTrainerCollapseAllButton:GetDisabledTexture():SetTexCoord(0.045, 0.475, 0.085, 0.925)
+	ClassTrainerCollapseAllButton:GetDisabledTexture():SetDesaturated(true)
 
 	hooksecurefunc(ClassTrainerCollapseAllButton, "SetNormalTexture", function(self, texture)
 		if find(texture, "MinusButton") then
-			self.Text:SetText("-")
+			self:GetNormalTexture():SetTexCoord(0.545, 0.975, 0.085, 0.925)
 		else
-			self.Text:SetText("+")
+			self:GetNormalTexture():SetTexCoord(0.045, 0.475, 0.085, 0.925)
 		end
 	end)
 end

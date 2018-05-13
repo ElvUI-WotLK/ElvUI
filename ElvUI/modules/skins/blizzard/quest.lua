@@ -199,8 +199,7 @@ local function LoadSkin()
 
 	QuestLogFrame:HookScript("OnShow", function()
 		if not QuestLogScrollFrame.backdrop then
-			--QuestLogScrollFrame:CreateBackdrop("Default", true)
-			QuestLogScrollFrame:CreateBackdrop("Default")
+			QuestLogScrollFrame:CreateBackdrop("Default", true)
 		end
 
 		QuestLogScrollFrame.backdrop:Point("TOPLEFT", 0, 2)
@@ -208,8 +207,7 @@ local function LoadSkin()
 		QuestLogScrollFrame:Size(302, 331)
 
 		if not QuestLogDetailScrollFrame.backdrop then
-			--QuestLogDetailScrollFrame:CreateBackdrop("Default", true)
-			QuestLogDetailScrollFrame:CreateBackdrop("Default")
+			QuestLogDetailScrollFrame:CreateBackdrop("Default", true)
 		end
 		QuestLogDetailScrollFrame.backdrop:Point("TOPLEFT", 0, 3)
 		QuestLogDetailScrollFrame.backdrop:Point("BOTTOMRIGHT", 0, -2)
@@ -224,8 +222,7 @@ local function LoadSkin()
 
 	QuestLogDetailFrame:HookScript("OnShow", function()
 		if not QuestLogDetailScrollFrame.backdrop then
-			--QuestLogDetailScrollFrame:CreateBackdrop("Default", true)
-			QuestLogDetailScrollFrame:CreateBackdrop("Default")
+			QuestLogDetailScrollFrame:CreateBackdrop("Default", true)
 		end
 		QuestLogDetailScrollFrame.backdrop:Point("BOTTOMRIGHT", 0, -2)
 		QuestLogDetailScrollFrame:Height(375)
@@ -332,23 +329,20 @@ local function LoadSkin()
 
 	for i = 1, #QuestLogScrollFrame.buttons do
 		local questLogTitle = _G["QuestLogScrollFrameButton"..i]
-		questLogTitle:SetNormalTexture("")
+		questLogTitle:SetNormalTexture("Interface\\AddOns\\ElvUI\\media\\textures\\PlusMinusButton")
 		questLogTitle.SetNormalTexture = E.noop
+		questLogTitle:GetNormalTexture():Size(13)
+		questLogTitle:GetNormalTexture():Point("LEFT", 5, 0)
 		questLogTitle:SetHighlightTexture("")
 		questLogTitle.SetHighlightTexture = E.noop
 
-		questLogTitle.Text = questLogTitle:CreateFontString(nil, "OVERLAY")
-		questLogTitle.Text:FontTemplate(nil, 22)
-		questLogTitle.Text:Point("LEFT", 3, 0)
-		questLogTitle.Text:SetText("+")
-
 		hooksecurefunc(questLogTitle, "SetNormalTexture", function(self, texture)
 			if find(texture, "MinusButton") then
-				self.Text:SetText("-")
+				self:GetNormalTexture():SetTexCoord(0.545, 0.975, 0.085, 0.925)
 			elseif find(texture, "PlusButton") then
-				self.Text:SetText("+")
+				self:GetNormalTexture():SetTexCoord(0.045, 0.475, 0.085, 0.925)
 			else
-				self.Text:SetText("")
+				self:GetNormalTexture():SetTexCoord(0, 0, 0, 0)
 			end
 		end)
 	end
