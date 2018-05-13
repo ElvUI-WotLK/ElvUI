@@ -566,27 +566,22 @@ end
 
 function CH:UpdateAnchors()
 	for _, frameName in pairs(CHAT_FRAMES) do
-		local frame = _G[frameName .. "EditBox"];
-		if(not frame) then break; end
-		if(not E.db.datatexts.leftChatPanel and (self.db.panelBackdrop == "HIDEBOTH" or self.db.panelBackdrop == "RIGHT")) then
-			frame:ClearAllPoints();
-			if(E.db.chat.editBoxPosition == "BELOW_CHAT") then
-				frame:SetPoint("TOPLEFT", ChatFrame1, "BOTTOMLEFT");
-				frame:SetPoint("BOTTOMRIGHT", ChatFrame1, "BOTTOMRIGHT", 0, -LeftChatTab:GetHeight());
-			else
-				frame:SetPoint("BOTTOMLEFT", ChatFrame1, "TOPLEFT");
-				frame:SetPoint("TOPRIGHT", ChatFrame1, "TOPRIGHT", 0, LeftChatTab:GetHeight());
-			end
-		else
-			if(E.db.datatexts.leftChatPanel and E.db.chat.editBoxPosition == "BELOW_CHAT") then
-				frame:SetAllPoints(LeftChatDataPanel);
-			else
-				frame:SetAllPoints(LeftChatTab);
-			end
+		local frame = _G[frameName.."EditBox"]
+		if not frame then break end
+		local noBackdrop = (self.db.panelBackdrop == "HIDEBOTH" or self.db.panelBackdrop == "RIGHT")
+		frame:ClearAllPoints()
+		if not E.db.datatexts.leftChatPanel and E.db.chat.editBoxPosition == "BELOW_CHAT" then
+			frame:Point("TOPLEFT", ChatFrame1, "BOTTOMLEFT", noBackdrop and -1 or -4, noBackdrop and -1 or -4)
+			frame:Point("BOTTOMRIGHT", ChatFrame1, "BOTTOMRIGHT", noBackdrop and 10 or 7, -LeftChatTab:GetHeight()-(noBackdrop and 1 or 4))
+		elseif E.db.chat.editBoxPosition == "BELOW_CHAT" then
+			frame:SetAllPoints(LeftChatDataPanel)
+ 		else
+			frame:Point("BOTTOMLEFT", ChatFrame1, "TOPLEFT", noBackdrop and -1 or -1, noBackdrop and 1 or 4)
+			frame:Point("TOPRIGHT", ChatFrame1, "TOPRIGHT", noBackdrop and 10 or 4, LeftChatTab:GetHeight()+(noBackdrop and 1 or 4))
 		end
 	end
 
-	CH:PositionChat(true);
+	CH:PositionChat(true)
 end
 
 local function FindRightChatID()
