@@ -24,7 +24,6 @@ local MovieFrame = MovieFrame;
 local Screenshot = Screenshot;
 local SetCVar = SetCVar;
 local UnitCastingInfo = UnitCastingInfo;
-local UnitFactionGroup = UnitFactionGroup;
 local UnitIsAFK = UnitIsAFK;
 
 local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
@@ -284,7 +283,7 @@ function AFK:Initialize()
 	self.AFKMode.bottom.logo:Point("CENTER", self.AFKMode.bottom, "CENTER", 0, 50);
 	self.AFKMode.bottom.logo:SetTexture("Interface\\AddOns\\ElvUI\\media\\textures\\logo");
 
-	local factionGroup = UnitFactionGroup("player");
+	local factionGroup = E.myfaction
 	self.AFKMode.bottom.faction = self.AFKMode.bottom:CreateTexture(nil, "OVERLAY");
 	self.AFKMode.bottom.faction:Point("BOTTOMLEFT", self.AFKMode.bottom, "BOTTOMLEFT", -20, -16);
 	self.AFKMode.bottom.faction:SetTexture("Interface\\AddOns\\ElvUI\\media\\textures\\"..factionGroup.."-Logo");
