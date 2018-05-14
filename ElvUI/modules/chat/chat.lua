@@ -1560,20 +1560,6 @@ function CH:SaveChatHistory(event, ...)
 	if not self.db.chatHistory then return end
 	local data = ElvCharacterDB.ChatHistoryLog
 
---[[
-	if self.db.throttleInterval ~= 0 and (event == "CHAT_MESSAGE_SAY" or event == "CHAT_MESSAGE_YELL" or event == "CHAT_MSG_CHANNEL") then
-		self:ChatThrottleHandler(event, ...)
-
-		local message, author = ...
-		local msg = PrepareMessage(author, message)
-		if author ~= E.myname and msgList[msg] then
-			if difftime(time(), msgTime[msg]) <= CH.db.throttleInterval then
-				return;
-			end
-		end
-	end
-]]
-
 	local temp = {}
 	for i = 1, select("#", ...) do
 		temp[i] = select(i, ...) or false
@@ -1590,6 +1576,18 @@ function CH:SaveChatHistory(event, ...)
 		end
 	end
 	temp = nil -- Destory!
+
+	if self.db.throttleInterval ~= 0 and (event == "CHAT_MESSAGE_SAY" or event == "CHAT_MESSAGE_YELL" or event == "CHAT_MSG_CHANNEL") then
+		self:ChatThrottleHandler(event, ...)
+
+		local message, author = ...
+		local msg = PrepareMessage(author, message)
+		if author ~= E.myname and msgList[msg] then
+			if difftime(time(), msgTime[msg]) <= CH.db.throttleInterval then
+				return
+			end
+		end
+	end
 end
 
 function CH:ChatFrame_AddMessageEventFilter(event, filter)
