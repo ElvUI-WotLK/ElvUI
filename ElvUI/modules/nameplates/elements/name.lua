@@ -22,7 +22,6 @@ function mod:UpdateElement_Name(frame, triggered)
 			r, g, b = classColor.r, classColor.g, classColor.b
 		end
 	elseif triggered or (not self.db.units[frame.UnitType].healthbar.enable and not frame.isTarget) then
-		local reactionType = frame.UnitReaction
 		if reactionType and reactionType == 4 then
 			r, g, b = self.db.reactions.neutral.r, self.db.reactions.neutral.g, self.db.reactions.neutral.b
 		elseif reactionType and reactionType > 4 then
