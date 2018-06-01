@@ -2100,6 +2100,15 @@ local function GetUnitSettings(unit, name)
 	};
 
 	if(unit == "FRIENDLY_PLAYER" or unit == "ENEMY_PLAYER") then
+		if unit == "ENEMY_PLAYER" then
+			group.args.markHealers = {
+				order = 1,
+				type = "toggle",
+				name = L["Healer Icon"],
+				desc = L["Display a healer icon over known healers inside battlegrounds or arenas."],
+				set = function(info, value) E.db.nameplates.units.ENEMY_PLAYER[ info[#info] ] = value NP:PLAYER_ENTERING_WORLD() NP:ConfigureAll() end
+			}
+		end
 		group.args.healthGroup.args.useClassColor = {
 			order = 4,
 			type = "toggle",
