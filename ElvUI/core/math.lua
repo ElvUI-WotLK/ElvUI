@@ -306,6 +306,8 @@ function E:StringTitle(str)
 	return str:gsub("(.)", upper, 1);
 end
 
+E.TimeThreshold = 3
+
 E.TimeColors = {
 	[0] = "|cffeeeeee",
 	[1] = "|cffeeeeee",

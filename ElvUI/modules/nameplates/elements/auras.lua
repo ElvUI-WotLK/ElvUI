@@ -48,10 +48,23 @@ function mod:UpdateTime(elapsed)
 		return
 	end
 
+	local timeColors, timeThreshold = E.TimeColors, E.db.cooldown.threshold
+	if mod.db.cooldown.override and E.TimeColors["nameplates"] then
+		timeColors, timeThreshold = E.TimeColors["nameplates"], mod.db.cooldown.threshold
+	end
+	if not timeThreshold then
+		timeThreshold = E.TimeThreshold
+	end
+
 	local timerValue, formatID
-	timerValue, formatID, self.nextUpdate = E:GetTimeInfo(self.timeLeft, 4)
-	if timerValue <= 0 then self:Hide(); LAI:RemoveAuraFromGUID(self:GetParent():GetParent().guid, self.spellID, nil, self:GetParent().filter); mod:UpdateElement_Filters(self:GetParent():GetParent(), "UNIT_AURA") return end
-	self.time:SetFormattedText(format("%s%s|r", E.TimeColors[formatID], E.TimeFormats[formatID][1]), timerValue)
+	timerValue, formatID, self.nextUpdate = E:GetTimeInfo(self.timeLeft, timeThreshold)
+	if timerValue <= 0 then
+		self:Hide()
+		LAI:RemoveAuraFromGUID(self:GetParent():GetParent().guid, self.spellID, nil, self:GetParent().filter)
+		mod:UpdateElement_Filters(self:GetParent():GetParent(), "UNIT_AURA")
+		return
+	end
+	self.time:SetFormattedText(format("%s%s|r", timeColors[formatID], E.TimeFormats[formatID][2]), timerValue)
 end
 
 function mod:SetAura(aura, index, name, icon, count, duration, expirationTime, spellID)

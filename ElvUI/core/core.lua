@@ -842,7 +842,7 @@ function E:UpdateAll(ignoreInstall)
 
 	self:SetMoversPositions();
 	self:UpdateMedia();
-	self:UpdateCooldownSettings();
+	self:UpdateCooldownSettings("all")
 
 	local UF = self:GetModule("UnitFrames")
 	UF.db = self.db.unitframe;
@@ -1217,7 +1217,7 @@ function E:Initialize()
 	self:LoadCommands();
 	self:InitializeModules();
 	self:LoadMovers();
-	self:UpdateCooldownSettings();
+	self:UpdateCooldownSettings("all")
 	self.initialized = true;
 
 	if(self.private.install_complete == nil) then

@@ -158,6 +158,15 @@ P["bags"] = {
 	["clearSearchOnClose"] = false,
 	["disableBagSort"] = false,
 	["disableBankSort"] = false,
+	["cooldown"] = {
+		["threshold"] = 4,
+		["override"] = false,
+		["expiringColor"] = {r = 1, g = 0, b = 0},
+		["secondsColor"] = {r = 1, g = 1, b = 1},
+		["minutesColor"] = {r = 1, g = 1, b = 1},
+		["hoursColor"] = {r = 1, g = 1, b = 1},
+		["daysColor"] = {r = 1, g = 1, b = 1},
+	},
 	["bagBar"] = {
 		["growthDirection"] = "VERTICAL",
 		["sortDirection"] = "ASCENDING",
@@ -200,6 +209,15 @@ P["nameplates"] = {
 	["castColor"] = {r = 1, g = 208/255, b = 0},
 	["castNoInterruptColor"] = {r = 0.78, g = 0.25, b = 0.25},
 	["comboPoints"] = true,
+	["cooldown"] = {
+		["threshold"] = 4,
+		["override"] = true,
+		["expiringColor"] = {r = 1, g = 0, b = 0},
+		["secondsColor"] = {r = 1, g = 1, b = 1},
+		["minutesColor"] = {r = 1, g = 1, b = 1},
+		["hoursColor"] = {r = 1, g = 1, b = 1},
+		["daysColor"] = {r = 1, g = 1, b = 1},
+	},
 	["reactions"] = {
 		["friendlyPlayer"] = {r = 0.31, g = 0.45, b = 0.63},
 		["tapped"] = {r = 0.6, g = 0.6, b = 0.6},
@@ -440,7 +458,7 @@ P["auras"] = {
 	["countXOffset"] = 0,
 	["timeYOffset"] = 0,
 	["timeXOffset"] = 0,
-	["fadeThreshold"] = 5,
+	["fadeThreshold"] = 6,
 	["buffs"] = {
 		["growthDirection"] = "LEFT_DOWN",
 		["wrapAfter"] = 12,
@@ -467,6 +485,15 @@ P["auras"] = {
 		["countFontsize"] = 10,
 		["durationFontSize"] = 10,
 	},
+	["cooldown"] = {
+		["threshold"] = 4,
+		["override"] = true,
+		["expiringColor"] = {r = 1, g = 0, b = 0},
+		["secondsColor"] = {r = 1, g = 1, b = 1},
+		["minutesColor"] = {r = 1, g = 1, b = 1},
+		["hoursColor"] = {r = 1, g = 1, b = 1},
+		["daysColor"] = {r = 1, g = 1, b = 1},
+	}
 }
 
 --Chat
@@ -621,6 +648,15 @@ P["unitframe"] = {
 	["targetOnMouseDown"] = false,
 	["auraBlacklistModifier"] = "SHIFT",
 	["thinBorders"] = false,
+	["cooldown"] = {
+		["threshold"] = 4,
+		["override"] = true,
+		["expiringColor"] = {r = 1, g = 0, b = 0},
+		["secondsColor"] = {r = 1, g = 1, b = 1},
+		["minutesColor"] = {r = 1, g = 1, b = 1},
+		["hoursColor"] = {r = 1, g = 1, b = 1},
+		["daysColor"] = {r = 1, g = 1, b = 1},
+	},
 	["colors"] = {
 		["borderColor"] = {r = 0, g = 0, b = 0},
 		["healthclass"] = false,

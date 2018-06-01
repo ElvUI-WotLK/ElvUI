@@ -1,8 +1,8 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 
 local floor = math.floor;
-local GetTime = GetTime;
 
+local GetTime = GetTime;
 local CreateFrame = CreateFrame;
 local hooksecurefunc = hooksecurefunc;
 
@@ -10,14 +10,6 @@ local ICON_SIZE = 36 --the normal size for an icon (don't change this)
 local FONT_SIZE = 20 --the base font size to use at a scale of 1
 local MIN_SCALE = 0.5 --the minimum scale we want to show cooldown counts at, anything below this will be hidden
 local MIN_DURATION = 1.5 --the minimum duration to show cooldown text for
-
-local TimeColors = {
-	[0] = "|cfffefefe",
-	[1] = "|cfffefefe",
-	[2] = "|cfffefefe",
-	[3] = "|cfffefefe",
-	[4] = "|cfffe0000",
-}
 
 local function Cooldown_OnUpdate(cd, elapsed)
 	if cd.nextUpdate > 0 then
@@ -32,9 +24,17 @@ local function Cooldown_OnUpdate(cd, elapsed)
 			cd.text:SetText("")
 			cd.nextUpdate = 500
 		else
+			local timeColors, timeThreshold = E.TimeColors, E.db.cooldown.threshold
+			if cd.ColorOverride and (E.db[cd.ColorOverride] and E.db[cd.ColorOverride].cooldown.override and E.TimeColors[cd.ColorOverride]) then
+				timeColors, timeThreshold = E.TimeColors[cd.ColorOverride], E.db[cd.ColorOverride].cooldown.threshold
+			end
+			if not timeThreshold then
+				timeThreshold = E.TimeThreshold
+			end
+
 			local timervalue, formatid
-			timervalue, formatid, cd.nextUpdate = E:GetTimeInfo(remain, E.db.cooldown.threshold)
-			cd.text:SetFormattedText(("%s%s|r"):format(TimeColors[formatid], E.TimeFormats[formatid][2]), timervalue)
+			timervalue, formatid, cd.nextUpdate = E:GetTimeInfo(remain, timeThreshold)
+			cd.text:SetFormattedText(("%s%s|r"):format(timeColors[formatid], E.TimeFormats[formatid][2]), timervalue)
 		end
 	else
 		E:Cooldown_StopTimer(cd)
@@ -92,6 +92,12 @@ function E:CreateCooldownTimer(parent)
 	parent:SetScript("OnSizeChanged", function(_, ...) self:Cooldown_OnSizeChanged(timer, ...) end)
 
 	parent.timer = timer
+
+	-- used by nameplate and bag module to override the cooldown color by its setting (if enabled)
+	if parent.ColorOverride then
+		timer.ColorOverride = parent.ColorOverride
+	end
+
 	return timer
 end
 
@@ -120,19 +126,33 @@ function E:RegisterCooldown(cooldown)
 	cooldown.isHooked = true
 end
 
-function E:UpdateCooldownSettings()
-	local color = self.db.cooldown.expiringColor
-	TimeColors[4] = E:RGBToHex(color.r, color.g, color.b) -- color for timers that are soon to expire
+function E:GetCooldownColors(db)
+	if not db then db = self.db.cooldown end -- just incase someone calls this without a first arg use the global
+	local c4 = E:RGBToHex(db.expiringColor.r, db.expiringColor.g, db.expiringColor.b) -- color for timers that are soon to expire
+	local c3 = E:RGBToHex(db.secondsColor.r, db.secondsColor.g, db.secondsColor.b) -- color for timers that have seconds remaining
+	local c2 = E:RGBToHex(db.minutesColor.r, db.minutesColor.g, db.minutesColor.b) -- color for timers that have minutes remaining
+	local c1 = E:RGBToHex(db.hoursColor.r, db.hoursColor.g, db.hoursColor.b) -- color for timers that have hours remaining
+	local c0 = E:RGBToHex(db.daysColor.r, db.daysColor.g, db.daysColor.b) -- color for timers that have days remaining
+	return c0, c1, c2, c3, c4
+end
 
-	color = self.db.cooldown.secondsColor
-	TimeColors[3] = E:RGBToHex(color.r, color.g, color.b) -- color for timers that have seconds remaining
+function E:UpdateCooldownSettings(module)
+	local cooldownDB, timeColors = self.db.cooldown, E.TimeColors
 
-	color = self.db.cooldown.minutesColor
-	TimeColors[2] = E:RGBToHex(color.r, color.g, color.b) -- color for timers that have minutes remaining
+	-- update the module timecolors if the config called it but ignore "global" and "all":
+	-- global is the main call from config, all is the core file calls
+	if module and (module ~= "global" and module ~= "all") and self.db[module] and self.db[module].cooldown then
+		if not E.TimeColors[module] then E.TimeColors[module] = {} end
+		cooldownDB, timeColors = self.db[module].cooldown, E.TimeColors[module]
+	end
 
-	color = self.db.cooldown.hoursColor
-	TimeColors[1] = E:RGBToHex(color.r, color.g, color.b) -- color for timers that have hours remaining
+	timeColors[0], timeColors[1], timeColors[2], timeColors[3], timeColors[4] = E:GetCooldownColors(cooldownDB)
 
-	color = self.db.cooldown.daysColor
-	TimeColors[0] = E:RGBToHex(color.r, color.g, color.b) -- color for timers that have days remaining
+	-- okay update the other override settings if it was one of the core file calls
+	if module and (module == "all") then
+		E:UpdateCooldownSettings("bags")
+		E:UpdateCooldownSettings("auras")
+		E:UpdateCooldownSettings("nameplates")
+		E:UpdateCooldownSettings("unitframe")
+	end
 end
