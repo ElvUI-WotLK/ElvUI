@@ -2,15 +2,17 @@ local E, L, V, P, G = unpack(ElvUI);
 local NP = E:GetModule("NamePlates");
 local ACD = LibStub("AceConfigDialog-3.0-ElvUI");
 
-local next = next
-local ipairs = ipairs
-local tremove = tremove
-local tinsert = tinsert
-local tsort = table.sort
-local tonumber = tonumber
-local tconcat = table.concat
-local format = string.format
-local pairs, type, strsplit, match, gsub = pairs, type, strsplit, string.match, string.gsub
+local next, ipairs, pairs, type, tonumber = next, ipairs, pairs, type, tonumber
+local tremove, tinsert, tsort, tconcat = tremove, tinsert, table.sort, table.concat
+local format, match, gsub, strsplit = string.format, string.match, string.gsub, strsplit
+
+local GetSpellInfo = GetSpellInfo
+local DUNGEON_DIFFICULTY, PLAYER_DIFFICULTY1, PLAYER_DIFFICULTY2 = DUNGEON_DIFFICULTY, PLAYER_DIFFICULTY1, PLAYER_DIFFICULTY2
+local FACTION_STANDING_LABEL2, FACTION_STANDING_LABEL4, FACTION_STANDING_LABEL5 = FACTION_STANDING_LABEL2, FACTION_STANDING_LABEL4, FACTION_STANDING_LABEL5
+local SPEED, DISABLE, HEALTH, LEVEL, NONE, COMBAT, FILTERS = SPEED, DISABLE, HEALTH, LEVEL, NONE, COMBAT, FILTERS
+local ARENA, RAID, PARTY, BATTLEFIELDS = ARENA, RAID, PARTY, BATTLEFIELDS
+local ROLE, TANK, HEALER, DAMAGER, COLOR = ROLE, TANK, HEALER, DAMAGER, COLOR
+local RAID_CLASS_COLORS = RAID_CLASS_COLORS
 
 local selectedNameplateFilter
 
@@ -74,12 +76,12 @@ local function UpdateInstanceDifficulty()
 				normal = {
 					order = 1,
 					type = "toggle",
-					name = "Normal",
+					name = PLAYER_DIFFICULTY1
 				},
 				heroic = {
 					order = 2,
 					type = "toggle",
-					name = "Heroic",
+					name = PLAYER_DIFFICULTY2
 				},
 			}
 		}
@@ -1692,7 +1694,7 @@ local function GetUnitSettings(unit, name)
 						order = 6,
 						type = "range",
 						name = L["Offset"],
-						min = 0, max = 30, step = 1
+						min = 0, max = 15, step = 1
 					},
 					timeToHold = {
 						order = 7,
@@ -2360,22 +2362,28 @@ E.Options.args.nameplate = {
 								NP:PLAYER_REGEN_ENABLED();
 							end
 						},
-						comboPoints = {
-							order = 7,
-							type = "toggle",
-							name = L["Combo Points"],
-							desc = L["Display combo points on nameplates."]
-						},
 						resetFilters = {
-							order = 8,
+							order = 7,
 							name = L["Reset Aura Filters"],
 							type = "execute",
 							func = function(info, value)
 								E:StaticPopup_Show("RESET_NP_AF") --reset nameplate aurafilters
 							end,
 						},
-						targetedNamePlate = {
+						comboPoints = {
+							order = 8,
+							type = "toggle",
+							name = L["Combo Points"],
+							desc = L["Display combo points on nameplates."]
+						},
+						nameColoredGlow = {
 							order = 9,
+							type = "toggle",
+							name = L["Name Colored Glow"],
+							desc = L["Use the Name Color of the unit for the Name Glow."]
+						},
+						targetedNamePlate = {
+							order = 10,
 							type = "group",
 							guiInline = true,
 							name = L["Targeted Nameplate"],

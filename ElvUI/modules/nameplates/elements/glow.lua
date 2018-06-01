@@ -4,6 +4,79 @@ local LSM = LibStub("LibSharedMedia-3.0")
 
 local CreateFrame = CreateFrame
 
+--[[
+Target Glow Style Option Variables
+	style1 - Border
+	style2 - Background
+	style3 - Top Arrow Only
+	style4 - Side Arrows Only
+	style5 - Border + Top Arrow
+	style6 - Background + Top Arrow
+	style7 - Border + Side Arrows
+	style8 - Background + Side Arrows
+]]
+
+function mod:UpdatePoisiton_Arrow(frame, shouldShow)
+	if frame.TopArrow and (shouldShow ~= 2) and (self.db.targetGlow == "style3" or self.db.targetGlow == "style5" or self.db.targetGlow == "style6") then -- top arrow
+		local topArrowSpace = -3
+		if self.db.units[frame.UnitType].showName and (frame.Name:GetText() ~= nil and frame.Name:GetText() ~= "") then
+			topArrowSpace = self.db.fontSize + topArrowSpace
+		end
+		frame.TopArrow:Point("BOTTOM", frame.HealthBar, "TOP", 0, topArrowSpace)
+
+		if shouldShow then
+			frame.TopArrow:Show()
+		end
+	end
+
+	if (frame.LeftArrow and frame.RightArrow) and (shouldShow ~= 2) and (self.db.targetGlow == "style4" or self.db.targetGlow == "style7" or self.db.targetGlow == "style8") then -- side arrows
+		frame.RightArrow:Point("RIGHT", frame.HealthBar, "LEFT", 3, 0)
+		frame.LeftArrow:Point("LEFT", frame.HealthBar, "RIGHT", -3, 0)
+
+		if shouldShow then
+			frame.RightArrow:Show()
+			frame.LeftArrow:Show()
+		end
+	end
+end
+
+function mod:UpdatePosition_Glow(frame, shouldShow)
+	local castBar = frame.CastBar and frame.CastBar:IsShown() and frame.CastBar
+	local iconPosition = castBar and (castBar.Icon and castBar.Icon:IsShown()) and (frame.UnitType and self.db.units[frame.UnitType].castbar.iconPosition)
+
+	if frame.Glow and (self.db.targetGlow == "style1" or self.db.targetGlow == "style5" or self.db.targetGlow == "style7") then -- original glow
+		local offset = (E.PixelMode and E.mult*6) or E.mult*8 -- edgeSize is 6 (not attached to the backdrop needs +1 for pixel mode or +3 for non pixel mode)
+		if self.db.units[frame.UnitType].castbar.offset < 4 then
+			frame.Glow:SetOutside((iconPosition == "LEFT" and castBar.Icon) or frame.HealthBar, offset, offset, (iconPosition == "RIGHT" and castBar.Icon) or castBar)
+		else
+			frame.Glow:SetOutside(frame.HealthBar, offset, offset)
+		end
+
+		if shouldShow then
+			frame.Glow:Show()
+		end
+	end
+
+	if frame.Glow2 and (self.db.targetGlow == "style2" or self.db.targetGlow == "style6" or self.db.targetGlow == "style8") then -- new background glow
+		local scale = 1
+		if self.db.useTargetScale then
+			if self.db.targetScale >= 0.75 then
+				scale = self.db.targetScale
+			else
+				scale = 0.75
+			end
+		end
+
+		local size = (E.Border+14+(castBar and 3 or 0))*scale
+		frame.Glow2:Point("TOPLEFT", (iconPosition == "LEFT" and castBar.Icon) or frame.HealthBar, "TOPLEFT", -(size*2), size)
+		frame.Glow2:Point("BOTTOMRIGHT", (iconPosition == "RIGHT" and castBar.Icon) or castBar or frame.HealthBar, "BOTTOMRIGHT", size*2, -size)
+
+		if shouldShow then
+			frame.Glow2:Show()
+		end
+	end
+end
+
 function mod:UpdateElement_Glow(frame)
 	if frame.TopArrow:IsShown() then frame.TopArrow:Hide() end
 	if frame.LeftArrow:IsShown() then frame.LeftArrow:Hide() end
@@ -12,7 +85,7 @@ function mod:UpdateElement_Glow(frame)
 	if frame.Glow:IsShown() then frame.Glow:Hide() end
 	if not frame.HealthBar:IsShown() then return end
 
-	local scale, shouldShow, r, g, b, a = 1, 0
+	local shouldShow, r, g, b, a = 0
 	if frame.isTarget and self.db.targetGlow ~= "none" then
 		r, g, b, a = self.db.glowColor.r, self.db.glowColor.g, self.db.glowColor.b, self.db.glowColor.a
 		shouldShow = 1
@@ -31,50 +104,17 @@ function mod:UpdateElement_Glow(frame)
 		end
 	end
 
-	--[[
-		style1:"Border",
-		style2:"Background",
-		style3:"Top Arrow Only",
-		style4:"Side Arrows Only",
-		style5:"Border + Top Arrow",
-		style6:"Background + Top Arrow",
-		style7:"Border + Side Arrows",
-		style8:"Background + Side Arrows"
-	]]
 	if shouldShow ~= 0 then
-		if self.db.targetGlow == "style1" or self.db.targetGlow == "style5" or self.db.targetGlow == "style7" then -- original glow
-			frame.Glow:Show()
-		end
-		if self.db.targetGlow == "style2" or self.db.targetGlow == "style6" or self.db.targetGlow == "style8" then -- new background glow
-			frame.Glow2:Show()
-			if self.db.useTargetScale then
-				if self.db.targetScale >= 0.75 then
-					scale = self.db.targetScale
-				else
-					scale = 0.75
-				end
-			end
-			local size = (E.Border*10)*scale;
-			frame.Glow2:SetPoint("TOPLEFT", frame.HealthBar, "TOPLEFT", -E:Scale(size*2), E:Scale(size))
-			frame.Glow2:SetPoint("BOTTOMRIGHT", frame.HealthBar, "BOTTOMRIGHT", E:Scale(size*2), -E:Scale(size))
-		end
-		if shouldShow ~= 2 and (self.db.targetGlow == "style3" or self.db.targetGlow == "style5" or self.db.targetGlow == "style6") then -- top arrow
-			frame.TopArrow:SetPoint("BOTTOM", frame.HealthBar, "TOP", 0, E:Scale(E.Border*2))
-			frame.TopArrow:Show()
-		end
-		if shouldShow ~= 2 and (self.db.targetGlow == "style4" or self.db.targetGlow == "style7" or self.db.targetGlow == "style8") then -- side arrows
-			frame.RightArrow:SetPoint("RIGHT", frame.HealthBar, "LEFT", E:Scale(E.Border*2), 0)
-			frame.LeftArrow:SetPoint("LEFT", frame.HealthBar, "RIGHT", -E:Scale(E.Border*2), 0)
-			frame.RightArrow:Show()
-			frame.LeftArrow:Show()
-		end
-		if r ~= frame.Glow.r or g ~= frame.Glow.g or b ~= frame.Glow.b or a ~= frame.Glow.a then
-			frame.Glow:SetBackdropBorderColor(r, g, b, a);
-			frame.Glow2:SetVertexColor(r, g, b, a);
-			frame.TopArrow:SetVertexColor(r, g, b, a);
-			frame.LeftArrow:SetVertexColor(r, g, b, a);
-			frame.RightArrow:SetVertexColor(r, g, b, a);
-			frame.Glow.r, frame.Glow.g, frame.Glow.b, frame.Glow.a = r, g, b, a;
+		self:UpdatePosition_Glow(frame, shouldShow)
+		self:UpdatePoisiton_Arrow(frame, shouldShow)
+
+		if frame.Glow and (r ~= frame.Glow.r or g ~= frame.Glow.g or b ~= frame.Glow.b or a ~= frame.Glow.a) then
+			frame.Glow:SetBackdropBorderColor(r, g, b, a)
+			frame.Glow2:SetVertexColor(r, g, b, a)
+			frame.TopArrow:SetVertexColor(r, g, b, a)
+			frame.LeftArrow:SetVertexColor(r, g, b, a)
+			frame.RightArrow:SetVertexColor(r, g, b, a)
+			frame.Glow.r, frame.Glow.g, frame.Glow.b, frame.Glow.a = r, g, b, a
 		end
 	end
 end
@@ -86,13 +126,7 @@ end
 function mod:ConstructElement_Glow(frame)
 	local f = CreateFrame("Frame", nil, frame)
 	f:SetFrameLevel(frame.HealthBar:GetFrameLevel() - 1)
-	f:SetOutside(frame.HealthBar, 3, 3)
-	f:SetBackdrop({
-		edgeFile = LSM:Fetch("border", "ElvUI GlowBorder"), edgeSize = E:Scale(3),
-		insets = {left = E:Scale(5), right = E:Scale(5), top = E:Scale(5), bottom = E:Scale(5)}
-	})
-
-	f:SetScale(E.PixelMode and 1.5 or 2)
+	f:SetBackdrop({edgeFile = LSM:Fetch("border", "ElvUI GlowBorder"), edgeSize = E:Scale(6)})
 	f:Hide()
 
 	local glow = frame:CreateTexture(nil, "BACKGROUND")

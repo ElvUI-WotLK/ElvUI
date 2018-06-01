@@ -623,6 +623,7 @@ L["Minimum Level"] = "最低等级"
 L["Minimum Time Left"] = "最低时间剩余"
 L["Missing"] = "缺失"
 L["Name Color"] = "姓名颜色"
+L["Name Colored Glow"] = true
 L["Name Only"] = "仅姓名"
 L["NamePlates"] = "姓名板(血条)"
 L["Nameplate Motion Type"] = "姓名板排列方式"
@@ -678,6 +679,7 @@ L["Use drag and drop to rearrange filter priority or right click to remove a fil
 L["Use Shift+LeftClick to toggle between friendly or enemy or normal state. Normal state will allow the filter to be checked on all units. Friendly state is for friendly units only and enemy state is for enemy units."] = "使用Shift+左键来改变友方/敌方/普通状态. 普通状态将允许过滤器检查所有单位. 友方/敌方将只检查对应单位."
 L["Use Tanked Color when a nameplate is being effectively tanked by another tank."] = "当另一个坦克更有效的坦住时姓名板使用被坦住的颜色"
 L["Use Target Scale"] = "使用目标缩放"
+L["Use the Name Color of the unit for the Name Glow."] = true
 L["Use Threat Color"] = "使用仇恨颜色"
 
 --Profiles Export/Import

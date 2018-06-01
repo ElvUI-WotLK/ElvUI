@@ -673,6 +673,7 @@ L["Minimum Level"] = true
 L["Minimum Time Left"] = true
 L["Missing"] = true
 L["Name Color"] = "이름 색상"
+L["Name Colored Glow"] = true
 L["Name Only"] = "이름만"
 L["NamePlates"] = "이름표"
 L["Nameplate Motion Type"] = true;
@@ -728,6 +729,7 @@ L["Use drag and drop to rearrange filter priority or right click to remove a fil
 L["Use Shift+LeftClick to toggle between friendly or enemy or normal state. Normal state will allow the filter to be checked on all units. Friendly state is for friendly units only and enemy state is for enemy units."] = true;
 L["Use Tanked Color when a nameplate is being effectively tanked by another tank."] = "다른 방어전담자가 효율적으로 역할 수행중일때 색상을 입힙니다."
 L["Use Target Scale"] = "대상 크기조정 사용"
+L["Use the Name Color of the unit for the Name Glow."] = true
 L["Use Threat Color"] = "위협 색상 사용"
 
 --Profiles Export/Import

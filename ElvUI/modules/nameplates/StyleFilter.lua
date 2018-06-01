@@ -143,6 +143,9 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 		local nameText = frame.oldName:GetText()
 		if nameText and nameText ~= "" then
 			frame.Name:SetTextColor(actions.color.nameColor.r, actions.color.nameColor.g, actions.color.nameColor.b, actions.color.nameColor.a)
+			if self.db.nameColoredGlow then
+				frame.Name.NameOnlyGlow:SetVertexColor(actions.color.nameColor.r - 0.1, actions.color.nameColor.g - 0.1, actions.color.nameColor.b - 0.1, 1)
+			end
 		end
 	end
 	if NameOnlyChanged then

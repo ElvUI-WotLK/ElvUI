@@ -9,21 +9,23 @@ function mod:UpdateElement_Name(frame, triggered)
 
 	frame.Name:SetText(frame.UnitName)
 
-	local r, g, b
-	local useClassColor = self.db.units[frame.UnitType].name and self.db.units[frame.UnitType].name.useClassColor
+	local r, g, b, classColor, useClassColor, useReactionColor
+	local class = frame.UnitClass
+	local reactionType = frame.UnitReaction
+	if class then
+		classColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class]
+		useClassColor = self.db.units[frame.UnitType].name and self.db.units[frame.UnitType].name.useClassColor
+	end
+
 	if useClassColor and (frame.UnitType == "FRIENDLY_PLAYER" or frame.UnitType == "ENEMY_PLAYER") then
-		local class = frame.UnitClass
-		local color = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class]
-		if class and color then
-			r, g, b = color.r, color.g, color.b
-		else
-			r, g, b = self.db.reactions.friendlyPlayer.r, self.db.reactions.friendlyPlayer.g, self.db.reactions.friendlyPlayer.b
+		if class and classColor then
+			r, g, b = classColor.r, classColor.g, classColor.b
 		end
 	elseif triggered or (not self.db.units[frame.UnitType].healthbar.enable and not frame.isTarget) then
 		local reactionType = frame.UnitReaction
-		if reactionType == 4 then
+		if reactionType and reactionType == 4 then
 			r, g, b = self.db.reactions.neutral.r, self.db.reactions.neutral.g, self.db.reactions.neutral.b
-		elseif reactionType > 4 then
+		elseif reactionType and reactionType > 4 then
 			if frame.UnitType == "FRIENDLY_PLAYER" then
 				r, g, b = mod.db.reactions.friendlyPlayer.r, mod.db.reactions.friendlyPlayer.g, mod.db.reactions.friendlyPlayer.b
 			else
@@ -43,7 +45,11 @@ function mod:UpdateElement_Name(frame, triggered)
 		end
 	end
 
-	frame.Name.NameOnlyGlow:SetVertexColor(self.db.glowColor.r, self.db.glowColor.g, self.db.glowColor.b, self.db.glowColor.a)
+	if self.db.nameColoredGlow then
+		frame.Name.NameOnlyGlow:SetVertexColor(r - 0.1, g - 0.1, b - 0.1, 1)
+	else
+		frame.Name.NameOnlyGlow:SetVertexColor(self.db.glowColor.r, self.db.glowColor.g, self.db.glowColor.b, self.db.glowColor.a)
+	end
 end
 
 function mod:ConfigureElement_Name(frame)

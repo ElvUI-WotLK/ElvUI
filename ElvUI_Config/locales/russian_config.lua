@@ -625,6 +625,7 @@ L["Minimum Level"] = "Минимальный уровень"
 L["Minimum Time Left"] = "Минимум оставшегося времени"
 L["Missing"] = "Отсутствует"
 L["Name Color"] = "Цвет имени"
+L["Name Colored Glow"] = true
 L["Name Only"] = "Только имя"
 L["NamePlates"] = "Индикаторы здоровья"
 L["Nameplate Motion Type"] = "Размещение индикаторов здоровья"
@@ -680,6 +681,7 @@ L["Use drag and drop to rearrange filter priority or right click to remove a fil
 L["Use Shift+LeftClick to toggle between friendly or enemy or normal state. Normal state will allow the filter to be checked on all units. Friendly state is for friendly units only and enemy state is for enemy units."] = "Используйте Shift+ЛКМ для переключеня между дружественным, враждебным или нормальным ремимами. В нормалльном режиме фильтр будет проверять все юниты. В дружеском долько дружественные, во враждебном только враждебные."
 L["Use Tanked Color when a nameplate is being effectively tanked by another tank."] = "Использовать этот цвет для юнитов, которых держит другой танк."
 L["Use Target Scale"] = "Масштабирование цели"
+L["Use the Name Color of the unit for the Name Glow."] = true
 L["Use Threat Color"] = "Использовать цвет угрозы"
 
 --Profiles Export/Import

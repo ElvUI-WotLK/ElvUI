@@ -625,6 +625,7 @@ L["Minimum Level"] = "Minimale Level"
 L["Minimum Time Left"] = "Minimale Zeit verbleibend"
 L["Missing"] = "Fehlend"
 L["Name Color"] = "Namen Farbe"
+L["Name Colored Glow"] = "Klassenfarben Leuchten"
 L["Name Only"] = "Nur Name"
 L["NamePlates"] = "Namensplaketten"
 L["Nameplate Motion Type"] = "Bewegungstyp für Namensplaketten"
@@ -680,6 +681,7 @@ L["Use drag and drop to rearrange filter priority or right click to remove a fil
 L["Use Shift+LeftClick to toggle between friendly or enemy or normal state. Normal state will allow the filter to be checked on all units. Friendly state is for friendly units only and enemy state is for enemy units."] = "Benutze Shift+Linksklick um zwischen freundlichem oder freindlichen Status umzuschalten. Normaler Status erlaubt den Filter alle Einheiten zu überprüfen. Freundlicher Status überprüft nur freundliche Einheiten. Feindliche überprüft nur feindliche Einheiten."
 L["Use Tanked Color when a nameplate is being effectively tanked by another tank."] = "Benutze 'Angetankte Farbe' für die Namensplakette, wenn die Einheit von einem anderen Tank getankt wird."
 L["Use Target Scale"] = "Benutze Ziel Skalierung"
+L["Use the Name Color of the unit for the Name Glow."] = "Benutze Klassenfarbe für das Einheiten Namensleuchten."
 L["Use Threat Color"] = "Benutze Bedrohungsfarbe"
 
 --Profiles Export/Import

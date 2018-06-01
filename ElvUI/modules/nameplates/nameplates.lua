@@ -4,10 +4,9 @@ local LSM = LibStub("LibSharedMedia-3.0")
 local LAI = LibStub("LibAuraInfo-1.0-ElvUI", true)
 
 local _G = _G
-local pairs, tonumber = pairs, tonumber
+local select, unpack, pairs, tonumber = select, unpack, pairs, tonumber
+local format, find, gsub, match = string.format, string.find, string.gsub, string.match
 local twipe = table.wipe
-local gsub = string.gsub
-local match = string.match
 
 local CreateFrame = CreateFrame
 local GetBattlefieldScore = GetBattlefieldScore
@@ -198,8 +197,8 @@ function mod:SetTargetFrame(frame)
 				mod:UpdateElement_Cast(frame, nil, frame.unit)
 				mod:UpdateElement_AurasByGUID(frame.guid)
 			end
-			mod:UpdateElement_Highlight(frame)
 		end
+		mod:UpdateElement_Highlight(frame)
 	elseif frame.isMouseover then
 		frame.isMouseover = nil
 
@@ -408,7 +407,6 @@ function mod:OnShow()
 	self.UnitFrame.UnitType = unitType
 	self.UnitFrame.UnitClass = mod:UnitClass(self.UnitFrame, unitType)
 	self.UnitFrame.UnitReaction = unitReaction
-	self.UnitFrame.UnitReaction = unitReaction
 
 	local unit, guid = mod:GetUnitByName(self.UnitFrame, unitType)
 	if unit and guid then
@@ -471,6 +469,7 @@ function mod:OnHide()
 	self.UnitFrame.RightArrow:Hide()
 	self.UnitFrame.HealthBar.r, self.UnitFrame.HealthBar.g, self.UnitFrame.HealthBar.b = nil, nil, nil
 	self.UnitFrame.HealthBar:Hide()
+	self.UnitFrame.HealthBar.currentScale = nil
 	self.UnitFrame.oldCastBar:Hide()
 	self.UnitFrame.CastBar:Hide()
 	self.UnitFrame.Level:ClearAllPoints()
@@ -494,7 +493,6 @@ function mod:OnHide()
 	self.UnitFrame.TopOffset = nil
 	self.UnitFrame.ThreatScale = nil
 	self.UnitFrame.ActionScale = nil
-
 	self.UnitFrame.ThreatReaction = nil
 	self.UnitFrame.guid = nil
 	self.UnitFrame.RaidIconType = nil
@@ -532,11 +530,23 @@ function mod:ForEachVisiblePlate(functionToRun, ...)
 end
 
 function mod:UpdateElement_All(frame, noTargetFrame, filterIgnore)
-	if self.db.units[frame.UnitType].healthbar.enable or (frame.isTarget and self.db.alwaysShowTargetHealth) then
+	local healthShown = (frame.UnitType and self.db.units[frame.UnitType].healthbar.enable) or (frame.isTarget and self.db.alwaysShowTargetHealth)
+
+	if healthShown then
 		mod:UpdateElement_Health(frame)
 		mod:UpdateElement_HealthColor(frame)
 		mod:UpdateElement_Cast(frame, nil, frame.unit)
 		mod:UpdateElement_Auras(frame)
+	end
+	mod:UpdateElement_RaidIcon(frame)
+	mod:UpdateElement_HealerIcon(frame)
+	mod:UpdateElement_Name(frame)
+	mod:UpdateElement_Level(frame)
+	mod:UpdateElement_Elite(frame)
+	mod:UpdateElement_Highlight(frame)
+
+	if healthShown then
+		mod:UpdateElement_Glow(frame)
 	else
 		-- make sure we hide the arrows and/or glow after disabling the healthbar
 		if frame.TopArrow and frame.TopArrow:IsShown() then frame.TopArrow:Hide() end
@@ -545,12 +555,6 @@ function mod:UpdateElement_All(frame, noTargetFrame, filterIgnore)
 		if frame.Glow2 and frame.Glow2:IsShown() then frame.Glow2:Hide() end
 		if frame.Glow and frame.Glow:IsShown() then frame.Glow:Hide() end
 	end
-	mod:UpdateElement_RaidIcon(frame)
-	mod:UpdateElement_HealerIcon(frame)
-	mod:UpdateElement_Name(frame)
-	mod:UpdateElement_Level(frame)
-	mod:UpdateElement_Elite(frame)
-	mod:UpdateElement_Highlight(frame)
 
 	if not noTargetFrame then
 		mod:SetTargetFrame(frame)
@@ -773,7 +777,7 @@ end
 function mod:PLAYER_ENTERING_WORLD()
 	twipe(self.Healers)
 	local inInstance, instanceType = IsInInstance()
-	if inInstance and instanceType == "pvp" and self.db.units.ENEMY_PLAYER.markHealers then
+	if inInstance and (instanceType == "pvp") and self.db.units.ENEMY_PLAYER.markHealers then
 		self.CheckHealerTimer = self:ScheduleRepeatingTimer("CheckBGHealers", 3)
 		self:CheckBGHealers()
 	else
@@ -885,6 +889,12 @@ function mod:UpdateFonts(plate)
 				plate.Debuffs.icons[i].count:SetFont(LSM:Fetch("font", self.db.stackFont), self.db.stackFontSize, self.db.stackFontOutline)
 			end
 		end
+	end
+
+	--update glow incase name font changes
+	local healthShown = (plate.UnitType and self.db.units[plate.UnitType].healthbar.enable) or (plate.isTarget and self.db.alwaysShowTargetHealth)
+	if healthShown then
+		self:UpdateElement_Glow(plate)
 	end
 end
 
