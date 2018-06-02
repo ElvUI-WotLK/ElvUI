@@ -7,7 +7,6 @@ local select, unpack, pairs = select, unpack, pairs
 local tonumber = tonumber
 local band = bit.band
 local tinsert, tremove, wipe = table.insert, table.remove, table.wipe
-
 local strlower, strsplit = string.lower, strsplit
 
 local CreateFrame = CreateFrame

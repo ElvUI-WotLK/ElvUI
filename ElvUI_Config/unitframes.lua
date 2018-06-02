@@ -1,39 +1,22 @@
-local E, L, V, P, G = unpack(ElvUI); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local UF = E:GetModule("UnitFrames");
-
-local _, ns = ...
-local ElvUF = ns.oUF
+local E, L, V, P, G = unpack(ElvUI)
+local UF = E:GetModule("UnitFrames")
 
 local _G = _G
-local next = next
-local select = select
-local pairs = pairs
-local ipairs = ipairs
-local format = string.format
-local tremove = table.remove
-local tconcat = table.concat
-local tinsert = table.insert
-local twipe = table.wipe
-local strsplit = strsplit
-local match = string.match
-local gsub = string.gsub
+local select, pairs, ipairs = select, pairs, ipairs
+local tremove, tinsert, tconcat, twipe = table.remove, table.insert, table.concat, table.wipe
+local format, match, gsub, strsplit = string.format, string.match, string.gsub, strsplit
+
 local IsAddOnLoaded = IsAddOnLoaded
 local GetScreenWidth = GetScreenWidth
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS
 local FRIEND, ENEMY, SHOW, HIDE, DELETE, NONE, FILTERS, FONT_SIZE, COLOR = FRIEND, ENEMY, SHOW, HIDE, DELETE, NONE, FILTERS, FONT_SIZE, COLOR
-
+local CUSTOM, DISABLE, DEFAULT, COLORS = CUSTOM, DISABLE, DEFAULT, COLORS
 local SHIFT_KEY, ALT_KEY, CTRL_KEY = SHIFT_KEY, ALT_KEY, CTRL_KEY
 local HEALTH, MANA, NAME, PLAYER, CLASS, ROLE, GROUP = HEALTH, MANA, NAME, PLAYER, CLASS, ROLE, GROUP
 local RAGE, FOCUS, ENERGY, RUNIC_POWER = RAGE, FOCUS, ENERGY, RUNIC_POWER
 local COMBAT_TEXT_RUNE_BLOOD, COMBAT_TEXT_RUNE_UNHOLY, COMBAT_TEXT_RUNE_FROST, COMBAT_TEXT_RUNE_DEATH = COMBAT_TEXT_RUNE_BLOOD, COMBAT_TEXT_RUNE_UNHOLY, COMBAT_TEXT_RUNE_FROST, COMBAT_TEXT_RUNE_DEATH
-------------------------------
 
 local ACD = LibStub("AceConfigDialog-3.0-ElvUI")
-local fillValues = {
-	["fill"] = L["Filled"],
-	["spaced"] = L["Spaced"],
-	["inset"] = L["Inset"]
-};
 
 local positionValues = {
 	TOPLEFT = "TOPLEFT",
@@ -44,8 +27,15 @@ local positionValues = {
 	BOTTOMRIGHT = "BOTTOMRIGHT",
 	CENTER = "CENTER",
 	TOP = "TOP",
-	BOTTOM = "BOTTOM",
-};
+	BOTTOM = "BOTTOM"
+}
+
+local orientationValues = {
+	--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
+	["LEFT"] = L["Left"],
+	["MIDDLE"] = L["Middle"],
+	["RIGHT"] = L["Right"]
+}
 
 local threatValues = {
 	["GLOW"] = L["Glow"],
@@ -71,29 +61,39 @@ local petAnchors = {
 	TOPRIGHT = "TOPRIGHT",
 	BOTTOMRIGHT = "BOTTOMRIGHT",
 	TOP = "TOP",
-	BOTTOM = "BOTTOM",
-};
-
-local auraBarsSortValues = {
-	["TIME_REMAINING"] = L["Time Remaining"],
-	["TIME_REMAINING_REVERSE"] = L["Time Remaining Reverse"],
-	["TIME_DURATION"] = L["Duration"],
-	["TIME_DURATION_REVERSE"] = L["Duration Reverse"],
-	["NAME"] = NAME,
-	["NONE"] = NONE,
+	BOTTOM = "BOTTOM"
 }
 
-local auraSortValues = {
-	["TIME_REMAINING"] = L["Time Remaining"],
-	["DURATION"] = L["Duration"],
-	["NAME"] = NAME,
-	["INDEX"] = L["Index"],
-	["PLAYER"] = PLAYER,
+local attachToValues = {
+	["Health"] = HEALTH,
+	["Power"] = L["Power"],
+	["InfoPanel"] = L["Information Panel"],
+	["Frame"] = L["Frame"],
 }
 
-local auraSortMethodValues = {
-	["ASCENDING"] = L["Ascending"],
-	["DESCENDING"] = L["Descending"]
+local growthDirectionValues = {
+	DOWN_RIGHT = format(L["%s and then %s"], L["Down"], L["Right"]),
+	DOWN_LEFT = format(L["%s and then %s"], L["Down"], L["Left"]),
+	UP_RIGHT = format(L["%s and then %s"], L["Up"], L["Right"]),
+	UP_LEFT = format(L["%s and then %s"], L["Up"], L["Left"]),
+	RIGHT_DOWN = format(L["%s and then %s"], L["Right"], L["Down"]),
+	RIGHT_UP = format(L["%s and then %s"], L["Right"], L["Up"]),
+	LEFT_DOWN = format(L["%s and then %s"], L["Left"], L["Down"]),
+	LEFT_UP = format(L["%s and then %s"], L["Left"], L["Up"]),
+}
+
+local smartAuraPositionValues = {
+	["DISABLED"] = DISABLE,
+	["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
+	["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
+	["FLUID_BUFFS_ON_DEBUFFS"] = L["Fluid Position Buffs on Debuffs"],
+	["FLUID_DEBUFFS_ON_BUFFS"] = L["Fluid Position Debuffs on Buffs"],
+}
+
+local colorOverrideValues = {
+	["USE_DEFAULT"] = L["Use Default"],
+	["FORCE_ON"] = L["Force On"],
+	["FORCE_OFF"] = L["Force Off"],
 }
 
 local CUSTOMTEXT_CONFIGS = {}
@@ -137,7 +137,7 @@ local function filterPriority(auraType, groupName, value, remove, movehere, frie
 		if state then
 			local stateFound = filterMatch(filter, filterValue(state))
 			if not stateFound then
-				local tbl, sv, sm = {strsplit(",",filter)}
+				local tbl, sv = {strsplit(",",filter)}
 				for i in ipairs(tbl) do
 					if tbl[i] == value then sv = i;break end
 				end
@@ -223,7 +223,14 @@ local function GetOptionsTable_AuraBars(friendlyOnly, updateFunc, groupName)
 				type = "select",
 				order = 9,
 				name = L["Sort Method"],
-				values = auraBarsSortValues,
+				values = {
+					["TIME_REMAINING"] = L["Time Remaining"],
+					["TIME_REMAINING_REVERSE"] = L["Time Remaining Reverse"],
+					["TIME_DURATION"] = L["Duration"],
+					["TIME_DURATION_REVERSE"] = L["Duration Reverse"],
+					["NAME"] = NAME,
+					["NONE"] = NONE
+				}
 			},
 			friendlyAuraType = {
 				type = "select",
@@ -471,14 +478,23 @@ local function GetOptionsTable_Auras(friendlyUnitOnly, auraType, isGroupFrame, u
 				name = L["Sort By"],
 				desc = L["Method to sort by."],
 				type = "select",
-				values = auraSortValues,
+				values = {
+					["TIME_REMAINING"] = L["Time Remaining"],
+					["DURATION"] = L["Duration"],
+					["NAME"] = NAME,
+					["INDEX"] = L["Index"],
+					["PLAYER"] = PLAYER
+				}
 			},
 			sortDirection = {
 				order = 16,
 				name = L["Sort Direction"],
 				desc = L["Ascending or Descending order."],
 				type = "select",
-				values = auraSortMethodValues,
+				values = {
+					["ASCENDING"] = L["Ascending"],
+					["DESCENDING"] = L["Descending"]
+				}
 			},
 			filters = {
 				name = FILTERS,
@@ -499,7 +515,7 @@ local function GetOptionsTable_Auras(friendlyUnitOnly, auraType, isGroupFrame, u
 			values = {
 				["FRAME"] = L["Frame"],
 				["DEBUFFS"] = L["Debuffs"],
-				["HEALTH"] = L["Health"],
+				["HEALTH"] = HEALTH,
 				["POWER"] = L["Power"],
 			},
 			disabled = function()
@@ -516,7 +532,7 @@ local function GetOptionsTable_Auras(friendlyUnitOnly, auraType, isGroupFrame, u
 			values = {
 				["FRAME"] = L["Frame"],
 				["BUFFS"] = L["Buffs"],
-				["HEALTH"] = L["Health"],
+				["HEALTH"] = HEALTH,
 				["POWER"] = L["Power"],
 			},
 			disabled = function()
@@ -915,14 +931,14 @@ local function GetOptionsTable_Health(isGroupFrame, updateFunc, groupName, numUn
 	local config = {
 		order = 100,
 		type = "group",
-		name = L["Health"],
+		name = HEALTH,
 		get = function(info) return E.db.unitframe.units[groupName]["health"][ info[#info] ] end,
 		set = function(info, value) E.db.unitframe.units[groupName]["health"][ info[#info] ] = value; updateFunc(UF, groupName, numUnits) end,
 		args = {
 			header = {
 				order = 1,
 				type = "header",
-				name = L["Health"],
+				name = HEALTH,
 			},
 			position = {
 				type = "select",
@@ -949,7 +965,7 @@ local function GetOptionsTable_Health(isGroupFrame, updateFunc, groupName, numUn
 				order = 5,
 				name = L["Attach Text To"],
 				values = {
-					["Health"] = L["Health"],
+					["Health"] = HEALTH,
 					["Power"] = L["Power"],
 					["InfoPanel"] = L["Information Panel"],
 					["Frame"] = L["Frame"],
@@ -1127,7 +1143,7 @@ local function CreateCustomTextGroup(unit, objectName)
 				type = "select",
 				name = L["Attach Text To"],
 				values = {
-					["Health"] = L["Health"],
+					["Health"] = HEALTH,
 					["Power"] = L["Power"],
 					["InfoPanel"] = L["Information Panel"],
 					["Frame"] = L["Frame"],
@@ -1240,7 +1256,7 @@ local function GetOptionsTable_Name(updateFunc, groupName, numUnits)
 				order = 5,
 				name = L["Attach Text To"],
 				values = {
-					["Health"] = L["Health"],
+					["Health"] = HEALTH,
 					["Power"] = L["Power"],
 					["InfoPanel"] = L["Information Panel"],
 					["Frame"] = L["Frame"],
@@ -1335,7 +1351,11 @@ local function GetOptionsTable_Power(hasDetatchOption, updateFunc, groupName, nu
 				type = "select",
 				order = 3,
 				name = L["Style"],
-				values = fillValues,
+				values = {
+					["fill"] = L["Filled"],
+					["spaced"] = L["Spaced"],
+					["inset"] = L["Inset"]
+				},
 				set = function(info, value)
 					E.db.unitframe.units[groupName]["power"][ info[#info] ] = value;
 
@@ -1422,7 +1442,7 @@ local function GetOptionsTable_Power(hasDetatchOption, updateFunc, groupName, nu
 				order = 10,
 				name = L["Attach Text To"],
 				values = {
-					["Health"] = L["Health"],
+					["Health"] = HEALTH,
 					["Power"] = L["Power"],
 					["InfoPanel"] = L["Information Panel"],
 					["Frame"] = L["Frame"],
@@ -1536,7 +1556,7 @@ local function GetOptionsTable_RaidIcon(updateFunc, groupName, numUnits)
 				order = 4,
 				name = L["Attach To"],
 				values = {
-					["Health"] = L["Health"],
+					["Health"] = HEALTH,
 					["Power"] = L["Power"],
 					["InfoPanel"] = L["Information Panel"],
 					["Frame"] = L["Frame"],
@@ -1785,7 +1805,7 @@ local function GetOptionsTable_ReadyCheckIcon(updateFunc, groupName)
 				type = "select",
 				name = L["Attach To"],
 				values = {
-					["Health"] = L["Health"],
+					["Health"] = HEALTH,
 					["Power"] = L["Power"],
 					["InfoPanel"] = L["Information Panel"],
 					["Frame"] = L["Frame"],
@@ -2468,7 +2488,7 @@ E.Options.args.unitframe = {
 								health = {
 									order = 10,
 									type = "color",
-									name = L["Health"],
+									name = HEALTH,
 								},
 								health_backdrop = {
 									order = 11,
@@ -2906,13 +2926,13 @@ E.Options.args.unitframe = {
 
 --Player
 E.Options.args.unitframe.args.player = {
-	name = L["Player Frame"],
-	type = "group",
 	order = 300,
+	type = "group",
+	name = L["Player Frame"],
 	childGroups = "tab",
 	get = function(info) return E.db.unitframe.units["player"][ info[#info] ] end,
-	set = function(info, value) E.db.unitframe.units["player"][ info[#info] ] = value; UF:CreateAndUpdateUF("player") end,
-	disabled = function() return not E.UnitFrames; end,
+	set = function(info, value) E.db.unitframe.units["player"][ info[#info] ] = value UF:CreateAndUpdateUF("player") end,
+	disabled = function() return not E.UnitFrames end,
 	args = {
 		generalGroup = {
 			order = 1,
@@ -2922,144 +2942,129 @@ E.Options.args.unitframe.args.player = {
 				header = {
 					order = 1,
 					type = "header",
-					name = L["General"],
+					name = L["General"]
 				},
 				enable = {
-					type = "toggle",
 					order = 2,
+					type = "toggle",
 					name = L["Enable"],
 					width = "full",
 					set = function(info, value)
-						E.db.unitframe.units["player"][ info[#info] ] = value;
-						UF:CreateAndUpdateUF("player");
+						E.db.unitframe.units["player"][ info[#info] ] = value
+						UF:CreateAndUpdateUF("player")
 						if value == true and E.db.unitframe.units.player.combatfade then
 							ElvUF_Pet:SetParent(ElvUF_Player)
 						else
 							ElvUF_Pet:SetParent(ElvUF_Parent)
 						end
-					end,
+					end
 				},
 				copyFrom = {
+					order = 3,
 					type = "select",
-					order = 2,
 					name = L["Copy From"],
 					desc = L["Select a unit to copy settings from."],
 					values = UF["units"],
-					set = function(info, value) UF:MergeUnitSettings(value, "player"); end,
+					set = function(info, value) UF:MergeUnitSettings(value, "player") end
 				},
 				resetSettings = {
+					order = 4,
 					type = "execute",
-					order = 3,
 					name = L["Restore Defaults"],
-					func = function(info, value) UF:ResetUnitSettings("player"); E:ResetMovers(L["Player Frame"]) end,
+					func = function(info, value) UF:ResetUnitSettings("player"); E:ResetMovers(L["Player Frame"]) end
 				},
 				showAuras = {
-					order = 4,
+					order = 5,
 					type = "execute",
 					name = L["Show Auras"],
 					func = function()
 						local frame = ElvUF_Player
 						if frame.forceShowAuras then
-							frame.forceShowAuras = nil;
+							frame.forceShowAuras = nil
 						else
-							frame.forceShowAuras = true;
+							frame.forceShowAuras = true
 						end
 
 						UF:CreateAndUpdateUF("player")
-					end,
+					end
 				},
 				width = {
-					order = 5,
-					name = L["Width"],
+					order = 6,
 					type = "range",
+					name = L["Width"],
 					min = 50, max = 500, step = 1,
 					set = function(info, value)
 						if E.db.unitframe.units["player"].castbar.width == E.db.unitframe.units["player"][ info[#info] ] then
-							E.db.unitframe.units["player"].castbar.width = value;
+							E.db.unitframe.units["player"].castbar.width = value
 						end
 
-						E.db.unitframe.units["player"][ info[#info] ] = value;
-						UF:CreateAndUpdateUF("player");
-					end,
+						E.db.unitframe.units["player"][ info[#info] ] = value
+						UF:CreateAndUpdateUF("player")
+					end
 				},
 				height = {
-					order = 6,
-					name = L["Height"],
+					order = 7,
 					type = "range",
-					min = 10, max = 250, step = 1,
+					name = L["Height"],
+					min = 10, max = 250, step = 1
 				},
 				combatfade = {
-					order = 7,
+					order = 8,
+					type = "toggle",
 					name = L["Combat Fade"],
 					desc = L["Fade the unitframe when out of combat, not casting, no target exists."],
-					type = "toggle",
 					set = function(info, value)
-						E.db.unitframe.units["player"][ info[#info] ] = value;
-						UF:CreateAndUpdateUF("player");
+						E.db.unitframe.units["player"][ info[#info] ] = value
+						UF:CreateAndUpdateUF("player")
 						if value == true and E.db.unitframe.units.player.enable then
 							ElvUF_Pet:SetParent(ElvUF_Player)
 						else
 							ElvUF_Pet:SetParent(ElvUF_Parent)
 						end
-					end,
+					end
 				},
 				healPrediction = {
-					order = 8,
-					name = L["Heal Prediction"],
-					desc = L["Show an incoming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."],
+					order = 9,
 					type = "toggle",
+					name = L["Heal Prediction"],
+					desc = L["Show an incoming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."]
 				},
 				hideonnpc = {
+					order = 10,
 					type = "toggle",
-					order = 9,
 					name = L["Text Toggle On NPC"],
 					desc = L["Power text will be hidden on NPC targets, in addition the name text will be repositioned to the power texts anchor point."],
 					get = function(info) return E.db.unitframe.units["player"]["power"].hideonnpc end,
-					set = function(info, value) E.db.unitframe.units["player"]["power"].hideonnpc = value; UF:CreateAndUpdateUF("player") end,
+					set = function(info, value) E.db.unitframe.units["player"]["power"].hideonnpc = value; UF:CreateAndUpdateUF("player") end
 				},
 				threatStyle = {
+					order = 11,
 					type = "select",
-					order = 10,
 					name = L["Threat Display Mode"],
-					values = threatValues,
+					values = threatValues
 				},
 				smartAuraPosition = {
-					order = 11,
+					order = 12,
 					type = "select",
 					name = L["Smart Aura Position"],
 					desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
-					values = {
-						["DISABLED"] = DISABLE,
-						["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
-						["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
-						["FLUID_BUFFS_ON_DEBUFFS"] = L["Fluid Position Buffs on Debuffs"],
-						["FLUID_DEBUFFS_ON_BUFFS"] = L["Fluid Position Debuffs on Buffs"],
-					},
+					values = smartAuraPositionValues
 				},
 				orientation = {
-					order = 12,
+					order = 13,
 					type = "select",
 					name = L["Frame Orientation"],
 					desc = L["Set the orientation of the UnitFrame."],
-					values = {
-						--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
-						["LEFT"] = L["Left"],
-						["MIDDLE"] = L["Middle"],
-						["RIGHT"] = L["Right"],
-					},
+					values = orientationValues
 				},
 				colorOverride = {
-					order = 13,
+					order = 14,
+					type = "select",
 					name = L["Class Color Override"],
 					desc = L["Override the default class color setting."],
-					type = "select",
-					values = {
-						["USE_DEFAULT"] = L["Use Default"],
-						["FORCE_ON"] = L["Force On"],
-						["FORCE_OFF"] = L["Force Off"],
-					},
-				},
-			},
+					values = colorOverrideValues
+				}
+			}
 		},
 		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, "player"),
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, "player"),
@@ -3527,13 +3532,13 @@ E.Options.args.unitframe.args.player = {
 
 --Target
 E.Options.args.unitframe.args.target = {
-	name = L["Target Frame"],
-	type = "group",
 	order = 400,
+	type = "group",
+	name = L["Target Frame"],
 	childGroups = "tab",
 	get = function(info) return E.db.unitframe.units["target"][ info[#info] ] end,
-	set = function(info, value) E.db.unitframe.units["target"][ info[#info] ] = value; UF:CreateAndUpdateUF("target") end,
-	disabled = function() return not E.UnitFrames; end,
+	set = function(info, value) E.db.unitframe.units["target"][ info[#info] ] = value UF:CreateAndUpdateUF("target") end,
+	disabled = function() return not E.UnitFrames end,
 	args = {
 		generalGroup = {
 			order = 1,
@@ -3638,38 +3643,23 @@ E.Options.args.unitframe.args.target = {
 					type = "select",
 					name = L["Smart Aura Position"],
 					desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
-					values = {
-						["DISABLED"] = DISABLE,
-						["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
-						["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
-						["FLUID_BUFFS_ON_DEBUFFS"] = L["Fluid Position Buffs on Debuffs"],
-						["FLUID_DEBUFFS_ON_BUFFS"] = L["Fluid Position Debuffs on Buffs"],
-					},
+					values = smartAuraPositionValues
 				},
 				orientation = {
 					order = 14,
 					type = "select",
 					name = L["Frame Orientation"],
 					desc = L["Set the orientation of the UnitFrame."],
-					values = {
-						--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
-						["LEFT"] = L["Left"],
-						["MIDDLE"] = L["Middle"],
-						["RIGHT"] = L["Right"],
-					},
+					values = orientationValues
 				},
 				colorOverride = {
 					order = 15,
 					name = L["Class Color Override"],
 					desc = L["Override the default class color setting."],
 					type = "select",
-					values = {
-						["USE_DEFAULT"] = L["Use Default"],
-						["FORCE_ON"] = L["Force On"],
-						["FORCE_OFF"] = L["Force Off"],
-					},
-				},
-			},
+					values = colorOverrideValues
+				}
+			}
 		},
 		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, "target"),
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, "target"),
@@ -3788,13 +3778,13 @@ E.Options.args.unitframe.args.target = {
 
 --TargetTarget
 E.Options.args.unitframe.args.targettarget = {
-	name = L["TargetTarget Frame"],
-	type = "group",
 	order = 500,
+	type = "group",
+	name = L["TargetTarget Frame"],
 	childGroups = "tab",
 	get = function(info) return E.db.unitframe.units["targettarget"][ info[#info] ] end,
-	set = function(info, value) E.db.unitframe.units["targettarget"][ info[#info] ] = value; UF:CreateAndUpdateUF("targettarget") end,
-	disabled = function() return not E.UnitFrames; end,
+	set = function(info, value) E.db.unitframe.units["targettarget"][ info[#info] ] = value UF:CreateAndUpdateUF("targettarget") end,
+	disabled = function() return not E.UnitFrames end,
 	args = {
 		generalGroup = {
 			order = 1,
@@ -3878,36 +3868,23 @@ E.Options.args.unitframe.args.targettarget = {
 					type = "select",
 					name = L["Smart Aura Position"],
 					desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
-					values = {
-						["DISABLED"] = DISABLE,
-						["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
-						["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
-					},
+					values = smartAuraPositionValues
 				},
 				orientation = {
 					order = 12,
 					type = "select",
 					name = L["Frame Orientation"],
 					desc = L["Set the orientation of the UnitFrame."],
-					values = {
-						--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
-						["LEFT"] = L["Left"],
-						["MIDDLE"] = L["Middle"],
-						["RIGHT"] = L["Right"],
-					},
+					values = orientationValues
 				},
 				colorOverride = {
 					order = 13,
 					name = L["Class Color Override"],
 					desc = L["Override the default class color setting."],
 					type = "select",
-					values = {
-						["USE_DEFAULT"] = L["Use Default"],
-						["FORCE_ON"] = L["Force On"],
-						["FORCE_OFF"] = L["Force Off"],
-					},
-				},
-			},
+					values = colorOverrideValues
+				}
+			}
 		},
 		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, "targettarget"),
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, "targettarget"),
@@ -3923,13 +3900,13 @@ E.Options.args.unitframe.args.targettarget = {
 
 --TargetTargetTarget
 E.Options.args.unitframe.args.targettargettarget = {
-	name = L["TargetTargetTarget Frame"],
+	order = 550,
 	type = "group",
-	order = 500,
+	name = L["TargetTargetTarget Frame"],
 	childGroups = "tab",
 	get = function(info) return E.db.unitframe.units["targettargettarget"][ info[#info] ] end,
-	set = function(info, value) E.db.unitframe.units["targettargettarget"][ info[#info] ] = value; UF:CreateAndUpdateUF("targettargettarget") end,
-	disabled = function() return not E.UnitFrames; end,
+	set = function(info, value) E.db.unitframe.units["targettargettarget"][ info[#info] ] = value UF:CreateAndUpdateUF("targettargettarget") end,
+	disabled = function() return not E.UnitFrames end,
 	args = {
 		generalGroup = {
 			order = 1,
@@ -4013,38 +3990,23 @@ E.Options.args.unitframe.args.targettargettarget = {
 					type = "select",
 					name = L["Smart Aura Position"],
 					desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
-					values = {
-						["DISABLED"] = DISABLE,
-						["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
-						["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
-						["FLUID_BUFFS_ON_DEBUFFS"] = L["Fluid Position Buffs on Debuffs"],
-						["FLUID_DEBUFFS_ON_BUFFS"] = L["Fluid Position Debuffs on Buffs"],
-					},
+					values = smartAuraPositionValues
 				},
 				orientation = {
 					order = 12,
 					type = "select",
 					name = L["Frame Orientation"],
 					desc = L["Set the orientation of the UnitFrame."],
-					values = {
-						--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
-						["LEFT"] = L["Left"],
-						["MIDDLE"] = L["Middle"],
-						["RIGHT"] = L["Right"],
-					},
+					values = orientationValues
 				},
 				colorOverride = {
 					order = 13,
 					name = L["Class Color Override"],
 					desc = L["Override the default class color setting."],
 					type = "select",
-					values = {
-						["USE_DEFAULT"] = L["Use Default"],
-						["FORCE_ON"] = L["Force On"],
-						["FORCE_OFF"] = L["Force Off"],
-					},
-				},
-			},
+					values = colorOverrideValues
+				}
+			}
 		},
 		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, "targettargettarget"),
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, "targettargettarget"),
@@ -4060,13 +4022,13 @@ E.Options.args.unitframe.args.targettargettarget = {
 
 --Focus
 E.Options.args.unitframe.args.focus = {
-	name = L["Focus Frame"],
-	type = "group",
 	order = 600,
+	type = "group",
+	name = L["Focus Frame"],
 	childGroups = "tab",
 	get = function(info) return E.db.unitframe.units["focus"][ info[#info] ] end,
-	set = function(info, value) E.db.unitframe.units["focus"][ info[#info] ] = value; UF:CreateAndUpdateUF("focus") end,
-	disabled = function() return not E.UnitFrames; end,
+	set = function(info, value) E.db.unitframe.units["focus"][ info[#info] ] = value UF:CreateAndUpdateUF("focus") end,
+	disabled = function() return not E.UnitFrames end,
 	args = {
 		generalGroup = {
 			order = 1,
@@ -4156,38 +4118,23 @@ E.Options.args.unitframe.args.focus = {
 					type = "select",
 					name = L["Smart Aura Position"],
 					desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
-					values = {
-						["DISABLED"] = DISABLE,
-						["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
-						["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
-						["FLUID_BUFFS_ON_DEBUFFS"] = L["Fluid Position Buffs on Debuffs"],
-						["FLUID_DEBUFFS_ON_BUFFS"] = L["Fluid Position Debuffs on Buffs"],
-					},
+					values = smartAuraPositionValues
 				},
 				orientation = {
 					order = 13,
 					type = "select",
 					name = L["Frame Orientation"],
 					desc = L["Set the orientation of the UnitFrame."],
-					values = {
-						--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
-						["LEFT"] = L["Left"],
-						["MIDDLE"] = L["Middle"],
-						["RIGHT"] = L["Right"],
-					},
+					values = orientationValues
 				},
 				colorOverride = {
 					order = 14,
 					name = L["Class Color Override"],
 					desc = L["Override the default class color setting."],
 					type = "select",
-					values = {
-						["USE_DEFAULT"] = L["Use Default"],
-						["FORCE_ON"] = L["Force On"],
-						["FORCE_OFF"] = L["Force Off"],
-					},
-				},
-			},
+					values = colorOverrideValues
+				}
+			}
 		},
 		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, "focus"),
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, "focus"),
@@ -4206,13 +4153,13 @@ E.Options.args.unitframe.args.focus = {
 
 --Focus Target
 E.Options.args.unitframe.args.focustarget = {
-	name = L["FocusTarget Frame"],
-	type = "group",
 	order = 700,
+	type = "group",
+	name = L["FocusTarget Frame"],
 	childGroups = "tab",
 	get = function(info) return E.db.unitframe.units["focustarget"][ info[#info] ] end,
-	set = function(info, value) E.db.unitframe.units["focustarget"][ info[#info] ] = value; UF:CreateAndUpdateUF("focustarget") end,
-	disabled = function() return not E.UnitFrames; end,
+	set = function(info, value) E.db.unitframe.units["focustarget"][ info[#info] ] = value UF:CreateAndUpdateUF("focustarget") end,
+	disabled = function() return not E.UnitFrames end,
 	args = {
 		generalGroup = {
 			order = 1,
@@ -4296,38 +4243,23 @@ E.Options.args.unitframe.args.focustarget = {
 					type = "select",
 					name = L["Smart Aura Position"],
 					desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
-					values = {
-						["DISABLED"] = DISABLE,
-						["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
-						["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
-						["FLUID_BUFFS_ON_DEBUFFS"] = L["Fluid Position Buffs on Debuffs"],
-						["FLUID_DEBUFFS_ON_BUFFS"] = L["Fluid Position Debuffs on Buffs"],
-					},
+					values = smartAuraPositionValues
 				},
 				orientation = {
 					order = 12,
 					type = "select",
 					name = L["Frame Orientation"],
 					desc = L["Set the orientation of the UnitFrame."],
-					values = {
-						--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
-						["LEFT"] = L["Left"],
-						["MIDDLE"] = L["Middle"],
-						["RIGHT"] = L["Right"],
-					},
+					values = orientationValues
 				},
 				colorOverride = {
 					order = 13,
 					name = L["Class Color Override"],
 					desc = L["Override the default class color setting."],
 					type = "select",
-					values = {
-						["USE_DEFAULT"] = L["Use Default"],
-						["FORCE_ON"] = L["Force On"],
-						["FORCE_OFF"] = L["Force Off"],
-					},
-				},
-			},
+					values = colorOverrideValues
+				}
+			}
 		},
 		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, "focustarget"),
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, "focustarget"),
@@ -4343,13 +4275,13 @@ E.Options.args.unitframe.args.focustarget = {
 
 --Pet
 E.Options.args.unitframe.args.pet = {
-	name = L["Pet Frame"],
-	type = "group",
 	order = 800,
+	type = "group",
+	name = L["Pet Frame"],
 	childGroups = "tab",
 	get = function(info) return E.db.unitframe.units["pet"][ info[#info] ] end,
-	set = function(info, value) E.db.unitframe.units["pet"][ info[#info] ] = value; UF:CreateAndUpdateUF("pet") end,
-	disabled = function() return not E.UnitFrames; end,
+	set = function(info, value) E.db.unitframe.units["pet"][ info[#info] ] = value UF:CreateAndUpdateUF("pet") end,
+	disabled = function() return not E.UnitFrames end,
 	args = {
 		generalGroup = {
 			order = 1,
@@ -4439,38 +4371,23 @@ E.Options.args.unitframe.args.pet = {
 					type = "select",
 					name = L["Smart Aura Position"],
 					desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
-					values = {
-						["DISABLED"] = DISABLE,
-						["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
-						["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
-						["FLUID_BUFFS_ON_DEBUFFS"] = L["Fluid Position Buffs on Debuffs"],
-						["FLUID_DEBUFFS_ON_BUFFS"] = L["Fluid Position Debuffs on Buffs"],
-					},
+					values = smartAuraPositionValues
 				},
 				orientation = {
 					order = 13,
 					type = "select",
 					name = L["Frame Orientation"],
 					desc = L["Set the orientation of the UnitFrame."],
-					values = {
-						--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
-						["LEFT"] = L["Left"],
-						["MIDDLE"] = L["Middle"],
-						["RIGHT"] = L["Right"],
-					},
+					values = orientationValues
 				},
 				colorOverride = {
 					order = 14,
 					name = L["Class Color Override"],
 					desc = L["Override the default class color setting."],
 					type = "select",
-					values = {
-						["USE_DEFAULT"] = L["Use Default"],
-						["FORCE_ON"] = L["Force On"],
-						["FORCE_OFF"] = L["Force Off"],
-					},
-				},
-			},
+					values = colorOverrideValues
+				}
+			}
 		},
 		buffIndicator = {
 			order = 600,
@@ -4549,13 +4466,13 @@ E.Options.args.unitframe.args.pet = {
 
 --Pet Target
 E.Options.args.unitframe.args.pettarget = {
-	name = L["PetTarget Frame"],
-	type = "group",
 	order = 900,
+	type = "group",
+	name = L["PetTarget Frame"],
 	childGroups = "tab",
 	get = function(info) return E.db.unitframe.units["pettarget"][ info[#info] ] end,
-	set = function(info, value) E.db.unitframe.units["pettarget"][ info[#info] ] = value; UF:CreateAndUpdateUF("pettarget") end,
-	disabled = function() return not E.UnitFrames; end,
+	set = function(info, value) E.db.unitframe.units["pettarget"][ info[#info] ] = value UF:CreateAndUpdateUF("pettarget") end,
+	disabled = function() return not E.UnitFrames end,
 	args = {
 		generalGroup = {
 			order = 1,
@@ -4639,38 +4556,23 @@ E.Options.args.unitframe.args.pettarget = {
 					type = "select",
 					name = L["Smart Aura Position"],
 					desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
-					values = {
-						["DISABLED"] = DISABLE,
-						["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
-						["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
-						["FLUID_BUFFS_ON_DEBUFFS"] = L["Fluid Position Buffs on Debuffs"],
-						["FLUID_DEBUFFS_ON_BUFFS"] = L["Fluid Position Debuffs on Buffs"],
-					},
+					values = smartAuraPositionValues
 				},
 				orientation = {
 					order = 12,
 					type = "select",
 					name = L["Frame Orientation"],
 					desc = L["Set the orientation of the UnitFrame."],
-					values = {
-						--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
-						["LEFT"] = L["Left"],
-						["MIDDLE"] = L["Middle"],
-						["RIGHT"] = L["Right"],
-					},
+					values = orientationValues
 				},
 				colorOverride = {
 					order = 13,
 					name = L["Class Color Override"],
 					desc = L["Override the default class color setting."],
 					type = "select",
-					values = {
-						["USE_DEFAULT"] = L["Use Default"],
-						["FORCE_ON"] = L["Force On"],
-						["FORCE_OFF"] = L["Force Off"],
-					},
-				},
-			},
+					values = colorOverrideValues
+				}
+			}
 		},
 		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, "pettarget"),
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, "pettarget"),
@@ -4685,13 +4587,13 @@ E.Options.args.unitframe.args.pettarget = {
 
 --Boss Frames
 E.Options.args.unitframe.args.boss = {
-	name = L["Boss Frames"],
-	type = "group",
 	order = 1000,
+	type = "group",
+	name = L["Boss Frames"],
 	childGroups = "tab",
 	get = function(info) return E.db.unitframe.units["boss"][ info[#info] ] end,
-	set = function(info, value) E.db.unitframe.units["boss"][ info[#info] ] = value; UF:CreateAndUpdateUFGroup("boss", MAX_BOSS_FRAMES) end,
-	disabled = function() return not E.UnitFrames; end,
+	set = function(info, value) E.db.unitframe.units["boss"][ info[#info] ] = value UF:CreateAndUpdateUFGroup("boss", MAX_BOSS_FRAMES) end,
+	disabled = function() return not E.UnitFrames end,
 	args = {
 		generalGroup = {
 			order = 1,
@@ -4795,43 +4697,28 @@ E.Options.args.unitframe.args.boss = {
 					type = "select",
 					name = L["Smart Aura Position"],
 					desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
-					values = {
-						["DISABLED"] = DISABLE,
-						["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
-						["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
-						["FLUID_BUFFS_ON_DEBUFFS"] = L["Fluid Position Buffs on Debuffs"],
-						["FLUID_DEBUFFS_ON_BUFFS"] = L["Fluid Position Debuffs on Buffs"],
-					},
+					values = smartAuraPositionValues
 				},
 				orientation = {
 					order = 14,
 					type = "select",
 					name = L["Frame Orientation"],
 					desc = L["Set the orientation of the UnitFrame."],
-					values = {
-						--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
-						["LEFT"] = L["Left"],
-						["MIDDLE"] = L["Middle"],
-						["RIGHT"] = L["Right"],
-					},
+					values = orientationValues
 				},
 				colorOverride = {
 					order = 15,
 					name = L["Class Color Override"],
 					desc = L["Override the default class color setting."],
 					type = "select",
-					values = {
-						["USE_DEFAULT"] = L["Use Default"],
-						["FORCE_ON"] = L["Force On"],
-						["FORCE_OFF"] = L["Force Off"],
-					},
+					values = colorOverrideValues
 				},
 				targetGlow = {
 					order = 16,
 					type = "toggle",
 					name = L["Target Glow"],
-				},
-			},
+				}
+			}
 		},
 		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUFGroup, "boss", MAX_BOSS_FRAMES),
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUFGroup, "boss", MAX_BOSS_FRAMES),
@@ -4848,13 +4735,13 @@ E.Options.args.unitframe.args.boss = {
 
 --Arena Frames
 E.Options.args.unitframe.args.arena = {
-	name = L["Arena Frames"],
+	order = 1100,
 	type = "group",
-	order = 1000,
+	name = L["Arena Frames"],
 	childGroups = "tab",
 	get = function(info) return E.db.unitframe.units["arena"][ info[#info] ] end,
-	set = function(info, value) E.db.unitframe.units["arena"][ info[#info] ] = value; UF:CreateAndUpdateUFGroup("arena", 5) end,
-	disabled = function() return not E.UnitFrames; end,
+	set = function(info, value) E.db.unitframe.units["arena"][ info[#info] ] = value UF:CreateAndUpdateUFGroup("arena", 5) end,
+	disabled = function() return not E.UnitFrames end,
 	args = {
 		generalGroup = {
 			order = 1,
@@ -4958,24 +4845,14 @@ E.Options.args.unitframe.args.arena = {
 					name = L["Class Color Override"],
 					desc = L["Override the default class color setting."],
 					type = "select",
-					values = {
-						["USE_DEFAULT"] = L["Use Default"],
-						["FORCE_ON"] = L["Force On"],
-						["FORCE_OFF"] = L["Force Off"],
-					},
+					values = colorOverrideValues
 				},
 				smartAuraPosition = {
 					order = 14,
 					type = "select",
 					name = L["Smart Aura Position"],
 					desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
-					values = {
-						["DISABLED"] = DISABLE,
-						["BUFFS_ON_DEBUFFS"] = L["Position Buffs on Debuffs"],
-						["DEBUFFS_ON_BUFFS"] = L["Position Debuffs on Buffs"],
-						["FLUID_BUFFS_ON_DEBUFFS"] = L["Fluid Position Buffs on Debuffs"],
-						["FLUID_DEBUFFS_ON_BUFFS"] = L["Fluid Position Debuffs on Buffs"],
-					},
+					values = smartAuraPositionValues
 				},
 				orientation = {
 					order = 15,
@@ -5063,13 +4940,13 @@ local groupPoints = {
 
 --Party Frames
 E.Options.args.unitframe.args.party = {
-	name = L["Party Frames"],
+	order = 1200,
 	type = "group",
-	order = 1100,
+	name = L["Party Frames"],
 	childGroups = "tab",
 	get = function(info) return E.db.unitframe.units["party"][ info[#info] ] end,
-	set = function(info, value) E.db.unitframe.units["party"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("party") end,
-	disabled = function() return not E.UnitFrames; end,
+	set = function(info, value) E.db.unitframe.units["party"][ info[#info] ] = value UF:CreateAndUpdateHeaderGroup("party") end,
+	disabled = function() return not E.UnitFrames end,
 	args = {
 		configureToggle = {
 			order = 1,
@@ -5149,23 +5026,14 @@ E.Options.args.unitframe.args.party = {
 					name = L["Class Color Override"],
 					desc = L["Override the default class color setting."],
 					type = "select",
-					values = {
-						["USE_DEFAULT"] = L["Use Default"],
-						["FORCE_ON"] = L["Force On"],
-						["FORCE_OFF"] = L["Force Off"],
-					},
+					values = colorOverrideValues
 				},
 				orientation = {
 					order = 9,
 					type = "select",
 					name = L["Frame Orientation"],
 					desc = L["Set the orientation of the UnitFrame."],
-					values = {
-						--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
-						["LEFT"] = L["Left"],
-						["MIDDLE"] = L["Middle"],
-						["RIGHT"] = L["Right"],
-					},
+					values = orientationValues
 				},
 				targetGlow = {
 					order = 10,
@@ -5204,16 +5072,7 @@ E.Options.args.unitframe.args.party = {
 							name = L["Growth Direction"],
 							desc = L["Growth direction from the first unitframe."],
 							type = "select",
-							values = {
-								DOWN_RIGHT = format(L["%s and then %s"], L["Down"], L["Right"]),
-								DOWN_LEFT = format(L["%s and then %s"], L["Down"], L["Left"]),
-								UP_RIGHT = format(L["%s and then %s"], L["Up"], L["Right"]),
-								UP_LEFT = format(L["%s and then %s"], L["Up"], L["Left"]),
-								RIGHT_DOWN = format(L["%s and then %s"], L["Right"], L["Down"]),
-								RIGHT_UP = format(L["%s and then %s"], L["Right"], L["Up"]),
-								LEFT_DOWN = format(L["%s and then %s"], L["Left"], L["Down"]),
-								LEFT_UP = format(L["%s and then %s"], L["Left"], L["Up"]),
-							},
+							values = growthDirectionValues
 						},
 						numGroups = {
 							order = 7,
@@ -5423,7 +5282,7 @@ E.Options.args.unitframe.args.party = {
 					order = 4,
 					name = L["Attach To"],
 					values = {
-						["Health"] = L["Health"],
+						["Health"] = HEALTH,
 						["Power"] = L["Power"],
 						["InfoPanel"] = L["Information Panel"],
 						["Frame"] = L["Frame"],
@@ -5671,13 +5530,13 @@ E.Options.args.unitframe.args.party = {
 
 --Raid Frames
 E.Options.args.unitframe.args.raid = {
-	name = L["Raid Frames"],
+	order = 1300,
 	type = "group",
-	order = 1100,
+	name = L["Raid Frames"],
 	childGroups = "tab",
 	get = function(info) return E.db.unitframe.units["raid"][ info[#info] ] end,
-	set = function(info, value) E.db.unitframe.units["raid"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("raid") end,
-	disabled = function() return not E.UnitFrames; end,
+	set = function(info, value) E.db.unitframe.units["raid"][ info[#info] ] = value UF:CreateAndUpdateHeaderGroup("raid") end,
+	disabled = function() return not E.UnitFrames end,
 	args = {
 		configureToggle = {
 			order = 1,
@@ -5742,13 +5601,13 @@ E.Options.args.unitframe.args.raid = {
 				},
 				resurrect = {
 					order = 6,
+					type = "toggle",
 					name = L["Resurrection Indicator"],
 					desc = L["Show an incoming resurection."],
-					type = "toggle",
 				},
 				threatStyle = {
-					type = "select",
 					order = 7,
+					type = "select",
 					name = L["Threat Display Mode"],
 					values = threatValues,
 				},
@@ -5757,23 +5616,14 @@ E.Options.args.unitframe.args.raid = {
 					name = L["Class Color Override"],
 					desc = L["Override the default class color setting."],
 					type = "select",
-					values = {
-						["USE_DEFAULT"] = L["Use Default"],
-						["FORCE_ON"] = L["Force On"],
-						["FORCE_OFF"] = L["Force Off"],
-					},
+					values = colorOverrideValues
 				},
 				orientation = {
 					order = 9,
 					type = "select",
 					name = L["Frame Orientation"],
 					desc = L["Set the orientation of the UnitFrame."],
-					values = {
-						--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
-						["LEFT"] = L["Left"],
-						["MIDDLE"] = L["Middle"],
-						["RIGHT"] = L["Right"],
-					},
+					values = orientationValues
 				},
 				targetGlow = {
 					order = 10,
@@ -5812,16 +5662,7 @@ E.Options.args.unitframe.args.raid = {
 							name = L["Growth Direction"],
 							desc = L["Growth direction from the first unitframe."],
 							type = "select",
-							values = {
-								DOWN_RIGHT = format(L["%s and then %s"], L["Down"], L["Right"]),
-								DOWN_LEFT = format(L["%s and then %s"], L["Down"], L["Left"]),
-								UP_RIGHT = format(L["%s and then %s"], L["Up"], L["Right"]),
-								UP_LEFT = format(L["%s and then %s"], L["Up"], L["Left"]),
-								RIGHT_DOWN = format(L["%s and then %s"], L["Right"], L["Down"]),
-								RIGHT_UP = format(L["%s and then %s"], L["Right"], L["Up"]),
-								LEFT_DOWN = format(L["%s and then %s"], L["Left"], L["Down"]),
-								LEFT_UP = format(L["%s and then %s"], L["Left"], L["Up"]),
-							},
+							values = growthDirectionValues
 						},
 						numGroups = {
 							order = 7,
@@ -6038,7 +5879,7 @@ E.Options.args.unitframe.args.raid = {
 					order = 4,
 					name = L["Attach To"],
 					values = {
-						["Health"] = L["Health"],
+						["Health"] = HEALTH,
 						["Power"] = L["Power"],
 						["InfoPanel"] = L["Information Panel"],
 						["Frame"] = L["Frame"],
@@ -6101,13 +5942,13 @@ E.Options.args.unitframe.args.raid = {
 
 --Raid-40 Frames
 E.Options.args.unitframe.args.raid40 = {
-	name = L["Raid-40 Frames"],
+	order = 1350,
 	type = "group",
-	order = 1100,
+	name = L["Raid-40 Frames"],
 	childGroups = "tab",
 	get = function(info) return E.db.unitframe.units["raid40"][ info[#info] ] end,
-	set = function(info, value) E.db.unitframe.units["raid40"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("raid40") end,
-	disabled = function() return not E.UnitFrames; end,
+	set = function(info, value) E.db.unitframe.units["raid40"][ info[#info] ] = value UF:CreateAndUpdateHeaderGroup("raid40") end,
+	disabled = function() return not E.UnitFrames end,
 	args = {
 		configureToggle = {
 			order = 1,
@@ -6187,23 +6028,14 @@ E.Options.args.unitframe.args.raid40 = {
 					name = L["Class Color Override"],
 					desc = L["Override the default class color setting."],
 					type = "select",
-					values = {
-						["USE_DEFAULT"] = L["Use Default"],
-						["FORCE_ON"] = L["Force On"],
-						["FORCE_OFF"] = L["Force Off"],
-					},
+					values = colorOverrideValues
 				},
 				orientation = {
 					order = 9,
 					type = "select",
 					name = L["Frame Orientation"],
 					desc = L["Set the orientation of the UnitFrame."],
-					values = {
-						--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
-						["LEFT"] = L["Left"],
-						["MIDDLE"] = L["Middle"],
-						["RIGHT"] = L["Right"],
-					},
+					values = orientationValues
 				},
 				targetGlow = {
 					order = 10,
@@ -6242,16 +6074,7 @@ E.Options.args.unitframe.args.raid40 = {
 							name = L["Growth Direction"],
 							desc = L["Growth direction from the first unitframe."],
 							type = "select",
-							values = {
-								DOWN_RIGHT = format(L["%s and then %s"], L["Down"], L["Right"]),
-								DOWN_LEFT = format(L["%s and then %s"], L["Down"], L["Left"]),
-								UP_RIGHT = format(L["%s and then %s"], L["Up"], L["Right"]),
-								UP_LEFT = format(L["%s and then %s"], L["Up"], L["Left"]),
-								RIGHT_DOWN = format(L["%s and then %s"], L["Right"], L["Down"]),
-								RIGHT_UP = format(L["%s and then %s"], L["Right"], L["Up"]),
-								LEFT_DOWN = format(L["%s and then %s"], L["Left"], L["Down"]),
-								LEFT_UP = format(L["%s and then %s"], L["Left"], L["Up"]),
-							},
+							values = growthDirectionValues
 						},
 						numGroups = {
 							order = 7,
@@ -6468,7 +6291,7 @@ E.Options.args.unitframe.args.raid40 = {
 					order = 4,
 					name = L["Attach To"],
 					values = {
-						["Health"] = L["Health"],
+						["Health"] = HEALTH,
 						["Power"] = L["Power"],
 						["InfoPanel"] = L["Information Panel"],
 						["Frame"] = L["Frame"],
@@ -6531,13 +6354,13 @@ E.Options.args.unitframe.args.raid40 = {
 
 --Raid Pet Frames
 E.Options.args.unitframe.args.raidpet = {
-	order = 1200,
+	order = 1400,
 	type = "group",
 	name = L["Raid Pet Frames"],
 	childGroups = "tab",
 	get = function(info) return E.db.unitframe.units["raidpet"][ info[#info] ] end,
-	set = function(info, value) E.db.unitframe.units["raidpet"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("raidpet") end,
-	disabled = function() return not E.UnitFrames; end,
+	set = function(info, value) E.db.unitframe.units["raidpet"][ info[#info] ] = value UF:CreateAndUpdateHeaderGroup("raidpet") end,
+	disabled = function() return not E.UnitFrames end,
 	args = {
 		configureToggle = {
 			order = 1,
@@ -6603,23 +6426,14 @@ E.Options.args.unitframe.args.raidpet = {
 					name = L["Class Color Override"],
 					desc = L["Override the default class color setting."],
 					type = "select",
-					values = {
-						["USE_DEFAULT"] = L["Use Default"],
-						["FORCE_ON"] = L["Force On"],
-						["FORCE_OFF"] = L["Force Off"],
-					},
+					values = colorOverrideValues
 				},
 				orientation = {
 					order = 7,
 					type = "select",
 					name = L["Frame Orientation"],
 					desc = L["Set the orientation of the UnitFrame."],
-					values = {
-						--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
-						["LEFT"] = L["Left"],
-						["MIDDLE"] = L["Middle"],
-						["RIGHT"] = L["Right"],
-					},
+					values = orientationValues
 				},
 				positionsGroup = {
 					order = 100,
@@ -6653,16 +6467,7 @@ E.Options.args.unitframe.args.raidpet = {
 							name = L["Growth Direction"],
 							desc = L["Growth direction from the first unitframe."],
 							type = "select",
-							values = {
-								DOWN_RIGHT = format(L["%s and then %s"], L["Down"], L["Right"]),
-								DOWN_LEFT = format(L["%s and then %s"], L["Down"], L["Left"]),
-								UP_RIGHT = format(L["%s and then %s"], L["Up"], L["Right"]),
-								UP_LEFT = format(L["%s and then %s"], L["Up"], L["Left"]),
-								RIGHT_DOWN = format(L["%s and then %s"], L["Right"], L["Down"]),
-								RIGHT_UP = format(L["%s and then %s"], L["Right"], L["Up"]),
-								LEFT_DOWN = format(L["%s and then %s"], L["Left"], L["Down"]),
-								LEFT_UP = format(L["%s and then %s"], L["Left"], L["Up"]),
-							},
+							values = growthDirectionValues
 						},
 						numGroups = {
 							order = 7,
@@ -6837,13 +6642,13 @@ E.Options.args.unitframe.args.raidpet = {
 
 --Tank Frames
 E.Options.args.unitframe.args.tank = {
-	name = L["Tank Frames"],
+	order = 1500,
 	type = "group",
-	order = 1300,
+	name = L["Tank Frames"],
 	childGroups = "tab",
 	get = function(info) return E.db.unitframe.units["tank"][ info[#info] ] end,
-	set = function(info, value) E.db.unitframe.units["tank"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("tank") end,
-	disabled = function() return not E.UnitFrames; end,
+	set = function(info, value) E.db.unitframe.units["tank"][ info[#info] ] = value UF:CreateAndUpdateHeaderGroup("tank") end,
+	disabled = function() return not E.UnitFrames end,
 	args = {
 		resetSettings = {
 			type = "execute",
@@ -6890,25 +6695,16 @@ E.Options.args.unitframe.args.tank = {
 					type = "select",
 					name = L["Frame Orientation"],
 					desc = L["Set the orientation of the UnitFrame."],
-					values = {
-						--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
-						["LEFT"] = L["Left"],
-						["MIDDLE"] = L["Middle"],
-						["RIGHT"] = L["Right"],
-					},
+					values = orientationValues
 				},
 				colorOverride = {
 					order = 7,
+					type = "select",
 					name = L["Class Color Override"],
 					desc = L["Override the default class color setting."],
-					type = "select",
-					values = {
-						["USE_DEFAULT"] = L["Use Default"],
-						["FORCE_ON"] = L["Force On"],
-						["FORCE_OFF"] = L["Force Off"],
-					},
-				},
-			},
+					values = colorOverrideValues
+				}
+			}
 		},
 		targetsGroup = {
 			order = 700,
@@ -7031,13 +6827,13 @@ E.Options.args.unitframe.args.tank = {
 
 --Assist Frames
 E.Options.args.unitframe.args.assist = {
-	name = L["Assist Frames"],
+	order = 1600,
 	type = "group",
-	order = 1300,
+	name = L["Assist Frames"],
 	childGroups = "tab",
 	get = function(info) return E.db.unitframe.units["assist"][ info[#info] ] end,
-	set = function(info, value) E.db.unitframe.units["assist"][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup("assist") end,
-	disabled = function() return not E.UnitFrames; end,
+	set = function(info, value) E.db.unitframe.units["assist"][ info[#info] ] = value UF:CreateAndUpdateHeaderGroup("assist") end,
+	disabled = function() return not E.UnitFrames end,
 	args = {
 		resetSettings = {
 			type = "execute",
@@ -7084,25 +6880,16 @@ E.Options.args.unitframe.args.assist = {
 					type = "select",
 					name = L["Frame Orientation"],
 					desc = L["Set the orientation of the UnitFrame."],
-					values = {
-						--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
-						["LEFT"] = L["Left"],
-						["MIDDLE"] = L["Middle"],
-						["RIGHT"] = L["Right"],
-					},
+					values = orientationValues
 				},
 				colorOverride = {
 					order = 7,
 					name = L["Class Color Override"],
 					desc = L["Override the default class color setting."],
 					type = "select",
-					values = {
-						["USE_DEFAULT"] = L["Use Default"],
-						["FORCE_ON"] = L["Force On"],
-						["FORCE_OFF"] = L["Force Off"],
-					},
-				},
-			},
+					values = colorOverrideValues
+				}
+			}
 		},
 		targetsGroup = {
 			order = 701,
@@ -7233,7 +7020,13 @@ E.Options.args.unitframe.args.generalOptionsGroup.args.allColorsGroup.args.class
 		t.r, t.g, t.b = r, g, b
 		UF:Update_AllFrames()
 	end,
-	args = {}
+	args = {
+		header = {
+			order = 0,
+			type = "header",
+			name = L["Class Resources"]
+		}
+	}
 }
 
 E.Options.args.unitframe.args.generalOptionsGroup.args.allColorsGroup.args.classResourceGroup.args.bgColor = {

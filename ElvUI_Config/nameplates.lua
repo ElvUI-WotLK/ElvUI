@@ -3,7 +3,7 @@ local NP = E:GetModule("NamePlates");
 local ACD = LibStub("AceConfigDialog-3.0-ElvUI");
 
 local next, ipairs, pairs, type, tonumber = next, ipairs, pairs, type, tonumber
-local tremove, tinsert, tsort, tconcat = tremove, tinsert, table.sort, table.concat
+local tremove, tinsert, tsort, tconcat = table.remove, table.insert, table.sort, table.concat
 local format, match, gsub, strsplit = string.format, string.match, string.gsub, strsplit
 
 local GetSpellInfo = GetSpellInfo
@@ -15,18 +15,6 @@ local ROLE, TANK, HEALER, DAMAGER, COLOR = ROLE, TANK, HEALER, DAMAGER, COLOR
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS
 
 local selectedNameplateFilter
-
-local positionValues = {
-	TOPLEFT = "TOPLEFT",
-	LEFT = "LEFT",
-	BOTTOMLEFT = "BOTTOMLEFT",
-	RIGHT = "RIGHT",
-	TOPRIGHT = "TOPRIGHT",
-	BOTTOMRIGHT = "BOTTOMRIGHT",
-	CENTER = "CENTER",
-	TOP = "TOP",
-	BOTTOM = "BOTTOM"
-};
 
 local carryFilterFrom, carryFilterTo
 local function filterValue(value)
@@ -106,12 +94,12 @@ local function UpdateInstanceDifficulty()
 				normal = {
 					order = 1,
 					type = "toggle",
-					name = "Normal",
+					name = PLAYER_DIFFICULTY1
 				},
 				heroic = {
 					order = 2,
 					type = "toggle",
-					name = "Heroic",
+					name = PLAYER_DIFFICULTY2
 				},
 			}
 		}
@@ -1370,7 +1358,7 @@ local function UpdateFilterGroup()
 					disabled = function() return E.global.nameplates.filters[selectedNameplateFilter].actions.hide end,
 					args = {
 						health = {
-							name = L["Health"],
+							name = HEALTH,
 							order = 1,
 							type = "toggle",
 							get = function(info)
@@ -1600,7 +1588,7 @@ local function GetUnitSettings(unit, name)
 			},
 			healthGroup = {
 				order = 1,
-				name = L["Health"],
+				name = HEALTH,
 				type = "group",
 				get = function(info) return E.db.nameplates.units[unit].healthbar[ info[#info] ]; end,
 				set = function(info, value) E.db.nameplates.units[unit].healthbar[ info[#info] ] = value; NP:ConfigureAll(); end,
@@ -1608,7 +1596,7 @@ local function GetUnitSettings(unit, name)
 					header = {
 						order = 0,
 						type = "header",
-						name = L["Health"]
+						name = HEALTH
 					},
 					enable = {
 						order = 1,
@@ -2525,7 +2513,7 @@ E.Options.args.nameplate = {
 						health = {
 							order = 3,
 							type = "group",
-							name = L["Health"],
+							name = HEALTH,
 							guiInline = true,
 							args = {
 								healthFont = {
