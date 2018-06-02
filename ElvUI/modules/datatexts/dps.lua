@@ -26,10 +26,10 @@ end
 
 local function GetDPS(self)
 	local DPS;
-	if(DMGTotal == 0 or combatTime == 0) then
-		DPS = "0.0";
+	if DMGTotal == 0 or combatTime == 0 then
+		DPS = 0
 	else
-		DPS = (DMGTotal) / (combatTime);
+		DPS = DMGTotal / combatTime
 	end
 	self.text:SetFormattedText(displayString, L["DPS"], DPS);
 end
