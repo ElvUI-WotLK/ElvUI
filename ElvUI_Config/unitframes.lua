@@ -1803,7 +1803,7 @@ local function CreateCustomTextGroup(unit, objectName)
 							else
 								for x = 1, child:GetNumChildren() do
 									local c2 = select(x, child:GetChildren())
-									if(c2.Untag) then
+									if c2.Untag then
 										c2:Untag(c2["customTexts"][objectName])
 										c2["customTexts"][objectName]:Hide()
 										c2["customTexts"][objectName] = nil
@@ -2311,7 +2311,7 @@ E.Options.args.unitframe = {
 										["NONE"] = NONE,
 										["OUTLINE"] = "OUTLINE",
 										["MONOCHROMEOUTLINE"] = "MONOCROMEOUTLINE",
-										["THICKOUTLINE"] = "THICKOUTLINE",
+										["THICKOUTLINE"] = "THICKOUTLINE"
 									},
 									set = function(info, value) E.db.unitframe[ info[#info] ] = value UF:Update_FontStrings() end
 								}
@@ -3964,53 +3964,53 @@ E.Options.args.unitframe.args.target = {
 			}
 		},
  		pvpIcon = {
- 			order = 449,
- 			type = "group",
- 			name = L["PvP Icon"],
- 			get = function(info) return E.db.unitframe.units["target"]["pvpIcon"][ info[#info] ] end,
+			order = 449,
+			type = "group",
+			name = L["PvP Icon"],
+			get = function(info) return E.db.unitframe.units["target"]["pvpIcon"][ info[#info] ] end,
 			set = function(info, value) E.db.unitframe.units["target"]["pvpIcon"][ info[#info] ] = value UF:CreateAndUpdateUF("target") end,
- 			args = {
+			args = {
 				header = {
 					order = 1,
 					type = "header",
 					name = L["PvP Icon"]
 				},
- 				enable = {
- 					order = 2,
- 					type = "toggle",
- 					name = L["Enable"]
- 				},
- 				scale = {
- 					order = 3,
- 					type = "range",
- 					name = L["Scale"],
- 					isPercent = true,
- 					min = 0.1, max = 2, step = 0.01
- 				},
- 				spacer = {
- 					order = 4,
- 					type = "description",
- 					name = " "
- 				},
- 				anchorPoint = {
- 					order = 5,
- 					type = "select",
- 					name = L["Anchor Point"],
- 					values = positionValues
- 				},
- 				xOffset = {
- 					order = 6,
- 					type = "range",
- 					name = L["X-Offset"],
- 					min = -100, max = 100, step = 1
- 				},
- 				yOffset = {
- 					order = 7,
- 					type = "range",
- 					name = L["Y-Offset"],
- 					min = -100, max = 100, step = 1
- 				}
- 			}
+				enable = {
+					order = 2,
+					type = "toggle",
+					name = L["Enable"]
+				},
+				scale = {
+					order = 3,
+					type = "range",
+					name = L["Scale"],
+					isPercent = true,
+					min = 0.1, max = 2, step = 0.01
+				},
+				spacer = {
+					order = 4,
+					type = "description",
+					name = " "
+				},
+				anchorPoint = {
+					order = 5,
+					type = "select",
+					name = L["Anchor Point"],
+					values = positionValues
+				},
+				xOffset = {
+					order = 6,
+					type = "range",
+					name = L["X-Offset"],
+					min = -100, max = 100, step = 1
+				},
+				yOffset = {
+					order = 7,
+					type = "range",
+					name = L["Y-Offset"],
+					min = -100, max = 100, step = 1
+				}
+			}
 		}
 	}
 }
@@ -4471,12 +4471,12 @@ E.Options.args.unitframe.args.focustarget = {
 					type = "execute",
 					name = L["Restore Defaults"],
 					func = function(info) E:StaticPopup_Show("RESET_UF_UNIT", L["FocusTarget Frame"], nil, {unit="focustarget", mover="FocusTarget Frame"}) end
-				},	
+				},
 				showAuras = {
 					order = 5,
 					type = "execute",
 					name = L["Show Auras"],
-					func = function() 
+					func = function()
 						local frame = ElvUF_FocusTarget
 						if frame.forceShowAuras then
 							frame.forceShowAuras = nil
@@ -4963,7 +4963,7 @@ E.Options.args.unitframe.args.boss = {
 					name = L["Width"],
 					min = 50, max = 500, step = 1,
 					set = function(info, value)
-						if(E.db.unitframe.units["boss"].castbar.width == E.db.unitframe.units["boss"][ info[#info] ]) then
+						if E.db.unitframe.units["boss"].castbar.width == E.db.unitframe.units["boss"][ info[#info] ] then
 							E.db.unitframe.units["boss"].castbar.width = value
 						end
 
@@ -5117,7 +5117,7 @@ E.Options.args.unitframe.args.arena = {
 					name = L["Width"],
 					min = 50, max = 500, step = 1,
 					set = function(info, value) 
-						if(E.db.unitframe.units["arena"].castbar.width == E.db.unitframe.units["arena"][ info[#info] ]) then
+						if E.db.unitframe.units["arena"].castbar.width == E.db.unitframe.units["arena"][ info[#info] ] then
 							E.db.unitframe.units["arena"].castbar.width = value
 						end
 
@@ -5573,7 +5573,7 @@ E.Options.args.unitframe.args.party = {
 					type = "execute",
 					name = L["Configure Auras"],
 					func = function()
-						if(E.db.unitframe.units["party"]["buffIndicator"].profileSpecific) then
+						if E.db.unitframe.units["party"]["buffIndicator"].profileSpecific then
 							E:SetToFilterConfig("Buff Indicator (Profile)")
 						else
 							E:SetToFilterConfig("Buff Indicator")
@@ -6574,7 +6574,7 @@ E.Options.args.unitframe.args.raid40 = {
 					type = "execute",
 					name = L["Configure Auras"],
 					func = function()
-						if(E.db.unitframe.units["raid40"]["buffIndicator"].profileSpecific) then
+						if E.db.unitframe.units["raid40"]["buffIndicator"].profileSpecific then
 							E:SetToFilterConfig("Buff Indicator (Profile)")
 						else
 							E:SetToFilterConfig("Buff Indicator")
@@ -6681,7 +6681,7 @@ E.Options.args.unitframe.args.raidpet = {
 			order = 1,
 			type = "execute",
 			name = L["Display Frames"],
-			func = function() 
+			func = function()
 				UF:HeaderConfig(ElvUF_Raidpet, ElvUF_Raidpet.forceShow ~= true or nil)
 			end
 		},

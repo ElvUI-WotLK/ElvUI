@@ -513,24 +513,29 @@ P["unitframe"]["filters"] = {
 
 G.unitframe.ChannelTicks = {
 	-- Warlock
-	[SpellName(1120)] = 5, -- Drain Soul
-	[SpellName(689)] = 5, -- Drain Life
-	[SpellName(5138)] = 5, -- Drain Mana
-	[SpellName(5740)] = 4, -- Rain of Fire
-	[SpellName(755)] = 10, -- Health Funnel
+	[SpellName(1120)] = 5,	-- Drain Soul
+	[SpellName(689)] = 5,	-- Drain Life
+	[SpellName(5138)] = 5,	-- Drain Mana
+	[SpellName(5740)] = 4,	-- Rain of Fire
+	[SpellName(755)] = 10,	-- Health Funnel
+	[SpellName(1949)] = 15,	-- Hellfire
 	-- Druid
-	[SpellName(44203)] = 4, -- Tranquility
+	[SpellName(44203)] = 4,	 -- Tranquility
 	[SpellName(16914)] = 10, -- Hurricane
 	-- Priest
-	[SpellName(15407)] = 3, -- Mind Flay
-	[SpellName(48045)] = 5, -- Mind Sear
-	[SpellName(47540)] = 3, -- Penance
+	[SpellName(15407)] = 3,	-- Mind Flay
+	[SpellName(48045)] = 5,	-- Mind Sear
+	[SpellName(47540)] = 3,	-- Penance
+	[SpellName(64843)] = 4,	-- Divine Hymn
+	[SpellName(64901)] = 4,	-- Hymn of Hope
 	-- Mage
-	[SpellName(5143)] = 5, -- Arcane Missiles
-	[SpellName(10)] = 8, -- Blizzard
-	[SpellName(12051)] = 4, -- Evocation
+	[SpellName(5143)] = 5,	-- Arcane Missiles
+	[SpellName(10)] = 8,	-- Blizzard
+	[SpellName(12051)] = 4,	-- Evocation
 	-- Hunter
-	[SpellName(58434)] = 6, -- Volley
+	[SpellName(58434)] = 6,	-- Volley
+	-- Death Knight
+	[SpellName(42650)] = 8,	-- Army of the Dead
 }
 
 G.unitframe.AuraBarColors = {
