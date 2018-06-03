@@ -1853,7 +1853,6 @@ P["unitframe"] = {
 			["startFromCenter"] = false,
 			["showPlayer"] = true,
 			["healPrediction"] = false,
-			["resurrect"] = true,
 			["colorOverride"] = "USE_DEFAULT",
 			["width"] = 184,
 			["height"] = 54,
@@ -2026,6 +2025,14 @@ P["unitframe"] = {
 				["xOffset"] = 0,
 				["yOffset"] = 2,
 			},
+			["resurrectIcon"] = {
+				["enable"] = true,
+				["size"] = 30,
+				["attachTo"] = "CENTER",
+				["attachToObject"] = "Frame",
+				["xOffset"] = 0,
+				["yOffset"] = 0
+			}
 		},
 		["raid"] = {
 			["enable"] = true,
@@ -2042,7 +2049,6 @@ P["unitframe"] = {
 			["sortDir"] = "ASC",
 			["showPlayer"] = true,
 			["healPrediction"] = false,
-			["resurrect"] = true,
 			["colorOverride"] = "USE_DEFAULT",
 			["width"] = 80,
 			["height"] = 44,
@@ -2185,6 +2191,14 @@ P["unitframe"] = {
 				["xOffset"] = 0,
 				["yOffset"] = 2,
 			},
+			["resurrectIcon"] = {
+				["enable"] = true,
+				["size"] = 30,
+				["attachTo"] = "CENTER",
+				["attachToObject"] = "Frame",
+				["xOffset"] = 0,
+				["yOffset"] = 0
+			}
 		},
 		["raid40"] = {
 			["enable"] = true,
@@ -2201,7 +2215,6 @@ P["unitframe"] = {
 			["sortDir"] = "ASC",
 			["showPlayer"] = true,
 			["healPrediction"] = false,
-			["resurrect"] = true,
 			["colorOverride"] = "USE_DEFAULT",
 			["width"] = 80,
 			["height"] = 27,
@@ -2344,6 +2357,14 @@ P["unitframe"] = {
 				["xOffset"] = 0,
 				["yOffset"] = 2,
 			},
+			["resurrectIcon"] = {
+				["enable"] = true,
+				["size"] = 30,
+				["attachTo"] = "CENTER",
+				["attachToObject"] = "Frame",
+				["xOffset"] = 0,
+				["yOffset"] = 0
+			}
 		},
 		["raidpet"] = {
 			["enable"] = false,
