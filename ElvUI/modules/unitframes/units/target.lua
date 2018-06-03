@@ -25,15 +25,17 @@ function UF:Construct_TargetFrame(frame)
 	frame.Castbar = self:Construct_Castbar(frame, L["Target Castbar"]);
 	frame.Castbar.SafeZone = nil;
 	frame.Castbar.LatencyTexture:Hide();
-	frame.RaidTargetIndicator = UF:Construct_RaidIcon(frame);
+	frame.RaidTargetIndicator = self:Construct_RaidIcon(frame);
 	frame.ComboPoints = self:Construct_Combobar(frame);
 	frame.HealCommBar = self:Construct_HealComm(frame);
 	frame.DebuffHighlight = self:Construct_DebuffHighlight(frame);
 	frame.GPS = self:Construct_GPS(frame);
 	frame.InfoPanel = self:Construct_InfoPanel(frame);
+	frame.MouseGlow = self:Construct_MouseGlow(frame)
+	frame.TargetGlow = self:Construct_TargetGlow(frame)
 	frame.AuraBars = self:Construct_AuraBarHeader(frame);
-	frame.Range = UF:Construct_Range(frame);
-	frame.PvPIndicator = UF:Construct_PvPIcon(frame);
+	frame.Range = self:Construct_Range(frame);
+	frame.PvPIndicator = self:Construct_PvPIcon(frame);
 	frame.customTexts = {};
 
 	frame:Point("BOTTOMRIGHT", E.UIParent, "BOTTOM", 413, 68);

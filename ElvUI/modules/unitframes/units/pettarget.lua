@@ -17,7 +17,9 @@ function UF:Construct_PetTargetFrame(frame)
 	frame.Buffs = self:Construct_Buffs(frame);
 	frame.ThreatIndicator = self:Construct_Threat(frame);
 	frame.Debuffs = self:Construct_Debuffs(frame);
-	frame.Range = UF:Construct_Range(frame);
+	frame.Range = self:Construct_Range(frame);
+	frame.MouseGlow = self:Construct_MouseGlow(frame)
+	frame.TargetGlow = self:Construct_TargetGlow(frame)
 	frame.customTexts = {};
 
 	frame:Point("BOTTOM", ElvUF_Pet, "TOP", 0, 7);

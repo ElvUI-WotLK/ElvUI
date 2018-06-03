@@ -27,14 +27,11 @@ function UF:Construct_BossFrames(frame)
 	frame.Buffs = self:Construct_Buffs(frame);
 	frame.Debuffs = self:Construct_Debuffs(frame);
 	frame.DebuffHighlight = self:Construct_DebuffHighlight(frame);
-	frame.TargetGlow = UF:Construct_TargetGlow(frame);
-	tinsert(frame.__elements, UF.UpdateTargetGlow);
-	frame:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetGlow);
-	frame:RegisterEvent("PLAYER_ENTERING_WORLD", UF.UpdateTargetGlow);
-	frame:RegisterEvent("GROUP_ROSTER_UPDATE", UF.UpdateTargetGlow);
 	frame.Castbar = self:Construct_Castbar(frame);
-	frame.RaidTargetIndicator = UF:Construct_RaidIcon(frame);
-	frame.Range = UF:Construct_Range(frame);
+	frame.RaidTargetIndicator = self:Construct_RaidIcon(frame);
+	frame.Range = self:Construct_Range(frame);
+	frame.MouseGlow = self:Construct_MouseGlow(frame)
+	frame.TargetGlow = self:Construct_TargetGlow(frame)
 	frame:SetAttribute("type2", "focus");
 	frame.customTexts = {};
 
@@ -89,8 +86,6 @@ function UF:Update_BossFrames(frame, db)
 	UF:Configure_Power(frame);
 
 	UF:Configure_Portrait(frame);
-
-	UF:Configure_TargetGlow(frame);
 
 	UF:EnableDisable_Auras(frame);
 	UF:Configure_Auras(frame, "Buffs");

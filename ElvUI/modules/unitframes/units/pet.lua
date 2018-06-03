@@ -23,12 +23,14 @@ function UF:Construct_PetFrame(frame)
 	frame.Castbar.LatencyTexture:Hide();
 	frame.ThreatIndicator = self:Construct_Threat(frame);
 	frame.HealCommBar = self:Construct_HealComm(frame);
-	frame.AuraWatch = UF:Construct_AuraWatch(frame);
-	frame.Range = UF:Construct_Range(frame);
+	frame.AuraWatch = self:Construct_AuraWatch(frame);
+	frame.Range = self:Construct_Range(frame);
 	if E.myclass == "HUNTER" then
-		frame.HappinessIndicator = UF:Construct_Happiness(frame)
+		frame.HappinessIndicator = self:Construct_Happiness(frame)
 	end
 	frame.InfoPanel = self:Construct_InfoPanel(frame);
+	frame.MouseGlow = self:Construct_MouseGlow(frame)
+	frame.TargetGlow = self:Construct_TargetGlow(frame)
 	frame.customTexts = {};
 
 	frame:Point("BOTTOM", E.UIParent, "BOTTOM", 0, 118);
