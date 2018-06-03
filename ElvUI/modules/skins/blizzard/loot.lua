@@ -1,64 +1,103 @@
-local E, L, V, P, G = unpack(select(2, ...));
-local S = E:GetModule("Skins");
+local E, L, V, P, G = unpack(select(2, ...))
+local S = E:GetModule("Skins")
 
-local _G = _G;
-local select = select;
+local _G = _G
+local unpack, select = unpack, select
 
-local UnitName = UnitName;
-local IsFishingLoot = IsFishingLoot;
+local UnitName = UnitName
+local IsFishingLoot = IsFishingLoot
 local GetLootRollItemInfo = GetLootRollItemInfo
 local GetItemQualityColor = GetItemQualityColor
-local LOOTFRAME_NUMBUTTONS = LOOTFRAME_NUMBUTTONS;
+local GetLootSlotInfo = GetLootSlotInfo
+local LOOTFRAME_NUMBUTTONS = LOOTFRAME_NUMBUTTONS
 local NUM_GROUP_LOOT_FRAMES = NUM_GROUP_LOOT_FRAMES
-local LOOT = LOOT;
+local LOOT, ITEMS = LOOT, ITEMS
 
 local function LoadSkin()
-	if(E.private.general.loot) then return; end
-	if(E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.loot ~= true) then return; end
+	if E.private.general.loot then return end
+	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.loot ~= true then return end
 
-	LootFrame:StripTextures();
+	local LootFrame = _G["LootFrame"]
+	LootFrame:StripTextures()
 
 	LootFrame:CreateBackdrop("Transparent")
-	LootFrame.backdrop:Point("TOPLEFT", 13, -14);
-	LootFrame.backdrop:Point("BOTTOMRIGHT", -68, 5);
+	LootFrame.backdrop:Point("TOPLEFT", 14, -14)
+	LootFrame.backdrop:Point("BOTTOMRIGHT", -75, 5)
 
-	LootFramePortraitOverlay:SetParent(E.HiddenFrame);
+	LootFramePortraitOverlay:SetParent(E.HiddenFrame)
 
-	S:HandleCloseButton(LootCloseButton);
+	S:HandleNextPrevButton(LootFrameUpButton)
+	S:SquareButton_SetIcon(LootFrameUpButton, "UP")
+	LootFrameUpButton:Point("BOTTOMLEFT", 25, 20)
+
+	S:HandleNextPrevButton(LootFrameDownButton)
+	S:SquareButton_SetIcon(LootFrameDownButton, "DOWN")
+	LootFrameDownButton:Point("BOTTOMLEFT", 145, 20)
+
+	S:HandleCloseButton(LootCloseButton)
+	LootCloseButton:Point("CENTER", LootFrame, "TOPRIGHT", -87, -26)
 
 	for i = 1, LootFrame:GetNumRegions() do
-		local region = select(i, LootFrame:GetRegions());
-		if(region:GetObjectType() == "FontString") then
-			if(region:GetText() == ITEMS) then
-				LootFrame.Title = region;
+		local region = select(i, LootFrame:GetRegions())
+		if region:GetObjectType() == "FontString" then
+			if region:GetText() == ITEMS then
+				LootFrame.Title = region
 			end
 		end
 	end
 
-	LootFrame.Title:ClearAllPoints();
-	LootFrame.Title:Point("TOPLEFT", LootFrame.backdrop, "TOPLEFT", 4, -4);
-	LootFrame.Title:SetJustifyH("LEFT");
-
-	for i = 1, LOOTFRAME_NUMBUTTONS do
-		local button = _G["LootButton" .. i];
-		_G["LootButton" .. i .. "NameFrame"]:Hide();
-		S:HandleItemButton(button, true);
-	end
-
-	S:HandleNextPrevButton(LootFrameDownButton);
-	S:HandleNextPrevButton(LootFrameUpButton);
-	S:SquareButton_SetIcon(LootFrameUpButton, "UP");
-	S:SquareButton_SetIcon(LootFrameDownButton, "DOWN");
+	LootFrame.Title:ClearAllPoints()
+	LootFrame.Title:Point("TOPLEFT", LootFrame.backdrop, "TOPLEFT", 4, -4)
+	LootFrame.Title:SetJustifyH("LEFT")
 
 	LootFrame:HookScript("OnShow", function(self)
-		if(IsFishingLoot()) then
-			self.Title:SetText(L["Fishy Loot"]);
-		elseif(not UnitIsFriend("player", "target") and UnitIsDead("target")) then
-			self.Title:SetText(UnitName("target"));
+		if IsFishingLoot() then
+			self.Title:SetText(L["Fishy Loot"])
+		elseif not UnitIsFriend("player", "target") and UnitIsDead("target") then
+			self.Title:SetText(UnitName("target"))
 		else
-			self.Title:SetText(LOOT);
+			self.Title:SetText(LOOT)
 		end
-	end);
+	end)
+
+	for i = 1, LOOTFRAME_NUMBUTTONS do
+		local button = _G["LootButton"..i]
+		local nameFrame = _G["LootButton"..i.."NameFrame"]
+
+		S:HandleItemButton(button, true)
+
+		button.bg = CreateFrame("Frame", nil, button)
+		button.bg:SetTemplate("Default")
+		button.bg:Point("TOPLEFT", 40, 0)
+		button.bg:Point("BOTTOMRIGHT", 110, 0)
+		button.bg:SetFrameLevel(button.bg:GetFrameLevel() - 1)
+
+		nameFrame:Hide()
+	end
+
+	hooksecurefunc("LootFrame_UpdateButton", function(index)
+		local numLootItems = LootFrame.numLootItems
+		local numLootToShow = LOOTFRAME_NUMBUTTONS
+		if numLootItems > LOOTFRAME_NUMBUTTONS then
+			numLootToShow = numLootToShow - 1
+		end
+
+		local button = _G["LootButton"..index]
+		local slot = (numLootToShow * (LootFrame.page - 1)) + index
+
+		if slot <= numLootItems then 
+			if (LootSlotIsItem(slot) or LootSlotIsCoin(slot)) and index <= numLootToShow then
+				local texture, _, _, quality = GetLootSlotInfo(slot)
+				if texture then
+					if quality and quality > 1 then
+						button.backdrop:SetBackdropBorderColor(GetItemQualityColor(quality))
+					else
+						button.backdrop:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+					end
+				end
+			end
+		end
+	end)
 end
 
 local function LoadRollSkin()
