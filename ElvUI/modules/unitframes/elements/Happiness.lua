@@ -4,8 +4,11 @@ local UF = E:GetModule("UnitFrames")
 function UF:Construct_Happiness(frame)
 	local HappinessIndicator = CreateFrame("Statusbar", nil, frame)
 
+	HappinessIndicator.bg = CreateFrame("Frame", nil, HappinessIndicator)
 	UF["statusbars"][HappinessIndicator] = true
-	HappinessIndicator:CreateBackdrop("Default", nil, nil, self.thinBorders, true)
+	HappinessIndicator.bg:SetTemplate("Default", nil, nil, self.thinBorders, true)
+	HappinessIndicator.bg:SetFrameLevel(HappinessIndicator:GetFrameLevel() - 1)
+	HappinessIndicator:SetInside(HappinessIndicator.bg)
 	HappinessIndicator:SetOrientation("VERTICAL")
 	HappinessIndicator:SetMinMaxValues(0, 100)
 
@@ -20,29 +23,29 @@ function UF:Configure_Happiness(frame)
 	local HappinessIndicator = frame.HappinessIndicator
 	local db = frame.db
 
-	frame.HAPPINESS_WIDTH = HappinessIndicator and frame.HAPPINESS_SHOWN and (db.happiness.width + (frame.BORDER*2)) or 0;
+	frame.HAPPINESS_WIDTH = HappinessIndicator and frame.HAPPINESS_SHOWN and (db.happiness.width + (frame.BORDER)) or 0;
 
 	if db.happiness.enable then
 		if not frame:IsElementEnabled("HappinessIndicator") then
 			frame:EnableElement("HappinessIndicator")
 		end
 
-		HappinessIndicator:ClearAllPoints()
+		HappinessIndicator.bg:ClearAllPoints()
 		if db.power.enable and not frame.USE_MINI_POWERBAR and not frame.USE_INSET_POWERBAR and not frame.POWERBAR_DETACHED and not frame.USE_POWERBAR_OFFSET then
 			if frame.ORIENTATION == "RIGHT" then
-				HappinessIndicator:Point("BOTTOMRIGHT", frame.Power, "BOTTOMLEFT", -frame.BORDER*2 + (frame.BORDER - frame.SPACING*3), 0)
-				HappinessIndicator:Point("TOPLEFT", frame.Health, "TOPLEFT", -frame.HAPPINESS_WIDTH, 0)
+				HappinessIndicator.bg:Point("BOTTOMRIGHT", frame.Power, "BOTTOMLEFT", -frame.BORDER + (frame.BORDER - frame.SPACING*3), -1)
+				HappinessIndicator.bg:Point("TOPLEFT", frame.Health, "TOPLEFT", -frame.HAPPINESS_WIDTH, 1)
 			else
-				HappinessIndicator:Point("BOTTOMLEFT", frame.Power, "BOTTOMRIGHT", frame.BORDER*2 + (-frame.BORDER + frame.SPACING*3), 0)
-				HappinessIndicator:Point("TOPRIGHT", frame.Health, "TOPRIGHT", frame.HAPPINESS_WIDTH, 0)
+				HappinessIndicator.bg:Point("BOTTOMLEFT", frame.Power, "BOTTOMRIGHT", frame.BORDER + (-frame.BORDER + frame.SPACING*3), -1)
+				HappinessIndicator.bg:Point("TOPRIGHT", frame.Health, "TOPRIGHT", frame.HAPPINESS_WIDTH, 1)
 			end
 		else
 			if frame.ORIENTATION == "RIGHT" then
-				HappinessIndicator:Point("BOTTOMRIGHT", frame.Health, "BOTTOMLEFT", -frame.BORDER*2 + (frame.BORDER - frame.SPACING*3), 0)
-				HappinessIndicator:Point("TOPLEFT", frame.Health, "TOPLEFT", -frame.HAPPINESS_WIDTH, 0)
+				HappinessIndicator.bg:Point("BOTTOMRIGHT", frame.Health, "BOTTOMLEFT", -frame.BORDER + (frame.BORDER - frame.SPACING*3), 0)
+				HappinessIndicator.bg:Point("TOPLEFT", frame.Health, "TOPLEFT", -frame.HAPPINESS_WIDTH, 0)
 			else
-				HappinessIndicator:Point("BOTTOMLEFT", frame.Health, "BOTTOMRIGHT", frame.BORDER*2 + (-frame.BORDER + frame.SPACING*3), 0)
-				HappinessIndicator:Point("TOPRIGHT", frame.Health, "TOPRIGHT", frame.HAPPINESS_WIDTH, 0)
+				HappinessIndicator.bg:Point("BOTTOMLEFT", frame.Health, "BOTTOMRIGHT", frame.BORDER + (-frame.BORDER + frame.SPACING*3), 0)
+				HappinessIndicator.bg:Point("TOPRIGHT", frame.Health, "TOPRIGHT", frame.HAPPINESS_WIDTH, 0)
 			end
 		end
 	elseif frame:IsElementEnabled("HappinessIndicator") then
@@ -74,7 +77,7 @@ function UF:UpdateOverride(event, unit)
 			element:SetValue(100)
 		end
 
-		if damagePercentage == 125 and self.db.happiness.autoHide then
+		if damagePercentage == 125 and E.db.unitframe.units.pet.happiness.autoHide then
 			element:Hide()
 		else
 			element:Show()
