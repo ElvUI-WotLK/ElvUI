@@ -23,7 +23,7 @@ function UF:Configure_Happiness(frame)
 	local HappinessIndicator = frame.HappinessIndicator
 	local db = frame.db
 
-	frame.HAPPINESS_WIDTH = HappinessIndicator and frame.HAPPINESS_SHOWN and (db.happiness.width + (frame.BORDER)) or 0;
+	frame.HAPPINESS_WIDTH = HappinessIndicator and frame.HAPPINESS_SHOWN and (db.happiness.width + (frame.BORDER*3)) or 0;
 
 	if db.happiness.enable then
 		if not frame:IsElementEnabled("HappinessIndicator") then
