@@ -15,7 +15,7 @@ function UF:Configure_ResurrectionIcon(frame)
 	local RI = frame.ResurrectIndicator
 	local db = frame.db
 
-	if frame.db.resurrect then
+	if db.resurrectIcon.enable then
 		if not frame:IsElementEnabled("ResurrectIndicator") then
 			frame:EnableElement("ResurrectIndicator")
 		end
