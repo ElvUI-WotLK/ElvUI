@@ -23,7 +23,7 @@ function UF:Configure_Happiness(frame)
 	local HappinessIndicator = frame.HappinessIndicator
 	local db = frame.db
 
-	frame.HAPPINESS_WIDTH = HappinessIndicator and frame.HAPPINESS_SHOWN and (db.happiness.width + (frame.BORDER*3)) or 0;
+	frame.HAPPINESS_WIDTH = HappinessIndicator and frame.HAPPINESS_SHOWN and (db.happiness.width + (frame.BORDER*3)) or 0
 
 	if db.happiness.enable then
 		if not frame:IsElementEnabled("HappinessIndicator") then
@@ -33,19 +33,19 @@ function UF:Configure_Happiness(frame)
 		HappinessIndicator.bg:ClearAllPoints()
 		if db.power.enable and not frame.USE_MINI_POWERBAR and not frame.USE_INSET_POWERBAR and not frame.POWERBAR_DETACHED and not frame.USE_POWERBAR_OFFSET then
 			if frame.ORIENTATION == "RIGHT" then
-				HappinessIndicator.bg:Point("BOTTOMRIGHT", frame.Power, "BOTTOMLEFT", -frame.BORDER + (frame.BORDER - frame.SPACING*3), -1)
-				HappinessIndicator.bg:Point("TOPLEFT", frame.Health, "TOPLEFT", -frame.HAPPINESS_WIDTH, 1)
+				HappinessIndicator.bg:Point("BOTTOMRIGHT", frame.Power, "BOTTOMLEFT", -frame.BORDER + (frame.BORDER - frame.SPACING*3), -frame.BORDER)
+				HappinessIndicator.bg:Point("TOPLEFT", frame.Health, "TOPLEFT", -frame.HAPPINESS_WIDTH, frame.BORDER)
 			else
-				HappinessIndicator.bg:Point("BOTTOMLEFT", frame.Power, "BOTTOMRIGHT", frame.BORDER + (-frame.BORDER + frame.SPACING*3), -1)
-				HappinessIndicator.bg:Point("TOPRIGHT", frame.Health, "TOPRIGHT", frame.HAPPINESS_WIDTH, 1)
+				HappinessIndicator.bg:Point("BOTTOMLEFT", frame.Power, "BOTTOMRIGHT", frame.BORDER + (-frame.BORDER + frame.SPACING*3), -frame.BORDER)
+				HappinessIndicator.bg:Point("TOPRIGHT", frame.Health, "TOPRIGHT", frame.HAPPINESS_WIDTH, frame.BORDER)
 			end
 		else
 			if frame.ORIENTATION == "RIGHT" then
-				HappinessIndicator.bg:Point("BOTTOMRIGHT", frame.Health, "BOTTOMLEFT", -frame.BORDER + (frame.BORDER - frame.SPACING*3), 0)
-				HappinessIndicator.bg:Point("TOPLEFT", frame.Health, "TOPLEFT", -frame.HAPPINESS_WIDTH, 0)
+				HappinessIndicator.bg:Point("BOTTOMRIGHT", frame.Health, "BOTTOMLEFT", -frame.BORDER + (frame.BORDER - frame.SPACING*3), -frame.BORDER)
+				HappinessIndicator.bg:Point("TOPLEFT", frame.Health, "TOPLEFT", -frame.HAPPINESS_WIDTH, frame.BORDER)
 			else
-				HappinessIndicator.bg:Point("BOTTOMLEFT", frame.Health, "BOTTOMRIGHT", frame.BORDER + (-frame.BORDER + frame.SPACING*3), 0)
-				HappinessIndicator.bg:Point("TOPRIGHT", frame.Health, "TOPRIGHT", frame.HAPPINESS_WIDTH, 0)
+				HappinessIndicator.bg:Point("BOTTOMLEFT", frame.Health, "BOTTOMRIGHT", frame.BORDER + (-frame.BORDER + frame.SPACING*3), -frame.BORDER)
+				HappinessIndicator.bg:Point("TOPRIGHT", frame.Health, "TOPRIGHT", frame.HAPPINESS_WIDTH, frame.BORDER)
 			end
 		end
 	elseif frame:IsElementEnabled("HappinessIndicator") then
