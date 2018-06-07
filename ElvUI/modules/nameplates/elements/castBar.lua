@@ -215,6 +215,8 @@ function mod:UpdateElement_Cast(frame, event, unit)
 end
 
 function mod:ConfigureElement_CastBar(frame)
+	if not frame.UnitType then return end
+
 	local castBar = frame.CastBar
 
 	castBar:ClearAllPoints()
