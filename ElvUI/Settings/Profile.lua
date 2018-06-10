@@ -729,7 +729,7 @@ P["unitframe"] = {
 				["color"] = {r = 1, g = 1, b = 1, a = 1}
 			},
 			["mouseoverGlow"] = {
-				["enable"] = false,
+				["enable"] = true,
 				["class"] = false,
 				["texture"] = "ElvUI Blank",
 				["color"] = {r = 1, g = 1, b = 1, a = 0.1}

@@ -2446,14 +2446,13 @@ E.Options.args.unitframe = {
 								end
 								UF:FrameGlow_UpdateFrames()
 							end,
-							--disabled = function() return not E.db.unitframe.colors.frameGlow.mouseoverGlow.enable end,
-							disabled = true,
+							disabled = function() return not E.db.unitframe.colors.frameGlow.mouseoverGlow.enable end,
 							args = {
 								enable = {
 									order = 1,
 									type = "toggle",
 									name = L["Enable"],
-									--disabled = false
+									disabled = false
 								},
 								texture = {
 									order = 2,
@@ -2485,8 +2484,7 @@ E.Options.args.unitframe = {
 									type = "color",
 									name = COLOR,
 									hasAlpha = true,
-									disabled = true,
-									--disabled = function() return not E.db.unitframe.colors.frameGlow.mouseoverGlow.enable or E.db.unitframe.colors.frameGlow.mouseoverGlow.class end
+									disabled = function() return not E.db.unitframe.colors.frameGlow.mouseoverGlow.enable or E.db.unitframe.colors.frameGlow.mouseoverGlow.class end
 								}
 							}
 						}
