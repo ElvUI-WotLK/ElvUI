@@ -4,13 +4,19 @@ local UF = E:GetModule("UnitFrames")
 function UF:Construct_Happiness(frame)
 	local HappinessIndicator = CreateFrame("Statusbar", nil, frame)
 
-	HappinessIndicator.bg = CreateFrame("Frame", nil, HappinessIndicator)
+	HappinessIndicator.backdrop = CreateFrame("Frame", nil, HappinessIndicator)
 	UF["statusbars"][HappinessIndicator] = true
-	HappinessIndicator.bg:SetTemplate("Default", nil, nil, self.thinBorders, true)
-	HappinessIndicator.bg:SetFrameLevel(HappinessIndicator:GetFrameLevel() - 1)
-	HappinessIndicator:SetInside(HappinessIndicator.bg)
+	HappinessIndicator.backdrop:SetTemplate("Default", nil, nil, self.thinBorders, true)
+	HappinessIndicator.backdrop:SetFrameLevel(HappinessIndicator:GetFrameLevel() - 1)
+	HappinessIndicator:SetInside(HappinessIndicator.backdrop)
 	HappinessIndicator:SetOrientation("VERTICAL")
 	HappinessIndicator:SetMinMaxValues(0, 100)
+	HappinessIndicator:SetFrameLevel(50)
+
+	HappinessIndicator.bg = HappinessIndicator:CreateTexture(nil, "BORDER")
+	HappinessIndicator.bg:SetAllPoints(HappinessIndicator)
+	HappinessIndicator.bg:SetTexture(E["media"].blankTex)
+	HappinessIndicator.bg.multiplier = 0.3
 
 	HappinessIndicator.Override = UF.UpdateOverride
 
@@ -30,22 +36,22 @@ function UF:Configure_Happiness(frame)
 			frame:EnableElement("HappinessIndicator")
 		end
 
-		HappinessIndicator.bg:ClearAllPoints()
+		HappinessIndicator.backdrop:ClearAllPoints()
 		if db.power.enable and not frame.USE_MINI_POWERBAR and not frame.USE_INSET_POWERBAR and not frame.POWERBAR_DETACHED and not frame.USE_POWERBAR_OFFSET then
 			if frame.ORIENTATION == "RIGHT" then
-				HappinessIndicator.bg:Point("BOTTOMRIGHT", frame.Power, "BOTTOMLEFT", -frame.BORDER + (frame.BORDER - frame.SPACING*3), -frame.BORDER)
-				HappinessIndicator.bg:Point("TOPLEFT", frame.Health, "TOPLEFT", -frame.HAPPINESS_WIDTH, frame.BORDER)
+				HappinessIndicator.backdrop:Point("BOTTOMRIGHT", frame.Power, "BOTTOMLEFT", -frame.BORDER + (frame.BORDER - frame.SPACING*3), -frame.BORDER)
+				HappinessIndicator.backdrop:Point("TOPLEFT", frame.Health, "TOPLEFT", -frame.HAPPINESS_WIDTH, frame.BORDER)
 			else
-				HappinessIndicator.bg:Point("BOTTOMLEFT", frame.Power, "BOTTOMRIGHT", frame.BORDER + (-frame.BORDER + frame.SPACING*3), -frame.BORDER)
-				HappinessIndicator.bg:Point("TOPRIGHT", frame.Health, "TOPRIGHT", frame.HAPPINESS_WIDTH, frame.BORDER)
+				HappinessIndicator.backdrop:Point("BOTTOMLEFT", frame.Power, "BOTTOMRIGHT", frame.BORDER + (-frame.BORDER + frame.SPACING*3), -frame.BORDER)
+				HappinessIndicator.backdrop:Point("TOPRIGHT", frame.Health, "TOPRIGHT", frame.HAPPINESS_WIDTH, frame.BORDER)
 			end
 		else
 			if frame.ORIENTATION == "RIGHT" then
-				HappinessIndicator.bg:Point("BOTTOMRIGHT", frame.Health, "BOTTOMLEFT", -frame.BORDER + (frame.BORDER - frame.SPACING*3), -frame.BORDER)
-				HappinessIndicator.bg:Point("TOPLEFT", frame.Health, "TOPLEFT", -frame.HAPPINESS_WIDTH, frame.BORDER)
+				HappinessIndicator.backdrop:Point("BOTTOMRIGHT", frame.Health, "BOTTOMLEFT", -frame.BORDER + (frame.BORDER - frame.SPACING*3), -frame.BORDER)
+				HappinessIndicator.backdrop:Point("TOPLEFT", frame.Health, "TOPLEFT", -frame.HAPPINESS_WIDTH, frame.BORDER)
 			else
-				HappinessIndicator.bg:Point("BOTTOMLEFT", frame.Health, "BOTTOMRIGHT", frame.BORDER + (-frame.BORDER + frame.SPACING*3), -frame.BORDER)
-				HappinessIndicator.bg:Point("TOPRIGHT", frame.Health, "TOPRIGHT", frame.HAPPINESS_WIDTH, frame.BORDER)
+				HappinessIndicator.backdrop:Point("BOTTOMLEFT", frame.Health, "BOTTOMRIGHT", frame.BORDER + (-frame.BORDER + frame.SPACING*3), -frame.BORDER)
+				HappinessIndicator.backdrop:Point("TOPRIGHT", frame.Health, "TOPRIGHT", frame.HAPPINESS_WIDTH, frame.BORDER)
 			end
 		end
 	elseif frame:IsElementEnabled("HappinessIndicator") then
@@ -64,18 +70,23 @@ function UF:UpdateOverride(event, unit)
 
 	local _, hunterPet = HasPetUI()
 	local happiness, damagePercentage = GetPetHappiness()
+	local value, r, g, b
 
 	if hunterPet and happiness then
 		if damagePercentage == 75 then
-			element:SetStatusBarColor(0.8, 0.2, 0.1)
-			element:SetValue(33)
+			value = 33
+			r, g, b = 0.8, 0.2, 0.1
 		elseif damagePercentage == 100 then
-			element:SetStatusBarColor(1, 1, 0)
-			element:SetValue(66)
+			value = 66
+			r, g, b = 1, 1, 0
 		elseif damagePercentage == 125 then
-			element:SetStatusBarColor(0, 0.8, 0)
-			element:SetValue(100)
+			value = 100
+			r, g, b = 0, 0.8, 0
 		end
+
+		element:SetValue(value)
+		element:SetStatusBarColor(r, g, b)
+		element.bg:SetVertexColor(r, g, b, 0.15)
 
 		if damagePercentage == 125 and E.db.unitframe.units.pet.happiness.autoHide then
 			element:Hide()
