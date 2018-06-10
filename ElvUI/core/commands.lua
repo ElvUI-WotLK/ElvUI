@@ -9,10 +9,11 @@ local UIFrameFadeOut, UIFrameFadeIn = UIFrameFadeOut, UIFrameFadeIn;
 local EnableAddOn, DisableAddOn, DisableAllAddOns = EnableAddOn, DisableAddOn, DisableAllAddOns;
 local SetCVar = SetCVar;
 local ReloadUI = ReloadUI;
-local debugprofilestart, debugprofilestop = debugprofilestart, debugprofilestop;
+local debugprofilestop = debugprofilestop
 local UpdateAddOnCPUUsage, GetAddOnCPUUsage = UpdateAddOnCPUUsage, GetAddOnCPUUsage;
 local ResetCPUUsage = ResetCPUUsage;
 local GetAddOnInfo = GetAddOnInfo;
+local GetCVarBool = GetCVarBool
 local ERR_NOT_IN_COMBAT = ERR_NOT_IN_COMBAT;
 
 function E:EnableAddon(addon)
@@ -121,22 +122,26 @@ local f = CreateFrame("Frame");
 f:Hide();
 f:SetScript("OnUpdate", OnUpdate);
 
-local toggleMode = false;
+local toggleMode, debugTimer = false, 0
 function E:GetCPUImpact()
-	if(not toggleMode) then
-		ResetCPUUsage();
-		num_frames = 0;
-		debugprofilestart();
-		f:Show();
-		toggleMode = true;
-		self:Print("CPU Impact being calculated, type /cpuimpact to get results when you are ready.");
+	if not GetCVarBool("scriptProfile") then
+		E:Print("For `/cpuimpact` to work, you need to enable script profiling via: `/console scriptProfile 1` then reload. Disable after testing by setting it back to 0.")
+		return
+	end
+
+	if not toggleMode then
+		ResetCPUUsage()
+		toggleMode, num_frames, debugTimer = true, 0, debugprofilestop()
+		self:Print("CPU Impact being calculated, type /cpuimpact to get results when you are ready.")
+		f:Show()
 	else
 		f:Hide()
-		local ms_passed = debugprofilestop();
-		UpdateAddOnCPUUsage();
+		local ms_passed = debugprofilestop() - debugTimer
+		UpdateAddOnCPUUsage()
 
-		self:Print("Consumed " .. (GetAddOnCPUUsage("ElvUI") / num_frames) .. " milliseconds per frame. Each frame took " .. (ms_passed / num_frames) .. " to render.");
-		toggleMode = false;
+		local per, passed = ((num_frames == 0 and 0) or (GetAddOnCPUUsage("ElvUI") / num_frames)), ((num_frames == 0 and 0) or (ms_passed / num_frames))
+		self:Print("Consumed "..(per and per > 0 and format("%.3f", per) or 0).."ms per frame. Each frame took "..(passed and passed > 0 and format("%.3f", passed) or 0).."ms to render.")
+		toggleMode = false
 	end
 end
 

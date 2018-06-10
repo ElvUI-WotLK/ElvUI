@@ -1136,8 +1136,8 @@ local function CompareCPUDiff(showall, module, minCalls)
 			end
 			newUsage, calls = GetFunctionCPUUsage(mod[newFunc], true);
 			differance = newUsage - oldUsage;
-			if(showall and calls > minCalls) then
-				E:Print(calls, name, differance);
+			if showall and (calls > minCalls) then
+				E:Print('Name('..name..')  Calls('..calls..') Diff('..(differance > 0 and format("%.3f", differance) or 0)..')')
 			end
 			if((differance > greatestDiff) and calls > minCalls) then
 				greatestName, greatestUsage, greatestCalls, greatestDiff = name, newUsage, calls, differance;
@@ -1146,46 +1146,55 @@ local function CompareCPUDiff(showall, module, minCalls)
 	end
 
 	if(greatestName) then
-		E:Print(greatestName .. " had the CPU usage difference of: " .. greatestUsage .. "ms. And has been called " .. greatestCalls .. " times.");
+		E:Print(greatestName.. " had the CPU usage difference of: "..(greatestUsage > 0 and format("%.3f", greatestUsage) or 0).."ms. And has been called ".. greatestCalls.." times.")
 	else
 		E:Print("CPU Usage: No CPU Usage differences found.");
 	end
+
+	twipe(CPU_USAGE)
 end
 
 function E:GetTopCPUFunc(msg)
-	local module, showall, delay, minCalls = msg:match("^([^%s]+)%s*([^%s]*)%s*([^%s]*)%s*(.*)$");
-	local mod;
-
-	module = (module == "nil" and nil) or module;
-	if not module then
-		E:Print("cpuusage: module (arg1) is required! This can be set as 'all' too.");
-		return;
+	if not GetCVarBool("scriptProfile") then
+		E:Print("For `/cpuusage` to work, you need to enable script profiling via: `/console scriptProfile 1` then reload. Disable after testing by setting it back to 0.")
+		return
 	end
-	showall = (showall == "true" and true) or false;
-	delay = (delay == "nil" and nil) or tonumber(delay) or 5;
-	minCalls = (minCalls == "nil" and nil) or tonumber(minCalls) or 15;
+	local module, showall, delay, minCalls = msg:match("^([^%s]+)%s*([^%s]*)%s*([^%s]*)%s*(.*)$")
+	local checkCore, mod = (not module or module == "") and "E"
 
-	twipe(CPU_USAGE);
-	if(module == "all") then
-		for _, registeredModule in pairs(self["RegisteredModules"]) do
-			mod = self:GetModule(registeredModule, true) or self;
-			for name in pairs(mod) do
-				if(type(mod[name]) == "function" and name ~= "GetModule") then
-					CPU_USAGE[registeredModule .. ":" .. name] = GetFunctionCPUUsage(mod[name], true);
+	showall = (showall == "true" and true) or false
+	delay = (delay == "nil" and nil) or tonumber(delay) or 5
+	minCalls = (minCalls == "nil" and nil) or tonumber(minCalls) or 15
+
+	twipe(CPU_USAGE)
+	if module == "all" then
+		for moduName, modu in pairs(self.modules) do
+			for funcName, func in pairs(modu) do
+				if (funcName ~= "GetModule") and (type(func) == "function") then
+					CPU_USAGE[moduName..":"..funcName] = GetFunctionCPUUsage(func, true)
 				end
 			end
 		end
 	else
-		mod = self:GetModule(module, true) or self;
-		for name in pairs(mod) do
-			if(type(mod[name]) == "function" and name ~= "GetModule") then
-				CPU_USAGE[module .. ":" .. name] = GetFunctionCPUUsage(mod[name], true);
+		if not checkCore then
+			mod = self:GetModule(module, true)
+			if not mod then
+				self:Print(module.." not found, falling back to checking core.")
+				mod, checkCore = self, "E"
+			end
+		else
+			mod = self
+		end
+
+		for name, func in pairs(mod) do
+			if (name ~= "GetModule") and type(func) == "function" then
+				CPU_USAGE[(checkCore or module)..":"..name] = GetFunctionCPUUsage(func, true)
 			end
 		end
 	end
 
-	self:Delay(delay, CompareCPUDiff, showall, module, minCalls);
-	self:Print("Calculating CPU Usage differences (module: " .. (module or "?") .. ", showall: " .. tostring(showall) .. ", minCalls: " .. tostring(minCalls) .. ", delay: " .. tostring(delay) .. ")");
+	self:Delay(delay, CompareCPUDiff, showall, module, minCalls)
+	self:Print("Calculating CPU Usage differences (module: "..(checkCore or module)..", showall: "..tostring(showall)..", minCalls: "..tostring(minCalls)..", delay: "..tostring(delay)..")")
 end
 
 function E:Initialize()

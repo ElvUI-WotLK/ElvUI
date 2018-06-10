@@ -340,7 +340,7 @@ E.Options.args.general = {
 				colorsHeader = {
 					order = 14,
 					type = "header",
-					name = L["Colors"]
+					name = COLORS
 				},
 				bordercolor = {
 					type = "color",
