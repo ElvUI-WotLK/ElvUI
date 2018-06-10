@@ -371,7 +371,7 @@ function UF:Construct_HighlightGlow(frame, glow)
 			end
 		end)
 
-		frame.Highlight.texture = frame.Health:CreateTexture("$parentHighlight", "ARTWORK", nil, 1)
+		frame.Highlight.texture = frame.Health:CreateTexture("$parentHighlight", "OVERLAY")
 		frame.Highlight.texture:Hide()
 
 		UF:FrameGlow_ElementHook(frame, frame.Highlight.texture, "mouseoverGlow")
