@@ -1043,7 +1043,6 @@ L["Set the type of auras to show when a unit is friendly."] = "Устанавл�
 L["Sets the font instance's horizontal text alignment style."] = "Устанавливает выравнивание текста по горизонтали"
 L["Show"] = "Показать"
 L["Show an incoming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."] = "Отображать объем входящего исцеления на рамках. Также отображает немного иначе окрашенную полосу для избыточного исцеления."
-L["Show an incoming resurection."] = "Отображать входящее воскрещение."
 L["Show Aura From Other Players"] = "Отображать чужие"
 L["Show Auras"] = "Показать ауры"
 L["Show Dispellable Debuffs"] = "Показывать развеиваемые дебаффы"

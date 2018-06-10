@@ -1031,7 +1031,6 @@ L["Set the type of auras to show when a unit is friendly."] = true;
 L["Sets the font instance's horizontal text alignment style."] = true;
 L["Show"] = true;
 L["Show an incoming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."] = true;
-L["Show an incoming resurection."] = true;
 L["Show Aura From Other Players"] = true;
 L["Show Auras"] = true;
 L["Show Dispellable Debuffs"] = true;

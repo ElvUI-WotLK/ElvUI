@@ -1091,7 +1091,6 @@ L["Set the type of auras to show when a unit is friendly."] = "해당 유닛이 
 L["Sets the font instance's horizontal text alignment style."] = "문자의 가로 정렬 방법을 결정합니다."
 L["Show"] = true;
 L["Show an incoming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."] = "생명력바에 예상 치유량을 표시합니다."
-L["Show an incoming resurection."] = true;
 L["Show Aura From Other Players"] = "다른 유저가 건 주문효과도 표시"
 L["Show Auras"] = "오라아이콘 표시"
 L["Show Dispellable Debuffs"] = "해제가능한 약화효과 표시"

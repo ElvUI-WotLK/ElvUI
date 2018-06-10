@@ -1043,7 +1043,6 @@ L["Set the type of auras to show when a unit is friendly."] = "Wähle den Aurent
 L["Sets the font instance's horizontal text alignment style."] = "Wähle die Schriftart Instanz horizontal zur Ausrichtung des Textes Stils."
 L["Show"] = true;
 L["Show an incoming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."] = "Zeige eingehende Heilung im Einheitenfenster. Zeigt eine etwas anders farbige Leiste für eingehende Überheilung."
-L["Show an incoming resurection."] = true;
 L["Show Aura From Other Players"] = "Zeige Auren von anderen Spielern"
 L["Show Auras"] = "Zeige Auren"
 L["Show Dispellable Debuffs"] = "Zeige stehlbare Schwächungszauber"
