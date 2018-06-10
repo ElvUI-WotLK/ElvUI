@@ -3,52 +3,58 @@ local B = E:NewModule("Bags", "AceHook-3.0", "AceEvent-3.0", "AceTimer-3.0");
 local Search = LibStub("LibItemSearch-1.2");
 
 local _G = _G;
-local type, ipairs, pairs, unpack, select, assert = type, ipairs, pairs, unpack, select, assert;
+local type, ipairs, pairs, unpack, select, assert, pcall = type, ipairs, pairs, unpack, select, assert, pcall
 local tinsert = table.insert;
 local floor, ceil, abs, mod = math.floor, math.ceil, math.abs, math.fmod
 local format, len, sub, gsub = string.format, string.len, string.sub, string.gsub
 
-local CreateFrame = CreateFrame;
-local GetContainerNumSlots = GetContainerNumSlots;
-local GetContainerItemInfo = GetContainerItemInfo;
-local SetItemButtonDesaturated = SetItemButtonDesaturated;
-local GetContainerItemInfo = GetContainerItemInfo;
-local IsBagOpen, IsOptionFrameOpen = IsBagOpen, IsOptionFrameOpen
+local BankFrameItemButton_Update = BankFrameItemButton_Update
+local BankFrameItemButton_UpdateLocked = BankFrameItemButton_UpdateLocked
 local CloseBag, CloseBackpack, CloseBankFrame = CloseBag, CloseBackpack, CloseBankFrame
-local ToggleFrame = ToggleFrame;
-local GetNumBankSlots = GetNumBankSlots;
-local PlaySound = PlaySound;
-local GetCurrentGuildBankTab = GetCurrentGuildBankTab;
-local GetGuildBankTabInfo = GetGuildBankTabInfo;
-local GetGuildBankItemLink = GetGuildBankItemLink;
-local GetContainerItemLink = GetContainerItemLink;
-local GetItemInfo = GetItemInfo;
-local GetContainerItemQuestInfo = GetContainerItemQuestInfo;
-local GetItemQualityColor = GetItemQualityColor;
-local GetContainerItemCooldown = GetContainerItemCooldown;
+local CooldownFrame_SetTimer = CooldownFrame_SetTimer
+local CreateFrame = CreateFrame
+local DeleteCursorItem = DeleteCursorItem
+local GetBackpackCurrencyInfo = GetBackpackCurrencyInfo
+local GetContainerItemCooldown = GetContainerItemCooldown
 local GetContainerItemID = GetContainerItemID
-local SetItemButtonCount = SetItemButtonCount;
-local SetItemButtonTexture = SetItemButtonTexture;
-local SetItemButtonTextureVertexColor = SetItemButtonTextureVertexColor;
-local CooldownFrame_SetTimer = CooldownFrame_SetTimer;
-local BankFrameItemButton_Update = BankFrameItemButton_Update;
-local BankFrameItemButton_UpdateLocked = BankFrameItemButton_UpdateLocked;
-local GetContainerNumFreeSlots = GetContainerNumFreeSlots;
-local GetBackpackCurrencyInfo = GetBackpackCurrencyInfo;
-local IsModifiedClick = IsModifiedClick;
-local GetMoney = GetMoney;
-local PickupContainerItem = PickupContainerItem;
-local DeleteCursorItem = DeleteCursorItem;
-local UseContainerItem = UseContainerItem;
-local IsControlKeyDown = IsControlKeyDown;
-local GetKeyRingSize = GetKeyRingSize;
-local SEARCH = SEARCH;
-local KEYRING_CONTAINER = KEYRING_CONTAINER;
-local NUM_CONTAINER_FRAMES = NUM_CONTAINER_FRAMES;
-local MAX_CONTAINER_ITEMS = MAX_CONTAINER_ITEMS;
-local MAX_WATCHED_TOKENS = MAX_WATCHED_TOKENS;
-local NUM_BAG_FRAMES = NUM_BAG_FRAMES;
+local GetContainerItemInfo = GetContainerItemInfo
+local GetContainerItemLink = GetContainerItemLink
+local GetContainerItemQuestInfo = GetContainerItemQuestInfo
+local GetContainerNumFreeSlots = GetContainerNumFreeSlots
+local GetContainerNumSlots = GetContainerNumSlots
+local GetCurrentGuildBankTab = GetCurrentGuildBankTab
+local GetGuildBankItemLink = GetGuildBankItemLink
+local GetGuildBankTabInfo = GetGuildBankTabInfo
+local GetItemInfo = GetItemInfo
+local GetItemQualityColor = GetItemQualityColor
+local GetMoney = GetMoney
+local GetNumBankSlots = GetNumBankSlots
+local GetKeyRingSize = GetKeyRingSize
+local GetScreenWidth, GetScreenHeight = GetScreenWidth, GetScreenHeight
+local IsBagOpen, IsOptionFrameOpen = IsBagOpen, IsOptionFrameOpen
+local IsModifiedClick = IsModifiedClick
+local IsShiftKeyDown, IsControlKeyDown = IsShiftKeyDown, IsControlKeyDown
+local PickupContainerItem = PickupContainerItem
+local PlaySound = PlaySound
+local PutItemInBag = PutItemInBag
+local SetItemButtonCount = SetItemButtonCount
+local SetItemButtonDesaturated = SetItemButtonDesaturated
+local SetItemButtonTexture = SetItemButtonTexture
+local SetItemButtonTextureVertexColor = SetItemButtonTextureVertexColor
+local ToggleFrame = ToggleFrame
+local UpdateSlot = UpdateSlot
+local UseContainerItem = UseContainerItem
+local CONTAINER_OFFSET_X, CONTAINER_OFFSET_Y = CONTAINER_OFFSET_X, CONTAINER_OFFSET_Y
+local CONTAINER_SCALE = CONTAINER_SCALE
+local CONTAINER_SPACING, VISIBLE_CONTAINER_SPACING = CONTAINER_SPACING, VISIBLE_CONTAINER_SPACING
+local CONTAINER_WIDTH = CONTAINER_WIDTH
+local KEYRING_CONTAINER = KEYRING_CONTAINER
+local MAX_CONTAINER_ITEMS = MAX_CONTAINER_ITEMS
+local MAX_WATCHED_TOKENS = MAX_WATCHED_TOKENS
+local NUM_BAG_FRAMES = NUM_BAG_FRAMES
+local NUM_CONTAINER_FRAMES = NUM_CONTAINER_FRAMES
 local BINDING_NAME_TOGGLEKEYRING = BINDING_NAME_TOGGLEKEYRING
+local SEARCH = SEARCH
 
 local SEARCH_STRING = ""
 
@@ -63,7 +69,6 @@ B.ProfessionColors = {
 	[0x0080] = {232/255, 118/255, 46/255}, -- Engineering
 	[0x0200] = {8/255, 180/255, 207/255}, -- Gems
 	[0x0400] = {105/255, 79/255, 7/255}, -- Mining
-	[0x010000] = {222/255, 13/255, 65/255} -- Cooking
 }
 
 function B:GetContainerFrame(arg)
@@ -1334,6 +1339,81 @@ function B:CloseBank()
 	self.BankFrame:Hide()
 end
 
+function B:updateContainerFrameAnchors()
+	local frame, xOffset, yOffset, screenHeight, freeScreenHeight, leftMostPoint, column
+	local screenWidth = GetScreenWidth()
+	local containerScale = 1
+	local leftLimit = 0
+	if BankFrame:IsShown() then
+		leftLimit = BankFrame:GetRight() - 25
+	end
+
+	while containerScale > CONTAINER_SCALE do
+		screenHeight = GetScreenHeight() / containerScale
+		-- Adjust the start anchor for bags depending on the multibars
+		xOffset = CONTAINER_OFFSET_X / containerScale
+		yOffset = CONTAINER_OFFSET_Y / containerScale
+		-- freeScreenHeight determines when to start a new column of bags
+		freeScreenHeight = screenHeight - yOffset
+		leftMostPoint = screenWidth - xOffset
+		column = 1
+		local frameHeight
+		for _, frameName in ipairs(ContainerFrame1.bags) do
+			frameHeight = _G[frameName]:GetHeight()
+			if freeScreenHeight < frameHeight then
+				-- Start a new column
+				column = column + 1
+				leftMostPoint = screenWidth - (column * CONTAINER_WIDTH * containerScale) - xOffset
+				freeScreenHeight = screenHeight - yOffset
+			end
+			freeScreenHeight = freeScreenHeight - frameHeight - VISIBLE_CONTAINER_SPACING
+		end
+		if leftMostPoint < leftLimit then
+			containerScale = containerScale - 0.01
+		else
+			break
+		end
+	end
+
+	if containerScale < CONTAINER_SCALE then
+		containerScale = CONTAINER_SCALE
+	end
+
+	screenHeight = GetScreenHeight() / containerScale
+	-- Adjust the start anchor for bags depending on the multibars
+	xOffset = CONTAINER_OFFSET_X / containerScale
+	yOffset = CONTAINER_OFFSET_Y / containerScale
+	-- freeScreenHeight determines when to start a new column of bags
+	freeScreenHeight = screenHeight - yOffset
+	column = 0
+
+	local bagsPerColumn = 0
+	for index, frameName in ipairs(ContainerFrame1.bags) do
+		frame = _G[frameName]
+		frame:SetScale(1)
+		if index == 1 then
+			-- First bag
+			frame:Point("BOTTOMRIGHT", ElvUIBagMover, "BOTTOMRIGHT", E.Spacing, -E.Border)
+			bagsPerColumn = bagsPerColumn + 1
+		elseif freeScreenHeight < frame:GetHeight() then
+			-- Start a new column
+			column = column + 1
+			freeScreenHeight = screenHeight - yOffset
+			if column > 1 then
+				frame:Point("BOTTOMRIGHT", ContainerFrame1.bags[(index - bagsPerColumn) - 1], "BOTTOMLEFT", -CONTAINER_SPACING, 0)
+			else
+				frame:Point("BOTTOMRIGHT", ContainerFrame1.bags[index - bagsPerColumn], "BOTTOMLEFT", -CONTAINER_SPACING, 0)
+			end
+			bagsPerColumn = 0
+		else
+			-- Anchor to the previous bag
+			frame:Point("BOTTOMRIGHT", ContainerFrame1.bags[index - 1], "TOPRIGHT", 0, CONTAINER_SPACING)
+			bagsPerColumn = bagsPerColumn + 1
+		end
+		freeScreenHeight = freeScreenHeight - frame:GetHeight() - VISIBLE_CONTAINER_SPACING
+	end
+end
+
 function B:PostBagMove()
 	if(not E.private.bags.enable) then return; end
 
@@ -1374,7 +1454,7 @@ function B:Initialize()
 		BagFrameHolder:Point("BOTTOMRIGHT", RightChatPanel, "BOTTOMRIGHT", -(E.Border*2), 22 + E.Border*4 - E.Spacing*2);
 		E:CreateMover(BagFrameHolder, "ElvUIBagMover", L["Bag Mover"], nil, nil, B.PostBagMove);
 
-		--self:SecureHook("UpdateContainerFrameAnchors");
+		self:SecureHook("updateContainerFrameAnchors")
 		return;
 	end
 
