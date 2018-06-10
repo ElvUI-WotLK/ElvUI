@@ -2343,7 +2343,7 @@ E.Options.args.nameplate = {
 							name = L["Enemy Combat Toggle"],
 							desc = L["Control enemy nameplates toggling on or off when in combat."],
 							values = {
-								["DISABLED"] = L["Disabled"],
+								["DISABLED"] = DISABLE,
 								["TOGGLE_ON"] = L["Toggle On While In Combat"],
 								["TOGGLE_OFF"] = L["Toggle Off While In Combat"],
 							},
@@ -2358,7 +2358,7 @@ E.Options.args.nameplate = {
 							name = L["Friendly Combat Toggle"],
 							desc = L["Control friendly nameplates toggling on or off when in combat."],
 							values = {
-								["DISABLED"] = L["Disabled"],
+								["DISABLED"] = DISABLE,
 								["TOGGLE_ON"] = L["Toggle On While In Combat"],
 								["TOGGLE_OFF"] = L["Toggle Off While In Combat"],
 							},

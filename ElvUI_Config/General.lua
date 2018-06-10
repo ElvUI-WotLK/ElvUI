@@ -556,7 +556,7 @@ E.Options.args.general = {
 						["backdrop"] = L["Skin Backdrop"],
 						["nobackdrop"] = L["Remove Backdrop"],
 						["backdrop_noborder"] = L["Skin Backdrop (No Borders)"],
-						["disabled"] = L["Disabled"]
+						["disabled"] = DISABLE
 					}
 				},
 				name = {
