@@ -191,10 +191,20 @@ E.Options.args.general = {
 					get = function(info) return E.global.general.minUiScale; end,
 					set = function(info, value) E.global.general.minUiScale = value; E:StaticPopup_Show("GLOBAL_RL"); end
 				},
-				numberPrefixStyle = {
+				decimalLength = {
 					order = 21,
+					type = "range",
+					name = L["Decimal Length"],
+					desc = L["Controls the amount of decimals used in values displayed on elements like NamePlates and UnitFrames."],
+					min = 0, max = 4, step = 1,
+					get = function(info) return E.db.general.decimalLength end,
+					set = function(info, value) E.db.general.decimalLength = value; E:StaticPopup_Show("GLOBAL_RL") end
+				},
+				numberPrefixStyle = {
+					order = 22,
 					type = "select",
-					name = L["Number Prefix"],
+					name = L["Unit Prefix Style"],
+					desc = L["The unit prefixes you want to use when values are shortened in ElvUI. This is mostly used on UnitFrames."],
 					get = function(info) return E.db.general.numberPrefixStyle; end,
 					set = function(info, value) E.db.general.numberPrefixStyle = value; E:StaticPopup_Show("CONFIG_RL"); end,
 					values = {
@@ -205,15 +215,6 @@ E.Options.args.general = {
 						["GERMAN"] = "German (Tsd, Mio, Mrd)"
 					}
 				},
-				decimalLength = {
-					order = 22,
-					type = "range",
-					name = L["Decimal Length"],
-					desc = L["Controls the amount of decimals used in values displayed on elements like NamePlates and UnitFrames."],
-					min = 0, max = 4, step = 1,
-					get = function(info) return E.db.general.decimalLength end,
-					set = function(info, value) E.db.general.decimalLength = value; E:StaticPopup_Show("GLOBAL_RL") end
-				}
 			}
 		},
 		media = {
@@ -231,7 +232,7 @@ E.Options.args.general = {
 				fontSize = {
 					order = 2,
 					type = "range",
-					name = L["Font Size"],
+					name = FONT_SIZE,
 					desc = L["Set the font size for everything in UI. Note: This doesn't effect somethings that have their own seperate options (UnitFrame Font, Datatext Font, ect..)"],
 					min = 4, max = 33, step = 1,
 					set = function(info, value) E.db.general[ info[#info] ] = value; E:UpdateMedia(); E:UpdateFontTemplates(); end
@@ -586,7 +587,7 @@ E.Options.args.general = {
 				fontSize = {
 					order = 6,
 					type = "range",
-					name = L["Font Size"],
+					name = FONT_SIZE,
 					get = function(info) return E.private.general.chatBubbleFontSize; end,
 					set = function(info, value) E.private.general.chatBubbleFontSize = value; E:StaticPopup_Show("PRIVATE_RL"); end,
 					min = 4, max = 33, step = 1,
@@ -661,7 +662,7 @@ E.Options.args.general = {
 				},
 				threatTextSize = {
 					order = 43,
-					name = L["Font Size"],
+					name = FONT_SIZE,
 					type = "range",
 					min = 6, max = 22, step = 1,
 					get = function(info) return E.db.general.threat.textSize; end,

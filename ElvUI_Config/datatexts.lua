@@ -152,7 +152,7 @@ E.Options.args.datatexts = {
 						fontSize = {
 							order = 2,
 							type = "range",
-							name = L["Font Size"],
+							name = FONT_SIZE,
 							min = 4, max = 22, step = 1
 						},
 						fontOutline = {

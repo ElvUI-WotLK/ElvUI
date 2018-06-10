@@ -484,7 +484,6 @@ L["Loot"] = "전리품 확인창"
 L["Lowest Allowed UI Scale"] = "최소 허용 UI 크기"
 L["Multi-Monitor Support"] = "다중모니터 지원"
 L["Name Font"] = "캐릭터 이름 글꼴"
-L["Number Prefix"] = true;
 L["Party / Raid"] = "파티&레이드 채널로"
 L["Party Only"] = "파티채널만"
 L["Raid Only"] = "레이드채널만"
@@ -497,13 +496,15 @@ L["Skin Backdrop"] = "반투명 스킨적용"
 L["Skin the blizzard chat bubbles."] = "말풍선에 디자인을 변경해 스킨을 입힐지, 혹은 투명하게 하여 안보이게 할지 결정합니다."
 L["The font that appears on the text above players heads. |cffFF0000WARNING: This requires a game restart or re-log for this change to take effect.|r"] = "화면상에서 캐릭터 위에 표시되는 이름, 길드, 칭호 등의 글꼴을 변경합니다.|n|n|cffff0000주의|r|n이 설정은 리로드가 아닌 캐릭터에 재접속하야 적용됩니다."
 L["The Thin Border Theme option will change the overall apperance of your UI. Using Thin Border Theme is a slight performance increase over the traditional layout."] = true;
+L["The unit prefixes you want to use when values are shortened in ElvUI. This is mostly used on UnitFrames."] = "ElvUI에서 수치를 짧게 표시하고 싶을때 단위를 사용해 축약합니다. 주로 유닛프레임에서 사용됩니다."
 L["Thin Border Theme"] = "얇은 경계 테마"
 L["Toggle Tutorials"] = "애드온 튜토리얼 확인"
 L["Top Panel"] = "상단 패널 표시"
-L["Version Check"] = true;
-L["Watch Frame Height"] = "퀘스트프레임 세로길이"
+L["Unit Prefix Style"] = "단위 축약 방식"
 L["Vendor Grays"] = "잡동사니 자동판매"
 L["Vendor Gray Detailed Report"] = "자동판매시 목록 보기"
+L["Version Check"] = true;
+L["Watch Frame Height"] = "퀘스트프레임 세로길이"
 L["When you go AFK display the AFK screen."] = "자리비움 시 UI가 자리비움모드로 전환됩니다."
 
 --Media

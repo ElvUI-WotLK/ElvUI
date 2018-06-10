@@ -436,7 +436,6 @@ L["Loot"] = "拾取"
 L["Lowest Allowed UI Scale"] = "最低允許UI縮放"
 L["Multi-Monitor Support"] = "多顯示器支持"
 L["Name Font"] = "名稱字體"
-L["Number Prefix"] = "數值縮寫"
 L["Party / Raid"] = "小隊/團隊"
 L["Party Only"] = "僅小隊"
 L["Raid Only"] = "僅團隊"
@@ -449,13 +448,15 @@ L["Skin Backdrop"] = "美化背景"
 L["Skin the blizzard chat bubbles."] = "美化暴雪對話泡泡."
 L["The font that appears on the text above players heads. |cffFF0000WARNING: This requires a game restart or re-log for this change to take effect.|r"] = "玩家頭頂姓名的字體. |cffFF0000警告: 你需要重新開啟遊戲或重新登錄才能使用此功能.|r"
 L["The Thin Border Theme option will change the overall apperance of your UI. Using Thin Border Theme is a slight performance increase over the traditional layout."] = "細邊框主題會改變所有的外觀,使用細邊框主題會略微提升性能"
+L["The unit prefixes you want to use when values are shortened in ElvUI. This is mostly used on UnitFrames."] = "在ElvUI中數值單位的縮寫. 該選項主要應用在單位框體."
 L["Thin Border Theme"] = "細邊框主題"
 L["Toggle Tutorials"] = "教學開關"
 L["Top Panel"] = "頂部面板"
-L["Version Check"] = true;
-L["Watch Frame Height"] = true;
+L["Vendor Grays"] = "出售灰色物品"
 L["Vendor Grays"] = "出售灰色物品"
 L["Vendor Gray Detailed Report"] = true
+L["Version Check"] = true;
+L["Watch Frame Height"] = true;
 L["When you go AFK display the AFK screen."] = "當你離開時顯示AFK界面"
 
 --Media

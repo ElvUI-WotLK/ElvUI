@@ -436,7 +436,6 @@ L["Loot"] = "Butin"
 L["Lowest Allowed UI Scale"] = true;
 L["Multi-Monitor Support"] = "Support Multi-Moniteur"
 L["Name Font"] = "Nom de la police"
-L["Number Prefix"] = true;
 L["Party / Raid"] = "Groupe / Raid"
 L["Party Only"] = "Groupe seulement"
 L["Raid Only"] = "Raid seulement"
@@ -449,13 +448,15 @@ L["Skin Backdrop"] = "Habiller le fond"
 L["Skin the blizzard chat bubbles."] = "Habillage des bulles de Chat."
 L["The font that appears on the text above players heads. |cffFF0000WARNING: This requires a game restart or re-log for this change to take effect.|r"] = "Police qui apparait sur le texte au dessus de la tête des joueurs. |cffFF0000ATTENTION: requiert un redémarrage du jeu ou une reconnexion pour que les changements soient pris en compte.|r"
 L["The Thin Border Theme option will change the overall apperance of your UI. Using Thin Border Theme is a slight performance increase over the traditional layout."] = true;
+L["The unit prefixes you want to use when values are shortened in ElvUI. This is mostly used on UnitFrames."] = true
 L["Thin Border Theme"] = true;
 L["Toggle Tutorials"] = "Afficher les tutoriels"
 L["Top Panel"] = "Bandeau en haut"
-L["Version Check"] = true;
-L["Watch Frame Height"] = true;
+L["Unit Prefix Style"] = "Style des préfixes d'unités"
 L["Vendor Grays"] = "Vendre les objets gris"
 L["Vendor Gray Detailed Report"] = true
+L["Version Check"] = true;
+L["Watch Frame Height"] = true;
 L["When you go AFK display the AFK screen."] = "Quand vous êtes AFK, affiche un écran spécial."
 
 --Media

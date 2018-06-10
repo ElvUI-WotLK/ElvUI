@@ -375,7 +375,7 @@ E.Options.args.auras = {
 						},
 						fontSize = {
 							order = 2,
-							name = L["Font Size"],
+							name = FONT_SIZE,
 							type = "range",
 							min = 6, max = 22, step = 1
 						},

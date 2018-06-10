@@ -178,7 +178,7 @@ E.Options.args.maps = {
 						locationFontSize = {
 							order = 4,
 							type = "range",
-							name = L["Font Size"],
+							name = FONT_SIZE,
 							min = 6, max = 36, step = 1,
 							set = function(info, value) E.db.general.minimap.locationFontSize = value; MM:Update_ZoneText(); end,
 							disabled = function() return not E.private.general.minimap.enable end,
