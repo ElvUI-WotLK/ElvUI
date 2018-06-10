@@ -1050,9 +1050,18 @@ P["unitframe"] = {
 				["enable"] = true,
 				["fill"] = "fill",
 				["height"] = 10,
+				["autoHide"] = true,
 				["detachFromFrame"] = false,
 				["detachedWidth"] = 250,
-				["autoHide"] = true
+				["parent"] = "FRAME",
+				["orientation"] = "HORIZONTAL",
+				["spacing"] = 5,
+				["strataAndLevel"] = {
+					["useCustomStrata"] = false,
+					["frameStrata"] = "LOW",
+					["useCustomLevel"] = false,
+					["frameLevel"] = 1
+				}
 			},
 			["aurabar"] = {
 				["enable"] = true,

@@ -26,7 +26,11 @@ function UF:Construct_TargetFrame(frame)
 	frame.Castbar.SafeZone = nil;
 	frame.Castbar.LatencyTexture:Hide();
 	frame.RaidTargetIndicator = self:Construct_RaidIcon(frame);
+
+	frame.ComboPointsHolder = CreateFrame("Frame", nil, frame)
+	frame.ComboPointsHolder:Point("BOTTOM", E.UIParent, "BOTTOM", 0, 200)
 	frame.ComboPoints = self:Construct_Combobar(frame);
+
 	frame.HealCommBar = self:Construct_HealComm(frame);
 	frame.DebuffHighlight = self:Construct_DebuffHighlight(frame);
 	frame.GPS = self:Construct_GPS(frame);

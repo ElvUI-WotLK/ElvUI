@@ -3926,7 +3926,10 @@ E.Options.args.unitframe.args.target = {
 					order = 3,
 					type = "range",
 					name = L["Height"],
-					min = ((E.db.unitframe.thinBorders or E.PixelMode) and 3 or 7), max = 15, step = 1
+					min = ((E.db.unitframe.thinBorders or E.PixelMode) and 3 or 7),
+					max = (E.db.unitframe.units["target"]["combobar"].detachFromFrame and 300 or 30),
+					step = 1,
+					disabled = function() return not E.db.unitframe.units["target"]["combobar"].enable end
 				},
 				fill = {
 					order = 4,
@@ -3935,24 +3938,139 @@ E.Options.args.unitframe.args.target = {
 					values = {
 						["fill"] = L["Filled"],
 						["spaced"] = L["Spaced"]
-					}
+					},
+					disabled = function() return not E.db.unitframe.units["target"]["combobar"].enable end
 				},
 				autoHide = {
 					order = 5,
 					type = "toggle",
-					name = L["Auto-Hide"]
+					name = L["Auto-Hide"],
+					disabled = function() return not E.db.unitframe.units["target"]["combobar"].enable end
 				},
-				detachFromFrame = {
+				spacer = {
 					order = 6,
-					type = "toggle",
-					name = L["Detach From Frame"]
+					type = "description",
+					name = ""
 				},
-				detachedWidth = {
-					order = 7,
-					type = "range",
-					name = L["Detached Width"],
-					disabled = function() return not E.db.unitframe.units["target"]["combobar"].detachFromFrame end,
-					min = 15, max = 450, step = 1
+				detachGroup = {
+					order = 8,
+					type = "group",
+					name = L["Detach From Frame"],
+					get = function(info) return E.db.unitframe.units["target"]["combobar"][ info[#info] ] end,
+					set = function(info, value) E.db.unitframe.units["target"]["combobar"][ info[#info] ] = value UF:CreateAndUpdateUF("target") end,
+					guiInline = true,
+					args = {
+						detachFromFrame = {
+							order = 1,
+							type = "toggle",
+							name = ENABLE,
+							width = "full",
+							set = function(info, value)
+								if value == true then
+									E.Options.args.unitframe.args.target.args.combobar.args.height.max = 300
+								else
+									E.Options.args.unitframe.args.target.args.combobar.args.height.max = 30
+								end
+								E.db.unitframe.units["target"]["combobar"][ info[#info] ] = value
+								UF:CreateAndUpdateUF("target")
+							end,
+							disabled = function() return not E.db.unitframe.units["target"]["combobar"].enable end
+						},
+						detachedWidth = {
+							order = 2,
+							type = "range",
+							name = L["Detached Width"],
+							disabled = function() return not E.db.unitframe.units["target"]["combobar"].detachFromFrame or not E.db.unitframe.units["target"]["combobar"].enable end,
+							min = ((E.db.unitframe.thinBorders or E.PixelMode) and 3 or 7), max = 800, step = 1
+						},
+						orientation = {
+							order = 3,
+							type = "select",
+							name = L["Frame Orientation"],
+							disabled = function()
+								return (E.db.unitframe.units["target"]["combobar"].fill and (E.db.unitframe.units["target"]["combobar"].fill == "fill"))
+								or not E.db.unitframe.units["target"]["combobar"].detachFromFrame
+								or not E.db.unitframe.units["target"]["combobar"].enable
+							end,
+							values = {
+								["HORIZONTAL"] = L["Horizontal"],
+								["VERTICAL"] = L["Vertical"]
+							}
+						},
+						spacer = {
+							order = 4,
+							type = "description",
+							name = ""
+						},
+						spacing = {
+							order = 5,
+							type = "range",
+							name = L["Spacing"],
+							min = ((E.db.unitframe.thinBorders or E.PixelMode) and -1 or -4), max = 20, step = 1,
+							disabled = function() return not E.db.unitframe.units["target"]["combobar"].detachFromFrame or not E.db.unitframe.units["target"]["combobar"].enable end
+						},
+						parent = {
+							order = 6,
+							type = "select",
+							name = L["Parent"],
+							desc = L["Choose UIPARENT to prevent it from hiding with the unitframe."],
+							disabled = function() return not E.db.unitframe.units["target"]["combobar"].detachFromFrame or not E.db.unitframe.units["target"]["combobar"].enable end,
+							values = {
+								["FRAME"] = "FRAME",
+								["UIPARENT"] = "UIPARENT"
+							}
+						},
+						strataAndLevel = {
+							order = 7,
+							type = "group",
+							name = L["Strata and Level"],
+							get = function(info) return E.db.unitframe.units["target"]["combobar"]["strataAndLevel"][ info[#info] ] end,
+							set = function(info, value) E.db.unitframe.units["target"]["combobar"]["strataAndLevel"][ info[#info] ] = value UF:CreateAndUpdateUF("target") end,
+							guiInline = true,
+							disabled = function() return not E.db.unitframe.units["target"]["combobar"].detachFromFrame end,
+							hidden = function() return not E.db.unitframe.units["target"]["combobar"].detachFromFrame end,
+							args = {
+								useCustomStrata = {
+									order = 1,
+									type = "toggle",
+									name = L["Use Custom Strata"],
+									disabled = function() return not E.db.unitframe.units["target"]["combobar"].enable end
+								},
+								frameStrata = {
+									order = 2,
+									type = "select",
+									name = L["Frame Strata"],
+									values = {
+										["BACKGROUND"] = "BACKGROUND",
+										["LOW"] = "LOW",
+										["MEDIUM"] = "MEDIUM",
+										["HIGH"] = "HIGH",
+										["DIALOG"] = "DIALOG",
+										["TOOLTIP"] = "TOOLTIP"
+									},
+									disabled = function() return not E.db.unitframe.units["target"]["combobar"].enable end
+								},
+								spacer = {
+									order = 3,
+									type = "description",
+									name = ""
+								},
+								useCustomLevel = {
+									order = 4,
+									type = "toggle",
+									name = L["Use Custom Level"],
+									disabled = function() return not E.db.unitframe.units["target"]["combobar"].enable end
+								},
+								frameLevel = {
+									order = 5,
+									type = "range",
+									name = L["Frame Level"],
+									min = 2, max = 128, step = 1,
+									disabled = function() return not E.db.unitframe.units["target"]["combobar"].enable end
+								}
+							}
+						}
+					}
 				}
 			}
 		},
