@@ -1104,7 +1104,7 @@ local function GetOptionsTable_Castbar(hasTicks, updateFunc, groupName, numUnits
 				order = 3,
 				type = "execute",
 				name = L["Show"].." / "..HIDE,
-				func = function() 
+				func = function()
 					local frameName = E:StringTitle(groupName)
 					frameName = "ElvUF_"..frameName
 					frameName = frameName:gsub("t(arget)", "T%1")
@@ -3075,11 +3075,6 @@ E.Options.args.unitframe = {
 							order = 7,
 							type = "toggle",
 							name = L["Party Frames"]
-						},
-						raid = {
-							order = 8,
-							type = "toggle",
-							name = L["Raid Frames"]
 						}
 					}
 				},
@@ -4056,7 +4051,7 @@ E.Options.args.unitframe.args.targettarget = {
 					order = 5,
 					type = "execute",
 					name = L["Show Auras"],
-					func = function() 
+					func = function()
 						local frame = ElvUF_TargetTarget
 						if frame.forceShowAuras then
 							frame.forceShowAuras = nil
@@ -4332,7 +4327,7 @@ E.Options.args.unitframe.args.focus = {
 					order = 5,
 					type = "execute",
 					name = L["Show Auras"],
-					func = function() 
+					func = function()
 						local frame = ElvUF_Focus
 						if frame.forceShowAuras then
 							frame.forceShowAuras = nil
@@ -4812,7 +4807,7 @@ E.Options.args.unitframe.args.pettarget = {
 					order = 5,
 					type = "execute",
 					name = L["Show Auras"],
-					func = function() 
+					func = function()
 						local frame = ElvUF_PetTarget
 						if frame.forceShowAuras then
 							frame.forceShowAuras = nil
@@ -5277,7 +5272,7 @@ E.Options.args.unitframe.args.party = {
 			order = 1,
 			type = "execute",
 			name = L["Display Frames"],
-			func = function() 
+			func = function()
 				UF:HeaderConfig(ElvUF_Party, ElvUF_Party.forceShow ~= true or nil)
 			end
 		},
@@ -5863,7 +5858,7 @@ E.Options.args.unitframe.args.raid = {
 			order = 1,
 			type = "execute",
 			name = L["Display Frames"],
-			func = function() 
+			func = function()
 				UF:HeaderConfig(_G["ElvUF_Raid"], _G["ElvUF_Raid"].forceShow ~= true or nil)
 			end
 		},
@@ -6271,7 +6266,7 @@ E.Options.args.unitframe.args.raid40 = {
 			order = 1,
 			type = "execute",
 			name = L["Display Frames"],
-			func = function() 
+			func = function()
 				UF:HeaderConfig(_G["ElvUF_Raid40"], _G["ElvUF_Raid40"].forceShow ~= true or nil)
 			end
 		},
@@ -6333,7 +6328,7 @@ E.Options.args.unitframe.args.raid40 = {
 					type = "select",
 					name = L["Threat Display Mode"],
 					values = threatValues
-				},	
+				},
 				colorOverride = {
 					order = 7,
 					type = "select",
@@ -6512,7 +6507,7 @@ E.Options.args.unitframe.args.raid40 = {
 							name = L["Invert Grouping Order"],
 							desc = L["Enabling this inverts the grouping order when the raid is not full, this will reverse the direction it starts from."],
 							disabled = function() return not E.db.unitframe.units["raid40"].raidWideSorting end
-						},	
+						},
 						startFromCenter = {
 							order = 6,
 							type = "toggle",
@@ -6733,7 +6728,7 @@ E.Options.args.unitframe.args.raidpet = {
 					type = "select",
 					name = L["Threat Display Mode"],
 					values = threatValues
-				},	
+				},
 				colorOverride = {
 					order = 6,
 					type = "select",
@@ -7144,7 +7139,7 @@ E.Options.args.unitframe.args.tank = {
 					order = 6,
 					type = "execute",
 					name = L["Configure Auras"],
-					func = function() 
+					func = function()
 						if E.db.unitframe.units["tank"]["buffIndicator"].profileSpecific then
 							E:SetToFilterConfig("Buff Indicator (Profile)")
 						else
@@ -7336,7 +7331,7 @@ E.Options.args.unitframe.args.assist = {
 					order = 6,
 					type = "execute",
 					name = L["Configure Auras"],
-					func = function() 
+					func = function()
 						if E.db.unitframe.units["assist"]["buffIndicator"].profileSpecific then
 							E:SetToFilterConfig("Buff Indicator (Profile)")
 						else
