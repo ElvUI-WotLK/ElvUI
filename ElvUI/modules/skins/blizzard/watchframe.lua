@@ -1,84 +1,148 @@
-local E, L, V, P, G = unpack(select(2, ...));
-local S = E:GetModule("Skins");
+local E, L, V, P, G = unpack(select(2, ...))
+local S = E:GetModule("Skins")
 
-local _G = _G;
-local unpack = unpack;
+local _G = _G
+local unpack = unpack
 
 local WATCHFRAME_EXPANDEDWIDTH = WATCHFRAME_EXPANDEDWIDTH
 
 local function LoadSkin()
-	if(E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.watchframe ~= true) then return end
+	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.watchframe ~= true then return end
 
-	WatchFrameCollapseExpandButton:StripTextures();
-	S:HandleCloseButton(WatchFrameCollapseExpandButton);
+	-- WatchFrame Expand/Collapse Button
+	WatchFrameCollapseExpandButton:StripTextures()
+	S:HandleCloseButton(WatchFrameCollapseExpandButton)
 	WatchFrameCollapseExpandButton:Size(32)
-	WatchFrameCollapseExpandButton.text:SetText("-");
+	WatchFrameCollapseExpandButton.text:SetText("-")
 	WatchFrameCollapseExpandButton.text:Point("CENTER", -1, 0)
-	WatchFrameCollapseExpandButton:SetFrameStrata("MEDIUM");
+	WatchFrameCollapseExpandButton:SetFrameStrata("MEDIUM")
 	WatchFrameCollapseExpandButton:Point("TOPRIGHT", -20, 4)
 
 	hooksecurefunc("WatchFrame_Expand", function()
-		WatchFrameCollapseExpandButton.text:SetText("-");
+		WatchFrameCollapseExpandButton.text:SetText("-")
 
 		WatchFrame:Width(WATCHFRAME_EXPANDEDWIDTH)
 	end)
 
 	hooksecurefunc("WatchFrame_Collapse", function()
-		WatchFrameCollapseExpandButton.text:SetText("+");
+		WatchFrameCollapseExpandButton.text:SetText("+")
 
 		WatchFrame:Width(WATCHFRAME_EXPANDEDWIDTH)
 	end)
 
+	-- WatchFrame Text
 	hooksecurefunc("WatchFrame_Update", function()
-		local questIndex;
-		local numQuestWatches = GetNumQuestWatches();
+		local questIndex
+		local numQuestWatches = GetNumQuestWatches()
 
 		for i = 1, numQuestWatches do
-			questIndex = GetQuestIndexForWatch(i);
-			if(questIndex) then
-				local title, level = GetQuestLogTitle(questIndex);
-				local color = GetQuestDifficultyColor(level);
+			questIndex = GetQuestIndexForWatch(i)
+			if questIndex then
+				local title, level = GetQuestLogTitle(questIndex)
+				local color = GetQuestDifficultyColor(level)
+				--local hex = E:RGBToHex(color.r, color.g, color.b)
+				--local text = hex.."["..level.."]|r "..title
 
 				for j = 1, #WATCHFRAME_QUESTLINES do
-					if(WATCHFRAME_QUESTLINES[j].text:GetText() == title) then
-						WATCHFRAME_QUESTLINES[j].text:SetTextColor(color.r, color.g, color.b);
-						WATCHFRAME_QUESTLINES[j].color = color;
+					if WATCHFRAME_QUESTLINES[j].text:GetText() == title then
+						--WATCHFRAME_QUESTLINES[j].text:SetText(text)
+						WATCHFRAME_QUESTLINES[j].text:SetTextColor(color.r, color.g, color.b)
+						WATCHFRAME_QUESTLINES[j].color = color
 					end
+				end
+				
+				for k = 1, #WATCHFRAME_ACHIEVEMENTLINES do
+					WATCHFRAME_ACHIEVEMENTLINES[k].color = nil
 				end
 			end
 		end
 
 		for i = 1, WATCHFRAME_NUM_ITEMS do
-			local button = _G["WatchFrameItem"..i];
-			local icon = _G["WatchFrameItem"..i.."IconTexture"];
-			local normal = _G["WatchFrameItem"..i.."NormalTexture"];
-			local cooldown = _G["WatchFrameItem"..i.."Cooldown"];
-			if(not button.skinned) then
-				button:CreateBackdrop();
-				button.backdrop:SetAllPoints();
-				button:StyleButton();
+			local button = _G["WatchFrameItem"..i]
+			local icon = _G["WatchFrameItem"..i.."IconTexture"]
+			local normal = _G["WatchFrameItem"..i.."NormalTexture"]
+			local cooldown = _G["WatchFrameItem"..i.."Cooldown"]
+			if not button.isSkinned then
+				button:CreateBackdrop()
+				button.backdrop:SetAllPoints()
+				button:StyleButton()
 				button:Size(25)
 
-				normal:SetAlpha(0);
-				icon:SetInside();
-				icon:SetTexCoord(unpack(E.TexCoords));
+				normal:SetAlpha(0)
 
-				E:RegisterCooldown(cooldown);
-				button.skinned = true;
+				icon:SetInside()
+				icon:SetTexCoord(unpack(E.TexCoords))
+
+				E:RegisterCooldown(cooldown)
+
+				button.isSkinned = true
 			end
 		end
 	end)
 
+	-- WatchFrame Highlight
 	hooksecurefunc("WatchFrameLinkButtonTemplate_Highlight", function(self, onEnter)
-		for i = self.startLine, self.lastLine do
-			if(not self.lines[i]) then return; end
-			if(self.lines[i].color) then
-				if(onEnter) then
-					self.lines[i].text:SetTextColor(1, 0.80, 0.10);
-				else
-					self.lines[i].text:SetTextColor(self.lines[i].color.r, self.lines[i].color.g, self.lines[i].color.b);
+		local line
+		for index = self.startLine, self.lastLine do
+			line = self.lines[index]
+			if line then
+				if index == self.startLine then
+					if onEnter then
+						line.text:SetTextColor(1, 0.80, 0.10)
+					else
+						if line.color then
+							line.text:SetTextColor(line.color.r, line.color.g, line.color.b)
+						else
+							line.text:SetTextColor(0.75, 0.61, 0)
+						end
+					end
 				end
 			end
+		end
+	end)
+
+	-- WatchFrame POI Buttons
+	hooksecurefunc("QuestPOI_DisplayButton", function(parentName, buttonType, buttonIndex)
+		local buttonName = "poi"..parentName..buttonType.."_"..buttonIndex
+		local poiButton = _G[buttonName]
+
+		if poiButton and parentName == "WatchFrameLines" then
+			if not poiButton.isSkinned then
+				poiButton.normalTexture:SetTexture("")
+				poiButton.pushedTexture:SetTexture("")
+				poiButton.highlightTexture:SetTexture("")
+				poiButton.selectionGlow:SetTexture("")
+
+				poiButton:SetScale(1)
+				poiButton:SetHitRectInsets(6, 6, 6, 6)
+
+				poiButton.bg = CreateFrame("Frame", nil, poiButton)
+				poiButton.bg:SetTemplate("Default", true)
+				poiButton.bg:Point("TOPLEFT", 6, -6)
+				poiButton.bg:Point("BOTTOMRIGHT", -6, 6)
+				poiButton.bg:SetFrameLevel(poiButton.bg:GetFrameLevel() - 1)
+
+				poiButton:HookScript("OnEnter", function(self)
+					self.bg:SetBackdropBorderColor(unpack(E["media"].rgbvaluecolor))
+				end)
+				poiButton:HookScript("OnLeave", function(self)
+					self.bg:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+				end)
+
+				poiButton.isSkinned = true
+			end
+		end
+	end)
+
+	hooksecurefunc("QuestPOI_SelectButton", function(poiButton)
+		if poiButton and poiButton.bg then
+			poiButton.bg:SetBackdropColor(unpack(E["media"].rgbvaluecolor))
+		end
+	end)
+
+	hooksecurefunc("QuestPOI_DeselectButton", function(poiButton)
+		if poiButton and poiButton.bg then
+			poiButton.bg:SetBackdropColor(unpack(E["media"].backdropcolor))
 		end
 	end)
 end

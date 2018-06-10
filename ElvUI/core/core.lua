@@ -20,7 +20,6 @@ local IsInInstance, GetNumPartyMembers, GetNumRaidMembers = IsInInstance, GetNum
 local IsSpellKnown = IsSpellKnown
 local RequestBattlefieldScoreData = RequestBattlefieldScoreData;
 local SendAddonMessage = SendAddonMessage;
-local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
 local ERR_NOT_IN_COMBAT = ERR_NOT_IN_COMBAT;
 local MAX_TALENT_TABS = MAX_TALENT_TABS;
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS;

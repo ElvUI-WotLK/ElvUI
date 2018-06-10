@@ -11,7 +11,6 @@ local IsShiftKeyDown = IsShiftKeyDown
 local ResetCursor = ResetCursor
 local RollOnLoot = RollOnLoot
 local ShowInspectCursor = ShowInspectCursor
-local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
 local ITEM_QUALITY_COLORS = ITEM_QUALITY_COLORS;
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
 

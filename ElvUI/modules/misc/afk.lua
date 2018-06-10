@@ -25,8 +25,6 @@ local Screenshot = Screenshot;
 local SetCVar = SetCVar;
 local UnitCastingInfo = UnitCastingInfo;
 local UnitIsAFK = UnitIsAFK;
-
-local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
 
 local CAMERA_SPEED = 0.035;

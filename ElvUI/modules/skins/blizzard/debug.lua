@@ -10,6 +10,7 @@ local function LoadSkin()
 	S:HandleCloseButton(ScriptErrorsFrameClose)
 	ScriptErrorsFrameScrollFrameText:FontTemplate(nil, 13)
 	ScriptErrorsFrameScrollFrame:CreateBackdrop("Default")
+	ScriptErrorsFrameScrollFrame.backdrop:Point("BOTTOMRIGHT", 0, -3)
 	ScriptErrorsFrameScrollFrame:SetFrameLevel(ScriptErrorsFrameScrollFrame:GetFrameLevel() + 2)
 
 	EventTraceFrame:SetTemplate("Transparent")

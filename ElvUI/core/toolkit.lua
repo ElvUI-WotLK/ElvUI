@@ -6,7 +6,6 @@ local unpack, type, select, getmetatable = unpack, type, select, getmetatable;
 
 local CreateFrame = CreateFrame;
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
-local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS;
 
 --Preload shit..
 E.mult = 1;
