@@ -1261,9 +1261,7 @@ function UF:Initialize()
 	end
 
 	if E.myclass == "HUNTER" then
-		UnitPopupMenus["PET"] = {"RAID_TARGET_ICON", "CANCEL"}
-	else
-		UnitPopupMenus["PET"] = {"PET_DISMISS", "RAID_TARGET_ICON", "CANCEL"}
+		UnitPopupMenus["PET"] = {"PET_PAPERDOLL", "PET_RENAME", "PET_ABANDON", "CANCEL"}
 	end
 
 	if E.private["unitframe"]["disabledBlizzardFrames"].arena and E.private["unitframe"]["disabledBlizzardFrames"].focus and E.private["unitframe"]["disabledBlizzardFrames"].party then
