@@ -1254,14 +1254,10 @@ function UF:Initialize()
 
 	for k, _ in pairs(UnitPopupMenus) do
 		for x, y in pairs(UnitPopupMenus[k]) do
-			if y == "SET_FOCUS" or y == "CLEAR_FOCUS" or y == "LOCK_FOCUS_FRAME" or y == "UNLOCK_FOCUS_FRAME" then
+			if y == "SET_FOCUS" or y == "CLEAR_FOCUS" or y == "LOCK_FOCUS_FRAME" or y == "UNLOCK_FOCUS_FRAME" or (E.myclass == "HUNTER" and y == "PET_DISMISS") then
 				tremove(UnitPopupMenus[k], x)
 			end
 		end
-	end
-
-	if E.myclass == "HUNTER" then
-		UnitPopupMenus["PET"] = {"PET_PAPERDOLL", "PET_RENAME", "PET_ABANDON", "CANCEL"}
 	end
 
 	if E.private["unitframe"]["disabledBlizzardFrames"].arena and E.private["unitframe"]["disabledBlizzardFrames"].focus and E.private["unitframe"]["disabledBlizzardFrames"].party then
