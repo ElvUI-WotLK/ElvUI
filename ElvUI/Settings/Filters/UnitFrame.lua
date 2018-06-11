@@ -302,6 +302,40 @@ G.unitframe.aurafilters["RaidDebuffs"] = {
 	["type"] = "Whitelist",
 	["spells"] = {
 	-- Naxxramas
+		-- Anub'Rekhan
+		[SpellName(54022)] = Defaults(), -- Locust Swarm
+		-- Grand Widow Faerlina
+		[SpellName(54098)] = Defaults(), -- Poison Bolt Volley
+		-- Maexxna
+		[SpellName(54121)] = Defaults(), -- Necrotic Poison
+		[SpellName(54125)] = Defaults(), -- Web Spray
+		-- Gluth
+		[SpellName(29306)] = Defaults(), -- Infected Wound
+		[SpellName(54378)] = Defaults(), -- Mortal Wound
+		-- Gothik the Harvester
+		[SpellName(27825)] = Defaults(), -- Shadow Mark
+		[SpellName(28679)] = Defaults(), -- Harvest Soul
+		[SpellName(55645)] = Defaults(), -- Death Plague
+		-- The Four Horsemem
+		[SpellName(28832)] = Defaults(), -- Mark of Korth'azz
+		[SpellName(28833)] = Defaults(), -- Mark of Blaumeux
+		[SpellName(28834)] = Defaults(), -- Mark of Rivendare
+		[SpellName(28835)] = Defaults(), -- Mark of Zeliek
+		[SpellName(57369)] = Defaults(), -- Unholy Shadow
+		-- Noth the Plaguebringer
+		[SpellName(29212)] = Defaults(), -- Cripple
+		[SpellName(29213)] = Defaults(), -- Curse of the Plaguebringer
+		[SpellName(29214)] = Defaults(), -- Wrath of the Plaguebringer
+		-- Heigan the Unclean
+		[SpellName(29310)] = Defaults(), -- Spell Disruption
+		[SpellName(29998)] = Defaults(), -- Decrepit Fever
+		-- Loatheb
+		[SpellName(55052)] = Defaults(), -- Inevitable Doom
+		[SpellName(55053)] = Defaults(), -- Deathbloom
+		-- Sapphiron
+		[SpellName(28522)] = Defaults(), -- Icebolt
+		[SpellName(55665)] = Defaults(), -- Life Drain
+		[SpellName(55699)] = Defaults(), -- Chill
 		-- Kel'Thuzad
 		[SpellName(28410)] = Defaults(), -- Chains of Kel'Thuzad
 		[SpellName(27819)] = Defaults(), -- Detonate Mana
