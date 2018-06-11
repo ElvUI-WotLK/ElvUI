@@ -69,6 +69,7 @@ function UF:Configure_ComboPoints(frame)
 		ComboPoints:Point("CENTER", frame.Health.backdrop, "TOP", 0, 0)
 		CLASSBAR_WIDTH = CLASSBAR_WIDTH * (frame.MAX_CLASS_BAR - 1) / frame.MAX_CLASS_BAR
 
+		ComboPoints:SetParent(frame)
 		ComboPoints:SetFrameLevel(50) --RaisedElementParent uses 100, we want it lower than this
 
 		if ComboPoints.Holder and ComboPoints.Holder.mover then
@@ -77,13 +78,13 @@ function UF:Configure_ComboPoints(frame)
 		end
 	elseif not frame.CLASSBAR_DETACHED then
 		ComboPoints:ClearAllPoints()
-
 		if frame.ORIENTATION == "RIGHT" then
 			ComboPoints:Point("BOTTOMRIGHT", frame.Health.backdrop, "TOPRIGHT", -frame.BORDER, frame.SPACING*3)
 		else
 			ComboPoints:Point("BOTTOMLEFT", frame.Health.backdrop, "TOPLEFT", frame.BORDER, frame.SPACING*3)
 		end
 
+		ComboPoints:SetParent(frame)
 		ComboPoints:SetFrameLevel(frame:GetFrameLevel() + 5)
 
 		if ComboPoints.Holder and ComboPoints.Holder.mover then
@@ -105,6 +106,12 @@ function UF:Configure_ComboPoints(frame)
 			ComboPoints:Point("BOTTOMLEFT", ComboPoints.Holder, "BOTTOMLEFT", frame.BORDER + frame.SPACING, frame.BORDER + frame.SPACING)
 			ComboPoints.Holder.mover:SetScale(1)
 			ComboPoints.Holder.mover:SetAlpha(1)
+		end
+
+		if db.combobar.parent == "UIPARENT" then
+			ComboPoints:SetParent(E.UIParent)
+		else
+			ComboPoints:SetParent(frame)
 		end
 
 		if not db.combobar.strataAndLevel.useCustomStrata then
@@ -179,7 +186,6 @@ function UF:Configure_ComboPoints(frame)
 			ComboPoints[i].backdrop:Show()
 		end
 
-		ComboPoints[i]:SetOrientation("HORIZONTAL")
 		ComboPoints[i]:Show()
 	end
 
@@ -187,12 +193,6 @@ function UF:Configure_ComboPoints(frame)
 		ComboPoints.backdrop:Show()
 	else
 		ComboPoints.backdrop:Hide()
-	end
-
-	if frame.CLASSBAR_DETACHED and db.combobar.parent == "UIPARENT" then
-		ComboPoints:SetParent(E.UIParent)
-	else
-		ComboPoints:SetParent(frame)
 	end
 
 	if frame.USE_CLASSBAR and not frame:IsElementEnabled("ComboPoints") then
