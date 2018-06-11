@@ -701,7 +701,6 @@ function AB:DisableBlizzard()
 
 	MultiCastActionBarFrame.ignoreFramePositionManager = true;
 
-	MainMenuBar:UnregisterAllEvents();
 	MainMenuBar:Hide();
 	MainMenuBar:SetParent(UIHider);
 
