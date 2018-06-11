@@ -64,6 +64,9 @@ function UF:Configure_ComboPoints(frame)
 	local color = E.db.unitframe.colors.borderColor
 	ComboPoints.backdrop:SetBackdropBorderColor(color.r, color.g, color.b)
 
+	color = self.db.colors.classResources.bgColor
+	ComboPoints.backdrop:SetBackdropColor(color.r, color.g, color.b)
+
 	if frame.USE_MINI_CLASSBAR and not frame.CLASSBAR_DETACHED then
 		ComboPoints:ClearAllPoints()
 		ComboPoints:Point("CENTER", frame.Health.backdrop, "TOP", 0, 0)
@@ -137,7 +140,12 @@ function UF:Configure_ComboPoints(frame)
 
 		local r, g, b = ElvUF.ColorGradient(i, 5, r1, g1, b1, r2, g2, b2, r3, g3, b3)
 		ComboPoints[i]:SetStatusBarColor(r, g, b)
+
+		color = E.db.unitframe.colors.borderColor
 		ComboPoints[i].backdrop:SetBackdropBorderColor(color.r, color.g, color.b)
+
+		color = self.db.colors.classResources.bgColor
+		ComboPoints[i].backdrop:SetBackdropColor(color.r, color.g, color.b)
 
 		ComboPoints[i]:Height(ComboPoints:GetHeight())
 		ComboPoints[i]:Hide()
