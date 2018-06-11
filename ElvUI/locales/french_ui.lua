@@ -4,7 +4,7 @@ local L = AceLocale:NewLocale("ElvUI", "frFR");
 if not L then return; end
 
 --*_ADDON locales
-L["INCOMPATIBLE_ADDON"] = "L'addon %s n'est pas compatible avec le module %s d'ElvUI. Merci de sélectionner soit l'addon ou le module d'ElvUI pour le désactiver."
+L["INCOMPATIBLE_ADDON"] = "L'addon %s n'est pas compatible avec le module %s d'ElvUI. Merci de sélectionner soit l'addon, soit le module d'ElvUI, pour le désactiver."
 
 --*_MSG locales
 L["LOGIN_MSG"] = "Bienvenue sur %sElvUI|r version %s%s|r, tapez /ec afin d'accéder au menu de configuration en jeu. Si vous avez besoin d'un support technique, vous pouvez nous rejoindre sur https://github.com/ElvUI-WotLK/ElvUI"
@@ -64,7 +64,7 @@ L["Character: "] = "Personnage: "
 L["Chest"] = "Torse"
 L["Combat"] = "Combat"
 L["Combat Time"] = true;
-L["Coords"] = true;
+L["Coords"] = "Coordonnées"
 L["copperabbrev"] = "|cffeda55fc|r" --Also used in Bags
 L["Deficit:"] = "Déficit:"
 L["DPS"] = "DPS"
@@ -91,7 +91,7 @@ L["Server: "] = "Serveur: "
 L["Session:"] = "Session:"
 L["silverabbrev"] = "|cffc7c7cfs|r" --Also used in Bags
 L["SP"] = "PdS"
-L["Spell/Heal Power"] = true;
+L["Spell/Heal Power"] = "Puissance d'attaque / de soin"
 L["Spent:"] = "Dépensé: "
 L["Stats For:"] = "Stats pour:"
 L["System"] = true;
@@ -128,7 +128,7 @@ L["Choose a theme layout you wish to use for your initial setup."] = "Choisissez
 L["Classic"] = "Classique"
 L["Click the button below to resize your chat frames, unitframes, and reposition your actionbars."] = "Cliquez sur le bouton ci-dessous pour redimensionner vos fenêtres de chat, vos cadres d'unités et repositionner vos barres d'actions."
 L["Config Mode:"] = "Mode Configuration:"
-L["CVars Set"] = "CVars configurés"
+L["CVars Set"] = "CVars configurées"
 L["CVars"] = "CVars"
 L["Dark"] = "Sombre"
 L["Disable"] = "Désactiver"
@@ -186,10 +186,10 @@ L["Bars"] = "Barres" --Also used in UnitFrames
 L["Calendar"] = "Calendrier"
 L["Can't Roll"] = "Ne peut pas jeter les dés"
 L["Disband Group"] = "Dissoudre le groupe"
-L["Empty Slot"] = true;
+L["Empty Slot"] = "Emplacement vide"
 L["Enable"] = "Activer" --Doesn't fit a section since it's used a lot of places
 L["Experience"] = "Expérience"
-L["Farm Mode"] = true;
+L["Farm Mode"] = "Mode farm"
 L["Fishy Loot"] = "Butin de pêche"
 L["Left Click:"] = "Clique Gauche:" --layout\layout.lua
 L["Raid Menu"] = "Menu Raid"
@@ -204,12 +204,12 @@ L["You don't have permission to mark targets."] = "Vous n'avez pas la permission
 
 --Movers
 L["Arena Frames"] = "Cadre d'arène" --Also used in UnitFrames
-L["Bag Mover (Grow Down)"] = true;
-L["Bag Mover (Grow Up)"] = true;
-L["Bag Mover"] = true;
+L["Bag Mover (Grow Down)"] = "Orientation des sacs (ajouter vers le bas)"
+L["Bag Mover (Grow Up)"] = "Orientation des sacs (ajouter vers le haut)"
+L["Bag Mover"] = "Orientation des sacs"
 L["Bags"] = "Sacs" --Also in DataTexts
-L["Bank Mover (Grow Down)"] = true;
-L["Bank Mover (Grow Up)"] = true;
+L["Bank Mover (Grow Down)"] = "Orientation de la banque (ajouter vers le bas)"
+L["Bank Mover (Grow Up)"] = "Orientation de la banque (ajouter vers le haut)"
 L["Bar "] = "Barre " --Also in ActionBars
 L["BNet Frame"] = "Cadre BNet"
 L["Boss Frames"] = "Cadre du Boss" --Also used in UnitFrames
@@ -255,16 +255,16 @@ L["Watch Frame"] = true;
 L["DESC_MOVERCONFIG"] = [=[Cadres déverrouillés. Déplacez-les et cliquez sur Verrouiller une fois terminé.
 
 Options:
-  Shift + RightClick - Hides mover temporarily.
-  Ctrl + RightClick - Resets mover position to default.
+  Shift + clic droit - Cacher temporairement.
+  Ctrl + clic droit - Réinitialiser la position par défaut.
 ]=]
 
 --Plugin Installer
-L["ElvUI Plugin Installation"] = true;
-L["In Progress"] = true;
-L["List of installations in queue:"] = true;
-L["Pending"] = true;
-L["Steps"] = true;
+L["ElvUI Plugin Installation"] = "Installation des Plugins ElvUI"
+L["In Progress"] = "En cours"
+L["List of installations in queue:"] = "Liste des installations en file d'attente"
+L["Pending"] = "En attente"
+L["Steps"] = "Etapes"
 
 --Prints
 L[" |cff00ff00bound to |r"] = "|cff00ff00assigné à |r"
@@ -278,7 +278,7 @@ L["Binds Saved"] = "Raccourcis sauvegardés"
 L["Confused.. Try Again!"] = "Confus...Essayez à nouveau!"
 L["No gray items to delete."] = "Aucun objet gris à détruire."
 L["The spell '%s' has been added to the Blacklist unitframe aura filter."] = "Le sort '%s' a bien été ajouté à la liste noire des filtres des cadres d'unités."
-L["This setting caused a conflicting anchor point, where '%s' would be attached to itself. Please check your anchor points. Setting '%s' to be attached to '%s'."] = true;
+L["This setting caused a conflicting anchor point, where '%s' would be attached to itself. Please check your anchor points. Setting '%s' to be attached to '%s'."] = "Cette configuration a causé un conflit avec le point d'ancrage, où '%s' devrait y être rattaché. Veuillez vérifier les points d'ancrages. La configuration de '%s' sera attachée à '%s'."
 L["Vendored gray items for: %s"] = "Objets gris vendus pour : %s"
 L["You don't have enough money to repair."] = "Vous n'avez pas assez d'argent pour réparer votre équipement."
 L["You must be at a vendor."] = "Vous devez être chez un marchand."
@@ -289,13 +289,13 @@ L["|cFFE30000Lua error recieved. You can view the error message when you exit co
 --Static Popups
 L["A setting you have changed will change an option for this character only. This setting that you have changed will be uneffected by changing user profiles. Changing this setting requires that you reload your User Interface."] = "Un réglage que vous avez modifié ne s'appliquera que pour ce personnage. La modification de ce réglage ne sera pas affecté par un changement de profil. Changer ce réglage requiert de relancer l'interface."
 L["Accepting this will reset the UnitFrame settings for %s. Are you sure?"] = true
-L["Accepting this will reset your Filter Priority lists for all auras on NamePlates. Are you sure?"] = true
+L["Accepting this will reset your Filter Priority lists for all auras on NamePlates. Are you sure?"] = "En acceptant, votre liste de priorités des filtres sera réinitialisée pour les auras des barre de noms. Êtes-vous sûr ?"
 L["Accepting this will reset your Filter Priority lists for all auras on UnitFrames. Are you sure?"] = "En acceptant, votre liste de priorités des filtres sera réinitialisée pour les auras des cadres d'unités. Êtes-vous sûr ?"
-L["Are you sure you want to apply this font to all ElvUI elements?"] = true;
+L["Are you sure you want to apply this font to all ElvUI elements?"] =  "Êtes-vous sûr de vouloir appliquer cette police à tous les éléments d'ELvUI ?"
 L["Are you sure you want to disband the group?"] = "Êtes-vous sûr de vouloir dissoudre le groupe ? "
 L["Are you sure you want to reset all the settings on this profile?"] = "Êtes-vous sûr de vouloir réinitialiser tous les réglages sur ce profile?"
 L["Are you sure you want to reset every mover back to it's default position?"] = "Êtes-vous sûr de vouloir réinitialiser tous les cadres à leur position par défaut ?"
-L["Because of the mass confusion caused by the new aura system I've implemented a new step to the installation process. This is optional. If you like how your auras are setup go to the last step and click finished to not be prompted again. If for some reason you are prompted repeatedly please restart your game."] = "En raison de la confusion générale provoquée par le nouveau système d'aura, j'ai mis en place une nouvelle étape dans le processus d'installation. Cette option est facultative. Si vous aimez la façon dont vos auras sont configurés allez à la dernière étape et cliquez sur Terminé pour ne pas être averti à nouveau. Si, pour une raison quelconque, vous êtes averti de nouveau, relancez complètement le jeu."
+L["Because of the mass confusion caused by the new aura system I've implemented a new step to the installation process. This is optional. If you like how your auras are setup go to the last step and click finished to not be prompted again. If for some reason you are prompted repeatedly please restart your game."] = "En raison de la confusion générale provoquée par le nouveau système d'aura, j'ai mis en place une nouvelle étape dans le processus d'installation. Cette option est facultative. Si vous aimez la façon dont vos auras sont configurés allez à la dernière étape et cliquez sur Terminé pour ne pas être averti à nouveau.  Si, pour une raison quelconque, vous êtes averti de nouveau, relancez complètement le jeu."
 L["Can't buy anymore slots!"] = "Impossible d'acheter plus emplacements !"
 L["Delete gray items?"] = true
 L["Disable Warning"] = "Désactiver l'alerte"
@@ -317,7 +317,7 @@ L["The profile you tried to import already exists. Choose a new name or accept t
 L["Type /hellokitty to revert to old settings."] = "Tapez /hellokitty pour recharger les anciennes configurations"
 L["Using the healer layout it is highly recommended you download the addon Clique if you wish to have the click-to-heal function."] = "Si vous utilisez l'agencement Soigneur, il est hautement recommandé de télécharger l'Addon Clique si vous souhaitez avoir la fonction cliquer-pour-soigner."
 L["Yes, Keep Changes!"] = "Oui, garder les changements!"
-L["You have changed the Thin Border Theme option. You will have to complete the installation process to remove any graphical bugs."] = true;
+L["You have changed the Thin Border Theme option. You will have to complete the installation process to remove any graphical bugs."] = "Vous venez de changer l'épaisseur de la bordure de votre interface. Vous devez finir le processus d'installation pour supprimer tout défaut graphique."
 L["You have changed your UIScale, however you still have the AutoScale option enabled in ElvUI. Press accept if you would like to disable the Auto Scale option."] = "Vous venez de changer l'échelle de votre interface, alors que votre option d'échelle automatique est encore activée dans ElvUI. Cliquer sur accepter si vous voulez désactiver l'option d'échelle automatique."
 L["You have imported settings which may require a UI reload to take effect. Reload now?"] = "Vous avez importé des paramètes qui requierent un rechargement de l'interface. Recharger maintenant ?"
 L["You must purchase a bank slot first!"] = "Vous devez d'abord acheter un emplacement de banque!"

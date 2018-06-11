@@ -31,7 +31,7 @@ L["Trigger"] = "Auslöser"
 
 --Bags
 L["Bank"] = true;
-L["Hold Control + Right Click:"] = "Halte Steuerung + Rechtsklick:"
+L["Hold Control + Right Click:"] = "Halte Strg + Rechtsklick:"
 L["Hold Shift + Drag:"] = "Halte Shift + Ziehen:"
 L["Purchase Bags"] = "Taschen kaufen"
 L["Reset Position"] = "Position zurücksetzen"
@@ -59,7 +59,7 @@ L["yells"] = "schreien"
 
 --DataTexts
 L["(Hold Shift) Memory Usage"] = "(Shift gedrückt) Speichernutzung"
-L["Avoidance Breakdown"] = "Vermeidung Aufgliederung"
+L["Avoidance Breakdown"] = "Vermeidungsanalyse"
 L["Character: "] = "Charakter: "
 L["Chest"] = "Brust"
 L["Combat"] = "Kampf"
@@ -118,7 +118,7 @@ L["Request was denied by user."] = "Die Anfrage wurde vom Benutzer abgelehnt."
 L["Your profile was successfully recieved by the player."] = "Dein Profil wurde erfolgreich von dem Spieler empfangen."
 
 --Install
-L["Aura Bars & Icons"] = "Aurenleiste & Symbole"
+L["Aura Bars & Icons"] = "Aurenleisten & Symbole"
 L["Auras Set"] = "Auren gesetzt"
 L["Auras"] = "Auren"
 L["Caster DPS"] = "Fernkampf DD"
@@ -289,12 +289,12 @@ L["|cFFE30000Lua error recieved. You can view the error message when you exit co
 --Static Popups
 L["A setting you have changed will change an option for this character only. This setting that you have changed will be uneffected by changing user profiles. Changing this setting requires that you reload your User Interface."] = "Eine Einstellung, die du geändert hast, betrifft nur einen Charakter. Diese Einstellung, die du verändert hast, wird die Benutzerprofile unbeeinflusst lassen. Eine Änderung dieser Einstellung erfordert, dass du dein Interface neu laden musst."
 L["Accepting this will reset the UnitFrame settings for %s. Are you sure?"] = "Wenn du aktzeptierst wird die Einstellung des Einheitenfensters für %s auf Standard zurückgesetzt. Bist du sicher?"
-L["Accepting this will reset your Filter Priority lists for all auras on NamePlates. Are you sure?"] = true
+L["Accepting this will reset your Filter Priority lists for all auras on NamePlates. Are you sure?"] = "Wenn du aktzeptierst wird die Filter Priorität für alle Namensplaketten auf Standard zurückgesetzt. Bist du sicher?"
 L["Accepting this will reset your Filter Priority lists for all auras on UnitFrames. Are you sure?"] = "Wenn du aktzeptierst wird die Filter Priorität für alle Einheitenfenster auf Standard zurückgesetzt. Bist du sicher?"
 L["Are you sure you want to apply this font to all ElvUI elements?"] = "Bist du sicher, dass du diese Schrifart auf alle ElvUI Elemente anwenden möchtest?"
 L["Are you sure you want to disband the group?"] = "Bist du dir sicher, dass du die Gruppe auflösen willst?"
 L["Are you sure you want to reset all the settings on this profile?"] = "Bist du dir sicher dass du alle Einstellungen dieses Profils zurücksetzen willst?"
-L["Are you sure you want to reset every mover back to it's default position?"] = "Bist du dir sicher, dass du jeden Beweger an die Standard-Position zurücksetzen möchtest?"
+L["Are you sure you want to reset every mover back to it's default position?"] = "Bist du dir sicher, dass du jeden Anker an die Standard-Position zurücksetzen möchtest?"
 L["Because of the mass confusion caused by the new aura system I've implemented a new step to the installation process. This is optional. If you like how your auras are setup go to the last step and click finished to not be prompted again. If for some reason you are prompted repeatedly please restart your game."] = "Aufgrund der großen Verwirrung, die durch das neue Auren-System verursacht wurde, habe ich einen neuen Schritt zum Installationsprozess hinzugefügt. Dieser ist optional. Wenn du deine Auren so eingestellt lassen willst, wie sie sind, gehe einfach zum letzten Schritt und klicke auf fertig um nicht erneut aufgefordert zu werden. Wirst du, aus welchen Grund auch immer, öfter aufgefordert, starte bitte dein Spiel neu"
 L["Can't buy anymore slots!"] = "Kann keine Slots mehr kaufen"
 L["Delete gray items?"] = "Graue Gegenstände löschen?"
