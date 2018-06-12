@@ -11,6 +11,36 @@ local GetShapeshiftForm = GetShapeshiftForm
 local UnitHasVehicleUI = UnitHasVehicleUI
 local MAX_COMBO_POINTS = MAX_COMBO_POINTS
 
+local CombobarDetached
+function UF:CombobarDetachedUpdate()
+	if E.myclass ~= "DRUID" then return end
+
+	if ElvUF_Target.CLASSBAR_DETACHED and UF.db.units.target.combobar.parent == "UIPARENT" then
+		if not CombobarDetached then
+			CombobarDetached = CreateFrame("Frame", nil, UIParent)
+
+			CombobarDetached:RegisterEvent("PLAYER_ENTERING_WORLD")
+			CombobarDetached:RegisterEvent("UNIT_ENTERED_VEHICLE")
+			CombobarDetached:RegisterEvent("UNIT_EXITING_VEHICLE")
+			CombobarDetached:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
+
+			CombobarDetached:SetScript("OnEvent", function(self, event, unit)
+				if (event == "UNIT_ENTERED_VEHICLE" or event == "UNIT_EXITING_VEHICLE") and unit ~= "player" then return end
+
+				if event == "PLAYER_ENTERING_WORLD" then
+					E:ShapeshiftDelayedUpdate(ElvUF_Target.ComboPoints.Override, ElvUF_Target)
+				end
+
+				ElvUF_Target.ComboPoints.Override(ElvUF_Target, event, unit)
+			end)
+		end
+
+		CombobarDetached:Show()
+	elseif CombobarDetached then
+		CombobarDetached:Hide()
+	end
+end
+
 function UF:Construct_Combobar(frame)
 	local ComboPoints = CreateFrame("Frame", nil, frame)
 	ComboPoints:CreateBackdrop("Default", nil, nil, UF.thinBorders, true)
@@ -26,8 +56,17 @@ function UF:Construct_Combobar(frame)
 		ComboPoints[i].backdrop:SetParent(ComboPoints)
 	end
 
+	frame:RegisterEvent("UNIT_ENTERED_VEHICLE", UF.UpdateComboDisplay)
+	frame:RegisterEvent("UNIT_EXITING_VEHICLE", UF.UpdateComboDisplay)
+
 	if E.myclass == "DRUID" then
 		frame:RegisterEvent("UPDATE_SHAPESHIFT_FORM", UF.UpdateComboDisplay)
+
+		frame:RegisterEvent("PLAYER_ENTERING_WORLD", function()
+			E:ShapeshiftDelayedUpdate(ElvUF_Target.ComboPoints.Override, ElvUF_Target)
+		end)
+
+		self:CombobarDetachedUpdate()
 	end
 
 	ComboPoints:SetScript("OnShow", UF.ToggleResourceBar)
@@ -203,8 +242,11 @@ function UF:Configure_ComboPoints(frame)
 		ComboPoints.backdrop:Hide()
 	end
 
+	self:CombobarDetachedUpdate()
+
 	if frame.USE_CLASSBAR and not frame:IsElementEnabled("ComboPoints") then
 		frame:EnableElement("ComboPoints")
+		ComboPoints:Show()
 	elseif not frame.USE_CLASSBAR and frame:IsElementEnabled("ComboPoints") then
 		frame:DisableElement("ComboPoints")
 		ComboPoints:Hide()
@@ -216,34 +258,45 @@ function UF:Configure_ComboPoints(frame)
 end
 
 function UF:UpdateComboDisplay(event, unit)
+	if unit == "pet" then return end
+	if unit ~= "player" and (event == "UNIT_ENTERED_VEHICLE" or event == "UNIT_EXITING_VEHICLE") then return end
+
 	local db = self.db
 	if not db then return end
 
 	local element = self.ComboPoints
 
-	if unit == "pet" then return end
-	if event == "UPDATE_SHAPESHIFT_FORM" and GetShapeshiftForm() ~= 3 then return element:Hide() end
-	if E.myclass ~= "ROGUE" and (E.myclass ~= "DRUID" or (E.myclass == "DRUID" and GetShapeshiftForm() ~= 3)) and not (UnitHasVehicleUI("player") or UnitHasVehicleUI("vehicle")) then return element:Hide() end
+	if db.combobar.enable then
+		local inVehicle = UnitHasVehicleUI("player") or UnitHasVehicleUI("vehicle")
 
-	local cp
-	if UnitHasVehicleUI("player") or UnitHasVehicleUI("vehicle") then
-		cp = GetComboPoints("vehicle", "target")
-	else
-		cp = GetComboPoints("player", "target")
-	end
-
-	if cp == 0 and db.combobar.autoHide then
-		element:Hide()
-		UF.ToggleResourceBar(element)
-	else
-		element:Show()
-		for i = 1, MAX_COMBO_POINTS do
-			if i <= cp then
-				element[i]:SetAlpha(1)
+		if not inVehicle and E.myclass ~= "ROGUE" and (E.myclass ~= "DRUID" or (E.myclass == "DRUID" and GetShapeshiftForm() ~= 3)) then
+			element:Hide()
+			UF.ToggleResourceBar(element)
+		else
+			local cp
+			if inVehicle then
+				cp = GetComboPoints("vehicle", "target")
 			else
-				element[i]:SetAlpha(.2)
+				cp = GetComboPoints("player", "target")
+			end
+
+			if cp == 0 and db.combobar.autoHide then
+				element:Hide()
+				UF.ToggleResourceBar(element)
+			else
+				element:Show()
+				for i = 1, MAX_COMBO_POINTS do
+					if i <= cp then
+						element[i]:SetAlpha(1)
+					else
+						element[i]:SetAlpha(0.2)
+					end
+				end
+				UF.ToggleResourceBar(element)
 			end
 		end
+	else
+		element:Hide()
 		UF.ToggleResourceBar(element)
 	end
 end

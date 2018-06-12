@@ -165,6 +165,23 @@ E.PriestColors = {
 	b = 0.99
 };
 
+local delayedTimer
+local delayedFuncs = {}
+function E:ShapeshiftDelayedUpdate(func, ...)
+	delayedFuncs[func] = {...}
+
+	if delayedTimer then return end
+
+	delayedTimer = E:ScheduleTimer(function()
+		for func in pairs(delayedFuncs) do
+			func(unpack(delayedFuncs[func]))
+		end
+
+		twipe(delayedFuncs)
+		delayedTimer = nil
+	end, 0.05) 
+end
+
 function E:GetPlayerRole()
 	local assignedRole = UnitGroupRolesAssigned("player")
 	if assignedRole == "NONE" or not assignedRole then
