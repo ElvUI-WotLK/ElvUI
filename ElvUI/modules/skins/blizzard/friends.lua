@@ -44,22 +44,6 @@ local function LoadSkin()
 		Tab:HookScript("OnLeave", S.SetOriginalBackdrop)
 	end
 
-	local function StyleButton(frame)
-			frame:SetHighlightTexture(nil)
-	
-			local leftGrad = frame:CreateTexture(nil, "HIGHLIGHT")
-			leftGrad:Size(frame:GetWidth() * 0.5, frame:GetHeight() * 0.95)
-			leftGrad:Point("LEFT", frame, "CENTER")
-			leftGrad:SetTexture(E.media.blankTex)
-			leftGrad:SetGradientAlpha("Horizontal", 0.9, 0.9, 0.9, 0.35, 0.9, 0.9, 0.9, 0)
-	
-			local rightGrad = frame:CreateTexture(nil, "HIGHLIGHT")
-			rightGrad:Size(frame:GetWidth() * 0.5, frame:GetHeight() * 0.95)
-			rightGrad:Point("RIGHT", frame, "CENTER")
-			rightGrad:SetTexture(E.media.blankTex)
-			rightGrad:SetGradientAlpha("Horizontal", 0.9, 0.9, 0.9, 0, 0.9, 0.9, 0.9, 0.35)
-		end
-
 	for i = 1, 11 do
 		_G["FriendsFrameFriendsScrollFrameButton"..i.."SummonButtonIcon"]:SetTexCoord(unpack(E.TexCoords))
 		_G["FriendsFrameFriendsScrollFrameButton"..i.."SummonButtonNormalTexture"]:SetAlpha(0)
@@ -107,7 +91,7 @@ local function LoadSkin()
 
 		button:CreateBackdrop("Default", true)
 		button.backdrop:SetAllPoints(button.icon)
-		StyleButton(button)
+		S:HandleButtonHighlight(button)
 
 		_G["WhoFrameButton"..i.."Level"]:ClearAllPoints()
 		_G["WhoFrameButton"..i.."Level"]:SetPoint("TOPLEFT", 11, -1)
@@ -189,8 +173,9 @@ local function LoadSkin()
 
 		button:CreateBackdrop("Default", true)
 		button.backdrop:SetAllPoints(button.icon)
-		StyleButton(button)
-		StyleButton(statusButton)
+
+		S:HandleButtonHighlight(button)
+		S:HandleButtonHighlight(statusButton)
 
 		_G["GuildFrameButton"..i.."Level"]:ClearAllPoints()
 		_G["GuildFrameButton"..i.."Level"]:SetPoint("TOPLEFT", 10, -1)
@@ -398,11 +383,12 @@ local function LoadSkin()
 	for i = 1, MAX_DISPLAY_CHANNEL_BUTTONS do
 		_G["ChannelButton"..i]:StripTextures()
 		_G["ChannelButton"..i.."Collapsed"]:SetTextColor(1, 1, 1)
-		StyleButton(_G["ChannelButton"..i])
+		
+		S:HandleButtonHighlight(_G["ChannelButton"..i])
 	end
 
 	for i = 1, 22 do
-		StyleButton(_G["ChannelMemberButton"..i])
+		S:HandleButtonHighlight(_G["ChannelMemberButton"..i])
 	end
 
 	ChannelRosterScrollFrame:StripTextures()

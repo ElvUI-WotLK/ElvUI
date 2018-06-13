@@ -22,24 +22,8 @@ local function LoadSkin()
 
 	S:HandleCloseButton(BattlefieldFrameCloseButton);
 
-	local function StyleButton(frame)
-		frame:SetHighlightTexture(nil)
-
-		local leftGrad = frame:CreateTexture(nil, "HIGHLIGHT")
-		leftGrad:Size(frame:GetWidth() * 0.5, frame:GetHeight() * 0.9)
-		leftGrad:Point("LEFT", frame, "CENTER")
-		leftGrad:SetTexture(E.media.blankTex)
-		leftGrad:SetGradientAlpha("Horizontal", 0.9, 0.9, 0.9, 0.35, 0.9, 0.9, 0.9, 0)
-
-		local rightGrad = frame:CreateTexture(nil, "HIGHLIGHT")
-		rightGrad:Size(frame:GetWidth() * 0.5, frame:GetHeight() * 0.9)
-		rightGrad:Point("RIGHT", frame, "CENTER")
-		rightGrad:SetTexture(E.media.blankTex)
-		rightGrad:SetGradientAlpha("Horizontal", 0.9, 0.9, 0.9, 0, 0.9, 0.9, 0.9, 0.35)
-	end
-
 	for i = 1, 5 do
-		StyleButton(_G["BattlegroundType"..i])
+		S:HandleButtonHighlight(_G["BattlegroundType"..i])
 	end
 
 	PVPBattlegroundFrame:StripTextures(true);
