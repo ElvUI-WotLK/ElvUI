@@ -13,7 +13,6 @@ function B:WorldStateAlwaysUpFrame_Update()
 		if captureBar and captureBar:IsShown() then
 			captureBar:ClearAllPoints()
 			captureBar:Point("TOP", pvpHolder, "BOTTOM", 0, -75)
-			captureBar.SetPoint = E.noop
 		end
 	end
 
