@@ -1,4 +1,5 @@
 # ElvUI WotLK (3.3.5a)
+
 This is the backported version of ElvUI for World of Warcraft 3.3.5a
 <br />
 ElvUI is a full UI replacement.
@@ -6,13 +7,17 @@ It completely replaces the default Blizzard UI at every level with a new and bet
 As such, you'll only ever have to update ElvUI and not worry too much about its individual components.
 This UI will arrange your interface to be more flexible and practical.
 
-## Screenshots
+## Screenshots:
+
 <img src="https://cloud.githubusercontent.com/assets/590348/22867052/f8d570ba-f190-11e6-9e4c-aee3adc16154.jpg" align="right" width="48.5%">
 <img src="https://cloud.githubusercontent.com/assets/590348/22867049/f8d43506-f190-11e6-9a1c-019a9a190fd7.jpg" width="48.5%">
 <img src="https://cloud.githubusercontent.com/assets/590348/22867050/f8d4f662-f190-11e6-9acd-fc83d7827bc0.jpg" align="right" width="48.5%">
 <img src="https://cloud.githubusercontent.com/assets/590348/22944322/5d95a2b0-f301-11e6-81e3-52d1d619c850.jpg" width="48.5%">
+<img src="https://user-images.githubusercontent.com/19589902/30231616-62e40f32-94f4-11e7-9712-a32f19719cd8.jpg" align="right" width="48.5%">
+<img src="https://user-images.githubusercontent.com/19589902/30231617-62e74594-94f4-11e7-96e5-65d81991dcf1.jpg" width="48.5%">
 
-## Installation
+## Installation:
+
 1. Download **[Latest Version](https://github.com/ElvUI-WotLK/ElvUI/releases/latest)**
 2. Unpack the Zip file
 3. Open the folder "ElvUI-(#.##)"
@@ -59,7 +64,8 @@ This UI will arrange your interface to be more flexible and practical.
 
 -- Please Note: These plugins will not function without ElvUI installed.
 
-## Commands
+## Commands:
+
     /ec or /elvui     Toggle the configuration GUI.
     /rl or /reloadui  Reload the whole UI.
     /moveui           Open the movable frames options.
@@ -97,7 +103,8 @@ This UI will arrange your interface to be more flexible and practical.
                           example: /resetui uf (resets all unitframes)
                   
 
-## Languages
+## Languages:
+
 ElvUI supports and contains language specific code for the following gameclients:
 * English (enUS)
 * Korean (koKR)
