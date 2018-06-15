@@ -1,6 +1,6 @@
-# ElvUI WotLK (3.3.5a)
+# ElvUI - Wrath of the Lich King (3.3.5a)
 
-This is the backported version of ElvUI for World of Warcraft 3.3.5a
+This is the backported version of ElvUI for World of Warcraft - Wrath of the Lich King (3.3.5a)
 <br />
 ElvUI is a full UI replacement.
 It completely replaces the default Blizzard UI at every level with a new and better interface.
