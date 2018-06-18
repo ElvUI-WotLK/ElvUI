@@ -11,6 +11,8 @@ function UF:Construct_PvPIcon(frame)
 	PvPIndicator:SetSize(30, 30)
 	PvPIndicator:SetPoint("CENTER", frame, "CENTER")
 
+	PvPIndicator.Override = UF.UpdateOverride
+
 	return PvPIndicator
 end
 
@@ -26,5 +28,45 @@ function UF:Configure_PVPIcon(frame)
 		frame:EnableElement("PvPIndicator")
 	elseif not frame.db.pvpIcon.enable and frame:IsElementEnabled("PvPIndicator") then
 		frame:DisableElement("PvPIndicator")
+	end
+end
+
+function UF:UpdateOverride(event, unit)
+	if not unit or self.unit ~= unit then return end
+
+	local element = self.PvPIndicator
+
+	if element.PreUpdate then
+		element:PreUpdate()
+	end
+
+	local status
+	local factionGroup = UnitFactionGroup(unit)
+
+	if UnitIsPVPFreeForAll(unit) then
+		element:SetTexture("Interface\\TargetingFrame\\UI-PVP-FFA")
+		element:SetTexCoord(0, 0.65625, 0, 0.65625)
+
+		status = "ffa"
+	elseif factionGroup and UnitIsPVP(unit) then
+		element:SetTexture("Interface\\AddOns\\ElvUI\\media\\textures\\PVP-Icons")
+
+		if factionGroup == "Alliance"  then
+			element:SetTexCoord(0.545, 0.935, 0.070, 0.940)
+		else
+			element:SetTexCoord(0.100, 0.475, 0.070, 0.940)
+		end
+
+		status = factionGroup
+	end
+
+	if status then
+		element:Show()
+	else
+		element:Hide()
+	end
+
+	if element.PostUpdate then
+		return element:PostUpdate(unit, status)
 	end
 end
