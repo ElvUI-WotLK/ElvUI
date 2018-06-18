@@ -254,6 +254,7 @@ local function BuildABConfig()
 					type = "execute",
 					name = L["Restore Bar"],
 					desc = L["Restore the actionbars default settings"],
+					buttonElvUI = true,
 					func = function() E:CopyTable(E.db.actionbar["barTotem"], P.actionbar["barTotem"]) E:ResetMovers(TUTORIAL_TITLE47) AB:AdjustTotemSettings() AB:PositionAndSizeBarTotem() end,
 					disabled = function() return not E.db.actionbar.barTotem.enabled end
 				},
@@ -349,6 +350,7 @@ local function BuildABConfig()
 				type = "execute",
 				name = L["Restore Bar"],
 				desc = L["Restore the actionbars default settings"],
+				buttonElvUI = true,
 				func = function() E:CopyTable(E.db.actionbar["barPet"], P.actionbar["barPet"]) E:ResetMovers(L["Pet Bar"]) AB:PositionAndSizeBarPet() end,
 				disabled = function() return not E.db.actionbar.barPet.enabled end
 			},
@@ -489,6 +491,7 @@ local function BuildABConfig()
 				type = "execute",
 				name = L["Restore Bar"],
 				desc = L["Restore the actionbars default settings"],
+				buttonElvUI = true,
 				func = function() E:CopyTable(E.db.actionbar["barShapeShift"], P.actionbar["barShapeShift"]) E:ResetMovers(L["Stance Bar"]) AB:PositionAndSizeBarShapeShift() end,
 				disabled = function() return not E.db.actionbar.barShapeShift.enabled end
 			},
@@ -641,6 +644,7 @@ local function BuildABConfig()
 				type = "execute",
 				name = L["Restore Bar"],
 				desc = L["Restore the actionbars default settings"],
+				buttonElvUI = true,
 				func = function() E:CopyTable(E.db.actionbar["microbar"], P.actionbar["microbar"]) E:ResetMovers(L["Micro Bar"]) AB:UpdateMicroPositionDimensions() end,
 				disabled = function() return not E.db.actionbar.microbar.enabled end
 			},
@@ -649,42 +653,44 @@ local function BuildABConfig()
 				type = "description",
 				name = " "
 			},
-			buttonsPerRow = {
-				order = 5,
-				type = "range",
-				name = L["Buttons Per Row"],
-				desc = L["The amount of buttons to display per row."],
-				min = 1, max = 8, step = 1,
-				disabled = function() return not E.db.actionbar.microbar.enabled end
-			},
-			xOffset = {
-				order = 6,
-				type = "range",
-				name = L["xOffset"],
-				min = -1, max = 10, step = 1,
-				disabled = function() return not E.db.actionbar.microbar.enabled end
-			},
-			yOffset = {
-				order = 7,
-				type = "range",
-				name = L["yOffset"],
-				min = -1, max = 10, step = 1,
-				disabled = function() return not E.db.actionbar.microbar.enabled end
-			},
-			alpha = {
-				order = 8,
-				type = "range",
-				isPercent = true,
-				name = L["Alpha"],
-				desc = L["Change the alpha level of the frame."],
-				min = 0, max = 1, step = 0.1,
-				disabled = function() return not E.db.actionbar.microbar.enabled end
-			},
 			mouseover = {
-				order = 9,
+				order = 5,
 				type = "toggle",
 				name = L["Mouse Over"],
 				desc = L["The frame is not shown unless you mouse over the frame."],
+				disabled = function() return not E.db.actionbar.microbar.enabled end
+			},
+			buttonSize = {
+				order = 6,
+				type = "range",
+				name = L["Button Size"],
+				desc = L["The size of the action buttons."],
+				min = 15, max = 60, step = 1,
+				disabled = function() return not E.db.actionbar.microbar.enabled end
+			},
+			buttonSpacing = {
+				order = 7,
+				type = "range",
+				name = L["Button Spacing"],
+				desc = L["The spacing between buttons."],
+				min = -1, max = 20, step = 1,
+				disabled = function() return not E.db.actionbar.microbar.enabled end
+			},
+			buttonsPerRow = {
+				order = 8,
+				type = "range",
+				name = L["Buttons Per Row"],
+				desc = L["The amount of buttons to display per row."],
+				min = 1, max = 10, step = 1,
+				disabled = function() return not E.db.actionbar.microbar.enabled end
+			},
+			alpha = {
+				order = 9,
+				type = "range",
+				name = L["Alpha"],
+				desc = L["Change the alpha level of the frame."],
+				isPercent = true,
+				min = 0, max = 1, step = 0.1,
 				disabled = function() return not E.db.actionbar.microbar.enabled end
 			},
 			visibility = {
@@ -735,6 +741,7 @@ local function BuildABConfig()
 					type = "execute",
 					name = L["Restore Bar"],
 					desc = L["Restore the actionbars default settings"],
+					buttonElvUI = true,
 					func = function() E:CopyTable(E.db.actionbar["bar"..i], P.actionbar["bar"..i]) E:ResetMovers(L["Bar "..i]) AB:PositionAndSizeBar("bar"..i) end,
 					disabled = function() return not E.db.actionbar["bar" .. i].enabled end
 				},

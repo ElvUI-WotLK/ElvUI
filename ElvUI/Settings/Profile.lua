@@ -2733,10 +2733,9 @@ P["actionbar"] = {
 
 	["microbar"] = {
 		["enabled"] = false,
-		["Scale"] = 1,
-		["xOffset"] = 1,
-		["yOffset"] = 1,
 		["buttonsPerRow"] = 10,
+		["buttonSize"] = 20,
+		["buttonSpacing"] = 2,
 		["alpha"] = 1,
 		["mouseover"] = false,
 		["visibility"] = "show",
