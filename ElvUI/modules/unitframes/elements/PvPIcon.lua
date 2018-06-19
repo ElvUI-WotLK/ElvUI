@@ -33,6 +33,7 @@ end
 
 function UF:UpdateOverride(event, unit)
 	if not unit or self.unit ~= unit then return end
+	if unit == "pet" then return end
 
 	local element = self.PvPIndicator
 
