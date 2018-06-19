@@ -37,7 +37,7 @@ This UI will arrange your interface to be more flexible and practical.
 <br />
 [ElvUI_DataTextColors](https://github.com/ElvUI-WotLK/ElvUI_DataTextColors)
 <br />
-[ElvUI_DTBars](https://github.com/ElvUI-WotLK/ElvUI_DTBars)
+[ElvUI_DataTextBarCreator](https://github.com/ElvUI-WotLK/ElvUI_DataTextBarCreator)
 <br />
 [ElvUI_Enhanced](https://github.com/ElvUI-WotLK/ElvUI_Enhanced)
 <br />
