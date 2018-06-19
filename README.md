@@ -49,7 +49,7 @@ This UI will arrange your interface to be more flexible and practical.
 <br />
 [ElvUI_LocPlus](https://github.com/ElvUI-WotLK/ElvUI_LocPlus)
 <br />
-[ElvUI_Microbar](https://github.com/ElvUI-WotLK/ElvUI_Microbar)
+[ElvUI_MicrobarEnhancement](https://github.com/ElvUI-WotLK/ElvUI_MicrobarEnhancement)
 <br />
 [ElvUI_MinimapButtons](https://github.com/ElvUI-WotLK/ElvUI_MinimapButtons)
 <br />
