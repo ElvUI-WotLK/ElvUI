@@ -33,14 +33,6 @@ local function onLeave()
 	end
 end
 
-function AB:MainMenuMicroButton_SetNormal()
-	MainMenuBarPerformanceBar:SetPoint("TOPLEFT", MainMenuMicroButton, "TOPLEFT", 9, -36)
-end
-
-function AB:MainMenuMicroButton_SetPushed()
-	MainMenuBarPerformanceBar:SetPoint("TOPLEFT", MainMenuMicroButton, "TOPLEFT", 8, -37)
-end
-
 function AB:HandleMicroButton(button)
 	local pushed = button:GetPushedTexture()
 	local normal = button:GetNormalTexture()
@@ -175,11 +167,8 @@ function AB:SetupMicroBar()
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", "UpdateMicroButtonsParent")
 
 	self:SecureHook("VehicleMenuBar_MoveMicroButtons", "UpdateMicroButtonsParent")
-	self:SecureHook("MainMenuMicroButton_SetPushed")
-	self:SecureHook("MainMenuMicroButton_SetNormal")
 	self:SecureHook("UpdateMicroButtons")
 
-	self:MainMenuMicroButton_SetNormal()
 	self:UpdateMicroPositionDimensions()
 	MainMenuBarPerformanceBar:Kill()
 

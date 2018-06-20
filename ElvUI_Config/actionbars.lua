@@ -179,7 +179,7 @@ local function BuildABConfig()
 						order = 5,
 						type = "range",
 						name = FONT_SIZE,
-						min = 4, max = 212, step = 1
+						min = 4, max = 32, step = 1
 					},
 					fontOutline = {
 						order = 6,
@@ -460,6 +460,9 @@ local function BuildABConfig()
 				width = "full",
 				multiline = true,
 				set = function(info, value)
+					if value and value:match("[\n\r]") then
+						value = value:gsub("[\n\r]","")
+					end
 					E.db.actionbar["barPet"]["visibility"] = value
 					AB:UpdateButtonSettings()
 				end,

@@ -98,10 +98,15 @@ function AB:PositionAndSizeBar(barName)
 	local numColumns = ceil(numButtons / buttonsPerRow);
 	local widthMult = self.db[barName].widthMult;
 	local heightMult = self.db[barName].heightMult;
+	local visibility = self.db[barName].visibility
 	local bar = self["handledBars"][barName];
 
 	bar.db = self.db[barName];
 	bar.db.position = nil;
+
+	if visibility and visibility:match("[\n\r]") then
+		visibility = visibility:gsub("[\n\r]","")
+	end
 
 	if(numButtons < buttonsPerRow) then
 		buttonsPerRow = numButtons;
@@ -215,7 +220,7 @@ function AB:PositionAndSizeBar(barName)
 
 		local page = self:GetPage(barName, self["barDefaults"][barName].page, self["barDefaults"][barName].conditions);
 		bar:Show();
-		RegisterStateDriver(bar, "visibility", self.db[barName].visibility);
+		RegisterStateDriver(bar, "visibility", visibility)
 		RegisterStateDriver(bar, "page", page);
 		bar:SetAttribute("page", page);
 
@@ -555,13 +560,10 @@ function AB:StyleButton(button, noBackdrop, useMasque)
 
 	if(macroName) then
 		if(self.db.macrotext) then
-			macroName:Show();
 			macroName:FontTemplate(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline);
 			macroName:ClearAllPoints();
 			macroName:Point("BOTTOM", 2, 2);
 			macroName:SetJustifyH("CENTER");
-		else
-			macroName:Hide()
 		end
 	end
 

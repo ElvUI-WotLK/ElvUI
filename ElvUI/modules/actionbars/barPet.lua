@@ -70,8 +70,6 @@ function AB:UpdatePet(event, unit)
 			AutoCastShine_AutoCastStop(shine)
 		end
 
-		button:SetAlpha(1)
-
 		if texture then
 			if GetPetActionSlotUsable(i) then
 				SetDesaturation(icon, nil)
