@@ -581,44 +581,52 @@ function AB:StyleButton(button, noBackdrop, useMasque)
 end
 
 function AB:Bar_OnEnter(bar)
-	if(bar:GetParent() == self.fadeParent) then
-		if(not self.fadeParent.mouseLock) then
-			E:UIFrameFadeIn(self.fadeParent, 0.2, self.fadeParent:GetAlpha(), 1);
+	if bar:GetParent() == self.fadeParent then
+		if not self.fadeParent.mouseLock then
+			E:UIFrameFadeIn(self.fadeParent, 0.2, self.fadeParent:GetAlpha(), 1)
 		end
-	elseif(bar.mouseover) then
+	end
+
+	if bar.mouseover then
 		E:UIFrameFadeIn(bar, 0.2, bar:GetAlpha(), bar.db.alpha)
 	end
 end
 
 function AB:Bar_OnLeave(bar)
-	if(bar:GetParent() == self.fadeParent) then
-		if(not self.fadeParent.mouseLock) then
-			E:UIFrameFadeOut(self.fadeParent, 0.2, self.fadeParent:GetAlpha(), 1 - self.db.globalFadeAlpha);
+	if bar:GetParent() == self.fadeParent then
+		if not self.fadeParent.mouseLock then
+			E:UIFrameFadeOut(self.fadeParent, 0.2, self.fadeParent:GetAlpha(), 1 - self.db.globalFadeAlpha)
 		end
-	elseif(bar.mouseover) then
-		E:UIFrameFadeOut(bar, 0.2, bar:GetAlpha(), 0);
+	end
+
+	if bar.mouseover then
+		E:UIFrameFadeOut(bar, 0.2, bar:GetAlpha(), 0)
 	end
 end
 
 function AB:Button_OnEnter(button)
-	local bar = button:GetParent();
-	if(bar:GetParent() == self.fadeParent) then
-		if(not self.fadeParent.mouseLock) then
-			E:UIFrameFadeIn(self.fadeParent, 0.2, self.fadeParent:GetAlpha(), 1);
+	local bar = button:GetParent()
+	if bar:GetParent() == self.fadeParent then
+		if not self.fadeParent.mouseLock then
+			E:UIFrameFadeIn(self.fadeParent, 0.2, self.fadeParent:GetAlpha(), 1)
 		end
-	elseif(bar.mouseover) then
-		E:UIFrameFadeIn(bar, 0.2, bar:GetAlpha(), bar.db.alpha);
+	end
+
+	if bar.mouseover then
+		E:UIFrameFadeIn(bar, 0.2, bar:GetAlpha(), bar.db.alpha)
 	end
 end
 
 function AB:Button_OnLeave(button)
-	local bar = button:GetParent();
-	if(bar:GetParent() == self.fadeParent) then
-		if(not self.fadeParent.mouseLock) then
-			E:UIFrameFadeOut(self.fadeParent, 0.2, self.fadeParent:GetAlpha(), 1 - self.db.globalFadeAlpha);
+	local bar = button:GetParent()
+	if bar:GetParent() == self.fadeParent then
+		if not self.fadeParent.mouseLock then
+			E:UIFrameFadeOut(self.fadeParent, 0.2, self.fadeParent:GetAlpha(), 1 - self.db.globalFadeAlpha)
 		end
-	elseif(bar.mouseover) then
-		E:UIFrameFadeOut(bar, 0.2, bar:GetAlpha(), 0);
+	end
+
+	if bar.mouseover then
+		E:UIFrameFadeOut(bar, 0.2, bar:GetAlpha(), 0)
 	end
 end
 
