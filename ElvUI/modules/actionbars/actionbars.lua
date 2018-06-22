@@ -707,6 +707,12 @@ function AB:DisableBlizzard()
 		_G["BonusActionButton"..i]:Hide();
 		_G["BonusActionButton"..i]:UnregisterAllEvents();
 		_G["BonusActionButton"..i]:SetAttribute("statehidden", true);
+
+		if E.myclass ~= "SHAMAN" then
+			_G["MultiCastActionButton"..i]:Hide()
+			_G["MultiCastActionButton"..i]:UnregisterAllEvents()
+			_G["MultiCastActionButton"..i]:SetAttribute("statehidden", true)
+		end
 	end
 
 	MultiCastActionBarFrame.ignoreFramePositionManager = true;
@@ -739,6 +745,12 @@ function AB:DisableBlizzard()
 	VehicleMenuBar:UnregisterAllEvents();
 	VehicleMenuBar:Hide();
 	VehicleMenuBar:SetParent(UIHider);
+
+	if E.myclass ~= "SHAMAN" then
+		MultiCastActionBarFrame:UnregisterAllEvents()
+		MultiCastActionBarFrame:Hide()
+		MultiCastActionBarFrame:SetParent(UIHider)
+	end
 
 	self:SecureHook("BlizzardOptionsPanel_OnEvent");
 

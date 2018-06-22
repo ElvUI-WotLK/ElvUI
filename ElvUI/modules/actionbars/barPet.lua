@@ -73,8 +73,10 @@ function AB:UpdatePet(event, unit)
 		if texture then
 			if GetPetActionSlotUsable(i) then
 				SetDesaturation(icon, nil)
+				SetDesaturation(autoCast, nil)
 			else
 				SetDesaturation(icon, 1)
+				SetDesaturation(autoCast, 1)
 			end
 			icon:Show()
 		else
