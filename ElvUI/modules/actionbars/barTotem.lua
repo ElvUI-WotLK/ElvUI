@@ -238,6 +238,7 @@ function AB:PositionAndSizeBarTotem()
 	end
 
 	MultiCastRecallSpellButton:Size(size);
+	MultiCastRecallSpellButton_Update(MultiCastRecallSpellButton)
 
 	MultiCastFlyoutFrameCloseButton:Width(size);
 
@@ -251,13 +252,7 @@ function AB:CreateTotemBar()
 	bar.eventFrame = CreateFrame("Frame");
 	bar.eventFrame:Hide();
 	bar.eventFrame:SetScript("OnEvent", function(self)
-		if self.recallButton then
-			AB:MultiCastRecallSpellButton_Update(MultiCastRecallSpellButton)
-			self.recallButton = nil
-		else
-			AB:PositionAndSizeBarTotem()
-		end
-
+		AB:PositionAndSizeBarTotem()
 		self:UnregisterEvent("PLAYER_REGEN_ENABLED");
 	end);
 
