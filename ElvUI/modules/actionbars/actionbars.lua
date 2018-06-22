@@ -313,6 +313,10 @@ function AB:PLAYER_REGEN_ENABLED()
 		self:PositionAndSizeBarTotem()
 		AB.NeedsPositionAndSizeBarTotem = nil
 	end
+	if AB.NeedRecallButtonUpdate then
+		MultiCastRecallSpellButton_Update(MultiCastRecallSpellButton)
+		AB.NeedRecallButtonUpdate = nil
+	end
 
 	self:UnregisterEvent("PLAYER_REGEN_ENABLED");
 end
