@@ -309,7 +309,8 @@ function AB:CreateTotemBar()
 	openButton.pushed:SetInside(openButton.backdrop);
 
 	self:SkinSummonButton(MultiCastSummonSpellButton);
-	bar.buttons[MultiCastSummonSpellButton] = true;
+	MultiCastSummonSpellButton:HookScript("OnEnter", AB.TotemOnEnter)
+	MultiCastSummonSpellButton:HookScript("OnLeave", AB.TotemOnLeave)
 
 	for i = 1, 4 do
 		local button = _G["MultiCastSlotButton" .. i];
