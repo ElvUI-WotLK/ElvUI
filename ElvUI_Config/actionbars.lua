@@ -236,7 +236,7 @@ local function BuildABConfig()
 			guiInline = false,
 			disabled = function() return not E.ActionBars or not E.myclass == "SHAMAN" end,
 			get = function(info) return E.db.actionbar["barTotem"][ info[#info] ] end,
-			set = function(info, value) E.db.actionbar["barTotem"][ info[#info] ] = value AB:AdjustTotemSettings() AB:PositionAndSizeBarTotem() end,
+			set = function(info, value) E.db.actionbar["barTotem"][ info[#info] ] = value; AB:PositionAndSizeBarTotem() end,
 			args = {
 				info = {
 					order = 1,
@@ -255,7 +255,7 @@ local function BuildABConfig()
 					name = L["Restore Bar"],
 					desc = L["Restore the actionbars default settings"],
 					buttonElvUI = true,
-					func = function() E:CopyTable(E.db.actionbar["barTotem"], P.actionbar["barTotem"]) E:ResetMovers(TUTORIAL_TITLE47) AB:AdjustTotemSettings() AB:PositionAndSizeBarTotem() end,
+					func = function() E:CopyTable(E.db.actionbar["barTotem"], P.actionbar["barTotem"]); E:ResetMovers(TUTORIAL_TITLE47); AB:PositionAndSizeBarTotem() end,
 					disabled = function() return not E.db.actionbar.barTotem.enabled end
 				},
 				mouseover = {

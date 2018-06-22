@@ -97,11 +97,14 @@ function AB:MultiCastFlyoutFrame_ToggleFlyout(self, type, parent)
 			button:SetTemplate("Default");
 			button:StyleButton();
 
-			button.icon:SetTexCoord(unpack(E.TexCoords));
+			AB:HookScript(button, "OnEnter", "TotemOnEnter")
+			AB:HookScript(button, "OnLeave", "TotemOnLeave")
+
 			button.icon:SetDrawLayer("ARTWORK");
 			button.icon:SetInside(button);
 			bar.buttons[button] = true;
-			AB:AdjustTotemSettings();
+
+			button.isSkinned = true
 		end
 
 		if(button:IsShown()) then
@@ -129,6 +132,8 @@ function AB:MultiCastFlyoutFrame_ToggleFlyout(self, type, parent)
 				color = SLOT_BORDER_COLORS[parent:GetID()]
 			end
 			button:SetBackdropBorderColor(color.r, color.g, color.b);
+
+			button.icon:SetTexCoord(unpack(E.TexCoords));
 		end
 	end
 
@@ -171,44 +176,14 @@ function AB:MultiCastRecallSpellButton_Update(self)
 end
 
 function AB:TotemOnEnter()
-	E:UIFrameFadeIn(bar, 0.2, bar:GetAlpha(), self.db["barTotem"].alpha)
+	if bar.mouseover then
+		E:UIFrameFadeIn(bar, 0.2, bar:GetAlpha(), AB.db["barTotem"].alpha)
+	end
 end
 
 function AB:TotemOnLeave()
-	E:UIFrameFadeOut(bar, 0.2, bar:GetAlpha(), 0)
-end
-
-function AB:AdjustTotemSettings()
-	if self.db["barTotem"].enabled and not InCombatLockdown() then
-		bar:Show()
-	elseif not InCombatLockdown() then
-		bar:Hide()
-	end
-
-	for button, _ in pairs(bar.buttons) do
-		if self.db["barTotem"].mouseover == true then
-			bar:SetAlpha(0)
-			if not self.hooks[bar] then
-				self:HookScript(bar, "OnEnter", "TotemOnEnter")
-				self:HookScript(bar, "OnLeave", "TotemOnLeave")
-			end
-
-			if not self.hooks[button] then
-				self:HookScript(button, "OnEnter", "TotemOnEnter")
-				self:HookScript(button, "OnLeave", "TotemOnLeave")
-			end
-		else
-			bar:SetAlpha(self.db["barTotem"].alpha)
-			if self.hooks[bar] then
-				self:Unhook(bar, "OnEnter")
-				self:Unhook(bar, "OnLeave")
-			end
-
-			if self.hooks[button] then
-				self:Unhook(button, "OnEnter")
-				self:Unhook(button, "OnLeave")
-			end
-		end
+	if bar.mouseover then
+		E:UIFrameFadeOut(bar, 0.2, bar:GetAlpha(), 0)
 	end
 end
 
@@ -232,6 +207,14 @@ function AB:PositionAndSizeBarTotem()
 	bar:Height(size);
 	MultiCastActionBarFrame:Height(size);
 	bar.db = self.db["barTotem"];
+
+	bar.mouseover = self.db["barTotem"].mouseover
+
+	if bar.mouseover then
+		bar:SetAlpha(0)
+	else
+		bar:SetAlpha(self.db["barTotem"].alpha)
+	end
 
 	local visibility = bar.db.visibility
 	if visibility and visibility:match("[\n\r]") then
@@ -284,6 +267,12 @@ function AB:CreateTotemBar()
 	MultiCastActionBarFrame:SetScript("OnHide", nil);
 	MultiCastActionBarFrame.SetParent = E.noop;
 	MultiCastActionBarFrame.SetPoint = E.noop;
+
+	self:HookScript(MultiCastActionBarFrame, "OnEnter", "TotemOnEnter")
+	self:HookScript(MultiCastActionBarFrame, "OnLeave", "TotemOnLeave")
+
+	self:HookScript(MultiCastFlyoutFrame, "OnEnter", "TotemOnEnter")
+	self:HookScript(MultiCastFlyoutFrame, "OnLeave", "TotemOnLeave")
 
 	local closeButton = MultiCastFlyoutFrameCloseButton;
 	bar.buttons[MultiCastFlyoutFrameCloseButton] = true;
@@ -338,18 +327,24 @@ function AB:CreateTotemBar()
 		local icon = _G["MultiCastActionButton" .. i .. "Icon"];
 		local normal = _G["MultiCastActionButton" .. i .. "NormalTexture"];
 		local cooldown = _G["MultiCastActionButton" .. i .. "Cooldown"];
+		normal:SetTexture(nil); normal:Hide(); normal:SetAlpha(0);
 		button:StyleButton();
 		icon:SetTexCoord(unpack(E.TexCoords));
 		icon:SetDrawLayer("ARTWORK");
 		icon:SetInside();
 		button.overlay:SetTexture(nil);
-		normal:Size(1)
 		E:RegisterCooldown(cooldown);
-		bar.buttons[button] = true;
+		button:HookScript("OnEnter", AB.TotemOnEnter)
+		button:HookScript("OnLeave", AB.TotemOnLeave)
 	end
 
 	self:SkinSummonButton(MultiCastRecallSpellButton);
 	bar.buttons[MultiCastRecallSpellButton] = true;
+
+	for button, _ in pairs(bar.buttons) do
+		self:HookScript(button, "OnEnter", "TotemOnEnter")
+		self:HookScript(button, "OnLeave", "TotemOnLeave")
+	end
 
 	self:SecureHook("MultiCastFlyoutFrameOpenButton_Show");
 	self:SecureHook("MultiCastActionButton_Update");
@@ -360,5 +355,4 @@ function AB:CreateTotemBar()
 	self:SecureHook("ShowMultiCastActionBar");
 
 	E:CreateMover(bar, "ElvBar_Totem", TUTORIAL_TITLE47, nil, nil, nil,"ALL,ACTIONBARS");
-	self:AdjustTotemSettings();
 end
