@@ -14,14 +14,14 @@ if(E.myclass ~= "SHAMAN") then return; end
 
 local bar = CreateFrame("Frame", "ElvUI_BarTotem", E.UIParent, "SecureHandlerStateTemplate");
 
---[[ Test code
+-- Test code
 local oldMultiCastRecallSpellButton_Update = MultiCastRecallSpellButton_Update
 function MultiCastRecallSpellButton_Update(self)
 	if InCombatLockdown() then AB.NeedRecallButtonUpdate = true; AB:RegisterEvent("PLAYER_REGEN_ENABLED") return end
 
 	oldMultiCastRecallSpellButton_Update(self)
 end
-]]
+-- Test code
 
 local SLOT_BORDER_COLORS = {
 	["summon"]			= {r = 0, g = 0, b = 0},
