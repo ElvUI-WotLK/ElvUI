@@ -309,8 +309,7 @@ function AB:CreateTotemBar()
 	openButton.pushed:SetInside(openButton.backdrop);
 
 	self:SkinSummonButton(MultiCastSummonSpellButton);
-	MultiCastSummonSpellButton:HookScript("OnEnter", AB.TotemOnEnter)
-	MultiCastSummonSpellButton:HookScript("OnLeave", AB.TotemOnLeave)
+	bar.buttons[MultiCastSummonSpellButton] = true
 
 	for i = 1, 4 do
 		local button = _G["MultiCastSlotButton" .. i];
@@ -335,16 +334,15 @@ function AB:CreateTotemBar()
 		icon:SetInside();
 		button.overlay:SetTexture(nil);
 		E:RegisterCooldown(cooldown);
-		button:HookScript("OnEnter", AB.TotemOnEnter)
-		button:HookScript("OnLeave", AB.TotemOnLeave)
+		bar.buttons[button] = true
 	end
 
 	self:SkinSummonButton(MultiCastRecallSpellButton);
 	bar.buttons[MultiCastRecallSpellButton] = true;
 
 	for button, _ in pairs(bar.buttons) do
-		self:HookScript(button, "OnEnter", "TotemOnEnter")
-		self:HookScript(button, "OnLeave", "TotemOnLeave")
+		button:HookScript("OnEnter", AB.TotemOnEnter)
+		button:HookScript("OnLeave", AB.TotemOnLeave)
 	end
 
 	self:SecureHook("MultiCastFlyoutFrameOpenButton_Show");
