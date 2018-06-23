@@ -63,7 +63,7 @@ local function LoadSkin()
 						end
 					end);
 					return
-				elseif(quality and quality > 1) then
+				elseif quality then
 					button.backdrop:SetBackdropBorderColor(GetItemQualityColor(quality));
 					return
 				end

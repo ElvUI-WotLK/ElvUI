@@ -89,7 +89,7 @@ local function LoadSkin()
 			if (LootSlotIsItem(slot) or LootSlotIsCoin(slot)) and index <= numLootToShow then
 				local texture, _, _, quality = GetLootSlotInfo(slot)
 				if texture then
-					if quality and quality > 1 then
+					if quality then
 						button.backdrop:SetBackdropBorderColor(GetItemQualityColor(quality))
 					else
 						button.backdrop:SetBackdropBorderColor(unpack(E["media"].bordercolor))

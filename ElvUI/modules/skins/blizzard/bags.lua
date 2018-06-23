@@ -112,7 +112,7 @@ local function LoadSkin()
 				elseif questId or isQuestItem then
 					itemButton:SetBackdropBorderColor(1.0, 0.3, 0.3)
 					itemButton.ignoreBorderColors = true
-				elseif quality and quality > 1 then
+				elseif quality then
 					itemButton:SetBackdropBorderColor(GetItemQualityColor(quality))
 					itemButton.ignoreBorderColors = true
 				else
@@ -204,7 +204,7 @@ local function LoadSkin()
 			elseif questId or isQuestItem then
 				button:SetBackdropBorderColor(1.0, 0.3, 0.3)
 				button.ignoreBorderColors = true
-			elseif quality and quality > 1 then
+			elseif quality then
 				button:SetBackdropBorderColor(GetItemQualityColor(quality))
 				button.ignoreBorderColors = true
 			else

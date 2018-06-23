@@ -201,7 +201,7 @@ local function LoadSkin()
 		if(skillLink) then
 			TradeSkillRequirementLabel:SetTextColor(1, 0.80, 0.10);
 			local quality = select(3, GetItemInfo(skillLink));
-			if(quality and quality > 1) then
+			if quality then
 				TradeSkillSkillIcon:SetBackdropBorderColor(GetItemQualityColor(quality));
 				TradeSkillSkillName:SetTextColor(GetItemQualityColor(quality));
 			else
@@ -219,7 +219,7 @@ local function LoadSkin()
 
 			if(reagentLink) then
 				local quality = select(3, GetItemInfo(reagentLink));
-				if(quality and quality > 1) then
+				if quality then
 					icon.backdrop:SetBackdropBorderColor(GetItemQualityColor(quality));
 					if(playerReagentCount < reagentCount) then
 						name:SetTextColor(0.5, 0.5, 0.5);

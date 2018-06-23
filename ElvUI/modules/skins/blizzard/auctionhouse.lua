@@ -123,7 +123,7 @@ local function LoadSkin()
 			self:GetNormalTexture():SetInside()
 		end
 		local _, _, _, quality = GetAuctionSellItemInfo()
-		if quality and quality > 1 then
+		if quality then
 			AuctionsItemButton:SetBackdropBorderColor(GetItemQualityColor(quality))
 			AuctionsItemButtonName:SetTextColor(quality)
 		else
@@ -229,11 +229,7 @@ local function LoadSkin()
 			icon:SetTemplate("Default")
 
 			hooksecurefunc(name, "SetVertexColor", function(_, r, g, b)
-				if(r == 1 and g == 1 and b == 1) then
-					icon:SetBackdropBorderColor(unpack(E["media"].bordercolor))
-				else
-					icon:SetBackdropBorderColor(r, g, b)
-				end
+				icon:SetBackdropBorderColor(r, g, b)
 			end)
 			hooksecurefunc(name, "Hide", function()
 				icon:SetBackdropBorderColor(unpack(E["media"].bordercolor))
@@ -262,11 +258,7 @@ local function LoadSkin()
 		icon:SetTemplate("Default")
 
 		hooksecurefunc(name, "SetVertexColor", function(_, r, g, b)
-			if(r == 1 and g == 1 and b == 1) then
-				icon:SetBackdropBorderColor(unpack(E["media"].bordercolor))
-			else
-				icon:SetBackdropBorderColor(r, g, b)
-			end
+			icon:SetBackdropBorderColor(r, g, b)
 		end)
 		hooksecurefunc(name, "Hide", function()
 			icon:SetBackdropBorderColor(unpack(E["media"].bordercolor))
@@ -297,11 +289,7 @@ local function LoadSkin()
 		icon.backdrop:SetAllPoints()
 
 		hooksecurefunc(name, "SetVertexColor", function(_, r, g, b)
-			if(r == 1 and g == 1 and b == 1) then
-				icon:SetBackdropBorderColor(unpack(E["media"].bordercolor))
-			else
-				icon:SetBackdropBorderColor(r, g, b)
-			end
+			icon:SetBackdropBorderColor(r, g, b)
 		end)
 		hooksecurefunc(name, "Hide", function()
 			icon:SetBackdropBorderColor(unpack(E["media"].bordercolor))

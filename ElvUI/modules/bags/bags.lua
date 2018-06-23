@@ -317,7 +317,7 @@ function B:UpdateSlot(bagID, slotID)
 		elseif questId or isQuestItem then
 			slot:SetBackdropBorderColor(1.0, 0.3, 0.3);
 			slot.ignoreBorderColors = true
-		elseif slot.rarity and slot.rarity > 1 then
+		elseif slot.rarity then
 			slot:SetBackdropBorderColor(r, g, b);
 			slot.ignoreBorderColors = true
 		else
@@ -686,7 +686,7 @@ function B:UpdateKeySlot(slotID)
 		elseif questId or isQuestItem then
 			slot:SetBackdropBorderColor(1.0, 0.3, 0.3);
 			slot.ignoreBorderColors = true
-		elseif slot.rarity and slot.rarity > 1 then
+		elseif slot.rarity then
 			slot:SetBackdropBorderColor(r, g, b);
 			slot.ignoreBorderColors = true
 		else

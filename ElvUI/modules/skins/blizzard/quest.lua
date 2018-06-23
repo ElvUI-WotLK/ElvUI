@@ -46,7 +46,7 @@ local function LoadSkin()
 			quality = select(3, GetItemInfo(link))
 		end
 
-		if quality and quality > 1 then
+		if quality then
 			if frame then
 				frame:SetBackdropBorderColor(GetItemQualityColor(quality))
 				frame.backdrop:SetBackdropBorderColor(GetItemQualityColor(quality))

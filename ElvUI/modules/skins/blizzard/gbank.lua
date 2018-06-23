@@ -100,10 +100,8 @@ local function LoadSkin()
 			itemLink = GetGuildBankItemLink(tab, i);
 			if itemLink then
 				itemRarity = select(3, GetItemInfo(itemLink))
-				if itemRarity > 1 then
+				if itemRarity then
 					r, g, b = GetItemQualityColor(itemRarity)
-				else
-					r, g, b = unpack(E.media.bordercolor)
 				end
 			else
 				r, g, b = unpack(E.media.bordercolor)
