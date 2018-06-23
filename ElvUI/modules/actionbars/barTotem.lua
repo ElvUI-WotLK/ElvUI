@@ -4,7 +4,6 @@ local AB = E:GetModule("ActionBars");
 local _G = _G;
 local unpack = unpack;
 local ipairs, pairs = ipairs, pairs;
-local tonumber = tonumber;
 local match = string.match;
 
 local HasMultiCastActionBar = HasMultiCastActionBar;
