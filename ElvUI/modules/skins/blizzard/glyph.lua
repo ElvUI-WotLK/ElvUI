@@ -1,11 +1,17 @@
 local E, L, V, P, G = unpack(select(2, ...));
 local S = E:GetModule("Skins");
 
+local _G = _G
+local unpack = unpack
+
+local TalentFrame_LoadUI = TalentFrame_LoadUI
+
 local function LoadSkin()
 	if(E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.talent ~= true) then return; end
 
-	GlyphFrame:StripTextures();
+	if not PlayerTalentFrame then TalentFrame_LoadUI() end
 
+	GlyphFrame:StripTextures()
 	GlyphFrame:CreateBackdrop();
 	GlyphFrame.backdrop:Size(328, 353)
 	GlyphFrame.backdrop:ClearAllPoints()
