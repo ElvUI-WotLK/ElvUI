@@ -164,7 +164,6 @@ function S:SkinAce3()
 		elseif TYPE == "Dropdown" then
 			local frame = widget.dropdown
 			local button = widget.button
-			local button_cover = widget.button_cover
 			local text = widget.text
 			frame:StripTextures()
 
@@ -181,7 +180,6 @@ function S:SkinAce3()
 			button:SetParent(frame.backdrop)
 			text:SetParent(frame.backdrop)
 			button:HookScript("OnClick", SkinDropdownPullout)
-			button_cover:HookScript("OnClick", SkinDropdownPullout)
 		elseif TYPE == "LSM30_Font" or TYPE == "LSM30_Sound" or TYPE == "LSM30_Border" or TYPE == "LSM30_Background" or TYPE == "LSM30_Statusbar" then
 			local frame = widget.frame
 			local button = frame.dropButton
