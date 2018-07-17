@@ -230,13 +230,13 @@ local elapsed = 0;
 function AB:Tooltip_OnUpdate(tooltip, e)
 	elapsed = elapsed + e;
 	if elapsed < .2 then return else elapsed = 0; end
-	if (not tooltip.comparing and IsModifiedClick("COMPAREITEMS")) then
+
+	local compareItems = IsModifiedClick("COMPAREITEMS")
+	if not tooltip.comparing and compareItems and tooltip:GetItem() then
 		GameTooltip_ShowCompareItem(tooltip);
 		tooltip.comparing = true;
-	elseif ( tooltip.comparing and not IsModifiedClick("COMPAREITEMS")) then
-		for _, frame in pairs(tooltip.shoppingTooltips) do
-			frame:Hide();
-		end
+	elseif tooltip.comparing and not compareItems then
+		for _, frame in pairs(tooltip.shoppingTooltips) do frame:Hide() end
 		tooltip.comparing = false;
 	end
 end

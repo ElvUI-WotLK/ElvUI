@@ -4,15 +4,15 @@ local DT = E:GetModule("DataTexts");
 local select = select;
 local join = string.join;
 
-local GetNumBattlefieldScores = GetNumBattlefieldScores;
 local GetBattlefieldScore = GetBattlefieldScore;
-local GetCurrentMapAreaID = GetCurrentMapAreaID;
-local GetBattlefieldStatInfo = GetBattlefieldStatInfo;
+local GetNumBattlefieldStats = GetNumBattlefieldStats
+local GetNumBattlefieldScores = GetNumBattlefieldScores
+local GetBattlefieldStatInfo = GetBattlefieldStatInfo
 local GetBattlefieldStatData = GetBattlefieldStatData;
 
+local name
 local lastPanel;
 local displayString = "";
-local classColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass];
 
 local dataLayout = {
 	["LeftChatDataPanel"] = {
@@ -36,14 +36,6 @@ local dataStrings = {
 	[12] = SHOW_COMBAT_HEALING
 };
 
-local WSG = 444;
-local AV = 402;
-local SOTA = 513;
-local IOC = 541;
-local EOTS = 483;
-local AB = 462;
-local name;
-
 function DT:UPDATE_BATTLEFIELD_SCORE()
 	lastPanel = self;
 	local pointIndex = dataLayout[self:GetParent():GetName()][self.pointIndex];
@@ -59,29 +51,22 @@ end
 function DT:BattlegroundStats()
 	DT:SetupTooltip(self);
 	local CurrentMapID = GetCurrentMapAreaID();
-	for index = 1, GetNumBattlefieldScores() do
-		name = GetBattlefieldScore(index);
-		if(name and name == E.myname) then
-			DT.tooltip:AddDoubleLine(L["Stats For:"], name, 1, 1, 1, classColor.r, classColor.g, classColor.b);
-			DT.tooltip:AddLine(" ");
-			if(CurrentMapID == WSG) then
-				DT.tooltip:AddDoubleLine(GetBattlefieldStatInfo(1), GetBattlefieldStatData(index, 1), 1, 1, 1);
-				DT.tooltip:AddDoubleLine(GetBattlefieldStatInfo(2), GetBattlefieldStatData(index, 2), 1, 1, 1);
-			elseif(CurrentMapID == EOTS) then
-				DT.tooltip:AddDoubleLine(GetBattlefieldStatInfo(1), GetBattlefieldStatData(index, 1), 1, 1, 1);
-			elseif(CurrentMapID == AV) then
-				DT.tooltip:AddDoubleLine(GetBattlefieldStatInfo(1), GetBattlefieldStatData(index, 1), 1, 1, 1);
-				DT.tooltip:AddDoubleLine(GetBattlefieldStatInfo(2), GetBattlefieldStatData(index, 2), 1, 1, 1);
-				DT.tooltip:AddDoubleLine(GetBattlefieldStatInfo(3), GetBattlefieldStatData(index, 3), 1, 1, 1);
-				DT.tooltip:AddDoubleLine(GetBattlefieldStatInfo(4), GetBattlefieldStatData(index, 4), 1, 1, 1);
-			elseif(CurrentMapID == SOTA) then
-				DT.tooltip:AddDoubleLine(GetBattlefieldStatInfo(1), GetBattlefieldStatData(index, 1), 1, 1, 1);
-				DT.tooltip:AddDoubleLine(GetBattlefieldStatInfo(2), GetBattlefieldStatData(index, 2), 1, 1, 1);
-			elseif(CurrentMapID == IOC or CurrentMapID == AB) then
-				DT.tooltip:AddDoubleLine(GetBattlefieldStatInfo(1), GetBattlefieldStatData(index, 1), 1, 1, 1);
-				DT.tooltip:AddDoubleLine(GetBattlefieldStatInfo(2), GetBattlefieldStatData(index, 2), 1, 1, 1);
+
+	local classColor = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[E.myclass]
+	local numStatInfo = GetNumBattlefieldStats()
+	if numStatInfo then
+		for index = 1, GetNumBattlefieldScores() do
+			name = GetBattlefieldScore(index)
+			if name and name == E.myname then
+				DT.tooltip:AddDoubleLine(L["Stats For:"], name, 1, 1, 1, classColor.r, classColor.g, classColor.b)
+				DT.tooltip:AddLine(" ")
+
+				-- Add extra statistics to watch based on what BG you are in.
+				for x = 1, numStatInfo do
+					DT.tooltip:AddDoubleLine(GetBattlefieldStatInfo(x), GetBattlefieldStatData(index, x), 1, 1, 1)
+				end
+				break
 			end
-			break;
 		end
 	end
 

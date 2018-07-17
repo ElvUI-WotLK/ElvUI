@@ -1262,6 +1262,8 @@ function E:Initialize()
 	self:RegisterEvent("CHARACTER_POINTS_CHANGED", "CheckRole");
 	self:RegisterEvent("UPDATE_FLOATING_CHAT_WINDOWS", "UIScale");
 	self:RegisterEvent("PLAYER_ENTERING_WORLD");
+	self:RegisterEvent("UNIT_ENTERED_VEHICLE", "EnterVehicleHideFrames")
+	self:RegisterEvent("UNIT_EXITED_VEHICLE", "ExitVehicleShowFrames")
 
 	if(self.db.general.kittys) then
 		self:CreateKittys();

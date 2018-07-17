@@ -223,14 +223,20 @@ function DT:LoadDataTexts()
 	self.db = E.db.datatexts;
 	LDB:UnregisterAllCallbacks(self)
 
-	local inInstance, instanceType = IsInInstance();
-	local fontTemplate = LSM:Fetch("font", self.db.font);
-	if(ElvConfigToggle) then
+	local fontTemplate = LSM:Fetch("font", self.db.font)
+	local inInstance, instanceType = IsInInstance()
+	local isInPVP = inInstance and (instanceType == "pvp")
+	local pointIndex, isBGPanel, enableBGPanel
+
+	if ElvConfigToggle then
 		ElvConfigToggle.text:FontTemplate(fontTemplate, self.db.fontSize, self.db.fontOutline);
 	end
+
 	for panelName, panel in pairs(DT.RegisteredPanels) do
+		isBGPanel = isInPVP and (panelName == "LeftChatDataPanel" or panelName == "RightChatDataPanel")
+		enableBGPanel = isBGPanel and (not DT.ForceHideBGStats and E.db.datatexts.battleground)
 		for i = 1, panel.numPoints do
-			local pointIndex = DT.PointLocation[i];
+			pointIndex = DT.PointLocation[i];
 			panel.dataPanels[pointIndex]:UnregisterAllEvents();
 			panel.dataPanels[pointIndex]:SetScript("OnUpdate", nil);
 			panel.dataPanels[pointIndex]:SetScript("OnEnter", nil);
@@ -241,7 +247,7 @@ function DT:LoadDataTexts()
 			panel.dataPanels[pointIndex].text:SetText(nil);
 			panel.dataPanels[pointIndex].pointIndex = pointIndex;
 
-			if((panelName == "LeftChatDataPanel" or panelName == "RightChatDataPanel") and (inInstance and (instanceType == "pvp")) and not DT.ForceHideBGStats and E.db.datatexts.battleground) then
+			if enableBGPanel then
 				panel.dataPanels[pointIndex]:RegisterEvent("UPDATE_BATTLEFIELD_SCORE");
 				panel.dataPanels[pointIndex]:RegisterEvent("PLAYER_REGEN_ENABLED");
 				panel.dataPanels[pointIndex]:SetScript("OnEvent", DT.UPDATE_BATTLEFIELD_SCORE);
@@ -249,7 +255,13 @@ function DT:LoadDataTexts()
 				panel.dataPanels[pointIndex]:SetScript("OnLeave", DT.Data_OnLeave);
 				panel.dataPanels[pointIndex]:SetScript("OnClick", DT.HideBattlegroundTexts);
 				DT.UPDATE_BATTLEFIELD_SCORE(panel.dataPanels[pointIndex])
+				DT.ShowingBGStats = true
 			else
+				-- we aren't showing BGStats anymore
+				if (isBGPanel or not isInPVP) and DT.ShowingBGStats then
+					DT.ShowingBGStats = nil
+				end
+
 				for name, data in pairs(DT.RegisteredDataTexts) do
 					for option, value in pairs(self.db.panels) do
 						if(value and type(value) == "table") then
