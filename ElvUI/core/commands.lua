@@ -163,6 +163,7 @@ function E:LoadCommands()
 	self:RegisterChatCommand("disable", "DisableAddon");
 	self:RegisterChatCommand("farmmode", "FarmMode");
 	--self:RegisterChatCommand("aprilfools", "");
+	self:RegisterChatCommand("estatus", "ShowStatusReport")
 
 	if E:GetModule("ActionBars") and E.private.actionbar.enable then
 		self:RegisterChatCommand("kb", E:GetModule("ActionBars").ActivateBindMode);

@@ -16,4 +16,5 @@
 	<Script file="cooldowns.lua"/>
 	<Script file="aprilfools.lua"/>
 	<Script file="pluginInstaller.lua"/>
+	<Script file="StatusReport.lua"/>
 </Ui>

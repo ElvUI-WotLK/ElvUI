@@ -31,7 +31,7 @@ E.myLocalizedRace, E.myrace = UnitRace("player")
 E.myname = UnitName("player")
 E.myrealm = GetRealmName()
 E.version = GetAddOnMetadata("ElvUI", "Version")
-E.wowbuild = select(2, GetBuildInfo()); E.wowbuild = tonumber(E.wowbuild);
+E.wowpatch, E.wowbuild = GetBuildInfo() E.wowbuild = tonumber(E.wowbuild)
 E.resolution = GetCVar("gxResolution");
 E.screenheight = tonumber(match(E.resolution, "%d+x(%d+)"));
 E.screenwidth = tonumber(match(E.resolution, "(%d+)x+%d"));
