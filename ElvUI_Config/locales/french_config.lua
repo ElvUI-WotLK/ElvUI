@@ -518,6 +518,7 @@ L["X-Offset"] = "Décalage X"
 L["Y-Offset"] = "Décalage Y"
 
 --Misc
+L["Filters are not allowed to have commas in their name. Stripping commas from filter name."] = true
 L["Install"] = "Installer"
 L["Run the installation process."] = "Démarrer le processus d'installation."
 L["Toggle Anchors"] = "Afficher les ancres"
@@ -658,7 +659,6 @@ L["Shortcuts"] = "Raccourcis"
 L["Side Arrows"] = true
 L["Stacking Nameplates"] = true;
 L["Style Filter"] = true
-L["Tagged NPC"] = "PNJ marqué"
 L["Tanked Color"] = "Couleur tankée"
 L["Target Indicator Color"] = "Couleur de l'indicateur de la cible"
 L["Target Indicator"] = "Indicateur de la cible"
@@ -726,8 +726,6 @@ L["Help Frame"] = "Fenêtre d'Assistance clientèle"
 L["LFD Frame"] = true;
 L["LFR Frame"] = true;
 L["Loot Frames"] = "Fenêtre de butin"
-L["Mail Frame"] = "Fenêtre du Courrier"
-L["Merchant Frame"] = "Marchand"
 L["Mirror Timers"] = "Fenêtre des Timers mirroirs" --need review
 L["Misc Frames"] = "Divers"
 L["Petition Frame"] = "Fenêtre de Charte"

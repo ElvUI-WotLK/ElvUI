@@ -566,6 +566,7 @@ L["X-Offset"] = "가로 조정"
 L["Y-Offset"] = "세로 조정"
 
 --Misc
+L["Filters are not allowed to have commas in their name. Stripping commas from filter name."] = "필터는 이름에 콤마를 허용하지 않습니다. 필터 이름에서 콤마를 제거하세요."
 L["Install"] = "설치"
 L["Run the installation process."] = "ElvUI의 설치 프로세스를 실행합니다."
 L["Toggle Anchors"] = "프레임 이동 모드"
@@ -706,7 +707,6 @@ L["Shortcuts"] = "바로가기"
 L["Side Arrows"] = "양옆 화살표"
 L["Stacking Nameplates"] = true;
 L["Style Filter"] = "스타일 필터"
-L["Tagged NPC"] = "선점된 유닛"
 L["Tanked Color"] = "방어전담 색상"
 L["Target Indicator Color"] = "대상 표시기 색상"
 L["Target Indicator"] = "대상 표시기"
@@ -774,8 +774,6 @@ L["Help Frame"] = "도움말"
 L["LFD Frame"] = true;
 L["LFR Frame"] = true;
 L["Loot Frames"] = "루팅 창"
-L["Mail Frame"] = "우편함"
-L["Merchant Frame"] = "상인 창"
 L["Mirror Timers"] = "미러 타이머"
 L["Misc Frames"] = "기타 프레임"
 L["Petition Frame"] = "GM 요청 창"

@@ -179,12 +179,12 @@ E.Options.args.skins = {
 				},
 				mail = {
 					type = "toggle",
-					name = L["Mail Frame"],
+					name = MAIL_LABEL,
 					desc = L["TOGGLESKIN_DESC"]
 				},
 				merchant = {
 					type = "toggle",
-					name = L["Merchant Frame"],
+					name = MERCHANT,
 					desc = L["TOGGLESKIN_DESC"]
 				},
 				misc = {

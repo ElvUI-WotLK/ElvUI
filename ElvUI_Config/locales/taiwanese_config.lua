@@ -518,6 +518,7 @@ L["X-Offset"] = "X偏移"
 L["Y-Offset"] = "Y偏移"
 
 --Misc
+L["Filters are not allowed to have commas in their name. Stripping commas from filter name."] = true
 L["Install"] = "安裝"
 L["Run the installation process."] = "執行安裝程序"
 L["Toggle Anchors"] = "解鎖元件定位"
@@ -658,7 +659,6 @@ L["Shortcuts"] = "快捷鍵"
 L["Side Arrows"] = "側面箭頭"
 L["Stacking Nameplates"] = true;
 L["Style Filter"] = "樣式過濾器"
-L["Tagged NPC"] = "標記的NPC"
 L["Tanked Color"] = "坦克顏色"
 L["Target Indicator Color"] = true
 L["Target Indicator"] = "目標指示器"
@@ -726,8 +726,6 @@ L["Help Frame"] = "幫助"
 L["LFD Frame"] = true;
 L["LFR Frame"] = true;
 L["Loot Frames"] = "拾取框架"
-L["Mail Frame"] = "信箱"
-L["Merchant Frame"] = "商人"
 L["Mirror Timers"] = "鏡像計時器"
 L["Misc Frames"] = "其他"
 L["Petition Frame"] = "回報GM"

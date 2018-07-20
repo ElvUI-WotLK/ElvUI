@@ -4,9 +4,11 @@ local ACD = LibStub("AceConfigDialog-3.0-ElvUI")
 local group
 
 local _G = _G
+local pairs = pairs
 
 local SetCVar = SetCVar
 local GameTooltip = _G["GameTooltip"]
+local FONT_SIZE = FONT_SIZE
 local NONE, COLOR, COLORS = NONE, COLOR, COLORS
 local SHIFT_KEY, ALT_KEY, CTRL_KEY = SHIFT_KEY, ALT_KEY, CTRL_KEY
 local OPTION_TOOLTIP_ACTION_BUTTON_USE_KEY_DOWN = OPTION_TOOLTIP_ACTION_BUTTON_USE_KEY_DOWN

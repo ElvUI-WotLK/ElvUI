@@ -507,6 +507,7 @@ L["X-Offset"] = true;
 L["Y-Offset"] = true;
 
 --Misc
+L["Filters are not allowed to have commas in their name. Stripping commas from filter name."] = true
 L["Install"] = true;
 L["Run the installation process."] = true;
 L["Toggle Anchors"] = true;
@@ -647,7 +648,6 @@ L["Shortcuts"] = true;
 L["Side Arrows"] = true
 L["Stacking Nameplates"] = true;
 L["Style Filter"] = true
-L["Tagged NPC"] = true;
 L["Tanked Color"] = true;
 L["Target Indicator Color"] = true
 L["Target Indicator"] = true
@@ -715,8 +715,6 @@ L["Help Frame"] = true;
 L["LFD Frame"] = true;
 L["LFR Frame"] = true;
 L["Loot Frames"] = true;
-L["Mail Frame"] = true;
-L["Merchant Frame"] = true;
 L["Mirror Timers"] = true;
 L["Misc Frames"] = true;
 L["Petition Frame"] = true;

@@ -2870,15 +2870,8 @@ E.Options.args.nameplate = {
 							name = L["FRIENDLY_NPC"],
 							hasAlpha = false
 						},
-						tapped = {
-							order = 5,
-							type = "color",
-							name = L["Tagged NPC"],
-							hasAlpha = false,
-							hidden = true
-						},
 						friendlyPlayer = {
-							order = 6,
+							order = 5,
 							type = "color",
 							name = L["FRIENDLY_PLAYER"],
 							hasAlpha = false

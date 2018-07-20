@@ -23,8 +23,6 @@ function mod:UpdateElement_HealthColor(frame)
 	local useClassColor = mod.db.units[frame.UnitType].healthbar.useClassColor
 	if classColor and ((frame.UnitType == "FRIENDLY_PLAYER" and useClassColor) or (frame.UnitType == "ENEMY_PLAYER" and useClassColor)) then
 		r, g, b = classColor.r, classColor.g, classColor.b
-	elseif frame.UnitReaction == 1 then
-		r, g, b = mod.db.reactions.tapped.r, mod.db.reactions.tapped.g, mod.db.reactions.tapped.b
 	else
 		local status = mod:UnitDetailedThreatSituation(frame)
 		if status then
@@ -136,7 +134,7 @@ function mod:ConfigureElement_HealthBar(frame, configuring)
 end
 
 function mod:ConstructElement_HealthBar(parent)
-	local frame = CreateFrame("StatusBar", nil, parent)
+	local frame = CreateFrame("StatusBar", "$parentHealthBar", parent)
 	frame:SetStatusBarTexture(LSM:Fetch("statusbar", self.db.statusbar), "BORDER")
 	self:StyleFrame(frame)
 
