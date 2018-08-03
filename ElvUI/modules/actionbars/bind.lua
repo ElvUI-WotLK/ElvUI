@@ -219,9 +219,9 @@ function AB:RegisterButton(b, override)
 		if script == button or override then
 			b:HookScript("OnEnter", function(b) self:BindUpdate(b) end)
 
-			if script == pet then
+			if script == shapeshift then
 				b:HookScript("OnEnter", function(b) self:BindUpdate(b, "SHAPESHIFT") end)
-			elseif script == shapeshift then
+			elseif script == pet then
 				b:HookScript("OnEnter", function(b) self:BindUpdate(b, "PET") end)
 			end
 		end
