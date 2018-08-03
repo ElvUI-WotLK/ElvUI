@@ -824,6 +824,11 @@ function AB:FixKeybindText(button)
 
 		hotkey:SetText(text);
 	end
+
+	if not button.useMasque then
+		hotkey:ClearAllPoints()
+		hotkey:Point("TOPRIGHT", 0, -3)
+	end
 end
 
 local color;
