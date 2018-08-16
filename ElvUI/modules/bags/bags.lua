@@ -298,7 +298,7 @@ function B:UpdateSlot(bagID, slotID)
 		local isQuestItem, questId, isActiveQuest = GetContainerItemQuestInfo(bagID, slotID);
 		local r, g, b;
 
-		if(slot.rarity) then
+		if slot.rarity then
 			r, g, b = GetItemQualityColor(slot.rarity);
 		end
 
@@ -317,7 +317,7 @@ function B:UpdateSlot(bagID, slotID)
 		elseif questId or isQuestItem then
 			slot:SetBackdropBorderColor(1.0, 0.3, 0.3);
 			slot.ignoreBorderColors = true
-		elseif slot.rarity then
+		elseif slot.rarity and slot.rarity > 1 then
 			slot:SetBackdropBorderColor(r, g, b);
 			slot.ignoreBorderColors = true
 		else
