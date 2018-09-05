@@ -266,15 +266,20 @@ local function BuildABConfig()
 					func = function() E:CopyTable(E.db.actionbar["barTotem"], P.actionbar["barTotem"]); E:ResetMovers(TUTORIAL_TITLE47); AB:PositionAndSizeBarTotem() end,
 					disabled = function() return not E.db.actionbar.barTotem.enabled end
 				},
-				mouseover = {
+				spacer = {
 					order = 4,
+					type = "description",
+					name = ""
+				},
+				mouseover = {
+					order = 5,
 					type = "toggle",
 					name = L["Mouse Over"],
 					desc = L["The frame is not shown unless you mouse over the frame."],
 					disabled = function() return not E.db.actionbar.barTotem.enabled end
 				},
 				flyoutDirection = {
-					order = 5,
+					order = 6,
 					type = "select",
 					name = L["Flyout Direction"],
 					values = {
@@ -284,7 +289,7 @@ local function BuildABConfig()
 					disabled = function() return not E.db.actionbar.barTotem.enabled end
 				},
 				buttonsize = {
-					order = 6,
+					order = 7,
 					type = "range",
 					name = L["Button Size"],
 					desc = L["The size of the action buttons."],
@@ -292,7 +297,7 @@ local function BuildABConfig()
 					disabled = function() return not E.db.actionbar.barTotem.enabled end
 				},
 				buttonspacing = {
-					order = 7,
+					order = 8,
 					type = "range",
 					name = L["Button Spacing"],
 					desc = L["The spacing between buttons."],
@@ -300,7 +305,7 @@ local function BuildABConfig()
 					disabled = function() return not E.db.actionbar.barTotem.enabled end
 				},
 				flyoutSpacing = {
-					order = 8,
+					order = 9,
 					type = "range",
 					name = L["Flyout Spacing"],
 					desc = L["The spacing between buttons."],
@@ -308,7 +313,7 @@ local function BuildABConfig()
 					disabled = function() return not E.db.actionbar.barTotem.enabled end
 				},
 				alpha = {
-					order = 9,
+					order = 10,
 					type = "range",
 					name = L["Alpha"],
 					isPercent = true,
@@ -316,7 +321,7 @@ local function BuildABConfig()
 					disabled = function() return not E.db.actionbar.barTotem.enabled end
 				},
 				visibility = {
-					order = 10,
+					order = 11,
 					type = "input",
 					name = L["Visibility State"],
 					desc = L["This works like a macro, you can run different situations to get the actionbar to show/hide differently.\n Example: '[combat] show;hide'"],

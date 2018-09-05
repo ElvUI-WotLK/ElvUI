@@ -61,6 +61,7 @@ local function LoadSkin()
 	S:HandleEditBox(TradeSkillFrameEditBox);
 
 	TradeSkillExpandButtonFrame:StripTextures();
+	TradeSkillExpandButtonFrame:Point("TOPLEFT", 8, -71)
 
 	TradeSkillCollapseAllButton:SetNormalTexture("Interface\\AddOns\\ElvUI\\media\\textures\\PlusMinusButton")
 	TradeSkillCollapseAllButton.SetNormalTexture = E.noop
