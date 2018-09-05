@@ -7,7 +7,7 @@ if not L then return end
 L["INCOMPATIBLE_ADDON"] = "插件 %s 不相容于 ElvUI 的 %s 模组, 请停用不相容的插件, 或停用模组."
 
 --*_MSG locales
-L["LOGIN_MSG"] = "欢迎使用 %sElvUI|r %s%s|r 版, 请输入/ec进入设定介面. 如需技术支持,请至至 https://github.com/ElvUI-WotLK/ElvUI"
+L["LOGIN_MSG"] = "Welcome to %sElvUI|r version %s%s|r, type /ec to access the in-game configuration menu. If you are in need of technical support you can visit us at https://github.com/ElvUI-WotLK/ElvUI or join our Discord: https://discord.gg/Uatdmm7"
 
 --ActionBars
 L["Binding"] = "绑定"
@@ -61,8 +61,6 @@ L["yells"] = "大喊"
 L["(Hold Shift) Memory Usage"] = "(按住Shift) 内存占用"
 L["Avoidance Breakdown"] = "免伤统计"
 L["Character: "] = "角色: "
-L["Chest"] = "胸"
-L["Combat"] = "战斗"
 L["Combat Time"] = true;
 L["Coords"] = "坐标"
 L["copperabbrev"] = "|cffeda55f铜|r"
@@ -82,8 +80,8 @@ L["Miss Chance"] = true;
 L["Mitigation By Level: "] = "等级减伤: "
 L["No Guild"] = "没有公会"
 L["Profit:"] = "利润:"
-L["Reset Counters: Hold Shift + Left Click"] = "重置计数器: 按住Shift + 左键点击"
 L["Reload UI"] = true;
+L["Reset Counters: Hold Control + Right Click"] = "重置计数器: 按住 Ctrl + 右键点击"
 L["Reset Data: Hold Shift + Right Click"] = "重置数据: 按住 Shift + 右键点击"
 L["Saved Dungeon(s)"] = "已有进度的地下城"
 L["Saved Raid(s)"] = "已有进度的副本"

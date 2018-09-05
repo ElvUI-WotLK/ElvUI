@@ -435,7 +435,7 @@ E.PopupDialogs["APPLY_FONT_WARNING"] = {
 		--E.db.tooltip.healthbar.fontSize = fontSize;
 		E.db.unitframe.font = font;
 		--E.db.unitframe.fontSize = fontSize;
-		--E.db.unitframe.units.party.rdebuffs.font = font;
+		E.db.unitframe.units.party.rdebuffs.font = font;
 		E.db.unitframe.units.raid.rdebuffs.font = font;
 		E.db.unitframe.units.raid40.rdebuffs.font = font;
 

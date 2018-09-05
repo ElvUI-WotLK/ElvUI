@@ -7,7 +7,11 @@ function mod:UpdateElement_Elite(frame)
 	local icon = frame.Elite
 	if self.db.units[frame.UnitType].eliteIcon.enable then
 		local elite, boss = frame.EliteIcon:IsShown(), frame.BossIcon:IsShown()
-		if boss or elite then
+
+		if boss then
+			icon:SetTexCoord(0, 0.15, 0.62, 0.94)
+			icon:Show()
+		elseif elite then
 			icon:SetTexCoord(0, 0.15, 0.35, 0.63)
 			icon:Show()
 		else

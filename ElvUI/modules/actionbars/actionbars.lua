@@ -32,8 +32,9 @@ local LEAVE_VEHICLE = LEAVE_VEHICLE;
 
 local LAB = LibStub("LibActionButton-1.0");
 local LSM = LibStub("LibSharedMedia-3.0");
-
 local LBF = LibStub("LibButtonFacade", true);
+
+local UIHider
 
 AB["handledBars"] = {};
 AB["handledbuttons"] = {};
@@ -557,9 +558,11 @@ function AB:StyleButton(button, noBackdrop, useMasque)
 		icon:SetInside();
 	end
 
-	if(self.db.hotkeytext) then
+	if self.db.hotkeytext or self.db.useRangeColorText then
 		hotkey:FontTemplate(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline);
-		hotkey:SetTextColor(color.r, color.g, color.b);
+		if button.config and (button.config.outOfRangeColoring ~= "hotkey") then
+			button.hotkey:SetTextColor(color.r, color.g, color.b)
+		end
 	end
 
 	if(macroName) then
@@ -669,48 +672,49 @@ function AB:FadeParent_OnEvent(event, unit)
 end
 
 function AB:DisableBlizzard()
-	local UIHider = CreateFrame("Frame");
-	UIHider:Hide();
+	UIHider = CreateFrame("Frame")
+	UIHider:Hide()
 
-	MultiBarBottomLeft:SetParent(UIHider);
-	MultiBarBottomLeft.Show = E.noop;
-	MultiBarBottomRight:SetParent(UIHider);
-	MultiBarBottomRight.Show = E.noop;
-	MultiBarLeft:SetParent(UIHider);
-	MultiBarLeft.Show = E.noop;
-	MultiBarRight:SetParent(UIHider);
-	MultiBarRight.Show = E.noop;
+	MultiBarBottomLeft:SetParent(UIHider)
+	MultiBarBottomLeft.Show = E.noop
+	MultiBarBottomRight:SetParent(UIHider)
+	MultiBarBottomRight.Show = E.noop
+	MultiBarLeft:SetParent(UIHider)
+	MultiBarLeft.Show = E.noop
+	MultiBarRight:SetParent(UIHider)
+	MultiBarRight.Show = E.noop
 
-	for i = 1,12 do
-		_G["ActionButton" .. i]:Hide();
-		_G["ActionButton" .. i]:UnregisterAllEvents();
-		_G["ActionButton" .. i]:SetAttribute("statehidden", true);
+	-- Hide MultiBar Buttons, but keep the bars alive
+	for i = 1, 12 do
+		_G["ActionButton"..i]:Hide()
+		_G["ActionButton"..i]:UnregisterAllEvents()
+		_G["ActionButton"..i]:SetAttribute("statehidden", true)
 
-		_G["MultiBarBottomLeftButton" .. i]:Hide();
-		_G["MultiBarBottomLeftButton" .. i]:UnregisterAllEvents();
-		_G["MultiBarBottomLeftButton" .. i]:SetAttribute("statehidden", true);
+		_G["MultiBarBottomLeftButton"..i]:Hide()
+		_G["MultiBarBottomLeftButton"..i]:UnregisterAllEvents()
+		_G["MultiBarBottomLeftButton"..i]:SetAttribute("statehidden", true)
 
-		_G["MultiBarBottomRightButton" .. i]:Hide();
-		_G["MultiBarBottomRightButton" .. i]:UnregisterAllEvents();
-		_G["MultiBarBottomRightButton" .. i]:SetAttribute("statehidden", true);
+		_G["MultiBarBottomRightButton"..i]:Hide()
+		_G["MultiBarBottomRightButton"..i]:UnregisterAllEvents()
+		_G["MultiBarBottomRightButton"..i]:SetAttribute("statehidden", true)
 
-		_G["MultiBarRightButton" .. i]:Hide();
-		_G["MultiBarRightButton" .. i]:UnregisterAllEvents();
-		_G["MultiBarRightButton" .. i]:SetAttribute("statehidden", true);
+		_G["MultiBarRightButton"..i]:Hide()
+		_G["MultiBarRightButton"..i]:UnregisterAllEvents()
+		_G["MultiBarRightButton"..i]:SetAttribute("statehidden", true)
 
-		_G["MultiBarLeftButton" .. i]:Hide();
-		_G["MultiBarLeftButton" .. i]:UnregisterAllEvents();
-		_G["MultiBarLeftButton" .. i]:SetAttribute("statehidden", true);
+		_G["MultiBarLeftButton"..i]:Hide()
+		_G["MultiBarLeftButton"..i]:UnregisterAllEvents()
+		_G["MultiBarLeftButton"..i]:SetAttribute("statehidden", true)
 
-		if(_G["VehicleMenuBarActionButton" .. i]) then
-			_G["VehicleMenuBarActionButton" .. i]:Hide();
-			_G["VehicleMenuBarActionButton" .. i]:UnregisterAllEvents();
-			_G["VehicleMenuBarActionButton" .. i]:SetAttribute("statehidden", true);
-		end
+		if _G["VehicleMenuBarActionButton"..i] then
+			_G["VehicleMenuBarActionButton"..i]:Hide()
+			_G["VehicleMenuBarActionButton"..i]:UnregisterAllEvents()
+			_G["VehicleMenuBarActionButton"..i]:SetAttribute("statehidden", true)
+ 		end
 
-		_G["BonusActionButton"..i]:Hide();
-		_G["BonusActionButton"..i]:UnregisterAllEvents();
-		_G["BonusActionButton"..i]:SetAttribute("statehidden", true);
+		_G["BonusActionButton"..i]:Hide()
+		_G["BonusActionButton"..i]:UnregisterAllEvents()
+		_G["BonusActionButton"..i]:SetAttribute("statehidden", true)
 
 		if E.myclass ~= "SHAMAN" then
 			_G["MultiCastActionButton"..i]:Hide()
@@ -723,6 +727,14 @@ function AB:DisableBlizzard()
 
 	MainMenuBar:Hide();
 	MainMenuBar:SetParent(UIHider);
+
+	MainMenuExpBar:UnregisterAllEvents()
+	MainMenuExpBar:Hide()
+	MainMenuExpBar:SetParent(UIHider)
+
+	ReputationWatchBar:UnregisterAllEvents()
+	ReputationWatchBar:Hide()
+	ReputationWatchBar:SetParent(UIHider)
 
 	MainMenuBarArtFrame:UnregisterAllEvents()
 	MainMenuBarArtFrame:RegisterEvent("KNOWN_CURRENCY_TYPES_UPDATE")
@@ -756,6 +768,15 @@ function AB:DisableBlizzard()
 		MultiCastActionBarFrame:SetParent(UIHider)
 	end
 
+	InterfaceOptionsActionBarsPanelAlwaysShowActionBars:EnableMouse(false)
+	InterfaceOptionsActionBarsPanelAlwaysShowActionBars:SetAlpha(0)
+
+	InterfaceOptionsActionBarsPanelLockActionBars:EnableMouse(false)
+	InterfaceOptionsActionBarsPanelLockActionBars:SetAlpha(0)
+
+	InterfaceOptionsStatusTextPanelXP:SetAlpha(0)
+	InterfaceOptionsStatusTextPanelXP:SetScale(0.0001)
+
 	self:SecureHook("BlizzardOptionsPanel_OnEvent");
 
 	if(PlayerTalentFrame) then
@@ -777,6 +798,7 @@ function AB:UpdateButtonConfig(bar, buttonName)
 	bar.buttonConfig.hideElements.hotkey = not self.db.hotkeytext;
 	bar.buttonConfig.showGrid = self.db["bar" .. bar.id].showGrid;
 	bar.buttonConfig.clickOnDown = self.db.keyDown;
+	bar.buttonConfig.outOfRangeColoring = (self.db.useRangeColorText and "hotkey") or "button"
 	SetModifiedClick("PICKUPACTION", self.db.movementModifier);
 	bar.buttonConfig.colors.range = E:GetColorTable(self.db.noRangeColor);
 	bar.buttonConfig.colors.mana = E:GetColorTable(self.db.noPowerColor);
@@ -835,7 +857,9 @@ local color;
 function AB:LAB_ButtonUpdate(button)
 	color = AB.db.fontColor;
 	button.count:SetTextColor(color.r, color.g, color.b);
-	button.hotkey:SetTextColor(color.r, color.g, color.b);
+	if button.config and (button.config.outOfRangeColoring ~= "hotkey") then
+		button.hotkey:SetTextColor(color.r, color.g, color.b)
+	end
 end
 LAB.RegisterCallback(AB, "OnButtonUpdate", AB.LAB_ButtonUpdate);
 

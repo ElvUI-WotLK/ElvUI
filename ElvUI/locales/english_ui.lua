@@ -7,7 +7,7 @@ if not L then return; end
 L["INCOMPATIBLE_ADDON"] = "The addon %s is not compatible with ElvUI's %s module. Please select either the addon or the ElvUI module to disable."
 
 --*_MSG locales
-L["LOGIN_MSG"] = "Welcome to %sElvUI|r version %s%s|r, type /ec to access the in-game configuration menu. If you are in need of technical support you can visit us at https://github.com/ElvUI-WotLK/ElvUI"
+L["LOGIN_MSG"] = "Welcome to %sElvUI|r version %s%s|r, type /ec to access the in-game configuration menu. If you are in need of technical support you can visit us at https://github.com/ElvUI-WotLK/ElvUI or join our Discord: https://discord.gg/Uatdmm7"
 
 --ActionBars
 L["Binding"] = true;
@@ -61,8 +61,6 @@ L["yells"] = true;
 L["(Hold Shift) Memory Usage"] = true;
 L["Avoidance Breakdown"] = true;
 L["Character: "] = true;
-L["Chest"] = true;
-L["Combat"] = true;
 L["Combat Time"] = true;
 L["Coords"] = true;
 L["copperabbrev"] = "|cffeda55fc|r" --Also used in Bags
@@ -83,7 +81,7 @@ L["Mitigation By Level: "] = true;
 L["No Guild"] = true;
 L["Profit:"] = true;
 L["Reload UI"] = true;
-L["Reset Counters: Hold Shift + Left Click"] = true
+L["Reset Counters: Hold Control + Right Click"] = true
 L["Reset Data: Hold Shift + Right Click"] = true;
 L["Saved Dungeon(s)"] = true
 L["Saved Raid(s)"] = true;

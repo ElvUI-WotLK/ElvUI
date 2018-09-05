@@ -93,6 +93,7 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 		frame.StyleChanged = true
 		frame.HealthColorChanged = true
 		frame.HealthBar:SetStatusBarColor(actions.color.healthColor.r, actions.color.healthColor.g, actions.color.healthColor.b, actions.color.healthColor.a);
+		frame.CutawayHealth:SetStatusBarColor(actions.color.healthColor.r * 1.5, actions.color.healthColor.g * 1.5, actions.color.healthColor.b * 1.5, actions.color.healthColor.a)
 	end
 	if BorderChanged then --Lets lock this to the values we want (needed for when the media border color changes)
 		frame.StyleChanged = true
@@ -181,6 +182,7 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 	if HealthColorChanged then
 		frame.HealthColorChanged = nil
 		frame.HealthBar:SetStatusBarColor(frame.HealthBar.r, frame.HealthBar.g, frame.HealthBar.b);
+		frame.CutawayHealth:SetStatusBarColor(frame.HealthBar.r * 1.5, frame.HealthBar.g * 1.5, frame.HealthBar.b * 1.5, 1)
 	end
 	if BorderChanged then
 		frame.BorderChanged = nil

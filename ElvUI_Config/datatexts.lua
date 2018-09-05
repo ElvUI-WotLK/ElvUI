@@ -3,6 +3,17 @@ local DT = E:GetModule("DataTexts");
 
 local datatexts = {};
 
+local _G = _G
+local pairs = pairs
+
+local NONE = NONE
+local FRIENDS = FRIENDS
+local HideLeftChat = HideLeftChat
+local HideRightChat = HideRightChat
+local HIDE = HIDE
+local AFK = AFK
+local DND = DND
+
 function DT:PanelLayoutOptions()
 	for name, data in pairs(DT.RegisteredDataTexts) do
 		datatexts[name] = data.localizedName or L[name]
@@ -329,6 +340,45 @@ E.Options.args.datatexts = {
 						["%d.%m.%y "] = "DD.MM.YY",
 						["%m.%d.%y "] = "MM.DD.YY",
 						["%y.%m.%d "] = "YY.MM.DD"
+					}
+				}
+			}
+		},
+		friends = {
+			order = 6,
+			type = "group",
+			name = FRIENDS,
+			args = {
+				header = {
+					order = 1,
+					type = "header",
+					name = FRIENDS
+				},
+				description = {
+					order = 2,
+					type = "description",
+					name = L["Hide specific sections in the datatext tooltip."]
+				},
+				hideGroup = {
+					order = 3,
+					type = "group",
+					guiInline = true,
+					name = HIDE,
+					args = {
+						hideAFK = {
+							order = 1,
+							type = "toggle",
+							name = AFK,
+							get = function(info) return E.db.datatexts.friends.hideAFK end,
+							set = function(info, value) E.db.datatexts.friends.hideAFK = value DT:LoadDataTexts() end
+						},
+						hideDND = {
+							order = 2,
+							type = "toggle",
+							name = DND,
+							get = function(info) return E.db.datatexts.friends.hideDND end,
+							set = function(info, value) E.db.datatexts.friends.hideDND = value DT:LoadDataTexts() end
+						}
 					}
 				}
 			}

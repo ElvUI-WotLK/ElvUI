@@ -8,7 +8,7 @@ local lower = string.lower
 local GetSpellInfo = GetSpellInfo
 
 local function SpellName(id)
-	local name, _, _, _, _, _, _, _, _ = GetSpellInfo(id)
+	local name = GetSpellInfo(id)
 	if not name then
 		print("|cff1784d1ElvUI:|r SpellID is not valid: "..id..". Please check for an updated version, if none exists report to ElvUI author.")
 		return "Impale"
@@ -586,11 +586,17 @@ G.unitframe.DebuffHighlightColors = {
 }
 
 G.unitframe.specialFilters = {
+	-- Whitelists
 	["Personal"] = true,
 	["nonPersonal"] = true,
-	["blockNonPersonal"] = true,
 	["CastByUnit"] = true,
 	["notCastByUnit"] = true,
-	["blockNoDuration"] = true,
 	["Dispellable"] = true,
-};
+	["notDispellable"] = true,
+
+	-- Blacklists
+	["blockNonPersonal"] = true,
+	["blockNoDuration"] = true,
+	["blockDispellable"] = true,
+	["blockNotDispellable"] = true,
+}

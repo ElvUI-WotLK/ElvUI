@@ -1,21 +1,24 @@
-local E, L, V, P, G = unpack(select(2, ...));
-local S = E:GetModule("Skins");
+local E, L, V, P, G = unpack(select(2, ...))
+local S = E:GetModule("Skins")
 
-local _G = _G;
-local unpack, select = unpack, select;
-local find = string.find;
+local _G = _G
+local unpack, select = unpack, select
+local find = string.find
 
+local CreateFrame = CreateFrame
 local GetItemInfo = GetItemInfo;
 local GetItemQualityColor = GetItemQualityColor;
 local GetTradeSkillItemLink = GetTradeSkillItemLink;
 local GetTradeSkillReagentInfo = GetTradeSkillReagentInfo;
 local GetTradeSkillReagentItemLink = GetTradeSkillReagentItemLink;
+local hooksecurefunc = hooksecurefunc
 
 local function LoadSkin()
 	if(E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.tradeskill ~= true) then return; end
 
 	TRADE_SKILLS_DISPLAYED = 25;
 
+	local TradeSkillFrame = _G["TradeSkillFrame"]
 	TradeSkillFrame:StripTextures(true);
 	TradeSkillFrame:SetAttribute("UIPanelLayout-width", E:Scale(710));
 	TradeSkillFrame:SetAttribute("UIPanelLayout-height", E:Scale(508));
@@ -38,12 +41,13 @@ local function LoadSkin()
 	TradeSkillFrame.bg2:SetFrameLevel(TradeSkillFrame.bg2:GetFrameLevel() - 1)
 
 	TradeSkillRankFrame:StripTextures();
-	TradeSkillRankFrame:Size(447, 16);
+	TradeSkillRankFrame:CreateBackdrop();
+	TradeSkillRankFrame:Size(447, 17);
 	TradeSkillRankFrame:ClearAllPoints();
 	TradeSkillRankFrame:Point("TOP", 10, -45);
-	TradeSkillRankFrame:CreateBackdrop();
 	TradeSkillRankFrame:SetStatusBarTexture(E["media"].normTex);
-	TradeSkillRankFrame:SetStatusBarColor(0.13, 0.35, 0.80);
+	TradeSkillRankFrame:SetStatusBarColor(0.22, 0.39, 0.84)
+	TradeSkillRankFrame.SetStatusBarColor = E.noop
 	E:RegisterStatusBar(TradeSkillRankFrame);
 
 	TradeSkillRankFrameSkillRank:ClearAllPoints();
@@ -143,31 +147,46 @@ local function LoadSkin()
 	TradeSkillSkillIcon:StyleButton(nil, true);
 	TradeSkillSkillIcon:SetTemplate("Default");
 
+	TradeSkillRequirementLabel:SetTextColor(1, 0.80, 0.10)
+
 	for i = 1, MAX_TRADE_SKILL_REAGENTS do
-		local reagent = _G["TradeSkillReagent" .. i];
-		local icon = _G["TradeSkillReagent" .. i .. "IconTexture"];
-		local count = _G["TradeSkillReagent" .. i .. "Count"];
-		local nameFrame = _G["TradeSkillReagent" .. i .. "NameFrame"];
+		local reagent = _G["TradeSkillReagent"..i]
+		local icon = _G["TradeSkillReagent"..i.."IconTexture"]
+		local count = _G["TradeSkillReagent"..i.."Count"]
+		local name = _G["TradeSkillReagent"..i.."Name"]
+		local nameFrame = _G["TradeSkillReagent"..i.."NameFrame"]
 
-		icon:SetTexCoord(unpack(E.TexCoords));
-		icon:SetDrawLayer("OVERLAY");
+		reagent:SetTemplate("Default")
+		reagent:StyleButton(nil, true)
+		reagent:Size(143, 40)
 
-		icon.backdrop = CreateFrame("Frame", nil, reagent);
-		icon.backdrop:SetFrameLevel(reagent:GetFrameLevel() - 1);
-		icon.backdrop:SetTemplate("Default");
-		icon.backdrop:SetOutside(icon);
+		icon.backdrop = CreateFrame("Frame", nil, reagent)
+		icon.backdrop:SetTemplate()
+		icon.backdrop:Point("TOPLEFT", icon, -1, 1)
+		icon.backdrop:Point("BOTTOMRIGHT", icon, 1, -1)
 
-		icon:SetParent(icon.backdrop);
-		count:SetParent(icon.backdrop);
-		count:SetDrawLayer("OVERLAY");
+		icon:SetTexCoord(unpack(E.TexCoords))
+		icon:SetDrawLayer("OVERLAY")
+		icon:Size(E.PixelMode and 38 or 32)
+		icon:Point("TOPLEFT", E.PixelMode and 1 or 4, -(E.PixelMode and 1 or 4))
+		icon:SetParent(icon.backdrop)
 
-		nameFrame:Kill();
+		count:SetParent(icon.backdrop)
+		count:SetDrawLayer("OVERLAY")
+
+		name:Point("LEFT", nameFrame, "LEFT", 20, 0)
+
+		nameFrame:Kill()
 	end
 
-	TradeSkillReagent1:Point("TOPLEFT", TradeSkillReagentLabel, "BOTTOMLEFT", -5, -6);
-	TradeSkillReagent3:Point("TOPLEFT", TradeSkillReagent1, "BOTTOMLEFT", 0, -3);
-	TradeSkillReagent5:Point("TOPLEFT", TradeSkillReagent3, "BOTTOMLEFT", 0, -3);
-	TradeSkillReagent7:Point("TOPLEFT", TradeSkillReagent6, "BOTTOMLEFT", 0, -3);
+	TradeSkillReagent1:Point("TOPLEFT", TradeSkillReagentLabel, "BOTTOMLEFT", 1, -3)
+	TradeSkillReagent2:Point("LEFT", TradeSkillReagent1, "RIGHT", 3, 0)
+	TradeSkillReagent3:Point("TOPLEFT", TradeSkillReagent1, "BOTTOMLEFT", 0, -3)
+	TradeSkillReagent4:Point("LEFT", TradeSkillReagent3, "RIGHT", 3, 0)
+	TradeSkillReagent5:Point("TOPLEFT", TradeSkillReagent3, "BOTTOMLEFT", 0, -3)
+	TradeSkillReagent6:Point("LEFT", TradeSkillReagent5, "RIGHT", 3, 0)
+	TradeSkillReagent7:Point("TOPLEFT", TradeSkillReagent5, "BOTTOMLEFT", 0, -3)
+	TradeSkillReagent8:Point("LEFT", TradeSkillReagent7, "RIGHT", 3, 0)
 
 	TradeSkillCancelButton:ClearAllPoints();
 	TradeSkillCancelButton:Point("TOPRIGHT", TradeSkillDetailScrollFrame, "BOTTOMRIGHT", 23, -3);
@@ -189,49 +208,51 @@ local function LoadSkin()
 	S:HandleCloseButton(TradeSkillFrameCloseButton);
 
 	hooksecurefunc("TradeSkillFrame_SetSelection", function(id)
-		if(TradeSkillSkillIcon:GetNormalTexture()) then
-			TradeSkillSkillIcon:SetAlpha(1);
-			TradeSkillSkillIcon:GetNormalTexture():SetTexCoord(unpack(E.TexCoords));
-			TradeSkillSkillIcon:GetNormalTexture():SetInside();
+		if TradeSkillSkillIcon:GetNormalTexture() then
+			TradeSkillSkillIcon:SetAlpha(1)
+			TradeSkillSkillIcon:GetNormalTexture():SetTexCoord(unpack(E.TexCoords))
+			TradeSkillSkillIcon:GetNormalTexture():SetInside()
 		else
-			TradeSkillSkillIcon:SetAlpha(0);
+			TradeSkillSkillIcon:SetAlpha(0)
 		end
 
 		local skillLink = GetTradeSkillItemLink(id)
-		if(skillLink) then
-			TradeSkillRequirementLabel:SetTextColor(1, 0.80, 0.10);
-			local quality = select(3, GetItemInfo(skillLink));
+		if skillLink then
+			local quality = select(3, GetItemInfo(skillLink))
 			if quality then
-				TradeSkillSkillIcon:SetBackdropBorderColor(GetItemQualityColor(quality));
-				TradeSkillSkillName:SetTextColor(GetItemQualityColor(quality));
+				TradeSkillSkillIcon:SetBackdropBorderColor(GetItemQualityColor(quality))
+				TradeSkillSkillName:SetTextColor(GetItemQualityColor(quality))
 			else
-				TradeSkillSkillIcon:SetBackdropBorderColor(unpack(E["media"].bordercolor));
-				TradeSkillSkillName:SetTextColor(1, 1, 1);
+				TradeSkillSkillIcon:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+				TradeSkillSkillName:SetTextColor(1, 1, 1)
 			end
 		end
 
-		local numReagents = GetTradeSkillNumReagents(id);
+		local numReagents = GetTradeSkillNumReagents(id)
 		for i = 1, numReagents, 1 do
-			local _, _, reagentCount, playerReagentCount = GetTradeSkillReagentInfo(id, i);
-			local reagentLink = GetTradeSkillReagentItemLink(id, i);
-			local icon = _G["TradeSkillReagent" .. i .. "IconTexture"];
-			local name = _G["TradeSkillReagent" .. i .. "Name"];
+			local _, _, reagentCount, playerReagentCount = GetTradeSkillReagentInfo(id, i)
+			local reagentLink = GetTradeSkillReagentItemLink(id, i)
+			local reagent = _G["TradeSkillReagent"..i]
+			local icon = _G["TradeSkillReagent"..i.."IconTexture"]
+			local name = _G["TradeSkillReagent"..i.."Name"]
 
-			if(reagentLink) then
-				local quality = select(3, GetItemInfo(reagentLink));
+			if reagentLink then
+				local quality = select(3, GetItemInfo(reagentLink))
 				if quality then
-					icon.backdrop:SetBackdropBorderColor(GetItemQualityColor(quality));
-					if(playerReagentCount < reagentCount) then
-						name:SetTextColor(0.5, 0.5, 0.5);
+					icon.backdrop:SetBackdropBorderColor(GetItemQualityColor(quality))
+					reagent:SetBackdropBorderColor(GetItemQualityColor(quality))
+					if playerReagentCount < reagentCount then
+						name:SetTextColor(0.5, 0.5, 0.5)
 					else
-						name:SetTextColor(GetItemQualityColor(quality));
+						name:SetTextColor(GetItemQualityColor(quality))
 					end
 				else
-					icon.backdrop:SetBackdropBorderColor(unpack(E["media"].bordercolor));
-				end
+					reagent:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+					icon.backdrop:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+ 				end
 			end
 		end
-	end);
+	end)
 end
 
-S:AddCallbackForAddon("Blizzard_TradeSkillUI", "TradeSkill", LoadSkin);
+S:AddCallbackForAddon("Blizzard_TradeSkillUI", "TradeSkill", LoadSkin)

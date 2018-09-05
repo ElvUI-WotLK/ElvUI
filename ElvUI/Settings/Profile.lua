@@ -158,6 +158,7 @@ P["bags"] = {
 	["clearSearchOnClose"] = false,
 	["disableBagSort"] = false,
 	["disableBankSort"] = false,
+	["strata"] = "MEDIUM",
 	["cooldown"] = {
 		["threshold"] = 4,
 		["override"] = false,
@@ -205,6 +206,9 @@ P["nameplates"] = {
 	["targetGlow"] = "style2",
 	["glowColor"] = {r = 77/255, g = 179/255, b = 255/255, a = 1},
 	["nameColoredGlow"] = false,
+	["cutawayHealth"] = false,
+	["cutawayHealthLength"] = 0.3,
+	["cutawayHealthFadeOutTime"] = 0.6,
 	["alwaysShowTargetHealth"] = true,
 	["castColor"] = {r = 1, g = 208/255, b = 0},
 	["castNoInterruptColor"] = {r = 0.78, g = 0.25, b = 0.25},
@@ -537,6 +541,7 @@ P["chat"] = {
 	["tabFont"] = "PT Sans Narrow",
 	["tabFontSize"] = 12,
 	["tabFontOutline"] = "NONE",
+	["panelColor"] = {r = 0.06, g = 0.06, b = 0.06, a = 0.8}
 }
 
 --Datatexts
@@ -575,11 +580,14 @@ P["datatexts"] = {
 	--Datatext Options
 	--General
 	["goldFormat"] = "BLIZZARD",
-	["goldCoins"] = false,
+	["goldCoins"] = true,
 	--Time Datatext
 	["timeFormat"] = "%I:%M",
 	["dateFormat"] = "",
-
+	["friends"] = {
+		["hideAFK"] = false,
+		["hideDND"] = false,
+	},
 	--Enabled/Disabled Panels
 	["minimapPanels"] = true,
 	["leftChatPanel"] = true,
@@ -2006,6 +2014,21 @@ P["unitframe"] = {
 					["color"] = {r = 1, g = 0.9, b = 0, a = 1}
 				},
 			},
+			["castbar"] = {
+				["enable"] = false,
+				["width"] = 256,
+				["height"] = 18,
+				["icon"] = true,
+				["format"] = "REMAINING",
+				["spark"] = true,
+				["iconSize"] = 32,
+				["iconAttached"] = true,
+				["insideInfoPanel"] = true,
+				["iconAttachedTo"] = "Frame",
+				["iconPosition"] = "LEFT",
+				["iconXOffset"] = -10,
+				["iconYOffset"] = 0
+			},
 			["roleIcon"] = {
 				["enable"] = true,
 				["position"] = "TOPRIGHT",
@@ -2725,6 +2748,7 @@ P["actionbar"] = {
 	["rightClickSelfCast"] = false,
 	["desaturateOnCooldown"] = false,
 
+	["useRangeColorText"] = false,
 	["noRangeColor"] = {r = 0.8, g = 0.1, b = 0.1},
 	["noPowerColor"] = {r = 0.5, g = 0.5, b = 1},
 	["usableColor"] = {r = 1, g = 1, b = 1},

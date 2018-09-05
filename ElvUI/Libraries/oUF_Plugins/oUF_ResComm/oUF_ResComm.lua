@@ -26,7 +26,17 @@ local UnitIsDead = UnitIsDead
 local UnitIsGhost = UnitIsGhost
 local UnitName = UnitName
 
+local enabledUF, enabled = {}
+local function tsize(t)
+	local i = 0
+	for _ in pairs(t) do
+		i = i + 1
+	end
+	return i
+end
+
 local function Update(self, event, unit, succeeded)
+	if not enabledUF[self] then return end
 	if not unit or self.unit ~= unit then return end
 
 	local element = self.ResurrectIndicator
@@ -100,15 +110,6 @@ local function ResComm_Update(event, ...)
 	end
 end
 
-local function tsize(t)
-	local i = 0
-	for _ in pairs(t) do
-		i = i + 1
-	end
-	return i
-end
-
-local enabledUF, enabled = {}
 local function ToggleCallbacks(toggle)
 	if toggle and not enabled and tsize(enabledUF) > 0 then
 		LRC.RegisterCallback("oUF_ResComm", "ResComm_CanRes", ResComm_Update)

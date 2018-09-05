@@ -183,7 +183,7 @@ function B:SetSearch(query)
 					button:SetAlpha(1);
 				else
 					SetItemButtonDesaturated(button, 1);
-					button:SetAlpha(0.4);
+					button:SetAlpha(0.5);
 				end
 			end
 		end
@@ -201,7 +201,7 @@ function B:SetSearch(query)
 					button:SetAlpha(1);
 				else
 					SetItemButtonDesaturated(button, 1);
-					button:SetAlpha(0.4);
+					button:SetAlpha(0.5);
 				end
 			end
 		end
@@ -277,7 +277,7 @@ end
 function B:UpdateSlot(bagID, slotID)
 	if (self.Bags[bagID] and self.Bags[bagID].numSlots ~= GetContainerNumSlots(bagID)) or not self.Bags[bagID] or not self.Bags[bagID][slotID] then return; end
 
-	local slot, _ = self.Bags[bagID][slotID], nil;
+	local slot = self.Bags[bagID][slotID]
 	local bagType = self.Bags[bagID].type;
 	local texture, count, locked, _, readable = GetContainerItemInfo(bagID, slotID);
 	local clink = GetContainerItemLink(bagID, slotID);
@@ -298,7 +298,7 @@ function B:UpdateSlot(bagID, slotID)
 		local isQuestItem, questId, isActiveQuest = GetContainerItemQuestInfo(bagID, slotID);
 		local r, g, b;
 
-		if slot.rarity then
+		if(slot.rarity) then
 			r, g, b = GetItemQualityColor(slot.rarity);
 		end
 
@@ -347,7 +347,7 @@ function B:UpdateSlot(bagID, slotID)
 
 	SetItemButtonTexture(slot, texture);
 	SetItemButtonCount(slot, count);
-	SetItemButtonDesaturated(slot, locked, 0.5, 0.5, 0.5);
+	SetItemButtonDesaturated(slot, locked)
 
 	if GameTooltip:GetOwner() == slot and not slot.hasItem then
 		B:Tooltip_Hide()
@@ -712,7 +712,7 @@ function B:UpdateKeySlot(slotID)
 
 	SetItemButtonTexture(slot, texture);
 	SetItemButtonCount(slot, count);
-	SetItemButtonDesaturated(slot, locked, 0.5, 0.5, 0.5);
+	SetItemButtonDesaturated(slot, locked)
 end
 
 function B:UpdateAll()
@@ -938,9 +938,11 @@ function B:VendorGrayCheck()
 end
 
 function B:ContructContainerFrame(name, isBank)
+	local strata = E.db.bags.strata or "MEDIUM"
+
 	local f = CreateFrame("Button", name, E.UIParent);
 	f:SetTemplate("Transparent");
-	f:SetFrameStrata("DIALOG");
+	f:SetFrameStrata(strata)
 	f.UpdateSlot = B.UpdateSlot;
 	f.UpdateAllSlots = B.UpdateAllSlots;
 	f.UpdateBagSlots = B.UpdateBagSlots;
@@ -1270,9 +1272,7 @@ function B:ToggleBags(id)
 end
 
 function B:ToggleBackpack()
-	if(IsOptionFrameOpen()) then
-		return;
-	end
+	if IsOptionFrameOpen() then return end
 
 	if(IsBagOpen(0)) then
 		self:OpenBags()

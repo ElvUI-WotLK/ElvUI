@@ -3,18 +3,18 @@ local AFK = E:NewModule("AFK", "AceEvent-3.0", "AceTimer-3.0");
 local CH = E:GetModule("Chat");
 
 local _G = _G;
-local GetTime = GetTime;
 local floor = math.floor;
 
---local ChatHistory_GetAccessID = ChatHistory_GetAccessID;
---local Chat_GetChatCategory = Chat_GetChatCategory;
+local ChatHistory_GetAccessID = ChatHistory_GetAccessID;
+local Chat_GetChatCategory = Chat_GetChatCategory;
 local CinematicFrame = CinematicFrame;
 local CreateFrame = CreateFrame;
 local GetBattlefieldStatus = GetBattlefieldStatus;
---local GetColoredName = GetColoredName;
+local GetColoredName = GetColoredName;
 local GetGuildInfo = GetGuildInfo;
 local GetScreenHeight = GetScreenHeight;
 local GetScreenWidth = GetScreenWidth;
+local GetTime = GetTime
 local InCombatLockdown = InCombatLockdown;
 local IsInGuild = IsInGuild;
 local IsShiftKeyDown = IsShiftKeyDown;
@@ -195,32 +195,41 @@ local function Chat_OnMouseWheel(self, delta)
 	end
 end
 
---[[
 local function Chat_OnEvent(self, event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13)
-	local coloredName = GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
-	local type = strsub(event, 10);
-	local info = ChatTypeInfo[type];
+	local coloredName = GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12)
+	local type = strsub(event, 10)
+	local info = ChatTypeInfo[type]
 
-	local chatGroup = Chat_GetChatCategory(type);
-	local chatTarget, body;
-	if(chatGroup == "BN_CONVERSATION") then
-		chatTarget = tostring(arg8);
-	elseif(chatGroup == "WHISPER" or chatGroup == "BN_WHISPER") then
-		if(not(strsub(arg2, 1, 2) == "|K")) then
+	arg1 = RemoveExtraSpaces(arg1)
+
+	local chatGroup = Chat_GetChatCategory(type)
+	local chatTarget, body
+	if chatGroup == "BN_CONVERSATION" then
+		chatTarget = tostring(arg8)
+	elseif chatGroup == "WHISPER" or chatGroup == "BN_WHISPER" then
+		if not(strsub(arg2, 1, 2) == "|K") then
 			chatTarget = arg2:upper()
 		else
-			chatTarget = arg2;
+			chatTarget = arg2
 		end
 	end
 
 	local playerLink
-	if(type ~= "BN_WHISPER" and type ~= "BN_CONVERSATION") then
-		playerLink = "|Hplayer:"..arg2..":"..arg11..":"..chatGroup..(chatTarget and ":"..chatTarget or "").."|h";
+	if type ~= "BN_WHISPER" and type ~= "BN_CONVERSATION" then
+		playerLink = "|Hplayer:"..arg2..":"..arg11..":"..chatGroup..(chatTarget and ":"..chatTarget or "").."|h"
 	else
-		playerLink = "|HBNplayer:"..arg2..":"..arg13..":"..arg11..":"..chatGroup..(chatTarget and ":"..chatTarget or "").."|h";
+		playerLink = "|HBNplayer:"..arg2..":"..arg13..":"..arg11..":"..chatGroup..(chatTarget and ":"..chatTarget or "").."|h"
 	end
 
-	body = format(_G["CHAT_"..type.."_GET"]..arg1, playerLink.."["..coloredName.."]".."|h");
+	local message = arg1
+	--Escape any % characters, as it may otherwise cause an "invalid option in format" error in the next step
+	message = gsub(message, "%%", "%%%%")
+
+	local success
+	success, body = pcall(format, _G["CHAT_"..type.."_GET"]..message, playerLink.."["..coloredName.."]".."|h")
+	if not success then
+		E:Print("An error happened in the AFK Chat module. Please screenshot this message and report it. Info:", type, message, _G["CHAT_"..type.."_GET"])
+	end
 
 	local accessID = ChatHistory_GetAccessID(chatGroup, chatTarget);
 	local typeID = ChatHistory_GetAccessID(type, chatTarget, arg12 == "" and arg13 or arg12);
@@ -232,9 +241,8 @@ local function Chat_OnEvent(self, event, arg1, arg2, arg3, arg4, arg5, arg6, arg
 		body = body:gsub("%[BN_CONVERSATION:", "%[".."");
 	end
 
-	self:AddMessage(CH:ConcatenateTimeStamp(body), info.r, info.g, info.b, info.id, false, accessID, typeID);
+	self:AddMessage(body, info.r, info.g, info.b, info.id, false, accessID, typeID)
 end
-]]
 
 function AFK:Initialize()
 	if E.global.afkEnabled then
@@ -267,7 +275,7 @@ function AFK:Initialize()
 	self.AFKMode.chat:SetScript("OnDragStart", self.AFKMode.chat.StartMoving);
 	self.AFKMode.chat:SetScript("OnDragStop", self.AFKMode.chat.StopMovingOrSizing);
 	self.AFKMode.chat:SetScript("OnMouseWheel", Chat_OnMouseWheel);
-	self.AFKMode.chat:SetScript("OnEvent", CH.ChatFrame_OnEvent);
+	self.AFKMode.chat:SetScript("OnEvent", Chat_OnEvent)
 
 	self.AFKMode.bottom = CreateFrame("Frame", nil, self.AFKMode);
 	self.AFKMode.bottom:SetFrameLevel(0);

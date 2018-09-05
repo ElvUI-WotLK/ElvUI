@@ -1,6 +1,11 @@
 local E, L, V, P, G = unpack(ElvUI);
 local CH = E:GetModule("Chat");
 
+local _G = _G
+local gsub, strlower = string.gsub, string.lower
+
+local GameTooltip = _G["GameTooltip"]
+
 E.Options.args.chat = {
 	type = "group",
 	name = L["Chat"],
@@ -24,6 +29,7 @@ E.Options.args.chat = {
 			order = 3,
 			type = "group",
 			name = L["General"],
+			disabled = function() return not E.private.chat.enable end,
 			args = {
 				header = {
 					order = 0,
@@ -186,14 +192,14 @@ E.Options.args.chat = {
 					order = 18,
 					type = "toggle",
 					name = L["Custom Timestamp Color"],
-					disabled = function() return not E.db.chat.timeStampFormat == "NONE"; end
+					disabled = function() return not E.private.chat.enable or E.db.chat.timeStampFormat == "NONE" end
 				},
 				customTimeColor = {
 					order = 19,
 					type = "color",
 					hasAlpha = false,
 					name = L["Timestamp Color"],
-					disabled = function() return (not E.db.chat.timeStampFormat == "NONE" or not E.db.chat.useCustomTimeColor); end,
+					disabled = function() return not E.private.chat.enable or (E.db.chat.timeStampFormat == "NONE" or not E.db.chat.useCustomTimeColor) end,
 					get = function(info)
 						local t = E.db.chat.customTimeColor;
 						local d = P.chat.customTimeColor;
@@ -210,6 +216,7 @@ E.Options.args.chat = {
 			order = 4,
 			type = "group",
 			name = L["Alerts"],
+			disabled = function() return not E.private.chat.enable end,
 			args = {
 				header = {
 					order = 0,
@@ -247,6 +254,7 @@ E.Options.args.chat = {
 			order = 5,
 			type = "group",
 			name = L["Panels"],
+			disabled = function() return not E.private.chat.enable end,
 			args = {
 				header = {
 					order = 0,
@@ -342,13 +350,29 @@ E.Options.args.chat = {
 						bags:Layout(true);
 					end
 				},
-				spacer2 = {
+				panelColor = {
 					order = 10,
+					type = "color",
+					name = L["Backdrop Color"],
+					hasAlpha = true,
+					get = function(info)
+						local t = E.db.chat.panelColor
+						local d = P.chat.panelColor
+						return t.r, t.g, t.b, t.a, d.r, d.g, d.b, d.a
+					end,
+					set = function(info, r, g, b, a)
+						local t = E.db.chat.panelColor
+						t.r, t.g, t.b, t.a = r, g, b, a
+						CH:Panels_ColorUpdate()
+					end,
+				},
+				spacer2 = {
+					order = 11,
 					type = "description",
 					name = ""
 				},
 				panelHeightRight = {
-					order = 11,
+					order = 12,
 					type = "range",
 					name = L["Right Panel Height"],
 					desc = L["Adjust the height of your right chat panel."],
@@ -358,7 +382,7 @@ E.Options.args.chat = {
 					set = function(info, value) E.db.chat.panelHeightRight = value; E:GetModule("Chat"):PositionChat(true); end
 				},
 				panelWidthRight = {
-					order = 12,
+					order = 13,
 					type = "range",
 					name = L["Right Panel Width"],
 					desc = L["Adjust the width of your right chat panel."],
@@ -372,7 +396,7 @@ E.Options.args.chat = {
 					end
 				},
 				panelBackdropNameLeft = {
-					order = 13,
+					order = 14,
 					type = "input",
 					width = "full",
 					name = L["Panel Texture (Left)"],
@@ -383,7 +407,7 @@ E.Options.args.chat = {
 					end
 				},
 				panelBackdropNameRight = {
-					order = 14,
+					order = 15,
 					type = "input",
 					width = "full",
 					name = L["Panel Texture (Right)"],
@@ -400,6 +424,7 @@ E.Options.args.chat = {
 			type = "group",
 			name = L["Fonts"],
 			set = function(info, value) E.db.chat[ info[#info] ] = value; CH:SetupChat(); end,
+			disabled = function() return not E.private.chat.enable end,
 			args = {
 				header = {
 					order = 1,
@@ -490,7 +515,7 @@ E.Options.args.chat = {
 					type = 'input',
 					get = function(info) return "" end,
 					set = function(info, value)
-						if value == "" or string.gsub(value, "%s+", "") == "" then return; end
+						if value == "" or gsub(value, "%s+", "") == "" then return; end
 						E.global.chat.classColorMentionExcludedNames[strlower(value)] = value
 					end
 				},

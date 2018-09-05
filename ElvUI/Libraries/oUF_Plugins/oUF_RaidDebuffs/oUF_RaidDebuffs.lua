@@ -203,9 +203,7 @@ local function Update(self, event, unit)
 	local _priority, priority = 0, 0
 	local _stackThreshold = 0
 
-	local i = 0
-	while true do
-		i = i + 1
+	for i = 1, 40 do
 		name, _, icon, count, debuffType, duration, expirationTime, _, _, _, spellId = UnitAura(unit, i, "HARMFUL")
 		if not name then break end
 

@@ -20,6 +20,7 @@ local colors = {
 		{0.9, 0.1, 1}, -- death
 	},
 	class = {},
+	debuff = {},
 	reaction = {},
 	power = {},
 }
@@ -58,6 +59,10 @@ if(not customClassColors()) then
 			self:SetScript('OnEvent', nil)
 		end
 	end)
+end
+
+for debuffType, color in next, DebuffTypeColor do
+	colors.debuff[debuffType] = {color.r, color.g, color.b}
 end
 
 for eclass, color in next, FACTION_BAR_COLORS do

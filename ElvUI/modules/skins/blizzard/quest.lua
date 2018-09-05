@@ -26,15 +26,12 @@ local function LoadSkin()
 		questItem:StripTextures()
 		questItem:SetTemplate("Default")
 		questItem:StyleButton()
-		--questItem:Size(143, 40)
-		questItem:Width(questItem:GetWidth() - 4)
+		questItem:Size(143, 40)
 		questItem:SetFrameLevel(questItem:GetFrameLevel() + 2)
 
-		--questIcon:Size(E.PixelMode and 38 or 32)
-		questIcon:Size(questIcon:GetWidth() -(E.Spacing*2), questIcon:GetHeight() -(E.Spacing*2))
+		questIcon:Size(E.PixelMode and 38 or 32)
 		questIcon:SetDrawLayer("OVERLAY")
-		--questIcon:Point("TOPLEFT", E.PixelMode and 1 or 4, -(E.PixelMode and 1 or 4))
-		questIcon:Point("TOPLEFT", E.Border, -E.Border)
+		questIcon:Point("TOPLEFT", E.PixelMode and 1 or 4, -(E.PixelMode and 1 or 4))
 		S:HandleIcon(questIcon)
 
 		questCount:SetParent(questItem.backdrop)
@@ -282,7 +279,7 @@ local function LoadSkin()
 
 	S:HandleCloseButton(QuestFrameCloseButton, QuestFrame.backdrop)
 
-	for i = 1, 6 do
+	for i = 1, MAX_REQUIRED_ITEMS do
 		local button = _G["QuestProgressItem"..i]
 		local texture = _G["QuestProgressItem"..i.."IconTexture"]
 		local count = _G["QuestProgressItem"..i.."Count"]
@@ -290,15 +287,12 @@ local function LoadSkin()
 		button:StripTextures()
 		button:SetTemplate("Default")
 		button:StyleButton()
-		--button:Size(143, 40)
-		button:Width(button:GetWidth() - 4)
+		button:Size(143, 40)
 		button:SetFrameLevel(button:GetFrameLevel() + 2)
 
-		--texture:Size(E.PixelMode and 38 or 32)
-		texture:Size(texture:GetWidth() -(E.Spacing*2), texture:GetHeight() -(E.Spacing*2))
+		texture:Size(E.PixelMode and 38 or 32)
 		texture:SetDrawLayer("OVERLAY")
-		--texture:Point("TOPLEFT", E.PixelMode and 1 or 4, -(E.PixelMode and 1 or 4))
-		texture:Point("TOPLEFT", E.Border, -E.Border)
+		texture:Point("TOPLEFT", E.PixelMode and 1 or 4, -(E.PixelMode and 1 or 4))
 		S:HandleIcon(texture)
 
 		count:SetParent(button.backdrop)

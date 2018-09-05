@@ -7,7 +7,7 @@ if not L then return; end
 L["INCOMPATIBLE_ADDON"] = "Аддон %s не совместим с модулем %s ElvUI. Пожалуйста, выберите отключить ли несовместимый аддон или модуль."
 
 --*_MSG locales
-L["LOGIN_MSG"] = "Добро пожаловать в %sElvUI|r версии %s%s|r, наберите /ec для доступа в меню настроек. Если Вам нужна техническая поддержка, посетите https://github.com/ElvUI-WotLK/ElvUI"
+L["LOGIN_MSG"] = "Welcome to %sElvUI|r version %s%s|r, type /ec to access the in-game configuration menu. If you are in need of technical support you can visit us at https://github.com/ElvUI-WotLK/ElvUI or join our Discord: https://discord.gg/Uatdmm7"
 
 --ActionBars
 L["Binding"] = "Назначение"
@@ -61,8 +61,6 @@ L["yells"] = "кричит"
 L["(Hold Shift) Memory Usage"] = "(Зажать Shift) Использование памяти"
 L["Avoidance Breakdown"] = "Распределение защиты"
 L["Character: "] = "Персонаж: "
-L["Chest"] = "Грудь"
-L["Combat"] = "Бой"
 L["Combat Time"] = "В бою"
 L["Coords"] = "Коорд."
 L["copperabbrev"] = "|cffeda55fм|r" --Also used in Bags
@@ -83,7 +81,7 @@ L["Mitigation By Level: "] = "Снижение на уровне: "
 L["No Guild"] = "Нет гильдии"
 L["Profit:"] = "Прибыль:"
 L["Reload UI"] = "Перезагрузка"
-L["Reset Counters: Hold Shift + Left Click"] = "Сбросить счётчики: Shift + ЛКМ"
+L["Reset Counters: Hold Control + Right Click"] = "Сбросить счётчики: Control + ПКМ:"
 L["Reset Data: Hold Shift + Right Click"] = "Сбросить данные: Shift + ПКМ"
 L["Saved Dungeon(s)"] = "Сохраненнные подземелья"
 L["Saved Raid(s)"] = "Сохраненные рейды"

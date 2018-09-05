@@ -34,6 +34,19 @@ local function LoadSkin()
 	S:SquareButton_SetIcon(LootFrameDownButton, "DOWN")
 	LootFrameDownButton:Point("BOTTOMLEFT", 145, 20)
 
+	LootFrame:EnableMouseWheel(true)
+	LootFrame:SetScript("OnMouseWheel", function(_, value)
+		if value > 0 then
+			if LootFrameUpButton:IsShown() and LootFrameUpButton:IsEnabled() == 1 then
+				LootFrame_PageUp()
+			end
+		else
+			if LootFrameDownButton:IsShown() and LootFrameDownButton:IsEnabled() == 1 then
+				LootFrame_PageDown()
+			end
+		end
+	end)
+
 	S:HandleCloseButton(LootCloseButton)
 	LootCloseButton:Point("CENTER", LootFrame, "TOPRIGHT", -87, -26)
 

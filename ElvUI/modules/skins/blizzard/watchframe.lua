@@ -35,17 +35,35 @@ local function LoadSkin()
 		local questIndex
 		local numQuestWatches = GetNumQuestWatches()
 
+		local title, level, questTag, daily
+		local color
 		for i = 1, numQuestWatches do
 			questIndex = GetQuestIndexForWatch(i)
 			if questIndex then
-				local title, level = GetQuestLogTitle(questIndex)
-				local color = GetQuestDifficultyColor(level)
-				--local hex = E:RGBToHex(color.r, color.g, color.b)
-				--local text = hex.."["..level.."]|r "..title
+				title, level, questTag, _, _, _, _, daily = GetQuestLogTitle(questIndex)
+				color = GetQuestDifficultyColor(level)
+--[[
+				local hex = E:RGBToHex(color.r, color.g, color.b)
 
+				if questTag == ELITE then
+					level = level.."+"
+				elseif questTag == LFG_TYPE_DUNGEON then
+					level = level.." D"
+				elseif questTag == PVP then
+					level = level.." PvP"
+				elseif questTag == RAID then
+					level = level.." R"
+				elseif questTag == GROUP then
+					level = level.." G"
+				elseif questTag == PLAYER_DIFFICULTY2 then
+					level = level.." HC"
+				end
+
+				local titleText = hex.."["..level.."]|r "..title
+]]
 				for j = 1, #WATCHFRAME_QUESTLINES do
 					if WATCHFRAME_QUESTLINES[j].text:GetText() == title then
-						--WATCHFRAME_QUESTLINES[j].text:SetText(text)
+						--WATCHFRAME_QUESTLINES[j].text:SetText(titleText)
 						WATCHFRAME_QUESTLINES[j].text:SetTextColor(color.r, color.g, color.b)
 						WATCHFRAME_QUESTLINES[j].color = color
 					end
@@ -57,6 +75,7 @@ local function LoadSkin()
 			end
 		end
 
+		-- WatchFrame Items
 		for i = 1, WATCHFRAME_NUM_ITEMS do
 			local button = _G["WatchFrameItem"..i]
 			local icon = _G["WatchFrameItem"..i.."IconTexture"]

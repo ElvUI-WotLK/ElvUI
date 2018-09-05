@@ -5,6 +5,7 @@ local floor = math.floor;
 local format, join = string.format, string.join;
 
 local GetTime = GetTime;
+local COMBAT = COMBAT
 
 local timer = 0;
 local startTime = 0;
@@ -13,7 +14,7 @@ local lastPanel;
 
 local function OnUpdate(self)
 	timer = GetTime() - startTime;
-	self.text:SetFormattedText(displayNumberString, L["Combat"], format("%02d:%02d:%02d", floor(timer / 60), timer % 60, (timer - floor(timer)) * 100));
+	self.text:SetFormattedText(displayNumberString, COMBAT, format("%02d:%02d:%02d", floor(timer / 60), timer % 60, (timer - floor(timer)) * 100));
 end
 
 local function OnEvent(self, event)
@@ -24,7 +25,7 @@ local function OnEvent(self, event)
 	elseif(event == "PLAYER_REGEN_ENABLED") then
 		self:SetScript("OnUpdate", nil);
 	else
-		self.text:SetFormattedText(displayNumberString, L["Combat"], "00:00:00");
+		self.text:SetFormattedText(displayNumberString, COMBAT, "00:00:00");
 	end
 
 	lastPanel = self;

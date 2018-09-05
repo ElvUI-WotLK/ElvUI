@@ -63,6 +63,12 @@ local function BuildABConfig()
 				name = L["Keybind Text"],
 				desc = L["Display bind names on action buttons."]
 			},
+			useRangeColorText = {
+				order = 7,
+				type = "toggle",
+				name = L["Color Keybind Text"],
+				desc = L["Color Keybind Text when Out of Range, instead of the button."]
+			},
 			keyDown = {
 				order = 8,
 				type = "toggle",

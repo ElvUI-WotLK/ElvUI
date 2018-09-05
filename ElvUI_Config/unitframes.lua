@@ -9,7 +9,7 @@ local format, match, gsub, strsplit = string.format, string.match, string.gsub, 
 local IsAddOnLoaded = IsAddOnLoaded
 local GetScreenWidth = GetScreenWidth
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS
-local FRIEND, ENEMY, HIDE, DELETE, NONE, FILTERS, FONT_SIZE, COLOR = FRIEND, ENEMY, HIDE, DELETE, NONE, FILTERS, FONT_SIZE, COLOR
+local BLOCK, FRIEND, ENEMY, HIDE, DELETE, NONE, FILTERS, FONT_SIZE, COLOR = BLOCK, FRIEND, ENEMY, HIDE, DELETE, NONE, FILTERS, FONT_SIZE, COLOR
 local CUSTOM, DISABLE, DEFAULT, COLORS = CUSTOM, DISABLE, DEFAULT, COLORS
 local SHIFT_KEY, ALT_KEY, CTRL_KEY = SHIFT_KEY, ALT_KEY, CTRL_KEY
 local HEALTH, MANA, NAME, PLAYER, CLASS, GROUP, HAPPINESS = HEALTH, MANA, NAME, PLAYER, CLASS, GROUP, HAPPINESS
@@ -308,15 +308,16 @@ local function GetOptionsTable_AuraBars(updateFunc, groupName)
 	}
 	config.args.filters.args.specialPriority = {
 		order = 19,
+		type = "select",
+		sortByValue = true,
 		name = L["Add Special Filter"],
 		desc = L["These filters don't use a list of spells like the regular filters. Instead they use the WoW API and some code logic to determine if an aura should be allowed or blocked."],
-		type = "select",
 		values = function()
 			local filters = {}
 			local list = E.global.unitframe["specialFilters"]
 			if not list then return end
 			for filter in pairs(list) do
-				filters[filter] = filter
+				filters[filter] = L[filter]
 			end
 			return filters
 		end,
@@ -373,9 +374,13 @@ local function GetOptionsTable_AuraBars(updateFunc, groupName)
 		dragOnClick = function(info)
 			filterPriority("aurabar", groupName, carryFilterFrom, true)
 		end,
-		stateSwitchGetText = function(_, text)
-			local friend, enemy = match(text, "^Friendly:([^,]*)"), match(text, "^Enemy:([^,]*)")
-			return (friend and format("|cFF33FF33%s|r %s", FRIEND, friend)) or (enemy and format("|cFFFF3333%s|r %s", ENEMY, enemy))
+		stateSwitchGetText = function(_, TEXT)
+			local friend, enemy = match(TEXT, "^Friendly:([^,]*)"), match(TEXT, "^Enemy:([^,]*)")
+			local text = friend or enemy or TEXT
+			local SF, localized = E.global.unitframe["specialFilters"][text], L[text]
+			local blockText = SF and localized and text:match("^block") and localized:gsub("^%[.-]%s?", "")
+			local filterText = (blockText and format("|cFF999999%s|r %s", BLOCK, blockText)) or localized or text
+			return (friend and format("|cFF33FF33%s|r %s", FRIEND, filterText)) or (enemy and format("|cFFFF3333%s|r %s", ENEMY, filterText)) or filterText
 		end,
 		stateSwitchOnClick = function(info)
 			filterPriority("aurabar", groupName, carryFilterFrom, nil, nil, true)
@@ -574,15 +579,16 @@ local function GetOptionsTable_Auras(auraType, isGroupFrame, updateFunc, groupNa
 	}
 	config.args.filters.args.specialPriority = {
 		order = 19,
+		type = "select",
+		sortByValue = true,
 		name = L["Add Special Filter"],
 		desc = L["These filters don't use a list of spells like the regular filters. Instead they use the WoW API and some code logic to determine if an aura should be allowed or blocked."],
-		type = "select",
 		values = function()
 			local filters = {}
 			local list = E.global.unitframe["specialFilters"]
 			if not list then return end
 			for filter in pairs(list) do
-				filters[filter] = filter
+				filters[filter] = L[filter]
 			end
 			return filters
 		end,
@@ -639,9 +645,13 @@ local function GetOptionsTable_Auras(auraType, isGroupFrame, updateFunc, groupNa
 		dragOnClick = function(info)
 			filterPriority(auraType, groupName, carryFilterFrom, true)
 		end,
-		stateSwitchGetText = function(_, text)
-			local friend, enemy = match(text, "^Friendly:([^,]*)"), match(text, "^Enemy:([^,]*)")
-			return (friend and format("|cFF33FF33%s|r %s", FRIEND, friend)) or (enemy and format("|cFFFF3333%s|r %s", ENEMY, enemy))
+		stateSwitchGetText = function(_, TEXT)
+			local friend, enemy = match(TEXT, "^Friendly:([^,]*)"), match(TEXT, "^Enemy:([^,]*)")
+			local text = friend or enemy or TEXT
+			local SF, localized = E.global.unitframe["specialFilters"][text], L[text]
+			local blockText = SF and localized and text:match("^block") and localized:gsub("^%[.-]%s?", "")
+			local filterText = (blockText and format("|cFF999999%s|r %s", BLOCK, blockText)) or localized or text
+			return (friend and format("|cFF33FF33%s|r %s", FRIEND, filterText)) or (enemy and format("|cFFFF3333%s|r %s", ENEMY, filterText)) or filterText
 		end,
 		stateSwitchOnClick = function(info)
 			filterPriority(auraType, groupName, carryFilterFrom, nil, nil, true)
@@ -1053,27 +1063,28 @@ local function GetOptionsTable_Portrait(updateFunc, groupName, numUnits)
 				name = L["Enable"],
 				desc = L["If you have a lot of 3D Portraits active then it will likely have a big impact on your FPS. Disable some portraits if you experience FPS issues."]
 			},
-			width = {
-				order = 3,
-				type = "range",
-				name = L["Width"],
-				min = 15, max = 150, step = 1
-			},
 			overlay = {
-				order = 4,
+				order = 3,
 				type = "toggle",
 				name = L["Overlay"],
-				desc = L["Overlay the healthbar"]
+				desc = L["The Portrait will overlay the Healthbar. This will be automatically happen if the Frame Orientation is set to Middle."],
+				disabled = function() return not E.db.unitframe.units[groupName]["portrait"]["enable"] end
 			},
 			style = {
+				order = 4,
 				type = "select",
 				name = L["Style"],
 				desc = L["Select the display method of the portrait."],
-				order = 5,
 				values = {
 					["2D"] = L["2D"],
 					["3D"] = L["3D"]
 				}
+			},
+			width = {
+				order = 5,
+				type = "range",
+				name = L["Width"],
+				min = 15, max = 150, step = 1
 			}
 		}
 	}
@@ -1100,6 +1111,7 @@ local function GetOptionsTable_Castbar(hasTicks, updateFunc, groupName, numUnits
 				name = L["Match Frame Width"],
 				func = function() E.db.unitframe.units[groupName]["castbar"]["width"] = E.db.unitframe.units[groupName]["width"] updateFunc(UF, groupName, numUnits) end
 			},
+			--[[ -- The forceShow function need to be redone for the Party Frame
 			forceshow = {
 				order = 3,
 				type = "execute",
@@ -1111,7 +1123,7 @@ local function GetOptionsTable_Castbar(hasTicks, updateFunc, groupName, numUnits
 
 					if numUnits then
 						for i = 1, numUnits do
-							local castbar = _G[frameName..i].Castbar
+							local castbar = _G[frameName.."UnitButton"..i].Castbar
 							if not castbar.oldHide then
 								castbar.oldHide = castbar.Hide
 								castbar.Hide = castbar.Show
@@ -1136,6 +1148,7 @@ local function GetOptionsTable_Castbar(hasTicks, updateFunc, groupName, numUnits
 					end
 				end
 			},
+			--]]
 			configureButton = {
 				order = 4,
 				type = "execute",
@@ -3673,7 +3686,7 @@ E.Options.args.unitframe.args.player = {
 			}
 		},
 		pvpIcon = {
-			order = 449,
+			order = 450,
 			type = "group",
 			name = L["PvP Icon"],
 			get = function(info) return E.db.unitframe.units["player"]["pvpIcon"][ info[#info] ] end,
@@ -3722,7 +3735,7 @@ E.Options.args.unitframe.args.player = {
  			}
  		},
 		pvpText = {
-			order = 850,
+			order = 460,
 			type = "group",
 			name = L["PvP Text"],
 			get = function(info) return E.db.unitframe.units["player"]["pvp"][ info[#info] ] end,
@@ -5778,6 +5791,7 @@ E.Options.args.unitframe.args.party = {
 		buffs = GetOptionsTable_Auras("buffs", true, UF.CreateAndUpdateHeaderGroup, "party"),
 		debuffs = GetOptionsTable_Auras("debuffs", true, UF.CreateAndUpdateHeaderGroup, "party"),
 		rdebuffs = GetOptionsTable_RaidDebuff(UF.CreateAndUpdateHeaderGroup, "party"),
+		castbar = GetOptionsTable_Castbar(false, UF.CreateAndUpdateHeaderGroup, "party", 5),
 		petsGroup = {
 			order = 850,
 			type = "group",

@@ -54,7 +54,11 @@ local function LoadSkin()
 	GossipFrameCloseButton:Point("CENTER", GossipFrame, "TOPRIGHT", -44, -25)
 
 	for i = 1, NUMGOSSIPBUTTONS do
-		local obj = select(3,_G["GossipTitleButton"..i]:GetRegions())
+		local button = _G["GossipTitleButton"..i]
+		local obj = select(3, button:GetRegions())
+
+		S:HandleButtonHighlight(button)
+
 		obj:SetTextColor(1, 1, 1)
 	end
 

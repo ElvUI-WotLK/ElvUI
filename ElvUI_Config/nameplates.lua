@@ -11,7 +11,7 @@ local DUNGEON_DIFFICULTY, PLAYER_DIFFICULTY1, PLAYER_DIFFICULTY2 = DUNGEON_DIFFI
 local FACTION_STANDING_LABEL2, FACTION_STANDING_LABEL4, FACTION_STANDING_LABEL5 = FACTION_STANDING_LABEL2, FACTION_STANDING_LABEL4, FACTION_STANDING_LABEL5
 local SPEED, DISABLE, HEALTH, LEVEL, NONE, COMBAT, FILTERS = SPEED, DISABLE, HEALTH, LEVEL, NONE, COMBAT, FILTERS
 local ARENA, RAID, PARTY, BATTLEFIELDS = ARENA, RAID, PARTY, BATTLEFIELDS
-local ROLE, TANK, HEALER, DAMAGER, COLOR = ROLE, TANK, HEALER, DAMAGER, COLOR
+local BLOCK, ROLE, TANK, HEALER, DAMAGER, COLOR = BLOCK, ROLE, TANK, HEALER, DAMAGER, COLOR
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS
 
 local selectedNameplateFilter
@@ -1795,6 +1795,7 @@ local function GetUnitSettings(unit, name)
 							specialFilters = {
 								order = 5,
 								type = "select",
+								sortByValue = true,
 								name = L["Add Special Filter"],
 								desc = L["These filters don't use a list of spells like the regular filters. Instead they use the WoW API and some code logic to determine if an aura should be allowed or blocked."],
 								values = function()
@@ -1802,7 +1803,7 @@ local function GetUnitSettings(unit, name)
 									local list = E.global.nameplates["specialFilters"]
 									if not list then return end
 									for filter in pairs(list) do
-										filters[filter] = filter
+										filters[filter] = L[filter]
 									end
 									return filters
 								end,
@@ -1842,35 +1843,42 @@ local function GetUnitSettings(unit, name)
 							},
 							filterPriority = {
 								order = 8,
-								name = L["Filter Priority"],
 								type = "multiselect",
+								name = L["Filter Priority"],
 								dragdrop = true,
 								dragOnLeave = function() end, --keep this here
-								dragOnEnter = function(info, value)
+								dragOnEnter = function(info)
 									carryFilterTo = info.obj.value
 								end,
-								dragOnMouseDown = function(info, value)
+								dragOnMouseDown = function(info)
 									carryFilterFrom, carryFilterTo = info.obj.value, nil
 								end,
-								dragOnMouseUp = function(info, value)
+								dragOnMouseUp = function(info)
 									filterPriority("buffs", unit, carryFilterTo, nil, carryFilterFrom) --add it in the new spot
 									carryFilterFrom, carryFilterTo = nil, nil
 								end,
-								dragOnClick = function(info, value)
+								dragOnClick = function(info)
 									filterPriority("buffs", unit, carryFilterFrom, true)
+								end,
+								stateSwitchGetText = function(_, TEXT)
+									local text = TEXT
+									local SF, localized = E.global.unitframe["specialFilters"][text], L[text]
+									local blockText = SF and localized and text:match("^block") and localized:gsub("^%[.-]%s?", "")
+									local filterText = (blockText and format("|cFF999999%s|r %s", BLOCK, blockText)) or localized or text
+									return filterText
 								end,
 								values = function()
 									local str = E.db.nameplates.units[unit].buffs.filters.priority
 									if str == "" then return nil end
 									return {strsplit(",",str)}
 								end,
-								get = function(info, value)
+								get = function(_, value)
 									local str = E.db.nameplates.units[unit].buffs.filters.priority
 									if str == "" then return nil end
 									local tbl = {strsplit(",",str)}
 									return tbl[value]
 								end,
-								set = function(info, value)
+								set = function()
 									NP:ConfigureAll()
 								end
 							},
@@ -1878,10 +1886,10 @@ local function GetUnitSettings(unit, name)
 								order = 9,
 								type = "description",
 								name = L["Use drag and drop to rearrange filter priority or right click to remove a filter."],
-							},
-						},
-					},
-				},
+							}
+						}
+					}
+				}
 			},
 			debuffsGroup = {
 				order = 5,
@@ -1956,6 +1964,7 @@ local function GetUnitSettings(unit, name)
 							specialFilters = {
 								order = 5,
 								type = "select",
+								sortByValue = true,
 								name = L["Add Special Filter"],
 								desc = L["These filters don't use a list of spells like the regular filters. Instead they use the WoW API and some code logic to determine if an aura should be allowed or blocked."],
 								values = function()
@@ -1963,7 +1972,7 @@ local function GetUnitSettings(unit, name)
 									local list = E.global.nameplates["specialFilters"]
 									if not list then return end
 									for filter in pairs(list) do
-										filters[filter] = filter
+										filters[filter] = L[filter]
 									end
 									return filters
 								end,
@@ -2003,22 +2012,29 @@ local function GetUnitSettings(unit, name)
 							},
 							filterPriority = {
 								order = 8,
-								dragdrop = true,
 								type = "multiselect",
 								name = L["Filter Priority"],
+								dragdrop = true,
 								dragOnLeave = function() end, --keep this here
-								dragOnEnter = function(info, value)
+								dragOnEnter = function(info)
 									carryFilterTo = info.obj.value
 								end,
-								dragOnMouseDown = function(info, value)
+								dragOnMouseDown = function(info)
 									carryFilterFrom, carryFilterTo = info.obj.value, nil
 								end,
-								dragOnMouseUp = function(info, value)
+								dragOnMouseUp = function(info)
 									filterPriority("debuffs", unit, carryFilterTo, nil, carryFilterFrom) --add it in the new spot
 									carryFilterFrom, carryFilterTo = nil, nil
 								end,
-								dragOnClick = function(info, value)
+								dragOnClick = function(info)
 									filterPriority("debuffs", unit, carryFilterFrom, true)
+								end,
+								stateSwitchGetText = function(_, TEXT)
+									local text = TEXT
+									local SF, localized = E.global.unitframe["specialFilters"][text], L[text]
+									local blockText = SF and localized and text:match("^block") and localized:gsub("^%[.-]%s?", "")
+									local filterText = (blockText and format("|cFF999999%s|r %s", BLOCK, blockText)) or localized or text
+									return filterText
 								end,
 								values = function()
 									local str = E.db.nameplates.units[unit].debuffs.filters.priority
@@ -2031,7 +2047,7 @@ local function GetUnitSettings(unit, name)
 									local tbl = {strsplit(",",str)}
 									return tbl[value]
 								end,
-								set = function(info, value)
+								set = function(info)
 									NP:ConfigureAll()
 								end
 							},
@@ -2250,8 +2266,16 @@ E.Options.args.nameplate = {
 			type = "description",
 			name = " "
 		},
-		friendlyPlayerShortcut = {
+		cutawayHealthShortcut = {
 			order = 13,
+			type = "execute",
+			name = L["Cutaway Health"],
+			buttonElvUI = true,
+			func = function() ACD:SelectGroup("ElvUI", "nameplate", "generalGroup", "cutawayHealth") end,
+			disabled = function() return not E.NamePlates end
+		},
+		friendlyPlayerShortcut = {
+			order = 14,
 			type = "execute",
 			name = L["Friendly Player Frames"],
 			buttonElvUI = true,
@@ -2259,19 +2283,11 @@ E.Options.args.nameplate = {
 			disabled = function() return not E.NamePlates end
 		},
 		enemyPlayerShortcut = {
-			order = 14,
+			order = 15,
 			type = "execute",
 			name = L["Enemy Player Frames"],
 			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "nameplate", "enemyPlayerGroup") end,
-			disabled = function() return not E.NamePlates end
-		},
-		friendlyNPCShortcut = {
-			order = 15,
-			type = "execute",
-			name = L["Friendly NPC Frames"],
-			buttonElvUI = true,
-			func = function() ACD:SelectGroup("ElvUI", "nameplate", "friendlyNPCGroup") end,
 			disabled = function() return not E.NamePlates end
 		},
 		spacer4 = {
@@ -2279,8 +2295,16 @@ E.Options.args.nameplate = {
 			type = "description",
 			name = " "
 		},
-		enemyNPCShortcut = {
+		friendlyNPCShortcut = {
 			order = 17,
+			type = "execute",
+			name = L["Friendly NPC Frames"],
+			buttonElvUI = true,
+			func = function() ACD:SelectGroup("ElvUI", "nameplate", "friendlyNPCGroup") end,
+			disabled = function() return not E.NamePlates end
+		},
+		enemyNPCShortcut = {
+			order = 18,
 			type = "execute",
 			name = L["Enemy NPC Frames"],
 			buttonElvUI = true,
@@ -2288,7 +2312,7 @@ E.Options.args.nameplate = {
 			disabled = function() return not E.NamePlates end
 		},
 		filtersShortcut = {
-			order = 18,
+			order = 19,
 			type = "execute",
 			name = L["Style Filter"],
 			buttonElvUI = true,
@@ -2296,7 +2320,7 @@ E.Options.args.nameplate = {
 			disabled = function() return not E.NamePlates end
 		},
 		generalGroup = {
-			order = 19,
+			order = 20,
 			type = "group",
 			name = L["General Options"],
 			childGroups = "tab",
@@ -2878,7 +2902,39 @@ E.Options.args.nameplate = {
 						}
 					}
 				},
-			},
+				cutawayHealth = {
+					order = 7,
+					type = "group",
+					name = L["Cutaway Health"],
+					args = {
+						enabled = {
+							order = 1,
+							type = "toggle",
+							name = L["Enable"],
+							get = function(info) return E.db.nameplates.cutawayHealth end,
+							set = function(info, value) E.db.nameplates.cutawayHealth = value; end,
+						},
+						healthLength = {
+							order = 2,
+							type = "range",
+							name = L["Health Length"],
+							desc = L["How much time before the CutawayHealth starts to fade."],
+							min = 0.1, max = 1, step = 0.1,
+							get = function(info) return E.db.nameplates.cutawayHealthLength end,
+							set = function(info, value) E.db.nameplates.cutawayHealthLength = value end
+						},
+						healthFadeOutTime = {
+							order = 3,
+							type = "range",
+							name = L["Fade Out"],
+							desc = L["How long the CutawayHealth will take to fade out."],
+							min = 0.1, max = 1, step = 0.1,
+							get = function(info) return E.db.nameplates.cutawayHealthFadeOutTime end,
+							set = function(info, value) E.db.nameplates.cutawayHealthFadeOutTime = value end
+						}
+					}
+				}
+			}
 		},
 		friendlyPlayerGroup = GetUnitSettings("FRIENDLY_PLAYER", L["Friendly Player Frames"]),
 		enemyPlayerGroup = GetUnitSettings("ENEMY_PLAYER", L["Enemy Player Frames"]),

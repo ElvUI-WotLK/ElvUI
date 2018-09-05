@@ -41,8 +41,8 @@ function M:UpdateBubbleBorder()
 
 	if E.private.chat.enable and E.private.general.classColorMentionsSpeech then
 		local classColorTable, lowerCaseWord, isFirstWord, rebuiltString, tempWord, wordMatch, classMatch
-		if text and text:match("%s-[^%s]+%s*") then
-			for word in text:gmatch("%s-[^%s]+%s*") do
+		if text and text:match("%s-%S+%s*") then
+			for word in text:gmatch("%s-%S+%s*") do
 				tempWord = word:gsub("^[%s%p]-([^%s%p]+)([%-]?[^%s%p]-)[%s%p]*$","%1%2")
 				lowerCaseWord = tempWord:lower()
 
@@ -253,6 +253,7 @@ function M:LoadChatBubbles()
 
 	self.BubbleFrame:RegisterEvent("CHAT_MSG_SAY")
 	self.BubbleFrame:RegisterEvent("CHAT_MSG_YELL")
+	self.BubbleFrame:RegisterEvent("CHAT_MSG_PARTY")
 	self.BubbleFrame:RegisterEvent("CHAT_MSG_PARTY_LEADER")
 	self.BubbleFrame:RegisterEvent("CHAT_MSG_MONSTER_SAY")
 	self.BubbleFrame:RegisterEvent("CHAT_MSG_MONSTER_YELL")

@@ -1,5 +1,9 @@
 local E, L, V, P, G = unpack(ElvUI);
 
+local NONE, FONT_SIZE, COLORS, DISABLE = NONE, FONT_SIZE, COLORS, DISABLE
+local GUILD, PLAYER, RAID_CONTROL, LOOT = GUILD, PLAYER, RAID_CONTROL, LOOT
+local SAY, CHAT_MSG_EMOTE = SAY, CHAT_MSG_EMOTE
+
 E.Options.args.general = {
 	type = "group",
 	name = L["General"],
@@ -14,13 +18,6 @@ E.Options.args.general = {
 			name = L["Version Check"],
 			get = function(info) return E.global.general.versionCheck; end,
 			set = function(info, value) E.global.general.versionCheck = value; end
-		},
-		animateConfig = {
-			order = 2,
-			type = "toggle",
-			name = L["Animate Config"],
-			get = function(info) return E.global.general.animateConfig; end,
-			set = function(info, value) E.global.general.animateConfig = value; E:StaticPopup_Show("GLOBAL_RL"); end
 		},
 		spacer = {
 			order = 3,
@@ -104,7 +101,7 @@ E.Options.args.general = {
 				loot = {
 					order = 9,
 					type = "toggle",
-					name = L["Loot"],
+					name = LOOT,
 					desc = L["Enable/Disable the loot frame."],
 					get = function(info) return E.private.general.loot; end,
 					set = function(info, value) E.private.general.loot = value; E:StaticPopup_Show("PRIVATE_RL"); end

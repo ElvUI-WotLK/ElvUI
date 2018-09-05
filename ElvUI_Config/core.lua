@@ -120,19 +120,22 @@ local DEVELOPERS = {
 	"Haste",
 	"Nightcracker",
 	"Omega1970",
-	"Hydrazine"
+	"Hydrazine",
+	"Blazeflack",
+	"|cffff7d0aMerathilis|r",
+	"|cFF8866ccSimpy|r"
 };
 
 local TESTERS = {
 	"Tukui Community",
 	"|cffF76ADBSarah|r - For Sarahing",
 	"Affinity",
+	"Azilroka",
 	"Modarch",
 	"Bladesdruid",
 	"Tirain",
 	"Phima",
 	"Veiled",
-	"Blazeflack",
 	"Repooc",
 	"Darth Predator",
 	"Alex",
@@ -232,7 +235,7 @@ local function ExportImport_Open(mode)
 	frame:AddChild(label1);
 
 	local label2 = AceGUI:Create("Label");
-	local font = GameFontHighlightSmall:GetFont();
+	font = GameFontHighlightSmall:GetFont();
 	label2:SetFont(font, 14);
 	label2:SetText(" \n ")
 	label2:SetWidth(800);

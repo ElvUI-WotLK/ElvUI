@@ -673,7 +673,7 @@ function mod:QueueObject(object)
 	object:Hide()
 end
 
-function mod:OnUpdate(elapsed)
+function mod:OnUpdate()
 	local count = select("#", WorldGetChildren(WorldFrame))
 	if count ~= numChildren then
 		local frame, region

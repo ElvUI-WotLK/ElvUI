@@ -4,7 +4,7 @@ local DT = E:GetModule("DataTexts")
 --Cache global variables
 --Lua functions
 local select, unpack = select, unpack
-local format, find, join = string.format, string.find, string.join
+local format, find, join, split = string.format, string.find, string.join, string.split
 local sort, wipe = table.sort, wipe
 --WoW API / Variables
 local EasyMenu = EasyMenu
@@ -41,6 +41,7 @@ local nameRankString = "%s |cff999999-|cffffffff %s"
 local moreMembersOnlineString = join("", "+ %d ", FRIENDS_LIST_ONLINE, "...")
 local noteString = join("", "|cff999999   ", LABEL_NOTE, ":|r %s")
 local officerNoteString = join("", "|cff999999   ", GUILD_RANK1_DESC, ":|r %s")
+local FRIEND_ONLINE, FRIEND_OFFLINE = select(2, split(" ", ERR_FRIEND_ONLINE_SS, 2)), select(2, split(" ", ERR_FRIEND_OFFLINE_S, 2))
 local guildTable, guildMotD = {}, ""
 local lastPanel
 
@@ -87,6 +88,13 @@ local function BuildGuildTable()
 end
 
 local eventHandlers = {
+	["CHAT_MSG_SYSTEM"] = function(_, arg1)
+		if (FRIEND_ONLINE ~= nil or FRIEND_OFFLINE ~= nil) and arg1 and (find(arg1, FRIEND_ONLINE) or find(arg1, FRIEND_OFFLINE)) then
+			E:Delay(10, function()
+				GuildRoster()
+			end)
+		end
+	end,
 	-- when we enter the world and guildframe is not available then
 	-- load guild frame, update guild message
 	["PLAYER_ENTERING_WORLD"] = function()
@@ -241,4 +249,4 @@ local function ValueColorUpdate(hex)
 end
 E["valueColorUpdateFuncs"][ValueColorUpdate] = true
 
-DT:RegisterDatatext("Guild", {"PLAYER_ENTERING_WORLD", "GUILD_ROSTER_UPDATE", "PLAYER_GUILD_UPDATE", "GUILD_MOTD"}, OnEvent, nil, OnClick, OnEnter, nil, GUILD)
+DT:RegisterDatatext("Guild", {"PLAYER_ENTERING_WORLD", "CHAT_MSG_SYSTEM", "GUILD_ROSTER_UPDATE", "PLAYER_GUILD_UPDATE", "GUILD_MOTD"}, OnEvent, nil, OnClick, OnEnter, nil, GUILD)

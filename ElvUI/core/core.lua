@@ -20,6 +20,7 @@ local IsInInstance, GetNumPartyMembers, GetNumRaidMembers = IsInInstance, GetNum
 local IsSpellKnown = IsSpellKnown
 local RequestBattlefieldScoreData = RequestBattlefieldScoreData;
 local SendAddonMessage = SendAddonMessage;
+local NONE = NONE
 local ERR_NOT_IN_COMBAT = ERR_NOT_IN_COMBAT;
 local MAX_TALENT_TABS = MAX_TALENT_TABS;
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
@@ -485,7 +486,7 @@ function E:GetTalentSpecInfo(isInspect)
 	end
 
 	if not specName then
-		specName = "None"
+		specName = NONE
 	end
 	if not specIcon then
 		specIcon = "Interface\\Icons\\INV_Misc_QuestionMark"
@@ -1135,6 +1136,12 @@ function E:DBConversions()
 		E.db.auras.debuffs.durationFontSize = fontSize
 		E.db.auras.fontSize = nil
 	end
+
+	if not E.db.chat.panelColorConverted then
+		local color = E.db.general.backdropfadecolor
+		E.db.chat.panelColor = {r = color.r, g = color.g, b = color.b, a = color.a}
+		E.db.chat.panelColorConverted = true
+	end
 end
 
 local CPU_USAGE = {};
@@ -1176,7 +1183,7 @@ function E:GetTopCPUFunc(msg)
 		E:Print("For `/cpuusage` to work, you need to enable script profiling via: `/console scriptProfile 1` then reload. Disable after testing by setting it back to 0.")
 		return
 	end
-	local module, showall, delay, minCalls = msg:match("^([^%s]+)%s*([^%s]*)%s*([^%s]*)%s*(.*)$")
+	local module, showall, delay, minCalls = msg:match("^(%S+)%s*(%S*)%s*(%S*)%s*(.*)$")
 	local checkCore, mod = (not module or module == "") and "E"
 
 	showall = (showall == "true" and true) or false

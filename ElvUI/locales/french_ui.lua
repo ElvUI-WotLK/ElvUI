@@ -7,7 +7,7 @@ if not L then return; end
 L["INCOMPATIBLE_ADDON"] = "L'addon %s n'est pas compatible avec le module %s d'ElvUI. Merci de sélectionner soit l'addon, soit le module d'ElvUI, pour le désactiver."
 
 --*_MSG locales
-L["LOGIN_MSG"] = "Bienvenue sur %sElvUI|r version %s%s|r, tapez /ec afin d'accéder au menu de configuration en jeu. Si vous avez besoin d'un support technique, vous pouvez nous rejoindre sur https://github.com/ElvUI-WotLK/ElvUI"
+L["LOGIN_MSG"] = "Welcome to %sElvUI|r version %s%s|r, type /ec to access the in-game configuration menu. If you are in need of technical support you can visit us at https://github.com/ElvUI-WotLK/ElvUI or join our Discord: https://discord.gg/Uatdmm7"
 
 --ActionBars
 L["Binding"] = "Raccourcis"
@@ -61,8 +61,6 @@ L["yells"] = "crie"
 L["(Hold Shift) Memory Usage"] = "(Maintenir MAJ) Utilisation de la Mémoire."
 L["Avoidance Breakdown"] = "Répartition de l'évitement"
 L["Character: "] = "Personnage: "
-L["Chest"] = "Torse"
-L["Combat"] = "Combat"
 L["Combat Time"] = true;
 L["Coords"] = "Coordonnées"
 L["copperabbrev"] = "|cffeda55fc|r" --Also used in Bags
@@ -83,7 +81,7 @@ L["Mitigation By Level: "] = "Réduction par niveau: "
 L["No Guild"] = "Pas de Guilde"
 L["Profit:"] = "Profit:"
 L["Reload UI"] = true;
-L["Reset Counters: Hold Shift + Left Click"] = true
+L["Reset Counters: Hold Control + Right Click"] = true
 L["Reset Data: Hold Shift + Right Click"] = "RAZ des données: MAJ + Clic droit"
 L["Saved Dungeon(s)"] = "Donjon(s) sauvegardé(s)"
 L["Saved Raid(s)"] = "Raid(s) Sauvegardé(s)"

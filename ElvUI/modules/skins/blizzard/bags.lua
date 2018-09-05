@@ -37,7 +37,7 @@ local function LoadSkin()
 
 	-- ContainerFrame
 	local containerFrame
-	local itemButton, itemButtonIcon, questTexture
+	local itemButton, itemButtonIcon, questTexture, cooldown
 	for i = 1, NUM_CONTAINER_FRAMES, 1 do
 		containerFrame = _G["ContainerFrame"..i]
 
@@ -52,6 +52,7 @@ local function LoadSkin()
 			itemButton = _G["ContainerFrame"..i.."Item"..k]
 			itemButtonIcon = _G["ContainerFrame"..i.."Item"..k.."IconTexture"]
 			questTexture = _G["ContainerFrame"..i.."Item"..k.."IconQuestTexture"]
+			cooldown = _G["ContainerFrame"..i.."Item"..k.."Cooldown"]
 
 			itemButton:SetNormalTexture(nil)
 
@@ -66,7 +67,8 @@ local function LoadSkin()
 			questTexture:SetTexCoord(0, 1, 0, 1)
 			questTexture:SetInside()
 
-			E:RegisterCooldown(_G["ContainerFrame"..i.."Item"..k.."Cooldown"])
+			cooldown.ColorOverride = "bags"
+			E:RegisterCooldown(cooldown)
 		end
 	end
 

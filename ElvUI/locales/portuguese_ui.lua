@@ -7,7 +7,7 @@ if not L then return end
 L["INCOMPATIBLE_ADDON"] = "The addon %s is not compatible with ElvUI's %s module. Please select either the addon or the ElvUI module to disable."
 
 --*_MSG locales
-L["LOGIN_MSG"] = "Bem vindo à versão %s%s|r da %sElvUI|r, escreva /ec para acessar o menu de configuração em jogo. Se precisar de suporte técnico visite-nos no site https://github.com/ElvUI-WotLK/ElvUI"
+L["LOGIN_MSG"] = "Welcome to %sElvUI|r version %s%s|r, type /ec to access the in-game configuration menu. If you are in need of technical support you can visit us at https://github.com/ElvUI-WotLK/ElvUI or join our Discord: https://discord.gg/Uatdmm7"
 
 --ActionBars
 L["Binding"] = "Ligações"
@@ -61,8 +61,6 @@ L["yells"] = "grita"
 L["(Hold Shift) Memory Usage"] = "(Segurar Shift) Memória em Uso"
 L["Avoidance Breakdown"] = "Separação de Anulação"
 L["Character: "] = "Personagem: "
-L["Chest"] = "Torso"
-L["Combat"] = true;
 L["Combat Time"] = true;
 L["Coords"] = true;
 L["copperabbrev"] = "|cffeda55fc|r"
@@ -83,7 +81,7 @@ L["Mitigation By Level: "] = "Mitigação por nível"
 L["No Guild"] = "Sem Guilda"
 L["Profit:"] = "Lucro:"
 L["Reload UI"] = true;
-L["Reset Counters: Hold Shift + Left Click"] = true
+L["Reset Counters: Hold Control + Right Click"] = true
 L["Reset Data: Hold Shift + Right Click"] = "Redefinir Dados: Segurar Shifr + Clique Direito"
 L["Saved Dungeon(s)"] = true
 L["Saved Raid(s)"] = "Raide(s) Salva(s)"

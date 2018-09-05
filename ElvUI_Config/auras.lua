@@ -168,7 +168,6 @@ E.Options.args.auras = {
 					values = {
 						["NONE"] = NONE,
 						["OUTLINE"] = "OUTLINE",
-
 						["MONOCHROMEOUTLINE"] = "MONOCROMEOUTLINE",
 						["THICKOUTLINE"] = "THICKOUTLINE"
 					}
@@ -387,7 +386,6 @@ E.Options.args.auras = {
 							values = {
 								["NONE"] = NONE,
 								["OUTLINE"] = "OUTLINE",
-								["MONOCHROME"] = (not E.isMacClient) and "MONOCHROME" or nil,
 								["MONOCHROMEOUTLINE"] = "MONOCROMEOUTLINE",
 								["THICKOUTLINE"] = "THICKOUTLINE"
 							},

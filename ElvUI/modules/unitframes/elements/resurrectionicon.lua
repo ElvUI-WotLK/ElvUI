@@ -7,6 +7,7 @@ function UF:Construct_ResurrectionIcon(frame)
 	tex:Point("CENTER", frame.Health, "CENTER")
 	tex:Size(30)
 	tex:SetDrawLayer("OVERLAY", 7)
+	tex:Hide()
 
 	return tex
 end
@@ -19,7 +20,6 @@ function UF:Configure_ResurrectionIcon(frame)
 		if not frame:IsElementEnabled("ResurrectIndicator") then
 			frame:EnableElement("ResurrectIndicator")
 		end
-		RI:Show()
 		RI:Size(db.resurrectIcon.size)
 
 		local attachPoint = self:GetObjectAnchorPoint(frame, db.resurrectIcon.attachToObject)
@@ -29,6 +29,5 @@ function UF:Configure_ResurrectionIcon(frame)
 		if frame:IsElementEnabled("ResurrectIndicator") then
 			frame:DisableElement("ResurrectIndicator")
 		end
-		RI:Hide()
 	end
 end

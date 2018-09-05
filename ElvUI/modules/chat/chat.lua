@@ -5,7 +5,7 @@ local LSM = LibStub("LibSharedMedia-3.0");
 local _G = _G
 local time, difftime = time, difftime
 local pairs, unpack, select, tostring, pcall, next, tonumber, type, assert = pairs, unpack, select, tostring, pcall, next, tonumber, type, assert
-local tinsert, tremove, twipe, tconcat = table.insert, table.remove, table.wipe, table.concat
+local tinsert, tremove, tconcat = table.insert, table.remove, table.concat
 local strmatch = strmatch
 local gsub, find, gmatch, format, split = string.gsub, string.find, string.gmatch, string.format, string.split
 local strlower, strsub, strlen, strupper = strlower, strsub, strlen, strupper
@@ -100,62 +100,38 @@ local tabTexs = {
 	"Highlight"
 }
 
-local smileyPack = {
-	["Angry"] = [[Interface\AddOns\ElvUI\media\textures\smileys\angry.blp]],
-	["Grin"] = [[Interface\AddOns\ElvUI\media\textures\smileys\grin.blp]],
-	["Hmm"] = [[Interface\AddOns\ElvUI\media\textures\smileys\hmm.blp]],
-	["MiddleFinger"] = [[Interface\AddOns\ElvUI\media\textures\smileys\middle_finger.blp]],
-	["Sad"] = [[Interface\AddOns\ElvUI\media\textures\smileys\sad.blp]],
-	["Surprise"] = [[Interface\AddOns\ElvUI\media\textures\smileys\surprise.blp]],
-	["Tongue"] = [[Interface\AddOns\ElvUI\media\textures\smileys\tongue.blp]],
-	["Cry"] = [[Interface\AddOns\ElvUI\media\textures\smileys\weepy.blp]],
-	["Wink"] = [[Interface\AddOns\ElvUI\media\textures\smileys\winky.blp]],
-	["Happy"] = [[Interface\AddOns\ElvUI\media\textures\smileys\happy.blp]],
-	["Heart"] = [[Interface\AddOns\ElvUI\media\textures\smileys\heart.blp]],
-	["BrokenHeart"] = [[Interface\AddOns\ElvUI\media\textures\smileys\broken_heart.blp]],
+CH.Smileys = {
+	Keys = {},
+	Textures = {}
 }
 
-local smileyKeys = {
-	["%:%-%@"] = "Angry",
-	["%:%@"] = "Angry",
-	["%:%-%)"]="Happy",
-	["%:%)"]="Happy",
-	["%:D"]="Grin",
-	["%:%-D"]="Grin",
-	["%;%-D"]="Grin",
-	["%;D"]="Grin",
-	["%=D"]="Grin",
-	["xD"]="Grin",
-	["XD"]="Grin",
-	["%:%-%("]="Sad",
-	["%:%("]="Sad",
-	["%:o"]="Surprise",
-	["%:%-o"]="Surprise",
-	["%:%-O"]="Surprise",
-	["%:O"]="Surprise",
-	["%:%-0"]="Surprise",
-	["%:P"]="Tongue",
-	["%:%-P"]="Tongue",
-	["%:p"]="Tongue",
-	["%:%-p"]="Tongue",
-	["%=P"]="Tongue",
-	["%=p"]="Tongue",
-	["%;%-p"]="Tongue",
-	["%;p"]="Tongue",
-	["%;P"]="Tongue",
-	["%;%-P"]="Tongue",
-	["%;%-%)"]="Wink",
-	["%;%)"]="Wink",
-	["%:S"]="Hmm",
-	["%:%-S"]="Hmm",
-	["%:%,%("]="Cry",
-	["%:%,%-%("]="Cry",
-	["%:%'%("]="Cry",
-	["%:%'%-%("]="Cry",
-	["%:%F"]="MiddleFinger",
-	["<3"]="Heart",
-	["</3"]="BrokenHeart",
-};
+function CH:RemoveSmiley(keyOrIndex)
+	if type(keyOrIndex) == "number" then
+		tremove(CH.Smileys.Keys, keyOrIndex)
+		tremove(CH.Smileys.Textures, keyOrIndex)
+	elseif type(keyOrIndex) == "string" then
+		for i, v in ipairs(CH.Smileys.Keys) do
+			if v == keyOrIndex then
+				tremove(CH.Smileys.Keys, i)
+				tremove(CH.Smileys.Textures, i)
+				break
+			end
+		end
+	end
+end
+
+-- `top` will be picked before others, use this for cases such as ">:(" and ":(". where you would want ">:(" selected before ":(".
+function CH:AddSmiley(key, texture, top)
+	if key and texture then
+		if top then
+			tinsert(CH.Smileys.Keys, 1, key)
+			tinsert(CH.Smileys.Textures, 1, texture)
+		else
+			tinsert(CH.Smileys.Keys, key)
+			tinsert(CH.Smileys.Textures, texture)
+		end
+	end
+end
 
 local specialChatIcons
 do --this can save some main file locals
@@ -228,9 +204,20 @@ function CH:GetGroupDistribution()
 end
 
 function CH:InsertEmotions(msg)
-	for k,v in pairs(smileyKeys) do
-		msg = gsub(msg,k,"|T"..smileyPack[v]..":16|t");
+	for i, v in ipairs(CH.Smileys.Keys) do
+		if CH.Smileys.Textures[i] then
+			if strmatch(msg, "^"..v.."$") then -- only word
+				msg = gsub(msg, v, "|T"..CH.Smileys.Textures[i]..":16:16|t")
+			elseif strmatch(msg, "^"..v.."[%s%p]+") then -- start of string
+				msg = gsub(msg, "^"..v.."([%s%p]+)", "|T"..CH.Smileys.Textures[i]..":16:16|t%1")
+			elseif strmatch(msg, "[%s%p]-"..v.."$") then -- end of string
+				msg = gsub(msg, "([%s%p]-)"..v.."$", "%1|T"..CH.Smileys.Textures[i]..":16:16|t")
+			elseif strmatch(msg, "[%s%p]-"..v.."[%s%p]+") then -- whole word
+				msg = gsub(msg, "([%s%p]-)"..v.."([%s%p]+)", "%1|T"..CH.Smileys.Textures[i]..":16:16|t%2")
+			end
+		end
 	end
+
 	return msg;
 end
 
@@ -342,12 +329,6 @@ function CH:StyleChat(frame)
 				self:SetText(CH:GetGroupDistribution() .. strsub(text, 5))
 				ChatEdit_ParseText(self, 0)
 			end
-		end
-
-		local new, found = gsub(text, "|Kf(%S+)|k(%S+)%s(%S+)|k", "%2 %3")
-		if found > 0 then
-			new = new:gsub("|", "")
-			self:SetText(new)
 		end
 	end
 
@@ -462,12 +443,12 @@ end
 local removeIconFromLine
 do
 	local raidIconFunc = function(x) x = x~="" and _G["RAID_TARGET_"..x];return x and ("{"..strlower(x).."}") or "" end
-	local stripTextureFunc = function(x, y) return (x~="" and x) or (y~="" and y) or "" end
+	local stripTextureFunc = function(w, x, y) if x=="" then return (w~="" and w) or (y~="" and y) or "" end end
 	local hyperLinkFunc = function(x, y) if x=="" then return y end end
 	removeIconFromLine = function(text)
 		text = gsub(text, "|TInterface\\TargetingFrame\\UI%-RaidTargetingIcon_(%d+):0|t", raidIconFunc) --converts raid icons into {star} etc, if possible.
-		text = gsub(text, "(%s?)|T.-|t(%s?)", stripTextureFunc) --strip any other texture out but keep a single space from the side(s).
-		text = gsub(text, "(|?)|H.-|?|h(.-)|?|h", hyperLinkFunc) --strip hyperlink data only keeping the actual text.
+		text = gsub(text, "(%s?)(|?)|T.-|t(%s?)", stripTextureFunc) --strip any other texture out but keep a single space from the side(s).
+		text = gsub(text, "(|?)|H.-|h(.-)|h", hyperLinkFunc) --strip hyperlink data only keeping the actual text.
 		return text
 	end
 end
@@ -735,7 +716,15 @@ function CH:PositionChat(override)
 		end
 	end
 
+	E.Layout:RepositionChatDataPanels()
+
 	self.initialMove = true;
+end
+
+function CH:Panels_ColorUpdate()
+	local panelColor = E.db.chat.panelColor
+	LeftChatPanel.backdrop:SetBackdropColor(panelColor.r, panelColor.g, panelColor.b, panelColor.a)
+	RightChatPanel.backdrop:SetBackdropColor(panelColor.r, panelColor.g, panelColor.b, panelColor.a)
 end
 
 local function UpdateChatTabColor(_, r, g, b)
@@ -887,7 +876,9 @@ function CH:DisableHyperlink()
 end
 
 function CH:DisableChatThrottle()
-	twipe(msgList); twipe(msgCount); twipe(msgTime)
+	wipe(msgList)
+	wipe(msgCount)
+	wipe(msgTime)
 end
 
 function CH:ShortChannel()
@@ -1385,7 +1376,7 @@ function CH:CheckKeyword(message)
 
 	local classColorTable, tempWord, rebuiltString, lowerCaseWord, wordMatch, classMatch
 	local isFirstWord = true
-	for word in message:gmatch("%s-[^%s]+%s*") do
+	for word in message:gmatch("%s-%S+%s*") do
 		if not next(protectLinks) or not protectLinks[word:gsub("%s",""):gsub("|s"," ")] then
 			tempWord = word:gsub("[%s%p]", "")
 			lowerCaseWord = tempWord:lower()
@@ -1484,7 +1475,7 @@ function CH:ChatEdit_AddHistory(_, line)
 end
 
 function CH:UpdateChatKeywords()
-	twipe(CH.Keywords)
+	wipe(CH.Keywords)
 	local keywords = self.db.keywords
 	keywords = gsub(keywords,",%s",",")
 
@@ -1661,6 +1652,106 @@ local FindURL_Events = {
 	"CHAT_MSG_DND",
 }
 
+function CH:DefaultSmileys()
+	if next(CH.Smileys.Keys) then
+		wipe(CH.Smileys.Keys)
+		wipe(CH.Smileys.Textures)
+	end
+
+	local t = "Interface\\AddOns\\ElvUI\\media\\textures\\chatEmojis\\%s.tga"
+
+	-- new keys
+	CH:AddSmiley(':angry:',			format(t,'angry'))
+	CH:AddSmiley(':blush:',			format(t,'blush'))
+	CH:AddSmiley(':broken_heart:',	format(t,'broken_heart'))
+	CH:AddSmiley(':call_me:',		format(t,'call_me'))
+	CH:AddSmiley(':cry:',			format(t,'cry'))
+	CH:AddSmiley(':facepalm:',		format(t,'facepalm'))
+	CH:AddSmiley(':grin:',			format(t,'grin'))
+	CH:AddSmiley(':heart:',			format(t,'heart'))
+	CH:AddSmiley(':heart_eyes:',	format(t,'heart_eyes'))
+	CH:AddSmiley(':joy:',			format(t,'joy'))
+	CH:AddSmiley(':kappa:',			format(t,'kappa'))
+	CH:AddSmiley(':middle_finger:',	format(t,'middle_finger'))
+	CH:AddSmiley(':murloc:',		format(t,'murloc'))
+	CH:AddSmiley(':ok_hand:',		format(t,'ok_hand'))
+	CH:AddSmiley(':open_mouth:',	format(t,'open_mouth'))
+	CH:AddSmiley(':poop:',			format(t,'poop'))
+	CH:AddSmiley(':rage:',			format(t,'rage'))
+	CH:AddSmiley(':sadkitty:',		format(t,'sadkitty'))
+	CH:AddSmiley(':scream:',		format(t,'scream'))
+	CH:AddSmiley(':scream_cat:',	format(t,'scream_cat'))
+	CH:AddSmiley(':slight_frown:',	format(t,'slight_frown'))
+	CH:AddSmiley(':smile:',			format(t,'smile'))
+	CH:AddSmiley(':smirk:',			format(t,'smirk'))
+	CH:AddSmiley(':sob:',			format(t,'sob'))
+	CH:AddSmiley(':sunglasses:',	format(t,'sunglasses'))
+	CH:AddSmiley(':thinking:',		format(t,'thinking'))
+	CH:AddSmiley(':thumbs_up:',		format(t,'thumbs_up'))
+	CH:AddSmiley(':semi_colon:',	format(t,'semi_colon'))
+	CH:AddSmiley(':wink:',			format(t,'wink'))
+	CH:AddSmiley(':zzz:',			format(t,'zzz'))
+	CH:AddSmiley(':stuck_out_tongue:',				format(t,'stuck_out_tongue'))
+	CH:AddSmiley(':stuck_out_tongue_closed_eyes:',	format(t,'stuck_out_tongue_closed_eyes'))
+
+	-- Simpy's keys
+	CH:AddSmiley('>:%(',	format(t,'rage'))
+	CH:AddSmiley(':%$',		format(t,'blush'))
+	CH:AddSmiley('<\\3',	format(t,'broken_heart'))
+	CH:AddSmiley(':\'%)',	format(t,'joy'))
+	CH:AddSmiley(';\'%)',	format(t,'joy'))
+	CH:AddSmiley(',,!,,',	format(t,'middle_finger'))
+	CH:AddSmiley('D:<',		format(t,'rage'))
+	CH:AddSmiley(':o3',		format(t,'scream_cat'))
+	CH:AddSmiley('XP',		format(t,'stuck_out_tongue_closed_eyes'))
+	CH:AddSmiley('8%-%)',	format(t,'sunglasses'))
+	CH:AddSmiley('8%)',		format(t,'sunglasses'))
+	CH:AddSmiley(':%+1:',	format(t,'thumbs_up'))
+	CH:AddSmiley(':;:',		format(t,'semi_colon'))
+	CH:AddSmiley(';o;',		format(t,'sob'))
+
+	-- old keys
+	CH:AddSmiley(':%-@',	format(t,'angry'))
+	CH:AddSmiley(':@',		format(t,'angry'))
+	CH:AddSmiley(':%-%)',	format(t,'smile'))
+	CH:AddSmiley(':%)',		format(t,'smile'))
+	CH:AddSmiley(':D',		format(t,'grin'))
+	CH:AddSmiley(':%-D',	format(t,'grin'))
+	CH:AddSmiley(';%-D',	format(t,'grin'))
+	CH:AddSmiley(';D',		format(t,'grin'))
+	CH:AddSmiley('=D',		format(t,'grin'))
+	CH:AddSmiley('xD',		format(t,'grin'))
+	CH:AddSmiley('XD',		format(t,'grin'))
+	CH:AddSmiley(':%-%(',	format(t,'slight_frown'))
+	CH:AddSmiley(':%(',		format(t,'slight_frown'))
+	CH:AddSmiley(':o',		format(t,'open_mouth'))
+	CH:AddSmiley(':%-o',	format(t,'open_mouth'))
+	CH:AddSmiley(':%-O',	format(t,'open_mouth'))
+	CH:AddSmiley(':O',		format(t,'open_mouth'))
+	CH:AddSmiley(':%-0',	format(t,'open_mouth'))
+	CH:AddSmiley(':P',		format(t,'stuck_out_tongue'))
+	CH:AddSmiley(':%-P',	format(t,'stuck_out_tongue'))
+	CH:AddSmiley(':p',		format(t,'stuck_out_tongue'))
+	CH:AddSmiley(':%-p',	format(t,'stuck_out_tongue'))
+	CH:AddSmiley('=P',		format(t,'stuck_out_tongue'))
+	CH:AddSmiley('=p',		format(t,'stuck_out_tongue'))
+	CH:AddSmiley(';%-p',	format(t,'stuck_out_tongue_closed_eyes'))
+	CH:AddSmiley(';p',		format(t,'stuck_out_tongue_closed_eyes'))
+	CH:AddSmiley(';P',		format(t,'stuck_out_tongue_closed_eyes'))
+	CH:AddSmiley(';%-P',	format(t,'stuck_out_tongue_closed_eyes'))
+	CH:AddSmiley(';%-%)',	format(t,'wink'))
+	CH:AddSmiley(';%)',		format(t,'wink'))
+	CH:AddSmiley(':S',		format(t,'smirk'))
+	CH:AddSmiley(':%-S',	format(t,'smirk'))
+	CH:AddSmiley(':,%(',	format(t,'cry'))
+	CH:AddSmiley(':,%-%(',	format(t,'cry'))
+	CH:AddSmiley(':\'%(',	format(t,'cry'))
+	CH:AddSmiley(':\'%-%(',	format(t,'cry'))
+	CH:AddSmiley(':F',		format(t,'middle_finger'))
+	CH:AddSmiley('<3',		format(t,'heart'))
+	CH:AddSmiley('</3',		format(t,'broken_heart'))
+end
+
 function CH:Initialize()
 	if ElvCharacterDB.ChatHistory then
 		ElvCharacterDB.ChatHistory = nil --Depreciated
@@ -1682,6 +1773,7 @@ function CH:Initialize()
 		ElvCharacterDB.ChatHistoryLog = {};
 	end
 
+	self:DefaultSmileys()
 	self:UpdateChatKeywords()
 	self:UpdateFading()
 	E.Chat = self
@@ -1847,6 +1939,8 @@ function CH:Initialize()
 	CombatLogQuickButtonFrame_CustomAdditionalFilterButton:Size(20, 22)
 	CombatLogQuickButtonFrame_CustomAdditionalFilterButton:Point("TOPRIGHT", CombatLogQuickButtonFrame_Custom, "TOPRIGHT", 0, -1)
 	CombatLogQuickButtonFrame_CustomAdditionalFilterButton:SetHitRectInsets(0, 0, 0, 0)
+
+	self:Panels_ColorUpdate()
 end
 
 local function InitializeCallback()

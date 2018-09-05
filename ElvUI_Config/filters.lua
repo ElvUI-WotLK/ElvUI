@@ -71,6 +71,10 @@ local function UpdateFilterGroup()
 					desc = L["Add a spell to the filter. Use spell ID if you don't want to match all auras which share the same name."],
 					get = function(info) return "" end,
 					set = function(info, value)
+						if not GetSpellInfo(value) then
+							E:Print("Error in filter", selectedFilter, ": Submitted value '", value, "' is not a proper spell")
+							return
+						end
 						if tonumber(value) then value = tonumber(value) end
 						E.global.unitframe.DebuffHighlightColors[value] = {enable = true, style = "GLOW", color = {r = 0.8, g = 0, b = 0, a = 0.85}}
 						UpdateFilterGroup()
@@ -229,6 +233,10 @@ local function UpdateFilterGroup()
 					desc = L["Add a spell to the filter. Use spell ID if you don't want to match all auras which share the same name."],
 					get = function(info) return "" end,
 					set = function(info, value)
+						if not GetSpellInfo(value) then
+							E:Print("Error in filter", selectedFilter, ": Submitted value '", value, "' is not a proper spell")
+							return
+						end
 						if tonumber(value) then value = tonumber(value) end
 						if not E.global.unitframe.AuraBarColors[value] then
 							E.global.unitframe.AuraBarColors[value] = false
@@ -1134,6 +1142,10 @@ local function UpdateFilterGroup()
 					desc = L["Add a spell to the filter. Use spell ID if you don't want to match all auras which share the same name."],
 					get = function(info) return "" end,
 					set = function(info, value)
+						if not GetSpellInfo(value) then
+							E:Print("Error in filter", selectedFilter, ": Submitted value '", value, "' is not a proper spell")
+							return
+						end
 						if tonumber(value) then	value = tonumber(value) end
 						if not E.global.unitframe["aurafilters"][selectedFilter]["spells"][value] then
 							E.global.unitframe["aurafilters"][selectedFilter]["spells"][value] = {
