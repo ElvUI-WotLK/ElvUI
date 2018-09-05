@@ -143,11 +143,11 @@ L["Use Override"] = true
 L["Visibility State"] = "État de visibilité"
 L["Width Multiplier"] = "Multiplicateur largeur"
 L[ [=[This works like a macro, you can run different situations to get the actionbar to page differently.
- Example: [combat] 2;]=] ] = [=[Ceci fonctionne comme une macro, vous pouvez exécuter différentes situations pour avoir une pagination de la barre d'actions différente.
-Exemple: [combat] 2;]=]
+ Example: '[combat] 2;']=] ] = [=[Ceci fonctionne comme une macro, vous pouvez exécuter différentes situations pour avoir une pagination de la barre d'actions différente.
+Exemple: '[combat] 2;']=]
 L[ [=[This works like a macro, you can run different situations to get the actionbar to show/hide differently.
- Example: [combat] show;hide]=] ] = [=[Ceci fonctionne comme une macro, vous pouvez exécuter différentes situations pour afficher ou masquer la barre d'actions différemment.
-Exemple: [combat] show;hide]=]
+ Example: '[combat] show;hide']=] ] = [=[Ceci fonctionne comme une macro, vous pouvez exécuter différentes situations pour afficher ou masquer la barre d'actions différemment.
+Exemple: '[combat] show;hide']=]
 
 --Bags
 L["Add an item or search syntax to the ignored list. Items matching the search syntax will be ignored."] = true

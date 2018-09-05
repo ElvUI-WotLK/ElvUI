@@ -143,11 +143,11 @@ L["Use Override"] = "使用覆蓋"
 L["Visibility State"] = "顯示狀態"
 L["Width Multiplier"] = "寬度倍數"
 L[ [=[This works like a macro, you can run different situations to get the actionbar to page differently.
- Example: [combat] 2;]=] ] = [=[此功能與巨集概念類似, 可根據不同情況切換至不同的快捷列設定。
-例如：[combat] 2;]=]
+ Example: '[combat] 2;']=] ] = [=[此功能與巨集概念類似, 可根據不同情況切換至不同的快捷列設定。
+例如：'[combat] 2;']=]
 L[ [=[This works like a macro, you can run different situations to get the actionbar to show/hide differently.
- Example: [combat] show;hide]=] ] = [=[此功能與巨集概念類似, 可根據不同情境, 切換顯示/隱藏快捷列。
-例如：[combat] show;hide]=]
+ Example: '[combat] show;hide']=] ] = [=[此功能與巨集概念類似, 可根據不同情境, 切換顯示/隱藏快捷列。
+例如：'[combat] show;hide']=]
 
 --Bags
 L["Add an item or search syntax to the ignored list. Items matching the search syntax will be ignored."] = "增加一個物品或是搜尋語法到忽略清單. 符合搜尋語法的物品將會被忽略"

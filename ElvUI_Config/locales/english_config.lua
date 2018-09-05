@@ -143,9 +143,9 @@ L["Use Override"] = true
 L["Visibility State"] = true
 L["Width Multiplier"] = true
 L[ [=[This works like a macro, you can run different situations to get the actionbar to page differently.
- Example: [combat] 2;]=] ] = true
+ Example: '[combat] 2;']=] ] = true
 L[ [=[This works like a macro, you can run different situations to get the actionbar to show/hide differently.
- Example: [combat] show;hide]=] ] = true
+ Example: '[combat] show;hide']=] ] = true
 
 --Bags
 L["Add an item or search syntax to the ignored list. Items matching the search syntax will be ignored."] = true

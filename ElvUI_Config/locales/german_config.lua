@@ -143,11 +143,11 @@ L["Use Override"] = "Benutze Überschreibung"
 L["Visibility State"] = "Sichbarkeitszustand"
 L["Width Multiplier"] = "Breitenmultiplikator"
 L[ [=[This works like a macro, you can run different situations to get the actionbar to page differently.
- Example: [combat] 2;]=] ] = [=[Dieses funktioniert wie ein Makro, du kannst verschiedene Situationen haben um die Aktionsleiste zu wechseln.
- Beispiel: [combat] 2;]=]
+ Example: '[combat] 2;']=] ] = [=[Dieses funktioniert wie ein Makro, du kannst verschiedene Situationen haben um die Aktionsleiste zu wechseln.
+ Beispiel: '[combat] 2;']=]
 L[ [=[This works like a macro, you can run different situations to get the actionbar to show/hide differently.
- Example: [combat] show;hide]=] ] = [=[Dieses funktioniert wie ein Makro, du kannst verschiedene Situationen haben um die Aktionsleiste ein-/auszublenden.
- Beispiel: [combat] show;hide]=]
+ Example: '[combat] show;hide']=] ] = [=[Dieses funktioniert wie ein Makro, du kannst verschiedene Situationen haben um die Aktionsleiste ein-/auszublenden.
+ Beispiel: '[combat] show;hide']=]
 
 --Bags
 L["Add an item or search syntax to the ignored list. Items matching the search syntax will be ignored."] = "Füge ein Gegenstand oder ein Suchoperator zu der Ignorierliste hinzu. Gegenstände die auf den Suchoperator zutreffen werden ignoriert."
