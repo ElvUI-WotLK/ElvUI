@@ -39,7 +39,7 @@ L["SEARCH_SYNTAX_DESC"] = [=[因為新增加的 LibItemSearch，你現在可以�
     • bou : 使用後綁定.
     • boe : 裝備後綁定.
     • boa : 帳號綁定.
-    • quest : 任務綁定.]=];
+    • quest : 任務綁定.]=]
 L["TEXT_FORMAT_DESC"] = [=[請填入代碼以變更文字格式。
 
 範例：
@@ -60,7 +60,7 @@ L["TEXT_FORMAT_DESC"] = [=[請填入代碼以變更文字格式。
 "name:medium" - 名稱上限為 15 個字元
 "name:long" - 名稱上限為 20 個字元
 
-若要停用此功能，此欄位請留空。如需更多資訊，請至 http://www.tukui.org]=];
+若要停用此功能，此欄位請留空。如需更多資訊，請至 http://www.tukui.org]=]
 L["NAMEPLATE_FRAMELEVEL_DESC"] = [=[If you set this to 1 then all plates triggered by this style filter will be above any of the non-triggered plates.
 
 If you set this to 2 in another style filter then all plates triggered by that filter will be above plates with frame level set to 1 and all non-triggered plates, and so on.
@@ -70,7 +70,7 @@ NOTE: This setting will NOT fix the issue with clicking or mousing over nameplat
 --ActionBars
 L["Action Paging"] = "快捷列翻頁"
 L["ActionBars"] = "快捷列"
-L["Action button keybinds will respond on key down, rather than on key up"] = true;
+L["Action button keybinds will respond on key down, rather than on key up"] = true
 L["Allow LBF to handle the skinning of this element."] = "允許 LBF 來處理此元件的皮膚"
 L["Alpha"] = "透明度"
 L["Anchor Point"] = "定位方向"
@@ -112,7 +112,7 @@ L["Inherit the global fade, mousing over, targetting, setting focus, losing heal
 L["Key Down"] = "按下施法"
 L["Keybind Mode"] = "快捷鍵綁定模式"
 L["Keybind Text"] = "快捷鍵文字"
-L["LBF Support"] = true;
+L["LBF Support"] = true
 L["Low Threshold"] = "冷卻時間低閥值"
 L["Macro Text"] = "巨集名稱"
 L["Minutes"] = "分"
@@ -121,7 +121,7 @@ L["Multiply the backdrops height or width by this value. This is usefull if you 
 L["Not Usable"] = "無法使用"
 L["Out of Power"] = "施放能量不足"
 L["Out of Range"] = "超出施放範圍"
-L["Pick Up Action Key"] = true;
+L["Pick Up Action Key"] = true
 L["Restore Bar"] = "還原快捷列"
 L["Restore the actionbars default settings"] = "恢復此快捷列的預設設定"
 L["RightClick Self-Cast"] = "右鍵自我施法"
@@ -354,7 +354,7 @@ L["BottomRightMiniPanel"] = "小地圖右下內側"
 L["Datatext Panel (Left)"] = "左側資訊框"
 L["Datatext Panel (Right)"] = "右側資訊框"
 L["DataTexts"] = "資訊文字"
-L["Date Format"] = true;
+L["Date Format"] = true
 L["Display data panels below the chat, used for datatexts."] = "在對話框下顯示用於資訊的框架."
 L["Display minimap panels below the minimap, used for datatexts."] = "顯示小地圖下方的資訊框."
 L["Gold Format"] = "金幣格式"
@@ -371,7 +371,7 @@ L["RightChatDataPanel"] = "右對話框"
 L["RightMiniPanel"] = "小地圖右側"
 L["Small Panels"] = "迷你面板"
 L["The display format of the money text that is shown in the gold datatext and its tooltip."] = "在信息文字中顯示的金錢格式"
-L["Time Format"] = true;
+L["Time Format"] = true
 L["TopLeftMiniPanel"] = "Minimap TopLeft (Inside)"
 L["TopMiniPanel"] = "Minimap Top (Inside)"
 L["TopRightMiniPanel"] = "Minimap TopRight (Inside)"
@@ -456,8 +456,8 @@ L["Top Panel"] = "頂部面板"
 L["Unit Prefix Style"] = "單位縮寫"
 L["Vendor Grays"] = "出售灰色物品"
 L["Vendor Gray Detailed Report"] = "詳細報告灰色物品售賣"
-L["Version Check"] = true;
-L["Watch Frame Height"] = true;
+L["Version Check"] = true
+L["Watch Frame Height"] = true
 L["When you go AFK display the AFK screen."] = "當你離開時顯示AFK界面"
 
 --Aura Filter
@@ -665,14 +665,14 @@ L["Name Color"] = "姓名顏色"
 L["Name Colored Glow"] = "姓名顏色高亮"
 L["Name Only"] = "僅姓名"
 L["NamePlates"] = "姓名面板(血條)"
-L["Nameplate Motion Type"] = true;
+L["Nameplate Motion Type"] = true
 L["Non-Target Transparency"] = "非目標透明度"
 L["Not Targeted"] = "非目標"
 L["Off Cooldown"] = "冷卻外"
 L["On Cooldown"] = "冷卻中"
 L["Over Health Threshold"] = "高於血量閾值"
 L["Over Power Threshold"] = "高於能量閾值"
-L["Overlapping Nameplates"] = true;
+L["Overlapping Nameplates"] = true
 L["Player Health"] = "玩家血量"
 L["Player in Combat"] = "玩家戰鬥中"
 L["Player Out of Combat"] = "玩家戰鬥外"
@@ -693,7 +693,7 @@ L["Shortcut to 'Filters' section of the config."] = "一個到'過濾器'功能�
 L["Shortcut to global filters."] = true
 L["Shortcuts"] = "快捷鍵"
 L["Side Arrows"] = "側面箭頭"
-L["Stacking Nameplates"] = true;
+L["Stacking Nameplates"] = true
 L["Style Filter"] = "樣式過濾器"
 L["Tanked Color"] = "坦克顏色"
 L["Target Indicator Color"] = true
@@ -746,21 +746,21 @@ L["Table"] = "表"
 
 --Skins
 L["Alert Frames"] = "警報"
-L["Arena Frame"] = true;
-L["Arena Registrar"] = true;
+L["Arena Frame"] = true
+L["Arena Registrar"] = true
 L["BG Map"] = "戰場地圖"
 L["BG Score"] = "戰場積分"
 L["Calendar Frame"] = "行事曆"
 L["Character Frame"] = "角色"
 L["Debug Tools"] = "除錯工具"
-L["GM Chat"] = true;
+L["GM Chat"] = true
 L["Gossip Frame"] = "對話"
 L["Greeting Frame"] = "歡迎"
 L["Guild Bank"] = "公會銀行"
 L["Guild Registrar"] = "公會註冊"
 L["Help Frame"] = "幫助"
-L["LFD Frame"] = true;
-L["LFR Frame"] = true;
+L["LFD Frame"] = true
+L["LFR Frame"] = true
 L["Loot Frames"] = "拾取框架"
 L["Mirror Timers"] = "鏡像計時器"
 L["Misc Frames"] = "其他"
@@ -774,7 +774,7 @@ L["Stable"] = "獸欄"
 L["Tabard Frame"] = "外袍"
 L["Taxi Frame"] = "載具"
 L["Trainer Frame"] = "訓練師"
-L["Tutorial Frame"] = true;
+L["Tutorial Frame"] = true
 L["World Map"] = "世界地圖"
 
 --Tooltip
@@ -822,7 +822,7 @@ L["Additional spacing between each individual group."] = true
 L["Alpha channel is taken from the color option."] = true
 L["An X offset (in pixels) to be used when anchoring new frames."] = "錨定新框架時的X偏移(單位:像素)"
 L["An Y offset (in pixels) to be used when anchoring new frames."] = "錨定新框架時的Y偏移(單位:像素)"
-L["Animation Speed"] = true;
+L["Animation Speed"] = true
 L["Ascending or Descending order."] = "升序或降序"
 L["Assist Frames"] = "助理框架"
 L["Assist Target"] = "助理目標"
@@ -948,7 +948,7 @@ L["Friendly Aura Type"] = "友好目標光環類型"
 L["Friendly"] = "友好"
 L["Glow"] = "閃爍"
 L["Good"] = "安全"
-L["GPS Arrow"] = true;
+L["GPS Arrow"] = true
 L["Group By"] = "隊伍排列方式"
 L["Group Spacing"] = true
 L["Grouping & Sorting"] = "分組與排序"
@@ -1049,7 +1049,7 @@ L["Range Check"] = "距離檢查"
 L["Rapidly update the health, uses more memory and cpu. Only recommended for healing."] = "實時更新生命值會佔用更多的內存的和CPU, 只推薦治療角色開啟."
 L["Reaction Castbars"] = "聲望施法條"
 L["Reactions"] = "陣營聲望"
-L["Ready Check Icon"] = true;
+L["Ready Check Icon"] = true
 L["Remaining"] = "剩餘數值"
 L["Remove a spell from the filter. Use the spell ID if you see the ID as part of the spell name in the filter."] = "從過濾器中移除一個技能. 當你看見有ID在過濾器中的技能名字時使用技能ID"
 L["Remove a spell from the filter."] = "從過濾器中移除一個技能."
@@ -1061,7 +1061,7 @@ L["Resurrect Icon"] = true
 L["Right to Left"] = "右到左"
 L["RL / ML Icons"] = "團隊隊長/裝備分配圖示"
 L["Role Icon"] = "角色定位圖示"
-L["Seconds remaining on the aura duration before the bar starts moving. Set to 0 to disable."] = true;
+L["Seconds remaining on the aura duration before the bar starts moving. Set to 0 to disable."] = true
 L["Select a unit to copy settings from."] = "選擇從哪單位複制."
 L["Select Filter"] = "選擇過濾器"
 L["Select Spell"] = "選擇技能"
@@ -1074,7 +1074,7 @@ L["Set the priority order of the spell, please note that prioritys are only used
 L["Set the type of auras to show when a unit is a foe."] = "當單位是敵對時設定光環顯示的類型."
 L["Set the type of auras to show when a unit is friendly."] = "當單位是友好時設定光環顯示的類型."
 L["Sets the font instance's horizontal text alignment style."] = "設定橫向字體的對齊方式."
-L["Show"] = true;
+L["Show"] = true
 L["Show an incoming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."] = "在單位框架中顯示即將回复的的預測治療量, 過量治療則以不同顏色顯示. "
 L["Show Aura From Other Players"] = "顯示其他玩家的光環"
 L["Show Auras"] = "顯示光環"
@@ -1091,7 +1091,7 @@ L["Sort By"] = "排序"
 L["Spaced"] = "留空"
 L["Spacing"] = "間隙"
 L["Spark"] = "火花"
-L["Speed in seconds"] = true;
+L["Speed in seconds"] = true
 L["Stack Counter"] = "層數計數"
 L["Stack Threshold"] = "層數閾值"
 L["Start Near Center"] = "由中心開始"

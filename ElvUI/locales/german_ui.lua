@@ -30,7 +30,7 @@ L["Remove Bar %d Action Page"] = "Entferne Leiste %d Aktion Seite"
 L["Trigger"] = "Auslöser"
 
 --Bags
-L["Bank"] = true;
+L["Bank"] = true
 L["Hold Control + Right Click:"] = "Halte Strg + Rechtsklick:"
 L["Hold Shift + Drag:"] = "Halte Shift + Ziehen:"
 L["Purchase Bags"] = "Taschen kaufen"
@@ -42,8 +42,8 @@ L["Vendor / Delete Grays"] = "Verkaufe / Lösche graue Gegenstände"
 
 --Chat
 L["AFK"] = "AFK" --Also used in datatexts and tooltip
-L["BG"] = true;
-L["BGL"] = true;
+L["BG"] = true
+L["BGL"] = true
 L["DND"] = "DND" --Also used in datatexts and tooltip
 L["G"] = "G"
 L["Invalid Target"] = "Ungültiges Ziel"
@@ -62,13 +62,13 @@ L["(Hold Shift) Memory Usage"] = "(Shift gedrückt) Speichernutzung"
 L["Avoidance Breakdown"] = "Vermeidungsanalyse"
 L["Character: "] = "Charakter: "
 L["Combat Time"] = "Kampf Zeit"
-L["Coords"] = true;
+L["Coords"] = true
 L["copperabbrev"] = "|cffeda55fc|r" --Also used in Bags
 L["Deficit:"] = "Defizit:"
 L["DPS"] = "DPS"
 L["Earned:"] = "Verdient:"
 L["Friends List"] = "Freundesliste"
-L["Gold"] = true;
+L["Gold"] = true
 L["goldabbrev"] = "|cffffd700g|r" --Also used in gold datatext
 L["Hit"] = "Hit"
 L["Hold Shift + Right Click:"] = "Halte Umschalt + Rechts Klick:"
@@ -76,11 +76,11 @@ L["Home Latency:"] = "Standort Latenz"
 L["HP"] = "HP"
 L["HPS"] = "HPS"
 L["lvl"] = "lvl"
-L["Miss Chance"] = true;
+L["Miss Chance"] = true
 L["Mitigation By Level: "] = "Milderung durch Stufe:"
 L["No Guild"] = "Keine Gilde"
 L["Profit:"] = "Gewinn:"
-L["Reload UI"] = true;
+L["Reload UI"] = true
 L["Reset Counters: Hold Control + Right Click"] = "Zähler zurücksetzen: Halte Strg + Rechtsklick"
 L["Reset Data: Hold Shift + Right Click"] = "Daten zurücksetzen: Halte Shift + Rechtsklick"
 L["Saved Dungeon(s)"] = "Gespeicherte Instanz(en)"
@@ -89,15 +89,15 @@ L["Server: "] = "Server: "
 L["Session:"] = "Sitzung:"
 L["silverabbrev"] = "|cffc7c7cfs|r" --Also used in Bags
 L["SP"] = "SP"
-L["Spell/Heal Power"] = true;
+L["Spell/Heal Power"] = true
 L["Spent:"] = "Ausgegeben:"
 L["Stats For:"] = "Stats Für:"
-L["System"] = true;
+L["System"] = true
 L["Total CPU:"] = "Gesamt CPU:"
 L["Total Memory:"] = "Gesamte Speichernutzung:"
 L["Total: "] = "Gesamt: "
 L["Unhittable:"] = "Unhittable:"
-L["Wintergrasp"] = true;
+L["Wintergrasp"] = true
 
 --DebugTools
 L["%s: %s tried to call the protected function '%s'."] = "%s: %s versucht die geschützte Funktion aufrufen '%s'."
@@ -187,7 +187,7 @@ L["Disband Group"] = "Gruppe auflösen"
 L["Empty Slot"] = "Leerer Platz"
 L["Enable"] = "Eingeschaltet" --Doesn't fit a section since it's used a lot of places
 L["Experience"] = "Erfahrung"
-L["Farm Mode"] = true;
+L["Farm Mode"] = true
 L["Fishy Loot"] = "Faule Beute"
 L["Left Click:"] = "Linksklick:" --layout\layout.lua
 L["Raid Menu"] = "Schlachtzugsmenü"
@@ -235,7 +235,7 @@ L["Player Castbar"] = "Spieler Zauberbalken"
 L["Player Debuffs"] = "Spieler Debuffs"
 L["Player Frame"] = "Spielerfenster" --Also used in UnitFrames
 L["Player Powerbar"] = "Spieler Kraftleiste"
-L["PvP"] = true;
+L["PvP"] = true
 L["Raid Frames"] = "Schlachtzugsfenster" --Also used in UnitFrames
 L["Raid Pet Frames"] = "Schlachtzugspets-Fenster"
 L["Raid-40 Frames"] = "40er Schlachtzugsfenster" --Also used in UnitFrames
@@ -249,7 +249,7 @@ L["TargetTarget Frame"] = "Ziel des Ziels Fenster" --Also used in UnitFrames
 L["TargetTargetTarget Frame"] = "Ziel des Ziels des Ziels Fenster"
 L["Tooltip"] = "Tooltip"
 L["Vehicle Seat Frame"] = "Fahrzeugfenster"
-L["Watch Frame"] = true;
+L["Watch Frame"] = true
 L["DESC_MOVERCONFIG"] = [=[Ankerpunkte entriegelt. Bewege die Ankerpunkte und klicke 'sperren', wenn du fertig bist.
 
 Options:
@@ -258,7 +258,7 @@ Options:
 ]=]
 
 --Plugin Installer
-L["ElvUI Plugin Installation"] = true;
+L["ElvUI Plugin Installation"] = true
 L["In Progress"] = "In Bearbeitung"
 L["List of installations in queue:"] = "Liste von Installationen in Warteschlange:"
 L["Pending"] = "Ausstehend"

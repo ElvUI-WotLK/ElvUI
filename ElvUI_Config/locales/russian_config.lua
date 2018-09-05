@@ -1,7 +1,7 @@
 -- Russian localization file for ruRU.
 local AceLocale = LibStub:GetLibrary("AceLocale-3.0")
 local L = AceLocale:NewLocale("ElvUI", "ruRU")
-if not L then return; end
+if not L then return end
 
 -- *_DESC locales
 L["ACTIONBARS_DESC"] = "Modify the actionbar settings."
@@ -39,7 +39,7 @@ L["SEARCH_SYNTAX_DESC"] = [=[С добавлением библиотеки LibI
     • bou : персональные при использовании.
     • boe : персональные при одевании.
     • boa : привязоные к учетной записи.
-    • quest : специальные предметы для заданий.]=];
+    • quest : специальные предметы для заданий.]=]
 L["TEXT_FORMAT_DESC"] = [=[Строка для изменения вида текста.
 
 Примеры:
@@ -60,7 +60,7 @@ L["TEXT_FORMAT_DESC"] = [=[Строка для изменения вида те�
 "name:medium" - Имя с ограничением длины в 15 символов
 "name:long" - Имя с ограничением длины в 20 символов
 
-Для отключения оставьте поле пустым, для дополнительной информации посетите http://www.tukui.org]=];
+Для отключения оставьте поле пустым, для дополнительной информации посетите http://www.tukui.org]=]
 L["NAMEPLATE_FRAMELEVEL_DESC"] = [=[If you set this to 1 then all plates triggered by this style filter will be above any of the non-triggered plates.
 
 If you set this to 2 in another style filter then all plates triggered by that filter will be above plates with frame level set to 1 and all non-triggered plates, and so on.

@@ -39,7 +39,7 @@ Die folgenden Suchbegriffe können auch benutzt werden:
     • bou : Beim Benutzen gebundene Gegenstände.
     • boe : Beim Ausrüsten gebundene Gegenstände.
     • boa : An den Account gebundene Gegenstände.
-    • quest : Gebundene Quest Gegenstände.]=];
+    • quest : Gebundene Quest Gegenstände.]=]
 L["TEXT_FORMAT_DESC"] = [=[Wähle eine Zeichenfolge um das Textformat zu ändern.
 
 Beispiele:
@@ -60,7 +60,7 @@ Namensformate:
 "name:medium" - Name auf 15 Zeichen beschränkt
 "name:long" - Name auf 20 Zeichen beschränkt
 
-Zum Deaktvieren lasse das Feld leer. Brauchst du mehr Informationen besuche http://www.tukui.org]=];
+Zum Deaktvieren lasse das Feld leer. Brauchst du mehr Informationen besuche http://www.tukui.org]=]
 L["NAMEPLATE_FRAMELEVEL_DESC"] = [=[If you set this to 1 then all plates triggered by this style filter will be above any of the non-triggered plates.
 
 If you set this to 2 in another style filter then all plates triggered by that filter will be above plates with frame level set to 1 and all non-triggered plates, and so on.
@@ -70,7 +70,7 @@ NOTE: This setting will NOT fix the issue with clicking or mousing over nameplat
 --ActionBars
 L["Action Paging"] = "Seitenwechsel der Aktionsleisten"
 L["ActionBars"] = "Aktionsleisten"
-L["Action button keybinds will respond on key down, rather than on key up"] = true;
+L["Action button keybinds will respond on key down, rather than on key up"] = true
 L["Allow LBF to handle the skinning of this element."] = "Erlaubt LBF das Gestalten dieser Elememte."
 L["Alpha"] = "Alpha"
 L["Anchor Point"] = "Ankerpunkt" --also in unitframes
@@ -174,7 +174,7 @@ L["Displays item level on equippable items."] = "Zeigt das Itemlevel für ausrü
 L["Enable/Disable the all-in-one bag."] = "Einschalten/Ausschalten der zusammengefassten Tasche."
 L["Enable/Disable the Bag-Bar."] = "Aktiviere/Deaktiviere die Taschenleiste."
 L["Full"] = "Voll"
-L["Global"] = true;
+L["Global"] = true
 L["Here you can add items or search terms that you want to be excluded from sorting. To remove an item just click on its name in the list."] = "Hier kannst du Gegenstände oder Suchbedingungen vom Suchen ausschließen. Um ein Gegenstand zu entfernen, klicke einfach auf den Namen in der Liste."
 L["Icons and Text (Short)"] = "Symbole und Text (Kurz)"
 L["Icons and Text"] = "Symbole und Text"
@@ -737,7 +737,7 @@ L["Global (Account Settings)"] = "Globale (Account Einstellungen)"
 L["Import Now"] = "Jetzt importieren"
 L["Import Profile"] = "Importiere Profil"
 L["Importing"] = "Importiere"
-L["Plugin"] = true; -- no need to translate
+L["Plugin"] = true -- no need to translate
 L["Private (Character Settings)"] = "Private (Charakter Einstellungen)"
 L["Profile imported successfully!"] = "Profil erfolgreich importiert!"
 L["Profile Name"] = "Profil Name"
@@ -746,21 +746,21 @@ L["Table"] = "Tabelle"
 
 --Skins
 L["Alert Frames"] = "Alarmfenster"
-L["Arena Frame"] = true;
-L["Arena Registrar"] = true;
+L["Arena Frame"] = true
+L["Arena Registrar"] = true
 L["BG Map"] = "Schlachtfeldkarte"
 L["BG Score"] = "Schlachtfeldpunkte"
 L["Calendar Frame"] = "Kalender Fenster"
 L["Character Frame"] = "Charakterfenster"
 L["Debug Tools"] = "Debug Tools"
-L["GM Chat"] = true;
+L["GM Chat"] = true
 L["Gossip Frame"] = "Begrüßungsfenster"
 L["Greeting Frame"] = "Begrüßungsfenster"
 L["Guild Bank"] = "Gildenbank"
 L["Guild Registrar"] = "Gildenregister"
 L["Help Frame"] = "Hilfefenster"
-L["LFD Frame"] = true;
-L["LFR Frame"] = true;
+L["LFD Frame"] = true
+L["LFR Frame"] = true
 L["Loot Frames"] = "Beutefenster"
 L["Mirror Timers"] = "Spiegel Zeitgeber"
 L["Misc Frames"] = "Verschiedene Fenster"
@@ -822,7 +822,7 @@ L["Additional spacing between each individual group."] = "Zusätzlicher Abstand 
 L["Alpha channel is taken from the color option."] = "Alphakanal wird von der Farboptionen übernommen."
 L["An X offset (in pixels) to be used when anchoring new frames."] = "X-Versatz (in Pixeln) der verwendet werden soll um neue Fenster zu ankern"
 L["An Y offset (in pixels) to be used when anchoring new frames."] = "Y-Versatz (in Pixeln) der verwendet werden soll um neue Fenster zu ankern"
-L["Animation Speed"] = true;
+L["Animation Speed"] = true
 L["Ascending or Descending order."] = "Aufsteigende oder Absteigende Reihenfolge"
 L["Assist Frames"] = "Assistent Fenster"
 L["Assist Target"] = "Assistent Ziel"
@@ -977,7 +977,7 @@ L["If not set to 0 then override the size of the aura icon to this."] = "Wenn di
 L["If you have a lot of 3D Portraits active then it will likely have a big impact on your FPS. Disable some portraits if you experience FPS issues."] = "Wenn du viele 3D Portraits aktiviert hast, wird es voraussichtlich enorm auf deine FPS auswirken. Deaktiviere bitte einige 3D Portraits sollte das der Fall sein."
 L["Ignore mouse events."] = "Ignoriere Maus Events."
 L["InfoPanel Border"] = "InfoPanel Rand"
-L["Information Panel"] = true; -- no need to translate
+L["Information Panel"] = true -- no need to translate
 L["Inset"] = "Einsatz"
 L["Inside Information Panel"] = "Im Information Panel"
 L["Interruptable"] = "Unterbrechbar"
@@ -1021,7 +1021,7 @@ L["Overlay"] = "Überblenden"
 L["Override any custom visibility setting in certain situations, EX: Only show groups 1 and 2 inside a 10 man instance."] = "Überschreibe alle benutzerdefinierten Einstellungen für die Sichtbarkeit in bestimmten Situationen. Beispiel: Zeige nur Gruppe 1 und 2 in einer 10er-Instanz."
 L["Override the default class color setting."] = "Überschreibe die Standard Klassenfarben Einstellungen"
 L["Owners Name"] = "Name des Besitzers"
-L["Parent"] = true; -- no need to translate
+L["Parent"] = true -- no need to translate
 L["Party Pets"] = "Gruppenbegleiter"
 L["Party Targets"] = "Gruppenziele"
 L["Per Row"] = "Pro Reihe"
@@ -1039,7 +1039,7 @@ L["Powers"] = "Kräfte"
 L["Priority"] = "Priorität"
 L["Profile Specific"] = "Profilspezifisch"
 L["PvP Icon"] = "PvP Symbol"
-L["PvP Text"] = true; -- no need to translate
+L["PvP Text"] = true -- no need to translate
 L["PVP Trinket"] = "PVP Schmuck"
 L["Raid Icon"] = "Schlachtzugssymbol"
 L["Raid-Wide Sorting"] = "Raidweite Sortierung"
@@ -1074,7 +1074,7 @@ L["Set the priority order of the spell, please note that prioritys are only used
 L["Set the type of auras to show when a unit is a foe."] = "Wähle den Aurentyp, der angezeigt werden soll, wenn das Ziel feindlich ist."
 L["Set the type of auras to show when a unit is friendly."] = "Wähle den Aurentyp, der angezeigt werden soll, wenn das Ziel freundlich ist."
 L["Sets the font instance's horizontal text alignment style."] = "Wähle die Schriftart Instanz horizontal zur Ausrichtung des Textes Stils."
-L["Show"] = true;
+L["Show"] = true
 L["Show an incoming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."] = "Zeige eingehende Heilung im Einheitenfenster. Zeigt eine etwas anders farbige Leiste für eingehende Überheilung."
 L["Show Aura From Other Players"] = "Zeige Auren von anderen Spielern"
 L["Show Auras"] = "Zeige Auren"
@@ -1091,7 +1091,7 @@ L["Sort By"] = "Sortieren nach"
 L["Spaced"] = "Abgetrennt"
 L["Spacing"] = "Abstand"
 L["Spark"] = "Funken"
-L["Speed in seconds"] = true;
+L["Speed in seconds"] = true
 L["Stack Counter"] = "Stapel Zähler"
 L["Stack Threshold"] = "Stapel Schwellenwert"
 L["Start Near Center"] = "Starte nahe der Mitte"

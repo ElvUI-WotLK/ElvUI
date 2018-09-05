@@ -39,7 +39,7 @@ The following search keywords can also be used:
     • bou : Bind on use items.
     • boe : Bind on equip items.
     • boa : Bind on account items.
-    • quest : Quest bound items.]=];
+    • quest : Quest bound items.]=]
 L["TEXT_FORMAT_DESC"] = [=[提供一个更改文字格式的方式
 
 例如:
@@ -68,7 +68,7 @@ L["NAMEPLATE_FRAMELEVEL_DESC"] = [=[如果你设置为1则所有符合这个过�
 --ActionBars
 L["Action Paging"] = "动作条翻页"
 L["ActionBars"] = "动作条"
-L["Action button keybinds will respond on key down, rather than on key up"] = true;
+L["Action button keybinds will respond on key down, rather than on key up"] = true
 L["Allow LBF to handle the skinning of this element."] = "允许LBF来处理这个元素的皮肤"
 L["Alpha"] = "透明度"
 L["Anchor Point"] = "定位方向"
@@ -454,7 +454,7 @@ L["Top Panel"] = "顶部面板"
 L["Unit Prefix Style"] = "单位缩写"
 L["Vendor Grays"] = "出售灰色物品"
 L["Vendor Gray Detailed Report"] = "出售灰色物品详细报告"
-L["Version Check"] = true;
+L["Version Check"] = true
 L["Watch Frame Height"] = "任务框架高度"
 L["When you go AFK display the AFK screen."] = "当你离开时显示AFK界面"
 
@@ -744,21 +744,21 @@ L["Table"] = "表"
 
 --Skins
 L["Alert Frames"] = "警报"
-L["Arena Frame"] = true;
-L["Arena Registrar"] = true;
+L["Arena Frame"] = true
+L["Arena Registrar"] = true
 L["BG Map"] = "战场地图"
 L["BG Score"] = "战场记分"
 L["Calendar Frame"] = "日历框架"
 L["Character Frame"] = "角色"
 L["Debug Tools"] = "除错工具"
-L["GM Chat"] = true;
+L["GM Chat"] = true
 L["Gossip Frame"] = "闲谈"
-L["Greeting Frame"] = true;
+L["Greeting Frame"] = true
 L["Guild Bank"] = "公会银行"
 L["Guild Registrar"] = "公会注册"
 L["Help Frame"] = "帮助"
-L["LFD Frame"] = true;
-L["LFR Frame"] = true;
+L["LFD Frame"] = true
+L["LFR Frame"] = true
 L["Loot Frames"] = "拾取"
 L["Mirror Timers"] = "镜像计时器"
 L["Misc Frames"] = "其他"
@@ -772,7 +772,7 @@ L["Stable"] = "兽栏"
 L["Tabard Frame"] = "战袍"
 L["Taxi Frame"] = "载具"
 L["Trainer Frame"] = "训练师"
-L["Tutorial Frame"] = true;
+L["Tutorial Frame"] = true
 L["World Map"] = "世界地图"
 
 --Tooltip
@@ -820,7 +820,7 @@ L["Additional spacing between each individual group."] = "各小队之间的额�
 L["Alpha channel is taken from the color option."] = "Alpha通道由颜色选项决定"
 L["An X offset (in pixels) to be used when anchoring new frames."] = "锚定新框架时的X偏移(像素)"
 L["An Y offset (in pixels) to be used when anchoring new frames."] = "锚定新框架时的Y偏移(像素)"
-L["Animation Speed"] = true;
+L["Animation Speed"] = true
 L["Ascending or Descending order."] = "升序或降序"
 L["Assist Frames"] = "助理框架"
 L["Assist Target"] = "助理目标"
@@ -1072,7 +1072,7 @@ L["Set the priority order of the spell, please note that prioritys are only used
 L["Set the type of auras to show when a unit is a foe."] = "当单位是敌对时设置光环显示的类型"
 L["Set the type of auras to show when a unit is friendly."] = "当单位是友好时设置光环显示的类型"
 L["Sets the font instance's horizontal text alignment style."] = "设置字体实例的水平文本对齐方式"
-L["Show"] = true;
+L["Show"] = true
 L["Show an incoming heal prediction bar on the unitframe. Also display a slightly different colored bar for incoming overheals."] = "在单位框架中显示即将回复的的预测治疗量, 过量治疗则以不同颜色显示"
 L["Show Aura From Other Players"] = "显示其他玩家的光环"
 L["Show Auras"] = "显示光环"

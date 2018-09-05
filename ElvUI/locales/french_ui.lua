@@ -1,7 +1,7 @@
 -- French localization file for frFR.
-local AceLocale = LibStub:GetLibrary("AceLocale-3.0");
-local L = AceLocale:NewLocale("ElvUI", "frFR");
-if not L then return; end
+local AceLocale = LibStub:GetLibrary("AceLocale-3.0")
+local L = AceLocale:NewLocale("ElvUI", "frFR")
+if not L then return end
 
 --*_ADDON locales
 L["INCOMPATIBLE_ADDON"] = "L'addon %s n'est pas compatible avec le module %s d'ElvUI. Merci de sélectionner soit l'addon, soit le module d'ElvUI, pour le désactiver."
@@ -42,8 +42,8 @@ L["Vendor / Delete Grays"] = true
 
 --Chat
 L["AFK"] = "ABS" --Also used in datatexts and tooltip
-L["BG"] = true;
-L["BGL"] = true;
+L["BG"] = true
+L["BGL"] = true
 L["DND"] = "NPD" --Also used in datatexts and tooltip
 L["G"] = "G"
 L["Invalid Target"] = "Cible incorrecte"
@@ -61,14 +61,14 @@ L["yells"] = "crie"
 L["(Hold Shift) Memory Usage"] = "(Maintenir MAJ) Utilisation de la Mémoire."
 L["Avoidance Breakdown"] = "Répartition de l'évitement"
 L["Character: "] = "Personnage: "
-L["Combat Time"] = true;
+L["Combat Time"] = true
 L["Coords"] = "Coordonnées"
 L["copperabbrev"] = "|cffeda55fc|r" --Also used in Bags
 L["Deficit:"] = "Déficit:"
 L["DPS"] = "DPS"
 L["Earned:"] = "Gagné:"
 L["Friends List"] = "Liste d'amis"
-L["Gold"] = true;
+L["Gold"] = true
 L["goldabbrev"] = "|cffffd700g|r" --Also used in Bags
 L["Hit"] = "Toucher"
 L["Hold Shift + Right Click:"] = "Maintenir Majuscule + Clic droit"
@@ -76,11 +76,11 @@ L["Home Latency:"] = "Latence du Domicile:"
 L["HP"] = "PdS"
 L["HPS"] = "HPS"
 L["lvl"] = "niveau"
-L["Miss Chance"] = true;
+L["Miss Chance"] = true
 L["Mitigation By Level: "] = "Réduction par niveau: "
 L["No Guild"] = "Pas de Guilde"
 L["Profit:"] = "Profit:"
-L["Reload UI"] = true;
+L["Reload UI"] = true
 L["Reset Counters: Hold Control + Right Click"] = true
 L["Reset Data: Hold Shift + Right Click"] = "RAZ des données: MAJ + Clic droit"
 L["Saved Dungeon(s)"] = "Donjon(s) sauvegardé(s)"
@@ -92,12 +92,12 @@ L["SP"] = "PdS"
 L["Spell/Heal Power"] = "Puissance d'attaque / de soin"
 L["Spent:"] = "Dépensé: "
 L["Stats For:"] = "Stats pour:"
-L["System"] = true;
+L["System"] = true
 L["Total CPU:"] = "Charge du CPU:"
 L["Total Memory:"] = "Mémoire totale:"
 L["Total: "] = "Total: "
 L["Unhittable:"] = "Intouchable:"
-L["Wintergrasp"] = true;
+L["Wintergrasp"] = true
 
 --DebugTools
 L["%s: %s tried to call the protected function '%s'."] = "%s: %s a essayé d'appeler la fonction protégée '%s'."
@@ -235,7 +235,7 @@ L["Player Castbar"] = "Barre d'incantation du joueur"
 L["Player Debuffs"] = "Affaiblissements du joueur"
 L["Player Frame"] = "Cadre du joueur" --Also used in UnitFrames
 L["Player Powerbar"] = "Barre de pouvoir du joueur" -- need review.
-L["PvP"] = true;
+L["PvP"] = true
 L["Raid Frames"] = "Cadres de Raid"
 L["Raid Pet Frames"] = "Cadres de Raid des Familiers"
 L["Raid-40 Frames"] = "Cadres de Raid 40"
@@ -249,7 +249,7 @@ L["TargetTarget Frame"] = "Cadre de la cible de votre cible" --Also used in Unit
 L["TargetTargetTarget Frame"] = "Cadre de la cible de la cible de la cible"
 L["Tooltip"] = "Infobulle"
 L["Vehicle Seat Frame"] = "Cadre de siège du véhicule"
-L["Watch Frame"] = true;
+L["Watch Frame"] = true
 L["DESC_MOVERCONFIG"] = [=[Cadres déverrouillés. Déplacez-les et cliquez sur Verrouiller une fois terminé.
 
 Options:

@@ -42,8 +42,8 @@ L["Vendor / Delete Grays"] = true
 
 --Chat
 L["AFK"] = "자리비움"
-L["BG"] = true;
-L["BGL"] = true;
+L["BG"] = true
+L["BGL"] = true
 L["DND"] = "다른 용무중"
 L["G"] = "길드"
 L["Invalid Target"] = "잘못된 대상"
@@ -61,7 +61,7 @@ L["yells"] = "외침"
 L["(Hold Shift) Memory Usage"] = "Shift: 메모리 사용량"
 L["Avoidance Breakdown"] = "방어율 목록"
 L["Character: "] = "캐릭터:"
-L["Combat Time"] = true;
+L["Combat Time"] = true
 L["Coords"] = "좌표"
 L["copperabbrev"] = "|TInterface\\MoneyFrame\\UI-MoneyIcons:0:0:1:0:64:16:33:48:1:16|t" --"|cffeda55f●|r"
 L["Deficit:"] = "손해:"
@@ -76,11 +76,11 @@ L["Home Latency:"] = "지연 시간:"
 L["HP"] = "주문력"
 L["HPS"] = "HPS"
 L["lvl"] = "레벨"
-L["Miss Chance"] = true;
+L["Miss Chance"] = true
 L["Mitigation By Level: "] = "레벨별 데미지 경감률"
 L["No Guild"] = "길드 없음"
 L["Profit:"] = "이익:"
-L["Reload UI"] = true;
+L["Reload UI"] = true
 L["Reset Counters: Hold Control + Right Click"] = true
 L["Reset Data: Hold Shift + Right Click"] = "자료 초기화: Shift + 우클릭"
 L["Saved Dungeon(s)"] = true
@@ -92,16 +92,16 @@ L["SP"] = "주문력"
 L["Spell/Heal Power"] = "주문력"
 L["Spent:"] = "지출:"
 L["Stats For:"] = "점수:"
-L["System"] = true;
+L["System"] = true
 L["Total CPU:"] = "전체 CPU 사용량:"
 L["Total Memory:"] = "전체 메모리:"
 L["Total: "] = "합계:"
 L["Unhittable:"] = "100% 방어행동까지"
-L["Wintergrasp"] = true;
+L["Wintergrasp"] = true
 
 --DebugTools
 L["%s: %s tried to call the protected function '%s'."] = "%s: %s 기능이 사용할 수 없는 %s 함수를 사용하려 합니다."
-L["No locals to dump"] = true; --Currently not used
+L["No locals to dump"] = true --Currently not used
 
 --Distributor
 L["%s is attempting to share his filters with you. Would you like to accept the request?"] = "%s 유저가 필터설정을 전송하려 합니다. 받으시겠습니까?"
@@ -187,7 +187,7 @@ L["Disband Group"] = "그룹 해산"
 L["Empty Slot"] = "빈 칸"
 L["Enable"] = "사용"
 L["Experience"] = "경험치"
-L["Farm Mode"] = true;
+L["Farm Mode"] = true
 L["Fishy Loot"] = "낚시 전리품"
 L["Left Click:"] = "왼 클릭 :"
 L["Raid Menu"] = "공대 도구"
@@ -234,8 +234,8 @@ L["Player Buffs"] = "플레이어 버프"
 L["Player Castbar"] = "플레이어 시전바"
 L["Player Debuffs"] = "플레이어 디버프"
 L["Player Frame"] = "플레이어 프레임"
-L["Player Powerbar"] = true;
-L["PvP"] = true;
+L["Player Powerbar"] = true
+L["PvP"] = true
 L["Raid Frames"] = "레이드 프레임"
 L["Raid Pet Frames"] = "레이드 소환수 프레임"
 L["Raid-40 Frames"] = "레이드 프레임(40인)"
@@ -244,12 +244,12 @@ L["Right Chat"] = "우측 패널"
 L["Stance Bar"] = "태세 바"
 L["Target Castbar"] = "대상 시전바"
 L["Target Frame"] = "대상 프레임"
-L["Target Powerbar"] = true;
+L["Target Powerbar"] = true
 L["TargetTarget Frame"] = "대상의대상 프레임"
 L["TargetTargetTarget Frame"] = "대상의대상의대상 프레임"
 L["Tooltip"] = "툴팁"
 L["Vehicle Seat Frame"] = "차량 좌석 프레임"
-L["Watch Frame"] = true;
+L["Watch Frame"] = true
 L["DESC_MOVERCONFIG"] = [=[프레임을 드래그로 원하는 위치로 이동시키세요.|n[잠금] 버튼을 누르면 이동모드가 종료됩니다.
 
 선택사항:
@@ -276,7 +276,7 @@ L["Binds Saved"] = "단축키가 저장되었습니다."
 L["Confused.. Try Again!"] = "작업에 혼선이 있었습니다. 다시 시도해 주세요."
 L["No gray items to delete."] = "잡동사니가 없습니다."
 L["The spell '%s' has been added to the Blacklist unitframe aura filter."] = "%s 주문이 차단 목록에 등록되었습니다."
-L["This setting caused a conflicting anchor point, where '%s' would be attached to itself. Please check your anchor points. Setting '%s' to be attached to '%s'."] = true;
+L["This setting caused a conflicting anchor point, where '%s' would be attached to itself. Please check your anchor points. Setting '%s' to be attached to '%s'."] = true
 L["Vendored gray items for: %s"] = "모든 잡동사니를 팔았습니다: %s"
 L["You don't have enough money to repair."] = "수리 비용이 부족합니다."
 L["You must be at a vendor."] = "상인을 만나야 가능합니다."
