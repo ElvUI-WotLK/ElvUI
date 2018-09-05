@@ -5,7 +5,6 @@ local LBF = LibStub("LibButtonFacade", true);
 
 --Cache global variables
 --Lua functions
-local GetTime = GetTime
 local _G = _G
 local unpack, pairs, ipairs = unpack, pairs, ipairs
 local floor, min, max, huge = math.floor, math.min, math.max, math.huge
@@ -13,6 +12,7 @@ local format = string.format
 local wipe, tinsert, tsort, tremove = table.wipe, table.insert, table.sort, table.remove
 --WoW API / Variables
 local CreateFrame = CreateFrame
+local GetTime = GetTime
 local UnitAura = UnitAura
 local CancelItemTempEnchantment = CancelItemTempEnchantment
 local CancelUnitBuff = CancelUnitBuff

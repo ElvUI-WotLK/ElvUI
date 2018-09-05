@@ -135,7 +135,6 @@ function RU:Initialize()
 	end);
 
 	RaidUtility_ShowButton:SetScript("OnDragStop", function(self)
-		if(InCombatLockdown()) then E:Print(ERR_NOT_IN_COMBAT); return; end
 		self:StopMovingOrSizing();
 		local point = self:GetPoint();
 		local xOffset = self:GetCenter();
@@ -181,6 +180,7 @@ function RU:Initialize()
 
 	self:CreateUtilButton("RaidControlButton", RaidUtilityPanel, nil, DisbandRaidButton:GetWidth(), 18, "TOPLEFT", ReadyCheckButton, "BOTTOMLEFT", 0, -5, L["Raid Menu"], nil)
 	RaidControlButton:SetScript("OnMouseUp", function()
+		if InCombatLockdown() then E:Print(ERR_NOT_IN_COMBAT) return end
 		ToggleFriendsFrame(5);
 	end);
 
