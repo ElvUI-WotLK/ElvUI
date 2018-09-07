@@ -72,7 +72,7 @@ function UF:Construct_PartyFrames()
 		self.ReadyCheckIndicator = UF:Construct_ReadyCheckIcon(self)
 		self.HealCommBar = UF:Construct_HealComm(self)
 		self.GPS = UF:Construct_GPS(self)
-		self.Castbar = UF:Construct_Castbar(self)
+		--self.Castbar = UF:Construct_Castbar(self)
 		self.customTexts = {}
 		self.unitframeType = "party"
 	end
@@ -237,7 +237,7 @@ function UF:Update_PartyFrames(frame, db)
 
 		UF:Configure_RaidDebuffs(frame)
 
-		UF:Configure_Castbar(frame)
+		--UF:Configure_Castbar(frame)
 
 		UF:Configure_RaidIcon(frame)
 

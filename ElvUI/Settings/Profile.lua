@@ -2014,6 +2014,7 @@ P["unitframe"] = {
 					["color"] = {r = 1, g = 0.9, b = 0, a = 1}
 				},
 			},
+--[[
 			["castbar"] = {
 				["enable"] = false,
 				["width"] = 256,
@@ -2029,6 +2030,7 @@ P["unitframe"] = {
 				["iconXOffset"] = -10,
 				["iconYOffset"] = 0
 			},
+]]
 			["roleIcon"] = {
 				["enable"] = true,
 				["position"] = "TOPRIGHT",
