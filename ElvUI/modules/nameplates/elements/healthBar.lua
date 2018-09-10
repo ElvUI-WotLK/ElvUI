@@ -89,7 +89,11 @@ function mod:UpdateElement_HealthColor(frame)
 	if r ~= frame.HealthBar.r or g ~= frame.HealthBar.g or b ~= frame.HealthBar.b then
 		if not frame.HealthColorChanged then
 			frame.HealthBar:SetStatusBarColor(r, g, b)
-			frame.CutawayHealth:SetStatusBarColor(r * 1.5, g * 1.5, b * 1.5, 1)
+			if frame.HealthColorChangeCallbacks then
+				for _, cb in ipairs(frame.HealthColorChangeCallbacks) do
+					cb(self, frame, r, g, b)
+				end
+			end
 		end
 		frame.HealthBar.r, frame.HealthBar.g, frame.HealthBar.b = r, g, b
 	end
@@ -103,47 +107,20 @@ function mod:UpdateElement_HealthColor(frame)
 	end
 end
 
-function mod:UpdateElement_CutawayHealthFadeOut(frame)
-	local cutawayHealth = frame.CutawayHealth
-	cutawayHealth.fading = true
-	E:UIFrameFadeOut(cutawayHealth, self.db.cutawayHealthFadeOutTime, cutawayHealth:GetAlpha(), 0)
-	cutawayHealth.isPlaying = nil
-end
-
-local function CutawayHealthClosure(frame)
-	return function() mod:UpdateElement_CutawayHealthFadeOut(frame) end
-end
-
 function mod:UpdateElement_Health(frame)
 	local health = frame.oldHealthBar:GetValue()
 	local _, maxHealth = frame.oldHealthBar:GetMinMaxValues()
 	frame.HealthBar:SetMinMaxValues(0, maxHealth)
-	frame.CutawayHealth:SetMinMaxValues(0, maxHealth)
+	if frame.MaxHealthChangeCallbacks then
+		for _, cb in ipairs(frame.MaxHealthChangeCallbacks) do
+			cb(self, frame, maxHealth)
+		end
+	end	
 
-	if self.db.cutawayHealth then
-		local oldValue = frame.HealthBar:GetValue()
-		local change = oldValue - health
-		if change > 0 and not frame.CutawayHealth.isPlaying then
-			local cutawayHealth = frame.CutawayHealth
-			if cutawayHealth.fading then
-				E:UIFrameFadeRemoveFrame(cutawayHealth)
-			end
-			cutawayHealth.fading = false
-			cutawayHealth:SetValue(oldValue)
-			cutawayHealth:SetAlpha(1)
-			if not cutawayHealth.closure then
-				cutawayHealth.closure = CutawayHealthClosure(frame)
-			end
-			E:Delay(self.db.cutawayHealthLength, cutawayHealth.closure)
-			cutawayHealth.isPlaying = true
-			cutawayHealth:Show()
+	if frame.HealthValueChangeCallbacks then
+		for _, cb in ipairs(frame.HealthValueChangeCallbacks) do
+			cb(self, frame, health)
 		end
-	else
-		if frame.CutawayHealth.isPlaying then
-			frame.CutawayHealth.isPlaying = nil
-			frame.CutawayHealth:SetScript("OnUpdate", nil)
-		end
-		frame.CutawayHealth:Hide()
 	end
 
 	frame.HealthBar:SetValue(health)
@@ -156,18 +133,32 @@ function mod:UpdateElement_Health(frame)
 	end
 end
 
+function mod:RegisterHealthBarCallbacks(frame, valueChangeCB, colorChangeCB, maxHealthChangeCB)
+	if valueChangeCB then
+		frame.HealthValueChangeCallbacks = frame.HealthValueChangeCallbacks or {}
+		tinsert(frame.HealthValueChangeCallbacks, valueChangeCB)
+	end
+
+	if colorChangeCB then
+		frame.HealthColorChangeCallbacks = frame.HealthColorChangeCallbacks or {}
+		tinsert(frame.HealthColorChangeCallbacks, colorChangeCB)
+	end
+
+	if maxHealthChangeCB then
+		frame.MaxHealthChangeCallbacks = frame.MaxHealthChangeCallbacks or {}
+		tinsert(frame.MaxHealthChangeCallbacks, maxHealthChangeCB)
+	end
+end
+
 function mod:ConfigureElement_HealthBar(frame, configuring)
 	local healthBar = frame.HealthBar
-	local cutawayHealth = frame.CutawayHealth
 
 	healthBar:SetPoint("TOP", frame, "CENTER", 0, self.db.units[frame.UnitType].castbar.height + 3)
 	healthBar:SetWidth(self.db.units[frame.UnitType].healthbar.width * (frame.ThreatScale or 1) * (frame.isTarget and self.db.useTargetScale and self.db.targetScale or 1))
 	healthBar:SetHeight(self.db.units[frame.UnitType].healthbar.height * (frame.ThreatScale or 1) * (frame.isTarget and self.db.useTargetScale and self.db.targetScale or 1))
 
-	cutawayHealth:SetAllPoints(healthBar)
 
 	healthBar:SetStatusBarTexture(LSM:Fetch("statusbar", self.db.statusbar), "BORDER")
-	cutawayHealth:SetStatusBarTexture(LSM:Fetch("statusbar", self.db.statusbar))
 
 	if (not configuring) and (self.db.units[frame.UnitType].healthbar.enable or frame.isTarget) then
 		healthBar:Show()
@@ -187,10 +178,6 @@ function mod:ConstructElement_HealthBar(parent)
 		local _, maxHealth = self:GetMinMaxValues()
 		self:GetStatusBarTexture():SetPoint("TOPRIGHT", -(width * ((maxHealth - health) / maxHealth)), 0)
 	end)
-
-	parent.CutawayHealth = CreateFrame("StatusBar", "$parentCutawayHealth", frame)
-	parent.CutawayHealth:SetStatusBarTexture(LSM:Fetch("background", "ElvUI Blank"))
-	parent.CutawayHealth:SetFrameLevel(frame:GetFrameLevel() - 1)
 
 	parent.FlashTexture = frame:CreateTexture(nil, "OVERLAY")
 	parent.FlashTexture:SetTexture(LSM:Fetch("background", "ElvUI Blank"))

@@ -134,6 +134,7 @@ function mod:SetTargetFrame(frame)
 				frame.HealthBar.r, frame.HealthBar.g, frame.HealthBar.b = nil, nil, nil
 				frame.CastBar:Hide()
 				self:ConfigureElement_HealthBar(frame)
+				self:ConfigureElement_CutawayHealth(frame)
 				self:ConfigureElement_CastBar(frame)
 				self:ConfigureElement_Glow(frame)
 				self:ConfigureElement_Elite(frame)
@@ -423,6 +424,7 @@ function mod:OnShow()
 
 	if mod.db.units[unitType].healthbar.enable or mod.db.alwaysShowTargetHealth then
 		mod:ConfigureElement_HealthBar(self.UnitFrame)
+		mod:ConfigureElement_CutawayHealth(self.UnitFrame)
 		mod:ConfigureElement_CastBar(self.UnitFrame)
 		mod:ConfigureElement_Glow(self.UnitFrame)
 
@@ -577,6 +579,7 @@ function mod:OnCreated(frame)
 	frame.UnitFrame.plateID = plateID
 
 	frame.UnitFrame.HealthBar = self:ConstructElement_HealthBar(frame.UnitFrame)
+	frame.UnitFrame.CutawayHealth = self:ConstructElement_CutawayHealth(frame.UnitFrame)
 	frame.UnitFrame.Level = self:ConstructElement_Level(frame.UnitFrame)
 	frame.UnitFrame.Name = self:ConstructElement_Name(frame.UnitFrame)
 	frame.UnitFrame.CastBar = self:ConstructElement_CastBar(frame.UnitFrame)

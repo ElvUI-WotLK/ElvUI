@@ -522,7 +522,7 @@ L["PvP Queue"] = true
 L["Reset Zoom"] = "重置缩放"
 L["Right"] = "右"
 L["Scale"] = "缩放"
-L["Smaller World Map"] = "更小的世界地图"
+L["Smaller World Map"] = "小型世界地图"
 L["Top Left"] = "左上"
 L["Top Right"] = "右上"
 L["Top"] = "上"
@@ -539,19 +539,19 @@ L["Unlock various elements of the UI to be repositioned."] = "解锁界面上的
 L["Version"] = "版本"
 
 --Module Reset
-L["Are you sure you want to reset ActionBars settings?"] = true
-L["Are you sure you want to reset Auras settings?"] = true
-L["Are you sure you want to reset Bags settings?"] = true
-L["Are you sure you want to reset Chat settings?"] = true
-L["Are you sure you want to reset Cooldown settings?"] = true
-L["Are you sure you want to reset DataBars settings?"] = true
-L["Are you sure you want to reset DataTexts settings?"] = true
-L["Are you sure you want to reset General settings?"] = true
-L["Are you sure you want to reset NamePlates settings?"] = true
-L["Are you sure you want to reset Tooltip settings?"] = true
-L["Are you sure you want to reset UnitFrames settings?"] = true
-L["Module Reset"] = true
-L["This section will help reset specfic settings back to default."] = true
+L["Are you sure you want to reset ActionBars settings?"] = "你确定要重置‘动作条’的设置吗？"
+L["Are you sure you want to reset Auras settings?"] = "你确定要重置‘光环’的设置吗？"
+L["Are you sure you want to reset Bags settings?"] = "你确定要重置‘背包’的设置吗？"
+L["Are you sure you want to reset Chat settings?"] = "你确定要重置‘聊天框’的设置吗？"
+L["Are you sure you want to reset Cooldown settings?"] = "你确定要重置‘冷却文字’的设置吗？"
+L["Are you sure you want to reset DataBars settings?"] = "你确定要重置‘数据条’的设置吗？"
+L["Are you sure you want to reset DataTexts settings?"] = "你确定要重置‘信息文字’的设置吗？"
+L["Are you sure you want to reset General settings?"] = "你确定要重置‘一般’的设置吗？"
+L["Are you sure you want to reset NamePlates settings?"] = "你确定要重置‘姓名版’的设置吗？"
+L["Are you sure you want to reset Tooltip settings?"] = "你确定要重置‘鼠标提示’的设置吗？"
+L["Are you sure you want to reset UnitFrames settings?"] = "你确定要重置‘单位框架’的设置吗？"
+L["Module Reset"] = "模块重置"
+L["This section will help reset specfic settings back to default."] = "这部分将帮助你重置特定设置为默认."
 
 --NamePlates
 L["# Displayed Auras"] = "显示光环的数量"

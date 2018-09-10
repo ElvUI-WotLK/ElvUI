@@ -17,9 +17,13 @@ local UnitIsConnected = UnitIsConnected
 local UnitIsDeadOrGhost = UnitIsDeadOrGhost
 local UnitIsUnit = UnitIsUnit
 
+local SpellRangeTable = {}
+
 function UF:Construct_Range()
 	local Range = {insideAlpha = 1, outsideAlpha = E.db.unitframe.OORAlpha}
 	Range.Override = UF.UpdateRange
+
+	SpellRangeTable[class] = SpellRangeTable[class] or {}
 
 	return Range
 end
@@ -39,10 +43,7 @@ function UF:Configure_Range(frame)
 	end
 end
 
-local SpellRangeTable = {}
-
 local function AddTable(tbl)
-	SpellRangeTable[class] = SpellRangeTable[class] or {}
 	SpellRangeTable[class][tbl] = {}
 end
 
@@ -81,32 +82,38 @@ local function getUnit(unit)
 end
 
 local function friendlyIsInRange(unit)
-	if CheckInteractDistance(unit, 1) then --Inspect (28 yards)
-		return true
+	if (not UnitIsUnit(unit, "player")) and (UnitInParty(unit) or UnitInRaid(unit)) then
+		unit = getUnit(unit) -- Swap the unit with `raid#` or `party#` when its NOT `player`, UnitIsUnit is true, and its not using `raid#` or `party#` already
 	end
 
-	if UnitIsDeadOrGhost(unit) and #SpellRangeTable[class].resSpells > 0 then
+	local inRange, checkedRange = UnitInRange(unit)
+	if checkedRange and not inRange then
+		return false -- blizz checked and said the unit is out of range
+	end
+
+	if CheckInteractDistance(unit, 1) then
+		return true -- within 28 yards (arg2 as 1 is compare achievements)
+	end
+
+	if UnitIsDeadOrGhost(unit) and #SpellRangeTable[class].resSpells > 0 then -- dead with rez spells
 		for _, spellID in ipairs(SpellRangeTable[class].resSpells) do
 			if SpellRange.IsSpellInRange(spellID, unit) == 1 then
-				return true
+				return true -- within rez range
 			end
 		end
 
-		return false
+		return false -- dead but no spells are in range
 	end
 
-	if #SpellRangeTable[class].friendlySpells == 0 and (UnitInRaid(unit) or UnitInParty(unit)) then
-		unit = getUnit(unit)
-		return unit and UnitInRange(unit)
-	else
+	if #SpellRangeTable[class].friendlySpells > 0 then -- you have some healy spell
 		for _, spellID in ipairs(SpellRangeTable[class].friendlySpells) do
 			if SpellRange.IsSpellInRange(spellID, unit) == 1 then
-				return true
+				return true -- within healy spell range
 			end
 		end
 	end
 
-	return false
+	return false -- not within 28 yards and no spells in range
 end
 
 local function petIsInRange(unit)
@@ -155,7 +162,7 @@ end
 function UF:UpdateRange()
 	local range = self.Range
 	local unit = self.unit
-	if(unit) then
+	if unit then
 		if UnitCanAttack("player", unit) then
 			if enemyIsInRange(unit) then
 				self:SetAlpha(range.insideAlpha)
@@ -171,7 +178,7 @@ function UF:UpdateRange()
 				self:SetAlpha(range.outsideAlpha)
 			end
 		else
-			if friendlyIsInRange(unit) and UnitIsConnected(unit) then
+			if UnitIsConnected(unit) and friendlyIsInRange(unit) then
 				self:SetAlpha(range.insideAlpha)
 			else
 				self:SetAlpha(range.outsideAlpha)

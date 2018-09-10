@@ -8,6 +8,7 @@ L["INCOMPATIBLE_ADDON"] = "Аддон %s не совместим с модуле
 
 --*_MSG locales
 L["LOGIN_MSG"] = "Добро пожаловать в %sElvUI|r версии %s%s|r, наберите /ec для доступа в меню настроек. Если Вам нужна техническая поддержка, посетите наш форум на https://github.com/ElvUI-WotLK/ElvUI или присоединяйтесь к серверу Discord: https://discord.gg/Uatdmm7"
+
 --ActionBars
 L["Binding"] = "Назначение"
 L["Key"] = "Клавиша"
