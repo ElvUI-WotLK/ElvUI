@@ -1,4 +1,5 @@
 # ElvUI - Wrath of the Lich King (3.3.5a)
+# THIS ADDON VERSION IS ONLY FOR SIRUS.SU
 
 This is the backported version of ElvUI for World of Warcraft - Wrath of the Lich King (3.3.5a)
 <br />
