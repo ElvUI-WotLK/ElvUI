@@ -11,8 +11,7 @@ local DUNGEON_DIFFICULTY, PLAYER_DIFFICULTY1, PLAYER_DIFFICULTY2 = DUNGEON_DIFFI
 local FACTION_STANDING_LABEL2, FACTION_STANDING_LABEL4, FACTION_STANDING_LABEL5 = FACTION_STANDING_LABEL2, FACTION_STANDING_LABEL4, FACTION_STANDING_LABEL5
 local SPEED, DISABLE, HEALTH, LEVEL, NONE, COMBAT, FILTERS = SPEED, DISABLE, HEALTH, LEVEL, NONE, COMBAT, FILTERS
 local ARENA, RAID, PARTY, BATTLEFIELDS = ARENA, RAID, PARTY, BATTLEFIELDS
-local BLOCK, ROLE, TANK, HEALER, DAMAGER, COLOR = BLOCK, ROLE, TANK, HEALER, DAMAGER, COLOR
-local RAID_CLASS_COLORS = RAID_CLASS_COLORS
+local BLOCK, ENEMY, ROLE, TANK, NAME, HEALER, DAMAGER, COLOR = BLOCK, ENEMY, ROLE, TANK, NAME, HEALER, DAMAGER, COLOR
 
 local selectedNameplateFilter
 
@@ -370,7 +369,7 @@ local function UpdateFilterGroup()
 					name = "",
 				},
 				names = {
-					name = L["Name"],
+					name = NAME,
 					order = 4,
 					type = "group",
 					disabled = function() return not (E.db.nameplates and E.db.nameplates.filters and E.db.nameplates.filters[selectedNameplateFilter] and E.db.nameplates.filters[selectedNameplateFilter].triggers and E.db.nameplates.filters[selectedNameplateFilter].triggers.enable) end,
@@ -1426,7 +1425,7 @@ local function UpdateFilterGroup()
 						name = {
 							order = 7,
 							type = "toggle",
-							name = L["Name"],
+							name = NAME,
 							get = function(info)
 								return E.global.nameplates.filters[selectedNameplateFilter].actions.color.name
 							end,
@@ -1761,9 +1760,18 @@ local function GetUnitSettings(unit, name)
 						set = function(info, value) E.db.nameplates.units[unit].buffs[ info[#info] ] = value; NP:ConfigureAll() end,
 					},
 					filtersGroup = {
-						name = FILTERS,
 						order = 4,
+						type = "range",
+						name = L["Icon Width Override"],
+						desc = L["If not set to 0 then set the width of the Aura Icon to this"],
+						min = 0, max = 60, step = 1,
+						get = function(info) return E.db.nameplates.units[unit].buffs[ info[#info]] end,
+						set = function(info, value) E.db.nameplates.units[unit].buffs[ info[#info] ] = value NP:ConfigureAll() end
+					},
+					filtersGroup = {
+						order = 5,
 						type = "group",
+						name = FILTERS,
 						guiInline = true,
 						args = {
 							minDuration = {
@@ -1929,10 +1937,19 @@ local function GetUnitSettings(unit, name)
 						get = function(info) return E.db.nameplates.units[unit].debuffs[ info[#info] ] end,
 						set = function(info, value) E.db.nameplates.units[unit].debuffs[ info[#info] ] = value; NP:ConfigureAll() end,
 					},
-					filtersGroup = {
-						name = FILTERS,
+					widthOverride = {
 						order = 4,
+						type = "range",
+						name = L["Icon Width Override"],
+						desc = L["If not set to 0 then set the width of the Aura Icon to this"],
+						min = 0, max = 60, step = 1,
+						get = function(info) return E.db.nameplates.units[unit].debuffs[ info[#info]] end,
+						set = function(info, value) E.db.nameplates.units[unit].debuffs[ info[#info] ] = value NP:ConfigureAll() end
+					},
+					filtersGroup = {
+						order = 5,
 						type = "group",
+						name = FILTERS,
 						guiInline = true,
 						args = {
 							minDuration = {
@@ -2081,7 +2098,7 @@ local function GetUnitSettings(unit, name)
 			},
 			nameGroup = {
 				order = 7,
-				name = L["Name"],
+				name = NAME,
 				type = "group",
 				get = function(info) return E.db.nameplates.units[unit].name[ info[#info] ]; end,
 				set = function(info, value) E.db.nameplates.units[unit].name[ info[#info] ] = value; NP:ConfigureAll(); end,
@@ -2089,7 +2106,7 @@ local function GetUnitSettings(unit, name)
 					header = {
 						order = 0,
 						type = "header",
-						name = L["Name"]
+						name = NAME
 					},
 					enable = {
 						order = 1,
@@ -2879,7 +2896,7 @@ E.Options.args.nameplate = {
 						bad = {
 							order = 2,
 							type = "color",
-							name = L["Enemy"],
+							name = ENEMY,
 							hasAlpha = false
 						},
 						neutral = {

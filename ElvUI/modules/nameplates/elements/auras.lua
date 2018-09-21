@@ -321,7 +321,7 @@ end
 function mod:Auras_SizeChanged(width)
 	local numAuras = #self.icons
 	for i = 1, numAuras do
-		self.icons[i]:SetWidth(((width - numAuras) / numAuras) - (E.private.general.pixelPerfect and 0 or 3))
+		self.icons[i]:SetWidth(self.db.widthOverride > 0 and self.db.widthOverride or ((width - numAuras) / numAuras) - (E.private.general.pixelPerfect and 0 or 3))
 		self.icons[i]:SetHeight((self.db.baseHeight or 18) * (self:GetParent().HealthBar.currentScale or 1))
 	end
 	self:SetHeight((self.db.baseHeight or 18) * (self:GetParent().HealthBar.currentScale or 1))
@@ -330,7 +330,7 @@ end
 function mod:UpdateAuraIcons(auras)
 	local maxAuras = auras.db.numAuras
 	local numCurrentAuras = #auras.icons
-	if(numCurrentAuras > maxAuras) then
+	if numCurrentAuras > maxAuras then
 		for i = maxAuras, numCurrentAuras do
 			tinsert(auraCache, auras.icons[i])
 			auras.icons[i]:Hide()
@@ -338,7 +338,7 @@ function mod:UpdateAuraIcons(auras)
 		end
 	end
 
-	if(numCurrentAuras ~= maxAuras) then
+	if numCurrentAuras ~= maxAuras then
 		self.Auras_SizeChanged(auras, auras:GetWidth(), auras:GetHeight())
 	end
 
@@ -368,17 +368,17 @@ function mod:UpdateAuraIcons(auras)
 			end
 		end
 
-		if(auras.side == "LEFT") then
-			if(i == 1) then
+		if auras.side == "LEFT" then
+			if i == 1 then
 				auras.icons[i]:SetPoint("BOTTOMLEFT", auras, "BOTTOMLEFT")
 			else
-				auras.icons[i]:SetPoint("LEFT", auras.icons[i-1], "RIGHT", E.Border + E.Spacing*3, 0)
+				auras.icons[i]:SetPoint("LEFT", auras.icons[i - 1], "RIGHT", E.Border + E.Spacing*3, 0)
 			end
 		else
-			if(i == 1) then
+			if i == 1 then
 				auras.icons[i]:SetPoint("BOTTOMRIGHT", auras, "BOTTOMRIGHT")
 			else
-				auras.icons[i]:SetPoint("RIGHT", auras.icons[i-1], "LEFT", -(E.Border + E.Spacing*3), 0)
+				auras.icons[i]:SetPoint("RIGHT", auras.icons[i - 1], "LEFT", -(E.Border + E.Spacing*3), 0)
 			end
 		end
 	end

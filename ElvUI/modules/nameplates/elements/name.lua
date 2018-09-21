@@ -2,38 +2,46 @@ local E, L, V, P, G = unpack(select(2, ...))
 local mod = E:GetModule("NamePlates")
 local LSM = LibStub("LibSharedMedia-3.0")
 
+local RAID_CLASS_COLORS = RAID_CLASS_COLORS
+local UNKNOWN = UNKNOWN
+
 function mod:UpdateElement_Name(frame, triggered)
 	if not triggered then
 		if not self.db.units[frame.UnitType].showName then return end
 	end
 
-	frame.Name:SetText(frame.UnitName)
+	frame.Name:SetText(frame.UnitName or UNKNOWN)
 
-	local r, g, b, classColor, useClassColor, useReactionColor
+	local r, g, b = 1, 1, 1
 	local class = frame.UnitClass
 	local reactionType = frame.UnitReaction
+	
+	local classColor, useClassColor
 	if class then
 		classColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class]
 		useClassColor = self.db.units[frame.UnitType].name and self.db.units[frame.UnitType].name.useClassColor
 	end
 
 	if useClassColor and (frame.UnitType == "FRIENDLY_PLAYER" or frame.UnitType == "ENEMY_PLAYER") then
-		if class and classColor then
-			r, g, b = classColor.r, classColor.g, classColor.b
-		end
+		r, g, b = classColor.r, classColor.g, classColor.b
 	elseif triggered or (not self.db.units[frame.UnitType].healthbar.enable and not frame.isTarget) then
-		if reactionType and reactionType == 4 then
-			r, g, b = self.db.reactions.neutral.r, self.db.reactions.neutral.g, self.db.reactions.neutral.b
-		elseif reactionType and reactionType > 4 then
-			if frame.UnitType == "FRIENDLY_PLAYER" then
-				r, g, b = mod.db.reactions.friendlyPlayer.r, mod.db.reactions.friendlyPlayer.g, mod.db.reactions.friendlyPlayer.b
+		if reactionType then
+			if reactionType == 4 then
+				r, g, b = self.db.reactions.neutral.r, self.db.reactions.neutral.g, self.db.reactions.neutral.b
+			elseif reactionType > 4 then
+				if frame.UnitType == "FRIENDLY_PLAYER" then
+					r, g, b = mod.db.reactions.friendlyPlayer.r, mod.db.reactions.friendlyPlayer.g, mod.db.reactions.friendlyPlayer.b
+				else
+					r, g, b = mod.db.reactions.good.r, mod.db.reactions.good.g, mod.db.reactions.good.b
+				end
 			else
-				r, g, b = mod.db.reactions.good.r, mod.db.reactions.good.g, mod.db.reactions.good.b
+				r, g, b = self.db.reactions.bad.r, self.db.reactions.bad.g, self.db.reactions.bad.b
 			end
-		else
-			r, g, b = self.db.reactions.bad.r, self.db.reactions.bad.g, self.db.reactions.bad.b
 		end
-	else
+	end
+
+	-- if for some reason the values failed just default to white
+	if not (r and g and b) then
 		r, g, b = 1, 1, 1
 	end
 
@@ -57,7 +65,7 @@ function mod:ConfigureElement_Name(frame)
 	name:SetJustifyH("LEFT")
 	name:SetJustifyV("BOTTOM")
 	name:ClearAllPoints()
-	if(self.db.units[frame.UnitType].healthbar.enable or (self.db.alwaysShowTargetHealth and frame.isTarget)) then
+	if self.db.units[frame.UnitType].healthbar.enable or (self.db.alwaysShowTargetHealth and frame.isTarget) then
 		name:SetJustifyH("LEFT")
 		name:SetPoint("BOTTOMLEFT", frame.HealthBar, "TOPLEFT", 0, E.Border*2)
 		name:SetPoint("BOTTOMRIGHT", frame.Level, "BOTTOMLEFT")

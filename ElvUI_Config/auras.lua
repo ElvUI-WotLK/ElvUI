@@ -1,5 +1,8 @@
-local E, L, V, P, G, _ = unpack(ElvUI);
-local A = E:GetModule("Auras");
+local E, L, V, P, G, _ = unpack(ElvUI)
+local A = E:GetModule("Auras")
+
+local BUFFOPTIONS_LABEL = BUFFOPTIONS_LABEL
+local FONT_SIZE, NAME, NONE = FONT_SIZE, NAME, NONE
 
 local function GetAuraOptions(headerName)
 	local auraOptions = {
@@ -77,7 +80,7 @@ local function GetAuraOptions(headerName)
 			values = {
 				["INDEX"] = L["Index"],
 				["TIME"] = L["Time"],
-				["NAME"] = L["Name"]
+				["NAME"] = NAME
 			}
 		},
 		sortDir = {
@@ -324,9 +327,9 @@ E.Options.args.auras = {
 				},
 				enable = {
 					order = 1,
+					type = "toggle",
 					name = L["Enable"],
 					desc = L["Display reminder bar on the minimap."],
-					type = "toggle",
 					set = function(info, value) E.db.general.reminder[ info[#info] ] = value; E:GetModule("Minimap"):UpdateSettings(); end
 				},
 				generalGroup = {
@@ -338,14 +341,14 @@ E.Options.args.auras = {
 					args = {
 						durations = {
 							order = 1,
-							name = L["Remaining Time"],
-							type = "toggle"
+							type = "toggle",
+							name = L["Remaining Time"]
 						},
 						reverse = {
 							order = 2,
+							type = "toggle",
 							name = L["Reverse Style"],
-							desc = L["When enabled active buff icons will light up instead of becoming darker, while inactive buff icons will become darker instead of being lit up."],
-							type = "toggle"
+							desc = L["When enabled active buff icons will light up instead of becoming darker, while inactive buff icons will become darker instead of being lit up."]
 						},
 						position = {
 							order = 3,
@@ -355,9 +358,9 @@ E.Options.args.auras = {
 							values = {
 								["LEFT"] = L["Left"],
 								["RIGHT"] = L["Right"]
-							},
-						},
-					},
+							}
+						}
+					}
 				},
 				fontGroup = {
 					order = 3,
@@ -367,32 +370,32 @@ E.Options.args.auras = {
 					disabled = function() return not E.db.general.reminder.enable or not E.db.general.reminder.durations end,
 					args = {
 						font = {
-							type = "select", dialogControl = "LSM30_Font",
 							order = 1,
+							type = "select", dialogControl = "LSM30_Font",
 							name = L["Font"],
 							values = AceGUIWidgetLSMlists.font
 						},
 						fontSize = {
 							order = 2,
-							name = FONT_SIZE,
 							type = "range",
+							name = FONT_SIZE,
 							min = 6, max = 22, step = 1
 						},
 						fontOutline = {
 							order = 3,
+							type = "select",
 							name = L["Font Outline"],
 							desc = L["Set the font outline."],
-							type = "select",
 							values = {
 								["NONE"] = NONE,
 								["OUTLINE"] = "OUTLINE",
 								["MONOCHROMEOUTLINE"] = "MONOCROMEOUTLINE",
 								["THICKOUTLINE"] = "THICKOUTLINE"
-							},
-						},
-					},
-				},
-			},
-		},
+							}
+						}
+					}
+				}
+			}
+		}
 	}
-};
+}

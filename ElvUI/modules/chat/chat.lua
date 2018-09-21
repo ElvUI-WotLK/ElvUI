@@ -6,9 +6,8 @@ local _G = _G
 local time, difftime = time, difftime
 local pairs, unpack, select, tostring, pcall, next, tonumber, type, assert = pairs, unpack, select, tostring, pcall, next, tonumber, type, assert
 local tinsert, tremove, tconcat = table.insert, table.remove, table.concat
-local strmatch = strmatch
 local gsub, find, gmatch, format, split = string.gsub, string.find, string.gmatch, string.format, string.split
-local strlower, strsub, strlen, strupper = strlower, strsub, strlen, strupper
+local strlower, strmatch, strsub, strlen, strupper = strlower, strmatch, strsub, strlen, strupper
 
 local BetterDate = BetterDate
 local ChatEdit_ActivateChat = ChatEdit_ActivateChat

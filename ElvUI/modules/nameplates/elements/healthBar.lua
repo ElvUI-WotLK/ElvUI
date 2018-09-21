@@ -2,6 +2,8 @@ local E, L, V, P, G = unpack(select(2, ...))
 local mod = E:GetModule("NamePlates")
 local LSM = LibStub("LibSharedMedia-3.0")
 
+local RAID_CLASS_COLORS = RAID_CLASS_COLORS
+
 function mod:UpdateElement_HealthOnValueChanged()
 	local frame = self:GetParent().UnitFrame
 	if not frame.UnitType then return end -- Bugs
