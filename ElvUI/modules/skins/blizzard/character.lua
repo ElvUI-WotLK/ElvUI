@@ -9,8 +9,8 @@ local function LoadSkin()
 
 	CharacterFrame:StripTextures(true)
 	CharacterFrame:CreateBackdrop("Transparent")
-	CharacterFrame.backdrop:Point("TOPLEFT", 10, -12)
-	CharacterFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
+	CharacterFrame.backdrop:Point("TOPLEFT", 0, 0)
+	CharacterFrame.backdrop:Point("BOTTOMRIGHT", 0, 0)
 
 	S:HandleCloseButton(CharacterFrameCloseButton)
 	CharacterFrameCloseButton:Point("CENTER", CharacterFrame, "TOPRIGHT", -45, -25)
@@ -231,10 +231,10 @@ local function LoadSkin()
 	CharacterFrame:HookScript("OnShow", ColorItemBorder)
 	ColorItemBorder()
 
-	S:HandleRotateButton(CharacterModelFrameRotateLeftButton)
-	CharacterModelFrameRotateLeftButton:SetPoint("TOPLEFT", 3, -3)
-	S:HandleRotateButton(CharacterModelFrameRotateRightButton)
-	CharacterModelFrameRotateRightButton:SetPoint("TOPLEFT", CharacterModelFrameRotateLeftButton, "TOPRIGHT", 3, 0)
+	-- S:HandleRotateButton(CharacterModelFrameControlFrameRotateLeftButton)
+	-- CharacterModelFrameControlFrameRotateLeftButton:SetPoint("TOPLEFT", 3, -3)
+	-- S:HandleRotateButton(CharacterModelFrameControlFrameRotateRightButton)
+	-- CharacterModelFrameControlFrameRotateRightButton:SetPoint("TOPLEFT", CharacterModelFrameControlFrameRotateLeftButton, "TOPRIGHT", 3, 0)
 
 	local function HandleResistanceFrame(frameName)
 		for i = 1, 5 do
@@ -291,8 +291,6 @@ local function LoadSkin()
 	select(1, PetMagicResFrame5:GetRegions()):SetTexCoord(0.21875, 0.8125, 0.4765625, 0.55078125) --Shadow
 
 	PetAttributesFrame:StripTextures()
-
-	S:HandleButton(PetPaperDollCloseButton)
 
 	PetPaperDollFrameExpBar:StripTextures()
 	PetPaperDollFrameExpBar:SetStatusBarTexture(E["media"].normTex)
@@ -479,12 +477,16 @@ local function LoadSkin()
 	SkillDetailScrollFrame:StripTextures()
 	S:HandleScrollBar(SkillDetailScrollFrameScrollBar)
 
-	S:HandleButton(SkillFrameCancelButton)
-	SkillFrameCancelButton:Point("CENTER", SkillFrame, "TOPLEFT", 307, -420)
+	if SkillFrameCancelButton then
+		S:HandleButton(SkillFrameCancelButton)
+		SkillFrameCancelButton:Point("CENTER", SkillFrame, "TOPLEFT", 307, -420)
+	end
 
 	TokenFrame:StripTextures(true)
 
-	select(4, TokenFrame:GetChildren()):Hide()
+	if select(4, TokenFrame:GetChildren()) then
+		select(4, TokenFrame:GetChildren()):Hide()
+	end
 
 	hooksecurefunc("TokenFrame_Update", function()
 		local scrollFrame = TokenFrameContainer
@@ -539,8 +541,10 @@ local function LoadSkin()
 
 	S:HandleScrollBar(TokenFrameContainerScrollBar)
 
-	S:HandleButton(TokenFrameCancelButton)
-	TokenFrameCancelButton:Point("CENTER", TokenFrame, "TOPLEFT", 307, -420)
+	if TokenFrameCancelButton then
+		S:HandleButton(TokenFrameCancelButton)
+		TokenFrameCancelButton:Point("CENTER", TokenFrame, "TOPLEFT", 307, -420)
+	end
 
 	TokenFramePopup:StripTextures()
 	TokenFramePopup:SetTemplate("Transparent")

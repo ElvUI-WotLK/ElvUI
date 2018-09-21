@@ -39,6 +39,9 @@ local function LoadSkin()
 	S:HandleButton(LFDDungeonReadyDialogEnterDungeonButton)
 	LFDDungeonReadyDialogLeaveQueueButton:Point("BOTTOMLEFT", LFDDungeonReadyDialog, "BOTTOM", 7, 10)
 	S:HandleButton(LFDDungeonReadyDialogLeaveQueueButton)
+    
+    LFDParentFrameArt:StripTextures(true)
+	LFDParentFrameArt:CreateBackdrop("Transparent")
 
 	--[[LFDDungeonReadyDialogRoleIcon:Size(57)
 	LFDDungeonReadyDialogRoleIcon:ClearAllPoints()
@@ -122,11 +125,8 @@ local function LoadSkin()
 	LFDSearchStatus:SetTemplate("Transparent")
 
 	LFDQueueFrame:StripTextures(true)
-	LFDQueueFrame:CreateBackdrop("Transparent")
-	LFDQueueFrame.backdrop:Point("TOPLEFT", 10, -11)
-	LFDQueueFrame.backdrop:Point("BOTTOMRIGHT", -1, 0)
 
-	LFDParentFramePortrait:Kill()
+	-- LFDParentFramePortrait:Kill()
 
 	for i = 1, LFDParentFrame:GetNumChildren() do
 		local child = select(i, LFDParentFrame:GetChildren())
@@ -145,8 +145,8 @@ local function LoadSkin()
 	LFDQueueFrameRoleButtonLeader.checkButton:SetFrameLevel(LFDQueueFrameRoleButtonLeader.checkButton:GetFrameLevel() + 2)
 
 	S:HandleDropDownBox(LFDQueueFrameTypeDropDown)
-	LFDQueueFrameTypeDropDown:HookScript("OnShow", function(self) self:Width(200) end)
-	LFDQueueFrameTypeDropDown:Point("TOPLEFT", 151, -125)
+	LFDQueueFrameTypeDropDown:HookScript("OnShow", function(self) self:Width(230) end)
+	LFDQueueFrameTypeDropDown:Point("TOPLEFT", 101, -125)
 
 	local function SkinLFDRandomDungeonLoot(frame)
 		if frame.isSkinned then return end
@@ -218,7 +218,6 @@ local function LoadSkin()
 	S:HandleScrollBar(LFDQueueFrameSpecificListScrollFrameScrollBar)
 
 	S:HandleButton(LFDQueueFrameFindGroupButton)
-	S:HandleButton(LFDQueueFrameCancelButton)
 
 	hooksecurefunc("LFDQueueFrameRandomCooldownFrame_Update", function()
 		if LFDQueueFrameCooldownFrame:IsShown() then
@@ -230,6 +229,10 @@ local function LoadSkin()
 	S:HandleButton(LFDQueueFramePartyBackfillNoBackfillButton)
 
 	S:HandleButton(LFDQueueFrameNoLFDWhileLFRLeaveQueueButton)
+    
+    for i = 1, 2 do
+		S:HandleTab(_G["LFDParentFrameTab"..i])
+	end
 end
 
 S:AddCallback("LFD", LoadSkin)

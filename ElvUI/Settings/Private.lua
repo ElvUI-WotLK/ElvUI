@@ -74,6 +74,7 @@ V["skins"] = {
 		["gmchat"] = true,
 		["gossip"] = true,
 		["greeting"] = true,
+		["guild"] = true,
 		["guildregistrar"] = true,
 		["help"] = true,
 		["inspect"] = true,
@@ -101,7 +102,7 @@ V["skins"] = {
 		["tradeskill"] = true,
 		["trainer"] = true,
 		["tutorial"] = true,
-		["watchframe"] = true,
+		["watchframe"] = false,
 		["worldmap"] = true,
 		["mirrorTimers"] = true
 	},

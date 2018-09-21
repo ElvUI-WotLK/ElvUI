@@ -50,7 +50,7 @@ local function AddSpell(tbl, spellID)
 end
 
 function UF:UpdateRangeCheckSpells()
-	for tbl, spells in pairs(E.global.unitframe.spellRangeCheck[class]) do
+	for tbl, spells in pairs(E.global.unitframe.spellRangeCheck[E.myclass]) do
 		AddTable(tbl) --Create the table holding spells, even if it ends up being an empty table
 		for spellID in pairs(spells) do
 			local enabled = spells[spellID]

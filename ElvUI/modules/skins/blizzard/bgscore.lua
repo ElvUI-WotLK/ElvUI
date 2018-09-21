@@ -31,16 +31,15 @@ local function LoadSkin()
 	S:HandleButton(WorldStateScoreFrameLeaveButton);
 	S:HandleCloseButton(WorldStateScoreFrameCloseButton);
 
+	WorldStateScoreFrameName:StyleButton()
+	WorldStateScoreFrameTeam:StyleButton()
 	WorldStateScoreFrameKB:StyleButton()
 	WorldStateScoreFrameDeaths:StyleButton()
 	WorldStateScoreFrameHK:StyleButton()
 	WorldStateScoreFrameDamageDone:StyleButton()
 	WorldStateScoreFrameHealingDone:StyleButton()
+	WorldStateScoreFrameTeamSkill:StyleButton()
 	WorldStateScoreFrameHonorGained:StyleButton()
-	WorldStateScoreFrameName:StyleButton()
-	WorldStateScoreFrameClass:StyleButton()
-	WorldStateScoreFrameTeam:StyleButton()
-	--WorldStateScoreFrameRatingChange:StyleButton()
 
 	for i = 1, 5 do
 		_G["WorldStateScoreColumn"..i]:StyleButton()

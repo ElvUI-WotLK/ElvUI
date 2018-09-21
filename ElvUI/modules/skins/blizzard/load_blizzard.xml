@@ -15,6 +15,7 @@
 	<Script file="debug.lua"/>
 	<Script file="dressingroom.lua"/>
 	<Script file="friends.lua"/>
+	<Script file="guild.lua"/>
 	<Script file="gbank.lua"/>
 	<Script file="glyph.lua"/>
 	<Script file="gmchat.lua"/>

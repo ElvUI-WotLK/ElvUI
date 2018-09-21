@@ -15,8 +15,8 @@ local function LoadSkin()
 
 	SpellBookFrame:StripTextures(true)
 	SpellBookFrame:CreateBackdrop("Transparent")
-	SpellBookFrame.backdrop:Point("TOPLEFT", 10, -12)
-	SpellBookFrame.backdrop:Point("BOTTOMRIGHT", -31, 75)
+	SpellBookFrame.backdrop:Point("TOPLEFT", 0, 0)
+	SpellBookFrame.backdrop:Point("BOTTOMRIGHT", 0, 0)
 
 --[[
 	SpellBookFrame:EnableMouseWheel(true)
@@ -40,11 +40,15 @@ local function LoadSkin()
 	end)
 ]]
 
-	for i = 1, 3 do
+	for i = 1, 5 do
 		local tab = _G["SpellBookFrameTabButton"..i]
+        
+        if tab == nil then
+            break
+        end
 
 		tab:GetNormalTexture():SetTexture(nil)
-		tab:GetDisabledTexture():SetTexture(nil)
+		-- tab:GetDisabledTexture():SetTexture(nil)
 
 		S:HandleTab(tab)
 
@@ -55,7 +59,7 @@ local function LoadSkin()
 	S:HandleNextPrevButton(SpellBookPrevPageButton)
 	S:HandleNextPrevButton(SpellBookNextPageButton)
 
-	S:HandleCloseButton(SpellBookCloseButton)
+	S:HandleCloseButton(SpellBookFrameCloseButton)
 
 	S:HandleCheckBox(ShowAllSpellRanksCheckBox)
 
@@ -63,8 +67,8 @@ local function LoadSkin()
 		local button = _G["SpellButton"..i]
 		button:StripTextures()
 
-		_G["SpellButton"..i.."AutoCastable"]:SetTexture("Interface\\Buttons\\UI-AutoCastableOverlay")
-		_G["SpellButton"..i.."AutoCastable"]:SetOutside(button, 16, 16)
+		-- _G["SpellButton"..i.."AutoCast"]:SetTexture("Interface\\Buttons\\UI-AutoCastableOverlay")
+		-- _G["SpellButton"..i.."AutoCast"]:SetOutside(button, 16, 16)
 
 		button:CreateBackdrop("Default", true)
 
@@ -73,12 +77,12 @@ local function LoadSkin()
 		E:RegisterCooldown(_G["SpellButton"..i.."Cooldown"])
 	end
 
-	hooksecurefunc("SpellButton_UpdateButton", function(self)
-		local name = self:GetName()
-		_G[name.."SpellName"]:SetTextColor(1, 0.80, 0.10)
-		_G[name.."SubSpellName"]:SetTextColor(1, 1, 1)
-		_G[name.."Highlight"]:SetTexture(1, 1, 1, 0.3)
-	end)
+	-- hooksecurefunc("SpellButton_UpdateButton", function(self)
+		-- local name = self:GetName()
+		-- _G[name.."SpellName"]:SetTextColor(1, 0.80, 0.10)
+		-- _G[name.."SubSpellName"]:SetTextColor(1, 1, 1)
+		-- _G[name.."Highlight"]:SetTexture(1, 1, 1, 0.3)
+	-- end)
 
 	for i = 1, MAX_SKILLLINE_TABS do
 		local tab = _G["SpellBookSkillLineTab"..i]

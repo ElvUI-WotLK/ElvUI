@@ -10,19 +10,6 @@ local UnitLevel = UnitLevel
 local UpdateMicroButtonsParent = UpdateMicroButtonsParent
 local RegisterStateDriver = RegisterStateDriver
 
-local MICRO_BUTTONS = {
-	"CharacterMicroButton",
-	"SpellbookMicroButton",
-	"TalentMicroButton",
-	"AchievementMicroButton",
-	"QuestLogMicroButton",
-	"SocialsMicroButton",
-	"PVPMicroButton",
-	"LFDMicroButton",
-	"MainMenuMicroButton",
-	"HelpMicroButton"
-}
-
 local function onEnter()
 	if AB.db.microbar.mouseover then
 		E:UIFrameFadeIn(ElvUI_MicroBar, 0.2, ElvUI_MicroBar:GetAlpha(), AB.db.microbar.alpha)
@@ -95,10 +82,10 @@ function AB:UpdateMicroPositionDimensions()
 	local offset = E:Scale(E.PixelMode and 1 or 3)
 	local spacing = E:Scale(offset + self.db.microbar.buttonSpacing)
 
-	for i = 1, #MICRO_BUTTONS do
-		local button = _G[MICRO_BUTTONS[i]]
+	for i = 1, #SHARED_MICROMENU_BUTTONS do
+		local button = _G[SHARED_MICROMENU_BUTTONS[i]]
 		local lastColumnButton = i - self.db.microbar.buttonsPerRow
-		lastColumnButton = _G[MICRO_BUTTONS[lastColumnButton]]
+		lastColumnButton = _G[SHARED_MICROMENU_BUTTONS[lastColumnButton]]
 
 		button:Size(self.db.microbar.buttonSize, self.db.microbar.buttonSize * 1.4)
 		button:ClearAllPoints()
@@ -138,15 +125,15 @@ end
 
 function AB:UpdateMicroButtons()
 	-- PvP Micro Button
-	PVPMicroButtonTexture:Point("TOPLEFT", PVPMicroButton, "TOPLEFT")
-	PVPMicroButtonTexture:Point("BOTTOMRIGHT", PVPMicroButton, "BOTTOMRIGHT")
-	PVPMicroButtonTexture:SetTexture("Interface\\AddOns\\ElvUI\\media\\textures\\PVP-Icons")
+	-- PVPMicroButtonTexture:Point("TOPLEFT", PVPMicroButton, "TOPLEFT")
+	-- PVPMicroButtonTexture:Point("BOTTOMRIGHT", PVPMicroButton, "BOTTOMRIGHT")
+	-- PVPMicroButtonTexture:SetTexture("Interface\\AddOns\\ElvUI\\media\\textures\\PVP-Icons")
 
-	if UnitLevel("player") < PVPMicroButton.minLevel then
-		PVPMicroButtonTexture:SetDesaturated(true)
-	else
-		PVPMicroButtonTexture:SetDesaturated(false)
-	end
+	-- if UnitLevel("player") < PVPMicroButton.minLevel then
+		-- PVPMicroButtonTexture:SetDesaturated(true)
+	-- else
+		-- PVPMicroButtonTexture:SetDesaturated(false)
+	-- end
 
 	self:UpdateMicroPositionDimensions()
 end
@@ -162,23 +149,23 @@ function AB:SetupMicroBar()
 	microBar.visibility:SetScript("OnShow", function() microBar:Show() end)
 	microBar.visibility:SetScript("OnHide", function() microBar:Hide() end)
 
-	for i = 1, #MICRO_BUTTONS do
-		self:HandleMicroButton(_G[MICRO_BUTTONS[i]])
+	for i = 1, #SHARED_MICROMENU_BUTTONS do
+		self:HandleMicroButton(_G[SHARED_MICROMENU_BUTTONS[i]])
 	end
 
 	MicroButtonPortrait:SetInside(CharacterMicroButton.backdrop)
 
-	if E.myfaction == "Alliance"  then
-		PVPMicroButtonTexture:SetTexCoord(0.545, 0.935, 0.070, 0.940)
-	else
-		PVPMicroButtonTexture:SetTexCoord(0.100, 0.475, 0.070, 0.940)
-	end
+	-- if E.myfaction == "Alliance"  then
+		-- PVPMicroButtonTexture:SetTexCoord(0.545, 0.935, 0.070, 0.940)
+	-- else
+		-- PVPMicroButtonTexture:SetTexCoord(0.100, 0.475, 0.070, 0.940)
+	-- end
 
 	self:SecureHook("VehicleMenuBar_MoveMicroButtons", "UpdateMicroButtonsParent")
 	self:SecureHook("UpdateMicroButtons")
 
 	self:UpdateMicroPositionDimensions()
-	MainMenuBarPerformanceBar:Kill()
+	-- MainMenuBarPerformanceBar:Kill()
 
 	E:CreateMover(microBar, "MicrobarMover", L["Micro Bar"], nil, nil, nil, "ALL,ACTIONBARS")
 end

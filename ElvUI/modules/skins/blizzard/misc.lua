@@ -19,11 +19,13 @@ local function LoadSkin()
 	local BlizzardMenuButtons = {
 		"Options",
 		"UIOptions",
+		"AudioOptions",
 		"Keybindings",
 		"Macros",
 		"SoundOptions",
 		"Logout",
 		"Quit",
+		"Help",
 		"Continue",
 	}
 
