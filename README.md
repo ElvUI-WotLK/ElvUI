@@ -19,7 +19,7 @@ This UI will arrange your interface to be more flexible and practical.
 
 ## Installation:
 
-1. Download **[Latest Version](https://github.com/ElvUI-WotLK/ElvUI/releases/latest)**
+1. Download **[Latest Version](https://github.com/lost-illusion/ElvUI/releases/latest)**
 2. Unpack the Zip file
 3. Open the folder "ElvUI-(#.##)"
 4. Copy (or drag and drop) **ElvUI** and **ElvUI_Config** into your Wow-Directory\Interface\AddOns
@@ -118,7 +118,7 @@ ElvUI supports and contains language specific code for the following gameclients
 ## FAQ:
 
 ### I would like to report a bug. What i need to do?
-Make sure you're using the latest version of [ElvUI](https://github.com/ElvUI-WotLK/ElvUI/releases/latest)
+Make sure you're using the latest version of [ElvUI](https://github.com/lost-illusion/ElvUI/releases/latest)
 <br />
 Describe your issue in as much detail as possible.
 <br />
@@ -150,7 +150,7 @@ The only purpose of ElvUI-WotLK is to improve the backported version of ElvUI an
 ## FAQ RU:
 
 ### Я хочу сообщить о баге. Что мне нужно делать?
-Убедитесь что вы используете последнюю версию [ElvUI](https://github.com/ElvUI-WotLK/ElvUI/releases/latest)
+Убедитесь что вы используете последнюю версию [ElvUI](https://github.com/lost-illusion/ElvUI/releases/latest)
 <br />
 Детально опишите свою проблему.
 <br />
