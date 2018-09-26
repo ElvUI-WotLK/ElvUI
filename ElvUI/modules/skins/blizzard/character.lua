@@ -267,16 +267,16 @@ local function LoadSkin()
 
 	PetPaperDollFrame:StripTextures(true)
 
-	for i=1, 3 do
-		local Tab = _G["PetPaperDollFrameTab"..i]
-		Tab:StripTextures()
-		Tab:CreateBackdrop("Default", true)
-		Tab.backdrop:Point("TOPLEFT", 3, -7)
-		Tab.backdrop:Point("BOTTOMRIGHT", -2, -1)
+	-- for i=1, 3 do
+		-- local Tab = _G["PetPaperDollFrameTab"..i]
+		-- Tab:StripTextures()
+		-- Tab:CreateBackdrop("Default", true)
+		-- Tab.backdrop:Point("TOPLEFT", 3, -7)
+		-- Tab.backdrop:Point("BOTTOMRIGHT", -2, -1)
 
-		Tab:HookScript("OnEnter", function(self) self.backdrop:SetBackdropBorderColor(unpack(E["media"].rgbvaluecolor)) end)
-		Tab:HookScript("OnLeave", function(self) self.backdrop:SetBackdropBorderColor(unpack(E["media"].bordercolor)) end)
-	end
+		-- Tab:HookScript("OnEnter", function(self) self.backdrop:SetBackdropBorderColor(unpack(E["media"].rgbvaluecolor)) end)
+		-- Tab:HookScript("OnLeave", function(self) self.backdrop:SetBackdropBorderColor(unpack(E["media"].bordercolor)) end)
+	-- end
 
 	S:HandleRotateButton(PetModelFrameRotateLeftButton)
 	S:HandleRotateButton(PetModelFrameRotateRightButton)
