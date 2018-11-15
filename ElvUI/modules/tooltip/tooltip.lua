@@ -419,7 +419,10 @@ function TT:GameTooltip_OnTooltipSetUnit(tt)
 			local itemLevel = ItemLevelMixIn:GetItemLevel( unitGUID )
 			if itemLevel then
 				local color = ItemLevelMixIn:GetColor(itemLevel)
-				tooltipLine = string.gsub(TOOLTIP_UNIT_LEVEL_ILEVEL_LABEL, TOOLTIP_UNIT_LEVEL_ILEVEL_LOADING_LABEL, color:WrapTextInColorCode(itemLevel))
+				
+				if color then
+					tooltipLine = string.gsub(TOOLTIP_UNIT_LEVEL_ILEVEL_LABEL, TOOLTIP_UNIT_LEVEL_ILEVEL_LOADING_LABEL, color:WrapTextInColorCode(itemLevel))
+				end
 			end
 		end
 
