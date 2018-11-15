@@ -66,7 +66,6 @@ do
 		self.massiveShakeObjects = {};
 		tinsert(self.massiveShakeObjects, GameTooltip);
 		tinsert(self.massiveShakeObjects, Minimap);
-		tinsert(self.massiveShakeObjects, WatchFrame);
 		tinsert(self.massiveShakeObjects, LeftChatPanel);
 		tinsert(self.massiveShakeObjects, RightChatPanel);
 		tinsert(self.massiveShakeObjects, LeftChatToggleButton);
