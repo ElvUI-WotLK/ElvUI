@@ -408,6 +408,23 @@ function TT:GameTooltip_OnTooltipSetUnit(tt)
 	if textWidth then
 		tt:SetMinimumWidth(textWidth)
 	end
+
+	if UnitIsPlayer(unit) then
+		ItemLevelMixIn:Request(unit)
+
+		local unitGUID = UnitGUID(unit)
+		local tooltipLine = TOOLTIP_UNIT_LEVEL_ILEVEL_LABEL
+
+		if unitGUID then
+			local itemLevel = ItemLevelMixIn:GetItemLevel( unitGUID )
+			if itemLevel then
+				local color = ItemLevelMixIn:GetColor(itemLevel)
+				tooltipLine = string.gsub(TOOLTIP_UNIT_LEVEL_ILEVEL_LABEL, TOOLTIP_UNIT_LEVEL_ILEVEL_LOADING_LABEL, color:WrapTextInColorCode(itemLevel))
+			end
+		end
+
+		GameTooltip:AddLine(tooltipLine, 1, 1, 1, true)
+	end
 end
 
 function TT:GameTooltipStatusBar_OnValueChanged(tt, value)
