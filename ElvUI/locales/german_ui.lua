@@ -7,7 +7,7 @@ if not L then return end
 L["INCOMPATIBLE_ADDON"] = "Das Addon %s ist nicht mit dem ElvUI %s Modul kompatibel. Bitte deaktiviere entweder das Addon oder deaktiviere das ElvUI Modul."
 
 --*_MSG locales
-L["LOGIN_MSG"] = "Willkommen zu %sElvUI|r Version %s%s|r, Tippe /ec um das Konfigurationsmenü aufzurufen. Für technische Hilfe, besuche das Supportforum unter https://github.com/ElvUI-WotLK/ElvUI oder trete unserem Discord bei: https://discord.gg/Uatdmm7"
+L["LOGIN_MSG"] = "Willkommen zu %sElvUI|r Version %s%s|r, Tippe /ec um das Konfigurationsmenü aufzurufen. Für technische Hilfe, besuche das Supportforum unter https://github.com/sirus-addons/ElvUI oder trete unserem Discord bei: https://discord.gg/Uatdmm7"
 
 --ActionBars
 L["Binding"] = "Belegung"
@@ -172,7 +172,7 @@ L["This resolution doesn't require that you change settings for the UI to fit on
 L["This resolution requires that you change some settings to get everything to fit on your screen."] = "Diese Auflösung benötigt Änderungen um mit der Benutzeroberfläche zu funktionieren."
 L["This will change the layout of your unitframes and actionbars."] = "Dies wird das Layout der Einheitenfenster und Aktionsleisten ändern."
 L["Welcome to ElvUI version %s!"] = "Willkommen bei ElvUI Version %s!"
-L["You are now finished with the installation process. If you are in need of technical support please visit us at https://github.com/ElvUI-WotLK/ElvUI"] = "Du hast den Installationsprozess abgeschlossen. Solltest du technische Hilfe benötigen, besuche uns auf https://github.com/ElvUI-WotLK/ElvUI"
+L["You are now finished with the installation process. If you are in need of technical support please visit us at https://github.com/sirus-addons/ElvUI"] = "Du hast den Installationsprozess abgeschlossen. Solltest du technische Hilfe benötigen, besuche uns auf https://github.com/sirus-addons/ElvUI"
 L["You can always change fonts and colors of any element of ElvUI from the in-game configuration."] = "Du kannst jederzeit in der Ingame-Konfiguration Schriften und Farben von jedem Element des Interfaces ändern."
 L["You can now choose what layout you wish to use based on your combat role."] = "Du kannst nun auf Basis deiner Rolle im Kampf ein Layout wählen."
 L["You may need to further alter these settings depending how low you resolution is."] = "Unter Umständen musst du, je nachdem wie niedrig deine Auflösung ist, diese Einstellungen ändern."
@@ -300,8 +300,8 @@ L["Disable Warning"] = "Deaktiviere Warnung"
 L["Discard"] = "Verwerfen"
 L["Do you enjoy the new ElvUI?"] = "Gefällt dir das neue ElvUI?"
 L["Do you swear not to post in technical support about something not working without first disabling the addon/module combination first?"] = "Schwörst du, dass du keinen Beitrag im Supportforum posten wirst, ohne vorher alle anderen Addons/Module zu deaktivieren?"
-L["ElvUI is five or more revisions out of date. You can download the newest version from https://github.com/ElvUI-WotLK/ElvUI/"] = "ElvUI ist seit fünf oder mehr Revisionen nicht aktuell. Du kannst die neueste Version unter https://github.com/ElvUI-WotLK/ElvUI/ herunterladen."
-L["ElvUI is out of date. You can download the newest version from https://github.com/ElvUI-WotLK/ElvUI/"] = "ElvUI ist nicht aktuell. Du kannst die neueste Version unter https://github.com/ElvUI-WotLK/ElvUI/ herunterladen."
+L["ElvUI is five or more revisions out of date. You can download the newest version from https://github.com/sirus-addons/ElvUI/"] = "ElvUI ist seit fünf oder mehr Revisionen nicht aktuell. Du kannst die neueste Version unter https://github.com/sirus-addons/ElvUI/ herunterladen."
+L["ElvUI is out of date. You can download the newest version from https://github.com/sirus-addons/ElvUI/"] = "ElvUI ist nicht aktuell. Du kannst die neueste Version unter https://github.com/sirus-addons/ElvUI/ herunterladen."
 L["ElvUI needs to perform database optimizations please be patient."] = "ElvUI muss eine Datenbankoptimierung durchführen. Bitte warte einen Moment."
 L["Error resetting UnitFrame."] = "Fehler beim Zurücksetzen des Einheitenfesters."
 L["Hover your mouse over any actionbutton or spellbook button to bind it. Press the escape key or right click to clear the current actionbutton's keybinding."] = "Bewege deine Maus über einen Aktionsbutton oder dein Zauberbuch um ihn mit einem Hotkey zu belegen. Drücke Escape oder rechte Maustaste um die aktuelle Tastenbelegung des Buttons zu löschen."
@@ -329,7 +329,7 @@ L["Targeted By:"] = "Ziel von:"
 --Tutorials
 L["A raid marker feature is available by pressing Escape -> Keybinds scroll to the bottom under ElvUI and setting a keybind for the raid marker."] = "Ein Feature für Schlachtzugsmarkierung ist verfügbar, wenn du Escape drückst und Tastaturbelegung wählst. Scrolle anschließend bis unter die Kategorie ElvUI und wähle eine Tastenbelegung für die Schlachtzugsmarkierung."
 L["ElvUI has a dual spec feature which allows you to load different profiles based on your current spec on the fly. You can enable this from the profiles tab."] = "ElvUI hat ein Feature für Dualspezialisierungen, welches dich abhängig von deiner momentanen Spezialisierung verschiedene Profile laden lässt. Dieses Feature kannst du im Abschnitt Profil aktivieren."
-L["For technical support visit us at https://github.com/ElvUI-WotLK/ElvUI"] = "Für technische Hilfe besuche uns unter https://github.com/ElvUI-WotLK/ElvUI"
+L["For technical support visit us at https://github.com/sirus-addons/ElvUI"] = "Für technische Hilfe besuche uns unter https://github.com/sirus-addons/ElvUI"
 L["If you accidently remove a chat frame you can always go the in-game configuration menu, press install, go to the chat portion and reset them."] = "Wenn du ausversehen das Chatfenster entfernen solltest, kannst du ganz einfach in die Ingame-Konfiguration gehen und den Installationsprozess erneut aufrufen. Drücke Installieren und gehe zu den Chateinstellungen und setze diese zurück."
 L["If you are experiencing issues with ElvUI try disabling all your addons except ElvUI, remember ElvUI is a full UI replacement addon, you cannot run two addons that do the same thing."] = "Wenn du Probleme mit ElvUI hast, deaktiviere alle Addons außer ElvUI. Denke auch daran, dass ElvUI die komplette Benutzeroberfläche ersetzt, d.h. du kannst kein Addon verwenden, welches die gleichen Funktionen wie ElvUI nutzt."
 L["The focus unit can be set by typing /focus when you are targeting the unit you want to focus. It is recommended you make a macro to do this."] = "Du kannst, während du ein Ziel hast, das Fokusfenster durch die Eingabe von /fokus setzen. Es wird empfohlen ein Makro dafür zu nutzen."

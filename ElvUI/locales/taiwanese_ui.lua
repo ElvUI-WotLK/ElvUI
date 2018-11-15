@@ -7,7 +7,7 @@ if not L then return end
 L["INCOMPATIBLE_ADDON"] = "插件 %s 與 ElvUI 的 %s 模組不相容。請停用不相容的插件，或停用相關的模組."
 
 --*_MSG locales
-L["LOGIN_MSG"] = "Welcome to %sElvUI|r version %s%s|r, type /ec to access the in-game configuration menu. If you are in need of technical support you can visit us at https://github.com/ElvUI-WotLK/ElvUI or join our Discord: https://discord.gg/Uatdmm7"
+L["LOGIN_MSG"] = "Welcome to %sElvUI|r version %s%s|r, type /ec to access the in-game configuration menu. If you are in need of technical support you can visit us at https://github.com/sirus-addons/ElvUI or join our Discord: https://discord.gg/Uatdmm7"
 
 --ActionBars
 L["Binding"] = "綁定"
@@ -172,7 +172,7 @@ L["This resolution doesn't require that you change settings for the UI to fit on
 L["This resolution requires that you change some settings to get everything to fit on your screen."] = "這個解析度需要你改變一些設定才能適應你的螢幕."
 L["This will change the layout of your unitframes and actionbars."] = "這將會改變你的單位框架和動作條的佈局"
 L["Welcome to ElvUI version %s!"] = "歡迎使用 ElvUI %s 版！"
-L["You are now finished with the installation process. If you are in need of technical support please visit us at https://github.com/ElvUI-WotLK/ElvUI"] = "已完成安裝程序. 小提示: 若想開啟微型選單, 請在小地圖按滑鼠中鍵. 如果沒有中鍵按鈕, 請按住Shift鍵, 並在小地圖按滑鼠右鍵. 如需技術支援請至 https://github.com/ElvUI-WotLK/ElvUI"
+L["You are now finished with the installation process. If you are in need of technical support please visit us at https://github.com/sirus-addons/ElvUI"] = "已完成安裝程序. 小提示: 若想開啟微型選單, 請在小地圖按滑鼠中鍵. 如果沒有中鍵按鈕, 請按住Shift鍵, 並在小地圖按滑鼠右鍵. 如需技術支援請至 https://github.com/sirus-addons/ElvUI"
 L["You can always change fonts and colors of any element of ElvUI from the in-game configuration."] = "你可以在遊戲內的設定選項內更改ElvUI的字體、顏色等設定."
 L["You can now choose what layout you wish to use based on your combat role."] = "你現在可以根據你的戰鬥角色選擇合適的佈局."
 L["You may need to further alter these settings depending how low you resolution is."] = "根據你的解析度你可能需要改動這些設定."
@@ -300,8 +300,8 @@ L["Disable Warning"] = "停用警告"
 L["Discard"] = "取消"
 L["Do you enjoy the new ElvUI?"] = "你享受新版的 ElvUI嗎?"
 L["Do you swear not to post in technical support about something not working without first disabling the addon/module combination first?"] = "你發誓在你沒停用其他插件或是模組前不會到技術支援發文詢問某些功能失效嗎?"
-L["ElvUI is five or more revisions out of date. You can download the newest version from https://github.com/ElvUI-WotLK/ElvUI/"] = "ElvUI 以過期超過5個版本. 你可以在 https://github.com/ElvUI-WotLK/ElvUI/ 下載到最新的版本."
-L["ElvUI is out of date. You can download the newest version from https://github.com/ElvUI-WotLK/ElvUI/"] = "ElvUI 以過期. 你可以在 https://github.com/ElvUI-WotLK/ElvUI/ 下載到最新的版本."
+L["ElvUI is five or more revisions out of date. You can download the newest version from https://github.com/sirus-addons/ElvUI/"] = "ElvUI 以過期超過5個版本. 你可以在 https://github.com/sirus-addons/ElvUI/ 下載到最新的版本."
+L["ElvUI is out of date. You can download the newest version from https://github.com/sirus-addons/ElvUI/"] = "ElvUI 以過期. 你可以在 https://github.com/sirus-addons/ElvUI/ 下載到最新的版本."
 L["ElvUI needs to perform database optimizations please be patient."] = "ElvUI 需要進行資料庫優化, 請稍待."
 L["Error resetting UnitFrame."] = "重置單位框架錯誤"
 L["Hover your mouse over any actionbutton or spellbook button to bind it. Press the escape key or right click to clear the current actionbutton's keybinding."] = "移動滑鼠到快捷列或技能書按鈕上綁定快捷鍵.按ESC或滑鼠右鍵取消目前快捷鍵."
@@ -329,7 +329,7 @@ L["Targeted By:"] = "同目標的有:"
 --Tutorials
 L["A raid marker feature is available by pressing Escape -> Keybinds scroll to the bottom under ElvUI and setting a keybind for the raid marker."] = "你可以通過按ESC鍵-> 按鍵設定, 滾動到ElvUI設定下方設定一個快速標記的快捷鍵."
 L["ElvUI has a dual spec feature which allows you to load different profiles based on your current spec on the fly. You can enable this from the profiles tab."] = "ElvUI 可以根據你所使用的天賦自動套用不同的裝備組. 你可以在設定檔中啟用此功能."
-L["For technical support visit us at https://github.com/ElvUI-WotLK/ElvUI"] = "如需技術支援請至 https://github.com/ElvUI-WotLK/ElvUI"
+L["For technical support visit us at https://github.com/sirus-addons/ElvUI"] = "如需技術支援請至 https://github.com/sirus-addons/ElvUI"
 L["If you accidently remove a chat frame you can always go the in-game configuration menu, press install, go to the chat portion and reset them."] = "如果你不慎移除了對話框, 你可以重新安裝一次重置他們."
 L["If you are experiencing issues with ElvUI try disabling all your addons except ElvUI, remember ElvUI is a full UI replacement addon, you cannot run two addons that do the same thing."] = "如果你使用 ElvUI 時遇到問題, 請嘗試停用除了ElvUI之外的插件. 請記住 ElvUI 是一套全套的 UI 替換插件, 你不能同時使用不同的插件來完成同一件事."
 L["The focus unit can be set by typing /focus when you are targeting the unit you want to focus. It is recommended you make a macro to do this."] = "你可以使用 /focus 指令設定目前目標為焦點目標. 建議你可以寫一個聚集來做這件事"

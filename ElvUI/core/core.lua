@@ -819,7 +819,7 @@ local function SendRecieve(_, event, prefix, message, _, sender)
 		message = tonumber(message)
 
 		if message and message > tonumber(E.version) then
-			E:Print(L["ElvUI is out of date. You can download the newest version from https://github.com/ElvUI-WotLK/ElvUI/"])
+			E:Print(L["ElvUI is out of date. You can download the newest version from https://github.com/sirus-addons/ElvUI/"])
 
 			if (message - tonumber(E.version)) >= 0.05 then
 				E:StaticPopup_Show("ELVUI_UPDATE_AVAILABLE")

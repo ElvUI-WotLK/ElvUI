@@ -22,7 +22,7 @@ lib.index = 0
 lib.prefix = "ElvUIPluginVC"
 
 -- MULTI Language Support (Default Language: English)
-local MSG_OUTDATED = "Your version of %s %s is out of date (latest is version %s). You can download the latest version from https://github.com/ElvUI-WotLK/ElvUI/"
+local MSG_OUTDATED = "Your version of %s %s is out of date (latest is version %s). You can download the latest version from https://github.com/sirus-addons/ElvUI/"
 local HDR_CONFIG = "Plugins"
 local HDR_INFORMATION = "LibElvUIPlugin-1.0.%d - Plugins Loaded  (Green means you have current version, Red means out of date)"
 local INFO_BY = "by"
@@ -31,7 +31,7 @@ local INFO_NEW = "Newest:"
 local LIBRARY = "Library"
 
 if GetLocale() == "deDE" then -- German Translation
-	MSG_OUTDATED = "Deine Version von %s %s ist veraltet (akutelle Version ist %s). Du kannst die aktuelle Version von https://github.com/ElvUI-WotLK/ElvUI/ herunterrladen."
+	MSG_OUTDATED = "Deine Version von %s %s ist veraltet (akutelle Version ist %s). Du kannst die aktuelle Version von https://github.com/sirus-addons/ElvUI/ herunterrladen."
 	HDR_CONFIG = "Plugins"
 	HDR_INFORMATION = "LibElvUIPlugin-1.0.%d - Plugins geladen (Grün bedeutet du hast die aktuelle Version, Rot bedeutet es ist veraltet)"
 	INFO_BY = "von"
@@ -41,7 +41,7 @@ if GetLocale() == "deDE" then -- German Translation
 end
 
 if GetLocale() == "ruRU" then -- Russian Translations
-	MSG_OUTDATED = "Ваша версия %s %s устарела (последняя версия %s). Вы можете скачать последнюю версию на https://github.com/ElvUI-WotLK/ElvUI/"
+	MSG_OUTDATED = "Ваша версия %s %s устарела (последняя версия %s). Вы можете скачать последнюю версию на https://github.com/sirus-addons/ElvUI/"
 	HDR_CONFIG = "Плагины"
 	HDR_INFORMATION = "LibElvUIPlugin-1.0.%d - загруженные плагины (зеленый означает, что у вас последняя версия, красный - устаревшая)"
 	INFO_BY = "от"
