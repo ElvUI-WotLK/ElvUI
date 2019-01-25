@@ -426,7 +426,9 @@ function TT:GameTooltip_OnTooltipSetUnit(tt)
 			end
 		end
 
-		GameTooltip:AddLine(tooltipLine, 1, 1, 1, true)
+		if not UnitIsEnemy("player", unit) then
+			GameTooltip:AddLine(tooltipLine, 1, 1, 1, true)
+		end
 	end
 end
 
