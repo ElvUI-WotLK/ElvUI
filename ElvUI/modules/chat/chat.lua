@@ -1939,6 +1939,14 @@ function CH:Initialize()
 	CombatLogQuickButtonFrame_CustomAdditionalFilterButton:Point("TOPRIGHT", CombatLogQuickButtonFrame_Custom, "TOPRIGHT", 0, -1)
 	CombatLogQuickButtonFrame_CustomAdditionalFilterButton:SetHitRectInsets(0, 0, 0, 0)
 
+	for i = 1, NUM_CHAT_WINDOWS do
+		local chatButtonFrame = _G["ChatFrame"..i.."ButtonFrame2"]
+
+		if chatButtonFrame then
+			chatButtonFrame:Hide()
+		end
+	end
+
 	self:Panels_ColorUpdate()
 end
 
