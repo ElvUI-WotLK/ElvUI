@@ -35,4 +35,4 @@ local function LoadSkin()
 	DressUpModel.backdrop:SetOutside(DressUpBackgroundTopLeft, nil, nil, DressUpModel);
 end
 
-S:AddCallback("DressingRoom", LoadSkin);
+-- S:AddCallback("DressingRoom", LoadSkin);
