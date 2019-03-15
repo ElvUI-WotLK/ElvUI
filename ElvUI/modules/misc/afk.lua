@@ -200,7 +200,7 @@ local function Chat_OnEvent(self, event, arg1, arg2, arg3, arg4, arg5, arg6, arg
 	local type = strsub(event, 10)
 	local info = ChatTypeInfo[type]
 
-	arg1 = RemoveExtraSpaces(arg1)
+	-- arg1 = RemoveExtraSpaces(arg1)
 
 	local chatGroup = Chat_GetChatCategory(type)
 	local chatTarget, body
