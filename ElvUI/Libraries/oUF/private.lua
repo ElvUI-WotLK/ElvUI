@@ -20,3 +20,7 @@ end
 function Private.error(...)
 	Private.print('|cffff0000Error:|r ' .. string.format(...))
 end
+
+function Private.unitExists(unit)
+	return unit and UnitExists(unit)
+end
