@@ -40,8 +40,37 @@ E.Options.args.general = {
 					type = "header",
 					name = L["General"],
 				},
-				pixelPerfect = {
+				AutoScale = {
 					order = 2,
+					type = "execute",
+					name = L["Auto Scale"],
+					func = function()
+						E.global.general.UIScale = E:PixelClip(E:PixelBestSize())
+						E:StaticPopup_Show("UISCALE_CHANGE")
+					end,
+				},
+				UIScale = {
+					order = 3,
+					type = "range",
+					name = L["UI_SCALE"],
+					min = 0.1, max = 1.25, step = 0.000001,
+					softMin = 0.40, softMax = 1.15, bigStep = 0.01,
+					get = function(info) return E.global.general.UIScale end,
+					set = function(info, value)
+						E.global.general.UIScale = value
+						E:StaticPopup_Show("UISCALE_CHANGE")
+					end
+				},
+				ignoreScalePopup = {
+					order = 4,
+					type = 'toggle',
+					name = L["Ignore UI Scale Popup"],
+					desc = L["This will prevent the UI Scale Popup from being shown when changing the game window size."],
+					get = function(info) return E.global.general.ignoreScalePopup end,
+					set = function(info, value) E.global.general.ignoreScalePopup = value end
+				},
+				pixelPerfect = {
+					order = 5,
 					type = "toggle",
 					name = L["Thin Border Theme"],
 					desc = L["The Thin Border Theme option will change the overall apperance of your UI. Using Thin Border Theme is a slight performance increase over the traditional layout."],
@@ -49,7 +78,7 @@ E.Options.args.general = {
 					set = function(info, value) E.private.general.pixelPerfect = value; E:StaticPopup_Show("PRIVATE_RL"); end
 				},
 				interruptAnnounce = {
-					order = 3,
+					order = 6,
 					type = "select",
 					name = L["Announce Interrupts"],
 					desc = L["Announce when you interrupt a spell to the specified chat channel."],
@@ -63,7 +92,7 @@ E.Options.args.general = {
 					}
 				},
 				autoRepair = {
-					order = 4,
+					order = 7,
 					type = "select",
 					name = L["Auto Repair"],
 					desc = L["Automatically repair using the following method when visiting a merchant."],
@@ -74,32 +103,32 @@ E.Options.args.general = {
 					}
 				},
 				autoAcceptInvite = {
-					order = 5,
+					order = 8,
 					type = "toggle",
 					name = L["Accept Invites"],
 					desc = L["Automatically accept invites from guild/friends."]
 				},
 				vendorGrays = {
-					order = 6,
+					order = 9,
 					type = "toggle",
 					name = L["Vendor Grays"],
 					desc = L["Automatically vendor gray items when visiting a vendor."]
 				},
 				vendorGraysDetails = {
-					order = 7,
+					order = 10,
 					type = "toggle",
 					name = L["Vendor Gray Detailed Report"],
 					desc = L["Displays a detailed report of every item sold when enabled."]
 				},
 				autoRoll = {
-					order = 8,
+					order = 11,
 					type = "toggle",
 					name = L["Auto Greed/DE"],
 					desc = L["Automatically select greed or disenchant (when available) on green quality items. This will only work if you are the max level."],
 					disabled = function() return not E.private.general.lootRoll; end
 				},
 				loot = {
-					order = 9,
+					order = 12,
 					type = "toggle",
 					name = LOOT,
 					desc = L["Enable/Disable the loot frame."],
@@ -107,7 +136,7 @@ E.Options.args.general = {
 					set = function(info, value) E.private.general.loot = value; E:StaticPopup_Show("PRIVATE_RL"); end
 				},
 				lootRoll = {
-					order = 10,
+					order = 13,
 					type = "toggle",
 					name = L["Loot Roll"],
 					desc = L["Enable/Disable the loot roll frame."],
@@ -115,7 +144,7 @@ E.Options.args.general = {
 					set = function(info, value) E.private.general.lootRoll = value; E:StaticPopup_Show("PRIVATE_RL"); end
 				},
 				eyefinity = {
-					order = 11,
+					order = 14,
 					name = L["Multi-Monitor Support"],
 					desc = L["Attempt to support eyefinity/nvidia surround."],
 					type = "toggle",
@@ -123,19 +152,19 @@ E.Options.args.general = {
 					set = function(info, value) E.global.general[ info[#info] ] = value; E:StaticPopup_Show("GLOBAL_RL"); end
 				},
 				hideErrorFrame = {
-					order = 12,
+					order = 15,
 					type = "toggle",
 					name = L["Hide Error Text"],
 					desc = L["Hides the red error text at the top of the screen while in combat."]
 				},
 				taintLog = {
-					order = 13,
+					order = 16,
 					type = "toggle",
 					name = L["Log Taints"],
 					desc = L["Send ADDON_ACTION_BLOCKED errors to the Lua Error frame. These errors are less important in most cases and will not effect your game performance. Also a lot of these errors cannot be fixed. Please only report these errors if you notice a Defect in gameplay."]
 				},
 				bottomPanel = {
-					order = 14,
+					order = 17,
 					type = "toggle",
 					name = L["Bottom Panel"],
 					desc = L["Display a panel across the bottom of the screen. This is for cosmetic only."],
@@ -143,7 +172,7 @@ E.Options.args.general = {
 					set = function(info, value) E.db.general.bottomPanel = value; E:GetModule("Layout"):BottomPanelVisibility(); end
 				},
 				topPanel = {
-					order = 15,
+					order = 18,
 					type = "toggle",
 					name = L["Top Panel"],
 					desc = L["Display a panel across the top of the screen. This is for cosmetic only."],
@@ -151,7 +180,7 @@ E.Options.args.general = {
 					set = function(info, value) E.db.general.topPanel = value; E:GetModule("Layout"):TopPanelVisibility(); end
 				},
 				afk = {
-					order = 16,
+					order = 19,
 					type = "toggle",
 					name = L["AFK Mode"],
 					desc = L["When you go AFK display the AFK screen."],
@@ -159,37 +188,21 @@ E.Options.args.general = {
 					set = function(info, value) E.db.general.afk = value; E:GetModule("AFK"):Toggle(); end
 				},
 				enhancedPvpMessages = {
-					order = 17,
+					order = 20,
 					type = "toggle",
 					name = L["Enhanced PVP Messages"],
 					desc = L["Display battleground messages in the middle of the screen."],
 				},
 				raidUtility = {
-					order = 18,
+					order = 21,
 					type = "toggle",
 					name = RAID_CONTROL,
 					desc = L["Enables the ElvUI Raid Control panel."],
 					get = function(info) return E.private.general.raidUtility end,
 					set = function(info, value) E.private.general.raidUtility = value; E:StaticPopup_Show("PRIVATE_RL") end
 				},
-				autoScale = {
-					order = 19,
-					name = L["Auto Scale"],
-					desc = L["Automatically scale the User Interface based on your screen resolution"],
-					type = "toggle",
-					get = function(info) return E.global.general.autoScale; end,
-					set = function(info, value) E.global.general[ info[#info] ] = value; E:StaticPopup_Show("GLOBAL_RL") end
-				},
-				minUiScale = {
-					order = 20,
-					type = "range",
-					name = L["Lowest Allowed UI Scale"],
-					min = 0.32, max = 0.64, step = 0.01,
-					get = function(info) return E.global.general.minUiScale; end,
-					set = function(info, value) E.global.general.minUiScale = value; E:StaticPopup_Show("GLOBAL_RL"); end
-				},
 				decimalLength = {
-					order = 21,
+					order = 22,
 					type = "range",
 					name = L["Decimal Length"],
 					desc = L["Controls the amount of decimals used in values displayed on elements like NamePlates and UnitFrames."],
@@ -198,19 +211,31 @@ E.Options.args.general = {
 					set = function(info, value) E.db.general.decimalLength = value; E:StaticPopup_Show("GLOBAL_RL") end
 				},
 				numberPrefixStyle = {
-					order = 22,
+					order = 23,
 					type = "select",
 					name = L["Unit Prefix Style"],
 					desc = L["The unit prefixes you want to use when values are shortened in ElvUI. This is mostly used on UnitFrames."],
 					get = function(info) return E.db.general.numberPrefixStyle; end,
 					set = function(info, value) E.db.general.numberPrefixStyle = value; E:StaticPopup_Show("CONFIG_RL"); end,
 					values = {
-						["METRIC"] = "Metric (k, M, G)",
-						["ENGLISH"] = "English (K, M, B)",
 						["CHINESE"] = "Chinese (W, Y)",
+						["ENGLISH"] = "English (K, M, B)",
+						["GERMAN"] = "German (Tsd, Mio, Mrd)",
 						["KOREAN"] = "Korean (천, 만, 억)",
-						["GERMAN"] = "German (Tsd, Mio, Mrd)"
+						["METRIC"] = "Metric (k, M, G)"
 					}
+				},
+				smoothingAmount = {
+					order = 24,
+					type = "range",
+					isPercent = true,
+					name = L["Smoothing Amount"],
+					desc = L["Controls the speed at which smoothed bars will be updated."],
+					min = 0.2, max = 0.8, softMax = 0.75, softMin = 0.25, step = 0.01,
+					set = function(info, value)
+						E.db.general.smoothingAmount = value
+						E:SetSmoothingAmount(value)
+					end,
 				},
 			}
 		},
