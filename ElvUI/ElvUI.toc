@@ -11,9 +11,9 @@
 Developer\Load_Developer.xml
 Libraries\Load_Libraries.xml
 Locales\Load_Locales.xml
-media\load_media.xml
-init.lua
+Media\Load_Media.xml
+Init.lua
 Settings\Load_Config.xml
 Core\Load_Core.xml
 Layout\Load_Layout.xml
-modules\load_modules.xml
+Modules\Load_Modules.xml
