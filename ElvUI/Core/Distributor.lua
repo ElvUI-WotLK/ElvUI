@@ -1,7 +1,7 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local D = E:NewModule("Distributor", "AceEvent-3.0","AceTimer-3.0","AceComm-3.0","AceSerializer-3.0")
-local LibCompress = LibStub:GetLibrary("LibCompress");
-local LibBase64 = LibStub("LibBase64-1.0-ElvUI");
+local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local D = E:GetModule("Distributor")
+local LibCompress = E.Libs.Compress
+local LibBase64 = E.Libs.Base64
 
 local tonumber, type, pcall, loadstring = tonumber, type, pcall, loadstring;
 local len, format, split, find = string.len, string.format, string.split, string.find;

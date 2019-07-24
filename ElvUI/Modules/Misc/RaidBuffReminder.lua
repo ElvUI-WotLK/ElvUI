@@ -1,8 +1,6 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local RB = E:NewModule("ReminderBuffs", "AceEvent-3.0");
+local RB = E:GetModule("ReminderBuffs")
 local LSM = LibStub("LibSharedMedia-3.0");
-
-E.ReminderBuffs = RB;
 
 RB.Spell1Buffs = {
 	67016, -- Flask of the North (SP)

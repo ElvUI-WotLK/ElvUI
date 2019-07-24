@@ -11,21 +11,22 @@ local function LoadSkin()
 
 	-- WatchFrame Expand/Collapse Button
 	WatchFrameCollapseExpandButton:StripTextures()
-	S:HandleCloseButton(WatchFrameCollapseExpandButton)
-	WatchFrameCollapseExpandButton:Size(32)
-	WatchFrameCollapseExpandButton.text:SetText("-")
-	WatchFrameCollapseExpandButton.text:Point("CENTER", -1, 0)
+	WatchFrameCollapseExpandButton:Size(16, 16)
+	WatchFrameCollapseExpandButton.tex = WatchFrameCollapseExpandButton:CreateTexture(nil, "OVERLAY")
+	WatchFrameCollapseExpandButton.tex:SetTexture(E.Media.Textures.MinusButton)
+	WatchFrameCollapseExpandButton.tex:SetInside()
+	WatchFrameCollapseExpandButton:SetHighlightTexture("Interface\\Buttons\\UI-PlusButton-Hilight", "ADD")
 	WatchFrameCollapseExpandButton:SetFrameStrata("MEDIUM")
 	WatchFrameCollapseExpandButton:Point("TOPRIGHT", -20, 4)
 
 	hooksecurefunc("WatchFrame_Expand", function()
-		WatchFrameCollapseExpandButton.text:SetText("-")
+		WatchFrameCollapseExpandButton.tex:SetTexture(E.Media.Textures.MinusButton)
 
 		WatchFrame:Width(WATCHFRAME_EXPANDEDWIDTH)
 	end)
 
 	hooksecurefunc("WatchFrame_Collapse", function()
-		WatchFrameCollapseExpandButton.text:SetText("+")
+		WatchFrameCollapseExpandButton.tex:SetTexture(E.Media.Textures.PlusButton)
 
 		WatchFrame:Width(WATCHFRAME_EXPANDEDWIDTH)
 	end)

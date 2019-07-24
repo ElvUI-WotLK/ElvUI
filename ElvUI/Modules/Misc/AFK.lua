@@ -1,6 +1,6 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local AFK = E:NewModule("AFK", "AceEvent-3.0", "AceTimer-3.0");
-local CH = E:GetModule("Chat");
+local AFK = E:GetModule("AFK")
+local CH = E:GetModule("Chat")
 
 local _G = _G;
 local floor = math.floor;

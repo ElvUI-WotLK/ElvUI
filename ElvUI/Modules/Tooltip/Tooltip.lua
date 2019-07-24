@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local TT = E:NewModule("Tooltip", "AceHook-3.0", "AceEvent-3.0");
+local TT = E:GetModule("Tooltip")
 
 local _G = _G;
 local unpack, tonumber, select, pairs = unpack, tonumber, select, pairs;

@@ -1,6 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local M = E:NewModule("Minimap", "AceEvent-3.0");
-E.Minimap = M;
+local M = E:GetModule("Minimap")
 
 local _G = _G;
 local strsub = strsub;

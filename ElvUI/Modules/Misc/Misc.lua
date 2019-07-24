@@ -1,6 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local M = E:NewModule("Misc", "AceEvent-3.0", "AceTimer-3.0");
-E.Misc = M;
+local M = E:GetModule("Misc")
 
 local CanGuildBankRepair = CanGuildBankRepair
 local CanMerchantRepair = CanMerchantRepair

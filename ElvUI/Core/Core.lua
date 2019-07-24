@@ -1,3 +1,14 @@
+local ElvUI = select(2, ...)
+
+local gameLocale
+do -- Locale doesn't exist yet, make it exist.
+	local convert = {["enGB"] = "enUS", ["esES"] = "esMX", ["itIT"] = "enUS"}
+	local lang = GetLocale()
+
+	gameLocale = convert[lang] or lang or "enUS"
+	ElvUI[2] = ElvUI[1].Libs.ACL:GetLocale("ElvUI", gameLocale)
+end
+
 local E, L, V, P, G = unpack(select(2, ...));
 local LSM = LibStub("LibSharedMedia-3.0");
 

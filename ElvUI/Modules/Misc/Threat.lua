@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local THREAT = E:NewModule("Threat", "AceEvent-3.0");
+local THREAT = E:GetModule("Threat")
 
 local pairs, select = pairs, select;
 local twipe = table.wipe;
@@ -17,7 +17,6 @@ local GetThreatStatusColor = GetThreatStatusColor;
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
 local UNKNOWN = UNKNOWN;
 
-E.Threat = THREAT
 THREAT.list = {};
 
 local DT -- used to hold the DT module when we need it

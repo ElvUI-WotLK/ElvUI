@@ -1,6 +1,6 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local CH = E:NewModule("Chat", "AceTimer-3.0", "AceHook-3.0", "AceEvent-3.0")
-local LSM = LibStub("LibSharedMedia-3.0");
+local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local CH = E:GetModule("Chat")
+local LSM = E.Libs.LSM
 
 local _G = _G
 local time, difftime = time, difftime
@@ -1775,7 +1775,7 @@ function CH:Initialize()
 	self:DefaultSmileys()
 	self:UpdateChatKeywords()
 	self:UpdateFading()
-	E.Chat = self
+
 	self:SecureHook("ChatEdit_OnEnterPressed")
 	FriendsMicroButton:Kill()
 	ChatFrameMenuButton:Kill()

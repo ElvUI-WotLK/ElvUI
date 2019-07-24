@@ -1,6 +1,6 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local A = E:NewModule("Auras", "AceEvent-3.0");
-local LSM = LibStub("LibSharedMedia-3.0");
+local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local A = E:GetModule("Auras", "AceEvent-3.0")
+local LSM = E.Libs.LSM
 local LBF = LibStub("LibButtonFacade", true);
 
 --Cache global variables

@@ -10,9 +10,9 @@
 
 Developer\Load_Developer.xml
 Libraries\Load_Libraries.xml
+Init.lua
 Locales\Load_Locales.xml
 Media\Load_Media.xml
-Init.lua
 Settings\Load_Config.xml
 Core\Load_Core.xml
 Layout\Load_Layout.xml

@@ -1,13 +1,11 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local LO = E:NewModule("Layout", "AceEvent-3.0");
+local LO = E:GetModule("Layout")
 
 local CreateFrame = CreateFrame;
 local UIFrameFadeIn, UIFrameFadeOut = UIFrameFadeIn, UIFrameFadeOut;
 
 local PANEL_HEIGHT = 22;
 local SIDE_BUTTON_WIDTH = 16;
-
-E.Layout = LO;
 
 local function Panel_OnShow(self)
 	self:SetFrameLevel(0)

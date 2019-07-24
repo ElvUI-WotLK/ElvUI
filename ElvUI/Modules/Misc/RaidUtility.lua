@@ -1,5 +1,5 @@
 local E, L, DF = unpack(select(2, ...));
-local RU = E:NewModule("RaidUtility", "AceEvent-3.0");
+local RU = E:GetModule("RaidUtility")
 
 local _G = _G;
 local unpack, pairs = unpack, pairs;
@@ -16,7 +16,6 @@ local InCombatLockdown = InCombatLockdown;
 local DoReadyCheck = DoReadyCheck;
 local ToggleFriendsFrame = ToggleFriendsFrame;
 
-E.RaidUtility = RU;
 local PANEL_HEIGHT = 100;
 
 local function CheckRaidStatus()

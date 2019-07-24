@@ -1,6 +1,8 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local B = E:NewModule("Bags", "AceHook-3.0", "AceEvent-3.0", "AceTimer-3.0");
-local Search = LibStub("LibItemSearch-1.2");
+local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local B = E:GetModule("Bags")
+local TT = E:GetModule("Tooltip")
+local Skins = E:GetModule("Skins")
+local Search = E.Libs.ItemSearch
 
 local _G = _G;
 local type, ipairs, pairs, unpack, select, assert, pcall = type, ipairs, pairs, unpack, select, assert, pcall
@@ -1491,8 +1493,6 @@ function B:Initialize()
 	self:SecureHook("BackpackTokenFrame_Update", "UpdateTokens");
 
 	self:Layout();
-
-	E.Bags = self;
 
 	self:DisableBlizzard();
 	self:RegisterEvent("GUILDBANKBAGSLOTS_CHANGED");

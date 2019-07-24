@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local AB = E:NewModule("ActionBars", "AceHook-3.0", "AceEvent-3.0");
+local AB = E:GetModule("ActionBars")
 
 local _G = _G;
 local pairs, select, unpack = pairs, select, unpack;
@@ -30,9 +30,9 @@ local GameTooltip_Hide = GameTooltip_Hide;
 local NUM_ACTIONBAR_BUTTONS = NUM_ACTIONBAR_BUTTONS;
 local LEAVE_VEHICLE = LEAVE_VEHICLE;
 
-local LAB = LibStub("LibActionButton-1.0");
-local LSM = LibStub("LibSharedMedia-3.0");
-local LBF = LibStub("LibButtonFacade", true);
+local LAB = E.Libs.LAB
+local LSM = E.Libs.LSM
+local LBF = E.Libs.LBF
 
 local UIHider
 

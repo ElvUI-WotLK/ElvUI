@@ -1,6 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local TOTEMS = E:NewModule("Totems", "AceEvent-3.0");
-E.TotemBar = TOTEMS
+local TOTEMS = E:GetModule("Totems")
 
 local _G = _G;
 local unpack = unpack;

@@ -1,8 +1,8 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local DT = E:NewModule("DataTexts", "AceTimer-3.0", "AceHook-3.0", "AceEvent-3.0");
-local LDB = LibStub:GetLibrary("LibDataBroker-1.1");
-local LSM = LibStub("LibSharedMedia-3.0");
-local TT = E:GetModule("Tooltip");
+local DT = E:GetModule("DataTexts")
+local TT = E:GetModule("Tooltip")
+local LDB = E.Libs.LDB
+local LSM = E.Libs.LSM
 
 local pairs, type, error = pairs, type, error;
 local len = string.len;
@@ -12,8 +12,6 @@ local InCombatLockdown = InCombatLockdown;
 local IsInInstance = IsInInstance;
 
 function DT:Initialize()
-	E.DataTexts = DT;
-
 	self.tooltip = CreateFrame("GameTooltip", "DatatextTooltip", E.UIParent, "GameTooltipTemplate");
 	TT:HookScript(self.tooltip, "OnShow", "SetStyle");
 

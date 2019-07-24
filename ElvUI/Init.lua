@@ -3,34 +3,93 @@
 
 To load the AddOn engine add this to the top of your file:
 
-	local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+	local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 ]]
 
 local _G = _G;
 local pairs, unpack = pairs, unpack;
 local format = string.format
 
-BINDING_HEADER_ELVUI = GetAddOnMetadata(..., "Title");
+BINDING_HEADER_ELVUI = GetAddOnMetadata(..., "Title")
+
+local AceAddon, AceAddonMinor = LibStub("AceAddon-3.0")
+local CallbackHandler = LibStub("CallbackHandler-1.0")
 
 local AddOnName, Engine = ...;
-local AddOn = LibStub("AceAddon-3.0"):NewAddon(AddOnName, "AceConsole-3.0", "AceEvent-3.0", "AceTimer-3.0", "AceHook-3.0");
-AddOn.callbacks = AddOn.callbacks or
-	LibStub("CallbackHandler-1.0"):New(AddOn);
-AddOn.DF = {}; AddOn.DF["profile"] = {}; AddOn.DF["global"] = {}; AddOn.privateVars = {}; AddOn.privateVars["profile"] = {}; -- Defaults
-AddOn.Options = {
-	type = "group",
-	name = AddOnName,
-	args = {},
-};
+local AddOn = LibStub("AceAddon-3.0"):NewAddon(AddOnName, "AceConsole-3.0", "AceEvent-3.0", "AceTimer-3.0", "AceHook-3.0")
+AddOn.callbacks = AddOn.callbacks or CallbackHandler:New(AddOn)
+AddOn.DF = {profile = {}, global = {}}; AddOn.privateVars = {profile = {}} -- Defaults
+AddOn.Options = {type = "group", name = AddOnName, args = {}}
 
-local Locale = LibStub("AceLocale-3.0"):GetLocale(AddOnName, false);
-Engine[1] = AddOn;
-Engine[2] = Locale;
-Engine[3] = AddOn.privateVars["profile"];
-Engine[4] = AddOn.DF["profile"];
-Engine[5] = AddOn.DF["global"];
+Engine[1] = AddOn
+Engine[2] = {}
+Engine[3] = AddOn.privateVars.profile
+Engine[4] = AddOn.DF.profile
+Engine[5] = AddOn.DF.global
+_G[AddOnName] = Engine
 
-_G[AddOnName] = Engine;
+do
+	AddOn.Libs = {}
+	AddOn.LibsMinor = {}
+	function AddOn:AddLib(name, major, minor)
+		if not name then return end
+
+		-- in this case: `major` is the lib table and `minor` is the minor version
+		if type(major) == "table" and type(minor) == "number" then
+			self.Libs[name], self.LibsMinor[name] = major, minor
+		else -- in this case: `major` is the lib name and `minor` is the silent switch
+			self.Libs[name], self.LibsMinor[name] = LibStub(major, minor)
+		end
+	end
+
+	AddOn:AddLib("AceAddon", AceAddon, AceAddonMinor)
+	AddOn:AddLib("AceDB", "AceDB-3.0")
+	AddOn:AddLib("EP", "LibElvUIPlugin-1.0")
+	AddOn:AddLib("LSM", "LibSharedMedia-3.0")
+	AddOn:AddLib("ACL", "AceLocale-3.0-ElvUI")
+	AddOn:AddLib("LAB", "LibActionButton-1.0-ElvUI")
+	AddOn:AddLib("LBF", "LibButtonFacade", true)
+	AddOn:AddLib("LDB", "LibDataBroker-1.1")
+	AddOn:AddLib("DualSpec", "LibDualSpec-1.0")
+	AddOn:AddLib("SimpleSticky", "LibSimpleSticky-1.0")
+	AddOn:AddLib("SpellRange", "SpellRange-1.0")
+	AddOn:AddLib("ItemSearch", "LibItemSearch-1.2-ElvUI")
+	AddOn:AddLib("Compress", "LibCompress")
+	AddOn:AddLib("Base64", "LibBase64-1.0-ElvUI")
+	AddOn:AddLib("Translit", "LibTranslit-1.0")
+	-- added on ElvUI_OptionsUI load: AceGUI, AceConfig, AceConfigDialog, AceConfigRegistry, AceDBOptions
+
+	-- backwards compatible for plugins
+	AddOn.LSM = AddOn.Libs.LSM
+	AddOn.Masque = AddOn.Libs.Masque
+end
+
+AddOn.oUF = Engine.oUF
+AddOn.ActionBars = AddOn:NewModule("ActionBars","AceHook-3.0","AceEvent-3.0")
+AddOn.AFK = AddOn:NewModule("AFK","AceEvent-3.0","AceTimer-3.0")
+AddOn.Auras = AddOn:NewModule("Auras","AceHook-3.0","AceEvent-3.0")
+AddOn.Bags = AddOn:NewModule("Bags","AceHook-3.0","AceEvent-3.0","AceTimer-3.0")
+AddOn.Blizzard = AddOn:NewModule("Blizzard","AceEvent-3.0","AceHook-3.0")
+AddOn.Chat = AddOn:NewModule("Chat","AceTimer-3.0","AceHook-3.0","AceEvent-3.0")
+AddOn.DataBars = AddOn:NewModule("DataBars","AceEvent-3.0")
+AddOn.DataTexts = AddOn:NewModule("DataTexts","AceTimer-3.0","AceHook-3.0","AceEvent-3.0")
+AddOn.DebugTools = AddOn:NewModule("DebugTools","AceEvent-3.0","AceHook-3.0")
+AddOn.Distributor = AddOn:NewModule("Distributor","AceEvent-3.0","AceTimer-3.0","AceComm-3.0","AceSerializer-3.0")
+AddOn.Layout = AddOn:NewModule("Layout","AceEvent-3.0")
+AddOn.Minimap = AddOn:NewModule("Minimap","AceEvent-3.0")
+AddOn.Misc = AddOn:NewModule("Misc","AceEvent-3.0","AceTimer-3.0")
+--AddOn.ModuleCopy = AddOn:NewModule("ModuleCopy","AceEvent-3.0","AceTimer-3.0","AceComm-3.0","AceSerializer-3.0")
+AddOn.NamePlates = AddOn:NewModule("NamePlates","AceHook-3.0","AceEvent-3.0","AceTimer-3.0")
+AddOn.PluginInstaller = AddOn:NewModule("PluginInstaller")
+AddOn.RaidUtility = AddOn:NewModule("RaidUtility","AceEvent-3.0")
+AddOn.ReminderBuffs = AddOn:NewModule("ReminderBuffs", "AceEvent-3.0")
+AddOn.Skins = AddOn:NewModule("Skins","AceTimer-3.0","AceHook-3.0","AceEvent-3.0")
+AddOn.Threat = AddOn:NewModule("Threat","AceEvent-3.0")
+AddOn.Tooltip = AddOn:NewModule("Tooltip","AceTimer-3.0","AceHook-3.0","AceEvent-3.0")
+AddOn.TotemBar = AddOn:NewModule("Totems","AceEvent-3.0")
+AddOn.UnitFrames = AddOn:NewModule("UnitFrames","AceTimer-3.0","AceEvent-3.0","AceHook-3.0")
+AddOn.WorldMap = AddOn:NewModule("WorldMap","AceHook-3.0","AceEvent-3.0","AceTimer-3.0")
+
 local tcopy = table.copy
 function AddOn:OnInitialize()
 	if not ElvCharacterDB then

@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...))
-local mod = E:NewModule("NamePlates", "AceHook-3.0", "AceEvent-3.0", "AceTimer-3.0")
+local mod = E:GetModule("NamePlates")
 local LSM = LibStub("LibSharedMedia-3.0")
 local LAI = LibStub("LibAuraInfo-1.0-ElvUI", true)
 
@@ -1026,8 +1026,6 @@ function mod:Initialize()
 	self:RegisterEvent("UNIT_COMBO_POINTS")
 
 	self:ScheduleRepeatingTimer("ForEachVisiblePlate", 0.1, "SetTargetFrame")
-
-	E.NamePlates = self
 end
 
 local function InitializeCallback()

@@ -1,7 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local B = E:NewModule("Blizzard", "AceEvent-3.0", "AceHook-3.0");
-
-E.Blizzard = B;
+local B = E:GetModule("Blizzard")
 
 local ChatEdit_ChooseBoxForSend = ChatEdit_ChooseBoxForSend;
 local GetTradeSkillListLink = GetTradeSkillListLink;

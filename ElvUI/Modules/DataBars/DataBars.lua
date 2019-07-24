@@ -1,6 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...))
-local mod = E:NewModule("DataBars", "AceEvent-3.0")
-E.DataBars = mod
+local mod = E:GetModule("DataBars")
 
 --Cache global variables
 --Lua functions

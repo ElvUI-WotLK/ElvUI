@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...));
-local S = E:NewModule("Skins", "AceHook-3.0", "AceEvent-3.0");
+local S = E:GetModule("Skins")
 
 local _G = _G;
 local unpack, assert, pairs, ipairs, select, type, pcall = unpack, assert, pairs, ipairs, select, type, pcall;
@@ -11,7 +11,6 @@ local hooksecurefunc = hooksecurefunc;
 local IsAddOnLoaded = IsAddOnLoaded;
 local GetCVarBool = GetCVarBool;
 
-E.Skins = S;
 S.addonsToLoad = {};
 S.nonAddonsToLoad = {};
 S.allowBypass = {};
@@ -389,31 +388,27 @@ function S:HandleItemButton(b, shrinkIcon)
 	b.isSkinned = true;
 end
 
+local handleCloseButtonOnEnter = function(btn) if btn.Texture then btn.Texture:SetVertexColor(unpack(E.media.rgbvaluecolor)) end end
+local handleCloseButtonOnLeave = function(btn) if btn.Texture then btn.Texture:SetVertexColor(1, 1, 1) end end
+
 function S:HandleCloseButton(f, point, text)
-	f:StripTextures();
+	f:StripTextures()
 
-	if(f:GetNormalTexture()) then f:SetNormalTexture(""); f.SetNormalTexture = E.noop; end
-	if(f:GetPushedTexture()) then f:SetPushedTexture(""); f.SetPushedTexture = E.noop; end
+	if f:GetNormalTexture() then f:SetNormalTexture(""); f.SetNormalTexture = E.noop; end
+	if f:GetPushedTexture() then f:SetPushedTexture(""); f.SetPushedTexture = E.noop; end
 
-	if(not f.backdrop) then
-		f:CreateBackdrop("Default", true);
-		f.backdrop:Point("TOPLEFT", 7, -8);
-		f.backdrop:Point("BOTTOMRIGHT", -8, 8);
-		f:HookScript("OnEnter", S.SetModifiedBackdrop);
-		f:HookScript("OnLeave", S.SetOriginalBackdrop);
+	if not f.Texture then
+		f.Texture = f:CreateTexture(nil, "OVERLAY")
+		f.Texture:Point("CENTER")
+		f.Texture:SetTexture(E.Media.Textures.Close)
+		f.Texture:Size(12, 12)
+		f:HookScript("OnEnter", handleCloseButtonOnEnter)
+		f:HookScript("OnLeave", handleCloseButtonOnLeave)
 		f:SetHitRectInsets(6, 6, 7, 7)
 	end
-	if(not text) then text = "x"; end
-	if(not f.text) then
-		f.text = f:CreateFontString(nil, "OVERLAY");
-		f.text:SetFont([[Interface\AddOns\ElvUI\media\fonts\PT_Sans_Narrow.ttf]], 16, "OUTLINE");
-		f.text:SetText(text);
-		f.text:SetJustifyH("CENTER");
-		f.text:SetPoint("CENTER", f, "CENTER", -1, 1);
-	end
 
-	if(point) then
-		f:Point("TOPRIGHT", point, "TOPRIGHT", 2, 2);
+	if point then
+		f:Point("TOPRIGHT", point, "TOPRIGHT", 2, 2)
 	end
 end
 
