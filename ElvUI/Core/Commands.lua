@@ -82,7 +82,7 @@ function E:LuaError(msg)
 	if msg == "on" then
 		DisableAllAddOns()
 		EnableAddOn("ElvUI")
-		EnableAddOn("ElvUI_Config")
+		EnableAddOn("ElvUI_OptionsUI")
 		SetCVar("scriptErrors", 1)
 		ReloadUI()
 	elseif msg == "off" then

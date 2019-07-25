@@ -54,7 +54,7 @@ end
 -- Plugin table format:
 --	{ name (string) - The name of the plugin,
 --		version (string) - The version of the plugin,
---		optionCallback (string) - The callback to call when ElvUI_Config is loaded
+--		optionCallback (string) - The callback to call when ElvUI_OptionsUI is loaded
 --	}
 --
 
@@ -70,7 +70,7 @@ function lib:RegisterPlugin(name,callback, isLib)
 	if isLib then plugin.isLib = true; plugin.version = 1 end
 	plugin.callback = callback
 	lib.plugins[name] = plugin
-	local loaded = IsAddOnLoaded("ElvUI_Config")
+	local loaded = IsAddOnLoaded("ElvUI_OptionsUI")
 
 	if not lib.vcframe then
 		local f = CreateFrame("Frame")

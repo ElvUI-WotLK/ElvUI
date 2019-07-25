@@ -191,7 +191,7 @@ end
 function AddOn:PLAYER_REGEN_DISABLED()
 	local err = false;
 
-	if IsAddOnLoaded("ElvUI_Config") then
+	if IsAddOnLoaded("ElvUI_OptionsUI") then
 		local ACD = LibStub("AceConfigDialog-3.0-ElvUI")
 
 		if ACD.OpenFrames[AddOnName] then
@@ -240,16 +240,16 @@ function AddOn:ToggleConfig()
 		return;
 	end
 
-	if not IsAddOnLoaded("ElvUI_Config") then
-		local _, _, _, _, _, reason = GetAddOnInfo("ElvUI_Config")
+	if not IsAddOnLoaded("ElvUI_OptionsUI") then
+		local _, _, _, _, _, reason = GetAddOnInfo("ElvUI_OptionsUI")
 		if reason ~= "MISSING" and reason ~= "DISABLED" then
 			self.GUIFrame = false;
-			LoadAddOn("ElvUI_Config")
-			if GetAddOnMetadata("ElvUI_Config", "Version") ~= "1.01" then
+			LoadAddOn("ElvUI_OptionsUI")
+			if GetAddOnMetadata("ElvUI_OptionsUI", "Version") ~= "1.01" then
 				self:StaticPopup_Show("CLIENT_UPDATE_REQUEST")
 			end
 		else
-			self:Print("|cffff0000Error -- Addon 'ElvUI_Config' not found or is disabled.|r")
+			self:Print("|cffff0000Error -- Addon 'ElvUI_OptionsUI' not found or is disabled.|r")
 			return
 		end
 	end

@@ -1,6 +1,27 @@
-local E, L, V, P, G = unpack(ElvUI);
-local D = E:GetModule("Distributor");
-local AceGUI = LibStub("AceGUI-3.0");
+local E = unpack(ElvUI) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local D = E:GetModule("Distributor")
+
+local _, Engine = ...
+Engine[1] = {}
+Engine[2] = E.Libs.ACL:GetLocale("ElvUI", E.global.general.locale or "enUS")
+local C, L = Engine[1], Engine[2]
+
+local _G, format, sort, tinsert = _G, format, sort, tinsert
+
+C.Values = {
+	FontFlags = {
+		["NONE"] = L["NONE"],
+		["OUTLINE"] = "OUTLINE",
+		["MONOCHROMEOUTLINE"] = "MONOCROMEOUTLINE",
+		["THICKOUTLINE"] = "THICKOUTLINE"
+	}
+}
+
+E:AddLib("AceGUI", "AceGUI-3.0")
+E:AddLib("AceConfig", "AceConfig-3.0-ElvUI")
+E:AddLib("AceConfigDialog", "AceConfigDialog-3.0-ElvUI")
+E:AddLib("AceConfigRegistry", "AceConfigRegistry-3.0-ElvUI")
+E:AddLib("AceDBOptions", "AceDBOptions-3.0")
 
 local pairs = pairs;
 local tsort, tinsert = table.sort, table.insert;

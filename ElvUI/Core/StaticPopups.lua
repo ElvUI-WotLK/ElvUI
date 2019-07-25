@@ -473,7 +473,7 @@ E.PopupDialogs.SCRIPT_PROFILE = {
 }
 
 E.PopupDialogs.ELVUI_CONFIG_FOUND = {
-    text = L["You still have ElvUI_Config installed.  ElvUI_Config has been renamed to ElvUI_OptionsUI, please remove it."],
+    text = L["You still have ElvUI_OptionsUI installed.  ElvUI_OptionsUI has been renamed to ElvUI_OptionsUI, please remove it."],
     button1 = ACCEPT,
     whileDead = 1,
     hideOnEscape = false,
@@ -498,7 +498,7 @@ function E:StaticPopup_OnShow()
 	end
 
 	-- boost static popups over ace gui
-	if IsAddOnLoaded("ElvUI_Config") then
+	if IsAddOnLoaded("ElvUI_OptionsUI") then
 		local ACD = LibStub and LibStub("AceConfigDialog-3.0-ElvUI")
 		if ACD and ACD.OpenFrames and ACD.OpenFrames.ElvUI then
 			self.frameStrataIncreased = true

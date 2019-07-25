@@ -67,7 +67,7 @@ function E:ToggleMoveMode(override, configType)
 
 		ElvUIMoverPopupWindow:Show()
 
-		if IsAddOnLoaded("ElvUI_Config") then
+		if IsAddOnLoaded("ElvUI_OptionsUI") then
 			if E.Libs.AceConfigDialog then
 				E.Libs.AceConfigDialog:Close("ElvUI")
 			end
@@ -289,7 +289,7 @@ function E:CreateMoverPopup()
 	lock:SetScript("OnClick", function()
 		E:ToggleMoveMode(true)
 
-		if IsAddOnLoaded("ElvUI_Config") and E.Libs.AceConfigDialog then
+		if IsAddOnLoaded("ElvUI_OptionsUI") and E.Libs.AceConfigDialog then
 			E.Libs.AceConfigDialog:Open("ElvUI")
 		end
 
