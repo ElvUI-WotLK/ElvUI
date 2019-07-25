@@ -1,7 +1,5 @@
 -- Korean localization file for koKR.
-local AceLocale = LibStub:GetLibrary("AceLocale-3.0")
-local L = AceLocale:NewLocale("ElvUI", "koKR")
-if not L then return end
+local L = ElvUI[1].Libs.ACL:NewLocale("ElvUI", "koKR")
 
 -- *_DESC locales
 L["ACTIONBARS_DESC"] = "행동단축바의 설정을 변경합니다."

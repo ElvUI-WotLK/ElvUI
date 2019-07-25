@@ -1,7 +1,5 @@
--- Chinese localization file for zhCN.
-local AceLocale = LibStub:GetLibrary("AceLocale-3.0")
-local L = AceLocale:NewLocale("ElvUI", "zhCN")
-if not L then return end
+-- Simplified Chinese localization file for zhCN.
+local L = ElvUI[1].Libs.ACL:NewLocale("ElvUI", "zhCN")
 
 -- *_DESC locales
 L["ACTIONBARS_DESC"] = "修改动作条设定"

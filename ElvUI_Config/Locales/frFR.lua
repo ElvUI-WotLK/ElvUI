@@ -1,7 +1,5 @@
 -- French localization file for frFR.
-local AceLocale = LibStub:GetLibrary("AceLocale-3.0")
-local L = AceLocale:NewLocale("ElvUI", "frFR")
-if not L then return end
+local L = ElvUI[1].Libs.ACL:NewLocale("ElvUI", "frFR")
 
 -- *_DESC locales
 L["ACTIONBARS_DESC"] = "Modifier les options des barres d'actions."

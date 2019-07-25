@@ -1,7 +1,5 @@
 -- Russian localization file for ruRU.
-local AceLocale = LibStub:GetLibrary("AceLocale-3.0")
-local L = AceLocale:NewLocale("ElvUI", "ruRU")
-if not L then return end
+local L = ElvUI[1].Libs.ACL:NewLocale("ElvUI", "ruRU")
 
 -- *_DESC locales
 L["ACTIONBARS_DESC"] = "Modify the actionbar settings."

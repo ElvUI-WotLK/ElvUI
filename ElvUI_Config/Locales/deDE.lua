@@ -1,7 +1,5 @@
 -- German localization file for deDE.
-local AceLocale = LibStub:GetLibrary("AceLocale-3.0")
-local L = AceLocale:NewLocale("ElvUI", "deDE")
-if not L then return end
+local L = ElvUI[1].Libs.ACL:NewLocale("ElvUI", "deDE")
 
 -- *_DESC locales
 L["ACTIONBARS_DESC"] = "Konfiguriere die Einstellungen für die Aktionsleisten."
