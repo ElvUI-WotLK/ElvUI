@@ -7,19 +7,19 @@
 ## LoadOnDemand: true
 
 Libraries\Load_Libraries.xml
-locales\load_locales.xml
-core.lua
+Locales\Load_locales.xml
+Core.lua
 General.lua
-actionbars.lua
-auras.lua
-bags.lua
-chat.lua
-datatexts.lua
-filters.lua
-nameplates.lua
-skins.lua
-tooltip.lua
-unitframes.lua
+ActionBars.lua
+Auras.lua
+Bags.lua
+Chat.lua
+DataTexts.lua
+Filters.lua
+Nameplates.lua
+Skins.lua
+Tooltip.lua
+UnitFrames.lua
 DataBars.lua
-maps.lua
-modulereset.lua
+Maps.lua
+ModuleControl.lua
