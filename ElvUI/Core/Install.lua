@@ -81,7 +81,7 @@ local function SetupChat(noDisplayMsg)
 		ChatFrame_AddMessageGroup(ChatFrame1, v)
 	end
 
-	chatGroup = {"COMBAT_XP_GAIN", "COMBAT_HONOR_GAIN", "COMBAT_FACTION_CHANGE", "COMBAT_GUILD_XP_GAIN", "SKILL", "LOOT", "CURRENCY", "MONEY"}
+	chatGroup = {"COMBAT_XP_GAIN", "COMBAT_HONOR_GAIN", "COMBAT_FACTION_CHANGE", "SKILL", "LOOT", "MONEY"}
 	ChatFrame_RemoveAllMessageGroups(ChatFrame3)
 	for _, v in ipairs(chatGroup) do
 		ChatFrame_AddMessageGroup(ChatFrame3, v)
