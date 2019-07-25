@@ -512,7 +512,6 @@ L["When you go AFK display the AFK screen."] = "자리비움 시 UI가 자리비
 L["Personal"] = true
 L["nonPersonal"] = "Non Personal"
 L["notCastByUnit"] = "Not Cast By Unit"
-L["Dispellable"] = "해제 가능"
 L["notDispellable"] = "해제 불가능"
 L["CastByUnit"] = "Cast By Unit"
 ---Blacklists

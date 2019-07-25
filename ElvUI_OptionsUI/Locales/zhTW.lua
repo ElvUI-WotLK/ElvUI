@@ -463,7 +463,6 @@ L["When you go AFK display the AFK screen."] = "當你離開時顯示AFK界面"
 L["Personal"] = "自己的"
 L["nonPersonal"] = "他人的"
 L["notCastByUnit"] = "非該單位的"
-L["Dispellable"] = "可驅散的"
 L["notDispellable"] = "不可驅散的"
 L["CastByUnit"] = "單位施放的"
 ---Blacklists

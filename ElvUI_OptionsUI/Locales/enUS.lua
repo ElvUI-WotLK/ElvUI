@@ -452,7 +452,6 @@ L["When you go AFK display the AFK screen."] = true
 L["Personal"] = true
 L["nonPersonal"] = "Non Personal"
 L["notCastByUnit"] = "Not Cast By Unit"
-L["Dispellable"] = true
 L["notDispellable"] = "Not Dispellable"
 L["CastByUnit"] = "Cast By Unit"
 ---Blacklists

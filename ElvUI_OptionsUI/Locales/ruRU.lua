@@ -463,7 +463,6 @@ L["When you go AFK display the AFK screen."] = "Отображать специ�
 L["Personal"] = "Личные"
 L["nonPersonal"] = "Чужие"
 L["notCastByUnit"] = "Не пренадлежит юниту"
-L["Dispellable"] = "Развеиваемые"
 L["notDispellable"] = "Не развеиваемые"
 L["CastByUnit"] = "Принадлежит юниту"
 ---Blacklists

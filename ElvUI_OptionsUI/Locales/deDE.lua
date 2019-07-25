@@ -463,7 +463,6 @@ L["When you go AFK display the AFK screen."] = "AFK Bildschirm anzeigen wenn du 
 L["Personal"] = "Persönlich"
 L["nonPersonal"] = "Nicht Persönlich"
 L["notCastByUnit"] = "Nicht gezaubert von der Einheit"
-L["Dispellable"] "Bannbar"
 L["notDispellable"] = "Nicht Bannbar"
 L["CastByUnit"] = "Gezaubert von Einheit"
 ---Blacklists
