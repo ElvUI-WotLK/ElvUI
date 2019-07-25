@@ -150,8 +150,8 @@ end
 
 function E:LoadCommands()
 	self:RegisterChatCommand("in", "DelayScriptCall")
-	self:RegisterChatCommand("ec", "ToggleConfig")
-	self:RegisterChatCommand("elvui", "ToggleConfig")
+	self:RegisterChatCommand("ec", "ToggleOptionsUI")
+	self:RegisterChatCommand("elvui", "ToggleOptionsUI")
 	self:RegisterChatCommand("cpuimpact", "GetCPUImpact")
 
 	self:RegisterChatCommand("cpuusage", "GetTopCPUFunc")

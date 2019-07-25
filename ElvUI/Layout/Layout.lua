@@ -441,7 +441,7 @@ function LO:CreateMinimapPanels()
 	configtoggle.text:SetJustifyH("CENTER")
 	configtoggle:SetScript("OnClick", function(_, btn)
 		if btn == "LeftButton" then
-			E:ToggleConfig()
+			E:ToggleOptionsUI()
 		else
 			E:BGStats()
 		end

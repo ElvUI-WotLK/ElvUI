@@ -38,7 +38,7 @@ local function BuildABConfig()
 				order = 2,
 				type = "execute",
 				name = L["Keybind Mode"],
-				func = function() AB:ActivateBindMode() E:ToggleConfig() GameTooltip:Hide() end
+				func = function() AB:ActivateBindMode() E:ToggleOptionsUI() GameTooltip:Hide() end
 			},
 			cooldownText = {
 				order = 3,

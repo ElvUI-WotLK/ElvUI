@@ -50,7 +50,7 @@ end
 
 local function OnClick(_, button)
 	if(button == "LeftButton" or (button == "RightButton" and not IsShiftKeyDown())) then
-		E:ToggleConfig();
+		E:ToggleOptionsUI();
 	elseif(button == "RightButton" and IsShiftKeyDown()) then
 		ReloadUI();
 	end

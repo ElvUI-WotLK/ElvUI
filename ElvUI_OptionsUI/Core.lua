@@ -65,21 +65,21 @@ E.Options.args = {
 		order = 3,
 		type = "execute",
 		name = L["Toggle Tutorials"],
-		func = function() E:Tutorials(true); E:ToggleConfig(); end
+		func = function() E:Tutorials(true); E:ToggleOptionsUI(); end
 	},
 	Install = {
 		order = 4,
 		type = "execute",
 		name = L["Install"],
 		desc = L["Run the installation process."],
-		func = function() E:Install(); E:ToggleConfig(); end
+		func = function() E:Install(); E:ToggleOptionsUI(); end
 	},
 	ToggleAnchors = {
 		order = 5,
 		type = "execute",
 		name = L["Toggle Anchors"],
 		desc = L["Unlock various elements of the UI to be repositioned."],
-		func = function() E:ToggleConfigMode(); end
+		func = function() E:ToggleMoveMode(); end
 	},
 	ResetAllMovers = {
 		order = 6,

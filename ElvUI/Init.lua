@@ -148,7 +148,7 @@ function AddOn:OnInitialize()
 
 	GameMenuButton:SetText(self:ColorizedName(AddOnName))
 	GameMenuButton:SetScript("OnClick", function()
-		AddOn:ToggleConfig();
+		AddOn:ToggleOptionsUI();
 		HideUIPanel(GameMenuFrame);
 	end);
 	GameMenuFrame[AddOnName] = GameMenuButton;
@@ -184,7 +184,7 @@ f:SetScript("OnEvent", function()
 end);
 
 function AddOn:PLAYER_REGEN_ENABLED()
-	self:ToggleConfig()
+	self:ToggleOptionsUI()
 	self:UnregisterEvent("PLAYER_REGEN_ENABLED");
 end
 
@@ -233,43 +233,120 @@ function AddOn:OnProfileReset()
 	self:StaticPopup_Show("RESET_PROFILE_PROMPT")
 end
 
-function AddOn:ToggleConfig()
+function AddOn:ToggleOptionsUI(msg)
 	if InCombatLockdown() then
 		self:Print(ERR_NOT_IN_COMBAT)
-		self:RegisterEvent("PLAYER_REGEN_ENABLED")
+		self:RegisterEvent('PLAYER_REGEN_ENABLED')
 		return;
 	end
 
 	if not IsAddOnLoaded("ElvUI_OptionsUI") then
-		local _, _, _, _, _, reason = GetAddOnInfo("ElvUI_OptionsUI")
+		local noConfig
+		local _, _, _, _, reason = GetAddOnInfo("ElvUI_OptionsUI")
 		if reason ~= "MISSING" and reason ~= "DISABLED" then
-			self.GUIFrame = false;
+			self.GUIFrame = false
 			LoadAddOn("ElvUI_OptionsUI")
-			if GetAddOnMetadata("ElvUI_OptionsUI", "Version") ~= "1.01" then
+
+			--For some reason, GetAddOnInfo reason is "DEMAND_LOADED" even if the addon is disabled.
+			--Workaround: Try to load addon and check if it is loaded right after.
+			if not IsAddOnLoaded("ElvUI_OptionsUI") then noConfig = true end
+
+			-- version check elvui options if it's actually enabled
+			if (not noConfig) and GetAddOnMetadata("ElvUI_OptionsUI", "Version") ~= "1.06" then
 				self:StaticPopup_Show("CLIENT_UPDATE_REQUEST")
 			end
 		else
+			noConfig = true
+		end
+
+		if noConfig then
 			self:Print("|cffff0000Error -- Addon 'ElvUI_OptionsUI' not found or is disabled.|r")
 			return
 		end
 	end
 
-	local ACD = LibStub("AceConfigDialog-3.0-ElvUI")
+	local ACD = self.Libs.AceConfigDialog
+	local ConfigOpen = ACD and ACD.OpenFrames and ACD.OpenFrames[AddOnName]
+
+	local pages, msgStr
+	if msg and msg ~= "" then
+		pages = {strsplit(",", msg)}
+		msgStr = msg:gsub(",","\001")
+	end
 
 	local mode = "Close"
-	if not ACD.OpenFrames[AddOnName] then
-		mode = "Open"
+	if not ConfigOpen or (pages ~= nil) then
+		if pages ~= nil then
+			local pageCount, index, mainSel = #pages
+			if pageCount > 1 then
+				wipe(pageNodes)
+				index = 0
+
+				local main, mainNode, mainSelStr, sub, subNode, subSel
+				for i = 1, pageCount do
+					if i == 1 then
+						main = pages[i] and ACD and ACD.Status and ACD.Status.ElvUI
+						mainSel = main and main.status and main.status.groups and main.status.groups.selected
+						mainSelStr = mainSel and ("^"..mainSel:gsub("([%(%)%.%%%+%-%*%?%[%^%$])","%%%1").."\001")
+						mainNode = main and main.children and main.children[pages[i]]
+						pageNodes[index+1], pageNodes[index+2] = main, mainNode
+					else
+						sub = pages[i] and pageNodes[i] and ((i == pageCount and pageNodes[i]) or pageNodes[i].children[pages[i]])
+						subSel = sub and sub.status and sub.status.groups and sub.status.groups.selected
+						subNode = (mainSelStr and msgStr:match(mainSelStr..pages[i]:gsub("([%(%)%.%%%+%-%*%?%[%^%$])","%%%1").."$") and (subSel and subSel == pages[i])) or ((i == pageCount and not subSel) and mainSel and mainSel == msgStr)
+						pageNodes[index+1], pageNodes[index+2] = sub, subNode
+					end
+					index = index + 2
+				end
+			else
+				local main = pages[1] and ACD and ACD.Status and ACD.Status.ElvUI
+				mainSel = main and main.status and main.status.groups and main.status.groups.selected
+			end
+
+			if ConfigOpen and ((not index and mainSel and mainSel == msg) or (index and pageNodes and pageNodes[index])) then
+				mode = "Close"
+			else
+				mode = "Open"
+			end
+		else
+			mode = "Open"
+		end
+	end
+
+	if ACD then
+		ACD[mode](ACD, AddOnName)
 	end
 
 	if mode == "Open" then
-		ElvConfigToggle.text:SetTextColor(unpack(AddOn.media.rgbvaluecolor));
-		PlaySound("igMainMenuOpen");
-	else
-		ElvConfigToggle.text:SetTextColor(1, 1, 1);
-		PlaySound("igMainMenuClose");
-	end
+		ConfigOpen = ACD and ACD.OpenFrames and ACD.OpenFrames[AddOnName]
+		if ConfigOpen then
+			local frame = ConfigOpen.frame
+			if frame and not self.GUIFrame then
+				self.GUIFrame = frame
+				ElvUIGUIFrame = self.GUIFrame
 
-	ACD[mode](ACD, AddOnName)
+				local maxWidth, maxHeight = self.UIParent:GetSize()
+				frame:SetMinResize(600, 500)
+				frame:SetMaxResize(maxWidth-50, maxHeight-50)
+
+				local status = frame.obj and frame.obj.status
+				if status then
+					local top, left = self:GetConfigPosition()
+					if top and left then
+						status.top, status.left = top, left
+
+						ConfigOpen:ApplyStatus()
+					end
+				end
+
+				hooksecurefunc(frame, "StopMovingOrSizing", AddOn.ConfigStopMovingOrSizing)
+			end
+		end
+
+		if ACD and pages then
+			ACD:SelectGroup(AddOnName, unpack(pages))
+		end
+	end
 
 	GameTooltip:Hide() --Just in case you're mouseovered something and it closes.
 end
