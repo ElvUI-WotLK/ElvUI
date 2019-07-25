@@ -52,8 +52,8 @@ local function LoadSkin()
 		tab.backdrop:Point("BOTTOMRIGHT", -14, 19)
 	end
 
-	S:HandleNextPrevButton(SpellBookPrevPageButton)
-	S:HandleNextPrevButton(SpellBookNextPageButton)
+	S:HandleNextPrevButton(SpellBookPrevPageButton, nil, nil, true)
+	S:HandleNextPrevButton(SpellBookNextPageButton, nil, nil, true)
 
 	S:HandleCloseButton(SpellBookCloseButton)
 

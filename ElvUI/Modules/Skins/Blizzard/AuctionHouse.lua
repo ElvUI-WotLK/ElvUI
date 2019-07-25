@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 local function LoadSkin()
@@ -67,7 +67,6 @@ local function LoadSkin()
 	AuctionProgressFrame:SetTemplate("Transparent")
 
 	S:HandleNextPrevButton(AuctionProgressFrameCancelButton)
-	S:SquareButton_SetIcon(AuctionProgressFrameCancelButton, "DELETE")
 	AuctionProgressFrameCancelButton:SetHitRectInsets(0, 0, 0, 0)
 
 	AuctionProgressFrameCancelButton:Size(28, 28)

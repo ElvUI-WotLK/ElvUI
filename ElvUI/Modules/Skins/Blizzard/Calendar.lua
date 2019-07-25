@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...));
+local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 local function LoadSkin()
@@ -53,7 +53,7 @@ local function LoadSkin()
 			end
 		end)
 
-		S:HandleNextPrevButton(button, true)
+		S:HandleNextPrevButton(button)
 
 		frame:CreateBackdrop("Default")
 		frame.backdrop:Point("TOPLEFT", 20, 2)

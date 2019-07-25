@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 local _G = _G
@@ -490,13 +490,12 @@ local function LoadSkin()
 	S:HandleButton(ChatConfigCombatSettingsFiltersCopyFilterButton)
 	ChatConfigCombatSettingsFiltersCopyFilterButton:Point("RIGHT", ChatConfigCombatSettingsFiltersAddFilterButton, "LEFT", -1, 0)
 
-	S:HandleNextPrevButton(ChatConfigMoveFilterUpButton, true)
-	S:SquareButton_SetIcon(ChatConfigMoveFilterUpButton, "UP")
+	S:HandleNextPrevButton(ChatConfigMoveFilterUpButton)
 	ChatConfigMoveFilterUpButton:Size(26)
 	ChatConfigMoveFilterUpButton:Point("TOPLEFT", ChatConfigCombatSettingsFilters, "BOTTOMLEFT", 3, -1)
 	ChatConfigMoveFilterUpButton:SetHitRectInsets(0, 0, 0, 0)
 
-	S:HandleNextPrevButton(ChatConfigMoveFilterDownButton, true)
+	S:HandleNextPrevButton(ChatConfigMoveFilterDownButton)
 	ChatConfigMoveFilterDownButton:Size(26)
 	ChatConfigMoveFilterDownButton:Point("LEFT", ChatConfigMoveFilterUpButton, "RIGHT", 1, 0)
 	ChatConfigMoveFilterDownButton:SetHitRectInsets(0, 0, 0, 0)

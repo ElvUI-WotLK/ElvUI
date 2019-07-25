@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 local _G = _G
@@ -258,8 +258,8 @@ local function LoadSkin()
 	S:HandleButton(GuildMemberGroupInviteButton)
 	GuildMemberGroupInviteButton:SetPoint("LEFT", GuildMemberRemoveButton, "RIGHT", 3, 0)
 
-	S:HandleNextPrevButton(GuildFramePromoteButton, true)
-	S:HandleNextPrevButton(GuildFrameDemoteButton, true)
+	S:HandleNextPrevButton(GuildFramePromoteButton)
+	S:HandleNextPrevButton(GuildFrameDemoteButton)
 	GuildFrameDemoteButton:SetPoint("LEFT", GuildFramePromoteButton, "RIGHT", 2, 0)
 
 	GuildMemberNoteBackground:SetTemplate("Default")

@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...));
+local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local THREAT = E:GetModule("Threat")
 
 local pairs, select = pairs, select;

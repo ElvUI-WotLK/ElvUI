@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 local _G = _G
@@ -110,7 +110,7 @@ local function LoadSkin()
 	PlayerTitleFrame.backdrop:Point("TOPLEFT", 20, 3)
 	PlayerTitleFrame.backdrop:Point("BOTTOMRIGHT", -16, 14)
 	PlayerTitleFrame.backdrop:SetFrameLevel(PlayerTitleFrame:GetFrameLevel())
-	S:HandleNextPrevButton(PlayerTitleFrameButton, true)
+	S:HandleNextPrevButton(PlayerTitleFrameButton)
 	PlayerTitleFrameButton:ClearAllPoints()
 	PlayerTitleFrameButton:Point("RIGHT", PlayerTitleFrame.backdrop, "RIGHT", -2, 0)
 
@@ -418,7 +418,7 @@ local function LoadSkin()
 	SkillFrame:StripTextures(true)
 
 	S:HandleNextPrevButton(SkillDetailStatusBarUnlearnButton)
-	S:SquareButton_SetIcon(SkillDetailStatusBarUnlearnButton, "DELETE")
+	--S:SquareButton_SetIcon(SkillDetailStatusBarUnlearnButton, "DELETE")
 	SkillDetailStatusBarUnlearnButton:Size(24)
 	SkillDetailStatusBarUnlearnButton:Point("LEFT", SkillDetailStatusBarBorder, "RIGHT", 5, 0)
 	SkillDetailStatusBarUnlearnButton:SetHitRectInsets(0, 0, 0, 0)

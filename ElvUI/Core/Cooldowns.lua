@@ -1,10 +1,11 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 
-local floor = math.floor;
-
-local GetTime = GetTime;
-local CreateFrame = CreateFrame;
-local hooksecurefunc = hooksecurefunc;
+--Lua functions
+local floor = math.floor
+--WoW API / Variables
+local GetTime = GetTime
+local CreateFrame = CreateFrame
+local hooksecurefunc = hooksecurefunc
 
 local ICON_SIZE = 36 --the normal size for an icon (don't change this)
 local FONT_SIZE = 20 --the base font size to use at a scale of 1

@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 local _G = _G
@@ -27,11 +27,9 @@ local function LoadSkin()
 	LootFramePortraitOverlay:SetParent(E.HiddenFrame)
 
 	S:HandleNextPrevButton(LootFrameUpButton)
-	S:SquareButton_SetIcon(LootFrameUpButton, "UP")
 	LootFrameUpButton:Point("BOTTOMLEFT", 25, 20)
 
 	S:HandleNextPrevButton(LootFrameDownButton)
-	S:SquareButton_SetIcon(LootFrameDownButton, "DOWN")
 	LootFrameDownButton:Point("BOTTOMLEFT", 145, 20)
 
 	LootFrame:EnableMouseWheel(true)
