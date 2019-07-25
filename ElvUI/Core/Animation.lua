@@ -50,7 +50,6 @@ function E:SetUpAnimGroup(obj, Type, ...)
 
 		for i = 1, 6 do
 			shake.path[i] = shake.path:CreateControlPoint()
-			shake.path[i]:SetOrder(i)
 
 			if Type == "Shake" then
 				shake.path[i]:SetOffset(E:RandomAnimShake(i))
@@ -58,6 +57,12 @@ function E:SetUpAnimGroup(obj, Type, ...)
 				shake.path[i]:SetOffset(E.AnimShakeH[i], 0)
 			end
 		end
+		shake.path[1]:SetOrder(1)
+		shake.path[2]:SetOrder(2)
+		shake.path[3]:SetOrder(3)
+		shake.path[4]:SetOrder(4)
+		shake.path[5]:SetOrder(5)
+		shake.path[6]:SetOrder(6)
 	else
 		local x, y, duration, customName = ...
 		if not customName then customName = "anim" end
