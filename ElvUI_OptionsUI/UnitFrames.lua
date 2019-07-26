@@ -3168,11 +3168,6 @@ E.Options.args.unitframe.args.player = {
 					set = function(info, value)
 						E.db.unitframe.units["player"][ info[#info] ] = value
 						UF:CreateAndUpdateUF("player")
-						if value == true and E.db.unitframe.units.player.combatfade then
-							ElvUF_Pet:SetParent(ElvUF_Player)
-						else
-							ElvUF_Pet:SetParent(ElvUF_Parent)
-						end
 					end
 				},
 				copyFrom = {
@@ -3223,21 +3218,6 @@ E.Options.args.unitframe.args.player = {
 					type = "range",
 					name = L["Height"],
 					min = 10, max = 500, step = 1
-				},
-				combatfade = {
-					order = 8,
-					type = "toggle",
-					name = L["Combat Fade"],
-					desc = L["Fade the unitframe when out of combat, not casting, no target exists."],
-					set = function(info, value)
-						E.db.unitframe.units["player"][ info[#info] ] = value
-						UF:CreateAndUpdateUF("player")
-						if value == true and E.db.unitframe.units.player.enable then
-							ElvUF_Pet:SetParent(ElvUF_Player)
-						else
-							ElvUF_Pet:SetParent(ElvUF_Parent)
-						end
-					end
 				},
 				healPrediction = {
 					order = 9,

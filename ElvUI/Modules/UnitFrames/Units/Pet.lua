@@ -97,10 +97,6 @@ function UF:Update_PetFrame(frame, db)
 
 	UF:Configure_HealComm(frame);
 
-	if(E.db.unitframe.units.player.enable and E.db.unitframe.units.player.combatfade and ElvUF_Player and not InCombatLockdown()) then
-		frame:SetParent(ElvUF_Player);
-	end
-
 	UF:Configure_Range(frame);
 
 	if E.myclass == "HUNTER" then
