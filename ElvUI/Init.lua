@@ -6,16 +6,30 @@ To load the AddOn engine add this to the top of your file:
 	local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 ]]
 
-local _G = _G;
-local pairs, unpack = pairs, unpack;
-local format = string.format
+--Lua functions
+local _G, min, format, pairs, strsplit, unpack, wipe, type, tcopy = _G, min, format, pairs, strsplit, unpack, wipe, type, table.copy
+--WoW API / Variables
+local hooksecurefunc = hooksecurefunc
+local CreateFrame = CreateFrame
+local GetAddOnInfo = GetAddOnInfo
+local GetAddOnMetadata = GetAddOnMetadata
+local GetTime = GetTime
+local HideUIPanel = HideUIPanel
+local InCombatLockdown = InCombatLockdown
+local IsAddOnLoaded = IsAddOnLoaded
+local LoadAddOn = LoadAddOn
+local ReloadUI = ReloadUI
+
+local ERR_NOT_IN_COMBAT = ERR_NOT_IN_COMBAT
+local GameMenuButtonLogout = GameMenuButtonLogout
+local GameMenuFrame = GameMenuFrame
 
 BINDING_HEADER_ELVUI = GetAddOnMetadata(..., "Title")
 
 local AceAddon, AceAddonMinor = LibStub("AceAddon-3.0")
 local CallbackHandler = LibStub("CallbackHandler-1.0")
 
-local AddOnName, Engine = ...;
+local AddOnName, Engine = ...
 local AddOn = LibStub("AceAddon-3.0"):NewAddon(AddOnName, "AceConsole-3.0", "AceEvent-3.0", "AceTimer-3.0", "AceHook-3.0")
 AddOn.callbacks = AddOn.callbacks or CallbackHandler:New(AddOn)
 AddOn.DF = {profile = {}, global = {}}; AddOn.privateVars = {profile = {}} -- Defaults
@@ -90,18 +104,19 @@ AddOn.TotemBar = AddOn:NewModule("Totems","AceEvent-3.0")
 AddOn.UnitFrames = AddOn:NewModule("UnitFrames","AceTimer-3.0","AceEvent-3.0","AceHook-3.0")
 AddOn.WorldMap = AddOn:NewModule("WorldMap","AceHook-3.0","AceEvent-3.0","AceTimer-3.0")
 
-local tcopy = table.copy
 function AddOn:OnInitialize()
 	if not ElvCharacterDB then
-		ElvCharacterDB = {};
+		ElvCharacterDB = {}
 	end
 
-	ElvCharacterData = nil; --Depreciated
-	ElvPrivateData = nil; --Depreciated
-	ElvData = nil; --Depreciated
+	ElvCharacterData = nil --Depreciated
+	ElvPrivateData = nil --Depreciated
+	ElvData = nil --Depreciated
 
-	self.db = tcopy(self.DF.profile, true);
-	self.global = tcopy(self.DF.global, true);
+	self.db = tcopy(self.DF.profile, true)
+	self.global = tcopy(self.DF.global, true)
+
+	local ElvDB = ElvDB
 	if ElvDB then
 		if ElvDB.global then
 			self:CopyTable(self.global, ElvDB.global)
@@ -117,7 +132,9 @@ function AddOn:OnInitialize()
 		end
 	end
 
-	self.private = tcopy(self.privateVars.profile, true);
+	self.private = tcopy(self.privateVars.profile, true)
+
+	local ElvPrivateDB = ElvPrivateDB
 	if ElvPrivateDB then
 		local profileKey
 		if ElvPrivateDB.profileKeys then
@@ -133,7 +150,7 @@ function AddOn:OnInitialize()
 	self.ScanTooltip = CreateFrame("GameTooltip", "ElvUI_ScanTooltip", _G.UIParent, "GameTooltipTemplate")
 	self.PixelMode = self.twoPixelsPlease or self.private.general.pixelPerfect -- keep this over `UIScale`
 	self:UIScale(true)
-	self:UpdateMedia();
+	self:UpdateMedia()
 
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
 	self:Contruct_StaticPopups()
@@ -143,89 +160,90 @@ function AddOn:OnInitialize()
 		self:StaticPopup_Show("TUKUI_ELVUI_INCOMPATIBLE")
 	end
 
-	local GameMenuButton = CreateFrame("Button", "ElvUI_MenuButton", GameMenuFrame, "GameMenuButtonTemplate");
-	GameMenuButton:Size(GameMenuButtonLogout:GetWidth(), GameMenuButtonLogout:GetHeight());
+	local GameMenuButton = CreateFrame("Button", "ElvUI_MenuButton", GameMenuFrame, "GameMenuButtonTemplate")
+	GameMenuButton:Size(GameMenuButtonLogout:GetWidth(), GameMenuButtonLogout:GetHeight())
 
 	GameMenuButton:SetText(self:ColorizedName(AddOnName))
 	GameMenuButton:SetScript("OnClick", function()
-		AddOn:ToggleOptionsUI();
-		HideUIPanel(GameMenuFrame);
-	end);
-	GameMenuFrame[AddOnName] = GameMenuButton;
+		AddOn:ToggleOptionsUI()
+		HideUIPanel(GameMenuFrame)
+	end)
+	GameMenuFrame[AddOnName] = GameMenuButton
 
 	GameMenuButtonRatings:HookScript("OnShow", function(self)
-		GameMenuFrame:SetHeight(GameMenuFrame:GetHeight() + self:GetHeight());
+		GameMenuFrame:SetHeight(GameMenuFrame:GetHeight() + self:GetHeight())
 	end)
 	GameMenuButtonRatings:HookScript("OnHide", function(self)
-		GameMenuFrame:SetHeight(GameMenuFrame:GetHeight() - self:GetHeight());
+		GameMenuFrame:SetHeight(GameMenuFrame:GetHeight() - self:GetHeight())
 	end)
 
 	GameMenuFrame:HookScript("OnShow", function()
-		if(not GameMenuFrame.isElvUI) then
-			GameMenuFrame:SetHeight(GameMenuFrame:GetHeight() + GameMenuButtonLogout:GetHeight() + 1);
-			GameMenuFrame.isElvUI = true;
+		if not GameMenuFrame.isElvUI then
+			GameMenuFrame:SetHeight(GameMenuFrame:GetHeight() + GameMenuButtonLogout:GetHeight() + 1)
+			GameMenuFrame.isElvUI = true
 		end
-		local _, relTo = GameMenuButtonLogout:GetPoint();
-		if(relTo ~= GameMenuFrame[AddOnName]) then
-			GameMenuFrame[AddOnName]:ClearAllPoints();
-			GameMenuFrame[AddOnName]:Point("TOPLEFT", relTo, "BOTTOMLEFT", 0, -1);
-			GameMenuButtonLogout:ClearAllPoints();
-			GameMenuButtonLogout:Point("TOPLEFT", GameMenuFrame[AddOnName], "BOTTOMLEFT", 0, -16);
+		local _, relTo = GameMenuButtonLogout:GetPoint()
+		if relTo ~= GameMenuFrame[AddOnName] then
+			GameMenuFrame[AddOnName]:ClearAllPoints()
+			GameMenuFrame[AddOnName]:Point("TOPLEFT", relTo, "BOTTOMLEFT", 0, -1)
+			GameMenuButtonLogout:ClearAllPoints()
+			GameMenuButtonLogout:Point("TOPLEFT", GameMenuFrame[AddOnName], "BOTTOMLEFT", 0, -16)
 		end
-	end);
+	end)
 
 	self.loadedtime = GetTime()
 end
 
-local f = CreateFrame("Frame");
-f:RegisterEvent("PLAYER_LOGIN");
-f:SetScript("OnEvent", function()
-	AddOn:Initialize();
-end);
+local LoadUI=CreateFrame("Frame")
+LoadUI:RegisterEvent("PLAYER_LOGIN")
+LoadUI:SetScript("OnEvent", function()
+	AddOn:Initialize()
+end)
 
 function AddOn:PLAYER_REGEN_ENABLED()
 	self:ToggleOptionsUI()
-	self:UnregisterEvent("PLAYER_REGEN_ENABLED");
+	self:UnregisterEvent("PLAYER_REGEN_ENABLED")
 end
 
 function AddOn:PLAYER_REGEN_DISABLED()
-	local err = false;
+	local err = false
 
 	if IsAddOnLoaded("ElvUI_OptionsUI") then
-		local ACD = LibStub("AceConfigDialog-3.0-ElvUI")
-
-		if ACD.OpenFrames[AddOnName] then
-			self:RegisterEvent("PLAYER_REGEN_ENABLED");
-			ACD:Close(AddOnName);
-			err = true;
+		local ACD = self.Libs.AceConfigDialog
+		if ACD and ACD.OpenFrames and ACD.OpenFrames[AddOnName] then
+			self:RegisterEvent("PLAYER_REGEN_ENABLED")
+			ACD:Close(AddOnName)
+			err = true
 		end
 	end
 
 	if self.CreatedMovers then
-		for name, _ in pairs(self.CreatedMovers) do
+		for name in pairs(self.CreatedMovers) do
 			if _G[name] and _G[name]:IsShown() then
-				err = true;
-				_G[name]:Hide();
+				err = true
+				_G[name]:Hide()
 			end
 		end
 	end
 
 	if err == true then
-		self:Print(ERR_NOT_IN_COMBAT);
+		self:Print(ERR_NOT_IN_COMBAT)
 	end
 end
 
 function AddOn:ResetProfile()
 	local profileKey
+
+	local ElvPrivateDB = ElvPrivateDB
 	if ElvPrivateDB.profileKeys then
 		profileKey = ElvPrivateDB.profileKeys[self.myname.." - "..self.myrealm]
 	end
 
 	if profileKey and ElvPrivateDB.profiles and ElvPrivateDB.profiles[profileKey] then
-		ElvPrivateDB.profiles[profileKey] = nil;
+		ElvPrivateDB.profiles[profileKey] = nil
 	end
 
-	ElvCharacterDB = nil;
+	ElvCharacterDB = nil
 	ReloadUI()
 end
 
@@ -233,11 +251,39 @@ function AddOn:OnProfileReset()
 	self:StaticPopup_Show("RESET_PROFILE_PROMPT")
 end
 
+function AddOn:ResetConfigSettings()
+	AddOn.configSavedPositionTop, AddOn.configSavedPositionLeft = nil, nil
+	AddOn.global.general.AceGUI = AddOn:CopyTable({}, AddOn.DF.global.general.AceGUI)
+end
+
+function AddOn:GetConfigPosition()
+	return AddOn.configSavedPositionTop, AddOn.configSavedPositionLeft
+end
+
+function AddOn:GetConfigSize()
+	return AddOn.global.general.AceGUI.width, AddOn.global.general.AceGUI.height
+end
+
+function AddOn:GetConfigDefaultSize()
+	local width, height = AddOn:GetConfigSize()
+	local maxWidth, maxHeight = AddOn.UIParent:GetSize()
+	width, height = min(maxWidth-50, width), min(maxHeight-50, height)
+	return width, height
+end
+
+function AddOn:ConfigStopMovingOrSizing()
+	if self.obj and self.obj.status then
+		AddOn.configSavedPositionTop, AddOn.configSavedPositionLeft = AddOn:Round(self:GetTop(), 2), AddOn:Round(self:GetLeft(), 2)
+		AddOn.global.general.AceGUI.width, AddOn.global.general.AceGUI.height = AddOn:Round(self:GetWidth(), 2), AddOn:Round(self:GetHeight(), 2)
+	end
+end
+
+local pageNodes = {}
 function AddOn:ToggleOptionsUI(msg)
 	if InCombatLockdown() then
 		self:Print(ERR_NOT_IN_COMBAT)
-		self:RegisterEvent('PLAYER_REGEN_ENABLED')
-		return;
+		self:RegisterEvent("PLAYER_REGEN_ENABLED")
+		return
 	end
 
 	if not IsAddOnLoaded("ElvUI_OptionsUI") then
