@@ -38,7 +38,7 @@ function UF:Construct_RaidpetFrames()
 	self.ThreatIndicator = UF:Construct_Threat(self)
 	self.RaidTargetIndicator = UF:Construct_RaidIcon(self)
 	self.HealCommBar = UF:Construct_HealComm(self)
-	self.Range = UF:Construct_Range(self)
+	self.Fader = UF:Construct_Fader()
 	self.customTexts = {}
 
 	UF:Update_StatusBars()
@@ -163,8 +163,8 @@ function UF:Update_RaidpetFrames(frame, db)
 	--OverHealing
 	UF:Configure_HealComm(frame)
 
-	--Range
-	UF:Configure_Range(frame)
+	--Fader
+	UF:Configure_Fader(frame)
 
 	--BuffIndicator
 	UF:UpdateAuraWatch(frame, true) --2nd argument is the petOverride

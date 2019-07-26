@@ -46,7 +46,7 @@ function UF:Construct_PlayerFrame(frame)
 	frame.AuraBars = self:Construct_AuraBarHeader(frame);
 	frame.InfoPanel = self:Construct_InfoPanel(frame);
 	frame.PvPIndicator = self:Construct_PvPIcon(frame);
-	frame.CombatFade = true;
+	frame.Fader = self:Construct_Fader()
 	frame.customTexts = {};
 
 	frame:Point("BOTTOMLEFT", E.UIParent, "BOTTOM", -413, 68);
@@ -125,13 +125,18 @@ function UF:Update_PlayerFrame(frame, db)
 
 	UF:Configure_Castbar(frame);
 
-	UF:Configure_ClassBar(frame);
-
-	if(db.combatfade and not frame:IsElementEnabled("CombatFade")) then
-		frame:EnableElement("CombatFade");
-	elseif(not db.combatfade and frame:IsElementEnabled("CombatFade")) then
-		frame:DisableElement("CombatFade");
+	if (not db.enable and not E.private.unitframe.disabledBlizzardFrames.player) then
+		CastingBarFrame_OnLoad(CastingBarFrame, "player", true, false)
+		CastingBarFrame_OnLoad(PetCastingBarFrame)
+	elseif not db.enable and E.private.unitframe.disabledBlizzardFrames.player or (db.enable and not db.castbar.enable) then
+		CastingBarFrame_SetUnit(CastingBarFrame, nil)
+		CastingBarFrame_SetUnit(PetCastingBarFrame, nil)
 	end
+
+	--Fader
+	UF:Configure_Fader(frame)
+
+	UF:Configure_ClassBar(frame);
 
 	UF:Configure_DebuffHighlight(frame);
 

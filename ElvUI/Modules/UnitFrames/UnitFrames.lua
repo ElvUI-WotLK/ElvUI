@@ -393,6 +393,43 @@ function UF:Configure_FontString(obj)
 	obj:FontTemplate() --This is temporary.
 end
 
+function UF:Construct_Fader()
+	return {UpdateRange = UF.UpdateRange}
+end
+
+function UF:Configure_Fader(frame)
+	if frame.db and frame.db.enable and (frame.db.fader and frame.db.fader.enable) then
+		if not frame:IsElementEnabled("Fader") then
+			frame:EnableElement("Fader")
+		end
+
+		frame.Fader:SetOption("Hover", frame.db.fader.hover)
+		frame.Fader:SetOption("Combat", frame.db.fader.combat)
+		frame.Fader:SetOption("PlayerTarget", frame.db.fader.playertarget)
+		frame.Fader:SetOption("Focus", frame.db.fader.focus)
+		frame.Fader:SetOption("Health", frame.db.fader.health)
+		frame.Fader:SetOption("Power", frame.db.fader.power)
+		frame.Fader:SetOption("Vehicle", frame.db.fader.vehicle)
+		frame.Fader:SetOption("Casting", frame.db.fader.casting)
+		frame.Fader:SetOption("MinAlpha", frame.db.fader.minAlpha)
+		frame.Fader:SetOption("MaxAlpha", frame.db.fader.maxAlpha)
+
+		if frame ~= ElvUF_Player then
+			frame.Fader:SetOption("Range", frame.db.fader.range)
+			frame.Fader:SetOption("UnitTarget", frame.db.fader.unittarget)
+		end
+
+		frame.Fader:SetOption("Smooth", (frame.db.fader.smooth > 0 and frame.db.fader.smooth) or nil)
+		frame.Fader:SetOption("Delay", (frame.db.fader.delay > 0 and frame.db.fader.delay) or nil)
+
+		frame.Fader:ClearTimers()
+		frame.Fader.configTimer = E:ScheduleTimer(frame.Fader.ForceUpdate, 0.25, frame.Fader, true)
+	elseif frame:IsElementEnabled("Fader") then
+		frame:DisableElement("Fader")
+		E:UIFrameFadeIn(frame, 1, frame:GetAlpha(), 1)
+	end
+end
+
 function UF:Update_AllFrames()
 	if InCombatLockdown() then self:RegisterEvent("PLAYER_REGEN_ENABLED"); return end
 	if E.private["unitframe"].enable ~= true then return; end

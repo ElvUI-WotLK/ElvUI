@@ -27,7 +27,7 @@ function UF:Construct_TankFrames()
 	self.RaidTargetIndicator = UF:Construct_RaidIcon(self)
 	self.MouseGlow = UF:Construct_MouseGlow(self)
 	self.TargetGlow = UF:Construct_TargetGlow(self)
-	self.Range = UF:Construct_Range(self)
+	self.Fader = UF:Construct_Fader()
 
 	if not self.isChild then
 		self:SetAttribute("initial-width", UF.db["units"]["tank"].width)
@@ -147,6 +147,9 @@ function UF:Update_TankFrames(frame, db)
 	--Threat
 	UF:Configure_Threat(frame)
 
+	--Fader
+	UF:Configure_Fader(frame)
+
 	--Name
 	do
 		local name = frame.Name
@@ -157,9 +160,6 @@ function UF:Update_TankFrames(frame, db)
 			frame:Tag(name, "[namecolor][name:medium]")
 		end
 	end
-
-	--Range
-	UF:Configure_Range(frame)
 
 	if not frame.isChild then
 		--Auras

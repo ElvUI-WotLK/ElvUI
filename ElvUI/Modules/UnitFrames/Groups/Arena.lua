@@ -28,8 +28,8 @@ function UF:Construct_ArenaFrames(frame)
 	frame.HealCommBar = self:Construct_HealComm(frame);
 	frame.MouseGlow = self:Construct_MouseGlow(frame)
 	frame.TargetGlow = self:Construct_TargetGlow(frame)
-	frame.Trinket = self:Construct_Trinket(frame);
-	frame.Range = self:Construct_Range(frame);
+	frame.Trinket = self:Construct_Trinket(frame)
+	frame.Fader = self:Construct_Fader()
 	frame:SetAttribute("type2", "focus");
 	frame.customTexts = {};
 	frame.InfoPanel = self:Construct_InfoPanel(frame);
@@ -96,7 +96,8 @@ function UF:Update_ArenaFrames(frame, db)
 
 	UF:Configure_Trinket(frame);
 
-	UF:Configure_Range(frame);
+	--Fader
+	UF:Configure_Fader(frame)
 
 	UF:Configure_HealComm(frame);
 

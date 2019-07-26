@@ -49,7 +49,7 @@ function UF:Construct_Raid40Frames()
 	self.ReadyCheckIndicator = UF:Construct_ReadyCheckIcon(self)
 	self.HealCommBar = UF:Construct_HealComm(self)
 	self.GPS = UF:Construct_GPS(self)
-	self.Range = UF:Construct_Range(self)
+	self.Fader = UF:Construct_Fader()
 	self.customTexts = {}
 
 	UF:Update_StatusBars()
@@ -220,8 +220,8 @@ function UF:Update_Raid40Frames(frame, db)
 	--Raid Roles
 	UF:Configure_RaidRoleIcons(frame)
 
-	--Range
-	UF:Configure_Range(frame)
+	--Fader
+	UF:Configure_Fader(frame)
 
 	--Buff Indicators
 	UF:UpdateAuraWatch(frame)

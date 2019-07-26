@@ -77,7 +77,7 @@ function UF:Construct_PartyFrames()
 		self.unitframeType = "party"
 	end
 
-	self.Range = UF:Construct_Range(self)
+	self.Fader = UF:Construct_Fader()
 
 	UF:Update_StatusBars()
 	UF:Update_FontStrings()
@@ -260,7 +260,8 @@ function UF:Update_PartyFrames(frame, db)
 		UF:Configure_CustomTexts(frame)
 	end
 
-	UF:Configure_Range(frame)
+	--Fader
+	UF:Configure_Fader(frame)
 
 	frame:UpdateAllElements("ElvUI_UpdateAllElements")
 end

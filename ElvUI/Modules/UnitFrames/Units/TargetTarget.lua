@@ -16,11 +16,11 @@ function UF:Construct_TargetTargetFrame(frame)
 	frame.Buffs = self:Construct_Buffs(frame);
 	frame.RaidTargetIndicator = self:Construct_RaidIcon(frame);
 	frame.Debuffs = self:Construct_Debuffs(frame);
-	frame.Range = self:Construct_Range(frame);
 	frame.ThreatIndicator = self:Construct_Threat(frame);
 	frame.InfoPanel = self:Construct_InfoPanel(frame)
 	frame.MouseGlow = self:Construct_MouseGlow(frame)
 	frame.TargetGlow = self:Construct_TargetGlow(frame)
+	frame.Fader = self:Construct_Fader()
 	frame.customTexts = {};
 
 	frame:Point("BOTTOM", E.UIParent, "BOTTOM", 0, 75);
@@ -80,7 +80,8 @@ function UF:Update_TargetTargetFrame(frame, db)
 	UF:Configure_Auras(frame, "Buffs");
 	UF:Configure_Auras(frame, "Debuffs");
 
-	UF:Configure_Range(frame);
+	--Fader
+	UF:Configure_Fader(frame)
 
 	UF:Configure_RaidIcon(frame);
 

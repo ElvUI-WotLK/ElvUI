@@ -38,8 +38,8 @@ function UF:Construct_TargetFrame(frame)
 	frame.MouseGlow = self:Construct_MouseGlow(frame)
 	frame.TargetGlow = self:Construct_TargetGlow(frame)
 	frame.AuraBars = self:Construct_AuraBarHeader(frame);
-	frame.Range = self:Construct_Range(frame);
 	frame.PvPIndicator = self:Construct_PvPIcon(frame);
+	frame.Fader = self:Construct_Fader()
 	frame.customTexts = {};
 
 	frame:Point("BOTTOMRIGHT", E.UIParent, "BOTTOM", 413, 68);
@@ -119,6 +119,9 @@ function UF:Update_TargetFrame(frame, db)
 
 	UF:Configure_Castbar(frame);
 
+	--Fader
+	UF:Configure_Fader(frame)
+
 	UF:Configure_ComboPoints(frame);
 
 	UF:Configure_DebuffHighlight(frame);
@@ -130,8 +133,6 @@ function UF:Update_TargetFrame(frame, db)
 	UF:Configure_RaidIcon(frame);
 
 	UF:Configure_AuraBars(frame);
-
-	UF:Configure_Range(frame);
 
 	UF:Configure_PVPIcon(frame)
 

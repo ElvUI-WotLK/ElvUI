@@ -8,4 +8,5 @@
 	<Include file="oUF_HealComm4\oUF_HealComm4.xml"/>
 	<Include file="oUF_ResComm\oUF_ResComm.xml"/>
 	<Script file="oUF_GPS\oUF_GPS.lua"/>
+	<Script file="oUF_Fader\oUF_Fader.lua"/>
 </Ui>

@@ -23,12 +23,12 @@ function UF:Construct_FocusFrame(frame)
 	frame.AuraBars = self:Construct_AuraBarHeader(frame);
 	frame.HealCommBar = self:Construct_HealComm(frame);
 	frame.RaidTargetIndicator = self:Construct_RaidIcon(frame);
-	frame.Range = self:Construct_Range(frame);
 	frame.ThreatIndicator = self:Construct_Threat(frame);
 	frame.GPS = self:Construct_GPS(frame);
 	frame.MouseGlow = self:Construct_MouseGlow(frame)
 	frame.TargetGlow = self:Construct_TargetGlow(frame)
 	frame.InfoPanel = self:Construct_InfoPanel(frame);
+	frame.Fader = self:Construct_Fader()
 	frame.customTexts = {};
 
 	frame:Point("BOTTOMRIGHT", ElvUF_Target, "TOPRIGHT", 0, 220);
@@ -93,6 +93,9 @@ function UF:Update_FocusFrame(frame, db)
 
 	UF:Configure_Castbar(frame);
 
+	--Fader
+	UF:Configure_Fader(frame)
+
 	UF:Configure_HealComm(frame);
 
 	UF:Configure_GPS(frame);
@@ -100,8 +103,6 @@ function UF:Update_FocusFrame(frame, db)
 	UF:Configure_RaidIcon(frame);
 
 	UF:Configure_AuraBars(frame);
-
-	UF:Configure_Range(frame);
 
 	UF:Configure_CustomTexts(frame);
 

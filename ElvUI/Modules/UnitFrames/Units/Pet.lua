@@ -24,13 +24,13 @@ function UF:Construct_PetFrame(frame)
 	frame.ThreatIndicator = self:Construct_Threat(frame);
 	frame.HealCommBar = self:Construct_HealComm(frame);
 	frame.AuraWatch = self:Construct_AuraWatch(frame);
-	frame.Range = self:Construct_Range(frame);
 	if E.myclass == "HUNTER" then
 		frame.HappinessIndicator = self:Construct_Happiness(frame)
 	end
 	frame.InfoPanel = self:Construct_InfoPanel(frame);
 	frame.MouseGlow = self:Construct_MouseGlow(frame)
 	frame.TargetGlow = self:Construct_TargetGlow(frame)
+	frame.Fader = self:Construct_Fader()
 	frame.customTexts = {};
 
 	frame:Point("BOTTOM", E.UIParent, "BOTTOM", 0, 118);
@@ -93,11 +93,12 @@ function UF:Update_PetFrame(frame, db)
 	UF:Configure_Auras(frame, "Buffs");
 	UF:Configure_Auras(frame, "Debuffs");
 
+	--Fader
+	UF:Configure_Fader(frame)
+
 	UF:Configure_Castbar(frame);
 
 	UF:Configure_HealComm(frame);
-
-	UF:Configure_Range(frame);
 
 	if E.myclass == "HUNTER" then
 		UF:Configure_Happiness(frame)
