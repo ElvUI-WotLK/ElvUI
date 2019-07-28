@@ -275,6 +275,22 @@ function S:HandleCheckBox(frame, noBackdrop, noReplaceTextures, forceSaturation)
 			end
 		end
 
+		if frame.SetDisabledCheckedTexture then
+			if E.private.skins.checkBoxSkin then
+				frame:SetDisabledCheckedTexture(E.Media.Textures.Melli)
+
+				local disabledCheckedTexture = frame:GetDisabledCheckedTexture()
+				disabledCheckedTexture:SetVertexColor(0.6, 0.6, 0.6, 0.8)
+				disabledCheckedTexture:SetInside(frame.backdrop)
+			else
+				frame:SetDisabledCheckedTexture("Interface\\Buttons\\UI-CheckBox-Check-Disabled")
+
+				if noBackdrop then
+					frame:GetDisabledCheckedTexture():SetInside(nil, -4, -4)
+				end
+			end
+		end
+
 		if frame.SetDisabledTexture then
 			if E.private.skins.checkBoxSkin then
 				frame:SetDisabledTexture(E.Media.Textures.Melli)
