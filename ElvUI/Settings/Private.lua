@@ -51,6 +51,7 @@ V["skins"] = {
 	["ace3"] = {
 		["enable"] = true,
 	},
+	checkBoxSkin = true,
 	["blizzard"] = {
 		["enable"] = true,
 		["achievement"] = true,

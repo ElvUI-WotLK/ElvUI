@@ -249,12 +249,6 @@ L["TargetTargetTarget Frame"] = "Цель цели цели"
 L["Tooltip"] = "Подсказка"
 L["Vehicle Seat Frame"] = "Техника"
 L["Watch Frame"] = "Задания"
-L["DESC_MOVERCONFIG"] = [=[Блокировка отключена. Передвиньте фреймы и нажмите 'Закрепить', когда закончите.
-
-Options:
-  Shift + RightClick - Hides mover temporarily.
-  Ctrl + RightClick - Resets mover position to default.
-]=]
 
 --Plugin Installer
 L["ElvUI Plugin Installation"] = "Установка плагина ElvUI"
@@ -344,3 +338,14 @@ L["You can use the /resetui command to reset all of your movers. You can also us
 L["Dead"] = "Труп"
 L["Ghost"] = "Призрак"
 L["Offline"] = "Не в сети"
+
+----------------------------------
+L["RED_ENABLE"] = "|cFFff3333Включить|r"
+L["GREEN_ENABLE"] = "|cFF33ff33Включить|r"
+L["DESC_MOVERCONFIG"] = [=[Блокировка отключена. Передвиньте фреймы и нажмите "Закрепить", когда закончите.
+Options:
+  LeftClick - Toggle Nudge Frame.
+  RightClick - Open Config Section.
+  Shift + RightClick - Hides mover temporarily.
+  Ctrl + RightClick - Resets mover position to default.
+]=]

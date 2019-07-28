@@ -1,11 +1,9 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local UF = E:GetModule("UnitFrames");
-
 local _, ns = ...
 local ElvUF = ns.oUF
 assert(ElvUF, "ElvUI was unable to locate oUF.")
 
---Cache global variables
 --Lua functions
 --WoW API / Variables
 local CreateFrame = CreateFrame
@@ -19,16 +17,18 @@ function UF:Construct_Raid40Frames()
 	self:SetScript("OnEnter", UnitFrame_OnEnter)
 	self:SetScript("OnLeave", UnitFrame_OnLeave)
 
-	self:SetAttribute("initial-width", UF.db["units"]["raid40"].width)
-	self:SetAttribute("initial-height", UF.db["units"]["raid40"].height)
+	self:SetAttribute("initial-width", E.db.unitframe.units.raid40.width)
+	self:SetAttribute("initial-height", E.db.unitframe.units.raid40.height)
 
 	self.RaisedElementParent = CreateFrame("Frame", nil, self)
 	self.RaisedElementParent.TextureParent = CreateFrame("Frame", nil, self.RaisedElementParent)
 	self.RaisedElementParent:SetFrameLevel(self:GetFrameLevel() + 100)
 
 	self.Health = UF:Construct_HealthBar(self, true, true, "RIGHT")
+
 	self.Power = UF:Construct_PowerBar(self, true, true, "LEFT")
 	self.Power.frequentUpdates = false
+
 	self.Portrait3D = UF:Construct_Portrait(self, "model")
 	self.Portrait2D = UF:Construct_Portrait(self, "texture")
 
@@ -52,12 +52,11 @@ function UF:Construct_Raid40Frames()
 	self.Fader = UF:Construct_Fader()
 	self.customTexts = {}
 
-	UF:Update_StatusBars()
-	UF:Update_FontStrings()
-
 	self.unitframeType = "raid40"
 
-	UF:Update_Raid40Frames(self, UF.db["units"]["raid40"])
+	UF:Update_StatusBars()
+	UF:Update_FontStrings()
+	UF:Update_Raid40Frames(self, E.db.unitframe.units.raid40)
 
 	return self
 end
@@ -165,7 +164,6 @@ function UF:Update_Raid40Frames(frame, db)
 		frame.USE_INFO_PANEL = not frame.USE_MINI_POWERBAR and not frame.USE_POWERBAR_OFFSET and db.infoPanel.enable
 		frame.INFO_PANEL_HEIGHT = frame.USE_INFO_PANEL and db.infoPanel.height or 0
 
-		frame.HAPPINESS_WIDTH = 0
 		frame.BOTTOM_OFFSET = UF:GetHealthBottomOffset(frame)
 
 		frame.VARIABLES_SET = true
@@ -174,7 +172,6 @@ function UF:Update_Raid40Frames(frame, db)
 	if not InCombatLockdown() then
 		frame:Size(frame.UNIT_WIDTH, frame.UNIT_HEIGHT)
 	end
-
 	UF:Configure_InfoPanel(frame)
 	--Health
 	UF:Configure_HealthBar(frame)
@@ -235,4 +232,4 @@ function UF:Update_Raid40Frames(frame, db)
 	frame:UpdateAllElements("ElvUI_UpdateAllElements")
 end
 
-UF["headerstoload"]["raid40"] = true
+UF.headerstoload.raid40 = true

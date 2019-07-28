@@ -323,7 +323,7 @@ end
 -- Does not close the pullout on click.
 do
 	local widgetType = "Dropdown-Item-Toggle"
-	local widgetVersion = 3
+	local widgetVersion = 4
 
 	local function UpdateToggle(self)
 		if self.value then
@@ -440,7 +440,7 @@ end
 -- A single line to separate items
 do
 	local widgetType = "Dropdown-Item-Separator"
-	local widgetVersion = 1
+	local widgetVersion = 2
 
 	-- exported, override
 	local function SetDisabled(self, disabled)

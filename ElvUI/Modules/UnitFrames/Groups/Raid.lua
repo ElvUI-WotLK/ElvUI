@@ -1,11 +1,9 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local UF = E:GetModule("UnitFrames");
-
 local _, ns = ...
 local ElvUF = ns.oUF
 assert(ElvUF, "ElvUI was unable to locate oUF.")
 
---Cache global variables
 --Lua functions
 --WoW API / Variables
 local CreateFrame = CreateFrame
@@ -14,10 +12,6 @@ local InCombatLockdown = InCombatLockdown
 local IsInInstance = IsInInstance
 local RegisterStateDriver = RegisterStateDriver
 local UnregisterStateDriver = UnregisterStateDriver
-
-local _, ns = ...
-local ElvUF = ns.oUF
-assert(ElvUF, "ElvUI was unable to locate oUF.")
 
 function UF:Construct_RaidFrames()
 	self:SetScript("OnEnter", UnitFrame_OnEnter)
@@ -37,6 +31,7 @@ function UF:Construct_RaidFrames()
 
 	self.Portrait3D = UF:Construct_Portrait(self, "model")
 	self.Portrait2D = UF:Construct_Portrait(self, "texture")
+
 	self.Name = UF:Construct_NameText(self)
 	self.Buffs = UF:Construct_Buffs(self)
 	self.Debuffs = UF:Construct_Debuffs(self)
@@ -55,13 +50,14 @@ function UF:Construct_RaidFrames()
 	self.HealCommBar = UF:Construct_HealComm(self)
 	self.GPS = UF:Construct_GPS(self)
 	self.Fader = UF:Construct_Fader()
+
 	self.customTexts = {}
 	self.InfoPanel = UF:Construct_InfoPanel(self)
 
+	self.unitframeType = "raid"
 	UF:Update_StatusBars()
 	UF:Update_FontStrings()
 
-	self.unitframeType = "raid"
 
 	UF:Update_RaidFrames(self, UF.db["units"]["raid"])
 
@@ -170,7 +166,6 @@ function UF:Update_RaidFrames(frame, db)
 		frame.USE_INFO_PANEL = not frame.USE_MINI_POWERBAR and not frame.USE_POWERBAR_OFFSET and db.infoPanel.enable
 		frame.INFO_PANEL_HEIGHT = frame.USE_INFO_PANEL and db.infoPanel.height or 0
 
-		frame.HAPPINESS_WIDTH = 0
 		frame.BOTTOM_OFFSET = UF:GetHealthBottomOffset(frame)
 
 		frame.VARIABLES_SET = true
@@ -207,11 +202,11 @@ function UF:Update_RaidFrames(frame, db)
 	--Raid Icon
 	UF:Configure_RaidIcon(frame)
 
-	--Debuff Highlight
-	UF:Configure_DebuffHighlight(frame)
-
 	--Resurrect Icon
 	UF:Configure_ResurrectionIcon(frame)
+
+	--Debuff Highlight
+	UF:Configure_DebuffHighlight(frame)
 
 	--Role Icon
 	UF:Configure_RoleIcon(frame)
@@ -240,4 +235,4 @@ function UF:Update_RaidFrames(frame, db)
 	frame:UpdateAllElements("ElvUI_UpdateAllElements")
 end
 
-UF["headerstoload"]["raid"] = true
+UF.headerstoload.raid = true

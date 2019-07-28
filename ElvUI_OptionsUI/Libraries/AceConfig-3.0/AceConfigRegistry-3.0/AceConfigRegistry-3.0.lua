@@ -59,7 +59,7 @@ local optstring={["nil"]=true,["string"]=true, _="string"}
 local optstringfunc={["nil"]=true,["string"]=true,["function"]=true, _="string or funcref"}
 local optstringnumberfunc={["nil"]=true,["string"]=true,["number"]=true,["function"]=true, _="string, number or funcref"}
 local optnumber={["nil"]=true,["number"]=true, _="number"}
-local optmethod={["nil"]=true,["string"]=true,["function"]=true, _="methodname or funcref"}
+local optnumberfunc={["nil"]=true,["number"]=true,["function"]=true,_="number"} -- added by ElvUI for range
 local optmethodfalse={["nil"]=true,["string"]=true,["function"]=true,["boolean"]={[false]=true},  _="methodname, funcref or false"}
 local optmethodnumber={["nil"]=true,["string"]=true,["function"]=true,["number"]=true,  _="methodname, funcref or number"}
 local optmethodtable={["nil"]=true,["string"]=true,["function"]=true,["table"]=true,  _="methodname, funcref or table"}
@@ -67,6 +67,7 @@ local optmethodbool={["nil"]=true,["string"]=true,["function"]=true,["boolean"]=
 local opttable={["nil"]=true,["table"]=true,  _="table"}
 local optbool={["nil"]=true,["boolean"]=true,  _="boolean"}
 local optboolnumber={["nil"]=true,["boolean"]=true,["number"]=true,  _="boolean or number"}
+local optstringnumber={["nil"]=true,["string"]=true,["number"]=true, _="string or number"}
 
 local basekeys={
 	type=isstring,
@@ -90,10 +91,11 @@ local basekeys={
 	set=optmethodfalse,
 	func=optmethodfalse,
 	arg={["*"]=true},
-	width=optstring,
+	width=optstringnumber,
 	-- below here were created by ElvUI --
 	customWidth=optnumber,
 	textWidth=optmethodbool,
+	sliderElvUI=optmethodbool,
 	buttonElvUI=optmethodbool,
 	sortByValue=optmethodbool,
 	dragdrop=optmethodbool,
@@ -107,13 +109,20 @@ local basekeys={
 }
 
 local typedkeys={
-	header={},
+	header={
+		control=optstring,
+		dialogControl=optstring,
+		dropdownControl=optstring,
+	},
 	description={
 		image=optstringnumberfunc,
 		imageCoords=optmethodtable,
 		imageHeight=optnumber,
 		imageWidth=optnumber,
 		fontSize=optstringfunc,
+		control=optstring,
+		dialogControl=optstring,
+		dropdownControl=optstring,
 	},
 	group={
 		args=istable,
@@ -130,6 +139,9 @@ local typedkeys={
 		imageCoords=optmethodtable,
 		imageHeight=optnumber,
 		imageWidth=optnumber,
+		control=optstring,
+		dialogControl=optstring,
+		dropdownControl=optstring,
 	},
 	input={
 		pattern=optstring,
@@ -143,20 +155,27 @@ local typedkeys={
 		tristate=optbool,
 		image=optstringnumberfunc,
 		imageCoords=optmethodtable,
+		control=optstring,
+		dialogControl=optstring,
+		dropdownControl=optstring,
 	},
 	tristate={
 	},
 	range={
-		min=optnumber,
-		softMin=optnumber,
-		max=optnumber,
-		softMax=optnumber,
+		min=optnumberfunc,
+		softMin=optnumberfunc,
+		max=optnumberfunc,
+		softMax=optnumberfunc,
 		step=optnumber,
-		bigStep=optnumber,
+		bigStep=optnumberfunc,
 		isPercent=optbool,
+		control=optstring,
+		dialogControl=optstring,
+		dropdownControl=optstring,
 	},
 	select={
 		values=ismethodtable,
+		sorting=optmethodtable,
 		style={
 			["nil"]=true,
 			["string"]={dropdown=true,radio=true},
@@ -177,10 +196,14 @@ local typedkeys={
 	},
 	color={
 		hasAlpha=optmethodbool,
-		reset=opttable,
+		control=optstring,
+		dialogControl=optstring,
+		dropdownControl=optstring,
 	},
 	keybinding={
-		-- TODO
+		control=optstring,
+		dialogControl=optstring,
+		dropdownControl=optstring,
 	},
 }
 

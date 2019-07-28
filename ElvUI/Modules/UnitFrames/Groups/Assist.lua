@@ -1,11 +1,9 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local UF = E:GetModule("UnitFrames");
-
 local _, ns = ...
 local ElvUF = ns.oUF
 assert(ElvUF, "ElvUI was unable to locate oUF.")
 
---Cache global variables
 --Lua functions
 local max = math.max
 --WoW API / Variables
@@ -30,8 +28,8 @@ function UF:Construct_AssistFrames()
 	self.Fader = UF:Construct_Fader()
 
 	if not self.isChild then
-		self:SetAttribute("initial-width", UF.db["units"]["assist"].width)
-		self:SetAttribute("initial-height", UF.db["units"]["assist"].height)
+		self:SetAttribute("initial-width", E.db.unitframe.units.assist.width)
+		self:SetAttribute("initial-height", E.db.unitframe.units.assist.height)
 
 		self.Buffs = UF:Construct_Buffs(self)
 		self.Debuffs = UF:Construct_Debuffs(self)
@@ -41,18 +39,17 @@ function UF:Construct_AssistFrames()
 
 		self.unitframeType = "assist"
 	else
-		self:SetAttribute("initial-width", UF.db["units"]["assist"].targetsGroup.width)
-		self:SetAttribute("initial-height", UF.db["units"]["assist"].targetsGroup.height)
+		self:SetAttribute("initial-width", E.db.unitframe.units.assist.targetsGroup.width)
+		self:SetAttribute("initial-height", E.db.unitframe.units.assist.targetsGroup.height)
 
 		self.unitframeType = "assisttarget"
 	end
 
-	UF:Update_StatusBars()
-	UF:Update_FontStrings()
-
 	self.originalParent = self:GetParent()
 
-	UF:Update_AssistFrames(self, UF.db["units"]["assist"])
+	UF:Update_AssistFrames(self, E.db.unitframe.units.assist)
+	UF:Update_StatusBars()
+	UF:Update_FontStrings()
 
 	return self
 end
@@ -111,7 +108,6 @@ function UF:Update_AssistFrames(frame, db)
 		frame.PORTRAIT_WIDTH = 0
 
 		frame.CLASSBAR_YOFFSET = 0
-		frame.HAPPINESS_WIDTH = 0
 		frame.BOTTOM_OFFSET = 0
 
 		frame.VARIABLES_SET = true
@@ -148,18 +144,12 @@ function UF:Update_AssistFrames(frame, db)
 	UF:Configure_Threat(frame)
 
 	--Name
-	do
-		local name = frame.Name
-		name:Point("CENTER", frame.Health, "CENTER")
-		if UF.db.colors.healthclass then
-			frame:Tag(name, "[name:medium]")
-		else
-			frame:Tag(name, "[namecolor][name:medium]")
-		end
-	end
+	UF:UpdateNameSettings(frame)
 
 	--Fader
 	UF:Configure_Fader(frame)
+
+	UF:Configure_RaidIcon(frame)
 
 	if not frame.isChild then
 		--Auras
@@ -180,4 +170,4 @@ function UF:Update_AssistFrames(frame, db)
 	frame:UpdateAllElements("ElvUI_UpdateAllElements")
 end
 
-UF["headerstoload"]["assist"] = {"MAINASSIST", "ELVUI_UNITTARGET"}
+UF.headerstoload.assist = {"MAINASSIST", "ELVUI_UNITTARGET"}

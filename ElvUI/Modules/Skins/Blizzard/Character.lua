@@ -171,11 +171,11 @@ local function LoadSkin()
 
 			if(slot.verticalFlyout) then
 				popout:Size(23, 9)
-				S:SquareButton_SetIcon(popout, "DOWN")
+			--	S:SquareButton_SetIcon(popout, "DOWN")
 				popout:SetPoint("TOP", slot, "BOTTOM", 0, 5)
 			else
 				popout:Size(9, 23)
-				S:SquareButton_SetIcon(popout, "RIGHT")
+			--	S:SquareButton_SetIcon(popout, "RIGHT")
 				popout:SetPoint("LEFT", slot, "RIGHT", -5, 0)
 			end
 		end
@@ -193,15 +193,15 @@ local function LoadSkin()
 	hooksecurefunc("PaperDollFrameItemPopoutButton_SetReversed", function(self, isReversed)
 		if(self:GetParent().verticalFlyout) then
 			if(isReversed) then
-				S:SquareButton_SetIcon(self, "UP")
+			--	S:SquareButton_SetIcon(self, "UP")
 			else
-				S:SquareButton_SetIcon(self, "DOWN")
+			--	S:SquareButton_SetIcon(self, "DOWN")
 			end
 		else
 			if(isReversed) then
-				S:SquareButton_SetIcon(self, "LEFT")
+			--	S:SquareButton_SetIcon(self, "LEFT")
 			else
-				S:SquareButton_SetIcon(self, "RIGHT")
+			--	S:SquareButton_SetIcon(self, "RIGHT")
 			end
 		end
 	end)

@@ -1,11 +1,9 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local UF = E:GetModule("UnitFrames");
-
 local _, ns = ...
 local ElvUF = ns.oUF
 assert(ElvUF, "ElvUI was unable to locate oUF.")
 
---Cache global variables
 --Lua functions
 local max = math.max
 --WoW API / Variables
@@ -30,8 +28,8 @@ function UF:Construct_TankFrames()
 	self.Fader = UF:Construct_Fader()
 
 	if not self.isChild then
-		self:SetAttribute("initial-width", UF.db["units"]["tank"].width)
-		self:SetAttribute("initial-height", UF.db["units"]["tank"].height)
+		self:SetAttribute("initial-width", E.db.unitframe.units.tank.width)
+		self:SetAttribute("initial-height", E.db.unitframe.units.tank.height)
 
 		self.Buffs = UF:Construct_Buffs(self)
 		self.Debuffs = UF:Construct_Debuffs(self)
@@ -41,8 +39,8 @@ function UF:Construct_TankFrames()
 
 		self.unitframeType = "tank"
 	else
-		self:SetAttribute("initial-width", UF.db["units"]["tank"].targetsGroup.width)
-		self:SetAttribute("initial-height", UF.db["units"]["tank"].targetsGroup.height)
+		self:SetAttribute("initial-width", E.db.unitframe.units.tank.targetsGroup.width)
+		self:SetAttribute("initial-height", E.db.unitframe.units.tank.targetsGroup.height)
 
 		self.unitframeType = "tanktarget"
 	end
@@ -52,7 +50,7 @@ function UF:Construct_TankFrames()
 
 	self.originalParent = self:GetParent()
 
-	UF:Update_TankFrames(self, E.db["unitframe"]["units"]["tank"])
+	UF:Update_TankFrames(self, E.db.unitframe.units.tank)
 
 	return self
 end
@@ -111,7 +109,6 @@ function UF:Update_TankFrames(frame, db)
 		frame.PORTRAIT_WIDTH = 0
 
 		frame.CLASSBAR_YOFFSET = 0
-		frame.HAPPINESS_WIDTH = 0
 		frame.BOTTOM_OFFSET = 0
 
 		frame.VARIABLES_SET = true
@@ -144,22 +141,16 @@ function UF:Update_TankFrames(frame, db)
 	--Health
 	UF:Configure_HealthBar(frame)
 
+	--Name
+	UF:UpdateNameSettings(frame)
+
 	--Threat
 	UF:Configure_Threat(frame)
 
 	--Fader
 	UF:Configure_Fader(frame)
 
-	--Name
-	do
-		local name = frame.Name
-		name:Point("CENTER", frame.Health, "CENTER")
-		if UF.db.colors.healthclass then
-			frame:Tag(name, "[name:medium]")
-		else
-			frame:Tag(name, "[namecolor][name:medium]")
-		end
-	end
+	UF:Configure_RaidIcon(frame)
 
 	if not frame.isChild then
 		--Auras
@@ -180,4 +171,4 @@ function UF:Update_TankFrames(frame, db)
 	frame:UpdateAllElements("ElvUI_UpdateAllElements")
 end
 
-UF["headerstoload"]["tank"] = {"MAINTANK", "ELVUI_UNITTARGET"}
+UF.headerstoload.tank = {"MAINTANK", "ELVUI_UNITTARGET"}

@@ -4,7 +4,6 @@ local _, ns = ...
 local ElvUF = ns.oUF
 assert(ElvUF, "ElvUI was unable to locate oUF.")
 
---Cache global variables
 --Lua functions
 --WoW API / Variables
 local CreateFrame = CreateFrame
@@ -17,8 +16,8 @@ function UF:Construct_RaidpetFrames()
 	self:SetScript("OnEnter", UnitFrame_OnEnter)
 	self:SetScript("OnLeave", UnitFrame_OnLeave)
 
-	self:SetAttribute("initial-width", UF.db["units"]["raidpet"].width)
-	self:SetAttribute("initial-height", UF.db["units"]["raidpet"].height)
+	self:SetAttribute("initial-width", E.db.unitframe.units.raidpet.width)
+	self:SetAttribute("initial-height", E.db.unitframe.units.raidpet.height)
 
 	self.RaisedElementParent = CreateFrame("Frame", nil, self)
 	self.RaisedElementParent.TextureParent = CreateFrame("Frame", nil, self.RaisedElementParent)
@@ -33,20 +32,19 @@ function UF:Construct_RaidpetFrames()
 	self.AuraWatch = UF:Construct_AuraWatch(self)
 	self.RaidDebuffs = UF:Construct_RaidDebuffs(self)
 	self.DebuffHighlight = UF:Construct_DebuffHighlight(self)
-	self.MouseGlow = UF:Construct_MouseGlow(self)
 	self.TargetGlow = UF:Construct_TargetGlow(self)
+	self.MouseGlow = UF:Construct_MouseGlow(self)
 	self.ThreatIndicator = UF:Construct_Threat(self)
 	self.RaidTargetIndicator = UF:Construct_RaidIcon(self)
 	self.HealCommBar = UF:Construct_HealComm(self)
 	self.Fader = UF:Construct_Fader()
 	self.customTexts = {}
 
-	UF:Update_StatusBars()
-	UF:Update_FontStrings()
-
 	self.unitframeType = "raidpet"
 
-	UF:Update_RaidpetFrames(self, UF.db["units"]["raidpet"])
+	UF:Update_StatusBars()
+	UF:Update_FontStrings()
+	UF:Update_RaidpetFrames(self, E.db.unitframe.units.raidpet)
 
 	return self
 end
@@ -124,7 +122,6 @@ function UF:Update_RaidpetFrames(frame, db)
 		frame.PORTRAIT_WIDTH = (frame.USE_PORTRAIT_OVERLAY or not frame.USE_PORTRAIT) and 0 or db.portrait.width
 
 		frame.CLASSBAR_YOFFSET = 0
-		frame.HAPPINESS_WIDTH = 0
 		frame.BOTTOM_OFFSET = 0
 
 		frame.VARIABLES_SET = true
@@ -176,4 +173,4 @@ function UF:Update_RaidpetFrames(frame, db)
 end
 
 --Added an additional argument at the end, specifying the header Template we want to use
-UF["headerstoload"]["raidpet"] = {nil, nil, "SecureGroupPetHeaderTemplate"}
+UF.headerstoload.raidpet = {nil, nil, "SecureGroupPetHeaderTemplate"}

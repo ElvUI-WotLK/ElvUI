@@ -249,12 +249,6 @@ L["TargetTargetTarget Frame"] = true
 L["Tooltip"] = "Tooltip"
 L["Vehicle Seat Frame"] = "Quadro de Assento de Veículo"
 L["Watch Frame"] = true
-L["DESC_MOVERCONFIG"] = [=[Movedores destravados. Mova-os agora e clique Travar quando acabar.
-
-Options:
-  Shift + RightClick - Hides mover temporarily.
-  Ctrl + RightClick - Resets mover position to default.
-]=]
 
 --Plugin Installer
 L["ElvUI Plugin Installation"] = true
@@ -344,3 +338,14 @@ L["You can use the /resetui command to reset all of your movers. You can also us
 L["Dead"] = true
 L["Ghost"] = "Fantasma"
 L["Offline"] = "Desconectado"
+
+----------------------------------
+L["RED_ENABLE"] = "|cFFff3333Ativar|r"
+L["GREEN_ENABLE"] = "|cFF33ff33Ativar|r"
+L["DESC_MOVERCONFIG"] = [=[Movedores destravados. Mova-os agora e clique Travar quando acabar.
+Options:
+  LeftClick - Toggle Nudge Frame.
+  RightClick - Open Config Section.
+  Shift + RightClick - Hides mover temporarily.
+  Ctrl + RightClick - Resets mover position to default.
+]=]

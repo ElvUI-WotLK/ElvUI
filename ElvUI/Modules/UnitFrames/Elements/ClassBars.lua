@@ -391,3 +391,33 @@ function UF:PostVisibilityAdditionalPower(enabled, stateChanged)
 		UF:Configure_InfoPanel(frame, true) --2nd argument is to prevent it from setting template, which removes threat border
 	end
 end
+
+function UF:Construct_ClassBar(frame)
+	local bars = CreateFrame("Frame", nil, frame)
+	bars:CreateBackdrop(nil, nil, nil, self.thinBorders, true)
+	bars:Hide()
+
+	local maxBars = max(UF.classMaxResourceBar[E.myclass] or 0, MAX_COMBO_POINTS)
+	for i = 1, maxBars do
+		bars[i] = CreateFrame("StatusBar", frame:GetName().."ClassIconButton"..i, bars)
+		bars[i]:SetStatusBarTexture(E.media.blankTex) --Dummy really, this needs to be set so we can change the color
+		bars[i]:GetStatusBarTexture():SetHorizTile(false)
+		UF.statusbars[bars[i]] = true
+
+		bars[i]:CreateBackdrop(nil, nil, nil, self.thinBorders, true)
+		bars[i].backdrop:SetParent(bars)
+
+		bars[i].bg = bars:CreateTexture(nil, "BORDER")
+		bars[i].bg:SetAllPoints(bars[i])
+		bars[i].bg:SetTexture(E.media.blankTex)
+	end
+
+	bars.PostUpdate = UF.UpdateClassBar
+	bars.UpdateColor = E.noop --We handle colors on our own in Configure_ClassBar
+	bars.UpdateTexture = E.noop --We don't use textures but statusbars, so prevent errors
+
+	bars:SetScript("OnShow", ToggleResourceBar)
+	bars:SetScript("OnHide", ToggleResourceBar)
+
+	return bars
+end
