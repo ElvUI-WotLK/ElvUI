@@ -1,35 +1,19 @@
 --[[
-# Element: ClassPower
+# Element: ComboPoints
 
-Handles the visibility and updating of the player's class resources (like Chi Orbs or Holy Power) and combo points.
+Handles the visibility and updating of the player's combo points.
 
 ## Widget
 
-ClassPower - An `table` consisting of as many StatusBars as the theoretical maximum return of [UnitPowerMax](http://wowprogramming.com/docs/api/UnitPowerMax.html).
-
-## Sub-Widgets
-
-.bg - A `Texture` used as a background. It will inherit the color of the main StatusBar.
-
-## Sub-Widget Options
-
-.multiplier - Used to tint the background based on the widget's R, G and B values. Defaults to 1 (number)[0-1]
+ComboPoints - An `table` consisting of as many Textures as the theoretical maximum return of [GetComboPoints](http://wowprogramming.com/docs/api/GetComboPoints).
 
 ## Notes
 
-A default texture will be applied if the sub-widgets are StatusBars and don't have a texture set.
-If the sub-widgets are StatusBars, their minimum and maximum values will be set to 0 and 1 respectively.
-
-Supported class powers:
-  - All     - Combo Points
-  - Mage    - Arcane Charges
-  - Monk    - Chi Orbs
-  - Paladin - Holy Power
-  - Warlock - Soul Shards
+A default texture will be applied if the widget is a Texture and doesn't have a texture or a color set.
 
 ## Examples
 
-    local ClassPower = {}
+    local ComboPoints = {}
     for index = 1, 10 do
         local Bar = CreateFrame('StatusBar', nil, self)
 
@@ -37,204 +21,90 @@ Supported class powers:
         Bar:SetSize(16, 16)
         Bar:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', (index - 1) * Bar:GetWidth(), 0)
 
-        ClassPower[index] = Bar
+        ComboPoints[index] = Bar
     end
 
     -- Register with oUF
-    self.ClassPower = ClassPower
+    self.ComboPoints = ComboPoints
 --]]
 
 local _, ns = ...
 local oUF = ns.oUF
 
-local _, PlayerClass = UnitClass('player')
+local GetComboPoints = GetComboPoints
+local UnitHasVehicleUI = UnitHasVehicleUI
 
--- Holds the class specific stuff.
-local ClassPowerID, ClassPowerType
-local ClassPowerEnable, ClassPowerDisable
+local MAX_COMBO_POINTS = MAX_COMBO_POINTS
 
-local function UpdateColor(element, powerType)
-	local color = element.__owner.colors.power[powerType]
-	local r, g, b = color[1], color[2], color[3]
-	for i = 1, #element do
-		local bar = element[i]
-		bar:SetStatusBarColor(r, g, b)
-
-		local bg = bar.bg
-		if(bg) then
-			local mu = bg.multiplier or 1
-			bg:SetVertexColor(r * mu, g * mu, b * mu)
-		end
-	end
-end
-
-local function Update(self, event, unit, powerType)
+local function Update(self, event, unit)
 	if(unit == 'pet') then return end
 
-	local element = self.ClassPower
+	local element = self.ComboPoints
 
-	--[[ Callback: ClassPower:PreUpdate(event)
+	--[[ Callback: ComboPoints:PreUpdate()
 	Called before the element has been updated.
 
-	* self  - the ClassPower element
-	]]
+	* self - the ComboPoints element
+	--]]
 	if(element.PreUpdate) then
 		element:PreUpdate()
 	end
 
-	local cur, max, oldMax
-	if(event ~= 'ClassPowerDisable') then
-		if(UnitHasVehicleUI('player')) then
-			cur = GetComboPoints('vehicle', 'target')
+	local cp
+	if(UnitHasVehicleUI('player')) then
+		cp = GetComboPoints('vehicle', 'target')
+	else
+		cp = GetComboPoints('player', 'target')
+	end
+
+	for i = 1, MAX_COMBO_POINTS do
+		if(i <= cp) then
+			element[i]:Show()
 		else
-			cur = GetComboPoints('player', 'target')
-		end
-		max = MAX_COMBO_POINTS
-
-		local numActive = cur + 0.9
-		for i = 1, max do
-			if(i > numActive) then
-				element[i]:Hide()
-				element[i]:SetValue(0)
-			else
-				element[i]:Show()
-				element[i]:SetValue(cur - i + 1)
-			end
-		end
-
-		oldMax = element.__max
-		if(max ~= oldMax) then
-			if(max < oldMax) then
-				for i = max + 1, oldMax do
-					element[i]:Hide()
-					element[i]:SetValue(0)
-				end
-			end
-
-			element.__max = max
+			element[i]:Hide()
 		end
 	end
-	--[[ Callback: ClassPower:PostUpdate(cur, max, hasMaxChanged, powerType)
+
+	--[[ Callback: ComboPoints:PostUpdate(role)
 	Called after the element has been updated.
 
-	* self          - the ClassPower element
-	* cur           - the current amount of power (number)
-	* max           - the maximum amount of power (number)
-	* hasMaxChanged - indicates whether the maximum amount has changed since the last update (boolean)
-	* powerType     - the active power type (string)
+	* self   - the ComboPoints element
+	* cpoint - the current amount of combo points (number)
 	--]]
 	if(element.PostUpdate) then
-		return element:PostUpdate(cur, max, oldMax ~= max, powerType)
+		return element:PostUpdate(cp)
 	end
 end
 
 local function Path(self, ...)
-	--[[ Override: ClassPower.Override(self, event, unit, ...)
+	--[[ Override: ComboPoints.Override(self, event, ...)
 	Used to completely override the internal update function.
 
 	* self  - the parent object
 	* event - the event triggering the update (string)
-	* unit  - the unit accompanying the event (string)
 	* ...   - the arguments accompanying the event
 	--]]
-	return (self.ClassPower.Override or Update) (self, ...)
-end
-
-local function Visibility(self, event, unit)
-	local element = self.ClassPower
-	local shouldEnable
-
-	if(UnitHasVehicleUI('player')) then
-		shouldEnable = true
-		unit = 'vehicle'
-	elseif UnitExists("target") then
-		shouldEnable = true
-	end
-
-	local isEnabled = element.isEnabled
-	local powerType = unit == 'vehicle' and 'COMBO_POINTS' or ClassPowerType
-
-	if(shouldEnable) then
-		--[[ Override: ClassPower:UpdateColor(powerType)
-		Used to completely override the internal function for updating the widgets' colors.
-
-		* self      - the ClassPower element
-		* powerType - the active power type (string)
-		--]]
-		(element.UpdateColor or UpdateColor) (element, powerType)
-	end
-
-	if(shouldEnable and not isEnabled) then
-		ClassPowerEnable(self)
-	elseif(not shouldEnable and (isEnabled or isEnabled == nil)) then
-		ClassPowerDisable(self)
-	elseif(shouldEnable and isEnabled) then
-		Path(self, event, unit, powerType)
-	end
-end
-
-local function VisibilityPath(self, ...)
-	--[[ Override: ClassPower.OverrideVisibility(self, event, unit)
-	Used to completely override the internal visibility function.
-
-	* self  - the parent object
-	* event - the event triggering the update (string)
-	* unit  - the unit accompanying the event (string)
-	--]]
-	return (self.ClassPower.OverrideVisibility or Visibility) (self, ...)
+	return (self.ComboPoints.Override or Update) (self, ...)
 end
 
 local function ForceUpdate(element)
-	return VisibilityPath(element.__owner, 'ForceUpdate', element.__owner.unit)
+	return Path(element.__owner, 'ForceUpdate', element.__owner.unit)
 end
 
-do
-	function ClassPowerEnable(self)
-		self.ClassPower.isEnabled = true
-
-		if(UnitHasVehicleUI('player')) then
-			Path(self, 'ClassPowerEnable', 'vehicle', 'COMBO_POINTS')
-		else
-			Path(self, 'ClassPowerEnable', 'player', ClassPowerType)
-		end
-	end
-
-	function ClassPowerDisable(self)
-		local element = self.ClassPower
-		for i = 1, #element do
-			element[i]:Hide()
-		end
-
-		self.ClassPower.isEnabled = false
-		Path(self, 'ClassPowerDisable', 'player', ClassPowerType)
-	end
-
-	if(PlayerClass == 'ROGUE' or PlayerClass == 'DRUID') then
-		ClassPowerType = 'COMBO_POINTS'
-	end
-end
-
-local function Enable(self, unit)
-	local element = self.ClassPower
-	if(element and UnitIsUnit(unit, 'player')) then
+local function Enable(self)
+	local element = self.ComboPoints
+	if(element) then
 		element.__owner = self
-		element.__max = #element
 		element.ForceUpdate = ForceUpdate
 
-		self:RegisterEvent('UNIT_COMBO_POINTS', Path)
-		self:RegisterEvent('PLAYER_TARGET_CHANGED', Path)
+		self:RegisterEvent('UNIT_COMBO_POINTS', Path, true)
+		self:RegisterEvent('PLAYER_TARGET_CHANGED', Path, true)
 
-		element.ClassPowerEnable = ClassPowerEnable
-		element.ClassPowerDisable = ClassPowerDisable
-
-		for i = 1, #element do
-			local bar = element[i]
-			if(bar:IsObjectType('StatusBar')) then
-				if(not bar:GetStatusBarTexture()) then
-					bar:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
-				end
-
-				bar:SetMinMaxValues(0, 1)
+		for index = 1, MAX_COMBO_POINTS do
+			local cp = element[index]
+			if(cp:IsObjectType('Texture') and not cp:GetTexture()) then
+				cp:SetTexture([[Interface\ComboFrame\ComboPoint]])
+				cp:SetTexCoord(0, 0.375, 0, 1)
 			end
 		end
 
@@ -243,12 +113,15 @@ local function Enable(self, unit)
 end
 
 local function Disable(self)
-	if(self.ClassPower) then
-		ClassPowerDisable(self)
+	local element = self.ComboPoints
+	if(element) then
+		for index = 1, MAX_COMBO_POINTS do
+			element[index]:Hide()
+		end
 
 		self:UnregisterEvent('UNIT_COMBO_POINTS', Path)
 		self:UnregisterEvent('PLAYER_TARGET_CHANGED', Path)
 	end
 end
 
-oUF:AddElement('ClassPower', VisibilityPath, Enable, Disable)
+oUF:AddElement('ComboPoints', Path, Enable, Disable)
