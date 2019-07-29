@@ -211,7 +211,6 @@ local function LoadSkin()
 				end
 			end
 		else
-			local classFileName
 			for i = 1, GUILDMEMBERS_TO_DISPLAY, 1 do
 				button = _G["GuildFrameGuildStatusButton"..i]
 				_, _, _, _, _, _, _, _, online, _, classFileName = GetGuildRosterInfo(button.guildIndex)
@@ -383,7 +382,7 @@ local function LoadSkin()
 	for i = 1, MAX_DISPLAY_CHANNEL_BUTTONS do
 		_G["ChannelButton"..i]:StripTextures()
 		_G["ChannelButton"..i.."Collapsed"]:SetTextColor(1, 1, 1)
-		
+
 		S:HandleButtonHighlight(_G["ChannelButton"..i])
 	end
 

@@ -3,13 +3,12 @@ local AB = E:GetModule("ActionBars")
 local UF = E:GetModule("UnitFrames")
 local Misc = E:GetModule("Misc")
 local Bags = E:GetModule("Bags")
-local Skins = E:GetModule("Skins")
 
 --Lua functions
 local _G = _G
 local pairs, type, unpack, assert = pairs, type, unpack, assert
 local tremove, tContains, tinsert, wipe = tremove, tContains, tinsert, wipe
-local strlower, format, error = strlower, format, error
+local strlower, format = strlower, format
 --WoW API / Variables
 local CreateFrame = CreateFrame
 local IsAddOnLoaded = IsAddOnLoaded
@@ -842,8 +841,7 @@ function E:StaticPopup_Show(which, text_arg1, text_arg2, data)
 		end
 	end
 
-	local dialog = nil
-	dialog = E:StaticPopup_FindVisible(which, data)
+	local dialog = E:StaticPopup_FindVisible(which, data)
 	if(dialog) then
 		if(not info.noCancelOnReuse) then
 			local OnCancel = info.OnCancel

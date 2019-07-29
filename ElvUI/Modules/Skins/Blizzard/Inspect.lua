@@ -39,16 +39,16 @@ local function LoadSkin()
 		"RangedSlot"
 	}
 
-	for _, slot in pairs(slots) do
+	for _, slot in ipairs(slots) do
 		local icon = _G["Inspect"..slot.."IconTexture"]
-		local slot = _G["Inspect"..slot]
-		slot:StripTextures()
-		slot:StyleButton()
+		local frame = _G["Inspect"..slot]
+		frame:StripTextures()
+		frame:StyleButton()
 		icon:SetTexCoord(unpack(E.TexCoords))
 		icon:SetInside()
-		slot:SetFrameLevel(slot:GetFrameLevel() + 2)
-		slot:CreateBackdrop("Default")
-		slot.backdrop:SetAllPoints()
+		frame:SetFrameLevel(frame:GetFrameLevel() + 2)
+		frame:CreateBackdrop("Default")
+		frame.backdrop:SetAllPoints()
 	end
 
 	hooksecurefunc("InspectPaperDollItemSlotButton_Update", function(button)

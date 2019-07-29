@@ -7,7 +7,7 @@ To load the AddOn engine add this to the top of your file:
 ]]
 
 --Lua functions
-local _G, min, format, pairs, strsplit, unpack, wipe, type, tcopy = _G, min, format, pairs, strsplit, unpack, wipe, type, table.copy
+local _G, min, pairs, strsplit, unpack, wipe, type, tcopy = _G, min, pairs, strsplit, unpack, wipe, type, table.copy
 --WoW API / Variables
 local hooksecurefunc = hooksecurefunc
 local CreateFrame = CreateFrame
@@ -108,10 +108,6 @@ function AddOn:OnInitialize()
 	if not ElvCharacterDB then
 		ElvCharacterDB = {}
 	end
-
-	ElvCharacterData = nil --Depreciated
-	ElvPrivateData = nil --Depreciated
-	ElvData = nil --Depreciated
 
 	self.db = tcopy(self.DF.profile, true)
 	self.global = tcopy(self.DF.global, true)

@@ -4,9 +4,8 @@ local LSM = LibStub("LibSharedMedia-3.0")
 local LAI = LibStub("LibAuraInfo-1.0-ElvUI", true)
 
 local select, unpack, pairs = select, unpack, pairs
-local tonumber = tonumber
 local band = bit.band
-local tinsert, tremove, wipe = table.insert, table.remove, table.wipe
+local tinsert, tremove = table.insert, table.remove
 local strlower, strsplit = string.lower, strsplit
 
 local CreateFrame = CreateFrame
@@ -22,17 +21,6 @@ local RaidIconBit = {
 	["SQUARE"] = 0x02000000,
 	["CROSS"] = 0x04000000,
 	["SKULL"] = 0x08000000
-}
-
-local RaidIconIndex = {
-	"STAR",
-	"CIRCLE",
-	"DIAMOND",
-	"TRIANGLE",
-	"MOON",
-	"SQUARE",
-	"CROSS",
-	"SKULL"
 }
 
 local ByRaidIcon = {}
@@ -105,7 +93,7 @@ function mod:HideAuraIcons(auras)
 end
 
 function mod:CheckFilter(name, spellID, isPlayer, allowDuration, noDuration, ...)
-	local filterName, filter, filterType, spellList, spell = false, false
+	local filterName, filter, filterType, spellList, spell
 	for i = 1, select("#", ...) do
 		filterName = select(i, ...)
 		if G.nameplates.specialFilters[filterName] or E.global.unitframe.aurafilters[filterName] then
@@ -135,7 +123,7 @@ end
 
 function mod:AuraFilter(frame, frameNum, index, buffType, minDuration, maxDuration, priority, isAura, name, texture, count, dispelType, duration, expiration, caster, spellID)
 	if not isAura then return nil end -- checking for an aura that is not there, pass nil to break while loop
-	local filterCheck, isPlayer, allowDuration, noDuration = false, false, false, false, false, false
+	local filterCheck, isPlayer, allowDuration, noDuration
 
 	noDuration = (not duration or duration == 0)
 	allowDuration = noDuration or (duration and (duration > 0) and (maxDuration == 0 or duration <= maxDuration) and (minDuration == 0 or duration >= minDuration))

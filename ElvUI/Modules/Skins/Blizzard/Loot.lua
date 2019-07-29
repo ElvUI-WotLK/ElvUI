@@ -96,7 +96,7 @@ local function LoadSkin()
 		local button = _G["LootButton"..index]
 		local slot = (numLootToShow * (LootFrame.page - 1)) + index
 
-		if slot <= numLootItems then 
+		if slot <= numLootItems then
 			if (LootSlotIsItem(slot) or LootSlotIsCoin(slot)) and index <= numLootToShow then
 				local texture, _, _, quality = GetLootSlotInfo(slot)
 				if texture then

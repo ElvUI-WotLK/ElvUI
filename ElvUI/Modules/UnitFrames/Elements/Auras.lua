@@ -3,10 +3,8 @@ local UF = E:GetModule("UnitFrames");
 local LSM = E.Libs.LSM
 
 --Lua functions
-local _G = _G
 local unpack, strfind, format, strsplit, sort, ceil = unpack, strfind, format, strsplit, sort, ceil
 --WoW API / Variables
-local GetTime = GetTime
 local CreateFrame = CreateFrame
 local IsShiftKeyDown = IsShiftKeyDown
 local IsAltKeyDown = IsAltKeyDown

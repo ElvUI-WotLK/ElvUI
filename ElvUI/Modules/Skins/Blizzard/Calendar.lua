@@ -24,7 +24,7 @@ local function LoadSkin()
 		else
 			if CalendarNextMonthButton:IsEnabled() == 1 then
 				CalendarNextMonthButton_OnClick()
-			end	
+			end
 		end
 	end)
 

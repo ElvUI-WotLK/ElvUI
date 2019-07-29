@@ -3,7 +3,7 @@ local Sticky = LibStub("LibSimpleSticky-1.0")
 
 local _G = _G
 local type, unpack, pairs = type, unpack, pairs
-local find, format, split, trim = string.find, string.format, string.split, string.trim
+local format, split, trim = string.format, string.split, string.trim
 
 local CreateFrame = CreateFrame
 local InCombatLockdown = InCombatLockdown
@@ -138,7 +138,7 @@ local function CreateMover(parent, name, text, overlay, snapOffset, postdrag, sh
 			end
 		end
 
-		local x, y, point = E:CalculateMoverPoints(self)
+		x, y, point = E:CalculateMoverPoints(self)
 		self:ClearAllPoints()
 		self:Point(self.positionOverride or point, E.UIParent, overridePoint and overridePoint or point, x, y)
 

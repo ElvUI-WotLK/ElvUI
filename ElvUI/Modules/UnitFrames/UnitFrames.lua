@@ -7,7 +7,6 @@ UF.LSM = E.Libs.LSM
 --Lua functions
 local _G = _G
 local select, pairs, type, unpack, assert, tostring = select, pairs, type, unpack, assert, tostring
-local min = math.min
 local tremove, tinsert = table.remove, table.insert
 local find, gsub, format = string.find, string.gsub, string.format
 --WoW API / Variables
@@ -21,7 +20,6 @@ local InCombatLockdown = InCombatLockdown
 local GetInstanceInfo = GetInstanceInfo
 local UnregisterStateDriver = UnregisterStateDriver
 local RegisterStateDriver = RegisterStateDriver
-local MAX_RAID_MEMBERS = MAX_RAID_MEMBERS
 local MAX_BOSS_FRAMES = MAX_BOSS_FRAMES
 
 local _, ns = ...
@@ -778,7 +776,6 @@ end
 
 function UF:CreateHeader(parent, groupFilter, overrideName, template, groupName, headerTemplate)
 	local group = parent.groupName or groupName
-	local db = UF.db.units[group]
 	ElvUF:SetActiveStyle("ElvUF_"..E:StringTitle(group))
 	local header = ElvUF:SpawnHeader(overrideName, headerTemplate, nil,
 			"groupFilter", groupFilter,

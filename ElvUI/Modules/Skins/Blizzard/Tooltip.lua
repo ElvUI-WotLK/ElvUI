@@ -5,8 +5,6 @@ local TT = E:GetModule("Tooltip")
 local _G = _G
 local pairs = pairs
 
-local hooksecurefunc = hooksecurefunc
-
 local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.tooltip ~= true then return end
 

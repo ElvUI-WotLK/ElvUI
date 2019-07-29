@@ -2,7 +2,6 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 local Skins = E:GetModule("Skins")
 
 --Lua functions
-local select = select
 --WoW API / Variables
 local CreateFrame = CreateFrame
 local GetAddOnInfo = GetAddOnInfo
@@ -138,7 +137,8 @@ function E:CreateStatusFrame()
 		section.Header.Text:Point("BOTTOM")
 		section.Header.Text:SetJustifyH("CENTER")
 		section.Header.Text:SetJustifyV("MIDDLE")
-		local font, height, flags = section.Header.Text:GetFont()
+		local font, flags
+		font, height, flags = section.Header.Text:GetFont()
 		section.Header.Text:FontTemplate(font, height*1.3, flags)
 
 		section.Header.LeftDivider = section.Header:CreateTexture(nil, "ARTWORK")

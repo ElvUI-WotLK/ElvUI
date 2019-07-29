@@ -1,4 +1,4 @@
-local E, L, DF = unpack(select(2, ...));
+local E, L = unpack(select(2, ...));
 local RU = E:GetModule("RaidUtility")
 
 local _G = _G;

@@ -219,8 +219,8 @@ do
 		--Store old settings
 		self.db.general.kittys = false
 		if HelloKittyLeft then
-			_HelloKittyLeft:Hide()
-			_HelloKittyRight:Hide()
+			HelloKittyLeft:Hide()
+			HelloKittyRight:Hide()
 		end
 
 		if not self.db.tempSettings then return end

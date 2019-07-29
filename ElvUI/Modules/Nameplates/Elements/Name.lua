@@ -15,7 +15,7 @@ function mod:UpdateElement_Name(frame, triggered)
 	local r, g, b = 1, 1, 1
 	local class = frame.UnitClass
 	local reactionType = frame.UnitReaction
-	
+
 	local classColor, useClassColor
 	if class then
 		classColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class]

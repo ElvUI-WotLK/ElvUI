@@ -5,7 +5,7 @@ local LAI = LibStub("LibAuraInfo-1.0-ElvUI", true)
 
 local _G = _G
 local select, unpack, pairs, tonumber = select, unpack, pairs, tonumber
-local format, find, gsub, match = string.format, string.find, string.gsub, string.match
+local format, gsub, match = string.format, string.gsub, string.match
 local twipe = table.wipe
 
 local CreateFrame = CreateFrame
@@ -16,8 +16,6 @@ local SetCVar = SetCVar
 local UnitClass = UnitClass
 local UnitExists = UnitExists
 local UnitGUID = UnitGUID
-local UnitInParty = UnitInParty
-local UnitInRaid = UnitInRaid
 local UnitName = UnitName
 local WorldFrame = WorldFrame
 local WorldGetChildren = WorldFrame.GetChildren
@@ -695,7 +693,7 @@ function mod:OnUpdate()
 	end
 
 	for frame in pairs(mod.VisiblePlates) do
-		if mod.hasTarget then 
+		if mod.hasTarget then
 			frame.alpha = frame:GetParent():GetAlpha()
 		else
 			frame.alpha = 1

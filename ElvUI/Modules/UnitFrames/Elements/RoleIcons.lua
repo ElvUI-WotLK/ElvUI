@@ -41,7 +41,7 @@ function UF:UpdateRoleIcon(event)
 		role = "HEALER"
 	elseif isDamage then
 		role = "DAMAGER"
-	elseif self.isForced and not role ~= nil then
+	elseif self.isForced then
 		local rnd = random(1, 3)
 		role = rnd == 1 and "TANK" or (rnd == 2 and "HEALER" or (rnd == 3 and "DAMAGER"))
 	else
@@ -77,9 +77,9 @@ function UF:Configure_RoleIcon(frame)
 		if db.roleIcon.combatHide then
 			E:RegisterEventForObject("PLAYER_REGEN_ENABLED", frame, UF.UpdateRoleIcon)
 			E:RegisterEventForObject("PLAYER_REGEN_DISABLED", frame, UF.UpdateRoleIcon)
-		else
-		--	E:UnregisterEventForObject("PLAYER_REGEN_ENABLED", frame, UF.UpdateRoleIcon)
-		--	E:UnregisterEventForObject("PLAYER_REGEN_DISABLED", frame, UF.UpdateRoleIcon)
+	--	else
+	--		E:UnregisterEventForObject("PLAYER_REGEN_ENABLED", frame, UF.UpdateRoleIcon)
+	--		E:UnregisterEventForObject("PLAYER_REGEN_DISABLED", frame, UF.UpdateRoleIcon)
 		end
 	else
 		frame:DisableElement("GroupRoleIndicator")

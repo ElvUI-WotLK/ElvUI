@@ -6,7 +6,6 @@ local _G = _G
 --WoW API / Variables
 local CreateFrame = CreateFrame
 local UnitLevel = UnitLevel
-local UpdateMicroButtonsParent = UpdateMicroButtonsParent
 local RegisterStateDriver = RegisterStateDriver
 
 local MICRO_BUTTONS = {

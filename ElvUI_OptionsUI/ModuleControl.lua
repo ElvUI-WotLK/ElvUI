@@ -1,6 +1,5 @@
 local E, L, V, P, G = unpack(ElvUI)
 local UF = E:GetModule("UnitFrames")
-local NP = E:GetModule("NamePlates")
 
 E.Options.args.modulereset = {
 	order = -2,

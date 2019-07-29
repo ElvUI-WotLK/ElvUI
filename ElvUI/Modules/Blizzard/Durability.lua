@@ -1,4 +1,4 @@
-local E, L, DF = unpack(select(2, ...))
+local E, L = unpack(select(2, ...))
 local B = E:GetModule("Blizzard");
 
 local _G = _G;

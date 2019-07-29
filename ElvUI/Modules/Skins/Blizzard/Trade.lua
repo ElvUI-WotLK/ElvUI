@@ -99,7 +99,7 @@ local function LoadSkin()
 				tradeItemButton:SetBackdropBorderColor(GetItemQualityColor(quality))
 			else
 				tradeItemButton:SetBackdropBorderColor(unpack(E["media"].bordercolor))
- 			end
+			end
 		else
 			tradeItemButton:SetBackdropBorderColor(unpack(E["media"].bordercolor))
 		end
@@ -116,7 +116,7 @@ local function LoadSkin()
 				tradeItemButton:SetBackdropBorderColor(GetItemQualityColor(quality))
 			else
 				tradeItemButton:SetBackdropBorderColor(unpack(E["media"].bordercolor))
- 			end
+			end
 		else
 			tradeItemButton:SetBackdropBorderColor(unpack(E["media"].bordercolor));
 		end

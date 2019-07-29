@@ -344,7 +344,7 @@ function D:GetImportStringType(dataString)
 end
 
 function D:Decode(dataString)
-	local profileInfo, profileType, profileKey, profileData, message;
+	local profileInfo, profileType, profileKey, profileData;
 	local stringType = self:GetImportStringType(dataString);
 
 	if(stringType == "Base64") then
@@ -389,6 +389,7 @@ function D:Decode(dataString)
 		profileDataAsString = format("%s%s", profileDataAsString, "}");
 		profileType, profileKey = E:StringSplitMultiDelim(profileInfo, "::");
 
+		local message
 		local profileToTable = loadstring(format("%s %s", "return", profileDataAsString));
 		if(profileToTable) then
 			message, profileData = pcall(profileToTable);
@@ -425,7 +426,7 @@ local function SetImportedProfile(profileType, profileKey, profileData, force)
 			return;
 		end
 	elseif(profileType == "private") then
-		local profileKey = ElvPrivateDB.profileKeys[E.myname.." - "..E.myrealm];
+		profileKey = ElvPrivateDB.profileKeys[E.myname.." - "..E.myrealm];
 		ElvPrivateDB.profiles[profileKey] = profileData;
 		E:StaticPopup_Show("IMPORT_RL");
 

@@ -1,5 +1,4 @@
 local E, L, V, P, G = unpack(select(2, ...))
-local NP = E:GetModule("NamePlates")
 local UF = E:GetModule("UnitFrames")
 local S = E:GetModule("Skins")
 
@@ -7,8 +6,6 @@ local _G = _G
 local format = format
 
 local CreateFrame = CreateFrame
-local IsAddOnLoaded = IsAddOnLoaded
-local GetScreenWidth = GetScreenWidth
 local SetCVar = SetCVar
 local PlaySoundFile = PlaySoundFile
 local ReloadUI = ReloadUI
@@ -591,7 +588,7 @@ local function SetPage(PageNum)
 		InstallSlider:SetValue(value)
 		InstallSlider.Cur:SetText(value)
 		InstallSlider:SetScript("OnValueChanged", function(self)
-			E.global.general.UIScale =  E:PixelClip(self:GetValue())
+			E.global.general.UIScale = E:PixelClip(self:GetValue())
 			InstallSlider.Cur:SetText(E.global.general.UIScale)
 		end)
 
@@ -727,7 +724,7 @@ function E:Install()
 		f:SetTemplate("Transparent")
 		f:Point("CENTER")
 		f:SetFrameStrata("TOOLTIP")
-		
+
 		f:SetMovable(true)
 		f:EnableMouse(true)
 		f:RegisterForDrag("LeftButton")
@@ -847,7 +844,7 @@ function E:Install()
 		f.Option4:SetScript("OnShow", function()
 			f.Option1:Width(100)
 			f.Option1:ClearAllPoints()
-			f.Option1:Point("RIGHT", f.Option2, "LEFT", -4, 0) 
+			f.Option1:Point("RIGHT", f.Option2, "LEFT", -4, 0)
 			f.Option2:Width(100)
 			f.Option2:ClearAllPoints()
 			f.Option2:Point("BOTTOMRIGHT", f, "BOTTOM", -4, 45)

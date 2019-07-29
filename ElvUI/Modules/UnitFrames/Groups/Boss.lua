@@ -6,7 +6,6 @@ assert(ElvUF, "ElvUI was unable to locate oUF.")
 
 --Lua functions
 local _G = _G
-local tinsert = table.insert
 --WoW API / Variables
 local MAX_BOSS_FRAMES = MAX_BOSS_FRAMES
 

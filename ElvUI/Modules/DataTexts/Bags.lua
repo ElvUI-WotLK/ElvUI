@@ -17,7 +17,7 @@ local displayString = "";
 local lastPanel;
 
 local function OnEvent(self)
-	local free, total, used = 0, 0, 0;
+	local free, total, used = 0, 0
 	for i = 0, NUM_BAG_SLOTS do
 		free, total = free + GetContainerNumFreeSlots(i), total + GetContainerNumSlots(i);
 	end

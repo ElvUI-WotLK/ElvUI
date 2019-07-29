@@ -90,7 +90,7 @@ function A:UpdateTime(elapsed)
 
 	local timerValue, formatID
 	timerValue, formatID, self.nextUpdate = E:GetTimeInfo(self.timeLeft, timeThreshold)
-	self.time:SetFormattedText(("%s%s|r"):format(timeColors[formatID], E.TimeFormats[formatID][1]), timerValue)
+	self.time:SetFormattedText(format("%s%s|r", timeColors[formatID], E.TimeFormats[formatID][1]), timerValue)
 
 	if self.timeLeft > E.db.auras.fadeThreshold then
 		E:StopFlash(self)
@@ -210,16 +210,11 @@ function A:ConfigureAuras(header, auraTable, weaponPosition)
 		db = self.db.buffs
 	end
 
+	local xOffset, yOffset, wrapXOffset, wrapYOffset, minWidth, minHeight
 	local size = db.size
 	local point = DIRECTION_TO_POINT[db.growthDirection]
-	local xOffset = 0
-	local yOffset = 0
-	local wrapXOffset = 0
-	local wrapYOffset = 0
 	local wrapAfter = db.wrapAfter
 	local maxWraps = db.maxWraps
-	local minWidth = 0
-	local minHeight = 0
 
 	if IS_HORIZONTAL_GROWTH[db.growthDirection] then
 		minWidth = ((wrapAfter == 1 and 0 or db.horizontalSpacing) + size) * wrapAfter

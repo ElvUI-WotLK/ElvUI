@@ -108,7 +108,7 @@ local function OnEvent(self, event, ...)
 		local message = select(1, ...);
 		if not (find(message, friendOnline) or find(message, friendOffline)) then return; end
 	end
-	
+
 	-- force update when showing tooltip
 	dataValid = false;
 

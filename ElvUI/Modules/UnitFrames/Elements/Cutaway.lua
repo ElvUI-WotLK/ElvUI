@@ -71,7 +71,6 @@ function UF:Configure_Cutaway(frame)
 		local power = frame.Cutaway.Power
 		local powerUsable = powerEnabled and frame.USE_POWERBAR
 		if power and powerUsable then
-			local unitPowerDB = frame.db.power
 			power:SetFrameLevel(frame.Power:GetFrameLevel())
 
 			frame.Power:PostUpdateColor()

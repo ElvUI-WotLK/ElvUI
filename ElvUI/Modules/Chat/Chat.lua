@@ -351,16 +351,16 @@ function CH:StyleChat(frame)
 	end
 
 	hooksecurefunc("ChatEdit_UpdateHeader", function()
-		local type = editbox:GetAttribute("chatType")
-		if ( type == "CHANNEL" ) then
-			local id = GetChannelName(editbox:GetAttribute("channelTarget"))
-			if id == 0 then
+		local cType = editbox:GetAttribute("chatType")
+		if ( cType == "CHANNEL" ) then
+			local channelID = GetChannelName(editbox:GetAttribute("channelTarget"))
+			if channelID == 0 then
 				editbox:SetBackdropBorderColor(unpack(E.media.bordercolor))
 			else
-				editbox:SetBackdropBorderColor(ChatTypeInfo[type..id].r,ChatTypeInfo[type..id].g,ChatTypeInfo[type..id].b)
+				editbox:SetBackdropBorderColor(ChatTypeInfo[cType..channelID].r,ChatTypeInfo[cType..channelID].g,ChatTypeInfo[cType..channelID].b)
 			end
-		elseif type then
-			editbox:SetBackdropBorderColor(ChatTypeInfo[type].r,ChatTypeInfo[type].g,ChatTypeInfo[type].b)
+		elseif cType then
+			editbox:SetBackdropBorderColor(ChatTypeInfo[cType].r,ChatTypeInfo[cType].g,ChatTypeInfo[cType].b)
 		end
 	end)
 
@@ -555,7 +555,7 @@ function CH:UpdateAnchors()
 			frame:Point("BOTTOMRIGHT", ChatFrame1, "BOTTOMRIGHT", noBackdrop and 10 or 7, -LeftChatTab:GetHeight()-(noBackdrop and 1 or 4))
 		elseif E.db.chat.editBoxPosition == "BELOW_CHAT" then
 			frame:SetAllPoints(LeftChatDataPanel)
- 		else
+		else
 			frame:Point("BOTTOMLEFT", ChatFrame1, "TOPLEFT", noBackdrop and -1 or -1, noBackdrop and 1 or 4)
 			frame:Point("TOPRIGHT", ChatFrame1, "TOPRIGHT", noBackdrop and 10 or 4, LeftChatTab:GetHeight()+(noBackdrop and 1 or 4))
 		end
@@ -588,11 +588,11 @@ function CH:UpdateChatTabs()
 		local chat = _G[format("ChatFrame%d", i)]
 		local tab = _G[format("ChatFrame%sTab", i)]
 		local id = chat:GetID()
-		local point = GetChatWindowSavedPosition(id)
+	--	local point = GetChatWindowSavedPosition(id)
 		local isDocked = chat.isDocked
 		local chatbg = format("ChatFrame%dBackground", i);
 		if id > NUM_CHAT_WINDOWS then
-			point = point or select(1, chat:GetPoint());
+	--		point = point or select(1, chat:GetPoint());
 			if select(2, tab:GetPoint()):GetName() ~= chatbg then
 				isDocked = true
 			else
@@ -628,7 +628,7 @@ function CH:PositionChat(override)
 
 	if not self.db.lockPositions or E.private.chat.enable ~= true then return end
 
-	local chat, chatbg, tab, id, point, isDocked
+	local chat, chatbg, tab, id, isDocked
 	local fadeUndockedTabs = E.db["chat"].fadeUndockedTabs
 	local fadeTabsNoBackdrop = E.db["chat"].fadeTabsNoBackdrop
 
@@ -639,12 +639,12 @@ function CH:PositionChat(override)
 		chatbg = format("ChatFrame%dBackground", i)
 		id = chat:GetID()
 		tab = _G[format("ChatFrame%sTab", i)]
-		point = GetChatWindowSavedPosition(id)
+	--	local point = GetChatWindowSavedPosition(id)
 		isDocked = chat.isDocked
 		tab.isDocked = chat.isDocked
 		tab.owner = chat
 		if id > NUM_CHAT_WINDOWS then
-			point = point or select(1, chat:GetPoint());
+	--		point = point or select(1, chat:GetPoint());
 			if select(2, tab:GetPoint()):GetName() ~= chatbg then
 				isDocked = true
 			else
@@ -928,9 +928,8 @@ function CH:ChatFrame_MessageEventHandler(self, event, arg1, arg2, arg3, arg4, a
 		local type = strsub(event, 10);
 		local info = ChatTypeInfo[type];
 
-		local filter = false;
 		if ( chatFilters[event] ) then
-			local newarg1, newarg2, newarg3, newarg4, newarg5, newarg6, newarg7, newarg8, newarg9, newarg10, newarg11, newarg12;
+			local filter, newarg1, newarg2, newarg3, newarg4, newarg5, newarg6, newarg7, newarg8, newarg9, newarg10, newarg11, newarg12;
 			for _, filterFunc in next, chatFilters[event] do
 				filter, newarg1, newarg2, newarg3, newarg4, newarg5, newarg6, newarg7, newarg8, newarg9, newarg10, newarg11, newarg12 = filterFunc(self, event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
 				if ( filter ) then
@@ -1065,12 +1064,12 @@ function CH:ChatFrame_MessageEventHandler(self, event, arg1, arg2, arg3, arg4, a
 			self:AddMessage(format(globalstring, arg8, arg4), info.r, info.g, info.b, info.id, accessID, typeID, isHistory, historyTime)
 		else
 			local body;
-			local _, fontHeight = FCF_GetChatWindowInfo(self:GetID());
-
-			if ( fontHeight == 0 ) then
-				--fontHeight will be 0 if it's still at the default (14)
-				fontHeight = 14;
-			end
+		--	local _, fontHeight = FCF_GetChatWindowInfo(self:GetID());
+		--
+		--	if ( fontHeight == 0 ) then
+		--		--fontHeight will be 0 if it's still at the default (14)
+		--		fontHeight = 14;
+		--	end
 
 			-- Add AFK/DND flags
 			local pflag = GetChatIcons(arg2);
@@ -1252,7 +1251,7 @@ function CH:SetupChat()
 
 			if id ~= 2 then
 				frame:SetScript("OnEvent", FloatingChatFrameOnEvent)
- 			end
+			end
 
 			hooksecurefunc(frame, "SetScript", function(f, script, func)
 				if script == "OnMouseWheel" and func ~= ChatFrame_OnMouseScroll then
@@ -1422,21 +1421,21 @@ function CH:CheckKeyword(message)
 	return rebuiltString
 end
 
-function CH:AddLines(lines, ...)
+function CH:AddLines(lineList, ...)
 	for i = select("#", ...), 1, -1 do
 		local x = select(i, ...);
 		if(x:GetObjectType() == "FontString" and not x:GetName()) then
-			tinsert(lines, x:GetText());
+			tinsert(lineList, x:GetText());
 		end
 	end
 end
 
 function CH:ChatEdit_OnEnterPressed(editBox)
-	local type = editBox:GetAttribute("chatType");
+	local cType = editBox:GetAttribute("chatType");
 	local chatFrame = editBox:GetParent();
-	if not chatFrame.isTemporary and ChatTypeInfo[type].sticky == 1 then
-		if not self.db.sticky then type = "SAY"; end
-		editBox:SetAttribute("chatType", type);
+	if not chatFrame.isTemporary and ChatTypeInfo[cType].sticky == 1 then
+		if not self.db.sticky then cType = "SAY"; end
+		editBox:SetAttribute("chatType", cType);
 	end
 end
 
@@ -1565,7 +1564,6 @@ function CH:SaveChatHistory(event, ...)
 			tremove(data, 1)
 		end
 	end
-	temp = nil -- Destory!
 
 	if self.db.throttleInterval ~= 0 and (event == "CHAT_MESSAGE_SAY" or event == "CHAT_MESSAGE_YELL" or event == "CHAT_MSG_CHANNEL") then
 		self:ChatThrottleHandler(event, ...)

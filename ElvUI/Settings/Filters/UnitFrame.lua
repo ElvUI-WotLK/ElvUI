@@ -3,7 +3,6 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 --Cache global variables
 --Lua functions
 local print, unpack = print, unpack
-local lower = string.lower
 --WoW API / Variables
 local GetSpellInfo = GetSpellInfo
 

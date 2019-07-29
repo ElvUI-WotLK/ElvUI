@@ -1,7 +1,6 @@
 local E, _, V, P, G = unpack(ElvUI); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local C, L = unpack(select(2, ...))
 local UF = E:GetModule("UnitFrames")
-local NP = E:GetModule("NamePlates")
 
 local _G = _G
 local select, pairs, ipairs = select, pairs, ipairs
@@ -948,7 +947,7 @@ local function GetOptionsTable_Castbar(hasTicks, updateFunc, groupName, numUnits
 				order = 6,
 				type = "range",
 				name = L["Width"],
- 				softMax = 600,
+				softMax = 600,
 				min = 50, max = GetScreenWidth(), step = 1
 			},
 			height = {
@@ -3167,7 +3166,7 @@ E.Options.args.unitframe = {
 										local t = E.db.unitframe.colors.auraBarBuff
 										local d = P.unitframe.colors.auraBarBuff
 										return t.r, t.g, t.b, t.a, d.r, d.g, d.b
- 									end,
+									end,
 									set = function(info, r, g, b)
 										if E:CheckClassColor(r, g, b) then
 											local classColor = E.myclass == "PRIEST" and E.PriestColors or (_G.CUSTOM_CLASS_COLORS and _G.CUSTOM_CLASS_COLORS[E.myclass] or _G.RAID_CLASS_COLORS[E.myclass])
@@ -4019,43 +4018,43 @@ E.Options.args.unitframe.args.player = {
 					type = "header",
 					name = L["PvP Icon"],
 				},
- 				enable = {
- 					order = 2,
- 					type = "toggle",
- 					name = L["Enable"]
- 				},
- 				scale = {
- 					order = 3,
- 					type = "range",
- 					name = L["Scale"],
- 					isPercent = true,
- 					min = 0.1, max = 2, step = 0.01
- 				},
- 				spacer = {
- 					order = 4,
- 					type = "description",
- 					name = " "
- 				},
- 				anchorPoint = {
- 					order = 5,
- 					type = "select",
- 					name = L["Anchor Point"],
- 					values = positionValues
- 				},
- 				xOffset = {
- 					order = 6,
- 					type = "range",
- 					name = L["X-Offset"],
- 					min = -100, max = 100, step = 1
- 				},
- 				yOffset = {
- 					order = 7,
- 					type = "range",
- 					name = L["Y-Offset"],
- 					min = -100, max = 100, step = 1
- 				}
- 			}
- 		},
+				enable = {
+					order = 2,
+					type = "toggle",
+					name = L["Enable"]
+				},
+				scale = {
+					order = 3,
+					type = "range",
+					name = L["Scale"],
+					isPercent = true,
+					min = 0.1, max = 2, step = 0.01
+				},
+				spacer = {
+					order = 4,
+					type = "description",
+					name = " "
+				},
+				anchorPoint = {
+					order = 5,
+					type = "select",
+					name = L["Anchor Point"],
+					values = positionValues
+				},
+				xOffset = {
+					order = 6,
+					type = "range",
+					name = L["X-Offset"],
+					min = -100, max = 100, step = 1
+				},
+				yOffset = {
+					order = 7,
+					type = "range",
+					name = L["Y-Offset"],
+					min = -100, max = 100, step = 1
+				}
+			}
+		},
 		pvpText = {
 			order = 460,
 			type = "group",
@@ -4230,7 +4229,7 @@ E.Options.args.unitframe.args.target = {
 		aurabar = GetOptionsTable_AuraBars(UF.CreateAndUpdateUF, "target"),
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUF, "target"),
 		GPSArrow = GetOptionsTableForNonGroup_GPS("target"),
- 		pvpIcon = {
+		pvpIcon = {
 			order = 449,
 			type = "group",
 			name = L["PvP Icon"],
@@ -5197,7 +5196,7 @@ E.Options.args.unitframe.args.boss = {
 							E.db.unitframe.units.boss.castbar.width = value
 						end
 
-						E.db.unitframe.units.boss[info[#info]] = value 
+						E.db.unitframe.units.boss[info[#info]] = value
 						UF:CreateAndUpdateUFGroup("boss", MAX_BOSS_FRAMES)
 					end
 				},
@@ -5346,7 +5345,7 @@ E.Options.args.unitframe.args.arena = {
 							E.db.unitframe.units.arena.castbar.width = value
 						end
 
-						E.db.unitframe.units.arena[info[#info]] = value 
+						E.db.unitframe.units.arena[info[#info]] = value
 						UF:CreateAndUpdateUFGroup("arena", 5)
 					end
 				},
@@ -5403,7 +5402,7 @@ E.Options.args.unitframe.args.arena = {
 					values = {
 						--["AUTOMATIC"] = L["Automatic"], not sure if i will use this yet
 						["LEFT"] = L["Left"],
-						--["MIDDLE"] = L["Middle"], --no way to handle this with trinket 
+						--["MIDDLE"] = L["Middle"], --no way to handle this with trinket
 						["RIGHT"] = L["Right"]
 					}
 				},
@@ -7163,7 +7162,7 @@ E.Options.args.unitframe.args.raidpet = {
 				},
 				configureButton = {
 					order = 5,
-					type = "execute", 
+					type = "execute",
 					name = L["Configure Auras"],
 					func = function() E:SetToFilterConfig("Buff Indicator") end
 				}

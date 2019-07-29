@@ -117,7 +117,7 @@ function mod:UpdateElement_Health(frame)
 		for _, cb in ipairs(frame.MaxHealthChangeCallbacks) do
 			cb(self, frame, maxHealth)
 		end
-	end	
+	end
 
 	if frame.HealthValueChangeCallbacks then
 		for _, cb in ipairs(frame.HealthValueChangeCallbacks) do

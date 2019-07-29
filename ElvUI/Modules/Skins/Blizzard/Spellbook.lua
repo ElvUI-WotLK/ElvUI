@@ -6,8 +6,8 @@ local S = E:GetModule("Skins");
 local _G = _G
 local unpack = unpack
 --WoW API / Variables
-local SpellBook_GetCurrentPage = SpellBook_GetCurrentPage
-local BOOKTYPE_SPELL = BOOKTYPE_SPELL
+--local SpellBook_GetCurrentPage = SpellBook_GetCurrentPage
+--local BOOKTYPE_SPELL = BOOKTYPE_SPELL
 local MAX_SKILLLINE_TABS = MAX_SKILLLINE_TABS
 
 local function LoadSkin()
@@ -32,7 +32,7 @@ local function LoadSkin()
 			if currentPage > 1 then
 				SpellBookPrevPageButton_OnClick()
 			end
-		else 
+		else
 			if currentPage < maxPages then
 				SpellBookNextPageButton_OnClick()
 			end

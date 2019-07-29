@@ -6,7 +6,6 @@ local match = string.match
 local select, tonumber = select, tonumber
 --WoW API / Variables
 local CreateFrame = CreateFrame
-local CreateFrame = CreateFrame
 local GetNumRaidMembers = GetNumRaidMembers
 local GetRaidRosterInfo = GetRaidRosterInfo
 local IsPartyLeader = IsPartyLeader

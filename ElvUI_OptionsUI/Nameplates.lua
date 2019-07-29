@@ -3,7 +3,7 @@ local NP = E:GetModule("NamePlates");
 local ACD = LibStub("AceConfigDialog-3.0-ElvUI");
 
 local next, ipairs, pairs, type, tonumber = next, ipairs, pairs, type, tonumber
-local tremove, tinsert, tsort, tconcat = table.remove, table.insert, table.sort, table.concat
+local tremove, tinsert, tconcat = table.remove, table.insert, table.concat
 local format, match, gsub, strsplit = string.format, string.match, string.gsub, strsplit
 
 local GetSpellInfo = GetSpellInfo
@@ -1759,7 +1759,7 @@ local function GetUnitSettings(unit, name)
 						get = function(info) return E.db.nameplates.units[unit].buffs[ info[#info] ] end,
 						set = function(info, value) E.db.nameplates.units[unit].buffs[ info[#info] ] = value; NP:ConfigureAll() end,
 					},
-					filtersGroup = {
+					widthOverride = {
 						order = 4,
 						type = "range",
 						name = L["Icon Width Override"],

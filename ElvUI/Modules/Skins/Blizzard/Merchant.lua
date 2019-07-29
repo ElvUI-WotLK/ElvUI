@@ -24,7 +24,7 @@ local function LoadSkin()
 		else
 			if MerchantNextPageButton:IsShown() and MerchantNextPageButton:IsEnabled() == 1 then
 				MerchantNextPageButton_OnClick()
-			end	
+			end
 		end
 	end)
 

@@ -3,10 +3,9 @@ local S = E:GetModule("Skins")
 
 --Lua functions
 local _G = _G
-local unpack, assert, pairs, ipairs, select, type, pcall = unpack, assert, pairs, ipairs, select, type, pcall
-local tinsert, wipe, strfind = tinsert, wipe, strfind
+local unpack, assert, pairs, ipairs, select, type = unpack, assert, pairs, ipairs, select, type
+local strfind = strfind
 --WoW API / Variables
-local GetCVarBool = GetCVarBool
 local hooksecurefunc = hooksecurefunc
 local IsAddOnLoaded = IsAddOnLoaded
 
@@ -208,7 +207,7 @@ end
 function S:HandleDropDownBox(frame, width)
 	if frame.backdrop then return end
 	local FrameName = frame.GetName and frame:GetName()
-	
+
 	local button = FrameName and _G[FrameName.."Button"]
 	if not button then return end
 

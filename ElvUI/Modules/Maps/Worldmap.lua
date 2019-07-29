@@ -28,8 +28,8 @@ function SetUIPanelAttribute(frame, name, value)
 
 	if(not frame:GetAttribute("UIPanelLayout-defined")) then
 		frame:SetAttribute("UIPanelLayout-defined", true);
-		for name,value in pairs(info) do
-			frame:SetAttribute("UIPanelLayout-"..name, value);
+		for attName, attValue in pairs(info) do
+			frame:SetAttribute("UIPanelLayout-"..attName, attValue);
 		end
 	end
 
@@ -121,9 +121,9 @@ function M:UpdateCoords()
 	local width = WorldMapDetailFrame:GetWidth();
 	local height = WorldMapDetailFrame:GetHeight();
 	local centerX, centerY = WorldMapDetailFrame:GetCenter();
-	local x, y = GetCursorPosition();
-	local adjustedX = (x / scale - (centerX - (width / 2))) / width;
-	local adjustedY = (centerY + (height / 2) - y / scale) / height;
+	local curX, curY = GetCursorPosition();
+	local adjustedX = (curX / scale - (centerX - (width / 2))) / width;
+	local adjustedY = (centerY + (height / 2) - curY / scale) / height;
 
 	if(adjustedX >= 0 and adjustedY >= 0 and adjustedX <= 1 and adjustedY <= 1) then
 		adjustedX = E:Round(100 * adjustedX, 2);

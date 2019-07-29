@@ -3,7 +3,6 @@ local DT = E:GetModule("DataTexts")
 local AB = E:GetModule("ActionBars")
 
 --Lua functions
-local _G = _G
 local tonumber, type = tonumber, type
 local format, lower = string.format, string.lower
 --WoW API / Variables

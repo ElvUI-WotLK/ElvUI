@@ -3,7 +3,6 @@ local _, ns = ...
 local ElvUF = ns.oUF
 assert(ElvUF, "ElvUI was unable to locate oUF.")
 
-local _G = _G
 local floor = math.floor
 local format = string.format
 

@@ -1,7 +1,7 @@
 --[[
 	Credit to Jaslm, most of this code is his from the addon ColorPickerPlus
 ]]
-local E, L, DF = unpack(select(2, ...))
+local E, L = unpack(select(2, ...))
 local B = E:GetModule("Blizzard");
 local S = E:GetModule("Skins");
 
@@ -249,12 +249,12 @@ function B:EnhanceColorPicker()
 
 	-- paste color on button click, updating frame components
 	b:SetScript("OnClick", function(self)
-		local colorBuffer = self.colors
-		ColorPickerFrame:SetColorRGB(colorBuffer.r, colorBuffer.g, colorBuffer.b)
-		ColorSwatch:SetTexture(colorBuffer.r, colorBuffer.g, colorBuffer.b)
+		local colors = self.colors
+		ColorPickerFrame:SetColorRGB(colors.r, colors.g, colors.b)
+		ColorSwatch:SetTexture(colors.r, colors.g, colors.b)
 		if ColorPickerFrame.hasOpacity then
-			if colorBuffer.a then
-				OpacitySliderFrame:SetValue(colorBuffer.a)
+			if colors.a then
+				OpacitySliderFrame:SetValue(colors.a)
 			end
 		end
 	end)

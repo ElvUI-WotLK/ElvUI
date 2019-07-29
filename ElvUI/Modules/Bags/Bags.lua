@@ -1,7 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local B = E:GetModule("Bags")
-local TT = E:GetModule("Tooltip")
-local Skins = E:GetModule("Skins")
 local Search = E.Libs.ItemSearch
 
 local _G = _G;
@@ -44,7 +42,6 @@ local SetItemButtonDesaturated = SetItemButtonDesaturated
 local SetItemButtonTexture = SetItemButtonTexture
 local SetItemButtonTextureVertexColor = SetItemButtonTextureVertexColor
 local ToggleFrame = ToggleFrame
-local UpdateSlot = UpdateSlot
 local UseContainerItem = UseContainerItem
 local CONTAINER_OFFSET_X, CONTAINER_OFFSET_Y = CONTAINER_OFFSET_X, CONTAINER_OFFSET_Y
 local CONTAINER_SCALE = CONTAINER_SCALE
@@ -173,7 +170,7 @@ function B:ResetAndClear()
 end
 
 function B:SetSearch(query)
-	local empty = len(query:gsub(" ", "")) == 0
+	local empty = len(gsub(query, " ", "")) == 0
 	for _, bagFrame in pairs(self.BagFrames) do
 		for _, bagID in ipairs(bagFrame.BagIDs) do
 			for slotID = 1, GetContainerNumSlots(bagID) do
@@ -211,7 +208,7 @@ function B:SetSearch(query)
 end
 
 function B:SetGuildBankSearch(query)
-	local empty = len(query:gsub(" ", "")) == 0
+	local empty = len(gsub(query, " ", "")) == 0
 	if GuildBankFrame and GuildBankFrame:IsShown() then
 		local tab = GetCurrentGuildBankTab()
 		local _, _, isViewable = GetGuildBankTabInfo(tab)
@@ -509,9 +506,9 @@ function B:Layout(isBank)
 			f.Bags[bagID].type = select(2, GetContainerNumFreeSlots(bagID));
 
 			--Hide unused slots
-			for i = 1, MAX_CONTAINER_ITEMS do
-				if f.Bags[bagID][i] then
-					f.Bags[bagID][i]:Hide();
+			for j = 1, MAX_CONTAINER_ITEMS do
+				if f.Bags[bagID][j] then
+					f.Bags[bagID][j]:Hide();
 				end
 			end
 
@@ -579,9 +576,9 @@ function B:Layout(isBank)
 				lastButton = f.Bags[bagID][slotID];
 			end
 		else
-			for i = 1, MAX_CONTAINER_ITEMS do
-				if f.Bags[bagID] and f.Bags[bagID][i] then
-					f.Bags[bagID][i]:Hide();
+			for j = 1, MAX_CONTAINER_ITEMS do
+				if f.Bags[bagID] and f.Bags[bagID][j] then
+					f.Bags[bagID][j]:Hide();
 				end
 			end
 
@@ -601,8 +598,8 @@ function B:Layout(isBank)
 	local numKey = GetKeyRingSize();
 	local numKeyColumns = 6;
 	if(not isBank) then
+		local lastRowKey
 		local totalSlots = 0
-		local lastRowButton
 		local numKeyRows = 1
 		for i = 1, numKey do
 			totalSlots = totalSlots + 1;
@@ -634,15 +631,15 @@ function B:Layout(isBank)
 			f.keyFrame.slots[i]:Size(buttonSize)
 			if(f.keyFrame.slots[i-1]) then
 				if(totalSlots - 1) % numKeyColumns == 0 then
-					f.keyFrame.slots[i]:Point("TOP", lastRowButton, "BOTTOM", 0, -buttonSpacing);
-					lastRowButton = f.keyFrame.slots[i];
+					f.keyFrame.slots[i]:Point("TOP", lastRowKey, "BOTTOM", 0, -buttonSpacing);
+					lastRowKey = f.keyFrame.slots[i];
 					numKeyRows = numKeyRows + 1;
 				else
 					f.keyFrame.slots[i]:Point("RIGHT", f.keyFrame.slots[i-1], "LEFT", -buttonSpacing, 0);
 				end
 			else
 				f.keyFrame.slots[i]:Point("TOPRIGHT", f.keyFrame, "TOPRIGHT", -buttonSpacing, -buttonSpacing);
-				lastRowButton = f.keyFrame.slots[i]
+				lastRowKey = f.keyFrame.slots[i]
 			end
 
 			self:UpdateKeySlot(i)
@@ -773,12 +770,12 @@ function B:UpdateTokens()
 
 	local numTokens = 0
 	for i = 1, MAX_WATCHED_TOKENS do
-		local name, count, type, icon, itemID = GetBackpackCurrencyInfo(i)
+		local name, count, cType, icon, itemID = GetBackpackCurrencyInfo(i)
 		local button = f.currencyButton[i];
 
-		if(type == 1) then
+		if(cType == 1) then
 			icon = "Interface\\PVPFrame\\PVP-ArenaPoints-Icon";
-		elseif(type == 2) then
+		elseif(cType == 2) then
 			icon = "Interface\\PVPFrame\\PVP-Currency-"..UnitFactionGroup("player");
 		end
 
@@ -1266,10 +1263,10 @@ end
 function B:ToggleBags(id)
 	if id and GetContainerNumSlots(id) == 0 then return; end --Closes a bag when inserting a new container..
 
-	if self.BagFrame:IsShown() then
-	--	self:CloseBags();
-	else
+	if not self.BagFrame:IsShown() then
 		self:OpenBags();
+--	else
+--		self:CloseBags();
 	end
 end
 
@@ -1383,7 +1380,7 @@ function B:updateContainerFrameAnchors()
 
 	screenHeight = GetScreenHeight() / containerScale
 	-- Adjust the start anchor for bags depending on the multibars
-	xOffset = CONTAINER_OFFSET_X / containerScale
+--	xOffset = CONTAINER_OFFSET_X / containerScale
 	yOffset = CONTAINER_OFFSET_Y / containerScale
 	-- freeScreenHeight determines when to start a new column of bags
 	freeScreenHeight = screenHeight - yOffset

@@ -10,8 +10,6 @@ local floor, select = floor, select
 local CreateFrame = CreateFrame
 local IsAddOnLoaded = IsAddOnLoaded
 local InCombatLockdown = InCombatLockdown
-local IsControlKeyDown = IsControlKeyDown
-local IsAltKeyDown = IsAltKeyDown
 local EditBox_ClearFocus = EditBox_ClearFocus
 local RESET = RESET
 

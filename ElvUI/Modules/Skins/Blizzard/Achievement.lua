@@ -228,7 +228,7 @@ local function LoadSkin(event)
 		_G["AchievementFrameStatsContainerButton" .. i .. "HeaderRight"]:Kill();
 		_G["AchievementFrameStatsContainerButton" .. i .. "HeaderMiddle"]:Kill();
 
-		local frame = "AchievementFrameComparisonStatsContainerButton" .. i;
+		frame = "AchievementFrameComparisonStatsContainerButton" .. i;
 		_G[frame]:StripTextures();
 		_G[frame]:StyleButton();
 		_G[frame .. "BG"]:SetTexture(1, 1, 1, 0.2);

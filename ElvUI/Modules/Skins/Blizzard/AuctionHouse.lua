@@ -197,7 +197,7 @@ local function LoadSkin()
 	end
 
 	AuctionsStackSizeEntry.backdrop:SetAllPoints()
-  	AuctionsNumStacksEntry.backdrop:SetAllPoints()
+	AuctionsNumStacksEntry.backdrop:SetAllPoints()
 
 	BrowseBidPrice:Point("BOTTOM", -15, 18)
 	BrowseBidText:Point("BOTTOMRIGHT", AuctionFrameBrowse, "BOTTOM", -116, 21)

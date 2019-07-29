@@ -4,9 +4,8 @@ local AB = E:GetModule("ActionBars");
 local _G = _G;
 local unpack = unpack;
 local ipairs, pairs = ipairs, pairs;
-local match = string.match;
+local gsub, match = string.gsub, string.match;
 
-local HasMultiCastActionBar = HasMultiCastActionBar;
 local RegisterStateDriver = RegisterStateDriver
 
 if(E.myclass ~= "SHAMAN") then return; end
@@ -93,13 +92,13 @@ function AB:SkinSummonButton(button)
 	normal:SetTexture(nil);
 end
 
-function AB:MultiCastFlyoutFrame_ToggleFlyout(self, type, parent)
-	self.top:SetTexture(nil);
-	self.middle:SetTexture(nil);
+function AB:MultiCastFlyoutFrame_ToggleFlyout(frame, type, parent)
+	frame.top:SetTexture(nil);
+	frame.middle:SetTexture(nil);
 
 	local color
 	local numButtons = 0;
-	for i, button in ipairs(self.buttons) do
+	for i, button in ipairs(frame.buttons) do
 		if(not button.isSkinned) then
 			button:SetTemplate("Default");
 			button:StyleButton();
@@ -123,17 +122,17 @@ function AB:MultiCastFlyoutFrame_ToggleFlyout(self, type, parent)
 				if i == 1 then
 					button:Point("BOTTOM", parent, "TOP", 0, AB.db["barTotem"].flyoutSpacing)
 				else
-					button:Point("BOTTOM", self.buttons[i - 1], "TOP", 0, AB.db["barTotem"].flyoutSpacing)
+					button:Point("BOTTOM", frame.buttons[i - 1], "TOP", 0, AB.db["barTotem"].flyoutSpacing)
 				end
 			elseif AB.db["barTotem"].flyoutDirection == "DOWN" then
 				if i == 1 then
 					button:Point("TOP", parent, "BOTTOM", 0, -AB.db["barTotem"].flyoutSpacing)
 				else
-					button:Point("TOP", self.buttons[i - 1], "BOTTOM", 0, -AB.db["barTotem"].flyoutSpacing)
+					button:Point("TOP", frame.buttons[i - 1], "BOTTOM", 0, -AB.db["barTotem"].flyoutSpacing)
 				end
 			end
 
- 			if type == "page" then
+			if type == "page" then
 				color = SLOT_BORDER_COLORS["summon"]
 			else
 				color = SLOT_BORDER_COLORS[parent:GetID()]
@@ -146,29 +145,29 @@ function AB:MultiCastFlyoutFrame_ToggleFlyout(self, type, parent)
 
 	if type == "slot" then
 		local tCoords = SLOT_EMPTY_TCOORDS[parent:GetID()];
-		self.buttons[1].icon:SetTexCoord(tCoords.left, tCoords.right, tCoords.top, tCoords.bottom);
+		frame.buttons[1].icon:SetTexCoord(tCoords.left, tCoords.right, tCoords.top, tCoords.bottom);
 
 		color = SLOT_BORDER_COLORS[parent:GetID()];
-		self.buttons[1]:SetBackdropBorderColor(color.r, color.g, color.b);
+		frame.buttons[1]:SetBackdropBorderColor(color.r, color.g, color.b);
 	elseif type == "page" then
 		color = SLOT_BORDER_COLORS["summon"]
 	end
 
 	MultiCastFlyoutFrameCloseButton.backdrop:SetBackdropBorderColor(color.r, color.g, color.b);
 
-	self:ClearAllPoints()
+	frame:ClearAllPoints()
 	MultiCastFlyoutFrameCloseButton:ClearAllPoints()
 	if AB.db["barTotem"].flyoutDirection == "UP" then
-		self:Point("BOTTOM", parent, "TOP")
-		MultiCastFlyoutFrameCloseButton:Point("TOP", self, "TOP")
+		frame:Point("BOTTOM", parent, "TOP")
+		MultiCastFlyoutFrameCloseButton:Point("TOP", frame, "TOP")
 		MultiCastFlyoutFrameCloseButton.icon:SetTexCoord(0.45312500, 0.64062500, 0.20312500, 0.01562500)
 	elseif AB.db["barTotem"].flyoutDirection == "DOWN" then
-		self:Point("TOP", parent, "BOTTOM")
-		MultiCastFlyoutFrameCloseButton:Point("BOTTOM", self, "BOTTOM")
+		frame:Point("TOP", parent, "BOTTOM")
+		MultiCastFlyoutFrameCloseButton:Point("BOTTOM", frame, "BOTTOM")
 		MultiCastFlyoutFrameCloseButton.icon:SetTexCoord(0.45312500, 0.64062500, 0.01562500, 0.20312500)
 	end
 
-	self:Height(((AB.db["barTotem"].buttonsize + AB.db["barTotem"].flyoutSpacing) * numButtons) + MultiCastFlyoutFrameCloseButton:GetHeight());
+	frame:Height(((AB.db["barTotem"].buttonsize + AB.db["barTotem"].flyoutSpacing) * numButtons) + MultiCastFlyoutFrameCloseButton:GetHeight());
 end
 
 function AB:TotemOnEnter()
@@ -213,8 +212,8 @@ function AB:PositionAndSizeBarTotem()
 	end
 
 	local visibility = bar.db.visibility
-	if visibility and visibility:match("[\n\r]") then
-		visibility = visibility:gsub("[\n\r]","")
+	if visibility and match(visibility, "[\n\r]") then
+		visibility = gsub(visibility, "[\n\r]","")
 	end
 
 	RegisterStateDriver(bar, "visibility", visibility)

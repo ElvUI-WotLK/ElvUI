@@ -26,7 +26,7 @@ E.Options.args.databars = {
 			name = XPBAR_LABEL,
 			args = {
 				header = {
- 					order = 1,
+					order = 1,
 					type = "header",
 					name = XPBAR_LABEL
 				},
@@ -136,7 +136,7 @@ E.Options.args.databars = {
 			name = REPUTATION,
 			args = {
 				header = {
- 					order = 1,
+					order = 1,
 					type = "header",
 					name = REPUTATION
 				},

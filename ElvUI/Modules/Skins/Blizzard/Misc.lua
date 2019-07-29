@@ -33,7 +33,7 @@ local function LoadSkin()
 			S:HandleButton(ElvuiMenuButtons)
 		end
 	end
-	
+
 	S:HandleButton(ElvUI_MenuButton)
 
 	-- Static Popups

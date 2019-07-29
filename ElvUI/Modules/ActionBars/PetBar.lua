@@ -301,7 +301,7 @@ function AB:CreateBarPet()
 
 		self:HookScript(button, "OnEnter", "Button_OnEnter")
 		self:HookScript(button, "OnLeave", "Button_OnLeave")
-		
+
 		if self.LBFGroup and E.private.actionbar.lbf.enable then
 			self.LBFGroup:AddButton(button)
 		end

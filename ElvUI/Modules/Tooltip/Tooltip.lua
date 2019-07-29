@@ -2,7 +2,7 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 local TT = E:GetModule("Tooltip")
 
 local _G = _G;
-local unpack, tonumber, select, pairs = unpack, tonumber, select, pairs;
+local unpack, tonumber, select = unpack, tonumber, select;
 local twipe, tinsert, tconcat = table.wipe, table.insert, table.concat;
 local floor = math.floor;
 local find, format = string.find, string.format
@@ -387,8 +387,8 @@ function TT:GameTooltip_OnTooltipSetUnit(tt)
 			local groupUnit = (numRaid > 0 and "raid"..i or "party"..i);
 			if (UnitIsUnit(groupUnit.."target", unit)) and (not UnitIsUnit(groupUnit,"player")) then
 				local _, class = UnitClass(groupUnit);
-				local color = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class];
-				tinsert(targetList, format("%s%s", E:RGBToHex(color.r, color.g, color.b), UnitName(groupUnit)))
+				local classColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class];
+				tinsert(targetList, format("%s%s", E:RGBToHex(classColor.r, classColor.g, classColor.b), UnitName(groupUnit)))
 			end
 		end
 		local numList = #targetList

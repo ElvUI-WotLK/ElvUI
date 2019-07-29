@@ -40,7 +40,7 @@ local function GetInstanceImages(...)
 	local numTextures = select("#", ...) / 4
 
 	local param, title, texture = 1
-	for textureIndex = 1, numTextures do
+	for i = 1, numTextures do
 		title = select(param, ...)
 		param = param + 1
 		texture = select(param, ...)
@@ -86,7 +86,7 @@ local function OnEnter(self)
 	local lockedInstances = {raids = {}, dungeons = {}}
 	local name, reset, difficulty, locked, extended, isRaid, maxPlayers
 	local difficultyLetter, buttonImg
-	
+
 	for i = 1, GetNumSavedInstances() do
 		name, _, reset, difficulty, locked, extended, _, isRaid, maxPlayers = GetSavedInstanceInfo(i)
 		if (locked or extended) and name then

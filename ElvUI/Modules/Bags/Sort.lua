@@ -122,11 +122,11 @@ local safe = {
 }
 
 local frame = CreateFrame("Frame")
-local t, WAIT_TIME = 0, 0.05
+local lastSortTime, WAIT_TIME = 0, 0.05
 frame:SetScript("OnUpdate", function(_, elapsed)
-	t = t + (elapsed or 0.01)
-	if t > WAIT_TIME then
-		t = 0
+	lastSortTime = lastSortTime + (elapsed or 0.01)
+	if lastSortTime > WAIT_TIME then
+		lastSortTime = 0
 		B:DoMoves()
 	end
 end)
@@ -204,11 +204,11 @@ local function DefaultSort(a, b)
 		end
 	end
 
-	local _, _, aRarity, _, _, aType, aSubType, _, aEquipLoc = GetItemInfo(aID)
-	local _, _, bRarity, _, _, bType, bSubType, _, bEquipLoc = GetItemInfo(bID)
+	local _, _, _, _, _, aType, aSubType, _, aEquipLoc = GetItemInfo(aID)
+	local _, _, _, _, _, bType, bSubType, _, bEquipLoc = GetItemInfo(bID)
 
-	aRarity = bagQualities[a]
-	bRarity = bagQualities[b]
+	local aRarity = bagQualities[a]
+	local bRarity = bagQualities[b]
 
 	if aRarity ~= bRarity and aRarity and bRarity then
 		return aRarity > bRarity
@@ -219,8 +219,8 @@ local function DefaultSort(a, b)
 	end
 
 	if aType == ARMOR or aType == ENCHSLOT_WEAPON then
-		local aEquipLoc = inventorySlots[aEquipLoc] or -1
-		local bEquipLoc = inventorySlots[bEquipLoc] or -1
+		aEquipLoc = inventorySlots[aEquipLoc] or -1
+		bEquipLoc = inventorySlots[bEquipLoc] or -1
 		if aEquipLoc == bEquipLoc then
 			return PrimarySort(a, b)
 		end
@@ -346,9 +346,14 @@ end
 
 function B:GetNumSlots(bag, role)
 	if IsGuildBankBag(bag) then
-		if not role then role = "deposit" end
-		local name, _, canView, canDeposit, numWithdrawals = GetGuildBankTabInfo(bag - 50)
-		if name and canView --[[and ((role == "withdraw" and numWithdrawals ~= 0) or (role == "deposit" and canDeposit) or (role == "both" and numWithdrawals ~= 0 and canDeposit))]] then
+	--	if not role then
+	--		role = "deposit"
+	--	end
+	--	local name, _, canView, canDeposit, numWithdrawals = GetGuildBankTabInfo(bag - 50)
+	--	if name and canView and ((role == "withdraw" and numWithdrawals ~= 0) or (role == "deposit" and canDeposit) or (role == "both" and numWithdrawals ~= 0 and canDeposit)) then
+
+		local name, _, canView = GetGuildBankTabInfo(bag - 50)
+		if name and canView then
 			return 98
 		end
 	else
@@ -832,8 +837,6 @@ function B:GetGroup(id)
 end
 
 function B:CommandDecorator(func, groupsDefaults)
-	local bagGroups = {}
-
 	return function(groups)
 		if self.SortUpdateTimer:IsShown() then
 			E:Print(L["Already Running.. Bailing Out!"]);

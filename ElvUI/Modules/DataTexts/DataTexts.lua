@@ -71,11 +71,11 @@ function DT:SetupObjectLDB(name, obj)
 		end
 	end
 
-	local function textUpdate(_, name, _, value)
-		if value == nil or (len(value) >= 3) or value == "n/a" or name == value then
-			curFrame.text:SetText(value ~= "n/a" and value or name)
+	local function textUpdate(_, text, _, value)
+		if value == nil or (len(value) >= 3) or value == "n/a" or text == value then
+			curFrame.text:SetText(value ~= "n/a" and value or text)
 		else
-			curFrame.text:SetFormattedText("%s: %s%s|r", name, hex, value)
+			curFrame.text:SetFormattedText("%s: %s%s|r", text, hex, value)
 		end
 	end
 

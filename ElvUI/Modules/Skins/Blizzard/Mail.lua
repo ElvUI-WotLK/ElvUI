@@ -32,7 +32,7 @@ local function LoadSkin()
 		else
 			if InboxNextPageButton:IsEnabled() == 1 then
 				InboxNextPage()
-			end	
+			end
 		end
 	end)
 

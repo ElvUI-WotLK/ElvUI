@@ -190,21 +190,21 @@ local function LoadSkin()
 		end
 	end)
 
-	hooksecurefunc("PaperDollFrameItemPopoutButton_SetReversed", function(self, isReversed)
-		if(self:GetParent().verticalFlyout) then
-			if(isReversed) then
-			--	S:SquareButton_SetIcon(self, "UP")
-			else
-			--	S:SquareButton_SetIcon(self, "DOWN")
-			end
-		else
-			if(isReversed) then
-			--	S:SquareButton_SetIcon(self, "LEFT")
-			else
-			--	S:SquareButton_SetIcon(self, "RIGHT")
-			end
-		end
-	end)
+--	hooksecurefunc("PaperDollFrameItemPopoutButton_SetReversed", function(self, isReversed)
+--		if(self:GetParent().verticalFlyout) then
+--			if(isReversed) then
+--				S:SquareButton_SetIcon(self, "UP")
+--			else
+--				S:SquareButton_SetIcon(self, "DOWN")
+--			end
+--		else
+--			if(isReversed) then
+--				S:SquareButton_SetIcon(self, "LEFT")
+--			else
+--				S:SquareButton_SetIcon(self, "RIGHT")
+--			end
+--		end
+--	end)
 
 	local function ColorItemBorder()
 		for _, slot in pairs(slots) do

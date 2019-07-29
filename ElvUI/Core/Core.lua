@@ -185,13 +185,13 @@ function E:ShapeshiftDelayedUpdate(func, ...)
 	if delayedTimer then return end
 
 	delayedTimer = E:ScheduleTimer(function()
-		for func in pairs(delayedFuncs) do
-			func(unpack(delayedFuncs[func]))
+		for f in pairs(delayedFuncs) do
+			f(unpack(delayedFuncs[f]))
 		end
 
 		twipe(delayedFuncs)
 		delayedTimer = nil
-	end, 0.05) 
+	end, 0.05)
 end
 
 function E:GetPlayerRole()
@@ -544,8 +544,10 @@ function E:CheckTalentTree(tree)
 	if type(tree) == "number" then
 		return tree == talentTree
 	elseif type(tree) == "table" then
-		for _, index in pairs(tree) do
-			return index == talentTree
+		for _, index in ipairs(tree) do
+			if index == talentTree then
+				return true
+			end
 		end
 	end
 end
@@ -699,7 +701,7 @@ function E:TableToLuaString(inTable)
 			if(type(v) == "number") then
 				ret = ret .. v .. ",\n"
 			elseif(type(v) == "string") then
-				ret = ret .. "\"" .. v:gsub("\\", "\\\\"):gsub("\n", "\\n"):gsub("\"", "\\\"") .. "\",\n"
+				ret = ret .. "\"" .. gsub(gsub(gsub(v, "\\", "\\\\"), "\n", "\\n"), "\"", "\\\"") .. "\",\n"
 			elseif(type(v) == "boolean") then
 				if(v) then
 					ret = ret .. "true,\n";

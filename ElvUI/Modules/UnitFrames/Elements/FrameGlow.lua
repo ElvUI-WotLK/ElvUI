@@ -88,7 +88,6 @@ end
 function UF:FrameGlow_PositionGlow(frame, mainGlow, powerGlow)
 	if not (frame and frame.VARIABLES_SET) then return end
 
-	local infoPanel = frame.InfoPanel
 	local additionalPower = frame.AdditionalPower
 	local runes = frame.Runes
 	local comboPoints = frame.ComboPoints

@@ -2,8 +2,6 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 local mod = E:GetModule("NamePlates")
 local LSM = LibStub("LibSharedMedia-3.0")
 
-local UnitIsTapDenied = UnitIsTapDenied
-
 function mod:UpdateElement_CutawayHealthFadeOut(frame)
 	local cutawayHealth = frame.CutawayHealth
 	cutawayHealth.fading = true
@@ -55,7 +53,7 @@ function mod:ConfigureElement_CutawayHealth(frame, configuring)
 	local cutawayHealth = frame.CutawayHealth
 	local healthBar = frame.HealthBar
 
-	cutawayHealth:SetAllPoints(healthBar)	
+	cutawayHealth:SetAllPoints(healthBar)
 	cutawayHealth:SetStatusBarTexture(LSM:Fetch("statusbar", self.db.statusbar))
 end
 

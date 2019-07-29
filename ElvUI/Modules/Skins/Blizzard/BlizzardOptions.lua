@@ -6,7 +6,6 @@ local ipairs = ipairs
 local find = string.find
 
 local InCombatLockdown = InCombatLockdown
-local IsShiftKeyDown = IsShiftKeyDown
 
 local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.BlizzardOptions ~= true then return end

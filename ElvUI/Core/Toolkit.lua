@@ -3,7 +3,7 @@ local LSM = E.Libs.LSM
 
 --Lua functions
 local _G = _G
-local unpack, type, select, getmetatable, assert, pairs = unpack, type, select, getmetatable, assert, pairs
+local unpack, type, select, getmetatable, assert = unpack, type, select, getmetatable, assert
 --WoW API / Variables
 local CreateFrame = CreateFrame
 

@@ -36,12 +36,12 @@ local function LoadSkin()
 		local questIndex
 		local numQuestWatches = GetNumQuestWatches()
 
-		local title, level, questTag, daily
+		local title, level
 		local color
 		for i = 1, numQuestWatches do
 			questIndex = GetQuestIndexForWatch(i)
 			if questIndex then
-				title, level, questTag, _, _, _, _, daily = GetQuestLogTitle(questIndex)
+				title, level = GetQuestLogTitle(questIndex)
 				color = GetQuestDifficultyColor(level)
 --[[
 				local hex = E:RGBToHex(color.r, color.g, color.b)
@@ -69,7 +69,7 @@ local function LoadSkin()
 						WATCHFRAME_QUESTLINES[j].color = color
 					end
 				end
-				
+
 				for k = 1, #WATCHFRAME_ACHIEVEMENTLINES do
 					WATCHFRAME_ACHIEVEMENTLINES[k].color = nil
 				end
