@@ -45,7 +45,7 @@ AB.barDefaults = {
 	["bar1"] = {
 		["page"] = 1,
 		["bindButtons"] = "ACTIONBUTTON",
-		["conditions"] = "[bonusbar:5] 11 [bar:2] 2 [bar:3] 3 [bar:4] 4 [bar:5] 5 [bar:6] 6",
+		["conditions"] = "[bonusbar:5] 11; [bar:2] 2; [bar:3] 3; [bar:4] 4; [bar:5] 5; [bar:6] 6;",
 		["position"] = "BOTTOM,ElvUIParent,BOTTOM,0,4",
 	},
 	["bar2"] = {
@@ -103,7 +103,7 @@ function AB:PositionAndSizeBar(barName)
 	local widthMult = self.db[barName].widthMult
 	local heightMult = self.db[barName].heightMult
 	local visibility = self.db[barName].visibility
-	local bar = self["handledBars"][barName]
+	local bar = self.handledBars[barName]
 
 	bar.db = self.db[barName]
 	bar.db.position = nil
