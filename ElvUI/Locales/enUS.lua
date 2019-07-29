@@ -249,12 +249,6 @@ L["TargetTargetTarget Frame"] = true --Also used in UnitFrames
 L["Tooltip"] = true
 L["Vehicle Seat Frame"] = true
 L["Watch Frame"] = true
-L["DESC_MOVERCONFIG"] = [=[Movers unlocked. Move them now and click Lock when you are done.
-
-Options:
-  Shift + RightClick - Hides mover temporarily.
-  Ctrl + RightClick - Resets mover position to default.
-]=]
 
 --Plugin Installer
 L["ElvUI Plugin Installation"] = true
@@ -344,3 +338,15 @@ L["You can use the /resetui command to reset all of your movers. You can also us
 L["Dead"] = true
 L["Ghost"] = true
 L["Offline"] = true
+
+----------------------------------
+L["RED_ENABLE"] = "|cFFff3333Enable|r"
+L["GREEN_ENABLE"] = "|cFF33ff33Enable|r"
+L["DESC_MOVERCONFIG"] = [=[Movers unlocked. Move them now and click Lock when you are done.
+
+Options:
+  LeftClick - Toggle Nudge Frame.
+  RightClick - Open Config Section.
+  Shift + RightClick - Hides mover temporarily.
+  Ctrl + RightClick - Resets mover position to default.
+]=]

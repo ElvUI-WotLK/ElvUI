@@ -7,8 +7,8 @@ local UF = E:GetModule("UnitFrames");
 --WoW API / Variables
 
 local CombatTextures = {
+	["COMBAT"] = E.Media.Textures.Combat,
 	["DEFAULT"] = [[Interface\CharacterFrame\UI-StateIcon]],
-	["COMBAT"] = [[Interface\AddOns\ElvUI\media\textures\combat]],
 	["ATTACK"] = [[Interface\CURSOR\Attack]],
 	["ALERT"] = [[Interface\DialogFrame\UI-Dialog-Icon-AlertNew]],
 	["ALERT2"] = [[Interface\OptionsFrame\UI-OptionsFrame-NewFeatureIcon]],
@@ -22,7 +22,6 @@ end
 
 function UF:Configure_CombatIndicator(frame)
 	if not frame.VARIABLES_SET then return end
-
 	local Icon = frame.CombatIndicator
 	local db = frame.db.CombatIcon
 

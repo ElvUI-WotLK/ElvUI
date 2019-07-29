@@ -22,21 +22,6 @@ S.ArrowRotation = {
 	["right"] = -1.57,
 }
 
-S.SQUARE_BUTTON_TEXCOORDS = {
-	["UP"] = {     0.45312500,    0.64062500,     0.01562500,     0.20312500},
-	["DOWN"] = {   0.45312500,    0.64062500,     0.20312500,     0.01562500},
-	["LEFT"] = {   0.23437500,    0.42187500,     0.01562500,     0.20312500},
-	["RIGHT"] = {  0.42187500,    0.23437500,     0.01562500,     0.20312500},
-	["DELETE"] = { 0.01562500,    0.20312500,     0.01562500,     0.20312500}
-};
-
-function S:SquareButton_SetIcon(self, name)
-	local coords = S.SQUARE_BUTTON_TEXCOORDS[strupper(name)]
-	if coords then
-		self.icon:SetTexCoord(coords[1], coords[2], coords[3], coords[4])
-	end
-end
-
 function S:SetModifiedBackdrop()
 	if self.backdrop then self = self.backdrop end
 	self:SetBackdropBorderColor(unpack(E.media.rgbvaluecolor))
@@ -56,32 +41,42 @@ function S:StatusBarColorGradient(bar, value, max, backdrop)
 	bar:SetStatusBarColor(r, g, b)
 end
 
-function S:HandleButton(f, strip)
-	local name = f:GetName();
-	if name then
-		local left = _G[name.."Left"]
-		local middle = _G[name.."Middle"]
-		local right = _G[name.."Right"]
+function S:HandleButton(button, strip, isDeclineButton, useCreateBackdrop, noSetTemplate)
+	if button.isSkinned then return end
+	assert(button, "doesn't exist!")
+
+	local buttonName = button.GetName and button:GetName()
+	if buttonName then
+		local left = _G[buttonName.."Left"]
+		local middle = _G[buttonName.."Middle"]
+		local right = _G[buttonName.."Right"]
 
 		if left then left:Kill() end
 		if middle then middle:Kill() end
 		if right then right:Kill() end
 	end
 
-	if f.Left then f.Left:Kill() end
-	if f.Middle then f.Middle:Kill() end
-	if f.Right then f.Right:Kill() end
+	if button.Left then button.Left:Kill() end
+	if button.Middle then button.Middle:Kill() end
+	if button.Right then button.Right:Kill() end
 
-	if f.SetNormalTexture then f:SetNormalTexture("") end
-	if f.SetHighlightTexture then f:SetHighlightTexture("") end
-	if f.SetPushedTexture then f:SetPushedTexture("") end
-	if f.SetDisabledTexture then f:SetDisabledTexture("") end
+	if button.SetNormalTexture then button:SetNormalTexture("") end
+	if button.SetHighlightTexture then button:SetHighlightTexture("") end
+	if button.SetPushedTexture then button:SetPushedTexture("") end
+	if button.SetDisabledTexture then button:SetDisabledTexture("") end
 
-	if strip then f:StripTextures() end
+	if strip then button:StripTextures() end
 
-	f:SetTemplate("Default", true)
-	f:HookScript("OnEnter", S.SetModifiedBackdrop)
-	f:HookScript("OnLeave", S.SetOriginalBackdrop)
+	if useCreateBackdrop then
+		button:CreateBackdrop(nil, true)
+	elseif not noSetTemplate then
+		button:SetTemplate(nil, true)
+	end
+
+	button:HookScript("OnEnter", S.SetModifiedBackdrop)
+	button:HookScript("OnLeave", S.SetOriginalBackdrop)
+
+	button.isSkinned = true
 end
 
 function S:HandleButtonHighlight(frame)
@@ -103,6 +98,7 @@ function S:HandleButtonHighlight(frame)
 end
 
 function S:HandleScrollBar(frame, thumbTrimY, thumbTrimX)
+	if frame.backdrop then return end
 	local name = frame:GetName()
 	if _G[name.."BG"] then _G[name.."BG"]:SetTexture(nil) end
 	if _G[name.."Track"] then _G[name.."Track"]:SetTexture(nil) end
@@ -169,6 +165,8 @@ function S:HandleTab(tab, noBackdrop)
 end
 
 function S:HandleRotateButton(btn)
+	if btn.isSkinned then return end
+
 	btn:SetTemplate()
 	btn:Size(btn:GetWidth() - 14, btn:GetHeight() - 14)
 
@@ -184,10 +182,14 @@ function S:HandleRotateButton(btn)
 
 	highlightTex:SetAllPoints(normTex)
 	highlightTex:SetTexture(1, 1, 1, 0.3)
+
+	btn.isSkinned = true
 end
 
 function S:HandleEditBox(frame)
-	frame:CreateBackdrop("Default")
+	if frame.backdrop then return end
+
+	frame:CreateBackdrop()
 	frame.backdrop:SetFrameLevel(frame:GetFrameLevel())
 
 	local EditBoxName = frame.GetName and frame:GetName()
@@ -204,6 +206,7 @@ function S:HandleEditBox(frame)
 end
 
 function S:HandleDropDownBox(frame, width)
+	if frame.backdrop then return end
 	local FrameName = frame.GetName and frame:GetName()
 	
 	local button = FrameName and _G[FrameName.."Button"]
@@ -241,57 +244,102 @@ function S:HandleStatusBar(frame, color)
 	E:RegisterStatusBar(frame)
 end
 
-function S:HandleCheckBox(frame, noBackdrop)
+function S:HandleCheckBox(frame, noBackdrop, noReplaceTextures, forceSaturation)
+	if frame.isSkinned then return end
 	assert(frame, "does not exist.")
 	frame:StripTextures()
+	frame.forceSaturation = forceSaturation
+
 	if noBackdrop then
-		frame:SetTemplate("Default")
+		frame:SetTemplate()
 		frame:Size(16)
 	else
-		frame:CreateBackdrop("Default")
+		frame:CreateBackdrop()
 		frame.backdrop:SetInside(nil, 4, 4)
 	end
 
-	if frame.SetCheckedTexture then
-		frame:SetCheckedTexture("Interface\\Buttons\\UI-CheckBox-Check")
-		if noBackdrop then
-			frame:GetCheckedTexture():SetInside(nil, -4, -4)
+	if not noReplaceTextures then
+		if frame.SetCheckedTexture then
+			if E.private.skins.checkBoxSkin then
+				frame:SetCheckedTexture(E.Media.Textures.Melli)
+
+				local checkedTexture = frame:GetCheckedTexture()
+				checkedTexture:SetVertexColor(1, .82, 0, 0.8)
+				checkedTexture:SetInside(frame.backdrop)
+			else
+				frame:SetCheckedTexture("Interface\\Buttons\\UI-CheckBox-Check")
+
+				if noBackdrop then
+					frame:GetCheckedTexture():SetInside(nil, -4, -4)
+				end
+			end
 		end
+
+		if frame.SetDisabledCheckedTexture then
+			if E.private.skins.checkBoxSkin then
+				frame:SetDisabledCheckedTexture(E.Media.Textures.Melli)
+
+				local disabledCheckedTexture = frame:GetDisabledCheckedTexture()
+				disabledCheckedTexture:SetVertexColor(0.6, 0.6, 0.6, 0.8)
+				disabledCheckedTexture:SetInside(frame.backdrop)
+			else
+				frame:SetDisabledCheckedTexture("Interface\\Buttons\\UI-CheckBox-Check-Disabled")
+
+				if noBackdrop then
+					frame:GetDisabledCheckedTexture():SetInside(nil, -4, -4)
+				end
+			end
+		end
+
+		if frame.SetDisabledTexture then
+			if E.private.skins.checkBoxSkin then
+				frame:SetDisabledTexture(E.Media.Textures.Melli)
+
+				local disabledTexture = frame:GetDisabledTexture()
+				disabledTexture:SetVertexColor(.6, .6, .6, .8)
+				disabledTexture:SetInside(frame.backdrop)
+			else
+				frame:SetDisabledTexture("Interface\\Buttons\\UI-CheckBox-Check-Disabled")
+
+				if noBackdrop then
+					frame:GetDisabledTexture():SetInside(nil, -4, -4)
+				end
+			end
+		end
+
+		frame:HookScript('OnDisable', function(checkbox)
+			if not checkbox.SetDisabledTexture then return; end
+			if checkbox:GetChecked() then
+				if E.private.skins.checkBoxSkin then
+					checkbox:SetDisabledTexture(E.Media.Textures.Melli)
+				else
+					checkbox:SetDisabledTexture("Interface\\Buttons\\UI-CheckBox-Check-Disabled")
+				end
+			else
+				checkbox:SetDisabledTexture("")
+			end
+		end)
+
+		hooksecurefunc(frame, "SetNormalTexture", function(checkbox, texPath)
+			if texPath ~= "" then checkbox:SetNormalTexture("") end
+		end)
+		hooksecurefunc(frame, "SetPushedTexture", function(checkbox, texPath)
+			if texPath ~= "" then checkbox:SetPushedTexture("") end
+		end)
+		hooksecurefunc(frame, "SetHighlightTexture", function(checkbox, texPath)
+			if texPath ~= "" then checkbox:SetHighlightTexture("") end
+		end)
+		hooksecurefunc(frame, "SetCheckedTexture", function(checkbox, texPath)
+			if texPath == E.Media.Textures.Melli or texPath == "Interface\\Buttons\\UI-CheckBox-Check" then return end
+			if E.private.skins.checkBoxSkin then
+				checkbox:SetCheckedTexture(E.Media.Textures.Melli)
+			else
+				checkbox:SetCheckedTexture("Interface\\Buttons\\UI-CheckBox-Check")
+			end
+		end)
 	end
 
-	if frame.SetDisabledTexture then
-		frame:SetDisabledTexture("Interface\\Buttons\\UI-CheckBox-Check-Disabled")
-		if noBackdrop then
-			frame:GetDisabledTexture():SetInside(nil, -4, -4)
-		end
-	end
-
-	frame:HookScript("OnDisable", function(self)
-		if not self.SetDisabledTexture then return end
-		if self:GetChecked() then
-			self:SetDisabledTexture("Interface\\Buttons\\UI-CheckBox-Check-Disabled")
-		else
-			self:SetDisabledTexture("")
-		end
-	end)
-
-	hooksecurefunc(frame, "SetNormalTexture", function(self, texPath)
-		if texPath ~= "" then
-			self:SetNormalTexture("")
-		end
-	end)
-
-	hooksecurefunc(frame, "SetPushedTexture", function(self, texPath)
-		if texPath ~= "" then
-			self:SetPushedTexture("")
-		end
-	end)
-
-	hooksecurefunc(frame, "SetHighlightTexture", function(self, texPath)
-		if texPath ~= "" then
-			self:SetHighlightTexture("")
-		end
-	end)
+	frame.isSkinned = true
 end
 
 function S:HandleIcon(icon, parent)
@@ -343,7 +391,7 @@ end
 local handleCloseButtonOnEnter = function(btn) if btn.Texture then btn.Texture:SetVertexColor(unpack(E.media.rgbvaluecolor)) end end
 local handleCloseButtonOnLeave = function(btn) if btn.Texture then btn.Texture:SetVertexColor(1, 1, 1) end end
 
-function S:HandleCloseButton(f, point, text)
+function S:HandleCloseButton(f, point)
 	f:StripTextures()
 
 	if f:GetNormalTexture() then f:SetNormalTexture(""); f.SetNormalTexture = E.noop end
@@ -370,10 +418,7 @@ function S:HandleSliderFrame(frame)
 
 	frame:StripTextures()
 	frame:SetThumbTexture(E.Media.Textures.Melli)
-	if not frame.backdrop then
-		frame:CreateBackdrop()
-		frame.backdrop:SetAllPoints()
-	end
+	frame:SetTemplate()
 
 	local thumb = frame:GetThumbTexture()
 	thumb:SetVertexColor(1, .82, 0, 0.8)
@@ -431,9 +476,11 @@ function S:HandleIconSelectionFrame(frame, numIcons, buttonNameTemplate, frameNa
 end
 
 function S:HandleNextPrevButton(btn, arrowDir, color, noBackdrop, stipTexts)
+	if btn.isSkinned then return end
+
 	if not arrowDir then
 		arrowDir = "down"
-		local ButtonName = btn:GetName():lower()
+		local ButtonName = btn:GetName() and btn:GetName():lower()
 
 		if ButtonName then
 			if (strfind(ButtonName, "left") or strfind(ButtonName, "prev") or strfind(ButtonName, "decrement") or strfind(ButtonName, "promote")) then
@@ -485,10 +532,12 @@ function S:HandleNextPrevButton(btn, arrowDir, color, noBackdrop, stipTexts)
 	Disabled:SetRotation(S.ArrowRotation[arrowDir])
 
 	Normal:SetVertexColor(unpack(color or {1, 1, 1}))
+
+	btn.isSkinned = true
 end
 
 function S:ADDON_LOADED(_, addon)
-	--S:SkinAce3()
+	S:SkinAce3()
 
 	if self.allowBypass[addon] then
 		if self.addonCallbacks[addon] then
@@ -579,11 +628,17 @@ function S:AddCallback(eventName, loadFunc)
 	E.RegisterCallback(E, eventName, loadFunc)
 end
 
+function S:SkinAce3()
+	S:HookAce3(LibStub("AceGUI-3.0", true))
+	S:Ace3_SkinTooltip(LibStub("AceConfigDialog-3.0", true))
+	S:Ace3_SkinTooltip(E.Libs.AceConfigDialog, E.LibsMinor.AceConfigDialog)
+end
+
 function S:Initialize()
 	self.Initialized = true
 	self.db = E.private.skins
 
-	--S:SkinAce3()
+	S:SkinAce3()
 
 	--Fire events for Blizzard addons that are already loaded
 	for addon in pairs(self.addonCallbacks) do

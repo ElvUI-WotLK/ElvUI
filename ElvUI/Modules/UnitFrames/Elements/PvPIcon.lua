@@ -1,15 +1,13 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local UF = E:GetModule("UnitFrames");
 
---Cache global variables
 --Lua functions
-
 --WoW API / Variables
 
 function UF:Construct_PvPIcon(frame)
 	local PvPIndicator = frame.RaisedElementParent.TextureParent:CreateTexture(nil, "ARTWORK")
-	PvPIndicator:SetSize(30, 30)
-	PvPIndicator:SetPoint("CENTER", frame, "CENTER")
+	PvPIndicator:Size(30, 30)
+	PvPIndicator:Point("CENTER", frame, "CENTER")
 
 	PvPIndicator.Override = UF.UpdateOverridePvP
 
@@ -49,7 +47,7 @@ function UF:UpdateOverridePvP(event, unit)
 
 		status = "ffa"
 	elseif factionGroup and UnitIsPVP(unit) then
-		element:SetTexture("Interface\\AddOns\\ElvUI\\media\\textures\\PVP-Icons")
+		element:SetTexture("Interface\\AddOns\\ElvUI\\Media\\Textures\\PVP-Icons")
 
 		if factionGroup == "Alliance"  then
 			element:SetTexCoord(0.545, 0.935, 0.070, 0.940)

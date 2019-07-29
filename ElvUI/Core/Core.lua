@@ -224,6 +224,37 @@ function E:CheckClassColor(r, g, b)
 	return matchFound;
 end
 
+function E:SetColorTable(t, data)
+	if not data.r or not data.g or not data.b then
+		error("SetColorTable: Could not unpack color values.")
+	end
+
+	if t and (type(t) == "table") then
+		t[1], t[2], t[3], t[4] = E:UpdateColorTable(data)
+	else
+		t = E:GetColorTable(data)
+	end
+
+	return t
+end
+
+function E:UpdateColorTable(data)
+	if not data.r or not data.g or not data.b then
+		error("UpdateColorTable: Could not unpack color values.")
+	end
+
+	if (data.r > 1 or data.r < 0) then data.r = 1 end
+	if (data.g > 1 or data.g < 0) then data.g = 1 end
+	if (data.b > 1 or data.b < 0) then data.b = 1 end
+	if data.a and (data.a > 1 or data.a < 0) then data.a = 1 end
+
+	if data.a then
+		return data.r, data.g, data.b, data.a
+	else
+		return data.r, data.g, data.b
+	end
+end
+
 function E:GetColorTable(data)
 	if(not data.r or not data.g or not data.b) then
 		error("Could not unpack color values.");
@@ -1128,6 +1159,10 @@ end
 
 --DATABASE CONVERSIONS
 function E:DBConversions()
+	if gameLocale and E.global.general.locale == "auto" then
+		E.global.general.locale = gameLocale
+	end
+
 	--Combat & Resting Icon options update
 	if E.db.unitframe.units.player.combatIcon ~= nil then
 		E.db.unitframe.units.player.CombatIcon.enable = E.db.unitframe.units.player.combatIcon

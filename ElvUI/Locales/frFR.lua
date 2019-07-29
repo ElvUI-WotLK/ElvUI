@@ -249,12 +249,6 @@ L["TargetTargetTarget Frame"] = "Cadre de la cible de la cible de la cible"
 L["Tooltip"] = "Infobulle"
 L["Vehicle Seat Frame"] = "Cadre de siège du véhicule"
 L["Watch Frame"] = true
-L["DESC_MOVERCONFIG"] = [=[Cadres déverrouillés. Déplacez-les et cliquez sur Verrouiller une fois terminé.
-
-Options:
-  Shift + clic droit - Cacher temporairement.
-  Ctrl + clic droit - Réinitialiser la position par défaut.
-]=]
 
 --Plugin Installer
 L["ElvUI Plugin Installation"] = "Installation des Plugins ElvUI"
@@ -344,3 +338,15 @@ L["You can use the /resetui command to reset all of your movers. You can also us
 L["Dead"] = "Mort"
 L["Ghost"] = "Fantôme"
 L["Offline"] = "Déconnecté"
+
+----------------------------------
+L["RED_ENABLE"] = "|cFFff3333Activer|r"
+L["GREEN_ENABLE"] = "|cFF33ff33Activer|r"
+L["DESC_MOVERCONFIG"] = [=[Cadres déverrouillés. Déplacez-les et cliquez sur Verrouiller une fois terminé.
+
+Options:
+  LeftClick - Toggle Nudge Frame.
+  Clic Droit - Open Config Section.
+  Shift + clic droit - Cacher temporairement.
+  Ctrl + clic droit - Réinitialiser la position par défaut.
+]=]

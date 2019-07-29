@@ -2,19 +2,18 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 local UF = E:GetModule("UnitFrames")
 
 local _G = _G
+--Lua functions
 local pairs = pairs
 local select = select
 local assert = assert
-local tinsert = table.insert
-
+local tinsert = tinsert
+--WoW API / Variables
 local CreateFrame = CreateFrame
-local UnitIsUnit = UnitIsUnit
-local UnitReaction = UnitReaction
-local UnitIsPlayer = UnitIsPlayer
 local UnitClass = UnitClass
 local UnitExists = UnitExists
-local RAID_CLASS_COLORS = RAID_CLASS_COLORS
-local FACTION_BAR_COLORS = FACTION_BAR_COLORS
+local UnitIsPlayer = UnitIsPlayer
+local UnitIsUnit = UnitIsUnit
+local UnitReaction = UnitReaction
 
 function UF:FrameGlow_MouseOnUnit(frame)
 	if frame and frame:IsVisible() and UnitExists("mouseover") then
@@ -97,7 +96,7 @@ function UF:FrameGlow_PositionGlow(frame, mainGlow, powerGlow)
 	local power = frame.Power and frame.Power.backdrop
 	local health = frame.Health and frame.Health.backdrop
 	local portrait = (frame.USE_PORTRAIT and not frame.USE_PORTRAIT_OVERLAY) and (frame.Portrait and frame.Portrait.backdrop)
-	local offset = (E.PixelMode and E.mult*3) or E.mult*4 -- edgeSize is 3
+	local offset = (E.PixelMode and 3) or 4 -- edgeSize is 3
 
 	mainGlow:ClearAllPoints()
 	mainGlow:Point("TOPLEFT", (frame.ORIENTATION == "LEFT" and portrait) or health, -offset, offset)
@@ -133,14 +132,14 @@ end
 
 function UF:FrameGlow_CreateGlow(frame, mouse)
 	-- Main Glow to wrap the health frame to it's best ability
-	frame:CreateShadow("Default")
+	frame:CreateShadow()
 	local mainGlow = frame.shadow
 	mainGlow:SetFrameStrata("BACKGROUND")
 	mainGlow:Hide()
 	frame.shadow = nil
 
 	-- Secondary Glow for power frame when using power offset or mini power
-	frame:CreateShadow("Default")
+	frame:CreateShadow()
 	local powerGlow = frame.shadow
 	powerGlow:SetFrameStrata("BACKGROUND")
 	powerGlow:Hide()

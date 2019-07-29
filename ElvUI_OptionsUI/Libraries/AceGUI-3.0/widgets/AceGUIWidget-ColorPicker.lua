@@ -1,7 +1,7 @@
 --[[-----------------------------------------------------------------------------
 ColorPicker Widget
 -------------------------------------------------------------------------------]]
-local Type, Version = "ColorPicker-ElvUI", 22
+local Type, Version = "ColorPicker-ElvUI", 26
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
@@ -13,12 +13,16 @@ local CreateFrame, UIParent = CreateFrame, UIParent
 
 -- Global vars/functions that we don't upvalue since they might get hooked, or upgraded
 -- List them here for Mikk's FindGlobals script
--- GLOBALS: ShowUIPanel, HideUIPanel, ColorPickerFrame, OpacitySliderFrame
+-- GLOBALS: ColorPickerFrame, OpacitySliderFrame, ColorPPDefault
 
 --[[-----------------------------------------------------------------------------
 Support functions
 -------------------------------------------------------------------------------]]
 local function ColorCallback(self, r, g, b, a, isAlpha)
+	-- this will block an infinite loop from `E.GrabColorPickerValues`
+	-- which is caused when we set values into the color picker again on `OnValueChanged`
+	if ColorPickerFrame.noColorCallback then return end
+
 	if not self.HasAlpha then
 		a = 1
 	end
@@ -47,7 +51,7 @@ local function Control_OnLeave(frame)
 end
 
 local function ColorSwatch_OnClick(frame)
-	HideUIPanel(ColorPickerFrame)
+	ColorPickerFrame:Hide()
 	local self = frame.obj
 	if not self.disabled then
 		ColorPickerFrame:SetFrameStrata("FULLSCREEN_DIALOG")
@@ -67,25 +71,24 @@ local function ColorSwatch_OnClick(frame)
 			ColorCallback(self, r, g, b, a, true)
 		end
 
-		local r, g, b, a, dR, dG, dB, dA = self.r, self.g, self.b, self.a, self.dR, self.dG, self.dB, self.dA
+		local r, g, b, a = self.r, self.g, self.b, self.a
 		if self.HasAlpha then
 			ColorPickerFrame.opacity = 1 - (a or 0)
 		end
 		ColorPickerFrame:SetColorRGB(r, g, b)
 
-		if(ColorPPDefault and self.dR and self.dG and self.dB) then
+		if ColorPPDefault and self.dR and self.dG and self.dB then
 			local alpha = 1
-			if(self.dA) then
-				alpha = 1 - self.dA
-			end
-			ColorPPDefault.colors = {r = self.dR, g = self.dG, b = self.dB, a = alpha}
+			if self.dA then alpha = 1 - self.dA end
+			if not ColorPPDefault.colors then ColorPPDefault.colors = {} end
+			ColorPPDefault.colors.r, ColorPPDefault.colors.g, ColorPPDefault.colors.b, ColorPPDefault.colors.a = self.dR, self.dG, self.dB, alpha
 		end
 
 		ColorPickerFrame.cancelFunc = function()
 			ColorCallback(self, r, g, b, a, true)
 		end
 
-		ShowUIPanel(ColorPickerFrame)
+		ColorPickerFrame:Show()
 	end
 	AceGUI:ClearFocus()
 end
@@ -114,10 +117,10 @@ local methods = {
 		self.g = g
 		self.b = b
 		self.a = a or 1
-		self.dR = defaultR
-		self.dG = defaultG
-		self.dB = defaultB
-		self.dA = defaultA
+		self.dR = defaultR or self.dR
+		self.dG = defaultG or self.dG
+		self.dB = defaultB or self.dB
+		self.dA = defaultA or self.dA
 		self.colorSwatch:SetVertexColor(r, g, b, a)
 	end,
 
@@ -156,6 +159,7 @@ local function Constructor()
 	colorSwatch:SetPoint("LEFT")
 
 	local texture = frame:CreateTexture(nil, "BACKGROUND")
+	colorSwatch.background = texture
 	texture:SetWidth(16)
 	texture:SetHeight(16)
 	texture:SetTexture(1, 1, 1)
@@ -163,6 +167,7 @@ local function Constructor()
 	texture:Show()
 
 	local checkers = frame:CreateTexture(nil, "BACKGROUND")
+	colorSwatch.checkers = checkers
 	checkers:SetWidth(14)
 	checkers:SetHeight(14)
 	checkers:SetTexture("Tileset\\Generic\\Checkers")

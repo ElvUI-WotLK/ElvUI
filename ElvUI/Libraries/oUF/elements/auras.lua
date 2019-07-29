@@ -68,15 +68,18 @@ button.isPlayer - indicates if the aura caster is the player or their vehicle (b
 local _, ns = ...
 local oUF = ns.oUF
 
+-- ElvUI changed block
+local CREATED = 2
+-- end block
+local VISIBLE = 1
+local HIDDEN = 0
+
 local tinsert = table.insert
 local floor = math.floor
 
 local CreateFrame = CreateFrame
 local UnitAura = UnitAura
 local UnitIsUnit = UnitIsUnit
-
-local VISIBLE = 1
-local HIDDEN = 0
 
 local function UpdateTooltip(self)
 	GameTooltip:SetUnitAura(self:GetParent().__owner.unit, self:GetID(), self.filter)
@@ -154,10 +157,13 @@ local function updateIcon(element, unit, index, offset, filter, isDebuff, visibl
 	-- count may be nil sometimes
 	count = count or 0
 
-	if element.forceShow then
+	-- ElvUI block
+	if element.forceShow or element.forceCreate then
 		spellID = 47540
 		name, rank, texture = GetSpellInfo(spellID)
-		count, debuffType, duration, expiration, caster, isStealable, shouldConsolidate = 5, 'Magic', 0, 60, 'player', nil, nil
+		if element.forceShow then
+			count, debuffType, duration, expiration, caster, isStealable, shouldConsolidate = 5, 'Magic', 0, 60, 'player', nil, nil
+		end
 	end
 
 	if(name) then
@@ -191,16 +197,20 @@ local function updateIcon(element, unit, index, offset, filter, isDebuff, visibl
 		* self   - the widget holding the aura buttons
 		* unit   - the unit on which the aura is cast (string)
 		* button - the button displaying the aura (Button)
-		* ...    - the return values from [UnitAura](http://wowprogramming.com/docs/api/UnitAura)
+		* ...    - the return values from [UnitAura](http://wowprogramming.com/docs/api/UnitAura.html)
 
 		## Returns
 
 		* show - indicates whether the aura button should be shown (boolean)
 		--]]
+
+		-- ElvUI changed block
 		local show = true
-		if not element.forceShow then
+		if element.forceCreate then show = false end
+		if not element.forceShow and not element.forceCreate then
 			show = (element.CustomFilter or customFilter) (element, unit, button, name, rank, texture, count, debuffType, duration, expiration, caster, isStealable, shouldConsolidate, spellID)
 		end
+		-- end block
 
 		if(show) then
 			-- We might want to consider delaying the creation of an actual cooldown
@@ -255,12 +265,26 @@ local function updateIcon(element, unit, index, offset, filter, isDebuff, visibl
 			* duration    - the aura duration in seconds (number?)
 			* expiration  - the point in time when the aura will expire. Comparable to GetTime() (number)
 			* debuffType  - the debuff type of the aura (string?)['Curse', 'Disease', 'Magic', 'Poison']
+			* isStealable - whether the aura can be stolen or purged (boolean)
 			--]]
 			if(element.PostUpdateIcon) then
-				element:PostUpdateIcon(unit, button, index, position, duration, expiration, debuffType)
+				element:PostUpdateIcon(unit, button, index, position, duration, expiration, debuffType, isStealable)
 			end
 
 			return VISIBLE
+		-- ElvUI changed block
+		elseif element.forceCreate then
+			local size = element.size or 16
+			button:SetSize(size, size)
+
+			button:Hide()
+
+			if (element.PostUpdateIcon) then
+				element:PostUpdateIcon(unit, button, index, position, duration, expiration, debuffType, isStealable)
+			end
+
+			return CREATED
+		-- end block
 		else
 			return HIDDEN
 		end
@@ -293,7 +317,10 @@ local function filterIcons(element, unit, filter, limit, isDebuff, offset, dontH
 	local index = 1
 	local visible = 0
 	local hidden = 0
-	while(visible < limit) do
+	-- ElvUI changed block
+	local created = 0
+	-- end block
+	while (visible < limit) do
 		local result = updateIcon(element, unit, index, offset, filter, isDebuff, visible)
 		if(not result) then
 			break
@@ -301,12 +328,20 @@ local function filterIcons(element, unit, filter, limit, isDebuff, offset, dontH
 			visible = visible + 1
 		elseif(result == HIDDEN) then
 			hidden = hidden + 1
+		-- ElvUI changed block
+		elseif(result == CREATED) then
+			visible = visible + 1
+			created = created + 1
+		-- end block
 		end
 
 		index = index + 1
 	end
 
-	if(not dontHide) then
+	-- ElvUI changed block
+	visible = visible - created
+	-- end block
+	if (not dontHide) then
 		for i = visible + offset + 1, #element do
 			element[i]:Hide()
 		end
@@ -332,7 +367,7 @@ local function UpdateAuras(self, event, unit)
 		local numDebuffs = auras.numDebuffs or 40
 		local max = auras.numTotal or numBuffs + numDebuffs
 
-		local visibleBuffs, hiddenBuffs = filterIcons(auras, unit, auras.buffFilter or auras.filter or 'HELPFUL', math.min(numBuffs, max), nil, 0, true)
+		local visibleBuffs = filterIcons(auras, unit, auras.buffFilter or auras.filter or 'HELPFUL', min(numBuffs, max), nil, 0, true)
 
 		local hasGap
 		if(visibleBuffs ~= 0 and auras.gap) then
@@ -351,7 +386,7 @@ local function UpdateAuras(self, event, unit)
 			if(button.icon) then button.icon:SetTexture() end
 			if(button.overlay) then button.overlay:Hide() end
 			if(button.stealable) then button.stealable:Hide() end
-			if(button.count) then button.count:SetText() end
+			if(button.count) then button.count:SetText('') end
 
 			button:EnableMouse(false)
 			button:Show()
@@ -369,7 +404,7 @@ local function UpdateAuras(self, event, unit)
 			end
 		end
 
-		local visibleDebuffs, hiddenDebuffs = filterIcons(auras, unit, auras.debuffFilter or auras.filter or 'HARMFUL', math.min(numDebuffs, max - visibleBuffs), true, visibleBuffs)
+		local visibleDebuffs = filterIcons(auras, unit, auras.debuffFilter or auras.filter or 'HARMFUL', min(numDebuffs, max - visibleBuffs), true, visibleBuffs)
 		auras.visibleDebuffs = visibleDebuffs
 
 		if(hasGap and visibleDebuffs == 0) then
@@ -423,7 +458,7 @@ local function UpdateAuras(self, event, unit)
 		if(buffs.PreUpdate) then buffs:PreUpdate(unit) end
 
 		local numBuffs = buffs.num or 32
-		local visibleBuffs, hiddenBuffs = filterIcons(buffs, unit, buffs.filter or 'HELPFUL', numBuffs)
+		local visibleBuffs = filterIcons(buffs, unit, buffs.filter or 'HELPFUL', numBuffs)
 		buffs.visibleBuffs = visibleBuffs
 
 		local fromRange, toRange
@@ -444,7 +479,7 @@ local function UpdateAuras(self, event, unit)
 		if(debuffs.PreUpdate) then debuffs:PreUpdate(unit) end
 
 		local numDebuffs = debuffs.num or 40
-		local visibleDebuffs, hiddenDebuffs = filterIcons(debuffs, unit, debuffs.filter or 'HARMFUL', numDebuffs, true)
+		local visibleDebuffs = filterIcons(debuffs, unit, debuffs.filter or 'HARMFUL', numDebuffs, true)
 		debuffs.visibleDebuffs = visibleDebuffs
 
 		local fromRange, toRange

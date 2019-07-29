@@ -249,12 +249,6 @@ L["TargetTargetTarget Frame"] = "目标的目标的目标框架"
 L["Tooltip"] = "鼠标提示"
 L["Vehicle Seat Frame"] = "载具座位框"
 L["Watch Frame"] = true
-L["DESC_MOVERCONFIG"] = [=[解除框架移动锁定. 现在可以移动它们, 移好后请点击「锁定」.
-
-选项：
-  Shift + 右键 - 暂时隐藏定位开关
-  Ctrl + 右键 - 重置定位开关位置
-]=]
 
 --Plugin Installer
 L["ElvUI Plugin Installation"] = "ElvUI插件安装"
@@ -344,3 +338,15 @@ L["You can use the /resetui command to reset all of your movers. You can also us
 L["Dead"] = "死亡"
 L["Ghost"] = "鬼魂"
 L["Offline"] = "离线"
+
+----------------------------------
+L["RED_ENABLE"] = "|cFFff3333启用|r"
+L["GREEN_ENABLE"] = "|cFF33ff33启用|r"
+L["DESC_MOVERCONFIG"] = [=[解除框架移动锁定. 现在可以移动它们, 移好后请点击「锁定」.
+
+选项：
+  左键 - 打开微调窗口.
+  右键 - 打开配置窗口.
+  Shift + 右键 - 暂时隐藏定位开关
+  Ctrl + 右键 - 重置定位开关位置
+]=]

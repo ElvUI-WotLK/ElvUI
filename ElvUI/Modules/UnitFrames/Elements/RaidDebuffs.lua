@@ -1,7 +1,6 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local UF = E:GetModule("UnitFrames");
 
---Cache global variables
 --Lua functions
 local unpack = unpack
 --WoW API / Variables
@@ -9,7 +8,7 @@ local CreateFrame = CreateFrame
 
 function UF:Construct_RaidDebuffs(frame)
 	local rdebuff = CreateFrame("Frame", nil, frame.RaisedElementParent)
-	rdebuff:SetTemplate("Default", nil, nil, UF.thinBorders, true)
+	rdebuff:SetTemplate(nil, nil, nil, UF.thinBorders, true)
 	rdebuff:SetFrameLevel(frame.RaisedElementParent:GetFrameLevel() + 20) --Make them appear above regular buffs or debuffs
 
 	local offset = UF.thinBorders and E.mult or E.Border

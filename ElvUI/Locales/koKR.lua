@@ -249,12 +249,6 @@ L["TargetTargetTarget Frame"] = "대상의대상의대상 프레임"
 L["Tooltip"] = "툴팁"
 L["Vehicle Seat Frame"] = "차량 좌석 프레임"
 L["Watch Frame"] = true
-L["DESC_MOVERCONFIG"] = [=[프레임을 드래그로 원하는 위치로 이동시키세요.|n[잠금] 버튼을 누르면 이동모드가 종료됩니다.
-
-선택사항:
-  Shift + 우클릭 - 조정자를 일시적으로 숨깁니다.
-  Ctrl + 우클릭 - 조정자의 위치를 기본값으로 초기화합니다.
-]=]
 
 --Plugin Installer
 L["ElvUI Plugin Installation"] = "ElvUI 플러그인  설치"
@@ -344,3 +338,15 @@ L["You can use the /resetui command to reset all of your movers. You can also us
 L["Dead"] = "죽음"
 L["Ghost"] = "유령"
 L["Offline"] = "오프라인"
+
+----------------------------------
+L["RED_ENABLE"] = "|cFFff3333사용|r"
+L["GREEN_ENABLE"] = "|cFF33ff33사용|r"
+L["DESC_MOVERCONFIG"] = [=[프레임을 드래그로 원하는 위치로 이동시키세요.|n[잠금] 버튼을 누르면 이동모드가 종료됩니다.
+
+선택사항:
+  LeftClick - Toggle Nudge Frame.
+  우클릭 - Open Config Section.
+  Shift + 우클릭 - 조정자를 일시적으로 숨깁니다.
+  Ctrl + 우클릭 - 조정자의 위치를 기본값으로 초기화합니다.
+]=]

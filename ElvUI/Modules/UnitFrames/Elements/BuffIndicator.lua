@@ -1,11 +1,11 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local UF = E:GetModule("UnitFrames");
-local LSM = LibStub("LibSharedMedia-3.0");
+local LSM = E.Libs.LSM
 
 --Cache global variables
 --Lua functions
 local assert, select, pairs, unpack = assert, select, pairs, unpack
-local tinsert = tinsert
+local tinsert, wipe = tinsert, wipe
 --WoW API / Variables
 local CreateFrame = CreateFrame
 local GetSpellInfo = GetSpellInfo
@@ -16,7 +16,7 @@ function UF:Construct_AuraWatch(frame)
 	auras:SetInside(frame.Health)
 	auras.presentAlpha = 1
 	auras.missingAlpha = 0
-	auras.strictMatching = false;
+	auras.strictMatching = false
 	auras.icons = {}
 
 	return auras
@@ -62,29 +62,30 @@ function UF:UpdateAuraWatchFromHeader(group, petOverride)
 	end
 end
 
+local buffs = {}
 function UF:UpdateAuraWatch(frame, petOverride, db)
-	local buffs = {};
-	local auras = frame.AuraWatch;
+	wipe(buffs)
+	local auras = frame.AuraWatch
 	db = db and db.buffIndicator or frame.db.buffIndicator
 
 	if not db.enable then
 		auras:Hide()
-		return;
+		return
 	else
 		auras:Show()
 	end
 
 	if frame.unit == "pet" and not petOverride then
-		local petWatch = E.global["unitframe"].buffwatch.PET or {}
+		local petWatch = E.global.unitframe.buffwatch.PET or {}
 		for _, value in pairs(petWatch) do
 			if value.style == "text" then value.style = "NONE" end --depreciated
-			tinsert(buffs, value);
+			tinsert(buffs, value)
 		end
 	else
-		local buffWatch = not db.profileSpecific and (E.global["unitframe"].buffwatch[E.myclass] or {}) or (E.db["unitframe"]["filters"].buffwatch or {})
+		local buffWatch = not db.profileSpecific and (E.global.unitframe.buffwatch[E.myclass] or {}) or (E.db.unitframe.filters.buffwatch or {})
 		for _, value in pairs(buffWatch) do
 			if value.style == "text" then value.style = "NONE" end --depreciated
-			tinsert(buffs, value);
+			tinsert(buffs, value)
 		end
 	end
 
@@ -94,68 +95,68 @@ function UF:UpdateAuraWatch(frame, petOverride, db)
 			local matchFound = false;
 			for j=1, #buffs do
 				if buffs[j].id and buffs[j].id == auras.icons[i] then
-					matchFound = true;
-					break;
+					matchFound = true
+					break
 				end
 			end
 
 			if not matchFound then
 				auras.icons[i]:Hide()
-				auras.icons[i] = nil;
+				auras.icons[i] = nil
 			end
 		end
 	end
 
-	local unitframeFont = LSM:Fetch("font", E.db["unitframe"].font)
+	local unitframeFont = LSM:Fetch("font", E.db.unitframe.font)
 
 	for i=1, #buffs do
 		if buffs[i].id then
-			local name, _, image = GetSpellInfo(buffs[i].id);
+			local name, _, image = GetSpellInfo(buffs[i].id)
 			if name then
 				local icon
 				if not auras.icons[buffs[i].id] then
-					icon = CreateFrame("Frame", nil, auras);
+					icon = CreateFrame("Frame", nil, auras)
 				else
-					icon = auras.icons[buffs[i].id];
+					icon = auras.icons[buffs[i].id]
 				end
 				icon.name = name
 				icon.image = image
-				icon.spellID = buffs[i].id;
-				icon.anyUnit = buffs[i].anyUnit;
-				icon.style = buffs[i].style;
-				icon.onlyShowMissing = buffs[i].onlyShowMissing;
-				icon.presentAlpha = icon.onlyShowMissing and 0 or 1;
-				icon.missingAlpha = icon.onlyShowMissing and 1 or 0;
+				icon.spellID = buffs[i].id
+				icon.anyUnit = buffs[i].anyUnit
+				icon.style = buffs[i].style
+				icon.onlyShowMissing = buffs[i].onlyShowMissing
+				icon.presentAlpha = icon.onlyShowMissing and 0 or 1
+				icon.missingAlpha = icon.onlyShowMissing and 1 or 0
 				icon.textThreshold = buffs[i].textThreshold or -1
 				icon.displayText = buffs[i].displayText
 				icon.decimalThreshold = buffs[i].decimalThreshold
 				icon.size = (buffs[i].sizeOverride ~= nil and buffs[i].sizeOverride > 0 and buffs[i].sizeOverride or db.size)
 
-				icon:Width(icon.size);
-				icon:Height(icon.size);
+				icon:Width(icon.size)
+				icon:Height(icon.size)
 				--Protect against missing .point value
 				if not buffs[i].point then buffs[i].point = "TOPLEFT" end
 
 				icon:ClearAllPoints()
-				icon:Point(buffs[i].point or "TOPLEFT", frame.Health, buffs[i].point or "TOPLEFT", buffs[i].xOffset, buffs[i].yOffset);
+				icon:Point(buffs[i].point or "TOPLEFT", frame.Health, buffs[i].point or "TOPLEFT", buffs[i].xOffset, buffs[i].yOffset)
 
 				if not icon.icon then
-					icon.icon = icon:CreateTexture(nil, "BORDER");
-					icon.icon:SetAllPoints(icon);
+					icon.icon = icon:CreateTexture(nil, "BORDER")
+					icon.icon:SetAllPoints(icon)
 				end
 
 				if not icon.text then
 					local f = CreateFrame("Frame", nil, icon)
 					f:SetFrameLevel(icon:GetFrameLevel() + 50)
-					icon.text = f:CreateFontString(nil, "BORDER");
+					icon.text = f:CreateFontString(nil, "BORDER")
 				end
 
 				if not icon.border then
-					icon.border = icon:CreateTexture(nil, "BACKGROUND");
-					icon.border:Point("TOPLEFT", -E.mult, E.mult);
-					icon.border:Point("BOTTOMRIGHT", E.mult, -E.mult);
-					icon.border:SetTexture(E["media"].blankTex);
-					icon.border:SetVertexColor(0, 0, 0);
+					icon.border = icon:CreateTexture(nil, "BACKGROUND")
+					icon.border:Point("TOPLEFT", -E.mult, E.mult)
+					icon.border:Point("BOTTOMRIGHT", E.mult, -E.mult)
+					icon.border:SetTexture(E.media.blankTex)
+					icon.border:SetVertexColor(0, 0, 0)
 				end
 
 				if not icon.cd then
@@ -168,12 +169,12 @@ function UF:UpdateAuraWatch(frame, petOverride, db)
 				end
 
 				if icon.style == "coloredIcon" then
-					icon.icon:SetTexture(E["media"].blankTex);
+					icon.icon:SetTexture(E.media.blankTex)
 
-					if (buffs[i]["color"]) then
-						icon.icon:SetVertexColor(buffs[i]["color"].r, buffs[i]["color"].g, buffs[i]["color"].b);
+					if buffs[i].color then
+						icon.icon:SetVertexColor(buffs[i].color.r, buffs[i].color.g, buffs[i].color.b)
 					else
-						icon.icon:SetVertexColor(0.8, 0.8, 0.8);
+						icon.icon:SetVertexColor(0.8, 0.8, 0.8)
 					end
 					icon.icon:Show()
 					icon.border:Show()
@@ -182,7 +183,7 @@ function UF:UpdateAuraWatch(frame, petOverride, db)
 					icon.icon:SetVertexColor(1, 1, 1)
 					--icon.icon:SetTexCoord(.18, .82, .18, .82)
 					icon.icon:SetTexCoord(unpack(E.TexCoords))
-					icon.icon:SetTexture(icon.image);
+					icon.icon:SetTexture(icon.image)
 					icon.icon:Show()
 					icon.border:Show()
 					icon.cd:SetAlpha(1)
@@ -205,7 +206,7 @@ function UF:UpdateAuraWatch(frame, petOverride, db)
 				end
 
 				if not icon.count then
-					icon.count = icon:CreateFontString(nil, "OVERLAY");
+					icon.count = icon:CreateFontString(nil, "OVERLAY")
 				end
 
 				icon.count:ClearAllPoints()
@@ -213,25 +214,25 @@ function UF:UpdateAuraWatch(frame, petOverride, db)
 					local point, anchorPoint, x, y = unpack(textCounterOffsets[buffs[i].point])
 					icon.count:Point(point, icon.text, anchorPoint, x, y)
 				else
-					icon.count:Point("CENTER", unpack(counterOffsets[buffs[i].point]));
+					icon.count:Point("CENTER", unpack(counterOffsets[buffs[i].point]))
 				end
 
-				icon.count:FontTemplate(unitframeFont, db.fontSize, E.db["unitframe"].fontOutline);
-				icon.text:FontTemplate(unitframeFont, db.fontSize, E.db["unitframe"].fontOutline);
+				icon.count:FontTemplate(unitframeFont, db.fontSize, E.db.unitframe.fontOutline)
+				icon.text:FontTemplate(unitframeFont, db.fontSize, E.db.unitframe.fontOutline)
 				icon.text:ClearAllPoints()
 				icon.text:Point(buffs[i].point, icon, buffs[i].point)
 
 				if buffs[i].enabled then
-					auras.icons[buffs[i].id] = icon;
+					auras.icons[buffs[i].id] = icon
 					if auras.watched then
-						auras.watched[buffs[i].id] = icon;
+						auras.watched[buffs[i].id] = icon
 					end
 				else
-					auras.icons[buffs[i].id] = nil;
+					auras.icons[buffs[i].id] = nil
 					if auras.watched then
-						auras.watched[buffs[i].id] = nil;
+						auras.watched[buffs[i].id] = nil
 					end
-					icon:Hide();
+					icon:Hide()
 				end
 			end
 		end

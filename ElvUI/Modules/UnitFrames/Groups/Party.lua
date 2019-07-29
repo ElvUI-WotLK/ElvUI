@@ -1,11 +1,9 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local UF = E:GetModule("UnitFrames");
-
 local _, ns = ...
 local ElvUF = ns.oUF
 assert(ElvUF, "ElvUI was unable to locate oUF.")
 
---Cache global variables
 --Lua functions
 local _G = _G
 --WoW API / Variables
@@ -27,16 +25,17 @@ function UF:Construct_PartyFrames()
 	self.SHADOW_SPACING = 3
 	if self.isChild then
 		self.Health = UF:Construct_HealthBar(self, true)
-
 		self.MouseGlow = UF:Construct_MouseGlow(self)
 		self.TargetGlow = UF:Construct_TargetGlow(self)
 		self.Name = UF:Construct_NameText(self)
+		self.RaidTargetIndicator = UF:Construct_RaidIcon(self)
+
 		self.originalParent = self:GetParent()
 
-		local childDB = UF.db["units"]["party"].petsGroup
+		local childDB = E.db.unitframe.units.party.petsGroup
 		self.childType = "pet"
 		if self == _G[self.originalParent:GetName().."Target"] then
-			childDB = UF.db["units"]["party"].targetsGroup
+			childDB = E.db.unitframe.units.party.targetsGroup
 			self.childType = "target"
 		end
 
@@ -45,8 +44,8 @@ function UF:Construct_PartyFrames()
 		self:SetAttribute("initial-width", childDB.width)
 		self:SetAttribute("initial-height", childDB.height)
 	else
-		self:SetAttribute("initial-width", UF.db["units"]["party"].width)
-		self:SetAttribute("initial-height", UF.db["units"]["party"].height)
+		self:SetAttribute("initial-width", E.db.unitframe.units.party.width)
+		self:SetAttribute("initial-height", E.db.unitframe.units.party.height)
 
 		self.Health = UF:Construct_HealthBar(self, true, true, "RIGHT")
 
@@ -72,12 +71,14 @@ function UF:Construct_PartyFrames()
 		self.ReadyCheckIndicator = UF:Construct_ReadyCheckIcon(self)
 		self.HealCommBar = UF:Construct_HealComm(self)
 		self.GPS = UF:Construct_GPS(self)
-		--self.Castbar = UF:Construct_Castbar(self)
 		self.customTexts = {}
+
+		self.Castbar = UF:Construct_Castbar(self)
+
 		self.unitframeType = "party"
 	end
 
-	self.Range = UF:Construct_Range(self)
+	self.Fader = UF:Construct_Fader()
 
 	UF:Update_StatusBars()
 	UF:Update_FontStrings()
@@ -166,7 +167,6 @@ function UF:Update_PartyFrames(frame, db)
 		frame.USE_INFO_PANEL = not frame.USE_MINI_POWERBAR and not frame.USE_POWERBAR_OFFSET and db.infoPanel.enable
 		frame.INFO_PANEL_HEIGHT = frame.USE_INFO_PANEL and db.infoPanel.height or 0
 
-		frame.HAPPINESS_WIDTH = 0
 		frame.BOTTOM_OFFSET = UF:GetHealthBottomOffset(frame)
 
 		frame.VARIABLES_SET = true
@@ -213,6 +213,8 @@ function UF:Update_PartyFrames(frame, db)
 		--Health
 		UF:Configure_HealthBar(frame)
 
+		UF:Configure_RaidIcon(frame)
+
 		--Name
 		UF:UpdateNameSettings(frame, frame.childType)
 	else
@@ -237,7 +239,7 @@ function UF:Update_PartyFrames(frame, db)
 
 		UF:Configure_RaidDebuffs(frame)
 
-		--UF:Configure_Castbar(frame)
+		UF:Configure_Castbar(frame)
 
 		UF:Configure_RaidIcon(frame)
 
@@ -260,9 +262,10 @@ function UF:Update_PartyFrames(frame, db)
 		UF:Configure_CustomTexts(frame)
 	end
 
-	UF:Configure_Range(frame)
+	--Fader
+	UF:Configure_Fader(frame)
 
 	frame:UpdateAllElements("ElvUI_UpdateAllElements")
 end
 
-UF["headerstoload"]["party"] = {nil, "ELVUI_UNITPET, ELVUI_UNITTARGET"}
+UF.headerstoload.party = {nil, "ELVUI_UNITPET, ELVUI_UNITTARGET"}

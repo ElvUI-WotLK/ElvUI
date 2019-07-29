@@ -249,12 +249,6 @@ L["TargetTargetTarget Frame"] = "Ziel des Ziels des Ziels Fenster"
 L["Tooltip"] = "Tooltip"
 L["Vehicle Seat Frame"] = "Fahrzeugfenster"
 L["Watch Frame"] = true
-L["DESC_MOVERCONFIG"] = [=[Ankerpunkte entriegelt. Bewege die Ankerpunkte und klicke 'sperren', wenn du fertig bist.
-
-Options:
-  Shift + Rechtsklick - Blendet den Anker vorübergehend aus.
-  Strg + Rechtsklick - Setzt den Anker auf Ursprungsposition zurück.
-]=]
 
 --Plugin Installer
 L["ElvUI Plugin Installation"] = true
@@ -344,3 +338,15 @@ L["You can use the /resetui command to reset all of your movers. You can also us
 L["Dead"] = "Tot"
 L["Ghost"] = "Geist"
 L["Offline"] = "Offline"
+
+----------------------------------
+L["RED_ENABLE"] = "|cFFff3333Eingeschaltet|r"
+L["GREEN_ENABLE"] = "|cFF33ff33Eingeschaltet|r"
+L["DESC_MOVERCONFIG"] = [=[Ankerpunkte entriegelt. Bewege die Ankerpunkte und klicke 'sperren', wenn du fertig bist.
+
+Options:
+  Linksklick - Öffnet das Fenster zum Verschieben.
+  Rechtsklick - Öffnet Konfigurationsbereich.
+  Shift + Rechtsklick - Blendet den Anker vorübergehend aus.
+  Strg + Rechtsklick - Setzt den Anker auf Ursprungsposition zurück.
+]=]

@@ -249,12 +249,6 @@ L["TargetTargetTarget Frame"] = "Marco del Objetivo del Objetivo del Objetivo"
 L["Tooltip"] = "Descripción Emergente"
 L["Vehicle Seat Frame"] = "Marco del Asiento del Vehículo"
 L["Watch Frame"] = true
-L["DESC_MOVERCONFIG"] = [=[Fijadores desbloqueados. Muévelos ahora y haz click en Bloquear cuando termines.
-
-Options:
-  Shift + RightClick - Hides mover temporarily.
-  Ctrl + RightClick - Resets mover position to default.
-]=]
 
 --Plugin Installer
 L["ElvUI Plugin Installation"] = "Instalación del plugin de ElvUI"
@@ -344,3 +338,14 @@ L["You can use the /resetui command to reset all of your movers. You can also us
 L["Dead"] = true
 L["Ghost"] = "Fantasma"
 L["Offline"] = "Fuera de Línea"
+
+----------------------------------
+L["RED_ENABLE"] = "|cFFff3333Habilitar|r"
+L["GREEN_ENABLE"] = "|cFF33ff33Habilitar|r"
+L["DESC_MOVERCONFIG"] = [=[Fijadores desbloqueados. Muévelos ahora y haz click en Bloquear cuando termines.
+Options:
+  LeftClick - Toggle Nudge Frame.
+  RightClick - Open Config Section.
+  Shift + RightClick - Hides mover temporarily.
+  Ctrl + RightClick - Resets mover position to default.
+]=]

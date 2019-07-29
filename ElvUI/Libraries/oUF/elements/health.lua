@@ -293,10 +293,11 @@ local function SetFrequentUpdates(element, state)
 		if(element.frequentUpdates) then
 			element:SetScript('OnUpdate', onHealthUpdate)
 
-			if((unit == 'party' or unit:match('party%d?$')) and not self:IsEventRegistered("UNIT_HEALTH")) then
-				self:RegisterEvent('UNIT_HEALTH', Path)
-			elseif(self:IsEventRegistered('UNIT_HEALTH')) then
-				self:UnregisterEvent('UNIT_HEALTH', Path)
+			local unit = element.__owner.unit
+			if((unit == 'party' or unit:match('party%d?$')) and not element:IsEventRegistered("UNIT_HEALTH")) then
+				element:RegisterEvent('UNIT_HEALTH', Path)
+			elseif(element:IsEventRegistered('UNIT_HEALTH')) then
+				element:UnregisterEvent('UNIT_HEALTH', Path)
 			end
 		else
 			element:SetScript('OnUpdate', nil)

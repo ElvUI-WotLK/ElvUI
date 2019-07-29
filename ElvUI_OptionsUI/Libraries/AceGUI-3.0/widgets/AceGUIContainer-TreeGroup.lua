@@ -2,7 +2,7 @@
 TreeGroup Container
 Container that uses a tree control to switch between groups.
 -------------------------------------------------------------------------------]]
-local Type, Version = "TreeGroup", 40
+local Type, Version = "TreeGroup", 44
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
@@ -57,7 +57,6 @@ end
 local function UpdateButton(button, treeline, selected, canExpand, isExpanded)
 	local self = button.obj
 	local toggle = button.toggle
-	local frame = self.frame
 	local text = treeline.text or ""
 	local icon = treeline.icon
 	local iconCoords = treeline.iconCoords
@@ -76,8 +75,6 @@ local function UpdateButton(button, treeline, selected, canExpand, isExpanded)
 		button:UnlockHighlight()
 		button.selected = false
 	end
-	local normalTexture = button:GetNormalTexture()
-	local line = button.line
 	button.level = level
 	if ( level == 1 ) then
 		button:SetNormalFontObject("GameFontNormal")
@@ -162,7 +159,7 @@ end
 local function FirstFrameUpdate(frame)
 	local self = frame.obj
 	frame:SetScript("OnUpdate", nil)
-	self:RefreshTree()
+	self:RefreshTree(nil, true)
 end
 
 local function BuildUniqueValue(...)
@@ -199,7 +196,6 @@ end
 
 local function Button_OnDoubleClick(button)
 	local self = button.obj
-	local status = self.status or self.localstatus
 	local status = (self.status or self.localstatus).groups
 	status[button.uniquevalue] = not status[button.uniquevalue]
 	self:RefreshTree()
@@ -210,11 +206,13 @@ local function Button_OnEnter(frame)
 	self:Fire("OnButtonEnter", frame.uniquevalue, frame)
 
 	if self.enabletooltips then
-		GameTooltip:SetOwner(frame, "ANCHOR_NONE")
-		GameTooltip:SetPoint("LEFT",frame,"RIGHT")
-		GameTooltip:SetText(frame.text:GetText() or "", 1, .82, 0, 1)
+		local tooltip = AceGUI.tooltip
+		tooltip:SetOwner(frame, "ANCHOR_NONE")
+		tooltip:ClearAllPoints()
+		tooltip:SetPoint("LEFT",frame,"RIGHT")
+		tooltip:SetText(frame.text:GetText() or "", 1, .82, 0, 1)
 
-		GameTooltip:Show()
+		tooltip:Show()
 	end
 end
 
@@ -223,7 +221,7 @@ local function Button_OnLeave(frame)
 	self:Fire("OnButtonLeave", frame.uniquevalue, frame)
 
 	if self.enabletooltips then
-		GameTooltip:Hide()
+		AceGUI.tooltip:Hide()
 	end
 end
 
@@ -269,14 +267,15 @@ end
 local function Dragger_OnMouseUp(frame)
 	local treeframe = frame:GetParent()
 	local self = treeframe.obj
-	local frame = treeframe:GetParent()
+	local treeframeParent = treeframe:GetParent()
 	treeframe:StopMovingOrSizing()
 	--treeframe:SetScript("OnUpdate", nil)
 	treeframe:SetUserPlaced(false)
 	--Without this :GetHeight will get stuck on the current height, causing the tree contents to not resize
 	treeframe:SetHeight(0)
-	treeframe:SetPoint("TOPLEFT", frame, "TOPLEFT",0,0)
-	treeframe:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT",0,0)
+	treeframe:ClearAllPoints()
+	treeframe:SetPoint("TOPLEFT", treeframeParent, "TOPLEFT",0,0)
+	treeframe:SetPoint("BOTTOMLEFT", treeframeParent, "BOTTOMLEFT",0,0)
 
 	local status = self.status or self.localstatus
 	status.treewidth = treeframe:GetWidth()
@@ -295,10 +294,13 @@ local methods = {
 	["OnAcquire"] = function(self)
 		self:SetTreeWidth(DEFAULT_TREE_WIDTH, DEFAULT_TREE_SIZABLE)
 		self:EnableButtonTooltips(true)
+		self.frame:SetScript("OnUpdate", FirstFrameUpdate)
 	end,
 
 	["OnRelease"] = function(self)
 		self.status = nil
+		self.tree = nil
+		self.frame:SetScript("OnUpdate", nil)
 		for k, v in pairs(self.localstatus) do
 			if k == "groups" then
 				for k2 in pairs(v) do
@@ -371,7 +373,6 @@ local methods = {
 
 	["BuildLevel"] = function(self, tree, level, parent)
 		local groups = (self.status or self.localstatus).groups
-		local hasChildren = self.hasChildren
 
 		for i, v in ipairs(tree) do
 			if v.children then
@@ -387,7 +388,7 @@ local methods = {
 		end
 	end,
 
-	["RefreshTree"] = function(self,scrollToSelection)
+	["RefreshTree"] = function(self,scrollToSelection,fromOnUpdate)
 		local buttons = self.buttons
 		local lines = self.lines
 
