@@ -1,7 +1,6 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local AB = E:GetModule("ActionBars");
+local AB = E:GetModule("ActionBars")
 
---Cache global variables
 --Lua functions
 local _G = _G
 local ceil = math.ceil
@@ -20,10 +19,10 @@ local UnregisterStateDriver = UnregisterStateDriver
 local GetBindingKey = GetBindingKey
 local NUM_SHAPESHIFT_SLOTS = NUM_SHAPESHIFT_SLOTS
 
-local bar = CreateFrame("Frame", "ElvUI_StanceBar", E.UIParent, "SecureHandlerStateTemplate");
+local bar = CreateFrame("Frame", "ElvUI_StanceBar", E.UIParent, "SecureHandlerStateTemplate")
 
 function AB:UPDATE_SHAPESHIFT_COOLDOWN()
-	local numForms = GetNumShapeshiftForms();
+	local numForms = GetNumShapeshiftForms()
 	local start, duration, enable, cooldown
 	for i = 1, NUM_SHAPESHIFT_SLOTS do
 		if i <= numForms then
@@ -37,7 +36,7 @@ function AB:UPDATE_SHAPESHIFT_COOLDOWN()
 end
 
 function AB:StyleShapeShift()
-	local numForms = GetNumShapeshiftForms();
+	local numForms = GetNumShapeshiftForms()
 	local texture, name, isActive, isCastable, _
 	local buttonName, button, icon, cooldown
 	local stance = GetShapeshiftForm()
@@ -68,19 +67,19 @@ function AB:StyleShapeShift()
 			end
 
 			if isActive then
-				ShapeshiftBarFrame.lastSelected = button:GetID();
+				ShapeshiftBarFrame.lastSelected = button:GetID()
 				if numForms == 1 then
 					button:GetCheckedTexture():SetTexture(1, 1, 1, 0.5)
-					button:SetChecked(true);
+					button:SetChecked(true)
 				else
 					button:GetCheckedTexture():SetTexture(1, 1, 1, 0.5)
-					button:SetChecked(self.db.barShapeShift.style ~= "darkenInactive");
+					button:SetChecked(self.db.barShapeShift.style ~= "darkenInactive")
 				end
 			else
 				if numForms == 1 or stance == 0 then
 					button:SetChecked(false)
 				else
-					button:SetChecked(self.db.barShapeShift.style == "darkenInactive");
+					button:SetChecked(self.db.barShapeShift.style == "darkenInactive")
 					button:GetCheckedTexture():SetAlpha(1)
 					if self.db.barShapeShift.style == "darkenInactive" then
 						button:GetCheckedTexture():SetTexture(0, 0, 0, 0.5)
@@ -100,20 +99,21 @@ function AB:StyleShapeShift()
 end
 
 function AB:PositionAndSizeBarShapeShift()
-	local buttonSpacing = E:Scale(self.db["barShapeShift"].buttonspacing)
-	local backdropSpacing = E:Scale((self.db["barShapeShift"].backdropSpacing or self.db["barShapeShift"].buttonspacing))
-	local buttonsPerRow = self.db["barShapeShift"].buttonsPerRow
-	local numButtons = self.db["barShapeShift"].buttons
-	local size = E:Scale(self.db["barShapeShift"].buttonsize)
-	local point = self.db["barShapeShift"].point
-	local widthMult = self.db["barShapeShift"].widthMult
-	local heightMult = self.db["barShapeShift"].heightMult
+	local buttonSpacing = E:Scale(self.db.barShapeShift.buttonspacing)
+	local backdropSpacing = E:Scale((self.db.barShapeShift.backdropSpacing or self.db.barShapeShift.buttonspacing))
+	local buttonsPerRow = self.db.barShapeShift.buttonsPerRow
+	local numButtons = self.db.barShapeShift.buttons
+	local size = E:Scale(self.db.barShapeShift.buttonsize)
+	local point = self.db.barShapeShift.point
+	local widthMult = self.db.barShapeShift.widthMult
+	local heightMult = self.db.barShapeShift.heightMult
 	if bar.mover then
 		bar.mover.positionOverride = point
 		E:UpdatePositionOverride(bar.mover:GetName())
 	end
-	bar.db = self.db["barShapeShift"]
-	bar.mouseover = self.db["barShapeShift"].mouseover
+	bar.db = self.db.barShapeShift
+	bar.db.position = nil; --Depreciated
+	bar.mouseover = self.db.barShapeShift.mouseover
 
 	if bar.LastButton and numButtons > bar.LastButton then
 		numButtons = bar.LastButton
@@ -132,7 +132,7 @@ function AB:PositionAndSizeBarShapeShift()
 		numColumns = 1
 	end
 
-	if self.db["barShapeShift"].backdrop == true then
+	if self.db.barShapeShift.backdrop == true then
 		bar.backdrop:Show()
 	else
 		bar.backdrop:Hide()
@@ -141,18 +141,18 @@ function AB:PositionAndSizeBarShapeShift()
 		heightMult = 1
 	end
 
-	local barWidth = (size * (buttonsPerRow * widthMult)) + ((buttonSpacing * (buttonsPerRow - 1)) * widthMult) + (buttonSpacing * (widthMult-1)) + ((self.db["barShapeShift"].backdrop == true and (E.Border + backdropSpacing) or E.Spacing)*2)
-	local barHeight = (size * (numColumns * heightMult)) + ((buttonSpacing * (numColumns - 1)) * heightMult) + (buttonSpacing * (heightMult-1)) + ((self.db["barShapeShift"].backdrop == true and (E.Border + backdropSpacing) or E.Spacing)*2)
+	local barWidth = (size * (buttonsPerRow * widthMult)) + ((buttonSpacing * (buttonsPerRow - 1)) * widthMult) + (buttonSpacing * (widthMult-1)) + ((self.db.barShapeShift.backdrop == true and (E.Border + backdropSpacing) or E.Spacing)*2)
+	local barHeight = (size * (numColumns * heightMult)) + ((buttonSpacing * (numColumns - 1)) * heightMult) + (buttonSpacing * (heightMult-1)) + ((self.db.barShapeShift.backdrop == true and (E.Border + backdropSpacing) or E.Spacing)*2)
 	bar:Width(barWidth)
 	bar:Height(barHeight)
 
-	if self.db["barShapeShift"].enabled then
+	if self.db.barShapeShift.enabled then
 		bar:SetScale(1)
 		bar:SetAlpha(bar.db.alpha)
 		E:EnableMover(bar.mover:GetName())
 	else
-		bar:SetScale(0.0001);
-		bar:SetAlpha(0);
+		bar:SetScale(0.0001)
+		bar:SetAlpha(0)
 		E:DisableMover(bar.mover:GetName())
 	end
 
@@ -169,14 +169,14 @@ function AB:PositionAndSizeBarShapeShift()
 		horizontalGrowth = "LEFT"
 	end
 
-	if self.db["barShapeShift"].inheritGlobalFade then
+	if self.db.barShapeShift.inheritGlobalFade then
 		bar:SetParent(self.fadeParent)
 	else
 		bar:SetParent(E.UIParent)
 	end
 
 	local button, lastButton, lastColumnButton
-	local firstButtonSpacing = (self.db["barShapeShift"].backdrop == true and (E.Border + backdropSpacing) or E.Spacing)
+	local firstButtonSpacing = (self.db.barShapeShift.backdrop == true and (E.Border + backdropSpacing) or E.Spacing)
 	for i = 1, NUM_SHAPESHIFT_SLOTS do
 		button = _G["ElvUI_StanceBarButton"..i]
 		lastButton = _G["ElvUI_StanceBarButton"..i-1]
@@ -185,7 +185,7 @@ function AB:PositionAndSizeBarShapeShift()
 		button:ClearAllPoints()
 		button:Size(size)
 
-		if self.db["barShapeShift"].mouseover == true then
+		if self.db.barShapeShift.mouseover == true then
 			bar:SetAlpha(0)
 		else
 			bar:SetAlpha(bar.db.alpha)
@@ -304,7 +304,7 @@ function AB:UpdateStanceBindings()
 end
 
 function AB:CreateBarShapeShift()
-	bar:CreateBackdrop("Default")
+	bar:CreateBackdrop()
 	bar.backdrop:SetAllPoints()
 	bar:Point("TOPLEFT", E.UIParent, "TOPLEFT", 4, -4)
 	bar.buttons = {}
