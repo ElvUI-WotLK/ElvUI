@@ -184,7 +184,7 @@ function AB:PositionAndSizeBarPet()
 		button:SetAttribute("showgrid", 1)
 		button:Size(size)
 		autoCast:SetOutside(button, autoCastSize, autoCastSize)
-		shine:SetInside(button)
+		shine:Size(size - E.Border*2)
 
 		if i == 1 then
 			local x, y
