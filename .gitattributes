@@ -1,5 +1,7 @@
 .github             export-ignore
 .gitattributes      export-ignore
+.luacheckrc         export-ignore
+.travis             export-ignore
 *ISSUE_TEMPLATE.md  export-ignore
 *readme.md          export-ignore
 *README.md          export-ignore
