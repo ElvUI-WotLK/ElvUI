@@ -145,7 +145,7 @@ function E:CreateCooldownTimer(parent)
 
 			-- prevent LibActionBar from showing blizzard CD when the CD timer is created
 			if AB and (parent.CooldownOverride == "actionbar") then
-				AB:ToggleCountDownNumbers(nil, nil, parent)
+			--	AB:ToggleCountDownNumbers(nil, nil, parent)
 			end
 		end
 	end
@@ -308,7 +308,7 @@ function E:UpdateCooldownOverride(module)
 	if blizzTextAB then
 		for _, bar in pairs(AB.handledBars) do
 			if bar then
-				AB:ToggleCountDownNumbers(bar)
+			--	AB:ToggleCountDownNumbers(bar)
 			end
 		end
 	end

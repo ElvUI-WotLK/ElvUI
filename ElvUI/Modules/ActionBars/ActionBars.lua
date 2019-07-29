@@ -533,33 +533,35 @@ function AB:StyleButton(button, noBackdrop, useMasque)
 	local flash = _G[name.."Flash"]
 	local hotkey = _G[name.."HotKey"]
 	local border = _G[name.."Border"]
-	local macroName = _G[name.."Name"]
+	local macroText = _G[name.."Name"]
 	local normal = _G[name.."NormalTexture"]
 	local normal2 = button:GetNormalTexture()
 	local buttonCooldown = _G[name.."Cooldown"]
 	local color = self.db.fontColor
+	local countPosition = self.db.countTextPosition or "BOTTOMRIGHT"
+	local countXOffset = self.db.countTextXOffset or 0
+	local countYOffset = self.db.countTextYOffset or 2
 
-	if not button.noBackdrop then
-		button.noBackdrop = noBackdrop
-	end
-
-	if not button.useMasque then
-		button.useMasque = useMasque
-	end
+	button.noBackdrop = noBackdrop
+	button.useMasque = useMasque
 
 	if flash then flash:SetTexture(nil) end
 	if normal then normal:SetTexture(nil); normal:Hide(); normal:SetAlpha(0) end
 	if normal2 then normal2:SetTexture(nil); normal2:Hide(); normal2:SetAlpha(0) end
-
-	if border and not button.useMasque then
-		border:Kill()
-	end
+	if border and not button.useMasque then border:Kill() end
 
 	if count then
 		count:ClearAllPoints()
-		count:Point("BOTTOMRIGHT", 0, 2)
+		count:Point(countPosition, countXOffset, countYOffset)
 		count:FontTemplate(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline)
 		count:SetTextColor(color.r, color.g, color.b)
+	end
+
+	if macroText then
+		macroText:ClearAllPoints()
+		macroText:Point("BOTTOM", 0, 1)
+		macroText:FontTemplate(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline)
+		macroText:SetTextColor(color.r, color.g, color.b)
 	end
 
 	if not button.noBackdrop and not button.backdrop and not button.useMasque then
@@ -576,15 +578,6 @@ function AB:StyleButton(button, noBackdrop, useMasque)
 		hotkey:FontTemplate(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline)
 		if button.config and (button.config.outOfRangeColoring ~= "hotkey") then
 			button.hotkey:SetTextColor(color.r, color.g, color.b)
-		end
-	end
-
-	if macroName then
-		if self.db.macrotext then
-			macroName:FontTemplate(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline)
-			macroName:ClearAllPoints()
-			macroName:Point("BOTTOM", 2, 2)
-			macroName:SetJustifyH("CENTER")
 		end
 	end
 
@@ -831,7 +824,7 @@ function AB:UpdateButtonConfig(bar, buttonName)
 end
 
 function AB:FixKeybindText(button)
-	local hotkey = _G[button:GetName() .. "HotKey"]
+	local hotkey = _G[button:GetName().."HotKey"]
 	local text = hotkey:GetText()
 
 	local hotkeyPosition = E.db.actionbar.hotkeyTextPosition or "TOPRIGHT"
