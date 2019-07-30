@@ -2,11 +2,10 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 local UF = E:GetModule("UnitFrames");
 
 --Lua functions
-local unpack, tonumber = unpack, tonumber
+local unpack = unpack
 local abs, min = abs, math.min
 --WoW API / Variables
 local CreateFrame = CreateFrame
-local UnitSpellHaste = UnitSpellHaste
 local UnitIsPlayer = UnitIsPlayer
 local UnitClass = UnitClass
 local UnitReaction = UnitReaction
