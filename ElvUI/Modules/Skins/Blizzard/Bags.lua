@@ -189,35 +189,35 @@ local function LoadSkin()
 
 	S:HandleButton(BankFramePurchaseButton)
 
-	hooksecurefunc("BankFrameItemButton_Update", function(button)
-		if button.isBag then return end
+	hooksecurefunc("BankFrameItemButton_Update", function(self)
+		if self.isBag then return end
 
-		local id = button:GetID()
+		local id = self:GetID()
 		local link = GetContainerItemLink(BANK_CONTAINER, id)
 		if link then
-			local questTexture = _G[button:GetName().."IconQuestTexture"]
+			local questTexture = _G[self:GetName().."IconQuestTexture"]
 			local isQuestItem, questId, isActive = GetContainerItemQuestInfo(BANK_CONTAINER, id)
 			local _, _, quality = GetItemInfo(link)
 
 			questTexture:Hide()
 
 			if questId and not isActive then
-				button:SetBackdropBorderColor(1.0, 1.0, 0.0)
-				button.ignoreBorderColors = true
+				self:SetBackdropBorderColor(1.0, 1.0, 0.0)
+				self.ignoreBorderColors = true
 				questTexture:Show()
 			elseif questId or isQuestItem then
-				button:SetBackdropBorderColor(1.0, 0.3, 0.3)
-				button.ignoreBorderColors = true
+				self:SetBackdropBorderColor(1.0, 0.3, 0.3)
+				self.ignoreBorderColors = true
 			elseif quality and quality > 1 then
-				button:SetBackdropBorderColor(GetItemQualityColor(quality))
-				button.ignoreBorderColors = true
+				self:SetBackdropBorderColor(GetItemQualityColor(quality))
+				self.ignoreBorderColors = true
 			else
-				button:SetBackdropBorderColor(unpack(E["media"].bordercolor))
-				button.ignoreBorderColors = true
+				self:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+				self.ignoreBorderColors = true
 			end
 		else
-			button:SetBackdropBorderColor(unpack(E["media"].bordercolor))
-			button.ignoreBorderColors = true
+			self:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+			self.ignoreBorderColors = true
 		end
 	end)
 end
