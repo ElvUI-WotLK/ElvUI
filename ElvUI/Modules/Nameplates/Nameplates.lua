@@ -351,7 +351,7 @@ end
 function mod:UnitDetailedThreatSituation(frame)
 	if not frame.Threat:IsShown() then
 		if frame.UnitType == "ENEMY_NPC" then
-			local r, g, b = frame.oldName:GetTextColor()
+			local r, g = frame.oldName:GetTextColor()
 			return (r > .5 and g < .5) and 0 or nil
 		end
 	else
@@ -368,7 +368,7 @@ function mod:UnitDetailedThreatSituation(frame)
 end
 
 function mod:UnitLevel(frame)
-	local level, elite, boss = frame.oldLevel:GetObjectType() == "FontString" and tonumber(frame.oldLevel:GetText()) or false, frame.EliteIcon:IsShown(), frame.BossIcon:IsShown()
+	local level, boss = frame.oldLevel:GetObjectType() == "FontString" and tonumber(frame.oldLevel:GetText()) or false, frame.BossIcon:IsShown()
 	if boss or not level then
 		return "??", 0.9, 0, 0
 	else

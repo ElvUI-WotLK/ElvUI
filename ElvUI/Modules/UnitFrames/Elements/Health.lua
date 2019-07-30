@@ -259,10 +259,10 @@ function UF:PostUpdateHealthColor(unit, r, g, b)
 	end
 end
 
-function UF:PostUpdateHealth(_, cur, max)
+function UF:PostUpdateHealth(_, _, max)
 	local parent = self:GetParent()
 	if parent.isForced then
-		cur = random(1, max or 100)
+		local cur = random(1, max or 100)
 		parent.forcedHealth = cur
 		self:SetValue(cur)
 	else

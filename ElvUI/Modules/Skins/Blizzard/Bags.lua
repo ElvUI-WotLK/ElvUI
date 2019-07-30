@@ -36,6 +36,7 @@ local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.bags ~= true or E.private.bags.enable then return end
 
 	-- ContainerFrame
+	do
 	local containerFrame
 	local itemButton, itemButtonIcon, questTexture, cooldown
 	for i = 1, NUM_CONTAINER_FRAMES, 1 do
@@ -70,6 +71,7 @@ local function LoadSkin()
 			cooldown.ColorOverride = "bags"
 			E:RegisterCooldown(cooldown)
 		end
+	end
 	end
 
 	BackpackTokenFrame:StripTextures()

@@ -551,8 +551,8 @@ function UF.groupPrototype:GetAttribute(name)
 	return self.groups[1]:GetAttribute(name)
 end
 
-function UF.groupPrototype:Configure_Groups(self)
-	local db = UF.db.units[self.groupName]
+function UF.groupPrototype:Configure_Groups(frame)
+	local db = UF.db.units[frame.groupName]
 
 	local point
 	local width, height, newCols, newRows = 0, 0, 0, 0
@@ -561,9 +561,9 @@ function UF.groupPrototype:Configure_Groups(self)
 	local UNIT_HEIGHT = db.infoPanel and db.infoPanel.enable and (db.height + db.infoPanel.height) or db.height
 	local groupSpacing = db.groupSpacing
 
-	local numGroups = self.numGroups
+	local numGroups = frame.numGroups
 	for i = 1, numGroups do
-		local group = self.groups[i]
+		local group = frame.groups[i]
 
 		point = DIRECTION_TO_POINT[direction]
 
@@ -625,14 +625,14 @@ function UF.groupPrototype:Configure_Groups(self)
 		if (i - 1) % db.groupsPerRowCol == 0 then
 			if DIRECTION_TO_POINT[direction] == "LEFT" or DIRECTION_TO_POINT[direction] == "RIGHT" then
 				if group then
-					group:Point(point, self, point, 0, height * yMult)
+					group:Point(point, frame, point, 0, height * yMult)
 				end
 				height = height + UNIT_HEIGHT + db.verticalSpacing + groupSpacing
 
 				newRows = newRows + 1
 			else
 				if group then
-					group:Point(point, self, point, width * xMult, 0)
+					group:Point(point, frame, point, width * xMult, 0)
 				end
 				width = width + db.width + db.horizontalSpacing + groupSpacing
 
@@ -642,22 +642,22 @@ function UF.groupPrototype:Configure_Groups(self)
 			if DIRECTION_TO_POINT[direction] == "LEFT" or DIRECTION_TO_POINT[direction] == "RIGHT" then
 				if newRows == 1 then
 					if group then
-						group:Point(point, self, point, width * xMult, 0)
+						group:Point(point, frame, point, width * xMult, 0)
 					end
 					width = width + ((db.width + db.horizontalSpacing) * 5) + groupSpacing
 					newCols = newCols + 1
 				elseif group then
-					group:Point(point, self, point, ((((db.width + db.horizontalSpacing) * 5) * ((i-1) % db.groupsPerRowCol))+((i-1) % db.groupsPerRowCol)*groupSpacing) * xMult, (((UNIT_HEIGHT + db.verticalSpacing+groupSpacing) * (newRows - 1))) * yMult)
+					group:Point(point, frame, point, ((((db.width + db.horizontalSpacing) * 5) * ((i-1) % db.groupsPerRowCol))+((i-1) % db.groupsPerRowCol)*groupSpacing) * xMult, (((UNIT_HEIGHT + db.verticalSpacing+groupSpacing) * (newRows - 1))) * yMult)
 				end
 			else
 				if newCols == 1 then
 					if group then
-						group:Point(point, self, point, 0, height * yMult)
+						group:Point(point, frame, point, 0, height * yMult)
 					end
 					height = height + ((UNIT_HEIGHT + db.verticalSpacing) * 5) + groupSpacing
 					newRows = newRows + 1
 				elseif group then
-					group:Point(point, self, point, (((db.width + db.horizontalSpacing +groupSpacing) * (newCols - 1))) * xMult, ((((UNIT_HEIGHT + db.verticalSpacing) * 5) * ((i-1) % db.groupsPerRowCol))+((i-1) % db.groupsPerRowCol)*groupSpacing) * yMult)
+					group:Point(point, frame, point, (((db.width + db.horizontalSpacing +groupSpacing) * (newCols - 1))) * xMult, ((((UNIT_HEIGHT + db.verticalSpacing) * 5) * ((i-1) % db.groupsPerRowCol))+((i-1) % db.groupsPerRowCol)*groupSpacing) * yMult)
 				end
 			end
 		end
@@ -669,36 +669,36 @@ function UF.groupPrototype:Configure_Groups(self)
 		end
 	end
 
-	if not self.isInstanceForced then
-		self.dirtyWidth = width - db.horizontalSpacing -groupSpacing
-		self.dirtyHeight = height - db.verticalSpacing -groupSpacing
+	if not frame.isInstanceForced then
+		frame.dirtyWidth = width - db.horizontalSpacing -groupSpacing
+		frame.dirtyHeight = height - db.verticalSpacing -groupSpacing
 	end
 
-	if self.mover then
-		self.mover.positionOverride = DIRECTION_TO_GROUP_ANCHOR_POINT[direction]
-		E:UpdatePositionOverride(self.mover:GetName())
-		self:GetScript("OnSizeChanged")(self) --Mover size is not updated if frame is hidden, so call an update manually
+	if frame.mover then
+		frame.mover.positionOverride = DIRECTION_TO_GROUP_ANCHOR_POINT[direction]
+		E:UpdatePositionOverride(frame.mover:GetName())
+		frame:GetScript("OnSizeChanged")(frame) --Mover size is not updated if frame is hidden, so call an update manually
 	end
 
-	self:Size(width - db.horizontalSpacing -groupSpacing, height - db.verticalSpacing - groupSpacing)
+	frame:Size(width - db.horizontalSpacing -groupSpacing, height - db.verticalSpacing - groupSpacing)
 end
 
-function UF.groupPrototype:Update(self)
-	local group = self.groupName
+function UF.groupPrototype:Update(frame)
+	local group = frame.groupName
 
 	UF[group].db = UF.db.units[group]
-	for i = 1, #self.groups do
-		self.groups[i].db = UF.db.units[group]
-		self.groups[i]:Update()
+	for i = 1, #frame.groups do
+		frame.groups[i].db = UF.db.units[group]
+		frame.groups[i]:Update()
 	end
 end
 
-function UF.groupPrototype:AdjustVisibility(self)
-	if not self.isForced then
-		local numGroups = self.numGroups
-		for i = 1, #self.groups do
-			local group = self.groups[i]
-			if (i <= numGroups) and ((self.db.raidWideSorting and i <= 1) or not self.db.raidWideSorting) then
+function UF.groupPrototype:AdjustVisibility(frame)
+	if not frame.isForced then
+		local numGroups = frame.numGroups
+		for i = 1, #frame.groups do
+			local group = frame.groups[i]
+			if (i <= numGroups) and ((frame.db.raidWideSorting and i <= 1) or not frame.db.raidWideSorting) then
 				group:Show()
 			else
 				if group.forceShow then
@@ -713,9 +713,9 @@ function UF.groupPrototype:AdjustVisibility(self)
 	end
 end
 
-function UF.groupPrototype:UpdateHeader(self)
-	local group = self.groupName
-	UF["Update_"..E:StringTitle(group).."Header"](UF, self, UF.db.units[group])
+function UF.groupPrototype:UpdateHeader(frame)
+	local group = frame.groupName
+	UF["Update_"..E:StringTitle(group).."Header"](UF, frame, UF.db.units[group])
 end
 
 function UF.headerPrototype:ClearChildPoints()
@@ -888,7 +888,7 @@ function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdat
 
 		if not UF.headerFunctions[group] then UF.headerFunctions[group] = {} end
 		UF.headerFunctions[group].Update = function()
-			local db = UF.db.units[group]
+		--	local db = UF.db.units[group]
 			if db.enable ~= true then
 				UnregisterStateDriver(UF[group], "visibility")
 				UF[group]:Hide()
