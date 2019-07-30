@@ -145,10 +145,6 @@ local function CastStart(self, event, unit)
 	element.spellID = spellID
 	element.spellName = name -- ElvUI
 
-	-- ElvUI block
-	element.extraTickRatio = 0
-	-- end block
-
 	if(element.casting) then
 		element.duration = GetTime() - startTime
 	else
