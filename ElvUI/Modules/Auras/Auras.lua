@@ -135,7 +135,8 @@ end
 
 function A:CreateIcon(button)
 	local font = LSM:Fetch("font", self.db.font)
-	local headerName = button:GetName()
+	local auraType = button:GetParent().filter
+
 	local db = self.db.debuffs
 	button.auraType = "debuffs" -- used to update cooldown text
 	if auraType == "HELPFUL" then
