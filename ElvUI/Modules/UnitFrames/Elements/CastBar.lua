@@ -339,7 +339,7 @@ function UF:PostCastStart(unit)
 	if unit == "vehicle" then unit = "player" end
 
 	if db.castbar.displayTarget and self.curTarget then
-		self.Text:SetText(GetSpellInfo(self.spellID).." > "..self.curTarget)
+		self.Text:SetText(GetSpellInfo(self.spellName).." > "..self.curTarget)
 	end
 
 	-- Get length of Time, then calculate available length for Text
@@ -361,7 +361,7 @@ function UF:PostCastStart(unit)
 
 	if self.channeling and db.castbar.ticks and unit == "player" then
 		local unitframe = E.global.unitframe
-		local baseTicks = unitframe.ChannelTicks[self.spellID]
+		local baseTicks = unitframe.ChannelTicks[self.spellName]
 
 		if baseTicks then
 			UF:SetCastTicks(self, baseTicks)

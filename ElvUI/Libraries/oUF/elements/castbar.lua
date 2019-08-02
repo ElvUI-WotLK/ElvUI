@@ -32,7 +32,6 @@ A default texture will be applied to the StatusBar and Texture widgets if they d
 .casting          - indicates whether the current spell is an ordinary cast (boolean)
 .channeling       - indicates whether the current spell is a channeled cast (boolean)
 .notInterruptible - indicates whether the current spell is interruptible (boolean)
-.spellID          - the spell identifier of the currently cast/channeled spell (number)
 
 ## Examples
 
@@ -102,7 +101,6 @@ local function resetAttributes(self)
 	self.casting = nil
 	self.channeling = nil
 	self.notInterruptible = nil
-	self.spellID = nil
 	self.spellName = nil -- ElvUI
 end
 
@@ -142,7 +140,6 @@ local function CastStart(self, event, unit)
 	element.notInterruptible = notInterruptible
 	element.holdTime = 0
 	element.castID = castID
-	element.spellID = spellID
 	element.spellName = name -- ElvUI
 
 	if(element.casting) then
@@ -277,15 +274,14 @@ local function CastStop(self, event, unit, _, _, castID)
 
 	resetAttributes(element)
 
-	--[[ Callback: Castbar:PostCastStop(unit, spellID)
+	--[[ Callback: Castbar:PostCastStop(unit)
 	Called after the element has been updated when a spell cast has stopped.
 
 	* self    - the Castbar widget
 	* unit    - the unit for which the update has been triggered (string)
-	* spellID - the ID of the spell (number)
 	--]]
 	if(element.PostCastStop) then
-		return element:PostCastStop(unit, spellID)
+		return element:PostCastStop(unit)
 	end
 end
 
@@ -315,15 +311,14 @@ local function CastFail(self, event, unit, _, _, castID)
 	resetAttributes(element)
 	element:SetValue(element.max)
 
-	--[[ Callback: Castbar:PostCastFail(unit, spellID)
+	--[[ Callback: Castbar:PostCastFail(unit)
 	Called after the element has been updated upon a failed spell cast.
 
 	* self    - the Castbar widget
 	* unit    - the unit for which the update has been triggered (string)
-	* spellID - the ID of the spell (number)
 	--]]
 	if(element.PostCastFail) then
-		return element:PostCastFail(unit, spellID)
+		return element:PostCastFail(unit)
 	end
 end
 
@@ -354,13 +349,12 @@ local function onUpdate(self, elapsed)
 		if(isCasting) then
 			self.duration = self.duration + elapsed
 			if(self.duration >= self.max) then
-				local spellID = self.spellID
 
 				resetAttributes(self)
 				self:Hide()
 
 				if(self.PostCastStop) then
-					self:PostCastStop(self.__owner.unit, spellID)
+					self:PostCastStop(self.__owner.unit)
 				end
 
 				return
@@ -368,13 +362,12 @@ local function onUpdate(self, elapsed)
 		else
 			self.duration = self.duration - elapsed
 			if(self.duration <= 0) then
-				local spellID = self.spellID
 
 				resetAttributes(self)
 				self:Hide()
 
 				if(self.PostCastStop) then
-					self:PostCastStop(self.__owner.unit, spellID)
+					self:PostCastStop(self.__owner.unit)
 				end
 
 				return
@@ -439,7 +432,7 @@ local function Enable(self, unit)
 
 		element:SetScript('OnUpdate', element.OnUpdate or onUpdate)
 
-		if(self.unit == 'player' and not (self.hasChildren or self.isChild or self.isNamePlate)) then
+		if(self.unit == 'player' and not (self.hasChildren or self.isChild)) then
 			CastingBarFrame_SetUnit(CastingBarFrame, nil)
 			CastingBarFrame_SetUnit(PetCastingBarFrame, nil)
 		end
@@ -487,7 +480,7 @@ local function Disable(self)
 
 		element:SetScript('OnUpdate', nil)
 
-		if(self.unit == 'player' and not (self.hasChildren or self.isChild or self.isNamePlate)) then
+		if(self.unit == 'player' and not (self.hasChildren or self.isChild)) then
 			CastingBarFrame_OnLoad(CastingBarFrame, 'player', true, false)
 			CastingBarFrame_SetUnit(CastingBarFrame, 'player', true, false)
 			PetCastingBarFrame_OnLoad(PetCastingBarFrame)
