@@ -3,7 +3,6 @@ local C, L = unpack(select(2, ...))
 local AB = E:GetModule("ActionBars")
 local group
 
-local _G = _G
 local pairs = pairs
 local SetCVar = SetCVar
 local GameTooltip = GameTooltip
