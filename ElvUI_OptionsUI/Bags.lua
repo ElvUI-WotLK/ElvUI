@@ -4,7 +4,6 @@ local B = E:GetModule("Bags")
 
 local gsub = string.gsub
 local match = string.match
-local SetInsertItemsLeftToRight = SetInsertItemsLeftToRight
 local GameTooltip = GameTooltip
 
 E.Options.args.bags = {

@@ -8,8 +8,8 @@ local Search = E.Libs.ItemSearch
 local _G = _G
 local type, ipairs, pairs, unpack, select, assert, pcall = type, ipairs, pairs, unpack, select, assert, pcall
 local tinsert, twipe = table.insert, table.wipe
-local floor, ceil, abs, mod = math.floor, math.ceil, math.abs, math.fmod
-local format, len, sub, gsub = string.format, string.len, string.sub, string.gsub
+local floor, ceil, abs = math.floor, math.ceil, math.absz
+local format, sub, gsub = string.format, string.sub, string.gsub
 --WoW API / Variables
 local BankFrameItemButton_Update = BankFrameItemButton_Update
 local BankFrameItemButton_UpdateLocked = BankFrameItemButton_UpdateLocked
@@ -58,8 +58,6 @@ local NUM_BAG_FRAMES = NUM_BAG_FRAMES
 local NUM_CONTAINER_FRAMES = NUM_CONTAINER_FRAMES
 local BINDING_NAME_TOGGLEKEYRING = BINDING_NAME_TOGGLEKEYRING
 local SEARCH = SEARCH
-
-local MATCH_ITEM_LEVEL = ITEM_LEVEL:gsub("%%d", "(%%d+)")
 
 local SEARCH_STRING = ""
 
@@ -168,7 +166,7 @@ function B:ResetAndClear()
 end
 
 function B:SetSearch(query)
-	local empty = #(query:gsub(" ", "")) == 0
+	local empty = #(gsub(query, " ", "")) == 0
 	local method = Search.Matches
 	for _, bagFrame in pairs(B.BagFrames) do
 		for _, bagID in ipairs(bagFrame.BagIDs) do
@@ -207,7 +205,7 @@ function B:SetSearch(query)
 end
 
 function B:SetGuildBankSearch(query)
-	local empty = #(query:gsub(" ", "")) == 0
+	local empty = #(gsub(query, " ", "")) == 0
 	if GuildBankFrame and GuildBankFrame:IsShown() then
 		local tab = GetCurrentGuildBankTab()
 		local _, _, isViewable = GetGuildBankTabInfo(tab)
@@ -269,7 +267,6 @@ function B:UpdateCountDisplay()
 	end
 
 	if ElvUIKeyFrameItem1 then
-		local numKey = GetKeyRingSize()
 		for i = 1, GetKeyRingSize() do
 			local slot = _G["ElvUIKeyFrameItem"..i]
 			if slot then
@@ -289,16 +286,6 @@ function B:UpdateAllBagSlots()
 	end
 end
 
-function B:IsItemEligibleForItemLevelDisplay(classID, subClassID, equipLoc, rarity)
-	if ((equipLoc ~= nil and equipLoc ~= "" and itemEquipLoc ~= "INVTYPE_AMMO"
-		and itemEquipLoc ~= "INVTYPE_BAG" and itemEquipLoc ~= "INVTYPE_QUIVER" and itemEquipLoc ~= "INVTYPE_TABARD"))
-	and (rarity and rarity > 1) then
-		return true
-	end
-
-	return false
-end
-
 function B:UpdateSlot(frame, bagID, slotID)
 	if (frame.Bags[bagID] and frame.Bags[bagID].numSlots ~= GetContainerNumSlots(bagID)) or not frame.Bags[bagID] or not frame.Bags[bagID][slotID] then
 		return
@@ -307,7 +294,7 @@ function B:UpdateSlot(frame, bagID, slotID)
 	local slot = frame.Bags[bagID][slotID]
 	local bagType = frame.Bags[bagID].type
 
-	local texture, count, locked, rarity, readable, _, _, _, noValue = GetContainerItemInfo(bagID, slotID)
+	local texture, count, locked, rarity, readable = GetContainerItemInfo(bagID, slotID)
 	slot.name, slot.rarity, slot.locked = nil, rarity, locked
 
 	local clink = GetContainerItemLink(bagID, slotID)
@@ -348,13 +335,12 @@ function B:UpdateSlot(frame, bagID, slotID)
 		if showBindType then
 			local colorblind = GetCVarBool("colorblindmode")
 			local bindTypeLines = colorblind and 4 or 3, colorblind and 8 or 7
-			local iLvl, BoE, BoU --GetDetailedItemLevelInfo this api dont work for some time correctly for ilvl
+			local BoE, BoU
 
 			for i = 2, bindTypeLines do
 				local line = _G["ElvUI_ScanTooltipTextLeft"..i]:GetText()
 				if not line or line == "" then break end
 				if showBindType then
-					-- as long as we check the ilvl first, we can savely break on these because they fall after ilvl
 					if line == ITEM_SOULBOUND or line == ITEM_ACCOUNTBOUND then break end
 					BoE, BoU = line == ITEM_BIND_ON_EQUIP, line == ITEM_BIND_ON_USE
 				end
@@ -369,9 +355,7 @@ function B:UpdateSlot(frame, bagID, slotID)
 			end
 		end
 
-		if iLvl and showItemLevel and
-			(itemEquipLoc ~= nil and itemEquipLoc ~= "" and itemEquipLoc ~= "INVTYPE_AMMO" and itemEquipLoc ~= "INVTYPE_BAG" and itemEquipLoc ~= "INVTYPE_QUIVER" and itemEquipLoc ~= "INVTYPE_TABARD")
-			and (slot.rarity and slot.rarity > 1) and iLvl >= B.db.itemLevelThreshold then
+		if iLvl and showItemLevel and (itemEquipLoc ~= nil and itemEquipLoc ~= "" and itemEquipLoc ~= "INVTYPE_AMMO" and itemEquipLoc ~= "INVTYPE_BAG" and itemEquipLoc ~= "INVTYPE_QUIVER" and itemEquipLoc ~= "INVTYPE_TABARD") and (slot.rarity and slot.rarity > 1) and iLvl >= B.db.itemLevelThreshold then
 			slot.itemLevel:SetText(iLvl)
 			if B.db.itemLevelCustomColorEnable then
 				slot.itemLevel:SetTextColor(B.db.itemLevelCustomColor.r, B.db.itemLevelCustomColor.g, B.db.itemLevelCustomColor.b)
