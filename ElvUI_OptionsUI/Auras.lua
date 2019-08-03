@@ -304,12 +304,7 @@ E.Options.args.auras = {
 							type = "select",
 							name = L["Font Outline"],
 							desc = L["Set the font outline."],
-							values = {
-								["NONE"] = L["NONE"],
-								["OUTLINE"] = "OUTLINE",
-								["MONOCHROMEOUTLINE"] = "MONOCROMEOUTLINE",
-								["THICKOUTLINE"] = "THICKOUTLINE"
-							}
+							values = C.Values.FontFlags
 						}
 					}
 				}

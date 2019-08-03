@@ -159,6 +159,7 @@ P.bags = {
 	countFontSize = 10,
 	countFontOutline = "MONOCHROMEOUTLINE",
 	countFontColor = {r = 1, g = 1, b = 1},
+	reverseSlots = false,
 	clearSearchOnClose = false,
 	disableBagSort = false,
 	disableBankSort = false,
