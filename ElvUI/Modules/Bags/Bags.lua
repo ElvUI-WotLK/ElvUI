@@ -7,8 +7,8 @@ local Search = E.Libs.ItemSearch
 --Lua functions
 local _G = _G
 local type, ipairs, pairs, unpack, select, assert, pcall = type, ipairs, pairs, unpack, select, assert, pcall
-local tinsert, twipe = table.insert, table.wipe
-local floor, ceil, abs = math.floor, math.ceil, math.absz
+local tinsert, tremove, twipe, tmaxn = tinsert, tremove, wipe, table.maxn
+local floor, ceil, abs = math.floor, math.ceil, math.abs
 local format, sub, gsub = string.format, string.sub, string.gsub
 --WoW API / Variables
 local BankFrameItemButton_Update = BankFrameItemButton_Update
