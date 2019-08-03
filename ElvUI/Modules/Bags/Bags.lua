@@ -175,7 +175,7 @@ function B:SetSearch(query)
 				local button = bagFrame.Bags[bagID][slotID]
 				local success, result = pcall(method, Search, link, query)
 				if empty or (success and result) then
-					SetItemButtonDesaturated(button, button.locked)
+					SetItemButtonDesaturated(button, button.locked or button.junkDesaturate)
 					button:SetAlpha(1)
 				else
 					SetItemButtonDesaturated(button, 1)
@@ -287,28 +287,22 @@ function B:UpdateAllBagSlots()
 end
 
 function B:UpdateSlot(frame, bagID, slotID)
-	if (frame.Bags[bagID] and frame.Bags[bagID].numSlots ~= GetContainerNumSlots(bagID)) or not frame.Bags[bagID] or not frame.Bags[bagID][slotID] then
-		return
-	end
+	if (frame.Bags[bagID] and frame.Bags[bagID].numSlots ~= GetContainerNumSlots(bagID)) or not frame.Bags[bagID] or not frame.Bags[bagID][slotID] then return end
 
 	local slot = frame.Bags[bagID][slotID]
 	local bagType = frame.Bags[bagID].type
-
-	local texture, count, locked, rarity, readable = GetContainerItemInfo(bagID, slotID)
-	slot.name, slot.rarity, slot.locked = nil, rarity, locked
-
+	local texture, count, locked, _, readable = GetContainerItemInfo(bagID, slotID)
 	local clink = GetContainerItemLink(bagID, slotID)
+
+	slot.name, slot.rarity, slot.locked, slot.readable, slot.isJunk, slot.junkDesaturate = nil, nil, locked, readable, nil, nil
 
 	slot:Show()
 	slot.questIcon:Hide()
-
+	slot.JunkIcon:Hide()
 	slot.itemLevel:SetText("")
 	slot.bindType:SetText("")
 
-	local professionColors = B.ProfessionColors[bagType]
-	local showItemLevel = B.db.itemLevel and clink and not professionColors
-	local showBindType = B.db.showBindType and (slot.rarity and slot.rarity > 1)
-	if showBindType then
+	if B.db.showBindType then
 		E.ScanTooltip:SetOwner(UIParent, "ANCHOR_NONE")
 		if slot.GetInventorySlot then -- this fixes bank bagid -1
 			E.ScanTooltip:SetInventoryItem("player", slot:GetInventorySlot())
@@ -318,35 +312,32 @@ function B:UpdateSlot(frame, bagID, slotID)
 		E.ScanTooltip:Show()
 	end
 
-	if professionColors then
-		slot:SetBackdropBorderColor(unpack(professionColors))
+	if B.ProfessionColors[bagType] then
+		slot:SetBackdropBorderColor(unpack(B.ProfessionColors[bagType]))
 		slot.ignoreBorderColors = true
 	elseif clink then
-		local name, _, itemRarity, iLvl, _, _, _, _, itemEquipLoc = GetItemInfo(clink)
-		slot.name = name
+		local iLvl, iType, itemEquipLoc, itemPrice
+		slot.name, _, slot.rarity, iLvl, _, iType, _, _, itemEquipLoc, _, itemPrice = GetItemInfo(clink)
 
 		local isQuestItem, questId, isActiveQuest = GetContainerItemQuestInfo(bagID, slotID)
 		local r, g, b
 
-		if slot.rarity or itemRarity then
-			r, g, b = GetItemQualityColor(slot.rarity or itemRarity)
+		if slot.rarity then
+			r, g, b = GetItemQualityColor(slot.rarity)
 		end
 
-		if showBindType then
+		if B.db.showBindType and (slot.rarity and slot.rarity > 1) then
 			local colorblind = GetCVarBool("colorblindmode")
 			local bindTypeLines = colorblind and 8 or 7
 			local BoE, BoU
 
 			for i = 2, bindTypeLines do
 				local line = _G["ElvUI_ScanTooltipTextLeft"..i]:GetText()
-				if not line or line == "" then break end
-				if showBindType then
-					if line == ITEM_SOULBOUND or line == ITEM_ACCOUNTBOUND then break end
-					BoE, BoU = line == ITEM_BIND_ON_EQUIP, line == ITEM_BIND_ON_USE
-				end
-				if (not showBindType) or (BoE or BoU) then
-					break
-				end
+				if (not line or line == "") or (line == ITEM_SOULBOUND or line == ITEM_ACCOUNTBOUND or line == ITEM_BNETACCOUNTBOUND) then break end
+
+				BoE, BoU = line == ITEM_BIND_ON_EQUIP, line == ITEM_BIND_ON_USE
+
+				if not B.db.showBindType and (slot.rarity and slot.rarity > 1) or (BoE or BoU) then break end
 			end
 
 			if BoE or BoU then
@@ -355,12 +346,23 @@ function B:UpdateSlot(frame, bagID, slotID)
 			end
 		end
 
-		if iLvl and showItemLevel and (itemEquipLoc ~= nil and itemEquipLoc ~= "" and itemEquipLoc ~= "INVTYPE_AMMO" and itemEquipLoc ~= "INVTYPE_BAG" and itemEquipLoc ~= "INVTYPE_QUIVER" and itemEquipLoc ~= "INVTYPE_TABARD") and (slot.rarity and slot.rarity > 1) and iLvl >= B.db.itemLevelThreshold then
+		-- Item Level
+		if iLvl and B.db.itemLevel and (itemEquipLoc ~= nil and itemEquipLoc ~= "" and itemEquipLoc ~= "INVTYPE_AMMO" and itemEquipLoc ~= "INVTYPE_BAG" and itemEquipLoc ~= "INVTYPE_QUIVER" and itemEquipLoc ~= "INVTYPE_TABARD") and (slot.rarity and slot.rarity > 1) and iLvl >= B.db.itemLevelThreshold then
 			slot.itemLevel:SetText(iLvl)
 			if B.db.itemLevelCustomColorEnable then
 				slot.itemLevel:SetTextColor(B.db.itemLevelCustomColor.r, B.db.itemLevelCustomColor.g, B.db.itemLevelCustomColor.b)
 			else
 				slot.itemLevel:SetTextColor(r, g, b)
+			end
+		end
+
+		slot.isJunk = (slot.rarity and slot.rarity == 0) and (itemPrice and itemPrice > 0) and (iType and iType ~= "Quest")
+		slot.junkDesaturate = slot.isJunk and E.db.bags.junkDesaturate
+
+		-- Junk Icon
+		if slot.JunkIcon then
+			if E.db.bags.junkIcon and slot.isJunk then
+				slot.JunkIcon:Show()
 			end
 		end
 
@@ -377,12 +379,14 @@ function B:UpdateSlot(frame, bagID, slotID)
 			slot.ignoreBorderColors = true
 		else
 			slot:SetBackdropBorderColor(unpack(E.media.bordercolor))
-			slot.ignoreBorderColors = true
+			slot.ignoreBorderColors = nil
 		end
 	else
 		slot:SetBackdropBorderColor(unpack(E.media.bordercolor))
 		slot.ignoreBorderColors = true
 	end
+
+	E.ScanTooltip:Hide()
 
 	if texture then
 		local start, duration, enable = GetContainerItemCooldown(bagID, slotID)
@@ -398,11 +402,9 @@ function B:UpdateSlot(frame, bagID, slotID)
 		slot.hasItem = nil
 	end
 
-	slot.readable = readable
-
 	SetItemButtonTexture(slot, texture)
 	SetItemButtonCount(slot, count)
-	SetItemButtonDesaturated(slot, slot.locked)
+	SetItemButtonDesaturated(slot, slot.locked or slot.junkDesaturate)
 
 	if GameTooltip:GetOwner() == slot and not slot.hasItem then
 		GameTooltip_Hide()
@@ -606,6 +608,14 @@ function B:Layout(isBank)
 						f.Bags[bagID][slotID].questIcon:Hide()
 					end
 
+					if not f.Bags[bagID][slotID].JunkIcon then
+						local JunkIcon = f.Bags[bagID][slotID]:CreateTexture(nil, "OVERLAY")
+						JunkIcon:SetTexture(E.Media.Textures.BagJunkIcon)
+						JunkIcon:Point("TOPLEFT", 1, 0)
+						JunkIcon:Hide()
+						f.Bags[bagID][slotID].JunkIcon = JunkIcon
+					end
+
 					f.Bags[bagID][slotID].iconTexture = _G[f.Bags[bagID][slotID]:GetName().."IconTexture"]
 					f.Bags[bagID][slotID].iconTexture:SetInside(f.Bags[bagID][slotID])
 					f.Bags[bagID][slotID].iconTexture:SetTexCoord(unpack(E.TexCoords))
@@ -627,6 +637,10 @@ function B:Layout(isBank)
 
 				f.Bags[bagID][slotID]:SetID(slotID)
 				f.Bags[bagID][slotID]:Size(buttonSize)
+
+				if f.Bags[bagID][slotID].JunkIcon then
+					f.Bags[bagID][slotID].JunkIcon:Size(buttonSize/2)
+				end
 
 				B:UpdateSlot(f, bagID, slotID)
 
