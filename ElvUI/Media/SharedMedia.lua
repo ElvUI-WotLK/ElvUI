@@ -85,6 +85,7 @@ E.Media = {
 		Arrow = M..[[Textures\Arrow.tga]],
 		ArrowRight = M..[[Textures\ArrowRight.tga]],
 		ArrowUp = M..[[Textures\ArrowUp.tga]],
+		BagJunkIcon = M..[[Textures\BagJunkIcon.blp]],
 		BagQuestIcon = M..[[Textures\BagQuestIcon.tga]],
 		Black8x8 = M..[[Textures\Black8x8.tga]],
 		White8x8 = [[Interface\BUTTONS\WHITE8X8]], -- not elvui
