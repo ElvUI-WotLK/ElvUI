@@ -334,7 +334,7 @@ function B:UpdateSlot(frame, bagID, slotID)
 
 		if showBindType then
 			local colorblind = GetCVarBool("colorblindmode")
-			local bindTypeLines = colorblind and 4 or 3, colorblind and 8 or 7
+			local bindTypeLines = colorblind and 8 or 7
 			local BoE, BoU
 
 			for i = 2, bindTypeLines do
