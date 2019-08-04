@@ -128,7 +128,7 @@ function B:UpdateSearch()
 	if #search > MIN_REPEAT_CHARACTERS then
 		local repeatChar = true
 		for i = 1, MIN_REPEAT_CHARACTERS, 1 do
-			if sub(search,(0-i), (0-i)) ~= sub(search,(-1 - i),(-1 - i)) then
+			if sub(search,(0 - i), (0 - i)) ~= sub(search,(-1 - i),(-1 - i)) then
 				repeatChar = false
 				break
 			end
@@ -202,9 +202,11 @@ function B:SetSearch(query)
 				local success, result = pcall(Search.Matches, Search, link, query)
 				if empty or (success and result) then
 					SetItemButtonDesaturated(button, button.locked or button.junkDesaturate)
+					button.searchOverlay:Hide()
 					button:SetAlpha(1)
 				else
 					SetItemButtonDesaturated(button, 1)
+					button.searchOverlay:Show()
 					button:SetAlpha(0.5)
 				end
 			end
@@ -727,10 +729,9 @@ function B:Layout(isBank)
 
 	local numKey = GetKeyRingSize()
 	local numKeyColumns = 6
-	if(not isBank) then
-		local lastRowKey
-		local totalSlots = 0
-		local numKeyRows = 1
+	if not isBank then
+		local totalSlots, numKeyRows, lastRowKey = 0, 1
+
 		for i = 1, numKey do
 			totalSlots = totalSlots + 1
 
@@ -753,7 +754,7 @@ function B:Layout(isBank)
 
 				if not f.keyFrame.slots[i].questIcon then
 					f.keyFrame.slots[i].questIcon = _G[f.keyFrame.slots[i]:GetName().."IconQuestTexture"] or _G[f.keyFrame.slots[i]:GetName()].IconQuestTexture
-					f.keyFrame.slots[i].questIcon:SetTexture("Interface\\AddOns\\ElvUI\\media\\textures\\bagQuestIcon.tga")
+					f.keyFrame.slots[i].questIcon:SetTexture(E.Media.Textures.BagQuestIcon)
 					f.keyFrame.slots[i].questIcon:SetTexCoord(0, 1, 0, 1)
 					f.keyFrame.slots[i].questIcon:SetInside()
 					f.keyFrame.slots[i].questIcon:Hide()
@@ -762,17 +763,26 @@ function B:Layout(isBank)
 				f.keyFrame.slots[i].iconTexture = _G[f.keyFrame.slots[i]:GetName().."IconTexture"]
 				f.keyFrame.slots[i].iconTexture:SetInside(f.keyFrame.slots[i])
 				f.keyFrame.slots[i].iconTexture:SetTexCoord(unpack(E.TexCoords))
+
+				if not f.keyFrame.slots[i].searchOverlay then
+					local searchOverlay = f.keyFrame.slots[i]:CreateTexture(nil, "ARTWORK")
+					searchOverlay:SetTexture(E.media.blankTex)
+					searchOverlay:SetVertexColor(0, 0, 0, 0.8)
+					searchOverlay:SetAllPoints()
+					searchOverlay:Hide()
+					f.keyFrame.slots[i].searchOverlay = searchOverlay
+				end
 			end
 
 			f.keyFrame.slots[i]:ClearAllPoints()
 			f.keyFrame.slots[i]:Size(buttonSize)
-			if f.keyFrame.slots[i-1] then
+			if f.keyFrame.slots[i - 1] then
 				if (totalSlots - 1) % numKeyColumns == 0 then
 					f.keyFrame.slots[i]:Point("TOP", lastRowKey, "BOTTOM", 0, -buttonSpacing)
 					lastRowKey = f.keyFrame.slots[i]
 					numKeyRows = numKeyRows + 1
 				else
-					f.keyFrame.slots[i]:Point("RIGHT", f.keyFrame.slots[i-1], "LEFT", -buttonSpacing, 0)
+					f.keyFrame.slots[i]:Point("RIGHT", f.keyFrame.slots[i - 1], "LEFT", -buttonSpacing, 0)
 				end
 			else
 				f.keyFrame.slots[i]:Point("TOPRIGHT", f.keyFrame, "TOPRIGHT", -buttonSpacing, -buttonSpacing)
@@ -788,7 +798,7 @@ function B:Layout(isBank)
 		f.keyFrame:Size(((buttonSize + buttonSpacing) * numKeyColumns) + buttonSpacing, ((buttonSize + buttonSpacing) * numKeyRows) + buttonSpacing)
 	end
 
-	f:Size(containerWidth, (((buttonSize + buttonSpacing) * numContainerRows) - buttonSpacing) + (isSplit and (numBags * bagSpacing) or 0 ) + f.topOffset + f.bottomOffset); -- 8 is the cussion of the f.holderFrame
+	f:Size(containerWidth, (((buttonSize + buttonSpacing) * numContainerRows) - buttonSpacing) + (isSplit and (numBags * bagSpacing) or 0) + f.topOffset + f.bottomOffset) -- 8 is the cussion of the f.holderFrame
 end
 
 function B:UpdateKeySlot(slotID)
@@ -806,14 +816,9 @@ function B:UpdateKeySlot(slotID)
 
 	if clink then
 		local name, _, rarity = GetItemInfo(clink)
-		slot.name, slot.rarity = name, rarity
-
 		local isQuestItem, questId, isActiveQuest = GetContainerItemQuestInfo(bagID, slotID)
-		local r, g, b
 
-		if slot.rarity then
-			r, g, b = GetItemQualityColor(slot.rarity)
-		end
+		slot.name, slot.rarity = name, rarity
 
 		-- color slot according to item quality
 		if questId and not isActiveQuest then
@@ -824,7 +829,7 @@ function B:UpdateKeySlot(slotID)
 			slot:SetBackdropBorderColor(unpack(B.QuestColors.questItem))
 			slot.ignoreBorderColors = true
 		elseif B.db.qualityColors and slot.rarity and slot.rarity > 1 then
-			slot:SetBackdropBorderColor(r, g, b)
+			slot:SetBackdropBorderColor(GetItemQualityColor(slot.rarity))
 			slot.ignoreBorderColors = true
 		else
 			slot:SetBackdropBorderColor(unpack(E.media.bordercolor))
@@ -908,7 +913,7 @@ function B:UpdateTokens()
 		if cType == 1 then
 			icon = "Interface\\PVPFrame\\PVP-ArenaPoints-Icon"
 		elseif cType == 2 then
-			icon = "Interface\\PVPFrame\\PVP-Currency-"..UnitFactionGroup("player")
+			icon = "Interface\\PVPFrame\\PVP-Currency-"..E.myfaction
 		end
 
 		button:ClearAllPoints()
@@ -1003,11 +1008,11 @@ function B:GetGraysValue()
 		for slot = 1, GetContainerNumSlots(bag) do
 			local itemID = GetContainerItemID(bag, slot)
 			if itemID then
-				local _, _, rarity, _, _, itype, _, _, _, _, itemPrice = GetItemInfo(itemID)
+				local _, _, rarity, _, _, iType, _, _, _, _, itemPrice = GetItemInfo(itemID)
 				if itemPrice then
 					local stackCount = select(2, GetContainerItemInfo(bag, slot)) or 1
 					local stackPrice = itemPrice * stackCount
-					if (rarity and rarity == 0) and (itype and itype ~= "Quest") and (stackPrice > 0) then
+					if (rarity and rarity == 0) and (iType and iType ~= "Quest") and (stackPrice > 0) then
 						value = value + stackPrice
 					end
 				end
@@ -1029,9 +1034,9 @@ function B:VendorGrays(delete)
 		for slot = 1, GetContainerNumSlots(bag), 1 do
 			local itemID = GetContainerItemID(bag, slot)
 			if itemID then
-				local _, link, rarity, _, _, itype, _, _, _, _, itemPrice = GetItemInfo(itemID)
+				local _, link, rarity, _, _, iType, _, _, _, _, itemPrice = GetItemInfo(itemID)
 
-				if (rarity and rarity == 0) and (itype and itype ~= "Quest") and (itemPrice and itemPrice > 0) then
+				if (rarity and rarity == 0) and (iType and iType ~= "Quest") and (itemPrice and itemPrice > 0) then
 					tinsert(B.SellFrame.Info.itemList, {bag, slot, itemPrice, link})
 				end
 			end
