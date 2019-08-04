@@ -24,10 +24,8 @@ local GetBindingKey = GetBindingKey
 local SetOverrideBindingClick = SetOverrideBindingClick
 local SetCVar = SetCVar
 local SetModifiedClick = SetModifiedClick
-local MainMenuBarVehicleLeaveButton_OnEnter = MainMenuBarVehicleLeaveButton_OnEnter
 local RegisterStateDriver = RegisterStateDriver
 local UnregisterStateDriver = UnregisterStateDriver
-local GameTooltip_Hide = GameTooltip_Hide
 local NUM_ACTIONBAR_BUTTONS = NUM_ACTIONBAR_BUTTONS
 local LEAVE_VEHICLE = LEAVE_VEHICLE
 
@@ -374,8 +372,6 @@ function AB:CreateVehicleLeave()
 	vehicle:RegisterForClicks("AnyUp")
 
 	vehicle:SetScript("OnClick", Vehicle_OnClick)
-	vehicle:SetScript("OnEnter", MainMenuBarVehicleLeaveButton_OnEnter)
-	vehicle:SetScript("OnLeave", GameTooltip_Hide)
 	vehicle:RegisterEvent("PLAYER_ENTERING_WORLD")
 	vehicle:RegisterEvent("UPDATE_BONUS_ACTIONBAR")
 	vehicle:RegisterEvent("UPDATE_MULTI_CAST_ACTIONBAR")

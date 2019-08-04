@@ -3,13 +3,11 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 --Lua functions
 local tinsert, tremove, next, wipe, ipairs = tinsert, tremove, next, wipe, ipairs
 local select, tonumber, type, unpack = select, tonumber, type, unpack
-local atan2, modf, ceil, floor, abs, sqrt, mod = math.atan2, math.modf, math.ceil, math.floor, math.abs, math.sqrt, mod
+local modf, ceil, floor, abs, mod = math.modf, math.ceil, math.floor, math.abs, mod
 local format, strsub, strupper, gsub, gmatch, utf8sub = format, strsub, strupper, gsub, gmatch, string.utf8sub
 local tostring, pairs = tostring, pairs
 --WoW API / Variables
 local CreateFrame = CreateFrame
-local UnitPosition = UnitPosition
-local GetPlayerFacing = GetPlayerFacing
 local GetScreenWidth, GetScreenHeight = GetScreenWidth, GetScreenHeight
 
 E.ShortPrefixValues = {}
@@ -334,21 +332,6 @@ function E:GetTimeInfo(s, threshhold, hhmm, mmss)
 		local days = floor((s/DAY)+.5)
 		return ceil(s / DAY), 0, days > 1 and (s - (days*DAY - HALFDAYISH)) or (s - DAYISH)
 	end
-end
-
-function E:GetDistance(unit1, unit2)
-	local x1, y1, _, map1 = UnitPosition(unit1)
-	if not x1 then return end
-
-	local x2, y2, _, map2 = UnitPosition(unit2)
-	if not x2 then return end
-
-	if map1 ~= map2 then return end
-
-	local dX = x2 - x1
-	local dY = y2 - y1
-	local distance = sqrt(dX * dX + dY * dY)
-	return distance, atan2(dY, dX) - GetPlayerFacing()
 end
 
 --Money text formatting, code taken from Scrooge by thelibrarian ( http://www.wowace.com/addons/scrooge/ )
