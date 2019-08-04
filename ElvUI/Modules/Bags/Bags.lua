@@ -616,7 +616,7 @@ function B:Layout(isBank)
 
 					f.Bags[bagID][slotID].Count = _G[f.Bags[bagID][slotID]:GetName().."Count"]
 					f.Bags[bagID][slotID].Count:ClearAllPoints()
-					f.Bags[bagID][slotID].Count:Point("BOTTOMRIGHT", 0, 2)
+					f.Bags[bagID][slotID].Count:Point("BOTTOMRIGHT", -1, 3)
 					f.Bags[bagID][slotID].Count:FontTemplate(E.Libs.LSM:Fetch("font", E.db.bags.countFont), E.db.bags.countFontSize, E.db.bags.countFontOutline)
 					f.Bags[bagID][slotID].Count:SetTextColor(countColor.r, countColor.g, countColor.b)
 
@@ -656,7 +656,7 @@ function B:Layout(isBank)
 					f.Bags[bagID][slotID].slotID = slotID
 
 					f.Bags[bagID][slotID].itemLevel = f.Bags[bagID][slotID]:CreateFontString(nil, "OVERLAY")
-					f.Bags[bagID][slotID].itemLevel:Point("BOTTOMRIGHT", 0, 2)
+					f.Bags[bagID][slotID].itemLevel:Point("BOTTOMRIGHT", -1, 3)
 					f.Bags[bagID][slotID].itemLevel:FontTemplate(E.Libs.LSM:Fetch("font", E.db.bags.itemLevelFont), E.db.bags.itemLevelFontSize, E.db.bags.itemLevelFontOutline)
 
 					f.Bags[bagID][slotID].bindType = f.Bags[bagID][slotID]:CreateFontString(nil, "OVERLAY")
@@ -1121,7 +1121,7 @@ function B:ContructContainerFrame(name, isBank)
 	end)
 
 	f.closeButton = CreateFrame("Button", name.."CloseButton", f, "UIPanelCloseButton")
-	f.closeButton:Point("TOPRIGHT", -4, -4)
+	f.closeButton:Point("TOPRIGHT", 0, 2)
 
 	Skins:HandleCloseButton(f.closeButton)
 
