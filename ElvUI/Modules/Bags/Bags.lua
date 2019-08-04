@@ -182,9 +182,11 @@ function B:SetSearch(query)
 				local success, result = pcall(Search.Matches, Search, link, query)
 				if empty or (success and result) then
 					SetItemButtonDesaturated(button, button.locked or button.junkDesaturate)
+					button.searchOverlay:Hide()
 					button:SetAlpha(1)
 				else
 					SetItemButtonDesaturated(button, 1)
+					button.searchOverlay:Show()
 					button:SetAlpha(0.5)
 				end
 			end
@@ -434,6 +436,7 @@ function B:SortingFadeBags(bagFrame, registerUpdate)
 		for slotID = 1, GetContainerNumSlots(bagID) do
 			local button = bagFrame.Bags[bagID][slotID]
 			SetItemButtonDesaturated(button, 1)
+			button.searchOverlay:Show()
 			button:SetAlpha(0.5)
 		end
 	end
@@ -635,6 +638,15 @@ function B:Layout(isBank)
 					f.Bags[bagID][slotID].iconTexture:SetInside(f.Bags[bagID][slotID])
 					f.Bags[bagID][slotID].iconTexture:SetTexCoord(unpack(E.TexCoords))
 
+					if not f.Bags[bagID][slotID].searchOverlay then
+						local searchOverlay = f.Bags[bagID][slotID]:CreateTexture(nil, "ARTWORK")
+						searchOverlay:SetTexture(E.media.blankTex)
+						searchOverlay:SetVertexColor(0, 0, 0, 0.8)
+						searchOverlay:SetAllPoints()
+						searchOverlay:Hide()
+						f.Bags[bagID][slotID].searchOverlay = searchOverlay
+					end
+
 					f.Bags[bagID][slotID].cooldown = _G[f.Bags[bagID][slotID]:GetName().."Cooldown"]
 					f.Bags[bagID][slotID].cooldown.CooldownOverride = "bags"
 					E:RegisterCooldown(f.Bags[bagID][slotID].cooldown)
@@ -722,7 +734,7 @@ function B:Layout(isBank)
 		for i = 1, numKey do
 			totalSlots = totalSlots + 1
 
-			if(not f.keyFrame.slots[i]) then
+			if not f.keyFrame.slots[i] then
 				f.keyFrame.slots[i] = CreateFrame("CheckButton", "ElvUIKeyFrameItem"..i, f.keyFrame, "ContainerFrameItemButtonTemplate")
 				f.keyFrame.slots[i]:StyleButton(nil, nil, true)
 				f.keyFrame.slots[i]:SetTemplate("Default", true)
@@ -739,7 +751,7 @@ function B:Layout(isBank)
 				f.keyFrame.slots[i].cooldown.CooldownOverride = "bags"
 				E:RegisterCooldown(f.keyFrame.slots[i].cooldown)
 
-				if not(f.keyFrame.slots[i].questIcon) then
+				if not f.keyFrame.slots[i].questIcon then
 					f.keyFrame.slots[i].questIcon = _G[f.keyFrame.slots[i]:GetName().."IconQuestTexture"] or _G[f.keyFrame.slots[i]:GetName()].IconQuestTexture
 					f.keyFrame.slots[i].questIcon:SetTexture("Interface\\AddOns\\ElvUI\\media\\textures\\bagQuestIcon.tga")
 					f.keyFrame.slots[i].questIcon:SetTexCoord(0, 1, 0, 1)
