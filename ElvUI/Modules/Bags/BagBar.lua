@@ -7,8 +7,14 @@ local unpack = unpack
 local tinsert = table.insert
 --WoW API / Variables
 local CreateFrame = CreateFrame
-local NUM_BAG_FRAMES = NUM_BAG_FRAMES
+local CursorHasItem = CursorHasItem
+local PutKeyInKeyRing = PutKeyInKeyRing
 local RegisterStateDriver = RegisterStateDriver
+local ToggleKeyRing = ToggleKeyRing
+
+local HIGHLIGHT_FONT_COLOR = HIGHLIGHT_FONT_COLOR
+local KEYRING = KEYRING
+local NUM_BAG_FRAMES = NUM_BAG_FRAMES
 
 local function OnEnter()
 	if not E.db.bags.bagBar.mouseover then return end

@@ -5,7 +5,7 @@ local LBF = E.Libs.LBF
 
 --Lua functions
 local _G = _G
-local unpack, pairs, ipairs = unpack, pairs, ipairs
+local unpack, pairs, ipairs, next, type = unpack, pairs, ipairs, next, type
 local floor, min, max, huge = math.floor, math.min, math.max, math.huge
 local format = string.format
 local wipe, tinsert, tsort, tremove = table.wipe, table.insert, table.sort, table.remove
@@ -19,6 +19,7 @@ local GetInventoryItemQuality = GetInventoryItemQuality
 local GetItemQualityColor = GetItemQualityColor
 local GetWeaponEnchantInfo = GetWeaponEnchantInfo
 local GetInventoryItemTexture = GetInventoryItemTexture
+local DebuffTypeColor = DebuffTypeColor
 
 local DIRECTION_TO_POINT = {
 	DOWN_RIGHT = "TOPLEFT",

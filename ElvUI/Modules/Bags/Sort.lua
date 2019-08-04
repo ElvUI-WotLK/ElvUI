@@ -3,7 +3,7 @@ local B = E:GetModule("Bags")
 
 local Search = E.Libs.ItemSearch
 
-local ipairs, pairs, tonumber, select, unpack = ipairs, pairs, tonumber, select, unpack;
+local ipairs, pairs, tonumber, select, unpack, pcall = ipairs, pairs, tonumber, select, unpack, pcall;
 local tinsert, tremove, tsort, twipe = table.insert, table.remove, table.sort, table.wipe;
 local floor = math.floor;
 local band = bit.band;

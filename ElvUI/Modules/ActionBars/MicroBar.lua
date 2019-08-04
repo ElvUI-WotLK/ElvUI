@@ -5,8 +5,9 @@ local AB = E:GetModule("ActionBars")
 local _G = _G
 --WoW API / Variables
 local CreateFrame = CreateFrame
-local UnitLevel = UnitLevel
+local InCombatLockdown = InCombatLockdown
 local RegisterStateDriver = RegisterStateDriver
+local UnitLevel = UnitLevel
 
 local MICRO_BUTTONS = {
 	"CharacterMicroButton",

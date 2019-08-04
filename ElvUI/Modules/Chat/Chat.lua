@@ -5,9 +5,9 @@ local LSM = E.Libs.LSM
 
 local _G = _G
 local time, difftime = time, difftime
-local pairs, unpack, select, tostring, pcall, next, tonumber, type = pairs, unpack, select, tostring, pcall, next, tonumber, type
-local tinsert, tremove, tconcat = table.insert, table.remove, table.concat
-local gsub, find, gmatch, format = string.gsub, string.find, string.gmatch, string.format
+local pairs, ipairs, unpack, select, tostring, pcall, next, tonumber, type = pairs, ipairs, unpack, select, tostring, pcall, next, tonumber, type
+local tinsert, tremove, tconcat, wipe = table.insert, table.remove, table.concat, table.wipe
+local gsub, find, gmatch, format, strtrim = string.gsub, string.find, string.gmatch, string.format, string.trim
 local strlower, strmatch, strsub, strlen, strupper = strlower, strmatch, strsub, strlen, strupper
 
 local BetterDate = BetterDate
@@ -50,9 +50,23 @@ local ShowUIPanel, HideUIPanel = ShowUIPanel, HideUIPanel
 local StaticPopup_Visible = StaticPopup_Visible
 local ToggleFrame = ToggleFrame
 local UnitName = UnitName
-local wipe = wipe
+local AFK = AFK
+local CHAT_BN_CONVERSATION_GET_LINK = CHAT_BN_CONVERSATION_GET_LINK
+local CHAT_FILTERED = CHAT_FILTERED
+local CHAT_FRAMES = CHAT_FRAMES
+local CHAT_IGNORED = CHAT_IGNORED
+local CHAT_OPTIONS = CHAT_OPTIONS
+local CHAT_RESTRICTED = CHAT_RESTRICTED
+local CHAT_TELL_ALERT_TIME = CHAT_TELL_ALERT_TIME
+local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS
+local DEFAULT_CHAT_FRAME = DEFAULT_CHAT_FRAME
+local DND = DND
+local ICON_LIST = ICON_LIST
+local ICON_TAG_LIST = ICON_TAG_LIST
+local MAX_WOW_CHAT_CHANNELS = MAX_WOW_CHAT_CHANNELS
 local NUM_CHAT_WINDOWS = NUM_CHAT_WINDOWS
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS
+local RAID_WARNING = RAID_WARNING
 
 local CreatedFrames = 0
 local msgList, msgCount, msgTime = {}, {}, {}

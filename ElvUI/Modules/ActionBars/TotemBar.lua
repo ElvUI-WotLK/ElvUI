@@ -6,6 +6,7 @@ local unpack = unpack;
 local ipairs, pairs = ipairs, pairs;
 local gsub, match = string.gsub, string.match;
 
+local InCombatLockdown = InCombatLockdown
 local RegisterStateDriver = RegisterStateDriver
 
 if(E.myclass ~= "SHAMAN") then return; end
