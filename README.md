@@ -1,3 +1,7 @@
+[![Game Version](https://img.shields.io/badge/wow-3.3.5-blue.svg)](https://github.com/ElvUI-WotLK)
+[![Build Status](https://travis-ci.com/ElvUI-WotLK/ElvUI.svg?branch=development)](https://travis-ci.com/ElvUI-WotLK/ElvUI)
+[![Discord](https://discordapp.com/api/guilds/259362419372064778/widget.png?style=shield)](https://discord.gg/UXSc7nt)
+
 # ElvUI - Wrath of the Lich King (3.3.5a)
 
 This is the backported version of ElvUI for World of Warcraft - Wrath of the Lich King (3.3.5a)
