@@ -88,13 +88,13 @@ local tabTexs = {
 
 CH.Smileys = {}
 function CH:RemoveSmiley(key)
-	if key and (type(key) == 'string') then
+	if key and (type(key) == "string") then
 		CH.Smileys[key] = nil
 	end
 end
 
 function CH:AddSmiley(key, texture)
-	if key and (type(key) == 'string' and not find(key, ':%%', 1, true)) and texture then
+	if key and (type(key) == "string" and not find(key, ":%%", 1, true)) and texture then
 		CH.Smileys[key] = texture
 	end
 end
@@ -170,11 +170,11 @@ end
 function CH:InsertEmotions(msg)
 	for word in gmatch(msg, "%s-%S+%s*") do
 		word = strtrim(word)
-		local pattern = gsub(word, '([%(%)%.%%%+%-%*%?%[%^%$])', '%%%1')
+		local pattern = gsub(word, "([%(%)%.%%%+%-%*%?%[%^%$])", "%%%1")
 		local emoji = CH.Smileys[pattern]
-		if emoji and strmatch(msg, '[%s%p]-'..pattern..'[%s%p]*') then
+		if emoji and strmatch(msg, "[%s%p]-"..pattern.."[%s%p]*") then
 			local base64 = E.Libs.Base64:Encode(word) -- btw keep `|h|cFFffffff|r|h` as it is
-			msg = gsub(msg, '([%s%p]-)'..pattern..'([%s%p]*)', (base64 and ('%1|Helvmoji:%%'..base64..'|h|cFFffffff|r|h') or '%1')..emoji..'%2');
+			msg = gsub(msg, "([%s%p]-)"..pattern.."([%s%p]*)", (base64 and ("%1|Helvmoji:%%"..base64.."|h|cFFffffff|r|h") or "%1")..emoji.."%2")
 		end
 	end
 
@@ -182,28 +182,28 @@ function CH:InsertEmotions(msg)
 end
 
 function CH:GetSmileyReplacementText(msg)
-	if not msg or not self.db.emotionIcons or find(msg, '/run') or find(msg, '/dump') or find(msg, '/script') then return msg end
-	local outstr = "";
-	local origlen = strlen(msg);
-	local startpos = 1;
-	local endpos, _;
+	if not msg or not self.db.emotionIcons or find(msg, "/run") or find(msg, "/dump") or find(msg, "/script") then return msg end
+	local outstr = ""
+	local origlen = strlen(msg)
+	local startpos = 1
+	local endpos, _
 
 	while(startpos <= origlen) do
-		local pos = find(msg,"|H",startpos,true);
+		local pos = find(msg,"|H",startpos,true)
 		endpos = pos or origlen
-		outstr = outstr .. CH:InsertEmotions(strsub(msg,startpos,endpos)); --run replacement on this bit
-		startpos = endpos + 1;
+		outstr = outstr..CH:InsertEmotions(strsub(msg,startpos,endpos)) --run replacement on this bit
+		startpos = endpos + 1
 		if(pos ~= nil) then
-			_, endpos = find(msg,"|h.-|h",startpos);
-			endpos = endpos or origlen;
+			_, endpos = find(msg,"|h.-|h",startpos)
+			endpos = endpos or origlen
 			if(startpos < endpos) then
-				outstr = outstr .. strsub(msg,startpos,endpos); --don't run replacement on this bit
-				startpos = endpos + 1;
+				outstr = outstr..strsub(msg,startpos,endpos) --don't run replacement on this bit
+				startpos = endpos + 1
 			end
 		end
 	end
 
-	return outstr;
+	return outstr
 end
 
 function CH:StyleChat(frame)
@@ -268,16 +268,16 @@ function CH:StyleChat(frame)
 		if InCombatLockdown() then
 			local MIN_REPEAT_CHARACTERS = E.db.chat.numAllowedCombatRepeat
 			if (strlen(text) > MIN_REPEAT_CHARACTERS) then
-			local repeatChar = true;
+			local repeatChar = true
 			for i=1, MIN_REPEAT_CHARACTERS, 1 do
 				if strsub(text,(0-i), (0-i)) ~= strsub(text,(-1-i),(-1-i)) then
-					repeatChar = false;
-					break;
+					repeatChar = false
+					break
 				end
 			end
 				if repeatChar then
 					editBox:Hide()
-					return;
+					return
 				end
 			end
 		end
@@ -313,14 +313,14 @@ function CH:StyleChat(frame)
 		editBox:Show()
 		if not LeftChatPanel:IsShown() then
 			LeftChatPanel.editboxforced = true
-			LeftChatToggleButton:GetScript('OnEnter')(LeftChatToggleButton)
+			LeftChatToggleButton:GetScript("OnEnter")(LeftChatToggleButton)
 		end
 	end)
 	editbox:HookScript("OnEditFocusLost", function(editBox)
 		if LeftChatPanel.editboxforced then
 			LeftChatPanel.editboxforced = nil
 			if LeftChatPanel:IsShown() then
-				LeftChatToggleButton:GetScript('OnLeave')(LeftChatToggleButton)
+				LeftChatToggleButton:GetScript("OnLeave")(LeftChatToggleButton)
 			end
 		end
 
@@ -380,11 +380,11 @@ function CH:AddMessage(msg, infoR, infoG, infoB, infoID, accessID, typeID, isHis
 	local historyTimestamp --we need to extend the arguments on AddMessage so we can properly handle times without overriding
 	if isHistory == "ElvUI_ChatHistory" then historyTimestamp = historyTime end
 
-	if (CH.db.timeStampFormat and CH.db.timeStampFormat ~= 'NONE' ) then
-		local timeStamp = BetterDate(CH.db.timeStampFormat, historyTimestamp or time());
-		timeStamp = gsub(timeStamp, ' ', '')
-		timeStamp = gsub(timeStamp, 'AM', ' AM')
-		timeStamp = gsub(timeStamp, 'PM', ' PM')
+	if (CH.db.timeStampFormat and CH.db.timeStampFormat ~= "NONE" ) then
+		local timeStamp = BetterDate(CH.db.timeStampFormat, historyTimestamp or time())
+		timeStamp = gsub(timeStamp, " ", "")
+		timeStamp = gsub(timeStamp, "AM", " AM")
+		timeStamp = gsub(timeStamp, "PM", " PM")
 		if CH.db.useCustomTimeColor then
 			local color = CH.db.customTimeColor
 			local hexColor = E:RGBToHex(color.r, color.g, color.b)
@@ -395,7 +395,7 @@ function CH:AddMessage(msg, infoR, infoG, infoB, infoID, accessID, typeID, isHis
 	end
 
 	if CH.db.copyChatLines then
-		msg = format('|Hcpl:%s|h%s|h %s', self:GetID(), E:TextureString(E.Media.Textures.ArrowRight, ":14"), msg)
+		msg = format("|Hcpl:%s|h%s|h %s", self:GetID(), E:TextureString(E.Media.Textures.ArrowRight, ":14"), msg)
 	end
 
 	self.OldAddMessage(self, msg, infoR, infoG, infoB, infoID, accessID, typeID)
@@ -403,19 +403,19 @@ end
 
 function CH:UpdateSettings()
 	for i = 1, CreatedFrames do
-		local chat = _G[format("ChatFrame%d", i)];
-		local name = chat:GetName();
-		local editbox = _G[name .. "EditBox"];
-		editbox:SetAltArrowKeyMode(CH.db.useAltKey);
+		local chat = _G[format("ChatFrame%d", i)]
+		local name = chat:GetName()
+		local editbox = _G[name.."EditBox"]
+		editbox:SetAltArrowKeyMode(CH.db.useAltKey)
 	end
 end
 
 local removeIconFromLine
 do
-	local raidIconFunc = function(x) x = x~="" and _G["RAID_TARGET_"..x];return x and ("{"..strlower(x).."}") or "" end
+	local raidIconFunc = function(x) x = x ~= "" and _G["RAID_TARGET_"..x]; return x and ("{"..strlower(x).."}") or "" end
 	local stripTextureFunc = function(w, x, y) if x=="" then return (w~="" and w) or (y~="" and y) or "" end end
 	local hyperLinkFunc = function(w, x, y) if w~="" then return end
-		local emoji = (x~="" and x) and strmatch(x, 'elvmoji:%%(.+)')
+		local emoji = (x~="" and x) and strmatch(x, "elvmoji:%%(.+)")
 		return (emoji and E.Libs.Base64:Decode(emoji)) or y
 	end
 	removeIconFromLine = function(text)
@@ -459,7 +459,7 @@ end
 
 function CH:CopyChat(frame)
 	if not CopyChatFrame:IsShown() then
-		local _, fontSize = FCF_GetChatWindowInfo(frame:GetID());
+		local _, fontSize = FCF_GetChatWindowInfo(frame:GetID())
 		if fontSize < 10 then fontSize = 12 end
 		FCF_SetChatWindowFontSize(frame, frame, 0.01)
 		CopyChatFrame:Show()
@@ -564,7 +564,7 @@ function CH:UpdateChatTabs()
 		local tab = _G[format("ChatFrame%sTab", i)]
 		local id = chat:GetID()
 		local isDocked = chat.isDocked
-		local chatbg = format("ChatFrame%dBackground", i);
+		local chatbg = format("ChatFrame%dBackground", i)
 		if id > NUM_CHAT_WINDOWS then
 			if select(2, tab:GetPoint()):GetName() ~= chatbg then
 				isDocked = true
@@ -700,7 +700,7 @@ function CH:PositionChat(override)
 
 	E.Layout:RepositionChatDataPanels()
 
-	self.initialMove = true;
+	self.initialMove = true
 end
 
 function CH:Panels_ColorUpdate()
@@ -736,8 +736,8 @@ function CH:FindURL(event, msg, author, ...)
 	end
 
 	if not CH.db.url then
-		msg = CH:CheckKeyword(msg, author);
-		msg = CH:GetSmileyReplacementText(msg);
+		msg = CH:CheckKeyword(msg, author)
+		msg = CH:GetSmileyReplacementText(msg)
 		return false, msg, author, ...
 	end
 
@@ -746,7 +746,7 @@ function CH:FindURL(event, msg, author, ...)
 		text = gsub(gsub(text, "(%S)({.-})", "%1 %2"), "({.-})(%S)", "%1 %2")
 	end
 
-	text = gsub(gsub(text, "(%S)(|c.-|H.-|h.-|h|r)", '%1 %2'), "(|c.-|H.-|h.-|h|r)(%S)", "%1 %2")
+	text = gsub(gsub(text, "(%S)(|c.-|H.-|h.-|h|r)", "%1 %2"), "(|c.-|H.-|h.-|h|r)(%S)", "%1 %2")
 	-- http://example.com
 	local newMsg, found = gsub(text, "(%a+)://(%S+)%s?", CH:PrintURL("%1://%2"))
 	if found > 0 then return false, CH:GetSmileyReplacementText(CH:CheckKeyword(newMsg, author)), author, ... end
@@ -803,13 +803,13 @@ end
 
 local hyperLinkEntered
 function CH:OnHyperlinkEnter(frame, refString)
-	if InCombatLockdown() then return; end
+	if InCombatLockdown() then return end
 	local linkToken = strmatch(refString, "^([^:]+)")
 	if hyperlinkTypes[linkToken] then
 		ShowUIPanel(GameTooltip)
 		GameTooltip:SetOwner(frame, "ANCHOR_CURSOR")
 		GameTooltip:SetHyperlink(refString)
-		hyperLinkEntered = frame;
+		hyperLinkEntered = frame
 		GameTooltip:Show()
 	end
 end
@@ -823,14 +823,14 @@ function CH:OnHyperlinkLeave(_, refString)
 
 	if hyperLinkEntered then
 		HideUIPanel(GameTooltip)
-		hyperLinkEntered = nil;
+		hyperLinkEntered = nil
 	end
 end
 
 function CH:OnMessageScrollChanged(frame)
 	if hyperLinkEntered == frame then
 		HideUIPanel(GameTooltip)
-		hyperLinkEntered = false;
+		hyperLinkEntered = false
 	end
 end
 
@@ -939,25 +939,25 @@ function CH:ChatFrame_MessageEventHandler(frame, event, arg1, arg2, arg3, arg4, 
 			CH.ClassNames[strlower(nameWithRealm)] = englishClass
 		end
 
-		local channelLength = strlen(arg4);
-		local infoType = chatType;
+		local channelLength = strlen(arg4)
+		local infoType = chatType
 		if (strsub(chatType, 1, 7) == "CHANNEL") and (chatType ~= "CHANNEL_LIST") and ((arg1 ~= "INVITE") or (chatType ~= "CHANNEL_NOTICE_USER")) then
 			if arg1 == "WRONG_PASSWORD" then
-				local staticPopup = _G[StaticPopup_Visible("CHAT_CHANNEL_PASSWORD") or ""];
+				local staticPopup = _G[StaticPopup_Visible("CHAT_CHANNEL_PASSWORD") or ""]
 				if staticPopup and strupper(staticPopup.data) == strupper(arg9) then
 					-- Don't display invalid password messages if we're going to prompt for a password (bug 102312)
-					return;
+					return
 				end
 			end
 
-			local found = 0;
+			local found = 0
 			for index, value in pairs(frame.channelList) do
 				if channelLength > strlen(value) then
 					-- arg9 is the channel name without the number in front...
 					if ((arg7 > 0) and (frame.zoneChannelList[index] == arg7)) or (strupper(value) == strupper(arg9)) then
-						found = 1;
-						infoType = "CHANNEL"..arg8;
-						info = ChatTypeInfo[infoType];
+						found = 1
+						infoType = "CHANNEL"..arg8
+						info = ChatTypeInfo[infoType]
 						if (chatType == "CHANNEL_NOTICE") and (arg1 == "YOU_LEFT") then
 							frame.channelList[index] = nil
 							frame.zoneChannelList[index] = nil
@@ -971,12 +971,12 @@ function CH:ChatFrame_MessageEventHandler(frame, event, arg1, arg2, arg3, arg4, 
 			end
 		end
 
-		local chatGroup = Chat_GetChatCategory(chatType);
-		local chatTarget;
+		local chatGroup = Chat_GetChatCategory(chatType)
+		local chatTarget
 		if chatGroup == "CHANNEL" or chatGroup == "BN_CONVERSATION" then
-			chatTarget = tostring(arg8);
+			chatTarget = tostring(arg8)
 		elseif chatGroup == "WHISPER" or chatGroup == "BN_WHISPER" then
-			chatTarget = strupper(arg2);
+			chatTarget = strupper(arg2)
 		end
 
 		if FCFManager_ShouldSuppressMessage(frame, chatGroup, chatTarget) then
@@ -1023,9 +1023,9 @@ function CH:ChatFrame_MessageEventHandler(frame, event, arg1, arg2, arg3, arg4, 
 				frame:AddMessage(arg1, info.r, info.g, info.b, info.id, nil, nil, isHistory, historyTime)
 			end
 		elseif chatType == "CHANNEL_NOTICE_USER" then
-			local globalstring = _G["CHAT_"..arg1.."_NOTICE_BN"];
+			local globalstring = _G["CHAT_"..arg1.."_NOTICE_BN"]
 			if not globalstring then
-				globalstring = _G["CHAT_"..arg1.."_NOTICE"];
+				globalstring = _G["CHAT_"..arg1.."_NOTICE"]
 			end
 
 			if strlen(arg5) > 0 then
@@ -1037,17 +1037,17 @@ function CH:ChatFrame_MessageEventHandler(frame, event, arg1, arg2, arg3, arg4, 
 				frame:AddMessage(format(globalstring, arg8, arg4, arg2), info.r, info.g, info.b, info.id, nil, nil, isHistory, historyTime)
 			end
 		elseif chatType == "CHANNEL_NOTICE" then
-			if arg1 == "NOT_IN_LFG" then return; end
-			local globalstring = _G["CHAT_"..arg1.."_NOTICE_BN"];
+			if arg1 == "NOT_IN_LFG" then return end
+			local globalstring = _G["CHAT_"..arg1.."_NOTICE_BN"]
 			if not globalstring then
-				globalstring = _G["CHAT_"..arg1.."_NOTICE"];
+				globalstring = _G["CHAT_"..arg1.."_NOTICE"]
 			end
 			if arg10 > 0 then
-				arg4 = arg4.." "..arg10;
+				arg4 = arg4.." "..arg10
 			end
 
-			local accessID = ChatHistory_GetAccessID(Chat_GetChatCategory(chatType), arg8);
-			local typeID = ChatHistory_GetAccessID(infoType, arg8);
+			local accessID = ChatHistory_GetAccessID(Chat_GetChatCategory(chatType), arg8)
+			local typeID = ChatHistory_GetAccessID(infoType, arg8)
 			frame:AddMessage(format(globalstring, arg8, arg4), info.r, info.g, info.b, info.id, accessID, typeID, isHistory, historyTime)
 		else
 			local body
@@ -1055,7 +1055,7 @@ function CH:ChatFrame_MessageEventHandler(frame, event, arg1, arg2, arg3, arg4, 
 			-- Add AFK/DND flags
 			-- Player Flags
 			local pflag, chatIcon, pluginChatIcon = "", specialChatIcons[nameWithRealm], CH:GetPluginIcon(nameWithRealm)
-			if type(chatIcon) == 'function' then chatIcon = chatIcon() end
+			if type(chatIcon) == "function" then chatIcon = chatIcon() end
 			if arg6 ~= "" then
 				if arg6 == "GM" then
 					--If it was a whisper, dispatch it to the GMChat addon.
@@ -1084,7 +1084,7 @@ function CH:ChatFrame_MessageEventHandler(frame, event, arg1, arg2, arg3, arg4, 
 			end
 
 			if chatType == "WHISPER_INFORM" and GMChatFrame_IsGM and GMChatFrame_IsGM(arg2) then
-				return;
+				return
 			end
 
 			local showLink = 1
@@ -1099,42 +1099,42 @@ function CH:ChatFrame_MessageEventHandler(frame, event, arg1, arg2, arg3, arg4, 
 			end
 
 			-- Search for icon links and replace them with texture links.
-			local term;
+			local term
 			for tag in gmatch(arg1, "%b{}") do
-				term = strlower(gsub(tag, "[{}]", ""));
+				term = strlower(gsub(tag, "[{}]", ""))
 				if ICON_TAG_LIST[term] and ICON_LIST[ICON_TAG_LIST[term]] then
-					arg1 = gsub(arg1, tag, ICON_LIST[ICON_TAG_LIST[term]] .. "0|t");
+					arg1 = gsub(arg1, tag, ICON_LIST[ICON_TAG_LIST[term]].."0|t")
 				end
 			end
 
-			local playerLink;
+			local playerLink
 
 			if chatType ~= "BN_WHISPER" and chatType ~= "BN_WHISPER_INFORM" and chatType ~= "BN_CONVERSATION" then
-				playerLink = "|Hplayer:"..arg2..":"..arg11..":"..chatGroup..(chatTarget and ":"..chatTarget or "").."|h";
+				playerLink = "|Hplayer:"..arg2..":"..arg11..":"..chatGroup..(chatTarget and ":"..chatTarget or "").."|h"
 			else
-				playerLink = "|HBNplayer:"..arg2..":"..arg13..":"..arg11..":"..chatGroup..(chatTarget and ":"..chatTarget or "").."|h";
+				playerLink = "|HBNplayer:"..arg2..":"..arg13..":"..arg11..":"..chatGroup..(chatTarget and ":"..chatTarget or "").."|h"
 			end
 
 			if (strlen(arg3) > 0) and (arg3 ~= "Universal") and (arg3 ~= frame.defaultLanguage) then
-				local languageHeader = "["..arg3.."] ";
+				local languageHeader = "["..arg3.."] "
 				if showLink and (strlen(arg2) > 0) then
-					body = format(_G["CHAT_"..chatType.."_GET"]..languageHeader..arg1, pflag..playerLink.."["..coloredName.."]".."|h");
+					body = format(_G["CHAT_"..chatType.."_GET"]..languageHeader..arg1, pflag..playerLink.."["..coloredName.."]".."|h")
 				else
-					body = format(_G["CHAT_"..chatType.."_GET"]..languageHeader..arg1, pflag..arg2);
+					body = format(_G["CHAT_"..chatType.."_GET"]..languageHeader..arg1, pflag..arg2)
 				end
 			else
 				if not showLink or strlen(arg2) == 0 then
 					if(find(arg1, "% ") and GetLocale() == "ruRU") then
-						arg1 = arg1:gsub("%%", "%%s");
+						arg1 = arg1:gsub("%%", "%%s")
 					end
-					body = format(_G["CHAT_" .. chatType .. "_GET"] .. arg1, pflag .. arg2, arg2);
+					body = format(_G["CHAT_"..chatType.."_GET"]..arg1, pflag..arg2, arg2)
 				else
 					if chatType == "EMOTE" then
-						body = format(_G["CHAT_"..chatType.."_GET"]..arg1, pflag..playerLink..coloredName.."|h");
+						body = format(_G["CHAT_"..chatType.."_GET"]..arg1, pflag..playerLink..coloredName.."|h")
 					elseif chatType == "TEXT_EMOTE" then
-						body = string.gsub(arg1, arg2, pflag..playerLink..coloredName.."|h", 1);
+						body = string.gsub(arg1, arg2, pflag..playerLink..coloredName.."|h", 1)
 					else
-						body = format(_G["CHAT_"..chatType.."_GET"]..arg1, pflag..playerLink.."["..coloredName.."]".."|h");
+						body = format(_G["CHAT_"..chatType.."_GET"]..arg1, pflag..playerLink.."["..coloredName.."]".."|h")
 					end
 				end
 			end
@@ -1147,8 +1147,8 @@ function CH:ChatFrame_MessageEventHandler(frame, event, arg1, arg2, arg3, arg4, 
 				body = "|Hchannel:channel:"..arg8.."|h["..arg4.."]|h "..body
 			end
 
-			local accessID = ChatHistory_GetAccessID(chatGroup, chatTarget);
-			local typeID = ChatHistory_GetAccessID(infoType, chatTarget);
+			local accessID = ChatHistory_GetAccessID(chatGroup, chatTarget)
+			local typeID = ChatHistory_GetAccessID(infoType, chatTarget)
 			if CH.db.shortChannels then
 				body = body:gsub("|Hchannel:(.-)|h%[(.-)%]|h", CH.ShortChannel)
 				body = body:gsub("CHANNEL:", "")
@@ -1165,23 +1165,23 @@ function CH:ChatFrame_MessageEventHandler(frame, event, arg1, arg2, arg3, arg4, 
 
 		if (isHistory ~= "ElvUI_ChatHistory") and (chatType == "WHISPER" or chatType == "BN_WHISPER") then
 			--BN_WHISPER FIXME
-			ChatEdit_SetLastTellTarget(arg2);
+			ChatEdit_SetLastTellTarget(arg2)
 			if frame.tellTimer and (GetTime() > frame.tellTimer) then
-				PlaySound("TellMessage");
+				PlaySound("TellMessage")
 			end
-			frame.tellTimer = GetTime() + CHAT_TELL_ALERT_TIME;
-			--FCF_FlashTab(frame);
+			frame.tellTimer = GetTime() + CHAT_TELL_ALERT_TIME
+			--FCF_FlashTab(frame)
 		end
 
 		if (isHistory ~= "ElvUI_ChatHistory") and (not frame:IsShown()) then
 			if (frame == DEFAULT_CHAT_FRAME and info.flashTabOnGeneral) or (frame ~= DEFAULT_CHAT_FRAME and info.flashTab) then
 				if not CHAT_OPTIONS.HIDE_FRAME_ALERTS or chatType == "WHISPER" or chatType == "BN_WHISPER" then	--BN_WHISPER FIXME
-					FCF_StartAlertFlash(frame); --This would taint if we were not using LibChatAnims
+					FCF_StartAlertFlash(frame) --This would taint if we were not using LibChatAnims
 				end
 			end
 		end
 
-		return true;
+		return true
 	end
 end
 
@@ -1213,8 +1213,8 @@ function CH:SetupChat()
 
 	for _, frameName in pairs(CHAT_FRAMES) do
 		local frame = _G[frameName]
-		local id = frame:GetID();
-		local _, fontSize = FCF_GetChatWindowInfo(id);
+		local id = frame:GetID()
+		local _, fontSize = FCF_GetChatWindowInfo(id)
 		self:StyleChat(frame)
 		FCFTab_UpdateAlpha(frame)
 		frame:FontTemplate(LSM:Fetch("font", self.db.font), fontSize, self.db.fontOutline)
@@ -1253,7 +1253,7 @@ function CH:SetupChat()
 
 	if not self.HookSecured then
 		self:SecureHook("FCF_OpenTemporaryWindow", "SetupChat")
-		self.HookSecured = true;
+		self.HookSecured = true
 	end
 end
 
@@ -1287,7 +1287,7 @@ function CH:CHAT_MSG_CHANNEL(event, message, author, ...)
 	end
 
 	if blockFlag then
-		return true;
+		return true
 	else
 		if CH.db.throttleInterval ~= 0 then
 			msgTime[msg] = time()
@@ -1312,7 +1312,7 @@ function CH:CHAT_MSG_YELL(event, message, author, ...)
 	end
 
 	if blockFlag then
-		return true;
+		return true
 	else
 		if CH.db.throttleInterval ~= 0 then
 			msgTime[msg] = time()
@@ -1327,16 +1327,16 @@ function CH:CHAT_MSG_SAY(event, message, author, ...)
 end
 
 function CH:ThrottleSound()
-	CH.SoundTimer = nil;
+	CH.SoundTimer = nil
 end
 
 local protectLinks = {}
 function CH:CheckKeyword(message, author)
 	for hyperLink in gmatch(message, "|%x+|H.-|h.-|h|r") do
-		protectLinks[hyperLink]=gsub(hyperLink,'%s','|s')
+		protectLinks[hyperLink]=gsub(hyperLink,"%s","|s")
 		for keyword in pairs(CH.Keywords) do
 			if hyperLink == keyword then
-				if (self.db.keywordSound ~= 'None') and not self.SoundTimer then
+				if (self.db.keywordSound ~= "None") and not self.SoundTimer then
 					if (self.db.noAlertInCombat and not InCombatLockdown()) or not self.db.noAlertInCombat then
 						PlaySoundFile(LSM:Fetch("sound", self.db.keywordSound), "Master")
 					end
@@ -1348,7 +1348,7 @@ function CH:CheckKeyword(message, author)
 	end
 
 	for hyperLink, tempLink in pairs(protectLinks) do
-		message = gsub(message, gsub(hyperLink, '([%(%)%.%%%+%-%*%?%[%^%$])', '%%%1'), tempLink)
+		message = gsub(message, gsub(hyperLink, "([%(%)%.%%%+%-%*%?%[%^%$])", "%%%1"), tempLink)
 	end
 
 	local rebuiltString
@@ -1361,7 +1361,7 @@ function CH:CheckKeyword(message, author)
 			for keyword in pairs(CH.Keywords) do
 				if lowerCaseWord == strlower(keyword) then
 					word = gsub(word, tempWord, format("%s%s|r", E.media.hexvaluecolor, tempWord))
-					if (author ~= UnitName("player")) and (self.db.keywordSound ~= 'None') and not self.SoundTimer then
+					if (author ~= UnitName("player")) and (self.db.keywordSound ~= "None") and not self.SoundTimer then
 						if (self.db.noAlertInCombat and not InCombatLockdown()) or not self.db.noAlertInCombat then
 							PlaySoundFile(LSM:Fetch("sound", self.db.keywordSound), "Master")
 						end
@@ -1379,7 +1379,7 @@ function CH:CheckKeyword(message, author)
 				local wordMatch = classMatch and lowerCaseWord
 
 				if(wordMatch and not E.global.chat.classColorMentionExcludedNames[wordMatch]) then
-					local classColorTable = _G.CUSTOM_CLASS_COLORS and _G.CUSTOM_CLASS_COLORS[classMatch] or _G.RAID_CLASS_COLORS[classMatch];
+					local classColorTable = _G.CUSTOM_CLASS_COLORS and _G.CUSTOM_CLASS_COLORS[classMatch] or _G.RAID_CLASS_COLORS[classMatch]
 					word = gsub(word, gsub(tempWord, "%-","%%-"), format("\124cff%.2x%.2x%.2x%s\124r", classColorTable.r*255, classColorTable.g*255, classColorTable.b*255, tempWord))
 				end
 			end
@@ -1394,7 +1394,7 @@ function CH:CheckKeyword(message, author)
 	end
 
 	for hyperLink, tempLink in pairs(protectLinks) do
-		rebuiltString = gsub(rebuiltString, gsub(tempLink, '([%(%)%.%%%+%-%*%?%[%^%$])','%%%1'), hyperLink)
+		rebuiltString = gsub(rebuiltString, gsub(tempLink, "([%(%)%.%%%+%-%*%?%[%^%$])","%%%1"), hyperLink)
 		protectLinks[hyperLink] = nil
 	end
 
@@ -1403,9 +1403,9 @@ end
 
 function CH:AddLines(lines, ...)
 	for i = select("#", ...), 1, -1 do
-		local x = select(i, ...);
+		local x = select(i, ...)
 		if(x:GetObjectType() == "FontString" and not x:GetName()) then
-			tinsert(lines, x:GetText());
+			tinsert(lines, x:GetText())
 		end
 	end
 end
@@ -1414,20 +1414,20 @@ function CH:ChatEdit_OnEnterPressed(editBox)
 	local chatType = editBox:GetAttribute("chatType")
 	local chatFrame = chatType and editBox:GetParent()
 	if chatFrame and (not chatFrame.isTemporary) and (ChatTypeInfo[chatType].sticky == 1) then
-		if not self.db.sticky then chatType = 'SAY' end
+		if not self.db.sticky then chatType = "SAY" end
 		editBox:SetAttribute("chatType", chatType)
 	end
 end
 
 function CH:SetChatFont(dropDown, chatFrame, fontSize)
 	if not chatFrame then
-		chatFrame = FCF_GetCurrentChatFrame();
+		chatFrame = FCF_GetCurrentChatFrame()
 	end
 	if not fontSize then
 		fontSize = dropDown.value
 	end
 	chatFrame:FontTemplate(LSM:Fetch("font", self.db.font), fontSize, self.db.fontOutline)
-	if self.db.fontOutline ~= 'NONE' then
+	if self.db.fontOutline ~= "NONE" then
 		chatFrame:SetShadowColor(0, 0, 0, 0.2)
 	else
 		chatFrame:SetShadowColor(0, 0, 0, 1)
@@ -1439,7 +1439,7 @@ function CH:ChatEdit_AddHistory(_, line) -- editBox, line
 	line = line and strtrim(line)
 
 	if line and strlen(line) > 0 then
-		if find(line, '/rl') then return end
+		if find(line, "/rl") then return end
 
 		for index, text in pairs(ElvCharacterDB.ChatEditHistory) do
 			if text == line then
@@ -1460,11 +1460,11 @@ function CH:UpdateChatKeywords()
 	wipe(CH.Keywords)
 
 	local keywords = self.db.keywords
-	keywords = gsub(keywords,',%s',',')
+	keywords = gsub(keywords,",%s",",")
 
 	for stringValue in gmatch(keywords, "[^,]+") do
-		if stringValue ~= '' then
-			CH.Keywords[stringValue] = true;
+		if stringValue ~= "" then
+			CH.Keywords[stringValue] = true
 		end
 	end
 end
@@ -1563,7 +1563,7 @@ function CH:SaveChatHistory(event, ...)
 end
 
 function CH:FCF_SetWindowAlpha(frame, alpha)
-	frame.oldAlpha = alpha or 1;
+	frame.oldAlpha = alpha or 1
 end
 
 function CH:ON_FCF_SavePositionAndDimensions(_, noLoop)
@@ -1601,112 +1601,112 @@ local FindURL_Events = {
 }
 
 function CH:DefaultSmileys()
-	local x = ':16:16'
+	local x = ":16:16"
 	if next(CH.Smileys) then
 		wipe(CH.Smileys)
 	end
 
 	-- new keys
-	CH:AddSmiley(':angry:', E:TextureString(E.Media.ChatEmojis.Angry,x))
-	CH:AddSmiley(':blush:', E:TextureString(E.Media.ChatEmojis.Blush,x))
-	CH:AddSmiley(':broken_heart:', E:TextureString(E.Media.ChatEmojis.BrokenHeart,x))
-	CH:AddSmiley(':call_me:', E:TextureString(E.Media.ChatEmojis.CallMe,x))
-	CH:AddSmiley(':cry:', E:TextureString(E.Media.ChatEmojis.Cry,x))
-	CH:AddSmiley(':facepalm:', E:TextureString(E.Media.ChatEmojis.Facepalm,x))
-	CH:AddSmiley(':grin:', E:TextureString(E.Media.ChatEmojis.Grin,x))
-	CH:AddSmiley(':heart:', E:TextureString(E.Media.ChatEmojis.Heart,x))
-	CH:AddSmiley(':heart_eyes:', E:TextureString(E.Media.ChatEmojis.HeartEyes,x))
-	CH:AddSmiley(':joy:', E:TextureString(E.Media.ChatEmojis.Joy,x))
-	CH:AddSmiley(':kappa:', E:TextureString(E.Media.ChatEmojis.Kappa,x))
-	CH:AddSmiley(':middle_finger:', E:TextureString(E.Media.ChatEmojis.MiddleFinger,x))
-	CH:AddSmiley(':murloc:', E:TextureString(E.Media.ChatEmojis.Murloc,x))
-	CH:AddSmiley(':ok_hand:', E:TextureString(E.Media.ChatEmojis.OkHand,x))
-	CH:AddSmiley(':open_mouth:', E:TextureString(E.Media.ChatEmojis.OpenMouth,x))
-	CH:AddSmiley(':poop:', E:TextureString(E.Media.ChatEmojis.Poop,x))
-	CH:AddSmiley(':rage:', E:TextureString(E.Media.ChatEmojis.Rage,x))
-	CH:AddSmiley(':sadkitty:', E:TextureString(E.Media.ChatEmojis.SadKitty,x))
-	CH:AddSmiley(':scream:', E:TextureString(E.Media.ChatEmojis.Scream,x))
-	CH:AddSmiley(':scream_cat:', E:TextureString(E.Media.ChatEmojis.ScreamCat,x))
-	CH:AddSmiley(':slight_frown:', E:TextureString(E.Media.ChatEmojis.SlightFrown,x))
-	CH:AddSmiley(':smile:', E:TextureString(E.Media.ChatEmojis.Smile,x))
-	CH:AddSmiley(':smirk:', E:TextureString(E.Media.ChatEmojis.Smirk,x))
-	CH:AddSmiley(':sob:', E:TextureString(E.Media.ChatEmojis.Sob,x))
-	CH:AddSmiley(':sunglasses:', E:TextureString(E.Media.ChatEmojis.Sunglasses,x))
-	CH:AddSmiley(':thinking:', E:TextureString(E.Media.ChatEmojis.Thinking,x))
-	CH:AddSmiley(':thumbs_up:', E:TextureString(E.Media.ChatEmojis.ThumbsUp,x))
-	CH:AddSmiley(':semi_colon:', E:TextureString(E.Media.ChatEmojis.SemiColon,x))
-	CH:AddSmiley(':wink:', E:TextureString(E.Media.ChatEmojis.Wink,x))
-	CH:AddSmiley(':zzz:', E:TextureString(E.Media.ChatEmojis.ZZZ,x))
-	CH:AddSmiley(':stuck_out_tongue:', E:TextureString(E.Media.ChatEmojis.StuckOutTongue,x))
-	CH:AddSmiley(':stuck_out_tongue_closed_eyes:', E:TextureString(E.Media.ChatEmojis.StuckOutTongueClosedEyes,x))
+	CH:AddSmiley(":angry:", E:TextureString(E.Media.ChatEmojis.Angry,x))
+	CH:AddSmiley(":blush:", E:TextureString(E.Media.ChatEmojis.Blush,x))
+	CH:AddSmiley(":broken_heart:", E:TextureString(E.Media.ChatEmojis.BrokenHeart,x))
+	CH:AddSmiley(":call_me:", E:TextureString(E.Media.ChatEmojis.CallMe,x))
+	CH:AddSmiley(":cry:", E:TextureString(E.Media.ChatEmojis.Cry,x))
+	CH:AddSmiley(":facepalm:", E:TextureString(E.Media.ChatEmojis.Facepalm,x))
+	CH:AddSmiley(":grin:", E:TextureString(E.Media.ChatEmojis.Grin,x))
+	CH:AddSmiley(":heart:", E:TextureString(E.Media.ChatEmojis.Heart,x))
+	CH:AddSmiley(":heart_eyes:", E:TextureString(E.Media.ChatEmojis.HeartEyes,x))
+	CH:AddSmiley(":joy:", E:TextureString(E.Media.ChatEmojis.Joy,x))
+	CH:AddSmiley(":kappa:", E:TextureString(E.Media.ChatEmojis.Kappa,x))
+	CH:AddSmiley(":middle_finger:", E:TextureString(E.Media.ChatEmojis.MiddleFinger,x))
+	CH:AddSmiley(":murloc:", E:TextureString(E.Media.ChatEmojis.Murloc,x))
+	CH:AddSmiley(":ok_hand:", E:TextureString(E.Media.ChatEmojis.OkHand,x))
+	CH:AddSmiley(":open_mouth:", E:TextureString(E.Media.ChatEmojis.OpenMouth,x))
+	CH:AddSmiley(":poop:", E:TextureString(E.Media.ChatEmojis.Poop,x))
+	CH:AddSmiley(":rage:", E:TextureString(E.Media.ChatEmojis.Rage,x))
+	CH:AddSmiley(":sadkitty:", E:TextureString(E.Media.ChatEmojis.SadKitty,x))
+	CH:AddSmiley(":scream:", E:TextureString(E.Media.ChatEmojis.Scream,x))
+	CH:AddSmiley(":scream_cat:", E:TextureString(E.Media.ChatEmojis.ScreamCat,x))
+	CH:AddSmiley(":slight_frown:", E:TextureString(E.Media.ChatEmojis.SlightFrown,x))
+	CH:AddSmiley(":smile:", E:TextureString(E.Media.ChatEmojis.Smile,x))
+	CH:AddSmiley(":smirk:", E:TextureString(E.Media.ChatEmojis.Smirk,x))
+	CH:AddSmiley(":sob:", E:TextureString(E.Media.ChatEmojis.Sob,x))
+	CH:AddSmiley(":sunglasses:", E:TextureString(E.Media.ChatEmojis.Sunglasses,x))
+	CH:AddSmiley(":thinking:", E:TextureString(E.Media.ChatEmojis.Thinking,x))
+	CH:AddSmiley(":thumbs_up:", E:TextureString(E.Media.ChatEmojis.ThumbsUp,x))
+	CH:AddSmiley(":semi_colon:", E:TextureString(E.Media.ChatEmojis.SemiColon,x))
+	CH:AddSmiley(":wink:", E:TextureString(E.Media.ChatEmojis.Wink,x))
+	CH:AddSmiley(":zzz:", E:TextureString(E.Media.ChatEmojis.ZZZ,x))
+	CH:AddSmiley(":stuck_out_tongue:", E:TextureString(E.Media.ChatEmojis.StuckOutTongue,x))
+	CH:AddSmiley(":stuck_out_tongue_closed_eyes:", E:TextureString(E.Media.ChatEmojis.StuckOutTongueClosedEyes,x))
 
-	-- Darth's keys
-	CH:AddSmiley(':meaw:', E:TextureString(E.Media.ChatEmojis.Meaw,x))
+	-- Darth"s keys
+	CH:AddSmiley(":meaw:", E:TextureString(E.Media.ChatEmojis.Meaw,x))
 
-	-- Simpy's keys
-	CH:AddSmiley('>:%(', E:TextureString(E.Media.ChatEmojis.Rage,x))
-	CH:AddSmiley(':%$', E:TextureString(E.Media.ChatEmojis.Blush,x))
-	CH:AddSmiley('<\\3', E:TextureString(E.Media.ChatEmojis.BrokenHeart,x))
-	CH:AddSmiley(':\'%)', E:TextureString(E.Media.ChatEmojis.Joy,x))
-	CH:AddSmiley(';\'%)', E:TextureString(E.Media.ChatEmojis.Joy,x))
-	CH:AddSmiley(',,!,,', E:TextureString(E.Media.ChatEmojis.MiddleFinger,x))
-	CH:AddSmiley('D:<', E:TextureString(E.Media.ChatEmojis.Rage,x))
-	CH:AddSmiley(':o3', E:TextureString(E.Media.ChatEmojis.ScreamCat,x))
-	CH:AddSmiley('XP', E:TextureString(E.Media.ChatEmojis.StuckOutTongueClosedEyes,x))
-	CH:AddSmiley('8%-%)', E:TextureString(E.Media.ChatEmojis.Sunglasses,x))
-	CH:AddSmiley('8%)', E:TextureString(E.Media.ChatEmojis.Sunglasses,x))
-	CH:AddSmiley(':%+1:', E:TextureString(E.Media.ChatEmojis.ThumbsUp,x))
-	CH:AddSmiley(':;:', E:TextureString(E.Media.ChatEmojis.SemiColon,x))
-	CH:AddSmiley(';o;', E:TextureString(E.Media.ChatEmojis.Sob,x))
+	-- Simpy"s keys
+	CH:AddSmiley(">:%(", E:TextureString(E.Media.ChatEmojis.Rage,x))
+	CH:AddSmiley(":%$", E:TextureString(E.Media.ChatEmojis.Blush,x))
+	CH:AddSmiley("<\\3", E:TextureString(E.Media.ChatEmojis.BrokenHeart,x))
+	CH:AddSmiley(":\'%)", E:TextureString(E.Media.ChatEmojis.Joy,x))
+	CH:AddSmiley(";\'%)", E:TextureString(E.Media.ChatEmojis.Joy,x))
+	CH:AddSmiley(",,!,,", E:TextureString(E.Media.ChatEmojis.MiddleFinger,x))
+	CH:AddSmiley("D:<", E:TextureString(E.Media.ChatEmojis.Rage,x))
+	CH:AddSmiley(":o3", E:TextureString(E.Media.ChatEmojis.ScreamCat,x))
+	CH:AddSmiley("XP", E:TextureString(E.Media.ChatEmojis.StuckOutTongueClosedEyes,x))
+	CH:AddSmiley("8%-%)", E:TextureString(E.Media.ChatEmojis.Sunglasses,x))
+	CH:AddSmiley("8%)", E:TextureString(E.Media.ChatEmojis.Sunglasses,x))
+	CH:AddSmiley(":%+1:", E:TextureString(E.Media.ChatEmojis.ThumbsUp,x))
+	CH:AddSmiley(":;:", E:TextureString(E.Media.ChatEmojis.SemiColon,x))
+	CH:AddSmiley(";o;", E:TextureString(E.Media.ChatEmojis.Sob,x))
 
 	-- old keys
-	CH:AddSmiley(':%-@', E:TextureString(E.Media.ChatEmojis.Angry,x))
-	CH:AddSmiley(':@', E:TextureString(E.Media.ChatEmojis.Angry,x))
-	CH:AddSmiley(':%-%)', E:TextureString(E.Media.ChatEmojis.Smile,x))
-	CH:AddSmiley(':%)', E:TextureString(E.Media.ChatEmojis.Smile,x))
-	CH:AddSmiley(':D', E:TextureString(E.Media.ChatEmojis.Grin,x))
-	CH:AddSmiley(':%-D', E:TextureString(E.Media.ChatEmojis.Grin,x))
-	CH:AddSmiley(';%-D', E:TextureString(E.Media.ChatEmojis.Grin,x))
-	CH:AddSmiley(';D', E:TextureString(E.Media.ChatEmojis.Grin,x))
-	CH:AddSmiley('=D', E:TextureString(E.Media.ChatEmojis.Grin,x))
-	CH:AddSmiley('xD', E:TextureString(E.Media.ChatEmojis.Grin,x))
-	CH:AddSmiley('XD', E:TextureString(E.Media.ChatEmojis.Grin,x))
-	CH:AddSmiley(':%-%(', E:TextureString(E.Media.ChatEmojis.SlightFrown,x))
-	CH:AddSmiley(':%(', E:TextureString(E.Media.ChatEmojis.SlightFrown,x))
-	CH:AddSmiley(':o', E:TextureString(E.Media.ChatEmojis.OpenMouth,x))
-	CH:AddSmiley(':%-o', E:TextureString(E.Media.ChatEmojis.OpenMouth,x))
-	CH:AddSmiley(':%-O', E:TextureString(E.Media.ChatEmojis.OpenMouth,x))
-	CH:AddSmiley(':O', E:TextureString(E.Media.ChatEmojis.OpenMouth,x))
-	CH:AddSmiley(':%-0', E:TextureString(E.Media.ChatEmojis.OpenMouth,x))
-	CH:AddSmiley(':P', E:TextureString(E.Media.ChatEmojis.StuckOutTongue,x))
-	CH:AddSmiley(':%-P', E:TextureString(E.Media.ChatEmojis.StuckOutTongue,x))
-	CH:AddSmiley(':p', E:TextureString(E.Media.ChatEmojis.StuckOutTongue,x))
-	CH:AddSmiley(':%-p', E:TextureString(E.Media.ChatEmojis.StuckOutTongue,x))
-	CH:AddSmiley('=P', E:TextureString(E.Media.ChatEmojis.StuckOutTongue,x))
-	CH:AddSmiley('=p', E:TextureString(E.Media.ChatEmojis.StuckOutTongue,x))
-	CH:AddSmiley(';%-p', E:TextureString(E.Media.ChatEmojis.StuckOutTongueClosedEyes,x))
-	CH:AddSmiley(';p', E:TextureString(E.Media.ChatEmojis.StuckOutTongueClosedEyes,x))
-	CH:AddSmiley(';P', E:TextureString(E.Media.ChatEmojis.StuckOutTongueClosedEyes,x))
-	CH:AddSmiley(';%-P', E:TextureString(E.Media.ChatEmojis.StuckOutTongueClosedEyes,x))
-	CH:AddSmiley(';%-%)', E:TextureString(E.Media.ChatEmojis.Wink,x))
-	CH:AddSmiley(';%)', E:TextureString(E.Media.ChatEmojis.Wink,x))
-	CH:AddSmiley(':S', E:TextureString(E.Media.ChatEmojis.Smirk,x))
-	CH:AddSmiley(':%-S', E:TextureString(E.Media.ChatEmojis.Smirk,x))
-	CH:AddSmiley(':,%(', E:TextureString(E.Media.ChatEmojis.Cry,x))
-	CH:AddSmiley(':,%-%(', E:TextureString(E.Media.ChatEmojis.Cry,x))
-	CH:AddSmiley(':\'%(', E:TextureString(E.Media.ChatEmojis.Cry,x))
-	CH:AddSmiley(':\'%-%(', E:TextureString(E.Media.ChatEmojis.Cry,x))
-	CH:AddSmiley(':F', E:TextureString(E.Media.ChatEmojis.MiddleFinger,x))
-	CH:AddSmiley('<3', E:TextureString(E.Media.ChatEmojis.Heart,x))
-	CH:AddSmiley('</3', E:TextureString(E.Media.ChatEmojis.BrokenHeart,x))
+	CH:AddSmiley(":%-@", E:TextureString(E.Media.ChatEmojis.Angry,x))
+	CH:AddSmiley(":@", E:TextureString(E.Media.ChatEmojis.Angry,x))
+	CH:AddSmiley(":%-%)", E:TextureString(E.Media.ChatEmojis.Smile,x))
+	CH:AddSmiley(":%)", E:TextureString(E.Media.ChatEmojis.Smile,x))
+	CH:AddSmiley(":D", E:TextureString(E.Media.ChatEmojis.Grin,x))
+	CH:AddSmiley(":%-D", E:TextureString(E.Media.ChatEmojis.Grin,x))
+	CH:AddSmiley(";%-D", E:TextureString(E.Media.ChatEmojis.Grin,x))
+	CH:AddSmiley(";D", E:TextureString(E.Media.ChatEmojis.Grin,x))
+	CH:AddSmiley("=D", E:TextureString(E.Media.ChatEmojis.Grin,x))
+	CH:AddSmiley("xD", E:TextureString(E.Media.ChatEmojis.Grin,x))
+	CH:AddSmiley("XD", E:TextureString(E.Media.ChatEmojis.Grin,x))
+	CH:AddSmiley(":%-%(", E:TextureString(E.Media.ChatEmojis.SlightFrown,x))
+	CH:AddSmiley(":%(", E:TextureString(E.Media.ChatEmojis.SlightFrown,x))
+	CH:AddSmiley(":o", E:TextureString(E.Media.ChatEmojis.OpenMouth,x))
+	CH:AddSmiley(":%-o", E:TextureString(E.Media.ChatEmojis.OpenMouth,x))
+	CH:AddSmiley(":%-O", E:TextureString(E.Media.ChatEmojis.OpenMouth,x))
+	CH:AddSmiley(":O", E:TextureString(E.Media.ChatEmojis.OpenMouth,x))
+	CH:AddSmiley(":%-0", E:TextureString(E.Media.ChatEmojis.OpenMouth,x))
+	CH:AddSmiley(":P", E:TextureString(E.Media.ChatEmojis.StuckOutTongue,x))
+	CH:AddSmiley(":%-P", E:TextureString(E.Media.ChatEmojis.StuckOutTongue,x))
+	CH:AddSmiley(":p", E:TextureString(E.Media.ChatEmojis.StuckOutTongue,x))
+	CH:AddSmiley(":%-p", E:TextureString(E.Media.ChatEmojis.StuckOutTongue,x))
+	CH:AddSmiley("=P", E:TextureString(E.Media.ChatEmojis.StuckOutTongue,x))
+	CH:AddSmiley("=p", E:TextureString(E.Media.ChatEmojis.StuckOutTongue,x))
+	CH:AddSmiley(";%-p", E:TextureString(E.Media.ChatEmojis.StuckOutTongueClosedEyes,x))
+	CH:AddSmiley(";p", E:TextureString(E.Media.ChatEmojis.StuckOutTongueClosedEyes,x))
+	CH:AddSmiley(";P", E:TextureString(E.Media.ChatEmojis.StuckOutTongueClosedEyes,x))
+	CH:AddSmiley(";%-P", E:TextureString(E.Media.ChatEmojis.StuckOutTongueClosedEyes,x))
+	CH:AddSmiley(";%-%)", E:TextureString(E.Media.ChatEmojis.Wink,x))
+	CH:AddSmiley(";%)", E:TextureString(E.Media.ChatEmojis.Wink,x))
+	CH:AddSmiley(":S", E:TextureString(E.Media.ChatEmojis.Smirk,x))
+	CH:AddSmiley(":%-S", E:TextureString(E.Media.ChatEmojis.Smirk,x))
+	CH:AddSmiley(":,%(", E:TextureString(E.Media.ChatEmojis.Cry,x))
+	CH:AddSmiley(":,%-%(", E:TextureString(E.Media.ChatEmojis.Cry,x))
+	CH:AddSmiley(":\'%(", E:TextureString(E.Media.ChatEmojis.Cry,x))
+	CH:AddSmiley(":\'%-%(", E:TextureString(E.Media.ChatEmojis.Cry,x))
+	CH:AddSmiley(":F", E:TextureString(E.Media.ChatEmojis.MiddleFinger,x))
+	CH:AddSmiley("<3", E:TextureString(E.Media.ChatEmojis.Heart,x))
+	CH:AddSmiley("</3", E:TextureString(E.Media.ChatEmojis.BrokenHeart,x))
 end
 
 function CH:BuildCopyChatFrame()
 	local frame = CreateFrame("Frame", "CopyChatFrame", E.UIParent)
 	tinsert(UISpecialFrames, "CopyChatFrame")
-	frame:SetTemplate('Transparent')
+	frame:SetTemplate("Transparent")
 	frame:Size(700, 200)
-	frame:Point('BOTTOM', E.UIParent, 'BOTTOM', 0, 3)
+	frame:Point("BOTTOM", E.UIParent, "BOTTOM", 0, 3)
 	frame:Hide()
 	frame:SetMovable(true)
 	frame:EnableMouse(true)
@@ -1723,18 +1723,18 @@ function CH:BuildCopyChatFrame()
 	end)
 	frame:SetScript("OnMouseUp", function(copyChat, button)
 		if button == "LeftButton" and copyChat.isMoving then
-			copyChat:StopMovingOrSizing();
-			copyChat.isMoving = false;
+			copyChat:StopMovingOrSizing()
+			copyChat.isMoving = false
 		elseif button == "RightButton" and copyChat.isSizing then
-			copyChat:StopMovingOrSizing();
-			copyChat.isSizing = false;
+			copyChat:StopMovingOrSizing()
+			copyChat.isSizing = false
 		end
 	end)
 	frame:SetScript("OnHide", function(copyChat)
 		if copyChat.isMoving or copyChat.isSizing then
-			copyChat:StopMovingOrSizing();
-			copyChat.isMoving = false;
-			copyChat.isSizing = false;
+			copyChat:StopMovingOrSizing()
+			copyChat.isMoving = false
+			copyChat.isSizing = false
 		end
 	end)
 	frame:SetFrameStrata("DIALOG")
@@ -1804,7 +1804,7 @@ function CH:Initialize()
 	self:RegisterEvent("UPDATE_FLOATING_CHAT_WINDOWS", "SetupChat")
 
 	if WIM then
-		WIM.RegisterWidgetTrigger("chat_display", "whisper,chat,w2w,demo", "OnHyperlinkClick", function(self) CH.clickedframe = self end);
+		WIM.RegisterWidgetTrigger("chat_display", "whisper,chat,w2w,demo", "OnHyperlinkClick", function(self) CH.clickedframe = self end)
 		WIM.RegisterItemRefHandler("url", HyperLinkedURL)
 	end
 

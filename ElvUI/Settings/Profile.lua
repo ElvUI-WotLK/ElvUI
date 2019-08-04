@@ -641,6 +641,7 @@ P.chat = {
 	tabFont = "PT Sans Narrow",
 	tabFontSize = 12,
 	tabFontOutline = "NONE",
+	copyChatLines = false,
 	panelColor = {r = .06, g = .06, b = .06, a = 0.8}
 }
 
