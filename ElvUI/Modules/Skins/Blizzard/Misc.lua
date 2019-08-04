@@ -162,6 +162,7 @@ local function LoadSkin()
 	-- Stack Split Frame
 	StackSplitFrame:SetTemplate("Transparent")
 	StackSplitFrame:GetRegions():Hide()
+	StackSplitFrame:SetFrameStrata("DIALOG")
 
 	StackSplitFrame.bg1 = CreateFrame("Frame", nil, StackSplitFrame)
 	StackSplitFrame.bg1:SetTemplate("Transparent")
