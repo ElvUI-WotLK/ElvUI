@@ -6,7 +6,9 @@ addons:
     packages:
     - luarocks
 
-install: luarocks install --local luacheck
+install:
+  - luarocks install --local luacheck
+  - luarocks install --local lanes
 
 script:
  - /home/travis/.luarocks/bin/luacheck . -q
