@@ -1329,10 +1329,6 @@ function UF:ToggleTransparentStatusBar(isTransparent, statusBar, backdropTex, ad
 			backdropTex:Point("BOTTOMRIGHT", statusBar, "BOTTOMRIGHT")
 		end
 
-		if invertBackdropTex then
-			backdropTex:Show()
-		end
-
 		if backdropTex.multiplier then
 			backdropTex.multiplier = 0.25
 		end
@@ -1352,10 +1348,6 @@ function UF:ToggleTransparentStatusBar(isTransparent, statusBar, backdropTex, ad
 		if adjustBackdropPoints then
 			backdropTex:ClearAllPoints()
 			backdropTex:SetAllPoints(statusBar)
-		end
-
-		if invertBackdropTex then
-			backdropTex:Hide()
 		end
 
 		if backdropTex.multiplier then

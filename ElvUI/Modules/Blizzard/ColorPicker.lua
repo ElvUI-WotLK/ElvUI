@@ -11,8 +11,6 @@ local tonumber, floor, strsub, wipe = tonumber, floor, strsub, wipe
 --WoW API / Variables
 local CreateFrame = CreateFrame
 local IsAddOnLoaded = IsAddOnLoaded
-local IsControlKeyDown = IsControlKeyDown
-local IsModifierKeyDown = IsModifierKeyDown
 local CALENDAR_COPY_EVENT, CALENDAR_PASTE_EVENT = CALENDAR_COPY_EVENT, CALENDAR_PASTE_EVENT
 local CLASS, DEFAULT = CLASS, DEFAULT
 

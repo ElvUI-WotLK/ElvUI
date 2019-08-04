@@ -6,7 +6,6 @@ local Misc = E:GetModule("Misc")
 local _G = _G
 local pairs = pairs
 --WoW API / Variables
-local hooksecurefunc = hooksecurefunc
 local NUM_GROUP_LOOT_FRAMES = NUM_GROUP_LOOT_FRAMES
 
 local POSITION, ANCHOR_POINT, YOFFSET = "TOP", "BOTTOM", -10

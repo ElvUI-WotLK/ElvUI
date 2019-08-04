@@ -245,16 +245,16 @@ local enchantableSlots = {
   [2] = 17
 }
 
-function A:HasEnchant(type, weapon, expiration)
-	if weapon and (not self.EnchanData[type] or self.EnchanData[type].expiration < expiration) then
-		self.EnchanData[type] = {}
-		self.EnchanData[type].expiration = expiration
+function A:HasEnchant(index, weapon, expiration)
+	if weapon and (not self.EnchanData[index] or self.EnchanData[index].expiration < expiration) then
+		self.EnchanData[index] = {}
+		self.EnchanData[index].expiration = expiration
 		return true
-	elseif self.EnchanData[type] then
+	elseif self.EnchanData[index] then
 		if weapon then
-			self.EnchanData[type].expiration = expiration
+			self.EnchanData[index].expiration = expiration
 		else
-			self.EnchanData[type] = nil
+			self.EnchanData[index] = nil
 			return true
 		end
 	end

@@ -200,8 +200,6 @@ local function Chat_OnEvent(self, event, arg1, arg2, arg3, arg4, arg5, arg6, arg
 	local type = strsub(event, 10)
 	local info = ChatTypeInfo[type]
 
-	arg1 = RemoveExtraSpaces(arg1)
-
 	local chatGroup = Chat_GetChatCategory(type)
 	local chatTarget, body
 	if chatGroup == "BN_CONVERSATION" then
@@ -236,7 +234,7 @@ local function Chat_OnEvent(self, event, arg1, arg2, arg3, arg4, arg5, arg6, arg
 	if CH.db.shortChannels then
 		body = body:gsub("|Hchannel:(.-)|h%[(.-)%]|h", CH.ShortChannel);
 		body = body:gsub("^(.-|h) "..L["whispers"], "%1");
-		body = body:gsub("<"..AFKString..">", "[|cffFF0000"..L["AFK"].."|r] ");
+		body = body:gsub("<"..AFK..">", "[|cffFF0000"..L["AFK"].."|r] ");
 		body = body:gsub("<"..DND..">", "[|cffE7E716"..L["DND"].."|r] ");
 		body = body:gsub("%[BN_CONVERSATION:", "%[".."");
 	end

@@ -8,7 +8,6 @@ local Threat = E:GetModule('Threat')
 local AFK = E:GetModule('AFK')
 
 local _G = _G
-local IsAddOnLoaded = IsAddOnLoaded
 local FCF_GetNumActiveChatFrames = FCF_GetNumActiveChatFrames
 
 local function GetChatWindowInfo()
@@ -129,7 +128,7 @@ E.Options.args.general = {
 					name = L["AFK Mode"],
 					desc = L["When you go AFK display the AFK screen."],
 					get = function(info) return E.db.general.afk; end,
-					set = function(info, value) E.db.general.afk = value; E:GetModule("AFK"):Toggle(); end
+					set = function(info, value) E.db.general.afk = value; AFK:Toggle(); end
 				},
 				enhancedPvpMessages = {
 					order = 20,
@@ -545,7 +544,7 @@ E.Options.args.general = {
 					name = L["Watch Frame Height"],
 					desc = L["Height of the watch tracker. Increase size to be able to see more objectives."],
 					min = 400, max = E.screenheight, step = 1,
-					set = function(info, value) E.db.general[info[#info]] = value; E:GetModule("Blizzard"):SetWatchFrameHeight(); end
+					set = function(info, value) E.db.general[info[#info]] = value; Blizzard:SetWatchFrameHeight(); end
 				}
 			}
 		},
