@@ -48,7 +48,6 @@ function E:UpdateBlizzardFonts()
 	STANDARD_TEXT_FONT	= NORMAL
 
 	if self.private.general.replaceBlizzFonts then
-		SetFont(ChatBubbleFont,						BUBBLE, self.private.general.chatBubbleFontSize, self.private.general.chatBubbleFontOutline)
 		SetFont(GameTooltipHeader,					NORMAL, self.db.general.fontSize)
 		SetFont(NumberFont_OutlineThick_Mono_Small,	NUMBER, self.db.general.fontSize, "OUTLINE")
 		SetFont(NumberFont_Outline_Huge,			NUMBER, 28, MONOCHROME.."THICKOUTLINE", 28)

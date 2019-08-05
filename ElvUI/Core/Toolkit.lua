@@ -189,7 +189,7 @@ local function Kill(object)
 	object:Hide()
 end
 
-local function StripTextures(object, kill)
+local function StripTextures(object, kill, alpha)
 	if object:IsObjectType("Texture") then
 		if kill then
 			object:Kill()

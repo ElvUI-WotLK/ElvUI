@@ -51,9 +51,9 @@ function UF:Configure_DebuffHighlight(frame)
 	end
 end
 
-function UF:PostUpdate_DebuffHighlight(object, debuffType, texture, wasFiltered, style, color)
+function UF:PostUpdate_DebuffHighlight(object, debuffType, texture, wasFiltered, style)
 	if debuffType and not wasFiltered then
-		color = UF.db.colors.debuffHighlight[debuffType]
+		local color = UF.db.colors.debuffHighlight[debuffType]
 		if object.DebuffHighlightBackdrop and object.DBHGlow then
 			object.DBHGlow:SetBackdropBorderColor(color.r, color.g, color.b, color.a)
 		else

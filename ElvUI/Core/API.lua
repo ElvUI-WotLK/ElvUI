@@ -10,7 +10,6 @@ local GetCVarBool = GetCVarBool
 local GetFunctionCPUUsage = GetFunctionCPUUsage
 local GetTalentTabInfo = GetTalentTabInfo
 local RequestBattlefieldScoreData = RequestBattlefieldScoreData
-local UnitFactionGroup = UnitFactionGroup
 local UnitGroupRolesAssigned = UnitGroupRolesAssigned
 local UnitHasVehicleUI = UnitHasVehicleUI
 local IsInInstance = IsInInstance

@@ -40,7 +40,7 @@ function E:DropDown(list, frame, xOffset, yOffset)
 		frame.buttons[i]:Hide()
 	end
 
-	for i = 1, #list do 
+	for i = 1, #list do
 		if not frame.buttons[i] then
 			frame.buttons[i] = CreateFrame("Button", nil, frame)
 

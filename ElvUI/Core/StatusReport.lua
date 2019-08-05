@@ -196,7 +196,7 @@ function E:CreateStatusFrame()
 	StatusFrame:SetScript("OnDragStart", function(self)
 		self:StartMoving()
 	end)
-	StatusFrame:SetScript("OnDragStop", function(self) 
+	StatusFrame:SetScript("OnDragStop", function(self)
 		self:StopMovingOrSizing()
 	end)
 
