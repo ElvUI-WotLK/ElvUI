@@ -111,9 +111,8 @@ local EnglishSpecName = {
 local function GetSpecName()
 	local specIdx, specName = E:GetTalentSpecInfo()
 
-	if specName and specName ~= "" then
-		--return EnglishSpecName[E.myclass][specIdx]
-		return specName
+	if specIdx and (specName and specName ~= "") then
+		return EnglishSpecName[E.myclass][specIdx]
 	else
 		return "None"
 	end
@@ -138,8 +137,8 @@ function E:CreateStatusFrame()
 		section.Header.Text:Point("BOTTOM")
 		section.Header.Text:SetJustifyH("CENTER")
 		section.Header.Text:SetJustifyV("MIDDLE")
-		local font, height, flags = section.Header.Text:GetFont()
-		section.Header.Text:SetFont(font, height*1.3, flags)
+		local font, fontHeight, flags = section.Header.Text:GetFont()
+		section.Header.Text:SetFont(font, fontHeight*1.3, flags)
 
 		section.Header.LeftDivider = section.Header:CreateTexture(nil, "ARTWORK")
 		section.Header.LeftDivider:Height(8)

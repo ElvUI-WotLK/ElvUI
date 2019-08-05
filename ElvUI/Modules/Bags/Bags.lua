@@ -643,7 +643,7 @@ function B:Layout(isBank)
 					if not f.Bags[bagID][slotID].searchOverlay then
 						local searchOverlay = f.Bags[bagID][slotID]:CreateTexture(nil, "ARTWORK")
 						searchOverlay:SetTexture(E.media.blankTex)
-						searchOverlay:SetVertexColor(0, 0, 0, 0.8)
+						searchOverlay:SetVertexColor(0, 0, 0)
 						searchOverlay:SetAllPoints()
 						searchOverlay:Hide()
 						f.Bags[bagID][slotID].searchOverlay = searchOverlay
