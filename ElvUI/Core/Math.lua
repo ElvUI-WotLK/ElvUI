@@ -12,20 +12,20 @@ local GetScreenWidth, GetScreenHeight = GetScreenWidth, GetScreenHeight
 
 E.ShortPrefixValues = {}
 E.ShortPrefixStyles = {
-	["CHINESE"] = {{1e8,"Y"}, {1e4,"W"}},
-	["ENGLISH"] = {{1e12,"T"}, {1e9,"B"}, {1e6,"M"}, {1e3,"K"}},
-	["GERMAN"] = {{1e12,"Bio"}, {1e9,"Mrd"}, {1e6,"Mio"}, {1e3,"Tsd"}},
-	["KOREAN"] = {{1e8,"억"}, {1e4,"만"}, {1e3,"천"}},
-	["METRIC"] = {{1e12,"T"}, {1e9,"G"}, {1e6,"M"}, {1e3,"k"}}
+	["CHINESE"] = {{1e8, "Y"}, {1e4, "W"}},
+	["ENGLISH"] = {{1e12, "T"}, {1e9, "B"}, {1e6, "M"}, {1e3, "K"}},
+	["GERMAN"] = {{1e12, "Bio"}, {1e9, "Mrd"}, {1e6, "Mio"}, {1e3, "Tsd"}},
+	["KOREAN"] = {{1e8, "억"}, {1e4, "만"}, {1e3, "천"}},
+	["METRIC"] = {{1e12, "T"}, {1e9, "G"}, {1e6, "M"}, {1e3, "k"}}
 }
 
 local gftStyles = {
-	['CURRENT'] = '%s',
-	['CURRENT_MAX'] = '%s - %s',
-	['CURRENT_PERCENT'] = '%s - %.1f%%',
-	['CURRENT_MAX_PERCENT'] = '%s - %s | %.1f%%',
-	['PERCENT'] = '%.1f%%',
-	['DEFICIT'] = '-%s',
+	["CURRENT"] = "%s",
+	["CURRENT_MAX"] = "%s - %s",
+	["CURRENT_PERCENT"] = "%s - %.1f%%",
+	["CURRENT_MAX_PERCENT"] = "%s - %s | %.1f%%",
+	["PERCENT"] = "%.1f%%",
+	["DEFICIT"] = "-%s"
 }
 
 function E:BuildPrefixValues()
@@ -40,14 +40,14 @@ function E:BuildPrefixValues()
 
 	local gftDec = tostring(E.db.general.decimalLength or 1)
 	for style, str in pairs(gftStyles) do
-		gftStyles[style] = gsub(str,"%d",gftDec)
+		gftStyles[style] = gsub(str, "%d", gftDec)
 	end
 end
 
 --Return short value of a number
 function E:ShortValue(v)
-	local abs_v = v<0 and -v or v
-	for i=1, #E.ShortPrefixValues do
+	local abs_v = v < 0 and -v or v
+	for i = 1, #E.ShortPrefixValues do
 		if abs_v >= E.ShortPrefixValues[i][1] then
 			return format(E.ShortPrefixValues[i][2], v / E.ShortPrefixValues[i][1])
 		end
@@ -63,21 +63,21 @@ end
 -- http://www.wowwiki.com/ColorGradient
 function E:ColorGradient(perc, ...)
 	if perc >= 1 then
-		return select(select('#', ...) - 2, ...)
+		return select(select("#", ...) - 2, ...)
 	elseif perc <= 0 then
 		return ...
 	end
 
-	local num = select('#', ...) / 3
-	local segment, relperc = modf(perc*(num-1))
-	local r1, g1, b1, r2, g2, b2 = select((segment*3)+1, ...)
+	local num = select("#", ...) / 3
+	local segment, relperc = modf(perc*(num - 1))
+	local r1, g1, b1, r2, g2, b2 = select((segment*3) + 1, ...)
 
-	return r1+(r2-r1)*relperc, g1+(g2-g1)*relperc, b1+(b2-b1)*relperc
+	return r1 + (r2 - r1)*relperc, g1 + (g2 - g1)*relperc, b1 + (b2 - b1)*relperc
 end
 
 --Return rounded number
 function E:Round(num, idp)
-	if(idp and idp > 0) then
+	if idp and idp > 0 then
 		local mult = 10 ^ idp
 		return floor(num * mult + 0.5) / mult
 	end
@@ -155,21 +155,21 @@ function E:GetXYOffset(position, override)
 	local default = E.Spacing
 	local x, y = override or default, override or default
 
-	if position == 'TOP' then
+	if position == "TOP" then
 		return 0, y
-	elseif position == 'TOPLEFT' then
+	elseif position == "TOPLEFT" then
 		return x, y
-	elseif position == 'TOPRIGHT' then
+	elseif position == "TOPRIGHT" then
 		return -x, y
-	elseif position == 'BOTTOM' then --or or then
+	elseif position == "BOTTOM" then
 		return 0, -y
-	elseif position == 'BOTTOMLEFT' then
+	elseif position == "BOTTOMLEFT" then
 		return x, -y
-	elseif position == 'BOTTOMRIGHT' then
+	elseif position == "BOTTOMRIGHT" then
 		return -x, -y
-	elseif position == 'LEFT' then
+	elseif position == "LEFT" then
 		return -x, 0
-	elseif position == 'RIGHT' then
+	elseif position == "RIGHT" then
 		return x, 0
 	elseif position == "CENTER" then
 		return 0, 0
@@ -180,18 +180,18 @@ function E:GetFormattedText(style, min, max)
 	if max == 0 then max = 1 end
 
 	local gftUseStyle = gftStyles[style]
-	if style == 'DEFICIT' then
+	if style == "DEFICIT" then
 		local gftDeficit = max - min
-		return ((gftDeficit > 0) and format(gftUseStyle, E:ShortValue(gftDeficit))) or ''
-	elseif style == 'PERCENT' then
+		return ((gftDeficit > 0) and format(gftUseStyle, E:ShortValue(gftDeficit))) or ""
+	elseif style == "PERCENT" then
 		return format(gftUseStyle, min / max * 100)
-	elseif style == 'CURRENT' or ((style == 'CURRENT_MAX' or style == 'CURRENT_MAX_PERCENT' or style == 'CURRENT_PERCENT') and min == max) then
+	elseif style == "CURRENT" or ((style == "CURRENT_MAX" or style == "CURRENT_MAX_PERCENT" or style == "CURRENT_PERCENT") and min == max) then
 		return format(gftStyles.CURRENT, E:ShortValue(min))
-	elseif style == 'CURRENT_MAX' then
+	elseif style == "CURRENT_MAX" then
 		return format(gftUseStyle, E:ShortValue(min), E:ShortValue(max))
-	elseif style == 'CURRENT_PERCENT' then
+	elseif style == "CURRENT_PERCENT" then
 		return format(gftUseStyle, E:ShortValue(min), min / max * 100)
-	elseif style == 'CURRENT_MAX_PERCENT' then
+	elseif style == "CURRENT_MAX_PERCENT" then
 		return format(gftUseStyle, E:ShortValue(min), E:ShortValue(max), min / max * 100)
 	end
 end
@@ -220,7 +220,7 @@ function E:ShortenString(str, numChars, dots)
 		end
 
 		if len == numChars and pos <= bytes then
-			return strsub(str, 1, pos - 1)..(dots and '...' or '')
+			return strsub(str, 1, pos - 1)..(dots and "..." or "")
 		else
 			return str
 		end
@@ -277,22 +277,22 @@ end
 
 E.TimeThreshold = 3
 E.TimeColors = { -- aura time colors for days, hours, minutes, seconds, fadetimer
-	[0] = '|cffeeeeee',
-	[1] = '|cffeeeeee',
-	[2] = '|cffeeeeee',
-	[3] = '|cffeeeeee',
-	[4] = '|cfffe0000',
-	[5] = '|cff909090', --mmss
-	[6] = '|cff707070', --hhmm
+	[0] = "|cffeeeeee",
+	[1] = "|cffeeeeee",
+	[2] = "|cffeeeeee",
+	[3] = "|cffeeeeee",
+	[4] = "|cfffe0000",
+	[5] = "|cff909090", --mmss
+	[6] = "|cff707070", --hhmm
 }
 E.TimeFormats = { -- short and long aura time formats
-	[0] = {'%dd', '%dd'},
-	[1] = {'%dh', '%dh'},
-	[2] = {'%dm', '%dm'},
-	[3] = {'%ds', '%d'},
-	[4] = {'%.1fs', '%.1f'},
-	[5] = {'%d:%02d', '%d:%02d'}, --mmss
-	[6] = {'%d:%02d', '%d:%02d'}, --hhmm
+	[0] = {"%dd", "%dd"},
+	[1] = {"%dh", "%dh"},
+	[2] = {"%dm", "%dm"},
+	[3] = {"%ds", "%d"},
+	[4] = {"%.1fs", "%.1f"},
+	[5] = {"%d:%02d", "%d:%02d"}, --mmss
+	[6] = {"%d:%02d", "%d:%02d"}, --hhmm
 }
 
 local DAY, HOUR, MINUTE = 86400, 3600, 60 --used for calculating aura time text
@@ -334,7 +334,7 @@ function E:GetTimeInfo(s, threshhold, hhmm, mmss)
 	end
 end
 
---Money text formatting, code taken from Scrooge by thelibrarian ( http://www.wowace.com/addons/scrooge/ )
+--Money text formatting, code taken from Scrooge by thelibrarian (http://www.wowace.com/addons/scrooge/)
 local COLOR_COPPER, COLOR_SILVER, COLOR_GOLD = "|cffeda55f", "|cffc7c7cf", "|cffffd700"
 local ICON_COPPER = "|TInterface\\MoneyFrame\\UI-CopperIcon:12:12|t"
 local ICON_SILVER = "|TInterface\\MoneyFrame\\UI-SilverIcon:12:12|t"
@@ -394,14 +394,6 @@ function E:FormatMoney(amount, style, textonly)
 			return format("%s%s %d%s %d%s", gold, goldname, silver, silvername, copper, coppername)
 		elseif silver > 0 then
 			return format("%d%s %d%s", silver, silvername, copper, coppername)
-		else
-			return format("%d%s", copper, coppername)
-		end
-	elseif style == "BLIZZARD2" then
-		if gold > 0 then
-			return format("%s%s %02d%s %02d%s", gold, goldname, silver, silvername, copper, coppername)
-		elseif silver > 0 then
-			return format("%d%s %02d%s", silver, silvername, copper, coppername)
 		else
 			return format("%d%s", copper, coppername)
 		end

@@ -49,8 +49,9 @@
 	StepTitleTextJustification - The justification of the text on each step button ("LEFT", "RIGHT", "CENTER"). Default: "CENTER"
 ]]
 
-local E, L, V, P, G, _ = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB, Localize Underscore
+local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB, Localize Underscore
 local PI = E:GetModule("PluginInstaller")
+local S = E:GetModule("Skins")
 
 --Cache global variables
 --Lua functions
@@ -62,7 +63,6 @@ local format = string.format
 local CreateFrame = CreateFrame
 local PlaySoundFile = PlaySoundFile
 local UIFrameFadeOut = UIFrameFadeOut
-local CreateAnimationGroup = CreateAnimationGroup
 local CONTINUE, PREVIOUS, UNKNOWN = CONTINUE, PREVIOUS, UNKNOWN
 
 --Global variables that we don't cache, list them here for the mikk's Find Globals script
@@ -125,15 +125,15 @@ local function SetPage(PageNum, PrevPage)
 	f.Status.text:SetFormattedText("%d / %d", f.CurrentPage, f.MaxPage)
 	if f.StepTitles then
 		for i = 1, #f.side.Lines do
+			local b = f.side.Lines[i]
 			local color
-			local line = f.side.Lines[i]
-			line.text:SetText(f.StepTitles[i])
+			b.text:SetText(f.StepTitles[i])
 			if i == f.CurrentPage then
-				color = f.StepTitlesColorSelected or {.09,.52,.82}
+				color = f.StepTitlesColorSelected or {0.09, 0.52, 0.82}
 			else
-				color = f.StepTitlesColor or {1,1,1}
+				color = f.StepTitlesColor or {1, 1, 1}
 			end
-			line.text:SetTextColor(color[1] or color.r, color[2] or color.g, color[3] or color.b)
+			b.text:SetTextColor(color[1] or color.r, color[2] or color.g, color[3] or color.b)
 		end
 	end
 end
@@ -162,7 +162,7 @@ function PI:CreateStepComplete()
 			PlaySoundFile([[Sound\Interface\LevelUp.wav]])
 			self.text:SetText(self.message)
 			UIFrameFadeOut(self, 3.5, 1, 0)
-			E:Delay(4, function() self:Hide() end)
+			E:Delay(4, frame.Hide, frame)
 			self.message = nil
 		else
 			self:Hide()
@@ -193,7 +193,7 @@ function PI:CreateStepComplete()
 	imsg.lineBottom:SetTexCoord(0.00195313, 0.81835938, 0.01953125, 0.03320313)
 
 	imsg.text = imsg:CreateFontString(nil, "ARTWORK")
-	imsg.text:FontTemplate(E["media"].normFont, 32, "OUTLINE")
+	imsg.text:FontTemplate(E.media.normFont, 32, "OUTLINE")
 	imsg.text:Point("BOTTOM", 0, 12)
 	imsg.text:SetTextColor(1, 0.82, 0)
 	imsg.text:SetJustifyH("CENTER")
@@ -212,36 +212,32 @@ function PI:CreateFrame()
 	f.Title:Point("TOP", 0, -5)
 
 	f.Next = CreateFrame("Button", "PluginInstallNextButton", f, "UIPanelButtonTemplate")
-	f.Next:StripTextures()
-	f.Next:SetTemplate("Default", true)
 	f.Next:Size(110, 25)
 	f.Next:Point("BOTTOMRIGHT", -5, 5)
 	f.Next:SetText(CONTINUE)
 	f.Next:Disable()
 	f.Next:SetScript("OnClick", NextPage)
-	E.Skins:HandleButton(f.Next, true)
+	S:HandleButton(f.Next, true)
 
 	f.Prev = CreateFrame("Button", "PluginInstallPrevButton", f, "UIPanelButtonTemplate")
-	f.Prev:StripTextures()
-	f.Prev:SetTemplate("Default", true)
 	f.Prev:Size(110, 25)
 	f.Prev:Point("BOTTOMLEFT", 5, 5)
 	f.Prev:SetText(PREVIOUS)
 	f.Prev:Disable()
 	f.Prev:SetScript("OnClick", PreviousPage)
-	E.Skins:HandleButton(f.Prev, true)
+	S:HandleButton(f.Prev, true)
 
 	f.Status = CreateFrame("StatusBar", "PluginInstallStatus", f)
 	f.Status:SetFrameLevel(f.Status:GetFrameLevel() + 2)
 	f.Status:CreateBackdrop("Default", true)
-	f.Status:SetStatusBarTexture(E["media"].normTex)
-	f.Status:SetStatusBarColor(unpack(E["media"].rgbvaluecolor))
+	f.Status:SetStatusBarTexture(E.media.normTex)
+	f.Status:SetStatusBarColor(unpack(E.media.rgbvaluecolor))
 	f.Status:Point("TOPLEFT", f.Prev, "TOPRIGHT", 6, -2)
 	f.Status:Point("BOTTOMRIGHT", f.Next, "BOTTOMLEFT", -6, 2)
 	-- Setup StatusBar Animation
-	f.Status.anim = CreateAnimationGroup(f.Status)
+	f.Status.anim = _G.CreateAnimationGroup(f.Status)
 	f.Status.anim.progress = f.Status.anim:CreateAnimation("Progress")
-	f.Status.anim.progress:SetSmoothing("Out")
+	f.Status.anim.progress:SetEasing("Out")
 	f.Status.anim.progress:SetDuration(.3)
 
 	f.Status.text = f.Status:CreateFontString(nil, "OVERLAY")
@@ -249,35 +245,31 @@ function PI:CreateFrame()
 	f.Status.text:SetPoint("CENTER")
 
 	f.Option1 = CreateFrame("Button", "PluginInstallOption1Button", f, "UIPanelButtonTemplate")
-	f.Option1:StripTextures()
 	f.Option1:Size(160, 30)
 	f.Option1:Point("BOTTOM", 0, 45)
 	f.Option1:SetText("")
 	f.Option1:Hide()
-	E.Skins:HandleButton(f.Option1, true)
+	S:HandleButton(f.Option1, true)
 
 	f.Option2 = CreateFrame("Button", "PluginInstallOption2Button", f, "UIPanelButtonTemplate")
-	f.Option2:StripTextures()
 	f.Option2:Size(110, 30)
 	f.Option2:Point("BOTTOMLEFT", f, "BOTTOM", 4, 45)
 	f.Option2:SetText("")
 	f.Option2:Hide()
-	f.Option2:SetScript("OnShow", function() f.Option1:SetWidth(110); f.Option1:ClearAllPoints(); f.Option1:Point("BOTTOMRIGHT", f, "BOTTOM", -4, 45) end)
-	f.Option2:SetScript("OnHide", function() f.Option1:SetWidth(160); f.Option1:ClearAllPoints(); f.Option1:Point("BOTTOM", 0, 45) end)
-	E.Skins:HandleButton(f.Option2, true)
+	f.Option2:SetScript("OnShow", function() f.Option1:SetWidth(110) f.Option1:ClearAllPoints() f.Option1:Point("BOTTOMRIGHT", f, "BOTTOM", -4, 45) end)
+	f.Option2:SetScript("OnHide", function() f.Option1:SetWidth(160) f.Option1:ClearAllPoints() f.Option1:Point("BOTTOM", 0, 45) end)
+	S:HandleButton(f.Option2, true)
 
 	f.Option3 = CreateFrame("Button", "PluginInstallOption3Button", f, "UIPanelButtonTemplate")
-	f.Option3:StripTextures()
 	f.Option3:Size(100, 30)
 	f.Option3:Point("LEFT", f.Option2, "RIGHT", 4, 0)
 	f.Option3:SetText("")
 	f.Option3:Hide()
-	f.Option3:SetScript("OnShow", function() f.Option1:SetWidth(100); f.Option1:ClearAllPoints(); f.Option1:Point("RIGHT", f.Option2, "LEFT", -4, 0); f.Option2:SetWidth(100); f.Option2:ClearAllPoints(); f.Option2:Point("BOTTOM", f, "BOTTOM", 0, 45) end)
-	f.Option3:SetScript("OnHide", function() f.Option1:SetWidth(160); f.Option1:ClearAllPoints(); f.Option1:Point("BOTTOM", 0, 45); f.Option2:SetWidth(110); f.Option2:ClearAllPoints(); f.Option2:Point("BOTTOMLEFT", f, "BOTTOM", 4, 45) end)
-	E.Skins:HandleButton(f.Option3, true)
+	f.Option3:SetScript("OnShow", function() f.Option1:SetWidth(100) f.Option1:ClearAllPoints() f.Option1:Point("RIGHT", f.Option2, "LEFT", -4, 0) f.Option2:SetWidth(100) f.Option2:ClearAllPoints() f.Option2:Point("BOTTOM", f, "BOTTOM", 0, 45) end)
+	f.Option3:SetScript("OnHide", function() f.Option1:SetWidth(160) f.Option1:ClearAllPoints() f.Option1:Point("BOTTOM", 0, 45) f.Option2:SetWidth(110) f.Option2:ClearAllPoints() f.Option2:Point("BOTTOMLEFT", f, "BOTTOM", 4, 45) end)
+	S:HandleButton(f.Option3, true)
 
 	f.Option4 = CreateFrame("Button", "PluginInstallOption4Button", f, "UIPanelButtonTemplate")
-	f.Option4:StripTextures()
 	f.Option4:Size(100, 30)
 	f.Option4:Point("LEFT", f.Option3, "RIGHT", 4, 0)
 	f.Option4:SetText("")
@@ -286,13 +278,13 @@ function PI:CreateFrame()
 		f.Option1:Width(100)
 		f.Option2:Width(100)
 
-		f.Option1:ClearAllPoints();
-		f.Option1:Point("RIGHT", f.Option2, "LEFT", -4, 0);
-		f.Option2:ClearAllPoints();
+		f.Option1:ClearAllPoints()
+		f.Option1:Point("RIGHT", f.Option2, "LEFT", -4, 0)
+		f.Option2:ClearAllPoints()
 		f.Option2:Point("BOTTOMRIGHT", f, "BOTTOM", -4, 45)
 	end)
-	f.Option4:SetScript("OnHide", function() f.Option1:SetWidth(160); f.Option1:ClearAllPoints(); f.Option1:Point("BOTTOM", 0, 45); f.Option2:SetWidth(110); f.Option2:ClearAllPoints(); f.Option2:Point("BOTTOMLEFT", f, "BOTTOM", 4, 45) end)
-	E.Skins:HandleButton(f.Option4, true)
+	f.Option4:SetScript("OnHide", function() f.Option1:SetWidth(160) f.Option1:ClearAllPoints() f.Option1:Point("BOTTOM", 0, 45) f.Option2:SetWidth(110) f.Option2:ClearAllPoints() f.Option2:Point("BOTTOMLEFT", f, "BOTTOM", 4, 45) end)
+	S:HandleButton(f.Option4, true)
 
 	f.SubTitle = f:CreateFontString(nil, "OVERLAY")
 	f.SubTitle:FontTemplate(nil, 15, nil)
@@ -321,7 +313,7 @@ function PI:CreateFrame()
 	local close = CreateFrame("Button", "PluginInstallCloseButton", f, "UIPanelCloseButton")
 	close:SetPoint("TOPRIGHT", f, "TOPRIGHT")
 	close:SetScript("OnClick", function() f:Hide() end)
-	E.Skins:HandleCloseButton(close)
+	S:HandleCloseButton(close)
 
 	f.pending = CreateFrame("Frame", "PluginInstallPendingButton", f)
 	f.pending:Size(20, 20)
@@ -332,7 +324,7 @@ function PI:CreateFrame()
 	f.pending.tex:SetTexture([[Interface\OptionsFrame\UI-OptionsFrame-NewFeatureIcon]])
 	f.pending:CreateBackdrop("Transparent")
 	f.pending:SetScript("OnEnter", function(self)
-		_G["GameTooltip"]:SetOwner(self, "ANCHOR_BOTTOMLEFT", E.PixelMode and -7 or -9);
+		_G["GameTooltip"]:SetOwner(self, "ANCHOR_BOTTOMLEFT", E.PixelMode and -7 or -9)
 		_G["GameTooltip"]:AddLine(L["List of installations in queue:"], 1, 1, 1)
 		_G["GameTooltip"]:AddLine(" ")
 		for i = 1, #PI.Installs do
@@ -355,7 +347,7 @@ function PI:CreateFrame()
 	f.side:Width(140)
 	f.side.text = f.side:CreateFontString(nil, "OVERLAY")
 	f.side.text:SetPoint("TOP", f.side, "TOP", 0, -4)
-	f.side.text:SetFont(E["media"].normFont, 18, "OUTLINE")
+	f.side.text:FontTemplate(E.media.normFont, 18, "OUTLINE")
 	f.side.text:SetText(L["Steps"])
 	f.side.Lines = {} --Table to keep shown lines
 	f.side:Hide()
@@ -370,7 +362,7 @@ function PI:CreateFrame()
 		button.text = button:CreateFontString(nil, "OVERLAY")
 		button.text:SetPoint("TOPLEFT", button, "TOPLEFT", 2, -2)
 		button.text:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -2, 2)
-		button.text:SetFont(E["media"].normFont, 14, "OUTLINE")
+		button.text:FontTemplate(E.media.normFont, 14, "OUTLINE")
 		button:SetScript("OnClick", function() if i <= f.MaxPage then SetPage(i, f.CurrentPage) end end)
 		button.text:SetText("")
 		f.side.Lines[i] = button
@@ -403,7 +395,9 @@ function PI:CloseInstall()
 		f.side.Lines[i].text:SetText("")
 		f.side.Lines[i]:Hide()
 	end
-	if #(self.Installs) > 0 then E:Delay(1, function() PI:RunInstall() end) end
+	if #self.Installs > 0 then
+		E:Delay(1, PI.RunInstall, PI)
+	end
 end
 
 function PI:RunInstall()
@@ -419,7 +413,7 @@ function PI:RunInstall()
 		f.Title:SetText(db.Title or L["ElvUI Plugin Installation"])
 		f.Status:SetMinMaxValues(0, f.MaxPage)
 		f.Status.text:SetText(f.CurrentPage.." / "..f.MaxPage)
-		f.tutorialImage:SetTexture(db.tutorialImage or [[Interface\AddOns\ElvUI\media\textures\logo.tga]])
+		f.tutorialImage:SetTexture(db.tutorialImage or E.Media.Textures.Logo)
 
 		f.Pages = db.Pages
 
@@ -454,6 +448,7 @@ function PI:RunInstall()
 end
 
 function PI:Initialize()
+	PI.Initialized = true
 	PI:CreateStepComplete()
 	PI:CreateFrame()
 end

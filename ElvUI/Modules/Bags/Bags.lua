@@ -895,7 +895,7 @@ function B:OnEvent(event, ...)
 		B:UpdateCooldowns(self)
 	elseif event == "PLAYERBANKSLOTS_CHANGED" then
 		B:UpdateBagSlots(self, -1)
-	elseif (event == "QUEST_ACCEPTED" or event == "QUEST_LOG_UPDATE") and self:IsShown() then
+	elseif (event == "QUEST_ACCEPTED" or event == "QUEST_REMOVED" or event == "QUEST_LOG_UPDATE") and self:IsShown() then
 		B:UpdateAllSlots(self)
 		for slotID = 1, GetKeyRingSize() do
 			B:UpdateKeySlot(slotID)

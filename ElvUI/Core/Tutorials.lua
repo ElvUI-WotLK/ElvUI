@@ -9,7 +9,7 @@ local DISABLE = DISABLE
 local HIDE = HIDE
 
 E.TutorialList = {
-	L["For technical support visit us at http://www.tukui.org."],
+	L["For technical support visit us at https://github.com/ElvUI-WotLK."],
 	L["You can toggle the microbar by using your middle mouse button on the minimap you can also accomplish this by enabling the actual microbar located in the actionbar settings."],
 	L["A raid marker feature is available by pressing Escape -> Keybinds scroll to the bottom under ElvUI and setting a keybind for the raid marker."],
 	L["You can set your keybinds quickly by typing /kb."],
@@ -57,8 +57,9 @@ function E:SpawnTutorialFrame()
 	f:Hide()
 
 	local header = CreateFrame("Button", nil, f)
-	header:SetTemplate(nil, true)
-	header:Width(120); header:Height(25)
+	header:SetTemplate("Default", true)
+	header:Width(120)
+	header:Height(25)
 	header:Point("CENTER", f, "TOP")
 	header:SetFrameLevel(header:GetFrameLevel() + 2)
 
@@ -76,7 +77,7 @@ function E:SpawnTutorialFrame()
 	f.desc = desc
 
 	f.disableButton = CreateFrame("CheckButton", f:GetName().."DisableButton", f, "OptionsCheckButtonTemplate")
-	_G[f.disableButton:GetName() .. "Text"]:SetText(DISABLE)
+	_G[f.disableButton:GetName().."Text"]:SetText(DISABLE)
 	f.disableButton:Point("BOTTOMLEFT")
 	Skins:HandleCheckBox(f.disableButton)
 	f.disableButton:SetScript("OnShow", function(self) self:SetChecked(E.db.hideTutorial) end)
@@ -86,7 +87,7 @@ function E:SpawnTutorialFrame()
 	f.hideButton = CreateFrame("Button", f:GetName().."HideButton", f, "OptionsButtonTemplate")
 	f.hideButton:Point("BOTTOMRIGHT", -5, 5)
 	Skins:HandleButton(f.hideButton)
-	_G[f.hideButton:GetName() .. "Text"]:SetText(HIDE)
+	_G[f.hideButton:GetName().."Text"]:SetText(HIDE)
 	f.hideButton:SetScript("OnClick", function(self) E:StaticPopupSpecial_Hide(self:GetParent()) end)
 
 	f.nextButton = CreateFrame("Button", f:GetName().."NextButton", f, "OptionsButtonTemplate")
@@ -107,7 +108,7 @@ function E:SpawnTutorialFrame()
 end
 
 function E:Tutorials(forceShow)
-	if (not forceShow and self.db.hideTutorial) or (not forceShow and not self.private.install_complete) then return; end
+	if (not forceShow and self.db.hideTutorial) or (not forceShow and not self.private.install_complete) then return end
 	local f = ElvUITutorialWindow
 	if not f then
 		f = E:SpawnTutorialFrame()

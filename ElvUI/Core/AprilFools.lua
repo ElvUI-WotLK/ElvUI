@@ -17,9 +17,9 @@ local twipe, tinsert = wipe, tinsert
 local CreateFrame = CreateFrame
 local DoEmote = DoEmote
 local GetCVar, SetCVar = GetCVar, SetCVar
-local NUM_PET_ACTION_SLOTS = NUM_PET_ACTION_SLOTS
 local PlayMusic, StopMusic = PlayMusic, StopMusic
 local SendChatMessage = SendChatMessage
+local NUM_PET_ACTION_SLOTS = NUM_PET_ACTION_SLOTS
 
 --Harlem Shake (Activate with command: /harlemshake)
 --People really seemed to like this one. We got a lot of positive responses.
@@ -41,7 +41,7 @@ do
 			E:CancelTimer(E.massiveShakeTimer)
 		end
 
-		E.global.aprilFools = true;
+		E.global.aprilFools = true
 		E:StaticPopup_Hide("HARLEM_SHAKE")
 		twipe(self.massiveShakeObjects)
 		DoEmote("Dance")
@@ -79,10 +79,20 @@ do
 		tinsert(self.massiveShakeObjects, WatchFrame)
 		tinsert(self.massiveShakeObjects, LeftChatPanel)
 		tinsert(self.massiveShakeObjects, RightChatPanel)
+		tinsert(self.massiveShakeObjects, LeftChatToggleButton)
+		tinsert(self.massiveShakeObjects, RightChatToggleButton)
+
+		if ElvUI_ReputationBar then
+			tinsert(self.massiveShakeObjects, ElvUI_ReputationBar)
+		end
+		if ElvUI_ExperienceBar then
+			tinsert(self.massiveShakeObjects, ElvUI_ExperienceBar)
+		end
 
 		for unit in pairs(UF.units) do
 			tinsert(self.massiveShakeObjects, UF[unit])
 		end
+
 		for _, header in pairs(UF.headers) do
 			tinsert(self.massiveShakeObjects, header)
 		end
@@ -186,7 +196,7 @@ do
 			t.transparentAurabars = self.db.unitframe.colors.transparentAurabars
 
 			--Apply new settings
-			self.db.general.backdropfadecolor = {r =131/255, g =36/255, b = 130/255, a = 0.36}
+			self.db.general.backdropfadecolor = {r = 131/255, g = 36/255, b = 130/255, a = 0.36}
 			self.db.general.backdropcolor = {r = 223/255, g = 76/255, b = 188/255}
 			self.db.general.bordercolor = {r = 223/255, g = 217/255, b = 47/255}
 			self.db.general.valuecolor = {r = 223/255, g = 217/255, b = 47/255}
@@ -265,7 +275,7 @@ do
 		if HelloKittyLeft then
 			HelloKittyLeft:Show()
 			HelloKittyRight:Show()
-			return;
+			return
 		end
 		local helloKittyLeft = CreateFrame("Frame", "HelloKittyLeft", UIParent)
 		helloKittyLeft:SetSize(120, 128)
