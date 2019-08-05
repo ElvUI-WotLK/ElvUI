@@ -193,6 +193,8 @@ function AddOn:OnInitialize()
 			GameMenuButtonLogout:Point("TOPLEFT", GameMenuFrame[AddOnName], "BOTTOMLEFT", 0, -16)
 		end
 	end)
+
+	self.loadedtime = GetTime()
 end
 
 local LoadUI = CreateFrame("Frame")

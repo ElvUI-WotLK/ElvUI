@@ -4,11 +4,11 @@ local AB = E:GetModule("ActionBars")
 
 --Lua functions
 local tonumber, type = tonumber, type
-local format, lower = string.format, string.lower
+local format, lower, split = string.format, string.lower, strsplit
 --WoW API / Variables
 local InCombatLockdown = InCombatLockdown
 local UIFrameFadeOut, UIFrameFadeIn = UIFrameFadeOut, UIFrameFadeIn
-local EnableAddOn, DisableAddOn, DisableAllAddOns = EnableAddOn, DisableAddOn, DisableAllAddOns
+local EnableAddOn, DisableAllAddOns = EnableAddOn, DisableAllAddOns
 local SetCVar = SetCVar
 local ReloadUI = ReloadUI
 local debugprofilestop = debugprofilestop
