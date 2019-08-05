@@ -111,7 +111,7 @@ local EnglishSpecName = {
 local function GetSpecName()
 	local specIdx, specName = E:GetTalentSpecInfo()
 
-	if specIdx and (specName and specName ~= "") then
+	if (specIdx and specIdx ~= 0) and (specName and specName ~= "") then
 		return EnglishSpecName[E.myclass][specIdx]
 	else
 		return "None"
