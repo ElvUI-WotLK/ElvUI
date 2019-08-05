@@ -5,6 +5,7 @@ local _G = _G
 local min, max, abs, floor = min, max, abs, floor
 local format, tonumber = format, tonumber
 --WoW API / Variables
+local UIParent = UIParent
 
 function E:IsEyefinity(width, height)
 	if E.global.general.eyefinity and width >= 3840 then
@@ -33,7 +34,6 @@ function E:UIScale(init)
 		E.Spacing = (E.PixelMode and 0) or E.mult
 		E.Border = ((not E.twoPixelsPlease) and E.PixelMode and E.mult) or E.mult*2
 	else --E.Initialize
-		local UIParent = _G.UIParent
 		UIParent:SetScale(scale)
 
 		--Check if we are using `E.eyefinity`
@@ -46,7 +46,7 @@ function E:UIScale(init)
 			--Eyefinity Test: Resize the E.UIParent to be smaller than it should be, all objects inside should relocate.
 			--Dragging moveable frames outside the box and reloading the UI ensures that they are saving position correctly.
 			local uiWidth, uiHeight = UIParent:GetSize()
-			width, height = uiWidth-250, uiHeight-250
+			width, height = uiWidth - 250, uiHeight - 250
 		elseif E.eyefinity then
 			--find a new width value of E.UIParent for screen #1.
 			local uiHeight = UIParent:GetHeight()
@@ -71,7 +71,7 @@ function E:PixelBestSize()
 end
 
 function E:PixelClip(num)
-	return tonumber(format('%.6f', num))
+	return tonumber(format("%.5f", num))
 end
 
 function E:PixelScaleChanged(event, skip)
@@ -85,10 +85,10 @@ function E:PixelScaleChanged(event, skip)
 
 	if skip or E.global.general.ignoreScalePopup then return end
 
-	if event == 'UISCALE_CHANGE' then
+	if event == "UISCALE_CHANGE" then
 		E:Delay(0.5, E.StaticPopup_Show, E, event)
 	else
-		E:StaticPopup_Show('UISCALE_CHANGE')
+		E:StaticPopup_Show("UISCALE_CHANGE")
 	end
 end
 

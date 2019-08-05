@@ -213,6 +213,8 @@ end
 
 -- Generic fade function
 function E:UIFrameFade(frame, info)
+	if not frame then return end
+
 	frame.fadeInfo = info
 
 	if not info.mode then
@@ -245,6 +247,8 @@ end
 
 -- Convenience function to do a simple fade in
 function E:UIFrameFadeIn(frame, timeToFade, startAlpha, endAlpha)
+	if not frame then return end
+
 	if frame.FadeObject then
 		frame.FadeObject.fadeTimer = nil
 	else
@@ -262,6 +266,8 @@ end
 
 -- Convenience function to do a simple fade out
 function E:UIFrameFadeOut(frame, timeToFade, startAlpha, endAlpha)
+	if not frame then return end
+
 	if frame.FadeObject then
 		frame.FadeObject.fadeTimer = nil
 	else

@@ -5,6 +5,8 @@ local format = format
 --WoW API / Variables
 local GetMouseFocus = GetMouseFocus
 local FrameStackTooltip_Toggle = FrameStackTooltip_Toggle
+local SlashCmdList = SlashCmdList
+local UIParentLoadAddOn = UIParentLoadAddOn
 
 --[[
 	Command to grab frame information when mouseing over a frame
@@ -20,13 +22,17 @@ local FrameStackTooltip_Toggle = FrameStackTooltip_Toggle
 ]]
 
 SLASH_FRAME1 = "/frame"
-SlashCmdList["FRAME"] = function(arg)
+SlashCmdList.FRAME = function(arg)
 	if arg ~= "" then
 		arg = _G[arg]
 	else
 		arg = GetMouseFocus()
 	end
-	if arg ~= nil then FRAME = arg end --Set the global variable FRAME to = whatever we are mousing over to simplify messing with frames that have no name.
+
+	if arg ~= nil then
+		FRAME = arg -- Set the global variable FRAME to = whatever we are mousing over to simplify messing with frames that have no name.
+	end
+
 	if arg ~= nil and arg:GetName() ~= nil then
 		local point, relativeTo, relativePoint, xOfs, yOfs = arg:GetPoint()
 		ChatFrame1:AddMessage("|cffCC0000----------------------------")
@@ -65,7 +71,7 @@ t:SetTexture(0, 1, 0, 0.5)
 
 hooksecurefunc("FrameStackTooltip_Toggle", function()
 	local tooltip = _G["FrameStackTooltip"]
-	if(not tooltip:IsVisible()) then
+	if not tooltip:IsVisible() then
 		FrameStackHighlight:Hide()
 	end
 end)
@@ -73,12 +79,12 @@ end)
 local _timeSinceLast = 0
 FrameStackTooltip:HookScript("OnUpdate", function(_, elapsed)
 	_timeSinceLast = _timeSinceLast - elapsed
-	if(_timeSinceLast <= 0) then
+	if _timeSinceLast <= 0 then
 		_timeSinceLast = FRAMESTACK_UPDATE_TIME
 		local highlightFrame = GetMouseFocus()
 
 		FrameStackHighlight:ClearAllPoints()
-		if(highlightFrame and highlightFrame ~= _G["WorldFrame"]) then
+		if highlightFrame and highlightFrame ~= _G["WorldFrame"] then
 			FrameStackHighlight:SetPoint("BOTTOMLEFT", highlightFrame)
 			FrameStackHighlight:SetPoint("TOPRIGHT", highlightFrame)
 			FrameStackHighlight:Show()
@@ -89,14 +95,14 @@ FrameStackTooltip:HookScript("OnUpdate", function(_, elapsed)
 end)
 
 SLASH_FRAMELIST1 = "/framelist"
-SlashCmdList["FRAMELIST"] = function(msg)
-	if(not FrameStackTooltip) then
+SlashCmdList.FRAMELIST = function(msg)
+	if not FrameStackTooltip then
 		UIParentLoadAddOn("Blizzard_DebugTools")
 	end
 
 	local isPreviouslyShown = FrameStackTooltip:IsShown()
-	if(not isPreviouslyShown) then
-		if(msg == tostring(true)) then
+	if not isPreviouslyShown then
+		if msg == tostring(true) then
 			FrameStackTooltip_Toggle(true)
 		else
 			FrameStackTooltip_Toggle()
@@ -112,34 +118,29 @@ SlashCmdList["FRAMELIST"] = function(msg)
 	end
 	print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
-	if(CopyChatFrame:IsShown()) then
+	if CopyChatFrame:IsShown() then
 		CopyChatFrame:Hide()
 	end
 
 	ElvUI[1]:GetModule("Chat"):CopyChat(ChatFrame1)
-	if(not isPreviouslyShown) then
+	if not isPreviouslyShown then
 		FrameStackTooltip_Toggle()
 	end
 end
 
 local function TextureList(frame)
 	frame = _G[frame] or FRAME
-	--[[for key, obj in pairs(frame) do
-		if type(obj) == "table" and obj.GetObjectType and obj:GetObjectType() == "Texture" then
-			print(key, obj:GetTexture())
-		end
-	end]]
 
-	for i=1, frame:GetNumRegions() do
+	for i = 1, frame:GetNumRegions() do
 		local region = select(i, frame:GetRegions())
-		if(region:GetObjectType() == "Texture") then
-			print(region:GetTexture(), region:GetName())
+		if region.IsObjectType and region:IsObjectType("Texture") then
+			print(region:GetTexture(), region:GetName(), region:GetDrawLayer())
 		end
 	end
 end
 
 SLASH_TEXLIST1 = "/texlist"
-SlashCmdList["TEXLIST"] = TextureList
+SlashCmdList.TEXLIST = TextureList
 
 local function GetPoint(frame)
 	if frame ~= "" then
@@ -156,4 +157,4 @@ local function GetPoint(frame)
 end
 
 SLASH_GETPOINT1 = "/getpoint"
-SlashCmdList["GETPOINT"] = GetPoint
+SlashCmdList.GETPOINT = GetPoint

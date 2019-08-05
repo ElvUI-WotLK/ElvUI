@@ -523,7 +523,7 @@ local function SetPage(PageNum)
 	InstallStatus.anim.progress:Play()
 	InstallStatus.text:SetText(CURRENT_PAGE.." / "..MAX_PAGE)
 
-	local r, g, b = E:ColorGradient(CURRENT_PAGE / MAX_PAGE, 1, 0, 0, 1, 1, 0, 0, 1, 0);
+	local r, g, b = E:ColorGradient(CURRENT_PAGE / MAX_PAGE, 1, 0, 0, 1, 1, 0, 0, 1, 0)
 	ElvUIInstallFrame.Status:SetStatusBarColor(r, g, b)
 
 	if PageNum == MAX_PAGE then
@@ -679,7 +679,7 @@ function E:Install()
 				PlaySoundFile([[Sound\Interface\LevelUp.wav]])
 				f.text:SetText(f.message)
 				UIFrameFadeOut(f, 3.5, 1, 0)
-				E:Delay(4, function() f:Hide() end)
+				E:Delay(4, f.Hide, f)
 				f.message = nil
 			else
 				f:Hide()
@@ -696,21 +696,21 @@ function E:Install()
 		imsg.bg:SetVertexColor(1, 1, 1, 0.6)
 
 		imsg.lineTop = imsg:CreateTexture(nil, "BACKGROUND")
-		imsg.lineTop:SetDrawLayer('BACKGROUND', 2)
+		imsg.lineTop:SetDrawLayer("BACKGROUND")
 		imsg.lineTop:SetTexture([[Interface\AddOns\ElvUI\media\textures\LevelUpTex]])
 		imsg.lineTop:Point("TOP")
 		imsg.lineTop:Size(418, 7)
 		imsg.lineTop:SetTexCoord(0.00195313, 0.81835938, 0.01953125, 0.03320313)
 
 		imsg.lineBottom = imsg:CreateTexture(nil, "BACKGROUND")
-		imsg.lineBottom:SetDrawLayer('BACKGROUND', 2)
+		imsg.lineBottom:SetDrawLayer("BACKGROUND")
 		imsg.lineBottom:SetTexture([[Interface\AddOns\ElvUI\media\textures\LevelUpTex]])
 		imsg.lineBottom:Point("BOTTOM")
 		imsg.lineBottom:Size(418, 7)
 		imsg.lineBottom:SetTexCoord(0.00195313, 0.81835938, 0.01953125, 0.03320313)
 
 		imsg.text = imsg:CreateFontString(nil, "OVERLAY")
-		imsg.text:FontTemplate(E["media"].normFont, 32, "OUTLINE")
+		imsg.text:FontTemplate(E.media.normFont, 32, "OUTLINE")
 		imsg.text:Point("BOTTOM", 0, 16)
 		imsg.text:SetTextColor(1, 0.82, 0)
 		imsg.text:SetJustifyH("CENTER")
@@ -754,7 +754,7 @@ function E:Install()
 
 		f.Status = CreateFrame("StatusBar", "InstallStatus", f)
 		f.Status:SetFrameLevel(f.Status:GetFrameLevel() + 2)
-		f.Status:CreateBackdrop("Default")
+		f.Status:CreateBackdrop()
 		f.Status:SetStatusBarTexture(E.media.normTex)
 		E:RegisterStatusBar(f.Status)
 		f.Status:SetMinMaxValues(0, MAX_PAGE)
@@ -764,7 +764,7 @@ function E:Install()
 		-- Setup StatusBar Animation
 		f.Status.anim = CreateAnimationGroup(f.Status)
 		f.Status.anim.progress = f.Status.anim:CreateAnimation("Progress")
-		f.Status.anim.progress:SetSmoothing("Out")
+		f.Status.anim.progress:SetEasing("Out")
 		f.Status.anim.progress:SetDuration(0.3)
 
 		f.Status.text = f.Status:CreateFontString(nil, "OVERLAY")

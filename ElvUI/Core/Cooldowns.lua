@@ -1,5 +1,4 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local AB = E:GetModule("ActionBars")
 
 --Lua functions
 local next, ipairs, pairs = next, ipairs, pairs
@@ -25,7 +24,7 @@ function E:Cooldown_OnUpdate(elapsed)
 	else
 		local remain = self.duration - (GetTime() - self.start)
 		if remain > 0.05 then
-			if self.parent.hideText or (self.fontScale and (self.fontScale < MIN_SCALE)) then
+			if self.fontScale and (self.fontScale < MIN_SCALE) then
 				self.text:SetText("")
 				self.nextUpdate = 500
 			else
@@ -121,7 +120,6 @@ function E:CreateCooldownTimer(parent)
 			end
 
 			timer.timerOptions.reverseToggle = db.cooldown.reverse
-			timer.timerOptions.hideBlizzard = db.cooldown.hideBlizzard
 
 			if db.cooldown.override and E.TimeColors[parent.CooldownOverride] then
 				timer.timerOptions.timeColors, timer.timerOptions.timeThreshold = E.TimeColors[parent.CooldownOverride], db.cooldown.threshold
@@ -142,16 +140,8 @@ function E:CreateCooldownTimer(parent)
 			else
 				timer.timerOptions.fontOptions = nil
 			end
-
-			-- prevent LibActionBar from showing blizzard CD when the CD timer is created
-		--	if AB and (parent.CooldownOverride == "actionbar") then
-		--		AB:ToggleCountDownNumbers(nil, nil, parent)
-		--	end
 		end
 	end
-	----------
-
-	E:ToggleBlizzardCooldownText(parent, timer)
 
 	-- keep an eye on the size so we can rescale the font if needed
 	self:Cooldown_OnSizeChanged(timer, parent:GetWidth())
@@ -197,18 +187,6 @@ function E:RegisterCooldown(cooldown)
 	end
 end
 
-function E:ToggleBlizzardCooldownText(cd, timer, request)
-	-- we should hide the blizzard cooldown text when ours are enabled
-	if timer and cd and cd.SetHideCountdownNumbers then
-		local forceHide = cd.hideText or (timer.timerOptions and timer.timerOptions.hideBlizzard) or (E.db and E.db.cooldown and E.db.cooldown.hideBlizzard)
-		if request then
-			return forceHide or E:Cooldown_IsEnabled(timer)
-		else
-			cd:SetHideCountdownNumbers(forceHide or E:Cooldown_IsEnabled(timer))
-		end
-	end
-end
-
 function E:GetCooldownColors(db)
 	if not db then db = self.db.cooldown end -- just incase someone calls this without a first arg use the global
 	local c6 = E:RGBToHex(db.hhmmColor.r, db.hhmmColor.g, db.hhmmColor.b) -- HH:MM color
@@ -225,7 +203,7 @@ function E:UpdateCooldownOverride(module)
 	local cooldowns = (module and E.RegisteredCooldowns[module])
 	if (not cooldowns) or not next(cooldowns) then return end
 
-	local CD, db, customFont, customFontSize, timer, text, blizzTextAB
+	local CD, db, customFont, customFontSize, timer, text
 	for _, cd in ipairs(cooldowns) do
 		db = (cd.CooldownOverride and E.db[cd.CooldownOverride]) or self.db
 		db = db and db.cooldown
@@ -240,7 +218,6 @@ function E:UpdateCooldownOverride(module)
 			end
 
 			CD.timerOptions.reverseToggle = db.reverse
-			CD.timerOptions.hideBlizzard = db.hideBlizzard
 
 			if cd.CooldownOverride and db.override and E.TimeColors[cd.CooldownOverride] then
 				CD.timerOptions.timeColors, CD.timerOptions.timeThreshold = E.TimeColors[cd.CooldownOverride], db.threshold
@@ -261,7 +238,6 @@ function E:UpdateCooldownOverride(module)
 			else
 				CD.timerOptions.fontOptions = nil
 			end
-			----------
 
 			-- update font
 			if timer and CD then
@@ -295,23 +271,11 @@ function E:UpdateCooldownOverride(module)
 			-- force update cooldown
 			if timer and CD then
 				E:Cooldown_ForceUpdate(CD)
-				E:ToggleBlizzardCooldownText(cd, CD)
-				if (not blizzTextAB) and AB and AB.handledBars and (cd.CooldownOverride == "actionbar") then
-					blizzTextAB = true
-				end
 			elseif cd.CooldownOverride == "auras" and not (timer and CD) then
 				cd.nextUpdate = -1
 			end
 		end
 	end
-
---	if blizzTextAB then
---		for _, bar in pairs(AB.handledBars) do
---			if bar then
---				AB:ToggleCountDownNumbers(bar)
---			end
---		end
---	end
 end
 
 function E:UpdateCooldownSettings(module)

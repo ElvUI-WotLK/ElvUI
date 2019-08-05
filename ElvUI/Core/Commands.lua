@@ -18,52 +18,6 @@ local GetAddOnInfo = GetAddOnInfo
 local GetCVarBool = GetCVarBool
 local ERR_NOT_IN_COMBAT = ERR_NOT_IN_COMBAT
 
-function E:EnableAddon(addon)
-	local _, _, _, _, _, reason, _ = GetAddOnInfo(addon)
-	if reason ~= "MISSING" then
-		EnableAddOn(addon)
-		ReloadUI()
-	else
-		E:Print(format("Addon '%s' not found.", addon))
-	end
-end
-
-function E:DisableAddon(addon)
-	local _, _, _, _, _, reason, _ = GetAddOnInfo(addon)
-	if reason ~= "MISSING" then
-		DisableAddOn(addon)
-		ReloadUI()
-	else
-		E:Print(format("Addon '%s' not found.", addon))
-	end
-end
-
-function FarmMode()
-	if InCombatLockdown() then E:Print(ERR_NOT_IN_COMBAT) return end
-	if not E.private.general.minimap.enable then return end
-	if Minimap:IsShown() then
-		UIFrameFadeOut(Minimap, 0.3)
-		UIFrameFadeIn(FarmModeMap, 0.3)
-		Minimap.fadeInfo.finishedFunc = function() Minimap:Hide() MinimapZoomIn:Click() MinimapZoomOut:Click() Minimap:SetAlpha(1) end
-		FarmModeMap.enabled = true
-	else
-		UIFrameFadeOut(FarmModeMap, 0.3)
-		UIFrameFadeIn(Minimap, 0.3)
-		FarmModeMap.fadeInfo.finishedFunc = function() FarmModeMap:Hide() MinimapZoomIn:Click() MinimapZoomOut:Click() Minimap:SetAlpha(1) end
-		FarmModeMap.enabled = false
-	end
-end
-
-function E:FarmMode(msg)
-	if not E.private.general.minimap.enable then return end
-	if msg and type(tonumber(msg)) == "number" and tonumber(msg) <= 500 and tonumber(msg) >= 20 and not InCombatLockdown() then
-		E.db.farmSize = tonumber(msg)
-		FarmModeMap:Size(tonumber(msg))
-	end
-
-	FarmMode()
-end
-
 function E:Grid(msg)
 	msg = msg and tonumber(msg)
 	if type(msg) == "number" and (msg <= 256 and msg >= 4) then
@@ -114,6 +68,74 @@ function E:DelayScriptCall(msg)
 	end
 end
 
+function FarmMode()
+	if InCombatLockdown() then E:Print(ERR_NOT_IN_COMBAT) return end
+	if not E.private.general.minimap.enable then return end
+
+	if Minimap:IsShown() then
+		UIFrameFadeOut(Minimap, 0.3)
+		UIFrameFadeIn(FarmModeMap, 0.3)
+		Minimap.fadeInfo.finishedFunc = function() Minimap:Hide() _G.MinimapZoomIn:Click() _G.MinimapZoomOut:Click() Minimap:SetAlpha(1) end
+		FarmModeMap.enabled = true
+	else
+		UIFrameFadeOut(FarmModeMap, 0.3)
+		UIFrameFadeIn(Minimap, 0.3)
+		FarmModeMap.fadeInfo.finishedFunc = function() FarmModeMap:Hide() _G.MinimapZoomIn:Click() _G.MinimapZoomOut:Click() Minimap:SetAlpha(1) end
+		FarmModeMap.enabled = false
+	end
+end
+
+function E:FarmMode(msg)
+	if not E.private.general.minimap.enable then return end
+
+	if msg and type(tonumber(msg)) == "number" and tonumber(msg) <= 500 and tonumber(msg) >= 20 and not InCombatLockdown() then
+		E.db.farmSize = tonumber(msg)
+		FarmModeMap:Size(tonumber(msg))
+	end
+
+	FarmMode()
+end
+
+-- make this a locale later?
+local MassKickMessage = "Guild Cleanup Results: Removed all guild members below rank %s, that have a minimal level of %s, and have not been online for at least: %s days."
+function E:MassGuildKick(msg)
+	local minLevel, minDays, minRankIndex = split(",", msg)
+	minRankIndex = tonumber(minRankIndex)
+	minLevel = tonumber(minLevel)
+	minDays = tonumber(minDays)
+
+	if not minLevel or not minDays then
+		E:Print("Usage: /cleanguild <minLevel>, <minDays>, [<minRankIndex>]")
+		return
+	end
+
+	if minDays > 31 then
+		E:Print("Maximum days value must be below 32.")
+		return
+	end
+
+	if not minRankIndex then minRankIndex = GuildControlGetNumRanks() - 1 end
+
+	for i = 1, GetNumGuildMembers() do
+		local name, _, rankIndex, level, _, _, note, officerNote, connected, _, classFileName = GetGuildRosterInfo(i)
+		local minLevelx = minLevel
+
+		if classFileName == "DEATHKNIGHT" then
+			minLevelx = minLevelx + 55
+		end
+
+		if not connected then
+			local years, months, days = GetGuildRosterLastOnline(i)
+			if days ~= nil and ((years > 0 or months > 0 or days >= minDays) and rankIndex >= minRankIndex)
+			and note ~= nil and officerNote ~= nil and (level <= minLevelx) then
+				GuildUninvite(name)
+			end
+		end
+	end
+
+	SendChatMessage(format(MassKickMessage, GuildControlGetRankName(minRankIndex), minLevel, minDays), "GUILD")
+end
+
 local num_frames = 0
 local function OnUpdate()
 	num_frames = num_frames + 1
@@ -147,6 +169,42 @@ function E:GetCPUImpact()
 	end
 end
 
+local BLIZZARD_ADDONS = {
+	"Blizzard_AchievementUI",
+	"Blizzard_ArenaUI",
+	"Blizzard_AuctionUI",
+	"Blizzard_BarbershopUI",
+	"Blizzard_BattlefieldMinimap",
+	"Blizzard_BindingUI",
+	"Blizzard_Calendar",
+	"Blizzard_CombatLog",
+	"Blizzard_CombatText",
+	"Blizzard_DebugTools",
+	"Blizzard_GlyphUI",
+	"Blizzard_GMChatUI",
+	"Blizzard_GMSurveyUI",
+	"Blizzard_GuildBankUI",
+	"Blizzard_InspectUI",
+	"Blizzard_ItemSocketingUI",
+	"Blizzard_MacroUI",
+	"Blizzard_RaidUI",
+	"Blizzard_TalentUI",
+	"Blizzard_TimeManager",
+	"Blizzard_TokenUI",
+	"Blizzard_TradeSkillUI",
+	"Blizzard_TrainerUI"
+}
+
+function E:EnableBlizzardAddOns()
+	for _, addon in pairs(BLIZZARD_ADDONS) do
+		local reason = select(5, GetAddOnInfo(addon))
+		if reason == "DISABLED" then
+			EnableAddOn(addon)
+			E:Print("The following addon was re-enabled:", addon)
+		end
+	end
+end
+
 function E:LoadCommands()
 	self:RegisterChatCommand("in", "DelayScriptCall")
 	self:RegisterChatCommand("ec", "ToggleOptionsUI")
@@ -172,6 +230,7 @@ function E:LoadCommands()
 	self:RegisterChatCommand("enable", "EnableAddon")
 	self:RegisterChatCommand("disable", "DisableAddon")
 	self:RegisterChatCommand("farmmode", "FarmMode")
+	self:RegisterChatCommand("cleanguild", "MassGuildKick")
 	self:RegisterChatCommand("estatus", "ShowStatusReport")
 	-- self:RegisterChatCommand("aprilfools", "") --Don't need this until next april fools
 

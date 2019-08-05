@@ -50,7 +50,7 @@ local RAID_CLASS_COLORS = RAID_CLASS_COLORS
 
 --Constants
 E.noop = function() end
-E.title = format("|cffff7000E|r|cffe5e3e3lvUI|r")
+E.title = format("|cff1784d1E|r|cffe5e3e3lvUI|r")
 E.myfaction, E.myLocalizedFaction = UnitFactionGroup("player")
 E.mylevel = UnitLevel("player")
 E.myLocalizedClass, E.myclass, E.myClassID = UnitClass("player")
@@ -146,11 +146,11 @@ function E:ColorizedName(name, arg2)
 	for i = 1, length do
 		local letter = sub(name, i, i)
 		if i == 1 then
-			colorizedName = format("|cffA11313%s", letter)
+			colorizedName = format("|cff1784d1%s", letter)
 		elseif i == 2 then
-			colorizedName = format("%s|r|cffC4C4C4%s", colorizedName, letter)
+			colorizedName = format("%s|r|cffe5e3e3%s", colorizedName, letter)
 		elseif i == length and arg2 then
-			colorizedName = format("%s%s|r|cffA11313:|r", colorizedName, letter)
+			colorizedName = format("%s%s|r|cff1784d1:|r", colorizedName, letter)
 		else
 			colorizedName = colorizedName..letter
 		end
