@@ -615,6 +615,8 @@ do
 		frame:SetPoint("CENTER", UIParent, "CENTER")
 		frame:SetSize(320, 72)
 		frame:SetFrameStrata("TOOLTIP")
+		frame:EnableKeyboard(true)
+
 		frame:SetScript("OnKeyDown", function(self, key)
 			if key == "ESCAPE" then
 				if self.cancel:IsShown() then
