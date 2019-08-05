@@ -1,6 +1,6 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local mod = E:GetModule("NamePlates")
-local LSM = LibStub("LibSharedMedia-3.0")
+local NP = E:GetModule("NamePlates")
+local LSM = E.Libs.LSM
 
 local unpack = unpack
 
@@ -11,7 +11,7 @@ local UnitChannelInfo = UnitChannelInfo
 local FAILED = FAILED
 local INTERRUPTED = INTERRUPTED
 
-function mod:UpdateElement_CastBarOnUpdate(elapsed)
+function NP:UpdateElement_CastBarOnUpdate(elapsed)
 	if self.casting then
 		self.value = self.value + elapsed
 		if self.value >= self.maxValue then
@@ -55,7 +55,7 @@ function mod:UpdateElement_CastBarOnUpdate(elapsed)
 	end
 end
 
-function mod:UpdateElement_Cast(frame, event, unit)
+function NP:UpdateElement_Cast(frame, event, unit)
 	if self.db.units[frame.UnitType].castbar.enable ~= true then return end
 	if self.db.units[frame.UnitType].healthbar.enable ~= true and not (frame.isTarget and self.db.alwaysShowTargetHealth) then return end --Bug
 
@@ -214,7 +214,7 @@ function mod:UpdateElement_Cast(frame, event, unit)
 	end
 end
 
-function mod:ConfigureElement_CastBar(frame)
+function NP:ConfigureElement_CastBar(frame)
 	if not frame.UnitType then return end
 
 	local castBar = frame.CastBar
@@ -262,16 +262,16 @@ function mod:ConfigureElement_CastBar(frame)
 	castBar.channelTimeFormat = self.db.units[frame.UnitType].castbar.channelTimeFormat
 end
 
-function mod:ConstructElement_CastBar(parent)
+function NP:ConstructElement_CastBar(parent)
 	local function updateGlowPosition()
 		if not parent then return end
 
-		mod:UpdatePosition_Glow(parent)
+		NP:UpdatePosition_Glow(parent)
 	end
 
 	local frame = CreateFrame("StatusBar", "$parentCastBar", parent)
 	self:StyleFrame(frame)
-	frame:SetScript("OnUpdate", mod.UpdateElement_CastBarOnUpdate)
+	frame:SetScript("OnUpdate", NP.UpdateElement_CastBarOnUpdate)
 	frame:SetScript("OnShow", updateGlowPosition)
 	frame:SetScript("OnHide", updateGlowPosition)
 
@@ -283,13 +283,16 @@ function mod:ConstructElement_CastBar(parent)
 	frame.Name = frame:CreateFontString(nil, "OVERLAY")
 	frame.Name:SetFont(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline)
 	frame.Name:SetWordWrap(false)
+
 	frame.Time = frame:CreateFontString(nil, "OVERLAY")
 	frame.Time:SetFont(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline)
 	frame.Time:SetWordWrap(false)
+
 	frame.Spark = frame:CreateTexture(nil, "OVERLAY")
 	frame.Spark:SetTexture([[Interface\CastingBar\UI-CastingBar-Spark]])
 	frame.Spark:SetBlendMode("ADD")
 	frame.Spark:SetSize(15, 15)
+
 	frame:Hide()
 
 	return frame

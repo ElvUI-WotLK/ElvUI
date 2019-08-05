@@ -1,20 +1,20 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local mod = E:GetModule("NamePlates")
-local LSM = LibStub("LibSharedMedia-3.0")
+local NP = E:GetModule("NamePlates")
+local LSM = E.Libs.LSM
 
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS
 
-function mod:UpdateElement_HealthOnValueChanged()
+function NP:UpdateElement_HealthOnValueChanged()
 	local frame = self:GetParent().UnitFrame
 	if not frame.UnitType then return end -- Bugs
 
-	mod:UpdateElement_Health(frame)
-	mod:UpdateElement_HealthColor(frame)
-	mod:UpdateElement_Glow(frame)
-	mod:UpdateElement_Filters(frame, "UNIT_HEALTH")
+	NP:UpdateElement_Health(frame)
+	NP:UpdateElement_HealthColor(frame)
+	NP:UpdateElement_Glow(frame)
+	NP:UpdateElement_Filters(frame, "UNIT_HEALTH")
 end
 
-function mod:UpdateElement_HealthColor(frame)
+function NP:UpdateElement_HealthColor(frame)
 	if not frame.HealthBar:IsShown() then return end
 
 	local r, g, b
@@ -22,32 +22,32 @@ function mod:UpdateElement_HealthColor(frame)
 
 	local class = frame.UnitClass
 	local classColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class]
-	local useClassColor = mod.db.units[frame.UnitType].healthbar.useClassColor
+	local useClassColor = NP.db.units[frame.UnitType].healthbar.useClassColor
 	if classColor and ((frame.UnitType == "FRIENDLY_PLAYER" and useClassColor) or (frame.UnitType == "ENEMY_PLAYER" and useClassColor)) then
 		r, g, b = classColor.r, classColor.g, classColor.b
 	else
-		local status = mod:UnitDetailedThreatSituation(frame)
+		local status = NP:UnitDetailedThreatSituation(frame)
 		if status then
 			if status == 3 then
 				if E.Role == "Tank" then
-					r, g, b = mod.db.threat.goodColor.r, mod.db.threat.goodColor.g, mod.db.threat.goodColor.b
-					scale = mod.db.threat.goodScale
+					r, g, b = NP.db.threat.goodColor.r, NP.db.threat.goodColor.g, NP.db.threat.goodColor.b
+					scale = NP.db.threat.goodScale
 				else
-					r, g, b = mod.db.threat.badColor.r, mod.db.threat.badColor.g, mod.db.threat.badColor.b
-					scale = mod.db.threat.badScale
+					r, g, b = NP.db.threat.badColor.r, NP.db.threat.badColor.g, NP.db.threat.badColor.b
+					scale = NP.db.threat.badScale
 				end
 			elseif status == 2 then
 				if E.Role == "Tank" then
-					r, g, b = mod.db.threat.badTransition.r, mod.db.threat.badTransition.g, mod.db.threat.badTransition.b
+					r, g, b = NP.db.threat.badTransition.r, NP.db.threat.badTransition.g, NP.db.threat.badTransition.b
 				else
-					r, g, b = mod.db.threat.goodTransition.r, mod.db.threat.goodTransition.g, mod.db.threat.goodTransition.b
+					r, g, b = NP.db.threat.goodTransition.r, NP.db.threat.goodTransition.g, NP.db.threat.goodTransition.b
 				end
 				scale = 1
 			elseif status == 1 then
 				if E.Role == "Tank" then
-					r, g, b = mod.db.threat.goodTransition.r, mod.db.threat.goodTransition.g, mod.db.threat.goodTransition.b
+					r, g, b = NP.db.threat.goodTransition.r, NP.db.threat.goodTransition.g, NP.db.threat.goodTransition.b
 				else
-					r, g, b = mod.db.threat.badTransition.r, mod.db.threat.badTransition.g, mod.db.threat.badTransition.b
+					r, g, b = NP.db.threat.badTransition.r, NP.db.threat.badTransition.g, NP.db.threat.badTransition.b
 				end
 				scale = 1
 			else
@@ -72,18 +72,18 @@ function mod:UpdateElement_HealthColor(frame)
 			end
 		end
 
-		if (not status) or (status and not mod.db.threat.useThreatColor) then
+		if (not status) or (status and not NP.db.threat.useThreatColor) then
 			local reactionType = frame.UnitReaction
 			if reactionType == 4 then
-				r, g, b = mod.db.reactions.neutral.r, mod.db.reactions.neutral.g, mod.db.reactions.neutral.b
+				r, g, b = NP.db.reactions.neutral.r, NP.db.reactions.neutral.g, NP.db.reactions.neutral.b
 			elseif reactionType > 4 then
 				if frame.UnitType == "FRIENDLY_PLAYER" then
-					r, g, b = mod.db.reactions.friendlyPlayer.r, mod.db.reactions.friendlyPlayer.g, mod.db.reactions.friendlyPlayer.b
+					r, g, b = NP.db.reactions.friendlyPlayer.r, NP.db.reactions.friendlyPlayer.g, NP.db.reactions.friendlyPlayer.b
 				else
-					r, g, b = mod.db.reactions.good.r, mod.db.reactions.good.g, mod.db.reactions.good.b
+					r, g, b = NP.db.reactions.good.r, NP.db.reactions.good.g, NP.db.reactions.good.b
 				end
 			else
-				r, g, b = mod.db.reactions.bad.r, mod.db.reactions.bad.g, mod.db.reactions.bad.b
+				r, g, b = NP.db.reactions.bad.r, NP.db.reactions.bad.g, NP.db.reactions.bad.b
 			end
 		end
 	end
@@ -109,7 +109,7 @@ function mod:UpdateElement_HealthColor(frame)
 	end
 end
 
-function mod:UpdateElement_Health(frame)
+function NP:UpdateElement_Health(frame)
 	local health = frame.oldHealthBar:GetValue()
 	local _, maxHealth = frame.oldHealthBar:GetMinMaxValues()
 	frame.HealthBar:SetMinMaxValues(0, maxHealth)
@@ -135,7 +135,7 @@ function mod:UpdateElement_Health(frame)
 	end
 end
 
-function mod:RegisterHealthBarCallbacks(frame, valueChangeCB, colorChangeCB, maxHealthChangeCB)
+function NP:RegisterHealthBarCallbacks(frame, valueChangeCB, colorChangeCB, maxHealthChangeCB)
 	if valueChangeCB then
 		frame.HealthValueChangeCallbacks = frame.HealthValueChangeCallbacks or {}
 		tinsert(frame.HealthValueChangeCallbacks, valueChangeCB)
@@ -152,13 +152,13 @@ function mod:RegisterHealthBarCallbacks(frame, valueChangeCB, colorChangeCB, max
 	end
 end
 
-function mod:ConfigureElement_HealthBar(frame, configuring)
+function NP:ConfigureElement_HealthBar(frame, configuring)
 	local healthBar = frame.HealthBar
 
 	healthBar:SetPoint("TOP", frame, "CENTER", 0, self.db.units[frame.UnitType].castbar.height + 3)
+
 	healthBar:SetWidth(self.db.units[frame.UnitType].healthbar.width * (frame.ThreatScale or 1) * (frame.isTarget and self.db.useTargetScale and self.db.targetScale or 1))
 	healthBar:SetHeight(self.db.units[frame.UnitType].healthbar.height * (frame.ThreatScale or 1) * (frame.isTarget and self.db.useTargetScale and self.db.targetScale or 1))
-
 
 	healthBar:SetStatusBarTexture(LSM:Fetch("statusbar", self.db.statusbar), "BORDER")
 
@@ -170,7 +170,7 @@ function mod:ConfigureElement_HealthBar(frame, configuring)
 	healthBar.text:SetFont(LSM:Fetch("font", self.db.healthFont), self.db.healthFontSize, self.db.healthFontOutline)
 end
 
-function mod:ConstructElement_HealthBar(parent)
+function NP:ConstructElement_HealthBar(parent)
 	local frame = CreateFrame("StatusBar", "$parentHealthBar", parent)
 	frame:SetStatusBarTexture(LSM:Fetch("statusbar", self.db.statusbar), "BORDER")
 	self:StyleFrame(frame)

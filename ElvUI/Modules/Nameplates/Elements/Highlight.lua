@@ -1,8 +1,8 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local mod = E:GetModule("NamePlates")
-local LSM = LibStub("LibSharedMedia-3.0")
+local NP = E:GetModule("NamePlates")
+local LSM = E.Libs.LSM
 
-function mod:UpdateElement_Highlight(frame)
+function NP:UpdateElement_Highlight(frame)
 	if frame:IsShown() and frame.isMouseover and (frame.NameOnlyChanged or (not self.db.units[frame.UnitType].healthbar.enable and self.db.units[frame.UnitType].showName)) and not frame.isTarget then
 		frame.Name.NameOnlyGlow:Show()
 		frame.Highlight:Show()
@@ -19,12 +19,12 @@ function mod:UpdateElement_Highlight(frame)
 	end
 end
 
-function mod:ConfigureElement_Highlight(frame)
+function NP:ConfigureElement_Highlight(frame)
 	if not self.db.units[frame.UnitType].healthbar.enable then return end
 	frame.Highlight.texture:SetTexture(LSM:Fetch("statusbar", self.db.statusbar))
 end
 
-function mod:ConstructElement_Highlight(frame)
+function NP:ConstructElement_Highlight(frame)
 	local f = CreateFrame("Frame", nil, frame)
 	f.texture = frame.HealthBar:CreateTexture("$parentHighlight", "ARTWORK")
 	f.texture:SetVertexColor(1, 1, 1, 0.3)

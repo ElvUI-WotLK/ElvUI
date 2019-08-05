@@ -1,11 +1,11 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local mod = E:GetModule("NamePlates")
-local LSM = LibStub("LibSharedMedia-3.0")
+local NP = E:GetModule("NamePlates")
+local LSM = E.Libs.LSM
 
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS
 local UNKNOWN = UNKNOWN
 
-function mod:UpdateElement_Name(frame, triggered)
+function NP:UpdateElement_Name(frame, triggered)
 	if not triggered then
 		if not self.db.units[frame.UnitType].showName then return end
 	end
@@ -30,9 +30,9 @@ function mod:UpdateElement_Name(frame, triggered)
 				r, g, b = self.db.reactions.neutral.r, self.db.reactions.neutral.g, self.db.reactions.neutral.b
 			elseif reactionType > 4 then
 				if frame.UnitType == "FRIENDLY_PLAYER" then
-					r, g, b = mod.db.reactions.friendlyPlayer.r, mod.db.reactions.friendlyPlayer.g, mod.db.reactions.friendlyPlayer.b
+					r, g, b = NP.db.reactions.friendlyPlayer.r, NP.db.reactions.friendlyPlayer.g, NP.db.reactions.friendlyPlayer.b
 				else
-					r, g, b = mod.db.reactions.good.r, mod.db.reactions.good.g, mod.db.reactions.good.b
+					r, g, b = NP.db.reactions.good.r, NP.db.reactions.good.g, NP.db.reactions.good.b
 				end
 			else
 				r, g, b = self.db.reactions.bad.r, self.db.reactions.bad.g, self.db.reactions.bad.b
@@ -59,7 +59,7 @@ function mod:UpdateElement_Name(frame, triggered)
 	end
 end
 
-function mod:ConfigureElement_Name(frame)
+function NP:ConfigureElement_Name(frame)
 	local name = frame.Name
 
 	name:SetJustifyH("LEFT")
@@ -77,13 +77,13 @@ function mod:ConfigureElement_Name(frame)
 	name:SetFont(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline)
 end
 
-function mod:ConstructElement_Name(frame)
+function NP:ConstructElement_Name(frame)
 	local name = frame:CreateFontString(nil, "OVERLAY")
 	name:SetFont(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline)
 	name:SetWordWrap(false)
 
 	local g = frame:CreateTexture(nil, "BACKGROUND", nil, -5)
-	g:SetTexture([[Interface\AddOns\ElvUI\media\textures\spark.tga]])
+	g:SetTexture(E.Media.Textures.Spark)
 	g:Hide()
 	g:SetPoint("TOPLEFT", name, -20, 8)
 	g:SetPoint("BOTTOMRIGHT", name, 20, -8)

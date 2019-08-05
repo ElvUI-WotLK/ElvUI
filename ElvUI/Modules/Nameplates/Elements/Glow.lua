@@ -1,6 +1,6 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local mod = E:GetModule("NamePlates")
-local LSM = LibStub("LibSharedMedia-3.0")
+local NP = E:GetModule("NamePlates")
+local LSM = E.Libs.LSM
 
 local CreateFrame = CreateFrame
 
@@ -16,7 +16,7 @@ Target Glow Style Option Variables
 	style8 - Background + Side Arrows
 ]]
 
-function mod:UpdatePoisiton_Arrow(frame, shouldShow)
+function NP:UpdatePoisiton_Arrow(frame, shouldShow)
 	if frame.TopArrow and (shouldShow ~= 2) and (self.db.targetGlow == "style3" or self.db.targetGlow == "style5" or self.db.targetGlow == "style6") then -- top arrow
 		local topArrowSpace = -3
 		if self.db.units[frame.UnitType].showName and (frame.Name:GetText() ~= nil and frame.Name:GetText() ~= "") then
@@ -40,7 +40,7 @@ function mod:UpdatePoisiton_Arrow(frame, shouldShow)
 	end
 end
 
-function mod:UpdatePosition_Glow(frame, shouldShow)
+function NP:UpdatePosition_Glow(frame, shouldShow)
 	local castBar = frame.CastBar and frame.CastBar:IsShown() and frame.CastBar
 	local iconPosition = castBar and (castBar.Icon and castBar.Icon:IsShown()) and (frame.UnitType and self.db.units[frame.UnitType].castbar.iconPosition)
 
@@ -77,7 +77,7 @@ function mod:UpdatePosition_Glow(frame, shouldShow)
 	end
 end
 
-function mod:UpdateElement_Glow(frame)
+function NP:UpdateElement_Glow(frame)
 	if frame.TopArrow:IsShown() then frame.TopArrow:Hide() end
 	if frame.LeftArrow:IsShown() then frame.LeftArrow:Hide() end
 	if frame.RightArrow:IsShown() then frame.RightArrow:Hide() end
@@ -119,35 +119,35 @@ function mod:UpdateElement_Glow(frame)
 	end
 end
 
-function mod:ConfigureElement_Glow(frame)
+function NP:ConfigureElement_Glow(frame)
 
 end
 
-function mod:ConstructElement_Glow(frame)
+function NP:ConstructElement_Glow(frame)
 	local f = CreateFrame("Frame", "$parentGlow", frame)
 	f:SetFrameLevel(frame.HealthBar:GetFrameLevel() - 1)
 	f:SetBackdrop({edgeFile = LSM:Fetch("border", "ElvUI GlowBorder"), edgeSize = E:Scale(6)})
 	f:Hide()
 
 	local glow = frame:CreateTexture(nil, "BACKGROUND")
-	glow:SetTexture([[Interface\AddOns\ElvUI\media\textures\spark.tga]])
+	glow:SetTexture(E.Media.Textures.Spark)
 	glow:Hide()
 	frame.Glow2 = glow
 
 	local top = frame:CreateTexture(nil, "BACKGROUND")
-	top:SetTexture([[Interface\AddOns\ElvUI\media\textures\nameplateTargetIndicator.tga]])
+	top:SetTexture(E.Media.Textures.NameplateTargetIndicator)
 	top:Size(45)
 	top:Hide()
 	frame.TopArrow = top
 
 	local left = frame:CreateTexture(nil, "BACKGROUND")
-	left:SetTexture([[Interface\AddOns\ElvUI\media\textures\nameplateTargetIndicatorLeft.tga]])
+	left:SetTexture(E.Media.Textures.NameplateTargetIndicatorLeft)
 	left:Size(45)
 	left:Hide()
 	frame.LeftArrow = left
 
 	local right = frame:CreateTexture(nil, "BACKGROUND")
-	right:SetTexture([[Interface\AddOns\ElvUI\media\textures\nameplateTargetIndicatorRight.tga]])
+	right:SetTexture(E.Media.Textures.NameplateTargetIndicatorRight)
 	right:Size(45)
 	right:Hide()
 	frame.RightArrow = right

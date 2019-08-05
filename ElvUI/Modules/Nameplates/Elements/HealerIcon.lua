@@ -1,7 +1,7 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local mod = E:GetModule("NamePlates")
+local NP = E:GetModule("NamePlates")
 
-function mod:UpdateElement_HealerIcon(frame)
+function NP:UpdateElement_HealerIcon(frame)
 	local icon = frame.HealerIcon
 	icon:ClearAllPoints()
 	if frame.HealthBar:IsShown() then
@@ -16,11 +16,11 @@ function mod:UpdateElement_HealerIcon(frame)
 	end
 end
 
-function mod:ConstructElement_HealerIcon(frame)
+function NP:ConstructElement_HealerIcon(frame)
 	local texture = frame:CreateTexture(nil, "OVERLAY")
 	texture:SetPoint("RIGHT", frame.HealthBar, "LEFT", -6, 0)
 	texture:SetSize(40, 40)
-	texture:SetTexture([[Interface\AddOns\ElvUI\media\textures\healer.tga]])
+	texture:SetTexture(E.Media.Textures.Healer)
 	texture:Hide()
 
 	return texture

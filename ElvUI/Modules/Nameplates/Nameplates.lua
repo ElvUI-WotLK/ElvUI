@@ -1,7 +1,7 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local mod = E:GetModule("NamePlates")
-local LSM = LibStub("LibSharedMedia-3.0")
-local LAI = LibStub("LibAuraInfo-1.0-ElvUI", true)
+local NP = E:GetModule("NamePlates")
+local LSM = E.Libs.LSM
+local LAI = E.Libs.LAI
 
 local _G = _G
 local select, unpack, pairs, tonumber = select, unpack, pairs, tonumber
@@ -32,18 +32,18 @@ local RaidIconCoordinate = {
 	[0.75] = {[0] = "TRIANGLE", [0.25] = "SKULL"}
 }
 
-mod.CreatedPlates = {}
-mod.VisiblePlates = {}
-mod.Healers = {}
+NP.CreatedPlates = {}
+NP.VisiblePlates = {}
+NP.Healers = {}
 
-mod.ByName = {}
+NP.ByName = {}
 
-mod.ENEMY_PLAYER = {}
-mod.FRIENDLY_PLAYER = {}
-mod.ENEMY_NPC = {}
-mod.FRIENDLY_NPC = {}
+NP.ENEMY_PLAYER = {}
+NP.FRIENDLY_PLAYER = {}
+NP.ENEMY_NPC = {}
+NP.FRIENDLY_NPC = {}
 
-function mod:CheckBGHealers()
+function NP:CheckBGHealers()
 	local name, _, damageDone, healingDone
 	for i = 1, GetNumBattlefieldScores() do
 		name, _, _, _, _, _, _, _, _, _, damageDone, healingDone = GetBattlefieldScore(i)
@@ -58,7 +58,7 @@ function mod:CheckBGHealers()
 	end
 end
 
-function mod:SetFrameScale(frame, scale)
+function NP:SetFrameScale(frame, scale)
 	if frame.HealthBar.currentScale ~= scale then
 		if frame.HealthBar.scale:IsPlaying() then
 			frame.HealthBar.scale:Stop()
@@ -70,15 +70,15 @@ function mod:SetFrameScale(frame, scale)
 	end
 end
 
-function mod:GetPlateFrameLevel(frame)
+function NP:GetPlateFrameLevel(frame)
 	local plateLevel
 	if frame.plateID then
-		plateLevel = frame.plateID*mod.levelStep
+		plateLevel = frame.plateID*NP.levelStep
 	end
 	return plateLevel
 end
 
-function mod:SetPlateFrameLevel(frame, level, isTarget)
+function NP:SetPlateFrameLevel(frame, level, isTarget)
 	if frame and level then
 		if isTarget then
 			level = 890 --10 higher than the max calculated level of 880
@@ -86,8 +86,8 @@ function mod:SetPlateFrameLevel(frame, level, isTarget)
 			--calculate Style Filter FrameLevelChanged leveling
 			--level method: (10*(40*2)) max 800 + max 80 (40*2) = max 880
 			--highest possible should be level 880 and we add 1 to all so 881
-			local leveledCount = mod.CollectedFrameLevelCount or 1
-			level = (frame.FrameLevelChanged*(40*mod.levelStep)) + (leveledCount*mod.levelStep)
+			local leveledCount = NP.CollectedFrameLevelCount or 1
+			level = (frame.FrameLevelChanged*(40*NP.levelStep)) + (leveledCount*NP.levelStep)
 		end
 
 		frame:SetFrameLevel(level+1)
@@ -97,23 +97,23 @@ function mod:SetPlateFrameLevel(frame, level, isTarget)
 	end
 end
 
-function mod:ResetNameplateFrameLevel(frame)
+function NP:ResetNameplateFrameLevel(frame)
 	local isTarget = frame.isTarget --frame.isTarget is not the same here so keep this.
-	local plateLevel = mod:GetPlateFrameLevel(frame)
+	local plateLevel = NP:GetPlateFrameLevel(frame)
 	if plateLevel then
 		if frame.FrameLevelChanged then --keep how many plates we change, this is reset to 1 post-ResetNameplateFrameLevel
-			mod.CollectedFrameLevelCount = (mod.CollectedFrameLevelCount and mod.CollectedFrameLevelCount + 1) or 1
+			NP.CollectedFrameLevelCount = (NP.CollectedFrameLevelCount and NP.CollectedFrameLevelCount + 1) or 1
 		end
 		self:SetPlateFrameLevel(frame, plateLevel, isTarget)
 	end
 end
 
-function mod:SetTargetFrame(frame)
+function NP:SetTargetFrame(frame)
 	if frame.isTarget then
 		if not frame.isTargetChanged then
 			frame.isTargetChanged = true
 
-			mod:SetPlateFrameLevel(frame, mod:GetPlateFrameLevel(frame), true)
+			NP:SetPlateFrameLevel(frame, NP:GetPlateFrameLevel(frame), true)
 
 			if self.db.useTargetScale then
 				self:SetFrameScale(frame, (frame.ThreatScale or 1) * self.db.targetScale)
@@ -124,7 +124,7 @@ function mod:SetTargetFrame(frame)
 				frame.guid = UnitGUID("target")
 
 				self:RegisterEvents(frame)
-				self:UpdateElement_AurasByGUID(frame.guid)
+				NP:UpdateElement_AurasByGUID(frame.guid)
 			end
 
 			if self.db.units[frame.UnitType].healthbar.enable ~= true and self.db.alwaysShowTargetHealth then
@@ -148,16 +148,15 @@ function mod:SetTargetFrame(frame)
 				frame:SetAlpha(1)
 			end
 
-			-- TEST
-			mod:UpdateElement_Highlight(frame)
-			mod:UpdateElement_CPoints(frame)
-			mod:UpdateElement_Filters(frame, "PLAYER_TARGET_CHANGED")
-			mod:ForEachPlate("ResetNameplateFrameLevel") --keep this after `UpdateElement_Filters`
+			NP:UpdateElement_Highlight(frame)
+			NP:UpdateElement_CPoints(frame)
+			NP:UpdateElement_Filters(frame, "PLAYER_TARGET_CHANGED")
+			NP:ForEachPlate("ResetNameplateFrameLevel") --keep this after `UpdateElement_Filters`
 		end
 	elseif frame.isTargetChanged then
 		frame.isTargetChanged = false
 
-		mod:SetPlateFrameLevel(frame, mod:GetPlateFrameLevel(frame))
+		NP:SetPlateFrameLevel(frame, NP:GetPlateFrameLevel(frame))
 
 		if self.db.useTargetScale then
 			self:SetFrameScale(frame, (frame.ThreatScale or 1))
@@ -182,10 +181,9 @@ function mod:SetTargetFrame(frame)
 			end
 		end
 
-		-- TEST
-		mod:UpdateElement_CPoints(frame)
-		mod:UpdateElement_Filters(frame, "PLAYER_TARGET_CHANGED")
-		mod:ForEachPlate("ResetNameplateFrameLevel") --keep this after `UpdateElement_Filters`
+		NP:UpdateElement_CPoints(frame)
+		NP:UpdateElement_Filters(frame, "PLAYER_TARGET_CHANGED")
+		NP:ForEachPlate("ResetNameplateFrameLevel") --keep this after `UpdateElement_Filters`
 	elseif frame.oldHighlight:IsShown() then
 		if not frame.isMouseover then
 			frame.isMouseover = true
@@ -194,9 +192,9 @@ function mod:SetTargetFrame(frame)
 				frame.unit = "mouseover"
 				frame.guid = UnitGUID("mouseover")
 
-				mod:UpdateElement_AurasByGUID(frame.guid)
-				mod:UpdateElement_Highlight(frame)
-				mod:UpdateElement_Cast(frame, nil, frame.unit)
+				NP:UpdateElement_AurasByGUID(frame.guid)
+				NP:UpdateElement_Highlight(frame)
+				NP:UpdateElement_Cast(frame, nil, frame.unit)
 			end
 		end
 	elseif frame.isMouseover then
@@ -207,7 +205,7 @@ function mod:SetTargetFrame(frame)
 			frame.guid = nil
 			frame.CastBar:Hide()
 		end
-		mod:UpdateElement_Highlight(frame)
+		NP:UpdateElement_Highlight(frame)
 	else
 		if not frame.AlphaChanged then
 			if self.hasTarget then
@@ -222,7 +220,7 @@ function mod:SetTargetFrame(frame)
 	self:UpdateElement_HealthColor(frame)
 end
 
-function mod:StyleFrame(parent, noBackdrop, point)
+function NP:StyleFrame(parent, noBackdrop, point)
 	point = point or parent
 	local noscalemult = E.mult * UIParent:GetScale()
 
@@ -231,7 +229,7 @@ function mod:StyleFrame(parent, noBackdrop, point)
 	if not noBackdrop then
 		point.backdrop = parent:CreateTexture(nil, "BACKGROUND")
 		point.backdrop:SetAllPoints(point)
-		point.backdrop:SetTexture(unpack(E["media"].backdropfadecolor))
+		point.backdrop:SetTexture(unpack(E.media.backdropfadecolor))
 	end
 
 	if E.PixelMode then
@@ -239,25 +237,25 @@ function mod:StyleFrame(parent, noBackdrop, point)
 		point.bordertop:SetPoint("TOPLEFT", point, "TOPLEFT", -noscalemult, noscalemult)
 		point.bordertop:SetPoint("TOPRIGHT", point, "TOPRIGHT", noscalemult, noscalemult)
 		point.bordertop:SetHeight(noscalemult)
-		point.bordertop:SetTexture(unpack(E["media"].bordercolor))
+		point.bordertop:SetTexture(unpack(E.media.bordercolor))
 
 		point.borderbottom = parent:CreateTexture()
 		point.borderbottom:SetPoint("BOTTOMLEFT", point, "BOTTOMLEFT", -noscalemult, -noscalemult)
 		point.borderbottom:SetPoint("BOTTOMRIGHT", point, "BOTTOMRIGHT", noscalemult, -noscalemult)
 		point.borderbottom:SetHeight(noscalemult)
-		point.borderbottom:SetTexture(unpack(E["media"].bordercolor))
+		point.borderbottom:SetTexture(unpack(E.media.bordercolor))
 
 		point.borderleft = parent:CreateTexture()
 		point.borderleft:SetPoint("TOPLEFT", point, "TOPLEFT", -noscalemult, noscalemult)
 		point.borderleft:SetPoint("BOTTOMLEFT", point, "BOTTOMLEFT", noscalemult, -noscalemult)
 		point.borderleft:SetWidth(noscalemult)
-		point.borderleft:SetTexture(unpack(E["media"].bordercolor))
+		point.borderleft:SetTexture(unpack(E.media.bordercolor))
 
 		point.borderright = parent:CreateTexture()
 		point.borderright:SetPoint("TOPRIGHT", point, "TOPRIGHT", noscalemult, noscalemult)
 		point.borderright:SetPoint("BOTTOMRIGHT", point, "BOTTOMRIGHT", -noscalemult, -noscalemult)
 		point.borderright:SetWidth(noscalemult)
-		point.borderright:SetTexture(unpack(E["media"].bordercolor))
+		point.borderright:SetTexture(unpack(E.media.bordercolor))
 	else
 		point.bordertop = parent:CreateTexture(nil, "OVERLAY")
 		point.bordertop:SetPoint("TOPLEFT", point, "TOPLEFT", -noscalemult, noscalemult*2)
@@ -309,11 +307,11 @@ function mod:StyleFrame(parent, noBackdrop, point)
 	end
 end
 
-function mod:RoundColors(r, g, b)
-	return floor(r*100+.5) / 100, floor(g*100+.5) / 100, floor(b*100+.5) / 100
+function NP:RoundColors(r, g, b)
+	return floor(r*100 + 0.5) / 100, floor(g*100 + 0.5) / 100, floor(b*100 + 0.5) / 100
 end
 
-function mod:GetUnitByName(frame, type)
+function NP:GetUnitByName(frame, type)
 	local unit = self[type][frame.UnitName]
 	if unit then
 		return unit[1], unit[2]
@@ -321,7 +319,7 @@ function mod:GetUnitByName(frame, type)
 	return nil, nil
 end
 
-function mod:GetUnitClassByGUID(frame, guid)
+function NP:GetUnitClassByGUID(frame, guid)
 	if not guid then guid = self.ByName[frame.UnitName] end
 	if guid then
 		local _, _, class = pcall(GetPlayerInfoByGUID, guid)
@@ -330,17 +328,17 @@ function mod:GetUnitClassByGUID(frame, guid)
 	return nil
 end
 
-function mod:UnitClass(frame, type)
+function NP:UnitClass(frame, type)
 	if type == "FRIENDLY_PLAYER" then
 		local unit = self[type][frame.UnitName]
 		if unit then
 			return unit[3]
 		else
-			return mod:GetUnitClassByGUID(frame)
+			return NP:GetUnitClassByGUID(frame)
 		end
 	elseif type == "ENEMY_PLAYER" then
 		local r, g, b = self:RoundColors(frame.oldHealthBar:GetStatusBarColor())
-		for class, _ in pairs(RAID_CLASS_COLORS) do -- ENEMY_PLAYER
+		for class in pairs(RAID_CLASS_COLORS) do -- ENEMY_PLAYER
 			if RAID_CLASS_COLORS[class].r == r and RAID_CLASS_COLORS[class].g == g and RAID_CLASS_COLORS[class].b == b then
 				return class
 			end
@@ -348,11 +346,11 @@ function mod:UnitClass(frame, type)
 	end
 end
 
-function mod:UnitDetailedThreatSituation(frame)
+function NP:UnitDetailedThreatSituation(frame)
 	if not frame.Threat:IsShown() then
 		if frame.UnitType == "ENEMY_NPC" then
 			local r, g = frame.oldName:GetTextColor()
-			return (r > .5 and g < .5) and 0 or nil
+			return (r > 0.5 and g < 0.5) and 0 or nil
 		end
 	else
 		local r, g, b = frame.Threat:GetVertexColor()
@@ -367,7 +365,7 @@ function mod:UnitDetailedThreatSituation(frame)
 	return nil
 end
 
-function mod:UnitLevel(frame)
+function NP:UnitLevel(frame)
 	local level, boss = frame.oldLevel:GetObjectType() == "FontString" and tonumber(frame.oldLevel:GetText()) or false, frame.BossIcon:IsShown()
 	if boss or not level then
 		return "??", 0.9, 0, 0
@@ -376,46 +374,46 @@ function mod:UnitLevel(frame)
 	end
 end
 
-function mod:GetUnitInfo(frame)
-	local r, g, b = mod:RoundColors(frame.oldHealthBar:GetStatusBarColor())
+function NP:GetUnitInfo(frame)
+	local r, g, b = NP:RoundColors(frame.oldHealthBar:GetStatusBarColor())
 
-	if r < .01 then
-		if b < .01 and g > .99 then
-			return 5, "FRIENDLY_NPC";
-		elseif b > .99 and g < .01 then
-			return 5, "FRIENDLY_PLAYER";
+	if r < 0.01 then
+		if b < 0.01 and g > 0.99 then
+			return 5, "FRIENDLY_NPC"
+		elseif b > 0.99 and g < 0.01 then
+			return 5, "FRIENDLY_PLAYER"
 		end
-	elseif r > .99 then
-		if b < .01 and g > .99 then
-			return 4, "ENEMY_NPC";
-		elseif b < .01 and g < .01 then
-			return 2, "ENEMY_NPC";
+	elseif r > 0.99 then
+		if b < 0.01 and g > 0.99 then
+			return 4, "ENEMY_NPC"
+		elseif b < 0.01 and g < 0.01 then
+			return 2, "ENEMY_NPC"
 		end
-	elseif r > .5 and r < .6 then
-		if g > .5 and g < .6 and b > .5 and b < .6 then
-			return 1, "ENEMY_NPC";
+	elseif r > 0.5 and r < 0.6 then
+		if g > 0.5 and g < 0.6 and b > 0.5 and b < 0.6 then
+			return 1, "ENEMY_NPC"
 		end
 	end
-	return 3, "ENEMY_PLAYER";
+	return 3, "ENEMY_PLAYER"
 end
 
-function mod:OnShow()
-	mod.VisiblePlates[self.UnitFrame] = true
+function NP:OnShow()
+	NP.VisiblePlates[self.UnitFrame] = true
 
 	self.UnitFrame.UnitName = gsub(self.UnitFrame.oldName:GetText(), FSPAT, "")
-	local unitReaction, unitType = mod:GetUnitInfo(self.UnitFrame)
+	local unitReaction, unitType = NP:GetUnitInfo(self.UnitFrame)
 	self.UnitFrame.UnitType = unitType
-	self.UnitFrame.UnitClass = mod:UnitClass(self.UnitFrame, unitType)
+	self.UnitFrame.UnitClass = NP:UnitClass(self.UnitFrame, unitType)
 	self.UnitFrame.UnitReaction = unitReaction
 
-	local unit, guid = mod:GetUnitByName(self.UnitFrame, unitType)
+	local unit, guid = NP:GetUnitByName(self.UnitFrame, unitType)
 	if unit and guid then
 		self.UnitFrame.unit, self.UnitFrame.guid = unit, guid
 		self.UnitFrame.isGroupUnit = true
 	end
 
 	if unitType == "ENEMY_PLAYER" then
-		mod:UpdateElement_HealerIcon(self.UnitFrame)
+		NP:UpdateElement_HealerIcon(self.UnitFrame)
 	end
 
 	self.UnitFrame.Level:ClearAllPoints()
@@ -423,46 +421,47 @@ function mod:OnShow()
 
 	self.UnitFrame.CutawayHealth:Hide()
 
-	if mod.db.units[unitType].healthbar.enable or mod.db.alwaysShowTargetHealth then
-		mod:ConfigureElement_HealthBar(self.UnitFrame)
-		mod:ConfigureElement_CutawayHealth(self.UnitFrame)
-		mod:ConfigureElement_CastBar(self.UnitFrame)
-		mod:ConfigureElement_Glow(self.UnitFrame)
+	if NP.db.units[unitType].healthbar.enable or NP.db.alwaysShowTargetHealth then
+		NP:ConfigureElement_HealthBar(self.UnitFrame)
+		NP:ConfigureElement_CutawayHealth(self.UnitFrame)
+		NP:ConfigureElement_CastBar(self.UnitFrame)
+		NP:ConfigureElement_Glow(self.UnitFrame)
 
-		if mod.db.units[unitType].buffs.enable then
-			self.UnitFrame.Buffs.db = mod.db.units[unitType].buffs
-			mod:UpdateAuraIcons(self.UnitFrame.Buffs)
+		if NP.db.units[unitType].buffs.enable then
+			self.UnitFrame.Buffs.db = NP.db.units[unitType].buffs
+			NP:UpdateAuraIcons(self.UnitFrame.Buffs)
 		end
 
-		if mod.db.units[unitType].debuffs.enable then
-			self.UnitFrame.Debuffs.db = mod.db.units[unitType].debuffs
-			mod:UpdateAuraIcons(self.UnitFrame.Debuffs)
+		if NP.db.units[unitType].debuffs.enable then
+			self.UnitFrame.Debuffs.db = NP.db.units[unitType].debuffs
+			NP:UpdateAuraIcons(self.UnitFrame.Debuffs)
 		end
 	end
 
-	mod:ConfigureElement_Level(self.UnitFrame)
-	mod:ConfigureElement_Name(self.UnitFrame)
-	mod:ConfigureElement_Elite(self.UnitFrame)
-	mod:ConfigureElement_Highlight(self.UnitFrame)
+	NP:ConfigureElement_CPoints(self.UnitFrame)
+	NP:ConfigureElement_Level(self.UnitFrame)
+	NP:ConfigureElement_Name(self.UnitFrame)
+	NP:ConfigureElement_Elite(self.UnitFrame)
+	NP:ConfigureElement_Highlight(self.UnitFrame)
 
-	mod:RegisterEvents(self.UnitFrame)
-	mod:UpdateElement_All(self.UnitFrame, nil, true)
+	NP:RegisterEvents(self.UnitFrame)
+	NP:UpdateElement_All(self.UnitFrame, nil, true)
 
 	self.UnitFrame:Show()
 
-	mod:UpdateElement_Filters(self.UnitFrame, "NAME_PLATE_UNIT_ADDED")
-	mod:ForEachPlate("ResetNameplateFrameLevel") --keep this after `UpdateElement_Filters`
+	NP:UpdateElement_Filters(self.UnitFrame, "NAME_PLATE_UNIT_ADDED")
+	NP:ForEachPlate("ResetNameplateFrameLevel") --keep this after `UpdateElement_Filters`
 end
 
-function mod:OnHide()
-	mod.VisiblePlates[self.UnitFrame] = nil
+function NP:OnHide()
+	NP.VisiblePlates[self.UnitFrame] = nil
 
 	self.UnitFrame.unit = nil
 	self.UnitFrame.isGroupUnit = nil
 
-	mod:HideAuraIcons(self.UnitFrame.Buffs)
-	mod:HideAuraIcons(self.UnitFrame.Debuffs)
-	mod:ClearStyledPlate(self.UnitFrame)
+	NP:HideAuraIcons(self.UnitFrame.Buffs)
+	NP:HideAuraIcons(self.UnitFrame.Debuffs)
+	NP:ClearStyledPlate(self.UnitFrame)
 	self.UnitFrame:UnregisterAllEvents()
 	self.UnitFrame.Glow.r, self.UnitFrame.Glow.g, self.UnitFrame.Glow.b = nil, nil, nil
 	self.UnitFrame.Glow:Hide()
@@ -501,12 +500,12 @@ function mod:OnHide()
 	self.UnitFrame.RaidIconType = nil
 end
 
-function mod:UpdateAllFrame(frame)
-	mod.OnHide(frame:GetParent())
-	mod.OnShow(frame:GetParent())
+function NP:UpdateAllFrame(frame)
+	NP.OnHide(frame:GetParent())
+	NP.OnShow(frame:GetParent())
 end
 
-function mod:ConfigureAll()
+function NP:ConfigureAll()
 	if E.private.nameplates.enable ~= true then return end
 
 	self:StyleFilterConfigureEvents()
@@ -514,7 +513,7 @@ function mod:ConfigureAll()
 	self:UpdateCVars()
 end
 
-function mod:ForEachPlate(functionToRun, ...)
+function NP:ForEachPlate(functionToRun, ...)
 	for frame in pairs(self.CreatedPlates) do
 		if frame and frame.UnitFrame then
 			self[functionToRun](self, frame.UnitFrame, ...)
@@ -522,34 +521,34 @@ function mod:ForEachPlate(functionToRun, ...)
 	end
 
 	if functionToRun == "ResetNameplateFrameLevel" then
-		mod.CollectedFrameLevelCount = 1
+		NP.CollectedFrameLevelCount = 1
 	end
 end
 
-function mod:ForEachVisiblePlate(functionToRun, ...)
+function NP:ForEachVisiblePlate(functionToRun, ...)
 	for frame in pairs(self.VisiblePlates) do
 		self[functionToRun](self, frame, ...)
 	end
 end
 
-function mod:UpdateElement_All(frame, noTargetFrame, filterIgnore)
+function NP:UpdateElement_All(frame, noTargetFrame, filterIgnore)
 	local healthShown = (frame.UnitType and self.db.units[frame.UnitType].healthbar.enable) or (frame.isTarget and self.db.alwaysShowTargetHealth)
 
 	if healthShown then
-		mod:UpdateElement_Health(frame)
-		mod:UpdateElement_HealthColor(frame)
-		mod:UpdateElement_Cast(frame, nil, frame.unit)
-		mod:UpdateElement_Auras(frame)
+		NP:UpdateElement_Health(frame)
+		NP:UpdateElement_HealthColor(frame)
+		NP:UpdateElement_Cast(frame, nil, frame.unit)
+		NP:UpdateElement_Auras(frame)
 	end
-	mod:UpdateElement_RaidIcon(frame)
-	mod:UpdateElement_HealerIcon(frame)
-	mod:UpdateElement_Name(frame)
-	mod:UpdateElement_Level(frame)
-	mod:UpdateElement_Elite(frame)
-	mod:UpdateElement_Highlight(frame)
+	NP:UpdateElement_RaidIcon(frame)
+	NP:UpdateElement_HealerIcon(frame)
+	NP:UpdateElement_Name(frame)
+	NP:UpdateElement_Level(frame)
+	NP:UpdateElement_Elite(frame)
+	NP:UpdateElement_Highlight(frame)
 
 	if healthShown then
-		mod:UpdateElement_Glow(frame)
+		NP:UpdateElement_Glow(frame)
 	else
 		-- make sure we hide the arrows and/or glow after disabling the healthbar
 		if frame.TopArrow and frame.TopArrow:IsShown() then frame.TopArrow:Hide() end
@@ -560,16 +559,16 @@ function mod:UpdateElement_All(frame, noTargetFrame, filterIgnore)
 	end
 
 	if not noTargetFrame then
-		mod:SetTargetFrame(frame)
+		NP:SetTargetFrame(frame)
 	end
 
 	if not filterIgnore then
-		mod:UpdateElement_Filters(frame, "UpdateElement_All")
+		NP:UpdateElement_Filters(frame, "UpdateElement_All")
 	end
 end
 
 local plateID = 0
-function mod:OnCreated(frame)
+function NP:OnCreated(frame)
 	plateID = plateID + 1
 	local HealthBar, CastBar = frame:GetChildren()
 	local Threat, Border, CastBarBorder, CastBarShield, CastBarIcon, Highlight, Name, Level, BossIcon, RaidIcon, EliteIcon = frame:GetRegions()
@@ -601,7 +600,7 @@ function mod:OnCreated(frame)
 	self:QueueObject(CastBarBorder)
 	self:QueueObject(CastBarShield)
 	self:QueueObject(Highlight)
-	CastBarIcon:SetParent(E.HiddenFrame);
+	CastBarIcon:SetParent(E.HiddenFrame)
 	BossIcon:SetAlpha(0)
 	EliteIcon:SetAlpha(0)
 
@@ -630,18 +629,18 @@ function mod:OnCreated(frame)
 	self.VisiblePlates[frame.UnitFrame] = true
 end
 
-function mod:OnEvent(event, unit, ...)
+function NP:OnEvent(event, unit, ...)
 	if not unit and not self.unit then return end
 	if self.unit ~= unit then return end
 
 	if event == "UPDATE_MOUSEOVER_UNIT" then
-		mod:UpdateElement_Highlight(self)
+		NP:UpdateElement_Highlight(self)
 	else
-		mod:UpdateElement_Cast(self, event, unit, ...)
+		NP:UpdateElement_Cast(self, event, unit, ...)
 	end
 end
 
-function mod:RegisterEvents(frame)
+function NP:RegisterEvents(frame)
 	if not frame.unit then return end
 
 	if self.db.units[frame.UnitType].healthbar.enable or (frame.isTarget and self.db.alwaysShowTargetHealth) then
@@ -658,13 +657,13 @@ function mod:RegisterEvents(frame)
 			frame:RegisterEvent("UNIT_SPELLCAST_FAILED")
 		end
 
-		mod.OnEvent(frame, nil, frame.unit)
+		NP.OnEvent(frame, nil, frame.unit)
 	end
 
 	frame:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
 end
 
-function mod:QueueObject(object)
+function NP:QueueObject(object)
 	local objectType = object:GetObjectType()
 	if objectType == "Texture" then
 		object:SetTexture("")
@@ -677,7 +676,7 @@ function mod:QueueObject(object)
 	object:Hide()
 end
 
-function mod:OnUpdate()
+function NP:OnUpdate()
 	local count = select("#", WorldGetChildren(WorldFrame))
 	if count ~= numChildren then
 		local frame, region
@@ -685,15 +684,15 @@ function mod:OnUpdate()
 			frame = select(i, WorldGetChildren(WorldFrame))
 			region = frame:GetRegions()
 
-			if not mod.CreatedPlates[frame] and region and region:GetObjectType() == "Texture" and region:GetTexture() == OVERLAY then
-				mod:OnCreated(frame)
+			if not NP.CreatedPlates[frame] and region and region:GetObjectType() == "Texture" and region:GetTexture() == OVERLAY then
+				NP:OnCreated(frame)
 			end
 		end
 		numChildren = count
 	end
 
-	for frame in pairs(mod.VisiblePlates) do
-		if mod.hasTarget then
+	for frame in pairs(NP.VisiblePlates) do
+		if NP.hasTarget then
 			frame.alpha = frame:GetParent():GetAlpha()
 		else
 			frame.alpha = 1
@@ -701,11 +700,11 @@ function mod:OnUpdate()
 
 		frame:GetParent():SetAlpha(1)
 
-		frame.isTarget = mod.hasTarget and frame.alpha == 1
+		frame.isTarget = NP.hasTarget and frame.alpha == 1
 	end
 end
 
-function mod:CheckRaidIcon(frame)
+function NP:CheckRaidIcon(frame)
 	if frame.RaidIcon:IsShown() then
 		local ux, uy = frame.RaidIcon:GetTexCoord()
 		frame.RaidIconType = RaidIconCoordinate[ux][uy]
@@ -714,7 +713,7 @@ function mod:CheckRaidIcon(frame)
 	end
 end
 
-function mod:SearchNameplateByGUID(guid)
+function NP:SearchNameplateByGUID(guid)
 	for frame in pairs(self.VisiblePlates) do
 		if frame and frame:IsShown() and frame.guid == guid then
 			return frame
@@ -722,7 +721,7 @@ function mod:SearchNameplateByGUID(guid)
 	end
 end
 
-function mod:SearchNameplateByName(sourceName)
+function NP:SearchNameplateByName(sourceName)
 	if not sourceName then return end
 	local SearchFor = strsplit("-", sourceName)
 	for frame in pairs(self.VisiblePlates) do
@@ -732,7 +731,7 @@ function mod:SearchNameplateByName(sourceName)
 	end
 end
 
-function mod:SearchNameplateByIconName(raidIcon)
+function NP:SearchNameplateByIconName(raidIcon)
 	for frame in pairs(self.VisiblePlates) do
 		self:CheckRaidIcon(frame)
 		if frame and frame:IsShown() and frame.RaidIcon:IsShown() and (frame.RaidIconType == raidIcon) then
@@ -741,7 +740,7 @@ function mod:SearchNameplateByIconName(raidIcon)
 	end
 end
 
-function mod:SearchForFrame(guid, raidIcon, name)
+function NP:SearchForFrame(guid, raidIcon, name)
 	local frame
 	if guid then frame = self:SearchNameplateByGUID(guid) end
 	if (not frame) and name then frame = self:SearchNameplateByName(name) end
@@ -750,7 +749,7 @@ function mod:SearchForFrame(guid, raidIcon, name)
 	return frame
 end
 
-function mod:UpdateCVars()
+function NP:UpdateCVars()
 	SetCVar("ShowClassColorInNameplate", "1")
 	SetCVar("showVKeyCastbar", "0")
 	SetCVar("nameplateAllowOverlap", self.db.motionType == "STACKED" and "0" or "1")
@@ -768,35 +767,31 @@ local function CopySettings(from, to)
 	end
 end
 
-function mod:ResetSettings(unit)
+function NP:ResetSettings(unit)
 	CopySettings(P.nameplates.units[unit], self.db.units[unit])
 end
 
-function mod:CopySettings(from, to)
+function NP:CopySettings(from, to)
 	if from == to then return end
 
 	CopySettings(self.db.units[from], self.db.units[to])
 end
 
-function mod:PLAYER_ENTERING_WORLD()
+function NP:PLAYER_ENTERING_WORLD()
 	twipe(self.Healers)
 	local inInstance, instanceType = IsInInstance()
 	if inInstance and (instanceType == "pvp") and self.db.units.ENEMY_PLAYER.markHealers then
-		self.CheckHealerTimer = self:ScheduleRepeatingTimer("CheckBGHealers", 3)
-		self:CheckBGHealers()
+		self:RegisterEvent("UPDATE_BATTLEFIELD_SCORE", "CheckBGHealers")
 	else
-		if self.CheckHealerTimer then
-			self:CancelTimer(self.CheckHealerTimer)
-			self.CheckHealerTimer = nil
-		end
+		self:UnregisterEvent("UPDATE_BATTLEFIELD_SCORE")
 	end
 end
 
-function mod:PLAYER_TARGET_CHANGED()
+function NP:PLAYER_TARGET_CHANGED()
 	self.hasTarget = UnitExists("target") == 1
 end
 
-function mod:UNIT_AURA(_, unit)
+function NP:UNIT_AURA(_, unit)
 	if unit == "target" then
 		self:UpdateElement_AurasByGUID(UnitGUID(unit))
 	elseif unit == "focus" then
@@ -804,13 +799,13 @@ function mod:UNIT_AURA(_, unit)
 	end
 end
 
-function mod:UNIT_COMBO_POINTS(_, unit)
+function NP:UNIT_COMBO_POINTS(_, unit)
 	if unit == "player" or unit == "vehicle" then
 		self:ForEachPlate("UpdateElement_CPoints")
 	end
 end
 
-function mod:PLAYER_REGEN_DISABLED()
+function NP:PLAYER_REGEN_DISABLED()
 	if self.db.showFriendlyCombat == "TOGGLE_ON" then
 		SetCVar("nameplateShowFriends", 1)
 	elseif self.db.showFriendlyCombat == "TOGGLE_OFF" then
@@ -823,10 +818,10 @@ function mod:PLAYER_REGEN_DISABLED()
 		SetCVar("nameplateShowEnemies", 0)
 	end
 
-	mod:ForEachPlate("UpdateElement_Filters", "PLAYER_REGEN_DISABLED")
+	NP:ForEachPlate("UpdateElement_Filters", "PLAYER_REGEN_DISABLED")
 end
 
-function mod:PLAYER_REGEN_ENABLED()
+function NP:PLAYER_REGEN_ENABLED()
 	if self.db.showFriendlyCombat == "TOGGLE_ON" then
 		SetCVar("nameplateShowFriends", 0)
 	elseif self.db.showFriendlyCombat == "TOGGLE_OFF" then
@@ -839,38 +834,38 @@ function mod:PLAYER_REGEN_ENABLED()
 		SetCVar("nameplateShowEnemies", 1)
 	end
 
-	mod:ForEachPlate("UpdateElement_Filters", "PLAYER_REGEN_ENABLED")
+	NP:ForEachPlate("UpdateElement_Filters", "PLAYER_REGEN_ENABLED")
 end
 
-function mod:UNIT_HEALTH()
-	mod:ForEachPlate("UpdateElement_Filters", "UNIT_HEALTH")
+function NP:UNIT_HEALTH()
+	NP:ForEachPlate("UpdateElement_Filters", "UNIT_HEALTH")
 end
 
-function mod:UNIT_MANA()
-	mod:ForEachPlate("UpdateElement_Filters", "UNIT_MANA")
+function NP:UNIT_MANA()
+	NP:ForEachPlate("UpdateElement_Filters", "UNIT_MANA")
 end
 
-function mod:UNIT_ENERGY()
-	mod:ForEachPlate("UpdateElement_Filters", "UNIT_ENERGY")
+function NP:UNIT_ENERGY()
+	NP:ForEachPlate("UpdateElement_Filters", "UNIT_ENERGY")
 end
 
-function mod:UNIT_FOCUS()
-	mod:ForEachPlate("UpdateElement_Filters", "UNIT_FOCUS")
+function NP:UNIT_FOCUS()
+	NP:ForEachPlate("UpdateElement_Filters", "UNIT_FOCUS")
 end
 
-function mod:UNIT_RAGE()
-	mod:ForEachPlate("UpdateElement_Filters", "UNIT_RAGE")
+function NP:UNIT_RAGE()
+	NP:ForEachPlate("UpdateElement_Filters", "UNIT_RAGE")
 end
 
-function mod:UNIT_RUNIC_POWER()
-	mod:ForEachPlate("UpdateElement_Filters", "UNIT_RUNIC_POWER")
+function NP:UNIT_RUNIC_POWER()
+	NP:ForEachPlate("UpdateElement_Filters", "UNIT_RUNIC_POWER")
 end
 
-function mod:SPELL_UPDATE_COOLDOWN()
-	mod:ForEachPlate("UpdateElement_Filters", "SPELL_UPDATE_COOLDOWN")
+function NP:SPELL_UPDATE_COOLDOWN()
+	NP:ForEachPlate("UpdateElement_Filters", "SPELL_UPDATE_COOLDOWN")
 end
 
-function mod:UpdateFonts(plate)
+function NP:UpdateFonts(plate)
 	if not plate then return end
 
 	if plate.Buffs and plate.Buffs.db and plate.Buffs.db.numAuras then
@@ -902,11 +897,11 @@ function mod:UpdateFonts(plate)
 	end
 end
 
-function mod:UpdatePlateFonts()
+function NP:UpdatePlateFonts()
 	self:ForEachPlate("UpdateFonts")
 end
 
-function mod:CacheArenaUnits()
+function NP:CacheArenaUnits()
 	wipe(self.ENEMY_PLAYER)
 	wipe(self.ENEMY_NPC)
 
@@ -923,7 +918,7 @@ function mod:CacheArenaUnits()
 	end
 end
 
-function mod:CacheGroupUnits()
+function NP:CacheGroupUnits()
 	wipe(self.FRIENDLY_PLAYER)
 
 	local unit
@@ -947,7 +942,7 @@ function mod:CacheGroupUnits()
 	end
 end
 
-function mod:CacheGroupPetUnits()
+function NP:CacheGroupPetUnits()
 	wipe(self.FRIENDLY_NPC)
 
 	local unit
@@ -968,17 +963,18 @@ function mod:CacheGroupPetUnits()
 	end
 end
 
-function mod:Initialize()
-	self.db = E.db["nameplates"]
-	if E.private["nameplates"].enable ~= true then return end
+function NP:Initialize()
+	self.db = E.db.nameplates
+
+	if E.private.nameplates.enable ~= true then return end
+	NP.Initialized = true
 
 	self.hasTarget = false
 
 	--Add metatable to all our StyleFilters so they can grab default values if missing
-	for _, filterTable in pairs(E.global.nameplates.filters) do
-		self:StyleFilterInitializeFilter(filterTable);
-	end
+	self:StyleFilterInitializeAllFilters()
 
+	--Populate `NP.StyleFilterEvents` with events Style Filters will be using and sort the filters based on priority.
 	self:StyleFilterConfigureEvents()
 
 	self.levelStep = 2
@@ -1027,7 +1023,7 @@ function mod:Initialize()
 end
 
 local function InitializeCallback()
-	mod:Initialize()
+	NP:Initialize()
 end
 
-E:RegisterModule(mod:GetName(), InitializeCallback)
+E:RegisterModule(NP:GetName(), InitializeCallback)

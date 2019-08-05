@@ -1,7 +1,7 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local mod = E:GetModule("NamePlates")
+local E, L, V, P, G = unpack(select(2, ...))
+local NP = E:GetModule("NamePlates")
 
-function mod:UpdateElement_RaidIcon(frame)
+function NP:UpdateElement_RaidIcon(frame)
 	local icon = frame.RaidIcon
 	icon:ClearAllPoints()
 	if frame.HealthBar:IsShown() then

@@ -1,8 +1,8 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local mod = E:GetModule("NamePlates")
-local LSM = LibStub("LibSharedMedia-3.0")
+local NP = E:GetModule("NamePlates")
+local LSM = E.Libs.LSM
 
-function mod:UpdateElement_CutawayHealthFadeOut(frame)
+function NP:UpdateElement_CutawayHealthFadeOut(frame)
 	local cutawayHealth = frame.CutawayHealth
 	cutawayHealth.fading = true
 	E:UIFrameFadeOut(cutawayHealth, self.db.cutawayHealthFadeOutTime, cutawayHealth:GetAlpha(), 0)
@@ -10,10 +10,10 @@ function mod:UpdateElement_CutawayHealthFadeOut(frame)
 end
 
 local function CutawayHealthClosure(frame)
-	return function() mod:UpdateElement_CutawayHealthFadeOut(frame) end
+	return function() NP:UpdateElement_CutawayHealthFadeOut(frame) end
 end
 
-function mod:CutawayHealthValueChangeCallback(frame, health)
+function NP:CutawayHealthValueChangeCallback(frame, health)
 	if self.db.cutawayHealth then
 		local oldValue = frame.HealthBar:GetValue()
 		local change = oldValue - health
@@ -41,15 +41,15 @@ function mod:CutawayHealthValueChangeCallback(frame, health)
 	end
 end
 
-function mod:CutawayHealthColorChangeCallback(frame, r, g, b)
+function NP:CutawayHealthColorChangeCallback(frame, r, g, b)
 	frame.CutawayHealth:SetStatusBarColor(r * 1.5, g * 1.5, b * 1.5, 1)
 end
 
-function mod:CutawayHealthMaxHealthChangeCallback(frame, maxHealth)
+function NP:CutawayHealthMaxHealthChangeCallback(frame, maxHealth)
 	frame.CutawayHealth:SetMinMaxValues(0, maxHealth)
 end
 
-function mod:ConfigureElement_CutawayHealth(frame, configuring)
+function NP:ConfigureElement_CutawayHealth(frame, configuring)
 	local cutawayHealth = frame.CutawayHealth
 	local healthBar = frame.HealthBar
 
@@ -57,14 +57,14 @@ function mod:ConfigureElement_CutawayHealth(frame, configuring)
 	cutawayHealth:SetStatusBarTexture(LSM:Fetch("statusbar", self.db.statusbar))
 end
 
-function mod:ConstructElement_CutawayHealth(parent)
+function NP:ConstructElement_CutawayHealth(parent)
 	local healthBar = parent.HealthBar
 
 	local cutawayHealth = CreateFrame("StatusBar", "$parentCutawayHealth", healthBar)
 	cutawayHealth:SetStatusBarTexture(LSM:Fetch("background", "ElvUI Blank"))
 	cutawayHealth:SetFrameLevel(healthBar:GetFrameLevel() - 1)
 
-	mod:RegisterHealthBarCallbacks(parent, mod.CutawayHealthValueChangeCallback, mod.CutawayHealthColorChangeCallback, mod.CutawayHealthMaxHealthChangeCallback)
+	NP:RegisterHealthBarCallbacks(parent, NP.CutawayHealthValueChangeCallback, NP.CutawayHealthColorChangeCallback, NP.CutawayHealthMaxHealthChangeCallback)
 
 	return cutawayHealth
 end

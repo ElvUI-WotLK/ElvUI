@@ -1,8 +1,8 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local mod = E:GetModule("NamePlates")
-local LSM = LibStub("LibSharedMedia-3.0")
+local NP = E:GetModule("NamePlates")
+local LSM = E.Libs.LSM
 
-function mod:UpdateElement_Level(frame)
+function NP:UpdateElement_Level(frame)
 	if not self.db.units[frame.UnitType].showLevel then return end
 
 	local level, r, g, b = self:UnitLevel(frame)
@@ -15,7 +15,7 @@ function mod:UpdateElement_Level(frame)
 	frame.Level:SetTextColor(r, g, b)
 end
 
-function mod:ConfigureElement_Level(frame)
+function NP:ConfigureElement_Level(frame)
 	local level = frame.Level
 
 	level:ClearAllPoints()
@@ -30,7 +30,7 @@ function mod:ConfigureElement_Level(frame)
 	level:SetFont(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline)
 end
 
-function mod:ConstructElement_Level(frame)
+function NP:ConstructElement_Level(frame)
 	local level = frame:CreateFontString(nil, "OVERLAY")
 	level:SetFont(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline)
 	return level

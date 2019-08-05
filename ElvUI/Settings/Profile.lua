@@ -275,7 +275,6 @@ P.nameplates = {
 	alwaysShowTargetHealth = true,
 	castColor = {r = 1, g = 208/255, b = 0},
 	castNoInterruptColor = {r = 0.78, g = 0.25, b = 0.25},
-	comboPoints = true,
 	cooldown = {
 		threshold = 4,
 		override = true,
@@ -315,6 +314,15 @@ P.nameplates = {
 		goodScale = 0.8,
 		badScale = 1.2,
 		useThreatColor = true,
+	},
+	comboBar = {
+		colors = {
+			[1] = {r = 0.69, g = 0.31, b = 0.31},
+			[2] = {r = 0.69, g = 0.31, b = 0.31},
+			[3] = {r = 0.65, g = 0.63, b = 0.35},
+			[4] = {r = 0.65, g = 0.63, b = 0.35},
+			[5] = {r = 0.33, g = 0.59, b = 0.33}
+		}
 	},
 	filters = {
 		Boss = {
@@ -401,6 +409,14 @@ P.nameplates = {
 				channelTimeFormat = "CURRENT",
 				timeToHold = 0,
 				iconPosition = "RIGHT",
+			},
+			comboPoints = {
+				enable = true,
+				width = 8,
+				height = 4,
+				spacing = 5,
+				xOffset = 0,
+				yOffset = 0
 			},
 			buffs = {
 				enable = true,
@@ -505,6 +521,14 @@ P.nameplates = {
 				channelTimeFormat = "CURRENT",
 				timeToHold = 0,
 				iconPosition = "RIGHT",
+			},
+			comboPoints = {
+				enable = true,
+				width = 8,
+				height = 4,
+				spacing = 5,
+				xOffset = 0,
+				yOffset = 0
 			},
 			buffs = {
 				enable = true,
