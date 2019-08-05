@@ -767,7 +767,7 @@ function B:Layout(isBank)
 				if not f.keyFrame.slots[i].searchOverlay then
 					local searchOverlay = f.keyFrame.slots[i]:CreateTexture(nil, "ARTWORK")
 					searchOverlay:SetTexture(E.media.blankTex)
-					searchOverlay:SetVertexColor(0, 0, 0, 0.8)
+					searchOverlay:SetVertexColor(0, 0, 0)
 					searchOverlay:SetAllPoints()
 					searchOverlay:Hide()
 					f.keyFrame.slots[i].searchOverlay = searchOverlay
