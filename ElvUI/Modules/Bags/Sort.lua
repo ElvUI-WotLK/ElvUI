@@ -374,7 +374,7 @@ local function DefaultCanMove()
 end
 
 function B:Encode_BagSlot(bag, slot)
-	return (bag * 100) + slot 
+	return (bag * 100) + slot
 end
 
 function B:Decode_BagSlot(int)
