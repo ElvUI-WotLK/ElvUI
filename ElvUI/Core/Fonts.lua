@@ -18,7 +18,6 @@ function E:UpdateBlizzardFonts()
 	local NUMBER		= self.media.normFont
 	local COMBAT		= LSM:Fetch("font", self.private.general.dmgfont)
 	local NAMEFONT		= LSM:Fetch("font", self.private.general.namefont)
-	local BUBBLE		= LSM:Fetch("font", self.private.general.chatBubbleFont)
 	local MONOCHROME	= ""
 
 	UIDROPDOWNMENU_DEFAULT_TEXT_HEIGHT = 12

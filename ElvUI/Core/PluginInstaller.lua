@@ -125,15 +125,15 @@ local function SetPage(PageNum, PrevPage)
 	f.Status.text:SetFormattedText("%d / %d", f.CurrentPage, f.MaxPage)
 	if f.StepTitles then
 		for i = 1, #f.side.Lines do
-			local b = f.side.Lines[i]
+			local button = f.side.Lines[i]
 			local color
-			b.text:SetText(f.StepTitles[i])
+			button.text:SetText(f.StepTitles[i])
 			if i == f.CurrentPage then
 				color = f.StepTitlesColorSelected or {0.09, 0.52, 0.82}
 			else
 				color = f.StepTitlesColor or {1, 1, 1}
 			end
-			b.text:SetTextColor(color[1] or color.r, color[2] or color.g, color[3] or color.b)
+			button.text:SetTextColor(color[1] or color.r, color[2] or color.g, color[3] or color.b)
 		end
 	end
 end
@@ -157,15 +157,15 @@ function PI:CreateStepComplete()
 	imsg:Size(418, 72)
 	imsg:Point("TOP", 0, -190)
 	imsg:Hide()
-	imsg:SetScript("OnShow", function(self)
-		if self.message then
+	imsg:SetScript("OnShow", function(frame)
+		if frame.message then
 			PlaySoundFile([[Sound\Interface\LevelUp.wav]])
-			self.text:SetText(self.message)
-			UIFrameFadeOut(self, 3.5, 1, 0)
+			frame.text:SetText(frame.message)
+			UIFrameFadeOut(frame, 3.5, 1, 0)
 			E:Delay(4, frame.Hide, frame)
-			self.message = nil
+			frame.message = nil
 		else
-			self:Hide()
+			frame:Hide()
 		end
 	end)
 

@@ -32,7 +32,7 @@ local LSM = E.Libs.LSM
 
 local _G = _G
 local tonumber, pairs, ipairs, error, unpack, select, tostring = tonumber, pairs, ipairs, error, unpack, select, tostring
-local assert, print, type, collectgarbage, pcall, date = assert, print, type, collectgarbage, pcall, date
+local assert, type, collectgarbage, pcall = assert, type, collectgarbage, pcall
 local twipe, tinsert, tremove, next = table.wipe, tinsert, tremove, next
 local floor = floor
 local format, find, match, strrep, strlen, sub, gsub, strjoin = string.format, string.find, string.match, strrep, strlen, string.sub, string.gsub, strjoin
@@ -584,7 +584,7 @@ do	--The code in this function is from WeakAuras, credit goes to Mirrored and th
 		return ret
 	end
 
- 	function E:TableToLuaString(inTable)
+	function E:TableToLuaString(inTable)
 		if type(inTable) ~= "table" then
 			E:Print("Invalid argument #1 to E:TableToLuaString (table expected)")
 			return
