@@ -64,9 +64,9 @@ globals = {
 	"CopyChatFrameEditBox",
 	"CopyChatScrollFrame",
 	"CopyChatScrollFrameScrollBar",
-	"DatatextTooltip"
-	"DatatextTooltipTextLeft1"
-	"DatatextTooltipTextRight1"
+	"DatatextTooltip",
+	"DatatextTooltipTextLeft1",
+	"DatatextTooltipTextRight1",
 	"DebuffsMover",
 	"DisbandRaidButton",
 	"ElvConfigToggle",
