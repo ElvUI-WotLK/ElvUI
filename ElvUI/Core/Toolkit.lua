@@ -341,3 +341,6 @@ while object do
 
 	object = EnumerateFrames(object)
 end
+
+--Add API to `CreateFont` objects without actually creating one
+addapi(GameFontNormal)
