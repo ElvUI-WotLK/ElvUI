@@ -17,14 +17,19 @@ local function SpellName(id)
 end
 
 local function Defaults(priorityOverride)
-	return {["enable"] = true, ["priority"] = priorityOverride or 0, ["stackThreshold"] = 0}
+	return {
+		enable = true,
+		priority = priorityOverride or 0,
+		stackThreshold = 0
+	}
 end
 
 G.unitframe.aurafilters = {}
 
-G.unitframe.aurafilters["CCDebuffs"] = {
-	["type"] = "Whitelist",
-	["spells"] = {
+-- These are debuffs that are some form of CC
+G.unitframe.aurafilters.CCDebuffs = {
+	type = "Whitelist",
+	spells = {
 	-- Death Knight
 		[SpellName(47476)] = Defaults(), -- Strangulate
 		[SpellName(51209)] = Defaults(), -- Hungering Cold
@@ -107,12 +112,12 @@ G.unitframe.aurafilters["CCDebuffs"] = {
 		[SpellName(20549)] = Defaults(), -- War Stomp
 	-- The Lich King
 		[SpellName(73787)] = Defaults(), -- Necrotic Plague
-	},
+	}
 }
 
-G.unitframe.aurafilters["TurtleBuffs"] = {
-	["type"] = "Whitelist",
-	["spells"] = {
+G.unitframe.aurafilters.TurtleBuffs = {
+	type = "Whitelist",
+	spells = {
 	-- Mage
 		[SpellName(45438)] = Defaults(5), -- Ice Block
 	-- Death Knight
@@ -148,12 +153,12 @@ G.unitframe.aurafilters["TurtleBuffs"] = {
 	-- Warrior
 		[SpellName(871)] = Defaults(3), -- Shield Wall
 		[SpellName(55694)] = Defaults(), -- Enraged Regeneration
-	},
+	}
 }
 
-G.unitframe.aurafilters["PlayerBuffs"] = {
-	["type"] = "Whitelist",
-	["spells"] = {
+G.unitframe.aurafilters.PlayerBuffs = {
+	type = "Whitelist",
+	spells = {
 	-- Mage
 		[SpellName(12042)] = Defaults(), -- Arcane Power
 		[SpellName(12051)] = Defaults(), -- Evocation
@@ -228,12 +233,13 @@ G.unitframe.aurafilters["PlayerBuffs"] = {
 		[SpellName(59545)] = Defaults(), -- Gift of the Naaru
 		[SpellName(20572)] = Defaults(), -- Blood Fury
 		[SpellName(26297)] = Defaults(), -- Berserking
-	},
+	}
 }
 
-G.unitframe.aurafilters["Blacklist"] = {
-	["type"] = "Blacklist",
-	["spells"] = {
+-- Buffs that really we dont need to see
+G.unitframe.aurafilters.Blacklist = {
+	type = "Blacklist",
+	spells = {
 		[6788] = Defaults(), -- Weakened Soul
 		[SpellName(8326)] = Defaults(), -- Ghost
 		[15007] = Defaults(), -- Resurrection Sickness
@@ -267,9 +273,13 @@ G.unitframe.aurafilters["Blacklist"] = {
 	},
 }
 
-G.unitframe.aurafilters["Whitelist"] = {
-	["type"] = "Whitelist",
-	["spells"] = {
+--[[
+	This should be a list of important buffs that we always want to see when they are active
+	bloodlust, paladin hand spells, raid cooldowns, etc..
+]]
+G.unitframe.aurafilters.Whitelist = {
+	type = "Whitelist",
+	spells = {
 		[SpellName(1022)] = Defaults(), -- Hand of Protection
 		[SpellName(1490)] = Defaults(), -- Curse of the Elements
 		[SpellName(2825)] = Defaults(), -- Bloodlust
@@ -294,12 +304,13 @@ G.unitframe.aurafilters["Whitelist"] = {
 		[SpellName(12292)] = Defaults(), -- Death Wish
 		[SpellName(31884)] = Defaults(), -- Avenging Wrath
 		[SpellName(34471)] = Defaults(), -- The Beast Within
-	},
+	}
 }
 
-G.unitframe.aurafilters["RaidDebuffs"] = {
-	["type"] = "Whitelist",
-	["spells"] = {
+-- RAID DEBUFFS: This should be pretty self explainitory
+G.unitframe.aurafilters.RaidDebuffs = {
+	type = "Whitelist",
+	spells = {
 	-- Naxxramas
 		-- Anub'Rekhan
 		[SpellName(54022)] = Defaults(), -- Locust Swarm
@@ -476,8 +487,7 @@ E.ReverseTimer = {
 
 }
 
---BuffWatch
---List of personal spells to show on unitframes as icon
+-- BuffWatch: List of personal spells to show on unitframes as icon
 local function ClassBuff(id, point, color, anyUnit, onlyShowMissing, style, displayText, decimalThreshold, textColor, textThreshold, xOffset, yOffset, sizeOverride)
 	local r, g, b = unpack(color)
 
@@ -486,9 +496,22 @@ local function ClassBuff(id, point, color, anyUnit, onlyShowMissing, style, disp
 		r2, g2, b2 = unpack(textColor)
 	end
 
-	return {["enabled"] = true, ["id"] = id, ["point"] = point, ["color"] = {["r"] = r, ["g"] = g, ["b"] = b},
-	["anyUnit"] = anyUnit, ["onlyShowMissing"] = onlyShowMissing, ["style"] = style or "coloredIcon", ["displayText"] = displayText or false, ["decimalThreshold"] = decimalThreshold or 5,
-	["textColor"] = {["r"] = r2, ["g"] = g2, ["b"] = b2}, ["textThreshold"] = textThreshold or -1, ["xOffset"] = xOffset or 0, ["yOffset"] = yOffset or 0, ["sizeOverride"] = sizeOverride or 0}
+	return {
+		enabled = true,
+		id = id,
+		point = point,
+		color = {r = r, g = g, b = b},
+		anyUnit = anyUnit,
+		onlyShowMissing = onlyShowMissing,
+		style = style or "coloredIcon",
+		displayText = displayText or false,
+		decimalThreshold = decimalThreshold or 5,
+		textColor = {r = r2, g = g2, b = b2},
+		textThreshold = textThreshold or -1,
+		xOffset = xOffset or 0,
+		yOffset = yOffset or 0,
+		sizeOverride = sizeOverride or 0
+	}
 end
 
 G.unitframe.buffwatch = {
@@ -540,10 +563,12 @@ G.unitframe.buffwatch = {
 	WARLOCK = {},
 }
 
-P["unitframe"]["filters"] = {
-	["buffwatch"] = {},
+-- Profile specific BuffIndicator
+P.unitframe.filters = {
+	buffwatch = {}
 }
 
+-- Ticks
 G.unitframe.ChannelTicks = {
 	-- Warlock
 	[SpellName(1120)] = 5,	-- Drain Soul
@@ -571,13 +596,10 @@ G.unitframe.ChannelTicks = {
 	[SpellName(42650)] = 8,	-- Army of the Dead
 }
 
+-- This should probably be the same as the whitelist filter + any personal class ones that may be important to watch
 G.unitframe.AuraBarColors = {
-	[SpellName(2825)] = {r = 0.98, g = 0.57, b = 0.10},	-- Bloodlust
-	[SpellName(32182)] = {r = 0.98, g = 0.57, b = 0.10}, -- Heroism
-}
-
-G.unitframe.InvalidSpells = {
-
+	[SpellName(2825)] = {r = 0.98, g = 0.57, b = 0.10},		-- Bloodlust
+	[SpellName(32182)] = {r = 0.98, g = 0.57, b = 0.10},	-- Heroism
 }
 
 G.unitframe.DebuffHighlightColors = {
@@ -586,16 +608,16 @@ G.unitframe.DebuffHighlightColors = {
 
 G.unitframe.specialFilters = {
 	-- Whitelists
-	["Personal"] = true,
-	["nonPersonal"] = true,
-	["CastByUnit"] = true,
-	["notCastByUnit"] = true,
-	["Dispellable"] = true,
-	["notDispellable"] = true,
+	Personal = true,
+	nonPersonal = true,
+	CastByUnit = true,
+	notCastByUnit = true,
+	Dispellable = true,
+	notDispellable = true,
 
 	-- Blacklists
-	["blockNonPersonal"] = true,
-	["blockNoDuration"] = true,
-	["blockDispellable"] = true,
-	["blockNotDispellable"] = true,
+	blockNonPersonal = true,
+	blockNoDuration = true,
+	blockDispellable = true,
+	blockNotDispellable = true,
 }

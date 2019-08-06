@@ -3,7 +3,7 @@
 
 	Add the nameplates name that you do NOT want to see.
 ]]
-local E, L, V, P, G, _ = unpack(select(2, ...)); --Engine
+local E, L, V, P, G = unpack(select(2, ...))
 
 G.nameplates.filters = {
 	Boss = {
@@ -12,13 +12,13 @@ G.nameplates.filters = {
 			curlevel = -1,
 			nameplateType = {
 				enable = true,
-				enemyNPC = true,
-			},
+				enemyNPC = true
+			}
 		},
 		actions = {
-			scale = 1.15,
-		},
-	},
+			scale = 1.15
+		}
+	}
 }
 
 E.StyleFilterDefaults = {
@@ -34,7 +34,7 @@ E.StyleFilterDefaults = {
 		role = {
 			tank = false,
 			healer = false,
-			damager = false,
+			damager = false
 		},
 		curlevel = 0,
 		maxlevel = 0,
@@ -96,16 +96,16 @@ E.StyleFilterDefaults = {
 			maxTimeLeft = 0
 		},
 		inCombat = false,
-		outOfCombat = false,
+		outOfCombat = false
 	},
 	actions = {
 		color = {
 			health = false,
 			border = false,
 			name = false,
-			healthColor = {r=1,g=1,b=1,a=1},
-			borderColor = {r=1,g=1,b=1,a=1},
-			nameColor = {r=1,g=1,b=1,a=1}
+			healthColor = {r = 1, g = 1, b = 1, a = 1},
+			borderColor = {r = 1, g = 1, b = 1, a = 1},
+			nameColor = {r = 1, g = 1, b = 1, a = 1}
 		},
 		texture = {
 			enable = false,
@@ -113,7 +113,7 @@ E.StyleFilterDefaults = {
 		},
 		flash = {
 			enable = false,
-			color = {r=1,g=1,b=1,a=1},
+			color = {r = 1, g = 1, b = 1, a = 1},
 			speed = 4
 		},
 		hide = false,
@@ -127,5 +127,5 @@ G.nameplates.specialFilters = {
 	Personal = true,
 	nonPersonal = true,
 	blockNonPersonal = true,
-	blockNoDuration = true,
-};
+	blockNoDuration = true
+}

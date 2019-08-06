@@ -21,12 +21,12 @@ V.general = {
 		hideCalendar = true,
 	},
 	classColorMentionsSpeech = true,
-	raidUtility = true,
+	raidUtility = true
 }
 
 V.bags = {
 	enable = true,
-	bagBar = false,
+	bagBar = false
 }
 
 V.nameplates = {
@@ -40,16 +40,16 @@ V.auras = {
 	lbf = {
 		enable = false,
 		skin = "Blizzard"
-	},
+	}
 }
 
 V.chat = {
-	enable = true,
+	enable = true
 }
 
 V.skins = {
 	ace3 = {
-		enable = true,
+		enable = true
 	},
 	checkBoxSkin = true,
 	parchmentRemover = {
@@ -108,7 +108,7 @@ V.skins = {
 		watchframe = true,
 		worldmap = true,
 		mirrorTimers = true
-	},
+	}
 }
 
 V.tooltip = {
@@ -124,7 +124,7 @@ V.unitframe = {
 		boss = true,
 		arena = true,
 		party = true,
-	},
+	}
 }
 
 V.actionbar = {
@@ -133,5 +133,5 @@ V.actionbar = {
 	lbf = {
 		enable = false,
 		skin = "Blizzard",
-	},
+	}
 }
