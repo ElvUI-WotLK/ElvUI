@@ -11,9 +11,10 @@ function UF:Construct_Cutaway(frame)
 	cutawayHealth:SetPoint("TOPLEFT", healthTexture, "TOPRIGHT")
 	cutawayHealth:SetPoint("BOTTOMLEFT", healthTexture, "BOTTOMRIGHT")
 
+	local cutawayPower
 	if frame.Power then
 		local powerTexture = frame.Power:GetStatusBarTexture()
-		local cutawayPower = CreateFrame("StatusBar", nil, frame.Power)
+		cutawayPower = CreateFrame("StatusBar", nil, frame.Power)
 		cutawayPower:SetStatusBarTexture(E.media.blankTex)
 		cutawayPower:SetFrameLevel(frame.Power:GetFrameLevel())
 		cutawayPower:SetPoint("TOPLEFT", powerTexture, "TOPRIGHT")
@@ -52,7 +53,7 @@ function UF:Configure_Cutaway(frame)
 			local unitHealthDB = frame.db.health
 			local vert = unitHealthDB.orientation and unitHealthDB.orientation == "VERTICAL"
 			local pointIndex = vert and VERT_INDEX or DEFAULT_INDEX
-			local firstPoint, secondPoint = healthPoints[pointIndex], healthPoints[pointIndex+1]
+			local firstPoint, secondPoint = healthPoints[pointIndex], healthPoints[pointIndex + 1]
 			local barTexture = frame.Health:GetStatusBarTexture()
 
 			health:ClearAllPoints()
