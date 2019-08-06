@@ -70,7 +70,7 @@ function E:PixelBestSize()
 end
 
 function E:PixelClip(num)
-	return tonumber(format("%.5f", num))
+	return tonumber(format("%.6f", num))
 end
 
 function E:PixelScaleChanged(event, skip)

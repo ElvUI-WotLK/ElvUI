@@ -2,7 +2,7 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 
 --Global Settings
 G.general = {
-	UIScale = 0.64,
+	UIScale = 0.711111,
 	version = 6.00,
 	locale = "auto",
 	eyefinity = false,
