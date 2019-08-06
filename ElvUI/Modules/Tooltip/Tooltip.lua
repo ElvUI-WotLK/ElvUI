@@ -178,9 +178,9 @@ function TT:ScanForItemLevel(itemLink)
 
 	local itemLevel = 0
 	for i = 2, tooltip:NumLines() do
-		local text = _G[ tooltip:GetName() .."TextLeft"..i]:GetText()
+		local text = _G[tooltip:GetName().."TextLeft"..i]:GetText()
 		if(text and text ~= "") then
-			local value = tonumber(text:match(S_ITEM_LEVEL))
+			local value = tonumber(match(text, S_ITEM_LEVEL))
 			if(value) then
 				itemLevel = value
 			end
@@ -194,7 +194,7 @@ end
 function TT:GetItemLvL(unit)
 	local total, item = 0, 0
 	for i = 1, #SlotName do
-		local itemLink = GetInventoryItemLink(unit, GetInventorySlotInfo(("%sSlot"):format(SlotName[i])))
+		local itemLink = GetInventoryItemLink(unit, GetInventorySlotInfo(format("%sSlot", SlotName[i])))
 		if (itemLink ~= nil) then
 			local itemLevel = self:ScanForItemLevel(itemLink)
 			if(itemLevel and itemLevel > 0) then
@@ -509,16 +509,16 @@ function TT:GameTooltip_OnTooltipSetItem(tt)
 		local bankCount = " "
 
 		if link ~= nil and self.db.spellID then
-			left = (("|cFFCA3C3C%s|r %s"):format(ID, link)):match(":(%w+)")
+			left = match(format("|cFFCA3C3C%s|r %s", ID, link), ":(%w+)")
 		end
 
 		if self.db.itemCount == "BAGS_ONLY" then
-			right = ("|cFFCA3C3C%s|r %d"):format(L["Count"], num)
+			right = format("|cFFCA3C3C%s|r %d", L["Count"], num)
 		elseif self.db.itemCount == "BANK_ONLY" then
-			bankCount = ("|cFFCA3C3C%s|r %d"):format(L["Bank"],(numall - num))
+			bankCount = format("|cFFCA3C3C%s|r %d", L["Bank"], (numall - num))
 		elseif self.db.itemCount == "BOTH" then
-			right = ("|cFFCA3C3C%s|r %d"):format(L["Count"], num)
-			bankCount = ("|cFFCA3C3C%s|r %d"):format(L["Bank"],(numall - num))
+			right = format("|cFFCA3C3C%s|r %d", L["Count"], num)
+			bankCount = format("|cFFCA3C3C%s|r %d", L["Bank"], (numall - num))
 		end
 
 		if left ~= " " or right ~= " " then
@@ -596,7 +596,7 @@ function TT:GameTooltip_OnTooltipSetSpell(tt)
 	local lines = tt:NumLines()
 	local isFound
 	for i= 1, lines do
-		local line = _G[("GameTooltipTextLeft%d"):format(i)]
+		local line = _G[format("GameTooltipTextLeft%d", i)]
 		if line and line:GetText() and find(line:GetText(), displayString) then
 			isFound = true
 			break
