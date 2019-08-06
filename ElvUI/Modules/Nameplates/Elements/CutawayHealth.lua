@@ -62,7 +62,7 @@ function NP:ConstructElement_CutawayHealth(parent)
 
 	local cutawayHealth = CreateFrame("StatusBar", "$parentCutawayHealth", healthBar)
 	cutawayHealth:SetStatusBarTexture(LSM:Fetch("background", "ElvUI Blank"))
-	cutawayHealth:SetFrameLevel(healthBar:GetFrameLevel() - 1)
+	cutawayHealth:SetFrameLevel(healthBar:GetFrameLevel())
 
 	NP:RegisterHealthBarCallbacks(parent, NP.CutawayHealthValueChangeCallback, NP.CutawayHealthColorChangeCallback, NP.CutawayHealthMaxHealthChangeCallback)
 
