@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local UF = E:GetModule("UnitFrames");
+local UF = E:GetModule("UnitFrames")
 
 --Lua functions
 local random = random
@@ -16,6 +16,12 @@ local _, ns = ...
 local ElvUF = ns.oUF
 assert(ElvUF, "ElvUI was unable to locate oUF.")
 
+function UF.HealthClipFrame_OnUpdate(clipFrame)
+	UF.HealthClipFrame_HealComm(clipFrame.__frame)
+
+	clipFrame:SetScript("OnUpdate", nil)
+end
+
 function UF:Construct_HealthBar(frame, bg, text, textPos)
 	local health = CreateFrame("StatusBar", nil, frame)
 	UF.statusbars[health] = true
@@ -28,7 +34,7 @@ function UF:Construct_HealthBar(frame, bg, text, textPos)
 		health.bg = health:CreateTexture(nil, "BORDER")
 		health.bg:SetAllPoints()
 		health.bg:SetTexture(E.media.blankTex)
-		health.bg.multiplier = 0.35
+		health.bg.multiplier = 0.25
 	end
 
 	if text then
@@ -46,6 +52,12 @@ function UF:Construct_HealthBar(frame, bg, text, textPos)
 	health.colorTapping = true
 	health.colorDisconnected = true
 	health:CreateBackdrop(nil, nil, nil, self.thinBorders, true)
+
+	local clipFrame = CreateFrame("Frame", nil, health)
+	clipFrame:SetScript("OnUpdate", UF.HealthClipFrame_OnUpdate)
+	clipFrame:SetAllPoints()
+	clipFrame.__frame = frame
+	health.ClipFrame = clipFrame
 
 	return health
 end
@@ -192,7 +204,10 @@ function UF:Configure_HealthBar(frame)
 	end
 
 	--Transparency Settings
-	UF:ToggleTransparentStatusBar(UF.db.colors.transparentHealth, frame.Health, frame.Health.bg, (frame.USE_PORTRAIT and frame.USE_PORTRAIT_OVERLAY) ~= true)
+	UF:ToggleTransparentStatusBar(UF.db.colors.transparentHealth, frame.Health, frame.Health.bg, true, nil)
+
+	--Prediction Texture; keep under ToggleTransparentStatusBar
+	UF:UpdatePredictionStatusBar(frame.HealthPrediction, frame.Health)
 
 	--Highlight Texture
 	UF:Configure_HighlightGlow(frame)
@@ -220,7 +235,7 @@ function UF:PostUpdateHealthColor(unit, r, g, b)
 
 	local newr, newg, newb -- fallback for bg if custom settings arent used
 	if not b then r, g, b = colors.health.r, colors.health.g, colors.health.b end
-	if (((colors.healthclass and colors.colorhealthbyvalue) or (colors.colorhealthbyvalue and parent.isForced)) and not (UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit))) then
+	if (((colors.healthclass and colors.colorhealthbyvalue) or (colors.colorhealthbyvalue and parent.isForced)) and (UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit))) then
 		local cur, max = self.cur or 1, self.max or 100
 		if parent.isForced then
 			cur = parent.forcedHealth or cur
@@ -239,7 +254,7 @@ function UF:PostUpdateHealthColor(unit, r, g, b)
 		elseif colors.customhealthbackdrop then
 			self.bg:SetVertexColor(colors.health_backdrop.r, colors.health_backdrop.g, colors.health_backdrop.b)
 		elseif colors.classbackdrop then
-			local reaction, color = (UnitReaction(unit, 'player'))
+			local reaction, color = (UnitReaction(unit, "player"))
 
 			if UnitIsPlayer(unit) then
 				local _, Class = UnitClass(unit)

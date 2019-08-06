@@ -34,6 +34,7 @@ function UF:Construct_TargetFrame(frame)
 	frame.GPS = self:Construct_GPS(frame)
 	frame.PvPIndicator = self:Construct_PvPIcon(frame)
 	frame.Fader = self:Construct_Fader()
+	frame.Cutaway = self:Construct_Cutaway(frame)
 	frame.customTexts = {}
 	frame:Point("BOTTOMRIGHT", E.UIParent, "BOTTOM", 413, 68)
 	E:CreateMover(frame, frame:GetName().."Mover", L["Target Frame"], nil, nil, nil, "ALL,SOLO", nil, "unitframe,target,generalGroup")
@@ -112,6 +113,9 @@ function UF:Update_TargetFrame(frame, db)
 
 	--Fader
 	UF:Configure_Fader(frame)
+
+	--Cutaway
+	UF:Configure_Cutaway(frame)
 
 	--Debuff Highlight
 	UF:Configure_DebuffHighlight(frame)

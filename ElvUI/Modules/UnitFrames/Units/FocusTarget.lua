@@ -25,6 +25,7 @@ function UF:Construct_FocusTargetFrame(frame)
 	frame.TargetGlow = self:Construct_TargetGlow(frame)
 	frame.InfoPanel = self:Construct_InfoPanel(frame)
 	frame.Fader = self:Construct_Fader()
+	frame.Cutaway = self:Construct_Cutaway(frame)
 
 	frame.customTexts = {}
 	frame:Point("BOTTOM", ElvUF_Focus, "TOP", 0, 7) --Set to default position
@@ -91,6 +92,9 @@ function UF:Update_FocusTargetFrame(frame, db)
 
 	--Fader
 	UF:Configure_Fader(frame)
+
+	--Cutaway
+	UF:Configure_Cutaway(frame)
 
 	--Raid Icon
 	UF:Configure_RaidIcon(frame)

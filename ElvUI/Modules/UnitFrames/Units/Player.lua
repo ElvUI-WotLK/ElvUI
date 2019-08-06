@@ -57,6 +57,7 @@ function UF:Construct_PlayerFrame(frame)
 	frame.InfoPanel = self:Construct_InfoPanel(frame)
 	frame.PvPIndicator = self:Construct_PvPIcon(frame)
 	frame.Fader = self:Construct_Fader()
+	frame.Cutaway = self:Construct_Cutaway(frame)
 	frame.customTexts = {}
 
 	frame:Point("BOTTOMLEFT", E.UIParent, "BOTTOM", -413, 68) --Set to default position
@@ -163,6 +164,9 @@ function UF:Update_PlayerFrame(frame, db)
 
 	--Fader
 	UF:Configure_Fader(frame)
+
+	--Cutaway
+	UF:Configure_Cutaway(frame)
 
 	--Debuff Highlight
 	UF:Configure_DebuffHighlight(frame)

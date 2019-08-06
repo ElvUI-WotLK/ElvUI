@@ -909,7 +909,9 @@ P.unitframe = {
 			width = 270,
 			height = 54,
 			lowmana = 30,
-			healPrediction = true,
+			healPrediction = {
+				enable = true
+			},
 			threatStyle = "GLOW",
 			smartAuraPosition = "DISABLED",
 			colorOverride = "USE_DEFAULT",
@@ -1124,6 +1126,20 @@ P.unitframe = {
 				xOffset = 0,
 				yOffset = 8,
 			},
+			cutaway =  {
+				health = {
+					enabled = false,
+					fadeOutTime = 0.6,
+					lengthBeforeFade = 0.3,
+					forceBlankTexture = true
+				},
+				power = {
+					enabled = false,
+					fadeOutTime = 0.6,
+					lengthBeforeFade = 0.3,
+					forceBlankTexture = true
+				}
+			}
 		},
 		target = {
 			enable = true,
@@ -1133,7 +1149,9 @@ P.unitframe = {
 			threatStyle = "GLOW",
 			smartAuraPosition = "DISABLED",
 			colorOverride = "USE_DEFAULT",
-			healPrediction = true,
+			healPrediction = {
+				enable = true
+			},
 			middleClickFocus = true,
 			disableMouseoverGlow = false,
 			disableTargetGlow = true,
@@ -1309,6 +1327,20 @@ P.unitframe = {
 				onMouseOver = true,
 				outOfRange = true,
 			},
+			cutaway =  {
+				health = {
+					enabled = false,
+					fadeOutTime = 0.6,
+					lengthBeforeFade = 0.3,
+					forceBlankTexture = true
+				},
+				power = {
+					enabled = false,
+					fadeOutTime = 0.6,
+					lengthBeforeFade = 0.3,
+					forceBlankTexture = true
+				}
+			}
 		},
 		targettarget = {
 			enable = true,
@@ -1418,6 +1450,20 @@ P.unitframe = {
 				xOffset = 0,
 				yOffset = 8,
 			},
+			cutaway =  {
+				health = {
+					enabled = false,
+					fadeOutTime = 0.6,
+					lengthBeforeFade = 0.3,
+					forceBlankTexture = true
+				},
+				power = {
+					enabled = false,
+					fadeOutTime = 0.6,
+					lengthBeforeFade = 0.3,
+					forceBlankTexture = true
+				}
+			}
 		},
 		targettargettarget = {
 			enable = false,
@@ -1526,6 +1572,20 @@ P.unitframe = {
 				xOffset = 0,
 				yOffset = 8,
 			},
+			cutaway =  {
+				health = {
+					enabled = false,
+					fadeOutTime = 0.6,
+					lengthBeforeFade = 0.3,
+					forceBlankTexture = true
+				},
+				power = {
+					enabled = false,
+					fadeOutTime = 0.6,
+					lengthBeforeFade = 0.3,
+					forceBlankTexture = true
+				}
+			}
 		},
 		focus = {
 			enable = true,
@@ -1535,7 +1595,9 @@ P.unitframe = {
 			colorOverride = "USE_DEFAULT",
 			width = 190,
 			height = 36,
-			healPrediction = true,
+			healPrediction = {
+				enable = true
+			},
 			disableMouseoverGlow = false,
 			disableTargetGlow = false,
 			health = {
@@ -1684,6 +1746,20 @@ P.unitframe = {
 				onMouseOver = true,
 				outOfRange = true,
 			},
+			cutaway =  {
+				health = {
+					enabled = false,
+					fadeOutTime = 0.6,
+					lengthBeforeFade = 0.3,
+					forceBlankTexture = true
+				},
+				power = {
+					enabled = false,
+					fadeOutTime = 0.6,
+					lengthBeforeFade = 0.3,
+					forceBlankTexture = true
+				}
+			}
 		},
 		focustarget = {
 			enable = false,
@@ -1792,6 +1868,20 @@ P.unitframe = {
 				xOffset = 0,
 				yOffset = 8,
 			},
+			cutaway =  {
+				health = {
+					enabled = false,
+					fadeOutTime = 0.6,
+					lengthBeforeFade = 0.3,
+					forceBlankTexture = true
+				},
+				power = {
+					enabled = false,
+					fadeOutTime = 0.6,
+					lengthBeforeFade = 0.3,
+					forceBlankTexture = true
+				}
+			}
 		},
 		pet = {
 			enable = true,
@@ -1801,7 +1891,9 @@ P.unitframe = {
 			colorOverride = "USE_DEFAULT",
 			width = 130,
 			height = 36,
-			healPrediction = true,
+			healPrediction = {
+				enable = true
+			},
 			disableMouseoverGlow = false,
 			disableTargetGlow = true,
 			health = {
@@ -1941,6 +2033,20 @@ P.unitframe = {
 					frameLevel = 1,
 				},
 			},
+			cutaway =  {
+				health = {
+					enabled = false,
+					fadeOutTime = 0.6,
+					lengthBeforeFade = 0.3,
+					forceBlankTexture = true
+				},
+				power = {
+					enabled = false,
+					fadeOutTime = 0.6,
+					lengthBeforeFade = 0.3,
+					forceBlankTexture = true
+				}
+			}
 		},
 		pettarget = {
 			enable = false,
@@ -2041,6 +2147,20 @@ P.unitframe = {
 				xOffset = 0,
 				yOffset = 0,
 			},
+			cutaway =  {
+				health = {
+					enabled = false,
+					fadeOutTime = 0.6,
+					lengthBeforeFade = 0.3,
+					forceBlankTexture = true
+				},
+				power = {
+					enabled = false,
+					fadeOutTime = 0.6,
+					lengthBeforeFade = 0.3,
+					forceBlankTexture = true
+				}
+			}
 		},
 		boss = {
 			enable = true,
@@ -2177,6 +2297,20 @@ P.unitframe = {
 				xOffset = 0,
 				yOffset = 8,
 			},
+			cutaway =  {
+				health = {
+					enabled = false,
+					fadeOutTime = 0.6,
+					lengthBeforeFade = 0.3,
+					forceBlankTexture = true
+				},
+				power = {
+					enabled = false,
+					fadeOutTime = 0.6,
+					lengthBeforeFade = 0.3,
+					forceBlankTexture = true
+				}
+			}
 		},
 		arena = {
 			enable = true,
@@ -2186,7 +2320,9 @@ P.unitframe = {
 			spacing = 25,
 			width = 246,
 			height = 47,
-			healPrediction = true,
+			healPrediction = {
+				enable = true
+			},
 			colorOverride = "USE_DEFAULT",
 			disableMouseoverGlow = false,
 			disableTargetGlow = false,
@@ -2313,6 +2449,20 @@ P.unitframe = {
 				xOffset = 1,
 				yOffset = 0,
 			},
+			cutaway =  {
+				health = {
+					enabled = false,
+					fadeOutTime = 0.6,
+					lengthBeforeFade = 0.3,
+					forceBlankTexture = true
+				},
+				power = {
+					enabled = false,
+					fadeOutTime = 0.6,
+					lengthBeforeFade = 0.3,
+					forceBlankTexture = true
+				}
+			}
 		},
 		party = {
 			enable = true,
@@ -2330,7 +2480,9 @@ P.unitframe = {
 			invertGroupingOrder = false,
 			startFromCenter = false,
 			showPlayer = true,
-			healPrediction = false,
+			healPrediction = {
+				enable = false
+			},
 			colorOverride = "USE_DEFAULT",
 			width = 184,
 			height = 54,
@@ -2566,6 +2718,20 @@ P.unitframe = {
 				attachToObject = "Frame",
 				xOffset = 0,
 				yOffset = 0
+			},
+			cutaway =  {
+				health = {
+					enabled = false,
+					fadeOutTime = 0.6,
+					lengthBeforeFade = 0.3,
+					forceBlankTexture = true
+				},
+				power = {
+					enabled = false,
+					fadeOutTime = 0.6,
+					lengthBeforeFade = 0.3,
+					forceBlankTexture = true
+				}
 			}
 		},
 		raid = {
@@ -2581,7 +2747,9 @@ P.unitframe = {
 			groupBy = "GROUP",
 			sortDir = "ASC",
 			showPlayer = true,
-			healPrediction = false,
+			healPrediction = {
+				enable = false
+			},
 			colorOverride = "USE_DEFAULT",
 			width = 80,
 			height = 44,
@@ -2753,6 +2921,20 @@ P.unitframe = {
 				attachToObject = "Frame",
 				xOffset = 0,
 				yOffset = 0
+			},
+			cutaway =  {
+				health = {
+					enabled = false,
+					fadeOutTime = 0.6,
+					lengthBeforeFade = 0.3,
+					forceBlankTexture = true
+				},
+				power = {
+					enabled = false,
+					fadeOutTime = 0.6,
+					lengthBeforeFade = 0.3,
+					forceBlankTexture = true
+				}
 			}
 		},
 		raid40 = {
@@ -2768,7 +2950,9 @@ P.unitframe = {
 			groupBy = "GROUP",
 			sortDir = "ASC",
 			showPlayer = true,
-			healPrediction = false,
+			healPrediction = {
+				enable = false
+			},
 			colorOverride = "USE_DEFAULT",
 			width = 80,
 			height = 27,
@@ -2940,6 +3124,20 @@ P.unitframe = {
 				attachToObject = "Frame",
 				xOffset = 0,
 				yOffset = 0
+			},
+			cutaway =  {
+				health = {
+					enabled = false,
+					fadeOutTime = 0.6,
+					lengthBeforeFade = 0.3,
+					forceBlankTexture = true
+				},
+				power = {
+					enabled = false,
+					fadeOutTime = 0.6,
+					lengthBeforeFade = 0.3,
+					forceBlankTexture = true
+				}
 			}
 		},
 		raidpet = {
@@ -2957,7 +3155,9 @@ P.unitframe = {
 			raidWideSorting = true,
 			invertGroupingOrder = false,
 			startFromCenter = false,
-			healPrediction = true,
+			healPrediction = {
+				enable = true
+			},
 			colorOverride = "USE_DEFAULT",
 			width = 80,
 			height = 30,
@@ -3077,6 +3277,20 @@ P.unitframe = {
 				xOffset = 0,
 				yOffset = 8,
 			},
+			cutaway =  {
+				health = {
+					enabled = false,
+					fadeOutTime = 0.6,
+					lengthBeforeFade = 0.3,
+					forceBlankTexture = true
+				},
+				power = {
+					enabled = false,
+					fadeOutTime = 0.6,
+					lengthBeforeFade = 0.3,
+					forceBlankTexture = true
+				}
+			}
 		},
 		tank = {
 			enable = true,
@@ -3211,6 +3425,20 @@ P.unitframe = {
 					yOffset = 8,
 				},
 			},
+			cutaway =  {
+				health = {
+					enabled = false,
+					fadeOutTime = 0.6,
+					lengthBeforeFade = 0.3,
+					forceBlankTexture = true
+				},
+				power = {
+					enabled = false,
+					fadeOutTime = 0.6,
+					lengthBeforeFade = 0.3,
+					forceBlankTexture = true
+				}
+			}
 		},
 		assist = {
 			enable = true,
@@ -3345,8 +3573,22 @@ P.unitframe = {
 					yOffset = 8,
 				},
 			},
-		},
-	},
+			cutaway =  {
+				health = {
+					enabled = false,
+					fadeOutTime = 0.6,
+					lengthBeforeFade = 0.3,
+					forceBlankTexture = true
+				},
+				power = {
+					enabled = false,
+					fadeOutTime = 0.6,
+					lengthBeforeFade = 0.3,
+					forceBlankTexture = true
+				}
+			}
+		}
+	}
 }
 
 --Cooldown

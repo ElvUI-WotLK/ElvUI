@@ -79,6 +79,7 @@ function UF:Construct_PartyFrames()
 	end
 
 	self.Fader = UF:Construct_Fader()
+	self.Cutaway = UF:Construct_Cutaway(self)
 
 	UF:Update_StatusBars()
 	UF:Update_FontStrings()
@@ -264,6 +265,9 @@ function UF:Update_PartyFrames(frame, db)
 
 	--Fader
 	UF:Configure_Fader(frame)
+
+	--Cutaway
+	UF:Configure_Cutaway(frame)
 
 	frame:UpdateAllElements("ElvUI_UpdateAllElements")
 end

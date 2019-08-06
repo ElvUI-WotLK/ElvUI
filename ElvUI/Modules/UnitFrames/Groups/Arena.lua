@@ -32,6 +32,7 @@ function UF:Construct_ArenaFrames(frame)
 	frame.TargetGlow = self:Construct_TargetGlow(frame)
 	frame.Trinket = self:Construct_Trinket(frame)
 	frame.Fader = self:Construct_Fader()
+	frame.Cutaway = self:Construct_Cutaway(frame)
 	frame:SetAttribute("type2", "focus")
 
 	frame.customTexts = {}
@@ -103,6 +104,9 @@ function UF:Update_ArenaFrames(frame, db)
 
 	--Fader
 	UF:Configure_Fader(frame)
+
+	--Cutaway
+	UF:Configure_Cutaway(frame)
 
 	--Heal Prediction
 	UF:Configure_HealComm(frame)

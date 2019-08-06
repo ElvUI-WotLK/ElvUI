@@ -50,6 +50,7 @@ function UF:Construct_RaidFrames()
 	self.HealCommBar = UF:Construct_HealComm(self)
 	self.GPS = UF:Construct_GPS(self)
 	self.Fader = UF:Construct_Fader()
+	self.Cutaway = UF:Construct_Cutaway(self)
 
 	self.customTexts = {}
 	self.InfoPanel = UF:Construct_InfoPanel(self)
@@ -222,6 +223,9 @@ function UF:Update_RaidFrames(frame, db)
 
 	--Fader
 	UF:Configure_Fader(frame)
+
+	--Cutaway
+	UF:Configure_Cutaway(frame)
 
 	--Buff Indicators
 	UF:UpdateAuraWatch(frame)

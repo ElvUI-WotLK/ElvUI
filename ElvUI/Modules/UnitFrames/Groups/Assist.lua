@@ -26,6 +26,7 @@ function UF:Construct_AssistFrames()
 	self.MouseGlow = UF:Construct_MouseGlow(self)
 	self.TargetGlow = UF:Construct_TargetGlow(self)
 	self.Fader = UF:Construct_Fader()
+	self.Cutaway = UF:Construct_Cutaway(self)
 
 	if not self.isChild then
 		self:SetAttribute("initial-width", E.db.unitframe.units.assist.width)
@@ -148,6 +149,9 @@ function UF:Update_AssistFrames(frame, db)
 
 	--Fader
 	UF:Configure_Fader(frame)
+
+	--Cutaway
+	UF:Configure_Cutaway(frame)
 
 	UF:Configure_RaidIcon(frame)
 

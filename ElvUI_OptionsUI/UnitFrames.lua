@@ -2230,6 +2230,83 @@ local function GetOptionsTableForNonGroup_GPS(unit)
 	return config
 end
 
+local function GetOptionsTable_Cutaway(updateFunc, groupName, numGroup)
+	local config = {
+		order = 1021,
+		type = "group",
+		childGroups = "tabs",
+		name = L["Cutaway Bars"],
+		args = {
+			health = {
+				order = 1,
+				type = "group",
+				guiInline = true,
+				name = L["HEALTH"],
+				get = function(info) return E.db.unitframe.units[groupName].cutaway.health[info[#info]] end,
+				set = function(info, value) E.db.unitframe.units[groupName].cutaway.health[info[#info]] = value; updateFunc(UF, groupName, numGroup) end,
+				args = {
+					enabled = {
+						order = 1,
+						type = "toggle",
+						name = L["ENABLE"]
+					},
+					lengthBeforeFade = {
+						order = 2,
+						type = "range",
+						name = L["Fade Out Delay"],
+						desc = L["How much time before the cutaway health starts to fade."],
+						min = 0.1, max = 1, step = 0.1,
+						disabled = function() return not E.db.unitframe.units[groupName].cutaway.health.enabled end
+					},
+					fadeOutTime = {
+						order = 3,
+						type = "range",
+						name = L["Fade Out"],
+						desc = L["How long the cutaway health will take to fade out."],
+						min = 0.1, max = 1, step = 0.1,
+						disabled = function() return not E.db.unitframe.units[groupName].cutaway.health.enabled end
+					}
+				}
+			}
+		}
+	}
+	if E.db.unitframe.units[groupName].cutaway.power then
+		config.args.power = {
+			order = 2,
+			type = "group",
+			name = L["Power"],
+			guiInline = true,
+			get = function(info) return E.db.unitframe.units[groupName].cutaway.power[info[#info]] end,
+			set = function(info, value) E.db.unitframe.units[groupName].cutaway.power[info[#info]] = value updateFunc(UF, groupName, numGroup) end,
+			args = {
+				enabled = {
+					order = 1,
+					type = "toggle",
+					name = L["ENABLE"]
+				},
+				lengthBeforeFade = {
+					order = 2,
+					type = "range",
+					name = L["Fade Out Delay"],
+					desc = L["How much time before the cutaway power starts to fade."],
+					min = 0.1, max = 1, step = 0.1,
+					disabled = function() return not E.db.unitframe.units[groupName].cutaway.power.enabled end
+				},
+				fadeOutTime = {
+					type = "range",
+					order = 3,
+					name = L["Fade Out"],
+					desc = L["How long the cutaway power will take to fade out."],
+					min = 0.1, max = 1, step = 0.1,
+					disabled = function() return not E.db.unitframe.units[groupName].cutaway.power.enabled end
+				}
+			}
+		}
+	end
+
+	return config
+end
+
 E.Options.args.unitframe = {
 	type = "group",
 	name = L["UnitFrames"],
@@ -3645,6 +3722,7 @@ E.Options.args.unitframe.args.player = {
 		castbar = GetOptionsTable_Castbar(true, UF.CreateAndUpdateUF, "player"),
 		aurabar = GetOptionsTable_AuraBars(UF.CreateAndUpdateUF, "player"),
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUF, "player"),
+		cutaway = GetOptionsTable_Cutaway(UF.CreateAndUpdateUF, "player"),
 		classbar = {
 			order = 750,
 			type = "group",
@@ -4228,6 +4306,7 @@ E.Options.args.unitframe.args.target = {
 		castbar = GetOptionsTable_Castbar(false, UF.CreateAndUpdateUF, "target"),
 		aurabar = GetOptionsTable_AuraBars(UF.CreateAndUpdateUF, "target"),
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUF, "target"),
+		cutaway = GetOptionsTable_Cutaway(UF.CreateAndUpdateUF, "target"),
 		GPSArrow = GetOptionsTableForNonGroup_GPS("target"),
 		pvpIcon = {
 			order = 449,
@@ -4411,6 +4490,7 @@ E.Options.args.unitframe.args.targettarget = {
 		buffs = GetOptionsTable_Auras("buffs", false, UF.CreateAndUpdateUF, "targettarget"),
 		debuffs = GetOptionsTable_Auras("debuffs", false, UF.CreateAndUpdateUF, "targettarget"),
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUF, "targettarget"),
+		cutaway = GetOptionsTable_Cutaway(UF.CreateAndUpdateUF, "targettarget")
 	}
 }
 
@@ -4544,6 +4624,7 @@ E.Options.args.unitframe.args.targettargettarget = {
 		buffs = GetOptionsTable_Auras("buffs", false, UF.CreateAndUpdateUF, "targettargettarget"),
 		debuffs = GetOptionsTable_Auras("debuffs", false, UF.CreateAndUpdateUF, "targettargettarget"),
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUF, "targettargettarget"),
+		cutaway = GetOptionsTable_Cutaway(UF.CreateAndUpdateUF, "targettargettarget")
 	}
 }
 
@@ -4675,7 +4756,8 @@ E.Options.args.unitframe.args.focus = {
 		castbar = GetOptionsTable_Castbar(false, UF.CreateAndUpdateUF, "focus"),
 		aurabar = GetOptionsTable_AuraBars(UF.CreateAndUpdateUF, "focus"),
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUF, "focus"),
-		GPSArrow = GetOptionsTableForNonGroup_GPS("focus"),
+		cutaway = GetOptionsTable_Cutaway(UF.CreateAndUpdateUF, "focus"),
+		GPSArrow = GetOptionsTableForNonGroup_GPS("focus")
 	}
 }
 
@@ -4809,6 +4891,7 @@ E.Options.args.unitframe.args.focustarget = {
 		buffs = GetOptionsTable_Auras("buffs", false, UF.CreateAndUpdateUF, "focustarget"),
 		debuffs = GetOptionsTable_Auras("debuffs", false, UF.CreateAndUpdateUF, "focustarget"),
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUF, "focustarget"),
+		cutaway = GetOptionsTable_Cutaway(UF.CreateAndUpdateUF, "focustarget")
 	}
 }
 
@@ -4971,6 +5054,7 @@ E.Options.args.unitframe.args.pet = {
 		debuffs = GetOptionsTable_Auras("debuffs", false, UF.CreateAndUpdateUF, "pet"),
 		castbar = GetOptionsTable_Castbar(false, UF.CreateAndUpdateUF, "pet"),
 		aurabar = GetOptionsTable_AuraBars(UF.CreateAndUpdateUF, "pet"),
+		cutaway = GetOptionsTable_Cutaway(UF.CreateAndUpdateUF, "pet"),
 		happiness = {
 			order = 700,
 			type = "group",
@@ -5133,7 +5217,8 @@ E.Options.args.unitframe.args.pettarget = {
 		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUF, "pettarget"),
 		fader = GetOptionsTable_Fader(UF.CreateAndUpdateUF, "pettarget"),
 		buffs = GetOptionsTable_Auras("buffs", false, UF.CreateAndUpdateUF, "pettarget"),
-		debuffs = GetOptionsTable_Auras("debuffs", false, UF.CreateAndUpdateUF, "pettarget")
+		debuffs = GetOptionsTable_Auras("debuffs", false, UF.CreateAndUpdateUF, "pettarget"),
+		cutaway = GetOptionsTable_Cutaway(UF.CreateAndUpdateUF, "pettarget")
 	}
 }
 
@@ -5283,6 +5368,7 @@ E.Options.args.unitframe.args.boss = {
 		debuffs = GetOptionsTable_Auras("debuffs", false, UF.CreateAndUpdateUFGroup, "boss", MAX_BOSS_FRAMES),
 		castbar = GetOptionsTable_Castbar(false, UF.CreateAndUpdateUFGroup, "boss", MAX_BOSS_FRAMES),
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUFGroup, "boss", MAX_BOSS_FRAMES),
+		cutaway = GetOptionsTable_Cutaway(UF.CreateAndUpdateUFGroup, "boss", MAX_BOSS_FRAMES)
 	}
 }
 
@@ -5476,7 +5562,8 @@ E.Options.args.unitframe.args.arena = {
 		fader = GetOptionsTable_Fader(UF.CreateAndUpdateUFGroup, "arena", 5),
 		buffs = GetOptionsTable_Auras("buffs", false, UF.CreateAndUpdateUFGroup, "arena", 5),
 		debuffs = GetOptionsTable_Auras("debuffs", false, UF.CreateAndUpdateUFGroup, "arena", 5),
-		castbar = GetOptionsTable_Castbar(false, UF.CreateAndUpdateUFGroup, "arena", 5)
+		castbar = GetOptionsTable_Castbar(false, UF.CreateAndUpdateUFGroup, "arena", 5),
+		cutaway = GetOptionsTable_Cutaway(UF.CreateAndUpdateUFGroup, "arena", 5)
 	}
 }
 
@@ -6076,6 +6163,7 @@ E.Options.args.unitframe.args.party = {
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateHeaderGroup, "party"),
 		readycheckIcon = GetOptionsTable_ReadyCheckIcon(UF.CreateAndUpdateHeaderGroup, "party"),
 		resurrectIcon = GetOptionsTable_ResurrectIcon(UF.CreateAndUpdateHeaderGroup, "party"),
+		cutaway = GetOptionsTable_Cutaway(UF.CreateAndUpdateHeaderGroup, "party"),
 		GPSArrow = GetOptionsTable_GPS("party")
 	}
 }
@@ -6476,6 +6564,7 @@ E.Options.args.unitframe.args.raid = {
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateHeaderGroup, "raid"),
 		readycheckIcon = GetOptionsTable_ReadyCheckIcon(UF.CreateAndUpdateHeaderGroup, "raid"),
 		resurrectIcon = GetOptionsTable_ResurrectIcon(UF.CreateAndUpdateHeaderGroup, "raid"),
+		cutaway = GetOptionsTable_Cutaway(UF.CreateAndUpdateHeaderGroup, "raid"),
 		GPSArrow = GetOptionsTable_GPS("raid")
 	}
 }
@@ -6876,6 +6965,7 @@ E.Options.args.unitframe.args.raid40 = {
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateHeaderGroup, "raid40"),
 		readycheckIcon = GetOptionsTable_ReadyCheckIcon(UF.CreateAndUpdateHeaderGroup, "raid40"),
 		resurrectIcon = GetOptionsTable_ResurrectIcon(UF.CreateAndUpdateHeaderGroup, "raid40"),
+		cutaway = GetOptionsTable_Cutaway(UF.CreateAndUpdateHeaderGroup, "raid40"),
 		GPSArrow = GetOptionsTable_GPS("raid40")
 	}
 }
@@ -7130,6 +7220,7 @@ E.Options.args.unitframe.args.raidpet = {
 		debuffs = GetOptionsTable_Auras("debuffs", true, UF.CreateAndUpdateHeaderGroup, "raidpet"),
 		rdebuffs = GetOptionsTable_RaidDebuff(UF.CreateAndUpdateHeaderGroup, "raidpet"),
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateHeaderGroup, "raidpet"),
+		cutaway = GetOptionsTable_Cutaway(UF.CreateAndUpdateHeaderGroup, "raidpet"),
 		buffIndicator = {
 			order = 701,
 			type = "group",
@@ -7314,6 +7405,7 @@ E.Options.args.unitframe.args.tank = {
 		buffs = GetOptionsTable_Auras("buffs", true, UF.CreateAndUpdateHeaderGroup, "tank"),
 		debuffs = GetOptionsTable_Auras("debuffs", true, UF.CreateAndUpdateHeaderGroup, "tank"),
 		rdebuffs = GetOptionsTable_RaidDebuff(UF.CreateAndUpdateHeaderGroup, "tank"),
+		cutaway = GetOptionsTable_Cutaway(UF.CreateAndUpdateHeaderGroup, "tank"),
 		buffIndicator = {
 			order = 701,
 			type = "group",
@@ -7514,6 +7606,7 @@ E.Options.args.unitframe.args.assist = {
 		buffs = GetOptionsTable_Auras("buffs", true, UF.CreateAndUpdateHeaderGroup, "assist"),
 		debuffs = GetOptionsTable_Auras("debuffs", true, UF.CreateAndUpdateHeaderGroup, "assist"),
 		rdebuffs = GetOptionsTable_RaidDebuff(UF.CreateAndUpdateHeaderGroup, "assist"),
+		cutaway = GetOptionsTable_Cutaway(UF.CreateAndUpdateHeaderGroup, "assist"),
 		buffIndicator = {
 			order = 702,
 			type = "group",

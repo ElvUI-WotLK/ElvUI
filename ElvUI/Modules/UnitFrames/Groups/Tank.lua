@@ -26,6 +26,7 @@ function UF:Construct_TankFrames()
 	self.MouseGlow = UF:Construct_MouseGlow(self)
 	self.TargetGlow = UF:Construct_TargetGlow(self)
 	self.Fader = UF:Construct_Fader()
+	self.Cutaway = UF:Construct_Cutaway(self)
 
 	if not self.isChild then
 		self:SetAttribute("initial-width", E.db.unitframe.units.tank.width)
@@ -149,6 +150,9 @@ function UF:Update_TankFrames(frame, db)
 
 	--Fader
 	UF:Configure_Fader(frame)
+
+	--Cutaway
+	UF:Configure_Cutaway(frame)
 
 	UF:Configure_RaidIcon(frame)
 
