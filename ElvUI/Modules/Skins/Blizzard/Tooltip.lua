@@ -44,7 +44,6 @@ local function LoadSkin()
 
 	TT:SecureHookScript(GameTooltip, "OnSizeChanged", "CheckBackdropColor")
 	TT:SecureHookScript(GameTooltip, "OnUpdate", "CheckBackdropColor")
-	TT:RegisterEvent("CURSOR_UPDATE", "CheckBackdropColor")
 end
 
 S:AddCallback("SkinTooltip", LoadSkin)

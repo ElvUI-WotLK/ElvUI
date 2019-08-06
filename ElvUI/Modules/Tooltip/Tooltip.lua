@@ -1,62 +1,62 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local TT = E:GetModule("Tooltip")
 
-local _G = _G;
-local unpack, tonumber, select = unpack, tonumber, select;
-local twipe, tinsert, tconcat = table.wipe, table.insert, table.concat;
-local floor = math.floor;
-local find, format = string.find, string.format
+--Lua functions
+local _G = _G
+local unpack, tonumber, select = unpack, tonumber, select
+local twipe, tinsert, tconcat = table.wipe, table.insert, table.concat
+local floor = math.floor
+local find, format, sub, match = string.find, string.format, string.sub, string.match
+--WoW API / Variables
+local CreateFrame = CreateFrame
+local GetTime = GetTime
+local UnitGUID = UnitGUID
+local InCombatLockdown = InCombatLockdown
+local IsShiftKeyDown = IsShiftKeyDown
+local IsControlKeyDown = IsControlKeyDown
+local IsAltKeyDown = IsAltKeyDown
+local GetInventoryItemLink = GetInventoryItemLink
+local GetInventorySlotInfo = GetInventorySlotInfo
+local UnitExists = UnitExists
+local CanInspect = CanInspect
+local NotifyInspect = NotifyInspect
+local GetMouseFocus = GetMouseFocus
+local UnitLevel = UnitLevel
+local UnitIsPlayer = UnitIsPlayer
+local UnitClass = UnitClass
+local UnitName = UnitName
+local GetGuildInfo = GetGuildInfo
+local UnitPVPName = UnitPVPName
+local UnitIsAFK = UnitIsAFK
+local UnitIsDND = UnitIsDND
+local GetQuestDifficultyColor = GetQuestDifficultyColor
+local UnitRace = UnitRace
+local UnitIsTapped = UnitIsTapped
+local UnitIsTappedByPlayer = UnitIsTappedByPlayer
+local UnitReaction = UnitReaction
+local UnitClassification = UnitClassification
+local UnitCreatureType = UnitCreatureType
+local UnitIsPVP = UnitIsPVP
+local UnitHasVehicleUI = UnitHasVehicleUI
+local GetNumPartyMembers = GetNumPartyMembers
+local GetNumRaidMembers = GetNumRaidMembers
+local UnitIsUnit = UnitIsUnit
+local UnitIsDeadOrGhost = UnitIsDeadOrGhost
+local GetItemCount = GetItemCount
+local UnitAura = UnitAura
+local SetTooltipMoney = SetTooltipMoney
+local GameTooltip_ClearMoney = GameTooltip_ClearMoney
+local TARGET = TARGET
+local DEAD = DEAD
+local FOREIGN_SERVER_LABEL = FOREIGN_SERVER_LABEL
+local PVP = PVP
+local FACTION_ALLIANCE = FACTION_ALLIANCE
+local FACTION_HORDE = FACTION_HORDE
+local LEVEL = LEVEL
+local FACTION_BAR_COLORS = FACTION_BAR_COLORS
+local ID = ID
 
-local CreateFrame = CreateFrame;
-local GetTime = GetTime;
-local UnitGUID = UnitGUID;
-local InCombatLockdown = InCombatLockdown;
-local IsShiftKeyDown = IsShiftKeyDown;
-local IsControlKeyDown = IsControlKeyDown;
-local IsAltKeyDown = IsAltKeyDown;
-local GetInventoryItemLink = GetInventoryItemLink;
-local GetInventorySlotInfo = GetInventorySlotInfo;
-local UnitExists = UnitExists;
-local CanInspect = CanInspect;
-local NotifyInspect = NotifyInspect;
-local GetMouseFocus = GetMouseFocus;
-local UnitLevel = UnitLevel;
-local UnitIsPlayer = UnitIsPlayer;
-local UnitClass = UnitClass;
-local UnitName = UnitName;
-local GetGuildInfo = GetGuildInfo;
-local UnitPVPName = UnitPVPName;
-local UnitIsAFK = UnitIsAFK;
-local UnitIsDND = UnitIsDND;
-local GetQuestDifficultyColor = GetQuestDifficultyColor;
-local UnitRace = UnitRace;
-local UnitIsTapped = UnitIsTapped;
-local UnitIsTappedByPlayer = UnitIsTappedByPlayer;
-local UnitReaction = UnitReaction;
-local UnitClassification = UnitClassification;
-local UnitCreatureType = UnitCreatureType;
-local UnitIsPVP = UnitIsPVP;
-local UnitHasVehicleUI = UnitHasVehicleUI;
-local GetNumPartyMembers = GetNumPartyMembers;
-local GetNumRaidMembers = GetNumRaidMembers;
-local UnitIsUnit = UnitIsUnit;
-local UnitIsDeadOrGhost = UnitIsDeadOrGhost;
-local GetItemCount = GetItemCount;
-local UnitAura = UnitAura;
-local SetTooltipMoney = SetTooltipMoney;
-local GameTooltip_ClearMoney = GameTooltip_ClearMoney;
-local TARGET = TARGET;
-local DEAD = DEAD;
-local FOREIGN_SERVER_LABEL = FOREIGN_SERVER_LABEL;
-local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
-local PVP = PVP;
-local FACTION_ALLIANCE = FACTION_ALLIANCE;
-local FACTION_HORDE = FACTION_HORDE;
-local LEVEL = LEVEL;
-local FACTION_BAR_COLORS = FACTION_BAR_COLORS;
-local ID = ID;
-
-local GameTooltip, GameTooltipStatusBar = _G["GameTooltip"], _G["GameTooltipStatusBar"]
+local GameTooltip, GameTooltipStatusBar = GameTooltip, GameTooltipStatusBar
 local S_ITEM_LEVEL = ITEM_LEVEL:gsub( "%%d", "(%%d+)" )
 local targetList, inspectCache = {}, {}
 local TAPPED_COLOR = { r=.6, g=.6, b=.6 }
@@ -79,16 +79,25 @@ local SlotName = {
 
 function TT:GameTooltip_SetDefaultAnchor(tt, parent)
 	if E.private.tooltip.enable ~= true then return end
-	if not self.db.visibility then return; end
+	if not self.db.visibility then return end
 
 	if(tt:GetAnchorType() ~= "ANCHOR_NONE") then return end
 	if InCombatLockdown() and self.db.visibility.combat then
-		tt:Hide()
-		return
+		local modifier = self.db.visibility.combatOverride
+		if (not(
+				(modifier == "SHIFT" and IsShiftKeyDown())
+				or
+				(modifier == "CTRL" and IsControlKeyDown())
+				or
+				(modifier == "ALT" and IsAltKeyDown())
+		)) then
+			tt:Hide()
+			return
+		end
 	end
 
 	local ownerName = tt:GetOwner() and tt:GetOwner().GetName and tt:GetOwner():GetName()
-	if(self.db.visibility.actionbars ~= "NONE" and ownerName and (find(ownerName, "ElvUI_Bar") or find(ownerName, "ElvUI_StanceBar") or find(ownerName, "PetAction")) and not keybindFrame.active) then
+	if (self.db.visibility.actionbars ~= "NONE" and ownerName and (find(ownerName, "ElvUI_Bar") or find(ownerName, "ElvUI_StanceBar") or find(ownerName, "PetAction")) and not keybindFrame.active) then
 		local modifier = self.db.visibility.actionbars
 
 		if(modifier == "ALL" or not ((modifier == "SHIFT" and IsShiftKeyDown()) or (modifier == "CTRL" and IsControlKeyDown()) or (modifier == "ALT" and IsAltKeyDown()))) then
@@ -97,50 +106,58 @@ function TT:GameTooltip_SetDefaultAnchor(tt, parent)
 		end
 	end
 
-	if(parent) then
-		if(self.db.healthBar.statusPosition == "BOTTOM") then
-			if(GameTooltipStatusBar.anchoredToTop) then
-				GameTooltipStatusBar:ClearAllPoints();
-				GameTooltipStatusBar:Point("TOPLEFT", GameTooltip, "BOTTOMLEFT", E.Border, -(E.Spacing * 3));
-				GameTooltipStatusBar:Point("TOPRIGHT", GameTooltip, "BOTTOMRIGHT", -E.Border, -(E.Spacing * 3));
-				GameTooltipStatusBar.text:Point("CENTER", GameTooltipStatusBar, 0, -3);
-				GameTooltipStatusBar.anchoredToTop = nil;
+	if tt.StatusBar then
+		if self.db.healthBar.statusPosition == "BOTTOM" then
+			if tt.StatusBar.anchoredToTop then
+				tt.StatusBar:ClearAllPoints()
+				tt.StatusBar:Point("TOPLEFT", tt, "BOTTOMLEFT", E.Border, -(E.Spacing * 3))
+				tt.StatusBar:Point("TOPRIGHT", tt, "BOTTOMRIGHT", -E.Border, -(E.Spacing * 3))
+				tt.StatusBar.text:Point("CENTER", tt.StatusBar, 0, 0)
+				tt.StatusBar.anchoredToTop = nil
 			end
 		else
-			if(not GameTooltipStatusBar.anchoredToTop) then
-				GameTooltipStatusBar:ClearAllPoints();
-				GameTooltipStatusBar:Point("BOTTOMLEFT", GameTooltip, "TOPLEFT", E.Border, (E.Spacing * 3));
-				GameTooltipStatusBar:Point("BOTTOMRIGHT", GameTooltip, "TOPRIGHT", -E.Border, (E.Spacing * 3));
-				GameTooltipStatusBar.text:Point("CENTER", GameTooltipStatusBar, 0, 3);
-				GameTooltipStatusBar.anchoredToTop = true;
+			if not tt.StatusBar.anchoredToTop then
+				tt.StatusBar:ClearAllPoints()
+				tt.StatusBar:Point("BOTTOMLEFT", tt, "TOPLEFT", E.Border, (E.Spacing * 3))
+				tt.StatusBar:Point("BOTTOMRIGHT", tt, "TOPRIGHT", -E.Border, (E.Spacing * 3))
+				tt.StatusBar.text:Point("CENTER", tt.StatusBar, 0, 0)
+				tt.StatusBar.anchoredToTop = true
 			end
-		end
-		if(self.db.cursorAnchor) then
-			tt:SetOwner(parent, "ANCHOR_CURSOR");
-			return;
-		else
-			tt:SetOwner(parent, "ANCHOR_NONE");
 		end
 	end
 
-	if(not E:HasMoverBeenMoved("TooltipMover")) then
-		if ElvUI_ContainerFrame and ElvUI_ContainerFrame:IsShown() then
-			tt:SetPoint("BOTTOMRIGHT", ElvUI_ContainerFrame, "TOPRIGHT", 0, 18)
-		elseif RightChatPanel:GetAlpha() == 1 and RightChatPanel:IsShown() then
-			tt:SetPoint("BOTTOMRIGHT", RightChatPanel, "TOPRIGHT", 0, 18)
+	if parent then
+		if self.db.cursorAnchor then
+			tt:SetOwner(parent, self.db.cursorAnchorType, self.db.cursorAnchorX, self.db.cursorAnchorY)
+			return
 		else
-			tt:SetPoint("BOTTOMRIGHT", RightChatPanel, "BOTTOMRIGHT", 0, 18)
+			tt:SetOwner(parent, "ANCHOR_NONE")
 		end
-	else
-		local point = E:GetScreenQuadrant(TooltipMover);
-		if(point == "TOPLEFT") then
-			tt:SetPoint("TOPLEFT", TooltipMover);
-		elseif(point == "TOPRIGHT") then
-			tt:SetPoint("TOPRIGHT", TooltipMover);
-		elseif(point == "BOTTOMLEFT" or point == "LEFT") then
-			tt:SetPoint("BOTTOMLEFT", TooltipMover);
+	end
+
+	local _, anchor = tt:GetPoint()
+
+	if (anchor == nil or (ElvUI_ContainerFrame and anchor == ElvUI_ContainerFrame) or anchor == RightChatPanel or anchor == TooltipMover or anchor == _G.UIParent or anchor == E.UIParent) then
+		tt:ClearAllPoints()
+		if not E:HasMoverBeenMoved("TooltipMover") then
+			if ElvUI_ContainerFrame and ElvUI_ContainerFrame:IsShown() then
+				tt:Point("BOTTOMRIGHT", ElvUI_ContainerFrame, "TOPRIGHT", 0, 18)
+			elseif RightChatPanel:GetAlpha() == 1 and RightChatPanel:IsShown() then
+				tt:Point("BOTTOMRIGHT", RightChatPanel, "TOPRIGHT", 0, 18)
+			else
+				tt:Point("BOTTOMRIGHT", RightChatPanel, "BOTTOMRIGHT", 0, 18)
+			end
 		else
-			tt:SetPoint("BOTTOMRIGHT", TooltipMover);
+			local point = E:GetScreenQuadrant(TooltipMover)
+			if point == "TOPLEFT" then
+				tt:Point("TOPLEFT", TooltipMover, "BOTTOMLEFT")
+			elseif point == "TOPRIGHT" then
+				tt:Point("TOPRIGHT", TooltipMover, "BOTTOMRIGHT")
+			elseif point == "BOTTOMLEFT" or point == "LEFT" then
+				tt:Point("BOTTOMLEFT", TooltipMover, "TOPLEFT")
+			else
+				tt:Point("BOTTOMRIGHT", TooltipMover, "TOPRIGHT")
+			end
 		end
 	end
 end
@@ -154,35 +171,35 @@ function TT:GetAvailableTooltip()
 end
 
 function TT:ScanForItemLevel(itemLink)
-	local tooltip = self:GetAvailableTooltip();
-	tooltip:SetOwner(UIParent, "ANCHOR_NONE");
-	tooltip:SetHyperlink(itemLink);
-	tooltip:Show();
+	local tooltip = self:GetAvailableTooltip()
+	tooltip:SetOwner(UIParent, "ANCHOR_NONE")
+	tooltip:SetHyperlink(itemLink)
+	tooltip:Show()
 
-	local itemLevel = 0;
+	local itemLevel = 0
 	for i = 2, tooltip:NumLines() do
-		local text = _G[ tooltip:GetName() .."TextLeft"..i]:GetText();
+		local text = _G[ tooltip:GetName() .."TextLeft"..i]:GetText()
 		if(text and text ~= "") then
-			local value = tonumber(text:match(S_ITEM_LEVEL));
+			local value = tonumber(text:match(S_ITEM_LEVEL))
 			if(value) then
-				itemLevel = value;
+				itemLevel = value
 			end
 		end
 	end
 
-	tooltip:Hide();
+	tooltip:Hide()
 	return itemLevel
 end
 
 function TT:GetItemLvL(unit)
-	local total, item = 0, 0;
+	local total, item = 0, 0
 	for i = 1, #SlotName do
-		local itemLink = GetInventoryItemLink(unit, GetInventorySlotInfo(("%sSlot"):format(SlotName[i])));
+		local itemLink = GetInventoryItemLink(unit, GetInventorySlotInfo(("%sSlot"):format(SlotName[i])))
 		if (itemLink ~= nil) then
-			local itemLevel = self:ScanForItemLevel(itemLink);
+			local itemLevel = self:ScanForItemLevel(itemLink)
 			if(itemLevel and itemLevel > 0) then
-				item = item + 1;
-				total = total + itemLevel;
+				item = item + 1
+				total = total + itemLevel
 			end
 		end
 	end
@@ -199,7 +216,7 @@ function TT:RemoveTrashLines(tt)
 		local tiptext = _G["GameTooltipTextLeft"..i]
 		local linetext = tiptext:GetText()
 
-		if(linetext == PVP or linetext == FACTION_ALLIANCE or linetext == FACTION_HORDE) then
+		if linetext == PVP or linetext == FACTION_ALLIANCE or linetext == FACTION_HORDE then
 			tiptext:SetText(nil)
 			tiptext:Hide()
 		end
@@ -207,16 +224,109 @@ function TT:RemoveTrashLines(tt)
 end
 
 function TT:GetLevelLine(tt, offset)
-	for i=offset, tt:NumLines() do
+	for i = offset, tt:NumLines() do
 		local tipText = _G["GameTooltipTextLeft"..i]
-		if(tipText:GetText() and tipText:GetText():find(LEVEL)) then
+		if tipText:GetText() and find(tipText:GetText(), LEVEL) then
 			return tipText
 		end
 	end
 end
 
+function TT:SetUnitText(tt, unit, level, isShiftKeyDown)
+	local color
+	if UnitIsPlayer(unit) then
+		local localeClass, class = UnitClass(unit)
+		if not localeClass or not class then return end
+
+		local name, realm = UnitName(unit)
+		local guildName, guildRankName, _, guildRealm = GetGuildInfo(unit)
+		local pvpName = UnitPVPName(unit)
+
+		color = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class]
+
+		if not color then
+			color = RAID_CLASS_COLORS.PRIEST
+		end
+
+		if self.db.playerTitles and pvpName then
+			name = pvpName
+		end
+
+		if realm and realm ~= "" then
+			if isShiftKeyDown or self.db.alwaysShowRealm then
+				name = name.."-"..realm
+			else
+				name = name..FOREIGN_SERVER_LABEL
+			end
+		end
+
+		if UnitIsAFK(unit) then
+			name = name..AFK_LABEL
+		elseif UnitIsDND(unit) then
+			name = name..DND_LABEL
+		end
+
+		GameTooltipTextLeft1:SetFormattedText("%s%s", E:RGBToHex(color.r, color.g, color.b), name)
+
+		local lineOffset = 2
+		if guildName then
+			if guildRealm and isShiftKeyDown then
+				guildName = guildName.."-"..guildRealm
+			end
+
+			if self.db.guildRanks then
+				GameTooltipTextLeft2:SetFormattedText("<|cff00ff10%s|r> [|cff00ff10%s|r]", guildName, guildRankName)
+			else
+				GameTooltipTextLeft2:SetFormattedText("<|cff00ff10%s|r>", guildName)
+			end
+
+			lineOffset = 3
+		end
+
+		local levelLine = self:GetLevelLine(tt, lineOffset)
+		if levelLine then
+			local diffColor = GetQuestDifficultyColor(level)
+			local race = UnitRace(unit)
+			levelLine:SetFormattedText("|cff%02x%02x%02x%s|r %s %s%s|r", diffColor.r * 255, diffColor.g * 255, diffColor.b * 255, level > 0 and level or "??", race or "", E:RGBToHex(color.r, color.g, color.b), localeClass)
+		end
+	else
+		if UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) then
+			color = TAPPED_COLOR
+		else
+			local unitReaction = UnitReaction(unit, "player")
+			if E.db.tooltip.useCustomFactionColors then
+				if unitReaction then
+					color = E.db.tooltip.factionColors[unitReaction]
+				end
+			else
+				color = FACTION_BAR_COLORS[unitReaction]
+			end
+		end
+
+		if not color then
+			color = RAID_CLASS_COLORS.PRIEST
+		end
+
+		local levelLine = self:GetLevelLine(tt, 2)
+		if levelLine then
+			local creatureClassification = UnitClassification(unit)
+			local creatureType = UnitCreatureType(unit)
+			local pvpFlag = ""
+			local diffColor = GetQuestDifficultyColor(level)
+
+			if UnitIsPVP(unit) then
+				pvpFlag = format(" (%s)", PVP)
+			end
+
+			levelLine:SetFormattedText("|cff%02x%02x%02x%s|r%s %s%s", diffColor.r * 255, diffColor.g * 255, diffColor.b * 255, level > 0 and level or "??", classification[creatureClassification] or "", creatureType or "", pvpFlag)
+		end
+	end
+
+	return color
+end
+
 function TT:INSPECT_TALENT_READY()
-	local GUID = UnitGUID("mouseover");
+	local GUID = UnitGUID("mouseover")
 	if(self.lastGUID ~= GUID) then return end
 
 	local unit = "mouseover"
@@ -238,9 +348,9 @@ function TT:INSPECT_TALENT_READY()
 	self:UnregisterEvent("INSPECT_TALENT_READY")
 end
 
-function TT:ShowInspectInfo(tt, unit, level, r, g, b, numTries)
+function TT:ShowInspectInfo(tt, unit, r, g, b, numTries)
 	local canInspect = CanInspect(unit)
-	if(not canInspect or level < 10 or numTries > 1) then return end
+	if(not canInspect or numTries > 1) then return end
 
 	local GUID = UnitGUID(unit)
 	if(GUID == E.myguid) then
@@ -253,7 +363,7 @@ function TT:ShowInspectInfo(tt, unit, level, r, g, b, numTries)
 		if(((GetTime() - inspectCache[GUID].time) > 900) or not talent or not itemLevel) then
 			inspectCache[GUID] = nil
 
-			return self:ShowInspectInfo(tt, unit, level, r, g, b, numTries + 1)
+			return self:ShowInspectInfo(tt, unit, r, g, b, numTries + 1)
 		end
 
 		tt:AddDoubleLine(L["Talent Specialization:"], talent, nil, nil, nil, r, g, b)
@@ -266,145 +376,88 @@ function TT:ShowInspectInfo(tt, unit, level, r, g, b, numTries)
 	end
 end
 
+
 function TT:GameTooltip_OnTooltipSetUnit(tt)
 	local unit = select(2, tt:GetUnit())
+	local isShiftKeyDown = IsShiftKeyDown()
+	local isControlKeyDown = IsControlKeyDown()
+	local isPlayerUnit = UnitIsPlayer(unit)
 	if((tt:GetOwner() ~= UIParent) and (self.db.visibility and self.db.visibility.unitFrames ~= "NONE")) then
 		local modifier = self.db.visibility.unitFrames
 
-		if(modifier == "ALL" or not ((modifier == "SHIFT" and IsShiftKeyDown()) or (modifier == "CTRL" and IsControlKeyDown()) or (modifier == "ALT" and IsAltKeyDown()))) then
+		if(modifier == "ALL" or not ((modifier == "SHIFT" and isShiftKeyDown) or (modifier == "CTRL" and isControlKeyDown) or (modifier == "ALT" and IsAltKeyDown()))) then
 			tt:Hide()
 			return
 		end
 	end
 
-	if(not unit) then
+	if not unit then
 		local GMF = GetMouseFocus()
-		if(GMF and GMF:GetAttribute("unit")) then
+		if GMF and GMF:GetAttribute("unit") then
 			unit = GMF:GetAttribute("unit")
 		end
-		if(not unit or not UnitExists(unit)) then
+		if not unit or not UnitExists(unit) then
 			return
 		end
 	end
 
-	self:RemoveTrashLines(tt)
-	local level = UnitLevel(unit)
-	local isShiftKeyDown = IsShiftKeyDown()
+	self:RemoveTrashLines(tt) --keep an eye on this may be buggy
 
-	local color
-	if(UnitIsPlayer(unit)) then
-		local localeClass, class = UnitClass(unit)
-		local name, realm = UnitName(unit)
-		local guildName, guildRankName, _, guildRealm = GetGuildInfo(unit)
-		local pvpName = UnitPVPName(unit)
-		if not localeClass or not class then return end
+	local color = self:SetUnitText(tt, unit, UnitLevel(unit), isShiftKeyDown)
 
-		color = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class];
-
-		if(self.db.playerTitles and pvpName) then
-			name = pvpName
-		end
-
-		if(realm and realm ~= "") then
-			if(isShiftKeyDown) then
-				name = name.."-"..realm;
+	if not isShiftKeyDown and not isControlKeyDown then
+		local unitTarget = unit.."target"
+		if self.db.targetInfo and unit ~= "player" and UnitExists(unitTarget) then
+			local targetColor
+			if(UnitIsPlayer(unitTarget) and not UnitHasVehicleUI(unitTarget)) then
+				local _, class = UnitClass(unitTarget)
+				targetColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class]
 			else
-				name = name..FOREIGN_SERVER_LABEL;
-			end
-		end
-
-		if(UnitIsAFK(unit)) then
-			name = name..AFK_LABEL
-		elseif(UnitIsDND(unit)) then
-			name = name..DND_LABEL
-		end
-
-		GameTooltipTextLeft1:SetFormattedText("%s%s", E:RGBToHex(color.r, color.g, color.b), name)
-
-		local lineOffset = 2
-		if(guildName) then
-			if(guildRealm and isShiftKeyDown) then
-				guildName = guildName.."-"..guildRealm
+				targetColor = E.db.tooltip.useCustomFactionColors and E.db.tooltip.factionColors[UnitReaction(unitTarget, "player")] or FACTION_BAR_COLORS[UnitReaction(unitTarget, "player")]
 			end
 
-			if(self.db.guildRanks) then
-				GameTooltipTextLeft2:SetText(("<|cff00ff10%s|r> [|cff00ff10%s|r]"):format(guildName, guildRankName))
-			else
-				GameTooltipTextLeft2:SetText(("<|cff00ff10%s|r>"):format(guildName))
+			tt:AddDoubleLine(format("%s:", TARGET), format("|cff%02x%02x%02x%s|r", targetColor.r * 255, targetColor.g * 255, targetColor.b * 255, UnitName(unitTarget)))
+		end
+
+		local numParty, numRaid = GetNumPartyMembers(), GetNumRaidMembers()
+		if self.db.targetInfo and (numParty > 0 or numRaid > 0) then
+			for i = 1, (numRaid > 0 and numRaid or numParty) do
+				local groupUnit = (numRaid > 0 and "raid"..i or "party"..i)
+				if (UnitIsUnit(groupUnit.."target", unit)) and (not UnitIsUnit(groupUnit,"player")) then
+					local _, class = UnitClass(groupUnit)
+					local classColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class]
+					if not classColor then classColor = RAID_CLASS_COLORS.PRIEST end
+					tinsert(targetList, format("%s%s", E:RGBToHex(classColor.r, classColor.g, classColor.b), UnitName(groupUnit)))
+				end
 			end
-			lineOffset = 3
+			local numList = #targetList
+			if (numList > 0) then
+				tt:AddLine(format("%s (|cffffffff%d|r): %s", L["Targeted By:"], numList, tconcat(targetList, ", ")), nil, nil, nil, true)
+				twipe(targetList)
+			end
 		end
+	end
 
-		local levelLine = self:GetLevelLine(tt, lineOffset)
-		if(levelLine) then
-			local diffColor = GetQuestDifficultyColor(level)
-			local race = UnitRace(unit)
-			levelLine:SetFormattedText("|cff%02x%02x%02x%s|r %s %s%s|r", diffColor.r * 255, diffColor.g * 255, diffColor.b * 255, level > 0 and level or "??", race or "", E:RGBToHex(color.r, color.g, color.b), localeClass)
-		end
+	if isShiftKeyDown and isPlayerUnit then
+		self:ShowInspectInfo(tt, unit, color.r, color.g, color.b, 0)
+	end
 
-		if(self.db.inspectInfo and isShiftKeyDown) then
-			self:ShowInspectInfo(tt, unit, level, color.r, color.g, color.b, 0)
+	-- NPC ID"s
+	if unit and self.db.npcID and not isPlayerUnit then
+		local guid = UnitGUID(unit) or ""
+		local id = tonumber(sub(guid, 6, 10), 16)
+		if id then
+			tt:AddLine(format("|cFFCA3C3C%s|r %d", ID, id))
 		end
+	end
+
+	if color then
+		tt.StatusBar:SetStatusBarColor(color.r, color.g, color.b)
 	else
-		if(UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit)) then
-			color = TAPPED_COLOR
-		else
-			color = E.db.tooltip.useCustomFactionColors and E.db.tooltip.factionColors[UnitReaction(unit, "player")] or FACTION_BAR_COLORS[UnitReaction(unit, "player")]
-		end
-
-		local levelLine = self:GetLevelLine(tt, 2)
-		if(levelLine) then
-			local creatureClassification = UnitClassification(unit)
-			local creatureType = UnitCreatureType(unit)
-			local pvpFlag = ""
-			local diffColor = GetQuestDifficultyColor(level)
-
-			if(UnitIsPVP(unit)) then
-				pvpFlag = format(" (%s)", PVP)
-			end
-
-			levelLine:SetFormattedText("|cff%02x%02x%02x%s|r%s %s%s", diffColor.r * 255, diffColor.g * 255, diffColor.b * 255, level > 0 and level or "??", classification[creatureClassification] or "", creatureType or "", pvpFlag)
-		end
+		tt.StatusBar:SetStatusBarColor(0.6, 0.6, 0.6)
 	end
 
-	local unitTarget = unit.."target"
-	if(self.db.targetInfo and unit ~= "player" and UnitExists(unitTarget)) then
-		local targetColor;
-		if(UnitIsPlayer(unitTarget) and not UnitHasVehicleUI(unitTarget)) then
-			local _, class = UnitClass(unitTarget);
-			targetColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class];
-		else
-			local reaction = UnitReaction(unitTarget, "player") or 4
-			targetColor = E.db.tooltip.useCustomFactionColors and E.db.tooltip.factionColors[reaction] or FACTION_BAR_COLORS[reaction]
-		end
-
-		GameTooltip:AddDoubleLine(format("%s:", TARGET), format("|cff%02x%02x%02x%s|r", targetColor.r * 255, targetColor.g * 255, targetColor.b * 255, UnitName(unitTarget)))
-	end
-
-	local numParty, numRaid = GetNumPartyMembers(), GetNumRaidMembers();
-	if(self.db.targetInfo and (numParty > 0 or numRaid > 0)) then
-		for i = 1, (numRaid > 0 and numRaid or numParty) do
-			local groupUnit = (numRaid > 0 and "raid"..i or "party"..i);
-			if (UnitIsUnit(groupUnit.."target", unit)) and (not UnitIsUnit(groupUnit,"player")) then
-				local _, class = UnitClass(groupUnit);
-				local classColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class];
-				tinsert(targetList, format("%s%s", E:RGBToHex(classColor.r, classColor.g, classColor.b), UnitName(groupUnit)))
-			end
-		end
-		local numList = #targetList
-		if (numList > 0) then
-			GameTooltip:AddLine(format("%s (|cffffffff%d|r): %s", L["Targeted By:"], numList, tconcat(targetList, ", ")), nil, nil, nil, true);
-			twipe(targetList);
-		end
-	end
-
-	if(color) then
-		GameTooltipStatusBar:SetStatusBarColor(color.r, color.g, color.b)
-	else
-		GameTooltipStatusBar:SetStatusBarColor(0.6, 0.6, 0.6)
-	end
-
-	local textWidth = GameTooltipStatusBar.text:GetStringWidth()
+	local textWidth = tt.StatusBar.text:GetStringWidth()
 	if textWidth then
 		tt:SetMinimumWidth(textWidth)
 	end
@@ -422,7 +475,7 @@ function TT:GameTooltipStatusBar_OnValueChanged(tt, value)
 
 	local _, max = tt:GetMinMaxValues()
 	if(value > 0 and max == 1) then
-		tt.text:SetFormattedText("%d%%", floor(value * 100));
+		tt.text:SetFormattedText("%d%%", floor(value * 100))
 		tt:SetStatusBarColor(TAPPED_COLOR.r, TAPPED_COLOR.g, TAPPED_COLOR.b) --most effeciant?
 	elseif(value == 0 or (unit and UnitIsDeadOrGhost(unit))) then
 		tt.text:SetText(DEAD)
@@ -481,25 +534,41 @@ function TT:GameTooltip_OnTooltipSetItem(tt)
 end
 
 function TT:GameTooltip_ShowStatusBar(tt)
-	local statusBar = _G[tt:GetName().."StatusBar"..tt.shownStatusBars];
-	if statusBar and not statusBar.skinned then
-		statusBar:StripTextures()
-		statusBar:SetStatusBarTexture(E["media"].normTex)
-		E:RegisterStatusBar(statusBar);
-		statusBar:CreateBackdrop("Default")
-		statusBar.skinned = true;
+	local sb = _G[tt:GetName().."StatusBar"..tt.shownStatusBars]
+	if not sb or sb.backdrop then return end
+
+	sb:StripTextures()
+	sb:CreateBackdrop(nil, nil, true)
+	sb:SetStatusBarTexture(E.media.normTex)
+end
+
+function TT:CheckBackdropColor(tt)
+	if not tt:IsShown() then return end
+
+	local r, g, b = tt:GetBackdropColor()
+	if r and g and b then
+		r, g, b = E:Round(r, 1), E:Round(g, 1), E:Round(b, 1)
+
+		local red, green, blue = unpack(E.media.backdropfadecolor)
+		if r ~= red or g ~= green or b ~= blue then
+			tt:SetBackdropColor(red, green, blue, self.db.colorAlpha)
+		end
 	end
 end
 
 function TT:SetStyle(tt)
-	tt:SetTemplate("Transparent", nil, true);
-	local r, g, b = tt:GetBackdropColor();
-	tt:SetBackdropColor(r, g, b, self.db.colorAlpha);
+	tt:SetTemplate("Transparent", nil, true) --ignore updates
+	local r, g, b = tt:GetBackdropColor()
+	tt:SetBackdropColor(r, g, b, self.db.colorAlpha)
 end
 
 function TT:MODIFIER_STATE_CHANGED(_, key)
-	if((key == "LSHIFT" or key == "RSHIFT") and UnitExists("mouseover")) then
-		GameTooltip:SetUnit("mouseover")
+	if key == "LSHIFT" or key == "RSHIFT" or key == "LCTRL" or key == "RCTRL" or key == "LALT" or key == "RALT" then
+		local owner = GameTooltip:GetOwner()
+		local notOnAuras = not (owner and owner.UpdateTooltip)
+		if notOnAuras and UnitExists("mouseover") then
+			GameTooltip:SetUnit('mouseover')
+		end
 	end
 end
 
@@ -509,10 +578,10 @@ function TT:SetUnitAura(tt, ...)
 		if caster then
 			local name = UnitName(caster)
 			local _, class = UnitClass(caster)
-			local color = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class];
-			tt:AddDoubleLine(("|cFFCA3C3C%s|r %d"):format(ID, id), format("%s%s", E:RGBToHex(color.r, color.g, color.b), name))
+			local color = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class]
+			tt:AddDoubleLine(format("|cFFCA3C3C%s|r %d", ID, id), format("%s%s", E:RGBToHex(color.r, color.g, color.b), name))
 		else
-			tt:AddLine(("|cFFCA3C3C%s|r %d"):format(ID, id))
+			tt:AddLine(format("|cFFCA3C3C%s|r %d", ID, id))
 		end
 
 		tt:Show()
@@ -523,13 +592,13 @@ function TT:GameTooltip_OnTooltipSetSpell(tt)
 	local id = select(3, tt:GetSpell())
 	if not id or not self.db.spellID then return end
 
-	local displayString = ("|cFFCA3C3C%s|r %d"):format(ID, id)
+	local displayString = format("|cFFCA3C3C%s|r %d", ID, id)
 	local lines = tt:NumLines()
 	local isFound
 	for i= 1, lines do
 		local line = _G[("GameTooltipTextLeft%d"):format(i)]
-		if line and line:GetText() and line:GetText():find(displayString) then
-			isFound = true;
+		if line and line:GetText() and find(line:GetText(), displayString) then
+			isFound = true
 			break
 		end
 	end
@@ -541,9 +610,9 @@ function TT:GameTooltip_OnTooltipSetSpell(tt)
 end
 
 function TT:SetItemRef(link)
-	if(find(link,"^spell:") and self.db.spellID) then
-		local id = tonumber(link:match("spell:(%d+)"));
-		ItemRefTooltip:AddLine(("|cFFCA3C3C%s|r %d"):format(ID, id))
+	if find(link,"^spell:") and self.db.spellID then
+		local id = sub(link,7)
+		ItemRefTooltip:AddLine(format("|cFFCA3C3C%s|r %d", ID, id))
 		ItemRefTooltip:Show()
 	end
 end
@@ -551,108 +620,122 @@ end
 function TT:RepositionBNET(frame, _, anchor)
 	if anchor ~= BNETMover then
 		frame:ClearAllPoints()
-		frame:SetPoint("TOPLEFT", BNETMover, "TOPLEFT")
-	end
-end
-
-function TT:CheckBackdropColor()
-	if not GameTooltip:IsShown() then return end
-
-	local r, g, b = GameTooltip:GetBackdropColor()
-	if (r and g and b) then
-		r = E:Round(r, 1)
-		g = E:Round(g, 1)
-		b = E:Round(b, 1)
-		local red, green, blue = unpack(E.media.backdropfadecolor)
-		if (r ~= red or g ~= green or b ~= blue) then
-			GameTooltip:SetBackdropColor(red, green, blue, self.db.colorAlpha)
-		end
+		frame:Point("TOPLEFT", BNETMover, "TOPLEFT")
 	end
 end
 
 function TT:SetTooltipFonts()
-	local font = E.LSM:Fetch("font", E.db.tooltip.font);
-	local fontOutline = E.db.tooltip.fontOutline;
-	local headerSize = E.db.tooltip.headerFontSize;
-	local textSize = E.db.tooltip.textFontSize;
-	local smallTextSize = E.db.tooltip.smallTextFontSize;
+	local font = E.Libs.LSM:Fetch("font", E.db.tooltip.font)
+	local fontOutline = E.db.tooltip.fontOutline
+	local headerSize = E.db.tooltip.headerFontSize
+	local textSize = E.db.tooltip.textFontSize
+	local smallTextSize = E.db.tooltip.smallTextFontSize
 
-	GameTooltipHeaderText:SetFont(font, headerSize, fontOutline);
-	GameTooltipText:SetFont(font, textSize, fontOutline);
-	GameTooltipTextSmall:SetFont(font, smallTextSize, fontOutline);
-	if(GameTooltip.hasMoney) then
+	GameTooltipHeaderText:FontTemplate(font, headerSize, fontOutline)
+	GameTooltipText:FontTemplate(font, textSize, fontOutline)
+	GameTooltipTextSmall:FontTemplate(font, smallTextSize, fontOutline)
+	if GameTooltip.hasMoney then
 		for i = 1, GameTooltip.numMoneyFrames do
-			_G["GameTooltipMoneyFrame"..i.."PrefixText"]:SetFont(font, textSize, fontOutline);
-			_G["GameTooltipMoneyFrame"..i.."SuffixText"]:SetFont(font, textSize, fontOutline);
-			_G["GameTooltipMoneyFrame"..i.."GoldButtonText"]:SetFont(font, textSize, fontOutline);
-			_G["GameTooltipMoneyFrame"..i.."SilverButtonText"]:SetFont(font, textSize, fontOutline);
-			_G["GameTooltipMoneyFrame"..i.."CopperButtonText"]:SetFont(font, textSize, fontOutline);
+			_G["GameTooltipMoneyFrame"..i.."PrefixText"]:FontTemplate(font, textSize, fontOutline)
+			_G["GameTooltipMoneyFrame"..i.."SuffixText"]:FontTemplate(font, textSize, fontOutline)
+			_G["GameTooltipMoneyFrame"..i.."GoldButtonText"]:FontTemplate(font, textSize, fontOutline)
+			_G["GameTooltipMoneyFrame"..i.."SilverButtonText"]:FontTemplate(font, textSize, fontOutline)
+			_G["GameTooltipMoneyFrame"..i.."CopperButtonText"]:FontTemplate(font, textSize, fontOutline)
 		end
 	end
 
-	ShoppingTooltip1TextLeft1:SetFont(font, headerSize, fontOutline);
-	ShoppingTooltip1TextLeft2:SetFont(font, headerSize, fontOutline);
-	ShoppingTooltip1TextLeft3:SetFont(font, headerSize, fontOutline);
-	ShoppingTooltip1TextLeft4:SetFont(font, headerSize, fontOutline);
-	ShoppingTooltip1TextRight1:SetFont(font, headerSize, fontOutline);
-	ShoppingTooltip1TextRight2:SetFont(font, headerSize, fontOutline);
-	ShoppingTooltip1TextRight3:SetFont(font, headerSize, fontOutline);
-	ShoppingTooltip1TextRight4:SetFont(font, headerSize, fontOutline);
-	ShoppingTooltip2TextLeft1:SetFont(font, headerSize, fontOutline);
-	ShoppingTooltip2TextLeft2:SetFont(font, headerSize, fontOutline);
-	ShoppingTooltip2TextLeft3:SetFont(font, headerSize, fontOutline);
-	ShoppingTooltip2TextLeft4:SetFont(font, headerSize, fontOutline);
-	ShoppingTooltip2TextRight1:SetFont(font, headerSize, fontOutline);
-	ShoppingTooltip2TextRight2:SetFont(font, headerSize, fontOutline);
-	ShoppingTooltip2TextRight3:SetFont(font, headerSize, fontOutline);
-	ShoppingTooltip2TextRight4:SetFont(font, headerSize, fontOutline);
+	-- Ignore header font size on DatatextTooltip
+	if DatatextTooltip then
+		DatatextTooltipTextLeft1:FontTemplate(font, textSize, fontOutline)
+		DatatextTooltipTextRight1:FontTemplate(font, textSize, fontOutline)
+	end
+
+	--These show when you compare items ("Currently Equipped", name of item, item level)
+	--Since they appear at the top of the tooltip, we set it to use the header font size.
+	ShoppingTooltip1TextLeft1:FontTemplate(font, headerSize, fontOutline)
+	ShoppingTooltip1TextLeft2:FontTemplate(font, headerSize, fontOutline)
+	ShoppingTooltip1TextLeft3:FontTemplate(font, headerSize, fontOutline)
+	ShoppingTooltip1TextLeft4:FontTemplate(font, headerSize, fontOutline)
+	ShoppingTooltip1TextRight1:FontTemplate(font, headerSize, fontOutline)
+	ShoppingTooltip1TextRight2:FontTemplate(font, headerSize, fontOutline)
+	ShoppingTooltip1TextRight3:FontTemplate(font, headerSize, fontOutline)
+	ShoppingTooltip1TextRight4:FontTemplate(font, headerSize, fontOutline)
+	ShoppingTooltip2TextLeft1:FontTemplate(font, headerSize, fontOutline)
+	ShoppingTooltip2TextLeft2:FontTemplate(font, headerSize, fontOutline)
+	ShoppingTooltip2TextLeft3:FontTemplate(font, headerSize, fontOutline)
+	ShoppingTooltip2TextLeft4:FontTemplate(font, headerSize, fontOutline)
+	ShoppingTooltip2TextRight1:FontTemplate(font, headerSize, fontOutline)
+	ShoppingTooltip2TextRight2:FontTemplate(font, headerSize, fontOutline)
+	ShoppingTooltip2TextRight3:FontTemplate(font, headerSize, fontOutline)
+	ShoppingTooltip2TextRight4:FontTemplate(font, headerSize, fontOutline)
+end
+
+--This changes the growth direction of the toast frame depending on position of the mover
+local function PostBNToastMove(mover)
+	local x, y = mover:GetCenter()
+	local screenHeight = E.UIParent:GetTop()
+	local screenWidth = E.UIParent:GetRight()
+
+	local anchorPoint
+	if (y > (screenHeight / 2)) then
+		anchorPoint = (x > (screenWidth/2)) and "TOPRIGHT" or "TOPLEFT"
+	else
+		anchorPoint = (x > (screenWidth/2)) and "BOTTOMRIGHT" or "BOTTOMLEFT"
+	end
+	mover.anchorPoint = anchorPoint
+
+	BNToastFrame:ClearAllPoints()
+	BNToastFrame:Point(anchorPoint, mover)
 end
 
 function TT:Initialize()
 	self.db = E.db.tooltip
 
-	BNToastFrame:Point("TOPRIGHT", MMHolder, "BOTTOMRIGHT", 0, -10);
-	E:CreateMover(BNToastFrame, "BNETMover", L["BNet Frame"])
+	BNToastFrame:Point("TOPRIGHT", MMHolder, "BOTTOMRIGHT", 0, -10)
+	E:CreateMover(BNToastFrame, "BNETMover", L["BNet Frame"], nil, nil, PostBNToastMove)
 	self:SecureHook(BNToastFrame, "SetPoint", "RepositionBNET")
 
 	if E.private.tooltip.enable ~= true then return end
-	E.Tooltip = TT
+	self.Initialized = true
 
-	SetCVar("showItemLevel", 1);
+	SetCVar("showItemLevel", 1)
 
-	GameTooltipStatusBar:Height(self.db.healthBar.height)
-	GameTooltipStatusBar:SetScript("OnValueChanged", nil)
-	GameTooltipStatusBar.text = GameTooltipStatusBar:CreateFontString(nil, "OVERLAY")
-	GameTooltipStatusBar.text:Point("CENTER", GameTooltipStatusBar, 0, -3)
-	GameTooltipStatusBar.text:FontTemplate(E.LSM:Fetch("font", self.db.healthBar.font), self.db.healthBar.fontSize, self.db.healthBar.fontOutline)
+	GameTooltip.StatusBar = GameTooltipStatusBar
+	GameTooltip.StatusBar:Height(self.db.healthBar.height)
+	GameTooltip.StatusBar:SetScript("OnValueChanged", nil) -- Do we need to unset this?
+	GameTooltip.StatusBar.text = GameTooltip.StatusBar:CreateFontString(nil, "OVERLAY")
+	GameTooltip.StatusBar.text:Point("CENTER", GameTooltip.StatusBar, 0, 0)
+	GameTooltip.StatusBar.text:FontTemplate(E.Libs.LSM:Fetch("font", self.db.healthBar.font), self.db.healthBar.fontSize, self.db.healthBar.fontOutline)
 
-	if(not GameTooltip.hasMoney) then
-		SetTooltipMoney(GameTooltip, 1, nil, "", "");
-		SetTooltipMoney(GameTooltip, 1, nil, "", "");
-		GameTooltip_ClearMoney(GameTooltip);
+	--Tooltip Fonts
+	if not GameTooltip.hasMoney then
+		--Force creation of the money lines, so we can set font for it
+		SetTooltipMoney(GameTooltip, 1, nil, "", "")
+		SetTooltipMoney(GameTooltip, 1, nil, "", "")
+		GameTooltip_ClearMoney(GameTooltip)
 	end
-	self:SetTooltipFonts();
+	self:SetTooltipFonts()
 
 	local GameTooltipAnchor = CreateFrame("Frame", "GameTooltipAnchor", E.UIParent)
 	GameTooltipAnchor:Point("BOTTOMRIGHT", RightChatToggleButton, "BOTTOMRIGHT")
 	GameTooltipAnchor:Size(130, 20)
-	GameTooltipAnchor:SetFrameLevel(GameTooltipAnchor:GetFrameLevel() + 50)
-	E:CreateMover(GameTooltipAnchor, "TooltipMover", L["Tooltip"])
+	GameTooltipAnchor:SetFrameLevel(GameTooltipAnchor:GetFrameLevel() + 400)
+	E:CreateMover(GameTooltipAnchor, "TooltipMover", L["Tooltip"], nil, nil, nil, nil, nil, "tooltip,general")
 
-	self:SecureHook("GameTooltip_SetDefaultAnchor")
 	self:SecureHook("SetItemRef")
+	self:SecureHook("GameTooltip_SetDefaultAnchor")
 	self:SecureHook(GameTooltip, "SetUnitAura")
 	self:SecureHook(GameTooltip, "SetUnitBuff", "SetUnitAura")
 	self:SecureHook(GameTooltip, "SetUnitDebuff", "SetUnitAura")
-	self:HookScript(GameTooltip, "OnTooltipSetSpell", "GameTooltip_OnTooltipSetSpell")
-	self:HookScript(GameTooltip, "OnTooltipCleared", "GameTooltip_OnTooltipCleared")
-	self:HookScript(GameTooltip, "OnTooltipSetItem", "GameTooltip_OnTooltipSetItem")
-	self:HookScript(GameTooltip, "OnTooltipSetUnit", "GameTooltip_OnTooltipSetUnit")
-
-	self:HookScript(GameTooltipStatusBar, "OnValueChanged", "GameTooltipStatusBar_OnValueChanged")
-
+	self:SecureHookScript(GameTooltip, "OnTooltipSetSpell", "GameTooltip_OnTooltipSetSpell")
+	self:SecureHookScript(GameTooltip, "OnTooltipCleared", "GameTooltip_OnTooltipCleared")
+	self:SecureHookScript(GameTooltip, "OnTooltipSetItem", "GameTooltip_OnTooltipSetItem")
+	self:SecureHookScript(GameTooltip, "OnTooltipSetUnit", "GameTooltip_OnTooltipSetUnit")
+	self:SecureHookScript(GameTooltip.StatusBar, "OnValueChanged", "GameTooltipStatusBar_OnValueChanged")
 	self:RegisterEvent("MODIFIER_STATE_CHANGED")
 
+	--Variable is localized at top of file, then set here when we"re sure the frame has been created
+	--Used to check if keybinding is active, if so then don"t hide tooltips on actionbars
 	keybindFrame = ElvUI_KeyBinder
 end
 
