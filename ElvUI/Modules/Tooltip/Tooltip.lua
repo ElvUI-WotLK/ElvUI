@@ -509,7 +509,8 @@ function TT:GameTooltip_OnTooltipSetItem(tt)
 		local bankCount = " "
 
 		if link ~= nil and self.db.spellID then
-			left = match(format("|cFFCA3C3C%s|r %s", ID, link), ":(%w+)")
+			local id = tonumber(match(link, ":(%w+)"))
+			left = format("|cFFCA3C3C%s|r %s", ID, id)
 		end
 
 		if self.db.itemCount == "BAGS_ONLY" then
@@ -610,8 +611,8 @@ function TT:GameTooltip_OnTooltipSetSpell(tt)
 end
 
 function TT:SetItemRef(link)
-	if find(link,"^spell:") and self.db.spellID then
-		local id = sub(link,7)
+	if self.db.spellID and (find(link, "^spell:") or find(link, "^item:")) then
+		local id = tonumber(match(link, "(%d+)"))
 		ItemRefTooltip:AddLine(format("|cFFCA3C3C%s|r %d", ID, id))
 		ItemRefTooltip:Show()
 	end
