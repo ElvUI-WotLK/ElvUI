@@ -1,5 +1,5 @@
 local E, _, V, P, G = unpack(ElvUI)
-local C, L = unpack(select(2, ...))
+local _, L = unpack(select(2, ...))
 local UF = E:GetModule("UnitFrames")
 local MC = E:GetModule("ModuleCopy")
 

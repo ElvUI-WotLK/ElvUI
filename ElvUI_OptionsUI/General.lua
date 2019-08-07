@@ -8,7 +8,6 @@ local Threat = E:GetModule("Threat")
 local AFK = E:GetModule("AFK")
 
 local _G = _G
-local min, max = math.min, math.max
 
 local FCF_GetNumActiveChatFrames = FCF_GetNumActiveChatFrames
 

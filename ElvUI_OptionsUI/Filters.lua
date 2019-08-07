@@ -3,7 +3,7 @@ local _, L = unpack(select(2, ...))
 local UF = E:GetModule("UnitFrames")
 
 local type, pairs, tonumber, tostring = type, pairs, tonumber, tostring
-local gsub, match, format, lower = string.gsub, string.match, string.format, string.lower
+local gsub, match, format = string.gsub, string.match, string.format
 
 local GetSpellInfo = GetSpellInfo
 

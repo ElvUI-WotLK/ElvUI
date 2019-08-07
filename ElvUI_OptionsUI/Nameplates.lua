@@ -4,7 +4,7 @@ local NP = E:GetModule("NamePlates")
 local ACD = E.Libs.AceConfigDialog
 
 local next, ipairs, pairs, type, tonumber = next, ipairs, pairs, type, tonumber
-local tremove, tinsert, tsort, tconcat = tremove, tinsert, table.sort, table.concat
+local tremove, tinsert, tconcat = tremove, tinsert, table.concat
 local format, match, gsub, strsplit = string.format, string.match, string.gsub, strsplit
 
 local GetSpellInfo = GetSpellInfo

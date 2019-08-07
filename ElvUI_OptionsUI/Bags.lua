@@ -113,7 +113,7 @@ E.Options.args.bags = {
 					set = function(info, value) E.db.bags[info[#info]] = value B:UpdateAllBagSlots() end
 				},
 				clearSearchOnClose = {
- 					order = 10,
+					order = 10,
 					type = "toggle",
 					name = L["Clear Search On Close"],
 					set = function(info, value) E.db.bags[info[#info]] = value end
