@@ -12,6 +12,8 @@ local function LoadSkin()
 	WorldMapFrame:DisableDrawLayer("OVERLAY")
 	WorldMapFrameTitle:SetDrawLayer("BORDER")
 	WorldMapFrame:CreateBackdrop("Transparent")
+	WorldMapFrame.backdrop:Point("TOPRIGHT", WorldMapFrameCloseButton, -3, 0)
+	WorldMapFrame.backdrop:Point("BOTTOMRIGHT", WorldMapTrackQuest, 0, -3)
 
 	WorldMapDetailFrame:CreateBackdrop()
 	WorldMapDetailFrame.backdrop:Point("TOPLEFT", -2, 2)
@@ -84,17 +86,13 @@ local function LoadSkin()
 	WorldMapZoneInfo:SetShadowOffset(2, -2)
 
 	local function SmallSkin()
-		WorldMapFrame.backdrop:ClearAllPoints()
-
 		if not WORLDMAP_SETTINGS.advanced then
 			WorldMapFrame.backdrop:Point("TOPLEFT", 14, -12)
-			WorldMapFrame.backdrop:Point("BOTTOMRIGHT", -20, -12)
 
 			WorldMapLevelDropDown:ClearAllPoints()
 			WorldMapLevelDropDown:Point("TOPRIGHT", WorldMapPositioningGuide, "TOPRIGHT", -440, -38)
 		else
 			WorldMapFrame.backdrop:Point("TOPLEFT", 4, 2)
-			WorldMapFrame.backdrop:Point("BOTTOMRIGHT", -1, 2)
 
 			WorldMapLevelDropDown:ClearAllPoints()
 			WorldMapLevelDropDown:Point("TOPRIGHT", WorldMapPositioningGuide, "TOPRIGHT", -420, -24)
@@ -113,15 +111,11 @@ local function LoadSkin()
 			end)
 		end
 
-		WorldMapFrame.backdrop:ClearAllPoints()
-		WorldMapFrame.backdrop:Point("TOPLEFT", WorldMapDetailFrame, "TOPLEFT", -10, 70)
-		WorldMapFrame.backdrop:Point("BOTTOMRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT", 12, -30)
+		WorldMapFrame.backdrop:Point("TOPLEFT", WorldMapDetailFrame, "TOPLEFT", -13, 70)
 	end
 
 	local function QuestSkin()
-		WorldMapFrame.backdrop:ClearAllPoints()
-		WorldMapFrame.backdrop:Point("TOPLEFT", WorldMapDetailFrame, "TOPLEFT", -(E.PixelMode and 10 or 11), 69)
-		WorldMapFrame.backdrop:Point("BOTTOMRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT", E.PixelMode and 321 or 322, -237)
+		WorldMapFrame.backdrop:Point("TOPLEFT", WorldMapDetailFrame, "TOPLEFT", -13, 70)
 	end
 
 	local function FixSkin()
