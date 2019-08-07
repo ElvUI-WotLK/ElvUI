@@ -29,7 +29,7 @@ local UnitIsUnit = UnitIsUnit
 local UnitIsFriend = UnitIsFriend
 local UnitIsPlayer = UnitIsPlayer
 local GameTooltip_Hide = GameTooltip_Hide
-local GameFontHighlightSmall = GameFontHighlightSmall
+local GameFontHighlightSmall = _G.GameFontHighlightSmall
 
 --Function we can call on profile change to update GUI
 function E:RefreshGUI()
@@ -44,7 +44,7 @@ E.Options.args = {
 	ElvUI_Header = {
 		order = 1,
 		type = "header",
-		name = L["Version"] .. format(": |cff99ff33%s|r", E.version),
+		name = L["Version"]..format(": |cff99ff33%s|r", E.version),
 		width = "full"
 	},
 	RepositionWindow = {
@@ -63,6 +63,7 @@ E.Options.args = {
 					status.width, status.height = E:GetConfigDefaultSize()
 
 					E.GUIFrame.obj:ApplyStatus()
+					GameTooltip:Hide()
 				end
 			end
 		end
@@ -222,9 +223,9 @@ for _, name in pairs(TESTERS) do
 end
 
 E.Options.args.credits = {
+	order = -1,
 	type = "group",
 	name = L["Credits"],
-	order = -1,
 	args = {
 		text = {
 			order = 1,
@@ -266,7 +267,7 @@ local exportTypeListOrder = {
 local exportString = ""
 local function ExportImport_Open(mode)
 	local Frame = E.Libs.AceGUI:Create("Frame")
-	Frame:SetTitle("")
+	Frame:SetTitle(" ")
 	Frame:EnableResize(false)
 	Frame:SetWidth(800)
 	Frame:SetHeight(600)
@@ -277,7 +278,7 @@ local function ExportImport_Open(mode)
 	Box:SetNumLines(30)
 	Box:DisableButton(true)
 	Box:SetWidth(800)
-	Box:SetLabel("")
+	Box:SetLabel(" ")
 	Frame:AddChild(Box)
 	--Save original script so we can restore it later
 	Box.editBox.OnTextChangedOrig = Box.editBox:GetScript("OnTextChanged")
@@ -346,67 +347,55 @@ local function ExportImport_Open(mode)
 		Frame:AddChild(exportButton)
 
 		--Set scripts
-		Box.editBox:SetScript(
-			"OnChar",
-			function()
+		Box.editBox:SetScript("OnChar", function()
+			Box:SetText(exportString)
+			Box.editBox:HighlightText()
+		end)
+		Box.editBox:SetScript("OnTextChanged", function(self, userInput)
+			if userInput then
+				--Prevent user from changing export string
 				Box:SetText(exportString)
 				Box.editBox:HighlightText()
 			end
-		)
-		Box.editBox:SetScript(
-			"OnTextChanged",
-			function(self, userInput)
-				if userInput then
-					--Prevent user from changing export string
-					Box:SetText(exportString)
-					Box.editBox:HighlightText()
-				end
-			end
-		)
+		end)
 	elseif mode == "import" then
 		Frame:SetTitle(L["Import Profile"])
 		local importButton = E.Libs.AceGUI:Create("Button-ElvUI") --This version changes text color on SetDisabled
 		importButton:SetDisabled(true)
 		importButton:SetText(L["Import Now"])
 		importButton:SetAutoWidth(true)
-		importButton:SetCallback(
-			"OnClick",
-			function()
-				--Clear labels
-				Label1:SetText(" ")
-				Label2:SetText(" ")
+		importButton:SetCallback("OnClick", function()
+			--Clear labels
+			Label1:SetText(" ")
+			Label2:SetText(" ")
 
-				local text
-				local success = D:ImportProfile(Box:GetText())
-				if success then
-					text = L["Profile imported successfully!"]
-				else
-					text = L["Error decoding data. Import string may be corrupted!"]
-				end
-				Label1:SetText(text)
+			local text
+			local success = D:ImportProfile(Box:GetText())
+			if success then
+				text = L["Profile imported successfully!"]
+			else
+				text = L["Error decoding data. Import string may be corrupted!"]
 			end
-		)
+			Label1:SetText(text)
+		end)
 		Frame:AddChild(importButton)
 
 		local decodeButton = E.Libs.AceGUI:Create("Button-ElvUI")
 		decodeButton:SetDisabled(true)
 		decodeButton:SetText(L["Decode Text"])
 		decodeButton:SetAutoWidth(true)
-		decodeButton:SetCallback(
-			"OnClick",
-			function()
-				--Clear labels
-				Label1:SetText(" ")
-				Label2:SetText(" ")
-				local decodedText
-				local profileType, profileKey, profileData = D:Decode(Box:GetText())
-				if profileData then
-					decodedText = E:TableToLuaString(profileData)
-				end
-				local importText = D:CreateProfileExport(decodedText, profileType, profileKey)
-				Box:SetText(importText)
+		decodeButton:SetCallback("OnClick", function()
+			--Clear labels
+			Label1:SetText(" ")
+			Label2:SetText(" ")
+			local decodedText
+			local profileType, profileKey, profileData = D:Decode(Box:GetText())
+			if profileData then
+				decodedText = E:TableToLuaString(profileData)
 			end
-		)
+			local importText = D:CreateProfileExport(decodedText, profileType, profileKey)
+			Box:SetText(importText)
+		end)
 		Frame:AddChild(decodeButton)
 
 		local oldText = ""
@@ -455,23 +444,20 @@ local function ExportImport_Open(mode)
 		Box.editBox:SetScript("OnTextChanged", OnTextChanged)
 	end
 
-	Frame:SetCallback(
-		"OnClose",
-		function(widget)
-			--Restore changed scripts
-			Box.editBox:SetScript("OnChar", nil)
-			Box.editBox:SetScript("OnTextChanged", Box.editBox.OnTextChangedOrig)
-			Box.editBox:SetScript("OnCursorChanged", Box.editBox.OnCursorChangedOrig)
-			Box.editBox.OnTextChangedOrig = nil
-			Box.editBox.OnCursorChangedOrig = nil
+	Frame:SetCallback("OnClose", function(widget)
+		--Restore changed scripts
+		Box.editBox:SetScript("OnChar", nil)
+		Box.editBox:SetScript("OnTextChanged", Box.editBox.OnTextChangedOrig)
+		Box.editBox:SetScript("OnCursorChanged", Box.editBox.OnCursorChangedOrig)
+		Box.editBox.OnTextChangedOrig = nil
+		Box.editBox.OnCursorChangedOrig = nil
 
-			--Clear stored export string
-			exportString = ""
+		--Clear stored export string
+		exportString = ""
 
-			E.Libs.AceGUI:Release(widget)
-			E.Libs.AceConfigDialog:Open("ElvUI")
-		end
-	)
+		E.Libs.AceGUI:Release(widget)
+		E.Libs.AceConfigDialog:Open("ElvUI")
+	end)
 
 	--Clear default text
 	Label1:SetText(" ")
@@ -507,9 +493,9 @@ E.Options.args.profiles.plugins.ElvUI = {
 	},
 	distributeProfile = {
 		order = 91,
+		type = "execute",
 		name = L["Share Current Profile"],
 		desc = L["Sends your current profile to your target."],
-		type = "execute",
 		func = function()
 			if not UnitExists("target") or not UnitIsPlayer("target")
 			or not UnitIsFriend("player", "target") or UnitIsUnit("player", "target") then
@@ -567,4 +553,3 @@ E.Options.args.profiles.plugins.ElvUI = {
 		end
 	}
 }
-

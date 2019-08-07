@@ -1,9 +1,5 @@
-local E, L, V, P, G = unpack(ElvUI);
-
-local ACHIEVEMENTS, AUCTIONS, BARBERSHOP, FRIENDS, INSPECT, TALENTS, TRADE, MERCHANT, MACROS, SPELLBOOK = ACHIEVEMENTS, AUCTIONS, BARBERSHOP, FRIENDS, INSPECT, TALENTS, TRADE, MERCHANT, MACROS, SPELLBOOK
-local TRADESKILLS, WORLD_MAP = TRADESKILLS, WORLD_MAP
-local MAIL_LABEL, TIMEMANAGER_TITLE, KEY_BINDING = MAIL_LABEL, TIMEMANAGER_TITLE, KEY_BINDING
-local INTERFACE_OPTIONS, DRESSUP_FRAME = INTERFACE_OPTIONS, DRESSUP_FRAME
+local E, _, V, P, G = unpack(ElvUI)
+local C, L = unpack(select(2, ...))
 
 E.Options.args.skins = {
 	type = "group",
@@ -18,29 +14,37 @@ E.Options.args.skins = {
 		blizzardEnable = {
 			order = 2,
 			type = "toggle",
-			name = "Blizzard",
-			get = function(info) return E.private.skins.blizzard.enable; end,
-			set = function(info, value) E.private.skins.blizzard.enable = value; E:StaticPopup_Show("PRIVATE_RL"); end,
+			name = L["Blizzard"],
+			get = function(info) return E.private.skins.blizzard.enable end,
+			set = function(info, value) E.private.skins.blizzard.enable = value E:StaticPopup_Show("PRIVATE_RL") end
 		},
 		ace3 = {
 			order = 3,
 			type = "toggle",
 			name = "Ace3",
-			get = function(info) return E.private.skins.ace3.enable; end,
-			set = function(info, value) E.private.skins.ace3.enable = value; E:StaticPopup_Show("PRIVATE_RL"); end,
+			get = function(info) return E.private.skins.ace3.enable end,
+			set = function(info, value) E.private.skins.ace3.enable = value E:StaticPopup_Show("PRIVATE_RL") end
+		},
+		checkBoxSkin = {
+			order = 4,
+			type = "toggle",
+			name = L["CheckBox Skin"],
+			get = function(info) return E.private.skins.checkBoxSkin end,
+			set = function(info, value) E.private.skins.checkBoxSkin = value E:StaticPopup_Show("PRIVATE_RL") end,
+			disabled = function() return not E.private.skins.ace3.enable and not E.private.skins.blizzard.enable end
 		},
 		blizzard = {
 			order = 100,
 			type = "group",
 			name = "Blizzard",
-			get = function(info) return E.private.skins.blizzard[ info[#info] ]; end,
-			set = function(info, value) E.private.skins.blizzard[ info[#info] ] = value; E:StaticPopup_Show("CONFIG_RL"); end,
+			get = function(info) return E.private.skins.blizzard[info[#info]] end,
+			set = function(info, value) E.private.skins.blizzard[info[#info]] = value E:StaticPopup_Show("CONFIG_RL") end,
 			disabled = function() return not E.private.skins.blizzard.enable end,
 			guiInline = true,
 			args = {
 				achievement = {
 					type = "toggle",
-					name = ACHIEVEMENTS,
+					name = L["ACHIEVEMENTS"],
 					desc = L["TOGGLESKIN_DESC"]
 				},
 				alertframes = {
@@ -60,7 +64,7 @@ E.Options.args.skins = {
 				},
 				auctionhouse = {
 					type = "toggle",
-					name = AUCTIONS,
+					name = L["AUCTIONS"],
 					desc = L["TOGGLESKIN_DESC"]
 				},
 				bags = {
@@ -71,7 +75,7 @@ E.Options.args.skins = {
 				},
 				barber = {
 					type = "toggle",
-					name = BARBERSHOP,
+					name = L["BARBERSHOP"],
 					desc = L["TOGGLESKIN_DESC"]
 				},
 				bgmap = {
@@ -86,17 +90,17 @@ E.Options.args.skins = {
 				},
 				binding = {
 					type = "toggle",
-					name = KEY_BINDING,
+					name = L["KEY_BINDINGS"],
 					desc = L["TOGGLESKIN_DESC"]
 				},
 				BlizzardOptions = {
 					type = "toggle",
-					name = INTERFACE_OPTIONS,
+					name = L["INTERFACE_OPTIONS"],
 					desc = L["TOGGLESKIN_DESC"]
 				},
 				calendar = {
 					type = "toggle",
-					name = L["Calendar Frame"],
+					name = L["Calendar"],
 					desc = L["TOGGLESKIN_DESC"]
 				},
 				character = {
@@ -111,27 +115,27 @@ E.Options.args.skins = {
 				},
 				dressingroom = {
 					type = "toggle",
-					name = DRESSUP_FRAME,
+					name = L["DRESSUP_FRAME"],
 					desc = L["TOGGLESKIN_DESC"]
 				},
 				friends = {
 					type = "toggle",
-					name = FRIENDS,
+					name = L["FRIENDS"],
 					desc = L["TOGGLESKIN_DESC"]
 				},
 				gbank = {
 					type = "toggle",
-					name = L["Guild Bank"],
-					desc = L["TOGGLESKIN_DESC"]
-				},
-				gmchat = {
-					type = "toggle",
-					name = L["GM Chat"],
+					name = L["GUILD_BANK"],
 					desc = L["TOGGLESKIN_DESC"]
 				},
 				gossip = {
 					type = "toggle",
 					name = L["Gossip Frame"],
+					desc = L["TOGGLESKIN_DESC"]
+				},
+				gmchat = {
+					type = "toggle",
+					name = L["GM Chat"],
 					desc = L["TOGGLESKIN_DESC"]
 				},
 				greeting = {
@@ -151,7 +155,7 @@ E.Options.args.skins = {
 				},
 				inspect = {
 					type = "toggle",
-					name = INSPECT,
+					name = L["INSPECT"],
 					desc = L["TOGGLESKIN_DESC"]
 				},
 				lfd = {
@@ -178,22 +182,27 @@ E.Options.args.skins = {
 				},
 				macro = {
 					type = "toggle",
-					name = MACROS,
+					name = L["MACROS"],
 					desc = L["TOGGLESKIN_DESC"]
 				},
 				mail = {
 					type = "toggle",
-					name = MAIL_LABEL,
+					name = L["MAIL_LABEL"],
 					desc = L["TOGGLESKIN_DESC"]
 				},
 				merchant = {
 					type = "toggle",
-					name = MERCHANT,
+					name = L["MERCHANT"],
 					desc = L["TOGGLESKIN_DESC"]
 				},
 				misc = {
 					type = "toggle",
 					name = L["Misc Frames"],
+					desc = L["TOGGLESKIN_DESC"]
+				},
+				mirrorTimers = {
+					type = "toggle",
+					name = L["Mirror Timers"],
 					desc = L["TOGGLESKIN_DESC"]
 				},
 				petition = {
@@ -223,7 +232,7 @@ E.Options.args.skins = {
 				},
 				spellbook = {
 					type = "toggle",
-					name = SPELLBOOK,
+					name = L["SPELLBOOK"],
 					desc = L["TOGGLESKIN_DESC"]
 				},
 				stable = {
@@ -238,32 +247,32 @@ E.Options.args.skins = {
 				},
 				talent = {
 					type = "toggle",
-					name = TALENTS,
+					name = L["TALENTS"],
 					desc = L["TOGGLESKIN_DESC"]
 				},
 				taxi = {
 					type = "toggle",
-					name = L["Taxi Frame"],
+					name = L["FLIGHT_MAP"],
+					desc = L["TOGGLESKIN_DESC"]
+				},
+				timemanager = {
+					type = "toggle",
+					name = L["TIMEMANAGER_TITLE"],
 					desc = L["TOGGLESKIN_DESC"]
 				},
 				tooltip = {
 					type = "toggle",
 					name = L["Tooltip"],
-					desc = L["TOGGLESKIN_DESC"],
-				},
-				timemanager = {
-					type = "toggle",
-					name = TIMEMANAGER_TITLE,
 					desc = L["TOGGLESKIN_DESC"]
 				},
 				trade = {
 					type = "toggle",
-					name = TRADE,
+					name = L["TRADE"],
 					desc = L["TOGGLESKIN_DESC"]
 				},
 				tradeskill = {
 					type = "toggle",
-					name = TRADESKILLS,
+					name = L["TRADESKILLS"],
 					desc = L["TOGGLESKIN_DESC"]
 				},
 				trainer = {
@@ -283,15 +292,10 @@ E.Options.args.skins = {
 				},
 				worldmap = {
 					type = "toggle",
-					name = WORLD_MAP,
-					desc = L["TOGGLESKIN_DESC"]
-				},
-				mirrorTimers = {
-					type = "toggle",
-					name = L["Mirror Timers"],
+					name = L["WORLD_MAP"],
 					desc = L["TOGGLESKIN_DESC"]
 				}
 			}
 		}
 	}
-};
+}
