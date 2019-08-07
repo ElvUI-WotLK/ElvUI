@@ -7,6 +7,10 @@ local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.worldmap ~= true then return end
 
 	local WorldMapFrame = _G["WorldMapFrame"]
+	WorldMapFrame:DisableDrawLayer("BACKGROUND")
+	WorldMapFrame:DisableDrawLayer("ARTWORK")
+	WorldMapFrame:DisableDrawLayer("OVERLAY")
+	WorldMapFrameTitle:SetDrawLayer("BORDER")
 	WorldMapFrame:CreateBackdrop("Transparent")
 
 	WorldMapDetailFrame:CreateBackdrop()
@@ -24,8 +28,7 @@ local function LoadSkin()
 
 	WorldMapQuestDetailScrollChildFrame:SetScale(1)
 
-	WorldMapQuestDetailScrollFrameTrack:Hide()
-	WorldMapQuestDetailScrollFrameTrack.Show = E.noop
+	WorldMapQuestDetailScrollFrameTrack:Kill()
 
 	WorldMapQuestRewardScrollFrame:Width(340)
 	WorldMapQuestRewardScrollFrame:Point("LEFT", WorldMapQuestDetailScrollFrame, "RIGHT", 8, 0)
@@ -51,6 +54,7 @@ local function LoadSkin()
 	WorldMapFrameSizeDownButton:SetSize(20, 20)
 	WorldMapFrameSizeDownButton:ClearAllPoints()
 	WorldMapFrameSizeDownButton:Point("RIGHT", WorldMapFrameCloseButton, "LEFT", 4, 0)
+	WorldMapFrameSizeDownButton.SetPoint = E.noop
 	WorldMapFrameSizeDownButton:GetHighlightTexture():Kill()
 	WorldMapFrameSizeDownButton:SetNormalTexture(E.Media.Textures.ArrowUp)
 	WorldMapFrameSizeDownButton:GetNormalTexture():SetRotation(S.ArrowRotation.down)
@@ -90,10 +94,20 @@ local function LoadSkin()
 	S:HandleDropDownBox(WorldMapZoneDropDown)
 
 	S:HandleButton(WorldMapZoomOutButton)
-	WorldMapZoomOutButton:SetPoint("LEFT", WorldMapZoneDropDown, "RIGHT", 0, 3)
+	WorldMapZoomOutButton:Point("LEFT", WorldMapZoneDropDown, "RIGHT", 0, 3)
 
 	S:HandleCheckBox(WorldMapTrackQuest)
 	S:HandleCheckBox(WorldMapQuestShowObjectives)
+
+	WorldMapFrameAreaLabel:FontTemplate(nil, 50, "OUTLINE")
+	WorldMapFrameAreaLabel:SetShadowOffset(2, -2)
+	WorldMapFrameAreaLabel:SetTextColor(0.90, 0.8294, 0.6407)
+
+	WorldMapFrameAreaDescription:FontTemplate(nil, 40, "OUTLINE")
+	WorldMapFrameAreaDescription:SetShadowOffset(2, -2)
+
+	WorldMapZoneInfo:FontTemplate(nil, 27, "OUTLINE")
+	WorldMapZoneInfo:SetShadowOffset(2, -2)
 
 	local function SmallSkin()
 		WorldMapFrame.backdrop:ClearAllPoints()
@@ -128,25 +142,15 @@ local function LoadSkin()
 		WorldMapFrame.backdrop:ClearAllPoints()
 		WorldMapFrame.backdrop:Point("TOPLEFT", WorldMapDetailFrame, "TOPLEFT", -10, 70)
 		WorldMapFrame.backdrop:Point("BOTTOMRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT", 12, -30)
-
-		WorldMapDetailFrame.backdrop:ClearAllPoints()
-		WorldMapDetailFrame.backdrop:Point("TOPLEFT", -2, 2)
-		WorldMapDetailFrame.backdrop:Point("BOTTOMRIGHT", 2, -1)
 	end
 
 	local function QuestSkin()
 		WorldMapFrame.backdrop:ClearAllPoints()
 		WorldMapFrame.backdrop:Point("TOPLEFT", WorldMapDetailFrame, "TOPLEFT", -(E.PixelMode and 10 or 11), 69)
 		WorldMapFrame.backdrop:Point("BOTTOMRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT", E.PixelMode and 321 or 322, -237)
-
-		WorldMapDetailFrame.backdrop:ClearAllPoints()
-		WorldMapDetailFrame.backdrop:Point("TOPLEFT", -2, 2)
-		WorldMapDetailFrame.backdrop:Point("BOTTOMRIGHT", 2, -1)
 	end
 
 	local function FixSkin()
-		WorldMapFrame:StripTextures();
-
 		if WORLDMAP_SETTINGS.size == WORLDMAP_FULLMAP_SIZE then
 			LargeSkin()
 		elseif WORLDMAP_SETTINGS.size == WORLDMAP_WINDOWED_SIZE then
@@ -154,31 +158,13 @@ local function LoadSkin()
 		elseif WORLDMAP_SETTINGS.size == WORLDMAP_QUESTLIST_SIZE then
 			QuestSkin()
 		end
-
-		WorldMapFrameAreaLabel:FontTemplate(nil, 50, "OUTLINE")
-		WorldMapFrameAreaLabel:SetShadowOffset(2, -2)
-		WorldMapFrameAreaLabel:SetTextColor(0.90, 0.8294, 0.6407)
-
-		WorldMapFrameAreaDescription:FontTemplate(nil, 40, "OUTLINE")
-		WorldMapFrameAreaDescription:SetShadowOffset(2, -2)
-
-		WorldMapZoneInfo:FontTemplate(nil, 27, "OUTLINE")
-		WorldMapZoneInfo:SetShadowOffset(2, -2)
-
-		WorldMapFrameSizeDownButton:ClearAllPoints()
-		WorldMapFrameSizeDownButton:Point("RIGHT", WorldMapFrameCloseButton, "LEFT", 4, 0)
-
-	--	if InCombatLockdown() then return end
-
-		--WorldMapFrame:SetFrameStrata("HIGH")
-		--WorldMapPOIFrame:SetFrameStrata("HIGH")
-		--WorldMapDetailFrame:SetFrameLevel(WorldMapFrame:GetFrameLevel() + 1)
 	end
 
-	WorldMapFrame:HookScript("OnShow", FixSkin)
-	hooksecurefunc("WorldMapFrame_SetFullMapView", LargeSkin)
-	hooksecurefunc("WorldMapFrame_SetQuestMapView", QuestSkin)
-	hooksecurefunc("WorldMap_ToggleSizeUp", FixSkin)
+	ShowUIPanel(WorldMapFrame)
+	FixSkin()
+	HideUIPanel(WorldMapFrame)
+
+	hooksecurefunc("ToggleMapFramerate", FixSkin)
 end
 
 S:AddCallback("SkinWorldMap", LoadSkin)
