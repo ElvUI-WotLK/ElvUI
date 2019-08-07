@@ -38,10 +38,9 @@ local function OnEnter(self)
 
 	local r, g, b
 	local _, name, quality, link
-	local free, total, used
+	local free, total, used = 0, 0, 0
 
 	for i = 0, NUM_BAG_SLOTS do
-		free, total, used = 0, 0, 0
 		free, total = GetContainerNumFreeSlots(i), GetContainerNumSlots(i)
 		used = total - free
 
@@ -58,8 +57,9 @@ local function OnEnter(self)
 		end
 	end
 
+	local count, currencyType, icon
 	for i = 1, MAX_WATCHED_TOKENS do
-		local name, count, currencyType, icon = GetBackpackCurrencyInfo(i)
+		name, count, currencyType, icon = GetBackpackCurrencyInfo(i)
 		if name and i == 1 then
 			DT.tooltip:AddLine(" ")
 			DT.tooltip:AddLine(CURRENCY..":")
