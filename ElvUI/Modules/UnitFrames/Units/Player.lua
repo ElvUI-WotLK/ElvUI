@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local UF = E:GetModule("UnitFrames");
+local UF = E:GetModule("UnitFrames")
 local _, ns = ...
 local ElvUF = ns.oUF
 assert(ElvUF, "ElvUI was unable to locate oUF.")
@@ -12,7 +12,8 @@ local max = math.max
 local CreateFrame = CreateFrame
 local CastingBarFrame_OnLoad = CastingBarFrame_OnLoad
 local CastingBarFrame_SetUnit = CastingBarFrame_SetUnit
-local MAX_COMBO_POINTS = MAX_COMBO_POINTS
+
+local CAN_HAVE_CLASSBAR = (E.myclass == "DRUID" or E.myclass == "DEATHKNIGHT")
 
 function UF:Construct_PlayerFrame(frame)
 	frame.ThreatIndicator = self:Construct_Threat(frame)
@@ -28,20 +29,17 @@ function UF:Construct_PlayerFrame(frame)
 	frame.Castbar = self:Construct_Castbar(frame, L["Player Castbar"])
 
 	--Create a holder frame all "classbars" can be positioned into
-	frame.ClassBarHolder = CreateFrame("Frame", nil, frame)
-	frame.ClassBarHolder:Point("BOTTOM", E.UIParent, "BOTTOM", 0, 150)
+	if CAN_HAVE_CLASSBAR then
+		frame.ClassBarHolder = CreateFrame("Frame", nil, frame)
+		frame.ClassBarHolder:Point("BOTTOM", E.UIParent, "BOTTOM", 0, 150)
 
-	--Combo points was moved to the ClassPower element, so all classes need to have a ClassBar now.
-	frame.ClassPower = self:Construct_ClassBar(frame)
-	frame.ClassBar = "ClassPower"
-
-	--Some classes need another set of different classbars.
-	if E.myclass == "DEATHKNIGHT" then
-		frame.Runes = self:Construct_DeathKnightResourceBar(frame)
-		frame.ClassBar = "Runes"
-	elseif E.myclass == "DRUID" then
-		frame.AdditionalPower = self:Construct_AdditionalPowerBar(frame, nil, UF.UpdateClassBar)
-		frame.ClassBar = "AdditionalPower"
+		if E.myclass == "DEATHKNIGHT" then
+			frame.Runes = self:Construct_DeathKnightResourceBar(frame)
+			frame.ClassBar = "Runes"
+		elseif E.myclass == "DRUID" then
+			frame.AdditionalPower = self:Construct_AdditionalPowerBar(frame, nil, UF.UpdateClassBar)
+			frame.ClassBar = "AdditionalPower"
+		end
 	end
 
 	frame.MouseGlow = self:Construct_MouseGlow(frame)
@@ -89,8 +87,8 @@ function UF:Update_PlayerFrame(frame, db)
 		frame.USE_PORTRAIT_OVERLAY = frame.USE_PORTRAIT and (db.portrait.overlay or frame.ORIENTATION == "MIDDLE")
 		frame.PORTRAIT_WIDTH = (frame.USE_PORTRAIT_OVERLAY or not frame.USE_PORTRAIT) and 0 or db.portrait.width
 
-		frame.CAN_HAVE_CLASSBAR = true --Combo points are in ClassPower now, so all classes need access to ClassBar
-		frame.MAX_CLASS_BAR = frame.MAX_CLASS_BAR or max(UF.classMaxResourceBar[E.myclass] or 0, MAX_COMBO_POINTS) --only set this initially
+		frame.CAN_HAVE_CLASSBAR = CAN_HAVE_CLASSBAR
+		frame.MAX_CLASS_BAR = frame.MAX_CLASS_BAR or UF.classMaxResourceBar[E.myclass] or 0
 		frame.USE_CLASSBAR = db.classbar.enable and frame.CAN_HAVE_CLASSBAR
 		frame.CLASSBAR_SHOWN = frame.CAN_HAVE_CLASSBAR and frame[frame.ClassBar]:IsShown()
 		frame.CLASSBAR_DETACHED = db.classbar.detachFromFrame
@@ -198,3 +196,19 @@ function UF:Update_PlayerFrame(frame, db)
 end
 
 tinsert(UF.unitstoload, "player")
+
+local function UpdateClassBar()
+	local frame = _G["ElvUF_Player"]
+	if frame and frame.ClassBar then
+		frame:UpdateElement(frame.ClassBar)
+		UF.ToggleResourceBar(frame[frame.ClassBar])
+	end
+end
+
+local f = CreateFrame("Frame")
+f:RegisterEvent("PLAYER_ENTERING_WORLD")
+f:SetScript("OnEvent", function(self, event)
+	self:UnregisterEvent(event)
+	if not E.db.unitframe.units.player.enable then return end
+	UpdateClassBar()
+end)

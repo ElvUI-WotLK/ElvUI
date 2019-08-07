@@ -24,6 +24,7 @@ E.Media = {
 		HelloKitty = M..[[Sounds\HelloKitty.ogg]],
 		MamaWeekends = M..[[Sounds\MamaWeekends.ogg]],
 		RunFast = M..[[Sounds\RunFast.ogg]],
+		ElvUIAska = M..[[Sounds\SndIncMsg.ogg]],
 		StopRunningSlimeBall = M..[[Sounds\StopRunningSlimeBall.ogg]],
 		Warning = M..[[Sounds\Warning.ogg]],
 		Whisper = M..[[Sounds\Whisper.ogg]],
@@ -82,6 +83,7 @@ E.Media = {
 		TyroneBiggums = M..[[ChatLogos\TyroneBiggums.tga]]
 	},
 	Textures = {
+		AllianceLogo = M..[[Textures\Alliance-Logo.blp]],
 		Arrow = M..[[Textures\Arrow.tga]],
 		ArrowRight = M..[[Textures\ArrowRight.tga]],
 		ArrowUp = M..[[Textures\ArrowUp.tga]],
@@ -90,8 +92,6 @@ E.Media = {
 		Black8x8 = M..[[Textures\Black8x8.tga]],
 		White8x8 = [[Interface\BUTTONS\WHITE8X8]], -- not elvui
 		Broom = M..[[Textures\Broom.blp]],
-		BagUpgradeIcon = M..[[Textures\BagUpgradeIcon.tga]],
-		BubbleTex = M..[[Textures\BubbleTex.tga]],
 		ChatEmojis = M..[[Textures\ChatEmojis]],
 		ChatLogos = M..[[Textures\ChatLogos]],
 		Close = M..[[Textures\Close.tga]],
@@ -104,20 +104,24 @@ E.Media = {
 		HelloKitty = M..[[Textures\HelloKitty.tga]],
 		HelloKittyChat = M..[[Textures\HelloKittyChat.tga]],
 		Highlight = M..[[Textures\Highlight.tga]],
+		HordeLogo = M..[[Textures\Horde-Logo.blp]],
 		Leader = M..[[Textures\Leader.tga]],
+		LevelUpTex = M..[[Textures\LevelUpTex.blp]],
 		Logo = M..[[Textures\Logo.tga]],
 		Mail = M..[[Textures\Mail.tga]],
 		Melli = M..[[Textures\Melli.tga]],
 		Minimalist = M..[[Textures\Minimalist.tga]],
-		Minus = M..[[Textures\Minus.tga]],
-		MinusButton = M..[[Textures\MinusButton.tga]],
+		Nameplates = M..[[Textures\Nameplates.blp]],
+		NameplateTargetIndicator = M..[[Textures\NameplateTargetIndicator.tga]],
+		NameplateTargetIndicatorLeft = M..[[Textures\NameplateTargetIndicatorLeft.tga]],
+		NameplateTargetIndicatorRight = M..[[Textures\NameplateTargetIndicatorRight.tga]],
 		NormTex = M..[[Textures\NormTex.tga]],
 		NormTex2 = M..[[Textures\NormTex2.tga]],
 		Pause = M..[[Textures\Pause.tga]],
-		PhaseIcons = M..[[Textures\PhaseIcons.tga]],
 		Play = M..[[Textures\Play.tga]],
-		Plus = M..[[Textures\Plus.tga]],
-		PlusButton = M..[[Textures\PlusButton.tga]],
+		PlusMinusButton = M..[[Textures\PlusMinusButton.blp]],
+		PvPIcons = M..[[Textures\PVP-Icons.blp]],
+		RaidIcons = M..[[Textures\RaidIcons.blp]],
 		Reset = M..[[Textures\Reset.tga]],
 		Resting = M..[[Textures\Resting.tga]],
 		Resting1 = M..[[Textures\Resting1.tga]],
@@ -126,30 +130,30 @@ E.Media = {
 		Smooth = M..[[Textures\Smooth.tga]],
 		Spark = M..[[Textures\Spark.tga]],
 		Tank = M..[[Textures\Tank.tga]],
-		TukuiLogo = M..[[Textures\TukuiLogo.tga]],
 		ExitVehicle = M..[[Textures\ExitVehicle.tga]]
 	}
 }
 
-LSM:Register("border","ElvUI GlowBorder",E.Media.Textures.GlowTex)
-LSM:Register("font","Continuum Medium",E.Media.Fonts.ContinuumMedium)
-LSM:Register("font","Die Die Die!",E.Media.Fonts.DieDieDie)
-LSM:Register("font","Action Man",E.Media.Fonts.ActionMan)
-LSM:Register("font","Expressway",E.Media.Fonts.Expressway,LSM.LOCALE_BIT_ruRU+LSM.LOCALE_BIT_western)
-LSM:Register("font","PT Sans Narrow",E.Media.Fonts.PTSansNarrow,LSM.LOCALE_BIT_ruRU+LSM.LOCALE_BIT_western)
-LSM:Register("font","Homespun",E.Media.Fonts.Homespun,LSM.LOCALE_BIT_ruRU+LSM.LOCALE_BIT_western)
-LSM:Register("sound","Awww Crap",E.Media.Sounds.AwwCrap)
-LSM:Register("sound","BBQ Ass",E.Media.Sounds.BbqAss)
-LSM:Register("sound","Big Yankie Devil",E.Media.Sounds.YankieBangBang)
-LSM:Register("sound","Dumb Shit",E.Media.Sounds.DumbShit)
-LSM:Register("sound","Mama Weekends",E.Media.Sounds.MamaWeekends)
-LSM:Register("sound","Runaway Fast",E.Media.Sounds.RunFast)
-LSM:Register("sound","Stop Running",E.Media.Sounds.StopRunningSlimeBall)
-LSM:Register("sound","Warning",E.Media.Sounds.Warning)
-LSM:Register("sound","Whisper Alert",E.Media.Sounds.Whisper)
-LSM:Register("statusbar","Melli",E.Media.Textures.Melli)
-LSM:Register("statusbar","ElvUI Gloss",E.Media.Textures.NormTex)
-LSM:Register("statusbar","ElvUI Norm",E.Media.Textures.NormTex2)
-LSM:Register("statusbar","Minimalist",E.Media.Textures.Minimalist)
-LSM:Register("statusbar","ElvUI Blank",E.Media.Textures.White8x8)
-LSM:Register("background","ElvUI Blank",E.Media.Textures.White8x8)
+LSM:Register("border", "ElvUI GlowBorder", E.Media.Textures.GlowTex)
+LSM:Register("font", "Continuum Medium", E.Media.Fonts.ContinuumMedium)
+LSM:Register("font", "Die Die Die!", E.Media.Fonts.DieDieDie, LSM.LOCALE_BIT_ruRU + LSM.LOCALE_BIT_western)
+LSM:Register("font", "Action Man", E.Media.Fonts.ActionMan)
+LSM:Register("font", "Expressway", E.Media.Fonts.Expressway, LSM.LOCALE_BIT_ruRU + LSM.LOCALE_BIT_western)
+LSM:Register("font", "PT Sans Narrow", E.Media.Fonts.PTSansNarrow, LSM.LOCALE_BIT_ruRU + LSM.LOCALE_BIT_western)
+LSM:Register("font", "Homespun", E.Media.Fonts.Homespun, LSM.LOCALE_BIT_ruRU + LSM.LOCALE_BIT_western)
+LSM:Register("sound", "ElvUI Aska", E.Media.Sounds.SndIncMsg)
+LSM:Register("sound", "Awww Crap", E.Media.Sounds.AwwCrap)
+LSM:Register("sound", "BBQ Ass", E.Media.Sounds.BbqAss)
+LSM:Register("sound", "Big Yankie Devil", E.Media.Sounds.YankieBangBang)
+LSM:Register("sound", "Dumb Shit", E.Media.Sounds.DumbShit)
+LSM:Register("sound", "Mama Weekends", E.Media.Sounds.MamaWeekends)
+LSM:Register("sound", "Runaway Fast", E.Media.Sounds.RunFast)
+LSM:Register("sound", "Stop Running", E.Media.Sounds.StopRunningSlimeBall)
+LSM:Register("sound", "Warning", E.Media.Sounds.Warning)
+LSM:Register("sound", "Whisper Alert", E.Media.Sounds.Whisper)
+LSM:Register("statusbar", "Melli", E.Media.Textures.Melli)
+LSM:Register("statusbar", "ElvUI Gloss", E.Media.Textures.NormTex)
+LSM:Register("statusbar", "ElvUI Norm", E.Media.Textures.NormTex2)
+LSM:Register("statusbar", "Minimalist", E.Media.Textures.Minimalist)
+LSM:Register("statusbar", "ElvUI Blank", E.Media.Textures.White8x8)
+LSM:Register("background", "ElvUI Blank", E.Media.Textures.White8x8)

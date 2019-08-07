@@ -23,15 +23,13 @@ function UF:Construct_Portrait(frame, type)
 
 	portrait.PostUpdate = self.PortraitUpdate
 
-	portrait.overlay = CreateFrame("Frame", nil, frame)
-	portrait.overlay:SetFrameLevel(frame.Health:GetFrameLevel() + 5) --Set to "frame.Health:GetFrameLevel()" if you don"t want portrait cut off.
-
 	return portrait
 end
 
 function UF:Configure_Portrait(frame, dontHide)
 	if not frame.VARIABLES_SET then return end
 	local db = frame.db
+
 	if frame.Portrait and not dontHide then
 		frame.Portrait:Hide()
 		frame.Portrait:ClearAllPoints()
@@ -45,22 +43,42 @@ function UF:Configure_Portrait(frame, dontHide)
 			frame:EnableElement("Portrait")
 		end
 
+		local color = E.db.unitframe.colors.borderColor
+		portrait.backdrop:SetBackdropBorderColor(color.r, color.g, color.b)
+
 		portrait:ClearAllPoints()
 		portrait.backdrop:ClearAllPoints()
 		if frame.USE_PORTRAIT_OVERLAY then
 			if db.portrait.style == "3D" then
-				portrait:SetFrameLevel(frame.Health:GetFrameLevel())
+				portrait:SetFrameLevel(frame.Health:GetFrameLevel() + 1)
 			else
 				portrait:SetParent(frame.Health)
 			end
 
-			portrait:SetAllPoints(frame.Health)
 			portrait:SetAlpha(0.35)
 			if not dontHide then
 				portrait:Show()
 			end
 			portrait.backdrop:Hide()
+
+			portrait:ClearAllPoints()
+			if db.portrait.fullOverlay then
+				portrait:SetAllPoints(frame.Health)
+			else
+				local healthTex = frame.Health:GetStatusBarTexture()
+				if db.health.reverseFill then
+					portrait:Point("TOPLEFT", healthTex, "TOPLEFT")
+					portrait:Point("BOTTOMLEFT", healthTex, "BOTTOMLEFT")
+					portrait:Point("BOTTOMRIGHT", frame.Health, "BOTTOMRIGHT")
+				else
+					portrait:Point("TOPLEFT", frame.Health, "TOPLEFT")
+					portrait:Point("BOTTOMRIGHT", healthTex, "BOTTOMRIGHT")
+					portrait:Point("BOTTOMLEFT", healthTex, "BOTTOMLEFT")
+				end
+			end
 		else
+			portrait:ClearAllPoints()
+			portrait:SetAllPoints()
 			portrait:SetAlpha(1)
 			if not dontHide then
 				portrait:Show()
@@ -90,7 +108,6 @@ function UF:Configure_Portrait(frame, dontHide)
 				end
 			end
 
-
 			portrait:SetInside(portrait.backdrop, frame.BORDER)
 		end
 	else
@@ -108,8 +125,8 @@ function UF:PortraitUpdate()
 
 	local portrait = db.portrait
 	if portrait.enable and self:GetParent().USE_PORTRAIT_OVERLAY then
-		self:SetAlpha(0);
-		self:SetAlpha(0.35);
+		self:SetAlpha(0)
+		self:SetAlpha(0.35)
 	else
 		self:SetAlpha(1)
 	end

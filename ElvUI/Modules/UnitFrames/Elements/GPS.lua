@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local UF = E:GetModule("UnitFrames");
+local UF = E:GetModule("UnitFrames")
 
 --Cache global variables
 --Lua functions
@@ -13,7 +13,7 @@ function UF:Construct_GPS(frame)
 	gps:Hide()
 
 	gps.Texture = gps:CreateTexture("OVERLAY")
-	gps.Texture:SetTexture([[Interface\AddOns\ElvUI\media\textures\arrow.tga]])
+	gps.Texture:SetTexture(E.Media.Textures.Arrow)
 	gps.Texture:SetBlendMode("BLEND")
 	gps.Texture:SetVertexColor(214/255, 41/255, 41/255)
 	gps.Texture:SetAllPoints()
@@ -23,6 +23,7 @@ end
 
 function UF:Configure_GPS(frame)
 	local GPS = frame.GPS
+
 	if frame.db.GPSArrow.enable then
 		if not frame:IsElementEnabled("GPS") then
 			frame:EnableElement("GPS")

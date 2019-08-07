@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local UF = E:GetModule("UnitFrames");
+local UF = E:GetModule("UnitFrames")
 
 --Lua functions
 local match = string.match
@@ -13,14 +13,14 @@ local UnitInParty = UnitInParty
 local UnitInRaid = UnitInRaid
 
 local function CheckLeader(unit)
-	if(unit == "player") then
+	if unit == "player" then
 		return IsPartyLeader()
-	elseif(unit ~= "player" and (UnitInParty(unit) or UnitInRaid(unit))) then
+	elseif unit ~= "player" and (UnitInParty(unit) or UnitInRaid(unit)) then
 		local gtype, index = match(unit, "(%D+)(%d+)")
 		index = tonumber(index)
-		if(gtype == "party" and GetNumRaidMembers() == 0) then
+		if gtype == "party" and GetNumRaidMembers() == 0 then
 			return GetPartyLeaderIndex() == index
-		elseif(gtype == "raid" and GetNumRaidMembers() > 0) then
+		elseif gtype == "raid" and GetNumRaidMembers() > 0 then
 			return select(2, GetRaidRosterInfo(index)) == 2
 		end
 	end
@@ -79,7 +79,7 @@ function UF:Configure_RaidRoleIcons(frame)
 
 		raidRoleFrameAnchor:ClearAllPoints()
 		if frame.db.raidRoleIcons.position == "TOPLEFT" then
-			raidRoleFrameAnchor:Point("LEFT", frame, "TOPLEFT", 2, 0)
+			raidRoleFrameAnchor:Point("LEFT", frame.Health, "TOPLEFT", 2, 0)
 		else
 			raidRoleFrameAnchor:Point("RIGHT", frame, "TOPRIGHT", -2, 0)
 		end

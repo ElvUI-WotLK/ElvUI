@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local UF = E:GetModule("UnitFrames");
+local UF = E:GetModule("UnitFrames")
 
 --Cache global variables
 --Lua functions
@@ -48,12 +48,17 @@ function UF:Construct_Combobar(frame)
 
 	for i = 1, MAX_COMBO_POINTS do
 		ComboPoints[i] = CreateFrame("StatusBar", frame:GetName().."ComboBarButton"..i, ComboPoints)
-		UF["statusbars"][ComboPoints[i]] = true
-		ComboPoints[i]:SetStatusBarTexture(E["media"].blankTex)
+		UF.statusbars[ComboPoints[i]] = true
+		ComboPoints[i]:SetStatusBarTexture(E.media.blankTex)
 		ComboPoints[i]:GetStatusBarTexture():SetHorizTile(false)
 		ComboPoints[i]:SetAlpha(0.15)
 		ComboPoints[i]:CreateBackdrop("Default", nil, nil, UF.thinBorders, true)
 		ComboPoints[i].backdrop:SetParent(ComboPoints)
+
+		ComboPoints[i].bg = ComboPoints[i]:CreateTexture(nil, "BORDER")
+		ComboPoints[i].bg:SetAllPoints()
+		ComboPoints[i].bg:SetTexture(E.media.blankTex)
+		ComboPoints[i].bg.multiplier = 0.3
 	end
 
 	frame:RegisterEvent("UNIT_ENTERED_VEHICLE", UF.UpdateComboDisplay)
@@ -103,9 +108,6 @@ function UF:Configure_ComboPoints(frame)
 	local color = E.db.unitframe.colors.borderColor
 	ComboPoints.backdrop:SetBackdropBorderColor(color.r, color.g, color.b)
 
-	color = self.db.colors.classResources.bgColor
-	ComboPoints.backdrop:SetBackdropColor(color.r, color.g, color.b)
-
 	if frame.USE_MINI_CLASSBAR and not frame.CLASSBAR_DETACHED then
 		ComboPoints:ClearAllPoints()
 		ComboPoints:Point("CENTER", frame.Health.backdrop, "TOP", 0, 0)
@@ -142,7 +144,7 @@ function UF:Configure_ComboPoints(frame)
 			ComboPoints:Height(frame.CLASSBAR_HEIGHT - ((frame.BORDER + frame.SPACING)*2))
 			ComboPoints:ClearAllPoints()
 			ComboPoints:Point("BOTTOMLEFT", ComboPoints.Holder, "BOTTOMLEFT", frame.BORDER + frame.SPACING, frame.BORDER + frame.SPACING)
-			E:CreateMover(ComboPoints.Holder, "ComboBarMover", L["Combobar"], nil, nil, nil, "ALL,SOLO")
+			E:CreateMover(ComboPoints.Holder, "ComboBarMover", L["Combobar"], nil, nil, nil, "ALL,SOLO", nil, "unitframe,target,combobar")
 		else
 			ComboPoints:ClearAllPoints()
 			ComboPoints:Point("BOTTOMLEFT", ComboPoints.Holder, "BOTTOMLEFT", frame.BORDER + frame.SPACING, frame.BORDER + frame.SPACING)
@@ -173,19 +175,10 @@ function UF:Configure_ComboPoints(frame)
 	ComboPoints:Height(frame.CLASSBAR_HEIGHT - ((frame.BORDER + frame.SPACING)*2))
 
 	for i = 1, frame.MAX_CLASS_BAR do
-		local r1, g1, b1 = unpack(ElvUF.colors.ComboPoints[1])
-		local r2, g2, b2 = unpack(ElvUF.colors.ComboPoints[2])
-		local r3, g3, b3 = unpack(ElvUF.colors.ComboPoints[3])
-
-		local r, g, b = ElvUF.ColorGradient(i, 5, r1, g1, b1, r2, g2, b2, r3, g3, b3)
-		ComboPoints[i]:SetStatusBarColor(r, g, b)
+		ComboPoints[i]:SetStatusBarColor(unpack(ElvUF.colors.ComboPoints[i]))
 
 		color = E.db.unitframe.colors.borderColor
 		ComboPoints[i].backdrop:SetBackdropBorderColor(color.r, color.g, color.b)
-
-		color = self.db.colors.classResources.bgColor
-		ComboPoints[i].backdrop:SetBackdropColor(color.r, color.g, color.b)
-
 		ComboPoints[i]:Height(ComboPoints:GetHeight())
 		ComboPoints[i]:Hide()
 		ComboPoints[i].backdrop:Hide()
@@ -233,6 +226,7 @@ function UF:Configure_ComboPoints(frame)
 			ComboPoints[i].backdrop:Show()
 		end
 
+		ComboPoints[i]:SetOrientation("HORIZONTAL")
 		ComboPoints[i]:Show()
 	end
 
@@ -280,6 +274,7 @@ function UF:UpdateComboDisplay(event, unit)
 				cp = GetComboPoints("player", "target")
 			end
 
+			local custom_backdrop = UF.db.colors.customclasspowerbackdrop and UF.db.colors.classpower_backdrop
 			if cp == 0 and db.combobar.autoHide then
 				element:Hide()
 				UF.ToggleResourceBar(element)
@@ -290,6 +285,13 @@ function UF:UpdateComboDisplay(event, unit)
 						element[i]:SetAlpha(1)
 					else
 						element[i]:SetAlpha(0.2)
+					end
+
+					if custom_backdrop then
+						element[i].bg:SetVertexColor(custom_backdrop.r, custom_backdrop.g, custom_backdrop.b)
+					else
+						local r, g, b = element[i]:GetStatusBarColor()
+						element[i].bg:SetVertexColor(r * 0.3, g * 0.3, b * 0.3)
 					end
 				end
 				UF.ToggleResourceBar(element)

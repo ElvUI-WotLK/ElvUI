@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local UF = E:GetModule("UnitFrames");
+local UF = E:GetModule("UnitFrames")
 
 --Lua functions
 --WoW API / Variables
@@ -47,7 +47,7 @@ function UF:UpdateOverridePvP(event, unit)
 
 		status = "ffa"
 	elseif factionGroup and UnitIsPVP(unit) then
-		element:SetTexture("Interface\\AddOns\\ElvUI\\Media\\Textures\\PVP-Icons")
+		element:SetTexture(E.Media.Textures.PvPIcons)
 
 		if factionGroup == "Alliance"  then
 			element:SetTexCoord(0.545, 0.935, 0.070, 0.940)

@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local UF = E:GetModule("UnitFrames");
+local UF = E:GetModule("UnitFrames")
 local _, ns = ...
 local ElvUF = ns.oUF
 assert(ElvUF, "ElvUI was unable to locate oUF.")
@@ -25,6 +25,11 @@ function UF:Construct_TargetFrame(frame)
 	frame.Castbar.SafeZone = nil
 	frame.Castbar.LatencyTexture:Hide()
 	frame.RaidTargetIndicator = self:Construct_RaidIcon(frame)
+
+	frame.ComboPointsHolder = CreateFrame("Frame", nil, frame)
+	frame.ComboPointsHolder:Point("BOTTOM", E.UIParent, "BOTTOM", 0, 200)
+	frame.ComboPoints = self:Construct_Combobar(frame)
+
 	frame.HealCommBar = self:Construct_HealComm(frame)
 	frame.DebuffHighlight = self:Construct_DebuffHighlight(frame)
 	frame.InfoPanel = self:Construct_InfoPanel(frame)
@@ -63,6 +68,16 @@ function UF:Update_TargetFrame(frame, db)
 		frame.USE_PORTRAIT = db.portrait and db.portrait.enable
 		frame.USE_PORTRAIT_OVERLAY = frame.USE_PORTRAIT and (db.portrait.overlay or frame.ORIENTATION == "MIDDLE")
 		frame.PORTRAIT_WIDTH = (frame.USE_PORTRAIT_OVERLAY or not frame.USE_PORTRAIT) and 0 or db.portrait.width
+
+		frame.CAN_HAVE_CLASSBAR = db.combobar.enable
+		frame.MAX_CLASS_BAR = MAX_COMBO_POINTS
+		frame.USE_CLASSBAR = db.combobar.enable
+		frame.CLASSBAR_SHOWN = frame.CAN_HAVE_CLASSBAR and frame.ComboPoints:IsShown()
+		frame.CLASSBAR_DETACHED = db.combobar.detachFromFrame
+		frame.USE_MINI_CLASSBAR = db.combobar.fill == "spaced" and frame.USE_CLASSBAR
+		frame.CLASSBAR_HEIGHT = frame.USE_CLASSBAR and db.combobar.height or 0
+		frame.CLASSBAR_WIDTH = frame.UNIT_WIDTH - ((frame.BORDER+frame.SPACING)*2) - frame.PORTRAIT_WIDTH  - frame.POWERBAR_OFFSET
+		frame.CLASSBAR_YOFFSET = (not frame.USE_CLASSBAR or not frame.CLASSBAR_SHOWN or frame.CLASSBAR_DETACHED) and 0 or (frame.USE_MINI_CLASSBAR and (frame.SPACING+(frame.CLASSBAR_HEIGHT/2)) or (frame.CLASSBAR_HEIGHT + frame.SPACING))
 
 		frame.USE_INFO_PANEL = not frame.USE_MINI_POWERBAR and not frame.USE_POWERBAR_OFFSET and db.infoPanel.enable
 		frame.INFO_PANEL_HEIGHT = frame.USE_INFO_PANEL and db.infoPanel.height or 0
@@ -110,6 +125,9 @@ function UF:Update_TargetFrame(frame, db)
 
 	--Castbar
 	UF:Configure_Castbar(frame)
+
+	--ComboBar
+	UF:Configure_ComboPoints(frame)
 
 	--Fader
 	UF:Configure_Fader(frame)

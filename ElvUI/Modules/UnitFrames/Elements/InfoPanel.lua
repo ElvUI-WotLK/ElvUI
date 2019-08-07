@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local UF = E:GetModule("UnitFrames");
+local UF = E:GetModule("UnitFrames")
 
 --WoW API / Variables
 local CreateFrame = CreateFrame
@@ -18,7 +18,7 @@ function UF:Configure_InfoPanel(frame, noTemplateChange)
 	if not frame.VARIABLES_SET then return end
 	local db = frame.db
 
-	if(frame.USE_INFO_PANEL) then
+	if frame.USE_INFO_PANEL then
 		frame.InfoPanel:Show()
 		frame.InfoPanel:ClearAllPoints()
 

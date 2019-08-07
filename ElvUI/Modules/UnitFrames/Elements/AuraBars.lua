@@ -2,11 +2,8 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 local UF = E:GetModule("UnitFrames")
 
 --Lua functions
-local match = string.match
-local strsplit = strsplit
-local tostring = tostring
-local format = format
-local select = select
+local tostring, select = tostring, select
+local format, strmatch, strsplit = string.format, strmatch, strsplit
 --WoW API / Variables
 local CreateFrame = CreateFrame
 local IsShiftKeyDown = IsShiftKeyDown
@@ -15,6 +12,7 @@ local IsControlKeyDown = IsControlKeyDown
 local UnitIsFriend = UnitIsFriend
 local UnitIsUnit = UnitIsUnit
 local UnitCanAttack = UnitCanAttack
+local RAID_CLASS_COLORS = RAID_CLASS_COLORS
 
 local function OnClick(self)
 	local mod = E.db.unitframe.auraBlacklistModifier
@@ -23,7 +21,7 @@ local function OnClick(self)
 
 	if auraName then
 		E:Print(format(L["The spell '%s' has been added to the Blacklist unitframe aura filter."], auraName))
-		E.global.unitframe.aurafilters.Blacklist.spells[auraName] = { enable = true, priority = 0 }
+		E.global.unitframe.aurafilters.Blacklist.spells[auraName] = {enable = true, priority = 0}
 		UF:Update_AllFrames()
 	end
 end
@@ -54,7 +52,6 @@ function UF:Construct_AuraBars()
 	bar.bg = bar:CreateTexture(nil, "BORDER")
 	bar.bg:Show()
 
-
 	bar.iconHolder:RegisterForClicks("RightButtonUp")
 	bar.iconHolder:SetScript("OnClick", OnClick)
 end
@@ -74,6 +71,7 @@ end
 
 function UF:Configure_AuraBars(frame)
 	if not frame.VARIABLES_SET then return end
+
 	local auraBars = frame.AuraBars
 	local db = frame.db
 	if db.aurabar.enable then
@@ -89,11 +87,11 @@ function UF:Configure_AuraBars(frame)
 		local debuffColor = self.db.colors.auraBarDebuff
 		local attachTo = frame
 
-		if(E:CheckClassColor(buffColor.r, buffColor.g, buffColor.b)) then
+		if E:CheckClassColor(buffColor.r, buffColor.g, buffColor.b) then
 			buffColor = E.myclass == "PRIEST" and E.PriestColors or (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass])
 		end
 
-		if(E:CheckClassColor(debuffColor.r, debuffColor.g, debuffColor.b)) then
+		if E:CheckClassColor(debuffColor.r, debuffColor.g, debuffColor.b) then
 			debuffColor = E.myclass == "PRIEST" and E.PriestColors or (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass])
 		end
 
@@ -130,11 +128,11 @@ function UF:Configure_AuraBars(frame)
 		auraBars:Point(anchorPoint.."RIGHT", attachTo, anchorTo.."RIGHT", offsetRight, yOffset)
 		auraBars.buffColor = {buffColor.r, buffColor.g, buffColor.b}
 		if UF.db.colors.auraBarByType then
-			auraBars.debuffColor = nil;
+			auraBars.debuffColor = nil
 			auraBars.defaultDebuffColor = {debuffColor.r, debuffColor.g, debuffColor.b}
 		else
 			auraBars.debuffColor = {debuffColor.r, debuffColor.g, debuffColor.b}
-			auraBars.defaultDebuffColor = nil;
+			auraBars.defaultDebuffColor = nil
 		end
 		auraBars.down = db.aurabar.anchorPoint == "BELOW"
 
@@ -185,9 +183,9 @@ function UF.SortAuraBarName(a, b)
 end
 
 function UF:CheckFilter(name, caster, spellID, isFriend, isPlayer, isUnit, allowDuration, noDuration, canDispell, ...)
-	for i=1, select("#", ...) do
+	for i = 1, select("#", ...) do
 		local filterName = select(i, ...)
-		local friendCheck = (isFriend and match(filterName, "^Friendly:([^,]*)")) or (not isFriend and match(filterName, "^Enemy:([^,]*)")) or nil
+		local friendCheck = (isFriend and strmatch(filterName, "^Friendly:([^,]*)")) or (not isFriend and strmatch(filterName, "^Enemy:([^,]*)")) or nil
 		if friendCheck ~= false then
 			if friendCheck ~= nil and (G.unitframe.specialFilters[friendCheck] or E.global.unitframe.aurafilters[friendCheck]) then
 				filterName = friendCheck -- this is for our filters to handle Friendly and Enemy
@@ -229,7 +227,7 @@ function UF:CheckFilter(name, caster, spellID, isFriend, isPlayer, isUnit, allow
 end
 
 function UF:AuraBarFilter(unit, name, _, _, _, debuffType, duration, _, unitCaster, isStealable, _, spellID)
-	if not self.db then return; end
+	if not self.db then return end
 	local db = self.db.aurabar
 
 	if not name then return nil end

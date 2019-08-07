@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local UF = E:GetModule("UnitFrames");
+local UF = E:GetModule("UnitFrames")
 
 --Lua functions
 local random = math.random
@@ -25,7 +25,7 @@ local roleIconTextures = {
 
 function UF:UpdateRoleIcon(event)
 	local lfdrole = self.GroupRoleIndicator
-	if not self.db then return; end
+	if not self.db then return end
 	local db = self.db.roleIcon
 
 	if (not db) or (db and not db.enable) then
@@ -33,30 +33,21 @@ function UF:UpdateRoleIcon(event)
 		return
 	end
 
-	local role
-	local isTank, isHealer, isDamage = UnitGroupRolesAssigned(self.unit)
-	if isTank then
-		role = "TANK"
-	elseif isHealer then
-		role = "HEALER"
-	elseif isDamage then
-		role = "DAMAGER"
-	elseif self.isForced then
+	local role = UnitGroupRolesAssigned(self.unit)
+	if self.isForced and role == "NONE" then
 		local rnd = random(1, 3)
 		role = rnd == 1 and "TANK" or (rnd == 2 and "HEALER" or (rnd == 3 and "DAMAGER"))
-	else
-		role = nil
 	end
 
-	local shouldHide = ((event == "PLAYER_REGEN_DISABLED" and db.combatHide and true) or false)
+--	local shouldHide = ((event == "PLAYER_REGEN_DISABLED" and db.combatHide and true) or false)
 
 	if (self.isForced or UnitIsConnected(self.unit)) and ((role == "DAMAGER" and db.damager) or (role == "HEALER" and db.healer) or (role == "TANK" and db.tank)) then
 		lfdrole:SetTexture(roleIconTextures[role])
-		if not shouldHide then
+--		if not shouldHide then
 			lfdrole:Show()
-		else
-			lfdrole:Hide()
-		end
+--		else
+--			lfdrole:Hide()
+--		end
 	else
 		lfdrole:Hide()
 	end
@@ -74,13 +65,13 @@ function UF:Configure_RoleIcon(frame)
 		role:Point(db.roleIcon.position, attachPoint, db.roleIcon.position, db.roleIcon.xOffset, db.roleIcon.yOffset)
 		role:Size(db.roleIcon.size)
 
-		if db.roleIcon.combatHide then
-			E:RegisterEventForObject("PLAYER_REGEN_ENABLED", frame, UF.UpdateRoleIcon)
-			E:RegisterEventForObject("PLAYER_REGEN_DISABLED", frame, UF.UpdateRoleIcon)
+	--	if db.roleIcon.combatHide then
+	--		E:RegisterEventForObject("PLAYER_REGEN_ENABLED", frame, UF.UpdateRoleIcon)
+	--		E:RegisterEventForObject("PLAYER_REGEN_DISABLED", frame, UF.UpdateRoleIcon)
 	--	else
 	--		E:UnregisterEventForObject("PLAYER_REGEN_ENABLED", frame, UF.UpdateRoleIcon)
 	--		E:UnregisterEventForObject("PLAYER_REGEN_DISABLED", frame, UF.UpdateRoleIcon)
-		end
+	--	end
 	else
 		frame:DisableElement("GroupRoleIndicator")
 		role:Hide()

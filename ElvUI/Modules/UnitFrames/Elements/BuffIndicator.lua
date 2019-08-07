@@ -30,7 +30,7 @@ local counterOffsets = {
 	["LEFT"] = {6, 1},
 	["RIGHT"] = {-6, 1},
 	["TOP"] = {0, 0},
-	["BOTTOM"] = {0, 0},
+	["BOTTOM"] = {0, 0}
 }
 
 local textCounterOffsets = {
@@ -41,13 +41,13 @@ local textCounterOffsets = {
 	["LEFT"] = {"LEFT", "RIGHT", -2, 0},
 	["RIGHT"] = {"RIGHT", "LEFT", 2, 0},
 	["TOP"] = {"RIGHT", "LEFT", 2, 0},
-	["BOTTOM"] = {"RIGHT", "LEFT", 2, 0},
+	["BOTTOM"] = {"RIGHT", "LEFT", 2, 0}
 }
 
 function UF:UpdateAuraWatchFromHeader(group, petOverride)
 	assert(self[group], "Invalid group specified.")
 	group = self[group]
-	for i=1, group:GetNumChildren() do
+	for i = 1, group:GetNumChildren() do
 		local frame = select(i, group:GetChildren())
 		if frame and frame.Health then
 			UF:UpdateAuraWatch(frame, petOverride, group.db)
@@ -91,9 +91,9 @@ function UF:UpdateAuraWatch(frame, petOverride, db)
 
 	--CLEAR CACHE
 	if auras.icons then
-		for i=1, #auras.icons do
-			local matchFound = false;
-			for j=1, #buffs do
+		for i = 1, #auras.icons do
+			local matchFound = false
+			for j = 1, #buffs do
 				if buffs[j].id and buffs[j].id == auras.icons[i] then
 					matchFound = true
 					break
@@ -109,7 +109,7 @@ function UF:UpdateAuraWatch(frame, petOverride, db)
 
 	local unitframeFont = LSM:Fetch("font", E.db.unitframe.font)
 
-	for i=1, #buffs do
+	for i = 1, #buffs do
 		if buffs[i].id then
 			local name, _, image = GetSpellInfo(buffs[i].id)
 			if name then

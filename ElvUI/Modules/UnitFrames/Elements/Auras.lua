@@ -50,7 +50,7 @@ local function OnClick(btn)
 
 	if auraName then
 		E:Print(format(L["The spell '%s' has been added to the Blacklist unitframe aura filter."], auraName))
-		E.global.unitframe.aurafilters.Blacklist.spells[btn.spellID] = { enable = true, priority = 0 }
+		E.global.unitframe.aurafilters.Blacklist.spells[btn.spellID] = {enable = true, priority = 0}
 
 		UF:Update_AllFrames()
 	end
@@ -63,11 +63,9 @@ function UF:Construct_AuraIcon(button)
 	button.cd.noOCC = true
 	button.cd.noCooldownCount = true
 	button.cd:SetReverse(true)
-	button.cd:SetDrawEdge(true)
 	button.cd:SetInside(button, offset, offset)
 
 	button.icon:SetInside(button, offset, offset)
-	button.icon:SetTexCoord(unpack(E.TexCoords))
 	button.icon:SetDrawLayer("ARTWORK")
 
 	button.count:ClearAllPoints()
@@ -93,6 +91,9 @@ end
 function UF:UpdateAuraSettings(auras, button)
 	if button.db then
 		button.count:FontTemplate(LSM:Fetch("font", button.db.countFont), button.db.countFontSize, button.db.countFontOutline)
+	end
+	if button.icon then
+		button.icon:SetTexCoord(unpack(E.TexCoords))
 	end
 
 	button:Size((auras and auras.size) or 30)
@@ -168,7 +169,7 @@ function UF:Configure_Auras(frame, auraType)
 		index = index + 1
 	end
 
-	local attachTo = self:GetAuraAnchorFrame(frame, auras.db.attachTo, db.debuffs.attachTo == 'BUFFS' and db.buffs.attachTo == 'DEBUFFS')
+	local attachTo = self:GetAuraAnchorFrame(frame, auras.db.attachTo, db.debuffs.attachTo == "BUFFS" and db.buffs.attachTo == "DEBUFFS")
 	local x, y = E:GetXYOffset(auras.db.anchorPoint, frame.SPACING) --Use frame.SPACING override since it may be different from E.Spacing due to forced thin borders
 
 	if auras.db.attachTo == "FRAME" then
@@ -192,8 +193,8 @@ function UF:Configure_Auras(frame, auraType)
 	auras:ClearAllPoints()
 	auras:Point(E.InversePoints[auras.db.anchorPoint], attachTo, auras.db.anchorPoint, x + auras.db.xOffset, y + auras.db.yOffset)
 	auras:Height(auras.size * rows)
-	auras["growth-y"] = strfind(auras.db.anchorPoint, 'TOP') and 'UP' or 'DOWN'
-	auras["growth-x"] = auras.db.anchorPoint == 'LEFT' and 'LEFT' or  auras.db.anchorPoint == 'RIGHT' and 'RIGHT' or (strfind(auras.db.anchorPoint, 'LEFT') and 'RIGHT' or 'LEFT')
+	auras["growth-y"] = strfind(auras.db.anchorPoint, "TOP") and "UP" or "DOWN"
+	auras["growth-x"] = auras.db.anchorPoint == "LEFT" and "LEFT" or auras.db.anchorPoint == "RIGHT" and "RIGHT" or (strfind(auras.db.anchorPoint, "LEFT") and "RIGHT" or "LEFT")
 	auras.initialAnchor = E.InversePoints[auras.db.anchorPoint]
 
 	--These are needed for SmartAuraPosition
@@ -319,7 +320,7 @@ local function SortAurasByCaster(a, b)
 			local sortDirection = a:GetParent().db.sortDirection
 			local aPlayer = a.isPlayer or false
 			local bPlayer = b.isPlayer or false
-			if(sortDirection == "DESCENDING") then
+			if sortDirection == "DESCENDING" then
 				return (aPlayer and not bPlayer)
 			else
 				return (not aPlayer and bPlayer)
@@ -348,7 +349,6 @@ function UF:SortAuras()
 
 	return 1, #self --from/to range needed for the :SetPosition call in oUF aura element. Without this aura icon position gets all whacky when not sorted by index
 end
-
 
 local unstableAffliction = GetSpellInfo(30108)
 local vampiricTouch = GetSpellInfo(34914)

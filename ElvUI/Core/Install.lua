@@ -265,24 +265,24 @@ function E:SetupLayout(layout, noDataReset, noDisplayMsg)
 		--Movers
 		E.db.movers.AlertFrameMover = "TOP,ElvUIParent,TOP,-1,-18"
 		E.db.movers.BNETMover = "TOPRIGHT,ElvUIParent,TOPRIGHT,-4,-274"
-		E.db.movers.ElvAB_1 = "BOTTOM,ElvUIParent,BOTTOM,1,190"
+		E.db.movers.ElvAB_1 = "BOTTOM,ElvUIParent,BOTTOM,0,190"
 		E.db.movers.ElvAB_2 = "BOTTOM,ElvUIParent,BOTTOM,0,4"
-		E.db.movers.ElvAB_3 = "BOTTOM,ElvUIParent,BOTTOM,1,138"
+		E.db.movers.ElvAB_3 = "BOTTOM,ElvUIParent,BOTTOM,0,138"
 		E.db.movers.ElvAB_5 = "BOTTOM,ElvUIParent,BOTTOM,-92,57"
 		if E.myclass == "SHAMAN" then
 			E.db.movers.ElvBar_Totem = "BOTTOM,ElvUIParent,BOTTOM,0,55"
 		end
-		E.db.movers.ElvUF_FocusMover = "BOTTOM,ElvUIParent,BOTTOM,341,59"
+		E.db.movers.ElvUF_FocusMover = "BOTTOM,ElvUIParent,BOTTOM,342,59"
 		E.db.movers.ElvUF_PartyMover = "BOTTOMLEFT,ElvUIParent,BOTTOMLEFT,4,248"
-		E.db.movers.ElvUF_PetMover = "BOTTOM,ElvUIParent,BOTTOM,-340,99"
+		E.db.movers.ElvUF_PetMover = "BOTTOM,ElvUIParent,BOTTOM,-341,99"
 		E.db.movers.ElvUF_PlayerCastbarMover = "BOTTOM,ElvUIParent,BOTTOM,0,96"
-		E.db.movers.ElvUF_PlayerMover = "BOTTOM,ElvUIParent,BOTTOM,-340,138"
+		E.db.movers.ElvUF_PlayerMover = "BOTTOM,ElvUIParent,BOTTOM,-341,138"
 		E.db.movers.ElvUF_Raid40Mover = "TOPLEFT,ElvUIParent,BOTTOMLEFT,4,482"
 		E.db.movers.ElvUF_RaidMover = "BOTTOMLEFT,ElvUIParent,BOTTOMLEFT,4,248"
 		E.db.movers.ElvUF_RaidpetMover = "TOPLEFT,ElvUIParent,BOTTOMLEFT,4,737"
 		E.db.movers.ElvUF_TargetCastbarMover = "BOTTOM,ElvUIParent,BOTTOM,0,242"
-		E.db.movers.ElvUF_TargetMover = "BOTTOM,ElvUIParent,BOTTOM,341,138"
-		E.db.movers.ElvUF_TargetTargetMover = "BOTTOM,ElvUIParent,BOTTOM,341,99"
+		E.db.movers.ElvUF_TargetMover = "BOTTOM,ElvUIParent,BOTTOM,342,138"
+		E.db.movers.ElvUF_TargetTargetMover = "BOTTOM,ElvUIParent,BOTTOM,342,99"
 		E.db.movers.ExperienceBarMover = "BOTTOM,ElvUIParent,BOTTOM,0,43"
 		E.db.movers.LootFrameMover = "TOPLEFT,ElvUIParent,TOPLEFT,418,-186"
 		E.db.movers.MirrorTimer1Mover = "TOP,ElvUIParent,TOP,-1,-96"
@@ -304,7 +304,7 @@ function E:SetupLayout(layout, noDataReset, noDisplayMsg)
 		E.db.unitframe.units.player.buffs.perrow = 7
 		E.db.unitframe.units.player.castbar.height = 40
 		E.db.unitframe.units.player.castbar.insideInfoPanel = false
-		E.db.unitframe.units.player.castbar.width = 406
+		E.db.unitframe.units.player.castbar.width = 407
 		E.db.unitframe.units.player.classbar.height = 14
 		E.db.unitframe.units.player.debuffs.perrow = 7
 		E.db.unitframe.units.player.disableMouseoverGlow = true
@@ -319,7 +319,7 @@ function E:SetupLayout(layout, noDataReset, noDisplayMsg)
 		E.db.unitframe.units.target.buffs.perrow = 7
 		E.db.unitframe.units.target.castbar.height = 40
 		E.db.unitframe.units.target.castbar.insideInfoPanel = false
-		E.db.unitframe.units.target.castbar.width = 406
+		E.db.unitframe.units.target.castbar.width = 407
 		E.db.unitframe.units.target.debuffs.anchorPoint = "TOPLEFT"
 		E.db.unitframe.units.target.debuffs.attachTo = "FRAME"
 		E.db.unitframe.units.target.debuffs.enable = false
