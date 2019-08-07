@@ -38,7 +38,7 @@ local function OnEnter(self)
 
 	local r, g, b
 	local _, name, quality, link
-	local free, total, used = 0, 0, 0
+	local free, total, used
 
 	for i = 0, NUM_BAG_SLOTS do
 		free, total = GetContainerNumFreeSlots(i), GetContainerNumSlots(i)
