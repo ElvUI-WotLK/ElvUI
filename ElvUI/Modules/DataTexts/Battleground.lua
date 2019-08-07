@@ -1,18 +1,17 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local DT = E:GetModule("DataTexts");
+local DT = E:GetModule("DataTexts")
 
-local select = select;
-local join = string.join;
+local select = select
+local join = string.join
 
-local GetBattlefieldScore = GetBattlefieldScore;
+local GetBattlefieldScore = GetBattlefieldScore
 local GetNumBattlefieldStats = GetNumBattlefieldStats
 local GetNumBattlefieldScores = GetNumBattlefieldScores
 local GetBattlefieldStatInfo = GetBattlefieldStatInfo
-local GetBattlefieldStatData = GetBattlefieldStatData;
+local GetBattlefieldStatData = GetBattlefieldStatData
 
-local name
-local lastPanel;
-local displayString = "";
+local displayString = ""
+local lastPanel
 
 local dataLayout = {
 	["LeftChatDataPanel"] = {
@@ -25,7 +24,7 @@ local dataLayout = {
 		["middle"] = 3,
 		["right"] = 12
 	}
-};
+}
 
 local dataStrings = {
 	[11] = DAMAGE,
@@ -34,28 +33,28 @@ local dataStrings = {
 	[4] = DEATHS,
 	[3] = HONORABLE_KILLS,
 	[12] = SHOW_COMBAT_HEALING
-};
+}
 
 function DT:UPDATE_BATTLEFIELD_SCORE()
-	lastPanel = self;
-	local pointIndex = dataLayout[self:GetParent():GetName()][self.pointIndex];
+	lastPanel = self
+	local pointIndex = dataLayout[self:GetParent():GetName()][self.pointIndex]
 	for i = 1, GetNumBattlefieldScores() do
-		name = GetBattlefieldScore(i);
-		if(name == E.myname) then
-			self.text:SetFormattedText(displayString, dataStrings[pointIndex], select(pointIndex, GetBattlefieldScore(i)));
-			break;
+		local name = GetBattlefieldScore(i)
+		if name == E.myname then
+			self.text:SetFormattedText(displayString, dataStrings[pointIndex], E:ShortValue(select(pointIndex, GetBattlefieldScore(i))))
+			break
 		end
 	end
 end
 
 function DT:BattlegroundStats()
-	DT:SetupTooltip(self);
+	DT:SetupTooltip(self)
 
-	local classColor = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[E.myclass]
+	local classColor = (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass]) or RAID_CLASS_COLORS[E.myclass]
 	local numStatInfo = GetNumBattlefieldStats()
 	if numStatInfo then
 		for index = 1, GetNumBattlefieldScores() do
-			name = GetBattlefieldScore(index)
+			local name = GetBattlefieldScore(index)
 			if name and name == E.myname then
 				DT.tooltip:AddDoubleLine(L["Stats For:"], name, 1, 1, 1, classColor.r, classColor.g, classColor.b)
 				DT.tooltip:AddLine(" ")
@@ -64,25 +63,26 @@ function DT:BattlegroundStats()
 				for x = 1, numStatInfo do
 					DT.tooltip:AddDoubleLine(GetBattlefieldStatInfo(x), GetBattlefieldStatData(index, x), 1, 1, 1)
 				end
+
 				break
 			end
 		end
 	end
 
-	DT.tooltip:Show();
+	DT.tooltip:Show()
 end
 
 function DT:HideBattlegroundTexts()
-	DT.ForceHideBGStats = true;
-	DT:LoadDataTexts();
-	E:Print(L["Battleground datatexts temporarily hidden, to show type /bgstats or right click the 'C' icon near the minimap."]);
+	DT.ForceHideBGStats = true
+	DT:LoadDataTexts()
+	E:Print(L["Battleground datatexts temporarily hidden, to show type /bgstats or right click the 'C' icon near the minimap."])
 end
 
 local function ValueColorUpdate(hex)
-	displayString = join("", "%s: ", hex, "%s|r");
+	displayString = join("", "%s: ", hex, "%s|r")
 
-	if(lastPanel ~= nil) then
-		DT.UPDATE_BATTLEFIELD_SCORE(lastPanel);
+	if lastPanel ~= nil then
+		DT.UPDATE_BATTLEFIELD_SCORE(lastPanel)
 	end
 end
-E["valueColorUpdateFuncs"][ValueColorUpdate] = true;
+E.valueColorUpdateFuncs[ValueColorUpdate] = true

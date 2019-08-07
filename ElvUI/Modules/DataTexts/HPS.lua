@@ -15,7 +15,7 @@ local combatTime = 0
 local timeStamp = 0
 local lastSegment = 0
 local lastPanel
-local displayString = "";
+local displayString = ""
 
 local function Reset()
 	timeStamp = 0
@@ -31,7 +31,7 @@ local function GetHPS(self)
 	else
 		hps = healTotal / combatTime
 	end
-	self.text:SetFormattedText(displayString, L["HPS"], hps)
+	self.text:SetFormattedText(displayString, L["HPS"], E:ShortValue(hps))
 end
 
 local function OnEvent(self, event, ...)
@@ -70,12 +70,12 @@ local function OnClick(self)
 end
 
 local function ValueColorUpdate(hex)
-	displayString = join("", "%s: ", hex, "%.1f|r")
+	displayString = join("", "%s: ", hex, "%s")
 
 	if lastPanel ~= nil then
 		OnEvent(lastPanel)
 	end
 end
-E["valueColorUpdateFuncs"][ValueColorUpdate] = true;
+E.valueColorUpdateFuncs[ValueColorUpdate] = true
 
 DT:RegisterDatatext("HPS", {"PLAYER_ENTERING_WORLD", "COMBAT_LOG_EVENT_UNFILTERED", "PLAYER_LEAVE_COMBAT", "PLAYER_REGEN_DISABLED", "UNIT_PET"}, OnEvent, nil, OnClick, nil, nil, L["HPS"])

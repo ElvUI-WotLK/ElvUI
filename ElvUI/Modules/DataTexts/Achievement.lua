@@ -1,31 +1,32 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local DT = E:GetModule("DataTexts");
+local DT = E:GetModule("DataTexts")
 
-local join = string.join;
+local join = string.join
 
-local GetTotalAchievementPoints = GetTotalAchievementPoints;
-local ToggleAchievementFrame = ToggleAchievementFrame;
-local ACHIEVEMENTS = ACHIEVEMENTS;
+local GetTotalAchievementPoints = GetTotalAchievementPoints
+local ToggleAchievementFrame = ToggleAchievementFrame
+local ACHIEVEMENTS = ACHIEVEMENTS
 
-local lastPanel;
-local displayNumberString = "";
+local displayNumberString = ""
+local lastPanel
 
 local function OnEvent(self)
-	self.text:SetFormattedText(displayNumberString, ACHIEVEMENTS, GetTotalAchievementPoints());
-	lastPanel = self;
+	self.text:SetFormattedText(displayNumberString, ACHIEVEMENTS, GetTotalAchievementPoints())
+
+	lastPanel = self
 end
 
 local function OnClick()
-	ToggleAchievementFrame();
+	ToggleAchievementFrame()
 end
 
 local function ValueColorUpdate(hex)
-	displayNumberString = join("", "%s: ", hex, "%d|r");
+	displayNumberString = join("", "%s: ", hex, "%d|r")
 
-	if(lastPanel ~= nil) then
-		OnEvent(lastPanel);
+	if lastPanel ~= nil then
+		OnEvent(lastPanel)
 	end
 end
-E["valueColorUpdateFuncs"][ValueColorUpdate] = true;
+E.valueColorUpdateFuncs[ValueColorUpdate] = true
 
 DT:RegisterDatatext("Achievement", {"ACHIEVEMENT_EARNED"}, OnEvent, nil, OnClick, nil, nil, ACHIEVEMENTS)

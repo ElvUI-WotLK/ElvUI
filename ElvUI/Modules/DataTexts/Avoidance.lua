@@ -13,15 +13,17 @@ local GetParryChance = GetParryChance
 local GetBlockChance = GetBlockChance
 local GetBonusBarOffset = GetBonusBarOffset
 local BOSS = BOSS
+local DEFENSE = DEFENSE
 local DODGE_CHANCE = DODGE_CHANCE
 local PARRY_CHANCE = PARRY_CHANCE
 local BLOCK_CHANCE = BLOCK_CHANCE
 
-local displayString, lastPanel
-local targetlv, playerlv
-local baseMissChance, levelDifference, dodge, parry, block, avoidance, unhittable
+local displayString = ""
 local chanceString = "%.2f%%"
 local AVD_DECAY_RATE = 0.2
+local targetlv, playerlv
+local baseMissChance, levelDifference, dodge, parry, block, avoidance, unhittable
+local lastPanel
 
 local function IsWearingShield()
 	local slotID = GetInventorySlotInfo("SecondaryHandSlot")
@@ -33,7 +35,7 @@ local function IsWearingShield()
 end
 
 local function OnEvent(self)
-	targetlv, playerlv = UnitLevel("target"), UnitLevel("player")
+	targetlv, playerlv = UnitLevel("target"), E.mylevel
 
 	baseMissChance = E.myrace == "NightElf" and 7 or 5
 	if targetlv == -1 then
@@ -97,7 +99,7 @@ local function OnEnter(self)
 	DT.tooltip:AddLine(" ")
 
 	if unhittable > 0 then
-		DT.tooltip:AddDoubleLine(L["Unhittable:"], "+" .. format(chanceString, unhittable), 1, 1, 1, 0, 1, 0)
+		DT.tooltip:AddDoubleLine(L["Unhittable:"], "+"..format(chanceString, unhittable), 1, 1, 1, 0, 1, 0)
 	else
 		DT.tooltip:AddDoubleLine(L["Unhittable:"], format(chanceString, unhittable), 1, 1, 1, 1, 0, 0)
 	end
@@ -112,6 +114,6 @@ local function ValueColorUpdate(hex)
 		OnEvent(lastPanel)
 	end
 end
-E["valueColorUpdateFuncs"][ValueColorUpdate] = true
+E.valueColorUpdateFuncs[ValueColorUpdate] = true
 
 DT:RegisterDatatext("Avoidance", {"COMBAT_RATING_UPDATE", "PLAYER_TARGET_CHANGED"}, OnEvent, nil, nil, OnEnter, nil, L["Avoidance Breakdown"])
