@@ -7,7 +7,6 @@ local Minimap = E:GetModule("Minimap")
 
 local _G = _G
 local pairs = pairs
-local find, upper = string.find, string.upper
 
 local HideLeftChat = HideLeftChat
 local HideRightChat = HideRightChat
