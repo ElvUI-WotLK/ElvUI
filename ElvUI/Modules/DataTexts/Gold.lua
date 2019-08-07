@@ -1,10 +1,9 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule("DataTexts")
 
-local wipe = wipe
 local pairs = pairs
-local format, strjoin = string.format, strjoin
-local tinsert = tinsert
+local strjoin = strjoin
+local tinsert, wipe = tinsert, wipe
 
 local GetBackpackCurrencyInfo = GetBackpackCurrencyInfo
 local GetMoney = GetMoney

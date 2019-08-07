@@ -1,12 +1,9 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule("DataTexts")
 
-local type, pairs = type, pairs
-local sort, wipe, next = table.sort, wipe, next
+local sort, wipe, next, type = table.sort, wipe, next, type
 local format, find, join, gsub = string.format, string.find, string.join, string.gsub
 
-local IsChatAFK = IsChatAFK
-local IsChatDND = IsChatDND
 local SendChatMessage = SendChatMessage
 local InviteUnit = InviteUnit
 local SetItemRef = SetItemRef
@@ -16,6 +13,8 @@ local GetQuestDifficultyColor = GetQuestDifficultyColor
 local GetRealZoneText = GetRealZoneText
 local UnitInParty = UnitInParty
 local UnitInRaid = UnitInRaid
+local UnitIsAFK = UnitIsAFK
+local UnitIsDND = UnitIsDND
 local ToggleFriendsFrame = ToggleFriendsFrame
 local EasyMenu = EasyMenu
 local AFK, DND, FRIENDS = AFK, DND, FRIENDS
@@ -28,9 +27,9 @@ local menuList = {
 	{text = CHAT_MSG_WHISPER_INFORM, hasArrow = true, notCheckable= true},
 	{text = PLAYER_STATUS, hasArrow = true, notCheckable = true,
 		menuList = {
-			{text = "|cff2BC226"..AVAILABLE.."|r", notCheckable = true, func = function() if IsChatAFK() then SendChatMessage("", "AFK") elseif IsChatDND() then SendChatMessage("", "DND") end end},
-			{text = "|cffE7E716"..DND.."|r", notCheckable = true, func = function() if not IsChatDND() then SendChatMessage("", "DND") end end},
-			{text = "|cffFF0000"..AFK.."|r", notCheckable = true, func = function() if not IsChatAFK() then SendChatMessage("", "AFK") end end}
+			{text = "|cff2BC226"..AVAILABLE.."|r", notCheckable = true, func = function() if UnitIsAFK("player") then SendChatMessage("", "AFK") elseif UnitIsDND("player") then SendChatMessage("", "DND") end end},
+			{text = "|cffE7E716"..DND.."|r", notCheckable = true, func = function() if not UnitIsDND("player") then SendChatMessage("", "DND") end end},
+			{text = "|cffFF0000"..AFK.."|r", notCheckable = true, func = function() if not UnitIsAFK("player") then SendChatMessage("", "AFK") end end}
 		}
 	}
 }
@@ -75,8 +74,8 @@ local function BuildFriendTable(total)
 
 		if connected then
 			local className = E:UnlocalizedClassName(class) or ""
-			local status = statusTable[(status == "<"..AFK..">" and 1) or (status == "<"..DND..">" and 2) or 3]
-			friendTable[i] = {name, level, className, area, connected, status, note}
+			local state = statusTable[(status == "<"..AFK..">" and 1) or (status == "<"..DND..">" and 2) or 3]
+			friendTable[i] = {name, level, className, area, connected, state, note}
 		end
 	end
 

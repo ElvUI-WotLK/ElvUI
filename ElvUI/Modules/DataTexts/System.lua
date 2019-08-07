@@ -174,8 +174,8 @@ local function OnUpdate(self, t)
 	end
 
 	if int2 < 0 then
-		local framerate = floor(GetFramerate()), 4
-		local latency = select(3, GetNetStats()), 4
+		local framerate = floor(GetFramerate() + 0.5)
+		local latency = select(3, GetNetStats())
 
 		self.text:SetFormattedText("FPS: %s%d|r MS: %s%d|r",
 			statusColors[framerate >= 30 and 1 or (framerate >= 20 and framerate < 30) and 2 or (framerate >= 10 and framerate < 20) and 3 or 4],
