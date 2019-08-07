@@ -5,7 +5,7 @@ local UF = E:GetModule("UnitFrames")
 local _G = _G
 local select, pairs, ipairs = select, pairs, ipairs
 local tremove, tinsert, tconcat, twipe = table.remove, table.insert, table.concat, table.wipe
-local format, match, gsub, strsplit = string.format, string.match, string.gsub, strsplit
+local format, strmatch, gsub, strsplit = string.format, strmatch, string.gsub, strsplit
 
 local GetScreenWidth = GetScreenWidth
 local IsAddOnLoaded = IsAddOnLoaded
@@ -3277,7 +3277,7 @@ E.Options.args.unitframe = {
 										local t = E.db.unitframe.colors.auraBarBuff
 										local d = P.unitframe.colors.auraBarBuff
 										return t.r, t.g, t.b, t.a, d.r, d.g, d.b
- 									end,
+									end,
 									set = function(info, r, g, b)
 										if E:CheckClassColor(r, g, b) then
 											local classColor = E.myclass == "PRIEST" and E.PriestColors or (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass])
@@ -4142,13 +4142,13 @@ E.Options.args.unitframe.args.player = {
 				}
 			}
 		},
- 		pvpIcon = {
- 			order = 449,
- 			type = "group",
- 			name = L["PvP Icon"],
- 			get = function(info) return E.db.unitframe.units.player.pvpIcon[info[#info]] end,
- 			set = function(info, value) E.db.unitframe.units.player.pvpIcon[info[#info]] = value UF:CreateAndUpdateUF("player") end,
- 			args = {
+		pvpIcon = {
+			order = 449,
+			type = "group",
+			name = L["PvP Icon"],
+			get = function(info) return E.db.unitframe.units.player.pvpIcon[info[#info]] end,
+			set = function(info, value) E.db.unitframe.units.player.pvpIcon[info[#info]] = value UF:CreateAndUpdateUF("player") end,
+			args = {
 				header = {
 					order = 1,
 					type = "header",
@@ -4574,52 +4574,52 @@ E.Options.args.unitframe.args.target = {
 		},
 		pvpIcon = {
 			order = 449,
- 			type = "group",
- 			name = L["PvP Icon"],
- 			get = function(info) return E.db.unitframe.units.target.pvpIcon[info[#info]] end,
+			type = "group",
+			name = L["PvP Icon"],
+			get = function(info) return E.db.unitframe.units.target.pvpIcon[info[#info]] end,
 			set = function(info, value) E.db.unitframe.units.target.pvpIcon[info[#info]] = value UF:CreateAndUpdateUF("target") end,
- 			args = {
+			args = {
 				header = {
 					order = 1,
 					type = "header",
 					name = L["PvP Icon"]
 				},
- 				enable = {
- 					order = 2,
- 					type = "toggle",
- 					name = L["ENABLE"]
- 				},
- 				scale = {
- 					order = 3,
- 					type = "range",
- 					name = L["Scale"],
- 					isPercent = true,
- 					min = 0.1, max = 2, step = 0.01
- 				},
- 				spacer = {
- 					order = 4,
- 					type = "description",
- 					name = " "
- 				},
- 				anchorPoint = {
- 					order = 5,
- 					type = "select",
- 					name = L["Anchor Point"],
- 					values = positionValues
- 				},
- 				xOffset = {
- 					order = 6,
- 					type = "range",
- 					name = L["xOffset"],
- 					min = -100, max = 100, step = 1
- 				},
- 				yOffset = {
- 					order = 7,
- 					type = "range",
- 					name = L["yOffset"],
- 					min = -100, max = 100, step = 1
- 				}
- 			}
+				enable = {
+					order = 2,
+					type = "toggle",
+					name = L["ENABLE"]
+				},
+				scale = {
+					order = 3,
+					type = "range",
+					name = L["Scale"],
+					isPercent = true,
+					min = 0.1, max = 2, step = 0.01
+				},
+				spacer = {
+					order = 4,
+					type = "description",
+					name = " "
+				},
+				anchorPoint = {
+					order = 5,
+					type = "select",
+					name = L["Anchor Point"],
+					values = positionValues
+				},
+				xOffset = {
+					order = 6,
+					type = "range",
+					name = L["xOffset"],
+					min = -100, max = 100, step = 1
+				},
+				yOffset = {
+					order = 7,
+					type = "range",
+					name = L["yOffset"],
+					min = -100, max = 100, step = 1
+				}
+			}
 		}
 	}
 }
