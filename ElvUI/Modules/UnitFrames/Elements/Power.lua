@@ -198,17 +198,10 @@ function UF:Configure_Power(frame)
 		frame:Tag(power.value, "")
 	end
 
-	if frame.DruidAltMana then
-		if db.power.druidMana then
-			frame:EnableElement("DruidAltMana")
-		else
-			frame:DisableElement("DruidAltMana")
-			frame.DruidAltMana:Hide()
-		end
-	end
+	frame.Power.custom_backdrop = UF.db.colors.custompowerbackdrop and UF.db.colors.power_backdrop
 
 	--Transparency Settings
-	UF:ToggleTransparentStatusBar(UF.db.colors.transparentPower, frame.Power, frame.Power.bg)
+	UF:ToggleTransparentStatusBar(UF.db.colors.transparentPower, frame.Power, frame.Power.bg, nil, UF.db.colors.invertPower)
 end
 
 local tokens = {[0] = "MANA", "RAGE", "FOCUS", "ENERGY", "RUNIC_POWER"}
@@ -228,8 +221,12 @@ function UF:PostUpdatePower(unit, _, max)
 		end
 	end
 
-	local db = parent.db
-	if db and db.power and db.power.hideonnpc then
+	if parent.db and parent.db.power and parent.db.power.hideonnpc then
 		UF:PostNamePosition(parent, unit)
+	end
+
+	--Force update to AdditionalPower in order to reposition text if necessary
+	if parent:IsElementEnabled("AdditionalPower") then
+		E:Delay(0.01, parent.AdditionalPower.ForceUpdate, parent.AdditionalPower) --Delay it slightly so Power text has a chance to clear itself first
 	end
 end
