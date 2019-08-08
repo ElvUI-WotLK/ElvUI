@@ -96,29 +96,35 @@ function S:HandleButtonHighlight(frame)
 	rightGrad:SetGradientAlpha("Horizontal", 0.9, 0.9, 0.9, 0, 0.9, 0.9, 0.9, 0.35)
 end
 
+local function GrabScrollBarElement(frame, element)
+	local FrameName = frame:GetName()
+	return frame[element] or FrameName and (_G[FrameName..element] or strfind(FrameName, element)) or nil
+end
+
 function S:HandleScrollBar(frame, thumbTrimY, thumbTrimX)
 	if frame.backdrop then return end
-	local name = frame:GetName()
-	if _G[name.."BG"] then _G[name.."BG"]:SetTexture(nil) end
-	if _G[name.."Track"] then _G[name.."Track"]:SetTexture(nil) end
-	if _G[name.."Top"] then _G[name.."Top"]:SetTexture(nil) end
-	if _G[name.."Bottom"] then _G[name.."Bottom"]:SetTexture(nil) end
-	if _G[name.."Middle"] then _G[name.."Middle"]:SetTexture(nil) end
+	local parent = frame:GetParent()
 
-	if not (_G[name.."ScrollUpButton"] and _G[name.."ScrollDownButton"]) then return end
+	local ScrollUpButton = GrabScrollBarElement(frame, "ScrollUpButton") or GrabScrollBarElement(frame, "UpButton") or GrabScrollBarElement(frame, "ScrollUp") or GrabScrollBarElement(parent, "scrollUp")
+	local ScrollDownButton = GrabScrollBarElement(frame, "ScrollDownButton") or GrabScrollBarElement(frame, "DownButton") or GrabScrollBarElement(frame, "ScrollDown") or GrabScrollBarElement(parent, "scrollDown")
+	local Thumb = GrabScrollBarElement(frame, "ThumbTexture") or GrabScrollBarElement(frame, "thumbTexture") or frame.GetThumbTexture and frame:GetThumbTexture()
 
+	frame:StripTextures()
 	frame:CreateBackdrop()
-	frame.backdrop:Point("TOPLEFT", _G[name.."ScrollUpButton"], "BOTTOMLEFT", 0, -1)
-	frame.backdrop:Point("BOTTOMRIGHT", _G[name.."ScrollDownButton"], "TOPRIGHT", 0, 1)
+	frame.backdrop:Point("TOPLEFT", ScrollUpButton or frame, ScrollUpButton and "BOTTOMLEFT" or "TOPLEFT", 0, -1)
+	frame.backdrop:Point("BOTTOMRIGHT", ScrollDownButton or frame, ScrollUpButton and "TOPRIGHT" or "BOTTOMRIGHT", 0, 1)
 	frame.backdrop:SetFrameLevel(frame.backdrop:GetFrameLevel() + 1)
 
-	S:HandleNextPrevButton(_G[name.."ScrollUpButton"])
-	S:HandleNextPrevButton(_G[name.."ScrollDownButton"])
+	for _, Button in pairs({ScrollUpButton, ScrollDownButton}) do
+		if Button then
+			S:HandleNextPrevButton(Button)
+		end
+	end
 
-	local Thumb = frame:GetThumbTexture()
 	if Thumb and not Thumb.backdrop then
 		Thumb:SetTexture()
 		Thumb:CreateBackdrop(nil, true, true)
+
 		if not thumbTrimY then thumbTrimY = 3 end
 		if not thumbTrimX then thumbTrimX = 2 end
 		Thumb.backdrop:Point("TOPLEFT", Thumb, "TOPLEFT", 2, -thumbTrimY)
@@ -204,13 +210,11 @@ function S:HandleEditBox(frame)
 	end
 end
 
-function S:HandleDropDownBox(frame, width)
+function S:HandleDropDownBox(frame, width, direction)
 	if frame.backdrop then return end
+
 	local FrameName = frame.GetName and frame:GetName()
-
 	local button = FrameName and _G[FrameName.."Button"]
-	if not button then return end
-
 	local text = FrameName and _G[FrameName.."Text"]
 
 	frame:StripTextures()
@@ -228,10 +232,12 @@ function S:HandleDropDownBox(frame, width)
 		text:Point("RIGHT", button, "LEFT", -2, 0)
 	end
 
-	S:HandleNextPrevButton(button)
-	button:ClearAllPoints()
-	button:Point("RIGHT", frame, "RIGHT", -10, 3)
-	button:Size(16, 16)
+	if button then
+		S:HandleNextPrevButton(button, direction or nil, {1, 0.8, 0})
+		button:ClearAllPoints()
+		button:Point("RIGHT", frame, "RIGHT", -10, 3)
+		button:Size(16, 16)
+	end
 end
 
 function S:HandleStatusBar(frame, color)
@@ -246,6 +252,7 @@ end
 function S:HandleCheckBox(frame, noBackdrop, noReplaceTextures, forceSaturation)
 	if frame.isSkinned then return end
 	assert(frame, "does not exist.")
+
 	frame:StripTextures()
 	frame.forceSaturation = forceSaturation
 
@@ -263,7 +270,7 @@ function S:HandleCheckBox(frame, noBackdrop, noReplaceTextures, forceSaturation)
 				frame:SetCheckedTexture(E.Media.Textures.Melli)
 
 				local checkedTexture = frame:GetCheckedTexture()
-				checkedTexture:SetVertexColor(1, .82, 0, 0.8)
+				checkedTexture:SetVertexColor(1, 0.82, 0, 0.8)
 				checkedTexture:SetInside(frame.backdrop)
 			else
 				frame:SetCheckedTexture("Interface\\Buttons\\UI-CheckBox-Check")
@@ -295,7 +302,7 @@ function S:HandleCheckBox(frame, noBackdrop, noReplaceTextures, forceSaturation)
 				frame:SetDisabledTexture(E.Media.Textures.Melli)
 
 				local disabledTexture = frame:GetDisabledTexture()
-				disabledTexture:SetVertexColor(.6, .6, .6, .8)
+				disabledTexture:SetVertexColor(0.6, 0.6, 0.6, 0.8)
 				disabledTexture:SetInside(frame.backdrop)
 			else
 				frame:SetDisabledTexture("Interface\\Buttons\\UI-CheckBox-Check-Disabled")
@@ -307,7 +314,8 @@ function S:HandleCheckBox(frame, noBackdrop, noReplaceTextures, forceSaturation)
 		end
 
 		frame:HookScript('OnDisable', function(checkbox)
-			if not checkbox.SetDisabledTexture then return; end
+			if not checkbox.SetDisabledTexture then return end
+
 			if checkbox:GetChecked() then
 				if E.private.skins.checkBoxSkin then
 					checkbox:SetDisabledTexture(E.Media.Textures.Melli)
@@ -339,6 +347,20 @@ function S:HandleCheckBox(frame, noBackdrop, noReplaceTextures, forceSaturation)
 	end
 
 	frame.isSkinned = true
+end
+
+function S:HandleColorSwatch(frame, size)
+	frame:StripTextures()
+	frame:CreateBackdrop("Default")
+	frame.backdrop:SetFrameLevel(frame:GetFrameLevel())
+
+	if size then
+		frame:Size(size)
+	end
+
+	frame:GetNormalTexture():SetTexture(E.media.blankTex)
+	frame:GetNormalTexture():ClearAllPoints()
+	frame:GetNormalTexture():SetInside(frame.backdrop)
 end
 
 function S:HandleIcon(icon, parent)
@@ -384,6 +406,7 @@ function S:HandleItemButton(b, shrinkIcon)
 			icon:SetTexture(texture)
 		end
 	end
+
 	b.isSkinned = true
 end
 
@@ -416,12 +439,19 @@ function S:HandleSliderFrame(frame)
 	local SIZE = 12
 
 	frame:StripTextures()
-	frame:SetThumbTexture(E.Media.Textures.Melli)
 	frame:SetTemplate()
+	frame:SetThumbTexture(E.Media.Textures.Melli)
 
 	local thumb = frame:GetThumbTexture()
-	thumb:SetVertexColor(1, .82, 0, 0.8)
-	thumb:Size(SIZE-2,SIZE-2)
+	thumb:SetVertexColor(1, 0.82, 0, 0.8)
+	thumb:Size(SIZE - 2, SIZE - 2)
+
+	hooksecurefunc("BlizzardOptionsPanel_Slider_Disable", function(slider)
+		slider:GetThumbTexture():SetVertexColor(0.6, 0.6, 0.6, 0.8)
+	end)
+	hooksecurefunc("BlizzardOptionsPanel_Slider_Enable", function(slider)
+		slider:GetThumbTexture():SetVertexColor(1, 0.82, 0, 0.8)
+	end)
 
 	if orientation == "VERTICAL" then
 		frame:Width(SIZE)

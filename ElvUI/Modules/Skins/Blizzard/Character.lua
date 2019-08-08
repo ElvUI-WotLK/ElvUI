@@ -261,8 +261,8 @@ local function LoadSkin()
 	select(1, MagicResFrame4:GetRegions()):SetTexCoord(0.21875, 0.8125, 0.36328125, 0.4375) --Frost
 	select(1, MagicResFrame5:GetRegions()):SetTexCoord(0.21875, 0.8125, 0.4765625, 0.55078125) --Shadow
 
-	S:HandleDropDownBox(PlayerStatFrameLeftDropDown, 140)
-	S:HandleDropDownBox(PlayerStatFrameRightDropDown, 140)
+	S:HandleDropDownBox(PlayerStatFrameLeftDropDown, 140, "down")
+	S:HandleDropDownBox(PlayerStatFrameRightDropDown, 140, "down")
 	CharacterAttributesFrame:StripTextures()
 
 	PetPaperDollFrame:StripTextures(true)

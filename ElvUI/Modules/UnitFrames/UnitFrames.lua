@@ -1311,7 +1311,7 @@ function UF:ToggleTransparentStatusBar(isTransparent, statusBar, backdropTex, ad
 			statusBar:GetParent():SetTemplate("Transparent", nil, nil, nil, true)
 		end
 
-		statusBar:SetStatusBarTexture(0, 0, 0, 0)
+		statusBar:SetStatusBarTexture("")
 		UF:Update_StatusBar(statusBar.bg or statusBar.BG, E.media.blankTex)
 
 		if statusBar.texture then statusBar.texture = statusBar:GetStatusBarTexture() end --Needed for Power element
