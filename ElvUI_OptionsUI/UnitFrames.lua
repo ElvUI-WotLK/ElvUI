@@ -6759,55 +6759,6 @@ E.Options.args.unitframe.args.raid = {
 				}
 			}
 		},
-		roleIcon = {
-			order = 700,
-			type = "group",
-			name = L["Role Icon"],
-			get = function(info) return E.db.unitframe.units.raid.roleIcon[info[#info]] end,
-			set = function(info, value) E.db.unitframe.units.raid.roleIcon[info[#info]] = value UF:CreateAndUpdateHeaderGroup("raid") end,
-			args = {
-				header = {
-					order = 1,
-					type = "header",
-					name = L["Role Icon"]
-				},
-				enable = {
-					order = 2,
-					type = "toggle",
-					name = L["ENABLE"]
-				},
-				position = {
-					order = 3,
-					type = "select",
-					name = L["Position"],
-					values = positionValues
-				},
-				attachTo = {
-					order = 4,
-					type = "select",
-					name = L["Attach To"],
-					values = attachToValues
-				},
-				xOffset = {
-					order = 5,
-					type = "range",
-					name = L["xOffset"],
-					min = -300, max = 300, step = 1
-				},
-				yOffset = {
-					order = 6,
-					type = "range",
-					name = L["yOffset"],
-					min = -300, max = 300, step = 1
-				},
-				size = {
-					order = 7,
-					type = "range",
-					name = L["Size"],
-					min = 4, max = 100, step = 1
-				}
-			}
-		},
 		raidRoleIcons = {
 			order = 750,
 			type = "group",
@@ -7162,55 +7113,6 @@ E.Options.args.unitframe.args.raid40 = {
 							E:SetToFilterConfig("Buff Indicator")
 						end
 					end
-				}
-			}
-		},
-		roleIcon = {
-			order = 700,
-			type = "group",
-			name = L["Role Icon"],
-			get = function(info) return E.db.unitframe.units.raid40.roleIcon[info[#info]] end,
-			set = function(info, value) E.db.unitframe.units.raid40.roleIcon[info[#info]] = value UF:CreateAndUpdateHeaderGroup("raid40") end,
-			args = {
-				header = {
-					order = 1,
-					type = "header",
-					name = L["Role Icon"]
-				},
-				enable = {
-					order = 2,
-					type = "toggle",
-					name = L["ENABLE"]
-				},
-				position = {
-					order = 3,
-					type = "select",
-					name = L["Position"],
-					values = positionValues
-				},
-				attachTo = {
-					order = 4,
-					type = "select",
-					name = L["Attach To"],
-					values = attachToValues
-				},
-				xOffset = {
-					order = 5,
-					type = "range",
-					name = L["xOffset"],
-					min = -300, max = 300, step = 1
-				},
-				yOffset = {
-					order = 6,
-					type = "range",
-					name = L["yOffset"],
-					min = -300, max = 300, step = 1
-				},
-				size = {
-					order = 7,
-					type = "range",
-					name = L["Size"],
-					min = 4, max = 100, step = 1
 				}
 			}
 		},
