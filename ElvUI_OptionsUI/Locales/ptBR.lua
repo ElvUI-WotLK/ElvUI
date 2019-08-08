@@ -1157,3 +1157,7 @@ L["xOffset"] = "Distância X"
 L["yOffset"] = "Distância Y"
 L["You may not remove a spell from a default filter that is not customly added. Setting spell to false instead."] = "Você não pode remover um feitiço de um filtro padrão que não seja um feitiço personalizado. Em vez disso definindo feitiço para falso."
 L["You need to hold this modifier down in order to blacklist an aura by right-clicking the icon. Set to None to disable the blacklist functionality."] = true
+
+-- Global Strings
+L["DISABLE"] = "Desativar"
+L["ENABLE"] = "Ativar"

@@ -1206,3 +1206,7 @@ L["xOffset"] = "X 좌표"
 L["yOffset"] = "Y 좌표"
 L["You may not remove a spell from a default filter that is not customly added. Setting spell to false instead."] = "기본 필터에 설정된 기본 주문들은 삭제할 수 없습니다. 대신 비활성화는 가능합니다."
 L["You need to hold this modifier down in order to blacklist an aura by right-clicking the icon. Set to None to disable the blacklist functionality."] = true
+
+-- Global Strings
+L["DISABLE"] = "비활성"
+L["ENABLE"] = "사용"

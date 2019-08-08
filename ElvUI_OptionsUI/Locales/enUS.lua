@@ -1145,3 +1145,7 @@ L["xOffset"] = true
 L["yOffset"] = true
 L["You may not remove a spell from a default filter that is not customly added. Setting spell to false instead."] = true
 L["You need to hold this modifier down in order to blacklist an aura by right-clicking the icon. Set to None to disable the blacklist functionality."] = true
+
+-- Global Strings
+L["DISABLE"] = "Disable"
+L["ENABLE"] = "Enable"

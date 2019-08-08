@@ -1157,3 +1157,7 @@ L["xOffset"] = "Отступ по Х"
 L["yOffset"] = "Отступ по Y"
 L["You may not remove a spell from a default filter that is not customly added. Setting spell to false instead."] = "Вы не можете удалить заклинание из фильтра по умолчанию, которое не было добавлено в него вручную. Отключаю использование в фильтре этого заклинания."
 L["You need to hold this modifier down in order to blacklist an aura by right-clicking the icon. Set to None to disable the blacklist functionality."] = "Вам нужно будет удерживать этот модификатор для занесения ауры в черный список при нажатии ПКМ. Установите на \"Нет\" для отключения возможности заносить их туда."
+
+-- Global Strings
+L["DISABLE"] = "Отключить"
+L["ENABLE"] = "Включить"

@@ -1157,3 +1157,7 @@ L["xOffset"] = "Décalage de l'axe X"
 L["yOffset"] = "Décalage de l'axe Y" --Another variation in bags section Y Offset
 L["You may not remove a spell from a default filter that is not customly added. Setting spell to false instead."] = "Vous ne pouvez pas supprimer un sort du filtre qui est par défaut.configurer le sort en 'désactivé'."
 L["You need to hold this modifier down in order to blacklist an aura by right-clicking the icon. Set to None to disable the blacklist functionality."] = "Vous devez maintenir le modifieur enfoncé pour retirer une aura en cliquant du droit sur l'icône. Sélectionnez Aucun pour désactiver la liste noire."
+
+-- Global Strings
+L["DISABLE"] = "Désactiver"
+L["ENABLE"] = "Activer"

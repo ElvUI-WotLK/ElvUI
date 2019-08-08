@@ -1157,3 +1157,7 @@ L["xOffset"] = "X-Versatz"
 L["yOffset"] = "Y-Versatz" --Another variation in bags section Y Offset
 L["You may not remove a spell from a default filter that is not customly added. Setting spell to false instead."] = "Du kannst keinen Filter entfernen, der nicht von dir selbst hinzugefügt wurde. Setzte den Zauber einfach auf deaktiviert."
 L["You need to hold this modifier down in order to blacklist an aura by right-clicking the icon. Set to None to disable the blacklist functionality."] = "Du musst den Modifikator gedrückt halten um mit rechtsklick auf ein Symbol es zur Schwarzen Liste hinzuzufügen. Setzte auf 'Kein' um die Funktion zu deaktivieren."
+
+-- Global Strings
+L["DISABLE"] = "Deaktivieren"
+L["ENABLE"] = "Eingeschaltet"

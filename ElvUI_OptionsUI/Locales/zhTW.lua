@@ -1157,3 +1157,7 @@ L["xOffset"] = "X軸偏移"
 L["yOffset"] = "Y軸偏移"
 L["You may not remove a spell from a default filter that is not customly added. Setting spell to false instead."] = "你不能移除一個內建技能, 僅能停用此技能."
 L["You need to hold this modifier down in order to blacklist an aura by right-clicking the icon. Set to None to disable the blacklist functionality."] = "按住設置按鍵+右鍵單擊會把該玩家加入黑名單, 設為無以關閉該功能"
+
+-- Global Strings
+L["DISABLE"] = "關閉"
+L["ENABLE"] = "啟用"
