@@ -13,15 +13,19 @@ assert(ElvUF, "ElvUI was unable to locate oUF.")
 
 function UF:Construct_PowerBar(frame, bg, text, textPos)
 	local power = CreateFrame("StatusBar", nil, frame)
-	UF["statusbars"][power] = true
+	UF.statusbars[power] = true
+
+	power.RaisedElementParent = CreateFrame("Frame", nil, power)
+	power.RaisedElementParent:SetFrameLevel(power:GetFrameLevel() + 100)
+	power.RaisedElementParent:SetAllPoints()
 
 	power.PostUpdate = self.PostUpdatePower
+	power.PostUpdateColor = self.PostUpdatePowerColor
 
 	if bg then
 		power.bg = power:CreateTexture(nil, "BORDER")
 		power.bg:SetAllPoints()
-		power.bg:SetTexture(E["media"].blankTex)
-		power.bg.multiplier = 0.2
+		power.bg:SetTexture(E.media.blankTex)
 	end
 
 	if text then
@@ -59,9 +63,6 @@ function UF:Configure_Power(frame)
 
 		E:SetSmoothing(power, self.db.smoothbars)
 
-		--power.Smooth = self.db.smoothbars
-		--power.SmoothSpeed = self.db.smoothSpeed * 10
-
 		--Text
 		local attachPoint = self:GetObjectAnchorPoint(frame, db.power.attachTextTo)
 		power.value:ClearAllPoints()
@@ -69,7 +70,7 @@ function UF:Configure_Power(frame)
 		frame:Tag(power.value, db.power.text_format)
 
 		if db.power.attachTextTo == "Power" then
-			power.value:SetParent(power)
+			power.value:SetParent(power.RaisedElementParent)
 		else
 			power.value:SetParent(frame.RaisedElementParent)
 		end
@@ -78,7 +79,8 @@ function UF:Configure_Power(frame)
 		power.colorClass = nil
 		power.colorReaction = nil
 		power.colorPower = nil
-		if self.db["colors"].powerclass then
+
+		if self.db.colors.powerclass then
 			power.colorClass = true
 			power.colorReaction = true
 		else
@@ -115,9 +117,9 @@ function UF:Configure_Power(frame)
 				power:Point("BOTTOMLEFT", power.Holder, "BOTTOMLEFT", frame.BORDER+frame.SPACING, frame.BORDER+frame.SPACING)
 				--Currently only Player and Target can detach power bars, so doing it this way is okay for now
 				if frame.unitframeType and frame.unitframeType == "player" then
-					E:CreateMover(power.Holder, "PlayerPowerBarMover", L["Player Powerbar"], nil, nil, nil, "ALL,SOLO")
+					E:CreateMover(power.Holder, "PlayerPowerBarMover", L["Player Powerbar"], nil, nil, nil, "ALL,SOLO", nil, "unitframe,player,power")
 				elseif frame.unitframeType and frame.unitframeType == "target" then
-					E:CreateMover(power.Holder, "TargetPowerBarMover", L["Target Powerbar"], nil, nil, nil, "ALL,SOLO")
+					E:CreateMover(power.Holder, "TargetPowerBarMover", L["Target Powerbar"], nil, nil, nil, "ALL,SOLO", nil, "unitframe,player,power")
 				end
 			else
 				power.Holder:Size(frame.POWERBAR_WIDTH, frame.POWERBAR_HEIGHT)
@@ -191,7 +193,6 @@ function UF:Configure_Power(frame)
 		else
 			power:SetParent(frame)
 		end
-
 	elseif frame:IsElementEnabled("Power") then
 		frame:DisableElement("Power")
 		power:Hide()
