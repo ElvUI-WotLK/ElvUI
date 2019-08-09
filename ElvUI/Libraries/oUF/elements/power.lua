@@ -131,8 +131,7 @@ local function UpdateColor(self, event, unit)
 	elseif(element.colorReaction and UnitReaction(unit, 'player')) then
 		t = self.colors.reaction[UnitReaction(unit, 'player')]
 	elseif(element.colorSmooth) then
-		local adjust = 0 - (element.min or 0)
-		r, g, b = self:ColorGradient((element.cur or 1) + adjust, (element.max or 1) + adjust, unpack(element.smoothGradient or self.colors.smooth))
+		r, g, b = self:ColorGradient(element.cur or 1, element.max or 1, unpack(element.smoothGradient or self.colors.smooth))
 	end
 
 	if(t) then
@@ -304,8 +303,8 @@ local function onPowerUpdate(self)
 	local unit = self.__owner.unit
 	local power = UnitPower(unit)
 
-	if(power ~= self.min) then
-		self.min = power
+	if(power ~= self.power) then
+		self.power = power
 
 		return Path(self.__owner, 'OnPowerUpdate', unit)
 	end
