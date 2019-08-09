@@ -71,6 +71,11 @@ function UF:Configure_Cutaway(frame)
 		local power = frame.Cutaway.Power
 		local powerUsable = powerEnabled and frame.USE_POWERBAR
 		if power and powerUsable then
+			local barTexture = frame.Power:GetStatusBarTexture()
+			power:ClearAllPoints()
+			power:SetPoint("TOPLEFT", barTexture, "TOPRIGHT")
+			power:SetPoint("BOTTOMLEFT", barTexture, "BOTTOMRIGHT")
+
 			power:SetFrameLevel(frame.Power:GetFrameLevel())
 
 			frame.Power:PostUpdateColor()
