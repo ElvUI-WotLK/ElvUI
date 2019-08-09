@@ -208,7 +208,7 @@ local function Update(self, event, unit)
 	* max  - the unit's maximum possible power value (number)
 	--]]
 	if(element.PostUpdate) then
-		element:PostUpdate(unit, cur, min, max)
+		element:PostUpdate(unit, cur, 0, max)
 	end
 end
 
