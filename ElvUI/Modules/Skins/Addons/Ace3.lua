@@ -67,7 +67,8 @@ function S:Ace3_CheckBoxIsEnableSwitch(widget)
 	if text then
 		local enabled, disabled = text == S.Ace3_L.GREEN_ENABLE, text == S.Ace3_L.RED_ENABLE
 		local isSwitch = (text == S.Ace3_L.Enable) or enabled or disabled
-		return isSwitch, enabled, disabled
+
+		return isSwitch
 	end
 end
 
@@ -113,16 +114,19 @@ function S:Ace3_RegisterAsWidget(widget)
 			check:SetTexture(E.Media.Textures.Melli)
 
 			hooksecurefunc(check, "SetDesaturated", function(chk, value)
+				local isSwitch = S:Ace3_CheckBoxIsEnableSwitch(widget)
+
 				if value == true then
-					chk:SetVertexColor(.6, .6, .6, .8)
-				else
-					local isSwitch, enabled, disabled = S:Ace3_CheckBoxIsEnableSwitch(widget)
-					if isSwitch and enabled then
-						chk:SetVertexColor(0.2, 1.0, 0.2, 1.0)
-					elseif isSwitch and disabled then
+					if isSwitch then
 						chk:SetVertexColor(1.0, 0.2, 0.2, 1.0)
 					else
-						chk:SetVertexColor(1, .82, 0, 0.8)
+						chk:SetVertexColor(0.6, 0.6, 0.6, 0.8)
+					end
+				else
+					if isSwitch then
+						chk:SetVertexColor(0.2, 1.0, 0.2, 1.0)
+					else
+						chk:SetVertexColor(1, 0.82, 0, 0.8)
 					end
 				end
 			end)
@@ -143,7 +147,7 @@ function S:Ace3_RegisterAsWidget(widget)
 		local text = widget.text
 		frame:StripTextures()
 
-		S:HandleNextPrevButton(button, nil, {1, .8, 0})
+		S:HandleNextPrevButton(button, nil, {1, 0.8, 0})
 
 		if not frame.backdrop then
 			frame:CreateBackdrop()
@@ -224,16 +228,16 @@ function S:Ace3_RegisterAsWidget(widget)
 			end
 		end)
 
-		button:Point('RIGHT', frame.backdrop, 'RIGHT', -2, 0)
+		button:Point("RIGHT", frame.backdrop, "RIGHT", -2, 0)
 
-		hooksecurefunc(frame, 'SetPoint', function(fr, a, b, c, d, e)
+		hooksecurefunc(frame, "SetPoint", function(fr, a, b, c, d, e)
 			if d == 7 then
 				fr:Point(a, b, c, 0, e)
 			end
 		end)
 
-		frame.backdrop:Point('TOPLEFT', 0, -2)
-		frame.backdrop:Point('BOTTOMRIGHT', -1, 0)
+		frame.backdrop:Point("TOPLEFT", 0, -2)
+		frame.backdrop:Point("BOTTOMRIGHT", -1, 0)
 		frame.backdrop:SetParent(widget.frame)
 		frame:SetParent(frame.backdrop)
 	elseif TYPE == "Button" or TYPE == "Button-ElvUI" then
@@ -379,7 +383,7 @@ function S:Ace3_RegisterAsContainer(widget)
 
 				hooksecurefunc(tab, "SetPoint", function(fr, a, b, c, d, e, f)
 					if f ~= "ignore" and a == "TOPLEFT" then
-						fr:SetPoint(a, b, c, d, e+2, "ignore")
+						fr:SetPoint(a, b, c, d, e + 2, "ignore")
 					end
 				end)
 

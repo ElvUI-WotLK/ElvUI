@@ -100,26 +100,22 @@ local UnitPowerMax = UnitPowerMax
 local UnitPowerType = UnitPowerType
 local UnitReaction = UnitReaction
 
-local updateFrequentUpdates
-
-local function UpdateColor(element, unit, cur, min, max)
-	local parent = element.__owner
-
-	if element.frequentUpdates ~= element.__frequentUpdates then
-		element.__frequentUpdates = element.frequentUpdates
-		updateFrequentUpdates(element, unit)
-	end
+local function UpdateColor(self, event, unit)
+	if(self.unit ~= unit) then return end
+	local element = self.Power
 
 	local ptype, ptoken, altR, altG, altB = UnitPowerType(unit)
 	local r, g, b, t
-	if(element.colorTapping and element.tapped) then
-		t = parent.colors.tapped
-	elseif(element.colorDisconnected and element.disconnected) then
-		t = parent.colors.disconnected
+	if(element.colorDisconnected and element.disconnected) then
+		t = self.colors.disconnected
+	elseif(element.colorTapping and not UnitPlayerControlled(unit) and (UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) and not UnitIsTappedByAllThreatList(unit))) then
+		t = self.colors.tapped
+	elseif(element.colorThreat and not UnitPlayerControlled(unit) and UnitThreatSituation('player', unit)) then
+		t =  self.colors.threat[UnitThreatSituation('player', unit)]
 	elseif(element.colorHappiness and UnitIsUnit(unit, 'pet') and GetPetHappiness()) then
-		t = parent.colors.happiness[GetPetHappiness()]
+		t = self.colors.happiness[GetPetHappiness()]
 	elseif(element.colorPower) then
-		t = parent.colors.power[ptoken]
+		t = self.colors.power[ptoken or ptype]
 		if(not t) then
 			if(element.GetAlternativeColor) then
 				r, g, b = element:GetAlternativeColor(unit, ptype, ptoken, altR, altG, altB)
@@ -131,23 +127,21 @@ local function UpdateColor(element, unit, cur, min, max)
 		(element.colorClassNPC and not UnitIsPlayer(unit)) or
 		(element.colorClassPet and UnitPlayerControlled(unit) and not UnitIsPlayer(unit)) then
 		local _, class = UnitClass(unit)
-		t = parent.colors.class[class]
+		t = self.colors.class[class]
 	elseif(element.colorReaction and UnitReaction(unit, 'player')) then
-		t = parent.colors.reaction[UnitReaction(unit, 'player')]
+		t = self.colors.reaction[UnitReaction(unit, 'player')]
 	elseif(element.colorSmooth) then
-		local adjust = 0 - (min or 0)
-		r, g, b = parent.ColorGradient(cur + adjust, max + adjust, unpack(element.smoothGradient or parent.colors.smooth))
+		local adjust = 0 - (element.min or 0)
+		r, g, b = self:ColorGradient((element.cur or 1) + adjust, (element.max or 1) + adjust, unpack(element.smoothGradient or self.colors.smooth))
 	end
 
 	if(t) then
 		r, g, b = t[1], t[2], t[3]
 	end
 
-	t = parent.colors.power[ptoken or ptype]
-
 	element:SetStatusBarTexture(element.texture)
 
-	if(r or g or b) then
+	if(b) then
 		element:SetStatusBarColor(r, g, b)
 	end
 
@@ -156,6 +150,21 @@ local function UpdateColor(element, unit, cur, min, max)
 		local mu = bg.multiplier or 1
 		bg:SetVertexColor(r * mu, g * mu, b * mu)
 	end
+
+	if(element.PostUpdateColor) then
+		element:PostUpdateColor(unit, r, g, b)
+	end
+end
+
+local function ColorPath(self, ...)
+	--[[ Override: Power.UpdateColor(self, event, unit)
+	Used to completely override the internal function for updating the widgets' colors.
+
+	* self  - the parent object
+	* event - the event triggering the update (string)
+	* unit  - the unit accompanying the event (string)
+	--]]
+	(self.Power.UpdateColor or UpdateColor) (self, ...)
 end
 
 local function Update(self, event, unit)
@@ -174,7 +183,7 @@ local function Update(self, event, unit)
 
 	local cur, max = UnitPower(unit), UnitPowerMax(unit)
 	local disconnected = not UnitIsConnected(unit)
-	local tapped = not UnitPlayerControlled(unit) and (UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) and not UnitIsTappedByAllThreatList(unit))
+
 	element:SetMinMaxValues(0, max)
 
 	if(disconnected) then
@@ -183,29 +192,23 @@ local function Update(self, event, unit)
 		element:SetValue(cur)
 	end
 
+	element.cur = cur
+	element.min = 0
+	element.max = max
 	element.disconnected = disconnected
 	element.tapped = tapped
 
-	--[[ Override: Power:UpdateColor(unit, cur, max)
-	Used to completely override the internal function for updating the widget's colors.
-
-	* self        - the Power element
-	* unit        - the unit for which the update has been triggered (string)
-	* cur         - the unit's current power value (number)
-	* max         - the unit's maximum possible power value (number)
-	--]]
-	element:UpdateColor(unit, cur, max)
-
-	--[[ Callback: Power:PostUpdate(unit, cur, max)
+	--[[ Callback: Power:PostUpdate(unit, cur, min, max)
 	Called after the element has been updated.
 
-	* self       - the Power element
-	* unit       - the unit for which the update has been triggered (string)
-	* cur        - the unit's current power value (number)
-	* max        - the unit's maximum possible power value (number)
+	* self - the Power element
+	* unit - the unit for which the update has been triggered (string)
+	* cur  - the unit's current power value (number)
+	* min  - the unit's minimum possible power value (number)
+	* max  - the unit's maximum possible power value (number)
 	--]]
 	if(element.PostUpdate) then
-		return element:PostUpdate(unit, cur, max)
+		element:PostUpdate(unit, cur, min, max)
 	end
 end
 
@@ -218,12 +221,83 @@ local function Path(self, ...)
 	* unit  - the unit accompanying the event (string)
 	* ...   - the arguments accompanying the event
 	--]]
-	return (self.Power.Override or Update) (self, ...)
+	(self.Power.Override or Update) (self, ...);
+
+	ColorPath(self, ...)
 end
 
 local function ForceUpdate(element)
-	return Path(element.__owner, 'ForceUpdate', element.__owner.unit)
+	Path(element.__owner, 'ForceUpdate', element.__owner.unit)
 end
+
+--[[ Power:SetColorDisconnected(state)
+Used to toggle coloring if the unit is offline.
+
+* self  - the Power element
+* state - the desired state (boolean)
+--]]
+local function SetColorDisconnected(element, state)
+	if(element.colorDisconnected ~= state) then
+		element.colorDisconnected = state
+		if(element.colorDisconnected) then
+			element.__owner:RegisterEvent('UNIT_CONNECTION', ColorPath)
+		else
+			element.__owner:UnregisterEvent('UNIT_CONNECTION', ColorPath)
+		end
+	end
+end
+
+--[[ Power:SetColorTapping(state)
+Used to toggle coloring if the unit isn't tapped by the player.
+
+* self  - the Power element
+* state - the desired state (boolean)
+--]]
+local function SetColorTapping(element, state)
+	if(element.colorTapping ~= state) then
+		element.colorTapping = state
+		if(element.colorTapping) then
+			element.__owner:RegisterEvent('UNIT_FACTION', ColorPath)
+		else
+			element.__owner:UnregisterEvent('UNIT_FACTION', ColorPath)
+		end
+	end
+end
+
+--[[ Power:SetColorThreat(state)
+Used to toggle coloring by the unit's threat status.
+
+* self  - the Power element
+* state - the desired state (boolean)
+--]]
+local function SetColorThreat(element, state)
+	if(element.colorThreat ~= state) then
+		element.colorThreat = state
+		if(element.colorThreat) then
+			element.__owner:RegisterEvent('UNIT_THREAT_LIST_UPDATE', ColorPath)
+		else
+			element.__owner:UnregisterEvent('UNIT_THREAT_LIST_UPDATE', ColorPath)
+		end
+	end
+end
+
+--[[ Power:SetColorHappiness(state)
+Used to toggle coloring by the unit's happiness status.
+
+* self  - the Power element
+* state - the desired state (boolean)
+--]]
+local function SetColorHappiness(element, state)
+	if(element.colorHappiness ~= state) then
+		element.colorHappiness = state
+		if(element.colorHappiness) then
+			element.__owner:RegisterEvent('UNIT_HAPPINESS', ColorPath)
+		else
+			element.__owner:UnregisterEvent('UNIT_HAPPINESS', ColorPath)
+		end
+	end
+end
+
 
 local function onPowerUpdate(self)
 	if(self.disconnected) then return end
@@ -238,26 +312,34 @@ local function onPowerUpdate(self)
 	end
 end
 
-function updateFrequentUpdates(self, unit)
-	if(not unit or (unit ~= 'player' and unit ~= 'pet')) then return end
+--[[ Power:SetFrequentUpdates(state)
+Used to toggle frequent updates.
 
-	local element = self.Power
-	if(element.frequentUpdates and not element:GetScript('OnUpdate')) then
-		element:SetScript('OnUpdate', onPowerUpdate)
+* self  - the Power element
+* state - the desired state (boolean)
+--]]
+local function SetFrequentUpdates(element, state)
+	--if(not unit or (unit ~= 'player' and unit ~= 'pet')) then return end
 
-		self:UnregisterEvent('UNIT_MANA', Path)
-		self:UnregisterEvent('UNIT_RAGE', Path)
-		self:UnregisterEvent('UNIT_FOCUS', Path)
-		self:UnregisterEvent('UNIT_ENERGY', Path)
-		self:UnregisterEvent('UNIT_RUNIC_POWER', Path)
-	elseif(not element.frequentUpdates and element:GetScript('OnUpdate')) then
-		element:SetScript('OnUpdate', nil)
+	if(element.frequentUpdates ~= state) then
+		element.frequentUpdates = state
+		if(element.frequentUpdates and not element:GetScript('OnUpdate')) then
+			element:SetScript('OnUpdate', onPowerUpdate)
 
-		self:RegisterEvent('UNIT_MANA', Path)
-		self:RegisterEvent('UNIT_RAGE', Path)
-		self:RegisterEvent('UNIT_FOCUS', Path)
-		self:RegisterEvent('UNIT_ENERGY', Path)
-		self:RegisterEvent('UNIT_RUNIC_POWER', Path)
+			element.__owner:UnregisterEvent('UNIT_MANA', Path)
+			element.__owner:UnregisterEvent('UNIT_RAGE', Path)
+			element.__owner:UnregisterEvent('UNIT_FOCUS', Path)
+			element.__owner:UnregisterEvent('UNIT_ENERGY', Path)
+			element.__owner:UnregisterEvent('UNIT_RUNIC_POWER', Path)
+		elseif(not element.frequentUpdates and element:GetScript('OnUpdate')) then
+			element:SetScript('OnUpdate', nil)
+
+			element.__owner:RegisterEvent('UNIT_MANA', Path)
+			element.__owner:RegisterEvent('UNIT_RAGE', Path)
+			element.__owner:RegisterEvent('UNIT_FOCUS', Path)
+			element.__owner:RegisterEvent('UNIT_ENERGY', Path)
+			element.__owner:RegisterEvent('UNIT_RUNIC_POWER', Path)
+		end
 	end
 end
 
@@ -266,8 +348,27 @@ local function Enable(self, unit)
 	if(element) then
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate
-		element.__frequentUpdates = element.frequentUpdates
-		updateFrequentUpdates(self, unit)
+		element.SetColorDisconnected = SetColorDisconnected
+		element.SetColorTapping = SetColorTapping
+		element.SetColorThreat = SetColorThreat
+		element.SetColorHappiness = SetColorHappiness
+		element.SetFrequentUpdates = SetFrequentUpdates
+
+		if(element.colorDisconnected) then
+			self:RegisterEvent('UNIT_CONNECTION', ColorPath)
+		end
+
+		if(element.colorTapping) then
+			self:RegisterEvent('UNIT_FACTION', ColorPath)
+		end
+
+		if(element.colorThreat) then
+			self:RegisterEvent('UNIT_THREAT_LIST_UPDATE', ColorPath)
+		end
+
+		if(element.colorHappiness) then
+			self:RegisterEvent('UNIT_HAPPINESS', ColorPath)
+		end
 
 		if(element.frequentUpdates and (unit == 'player' or unit == 'pet')) then
 			element:SetScript('OnUpdate', onPowerUpdate)
@@ -286,17 +387,9 @@ local function Enable(self, unit)
 		self:RegisterEvent('UNIT_MAXRUNIC_POWER', Path)
 		self:RegisterEvent('UNIT_DISPLAYPOWER', Path)
 
-		self:RegisterEvent('UNIT_CONNECTION', Path)
-		self:RegisterEvent('UNIT_HAPPINESS', Path)
-		self:RegisterEvent('UNIT_FACTION', Path) -- For tapping
-
 		if(element:IsObjectType('StatusBar')) then
 			element.texture = element:GetStatusBarTexture() and element:GetStatusBarTexture():GetTexture() or [[Interface\TargetingFrame\UI-StatusBar]]
 			element:SetStatusBarTexture(element.texture)
-		end
-
-		if(not element.UpdateColor) then
-			element.UpdateColor = UpdateColor
 		end
 
 		element:Show()
@@ -327,9 +420,10 @@ local function Disable(self)
 		self:UnregisterEvent('UNIT_MAXRUNIC_POWER', Path)
 		self:UnregisterEvent('UNIT_DISPLAYPOWER', Path)
 
-		self:UnregisterEvent('UNIT_CONNECTION', Path)
-		self:UnregisterEvent('UNIT_HAPPINESS', Path)
-		self:UnregisterEvent('UNIT_FACTION', Path)
+		self:UnregisterEvent('UNIT_CONNECTION', ColorPath)
+		self:UnregisterEvent('UNIT_THREAT_LIST_UPDATE', ColorPath)
+		self:UnregisterEvent('UNIT_FACTION', ColorPath)
+		self:UnregisterEvent('UNIT_HAPPINESS', ColorPath)
 	end
 end
 

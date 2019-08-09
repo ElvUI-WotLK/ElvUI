@@ -26,6 +26,7 @@ function UF:Construct_PowerBar(frame, bg, text, textPos)
 		power.bg = power:CreateTexture(nil, "BORDER")
 		power.bg:SetAllPoints()
 		power.bg:SetTexture(E.media.blankTex)
+		power.bg.multiplier = 0.35 -- Bug
 	end
 
 	if text then
@@ -199,27 +200,34 @@ function UF:Configure_Power(frame)
 		frame:Tag(power.value, "")
 	end
 
-	frame.Power.custom_backdrop = UF.db.colors.custompowerbackdrop and UF.db.colors.power_backdrop
+	power.custom_backdrop = UF.db.colors.custompowerbackdrop and UF.db.colors.power_backdrop
 
 	--Transparency Settings
-	UF:ToggleTransparentStatusBar(UF.db.colors.transparentPower, frame.Power, frame.Power.bg, nil, UF.db.colors.invertPower)
+	UF:ToggleTransparentStatusBar(UF.db.colors.transparentPower, power, power.bg, nil, UF.db.colors.invertPower)
 end
 
 local tokens = {[0] = "MANA", "RAGE", "FOCUS", "ENERGY", "RUNIC_POWER"}
-function UF:PostUpdatePower(unit, _, max)
-	local parent = self:GetParent()
+function UF:PostUpdatePowerColor()
+	local parent = self.origParent or self:GetParent()
 
 	if parent.isForced then
-		local pType = random(0, 4)
-		local color = ElvUF["colors"].power[tokens[pType]]
-		local cur = random(1, max)
-		self:SetValue(cur)
+		local color = ElvUF.colors.power[tokens[random(0, 4)]]
+		self:SetValue(random(1, self.max))
 
 		if not self.colorClass then
 			self:SetStatusBarColor(color[1], color[2], color[3])
-			local mu = self.bg.multiplier or 1
-			self.bg:SetVertexColor(color[1] * mu, color[2] * mu, color[3] * mu)
+
+			if self.bg then
+				UF:UpdateBackdropTextureColor(self.bg, color[1], color[2], color[3])
+			end
 		end
+	end
+end
+
+function UF:PostUpdatePower(unit, _, _, max)
+	local parent = self.origParent or self:GetParent()
+	if parent.isForced then
+		self:SetValue(random(1, self.max))
 	end
 
 	if parent.db and parent.db.power and parent.db.power.hideonnpc then
