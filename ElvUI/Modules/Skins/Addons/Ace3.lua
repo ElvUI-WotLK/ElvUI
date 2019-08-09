@@ -356,11 +356,9 @@ function S:Ace3_RegisterAsContainer(widget)
 				for i = offset + 1, #lines do
 					local button = buttons[i - offset]
 					if button then
-						if not button.isSkinned then
-							S:HandleButtonHighlight(button, 1, 0.82, 0)
+						button.highlight:SetTexture(E.Media.Textures.Highlight)
+						button.highlight:SetVertexColor(1, 0.82, 0, 0.35)
 
-							button.isSkinned = true
-						end
 						if groupstatus[lines[i].uniquevalue] then
 							button.toggle:SetNormalTexture(E.Media.Textures.Minus)
 							button.toggle:SetPushedTexture(E.Media.Textures.Minus)
