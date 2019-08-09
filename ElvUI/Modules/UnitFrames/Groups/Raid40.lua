@@ -39,7 +39,6 @@ function UF:Construct_Raid40Frames()
 	self.RaidDebuffs = UF:Construct_RaidDebuffs(self)
 	self.DebuffHighlight = UF:Construct_DebuffHighlight(self)
 	self.ResurrectIndicator = UF:Construct_ResurrectionIcon(self)
-	self.GroupRoleIndicator = UF:Construct_RoleIcon(self)
 	self.RaidRoleFramesAnchor = UF:Construct_RaidRoleFrames(self)
 	self.MouseGlow = UF:Construct_MouseGlow(self)
 	self.TargetGlow = UF:Construct_TargetGlow(self)
@@ -205,9 +204,6 @@ function UF:Update_Raid40Frames(frame, db)
 
 	--Resurrect Highlight
 	UF:Configure_ResurrectionIcon(frame)
-
-	--Role Icon
-	UF:Configure_RoleIcon(frame)
 
 	--OverHealing
 	UF:Configure_HealComm(frame)
