@@ -192,7 +192,6 @@ local function Update(self, event, unit)
 	end
 
 	element.cur = cur
-	element.min = 0
 	element.max = max
 	element.disconnected = disconnected
 	element.tapped = tapped
