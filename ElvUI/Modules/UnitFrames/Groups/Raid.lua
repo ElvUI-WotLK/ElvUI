@@ -199,14 +199,14 @@ function UF:Update_RaidFrames(frame, db)
 	--RaidDebuffs
 	UF:Configure_RaidDebuffs(frame)
 
+	--Raid Icon
+	UF:Configure_RaidIcon(frame)
+
 	--Resurrect Icon
 	UF:Configure_ResurrectionIcon(frame)
 
 	--Debuff Highlight
 	UF:Configure_DebuffHighlight(frame)
-
-	--Role Icon
-	UF:Configure_RoleIcon(frame)
 
 	--OverHealing
 	UF:Configure_HealComm(frame)
