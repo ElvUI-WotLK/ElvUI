@@ -132,7 +132,7 @@ local function Power_PostUpdate(self, unit, curPower, maxPower)
 	UpdateSize(self, element, curPower, maxPower)
 	if element.playing then return end
 
-	if (element.cur - curPower) > (maxPower * 0.1) then
+	if (element.cur - curPower) > (maxPower * 0.01) then
 		element:SetAlpha(self:GetAlpha())
 
 		E:Delay(element.lengthBeforeFade, fadeClosure, element)
