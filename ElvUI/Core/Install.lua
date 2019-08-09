@@ -389,10 +389,6 @@ function E:SetupLayout(layout, noDataReset, noDisplayMsg)
 		E.db.unitframe.units.raid.rdebuffs.xOffset = 30
 		E.db.unitframe.units.raid.rdebuffs.yOffset = 25
 		E.db.unitframe.units.raid.resurrectIcon.attachTo = "BOTTOMRIGHT"
-		E.db.unitframe.units.raid.roleIcon.attachTo = "InfoPanel"
-		E.db.unitframe.units.raid.roleIcon.position = "BOTTOMRIGHT"
-		E.db.unitframe.units.raid.roleIcon.size = 12
-		E.db.unitframe.units.raid.roleIcon.xOffset = 0
 		E.db.unitframe.units.raid.visibility = "[@raid6,noexists] hide;show"
 		E.db.unitframe.units.raid.width = 92
 			--Raid40
