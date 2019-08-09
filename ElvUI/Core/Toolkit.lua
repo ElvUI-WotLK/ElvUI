@@ -81,7 +81,7 @@ end
 local function SetTemplate(frame, template, glossTex, ignoreUpdates, forcePixelMode, isUnitFrameElement)
 	GetTemplate(template, isUnitFrameElement)
 
-	if template then frame.template = template end
+	frame.template = template or "Default"
 	if glossTex then frame.glossTex = glossTex end
 	if ignoreUpdates then frame.ignoreUpdates = ignoreUpdates end
 	if forcePixelMode then frame.forcePixelMode = forcePixelMode end
