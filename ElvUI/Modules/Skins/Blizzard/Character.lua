@@ -375,7 +375,7 @@ local function LoadSkin()
 		E:RegisterStatusBar(factionBar)
 		factionBar:CreateBackdrop("Default")
 
-		factionButton:SetNormalTexture("Interface\\AddOns\\ElvUI\\media\\textures\\PlusMinusButton")
+		factionButton:SetNormalTexture(E.Media.Textures.Minus)
 		factionButton.SetNormalTexture = E.noop
 		factionButton:GetNormalTexture():Size(15)
 		factionButton:SetHighlightTexture(nil)
@@ -391,9 +391,9 @@ local function LoadSkin()
 			factionIndex = factionOffset + i
 			if(factionIndex <= numFactions) then
 				if(factionRow.isCollapsed) then
-					factionButton:GetNormalTexture():SetTexCoord(0.045, 0.475, 0.085, 0.925)
+					factionButton:GetNormalTexture():SetTexture(E.Media.Textures.Plus)
 				else
-					factionButton:GetNormalTexture():SetTexCoord(0.545, 0.975, 0.085, 0.925)
+					factionButton:GetNormalTexture():SetTexture(E.Media.Textures.Minus)
 				end
 			end
 		end
@@ -425,17 +425,17 @@ local function LoadSkin()
 
 	SkillFrameExpandButtonFrame:StripTextures()
 
-	SkillFrameCollapseAllButton:SetNormalTexture("Interface\\AddOns\\ElvUI\\media\\textures\\PlusMinusButton")
+	SkillFrameCollapseAllButton:SetNormalTexture(E.Media.Textures.Plus)
 	SkillFrameCollapseAllButton.SetNormalTexture = E.noop
-	SkillFrameCollapseAllButton:GetNormalTexture():Size(15)
+	SkillFrameCollapseAllButton:GetNormalTexture():Size(16)
 	SkillFrameCollapseAllButton:Point("LEFT", SkillFrameExpandTabLeft, "RIGHT", -40, -3)
 	SkillFrameCollapseAllButton:SetHighlightTexture(nil)
 
 	hooksecurefunc(SkillFrameCollapseAllButton, "SetNormalTexture", function(self, texture)
 		if find(texture, "MinusButton") then
-			SkillFrameCollapseAllButton:GetNormalTexture():SetTexCoord(0.545, 0.975, 0.085, 0.925)
+			SkillFrameCollapseAllButton:GetNormalTexture():SetTexture(E.Media.Textures.Minus)
 		else
-			SkillFrameCollapseAllButton:GetNormalTexture():SetTexCoord(0.045, 0.475, 0.085, 0.925)
+			SkillFrameCollapseAllButton:GetNormalTexture():SetTexture(E.Media.Textures.Plus)
 		end
 	end)
 
@@ -452,16 +452,16 @@ local function LoadSkin()
 		statusBarBackground:SetTexture(nil)
 
 		local skillTypeLabelText = _G["SkillTypeLabel" .. i]
-		skillTypeLabelText:SetNormalTexture("Interface\\AddOns\\ElvUI\\media\\textures\\PlusMinusButton")
+		skillTypeLabelText:SetNormalTexture(E.Media.Textures.Plus)
 		skillTypeLabelText.SetNormalTexture = E.noop
-		skillTypeLabelText:GetNormalTexture():Size(13)
+		skillTypeLabelText:GetNormalTexture():Size(16)
 		skillTypeLabelText:SetHighlightTexture(nil)
 
 		hooksecurefunc(skillTypeLabelText, "SetNormalTexture", function(self, texture)
 			if find(texture, "MinusButton") then
-				self:GetNormalTexture():SetTexCoord(0.545, 0.975, 0.085, 0.925)
+				self:GetNormalTexture():SetTexture(E.Media.Textures.Minus)
 			else
-				self:GetNormalTexture():SetTexCoord(0.045, 0.475, 0.085, 0.925)
+				self:GetNormalTexture():SetTexture(E.Media.Textures.Plus)
 			end
 		end)
 	end
@@ -504,8 +504,9 @@ local function LoadSkin()
 				button.categoryRight:Kill()
 				button.highlight:Kill()
 
-				button.expandIcon:SetTexture("Interface\\AddOns\\ElvUI\\media\\textures\\PlusMinusButton")
-				button.expandIcon:Size(15)
+				button.expandIcon:SetTexture(E.Media.Textures.Plus)
+				button.expandIcon:SetTexCoord(0, 1, 0, 1)
+				button.expandIcon:Size(16)
 
 				button.isSkinned = true
 			end
@@ -513,10 +514,11 @@ local function LoadSkin()
 			if name or name == "" then
 				if isHeader then
 					if isExpanded then
-						button.expandIcon:SetTexCoord(0.545, 0.975, 0.085, 0.925)
+						button.expandIcon:SetTexture(E.Media.Textures.Minus)
 					else
-						button.expandIcon:SetTexCoord(0.045, 0.475, 0.085, 0.925)
+						button.expandIcon:SetTexture(E.Media.Textures.Plus)
 					end
+					button.expandIcon:SetTexCoord(0, 1, 0, 1)
 				else
 					if extraCurrencyType == 1 then
 						button.icon:SetTexCoord(unpack(E.TexCoords))

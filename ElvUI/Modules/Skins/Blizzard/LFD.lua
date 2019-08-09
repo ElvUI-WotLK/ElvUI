@@ -199,17 +199,17 @@ local function LoadSkin()
 		button.enableButton:CreateBackdrop("Default")
 		button.enableButton.backdrop:SetInside(nil, 4, 4)
 
-		button.expandOrCollapseButton:SetNormalTexture("Interface\\AddOns\\ElvUI\\media\\textures\\PlusMinusButton")
+		button.expandOrCollapseButton:SetNormalTexture(E.Media.Textures.Plus)
 		button.expandOrCollapseButton.SetNormalTexture = E.noop
-		button.expandOrCollapseButton:GetNormalTexture():Size(12)
+		button.expandOrCollapseButton:GetNormalTexture():Size(16)
 
 		button.expandOrCollapseButton:SetHighlightTexture(nil)
 
 		hooksecurefunc(button.expandOrCollapseButton, "SetNormalTexture", function(self, texture)
 			if find(texture, "MinusButton") then
-				self:GetNormalTexture():SetTexCoord(0.545, 0.975, 0.085, 0.925)
+				self:GetNormalTexture():SetTexture(E.Media.Textures.Minus)
 			elseif find(texture, "PlusButton") then
-				self:GetNormalTexture():SetTexCoord(0.045, 0.475, 0.085, 0.925)
+				self:GetNormalTexture():SetTexture(E.Media.Textures.Plus)
 			end
 		end)
 	end

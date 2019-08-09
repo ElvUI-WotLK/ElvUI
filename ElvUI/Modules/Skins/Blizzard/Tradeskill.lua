@@ -63,26 +63,25 @@ local function LoadSkin()
 	TradeSkillExpandButtonFrame:StripTextures();
 	TradeSkillExpandButtonFrame:Point("TOPLEFT", 8, -71)
 
-	TradeSkillCollapseAllButton:SetNormalTexture("Interface\\AddOns\\ElvUI\\media\\textures\\PlusMinusButton")
+	TradeSkillCollapseAllButton:SetNormalTexture(E.Media.Textures.Plus)
 	TradeSkillCollapseAllButton.SetNormalTexture = E.noop
 	TradeSkillCollapseAllButton:GetNormalTexture():Point("LEFT", 3, 2)
-	TradeSkillCollapseAllButton:GetNormalTexture():Size(15)
+	TradeSkillCollapseAllButton:GetNormalTexture():Size(16)
 
 	TradeSkillCollapseAllButton:SetHighlightTexture("")
 	TradeSkillCollapseAllButton.SetHighlightTexture = E.noop
 
-	TradeSkillCollapseAllButton:SetDisabledTexture("Interface\\AddOns\\ElvUI\\media\\textures\\PlusMinusButton")
+	TradeSkillCollapseAllButton:SetDisabledTexture(E.Media.Textures.Plus)
 	TradeSkillCollapseAllButton.SetDisabledTexture = E.noop
 	TradeSkillCollapseAllButton:GetDisabledTexture():Point("LEFT", 3, 2)
-	TradeSkillCollapseAllButton:GetDisabledTexture():Size(15)
-	TradeSkillCollapseAllButton:GetDisabledTexture():SetTexCoord(0.045, 0.475, 0.085, 0.925)
+	TradeSkillCollapseAllButton:GetDisabledTexture():Size(16)
 	TradeSkillCollapseAllButton:GetDisabledTexture():SetDesaturated(true)
 
 	hooksecurefunc(TradeSkillCollapseAllButton, "SetNormalTexture", function(self, texture)
 		if find(texture, "MinusButton") then
-			self:GetNormalTexture():SetTexCoord(0.545, 0.975, 0.085, 0.925)
+			self:GetNormalTexture():SetTexture(E.Media.Textures.Minus)
 		else
-			self:GetNormalTexture():SetTexCoord(0.045, 0.475, 0.085, 0.925)
+			self:GetNormalTexture():SetTexture(E.Media.Textures.Plus)
 		end
 	end)
 
@@ -102,7 +101,7 @@ local function LoadSkin()
 		local skillButton = _G["TradeSkillSkill"..i]
 		local skillButtonHighlight = _G["TradeSkillSkill"..i.."Highlight"]
 
-		skillButton:SetNormalTexture("Interface\\AddOns\\ElvUI\\media\\textures\\PlusMinusButton")
+		skillButton:SetNormalTexture(E.Media.Textures.Plus)
 		skillButton.SetNormalTexture = E.noop
 		skillButton:GetNormalTexture():Size(13)
 		skillButton:GetNormalTexture():Point("LEFT", 2, 1)
@@ -112,11 +111,11 @@ local function LoadSkin()
 
 		hooksecurefunc(skillButton, "SetNormalTexture", function(self, texture)
 			if find(texture, "MinusButton") then
-				self:GetNormalTexture():SetTexCoord(0.545, 0.975, 0.085, 0.925)
+				self:GetNormalTexture():SetTexture(E.Media.Textures.Minus)
 			elseif find(texture, "PlusButton") then
-				self:GetNormalTexture():SetTexCoord(0.045, 0.475, 0.085, 0.925)
+				self:GetNormalTexture():SetTexture(E.Media.Textures.Plus)
 			else
-				self:GetNormalTexture():SetTexCoord(0, 0, 0, 0)
+				self:GetNormalTexture():SetTexture("")
 			end
 		end)
 	end
