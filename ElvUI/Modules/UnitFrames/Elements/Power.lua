@@ -202,7 +202,7 @@ function UF:Configure_Power(frame)
 	power.custom_backdrop = UF.db.colors.custompowerbackdrop and UF.db.colors.power_backdrop
 
 	--Transparency Settings
-	UF:ToggleTransparentStatusBar(UF.db.colors.transparentPower, power, power.BG)
+	UF:ToggleTransparentStatusBar(UF.db.colors.transparentPower, power, power.BG, nil, UF.db.colors.invertPower)
 end
 
 local tokens = {[0] = "MANA", "RAGE", "FOCUS", "ENERGY", "RUNIC_POWER"}
