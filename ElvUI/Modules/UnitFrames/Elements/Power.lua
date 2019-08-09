@@ -223,7 +223,7 @@ function UF:PostUpdatePowerColor()
 	end
 end
 
-function UF:PostUpdatePower(unit, _, _, max)
+function UF:PostUpdatePower(unit, _, max)
 	local parent = self.origParent or self:GetParent()
 	if parent.isForced then
 		self:SetValue(random(1, self.max))

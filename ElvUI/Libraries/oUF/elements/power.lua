@@ -198,17 +198,16 @@ local function Update(self, event, unit)
 	element.disconnected = disconnected
 	element.tapped = tapped
 
-	--[[ Callback: Power:PostUpdate(unit, cur, min, max)
+	--[[ Callback: Power:PostUpdate(unit, cur, max)
 	Called after the element has been updated.
 
 	* self - the Power element
 	* unit - the unit for which the update has been triggered (string)
 	* cur  - the unit's current power value (number)
-	* min  - the unit's minimum possible power value (number)
 	* max  - the unit's maximum possible power value (number)
 	--]]
 	if(element.PostUpdate) then
-		element:PostUpdate(unit, cur, 0, max)
+		element:PostUpdate(unit, cur, max)
 	end
 end
 
