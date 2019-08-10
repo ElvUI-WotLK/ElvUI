@@ -101,7 +101,12 @@ function S:Ace3_RegisterAsWidget(widget)
 		checkbg.backdrop:SetInside(widget.checkbg, 4, 4)
 		checkbg.backdrop:SetFrameLevel(widget.checkbg.backdrop:GetFrameLevel() + 1)
 		checkbg:SetTexture()
+		checkbg.SetTexture = E.noop
+
+		check:SetParent(checkbg.backdrop)
+
 		highlight:SetTexture()
+		highlight.SetTexture = E.noop
 
 		hooksecurefunc(widget, "SetValue", function(w, checked)
 			if S:Ace3_CheckBoxIsEnableSwitch(w) then
@@ -112,34 +117,35 @@ function S:Ace3_RegisterAsWidget(widget)
 		if E.private.skins.checkBoxSkin then
 			checkbg.backdrop:SetInside(widget.checkbg, 5, 5)
 			check:SetTexture(E.Media.Textures.Melli)
+			check.SetTexture = E.noop
+			check:SetInside(widget.checkbg.backdrop)
 
 			hooksecurefunc(check, "SetDesaturated", function(chk, value)
-				local isSwitch = S:Ace3_CheckBoxIsEnableSwitch(widget)
-
 				if value == true then
-					if isSwitch then
-						chk:SetVertexColor(1.0, 0.2, 0.2, 1.0)
-					else
-						chk:SetVertexColor(0.6, 0.6, 0.6, 0.8)
-					end
-				else
-					if isSwitch then
-						chk:SetVertexColor(0.2, 1.0, 0.2, 1.0)
-					else
-						chk:SetVertexColor(1, 0.82, 0, 0.8)
-					end
+					chk:SetDesaturated(false)
 				end
 			end)
 
-			check.SetTexture = E.noop
-			check:SetInside(widget.checkbg.backdrop)
+			hooksecurefunc(widget, "SetDisabled", function(_, value)
+				local isSwitch = S:Ace3_CheckBoxIsEnableSwitch(widget)
+
+				if value then
+					if isSwitch then
+						check:SetVertexColor(1.0, 0.2, 0.2, 1.0)
+					else
+						check:SetVertexColor(0.6, 0.6, 0.6, 0.8)
+					end
+				else
+					if isSwitch then
+						check:SetVertexColor(0.2, 1.0, 0.2, 1.0)
+					else
+						check:SetVertexColor(1, 0.82, 0, 0.8)
+					end
+				end
+			end)
 		else
 			check:SetOutside(widget.checkbg.backdrop, 3, 3)
 		end
-
-		check:SetParent(checkbg.backdrop)
-		checkbg.SetTexture = E.noop
-		highlight.SetTexture = E.noop
 	elseif TYPE == "Dropdown" then
 		local frame = widget.dropdown
 		local button = widget.button
@@ -260,6 +266,15 @@ function S:Ace3_RegisterAsWidget(widget)
 
 		lowtext:Point("TOPLEFT", frame, "BOTTOMLEFT", 2, -2)
 		hightext:Point("TOPRIGHT", frame, "BOTTOMRIGHT", -2, -2)
+
+		hooksecurefunc(widget, "SetDisabled", function(w, disabled)
+			local thumbTex = w.slider:GetThumbTexture()
+			if disabled then
+				thumbTex:SetVertexColor(0.6, 0.6, 0.6, 0.8)
+			else
+				thumbTex:SetVertexColor(1, 0.82, 0, 0.8)
+			end
+		end)
 	elseif TYPE == "Keybinding" then
 		local button = widget.button
 		local msgframe = widget.msgframe

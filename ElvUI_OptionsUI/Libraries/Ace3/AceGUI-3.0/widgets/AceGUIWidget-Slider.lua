@@ -138,7 +138,6 @@ local methods = {
 		self.disabled = disabled
 		if disabled then
 			self.slider:EnableMouse(false)
-			self.slider:GetThumbTexture():SetVertexColor(0.6, 0.6, 0.6, 0.8) -- ElvUI
 			self.label:SetTextColor(.5, .5, .5)
 			self.hightext:SetTextColor(.5, .5, .5)
 			self.lowtext:SetTextColor(.5, .5, .5)
@@ -148,7 +147,6 @@ local methods = {
 			self.editbox:ClearFocus()
 		else
 			self.slider:EnableMouse(true)
-			self.slider:GetThumbTexture():SetVertexColor(1, 0.82, 0, 0.8) -- ElvUI
 			self.label:SetTextColor(1, .82, 0)
 			self.hightext:SetTextColor(1, 1, 1)
 			self.lowtext:SetTextColor(1, 1, 1)
