@@ -1,6 +1,6 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local M = E:GetModule("Misc");
-local CH = E:GetModule("Chat");
+local M = E:GetModule("Misc")
+local CH = E:GetModule("Chat")
 
 --Cache global variables
 --Lua functions
@@ -89,31 +89,31 @@ function M:SkinBubble(frame)
 	local mult = E.mult * UIParent:GetScale()
 	for i = 1, frame:GetNumRegions() do
 		local region = select(i, frame:GetRegions())
-		if region:GetObjectType() == "Texture" then
+		if region:IsObjectType("Texture") then
 			region:SetTexture(nil)
-		elseif region:GetObjectType() == "FontString" then
+		elseif region:IsObjectType("FontString") then
 			frame.text = region
 		end
 	end
 
 	local name = frame:CreateFontString(nil, "OVERLAY")
 	if E.private.general.chatBubbles == "backdrop" then
-		name:SetPoint("TOPLEFT", 5, 19)
+		name:SetPoint("TOPLEFT", 5, E.PixelMode and 15 or 18)
 	else
 		name:SetPoint("TOPLEFT", 5, 6)
 	end
 	name:SetPoint("BOTTOMRIGHT", frame, "TOPRIGHT", -5, -5)
 	name:SetJustifyH("LEFT")
-	name:FontTemplate(E.LSM:Fetch("font", E.private.general.chatBubbleFont), E.private.general.chatBubbleFontSize * 0.85, E.private.general.chatBubbleFontOutline)
+	name:FontTemplate(E.Libs.LSM:Fetch("font", E.private.general.chatBubbleFont), E.private.general.chatBubbleFontSize * 0.85, E.private.general.chatBubbleFontOutline)
 	frame.Name = name
 
 	if E.private.general.chatBubbles == "backdrop" then
 		if E.PixelMode then
 			frame:SetBackdrop({
-				bgFile = E["media"].blankTex,
-				edgeFile = E["media"].blankTex,
+				bgFile = E.media.blankTex,
+				edgeFile = E.media.blankTex,
 				tile = false, tileSize = 0, edgeSize = mult,
-				insets = { left = 0, right = 0, top = 0, bottom = 0}
+				insets = {left = 0, right = 0, top = 0, bottom = 0}
 			})
 			frame:SetBackdropColor(unpack(E.media.backdropfadecolor))
 			frame:SetBackdropBorderColor(0, 0, 0)
@@ -223,6 +223,7 @@ end
 
 local numChildren = 0
 local function ChatBubble_OnUpdate(self, elapsed)
+	if not M.BubbleFrame then return end
 	if not M.BubbleFrame.lastupdate then
 		M.BubbleFrame.lastupdate = -2 -- wait 2 seconds before hooking frames
 	end

@@ -1,7 +1,12 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local M = E:GetModule("Misc");
+local M = E:GetModule("Misc")
+
+local unpack, pairs = unpack, pairs
+local tinsert = table.insert
+local max = math.max
 
 local CloseLoot = CloseLoot
+local CreateFrame = CreateFrame
 local CursorOnUpdate = CursorOnUpdate
 local CursorUpdate = CursorUpdate
 local GetCVar = GetCVar
@@ -10,37 +15,37 @@ local GetLootSlotInfo = GetLootSlotInfo
 local GetLootSlotLink = GetLootSlotLink
 local GetNumLootItems = GetNumLootItems
 local GiveMasterLoot = GiveMasterLoot
+local HandleModifiedItemClick = HandleModifiedItemClick
 local IsFishingLoot = IsFishingLoot
 local IsModifiedClick = IsModifiedClick
 local LootSlot = LootSlot
 local LootSlotIsCoin = LootSlotIsCoin
 local LootSlotIsItem = LootSlotIsItem
 local ResetCursor = ResetCursor
+local StaticPopup_Hide = StaticPopup_Hide
+local ToggleDropDownMenu = ToggleDropDownMenu
 local UnitIsDead = UnitIsDead
 local UnitIsFriend = UnitIsFriend
 local UnitName = UnitName
-local ITEM_QUALITY_COLORS = ITEM_QUALITY_COLORS;
-local LOOT = LOOT;
-
-local max = math.max
-local tinsert = table.insert
-local unpack, pairs = unpack, pairs;
+local ITEM_QUALITY_COLORS = ITEM_QUALITY_COLORS
+local TEXTURE_ITEM_QUEST_BANG = TEXTURE_ITEM_QUEST_BANG
+local LOOT = LOOT
 
 -- Credit Haste
 local lootFrame, lootFrameHolder
-local iconSize = 30;
+local iconSize = 30
 
-local sq, ss, sn;
+local sq, ss, sn
 local OnEnter = function(self)
-	local slot = self:GetID();
-	if(LootSlotIsItem(slot)) then
-		GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
-		GameTooltip:SetLootItem(slot);
-		CursorUpdate(self);
+	local slot = self:GetID()
+	if LootSlotIsItem(slot) then
+		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+		GameTooltip:SetLootItem(slot)
+		CursorUpdate(self)
 	end
 
-	self.drop:Show();
-	self.drop:SetVertexColor(1, 1, 0);
+	self.drop:Show()
+	self.drop:SetVertexColor(1, 1, 1)
 end
 
 local OnLeave = function(self)
@@ -48,20 +53,20 @@ local OnLeave = function(self)
 		local color = ITEM_QUALITY_COLORS[self.quality]
 		self.drop:SetVertexColor(color.r, color.g, color.b)
 	else
-		self.drop:Hide();
+		self.drop:Hide()
 	end
 
-	GameTooltip:Hide();
-	ResetCursor();
+	GameTooltip:Hide()
+	ResetCursor()
 end
 
 local OnClick = function(self)
-	LootFrame.selectedQuality = self.quality;
+	LootFrame.selectedQuality = self.quality
 	LootFrame.selectedItemName = self.name:GetText()
 	LootFrame.selectedSlot = self:GetID()
 	LootFrame.selectedLootButton = self:GetName()
 
-	if(IsModifiedClick()) then
+	if IsModifiedClick() then
 		HandleModifiedItemClick(GetLootSlotLink(self:GetID()))
 	else
 		StaticPopup_Hide("CONFIRM_LOOT_DISTRIBUTION")
@@ -73,7 +78,7 @@ local OnClick = function(self)
 end
 
 local OnShow = function(self)
-	if(GameTooltip:IsOwned(self)) then
+	if GameTooltip:IsOwned(self) then
 		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
 		GameTooltip:SetLootItem(self:GetID())
 		CursorOnUpdate(self)
@@ -84,7 +89,7 @@ local function anchorSlots(self)
 	local shownSlots = 0
 	for i = 1, #self.slots do
 		local frame = self.slots[i]
-		if(frame:IsShown()) then
+		if frame:IsShown() then
 			shownSlots = shownSlots + 1
 
 			frame:Point("TOP", lootFrame, 4, (-8 + iconSize) - (shownSlots * iconSize))
@@ -110,10 +115,10 @@ local function createSlot(id)
 
 	local iconFrame = CreateFrame("Frame", nil, frame)
 	iconFrame:Size(iconSize - 2)
-	iconFrame:SetPoint("RIGHT", frame)
+	iconFrame:Point("RIGHT", frame)
 	iconFrame:SetTemplate("Default")
 	frame.iconFrame = iconFrame
-	E["frames"][iconFrame] = nil;
+	E.frames[iconFrame] = nil
 
 	local icon = iconFrame:CreateTexture(nil, "ARTWORK")
 	icon:SetTexCoord(unpack(E.TexCoords))
@@ -129,26 +134,31 @@ local function createSlot(id)
 
 	local name = frame:CreateFontString(nil, "OVERLAY")
 	name:SetJustifyH("LEFT")
-	name:SetPoint("LEFT", frame)
-	name:SetPoint("RIGHT", icon, "LEFT")
+	name:Point("LEFT", frame)
+	name:Point("RIGHT", icon, "LEFT")
 	name:SetNonSpaceWrap(true)
 	name:FontTemplate(nil, nil, "OUTLINE")
 	frame.name = name
 
 	local drop = frame:CreateTexture(nil, "ARTWORK")
-	drop:SetTexture("Interface\\QuestFrame\\UI-QuestLogTitleHighlight")
-	drop:SetPoint("LEFT", icon, "RIGHT", 0, 0)
-	drop:SetPoint("RIGHT", frame)
+	drop:SetTexture(1, 1, 1, 0.15)
+	drop:Point("LEFT", icon, "RIGHT", 0, 0)
+	drop:Point("RIGHT", frame)
 	drop:SetAllPoints(frame)
-	drop:SetAlpha(.3)
 	frame.drop = drop
+
+	local questTexture = iconFrame:CreateTexture(nil, "OVERLAY")
+	questTexture:SetInside()
+	questTexture:SetTexture(TEXTURE_ITEM_QUEST_BANG)
+	questTexture:SetTexCoord(unpack(E.TexCoords))
+	frame.questTexture = questTexture
 
 	lootFrame.slots[id] = frame
 	return frame
 end
 
 function M:LOOT_SLOT_CLEARED(_, slot)
-	if(not lootFrame:IsShown()) then return end
+	if not lootFrame:IsShown() then return end
 
 	lootFrame.slots[slot]:Hide()
 	anchorSlots(lootFrame)
@@ -168,28 +178,28 @@ function M:OPEN_MASTER_LOOT_LIST()
 end
 
 function M:UPDATE_MASTER_LOOT_LIST()
-	UIDropDownMenu_Refresh(GroupLootDropDown);
+	UIDropDownMenu_Refresh(GroupLootDropDown)
 end
 
 function M:LOOT_OPENED(_, autoLoot)
 	lootFrame:Show()
 
-	if(not lootFrame:IsShown()) then
+	if not lootFrame:IsShown() then
 		CloseLoot(autoLoot == 0)
 	end
 
 	local items = GetNumLootItems()
 
-	if(IsFishingLoot()) then
+	if IsFishingLoot() then
 		lootFrame.title:SetText(L["Fishy Loot"])
-	elseif(not UnitIsFriend("player", "target") and UnitIsDead("target")) then
+	elseif not UnitIsFriend("player", "target") and UnitIsDead("target") then
 		lootFrame.title:SetText(UnitName("target"))
 	else
 		lootFrame.title:SetText(LOOT)
 	end
 
 	-- Blizzard uses strings here
-	if(GetCVar("lootUnderMouse") == "1") then
+	if GetCVar("lootUnderMouse") == "1" then
 		local x, y = GetCursorPosition()
 		x = x / lootFrame:GetEffectiveScale()
 		y = y / lootFrame:GetEffectiveScale()
@@ -198,21 +208,21 @@ function M:LOOT_OPENED(_, autoLoot)
 		lootFrame:Point("TOPLEFT", UIParent, "BOTTOMLEFT", x - 40, y + 20)
 		lootFrame:GetCenter()
 		lootFrame:Raise()
-		E:DisableMover("LootFrameMover");
+		E:DisableMover("LootFrameMover")
 	else
 		lootFrame:ClearAllPoints()
-		lootFrame:SetPoint("TOPLEFT", lootFrameHolder, "TOPLEFT")
-		E:EnableMover("LootFrameMover");
+		lootFrame:Point("TOPLEFT", lootFrameHolder, "TOPLEFT")
+		E:EnableMover("LootFrameMover")
 	end
 
 	local m, w, t = 0, 0, lootFrame.title:GetStringWidth()
-	if(items > 0) then
+	if items > 0 then
 		for i = 1, items do
 			local slot = lootFrame.slots[i] or createSlot(i)
-			local texture, item, quantity, quality = GetLootSlotInfo(i)
+			local texture, item, quantity, quality, _, isQuestItem, questId, isActive = GetLootSlotInfo(i)
 			local color = ITEM_QUALITY_COLORS[quality]
 
-			if(LootSlotIsCoin(i)) then
+			if texture and texture:find("INV_Misc_Coin") then
 				item = item:gsub("\n", ", ")
 			end
 
@@ -242,8 +252,22 @@ function M:LOOT_OPENED(_, autoLoot)
 			end
 			w = max(w, slot.name:GetStringWidth())
 
-			slot:Enable()
-			slot:Show()
+			local questTexture = slot.questTexture
+			if questId and not isActive then
+				questTexture:SetTexture(TEXTURE_ITEM_QUEST_BANG)
+				questTexture:Show()
+			elseif questId or isQuestItem then
+				questTexture:SetTexture(TEXTURE_ITEM_QUEST_BORDER)
+				questTexture:Show()
+			else
+				questTexture:Hide()
+			end
+
+			-- Check for FasterLooting scripts or w/e (if bag is full)
+			if texture then
+				slot:Enable()
+				slot:Show()
+			end
 		end
 	else
 		local slot = lootFrame.slots[1] or createSlot(1)
@@ -255,6 +279,7 @@ function M:LOOT_OPENED(_, autoLoot)
 		end
 		slot.icon:SetTexture[[Interface\Icons\INV_Misc_Herb_AncientLichen]]
 
+		items = 1
 		w = max(w, slot.name:GetStringWidth())
 
 		slot.count:Hide()
@@ -274,8 +299,9 @@ end
 
 function M:LoadLoot()
 	if not E.private.general.loot then return end
+
 	lootFrameHolder = CreateFrame("Frame", "ElvLootFrameHolder", E.UIParent)
-	lootFrameHolder:Point("TOPLEFT", 36, -195)
+	lootFrameHolder:Point("TOP", 0, -50)
 	lootFrameHolder:Size(150, 22)
 
 	lootFrame = CreateFrame("Button", "ElvLootFrame", lootFrameHolder)
@@ -283,17 +309,17 @@ function M:LoadLoot()
 	lootFrame:SetPoint("TOPLEFT")
 	lootFrame:Size(256, 64)
 	lootFrame:SetTemplate("Transparent")
-	lootFrame:SetFrameStrata("FULLSCREEN")
+	lootFrame:SetFrameStrata("DIALOG")
 	lootFrame:SetToplevel(true)
 	lootFrame.title = lootFrame:CreateFontString(nil, "OVERLAY")
 	lootFrame.title:FontTemplate(nil, nil, "OUTLINE")
-	lootFrame.title:Point("BOTTOMLEFT", lootFrame, "TOPLEFT", 0, 1);
+	lootFrame.title:Point("BOTTOMLEFT", lootFrame, "TOPLEFT", 0, 1)
 	lootFrame.slots = {}
 	lootFrame:SetScript("OnHide", function()
 		StaticPopup_Hide("CONFIRM_LOOT_DISTRIBUTION")
 		CloseLoot()
 	end)
-	E["frames"][lootFrame] = nil;
+	E.frames[lootFrame] = nil
 
 	self:RegisterEvent("LOOT_OPENED")
 	self:RegisterEvent("LOOT_SLOT_CLEARED")
@@ -301,16 +327,16 @@ function M:LoadLoot()
 	self:RegisterEvent("OPEN_MASTER_LOOT_LIST")
 	self:RegisterEvent("UPDATE_MASTER_LOOT_LIST")
 
-	E:CreateMover(lootFrameHolder, "LootFrameMover", L["Loot Frame"])
+	E:CreateMover(lootFrameHolder, "LootFrameMover", L["Loot Frame"], nil, nil, nil, nil, nil, "general,general")
 
 	-- Fuzz
 	LootFrame:UnregisterAllEvents()
 	tinsert(UISpecialFrames, "ElvLootFrame")
 
 	function _G.GroupLootDropDown_GiveLoot(self)
-		if(sq >= MASTER_LOOT_THREHOLD) then
+		if sq >= MASTER_LOOT_THREHOLD then
 			local dialog = StaticPopup_Show("CONFIRM_LOOT_DISTRIBUTION", ITEM_QUALITY_COLORS[sq].hex..sn..FONT_COLOR_CODE_CLOSE, self:GetText())
-			if (dialog) then
+			if dialog then
 				dialog.data = self.value
 			end
 		else
@@ -319,8 +345,8 @@ function M:LoadLoot()
 		CloseDropDownMenus()
 	end
 
-	E.PopupDialogs["CONFIRM_LOOT_DISTRIBUTION"].OnAccept = function(_, data)
-		GiveMasterLoot(ss, data);
+	E.PopupDialogs.CONFIRM_LOOT_DISTRIBUTION.OnAccept = function(_, data)
+		GiveMasterLoot(ss, data)
 	end
-	StaticPopupDialogs["CONFIRM_LOOT_DISTRIBUTION"].preferredIndex = 3;
+	StaticPopupDialogs.CONFIRM_LOOT_DISTRIBUTION.preferredIndex = 3
 end

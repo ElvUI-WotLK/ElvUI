@@ -85,13 +85,13 @@ function D:ModifyErrorFrame()
 end
 
 function D:ScriptErrorsFrame_UpdateButtons()
-	local numErrors = #ScriptErrorsFrame.order;
-	local index = ScriptErrorsFrame.index;
-	if ( index == 0 ) then
+	local numErrors = #ScriptErrorsFrame.order
+	local index = ScriptErrorsFrame.index
+	if index == 0 then
 		ScriptErrorsFrame.lastButton:Disable()
 		ScriptErrorsFrame.firstButton:Disable()
 	else
-		if ( numErrors == 1 ) then
+		if numErrors == 1 then
 			ScriptErrorsFrame.lastButton:Disable()
 			ScriptErrorsFrame.firstButton:Disable()
 		else
@@ -102,15 +102,15 @@ function D:ScriptErrorsFrame_UpdateButtons()
 end
 
 function D:ScriptErrorsFrame_OnError(_, keepHidden)
-	if keepHidden or self.MessagePrinted or not InCombatLockdown() or GetCVarBool("scriptErrors") ~= 1 then return; end
+	if keepHidden or self.MessagePrinted or not InCombatLockdown() or GetCVarBool("scriptErrors") ~= 1 then return end
 
 	E:Print(L["|cFFE30000Lua error recieved. You can view the error message when you exit combat."])
-	self.MessagePrinted = true;
+	self.MessagePrinted = true
 end
 
 function D:PLAYER_REGEN_ENABLED()
 	ScriptErrorsFrame:SetParent(UIParent)
-	self.MessagePrinted = nil;
+	self.MessagePrinted = nil
 end
 
 function D:PLAYER_REGEN_DISABLED()
@@ -123,8 +123,8 @@ function D:TaintError(event, addonName, addonFunc)
 end
 
 function D:StaticPopup_Show(name)
-	if(name == "ADDON_ACTION_FORBIDDEN" and E.db.general.taintLog ~= true) then
-		StaticPopup_Hide(name);
+	if name == "ADDON_ACTION_FORBIDDEN" and E.db.general.taintLog ~= true then
+		StaticPopup_Hide(name)
 	end
 end
 
@@ -132,7 +132,7 @@ function D:Initialize()
 	self.HideFrame = CreateFrame("Frame")
 	self.HideFrame:Hide()
 
-	if( not IsAddOnLoaded("Blizzard_DebugTools") ) then
+	if not IsAddOnLoaded("Blizzard_DebugTools") then
 		LoadAddOn("Blizzard_DebugTools")
 	end
 
