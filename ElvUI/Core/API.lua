@@ -67,9 +67,11 @@ function E:CheckTalentTree(tree)
 end
 
 function E:GetPlayerRole()
-	local assignedRole = UnitGroupRolesAssigned("player")
+	local isTank, isHealer, isDamage = UnitGroupRolesAssigned("player")
 
-	if assignedRole == "NONE" or not assignedRole then
+	if isTank or isHealer or isDamage then
+		return isTank and "TANK" or isHealer and "HEALER" or isDamage and "DAMAGER"
+	else
 		if self.HealingClasses[self.myclass] ~= nil and self:CheckTalentTree(self.HealingClasses[E.myclass]) then
 			return "HEALER"
 		elseif E.Role == "Tank" then
@@ -77,8 +79,6 @@ function E:GetPlayerRole()
 		else
 			return "DAMAGER"
 		end
-	else
-		return assignedRole
 	end
 end
 
