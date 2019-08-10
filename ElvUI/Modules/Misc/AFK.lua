@@ -27,7 +27,8 @@ local Screenshot = Screenshot
 local SetCVar = SetCVar
 local UnitCastingInfo = UnitCastingInfo
 local UnitIsAFK = UnitIsAFK
-local AFK, DND = AFK, DND
+local AFKstr = _G.AFK
+local DNDstr = _G.DND
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS
 
 local CAMERA_SPEED = 0.035
@@ -238,8 +239,8 @@ local function Chat_OnEvent(self, event, arg1, arg2, arg3, arg4, arg5, arg6, arg
 	if CH.db.shortChannels then
 		body = body:gsub("|Hchannel:(.-)|h%[(.-)%]|h", CH.ShortChannel)
 		body = body:gsub("^(.-|h) "..L["whispers"], "%1")
-		body = body:gsub("<"..AFK..">", "[|cffFF0000"..L["AFK"].."|r] ")
-		body = body:gsub("<"..DND..">", "[|cffE7E716"..L["DND"].."|r] ")
+		body = body:gsub("<"..AFKstr..">", "[|cffFF0000"..L["AFK"].."|r] ")
+		body = body:gsub("<"..DNDstr..">", "[|cffE7E716"..L["DND"].."|r] ")
 		body = body:gsub("%[BN_CONVERSATION:", "%[".."")
 	end
 

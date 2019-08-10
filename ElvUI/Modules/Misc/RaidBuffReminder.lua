@@ -3,7 +3,6 @@ local RB = E:GetModule("ReminderBuffs")
 local LSM = E.Libs.LSM
 
 local pairs, unpack = pairs, unpack
-local format = string.format
 
 RB.Spell1Buffs = {
 	67016, -- Flask of the North (SP)

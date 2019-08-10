@@ -7,7 +7,6 @@ local format, gsub = string.format, string.gsub
 local AcceptGroup = AcceptGroup
 local CanGuildBankRepair = CanGuildBankRepair
 local CanMerchantRepair = CanMerchantRepair
-local GetCoinTextureString = GetCoinTextureString
 local GetCVarBool, SetCVar = GetCVarBool, SetCVar
 local GetFriendInfo = GetFriendInfo
 local GetGuildBankWithdrawMoney = GetGuildBankWithdrawMoney

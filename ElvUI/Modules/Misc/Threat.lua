@@ -1,7 +1,6 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local THREAT = E:GetModule("Threat")
 local DT = E:GetModule("DataTexts")
-local LSM = E.Libs.LSM
 
 local pairs, select = pairs, select
 local wipe = wipe
