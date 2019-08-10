@@ -227,7 +227,6 @@ function M:AutoInvite(event, leaderName)
 				local guildMemberName = gsub(GetGuildRosterInfo(guildIndex), "-.*", "")
 				if guildMemberName == leaderName then
 					AcceptGroup()
-					inGroup = true
 					break
 				end
 			end
