@@ -279,10 +279,6 @@ function AB:CreateBarPet()
 
 	self:HookScript(bar, "OnEnter", "Bar_OnEnter")
 	self:HookScript(bar, "OnLeave", "Bar_OnLeave")
-	for i = 1, NUM_PET_ACTION_SLOTS do
-		self:HookScript(_G["PetActionButton"..i], "OnEnter", "Button_OnEnter")
-		self:HookScript(_G["PetActionButton"..i], "OnLeave", "Button_OnLeave")
-	end
 
 	self:RegisterEvent("SPELLS_CHANGED", "UpdatePet")
 	self:RegisterEvent("PLAYER_CONTROL_GAINED", "UpdatePet")
