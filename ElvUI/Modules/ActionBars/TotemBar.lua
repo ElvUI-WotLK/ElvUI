@@ -343,5 +343,5 @@ function AB:CreateTotemBar()
 	self:SecureHook("MultiCastFlyoutFrame_ToggleFlyout")
 	self:SecureHook("ShowMultiCastActionBar")
 
-	E:CreateMover(bar, "ElvBar_Totem", TUTORIAL_TITLE47, nil, nil, nil,"ALL,ACTIONBARS")
+	E:CreateMover(bar, "ElvBar_Totem", TUTORIAL_TITLE47, nil, nil, nil,"ALL,ACTIONBARS", nil, "actionbar,barTotem")
 end
