@@ -46,7 +46,7 @@ function AB:UpdatePet(event, unit)
 		button.isToken = isToken
 		button.tooltipSubtext = subtext
 
-		if isActive and name ~= "PET_ACTION_FOLLOW" then
+		if isActive --[[and name ~= "PET_ACTION_FOLLOW"]] then
 			button:SetChecked(true)
 
 			if IsPetAttackAction(i) then
@@ -84,7 +84,7 @@ function AB:UpdatePet(event, unit)
 			icon:Hide()
 		end
 
-		if not PetHasActionBar() and texture and name ~= "PET_ACTION_FOLLOW" then
+		if not PetHasActionBar() and texture --[[and name ~= "PET_ACTION_FOLLOW"]] then
 			PetActionButton_StopFlash(button)
 			SetDesaturation(icon, 1)
 			button:SetChecked(0)
@@ -164,7 +164,7 @@ function AB:PositionAndSizeBarPet()
 		bar:SetAlpha(bar.db.alpha)
 	end
 
-	if self.db["barPet"].inheritGlobalFade then
+	if self.db.barPet.inheritGlobalFade then
 		bar:SetParent(self.fadeParent)
 	else
 		bar:SetParent(E.UIParent)
@@ -177,14 +177,14 @@ function AB:PositionAndSizeBarPet()
 		lastButton = _G["PetActionButton"..i - 1]
 		autoCast = _G["PetActionButton"..i.."AutoCastable"]
 		shine = _G["PetActionButton"..i.."Shine"]
-		lastColumnButton = _G["PetActionButton"..i-buttonsPerRow]
+		lastColumnButton = _G["PetActionButton"..i - buttonsPerRow]
 
 		button:SetParent(bar)
 		button:ClearAllPoints()
-		button:SetAttribute("showgrid", 1)
 		button:Size(size)
 		autoCast:SetOutside(button, autoCastSize, autoCastSize)
 		shine:Size(size - E.Border*2)
+		button:SetAttribute("showgrid", 1)
 
 		if i == 1 then
 			local x, y
@@ -279,6 +279,10 @@ function AB:CreateBarPet()
 
 	self:HookScript(bar, "OnEnter", "Bar_OnEnter")
 	self:HookScript(bar, "OnLeave", "Bar_OnLeave")
+	for i = 1, NUM_PET_ACTION_SLOTS do
+		self:HookScript(_G["PetActionButton"..i], "OnEnter", "Button_OnEnter")
+		self:HookScript(_G["PetActionButton"..i], "OnLeave", "Button_OnLeave")
+	end
 
 	self:RegisterEvent("SPELLS_CHANGED", "UpdatePet")
 	self:RegisterEvent("PLAYER_CONTROL_GAINED", "UpdatePet")

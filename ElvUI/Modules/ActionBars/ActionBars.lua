@@ -104,7 +104,7 @@ function AB:PositionAndSizeBar(barName)
 	local bar = self.handledBars[barName]
 
 	bar.db = self.db[barName]
-	bar.db.position = nil
+	bar.db.position = nil --Depreciated
 
 	if visibility and visibility:match("[\n\r]") then
 		visibility = visibility:gsub("[\n\r]","")
@@ -164,12 +164,12 @@ function AB:PositionAndSizeBar(barName)
 	local button, lastButton, lastColumnButton
 	for i = 1, NUM_ACTIONBAR_BUTTONS do
 		button = bar.buttons[i]
-		lastButton = bar.buttons[i-1]
+		lastButton = bar.buttons[i - 1]
 		lastColumnButton = bar.buttons[i-buttonsPerRow]
 		button:SetParent(bar)
 		button:ClearAllPoints()
-		button:SetAttribute("showgrid", 1)
 		button:Size(size)
+		button:SetAttribute("showgrid", 1)
 
 		if i == 1 then
 			local x, y
@@ -187,7 +187,7 @@ function AB:PositionAndSizeBar(barName)
 		elseif (i - 1) % buttonsPerRow == 0 then
 			local y = -buttonSpacing
 			local buttonPoint, anchorPoint = "TOP", "BOTTOM"
-			if verticalGrowth == 'UP' then
+			if verticalGrowth == "UP" then
 				y = buttonSpacing
 				buttonPoint = "BOTTOM"
 				anchorPoint = "TOP"
@@ -196,7 +196,7 @@ function AB:PositionAndSizeBar(barName)
 		else
 			local x = buttonSpacing
 			local buttonPoint, anchorPoint = "LEFT", "RIGHT"
-			if horizontalGrowth == 'LEFT' then
+			if horizontalGrowth == "LEFT" then
 				x = -buttonSpacing
 				buttonPoint = "RIGHT"
 				anchorPoint = "LEFT"
@@ -482,7 +482,7 @@ function AB:UpdateButtonSettings()
 		return
 	end
 
-	for button, _ in pairs(self.handledbuttons) do
+	for button in pairs(self.handledbuttons) do
 		if button then
 			self:StyleButton(button, button.noBackdrop)
 		else
@@ -533,6 +533,7 @@ function AB:StyleButton(button, noBackdrop, useMasque)
 	local normal = _G[name.."NormalTexture"]
 	local normal2 = button:GetNormalTexture()
 	local buttonCooldown = _G[name.."Cooldown"]
+
 	local color = self.db.fontColor
 	local countPosition = self.db.countTextPosition or "BOTTOMRIGHT"
 	local countXOffset = self.db.countTextXOffset or 0
@@ -542,8 +543,8 @@ function AB:StyleButton(button, noBackdrop, useMasque)
 	button.useMasque = useMasque
 
 	if flash then flash:SetTexture(nil) end
-	if normal then normal:SetTexture(nil); normal:Hide(); normal:SetAlpha(0) end
-	if normal2 then normal2:SetTexture(nil); normal2:Hide(); normal2:SetAlpha(0) end
+	if normal then normal:SetTexture(nil) normal:Hide() normal:SetAlpha(0) end
+	if normal2 then normal2:SetTexture(nil) normal2:Hide() normal2:SetAlpha(0) end
 	if border and not button.useMasque then border:Kill() end
 
 	if count then
@@ -599,7 +600,9 @@ function AB:Bar_OnEnter(bar)
 		if not self.fadeParent.mouseLock then
 			E:UIFrameFadeIn(self.fadeParent, 0.2, self.fadeParent:GetAlpha(), 1)
 		end
-	elseif bar.mouseover then
+	end
+
+	if bar.mouseover then
 		E:UIFrameFadeIn(bar, 0.2, bar:GetAlpha(), bar.db.alpha)
 	end
 end
@@ -609,7 +612,9 @@ function AB:Bar_OnLeave(bar)
 		if not self.fadeParent.mouseLock then
 			E:UIFrameFadeOut(self.fadeParent, 0.2, self.fadeParent:GetAlpha(), 1 - self.db.globalFadeAlpha)
 		end
-	elseif bar.mouseover then
+	end
+
+	if bar.mouseover then
 		E:UIFrameFadeOut(bar, 0.2, bar:GetAlpha(), 0)
 	end
 end
@@ -620,7 +625,9 @@ function AB:Button_OnEnter(button)
 		if not self.fadeParent.mouseLock then
 			E:UIFrameFadeIn(self.fadeParent, 0.2, self.fadeParent:GetAlpha(), 1)
 		end
-	elseif bar.mouseover then
+	end
+
+	if bar.mouseover then
 		E:UIFrameFadeIn(bar, 0.2, bar:GetAlpha(), bar.db.alpha)
 	end
 end
@@ -631,7 +638,9 @@ function AB:Button_OnLeave(button)
 		if not self.fadeParent.mouseLock then
 			E:UIFrameFadeOut(self.fadeParent, 0.2, self.fadeParent:GetAlpha(), 1 - self.db.globalFadeAlpha)
 		end
-	elseif bar.mouseover then
+	end
+
+	if bar.mouseover then
 		E:UIFrameFadeOut(bar, 0.2, bar:GetAlpha(), 0)
 	end
 end
@@ -949,27 +958,26 @@ function AB:Initialize()
 	self.fadeParent:SetScript("OnEvent", self.FadeParent_OnEvent)
 
 	self:DisableBlizzard()
-
 	self:SetupMicroBar()
-
+	self:UpdateBar1Paging()
 	for i = 1, 6 do
 		self:CreateBar(i)
 	end
-
 	self:CreateBarPet()
 	self:CreateBarShapeShift()
 	self:CreateVehicleLeave()
-
 	if E.myclass == "SHAMAN" and self.db.barTotem.enabled then
 		self:CreateTotemBar()
 	end
-
+	self:UpdateButtonSettings()
 	self:LoadKeyBinder()
+
 	self:RegisterEvent("UPDATE_BINDINGS", "ReassignBindings")
 	self:ReassignBindings()
 
+	--We handle actionbar lock for regular bars, but the lock on PetBar needs to be handled by WoW so make some necessary updates
 	SetCVar("lockActionBars", (self.db.lockActionBars == true and 1 or 0))
-	LOCK_ACTIONBAR = (self.db.lockActionBars == true and "1" or "0")
+	LOCK_ACTIONBAR = (self.db.lockActionBars == true and "1" or "0") --Keep an eye on this, in case it taints
 
 	self:ToggleDesaturation()
 end

@@ -50,14 +50,14 @@ function AB:StyleShapeShift()
 			texture, name, isActive, isCastable = GetShapeshiftFormInfo(i)
 
 			if self.db.stanceBar.style == "darkenInactive" then
-				_, _, texture = GetSpellInfo(name)
+				if name then
+					_, _, texture = GetSpellInfo(name)
+				end
 			end
 
 			if not texture then
 				texture = "Interface\\Icons\\Spell_Nature_WispSplode"
 			end
-
-			icon:SetTexture(texture)
 
 			if texture then
 				cooldown:SetAlpha(1)
@@ -88,6 +88,8 @@ function AB:StyleShapeShift()
 				end
 			end
 
+			icon:SetTexture(texture)
+
 			if isCastable then
 				icon:SetVertexColor(1.0, 1.0, 1.0)
 			else
@@ -111,7 +113,7 @@ function AB:PositionAndSizeBarShapeShift()
 		E:UpdatePositionOverride(bar.mover:GetName())
 	end
 	bar.db = self.db.stanceBar
-	bar.db.position = nil; --Depreciated
+	bar.db.position = nil --Depreciated
 	bar.mouseover = self.db.stanceBar.mouseover
 
 	if bar.LastButton and numButtons > bar.LastButton then
@@ -178,8 +180,9 @@ function AB:PositionAndSizeBarShapeShift()
 	local firstButtonSpacing = (self.db.stanceBar.backdrop == true and (E.Border + backdropSpacing) or E.Spacing)
 	for i = 1, NUM_SHAPESHIFT_SLOTS do
 		button = _G["ElvUI_StanceBarButton"..i]
-		lastButton = _G["ElvUI_StanceBarButton"..i-1]
-		lastColumnButton = _G["ElvUI_StanceBarButton"..i-buttonsPerRow]
+		lastButton = _G["ElvUI_StanceBarButton"..i - 1]
+		lastColumnButton = _G["ElvUI_StanceBarButton"..i - buttonsPerRow]
+
 		button:SetParent(bar)
 		button:ClearAllPoints()
 		button:Size(size)

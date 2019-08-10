@@ -7,7 +7,6 @@ local _G = _G
 local CreateFrame = CreateFrame
 local InCombatLockdown = InCombatLockdown
 local RegisterStateDriver = RegisterStateDriver
-local UnitLevel = UnitLevel
 
 local MICRO_BUTTONS = {
 	"CharacterMicroButton",
@@ -22,15 +21,35 @@ local MICRO_BUTTONS = {
 	"HelpMicroButton"
 }
 
-local function onEnter()
+local function onEnterBar()
 	if AB.db.microbar.mouseover then
 		E:UIFrameFadeIn(ElvUI_MicroBar, 0.2, ElvUI_MicroBar:GetAlpha(), AB.db.microbar.alpha)
 	end
 end
 
-local function onLeave()
+local function onLeaveBar()
 	if AB.db.microbar.mouseover then
 		E:UIFrameFadeOut(ElvUI_MicroBar, 0.2, ElvUI_MicroBar:GetAlpha(), 0)
+	end
+end
+
+local function onEnterButton(button)
+	if AB.db.microbar.mouseover then
+		E:UIFrameFadeIn(ElvUI_MicroBar, 0.2, ElvUI_MicroBar:GetAlpha(), AB.db.microbar.alpha)
+	end
+
+	if button.backdrop then
+		button.backdrop:SetBackdropBorderColor(unpack(E.media.rgbvaluecolor))
+	end
+end
+
+local function onLeaveButton(button)
+	if AB.db.microbar.mouseover then
+		E:UIFrameFadeOut(ElvUI_MicroBar, 0.2, ElvUI_MicroBar:GetAlpha(), 0)
+	end
+
+	if button.backdrop then
+		button.backdrop:SetBackdropBorderColor(unpack(E.media.bordercolor))
 	end
 end
 
@@ -47,9 +66,10 @@ function AB:HandleMicroButton(button)
 
 	button:SetParent(ElvUI_MicroBar)
 	button:GetHighlightTexture():Kill()
-	button:HookScript("OnEnter", onEnter)
-	button:HookScript("OnLeave", onLeave)
+	button:HookScript("OnEnter", onEnterButton)
+	button:HookScript("OnLeave", onLeaveButton)
 	button:SetHitRectInsets(0, 0, 0, 0)
+	button:Show()
 
 	pushed:SetTexCoord(0.17, 0.87, 0.5, 0.908)
 	pushed:SetInside(f)
@@ -69,6 +89,8 @@ function AB:UpdateMicroButtonsParent()
 	for i = 1, #MICRO_BUTTONS do
 		_G[MICRO_BUTTONS[i]]:SetParent(ElvUI_MicroBar)
 	end
+
+	AB:UpdateMicroPositionDimensions()
 end
 
 function AB:UpdateMicroBarVisibility()
@@ -141,7 +163,7 @@ function AB:UpdateMicroButtons()
 	PVPMicroButtonTexture:Point("BOTTOMRIGHT", PVPMicroButton, "BOTTOMRIGHT")
 	PVPMicroButtonTexture:SetTexture("Interface\\AddOns\\ElvUI\\media\\textures\\PVP-Icons")
 
-	if UnitLevel("player") < PVPMicroButton.minLevel then
+	if E.mylevel < PVPMicroButton.minLevel then
 		PVPMicroButtonTexture:SetDesaturated(true)
 	else
 		PVPMicroButtonTexture:SetDesaturated(false)
@@ -157,7 +179,7 @@ function AB:SetupMicroBar()
 	microBar:SetScript("OnEnter", onEnter)
 	microBar:SetScript("OnLeave", onLeave)
 
-	microBar.visibility = CreateFrame('Frame', nil, E.UIParent, "SecureHandlerStateTemplate")
+	microBar.visibility = CreateFrame("Frame", nil, E.UIParent, "SecureHandlerStateTemplate")
 	microBar.visibility:SetScript("OnShow", function() microBar:Show() end)
 	microBar.visibility:SetScript("OnHide", function() microBar:Hide() end)
 
