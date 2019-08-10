@@ -19,7 +19,6 @@ local HandleModifiedItemClick = HandleModifiedItemClick
 local IsFishingLoot = IsFishingLoot
 local IsModifiedClick = IsModifiedClick
 local LootSlot = LootSlot
-local LootSlotIsCoin = LootSlotIsCoin
 local LootSlotIsItem = LootSlotIsItem
 local ResetCursor = ResetCursor
 local StaticPopup_Hide = StaticPopup_Hide
@@ -279,7 +278,6 @@ function M:LOOT_OPENED(_, autoLoot)
 		end
 		slot.icon:SetTexture[[Interface\Icons\INV_Misc_Herb_AncientLichen]]
 
-		items = 1
 		w = max(w, slot.name:GetStringWidth())
 
 		slot.count:Hide()
