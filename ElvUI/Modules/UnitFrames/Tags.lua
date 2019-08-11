@@ -2,37 +2,48 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 local _, ns = ...
 local ElvUF = ns.oUF
 assert(ElvUF, "ElvUI was unable to locate oUF.")
+local Translit = E.Libs.Translit
+local translitMark = "!"
 
+--Lua functions
+local find = string.find
 local floor = math.floor
 local format = string.format
-
-local GetTime = GetTime
-local UnitGUID = UnitGUID
-local UnitPower = UnitPower
-local UnitPowerMax = UnitPowerMax
-local UnitIsAFK = UnitIsAFK
-local UnitIsDeadOrGhost = UnitIsDeadOrGhost
-local UnitIsConnected = UnitIsConnected
-local UnitHealth = UnitHealth
-local UnitHealthMax = UnitHealthMax
-local UnitIsDead = UnitIsDead
-local UnitIsGhost = UnitIsGhost
-local UnitPowerType = UnitPowerType
-local UnitLevel = UnitLevel
+local gmatch = gmatch
+local gsub = gsub
+local match = string.match
+local utf8lower = string.utf8lower
+local utf8sub = string.utf8sub
+--WoW API / Variables
+local GetGuildInfo = GetGuildInfo
+local GetNumPartyMembers = GetNumPartyMembers
+local GetPVPTimer = GetPVPTimer
 local GetQuestGreenRange = GetQuestGreenRange
-local UnitReaction = UnitReaction
+local GetThreatStatusColor = GetThreatStatusColor
+local GetTime = GetTime
+local GetUnitSpeed = GetUnitSpeed
 local UnitClass = UnitClass
-local UnitIsPlayer = UnitIsPlayer
+local UnitClassification = UnitClassification
 local UnitDetailedThreatSituation = UnitDetailedThreatSituation
 local UnitExists = UnitExists
-local GetThreatStatusColor = GetThreatStatusColor
+local UnitGUID = UnitGUID
+local UnitHealth = UnitHealth
+local UnitHealthMax = UnitHealthMax
+local UnitIsAFK = UnitIsAFK
+local UnitIsConnected = UnitIsConnected
 local UnitIsDND = UnitIsDND
-local UnitIsPVPFreeForAll = UnitIsPVPFreeForAll
+local UnitIsDead = UnitIsDead
+local UnitIsDeadOrGhost = UnitIsDeadOrGhost
+local UnitIsGhost = UnitIsGhost
 local UnitIsPVP = UnitIsPVP
-local GetPVPTimer = GetPVPTimer
-local GetNumPartyMembers = GetNumPartyMembers
-local UnitClassification = UnitClassification
-local GetUnitSpeed = GetUnitSpeed
+local UnitIsPVPFreeForAll = UnitIsPVPFreeForAll
+local UnitIsPlayer = UnitIsPlayer
+local UnitLevel = UnitLevel
+local UnitName = UnitName
+local UnitPower = UnitPower
+local UnitPowerMax = UnitPowerMax
+local UnitPowerType = UnitPowerType
+local UnitReaction = UnitReaction
 local DEFAULT_AFK_MESSAGE = DEFAULT_AFK_MESSAGE
 local SPELL_POWER_MANA = SPELL_POWER_MANA
 local PVP = PVP
@@ -45,7 +56,7 @@ ElvUF.Tags.Events["afk"] = "PLAYER_FLAGS_CHANGED"
 ElvUF.Tags.Methods["afk"] = function(unit)
 	local isAFK = UnitIsAFK(unit)
 	if isAFK then
-		return ("|cffFFFFFF[|r|cffFF0000%s|r|cFFFFFFFF]|r"):format(DEFAULT_AFK_MESSAGE)
+		return format("|cffFFFFFF[|r|cffFF0000%s|r|cFFFFFFFF]|r", DEFAULT_AFK_MESSAGE)
 	else
 		return nil
 	end
@@ -456,6 +467,31 @@ ElvUF.Tags.Methods["name:long"] = function(unit)
 	return name ~= nil and E:ShortenString(name, 20) or nil
 end
 
+local function abbrev(name)
+	local letters, lastWord = "", match(name, ".+%s(.+)$")
+	if lastWord then
+		for word in gmatch(name, ".-%s") do
+			local firstLetter = utf8sub(gsub(word, "^[%s%p]*", ""), 1, 1)
+			if firstLetter ~= utf8lower(firstLetter) then
+				letters = format("%s%s. ", letters, firstLetter)
+			end
+		end
+		name = format("%s%s", letters, lastWord)
+	end
+	return name
+end
+
+ElvUF.Tags.Events["name:abbrev"] = "UNIT_NAME_UPDATE"
+ElvUF.Tags.Methods["name:abbrev"] = function(unit)
+	local name = UnitName(unit)
+
+	if name and find(name, "%s") then
+		name = abbrev(name)
+	end
+
+	return name ~= nil and E:ShortenString(name, 20) or "" --The value 20 controls how many characters are allowed in the name before it gets truncated. Change it to fit your needs.
+end
+
 ElvUF.Tags.Events["name:veryshort:status"] = "UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED UNIT_HEALTH"
 ElvUF.Tags.Methods["name:veryshort:status"] = function(unit)
 	local status = UnitIsDead(unit) and L["Dead"] or UnitIsGhost(unit) and L["Ghost"] or not UnitIsConnected(unit) and L["Offline"]
@@ -498,6 +534,78 @@ ElvUF.Tags.Methods["name:long:status"] = function(unit)
 	else
 		return name ~= nil and E:ShortenString(name, 20) or nil
 	end
+end
+
+ElvUF.Tags.Events["name:veryshort:translit"] = "UNIT_NAME_UPDATE"
+ElvUF.Tags.Methods["name:veryshort:translit"] = function(unit)
+	local name = Translit:Transliterate(UnitName(unit), translitMark)
+	return name ~= nil and E:ShortenString(name, 5) or nil
+end
+
+ElvUF.Tags.Events["name:short:translit"] = "UNIT_NAME_UPDATE"
+ElvUF.Tags.Methods["name:short:translit"] = function(unit)
+	local name = Translit:Transliterate(UnitName(unit), translitMark)
+	return name ~= nil and E:ShortenString(name, 10) or nil
+end
+
+ElvUF.Tags.Events["name:medium:translit"] = "UNIT_NAME_UPDATE"
+ElvUF.Tags.Methods["name:medium:translit"] = function(unit)
+	local name = Translit:Transliterate(UnitName(unit), translitMark)
+	return name ~= nil and E:ShortenString(name, 15) or nil
+end
+
+ElvUF.Tags.Events["name:long:translit"] = "UNIT_NAME_UPDATE"
+ElvUF.Tags.Methods["name:long:translit"] = function(unit)
+	local name = Translit:Transliterate(UnitName(unit), translitMark)
+	return name ~= nil and E:ShortenString(name, 20) or nil
+end
+
+ElvUF.Tags.Events["realm"] = "UNIT_NAME_UPDATE"
+ElvUF.Tags.Methods["realm"] = function(unit)
+	local _, realm = UnitName(unit)
+
+	if realm and realm ~= "" then
+		return realm
+	else
+		return nil
+	end
+end
+
+ElvUF.Tags.Events["realm:dash"] = "UNIT_NAME_UPDATE"
+ElvUF.Tags.Methods["realm:dash"] = function(unit)
+	local _, realm = UnitName(unit)
+
+	if realm and (realm ~= "" and realm ~= E.myrealm) then
+		realm = format("-%s", realm)
+	elseif realm == "" then
+		realm = nil
+	end
+
+	return realm
+end
+
+ElvUF.Tags.Events["realm:translit"] = "UNIT_NAME_UPDATE"
+ElvUF.Tags.Methods["realm:translit"] = function(unit)
+	local _, realm = Translit:Transliterate(UnitName(unit), translitMark)
+
+	if realm and realm ~= "" then
+		return realm
+	else
+		return nil
+	end
+end
+
+ElvUF.Tags.Events["realm:dash:translit"] = "UNIT_NAME_UPDATE"
+ElvUF.Tags.Methods["realm:dash:translit"] = function(unit)
+	local _, realm = Translit:Transliterate(UnitName(unit), translitMark)
+
+	if realm and (realm ~= "" and realm ~= E.myrealm) then
+		realm = format("-%s", realm)
+	elseif realm == "" then
+		realm = nil
+	end
+
+	return realm
 end
 
 ElvUF.Tags.Events["threat:percent"] = "UNIT_THREAT_SITUATION_UPDATE"
@@ -560,7 +668,7 @@ ElvUF.Tags.Methods["statustimer"] = function(unit)
 		local timer = GetTime() - unitStatus[guid][2]
 		local mins = floor(timer / 60)
 		local secs = floor(timer - (mins * 60))
-		return ("%s (%01.f:%02.f)"):format(status, mins, secs)
+		return format("%s (%01.f:%02.f)", status, mins, secs)
 	else
 		return nil
 	end
@@ -574,7 +682,7 @@ ElvUF.Tags.Methods["pvptimer"] = function(unit)
 		if timer ~= 301000 and timer ~= -1 then
 			local mins = floor((timer / 1000) / 60)
 			local secs = floor((timer / 1000) - (mins * 60))
-			return ("%s (%01.f:%02.f)"):format(PVP, mins, secs)
+			return format("%s (%01.f:%02.f)", PVP, mins, secs)
 		else
 			return PVP
 		end
@@ -676,6 +784,20 @@ ElvUF.Tags.Methods["guild:brackets"] = function(unit)
 	return guildName and format("<%s>", guildName) or nil
 end
 
+ElvUF.Tags.Events["guild:translit"] = "UNIT_NAME_UPDATE PLAYER_GUILD_UPDATE"
+ElvUF.Tags.Methods["guild:translit"] = function(unit)
+	if (UnitIsPlayer(unit)) then
+		return Translit:Transliterate(GetGuildInfo(unit), translitMark) or nil
+	end
+end
+
+ElvUF.Tags.Events["guild:brackets:translit"] = "PLAYER_GUILD_UPDATE"
+ElvUF.Tags.Methods["guild:brackets:translit"] = function(unit)
+	local guildName = Translit:Transliterate(GetGuildInfo(unit), translitMark)
+
+	return guildName and format("<%s>", guildName) or nil
+end
+
 ElvUF.Tags.Events["target:veryshort"] = "UNIT_TARGET"
 ElvUF.Tags.Methods["target:veryshort"] = function(unit)
 	local targetName = UnitName(unit.."target")
@@ -703,5 +825,35 @@ end
 ElvUF.Tags.Events["target"] = "UNIT_TARGET"
 ElvUF.Tags.Methods["target"] = function(unit)
 	local targetName = UnitName(unit.."target")
+	return targetName or nil
+end
+
+ElvUF.Tags.Events["target:veryshort:translit"] = "UNIT_TARGET"
+ElvUF.Tags.Methods["target:veryshort:translit"] = function(unit)
+	local targetName = Translit:Transliterate(UnitName(unit.."target"), translitMark)
+	return targetName ~= nil and E:ShortenString(targetName, 5) or nil
+end
+
+ElvUF.Tags.Events["target:short:translit"] = "UNIT_TARGET"
+ElvUF.Tags.Methods["target:short:translit"] = function(unit)
+	local targetName = Translit:Transliterate(UnitName(unit.."target"), translitMark)
+	return targetName ~= nil and E:ShortenString(targetName, 10) or nil
+end
+
+ElvUF.Tags.Events["target:medium:translit"] = "UNIT_TARGET"
+ElvUF.Tags.Methods["target:medium:translit"] = function(unit)
+	local targetName = Translit:Transliterate(UnitName(unit.."target"), translitMark)
+	return targetName ~= nil and E:ShortenString(targetName, 15) or nil
+end
+
+ElvUF.Tags.Events["target:long:translit"] = "UNIT_TARGET"
+ElvUF.Tags.Methods["target:long:translit"] = function(unit)
+	local targetName = Translit:Transliterate(UnitName(unit.."target"), translitMark)
+	return targetName ~= nil and E:ShortenString(targetName, 20) or nil
+end
+
+ElvUF.Tags.Events["target:translit"] = "UNIT_TARGET"
+ElvUF.Tags.Methods["target:translit"] = function(unit)
+	local targetName = Translit:Transliterate(UnitName(unit.."target"), translitMark)
 	return targetName or nil
 end
