@@ -1,9 +1,10 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule("DataTexts")
 
+--Lua functions
 local floor = math.floor
 local format, join = string.format, string.join
-
+--WoW API / Variables
 local GetTime = GetTime
 local COMBAT = COMBAT
 

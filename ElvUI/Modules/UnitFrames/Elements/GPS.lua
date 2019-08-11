@@ -1,9 +1,7 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local UF = E:GetModule("UnitFrames")
 
---Cache global variables
 --Lua functions
-
 --WoW API / Variables
 local CreateFrame = CreateFrame
 
@@ -18,7 +16,7 @@ function UF:Construct_GPS(frame)
 	gps.Texture:SetVertexColor(214/255, 41/255, 41/255)
 	gps.Texture:SetAllPoints()
 
-	return gps;
+	return gps
 end
 
 function UF:Configure_GPS(frame)

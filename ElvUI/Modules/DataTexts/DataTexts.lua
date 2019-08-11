@@ -4,9 +4,10 @@ local TT = E:GetModule("Tooltip")
 local LDB = E.Libs.LDB
 local LSM = E.Libs.LSM
 
+--Lua functions
 local pairs, type, error = pairs, type, error
 local strlen = strlen
-
+--WoW API / Variables
 local CreateFrame = CreateFrame
 local InCombatLockdown = InCombatLockdown
 local IsInInstance = IsInInstance

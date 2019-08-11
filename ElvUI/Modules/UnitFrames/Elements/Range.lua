@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local UF = E:GetModule("UnitFrames");
+local UF = E:GetModule("UnitFrames")
 local SpellRange = E.Libs.SpellRange
 
 --Lua functions
@@ -39,13 +39,13 @@ end
 
 local function getUnit(unit)
 	if not unit:find("party") or not unit:find("raid") then
-		for i=1, 4 do
+		for i = 1, 4 do
 			if UnitIsUnit(unit, "party"..i) then
 				return "party"..i
 			end
 		end
 
-		for i=1, 40 do
+		for i = 1, 40 do
 			if UnitIsUnit(unit, "raid"..i) then
 				return "raid"..i
 			end

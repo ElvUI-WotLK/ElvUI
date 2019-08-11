@@ -1,10 +1,11 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
+--Lua functions
 local _G = _G
 local ipairs = ipairs
 local find = string.find
-
+--WoW API / Variables
 local InCombatLockdown = InCombatLockdown
 
 local function LoadSkin()
@@ -579,7 +580,7 @@ local function LoadSkin()
 					S:HandleCheckBox(_G[checkBoxName.."Check"])
 				end
 			end
-		elseif(checkBoxTemplate == "ChatConfigCheckBoxWithSwatchTemplate") or (checkBoxTemplate == "ChatConfigCheckBoxWithSwatchAndClassColorTemplate") then
+		elseif checkBoxTemplate == "ChatConfigCheckBoxWithSwatchTemplate" or checkBoxTemplate == "ChatConfigCheckBoxWithSwatchAndClassColorTemplate" then
 			frame:SetTemplate("Transparent")
 			for index, _ in ipairs(checkBoxTable) do
 				local checkBoxName = checkBoxNameString..index

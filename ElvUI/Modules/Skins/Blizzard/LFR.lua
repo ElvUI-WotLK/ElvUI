@@ -1,10 +1,12 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
-local find = string.find;
+--Lua functions
+local find = string.find
+--WoW API / Variables
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.lfr ~= true then return end
+	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.lfr ~= true then return; end
 
 	local buttons = {
 		"LFRQueueFrameFindGroupButton",
@@ -12,7 +14,7 @@ local function LoadSkin()
 		"LFRBrowseFrameSendMessageButton",
 		"LFRBrowseFrameInviteButton",
 		"LFRBrowseFrameRefreshButton"
-	};
+	}
 
 	LFRParentFrame:StripTextures()
 	LFRParentFrame:CreateBackdrop("Transparent")
@@ -22,12 +24,12 @@ local function LoadSkin()
 	LFRQueueFrame:StripTextures()
 	LFRBrowseFrame:StripTextures()
 
-	for i=1, #buttons do
+	for i = 1, #buttons do
 		S:HandleButton(_G[buttons[i]], true)
 	end
 
 	--Close button doesn't have a fucking name, extreme hackage
-	for i=1, LFRParentFrame:GetNumChildren() do
+	for i = 1, LFRParentFrame:GetNumChildren() do
 		local child = select(i, LFRParentFrame:GetChildren())
 		if child.GetPushedTexture and child:GetPushedTexture() and not child:GetName() then
 			S:HandleCloseButton(child)
@@ -43,7 +45,7 @@ local function LoadSkin()
 	LFRQueueFrameCommentTextButton:CreateBackdrop("Default")
 	LFRQueueFrameCommentTextButton:Height(35)
 
-	for i=1, 7 do
+	for i = 1, 7 do
 		local button = "LFRBrowseFrameColumnHeader"..i
 		_G[button.."Left"]:Kill()
 		_G[button.."Middle"]:Kill()
@@ -51,8 +53,8 @@ local function LoadSkin()
 		_G[button]:StyleButton()
 	end
 
-	for i=1, NUM_LFR_CHOICE_BUTTONS do
-		local button = _G["LFRQueueFrameSpecificListButton"..i];
+	for i = 1, NUM_LFR_CHOICE_BUTTONS do
+		local button = _G["LFRQueueFrameSpecificListButton"..i]
 		S:HandleCheckBox(button.enableButton)
 
 		button.expandOrCollapseButton:SetNormalTexture(E.Media.Textures.Plus)
@@ -81,7 +83,7 @@ local function LoadSkin()
 	LFRQueueFrameSpecificListScrollFrame:StripTextures()
 
 	--Skill Line Tabs
-	for i=1, 2 do
+	for i = 1, 2 do
 		local tab = _G["LFRParentFrameSideTab"..i]
 		if tab then
 			local tex = tab:GetNormalTexture():GetTexture()
@@ -101,7 +103,7 @@ local function LoadSkin()
 		end
 	end
 
-	for i=1, 1 do
+	for i = 1, 1 do
 		local button = _G["RaidFinderQueueFrameScrollFrameChildFrameItem"..i]
 		local icon = _G["RaidFinderQueueFrameScrollFrameChildFrameItem"..i.."IconTexture"]
 		local count = _G["RaidFinderQueueFrameScrollFrameChildFrameItem"..i.."Count"]
@@ -129,4 +131,4 @@ local function LoadSkin()
 	end
 end
 
-S:AddCallback("LFR", LoadSkin);
+S:AddCallback("LFR", LoadSkin)

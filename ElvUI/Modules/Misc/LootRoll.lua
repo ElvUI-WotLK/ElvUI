@@ -1,10 +1,11 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local M = E:GetModule("Misc")
 
+--Lua functions
 local pairs, unpack, ipairs, next, tonumber = pairs, unpack, ipairs, next, tonumber
 local tinsert = table.insert
 local find = string.find
-
+--WoW API / Variables
 local CreateFrame = CreateFrame
 local RollOnLoot = RollOnLoot
 local ResetCursor = ResetCursor

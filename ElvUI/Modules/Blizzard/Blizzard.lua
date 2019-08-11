@@ -1,6 +1,8 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local B = E:GetModule("Blizzard")
 
+--Lua functions
+--WoW API / Variables
 local ChatEdit_ChooseBoxForSend = ChatEdit_ChooseBoxForSend
 local GetTradeSkillListLink = GetTradeSkillListLink
 local Minimap_SetPing = Minimap_SetPing

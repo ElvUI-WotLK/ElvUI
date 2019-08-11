@@ -1,9 +1,10 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule("DataTexts")
 
+--Lua functions
 local sort, wipe, next, type = table.sort, wipe, next, type
 local format, find, join, gsub = string.format, string.find, string.join, string.gsub
-
+--WoW API / Variables
 local SendChatMessage = SendChatMessage
 local InviteUnit = InviteUnit
 local SetItemRef = SetItemRef

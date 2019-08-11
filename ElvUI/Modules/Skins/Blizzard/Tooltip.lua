@@ -2,8 +2,10 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 local S = E:GetModule("Skins")
 local TT = E:GetModule("Tooltip")
 
+--Lua functions
 local _G = _G
 local pairs = pairs
+--WoW API / Variables
 
 local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.tooltip ~= true then return end

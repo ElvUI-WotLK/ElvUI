@@ -3,12 +3,13 @@ local UF = E:GetModule("UnitFrames")
 local _, ns = ...
 local ElvUF = ns.oUF
 
+--Lua functions
 local _G = _G
 local setmetatable, getfenv, setfenv = setmetatable, getfenv, setfenv
 local type, unpack, select, pairs = type, unpack, select, pairs
 local min, random = math.min, math.random
 local format = string.format
-
+--WoW API / Variables
 local UnitPower = UnitPower
 local UnitPowerMax = UnitPowerMax
 local UnitHealth = UnitHealth

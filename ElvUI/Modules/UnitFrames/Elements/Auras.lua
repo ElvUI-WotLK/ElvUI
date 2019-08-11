@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local UF = E:GetModule("UnitFrames");
+local UF = E:GetModule("UnitFrames")
 local LSM = E.Libs.LSM
 
 --Lua functions
@@ -258,13 +258,13 @@ function UF:Configure_Auras(frame, auraType)
 end
 
 local function SortAurasByTime(a, b)
-	if (a and b and a:GetParent().db) then
+	if a and b and a:GetParent().db then
 		if a:IsShown() and b:IsShown() then
 			local sortDirection = a:GetParent().db.sortDirection
 			local aTime = a.expiration or -1
 			local bTime = b.expiration or -1
 			if (aTime and bTime) then
-				if(sortDirection == "DESCENDING") then
+				if sortDirection == "DESCENDING" then
 					return aTime < bTime
 				else
 					return aTime > bTime
@@ -277,13 +277,13 @@ local function SortAurasByTime(a, b)
 end
 
 local function SortAurasByName(a, b)
-	if (a and b and a:GetParent().db) then
+	if a and b and a:GetParent().db then
 		if a:IsShown() and b:IsShown() then
 			local sortDirection = a:GetParent().db.sortDirection
 			local aName = a.spell or ""
 			local bName = b.spell or ""
-			if (aName and bName) then
-				if(sortDirection == "DESCENDING") then
+			if aName and bName then
+				if sortDirection == "DESCENDING" then
 					return aName < bName
 				else
 					return aName > bName
@@ -296,13 +296,13 @@ local function SortAurasByName(a, b)
 end
 
 local function SortAurasByDuration(a, b)
-	if (a and b and a:GetParent().db) then
+	if a and b and a:GetParent().db then
 		if a:IsShown() and b:IsShown() then
 			local sortDirection = a:GetParent().db.sortDirection
 			local aTime = a.duration or -1
 			local bTime = b.duration or -1
-			if (aTime and bTime) then
-				if(sortDirection == "DESCENDING") then
+			if aTime and bTime then
+				if sortDirection == "DESCENDING" then
 					return aTime < bTime
 				else
 					return aTime > bTime
@@ -315,7 +315,7 @@ local function SortAurasByDuration(a, b)
 end
 
 local function SortAurasByCaster(a, b)
-	if (a and b and a:GetParent().db) then
+	if a and b and a:GetParent().db then
 		if a:IsShown() and b:IsShown() then
 			local sortDirection = a:GetParent().db.sortDirection
 			local aPlayer = a.isPlayer or false
@@ -354,7 +354,7 @@ local unstableAffliction = GetSpellInfo(30108)
 local vampiricTouch = GetSpellInfo(34914)
 function UF:PostUpdateAura(unit, button)
 	if button.isDebuff then
-		if(not button.isFriend and not button.isPlayer) then --[[and (not E.isDebuffWhiteList[name])]]
+		if not button.isFriend and not button.isPlayer then --[[and (not E.isDebuffWhiteList[name])]]
 			button:SetBackdropBorderColor(0.9, 0.1, 0.1)
 			button.icon:SetDesaturated((unit and not strfind(unit, "arena%d")) and true or false)
 		else

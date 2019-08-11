@@ -1,35 +1,33 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local S = E:GetModule("Skins");
+local S = E:GetModule("Skins")
 
-local split = string.split;
+--Lua functions
+local split = string.split
+--WoW API / Variables
 
 local function LoadSkin()
-	if(E.private.skins.blizzard.enable ~= true
-		or E.private.skins.blizzard.bgscore ~= true)
-	then
-		return;
-	end
+	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.bgscore ~= true then return; end
 
-	WorldStateScoreFrame:CreateBackdrop("Transparent");
-	WorldStateScoreFrame.backdrop:Point("TOPLEFT", 10, -15);
-	WorldStateScoreFrame.backdrop:Point("BOTTOMRIGHT", -113, 67);
+	WorldStateScoreFrame:CreateBackdrop("Transparent")
+	WorldStateScoreFrame.backdrop:Point("TOPLEFT", 10, -15)
+	WorldStateScoreFrame.backdrop:Point("BOTTOMRIGHT", -113, 67)
 
-	WorldStateScoreFrame:StripTextures();
+	WorldStateScoreFrame:StripTextures()
 
-	WorldStateScoreScrollFrame:StripTextures();
-	S:HandleScrollBar(WorldStateScoreScrollFrameScrollBar);
+	WorldStateScoreScrollFrame:StripTextures()
+	S:HandleScrollBar(WorldStateScoreScrollFrameScrollBar)
 
 	local tab
 	for i = 1, 3 do
-		tab = _G["WorldStateScoreFrameTab"..i];
+		tab = _G["WorldStateScoreFrameTab"..i]
 
-		S:HandleTab(tab);
+		S:HandleTab(tab)
 
-		_G["WorldStateScoreFrameTab"..i.."Text"]:Point("CENTER", 0, 2);
+		_G["WorldStateScoreFrameTab"..i.."Text"]:Point("CENTER", 0, 2)
 	end
 
-	S:HandleButton(WorldStateScoreFrameLeaveButton);
-	S:HandleCloseButton(WorldStateScoreFrameCloseButton);
+	S:HandleButton(WorldStateScoreFrameLeaveButton)
+	S:HandleCloseButton(WorldStateScoreFrameCloseButton)
 
 	WorldStateScoreFrameKB:StyleButton()
 	WorldStateScoreFrameDeaths:StyleButton()
@@ -53,24 +51,24 @@ local function LoadSkin()
 		for i = 1, MAX_WORLDSTATE_SCORE_BUTTONS do
 			local index = offset + i
 			local name, _, _, _, _, faction, _, _, _, classToken = GetBattlefieldScore(index)
-			if(name) then
+			if name then
 				local n, r = split("-", name, 2)
 				local myName = UnitName("player")
 
-				if(name == myName) then
+				if name == myName then
 					n = "> "..n.." <"
 				end
 
-				if(r) then
+				if r then
 					local color
-					if(inArena) then
-						if(faction == 1) then
+					if inArena then
+						if faction == 1 then
 							color = "|cffffd100"
 						else
 							color = "|cff19ff19"
 						end
 					else
-						if(faction == 1) then
+						if faction == 1 then
 							color = "|cff00adf0"
 						else
 							color = "|cffff1919"
@@ -89,4 +87,4 @@ local function LoadSkin()
 	end)
 end
 
-S:AddCallback("WorldStateScore", LoadSkin);
+S:AddCallback("WorldStateScore", LoadSkin)

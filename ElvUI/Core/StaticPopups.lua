@@ -79,7 +79,7 @@ E.PopupDialogs.ELVUI_UPDATE_AVAILABLE = {
 		self:GetParent():Hide()
 	end,
 	EditBoxOnTextChanged = function(self)
-		if(self:GetText() ~= "https://github.com/ElvUI-WotLK/ElvUI") then
+		if self:GetText() ~= "https://github.com/ElvUI-WotLK/ElvUI" then
 			self:SetText("https://github.com/ElvUI-WotLK/ElvUI")
 		end
 		self:HighlightText()

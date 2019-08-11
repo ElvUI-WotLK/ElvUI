@@ -3,11 +3,12 @@ local NP = E:GetModule("NamePlates")
 local LSM = E.Libs.LSM
 local LAI = E.Libs.LAI
 
+--Lua functions
 local select, unpack, pairs = select, unpack, pairs
 local band = bit.band
 local tinsert, tremove = table.insert, table.remove
 local strlower, strsplit = string.lower, strsplit
-
+--WoW API / Variables
 local CreateFrame = CreateFrame
 local UnitGUID = UnitGUID
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS

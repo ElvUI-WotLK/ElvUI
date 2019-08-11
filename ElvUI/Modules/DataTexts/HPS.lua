@@ -1,11 +1,12 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule("DataTexts")
 
+--Lua functions
 local time = time
 local select = select
 local max = math.max
 local join = string.join
-
+--WoW API / Variables
 local UnitGUID = UnitGUID
 
 local events = {SPELL_HEAL = true, SPELL_PERIODIC_HEAL = true}

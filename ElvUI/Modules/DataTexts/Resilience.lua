@@ -1,9 +1,10 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule("DataTexts")
 
+--Lua functions
 local join = string.join
 local min = math.min
-
+--WoW API / Variables
 local GetCombatRating = GetCombatRating
 local CR_CRIT_TAKEN_MELEE = CR_CRIT_TAKEN_MELEE
 local CR_CRIT_TAKEN_RANGED = CR_CRIT_TAKEN_RANGED

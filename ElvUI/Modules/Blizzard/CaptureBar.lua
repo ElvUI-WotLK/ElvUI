@@ -1,7 +1,9 @@
 local E, L = unpack(select(2, ...)); --Import: Engine, Locales
 local B = E:GetModule("Blizzard")
 
+--Lua functions
 local _G = _G
+--WoW API / Variables
 
 local pvpHolder = CreateFrame("Frame", "PvPHolder", E.UIParent)
 

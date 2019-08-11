@@ -3,11 +3,12 @@ local NP = E:GetModule("NamePlates")
 local LSM = E.Libs.LSM
 local LAI = E.Libs.LAI
 
+--Lua functions
 local _G = _G
 local select, unpack, pairs, tonumber = select, unpack, pairs, tonumber
 local format, gsub, match = string.format, string.gsub, string.match
 local twipe = table.wipe
-
+--WoW API / Variables
 local CreateFrame = CreateFrame
 local GetBattlefieldScore = GetBattlefieldScore
 local GetNumBattlefieldScores = GetNumBattlefieldScores

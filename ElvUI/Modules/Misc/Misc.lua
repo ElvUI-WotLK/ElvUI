@@ -2,8 +2,9 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 local M = E:GetModule("Misc")
 local Bags = E:GetModule("Bags")
 
+--Lua functions
 local format, gsub = string.format, string.gsub
-
+--WoW API / Variables
 local AcceptGroup = AcceptGroup
 local CanGuildBankRepair = CanGuildBankRepair
 local CanMerchantRepair = CanMerchantRepair

@@ -139,7 +139,10 @@ local function filterPriority(auraType, groupName, value, remove, movehere, frie
 			if not stateFound then
 				local tbl, sv = {strsplit(",",filter)}
 				for i in ipairs(tbl) do
-					if tbl[i] == value then sv = i;break end
+					if tbl[i] == value then
+						sv = i
+						break
+					end
 				end
 				tinsert(tbl, sv, state)
 				tremove(tbl, sv + 1)

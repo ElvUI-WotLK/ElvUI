@@ -2,11 +2,9 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 local mod = E:GetModule("DataBars")
 local LSM = LibStub("LibSharedMedia-3.0")
 
---Cache global variables
 --Lua functions
 local _G = _G
 local format = format
-
 --WoW API / Variables
 local GetWatchedFactionInfo, GetNumFactions, GetFactionInfo = GetWatchedFactionInfo, GetNumFactions, GetFactionInfo
 local InCombatLockdown = InCombatLockdown
@@ -22,7 +20,7 @@ function mod:UpdateReputation(event)
 
 	local ID, standingLabel
 	local name, reaction, min, max, value = GetWatchedFactionInfo()
-	local numFactions = GetNumFactions();
+	local numFactions = GetNumFactions()
 
 	if not name or (event == "PLAYER_REGEN_DISABLED" and self.db.reputation.hideInCombat) then
 		bar:Hide()
@@ -46,7 +44,7 @@ function mod:UpdateReputation(event)
 		for i = 1, numFactions do
 			local factionName, _, standingID = GetFactionInfo(i)
 			if factionName == name then
-				ID = standingID;
+				ID = standingID
 			end
 		end
 
@@ -58,7 +56,7 @@ function mod:UpdateReputation(event)
 
 		--Prevent a division by zero
 		local maxMinDiff = max - min
-		if (maxMinDiff == 0) then
+		if maxMinDiff == 0 then
 			maxMinDiff = 1
 		end
 
@@ -101,7 +99,7 @@ function mod:ReputationBar_OnEnter()
 end
 
 function mod:ReputationBar_OnClick()
-	ToggleCharacter("ReputationFrame");
+	ToggleCharacter("ReputationFrame")
 end
 
 function mod:UpdateReputationDimensions()

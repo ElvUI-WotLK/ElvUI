@@ -1,10 +1,13 @@
-local E, L, V, P, G, _ = unpack(select(2, ...));
+local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
+
+--Lua functions
+--WoW API / Variables
 
 local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.tutorial ~= true then return end
 
-	for i=1, TutorialFrame:GetNumChildren() do
+	for i = 1, TutorialFrame:GetNumChildren() do
 		local child = select(i, TutorialFrame:GetChildren())
 		if child.GetPushedTexture and child:GetPushedTexture() and not child:GetName() then
 			S:HandleCloseButton(child)
@@ -44,4 +47,4 @@ local function LoadSkin()
 	TutorialFrameCallOut:Kill()
 end
 
-S:AddCallback("Tutorial", LoadSkin);
+S:AddCallback("Tutorial", LoadSkin)

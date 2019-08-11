@@ -2,6 +2,8 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 local NP = E:GetModule("NamePlates")
 local LSM = E.Libs.LSM
 
+--Lua functions
+--WoW API / Variables
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS
 
 function NP:UpdateElement_HealthOnValueChanged()

@@ -2,6 +2,9 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 local NP = E:GetModule("NamePlates")
 local LSM = E.Libs.LSM
 
+--Lua functions
+--WoW API / Variables
+
 function NP:UpdateElement_CutawayHealthFadeOut(frame)
 	local cutawayHealth = frame.CutawayHealth
 	cutawayHealth.fading = true

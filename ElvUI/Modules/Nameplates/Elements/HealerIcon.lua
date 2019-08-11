@@ -1,6 +1,9 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local NP = E:GetModule("NamePlates")
 
+--Lua functions
+--WoW API / Variables
+
 function NP:UpdateElement_HealerIcon(frame)
 	local icon = frame.HealerIcon
 	icon:ClearAllPoints()

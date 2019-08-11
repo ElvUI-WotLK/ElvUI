@@ -1,8 +1,10 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
+--Lua functions
 local _G = _G
 local find = string.find
+--WoW API / Variables
 
 local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.character ~= true then return end
@@ -42,7 +44,7 @@ local function LoadSkin()
 
 	PaperDollFrameItemFlyoutHighlight:Kill()
 	local function SkinItemFlyouts(button)
-		if(not button.isSkinned) then
+		if not button.isSkinned then
 			button.icon = _G[button:GetName().."IconTexture"]
 
 			button:GetNormalTexture():SetTexture(nil)
@@ -54,13 +56,13 @@ local function LoadSkin()
 		end
 
 		local cooldown = _G[button:GetName() .."Cooldown"]
-		if(cooldown) then
+		if cooldown then
 			E:RegisterCooldown(cooldown)
 		end
 
 		local location = button.location
-		if(not location) then return end
-		if(location >= PDFITEMFLYOUT_FIRST_SPECIAL_LOCATION) then return end
+		if not location then return end
+		if location >= PDFITEMFLYOUT_FIRST_SPECIAL_LOCATION then return end
 
 		local id = EquipmentManager_GetItemInfoByLocation(location)
 		local _, _, quality = GetItemInfo(id)
@@ -157,7 +159,7 @@ local function LoadSkin()
 
 		slot:SetFrameLevel(PaperDollFrame:GetFrameLevel() + 2)
 
-		if(cooldown) then
+		if cooldown then
 			E:RegisterCooldown(cooldown)
 		end
 
@@ -272,7 +274,7 @@ local function LoadSkin()
 
 	PetPaperDollFrame:StripTextures(true)
 
-	for i=1, 3 do
+	for i = 1, 3 do
 		local Tab = _G["PetPaperDollFrameTab"..i]
 		Tab:StripTextures()
 		Tab:CreateBackdrop("Default", true)
@@ -307,15 +309,14 @@ local function LoadSkin()
 	local function updHappiness(self)
 		local happiness = GetPetHappiness()
 		local _, isHunterPet = HasPetUI()
-		if(not happiness or not isHunterPet) then
-			return
-		end
+		if not happiness or not isHunterPet then return end
+
 		local texture = self:GetRegions()
-		if(happiness == 1) then
+		if happiness == 1 then
 			texture:SetTexCoord(0.41, 0.53, 0.06, 0.30)
-		elseif(happiness == 2) then
+		elseif happiness == 2 then
 			texture:SetTexCoord(0.22, 0.345, 0.06, 0.30)
-		elseif(happiness == 3) then
+		elseif happiness == 3 then
 			texture:SetTexCoord(0.04, 0.15, 0.06, 0.30)
 		end
 	end
@@ -394,8 +395,8 @@ local function LoadSkin()
 			factionRow = _G["ReputationBar"..i]
 			factionButton = _G["ReputationBar"..i.."ExpandOrCollapseButton"]
 			factionIndex = factionOffset + i
-			if(factionIndex <= numFactions) then
-				if(factionRow.isCollapsed) then
+			if factionIndex <= numFactions then
+				if factionRow.isCollapsed then
 					factionButton:GetNormalTexture():SetTexture(E.Media.Textures.Plus)
 				else
 					factionButton:GetNormalTexture():SetTexture(E.Media.Textures.Minus)

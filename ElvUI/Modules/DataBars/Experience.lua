@@ -2,7 +2,6 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 local mod = E:GetModule("DataBars")
 local LSM = LibStub("LibSharedMedia-3.0")
 
---Cache global variables
 --Lua functions
 local format = format
 local min = min
@@ -15,7 +14,7 @@ local MAX_PLAYER_LEVEL_TABLE = MAX_PLAYER_LEVEL_TABLE
 local InCombatLockdown = InCombatLockdown
 
 function mod:GetXP(unit)
-	if(unit == "pet") then
+	if unit == "pet" then
 		return GetPetExperience()
 	else
 		return UnitXP(unit), UnitXPMax(unit)
@@ -35,7 +34,7 @@ function mod:UpdateExperience(event)
 		E:EnableMover(self.expBar.mover:GetName())
 		bar:Show()
 
-		if(self.db.experience.hideInVehicle) then
+		if self.db.experience.hideInVehicle then
 			E:RegisterObjectForVehicleLock(bar, E.UIParent)
 		else
 			E:UnregisterObjectForVehicleLock(bar)
@@ -138,7 +137,7 @@ function mod:UpdateExperienceDimensions()
 end
 
 function mod:EnableDisable_ExperienceBar()
-	local maxLevel = MAX_PLAYER_LEVEL_TABLE[GetExpansionLevel()];
+	local maxLevel = MAX_PLAYER_LEVEL_TABLE[GetExpansionLevel()]
 	if (UnitLevel("player") ~= maxLevel or not self.db.experience.hideAtMaxLevel) and self.db.experience.enable then
 		self:RegisterEvent("PLAYER_XP_UPDATE", "UpdateExperience")
 		self:RegisterEvent("DISABLE_XP_GAIN", "UpdateExperience")

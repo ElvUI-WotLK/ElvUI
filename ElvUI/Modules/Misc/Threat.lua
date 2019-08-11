@@ -2,9 +2,10 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 local THREAT = E:GetModule("Threat")
 local DT = E:GetModule("DataTexts")
 
+--Lua functions
 local pairs, select = pairs, select
 local wipe = wipe
-
+--WoW API / Variables
 local CreateFrame = CreateFrame
 local UnitReaction = UnitReaction
 local UnitClass = UnitClass

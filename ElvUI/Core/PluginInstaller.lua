@@ -53,7 +53,6 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 local PI = E:GetModule("PluginInstaller")
 local S = E:GetModule("Skins")
 
---Cache global variables
 --Lua functions
 local pairs, unpack = pairs, unpack
 local tinsert, tremove = tinsert, tremove

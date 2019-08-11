@@ -2,7 +2,9 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 local RB = E:GetModule("ReminderBuffs")
 local LSM = E.Libs.LSM
 
+--Lua functions
 local pairs, unpack = pairs, unpack
+--WoW API / Variables
 
 RB.Spell1Buffs = {
 	67016, -- Flask of the North (SP)
@@ -270,7 +272,7 @@ function RB:UpdateDefaultIcons()
 end
 
 function RB:Initialize()
-	if(not E.private.general.minimap.enable) then return end
+	if not E.private.general.minimap.enable then return end
 
 	self.db = E.db.general.reminder
 

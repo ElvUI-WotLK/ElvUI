@@ -1,9 +1,10 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule("DataTexts")
 
+--Lua functions
 local format, join = string.format, string.join
 local abs = math.abs
-
+--WoW API / Variables
 local GetInventorySlotInfo = GetInventorySlotInfo
 local GetInventoryItemID = GetInventoryItemID
 local GetItemInfo = GetItemInfo

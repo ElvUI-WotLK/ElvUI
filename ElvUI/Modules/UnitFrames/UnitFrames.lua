@@ -3,7 +3,6 @@ local UF = E:GetModule("UnitFrames")
 local LSM = E.Libs.LSM
 UF.LSM = E.Libs.LSM
 
---Cache global variables
 --Lua functions
 local _G = _G
 local select, pairs, type, unpack, assert, tostring = select, pairs, type, unpack, assert, tostring

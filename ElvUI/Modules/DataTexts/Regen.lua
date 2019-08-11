@@ -1,8 +1,9 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule("DataTexts")
 
+--Lua functions
 local join = string.join
-
+--WoW API / Variables
 local InCombatLockdown = InCombatLockdown
 local GetManaRegen = GetManaRegen
 local MANA_REGEN = MANA_REGEN

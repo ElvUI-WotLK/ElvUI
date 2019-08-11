@@ -1,55 +1,56 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local S = E:GetModule("Skins");
+local S = E:GetModule("Skins")
 
-local _G = _G;
-local unpack, select = unpack, select;
-
-local GetItemInfo = GetItemInfo;
-local GetItemQualityColor = GetItemQualityColor;
-local GetTradePlayerItemLink = GetTradePlayerItemLink;
-local GetTradeTargetItemLink = GetTradeTargetItemLink;
+--Lua functions
+local _G = _G
+local unpack, select = unpack, select
+--WoW API / Variables
+local GetItemInfo = GetItemInfo
+local GetItemQualityColor = GetItemQualityColor
+local GetTradePlayerItemLink = GetTradePlayerItemLink
+local GetTradeTargetItemLink = GetTradeTargetItemLink
 
 local function LoadSkin()
-	if(E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.trade ~= true) then return; end
+	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.trade ~= true then return; end
 
-	TradeFrame:StripTextures(true);
-	TradeFrame:CreateBackdrop("Transparent");
+	TradeFrame:StripTextures(true)
+	TradeFrame:CreateBackdrop("Transparent")
 	TradeFrame.backdrop:Point("TOPLEFT", 14, -4)
 	TradeFrame.backdrop:Point("BOTTOMRIGHT", -20, 48)
 
-	S:HandleCloseButton(TradeFrameCloseButton, TradeFrame.backdrop);
+	S:HandleCloseButton(TradeFrameCloseButton, TradeFrame.backdrop)
 
 	S:HandleButton(TradeFrameTradeButton)
 	S:HandleButton(TradeFrameCancelButton)
 
-	S:HandleEditBox(TradePlayerInputMoneyFrameGold);
-	S:HandleEditBox(TradePlayerInputMoneyFrameSilver);
-	S:HandleEditBox(TradePlayerInputMoneyFrameCopper);
+	S:HandleEditBox(TradePlayerInputMoneyFrameGold)
+	S:HandleEditBox(TradePlayerInputMoneyFrameSilver)
+	S:HandleEditBox(TradePlayerInputMoneyFrameCopper)
 
 	for i = 1, MAX_TRADE_ITEMS do
-		local player = _G["TradePlayerItem"..i];
-		local recipient = _G["TradeRecipientItem"..i];
-		local playerButton = _G["TradePlayerItem"..i.."ItemButton"];
-		local playerButtonIcon = _G["TradePlayerItem"..i.."ItemButtonIconTexture"];
-		local recipientButton = _G["TradeRecipientItem"..i.."ItemButton"];
-		local recipientButtonIcon = _G["TradeRecipientItem"..i.."ItemButtonIconTexture"];
+		local player = _G["TradePlayerItem"..i]
+		local recipient = _G["TradeRecipientItem"..i]
+		local playerButton = _G["TradePlayerItem"..i.."ItemButton"]
+		local playerButtonIcon = _G["TradePlayerItem"..i.."ItemButtonIconTexture"]
+		local recipientButton = _G["TradeRecipientItem"..i.."ItemButton"]
+		local recipientButtonIcon = _G["TradeRecipientItem"..i.."ItemButtonIconTexture"]
 
-		player:StripTextures();
-		recipient:StripTextures();
+		player:StripTextures()
+		recipient:StripTextures()
 
-		playerButton:StripTextures();
-		playerButton:StyleButton();
-		playerButton:SetTemplate("Default", true);
+		playerButton:StripTextures()
+		playerButton:StyleButton()
+		playerButton:SetTemplate("Default", true)
 
-		playerButtonIcon:SetInside();
-		playerButtonIcon:SetTexCoord(unpack(E.TexCoords));
+		playerButtonIcon:SetInside()
+		playerButtonIcon:SetTexCoord(unpack(E.TexCoords))
 
-		recipientButton:StripTextures();
-		recipientButton:StyleButton();
-		recipientButton:SetTemplate("Default", true);
+		recipientButton:StripTextures()
+		recipientButton:StyleButton()
+		recipientButton:SetTemplate("Default", true)
 
-		recipientButtonIcon:SetInside();
-		recipientButtonIcon:SetTexCoord(unpack(E.TexCoords));
+		recipientButtonIcon:SetInside()
+		recipientButtonIcon:SetTexCoord(unpack(E.TexCoords))
 
 		playerButton.bg = CreateFrame("Frame", nil, playerButton)
 		playerButton.bg:SetTemplate("Default")
@@ -64,21 +65,21 @@ local function LoadSkin()
 		recipientButton.bg:SetFrameLevel(recipientButton:GetFrameLevel() - 3)
 	end
 
-	TradeHighlightPlayerTop:SetTexture(0, 1, 0, 0.2);
-	TradeHighlightPlayerBottom:SetTexture(0, 1, 0, 0.2);
-	TradeHighlightPlayerMiddle:SetTexture(0, 1, 0, 0.2);
+	TradeHighlightPlayerTop:SetTexture(0, 1, 0, 0.2)
+	TradeHighlightPlayerBottom:SetTexture(0, 1, 0, 0.2)
+	TradeHighlightPlayerMiddle:SetTexture(0, 1, 0, 0.2)
 
-	TradeHighlightPlayerEnchantTop:SetTexture(0, 1, 0, 0.2);
-	TradeHighlightPlayerEnchantBottom:SetTexture(0, 1, 0, 0.2);
-	TradeHighlightPlayerEnchantMiddle:SetTexture(0, 1, 0, 0.2);
+	TradeHighlightPlayerEnchantTop:SetTexture(0, 1, 0, 0.2)
+	TradeHighlightPlayerEnchantBottom:SetTexture(0, 1, 0, 0.2)
+	TradeHighlightPlayerEnchantMiddle:SetTexture(0, 1, 0, 0.2)
 
-	TradeHighlightRecipientTop:SetTexture(0, 1, 0, 0.2);
-	TradeHighlightRecipientBottom:SetTexture(0, 1, 0, 0.2);
-	TradeHighlightRecipientMiddle:SetTexture(0, 1, 0, 0.2);
+	TradeHighlightRecipientTop:SetTexture(0, 1, 0, 0.2)
+	TradeHighlightRecipientBottom:SetTexture(0, 1, 0, 0.2)
+	TradeHighlightRecipientMiddle:SetTexture(0, 1, 0, 0.2)
 
-	TradeHighlightRecipientEnchantTop:SetTexture(0, 1, 0, 0.2);
-	TradeHighlightRecipientEnchantBottom:SetTexture(0, 1, 0, 0.2);
-	TradeHighlightRecipientEnchantMiddle:SetTexture(0, 1, 0, 0.2);
+	TradeHighlightRecipientEnchantTop:SetTexture(0, 1, 0, 0.2)
+	TradeHighlightRecipientEnchantBottom:SetTexture(0, 1, 0, 0.2)
+	TradeHighlightRecipientEnchantMiddle:SetTexture(0, 1, 0, 0.2)
 
 	TradeHighlightPlayer:Point("TOPLEFT", 23, -100)
 	TradeHighlightRecipient:Point("TOPLEFT", 192, -100)
@@ -118,9 +119,9 @@ local function LoadSkin()
 				tradeItemButton:SetBackdropBorderColor(unpack(E.media.bordercolor))
 			end
 		else
-			tradeItemButton:SetBackdropBorderColor(unpack(E.media.bordercolor));
+			tradeItemButton:SetBackdropBorderColor(unpack(E.media.bordercolor))
 		end
 	end)
 end
 
-S:AddCallback("Trade", LoadSkin);
+S:AddCallback("Trade", LoadSkin)

@@ -1,11 +1,9 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local UF = E:GetModule("UnitFrames");
+local UF = E:GetModule("UnitFrames")
 
---Cache global variables
 --Lua functions
 local pairs = pairs
 --WoW API / Variables
-
 
 function UF:Configure_CustomTexts(frame)
 	local db = frame.db

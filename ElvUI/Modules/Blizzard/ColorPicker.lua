@@ -6,6 +6,7 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 local B = E:GetModule("Blizzard")
 local S = E:GetModule("Skins")
 
+--Lua functions
 local format, strlen, strjoin, gsub = format, strlen, strjoin, gsub
 local tonumber, floor, strsub, wipe = tonumber, floor, strsub, wipe
 --WoW API / Variables
@@ -242,7 +243,7 @@ function B:EnhanceColorPicker()
 	b:Point("TOP", ColorPPCopy, "BOTTOMRIGHT", 0, -7)
 
 	b:SetScript("OnClick", function()
-		local color = E.myclass == "PRIEST" and E.PriestColors or (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass]);
+		local color = E.myclass == "PRIEST" and E.PriestColors or (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass])
 		ColorPickerFrame:SetColorRGB(color.r, color.g, color.b)
 		ColorSwatch:SetTexture(color.r, color.g, color.b)
 		if ColorPickerFrame.hasOpacity then

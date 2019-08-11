@@ -1,8 +1,9 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local M = E:GetModule("Misc")
 
+--Lua functions
 local sin, cos, pi = math.sin, math.cos, math.pi
-
+--WoW API / Variables
 local CreateFrame = CreateFrame
 local GetNumPartyMembers = GetNumPartyMembers
 local UnitInRaid = UnitInRaid

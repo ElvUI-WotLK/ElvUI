@@ -1,8 +1,7 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local UF = E:GetModule("UnitFrames");
+local UF = E:GetModule("UnitFrames")
 local LSM = E.Libs.LSM
 
---Cache global variables
 --Lua functions
 local assert, select, pairs, unpack = assert, select, pairs, unpack
 local tinsert, wipe = tinsert, wipe

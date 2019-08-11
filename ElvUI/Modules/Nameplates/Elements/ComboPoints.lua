@@ -2,8 +2,9 @@ local E, L, V, P, G = unpack(select(2, ...))
 local NP = E:GetModule("NamePlates")
 local LSM = E.Libs.LSM
 
+--Lua functions
 local unpack = unpack
-
+--WoW API / Variables
 local GetComboPoints = GetComboPoints
 local MAX_COMBO_POINTS = MAX_COMBO_POINTS
 

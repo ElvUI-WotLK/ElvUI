@@ -1,6 +1,9 @@
 local E, L, V, P, G = unpack(select(2, ...))
 local NP = E:GetModule("NamePlates")
 
+--Lua functions
+--WoW API / Variables
+
 function NP:UpdateElement_RaidIcon(frame)
 	local icon = frame.RaidIcon
 	icon:ClearAllPoints()

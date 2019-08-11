@@ -9,7 +9,7 @@ do -- Locale doesn't exist yet, make it exist.
 	ElvUI[2] = ElvUI[1].Libs.ACL:GetLocale("ElvUI", gameLocale)
 end
 
-local E, L, V, P, G = unpack(ElvUI)
+local E, L, V, P, G = unpack(ElvUI); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 
 local ActionBars = E:GetModule("ActionBars")
 local AFK = E:GetModule("AFK")
@@ -30,13 +30,14 @@ local UnitFrames = E:GetModule("UnitFrames")
 
 local LSM = E.Libs.LSM
 
+--Lua functions
 local _G = _G
 local tonumber, pairs, ipairs, error, unpack, select, tostring = tonumber, pairs, ipairs, error, unpack, select, tostring
 local assert, type, collectgarbage, pcall = assert, type, collectgarbage, pcall
 local twipe, tinsert, tremove, next = table.wipe, tinsert, tremove, next
 local floor = floor
 local format, find, match, strrep, strlen, sub, gsub, strjoin = string.format, string.find, string.match, strrep, strlen, string.sub, string.gsub, strjoin
-
+--WoW API / Variables
 local UnitGUID = UnitGUID
 local CreateFrame = CreateFrame
 local GetCVar = GetCVar

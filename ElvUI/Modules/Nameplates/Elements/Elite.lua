@@ -1,6 +1,9 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local NP = E:GetModule("NamePlates")
 
+--Lua functions
+--WoW API / Variables
+
 function NP:UpdateElement_Elite(frame)
 	if not self.db.units[frame.UnitType].eliteIcon then return end
 

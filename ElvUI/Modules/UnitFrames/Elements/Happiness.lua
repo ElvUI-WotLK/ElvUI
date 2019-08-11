@@ -1,6 +1,9 @@
 ﻿local E, L, V, P, G = unpack(ElvUI)
 local UF = E:GetModule("UnitFrames")
 
+--Lua functions
+--WoW API / Variables
+
 function UF:Construct_Happiness(frame)
 	local HappinessIndicator = CreateFrame("Statusbar", nil, frame)
 

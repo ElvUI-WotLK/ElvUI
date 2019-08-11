@@ -1,10 +1,11 @@
-local E, L = unpack(select(2, ...))
+local E, L = unpack(select(2, ...)); --Import: Engine, Locales
 local RU = E:GetModule("RaidUtility")
 
+--Lua functions
 local _G = _G
 local unpack, pairs = unpack, pairs
 local find = string.find
-
+--WoW API / Variables
 local CreateFrame = CreateFrame
 local IsInInstance = IsInInstance
 local GetNumRaidMembers = GetNumRaidMembers
@@ -91,7 +92,7 @@ function RU:Initialize()
 	self.Initialized = true
 
 	--Create main frame
-	local RaidUtilityPanel = CreateFrame("Frame", "RaidUtilityPanel", E.UIParent, "SecureHandlerClickTemplate");
+	local RaidUtilityPanel = CreateFrame("Frame", "RaidUtilityPanel", E.UIParent, "SecureHandlerClickTemplate")
 	RaidUtilityPanel:SetTemplate("Transparent")
 	RaidUtilityPanel:Width(230)
 	RaidUtilityPanel:Height(PANEL_HEIGHT)
@@ -106,13 +107,13 @@ function RU:Initialize()
 		local raidUtil = self:GetFrameRef("RaidUtilityPanel")
 		local closeButton = raidUtil:GetFrameRef("RaidUtility_CloseButton")
 
-		self:Hide();
-		raidUtil:Show();
+		self:Hide()
+		raidUtil:Show()
 
-		local point = self:GetPoint();
+		local point = self:GetPoint()
 		local raidUtilPoint, closeButtonPoint, yOffset
 
-		if(string.find(point, "BOTTOM")) then
+		if string.find(point, "BOTTOM") then
 			raidUtilPoint = "BOTTOM"
 			closeButtonPoint = "TOP"
 			yOffset = 1

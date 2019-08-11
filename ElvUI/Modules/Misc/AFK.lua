@@ -2,11 +2,12 @@ local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateD
 local AFK = E:GetModule("AFK")
 local CH = E:GetModule("Chat")
 
+--Lua functions
 local _G = _G
 local tostring = tostring
 local floor = math.floor
 local format, strsub, gsub = string.format, string.sub, string.gsub
-
+--WoW API / Variables
 local ChatHistory_GetAccessID = ChatHistory_GetAccessID
 local Chat_GetChatCategory = Chat_GetChatCategory
 local CinematicFrame = CinematicFrame

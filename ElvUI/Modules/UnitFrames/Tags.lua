@@ -611,7 +611,7 @@ end
 ElvUF.Tags.Events["threat:percent"] = "UNIT_THREAT_SITUATION_UPDATE"
 ElvUF.Tags.Methods["threat:percent"] = function(unit)
 	local _, _, percent = UnitDetailedThreatSituation("player", unit)
-	if(percent and percent > 0) and (GetNumPartyMembers() or UnitExists("pet")) then
+	if percent and percent > 0 and (GetNumPartyMembers() or UnitExists("pet")) then
 		return format("%.0f%%", percent)
 	else
 		return nil
@@ -621,7 +621,7 @@ end
 ElvUF.Tags.Events["threat:current"] = "UNIT_THREAT_SITUATION_UPDATE"
 ElvUF.Tags.Methods["threat:current"] = function(unit)
 	local _, _, percent, _, threatvalue = UnitDetailedThreatSituation("player", unit)
-	if(percent and percent > 0) and (GetNumPartyMembers() or UnitExists("pet")) then
+	if percent and percent > 0 and (GetNumPartyMembers() or UnitExists("pet")) then
 		return E:ShortValue(threatvalue)
 	else
 		return nil
@@ -631,7 +631,7 @@ end
 ElvUF.Tags.Events["threatcolor"] = "UNIT_THREAT_SITUATION_UPDATE"
 ElvUF.Tags.Methods["threatcolor"] = function(unit)
 	local _, status = UnitDetailedThreatSituation("player", unit)
-	if (status) and (GetNumPartyMembers() > 0 or UnitExists("pet")) then
+	if status and (GetNumPartyMembers() > 0 or UnitExists("pet")) then
 		return Hex(GetThreatStatusColor(status))
 	else
 		return nil
@@ -651,7 +651,7 @@ ElvUF.Tags.Methods["statustimer"] = function(unit)
 		if not unitStatus[guid] or unitStatus[guid] and unitStatus[guid][1] ~= "DND" then
 			unitStatus[guid] = {"DND", GetTime()}
 		end
-	elseif(UnitIsDead(unit)) or (UnitIsGhost(unit))then
+	elseif UnitIsDead(unit) or UnitIsGhost(unit) then
 		if not unitStatus[guid] or unitStatus[guid] and unitStatus[guid][1] ~= "Dead" then
 			unitStatus[guid] = {"Dead", GetTime()}
 		end

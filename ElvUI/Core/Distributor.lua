@@ -1,11 +1,12 @@
-local E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local D = E:GetModule("Distributor")
 local LibCompress = E.Libs.Compress
 local LibBase64 = E.Libs.Base64
 
+--Lua functions
 local tonumber, type, gsub, pcall, loadstring = tonumber, type, gsub, pcall, loadstring
 local len, format, split, find = string.len, string.format, string.split, string.find
-
+--WoW API / Variables
 local CreateFrame = CreateFrame
 local GetNumRaidMembers, UnitInRaid = GetNumRaidMembers, UnitInRaid
 local GetNumPartyMembers, UnitInParty = GetNumPartyMembers, UnitInParty

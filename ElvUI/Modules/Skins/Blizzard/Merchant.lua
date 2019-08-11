@@ -1,9 +1,10 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
-local S = E:GetModule("Skins");
+local S = E:GetModule("Skins")
 
+--Lua functions
 local _G = _G
 local unpack, select = unpack, select
-
+--WoW API / Variables
 local hooksecurefunc = hooksecurefunc
 
 local function LoadSkin()
@@ -28,7 +29,7 @@ local function LoadSkin()
 		end
 	end)
 
-	S:HandleCloseButton(MerchantFrameCloseButton, MerchantFrame.backdrop);
+	S:HandleCloseButton(MerchantFrameCloseButton, MerchantFrame.backdrop)
 
 	for i = 1, 12 do
 		local item = _G["MerchantItem"..i]

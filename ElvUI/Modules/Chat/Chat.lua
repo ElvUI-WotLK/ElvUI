@@ -3,13 +3,14 @@ local CH = E:GetModule("Chat")
 local Skins = E:GetModule("Skins")
 local LSM = E.Libs.LSM
 
+--Lua functions
 local _G = _G
 local time, difftime = time, difftime
 local pairs, ipairs, unpack, select, tostring, pcall, next, tonumber, type = pairs, ipairs, unpack, select, tostring, pcall, next, tonumber, type
 local tinsert, tremove, tconcat, wipe = table.insert, table.remove, table.concat, table.wipe
 local gsub, find, gmatch, format, strtrim = string.gsub, string.find, string.gmatch, string.format, string.trim
 local strlower, strmatch, strsub, strlen, strupper = strlower, strmatch, strsub, strlen, strupper
-
+--WoW API / Variables
 local BetterDate = BetterDate
 local ChatEdit_ActivateChat = ChatEdit_ActivateChat
 local ChatEdit_ChooseBoxForSend = ChatEdit_ChooseBoxForSend
@@ -207,10 +208,10 @@ function CH:GetSmileyReplacementText(msg)
 		endpos = pos or origlen
 		outstr = outstr..CH:InsertEmotions(strsub(msg,startpos,endpos)) --run replacement on this bit
 		startpos = endpos + 1
-		if(pos ~= nil) then
+		if pos ~= nil then
 			_, endpos = find(msg,"|h.-|h",startpos)
 			endpos = endpos or origlen
-			if(startpos < endpos) then
+			if startpos < endpos then
 				outstr = outstr..strsub(msg,startpos,endpos) --don't run replacement on this bit
 				startpos = endpos + 1
 			end
@@ -283,7 +284,7 @@ function CH:StyleChat(frame)
 			local MIN_REPEAT_CHARACTERS = E.db.chat.numAllowedCombatRepeat
 			if (strlen(text) > MIN_REPEAT_CHARACTERS) then
 			local repeatChar = true
-			for i=1, MIN_REPEAT_CHARACTERS, 1 do
+			for i = 1, MIN_REPEAT_CHARACTERS, 1 do
 				if strsub(text,(0-i), (0-i)) ~= strsub(text,(-1-i),(-1-i)) then
 					repeatChar = false
 					break
@@ -620,7 +621,7 @@ function CH:PositionChat(override)
 	local fadeUndockedTabs = E.db.chat.fadeUndockedTabs
 	local fadeTabsNoBackdrop = E.db.chat.fadeTabsNoBackdrop
 
-	for i=1, CreatedFrames do
+	for i = 1, CreatedFrames do
 		local BASE_OFFSET = 57 + E.Spacing*3
 
 		local chat = _G[format("ChatFrame%d", i)]
@@ -720,7 +721,7 @@ function CH:Panels_ColorUpdate()
 end
 
 local function UpdateChatTabColor(_, r, g, b)
-	for i=1, CreatedFrames do
+	for i = 1, CreatedFrames do
 		_G["ChatFrame"..i.."TabText"]:SetTextColor(r, g, b)
 	end
 end
@@ -1134,7 +1135,7 @@ function CH:ChatFrame_MessageEventHandler(frame, event, arg1, arg2, arg3, arg4, 
 				end
 			else
 				if not showLink or strlen(arg2) == 0 then
-					if(find(arg1, "% ") and GetLocale() == "ruRU") then
+					if find(arg1, "% ") and GetLocale() == "ruRU" then
 						arg1 = arg1:gsub("%%", "%%s")
 					end
 					body = format(_G["CHAT_"..chatType.."_GET"]..arg1, pflag..arg2, arg2)
@@ -1388,7 +1389,7 @@ function CH:CheckKeyword(message, author)
 				local classMatch = CH.ClassNames[lowerCaseWord]
 				local wordMatch = classMatch and lowerCaseWord
 
-				if(wordMatch and not E.global.chat.classColorMentionExcludedNames[wordMatch]) then
+				if wordMatch and not E.global.chat.classColorMentionExcludedNames[wordMatch] then
 					local classColorTable = _G.CUSTOM_CLASS_COLORS and _G.CUSTOM_CLASS_COLORS[classMatch] or _G.RAID_CLASS_COLORS[classMatch]
 					word = gsub(word, gsub(tempWord, "%-","%%-"), format("\124cff%.2x%.2x%.2x%s\124r", classColorTable.r*255, classColorTable.g*255, classColorTable.b*255, tempWord))
 				end
@@ -1414,7 +1415,7 @@ end
 function CH:AddLines(lines, ...)
 	for i = select("#", ...), 1, -1 do
 		local x = select(i, ...)
-		if(x:GetObjectType() == "FontString" and not x:GetName()) then
+		if x:GetObjectType() == "FontString" and not x:GetName() then
 			tinsert(lines, x:GetText())
 		end
 	end

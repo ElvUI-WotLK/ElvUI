@@ -2,6 +2,8 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 local LO = E:GetModule("Layout")
 local DT = E:GetModule("DataTexts")
 
+--Lua functions
+--WoW API / Variables
 local CreateFrame = CreateFrame
 local UIFrameFadeIn, UIFrameFadeOut = UIFrameFadeIn, UIFrameFadeOut
 

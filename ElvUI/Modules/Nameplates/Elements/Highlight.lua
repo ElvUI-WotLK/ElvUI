@@ -2,6 +2,9 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 local NP = E:GetModule("NamePlates")
 local LSM = E.Libs.LSM
 
+--Lua functions
+--WoW API / Variables
+
 function NP:UpdateElement_Highlight(frame)
 	if frame:IsShown() and frame.isMouseover and (frame.NameOnlyChanged or (not self.db.units[frame.UnitType].healthbar.enable and self.db.units[frame.UnitType].showName)) and not frame.isTarget then
 		frame.Name.NameOnlyGlow:Show()

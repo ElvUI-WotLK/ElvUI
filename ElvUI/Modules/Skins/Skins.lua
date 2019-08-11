@@ -479,9 +479,9 @@ function S:HandleIconSelectionFrame(frame, numIcons, buttonNameTemplate, frameNa
 	assert(numIcons and type(numIcons) == "number", "HandleIconSelectionFrame: numIcons argument missing or not a number")
 	assert(buttonNameTemplate and type(buttonNameTemplate) == "string", "HandleIconSelectionFrame: buttonNameTemplate argument missing or not a string")
 
-	local frameName = frameNameOverride or frame:GetName(); --We need override in case Blizzard fucks up the naming (guild bank)
-	local scrollFrame = _G[frameName.."ScrollFrame"];
-	local editBox = _G[frameName.."EditBox"];
+	local frameName = frameNameOverride or frame:GetName() --We need override in case Blizzard fucks up the naming (guild bank)
+	local scrollFrame = _G[frameName.."ScrollFrame"]
+	local editBox = _G[frameName.."EditBox"]
 	local okayButton = _G[frameName.."OkayButton"] or _G[frameName.."Okay"]
 	local cancelButton = _G[frameName.."CancelButton"] or _G[frameName.."Cancel"]
 

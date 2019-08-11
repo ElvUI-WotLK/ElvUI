@@ -1,6 +1,9 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local D = E:GetModule("DebugTools")
 
+--Lua functions
+--WoW API / Variables
+
 function D:ModifyErrorFrame()
 	ScriptErrorsFrameScrollFrameText.cursorOffset = 0
 	ScriptErrorsFrameScrollFrameText.cursorHeight = 0
@@ -16,11 +19,11 @@ function D:ModifyErrorFrame()
 		-- Sometimes the locals table does not have an entry for an index, which can cause an argument #6 error
 		-- in Blizzard_DebugTools.lua:430 and then cause a C stack overflow, this will prevent that
 		local index = ScriptErrorsFrame.index
-		if( not index or not ScriptErrorsFrame.order[index] ) then
+		if not index or not ScriptErrorsFrame.order[index] then
 			index = #(ScriptErrorsFrame.order)
 		end
 
-		if( index > 0 ) then
+		if index > 0 then
 			ScriptErrorsFrame.locals[index] = ScriptErrorsFrame.locals[index] or L["No locals to dump"]
 		end
 

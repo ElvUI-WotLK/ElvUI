@@ -1,6 +1,9 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local UF = E:GetModule("UnitFrames")
 
+--Lua functions
+--WoW API / Variables
+
 function UF:Construct_DebuffHighlight(frame)
 	local dbh = frame:CreateTexture(nil, "OVERLAY")
 	dbh:SetInside(frame.Health.backdrop)

@@ -81,7 +81,7 @@ function TT:GameTooltip_SetDefaultAnchor(tt, parent)
 	if E.private.tooltip.enable ~= true then return end
 	if not self.db.visibility then return end
 
-	if(tt:GetAnchorType() ~= "ANCHOR_NONE") then return end
+	if tt:GetAnchorType() ~= "ANCHOR_NONE" then return end
 	if InCombatLockdown() and self.db.visibility.combat then
 		local modifier = self.db.visibility.combatOverride
 		if (not(
@@ -97,10 +97,10 @@ function TT:GameTooltip_SetDefaultAnchor(tt, parent)
 	end
 
 	local ownerName = tt:GetOwner() and tt:GetOwner().GetName and tt:GetOwner():GetName()
-	if (self.db.visibility.actionbars ~= "NONE" and ownerName and (find(ownerName, "ElvUI_Bar") or find(ownerName, "ElvUI_StanceBar") or find(ownerName, "PetAction")) and not keybindFrame.active) then
+	if self.db.visibility.actionbars ~= "NONE" and ownerName and (find(ownerName, "ElvUI_Bar") or find(ownerName, "ElvUI_StanceBar") or find(ownerName, "PetAction")) and not keybindFrame.active then
 		local modifier = self.db.visibility.actionbars
 
-		if(modifier == "ALL" or not ((modifier == "SHIFT" and IsShiftKeyDown()) or (modifier == "CTRL" and IsControlKeyDown()) or (modifier == "ALT" and IsAltKeyDown()))) then
+		if modifier == "ALL" or not ((modifier == "SHIFT" and IsShiftKeyDown()) or (modifier == "CTRL" and IsControlKeyDown()) or (modifier == "ALT" and IsAltKeyDown())) then
 			tt:Hide()
 			return
 		end
@@ -137,7 +137,7 @@ function TT:GameTooltip_SetDefaultAnchor(tt, parent)
 
 	local _, anchor = tt:GetPoint()
 
-	if (anchor == nil or (ElvUI_ContainerFrame and anchor == ElvUI_ContainerFrame) or anchor == RightChatPanel or anchor == TooltipMover or anchor == _G.UIParent or anchor == E.UIParent) then
+	if anchor == nil or (ElvUI_ContainerFrame and anchor == ElvUI_ContainerFrame) or anchor == RightChatPanel or anchor == TooltipMover or anchor == _G.UIParent or anchor == E.UIParent then
 		tt:ClearAllPoints()
 		if not E:HasMoverBeenMoved("TooltipMover") then
 			if ElvUI_ContainerFrame and ElvUI_ContainerFrame:IsShown() then
@@ -163,8 +163,8 @@ function TT:GameTooltip_SetDefaultAnchor(tt, parent)
 end
 
 function TT:GetAvailableTooltip()
-	for i=1, #GameTooltip.shoppingTooltips do
-		if(not GameTooltip.shoppingTooltips[i]:IsShown()) then
+	for i = 1, #GameTooltip.shoppingTooltips do
+		if not GameTooltip.shoppingTooltips[i]:IsShown() then
 			return GameTooltip.shoppingTooltips[i]
 		end
 	end
@@ -179,9 +179,9 @@ function TT:ScanForItemLevel(itemLink)
 	local itemLevel = 0
 	for i = 2, tooltip:NumLines() do
 		local text = _G[tooltip:GetName().."TextLeft"..i]:GetText()
-		if(text and text ~= "") then
+		if text and text ~= "" then
 			local value = tonumber(match(text, S_ITEM_LEVEL))
-			if(value) then
+			if value then
 				itemLevel = value
 			end
 		end
@@ -195,16 +195,16 @@ function TT:GetItemLvL(unit)
 	local total, item = 0, 0
 	for i = 1, #SlotName do
 		local itemLink = GetInventoryItemLink(unit, GetInventorySlotInfo(format("%sSlot", SlotName[i])))
-		if (itemLink ~= nil) then
+		if itemLink ~= nil then
 			local itemLevel = self:ScanForItemLevel(itemLink)
-			if(itemLevel and itemLevel > 0) then
+			if itemLevel and itemLevel > 0 then
 				item = item + 1
 				total = total + itemLevel
 			end
 		end
 	end
 
-	if(total < 1) then
+	if total < 1 then
 		return
 	end
 
@@ -327,19 +327,19 @@ end
 
 function TT:INSPECT_TALENT_READY()
 	local GUID = UnitGUID("mouseover")
-	if(self.lastGUID ~= GUID) then return end
+	if self.lastGUID ~= GUID then return end
 
 	local unit = "mouseover"
-	if(UnitExists(unit)) then
+	if UnitExists(unit) then
 		local itemLevel = self:GetItemLvL(unit)
 		local _, talentName = E:GetTalentSpecInfo(1)
 		inspectCache[GUID] = {time = GetTime()}
 
-		if(talentName) then
+		if talentName then
 			inspectCache[GUID].talent = talentName
 		end
 
-		if(itemLevel) then
+		if itemLevel then
 			inspectCache[GUID].itemLevel = itemLevel
 		end
 
@@ -350,17 +350,17 @@ end
 
 function TT:ShowInspectInfo(tt, unit, r, g, b, numTries)
 	local canInspect = CanInspect(unit)
-	if(not canInspect or numTries > 1) then return end
+	if not canInspect or numTries > 1 then return end
 
 	local GUID = UnitGUID(unit)
-	if(GUID == E.myguid) then
+	if GUID == E.myguid then
 		tt:AddDoubleLine(L["Talent Specialization:"], select(2, E:GetTalentSpecInfo()), nil, nil, nil, r, g, b)
 		tt:AddDoubleLine(L["Item Level:"], self:GetItemLvL("player"), nil, nil, nil, 1, 1, 1)
-	elseif(inspectCache[GUID]) then
+	elseif inspectCache[GUID] then
 		local talent = inspectCache[GUID].talent
 		local itemLevel = inspectCache[GUID].itemLevel
 
-		if(((GetTime() - inspectCache[GUID].time) > 900) or not talent or not itemLevel) then
+		if ((GetTime() - inspectCache[GUID].time) > 900) or not talent or not itemLevel then
 			inspectCache[GUID] = nil
 
 			return self:ShowInspectInfo(tt, unit, r, g, b, numTries + 1)
@@ -369,23 +369,22 @@ function TT:ShowInspectInfo(tt, unit, r, g, b, numTries)
 		tt:AddDoubleLine(L["Talent Specialization:"], talent, nil, nil, nil, r, g, b)
 		tt:AddDoubleLine(L["Item Level:"], itemLevel, nil, nil, nil, 1, 1, 1)
 	else
-		if(not canInspect) or (InspectFrame and InspectFrame:IsShown()) then return end
+		if not canInspect or (InspectFrame and InspectFrame:IsShown()) then return end
 		self.lastGUID = GUID
 		NotifyInspect(unit)
 		self:RegisterEvent("INSPECT_TALENT_READY")
 	end
 end
 
-
 function TT:GameTooltip_OnTooltipSetUnit(tt)
 	local unit = select(2, tt:GetUnit())
 	local isShiftKeyDown = IsShiftKeyDown()
 	local isControlKeyDown = IsControlKeyDown()
 	local isPlayerUnit = UnitIsPlayer(unit)
-	if((tt:GetOwner() ~= UIParent) and (self.db.visibility and self.db.visibility.unitFrames ~= "NONE")) then
+	if tt:GetOwner() ~= UIParent and (self.db.visibility and self.db.visibility.unitFrames ~= "NONE") then
 		local modifier = self.db.visibility.unitFrames
 
-		if(modifier == "ALL" or not ((modifier == "SHIFT" and isShiftKeyDown) or (modifier == "CTRL" and isControlKeyDown) or (modifier == "ALT" and IsAltKeyDown()))) then
+		if modifier == "ALL" or not ((modifier == "SHIFT" and isShiftKeyDown) or (modifier == "CTRL" and isControlKeyDown) or (modifier == "ALT" and IsAltKeyDown())) then
 			tt:Hide()
 			return
 		end
@@ -409,7 +408,7 @@ function TT:GameTooltip_OnTooltipSetUnit(tt)
 		local unitTarget = unit.."target"
 		if self.db.targetInfo and unit ~= "player" and UnitExists(unitTarget) then
 			local targetColor
-			if(UnitIsPlayer(unitTarget) and not UnitHasVehicleUI(unitTarget)) then
+			if UnitIsPlayer(unitTarget) and not UnitHasVehicleUI(unitTarget) then
 				local _, class = UnitClass(unitTarget)
 				targetColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class]
 			else
@@ -423,7 +422,7 @@ function TT:GameTooltip_OnTooltipSetUnit(tt)
 		if self.db.targetInfo and (numParty > 0 or numRaid > 0) then
 			for i = 1, (numRaid > 0 and numRaid or numParty) do
 				local groupUnit = (numRaid > 0 and "raid"..i or "party"..i)
-				if (UnitIsUnit(groupUnit.."target", unit)) and (not UnitIsUnit(groupUnit,"player")) then
+				if UnitIsUnit(groupUnit.."target", unit) and not UnitIsUnit(groupUnit,"player") then
 					local _, class = UnitClass(groupUnit)
 					local classColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class]
 					if not classColor then classColor = RAID_CLASS_COLORS.PRIEST end
@@ -431,7 +430,7 @@ function TT:GameTooltip_OnTooltipSetUnit(tt)
 				end
 			end
 			local numList = #targetList
-			if (numList > 0) then
+			if numList > 0 then
 				tt:AddLine(format("%s (|cffffffff%d|r): %s", L["Targeted By:"], numList, tconcat(targetList, ", ")), nil, nil, nil, true)
 				twipe(targetList)
 			end
@@ -466,18 +465,18 @@ end
 function TT:GameTooltipStatusBar_OnValueChanged(tt, value)
 	if not value or not self.db.healthBar.text or not tt.text then return end
 	local unit = select(2, tt:GetParent():GetUnit())
-	if(not unit) then
+	if not unit then
 		local GMF = GetMouseFocus()
-		if(GMF and GMF:GetAttribute("unit")) then
+		if GMF and GMF:GetAttribute("unit") then
 			unit = GMF:GetAttribute("unit")
 		end
 	end
 
 	local _, max = tt:GetMinMaxValues()
-	if(value > 0 and max == 1) then
+	if value > 0 and max == 1 then
 		tt.text:SetFormattedText("%d%%", floor(value * 100))
 		tt:SetStatusBarColor(TAPPED_COLOR.r, TAPPED_COLOR.g, TAPPED_COLOR.b) --most effeciant?
-	elseif(value == 0 or (unit and UnitIsDeadOrGhost(unit))) then
+	elseif value == 0 or (unit and UnitIsDeadOrGhost(unit)) then
 		tt.text:SetText(DEAD)
 	else
 		tt.text:SetText(E:ShortValue(value).." / "..E:ShortValue(max))
@@ -490,10 +489,10 @@ end
 
 function TT:GameTooltip_OnTooltipSetItem(tt)
 	local ownerName = tt:GetOwner() and tt:GetOwner().GetName and tt:GetOwner():GetName()
-	if (self.db.visibility and self.db.visibility.bags ~= 'NONE' and ownerName and (find(ownerName, "ElvUI_Container") or find(ownerName, "ElvUI_BankContainer"))) then
+	if self.db.visibility and self.db.visibility.bags ~= 'NONE' and ownerName and (find(ownerName, "ElvUI_Container") or find(ownerName, "ElvUI_BankContainer")) then
 		local modifier = self.db.visibility.bags
 
-		if(modifier == "ALL" or not ((modifier == "SHIFT" and IsShiftKeyDown()) or (modifier == "CTRL" and IsControlKeyDown()) or (modifier == "ALT" and IsAltKeyDown()))) then
+		if modifier == "ALL" or not ((modifier == "SHIFT" and IsShiftKeyDown()) or (modifier == "CTRL" and IsControlKeyDown()) or (modifier == "ALT" and IsAltKeyDown())) then
 			tt.itemCleared = true
 			tt:Hide()
 			return
@@ -678,7 +677,7 @@ local function PostBNToastMove(mover)
 	local screenWidth = E.UIParent:GetRight()
 
 	local anchorPoint
-	if (y > (screenHeight / 2)) then
+	if y > (screenHeight / 2) then
 		anchorPoint = (x > (screenWidth/2)) and "TOPRIGHT" or "TOPLEFT"
 	else
 		anchorPoint = (x > (screenWidth/2)) and "BOTTOMRIGHT" or "BOTTOMLEFT"

@@ -1,11 +1,12 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule("DataTexts")
 
+--Lua functions
 local next, unpack = next, unpack
-local format, join = string.format, string.join
+local format, gsub, join = string.format, string.gsub, string.join
 local tinsert = table.insert
 local time, utf8sub = time, string.utf8sub
-
+--WoW API / Variables
 local GetGameTime = GetGameTime
 local GetNumSavedInstances = GetNumSavedInstances
 local GetSavedInstanceInfo = GetSavedInstanceInfo
@@ -14,7 +15,7 @@ local IsInInstance = IsInInstance
 local SecondsToTime = SecondsToTime
 local QUEUE_TIME_UNAVAILABLE = QUEUE_TIME_UNAVAILABLE
 local TIMEMANAGER_TOOLTIP_REALMTIME = TIMEMANAGER_TOOLTIP_REALMTIME
-local WINTERGRASP_IN_PROGRESS = WINTERGRASP_IN_PROGRESS;
+local WINTERGRASP_IN_PROGRESS = WINTERGRASP_IN_PROGRESS
 
 local timeDisplayFormat = ""
 local dateDisplayFormat = ""
@@ -131,7 +132,7 @@ local function OnEnter(self)
 
 	DT.tooltip:AddLine(" ")
 
-	DT.tooltip:AddDoubleLine(TIMEMANAGER_TOOLTIP_REALMTIME, format(europeDisplayFormat_nocolor, GetGameTime()), 1, 1, 1, lockoutColorNormal.r, lockoutColorNormal.g, lockoutColorNormal.b);
+	DT.tooltip:AddDoubleLine(TIMEMANAGER_TOOLTIP_REALMTIME, format(europeDisplayFormat_nocolor, GetGameTime()), 1, 1, 1, lockoutColorNormal.r, lockoutColorNormal.g, lockoutColorNormal.b)
 
 	DT.tooltip:Show()
 end
@@ -149,7 +150,7 @@ local function OnUpdate(self, t)
 		E:StopFlash(self)
 	end
 
-	self.text:SetText(BetterDate(E.db.datatexts.timeFormat.." "..E.db.datatexts.dateFormat, time()):gsub(":", timeDisplayFormat):gsub("%s", dateDisplayFormat));
+	self.text:SetText(gsub(gsub(BetterDate(E.db.datatexts.timeFormat.." "..E.db.datatexts.dateFormat, time()), ":", timeDisplayFormat), "%s", dateDisplayFormat))
 
 	lastPanel = self
 	int = 1

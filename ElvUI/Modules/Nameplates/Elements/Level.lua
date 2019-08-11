@@ -2,6 +2,9 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 local NP = E:GetModule("NamePlates")
 local LSM = E.Libs.LSM
 
+--Lua functions
+--WoW API / Variables
+
 function NP:UpdateElement_Level(frame)
 	if not self.db.units[frame.UnitType].showLevel then return end
 
@@ -20,7 +23,7 @@ function NP:ConfigureElement_Level(frame)
 
 	level:ClearAllPoints()
 
-	if(self.db.units[frame.UnitType].healthbar.enable or (self.db.alwaysShowTargetHealth and frame.isTarget)) then
+	if self.db.units[frame.UnitType].healthbar.enable or (self.db.alwaysShowTargetHealth and frame.isTarget) then
 		level:SetJustifyH("RIGHT")
 		level:SetPoint("BOTTOMRIGHT", frame.HealthBar, "TOPRIGHT", 0, E.Border*2)
 	else

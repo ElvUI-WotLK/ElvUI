@@ -1,4 +1,4 @@
-local E, _, V, P, G = unpack(ElvUI)
+local E, _, V, P, G = unpack(ElvUI); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local C, L = unpack(select(2, ...))
 local NP = E:GetModule("NamePlates")
 local ACD = E.Libs.AceConfigDialog
@@ -1546,7 +1546,7 @@ local ORDER = 100
 local function GetUnitSettings(unit, name)
 	local copyValues = {}
 	for x, y in pairs(NP.db.units) do
-		if(type(y) == "table" and x ~= unit) then
+		if type(y) == "table" and x ~= unit then
 			copyValues[x] = L[x]
 		end
 	end

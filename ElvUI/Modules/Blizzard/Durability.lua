@@ -1,6 +1,9 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales
 local B = E:GetModule("Blizzard")
 
+--Lua functions
+--WoW API / Variables
+
 local function SetPosition(self, _, parent)
 	if parent == "MinimapCluster" or parent == MinimapCluster then
 		self:ClearAllPoints()

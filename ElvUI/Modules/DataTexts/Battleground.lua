@@ -1,9 +1,10 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule("DataTexts")
 
+--Lua functions
 local select = select
 local join = string.join
-
+--WoW API / Variables
 local GetBattlefieldScore = GetBattlefieldScore
 local GetNumBattlefieldStats = GetNumBattlefieldStats
 local GetNumBattlefieldScores = GetNumBattlefieldScores

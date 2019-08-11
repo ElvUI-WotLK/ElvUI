@@ -1,8 +1,11 @@
 local E, L, V, P, G = unpack(select(2, ...)); -- Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
+--Lua functions
+--WoW API / Variables
+
 local function LoadSkin()
-	if(not E.private.skins.blizzard.enable or not E.private.skins.blizzard.inspect) then return; end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.inspect then return; end
 
 	InspectFrame:StripTextures(true)
 	InspectFrame:CreateBackdrop("Transparent")
@@ -52,24 +55,24 @@ local function LoadSkin()
 	end
 
 	hooksecurefunc("InspectPaperDollItemSlotButton_Update", function(button)
-		if(button.hasItem) then
+		if button.hasItem then
 			local itemID = GetInventoryItemID(InspectFrame.unit, button:GetID())
-			if(itemID) then
+			if itemID then
 				local _, _, quality = GetItemInfo(itemID)
-				if(not quality) then
+				if not quality then
 					E:Delay(0.1, function()
-						if(InspectFrame.unit) then
-							InspectPaperDollItemSlotButton_Update(button);
+						if InspectFrame.unit then
+							InspectPaperDollItemSlotButton_Update(button)
 						end
-					end);
+					end)
 					return
 				elseif quality then
-					button.backdrop:SetBackdropBorderColor(GetItemQualityColor(quality));
+					button.backdrop:SetBackdropBorderColor(GetItemQualityColor(quality))
 					return
 				end
 			end
 		end
-		button.backdrop:SetBackdropBorderColor(unpack(E.media.bordercolor));
+		button.backdrop:SetBackdropBorderColor(unpack(E.media.bordercolor))
 	end)
 
 	S:HandleRotateButton(InspectModelRotateLeftButton)
@@ -108,20 +111,20 @@ local function LoadSkin()
 	InspectTalentFrameTab1:Point("TOPLEFT", 19, -40)
 
 	for i = 1, MAX_NUM_TALENTS do
-		local talent = _G["InspectTalentFrameTalent"..i];
-		local icon = _G["InspectTalentFrameTalent"..i.."IconTexture"];
-		local rank = _G["InspectTalentFrameTalent"..i.."Rank"];
+		local talent = _G["InspectTalentFrameTalent"..i]
+		local icon = _G["InspectTalentFrameTalent"..i.."IconTexture"]
+		local rank = _G["InspectTalentFrameTalent"..i.."Rank"]
 
-		if (talent) then
-			talent:StripTextures();
-			talent:SetTemplate("Default");
-			talent:StyleButton();
+		if talent then
+			talent:StripTextures()
+			talent:SetTemplate("Default")
+			talent:StyleButton()
 
-			icon:SetInside();
-			icon:SetTexCoord(unpack(E.TexCoords));
-			icon:SetDrawLayer("ARTWORK");
+			icon:SetInside()
+			icon:SetTexCoord(unpack(E.TexCoords))
+			icon:SetDrawLayer("ARTWORK")
 
-			rank:SetFont(E.LSM:Fetch("font", E.db.general.font), 12, "OUTLINE");
+			rank:SetFont(E.LSM:Fetch("font", E.db.general.font), 12, "OUTLINE")
 		end
 	end
 
@@ -135,4 +138,4 @@ local function LoadSkin()
 	InspectTalentFramePointsBar:StripTextures()
 end
 
-S:AddCallbackForAddon("Blizzard_InspectUI", "Inspect", LoadSkin);
+S:AddCallbackForAddon("Blizzard_InspectUI", "Inspect", LoadSkin)

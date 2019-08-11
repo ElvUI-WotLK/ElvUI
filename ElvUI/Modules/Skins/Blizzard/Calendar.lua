@@ -1,16 +1,13 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
+--Lua functions
+--WoW API / Variables
+
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.calendar ~= true then return end
-	local frames = {
-		"CalendarFrame",
-	}
+	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.calendar ~= true then return; end
 
-	for _, frame in pairs(frames) do
-		_G[frame]:StripTextures()
-	end
-
+	CalendarFrame:StripTextures()
 	CalendarFrame:CreateBackdrop("Transparent")
 	CalendarFrame.backdrop:Point("TOPLEFT", 1, -2)
 	CalendarFrame.backdrop:Point("BOTTOMRIGHT", -2, -7)
@@ -62,7 +59,7 @@ local function LoadSkin()
 
 	local bg = CreateFrame("Frame", "CalendarFrameBackdrop", CalendarFrame)
 	bg:SetTemplate("Default")
-	bg:SetOutside(CalendarDayButton1, 3, 3, CalendarDayButton42);
+	bg:SetOutside(CalendarDayButton1, 3, 3, CalendarDayButton42)
 
 	CalendarContextMenu:SetTemplate("Default")
 	hooksecurefunc(CalendarContextMenu, "SetBackdropColor", function(self, r, g, b, a)
@@ -92,24 +89,24 @@ local function LoadSkin()
 		end
 	end)
 
-	for i=1, 7 do
+	for i = 1, 7 do
 		_G["CalendarContextMenuButton"..i]:StyleButton()
 	end
 
 	for i = 1, 42 do
 		local button = _G["CalendarDayButton"..i]
-		local eventTexture = _G["CalendarDayButton"..i.."EventTexture"];
-		local overlayFrame = _G["CalendarDayButton"..i.."OverlayFrame"];
-		button:SetFrameLevel(button:GetFrameLevel() + 1);
-		button:Size(91 - E.Border);
-		button:SetTemplate("Default", nil, true);
-		button:SetBackdropColor(0, 0, 0, 0);
-		button:GetNormalTexture():SetInside();
-		button:GetNormalTexture():SetDrawLayer("BACKGROUND");
-		button:GetHighlightTexture():SetInside();
-		button:GetHighlightTexture():SetTexture(1, 1, 1, 0.3);
-		eventTexture:SetInside();
-		overlayFrame:SetInside();
+		local eventTexture = _G["CalendarDayButton"..i.."EventTexture"]
+		local overlayFrame = _G["CalendarDayButton"..i.."OverlayFrame"]
+		button:SetFrameLevel(button:GetFrameLevel() + 1)
+		button:Size(91 - E.Border)
+		button:SetTemplate("Default", nil, true)
+		button:SetBackdropColor(0, 0, 0, 0)
+		button:GetNormalTexture():SetInside()
+		button:GetNormalTexture():SetDrawLayer("BACKGROUND")
+		button:GetHighlightTexture():SetInside()
+		button:GetHighlightTexture():SetTexture(1, 1, 1, 0.3)
+		eventTexture:SetInside()
+		overlayFrame:SetInside()
 
 		for j = 1, 4 do
 			local EventButton = _G["CalendarDayButton"..i.."EventButton"..j]
@@ -117,22 +114,22 @@ local function LoadSkin()
 			EventButton:StyleButton()
 		end
 
-		button:ClearAllPoints();
-		if(i == 1) then
-			button:SetPoint("TOPLEFT", CalendarWeekday1Background, "BOTTOMLEFT", 0, 0);
-		elseif(mod(i, 7) == 1) then
-			button:SetPoint("TOPLEFT", _G["CalendarDayButton"..(i - 7)], "BOTTOMLEFT", 0, -E.Border);
+		button:ClearAllPoints()
+		if i == 1 then
+			button:SetPoint("TOPLEFT", CalendarWeekday1Background, "BOTTOMLEFT", 0, 0)
+		elseif mod(i, 7) == 1 then
+			button:SetPoint("TOPLEFT", _G["CalendarDayButton"..(i - 7)], "BOTTOMLEFT", 0, -E.Border)
 		else
-			button:SetPoint("TOPLEFT", _G["CalendarDayButton"..(i - 1)], "TOPRIGHT", E.Border, 0);
+			button:SetPoint("TOPLEFT", _G["CalendarDayButton"..(i - 1)], "TOPRIGHT", E.Border, 0)
 		end
 	end
 
 	CalendarTodayFrame:StripTextures()
 	CalendarTodayFrame:SetTemplate("Default")
 	CalendarTodayFrame:Size(CalendarDayButton1:GetWidth(), CalendarDayButton1:GetHeight())
-	CalendarTodayFrame:SetBackdropBorderColor(unpack(E.media.rgbvaluecolor));
-	local value = E.db.general.valuecolor;
-	CalendarTodayFrame:SetBackdropColor(value.r, value.g, value.b, 0.5);
+	CalendarTodayFrame:SetBackdropBorderColor(unpack(E.media.rgbvaluecolor))
+	local value = E.db.general.valuecolor
+	CalendarTodayFrame:SetBackdropColor(value.r, value.g, value.b, 0.5)
 	CalendarTodayFrame:HookScript("OnUpdate", function(self) self:SetAlpha(CalendarTodayTextureGlow:GetAlpha()) end)
 	CalendarTodayFrame:CreateShadow()
 	CalendarTodayFrame.shadow:SetBackdropBorderColor(unpack(E.media.rgbvaluecolor))
@@ -209,7 +206,7 @@ local function LoadSkin()
 	S:HandleButton(CalendarCreateEventInviteButton, true)
 	S:HandleButton(CalendarCreateEventRaidInviteButton, true)
 
-	for i=1, 16 do
+	for i = 1, 16 do
 		_G["CalendarTexturePickerScrollFrameButton"..i]:StyleButton()
 	end
 
@@ -283,4 +280,4 @@ local function LoadSkin()
 	S:HandleScrollBar(CalendarViewEventDescriptionScrollFrameScrollBar)
 end
 
-S:AddCallbackForAddon("Blizzard_Calendar", "Calendar", LoadSkin);
+S:AddCallbackForAddon("Blizzard_Calendar", "Calendar", LoadSkin)

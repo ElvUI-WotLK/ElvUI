@@ -1,10 +1,11 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
+--Lua functions
 local _G = _G
 local unpack = unpack
 local find = string.find
-
+--WoW API / Variables
 local hooksecurefunc = hooksecurefunc
 
 local function LoadSkin()
@@ -102,7 +103,7 @@ local function LoadSkin()
 		local _, type, finished
 		local numVisibleObjectives = 0
 		for i = 1, numObjectives do
-			_, type, finished = GetQuestLogLeaderBoard(i);
+			_, type, finished = GetQuestLogLeaderBoard(i)
 			if type ~= "spell" then
 				numVisibleObjectives = numVisibleObjectives + 1
 				objective = _G["QuestInfoObjective"..numVisibleObjectives]
@@ -342,4 +343,4 @@ local function LoadSkin()
 	end
 end
 
-S:AddCallback("Quest", LoadSkin);
+S:AddCallback("Quest", LoadSkin)

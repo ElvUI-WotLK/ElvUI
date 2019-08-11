@@ -2,8 +2,9 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 local NP = E:GetModule("NamePlates")
 local LSM = E.Libs.LSM
 
+--Lua functions
 local unpack = unpack
-
+--WoW API / Variables
 local CreateFrame = CreateFrame
 local GetTime = GetTime
 local UnitCastingInfo = UnitCastingInfo
