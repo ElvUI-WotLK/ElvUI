@@ -450,12 +450,12 @@ function S:HandleSliderFrame(frame)
 	thumb:SetVertexColor(1, 0.82, 0, 0.8)
 	thumb:Size(SIZE - 2, SIZE - 2)
 
-	hooksecurefunc("BlizzardOptionsPanel_Slider_Disable", function(slider)
-		slider:GetThumbTexture():SetVertexColor(0.6, 0.6, 0.6, 0.8)
-	end)
-	hooksecurefunc("BlizzardOptionsPanel_Slider_Enable", function(slider)
-		slider:GetThumbTexture():SetVertexColor(1, 0.82, 0, 0.8)
-	end)
+    frame:HookScript("OnDisable", function(slider)
+        slider:GetThumbTexture():SetVertexColor(0.6, 0.6, 0.6, 0.8)
+    end)
+    frame:HookScript("OnEnable", function(slider)
+        slider:GetThumbTexture():SetVertexColor(1, 0.82, 0, 0.8)
+    end)
 
 	if orientation == "VERTICAL" then
 		frame:Width(SIZE)
