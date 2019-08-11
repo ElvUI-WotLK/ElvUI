@@ -134,6 +134,9 @@ local function LoadSkin()
 	GearManagerToggleButton:GetHighlightTexture():SetTexture(1, 1, 1, 0.3)
 	GearManagerToggleButton:GetHighlightTexture():SetAllPoints()
 
+	local popoutButtonOnEnter = function(btn) btn.icon:SetVertexColor(unpack(E.media.rgbvaluecolor)) end
+	local popoutButtonOnLeave = function(btn) btn.icon:SetVertexColor(1, 1, 1) end
+
 	local slots = {"HeadSlot", "NeckSlot", "ShoulderSlot", "BackSlot", "ChestSlot", "ShirtSlot", "TabardSlot", "WristSlot",
 		"HandsSlot", "WaistSlot", "LegsSlot", "FeetSlot", "Finger0Slot", "Finger1Slot", "Trinket0Slot", "Trinket1Slot",
 		"MainHandSlot", "SecondaryHandSlot", "RangedSlot", "AmmoSlot"
@@ -158,53 +161,55 @@ local function LoadSkin()
 			E:RegisterCooldown(cooldown)
 		end
 
-		if(popout) then
+		if popout then
 			popout:StripTextures()
-			popout:SetTemplate("Default", true)
-			popout:HookScript("OnEnter", S.SetModifiedBackdrop)
-			popout:HookScript("OnLeave", S.SetOriginalBackdrop)
+			popout:HookScript("OnEnter", popoutButtonOnEnter)
+			popout:HookScript("OnLeave", popoutButtonOnLeave)
 
 			popout.icon = popout:CreateTexture(nil, "ARTWORK")
-			popout.icon:Size(14)
+			popout.icon:Size(24)
 			popout.icon:Point("CENTER")
-			popout.icon:SetTexture([[Interface\AddOns\ElvUI\media\textures\SquareButtonTextures.blp]])
+			popout.icon:SetTexture(E.Media.Textures.ArrowUp)
 
-			if(slot.verticalFlyout) then
-				popout:Size(23, 9)
-			--	S:SquareButton_SetIcon(popout, "DOWN")
-				popout:SetPoint("TOP", slot, "BOTTOM", 0, 5)
+			if slot.verticalFlyout then
+				popout.icon:SetRotation(S.ArrowRotation.down)
+				popout.icon:SetRotation(S.ArrowRotation.down)
+				popout.icon:SetRotation(S.ArrowRotation.down)
 			else
-				popout:Size(9, 23)
-			--	S:SquareButton_SetIcon(popout, "RIGHT")
-				popout:SetPoint("LEFT", slot, "RIGHT", -5, 0)
+				popout.icon:SetRotation(S.ArrowRotation.right)
+				popout.icon:SetRotation(S.ArrowRotation.right)
+				popout.icon:SetRotation(S.ArrowRotation.right)
 			end
 		end
 	end
 
 	hooksecurefunc("PaperDollFrameItemFlyout_Show", function(self)
 		PaperDollFrameItemFlyoutButtons:StripTextures()
-		if(self.verticalFlyout) then
-			PaperDollFrameItemFlyout.buttonFrame:Point("TOPLEFT", self.popoutButton, "BOTTOMLEFT", -10, 0)
-		else
-			PaperDollFrameItemFlyout.buttonFrame:Point("TOPLEFT", self.popoutButton, "TOPRIGHT", 0, 10)
-		end
 	end)
 
---	hooksecurefunc("PaperDollFrameItemPopoutButton_SetReversed", function(self, isReversed)
---		if(self:GetParent().verticalFlyout) then
---			if(isReversed) then
---				S:SquareButton_SetIcon(self, "UP")
---			else
---				S:SquareButton_SetIcon(self, "DOWN")
---			end
---		else
---			if(isReversed) then
---				S:SquareButton_SetIcon(self, "LEFT")
---			else
---				S:SquareButton_SetIcon(self, "RIGHT")
---			end
---		end
---	end)
+	hooksecurefunc("PaperDollFrameItemPopoutButton_SetReversed", function(self, isReversed)
+		if self:GetParent().verticalFlyout then
+			if isReversed then
+				self.icon:SetRotation(S.ArrowRotation.up)
+				self.icon:SetRotation(S.ArrowRotation.up)
+				self.icon:SetRotation(S.ArrowRotation.up)
+			else
+				self.icon:SetRotation(S.ArrowRotation.down)
+				self.icon:SetRotation(S.ArrowRotation.down)
+				self.icon:SetRotation(S.ArrowRotation.down)
+			end
+		else
+			if isReversed then
+				self.icon:SetRotation(S.ArrowRotation.left)
+				self.icon:SetRotation(S.ArrowRotation.left)
+				self.icon:SetRotation(S.ArrowRotation.left)
+			else
+				self.icon:SetRotation(S.ArrowRotation.right)
+				self.icon:SetRotation(S.ArrowRotation.right)
+				self.icon:SetRotation(S.ArrowRotation.right)
+			end
+		end
+	end)
 
 	local function ColorItemBorder()
 		for _, slot in pairs(slots) do
