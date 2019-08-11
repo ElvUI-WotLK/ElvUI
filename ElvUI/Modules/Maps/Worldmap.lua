@@ -1,12 +1,14 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local M = E:GetModule("WorldMap")
 
+--Lua functions
 local find = string.find
-
+--WoW API / Variables
 local CreateFrame = CreateFrame
-local InCombatLockdown = InCombatLockdown
-local GetPlayerMapPosition = GetPlayerMapPosition
+local GetCVarBool = GetCVarBool
 local GetCursorPosition = GetCursorPosition
+local GetPlayerMapPosition = GetPlayerMapPosition
+local InCombatLockdown = InCombatLockdown
 local PLAYER = PLAYER
 local MOUSE_LABEL = MOUSE_LABEL
 local WORLDMAP_POI_FRAMELEVEL = WORLDMAP_POI_FRAMELEVEL
@@ -31,7 +33,7 @@ function M:PLAYER_REGEN_ENABLED()
 	WorldMapBlobFrame.Hide = nil
 	WorldMapBlobFrame.Show = nil
 
-	if self.blobWasVisible then
+	if M.blobWasVisible then
 		WorldMapBlobFrame:Show()
 	end
 
@@ -39,10 +41,10 @@ function M:PLAYER_REGEN_ENABLED()
 		WorldMapBlobFrame:DrawQuestBlob(WorldMapQuestScrollChildFrame.selected.questId, false)
 	end
 
-	if self.blobWasVisible then
+	if M.blobWasVisible then
 		WorldMapBlobFrame_CalculateHitTranslations()
 
-		if (WorldMapQuestScrollChildFrame.selected and not WorldMapQuestScrollChildFrame.selected.completed) then
+		if WorldMapQuestScrollChildFrame.selected and not WorldMapQuestScrollChildFrame.selected.completed then
 			WorldMapBlobFrame:DrawQuestBlob(WorldMapQuestScrollChildFrame.selected.questId, true)
 		end
 	end
@@ -56,12 +58,12 @@ function M:PLAYER_REGEN_DISABLED()
 		WorldMapQuestShowObjectives:Disable()
 	end
 
-	self.blobWasVisible = WorldMapFrame:IsShown() and WorldMapBlobFrame:IsShown()
+	M.blobWasVisible = WorldMapFrame:IsShown() and WorldMapBlobFrame:IsShown()
 
-	--WorldMapBlobFrame:SetParent(nil)
-	--WorldMapBlobFrame:ClearAllPoints()
-	--WorldMapBlobFrame:SetPoint("TOP", UIParent, "BOTTOM")
-	--WorldMapBlobFrame:Hide()
+--	WorldMapBlobFrame:SetParent(nil)
+--	WorldMapBlobFrame:ClearAllPoints()
+--	WorldMapBlobFrame:SetPoint("TOP", UIParent, "BOTTOM")
+--	WorldMapBlobFrame:Hide()
 	WorldMapBlobFrame.Hide = function() M.blobWasVisible = nil end
 	WorldMapBlobFrame.Show = function() M.blobWasVisible = true end
 end
@@ -75,7 +77,7 @@ function M:UpdateCoords()
 	if x ~= 0 and y ~= 0 then
 		CoordsHolder.playerCoords:SetFormattedText("%s:   %.2f, %.2f", PLAYER, x, y)
 	else
-		CoordsHolder.playerCoords:SetText("")
+		CoordsHolder.playerCoords:SetFormattedText("%s:   %s", PLAYER, "N/A")
 	end
 
 	local scale = WorldMapDetailFrame:GetEffectiveScale()
@@ -125,6 +127,8 @@ function M:ToggleMapFramerate()
 end
 
 function M:Initialize()
+	M.Initialized = true
+
 	if E.global.general.WorldMapCoordinates.enable then
 		local coordsHolder = CreateFrame("Frame", "CoordsHolder", WorldMapFrame)
 		coordsHolder:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 100)
@@ -140,14 +144,23 @@ function M:Initialize()
 		coordsHolder.mouseCoords:SetPoint("BOTTOMLEFT", coordsHolder.playerCoords, "TOPLEFT", 0, 5)
 		coordsHolder.mouseCoords:SetText(MOUSE_LABEL..":   0, 0")
 
-		coordsHolder:SetScript("OnUpdate", self.UpdateCoords)
+		WorldMapFrame:HookScript("OnShow", function()
+			if not M.CoordsTimer then
+				M:UpdateCoords()
+				M.CoordsTimer = M:ScheduleRepeatingTimer("UpdateCoords", 0.1)
+			end
+		end)
+		WorldMapFrame:HookScript("OnHide", function()
+			M:CancelTimer(M.CoordsTimer)
+			M.CoordsTimer = nil
+		end)
 
-		self:PositionCoords()
+		M:PositionCoords()
 	end
 
 	if E.global.general.smallerWorldMap or (E.private.skins.blizzard.enable and E.private.skins.blizzard.worldmap) then
-		self:RegisterEvent("PLAYER_REGEN_ENABLED")
-		self:RegisterEvent("PLAYER_REGEN_DISABLED")
+		M:RegisterEvent("PLAYER_REGEN_ENABLED")
+		M:RegisterEvent("PLAYER_REGEN_DISABLED")
 	end
 
 	if E.global.general.smallerWorldMap then
@@ -162,7 +175,7 @@ function M:Initialize()
 			HideUIPanel(WorldMapFrame)
 		end
 
-		self:SecureHook("ToggleMapFramerate")
+		M:SecureHook("ToggleMapFramerate")
 
 		DropDownList1:HookScript("OnShow", function()
 			if DropDownList1:GetScale() ~= UIParent:GetScale() then
@@ -170,7 +183,7 @@ function M:Initialize()
 			end
 		end)
 
-		self:RawHook("WorldMapQuestPOI_OnLeave", function(self)
+		M:RawHook("WorldMapQuestPOI_OnLeave", function()
 			WorldMapPOIFrame.allowBlobTooltip = true
 			WorldMapTooltip:Hide()
 		end, true)
