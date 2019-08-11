@@ -3212,7 +3212,7 @@ E.Options.args.unitframe = {
 									set = function(info, value) E.db.unitframe.colors[info[#info]] = value UF:Update_AllFrames() end
 								},
 								invertAurabars = {
-									order = 2,
+									order = 3,
 									type = "toggle",
 									name = L["Invert Colors"],
 									desc = L["Invert foreground and background colors."],
@@ -3221,25 +3221,25 @@ E.Options.args.unitframe = {
 									set = function(info, value) E.db.unitframe.colors[info[#info]] = value UF:Update_AllFrames() end
 								},
 								auraBarByType = {
-									order = 3,
+									order = 4,
 									type = "toggle",
 									name = L["By Type"],
 									desc = L["Color aurabar debuffs by type."]
 								},
 								auraBarTurtle = {
-									order = 4,
+									order = 5,
 									type = "toggle",
 									name = L["Color Turtle Buffs"],
 									desc = L["Color all buffs that reduce the unit's incoming damage."]
 								},
 								spacer1 = {
-									order = 5,
+									order = 6,
 									type = "description",
 									name = " ",
 									width = "full"
 								},
 								customaurabarbackdrop = {
-									order = 6,
+									order = 7,
 									type = "toggle",
 									name = L["Custom Backdrop"],
 									desc = L["Use the custom backdrop color instead of a multiple of the main color."],
@@ -3247,7 +3247,7 @@ E.Options.args.unitframe = {
 									set = function(info, value) E.db.unitframe.colors[info[#info]] = value UF:Update_AllFrames() end,
 								},
 								aurabar_backdrop = {
-									order = 7,
+									order = 8,
 									type = "color",
 									name = L["Custom Backdrop"],
 									desc = L["Use the custom backdrop color instead of a multiple of the main color."],
@@ -3264,13 +3264,13 @@ E.Options.args.unitframe = {
 									end,
 								},
 								spacer2 = {
-									order = 8,
+									order = 9,
 									type = "description",
 									name = " ",
 									width = "full"
 								},
 								BUFFS = {
-									order = 9,
+									order = 10,
 									type = "color",
 									name = L["Buffs"],
 									get = function(info)
@@ -3293,7 +3293,7 @@ E.Options.args.unitframe = {
 									end
 								},
 								DEBUFFS = {
-									order = 10,
+									order = 11,
 									type = "color",
 									name = L["Debuffs"],
 									get = function(info)
@@ -3308,7 +3308,7 @@ E.Options.args.unitframe = {
 									end
 								},
 								auraBarTurtleColor = {
-									order = 11,
+									order = 12,
 									type = "color",
 									name = L["Turtle Color"],
 									get = function(info)
