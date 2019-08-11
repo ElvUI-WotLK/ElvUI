@@ -27,12 +27,12 @@ local function LoadSkin()
 	S:HandleEditBox(TradePlayerInputMoneyFrameCopper);
 
 	for i = 1, MAX_TRADE_ITEMS do
-		local player = _G["TradePlayerItem" .. i];
-		local recipient = _G["TradeRecipientItem" .. i];
-		local playerButton = _G["TradePlayerItem" .. i .. "ItemButton"];
-		local playerButtonIcon = _G["TradePlayerItem" .. i .. "ItemButtonIconTexture"];
-		local recipientButton = _G["TradeRecipientItem" .. i .. "ItemButton"];
-		local recipientButtonIcon = _G["TradeRecipientItem" .. i .. "ItemButtonIconTexture"];
+		local player = _G["TradePlayerItem"..i];
+		local recipient = _G["TradeRecipientItem"..i];
+		local playerButton = _G["TradePlayerItem"..i.."ItemButton"];
+		local playerButtonIcon = _G["TradePlayerItem"..i.."ItemButtonIconTexture"];
+		local recipientButton = _G["TradeRecipientItem"..i.."ItemButton"];
+		local recipientButtonIcon = _G["TradeRecipientItem"..i.."ItemButtonIconTexture"];
 
 		player:StripTextures();
 		recipient:StripTextures();

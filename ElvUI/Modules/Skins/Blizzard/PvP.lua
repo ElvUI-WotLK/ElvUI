@@ -67,7 +67,7 @@ local function LoadSkin()
 	PVPFrame:StripTextures(true);
 
 	for i = 1, MAX_ARENA_TEAMS do
-		local pvpTeam = _G["PVPTeam" .. i];
+		local pvpTeam = _G["PVPTeam"..i];
 		pvpTeam:StripTextures();
 		pvpTeam:CreateBackdrop("Default");
 		pvpTeam.backdrop:Point("TOPLEFT", 9, -4);
@@ -76,7 +76,7 @@ local function LoadSkin()
 		pvpTeam:HookScript("OnEnter", S.SetModifiedBackdrop);
 		pvpTeam:HookScript("OnLeave", S.SetOriginalBackdrop);
 
-		_G["PVPTeam" .. i .. "Highlight"]:Kill();
+		_G["PVPTeam"..i.."Highlight"]:Kill();
 	end
 
 	PVPTeamDetails:StripTextures();
@@ -85,7 +85,7 @@ local function LoadSkin()
 	S:HandleCloseButton(PVPTeamDetailsCloseButton);
 
 	for i = 1, 5 do
-		_G["PVPTeamDetailsFrameColumnHeader" .. i]:StripTextures();
+		_G["PVPTeamDetailsFrameColumnHeader"..i]:StripTextures();
 	end
 
 	S:HandleButton(PVPTeamDetailsAddTeamMember);
@@ -93,7 +93,7 @@ local function LoadSkin()
 	S:HandleNextPrevButton(PVPTeamDetailsToggleButton);
 
 	for i = 1, 2 do
-		S:HandleTab(_G["PVPParentFrameTab" .. i]);
+		S:HandleTab(_G["PVPParentFrameTab"..i]);
 	end
 end
 

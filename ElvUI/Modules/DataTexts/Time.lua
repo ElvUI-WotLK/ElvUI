@@ -149,7 +149,7 @@ local function OnUpdate(self, t)
 		E:StopFlash(self)
 	end
 
-	self.text:SetText(BetterDate(E.db.datatexts.timeFormat .. " " .. E.db.datatexts.dateFormat, time()):gsub(":", timeDisplayFormat):gsub("%s", dateDisplayFormat));
+	self.text:SetText(BetterDate(E.db.datatexts.timeFormat.." "..E.db.datatexts.dateFormat, time()):gsub(":", timeDisplayFormat):gsub("%s", dateDisplayFormat));
 
 	lastPanel = self
 	int = 1

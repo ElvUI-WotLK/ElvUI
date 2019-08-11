@@ -97,9 +97,9 @@ local function LoadSkin()
 	end
 
 	for i = 1, 42 do
-		local button = _G["CalendarDayButton" .. i]
-		local eventTexture = _G["CalendarDayButton" .. i .. "EventTexture"];
-		local overlayFrame = _G["CalendarDayButton" .. i .. "OverlayFrame"];
+		local button = _G["CalendarDayButton"..i]
+		local eventTexture = _G["CalendarDayButton"..i.."EventTexture"];
+		local overlayFrame = _G["CalendarDayButton"..i.."OverlayFrame"];
 		button:SetFrameLevel(button:GetFrameLevel() + 1);
 		button:Size(91 - E.Border);
 		button:SetTemplate("Default", nil, true);
@@ -112,7 +112,7 @@ local function LoadSkin()
 		overlayFrame:SetInside();
 
 		for j = 1, 4 do
-			local EventButton = _G["CalendarDayButton" .. i .. "EventButton" .. j]
+			local EventButton = _G["CalendarDayButton"..i.."EventButton"..j]
 			EventButton:StripTextures()
 			EventButton:StyleButton()
 		end
@@ -121,9 +121,9 @@ local function LoadSkin()
 		if(i == 1) then
 			button:SetPoint("TOPLEFT", CalendarWeekday1Background, "BOTTOMLEFT", 0, 0);
 		elseif(mod(i, 7) == 1) then
-			button:SetPoint("TOPLEFT", _G["CalendarDayButton" .. (i - 7)], "BOTTOMLEFT", 0, -E.Border);
+			button:SetPoint("TOPLEFT", _G["CalendarDayButton"..(i - 7)], "BOTTOMLEFT", 0, -E.Border);
 		else
-			button:SetPoint("TOPLEFT", _G["CalendarDayButton" .. (i - 1)], "TOPRIGHT", E.Border, 0);
+			button:SetPoint("TOPLEFT", _G["CalendarDayButton"..(i - 1)], "TOPRIGHT", E.Border, 0);
 		end
 	end
 

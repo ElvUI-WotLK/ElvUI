@@ -19,14 +19,14 @@ local function LoadSkin()
 	TabardFrameCustomizationFrame:StripTextures();
 
 	for i = 1, 5 do
-		local custom = "TabardFrameCustomization" .. i;
+		local custom = "TabardFrameCustomization"..i;
 		_G[custom]:StripTextures();
-		S:HandleNextPrevButton(_G[custom .. "LeftButton"]);
-		S:HandleNextPrevButton(_G[custom .. "RightButton"]);
+		S:HandleNextPrevButton(_G[custom.."LeftButton"]);
+		S:HandleNextPrevButton(_G[custom.."RightButton"]);
 
 		if(i > 1) then
 			_G[custom]:ClearAllPoints();
-			_G[custom]:Point("TOP", _G["TabardFrameCustomization" .. i-1], "BOTTOM", 0, -6);
+			_G[custom]:Point("TOP", _G["TabardFrameCustomization"..i-1], "BOTTOM", 0, -6);
 		else
 			local point, anchor, point2, x, y = _G[custom]:GetPoint();
 			_G[custom]:Point(point, anchor, point2, x, y+4);

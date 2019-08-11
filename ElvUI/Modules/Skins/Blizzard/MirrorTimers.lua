@@ -28,9 +28,9 @@ local function LoadSkin()
 	end
 
 	for i = 1, MIRRORTIMER_NUMTIMERS do
-		local mirrorTimer = _G["MirrorTimer" .. i];
-		local statusBar = _G["MirrorTimer" .. i .. "StatusBar"];
-		local text = _G["MirrorTimer" .. i .. "Text"];
+		local mirrorTimer = _G["MirrorTimer"..i];
+		local statusBar = _G["MirrorTimer"..i.."StatusBar"];
+		local text = _G["MirrorTimer"..i.."Text"];
 
 		mirrorTimer:StripTextures();
 		mirrorTimer:Size(222, 18);
@@ -49,7 +49,7 @@ local function LoadSkin()
 		mirrorTimer.timeSinceUpdate = 0.3;
 		mirrorTimer:HookScript("OnUpdate", MirrorTimer_OnUpdate);
 
-		E:CreateMover(mirrorTimer, "MirrorTimer" .. i .. "Mover", L["MirrorTimer"] .. i, nil, nil, nil, "ALL,SOLO");
+		E:CreateMover(mirrorTimer, "MirrorTimer"..i.."Mover", L["MirrorTimer"]..i, nil, nil, nil, "ALL,SOLO");
 	end
 end
 

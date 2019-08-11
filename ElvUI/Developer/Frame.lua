@@ -70,7 +70,7 @@ t:SetAllPoints()
 t:SetTexture(0, 1, 0, 0.5)
 
 hooksecurefunc("FrameStackTooltip_Toggle", function()
-	local tooltip = _G["FrameStackTooltip"]
+	local tooltip = FrameStackTooltip
 	if not tooltip:IsVisible() then
 		FrameStackHighlight:Hide()
 	end
@@ -84,7 +84,7 @@ FrameStackTooltip:HookScript("OnUpdate", function(_, elapsed)
 		local highlightFrame = GetMouseFocus()
 
 		FrameStackHighlight:ClearAllPoints()
-		if highlightFrame and highlightFrame ~= _G["WorldFrame"] then
+		if highlightFrame and highlightFrame ~= WorldFrame then
 			FrameStackHighlight:SetPoint("BOTTOMLEFT", highlightFrame)
 			FrameStackHighlight:SetPoint("TOPRIGHT", highlightFrame)
 			FrameStackHighlight:Show()

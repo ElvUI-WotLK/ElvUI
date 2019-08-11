@@ -194,7 +194,7 @@ local function LoadSkin()
 	end)
 
 	for i = 1, NUM_LFD_CHOICE_BUTTONS do
-		local button = _G["LFDQueueFrameSpecificListButton" .. i]
+		local button = _G["LFDQueueFrameSpecificListButton"..i]
 		button.enableButton:StripTextures()
 		button.enableButton:CreateBackdrop("Default")
 		button.enableButton.backdrop:SetInside(nil, 4, 4)

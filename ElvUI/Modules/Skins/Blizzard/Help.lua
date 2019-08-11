@@ -24,7 +24,7 @@ local function LoadSkin()
 	S:HandleCloseButton(HelpFrameCloseButton);
 
 	for i = 1, #helpFrameButtons do
-		local button = _G["HelpFrame" .. helpFrameButtons[i]];
+		local button = _G["HelpFrame"..helpFrameButtons[i]];
 		S:HandleButton(button);
 	end
 

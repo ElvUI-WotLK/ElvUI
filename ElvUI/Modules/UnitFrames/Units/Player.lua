@@ -197,7 +197,7 @@ end
 tinsert(UF.unitstoload, "player")
 
 local function UpdateClassBar()
-	local frame = _G["ElvUF_Player"]
+	local frame = _G.ElvUF_Player
 	if frame and frame.ClassBar then
 		frame:UpdateElement(frame.ClassBar)
 		UF.ToggleResourceBar(frame[frame.ClassBar])

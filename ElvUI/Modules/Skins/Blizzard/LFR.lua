@@ -52,7 +52,7 @@ local function LoadSkin()
 	end
 
 	for i=1, NUM_LFR_CHOICE_BUTTONS do
-		local button = _G["LFRQueueFrameSpecificListButton" .. i];
+		local button = _G["LFRQueueFrameSpecificListButton"..i];
 		S:HandleCheckBox(button.enableButton)
 
 		button.expandOrCollapseButton:SetNormalTexture(E.Media.Textures.Plus)

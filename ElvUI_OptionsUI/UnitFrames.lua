@@ -6465,7 +6465,7 @@ E.Options.args.unitframe.args.raid = {
 			type = "execute",
 			name = L["Display Frames"],
 			func = function()
-				UF:HeaderConfig(_G["ElvUF_Raid"], _G["ElvUF_Raid"].forceShow ~= true or nil)
+				UF:HeaderConfig(ElvUF_Raid, ElvUF_Raid.forceShow ~= true or nil)
 			end
 		},
 		resetSettings = {
@@ -6822,7 +6822,7 @@ E.Options.args.unitframe.args.raid40 = {
 			type = "execute",
 			name = L["Display Frames"],
 			func = function()
-				UF:HeaderConfig(_G["ElvUF_Raid40"], _G["ElvUF_Raid40"].forceShow ~= true or nil)
+				UF:HeaderConfig(ElvUF_Raid40, ElvUF_Raid40.forceShow ~= true or nil)
 			end
 		},
 		resetSettings = {
@@ -6935,9 +6935,9 @@ E.Options.args.unitframe.args.raid40 = {
 							set = function(info, value)
 								E.db.unitframe.units.raid40[info[#info]] = value
 								UF:CreateAndUpdateHeaderGroup("raid40")
-								if _G["ElvUF_Raid"].isForced then
-									UF:HeaderConfig(_G["ElvUF_Raid40"])
-									UF:HeaderConfig(_G["ElvUF_Raid40"], true)
+								if ElvUF_Raid40.isForced then
+									UF:HeaderConfig(ElvUF_Raid40)
+									UF:HeaderConfig(ElvUF_Raid40, true)
 								end
 							end
 						},
@@ -6949,9 +6949,9 @@ E.Options.args.unitframe.args.raid40 = {
 							set = function(info, value)
 								E.db.unitframe.units.raid40[info[#info]] = value
 								UF:CreateAndUpdateHeaderGroup("raid40")
-								if _G["ElvUF_Raid"].isForced then
-									UF:HeaderConfig(_G["ElvUF_Raid40"])
-									UF:HeaderConfig(_G["ElvUF_Raid40"], true)
+								if ElvUF_Raid40.isForced then
+									UF:HeaderConfig(ElvUF_Raid40)
+									UF:HeaderConfig(ElvUF_Raid40, true)
 								end
 							end
 						},

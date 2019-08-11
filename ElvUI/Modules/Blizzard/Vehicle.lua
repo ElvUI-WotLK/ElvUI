@@ -1,15 +1,16 @@
 local E, L = unpack(select(2, ...)); --Import: Engine, Locales
 local B = E:GetModule("Blizzard")
 
+--Lua functions
 local _G = _G
-
+--WoW API / Variables
 local hooksecurefunc = hooksecurefunc
 local GetVehicleUIIndicator = GetVehicleUIIndicator
 local GetVehicleUIIndicatorSeat = GetVehicleUIIndicatorSeat
 local VehicleSeatIndicator_SetUpVehicle = VehicleSeatIndicator_SetUpVehicle
 
 local function VehicleSeatIndicator_SetPosition(_, _, parent)
-	if (parent == "MinimapCluster") or (parent == _G["MinimapCluster"]) then
+	if (parent == "MinimapCluster") or (parent == MinimapCluster) then
 		VehicleSeatIndicator:ClearAllPoints()
 		VehicleSeatIndicator:Point("TOPLEFT", VehicleSeatMover, "TOPLEFT", 0, 0)
 	end

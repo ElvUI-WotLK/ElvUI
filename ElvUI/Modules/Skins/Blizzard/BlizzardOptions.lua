@@ -144,7 +144,7 @@ local function LoadSkin()
 		if SkinFrames then
 			SkinFrames:StripTextures()
 			SkinFrames:CreateBackdrop("Transparent")
-			if SkinFrames ~= _G["VideoOptionsFramePanelContainer"] and SkinFrames ~= _G["InterfaceOptionsFramePanelContainer"] then
+			if SkinFrames ~= VideoOptionsFramePanelContainer and SkinFrames ~= InterfaceOptionsFramePanelContainer then
 				SkinFrames.backdrop:Point("TOPLEFT", -1 ,0)
 				SkinFrames.backdrop:Point("BOTTOMRIGHT", 0, 1)
 			else

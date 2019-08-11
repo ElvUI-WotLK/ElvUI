@@ -89,7 +89,7 @@ local function LoadSkin()
 	end)
 
 	for i = 12, 19 do
-		CreateFrame("Button", "ClassTrainerSkill" .. i, ClassTrainerFrame, "ClassTrainerSkillButtonTemplate"):Point("TOPLEFT", _G["ClassTrainerSkill" .. i - 1], "BOTTOMLEFT")
+		CreateFrame("Button", "ClassTrainerSkill"..i, ClassTrainerFrame, "ClassTrainerSkillButtonTemplate"):Point("TOPLEFT", _G["ClassTrainerSkill"..i - 1], "BOTTOMLEFT")
 	end
 
 	ClassTrainerSkill1:Point("TOPLEFT", 22, -80)

@@ -43,7 +43,7 @@ local function LoadSkin()
 	PaperDollFrameItemFlyoutHighlight:Kill()
 	local function SkinItemFlyouts(button)
 		if(not button.isSkinned) then
-			button.icon = _G[button:GetName() .. "IconTexture"]
+			button.icon = _G[button:GetName().."IconTexture"]
 
 			button:GetNormalTexture():SetTexture(nil)
 			button:SetTemplate("Default")
@@ -145,7 +145,7 @@ local function LoadSkin()
 	for _, slot in pairs(slots) do
 		local icon = _G["Character"..slot.."IconTexture"]
 		local cooldown = _G["Character"..slot.."Cooldown"]
-		local popout = _G["Character" .. slot .. "PopoutButton"]
+		local popout = _G["Character"..slot.."PopoutButton"]
 
 		slot = _G["Character"..slot]
 		slot:StripTextures()
@@ -369,9 +369,9 @@ local function LoadSkin()
 	ReputationFrame:StripTextures(true)
 
 	for i = 1, NUM_FACTIONS_DISPLAYED do
-		local factionRow = _G["ReputationBar" .. i]
-		local factionBar = _G["ReputationBar" .. i .. "ReputationBar"]
-		local factionButton = _G["ReputationBar" .. i .. "ExpandOrCollapseButton"]
+		local factionRow = _G["ReputationBar"..i]
+		local factionBar = _G["ReputationBar"..i.."ReputationBar"]
+		local factionButton = _G["ReputationBar"..i.."ExpandOrCollapseButton"]
 
 		factionRow:StripTextures(true)
 
@@ -391,8 +391,8 @@ local function LoadSkin()
 		local factionIndex, factionRow, factionButton
 		local numFactions = GetNumFactions()
 		for i = 1, NUM_FACTIONS_DISPLAYED, 1 do
-			factionRow = _G["ReputationBar" .. i]
-			factionButton = _G["ReputationBar" .. i .. "ExpandOrCollapseButton"]
+			factionRow = _G["ReputationBar"..i]
+			factionButton = _G["ReputationBar"..i.."ExpandOrCollapseButton"]
 			factionIndex = factionOffset + i
 			if(factionIndex <= numFactions) then
 				if(factionRow.isCollapsed) then
@@ -445,9 +445,9 @@ local function LoadSkin()
 	end)
 
 	for i = 1, SKILLS_TO_DISPLAY do
-		local statusBar = _G["SkillRankFrame" .. i]
-		local statusBarBorder = _G["SkillRankFrame" .. i .. "Border"]
-		local statusBarBackground = _G["SkillRankFrame" .. i .. "Background"]
+		local statusBar = _G["SkillRankFrame"..i]
+		local statusBarBorder = _G["SkillRankFrame"..i.."Border"]
+		local statusBarBackground = _G["SkillRankFrame"..i.."Background"]
 
 		statusBar:SetStatusBarTexture(E.media.normTex)
 		E:RegisterStatusBar(statusBar)
@@ -456,7 +456,7 @@ local function LoadSkin()
 		statusBarBorder:StripTextures()
 		statusBarBackground:SetTexture(nil)
 
-		local skillTypeLabelText = _G["SkillTypeLabel" .. i]
+		local skillTypeLabelText = _G["SkillTypeLabel"..i]
 		skillTypeLabelText:SetNormalTexture(E.Media.Textures.Plus)
 		skillTypeLabelText.SetNormalTexture = E.noop
 		skillTypeLabelText:GetNormalTexture():Size(16)

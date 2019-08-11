@@ -70,7 +70,7 @@ local function LoadSkin()
 		_G[self:GetName().."Name"]:SetTextColor(1, 1, 0)
 
 		for i = 1, MAX_NUM_ITEMS do
-			local questItem = _G["QuestInfoItem" .. i]
+			local questItem = _G["QuestInfoItem"..i]
 			local questName = _G["QuestInfoItem"..i.."Name"]
 			local link = questItem.type and (QuestInfoFrame.questLog and GetQuestLogItemLink or GetQuestItemLink)(questItem.type, questItem:GetID())
 

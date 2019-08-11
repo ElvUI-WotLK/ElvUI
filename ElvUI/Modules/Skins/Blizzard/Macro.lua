@@ -17,7 +17,7 @@ local function LoadSkin()
 	end
 
 	for i = 1, 2 do
-		local tab = _G["MacroFrameTab" .. i];
+		local tab = _G["MacroFrameTab"..i];
 		tab:Height(22);
 	end
 	MacroFrameTab1:Point("TOPLEFT", MacroFrame, "TOPLEFT", 85, -39);

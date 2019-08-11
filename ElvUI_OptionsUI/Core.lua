@@ -211,15 +211,15 @@ sort(TESTERS, SortList)
 
 for _, name in pairs(DONATORS) do
 	tinsert(E.CreditsList, name)
-	DONATOR_STRING = DONATOR_STRING .. LINE_BREAK .. name
+	DONATOR_STRING = DONATOR_STRING..LINE_BREAK..name
 end
 for _, name in pairs(DEVELOPERS) do
 	tinsert(E.CreditsList, name)
-	DEVELOPER_STRING = DEVELOPER_STRING .. LINE_BREAK .. name
+	DEVELOPER_STRING = DEVELOPER_STRING..LINE_BREAK..name
 end
 for _, name in pairs(TESTERS) do
 	tinsert(E.CreditsList, name)
-	TESTER_STRING = TESTER_STRING .. LINE_BREAK .. name
+	TESTER_STRING = TESTER_STRING..LINE_BREAK..name
 end
 
 E.Options.args.credits = {
@@ -231,10 +231,10 @@ E.Options.args.credits = {
 			order = 1,
 			type = "description",
 			name =
-				L["ELVUI_CREDITS"] .. "\n\n" ..
-				L["Coding:"] .. DEVELOPER_STRING .. "\n\n" ..
-				L["Testing:"] .. TESTER_STRING .. "\n\n" ..
-				L["Donations:"] .. DONATOR_STRING
+				L["ELVUI_CREDITS"].."\n\n" ..
+				L["Coding:"]..DEVELOPER_STRING.."\n\n" ..
+				L["Testing:"]..TESTER_STRING.."\n\n" ..
+				L["Donations:"]..DONATOR_STRING
 		}
 	}
 }

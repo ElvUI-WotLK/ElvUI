@@ -9,7 +9,7 @@ local hooksecurefunc = hooksecurefunc
 local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.merchant ~= true then return end
 
-	local MerchantFrame = _G["MerchantFrame"]
+	local MerchantFrame = _G.MerchantFrame
 	MerchantFrame:StripTextures(true)
 	MerchantFrame:CreateBackdrop("Transparent")
 	MerchantFrame.backdrop:Point("TOPLEFT", 10, -11)

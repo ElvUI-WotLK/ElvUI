@@ -24,7 +24,7 @@ local function LoadSkin()
 
 	local registrarButton;
 	for i = 1, MAX_TEAM_BORDERS do
-		registrarButton = select(3, _G["ArenaRegistrarButton" .. i]:GetRegions());
+		registrarButton = select(3, _G["ArenaRegistrarButton"..i]:GetRegions());
 		registrarButton:SetTextColor(1, 1, 1);
 	end
 
@@ -50,9 +50,9 @@ local function LoadSkin()
 
 	local customization, customizationLeft, customizationRight;
 	for i = 1, 2 do
-		customization = _G["PVPBannerFrameCustomization" .. i];
-		customizationLeft = _G["PVPBannerFrameCustomization" .. i .. "LeftButton"];
-		customizationRight = _G["PVPBannerFrameCustomization" .. i .. "RightButton"];
+		customization = _G["PVPBannerFrameCustomization"..i];
+		customizationLeft = _G["PVPBannerFrameCustomization"..i.."LeftButton"];
+		customizationRight = _G["PVPBannerFrameCustomization"..i.."RightButton"];
 
 		customization:StripTextures();
 		S:HandleNextPrevButton(customizationLeft);
@@ -61,7 +61,7 @@ local function LoadSkin()
 
 	local pickerButton;
 	for i = 1, 3 do
-		pickerButton = _G["PVPColorPickerButton" .. i];
+		pickerButton = _G["PVPColorPickerButton"..i];
 		S:HandleButton(pickerButton);
 		if(i == 2) then
 			pickerButton:Point("TOP", PVPBannerFrameCustomization2, "BOTTOM", 0, -33);

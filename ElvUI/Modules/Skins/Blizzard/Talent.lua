@@ -61,11 +61,11 @@ local function LoadSkin()
 	end
 
 	for i = 1, 4 do
-		S:HandleTab(_G["PlayerTalentFrameTab" .. i]);
+		S:HandleTab(_G["PlayerTalentFrameTab"..i]);
 	end
 
 	for i = 1, MAX_TALENT_TABS do
-		local tab = _G["PlayerSpecTab" .. i];
+		local tab = _G["PlayerSpecTab"..i];
 		tab:GetRegions():Hide();
 
 		tab:SetTemplate("Default");

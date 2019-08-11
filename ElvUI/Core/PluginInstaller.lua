@@ -55,7 +55,6 @@ local S = E:GetModule("Skins")
 
 --Cache global variables
 --Lua functions
-local _G = _G
 local pairs, unpack = pairs, unpack
 local tinsert, tremove = tinsert, tremove
 local format = string.format
@@ -235,7 +234,7 @@ function PI:CreateFrame()
 	f.Status:Point("TOPLEFT", f.Prev, "TOPRIGHT", 6, -2)
 	f.Status:Point("BOTTOMRIGHT", f.Next, "BOTTOMLEFT", -6, 2)
 	-- Setup StatusBar Animation
-	f.Status.anim = _G.CreateAnimationGroup(f.Status)
+	f.Status.anim = CreateAnimationGroup(f.Status)
 	f.Status.anim.progress = f.Status.anim:CreateAnimation("Progress")
 	f.Status.anim.progress:SetEasing("Out")
 	f.Status.anim.progress:SetDuration(.3)
@@ -324,16 +323,16 @@ function PI:CreateFrame()
 	f.pending.tex:SetTexture([[Interface\OptionsFrame\UI-OptionsFrame-NewFeatureIcon]])
 	f.pending:CreateBackdrop("Transparent")
 	f.pending:SetScript("OnEnter", function(self)
-		_G["GameTooltip"]:SetOwner(self, "ANCHOR_BOTTOMLEFT", E.PixelMode and -7 or -9)
-		_G["GameTooltip"]:AddLine(L["List of installations in queue:"], 1, 1, 1)
-		_G["GameTooltip"]:AddLine(" ")
+		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMLEFT", E.PixelMode and -7 or -9)
+		GameTooltip:AddLine(L["List of installations in queue:"], 1, 1, 1)
+		GameTooltip:AddLine(" ")
 		for i = 1, #PI.Installs do
-			_G["GameTooltip"]:AddDoubleLine(format("%d. %s", i, (PI.Installs[i].Name or UNKNOWN)), i == 1 and format("|cff00FF00%s|r", L["In Progress"]) or format("|cffFF0000%s|r", L["Pending"]))
+			GameTooltip:AddDoubleLine(format("%d. %s", i, (PI.Installs[i].Name or UNKNOWN)), i == 1 and format("|cff00FF00%s|r", L["In Progress"]) or format("|cffFF0000%s|r", L["Pending"]))
 		end
-		_G["GameTooltip"]:Show()
+		GameTooltip:Show()
 	end)
 	f.pending:SetScript("OnLeave", function()
-		_G["GameTooltip"]:Hide()
+		GameTooltip:Hide()
 	end)
 
 	f.tutorialImage = f:CreateTexture("PluginInstallTutorialImage", "OVERLAY")
@@ -402,7 +401,7 @@ end
 
 function PI:RunInstall()
 	if not E.private.install_complete then return end
-	if self.Installs[1] and not PluginInstallFrame:IsShown() and not (_G["ElvUIInstallFrame"] and _G["ElvUIInstallFrame"]:IsShown()) then
+	if self.Installs[1] and not PluginInstallFrame:IsShown() and not (ElvUIInstallFrame and ElvUIInstallFrame:IsShown()) then
 		f.StepTitles = nil
 		f.StepTitlesColor = nil
 		f.StepTitlesColorSelected = nil

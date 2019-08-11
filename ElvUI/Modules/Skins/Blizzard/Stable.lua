@@ -25,8 +25,8 @@ local function LoadSkin()
 	_G["PetStableCurrentPetIconTexture"]:SetDrawLayer("OVERLAY");
 
 	for i = 1, NUM_PET_STABLE_SLOTS do
-		S:HandleItemButton(_G["PetStableStabledPet" .. i], true);
-		_G["PetStableStabledPet" .. i .. "IconTexture"]:SetDrawLayer("OVERLAY");
+		S:HandleItemButton(_G["PetStableStabledPet"..i], true);
+		_G["PetStableStabledPet"..i.."IconTexture"]:SetDrawLayer("OVERLAY");
 	end
 
 	PetStablePetInfo:GetRegions():SetTexCoord(0.04, 0.15, 0.06, 0.30);

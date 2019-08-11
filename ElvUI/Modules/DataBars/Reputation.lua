@@ -94,7 +94,7 @@ function mod:ReputationBar_OnEnter()
 		GameTooltip:AddLine(name)
 		GameTooltip:AddLine(" ")
 
-		GameTooltip:AddDoubleLine(STANDING..":", _G["FACTION_STANDING_LABEL" .. reaction], 1, 1, 1)
+		GameTooltip:AddDoubleLine(STANDING..":", _G["FACTION_STANDING_LABEL"..reaction], 1, 1, 1)
 		GameTooltip:AddDoubleLine(REPUTATION..":", format("%d / %d (%d%%)", value - min, max - min, (value - min) / ((max - min == 0) and max or (max - min)) * 100), 1, 1, 1)
 	end
 	GameTooltip:Show()

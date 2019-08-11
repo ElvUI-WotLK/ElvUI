@@ -157,7 +157,7 @@ local function LoadSkin(event)
 	S:HandleScrollBar(AchievementFrameComparisonStatsContainerScrollBar, 5);
 
 	for i = 1, 2 do
-		S:HandleTab(_G["AchievementFrameTab" .. i]);
+		S:HandleTab(_G["AchievementFrameTab"..i]);
 	end
 
 	local function SkinStatusBar(bar)
@@ -168,16 +168,16 @@ local function LoadSkin(event)
 		E:RegisterStatusBar(bar);
 
 		local barName = bar:GetName();
-		if(_G[barName .. "Title"]) then
-			_G[barName .. "Title"]:Point("LEFT", 4, 0);
+		if(_G[barName.."Title"]) then
+			_G[barName.."Title"]:Point("LEFT", 4, 0);
 		end
 
-		if(_G[barName .. "Label"]) then
-			_G[barName .. "Label"]:Point("LEFT", 4, 0);
+		if(_G[barName.."Label"]) then
+			_G[barName.."Label"]:Point("LEFT", 4, 0);
 		end
 
-		if(_G[barName .. "Text"]) then
-			_G[barName .. "Text"]:Point("RIGHT", -4, 0);
+		if(_G[barName.."Text"]) then
+			_G[barName.."Text"]:Point("RIGHT", -4, 0);
 		end
 	end
 
@@ -189,26 +189,26 @@ local function LoadSkin(event)
 	AchievementFrameComparisonHeader:Point("BOTTOMRIGHT", AchievementFrameComparison, "TOPRIGHT", 45, -20);
 
 	for i = 1, 8 do
-		local frame = _G["AchievementFrameSummaryCategoriesCategory" .. i];
-		local button = _G["AchievementFrameSummaryCategoriesCategory" .. i .. "Button"];
-		local highlight = _G["AchievementFrameSummaryCategoriesCategory" .. i .. "ButtonHighlight"];
+		local frame = _G["AchievementFrameSummaryCategoriesCategory"..i];
+		local button = _G["AchievementFrameSummaryCategoriesCategory"..i.."Button"];
+		local highlight = _G["AchievementFrameSummaryCategoriesCategory"..i.."ButtonHighlight"];
 		SkinStatusBar(frame);
 		button:StripTextures();
 		highlight:StripTextures();
 
-		_G[highlight:GetName() .. "Middle"]:SetTexture(1, 1, 1, 0.3);
-		_G[highlight:GetName() .. "Middle"]:SetAllPoints(frame);
+		_G[highlight:GetName().."Middle"]:SetTexture(1, 1, 1, 0.3);
+		_G[highlight:GetName().."Middle"]:SetAllPoints(frame);
 	end
 
 	hooksecurefunc("AchievementFrameSummary_UpdateAchievements", function()
 		for i = 1, ACHIEVEMENTUI_MAX_SUMMARY_ACHIEVEMENTS do
-			local frame = _G["AchievementFrameSummaryAchievement" .. i];
+			local frame = _G["AchievementFrameSummaryAchievement"..i];
 			if(not frame.isSkinned) then
 				SkinAchievement(frame);
 				frame.isSkinned = true;
 			end
 
-			local prevFrame = _G["AchievementFrameSummaryAchievement" .. i-1];
+			local prevFrame = _G["AchievementFrameSummaryAchievement"..i-1];
 			if(i ~= 1) then
 				frame:ClearAllPoints()
 				frame:Point("TOPLEFT", prevFrame, "BOTTOMLEFT", 0, -1);
@@ -220,25 +220,25 @@ local function LoadSkin(event)
 	end);
 
 	for i = 1, 20 do
-		local frame = _G["AchievementFrameStatsContainerButton" .. i];
+		local frame = _G["AchievementFrameStatsContainerButton"..i];
 		frame:StyleButton();
 
-		_G["AchievementFrameStatsContainerButton" .. i .. "BG"]:SetTexture(1, 1, 1, 0.2);
-		_G["AchievementFrameStatsContainerButton" .. i .. "HeaderLeft"]:Kill();
-		_G["AchievementFrameStatsContainerButton" .. i .. "HeaderRight"]:Kill();
-		_G["AchievementFrameStatsContainerButton" .. i .. "HeaderMiddle"]:Kill();
+		_G["AchievementFrameStatsContainerButton"..i.."BG"]:SetTexture(1, 1, 1, 0.2);
+		_G["AchievementFrameStatsContainerButton"..i.."HeaderLeft"]:Kill();
+		_G["AchievementFrameStatsContainerButton"..i.."HeaderRight"]:Kill();
+		_G["AchievementFrameStatsContainerButton"..i.."HeaderMiddle"]:Kill();
 
-		frame = "AchievementFrameComparisonStatsContainerButton" .. i;
+		frame = "AchievementFrameComparisonStatsContainerButton"..i;
 		_G[frame]:StripTextures();
 		_G[frame]:StyleButton();
-		_G[frame .. "BG"]:SetTexture(1, 1, 1, 0.2);
-		_G[frame .. "HeaderLeft"]:Kill();
-		_G[frame .. "HeaderRight"]:Kill();
-		_G[frame .. "HeaderMiddle"]:Kill();
+		_G[frame.."BG"]:SetTexture(1, 1, 1, 0.2);
+		_G[frame.."HeaderLeft"]:Kill();
+		_G[frame.."HeaderRight"]:Kill();
+		_G[frame.."HeaderMiddle"]:Kill();
 	end
 
 	hooksecurefunc("AchievementButton_GetProgressBar", function(index)
-		local frame = _G["AchievementFrameProgressBar" .. index];
+		local frame = _G["AchievementFrameProgressBar"..index];
 		if(frame) then
 			if(not frame.skinned) then
 				frame:StripTextures();
@@ -255,7 +255,7 @@ local function LoadSkin(event)
 
 				if(index > 1) then
 					frame:ClearAllPoints();
-					frame:Point("TOP", _G["AchievementFrameProgressBar" .. index-1], "BOTTOM", 0, -5);
+					frame:Point("TOP", _G["AchievementFrameProgressBar"..index-1], "BOTTOM", 0, -5);
 					frame.SetPoint = E.noop;
 					frame.ClearAllPoints = E.noop;
 				end
