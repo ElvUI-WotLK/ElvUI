@@ -153,12 +153,14 @@ function M:Initialize()
 	if E.global.general.smallerWorldMap then
 		BlackoutWorld:SetTexture(nil)
 
-		ShowUIPanel(WorldMapFrame)
-		M:ToggleMapFramerate()
-		HideUIPanel(WorldMapFrame)
-
-		WorldMapFrame:SetParent(E.UIParent)
+		WorldMapFrame:SetParent(UIParent)
 		WorldMapFrame.SetParent = E.noop
+
+		if not GetCVarBool("miniWorldMap") then
+			ShowUIPanel(WorldMapFrame)
+			M:ToggleMapFramerate()
+			HideUIPanel(WorldMapFrame)
+		end
 
 		self:SecureHook("ToggleMapFramerate")
 
