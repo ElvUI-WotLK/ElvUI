@@ -1,7 +1,7 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local M = E:GetModule("WorldMap")
 
-local find, format = string.find, string.format
+local find = string.find
 
 local CreateFrame = CreateFrame
 local InCombatLockdown = InCombatLockdown
@@ -22,6 +22,7 @@ local INVERTED_POINTS = {
 
 function M:PLAYER_REGEN_ENABLED()
 	WorldMapFrameSizeUpButton:Enable()
+	WorldMapFrameSizeDownButton:Enable()
 	WorldMapQuestShowObjectives:Enable()
 
 	WorldMapBlobFrame:SetParent(WorldMapFrame)
@@ -49,6 +50,7 @@ end
 
 function M:PLAYER_REGEN_DISABLED()
 	WorldMapFrameSizeUpButton:Disable()
+	WorldMapFrameSizeDownButton:Disable()
 
 	if not GetCVarBool("miniWorldMap") then
 		WorldMapQuestShowObjectives:Disable()
@@ -56,10 +58,10 @@ function M:PLAYER_REGEN_DISABLED()
 
 	self.blobWasVisible = WorldMapFrame:IsShown() and WorldMapBlobFrame:IsShown()
 
-	WorldMapBlobFrame:SetParent(nil)
-	WorldMapBlobFrame:ClearAllPoints()
-	WorldMapBlobFrame:SetPoint("TOP", UIParent, "BOTTOM")
-	WorldMapBlobFrame:Hide()
+	--WorldMapBlobFrame:SetParent(nil)
+	--WorldMapBlobFrame:ClearAllPoints()
+	--WorldMapBlobFrame:SetPoint("TOP", UIParent, "BOTTOM")
+	--WorldMapBlobFrame:Hide()
 	WorldMapBlobFrame.Hide = function() M.blobWasVisible = nil end
 	WorldMapBlobFrame.Show = function() M.blobWasVisible = true end
 end
@@ -71,7 +73,7 @@ function M:UpdateCoords()
 	y = y and E:Round(100 * y, 2) or 0
 
 	if x ~= 0 and y ~= 0 then
-		CoordsHolder.playerCoords:SetText(PLAYER..":   "..format("%.2f, %.2f", x, y))
+		CoordsHolder.playerCoords:SetFormattedText("%s:   %.2f, %.2f", PLAYER, x, y)
 	else
 		CoordsHolder.playerCoords:SetText("")
 	end
@@ -87,7 +89,7 @@ function M:UpdateCoords()
 	if adjustedX >= 0 and adjustedY >= 0 and adjustedX <= 1 and adjustedY <= 1 then
 		adjustedX = E:Round(100 * adjustedX, 2)
 		adjustedY = E:Round(100 * adjustedY, 2)
-		CoordsHolder.mouseCoords:SetText(MOUSE_LABEL..":  "..format("%.2f, %.2f", adjustedX, adjustedY))
+		CoordsHolder.mouseCoords:SetFormattedText("%s:  %.2f, %.2f", MOUSE_LABEL, adjustedX, adjustedY)
 	else
 		CoordsHolder.mouseCoords:SetText("")
 	end
