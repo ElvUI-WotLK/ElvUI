@@ -135,11 +135,21 @@ function S:Ace3_RegisterAsWidget(widget)
 					else
 						check:SetVertexColor(0.6, 0.6, 0.6, 0.8)
 					end
-				else
+				end
+			end)
+
+			hooksecurefunc(widget, "SetValue", function(_, value)
+				local isSwitch = S:Ace3_CheckBoxIsEnableSwitch(widget)
+
+				if value then
 					if isSwitch then
 						check:SetVertexColor(0.2, 1.0, 0.2, 1.0)
 					else
 						check:SetVertexColor(1, 0.82, 0, 0.8)
+					end
+				else
+					if widget.tristate and value == nil then
+						check:SetVertexColor(0.6, 0.6, 0.6, 0.8)
 					end
 				end
 			end)
