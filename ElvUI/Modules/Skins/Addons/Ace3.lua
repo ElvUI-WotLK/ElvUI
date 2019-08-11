@@ -108,9 +108,29 @@ function S:Ace3_RegisterAsWidget(widget)
 		highlight:SetTexture()
 		highlight.SetTexture = E.noop
 
-		hooksecurefunc(widget, "SetValue", function(w, checked)
-			if S:Ace3_CheckBoxIsEnableSwitch(w) then
-				w:SetLabel(checked and S.Ace3_L.GREEN_ENABLE or S.Ace3_L.RED_ENABLE)
+		hooksecurefunc(widget, "SetDisabled", function(w, value)
+			local isSwitch = S:Ace3_CheckBoxIsEnableSwitch(widget)
+
+			if value then
+				if isSwitch then
+					w:SetLabel(S.Ace3_L.RED_ENABLE)
+				end
+			end
+		end)
+
+		hooksecurefunc(widget, "SetValue", function(w, value)
+			local isSwitch = S:Ace3_CheckBoxIsEnableSwitch(widget)
+
+			if value then
+				if isSwitch then
+					w:SetLabel(S.Ace3_L.GREEN_ENABLE)
+				end
+			else
+				--if not (widget.tristate and value == nil) then
+					if isSwitch then
+						w:SetLabel(S.Ace3_L.RED_ENABLE)
+					end
+				--end
 			end
 		end)
 
