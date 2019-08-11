@@ -18,6 +18,7 @@ P.general = {
 	hideErrorFrame = true,
 	enhancedPvpMessages = true,
 	watchFrameHeight = 480,
+	watchFrameAutoHide = true,
 	vehicleSeatIndicatorSize = 128,
 	afk = true,
 	numberPrefixStyle = "ENGLISH",

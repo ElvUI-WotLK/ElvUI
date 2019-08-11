@@ -68,7 +68,7 @@ function UF:Update_AssistHeader(header, db)
 	if not header.positioned then
 		header:ClearAllPoints()
 		header:Point("TOPLEFT", E.UIParent, "TOPLEFT", 4, -248)
-		E:CreateMover(header, header:GetName().."Mover", L["MA Frames"], nil, nil, nil, "ALL,RAID")
+		E:CreateMover(header, header:GetName().."Mover", L["MA Frames"], nil, nil, nil, "ALL,RAID", nil, "unitframe,assist,generalGroup")
 		header.mover.positionOverride = "TOPLEFT"
 		header:SetAttribute("minHeight", header.dirtyHeight)
 		header:SetAttribute("minWidth", header.dirtyWidth)

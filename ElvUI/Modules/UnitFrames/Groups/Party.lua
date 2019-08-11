@@ -96,7 +96,7 @@ function UF:Update_PartyHeader(header, db)
 		header:ClearAllPoints()
 		header:Point("BOTTOMLEFT", E.UIParent, "BOTTOMLEFT", 4, 195)
 
-		E:CreateMover(header, header:GetName() .. "Mover", L["Party Frames"], nil, nil, nil, "ALL,PARTY,ARENA")
+		E:CreateMover(header, header:GetName() .. "Mover", L["Party Frames"], nil, nil, nil, "ALL,PARTY,ARENA", nil, "unitframe,party,generalGroup")
 		header.positioned = true
 
 		header:RegisterEvent("PLAYER_LOGIN")

@@ -6,6 +6,10 @@ local min = math.min
 --WoW API / Variables
 local GetScreenHeight = GetScreenHeight
 
+function B:SetObjectiveFrameAutoHide()
+
+end
+
 function B:SetWatchFrameHeight()
 	local top = WatchFrame:GetTop() or 0
 	local screenHeight = GetScreenHeight()
@@ -21,7 +25,7 @@ function B:MoveWatchFrame()
 	WatchFrameHolder:Size(150, 22)
 	WatchFrameHolder:Point("TOPRIGHT", E.UIParent, "TOPRIGHT", -135, -300)
 
-	E:CreateMover(WatchFrameHolder, "WatchFrameMover", L["Watch Frame"])
+	E:CreateMover(WatchFrameHolder, "WatchFrameMover", L["Watch Frame"], nil, nil, nil, nil, nil, "general,objectiveFrameGroup")
 	WatchFrameHolder:SetAllPoints(WatchFrameMover)
 
 	WatchFrame:ClearAllPoints()
