@@ -33,7 +33,7 @@ local function LoadSkin()
 		TT:SecureHookScript(tt, "OnShow", "SetStyle")
 	end
 
-	GameTooltipStatusBar:SetStatusBarTexture(E["media"].normTex)
+	GameTooltipStatusBar:SetStatusBarTexture(E.media.normTex)
 	E:RegisterStatusBar(GameTooltipStatusBar)
 	GameTooltipStatusBar:CreateBackdrop("Transparent")
 	GameTooltipStatusBar:ClearAllPoints()

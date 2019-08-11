@@ -103,7 +103,7 @@ local function LoadSkin()
 					if quality then
 						button.backdrop:SetBackdropBorderColor(GetItemQualityColor(quality))
 					else
-						button.backdrop:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+						button.backdrop:SetBackdropBorderColor(unpack(E.media.bordercolor))
 					end
 				end
 			end
@@ -149,7 +149,7 @@ local function LoadRollSkin()
 		local statusBar = _G[frameName .. "Timer"];
 		statusBar:StripTextures();
 		statusBar:CreateBackdrop("Default");
-		statusBar:SetStatusBarTexture(E["media"].normTex);
+		statusBar:SetStatusBarTexture(E.media.normTex);
 		E:RegisterStatusBar(statusBar);
 
 		local decoration = _G[frameName .. "Decoration"];

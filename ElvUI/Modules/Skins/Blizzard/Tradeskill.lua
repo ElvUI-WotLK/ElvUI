@@ -45,7 +45,7 @@ local function LoadSkin()
 	TradeSkillRankFrame:Size(447, 17);
 	TradeSkillRankFrame:ClearAllPoints();
 	TradeSkillRankFrame:Point("TOP", 10, -45);
-	TradeSkillRankFrame:SetStatusBarTexture(E["media"].normTex);
+	TradeSkillRankFrame:SetStatusBarTexture(E.media.normTex);
 	TradeSkillRankFrame:SetStatusBarColor(0.22, 0.39, 0.84)
 	TradeSkillRankFrame.SetStatusBarColor = E.noop
 	E:RegisterStatusBar(TradeSkillRankFrame);
@@ -223,7 +223,7 @@ local function LoadSkin()
 				TradeSkillSkillIcon:SetBackdropBorderColor(GetItemQualityColor(quality))
 				TradeSkillSkillName:SetTextColor(GetItemQualityColor(quality))
 			else
-				TradeSkillSkillIcon:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+				TradeSkillSkillIcon:SetBackdropBorderColor(unpack(E.media.bordercolor))
 				TradeSkillSkillName:SetTextColor(1, 1, 1)
 			end
 		end
@@ -247,8 +247,8 @@ local function LoadSkin()
 						name:SetTextColor(GetItemQualityColor(quality))
 					end
 				else
-					reagent:SetBackdropBorderColor(unpack(E["media"].bordercolor))
-					icon.backdrop:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+					reagent:SetBackdropBorderColor(unpack(E.media.bordercolor))
+					icon.backdrop:SetBackdropBorderColor(unpack(E.media.bordercolor))
 				end
 			end
 		end

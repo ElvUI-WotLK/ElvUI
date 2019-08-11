@@ -222,10 +222,10 @@ local function LoadSkin()
 				if rarity then
 					target:SetBackdropBorderColor(GetItemQualityColor(rarity))
 				else
-					target:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+					target:SetBackdropBorderColor(unpack(E.media.bordercolor))
 				end
 			else
-				target:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+				target:SetBackdropBorderColor(unpack(E.media.bordercolor))
 			end
 		end
 	end
@@ -279,8 +279,8 @@ local function LoadSkin()
 		Tab.backdrop:Point("TOPLEFT", 3, -7)
 		Tab.backdrop:Point("BOTTOMRIGHT", -2, -1)
 
-		Tab:HookScript("OnEnter", function(self) self.backdrop:SetBackdropBorderColor(unpack(E["media"].rgbvaluecolor)) end)
-		Tab:HookScript("OnLeave", function(self) self.backdrop:SetBackdropBorderColor(unpack(E["media"].bordercolor)) end)
+		Tab:HookScript("OnEnter", function(self) self.backdrop:SetBackdropBorderColor(unpack(E.media.rgbvaluecolor)) end)
+		Tab:HookScript("OnLeave", function(self) self.backdrop:SetBackdropBorderColor(unpack(E.media.bordercolor)) end)
 	end
 
 	S:HandleRotateButton(PetModelFrameRotateLeftButton)
@@ -300,7 +300,7 @@ local function LoadSkin()
 	S:HandleButton(PetPaperDollCloseButton)
 
 	PetPaperDollFrameExpBar:StripTextures()
-	PetPaperDollFrameExpBar:SetStatusBarTexture(E["media"].normTex)
+	PetPaperDollFrameExpBar:SetStatusBarTexture(E.media.normTex)
 	E:RegisterStatusBar(PetPaperDollFrameExpBar)
 	PetPaperDollFrameExpBar:CreateBackdrop("Default")
 
@@ -376,7 +376,7 @@ local function LoadSkin()
 		factionRow:StripTextures(true)
 
 		factionBar:StripTextures()
-		factionBar:SetStatusBarTexture(E["media"].normTex)
+		factionBar:SetStatusBarTexture(E.media.normTex)
 		E:RegisterStatusBar(factionBar)
 		factionBar:CreateBackdrop("Default")
 
@@ -449,7 +449,7 @@ local function LoadSkin()
 		local statusBarBorder = _G["SkillRankFrame" .. i .. "Border"]
 		local statusBarBackground = _G["SkillRankFrame" .. i .. "Background"]
 
-		statusBar:SetStatusBarTexture(E["media"].normTex)
+		statusBar:SetStatusBarTexture(E.media.normTex)
 		E:RegisterStatusBar(statusBar)
 		statusBar:CreateBackdrop("Default")
 
@@ -474,7 +474,7 @@ local function LoadSkin()
 	SkillDetailStatusBar:StripTextures()
 	SkillDetailStatusBar:SetParent(SkillDetailScrollFrame)
 	SkillDetailStatusBar:CreateBackdrop("Default")
-	SkillDetailStatusBar:SetStatusBarTexture(E["media"].normTex)
+	SkillDetailStatusBar:SetStatusBarTexture(E.media.normTex)
 	SkillDetailStatusBar:SetParent(SkillDetailScrollFrame)
 	E:RegisterStatusBar(SkillDetailStatusBar)
 

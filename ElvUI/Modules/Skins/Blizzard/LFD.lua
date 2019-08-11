@@ -100,7 +100,7 @@ local function LoadSkin()
 			local _, _, quality = GetItemInfo(link)
 			button:SetBackdropBorderColor(GetItemQualityColor(quality))
 		else
-			button:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+			button:SetBackdropBorderColor(unpack(E.media.bordercolor))
 		end
 
 		local texturePath = button.texture:GetTexture()
@@ -187,7 +187,7 @@ local function LoadSkin()
 					name:SetTextColor(GetItemQualityColor(quality))
 				end
 			else
-				frame.backdrop:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+				frame.backdrop:SetBackdropBorderColor(unpack(E.media.bordercolor))
 				name:SetTextColor(1, 1, 1)
 			end
 		end

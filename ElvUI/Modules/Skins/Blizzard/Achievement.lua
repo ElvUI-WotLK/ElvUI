@@ -52,10 +52,10 @@ local function LoadSkin(event)
 		end
 
 		hooksecurefunc(achievement, "Saturate", function()
-			achievement:SetBackdropBorderColor(unpack(E["media"].bordercolor));
+			achievement:SetBackdropBorderColor(unpack(E.media.bordercolor));
 		end);
 		hooksecurefunc(achievement, "Desaturate", function()
-			achievement:SetBackdropBorderColor(unpack(E["media"].bordercolor));
+			achievement:SetBackdropBorderColor(unpack(E.media.bordercolor));
 		end);
 
 		achievement.isSkinned = true;
@@ -162,7 +162,7 @@ local function LoadSkin(event)
 
 	local function SkinStatusBar(bar)
 		bar:StripTextures();
-		bar:SetStatusBarTexture(E["media"].normTex);
+		bar:SetStatusBarTexture(E.media.normTex);
 		bar:SetStatusBarColor(4/255, 179/255, 30/255);
 		bar:CreateBackdrop("Default");
 		E:RegisterStatusBar(bar);
@@ -242,7 +242,7 @@ local function LoadSkin(event)
 		if(frame) then
 			if(not frame.skinned) then
 				frame:StripTextures();
-				frame:SetStatusBarTexture(E["media"].normTex);
+				frame:SetStatusBarTexture(E.media.normTex);
 				E:RegisterStatusBar(frame);
 				frame:SetStatusBarColor(4/255, 179/255, 30/255);
 				frame:GetStatusBarTexture():SetInside();

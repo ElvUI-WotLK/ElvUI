@@ -63,7 +63,7 @@ local function LoadSkin()
 				local packageIcon, _, _, _, _, _, _, _, _, _, _, _, isGM = GetInboxHeaderInfo(index)
 				local button = _G["MailItem"..i.."Button"]
 
-				button:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+				button:SetBackdropBorderColor(unpack(E.media.bordercolor))
 				if packageIcon and not isGM then
 					local ItemLink = GetInboxItemLink(index, 1)
 
@@ -73,7 +73,7 @@ local function LoadSkin()
 						if quality then
 							button:SetBackdropBorderColor(GetItemQualityColor(quality))
 						else
-							button:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+							button:SetBackdropBorderColor(unpack(E.media.bordercolor))
 						end
 					end
 				elseif isGM then
@@ -123,13 +123,13 @@ local function LoadSkin()
 				if quality then
 					button:SetBackdropBorderColor(GetItemQualityColor(quality))
 				else
-					button:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+					button:SetBackdropBorderColor(unpack(E.media.bordercolor))
 				end
 
 				texture:SetTexCoord(unpack(E.TexCoords))
 				texture:SetInside()
 			else
-				button:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+				button:SetBackdropBorderColor(unpack(E.media.bordercolor))
 			end
 		end
 	end)
@@ -189,14 +189,14 @@ local function LoadSkin()
 			local ItemLink = GetInboxItemLink(InboxFrame.openMailID, i)
 			local button = _G["OpenMailAttachmentButton"..i]
 
-			button:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+			button:SetBackdropBorderColor(unpack(E.media.bordercolor))
 			if ItemLink then
 				local quality = select(3, GetItemInfo(ItemLink))
 
 				if quality then
 					button:SetBackdropBorderColor(GetItemQualityColor(quality))
 				else
-					button:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+					button:SetBackdropBorderColor(unpack(E.media.bordercolor))
 				end
 			end
 		end

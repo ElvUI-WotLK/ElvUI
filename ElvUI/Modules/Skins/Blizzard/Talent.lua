@@ -56,7 +56,7 @@ local function LoadSkin()
 			icon:SetTexCoord(unpack(E.TexCoords));
 			icon:SetDrawLayer("ARTWORK");
 
-			rank:SetFont(E.LSM:Fetch("font", E.db["general"].font), 12, "OUTLINE");
+			rank:SetFont(E.LSM:Fetch("font", E.db.general.font), 12, "OUTLINE");
 		end
 	end
 

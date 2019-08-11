@@ -120,11 +120,11 @@ local function LoadSkin()
 					itemButton:SetBackdropBorderColor(GetItemQualityColor(quality))
 					itemButton.ignoreBorderColors = true
 				else
-					itemButton:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+					itemButton:SetBackdropBorderColor(unpack(E.media.bordercolor))
 					itemButton.ignoreBorderColors = true
 				end
 			else
-				itemButton:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+				itemButton:SetBackdropBorderColor(unpack(E.media.bordercolor))
 				itemButton.ignoreBorderColors = true
 			end
 		end
@@ -179,7 +179,7 @@ local function LoadSkin()
 		buttonIcon:SetTexCoord(unpack(E.TexCoords))
 
 		_G["BankFrameBag"..i.."HighlightFrameTexture"]:SetInside()
-		_G["BankFrameBag"..i.."HighlightFrameTexture"]:SetTexture(unpack(E["media"].rgbvaluecolor), 0.3)
+		_G["BankFrameBag"..i.."HighlightFrameTexture"]:SetTexture(unpack(E.media.rgbvaluecolor), 0.3)
 	end
 
 	BankFrame.bagBackdrop = CreateFrame("Frame", "BankFrameBagBackdrop", BankFrame)
@@ -212,11 +212,11 @@ local function LoadSkin()
 				self:SetBackdropBorderColor(GetItemQualityColor(quality))
 				self.ignoreBorderColors = true
 			else
-				self:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+				self:SetBackdropBorderColor(unpack(E.media.bordercolor))
 				self.ignoreBorderColors = true
 			end
 		else
-			self:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+			self:SetBackdropBorderColor(unpack(E.media.bordercolor))
 			self.ignoreBorderColors = true
 		end
 	end)

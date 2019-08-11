@@ -66,13 +66,13 @@ local function LoadSkin()
 
 	CalendarContextMenu:SetTemplate("Default")
 	hooksecurefunc(CalendarContextMenu, "SetBackdropColor", function(self, r, g, b, a)
-		local r2, g2, b2, a2 = unpack(E["media"].backdropfadecolor)
+		local r2, g2, b2, a2 = unpack(E.media.backdropfadecolor)
 		if r ~= r2 or g ~= g2 or b ~= b2 or a ~= a2 then
 			self:SetBackdropColor(r2, g2, b2, a2)
 		end
 	end)
 	hooksecurefunc(CalendarContextMenu, "SetBackdropBorderColor", function(self, r, g, b)
-		local r2, g2, b2 = unpack(E["media"].bordercolor)
+		local r2, g2, b2 = unpack(E.media.bordercolor)
 		if r ~= r2 or g ~= g2 or b ~= b2 then
 			self:SetBackdropBorderColor(r2, g2, b2)
 		end
@@ -80,13 +80,13 @@ local function LoadSkin()
 
 	CalendarInviteStatusContextMenu:SetTemplate("Default")
 	hooksecurefunc(CalendarInviteStatusContextMenu, "SetBackdropColor", function(self, r, g, b, a)
-		local r2, g2, b2, a2 = unpack(E["media"].backdropfadecolor)
+		local r2, g2, b2, a2 = unpack(E.media.backdropfadecolor)
 		if r ~= r2 or g ~= g2 or b ~= b2 or a ~= a2 then
 			self:SetBackdropColor(r2, g2, b2, a2)
 		end
 	end)
 	hooksecurefunc(CalendarInviteStatusContextMenu, "SetBackdropBorderColor", function(self, r, g, b)
-		local r2, g2, b2 = unpack(E["media"].bordercolor)
+		local r2, g2, b2 = unpack(E.media.bordercolor)
 		if r ~= r2 or g ~= g2 or b ~= b2 then
 			self:SetBackdropBorderColor(r2, g2, b2)
 		end
@@ -130,12 +130,12 @@ local function LoadSkin()
 	CalendarTodayFrame:StripTextures()
 	CalendarTodayFrame:SetTemplate("Default")
 	CalendarTodayFrame:Size(CalendarDayButton1:GetWidth(), CalendarDayButton1:GetHeight())
-	CalendarTodayFrame:SetBackdropBorderColor(unpack(E["media"].rgbvaluecolor));
-	local value = E.db["general"].valuecolor;
+	CalendarTodayFrame:SetBackdropBorderColor(unpack(E.media.rgbvaluecolor));
+	local value = E.db.general.valuecolor;
 	CalendarTodayFrame:SetBackdropColor(value.r, value.g, value.b, 0.5);
 	CalendarTodayFrame:HookScript("OnUpdate", function(self) self:SetAlpha(CalendarTodayTextureGlow:GetAlpha()) end)
 	CalendarTodayFrame:CreateShadow()
-	CalendarTodayFrame.shadow:SetBackdropBorderColor(unpack(E["media"].rgbvaluecolor))
+	CalendarTodayFrame.shadow:SetBackdropBorderColor(unpack(E.media.rgbvaluecolor))
 
 	CalendarCreateEventFrame:StripTextures()
 	CalendarCreateEventFrame:SetTemplate("Transparent")

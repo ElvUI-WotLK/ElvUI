@@ -100,7 +100,7 @@ local function LoadSkin()
 				for _, v in pairs{"HealthBar", "ManaBar", "Target", "TargetTarget"} do
 					local sBar = pfBName .. v;
 					_G[sBar]:StripTextures();
-					_G[sBar]:SetStatusBarTexture(E["media"].normTex);
+					_G[sBar]:SetStatusBarTexture(E.media.normTex);
 				end
 
 				_G[pfBName .. "ManaBar"]:Point("TOP", "$parentHealthBar", "BOTTOM", 0, 0);

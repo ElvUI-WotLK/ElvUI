@@ -44,13 +44,13 @@ local function LoadSkin()
 	FrameStackTooltip:HookScript("OnShow", function(self)
 		local noscalemult = E.mult * GetCVar("uiScale")
 		self:SetBackdrop({
-			bgFile = E["media"].blankTex,
-			edgeFile = E["media"].blankTex,
+			bgFile = E.media.blankTex,
+			edgeFile = E.media.blankTex,
 			tile = false, tileSize = 0, edgeSize = noscalemult,
 			insets = { left = -noscalemult, right = -noscalemult, top = -noscalemult, bottom = -noscalemult}
 		});
-		self:SetBackdropColor(unpack(E["media"].backdropfadecolor))
-		self:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+		self:SetBackdropColor(unpack(E.media.backdropfadecolor))
+		self:SetBackdropBorderColor(unpack(E.media.bordercolor))
 	end)
 
 	EventTraceTooltip:HookScript("OnShow", function(self)

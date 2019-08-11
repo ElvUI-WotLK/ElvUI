@@ -84,7 +84,7 @@ local function LoadSkin()
 
 	AuctionProgressBar:StripTextures()
 	AuctionProgressBar:CreateBackdrop("Default")
-	AuctionProgressBar:SetStatusBarTexture(E["media"].normTex)
+	AuctionProgressBar:SetStatusBarTexture(E.media.normTex)
 	E:RegisterStatusBar(AuctionProgressBar);
 	AuctionProgressBar:SetStatusBarColor(1, 1, 0)
 
@@ -124,10 +124,10 @@ local function LoadSkin()
 			if quality then
 				self:SetBackdropBorderColor(GetItemQualityColor(quality))
 			else
-				self:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+				self:SetBackdropBorderColor(unpack(E.media.bordercolor))
 			end
 		else
-			self:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+			self:SetBackdropBorderColor(unpack(E.media.bordercolor))
 		end
 	end)
 
@@ -232,7 +232,7 @@ local function LoadSkin()
 				icon:SetBackdropBorderColor(r, g, b)
 			end)
 			hooksecurefunc(name, "Hide", function()
-				icon:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+				icon:SetBackdropBorderColor(unpack(E.media.bordercolor))
 			end)
 		end
 
@@ -261,7 +261,7 @@ local function LoadSkin()
 			icon:SetBackdropBorderColor(r, g, b)
 		end)
 		hooksecurefunc(name, "Hide", function()
-			icon:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+			icon:SetBackdropBorderColor(unpack(E.media.bordercolor))
 		end)
 
 		button:StripTextures()
@@ -292,7 +292,7 @@ local function LoadSkin()
 			icon:SetBackdropBorderColor(r, g, b)
 		end)
 		hooksecurefunc(name, "Hide", function()
-			icon:SetBackdropBorderColor(unpack(E["media"].bordercolor))
+			icon:SetBackdropBorderColor(unpack(E.media.bordercolor))
 		end)
 
 		button:StripTextures()

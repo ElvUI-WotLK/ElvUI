@@ -155,7 +155,7 @@ function lib:VersionCheck(event, prefix, message, channel, sender)
 		if not (prefix == lib.prefix and sender and message and not strmatch(message, "^%s-$")) then return end
 		if sender == E.myname then return end
 
-		if not E["pluginRecievedOutOfDateMessage"] then
+		if not E.pluginRecievedOutOfDateMessage then
 			local name, version, plugin, Pname
 			for _, p in pairs({strsplit(";",message)}) do
 				if not strmatch(p, "^%s-$") then
@@ -167,7 +167,7 @@ function lib:VersionCheck(event, prefix, message, channel, sender)
 							plugin.newversion = tonumber(version)
 							Pname = GetAddOnMetadata(plugin.name, "Title")
 							E:Print(format(MSG_OUTDATED, Pname, plugin.version, plugin.newversion))
-							E["pluginRecievedOutOfDateMessage"] = true
+							E.pluginRecievedOutOfDateMessage = true
 						end
 					end
 				end
@@ -182,7 +182,7 @@ function lib:VersionCheck(event, prefix, message, channel, sender)
 		local num = numRaid > 0 and numRaid or numParty
 		if num ~= lib.groupSize then
 			if num > 1 and ((lib.groupSize and num > lib.groupSize) or not lib.groupSize) then
-				E["ElvUIPluginSendMSGTimer"] = E:ScheduleTimer("SendPluginVersionCheck", 12)
+				E.ElvUIPluginSendMSGTimer = E:ScheduleTimer("SendPluginVersionCheck", 12)
 			end
 			lib.groupSize = num
 		end

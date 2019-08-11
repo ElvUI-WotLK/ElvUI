@@ -6578,9 +6578,9 @@ E.Options.args.unitframe.args.raid = {
 							set = function(info, value)
 								E.db.unitframe.units.raid[info[#info]] = value
 								UF:CreateAndUpdateHeaderGroup("raid")
-								if _G["ElvUF_Raid"].isForced then
-									UF:HeaderConfig(_G["ElvUF_Raid"])
-									UF:HeaderConfig(_G["ElvUF_Raid"], true)
+								if ElvUF_Raid.isForced then
+									UF:HeaderConfig(ElvUF_Raid)
+									UF:HeaderConfig(ElvUF_Raid, true)
 								end
 							end
 						},
@@ -6592,9 +6592,9 @@ E.Options.args.unitframe.args.raid = {
 							set = function(info, value)
 								E.db.unitframe.units.raid[info[#info]] = value
 								UF:CreateAndUpdateHeaderGroup("raid")
-								if _G["ElvUF_Raid"].isForced then
-									UF:HeaderConfig(_G["ElvUF_Raid"])
-									UF:HeaderConfig(_G["ElvUF_Raid"], true)
+								if ElvUF_Raid.isForced then
+									UF:HeaderConfig(ElvUF_Raid)
+									UF:HeaderConfig(ElvUF_Raid, true)
 								end
 							end
 						},
