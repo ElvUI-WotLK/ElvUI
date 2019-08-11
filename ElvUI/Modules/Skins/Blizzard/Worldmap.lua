@@ -6,7 +6,7 @@ local _G = _G
 local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.worldmap ~= true then return end
 
-	local WorldMapFrame = _G["WorldMapFrame"]
+	local WorldMapFrame = _G.WorldMapFrame
 	WorldMapFrame:DisableDrawLayer("BACKGROUND")
 	WorldMapFrame:DisableDrawLayer("ARTWORK")
 	WorldMapFrame:DisableDrawLayer("OVERLAY")
@@ -18,7 +18,6 @@ local function LoadSkin()
 	WorldMapDetailFrame:CreateBackdrop()
 	WorldMapDetailFrame.backdrop:Point("TOPLEFT", -2, 2)
 	WorldMapDetailFrame.backdrop:Point("BOTTOMRIGHT", 2, -1)
-	WorldMapDetailFrame.backdrop:SetFrameLevel(WorldMapDetailFrame:GetFrameLevel() - 2)
 
 	WorldMapQuestDetailScrollFrame:Width(348)
 	WorldMapQuestDetailScrollFrame:Point("BOTTOMLEFT", WorldMapDetailFrame, "BOTTOMLEFT", -25, -207)
@@ -86,16 +85,16 @@ local function LoadSkin()
 	WorldMapZoneInfo:SetShadowOffset(2, -2)
 
 	local function SmallSkin()
-		if not WORLDMAP_SETTINGS.advanced then
-			WorldMapFrame.backdrop:Point("TOPLEFT", 14, -12)
-
-			WorldMapLevelDropDown:ClearAllPoints()
-			WorldMapLevelDropDown:Point("TOPRIGHT", WorldMapPositioningGuide, "TOPRIGHT", -440, -38)
-		else
+		if WORLDMAP_SETTINGS.advanced then
 			WorldMapFrame.backdrop:Point("TOPLEFT", 4, 2)
 
 			WorldMapLevelDropDown:ClearAllPoints()
 			WorldMapLevelDropDown:Point("TOPRIGHT", WorldMapPositioningGuide, "TOPRIGHT", -420, -24)
+		else
+			WorldMapFrame.backdrop:Point("TOPLEFT", 14, -12)
+
+			WorldMapLevelDropDown:ClearAllPoints()
+			WorldMapLevelDropDown:Point("TOPRIGHT", WorldMapPositioningGuide, "TOPRIGHT", -440, -38)
 		end
 	end
 
@@ -115,7 +114,7 @@ local function LoadSkin()
 	end
 
 	local function QuestSkin()
-		WorldMapFrame.backdrop:Point("TOPLEFT", WorldMapDetailFrame, "TOPLEFT", -13, 70)
+		WorldMapFrame.backdrop:Point("TOPLEFT", WorldMapDetailFrame, "TOPLEFT", -14, 69)
 	end
 
 	local function FixSkin()
@@ -132,7 +131,11 @@ local function LoadSkin()
 	FixSkin()
 	HideUIPanel(WorldMapFrame)
 
+	hooksecurefunc("WorldMapFrame_SetQuestMapView", QuestSkin)
+	hooksecurefunc("WorldMapFrame_SetFullMapView", LargeSkin)
+	hooksecurefunc("WorldMapFrame_SetMiniMode", SmallSkin)
 	hooksecurefunc("ToggleMapFramerate", FixSkin)
+	hooksecurefunc("WorldMapFrame_ToggleAdvanced", FixSkin)
 end
 
 S:AddCallback("SkinWorldMap", LoadSkin)
