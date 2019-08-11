@@ -1,25 +1,24 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(ElvUI); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
+
+--Lua functions
+--WoW API / Variables
 
 local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.bgmap ~= true then return end
+
 	BattlefieldMinimap:SetClampedToScreen(true)
 	BattlefieldMinimapCorner:Kill()
 	BattlefieldMinimapBackground:Kill()
 	BattlefieldMinimapTab:Kill()
-	BattlefieldMinimapTabLeft:Kill()
-	BattlefieldMinimapTabMiddle:Kill()
-	BattlefieldMinimapTabRight:Kill()
 
 	BattlefieldMinimap:CreateBackdrop("Default")
-	BattlefieldMinimap.backdrop:Point("BOTTOMRIGHT", -4, 2)
+	BattlefieldMinimap.backdrop:SetPoint("BOTTOMRIGHT", E.Border - E:Scale(6), -(E.Border - E:Scale(4)))
 	BattlefieldMinimap:SetFrameStrata("LOW")
 	BattlefieldMinimapCloseButton:ClearAllPoints()
-	BattlefieldMinimapCloseButton:SetPoint("TOPRIGHT", -4, 0)
+	BattlefieldMinimapCloseButton:Point("TOPRIGHT", -6, 0)
 	S:HandleCloseButton(BattlefieldMinimapCloseButton)
-	BattlefieldMinimapCloseButton.text:ClearAllPoints()
-	BattlefieldMinimapCloseButton.text:SetPoint("CENTER", BattlefieldMinimapCloseButton, "CENTER", 0, 1)
-	BattlefieldMinimapCloseButton:SetFrameStrata("MEDIUM")
+	BattlefieldMinimapCloseButton:SetFrameLevel(BattlefieldMinimap:GetFrameLevel() + 5)
 
 	BattlefieldMinimap:EnableMouse(true)
 	BattlefieldMinimap:SetMovable(true)
@@ -27,11 +26,8 @@ local function LoadSkin()
 	BattlefieldMinimap:SetScript("OnMouseUp", function(self, btn)
 		if btn == "LeftButton" then
 			BattlefieldMinimapTab:StopMovingOrSizing()
-			BattlefieldMinimapTab:SetUserPlaced(true)
-			if OpacityFrame:IsShown() then OpacityFrame:Hide() end -- seem to be a bug with default ui in 4.0, we hide it on next click
 		elseif btn == "RightButton" then
 			ToggleDropDownMenu(1, nil, BattlefieldMinimapTabDropDown, self:GetName(), 0, -4)
-			if OpacityFrame:IsShown() then OpacityFrame:Hide() end -- seem to be a bug with default ui in 4.0, we hide it on next click
 		end
 	end)
 
@@ -46,35 +42,34 @@ local function LoadSkin()
 	end)
 
 	hooksecurefunc("BattlefieldMinimap_UpdateOpacity", function()
-		local alpha = 1.0 - BattlefieldMinimapOptions.opacity or 0;
+		local alpha = 1.0 - BattlefieldMinimapOptions.opacity or 0
 		BattlefieldMinimap.backdrop:SetAlpha(alpha)
 	end)
 
 	local oldAlpha
 	BattlefieldMinimap:HookScript("OnEnter", function()
-		oldAlpha = BattlefieldMinimapOptions.opacity or 0;
+		oldAlpha = BattlefieldMinimapOptions.opacity or 0
 		BattlefieldMinimap_UpdateOpacity(0)
 	end)
 
 	BattlefieldMinimap:HookScript("OnLeave", function()
 		if oldAlpha then
 			BattlefieldMinimap_UpdateOpacity(oldAlpha)
-			oldAlpha = nil;
+			oldAlpha = nil
 		end
 	end)
 
 	BattlefieldMinimapCloseButton:HookScript("OnEnter", function()
-		oldAlpha = BattlefieldMinimapOptions.opacity or 0;
+		oldAlpha = BattlefieldMinimapOptions.opacity or 0
 		BattlefieldMinimap_UpdateOpacity(0)
 	end)
 
 	BattlefieldMinimapCloseButton:HookScript("OnLeave", function()
 		if oldAlpha then
 			BattlefieldMinimap_UpdateOpacity(oldAlpha)
-			oldAlpha = nil;
+			oldAlpha = nil
 		end
 	end)
-
 end
 
-S:AddCallbackForAddon("Blizzard_BattlefieldMinimap", "BattlefieldMinimap", LoadSkin);
+S:AddCallbackForAddon("Blizzard_BattlefieldMinimap", "BattlefieldMinimap", LoadSkin)
