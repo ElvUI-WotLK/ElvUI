@@ -109,7 +109,7 @@ function S:Ace3_RegisterAsWidget(widget)
 		highlight.SetTexture = E.noop
 
 		hooksecurefunc(widget, "SetDisabled", function(w, value)
-			local isSwitch = S:Ace3_CheckBoxIsEnableSwitch(widget)
+			local isSwitch = S:Ace3_CheckBoxIsEnableSwitch(w)
 
 			if value then
 				if isSwitch then
@@ -119,18 +119,10 @@ function S:Ace3_RegisterAsWidget(widget)
 		end)
 
 		hooksecurefunc(widget, "SetValue", function(w, value)
-			local isSwitch = S:Ace3_CheckBoxIsEnableSwitch(widget)
+			local isSwitch = S:Ace3_CheckBoxIsEnableSwitch(w)
 
-			if value then
-				if isSwitch then
-					w:SetLabel(S.Ace3_L.GREEN_ENABLE)
-				end
-			else
-				--if not (widget.tristate and value == nil) then
-					if isSwitch then
-						w:SetLabel(S.Ace3_L.RED_ENABLE)
-					end
-				--end
+			if isSwitch then
+				w:SetLabel(value and S.Ace3_L.GREEN_ENABLE or S.Ace3_L.RED_ENABLE)
 			end
 		end)
 
@@ -146,8 +138,8 @@ function S:Ace3_RegisterAsWidget(widget)
 				end
 			end)
 
-			hooksecurefunc(widget, "SetDisabled", function(_, value)
-				local isSwitch = S:Ace3_CheckBoxIsEnableSwitch(widget)
+			hooksecurefunc(widget, "SetDisabled", function(w, value)
+				local isSwitch = S:Ace3_CheckBoxIsEnableSwitch(w)
 
 				if value then
 					if isSwitch then
@@ -158,8 +150,8 @@ function S:Ace3_RegisterAsWidget(widget)
 				end
 			end)
 
-			hooksecurefunc(widget, "SetValue", function(_, value)
-				local isSwitch = S:Ace3_CheckBoxIsEnableSwitch(widget)
+			hooksecurefunc(widget, "SetValue", function(w, value)
+				local isSwitch = S:Ace3_CheckBoxIsEnableSwitch(w)
 
 				if value then
 					if isSwitch then
@@ -168,7 +160,7 @@ function S:Ace3_RegisterAsWidget(widget)
 						check:SetVertexColor(1, 0.82, 0, 0.8)
 					end
 				else
-					if widget.tristate and value == nil then
+					if w.tristate and value == nil then
 						check:SetVertexColor(0.6, 0.6, 0.6, 0.8)
 					end
 				end
