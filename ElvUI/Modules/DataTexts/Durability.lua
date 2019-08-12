@@ -2,7 +2,6 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 local DT = E:GetModule("DataTexts")
 
 --Lua functions
-local _G = _G
 local pairs = pairs
 local format, join, upper = string.format, string.join, string.upper
 --WoW API / Variables
@@ -34,8 +33,8 @@ local function OnEvent(self)
 	lastPanel = self
 	totalDurability = 100
 
-	for _, value in pairs(slots) do
-		local slot = GetInventorySlotInfo(value)
+	for sType, value in pairs(slots) do
+		local slot = GetInventorySlotInfo(sType)
 		current, max = GetInventoryItemDurability(slot)
 
 		if current then
@@ -58,7 +57,7 @@ local function OnEnter(self)
 	DT:SetupTooltip(self)
 
 	for slot, durability in pairs(invDurability) do
-		DT.tooltip:AddDoubleLine(_G[upper(slot)], format(tooltipString, durability), 1, 1, 1, E:ColorGradient(durability * 0.01, 1, 0, 0, 1, 1, 0, 0, 1, 0))
+		DT.tooltip:AddDoubleLine(slot, format(tooltipString, durability), 1, 1, 1, E:ColorGradient(durability * 0.01, 1, 0, 0, 1, 1, 0, 0, 1, 0))
 	end
 
 	DT.tooltip:Show()
