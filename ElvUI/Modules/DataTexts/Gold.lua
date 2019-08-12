@@ -19,7 +19,7 @@ local currencyString = "|T%s:14:14:0:0:64:64:4:60:4:60|t %s"
 
 local Profit = 0
 local Spent = 0
-local resetCountersFormatter = strjoin("", "|cffaaaaaa", L["Reset Counters: Hold Control + Right Click"], "|r")
+local resetCountersFormatter = strjoin("", "|cffaaaaaa", L["Reset Counters: Hold Shift + Left Click"], "|r")
 local resetInfoFormatter = strjoin("", "|cffaaaaaa", L["Reset Data: Hold Shift + Right Click"], "|r")
 
 local function OnEvent(self)

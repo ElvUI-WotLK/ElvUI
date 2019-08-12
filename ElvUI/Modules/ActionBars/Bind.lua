@@ -337,7 +337,7 @@ function AB:LoadKeyBinder()
 	desc:SetJustifyH("LEFT")
 	desc:Point("TOPLEFT", 18, -32)
 	desc:Point("BOTTOMRIGHT", -18, 48)
-	desc:SetText(L["Hover your mouse over any actionbutton or spellbook button to bind it. Press the escape key or right click to clear the current actionbutton's keybinding."])
+	desc:SetText(L["Hover your mouse over any actionbutton or spellbook button to bind it. Press the ESC key to clear the current actionbutton's keybinding."])
 
 	local perCharCheck = CreateFrame("CheckButton", f:GetName().."CheckButton", f, "OptionsCheckButtonTemplate")
 	_G[perCharCheck:GetName().."Text"]:SetText(CHARACTER_SPECIFIC_KEYBINDINGS)

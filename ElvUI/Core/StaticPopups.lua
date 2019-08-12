@@ -53,7 +53,7 @@ E.PopupDialogs.ELVUI_UPDATED_WHILE_RUNNING = {
 }
 
 E.PopupDialogs.ELVUI_UPDATE_AVAILABLE = {
-	text = L["ElvUI is five or more revisions out of date. You can download the newest version from https://github.com/ElvUI-WotLK/ElvUI/"],
+	text = L["ElvUI is five or more revisions out of date. You can download the newest version from https://github.com/ElvUI-WotLK/ElvUI"],
 	hasEditBox = 1,
 	OnShow = function(self)
 		self.editBox:SetAutoFocus(false)
@@ -187,22 +187,13 @@ E.PopupDialogs.INCOMPATIBLE_ADDON = {
 }
 
 E.PopupDialogs.UISCALE_CHANGE = {
-	text = L["The UI Scale has been changes, if you would like to preview the change press the preview button. It is recommended that you reload your User Interface for the best appearance."],
+	text = L["The UI Scale has been changed, if you would like to preview the change press the preview button. It is recommended that you reload your User Interface for the best appearance."],
 	OnAccept = function() ReloadUI() end,
 	OnCancel = E.noop,
 	button1 = ACCEPT,
 	button2 = CANCEL,
 	button3 = L["Preview Changes"],
 	OnAlt = function() E:PixelScaleChanged("UISCALE_CHANGE") end,
-	whileDead = 1,
-	hideOnEscape = false
-}
-
-E.PopupDialogs.FAILED_UISCALE = {
-	text = L["You have changed your UIScale, however you still have the AutoScale option enabled in ElvUI. Press accept if you would like to disable the Auto Scale option."],
-	button1 = ACCEPT,
-	button2 = CANCEL,
-	OnAccept = function() E.global.general.autoScale = false ReloadUI() end,
 	whileDead = 1,
 	hideOnEscape = false
 }
@@ -300,16 +291,6 @@ E.PopupDialogs.RESET_NP_AF = {
 	end,
 	whileDead = 1,
 	hideOnEscape = false,
-}
-
-E.PopupDialogs.KEYBIND_MODE = {
-	text = L["Hover your mouse over any actionbutton or spellbook button to bind it. Press the escape key or right click to clear the current actionbutton's keybinding."],
-	button1 = L["Save"],
-	button2 = L["Discard"],
-	OnAccept = function() AB:DeactivateBindMode(true) end,
-	OnCancel = function() AB:DeactivateBindMode(false) end,
-	whileDead = 1,
-	hideOnEscape = false
 }
 
 E.PopupDialogs.DELETE_GRAYS = {
@@ -491,13 +472,6 @@ E.PopupDialogs.SCRIPT_PROFILE = {
 	showAlert = 1,
 	whileDead = 1,
 	hideOnEscape = false
-}
-
-E.PopupDialogs.ELVUI_CONFIG_FOUND = {
-    text = L["You still have ElvUI_Config installed.  ElvUI_Config has been renamed to ElvUI_OptionsUI, please remove it."],
-    button1 = ACCEPT,
-    whileDead = 1,
-    hideOnEscape = false,
 }
 
 local MAX_STATIC_POPUPS = 4

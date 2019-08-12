@@ -66,4 +66,4 @@ local function ValueColorUpdate(hex)
 end
 E.valueColorUpdateFuncs[ValueColorUpdate] = true
 
-DT:RegisterDatatext("ElvUI Config", {"PLAYER_ENTERING_WORLD"}, OnEvent, nil, OnClick, OnEnter, nil, L["ElvUI OptionsUI"])
+DT:RegisterDatatext("ElvUI Config", {"PLAYER_ENTERING_WORLD"}, OnEvent, nil, OnClick, OnEnter)

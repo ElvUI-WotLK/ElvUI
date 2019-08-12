@@ -25,7 +25,7 @@ function B:MoveWatchFrame()
 	WatchFrameHolder:Size(150, 22)
 	WatchFrameHolder:Point("TOPRIGHT", E.UIParent, "TOPRIGHT", -135, -300)
 
-	E:CreateMover(WatchFrameHolder, "WatchFrameMover", L["Watch Frame"], nil, nil, nil, nil, nil, "general,objectiveFrameGroup")
+	E:CreateMover(WatchFrameHolder, "WatchFrameMover", L["Objective Frame"], nil, nil, nil, nil, nil, "general,objectiveFrameGroup")
 	WatchFrameHolder:SetAllPoints(WatchFrameMover)
 
 	WatchFrame:ClearAllPoints()
