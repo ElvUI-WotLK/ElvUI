@@ -12,7 +12,7 @@ E.Options.args.databars = {
 		intro = {
 			order = 1,
 			type = "description",
-			name = L["DATABAR_DESC"]
+			name = L["Setup on-screen display of information bars."]
 		},
 		spacer = {
 			order = 2,
