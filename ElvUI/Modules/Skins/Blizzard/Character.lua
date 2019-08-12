@@ -55,7 +55,7 @@ local function LoadSkin()
 			button.icon:SetTexCoord(unpack(E.TexCoords))
 		end
 
-		local cooldown = _G[button:GetName() .."Cooldown"]
+		local cooldown = _G[button:GetName().."Cooldown"]
 		if cooldown then
 			E:RegisterCooldown(cooldown)
 		end
@@ -532,7 +532,7 @@ local function LoadSkin()
 						local factionGroup = UnitFactionGroup("player")
 						if factionGroup then
 							button.icon:SetTexture("Interface\\TargetingFrame\\UI-PVP-"..factionGroup)
-							button.icon:SetTexCoord( 0.03125, 0.59375, 0.03125, 0.59375 )
+							button.icon:SetTexCoord(0.03125, 0.59375, 0.03125, 0.59375)
 						else
 							button.icon:SetTexCoord(unpack(E.TexCoords))
 						end

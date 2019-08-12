@@ -2,6 +2,8 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 local S = E:GetModule("Skins")
 
 --Lua functions
+local _G = _G
+local unpack = unpack
 --WoW API / Variables
 
 local function LoadSkin()
@@ -13,7 +15,7 @@ local function LoadSkin()
 	S:HandleScrollBar(MacroFrameScrollFrameScrollBar)
 	S:HandleScrollBar(MacroPopupScrollFrameScrollBar)
 
-	local Buttons = { "MacroFrameTab1", "MacroFrameTab2", "MacroDeleteButton", "MacroNewButton", "MacroExitButton", "MacroEditButton", "MacroPopupOkayButton", "MacroPopupCancelButton" }
+	local Buttons = {"MacroFrameTab1", "MacroFrameTab2", "MacroDeleteButton", "MacroNewButton", "MacroExitButton", "MacroEditButton", "MacroPopupOkayButton", "MacroPopupCancelButton"}
 	for i = 1, #Buttons do
 		_G[Buttons[i]]:StripTextures()
 		S:HandleButton(_G[Buttons[i]])
@@ -44,7 +46,7 @@ local function LoadSkin()
 	MacroEditButton:Point("BOTTOMLEFT", MacroFrameSelectedMacroButton, "BOTTOMRIGHT", 10, 0)
 
 	MacroFrameSelectedMacroButton:StripTextures()
-	MacroFrameSelectedMacroButton:StyleButton(true)
+	MacroFrameSelectedMacroButton:StyleButton(nil, true)
 	MacroFrameSelectedMacroButton:GetNormalTexture():SetTexture(nil)
 	MacroFrameSelectedMacroButton:SetTemplate("Default")
 	MacroFrameSelectedMacroButtonIcon:SetTexCoord(unpack(E.TexCoords))
