@@ -89,7 +89,9 @@ local function UpdateColorTexts(r, g, b, box)
 	ColorPPBoxB:SetText(b)
 end
 
-local function UpdateColor()
+local function UpdateColor(box)
+	if box:GetID() == 4 and box:GetNumLetters() ~= 6 then return else UpdateColorTexts(nil, nil, nil, box) end
+
 	local r, g, b = GetHexColor(ColorPPBoxH)
 	ColorPickerFrame:SetColorRGB(r, g, b)
 	ColorSwatch:SetTexture(r, g, b)
