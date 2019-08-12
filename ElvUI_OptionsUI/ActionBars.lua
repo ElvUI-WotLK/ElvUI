@@ -78,7 +78,7 @@ local function BuildABConfig()
 				order = 8,
 				type = "toggle",
 				name = L["Key Down"],
-				desc = L["Action button keybinds will respond on key down, rather than on key up"],
+				desc = L["OPTION_TOOLTIP_ACTION_BUTTON_USE_KEY_DOWN"],
 				disabled = function() return not E.private.actionbar.enable end
 			},
 			lockActionBars = {
