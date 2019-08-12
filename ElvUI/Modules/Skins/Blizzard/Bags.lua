@@ -27,9 +27,9 @@ local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.bags ~= true then return end
 
 	local ProfessionColors = {
-		[0x0001] = {E.db.colors.profession.quiver.r, E.db.colors.profession.quiver.g, E.db.colors.profession.quiver.b},
-		[0x0002] = {E.db.colors.profession.ammoPouch.r, E.db.colors.profession.ammoPouch.g, E.db.colors.profession.ammoPouch.b},
-		[0x0004] = {E.db.colors.profession.soulBag.r, E.db.colors.profession.soulBag.g, E.db.colors.profession.soulBag.b},
+		[0x0001] = {E.db.bags.colors.profession.quiver.r, E.db.bags.colors.profession.quiver.g, E.db.bags.colors.profession.quiver.b},
+		[0x0002] = {E.db.bags.colors.profession.ammoPouch.r, E.db.bags.colors.profession.ammoPouch.g, E.db.bags.colors.profession.ammoPouch.b},
+		[0x0004] = {E.db.bags.colors.profession.soulBag.r, E.db.bags.colors.profession.soulBag.g, E.db.bags.colors.profession.soulBag.b},
 		[0x0008] = {E.db.bags.colors.profession.leatherworking.r, E.db.bags.colors.profession.leatherworking.g, E.db.bags.colors.profession.leatherworking.b},
 		[0x0010] = {E.db.bags.colors.profession.inscription.r, E.db.bags.colors.profession.inscription.g, E.db.bags.colors.profession.inscription.b},
 		[0x0020] = {E.db.bags.colors.profession.herbs.r, E.db.bags.colors.profession.herbs.g, E.db.bags.colors.profession.herbs.b},
