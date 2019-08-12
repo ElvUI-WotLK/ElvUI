@@ -882,10 +882,10 @@ function CH:AddPluginIcons(func)
 	tinsert(PluginIconsCalls, func)
 end
 
-function CH:GetPluginIcon(sender)
+function CH:GetPluginIcon(sender, name, realm)
 	local icon
 	for _,func in ipairs(PluginIconsCalls) do
-		icon = func(sender)
+		icon = func(sender, name, realm)
 		if icon and icon ~= "" then break end
 	end
 	return icon
@@ -940,13 +940,12 @@ function CH:ChatFrame_MessageEventHandler(frame, event, arg1, arg2, arg3, arg4, 
 
 		local _, _, englishClass, _, _, _, name, realm = pcall(GetPlayerInfoByGUID, arg12)
 		local coloredName = historySavedName or CH:GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12)
-		local nameWithRealm
 
 		--Cache name->class
-		realm = strmatch(realm ~= "" and realm or E.myrealm, "%s*(%S+)$") -- TODO
+		local nameWithRealm = strmatch(realm ~= "" and realm or E.myrealm, "%s*(%S+)$") -- TODO
 		if name and name ~= "" then
 			CH.ClassNames[strlower(name)] = englishClass
-			nameWithRealm = name.."-"..realm
+			nameWithRealm = name.."-"..nameWithRealm
 			CH.ClassNames[strlower(nameWithRealm)] = englishClass
 		end
 
@@ -1065,7 +1064,7 @@ function CH:ChatFrame_MessageEventHandler(frame, event, arg1, arg2, arg3, arg4, 
 
 			-- Add AFK/DND flags
 			-- Player Flags
-			local pflag, chatIcon, pluginChatIcon = "", specialChatIcons[nameWithRealm], CH:GetPluginIcon(nameWithRealm)
+			local pflag, chatIcon, pluginChatIcon = "", specialChatIcons[nameWithRealm], CH:GetPluginIcon(nameWithRealm, name, realm)
 			if type(chatIcon) == "function" then chatIcon = chatIcon() end
 			if arg6 ~= "" then
 				if arg6 == "GM" then
