@@ -19,7 +19,6 @@ local VehicleExit = VehicleExit
 local PetDismiss = PetDismiss
 local CanExitVehicle = CanExitVehicle
 local InCombatLockdown = InCombatLockdown
-local IsEquipped = IsEquipped
 local ClearOverrideBindings = ClearOverrideBindings
 local GetBindingKey = GetBindingKey
 local SetOverrideBindingClick = SetOverrideBindingClick
