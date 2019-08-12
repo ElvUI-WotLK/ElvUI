@@ -1,17 +1,13 @@
 local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local UF = E:GetModule("UnitFrames")
 
---Lua functions
---WoW API / Variables
-local CreateFrame = CreateFrame
-
 function UF:Construct_Cutaway(frame)
 	local cutaway = {}
 	local frameName = frame:GetName()
 
 	if frame.Power then
+		local powerTexture = frame.Power:GetStatusBarTexture()
 		local cutawayPower = frame.Power.ClipFrame:CreateTexture(frameName.."CutawayPower")
-		cutawayPower:SetFrameLevel(frame.Power:GetFrameLevel())
 		cutawayPower:SetPoint("TOPLEFT", powerTexture, "TOPRIGHT")
 		cutawayPower:SetPoint("BOTTOMLEFT", powerTexture, "BOTTOMRIGHT")
 		cutawayPower:SetTexture(E.media.blankTex)
@@ -79,8 +75,6 @@ function UF:Configure_Cutaway(frame)
 			power:ClearAllPoints()
 			power:SetPoint(point1[1], barTexture, point1[2])
 			power:SetPoint(point2[1], barTexture, point2[2])
-
-			power:SetFrameLevel(frame.Power:GetFrameLevel())
 
 			frame.Power:PostUpdateColor()
 		end
