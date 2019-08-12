@@ -128,11 +128,12 @@ local function LoadSkin()
 
 	S:HandleScrollBar(PlayerTitlePickerScrollFrameScrollBar)
 
-	_G["GearManagerToggleButton"]:Size(26, 32)
-	_G["GearManagerToggleButton"]:CreateBackdrop("Default")
-
-	GearManagerToggleButton:GetNormalTexture():SetTexCoord(0.1875, 0.8125, 0.125, 0.90625)
-	GearManagerToggleButton:GetPushedTexture():SetTexCoord(0.1875, 0.8125, 0.125, 0.90625)
+	local GearManagerToggleButton = _G["GearManagerToggleButton"]
+	GearManagerToggleButton:Size(30)
+	GearManagerToggleButton:CreateBackdrop("Default")
+	GearManagerToggleButton:Point("TOPRIGHT", -46, -39)
+	GearManagerToggleButton:GetNormalTexture():SetTexCoord(0.2000, 0.8160, 0.155, 0.90700)
+	GearManagerToggleButton:GetPushedTexture():SetTexCoord(0.1900, 0.8160, 0.175, 0.90700)
 	GearManagerToggleButton:GetHighlightTexture():SetTexture(1, 1, 1, 0.3)
 	GearManagerToggleButton:GetHighlightTexture():SetAllPoints()
 
