@@ -25,10 +25,6 @@ function UF:Construct_Cutaway(frame)
 end
 
 local cutawayPoints = {
-	[-4] = {"TOPLEFT", "BOTTOMLEFT"},
-	[-3] = {"TOPRIGHT", "BOTTOMRIGHT"},
-	[-2] = {"TOPRIGHT", "TOPLEFT"},
-	[-1] = {"BOTTOMRIGHT", "BOTTOMLEFT"},
 	[1] = {"TOPLEFT", "TOPRIGHT"},
 	[2] = {"BOTTOMLEFT", "BOTTOMRIGHT"},
 	[3] = {"BOTTOMLEFT", "TOPLEFT"},
@@ -38,8 +34,8 @@ local cutawayPoints = {
 local DEFAULT_INDEX, VERT_INDEX = 1, 3
 function UF:GetPoints_Cutaway(db)
 local index = (db.orientation == "VERTICAL" and VERT_INDEX) or DEFAULT_INDEX
-	local p1 = (db.reverseFill and -index) or index
-	local p2 = p1 + (db.reverseFill and -1 or 1)
+	local p1 = index
+	local p2 = p1 + 1
 	return cutawayPoints[p1], cutawayPoints[p2]
 end
 
