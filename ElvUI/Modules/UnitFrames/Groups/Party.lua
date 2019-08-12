@@ -84,10 +84,7 @@ function UF:Construct_PartyFrames()
 	UF:Update_StatusBars()
 	UF:Update_FontStrings()
 
-	local function TestFixCastBar()
-		UF:Update_PartyFrames(self, UF.db["units"]["party"])
-	end
-	E:Delay(.1, TestFixCastBar)
+	UF:Update_PartyFrames(self, UF.db.units.party)
 
 	return self
 end

@@ -102,152 +102,157 @@ function UF:Configure_Castbar(frame)
 	if not frame.VARIABLES_SET then return end
 	local castbar = frame.Castbar
 	local db = frame.db
-	castbar:Width(db.castbar.width - ((frame.BORDER+frame.SPACING)*2))
-	castbar:Height(db.castbar.height - ((frame.BORDER+frame.SPACING)*2))
-	castbar.Holder:Width(db.castbar.width)
-	castbar.Holder:Height(db.castbar.height)
 
-	local color = E.db.unitframe.colors.borderColor
-	castbar.ButtonIcon.bg:SetBackdropBorderColor(color.r, color.g, color.b)
-
-	local oSC = castbar.Holder:GetScript("OnSizeChanged")
-	if oSC then oSC(castbar.Holder) end
-
-	if db.castbar.strataAndLevel and db.castbar.strataAndLevel.useCustomStrata then
-		castbar:SetFrameStrata(db.castbar.strataAndLevel.frameStrata)
-	end
-
-	if db.castbar.strataAndLevel and db.castbar.strataAndLevel.useCustomLevel then
-		castbar:SetFrameLevel(db.castbar.strataAndLevel.frameLevel)
-	end
-
-	castbar.timeToHold = db.castbar.timeToHold
-
-	--Latency
-	if db.castbar.latency then
-		castbar.SafeZone = castbar.LatencyTexture
-		castbar.LatencyTexture:Show()
-	else
-		castbar.SafeZone = nil
-		castbar.LatencyTexture:Hide()
-	end
-
-	--Icon
-	if db.castbar.icon then
-		castbar.Icon = castbar.ButtonIcon
-		castbar.Icon:SetTexCoord(unpack(E.TexCoords))
-
-		if not db.castbar.iconAttached then
-			castbar.Icon.bg:Size(db.castbar.iconSize)
-		else
-			if db.castbar.insideInfoPanel and frame.USE_INFO_PANEL then
-				castbar.Icon.bg:Size(db.infoPanel.height - frame.SPACING*2)
-			else
-				castbar.Icon.bg:Size(db.castbar.height - frame.SPACING*2)
-			end
-
-			castbar:Width(db.castbar.width - castbar.Icon.bg:GetWidth() - (frame.BORDER + frame.SPACING*5))
+	if db.castbar.enable then
+		if not frame:IsElementEnabled("Castbar") then
+			frame:EnableElement("Castbar")
 		end
 
-		castbar.Icon.bg:Show()
-	else
-		castbar.ButtonIcon.bg:Hide()
-		castbar.Icon = nil
-	end
+		castbar:Width(db.castbar.width - ((frame.BORDER+frame.SPACING)*2))
+		castbar:Height(db.castbar.height - ((frame.BORDER+frame.SPACING)*2))
+		castbar.Holder:Width(db.castbar.width)
+		castbar.Holder:Height(db.castbar.height)
 
-	if db.castbar.spark then
-		castbar.Spark = castbar.Spark_
-		castbar.Spark:Point("CENTER", castbar:GetStatusBarTexture(), "RIGHT", 0, 0)
-		castbar.Spark:Height(db.castbar.height * 2)
-	elseif castbar.Spark then
-		castbar.Spark:Hide()
-		castbar.Spark = nil
-	end
+		local color = E.db.unitframe.colors.borderColor
+		castbar.ButtonIcon.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 
-	castbar:ClearAllPoints()
-	if db.castbar.insideInfoPanel and frame.USE_INFO_PANEL then
-		if not db.castbar.iconAttached then
-			castbar:SetInside(frame.InfoPanel, 0, 0)
+		local oSC = castbar.Holder:GetScript("OnSizeChanged")
+		if oSC then oSC(castbar.Holder) end
+
+		if db.castbar.strataAndLevel and db.castbar.strataAndLevel.useCustomStrata then
+			castbar:SetFrameStrata(db.castbar.strataAndLevel.frameStrata)
+		end
+
+		if db.castbar.strataAndLevel and db.castbar.strataAndLevel.useCustomLevel then
+			castbar:SetFrameLevel(db.castbar.strataAndLevel.frameLevel)
+		end
+
+		castbar.timeToHold = db.castbar.timeToHold
+
+		--Latency
+		if db.castbar.latency then
+			castbar.SafeZone = castbar.LatencyTexture
+			castbar.LatencyTexture:Show()
 		else
-			local iconWidth = db.castbar.icon and (castbar.Icon.bg:GetWidth() - frame.BORDER) or 0
-			if frame.ORIENTATION == "RIGHT" then
-				castbar:Point("TOPLEFT", frame.InfoPanel, "TOPLEFT")
-				castbar:Point("BOTTOMRIGHT", frame.InfoPanel, "BOTTOMRIGHT", -iconWidth - frame.SPACING*3, 0)
+			castbar.SafeZone = nil
+			castbar.LatencyTexture:Hide()
+		end
+
+		--Icon
+		if db.castbar.icon then
+			castbar.Icon = castbar.ButtonIcon
+			castbar.Icon:SetTexCoord(unpack(E.TexCoords))
+
+			if not db.castbar.iconAttached then
+				castbar.Icon.bg:Size(db.castbar.iconSize)
 			else
-				castbar:Point("TOPLEFT", frame.InfoPanel, "TOPLEFT", iconWidth + frame.SPACING*3, 0)
-				castbar:Point("BOTTOMRIGHT", frame.InfoPanel, "BOTTOMRIGHT")
+				if db.castbar.insideInfoPanel and frame.USE_INFO_PANEL then
+					castbar.Icon.bg:Size(db.infoPanel.height - frame.SPACING*2)
+				else
+					castbar.Icon.bg:Size(db.castbar.height - frame.SPACING*2)
+				end
+
+				castbar:Width(db.castbar.width - castbar.Icon.bg:GetWidth() - (frame.BORDER + frame.SPACING*5))
 			end
+
+			castbar.Icon.bg:Show()
+		else
+			castbar.ButtonIcon.bg:Hide()
+			castbar.Icon = nil
 		end
 
 		if db.castbar.spark then
-			castbar.Spark:Height(db.infoPanel and db.infoPanel.height * 2) -- Grab the height from the infopanel.
-		end
-
-		if castbar.Holder.mover then
-			E:DisableMover(castbar.Holder.mover:GetName())
-		end
-	else
-		local isMoved = E:HasMoverBeenMoved(frame:GetName().."CastbarMover") or not castbar.Holder.mover
-		if not isMoved then
-			castbar.Holder.mover:ClearAllPoints()
+			castbar.Spark = castbar.Spark_
+			castbar.Spark:Point("CENTER", castbar:GetStatusBarTexture(), "RIGHT", 0, 0)
+			castbar.Spark:Height(db.castbar.height * 2)
+		elseif castbar.Spark then
+			castbar.Spark:Hide()
+			castbar.Spark = nil
 		end
 
 		castbar:ClearAllPoints()
-		if frame.ORIENTATION ~= "RIGHT" then
-			castbar:Point("BOTTOMRIGHT", castbar.Holder, "BOTTOMRIGHT", -(frame.BORDER+frame.SPACING), frame.BORDER+frame.SPACING)
-			if not isMoved then
-				castbar.Holder.mover:Point("TOPRIGHT", frame, "BOTTOMRIGHT", 0, -(frame.BORDER - frame.SPACING))
+		if db.castbar.insideInfoPanel and frame.USE_INFO_PANEL then
+			if not db.castbar.iconAttached then
+				castbar:SetInside(frame.InfoPanel, 0, 0)
+			else
+				local iconWidth = db.castbar.icon and (castbar.Icon.bg:GetWidth() - frame.BORDER) or 0
+				if frame.ORIENTATION == "RIGHT" then
+					castbar:Point("TOPLEFT", frame.InfoPanel, "TOPLEFT")
+					castbar:Point("BOTTOMRIGHT", frame.InfoPanel, "BOTTOMRIGHT", -iconWidth - frame.SPACING*3, 0)
+				else
+					castbar:Point("TOPLEFT", frame.InfoPanel, "TOPLEFT", iconWidth + frame.SPACING*3, 0)
+					castbar:Point("BOTTOMRIGHT", frame.InfoPanel, "BOTTOMRIGHT")
+				end
+			end
+
+			if db.castbar.spark then
+				castbar.Spark:Height(db.infoPanel and db.infoPanel.height * 2) -- Grab the height from the infopanel.
+			end
+
+			if castbar.Holder.mover then
+				E:DisableMover(castbar.Holder.mover:GetName())
 			end
 		else
-			castbar:Point("BOTTOMLEFT", castbar.Holder, "BOTTOMLEFT", frame.BORDER+frame.SPACING, frame.BORDER+frame.SPACING)
+			local isMoved = E:HasMoverBeenMoved(frame:GetName().."CastbarMover") or not castbar.Holder.mover
 			if not isMoved then
-				castbar.Holder.mover:Point("TOPLEFT", frame, "BOTTOMLEFT", 0, -(frame.BORDER - frame.SPACING))
+				castbar.Holder.mover:ClearAllPoints()
+			end
+
+			castbar:ClearAllPoints()
+			if frame.ORIENTATION ~= "RIGHT" then
+				castbar:Point("BOTTOMRIGHT", castbar.Holder, "BOTTOMRIGHT", -(frame.BORDER+frame.SPACING), frame.BORDER+frame.SPACING)
+				if not isMoved then
+					castbar.Holder.mover:Point("TOPRIGHT", frame, "BOTTOMRIGHT", 0, -(frame.BORDER - frame.SPACING))
+				end
+			else
+				castbar:Point("BOTTOMLEFT", castbar.Holder, "BOTTOMLEFT", frame.BORDER+frame.SPACING, frame.BORDER+frame.SPACING)
+				if not isMoved then
+					castbar.Holder.mover:Point("TOPLEFT", frame, "BOTTOMLEFT", 0, -(frame.BORDER - frame.SPACING))
+				end
+			end
+
+			if castbar.Holder.mover then
+				E:EnableMover(castbar.Holder.mover:GetName())
 			end
 		end
 
-		if castbar.Holder.mover then
-			E:EnableMover(castbar.Holder.mover:GetName())
+		if not db.castbar.iconAttached and db.castbar.icon then
+			local attachPoint = db.castbar.iconAttachedTo == "Frame" and frame or frame.Castbar
+			local anchorPoint = db.castbar.iconPosition
+			castbar.Icon.bg:ClearAllPoints()
+			castbar.Icon.bg:Point(INVERT_ANCHORPOINT[anchorPoint], attachPoint, anchorPoint, db.castbar.iconXOffset, db.castbar.iconYOffset)
+		elseif db.castbar.icon then
+			castbar.Icon.bg:ClearAllPoints()
+			if frame.ORIENTATION == "RIGHT" then
+				castbar.Icon.bg:Point("LEFT", castbar, "RIGHT", frame.SPACING*3, 0)
+			else
+				castbar.Icon.bg:Point("RIGHT", castbar, "LEFT", -frame.SPACING*3, 0)
+			end
 		end
-	end
 
-	if not db.castbar.iconAttached and db.castbar.icon then
-		local attachPoint = db.castbar.iconAttachedTo == "Frame" and frame or frame.Castbar
-		local anchorPoint = db.castbar.iconPosition
-		castbar.Icon.bg:ClearAllPoints()
-		castbar.Icon.bg:Point(INVERT_ANCHORPOINT[anchorPoint], attachPoint, anchorPoint, db.castbar.iconXOffset, db.castbar.iconYOffset)
-	elseif db.castbar.icon then
-		castbar.Icon.bg:ClearAllPoints()
-		if frame.ORIENTATION == "RIGHT" then
-			castbar.Icon.bg:Point("LEFT", castbar, "RIGHT", frame.SPACING*3, 0)
-		else
-			castbar.Icon.bg:Point("RIGHT", castbar, "LEFT", -frame.SPACING*3, 0)
+		--Adjust tick heights
+		castbar.tickHeight = castbar:GetHeight()
+
+		if db.castbar.ticks then --Only player unitframe has this
+			--Set tick width and color
+			castbar.tickWidth = db.castbar.tickWidth
+			castbar.tickColor = db.castbar.tickColor
+
+			for i = 1, #ticks do
+				ticks[i]:SetVertexColor(castbar.tickColor.r, castbar.tickColor.g, castbar.tickColor.b, castbar.tickColor.a)
+				ticks[i]:Width(castbar.tickWidth)
+			end
 		end
-	end
 
-	--Adjust tick heights
-	castbar.tickHeight = castbar:GetHeight()
+		castbar.custom_backdrop = UF.db.colors.customcastbarbackdrop and UF.db.colors.castbar_backdrop
+		UF:ToggleTransparentStatusBar(UF.db.colors.transparentCastbar, castbar, castbar.bg, nil, UF.db.colors.invertCastbar)
+	else
+		if not db.castbar.enable and frame:IsElementEnabled("Castbar") then
+			frame:DisableElement("Castbar")
 
-	if db.castbar.ticks then --Only player unitframe has this
-		--Set tick width and color
-		castbar.tickWidth = db.castbar.tickWidth
-		castbar.tickColor = db.castbar.tickColor
-
-		for i = 1, #ticks do
-			ticks[i]:SetVertexColor(castbar.tickColor.r, castbar.tickColor.g, castbar.tickColor.b, castbar.tickColor.a)
-			ticks[i]:Width(castbar.tickWidth)
-		end
-	end
-
-	castbar.custom_backdrop = UF.db.colors.customcastbarbackdrop and UF.db.colors.castbar_backdrop
-	UF:ToggleTransparentStatusBar(UF.db.colors.transparentCastbar, castbar, castbar.bg, nil, UF.db.colors.invertCastbar)
-
-	if db.castbar.enable and not frame:IsElementEnabled("Castbar") then
-		frame:EnableElement("Castbar")
-	elseif not db.castbar.enable and frame:IsElementEnabled("Castbar") then
-		frame:DisableElement("Castbar")
-
-		if castbar.Holder.mover then
-			E:DisableMover(castbar.Holder.mover:GetName())
+			if castbar.Holder.mover then
+				E:DisableMover(castbar.Holder.mover:GetName())
+			end
 		end
 	end
 end
