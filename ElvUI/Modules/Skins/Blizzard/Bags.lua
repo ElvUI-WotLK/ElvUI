@@ -97,7 +97,7 @@ local function LoadSkin()
 
 		if portraitButton then
 			portraitButton:CreateBackdrop()
-			portraitButton:Size(36)
+			portraitButton:Size(32)
 			portraitButton:Point("TOPLEFT", 12, -7)
 			portraitButton:StyleButton(nil, true)
 			portraitButton.hover:SetAllPoints()

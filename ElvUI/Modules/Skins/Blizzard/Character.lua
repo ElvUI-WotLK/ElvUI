@@ -129,9 +129,9 @@ local function LoadSkin()
 	S:HandleScrollBar(PlayerTitlePickerScrollFrameScrollBar)
 
 	local GearManagerToggleButton = _G["GearManagerToggleButton"]
-	GearManagerToggleButton:Size(30)
+	GearManagerToggleButton:Size(26, 32)
 	GearManagerToggleButton:CreateBackdrop("Default")
-	GearManagerToggleButton:Point("TOPRIGHT", -46, -39)
+	GearManagerToggleButton:Point("TOPRIGHT", -48, -39)
 	GearManagerToggleButton:GetNormalTexture():SetTexCoord(0.2000, 0.8160, 0.155, 0.90700)
 	GearManagerToggleButton:GetPushedTexture():SetTexCoord(0.1900, 0.8160, 0.175, 0.90700)
 	GearManagerToggleButton:GetHighlightTexture():SetTexture(1, 1, 1, 0.3)
@@ -425,7 +425,7 @@ local function LoadSkin()
 	SkillFrame:StripTextures(true)
 
 	S:HandleNextPrevButton(SkillDetailStatusBarUnlearnButton)
-	--S:SquareButton_SetIcon(SkillDetailStatusBarUnlearnButton, "DELETE")
+
 	SkillDetailStatusBarUnlearnButton:Size(24)
 	SkillDetailStatusBarUnlearnButton:Point("LEFT", SkillDetailStatusBarBorder, "RIGHT", 5, 0)
 	SkillDetailStatusBarUnlearnButton:SetHitRectInsets(0, 0, 0, 0)
