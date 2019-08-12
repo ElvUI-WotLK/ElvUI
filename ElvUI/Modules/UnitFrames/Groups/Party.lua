@@ -32,21 +32,13 @@ function UF:Construct_PartyFrames()
 
 		self.originalParent = self:GetParent()
 
-		local childDB = E.db.unitframe.units.party.petsGroup
 		self.childType = "pet"
 		if self == _G[self.originalParent:GetName().."Target"] then
-			childDB = E.db.unitframe.units.party.targetsGroup
 			self.childType = "target"
 		end
 
 		self.unitframeType = "party"..self.childType
-
-		self:SetAttribute("initial-width", childDB.width)
-		self:SetAttribute("initial-height", childDB.height)
 	else
-		self:SetAttribute("initial-width", E.db.unitframe.units.party.width)
-		self:SetAttribute("initial-height", E.db.unitframe.units.party.height)
-
 		self.Health = UF:Construct_HealthBar(self, true, true, "RIGHT")
 
 		self.Power = UF:Construct_PowerBar(self, true, true, "LEFT")
@@ -85,6 +77,9 @@ function UF:Construct_PartyFrames()
 	UF:Update_FontStrings()
 
 	UF:Update_PartyFrames(self, UF.db.units.party)
+
+	self:SetAttribute("initial-width", self.UNIT_WIDTH)
+	self:SetAttribute("initial-height", self.UNIT_HEIGHT)
 
 	return self
 end

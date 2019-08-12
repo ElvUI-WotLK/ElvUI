@@ -29,9 +29,6 @@ function UF:Construct_TankFrames()
 	self.Cutaway = UF:Construct_Cutaway(self)
 
 	if not self.isChild then
-		self:SetAttribute("initial-width", E.db.unitframe.units.tank.width)
-		self:SetAttribute("initial-height", E.db.unitframe.units.tank.height)
-
 		self.Buffs = UF:Construct_Buffs(self)
 		self.Debuffs = UF:Construct_Debuffs(self)
 		self.AuraWatch = UF:Construct_AuraWatch(self)
@@ -40,9 +37,6 @@ function UF:Construct_TankFrames()
 
 		self.unitframeType = "tank"
 	else
-		self:SetAttribute("initial-width", E.db.unitframe.units.tank.targetsGroup.width)
-		self:SetAttribute("initial-height", E.db.unitframe.units.tank.targetsGroup.height)
-
 		self.unitframeType = "tanktarget"
 	end
 
@@ -52,6 +46,9 @@ function UF:Construct_TankFrames()
 	self.originalParent = self:GetParent()
 
 	UF:Update_TankFrames(self, E.db.unitframe.units.tank)
+
+	self:SetAttribute("initial-width", self.UNIT_WIDTH)
+	self:SetAttribute("initial-height", self.UNIT_HEIGHT)
 
 	return self
 end

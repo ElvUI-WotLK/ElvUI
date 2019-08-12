@@ -29,9 +29,6 @@ function UF:Construct_AssistFrames()
 	self.Cutaway = UF:Construct_Cutaway(self)
 
 	if not self.isChild then
-		self:SetAttribute("initial-width", E.db.unitframe.units.assist.width)
-		self:SetAttribute("initial-height", E.db.unitframe.units.assist.height)
-
 		self.Buffs = UF:Construct_Buffs(self)
 		self.Debuffs = UF:Construct_Debuffs(self)
 		self.AuraWatch = UF:Construct_AuraWatch(self)
@@ -40,9 +37,6 @@ function UF:Construct_AssistFrames()
 
 		self.unitframeType = "assist"
 	else
-		self:SetAttribute("initial-width", E.db.unitframe.units.assist.targetsGroup.width)
-		self:SetAttribute("initial-height", E.db.unitframe.units.assist.targetsGroup.height)
-
 		self.unitframeType = "assisttarget"
 	end
 
@@ -51,6 +45,9 @@ function UF:Construct_AssistFrames()
 	UF:Update_AssistFrames(self, E.db.unitframe.units.assist)
 	UF:Update_StatusBars()
 	UF:Update_FontStrings()
+
+	self:SetAttribute("initial-width", self.UNIT_WIDTH)
+	self:SetAttribute("initial-height", self.UNIT_HEIGHT)
 
 	return self
 end

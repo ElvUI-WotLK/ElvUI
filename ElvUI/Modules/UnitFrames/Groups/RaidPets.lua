@@ -16,9 +16,6 @@ function UF:Construct_RaidpetFrames()
 	self:SetScript("OnEnter", UnitFrame_OnEnter)
 	self:SetScript("OnLeave", UnitFrame_OnLeave)
 
-	self:SetAttribute("initial-width", E.db.unitframe.units.raidpet.width)
-	self:SetAttribute("initial-height", E.db.unitframe.units.raidpet.height)
-
 	self.RaisedElementParent = CreateFrame("Frame", nil, self)
 	self.RaisedElementParent.TextureParent = CreateFrame("Frame", nil, self.RaisedElementParent)
 	self.RaisedElementParent:SetFrameLevel(self:GetFrameLevel() + 100)
@@ -46,6 +43,9 @@ function UF:Construct_RaidpetFrames()
 	UF:Update_StatusBars()
 	UF:Update_FontStrings()
 	UF:Update_RaidpetFrames(self, E.db.unitframe.units.raidpet)
+
+	self:SetAttribute("initial-width", self.UNIT_WIDTH)
+	self:SetAttribute("initial-height", self.UNIT_HEIGHT)
 
 	return self
 end

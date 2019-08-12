@@ -17,9 +17,6 @@ function UF:Construct_RaidFrames()
 	self:SetScript("OnEnter", UnitFrame_OnEnter)
 	self:SetScript("OnLeave", UnitFrame_OnLeave)
 
-	self:SetAttribute("initial-width", UF.db.units.raid.width)
-	self:SetAttribute("initial-height", UF.db.units.raid.height)
-
 	self.RaisedElementParent = CreateFrame("Frame", nil, self)
 	self.RaisedElementParent.TextureParent = CreateFrame("Frame", nil, self.RaisedElementParent)
 	self.RaisedElementParent:SetFrameLevel(self:GetFrameLevel() + 100)
@@ -58,8 +55,10 @@ function UF:Construct_RaidFrames()
 	UF:Update_StatusBars()
 	UF:Update_FontStrings()
 
+	UF:Update_RaidFrames(self, UF.db.units.raid)
 
-	UF:Update_RaidFrames(self, UF.db["units"]["raid"])
+	self:SetAttribute("initial-width", self.UNIT_WIDTH)
+	self:SetAttribute("initial-height", self.UNIT_HEIGHT)
 
 	return self
 end

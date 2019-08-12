@@ -1143,7 +1143,7 @@ do
 	function UF:PLAYER_ENTERING_WORLD()
 		if not hasEnteredWorld then
 			--We only want to run Update_AllFrames once when we first log in or /reload
-			E:Delay(.2, UF.Update_AllFrames, UF)
+			UF:Update_AllFrames()
 			hasEnteredWorld = true
 		else
 			local _, instanceType = IsInInstance()
