@@ -8,8 +8,8 @@ assert(ElvUF, "ElvUI was unable to locate oUF.")
 local _G = _G
 --WoW API / Variables
 local CreateFrame = CreateFrame
+local GetInstanceInfo = GetInstanceInfo
 local InCombatLockdown = InCombatLockdown
-local IsInInstance = IsInInstance
 local RegisterStateDriver = RegisterStateDriver
 local UnregisterStateDriver = UnregisterStateDriver
 
@@ -96,7 +96,7 @@ function UF:Update_PartyHeader(header, db)
 
 		header:RegisterEvent("PLAYER_LOGIN")
 		header:RegisterEvent("ZONE_CHANGED_NEW_AREA")
-		header:SetScript("OnEvent", UF["PartySmartVisibility"])
+		header:SetScript("OnEvent", UF.PartySmartVisibility)
 	end
 
 	UF.PartySmartVisibility(header)
@@ -108,14 +108,16 @@ function UF:PartySmartVisibility(event)
 		return
 	end
 
-	if event == "PLAYER_REGEN_ENABLED" then self:UnregisterEvent("PLAYER_REGEN_ENABLED") end
+	if event == "PLAYER_REGEN_ENABLED" then
+		self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+	end
 
 	if not InCombatLockdown() then
-		local inInstance, instanceType = IsInInstance()
-		if inInstance and (instanceType == "raid" or instanceType == "pvp") then
+		local _, instanceType = GetInstanceInfo()
+		if instanceType == "raid" or instanceType == "pvp" then
 			UnregisterStateDriver(self, "visibility")
-			self:Hide()
 			self.blockVisibilityChanges = true
+			self:Hide()
 		elseif self.db.visibility then
 			RegisterStateDriver(self, "visibility", self.db.visibility)
 			self.blockVisibilityChanges = false

@@ -9,7 +9,6 @@ assert(ElvUF, "ElvUI was unable to locate oUF.")
 local CreateFrame = CreateFrame
 local GetInstanceInfo = GetInstanceInfo
 local InCombatLockdown = InCombatLockdown
-local IsInInstance = IsInInstance
 local RegisterStateDriver = RegisterStateDriver
 local UnregisterStateDriver = UnregisterStateDriver
 
@@ -73,9 +72,8 @@ function UF:RaidSmartVisibility(event)
 
 	if not InCombatLockdown() then
 		self.isInstanceForced = nil
-		local inInstance, instanceType = IsInInstance()
-		if inInstance and (instanceType == "raid" or instanceType == "pvp") then
-			local _, _, _, _, maxPlayers = GetInstanceInfo()
+		local _, instanceType, _, _, maxPlayers = GetInstanceInfo()
+		if instanceType == "raid" or instanceType == "pvp" then
 			local mapID = GetCurrentMapAreaID()
 			if UF.instanceMapIDs[mapID] then
 				maxPlayers = UF.instanceMapIDs[mapID]
@@ -91,8 +89,8 @@ function UF:RaidSmartVisibility(event)
 					UF:CreateAndUpdateHeaderGroup("raid")
 				end
 			else
-				self:Hide()
 				self.blockVisibilityChanges = true
+				self:Hide()
 			end
 		elseif self.db.visibility then
 			RegisterStateDriver(self, "visibility", self.db.visibility)
@@ -118,7 +116,7 @@ function UF:Update_RaidHeader(header, db)
 
 		header:RegisterEvent("PLAYER_LOGIN")
 		header:RegisterEvent("ZONE_CHANGED_NEW_AREA")
-		header:SetScript("OnEvent", UF["RaidSmartVisibility"])
+		header:SetScript("OnEvent", UF.RaidSmartVisibility)
 		header.positioned = true
 	end
 

@@ -7,8 +7,8 @@ assert(ElvUF, "ElvUI was unable to locate oUF.")
 --Lua functions
 --WoW API / Variables
 local CreateFrame = CreateFrame
+local GetInstanceInfo = GetInstanceInfo
 local InCombatLockdown = InCombatLockdown
-local IsInInstance = IsInInstance
 local RegisterStateDriver = RegisterStateDriver
 local UnregisterStateDriver = UnregisterStateDriver
 
@@ -56,8 +56,8 @@ function UF:RaidPetsSmartVisibility(event)
 	if event == "PLAYER_REGEN_ENABLED" then self:UnregisterEvent("PLAYER_REGEN_ENABLED") end
 
 	if not InCombatLockdown() then
-		local inInstance, instanceType = IsInInstance()
-		if inInstance and instanceType == "raid" then
+		local _, instanceType = GetInstanceInfo()
+		if instanceType == "raid" then
 			UnregisterStateDriver(self, "visibility")
 			self:Show()
 		elseif self.db.visibility then
@@ -81,7 +81,7 @@ function UF:Update_RaidpetHeader(header, db)
 
 		header:RegisterEvent("PLAYER_LOGIN")
 		header:RegisterEvent("ZONE_CHANGED_NEW_AREA")
-		header:SetScript("OnEvent", UF["RaidPetsSmartVisibility"])
+		header:SetScript("OnEvent", UF.RaidPetsSmartVisibility)
 	end
 
 	UF.RaidPetsSmartVisibility(header)

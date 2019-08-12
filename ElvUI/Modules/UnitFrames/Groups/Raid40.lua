@@ -9,7 +9,6 @@ assert(ElvUF, "ElvUI was unable to locate oUF.")
 local CreateFrame = CreateFrame
 local GetInstanceInfo = GetInstanceInfo
 local InCombatLockdown = InCombatLockdown
-local IsInInstance = IsInInstance
 local RegisterStateDriver = RegisterStateDriver
 local UnregisterStateDriver = UnregisterStateDriver
 
@@ -67,13 +66,14 @@ function UF:Raid40SmartVisibility(event)
 		return
 	end
 
-	if event == "PLAYER_REGEN_ENABLED" then self:UnregisterEvent("PLAYER_REGEN_ENABLED") end
+	if event == "PLAYER_REGEN_ENABLED" then
+		self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+	end
 
 	if not InCombatLockdown() then
 		self.isInstanceForced = nil
-		local inInstance, instanceType = IsInInstance()
-		if inInstance and (instanceType == "raid" or instanceType == "pvp") then
-			local _, _, _, _, maxPlayers = GetInstanceInfo()
+		local _, instanceType, _, _, maxPlayers = GetInstanceInfo()
+		if instanceType == "raid" or instanceType == "pvp" then
 			local mapID = GetCurrentMapAreaID()
 			if UF.instanceMapIDs[mapID] then
 				maxPlayers = UF.instanceMapIDs[mapID]
@@ -82,19 +82,21 @@ function UF:Raid40SmartVisibility(event)
 			UnregisterStateDriver(self, "visibility")
 
 			if maxPlayers == 40 then
-				self:Show()
 				self.isInstanceForced = true
 				self.blockVisibilityChanges = false
+				self:Show()
+
 				if ElvUF_Raid40.numGroups ~= E:Round(maxPlayers/5) and event then
 					UF:CreateAndUpdateHeaderGroup("raid40")
 				end
 			else
-				self:Hide()
 				self.blockVisibilityChanges = true
+				self:Hide()
 			end
 		elseif self.db.visibility then
 			RegisterStateDriver(self, "visibility", self.db.visibility)
 			self.blockVisibilityChanges = false
+
 			if ElvUF_Raid40.numGroups ~= self.db.numGroups then
 				UF:CreateAndUpdateHeaderGroup("raid40")
 			end
@@ -116,7 +118,7 @@ function UF:Update_Raid40Header(header, db)
 
 		header:RegisterEvent("PLAYER_LOGIN")
 		header:RegisterEvent("ZONE_CHANGED_NEW_AREA")
-		header:SetScript("OnEvent", UF["Raid40SmartVisibility"])
+		header:SetScript("OnEvent", UF.Raid40SmartVisibility)
 		header.positioned = true
 	end
 

@@ -866,11 +866,12 @@ function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdat
 			end
 
 			if not self[group].mover then
-				UF.headerFunctions[group]:Update(self[group])
 				UF.headerFunctions[group]:UpdateHeader(self[group])
+				UF.headerFunctions[group]:Update(self[group])
 			end
 		else
 			UF.headerFunctions[group]:Configure_Groups(self[group])
+			UF.headerFunctions[group]:UpdateHeader(self[group])
 			UF.headerFunctions[group]:Update(self[group])
 		end
 
