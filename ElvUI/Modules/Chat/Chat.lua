@@ -1860,25 +1860,29 @@ function CH:Initialize()
 
 	GeneralDockManagerOverflowButton:ClearAllPoints()
 	GeneralDockManagerOverflowButton:Point("BOTTOMRIGHT", LeftChatTab, "BOTTOMRIGHT", -2, 2)
-	GeneralDockManagerOverflowButton:SetTemplate("Default")
 	GeneralDockManagerOverflowButtonList:SetTemplate("Transparent")
 	hooksecurefunc(GeneralDockManagerScrollFrame, "SetPoint", function(self, point, anchor, attachTo, x, y)
 		if anchor == GeneralDockManagerOverflowButton and x == 0 and y == 0 then
-			self:SetPoint(point, anchor, attachTo, -2, -6)
+			self:Point(point, anchor, attachTo, -2, -6)
 		end
 	end)
 
-	CombatLogQuickButtonFrame_Custom:StripTextures()
-	CombatLogQuickButtonFrame_Custom:CreateBackdrop("Default", true)
-	CombatLogQuickButtonFrame_Custom.backdrop:Point("TOPLEFT", 0, -1)
-	CombatLogQuickButtonFrame_Custom.backdrop:Point("BOTTOMRIGHT", -22, 1)
+	-- Combat Log Skinning (credit: Aftermathh)
+	local CombatLogButton = _G.CombatLogQuickButtonFrame_Custom
+	CombatLogButton:StripTextures()
+	CombatLogButton:CreateBackdrop("Default", true)
+	CombatLogButton.backdrop:Point("TOPLEFT", 0, -1)
+	CombatLogButton.backdrop:Point("BOTTOMRIGHT", -22, 1)
 
 	CombatLogQuickButtonFrame_CustomProgressBar:StripTextures()
 	CombatLogQuickButtonFrame_CustomProgressBar:SetStatusBarTexture(E.media.normTex)
-	CombatLogQuickButtonFrame_CustomProgressBar:Point("TOPLEFT", 0, 3)
+	CombatLogQuickButtonFrame_CustomProgressBar:SetStatusBarColor(0.31, 0.31, 0.31)
+	CombatLogQuickButtonFrame_CustomProgressBar:ClearAllPoints()
+	CombatLogQuickButtonFrame_CustomProgressBar:SetInside(CombatLogButton.backdrop)
 
+	Skins:HandleNextPrevButton(CombatLogQuickButtonFrame_CustomAdditionalFilterButton)
 	CombatLogQuickButtonFrame_CustomAdditionalFilterButton:Size(20, 22)
-	CombatLogQuickButtonFrame_CustomAdditionalFilterButton:Point("TOPRIGHT", CombatLogQuickButtonFrame_Custom, "TOPRIGHT", 0, -1)
+	CombatLogQuickButtonFrame_CustomAdditionalFilterButton:Point("TOPRIGHT", CombatLogButton, "TOPRIGHT", 0, -1)
 	CombatLogQuickButtonFrame_CustomAdditionalFilterButton:SetHitRectInsets(0, 0, 0, 0)
 end
 
