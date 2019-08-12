@@ -108,21 +108,24 @@ function UF:Raid40SmartVisibility(event)
 end
 
 function UF:Update_Raid40Header(header, db)
-	header.db = db
+	header:GetParent().db = db
 
-	if not header.positioned then
-		header:ClearAllPoints()
-		header:Point("BOTTOMLEFT", E.UIParent, "BOTTOMLEFT", 4, 195)
+	local headerHolder = header:GetParent()
+	headerHolder.db = db
 
-		E:CreateMover(header, header:GetName().."Mover", L["Raid-40 Frames"], nil, nil, nil, "ALL,RAID", nil, "unitframe,raid40,generalGroup")
+	if not headerHolder.positioned then
+		headerHolder:ClearAllPoints()
+		headerHolder:Point("BOTTOMLEFT", E.UIParent, "BOTTOMLEFT", 4, 195)
 
-		header:RegisterEvent("PLAYER_LOGIN")
-		header:RegisterEvent("ZONE_CHANGED_NEW_AREA")
-		header:SetScript("OnEvent", UF.Raid40SmartVisibility)
-		header.positioned = true
+		E:CreateMover(headerHolder, headerHolder:GetName().."Mover", L["Raid-40 Frames"], nil, nil, nil, "ALL,RAID", nil, "unitframe,raid40,generalGroup")
+
+		headerHolder:RegisterEvent("PLAYER_LOGIN")
+		headerHolder:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+		headerHolder:SetScript("OnEvent", UF.Raid40SmartVisibility)
+		headerHolder.positioned = true
 	end
 
-	UF.Raid40SmartVisibility(header)
+	UF.Raid40SmartVisibility(headerHolder)
 end
 
 function UF:Update_Raid40Frames(frame, db)

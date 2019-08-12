@@ -72,19 +72,22 @@ end
 function UF:Update_RaidpetHeader(header, db)
 	header.db = db
 
-	if not header.positioned then
-		header:ClearAllPoints()
-		header:Point("BOTTOMLEFT", E.UIParent, "BOTTOMLEFT", 4, 574)
+	local headerHolder = header:GetParent()
+	headerHolder.db = db
 
-		E:CreateMover(header, header:GetName().."Mover", L["Raid Pet Frames"], nil, nil, nil, "ALL,RAID10,RAID25,RAID40", nil, "unitframe,raidpet,generalGroup")
-		header.positioned = true
+	if not headerHolder.positioned then
+		headerHolder:ClearAllPoints()
+		headerHolder:Point("BOTTOMLEFT", E.UIParent, "BOTTOMLEFT", 4, 574)
 
-		header:RegisterEvent("PLAYER_LOGIN")
-		header:RegisterEvent("ZONE_CHANGED_NEW_AREA")
-		header:SetScript("OnEvent", UF.RaidPetsSmartVisibility)
+		E:CreateMover(headerHolder, headerHolder:GetName().."Mover", L["Raid Pet Frames"], nil, nil, nil, "ALL,RAID10,RAID25,RAID40", nil, "unitframe,raidpet,generalGroup")
+		headerHolder.positioned = true
+
+		headerHolder:RegisterEvent("PLAYER_LOGIN")
+		headerHolder:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+		headerHolder:SetScript("OnEvent", UF.RaidPetsSmartVisibility)
 	end
 
-	UF.RaidPetsSmartVisibility(header)
+	UF.RaidPetsSmartVisibility(headerHolder)
 end
 
 function UF:Update_RaidpetFrames(frame, db)

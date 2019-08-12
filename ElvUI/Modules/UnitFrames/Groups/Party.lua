@@ -87,19 +87,22 @@ end
 function UF:Update_PartyHeader(header, db)
 	header.db = db
 
-	if not header.positioned then
-		header:ClearAllPoints()
-		header:Point("BOTTOMLEFT", E.UIParent, "BOTTOMLEFT", 4, 195)
+	local headerHolder = header:GetParent()
+	headerHolder.db = db
 
-		E:CreateMover(header, header:GetName().."Mover", L["Party Frames"], nil, nil, nil, "ALL,PARTY,ARENA", nil, "unitframe,party,generalGroup")
-		header.positioned = true
+	if not headerHolder.positioned then
+		headerHolder:ClearAllPoints()
+		headerHolder:Point("BOTTOMLEFT", E.UIParent, "BOTTOMLEFT", 4, 195)
 
-		header:RegisterEvent("PLAYER_LOGIN")
-		header:RegisterEvent("ZONE_CHANGED_NEW_AREA")
-		header:SetScript("OnEvent", UF.PartySmartVisibility)
+		E:CreateMover(headerHolder, headerHolder:GetName().."Mover", L["Party Frames"], nil, nil, nil, "ALL,PARTY,ARENA", nil, "unitframe,party,generalGroup")
+		headerHolder.positioned = true
+
+		headerHolder:RegisterEvent("PLAYER_LOGIN")
+		headerHolder:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+		headerHolder:SetScript("OnEvent", UF.PartySmartVisibility)
 	end
 
-	UF.PartySmartVisibility(header)
+	UF.PartySmartVisibility(headerHolder)
 end
 
 function UF:PartySmartVisibility(event)

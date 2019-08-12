@@ -716,11 +716,6 @@ function UF.groupPrototype:AdjustVisibility(frame)
 	end
 end
 
-function UF.groupPrototype:UpdateHeader(frame)
-	local group = frame.groupName
-	UF["Update_"..E:StringTitle(group).."Header"](UF, frame, UF.db.units[group])
-end
-
 function UF.headerPrototype:ClearChildPoints()
 	for i = 1, self:GetNumChildren() do
 		local child = select(i, self:GetChildren())
@@ -731,6 +726,7 @@ end
 function UF.headerPrototype:Update()
 	local group = self.groupName
 	local db = UF.db.units[group]
+	UF["Update_"..E:StringTitle(group).."Header"](UF, self, db)
 
 	local i = 1
 	local child = self:GetAttribute("child"..i)
@@ -804,11 +800,9 @@ function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdat
 	local raidFilter = UF.db.smartRaidFilter
 	local numGroups = db.numGroups
 	if raidFilter and numGroups and (self[group] and not self[group].blockVisibilityChanges) then
-		local inInstance, instanceType = IsInInstance()
-		if inInstance and (instanceType == "raid" or instanceType == "pvp") then
-			local _, _, _, _, maxPlayers = GetInstanceInfo()
+		local _, instanceType, _, _, maxPlayers = GetInstanceInfo()
+		if instanceType == "raid" or instanceType == "pvp" then
 			local mapID = GetCurrentMapAreaID()
-
 			if UF.instanceMapIDs[mapID] then
 				maxPlayers = UF.instanceMapIDs[mapID]
 			end
@@ -866,12 +860,10 @@ function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdat
 			end
 
 			if not self[group].mover then
-				UF.headerFunctions[group]:UpdateHeader(self[group])
 				UF.headerFunctions[group]:Update(self[group])
 			end
 		else
 			UF.headerFunctions[group]:Configure_Groups(self[group])
-			UF.headerFunctions[group]:UpdateHeader(self[group])
 			UF.headerFunctions[group]:Update(self[group])
 		end
 
