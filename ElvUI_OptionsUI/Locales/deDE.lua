@@ -1490,7 +1490,7 @@ Für die meisten Anwender ist es allerdigns einfacher, eine tga-Datei in ihren W
 -- Global Strings
 L["ACHIEVEMENTS"] = "Erfolge"
 L["AFK"] = "AFK"
-L["ALT_KEY"] = "ALT"
+L["ALT_KEY_TEXT"] = "ALT"
 L["ARENA"] = "Arena"
 L["AUCTIONS"] = "Auktionen"
 L["BAGSLOT"] = "Tasche"

@@ -1486,7 +1486,7 @@ O también puedes simplemente colocar un archivo tga en la carpeta de WoW, y esc
 -- Global Strings
 L["ACHIEVEMENTS"] = "Logros"
 L["AFK"] = "Ausente"
-L["ALT_KEY"] = "ALT"
+L["ALT_KEY_TEXT"] = "ALT"
 L["ARENA"] = "Arena"
 L["AUCTIONS"] = "Subastas"
 L["BAGSLOT"] = "Bolsa"

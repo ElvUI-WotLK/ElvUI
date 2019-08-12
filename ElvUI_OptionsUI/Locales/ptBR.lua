@@ -1488,7 +1488,7 @@ Para a maioria dos usuários seria mais fácil simplesmente copiar o ficheiro tg
 -- Global Strings
 L["ACHIEVEMENTS"] = "Conquistas"
 L["AFK"] = "Ausente"
-L["ALT_KEY"] = "ALT"
+L["ALT_KEY_TEXT"] = "ALT"
 L["ARENA"] = "Arena"
 L["AUCTIONS"] = "Leilões"
 L["BAGSLOT"] = "Bolsa"

@@ -1486,7 +1486,7 @@ Ou pour la majorité des utilsateurs, il serait plus simple de mettre le fichier
 -- Global Strings
 L["ACHIEVEMENTS"] = "Hauts faits"
 L["AFK"] = "ABS"
-L["ALT_KEY"] = "ALT"
+L["ALT_KEY_TEXT"] = "ALT"
 L["ARENA"] = "Arène"
 L["AUCTIONS"] = "Ventes"
 L["BAGSLOT"] = "Sac"

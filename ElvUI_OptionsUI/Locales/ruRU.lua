@@ -1486,7 +1486,7 @@ Or for most users it would be easier to simply put a tga file into your WoW fold
 -- Global Strings
 L["ACHIEVEMENTS"] = "Достижения"
 L["AFK"] = "АФК"
-L["ALT_KEY"] = "ALT"
+L["ALT_KEY_TEXT"] = "ALT"
 L["ARENA"] = "Арена"
 L["AUCTIONS"] = "Лоты"
 L["BAGSLOT"] = "Сумка"
