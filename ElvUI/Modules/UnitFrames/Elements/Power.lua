@@ -45,6 +45,12 @@ function UF:Construct_PowerBar(frame, bg, text, textPos)
 	power.colorTapping = false
 	power:CreateBackdrop("Default", nil, nil, self.thinBorders, true)
 
+	local clipFrame = CreateFrame('Frame', nil, power)
+	clipFrame:SetAllPoints()
+	clipFrame:EnableMouse(false)
+	clipFrame.__frame = frame
+	power.ClipFrame = clipFrame
+
 	return power
 end
 

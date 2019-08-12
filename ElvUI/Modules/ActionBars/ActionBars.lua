@@ -19,6 +19,7 @@ local VehicleExit = VehicleExit
 local PetDismiss = PetDismiss
 local CanExitVehicle = CanExitVehicle
 local InCombatLockdown = InCombatLockdown
+local IsEquipped = IsEquipped
 local ClearOverrideBindings = ClearOverrideBindings
 local GetBindingKey = GetBindingKey
 local SetOverrideBindingClick = SetOverrideBindingClick
@@ -871,12 +872,16 @@ function AB:FixKeybindText(button)
 	end
 end
 
-local color
 function AB:LAB_ButtonUpdate(button)
-	color = AB.db.fontColor
+	local color = AB.db.fontColor
 	button.count:SetTextColor(color.r, color.g, color.b)
 	if button.config and (button.config.outOfRangeColoring ~= "hotkey") then
 		button.hotkey:SetTextColor(color.r, color.g, color.b)
+	end
+
+	color = (AB.db.equippedItem and button:IsEquipped() and AB.db.equippedItemColor) or E.media.bordercolor
+	if button.backdrop then
+		button.backdrop:SetBackdropBorderColor(color.r, color.g, color.b)
 	end
 end
 LAB.RegisterCallback(AB, "OnButtonUpdate", AB.LAB_ButtonUpdate)

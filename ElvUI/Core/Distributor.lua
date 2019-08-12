@@ -545,7 +545,6 @@ E.PopupDialogs.IMPORT_PROFILE_EXISTS = {
 		end
 	end,
 	OnShow = function(self) self.editBox:SetText(D.profileKey) self.editBox:SetFocus() end,
-	timeout = 0,
 	whileDead = 1,
 	hideOnEscape = true,
 	preferredIndex = 3
@@ -556,7 +555,6 @@ E.PopupDialogs.IMPORT_RL = {
 	button1 = ACCEPT,
 	button2 = CANCEL,
 	OnAccept = ReloadUI,
-	timeout = 0,
 	whileDead = 1,
 	hideOnEscape = false,
 	preferredIndex = 3
