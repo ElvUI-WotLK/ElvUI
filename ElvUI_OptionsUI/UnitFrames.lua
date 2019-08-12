@@ -2402,7 +2402,7 @@ E.Options.args.unitframe = {
 		playerShortcut = {
 			order = 11,
 			type = "execute",
-			name = L["PLAYER"],
+			name = L["Player"],
 			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "unitframe", "player") end,
 			disabled = function() return not E.UnitFrames.Initialized end
@@ -3541,7 +3541,7 @@ E.Options.args.unitframe = {
 						player = {
 							order = 2,
 							type = "toggle",
-							name = L["PLAYER"],
+							name = L["Player"],
 							desc = L["Disables the player and pet unitframes."]
 						},
 						target = {
@@ -3553,18 +3553,18 @@ E.Options.args.unitframe = {
 						focus = {
 							order = 4,
 							type = "toggle",
-							name = L["FOCUS"],
+							name = L["Focus"],
 							desc = L["Disables the focus and target of focus unitframes."]
 						},
 						boss = {
 							order = 5,
 							type = "toggle",
-							name = L["BOSS"]
+							name = L["Boss"]
 						},
 						arena = {
 							order = 6,
 							type = "toggle",
-							name = L["ARENA"]
+							name = L["Arena"]
 						},
 						party = {
 							order = 7,
@@ -3628,7 +3628,7 @@ E.Options.args.unitframe = {
 E.Options.args.unitframe.args.player = {
 	order = 300,
 	type = "group",
-	name = L["PLAYER"],
+	name = L["Player"],
 	childGroups = "tab",
 	get = function(info) return E.db.unitframe.units.player[info[#info]] end,
 	set = function(info, value) E.db.unitframe.units.player[info[#info]] = value UF:CreateAndUpdateUF("player") end,
@@ -3662,7 +3662,7 @@ E.Options.args.unitframe.args.player = {
 			order = 3,
 			type = "execute",
 			name = L["Restore Defaults"],
-			func = function(info) E:StaticPopup_Show("RESET_UF_UNIT", L["PLAYER"], nil, {unit="player", mover="Player Frame"}) end
+			func = function(info) E:StaticPopup_Show("RESET_UF_UNIT", L["Player"], nil, {unit="player", mover="Player Frame"}) end
 		},
 		copyFrom = {
 			order = 4,
