@@ -86,8 +86,8 @@ local function LoadSkin()
 		end
 	end)
 
-	S:HandleNextPrevButton(InboxPrevPageButton)
-	S:HandleNextPrevButton(InboxNextPageButton)
+	S:HandleNextPrevButton(InboxPrevPageButton, nil, nil, true)
+	S:HandleNextPrevButton(InboxNextPageButton, nil, nil, true)
 
 	S:HandleCloseButton(InboxCloseButton)
 
