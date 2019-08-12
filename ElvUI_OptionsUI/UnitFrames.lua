@@ -1223,7 +1223,7 @@ local function GetOptionsTable_Fader(updateFunc, groupName, numUnits)
 			focus = {
 				order = 8,
 				type = "toggle",
-				name = L["FOCUS"],
+				name = L["Focus"],
 				disabled = function() return not E.db.unitframe.units[groupName].fader.enable or E.db.unitframe.units[groupName].fader.range end
 			},
 			health = {
@@ -2444,7 +2444,7 @@ E.Options.args.unitframe = {
 		focusShortcut = {
 			order = 17,
 			type = "execute",
-			name = L["FOCUS"],
+			name = L["Focus"],
 			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "unitframe", "focus") end,
 			disabled = function() return not E.UnitFrames.Initialized end
@@ -4855,7 +4855,7 @@ E.Options.args.unitframe.args.targettargettarget = {
 E.Options.args.unitframe.args.focus = {
 	order = 600,
 	type = "group",
-	name = L["FOCUS"],
+	name = L["Focus"],
 	childGroups = "tab",
 	get = function(info) return E.db.unitframe.units.focus[info[#info]] end,
 	set = function(info, value) E.db.unitframe.units.focus[info[#info]] = value UF:CreateAndUpdateUF("focus") end,
@@ -4885,7 +4885,7 @@ E.Options.args.unitframe.args.focus = {
 			order = 3,
 			type = "execute",
 			name = L["Restore Defaults"],
-			func = function(info) E:StaticPopup_Show("RESET_UF_UNIT", L["FOCUS"], nil, {unit="focus", mover="Focus Frame"}) end
+			func = function(info) E:StaticPopup_Show("RESET_UF_UNIT", L["Focus"], nil, {unit="focus", mover="Focus Frame"}) end
 		},
 		copyFrom = {
 			order = 4,
