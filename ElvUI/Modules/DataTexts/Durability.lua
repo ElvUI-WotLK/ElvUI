@@ -3,7 +3,7 @@ local DT = E:GetModule("DataTexts")
 
 --Lua functions
 local pairs = pairs
-local format, join, upper = string.format, string.join, string.upper
+local format, join = string.format, string.join
 --WoW API / Variables
 local GetInventoryItemDurability = GetInventoryItemDurability
 local GetInventorySlotInfo = GetInventorySlotInfo
