@@ -213,11 +213,20 @@ local function LoadSkin()
 	-- Dropdown Menu
 	hooksecurefunc("UIDropDownMenu_InitializeHelper", function()
 		for i = 1, UIDROPDOWNMENU_MAXLEVELS do
-			_G["DropDownList"..i.."Backdrop"]:SetTemplate("Transparent")
-			_G["DropDownList"..i.."MenuBackdrop"]:SetTemplate("Transparent")
+			local dropBackdrop = _G["DropDownList"..i.."Backdrop"]
+			local dropMenuBackdrop = _G["DropDownList"..i.."MenuBackdrop"]
+
+			dropBackdrop:SetTemplate("Transparent")
+			dropMenuBackdrop:SetTemplate("Transparent")
+
 			for j = 1, UIDROPDOWNMENU_MAXBUTTONS do
-				_G["DropDownList"..i.."Button"..j]:SetFrameLevel(_G["DropDownList"..i.."Backdrop"]:GetFrameLevel() + 1)
-				_G["DropDownList"..i.."Button"..j.."Highlight"]:SetTexture(1, 1, 1, 0.3)
+				local button = _G["DropDownList"..i.."Button"..j]
+				local highlight = _G["DropDownList"..i.."Button"..j.."Highlight"]
+				local colorSwatch = _G["DropDownList"..i.."Button"..j.."ColorSwatch"]
+
+				button:SetFrameLevel(dropBackdrop:GetFrameLevel() + 1)
+				highlight:SetTexture(1, 1, 1, 0.3)
+				S:HandleColorSwatch(colorSwatch, 14)
 			end
 		end
 	end)

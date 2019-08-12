@@ -563,11 +563,14 @@ local function LoadSkin()
 
 	S:HandleButton(ChatConfigFrameOkayButton)
 
+	S:HandleColorSwatch(CombatConfigColorsColorizeSpellNamesColorSwatch)
+	S:HandleColorSwatch(CombatConfigColorsColorizeDamageNumberColorSwatch)
+
 	S:SecureHook("ChatConfig_CreateCheckboxes", function(frame, checkBoxTable, checkBoxTemplate)
 		local checkBoxNameString = frame:GetName().."CheckBox"
 		if checkBoxTemplate == "ChatConfigCheckBoxTemplate" then
 			frame:SetTemplate("Transparent")
-			for index, _ in ipairs(checkBoxTable) do
+			for index in ipairs(checkBoxTable) do
 				local checkBoxName = checkBoxNameString..index
 				local checkbox = _G[checkBoxName]
 				if not checkbox.backdrop then
@@ -582,9 +585,11 @@ local function LoadSkin()
 			end
 		elseif checkBoxTemplate == "ChatConfigCheckBoxWithSwatchTemplate" or checkBoxTemplate == "ChatConfigCheckBoxWithSwatchAndClassColorTemplate" then
 			frame:SetTemplate("Transparent")
-			for index, _ in ipairs(checkBoxTable) do
+			for index in ipairs(checkBoxTable) do
 				local checkBoxName = checkBoxNameString..index
 				local checkbox = _G[checkBoxName]
+				local colorSwatch = _G[checkBoxName.."ColorSwatch"]
+
 				if not checkbox.backdrop then
 					checkbox:StripTextures()
 					checkbox:CreateBackdrop()
@@ -597,6 +602,8 @@ local function LoadSkin()
 					if checkBoxTemplate == "ChatConfigCheckBoxWithSwatchAndClassColorTemplate" then
 						S:HandleCheckBox(_G[checkBoxName.."ColorClasses"])
 					end
+
+					S:HandleColorSwatch(colorSwatch)
 				end
 			end
 		end
@@ -606,6 +613,7 @@ local function LoadSkin()
 		local checkBoxNameString = frame:GetName().."CheckBox"
 		for index, value in ipairs(checkBoxTable) do
 			local checkBoxName = checkBoxNameString..index
+
 			if _G[checkBoxName] then
 				S:HandleCheckBox(_G[checkBoxName])
 				if value.subTypes then
@@ -624,15 +632,20 @@ local function LoadSkin()
 	S:SecureHook("ChatConfig_CreateColorSwatches", function(frame, swatchTable)
 		frame:SetTemplate("Transparent")
 		local nameString = frame:GetName().."Swatch"
-		for index, _ in ipairs(swatchTable) do
+
+		for index in ipairs(swatchTable) do
 			local swatchName = nameString..index
 			local swatch = _G[swatchName]
+			local colorSwatch = _G[swatchName.."ColorSwatch"]
+
 			if not swatch.backdrop then
 				swatch:StripTextures()
 				swatch:CreateBackdrop()
 				swatch.backdrop:Point("TOPLEFT", 3, -1)
 				swatch.backdrop:Point("BOTTOMRIGHT", -3, 1)
 				swatch.backdrop:SetFrameLevel(swatch:GetParent():GetFrameLevel() + 1)
+
+				S:HandleColorSwatch(colorSwatch)
 			end
 		end
 	end)
