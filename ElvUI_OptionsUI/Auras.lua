@@ -126,7 +126,7 @@ E.Options.args.auras = {
 		enable = {
 			order = 2,
 			type = "toggle",
-			name = L["ENABLE"],
+			name = L["Enable"],
 			get = function(info) return E.private.auras[info[#info]] end,
 			set = function(info, value)
 				E.private.auras[info[#info]] = value
@@ -248,7 +248,7 @@ E.Options.args.auras = {
 				enable = {
 					order = 2,
 					type = "toggle",
-					name = L["ENABLE"],
+					name = L["Enable"],
 					desc = L["Display reminder bar on the minimap."],
 					set = function(info, value) E.db.general.reminder[info[#info]] = value M:UpdateSettings() end
 				},

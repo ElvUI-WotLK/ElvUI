@@ -283,7 +283,7 @@ local function BuildABConfig()
 					enable = {
 						order = 1,
 						type = "toggle",
-						name = L["ENABLE"],
+						name = L["Enable"],
 						desc = L["Allow LBF to handle the skinning of this element."]
 					}
 				}
@@ -308,7 +308,7 @@ local function BuildABConfig()
 				enabled = {
 					order = 2,
 					type = "toggle",
-					name = L["ENABLE"],
+					name = L["Enable"],
 					set = function(info, value) E.db.actionbar.barTotem[info[#info]] = value E:StaticPopup_Show("PRIVATE_RL") end
 				},
 				restorePosition = {
@@ -410,7 +410,7 @@ local function BuildABConfig()
 			enabled = {
 				order = 2,
 				type = "toggle",
-				name = L["ENABLE"]
+				name = L["Enable"]
 			},
 			restorePosition = {
 				order = 3,
@@ -554,7 +554,7 @@ local function BuildABConfig()
 			enabled = {
 				order = 2,
 				type = "toggle",
-				name = L["ENABLE"]
+				name = L["Enable"]
 			},
 			restorePosition = {
 				order = 3,
@@ -714,7 +714,7 @@ local function BuildABConfig()
 			enabled = {
 				order = 2,
 				type = "toggle",
-				name = L["ENABLE"]
+				name = L["Enable"]
 			},
 			restoreMicrobar = {
 				order = 3,
@@ -807,7 +807,7 @@ local function BuildABConfig()
 				enabled = {
 					order = 2,
 					type = "toggle",
-					name = L["ENABLE"],
+					name = L["Enable"],
 					set = function(info, value)
 						E.db.actionbar["bar"..i][info[#info]] = value
 						AB:PositionAndSizeBar("bar"..i)
@@ -991,7 +991,7 @@ E.Options.args.actionbar = {
 		enable = {
 			order = 1,
 			type = "toggle",
-			name = L["ENABLE"],
+			name = L["Enable"],
 			get = function(info) return E.private.actionbar[info[#info]] end,
 			set = function(info, value) E.private.actionbar[info[#info]] = value E:StaticPopup_Show("PRIVATE_RL") end
 		},

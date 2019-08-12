@@ -34,7 +34,7 @@ E.Options.args.databars = {
 				enable = {
 					order = 2,
 					type = "toggle",
-					name = L["ENABLE"],
+					name = L["Enable"],
 					set = function(info, value) mod.db.experience[info[#info]] = value mod:EnableDisable_ExperienceBar() end
 				},
 				mouseover = {
@@ -139,7 +139,7 @@ E.Options.args.databars = {
 				enable = {
 					order = 2,
 					type = "toggle",
-					name = L["ENABLE"],
+					name = L["Enable"],
 					set = function(info, value) mod.db.reputation[info[#info]] = value mod:EnableDisable_ReputationBar() end
 				},
 				mouseover = {

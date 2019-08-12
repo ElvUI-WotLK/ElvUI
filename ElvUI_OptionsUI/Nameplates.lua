@@ -311,7 +311,7 @@ local function UpdateFilterGroup()
 				enable = {
 					order = 0,
 					type = "toggle",
-					name = L["ENABLE"],
+					name = L["Enable"],
 					get = function(info)
 						return (E.db.nameplates and E.db.nameplates.filters and E.db.nameplates.filters[selectedNameplateFilter] and E.db.nameplates.filters[selectedNameplateFilter].triggers and E.db.nameplates.filters[selectedNameplateFilter].triggers.enable)
 					end,
@@ -597,7 +597,7 @@ local function UpdateFilterGroup()
 						enable = {
 							order = 1,
 							type = "toggle",
-							name = L["ENABLE"],
+							name = L["Enable"],
 							get = function(info)
 								return E.global.nameplates.filters[selectedNameplateFilter].triggers.healthThreshold
 							end,
@@ -668,7 +668,7 @@ local function UpdateFilterGroup()
 						powerThreshold = {
 							order = 1,
 							type = "toggle",
-							name = L["ENABLE"],
+							name = L["Enable"],
 							desc = L["Enabling this will check your power amount."],
 							get = function(info)
 								return E.global.nameplates.filters[selectedNameplateFilter].triggers.powerThreshold
@@ -726,7 +726,7 @@ local function UpdateFilterGroup()
 						enable = {
 							order = 1,
 							type = "toggle",
-							name = L["ENABLE"],
+							name = L["Enable"],
 							get = function(info)
 								return E.global.nameplates.filters[selectedNameplateFilter].triggers.level
 							end,
@@ -1062,7 +1062,7 @@ local function UpdateFilterGroup()
 						enable = {
 							order = 0,
 							type = "toggle",
-							name = L["ENABLE"],
+							name = L["Enable"],
 							get = function(info)
 								return E.global.nameplates.filters[selectedNameplateFilter].triggers.nameplateType and E.global.nameplates.filters[selectedNameplateFilter].triggers.nameplateType.enable
 							end,
@@ -1139,7 +1139,7 @@ local function UpdateFilterGroup()
 						enable = {
 							order = 0,
 							type = "toggle",
-							name = L["ENABLE"],
+							name = L["Enable"],
 							get = function(info)
 								return E.global.nameplates.filters[selectedNameplateFilter].triggers.reactionType and E.global.nameplates.filters[selectedNameplateFilter].triggers.reactionType.enable
 							end,
@@ -1457,7 +1457,7 @@ local function UpdateFilterGroup()
 						enable = {
 							order = 1,
 							type = "toggle",
-							name = L["ENABLE"],
+							name = L["Enable"],
 							get = function(info)
 								return E.global.nameplates.filters[selectedNameplateFilter].actions.texture.enable
 							end,
@@ -1491,7 +1491,7 @@ local function UpdateFilterGroup()
 					disabled = function() return E.global.nameplates.filters[selectedNameplateFilter].actions.hide end,
 					args = {
 						enable = {
-							name = L["ENABLE"],
+							name = L["Enable"],
 							order = 1,
 							type = "toggle",
 							get = function(info)
@@ -1596,7 +1596,7 @@ local function GetUnitSettings(unit, name)
 					enable = {
 						order = 2,
 						type = "toggle",
-						name = L["ENABLE"]
+						name = L["Enable"]
 					},
 					height = {
 						order = 3,
@@ -1621,7 +1621,7 @@ local function GetUnitSettings(unit, name)
 							enable = {
 								order = 1,
 								type = "toggle",
-								name = L["ENABLE"]
+								name = L["Enable"]
 							},
 							format = {
 								order = 2,
@@ -1655,7 +1655,7 @@ local function GetUnitSettings(unit, name)
 					enable = {
 						order = 2,
 						type = "toggle",
-						name = L["ENABLE"]
+						name = L["Enable"]
 					},
 					hideSpellName = {
 						order = 3,
@@ -1733,7 +1733,7 @@ local function GetUnitSettings(unit, name)
 					enable = {
 						order = 2,
 						type = "toggle",
-						name = L["ENABLE"],
+						name = L["Enable"],
 						get = function(info) return E.db.nameplates.units[unit].buffs[info[#info]] end,
 						set = function(info, value) E.db.nameplates.units[unit].buffs[info[#info]] = value NP:ConfigureAll() end
 					},
@@ -1911,7 +1911,7 @@ local function GetUnitSettings(unit, name)
 					enable = {
 						order = 2,
 						type = "toggle",
-						name = L["ENABLE"],
+						name = L["Enable"],
 						get = function(info) return E.db.nameplates.units[unit].debuffs[info[#info]] end,
 						set = function(info, value) E.db.nameplates.units[unit].debuffs[info[#info]] = value NP:ConfigureAll() end
 					},
@@ -2086,7 +2086,7 @@ local function GetUnitSettings(unit, name)
 					enable = {
 						order = 2,
 						type = "toggle",
-						name = L["ENABLE"],
+						name = L["Enable"],
 						get = function(info) return E.db.nameplates.units[unit].showLevel end,
 						set = function(info, value) E.db.nameplates.units[unit].showLevel = value NP:ConfigureAll() end
 					}
@@ -2107,7 +2107,7 @@ local function GetUnitSettings(unit, name)
 					enable = {
 						order = 2,
 						type = "toggle",
-						name = L["ENABLE"],
+						name = L["Enable"],
 						get = function(info) return E.db.nameplates.units[unit].showName end,
 						set = function(info, value) E.db.nameplates.units[unit].showName = value NP:ConfigureAll() end
 					}
@@ -2133,7 +2133,7 @@ local function GetUnitSettings(unit, name)
 					markHealers = {
 						order = 2,
 						type = "toggle",
-						name = L["ENABLE"],
+						name = L["Enable"],
 						desc = L["Display a healer icon over known healers inside battlegrounds or arenas."]
 					}
 				}
@@ -2153,7 +2153,7 @@ local function GetUnitSettings(unit, name)
 					enable = {
 						order = 2,
 						type = "toggle",
-						name = L["ENABLE"]
+						name = L["Enable"]
 					},
 					width = {
 						order = 3,
@@ -2219,7 +2219,7 @@ local function GetUnitSettings(unit, name)
 				enable = {
 					order = 2,
 					type = "toggle",
-					name = L["ENABLE"]
+					name = L["Enable"]
 				},
 				position = {
 					order = 3,
@@ -2278,7 +2278,7 @@ local function GetUnitSettings(unit, name)
 					enable = {
 						order = 2,
 						type = "toggle",
-						name = L["ENABLE"]
+						name = L["Enable"]
 					},
 					width = {
 						order = 3,
@@ -2334,7 +2334,7 @@ E.Options.args.nameplate = {
 		enable = {
 			order = 1,
 			type = "toggle",
-			name = L["ENABLE"],
+			name = L["Enable"],
 			get = function(info) return E.private.nameplates[info[#info]] end,
 			set = function(info, value) E.private.nameplates[info[#info]] = value E:StaticPopup_Show("PRIVATE_RL") end
 		},
@@ -2983,7 +2983,7 @@ E.Options.args.nameplate = {
 						enabled = {
 							order = 2,
 							type = "toggle",
-							name = L["ENABLE"],
+							name = L["Enable"],
 							get = function(info) return E.db.nameplates.cutawayHealth end,
 							set = function(info, value) E.db.nameplates.cutawayHealth = value end,
 						},

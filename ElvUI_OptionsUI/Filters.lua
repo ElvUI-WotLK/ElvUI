@@ -136,7 +136,7 @@ local function UpdateFilterGroup()
 				enableReset = {
 					order = 1,
 					type = "toggle",
-					name = L["ENABLE"],
+					name = L["Enable"],
 					get = function(info) return FilterResetState[selectedFilter] end,
 					set = function(info, value)
 						FilterResetState[selectedFilter] = value
@@ -177,7 +177,7 @@ local function UpdateFilterGroup()
 				enabled = {
 					order = 0,
 					type = "toggle",
-					name = L["ENABLE"],
+					name = L["Enable"],
 					get = function(info)
 						return E.global.unitframe.DebuffHighlightColors[(spellID or selectedSpell)].enable
 					end,
@@ -317,7 +317,7 @@ local function UpdateFilterGroup()
 				enableReset = {
 					order = 1,
 					type = "toggle",
-					name = L["ENABLE"],
+					name = L["Enable"],
 					get = function(info) return FilterResetState[selectedFilter] end,
 					set = function(info, value)
 						FilterResetState[selectedFilter] = value
@@ -487,7 +487,7 @@ local function UpdateFilterGroup()
 				enableReset = {
 					order = 1,
 					type = "toggle",
-					name = L["ENABLE"],
+					name = L["Enable"],
 					get = function(info) return FilterResetState[selectedFilter] end,
 					set = function(info, value)
 						FilterResetState[selectedFilter] = value
@@ -524,7 +524,7 @@ local function UpdateFilterGroup()
 						enabled = {
 							order = 0,
 							type = "toggle",
-							name = L["ENABLE"],
+							name = L["Enable"],
 						},
 						point = {
 							order = 1,
@@ -738,7 +738,7 @@ local function UpdateFilterGroup()
 				enableReset = {
 					order = 1,
 					type = "toggle",
-					name = L["ENABLE"],
+					name = L["Enable"],
 					get = function(info) return FilterResetState[selectedFilter] end,
 					set = function(info, value)
 						FilterResetState[selectedFilter] = value
@@ -781,7 +781,7 @@ local function UpdateFilterGroup()
 					enabled = {
 						order = 0,
 						type = "toggle",
-						name = L["ENABLE"]
+						name = L["Enable"]
 					},
 					point = {
 						order = 1,
@@ -993,7 +993,7 @@ local function UpdateFilterGroup()
 				enableReset = {
 					order = 1,
 					type = "toggle",
-					name = L["ENABLE"],
+					name = L["Enable"],
 					get = function(info) return FilterResetState[selectedFilter] end,
 					set = function(info, value)
 						FilterResetState[selectedFilter] = value
@@ -1040,7 +1040,7 @@ local function UpdateFilterGroup()
 					enabled = {
 						order = 0,
 						type = "toggle",
-						name = L["ENABLE"]
+						name = L["Enable"]
 					},
 					point = {
 						order = 1,
@@ -1284,7 +1284,7 @@ local function UpdateFilterGroup()
 					enableReset = {
 						order = 1,
 						type = "toggle",
-						name = L["ENABLE"],
+						name = L["Enable"],
 						get = function(info) return FilterResetState[selectedFilter] end,
 						set = function(info, value)
 							FilterResetState[selectedFilter] = value
@@ -1326,7 +1326,7 @@ local function UpdateFilterGroup()
 				enable = {
 					order = 1,
 					type = "toggle",
-					name = L["ENABLE"],
+					name = L["Enable"],
 					get = function()
 						if not (spellID or selectedSpell) then
 							return false

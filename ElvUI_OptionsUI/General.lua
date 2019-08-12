@@ -403,7 +403,7 @@ E.Options.args.general = {
 				enable = {
 					order = 2,
 					type = "toggle",
-					name = L["ENABLE"],
+					name = L["Enable"],
 					set = function(info, value) E.db.general.totems[info[#info]] = value Totems:ToggleEnable() end
 				},
 				size = {
@@ -539,7 +539,7 @@ E.Options.args.general = {
 				enable = {
 					order = 2,
 					type = "toggle",
-					name = L["ENABLE"],
+					name = L["Enable"],
 					set = function(info, value) E.db.general.threat.enable = value Threat:ToggleEnable()end
 				},
 				position = {
