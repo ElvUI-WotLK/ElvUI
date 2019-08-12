@@ -1872,7 +1872,7 @@ function CH:Initialize()
 	CombatLogButton:StripTextures()
 	CombatLogButton:CreateBackdrop("Default", true)
 	CombatLogButton.backdrop:Point("TOPLEFT", 0, -1)
-	CombatLogButton.backdrop:Point("BOTTOMRIGHT", -22, 1)
+	CombatLogButton.backdrop:Point("BOTTOMRIGHT", -22, -1)
 
 	CombatLogQuickButtonFrame_CustomProgressBar:StripTextures()
 	CombatLogQuickButtonFrame_CustomProgressBar:SetStatusBarTexture(E.media.normTex)
