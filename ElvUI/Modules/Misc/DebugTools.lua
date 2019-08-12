@@ -24,7 +24,7 @@ function D:ModifyErrorFrame()
 		end
 
 		if index > 0 then
-			ScriptErrorsFrame.locals[index] = ScriptErrorsFrame.locals[index] or L["No locals to dump"]
+			ScriptErrorsFrame.locals[index] = ScriptErrorsFrame.locals[index] or "No locals to dump"
 		end
 
 		Orig_ScriptErrorsFrame_Update(...)

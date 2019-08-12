@@ -170,29 +170,22 @@ end
 --General
 local function CreateGeneralConfig()
 	local config = MC:CreateModuleConfigGroup(L["General"], "general")
-	config.args.altPowerBar = {
-		order = 2,
-		type = "toggle",
-		name = L["Alternative Power"],
-		get = function(info) return E.global.profileCopy.general[info[#info]] end,
-		set = function(info, value) E.global.profileCopy.general[info[#info]] = value end
-	}
 	config.args.minimap = {
-		order = 3,
+		order = 2,
 		type = "toggle",
 		name = L["MINIMAP_LABEL"],
 		get = function(info) return E.global.profileCopy.general[info[#info]] end,
 		set = function(info, value) E.global.profileCopy.general[info[#info]] = value end
 	}
 	config.args.threat = {
-		order = 4,
+		order = 3,
 		type = "toggle",
 		name = L["Threat"],
 		get = function(info) return E.global.profileCopy.general[info[#info]] end,
 		set = function(info, value) E.global.profileCopy.general[info[#info]] = value end
 	}
 	config.args.totems = {
-		order = 5,
+		order = 4,
 		type = "toggle",
 		name = L["Class Totems"],
 		get = function(info) return E.global.profileCopy.general[info[#info]] end,

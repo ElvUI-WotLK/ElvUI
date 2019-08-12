@@ -737,7 +737,7 @@ do
 
 				if msg and (msg > ver) then -- you're outdated D:
 					if not E.recievedOutOfDateMessage then
-						E:Print(L["ElvUI is out of date. You can download the newest version from https://github.com/ElvUI-WotLK"])
+						E:Print(L["ElvUI is out of date. You can download the newest version from https://github.com/ElvUI-WotLK/ElvUI"])
 
 						if msg and ((msg - ver) >= 0.01) and not inCombat then
 							E:StaticPopup_Show("ELVUI_UPDATE_AVAILABLE")

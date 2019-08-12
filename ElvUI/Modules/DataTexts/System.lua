@@ -109,7 +109,7 @@ local function ToggleGameMenuFrame()
 end
 
 local function OnClick(_, btn)
-	if btn == "RightButton" then
+	if IsModifierKeyDown() then
 		collectgarbage("collect")
 		ResetCPUUsage()
 	elseif btn == "LeftButton" then
@@ -157,6 +157,7 @@ local function OnEnter(self)
 		DT.tooltip:AddLine(L["(Hold Shift) Memory Usage"])
 	end
 
+	DT.tooltip:AddLine(L["(Modifer Click) Collect Garbage"])
 	DT.tooltip:Show()
 end
 
