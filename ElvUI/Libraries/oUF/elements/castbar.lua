@@ -22,16 +22,16 @@ A default texture will be applied to the StatusBar and Texture widgets if they d
 
 ## Options
 
-.timeToHold      - indicates for how many seconds the castbar should be visible after a _FAILED or _INTERRUPTED
+.timeToHold      - Indicates for how many seconds the castbar should be visible after a _FAILED or _INTERRUPTED
                    event. Defaults to 0 (number)
-.hideTradeSkills - makes the element ignore casts related to crafting professions (boolean)
+.hideTradeSkills - Makes the element ignore casts related to crafting professions (boolean)
 
 ## Attributes
 
-.castID           - a globally unique identifier of the currently cast spell (string?)
-.casting          - indicates whether the current spell is an ordinary cast (boolean)
-.channeling       - indicates whether the current spell is a channeled cast (boolean)
-.notInterruptible - indicates whether the current spell is interruptible (boolean)
+.castID           - A globally unique identifier of the currently cast spell (string?)
+.casting          - Indicates whether the current spell is an ordinary cast (boolean)
+.channeling       - Indicates whether the current spell is a channeled cast (boolean)
+.notInterruptible - Indicates whether the current spell is interruptible (boolean)
 
 ## Examples
 
@@ -88,13 +88,28 @@ A default texture will be applied to the StatusBar and Texture widgets if they d
 local _, ns = ...
 local oUF = ns.oUF
 
+local DEFAULT_ICON = [[Interface\ICONS\INV_Misc_QuestionMark]]
+
+-- ElvUI block
+local select = select
 local GetNetStats = GetNetStats
 local GetTime = GetTime
 local UnitCastingInfo = UnitCastingInfo
 local UnitChannelInfo = UnitChannelInfo
-local tradeskillCurrent, tradeskillTotal, mergeTradeskill = 0, 0, false -- ElvUI
+local FAILED = FAILED
+local INTERRUPTED = INTERRUPTED
 
-local DEFAULT_ICON = [[Interface\ICONS\INV_Misc_QuestionMark]]
+local tradeskillCastTime, tradeskillCastDuration, tradeskillCurrent, tradeskillTotal, mergeTradeskill = 0, 0, 0, 0, false -- ElvUI
+-- ElvUI block
+local UNIT_SPELLCAST_SENT = function (self, event, unit, _, _, target, castID)
+	local castbar = self.Castbar
+	castbar.curTarget = (target and target ~= "") and target or nil
+
+	if castbar.isTradeSkill then
+		castbar.tradeSkillCastId = castID
+	end
+end
+-- end block
 
 local function resetAttributes(self)
 	self.castID = nil
@@ -103,13 +118,6 @@ local function resetAttributes(self)
 	self.notInterruptible = nil
 	self.spellName = nil -- ElvUI
 end
-
--- ElvUI block
-local UNIT_SPELLCAST_SENT = function (self, event, unit, _, _, target)
-	local castbar = self.Castbar
-	castbar.curTarget = (target and target ~= "") and target or nil
-end
--- end block
 
 local function CastStart(self, event, unit)
 	if(self.unit ~= unit) then return end
@@ -148,16 +156,20 @@ local function CastStart(self, event, unit)
 		element.duration = endTime - GetTime()
 	end
 
-	if(mergeTradeskill and isTradeSkill and UnitIsUnit(unit, "player")) then
-		element.duration = element.duration + (element.max * tradeskillCurrent);
-		element.max = element.max * tradeskillTotal;
+	-- ElvUI block
+	if(mergeTradeskill and isTradeSkill and self.unit == 'player') then
+		element.duration = element.duration + (element.max * tradeskillCurrent)
+		element.max = element.max * tradeskillTotal
 		element.holdTime = 1
 		element.tradeSkillCastId = castID
 
 		if(unit == "player") then
-			tradeskillCurrent = tradeskillCurrent + 1;
+			tradeskillCurrent = tradeskillCurrent + 1
+			tradeskillCastTime = element.max
+			tradeskillCastDuration = element.duration
 		end
 	end
+	-- end block
 
 	element:SetMinMaxValues(0, element.max)
 	element:SetValue(element.duration)
@@ -166,7 +178,7 @@ local function CastStart(self, event, unit)
 	if(element.Shield) then element.Shield:SetShown(notInterruptible) end
 	if(element.Spark) then element.Spark:Show() end
 	if(element.Text) then element.Text:SetText(name) end
-	if(element.Time) then element.Time:SetText('') end
+	if(element.Time) then element.Time:SetText() end
 
 	local safeZone = element.SafeZone
 	if(safeZone) then
@@ -265,9 +277,9 @@ local function CastStop(self, event, unit, _, _, castID)
 	end
 
 	-- ElvUI block
-	if(mergeTradeskill and UnitIsUnit(unit, "player")) then
-		if(tradeskillCurrent == tradeskillTotal) then
-			mergeTradeskill = false;
+	if mergeTradeskill and self.unit == 'player' then
+		if tradeskillCurrent == tradeskillTotal then
+			mergeTradeskill = false
 		end
 	end
 	-- end block
@@ -302,8 +314,8 @@ local function CastFail(self, event, unit, _, _, castID)
 	element.holdTime = element.timeToHold or 0
 
 	-- ElvUI block
-	if(mergeTradeskill and UnitIsUnit(unit, "player")) then
-		mergeTradeskill = false;
+	if mergeTradeskill and self.unit == 'player' then
+		mergeTradeskill = false
 		element.tradeSkillCastId = nil
 	end
 	-- end block
@@ -348,7 +360,7 @@ local function onUpdate(self, elapsed)
 		local isCasting = self.casting
 		if(isCasting) then
 			self.duration = self.duration + elapsed
-			if(self.duration >= self.max) then
+			if(self.duration >= self.max or (tradeskillTotal > 1 and self.duration >= (tradeskillCastDuration + tradeskillCastTime * 1.25))) then
 
 				resetAttributes(self)
 				self:Hide()
@@ -391,7 +403,7 @@ local function onUpdate(self, elapsed)
 		end
 
 		self:SetValue(self.duration)
-	elseif (self.holdTime > 0) then
+	elseif(self.holdTime > 0) then
 		self.holdTime = self.holdTime - elapsed
 	else
 		resetAttributes(self)
@@ -426,6 +438,7 @@ local function Enable(self, unit)
 
 		-- ElvUI block
 		self:RegisterEvent('UNIT_SPELLCAST_SENT', UNIT_SPELLCAST_SENT, true)
+		element:Hide()
 		-- end block
 
 		element.holdTime = 0
@@ -455,8 +468,6 @@ local function Enable(self, unit)
 		if(safeZone and safeZone:IsObjectType('Texture') and not safeZone:GetTexture()) then
 			safeZone:SetColorTexture(1, 0, 0)
 		end
-
-		element:Hide()
 
 		return true
 	end
@@ -491,6 +502,8 @@ end
 
 -- ElvUI block
 hooksecurefunc('DoTradeSkill', function(_, num)
+	tradeskillCastTime = 0
+	tradeskillCastDuration = 0
 	tradeskillCurrent = 0
 	tradeskillTotal = num or 1
 	mergeTradeskill = true
@@ -500,44 +513,44 @@ end)
 oUF:AddElement('Castbar', Update, Enable, Disable)
 
 function CastingBarFrame_SetUnit(self, unit, showTradeSkills, showShield)
-	if self.unit ~= unit then
-		self.unit = unit;
-		self.showTradeSkills = showTradeSkills;
-		self.showShield = showShield;
+	if(self.unit ~= unit) then
+		self.unit = unit
+		self.showTradeSkills = showTradeSkills
+		self.showShield = showShield
 
-		self.casting = nil;
-		self.channeling = nil;
-		self.holdTime = 0;
-		self.fadeOut = nil;
+		self.casting = nil
+		self.channeling = nil
+		self.holdTime = 0
+		self.fadeOut = nil
 
-		if unit then
-			self:RegisterEvent("UNIT_SPELLCAST_START");
-			self:RegisterEvent("UNIT_SPELLCAST_STOP");
-			self:RegisterEvent("UNIT_SPELLCAST_FAILED");
-			self:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED");
-			self:RegisterEvent("UNIT_SPELLCAST_DELAYED");
-			self:RegisterEvent("UNIT_SPELLCAST_CHANNEL_START");
-			self:RegisterEvent("UNIT_SPELLCAST_CHANNEL_UPDATE");
-			self:RegisterEvent("UNIT_SPELLCAST_CHANNEL_STOP");
-			self:RegisterEvent("UNIT_SPELLCAST_INTERRUPTIBLE");
-			self:RegisterEvent("UNIT_SPELLCAST_NOT_INTERRUPTIBLE");
-			self:RegisterEvent("PLAYER_ENTERING_WORLD");
+		if(unit) then
+			self:RegisterEvent("UNIT_SPELLCAST_START")
+			self:RegisterEvent("UNIT_SPELLCAST_STOP")
+			self:RegisterEvent("UNIT_SPELLCAST_FAILED")
+			self:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED")
+			self:RegisterEvent("UNIT_SPELLCAST_DELAYED")
+			self:RegisterEvent("UNIT_SPELLCAST_CHANNEL_START")
+			self:RegisterEvent("UNIT_SPELLCAST_CHANNEL_UPDATE")
+			self:RegisterEvent("UNIT_SPELLCAST_CHANNEL_STOP")
+			self:RegisterEvent("UNIT_SPELLCAST_INTERRUPTIBLE")
+			self:RegisterEvent("UNIT_SPELLCAST_NOT_INTERRUPTIBLE")
+			self:RegisterEvent("PLAYER_ENTERING_WORLD")
 
 			CastingBarFrame_OnEvent(self, "PLAYER_ENTERING_WORLD")
 		else
-			self:UnregisterEvent("UNIT_SPELLCAST_INTERRUPTED");
-			self:UnregisterEvent("UNIT_SPELLCAST_DELAYED");
-			self:UnregisterEvent("UNIT_SPELLCAST_CHANNEL_START");
-			self:UnregisterEvent("UNIT_SPELLCAST_CHANNEL_UPDATE");
-			self:UnregisterEvent("UNIT_SPELLCAST_CHANNEL_STOP");
-			self:UnregisterEvent("UNIT_SPELLCAST_INTERRUPTIBLE");
-			self:UnregisterEvent("UNIT_SPELLCAST_NOT_INTERRUPTIBLE");
-			self:UnregisterEvent("PLAYER_ENTERING_WORLD");
-			self:UnregisterEvent("UNIT_SPELLCAST_START");
-			self:UnregisterEvent("UNIT_SPELLCAST_STOP");
-			self:UnregisterEvent("UNIT_SPELLCAST_FAILED");
+			self:UnregisterEvent("UNIT_SPELLCAST_INTERRUPTED")
+			self:UnregisterEvent("UNIT_SPELLCAST_DELAYED")
+			self:UnregisterEvent("UNIT_SPELLCAST_CHANNEL_START")
+			self:UnregisterEvent("UNIT_SPELLCAST_CHANNEL_UPDATE")
+			self:UnregisterEvent("UNIT_SPELLCAST_CHANNEL_STOP")
+			self:UnregisterEvent("UNIT_SPELLCAST_INTERRUPTIBLE")
+			self:UnregisterEvent("UNIT_SPELLCAST_NOT_INTERRUPTIBLE")
+			self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+			self:UnregisterEvent("UNIT_SPELLCAST_START")
+			self:UnregisterEvent("UNIT_SPELLCAST_STOP")
+			self:UnregisterEvent("UNIT_SPELLCAST_FAILED")
 
-			self:Hide();
+			self:Hide()
 		end
 	end
 end
