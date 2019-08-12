@@ -5263,7 +5263,7 @@ E.Options.args.unitframe.args.pet = {
 				header = {
 					order = 1,
 					type = "header",
-					name = HAPPINESS
+					name = L["HAPPINESS"]
 				},
 				enable = {
 					order = 2,
