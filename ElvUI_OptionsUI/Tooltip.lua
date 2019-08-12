@@ -225,7 +225,7 @@ E.Options.args.tooltip = {
 						["ALL"] = L["Always Hide"],
 						["NONE"] = L["Never Hide"],
 						["SHIFT"] = L["SHIFT_KEY"],
-						["ALT"] = L["ALT_KEY"],
+						["ALT"] = L["ALT_KEY_TEXT"],
 						["CTRL"] = L["CTRL_KEY"]
 					}
 				},
@@ -238,7 +238,7 @@ E.Options.args.tooltip = {
 						["ALL"] = L["Always Hide"],
 						["NONE"] = L["Never Hide"],
 						["SHIFT"] = L["SHIFT_KEY"],
-						["ALT"] = L["ALT_KEY"],
+						["ALT"] = L["ALT_KEY_TEXT"],
 						["CTRL"] = L["CTRL_KEY"]
 					}
 				},
@@ -251,7 +251,7 @@ E.Options.args.tooltip = {
 						["ALL"] = L["Always Hide"],
 						["NONE"] = L["Never Hide"],
 						["SHIFT"] = L["SHIFT_KEY"],
-						["ALT"] = L["ALT_KEY"],
+						["ALT"] = L["ALT_KEY_TEXT"],
 						["CTRL"] = L["CTRL_KEY"]
 					}
 				},
@@ -270,7 +270,7 @@ E.Options.args.tooltip = {
 					values = {
 						["ALL"] = L["Always Hide"],
 						["SHIFT"] = L["SHIFT_KEY"],
-						["ALT"] = L["ALT_KEY"],
+						["ALT"] = L["ALT_KEY_TEXT"],
 						["CTRL"] = L["CTRL_KEY"]
 					}
 				}

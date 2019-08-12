@@ -114,7 +114,7 @@ local function BuildABConfig()
 				values = {
 					["NONE"] = L["NONE"],
 					["SHIFT"] = L["SHIFT_KEY"],
-					["ALT"] = L["ALT_KEY"],
+					["ALT"] = L["ALT_KEY_TEXT"],
 					["CTRL"] = L["CTRL_KEY"]
 				}
 			},
