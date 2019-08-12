@@ -480,7 +480,6 @@ local function Disable(self)
 		self:UnregisterEvent('UNIT_SPELLCAST_INTERRUPTED', CastFail)
 		self:UnregisterEvent('UNIT_SPELLCAST_INTERRUPTIBLE', CastInterruptible)
 		self:UnregisterEvent('UNIT_SPELLCAST_NOT_INTERRUPTIBLE', CastInterruptible)
-		self:UnregisterEvent('UNIT_SPELLCAST_NOT_INTERRUPTIBLE', CastInterruptible)
 
 		element:SetScript('OnUpdate', nil)
 
