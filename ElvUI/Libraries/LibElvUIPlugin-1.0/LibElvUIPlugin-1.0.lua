@@ -85,7 +85,7 @@ function lib:RegisterPlugin(name,callback, isLib)
 			local configFrame = CreateFrame("Frame")
 			configFrame:RegisterEvent("ADDON_LOADED")
 			configFrame:SetScript("OnEvent", function(self, event, addon)
-				if addon == "ElvUI_Config" then
+				if addon == "ElvUI_OptionsUI" then
 					for _, PlugIn in pairs(lib.plugins) do
 						if PlugIn.callback then
 							PlugIn.callback()
