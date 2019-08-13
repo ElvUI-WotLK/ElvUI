@@ -34,47 +34,24 @@ local function LoadSkin()
 
 	-- WatchFrame Text
 	hooksecurefunc("WatchFrame_Update", function()
-		local questIndex
-		local numQuestWatches = GetNumQuestWatches()
-
-		local title, level
-		local color
-		for i = 1, numQuestWatches do
-			questIndex = GetQuestIndexForWatch(i)
+		local title, level, color
+		for i = 1, GetNumQuestWatches() do
+			local questIndex = GetQuestIndexForWatch(i)
 			if questIndex then
 				title, level = GetQuestLogTitle(questIndex)
 				color = GetQuestDifficultyColor(level)
---[[
-				local hex = E:RGBToHex(color.r, color.g, color.b)
 
-				if questTag == ELITE then
-					level = level.."+"
-				elseif questTag == LFG_TYPE_DUNGEON then
-					level = level.." D"
-				elseif questTag == PVP then
-					level = level.." PvP"
-				elseif questTag == RAID then
-					level = level.." R"
-				elseif questTag == GROUP then
-					level = level.." G"
-				elseif questTag == PLAYER_DIFFICULTY2 then
-					level = level.." HC"
-				end
-
-				local titleText = hex.."["..level.."]|r "..title
-]]
 				for j = 1, #WATCHFRAME_QUESTLINES do
 					if WATCHFRAME_QUESTLINES[j].text:GetText() == title then
-						--WATCHFRAME_QUESTLINES[j].text:SetText(titleText)
 						WATCHFRAME_QUESTLINES[j].text:SetTextColor(color.r, color.g, color.b)
 						WATCHFRAME_QUESTLINES[j].color = color
 					end
 				end
-
-				for k = 1, #WATCHFRAME_ACHIEVEMENTLINES do
-					WATCHFRAME_ACHIEVEMENTLINES[k].color = nil
-				end
 			end
+		end
+
+		for i = 1, #WATCHFRAME_ACHIEVEMENTLINES do
+			WATCHFRAME_ACHIEVEMENTLINES[i].color = nil
 		end
 
 		-- WatchFrame Items
@@ -83,7 +60,8 @@ local function LoadSkin()
 			local icon = _G["WatchFrameItem"..i.."IconTexture"]
 			local normal = _G["WatchFrameItem"..i.."NormalTexture"]
 			local cooldown = _G["WatchFrameItem"..i.."Cooldown"]
-			if not button.isSkinned then
+
+			if button and not button.isSkinned then
 				button:CreateBackdrop()
 				button.backdrop:SetAllPoints()
 				button:StyleButton()
