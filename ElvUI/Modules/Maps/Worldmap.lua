@@ -22,27 +22,34 @@ local INVERTED_POINTS = {
 	["BOTTOM"] = "TOP"
 }
 
+local WorldMapItems = {
+	"WorldMapFrameSizeUpButton",
+	"WorldMapFrameSizeDownButton",
+	"WorldMapQuestShowObjectives",
+	"WorldMapTrackQuest",
+	"WorldMapZoneDropDownButton",
+	"WorldMapContinentDropDownButton",
+	"WorldMapZoneMinimapDropDownButton",
+	"WorldMapLevelDropDownButton",
+	"WorldMapLevelDownButton",
+	"WorldMapLevelUpButton"
+}
+
 function M:PLAYER_REGEN_ENABLED()
-	WorldMapFrameSizeUpButton:Enable()
-	WorldMapFrameSizeDownButton:Enable()
+	for i = 1, #WorldMapItems do
+		local item = _G[WorldMapItems[i]]
+		if item then item:Enable() end
+	end
+
+	if not GetCVarBool("miniWorldMap") then
+		WorldMapZoomOutButton:Show()
+	end
+
+	WorldMapButton:Show()
 
 	if E.private.skins.blizzard.enable and E.private.skins.blizzard.worldmap then
 		WorldMapFrameSizeUpButton.Texture:SetVertexColor(1, 1, 1)
 		WorldMapFrameSizeDownButton.Texture:SetVertexColor(1, 1, 1)
-	end
-
-	WorldMapQuestShowObjectives:Enable()
-	WorldMapTrackQuest:Enable()
-	WorldMapZoneDropDownButton:Enable()
-	WorldMapContinentDropDownButton:Enable()
-	WorldMapZoneMinimapDropDownButton:Enable()
-	WorldMapLevelDropDownButton:Enable()
-	WorldMapLevelDownButton:Enable()
-	WorldMapLevelUpButton:Enable()
-	WorldMapButton:Show()
-
-	if not GetCVarBool("miniWorldMap") then
-		WorldMapZoomOutButton:Show()
 	end
 
 	hooksecurefunc("QuestPOI_DisplayButton", function(parentName, buttonType, buttonIndex)
@@ -78,26 +85,20 @@ function M:PLAYER_REGEN_ENABLED()
 end
 
 function M:PLAYER_REGEN_DISABLED()
-	WorldMapFrameSizeUpButton:Disable()
-	WorldMapFrameSizeDownButton:Disable()
+	for i = 1, #WorldMapItems do
+		local item = _G[WorldMapItems[i]]
+		if item then item:Disable() end
+	end
+
+	if not GetCVarBool("miniWorldMap") then
+		WorldMapZoomOutButton:Hide()
+	end
+
+	WorldMapButton:Hide()
 
 	if E.private.skins.blizzard.enable and E.private.skins.blizzard.worldmap then
 		WorldMapFrameSizeUpButton.Texture:SetVertexColor(0.4, 0.4, 0.4)
 		WorldMapFrameSizeDownButton.Texture:SetVertexColor(0.4, 0.4, 0.4)
-	end
-
-	WorldMapQuestShowObjectives:Disable()
-	WorldMapTrackQuest:Disable()
-	WorldMapZoneDropDownButton:Disable()
-	WorldMapContinentDropDownButton:Disable()
-	WorldMapZoneMinimapDropDownButton:Disable()
-	WorldMapLevelDropDownButton:Disable()
-	WorldMapLevelDownButton:Disable()
-	WorldMapLevelUpButton:Disable()
-	WorldMapButton:Hide()
-
-	if not GetCVarBool("miniWorldMap") then
-		WorldMapZoomOutButton:Hide()
 	end
 
 	hooksecurefunc("QuestPOI_DisplayButton", function(parentName, buttonType, buttonIndex)
