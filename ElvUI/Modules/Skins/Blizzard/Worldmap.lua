@@ -59,11 +59,13 @@ local function LoadSkin()
 	WorldMapFrameSizeDownButton.SetPoint = E.noop
 	WorldMapFrameSizeDownButton:GetHighlightTexture():Kill()
 	S:HandleNextPrevButton(WorldMapFrameSizeDownButton, nil, nil, true)
+	WorldMapFrameSizeDownButton:Size(26)
 
 	WorldMapFrameSizeUpButton:ClearAllPoints()
 	WorldMapFrameSizeUpButton:Point("RIGHT", WorldMapFrameCloseButton, "LEFT", 4, 0)
 	WorldMapFrameSizeUpButton:GetHighlightTexture():Kill()
 	S:HandleNextPrevButton(WorldMapFrameSizeUpButton, nil, nil, true)
+	WorldMapFrameSizeUpButton:Size(26)
 
 	S:HandleDropDownBox(WorldMapLevelDropDown)
 	S:HandleDropDownBox(WorldMapZoneMinimapDropDown)
