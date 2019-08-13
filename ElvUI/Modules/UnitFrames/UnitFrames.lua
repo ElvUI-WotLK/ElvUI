@@ -697,7 +697,7 @@ function UF.groupPrototype:Update(frame)
 end
 
 function UF.groupPrototype:AdjustVisibility(frame)
-	if not frame.isForced then
+--	if not frame.isForced then
 		local numGroups = frame.numGroups
 		for i = 1, #frame.groups do
 			local group = frame.groups[i]
@@ -713,7 +713,7 @@ function UF.groupPrototype:AdjustVisibility(frame)
 				end
 			end
 		end
-	end
+--	end
 end
 
 function UF.headerPrototype:ClearChildPoints()
