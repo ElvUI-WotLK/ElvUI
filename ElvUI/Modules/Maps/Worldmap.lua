@@ -128,6 +128,14 @@ function M:ToggleMapFramerate()
 	end
 end
 
+function M:WorldMapFrame_SetQuestMapView()
+	WorldMapBlobFrame:SetScale(WORLDMAP_SETTINGS.size)
+end
+
+function M:WorldMapFrame_SetFullMapView()
+	WorldMapBlobFrame:SetScale(WORLDMAP_SETTINGS.size)
+end
+
 function M:Initialize()
 	M.Initialized = true
 
@@ -178,6 +186,8 @@ function M:Initialize()
 		end
 
 		M:SecureHook("ToggleMapFramerate")
+		M:SecureHook("WorldMapFrame_SetQuestMapView")
+		M:SecureHook("WorldMapFrame_SetFullMapView")
 
 		DropDownList1:HookScript("OnShow", function()
 			if DropDownList1:GetScale() ~= UIParent:GetScale() then
