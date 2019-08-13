@@ -33,7 +33,7 @@ local LSM = E.Libs.LSM
 --Lua functions
 local _G = _G
 local tonumber, pairs, ipairs, error, unpack, select, tostring = tonumber, pairs, ipairs, error, unpack, select, tostring
-local assert, type, collectgarbage, pcall = assert, type, collectgarbage, pcall
+local assert, type, pcall = assert, type, pcall
 local twipe, tinsert, tremove, next = table.wipe, tinsert, tremove, next
 local floor = floor
 local format, find, match, strrep, strlen, sub, gsub, strjoin = string.format, string.find, string.match, strrep, strlen, string.sub, string.gsub, strjoin
@@ -165,8 +165,8 @@ E.PriestColors = {r = 0.99, g = 0.99, b = 0.99}
 --This frame everything in ElvUI should be anchored to for Eyefinity support.
 E.UIParent = CreateFrame("Frame", "ElvUIParent", UIParent)
 E.UIParent:SetFrameLevel(UIParent:GetFrameLevel())
-E.UIParent:SetPoint("CENTER", UIParent, "CENTER")
 E.UIParent:SetSize(UIParent:GetSize())
+E.UIParent:SetPoint("CENTER", UIParent, "CENTER")
 E.snapBars[#E.snapBars + 1] = E.UIParent
 
 E.HiddenFrame = CreateFrame("Frame")
@@ -200,14 +200,36 @@ function E:ShapeshiftDelayedUpdate(func, ...)
 	end, 0.05)
 end
 
+function E:GrabColorPickerValues(r, g, b)
+	-- we must block the execution path to `ColorCallback` in `AceGUIWidget-ColorPicker-ElvUI`
+	-- in order to prevent an infinite loop from `OnValueChanged` when passing into `E.UpdateMedia` which eventually leads here again.
+	ColorPickerFrame.noColorCallback = true
+
+	-- grab old values
+	local oldR, oldG, oldB = ColorPickerFrame:GetColorRGB()
+
+	-- set and define the new values
+	ColorPickerFrame:SetColorRGB(r, g, b)
+	r, g, b = ColorPickerFrame:GetColorRGB()
+
+	-- swap back to the old values
+	if oldR then ColorPickerFrame:SetColorRGB(oldR, oldG, oldB) end
+
+	-- free it up..
+	ColorPickerFrame.noColorCallback = nil
+
+	return r, g, b
+end
+
 --Basically check if another class border is being used on a class that doesn't match. And then return true if a match is found.
 function E:CheckClassColor(r, g, b)
-	r, g, b = floor(r*100 + 0.5) / 100, floor(g*100 + 0.5) / 100, floor(b*100 + 0.5) / 100
+	r, g, b = E:GrabColorPickerValues(r, g, b)
 	local matchFound = false
 	for class in pairs(RAID_CLASS_COLORS) do
 		if class ~= E.myclass then
 			local colorTable = class == "PRIEST" and E.PriestColors or (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class])
-			if colorTable.r == r and colorTable.g == g and colorTable.b == b then
+			local red, green, blue = E:GrabColorPickerValues(colorTable.r, colorTable.g, colorTable.b)
+			if red == r and green == g and blue == b then
 				matchFound = true
 			end
 		end
@@ -346,7 +368,7 @@ function E:UpdateFrameTemplates()
 	for frame in pairs(self.frames) do
 		if frame and frame.template and not frame.ignoreUpdates then
 			if not frame.ignoreFrameTemplates then
-				frame:SetTemplate(frame.template, frame.glossTex)
+				frame:SetTemplate(frame.template, frame.glossTex, nil, frame.forcePixelMode)
 			end
 		else
 			self.frames[frame] = nil
@@ -356,7 +378,7 @@ function E:UpdateFrameTemplates()
 	for frame in pairs(self.unitFrameElements) do
 		if frame and frame.template and not frame.ignoreUpdates then
 			if not frame.ignoreFrameTemplates then
-				frame:SetTemplate(frame.template, frame.glossTex)
+				frame:SetTemplate(frame.template, frame.glossTex, nil, frame.forcePixelMode, frame.isUnitFrameElement)
 			end
 		else
 			self.unitFrameElements[frame] = nil
@@ -392,7 +414,7 @@ end
 
 function E:UpdateBackdropColors()
 	for frame in pairs(self.frames) do
-		if frame then
+		if frame and not frame.ignoreUpdates then
 			if not frame.ignoreBackdropColors then
 				if frame.template == "Default" or frame.template == nil then
 					frame:SetBackdropColor(unpack(self.media.backdropcolor))
@@ -406,7 +428,7 @@ function E:UpdateBackdropColors()
 	end
 
 	for frame in pairs(self.unitFrameElements) do
-		if frame then
+		if frame and not frame.ignoreUpdates then
 			if not frame.ignoreBackdropColors then
 				if frame.template == "Default" or frame.template == nil then
 					frame:SetBackdropColor(unpack(self.media.backdropcolor))
@@ -737,7 +759,13 @@ do
 				local msg, ver = tonumber(message), tonumber(E.version)
 				local inCombat = InCombatLockdown()
 
-				if msg and (msg > ver) then -- you're outdated D:
+				if ver ~= G.general.version then
+					if not E.shownUpdatedWhileRunningPopup and not inCombat then
+						E:StaticPopup_Show("ELVUI_UPDATED_WHILE_RUNNING", nil, nil, {mismatch = ver > G.general.version})
+
+						E.shownUpdatedWhileRunningPopup = true
+					end
+				elseif msg and (msg > ver) then -- you're outdated D:
 					if not E.recievedOutOfDateMessage then
 						E:Print(L["ElvUI is out of date. You can download the newest version from https://github.com/ElvUI-WotLK/ElvUI"])
 
@@ -882,8 +910,106 @@ function E:UpdateAll(ignoreInstall)
 
 	Blizzard:SetWatchFrameHeight()
 	E:SetMoversClampedToScreen(true) -- Go back to using clamp after resizing has taken place.
+end
 
-	collectgarbage("collect")
+do
+	E.ObjectEventTable, E.ObjectEventFrame = {}, CreateFrame("Frame")
+	local eventFrame, eventTable = E.ObjectEventFrame, E.ObjectEventTable
+
+	eventFrame:SetScript("OnEvent", function(_, event, ...)
+		local objs = eventTable[event]
+		if objs then
+			for object, funcs in pairs(objs) do
+				for _, func in ipairs(funcs) do
+					func(object, event, ...)
+				end
+			end
+		end
+	end)
+
+	function E:HasFunctionForObject(event, object, func)
+		if not (event and object and func) then
+			E:Print("Error. Usage: HasFunctionForObject(event, object, func)")
+			return
+		end
+
+		local objs = eventTable[event]
+		local funcs = objs and objs[object]
+		return funcs and tContains(funcs, func)
+	end
+
+	function E:IsEventRegisteredForObject(event, object)
+		if not (event and object) then
+			E:Print("Error. Usage: IsEventRegisteredForObject(event, object)")
+			return
+		end
+
+		local objs = eventTable[event]
+		local funcs = objs and objs[object]
+		return funcs ~= nil, funcs
+	end
+
+	--- Registers specified event and adds specified func to be called for the specified object.
+	-- Unless all parameters are supplied it will not register.
+	-- If the specified object has already been registered for the specified event
+	-- then it will just add the specified func to a table of functions that should be called.
+	-- When a registered event is triggered, then the registered function is called with
+	-- the object as first parameter, then event, and then all the parameters for the event itself.
+	-- @param event The event you want to register.
+	-- @param object The object you want to register the event for.
+	-- @param func The function you want executed for this object.
+	function E:RegisterEventForObject(event, object, func)
+		if not (event and object and func) then
+			E:Print("Error. Usage: RegisterEventForObject(event, object, func)")
+			return
+		end
+
+		local objs = eventTable[event]
+		if not objs then
+			objs = {}
+			eventTable[event] = objs
+			eventFrame:RegisterEvent(event)
+		end
+
+		local funcs = objs[object]
+		if not funcs then
+			objs[object] = {func}
+		elseif not tContains(funcs, func) then
+			tinsert(funcs, func)
+		end
+	end
+
+	--- Unregisters specified function for the specified object on the specified event.
+	-- Unless all parameters are supplied it will not unregister.
+	-- @param event The event you want to unregister an object from.
+	-- @param object The object you want to unregister a func from.
+	-- @param func The function you want unregistered for the object.
+	function E:UnregisterEventForObject(event, object, func)
+		if not (event and object and func) then
+			E:Print("Error. Usage: UnregisterEventForObject(event, object, func)")
+			return
+		end
+
+		local objs = eventTable[event]
+		local funcs = objs and objs[object]
+		if funcs then
+			for index, fnc in ipairs(funcs) do
+				if func == fnc then
+					tremove(funcs, index)
+					break
+				end
+			end
+
+			if #funcs == 0 then
+				objs[object] = nil
+			end
+
+			if not next(funcs) then
+				eventFrame:UnregisterEvent(event)
+				eventTable[event] = nil
+			end
+		end
+	end
 end
 
 function E:ResetAllUI()
@@ -909,90 +1035,54 @@ function E:ResetUI(...)
 	self:ResetMovers(...)
 end
 
-function E:RegisterModule(name, loadFunc)
-	if loadFunc and type(loadFunc) == "function" then --New method using callbacks
-		if self.initialized then
-			loadFunc()
-		else
-			if self.ModuleCallbacks[name] then
-				--Don't allow a registered module name to be overwritten
-				E:Print("Invalid argument #1 to E:RegisterModule (module name:", name, "is already registered, please use a unique name)")
-				return
-			end
+do
+	local function errorhandler(err)
+		return _G.geterrorhandler()(err)
+	end
 
-			--Add module name to registry
-			self.ModuleCallbacks[name] = true
-			self.ModuleCallbacks.CallPriority[#self.ModuleCallbacks.CallPriority + 1] = name
-
-			--Register loadFunc to be called when event is fired
-			E:RegisterCallback(name, loadFunc, E:GetModule(name))
-		end
-	else
-		if self.initialized then
-			self:GetModule(name):Initialize()
-		else
-			self.RegisteredModules[#self.RegisteredModules + 1] = name
-		end
+	function E:CallLoadFunc(func, ...)
+		xpcall(func, errorhandler, ...)
 	end
 end
 
-function E:RegisterInitialModule(name, loadFunc)
-	if loadFunc and type(loadFunc) == "function" then --New method using callbacks
-		if self.InitialModuleCallbacks[name] then
-			--Don't allow a registered module name to be overwritten
-			E:Print("Invalid argument #1 to E:RegisterInitialModule (module name:", name, "is already registered, please use a unique name)")
-			return
-		end
+function E:CallLoadedModule(obj, silent, object, index)
+	local name, func
+	if type(obj) == "table" then name, func = unpack(obj) else name = obj end
+	local module = name and self:GetModule(name, silent)
 
-		--Add module name to registry
-		self.InitialModuleCallbacks[name] = true
-		self.InitialModuleCallbacks.CallPriority[#self.InitialModuleCallbacks.CallPriority + 1] = name
+	if not module then return end
+	if func and type(func) == "string" then
+		E:CallLoadFunc(module[func], module)
+	elseif func and type(func) == "function" then
+		E:CallLoadFunc(func, module)
+	elseif module.Initialize then
+		E:CallLoadFunc(module.Initialize, module)
+	end
 
-		--Register loadFunc to be called when event is fired
-		E:RegisterCallback(name, loadFunc, E:GetModule(name))
+	if object and index then object[index] = nil end
+end
+
+function E:RegisterInitialModule(name, func)
+	self.RegisteredInitialModules[#self.RegisteredInitialModules + 1] = (func and {name, func}) or name
+end
+
+function E:RegisterModule(name, func)
+	if self.initialized then
+		E:CallLoadedModule((func and {name, func}) or name)
 	else
-		self.RegisteredInitialModules[#self.RegisteredInitialModules + 1] = name
+		self.RegisteredModules[#self.RegisteredModules + 1] = (func and {name, func}) or name
 	end
 end
 
 function E:InitializeInitialModules()
-	--Fire callbacks for any module using the new system
-	for index, moduleName in ipairs(self.InitialModuleCallbacks.CallPriority) do
-		self.InitialModuleCallbacks[moduleName] = nil
-		self.InitialModuleCallbacks.CallPriority[index] = nil
-		E.callbacks:Fire(moduleName)
-	end
-
-	--Old deprecated initialize method, we keep it for any plugins that may need it
-	for _, module in pairs(E.RegisteredInitialModules) do
-		module = self:GetModule(module, true)
-		if module and module.Initialize then
-			local _, catch = pcall(module.Initialize, module)
-			if catch and GetCVarBool("scriptErrors") == true then
-				_G.ScriptErrorsFrame:OnError(catch, false, false)
-			end
-		end
+	for index, object in ipairs(E.RegisteredInitialModules) do
+		E:CallLoadedModule(object, true, E.RegisteredInitialModules, index)
 	end
 end
 
 function E:InitializeModules()
-	--Fire callbacks for any module using the new system
-	for index, moduleName in ipairs(self.ModuleCallbacks.CallPriority) do
-		self.ModuleCallbacks[moduleName] = nil
-		self.ModuleCallbacks.CallPriority[index] = nil
-		E.callbacks:Fire(moduleName)
-	end
-
-	--Old deprecated initialize method, we keep it for any plugins that may need it
-	for _, module in pairs(E.RegisteredModules) do
-		module = self:GetModule(module)
-		if module.Initialize then
-			local _, catch = pcall(module.Initialize, module)
-
-			if catch and GetCVarBool("scriptErrors") == true then
-				_G.ScriptErrorsFrame:OnError(catch, false, false)
-			end
-		end
+	for index, object in ipairs(E.RegisteredModules) do
+		E:CallLoadedModule(object, true, E.RegisteredModules, index)
 	end
 end
 
@@ -1170,11 +1260,9 @@ function E:Initialize()
 		self:Delay(5, self.Print, self, L["Type /hellokitty to revert to old settings."])
 	end
 
-	collectgarbage("collect")
-
 	if self.db.general.loginmessage then
 		local msg = format(L["LOGIN_MSG"], self.media.hexvaluecolor, self.media.hexvaluecolor, self.version)
 		if Chat.Initialized then msg = select(2, Chat:FindURL("CHAT_MSG_DUMMY", msg)) end
-		E:Print(msg)
+		print(msg)
 	end
 end
