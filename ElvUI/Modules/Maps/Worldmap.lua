@@ -31,6 +31,7 @@ function M:PLAYER_REGEN_ENABLED()
 	WorldMapBlobFrame:SetParent(WorldMapFrame)
 	WorldMapBlobFrame:ClearAllPoints()
 	WorldMapBlobFrame:SetPoint("TOPLEFT", WorldMapDetailFrame)
+	WorldMapBlobFrame:SetScale(WORLDMAP_SETTINGS.size)
 	WorldMapBlobFrame.Hide = nil
 	WorldMapBlobFrame.Show = nil
 
