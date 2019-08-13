@@ -12,7 +12,7 @@ local function LoadSkin()
 
 	-- WatchFrame Expand/Collapse Button
 	WatchFrameCollapseExpandButton:StripTextures()
-	WatchFrameCollapseExpandButton:Size(16, 16)
+	WatchFrameCollapseExpandButton:Size(16)
 	WatchFrameCollapseExpandButton.tex = WatchFrameCollapseExpandButton:CreateTexture(nil, "OVERLAY")
 	WatchFrameCollapseExpandButton.tex:SetTexture(E.Media.Textures.MinusButton)
 	WatchFrameCollapseExpandButton.tex:SetInside()
@@ -34,9 +34,9 @@ local function LoadSkin()
 
 	-- WatchFrame Text
 	hooksecurefunc("WatchFrame_Update", function()
-		local title, level, color
+		local questIndex, title, level, color
 		for i = 1, GetNumQuestWatches() do
-			local questIndex = GetQuestIndexForWatch(i)
+			questIndex = GetQuestIndexForWatch(i)
 			if questIndex then
 				title, level = GetQuestLogTitle(questIndex)
 				color = GetQuestDifficultyColor(level)
@@ -102,8 +102,7 @@ local function LoadSkin()
 
 	-- WatchFrame POI Buttons
 	hooksecurefunc("QuestPOI_DisplayButton", function(parentName, buttonType, buttonIndex)
-		local buttonName = "poi"..parentName..buttonType.."_"..buttonIndex
-		local poiButton = _G[buttonName]
+		local poiButton = _G["poi"..parentName..buttonType.."_"..buttonIndex]
 
 		if poiButton and parentName == "WatchFrameLines" then
 			if not poiButton.isSkinned then
