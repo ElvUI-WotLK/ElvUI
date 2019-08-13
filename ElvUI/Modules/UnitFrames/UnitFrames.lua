@@ -532,7 +532,7 @@ function UF:CreateAndUpdateUFGroup(group, numGroup)
 			frame:Disable()
 
 			-- for some reason the boss/arena 'uncheck disable' doesnt fire this, we need to so putting it here.
-			if group == 'boss' or group == 'arena' then
+			if group == "boss" or group == "arena" then
 				UF:Configure_Fader(frame)
 			end
 
