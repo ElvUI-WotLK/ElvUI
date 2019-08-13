@@ -22,51 +22,11 @@ local INVERTED_POINTS = {
 	["BOTTOM"] = "TOP"
 }
 
-local WorldMapItems = {
-	"WorldMapFrameSizeUpButton",
-	"WorldMapFrameSizeDownButton",
-	"WorldMapQuestShowObjectives",
-	"WorldMapTrackQuest",
-	"WorldMapZoneDropDownButton",
-	"WorldMapContinentDropDownButton",
-	"WorldMapZoneMinimapDropDownButton",
-	"WorldMapLevelDropDownButton",
-	"WorldMapLevelDownButton",
-	"WorldMapLevelUpButton"
-}
-
-local poiWasVisible = true
-hooksecurefunc("QuestPOI_DisplayButton", function(parentName, buttonType, buttonIndex)
-	local poiButton = _G["poi"..parentName..buttonType.."_"..buttonIndex]
-
-	if poiButton and parentName == "WatchFrameLines" then
-		if not poiWasVisible then
-			poiButton:Hide()
-		else
-			poiButton:Show()
-		end
-	end
-end)
-
 function M:PLAYER_REGEN_ENABLED()
-	for i = 1, #WorldMapItems do
-		local item = _G[WorldMapItems[i]]
-		if item then item:Enable() end
-	end
+	WorldMapFrameSizeUpButton:Enable()
+	WorldMapFrameSizeDownButton:Enable()
 
-	if not GetCVarBool("miniWorldMap") then
-		WorldMapZoomOutButton:Show()
-	end
-
-	WorldMapButton:Show()
-
-	if E.private.skins.blizzard.enable and E.private.skins.blizzard.worldmap then
-		WorldMapFrameSizeUpButton.Texture:SetVertexColor(1, 1, 1)
-		WorldMapFrameSizeDownButton.Texture:SetVertexColor(1, 1, 1)
-	end
-
-	poiWasVisible = true
-	WatchFrame_Update()
+	WorldMapQuestShowObjectives:Enable()
 
 	WorldMapBlobFrame:SetParent(WorldMapFrame)
 	WorldMapBlobFrame:ClearAllPoints()
@@ -92,30 +52,19 @@ function M:PLAYER_REGEN_ENABLED()
 end
 
 function M:PLAYER_REGEN_DISABLED()
-	for i = 1, #WorldMapItems do
-		local item = _G[WorldMapItems[i]]
-		if item then item:Disable() end
-	end
+	WorldMapFrameSizeUpButton:Disable()
+	WorldMapFrameSizeDownButton:Disable()
 
 	if not GetCVarBool("miniWorldMap") then
-		WorldMapZoomOutButton:Hide()
+		WorldMapQuestShowObjectives:Disable()
 	end
 
-	WorldMapButton:Hide()
-
-	if E.private.skins.blizzard.enable and E.private.skins.blizzard.worldmap then
-		WorldMapFrameSizeUpButton.Texture:SetVertexColor(0.4, 0.4, 0.4)
-		WorldMapFrameSizeDownButton.Texture:SetVertexColor(0.4, 0.4, 0.4)
-	end
-
-	poiWasVisible = nil
-	WatchFrame_Update()
 	M.blobWasVisible = WorldMapFrame:IsShown() and WorldMapBlobFrame:IsShown()
 
---	WorldMapBlobFrame:SetParent(nil)
---	WorldMapBlobFrame:ClearAllPoints()
---	WorldMapBlobFrame:SetPoint("TOP", UIParent, "BOTTOM")
---	WorldMapBlobFrame:Hide()
+	WorldMapBlobFrame:SetParent(nil)
+	WorldMapBlobFrame:ClearAllPoints()
+	WorldMapBlobFrame:SetPoint("TOP", UIParent, "BOTTOM")
+	WorldMapBlobFrame:Hide()
 	WorldMapBlobFrame.Hide = function() M.blobWasVisible = nil end
 	WorldMapBlobFrame.Show = function() M.blobWasVisible = true end
 end
