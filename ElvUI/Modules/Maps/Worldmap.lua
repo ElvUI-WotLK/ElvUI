@@ -35,6 +35,19 @@ local WorldMapItems = {
 	"WorldMapLevelUpButton"
 }
 
+local poiWasVisible = true
+hooksecurefunc("QuestPOI_DisplayButton", function(parentName, buttonType, buttonIndex)
+	local poiButton = _G["poi"..parentName..buttonType.."_"..buttonIndex]
+
+	if poiButton and parentName == "WatchFrameLines" then
+		if not poiWasVisible then
+			poiButton:Hide()
+		else
+			poiButton:Show()
+		end
+	end
+end)
+
 function M:PLAYER_REGEN_ENABLED()
 	for i = 1, #WorldMapItems do
 		local item = _G[WorldMapItems[i]]
@@ -52,13 +65,7 @@ function M:PLAYER_REGEN_ENABLED()
 		WorldMapFrameSizeDownButton.Texture:SetVertexColor(1, 1, 1)
 	end
 
-	hooksecurefunc("QuestPOI_DisplayButton", function(parentName, buttonType, buttonIndex)
-		local poiButton = _G["poi"..parentName..buttonType.."_"..buttonIndex]
-
-		if poiButton and parentName == "WatchFrameLines" then
-			poiButton:Show()
-		end
-	end)
+	poiWasVisible = true
 	WatchFrame_Update()
 
 	WorldMapBlobFrame:SetParent(WorldMapFrame)
@@ -101,15 +108,8 @@ function M:PLAYER_REGEN_DISABLED()
 		WorldMapFrameSizeDownButton.Texture:SetVertexColor(0.4, 0.4, 0.4)
 	end
 
-	hooksecurefunc("QuestPOI_DisplayButton", function(parentName, buttonType, buttonIndex)
-		local poiButton = _G["poi"..parentName..buttonType.."_"..buttonIndex]
-
-		if poiButton and parentName == "WatchFrameLines" then
-			poiButton:Hide()
-		end
-	end)
+	poiWasVisible = nil
 	WatchFrame_Update()
-
 	M.blobWasVisible = WorldMapFrame:IsShown() and WorldMapBlobFrame:IsShown()
 
 --	WorldMapBlobFrame:SetParent(nil)
