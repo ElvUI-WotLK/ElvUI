@@ -129,10 +129,14 @@ function M:ToggleMapFramerate()
 end
 
 function M:WorldMapFrame_SetQuestMapView()
+	if InCombatLockdown() then return end
+
 	WorldMapBlobFrame:SetScale(WORLDMAP_SETTINGS.size)
 end
 
 function M:WorldMapFrame_SetFullMapView()
+	if InCombatLockdown() then return end
+
 	WorldMapBlobFrame:SetScale(WORLDMAP_SETTINGS.size)
 end
 
