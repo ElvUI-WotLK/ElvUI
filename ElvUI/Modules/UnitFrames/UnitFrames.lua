@@ -618,7 +618,7 @@ function UF.groupPrototype:Configure_Groups(frame)
 				group:SetAttribute("groupFilter", tostring(i))
 			end
 
-			group:Show()
+		--	group:Show()
 		end
 
 		--MATH!! WOOT
@@ -851,7 +851,7 @@ function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdat
 			end
 		end
 
-		UF.headerFunctions[group]:AdjustVisibility(self[group])
+	--	UF.headerFunctions[group]:AdjustVisibility(self[group])
 
 		if headerUpdate or not self[group].mover then
 			UF.headerFunctions[group]:Configure_Groups(self[group])
@@ -866,6 +866,8 @@ function UF:CreateAndUpdateHeaderGroup(group, groupFilter, template, headerUpdat
 			UF.headerFunctions[group]:Configure_Groups(self[group])
 			UF.headerFunctions[group]:Update(self[group])
 		end
+
+		UF.headerFunctions[group]:AdjustVisibility(self[group])
 
 		if db.enable then
 			if self[group].mover then
