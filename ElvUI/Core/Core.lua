@@ -33,7 +33,7 @@ local LSM = E.Libs.LSM
 --Lua functions
 local _G = _G
 local tonumber, pairs, ipairs, error, unpack, select, tostring = tonumber, pairs, ipairs, error, unpack, select, tostring
-local assert, type, pcall = assert, type, pcall
+local assert, type = assert, type
 local twipe, tinsert, tremove, next = table.wipe, tinsert, tremove, next
 local format, find, match, strrep, strlen, sub, gsub, strjoin = string.format, string.find, string.match, strrep, strlen, string.sub, string.gsub, strjoin
 --WoW API / Variables
@@ -1034,89 +1034,46 @@ function E:ResetUI(...)
 	self:ResetMovers(...)
 end
 
-function E:RegisterModule(name, loadFunc)
-	if loadFunc and type(loadFunc) == "function" then --New method using callbacks
-		if self.initialized then
-			loadFunc()
-		else
-			if self.ModuleCallbacks[name] then
-				--Don't allow a registered module name to be overwritten
-				E:Print("Invalid argument #1 to E:RegisterModule (module name:", name, "is already registered, please use a unique name)")
-				return
-			end
+function E:CallLoadedModule(obj, silent, object, index)
+	local name, func
+	if type(obj) == "table" then name, func = unpack(obj) else name = obj end
+	local module = name and self:GetModule(name, silent)
 
-			--Add module name to registry
-			self.ModuleCallbacks[name] = true
-			self.ModuleCallbacks.CallPriority[#self.ModuleCallbacks.CallPriority + 1] = name
-
-			--Register loadFunc to be called when event is fired
-			E:RegisterCallback(name, loadFunc, E:GetModule(name))
-		end
-	else
-		if self.initialized then
-			self:GetModule(name):Initialize()
-		else
-			self.RegisteredModules[#self.RegisteredModules + 1] = name
-		end
+	if not module then return end
+	if func and type(func) == "string" then
+		E:RegisterCallback(name, module[func], module)
+	elseif func and type(func) == "function" then
+		E:RegisterCallback(name, func, module)
+	elseif module.Initialize then
+		E:RegisterCallback(name, module.Initialize, module)
 	end
+
+	E.callbacks:Fire(name)
+
+	if object and index then object[index] = nil end
 end
 
-function E:RegisterInitialModule(name, loadFunc)
-	if loadFunc and type(loadFunc) == "function" then --New method using callbacks
-		if self.InitialModuleCallbacks[name] then
-			--Don't allow a registered module name to be overwritten
-			E:Print("Invalid argument #1 to E:RegisterInitialModule (module name:", name, "is already registered, please use a unique name)")
-			return
-		end
+function E:RegisterInitialModule(name, func)
+	self.RegisteredInitialModules[#self.RegisteredInitialModules + 1] = (func and {name, func}) or name
+end
 
-		--Add module name to registry
-		self.InitialModuleCallbacks[name] = true
-		self.InitialModuleCallbacks.CallPriority[#self.InitialModuleCallbacks.CallPriority + 1] = name
-
-		--Register loadFunc to be called when event is fired
-		E:RegisterCallback(name, loadFunc, E:GetModule(name))
+function E:RegisterModule(name, func)
+	if self.initialized then
+		E:CallLoadedModule((func and {name, func}) or name)
 	else
-		self.RegisteredInitialModules[#self.RegisteredInitialModules + 1] = name
+		self.RegisteredModules[#self.RegisteredModules + 1] = (func and {name, func}) or name
 	end
 end
 
 function E:InitializeInitialModules()
-	--Fire callbacks for any module using the new system
-	for index, moduleName in ipairs(self.InitialModuleCallbacks.CallPriority) do
-		self.InitialModuleCallbacks[moduleName] = nil
-		self.InitialModuleCallbacks.CallPriority[index] = nil
-		E.callbacks:Fire(moduleName)
-	end
-
-	--Old deprecated initialize method, we keep it for any plugins that may need it
-	for _, module in pairs(E.RegisteredInitialModules) do
-		module = self:GetModule(module, true)
-		if module and module.Initialize then
-			local _, catch = pcall(module.Initialize, module)
-			if catch then
-				ScriptErrorsFrame_OnError(catch, false);
-			end
-		end
+	for index, object in ipairs(E.RegisteredInitialModules) do
+		E:CallLoadedModule(object, true, E.RegisteredInitialModules, index)
 	end
 end
 
 function E:InitializeModules()
-	--Fire callbacks for any module using the new system
-	for index, moduleName in ipairs(self.ModuleCallbacks.CallPriority) do
-		self.ModuleCallbacks[moduleName] = nil
-		self.ModuleCallbacks.CallPriority[index] = nil
-		E.callbacks:Fire(moduleName)
-	end
-
-	--Old deprecated initialize method, we keep it for any plugins that may need it
-	for _, module in pairs(E.RegisteredModules) do
-		module = self:GetModule(module)
-		if module.Initialize then
-			local _, catch = pcall(module.Initialize, module)
-			if catch then
-				ScriptErrorsFrame_OnError(catch, false)
-			end
-		end
+	for index, object in ipairs(E.RegisteredModules) do
+		E:CallLoadedModule(object, true, E.RegisteredModules, index)
 	end
 end
 
