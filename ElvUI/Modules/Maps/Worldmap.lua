@@ -45,6 +45,15 @@ function M:PLAYER_REGEN_ENABLED()
 		WorldMapZoomOutButton:Show()
 	end
 
+	hooksecurefunc("QuestPOI_DisplayButton", function(parentName, buttonType, buttonIndex)
+		local poiButton = _G["poi"..parentName..buttonType.."_"..buttonIndex]
+
+		if poiButton and parentName == "WatchFrameLines" then
+			poiButton:Show()
+		end
+	end)
+	WatchFrame_Update()
+
 	WorldMapBlobFrame:SetParent(WorldMapFrame)
 	WorldMapBlobFrame:ClearAllPoints()
 	WorldMapBlobFrame:SetPoint("TOPLEFT", WorldMapDetailFrame)
@@ -90,6 +99,15 @@ function M:PLAYER_REGEN_DISABLED()
 	if not GetCVarBool("miniWorldMap") then
 		WorldMapZoomOutButton:Hide()
 	end
+
+	hooksecurefunc("QuestPOI_DisplayButton", function(parentName, buttonType, buttonIndex)
+		local poiButton = _G["poi"..parentName..buttonType.."_"..buttonIndex]
+
+		if poiButton and parentName == "WatchFrameLines" then
+			poiButton:Hide()
+		end
+	end)
+	WatchFrame_Update()
 
 	M.blobWasVisible = WorldMapFrame:IsShown() and WorldMapBlobFrame:IsShown()
 
