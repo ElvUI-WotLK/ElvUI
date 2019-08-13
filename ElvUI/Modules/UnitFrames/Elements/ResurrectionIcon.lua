@@ -9,6 +9,7 @@ function UF:Construct_ResurrectionIcon(frame)
 	tex:SetTexture([[Interface\AddOns\ElvUI\media\textures\Raid-Icon-Rez]])
 	tex:Point("CENTER", frame.Health, "CENTER")
 	tex:Size(30)
+	tex:Hide()
 
 	return tex
 end
@@ -18,15 +19,17 @@ function UF:Configure_ResurrectionIcon(frame)
 	local db = frame.db
 
 	if db.resurrectIcon.enable then
-		frame:EnableElement("ResurrectIndicator")
-		RI:Show()
+		if not frame:IsElementEnabled("ResurrectIndicator") then
+			frame:EnableElement("ResurrectIndicator")
+		end
 		RI:Size(db.resurrectIcon.size)
 
 		local attachPoint = self:GetObjectAnchorPoint(frame, db.resurrectIcon.attachToObject)
 		RI:ClearAllPoints()
 		RI:Point(db.resurrectIcon.attachTo, attachPoint, db.resurrectIcon.attachTo, db.resurrectIcon.xOffset, db.resurrectIcon.yOffset)
 	else
-		frame:DisableElement("ResurrectIndicator")
-		RI:Hide()
+		if frame:IsElementEnabled("ResurrectIndicator") then
+			frame:DisableElement("ResurrectIndicator")
+		end
 	end
 end
