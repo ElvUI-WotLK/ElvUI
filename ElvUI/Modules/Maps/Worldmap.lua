@@ -111,6 +111,7 @@ function M:PositionCoords()
 
 	CoordsHolder.playerCoords:ClearAllPoints()
 	CoordsHolder.playerCoords:Point(position, WorldMapDetailFrame, position, x + xOffset, y + yOffset)
+
 	CoordsHolder.mouseCoords:ClearAllPoints()
 	CoordsHolder.mouseCoords:Point(position, CoordsHolder.playerCoords, INVERTED_POINTS[position], 0, y)
 end
@@ -144,19 +145,21 @@ function M:Initialize()
 	M.Initialized = true
 
 	if E.global.general.WorldMapCoordinates.enable then
-		local coordsHolder = CreateFrame("Frame", "CoordsHolder", WorldMapFrame)
-		coordsHolder:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 100)
-		coordsHolder:SetFrameStrata(WorldMapDetailFrame:GetFrameStrata())
-		coordsHolder.playerCoords = coordsHolder:CreateFontString(nil, "OVERLAY")
-		coordsHolder.mouseCoords = coordsHolder:CreateFontString(nil, "OVERLAY")
-		coordsHolder.playerCoords:SetTextColor(1, 1 ,0)
-		coordsHolder.mouseCoords:SetTextColor(1, 1 ,0)
-		coordsHolder.playerCoords:SetFontObject(NumberFontNormal)
-		coordsHolder.mouseCoords:SetFontObject(NumberFontNormal)
-		coordsHolder.playerCoords:SetPoint("BOTTOMLEFT", WorldMapDetailFrame, "BOTTOMLEFT", 5, 5)
-		coordsHolder.playerCoords:SetText(PLAYER..":   0, 0")
-		coordsHolder.mouseCoords:SetPoint("BOTTOMLEFT", coordsHolder.playerCoords, "TOPLEFT", 0, 5)
-		coordsHolder.mouseCoords:SetText(MOUSE_LABEL..":   0, 0")
+		local CoordsHolder = CreateFrame("Frame", "CoordsHolder", WorldMapFrame)
+		CoordsHolder:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 100)
+		CoordsHolder:SetFrameStrata(WorldMapDetailFrame:GetFrameStrata())
+
+		CoordsHolder.playerCoords = CoordsHolder:CreateFontString(nil, "OVERLAY")
+		CoordsHolder.playerCoords:SetTextColor(1, 1 ,0)
+		CoordsHolder.playerCoords:SetFontObject(NumberFontNormal)
+		CoordsHolder.playerCoords:SetPoint("BOTTOMLEFT", WorldMapDetailFrame, "BOTTOMLEFT", 5, 5)
+		CoordsHolder.playerCoords:SetText(PLAYER..":   0, 0")
+
+		CoordsHolder.mouseCoords = CoordsHolder:CreateFontString(nil, "OVERLAY")
+		CoordsHolder.mouseCoords:SetTextColor(1, 1 ,0)
+		CoordsHolder.mouseCoords:SetFontObject(NumberFontNormal)
+		CoordsHolder.mouseCoords:SetPoint("BOTTOMLEFT", CoordsHolder.playerCoords, "TOPLEFT", 0, 5)
+		CoordsHolder.mouseCoords:SetText(MOUSE_LABEL..":   0, 0")
 
 		WorldMapFrame:HookScript("OnShow", function()
 			if not M.CoordsTimer then
