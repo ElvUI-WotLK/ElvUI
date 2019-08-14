@@ -77,28 +77,20 @@ local function LoadSkin()
 	S:HandleNextPrevButton(MerchantNextPageButton, nil, nil, true)
 	S:HandleNextPrevButton(MerchantPrevPageButton, nil, nil, true)
 
-	MerchantRepairItemButton:StyleButton()
-	MerchantRepairItemButton:SetTemplate()
+	S:HandleButton(MerchantRepairItemButton)
+	MerchantRepairItemButton:StyleButton(false)
+	MerchantRepairItemButton:GetRegions():SetTexCoord(0.04, 0.24, 0.07, 0.5)
+	MerchantRepairItemButton:GetRegions():SetInside()
 
-	for i = 1, MerchantRepairItemButton:GetNumRegions() do
-		local region = select(i, MerchantRepairItemButton:GetRegions())
-		if region:GetObjectType() == "Texture" then
-			region:SetTexCoord(0.04, 0.24, 0.07, 0.5)
-			region:SetInside()
-		end
-	end
-
-	MerchantRepairAllButton:StyleButton()
-	MerchantRepairAllButton:SetTemplate()
-
-	MerchantRepairAllIcon:SetTexCoord(0.34, 0.1, 0.34, 0.535, 0.535, 0.1, 0.535, 0.535)
-	MerchantRepairAllIcon:SetInside()
-
+	S:HandleButton(MerchantGuildBankRepairButton)
 	MerchantGuildBankRepairButton:StyleButton()
-	MerchantGuildBankRepairButton:SetTemplate()
-
 	MerchantGuildBankRepairButtonIcon:SetTexCoord(0.61, 0.82, 0.1, 0.52)
 	MerchantGuildBankRepairButtonIcon:SetInside()
+
+	S:HandleButton(MerchantRepairAllButton)
+	MerchantRepairAllIcon:StyleButton(false)
+	MerchantRepairAllIcon:SetTexCoord(0.34, 0.1, 0.34, 0.535, 0.535, 0.1, 0.535, 0.535)
+	MerchantRepairAllIcon:SetInside()
 
 	MerchantBuyBackItem:StripTextures(true)
 	MerchantBuyBackItem:CreateBackdrop("Transparent")
@@ -119,24 +111,26 @@ local function LoadSkin()
 
 	hooksecurefunc("MerchantFrame_UpdateMerchantInfo", function()
 		local numMerchantItems = GetMerchantNumItems()
-		local index
-		local itemButton, itemName
+		local index, button, itemName
 		for i = 1, BUYBACK_ITEMS_PER_PAGE do
 			index = (((MerchantFrame.page - 1) * MERCHANT_ITEMS_PER_PAGE) + i)
-			itemButton = _G["MerchantItem"..i.."ItemButton"]
-			itemName = _G["MerchantItem"..i.."Name"]
+			button = _G["MerchantItem"..i.."ItemButton"]
+			name = _G["MerchantItem"..i.."Name"]
 
 			if index <= numMerchantItems then
-				if itemButton.link then
-					local _, _, quality = GetItemInfo(itemButton.link)
-					local r, g, b = GetItemQualityColor(quality)
+				if button.link then
+					local _, _, quality = GetItemInfo(button.link)
 
-					itemName:SetTextColor(r, g, b)
 					if quality then
-						itemButton:SetBackdropBorderColor(r, g, b)
+						button:SetBackdropBorderColor(GetItemQualityColor(quality))
+						name:SetTextColor(GetItemQualityColor(quality))
 					else
-						itemButton:SetBackdropBorderColor(unpack(E.media.bordercolor))
+						button:SetBackdropBorderColor(unpack(E.media.bordercolor))
+						name:SetTextColor(1, 1, 1)
 					end
+				else
+					button:SetBackdropBorderColor(unpack(E.media.bordercolor))
+					name:SetTextColor(1, 1, 1)
 				end
 			end
 
@@ -145,11 +139,12 @@ local function LoadSkin()
 				local _, _, quality = GetItemInfo(buybackName)
 				local r, g, b = GetItemQualityColor(quality)
 
-				MerchantBuyBackItemName:SetTextColor(r, g, b)
 				if quality then
 					MerchantBuyBackItemItemButton:SetBackdropBorderColor(r, g, b)
+					MerchantBuyBackItemName:SetTextColor(r, g, b)
 				else
 					MerchantBuyBackItemItemButton:SetBackdropBorderColor(unpack(E.media.bordercolor))
+					MerchantBuyBackItemName:SetTextColor(1, 1, 1)
 				end
 			else
 				MerchantBuyBackItemItemButton:SetBackdropBorderColor(unpack(E.media.bordercolor))
@@ -159,22 +154,22 @@ local function LoadSkin()
 
 	hooksecurefunc("MerchantFrame_UpdateBuybackInfo", function()
 		local numBuybackItems = GetNumBuybackItems()
-		local itemButton, itemName
+		local button, name
 		for i = 1, BUYBACK_ITEMS_PER_PAGE do
-			itemButton = _G["MerchantItem"..i.."ItemButton"]
-			itemName = _G["MerchantItem"..i.."Name"]
+			button = _G["MerchantItem"..i.."ItemButton"]
+			name = _G["MerchantItem"..i.."Name"]
 
 			if i <= numBuybackItems then
 				local buybackName = GetBuybackItemInfo(i)
 				if buybackName then
 					local _, _, quality = GetItemInfo(buybackName)
-					local r, g, b = GetItemQualityColor(quality)
 
-					itemName:SetTextColor(r, g, b)
 					if quality then
-						itemButton:SetBackdropBorderColor(r, g, b)
+						button:SetBackdropBorderColor(GetItemQualityColor(quality))
+						name:SetTextColor(GetItemQualityColor(quality))
 					else
-						itemButton:SetBackdropBorderColor(unpack(E.media.bordercolor))
+						button:SetBackdropBorderColor(unpack(E.media.bordercolor))
+						name:SetTextColor(1, 1, 1)
 					end
 				end
 			end
