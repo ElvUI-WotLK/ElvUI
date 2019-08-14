@@ -65,6 +65,9 @@ local function LoadSkin()
 	ClassTrainerMoneyFrame:ClearAllPoints()
 	ClassTrainerMoneyFrame:Point("BOTTOMLEFT", ClassTrainerFrame, "BOTTOMRIGHT", -180, 107)
 
+	ClassTrainerSkillHighlight:SetTexture(E.Media.Textures.Highlight)
+	ClassTrainerSkillHighlight:SetAlpha(0.35)
+
 	S:HandleCloseButton(ClassTrainerFrameCloseButton)
 
 	ClassTrainerSkillIcon:StripTextures()

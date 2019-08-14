@@ -195,7 +195,7 @@ local function LoadSkin()
 
 	QuestLogFrame:HookScript("OnShow", function()
 		if not QuestLogScrollFrame.backdrop then
-			QuestLogScrollFrame:CreateBackdrop("Default", true)
+			QuestLogScrollFrame:CreateBackdrop("Transparent")
 		end
 
 		QuestLogScrollFrame.backdrop:Point("TOPLEFT", 0, 2)
@@ -203,7 +203,7 @@ local function LoadSkin()
 		QuestLogScrollFrame:Size(302, 331)
 
 		if not QuestLogDetailScrollFrame.backdrop then
-			QuestLogDetailScrollFrame:CreateBackdrop("Default", true)
+			QuestLogDetailScrollFrame:CreateBackdrop("Transparent")
 		end
 		QuestLogDetailScrollFrame.backdrop:Point("TOPLEFT", 0, 3)
 		QuestLogDetailScrollFrame.backdrop:Point("BOTTOMRIGHT", 0, -2)
@@ -218,7 +218,7 @@ local function LoadSkin()
 
 	QuestLogDetailFrame:HookScript("OnShow", function()
 		if not QuestLogDetailScrollFrame.backdrop then
-			QuestLogDetailScrollFrame:CreateBackdrop("Default", true)
+			QuestLogDetailScrollFrame:CreateBackdrop("Transparent")
 		end
 		QuestLogDetailScrollFrame.backdrop:Point("BOTTOMRIGHT", 0, -2)
 		QuestLogDetailScrollFrame:Height(375)

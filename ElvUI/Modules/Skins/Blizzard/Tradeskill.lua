@@ -189,6 +189,9 @@ local function LoadSkin()
 	TradeSkillReagent7:Point("TOPLEFT", TradeSkillReagent5, "BOTTOMLEFT", 0, -3)
 	TradeSkillReagent8:Point("LEFT", TradeSkillReagent7, "RIGHT", 3, 0)
 
+	TradeSkillHighlight:SetTexture(E.Media.Textures.Highlight)
+	TradeSkillHighlight:SetAlpha(0.35)
+
 	TradeSkillCancelButton:ClearAllPoints()
 	TradeSkillCancelButton:Point("TOPRIGHT", TradeSkillDetailScrollFrame, "BOTTOMRIGHT", 23, -3)
 	S:HandleButton(TradeSkillCancelButton)
