@@ -31,7 +31,7 @@ function M:PLAYER_REGEN_ENABLED()
 	WorldMapBlobFrame:SetParent(WorldMapFrame)
 	WorldMapBlobFrame:ClearAllPoints()
 	WorldMapBlobFrame:SetPoint("TOPLEFT", WorldMapDetailFrame)
-	WorldMapBlobFrame:SetScale(WORLDMAP_SETTINGS.size)
+	WorldMapBlobFrame:SetScale(M.blobNewScale or WORLDMAP_SETTINGS.size)
 	WorldMapBlobFrame.Hide = nil
 	WorldMapBlobFrame.Show = nil
 
@@ -68,6 +68,7 @@ function M:PLAYER_REGEN_DISABLED()
 	WorldMapBlobFrame:Hide()
 	WorldMapBlobFrame.Hide = function() M.blobWasVisible = nil end
 	WorldMapBlobFrame.Show = function() M.blobWasVisible = true end
+	M.blobNewScale = nil
 end
 
 function M:UpdateCoords()
@@ -129,18 +130,6 @@ function M:ToggleMapFramerate()
 	end
 end
 
-function M:WorldMapFrame_SetQuestMapView()
-	if InCombatLockdown() then return end
-
-	WorldMapBlobFrame:SetScale(WORLDMAP_SETTINGS.size)
-end
-
-function M:WorldMapFrame_SetFullMapView()
-	if InCombatLockdown() then return end
-
-	WorldMapBlobFrame:SetScale(WORLDMAP_SETTINGS.size)
-end
-
 function M:Initialize()
 	M.Initialized = true
 
@@ -193,8 +182,10 @@ function M:Initialize()
 		end
 
 		M:SecureHook("ToggleMapFramerate")
-		M:SecureHook("WorldMapFrame_SetQuestMapView")
-		M:SecureHook("WorldMapFrame_SetFullMapView")
+
+		hooksecurefunc(WorldMapDetailFrame, "SetScale", function(_, scale)
+			M.blobNewScale = scale
+		end)
 
 		DropDownList1:HookScript("OnShow", function()
 			if DropDownList1:GetScale() ~= UIParent:GetScale() then
