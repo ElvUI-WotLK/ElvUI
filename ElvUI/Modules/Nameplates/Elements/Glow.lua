@@ -113,9 +113,16 @@ function NP:UpdateElement_Glow(frame)
 		if frame.Glow and (r ~= frame.Glow.r or g ~= frame.Glow.g or b ~= frame.Glow.b or a ~= frame.Glow.a) then
 			frame.Glow:SetBackdropBorderColor(r, g, b, a)
 			frame.Glow2:SetVertexColor(r, g, b, a)
+
 			frame.TopArrow:SetVertexColor(r, g, b, a)
+			frame.TopArrow:SetRotation(3.14)
+
 			frame.LeftArrow:SetVertexColor(r, g, b, a)
+			frame.LeftArrow:SetRotation(1.57)
+
 			frame.RightArrow:SetVertexColor(r, g, b, a)
+			frame.RightArrow:SetRotation(-1.57)
+
 			frame.Glow.r, frame.Glow.g, frame.Glow.b, frame.Glow.a = r, g, b, a
 		end
 	end
@@ -137,20 +144,17 @@ function NP:ConstructElement_Glow(frame)
 	frame.Glow2 = glow
 
 	local top = frame:CreateTexture(nil, "BACKGROUND")
-	top:SetTexture(E.Media.Textures.NameplateTargetIndicator)
-	top:Size(45)
+	top:SetTexture(E.Media.Textures.ArrowUp)
 	top:Hide()
 	frame.TopArrow = top
 
 	local left = frame:CreateTexture(nil, "BACKGROUND")
-	left:SetTexture(E.Media.Textures.NameplateTargetIndicatorLeft)
-	left:Size(45)
+	left:SetTexture(E.Media.Textures.ArrowUp)
 	left:Hide()
 	frame.LeftArrow = left
 
 	local right = frame:CreateTexture(nil, "BACKGROUND")
-	right:SetTexture(E.Media.Textures.NameplateTargetIndicatorRight)
-	right:Size(45)
+	right:SetTexture(E.Media.Textures.ArrowUp)
 	right:Hide()
 	frame.RightArrow = right
 
