@@ -48,6 +48,12 @@ local function LoadSkin()
 	WorldMapQuestScrollFrame.backdrop:Point("BOTTOMRIGHT", 25, -3)
 	WorldMapQuestScrollFrame.backdrop:SetFrameLevel(WorldMapQuestScrollFrame:GetFrameLevel())
 
+	WorldMapQuestSelectBar:SetTexture(E.Media.Textures.Highlight)
+	WorldMapQuestSelectBar:SetAlpha(0.35)
+
+	WorldMapQuestHighlightBar:SetTexture(E.Media.Textures.Highlight)
+	WorldMapQuestHighlightBar:SetAlpha(0.35)
+
 	S:HandleScrollBar(WorldMapQuestScrollFrameScrollBar)
 	S:HandleScrollBar(WorldMapQuestDetailScrollFrameScrollBar, 4)
 	S:HandleScrollBar(WorldMapQuestRewardScrollFrameScrollBar, 4)
