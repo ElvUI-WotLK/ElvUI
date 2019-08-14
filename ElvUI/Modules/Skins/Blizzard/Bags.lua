@@ -228,35 +228,52 @@ local function LoadSkin()
 
 	hooksecurefunc("BankFrameItemButton_Update", function(button)
 		local id = button:GetID()
-		local link = button.isBag and GetInventoryItemLink("player", ContainerIDToInventoryID(id)) or GetContainerItemLink(BANK_CONTAINER, id)
+		local link, quality
+		local questTexture, isQuestItem, questId, isActive
 
-		if link then
-			local questTexture = _G[button:GetName().."IconQuestTexture"]
-			local isQuestItem, questId, isActive = GetContainerItemQuestInfo(BANK_CONTAINER, id)
-			local quality = select(3, GetItemInfo(link))
-
-			if questTexture then questTexture:Hide() end
-
-			if button.isBag then
-				button:SetBackdropBorderColor(GetItemQualityColor(quality))
-				button.ignoreBorderColors = true
-			elseif questId and not isActive then
-				button:SetBackdropBorderColor(unpack(QuestColors.questStarter))
-				button.ignoreBorderColors = true
-				if questTexture then questTexture:Show() end
-			elseif questId or isQuestItem then
-				button:SetBackdropBorderColor(unpack(QuestColors.questItem))
-				button.ignoreBorderColors = true
-			elseif quality then
-				button:SetBackdropBorderColor(GetItemQualityColor(quality))
-				button.ignoreBorderColors = true
+		if button.isBag then
+			link = GetInventoryItemLink("player", ContainerIDToInventoryID(id))
+			if link then
+				quality = select(3, GetItemInfo(link))
+				if quality then
+					button:SetBackdropBorderColor(GetItemQualityColor(quality))
+					button.ignoreBorderColors = true
+				else
+					button:SetBackdropBorderColor(unpack(E.media.bordercolor))
+					button.ignoreBorderColors = nil
+				end
 			else
 				button:SetBackdropBorderColor(unpack(E.media.bordercolor))
 				button.ignoreBorderColors = nil
 			end
 		else
-			button:SetBackdropBorderColor(unpack(E.media.bordercolor))
-			button.ignoreBorderColors = nil
+			link = GetContainerItemLink(BANK_CONTAINER, id)
+			questTexture = _G[button:GetName().."IconQuestTexture"]
+
+			if questTexture then questTexture:Hide() end
+
+			if link then
+				isQuestItem, questId, isActive = GetContainerItemQuestInfo(BANK_CONTAINER, id)
+				quality = select(3, GetItemInfo(link))
+
+				if questId and not isActive then
+					button:SetBackdropBorderColor(unpack(QuestColors.questStarter))
+					button.ignoreBorderColors = true
+					if questTexture then questTexture:Show() end
+				elseif questId or isQuestItem then
+					button:SetBackdropBorderColor(unpack(QuestColors.questItem))
+					button.ignoreBorderColors = true
+				elseif quality then
+					button:SetBackdropBorderColor(GetItemQualityColor(quality))
+					button.ignoreBorderColors = true
+				else
+					button:SetBackdropBorderColor(unpack(E.media.bordercolor))
+					button.ignoreBorderColors = nil
+				end
+			else
+				button:SetBackdropBorderColor(unpack(E.media.bordercolor))
+				button.ignoreBorderColors = nil
+			end
 		end
 	end)
 end
