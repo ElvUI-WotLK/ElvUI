@@ -3,7 +3,7 @@ local S = E:GetModule("Skins")
 
 --Lua functions
 local _G = _G
-local unpack, select = unpack, select
+local unpack = unpack
 --WoW API / Variables
 local hooksecurefunc = hooksecurefunc
 
@@ -111,7 +111,7 @@ local function LoadSkin()
 
 	hooksecurefunc("MerchantFrame_UpdateMerchantInfo", function()
 		local numMerchantItems = GetMerchantNumItems()
-		local index, button, itemName
+		local index, button, name
 		for i = 1, BUYBACK_ITEMS_PER_PAGE do
 			index = (((MerchantFrame.page - 1) * MERCHANT_ITEMS_PER_PAGE) + i)
 			button = _G["MerchantItem"..i.."ItemButton"]
