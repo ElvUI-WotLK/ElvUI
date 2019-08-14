@@ -100,7 +100,7 @@ E.Options.args.skins = {
 				},
 				calendar = {
 					type = "toggle",
-					name = L["Calendar"],
+					name = L["Calendar Frame"],
 					desc = L["TOGGLESKIN_DESC"]
 				},
 				character = {

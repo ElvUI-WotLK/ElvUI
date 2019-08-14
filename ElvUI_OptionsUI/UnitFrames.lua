@@ -2489,7 +2489,7 @@ E.Options.args.unitframe = {
 		bossShortcut = {
 			order = 23,
 			type = "execute",
-			name = L["BOSS"],
+			name = L["Boss"],
 			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "unitframe", "boss") end,
 			disabled = function() return not E.UnitFrames.Initialized end
@@ -5411,7 +5411,7 @@ E.Options.args.unitframe.args.pettarget = {
 E.Options.args.unitframe.args.boss = {
 	order = 1000,
 	type = "group",
-	name = L["BOSS"],
+	name = L["Boss"],
 	childGroups = "tab",
 	get = function(info) return E.db.unitframe.units.boss[info[#info]] end,
 	set = function(info, value) E.db.unitframe.units.boss[info[#info]] = value UF:CreateAndUpdateUFGroup("boss", MAX_BOSS_FRAMES) end,
@@ -5433,7 +5433,7 @@ E.Options.args.unitframe.args.boss = {
 			order = 3,
 			type = "execute",
 			name = L["Restore Defaults"],
-			func = function(info) E:StaticPopup_Show("RESET_UF_UNIT", L["BOSS"], nil, {unit="boss", mover="Boss Frames"}) end
+			func = function(info) E:StaticPopup_Show("RESET_UF_UNIT", L["Boss"], nil, {unit="boss", mover="Boss Frames"}) end
 		},
 		copyFrom = {
 			order = 4,
