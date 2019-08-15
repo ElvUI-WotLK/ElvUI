@@ -484,7 +484,7 @@ function AB:UpdateButtonSettings()
 
 	for button in pairs(self.handledbuttons) do
 		if button then
-			self:StyleButton(button, button.noBackdrop)
+			self:StyleButton(button, button.noBackdrop, button.useMasque)
 		else
 			self.handledbuttons[button] = nil
 		end
