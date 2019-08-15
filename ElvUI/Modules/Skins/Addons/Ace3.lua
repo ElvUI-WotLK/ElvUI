@@ -396,14 +396,14 @@ function S:Ace3_RegisterAsContainer(widget)
 						button.highlight:SetTexture(E.Media.Textures.Highlight)
 						button.highlight:SetVertexColor(1, 0.82, 0, 0.35)
 
+						button.toggle:SetHighlightTexture("")
+
 						if groupstatus[lines[i].uniquevalue] then
 							button.toggle:SetNormalTexture(E.Media.Textures.Minus)
 							button.toggle:SetPushedTexture(E.Media.Textures.Minus)
-							button.toggle:SetHighlightTexture("")
 						else
 							button.toggle:SetNormalTexture(E.Media.Textures.Plus)
 							button.toggle:SetPushedTexture(E.Media.Textures.Plus)
-							button.toggle:SetHighlightTexture("")
 						end
 					end
 				end
