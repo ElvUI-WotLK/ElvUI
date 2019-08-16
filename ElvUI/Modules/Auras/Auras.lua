@@ -246,18 +246,20 @@ local enchantableSlots = {
 }
 
 function A:HasEnchant(index, weapon, expiration)
-	if weapon and (not self.EnchanData[index] or self.EnchanData[index].expiration < expiration) then
-		self.EnchanData[index] = {}
-		self.EnchanData[index].expiration = expiration
-		return true
-	elseif self.EnchanData[index] then
-		if weapon then
-			self.EnchanData[index].expiration = expiration
-		else
+	if not weapon then
+		if self.EnchanData[index] then
 			self.EnchanData[index] = nil
 			return true
 		end
+		return
 	end
+
+	if not self.EnchanData[index] or self.EnchanData[index] < expiration then
+		self.EnchanData[index] = expiration
+		return true
+	end
+
+	self.EnchanData[index] = expiration
 end
 
 local buttons = {}
@@ -359,7 +361,7 @@ function A:ConfigureAuras(header, auraTable, weaponPosition)
 						button:SetBackdropBorderColor(GetItemQualityColor(quality))
 					end
 
-					local expirationTime = A.EnchanData[weapon].expiration
+					local expirationTime = A.EnchanData[weapon]
 					if expirationTime then
 						if not button.timeLeft then
 							button.timeLeft = expirationTime / 1e3
