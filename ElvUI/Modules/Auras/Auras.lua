@@ -595,10 +595,18 @@ function A:Initialize()
 	self.BuffFrame:Point("TOPRIGHT", MMHolder, "TOPLEFT", -(6 + E.Border), -E.Border - E.Spacing)
 	E:CreateMover(self.BuffFrame, "BuffsMover", L["Player Buffs"], nil, nil, nil, nil, nil, "auras,buffs")
 
-	self.BuffFrame:SetScript("OnUpdate", function(self)
+	self.BuffFrame.nextUpdate = -1
+	self.BuffFrame:SetScript("OnUpdate", function(bf, elapsed)
+		if bf.nextUpdate > 0 then
+			bf.nextUpdate = bf.nextUpdate - elapsed
+			return
+		end
+
+		bf.nextUpdate = 1
+
 		local hasMainHandEnchant, mainHandExpiration, _, hasOffHandEnchant, offHandExpiration = GetWeaponEnchantInfo()
 		if A:HasEnchant(1, hasMainHandEnchant, mainHandExpiration) or A:HasEnchant(2, hasOffHandEnchant, offHandExpiration) then
-			A:UpdateHeader(self)
+			A:UpdateHeader(bf)
 		end
 	end)
 
