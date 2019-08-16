@@ -56,7 +56,6 @@ function UF:Construct_Combobar(frame)
 		ComboPoints[i].bg = ComboPoints[i]:CreateTexture(nil, "BORDER")
 		ComboPoints[i].bg:SetAllPoints()
 		ComboPoints[i].bg:SetTexture(E.media.blankTex)
-		ComboPoints[i].bg.multiplier = 0.3
 	end
 
 	frame:RegisterEvent("UNIT_ENTERED_VEHICLE", UF.UpdateComboDisplay)
