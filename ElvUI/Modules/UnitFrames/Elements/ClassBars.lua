@@ -305,10 +305,9 @@ function UF:Construct_AdditionalPowerBar(frame)
 	additionalPower:SetStatusBarTexture(E.media.blankTex)
 	UF.statusbars[additionalPower] = true
 
-	additionalPower.bg = additionalPower:CreateTexture(nil, "BORDER")
-	additionalPower.bg:SetAllPoints(additionalPower)
-	additionalPower.bg:SetTexture(E.media.blankTex)
-	additionalPower.bg.multiplier = 0.35
+	additionalPower.BG = additionalPower:CreateTexture(nil, "BORDER")
+	additionalPower.BG:SetAllPoints(additionalPower)
+	additionalPower.BG:SetTexture(E.media.blankTex)
 
 	additionalPower.text = additionalPower:CreateFontString(nil, "OVERLAY")
 	UF:Configure_FontString(additionalPower.text)
@@ -376,7 +375,10 @@ function UF:PostUpdateAdditionalPower(_, MIN, MAX, event)
 
 		local custom_backdrop = UF.db.colors.customclasspowerbackdrop and UF.db.colors.classpower_backdrop
 		if custom_backdrop then
-			self.bg:SetVertexColor(custom_backdrop.r, custom_backdrop.g, custom_backdrop.b)
+			self.BG:SetVertexColor(custom_backdrop.r, custom_backdrop.g, custom_backdrop.b)
+		else
+			local r, g, b = self:GetStatusBarColor()
+			self.BG:SetVertexColor(r * 0.35, g * 0.35, b * 0.35)
 		end
 
 		self:Show()
