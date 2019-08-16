@@ -2928,15 +2928,55 @@ E.Options.args.unitframe = {
 									get = function(info) return E.db.unitframe.colors[info[#info]] end,
 									set = function(info, value) E.db.unitframe.colors[info[#info]] = value UF:Update_AllFrames() end
 								},
-								useDeadBackdrop = {
+								spacer1 = {
 									order = 7,
+									type = "description",
+									name = " ",
+									width = "full"
+								},
+								customhealthbackdrop = {
+									order = 8,
+									type = "toggle",
+									name = L["Custom Backdrop"],
+									desc = L["Use the custom backdrop color instead of a multiple of the main color."],
+									get = function(info) return E.db.unitframe.colors[info[#info]] end,
+									set = function(info, value) E.db.unitframe.colors[info[#info]] = value UF:Update_AllFrames() end
+								},
+								health_backdrop = {
+									order = 9,
+									type = "color",
+									name = L["Health Backdrop"],
+									disabled = function() return not E.db.unitframe.colors.customhealthbackdrop end
+								},
+								spacer2 = {
+									order = 10,
+									type = "description",
+									name = " ",
+									width = "full"
+								},
+								useDeadBackdrop = {
+									order = 11,
 									type = "toggle",
 									name = L["Use Dead Backdrop"],
 									get = function(info) return E.db.unitframe.colors[info[#info]] end,
 									set = function(info, value) E.db.unitframe.colors[info[#info]] = value UF:Update_AllFrames() end
 								},
+								health_backdrop_dead = {
+									order = 12,
+									type = "color",
+									name = L["Custom Dead Backdrop"],
+									desc = L["Use this backdrop color for units that are dead or ghosts."],
+									customWidth = 250,
+									disabled = function() return not E.db.unitframe.colors.useDeadBackdrop end
+								},
+								spacer3 = {
+									order = 13,
+									type = "description",
+									name = " ",
+									width = "full"
+								},
 								classbackdrop = {
-									order = 8,
+									order = 14,
 									type = "toggle",
 									name = L["Class Backdrop"],
 									desc = L["Color the health backdrop by class or reaction."],
@@ -2944,16 +2984,8 @@ E.Options.args.unitframe = {
 									set = function(info, value) E.db.unitframe.colors[info[#info]] = value UF:Update_AllFrames() end,
 									disabled = function() return E.db.unitframe.colors.customhealthbackdrop end
 								},
-								customhealthbackdrop = {
-									order = 9,
-									type = "toggle",
-									name = L["Custom Backdrop"],
-									desc = L["Use the custom backdrop color instead of a multiple of the main color."],
-									get = function(info) return E.db.unitframe.colors[info[#info]] end,
-									set = function(info, value) E.db.unitframe.colors[info[#info]] = value UF:Update_AllFrames() end
-								},
 								healthMultiplier = {
-									order = 10,
+									order = 15,
 									type = "range",
 									name = L["Health Backdrop Multiplier"],
 									min = 0, softMax = 0.75, max = 1, step = .01,
@@ -2961,33 +2993,26 @@ E.Options.args.unitframe = {
 									set = function(info, value) E.db.unitframe.colors[info[#info]] = value UF:Update_AllFrames() end,
 									disabled = function() return E.db.unitframe.colors.customhealthbackdrop end
 								},
-								health_backdrop = {
-									order = 11,
-									type = "color",
-									name = L["Health Backdrop"],
-									disabled = function() return not E.db.unitframe.colors.customhealthbackdrop end
+								spacer4 = {
+									order = 16,
+									type = "description",
+									name = " ",
+									width = "full"
 								},
 								tapped = {
-									order = 12,
+									order = 17,
 									type = "color",
 									name = L["Tapped"]
 								},
 								health = {
-									order = 13,
+									order = 18,
 									type = "color",
 									name = L["HEALTH"]
 								},
 								disconnected = {
-									order = 14,
+									order = 19,
 									type = "color",
 									name = L["Disconnected"]
-								},
-								health_backdrop_dead = {
-									order = 15,
-									type = "color",
-									name = L["Custom Dead Backdrop"],
-									desc = L["Use this backdrop color for units that are dead or ghosts."],
-									customWidth = 250
 								}
 							}
 						},
