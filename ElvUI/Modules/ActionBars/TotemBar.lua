@@ -12,7 +12,7 @@ local RegisterStateDriver = RegisterStateDriver
 if E.myclass ~= "SHAMAN" then return end
 
 local bar = CreateFrame("Frame", "ElvUI_BarTotem", E.UIParent, "SecureHandlerStateTemplate")
-local bar:SetFrameStrata("LOW")
+bar:SetFrameStrata("LOW")
 
 local SLOT_BORDER_COLORS = {
 	["summon"]			= {r = 0, g = 0, b = 0},

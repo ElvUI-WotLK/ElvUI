@@ -19,7 +19,7 @@ local GetBindingKey = GetBindingKey
 local NUM_SHAPESHIFT_SLOTS = NUM_SHAPESHIFT_SLOTS
 
 local bar = CreateFrame("Frame", "ElvUI_StanceBar", E.UIParent, "SecureHandlerStateTemplate")
-local bar:SetFrameStrata("LOW")
+bar:SetFrameStrata("LOW")
 
 function AB:UPDATE_SHAPESHIFT_COOLDOWN()
 	local numForms = GetNumShapeshiftForms()
