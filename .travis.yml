@@ -1,0 +1,19 @@
+language: minimal
+cache: packages
+
+addons:
+  apt:
+    packages:
+    - luarocks
+
+install:
+  - luarocks install --local luacheck
+  - luarocks install --local lanes
+
+script:
+ - /home/travis/.luarocks/bin/luacheck . -q
+
+notifications:
+  email:
+    on_success: never
+    on_failure: never

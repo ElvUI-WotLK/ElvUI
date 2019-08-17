@@ -28,7 +28,7 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ]]
-local MAJOR_VERSION = "LibActionButton-1.0"
+local MAJOR_VERSION = "LibActionButton-1.0-ElvUI"
 local MINOR_VERSION = 66
 
 if not LibStub then error(MAJOR_VERSION .. " requires LibStub.") end
@@ -193,138 +193,154 @@ function SetupSecureSnippets(button)
 	-- secure UpdateState(self, state)
 	-- update the type and action of the button based on the state
 	button:SetAttribute("UpdateState", [[
-		local state = ...;
+		local state = ...
 		self:SetAttribute("state", state)
-		local type, action = (self:GetAttribute(format("labtype-%s", state)) or "empty"), self:GetAttribute(format("labaction-%s", state));
-		self:SetAttribute("type", type);
-		if(type ~= "empty" and type ~= "custom") then
-			local action_field = (type == "pet") and "action" or type;
-			self:SetAttribute(action_field, action);
-			self:SetAttribute("action_field", action_field);
-		end
-		local onStateChanged = self:GetAttribute("OnStateChanged");
-		if(onStateChanged) then
-			self:Run(onStateChanged, state, type, action);
-		end
-	]]);
+		local type, action = (self:GetAttribute(format("labtype-%s", state)) or "empty"), self:GetAttribute(format("labaction-%s", state))
 
+		self:SetAttribute("type", type)
+		if type ~= "empty" and type ~= "custom" then
+			local action_field = (type == "pet") and "action" or type
+			self:SetAttribute(action_field, action)
+			self:SetAttribute("action_field", action_field)
+		end
+		local onStateChanged = self:GetAttribute("OnStateChanged")
+		if onStateChanged then
+			self:Run(onStateChanged, state, type, action)
+		end
+	]])
+
+	-- this function is invoked by the header when the state changes
 	button:SetAttribute("_childupdate-state", [[
-		control:RunFor(self, self:GetAttribute("UpdateState"), message);
-	]]);
+		control:RunFor(self, self:GetAttribute("UpdateState"), message)
+	]])
 
+	-- secure PickupButton(self, kind, value, ...)
+	-- utility function to place a object on the cursor
 	button:SetAttribute("PickupButton", [[
-		local kind, value = ...;
-		if(kind == "empty") then
+		local kind, value = ...
+		if kind == "empty" then
 			return "clear"
-		elseif(kind == "action" or kind == "pet") then
-			local actionType = (kind == "pet") and "petaction" or kind;
-			return actionType, value;
-		elseif(kind == "spell" or kind == "item" or kind == "macro") then
-			return "clear", kind, value;
+		elseif kind == "action" or kind == "pet" then
+			local actionType = (kind == "pet") and "petaction" or kind
+			return actionType, value
+		elseif kind == "spell" or kind == "item" or kind == "macro" then
+			return "clear", kind, value
 		else
-			print("LibActionButton-1.0: Unknown type: " .. tostring(kind));
-			return false;
+			print("LibActionButton-1.0: Unknown type: " .. tostring(kind))
+			return false
 		end
 	]]);
 
 	button:SetAttribute("OnDragStart", [[
-		if((self:GetAttribute("buttonlock") and not IsModifiedClick("PICKUPACTION")) or self:GetAttribute("LABdisableDragNDrop")) then return false; end
-		local state = self:GetAttribute("state");
-		local type = self:GetAttribute("type");
-
-		if(type == "empty" or type == "custom") then
-			return false;
+		if (self:GetAttribute("buttonlock") and not IsModifiedClick("PICKUPACTION")) or self:GetAttribute("LABdisableDragNDrop") then return false end
+		local state = self:GetAttribute("state")
+		local type = self:GetAttribute("type")
+		-- if the button is empty, we can't drag anything off it
+		if type == "empty" or type == "custom" then
+			return false
 		end
+		-- Get the value for the action attribute
+		local action_field = self:GetAttribute("action_field")
+		local action = self:GetAttribute(action_field)
 
-		local action_field = self:GetAttribute("action_field");
-		local action = self:GetAttribute(action_field);
-
-		if(type ~= "action" and type ~= "pet") then
-			self:SetAttribute(format("labtype-%s", state), "empty");
-			self:SetAttribute(format("labaction-%s", state), nil);
-
-			control:RunFor(self, self:GetAttribute("UpdateState"), state);
-
+		-- non-action fields need to change their type to empty
+		if type ~= "action" and type ~= "pet" then
+			self:SetAttribute(format("labtype-%s", state), "empty")
+			self:SetAttribute(format("labaction-%s", state), nil)
+			-- update internal state
+			control:RunFor(self, self:GetAttribute("UpdateState"), state)
+			-- send a notification to the insecure code
 			--self:CallMethod("ButtonContentsChanged", state, "empty", nil)
 		end
-
-		return control:RunFor(self, self:GetAttribute("PickupButton"), type, action);
-	]]);
+		-- return the button contents for pickup
+		return control:RunFor(self, self:GetAttribute("PickupButton"), type, action)
+	]])
 
 	button:SetAttribute("OnReceiveDrag", [[
-		if(self:GetAttribute("LABdisableDragNDrop")) then return false; end
-		local kind, value, subtype, extra = ...;
-		if(not kind or not value) then return false; end
-		local state = self:GetAttribute("state");
-		local buttonType, buttonAction = self:GetAttribute("type"), nil;
-		if(buttonType == "custom") then return false; end
-
-		if(buttonType ~= "action" and buttonType ~= "pet") then
-			if(kind == "spell") then
-				if(extra) then
-					value = extra;
+		if self:GetAttribute("LABdisableDragNDrop") then return false end
+		local kind, value, subtype, extra = ...
+		if not kind or not value then return false end
+		local state = self:GetAttribute("state")
+		local buttonType, buttonAction = self:GetAttribute("type"), nil
+		if buttonType == "custom" then return false end
+		-- action buttons can do their magic themself
+		-- for all other buttons, we'll need to update the content now
+		if buttonType ~= "action" and buttonType ~= "pet" then
+			-- with "spell" types, the 4th value contains the actual spell id
+			if kind == "spell" then
+				if extra then
+					value = extra
 				else
-					print("no spell id?", ...);
+					print("no spell id?", ...)
 				end
-			elseif(kind == "item" and value) then
-				value = format("item:%d", value);
+			elseif kind == "item" and value then
+				value = format("item:%d", value)
 			end
 
-			if(buttonType ~= "empty") then
-				buttonAction = self:GetAttribute(self:GetAttribute("action_field"));
+			-- Get the action that was on the button before
+			if buttonType ~= "empty" then
+				buttonAction = self:GetAttribute(self:GetAttribute("action_field"))
 			end
 
-			self:SetAttribute(format("labtype-%s", state), kind);
-			self:SetAttribute(format("labaction-%s", state), value);
+			-- TODO: validate what kind of action is being fed in here
+			-- We can only use a handful of the possible things on the cursor
+			-- return false for all those we can't put on buttons
 
-			control:RunFor(self, self:GetAttribute("UpdateState"), state);
-
+			self:SetAttribute(format("labtype-%s", state), kind)
+			self:SetAttribute(format("labaction-%s", state), value)
+			-- update internal state
+			control:RunFor(self, self:GetAttribute("UpdateState"), state)
+			-- send a notification to the insecure code
 			--self:CallMethod("ButtonContentsChanged", state, kind, value)
 		else
-			buttonAction = self:GetAttribute("action");
+			-- get the action for (pet-)action buttons
+			buttonAction = self:GetAttribute("action")
 		end
-		return control:RunFor(self, self:GetAttribute("PickupButton"), buttonType, buttonAction);
-	]]);
+		return control:RunFor(self, self:GetAttribute("PickupButton"), buttonType, buttonAction)
+	]])
 
-	button:SetScript("OnDragStart", nil);
-
+	button:SetScript("OnDragStart", nil)
+	-- Wrapped OnDragStart(self, button, kind, value, ...)
 	button.header:WrapScript(button, "OnDragStart", [[
-		return control:RunFor(self, self:GetAttribute("OnDragStart"));
-	]]);
-
+		return control:RunFor(self, self:GetAttribute("OnDragStart"))
+	]])
+	-- Wrap twice, because the post-script is not run when the pre-script causes a pickup (doh)
+	-- we also need some phony message, or it won't work =/
 	button.header:WrapScript(button, "OnDragStart", [[
 		return "message", "update";
 	]], [[
-		return control:RunFor(self, self:GetAttribute("UpdateState"), self:GetAttribute("state"));
-	]]);
+		return control:RunFor(self, self:GetAttribute("UpdateState"), self:GetAttribute("state"))
+	]])
 
-	button:SetScript("OnReceiveDrag", nil);
-
+	button:SetScript("OnReceiveDrag", nil)
+	-- Wrapped OnReceiveDrag(self, button, kind, value, ...)
 	button.header:WrapScript(button, "OnReceiveDrag", [[
-		return control:RunFor(self, self:GetAttribute("OnReceiveDrag"), kind, value, ...);
-	]]);
-
+		return control:RunFor(self, self:GetAttribute("OnReceiveDrag"), kind, value, ...)
+	]])
+	-- Wrap twice, because the post-script is not run when the pre-script causes a pickup (doh)
+	-- we also need some phony message, or it won't work =/
 	button.header:WrapScript(button, "OnReceiveDrag", [[
-		return "message", "update";
+		return "message", "update"
 	]], [[
-		control:RunFor(self, self:GetAttribute("UpdateState"), self:GetAttribute("state"));
-	]]);
+		control:RunFor(self, self:GetAttribute("UpdateState"), self:GetAttribute("state"))
+	]])
 
 	button:SetScript("OnAttributeChanged", function(self, ...)
-		button:ButtonContentsChanged(...);
-	end);
+		button:ButtonContentsChanged(...)
+	end)
 end
 
 function WrapOnClick(button)
+	-- Wrap OnClick, to catch changes to actions that are applied with a click on the button.
 	button.header:WrapScript(button, "OnClick", [[
 		if self:GetAttribute("type") == "action" then
-			local type, action = GetActionInfo(self:GetAttribute("action"));
-			return nil, format("%s|%s", tostring(type), tostring(action));
+			local type, action = GetActionInfo(self:GetAttribute("action"))
+			return nil, format("%s|%s", tostring(type), tostring(action))
 		end
 	]], [[
-		local type, action = GetActionInfo(self:GetAttribute("action"));
-		if(message ~= format("%s|%s", tostring(type), tostring(action))) then
-			return control:RunFor(self, self:GetAttribute("UpdateState"), self:GetAttribute("state"));
+		local type, action = GetActionInfo(self:GetAttribute("action"))
+		if message ~= format("%s|%s", tostring(type), tostring(action)) then
+			return control:RunFor(self, self:GetAttribute("UpdateState"), self:GetAttribute("state"))
 		end
 	]])
 end
@@ -351,6 +367,7 @@ function Generic:NewHeader(header)
 	SetupSecureSnippets(self)
 	WrapOnClick(self)
 end
+
 
 -----------------------------------------------------------
 --- state management
@@ -487,8 +504,12 @@ local function PickupAny(kind, target, detail, ...)
 	end
 end
 
-function Generic:OnUpdate()
+function Generic:OnUpdate(elapsed)
 	if not GetCVarBool('lockActionBars') then return; end
+
+	self.lastupdate = (self.lastupdate or 0) + elapsed;
+	if (self.lastupdate < .2) then return end
+	self.lastupdate = 0
 
 	local isDragKeyDown
 	if GetModifiedClick("PICKUPACTION") == 'ALT' then
@@ -562,7 +583,7 @@ function Generic:PostClick()
 			self._old_type = nil
 		end
 		local oldType, oldAction = self._state_type, self._state_action
-		local  kind, data, subtype = GetCursorInfo()
+		local kind, data, subtype = GetCursorInfo()
 		self.header:SetFrameRef("updateButton", self)
 		self.header:Execute(format([[
 			local frame = self:GetFrameRef("updateButton")
@@ -607,9 +628,11 @@ function Generic:UpdateConfig(config)
 	else
 		self.actionName:Show()
 	end
+
 	UpdateHotkeys(self)
 	UpdateGrid(self)
 	Update(self, true)
+
 	self:RegisterForClicks(self.config.clickOnDown and "AnyDown" or "AnyUp")
 end
 
@@ -842,6 +865,7 @@ end
 
 -----------------------------------------------------------
 --- KeyBound integration
+
 function Generic:GetBindingAction()
 	return self.config.keyBoundTarget or "CLICK "..self:GetName()..":LeftButton"
 end

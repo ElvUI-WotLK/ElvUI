@@ -33,7 +33,7 @@ local GetAngle = function(unit1, unit2)
 	return -pi2 - GetPlayerFacing() - atan2(y2 - y1, x2 - x1);
 end
 
-local minThrottle = 0.02
+local minThrottle = 0.2
 local numArrows, inRange, unit, GPS
 local Update = function(self, elapsed)
 	if(self.elapsed and self.elapsed > (self.throttle or minThrottle)) then

@@ -2,7 +2,6 @@ local MAJOR, MINOR = "LibElvUIPlugin-1.0", 18
 local lib, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
 if not lib then return end
 
---Cache global variables
 --Lua functions
 local pairs, tonumber = pairs, tonumber
 local format, gsub, strmatch, strsplit = format, gsub, strmatch, strsplit
@@ -54,7 +53,7 @@ end
 -- Plugin table format:
 --	{ name (string) - The name of the plugin,
 --		version (string) - The version of the plugin,
---		optionCallback (string) - The callback to call when ElvUI_Config is loaded
+--		optionCallback (string) - The callback to call when ElvUI_OptionsUI is loaded
 --	}
 --
 
@@ -70,7 +69,7 @@ function lib:RegisterPlugin(name,callback, isLib)
 	if isLib then plugin.isLib = true; plugin.version = 1 end
 	plugin.callback = callback
 	lib.plugins[name] = plugin
-	local loaded = IsAddOnLoaded("ElvUI_Config")
+	local loaded = IsAddOnLoaded("ElvUI_OptionsUI")
 
 	if not lib.vcframe then
 		local f = CreateFrame("Frame")
@@ -86,7 +85,7 @@ function lib:RegisterPlugin(name,callback, isLib)
 			local configFrame = CreateFrame("Frame")
 			configFrame:RegisterEvent("ADDON_LOADED")
 			configFrame:SetScript("OnEvent", function(self, event, addon)
-				if addon == "ElvUI_Config" then
+				if addon == "ElvUI_OptionsUI" then
 					for _, PlugIn in pairs(lib.plugins) do
 						if PlugIn.callback then
 							PlugIn.callback()
@@ -155,7 +154,7 @@ function lib:VersionCheck(event, prefix, message, channel, sender)
 		if not (prefix == lib.prefix and sender and message and not strmatch(message, "^%s-$")) then return end
 		if sender == E.myname then return end
 
-		if not E["pluginRecievedOutOfDateMessage"] then
+		if not E.pluginRecievedOutOfDateMessage then
 			local name, version, plugin, Pname
 			for _, p in pairs({strsplit(";",message)}) do
 				if not strmatch(p, "^%s-$") then
@@ -167,7 +166,7 @@ function lib:VersionCheck(event, prefix, message, channel, sender)
 							plugin.newversion = tonumber(version)
 							Pname = GetAddOnMetadata(plugin.name, "Title")
 							E:Print(format(MSG_OUTDATED, Pname, plugin.version, plugin.newversion))
-							E["pluginRecievedOutOfDateMessage"] = true
+							E.pluginRecievedOutOfDateMessage = true
 						end
 					end
 				end
@@ -182,7 +181,7 @@ function lib:VersionCheck(event, prefix, message, channel, sender)
 		local num = numRaid > 0 and numRaid or numParty
 		if num ~= lib.groupSize then
 			if num > 1 and ((lib.groupSize and num > lib.groupSize) or not lib.groupSize) then
-				E["ElvUIPluginSendMSGTimer"] = E:ScheduleTimer("SendPluginVersionCheck", 12)
+				E.ElvUIPluginSendMSGTimer = E:ScheduleTimer("SendPluginVersionCheck", 12)
 			end
 			lib.groupSize = num
 		end

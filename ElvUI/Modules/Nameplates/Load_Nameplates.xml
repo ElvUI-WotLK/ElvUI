@@ -1,0 +1,16 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="Nameplates.lua"/>
+	<Script file="StyleFilter.lua"/>
+	<Script file="Elements\Auras.lua"/>
+	<Script file="Elements\CastBar.lua"/>
+	<Script file="Elements\ComboPoints.lua"/>
+	<Script file="Elements\Glow.lua"/>
+	<Script file="Elements\HealthBar.lua"/>
+	<Script file="Elements\CutawayHealth.lua"/>
+	<Script file="Elements\Level.lua"/>
+	<Script file="Elements\Name.lua"/>
+	<Script file="Elements\RaidIcon.lua"/>
+	<Script file="Elements\HealerIcon.lua"/>
+	<Script file="Elements\Elite.lua"/>
+	<Script file="Elements\Highlight.lua"/>
+</Ui>
