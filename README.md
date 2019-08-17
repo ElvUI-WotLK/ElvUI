@@ -47,8 +47,6 @@ This UI will arrange your interface to be more flexible and practical.
 <br />
 [ElvUI_EnhancedFriendsList](https://github.com/ElvUI-WotLK/ElvUI_EnhancedFriendsList)
 <br />
-[ElvUI_EverySecondCounts](https://github.com/ElvUI-WotLK/ElvUI_EverySecondCounts)
-<br />
 [ElvUI_ExtraActionBars](https://github.com/ElvUI-WotLK/ElvUI_ExtraActionBars)
 <br />
 [ElvUI_LocPlus](https://github.com/ElvUI-WotLK/ElvUI_LocPlus)
