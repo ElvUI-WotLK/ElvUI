@@ -314,6 +314,10 @@ function CH:StyleChat(frame)
 		editbox.characterCount:SetText((255 - strlen(text)))
 	end
 
+	for _, text in ipairs(ElvCharacterDB.ChatEditHistory) do
+		editbox:AddHistoryLine(text)
+	end
+
 	local a, b, c = select(6, editbox:GetRegions()); a:Kill(); b:Kill(); c:Kill()
 	_G[format(editbox:GetName().."FocusLeft", id)]:Kill()
 	_G[format(editbox:GetName().."FocusMid", id)]:Kill()
@@ -339,13 +343,8 @@ function CH:StyleChat(frame)
 			end
 		end
 
-		editBox.historyIndex = 0
 		editBox:Hide()
 	end)
-
-	for _, text in pairs(ElvCharacterDB.ChatEditHistory) do
-		editbox:AddHistoryLine(text)
-	end
 
 	language:Height(22)
 	language:StripTextures()
@@ -1443,20 +1442,20 @@ function CH:SetChatFont(dropDown, chatFrame, fontSize)
 	chatFrame:SetShadowOffset(E.mult, -E.mult)
 end
 
-function CH:ChatEdit_AddHistory(_, line) -- editBox, line
-	line = line and strtrim(line)
+function CH:ChatEdit_AddHistory(_, text)
+	text = strtrim(text)
 
-	if line and strlen(line) > 0 then
-		if find(line, "/rl") then return end
+	if strlen(text) > 0 then
+		if find(text, "/rl") then return end
 
-		for index, text in pairs(ElvCharacterDB.ChatEditHistory) do
-			if text == line then
-				tremove(ElvCharacterDB.ChatEditHistory, index)
+		for i, historyText in ipairs(ElvCharacterDB.ChatEditHistory) do
+			if historyText == text then
+				tremove(ElvCharacterDB.ChatEditHistory, i)
 				break
 			end
 		end
 
-		tinsert(ElvCharacterDB.ChatEditHistory, line)
+		tinsert(ElvCharacterDB.ChatEditHistory, text)
 
 		if #ElvCharacterDB.ChatEditHistory > 20 then
 			tremove(ElvCharacterDB.ChatEditHistory, 1)
