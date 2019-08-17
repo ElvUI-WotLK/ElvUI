@@ -266,7 +266,7 @@ local function GetOptionsTable_AuraBars(updateFunc, groupName)
 			yOffset = {
 				order = 19,
 				type = "range",
-				name = L["yOffset"],
+				name = L["Y-Offset"],
 				min = -1000, max = 1000, step = 1,
 			},
 			spacing = {
@@ -454,13 +454,13 @@ local function GetOptionsTable_Auras(auraType, isGroupFrame, updateFunc, groupNa
 			xOffset = {
 				order = 6,
 				type = "range",
-				name = L["xOffset"],
+				name = L["X-Offset"],
 				min = -300, max = 300, step = 1
 			},
 			yOffset = {
 				order = 7,
 				type = "range",
-				name = L["yOffset"],
+				name = L["Y-Offset"],
 				min = -300, max = 300, step = 1
 			},
 			anchorPoint = {
@@ -1472,14 +1472,14 @@ local function GetOptionsTable_Castbar(hasTicks, updateFunc, groupName, numUnits
 					iconXOffset = {
 						order = 6,
 						type = "range",
-						name = L["xOffset"],
+						name = L["X-Offset"],
 						min = -300, max = 300, step = 1,
 						disabled = function() return E.db.unitframe.units[groupName].castbar.iconAttached end
 					},
 					iconYOffset = {
 						order = 7,
 						type = "range",
-						name = L["yOffset"],
+						name = L["Y-Offset"],
 						min = -300, max = 300, step = 1,
 						disabled = function() return E.db.unitframe.units[groupName].castbar.iconAttached end
 					}
@@ -1621,14 +1621,14 @@ local function GetOptionsTable_RaidIcon(updateFunc, groupName, numUnits)
 			xOffset = {
 				order = 6,
 				type = "range",
-				name = L["xOffset"],
+				name = L["X-Offset"],
 				min = -300, max = 300, step = 1,
 				disabled = function() return not E.db.unitframe.units[groupName].raidicon.enable end
 			},
 			yOffset = {
 				order = 7,
 				type = "range",
-				name = L["yOffset"],
+				name = L["Y-Offset"],
 				min = -300, max = 300, step = 1,
 				disabled = function() return not E.db.unitframe.units[groupName].raidicon.enable end
 			}
@@ -1677,13 +1677,13 @@ local function GetOptionsTable_ResurrectIcon(updateFunc, groupName, numUnits)
 			xOffset = {
 				order = 6,
 				type = "range",
-				name = L["xOffset"],
+				name = L["X-Offset"],
 				min = -300, max = 300, step = 1
 			},
 			yOffset = {
 				order = 7,
 				type = "range",
-				name = L["yOffset"],
+				name = L["Y-Offset"],
 				min = -300, max = 300, step = 1
 			}
 		}
@@ -1748,13 +1748,13 @@ local function GetOptionsTable_RaidDebuff(updateFunc, groupName)
 			xOffset = {
 				order = 9,
 				type = "range",
-				name = L["xOffset"],
+				name = L["X-Offset"],
 				min = -300, max = 300, step = 1
 			},
 			yOffset = {
 				order = 10,
 				type = "range",
-				name = L["yOffset"],
+				name = L["Y-Offset"],
 				min = -300, max = 300, step = 1
 			},
 			configureButton = {
@@ -1780,13 +1780,13 @@ local function GetOptionsTable_RaidDebuff(updateFunc, groupName)
 					xOffset = {
 						order = 2,
 						type = "range",
-						name = L["xOffset"],
+						name = L["X-Offset"],
 						min = -10, max = 10, step = 1
 					},
 					yOffset = {
 						order = 3,
 						type = "range",
-						name = L["yOffset"],
+						name = L["Y-Offset"],
 						min = -10, max = 10, step = 1
 					},
 					color = {
@@ -1824,13 +1824,13 @@ local function GetOptionsTable_RaidDebuff(updateFunc, groupName)
 					xOffset = {
 						order = 2,
 						type = "range",
-						name = L["xOffset"],
+						name = L["X-Offset"],
 						min = -10, max = 10, step = 1
 					},
 					yOffset = {
 						order = 3,
 						type = "range",
-						name = L["yOffset"],
+						name = L["Y-Offset"],
 						min = -10, max = 10, step = 1
 					},
 					color = {
@@ -1896,13 +1896,13 @@ local function GetOptionsTable_ReadyCheckIcon(updateFunc, groupName)
 			xOffset = {
 				order = 6,
 				type = "range",
-				name = L["xOffset"],
+				name = L["X-Offset"],
 				min = -300, max = 300, step = 1
 			},
 			yOffset = {
 				order = 7,
 				type = "range",
-				name = L["yOffset"],
+				name = L["Y-Offset"],
 				min = -300, max = 300, step = 1
 			}
 		}
@@ -2056,13 +2056,13 @@ local function CreateCustomTextGroup(unit, objectName)
 			xOffset = {
 				order = 8,
 				type = "range",
-				name = L["xOffset"],
+				name = L["X-Offset"],
 				min = -400, max = 400, step = 1
 			},
 			yOffset = {
 				order = 9,
 				type = "range",
-				name = L["yOffset"],
+				name = L["Y-Offset"],
 				min = -400, max = 400, step = 1
 			},
 			attachTextTo = {
@@ -2179,13 +2179,13 @@ local function GetOptionsTable_GPS(groupName)
 			xOffset = {
 				order = 6,
 				type = "range",
-				name = L["xOffset"],
+				name = L["X-Offset"],
 				min = -300, max = 300, step = 1
 			},
 			yOffset = {
 				order = 7,
 				type = "range",
-				name = L["yOffset"],
+				name = L["Y-Offset"],
 				min = -300, max = 300, step = 1
 			}
 		}
@@ -2233,13 +2233,13 @@ local function GetOptionsTableForNonGroup_GPS(unit)
 			xOffset = {
 				order = 6,
 				type = "range",
-				name = L["xOffset"],
+				name = L["X-Offset"],
 				min = -300, max = 300, step = 1
 			},
 			yOffset = {
 				order = 7,
 				type = "range",
-				name = L["yOffset"],
+				name = L["Y-Offset"],
 				min = -300, max = 300, step = 1
 			}
 		}
@@ -2489,7 +2489,7 @@ E.Options.args.unitframe = {
 		bossShortcut = {
 			order = 23,
 			type = "execute",
-			name = L["Boss"],
+			name = L["BOSS"],
 			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "unitframe", "boss") end,
 			disabled = function() return not E.UnitFrames.Initialized end
@@ -3584,7 +3584,7 @@ E.Options.args.unitframe = {
 						boss = {
 							order = 5,
 							type = "toggle",
-							name = L["Boss"]
+							name = L["BOSS"]
 						},
 						arena = {
 							order = 6,
@@ -4013,13 +4013,13 @@ E.Options.args.unitframe.args.player = {
 				xOffset = {
 					order = 6,
 					type = "range",
-					name = L["xOffset"],
+					name = L["X-Offset"],
 					min = -100, max = 100, step = 1
 				},
 				yOffset = {
 					order = 7,
 					type = "range",
-					name = L["yOffset"],
+					name = L["Y-Offset"],
 					min = -100, max = 100, step = 1
 				},
 				spacer2 = {
@@ -4110,13 +4110,13 @@ E.Options.args.unitframe.args.player = {
 				xOffset = {
 					order = 6,
 					type = "range",
-					name = L["xOffset"],
+					name = L["X-Offset"],
 					min = -100, max = 100, step = 1
 				},
 				yOffset = {
 					order = 7,
 					type = "range",
-					name = L["yOffset"],
+					name = L["Y-Offset"],
 					min = -100, max = 100, step = 1
 				},
 				spacer2 = {
@@ -4200,13 +4200,13 @@ E.Options.args.unitframe.args.player = {
 				xOffset = {
 					order = 6,
 					type = "range",
-					name = L["xOffset"],
+					name = L["X-Offset"],
 					min = -100, max = 100, step = 1
 				},
 				yOffset = {
 					order = 7,
 					type = "range",
-					name = L["yOffset"],
+					name = L["Y-Offset"],
 					min = -100, max = 100, step = 1
 				}
 			}
@@ -4618,13 +4618,13 @@ E.Options.args.unitframe.args.target = {
 				xOffset = {
 					order = 6,
 					type = "range",
-					name = L["xOffset"],
+					name = L["X-Offset"],
 					min = -100, max = 100, step = 1
 				},
 				yOffset = {
 					order = 7,
 					type = "range",
-					name = L["yOffset"],
+					name = L["Y-Offset"],
 					min = -100, max = 100, step = 1
 				}
 			}
@@ -5436,7 +5436,7 @@ E.Options.args.unitframe.args.pettarget = {
 E.Options.args.unitframe.args.boss = {
 	order = 1000,
 	type = "group",
-	name = L["Boss"],
+	name = L["BOSS"],
 	childGroups = "tab",
 	get = function(info) return E.db.unitframe.units.boss[info[#info]] end,
 	set = function(info, value) E.db.unitframe.units.boss[info[#info]] = value UF:CreateAndUpdateUFGroup("boss", MAX_BOSS_FRAMES) end,
@@ -5458,7 +5458,7 @@ E.Options.args.unitframe.args.boss = {
 			order = 3,
 			type = "execute",
 			name = L["Restore Defaults"],
-			func = function(info) E:StaticPopup_Show("RESET_UF_UNIT", L["Boss"], nil, {unit="boss", mover="Boss Frames"}) end
+			func = function(info) E:StaticPopup_Show("RESET_UF_UNIT", L["BOSS"], nil, {unit="boss", mover="Boss Frames"}) end
 		},
 		copyFrom = {
 			order = 4,
@@ -5742,13 +5742,13 @@ E.Options.args.unitframe.args.arena = {
 				xOffset = {
 					order = 5,
 					type = "range",
-					name = L["xOffset"],
+					name = L["X-Offset"],
 					min = -60, max = 60, step = 1
 				},
 				yOffset = {
 					order = 6,
 					type = "range",
-					name = L["yOffset"],
+					name = L["Y-Offset"],
 					min = -60, max = 60, step = 1
 				}
 			}
@@ -6098,13 +6098,13 @@ E.Options.args.unitframe.args.party = {
 				xOffset = {
 					order = 5,
 					type = "range",
-					name = L["xOffset"],
+					name = L["X-Offset"],
 					min = -300, max = 300, step = 1
 				},
 				yOffset = {
 					order = 6,
 					type = "range",
-					name = L["yOffset"],
+					name = L["Y-Offset"],
 					min = -300, max = 300, step = 1
 				},
 				size = {
@@ -6213,14 +6213,14 @@ E.Options.args.unitframe.args.party = {
 				xOffset = {
 					order = 6,
 					type = "range",
-					name = L["xOffset"],
+					name = L["X-Offset"],
 					desc = L["An X offset (in pixels) to be used when anchoring new frames."],
 					min = -500, max = 500, step = 1
 				},
 				yOffset = {
 					order = 7,
 					type = "range",
-					name = L["yOffset"],
+					name = L["Y-Offset"],
 					desc = L["An Y offset (in pixels) to be used when anchoring new frames."],
 					min = -500, max = 500, step = 1
 				},
@@ -6302,14 +6302,14 @@ E.Options.args.unitframe.args.party = {
 				xOffset = {
 					order = 6,
 					type = "range",
-					name = L["xOffset"],
+					name = L["X-Offset"],
 					desc = L["An X offset (in pixels) to be used when anchoring new frames."],
 					min = -500, max = 500, step = 1
 				},
 				yOffset = {
 					order = 7,
 					type = "range",
-					name = L["yOffset"],
+					name = L["Y-Offset"],
 					desc = L["An Y offset (in pixels) to be used when anchoring new frames."],
 					min = -500, max = 500, step = 1
 				},
@@ -7448,14 +7448,14 @@ E.Options.args.unitframe.args.tank = {
 				xOffset = {
 					order = 6,
 					type = "range",
-					name = L["xOffset"],
+					name = L["X-Offset"],
 					desc = L["An X offset (in pixels) to be used when anchoring new frames."],
 					min = -500, max = 500, step = 1
 				},
 				yOffset = {
 					order = 7,
 					type = "range",
-					name = L["yOffset"],
+					name = L["Y-Offset"],
 					desc = L["An Y offset (in pixels) to be used when anchoring new frames."],
 					min = -500, max = 500, step = 1
 				},
@@ -7636,14 +7636,14 @@ E.Options.args.unitframe.args.assist = {
 				xOffset = {
 					order = 6,
 					type = "range",
-					name = L["xOffset"],
+					name = L["X-Offset"],
 					desc = L["An X offset (in pixels) to be used when anchoring new frames."],
 					min = -500, max = 500, step = 1
 				},
 				yOffset = {
 					order = 7,
 					type = "range",
-					name = L["yOffset"],
+					name = L["Y-Offset"],
 					desc = L["An Y offset (in pixels) to be used when anchoring new frames."],
 					min = -500, max = 500, step = 1
 				},

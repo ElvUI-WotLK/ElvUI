@@ -88,7 +88,7 @@ E.Options.args.maps = {
 						xOffset = {
 							order = 4,
 							type = "range",
-							name = L["xOffset"],
+							name = L["X-Offset"],
 							get = function(info) return E.global.general.WorldMapCoordinates.xOffset end,
 							set = function(info, value) E.global.general.WorldMapCoordinates.xOffset = value WM:PositionCoords() end,
 							disabled = function() return not E.global.general.WorldMapCoordinates.enable end,
@@ -97,7 +97,7 @@ E.Options.args.maps = {
 						yOffset = {
 							order = 5,
 							type = "range",
-							name = L["yOffset"],
+							name = L["Y-Offset"],
 							get = function(info) return E.global.general.WorldMapCoordinates.yOffset end,
 							set = function(info, value) E.global.general.WorldMapCoordinates.yOffset = value WM:PositionCoords() end,
 							disabled = function() return not E.global.general.WorldMapCoordinates.enable end,
@@ -293,14 +293,14 @@ E.Options.args.maps = {
 								xOffset = {
 									order = 6,
 									type = "range",
-									name = L["xOffset"],
+									name = L["X-Offset"],
 									min = -50, max = 50, step = 1,
 									disabled = function() return E.private.general.minimap.hideCalendar end
 								},
 								yOffset = {
 									order = 7,
 									type = "range",
-									name = L["yOffset"],
+									name = L["Y-Offset"],
 									min = -50, max = 50, step = 1,
 									disabled = function() return E.private.general.minimap.hideCalendar end
 								}
@@ -343,13 +343,13 @@ E.Options.args.maps = {
 								xOffset = {
 									order = 4,
 									type = "range",
-									name = L["xOffset"],
+									name = L["X-Offset"],
 									min = -50, max = 50, step = 1
 								},
 								yOffset = {
 									order = 5,
 									type = "range",
-									name = L["yOffset"],
+									name = L["Y-Offset"],
 									min = -50, max = 50, step = 1
 								}
 							}
@@ -391,13 +391,13 @@ E.Options.args.maps = {
 								xOffset = {
 									order = 4,
 									type = "range",
-									name = L["xOffset"],
+									name = L["X-Offset"],
 									min = -50, max = 50, step = 1
 								},
 								yOffset = {
 									order = 5,
 									type = "range",
-									name = L["yOffset"],
+									name = L["Y-Offset"],
 									min = -50, max = 50, step = 1
 								}
 							}
@@ -439,13 +439,13 @@ E.Options.args.maps = {
 								xOffset = {
 									order = 4,
 									type = "range",
-									name = L["xOffset"],
+									name = L["X-Offset"],
 									min = -50, max = 50, step = 1
 								},
 								yOffset = {
 									order = 5,
 									type = "range",
-									name = L["yOffset"],
+									name = L["Y-Offset"],
 									min = -50, max = 50, step = 1
 								}
 							}
@@ -487,13 +487,13 @@ E.Options.args.maps = {
 								xOffset = {
 									order = 4,
 									type = "range",
-									name = L["xOffset"],
+									name = L["X-Offset"],
 									min = -50, max = 50, step = 1
 								},
 								yOffset = {
 									order = 5,
 									type = "range",
-									name = L["yOffset"],
+									name = L["Y-Offset"],
 									min = -50, max = 50, step = 1
 								}
 							}
@@ -546,13 +546,13 @@ E.Options.args.maps = {
 								xOffset = {
 									order = 6,
 									type = "range",
-									name = L["xOffset"],
+									name = L["X-Offset"],
 									min = -50, max = 50, step = 1
 								},
 								yOffset = {
 									order = 7,
 									type = "range",
-									name = L["yOffset"],
+									name = L["Y-Offset"],
 									min = -50, max = 50, step = 1
 								}
 							}

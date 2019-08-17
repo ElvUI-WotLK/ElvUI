@@ -2179,14 +2179,14 @@ local function GetUnitSettings(unit, name)
 					xOffset = {
 						order = 6,
 						type = "range",
-						name = L["xOffset"],
+						name = L["X-Offset"],
 						min = -100, max = 100, step = 1,
 						disabled = function() return not E.db.nameplates.units.ENEMY_PLAYER.comboPoints.enable end
 					},
 					yOffset = {
 						order = 7,
 						type = "range",
-						name = L["yOffset"],
+						name = L["Y-Offset"],
 						min = -100, max = 100, step = 1,
 						disabled = function() return not E.db.nameplates.units.ENEMY_PLAYER.comboPoints.enable end
 					}
@@ -2249,14 +2249,14 @@ local function GetUnitSettings(unit, name)
 				xOffset = {
 					order = 6,
 					type = "range",
-					name = L["xOffset"],
+					name = L["X-Offset"],
 					min = -100, max = 100, step = 1,
 					disabled = function() return not E.db.nameplates.units[unit].eliteIcon.enable end
 				},
 				yOffset = {
 					order = 7,
 					type = "range",
-					name = L["yOffset"],
+					name = L["Y-Offset"],
 					min = -100, max = 100, step = 1,
 					disabled = function() return not E.db.nameplates.units[unit].eliteIcon.enable end
 				}
@@ -2304,14 +2304,14 @@ local function GetUnitSettings(unit, name)
 					xOffset = {
 						order = 6,
 						type = "range",
-						name = L["xOffset"],
+						name = L["X-Offset"],
 						min = -100, max = 100, step = 1,
 						disabled = function() return not E.db.nameplates.units.ENEMY_NPC.comboPoints.enable end
 					},
 					yOffset = {
 						order = 7,
 						type = "range",
-						name = L["yOffset"],
+						name = L["Y-Offset"],
 						min = -100, max = 100, step = 1,
 						disabled = function() return not E.db.nameplates.units.ENEMY_NPC.comboPoints.enable end
 					}
@@ -2991,7 +2991,7 @@ E.Options.args.nameplate = {
 							order = 3,
 							type = "range",
 							name = L["Health Length"],
-							desc = L["How much time before the CutawayHealth starts to fade."],
+							desc = L["How much time before the cutaway health starts to fade."],
 							min = 0.1, max = 1, step = 0.1,
 							get = function(info) return E.db.nameplates.cutawayHealthLength end,
 							set = function(info, value) E.db.nameplates.cutawayHealthLength = value end,
@@ -3001,7 +3001,7 @@ E.Options.args.nameplate = {
 							order = 4,
 							type = "range",
 							name = L["Fade Out"],
-							desc = L["How long the CutawayHealth will take to fade out."],
+							desc = L["How long the cutaway health will take to fade out."],
 							min = 0.1, max = 1, step = 0.1,
 							get = function(info) return E.db.nameplates.cutawayHealthFadeOutTime end,
 							set = function(info, value) E.db.nameplates.cutawayHealthFadeOutTime = value end,
