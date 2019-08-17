@@ -62,6 +62,7 @@ local IS_HORIZONTAL_GROWTH = {
 }
 
 local weaponEnchantTime = {}
+A.EnchanData = weaponEnchantTime
 
 function A:UpdateTime(elapsed)
 	if self.IsWeapon then
