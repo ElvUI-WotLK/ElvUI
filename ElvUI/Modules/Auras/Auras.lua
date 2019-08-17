@@ -61,11 +61,11 @@ local IS_HORIZONTAL_GROWTH = {
 	LEFT_UP = true
 }
 
-A.EnchanData = {}
+local weaponEnchantTime = {}
 
 function A:UpdateTime(elapsed)
 	if self.IsWeapon then
-		local expiration = A.EnchanData[self:GetID()].expiration
+		local expiration = weaponEnchantTime[self:GetID()]
 		if expiration then
 			self.timeLeft = expiration / 1e3
 		else
@@ -247,19 +247,19 @@ local enchantableSlots = {
 
 function A:HasEnchant(index, weapon, expiration)
 	if not weapon then
-		if self.EnchanData[index] then
-			self.EnchanData[index] = nil
+		if weaponEnchantTime[index] then
+			weaponEnchantTime[index] = nil
 			return true
 		end
 		return
 	end
 
-	if not self.EnchanData[index] or self.EnchanData[index] < expiration then
-		self.EnchanData[index] = expiration
+	if not weaponEnchantTime[index] or weaponEnchantTime[index] < expiration then
+		weaponEnchantTime[index] = expiration
 		return true
 	end
 
-	self.EnchanData[index] = expiration
+	weaponEnchantTime[index] = expiration
 end
 
 local buttons = {}
@@ -343,7 +343,7 @@ function A:ConfigureAuras(header, auraTable, weaponPosition)
 	if weaponPosition then
 		for weapon = 2, 1, -1 do
 			button = _G["ElvUIPlayerBuffsTempEnchant"..weapon]
-			if A.EnchanData[weapon] then
+			if weaponEnchantTime[weapon] then
 				if not button then
 					button = CreateFrame("Button", "$parentTempEnchant"..weapon, header)
 					button.IsWeapon = true
@@ -361,7 +361,7 @@ function A:ConfigureAuras(header, auraTable, weaponPosition)
 						button:SetBackdropBorderColor(GetItemQualityColor(quality))
 					end
 
-					local expirationTime = A.EnchanData[weapon]
+					local expirationTime = weaponEnchantTime[weapon]
 					if expirationTime then
 						if not button.timeLeft then
 							button.timeLeft = expirationTime / 1e3
