@@ -131,3 +131,37 @@ function UF:Configure_HealComm(frame)
 		frame:DisableElement("HealComm4")
 	end
 end
+
+local function UpdateFillBar(frame, previousTexture, bar, amount)
+	if amount == 0 then
+		bar:Hide()
+		return previousTexture
+	end
+
+	local orientation = frame:GetOrientation()
+	bar:ClearAllPoints()
+	if orientation == "HORIZONTAL" then
+		bar:SetPoint("TOPLEFT", previousTexture, "TOPRIGHT")
+		bar:SetPoint("BOTTOMLEFT", previousTexture, "BOTTOMRIGHT")
+	else
+		bar:SetPoint("BOTTOMRIGHT", previousTexture, "TOPRIGHT")
+		bar:SetPoint("BOTTOMLEFT", previousTexture, "TOPLEFT")
+	end
+
+	local totalWidth, totalHeight = frame:GetSize()
+	if orientation == "HORIZONTAL" then
+		bar:Width(totalWidth)
+	else
+		bar:Height(totalHeight)
+	end
+
+	return bar:GetStatusBarTexture()
+end
+
+function UF:UpdateHealComm(_, myIncomingHeal, allIncomingHeal)
+	local health = self.health
+	local previousTexture = health:GetStatusBarTexture()
+
+	previousTexture = UpdateFillBar(health, previousTexture, self.myBar, myIncomingHeal)
+	UpdateFillBar(health, previousTexture, self.otherBar, allIncomingHeal)
+end
