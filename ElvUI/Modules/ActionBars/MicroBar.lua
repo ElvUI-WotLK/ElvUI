@@ -175,6 +175,7 @@ end
 function AB:SetupMicroBar()
 	local microBar = CreateFrame("Frame", "ElvUI_MicroBar", E.UIParent)
 	microBar:Point("TOPLEFT", E.UIParent, "TOPLEFT", 4, -48)
+	microBar:SetFrameStrata("LOW")
 	microBar:EnableMouse(true)
 	microBar:SetScript("OnEnter", onEnterBar)
 	microBar:SetScript("OnLeave", onLeaveBar)
