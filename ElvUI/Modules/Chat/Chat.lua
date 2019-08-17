@@ -763,10 +763,7 @@ function CH:FindURL(event, msg, author, ...)
 	-- example@example.com
 	newMsg, found = gsub(newMsg, "(%S+@[A-z][A-z0-9-]+%.[A-z0-9-]+)", CH.PrintURL)
 	x = x + found
-	-- IP address 1.1.1.1
-	newMsg, found = gsub(newMsg, "(%d%d?%d?%.%d%d?%d?%.%d%d?%d?%.%d%d?%d?)", CH.PrintURL)
-	x = x + found
-	-- IP address with port 1.1.1.1:1
+	-- IP address
 	newMsg, found = gsub(newMsg, "(%d%d?%d?%.%d%d?%d?%.%d%d?%d?%.%d%d?%d?[:%d]*)", CH.PrintURL)
 	x = x + found
 
