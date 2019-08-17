@@ -3,7 +3,7 @@ local S = E:GetModule("Skins")
 
 --Lua functions
 local _G = _G
-local unpack, assert, pairs, ipairs, select, type = unpack, assert, pairs, ipairs, select, type
+local unpack, pairs, ipairs, select, type = unpack, pairs, ipairs, select, type
 local strfind = strfind
 --WoW API / Variables
 local hooksecurefunc = hooksecurefunc
@@ -42,7 +42,6 @@ end
 
 function S:HandleButton(button, strip, isDeclineButton, useCreateBackdrop, noSetTemplate)
 	if button.isSkinned then return end
-	assert(button, "doesn't exist!")
 
 	local buttonName = button.GetName and button:GetName()
 	if buttonName then
@@ -255,7 +254,6 @@ end
 
 function S:HandleCheckBox(frame, noBackdrop, noReplaceTextures, forceSaturation)
 	if frame.isSkinned then return end
-	assert(frame, "does not exist.")
 
 	frame:StripTextures()
 	frame.forceSaturation = forceSaturation
@@ -475,10 +473,6 @@ function S:HandleSliderFrame(frame)
 end
 
 function S:HandleIconSelectionFrame(frame, numIcons, buttonNameTemplate, frameNameOverride)
-	assert(frame, "HandleIconSelectionFrame: frame argument missing")
-	assert(numIcons and type(numIcons) == "number", "HandleIconSelectionFrame: numIcons argument missing or not a number")
-	assert(buttonNameTemplate and type(buttonNameTemplate) == "string", "HandleIconSelectionFrame: buttonNameTemplate argument missing or not a string")
-
 	local frameName = frameNameOverride or frame:GetName() --We need override in case Blizzard fucks up the naming (guild bank)
 	local scrollFrame = _G[frameName.."ScrollFrame"]
 	local editBox = _G[frameName.."EditBox"]
