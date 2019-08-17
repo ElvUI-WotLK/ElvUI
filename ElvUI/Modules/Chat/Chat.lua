@@ -1556,7 +1556,7 @@ function CH:SaveChatHistory(event, ...)
 		end
 	end
 
-	if self.db.throttleInterval ~= 0 and (event == "CHAT_MESSAGE_SAY" or event == "CHAT_MESSAGE_YELL" or event == "CHAT_MSG_CHANNEL") then
+	if self.db.throttleInterval ~= 0 and (event == "CHAT_MSG_SAY" or event == "CHAT_MSG_YELL" or event == "CHAT_MSG_CHANNEL") then
 		self:ChatThrottleHandler(event, ...)
 
 		local message, author = ...
