@@ -730,7 +730,7 @@ function CH:ScrollToBottom(frame)
 	self:CancelTimer(frame.ScrollTimer, true)
 end
 
-function CH:PrintURL(url)
+function CH.PrintURL(url)
 	return "|cFFFFFFFF[|Hurl:"..url.."|h"..url.."|h]|r "
 end
 
@@ -754,22 +754,27 @@ function CH:FindURL(event, msg, author, ...)
 		text = gsub(gsub(text, "(%S)({.-})", "%1 %2"), "({.-})(%S)", "%1 %2")
 	end
 
-	text = gsub(gsub(text, "(%S)(|c.-|H.-|h.-|h|r)", "%1 %2"), "(|c.-|H.-|h.-|h|r)(%S)", "%1 %2")
+	local x = 0
+	local newMsg, found = gsub(gsub(text, "(%S)(|c.-|H.-|h.-|h|r)", "%1 %2"), "(|c.-|H.-|h.-|h|r)(%S)", "%1 %2")
+
 	-- http://example.com
-	local newMsg, found = gsub(text, "(%a+)://(%S+)%s?", CH:PrintURL("%1://%2"))
-	if found > 0 then return false, CH:GetSmileyReplacementText(CH:CheckKeyword(newMsg, author)), author, ... end
-	-- www.example.com
-	newMsg, found = gsub(text, "www%.([_A-Za-z0-9-]+)%.(%S+)%s?", CH:PrintURL("www.%1.%2"))
-	if found > 0 then return false, CH:GetSmileyReplacementText(CH:CheckKeyword(newMsg, author)), author, ... end
+	newMsg, found = gsub(newMsg, "([A-z][A-z0-9+-%.]+://%S+)", CH.PrintURL)
+	x = x + found
 	-- example@example.com
-	newMsg, found = gsub(text, "([_A-Za-z0-9-%.]+)@([_A-Za-z0-9-]+)(%.+)([_A-Za-z0-9-%.]+)%s?", CH:PrintURL("%1@%2%3%4"))
-	if found > 0 then return false, CH:GetSmileyReplacementText(CH:CheckKeyword(newMsg, author)), author, ... end
-	-- IP address with port 1.1.1.1:1
-	newMsg, found = gsub(text, "(%d%d?%d?)%.(%d%d?%d?)%.(%d%d?%d?)%.(%d%d?%d?)(:%d+)%s?", CH:PrintURL("%1.%2.%3.%4%5"))
-	if found > 0 then return false, CH:GetSmileyReplacementText(CH:CheckKeyword(newMsg, author)), author, ... end
+	newMsg, found = gsub(newMsg, "(%S+@[A-z][A-z0-9-]+%.[A-z0-9-]+)", CH.PrintURL)
+	x = x + found
 	-- IP address 1.1.1.1
-	newMsg, found = gsub(text, "(%d%d?%d?)%.(%d%d?%d?)%.(%d%d?%d?)%.(%d%d?%d?)%s?", CH:PrintURL("%1.%2.%3.%4"))
-	if found > 0 then return false, CH:GetSmileyReplacementText(CH:CheckKeyword(newMsg, author)), author, ... end
+	newMsg, found = gsub(newMsg, "(%d%d?%d?%.%d%d?%d?%.%d%d?%d?%.%d%d?%d?)", CH.PrintURL)
+	x = x + found
+	-- IP address with port 1.1.1.1:1
+	newMsg, found = gsub(newMsg, "(%d%d?%d?%.%d%d?%d?%.%d%d?%d?%.%d%d?%d?[:%d]*)", CH.PrintURL)
+	x = x + found
+
+	if x > 0 then
+		newMsg = CH:CheckKeyword(newMsg, author)
+		newMsg = CH:GetSmileyReplacementText(newMsg)
+		return false, newMsg, author, ...
+	end
 
 	msg = CH:CheckKeyword(msg, author)
 	msg = CH:GetSmileyReplacementText(msg)
@@ -823,12 +828,6 @@ function CH:OnHyperlinkEnter(frame, refString)
 end
 
 function CH:OnHyperlinkLeave(_, refString)
-	-- local linkToken = refString:match("^([^:]+)")
-	-- if hyperlinkTypes[linkToken] then
-		-- HideUIPanel(GameTooltip)
-		-- hyperLinkEntered = nil
-	-- end
-
 	if hyperLinkEntered then
 		HideUIPanel(GameTooltip)
 		hyperLinkEntered = nil
@@ -1442,11 +1441,17 @@ function CH:SetChatFont(dropDown, chatFrame, fontSize)
 	chatFrame:SetShadowOffset(E.mult, -E.mult)
 end
 
+local historyBlacklist = {
+	["/rl"] = true,
+	["/reload"] = true,
+	["/reloadui"] = true,
+}
+
 function CH:ChatEdit_AddHistory(_, text)
 	text = strtrim(text)
 
 	if strlen(text) > 0 then
-		if find(text, "/rl") then return end
+		if historyBlacklist[text] then return end
 
 		for i, historyText in ipairs(ElvCharacterDB.ChatEditHistory) do
 			if historyText == text then

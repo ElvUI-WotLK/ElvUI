@@ -40,14 +40,11 @@ local instanceIconByName = {}
 local function GetInstanceImages(...)
 	local numTextures = select("#", ...) / 4
 
-	local param, title, texture = 1
+	local argn, title, texture = 1
 	for i = 1, numTextures do
-		title = select(param, ...)
-		param = param + 1
-		texture = select(param, ...)
-		param = param + 1
+		title, texture = select(argn, ...)
 		instanceIconByName[title] = texture
-		param = param + 2
+		argn = argn + 4
 	end
 end
 
