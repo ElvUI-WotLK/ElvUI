@@ -146,7 +146,9 @@ function AFK:OnEvent(event, ...)
 	end
 
 	if event == "PLAYER_REGEN_ENABLED" then
+		self:ScheduleTimer("OnEvent", 10)
 		self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+		return
 	end
 
 	if not E.db.general.afk then return end
