@@ -188,7 +188,7 @@ function NP:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, Fl
 	end
 	if TextureChanged then
 		frame.TextureChanged = nil
-		local tex = LSM:Fetch("statusbar", mod.db.statusbar)
+		local tex = LSM:Fetch("statusbar", NP.db.statusbar)
 		frame.Highlight.texture:SetTexture(tex)
 		frame.HealthBar:SetStatusBarTexture(tex)
 	end
