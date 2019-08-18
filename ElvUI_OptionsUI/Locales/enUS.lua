@@ -278,7 +278,6 @@ L["Custom Texts"] = true
 L["Custom Texture"] = true
 L["Custom Timestamp Color"] = true
 L["Cutaway Bars"] = true
-L["Cutaway Health"] = true
 L["Darken Inactive"] = true
 L["DataBars"] = true
 L["Datatext Panel (Left)"] = true
