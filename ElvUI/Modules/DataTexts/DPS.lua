@@ -39,9 +39,7 @@ end
 local function OnEvent(self, event, ...)
 	lastPanel = self
 
-	if event == "PLAYER_ENTERING_WORLD" then
-		playerID = E.myguid
-	elseif event == "PLAYER_REGEN_DISABLED" or event == "PLAYER_LEAVE_COMBAT" then
+	if event == "PLAYER_REGEN_DISABLED" or event == "PLAYER_LEAVE_COMBAT" then
 		local now = time()
 		if now - lastSegment > 20 then
 			Reset()
@@ -50,23 +48,25 @@ local function OnEvent(self, event, ...)
 	elseif event == "COMBAT_LOG_EVENT_UNFILTERED" then
 		if not events[select(2, ...)] then return end
 
-		local id = select(4, ...)
-		local overKill = 0
-
+		local id = select(3, ...)
 		if id == playerID or id == petID then
 			if timeStamp == 0 then timeStamp = select(1, ...) end
 			lastSegment = timeStamp
 			combatTime = select(1, ...) - timeStamp
+
 			if select(2, ...) == "SWING_DAMAGE" then
-				lastDMGAmount = select(12, ...)
+				lastDMGAmount = select(9, ...)
 			else
-				lastDMGAmount = select(15, ...)
+				lastDMGAmount = select(12, ...)
 			end
 
-			DMGTotal = DMGTotal + max(0, lastDMGAmount - overKill)
+			DMGTotal = DMGTotal + lastDMGAmount
 		end
 	elseif event == "UNIT_PET" then
 		petID = UnitGUID("pet")
+	elseif event == "PLAYER_ENTERING_WORLD" then
+		playerID = E.myguid
+		self:UnregisterEvent(event)
 	end
 
 	GetDPS(self)
