@@ -895,7 +895,6 @@ local function OnCooldownUpdate(_, button, start, duration)
 
 		if (E.db.cooldown.enable and AB.db.cooldown.reverse) or (not E.db.cooldown.enable and not AB.db.cooldown.reverse) then
 			if not button.onCooldownDoneHooked then
-				button.icon:SetDesaturated(true)
 				AB:HookScript(button.cooldown, "OnHide", function()
 					button.icon:SetDesaturated(false)
 				end)
@@ -904,9 +903,10 @@ local function OnCooldownUpdate(_, button, start, duration)
 			end
 		else
 			if not button.onCooldownTimerDoneHooked then
-				button.icon:SetDesaturated(true)
 				if button.cooldown.timer then
 					AB:HookScript(button.cooldown.timer, "OnHide", function()
+						if (E.db.cooldown.enable and AB.db.cooldown.reverse) or (not E.db.cooldown.enable and not AB.db.cooldown.reverse) then return end
+
 						button.icon:SetDesaturated(false)
 					end)
 
@@ -942,6 +942,8 @@ function AB:ToggleDesaturation(value)
 			else
 				if button.onCooldownTimerDoneHooked then
 					if button.cooldown.timer then
+						if (E.db.cooldown.enable and AB.db.cooldown.reverse) or (not E.db.cooldown.enable and not AB.db.cooldown.reverse) then return end
+
 						AB:Unhook(button.cooldown.timer, "OnHide")
 
 						button.onCooldownTimerDoneHooked = nil
