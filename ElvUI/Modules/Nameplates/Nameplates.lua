@@ -679,31 +679,35 @@ function NP:QueueObject(object)
 	object:Hide()
 end
 
-function NP:OnUpdate()
-	local count = select("#", WorldGetChildren(WorldFrame))
-	if count ~= numChildren then
-		local frame, region
-		for i = numChildren + 1, count do
-			frame = select(i, WorldGetChildren(WorldFrame))
-			region = frame:GetRegions()
+local function findNewPlate(...)
+	local argc = select("#", ...)
+	if argc == numChildren then return end
 
-			if not NP.CreatedPlates[frame] and region and region:GetObjectType() == "Texture" and region:GetTexture() == OVERLAY then
+	local frame, region
+	for i = numChildren + 1, argc do
+		frame = select(i, ...)
+		if not NP.CreatedPlates[frame] then
+			region = frame:GetRegions()
+			if region and region:GetObjectType() == "Texture" and region:GetTexture() == OVERLAY then
 				NP:OnCreated(frame)
 			end
 		end
-		numChildren = count
 	end
 
-	for frame in pairs(NP.VisiblePlates) do
-		if NP.hasTarget then
+	numChildren = argc
+end
+
+function NP:OnUpdate()
+	findNewPlate(WorldGetChildren(WorldFrame))
+
+	for frame in pairs(self.VisiblePlates) do
+		if self.hasTarget then
 			frame.alpha = frame:GetParent():GetAlpha()
+			frame.isTarget = frame.alpha == 1
+			frame:GetParent():SetAlpha(1)
 		else
 			frame.alpha = 1
 		end
-
-		frame:GetParent():SetAlpha(1)
-
-		frame.isTarget = NP.hasTarget and frame.alpha == 1
 	end
 end
 
