@@ -896,18 +896,30 @@ end
 local function OnCooldownUpdate(_, button, start, duration)
 	if not button._state_type == "action" then return end
 
-	if start and duration > 1.5 then
+	if duration and duration > 1.5 then
 		button.saturationLocked = true --Lock any new actions that are created after we activated desaturation option
 
 		button.icon:SetDesaturated(true)
 
-		--Hook cooldown done and add colors back
-		if not button.onCooldownDoneHooked then
-			button.onCooldownDoneHooked = true
-			if button.cooldown.timer then
-				AB:HookScript(button.cooldown.timer, "OnHide", Saturate)
-			else
-				AB:HookScript(button.cooldown, "OnHide", Saturate)
+		if (E.db.cooldown.enable and AB.db.cooldown.reverse) or (not E.db.cooldown.enable and not AB.db.cooldown.reverse) then
+			if not button.onCooldownDoneHooked then
+				button.icon:SetDesaturated(true)
+				AB:HookScript(button.cooldown, "OnHide", function()
+					button.icon:SetDesaturated(false)
+				end)
+
+				button.onCooldownDoneHooked = true
+			end
+		else
+			if not button.onCooldownTimerDoneHooked then
+				button.icon:SetDesaturated(true)
+				if button.cooldown.timer then
+					AB:HookScript(button.cooldown.timer, "OnHide", function()
+						button.icon:SetDesaturated(false)
+					end)
+
+					button.onCooldownTimerDoneHooked = true
+				end
 			end
 		end
 	end
@@ -929,13 +941,20 @@ function AB:ToggleDesaturation(value)
 		for button in pairs(LAB.actionButtons) do
 			button.saturationLocked = nil
 			button.icon:SetDesaturated(false)
-			if button.onCooldownDoneHooked then
-				if button.cooldown.timer then
-					AB:Unhook(button.cooldown.timer, "OnHide")
-				else
+			if (E.db.cooldown.enable and AB.db.cooldown.reverse) or (not E.db.cooldown.enable and not AB.db.cooldown.reverse) then
+				if button.onCooldownDoneHooked then
 					AB:Unhook(button.cooldown, "OnHide")
+
+					button.onCooldownDoneHooked = nil
 				end
-				button.onCooldownDoneHooked = nil
+			else
+				if button.onCooldownTimerDoneHooked then
+					if button.cooldown.timer then
+						AB:Unhook(button.cooldown.timer, "OnHide")
+
+						button.onCooldownTimerDoneHooked = nil
+					end
+				end
 			end
 		end
 	end
