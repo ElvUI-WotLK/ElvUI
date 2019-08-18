@@ -885,14 +885,6 @@ function AB:LAB_ButtonUpdate(button)
 end
 LAB.RegisterCallback(AB, "OnButtonUpdate", AB.LAB_ButtonUpdate)
 
-local function Saturate(cooldown)
-	if cooldown:GetParent():GetParent():GetParent().icon then
-		cooldown:GetParent():GetParent():GetParent().icon:SetDesaturated(false)
-	else
-		cooldown:GetParent().icon:SetDesaturated(false)
-	end
-end
-
 local function OnCooldownUpdate(_, button, start, duration)
 	if not button._state_type == "action" then return end
 
