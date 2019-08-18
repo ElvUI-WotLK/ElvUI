@@ -15,8 +15,8 @@ local NUM_GROUP_LOOT_FRAMES = NUM_GROUP_LOOT_FRAMES
 local LOOT, ITEMS = LOOT, ITEMS
 
 local function LoadSkin()
-	if E.private.general.loot then return; end
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.loot ~= true then return; end
+	if E.private.general.loot then return end
+	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.loot ~= true then return end
 
 	local LootFrame = _G.LootFrame
 	LootFrame:StripTextures()
@@ -29,9 +29,11 @@ local function LoadSkin()
 
 	S:HandleNextPrevButton(LootFrameUpButton)
 	LootFrameUpButton:Point("BOTTOMLEFT", 25, 20)
+	LootFrameUpButton:Size(24)
 
 	S:HandleNextPrevButton(LootFrameDownButton)
 	LootFrameDownButton:Point("BOTTOMLEFT", 145, 20)
+	LootFrameDownButton:Size(24)
 
 	LootFrame:EnableMouseWheel(true)
 	LootFrame:SetScript("OnMouseWheel", function(_, value)
@@ -75,6 +77,7 @@ local function LoadSkin()
 	for i = 1, LOOTFRAME_NUMBUTTONS do
 		local button = _G["LootButton"..i]
 		local nameFrame = _G["LootButton"..i.."NameFrame"]
+		local questTexture = _G["LootButton"..i.."IconQuestTexture"]
 
 		S:HandleItemButton(button, true)
 
@@ -83,6 +86,11 @@ local function LoadSkin()
 		button.bg:Point("TOPLEFT", 40, 0)
 		button.bg:Point("BOTTOMRIGHT", 110, 0)
 		button.bg:SetFrameLevel(button.bg:GetFrameLevel() - 1)
+
+		questTexture:SetTexture(E.Media.Textures.BagQuestIcon)
+		questTexture.SetTexture = E.noop
+		questTexture:SetTexCoord(0, 1, 0, 1)
+		questTexture:SetInside()
 
 		nameFrame:Hide()
 	end
@@ -99,9 +107,18 @@ local function LoadSkin()
 
 		if slot <= numLootItems then
 			if (LootSlotIsItem(slot) or LootSlotIsCoin(slot)) and index <= numLootToShow then
-				local texture, _, _, quality = GetLootSlotInfo(slot)
+				local texture, _, _, quality, _, isQuestItem, questId, isActive = GetLootSlotInfo(slot)
 				if texture then
-					if quality then
+					local questTexture = _G["LootButton"..index.."IconQuestTexture"]
+
+					questTexture:Hide()
+
+					if questId and not isActive then
+						button.backdrop:SetBackdropBorderColor(1.0, 1.0, 0.0)
+						questTexture:Show()
+					elseif questId or isQuestItem then
+						button.backdrop:SetBackdropBorderColor(1.0, 0.3, 0.3)
+					elseif quality then
 						button.backdrop:SetBackdropBorderColor(GetItemQualityColor(quality))
 					else
 						button.backdrop:SetBackdropBorderColor(unpack(E.media.bordercolor))
@@ -113,18 +130,21 @@ local function LoadSkin()
 end
 
 local function LoadRollSkin()
-	if E.private.general.lootRoll then return; end
-	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.lootRoll then return; end
+	if E.private.general.lootRoll then return end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.lootRoll then return end
 
 	local function OnShow(self)
+		local cornerTexture = _G[self:GetName().."Corner"]
+		local iconFrame = _G[self:GetName().."IconFrame"]
+		local statusBar = _G[self:GetName().."Timer"]
+		local _, _, _, quality = GetLootRollItemInfo(self.rollID)
+
 		self:SetTemplate("Transparent")
 
-		local cornerTexture = _G[self:GetName().."Corner"]
 		cornerTexture:SetTexture()
 
-		local iconFrame = _G[self:GetName().."IconFrame"]
-		local _, _, _, quality = GetLootRollItemInfo(self.rollID)
 		iconFrame:SetBackdropBorderColor(GetItemQualityColor(quality))
+		statusBar:SetStatusBarColor(GetItemQualityColor(quality))
 	end
 
 	for i = 1, NUM_GROUP_LOOT_FRAMES do
@@ -142,6 +162,7 @@ local function LoadRollSkin()
 
 		local iconFrame = _G[frameName.."IconFrame"]
 		iconFrame:SetTemplate("Default")
+		iconFrame:StyleButton()
 
 		local icon = _G[frameName.."IconFrameIcon"]
 		icon:SetInside()

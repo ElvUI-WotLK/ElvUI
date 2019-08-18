@@ -51,25 +51,23 @@ local function LoadSkin()
 	end
 
 	-- Interface Options Frame
-	InterfaceOptionsFrame:SetTemplate("Transparent")
-	InterfaceOptionsFrame:SetClampedToScreen(true)
-	InterfaceOptionsFrame:SetMovable(true)
-	InterfaceOptionsFrame:EnableMouse(true)
-	InterfaceOptionsFrame:RegisterForDrag("LeftButton", "RightButton")
-	InterfaceOptionsFrame:SetScript("OnDragStart", function(self)
-		if InCombatLockdown() then return end
+	for _, frame in pairs({"InterfaceOptionsFrame", "VideoOptionsFrame", "AudioOptionsFrame"}) do
+		local Frame = _G[frame]
 
-		self:StartMoving()
-		self.isMoving = true
-	end)
-	InterfaceOptionsFrame:SetScript("OnDragStop", function(self)
-		self:StopMovingOrSizing()
-		self.isMoving = false
-	end)
+		Frame:SetTemplate("Transparent")
+		Frame:SetClampedToScreen(true)
+		Frame:SetMovable(true)
+		Frame:EnableMouse(true)
+		Frame:RegisterForDrag("LeftButton", "RightButton")
+		Frame:SetScript("OnDragStart", function(self)
+			if InCombatLockdown() then return end
 
-	VideoOptionsFrame:SetTemplate("Transparent")
-
-	AudioOptionsFrame:SetTemplate("Transparent")
+			self:StartMoving()
+		end)
+		Frame:SetScript("OnDragStop", function(self)
+			self:StopMovingOrSizing()
+		end)
+	end
 
 	S:HandleButton(VideoOptionsFrameDefaults)
 	VideoOptionsFrameDefaults:ClearAllPoints()
