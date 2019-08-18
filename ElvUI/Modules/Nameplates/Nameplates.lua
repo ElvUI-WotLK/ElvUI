@@ -840,30 +840,6 @@ function NP:PLAYER_REGEN_ENABLED()
 	NP:ForEachPlate("UpdateElement_Filters", "PLAYER_REGEN_ENABLED")
 end
 
-function NP:UNIT_HEALTH()
-	NP:ForEachPlate("UpdateElement_Filters", "UNIT_HEALTH")
-end
-
-function NP:UNIT_MANA()
-	NP:ForEachPlate("UpdateElement_Filters", "UNIT_MANA")
-end
-
-function NP:UNIT_ENERGY()
-	NP:ForEachPlate("UpdateElement_Filters", "UNIT_ENERGY")
-end
-
-function NP:UNIT_FOCUS()
-	NP:ForEachPlate("UpdateElement_Filters", "UNIT_FOCUS")
-end
-
-function NP:UNIT_RAGE()
-	NP:ForEachPlate("UpdateElement_Filters", "UNIT_RAGE")
-end
-
-function NP:UNIT_RUNIC_POWER()
-	NP:ForEachPlate("UpdateElement_Filters", "UNIT_RUNIC_POWER")
-end
-
 function NP:SPELL_UPDATE_COOLDOWN()
 	NP:ForEachPlate("UpdateElement_Filters", "SPELL_UPDATE_COOLDOWN")
 end
@@ -995,12 +971,6 @@ function NP:Initialize()
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
 	self:RegisterEvent("PLAYER_LOGOUT") -- used in the StyleFilter
 	self:RegisterEvent("PLAYER_TARGET_CHANGED")
-	self:RegisterEvent("UNIT_HEALTH")
-	self:RegisterEvent("UNIT_MANA")
-	self:RegisterEvent("UNIT_ENERGY")
-	self:RegisterEvent("UNIT_FOCUS")
-	self:RegisterEvent("UNIT_RAGE")
-	self:RegisterEvent("UNIT_RUNIC_POWER")
 	self:RegisterEvent("SPELL_UPDATE_COOLDOWN")
 
 	-- Arena & Arena Pets
