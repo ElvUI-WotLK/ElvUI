@@ -703,11 +703,12 @@ function NP:OnUpdate()
 	for frame in pairs(NP.VisiblePlates) do
 		if NP.hasTarget then
 			frame.alpha = frame:GetParent():GetAlpha()
-			frame.isTarget = frame.alpha == 1
 			frame:GetParent():SetAlpha(1)
 		else
 			frame.alpha = 1
 		end
+
+		frame.isTarget = NP.hasTarget and frame.alpha == 1
 	end
 end
 
