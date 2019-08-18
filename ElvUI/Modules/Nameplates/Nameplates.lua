@@ -700,8 +700,8 @@ end
 function NP:OnUpdate()
 	findNewPlate(WorldGetChildren(WorldFrame))
 
-	for frame in pairs(self.VisiblePlates) do
-		if self.hasTarget then
+	for frame in pairs(NP.VisiblePlates) do
+		if NP.hasTarget then
 			frame.alpha = frame:GetParent():GetAlpha()
 			frame.isTarget = frame.alpha == 1
 			frame:GetParent():SetAlpha(1)
