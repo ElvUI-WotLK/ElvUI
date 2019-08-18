@@ -226,9 +226,9 @@ function S:HandleDropDownBox(frame, width, direction)
 	frame.backdrop:Point("TOPLEFT", 20, -3)
 	frame.backdrop:Point("BOTTOMRIGHT", button, "BOTTOMRIGHT", 2, -2)
 
-	if width then
-		frame:Width(width)
-	end
+	if not width then width = 155 end
+
+	frame:Width(width)
 
 	if text then
 		text:ClearAllPoints()
