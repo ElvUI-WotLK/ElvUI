@@ -1235,7 +1235,7 @@ do
 	function lib:GUIDAura(dstGUID, i, filter)
 		if self.GUIDAuras[dstGUID] and self.GUIDAuras[dstGUID][filter] and self.GUIDAuras[dstGUID][filter][i] then
 			data = self.GUIDAuras[dstGUID][filter][i]
-			return true, data.name, data.texture, data.count or 0, data.debuffType, data.duration, data.expirationTime, data.srcGUID, data.spellID
+			return true, data.name, data.texture, data.stackCount or 0, data.debuffType, data.duration, data.expirationTime, data.srcGUID, data.spellID
 		end
 		return false
 	end
@@ -1249,14 +1249,14 @@ do
 				for i = 1, #self.GUIDAuras[dstGUID][filter] do
 					data = self.GUIDAuras[dstGUID][filter][i]
 					if data.spellID == spellID and data.srcGUID == srcGUID then
-						return true, data.count or 0, data.debuffType, data.duration, data.expirationTime, data.isDebuff, data.srcGUID
+						return true, data.stackCount or 0, data.debuffType, data.duration, data.expirationTime, data.isDebuff, data.srcGUID
 					end
 				end
 			end
 			for i = 1, #self.GUIDAuras[dstGUID][filter] do
 				data = self.GUIDAuras[dstGUID][filter][i]
 				if data.spellID == spellID then
-					return true, data.count or 0, data.debuffType, data.duration, data.expirationTime, data.isDebuff, data.srcGUID
+					return true, data.stackCount or 0, data.debuffType, data.duration, data.expirationTime, data.isDebuff, data.srcGUID
 				end
 			end
 		end
