@@ -141,11 +141,11 @@ function NP:UpdateElement_Cast(frame, event, unit)
 		end
 	elseif event == "UNIT_SPELLCAST_DELAYED" or event == "UNIT_SPELLCAST_CHANNEL_UPDATE" then
 		if frame:IsShown() then
-			local name, startTime, endTime, notInterruptible, _
+			local name, startTime, endTime, _
 			if event == "UNIT_SPELLCAST_DELAYED" then
-				name, _, _, _, startTime, endTime, _, notInterruptible = UnitCastingInfo(unit)
+				name, _, _, _, startTime, endTime = UnitCastingInfo(unit)
 			else
-				name, _, _, _, startTime, endTime, _, notInterruptible = UnitChannelInfo(unit)
+				name, _, _, _, startTime, endTime = UnitChannelInfo(unit)
 			end
 
 			if not name then
