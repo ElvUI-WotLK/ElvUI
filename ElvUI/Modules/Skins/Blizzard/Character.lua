@@ -436,6 +436,9 @@ local function LoadSkin()
 	SkillDetailStatusBarUnlearnButton:Point("LEFT", SkillDetailStatusBarBorder, "RIGHT", 5, 0)
 	SkillDetailStatusBarUnlearnButton:Size(20)
 	SkillDetailStatusBarUnlearnButton:SetHitRectInsets(0, 0, 0, 0)
+	SkillDetailStatusBarUnlearnButton.Texture = normal
+	SkillDetailStatusBarUnlearnButton:HookScript("OnEnter", S.CloseButtonOnEnter)
+	SkillDetailStatusBarUnlearnButton:HookScript("OnLeave", S.CloseButtonOnLeave)
 
 	SkillFrameExpandButtonFrame:StripTextures()
 
