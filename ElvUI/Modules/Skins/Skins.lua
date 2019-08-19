@@ -412,13 +412,8 @@ function S:HandleItemButton(b, shrinkIcon)
 	b.isSkinned = true
 end
 
-function S:CloseButtonOnEnter()
-	if self.Texture then self.Texture:SetVertexColor(unpack(E.media.rgbvaluecolor)) end
-end
-
-function S:CloseButtonOnLeave()
-	if self.Texture then self.Texture:SetVertexColor(1, 1, 1) end
-end
+local handleCloseButtonOnEnter = function(btn) if btn.Texture then btn.Texture:SetVertexColor(unpack(E.media.rgbvaluecolor)) end end
+local handleCloseButtonOnLeave = function(btn) if btn.Texture then btn.Texture:SetVertexColor(1, 1, 1) end end
 
 function S:HandleCloseButton(f, point)
 	f:StripTextures()
@@ -431,8 +426,8 @@ function S:HandleCloseButton(f, point)
 		f.Texture:Point("CENTER")
 		f.Texture:SetTexture(E.Media.Textures.Close)
 		f.Texture:Size(12, 12)
-		f:HookScript("OnEnter", S.CloseButtonOnEnter)
-		f:HookScript("OnLeave", S.CloseButtonOnLeave)
+		f:HookScript("OnEnter", handleCloseButtonOnEnter)
+		f:HookScript("OnLeave", handleCloseButtonOnLeave)
 		f:SetHitRectInsets(6, 6, 7, 7)
 	end
 
@@ -544,8 +539,8 @@ function S:HandleNextPrevButton(btn, arrowDir, color, noBackdrop, stipTexts)
 		btn:Size(20, 20)
 		Disabled:SetVertexColor(.5, .5, .5)
 		btn.Texture = Normal
-		btn:HookScript("OnEnter", S.CloseButtonOnEnter)
-		btn:HookScript("OnLeave", S.CloseButtonOnLeave)
+		btn:HookScript("OnEnter", handleCloseButtonOnEnter)
+		btn:HookScript("OnLeave", handleCloseButtonOnLeave)
 	else
 		btn:Size(18, 18)
 		Disabled:SetVertexColor(.3, .3, .3)
