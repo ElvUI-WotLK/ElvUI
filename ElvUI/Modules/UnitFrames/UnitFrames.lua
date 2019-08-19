@@ -1275,13 +1275,11 @@ end
 function UF:SetStatusBarBackdropPoints(statusBar, statusBarTex, backdropTex, statusBarOrientation)
 	backdropTex:ClearAllPoints()
 	if statusBarOrientation == "VERTICAL" then
-		backdropTex:Point("TOPLEFT", statusBar, "TOPLEFT")
-		backdropTex:Point("BOTTOMLEFT", statusBarTex, "TOPLEFT")
-		backdropTex:Point("BOTTOMRIGHT", statusBarTex, "TOPRIGHT")
+		backdropTex:SetPoint("TOPLEFT", statusBar)
+		backdropTex:SetPoint("BOTTOMRIGHT", statusBarTex, "TOPRIGHT")
 	else
-		backdropTex:Point("TOPLEFT", statusBarTex, "TOPRIGHT")
-		backdropTex:Point("BOTTOMLEFT", statusBarTex, "BOTTOMRIGHT")
-		backdropTex:Point("BOTTOMRIGHT", statusBar, "BOTTOMRIGHT")
+		backdropTex:SetPoint("TOPRIGHT", statusBar)
+		backdropTex:SetPoint("BOTTOMLEFT", statusBarTex, "BOTTOMRIGHT")
 	end
 end
 
@@ -1325,7 +1323,7 @@ function UF:ToggleTransparentStatusBar(isTransparent, statusBar, backdropTex, ad
 		if statusBar.texture then statusBar.texture = statusBar:GetStatusBarTexture() end
 
 		if adjustBackdropPoints then
-			UF:SetStatusBarBackdropPoints(statusBar, statusBarTex, backdropTex, statusBarOrientation)
+			backdropTex:SetAllPoints()
 		end
 	end
 end
