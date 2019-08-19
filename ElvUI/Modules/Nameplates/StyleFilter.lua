@@ -16,9 +16,6 @@ local UnitHealthMax = UnitHealthMax
 local UnitPower = UnitPower
 local UnitPowerMax = UnitPowerMax
 
-local FAILED = FAILED
-local INTERRUPTED = INTERRUPTED
-
 mod.TriggerConditions = {
 	frameTypes = {
 		["FRIENDLY_PLAYER"] = "friendlyPlayer",
@@ -415,7 +412,7 @@ end
 function mod:StyleFilterPass(frame, actions)
 	local healthBarEnabled = (frame.UnitType and mod.db.units[frame.UnitType].healthbar.enable) or (frame.isTarget and mod.db.alwaysShowTargetHealth)
 	local healthBarShown = healthBarEnabled and frame.HealthBar:IsShown()
-	
+
 	mod:StyleFilterSetChanges(frame, actions,
 		(healthBarShown and actions.color and actions.color.health), --HealthColorChanged
 		(healthBarShown and actions.color and actions.color.border and frame.HealthBar.backdrop), --BorderChanged

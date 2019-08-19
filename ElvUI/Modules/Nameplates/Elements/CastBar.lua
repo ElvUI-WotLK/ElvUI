@@ -115,7 +115,7 @@ function NP:UpdateElement_Cast(frame, event, unit)
 	elseif event == "UNIT_SPELLCAST_FAILED" or event == "UNIT_SPELLCAST_INTERRUPTED" then
 		if frame.CastBar:IsShown() then
 			frame.CastBar:SetValue(frame.CastBar.maxValue)
-	
+
 			if event == "UNIT_SPELLCAST_FAILED" then
 				frame.CastBar.Name:SetText(FAILED)
 			else
