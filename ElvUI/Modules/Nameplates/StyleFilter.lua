@@ -343,7 +343,7 @@ function mod:StyleFilterConditionCheck(frame, filter, trigger)
 		local b, c = frame.CastBar, trigger.casting
 
 		-- Spell
-		if b and b.spellName then
+		if b.spellName then
 			if c.spells and next(c.spells) then
 				for _, value in pairs(c.spells) do
 					if value then -- only run if at least one is selected

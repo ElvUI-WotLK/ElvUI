@@ -168,10 +168,7 @@ function NP:SetTargetFrame(frame)
 			frame.guid = nil
 
 			frame:UnregisterAllEvents()
-
-			if frame.CastBar:IsShown() then
-				frame.CastBar:Hide()
-			end
+			NP:UpdateElement_Cast(frame)
 		end
 
 		if self.db.units[frame.UnitType].healthbar.enable ~= true then
@@ -211,10 +208,7 @@ function NP:SetTargetFrame(frame)
 		if not frame.isGroupUnit then
 			frame.unit = nil
 			frame.guid = nil
-
-			if frame.CastBar:IsShown() then
-				frame.CastBar:Hide()
-			end
+			NP:UpdateElement_Cast(frame)
 		end
 	elseif not frame.AlphaChanged then
 		if hasTarget then
@@ -488,6 +482,7 @@ function NP:OnHide()
 	self.UnitFrame.HealthBar.currentScale = nil
 	self.UnitFrame.oldCastBar:Hide()
 	self.UnitFrame.CastBar:Hide()
+	self.UnitFrame.CastBar.spellName = nil
 	self.UnitFrame.Level:ClearAllPoints()
 	self.UnitFrame.Level:SetText("")
 	self.UnitFrame.Name.r, self.UnitFrame.Name.g, self.UnitFrame.Name.b = nil, nil, nil

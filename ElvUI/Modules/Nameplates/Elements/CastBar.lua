@@ -23,8 +23,10 @@ function NP:UpdateElement_CastBarOnUpdate(elapsed)
 	if self.casting then
 		self.value = self.value + elapsed
 		if self.value >= self.maxValue then
-			self:SetValue(self.maxValue)
+			resetAttributes(self)
+			self:SetValue(self.maxValue, "casting")
 			self:Hide()
+			NP:UpdateElement_Filters(self:GetParent(), "FAKE_Casting")
 			return
 		end
 		self:SetValue(self.value)
@@ -44,7 +46,9 @@ function NP:UpdateElement_CastBarOnUpdate(elapsed)
 	elseif self.channeling then
 		self.value = self.value - elapsed
 		if self.value <= 0 then
+			resetAttributes(self)
 			self:Hide()
+			NP:UpdateElement_Filters(self:GetParent(), "FAKE_Casting")
 			return
 		end
 		self:SetValue(self.value)
@@ -59,14 +63,13 @@ function NP:UpdateElement_CastBarOnUpdate(elapsed)
 	elseif self.holdTime > 0 then
 		self.holdTime = self.holdTime - elapsed
 	else
+		resetAttributes(self)
 		self:Hide()
+		NP:UpdateElement_Filters(self:GetParent(), "FAKE_Casting")
 	end
 end
 
 function NP:UpdateElement_Cast(frame, event, unit)
-	if self.db.units[frame.UnitType].castbar.enable ~= true then return end
-	if self.db.units[frame.UnitType].healthbar.enable ~= true and not (frame.isTarget and self.db.alwaysShowTargetHealth) then return end --Bug
-
 	if unit then
 		if not event then
 			if UnitChannelInfo(unit) then
@@ -76,36 +79,50 @@ function NP:UpdateElement_Cast(frame, event, unit)
 			end
 		end
 	elseif frame.CastBar:IsShown() then
+		resetAttributes(frame.CastBar)
 		frame.CastBar:Hide()
 	end
 
-	if event == "UNIT_SPELLCAST_START" then
-		local name, _, _, texture, startTime, endTime, _, castID, notInterruptible = UnitCastingInfo(unit)
+	if self.db.units[frame.UnitType].castbar.enable ~= true then return end
+	if self.db.units[frame.UnitType].healthbar.enable ~= true and not (frame.isTarget and self.db.alwaysShowTargetHealth) then return end --Bug
+
+	if event == "UNIT_SPELLCAST_START" or event == "UNIT_SPELLCAST_CHANNEL_START" then
+		local name, _, _, texture, startTime, endTime, _, _, notInterruptible = UnitCastingInfo(unit)
+		event = "UNIT_SPELLCAST_START"
 		if not name then
+			name, _, _, texture, startTime, endTime, _, notInterruptible = UnitChannelInfo(unit)
+			event = "UNIT_SPELLCAST_CHANNEL_START"
+		end
+
+		if not name then
+			resetAttributes(frame.CastBar)
 			frame.CastBar:Hide()
 			return
 		end
 
-		frame.CastBar.notInterruptible = notInterruptible
+		endTime = endTime / 1000
+		startTime = startTime / 1000
 
-		if frame.CastBar.Spark then
-			frame.CastBar.Spark:Show()
+		frame.CastBar.maxValue = endTime - startTime
+		frame.CastBar.casting = event == "UNIT_SPELLCAST_START"
+		frame.CastBar.channeling = event == "UNIT_SPELLCAST_CHANNEL_START"
+		frame.CastBar.notInterruptible = notInterruptible
+		frame.CastBar.holdTime = 0
+		frame.CastBar.spellName = name
+
+		if frame.CastBar.casting then
+			frame.CastBar.value = GetTime() - startTime
+		else
+			frame.CastBar.value = endTime - GetTime()
 		end
-		frame.CastBar.Name:SetText(name)
-		frame.CastBar.value = (GetTime() - (startTime / 1000))
-		frame.CastBar.maxValue = (endTime - startTime) / 1000
+
 		frame.CastBar:SetMinMaxValues(0, frame.CastBar.maxValue)
 		frame.CastBar:SetValue(frame.CastBar.value)
 
-		if frame.CastBar.Icon then
-			frame.CastBar.Icon.texture:SetTexture(texture)
-		end
-
-		frame.CastBar.casting = true
-		frame.CastBar.castID = castID
-		frame.CastBar.channeling = nil
-		frame.CastBar.holdTime = 0
-		frame.CastBar.spellName = name
+		frame.CastBar.Icon.texture:SetTexture(texture)
+		frame.CastBar.Spark:Show()
+		frame.CastBar.Name:SetText(name)
+		frame.CastBar.Time:SetText()
 
 		frame.CastBar:Show()
 	elseif event == "UNIT_SPELLCAST_STOP" or event == "UNIT_SPELLCAST_CHANNEL_STOP" then
@@ -114,77 +131,47 @@ function NP:UpdateElement_Cast(frame, event, unit)
 		end
 	elseif event == "UNIT_SPELLCAST_FAILED" or event == "UNIT_SPELLCAST_INTERRUPTED" then
 		if frame.CastBar:IsShown() then
-			frame.CastBar:SetValue(frame.CastBar.maxValue)
-
-			if event == "UNIT_SPELLCAST_FAILED" then
-				frame.CastBar.Name:SetText(FAILED)
-			else
-				frame.CastBar.Name:SetText(INTERRUPTED)
-			end
-
-			resetAttributes(frame.CastBar)
+			frame.CastBar.Spark:Hide()
+			frame.CastBar.Name:SetText(event == "UNIT_SPELLCAST_FAILED" and FAILED or INTERRUPTED)
 
 			frame.CastBar.holdTime = self.db.units[frame.UnitType].castbar.timeToHold --How long the castbar should stay visible after being interrupted, in seconds
+
+			resetAttributes(frame.CastBar)
+			frame.CastBar:SetValue(frame.CastBar.maxValue)
 		end
-	elseif event == "UNIT_SPELLCAST_DELAYED" then
+	elseif event == "UNIT_SPELLCAST_DELAYED" or event == "UNIT_SPELLCAST_CHANNEL_UPDATE" then
 		if frame:IsShown() then
-			local name, _, _, _, startTime, endTime, _, _, notInterruptible = UnitCastingInfo(unit)
+			local name, startTime, endTime, notInterruptible, _
+			if event == "UNIT_SPELLCAST_DELAYED" then
+				name, _, _, _, startTime, endTime, _, notInterruptible = UnitCastingInfo(unit)
+			else
+				name, _, _, _, startTime, endTime, _, notInterruptible = UnitChannelInfo(unit)
+			end
+
 			if not name then
+				resetAttributes(frame.CastBar)
 				frame.CastBar:Hide()
 				return
 			end
 
-			frame.CastBar.Name:SetText(name)
-			frame.CastBar.value = (GetTime() - (startTime / 1000))
-			frame.CastBar.maxValue = (endTime - startTime) / 1000
-			frame.CastBar:SetMinMaxValues(0, frame.CastBar.maxValue)
-			frame.CastBar.notInterruptible = notInterruptible
-			if not frame.CastBar.casting then
-				frame.CastBar.casting = true
-				frame.CastBar.channeling = nil
+			endTime = endTime / 1000
+			startTime = startTime / 1000
+
+			if frame.CastBar.casting then
+				frame.CastBar.value = GetTime() - startTime
+			elseif frame.CastBar.channeling then
+				frame.CastBar.value = endTime - GetTime()
+			else
+				resetAttributes(frame.CastBar)
 			end
-		end
-	elseif event == "UNIT_SPELLCAST_CHANNEL_START" then
-		local name, _, _, texture, startTime, endTime, _, notInterruptible = UnitChannelInfo(unit)
-		if not name then
-			frame.CastBar:Hide()
-			return
-		end
 
-		frame.CastBar.Name:SetText(name)
-		frame.CastBar.value = (endTime / 1000) - GetTime()
-		frame.CastBar.maxValue = (endTime - startTime) / 1000
-		frame.CastBar:SetMinMaxValues(0, frame.CastBar.maxValue)
-		frame.CastBar:SetValue(frame.CastBar.value)
-		frame.CastBar.holdTime = 0
-
-		if frame.CastBar.Icon then
-			frame.CastBar.Icon.texture:SetTexture(texture)
-		end
-		frame.CastBar.notInterruptible = notInterruptible
-		frame.CastBar.casting = nil
-		frame.CastBar.channeling = true
-		frame.CastBar.spellName = name
-
-		frame.CastBar:Show()
-	elseif event == "UNIT_SPELLCAST_CHANNEL_UPDATE" then
-		if frame.CastBar:IsShown() then
-			local name, _, _, _, startTime, endTime, _, notInterruptible = UnitChannelInfo(unit)
-			if not name then
-				frame.CastBar:Hide()
-				return
-			end
-			frame.CastBar.notInterruptible = notInterruptible
 			frame.CastBar.Name:SetText(name)
-			frame.CastBar.value = ((endTime / 1000) - GetTime())
-			frame.CastBar.maxValue = (endTime - startTime) / 1000
+			frame.CastBar.maxValue = endTime - startTime
 			frame.CastBar:SetMinMaxValues(0, frame.CastBar.maxValue)
 			frame.CastBar:SetValue(frame.CastBar.value)
 		end
-	elseif event == "UNIT_SPELLCAST_INTERRUPTIBLE" then
-		frame.CastBar.notInterruptible = nil
-	elseif event == "UNIT_SPELLCAST_NOT_INTERRUPTIBLE" then
-		frame.CastBar.notInterruptible = true
+	elseif event == "UNIT_SPELLCAST_INTERRUPTIBLE" or event == "UNIT_SPELLCAST_NOT_INTERRUPTIBLE" then
+		frame.CastBar.notInterruptible = event == "UNIT_SPELLCAST_NOT_INTERRUPTIBLE"
 	end
 
 	if not frame.CastBar.notInterruptible then
@@ -194,10 +181,6 @@ function NP:UpdateElement_Cast(frame, event, unit)
 	end
 
 	self:UpdateElement_Filters(frame, "FAKE_Casting")
-
-	if not frame.CastBar:IsShown() then --This is so we can trigger based on Cast Name or Interruptible
-		frame.CastBar.notInterruptible = true --Only remove this when it's not shown so we can use it in style filter
-	end
 end
 
 function NP:ConfigureElement_CastBar(frame)
@@ -259,11 +242,7 @@ function NP:ConstructElement_CastBar(parent)
 	NP:StyleFrame(frame)
 	frame:SetScript("OnUpdate", NP.UpdateElement_CastBarOnUpdate)
 	frame:SetScript("OnShow", updateGlowPosition)
-	frame:SetScript("OnHide", function(cb)
-		updateGlowPosition(cb)
-		resetAttributes(cb)
-		NP:UpdateElement_Filters(parent, "FAKE_Casting")
-	end)
+	frame:SetScript("OnHide", updateGlowPosition)
 
 	frame.Icon = CreateFrame("Frame", nil, frame)
 	frame.Icon.texture = frame.Icon:CreateTexture(nil, "BORDER")
