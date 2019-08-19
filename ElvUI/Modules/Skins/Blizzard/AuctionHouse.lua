@@ -248,10 +248,14 @@ local function LoadSkin()
 			local ItemButton = _G[Frame.."Button"..i.."Item"]
 			local Texture = _G[Frame.."Button"..i.."ItemIconTexture"]
 			local Name = _G[Frame.."Button"..i.."Name"]
+			local Highlight = _G[Frame.."Button"..i.."Highlight"]
 
 			if Button then
 				Button:StripTextures()
-				S:HandleButtonHighlight(Button)
+
+				Highlight:SetTexture(E.Media.Textures.Highlight)
+				Highlight:SetInside()
+				hooksecurefunc(Name, "SetVertexColor", function(_, r, g, b) Highlight:SetVertexColor(r, g, b, 0.35) end)
 			end
 
 			if ItemButton then
