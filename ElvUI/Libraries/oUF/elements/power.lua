@@ -182,6 +182,9 @@ local function Update(self, event, unit)
 
 	local cur, max = UnitPower(unit), UnitPowerMax(unit)
 	local disconnected = not UnitIsConnected(unit)
+	if max == 0 then
+		max = 1
+	end
 
 	element:SetMinMaxValues(0, max)
 
