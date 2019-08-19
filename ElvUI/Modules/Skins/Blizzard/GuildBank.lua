@@ -17,7 +17,6 @@ local function LoadSkin()
 
 	GuildBankEmblemFrame:StripTextures(true)
 
-	--Close button doesn't have a fucking name, extreme hackage
 	for i = 1, GuildBankFrame:GetNumChildren() do
 		local child = select(i, GuildBankFrame:GetChildren())
 		if child.GetPushedTexture and child:GetPushedTexture() and not child:GetName() then
@@ -39,12 +38,18 @@ local function LoadSkin()
 	GuildBankInfoScrollFrame:Width(572)
 
 	S:HandleScrollBar(GuildBankInfoScrollFrameScrollBar)
+	GuildBankInfoScrollFrameScrollBar:ClearAllPoints()
+	GuildBankInfoScrollFrameScrollBar:Point("TOPRIGHT", GuildBankInfoScrollFrame, "TOPRIGHT", 29, -10)
+	GuildBankInfoScrollFrameScrollBar:Point("BOTTOMRIGHT", GuildBankInfoScrollFrame, "BOTTOMRIGHT", 0, 18)
 
 	GuildBankTabInfoEditBox:Width(702)
 
 	GuildBankTransactionsScrollFrame:StripTextures()
 
 	S:HandleScrollBar(GuildBankTransactionsScrollFrameScrollBar)
+	GuildBankTransactionsScrollFrameScrollBar:ClearAllPoints()
+	GuildBankTransactionsScrollFrameScrollBar:Point("TOPRIGHT", GuildBankTransactionsScrollFrame, "TOPRIGHT", 29, -9)
+	GuildBankTransactionsScrollFrameScrollBar:Point("BOTTOMRIGHT", GuildBankTransactionsScrollFrame, "BOTTOMRIGHT", 0, 17)
 
 	GuildBankFrame.inset = CreateFrame("Frame", nil, GuildBankFrame)
 	GuildBankFrame.inset:SetTemplate("Default")
@@ -88,7 +93,7 @@ local function LoadSkin()
 		button:SetTemplate()
 		button:StyleButton()
 
-		button:GetCheckedTexture():SetTexture(1, 1, 1)
+		button:GetCheckedTexture():SetTexture(1, 1, 1, 0.3)
 		button:GetCheckedTexture():SetInside()
 
 		texture:SetInside()
@@ -100,11 +105,6 @@ local function LoadSkin()
 		local tab = _G["GuildBankFrameTab"..i]
 
 		S:HandleTab(tab)
-
-		if i == 1 then
-			tab:ClearAllPoints()
-			tab:Point("BOTTOMLEFT", GuildBankFrame, "BOTTOMLEFT", 0, -24)
-		end
 	end
 
 	hooksecurefunc("GuildBankFrame_Update", function()

@@ -112,7 +112,10 @@ local function LoadSkin()
 		local tab = _G["AuctionFilterButton"..i]
 
 		tab:StripTextures()
-		S:HandleButtonHighlight(tab)
+
+		tab:SetHighlightTexture(E.Media.Textures.Highlight)
+		tab:GetHighlightTexture():SetInside()
+		tab:GetHighlightTexture():SetAlpha(0.35)
 	end
 
 	S:HandleCloseButton(AuctionFrameCloseButton, AuctionFrame.backdrop)
@@ -173,6 +176,11 @@ local function LoadSkin()
 	BidBidButton:Point("RIGHT", BidBuyoutButton, "LEFT", -4, 0)
 
 	BidBidPrice:Point("BOTTOM", 25, 10)
+
+	S:HandleScrollBar(BidScrollFrameScrollBar)
+	BidScrollFrameScrollBar:ClearAllPoints()
+	BidScrollFrameScrollBar:Point("TOPRIGHT", BidScrollFrame, "TOPRIGHT", 23, -18)
+	BidScrollFrameScrollBar:Point("BOTTOMRIGHT", BidScrollFrame, "BOTTOMRIGHT", 0, 16)
 
 	-- Auctions Frame
 	AuctionsTitle:ClearAllPoints()

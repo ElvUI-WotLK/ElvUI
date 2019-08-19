@@ -288,7 +288,7 @@ function E:SetupLayout(layout, noDataReset, noDisplayMsg)
 		E.db.movers.LootFrameMover = "TOPLEFT,ElvUIParent,TOPLEFT,418,-186"
 		E.db.movers.MirrorTimer1Mover = "TOP,ElvUIParent,TOP,-1,-96"
 		E.db.movers.WatchFrameMover = "TOPRIGHT,ElvUIParent,TOPRIGHT,-163,-325"
-		E.db.movers.ReputationBarMover = "TOPRIGHT,ElvUIParent,TOPRIGHT,-3,-246"
+		E.db.movers.ReputationBarMover = "TOPRIGHT,ElvUIParent,TOPRIGHT,-2,-245"
 		E.db.movers.ShiftAB = "TOPLEFT,ElvUIParent,BOTTOMLEFT,4,769"
 		E.db.movers.TempEnchantMover = "TOPRIGHT,ElvUIParent,TOPRIGHT,-4,-257"
 		E.db.movers.TotemBarMover = "BOTTOMLEFT,ElvUIParent,BOTTOMLEFT,485,4"
