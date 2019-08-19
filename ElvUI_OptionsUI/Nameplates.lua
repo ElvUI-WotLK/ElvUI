@@ -350,7 +350,7 @@ local function UpdateFilterGroup()
 						if G.nameplates.filters[selectedNameplateFilter] then
 							filter = E:CopyTable(filter, G.nameplates.filters[selectedNameplateFilter])
 						end
-						NP:StyleFilterInitializeFilter(filter)
+						NP:StyleFilterCopyDefaults(filter)
 						E.global.nameplates.filters[selectedNameplateFilter] = filter
 						UpdateStyleLists()
 						UpdateInstanceDifficulty()
@@ -440,73 +440,117 @@ local function UpdateFilterGroup()
 					order = 6,
 					type = "group",
 					name = L["Casting"],
-					disabled = true,
-					--disabled = function() return not (E.db.nameplates and E.db.nameplates.filters and E.db.nameplates.filters[selectedNameplateFilter] and E.db.nameplates.filters[selectedNameplateFilter].triggers and E.db.nameplates.filters[selectedNameplateFilter].triggers.enable) end,
+					get = function(info)
+						return E.global.nameplates.filters[selectedNameplateFilter].triggers.casting[info[#info]]
+					end,
+					set = function(info, value)
+						E.global.nameplates.filters[selectedNameplateFilter].triggers.casting[info[#info]] = value
+						NP:ConfigureAll()
+					end,
+					disabled = function()
+						return not (E.db.nameplates and E.db.nameplates.filters and E.db.nameplates.filters[selectedNameplateFilter] and
+							E.db.nameplates.filters[selectedNameplateFilter].triggers and
+							E.db.nameplates.filters[selectedNameplateFilter].triggers.enable)
+					end,
 					args = {
-						interruptible = {
-							order = 1,
-							type = "toggle",
-							name = L["Interruptible"],
-							desc = L["If enabled then the filter will only activate if the unit is casting interruptible spells."],
-							get = function(info)
-								return E.global.nameplates.filters[selectedNameplateFilter].triggers.casting.interruptible
-							end,
-							set = function(info, value)
-								E.global.nameplates.filters[selectedNameplateFilter].triggers.casting.interruptible = value
-								NP:ConfigureAll()
-							end
-						},
-						notInterruptible = {
+						types = {
+							name = "",
+							type = "group",
+							guiInline = true,
 							order = 2,
-							type = "toggle",
-							name = L["Non-Interruptable"],
-							desc = L["If enabled then the filter will only activate if the unit is casting not interruptible spells."],
-							get = function(info)
-								return E.global.nameplates.filters[selectedNameplateFilter].triggers.casting.notInterruptible
-							end,
-							set = function(info, value)
-								E.global.nameplates.filters[selectedNameplateFilter].triggers.casting.notInterruptible = value
-								NP:ConfigureAll()
-							end
-						},
-						spacer2 = {
-							order = 3,
-							type = "description",
-							name = ""
+							args = {
+								isCasting = {
+									type = "toggle",
+									order = 1,
+									name = L["Is Casting Anything"],
+									desc = L["If enabled then the filter will activate if the unit is casting anything."]
+								},
+								notCasting = {
+									type = "toggle",
+									order = 2,
+									name = L["Not Casting Anything"],
+									desc = L["If enabled then the filter will activate if the unit is not casting anything."]
+								},
+								isChanneling = {
+									type = "toggle",
+									order = 3,
+									customWidth = 200,
+									name = L["Is Channeling Anything"],
+									desc = L["If enabled then the filter will activate if the unit is channeling anything."]
+								},
+								notChanneling = {
+									type = "toggle",
+									order = 4,
+									customWidth = 200,
+									name = L["Not Channeling Anything"],
+									desc = L["If enabled then the filter will activate if the unit is not channeling anything."]
+								},
+								spacer1 = {
+									order = 5,
+									type = "description",
+									name = " ",
+									width = "full"
+								},
+								interruptible = {
+									type = "toggle",
+									order = 6,
+									name = L["Interruptible"],
+									desc = L["If enabled then the filter will only activate if the unit is casting interruptible spells."]
+								},
+								notInterruptible = {
+									type = "toggle",
+									order = 7,
+									name = L["Non-Interruptable"],
+									desc = L["If enabled then the filter will only activate if the unit is casting not interruptible spells."]
+								}
+							}
 						},
 						addSpell = {
-							order = 4,
-							type = "input",
+							order = 9,
 							name = L["Add Spell ID or Name"],
-							get = function(info) return "" end,
+							type = "input",
+							get = function(info)
+								return ""
+							end,
 							set = function(info, value)
-								if match(value, "^[%s%p]-$") then
-									return
-								end
+								if match(value, "^[%s%p]-$") then return end
+
 								E.global.nameplates.filters[selectedNameplateFilter].triggers.casting.spells[value] = true
 								UpdateFilterGroup()
 								NP:ConfigureAll()
 							end
 						},
 						removeSpell = {
-							order = 5,
-							type = "input",
+							order = 10,
 							name = L["Remove Spell ID or Name"],
 							desc = L["If the aura is listed with a number then you need to use that to remove it from the list."],
-							get = function(info) return "" end,
+							type = "input",
+							get = function(info)
+								return ""
+							end,
 							set = function(info, value)
-								if match(value, "^[%s%p]-$") then
-									return
-								end
+								if match(value, "^[%s%p]-$") then return end
+
 								E.global.nameplates.filters[selectedNameplateFilter].triggers.casting.spells[value] = nil
 								UpdateFilterGroup()
 								NP:ConfigureAll()
 							end
 						},
-						description = {
-							order = 6,
-							type = "descriptiption",
+						description1 = {
+							order = 12,
+							type = "description",
+							name = L["You do not need to use 'Is Casting Anything' or 'Is Channeling Anything' for these spells to trigger."]
+						},
+						description2 = {
+							order = 13,
+							type = "description",
 							name = L["If this list is empty, and if 'Interruptible' is checked, then the filter will activate on any type of cast that can be interrupted."]
+						},
+						notSpell = {
+							type = "toggle",
+							order = -2,
+							name = L["Not Spell"],
+							desc = L["If enabled then the filter will only activate if the unit is not casting or channeling one of the selected spells."]
 						}
 					}
 				},
@@ -3036,7 +3080,7 @@ E.Options.args.nameplate = {
 							return
 						end
 						local filter = {}
-						NP:StyleFilterInitializeFilter(filter)
+						NP:StyleFilterCopyDefaults(filter)
 						E.global.nameplates.filters[value] = filter
 						UpdateFilterGroup()
 						NP:ConfigureAll()

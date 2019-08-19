@@ -45,10 +45,10 @@ NP.ENEMY_NPC = {}
 NP.FRIENDLY_NPC = {}
 
 function NP:CheckBGHealers()
-	local name, _, damageDone, healingDone
+	local name, _, classToken, damageDone, healingDone
 	for i = 1, GetNumBattlefieldScores() do
-		name, _, _, _, _, _, _, _, _, _, damageDone, healingDone = GetBattlefieldScore(i)
-		if name then
+		name, _, _, _, _, _, _, _, _, classToken, damageDone, healingDone = GetBattlefieldScore(i)
+		if name and classToken and E.HealingClasses[classToken] then
 			name = match(name,"([^%-]+).*")
 			if name and healingDone > (damageDone * 2) then
 				self.Healers[name] = true
@@ -169,7 +169,9 @@ function NP:SetTargetFrame(frame)
 			frame.unit = nil
 			frame.guid = nil
 			frame:UnregisterAllEvents()
-			frame.CastBar:Hide()
+			if frame.CastBar:IsShown() then
+				frame.CastBar:Hide()
+			end
 		end
 
 		if self.db.units[frame.UnitType].healthbar.enable ~= true then
@@ -206,7 +208,10 @@ function NP:SetTargetFrame(frame)
 		if not frame.isGroupUnit then
 			frame.unit = nil
 			frame.guid = nil
-			frame.CastBar:Hide()
+
+			if frame.CastBar:IsShown() then
+				frame.CastBar:Hide()
+			end
 		end
 		NP:UpdateElement_Highlight(frame)
 	else
@@ -464,7 +469,7 @@ function NP:OnHide()
 
 	NP:HideAuraIcons(self.UnitFrame.Buffs)
 	NP:HideAuraIcons(self.UnitFrame.Debuffs)
-	NP:ClearStyledPlate(self.UnitFrame)
+	NP:StyleFilterClear(self.UnitFrame)
 	self.UnitFrame:UnregisterAllEvents()
 	self.UnitFrame.Glow.r, self.UnitFrame.Glow.g, self.UnitFrame.Glow.b = nil, nil, nil
 	self.UnitFrame.Glow:Hide()
@@ -496,11 +501,11 @@ function NP:OnHide()
 	self.UnitFrame.UnitReaction = nil
 	self.UnitFrame.TopLevelFrame = nil
 	self.UnitFrame.TopOffset = nil
-	self.UnitFrame.ThreatScale = nil
-	self.UnitFrame.ActionScale = nil
 	self.UnitFrame.ThreatReaction = nil
 	self.UnitFrame.guid = nil
 	self.UnitFrame.RaidIconType = nil
+
+	NP:StyleFilterClearVariables(self)
 end
 
 function NP:UpdateAllFrame(frame)
@@ -511,9 +516,9 @@ end
 function NP:ConfigureAll()
 	if E.private.nameplates.enable ~= true then return end
 
-	self:StyleFilterConfigureEvents()
-	self:ForEachPlate("UpdateAllFrame")
-	self:UpdateCVars()
+	NP:StyleFilterConfigure()
+	NP:ForEachPlate("UpdateAllFrame")
+	NP:UpdateCVars()
 end
 
 function NP:ForEachPlate(functionToRun, ...)
@@ -845,7 +850,7 @@ function NP:PLAYER_REGEN_ENABLED()
 	NP:ForEachPlate("UpdateElement_Filters", "PLAYER_REGEN_ENABLED")
 end
 
-function NP:SPELL_UPDATE_COOLDOWN()
+function NP:SPELL_UPDATE_COOLDOWN(...)
 	NP:ForEachPlate("UpdateElement_Filters", "SPELL_UPDATE_COOLDOWN")
 end
 
@@ -960,10 +965,10 @@ function NP:Initialize()
 	self.hasTarget = false
 
 	--Add metatable to all our StyleFilters so they can grab default values if missing
-	self:StyleFilterInitializeAllFilters()
+	self:StyleFilterInitialize()
 
 	--Populate `NP.StyleFilterEvents` with events Style Filters will be using and sort the filters based on priority.
-	self:StyleFilterConfigureEvents()
+	self:StyleFilterConfigure()
 
 	self.levelStep = 2
 
@@ -974,7 +979,7 @@ function NP:Initialize()
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
-	self:RegisterEvent("PLAYER_LOGOUT") -- used in the StyleFilter
+	self:RegisterEvent("PLAYER_LOGOUT", NP.StyleFilterClearDefaults)
 	self:RegisterEvent("PLAYER_TARGET_CHANGED")
 	self:RegisterEvent("SPELL_UPDATE_COOLDOWN")
 

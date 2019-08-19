@@ -12,6 +12,13 @@ local UnitChannelInfo = UnitChannelInfo
 local FAILED = FAILED
 local INTERRUPTED = INTERRUPTED
 
+local function resetAttributes(self)
+	self.casting = nil
+	self.channeling = nil
+	self.notInterruptible = nil
+	self.spellName = nil
+end
+
 function NP:UpdateElement_CastBarOnUpdate(elapsed)
 	if self.casting then
 		self.value = self.value + elapsed
@@ -79,7 +86,7 @@ function NP:UpdateElement_Cast(frame, event, unit)
 			return
 		end
 
-		frame.CastBar.canInterrupt = not notInterruptible
+		frame.CastBar.notInterruptible = notInterruptible
 
 		if frame.CastBar.Spark then
 			frame.CastBar.Spark:Show()
@@ -98,41 +105,25 @@ function NP:UpdateElement_Cast(frame, event, unit)
 		frame.CastBar.castID = castID
 		frame.CastBar.channeling = nil
 		frame.CastBar.holdTime = 0
+		frame.CastBar.spellName = name
 
 		frame.CastBar:Show()
 	elseif event == "UNIT_SPELLCAST_STOP" or event == "UNIT_SPELLCAST_CHANNEL_STOP" then
-		if not frame.CastBar:IsVisible() then
-			frame.CastBar:Hide()
-		end
-		if (frame.CastBar.casting and event == "UNIT_SPELLCAST_STOP") or (frame.CastBar.channeling and event == "UNIT_SPELLCAST_CHANNEL_STOP") then
-			if frame.CastBar.Spark then
-				frame.CastBar.Spark:Hide()
-			end
-
-			frame.CastBar:SetValue(frame.CastBar.maxValue)
-			if event == "UNIT_SPELLCAST_STOP" then
-				frame.CastBar.casting = nil
-			else
-				frame.CastBar.channeling = nil
-			end
-			frame.CastBar.canInterrupt = nil
-			frame.CastBar:Hide()
+		if frame.CastBar:IsShown() then
+			resetAttributes(frame.CastBar)
 		end
 	elseif event == "UNIT_SPELLCAST_FAILED" or event == "UNIT_SPELLCAST_INTERRUPTED" then
 		if frame.CastBar:IsShown() then
 			frame.CastBar:SetValue(frame.CastBar.maxValue)
-			if frame.CastBar.Spark then
-				frame.CastBar.Spark:Hide()
-			end
-
+	
 			if event == "UNIT_SPELLCAST_FAILED" then
 				frame.CastBar.Name:SetText(FAILED)
 			else
 				frame.CastBar.Name:SetText(INTERRUPTED)
 			end
-			frame.CastBar.casting = nil
-			frame.CastBar.channeling = nil
-			frame.CastBar.canInterrupt = nil
+
+			resetAttributes(frame.CastBar)
+
 			frame.CastBar.holdTime = self.db.units[frame.UnitType].castbar.timeToHold --How long the castbar should stay visible after being interrupted, in seconds
 		end
 	elseif event == "UNIT_SPELLCAST_DELAYED" then
@@ -147,12 +138,8 @@ function NP:UpdateElement_Cast(frame, event, unit)
 			frame.CastBar.value = (GetTime() - (startTime / 1000))
 			frame.CastBar.maxValue = (endTime - startTime) / 1000
 			frame.CastBar:SetMinMaxValues(0, frame.CastBar.maxValue)
-			frame.CastBar.canInterrupt = not notInterruptible
+			frame.CastBar.notInterruptible = notInterruptible
 			if not frame.CastBar.casting then
-				if frame.CastBar.Spark then
-					frame.CastBar.Spark:Show()
-				end
-
 				frame.CastBar.casting = true
 				frame.CastBar.channeling = nil
 			end
@@ -174,12 +161,10 @@ function NP:UpdateElement_Cast(frame, event, unit)
 		if frame.CastBar.Icon then
 			frame.CastBar.Icon.texture:SetTexture(texture)
 		end
-		if frame.CastBar.Spark then
-			frame.CastBar.Spark:Hide()
-		end
-		frame.CastBar.canInterrupt = not notInterruptible
+		frame.CastBar.notInterruptible = notInterruptible
 		frame.CastBar.casting = nil
 		frame.CastBar.channeling = true
+		frame.CastBar.spellName = name
 
 		frame.CastBar:Show()
 	elseif event == "UNIT_SPELLCAST_CHANNEL_UPDATE" then
@@ -189,7 +174,7 @@ function NP:UpdateElement_Cast(frame, event, unit)
 				frame.CastBar:Hide()
 				return
 			end
-			frame.CastBar.canInterrupt = not notInterruptible
+			frame.CastBar.notInterruptible = notInterruptible
 			frame.CastBar.Name:SetText(name)
 			frame.CastBar.value = ((endTime / 1000) - GetTime())
 			frame.CastBar.maxValue = (endTime - startTime) / 1000
@@ -197,21 +182,21 @@ function NP:UpdateElement_Cast(frame, event, unit)
 			frame.CastBar:SetValue(frame.CastBar.value)
 		end
 	elseif event == "UNIT_SPELLCAST_INTERRUPTIBLE" then
-		frame.CastBar.canInterrupt = true
+		frame.CastBar.notInterruptible = nil
 	elseif event == "UNIT_SPELLCAST_NOT_INTERRUPTIBLE" then
-		frame.CastBar.canInterrupt = nil
+		frame.CastBar.notInterruptible = true
 	end
 
-	if frame.CastBar.canInterrupt then
+	if not frame.CastBar.notInterruptible then
 		frame.CastBar:SetStatusBarColor(self.db.castColor.r, self.db.castColor.g, self.db.castColor.b)
 	else
 		frame.CastBar:SetStatusBarColor(self.db.castNoInterruptColor.r, self.db.castNoInterruptColor.g, self.db.castNoInterruptColor.b)
 	end
 
-	if frame.CastBar:IsShown() then --This is so we can trigger based on Cast Name or Interruptible
-		self:UpdateElement_Filters(frame, "UpdateElement_Cast")
-	else
-		frame.CastBar.canInterrupt = nil --Only remove this when it's not shown so we can use it in style filter
+	self:UpdateElement_Filters(frame, "FAKE_Casting")
+
+	if not frame.CastBar:IsShown() then --This is so we can trigger based on Cast Name or Interruptible
+		frame.CastBar.notInterruptible = true --Only remove this when it's not shown so we can use it in style filter
 	end
 end
 
@@ -274,7 +259,10 @@ function NP:ConstructElement_CastBar(parent)
 	self:StyleFrame(frame)
 	frame:SetScript("OnUpdate", NP.UpdateElement_CastBarOnUpdate)
 	frame:SetScript("OnShow", updateGlowPosition)
-	frame:SetScript("OnHide", updateGlowPosition)
+	frame:SetScript("OnHide", function(self)
+		updateGlowPosition(self)
+		resetAttributes(self)
+	end)
 
 	frame.Icon = CreateFrame("Frame", nil, frame)
 	frame.Icon.texture = frame.Icon:CreateTexture(nil, "BORDER")
