@@ -163,6 +163,10 @@ local function Update(self, event, unit)
 	if(disconnected) then
 		element:SetValue(max)
 	else
+		if(cur == 0) then
+			cur = 0.0001
+		end
+
 		element:SetValue(cur)
 	end
 
