@@ -22,7 +22,7 @@ local WorldFrame = WorldFrame
 local WorldGetChildren = WorldFrame.GetChildren
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS
 
-local numChildren = 0
+local numChildren, hasTarget = 0
 local OVERLAY = [=[Interface\TargetingFrame\UI-TargetingFrame-Flash]=]
 local FSPAT = "%s*"..((_G.FOREIGN_SERVER_LABEL:gsub("^%s", "")):gsub("[%*()]", "%%%1")).."$"
 
@@ -132,9 +132,7 @@ function NP:SetTargetFrame(frame)
 				frame.Name:ClearAllPoints()
 				frame.Level:ClearAllPoints()
 				frame.HealthBar.r, frame.HealthBar.g, frame.HealthBar.b = nil, nil, nil
-				frame.CastBar:Hide()
 				self:ConfigureElement_HealthBar(frame)
-				self:ConfigureElement_CutawayHealth(frame)
 				self:ConfigureElement_CastBar(frame)
 				self:ConfigureElement_Glow(frame)
 				self:ConfigureElement_Elite(frame)
@@ -147,14 +145,14 @@ function NP:SetTargetFrame(frame)
 				self:UpdateElement_All(frame, true)
 			end
 
-			if self.hasTarget then
+			if hasTarget then
 				frame:SetAlpha(1)
 			end
 
 			NP:UpdateElement_Highlight(frame)
 			NP:UpdateElement_CPoints(frame)
 			NP:UpdateElement_Filters(frame, "PLAYER_TARGET_CHANGED")
-			NP:ForEachPlate("ResetNameplateFrameLevel") --keep this after `UpdateElement_Filters`
+			NP:ForEachVisiblePlate("ResetNameplateFrameLevel") --keep this after `UpdateElement_Filters`
 		end
 	elseif frame.isTargetChanged then
 		frame.isTargetChanged = false
@@ -168,7 +166,9 @@ function NP:SetTargetFrame(frame)
 		if not frame.isGroupUnit then
 			frame.unit = nil
 			frame.guid = nil
+
 			frame:UnregisterAllEvents()
+
 			if frame.CastBar:IsShown() then
 				frame.CastBar:Hide()
 			end
@@ -179,7 +179,7 @@ function NP:SetTargetFrame(frame)
 		end
 
 		if not frame.AlphaChanged then
-			if self.hasTarget then
+			if hasTarget then
 				frame:SetAlpha(self.db.nonTargetTransparency)
 			else
 				frame:SetAlpha(1)
@@ -188,22 +188,25 @@ function NP:SetTargetFrame(frame)
 
 		NP:UpdateElement_CPoints(frame)
 		NP:UpdateElement_Filters(frame, "PLAYER_TARGET_CHANGED")
-		NP:ForEachPlate("ResetNameplateFrameLevel") --keep this after `UpdateElement_Filters`
+		NP:ForEachVisiblePlate("ResetNameplateFrameLevel") --keep this after `UpdateElement_Filters`
 	elseif frame.oldHighlight:IsShown() then
 		if not frame.isMouseover then
 			frame.isMouseover = true
+
+			NP:UpdateElement_Highlight(frame)
 
 			if not frame.isGroupUnit then
 				frame.unit = "mouseover"
 				frame.guid = UnitGUID("mouseover")
 
 				NP:UpdateElement_AurasByGUID(frame.guid)
-				NP:UpdateElement_Highlight(frame)
 				NP:UpdateElement_Cast(frame, nil, frame.unit)
 			end
 		end
 	elseif frame.isMouseover then
 		frame.isMouseover = nil
+
+		NP:UpdateElement_Highlight(frame)
 
 		if not frame.isGroupUnit then
 			frame.unit = nil
@@ -213,14 +216,11 @@ function NP:SetTargetFrame(frame)
 				frame.CastBar:Hide()
 			end
 		end
-		NP:UpdateElement_Highlight(frame)
-	else
-		if not frame.AlphaChanged then
-			if self.hasTarget then
-				frame:SetAlpha(self.db.nonTargetTransparency)
-			else
-				frame:SetAlpha(1)
-			end
+	elseif not frame.AlphaChanged then
+		if hasTarget then
+			frame:SetAlpha(self.db.nonTargetTransparency)
+		else
+			frame:SetAlpha(1)
 		end
 	end
 
@@ -322,9 +322,8 @@ end
 function NP:GetUnitByName(frame, type)
 	local unit = self[type][frame.UnitName]
 	if unit then
-		return unit[1], unit[2]
+		return unit
 	end
-	return nil, nil
 end
 
 function NP:GetUnitClassByGUID(frame, guid)
@@ -340,7 +339,10 @@ function NP:UnitClass(frame, type)
 	if type == "FRIENDLY_PLAYER" then
 		local unit = self[type][frame.UnitName]
 		if unit then
-			return unit[3]
+			local _, class = UnitClass(unit)
+			if class then
+				return class
+			end
 		else
 			return NP:GetUnitClassByGUID(frame)
 		end
@@ -414,10 +416,15 @@ function NP:OnShow()
 	self.UnitFrame.UnitClass = NP:UnitClass(self.UnitFrame, unitType)
 	self.UnitFrame.UnitReaction = unitReaction
 
-	local unit, guid = NP:GetUnitByName(self.UnitFrame, unitType)
-	if unit and guid then
-		self.UnitFrame.unit, self.UnitFrame.guid = unit, guid
+	local unit = NP:GetUnitByName(self.UnitFrame, unitType)
+	if unit then
+		self.UnitFrame.unit = unit
 		self.UnitFrame.isGroupUnit = true
+
+		local guid = UnitGUID(unit)
+		if guid then
+			self.UnitFrame.guid = guid
+		end
 	end
 
 	if unitType == "ENEMY_PLAYER" then
@@ -431,7 +438,6 @@ function NP:OnShow()
 
 	if NP.db.units[unitType].healthbar.enable or NP.db.alwaysShowTargetHealth then
 		NP:ConfigureElement_HealthBar(self.UnitFrame)
-		NP:ConfigureElement_CutawayHealth(self.UnitFrame)
 		NP:ConfigureElement_CastBar(self.UnitFrame)
 		NP:ConfigureElement_Glow(self.UnitFrame)
 
@@ -458,7 +464,7 @@ function NP:OnShow()
 	self.UnitFrame:Show()
 
 	NP:UpdateElement_Filters(self.UnitFrame, "NAME_PLATE_UNIT_ADDED")
-	NP:ForEachPlate("ResetNameplateFrameLevel") --keep this after `UpdateElement_Filters`
+	NP:ForEachVisiblePlate("ResetNameplateFrameLevel") --keep this after `UpdateElement_Filters`
 end
 
 function NP:OnHide()
@@ -641,11 +647,7 @@ function NP:OnEvent(event, unit, ...)
 	if not unit and not self.unit then return end
 	if self.unit ~= unit then return end
 
-	if event == "UPDATE_MOUSEOVER_UNIT" then
-		NP:UpdateElement_Highlight(self)
-	else
-		NP:UpdateElement_Cast(self, event, unit, ...)
-	end
+	NP:UpdateElement_Cast(self, event, unit, ...)
 end
 
 function NP:RegisterEvents(frame)
@@ -667,8 +669,6 @@ function NP:RegisterEvents(frame)
 
 		NP.OnEvent(frame, nil, frame.unit)
 	end
-
-	frame:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
 end
 
 function NP:QueueObject(object)
@@ -706,14 +706,14 @@ function NP:OnUpdate()
 	findNewPlate(WorldGetChildren(WorldFrame))
 
 	for frame in pairs(NP.VisiblePlates) do
-		if NP.hasTarget then
+		if hasTarget then
 			frame.alpha = frame:GetParent():GetAlpha()
 			frame:GetParent():SetAlpha(1)
 		else
 			frame.alpha = 1
 		end
 
-		frame.isTarget = NP.hasTarget and frame.alpha == 1
+		frame.isTarget = hasTarget and frame.alpha == 1
 	end
 end
 
@@ -801,7 +801,7 @@ function NP:PLAYER_ENTERING_WORLD()
 end
 
 function NP:PLAYER_TARGET_CHANGED()
-	self.hasTarget = UnitExists("target") == 1
+	hasTarget = UnitExists("target") == 1
 end
 
 function NP:UNIT_AURA(_, unit)
@@ -814,7 +814,7 @@ end
 
 function NP:UNIT_COMBO_POINTS(_, unit)
 	if unit == "player" or unit == "vehicle" then
-		self:ForEachPlate("UpdateElement_CPoints")
+		self:ForEachVisiblePlate("UpdateElement_CPoints")
 	end
 end
 
@@ -831,7 +831,7 @@ function NP:PLAYER_REGEN_DISABLED()
 		SetCVar("nameplateShowEnemies", 0)
 	end
 
-	NP:ForEachPlate("UpdateElement_Filters", "PLAYER_REGEN_DISABLED")
+	NP:ForEachVisiblePlate("UpdateElement_Filters", "PLAYER_REGEN_DISABLED")
 end
 
 function NP:PLAYER_REGEN_ENABLED()
@@ -847,11 +847,11 @@ function NP:PLAYER_REGEN_ENABLED()
 		SetCVar("nameplateShowEnemies", 1)
 	end
 
-	NP:ForEachPlate("UpdateElement_Filters", "PLAYER_REGEN_ENABLED")
+	NP:ForEachVisiblePlate("UpdateElement_Filters", "PLAYER_REGEN_ENABLED")
 end
 
 function NP:SPELL_UPDATE_COOLDOWN(...)
-	NP:ForEachPlate("UpdateElement_Filters", "SPELL_UPDATE_COOLDOWN")
+	NP:ForEachVisiblePlate("UpdateElement_Filters", "SPELL_UPDATE_COOLDOWN")
 end
 
 function NP:UNIT_FACTION()
@@ -902,11 +902,11 @@ function NP:CacheArenaUnits()
 	for i = 1, 5 do
 		if UnitExists("arena"..i) then
 			unit = format("arena%d", i)
-			self.ENEMY_PLAYER[UnitName(unit)] = {unit, UnitGUID(unit)}
+			self.ENEMY_PLAYER[UnitName(unit)] = unit
 		end
 		if UnitExists("arenapet"..i) then
 			unit = format("arenapet%d", i)
-			self.ENEMY_NPC[UnitName(unit)] = {unit, UnitGUID(unit)}
+			self.ENEMY_NPC[UnitName(unit)] = unit
 		end
 	end
 end
@@ -915,21 +915,18 @@ function NP:CacheGroupUnits()
 	wipe(self.FRIENDLY_PLAYER)
 
 	local unit
-	local _, class
 	if GetNumRaidMembers() > 0 then
 		for i = 1, 40 do
 			if UnitExists("raid"..i) then
 				unit = format("raid%d", i)
-				_, class = UnitClass(unit)
-				self.FRIENDLY_PLAYER[UnitName(unit)] = {unit, UnitGUID(unit), class}
+				self.FRIENDLY_PLAYER[UnitName(unit)] = unit
 			end
 		end
 	elseif GetNumPartyMembers() > 0 then
 		for i = 1, 5 do
 			if UnitExists("party"..i) then
 				unit = format("party%d", i)
-				_, class = UnitClass(unit)
-				self.FRIENDLY_PLAYER[UnitName(unit)] = {unit, UnitGUID(unit), class}
+				self.FRIENDLY_PLAYER[UnitName(unit)] = unit
 			end
 		end
 	end
@@ -943,14 +940,14 @@ function NP:CacheGroupPetUnits()
 		for i = 1, 40 do
 			if UnitExists("raidpet"..i) then
 				unit = format("raidpet%d", i)
-				self.FRIENDLY_NPC[UnitName(unit)] = {unit, UnitGUID(unit)}
+				self.FRIENDLY_NPC[UnitName(unit)] = unit
 			end
 		end
 	elseif GetNumPartyMembers() > 0 then
 		for i = 1, 5 do
 			if UnitExists("partypet"..i) then
 				unit = format("partypet%d", i)
-				self.FRIENDLY_NPC[UnitName(unit)] = {unit, UnitGUID(unit)}
+				self.FRIENDLY_NPC[UnitName(unit)] = unit
 			end
 		end
 	end
@@ -961,8 +958,6 @@ function NP:Initialize()
 
 	if E.private.nameplates.enable ~= true then return end
 	NP.Initialized = true
-
-	self.hasTarget = false
 
 	--Add metatable to all our StyleFilters so they can grab default values if missing
 	self:StyleFilterInitialize()

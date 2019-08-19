@@ -115,15 +115,10 @@ function NP:UpdateElement_Health(frame)
 	local health = frame.oldHealthBar:GetValue()
 	local _, maxHealth = frame.oldHealthBar:GetMinMaxValues()
 	frame.HealthBar:SetMinMaxValues(0, maxHealth)
-	if frame.MaxHealthChangeCallbacks then
-		for _, cb in ipairs(frame.MaxHealthChangeCallbacks) do
-			cb(self, frame, maxHealth)
-		end
-	end
 
 	if frame.HealthValueChangeCallbacks then
 		for _, cb in ipairs(frame.HealthValueChangeCallbacks) do
-			cb(self, frame, health)
+			cb(self, frame, health, maxHealth)
 		end
 	end
 
@@ -137,7 +132,7 @@ function NP:UpdateElement_Health(frame)
 	end
 end
 
-function NP:RegisterHealthBarCallbacks(frame, valueChangeCB, colorChangeCB, maxHealthChangeCB)
+function NP:RegisterHealthBarCallbacks(frame, valueChangeCB, colorChangeCB)
 	if valueChangeCB then
 		frame.HealthValueChangeCallbacks = frame.HealthValueChangeCallbacks or {}
 		tinsert(frame.HealthValueChangeCallbacks, valueChangeCB)
@@ -146,11 +141,6 @@ function NP:RegisterHealthBarCallbacks(frame, valueChangeCB, colorChangeCB, maxH
 	if colorChangeCB then
 		frame.HealthColorChangeCallbacks = frame.HealthColorChangeCallbacks or {}
 		tinsert(frame.HealthColorChangeCallbacks, colorChangeCB)
-	end
-
-	if maxHealthChangeCB then
-		frame.MaxHealthChangeCallbacks = frame.MaxHealthChangeCallbacks or {}
-		tinsert(frame.MaxHealthChangeCallbacks, maxHealthChangeCB)
 	end
 end
 
@@ -172,16 +162,18 @@ function NP:ConfigureElement_HealthBar(frame, configuring)
 	healthBar.text:SetFont(LSM:Fetch("font", self.db.healthFont), self.db.healthFontSize, self.db.healthFontOutline)
 end
 
+local function HealthBar_OnSizeChanged(self, width)
+	local health = self:GetValue()
+	local _, maxHealth = self:GetMinMaxValues()
+	self:GetStatusBarTexture():SetPoint("TOPRIGHT", -(width * ((maxHealth - health) / maxHealth)), 0)
+end
+
 function NP:ConstructElement_HealthBar(parent)
 	local frame = CreateFrame("StatusBar", "$parentHealthBar", parent)
 	frame:SetStatusBarTexture(LSM:Fetch("statusbar", self.db.statusbar), "BORDER")
 	self:StyleFrame(frame)
 
-	frame:SetScript("OnSizeChanged", function(self, width)
-		local health = self:GetValue()
-		local _, maxHealth = self:GetMinMaxValues()
-		self:GetStatusBarTexture():SetPoint("TOPRIGHT", -(width * ((maxHealth - health) / maxHealth)), 0)
-	end)
+	frame:SetScript("OnSizeChanged", HealthBar_OnSizeChanged)
 
 	parent.FlashTexture = frame:CreateTexture(nil, "OVERLAY")
 	parent.FlashTexture:SetTexture(LSM:Fetch("background", "ElvUI Blank"))

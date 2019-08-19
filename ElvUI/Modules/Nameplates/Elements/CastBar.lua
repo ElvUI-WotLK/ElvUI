@@ -115,7 +115,7 @@ function NP:UpdateElement_Cast(frame, event, unit)
 	elseif event == "UNIT_SPELLCAST_FAILED" or event == "UNIT_SPELLCAST_INTERRUPTED" then
 		if frame.CastBar:IsShown() then
 			frame.CastBar:SetValue(frame.CastBar.maxValue)
-	
+
 			if event == "UNIT_SPELLCAST_FAILED" then
 				frame.CastBar.Name:SetText(FAILED)
 			else
@@ -256,25 +256,26 @@ function NP:ConstructElement_CastBar(parent)
 	end
 
 	local frame = CreateFrame("StatusBar", "$parentCastBar", parent)
-	self:StyleFrame(frame)
+	NP:StyleFrame(frame)
 	frame:SetScript("OnUpdate", NP.UpdateElement_CastBarOnUpdate)
 	frame:SetScript("OnShow", updateGlowPosition)
-	frame:SetScript("OnHide", function(self)
-		updateGlowPosition(self)
-		resetAttributes(self)
+	frame:SetScript("OnHide", function(cb)
+		updateGlowPosition(cb)
+		resetAttributes(cb)
+		NP:UpdateElement_Filters(parent, "FAKE_Casting")
 	end)
 
 	frame.Icon = CreateFrame("Frame", nil, frame)
 	frame.Icon.texture = frame.Icon:CreateTexture(nil, "BORDER")
 	frame.Icon.texture:SetAllPoints()
-	self:StyleFrame(frame.Icon)
+	NP:StyleFrame(frame.Icon)
 
 	frame.Name = frame:CreateFontString(nil, "OVERLAY")
-	frame.Name:SetFont(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline)
+	frame.Name:SetFont(LSM:Fetch("font", NP.db.font), NP.db.fontSize, NP.db.fontOutline)
 	frame.Name:SetWordWrap(false)
 
 	frame.Time = frame:CreateFontString(nil, "OVERLAY")
-	frame.Time:SetFont(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline)
+	frame.Time:SetFont(LSM:Fetch("font", NP.db.font), NP.db.fontSize, NP.db.fontOutline)
 	frame.Time:SetWordWrap(false)
 
 	frame.Spark = frame:CreateTexture(nil, "OVERLAY")

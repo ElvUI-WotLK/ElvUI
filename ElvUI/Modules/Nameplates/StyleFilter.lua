@@ -16,9 +16,6 @@ local UnitHealthMax = UnitHealthMax
 local UnitPower = UnitPower
 local UnitPowerMax = UnitPowerMax
 
-local FAILED = FAILED
-local INTERRUPTED = INTERRUPTED
-
 mod.TriggerConditions = {
 	frameTypes = {
 		["FRIENDLY_PLAYER"] = "friendlyPlayer",
@@ -346,7 +343,7 @@ function mod:StyleFilterConditionCheck(frame, filter, trigger)
 		local b, c = frame.CastBar, trigger.casting
 
 		-- Spell
-		if b.spellName then
+		if b and b.spellName then
 			if c.spells and next(c.spells) then
 				for _, value in pairs(c.spells) do
 					if value then -- only run if at least one is selected
@@ -415,7 +412,7 @@ end
 function mod:StyleFilterPass(frame, actions)
 	local healthBarEnabled = (frame.UnitType and mod.db.units[frame.UnitType].healthbar.enable) or (frame.isTarget and mod.db.alwaysShowTargetHealth)
 	local healthBarShown = healthBarEnabled and frame.HealthBar:IsShown()
-	
+
 	mod:StyleFilterSetChanges(frame, actions,
 		(healthBarShown and actions.color and actions.color.health), --HealthColorChanged
 		(healthBarShown and actions.color and actions.color.border and frame.HealthBar.backdrop), --BorderChanged
