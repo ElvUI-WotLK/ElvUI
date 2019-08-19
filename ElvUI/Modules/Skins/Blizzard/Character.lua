@@ -424,10 +424,17 @@ local function LoadSkin()
 
 	SkillFrame:StripTextures(true)
 
-	S:HandleNextPrevButton(SkillDetailStatusBarUnlearnButton)
+	local normal = SkillDetailStatusBarUnlearnButton:GetNormalTexture()
+	local pushed = SkillDetailStatusBarUnlearnButton:GetPushedTexture()
 
-	SkillDetailStatusBarUnlearnButton:Size(24)
+	normal:SetTexture(E.Media.Textures.Close)
+	normal:SetInside()
+
+	pushed:SetTexture(E.Media.Textures.Close)
+	pushed:SetInside()
+
 	SkillDetailStatusBarUnlearnButton:Point("LEFT", SkillDetailStatusBarBorder, "RIGHT", 5, 0)
+	SkillDetailStatusBarUnlearnButton:Size(20)
 	SkillDetailStatusBarUnlearnButton:SetHitRectInsets(0, 0, 0, 0)
 
 	SkillFrameExpandButtonFrame:StripTextures()
