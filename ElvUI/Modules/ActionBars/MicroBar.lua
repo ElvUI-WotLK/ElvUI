@@ -21,34 +21,22 @@ local MICRO_BUTTONS = {
 	"HelpMicroButton"
 }
 
-local function onEnterBar()
-	if AB.db.microbar.mouseover then
-		E:UIFrameFadeIn(ElvUI_MicroBar, 0.2, ElvUI_MicroBar:GetAlpha(), AB.db.microbar.alpha)
-	end
-end
-
-local function onLeaveBar()
-	if AB.db.microbar.mouseover then
-		E:UIFrameFadeOut(ElvUI_MicroBar, 0.2, ElvUI_MicroBar:GetAlpha(), 0)
-	end
-end
-
-local function onEnterButton(button)
+local function onEnter(button)
 	if AB.db.microbar.mouseover then
 		E:UIFrameFadeIn(ElvUI_MicroBar, 0.2, ElvUI_MicroBar:GetAlpha(), AB.db.microbar.alpha)
 	end
 
-	if button.backdrop then
+	if button and button.backdrop then
 		button.backdrop:SetBackdropBorderColor(unpack(E.media.rgbvaluecolor))
 	end
 end
 
-local function onLeaveButton(button)
+local function onLeave(button)
 	if AB.db.microbar.mouseover then
 		E:UIFrameFadeOut(ElvUI_MicroBar, 0.2, ElvUI_MicroBar:GetAlpha(), 0)
 	end
 
-	if button.backdrop then
+	if button and button.backdrop then
 		button.backdrop:SetBackdropBorderColor(unpack(E.media.bordercolor))
 	end
 end
@@ -66,8 +54,8 @@ function AB:HandleMicroButton(button)
 
 	button:SetParent(ElvUI_MicroBar)
 	button:GetHighlightTexture():Kill()
-	button:HookScript("OnEnter", onEnterButton)
-	button:HookScript("OnLeave", onLeaveButton)
+	button:HookScript("OnEnter", onEnter)
+	button:HookScript("OnLeave", onLeave)
 	button:SetHitRectInsets(0, 0, 0, 0)
 	button:Show()
 
@@ -177,8 +165,8 @@ function AB:SetupMicroBar()
 	microBar:Point("TOPLEFT", E.UIParent, "TOPLEFT", 4, -48)
 	microBar:SetFrameStrata("LOW")
 	microBar:EnableMouse(true)
-	microBar:SetScript("OnEnter", onEnterBar)
-	microBar:SetScript("OnLeave", onLeaveBar)
+	microBar:SetScript("OnEnter", onEnter)
+	microBar:SetScript("OnLeave", onLeave)
 
 	microBar.visibility = CreateFrame("Frame", nil, E.UIParent, "SecureHandlerStateTemplate")
 	microBar.visibility:SetScript("OnShow", function() microBar:Show() end)
