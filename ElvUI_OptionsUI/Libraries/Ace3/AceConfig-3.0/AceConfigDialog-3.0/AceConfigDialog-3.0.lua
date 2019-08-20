@@ -812,7 +812,7 @@ local function ActivateControl(widget, event, ...)
 		end
 
 		-- show validate message
-		if rootframe.SetStatusText then
+		if not group.validatePopup and rootframe.SetStatusText then
 			rootframe:SetStatusText(validated)
 		else
 			validationErrorPopup(validated)
