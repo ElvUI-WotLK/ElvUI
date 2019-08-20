@@ -4,7 +4,6 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 G.general = {
 	UIScale = 0.711111,
 	version = 6.00,
-	versionCheck = true,
 	locale = "auto",
 	eyefinity = false,
 	ignoreScalePopup = false,
