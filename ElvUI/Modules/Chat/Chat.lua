@@ -1491,11 +1491,6 @@ function CH:DisplayChatHistory()
 	local data, d = ElvCharacterDB.ChatHistoryLog
 	if not (data and next(data)) then return end
 
-	if not GetPlayerInfoByGUID(E.myguid) then
-		E:Delay(0.1, CH.DisplayChatHistory)
-		return
-	end
-
 	CH.SoundTimer = true
 	for _, chat in pairs(CHAT_FRAMES) do
 		for i = 1, #data do
