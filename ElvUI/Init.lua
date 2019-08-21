@@ -156,6 +156,7 @@ function AddOn:OnInitialize()
 	self:UIScale(true)
 	self:UpdateMedia()
 
+	self:RegisterEvent("UPDATE_FLOATING_CHAT_WINDOWS", "PixelScaleChanged")
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
 	self:Contruct_StaticPopups()
 	self:InitializeInitialModules()

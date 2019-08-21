@@ -81,6 +81,8 @@ function E:PixelScaleChanged(event, skip)
 
 	if skip or E.global.general.ignoreScalePopup then return end
 
+	if event == "UPDATE_FLOATING_CHAT_WINDOWS" then return end
+
 	if event == "UISCALE_CHANGE" then
 		E:Delay(0.5, E.StaticPopup_Show, E, event)
 	else
