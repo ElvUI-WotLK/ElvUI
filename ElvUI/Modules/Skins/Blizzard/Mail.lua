@@ -42,22 +42,13 @@ local function LoadSkin()
 		local icon = _G["MailItem"..i.."ButtonIcon"]
 
 		mail:StripTextures()
-		mail:CreateBackdrop("Default")
-		mail.backdrop:Point("TOPLEFT", 42, -2)
-		mail.backdrop:Point("BOTTOMRIGHT", -2, 6)
-
-		mail.bg = CreateFrame("Frame", nil, mail)
-		mail.bg:SetTemplate("Default", true)
-		mail.bg:Point("TOPLEFT", -2, -2)
-		mail.bg:Point("BOTTOMRIGHT", -270, 6)
-		mail.bg:SetFrameLevel(mail.bg:GetFrameLevel() - 2)
 
 		button:StripTextures()
+		button:SetTemplate(nil, true)
 		button:StyleButton()
-		button:SetAllPoints(mail.bg)
 
 		icon:SetTexCoord(unpack(E.TexCoords))
-		icon:SetInside(mail.bg)
+		icon:SetInside()
 	end
 
 	hooksecurefunc("InboxFrame_Update", function()
@@ -65,7 +56,7 @@ local function LoadSkin()
 		local index = ((InboxFrame.pageNum - 1) * INBOXITEMS_TO_DISPLAY) + 1
 
 		for i = 1, INBOXITEMS_TO_DISPLAY do
-			local mail = _G["MailItem"..i]
+			local button = _G["MailItem"..i.."Button"]
 
 			if index <= numItems then
 				local packageIcon, _, _, _, _, _, _, _, _, _, _, _, isGM = GetInboxHeaderInfo(index)
@@ -77,18 +68,18 @@ local function LoadSkin()
 						local quality = select(3, GetItemInfo(ItemLink))
 
 						if quality then
-							mail.bg:SetBackdropBorderColor(GetItemQualityColor(quality))
+							button:SetBackdropBorderColor(GetItemQualityColor(quality))
 						else
-							mail.bg:SetBackdropBorderColor(unpack(E.media.bordercolor))
+							button:SetBackdropBorderColor(unpack(E.media.bordercolor))
 						end
 					end
 				elseif isGM then
-					mail.bg:SetBackdropBorderColor(0, 0.56, 0.94)
+					button:SetBackdropBorderColor(0, 0.56, 0.94)
 				else
-					mail.bg:SetBackdropBorderColor(unpack(E.media.bordercolor))
+					button:SetBackdropBorderColor(unpack(E.media.bordercolor))
 				end
 			else
-				mail.bg:SetBackdropBorderColor(unpack(E.media.bordercolor))
+				button:SetBackdropBorderColor(unpack(E.media.bordercolor))
 			end
 
 			index = index + 1
