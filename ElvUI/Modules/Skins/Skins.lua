@@ -563,6 +563,14 @@ function S:HandleNextPrevButton(btn, arrowDir, color, noBackdrop, stipTexts)
 	btn.isSkinned = true
 end
 
+function S:SetNextPrevButtonDirection(frame, arrowDir)
+	local direction = self.ArrowRotation[(arrowDir or "down")]
+
+	frame:GetNormalTexture():SetRotation(direction)
+	frame:GetDisabledTexture():SetRotation(direction)
+	frame:GetPushedTexture():SetRotation(direction)
+end
+
 function S:ADDON_LOADED(_, addon)
 	S:SkinAce3()
 
