@@ -757,13 +757,16 @@ function CH:FindURL(event, msg, author, ...)
 	local x, found = 0
 	local newMsg = gsub(gsub(text, "(%S)(|c.-|H.-|h.-|h|r)", "%1 %2"), "(|c.-|H.-|h.-|h|r)(%S)", "%1 %2")
 
-	-- http://example.com
+	-- https://example.com
 	newMsg, found = gsub(newMsg, "([A-z][A-z0-9+-%.]+://%S+)", CH.PrintURL)
+	x = x + found
+	-- www.example.com
+	newMsg, found = gsub(newMsg, "(www%.[A-z0-9-]+%.%S+)", CH.PrintURL)
 	x = x + found
 	-- example@example.com
 	newMsg, found = gsub(newMsg, "(%S+@[A-z][A-z0-9-]+%.[A-z0-9-]+)", CH.PrintURL)
 	x = x + found
-	-- IP address
+	-- 1.1.1.1[:1337]
 	newMsg, found = gsub(newMsg, "(%d%d?%d?%.%d%d?%d?%.%d%d?%d?%.%d%d?%d?[:%d]*)", CH.PrintURL)
 	x = x + found
 
