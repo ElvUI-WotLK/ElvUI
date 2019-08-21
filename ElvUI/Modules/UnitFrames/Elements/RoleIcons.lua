@@ -33,7 +33,8 @@ function UF:UpdateRoleIcon(event)
 		return
 	end
 
-	local role = UnitGroupRolesAssigned(self.unit)
+	local isTank, isHealer, isDamage = UnitGroupRolesAssigned(self.unit)
+	local role = isTank and "TANK" or isHealer and "HEALER" or isDamage and "DAMAGER" or "NONE"
 	if self.isForced and role == "NONE" then
 		local rnd = random(1, 3)
 		role = rnd == 1 and "TANK" or (rnd == 2 and "HEALER" or (rnd == 3 and "DAMAGER"))
