@@ -42,13 +42,19 @@ local function LoadSkin()
 		local icon = _G["MailItem"..i.."ButtonIcon"]
 
 		mail:StripTextures()
+		mail:CreateBackdrop("Default")
+		mail.backdrop:Point("TOPLEFT", 45, -2)
+		mail.backdrop:Point("BOTTOMRIGHT", 4, 9)
 
 		button:StripTextures()
-		button:SetTemplate(nil, true)
+		button:CreateBackdrop()
+		button:Point("TOPLEFT", 8, -3)
+		button:Size(32)
 		button:StyleButton()
+		button.hover:SetAllPoints()
 
 		icon:SetTexCoord(unpack(E.TexCoords))
-		icon:SetInside()
+		icon:SetInside(button.backdrop)
 	end
 
 	hooksecurefunc("InboxFrame_Update", function()
@@ -68,31 +74,37 @@ local function LoadSkin()
 						local quality = select(3, GetItemInfo(ItemLink))
 
 						if quality then
-							button:SetBackdropBorderColor(GetItemQualityColor(quality))
+							button.backdrop:SetBackdropBorderColor(GetItemQualityColor(quality))
 						else
-							button:SetBackdropBorderColor(unpack(E.media.bordercolor))
+							button.backdrop:SetBackdropBorderColor(unpack(E.media.bordercolor))
 						end
 					end
 				elseif isGM then
-					button:SetBackdropBorderColor(0, 0.56, 0.94)
+					button.backdrop:SetBackdropBorderColor(0, 0.56, 0.94)
 				else
-					button:SetBackdropBorderColor(unpack(E.media.bordercolor))
+					button.backdrop:SetBackdropBorderColor(unpack(E.media.bordercolor))
 				end
 			else
-				button:SetBackdropBorderColor(unpack(E.media.bordercolor))
+				button.backdrop:SetBackdropBorderColor(unpack(E.media.bordercolor))
 			end
 
 			index = index + 1
 		end
 	end)
 
+	InboxTitleText:ClearAllPoints()
+	InboxTitleText:Point("TOP", InboxFrame, "TOP", 0, -18)
+
+	SendMailTitleText:ClearAllPoints()
+	SendMailTitleText:Point("TOP", SendMailFrame, "TOP", 0, -18)
+
 	S:HandleNextPrevButton(InboxPrevPageButton, nil, nil, true)
 	InboxPrevPageButton:Size(32)
-	InboxPrevPageButton:Point("CENTER", InboxFrame, "BOTTOMLEFT", 38, 104)
+	InboxPrevPageButton:Point("CENTER", InboxFrame, "BOTTOMLEFT", 44, 104)
 
 	S:HandleNextPrevButton(InboxNextPageButton, nil, nil, true)
 	InboxNextPageButton:Size(32)
-	InboxNextPageButton:Point("CENTER", InboxFrame, "BOTTOMLEFT", 319, 104)
+	InboxNextPageButton:Point("CENTER", InboxFrame, "BOTTOMLEFT", 328, 104)
 
 	S:HandleCloseButton(InboxCloseButton, MailFrame.backdrop)
 
