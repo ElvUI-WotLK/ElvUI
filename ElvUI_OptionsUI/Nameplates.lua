@@ -3144,7 +3144,7 @@ for i = 1, 5 do
 		set = function(info, r, g, b)
 			local t = E.db.nameplates.comboBar.colors[i]
 			t.r, t.g, t.b = r, g, b
-			NP:PLAYER_COMBO_POINTS()
+			NP:UNIT_COMBO_POINTS()
 			NP:ConfigureAll()
 		end
 	}
