@@ -34,6 +34,21 @@ StickyFrames.rangeX = 15
 StickyFrames.rangeY = 15
 StickyFrames.sticky = StickyFrames.sticky or {}
 
+local twipe = table.wipe
+local groupBlacklist = {}
+
+local function isGroupPoint(frame, frame2)
+	if groupBlacklist[frame2] then
+		return true
+	else
+		local _, point = frame2:GetPoint()
+		if groupBlacklist[point] or frame.parent == point then
+			groupBlacklist[frame2.parent] = true
+			return true
+		end
+	end
+end
+
 --[[---------------------------------------------------------------------------------
   StickyFrames:StartMoving() - Sets a custom OnUpdate for the frame so it follows
   the mouse and snaps to the frames you specify
@@ -78,6 +93,7 @@ end
 function StickyFrames:StopMoving(frame)
 	frame:SetScript("OnUpdate", self.scripts[frame])
 	self.scripts[frame] = nil
+	twipe(groupBlacklist)
 
 	if StickyFrames.sticky[frame] then
 		local sticky = StickyFrames.sticky[frame]
@@ -136,7 +152,7 @@ function StickyFrames:GetUpdateFunc(frame, frameList, xoffset, yoffset, left, to
 		StickyFrames.sticky[frame] = nil
 		for i = 1, #frameList do
 			local v = frameList[i]
-			if frame ~= v and frame ~= v:GetParent() and not IsShiftKeyDown() and v:IsVisible() then
+			if frame ~= v and frame ~= v:GetParent() and not isGroupPoint(frame, v) and not IsShiftKeyDown() and v:IsVisible() then
 				if self:SnapFrame(frame, v, left, top, right, bottom) then
 					StickyFrames.sticky[frame] = v
 					break
