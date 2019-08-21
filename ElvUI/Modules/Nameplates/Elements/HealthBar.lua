@@ -4,7 +4,6 @@ local LSM = E.Libs.LSM
 
 --Lua functions
 --WoW API / Variables
-local RAID_CLASS_COLORS = RAID_CLASS_COLORS
 
 function NP:UpdateElement_HealthOnValueChanged()
 	local frame = self:GetParent().UnitFrame
