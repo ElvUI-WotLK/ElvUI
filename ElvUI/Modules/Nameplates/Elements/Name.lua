@@ -73,7 +73,7 @@ function NP:ConfigureElement_Name(frame)
 		name:SetPoint("BOTTOMRIGHT", frame.Level, "BOTTOMLEFT")
 	else
 		name:SetJustifyH("CENTER")
-		name:SetPoint("BOTTOM", frame, "CENTER", 0, 0)
+		name:SetPoint("TOP", frame)
 	end
 
 	name:SetFont(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline)
