@@ -440,7 +440,7 @@ function B:CanItemGoInBag(bag, slot, targetBag)
 	local itemFamily = GetItemFamily(item)
 	if itemFamily and itemFamily > 0 then
 		local equipSlot = select(9, GetItemInfo(item))
-		if equipSlot == "INVTYPE_BAG" then
+		if equipSlot == "INVTYPE_QUIVER" then
 			itemFamily = 1
 		end
 	end
