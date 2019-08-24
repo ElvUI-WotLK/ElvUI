@@ -735,8 +735,10 @@ function CH.PrintURL(url)
 end
 
 local tempURLs = {}
+local tempURLsCount = 0
 local function tempReplaceURL(url)
-	local id = "|Hurl:"..#tempURLs.."|h"
+	tempURLsCount = tempURLsCount + 1
+	local id = "|Hurl:"..tempURLsCount.."|h"
 	tempURLs[id] = CH.PrintURL(url)	
 	return id
 end
@@ -780,6 +782,7 @@ function CH:FindURL(event, msg, author, ...)
 	if x > 0 then
 		newMsg = gsub(newMsg, "(|Hurl:%d+|h)", tempURLs)
 		wipe(tempURLs)
+		tempURLsCount = 0
 
 		newMsg = CH:CheckKeyword(newMsg, author)
 		newMsg = CH:GetSmileyReplacementText(newMsg)
