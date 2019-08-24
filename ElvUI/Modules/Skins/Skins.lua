@@ -675,6 +675,13 @@ function S:Initialize()
 
 	S:SkinAce3()
 
+	--Fire event for all skins that doesn't rely on a Blizzard addon
+	for index, event in ipairs(self.nonAddonCallbacks.CallPriority) do
+		self.nonAddonCallbacks[event] = nil
+		self.nonAddonCallbacks.CallPriority[index] = nil
+		E.callbacks:Fire(event)
+	end
+
 	--Fire events for Blizzard addons that are already loaded
 	for addon in pairs(self.addonCallbacks) do
 		if IsAddOnLoaded(addon) then
@@ -684,13 +691,6 @@ function S:Initialize()
 				E.callbacks:Fire(event)
 			end
 		end
-	end
-
-	--Fire event for all skins that doesn't rely on a Blizzard addon
-	for index, event in ipairs(self.nonAddonCallbacks.CallPriority) do
-		self.nonAddonCallbacks[event] = nil
-		self.nonAddonCallbacks.CallPriority[index] = nil
-		E.callbacks:Fire(event)
 	end
 end
 
