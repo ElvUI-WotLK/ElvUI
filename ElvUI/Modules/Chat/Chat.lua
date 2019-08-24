@@ -739,7 +739,7 @@ local tempURLsCount = 0
 local function tempReplaceURL(url)
 	tempURLsCount = tempURLsCount + 1
 	local id = "|Hurl:"..tempURLsCount.."|h"
-	tempURLs[id] = CH.PrintURL(url)	
+	tempURLs[id] = CH.PrintURL(url)
 	return id
 end
 
