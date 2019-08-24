@@ -734,6 +734,13 @@ function CH.PrintURL(url)
 	return "|cFFFFFFFF[|Hurl:"..url.."|h"..url.."|h]|r "
 end
 
+local tempURLs = {}
+local function tempReplaceURL(url)
+	local id = "|Hurl:"..#tempURLs.."|h"
+	tempURLs[id] = CH.PrintURL(url)	
+	return id
+end
+
 function CH:FindURL(event, msg, author, ...)
 	if (event == "CHAT_MSG_WHISPER" or event == "CHAT_MSG_BN_WHISPER") and (CH.db.whisperSound ~= "None") and not CH.SoundTimer then
 		if (CH.db.noAlertInCombat and not InCombatLockdown()) or not CH.db.noAlertInCombat then
@@ -758,19 +765,22 @@ function CH:FindURL(event, msg, author, ...)
 	local newMsg = gsub(gsub(text, "(%S)(|c.-|H.-|h.-|h|r)", "%1 %2"), "(|c.-|H.-|h.-|h|r)(%S)", "%1 %2")
 
 	-- https://example.com
-	newMsg, found = gsub(newMsg, "([A-z][A-z0-9+-%.]+://%S+)", CH.PrintURL)
+	newMsg, found = gsub(newMsg, "([A-z][A-z0-9+-%.]+://%S+)", tempReplaceURL)
 	x = x + found
 	-- www.example.com
-	newMsg, found = gsub(newMsg, "(www%.[A-z0-9-]+%.%S+)", CH.PrintURL)
+	newMsg, found = gsub(newMsg, "(www%.[A-z0-9-]+%.%S+)", tempReplaceURL)
 	x = x + found
 	-- example@example.com
-	newMsg, found = gsub(newMsg, "(%S+@[A-z][A-z0-9-]+%.[A-z0-9-]+)", CH.PrintURL)
+	newMsg, found = gsub(newMsg, "(%S+@[A-z][A-z0-9-]+%.[A-z0-9-]+)", tempReplaceURL)
 	x = x + found
 	-- 1.1.1.1[:1337]
-	newMsg, found = gsub(newMsg, "(%d%d?%d?%.%d%d?%d?%.%d%d?%d?%.%d%d?%d?[:%d]*)", CH.PrintURL)
+	newMsg, found = gsub(newMsg, "(%d%d?%d?%.%d%d?%d?%.%d%d?%d?%.%d%d?%d?[:%d]*)", tempReplaceURL)
 	x = x + found
 
 	if x > 0 then
+		newMsg = gsub(newMsg, "(|Hurl:%d+|h)", tempURLs)
+		wipe(tempURLs)
+
 		newMsg = CH:CheckKeyword(newMsg, author)
 		newMsg = CH:GetSmileyReplacementText(newMsg)
 		return false, newMsg, author, ...
