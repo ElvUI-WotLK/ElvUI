@@ -208,7 +208,7 @@ local function CastUpdate(self, event, unit, _, _, castID)
 	if(self.unit ~= unit) then return end
 
 	local element = self.Castbar
-	if(not element:IsShown() or element.castID ~= castID) then
+	if(not element:IsShown() or element.castID and element.castID ~= castID) then
 		return
 	end
 
