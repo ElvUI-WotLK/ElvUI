@@ -113,7 +113,7 @@ function E:CreateCooldownTimer(parent)
 
 	-- cooldown override settings
 	if parent.CooldownOverride then
-		local db = E.db[parent.CooldownOverride]
+		local db = (parent.CooldownOverride and E.db[parent.CooldownOverride]) or E.db
 		if db and db.cooldown then
 			if not timer.timerOptions then
 				timer.timerOptions = {}
