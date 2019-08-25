@@ -131,6 +131,8 @@ function M:ToggleMapFramerate()
 end
 
 function M:Initialize()
+	if not E.private.worldmap.enable then return end
+
 	M.Initialized = true
 
 	if E.global.general.WorldMapCoordinates.enable then

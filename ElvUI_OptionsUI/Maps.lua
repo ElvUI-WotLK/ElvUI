@@ -20,11 +20,19 @@ E.Options.args.maps = {
 					type = "header",
 					name = L["WORLD_MAP"]
 				},
-				generalGroup = {
+				enable = {
 					order = 2,
+					type = "toggle",
+					name = L["Enable"],
+					get = function(info) return E.private.worldmap[info[#info]] end,
+					set = function(info, value) E.private.worldmap[info[#info]] = value; E:StaticPopup_Show("PRIVATE_RL") end
+				},
+				generalGroup = {
+					order = 3,
 					type = "group",
 					name = L["General"],
 					guiInline = true,
+					disabled = function() return not WM.Initialized end,
 					args = {
 						smallerWorldMap = {
 							order = 1,
@@ -46,15 +54,16 @@ E.Options.args.maps = {
 					}
 				},
 				spacer = {
-					order = 3,
+					order = 4,
 					type = "description",
 					name = "\n"
 				},
 				coordinatesGroup = {
-					order = 4,
+					order = 5,
 					type = "group",
 					name = L["World Map Coordinates"],
 					guiInline = true,
+					disabled = function() return not WM.Initialized end,
 					args = {
 						enable = {
 							order = 1,

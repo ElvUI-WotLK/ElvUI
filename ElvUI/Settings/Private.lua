@@ -135,3 +135,7 @@ V.actionbar = {
 		skin = "Blizzard",
 	}
 }
+
+V.worldmap = {
+	enable = true
+}
