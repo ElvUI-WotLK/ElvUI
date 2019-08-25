@@ -42,9 +42,12 @@ local function LoadSkin()
 		local icon = _G["MailItem"..i.."ButtonIcon"]
 
 		mail:StripTextures()
-		mail:CreateBackdrop("Default")
-		mail.backdrop:Point("TOPLEFT", 45, -2)
-		mail.backdrop:Point("BOTTOMRIGHT", 4, 9)
+		mail:CreateBackdrop("Transparent")
+		mail.backdrop:SetParent(button)
+		mail.backdrop:ClearAllPoints()
+		mail.backdrop:Point("TOPLEFT", mail, 45, -2)
+		mail.backdrop:Point("BOTTOMRIGHT", mail, 4, 9)
+		mail.backdrop:SetFrameLevel(mail:GetFrameLevel() - 1)
 
 		button:StripTextures()
 		button:CreateBackdrop()
