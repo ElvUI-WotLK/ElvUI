@@ -481,6 +481,7 @@ function E:CheckIncompatible()
 	if IsAddOnLoaded("TidyPlates") and E.private.nameplates.enable then E:IncompatibleAddOn("TidyPlates", "NamePlates") end
 	if IsAddOnLoaded("Aloft") and E.private.nameplates.enable then E:IncompatibleAddOn("Aloft", "NamePlates") end
 	if IsAddOnLoaded("Healers-Have-To-Die") and E.private.nameplates.enable then E:IncompatibleAddOn("Healers-Have-To-Die", "NamePlates") end
+	if IsAddOnLoaded("Mapster") and E.private.worldmap.enable then E:IncompatibleAddOn("Mapster", "WorldMap") end
 end
 
 function E:CopyTable(currentTable, defaultTable)
