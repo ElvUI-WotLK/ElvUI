@@ -110,39 +110,41 @@ function NP:ResetNameplateFrameLevel(frame)
 end
 
 function NP:SetTargetFrame(frame)
+	frame:Hide()
+
 	if frame.isTarget then
 		if not frame.isTargetChanged then
 			frame.isTargetChanged = true
 
 			NP:SetPlateFrameLevel(frame, NP:GetPlateFrameLevel(frame), true)
 
-			if self.db.useTargetScale then
-				self:SetFrameScale(frame, (frame.ThreatScale or 1) * self.db.targetScale)
+			if NP.db.useTargetScale then
+				NP:SetFrameScale(frame, (frame.ThreatScale or 1) * NP.db.targetScale)
 			end
 
 			if not frame.isGroupUnit then
 				frame.unit = "target"
 				frame.guid = UnitGUID("target")
 
-				self:RegisterEvents(frame)
+				NP:RegisterEvents(frame)
 				NP:UpdateElement_AurasByGUID(frame.guid)
 			end
 
-			if self.db.units[frame.UnitType].healthbar.enable ~= true and self.db.alwaysShowTargetHealth then
+			if NP.db.units[frame.UnitType].healthbar.enable ~= true and NP.db.alwaysShowTargetHealth then
 				frame.Name:ClearAllPoints()
 				frame.Level:ClearAllPoints()
 				frame.HealthBar.r, frame.HealthBar.g, frame.HealthBar.b = nil, nil, nil
-				self:ConfigureElement_HealthBar(frame)
-				self:ConfigureElement_CastBar(frame)
-				self:ConfigureElement_Glow(frame)
-				self:ConfigureElement_Elite(frame)
-				self:ConfigureElement_Highlight(frame)
-				self:ConfigureElement_Level(frame)
-				self:ConfigureElement_Name(frame)
-				self:ConfigureElement_CPoints(frame)
-				self:RegisterEvents(frame)
+				NP:ConfigureElement_HealthBar(frame)
+				NP:ConfigureElement_CastBar(frame)
+				NP:ConfigureElement_Glow(frame)
+				NP:ConfigureElement_Elite(frame)
+				NP:ConfigureElement_Highlight(frame)
+				NP:ConfigureElement_Level(frame)
+				NP:ConfigureElement_Name(frame)
+				NP:ConfigureElement_CPoints(frame)
+				NP:RegisterEvents(frame)
 
-				self:UpdateElement_All(frame, true)
+				NP:UpdateElement_All(frame, true)
 			end
 
 			if hasTarget then
@@ -159,8 +161,8 @@ function NP:SetTargetFrame(frame)
 
 		NP:SetPlateFrameLevel(frame, NP:GetPlateFrameLevel(frame))
 
-		if self.db.useTargetScale then
-			self:SetFrameScale(frame, (frame.ThreatScale or 1))
+		if NP.db.useTargetScale then
+			NP:SetFrameScale(frame, (frame.ThreatScale or 1))
 		end
 
 		if not frame.isGroupUnit then
@@ -171,13 +173,13 @@ function NP:SetTargetFrame(frame)
 			NP:UpdateElement_Cast(frame)
 		end
 
-		if self.db.units[frame.UnitType].healthbar.enable ~= true then
-			self:UpdateAllFrame(frame)
+		if NP.db.units[frame.UnitType].healthbar.enable ~= true then
+			NP:UpdateAllFrame(frame)
 		end
 
 		if not frame.AlphaChanged then
 			if hasTarget then
-				frame:SetAlpha(self.db.nonTargetTransparency)
+				frame:SetAlpha(NP.db.nonTargetTransparency)
 			else
 				frame:SetAlpha(1)
 			end
@@ -207,19 +209,20 @@ function NP:SetTargetFrame(frame)
 
 		if not frame.isGroupUnit then
 			frame.unit = nil
-			frame.guid = nil
 			NP:UpdateElement_Cast(frame)
 		end
 	elseif not frame.AlphaChanged then
 		if hasTarget then
-			frame:SetAlpha(self.db.nonTargetTransparency)
+			frame:SetAlpha(NP.db.nonTargetTransparency)
 		else
 			frame:SetAlpha(1)
 		end
 	end
 
-	self:UpdateElement_Glow(frame)
-	self:UpdateElement_HealthColor(frame)
+	NP:UpdateElement_Glow(frame)
+	NP:UpdateElement_HealthColor(frame)
+
+	frame:Show()
 end
 
 function NP:StyleFrame(parent, noBackdrop, point)
@@ -470,7 +473,21 @@ function NP:OnHide()
 	NP:HideAuraIcons(self.UnitFrame.Buffs)
 	NP:HideAuraIcons(self.UnitFrame.Debuffs)
 	NP:StyleFilterClear(self.UnitFrame)
-	self.UnitFrame:UnregisterAllEvents()
+	
+--	self.UnitFrame:UnregisterAllEvents()
+	if self.UnitFrame:IsEventRegistered("UNIT_SPELLCAST_INTERRUPTED") then
+		self.UnitFrame:UnregisterEvent("UNIT_SPELLCAST_INTERRUPTED")
+		self.UnitFrame:UnregisterEvent("UNIT_SPELLCAST_DELAYED")
+		self.UnitFrame:UnregisterEvent("UNIT_SPELLCAST_CHANNEL_START")
+		self.UnitFrame:UnregisterEvent("UNIT_SPELLCAST_CHANNEL_UPDATE")
+		self.UnitFrame:UnregisterEvent("UNIT_SPELLCAST_CHANNEL_STOP")
+		self.UnitFrame:UnregisterEvent("UNIT_SPELLCAST_INTERRUPTIBLE")
+		self.UnitFrame:UnregisterEvent("UNIT_SPELLCAST_NOT_INTERRUPTIBLE")
+		self.UnitFrame:UnregisterEvent("UNIT_SPELLCAST_START")
+		self.UnitFrame:UnregisterEvent("UNIT_SPELLCAST_STOP")
+		self.UnitFrame:UnregisterEvent("UNIT_SPELLCAST_FAILED")
+	end
+
 	self.UnitFrame.Glow.r, self.UnitFrame.Glow.g, self.UnitFrame.Glow.b = nil, nil, nil
 	self.UnitFrame.Glow:Hide()
 	self.UnitFrame.Glow2:Hide()
@@ -984,8 +1001,6 @@ function NP:Initialize()
 	self:CacheGroupPetUnits()
 	self:RegisterEvent("UNIT_NAME_UPDATE", "CacheGroupPetUnits")
 
-	--self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-
 	LAI.UnregisterAllCallbacks(self)
 	LAI.RegisterCallback(self, "LibAuraInfo_AURA_APPLIED")
 	LAI.RegisterCallback(self, "LibAuraInfo_AURA_REMOVED")
@@ -997,7 +1012,7 @@ function NP:Initialize()
 	self:RegisterEvent("UNIT_COMBO_POINTS")
 	self:RegisterEvent("UNIT_FACTION")
 
-	self:ScheduleRepeatingTimer("ForEachVisiblePlate", 0.1, "SetTargetFrame")
+	self:ScheduleRepeatingTimer("ForEachVisiblePlate", 0.15, "SetTargetFrame")
 end
 
 local function InitializeCallback()
