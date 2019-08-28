@@ -2,7 +2,7 @@
 TreeGroup Container
 Container that uses a tree control to switch between groups.
 -------------------------------------------------------------------------------]]
-local Type, Version = "TreeGroup", 44
+local Type, Version = "TreeGroup", 43
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
@@ -159,7 +159,7 @@ end
 local function FirstFrameUpdate(frame)
 	local self = frame.obj
 	frame:SetScript("OnUpdate", nil)
-	self:RefreshTree(nil, true)
+	self:RefreshTree()
 end
 
 local function BuildUniqueValue(...)
@@ -206,13 +206,11 @@ local function Button_OnEnter(frame)
 	self:Fire("OnButtonEnter", frame.uniquevalue, frame)
 
 	if self.enabletooltips then
-		local tooltip = AceGUI.tooltip
-		tooltip:SetOwner(frame, "ANCHOR_NONE")
-		tooltip:ClearAllPoints()
-		tooltip:SetPoint("LEFT",frame,"RIGHT")
-		tooltip:SetText(frame.text:GetText() or "", 1, .82, 0, 1)
+		GameTooltip:SetOwner(frame, "ANCHOR_NONE")
+		GameTooltip:SetPoint("LEFT",frame,"RIGHT")
+		GameTooltip:SetText(frame.text:GetText() or "", 1, .82, 0, 1)
 
-		tooltip:Show()
+		GameTooltip:Show()
 	end
 end
 
@@ -221,7 +219,7 @@ local function Button_OnLeave(frame)
 	self:Fire("OnButtonLeave", frame.uniquevalue, frame)
 
 	if self.enabletooltips then
-		AceGUI.tooltip:Hide()
+		GameTooltip:Hide()
 	end
 end
 
@@ -294,13 +292,10 @@ local methods = {
 	["OnAcquire"] = function(self)
 		self:SetTreeWidth(DEFAULT_TREE_WIDTH, DEFAULT_TREE_SIZABLE)
 		self:EnableButtonTooltips(true)
-		self.frame:SetScript("OnUpdate", FirstFrameUpdate)
 	end,
 
 	["OnRelease"] = function(self)
 		self.status = nil
-		self.tree = nil
-		self.frame:SetScript("OnUpdate", nil)
 		for k, v in pairs(self.localstatus) do
 			if k == "groups" then
 				for k2 in pairs(v) do
@@ -388,7 +383,7 @@ local methods = {
 		end
 	end,
 
-	["RefreshTree"] = function(self,scrollToSelection,fromOnUpdate)
+	["RefreshTree"] = function(self,scrollToSelection)
 		local buttons = self.buttons
 		local lines = self.lines
 

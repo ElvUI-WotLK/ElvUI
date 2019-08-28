@@ -1,4 +1,4 @@
---[[ $Id: AceGUIWidget-DropDown-Items.lua 996 2010-12-01 18:34:17Z nevcairiel $ ]]--
+--[[ $Id$ ]]--
 
 local AceGUI = LibStub("AceGUI-3.0")
 
@@ -323,7 +323,7 @@ end
 -- Does not close the pullout on click.
 do
 	local widgetType = "Dropdown-Item-Toggle"
-	local widgetVersion = 4
+	local widgetVersion = 3
 
 	local function UpdateToggle(self)
 		if self.value then
@@ -440,7 +440,7 @@ end
 -- A single line to separate items
 do
 	local widgetType = "Dropdown-Item-Separator"
-	local widgetVersion = 2
+	local widgetVersion = 1
 
 	-- exported, override
 	local function SetDisabled(self, disabled)

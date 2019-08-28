@@ -1,10 +1,10 @@
---[[ $Id: AceGUIWidget-DropDown.lua 1116 2014-10-12 08:15:46Z nevcairiel $ ]]--
+--[[ $Id$ ]]--
 local AceGUI = LibStub("AceGUI-3.0")
 
 -- Lua APIs
 local min, max, floor = math.min, math.max, math.floor
 local select, pairs, ipairs, type, tostring = select, pairs, ipairs, type, tostring
-local tonumber, tsort, error = tonumber, table.sort, error
+local tsort, tonumber = table.sort, tonumber
 
 -- WoW APIs
 local PlaySound = PlaySound

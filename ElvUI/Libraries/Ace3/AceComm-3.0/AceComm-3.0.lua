@@ -9,7 +9,7 @@
 -- make into AceComm.
 -- @class file
 -- @name AceComm-3.0
--- @release $Id: AceComm-3.0.lua 895 2009-12-06 16:28:55Z nevcairiel $
+-- @release $Id$
 
 --[[ AceComm-3.0
 
@@ -17,10 +17,10 @@ TODO: Time out old data rotting around from dead senders? Not a HUGE deal since 
 
 ]]
 
-local CallbackHandler = LibStub:GetLibrary("CallbackHandler-1.0")
+local CallbackHandler = LibStub("CallbackHandler-1.0")
 local CTL = assert(ChatThrottleLib, "AceComm-3.0 requires ChatThrottleLib")
 
-local MAJOR, MINOR = "AceComm-3.0", 10
+local MAJOR, MINOR = "AceComm-3.0", 12
 local AceComm,oldminor = LibStub:NewLibrary(MAJOR, MINOR)
 
 if not AceComm then return end
@@ -74,7 +74,7 @@ function AceComm:SendCommMessage(prefix, text, distribution, target, prio, callb
 	if not( type(prefix)=="string" and
 			type(text)=="string" and
 			type(distribution)=="string" and
-			(target==nil or type(target)=="string") and
+			(target==nil or type(target)=="string" or type(target)=="number") and
 			(prio=="BULK" or prio=="NORMAL" or prio=="ALERT")
 		) then
 		error('Usage: SendCommMessage(addon, "prefix", "text", "distribution"[, "target"[, "prio"[, callbackFn, callbackarg]]])', 2)

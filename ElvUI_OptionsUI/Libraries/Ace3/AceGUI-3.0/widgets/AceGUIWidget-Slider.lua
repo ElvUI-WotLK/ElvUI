@@ -2,7 +2,7 @@
 Slider Widget
 Graphical Slider, like, for Range values.
 -------------------------------------------------------------------------------]]
-local Type, Version = "Slider", 22
+local Type, Version = "Slider", 20
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
@@ -57,10 +57,9 @@ local function Frame_OnMouseDown(frame)
 	AceGUI:ClearFocus()
 end
 
-local function Slider_OnValueChanged(frame)
+local function Slider_OnValueChanged(frame, newvalue)
 	local self = frame.obj
 	if not frame.setup then
-		local newvalue = frame:GetValue()
 		if newvalue ~= self.value and not self.disabled then
 			self.value = newvalue
 			self:Fire("OnValueChanged", newvalue)

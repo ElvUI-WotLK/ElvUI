@@ -8,10 +8,10 @@
 -- :IterateOptionsTables() (and :GetOptionsTable() if only given one argument) return a function reference that the requesting config handling addon must call with valid "uiType", "uiName".
 -- @class file
 -- @name AceConfigRegistry-3.0
--- @release $Id: AceConfigRegistry-3.0.lua 1105 2013-12-08 22:11:58Z nevcairiel $
-local CallbackHandler = LibStub:GetLibrary("CallbackHandler-1.0")
+-- @release $Id$
+local CallbackHandler = LibStub("CallbackHandler-1.0")
 
-local MAJOR, MINOR = "AceConfigRegistry-3.0-ElvUI", 17
+local MAJOR, MINOR = "AceConfigRegistry-3.0-ElvUI", 20
 local AceConfigRegistry = LibStub:NewLibrary(MAJOR, MINOR)
 
 if not AceConfigRegistry then return end
@@ -85,7 +85,7 @@ local basekeys={
 		dialogHidden=optmethodbool,
 		dropdownHidden=optmethodbool,
 	cmdHidden=optmethodbool,
-	icon=optstringnumberfunc,
+	icon=optstringfunc,
 	iconCoords=optmethodtable,
 	handler=opttable,
 	get=optmethodfalse,
@@ -116,7 +116,7 @@ local typedkeys={
 		dropdownControl=optstring,
 	},
 	description={
-		image=optstringnumberfunc,
+		image=optstringfunc,
 		imageCoords=optmethodtable,
 		imageHeight=optnumber,
 		imageWidth=optnumber,
@@ -136,7 +136,7 @@ local typedkeys={
 		childGroups=optstring,
 	},
 	execute={
-		image=optstringnumberfunc,
+		image=optstringfunc,
 		imageCoords=optmethodtable,
 		imageHeight=optnumber,
 		imageWidth=optnumber,
@@ -154,7 +154,7 @@ local typedkeys={
 	},
 	toggle={
 		tristate=optbool,
-		image=optstringnumberfunc,
+		image=optstringfunc,
 		imageCoords=optmethodtable,
 		control=optstring,
 		dialogControl=optstring,

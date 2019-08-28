@@ -9,7 +9,7 @@
 -- make into AceConsole.
 -- @class file
 -- @name AceConsole-3.0
--- @release $Id: AceConsole-3.0.lua 1143 2016-07-11 08:52:03Z nevcairiel $
+-- @release $Id$
 local MAJOR,MINOR = "AceConsole-3.0", 7
 
 local AceConsole, oldminor = LibStub:NewLibrary(MAJOR, MINOR)

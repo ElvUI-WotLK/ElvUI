@@ -21,7 +21,7 @@ local CreateFrame, UIParent = CreateFrame, UIParent
 ]]
 do
 	local Type = "Window"
-	local Version = 6
+	local Version = 5
 
 	local function frameOnShow(this)
 		this.obj:Fire("OnShow")
