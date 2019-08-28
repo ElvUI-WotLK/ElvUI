@@ -5,14 +5,19 @@ local LAI = E.Libs.LAI
 
 --Lua functions
 local _G = _G
+local pcall = pcall
+local type = type
 local select, unpack, pairs, tonumber = select, unpack, pairs, tonumber
-local format, gsub, match = string.format, string.gsub, string.match
+local floor = math.floor
+local format, gsub, match, split = string.format, string.gsub, string.match, string.split
 local twipe = table.wipe
 --WoW API / Variables
 local CreateFrame = CreateFrame
 local GetBattlefieldScore = GetBattlefieldScore
 local GetNumBattlefieldScores = GetNumBattlefieldScores
 local GetNumPartyMembers, GetNumRaidMembers = GetNumPartyMembers, GetNumRaidMembers
+local GetPlayerInfoByGUID = GetPlayerInfoByGUID
+local IsInInstance = IsInInstance
 local SetCVar = SetCVar
 local UnitClass = UnitClass
 local UnitExists = UnitExists
@@ -316,8 +321,8 @@ function NP:RoundColors(r, g, b)
 	return floor(r*100 + 0.5) / 100, floor(g*100 + 0.5) / 100, floor(b*100 + 0.5) / 100
 end
 
-function NP:GetUnitByName(frame, type)
-	local unit = self[type][frame.UnitName]
+function NP:GetUnitByName(frame, unitType)
+	local unit = self[unitType][frame.UnitName]
 	if unit then
 		return unit
 	end
@@ -332,9 +337,9 @@ function NP:GetUnitClassByGUID(frame, guid)
 	return nil
 end
 
-function NP:UnitClass(frame, type)
-	if type == "FRIENDLY_PLAYER" then
-		local unit = self[type][frame.UnitName]
+function NP:UnitClass(frame, unitType)
+	if unitType == "FRIENDLY_PLAYER" then
+		local unit = self[unitType][frame.UnitName]
 		if unit then
 			local _, class = UnitClass(unit)
 			if class then
@@ -343,7 +348,7 @@ function NP:UnitClass(frame, type)
 		else
 			return NP:GetUnitClassByGUID(frame)
 		end
-	elseif type == "ENEMY_PLAYER" then
+	elseif unitType == "ENEMY_PLAYER" then
 		local r, g, b = self:RoundColors(frame.oldHealthBar:GetStatusBarColor())
 		for class in pairs(RAID_CLASS_COLORS) do -- ENEMY_PLAYER
 			if RAID_CLASS_COLORS[class].r == r and RAID_CLASS_COLORS[class].g == g and RAID_CLASS_COLORS[class].b == b then
@@ -382,7 +387,7 @@ function NP:UnitLevel(frame)
 end
 
 function NP:GetUnitInfo(frame)
-	local r, g, b = NP:RoundColors(frame.oldHealthBar:GetStatusBarColor())
+	local r, g, b = frame.oldHealthBar:GetStatusBarColor()
 
 	if r < 0.01 then
 		if b < 0.01 and g > 0.99 then
@@ -473,8 +478,7 @@ function NP:OnHide()
 	NP:HideAuraIcons(self.UnitFrame.Buffs)
 	NP:HideAuraIcons(self.UnitFrame.Debuffs)
 	NP:StyleFilterClear(self.UnitFrame)
-	
---	self.UnitFrame:UnregisterAllEvents()
+
 	if self.UnitFrame:IsEventRegistered("UNIT_SPELLCAST_INTERRUPTED") then
 		self.UnitFrame:UnregisterEvent("UNIT_SPELLCAST_INTERRUPTED")
 		self.UnitFrame:UnregisterEvent("UNIT_SPELLCAST_DELAYED")
@@ -748,7 +752,7 @@ end
 
 function NP:SearchNameplateByName(sourceName)
 	if not sourceName then return end
-	local SearchFor = strsplit("-", sourceName)
+	local SearchFor = split("-", sourceName)
 	for frame in pairs(self.VisiblePlates) do
 		if frame and frame:IsShown() and frame.UnitName == SearchFor and RAID_CLASS_COLORS[frame.UnitClass] then
 			return frame
@@ -907,8 +911,8 @@ function NP:UpdatePlateFonts()
 end
 
 function NP:CacheArenaUnits()
-	wipe(self.ENEMY_PLAYER)
-	wipe(self.ENEMY_NPC)
+	twipe(self.ENEMY_PLAYER)
+	twipe(self.ENEMY_NPC)
 
 	local unit
 	for i = 1, 5 do
@@ -924,7 +928,7 @@ function NP:CacheArenaUnits()
 end
 
 function NP:CacheGroupUnits()
-	wipe(self.FRIENDLY_PLAYER)
+	twipe(self.FRIENDLY_PLAYER)
 
 	local unit
 	if GetNumRaidMembers() > 0 then
@@ -945,7 +949,7 @@ function NP:CacheGroupUnits()
 end
 
 function NP:CacheGroupPetUnits()
-	wipe(self.FRIENDLY_NPC)
+	twipe(self.FRIENDLY_NPC)
 
 	local unit
 	if GetNumRaidMembers() > 0 then
