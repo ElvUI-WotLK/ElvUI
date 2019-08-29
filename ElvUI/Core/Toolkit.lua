@@ -104,7 +104,7 @@ local function SetTemplate(frame, template, glossTex, ignoreUpdates, forcePixelM
 				local border = CreateFrame("Frame", nil, frame)
 				border:SetInside(frame, E.mult, E.mult)
 				border:SetBackdrop({
-					edgeFile = bgFile,
+					edgeFile = E.media.blankTex,
 					edgeSize = E.mult,
 					insets = {left = -E.mult, right = -E.mult, top = -E.mult, bottom = -E.mult}
 				})
@@ -117,7 +117,7 @@ local function SetTemplate(frame, template, glossTex, ignoreUpdates, forcePixelM
 				border:SetOutside(frame, E.mult, E.mult)
 				border:SetFrameLevel(frame:GetFrameLevel() + 1)
 				border:SetBackdrop({
-					edgeFile = bgFile,
+					edgeFile = E.media.blankTex,
 					edgeSize = E.mult,
 					insets = {left = E.mult, right = E.mult, top = E.mult, bottom = E.mult}
 				})
