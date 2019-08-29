@@ -878,9 +878,20 @@ function AB:LAB_ButtonUpdate(button)
 		button.hotkey:SetTextColor(color.r, color.g, color.b)
 	end
 
-	color = (AB.db.equippedItem and button:IsEquipped() and AB.db.equippedItemColor) or E.media.bordercolor
 	if button.backdrop then
-		button.backdrop:SetBackdropBorderColor(color.r, color.g, color.b)
+		if AB.db.equippedItem then
+			if button:IsEquipped() and AB.db.equippedItemColor then
+				color = AB.db.equippedItemColor
+				button.backdrop:SetBackdropBorderColor(color.r, color.g, color.b)
+				button.backdrop.isColored = true
+			elseif button.backdrop.isColored then
+				button.backdrop.isColored = nil
+				button.backdrop:SetBackdropBorderColor(unpack(E.media.bordercolor))
+			end
+		elseif button.backdrop.isColored then
+			button.backdrop.isColored = nil
+			button.backdrop:SetBackdropBorderColor(unpack(E.media.bordercolor))
+		end
 	end
 end
 LAB.RegisterCallback(AB, "OnButtonUpdate", AB.LAB_ButtonUpdate)
