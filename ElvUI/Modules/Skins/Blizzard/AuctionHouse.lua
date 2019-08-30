@@ -9,6 +9,8 @@ local hooksecurefunc = hooksecurefunc
 local CreateFrame = CreateFrame
 local GetAuctionSellItemInfo = GetAuctionSellItemInfo
 
+local NUM_BROWSE_TO_DISPLAY = NUM_BROWSE_TO_DISPLAY
+
 local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.auctionhouse ~= true then return end
 
