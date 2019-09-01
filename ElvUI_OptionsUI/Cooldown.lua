@@ -216,13 +216,9 @@ local function group(order, db, label)
 		E.Options.args.cooldown.args[db].args.colorGroup.args.spacer2 = nil
 	end
 
-	if db == "auras" then
+	if db == "auras" or db == "nameplates" then
 		-- even though the top auras can support hiding the text don't allow this to be a setting to prevent confusion
 		E.Options.args.cooldown.args[db].args.reverse = nil
-	end
-
-	if db == "nameplates" then
-		E.Options.args.cooldown.args[db].args.fontGroup = nil
 	end
 end
 

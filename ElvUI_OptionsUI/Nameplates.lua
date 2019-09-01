@@ -9,6 +9,13 @@ local format, match, gsub, strsplit = string.format, string.match, string.gsub, 
 
 local GetSpellInfo = GetSpellInfo
 
+local positionValues = {
+	TOPLEFT = "TOPLEFT",
+	TOPRIGHT = "TOPRIGHT",
+	BOTTOMLEFT = "BOTTOMLEFT",
+	BOTTOMRIGHT = "BOTTOMRIGHT"
+}
+
 local selectedNameplateFilter
 
 local carryFilterFrom, carryFilterTo
@@ -1765,80 +1772,235 @@ local function GetUnitSettings(unit, name)
 				order = 3,
 				type = "group",
 				name = L["Buffs"],
-				get = function(info) return E.db.nameplates.units[unit].buffs.filters[info[#info]] end,
-				set = function(info, value) E.db.nameplates.units[unit].buffs.filters[info[#info]] = value NP:ConfigureAll() end,
-				disabled = function() return not E.db.nameplates.units[unit].healthbar.enable end,
+				get = function(info)
+					return E.db.nameplates.units[unit].buffs[info[#info]]
+				end,
+				set = function(info, value)
+					E.db.nameplates.units[unit].buffs[info[#info]] = value
+					NP:ConfigureAll()
+				end,
 				args = {
 					header = {
-						order = 1,
+						order = 0,
 						type = "header",
 						name = L["Buffs"]
 					},
 					enable = {
-						order = 2,
+						order = 1,
 						type = "toggle",
-						name = L["Enable"],
-						get = function(info) return E.db.nameplates.units[unit].buffs[info[#info]] end,
-						set = function(info, value) E.db.nameplates.units[unit].buffs[info[#info]] = value NP:ConfigureAll() end
+						name = L["Enable"]
 					},
 					numAuras = {
-						order = 3,
+						order = 2,
 						type = "range",
 						name = L["# Displayed Auras"],
-						desc = L["Controls how many auras are displayed, this will also affect the size of the auras."],
-						min = 1, max = 8, step = 1,
-						get = function(info) return E.db.nameplates.units[unit].buffs[info[#info]] end,
-						set = function(info, value) E.db.nameplates.units[unit].buffs[info[#info]] = value NP:ConfigureAll() end
+						min = 1, max = 12, step = 1
 					},
-					baseHeight = {
+					size = {
+						order = 3,
+						type = "range",
+						name = L["Icon Size"],
+						min = 6, max = 60, step = 1
+					},
+					spacing = {
 						order = 4,
 						type = "range",
-						name = L["Icon Base Height"],
-						desc = L["Base Height for the Aura Icon"],
-						min = 6, max = 60, step = 1,
-						get = function(info) return E.db.nameplates.units[unit].buffs[info[#info]] end,
-						set = function(info, value) E.db.nameplates.units[unit].buffs[info[#info]] = value NP:ConfigureAll() end
+						name = L["Spacing"],
+						min = 0, max = 60, step = 1
 					},
-					widthOverride = {
+					xOffset = {
 						order = 5,
 						type = "range",
-						name = L["Icon Width Override"],
-						desc = L["If not set to 0 then set the width of the Aura Icon to this"],
-						min = 0, max = 60, step = 1,
-						get = function(info) return E.db.nameplates.units[unit].buffs[ info[#info]] end,
-						set = function(info, value) E.db.nameplates.units[unit].buffs[info[#info]] = value NP:ConfigureAll() end
+						name = L["X-Offset"],
+						min = -100, max = 100, step = 1
+					},
+					yOffset = {
+						order = 6,
+						type = "range",
+						name = L["Y-Offset"],
+						min = -100, max = 100, step = 1
+					},
+					anchorPoint = {
+						order = 7,
+						type = "select",
+						name = L["Anchor Point"],
+						desc = L["What point to anchor to the frame you set to attach to."],
+						values = positionValues
+					},
+					growthX = {
+						order = 8,
+						type = "select",
+						name = L["Growth X-Direction"],
+						values = {
+							["LEFT"] = L["Left"],
+							["RIGHT"] = L["Right"]
+						}
+					},
+					growthY = {
+						order = 9,
+						type = "select",
+						name = L["Growth Y-Direction"],
+						values = {
+							["UP"] = L["Up"],
+							["DOWN"] = L["Down"]
+						}
+					},
+					cooldownOrientation = {
+						order = 10,
+						type = "select",
+						name = L["Cooldown Orientation"],
+						values = {
+							["VERTICAL"] = L["Vertical"],
+							["HORIZONTAL"] = L["Horizontal"]
+						}
+					},
+					reverseCooldown = {
+						order = 11,
+						type = "toggle",
+						name = L["Reverse Cooldown"],
+					},
+					stacks = {
+						order = 12,
+						type = "group",
+						name = L["Stack Counter"],
+						guiInline = true,
+						get = function(info, value)
+							return E.db.nameplates.units[unit].buffs[info[#info]]
+						end,
+						set = function(info, value)
+							E.db.nameplates.units[unit].buffs[info[#info]] = value
+							NP:ConfigureAll()
+						end,
+						args = {
+							countFont = {
+								order = 1,
+								type = "select",
+								name = L["Font"],
+								dialogControl = "LSM30_Font",
+								values = AceGUIWidgetLSMlists.font
+							},
+							countFontSize = {
+								order = 2,
+								name = L["FONT_SIZE"],
+								type = "range",
+								min = 4, max = 20, step = 1 -- max 20 cause otherwise it looks weird
+							},
+							countFontOutline = {
+								order = 3,
+								type = "select",
+								name = L["Font Outline"],
+								desc = L["Set the font outline."],
+								values = C.Values.FontFlags
+							},
+							countPosition = {
+								order = 4,
+								type = "select",
+								name = L["Position"],
+								values = {
+									["TOP"] = "TOP",
+									["LEFT"] = "LEFT",
+									["BOTTOM"] = "BOTTOM",
+									["CENTER"] = "CENTER",
+									["TOPLEFT"] = "TOPLEFT",
+									["BOTTOMLEFT"] = "BOTTOMLEFT",
+									["BOTTOMRIGHT"] = "BOTTOMRIGHT",
+									["RIGHT"] = "RIGHT",
+									["TOPRIGHT"] = "TOPRIGHT"
+								}
+							}
+						}
+					},
+					duration = {
+						order = 13,
+						type = "group",
+						name = L["Duration"],
+						guiInline = true,
+						get = function(info)
+							return E.db.nameplates.units[unit].buffs[info[#info]]
+						end,
+						set = function(info, value)
+							E.db.nameplates.units[unit].buffs[info[#info]] = value
+							NP:ConfigureAll()
+						end,
+						args = {
+							countFont = {
+								order = 1,
+								type = "select",
+								name = L["Font"],
+								dialogControl = "LSM30_Font",
+								values = AceGUIWidgetLSMlists.font
+							},
+							countFontSize = {
+								order = 2,
+								type = "range",
+								name = L["FONT_SIZE"],
+								min = 4, max = 20, step = 1 -- max 20 cause otherwise it looks weird
+							},
+							countFontOutline = {
+								order = 3,
+								type = "select",
+								name = L["Font Outline"],
+								desc = L["Set the font outline."],
+								values = C.Values.FontFlags
+							},
+							durationPosition = {
+								order = 4,
+								type = "select",
+								name = L["Position"],
+								values = {
+									["TOP"] = "TOP",
+									["LEFT"] = "LEFT",
+									["BOTTOM"] = "BOTTOM",
+									["CENTER"] = "CENTER",
+									["TOPLEFT"] = "TOPLEFT",
+									["BOTTOMLEFT"] = "BOTTOMLEFT",
+									["BOTTOMRIGHT"] = "BOTTOMRIGHT",
+									["RIGHT"] = "RIGHT",
+									["TOPRIGHT"] = "TOPRIGHT"
+								}
+							}
+						}
 					},
 					filtersGroup = {
-						order = 6,
-						type = "group",
+						order = 14,
 						name = L["FILTERS"],
+						type = "group",
 						guiInline = true,
+						get = function(info)
+							return E.db.nameplates.units[unit].buffs.filters[info[#info]]
+						end,
+						set = function(info, value)
+							E.db.nameplates.units[unit].buffs.filters[info[#info]] = value
+							NP:ConfigureAll()
+						end,
 						args = {
 							minDuration = {
 								order = 1,
 								type = "range",
 								name = L["Minimum Duration"],
 								desc = L["Don't display auras that are shorter than this duration (in seconds). Set to zero to disable."],
-								min = 0, max = 10800, step = 1,
+								min = 0, max = 10800, step = 1
 							},
 							maxDuration = {
 								order = 2,
 								type = "range",
 								name = L["Maximum Duration"],
 								desc = L["Don't display auras that are longer than this duration (in seconds). Set to zero to disable."],
-								min = 0, max = 10800, step = 1,
+								min = 0, max = 10800, step = 1
 							},
 							jumpToFilter = {
 								order = 3,
 								type = "execute",
 								name = L["Filters Page"],
 								desc = L["Shortcut to global filters."],
-								func = function() ACD:SelectGroup("ElvUI", "filters") end,
+								func = function()
+									ACD:SelectGroup("ElvUI", "filters")
+								end
 							},
 							spacer1 = {
 								order = 4,
 								type = "description",
-								name = " ",
+								name = " "
 							},
 							specialFilters = {
 								order = 5,
@@ -1849,7 +2011,8 @@ local function GetUnitSettings(unit, name)
 								values = function()
 									local filters = {}
 									local list = E.global.nameplates.specialFilters
-									if not list then return end
+									if not (list and next(list)) then return filters end
+
 									for filter in pairs(list) do
 										filters[filter] = L[filter]
 									end
@@ -1868,7 +2031,8 @@ local function GetUnitSettings(unit, name)
 								values = function()
 									local filters = {}
 									local list = E.global.unitframe.aurafilters
-									if not list then return end
+									if not (list and next(list)) then return filters end
+
 									for filter in pairs(list) do
 										filters[filter] = filter
 									end
@@ -1894,7 +2058,7 @@ local function GetUnitSettings(unit, name)
 								type = "multiselect",
 								name = L["Filter Priority"],
 								dragdrop = true,
-								dragOnLeave = function() end, --keep this here
+								dragOnLeave = E.noop, --keep this here
 								dragOnEnter = function(info)
 									carryFilterTo = info.obj.value
 								end,
@@ -1908,22 +2072,23 @@ local function GetUnitSettings(unit, name)
 								dragOnClick = function(info)
 									filterPriority("buffs", unit, carryFilterFrom, true)
 								end,
-								stateSwitchGetText = function(_, TEXT)
-									local text = TEXT
+								stateSwitchGetText = function(_, text)
 									local SF, localized = E.global.unitframe.specialFilters[text], L[text]
 									local blockText = SF and localized and text:match("^block") and localized:gsub("^%[.-]%s?", "")
-									local filterText = (blockText and format("|cFF999999%s|r %s", L["BLOCK"], blockText)) or localized or text
-									return filterText
+									return (blockText and format("|cFF999999%s|r %s", L["BLOCK"], blockText)) or localized or text
+								end,
+								stateSwitchOnClick = function()
+									filterPriority("buffs", unit, carryFilterFrom, nil, nil, true)
 								end,
 								values = function()
 									local str = E.db.nameplates.units[unit].buffs.filters.priority
-									if str == "" then return nil end
-									return {strsplit(",",str)}
+									if str == "" then return {} end
+									return {strsplit(",", str)}
 								end,
 								get = function(_, value)
 									local str = E.db.nameplates.units[unit].buffs.filters.priority
-									if str == "" then return nil end
-									local tbl = {strsplit(",",str)}
+									if str == "" then return end
+									local tbl = {strsplit(",", str)}
 									return tbl[value]
 								end,
 								set = function()
@@ -1933,7 +2098,9 @@ local function GetUnitSettings(unit, name)
 							spacer3 = {
 								order = 9,
 								type = "description",
-								name = L["Use drag and drop to rearrange filter priority or right click to remove a filter."],
+								name = L["Use drag and drop to rearrange filter priority or right click to remove a filter."] ..
+									"\n" ..
+										L["Use Shift+LeftClick to toggle between friendly or enemy or normal state. Normal state will allow the filter to be checked on all units. Friendly state is for friendly units only and enemy state is for enemy units."]
 							}
 						}
 					}
@@ -1943,53 +2110,206 @@ local function GetUnitSettings(unit, name)
 				order = 4,
 				type = "group",
 				name = L["Debuffs"],
-				get = function(info) return E.db.nameplates.units[unit].debuffs.filters[info[#info]] end,
-				set = function(info, value) E.db.nameplates.units[unit].debuffs.filters[info[#info]] = value NP:ConfigureAll() end,
-				disabled = function() return not E.db.nameplates.units[unit].healthbar.enable end,
+				get = function(info)
+					return E.db.nameplates.units[unit].debuffs[info[#info]]
+				end,
+				set = function(info, value)
+					E.db.nameplates.units[unit].debuffs[info[#info]] = value
+					NP:ConfigureAll()
+				end,
 				args = {
 					header = {
-						order = 1,
+						order = 0,
 						type = "header",
 						name = L["Debuffs"]
 					},
 					enable = {
-						order = 2,
+						order = 1,
 						type = "toggle",
-						name = L["Enable"],
-						get = function(info) return E.db.nameplates.units[unit].debuffs[info[#info]] end,
-						set = function(info, value) E.db.nameplates.units[unit].debuffs[info[#info]] = value NP:ConfigureAll() end
+						name = L["Enable"]
 					},
 					numAuras = {
-						order = 3,
+						order = 2,
 						type = "range",
 						name = L["# Displayed Auras"],
-						desc = L["Controls how many auras are displayed, this will also affect the size of the auras."],
-						min = 1, max = 8, step = 1,
-						get = function(info) return E.db.nameplates.units[unit].debuffs[info[#info]] end,
-						set = function(info, value) E.db.nameplates.units[unit].debuffs[info[#info]] = value NP:ConfigureAll() end
+						min = 1, max = 12, step = 1
 					},
-					baseHeight = {
+					size = {
+						order = 3,
+						type = "range",
+						name = L["Icon Size"],
+						min = 6, max = 60, step = 1
+					},
+					spacing = {
 						order = 4,
 						type = "range",
-						name = L["Icon Base Height"],
-						desc = L["Base Height for the Aura Icon"],
-						min = 6, max = 60, step = 1,
-						get = function(info) return E.db.nameplates.units[unit].debuffs[info[#info]] end,
-						set = function(info, value) E.db.nameplates.units[unit].debuffs[info[#info]] = value NP:ConfigureAll() end
+						name = L["Spacing"],
+						min = 0, max = 60, step = 1
 					},
-					widthOverride = {
+					xOffset = {
 						order = 5,
 						type = "range",
-						name = L["Icon Width Override"],
-						desc = L["If not set to 0 then set the width of the Aura Icon to this"],
-						min = 0, max = 60, step = 1,
-						get = function(info) return E.db.nameplates.units[unit].debuffs[ info[#info]] end,
-						set = function(info, value) E.db.nameplates.units[unit].debuffs[info[#info]] = value NP:ConfigureAll() end
+						name = L["X-Offset"],
+						min = -100, max = 100, step = 1
+					},
+					yOffset = {
+						order = 6,
+						type = "range",
+						name = L["Y-Offset"],
+						min = -100, max = 100, step = 1
+					},
+					anchorPoint = {
+						order = 7,
+						type = "select",
+						name = L["Anchor Point"],
+						desc = L["What point to anchor to the frame you set to attach to."],
+						values = positionValues
+					},
+					growthX = {
+						order = 8,
+						type = "select",
+						name = L["Growth X-Direction"],
+						values = {
+							["LEFT"] = L["Left"],
+							["RIGHT"] = L["Right"]
+						}
+					},
+					growthY = {
+						order = 9,
+						type = "select",
+						name = L["Growth Y-Direction"],
+						values = {
+							["UP"] = L["Up"],
+							["DOWN"] = L["Down"]
+						}
+					},
+					cooldownOrientation = {
+						order = 10,
+						type = "select",
+						name = L["Cooldown Orientation"],
+						values = {
+							["VERTICAL"] = L["Vertical"],
+							["HORIZONTAL"] = L["Horizontal"]
+						}
+					},
+					reverseCooldown = {
+						order = 11,
+						type = "toggle",
+						name = L["Reverse Cooldown"],
+					},
+					stacks = {
+						order = 12,
+						type = "group",
+						name = L["Stack Counter"],
+						guiInline = true,
+						get = function(info, value)
+							return E.db.nameplates.units[unit].debuffs[info[#info]]
+						end,
+						set = function(info, value)
+							E.db.nameplates.units[unit].debuffs[info[#info]] = value
+							NP:ConfigureAll()
+						end,
+						args = {
+							countFont = {
+								order = 1,
+								type = "select",
+								name = L["Font"],
+								dialogControl = "LSM30_Font",
+								values = AceGUIWidgetLSMlists.font
+							},
+							countFontSize = {
+								order = 2,
+								type = "range",
+								name = L["FONT_SIZE"],
+								min = 4, max = 20, step = 1 -- max 20 cause otherwise it looks weird
+							},
+							countFontOutline = {
+								order = 3,
+								type = "select",
+								name = L["Font Outline"],
+								desc = L["Set the font outline."],
+								values = C.Values.FontFlags
+							},
+							countPosition = {
+								order = 4,
+								type = "select",
+								name = L["Position"],
+								values = {
+									["TOP"] = "TOP",
+									["LEFT"] = "LEFT",
+									["BOTTOM"] = "BOTTOM",
+									["CENTER"] = "CENTER",
+									["TOPLEFT"] = "TOPLEFT",
+									["BOTTOMLEFT"] = "BOTTOMLEFT",
+									["BOTTOMRIGHT"] = "BOTTOMRIGHT",
+									["RIGHT"] = "RIGHT",
+									["TOPRIGHT"] = "TOPRIGHT"
+								}
+							}
+						}
+					},
+					duration = {
+						order = 13,
+						type = "group",
+						name = L["Duration"],
+						guiInline = true,
+						get = function(info)
+							return E.db.nameplates.units[unit].debuffs[info[#info]]
+						end,
+						set = function(info, value)
+							E.db.nameplates.units[unit].debuffs[info[#info]] = value
+							NP:ConfigureAll()
+						end,
+						args = {
+							countFont = {
+								order = 1,
+								type = "select",
+								name = L["Font"],
+								dialogControl = "LSM30_Font",
+								values = AceGUIWidgetLSMlists.font
+							},
+							countFontSize = {
+								order = 2,
+								type = "range",
+								name = L["FONT_SIZE"],
+								min = 4, max = 20, step = 1 -- max 20 cause otherwise it looks weird
+							},
+							countFontOutline = {
+								order = 3,
+								type = "select",
+								name = L["Font Outline"],
+								desc = L["Set the font outline."],
+								values = C.Values.FontFlags
+							},
+							durationPosition = {
+								order = 4,
+								type = "select",
+								name = L["Position"],
+								values = {
+									["TOP"] = "TOP",
+									["LEFT"] = "LEFT",
+									["BOTTOM"] = "BOTTOM",
+									["CENTER"] = "CENTER",
+									["TOPLEFT"] = "TOPLEFT",
+									["BOTTOMLEFT"] = "BOTTOMLEFT",
+									["BOTTOMRIGHT"] = "BOTTOMRIGHT",
+									["RIGHT"] = "RIGHT",
+									["TOPRIGHT"] = "TOPRIGHT"
+								}
+							}
+						}
 					},
 					filtersGroup = {
-						order = 6,
+						order = 14,
 						type = "group",
 						name = L["FILTERS"],
+						get = function(info)
+							return E.db.nameplates.units[unit].debuffs.filters[info[#info]]
+						end,
+						set = function(info, value)
+							E.db.nameplates.units[unit].debuffs.filters[info[#info]] = value
+							NP:ConfigureAll()
+						end,
 						guiInline = true,
 						args = {
 							minDuration = {
@@ -1997,21 +2317,23 @@ local function GetUnitSettings(unit, name)
 								type = "range",
 								name = L["Minimum Duration"],
 								desc = L["Don't display auras that are shorter than this duration (in seconds). Set to zero to disable."],
-								min = 0, max = 10800, step = 1,
+								min = 0, max = 10800, step = 1
 							},
 							maxDuration = {
 								order = 2,
 								type = "range",
 								name = L["Maximum Duration"],
 								desc = L["Don't display auras that are longer than this duration (in seconds). Set to zero to disable."],
-								min = 0, max = 10800, step = 1,
+								min = 0, max = 10800, step = 1
 							},
 							jumpToFilter = {
 								order = 3,
 								type = "execute",
 								name = L["Filters Page"],
 								desc = L["Shortcut to global filters."],
-								func = function() ACD:SelectGroup("ElvUI", "filters") end,
+								func = function()
+									ACD:SelectGroup("ElvUI", "filters")
+								end
 							},
 							spacer1 = {
 								order = 4,
@@ -2027,7 +2349,8 @@ local function GetUnitSettings(unit, name)
 								values = function()
 									local filters = {}
 									local list = E.global.nameplates.specialFilters
-									if not list then return end
+									if not (list and next(list)) then return filters end
+
 									for filter in pairs(list) do
 										filters[filter] = L[filter]
 									end
@@ -2046,7 +2369,8 @@ local function GetUnitSettings(unit, name)
 								values = function()
 									local filters = {}
 									local list = E.global.unitframe.aurafilters
-									if not list then return end
+									if not (list and next(list)) then return filters end
+
 									for filter in pairs(list) do
 										filters[filter] = filter
 									end
@@ -2070,9 +2394,9 @@ local function GetUnitSettings(unit, name)
 							filterPriority = {
 								order = 8,
 								type = "multiselect",
-								dragdrop = true,
 								name = L["Filter Priority"],
-								dragOnLeave = function() end, --keep this here
+								dragdrop = true,
+								dragOnLeave = E.noop, --keep this here
 								dragOnEnter = function(info)
 									carryFilterTo = info.obj.value
 								end,
@@ -2086,22 +2410,23 @@ local function GetUnitSettings(unit, name)
 								dragOnClick = function(info)
 									filterPriority("debuffs", unit, carryFilterFrom, true)
 								end,
-								stateSwitchGetText = function(_, TEXT)
-									local text = TEXT
+								stateSwitchGetText = function(_, text)
 									local SF, localized = E.global.unitframe.specialFilters[text], L[text]
 									local blockText = SF and localized and text:match("^block") and localized:gsub("^%[.-]%s?", "")
-									local filterText = (blockText and format("|cFF999999%s|r %s", L["BLOCK"], blockText)) or localized or text
-									return filterText
+									return (blockText and format("|cFF999999%s|r %s", L["BLOCK"], blockText)) or localized or text
+								end,
+								stateSwitchOnClick = function(info)
+									filterPriority("debuffs", unit, carryFilterFrom, nil, nil, true)
 								end,
 								values = function()
 									local str = E.db.nameplates.units[unit].debuffs.filters.priority
-									if str == "" then return nil end
-									return {strsplit(",",str)}
+									if str == "" then return {} end
+									return {strsplit(",", str)}
 								end,
 								get = function(info, value)
 									local str = E.db.nameplates.units[unit].debuffs.filters.priority
-									if str == "" then return nil end
-									local tbl = {strsplit(",",str)}
+									if str == "" then return end
+									local tbl = {strsplit(",", str)}
 									return tbl[value]
 								end,
 								set = function(info)
@@ -2111,7 +2436,9 @@ local function GetUnitSettings(unit, name)
 							spacer3 = {
 								order = 9,
 								type = "description",
-								name = L["Use drag and drop to rearrange filter priority or right click to remove a filter."],
+								name = L["Use drag and drop to rearrange filter priority or right click to remove a filter."] ..
+									"\n" ..
+										L["Use Shift+LeftClick to toggle between friendly or enemy or normal state. Normal state will allow the filter to be checked on all units. Friendly state is for friendly units only and enemy state is for enemy units."]
 							}
 						}
 					}

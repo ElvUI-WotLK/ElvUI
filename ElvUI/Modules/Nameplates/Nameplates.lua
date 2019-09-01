@@ -42,7 +42,7 @@ NP.CreatedPlates = {}
 NP.VisiblePlates = {}
 NP.Healers = {}
 
-NP.ByName = {}
+NP.GUIDByName = {}
 
 NP.ENEMY_PLAYER = {}
 NP.FRIENDLY_PLAYER = {}
@@ -115,8 +115,6 @@ function NP:ResetNameplateFrameLevel(frame)
 end
 
 function NP:SetTargetFrame(frame)
-	frame:Hide()
-
 	if frame.isTarget then
 		if not frame.isTargetChanged then
 			frame.isTargetChanged = true
@@ -132,8 +130,9 @@ function NP:SetTargetFrame(frame)
 				frame.guid = UnitGUID("target")
 
 				NP:RegisterEvents(frame)
-				NP:UpdateElement_AurasByGUID(frame.guid)
 			end
+
+			NP:UpdateElement_Auras(frame)
 
 			if NP.db.units[frame.UnitType].healthbar.enable ~= true and NP.db.alwaysShowTargetHealth then
 				frame.Name:ClearAllPoints()
@@ -203,9 +202,10 @@ function NP:SetTargetFrame(frame)
 				frame.unit = "mouseover"
 				frame.guid = UnitGUID("mouseover")
 
-				NP:UpdateElement_AurasByGUID(frame.guid)
 				NP:UpdateElement_Cast(frame, nil, frame.unit)
 			end
+
+			NP:UpdateElement_Auras(frame)
 		end
 	elseif frame.isMouseover then
 		frame.isMouseover = nil
@@ -216,18 +216,18 @@ function NP:SetTargetFrame(frame)
 			frame.unit = nil
 			NP:UpdateElement_Cast(frame)
 		end
-	elseif not frame.AlphaChanged then
-		if hasTarget then
-			frame:SetAlpha(NP.db.nonTargetTransparency)
-		else
-			frame:SetAlpha(1)
+	else
+		if not frame.AlphaChanged then
+			if hasTarget then
+				frame:SetAlpha(NP.db.nonTargetTransparency)
+			else
+				frame:SetAlpha(1)
+			end
 		end
 	end
 
 	NP:UpdateElement_Glow(frame)
 	NP:UpdateElement_HealthColor(frame)
-
-	frame:Show()
 end
 
 function NP:StyleFrame(parent, noBackdrop, point)
@@ -329,7 +329,7 @@ function NP:GetUnitByName(frame, unitType)
 end
 
 function NP:GetUnitClassByGUID(frame, guid)
-	if not guid then guid = self.ByName[frame.UnitName] end
+	if not guid then guid = self.GUIDByName[frame.UnitName] end
 	if guid then
 		local _, _, class = pcall(GetPlayerInfoByGUID, guid)
 		return class
@@ -415,7 +415,6 @@ function NP:OnShow()
 	self.UnitFrame.UnitName = gsub(self.UnitFrame.oldName:GetText(), FSPAT, "")
 	local unitReaction, unitType = NP:GetUnitInfo(self.UnitFrame)
 	self.UnitFrame.UnitType = unitType
-	self.UnitFrame.UnitClass = NP:UnitClass(self.UnitFrame, unitType)
 	self.UnitFrame.UnitReaction = unitReaction
 
 	local unit = NP:GetUnitByName(self.UnitFrame, unitType)
@@ -427,7 +426,11 @@ function NP:OnShow()
 		if guid then
 			self.UnitFrame.guid = guid
 		end
+	elseif NP.GUIDByName[self.UnitFrame.UnitName] then
+		self.UnitFrame.guid = NP.GUIDByName[self.UnitFrame.UnitName]
 	end
+
+	self.UnitFrame.UnitClass = NP:UnitClass(self.UnitFrame, unitType)
 
 	if unitType == "ENEMY_PLAYER" then
 		NP:UpdateElement_HealerIcon(self.UnitFrame)
@@ -445,12 +448,12 @@ function NP:OnShow()
 
 		if NP.db.units[unitType].buffs.enable then
 			self.UnitFrame.Buffs.db = NP.db.units[unitType].buffs
-			NP:UpdateAuraIcons(self.UnitFrame.Buffs)
+		--	NP:UpdateAuraIcons(self.UnitFrame.Buffs)
 		end
 
 		if NP.db.units[unitType].debuffs.enable then
 			self.UnitFrame.Debuffs.db = NP.db.units[unitType].debuffs
-			NP:UpdateAuraIcons(self.UnitFrame.Debuffs)
+		--	NP:UpdateAuraIcons(self.UnitFrame.Debuffs)
 		end
 	end
 
@@ -469,14 +472,30 @@ function NP:OnShow()
 	NP:ForEachVisiblePlate("ResetNameplateFrameLevel") --keep this after `UpdateElement_Filters`
 end
 
-function NP:OnHide()
+function NP:OnHide(isConfig)
 	NP.VisiblePlates[self.UnitFrame] = nil
 
 	self.UnitFrame.unit = nil
 	self.UnitFrame.isGroupUnit = nil
 
-	NP:HideAuraIcons(self.UnitFrame.Buffs)
-	NP:HideAuraIcons(self.UnitFrame.Debuffs)
+	--NP:HideAuraIcons(self.UnitFrame.Buffs)
+
+	if self.UnitFrame.Buffs.visibleBuffs then
+		for i = 1, self.UnitFrame.Buffs.visibleBuffs do
+			self.UnitFrame.Buffs[i]:Hide()
+		end
+	end
+	if self.UnitFrame.Debuffs.visibleDeuffs then
+		for i = 1, self.UnitFrame.Debuffs.visibleDeuffs do
+			self.UnitFrame.Debuffs[i]:Hide()
+		end
+	end
+
+	if isConfig then
+		self.UnitFrame.Buffs.anchoredIcons = 0
+		self.UnitFrame.Debuffs.anchoredIcons = 0
+	end
+
 	NP:StyleFilterClear(self.UnitFrame)
 
 	if self.UnitFrame:IsEventRegistered("UNIT_SPELLCAST_INTERRUPTED") then
@@ -530,8 +549,8 @@ function NP:OnHide()
 	NP:StyleFilterClearVariables(self)
 end
 
-function NP:UpdateAllFrame(frame)
-	NP.OnHide(frame:GetParent())
+function NP:UpdateAllFrame(frame, isConfig)
+	NP.OnHide(frame:GetParent(), isConfig)
 	NP.OnShow(frame:GetParent())
 end
 
@@ -539,7 +558,7 @@ function NP:ConfigureAll()
 	if E.private.nameplates.enable ~= true then return end
 
 	NP:StyleFilterConfigure()
-	NP:ForEachPlate("UpdateAllFrame")
+	NP:ForEachPlate("UpdateAllFrame", true)
 	NP:UpdateCVars()
 end
 
@@ -604,6 +623,7 @@ function NP:OnCreated(frame)
 	local Threat, Border, CastBarBorder, CastBarShield, CastBarIcon, Highlight, Name, Level, BossIcon, RaidIcon, EliteIcon = frame:GetRegions()
 
 	frame.UnitFrame = CreateFrame("Frame", format("ElvUI_NamePlate%d", plateID), frame)
+	frame.UnitFrame:Hide()
 	frame.UnitFrame:SetAllPoints(frame)
 	frame.UnitFrame:SetScript("OnEvent", self.OnEvent)
 	frame.UnitFrame.plateID = plateID
@@ -615,8 +635,8 @@ function NP:OnCreated(frame)
 	frame.UnitFrame.CastBar = self:ConstructElement_CastBar(frame.UnitFrame)
 	frame.UnitFrame.Glow = self:ConstructElement_Glow(frame.UnitFrame)
 	frame.UnitFrame.Elite = self:ConstructElement_Elite(frame.UnitFrame)
-	frame.UnitFrame.Buffs = self:ConstructElement_Auras(frame.UnitFrame, "LEFT")
-	frame.UnitFrame.Debuffs = self:ConstructElement_Auras(frame.UnitFrame, "RIGHT")
+	frame.UnitFrame.Buffs = self:ConstructElement_Auras(frame.UnitFrame, "Buffs")
+	frame.UnitFrame.Debuffs = self:ConstructElement_Auras(frame.UnitFrame, "Debuffs")
 	frame.UnitFrame.HealerIcon = self:ConstructElement_HealerIcon(frame.UnitFrame)
 	frame.UnitFrame.CPoints = self:ConstructElement_CPoints(frame.UnitFrame)
 	frame.UnitFrame.Highlight = self:ConstructElement_Highlight(frame.UnitFrame)
@@ -820,11 +840,18 @@ function NP:PLAYER_TARGET_CHANGED()
 	hasTarget = UnitExists("target") == 1
 end
 
-function NP:UNIT_AURA(_, unit)
-	if unit == "target" then
-		self:UpdateElement_AurasByGUID(UnitGUID(unit))
-	elseif unit == "focus" then
-		self:UpdateElement_AurasByGUID(UnitGUID(unit))
+function NP:UPDATE_MOUSEOVER_UNIT()
+	if UnitIsPlayer("mouseover")then
+		local name = UnitName("mouseover")
+		for frame in pairs(NP.VisiblePlates) do
+			if frame.UnitName == name then
+				local guid = UnitGUID("mouseover")
+				if NP.GUIDByName[name] ~= guid then
+					NP.GUIDByName[name] = guid
+					NP:UpdateAllFrame(frame)
+				end
+			end
+		end
 	end
 end
 
@@ -870,40 +897,36 @@ function NP:SPELL_UPDATE_COOLDOWN(...)
 	NP:ForEachVisiblePlate("UpdateElement_Filters", "SPELL_UPDATE_COOLDOWN")
 end
 
-function NP:UNIT_FACTION()
-	self:ForEachVisiblePlate("UpdateAllFrame")
-end
-
 function NP:UpdateFonts(plate)
-	if not plate then return end
-
-	if plate.Buffs and plate.Buffs.db and plate.Buffs.db.numAuras then
-		for i = 1, plate.Buffs.db.numAuras do
-			if plate.Buffs.icons[i] and plate.Buffs.icons[i].time then
-				plate.Buffs.icons[i].time:SetFont(LSM:Fetch("font", self.db.durationFont), self.db.durationFontSize, self.db.durationFontOutline)
-			end
-			if plate.Buffs.icons[i] and plate.Buffs.icons[i].count then
-				plate.Buffs.icons[i].count:SetFont(LSM:Fetch("font", self.db.stackFont), self.db.stackFontSize, self.db.stackFontOutline)
-			end
-		end
-	end
-
-	if plate.Debuffs and plate.Debuffs.db and plate.Debuffs.db.numAuras then
-		for i = 1, plate.Debuffs.db.numAuras do
-			if plate.Debuffs.icons[i] and plate.Debuffs.icons[i].time then
-				plate.Debuffs.icons[i].time:SetFont(LSM:Fetch("font", self.db.durationFont), self.db.durationFontSize, self.db.durationFontOutline)
-			end
-			if plate.Debuffs.icons[i] and plate.Debuffs.icons[i].count then
-				plate.Debuffs.icons[i].count:SetFont(LSM:Fetch("font", self.db.stackFont), self.db.stackFontSize, self.db.stackFontOutline)
-			end
-		end
-	end
-
-	--update glow incase name font changes
-	local healthShown = (plate.UnitType and self.db.units[plate.UnitType].healthbar.enable) or (plate.isTarget and self.db.alwaysShowTargetHealth)
-	if healthShown then
-		self:UpdateElement_Glow(plate)
-	end
+	--if not plate then return end
+	--
+	--if plate.Buffs and plate.Buffs.db and plate.Buffs.db.numAuras then
+	--	for i = 1, plate.Buffs.db.numAuras do
+	--		if plate.Buffs.icons[i] and plate.Buffs.icons[i].time then
+	--			plate.Buffs.icons[i].time:SetFont(LSM:Fetch("font", self.db.durationFont), self.db.durationFontSize, self.db.durationFontOutline)
+	--		end
+	--		if plate.Buffs.icons[i] and plate.Buffs.icons[i].count then
+	--			plate.Buffs.icons[i].count:SetFont(LSM:Fetch("font", self.db.stackFont), self.db.stackFontSize, self.db.stackFontOutline)
+	--		end
+	--	end
+	--end
+	--
+	--if plate.Debuffs and plate.Debuffs.db and plate.Debuffs.db.numAuras then
+	--	for i = 1, plate.Debuffs.db.numAuras do
+	--		if plate.Debuffs.icons[i] and plate.Debuffs.icons[i].time then
+	--			plate.Debuffs.icons[i].time:SetFont(LSM:Fetch("font", self.db.durationFont), self.db.durationFontSize, self.db.durationFontOutline)
+	--		end
+	--		if plate.Debuffs.icons[i] and plate.Debuffs.icons[i].count then
+	--			plate.Debuffs.icons[i].count:SetFont(LSM:Fetch("font", self.db.stackFont), self.db.stackFontSize, self.db.stackFontOutline)
+	--		end
+	--	end
+	--end
+	--
+	----update glow incase name font changes
+	--local healthShown = (plate.UnitType and self.db.units[plate.UnitType].healthbar.enable) or (plate.isTarget and self.db.alwaysShowTargetHealth)
+	--if healthShown then
+	--	self:UpdateElement_Glow(plate)
+	--end
 end
 
 function NP:UpdatePlateFonts()
@@ -994,6 +1017,7 @@ function NP:Initialize()
 	self:RegisterEvent("PLAYER_TARGET_CHANGED")
 	self:RegisterEvent("SPELL_UPDATE_COOLDOWN")
 
+	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
 	-- Arena & Arena Pets
 	self:CacheArenaUnits()
 	self:RegisterEvent("ARENA_OPPONENT_UPDATE", "CacheArenaUnits")
@@ -1012,9 +1036,7 @@ function NP:Initialize()
 	LAI.RegisterCallback(self, "LibAuraInfo_AURA_APPLIED_DOSE")
 	LAI.RegisterCallback(self, "LibAuraInfo_AURA_CLEAR")
 	LAI.RegisterCallback(self, "RemoveAuraFromGUID")
-	self:RegisterEvent("UNIT_AURA")
 	self:RegisterEvent("UNIT_COMBO_POINTS")
-	self:RegisterEvent("UNIT_FACTION")
 
 	self:ScheduleRepeatingTimer("ForEachVisiblePlate", 0.15, "SetTargetFrame")
 end
