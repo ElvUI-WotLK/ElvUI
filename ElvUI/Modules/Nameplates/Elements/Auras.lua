@@ -237,16 +237,16 @@ function NP:UpdateElement_Auras(frame)
 					button.count:SetJustifyH(right and "RIGHT" or "LEFT")
 					button.count:Point(point, right and -1 or 1, bottom and 1 or -1)
 				end
-				
+
 				button.time:ClearAllPoints()
-				local point = db.durationPosition
+				point = db.durationPosition
 				if point == "CENTER" then
 					button.time:Point(point, 1, 0)
 				else
 					local bottom, right = find(point, "BOTTOM"), find(point, "RIGHT")
 					button.time:Point(point, right and -1 or 1, bottom and 1 or -1)
 				end
-				
+
 				button:SetOrientation(db.cooldownOrientation)
 
 				button.bg:ClearAllPoints()
@@ -312,7 +312,7 @@ function NP:UpdateElement_Auras(frame)
 				end
 
 				button.time:ClearAllPoints()
-				local point = db.durationPosition
+				point = db.durationPosition
 				if point == "CENTER" then
 					button.time:Point(point, 1, 0)
 				else
@@ -379,10 +379,10 @@ function NP:Construct_AuraIcon(parent, index)
 	button:SetStatusBarTexture(E.media.blankTex)
 	button:SetStatusBarColor(0, 0, 0, 0)
 	button:SetOrientation("VERTICAL")
-	
+
 	button.bg = button:CreateTexture()
 	button.bg:SetTexture(0, 0, 0, 0.5)
-	
+
 	button.bg:SetPoint("TOPLEFT", button)
 	button.bg:SetPoint("BOTTOMRIGHT", button:GetStatusBarTexture(), "TOPRIGHT")
 
@@ -409,7 +409,7 @@ function NP:Construct_AuraIcon(parent, index)
 	end
 
 	local db = NP.db.units[parent:GetParent().UnitType][parent.type]
-	
+
 	button.count:FontTemplate(LSM:Fetch("font", db.countFont), db.countFontSize, db.countFontOutline)
 
 	if button.timerOptions and button.timerOptions.fontOptions and button.timerOptions.fontOptions.enable then
@@ -435,8 +435,7 @@ function NP:ConstructElement_Auras(frame, auraType)
 end
 
 function NP:UpdateAuraSettings(frame)
-	local db = NP.db.units[frame:GetParent().UnitType][frame.type]
-
+	--local db = NP.db.units[frame:GetParent().UnitType][frame.type]
 end
 
 function NP:CheckFilter(name, spellID, isPlayer, allowDuration, noDuration, ...)
