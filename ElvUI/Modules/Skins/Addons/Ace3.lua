@@ -300,14 +300,18 @@ function S:Ace3_RegisterAsWidget(widget)
 	elseif TYPE == "Keybinding" then
 		local button = widget.button
 		local msgframe = widget.msgframe
-
-		S:HandleButton(button, true, nil, true)
-		button.backdrop:SetInside()
-
+		local msg = widget.msgframe.msg
+		S:HandleButton(button)
 		msgframe:StripTextures()
-		msgframe:SetTemplate("Transparent")
-		msgframe.msg:ClearAllPoints()
-		msgframe.msg:Point("CENTER")
+		msgframe:CreateBackdrop("Default", true)
+		msgframe.backdrop:SetInside()
+		msgframe:SetToplevel(true)
+
+		msg:ClearAllPoints()
+		msg:Point("LEFT", 10, 0)
+		msg:Point("RIGHT", -10, 0)
+		msg:SetJustifyV("MIDDLE")
+		msg:Width(msg:GetWidth() + 10)
 	elseif (TYPE == "ColorPicker" or TYPE == "ColorPicker-ElvUI") then
 		local frame = widget.frame
 		local colorSwatch = widget.colorSwatch
