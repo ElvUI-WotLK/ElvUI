@@ -193,6 +193,9 @@ function UF:Update_PartyFrames(frame, db)
 			childDB = db.targetsGroup
 		end
 
+		frame.UNIT_WIDTH = childDB.width
+		frame.UNIT_HEIGHT = childDB.height
+
 		if not frame.originalParent.childList then
 			frame.originalParent.childList = {}
 		end
