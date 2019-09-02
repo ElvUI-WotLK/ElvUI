@@ -4,7 +4,7 @@
 ## Title: |cff1784d1E|r|cffe5e3e3lvUI|r |cff1784d1O|r|cffe5e3e3ptionsUI|r
 ## Notes: Options for ElvUI.
 ## RequiredDeps: ElvUI
-## LoadOnDemand: true
+## LoadOnDemand: 1
 
 Libraries\Load_Libraries.xml
 Locales\Load_locales.xml
