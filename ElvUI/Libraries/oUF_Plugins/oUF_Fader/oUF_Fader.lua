@@ -62,6 +62,7 @@ local function Update(self, _, unit)
 	end
 
 	unit = unit or self.unit
+	if self.unit ~= unit then return end
 
 	-- range fader
 	if element.Range then
