@@ -146,37 +146,17 @@ function LO:SetChatTabStyle()
 end
 
 function LO:SetDataPanelStyle()
-	if E.db.datatexts.panelTransparency then
-		if not E.db.datatexts.panelBackdrop then
-			LeftChatDataPanel:SetTemplate("NoBackdrop")
-			LeftChatToggleButton:SetTemplate("NoBackdrop")
-			RightChatDataPanel:SetTemplate("NoBackdrop")
-			RightChatToggleButton:SetTemplate("NoBackdrop")
-		else
-			LeftChatDataPanel:SetTemplate("Transparent")
-			LeftChatToggleButton:SetTemplate("Transparent")
-			RightChatDataPanel:SetTemplate("Transparent")
-			RightChatToggleButton:SetTemplate("Transparent")
-		end
-		LeftMiniPanel:SetTemplate("Transparent")
-		RightMiniPanel:SetTemplate("Transparent")
-		ElvConfigToggle:SetTemplate("Transparent")
-	else
-		if not E.db.datatexts.panelBackdrop then
-			LeftChatDataPanel:SetTemplate("NoBackdrop")
-			LeftChatToggleButton:SetTemplate("NoBackdrop")
-			RightChatDataPanel:SetTemplate("NoBackdrop")
-			RightChatToggleButton:SetTemplate("NoBackdrop")
-		else
-			LeftChatDataPanel:SetTemplate("Default", true)
-			LeftChatToggleButton:SetTemplate("Default", true)
-			RightChatDataPanel:SetTemplate("Default", true)
-			RightChatToggleButton:SetTemplate("Default", true)
-		end
-		RightMiniPanel:SetTemplate("Default", true)
-		LeftMiniPanel:SetTemplate("Default", true)
-		ElvConfigToggle:SetTemplate("Default", true)
-	end
+	local transparent = E.db.datatexts.panelTransparency and "Transparent" or "Default"
+	local template = E.db.datatexts.panelBackdrop and transparent or "NoBackdrop"
+
+	LeftChatDataPanel:SetTemplate(template, true)
+	LeftChatToggleButton:SetTemplate(template, true)
+	RightChatDataPanel:SetTemplate(template, true)
+	RightChatToggleButton:SetTemplate(template, true)
+
+	LeftMiniPanel:SetTemplate(transparent, true)
+	RightMiniPanel:SetTemplate(transparent, true)
+	ElvConfigToggle:SetTemplate(transparent, true)
 end
 
 function LO:RepositionChatDataPanels()
