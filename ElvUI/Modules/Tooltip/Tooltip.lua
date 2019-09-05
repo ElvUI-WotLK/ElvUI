@@ -652,22 +652,12 @@ function TT:SetTooltipFonts()
 
 	--These show when you compare items ("Currently Equipped", name of item, item level)
 	--Since they appear at the top of the tooltip, we set it to use the header font size.
-	ShoppingTooltip1TextLeft1:FontTemplate(font, headerSize, fontOutline)
-	ShoppingTooltip1TextLeft2:FontTemplate(font, headerSize, fontOutline)
-	ShoppingTooltip1TextLeft3:FontTemplate(font, headerSize, fontOutline)
-	ShoppingTooltip1TextLeft4:FontTemplate(font, headerSize, fontOutline)
-	ShoppingTooltip1TextRight1:FontTemplate(font, headerSize, fontOutline)
-	ShoppingTooltip1TextRight2:FontTemplate(font, headerSize, fontOutline)
-	ShoppingTooltip1TextRight3:FontTemplate(font, headerSize, fontOutline)
-	ShoppingTooltip1TextRight4:FontTemplate(font, headerSize, fontOutline)
-	ShoppingTooltip2TextLeft1:FontTemplate(font, headerSize, fontOutline)
-	ShoppingTooltip2TextLeft2:FontTemplate(font, headerSize, fontOutline)
-	ShoppingTooltip2TextLeft3:FontTemplate(font, headerSize, fontOutline)
-	ShoppingTooltip2TextLeft4:FontTemplate(font, headerSize, fontOutline)
-	ShoppingTooltip2TextRight1:FontTemplate(font, headerSize, fontOutline)
-	ShoppingTooltip2TextRight2:FontTemplate(font, headerSize, fontOutline)
-	ShoppingTooltip2TextRight3:FontTemplate(font, headerSize, fontOutline)
-	ShoppingTooltip2TextRight4:FontTemplate(font, headerSize, fontOutline)
+	for i = 1, 2 do
+		for j = 1, 4 do
+			_G["ShoppingTooltip"..i.."TextLeft"..j]:FontTemplate(font, headerSize, fontOutline)
+			_G["ShoppingTooltip"..i.."TextRight"..j]:FontTemplate(font, headerSize, fontOutline)
+		end
+	end
 end
 
 --This changes the growth direction of the toast frame depending on position of the mover
