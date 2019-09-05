@@ -72,6 +72,7 @@ end
 function NP:UpdateTime(elapsed)
 	self.timeLeft = self.timeLeft - elapsed
 	self:SetValue(self.timeLeft)
+
 	if self.nextUpdate > 0 then
 		self.nextUpdate = self.nextUpdate - elapsed
 		return
@@ -82,6 +83,11 @@ function NP:UpdateTime(elapsed)
 		self.time:SetText("")
 		self:SetScript("OnUpdate", nil)
 	else
+		if self.timeLeft < 0 then
+			self:Hide()
+			return
+		end
+
 		local timeColors, timeThreshold = (self.timerOptions and self.timerOptions.timeColors) or E.TimeColors, (self.timerOptions and self.timerOptions.timeThreshold) or E.db.cooldown.threshold
 		if not timeThreshold then timeThreshold = E.TimeThreshold end
 
@@ -117,6 +123,8 @@ function NP:SetAura(frame, guid, index, filter, isDebuff, visible)
 				button:SetScript("OnUpdate", nil)
 				button:SetMinMaxValues(0, 1)
 				button:SetValue(0)
+			elseif button.timeLeft and button.timeLeft < 0 then
+				return HIDDEN
 			else
 				local timeLeft = expiration - GetTime()
 				if not button.timeLeft then
