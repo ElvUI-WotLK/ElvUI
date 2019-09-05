@@ -249,7 +249,7 @@ function AB:CreateBar(id)
 	local point, anchor, attachTo, x, y = split(",", self.barDefaults["bar"..id].position)
 	bar:Point(point, anchor, attachTo, x, y)
 	bar.id = id
-	bar:CreateBackdrop()
+	bar:CreateBackdrop(self.db.transparentBackdrops and "Transparent")
 	bar:SetFrameStrata("LOW")
 
 	--Use this method instead of :SetAllPoints, as the size of the mover would otherwise be incorrect
@@ -562,7 +562,7 @@ function AB:StyleButton(button, noBackdrop, useMasque)
 	end
 
 	if not button.noBackdrop and not button.backdrop and not button.useMasque then
-		button:CreateBackdrop(nil, true)
+		button:CreateBackdrop(self.db.transparentButtons and "Transparent", true)
 		button.backdrop:SetAllPoints()
 	end
 

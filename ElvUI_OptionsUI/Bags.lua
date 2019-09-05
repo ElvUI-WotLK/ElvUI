@@ -86,58 +86,64 @@ E.Options.args.bags = {
 					desc = L["Use coin icons instead of colored text."],
 					set = function(info, value) E.db.bags[info[#info]] = value B:UpdateGoldText() end
 				},
-				junkIcon = {
+				transparent = {
 					order = 6,
+					type = "toggle",
+					name = L["Transparent Buttons"],
+					set = function(info, value) E.db.bags[info[#info]] = value E:StaticPopup_Show("PRIVATE_RL") end
+				},
+				junkIcon = {
+					order = 7,
 					type = "toggle",
 					name = L["Show Junk Icon"],
 					desc = L["Display the junk icon on all grey items that can be vendored."],
 					set = function(info, value) E.db.bags[info[#info]] = value B:UpdateAllBagSlots() end
 				},
 				junkDesaturate = {
-					order = 7,
+					order = 8,
 					type = "toggle",
 					name = L["Desaturate Junk Items"],
 					set = function(info, value) E.db.bags[info[#info]] = value B:UpdateAllBagSlots() end,
 				},
 				qualityColors = {
-					order = 8,
+					order = 9,
 					type = "toggle",
 					name = L["Show Quality Color"],
 					desc = L["Colors the border according to the Quality of the Item."],
 					set = function(info, value) E.db.bags[info[#info]] = value B:UpdateAllBagSlots() end
 				},
 				showBindType = {
-					order = 9,
+					order = 10,
 					type = "toggle",
 					name = L["Show Bind on Equip/Use Text"],
 					set = function(info, value) E.db.bags[info[#info]] = value B:UpdateAllBagSlots() end
 				},
 				clearSearchOnClose = {
-					order = 10,
+					order = 11,
 					type = "toggle",
 					name = L["Clear Search On Close"],
 					set = function(info, value) E.db.bags[info[#info]] = value end
 				},
 				reverseSlots = {
-					order = 11,
+					order = 12,
 					type = "toggle",
 					name = L["Reverse Bag Slots"],
 					set = function(info, value) E.db.bags[info[#info]] = value B:UpdateAll() B:UpdateTokens() end
 				},
 				disableBagSort = {
-					order = 12,
+					order = 13,
 					type = "toggle",
 					name = L["Disable Bag Sort"],
 					set = function(info, value) E.db.bags[info[#info]] = value B:ToggleSortButtonState(false) end
 				},
 				disableBankSort = {
-					order = 13,
+					order = 14,
 					type = "toggle",
 					name = L["Disable Bank Sort"],
 					set = function(info, value) E.db.bags[info[#info]] = value B:ToggleSortButtonState(true) end
 				},
 				countGroup = {
-					order = 14,
+					order = 15,
 					type = "group",
 					name = L["Item Count Font"],
 					guiInline = true,
@@ -182,7 +188,7 @@ E.Options.args.bags = {
 					}
 				},
 				itemLevelGroup = {
-					order = 15,
+					order = 16,
 					type = "group",
 					name = L["Item Level"],
 					guiInline = true,

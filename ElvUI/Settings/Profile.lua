@@ -169,6 +169,7 @@ P.bags = {
 	strata = "DIALOG",
 	qualityColors = true,
 	showBindType = false,
+	transparent = false,
 	colors = {
 		profession = {
 			quiver = {r = 1, g = 0.69, b = 0.41},
@@ -3774,6 +3775,8 @@ P.actionbar = {
 
 	keyDown = true,
 	movementModifier = "SHIFT",
+	transparentBackdrops = false,
+	transparentButtons = false,
 	globalFadeAlpha = 0,
 	lockActionBars = true,
 	rightClickSelfCast = false,

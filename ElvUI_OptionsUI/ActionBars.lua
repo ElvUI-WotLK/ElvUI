@@ -99,14 +99,31 @@ local function BuildABConfig()
 				order = 10,
 				type = "toggle",
 				name = L["Desaturate Cooldowns"],
-				customWidth = 180,
 				set = function(info, value)
 					E.db.actionbar.desaturateOnCooldown = value
 					AB:ToggleDesaturation(value)
 				end
 			},
-			movementModifier = {
+			transparentBackdrops = {
 				order = 11,
+				type = "toggle",
+				name = L["Transparent Backdrops"],
+				set = function(info, value)
+					E.db.actionbar.transparentBackdrops = value
+					E:StaticPopup_Show("PRIVATE_RL")
+				end
+			},
+			transparentButtons = {
+				order = 12,
+				type = "toggle",
+				name = L["Transparent Buttons"],
+				set = function(info, value)
+					E.db.actionbar.transparentButtons = value
+					E:StaticPopup_Show("PRIVATE_RL")
+				end
+			},
+			movementModifier = {
+				order = 13,
 				type = "select",
 				name = L["Pick Up Action Key"],
 				desc = L["The button you must hold down in order to drag an ability to another action button."],
@@ -119,7 +136,7 @@ local function BuildABConfig()
 				}
 			},
 			globalFadeAlpha = {
-				order = 12,
+				order = 14,
 				type = "range",
 				name = L["Global Fade Transparency"],
 				desc = L["Transparency level when not in combat, no target exists, full health, not casting, and no focus target exists."],
@@ -128,14 +145,14 @@ local function BuildABConfig()
 				set = function(info, value) E.db.actionbar[info[#info]] = value AB.fadeParent:SetAlpha(1-value) end
 			},
 			equippedItem = {
-				order = 13,
+				order = 15,
 				type = "toggle",
 				name = L["Equipped Item"],
 				get = function(info) return E.db.actionbar[info[#info]] end,
 				set = function(info, value) E.db.actionbar[info[#info]] = value AB:UpdateButtonSettings() end
 			},
 			equippedItemColor = {
-				order = 14,
+				order = 16,
 				type = "color",
 				name = L["Equipped Item Color"],
 				get = function(info)
@@ -151,7 +168,7 @@ local function BuildABConfig()
 				disabled = function() return not E.db.actionbar.equippedItem end
 			},
 			colorGroup = {
-				order = 15,
+				order = 17,
 				type = "group",
 				name = L["COLORS"],
 				guiInline = true,
@@ -193,7 +210,7 @@ local function BuildABConfig()
 				}
 			},
 			fontGroup = {
-				order = 16,
+				order = 18,
 				type = "group",
 				name = L["Fonts"],
 				guiInline = true,
@@ -295,7 +312,7 @@ local function BuildABConfig()
 				}
 			},
 			lbf = {
-				order = 30,
+				order = 19,
 				type = "group",
 				guiInline = true,
 				name = L["LBF Support"],
