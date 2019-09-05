@@ -425,8 +425,10 @@ local function LoadSkin()
 	SkillFrame:StripTextures(true)
 
 	S:HandleCloseButton(SkillDetailStatusBarUnlearnButton)
-	SkillDetailStatusBarUnlearnButton:Point("LEFT", SkillDetailStatusBarBorder, "RIGHT", 5, 0)
 	SkillDetailStatusBarUnlearnButton.Texture:Size(20)
+	SkillDetailStatusBarUnlearnButton.Texture:SetVertexColor(1, 0, 0)
+	SkillDetailStatusBarUnlearnButton:HookScript("OnEnter", function(btn) btn.Texture:SetVertexColor(1, 1, 1) end)
+	SkillDetailStatusBarUnlearnButton:HookScript("OnLeave", function(btn) btn.Texture:SetVertexColor(1, 0, 0) end)
 
 	SkillFrameExpandButtonFrame:StripTextures()
 
