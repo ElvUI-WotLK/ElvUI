@@ -123,15 +123,15 @@ function NP:SetAura(frame, guid, index, filter, isDebuff, visible)
 				button:SetScript("OnUpdate", nil)
 				button:SetMinMaxValues(0, 1)
 				button:SetValue(0)
-			elseif button.timeLeft and button.timeLeft < 0 then
-				return HIDDEN
 			else
 				local timeLeft = expiration - GetTime()
 				if not button.timeLeft then
 					button.timeLeft = timeLeft
 					button:SetScript("OnUpdate", NP.UpdateTime)
-				else
+				elseif timeLeft > 0 then
 					button.timeLeft = timeLeft
+				else
+					return HIDDEN
 				end
 
 				button.nextUpdate = -1
