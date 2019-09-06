@@ -41,6 +41,7 @@ local IsModifiedClick = IsModifiedClick
 local IsShiftKeyDown, IsControlKeyDown = IsShiftKeyDown, IsControlKeyDown
 local PickupContainerItem = PickupContainerItem
 local PlaySound = PlaySound
+local PutItemInBackpack = PutItemInBackpack
 local PutItemInBag = PutItemInBag
 local SetItemButtonCount = SetItemButtonCount
 local SetItemButtonDesaturated = SetItemButtonDesaturated
@@ -48,6 +49,8 @@ local SetItemButtonTexture = SetItemButtonTexture
 local SetItemButtonTextureVertexColor = SetItemButtonTextureVertexColor
 local ToggleFrame = ToggleFrame
 local UseContainerItem = UseContainerItem
+
+local BACKPACK_TOOLTIP = BACKPACK_TOOLTIP
 local BINDING_NAME_TOGGLEKEYRING = BINDING_NAME_TOGGLEKEYRING
 local CONTAINER_OFFSET_X, CONTAINER_OFFSET_Y = CONTAINER_OFFSET_X, CONTAINER_OFFSET_Y
 local CONTAINER_SCALE = CONTAINER_SCALE
@@ -60,6 +63,7 @@ local ITEM_BNETACCOUNTBOUND = ITEM_BNETACCOUNTBOUND
 local ITEM_SOULBOUND = ITEM_SOULBOUND
 local KEYRING_CONTAINER = KEYRING_CONTAINER
 local MAX_CONTAINER_ITEMS = MAX_CONTAINER_ITEMS
+local MAX_GUILDBANK_SLOTS_PER_TAB = MAX_GUILDBANK_SLOTS_PER_TAB
 local MAX_WATCHED_TOKENS = MAX_WATCHED_TOKENS
 local NUM_BAG_FRAMES = NUM_BAG_FRAMES
 local NUM_CONTAINER_FRAMES = NUM_CONTAINER_FRAMES
@@ -537,23 +541,32 @@ function B:Layout(isBank)
 					f.ContainerHolder[i] = CreateFrame("CheckButton", "ElvUIBankBag"..bagID - 4, f.ContainerHolder, "BankItemButtonBagTemplate")
 					f.ContainerHolder[i]:SetScript("OnClick", function(holder)
 						local inventoryID = holder:GetInventorySlot()
-						PutItemInBag(inventoryID) --Put bag on empty slot, or drop item in this bag
+						PutItemInBag(inventoryID)
 					end)
 				else
-					if bagID == 0 then --Backpack needs different setup
-						f.ContainerHolder[i] = CreateFrame("CheckButton", "ElvUIMainBagBackpack", f.ContainerHolder, "BankItemButtonBagTemplate")
+					if bagID == 0 then
+						f.ContainerHolder[i] = CreateFrame("CheckButton", "ElvUIMainBagBackpack", f.ContainerHolder, "ItemButtonTemplate")
+
+						f.ContainerHolder[i].model = CreateFrame("Model", "$parentItemAnim", f.ContainerHolder[i], "ItemAnimTemplate")
+						f.ContainerHolder[i].model:Point("BOTTOMRIGHT", -10, 0)
+
 						f.ContainerHolder[i]:SetScript("OnClick", function()
-							PutItemInBackpack() --Put bag on empty slot, or drop item in this bag
+							PutItemInBackpack()
 						end)
 						f.ContainerHolder[i]:SetScript("OnReceiveDrag", function()
-							PutItemInBackpack() --Put bag on empty slot, or drop item in this bag
+							PutItemInBackpack()
 						end)
-						f.ContainerHolder[i]:SetScript("OnEnter", nil)
+						f.ContainerHolder[i]:SetScript("OnEnter", function(btn)
+							GameTooltip:SetOwner(btn, "ANCHOR_LEFT")
+							GameTooltip:SetText(BACKPACK_TOOLTIP, 1, 1, 1)
+							GameTooltip:Show()
+						end)
+						f.ContainerHolder[i]:SetScript("OnLeave", GameTooltip_Hide)
 					else
 						f.ContainerHolder[i] = CreateFrame("CheckButton", "ElvUIMainBag"..(bagID - 1).."Slot", f.ContainerHolder, "BagSlotButtonTemplate")
 						f.ContainerHolder[i]:SetScript("OnClick", function(holder)
 							local id = holder:GetID()
-							PutItemInBag(id) --Put bag on empty slot, or drop item in this bag
+							PutItemInBag(id)
 						end)
 					end
 				end
@@ -574,11 +587,9 @@ function B:Layout(isBank)
 					end
 				end
 
-				if bagID == 0 then --backpack
-					f.ContainerHolder[i].iconTexture = f.ContainerHolder[i]:CreateTexture(nil, "ARTWORK")
+				f.ContainerHolder[i].iconTexture = _G[f.ContainerHolder[i]:GetName().."IconTexture"]
+				if bagID == 0 then
 					f.ContainerHolder[i].iconTexture:SetTexture("Interface\\Buttons\\Button-Backpack-Up")
-				else
-					f.ContainerHolder[i].iconTexture = _G[f.ContainerHolder[i]:GetName().."IconTexture"]
 				end
 				f.ContainerHolder[i].iconTexture:SetInside()
 				f.ContainerHolder[i].iconTexture:SetTexCoord(unpack(E.TexCoords))
