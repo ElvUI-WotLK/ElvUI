@@ -531,7 +531,7 @@ function B:Layout(isBank)
 		end
 
 		--Bag Containers
-		if (not isBank and bagID <= 3) or (isBank and bagID ~= -1 and numContainerSlots >= 1 and not (i - 1 > numContainerSlots)) then
+		if (not isBank) or (isBank and bagID ~= -1 and numContainerSlots >= 1 and not (i - 1 > numContainerSlots)) then
 			if not f.ContainerHolder[i] then
 				if isBank then
 					f.ContainerHolder[i] = CreateFrame("CheckButton", "ElvUIBankBag"..bagID - 4, f.ContainerHolder, "BankItemButtonBagTemplate")
@@ -540,11 +540,22 @@ function B:Layout(isBank)
 						PutItemInBag(inventoryID) --Put bag on empty slot, or drop item in this bag
 					end)
 				else
-					f.ContainerHolder[i] = CreateFrame("CheckButton", "ElvUIMainBag"..bagID.."Slot", f.ContainerHolder, "BagSlotButtonTemplate")
-					f.ContainerHolder[i]:SetScript("OnClick", function(holder)
-						local id = holder:GetID()
-						PutItemInBag(id) --Put bag on empty slot, or drop item in this bag
-					end)
+					if bagID == 0 then --Backpack needs different setup
+						f.ContainerHolder[i] = CreateFrame("CheckButton", "ElvUIMainBagBackpack", f.ContainerHolder, "BankItemButtonBagTemplate")
+						f.ContainerHolder[i]:SetScript("OnClick", function()
+							PutItemInBackpack() --Put bag on empty slot, or drop item in this bag
+						end)
+						f.ContainerHolder[i]:SetScript("OnReceiveDrag", function()
+							PutItemInBackpack() --Put bag on empty slot, or drop item in this bag
+						end)
+						f.ContainerHolder[i]:SetScript("OnEnter", nil)
+					else
+						f.ContainerHolder[i] = CreateFrame("CheckButton", "ElvUIMainBag"..(bagID - 1).."Slot", f.ContainerHolder, "BagSlotButtonTemplate")
+						f.ContainerHolder[i]:SetScript("OnClick", function(holder)
+							local id = holder:GetID()
+							PutItemInBag(id) --Put bag on empty slot, or drop item in this bag
+						end)
+					end
 				end
 
 				f.ContainerHolder[i]:SetTemplate(E.db.bags.transparent and "Transparent", true)
@@ -563,12 +574,17 @@ function B:Layout(isBank)
 					end
 				end
 
-				f.ContainerHolder[i].iconTexture = _G[f.ContainerHolder[i]:GetName().."IconTexture"]
+				if bagID == 0 then --backpack
+					f.ContainerHolder[i].iconTexture = f.ContainerHolder[i]:CreateTexture(nil, "ARTWORK")
+					f.ContainerHolder[i].iconTexture:SetTexture("Interface\\Buttons\\Button-Backpack-Up")
+				else
+					f.ContainerHolder[i].iconTexture = _G[f.ContainerHolder[i]:GetName().."IconTexture"]
+				end
 				f.ContainerHolder[i].iconTexture:SetInside()
 				f.ContainerHolder[i].iconTexture:SetTexCoord(unpack(E.TexCoords))
 			end
 
-			f.ContainerHolder:Size(((buttonSize + buttonSpacing) * (isBank and i - 1 or i)) + buttonSpacing,buttonSize + (buttonSpacing * 2))
+			f.ContainerHolder:Size(((buttonSize + buttonSpacing) * (isBank and i - 1 or i)) + buttonSpacing, buttonSize + (buttonSpacing * 2))
 
 			if isBank then
 				BankFrameItemButton_Update(f.ContainerHolder[i])
