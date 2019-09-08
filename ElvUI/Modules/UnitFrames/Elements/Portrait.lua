@@ -55,7 +55,7 @@ function UF:Configure_Portrait(frame, dontHide)
 				portrait:SetParent(frame.Health)
 			end
 
-			portrait:SetAlpha(0.35)
+			portrait:SetAlpha(db.portrait.overlayAlpha)
 			if not dontHide then
 				portrait:Show()
 			end
@@ -126,7 +126,7 @@ function UF:PortraitUpdate()
 	local portrait = db.portrait
 	if portrait.enable and self:GetParent().USE_PORTRAIT_OVERLAY then
 		self:SetAlpha(0)
-		self:SetAlpha(0.35)
+		self:SetAlpha(db.portrait.overlayAlpha)
 	else
 		self:SetAlpha(1)
 	end

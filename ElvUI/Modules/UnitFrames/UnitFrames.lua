@@ -1323,7 +1323,8 @@ function UF:ToggleTransparentStatusBar(isTransparent, statusBar, backdropTex, ad
 		if statusBar.texture then statusBar.texture = statusBar:GetStatusBarTexture() end
 
 		if adjustBackdropPoints then
-			backdropTex:SetAllPoints()
+			backdropTex:ClearAllPoints()
+			backdropTex:SetAllPoints(statusBar)
 		end
 	end
 end

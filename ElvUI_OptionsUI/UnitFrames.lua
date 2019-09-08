@@ -1163,6 +1163,14 @@ local function GetOptionsTable_Portrait(updateFunc, groupName, numUnits)
 				name = L["Width"],
 				min = 15, max = 150, step = 1,
 				disabled = function() return not E.db.unitframe.units[groupName].portrait.enable or E.db.unitframe.units[groupName].portrait.overlay end
+			},
+			overlayAlpha = {
+				order = 7,
+				type = "range",
+				name = L["Overlay Alpha"],
+				desc = L["Set the alpha level of portrait when frame is overlayed."],
+				min = 0.01, max = 1, step = 0.01,
+				disabled = function() return not E.db.unitframe.units[groupName].portrait.overlay end,
 			}
 		}
 	}
