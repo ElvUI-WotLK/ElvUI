@@ -234,7 +234,7 @@ function UF:PostUpdateHealthColor(unit, r, g, b)
 
 	local newr, newg, newb -- fallback for bg if custom settings arent used
 	if not b then r, g, b = colors.health.r, colors.health.g, colors.health.b end
-	if (((colors.healthclass and colors.colorhealthbyvalue) or (colors.colorhealthbyvalue and parent.isForced)) and (UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit))) then
+	if (((colors.healthclass and colors.colorhealthbyvalue) or (colors.colorhealthbyvalue and parent.isForced)) and not (UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit))) then
 		local cur, max = self.cur or 1, self.max or 100
 		if parent.isForced then
 			cur = parent.forcedHealth or cur
