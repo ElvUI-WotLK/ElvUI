@@ -65,15 +65,13 @@ function UF:Configure_Portrait(frame, dontHide)
 			if db.portrait.fullOverlay then
 				portrait:SetAllPoints(frame.Health)
 			else
-				local healthTex = frame.Health:GetStatusBarTexture()
-				if db.health.reverseFill then
-					portrait:Point("TOPLEFT", healthTex, "TOPLEFT")
-					portrait:Point("BOTTOMLEFT", healthTex, "BOTTOMLEFT")
-					portrait:Point("BOTTOMRIGHT", frame.Health, "BOTTOMRIGHT")
+				local statusBarTex = frame.Health:GetStatusBarTexture()
+				if frame.Health:GetOrientation() == "VERTICAL" then
+					portrait:SetPoint("BOTTOMLEFT", frame.Health)
+					portrait:SetPoint("TOPRIGHT", statusBarTex, "TOPRIGHT")
 				else
-					portrait:Point("TOPLEFT", frame.Health, "TOPLEFT")
-					portrait:Point("BOTTOMRIGHT", healthTex, "BOTTOMRIGHT")
-					portrait:Point("BOTTOMLEFT", healthTex, "BOTTOMLEFT")
+					portrait:SetPoint("TOPLEFT", frame.Health)
+					portrait:SetPoint("BOTTOMRIGHT", statusBarTex, "BOTTOMRIGHT")
 				end
 			end
 		else
