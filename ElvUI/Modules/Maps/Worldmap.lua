@@ -87,6 +87,8 @@ function M:UpdateCoords()
 	local width = WorldMapDetailFrame:GetWidth()
 	local height = WorldMapDetailFrame:GetHeight()
 	local centerX, centerY = WorldMapDetailFrame:GetCenter()
+	if not centerX then return end
+
 	local curX, curY = GetCursorPosition()
 	local adjustedX = (curX / scale - (centerX - (width / 2))) / width
 	local adjustedY = (centerY + (height / 2) - curY / scale) / height
