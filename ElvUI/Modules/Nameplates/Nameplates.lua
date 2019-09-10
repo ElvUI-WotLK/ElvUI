@@ -426,7 +426,7 @@ function NP:OnShow()
 		if guid then
 			self.UnitFrame.guid = guid
 		end
-	elseif NP.GUIDByName[self.UnitFrame.UnitName] then
+	elseif NP.GUIDByName[self.UnitFrame.UnitName] and unitType ~= "ENEMY_NPC" then
 		self.UnitFrame.guid = NP.GUIDByName[self.UnitFrame.UnitName]
 	end
 
@@ -445,16 +445,6 @@ function NP:OnShow()
 		NP:ConfigureElement_HealthBar(self.UnitFrame)
 		NP:ConfigureElement_CastBar(self.UnitFrame)
 		NP:ConfigureElement_Glow(self.UnitFrame)
-
-		if NP.db.units[unitType].buffs.enable then
-			self.UnitFrame.Buffs.db = NP.db.units[unitType].buffs
-		--	NP:UpdateAuraIcons(self.UnitFrame.Buffs)
-		end
-
-		if NP.db.units[unitType].debuffs.enable then
-			self.UnitFrame.Debuffs.db = NP.db.units[unitType].debuffs
-		--	NP:UpdateAuraIcons(self.UnitFrame.Debuffs)
-		end
 	end
 
 	NP:ConfigureElement_CPoints(self.UnitFrame)
@@ -477,8 +467,6 @@ function NP:OnHide(isConfig)
 
 	self.UnitFrame.unit = nil
 	self.UnitFrame.isGroupUnit = nil
-
-	--NP:HideAuraIcons(self.UnitFrame.Buffs)
 
 	if self.UnitFrame.Buffs.visibleBuffs then
 		for i = 1, self.UnitFrame.Buffs.visibleBuffs do
