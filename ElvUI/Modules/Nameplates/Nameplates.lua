@@ -151,6 +151,8 @@ function NP:SetTargetFrame(frame)
 				NP:UpdateElement_All(frame, true)
 			end
 
+			frame.CastBar.Icon:SetWidth((NP.db.units[frame.UnitType].castbar.height + NP.db.units[frame.UnitType].healthbar.height + NP.db.units[frame.UnitType].castbar.offset) * (frame.HealthBar.currentScale or 1))
+
 			if hasTarget then
 				frame:SetAlpha(1)
 			end
