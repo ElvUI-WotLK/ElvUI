@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...))
 local M = E:GetModule("WorldMap")
 
 --Lua functions
@@ -31,11 +31,11 @@ function M:PLAYER_REGEN_ENABLED()
 	WorldMapBlobFrame:SetParent(WorldMapFrame)
 	WorldMapBlobFrame:ClearAllPoints()
 	WorldMapBlobFrame:SetPoint("TOPLEFT", WorldMapDetailFrame)
-	WorldMapBlobFrame:SetScale(M.blobNewScale or WORLDMAP_SETTINGS.size)
+	WorldMapBlobFrame:SetScale(self.blobNewScale or WORLDMAP_SETTINGS.size)
 	WorldMapBlobFrame.Hide = nil
 	WorldMapBlobFrame.Show = nil
 
-	if M.blobWasVisible then
+	if self.blobWasVisible then
 		WorldMapBlobFrame:Show()
 	end
 
@@ -43,7 +43,7 @@ function M:PLAYER_REGEN_ENABLED()
 		WorldMapBlobFrame:DrawQuestBlob(WorldMapQuestScrollChildFrame.selected.questId, false)
 	end
 
-	if M.blobWasVisible then
+	if self.blobWasVisible then
 		WorldMapBlobFrame_CalculateHitTranslations()
 
 		if WorldMapQuestScrollChildFrame.selected and not WorldMapQuestScrollChildFrame.selected.completed then
@@ -60,7 +60,7 @@ function M:PLAYER_REGEN_DISABLED()
 		WorldMapQuestShowObjectives:Disable()
 	end
 
-	M.blobWasVisible = WorldMapFrame:IsShown() and WorldMapBlobFrame:IsShown()
+	self.blobWasVisible = WorldMapFrame:IsShown() and WorldMapBlobFrame:IsShown()
 
 	WorldMapBlobFrame:SetParent(nil)
 	WorldMapBlobFrame:ClearAllPoints()
@@ -68,37 +68,67 @@ function M:PLAYER_REGEN_DISABLED()
 	WorldMapBlobFrame:Hide()
 	WorldMapBlobFrame.Hide = function() M.blobWasVisible = nil end
 	WorldMapBlobFrame.Show = function() M.blobWasVisible = true end
-	M.blobNewScale = nil
+	self.blobNewScale = nil
 end
 
-function M:UpdateCoords()
-	if not WorldMapFrame:IsShown() then return end
-	local x, y = GetPlayerMapPosition("player")
-	x = x and E:Round(100 * x, 2) or 0
-	y = y and E:Round(100 * y, 2) or 0
+local t = 0
+local function UpdateCoords(self, elapsed)
+	t = t + elapsed
+	if t < 0.03333 then return end
+	t = 0
 
-	if x ~= 0 and y ~= 0 then
-		CoordsHolder.playerCoords:SetFormattedText("%s:   %.2f, %.2f", PLAYER, x, y)
-	else
-		CoordsHolder.playerCoords:SetFormattedText("%s:   %s", PLAYER, "N/A")
+	local x, y = GetPlayerMapPosition("player")
+
+	if self.playerCoords.x ~= x and self.playerCoords.y ~= y then
+		local adjustedX, adjustedY
+		
+		if x then
+			adjustedX = E:Round(100 * x, 2)
+			adjustedY = E:Round(100 * y, 2)
+		else
+			adjustedX = 0
+			adjustedY = 0
+		end
+
+		if adjustedX ~= 0 and adjustedY ~= 0 then
+			self.playerCoords.x = x
+			self.playerCoords.y = y
+			self.playerCoords:SetFormattedText("%s:   %.2f, %.2f", PLAYER, adjustedX, adjustedY)
+		else
+			self.playerCoords.x = nil
+			self.playerCoords.y = nil
+			self.playerCoords:SetFormattedText("%s:   %s", PLAYER, "N/A")
+		end
 	end
 
-	local scale = WorldMapDetailFrame:GetEffectiveScale()
-	local width = WorldMapDetailFrame:GetWidth()
-	local height = WorldMapDetailFrame:GetHeight()
-	local centerX, centerY = WorldMapDetailFrame:GetCenter()
-	if not centerX then return end
+	if WorldMapDetailFrame:IsMouseOver() then
+		local curX, curY = GetCursorPosition()
+	
+		if self.mouseCoords.x ~= curX and self.mouseCoords.y ~= curY then
+			local scale = WorldMapDetailFrame:GetEffectiveScale()
+			local width = WorldMapDetailFrame:GetWidth()
+			local height = WorldMapDetailFrame:GetHeight()
+			local centerX, centerY = WorldMapDetailFrame:GetCenter()
+			local adjustedX = (curX / scale - (centerX - (width / 2))) / width
+			local adjustedY = (centerY + (height / 2) - curY / scale) / height
 
-	local curX, curY = GetCursorPosition()
-	local adjustedX = (curX / scale - (centerX - (width / 2))) / width
-	local adjustedY = (centerY + (height / 2) - curY / scale) / height
+			if adjustedX >= 0 and adjustedY >= 0 and adjustedX <= 1 and adjustedY <= 1 then
+				adjustedX = E:Round(100 * adjustedX, 2)
+				adjustedY = E:Round(100 * adjustedY, 2)
 
-	if adjustedX >= 0 and adjustedY >= 0 and adjustedX <= 1 and adjustedY <= 1 then
-		adjustedX = E:Round(100 * adjustedX, 2)
-		adjustedY = E:Round(100 * adjustedY, 2)
-		CoordsHolder.mouseCoords:SetFormattedText("%s:  %.2f, %.2f", MOUSE_LABEL, adjustedX, adjustedY)
-	else
-		CoordsHolder.mouseCoords:SetText("")
+				self.mouseCoords.x = curX
+				self.mouseCoords.y = curY
+				self.mouseCoords:SetFormattedText("%s:  %.2f, %.2f", MOUSE_LABEL, adjustedX, adjustedY)
+			else
+				self.mouseCoords.x = nil
+				self.mouseCoords.y = nil
+				self.mouseCoords:SetText("")
+			end
+		end
+	elseif self.mouseCoords.x then
+		self.mouseCoords.x = nil
+		self.mouseCoords.y = nil
+		self.mouseCoords:SetText("")
 	end
 end
 
@@ -135,7 +165,7 @@ end
 function M:Initialize()
 	if not E.private.worldmap.enable then return end
 
-	M.Initialized = true
+	self.Initialized = true
 
 	if E.global.general.WorldMapCoordinates.enable then
 		local CoordsHolder = CreateFrame("Frame", "CoordsHolder", WorldMapFrame)
@@ -154,23 +184,14 @@ function M:Initialize()
 		CoordsHolder.mouseCoords:SetPoint("BOTTOMLEFT", CoordsHolder.playerCoords, "TOPLEFT", 0, 5)
 		CoordsHolder.mouseCoords:SetText(MOUSE_LABEL..":   0, 0")
 
-		WorldMapFrame:HookScript("OnShow", function()
-			if not M.CoordsTimer then
-				M:UpdateCoords()
-				M.CoordsTimer = M:ScheduleRepeatingTimer("UpdateCoords", 0.1)
-			end
-		end)
-		WorldMapFrame:HookScript("OnHide", function()
-			M:CancelTimer(M.CoordsTimer)
-			M.CoordsTimer = nil
-		end)
+		CoordsHolder:SetScript("OnUpdate", UpdateCoords)
 
-		M:PositionCoords()
+		self:PositionCoords()
 	end
 
 	if E.global.general.smallerWorldMap or (E.private.skins.blizzard.enable and E.private.skins.blizzard.worldmap) then
-		M:RegisterEvent("PLAYER_REGEN_ENABLED")
-		M:RegisterEvent("PLAYER_REGEN_DISABLED")
+		self:RegisterEvent("PLAYER_REGEN_ENABLED")
+		self:RegisterEvent("PLAYER_REGEN_DISABLED")
 	end
 
 	if E.global.general.smallerWorldMap then
@@ -181,14 +202,14 @@ function M:Initialize()
 
 		if not GetCVarBool("miniWorldMap") then
 			ShowUIPanel(WorldMapFrame)
-			M:ToggleMapFramerate()
+			self:ToggleMapFramerate()
 			HideUIPanel(WorldMapFrame)
 		end
 
 		M:SecureHook("ToggleMapFramerate")
 
 		hooksecurefunc(WorldMapDetailFrame, "SetScale", function(_, scale)
-			M.blobNewScale = scale
+			self.blobNewScale = scale
 		end)
 
 		DropDownList1:HookScript("OnShow", function()
@@ -197,7 +218,7 @@ function M:Initialize()
 			end
 		end)
 
-		M:RawHook("WorldMapQuestPOI_OnLeave", function()
+		self:RawHook("WorldMapQuestPOI_OnLeave", function()
 			WorldMapPOIFrame.allowBlobTooltip = true
 			WorldMapTooltip:Hide()
 		end, true)
