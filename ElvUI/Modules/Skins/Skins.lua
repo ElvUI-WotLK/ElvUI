@@ -510,15 +510,17 @@ function S:HandleNextPrevButton(btn, arrowDir, color, noBackdrop, stipTexts)
 		local ButtonName = btn:GetName() and btn:GetName():lower()
 
 		if ButtonName then
-			if (strfind(ButtonName, "left") or strfind(ButtonName, "prev") or strfind(ButtonName, "decrement") or strfind(ButtonName, "promote")) then
+			if (strfind(ButtonName, "left") or strfind(ButtonName, "prev") or strfind(ButtonName, "decrement")) then
 				arrowDir = "left"
 			elseif (strfind(ButtonName, "right") or strfind(ButtonName, "next") or strfind(ButtonName, "increment")) then
 				arrowDir = "right"
-			elseif (strfind(ButtonName, "scrollup") or strfind(ButtonName, "upbutton") or strfind(ButtonName, "top")) then
+			elseif (strfind(ButtonName, "scrollup") or strfind(ButtonName, "upbutton") or strfind(ButtonName, "top") or strfind(ButtonName, "promote")) then
 				arrowDir = "up"
 			end
 		end
 	end
+
+	btn:SetHitRectInsets(0, 0, 0, 0)
 
 	btn:StripTextures()
 	if not noBackdrop then
