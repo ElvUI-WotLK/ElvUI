@@ -175,13 +175,15 @@ function B:ResetAndClear()
 end
 
 function B:SetSearch(query)
-	local empty = #(gsub(query, " ", "")) == 0
+	local empty = (gsub(query, "%s+", "")) == ""
+
 	for _, bagFrame in pairs(B.BagFrames) do
 		for _, bagID in ipairs(bagFrame.BagIDs) do
 			for slotID = 1, GetContainerNumSlots(bagID) do
 				local _, _, _, _, _, _, link = GetContainerItemInfo(bagID, slotID)
 				local button = bagFrame.Bags[bagID][slotID]
 				local success, result = pcall(Search.Matches, Search, link, query)
+
 				if empty or (success and result) then
 					SetItemButtonDesaturated(button, button.locked or button.junkDesaturate)
 					button.searchOverlay:Hide()
@@ -217,12 +219,13 @@ function B:SetSearch(query)
 end
 
 function B:SetGuildBankSearch(query)
-	local empty = #(gsub(query, " ", "")) == 0
 	if GuildBankFrame and GuildBankFrame:IsShown() then
 		local tab = GetCurrentGuildBankTab()
 		local _, _, isViewable = GetGuildBankTabInfo(tab)
 
 		if isViewable then
+			local empty = (gsub(query, "%s+", "")) == ""
+
 			for slotID = 1, MAX_GUILDBANK_SLOTS_PER_TAB do
 				local link = GetGuildBankItemLink(tab, slotID)
 				--A column goes from 1-14, e.g. GuildBankColumn1Button14 (slotID 14) or GuildBankColumn2Button3 (slotID 17)
@@ -230,8 +233,10 @@ function B:SetGuildBankSearch(query)
 				local btn = (slotID % 14)
 				if col == 0 then col = 1 end
 				if btn == 0 then btn = 14 end
+
 				local button = _G["GuildBankColumn"..col.."Button"..btn]
 				local success, result = pcall(Search.Matches, Search, link, query)
+
 				if empty or (success and result) then
 					SetItemButtonDesaturated(button, button.locked or button.junkDesaturate)
 					button:SetAlpha(1)
