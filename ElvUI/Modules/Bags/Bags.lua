@@ -153,7 +153,7 @@ function B:UpdateSearch()
 	SEARCH_STRING = search
 
 	B:RefreshSearch()
-	B:SetGuildBankSearch(SEARCH_STRING)
+--	B:SetGuildBankSearch(SEARCH_STRING)
 end
 
 function B:OpenEditbox()
@@ -1852,7 +1852,7 @@ function B:Initialize()
 	B:RegisterEvent("BANKFRAME_OPENED", "OpenBank")
 	B:RegisterEvent("BANKFRAME_CLOSED", "CloseBank")
 	B:RegisterEvent("PLAYERBANKBAGSLOTS_CHANGED")
-	B:RegisterEvent("GUILDBANKBAGSLOTS_CHANGED")
+--	B:RegisterEvent("GUILDBANKBAGSLOTS_CHANGED")
 end
 
 local function InitializeCallback()
