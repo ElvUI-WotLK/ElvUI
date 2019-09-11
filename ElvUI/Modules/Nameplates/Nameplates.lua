@@ -887,8 +887,8 @@ function NP:SPELL_UPDATE_COOLDOWN(...)
 	NP:ForEachVisiblePlate("UpdateElement_Filters", "SPELL_UPDATE_COOLDOWN")
 end
 
-function NP:UNIT_FACTION()	
-	self:ForEachVisiblePlate("UpdateAllFrame")	
+function NP:UNIT_FACTION()
+	self:ForEachVisiblePlate("UpdateAllFrame")
 end
 
 function NP:UpdateFonts(plate)
