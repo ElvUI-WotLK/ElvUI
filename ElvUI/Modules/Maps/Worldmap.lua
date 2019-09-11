@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...))
+local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local M = E:GetModule("WorldMap")
 
 --Lua functions
@@ -81,7 +81,7 @@ local function UpdateCoords(self, elapsed)
 
 	if self.playerCoords.x ~= x and self.playerCoords.y ~= y then
 		local adjustedX, adjustedY
-		
+
 		if x then
 			adjustedX = E:Round(100 * x, 2)
 			adjustedY = E:Round(100 * y, 2)
@@ -103,7 +103,7 @@ local function UpdateCoords(self, elapsed)
 
 	if WorldMapDetailFrame:IsMouseOver() then
 		local curX, curY = GetCursorPosition()
-	
+
 		if self.mouseCoords.x ~= curX and self.mouseCoords.y ~= curY then
 			local scale = WorldMapDetailFrame:GetEffectiveScale()
 			local width = WorldMapDetailFrame:GetWidth()
