@@ -330,7 +330,7 @@ function B:UpdateSlot(frame, bagID, slotID)
 		E.ScanTooltip:Show()
 	end
 
-	if B.ProfessionColors[bagType] then
+	if B.db.professionBagColors and B.ProfessionColors[bagType] then
 		slot:SetBackdropBorderColor(unpack(B.ProfessionColors[bagType]))
 		slot.ignoreBorderColors = true
 	elseif clink then
@@ -382,15 +382,18 @@ function B:UpdateSlot(frame, bagID, slotID)
 			end
 		end
 
+		if B.db.questIcon and (questId and not isActiveQuest) then
+			slot.questIcon:Show()
+		end
+
 		-- color slot according to item quality
-		if questId and not isActiveQuest then
+		if B.db.questItemColors and (questId and not isActiveQuest) then
 			slot:SetBackdropBorderColor(unpack(B.QuestColors.questStarter))
 			slot.ignoreBorderColors = true
-			slot.questIcon:Show()
-		elseif questId or isQuestItem then
+		elseif B.db.questItemColors and (questId or isQuestItem) then
 			slot:SetBackdropBorderColor(unpack(B.QuestColors.questItem))
 			slot.ignoreBorderColors = true
-		elseif B.db.qualityColors and slot.rarity and slot.rarity > 1 then
+		elseif B.db.qualityColors and (slot.rarity and slot.rarity > 1) then
 			slot:SetBackdropBorderColor(r, g, b)
 			slot.ignoreBorderColors = true
 		else
@@ -850,15 +853,18 @@ function B:UpdateKeySlot(slotID)
 
 		slot.name, slot.rarity = name, rarity
 
+		if B.db.questIcon and (questId and not isActiveQuest) then
+			slot.questIcon:Show()
+		end
+
 		-- color slot according to item quality
-		if questId and not isActiveQuest then
+		if B.db.questItemColors and (questId and not isActiveQuest) then
 			slot:SetBackdropBorderColor(unpack(B.QuestColors.questStarter))
 			slot.ignoreBorderColors = true
-			slot.questIcon:Show()
-		elseif questId or isQuestItem then
+		elseif B.db.questItemColors and (questId or isQuestItem) then
 			slot:SetBackdropBorderColor(unpack(B.QuestColors.questItem))
 			slot.ignoreBorderColors = true
-		elseif B.db.qualityColors and slot.rarity and slot.rarity > 1 then
+		elseif B.db.qualityColors and (slot.rarity and slot.rarity > 1) then
 			slot:SetBackdropBorderColor(GetItemQualityColor(slot.rarity))
 			slot.ignoreBorderColors = true
 		else

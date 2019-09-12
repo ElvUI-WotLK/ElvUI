@@ -170,6 +170,9 @@ P.bags = {
 	qualityColors = true,
 	showBindType = false,
 	transparent = false,
+	questIcon = true,
+	professionBagColors = true,
+	questItemColors = true,
 	colors = {
 		profession = {
 			quiver = {r = 1, g = 0.69, b = 0.41},
