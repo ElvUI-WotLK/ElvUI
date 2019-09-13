@@ -57,7 +57,7 @@ local FACTION_BAR_COLORS = FACTION_BAR_COLORS
 local ID = ID
 
 local GameTooltip, GameTooltipStatusBar = GameTooltip, GameTooltipStatusBar
-local S_ITEM_LEVEL = ITEM_LEVEL:gsub( "%%d", "(%%d+)" )
+local MATCH_ITEM_LEVEL = ITEM_LEVEL:gsub( "%%d", "(%%d+)" )
 local targetList, inspectCache = {}, {}
 local TAPPED_COLOR = { r=.6, g=.6, b=.6 }
 local AFK_LABEL = " |cffFFFFFF[|r|cffE7E716"..L["AFK"].."|r|cffFFFFFF]|r"
@@ -162,51 +162,45 @@ function TT:GameTooltip_SetDefaultAnchor(tt, parent)
 	end
 end
 
-function TT:GetAvailableTooltip()
-	for i = 1, #GameTooltip.shoppingTooltips do
-		if not GameTooltip.shoppingTooltips[i]:IsShown() then
-			return GameTooltip.shoppingTooltips[i]
-		end
-	end
-end
-
 function TT:ScanForItemLevel(itemLink)
-	local tooltip = self:GetAvailableTooltip()
-	tooltip:SetOwner(UIParent, "ANCHOR_NONE")
-	tooltip:SetHyperlink(itemLink)
-	tooltip:Show()
+	E.ScanTooltip:SetOwner(UIParent, "ANCHOR_NONE")
+	E.ScanTooltip:SetHyperlink(itemLink)
+	E.ScanTooltip:Show()
 
-	local itemLevel = 0
-	for i = 2, tooltip:NumLines() do
-		local text = _G[tooltip:GetName().."TextLeft"..i]:GetText()
-		if text and text ~= "" then
-			local value = tonumber(match(text, S_ITEM_LEVEL))
+	local iLvl = 0
+	for i = 2, E.ScanTooltip:NumLines() do
+		local line = _G["ElvUI_ScanTooltipTextLeft"..i]
+		local lineText = line:GetText()
+
+		if lineText and lineText ~= "" then
+			local value = strmatch(lineText, MATCH_ITEM_LEVEL)
+
 			if value then
-				itemLevel = value
+				iLvl = tonumber(value)
 			end
 		end
 	end
 
-	tooltip:Hide()
-	return itemLevel
+	E.ScanTooltip:Hide()
+
+	return iLvl
 end
 
 function TT:GetItemLvL(unit)
 	local total, item = 0, 0
 	for i = 1, #SlotName do
 		local itemLink = GetInventoryItemLink(unit, GetInventorySlotInfo(format("%sSlot", SlotName[i])))
+
 		if itemLink ~= nil then
-			local itemLevel = self:ScanForItemLevel(itemLink)
-			if itemLevel and itemLevel > 0 then
+			local iLvl = self:ScanForItemLevel(itemLink)
+			if iLvl and iLvl > 0 then
 				item = item + 1
-				total = total + itemLevel
+				total = total + iLvl
 			end
 		end
 	end
 
-	if total < 1 then
-		return
-	end
+	if total < 1 then return end
 
 	return floor(total / item)
 end
