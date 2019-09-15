@@ -32,22 +32,13 @@ E.StaticPopup_DisplayedFrames = {}
 
 E.PopupDialogs.ELVUI_UPDATED_WHILE_RUNNING = {
 	text = L["ElvUI was updated while the game is still running. Please relaunch the game, as this is required for the files to be properly updated."],
-	button1 = ACCEPT,
+	button1 = "|cffff0000"..QUIT,
 	button2 = CANCEL,
+	OnAccept = function()
+		Quit()
+	end,
 	OnShow = function(self, data)
-		local secureButton = E:StaticPopup_GetSecureButton("Quit")
-		if secureButton then
-			E:StaticPopup_PositionSecureButton(self, self.button1, secureButton)
-		else
-			secureButton = E:StaticPopup_CreateSecureButton(self, self.button1, _G.QUIT, "/quit")
-			E:StaticPopup_SetSecureButton("Quit", secureButton)
-		end
-
-		if data and data.mismatch then
-			self.button2:Disable()
-		end
-
-		self.button1:Hide()
+		self.button2:Disable()
 	end,
 	whileDead = 1,
 }
