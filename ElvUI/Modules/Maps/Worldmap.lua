@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local M = E:GetModule("WorldMap")
 
 --Lua functions
@@ -133,6 +133,8 @@ local function UpdateCoords(self, elapsed)
 end
 
 function M:PositionCoords()
+	if not self.coordsHolder then return end
+
 	local db = E.global.general.WorldMapCoordinates
 	local position = db.position
 	local xOffset = db.xOffset
@@ -142,11 +144,11 @@ function M:PositionCoords()
 	if find(position, "RIGHT") then x = -5 end
 	if find(position, "TOP") then y = -5 end
 
-	CoordsHolder.playerCoords:ClearAllPoints()
-	CoordsHolder.playerCoords:Point(position, WorldMapDetailFrame, position, x + xOffset, y + yOffset)
+	self.coordsHolder.playerCoords:ClearAllPoints()
+	self.coordsHolder.playerCoords:Point(position, WorldMapDetailFrame, position, x + xOffset, y + yOffset)
 
-	CoordsHolder.mouseCoords:ClearAllPoints()
-	CoordsHolder.mouseCoords:Point(position, CoordsHolder.playerCoords, INVERTED_POINTS[position], 0, y)
+	self.coordsHolder.mouseCoords:ClearAllPoints()
+	self.coordsHolder.mouseCoords:Point(position, self.coordsHolder.playerCoords, INVERTED_POINTS[position], 0, y)
 end
 
 function M:ToggleMapFramerate()
@@ -165,27 +167,26 @@ end
 function M:Initialize()
 	if not E.private.worldmap.enable then return end
 
-	self.Initialized = true
-
 	if E.global.general.WorldMapCoordinates.enable then
-		local CoordsHolder = CreateFrame("Frame", "CoordsHolder", WorldMapFrame)
-		CoordsHolder:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 100)
-		CoordsHolder:SetFrameStrata(WorldMapDetailFrame:GetFrameStrata())
+		local coordsHolder = CreateFrame("Frame", "ElvUI_CoordsHolder", WorldMapFrame)
+		coordsHolder:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 100)
+		coordsHolder:SetFrameStrata(WorldMapDetailFrame:GetFrameStrata())
 
-		CoordsHolder.playerCoords = CoordsHolder:CreateFontString(nil, "OVERLAY")
-		CoordsHolder.playerCoords:SetTextColor(1, 1 ,0)
-		CoordsHolder.playerCoords:SetFontObject(NumberFontNormal)
-		CoordsHolder.playerCoords:SetPoint("BOTTOMLEFT", WorldMapDetailFrame, "BOTTOMLEFT", 5, 5)
-		CoordsHolder.playerCoords:SetText(PLAYER..":   0, 0")
+		coordsHolder.playerCoords = coordsHolder:CreateFontString(nil, "OVERLAY")
+		coordsHolder.playerCoords:SetTextColor(1, 1 ,0)
+		coordsHolder.playerCoords:SetFontObject(NumberFontNormal)
+		coordsHolder.playerCoords:SetPoint("BOTTOMLEFT", WorldMapDetailFrame, "BOTTOMLEFT", 5, 5)
+		coordsHolder.playerCoords:SetText(PLAYER..":   0, 0")
 
-		CoordsHolder.mouseCoords = CoordsHolder:CreateFontString(nil, "OVERLAY")
-		CoordsHolder.mouseCoords:SetTextColor(1, 1 ,0)
-		CoordsHolder.mouseCoords:SetFontObject(NumberFontNormal)
-		CoordsHolder.mouseCoords:SetPoint("BOTTOMLEFT", CoordsHolder.playerCoords, "TOPLEFT", 0, 5)
-		CoordsHolder.mouseCoords:SetText(MOUSE_LABEL..":   0, 0")
+		coordsHolder.mouseCoords = coordsHolder:CreateFontString(nil, "OVERLAY")
+		coordsHolder.mouseCoords:SetTextColor(1, 1 ,0)
+		coordsHolder.mouseCoords:SetFontObject(NumberFontNormal)
+		coordsHolder.mouseCoords:SetPoint("BOTTOMLEFT", coordsHolder.playerCoords, "TOPLEFT", 0, 5)
+		coordsHolder.mouseCoords:SetText(MOUSE_LABEL..":   0, 0")
 
-		CoordsHolder:SetScript("OnUpdate", UpdateCoords)
+		coordsHolder:SetScript("OnUpdate", UpdateCoords)
 
+		self.coordsHolder = coordsHolder
 		self:PositionCoords()
 	end
 
@@ -227,6 +228,8 @@ function M:Initialize()
 	--	WorldMapCompareTooltip1:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 110)
 	--	WorldMapCompareTooltip2:SetFrameLevel(WORLDMAP_POI_FRAMELEVEL + 110)
 	end
+
+	self.Initialized = true
 end
 
 local function InitializeCallback()

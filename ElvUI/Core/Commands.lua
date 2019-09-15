@@ -75,12 +75,36 @@ function FarmMode()
 	if Minimap:IsShown() then
 		UIFrameFadeOut(Minimap, 0.3)
 		UIFrameFadeIn(FarmModeMap, 0.3)
-		Minimap.fadeInfo.finishedFunc = function() Minimap:Hide() _G.MinimapZoomIn:Click() _G.MinimapZoomOut:Click() Minimap:SetAlpha(1) end
+		Minimap.fadeInfo.finishedFunc = function()
+			Minimap:Hide()
+			FarmModeMap:SetAlpha(1)
+
+			local zoomLevel = Minimap:GetZoom()
+			if zoomLevel < 5 then
+				Minimap:SetZoom(zoomLevel + 1)
+				Minimap:SetZoom(zoomLevel)
+			else
+				Minimap:SetZoom(zoomLevel - 1)
+				Minimap:SetZoom(zoomLevel)
+			end
+		end
 		FarmModeMap.enabled = true
 	else
 		UIFrameFadeOut(FarmModeMap, 0.3)
 		UIFrameFadeIn(Minimap, 0.3)
-		FarmModeMap.fadeInfo.finishedFunc = function() FarmModeMap:Hide() _G.MinimapZoomIn:Click() _G.MinimapZoomOut:Click() Minimap:SetAlpha(1) end
+		FarmModeMap.fadeInfo.finishedFunc = function()
+			FarmModeMap:Hide()
+			Minimap:SetAlpha(1)
+
+			local zoomLevel = Minimap:GetZoom()
+			if zoomLevel < 5 then
+				Minimap:SetZoom(zoomLevel + 1)
+				Minimap:SetZoom(zoomLevel)
+			else
+				Minimap:SetZoom(zoomLevel - 1)
+				Minimap:SetZoom(zoomLevel)
+			end
+		end
 		FarmModeMap.enabled = false
 	end
 end

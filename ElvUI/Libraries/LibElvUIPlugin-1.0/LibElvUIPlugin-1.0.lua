@@ -1,5 +1,5 @@
 local MAJOR, MINOR = "LibElvUIPlugin-1.0", 31
-local lib = _G.LibStub:NewLibrary(MAJOR, MINOR)
+local lib = LibStub:NewLibrary(MAJOR, MINOR)
 if not lib then return end
 -- GLOBALS: ElvUI
 
@@ -202,9 +202,9 @@ function lib:GetPluginOptions()
 end
 
 do	-- this will handle `8.1.5.0015` into `8.150015` etc
-	local verStrip = function(a, b) return a..gsub(b,'%.', '') end
+	local verStrip = function(a, b) return a..gsub(b, "%.", "") end
 	function lib:StripVersion(version)
-		local ver = gsub(version, '(%d-%.)([%d%.]+)', verStrip)
+		local ver = gsub(version, "(%d-%.)([%d%.]+)", verStrip)
 		return tonumber(ver)
 	end
 end
@@ -230,8 +230,9 @@ function lib:VersionCheck(event, prefix, message, _, sender)
 	elseif event == "PLAYER_ENTERING_WORLD" then
 		lib:DelayedSendVersionCheck()
 	else
-		local numRaid, numParty = GetNumRaidMembers(), GetNumPartyMembers() + 1
-		local num = numRaid > 0 and numRaid or numParty
+		local numRaid = GetNumRaidMembers()
+		local num = numRaid > 0 and numRaid or (GetNumPartyMembers() + 1)
+
 		if num ~= lib.groupSize then
 			if num > 1 and num > lib.groupSize then
 				lib:DelayedSendVersionCheck()
@@ -288,7 +289,7 @@ function lib:SendPluginVersionCheck(message)
 		for _ = 1, ceil(msgLength / maxChar) do
 			splitMessage = match(sub(message, 1, maxChar), ".+;")
 			if splitMessage then -- incase the string is over `maxChar` but doesnt contain `;`
-				message = gsub(message, "^"..gsub(splitMessage, '([%-%.%+%[%]%(%)%$%^%%%?%*])','%%%1'), "")
+				message = gsub(message, "^"..gsub(splitMessage, "([%-%.%+%[%]%(%)%$%^%%%?%*])", "%%%1"), "")
 				E:Delay(delay, SendAddonMessage, lib.prefix, splitMessage, ChatType)
 				delay = delay + 1
 			end
@@ -324,7 +325,7 @@ function lib:HookInitialize(tbl, func)
 		hooksecurefunc(E, "Initialize", self.Initialized)
 	end
 
-	tinsert(lib.inits, { tbl, func })
+	tinsert(lib.inits, {tbl, func})
 end
 
 lib.VCFrame = CreateFrame("Frame")

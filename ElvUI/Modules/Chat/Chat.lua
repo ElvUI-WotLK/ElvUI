@@ -5,7 +5,7 @@ local LSM = E.Libs.LSM
 
 --Lua functions
 local _G = _G
-local time, difftime = time, difftime
+local time = time
 local pairs, ipairs, unpack, select, tostring, pcall, next, tonumber, type = pairs, ipairs, unpack, select, tostring, pcall, next, tonumber, type
 local tinsert, tremove, tconcat, wipe = table.insert, table.remove, table.concat, table.wipe
 local gsub, find, gmatch, format, strtrim = string.gsub, string.find, string.gmatch, string.format, string.trim
@@ -117,14 +117,14 @@ end
 local specialChatIcons
 do --this can save some main file locals
 	local y = ":13:25"
-	--local ElvMelon		= E:TextureString(E.Media.ChatLogos.ElvMelon,y)
-	--local ElvRainbow	= E:TextureString(E.Media.ChatLogos.ElvRainbow,y)
-	--local ElvRed		= E:TextureString(E.Media.ChatLogos.ElvRed,y)
-	--local ElvOrange		= E:TextureString(E.Media.ChatLogos.ElvOrange,y)
-	--local ElvYellow		= E:TextureString(E.Media.ChatLogos.ElvYellow,y)
-	--local ElvGreen		= E:TextureString(E.Media.ChatLogos.ElvGreen,y)
-	--local ElvBlue		= E:TextureString(E.Media.ChatLogos.ElvBlue,y)
-	--local ElvPurple		= E:TextureString(E.Media.ChatLogos.ElvPurple,y)
+--	local ElvMelon		= E:TextureString(E.Media.ChatLogos.ElvMelon,y)
+--	local ElvRainbow	= E:TextureString(E.Media.ChatLogos.ElvRainbow,y)
+--	local ElvRed		= E:TextureString(E.Media.ChatLogos.ElvRed,y)
+--	local ElvOrange		= E:TextureString(E.Media.ChatLogos.ElvOrange,y)
+--	local ElvYellow		= E:TextureString(E.Media.ChatLogos.ElvYellow,y)
+--	local ElvGreen		= E:TextureString(E.Media.ChatLogos.ElvGreen,y)
+--	local ElvBlue		= E:TextureString(E.Media.ChatLogos.ElvBlue,y)
+--	local ElvPurple		= E:TextureString(E.Media.ChatLogos.ElvPurple,y)
 	local ElvPink		= E:TextureString(E.Media.ChatLogos.ElvPink,y)
 
 	specialChatIcons = {
@@ -136,14 +136,13 @@ CH.Keywords = {}
 CH.ClassNames = {}
 
 local function ChatFrame_OnMouseScroll(frame, delta)
-	local numScrollMessages = CH.db.numScrollMessages or 3
 	if delta < 0 then
 		if IsShiftKeyDown() then
 			frame:ScrollToBottom()
 		elseif IsAltKeyDown() then
 			frame:ScrollDown()
 		else
-			for _ = 1, numScrollMessages do
+			for _ = 1, (CH.db.numScrollMessages or 3) do
 				frame:ScrollDown()
 			end
 		end
@@ -153,7 +152,7 @@ local function ChatFrame_OnMouseScroll(frame, delta)
 		elseif IsAltKeyDown() then
 			frame:ScrollUp()
 		else
-			for _ = 1, numScrollMessages do
+			for _ = 1, (CH.db.numScrollMessages or 3) do
 				frame:ScrollUp()
 			end
 		end
@@ -244,7 +243,7 @@ function CH:StyleChat(frame)
 	editbox.characterCount:SetJustifyH("CENTER")
 	editbox.characterCount:Width(40)
 
-	for _, texName in pairs(tabTexs) do
+	for _, texName in ipairs(tabTexs) do
 		_G[tab:GetName()..texName.."Left"]:SetTexture(nil)
 		_G[tab:GetName()..texName.."Middle"]:SetTexture(nil)
 		_G[tab:GetName()..texName.."Right"]:SetTexture(nil)
@@ -282,14 +281,14 @@ function CH:StyleChat(frame)
 
 		if InCombatLockdown() then
 			local MIN_REPEAT_CHARACTERS = E.db.chat.numAllowedCombatRepeat
-			if (strlen(text) > MIN_REPEAT_CHARACTERS) then
-			local repeatChar = true
-			for i = 1, MIN_REPEAT_CHARACTERS, 1 do
-				if strsub(text,(0-i), (0-i)) ~= strsub(text,(-1-i),(-1-i)) then
-					repeatChar = false
-					break
+			if strlen(text) > MIN_REPEAT_CHARACTERS then
+				local repeatChar = true
+				for i = 1, MIN_REPEAT_CHARACTERS do
+					if strsub(text, (0 - i), (0 - i)) ~= strsub(text, (-1 - i), (-1 - i)) then
+						repeatChar = false
+						break
+					end
 				end
-			end
 				if repeatChar then
 					editBox:Hide()
 					return
@@ -304,13 +303,12 @@ function CH:StyleChat(frame)
 					unitname = unitname.."-"..gsub(realm, " ", "")
 				end
 				ChatFrame_SendTell((unitname or L["Invalid Target"]), ChatFrame1)
-			end
-
-			if strsub(text, 1, 4) == "/gr " then
+			elseif strsub(text, 1, 4) == "/gr " then
 				editBox:SetText(CH:GetGroupDistribution()..strsub(text, 5))
 				ChatEdit_ParseText(editBox, 0)
 			end
 		end
+
 		editbox.characterCount:SetText((255 - strlen(text)))
 	end
 
@@ -318,7 +316,10 @@ function CH:StyleChat(frame)
 		editbox:AddHistoryLine(text)
 	end
 
-	local a, b, c = select(6, editbox:GetRegions()); a:Kill(); b:Kill(); c:Kill()
+	local a, b, c = select(6, editbox:GetRegions())
+	a:Kill()
+	b:Kill()
+	c:Kill()
 	_G[format(editbox:GetName().."FocusLeft", id)]:Kill()
 	_G[format(editbox:GetName().."FocusMid", id)]:Kill()
 	_G[format(editbox:GetName().."FocusRight", id)]:Kill()
@@ -422,10 +423,18 @@ end
 
 local removeIconFromLine
 do
-	local raidIconFunc = function(x) x = x ~= "" and _G["RAID_TARGET_"..x]; return x and ("{"..strlower(x).."}") or "" end
-	local stripTextureFunc = function(w, x, y) if x=="" then return (w~="" and w) or (y~="" and y) or "" end end
-	local hyperLinkFunc = function(w, x, y) if w~="" then return end
-		local emoji = (x~="" and x) and strmatch(x, "elvmoji:%%(.+)")
+	local raidIconFunc = function(x)
+		x = x ~= "" and _G["RAID_TARGET_"..x]
+		return x and ("{"..strlower(x).."}") or ""
+	end
+	local stripTextureFunc = function(w, x, y)
+		if x == "" then
+			return (w ~= "" and w) or (y ~= "" and y) or ""
+		end
+	end
+	local hyperLinkFunc = function(w, x, y)
+		if w ~= "" then return end
+		local emoji = (x ~= "" and x) and strmatch(x, "elvmoji:%%(.+)")
 		return (emoji and E.Libs.Base64:Decode(emoji)) or y
 	end
 	removeIconFromLine = function(text)
@@ -530,7 +539,7 @@ function CH:SetupChatTabs(frame, hook)
 end
 
 function CH:UpdateAnchors()
-	for _, frameName in pairs(CHAT_FRAMES) do
+	for _, frameName in ipairs(CHAT_FRAMES) do
 		local frame = _G[frameName.."EditBox"]
 		if not frame then break end
 		local noBackdrop = (self.db.panelBackdrop == "HIDEBOTH" or self.db.panelBackdrop == "RIGHT")
@@ -552,7 +561,7 @@ end
 local function FindRightChatID()
 	local rightChatID
 
-	for _, frameName in pairs(CHAT_FRAMES) do
+	for _, frameName in ipairs(CHAT_FRAMES) do
 		local chat = _G[frameName]
 		local id = chat:GetID()
 
@@ -855,7 +864,7 @@ function CH:OnMessageScrollChanged(frame)
 end
 
 function CH:EnableHyperlink()
-	for _, frameName in pairs(CHAT_FRAMES) do
+	for _, frameName in ipairs(CHAT_FRAMES) do
 		local frame = _G[frameName]
 		if (not self.hooks or not self.hooks[frame] or not self.hooks[frame].OnHyperlinkEnter) then
 			self:HookScript(frame, "OnHyperlinkEnter")
@@ -866,7 +875,7 @@ function CH:EnableHyperlink()
 end
 
 function CH:DisableHyperlink()
-	for _, frameName in pairs(CHAT_FRAMES) do
+	for _, frameName in ipairs(CHAT_FRAMES) do
 		local frame = _G[frameName]
 		if self.hooks and self.hooks[frame] and self.hooks[frame].OnHyperlinkEnter then
 			self:Unhook(frame, "OnHyperlinkEnter")
@@ -950,11 +959,10 @@ function CH:ChatFrame_MessageEventHandler(frame, event, arg1, arg2, arg3, arg4, 
 		local _, _, englishClass, _, _, _, name, realm = pcall(GetPlayerInfoByGUID, arg12)
 		local coloredName = historySavedName or CH:GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12)
 
-		--Cache name->class
-		local nameWithRealm = strmatch(realm ~= "" and realm or E.myrealm, "%s*(%S+)$") -- TODO
+		local nameWithRealm = strmatch(realm ~= "" and realm or E.myrealm, "%s*(%S+)$")
 		if name and name ~= "" then
-			CH.ClassNames[strlower(name)] = englishClass
 			nameWithRealm = name.."-"..nameWithRealm
+			CH.ClassNames[strlower(name)] = englishClass
 			CH.ClassNames[strlower(nameWithRealm)] = englishClass
 		end
 
@@ -1230,7 +1238,7 @@ end
 function CH:SetupChat()
 	if E.private.chat.enable ~= true then return end
 
-	for _, frameName in pairs(CHAT_FRAMES) do
+	for _, frameName in ipairs(CHAT_FRAMES) do
 		local frame = _G[frameName]
 		local id = frame:GetID()
 		local _, fontSize = FCF_GetChatWindowInfo(id)
@@ -1280,7 +1288,7 @@ local function PrepareMessage(author, message)
 	return format("%s%s", strupper(author), message)
 end
 
-function CH:ChatThrottleHandler(_, arg1, arg2) -- event, arg1, arg2
+function CH:ChatThrottleHandler(_, arg1, arg2)
 	if arg2 ~= "" then
 		local message = PrepareMessage(arg2, arg1)
 		if msgList[message] == nil then
@@ -1300,7 +1308,7 @@ function CH:CHAT_MSG_CHANNEL(event, message, author, ...)
 	-- ignore player messages
 	if author == UnitName("player") then return CH.FindURL(self, event, message, author, ...) end
 	if msgList[msg] and CH.db.throttleInterval ~= 0 then
-		if difftime(time(), msgTime[msg]) <= CH.db.throttleInterval then
+		if (time() - msgTime[msg]) <= CH.db.throttleInterval then
 			blockFlag = true
 		end
 	end
@@ -1325,7 +1333,7 @@ function CH:CHAT_MSG_YELL(event, message, author, ...)
 	-- ignore player messages
 	if author == UnitName("player") then return CH.FindURL(self, event, message, author, ...) end
 	if msgList[msg] and msgCount[msg] > 1 and CH.db.throttleInterval ~= 0 then
-		if difftime(time(), msgTime[msg]) <= CH.db.throttleInterval then
+		if (time() - msgTime[msg]) <= CH.db.throttleInterval then
 			blockFlag = true
 		end
 	end
@@ -1485,7 +1493,7 @@ function CH:UpdateChatKeywords()
 	wipe(CH.Keywords)
 
 	local keywords = self.db.keywords
-	keywords = gsub(keywords,",%s",",")
+	keywords = gsub(keywords, ",%s", ",")
 
 	for stringValue in gmatch(keywords, "[^,]+") do
 		if stringValue ~= "" then
@@ -1495,7 +1503,7 @@ function CH:UpdateChatKeywords()
 end
 
 function CH:UpdateFading()
-	for _, frameName in pairs(CHAT_FRAMES) do
+	for _, frameName in ipairs(CHAT_FRAMES) do
 		local frame = _G[frameName]
 		if frame then
 			frame:SetFading(self.db.fade)
@@ -1508,12 +1516,12 @@ function CH:DisplayChatHistory()
 	if not (data and next(data)) then return end
 
 	CH.SoundTimer = true
-	for _, chat in pairs(CHAT_FRAMES) do
+	for _, chat in ipairs(CHAT_FRAMES) do
 		for i = 1, #data do
 			d = data[i]
 			if type(d) == "table" then
-				for _, messageType in pairs(_G[chat].messageTypeList) do
-					if gsub(strsub(d[50],10),"_INFORM","") == messageType then
+				for _, messageType in ipairs(_G[chat].messageTypeList) do
+					if gsub(strsub(d[50], 10), "_INFORM", "") == messageType then
 						CH:ChatFrame_MessageEventHandler(_G[chat],d[50],d[1],d[2],d[3],d[4],d[5],d[6],d[7],d[8],d[9],d[10],d[11],d[12],0,"ElvUI_ChatHistory",d[51],d[52])
 					end
 				end
@@ -1525,14 +1533,15 @@ end
 
 tremove(ChatTypeGroup.GUILD, 2)
 function CH:DelayGuildMOTD()
-	local delay, checks, delayFrame, chat = 0, 0, CreateFrame("Frame")
+	local delay, checks, chat = 0, 0
+	local delayFrame = CreateFrame("Frame")
 	tinsert(ChatTypeGroup.GUILD, 2, "GUILD_MOTD")
 	delayFrame:SetScript("OnUpdate", function(df, elapsed)
 		delay = delay + elapsed
 		if delay < 5 then return end
 		local msg = GetGuildRosterMOTD()
 		if msg and strlen(msg) > 0 then
-			for _, frame in pairs(CHAT_FRAMES) do
+			for _, frame in ipairs(CHAT_FRAMES) do
 				chat = _G[frame]
 				if chat and chat:IsEventRegistered("CHAT_MSG_GUILD") then
 					CH:ChatFrame_SystemEventHandler(chat, "GUILD_MOTD", msg)
@@ -1575,7 +1584,7 @@ function CH:SaveChatHistory(event, ...)
 		local message, author = ...
 		local msg = PrepareMessage(author, message)
 		if author ~= E.myname and msgList[msg] then
-			if difftime(time(), msgTime[msg]) <= CH.db.throttleInterval then
+			if (time() - msgTime[msg]) <= CH.db.throttleInterval then
 				return
 			end
 		end
@@ -1781,7 +1790,7 @@ function CH:BuildCopyChatFrame()
 	editBox:Height(200)
 	editBox:SetScript("OnEscapePressed", function() CopyChatFrame:Hide() end)
 	scrollArea:SetScrollChild(editBox)
-	CopyChatFrameEditBox:SetScript("OnTextChanged", function(_, userInput)
+	editBox:SetScript("OnTextChanged", function(_, userInput)
 		if userInput then return end
 		local _, max = CopyChatScrollFrameScrollBar:GetMinMaxValues()
 		for _ = 1, max do
@@ -1830,7 +1839,7 @@ function CH:Initialize()
 
 	if not E.db.chat.lockPositions then CH:UpdateChatTabs() end --It was not done in PositionChat, so do it now
 
-	for _, event in pairs(FindURL_Events) do
+	for _, event in ipairs(FindURL_Events) do
 		ChatFrame_AddMessageEventFilter(event, CH[event] or CH.FindURL)
 		local nType = strsub(event, 10)
 		if nType ~= "AFK" and nType ~= "DND" then
@@ -1846,8 +1855,6 @@ function CH:Initialize()
 		local chatType = editbox:GetAttribute("chatType")
 		if not chatType then return end
 
-		local ChatTypeInfo = _G.ChatTypeInfo
-		local info = ChatTypeInfo[chatType]
 		local chanTarget = editbox:GetAttribute("channelTarget")
 		local chanName = chanTarget and GetChannelName(chanTarget)
 
@@ -1859,10 +1866,11 @@ function CH:Initialize()
 			if chanName == 0 then
 				editbox:SetBackdropBorderColor(unpack(E.media.bordercolor))
 			else
-				info = ChatTypeInfo[chatType..chanName]
+				local info = ChatTypeInfo[chatType..chanName]
 				editbox:SetBackdropBorderColor(info.r, info.g, info.b)
 			end
 		else
+			local info = ChatTypeInfo[chatType]
 			editbox:SetBackdropBorderColor(info.r, info.g, info.b)
 		end
 	end)
@@ -1877,7 +1885,7 @@ function CH:Initialize()
 	end)
 
 	-- Combat Log Skinning (credit: Aftermathh)
-	local CombatLogButton = _G.CombatLogQuickButtonFrame_Custom
+	local CombatLogButton = CombatLogQuickButtonFrame_Custom
 	CombatLogButton:StripTextures()
 	CombatLogButton:CreateBackdrop("Default", true)
 	CombatLogButton.backdrop:Point("TOPLEFT", 0, -1)

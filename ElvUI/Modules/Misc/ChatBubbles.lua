@@ -1,11 +1,11 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local M = E:GetModule("Misc")
 local CH = E:GetModule("Chat")
 
 --Lua functions
 local select, unpack = select, unpack
+local format, gmatch, gsub, lower, match = string.format, string.gmatch, string.gsub, string.lower, string.match
 --WoW API / Variables
-local CreateFrame = CreateFrame
 local GetPlayerInfoByGUID = GetPlayerInfoByGUID
 local WorldFrame = WorldFrame
 local WorldGetChildren = WorldFrame.GetChildren
@@ -39,18 +39,19 @@ function M:UpdateBubbleBorder()
 	end
 
 	if E.private.chat.enable and E.private.general.classColorMentionsSpeech then
-		local classColorTable, lowerCaseWord, isFirstWord, rebuiltString, tempWord, wordMatch, classMatch
-		if text and text:match("%s-%S+%s*") then
-			for word in text:gmatch("%s-%S+%s*") do
-				tempWord = word:gsub("^[%s%p]-([^%s%p]+)([%-]?[^%s%p]-)[%s%p]*$","%1%2")
-				lowerCaseWord = tempWord:lower()
+		if text and match(text, "%s-%S+%s*") then
+			local classColorTable, lowerCaseWord, isFirstWord, rebuiltString, tempWord, wordMatch, classMatch
+
+			for word in gmatch(text, "%s-%S+%s*") do
+				tempWord = gsub(word, "^[%s%p]-([^%s%p]+)([%-]?[^%s%p]-)[%s%p]*$", "%1%2")
+				lowerCaseWord = lower(tempWord)
 
 				classMatch = CH.ClassNames[lowerCaseWord]
 				wordMatch = classMatch and lowerCaseWord
 
 				if wordMatch and not E.global.chat.classColorMentionExcludedNames[wordMatch] then
 					classColorTable = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[classMatch] or RAID_CLASS_COLORS[classMatch]
-					word = word:gsub(tempWord:gsub("%-","%%-"), format("\124cff%.2x%.2x%.2x%s\124r", classColorTable.r*255, classColorTable.g*255, classColorTable.b*255, tempWord))
+					word = gsub(word, gsub(tempWord, "%-", "%%-"), format("\124cff%.2x%.2x%.2x%s\124r", classColorTable.r*255, classColorTable.g*255, classColorTable.b*255, tempWord))
 				end
 
 				if not isFirstWord then
@@ -61,7 +62,7 @@ function M:UpdateBubbleBorder()
 				end
 			end
 
-			if rebuiltString ~= nil then
+			if rebuiltString then
 				self.text:SetText(rebuiltString)
 			end
 		end
@@ -71,14 +72,15 @@ end
 function M:AddChatBubbleName(chatBubble, guid, name)
 	if not name then return end
 
-	local defaultColor, color = "|cffffffff"
-	if guid ~= nil and guid ~= "" then
+	local color
+	if guid and guid ~= "" then
 		local _, class = GetPlayerInfoByGUID(guid)
 		if class then
-			color = (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] and E:RGBToHex(CUSTOM_CLASS_COLORS[class].r, CUSTOM_CLASS_COLORS[class].g, CUSTOM_CLASS_COLORS[class].b)) or (RAID_CLASS_COLORS[class] and E:RGBToHex(RAID_CLASS_COLORS[class].r, RAID_CLASS_COLORS[class].g, RAID_CLASS_COLORS[class].b))
+			color = (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] and E:RGBToHex(CUSTOM_CLASS_COLORS[class].r, CUSTOM_CLASS_COLORS[class].g, CUSTOM_CLASS_COLORS[class].b))
+				or (RAID_CLASS_COLORS[class] and E:RGBToHex(RAID_CLASS_COLORS[class].r, RAID_CLASS_COLORS[class].g, RAID_CLASS_COLORS[class].b))
 		end
 	else
-		color = defaultColor
+		color = "|cffffffff"
 	end
 
 	chatBubble.Name:SetFormattedText("%s%s|r", color, name)
@@ -122,56 +124,59 @@ function M:SkinBubble(frame)
 
 		local r, g, b = frame.text:GetTextColor()
 		if not E.PixelMode then
+			local mult2 = mult * 2
+			local mult3 = mult * 3
+
 			frame.backdrop = frame:CreateTexture(nil, "BACKGROUND")
 			frame.backdrop:SetAllPoints(frame)
 			frame.backdrop:SetTexture(unpack(E.media.backdropfadecolor))
 
 			frame.bordertop = frame:CreateTexture(nil, "ARTWORK")
-			frame.bordertop:SetPoint("TOPLEFT", frame, "TOPLEFT", -mult*2, mult*2)
-			frame.bordertop:SetPoint("TOPRIGHT", frame, "TOPRIGHT", mult*2, mult*2)
+			frame.bordertop:SetPoint("TOPLEFT", frame, "TOPLEFT", -mult2, mult2)
+			frame.bordertop:SetPoint("TOPRIGHT", frame, "TOPRIGHT", mult2, mult2)
 			frame.bordertop:SetHeight(mult)
 			frame.bordertop:SetTexture(r, g, b)
 
 			frame.bordertop.backdrop = frame:CreateTexture(nil, "BORDER")
 			frame.bordertop.backdrop:SetPoint("TOPLEFT", frame.bordertop, "TOPLEFT", -mult, mult)
 			frame.bordertop.backdrop:SetPoint("TOPRIGHT", frame.bordertop, "TOPRIGHT", mult, mult)
-			frame.bordertop.backdrop:SetHeight(mult * 3)
+			frame.bordertop.backdrop:SetHeight(mult3)
 			frame.bordertop.backdrop:SetTexture(0, 0, 0)
 
 			frame.borderbottom = frame:CreateTexture(nil, "ARTWORK")
-			frame.borderbottom:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", -mult*2, -mult*2)
-			frame.borderbottom:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", mult*2, -mult*2)
+			frame.borderbottom:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", -mult2, -mult2)
+			frame.borderbottom:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", mult2, -mult2)
 			frame.borderbottom:SetHeight(mult)
 			frame.borderbottom:SetTexture(r, g, b)
 
 			frame.borderbottom.backdrop = frame:CreateTexture(nil, "BORDER")
 			frame.borderbottom.backdrop:SetPoint("BOTTOMLEFT", frame.borderbottom, "BOTTOMLEFT", -mult, -mult)
 			frame.borderbottom.backdrop:SetPoint("BOTTOMRIGHT", frame.borderbottom, "BOTTOMRIGHT", mult, -mult)
-			frame.borderbottom.backdrop:SetHeight(mult * 3)
+			frame.borderbottom.backdrop:SetHeight(mult3)
 			frame.borderbottom.backdrop:SetTexture(0, 0, 0)
 
 			frame.borderleft = frame:CreateTexture(nil, "ARTWORK")
-			frame.borderleft:SetPoint("TOPLEFT", frame, "TOPLEFT", -mult*2, mult*2)
-			frame.borderleft:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", mult*2, -mult*2)
+			frame.borderleft:SetPoint("TOPLEFT", frame, "TOPLEFT", -mult2, mult2)
+			frame.borderleft:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", mult2, -mult2)
 			frame.borderleft:SetWidth(mult)
 			frame.borderleft:SetTexture(r, g, b)
 
 			frame.borderleft.backdrop = frame:CreateTexture(nil, "BORDER")
 			frame.borderleft.backdrop:SetPoint("TOPLEFT", frame.borderleft, "TOPLEFT", -mult, mult)
 			frame.borderleft.backdrop:SetPoint("BOTTOMLEFT", frame.borderleft, "BOTTOMLEFT", -mult, -mult)
-			frame.borderleft.backdrop:SetWidth(mult * 3)
+			frame.borderleft.backdrop:SetWidth(mult3)
 			frame.borderleft.backdrop:SetTexture(0, 0, 0)
 
 			frame.borderright = frame:CreateTexture(nil, "ARTWORK")
-			frame.borderright:SetPoint("TOPRIGHT", frame, "TOPRIGHT", mult*2, mult*2)
-			frame.borderright:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -mult*2, -mult*2)
+			frame.borderright:SetPoint("TOPRIGHT", frame, "TOPRIGHT", mult2, mult2)
+			frame.borderright:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -mult2, -mult2)
 			frame.borderright:SetWidth(mult)
 			frame.borderright:SetTexture(r, g, b)
 
 			frame.borderright.backdrop = frame:CreateTexture(nil, "BORDER")
 			frame.borderright.backdrop:SetPoint("TOPRIGHT", frame.borderright, "TOPRIGHT", mult, mult)
 			frame.borderright.backdrop:SetPoint("BOTTOMRIGHT", frame.borderright, "BOTTOMRIGHT", mult, -mult)
-			frame.borderright.backdrop:SetWidth(mult * 3)
+			frame.borderright.backdrop:SetWidth(mult3)
 			frame.borderright.backdrop:SetTexture(0, 0, 0)
 		else
 			frame:SetBackdropColor(unpack(E.media.backdropfadecolor))
@@ -204,13 +209,13 @@ function M:SkinBubble(frame)
 end
 
 function M:IsChatBubble(frame)
+	local region
 	for i = 1, frame:GetNumRegions() do
-		local region = select(i, frame:GetRegions())
+		region = select(i, frame:GetRegions())
 		if region.GetTexture and region:GetTexture() and region:GetTexture() == [[Interface\Tooltips\ChatBubble-Background]] then
 			return true
 		end
 	end
-	return false
 end
 
 local function ChatBubble_OnEvent(self, event, msg, sender, _, _, _, _, _, _, _, _, _, guid)
@@ -221,35 +226,36 @@ local function ChatBubble_OnEvent(self, event, msg, sender, _, _, _, _, _, _, _,
 end
 
 local numChildren = 0
-local function ChatBubble_OnUpdate(self, elapsed)
-	if not M.BubbleFrame then return end
-	if not M.BubbleFrame.lastupdate then
-		M.BubbleFrame.lastupdate = -2 -- wait 2 seconds before hooking frames
-	end
+local function findChatBubbles(...)
+	local argc = select("#", ...)
+	if argc == numChildren then return end
 
-	M.BubbleFrame.lastupdate = M.BubbleFrame.lastupdate + elapsed
-	if M.BubbleFrame.lastupdate < .1 then return end
-	M.BubbleFrame.lastupdate = 0
-
-	local count = select("#", WorldGetChildren(WorldFrame))
-	if count ~= numChildren then
-		for i = numChildren + 1, count do
-			local frame = select(i, WorldGetChildren(WorldFrame))
-
-			if M:IsChatBubble(frame) then
-				if not frame.isSkinnedElvUI then
-					M:SkinBubble(frame)
-				end
+	local frame
+	for i = numChildren + 1, argc do
+		frame = select(i, ...)
+		if M:IsChatBubble(frame) then
+			if not frame.isSkinnedElvUI then
+				M:SkinBubble(frame)
 			end
 		end
-		numChildren = count
 	end
+
+	numChildren = argc
+end
+
+local function ChatBubble_OnUpdate(self, elapsed)
+	self.lastupdate = self.lastupdate + elapsed
+	if self.lastupdate < .1 then return end
+	self.lastupdate = 0
+
+	findChatBubbles(WorldGetChildren(WorldFrame))
 end
 
 function M:LoadChatBubbles()
 	if E.private.general.chatBubbles == "disabled" then return end
 
 	self.BubbleFrame = CreateFrame("Frame")
+	self.BubbleFrame.lastupdate = -2 -- wait 2 seconds before hooking frames
 
 	self.BubbleFrame:RegisterEvent("CHAT_MSG_SAY")
 	self.BubbleFrame:RegisterEvent("CHAT_MSG_YELL")

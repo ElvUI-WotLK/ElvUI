@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local M = E:GetModule("Minimap")
 local Reminder = E:GetModule("ReminderBuffs")
 
@@ -68,8 +68,9 @@ function M:GetLocTextColor()
 	end
 end
 
-function M:ADDON_LOADED(_, addon)
+function M:ADDON_LOADED(event, addon)
 	if addon == "Blizzard_TimeManager" then
+		self:UnregisterEvent(event)
 		TimeManagerClockButton:Kill()
 	end
 end
@@ -90,10 +91,12 @@ function M:Minimap_OnMouseUp(btn)
 end
 
 function M:Minimap_OnMouseWheel(d)
-	if d > 0 then
-		MinimapZoomIn:Click()
-	elseif d < 0 then
-		MinimapZoomOut:Click()
+	local zoomLevel = Minimap:GetZoom()
+
+	if d > 0 and zoomLevel < 5 then
+		Minimap:SetZoom(zoomLevel + 1)
+	elseif d < 0 and zoomLevel > 0 then
+		Minimap:SetZoom(zoomLevel - 1)
 	end
 end
 
@@ -109,20 +112,79 @@ function M:PLAYER_REGEN_ENABLED()
 	self:UpdateSettings()
 end
 
+function M:CreateFarmModeMap()
+	local fm = CreateFrame("Minimap", "FarmModeMap", E.UIParent)
+	fm:Size(E.db.farmSize)
+	fm:Point("TOP", E.UIParent, "TOP", 0, -120)
+	fm:SetClampedToScreen(true)
+	fm:CreateBackdrop("Default")
+	fm:EnableMouseWheel(true)
+	fm:SetScript("OnMouseWheel", M.Minimap_OnMouseWheel)
+	fm:SetScript("OnMouseUp", M.Minimap_OnMouseUp)
+	fm:RegisterForDrag("LeftButton", "RightButton")
+	fm:SetMovable(true)
+	fm:SetScript("OnDragStart", function(self) self:StartMoving() end)
+	fm:SetScript("OnDragStop", function(self) self:StopMovingOrSizing() end)
+	fm:Hide()
+
+	self.farmModeMap = fm
+
+	fm:SetScript("OnShow", function()
+		if BuffsMover and not E:HasMoverBeenMoved("BuffsMover") then
+			BuffsMover:ClearAllPoints()
+			BuffsMover:Point("TOPRIGHT", E.UIParent, "TOPRIGHT", -3, -3)
+		end
+
+		if DebuffsMover and not E:HasMoverBeenMoved("DebuffsMover") then
+			DebuffsMover:ClearAllPoints()
+			DebuffsMover:Point("TOPRIGHT", ElvUIPlayerBuffs, "BOTTOMRIGHT", 0, -3)
+		end
+
+		MinimapCluster:ClearAllPoints()
+		MinimapCluster:SetAllPoints(fm)
+
+		if IsAddOnLoaded("Routes") then
+			LibStub("AceAddon-3.0"):GetAddon("Routes"):ReparentMinimap(fm)
+		end
+
+		if IsAddOnLoaded("GatherMate2") then
+			LibStub("AceAddon-3.0"):GetAddon("GatherMate2"):GetModule("Display"):ReparentMinimapPins(fm)
+		end
+	end)
+
+	fm:SetScript("OnHide", function()
+		if BuffsMover and not E:HasMoverBeenMoved("BuffsMover") then
+			E:ResetMovers(L["Player Buffs"])
+		end
+
+		if DebuffsMover and not E:HasMoverBeenMoved("DebuffsMover") then
+			E:ResetMovers(L["Player Debuffs"])
+		end
+
+		MinimapCluster:ClearAllPoints()
+		MinimapCluster:SetAllPoints(Minimap)
+
+		if IsAddOnLoaded("Routes") then
+			LibStub("AceAddon-3.0"):GetAddon("Routes"):ReparentMinimap(Minimap)
+		end
+
+		if IsAddOnLoaded("GatherMate2") then
+			LibStub("AceAddon-3.0"):GetAddon("GatherMate2"):GetModule("Display"):ReparentMinimapPins(Minimap)
+		end
+	end)
+end
+
 local isResetting
 local function ResetZoom()
 	Minimap:SetZoom(0)
-	MinimapZoomIn:Enable() --Reset enabled state of buttons
-	MinimapZoomOut:Disable()
-	isResetting = false
+	isResetting = nil
 end
-local function SetupZoomReset()
-	if E.db.general.minimap.resetZoom.enable and not isResetting then
+local function SetupZoomReset(self, zoomLevel)
+	if not isResetting and zoomLevel > 0 and E.db.general.minimap.resetZoom.enable then
 		isResetting = true
 		E:Delay(E.db.general.minimap.resetZoom.time, ResetZoom)
 	end
 end
-hooksecurefunc(Minimap, "SetZoom", SetupZoomReset)
 
 function M:UpdateSettings()
 	if InCombatLockdown() then
@@ -303,8 +365,6 @@ function M:Initialize()
 		return
 	end
 
-	self.Initialized = true
-
 	--Support for other mods
 	function GetMinimapShape()
 		return "SQUARE"
@@ -361,7 +421,11 @@ function M:Initialize()
 
 	MiniMapInstanceDifficulty:SetParent(Minimap)
 
-	if TimeManagerClockButton then TimeManagerClockButton:Kill() end
+	if TimeManagerClockButton then
+		TimeManagerClockButton:Kill()
+	else
+		self:RegisterEvent("ADDON_LOADED")
+	end
 
 	E:CreateMover(MMHolder, "MinimapMover", L["Minimap"], nil, nil, MinimapPostDrag, nil, nil, "maps,minimap")
 
@@ -373,71 +437,12 @@ function M:Initialize()
 	self:RegisterEvent("ZONE_CHANGED", "Update_ZoneText")
 	self:RegisterEvent("ZONE_CHANGED_INDOORS", "Update_ZoneText")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", "Update_ZoneText")
-	self:RegisterEvent("ADDON_LOADED")
 
-	local fm = CreateFrame("Minimap", "FarmModeMap", E.UIParent)
-	fm:Size(E.db.farmSize)
-	fm:Point("TOP", E.UIParent, "TOP", 0, -120)
-	fm:SetClampedToScreen(true)
-	fm:CreateBackdrop("Default")
-	fm:EnableMouseWheel(true)
-	fm:SetScript("OnMouseWheel", M.Minimap_OnMouseWheel)
-	fm:SetScript("OnMouseUp", M.Minimap_OnMouseUp)
-	fm:RegisterForDrag("LeftButton", "RightButton")
-	fm:SetMovable(true)
-	fm:SetScript("OnDragStart", function(self) self:StartMoving() end)
-	fm:SetScript("OnDragStop", function(self) self:StopMovingOrSizing() end)
-	fm:Hide()
+	hooksecurefunc(Minimap, "SetZoom", SetupZoomReset)
 
-	FarmModeMap:SetScript("OnShow", function()
-		if BuffsMover and not E:HasMoverBeenMoved("BuffsMover") then
-			BuffsMover:ClearAllPoints()
-			BuffsMover:Point("TOPRIGHT", E.UIParent, "TOPRIGHT", -3, -3)
-		end
+	self:CreateFarmModeMap()
 
-		if DebuffsMover and not E:HasMoverBeenMoved("DebuffsMover") then
-			DebuffsMover:ClearAllPoints()
-			DebuffsMover:Point("TOPRIGHT", ElvUIPlayerBuffs, "BOTTOMRIGHT", 0, -3)
-		end
-
-		MinimapCluster:ClearAllPoints()
-		MinimapCluster:SetAllPoints(FarmModeMap)
-
-		if IsAddOnLoaded("Routes") then
-			LibStub("AceAddon-3.0"):GetAddon("Routes"):ReparentMinimap(FarmModeMap)
-		end
-
-		if IsAddOnLoaded("GatherMate2") then
-			LibStub("AceAddon-3.0"):GetAddon("GatherMate2"):GetModule("Display"):ReparentMinimapPins(FarmModeMap)
-		end
-	end)
-
-	FarmModeMap:SetScript("OnHide", function()
-		if BuffsMover and not E:HasMoverBeenMoved("BuffsMover") then
-			E:ResetMovers(L["Player Buffs"])
-		end
-
-		if DebuffsMover and not E:HasMoverBeenMoved("DebuffsMover") then
-			E:ResetMovers(L["Player Debuffs"])
-		end
-
-		MinimapCluster:ClearAllPoints()
-		MinimapCluster:SetAllPoints(Minimap)
-
-		if IsAddOnLoaded("Routes") then
-			LibStub("AceAddon-3.0"):GetAddon("Routes"):ReparentMinimap(Minimap)
-		end
-
-		if IsAddOnLoaded("GatherMate2") then
-			LibStub("AceAddon-3.0"):GetAddon("GatherMate2"):GetModule("Display"):ReparentMinimapPins(Minimap)
-		end
-	end)
-
-	UIParent:HookScript("OnShow", function()
-		if not FarmModeMap.enabled then
-			FarmModeMap:Hide()
-		end
-	end)
+	self.Initialized = true
 end
 
 local function InitializeCallback()

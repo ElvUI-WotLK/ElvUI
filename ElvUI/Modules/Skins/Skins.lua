@@ -118,10 +118,12 @@ function S:HandleScrollBar(frame, thumbTrimY, thumbTrimX)
 	frame.backdrop:Point("BOTTOMRIGHT", ScrollDownButton or frame, ScrollUpButton and "TOPRIGHT" or "BOTTOMRIGHT", 0, 1)
 	frame.backdrop:SetFrameLevel(frame.backdrop:GetFrameLevel() + 1)
 
-	for _, Button in pairs({ScrollUpButton, ScrollDownButton}) do
-		if Button then
-			S:HandleNextPrevButton(Button)
-		end
+
+	if ScrollUpButton then
+		S:HandleNextPrevButton(ScrollUpButton)
+	end
+	if ScrollDownButton then
+		S:HandleNextPrevButton(ScrollDownButton)
 	end
 
 	if Thumb and not Thumb.backdrop then
@@ -151,7 +153,7 @@ local tabs = {
 function S:HandleTab(tab, noBackdrop)
 	if (not tab) or (tab.backdrop and not noBackdrop) then return end
 
-	for _, object in pairs(tabs) do
+	for _, object in ipairs(tabs) do
 		local tex = _G[tab:GetName()..object]
 		if tex then
 			tex:SetTexture()

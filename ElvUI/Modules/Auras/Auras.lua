@@ -61,6 +61,11 @@ local IS_HORIZONTAL_GROWTH = {
 	LEFT_UP = true
 }
 
+local enchantableSlots = {
+  [1] = 16,
+  [2] = 17
+}
+
 local weaponEnchantTime = {}
 A.EnchanData = weaponEnchantTime
 
@@ -106,7 +111,7 @@ end
 
 local UpdateTooltip = function(self)
 	if self.IsWeapon then
-		GameTooltip:SetInventoryItem("player", self:GetID() == 1 and 16 or 17)
+		GameTooltip:SetInventoryItem("player", enchantableSlots[self:GetID()])
 	else
 		GameTooltip:SetUnitAura("player", self:GetID(), self:GetParent().filter)
 	end
@@ -125,11 +130,7 @@ end
 
 local OnClick = function(self)
 	if self.IsWeapon then
-		if self:GetID() == 1 then
-			CancelItemTempEnchantment(1)
-		elseif self:GetID() == 2 then
-			CancelItemTempEnchantment(2)
-		end
+		CancelItemTempEnchantment(self:GetID())
 	else
 		CancelUnitBuff("player", self:GetID(), self:GetParent().filter)
 	end
@@ -240,11 +241,6 @@ function A:CooldownText_Update(button)
 		button.timerOptions.fontOptions = nil
 	end
 end
-
-local enchantableSlots = {
-  [1] = 16,
-  [2] = 17
-}
 
 function A:HasEnchant(index, weapon, expiration)
 	if not weapon then

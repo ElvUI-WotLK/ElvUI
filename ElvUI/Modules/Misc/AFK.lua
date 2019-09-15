@@ -6,7 +6,7 @@ local CH = E:GetModule("Chat")
 local _G = _G
 local tostring = tostring
 local floor = math.floor
-local format, strsub, gsub = string.format, string.sub, string.gsub
+local format, gsub, sub, upper = string.format, string.gsub, string.sub, string.upper
 --WoW API / Variables
 local ChatHistory_GetAccessID = ChatHistory_GetAccessID
 local Chat_GetChatCategory = Chat_GetChatCategory
@@ -28,17 +28,20 @@ local Screenshot = Screenshot
 local SetCVar = SetCVar
 local UnitCastingInfo = UnitCastingInfo
 local UnitIsAFK = UnitIsAFK
+
 local AFKstr = _G.AFK
-local DNDstr = _G.DND
+local CHAT_BN_CONVERSATION_GET_LINK = CHAT_BN_CONVERSATION_GET_LINK
+local DND = DND
+local MAX_WOW_CHAT_CHANNELS = MAX_WOW_CHAT_CHANNELS
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS
 
-local CAMERA_SPEED = 0.035
-local ignoreKeys = {
-	LALT = true,
-	LSHIFT = true,
-	RSHIFT = true
-}
+local cameraSpeed = 0.035
 
+local ignoreKeys = {
+	["LALT"] = true,
+	["LSHIFT"] = true,
+	["RSHIFT"] = true
+}
 local printKeys = {
 	["PRINTSCREEN"] = true,
 }
@@ -76,7 +79,7 @@ end
 function AFK:SetAFK(status)
 	if status and not self.isAFK then
 		if InspectFrame then
-			InspectPaperDollFrame:Hide()
+			InspectFrame:Hide()
 		end
 
 		UIParent:Hide()
@@ -84,7 +87,7 @@ function AFK:SetAFK(status)
 
 		E.global.afkEnabled = true
 
-		MoveViewLeftStart(CAMERA_SPEED)
+		MoveViewLeftStart(cameraSpeed)
 
 		if IsInGuild() then
 			local guildName, guildRankName = GetGuildInfo("player")
@@ -121,7 +124,10 @@ function AFK:SetAFK(status)
 		self:CancelTimer(self.timer)
 		self.AFKMode.bottom.time:SetText("00:00")
 
-		self.AFKMode.chat:UnregisterAllEvents()
+		self.AFKMode.chat:UnregisterEvent("CHAT_MSG_WHISPER")
+		self.AFKMode.chat:UnregisterEvent("CHAT_MSG_BN_WHISPER")
+		self.AFKMode.chat:UnregisterEvent("CHAT_MSG_BN_CONVERSATION")
+		self.AFKMode.chat:UnregisterEvent("CHAT_MSG_GUILD")
 		self.AFKMode.chat:Clear()
 
 		self.isAFK = false
@@ -192,73 +198,64 @@ local function OnKeyDown(_, key)
 end
 
 local function Chat_OnMouseWheel(self, delta)
-	if delta == 1 and IsShiftKeyDown() then
-		self:ScrollToTop()
-	elseif delta == -1 and IsShiftKeyDown() then
-		self:ScrollToBottom()
-	elseif delta == -1 then
-		self:ScrollDown()
-	else
-		self:ScrollUp()
+	if delta > 0 then
+		if IsShiftKeyDown() then
+			self:ScrollToTop()
+		else
+			self:ScrollUp()
+		end
+	elseif delta < 0 then
+		if IsShiftKeyDown() then
+			self:ScrollToBottom()
+		else
+			self:ScrollDown()
+		end
 	end
 end
 
 local function Chat_OnEvent(self, event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13)
 	local coloredName = GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12)
-	local type = strsub(event, 10)
-	local info = ChatTypeInfo[type]
+	local chatType = sub(event, 10)
+	local info = ChatTypeInfo[chatType]
 
-	local chatGroup = Chat_GetChatCategory(type)
-	local chatTarget, body
+	local chatGroup = Chat_GetChatCategory(chatType)
+	local chatTarget
 	if chatGroup == "BN_CONVERSATION" then
 		chatTarget = tostring(arg8)
 	elseif chatGroup == "WHISPER" or chatGroup == "BN_WHISPER" then
-		if not(strsub(arg2, 1, 2) == "|K") then
-			chatTarget = arg2:upper()
-		else
-			chatTarget = arg2
-		end
+		chatTarget = upper(arg2)
 	end
 
 	local playerLink
-	if type ~= "BN_WHISPER" and type ~= "BN_CONVERSATION" then
+	if chatType ~= "BN_WHISPER" and chatType ~= "BN_CONVERSATION" then
 		playerLink = "|Hplayer:"..arg2..":"..arg11..":"..chatGroup..(chatTarget and ":"..chatTarget or "").."|h"
 	else
 		playerLink = "|HBNplayer:"..arg2..":"..arg13..":"..arg11..":"..chatGroup..(chatTarget and ":"..chatTarget or "").."|h"
 	end
 
-	local message = arg1
-	--Escape any % characters, as it may otherwise cause an "invalid option in format" error in the next step
-	message = gsub(message, "%%", "%%%%")
+	arg1 = gsub(arg1, "%%", "%%%%")
 
-	local success
-	success, body = pcall(format, _G["CHAT_"..type.."_GET"]..message, playerLink.."["..coloredName.."]".."|h")
-	if not success then
-		E:Print("An error happened in the AFK Chat module. Please screenshot this message and report it. Info:", type, message, _G["CHAT_"..type.."_GET"])
+	local body = format(_G["CHAT_"..chatType.."_GET"]..arg1, playerLink.."["..coloredName.."]".."|h")
+
+	if chatGroup == "BN_CONVERSATION" then
+		body = format(CHAT_BN_CONVERSATION_GET_LINK, arg8, MAX_WOW_CHAT_CHANNELS + arg8)..body
 	end
 
 	local accessID = ChatHistory_GetAccessID(chatGroup, chatTarget)
-	local typeID = ChatHistory_GetAccessID(type, chatTarget, arg12 == "" and arg13 or arg12)
+	local typeID = ChatHistory_GetAccessID(chatType, chatTarget)
+
 	if CH.db.shortChannels then
-		body = body:gsub("|Hchannel:(.-)|h%[(.-)%]|h", CH.ShortChannel)
-		body = body:gsub("^(.-|h) "..L["whispers"], "%1")
-		body = body:gsub("<"..AFKstr..">", "[|cffFF0000"..L["AFK"].."|r] ")
-		body = body:gsub("<"..DNDstr..">", "[|cffE7E716"..L["DND"].."|r] ")
-		body = body:gsub("%[BN_CONVERSATION:", "%[".."")
+		body = gsub(body, "|Hchannel:(.-)|h%[(.-)%]|h", CH.ShortChannel)
+		body = gsub(body, "^(.-|h) "..L["whispers"], "%1")
+		body = gsub(body, "<"..AFKstr..">", "[|cffFF0000"..L["AFK"].."|r] ")
+		body = gsub(body, "<"..DND..">", "[|cffE7E716"..L["DND"].."|r] ")
+		body = gsub(body, "%[BN_CONVERSATION:", "%[".."")
 	end
 
 	self:AddMessage(body, info.r, info.g, info.b, info.id, false, accessID, typeID)
 end
 
 function AFK:Initialize()
-	self.Initialized = true
-
-	if E.global.afkEnabled then
-		E.global.afkEnabled = nil
-	end
-
-	local classColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass]
-
 	self.AFKMode = CreateFrame("Frame", "ElvUIAFKFrame")
 	self.AFKMode:SetFrameLevel(1)
 	self.AFKMode:SetScale(UIParent:GetScale())
@@ -302,6 +299,7 @@ function AFK:Initialize()
 	self.AFKMode.bottom.faction:SetTexture("Interface\\AddOns\\ElvUI\\media\\textures\\"..E.myfaction.."-Logo")
 	self.AFKMode.bottom.faction:Size(140)
 
+	local classColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass]
 	self.AFKMode.bottom.name = self.AFKMode.bottom:CreateFontString(nil, "OVERLAY")
 	self.AFKMode.bottom.name:FontTemplate(nil, 20)
 	self.AFKMode.bottom.name:SetFormattedText("%s - %s", E.myname, E.myrealm)
@@ -326,7 +324,11 @@ function AFK:Initialize()
 	self.AFKMode.bottom.model:SetFacing(6)
 	self.AFKMode.bottom.model:SetUnit("player")
 
-	self:Toggle()
+	if E.db.general.afk then
+		self:Toggle()
+	end
+
+	self.Initialized = true
 end
 
 local function InitializeCallback()
