@@ -4,7 +4,13 @@ local LSM = E.Libs.LSM
 
 --Lua functions
 local pairs, unpack = pairs, unpack
+local format = string.format
 --WoW API / Variables
+local CooldownFrame_SetTimer = CooldownFrame_SetTimer
+local CreateFrame = CreateFrame
+local GetSpellInfo = GetSpellInfo
+local GetTime = GetTime
+local UnitAura = UnitAura
 
 RB.Spell1Buffs = {
 	67016, -- Flask of the North (SP)
@@ -121,7 +127,7 @@ function RB:UpdateReminderTime(elapsed)
 
 	local timervalue, formatid
 	timervalue, formatid, self.nextUpdate = E:GetTimeInfo(self.expiration, 4)
-	self.timer:SetFormattedText(("%s%s|r"):format(E.TimeColors[formatid], E.TimeFormats[formatid][1]), timervalue)
+	self.timer:SetFormattedText(format("%s%s|r", E.TimeColors[formatid], E.TimeFormats[formatid][1]), timervalue)
 end
 
 function RB:UpdateReminder(event, unit)

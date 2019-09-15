@@ -6,7 +6,7 @@ local Skins = E:GetModule("Skins")
 local _G = _G
 local select, tonumber, pairs = select, tonumber, pairs
 local floor = math.floor
-local find, format = string.find, string.format
+local find, format, upper = string.find, string.format, string.upper
 --WoW API / Variables
 local hooksecurefunc = hooksecurefunc
 local CreateFrame = CreateFrame
@@ -87,7 +87,7 @@ function AB:BindListener(key)
 
 	if key == "MiddleButton" then key = "BUTTON3" end
 	if find(key, "Button%d") then
-		key = key:upper()
+		key = upper(key)
 	end
 
 	local alt = IsAltKeyDown() and "ALT-" or ""

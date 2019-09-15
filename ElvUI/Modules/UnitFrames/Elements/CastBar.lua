@@ -3,7 +3,7 @@ local UF = E:GetModule("UnitFrames")
 
 --Lua functions
 local unpack = unpack
-local abs, min = abs, math.min
+local abs, min = math.abs, math.min
 --WoW API / Variables
 local CreateFrame = CreateFrame
 local UnitIsPlayer = UnitIsPlayer
@@ -82,7 +82,7 @@ function UF:Construct_Castbar(frame, moverName)
 
 	if moverName then
 		local name = frame:GetName()
-		local configName = name:gsub("^ElvUF_", ""):lower()
+		local configName = string.lower(string.gsub(name, "^ElvUF_", ""))
 		E:CreateMover(castbar.Holder, name.."CastbarMover", moverName, nil, -6, nil, "ALL,SOLO", nil, "unitframe,"..configName..",castbar")
 	end
 

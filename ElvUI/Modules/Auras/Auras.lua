@@ -504,7 +504,7 @@ end
 
 local sorters = {}
 for _, key in ipairs{"index", "name", "expires"} do
-	local label = key:upper()
+	local label = string.upper(key)
 	sorters[label] = {}
 	for bool in pairs{[true] = true, [false] = false} do
 		sorters[label][bool] = {}

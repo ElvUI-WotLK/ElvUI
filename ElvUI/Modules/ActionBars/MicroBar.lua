@@ -89,8 +89,8 @@ function AB:UpdateMicroBarVisibility()
 	end
 
 	local visibility = self.db.microbar.visibility
-	if visibility and visibility:match("[\n\r]") then
-		visibility = visibility:gsub("[\n\r]", "")
+	if visibility and string.match(visibility, "[\n\r]") then
+		visibility = string.gsub(visibility, "[\n\r]", "")
 	end
 
 	RegisterStateDriver(ElvUI_MicroBar.visibility, "visibility", (self.db.microbar.enabled and visibility) or "hide")

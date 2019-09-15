@@ -592,7 +592,7 @@ do	--The code in this function is from WeakAuras, credit goes to Mirrored and th
 			if type(v) == "number" then
 				ret = ret..v..",\n"
 			elseif type(v) == "string" then
-				ret = ret.."\""..v:gsub("\\", "\\\\"):gsub("\n", "\\n"):gsub("\"", "\\\""):gsub("\124", "\124\124").."\",\n"
+				ret = ret.."\""..gsub(gsub(gsub(gsub(v, "\\", "\\\\"), "\n", "\\n"), "\"", "\\\""), "\124", "\124\124").."\",\n"
 			elseif type(v) == "boolean" then
 				if v then ret = ret.."true,\n" else ret = ret.."false,\n" end
 			elseif type(v) == "table" then
@@ -671,7 +671,7 @@ do	--The code in this function is from WeakAuras, credit goes to Mirrored and th
 				if type(v) == "number" then
 					ret = ret..v.."\n"
 				elseif type(v) == "string" then
-					ret = ret.."\""..v:gsub("\\", "\\\\"):gsub("\n", "\\n"):gsub("\"", "\\\""):gsub("\124", "\124\124").."\"\n"
+					ret = ret.."\""..gsub(gsub(gsub(gsub(v, "\\", "\\\\"), "\n", "\\n"), "\"", "\\\""), "\124", "\124\124").."\"\n"
 				elseif type(v) == "boolean" then
 					if v then
 						ret = ret.."true\n"

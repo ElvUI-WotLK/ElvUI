@@ -3,8 +3,9 @@ local M = E:GetModule("Misc")
 
 --Lua functions
 local unpack, pairs = unpack, pairs
-local tinsert = table.insert
 local max = math.max
+local find, gsub = string.find, string.gsub
+local tinsert = table.insert
 --WoW API / Variables
 local CloseLoot = CloseLoot
 local CreateFrame = CreateFrame
@@ -222,8 +223,8 @@ function M:LOOT_OPENED(_, autoLoot)
 			local texture, item, quantity, quality, _, isQuestItem, questId, isActive = GetLootSlotInfo(i)
 			local color = ITEM_QUALITY_COLORS[quality]
 
-			if texture and texture:find("INV_Misc_Coin") then
-				item = item:gsub("\n", ", ")
+			if texture and find(texture, "INV_Misc_Coin") then
+				item = gsub(item, "\n", ", ")
 			end
 
 			if quantity and (quantity > 1) then

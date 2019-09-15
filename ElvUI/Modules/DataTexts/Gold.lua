@@ -3,7 +3,7 @@ local DT = E:GetModule("DataTexts")
 
 --Lua functions
 local pairs = pairs
-local strjoin = strjoin
+local format, strjoin = string.format, strjoin
 local tinsert, wipe = tinsert, wipe
 --WoW API / Variables
 local GetBackpackCurrencyInfo = GetBackpackCurrencyInfo
@@ -121,7 +121,7 @@ local function OnEnter(self)
 			elseif currencyType == 2 then
 				icon = "Interface\\PVPFrame\\PVP-Currency-"..E.myfaction
 			end
-			DT.tooltip:AddDoubleLine(currencyString:format(icon, name), count, 1, 1, 1)
+			DT.tooltip:AddDoubleLine(format(currencyString, icon, name), count, 1, 1, 1)
 		end
 	end
 

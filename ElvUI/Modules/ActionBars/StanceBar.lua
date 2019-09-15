@@ -252,8 +252,8 @@ function AB:AdjustMaxStanceButtons(event)
 	end
 
 	local visibility = self.db.stanceBar.visibility
-	if visibility and visibility:match("[\n\r]") then
-		visibility = visibility:gsub("[\n\r]", "")
+	if visibility and string.match(visibility, "[\n\r]") then
+		visibility = string.gsub(visibility, "[\n\r]", "")
 	end
 
 	for i = 1, #bar.buttons do

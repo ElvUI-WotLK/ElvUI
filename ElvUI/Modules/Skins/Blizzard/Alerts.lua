@@ -5,6 +5,7 @@ local S = E:GetModule("Skins")
 local _G = _G
 local unpack = unpack
 local tonumber = tonumber
+local match = string.match
 --WoW API / Variables
 
 local function LoadSkin()
@@ -37,7 +38,7 @@ local function LoadSkin()
 
 			frame.isSkinned = true
 
-			if tonumber(name:match(".+(%d+)")) == MAX_ACHIEVEMENT_ALERTS then
+			if tonumber(match(name, ".+(%d+)")) == MAX_ACHIEVEMENT_ALERTS then
 				S:Unhook("AchievementAlertFrame_GetAlertFrame")
 			end
 		end

@@ -301,7 +301,7 @@ function CH:StyleChat(frame)
 			if strsub(text, 1, 4) == "/tt " then
 				local unitname, realm = UnitName("target")
 				if unitname and realm and not UnitIsSameServer("player", "target") then
-					unitname = unitname.."-"..realm:gsub(" ", "")
+					unitname = unitname.."-"..gsub(realm, " ", "")
 				end
 				ChatFrame_SendTell((unitname or L["Invalid Target"]), ChatFrame1)
 			end
@@ -1144,14 +1144,14 @@ function CH:ChatFrame_MessageEventHandler(frame, event, arg1, arg2, arg3, arg4, 
 			else
 				if not showLink or strlen(arg2) == 0 then
 					if find(arg1, "% ") and GetLocale() == "ruRU" then
-						arg1 = arg1:gsub("%%", "%%s")
+						arg1 = gsub(arg1, "%%", "%%s")
 					end
 					body = format(_G["CHAT_"..chatType.."_GET"]..arg1, pflag..arg2, arg2)
 				else
 					if chatType == "EMOTE" then
 						body = format(_G["CHAT_"..chatType.."_GET"]..arg1, pflag..playerLink..coloredName.."|h")
 					elseif chatType == "TEXT_EMOTE" then
-						body = string.gsub(arg1, arg2, pflag..playerLink..coloredName.."|h", 1)
+						body = gsub(arg1, arg2, pflag..playerLink..coloredName.."|h", 1)
 					else
 						body = format(_G["CHAT_"..chatType.."_GET"]..arg1, pflag..playerLink.."["..coloredName.."]".."|h")
 					end
@@ -1169,15 +1169,15 @@ function CH:ChatFrame_MessageEventHandler(frame, event, arg1, arg2, arg3, arg4, 
 			local accessID = ChatHistory_GetAccessID(chatGroup, chatTarget)
 			local typeID = ChatHistory_GetAccessID(infoType, chatTarget)
 			if CH.db.shortChannels then
-				body = body:gsub("|Hchannel:(.-)|h%[(.-)%]|h", CH.ShortChannel)
-				body = body:gsub("CHANNEL:", "")
-				body = body:gsub("^(.-|h) "..L["whispers"], "%1")
-				body = body:gsub("^(.-|h) "..L["says"], "%1")
-				body = body:gsub("^(.-|h) "..L["yells"], "%1")
-				body = body:gsub("<"..AFK..">", "[|cffFF0000"..L["AFK"].."|r] ")
-				body = body:gsub("<"..DND..">", "[|cffE7E716"..L["DND"].."|r] ")
-				body = body:gsub("%[BN_CONVERSATION:", "%[".."")
-				body = body:gsub("^%["..RAID_WARNING.."%]", "["..L["RW"].."]")
+				body = gsub(body, "|Hchannel:(.-)|h%[(.-)%]|h", CH.ShortChannel)
+				body = gsub(body, "CHANNEL:", "")
+				body = gsub(body, "^(.-|h) "..L["whispers"], "%1")
+				body = gsub(body, "^(.-|h) "..L["says"], "%1")
+				body = gsub(body, "^(.-|h) "..L["yells"], "%1")
+				body = gsub(body, "<"..AFK..">", "[|cffFF0000"..L["AFK"].."|r] ")
+				body = gsub(body, "<"..DND..">", "[|cffE7E716"..L["DND"].."|r] ")
+				body = gsub(body, "%[BN_CONVERSATION:", "%[".."")
+				body = gsub(body, "^%["..RAID_WARNING.."%]", "["..L["RW"].."]")
 			end
 			frame:AddMessage(body, info.r, info.g, info.b, info.id, accessID, typeID, isHistory, historyTime)
 		end

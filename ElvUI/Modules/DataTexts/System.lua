@@ -14,9 +14,12 @@ local GetCVar = GetCVar
 local GetFramerate = GetFramerate
 local GetNetStats = GetNetStats
 local GetNumAddOns = GetNumAddOns
+local HideUIPanel = HideUIPanel
 local IsAddOnLoaded = IsAddOnLoaded
 local IsShiftKeyDown = IsShiftKeyDown
+local PlaySound = PlaySound
 local ResetCPUUsage = ResetCPUUsage
+local ShowUIPanel = ShowUIPanel
 local UpdateAddOnCPUUsage = UpdateAddOnCPUUsage
 local UpdateAddOnMemoryUsage = UpdateAddOnMemoryUsage
 

@@ -50,8 +50,8 @@ function B:SizeAndPositionBagBar()
 	local sortDirection = E.db.bags.bagBar.sortDirection
 
 	local visibility = E.db.bags.bagBar.visibility
-	if visibility and visibility:match("[\n\r]") then
-		visibility = visibility:gsub("[\n\r]","")
+	if visibility and string.match(visibility, "[\n\r]") then
+		visibility = string.gsub(visibility, "[\n\r]","")
 	end
 
 	RegisterStateDriver(ElvUIBags, "visibility", visibility)

@@ -4,7 +4,7 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 local tinsert, tremove, next, wipe, ipairs = tinsert, tremove, next, wipe, ipairs
 local select, tonumber, type, unpack = select, tonumber, type, unpack
 local modf, ceil, floor, abs, mod = math.modf, math.ceil, math.floor, math.abs, mod
-local format, strsub, strupper, gsub, gmatch, utf8sub = format, strsub, strupper, gsub, gmatch, string.utf8sub
+local byte, format, strsub, strupper, gsub, gmatch, utf8sub = string.byte, format, strsub, strupper, gsub, gmatch, string.utf8sub
 local tostring, pairs = tostring, pairs
 --WoW API / Variables
 local CreateFrame = CreateFrame
@@ -204,7 +204,7 @@ function E:ShortenString(str, numChars, dots)
 		local len, pos = 0, 1
 		while pos <= bytes do
 			len = len + 1
-			local c = str:byte(pos)
+			local c = byte(str, pos)
 			if c > 0 and c <= 127 then
 				pos = pos + 1
 			elseif c >= 192 and c <= 223 then

@@ -3,7 +3,7 @@ local M = E:GetModule("Minimap")
 local Reminder = E:GetModule("ReminderBuffs")
 
 --Lua functions
-local utf8sub = string.utf8sub
+local match, utf8sub = string.match, string.utf8sub
 --WoW API / Variables
 local CreateFrame = CreateFrame
 local ToggleCharacter = ToggleCharacter
@@ -77,7 +77,7 @@ end
 function M:Minimap_OnMouseUp(btn)
 	local position = self:GetPoint()
 	if btn == "MiddleButton" or (btn == "RightButton" and IsShiftKeyDown()) then
-		if position:match("LEFT") then
+		if match(position, "LEFT") then
 			EasyMenu(menuList, menuFrame, "cursor", 0, 0, "MENU", 2)
 		else
 			EasyMenu(menuList, menuFrame, "cursor", -160, 0, "MENU", 2)

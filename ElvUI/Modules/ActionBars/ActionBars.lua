@@ -5,7 +5,7 @@ local AB = E:GetModule("ActionBars")
 local _G = _G
 local pairs, select, unpack = pairs, select, unpack
 local ceil = math.ceil
-local format, gsub, split = string.format, string.gsub, string.split
+local format, gsub, match, split = string.format, string.gsub, string.match, string.split
 --WoW API / Variables
 local hooksecurefunc = hooksecurefunc
 local CreateFrame = CreateFrame
@@ -106,8 +106,8 @@ function AB:PositionAndSizeBar(barName)
 	bar.db = self.db[barName]
 	bar.db.position = nil --Depreciated
 
-	if visibility and visibility:match("[\n\r]") then
-		visibility = visibility:gsub("[\n\r]","")
+	if visibility and match(visibility, "[\n\r]") then
+		visibility = gsub(visibility, "[\n\r]","")
 	end
 
 	if numButtons < buttonsPerRow then
@@ -510,8 +510,8 @@ function AB:GetPage(bar, defaultPage, condition)
 	if not condition then condition = "" end
 	if not page then
 		page = ""
-	elseif page:match("[\n\r]") then
-		page = page:gsub("[\n\r]","")
+	elseif match(page, "[\n\r]") then
+		page = gsub(page, "[\n\r]","")
 	end
 
 	if page then

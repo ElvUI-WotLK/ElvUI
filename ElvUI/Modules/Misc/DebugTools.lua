@@ -2,7 +2,10 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 local D = E:GetModule("DebugTools")
 
 --Lua functions
+local format = string.format
 --WoW API / Variables
+local GetCVarBool = GetCVarBool
+local InCombatLockdown = InCombatLockdown
 
 function D:ModifyErrorFrame()
 	ScriptErrorsFrameScrollFrameText.cursorOffset = 0
@@ -122,7 +125,7 @@ end
 
 function D:TaintError(event, addonName, addonFunc)
 	if GetCVarBool("scriptErrors") ~= 1 or E.db.general.taintLog ~= true then return end
-	ScriptErrorsFrame_OnError(L["%s: %s tried to call the protected function '%s'."]:format(event, addonName or "<name>", addonFunc or "<func>"), false)
+	ScriptErrorsFrame_OnError(format(L["%s: %s tried to call the protected function '%s'."], event, addonName or "<name>", addonFunc or "<func>"), false)
 end
 
 function D:StaticPopup_Show(name)

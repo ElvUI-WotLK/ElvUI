@@ -4,7 +4,7 @@ local Search = E.Libs.ItemSearch
 
 --Lua functions
 local ipairs, pairs, select, unpack, pcall = ipairs, pairs, select, unpack, pcall
-local strmatch, gmatch, strfind = strmatch, gmatch, strfind
+local strmatch, gmatch, strfind = strmatch, string.gmatch, strfind
 local tinsert, tremove, sort, wipe = tinsert, tremove, sort, wipe
 local tonumber, floor, band = tonumber, floor, bit.band
 --WoW API / Variables
@@ -33,10 +33,10 @@ local SplitContainerItem = SplitContainerItem
 local SplitGuildBankItem = SplitGuildBankItem
 local ARMOR, ENCHSLOT_WEAPON = ARMOR, ENCHSLOT_WEAPON
 
-local guildBags = {51, 52, 53, 54, 55, 56, 57, 58}
-local bankBags = {BANK_CONTAINER}
 local MAX_MOVE_TIME = 1.25
+local guildBags = {51, 52, 53, 54, 55, 56, 57, 58}
 
+local bankBags = {BANK_CONTAINER}
 for i = NUM_BAG_SLOTS + 1, NUM_BAG_SLOTS + NUM_BANKBAGSLOTS do
 	tinsert(bankBags, i)
 end
@@ -53,7 +53,6 @@ end
 for _, i in ipairs(bankBags) do
 	tinsert(allBags, i)
 end
-
 for _, i in ipairs(guildBags) do
 	tinsert(allBags, i)
 end
@@ -83,8 +82,8 @@ local specialtyBags = {}
 local emptySlots = {}
 
 local moveRetries = 0
-local lastItemID, lockStop, lastDestination, lastMove
 local moveTracker = {}
+local lastItemID, lockStop, lastDestination, lastMove
 
 local inventorySlots = {
 	INVTYPE_AMMO = 0,
@@ -883,7 +882,7 @@ function B:CommandDecorator(func, groupsDefaults)
 		if not groups or #groups == 0 then
 			groups = groupsDefaults
 		end
-		for bags in (groups or ""):gmatch("%S+") do
+		for bags in gmatch((groups or ""), "%S+") do
 			if bags == "guild" then
 				bags = B:GetGroup(bags)
 				if bags then

@@ -3,7 +3,10 @@ local UF = E:GetModule("UnitFrames")
 local LSM = E.Libs.LSM
 
 --Lua functions
-local unpack, strfind, format, strsplit, sort, ceil = unpack, strfind, format, strsplit, sort, ceil
+local unpack = unpack
+local ceil = math.ceil
+local find, format, split = string.find, string.format, string.split
+local sort = table.sort
 --WoW API / Variables
 local CreateFrame = CreateFrame
 local IsShiftKeyDown = IsShiftKeyDown
@@ -124,7 +127,7 @@ function UF:UpdateAuraCooldownPosition(button)
 	if point == "CENTER" then
 		button.cd.timer.text:Point(point, 1, 0)
 	else
-		local bottom, right = point:find("BOTTOM"), point:find("RIGHT")
+		local bottom, right = find(point, "BOTTOM"), find(point, "RIGHT")
 		button.cd.timer.text:Point(point, right and -1 or 1, bottom and 1 or -1)
 	end
 
@@ -136,7 +139,7 @@ function UF:Configure_Auras(frame, auraType)
 
 	local db = frame.db
 	local auras = frame[auraType]
-	auraType = auraType:lower()
+	auraType = string.lower(auraType)
 	auras.db = db[auraType]
 
 	local rows = auras.db.numrows
@@ -193,8 +196,8 @@ function UF:Configure_Auras(frame, auraType)
 	auras:ClearAllPoints()
 	auras:Point(E.InversePoints[auras.db.anchorPoint], attachTo, auras.db.anchorPoint, x + auras.db.xOffset, y + auras.db.yOffset)
 	auras:Height(auras.size * rows)
-	auras["growth-y"] = strfind(auras.db.anchorPoint, "TOP") and "UP" or "DOWN"
-	auras["growth-x"] = auras.db.anchorPoint == "LEFT" and "LEFT" or auras.db.anchorPoint == "RIGHT" and "RIGHT" or (strfind(auras.db.anchorPoint, "LEFT") and "RIGHT" or "LEFT")
+	auras["growth-y"] = find(auras.db.anchorPoint, "TOP") and "UP" or "DOWN"
+	auras["growth-x"] = auras.db.anchorPoint == "LEFT" and "LEFT" or auras.db.anchorPoint == "RIGHT" and "RIGHT" or (find(auras.db.anchorPoint, "LEFT") and "RIGHT" or "LEFT")
 	auras.initialAnchor = E.InversePoints[auras.db.anchorPoint]
 
 	--These are needed for SmartAuraPosition
@@ -356,7 +359,7 @@ function UF:PostUpdateAura(unit, button)
 	if button.isDebuff then
 		if not button.isFriend and not button.isPlayer then --[[and (not E.isDebuffWhiteList[name])]]
 			button:SetBackdropBorderColor(0.9, 0.1, 0.1)
-			button.icon:SetDesaturated((unit and not strfind(unit, "arena%d")) and true or false)
+			button.icon:SetDesaturated((unit and not find(unit, "arena%d")) and true or false)
 		else
 			local color = (button.dtype and DebuffTypeColor[button.dtype]) or DebuffTypeColor.none
 			if button.name and (button.name == unstableAffliction or button.name == vampiricTouch) and E.myclass ~= "WARLOCK" then
@@ -408,7 +411,7 @@ function UF:AuraFilter(unit, button, name, _, _, _, debuffType, duration, expira
 	if db.priority ~= "" then
 		local isUnit = unit and caster and UnitIsUnit(unit, caster)
 		local canDispell = (self.type == "buffs" and isStealable) or (self.type == "debuffs" and debuffType and E:IsDispellableByMe(debuffType))
-		filterCheck, spellPriority = UF:CheckFilter(name, caster, spellID, isFriend, isPlayer, isUnit, allowDuration, noDuration, canDispell, strsplit(",", db.priority))
+		filterCheck, spellPriority = UF:CheckFilter(name, caster, spellID, isFriend, isPlayer, isUnit, allowDuration, noDuration, canDispell, split(",", db.priority))
 		if spellPriority then button.priority = spellPriority end -- this is the only difference from auarbars code
 	else
 		filterCheck = allowDuration and true -- Allow all auras to be shown when the filter list is empty, while obeying duration sliders

@@ -8,7 +8,7 @@ local _G = _G
 local setmetatable, getfenv, setfenv = setmetatable, getfenv, setfenv
 local type, unpack, select, pairs = type, unpack, select, pairs
 local min, random = math.min, math.random
-local format = string.format
+local find, format = string.find, string.format
 --WoW API / Variables
 local UnitPower = UnitPower
 local UnitPowerMax = UnitPowerMax
@@ -33,21 +33,21 @@ local function createConfigEnv()
 	if configEnv then return end
 	configEnv = setmetatable({
 		UnitPower = function (unit, displayType)
-			if unit:find("target") or unit:find("focus") then
+			if find(unit, "target") or find(unit, "focus") then
 				return UnitPower(unit, displayType)
 			end
 
 			return random(1, UnitPowerMax(unit, displayType) or 1)
 		end,
 		UnitHealth = function(unit)
-			if unit:find("target") or unit:find("focus") then
+			if find(unit, "target") or find(unit, "focus") then
 				return UnitHealth(unit)
 			end
 
 			return random(1, UnitHealthMax(unit))
 		end,
 		UnitName = function(unit)
-			if unit:find("target") or unit:find("focus") then
+			if find(unit, "target") or find(unit, "focus") then
 				return UnitName(unit)
 			end
 			if E.CreditsList then
@@ -57,7 +57,7 @@ local function createConfigEnv()
 			return "Test Name"
 		end,
 		UnitClass = function(unit)
-			if unit:find("target") or unit:find("focus") then
+			if find(unit, "target") or find(unit, "focus") then
 				return UnitClass(unit)
 			end
 

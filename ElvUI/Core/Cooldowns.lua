@@ -2,7 +2,9 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 
 --Lua functions
 local next, ipairs, pairs = next, ipairs, pairs
-local floor, tinsert = floor, tinsert
+local floor = math.floor
+local format = string.format
+local tinsert = table.insert
 --WoW API / Variables
 local GetTime = GetTime
 local CreateFrame = CreateFrame
@@ -36,7 +38,7 @@ function E:Cooldown_OnUpdate(elapsed)
 
 				local value1, formatid, nextUpdate, value2 = E:GetTimeInfo(remain, timeThreshold, hhmmThreshold, mmssThreshold)
 				self.nextUpdate = nextUpdate
-				self.text:SetFormattedText(("%s%s|r"):format(timeColors[formatid], E.TimeFormats[formatid][2]), value1, value2)
+				self.text:SetFormattedText(format("%s%s|r", timeColors[formatid], E.TimeFormats[formatid][2]), value1, value2)
 			end
 		else
 			E:Cooldown_StopTimer(self)

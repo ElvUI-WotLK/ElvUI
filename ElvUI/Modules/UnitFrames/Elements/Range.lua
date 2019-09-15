@@ -4,6 +4,7 @@ local SpellRange = E.Libs.SpellRange
 
 --Lua functions
 local pairs, ipairs = pairs, ipairs
+local find = string.find
 --WoW API / Variables
 local CheckInteractDistance = CheckInteractDistance
 local UnitCanAttack = UnitCanAttack
@@ -38,7 +39,7 @@ function UF:UpdateRangeCheckSpells()
 end
 
 local function getUnit(unit)
-	if not unit:find("party") or not unit:find("raid") then
+	if not find(unit, "party") or not find(unit, "raid") then
 		for i = 1, 4 do
 			if UnitIsUnit(unit, "party"..i) then
 				return "party"..i

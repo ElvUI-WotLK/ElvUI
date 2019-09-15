@@ -3,15 +3,18 @@ local mod = E:GetModule("DataBars")
 local LSM = LibStub("LibSharedMedia-3.0")
 
 --Lua functions
-local format = format
-local min = min
+local min = math.min
+local format = string.format
 --WoW API / Variables
-local GetPetExperience, UnitXP, UnitXPMax = GetPetExperience, UnitXP, UnitXPMax
-local UnitLevel = UnitLevel
-local IsXPUserDisabled, GetXPExhaustion = IsXPUserDisabled, GetXPExhaustion
 local GetExpansionLevel = GetExpansionLevel
-local MAX_PLAYER_LEVEL_TABLE = MAX_PLAYER_LEVEL_TABLE
+local GetPetExperience = GetPetExperience
+local GetXPExhaustion = GetXPExhaustion
 local InCombatLockdown = InCombatLockdown
+local IsXPUserDisabled = IsXPUserDisabled
+local UnitLevel = UnitLevel
+local UnitXP = UnitXP
+local UnitXPMax = UnitXPMax
+local MAX_PLAYER_LEVEL_TABLE = MAX_PLAYER_LEVEL_TABLE
 
 function mod:GetXP(unit)
 	if unit == "pet" then

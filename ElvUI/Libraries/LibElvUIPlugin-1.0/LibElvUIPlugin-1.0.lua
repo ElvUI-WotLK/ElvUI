@@ -30,16 +30,19 @@ LibElvUIPlugin API:
 		function	- function to call after Initialize (may be a string, that exists on the addons table: table['string'])
 ----------------------------]]--
 
-local assert, pairs, ipairs, strlen = assert, pairs, ipairs, strlen
-local tonumber, strmatch, strsub, tinsert = tonumber, strmatch, strsub, tinsert
-local format, wipe, type, gmatch, gsub, ceil = format, wipe, type, gmatch, gsub, ceil
+local pairs, ipairs = pairs, ipairs
+local tonumber, type = tonumber, type
+local ceil = math.ceil
+local format, gmatch, gsub, len, match, sub = string.format, string.gmatch, string.gsub, string.len, string.match, string.sub
+local tinsert, wipe = table.insert, table.wipe
 
-local hooksecurefunc = hooksecurefunc
 local GetAddOnMetadata = GetAddOnMetadata
-local CreateFrame, IsAddOnLoaded = CreateFrame, IsAddOnLoaded
-local GetNumPartyMembers, GetNumRaidMembers = GetNumPartyMembers, GetNumRaidMembers
+local GetNumPartyMembers = GetNumRaidMembers
+local GetNumRaidMembers = GetNumRaidMembers
+local IsAddOnLoaded = IsAddOnLoaded
 local IsInInstance = IsInInstance
 local SendAddonMessage = SendAddonMessage
+
 local UNKNOWN = UNKNOWN
 
 lib.prefix = "ElvUIPluginVC"
@@ -207,7 +210,7 @@ do	-- this will handle `8.1.5.0015` into `8.150015` etc
 end
 
 function lib:VersionCheck(event, prefix, message, _, sender)
-	if (event == "CHAT_MSG_ADDON" and prefix == lib.prefix) and (sender and message and not strmatch(message, "^%s-$")) then
+	if (event == "CHAT_MSG_ADDON" and prefix == lib.prefix) and (sender and message and not match(message, "^%s-$")) then
 		if sender == E.myname then return end
 
 		if not E.pluginRecievedOutOfDateMessage then
@@ -260,7 +263,7 @@ function lib:ClearSendMessageWait()
 end
 
 function lib:SendPluginVersionCheck(message)
-	if (not message) or strmatch(message, "^%s-$") then
+	if (not message) or match(message, "^%s-$") then
 		lib.ClearSendMessageWait()
 		return
 	end
@@ -278,12 +281,12 @@ function lib:SendPluginVersionCheck(message)
 		return
 	end
 
-	local maxChar, msgLength = 254 - strlen(lib.prefix), strlen(message)
+	local maxChar, msgLength = 254 - len(lib.prefix), len(message)
 	if msgLength > maxChar then
 		local delay, splitMessage = 0
 
 		for _ = 1, ceil(msgLength / maxChar) do
-			splitMessage = strmatch(strsub(message, 1, maxChar), ".+;")
+			splitMessage = match(sub(message, 1, maxChar), ".+;")
 			if splitMessage then -- incase the string is over `maxChar` but doesnt contain `;`
 				message = gsub(message, "^"..gsub(splitMessage, '([%-%.%+%[%]%(%)%$%^%%%?%*])','%%%1'), "")
 				E:Delay(delay, SendAddonMessage, lib.prefix, splitMessage, ChatType)

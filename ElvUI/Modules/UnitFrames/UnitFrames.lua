@@ -220,7 +220,7 @@ function UF:Construct_UF(frame, unit)
 
 	if not self.groupunits[unit] then
 		local stringTitle = E:StringTitle(unit)
-		if stringTitle:find("target") then
+		if find(stringTitle, "target") then
 			stringTitle = gsub(stringTitle, "target", "Target")
 		end
 		self["Construct_"..stringTitle.."Frame"](self, frame, unit)
@@ -502,7 +502,7 @@ function UF:CreateAndUpdateUFGroup(group, numGroup)
 	for i = 1, numGroup do
 		local unit = group..i
 		local frameName = E:StringTitle(unit)
-		frameName = frameName:gsub("t(arget)", "T%1")
+		frameName = gsub(frameName, "t(arget)", "T%1")
 		local frame = self[unit]
 
 		if not frame then
@@ -515,7 +515,7 @@ function UF:CreateAndUpdateUFGroup(group, numGroup)
 		end
 
 		frameName = E:StringTitle(group)
-		frameName = frameName:gsub("t(arget)", "T%1")
+		frameName = gsub(frameName, "t(arget)", "T%1")
 		frame.Update = function()
 			UF["Update_"..E:StringTitle(frameName).."Frames"](self, frame, self.db.units[group])
 		end
@@ -931,7 +931,7 @@ function UF:CreateAndUpdateUF(unit)
 	if InCombatLockdown() then self:RegisterEvent("PLAYER_REGEN_ENABLED") return end
 
 	local frameName = E:StringTitle(unit)
-	frameName = frameName:gsub("t(arget)", "T%1")
+	frameName = gsub(frameName, "t(arget)", "T%1")
 	if not self[unit] then
 		self[unit] = ElvUF:Spawn(unit, "ElvUF_"..frameName)
 		self.units[unit] = unit
@@ -1097,7 +1097,7 @@ function ElvUF:DisableBlizzard(unit)
 			HandleFrame("Boss"..id.."TargetFrame")
 		else
 			for i = 1, MAX_BOSS_FRAMES do
-				HandleFrame(("Boss%dTargetFrame"):format(i))
+				HandleFrame(format("Boss%dTargetFrame", i))
 			end
 		end
 	elseif (unit:match"(party)%d?$" == "party") and E.private.unitframe.disabledBlizzardFrames.party then
@@ -1107,7 +1107,7 @@ function ElvUF:DisableBlizzard(unit)
 			HandleFrame("PartyMemberFrame"..id)
 		else
 			for i = 1, 4 do
-				HandleFrame(("PartyMemberFrame%d"):format(i))
+				HandleFrame(format("PartyMemberFrame%d", i))
 			end
 		end
 		HandleFrame(PartyMemberBackground)
@@ -1119,8 +1119,8 @@ function ElvUF:DisableBlizzard(unit)
 			HandleFrame("ArenaEnemyFrame"..id.."PetFrame")
 		else
 			for i = 1, 5 do
-				HandleFrame(("ArenaEnemyFrame%d"):format(i))
-				HandleFrame(("ArenaEnemyFrame%dPetFrame"):format(i))
+				HandleFrame(format("ArenaEnemyFrame%d", i))
+				HandleFrame(format("ArenaEnemyFrame%dPetFrame", i))
 			end
 		end
 	end

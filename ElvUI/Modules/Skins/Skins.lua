@@ -4,7 +4,7 @@ local S = E:GetModule("Skins")
 --Lua functions
 local _G = _G
 local unpack, pairs, ipairs, select, type = unpack, pairs, ipairs, select, type
-local strfind = strfind
+local strfind, lower = strfind, string.lower
 --WoW API / Variables
 local hooksecurefunc = hooksecurefunc
 local IsAddOnLoaded = IsAddOnLoaded
@@ -507,7 +507,7 @@ function S:HandleNextPrevButton(btn, arrowDir, color, noBackdrop, stipTexts)
 
 	if not arrowDir then
 		arrowDir = "down"
-		local ButtonName = btn:GetName() and btn:GetName():lower()
+		local ButtonName = btn:GetName() and lower(btn:GetName())
 
 		if ButtonName then
 			if (strfind(ButtonName, "left") or strfind(ButtonName, "prev") or strfind(ButtonName, "decrement")) then

@@ -75,7 +75,7 @@ function UF:Configure_Threat(frame)
 			threat:SetFrameStrata("LOW")
 			threat:SetFrameLevel(75) --Inset power uses 50, we want it to appear above that
 			local point = db.threatStyle
-			point = point:gsub("ICON", "")
+			point = string.gsub(point, "ICON", "")
 
 			threat.texIcon:ClearAllPoints()
 			threat.texIcon:Point(point, frame.Health, point)

@@ -4,7 +4,7 @@ local AB = E:GetModule("ActionBars")
 
 --Lua functions
 local tonumber, type = tonumber, type
-local format, lower, split = string.format, string.lower, strsplit
+local format, lower, match, split = string.format, string.lower, string.match, string.split
 --WoW API / Variables
 local InCombatLockdown = InCombatLockdown
 local UIFrameFadeOut, UIFrameFadeIn = UIFrameFadeOut, UIFrameFadeIn
@@ -58,7 +58,7 @@ local function OnCallback(command)
 end
 
 function E:DelayScriptCall(msg)
-	local secs, command = msg:match("^(%S+)%s+(.*)$")
+	local secs, command = match(msg, "^(%S+)%s+(.*)$")
 	secs = tonumber(secs)
 	if (not secs) or (#command == 0) then
 		self:Print("usage: /in <seconds> <command>")

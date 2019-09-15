@@ -15,13 +15,13 @@ local UnitIsFriend = UnitIsFriend
 local DAY, HOUR, MINUTE = 86400, 3600, 60
 local function FormatTime(s)
 	if s < MINUTE then
-		return ("%.1fs"):format(s)
+		return format("%.1fs", s)
 	elseif s < HOUR then
-		return ("%dm %ds"):format(s/60%60, s%60)
+		return format("%dm %ds", s/60%60, s%60)
 	elseif s < DAY then
-		return ("%dh %dm"):format(s/(60*60), s/60%60)
+		return format("%dh %dm", s/HOUR, s/60%60)
 	else
-		return ("%dd %dh"):format(s/DAY, (s / HOUR) - (floor(s/DAY) * 24))
+		return format("%dd %dh", s/DAY, (s / HOUR) - (floor(s/DAY) * 24))
 	end
 end
 

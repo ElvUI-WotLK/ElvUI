@@ -1695,7 +1695,7 @@ function B:VendorGreys_OnUpdate(elapsed)
 	elseif lastItem then
 		B.SellFrame:Hide()
 		if B.SellFrame.Info.goldGained > 0 then
-			E:Print((L["Vendored gray items for: %s"]):format(B:FormatMoney(B.SellFrame.Info.goldGained)))
+			E:Print(format(L["Vendored gray items for: %s"], B:FormatMoney(B.SellFrame.Info.goldGained)))
 		end
 	end
 end

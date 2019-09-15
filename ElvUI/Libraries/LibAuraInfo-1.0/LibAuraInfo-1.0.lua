@@ -1089,7 +1089,7 @@ local GUIDIsPlayer
 do
 	local B, maskedB
 	function GUIDIsPlayer(guid)
-		B = tonumber(guid:sub(5, 5), 16);
+		B = tonumber(sub(guid, 5, 5), 16);
 		maskedB = B % 8; -- x % 8 has the same effect as x & 0x7 on numbers <= 0xf
 	--~ 	local knownTypes = {[0]="player", [3]="NPC", [4]="pet", [5]="vehicle"};
 	--~ 	print("Your target is a " .. (knownTypes[maskedB] or " unknown entity!"));

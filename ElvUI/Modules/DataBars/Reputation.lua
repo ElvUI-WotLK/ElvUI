@@ -4,15 +4,17 @@ local LSM = LibStub("LibSharedMedia-3.0")
 
 --Lua functions
 local _G = _G
-local format = format
+local format = string.format
 --WoW API / Variables
-local GetWatchedFactionInfo, GetNumFactions, GetFactionInfo = GetWatchedFactionInfo, GetNumFactions, GetFactionInfo
+local GetFactionInfo = GetFactionInfo
+local GetNumFactions = GetNumFactions
+local GetWatchedFactionInfo = GetWatchedFactionInfo
 local InCombatLockdown = InCombatLockdown
 local FACTION_BAR_COLORS = FACTION_BAR_COLORS
-local REPUTATION, STANDING = REPUTATION, STANDING
+local REPUTATION = REPUTATION
+local STANDING = STANDING
+local UNKNOWN = UNKNOWN
 
-local backupColor = FACTION_BAR_COLORS[1]
-local FactionStandingLabelUnknown = UNKNOWN
 function mod:UpdateReputation(event)
 	if not mod.db.reputation.enable then return end
 
@@ -35,7 +37,7 @@ function mod:UpdateReputation(event)
 
 		local text = ""
 		local textFormat = self.db.reputation.textFormat
-		local color = FACTION_BAR_COLORS[reaction] or backupColor
+		local color = FACTION_BAR_COLORS[reaction] or FACTION_BAR_COLORS[1]
 		bar.statusBar:SetStatusBarColor(color.r, color.g, color.b)
 
 		bar.statusBar:SetMinMaxValues(min, max)
@@ -51,7 +53,7 @@ function mod:UpdateReputation(event)
 		if ID then
 			standingLabel = _G["FACTION_STANDING_LABEL"..ID]
 		else
-			standingLabel = FactionStandingLabelUnknown
+			standingLabel = UNKNOWN
 		end
 
 		--Prevent a division by zero
