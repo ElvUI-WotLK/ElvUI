@@ -315,7 +315,7 @@ function S:HandleCheckBox(frame, noBackdrop, noReplaceTextures, forceSaturation)
 			end
 		end
 
-		frame:HookScript('OnDisable', function(checkbox)
+		frame:HookScript("OnDisable", function(checkbox)
 			if not checkbox.SetDisabledTexture then return end
 
 			if checkbox:GetChecked() then
@@ -418,8 +418,8 @@ local handleCloseButtonOnLeave = function(btn) if btn.Texture then btn.Texture:S
 function S:HandleCloseButton(f, point)
 	f:StripTextures()
 
-	if f:GetNormalTexture() then f:SetNormalTexture(""); f.SetNormalTexture = E.noop end
-	if f:GetPushedTexture() then f:SetPushedTexture(""); f.SetPushedTexture = E.noop end
+	if f:GetNormalTexture() then f:SetNormalTexture("") f.SetNormalTexture = E.noop end
+	if f:GetPushedTexture() then f:SetPushedTexture("") f.SetPushedTexture = E.noop end
 
 	if not f.Texture then
 		f.Texture = f:CreateTexture(nil, "OVERLAY")
