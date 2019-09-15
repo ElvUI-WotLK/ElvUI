@@ -6,8 +6,14 @@ local min = math.min
 --WoW API / Variables
 local GetScreenHeight = GetScreenHeight
 
-function B:SetObjectiveFrameAutoHide()
+local hideRule = "[@arena1,exists][@arena2,exists][@arena3,exists][@arena4,exists][@arena5,exists][@boss1,exists][@boss2,exists][@boss3,exists][@boss4,exists]"
 
+function B:SetObjectiveFrameAutoHide()
+	if E.db.general.watchFrameAutoHide then
+		RegisterStateDriver(WatchFrame, "visibility", hideRule)
+	else
+		UnregisterStateDriver(WatchFrame, "visibility")
+	end
 end
 
 function B:SetWatchFrameHeight()
@@ -39,4 +45,6 @@ function B:MoveWatchFrame()
 			WatchFrame:SetPoint("TOP", WatchFrameHolder, "TOP")
 		end
 	end)
+
+	self:SetObjectiveFrameAutoHide()
 end
