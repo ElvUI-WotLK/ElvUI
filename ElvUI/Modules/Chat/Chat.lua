@@ -462,7 +462,7 @@ end
 
 function CH:GetLines(frame)
 	local lineCount = 0
-	local _, message, info, r, g, b
+	local _, message, lineID, info, r, g, b
 
 	for i = 1, frame:GetNumMessages() do
 		message, _, lineID = frame:GetMessageInfo(i)

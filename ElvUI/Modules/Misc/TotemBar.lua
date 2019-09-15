@@ -35,7 +35,7 @@ function TOTEMS:Update()
 
 			CooldownFrame_SetTimer(self.bar[i].cooldown, startTime, duration, 1)
 
-			color = SLOT_BORDER_COLORS[self.bar[i]:GetID()]
+			local color = SLOT_BORDER_COLORS[self.bar[i]:GetID()]
 			self.bar[i]:SetBackdropBorderColor(color.r, color.g, color.b)
 			self.bar[i].ignoreBorderColors = true
 		else

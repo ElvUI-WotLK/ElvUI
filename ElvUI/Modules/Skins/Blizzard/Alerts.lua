@@ -25,7 +25,7 @@ local function LoadSkin()
 			_G[name.."Background"]:SetTexture(nil)
 			_G[name.."Unlocked"]:SetTextColor(1, 1, 1)
 
-			icon = _G[name.."Icon"]
+			local icon = _G[name.."Icon"]
 			icon:DisableDrawLayer("BACKGROUND")
 			icon:DisableDrawLayer("OVERLAY")
 

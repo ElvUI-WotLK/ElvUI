@@ -82,7 +82,7 @@ local function OnEnter(self)
 	DT.tooltip:AddDoubleLine(L["Wintergrasp"], wgtime, 1, 1, 1, lockoutColorNormal.r, lockoutColorNormal.g, lockoutColorNormal.b)
 
 	local lockedInstances = {raids = {}, dungeons = {}}
-	local name, reset, difficulty, locked, extended, isRaid, maxPlayers
+	local name, reset, difficulty, locked, extended, isRaid, maxPlayers, lockoutColor
 	local difficultyLetter, buttonImg
 
 	for i = 1, GetNumSavedInstances() do
