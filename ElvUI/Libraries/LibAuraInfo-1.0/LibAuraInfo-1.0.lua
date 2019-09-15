@@ -13,7 +13,7 @@ local select = select
 local tonumber = tonumber
 local bit_band = bit.band
 local math_floor = math.floor
-local split = string.split
+local split, sub = string.split, string.sub
 local table_insert, table_remove = table.insert, table.remove
 
 local UnitAura = UnitAura
