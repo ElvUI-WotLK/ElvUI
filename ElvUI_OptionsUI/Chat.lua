@@ -162,7 +162,7 @@ E.Options.args.chat = {
 					type = "range",
 					name = L["Allowed Combat Repeat"],
 					desc = L["Number of repeat characters while in combat before the chat editbox is automatically closed."],
-					min = 2, max = 10, step = 1
+					min = 3, max = 10, step = 1
 				},
 				numScrollMessages = {
 					order = 16,
