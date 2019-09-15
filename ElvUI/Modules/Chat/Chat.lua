@@ -24,10 +24,8 @@ local Chat_GetChatCategory = Chat_GetChatCategory
 local CreateFrame = CreateFrame
 local FCFManager_ShouldSuppressMessage = FCFManager_ShouldSuppressMessage
 local FCFTab_UpdateAlpha = FCFTab_UpdateAlpha
-local FCF_GetChatWindowInfo = FCF_GetChatWindowInfo
 local FCF_GetCurrentChatFrame = FCF_GetCurrentChatFrame
 local FCF_SavePositionAndDimensions = FCF_SavePositionAndDimensions
-local FCF_SetChatWindowFontSize = FCF_SetChatWindowFontSize
 local FCF_StartAlertFlash = FCF_StartAlertFlash
 local FloatingChatFrame_OnEvent = FloatingChatFrame_OnEvent
 local GetChannelName = GetChannelName
@@ -455,37 +453,47 @@ local function colorizeLine(text, r, g, b)
 	return text
 end
 
+local chatTypeIndexToName = {}
 local copyLines = {}
-function CH:GetLines(...)
-	local index = 1
-	wipe(copyLines)
-	for i = select("#", ...), 1, -1 do
-		local region = select(i, ...)
-		if region:GetObjectType() == "FontString" then
-			local line = tostring(region:GetText())
-			local r, g, b = region:GetTextColor()
 
-			line = removeIconFromLine(line)
+for chatType in pairs(ChatTypeInfo) do
+	chatTypeIndexToName[GetChatTypeIndex(chatType)] = chatType
+end
 
-			line = colorizeLine(line, r, g, b)
+function CH:GetLines(frame)
+	local lineCount = 0
+	local _, message, info, r, g, b
 
-			copyLines[index] = line
-			index = index + 1
+	for i = 1, frame:GetNumMessages() do
+		message, _, lineID = frame:GetMessageInfo(i)
+
+		if message then
+			info = ChatTypeInfo[chatTypeIndexToName[lineID]]
+
+			if info then
+				r, g, b = info.r, info.g, info.b
+			else
+				r, g, b = 1, 1, 1
+			end
+
+			message = removeIconFromLine(message)
+			message = colorizeLine(message, r, g, b)
+
+			lineCount = lineCount + 1
+			copyLines[lineCount] = message
 		end
 	end
-	return index - 1
+
+	return lineCount
 end
 
 function CH:CopyChat(frame)
 	if not CopyChatFrame:IsShown() then
-		local _, fontSize = FCF_GetChatWindowInfo(frame:GetID())
-		if fontSize < 10 then fontSize = 12 end
-		FCF_SetChatWindowFontSize(frame, frame, 0.01)
-		CopyChatFrame:Show()
-		local lineCt = self:GetLines(frame:GetRegions())
-		local text = tconcat(copyLines, " \n", 1, lineCt)
-		FCF_SetChatWindowFontSize(frame, frame, fontSize)
+		local lineCount = self:GetLines(frame)
+		local text = tconcat(copyLines, "\n", 1, lineCount)
+
 		CopyChatFrameEditBox:SetText(text)
+		CopyChatFrame:Show()
 	else
 		CopyChatFrame:Hide()
 	end
@@ -1241,7 +1249,7 @@ function CH:SetupChat()
 	for _, frameName in ipairs(CHAT_FRAMES) do
 		local frame = _G[frameName]
 		local id = frame:GetID()
-		local _, fontSize = FCF_GetChatWindowInfo(id)
+		local _, fontSize = frame:GetFont()
 		self:StyleChat(frame)
 		FCFTab_UpdateAlpha(frame)
 		frame:FontTemplate(LSM:Fetch("font", self.db.font), fontSize, self.db.fontOutline)
