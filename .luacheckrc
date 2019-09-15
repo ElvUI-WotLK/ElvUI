@@ -10,9 +10,6 @@ max_code_line_length = false
 max_string_line_length = false
 max_comment_line_length = false
 
-allow_defined = true
-allow_defined_top = true
-
 exclude_files = {
 	"**/Libraries",
 }
@@ -24,6 +21,7 @@ ignore = {
 	"212", -- Unused argument
 
 	"1/SLASH_.*",			-- Setting/Mutating/Accessing an undefined global variable (Slash commands)
+	"111/[A-Z][A-Z0-9_]+",	-- Setting an undefined global variable
 	"113/[A-Z][A-Z0-9_]+",	-- Accessing an undefined global variable (GlobalStrings and Constants 2char+)
 	"131/[A-Z][A-Z0-9_]+",	-- Unused implicitly defined global variable (GlobalStrings and Constants 2char+)
 	"211/[E|L|V|P|G]",		-- Unused local variable
@@ -35,6 +33,7 @@ ignore = {
 	"131/HideBothChat",				-- Unused implicitly defined global variable
 	"131/ElvUIGUIFrame",			-- Unused implicitly defined global variable
 
+	"111/Elv[A-z0-9_]+",
 	"113/Elv[A-z0-9_]+",
 }
 
@@ -71,12 +70,15 @@ globals = {
 	"DatatextTooltipTextRight1",
 	"DebuffsMover",
 	"DisbandRaidButton",
+	"FarmMode",
 	"FarmModeMap",
 	"FrameStackHighlight",
 	"GetMinimapShape",
 	"HelloKittyLeft",
 	"HelloKittyRight",
 	"HideBothChat",
+	"HideLeftChat",
+	"HideRightChat",
 	"InstallNextButton",
 	"InstallOption1Button",
 	"InstallOption2Button",
@@ -98,6 +100,7 @@ globals = {
 	"MinimapMover",
 	"PluginInstallFrame",
 	"RaidControlButton",
+	"RaidMark_HotkeyPressed",
 	"RaidUtilityPanel",
 	"RaidUtility_CloseButton",
 	"RaidUtility_ShowButton",
