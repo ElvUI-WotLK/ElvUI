@@ -3,7 +3,7 @@ local DT = E:GetModule("DataTexts")
 
 --Lua functions
 local pairs = pairs
-local strfind, strjoin = strfind, strjoin
+local find, join = string.find, string.join
 --WoW API / Variables
 local GetNumAddOns = GetNumAddOns
 local GetAddOnInfo = GetAddOnInfo
@@ -21,11 +21,11 @@ local function OnEvent(self, event)
 
 	if event == "PLAYER_ENTERING_WORLD" then
 		for i = 1, GetNumAddOns() do
-			local name, _, _, enabled = GetAddOnInfo(i)
-			if enabled and strfind(name, "ElvUI") and not (name == "ElvUI") then
+			local _, title, _, enabled = GetAddOnInfo(i)
+			if enabled and find(title, E.title) and title ~= E.title then
 				plugins = plugins or {}
 				local version = GetAddOnMetadata(i, "version")
-				plugins[name] = version
+				plugins[title] = version
 			end
 		end
 	end
@@ -58,7 +58,7 @@ local function OnClick(_, button)
 end
 
 local function ValueColorUpdate(hex)
-	displayString = strjoin("", hex, "%s|r")
+	displayString = join("", hex, "%s|r")
 
 	if lastPanel ~= nil then
 		OnEvent(lastPanel, "ELVUI_COLOR_UPDATE")
