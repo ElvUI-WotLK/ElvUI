@@ -1,8 +1,7 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local TOTEMS = E:GetModule("Totems")
 
 --Lua functions
-local _G = _G
 local unpack = unpack
 --WoW API / Variables
 local CreateFrame = CreateFrame
@@ -11,38 +10,34 @@ local CooldownFrame_SetTimer = CooldownFrame_SetTimer
 local MAX_TOTEMS = MAX_TOTEMS
 
 local SLOT_BORDER_COLORS = {
-	[EARTH_TOTEM_SLOT]	= {r = 0.23, g = 0.45, b = 0.13},
-	[FIRE_TOTEM_SLOT]	= {r = 0.58, g = 0.23, b = 0.10},
-	[WATER_TOTEM_SLOT]	= {r = 0.19, g = 0.48, b = 0.60},
-	[AIR_TOTEM_SLOT]	= {r = 0.42, g = 0.18, b = 0.74}
+	[FIRE_TOTEM_SLOT]	= {r = 0.23, g = 0.45, b = 0.13},	-- [1]
+	[EARTH_TOTEM_SLOT]	= {r = 0.58, g = 0.23, b = 0.10},	-- [2]
+	[WATER_TOTEM_SLOT]	= {r = 0.19, g = 0.48, b = 0.60},	-- [3]
+	[AIR_TOTEM_SLOT]	= {r = 0.42, g = 0.18, b = 0.74}	-- [4]
+}
+
+local totemFrames = {
+	TotemFrameTotem1,
+	TotemFrameTotem2,
+	TotemFrameTotem3,
+	TotemFrameTotem4
 }
 
 function TOTEMS:Update()
-	local displayedTotems = 0
+	local _, startTime, duration, icon
 
 	for i = 1, MAX_TOTEMS do
-		local color
-		local haveTotem, _, startTime, duration, icon = GetTotemInfo(i)
+		if totemFrames[i].slot ~= 0 then
+			_, _, startTime, duration, icon = GetTotemInfo(totemFrames[i].slot)
 
-		if haveTotem and icon and icon ~= "" then
 			self.bar[i]:Show()
 			self.bar[i].iconTexture:SetTexture(icon)
-			displayedTotems = displayedTotems + 1
+
 			CooldownFrame_SetTimer(self.bar[i].cooldown, startTime, duration, 1)
 
-			if E.myclass == "SHAMAN" then
-				color = SLOT_BORDER_COLORS[self.bar[i]:GetID()]
-				self.bar[i]:SetBackdropBorderColor(color.r, color.g, color.b)
-				self.bar[i].ignoreBorderColors = true
-			end
-
-			for d = 1, MAX_TOTEMS do
-				if _G["TotemFrameTotem"..d.."IconTexture"]:GetTexture() == icon then
-					_G["TotemFrameTotem"..d]:ClearAllPoints()
-					_G["TotemFrameTotem"..d]:SetParent(self.bar[i].holder)
-					_G["TotemFrameTotem"..d]:SetAllPoints(self.bar[i].holder)
-				end
-			end
+			color = SLOT_BORDER_COLORS[self.bar[i]:GetID()]
+			self.bar[i]:SetBackdropBorderColor(color.r, color.g, color.b)
+			self.bar[i].ignoreBorderColors = true
 		else
 			self.bar[i]:Hide()
 		end
@@ -110,7 +105,8 @@ function TOTEMS:PositionAndSize()
 end
 
 function TOTEMS:Initialize()
-	self.Initialized = true
+	if E.myclass ~= "SHAMAN" then return end
+
 	self.db = E.db.general.totems
 
 	local bar = CreateFrame("Frame", "ElvUI_TotemBar", E.UIParent)
@@ -118,7 +114,7 @@ function TOTEMS:Initialize()
 	self.bar = bar
 
 	for i = 1, MAX_TOTEMS do
-		local frame = CreateFrame("Button", bar:GetName().."Totem"..i, bar)
+		local frame = CreateFrame("Button", "$parentTotem"..i, bar)
 		frame:SetID(i)
 		frame:SetTemplate("Default")
 		frame:StyleButton()
@@ -132,7 +128,7 @@ function TOTEMS:Initialize()
 		frame.iconTexture:SetTexCoord(unpack(E.TexCoords))
 		frame.iconTexture:SetInside()
 
-		frame.cooldown = CreateFrame("Cooldown", frame:GetName().."Cooldown", frame, "CooldownFrameTemplate")
+		frame.cooldown = CreateFrame("Cooldown", "$parentCooldown", frame, "CooldownFrameTemplate")
 		frame.cooldown:SetReverse(true)
 		frame.cooldown:SetInside()
 		E:RegisterCooldown(frame.cooldown)
@@ -144,6 +140,8 @@ function TOTEMS:Initialize()
 
 	E:CreateMover(bar, "TotemBarMover", TUTORIAL_TITLE47, nil, nil, nil, nil, nil, "general,totems")
 	self:ToggleEnable()
+
+	self.Initialized = true
 end
 
 local function InitializeCallback()

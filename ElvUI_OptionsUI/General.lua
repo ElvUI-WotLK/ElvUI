@@ -394,6 +394,7 @@ E.Options.args.general = {
 			name = L["Class Totems"],
 			get = function(info) return E.db.general.totems[info[#info]] end,
 			set = function(info, value) E.db.general.totems[info[#info]] = value Totems:PositionAndSize() end,
+			hidden = function() return E.myclass ~= "SHAMAN" end,
 			args = {
 				header = {
 					order = 1,
