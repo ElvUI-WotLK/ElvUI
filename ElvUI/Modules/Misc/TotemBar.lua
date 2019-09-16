@@ -51,7 +51,7 @@ function TOTEMS:ToggleEnable()
 		self:RegisterEvent("PLAYER_ENTERING_WORLD", "Update")
 		self:Update()
 		E:EnableMover("TotemBarMover")
-	else
+	elseif self.Initialized then
 		self.bar:Hide()
 		self:UnregisterEvent("PLAYER_TOTEM_UPDATE")
 		self:UnregisterEvent("PLAYER_ENTERING_WORLD")
@@ -60,6 +60,8 @@ function TOTEMS:ToggleEnable()
 end
 
 function TOTEMS:PositionAndSize()
+	if not self.Initialized then return end
+
 	for i = 1, MAX_TOTEMS do
 		local button = self.bar[i]
 		local prevButton = self.bar[i - 1]
