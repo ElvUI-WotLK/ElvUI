@@ -39,29 +39,48 @@ local megaByteString = "%.2f mb"
 local memoryTable = {}
 local cpuTable = {}
 local lodTable = {}
+local disabledTable = {}
+local initialized
 
 local function OnEvent(self, event, addonName)
 	if event == "ADDON_LOADED" then
-		tinsert(memoryTable, lodTable[addonName])
-		tinsert(cpuTable, lodTable[addonName])
-		lodTable[addonName] = nil
-	elseif event == "PLAYER_ENTERING_WORLD" then
-		local _, name, title, enabled
+		if lodTable[addonName] then
+			tinsert(memoryTable, lodTable[addonName])
+			tinsert(cpuTable, lodTable[addonName])
+			lodTable[addonName] = nil
+		elseif disabledTable[addonName] then
+			tinsert(memoryTable, disabledTable[addonName])
+			tinsert(cpuTable, disabledTable[addonName])
+			disabledTable[addonName] = nil
+		end
+	elseif not initialized and (event == "PLAYER_ENTERING_WORLD" or event == "ELVUI_FORCE_RUN") then
+		local _, name, title, enabled, loadable
 
 		for i = 1, GetNumAddOns() do
-			name, title, _, enabled = GetAddOnInfo(i)
+			name, title, _, enabled, loadable = GetAddOnInfo(i)
 
-			if enabled then
-				if IsAddOnLoaded(i) then
-					tinsert(memoryTable, {i, title, 0})
-					tinsert(cpuTable, {i, title, 0})
-				else
-					lodTable[name] = {i, title, 0}
-				end
+			if IsAddOnLoaded(i) then
+				tinsert(memoryTable, {i, title, 0})
+				tinsert(cpuTable, {i, title, 0})
+			elseif loadable then
+				lodTable[name] = {i, title, 0}
+			elseif not enabled then
+				disabledTable[name] = {i, title, 0}
 			end
 		end
 
+		initialized = true
 		self:UnregisterEvent(event)
+	elseif initialized and event == "ELVUI_FORCE_RUN" then
+		local _, name
+
+		for i = 1, GetNumAddOns() do
+			name = GetAddOnInfo(i)
+
+			if (lodTable[name] or disabledTable[name]) and IsAddOnLoaded(i) then
+				OnEvent(self, "ADDON_LOADED", name)
+			end
+		end
 	end
 end
 
