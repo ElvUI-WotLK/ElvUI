@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule("DataTexts")
 
 --Lua functions
@@ -15,6 +15,8 @@ local displayString = ""
 local lastPanel
 
 local function OnEvent(self)
+	lastPanel = self
+
 	if E.Role == "Caster" then
 		hitRatingBonus = GetCombatRatingBonus(CR_HIT_SPELL)
 	else
@@ -25,13 +27,11 @@ local function OnEvent(self)
 		end
 	end
 
-	self.text:SetFormattedText(displayString, L["Hit"], hitRatingBonus)
-
-	lastPanel = self
+	self.text:SetFormattedText(displayString, hitRatingBonus)
 end
 
 local function ValueColorUpdate(hex)
-	displayString = join("", "%s: ", hex, "%.2f%%|r")
+	displayString = join("", L["Hit"], ": ", hex, "%.2f%%|r")
 
 	if lastPanel ~= nil then
 		OnEvent(lastPanel)

@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule("DataTexts")
 
 --Lua functions
@@ -10,63 +10,59 @@ local UnitAttackPower = UnitAttackPower
 local UnitRangedAttackPower = UnitRangedAttackPower
 local ATTACK_POWER = ATTACK_POWER
 local ATTACK_POWER_MAGIC_NUMBER = ATTACK_POWER_MAGIC_NUMBER
+local ATTACK_POWER_TOOLTIP = ATTACK_POWER_TOOLTIP
 local MELEE_ATTACK_POWER = MELEE_ATTACK_POWER
 local MELEE_ATTACK_POWER_TOOLTIP = MELEE_ATTACK_POWER_TOOLTIP
 local PET_BONUS_TOOLTIP_RANGED_ATTACK_POWER = PET_BONUS_TOOLTIP_RANGED_ATTACK_POWER
 local PET_BONUS_TOOLTIP_SPELLDAMAGE = PET_BONUS_TOOLTIP_SPELLDAMAGE
 local RANGED_ATTACK_POWER = RANGED_ATTACK_POWER
 local RANGED_ATTACK_POWER_TOOLTIP = RANGED_ATTACK_POWER_TOOLTIP
-local ATTACK_POWER_TOOLTIP = ATTACK_POWER_TOOLTIP
 
-local base, posBuff, negBuff, effective, Rbase, RposBuff, RnegBuff, Reffective, pwr
+local apower, base, posBuff, negBuff
 local displayNumberString = ""
 local lastPanel
 
 local function OnEvent(self)
+	lastPanel = self
+
 	if E.myclass == "HUNTER" then
-		Rbase, RposBuff, RnegBuff = UnitRangedAttackPower("player")
-		Reffective = Rbase + RposBuff + RnegBuff
-		pwr = Reffective
+		base, posBuff, negBuff = UnitRangedAttackPower("player")
+		apower = base + posBuff + negBuff
 	else
 		base, posBuff, negBuff = UnitAttackPower("player")
-		effective = base + posBuff + negBuff
-		pwr = effective
+		apower = base + posBuff + negBuff
 	end
 
-	self.text:SetFormattedText(displayNumberString, ATTACK_POWER, pwr)
-
-	lastPanel = self
+	self.text:SetFormattedText(displayNumberString, apower)
 end
 
 local function OnEnter(self)
 	DT:SetupTooltip(self)
 
 	if E.myclass == "HUNTER" then
-		DT.tooltip:AddDoubleLine(RANGED_ATTACK_POWER, pwr, 1, 1, 1)
+		local petAPBonus = ComputePetBonus("PET_BONUS_RAP_TO_AP", apower)
+		local petSpellDmgBonus = ComputePetBonus("PET_BONUS_RAP_TO_SPELLDMG", apower)
 
-		local line = format(RANGED_ATTACK_POWER_TOOLTIP, max((pwr), 0) / ATTACK_POWER_MAGIC_NUMBER)
-		local petAPBonus = ComputePetBonus("PET_BONUS_RAP_TO_AP", pwr)
-		local petSpellDmgBonus = ComputePetBonus("PET_BONUS_RAP_TO_SPELLDMG", pwr)
+		DT.tooltip:AddDoubleLine(RANGED_ATTACK_POWER, apower, 1, 1, 1, 1, 1, 1)
+		DT.tooltip:AddLine(format(RANGED_ATTACK_POWER_TOOLTIP, max(0, apower) / ATTACK_POWER_MAGIC_NUMBER), nil, nil, nil, true)
 
 		if petAPBonus > 0 then
-			line = line.."\n"..format(PET_BONUS_TOOLTIP_RANGED_ATTACK_POWER, petAPBonus)
+			DT.tooltip:AddLine(format(PET_BONUS_TOOLTIP_RANGED_ATTACK_POWER, petAPBonus), nil, nil, nil)
 		end
 
 		if petSpellDmgBonus > 0 then
-			line = line.."\n"..format(PET_BONUS_TOOLTIP_SPELLDAMAGE, petSpellDmgBonus)
+			DT.tooltip:AddLine(format(PET_BONUS_TOOLTIP_SPELLDAMAGE, petSpellDmgBonus), nil, nil, nil)
 		end
-
-		DT.tooltip:AddLine(line, nil, nil, nil, true)
 	else
-		DT.tooltip:AddDoubleLine(MELEE_ATTACK_POWER, pwr, 1, 1, 1)
-		DT.tooltip:AddLine(format(MELEE_ATTACK_POWER_TOOLTIP, max((base + posBuff + negBuff), 0) / ATTACK_POWER_MAGIC_NUMBER), nil, nil, nil, true)
+		DT.tooltip:AddDoubleLine(MELEE_ATTACK_POWER, apower, 1, 1, 1, 1, 1, 1)
+		DT.tooltip:AddLine(format(MELEE_ATTACK_POWER_TOOLTIP, max(0, apower) / ATTACK_POWER_MAGIC_NUMBER), nil, nil, nil, true)
 	end
 
 	DT.tooltip:Show()
 end
 
 local function ValueColorUpdate(hex)
-	displayNumberString = join("", "%s: ", hex, "%d|r")
+	displayNumberString = join("", ATTACK_POWER, ": ", hex, "%d|r")
 
 	if lastPanel ~= nil then
 		OnEvent(lastPanel)

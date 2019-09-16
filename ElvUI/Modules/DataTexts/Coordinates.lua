@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule("DataTexts")
 
 --Lua functions
@@ -10,16 +10,17 @@ local ToggleFrame = ToggleFrame
 local displayString = ""
 local x, y = 0, 0
 
+local timeSinceUpdate = 0
+
 local function OnUpdate(self, elapsed)
-	self.timeSinceUpdate = (self.timeSinceUpdate or 0) + elapsed
+	timeSinceUpdate = timeSinceUpdate + elapsed
 
-	if self.timeSinceUpdate > 0.1 then
+	if timeSinceUpdate > 0.03333 then
+		timeSinceUpdate = 0
+
 		x, y = GetPlayerMapPosition("player")
-		x = E:Round(100 * x, 1)
-		y = E:Round(100 * y, 1)
 
-		self.text:SetFormattedText(displayString, x, y)
-		self.timeSinceUpdate = 0
+		self.text:SetFormattedText(displayString, x * 100, y * 100)
 	end
 end
 
@@ -28,7 +29,7 @@ local function OnClick()
 end
 
 local function ValueColorUpdate(hex)
-	displayString = join("", hex, "%.1f|r", " , ", hex, "%.1f|r")
+	displayString = join("", hex, "%.2f|r", " , ", hex, "%.2f|r")
 end
 E.valueColorUpdateFuncs[ValueColorUpdate] = true
 

@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule("DataTexts")
 
 --Lua functions
@@ -8,13 +8,13 @@ local ContainerIDToInventoryID = ContainerIDToInventoryID
 local GetBackpackCurrencyInfo = GetBackpackCurrencyInfo
 local GetContainerNumFreeSlots = GetContainerNumFreeSlots
 local GetContainerNumSlots = GetContainerNumSlots
-local GetItemInfo = GetItemInfo
 local GetInventoryItemLink = GetInventoryItemLink
+local GetItemInfo = GetItemInfo
 local GetItemQualityColor = GetItemQualityColor
 local BACKPACK_TOOLTIP = BACKPACK_TOOLTIP
 local CURRENCY = CURRENCY
-local NUM_BAG_SLOTS = NUM_BAG_SLOTS
 local MAX_WATCHED_TOKENS = MAX_WATCHED_TOKENS
+local NUM_BAG_SLOTS = NUM_BAG_SLOTS
 
 local currencyString = "|T%s:14:14:0:0:64:64:4:60:4:60|t %s"
 local displayString = ""
@@ -25,7 +25,7 @@ local function OnEvent(self)
 	for i = 0, NUM_BAG_SLOTS do
 		free, total = free + GetContainerNumFreeSlots(i), total + GetContainerNumSlots(i)
 	end
-	self.text:SetFormattedText(displayString, L["Bags"], total - free, total)
+	self.text:SetFormattedText(displayString, total - free, total)
 
 	lastPanel = self
 end
@@ -80,7 +80,7 @@ local function OnEnter(self)
 end
 
 local function ValueColorUpdate(hex)
-	displayString = join("", "%s: ", hex, "%d/%d|r")
+	displayString = join("", L["Bags"], ": ", hex, "%d/%d|r")
 
 	if lastPanel ~= nil then
 		OnEvent(lastPanel)

@@ -1,9 +1,9 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule("DataTexts")
 
 --Lua functions
-local time = time
 local select = select
+local time = time
 local max = math.max
 local join = string.join
 --WoW API / Variables
@@ -32,15 +32,13 @@ local function GetHPS(self)
 	else
 		hps = healTotal / combatTime
 	end
-	self.text:SetFormattedText(displayString, L["HPS"], E:ShortValue(hps))
+	self.text:SetFormattedText(displayString, E:ShortValue(hps))
 end
 
 local function OnEvent(self, event, ...)
 	lastPanel = self
 
-	if event == "PLAYER_ENTERING_WORLD" then
-		playerID = E.myguid
-	elseif event == "PLAYER_REGEN_DISABLED" or event == "PLAYER_LEAVE_COMBAT" then
+	if event == "PLAYER_REGEN_DISABLED" or event == "PLAYER_LEAVE_COMBAT" then
 		local now = time()
 		if now - lastSegment > 20 then
 			Reset()
@@ -51,15 +49,22 @@ local function OnEvent(self, event, ...)
 
 		local id = select(3, ...)
 		if id == playerID or id == petID then
-			if timeStamp == 0 then timeStamp = select(1, ...) end
-			local overHeal = select(13, ...)
+			if timeStamp == 0 then
+				timeStamp = ...
+			end
+
 			lastSegment = timeStamp
-			combatTime = select(1, ...) - timeStamp
+			combatTime = (...) - timeStamp
+
+			local overHeal = select(13, ...)
 			lastHealAmount = select(12, ...)
 			healTotal = healTotal + max(0, lastHealAmount - overHeal)
 		end
 	elseif event == "UNIT_PET" then
 		petID = UnitGUID("pet")
+	elseif event == "PLAYER_ENTERING_WORLD" then
+		playerID = E.myguid
+		self:UnregisterEvent(event)
 	end
 
 	GetHPS(self)
@@ -71,7 +76,7 @@ local function OnClick(self)
 end
 
 local function ValueColorUpdate(hex)
-	displayString = join("", "%s: ", hex, "%s")
+	displayString = join("", L["HPS"], ": ", hex, "%s")
 
 	if lastPanel ~= nil then
 		OnEvent(lastPanel)

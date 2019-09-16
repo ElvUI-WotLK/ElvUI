@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule("DataTexts")
 
 --Lua functions
@@ -12,9 +12,8 @@ local displayNumberString = ""
 local lastPanel
 
 local function OnEvent(self)
-	self.text:SetFormattedText(displayNumberString, ACHIEVEMENTS, GetTotalAchievementPoints())
-
 	lastPanel = self
+	self.text:SetFormattedText(displayNumberString, GetTotalAchievementPoints())
 end
 
 local function OnClick()
@@ -22,7 +21,7 @@ local function OnClick()
 end
 
 local function ValueColorUpdate(hex)
-	displayNumberString = join("", "%s: ", hex, "%d|r")
+	displayNumberString = join("", ACHIEVEMENTS, ": ", hex, "%d|r")
 
 	if lastPanel ~= nil then
 		OnEvent(lastPanel)

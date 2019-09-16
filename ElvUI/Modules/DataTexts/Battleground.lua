@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule("DataTexts")
 
 --Lua functions
@@ -6,10 +6,11 @@ local select = select
 local join = string.join
 --WoW API / Variables
 local GetBattlefieldScore = GetBattlefieldScore
-local GetNumBattlefieldStats = GetNumBattlefieldStats
-local GetNumBattlefieldScores = GetNumBattlefieldScores
-local GetBattlefieldStatInfo = GetBattlefieldStatInfo
 local GetBattlefieldStatData = GetBattlefieldStatData
+local GetBattlefieldStatInfo = GetBattlefieldStatInfo
+local GetNumBattlefieldScores = GetNumBattlefieldScores
+local GetNumBattlefieldStats = GetNumBattlefieldStats
+local RAID_CLASS_COLORS = RAID_CLASS_COLORS
 
 local displayString = ""
 local lastPanel
@@ -38,6 +39,7 @@ local dataStrings = {
 
 function DT:UPDATE_BATTLEFIELD_SCORE()
 	lastPanel = self
+
 	local pointIndex = dataLayout[self:GetParent():GetName()][self.pointIndex]
 	for i = 1, GetNumBattlefieldScores() do
 		local name = GetBattlefieldScore(i)
@@ -51,18 +53,19 @@ end
 function DT:BattlegroundStats()
 	DT:SetupTooltip(self)
 
-	local classColor = (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass]) or RAID_CLASS_COLORS[E.myclass]
 	local numStatInfo = GetNumBattlefieldStats()
 	if numStatInfo then
-		for index = 1, GetNumBattlefieldScores() do
-			local name = GetBattlefieldScore(index)
+		for i = 1, GetNumBattlefieldScores() do
+			local name = GetBattlefieldScore(i)
 			if name and name == E.myname then
+				local classColor = (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass]) or RAID_CLASS_COLORS[E.myclass]
+
 				DT.tooltip:AddDoubleLine(L["Stats For:"], name, 1, 1, 1, classColor.r, classColor.g, classColor.b)
 				DT.tooltip:AddLine(" ")
 
 				-- Add extra statistics to watch based on what BG you are in.
-				for x = 1, numStatInfo do
-					DT.tooltip:AddDoubleLine(GetBattlefieldStatInfo(x), GetBattlefieldStatData(index, x), 1, 1, 1)
+				for j = 1, numStatInfo do
+					DT.tooltip:AddDoubleLine(GetBattlefieldStatInfo(j), GetBattlefieldStatData(i, j), 1, 1, 1)
 				end
 
 				break

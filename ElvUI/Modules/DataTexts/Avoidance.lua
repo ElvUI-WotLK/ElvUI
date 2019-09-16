@@ -1,28 +1,30 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule("DataTexts")
 
 --Lua functions
-local format, join = string.format, string.join
+local select = select
 local abs = math.abs
+local format, join = string.format, string.join
 --WoW API / Variables
-local GetInventorySlotInfo = GetInventorySlotInfo
-local GetInventoryItemID = GetInventoryItemID
-local GetItemInfo = GetItemInfo
-local UnitLevel = UnitLevel
-local GetDodgeChance = GetDodgeChance
-local GetParryChance = GetParryChance
 local GetBlockChance = GetBlockChance
 local GetBonusBarOffset = GetBonusBarOffset
+local GetDodgeChance = GetDodgeChance
+local GetInventoryItemID = GetInventoryItemID
+local GetInventorySlotInfo = GetInventorySlotInfo
+local GetItemInfo = GetItemInfo
+local GetParryChance = GetParryChance
+local UnitLevel = UnitLevel
+local BLOCK_CHANCE = BLOCK_CHANCE
 local BOSS = BOSS
 local DEFENSE = DEFENSE
 local DODGE_CHANCE = DODGE_CHANCE
 local PARRY_CHANCE = PARRY_CHANCE
-local BLOCK_CHANCE = BLOCK_CHANCE
 
 local displayString = ""
 local chanceString = "%.2f%%"
+local chanceString2 = "+%.2f%%"
 local AVD_DECAY_RATE = 0.2
-local targetlv, playerlv
+local targetlvl, playerlvl
 local baseMissChance, levelDifference, dodge, parry, block, avoidance, unhittable
 local lastPanel
 
@@ -36,15 +38,15 @@ local function IsWearingShield()
 end
 
 local function OnEvent(self)
-	targetlv, playerlv = UnitLevel("target"), E.mylevel
+	targetlvl, playerlvl = UnitLevel("target"), E.mylevel
 
 	baseMissChance = E.myrace == "NightElf" and 7 or 5
-	if targetlv == -1 then
+	if targetlvl == -1 then
 		levelDifference = 3
-	elseif targetlv > playerlv then
-		levelDifference = (targetlv - playerlv)
-	elseif targetlv < playerlv and targetlv > 0 then
-		levelDifference = (targetlv - playerlv)
+	elseif targetlvl > playerlvl then
+		levelDifference = (targetlvl - playerlvl)
+	elseif targetlvl < playerlvl and targetlvl > 0 then
+		levelDifference = (targetlvl - playerlvl)
 	else
 		levelDifference = 0
 	end
@@ -76,7 +78,7 @@ local function OnEvent(self)
 	avoidance = (dodge + parry + block + baseMissChance)
 	unhittable = avoidance - 102.4
 
-	self.text:SetFormattedText(displayString, DEFENSE, avoidance)
+	self.text:SetFormattedText(displayString, avoidance)
 
 	lastPanel = self
 end
@@ -84,12 +86,12 @@ end
 local function OnEnter(self)
 	DT:SetupTooltip(self)
 
-	if targetlv > 1 then
-		DT.tooltip:AddDoubleLine(L["Avoidance Breakdown"], join("", " (", L["lvl"], " ", targetlv, ")"))
-	elseif targetlv == -1 then
+	if targetlvl > 1 then
+		DT.tooltip:AddDoubleLine(L["Avoidance Breakdown"], join("", " (", L["lvl"], " ", targetlvl, ")"))
+	elseif targetlvl == -1 then
 		DT.tooltip:AddDoubleLine(L["Avoidance Breakdown"], join("", " (", BOSS, ")"))
 	else
-		DT.tooltip:AddDoubleLine(L["Avoidance Breakdown"], join("", " (", L["lvl"], " ", playerlv, ")"))
+		DT.tooltip:AddDoubleLine(L["Avoidance Breakdown"], join("", " (", L["lvl"], " ", playerlvl, ")"))
 	end
 
 	DT.tooltip:AddLine(" ")
@@ -100,7 +102,7 @@ local function OnEnter(self)
 	DT.tooltip:AddLine(" ")
 
 	if unhittable > 0 then
-		DT.tooltip:AddDoubleLine(L["Unhittable:"], "+"..format(chanceString, unhittable), 1, 1, 1, 0, 1, 0)
+		DT.tooltip:AddDoubleLine(L["Unhittable:"], format(chanceString2, unhittable), 1, 1, 1, 0, 1, 0)
 	else
 		DT.tooltip:AddDoubleLine(L["Unhittable:"], format(chanceString, unhittable), 1, 1, 1, 1, 0, 0)
 	end
@@ -109,7 +111,7 @@ local function OnEnter(self)
 end
 
 local function ValueColorUpdate(hex)
-	displayString = join("", "%s: ", hex, "%.2f%%|r")
+	displayString = join("", DEFENSE, ": ", hex, "%.2f%%|r")
 
 	if lastPanel ~= nil then
 		OnEvent(lastPanel)

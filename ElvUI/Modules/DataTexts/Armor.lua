@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule("DataTexts")
 
 --Lua functions
@@ -17,7 +17,7 @@ local lastPanel
 local function OnEvent(self)
 	_, effectiveArmor = UnitArmor("player")
 
-	self.text:SetFormattedText(displayString, ARMOR, effectiveArmor)
+	self.text:SetFormattedText(displayString, effectiveArmor)
 
 	lastPanel = self
 end
@@ -29,15 +29,17 @@ local function OnEnter(self)
 	DT.tooltip:AddLine(" ")
 
 	local playerLevel = E.mylevel + 3
+	local targetLevel = UnitLevel("target")
+	local armorReduction
+
 	for i = 1, 4 do
-		local armorReduction = PaperDollFrame_GetArmorReduction(effectiveArmor, playerLevel)
+		armorReduction = PaperDollFrame_GetArmorReduction(effectiveArmor, playerLevel)
 		DT.tooltip:AddDoubleLine(playerLevel, format(chanceString, armorReduction), 1, 1, 1)
 		playerLevel = playerLevel - 1
 	end
 
-	local targetLevel = UnitLevel("target")
 	if targetLevel and targetLevel > 0 and (targetLevel > playerLevel + 3 or targetLevel < playerLevel) then
-		local armorReduction = PaperDollFrame_GetArmorReduction(effectiveArmor, targetLevel)
+		armorReduction = PaperDollFrame_GetArmorReduction(effectiveArmor, targetLevel)
 		DT.tooltip:AddDoubleLine(targetLevel, format(chanceString, armorReduction), 1, 1, 1)
 	end
 
@@ -45,7 +47,7 @@ local function OnEnter(self)
 end
 
 local function ValueColorUpdate(hex)
-	displayString = join("", "%s: ", hex, "%d|r")
+	displayString = join("", ARMOR, ": ", hex, "%d|r")
 
 	if lastPanel ~= nil then
 		OnEvent(lastPanel)
