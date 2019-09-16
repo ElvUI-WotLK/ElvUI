@@ -262,6 +262,10 @@ function NP:ConstructElement_CastBar(parent)
 	frame.Spark:SetBlendMode("ADD")
 	frame.Spark:SetSize(15, 15)
 
+	frame.Icon.scale = CreateAnimationGroup(frame.Icon)
+	frame.Icon.scale.width = frame.Icon.scale:CreateAnimation("Width")
+	frame.Icon.scale.width:SetDuration(0.2)
+
 	frame:Hide()
 
 	return frame

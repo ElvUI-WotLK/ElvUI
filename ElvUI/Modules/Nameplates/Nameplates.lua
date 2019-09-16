@@ -68,11 +68,18 @@ function NP:SetFrameScale(frame, scale)
 	if frame.HealthBar.currentScale ~= scale then
 		if frame.HealthBar.scale:IsPlaying() then
 			frame.HealthBar.scale:Stop()
+			frame.CastBar.Icon.scale:Stop()
 		end
+
 		frame.HealthBar.scale.width:SetChange(self.db.units[frame.UnitType].healthbar.width * scale)
 		frame.HealthBar.scale.height:SetChange(self.db.units[frame.UnitType].healthbar.height * scale)
 		frame.HealthBar.scale:Play()
 		frame.HealthBar.currentScale = scale
+
+		local endScale = self.db.units[frame.UnitType].healthbar.height * scale + self.db.units[frame.UnitType].castbar.height + self.db.units[frame.UnitType].castbar.offset
+		frame.CastBar.Icon.scale.width:SetChange(endScale)
+		frame.CastBar.Icon.scale:Play()
+		frame.CastBar.Icon.currentScale = scale
 	end
 end
 
@@ -150,8 +157,6 @@ function NP:SetTargetFrame(frame)
 
 				NP:UpdateElement_All(frame, true)
 			end
-
-			frame.CastBar.Icon:SetWidth((NP.db.units[frame.UnitType].castbar.height + NP.db.units[frame.UnitType].healthbar.height + NP.db.units[frame.UnitType].castbar.offset) * (frame.HealthBar.currentScale or 1))
 
 			if hasTarget then
 				frame:SetAlpha(1)
