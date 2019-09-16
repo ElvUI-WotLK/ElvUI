@@ -197,7 +197,6 @@ local function Update(self, event, unit)
 	element.cur = cur
 	element.max = max
 	element.disconnected = disconnected
-	element.tapped = tapped
 
 	--[[ Callback: Power:PostUpdate(unit, cur, max)
 	Called after the element has been updated.
