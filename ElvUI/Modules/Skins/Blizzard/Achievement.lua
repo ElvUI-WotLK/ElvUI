@@ -219,16 +219,20 @@ local function LoadSkin(event)
 		end
 	end)
 
-	for _, frame in pairs({"AchievementFrameStatsContainerButton", "AchievementFrameComparisonStatsContainerButton"}) do
-		for i = 1, 20 do
-			_G[frame..i]:StripTextures()
-			_G[frame..i]:StyleButton()
+	for i = 1, 20 do
+		_G["AchievementFrameStatsContainerButton"..i]:StyleButton()
+		_G["AchievementFrameStatsContainerButton"..i.."BG"]:SetTexture(1, 1, 1, 0.2)
+		_G["AchievementFrameStatsContainerButton"..i.."HeaderLeft"]:Kill()
+		_G["AchievementFrameStatsContainerButton"..i.."HeaderRight"]:Kill()
+		_G["AchievementFrameStatsContainerButton"..i.."HeaderMiddle"]:Kill()
 
-			_G[frame..i.."BG"]:SetTexture(1, 1, 1, 0.2)
-			_G[frame..i.."HeaderLeft"]:Kill()
-			_G[frame..i.."HeaderRight"]:Kill()
-			_G[frame..i.."HeaderMiddle"]:Kill()
-		end
+		local frame = _G["AchievementFrameComparisonStatsContainerButton"..i]
+		frame:StripTextures()
+		frame:StyleButton()
+		_G["AchievementFrameComparisonStatsContainerButton"..i.."BG"]:SetTexture(1, 1, 1, 0.2)
+		_G["AchievementFrameComparisonStatsContainerButton"..i.."HeaderLeft"]:Kill()
+		_G["AchievementFrameComparisonStatsContainerButton"..i.."HeaderRight"]:Kill()
+		_G["AchievementFrameComparisonStatsContainerButton"..i.."HeaderMiddle"]:Kill()
 	end
 
 	hooksecurefunc("AchievementButton_GetProgressBar", function(index)
