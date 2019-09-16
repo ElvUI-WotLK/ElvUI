@@ -1,11 +1,11 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule("DataTexts")
 
 --Lua functions
-local next, unpack = next, unpack
-local format, gsub, join = string.format, string.gsub, string.join
-local tinsert = table.insert
-local time, utf8sub = time, string.utf8sub
+local next = next
+local time = time
+local format, gsub, join, utf8sub = string.format, string.gsub, string.join, string.utf8sub
+local tinsert, wipe = table.insert, table.wipe
 --WoW API / Variables
 local GetGameTime = GetGameTime
 local GetNumSavedInstances = GetNumSavedInstances
@@ -22,18 +22,18 @@ local dateDisplayFormat = ""
 local europeDisplayFormat_nocolor = join("", "%02d", ":|r%02d")
 local lockoutInfoFormat = "%s%s %s |cffaaaaaa(%s)"
 local lockoutColorExtended, lockoutColorNormal = {r = 0.3, g = 1, b = 0.3}, {r = .8, g = .8, b = .8}
+local lockedInstances = {raids = {}, dungeons = {}}
+local collectedInstanceImages
 
 local function OnClick(_, btn)
 	if btn == "RightButton" then
-		if not IsAddOnLoaded("Blizzard_TimeManager") then LoadAddOn("Blizzard_TimeManager") end
+		if not IsAddOnLoaded("Blizzard_TimeManager") then
+			LoadAddOn("Blizzard_TimeManager")
+		end
 		TimeManagerClockButton_OnClick(TimeManagerClockButton)
 	else
 		GameTimeFrame:Click()
 	end
-end
-
-local function OnLeave()
-	DT.tooltip:Hide()
 end
 
 local instanceIconByName = {}
@@ -57,7 +57,6 @@ local difficultyTag = { -- Normal, Normal, Heroic, Heroic
 	(krcntw and PLAYER_DIFFICULTY2) or utf8sub(PLAYER_DIFFICULTY2, 1, 1), -- H
 }
 
-local collectedInstanceImages = false
 local function OnEnter(self)
 	DT:SetupTooltip(self)
 
@@ -69,7 +68,7 @@ local function OnEnter(self)
 		collectedInstanceImages = true
 	end
 
-	local wgtime = GetWintergraspWaitTime() or nil
+	local wgtime = GetWintergraspWaitTime()
 	local _, instanceType = IsInInstance()
 	if not instanceType == "none" then
 		wgtime = QUEUE_TIME_UNAVAILABLE
@@ -81,20 +80,23 @@ local function OnEnter(self)
 
 	DT.tooltip:AddDoubleLine(L["Wintergrasp"], wgtime, 1, 1, 1, lockoutColorNormal.r, lockoutColorNormal.g, lockoutColorNormal.b)
 
-	local lockedInstances = {raids = {}, dungeons = {}}
-	local name, reset, difficulty, locked, extended, isRaid, maxPlayers, lockoutColor
-	local difficultyLetter, buttonImg
+	wipe(lockedInstances.raids)
+	wipe(lockedInstances.dungeons)
+
+	local name, reset, difficulty, locked, extended, isRaid, maxPlayers
+	local difficultyLetter, buttonImg, lockoutColor, info
 
 	for i = 1, GetNumSavedInstances() do
 		name, _, reset, difficulty, locked, extended, _, isRaid, maxPlayers = GetSavedInstanceInfo(i)
-		if (locked or extended) and name then
+
+		if name and (locked or extended) then
 			difficultyLetter = difficultyTag[not isRaid and (difficulty == 2 and 3 or 1) or difficulty]
 			buttonImg = instanceIconByName[name] and format("|T%s:22:22:0:0:96:96:0:64:0:64|t ", "Interface\\LFGFrame\\LFGIcon-"..instanceIconByName[name]) or ""
 
 			if isRaid then
-				tinsert(lockedInstances.raids, {name, buttonImg, reset, difficultyLetter, extended, maxPlayers})
+				tinsert(lockedInstances.raids, {name, reset, extended, maxPlayers, difficultyLetter, buttonImg})
 			elseif difficulty == 2 then
-				tinsert(lockedInstances.dungeons, {name, buttonImg, reset, difficultyLetter, extended, maxPlayers})
+				tinsert(lockedInstances.dungeons, {name, reset, extended, maxPlayers, difficultyLetter, buttonImg})
 			end
 		end
 	end
@@ -104,13 +106,17 @@ local function OnEnter(self)
 		DT.tooltip:AddLine(L["Saved Raid(s)"])
 
 		for i = 1, #lockedInstances.raids do
-			name, buttonImg, reset, difficultyLetter, extended, maxPlayers = unpack(lockedInstances.raids[i])
+			info = lockedInstances.raids[i]
 
-			lockoutColor = extended and lockoutColorExtended or lockoutColorNormal
-			DT.tooltip:AddDoubleLine(format(lockoutInfoFormat, buttonImg, maxPlayers, difficultyLetter, name), SecondsToTime(reset, false, nil, 3), 1, 1, 1, lockoutColor.r, lockoutColor.g, lockoutColor.b)
+			lockoutColor = info[3] and lockoutColorExtended or lockoutColorNormal
+
+			DT.tooltip:AddDoubleLine(
+				format(lockoutInfoFormat, info[6], info[4], info[5], info[1]),
+				SecondsToTime(info[2], false, nil, 3),
+				1, 1, 1,
+				lockoutColor.r, lockoutColor.g, lockoutColor.b
+			)
 		end
-
-		DT.tooltip:Show()
 	end
 
 	if next(lockedInstances.dungeons) then
@@ -118,17 +124,20 @@ local function OnEnter(self)
 		DT.tooltip:AddLine(L["Saved Dungeon(s)"])
 
 		for i = 1, #lockedInstances.dungeons do
-			name, buttonImg, reset, difficultyLetter, extended, maxPlayers = unpack(lockedInstances.dungeons[i])
+			info = lockedInstances.raids[i]
 
-			lockoutColor = extended and lockoutColorExtended or lockoutColorNormal
-			DT.tooltip:AddDoubleLine(format(lockoutInfoFormat, buttonImg, maxPlayers, difficultyLetter, name), SecondsToTime(reset, false, nil, 3), 1, 1, 1, lockoutColor.r, lockoutColor.g, lockoutColor.b)
+			lockoutColor = info[3] and lockoutColorExtended or lockoutColorNormal
+
+			DT.tooltip:AddDoubleLine(
+				format(lockoutInfoFormat, info[6], info[4], info[5], info[1]),
+				SecondsToTime(info[2], false, nil, 3),
+				1, 1, 1,
+				lockoutColor.r, lockoutColor.g, lockoutColor.b
+			)
 		end
-
-		DT.tooltip:Show()
 	end
 
 	DT.tooltip:AddLine(" ")
-
 	DT.tooltip:AddDoubleLine(TIMEMANAGER_TOOLTIP_REALMTIME, format(europeDisplayFormat_nocolor, GetGameTime()), 1, 1, 1, lockoutColorNormal.r, lockoutColorNormal.g, lockoutColorNormal.b)
 
 	DT.tooltip:Show()
@@ -136,10 +145,13 @@ end
 
 local lastPanel
 local int = 5
-local function OnUpdate(self, t)
-	int = int - t
+local function OnUpdate(self, elapsed)
+	int = int - elapsed
 
 	if int > 0 then return end
+
+	int = 1
+	lastPanel = self
 
 	if GameTimeFrame.flashInvite then
 		E:Flash(self, 0.53)
@@ -148,9 +160,6 @@ local function OnUpdate(self, t)
 	end
 
 	self.text:SetText(gsub(gsub(BetterDate(E.db.datatexts.timeFormat.." "..E.db.datatexts.dateFormat, time()), ":", timeDisplayFormat), "%s", dateDisplayFormat))
-
-	lastPanel = self
-	int = 1
 end
 
 local function ValueColorUpdate(hex)
@@ -163,4 +172,4 @@ local function ValueColorUpdate(hex)
 end
 E.valueColorUpdateFuncs[ValueColorUpdate] = true
 
-DT:RegisterDatatext("Time", nil, nil, OnUpdate, OnClick, OnEnter, OnLeave)
+DT:RegisterDatatext("Time", nil, nil, OnUpdate, OnClick, OnEnter)
