@@ -182,7 +182,6 @@ function M:Initialize()
 		coordsHolder.mouseCoords:SetTextColor(1, 1 ,0)
 		coordsHolder.mouseCoords:SetFontObject(NumberFontNormal)
 		coordsHolder.mouseCoords:SetPoint("BOTTOMLEFT", coordsHolder.playerCoords, "TOPLEFT", 0, 5)
-		coordsHolder.mouseCoords:SetText(MOUSE_LABEL..":   0, 0")
 
 		coordsHolder:SetScript("OnUpdate", UpdateCoords)
 
