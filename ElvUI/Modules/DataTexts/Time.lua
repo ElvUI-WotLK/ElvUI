@@ -43,7 +43,9 @@ local function GetInstanceImages(...)
 	local argn, title, texture = 1
 	for i = 1, numTextures do
 		title, texture = select(argn, ...)
-		instanceIconByName[title] = texture
+		if texture ~= "" then
+			instanceIconByName[title] = texture
+		end
 		argn = argn + 4
 	end
 end
@@ -91,7 +93,7 @@ local function OnEnter(self)
 
 		if name and (locked or extended) then
 			difficultyLetter = difficultyTag[not isRaid and (difficulty == 2 and 3 or 1) or difficulty]
-			buttonImg = instanceIconByName[name] and format("|T%s:22:22:0:0:96:96:0:64:0:64|t ", "Interface\\LFGFrame\\LFGIcon-"..instanceIconByName[name]) or ""
+			buttonImg = format("|T%s%s:22:22:0:0:96:96:0:64:0:64|t ", "Interface\\LFGFrame\\LFGIcon-", instanceIconByName[name] or "Raid")
 
 			if isRaid then
 				tinsert(lockedInstances.raids, {name, reset, extended, maxPlayers, difficultyLetter, buttonImg})
