@@ -219,7 +219,7 @@ function TT:SetUnitText(tt, unit, level, isShiftKeyDown)
 		if not localeClass or not class then return end
 
 		local name, realm = UnitName(unit)
-		local guildName, guildRankName, _, guildRealm = GetGuildInfo(unit)
+		local guildName, guildRankName = GetGuildInfo(unit)
 		local pvpName = UnitPVPName(unit)
 
 		color = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class]
@@ -250,10 +250,6 @@ function TT:SetUnitText(tt, unit, level, isShiftKeyDown)
 
 		local lineOffset = 2
 		if guildName then
-			if guildRealm and isShiftKeyDown then
-				guildName = guildName.."-"..guildRealm
-			end
-
 			if self.db.guildRanks then
 				GameTooltipTextLeft2:SetFormattedText("<|cff00ff10%s|r> [|cff00ff10%s|r]", guildName, guildRankName)
 			else

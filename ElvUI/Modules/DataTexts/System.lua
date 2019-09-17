@@ -72,7 +72,7 @@ local function OnEvent(self, event, addonName)
 		initialized = true
 		self:UnregisterEvent(event)
 	elseif initialized and event == "ELVUI_FORCE_RUN" then
-		local _, name
+		local name
 
 		for i = 1, GetNumAddOns() do
 			name = GetAddOnInfo(i)
