@@ -882,8 +882,10 @@ function E:UpdateAll(ignoreInstall)
 	Threat:ToggleEnable()
 	Threat:UpdatePosition()
 
-	Totems:PositionAndSize()
-	Totems:ToggleEnable()
+	if E.myclass == "SHAMAN" then
+		Totems:PositionAndSize()
+		Totems:ToggleEnable()
+	end
 
 	ReminderBuffs:UpdateSettings()
 
