@@ -56,15 +56,22 @@ local function group(order, db, label)
 						desc = L["This will override the global cooldown settings."],
 						disabled = E.noop
 					},
-					mmssThreshold = {
+					threshold = {
 						order = 2,
+						type = "range",
+						name = L["Low Threshold"],
+						desc = L["Threshold before text turns red and is in decimal form. Set to -1 for it to never turn red"],
+						min = -1, max = 20, step = 1
+					},
+					mmssThreshold = {
+						order = 3,
 						type = "range",
 						name = L["MM:SS Threshold"],
 						desc = L["Threshold (in seconds) before text is shown in the MM:SS format. Set to -1 to never change to this format."],
 						min = -1, max = 10800, step = 1
 					},
 					hhmmThreshold = {
-						order = 3,
+						order = 4,
 						type = "range",
 						name = L["HH:MM Threshold"],
 						desc = L["Threshold (in minutes) before text is shown in the HH:MM format. Set to -1 to never change to this format."],
@@ -86,69 +93,54 @@ local function group(order, db, label)
 						get = function(info) return (profile(db))[info[#info]] end,
 						set = function(info, value) (profile(db))[info[#info]] = value E:UpdateCooldownSettings(db) end,
 					},
-					threshold = {
-						order = 2,
-						type = "range",
-						name = L["Low Threshold"],
-						desc = L["Threshold before text turns red and is in decimal form. Set to -1 for it to never turn red"],
-						min = -1, max = 20, step = 1,
-						disabled = function() return not (profile(db)).override end,
-						get = function(info) return (profile(db))[info[#info]] end,
-						set = function(info, value) (profile(db))[info[#info]] = value E:UpdateCooldownSettings(db) end
-					},
 					spacer1 = {
-						order = 3,
-						type = "description",
-						name = " "
-					},
-					spacer2 = {
-						order = 4,
+						order = 2,
 						type = "description",
 						name = " "
 					},
 					expiringColor = {
-						order = 5,
+						order = 3,
 						type = "color",
 						name = L["Expiring"],
 						desc = L["Color when the text is about to expire"],
 						disabled = function() return not (profile(db)).override end
 					},
 					secondsColor = {
-						order = 6,
+						order = 4,
 						type = "color",
 						name = L["Seconds"],
 						desc = L["Color when the text is in the seconds format."],
 						disabled = function() return not (profile(db)).override end
 					},
 					minutesColor = {
-						order = 7,
+						order = 5,
 						type = "color",
 						name = L["Minutes"],
 						desc = L["Color when the text is in the minutes format."],
 						disabled = function() return not (profile(db)).override end
 					},
 					hoursColor = {
-						order = 8,
+						order = 6,
 						type = "color",
 						name = L["Hours"],
 						desc = L["Color when the text is in the hours format."],
 						disabled = function() return not (profile(db)).override end
 					},
 					daysColor = {
-						order = 9,
+						order = 7,
 						type = "color",
 						name = L["Days"],
 						desc = L["Color when the text is in the days format."],
 						disabled = function() return not (profile(db)).override end
 					},
 					mmssColor = {
-						order = 10,
+						order = 8,
 						type = "color",
 						name = L["MM:SS"],
 						disabled = function() return not (profile(db)).override end
 					},
 					hhmmColor = {
-						order = 11,
+						order = 9,
 						type = "color",
 						name = L["HH:MM"],
 						disabled = function() return not (profile(db)).override end
@@ -204,6 +196,7 @@ local function group(order, db, label)
 		-- clean up the main one
 		E.Options.args.cooldown.args[db].args.reverse = nil
 		E.Options.args.cooldown.args[db].args.colorGroup.args.override = nil
+		E.Options.args.cooldown.args[db].args.colorGroup.args.spacer1 = nil
 
 		-- remove disables
 		for _, x in pairs(E.Options.args.cooldown.args[db].args.colorGroup.args) do
