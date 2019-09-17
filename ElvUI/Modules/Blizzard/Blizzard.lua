@@ -36,6 +36,7 @@ function B:Initialize()
 	self:MoveWatchFrame()
 
 	self:RegisterEvent("ADDON_LOADED")
+	self:RegisterEvent("ZONE_CHANGED_NEW_AREA", SetMapToCurrentZone)
 
 	if GetLocale() == "deDE" then
 		DAY_ONELETTER_ABBR = "%d d"
