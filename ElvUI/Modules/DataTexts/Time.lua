@@ -124,7 +124,7 @@ local function OnEnter(self)
 		DT.tooltip:AddLine(L["Saved Dungeon(s)"])
 
 		for i = 1, #lockedInstances.dungeons do
-			info = lockedInstances.raids[i]
+			info = lockedInstances.dungeons[i]
 
 			lockoutColor = info[3] and lockoutColorExtended or lockoutColorNormal
 
