@@ -1,11 +1,15 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
+local _G = _G
+local unpack = unpack
 --WoW API / Variables
+local hooksecurefunc = hooksecurefunc
+local CLASS_SORT_ORDER = CLASS_SORT_ORDER
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.calendar ~= true then return; end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.calendar then return end
 
 	CalendarFrame:StripTextures()
 	CalendarFrame:CreateBackdrop("Transparent")
@@ -34,20 +38,24 @@ local function LoadSkin()
 	do
 		local frame = CalendarFilterFrame
 		local button = CalendarFilterButton
+		local text = _G[frame:GetName().."Text"]
 
 		frame:StripTextures()
 		frame:Width(155)
 
-		_G[frame:GetName().."Text"]:ClearAllPoints()
-		_G[frame:GetName().."Text"]:Point("RIGHT", button, "LEFT", -2, 0)
+		text:ClearAllPoints()
+		text:Point("RIGHT", button, "LEFT", -2, 0)
 
 		button:ClearAllPoints()
 		button:Point("RIGHT", frame, "RIGHT", -10, 3)
-		hooksecurefunc(button, "SetPoint", function(self, point, attachTo, anchorPoint, xOffset, yOffset)
-			if point ~= "RIGHT" or attachTo ~= frame or anchorPoint ~= "RIGHT" or xOffset ~= -10 or yOffset ~= 3 then
-				self:ClearAllPoints()
-				self:Point("RIGHT", frame, "RIGHT", -10, 3)
-			end
+
+		hooksecurefunc(button, "SetPoint", function(self)
+			if self._blocked then return end
+
+			self._blocked = true
+			self:ClearAllPoints()
+			self:Point("RIGHT", frame, "RIGHT", -10, 3)
+			self._blocked = nil
 		end)
 
 		S:HandleNextPrevButton(button)
@@ -61,33 +69,26 @@ local function LoadSkin()
 	bg:SetTemplate("Default")
 	bg:SetOutside(CalendarDayButton1, 3, 3, CalendarDayButton42)
 
+	local function setBackdropColor(self)
+		if self._blocked then return end
+		self._blocked = true
+		self:SetBackdropColor(unpack(E.media.backdropfadecolor))
+		self._blocked = nil
+	end
+	local function setBackdropBorderColor(self)
+		if self._blocked then return end
+		self._blocked = true
+		self:SetBackdropBorderColor(unpack(E.media.bordercolor))
+		self._blocked = nil
+	end
+
 	CalendarContextMenu:SetTemplate("Default")
-	hooksecurefunc(CalendarContextMenu, "SetBackdropColor", function(self, r, g, b, a)
-		local r2, g2, b2, a2 = unpack(E.media.backdropfadecolor)
-		if r ~= r2 or g ~= g2 or b ~= b2 or a ~= a2 then
-			self:SetBackdropColor(r2, g2, b2, a2)
-		end
-	end)
-	hooksecurefunc(CalendarContextMenu, "SetBackdropBorderColor", function(self, r, g, b)
-		local r2, g2, b2 = unpack(E.media.bordercolor)
-		if r ~= r2 or g ~= g2 or b ~= b2 then
-			self:SetBackdropBorderColor(r2, g2, b2)
-		end
-	end)
+	hooksecurefunc(CalendarContextMenu, "SetBackdropColor", setBackdropColor)
+	hooksecurefunc(CalendarContextMenu, "SetBackdropBorderColor", setBackdropBorderColor)
 
 	CalendarInviteStatusContextMenu:SetTemplate("Default")
-	hooksecurefunc(CalendarInviteStatusContextMenu, "SetBackdropColor", function(self, r, g, b, a)
-		local r2, g2, b2, a2 = unpack(E.media.backdropfadecolor)
-		if r ~= r2 or g ~= g2 or b ~= b2 or a ~= a2 then
-			self:SetBackdropColor(r2, g2, b2, a2)
-		end
-	end)
-	hooksecurefunc(CalendarInviteStatusContextMenu, "SetBackdropBorderColor", function(self, r, g, b)
-		local r2, g2, b2 = unpack(E.media.bordercolor)
-		if r ~= r2 or g ~= g2 or b ~= b2 then
-			self:SetBackdropBorderColor(r2, g2, b2)
-		end
-	end)
+	hooksecurefunc(CalendarInviteStatusContextMenu, "SetBackdropColor", setBackdropColor)
+	hooksecurefunc(CalendarInviteStatusContextMenu, "SetBackdropBorderColor", setBackdropBorderColor)
 
 	for i = 1, 7 do
 		_G["CalendarContextMenuButton"..i]:StyleButton()
@@ -164,11 +165,11 @@ local function LoadSkin()
 	S:HandleDropDownBox(CalendarCreateEventAMPMDropDown, 68)
 	S:HandleDropDownBox(CalendarCreateEventRepeatOptionDropDown, 120)
 	CalendarCreateEventIcon:SetTexCoord(unpack(E.TexCoords))
-	hooksecurefunc(CalendarCreateEventIcon, "SetTexCoord", function(self, x1, y1, x2, y2)
-		local x3, y3, x4, y4 = unpack(E.TexCoords)
-		if x1 ~= x3 or y1 ~= y3 or x2 ~= x4 or y2 ~= y4 then
-			self:SetTexCoord(unpack(E.TexCoords))
-		end
+	hooksecurefunc(CalendarCreateEventIcon, "SetTexCoord", function(self)
+		if self._blocked then return end
+		self._blocked = true
+		self:SetTexCoord(unpack(E.TexCoords))
+		self._blocked = nil
 	end)
 
 	CalendarCreateEventInviteListSection:StripTextures()
@@ -280,4 +281,4 @@ local function LoadSkin()
 	S:HandleScrollBar(CalendarViewEventDescriptionScrollFrameScrollBar)
 end
 
-S:AddCallbackForAddon("Blizzard_Calendar", "Calendar", LoadSkin)
+S:AddCallbackForAddon("Blizzard_Calendar", "Skin_Blizzard_Calendar", LoadSkin)

@@ -1,13 +1,14 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
 local _G = _G
+local type = type
 local unpack = unpack
 --WoW API / Variables
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.misc ~= true then return end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.misc then return end
 
 	-- ESC/Menu Buttons
 	GameMenuFrame:StripTextures()
@@ -16,21 +17,21 @@ local function LoadSkin()
 	GameMenuFrameHeader:ClearAllPoints()
 	GameMenuFrameHeader:Point("TOP", GameMenuFrame, 0, 7)
 
-	local BlizzardMenuButtons = {
-		"Options",
-		"UIOptions",
-		"Keybindings",
-		"Macros",
-		"SoundOptions",
-		"Logout",
-		"Quit",
-		"Continue",
+	local menuButtons = {
+		"GameMenuButtonOptions",
+		"GameMenuButtonUIOptions",
+		"GameMenuButtonKeybindings",
+		"GameMenuButtonMacros",
+		"GameMenuButtonSoundOptions",
+		"GameMenuButtonLogout",
+		"GameMenuButtonQuit",
+		"GameMenuButtonContinue",
 	}
 
-	for i = 1, #BlizzardMenuButtons do
-		local ElvuiMenuButtons = _G["GameMenuButton"..BlizzardMenuButtons[i]]
-		if ElvuiMenuButtons then
-			S:HandleButton(ElvuiMenuButtons)
+	for i = 1, #menuButtons do
+		local button = _G[menuButtons[i]]
+		if button then
+			S:HandleButton(button)
 		end
 	end
 
@@ -57,8 +58,8 @@ local function LoadSkin()
 		S:HandleEditBox(_G["StaticPopup"..i.."MoneyInputFrameSilver"])
 		S:HandleEditBox(_G["StaticPopup"..i.."MoneyInputFrameCopper"])
 
-		for k = 1, itemFrameBox:GetNumRegions() do
-			local region = select(k, itemFrameBox:GetRegions())
+		for j = 1, itemFrameBox:GetNumRegions() do
+			local region = select(j, itemFrameBox:GetRegions())
 			if region and region:GetObjectType() == "Texture" then
 				if region:GetTexture() == "Interface\\ChatFrame\\UI-ChatInputBorder-Left" or region:GetTexture() == "Interface\\ChatFrame\\UI-ChatInputBorder-Right" then
 					region:Kill()
@@ -79,7 +80,11 @@ local function LoadSkin()
 
 			if info.hasItemFrame then
 				if data and type(data) == "table" then
-					itemFrame:SetBackdropBorderColor(unpack(data.color or {1, 1, 1, 1}))
+					if data.color then
+						itemFrame:SetBackdropBorderColor(unpack(data.color))
+					else
+						itemFrame:SetBackdropBorderColor(1, 1, 1, 1)
+					end
 				end
 			end
 		end)
@@ -101,18 +106,8 @@ local function LoadSkin()
 
 	-- Other Frames
 	TicketStatusFrameButton:SetTemplate("Transparent")
-
 	AutoCompleteBox:SetTemplate("Transparent")
-
 	ConsolidatedBuffsTooltip:SetTemplate("Transparent")
-
-	if GetLocale() == "koKR" then
-		S:HandleButton(GameMenuButtonRatings)
-
-		RatingMenuFrame:SetTemplate("Transparent")
-		RatingMenuFrameHeader:Kill()
-		S:HandleButton(RatingMenuButtonOkay)
-	end
 
 	-- BNToast Frame
 	BNToastFrame:SetTemplate("Transparent")
@@ -173,24 +168,6 @@ local function LoadSkin()
 
 	S:HandleSliderFrame(OpacityFrameSlider)
 
-	-- Declension Frame
-	if GetLocale() == "ruRU" then
-		DeclensionFrame:SetTemplate("Transparent")
-
-		S:HandleNextPrevButton(DeclensionFrameSetPrev)
-		S:HandleNextPrevButton(DeclensionFrameSetNext)
-		S:HandleButton(DeclensionFrameOkayButton)
-		S:HandleButton(DeclensionFrameCancelButton)
-
-		for i = 1, RUSSIAN_DECLENSION_PATTERNS do
-			local editBox = _G["DeclensionFrameDeclension"..i.."Edit"]
-			if editBox then
-				editBox:StripTextures()
-				S:HandleEditBox(editBox)
-			end
-		end
-	end
-
 	-- Channel Pullout Frame
 	ChannelPullout:SetTemplate("Transparent")
 
@@ -225,23 +202,23 @@ local function LoadSkin()
 	end)
 
 	-- Chat Menu
-	local ChatMenus = {
+	local chatMenus = {
 		"ChatMenu",
 		"EmoteMenu",
 		"LanguageMenu",
 		"VoiceMacroMenu",
 	}
 
-	for i = 1, #ChatMenus do
-		if _G[ChatMenus[i]] == _G["ChatMenu"] then
-			_G[ChatMenus[i]]:HookScript("OnShow", function(self)
+	for i = 1, #chatMenus do
+		if chatMenus[i] == "ChatMenu" then
+			_G[chatMenus[i]]:HookScript("OnShow", function(self)
 				self:SetTemplate("Transparent")
 				self:SetBackdropColor(unpack(E.media.backdropfadecolor))
 				self:ClearAllPoints()
 				self:Point("BOTTOMLEFT", ChatFrame1, "TOPLEFT", 0, 30)
 			end)
 		else
-			_G[ChatMenus[i]]:HookScript("OnShow", function(self)
+			_G[chatMenus[i]]:HookScript("OnShow", function(self)
 				self:SetTemplate("Transparent")
 				self:SetBackdropColor(unpack(E.media.backdropfadecolor))
 			end)
@@ -254,6 +231,31 @@ local function LoadSkin()
 		_G["LanguageMenuButton"..i]:StyleButton()
 		_G["VoiceMacroMenuButton"..i]:StyleButton()
 	end
+
+	local locale = GetLocale()
+	if locale == "koKR" then
+		S:HandleButton(GameMenuButtonRatings)
+
+		RatingMenuFrame:SetTemplate("Transparent")
+		RatingMenuFrameHeader:Kill()
+		S:HandleButton(RatingMenuButtonOkay)
+	elseif locale == "ruRU" then
+		-- Declension Frame
+		DeclensionFrame:SetTemplate("Transparent")
+
+		S:HandleNextPrevButton(DeclensionFrameSetPrev)
+		S:HandleNextPrevButton(DeclensionFrameSetNext)
+		S:HandleButton(DeclensionFrameOkayButton)
+		S:HandleButton(DeclensionFrameCancelButton)
+
+		for i = 1, RUSSIAN_DECLENSION_PATTERNS do
+			local editBox = _G["DeclensionFrameDeclension"..i.."Edit"]
+			if editBox then
+				editBox:StripTextures()
+				S:HandleEditBox(editBox)
+			end
+		end
+	end
 end
 
-S:AddCallback("SkinMisc", LoadSkin)
+S:AddCallback("Skin_Misc", LoadSkin)

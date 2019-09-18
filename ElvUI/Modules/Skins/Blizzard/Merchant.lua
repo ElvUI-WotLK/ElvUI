@@ -1,14 +1,17 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
 local _G = _G
 local unpack = unpack
 --WoW API / Variables
-local hooksecurefunc = hooksecurefunc
+local GetBuybackItemInfo = GetBuybackItemInfo
+local GetItemInfo = GetItemInfo
+local GetItemQualityColor = GetItemQualityColor
+local GetMerchantNumItems = GetMerchantNumItems
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.merchant ~= true then return end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.merchant then return end
 
 	local MerchantFrame = _G.MerchantFrame
 	MerchantFrame:StripTextures(true)
@@ -111,19 +114,23 @@ local function LoadSkin()
 
 	hooksecurefunc("MerchantFrame_UpdateMerchantInfo", function()
 		local numMerchantItems = GetMerchantNumItems()
-		local index, button, name
+		local index = (MerchantFrame.page - 1) * MERCHANT_ITEMS_PER_PAGE
+		local _, button, name, quality
+
 		for i = 1, BUYBACK_ITEMS_PER_PAGE do
-			index = (((MerchantFrame.page - 1) * MERCHANT_ITEMS_PER_PAGE) + i)
-			button = _G["MerchantItem"..i.."ItemButton"]
-			name = _G["MerchantItem"..i.."Name"]
+			index = index + 1
 
 			if index <= numMerchantItems then
+				button = _G["MerchantItem"..i.."ItemButton"]
+				name = _G["MerchantItem"..i.."Name"]
+
 				if button.link then
-					local _, _, quality = GetItemInfo(button.link)
+					_, _, quality = GetItemInfo(button.link)
 
 					if quality then
-						button:SetBackdropBorderColor(GetItemQualityColor(quality))
-						name:SetTextColor(GetItemQualityColor(quality))
+						local r, g, b = GetItemQualityColor(quality)
+						button:SetBackdropBorderColor(r, g, b)
+						name:SetTextColor(r, g, b)
 					else
 						button:SetBackdropBorderColor(unpack(E.media.bordercolor))
 						name:SetTextColor(1, 1, 1)
@@ -134,12 +141,12 @@ local function LoadSkin()
 				end
 			end
 
-			local buybackName = GetBuybackItemInfo(GetNumBuybackItems())
-			if buybackName then
-				local _, _, quality = GetItemInfo(buybackName)
-				local r, g, b = GetItemQualityColor(quality)
+			local itemName = GetBuybackItemInfo(GetNumBuybackItems())
+			if itemName then
+				_, _, quality = GetItemInfo(itemName)
 
 				if quality then
+					local r, g, b = GetItemQualityColor(quality)
 					MerchantBuyBackItemItemButton:SetBackdropBorderColor(r, g, b)
 					MerchantBuyBackItemName:SetTextColor(r, g, b)
 				else
@@ -154,19 +161,21 @@ local function LoadSkin()
 
 	hooksecurefunc("MerchantFrame_UpdateBuybackInfo", function()
 		local numBuybackItems = GetNumBuybackItems()
-		local button, name
-		for i = 1, BUYBACK_ITEMS_PER_PAGE do
-			button = _G["MerchantItem"..i.."ItemButton"]
-			name = _G["MerchantItem"..i.."Name"]
+		local _, button, name, quality
 
+		for i = 1, BUYBACK_ITEMS_PER_PAGE do
 			if i <= numBuybackItems then
-				local buybackName = GetBuybackItemInfo(i)
-				if buybackName then
-					local _, _, quality = GetItemInfo(buybackName)
+				local itemName = GetBuybackItemInfo(i)
+
+				if itemName then
+					button = _G["MerchantItem"..i.."ItemButton"]
+					name = _G["MerchantItem"..i.."Name"]
+					_, _, quality = GetItemInfo(itemName)
 
 					if quality then
-						button:SetBackdropBorderColor(GetItemQualityColor(quality))
-						name:SetTextColor(GetItemQualityColor(quality))
+						local r, g, b = GetItemQualityColor(quality)
+						button:SetBackdropBorderColor(r, g, b)
+						name:SetTextColor(r, g, b)
 					else
 						button:SetBackdropBorderColor(unpack(E.media.bordercolor))
 						name:SetTextColor(1, 1, 1)
@@ -177,4 +186,4 @@ local function LoadSkin()
 	end)
 end
 
-S:AddCallback("Merchant", LoadSkin)
+S:AddCallback("Skin_Merchant", LoadSkin)

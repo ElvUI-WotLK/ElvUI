@@ -1,15 +1,28 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
 local _G = _G
+local select = select
 local unpack = unpack
 local find = string.find
 --WoW API / Variables
+local GetItemInfo = GetItemInfo
+local GetItemQualityColor = GetItemQualityColor
+local GetMoney = GetMoney
+local GetNumQuestLeaderBoards = GetNumQuestLeaderBoards
+local GetQuestItemLink = GetQuestItemLink
+local GetQuestLogItemLink = GetQuestLogItemLink
+local GetQuestLogLeaderBoard = GetQuestLogLeaderBoard
+local GetQuestLogRequiredMoney = GetQuestLogRequiredMoney
 local hooksecurefunc = hooksecurefunc
+local GetQuestMoneyToGet = GetQuestMoneyToGet
+
+local MAX_NUM_ITEMS = MAX_NUM_ITEMS
+local MAX_REPUTATIONS = MAX_REPUTATIONS
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.quest ~= true then return end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.quest then return end
 
 	QuestLogFrame:StripTextures()
 	QuestLogFrame:CreateBackdrop("Transparent")
@@ -19,7 +32,13 @@ local function LoadSkin()
 	QuestLogCount:StripTextures()
 	QuestLogCount:SetTemplate("Transparent")
 
-	for frame, numItems in pairs({["QuestInfoItem"] = MAX_NUM_ITEMS, ["QuestProgressItem"] = MAX_REQUIRED_ITEMS}) do
+	QuestInfoItemHighlight:StripTextures()
+
+	local items = {
+		["QuestInfoItem"] = MAX_NUM_ITEMS,
+		["QuestProgressItem"] = MAX_REQUIRED_ITEMS
+	}
+	for frame, numItems in pairs(items) do
 		for i = 1, numItems do
 			local item = _G[frame..i]
 			local icon = _G[frame..i.."IconTexture"]
@@ -41,16 +60,18 @@ local function LoadSkin()
 		end
 	end
 
-	local function QuestQualityColors(frame, text, link, quality)
+	local function questQualityColors(frame, text, link, quality)
 		if link and not quality then
 			quality = select(3, GetItemInfo(link))
 		end
 
 		if quality then
-			frame:SetBackdropBorderColor(GetItemQualityColor(quality))
-			frame.backdrop:SetBackdropBorderColor(GetItemQualityColor(quality))
+			local r, g, b = GetItemQualityColor(quality)
 
-			text:SetTextColor(GetItemQualityColor(quality))
+			frame:SetBackdropBorderColor(r, g, b)
+			frame.backdrop:SetBackdropBorderColor(r, g, b)
+
+			text:SetTextColor(r, g, b)
 		else
 			frame:SetBackdropBorderColor(unpack(E.media.bordercolor))
 			frame.backdrop:SetBackdropBorderColor(unpack(E.media.bordercolor))
@@ -59,21 +80,22 @@ local function LoadSkin()
 		end
 	end
 
-	QuestInfoItemHighlight:StripTextures()
-
 	hooksecurefunc("QuestInfoItem_OnClick", function(self)
 		if self.type == "choice" then
-			_G[self:GetName()]:SetBackdropBorderColor(1, 0.80, 0.10)
-			_G[self:GetName()].backdrop:SetBackdropBorderColor(1, 0.80, 0.10)
+			self:SetBackdropBorderColor(1, 0.80, 0.10)
+			self.backdrop:SetBackdropBorderColor(1, 0.80, 0.10)
 			_G[self:GetName().."Name"]:SetTextColor(1, 0.80, 0.10)
 
+			local item, name, link
+
 			for i = 1, MAX_NUM_ITEMS do
-				local item = _G["QuestInfoItem"..i]
-				local name = _G["QuestInfoItem"..i.."Name"]
-				local link = item.type and (QuestInfoFrame.questLog and GetQuestLogItemLink or GetQuestItemLink)(item.type, item:GetID())
+				item = _G["QuestInfoItem"..i]
 
 				if item ~= self then
-					QuestQualityColors(item, name, link)
+					name = _G["QuestInfoItem"..i.."Name"]
+					link = item.type and (QuestInfoFrame.questLog and GetQuestLogItemLink or GetQuestItemLink)(item.type, item:GetID())
+
+					questQualityColors(item, name, link)
 				end
 			end
 		end
@@ -95,16 +117,18 @@ local function LoadSkin()
 	QuestLogFramePushQuestButton:Point("LEFT", QuestLogFrameAbandonButton, "RIGHT", 2, 0)
 	QuestLogFramePushQuestButton:Point("RIGHT", QuestLogFrameTrackButton, "LEFT", -2, 0)
 
-	local function QuestObjectiveText()
+	local function questObjectiveText()
 		local numObjectives = GetNumQuestLeaderBoards()
-		local objective
-		local _, type, finished
+		local _, objType, finished, objective
 		local numVisibleObjectives = 0
+
 		for i = 1, numObjectives do
-			_, type, finished = GetQuestLogLeaderBoard(i)
-			if type ~= "spell" then
+			_, objType, finished = GetQuestLogLeaderBoard(i)
+
+			if objType ~= "spell" then
 				numVisibleObjectives = numVisibleObjectives + 1
 				objective = _G["QuestInfoObjective"..numVisibleObjectives]
+
 				if finished then
 					objective:SetTextColor(1, 0.80, 0.10)
 				else
@@ -115,63 +139,67 @@ local function LoadSkin()
 	end
 
 	hooksecurefunc("QuestInfo_Display", function()
-		local textColor = {1, 1, 1}
-		local titleTextColor = {1, 0.80, 0.10}
+		QuestInfoTitleHeader:SetTextColor(1, 0.80, 0.10)
+		QuestInfoDescriptionHeader:SetTextColor(1, 0.80, 0.10)
+		QuestInfoObjectivesHeader:SetTextColor(1, 0.80, 0.10)
+		QuestInfoRewardsHeader:SetTextColor(1, 0.80, 0.10)
 
-		QuestInfoTitleHeader:SetTextColor(unpack(titleTextColor))
-		QuestInfoDescriptionHeader:SetTextColor(unpack(titleTextColor))
-		QuestInfoObjectivesHeader:SetTextColor(unpack(titleTextColor))
-		QuestInfoRewardsHeader:SetTextColor(unpack(titleTextColor))
+		QuestInfoDescriptionText:SetTextColor(1, 1, 1)
+		QuestInfoObjectivesText:SetTextColor(1, 1, 1)
+		QuestInfoGroupSize:SetTextColor(1, 1, 1)
+		QuestInfoRewardText:SetTextColor(1, 1, 1)
 
-		QuestInfoDescriptionText:SetTextColor(unpack(textColor))
-		QuestInfoObjectivesText:SetTextColor(unpack(textColor))
-		QuestInfoGroupSize:SetTextColor(unpack(textColor))
-		QuestInfoRewardText:SetTextColor(unpack(textColor))
-
-		QuestInfoItemChooseText:SetTextColor(unpack(textColor))
-		QuestInfoItemReceiveText:SetTextColor(unpack(textColor))
-		QuestInfoSpellLearnText:SetTextColor(unpack(textColor))
-		QuestInfoHonorFrameReceiveText:SetTextColor(unpack(textColor))
-		QuestInfoArenaPointsFrameReceiveText:SetTextColor(unpack(textColor))
-		QuestInfoTalentFrameReceiveText:SetTextColor(unpack(textColor))
-		QuestInfoXPFrameReceiveText:SetTextColor(unpack(textColor))
-		QuestInfoReputationText:SetTextColor(unpack(textColor))
+		QuestInfoItemChooseText:SetTextColor(1, 1, 1)
+		QuestInfoItemReceiveText:SetTextColor(1, 1, 1)
+		QuestInfoSpellLearnText:SetTextColor(1, 1, 1)
+		QuestInfoHonorFrameReceiveText:SetTextColor(1, 1, 1)
+		QuestInfoArenaPointsFrameReceiveText:SetTextColor(1, 1, 1)
+		QuestInfoTalentFrameReceiveText:SetTextColor(1, 1, 1)
+		QuestInfoXPFrameReceiveText:SetTextColor(1, 1, 1)
+		QuestInfoReputationText:SetTextColor(1, 1, 1)
 
 		for i = 1, MAX_REPUTATIONS do
-			_G["QuestInfoReputation"..i.."Faction"]:SetTextColor(unpack(textColor))
+			_G["QuestInfoReputation"..i.."Faction"]:SetTextColor(1, 1, 1)
 		end
 
-		if GetQuestLogRequiredMoney() > 0 then
-			if GetQuestLogRequiredMoney() > GetMoney() then
+		local requiredMoney = GetQuestLogRequiredMoney()
+
+		if requiredMoney > 0 then
+			if requiredMoney > GetMoney() then
 				QuestInfoRequiredMoneyText:SetTextColor(0.6, 0.6, 0.6)
 			else
 				QuestInfoRequiredMoneyText:SetTextColor(1, 0.80, 0.10)
 			end
 		end
 
-		QuestObjectiveText()
+		questObjectiveText()
+
+		local item, name, link
 
 		for i = 1, MAX_NUM_ITEMS do
-			local item = _G["QuestInfoItem"..i]
-			local name = _G["QuestInfoItem"..i.."Name"]
-			local link = item.type and (QuestInfoFrame.questLog and GetQuestLogItemLink or GetQuestItemLink)(item.type, item:GetID())
+			item = _G["QuestInfoItem"..i]
+			name = _G["QuestInfoItem"..i.."Name"]
+			link = item.type and (QuestInfoFrame.questLog and GetQuestLogItemLink or GetQuestItemLink)(item.type, item:GetID())
 
-			QuestQualityColors(item, name, link)
+			questQualityColors(item, name, link)
 		end
 	end)
 
 	hooksecurefunc("QuestInfo_ShowRewards", function()
-		for i = 1, MAX_NUM_ITEMS do
-			local item = _G["QuestInfoItem"..i]
-			local name = _G["QuestInfoItem"..i.."Name"]
-			local link = item.type and (QuestInfoFrame.questLog and GetQuestLogItemLink or GetQuestItemLink)(item.type, item:GetID())
+		local item, name, link
 
-			QuestQualityColors(item, name, link)
+		for i = 1, MAX_NUM_ITEMS do
+			item = _G["QuestInfoItem"..i]
+			name = _G["QuestInfoItem"..i.."Name"]
+			link = item.type and (QuestInfoFrame.questLog and GetQuestLogItemLink or GetQuestItemLink)(item.type, item:GetID())
+
+			questQualityColors(item, name, link)
 		end
 	end)
 
 	hooksecurefunc("QuestInfo_ShowRequiredMoney", function()
 		local requiredMoney = GetQuestLogRequiredMoney()
+
 		if requiredMoney > 0 then
 			if requiredMoney > GetMoney() then
 				QuestInfoRequiredMoneyText:SetTextColor(0.6, 0.6, 0.6)
@@ -286,20 +314,24 @@ local function LoadSkin()
 		QuestProgressText:SetTextColor(1, 1, 1)
 		QuestProgressRequiredItemsText:SetTextColor(1, 0.80, 0.10)
 
-		if GetQuestMoneyToGet() > 0 then
-			if GetQuestMoneyToGet() > GetMoney() then
+		local moneyToGet = GetQuestMoneyToGet()
+
+		if moneyToGet > 0 then
+			if moneyToGet > GetMoney() then
 				QuestProgressRequiredMoneyText:SetTextColor(0.6, 0.6, 0.6)
 			else
 				QuestProgressRequiredMoneyText:SetTextColor(1, 0.80, 0.10)
 			end
 		end
 
-		for i = 1, MAX_REQUIRED_ITEMS do
-			local item = _G["QuestProgressItem"..i]
-			local name = _G["QuestProgressItem"..i.."Name"]
-			local link = item.type and GetQuestItemLink(item.type, item:GetID())
+		local item, name, link
 
-			QuestQualityColors(item, name, link)
+		for i = 1, MAX_REQUIRED_ITEMS do
+			item = _G["QuestProgressItem"..i]
+			name = _G["QuestProgressItem"..i.."Name"]
+			link = item.type and GetQuestItemLink(item.type, item:GetID())
+
+			questQualityColors(item, name, link)
 		end
 	end)
 
@@ -324,4 +356,4 @@ local function LoadSkin()
 	end
 end
 
-S:AddCallback("Quest", LoadSkin)
+S:AddCallback("Skin_Quest", LoadSkin)

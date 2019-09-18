@@ -1,26 +1,26 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
 local _G = _G
-local pairs, unpack = pairs, unpack
+local ipairs, unpack = ipairs, unpack
 --WoW API / Variables
-local hooksecurefunc = hooksecurefunc
 local CreateFrame = CreateFrame
 local GetAuctionSellItemInfo = GetAuctionSellItemInfo
+local GetItemQualityColor = GetItemQualityColor
+local hooksecurefunc = hooksecurefunc
 
 local NUM_BROWSE_TO_DISPLAY = NUM_BROWSE_TO_DISPLAY
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.auctionhouse ~= true then return end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.auctionhouse then return end
 
-	local AuctionFrame = _G["AuctionFrame"]
 	AuctionFrame:StripTextures(true)
 	AuctionFrame:CreateBackdrop("Transparent")
 	AuctionFrame.backdrop:Point("TOPLEFT", 10, 0)
 	AuctionFrame.backdrop:Point("BOTTOMRIGHT", 0, 0)
 
-	local Buttons = {
+	local buttons = {
 		BrowseSearchButton,
 		BrowseResetButton,
 		BrowseBidButton,
@@ -35,13 +35,11 @@ local function LoadSkin()
 		AuctionsNumStacksMaxButton,
 		AuctionsCloseButton
 	}
-
-	local CheckBoxes = {
+	local checkBoxes = {
 		IsUsableCheckButton,
 		ShowOnPlayerCheckButton
 	}
-
-	local EditBoxes = {
+	local editBoxes = {
 		BrowseName,
 		BrowseMinLevel,
 		BrowseMaxLevel,
@@ -60,8 +58,7 @@ local function LoadSkin()
 		BuyoutPriceSilver,
 		BuyoutPriceCopper
 	}
-
-	local SortTabs = {
+	local sortTabs = {
 		BrowseQualitySort,
 		BrowseLevelSort,
 		BrowseDurationSort,
@@ -79,17 +76,20 @@ local function LoadSkin()
 		AuctionsBidSort
 	}
 
-	for _, Button in pairs(Buttons) do
-		S:HandleButton(Button, true)
+	for _, button in ipairs(buttons) do
+		S:HandleButton(button, true)
 	end
-
-	for _, CheckBox in pairs(CheckBoxes) do
-		S:HandleCheckBox(CheckBox)
+	for _, checkBox in ipairs(checkBoxes) do
+		S:HandleCheckBox(checkBox)
 	end
-
-	for _, EditBox in pairs(EditBoxes) do
-		S:HandleEditBox(EditBox)
-		EditBox:SetTextInsets(1, 1, -1, 1)
+	for _, editBox in ipairs(editBoxes) do
+		S:HandleEditBox(editBox)
+		editBox:SetTextInsets(1, 1, -1, 1)
+	end
+	for _, tab in ipairs(sortTabs) do
+		tab:StripTextures()
+		tab:SetNormalTexture([[Interface\Buttons\UI-SortArrow]])
+		tab:StyleButton()
 	end
 
 	for i = 1, AuctionFrame.numTabs do
@@ -102,12 +102,6 @@ local function LoadSkin()
 			tab:Point("BOTTOMLEFT", AuctionFrame, "BOTTOMLEFT", 20, -30)
 			tab.SetPoint = E.noop
 		end
-	end
-
-	for _, Tab in pairs(SortTabs) do
-		Tab:StripTextures()
-		Tab:SetNormalTexture([[Interface\Buttons\UI-SortArrow]])
-		Tab:StyleButton()
 	end
 
 	for i = 1, NUM_FILTERS_TO_DISPLAY do
@@ -206,11 +200,14 @@ local function LoadSkin()
 	AuctionsItemButton:StyleButton()
 
 	AuctionsItemButton:HookScript("OnEvent", function(self, event)
-		if event == "NEW_AUCTION_UPDATE" and self:GetNormalTexture() then
-			self:GetNormalTexture():SetTexCoord(unpack(E.TexCoords))
-			self:GetNormalTexture():SetInside()
+		local normalTexture = self:GetNormalTexture()
+
+		if event == "NEW_AUCTION_UPDATE" and normalTexture then
+			normalTexture:SetTexCoord(unpack(E.TexCoords))
+			normalTexture:SetInside()
 
 			local _, _, _, quality = GetAuctionSellItemInfo()
+
 			if quality then
 				self:SetBackdropBorderColor(GetItemQualityColor(quality))
 			else
@@ -252,47 +249,60 @@ local function LoadSkin()
 	AuctionProgressBar:SetStatusBarTexture(E.media.normTex)
 	AuctionProgressBar:SetStatusBarColor(1, 1, 0)
 
-	for Frame, NumButtons in pairs({["Browse"] = NUM_BROWSE_TO_DISPLAY, ["Auctions"] = NUM_AUCTIONS_TO_DISPLAY, ["Bid"] = NUM_BIDS_TO_DISPLAY}) do
-		for i = 1, NumButtons do
-			local Button = _G[Frame.."Button"..i]
-			local ItemButton = _G[Frame.."Button"..i.."Item"]
-			local Texture = _G[Frame.."Button"..i.."ItemIconTexture"]
-			local Name = _G[Frame.."Button"..i.."Name"]
-			local Highlight = _G[Frame.."Button"..i.."Highlight"]
+	local frames = {
+		["Browse"] = NUM_BROWSE_TO_DISPLAY,
+		["Auctions"] = NUM_AUCTIONS_TO_DISPLAY,
+		["Bid"] = NUM_BIDS_TO_DISPLAY
+	}
 
-			if Button then
-				Button:StripTextures()
+	for frameName, numButtons in pairs(frames) do
+		for i = 1, numButtons do
+			local button = _G[frameName.."Button"..i]
+			local itemButton = _G[frameName.."Button"..i.."Item"]
+			local name = _G[frameName.."Button"..i.."Name"]
 
-				Highlight:SetTexture(E.Media.Textures.Highlight)
-				Highlight:SetInside()
-				hooksecurefunc(Name, "SetVertexColor", function(_, r, g, b) Highlight:SetVertexColor(r, g, b, 0.35) end)
+			if button then
+				button:StripTextures()
+
+				local highlight = _G[frameName.."Button"..i.."Highlight"]
+				highlight:SetTexture(E.Media.Textures.Highlight)
+				highlight:SetInside()
+
+				hooksecurefunc(name, "SetVertexColor", function(_, r, g, b)
+					highlight:SetVertexColor(r, g, b, 0.35)
+				end)
 			end
 
-			if ItemButton then
-				ItemButton:SetTemplate()
-				ItemButton:StyleButton()
-				ItemButton:GetNormalTexture():SetTexture("")
-				ItemButton:Point("TOPLEFT", 0, -1)
-				ItemButton:Size(34)
+			if itemButton then
+				itemButton:SetTemplate()
+				itemButton:StyleButton()
+				itemButton:GetNormalTexture():SetTexture("")
+				itemButton:Point("TOPLEFT", 0, -1)
+				itemButton:Size(34)
 
-				Texture:SetTexCoord(unpack(E.TexCoords))
-				Texture:SetInside()
+				local texture = _G[frameName.."Button"..i.."ItemIconTexture"]
+				texture:SetTexCoord(unpack(E.TexCoords))
+				texture:SetInside()
 
-				hooksecurefunc(Name, "SetVertexColor", function(_, r, g, b) ItemButton:SetBackdropBorderColor(r, g, b) end)
-				hooksecurefunc(Name, "Hide", function() ItemButton:SetBackdropBorderColor(unpack(E.media.bordercolor)) end)
+				hooksecurefunc(name, "SetVertexColor", function(_, r, g, b)
+					itemButton:SetBackdropBorderColor(r, g, b)
+				end)
+				hooksecurefunc(name, "Hide", function()
+					itemButton:SetBackdropBorderColor(unpack(E.media.bordercolor))
+				end)
 			end
 		end
 	end
 
 	-- Custom Backdrops
-	for _, Frame in pairs({AuctionFrameBrowse, AuctionFrameAuctions}) do
-		Frame.LeftBackground = CreateFrame("Frame", nil, Frame)
-		Frame.LeftBackground:SetTemplate("Transparent")
-		Frame.LeftBackground:SetFrameLevel(Frame:GetFrameLevel() - 1)
+	for _, frame in ipairs({AuctionFrameBrowse, AuctionFrameAuctions}) do
+		frame.LeftBackground = CreateFrame("Frame", nil, frame)
+		frame.LeftBackground:SetTemplate("Transparent")
+		frame.LeftBackground:SetFrameLevel(frame:GetFrameLevel() - 1)
 
-		Frame.RightBackground = CreateFrame("Frame", nil, Frame)
-		Frame.RightBackground:SetTemplate("Transparent")
-		Frame.RightBackground:SetFrameLevel(Frame:GetFrameLevel() - 1)
+		frame.RightBackground = CreateFrame("Frame", nil, frame)
+		frame.RightBackground:SetTemplate("Transparent")
+		frame.RightBackground:SetFrameLevel(frame:GetFrameLevel() - 1)
 	end
 
 	AuctionFrameAuctions.LeftBackground:Point("TOPLEFT", 15, -72)
@@ -338,4 +348,4 @@ local function LoadSkin()
 	S:HandleCloseButton(AuctionDressUpFrameCloseButton, AuctionDressUpFrame.backdrop)
 end
 
-S:AddCallbackForAddon("Blizzard_AuctionUI", "AuctionHouse", LoadSkin)
+S:AddCallbackForAddon("Blizzard_AuctionUI", "Skin_Blizzard_AuctionUI", LoadSkin)
