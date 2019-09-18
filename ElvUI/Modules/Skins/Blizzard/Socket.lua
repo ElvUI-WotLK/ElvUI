@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
@@ -9,7 +9,7 @@ local GetNumSockets = GetNumSockets
 local GetSocketTypes = GetSocketTypes
 
 local function LoadSkin()
-	if not (E.private.skins.blizzard.enable and E.private.skins.blizzard.socket) then return end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.socket then return end
 
 	ItemSocketingFrame:StripTextures()
 	ItemSocketingFrame:CreateBackdrop("Transparent")
@@ -53,4 +53,4 @@ local function LoadSkin()
 	S:HandleButton(ItemSocketingSocketButton)
 end
 
-S:AddCallbackForAddon("Blizzard_ItemSocketingUI", "ItemSocket", LoadSkin)
+S:AddCallbackForAddon("Blizzard_ItemSocketingUI", "Skin_Blizzard_ItemSocketingUI", LoadSkin)

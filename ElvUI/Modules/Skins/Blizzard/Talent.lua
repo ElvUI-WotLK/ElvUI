@@ -1,12 +1,13 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
 local _G = _G
+local unpack = unpack
 --WoW API / Variables
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.talent ~= true then return; end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.talent then return end
 
 	PlayerTalentFrame:StripTextures(true)
 	PlayerTalentFrame:CreateBackdrop("Transparent")
@@ -78,4 +79,4 @@ local function LoadSkin()
 	end
 end
 
-S:AddCallbackForAddon("Blizzard_TalentUI", "Talent", LoadSkin)
+S:AddCallbackForAddon("Blizzard_TalentUI", "Skin_Blizzard_TalentUI", LoadSkin)

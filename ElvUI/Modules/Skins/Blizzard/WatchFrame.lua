@@ -1,13 +1,19 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
 local _G = _G
 local unpack = unpack
+local format = string.format
 --WoW API / Variables
+local GetNumQuestWatches = GetNumQuestWatches
+local GetQuestDifficultyColor = GetQuestDifficultyColor
+local GetQuestIndexForWatch = GetQuestIndexForWatch
+local GetQuestLogTitle = GetQuestLogTitle
+local hooksecurefunc = hooksecurefunc
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.watchframe ~= true then return end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.watchframe then return end
 
 	-- WatchFrame Expand/Collapse Button
 	WatchFrameCollapseExpandButton:StripTextures()
@@ -34,6 +40,7 @@ local function LoadSkin()
 	-- WatchFrame Text
 	hooksecurefunc("WatchFrame_Update", function()
 		local questIndex, title, level, color
+
 		for i = 1, GetNumQuestWatches() do
 			questIndex = GetQuestIndexForWatch(i)
 			if questIndex then
@@ -56,11 +63,12 @@ local function LoadSkin()
 		-- WatchFrame Items
 		for i = 1, WATCHFRAME_NUM_ITEMS do
 			local button = _G["WatchFrameItem"..i]
-			local icon = _G["WatchFrameItem"..i.."IconTexture"]
-			local normal = _G["WatchFrameItem"..i.."NormalTexture"]
-			local cooldown = _G["WatchFrameItem"..i.."Cooldown"]
 
 			if button and not button.isSkinned then
+				local icon = _G["WatchFrameItem"..i.."IconTexture"]
+				local normal = _G["WatchFrameItem"..i.."NormalTexture"]
+				local cooldown = _G["WatchFrameItem"..i.."Cooldown"]
+
 				button:CreateBackdrop()
 				button.backdrop:SetAllPoints()
 				button:StyleButton()
@@ -81,8 +89,10 @@ local function LoadSkin()
 	-- WatchFrame Highlight
 	hooksecurefunc("WatchFrameLinkButtonTemplate_Highlight", function(self, onEnter)
 		local line
+
 		for index = self.startLine, self.lastLine do
 			line = self.lines[index]
+
 			if line then
 				if index == self.startLine then
 					if onEnter then
@@ -101,7 +111,7 @@ local function LoadSkin()
 
 	-- WatchFrame POI Buttons
 	hooksecurefunc("QuestPOI_DisplayButton", function(parentName, buttonType, buttonIndex)
-		local poiButton = _G["poi"..parentName..buttonType.."_"..buttonIndex]
+		local poiButton = _G[format("poi%s%s_%d", parentName, buttonType, buttonIndex)]
 
 		if poiButton and parentName == "WatchFrameLines" then
 			if not poiButton.isSkinned then
@@ -144,4 +154,4 @@ local function LoadSkin()
 	end)
 end
 
-S:AddCallback("WatchFrame", LoadSkin)
+S:AddCallback("Skin_WatchFrame", LoadSkin)

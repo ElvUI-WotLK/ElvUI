@@ -1,11 +1,16 @@
-local E, L, V, P, G = unpack(select(2, ...)); -- Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) -- Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
+local _G = _G
+local unpack = unpack
 --WoW API / Variables
+local GetInventoryItemID = GetInventoryItemID
+local GetItemInfo = GetItemInfo
+local GetItemQualityColor = GetItemQualityColor
 
 local function LoadSkin()
-	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.inspect then return; end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.inspect then return end
 
 	InspectFrame:StripTextures(true)
 	InspectFrame:CreateBackdrop("Transparent")
@@ -54,17 +59,19 @@ local function LoadSkin()
 		frame.backdrop:SetAllPoints()
 	end
 
-	hooksecurefunc("InspectPaperDollItemSlotButton_Update", function(button)
+	local function styleButton(button)
 		if button.hasItem then
 			local itemID = GetInventoryItemID(InspectFrame.unit, button:GetID())
 			if itemID then
 				local _, _, quality = GetItemInfo(itemID)
+
 				if not quality then
 					E:Delay(0.1, function()
 						if InspectFrame.unit then
-							InspectPaperDollItemSlotButton_Update(button)
+							styleButton(button)
 						end
 					end)
+
 					return
 				elseif quality then
 					button.backdrop:SetBackdropBorderColor(GetItemQualityColor(quality))
@@ -72,8 +79,11 @@ local function LoadSkin()
 				end
 			end
 		end
+
 		button.backdrop:SetBackdropBorderColor(unpack(E.media.bordercolor))
-	end)
+	end
+
+	hooksecurefunc("InspectPaperDollItemSlotButton_Update", styleButton)
 
 	S:HandleRotateButton(InspectModelRotateLeftButton)
 	S:HandleRotateButton(InspectModelRotateRightButton)
@@ -112,10 +122,11 @@ local function LoadSkin()
 
 	for i = 1, MAX_NUM_TALENTS do
 		local talent = _G["InspectTalentFrameTalent"..i]
-		local icon = _G["InspectTalentFrameTalent"..i.."IconTexture"]
-		local rank = _G["InspectTalentFrameTalent"..i.."Rank"]
 
 		if talent then
+			local icon = _G["InspectTalentFrameTalent"..i.."IconTexture"]
+			local rank = _G["InspectTalentFrameTalent"..i.."Rank"]
+
 			talent:StripTextures()
 			talent:SetTemplate("Default")
 			talent:StyleButton()
@@ -138,4 +149,4 @@ local function LoadSkin()
 	InspectTalentFramePointsBar:StripTextures()
 end
 
-S:AddCallbackForAddon("Blizzard_InspectUI", "Inspect", LoadSkin)
+S:AddCallbackForAddon("Blizzard_InspectUI", "Skin_Blizzard_InspectUI", LoadSkin)

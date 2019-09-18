@@ -1,20 +1,14 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
+local _G = _G
 local find = string.find
 --WoW API / Variables
+local hooksecurefunc = hooksecurefunc
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.lfr ~= true then return; end
-
-	local buttons = {
-		"LFRQueueFrameFindGroupButton",
-		"LFRQueueFrameAcceptCommentButton",
-		"LFRBrowseFrameSendMessageButton",
-		"LFRBrowseFrameInviteButton",
-		"LFRBrowseFrameRefreshButton"
-	}
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.lfr then return end
 
 	LFRParentFrame:StripTextures()
 	LFRParentFrame:CreateBackdrop("Transparent")
@@ -24,6 +18,13 @@ local function LoadSkin()
 	LFRQueueFrame:StripTextures()
 	LFRBrowseFrame:StripTextures()
 
+	local buttons = {
+		"LFRQueueFrameFindGroupButton",
+		"LFRQueueFrameAcceptCommentButton",
+		"LFRBrowseFrameSendMessageButton",
+		"LFRBrowseFrameInviteButton",
+		"LFRBrowseFrameRefreshButton"
+	}
 	for i = 1, #buttons do
 		S:HandleButton(_G[buttons[i]], true)
 	end
@@ -81,54 +82,6 @@ local function LoadSkin()
 	LFRQueueFrameRoleButtonDPS:GetChildren():SetFrameLevel(LFRQueueFrameRoleButtonDPS:GetChildren():GetFrameLevel() + 2)
 
 	LFRQueueFrameSpecificListScrollFrame:StripTextures()
-
-	--Skill Line Tabs
-	for i = 1, 2 do
-		local tab = _G["LFRParentFrameSideTab"..i]
-		if tab then
-			local tex = tab:GetNormalTexture():GetTexture()
-			tab:StripTextures()
-			tab:GetNormalTexture():SetTexCoord(unpack(E.TexCoords))
-			tab:GetNormalTexture():ClearAllPoints()
-			tab:GetNormalTexture():Point("TOPLEFT", 2, -2)
-			tab:GetNormalTexture():Point("BOTTOMRIGHT", -2, 2)
-			tab:SetNormalTexture(tex)
-
-			tab:CreateBackdrop("Default")
-			tab.backdrop:SetAllPoints()
-			tab:StyleButton(true)
-
-			local point, relatedTo, point2, _, y = tab:GetPoint()
-			tab:Point(point, relatedTo, point2, 1, y)
-		end
-	end
-
-	for i = 1, 1 do
-		local button = _G["RaidFinderQueueFrameScrollFrameChildFrameItem"..i]
-		local icon = _G["RaidFinderQueueFrameScrollFrameChildFrameItem"..i.."IconTexture"]
-		local count = _G["RaidFinderQueueFrameScrollFrameChildFrameItem"..i.."Count"]
-
-		if button then
-			local __texture = _G[button:GetName().."IconTexture"]:GetTexture()
-			button:StripTextures()
-			icon:SetTexture(__texture)
-			icon:SetTexCoord(unpack(E.TexCoords))
-			icon:Point("TOPLEFT", 2, -2)
-			icon:SetDrawLayer("OVERLAY")
-			count:SetDrawLayer("OVERLAY")
-			if not button.backdrop then
-				button:CreateBackdrop("Default")
-				button.backdrop:Point("TOPLEFT", icon, "TOPLEFT", -2, 2)
-				button.backdrop:Point("BOTTOMRIGHT", icon, "BOTTOMRIGHT", 2, -2)
-				icon:SetParent(button.backdrop)
-				icon.SetPoint = E.noop
-
-				if count then
-					count:SetParent(button.backdrop)
-				end
-			end
-		end
-	end
 end
 
-S:AddCallback("LFR", LoadSkin)
+S:AddCallback("Skin_LFR", LoadSkin)

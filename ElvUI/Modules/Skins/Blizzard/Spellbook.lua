@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
@@ -10,7 +10,7 @@ local unpack = unpack
 local MAX_SKILLLINE_TABS = MAX_SKILLLINE_TABS
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.spellbook ~= true then return end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.spellbook then return end
 
 	SpellBookFrame:StripTextures(true)
 	SpellBookFrame:CreateBackdrop("Transparent")
@@ -60,10 +60,11 @@ local function LoadSkin()
 
 	for i = 1, SPELLS_PER_PAGE do
 		local button = _G["SpellButton"..i]
+		local autoCast = _G["SpellButton"..i.."AutoCastable"]
 		button:StripTextures()
 
-		_G["SpellButton"..i.."AutoCastable"]:SetTexture("Interface\\Buttons\\UI-AutoCastableOverlay")
-		_G["SpellButton"..i.."AutoCastable"]:SetOutside(button, 16, 16)
+		autoCast:SetTexture("Interface\\Buttons\\UI-AutoCastableOverlay")
+		autoCast:SetOutside(button, 16, 16)
 
 		button:CreateBackdrop("Default", true)
 
@@ -93,4 +94,4 @@ local function LoadSkin()
 	SpellBookPageText:SetTextColor(1, 1, 1)
 end
 
-S:AddCallback("Spellbook", LoadSkin)
+S:AddCallback("Skin_Spellbook", LoadSkin)

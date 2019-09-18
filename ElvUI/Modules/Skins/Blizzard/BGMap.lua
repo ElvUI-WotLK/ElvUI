@@ -1,11 +1,11 @@
-local E, L, V, P, G = unpack(ElvUI); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(ElvUI) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
 --WoW API / Variables
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.bgmap ~= true then return end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.bgmap then return end
 
 	BattlefieldMinimap:SetClampedToScreen(true)
 	BattlefieldMinimapCorner:Kill()
@@ -25,7 +25,10 @@ local function LoadSkin()
 
 	BattlefieldMinimap:SetScript("OnMouseUp", function(self, btn)
 		if btn == "LeftButton" then
-			BattlefieldMinimapTab:StopMovingOrSizing()
+			if BattlefieldMinimapTab._moved then
+				BattlefieldMinimapTab:StopMovingOrSizing()
+				BattlefieldMinimapTab._moved = nil
+			end
 		elseif btn == "RightButton" then
 			ToggleDropDownMenu(1, nil, BattlefieldMinimapTabDropDown, self:GetName(), 0, -4)
 		end
@@ -33,11 +36,10 @@ local function LoadSkin()
 
 	BattlefieldMinimap:SetScript("OnMouseDown", function(_, btn)
 		if btn == "LeftButton" then
-			if BattlefieldMinimapOptions and BattlefieldMinimapOptions.locked then
-				return
-			else
-				BattlefieldMinimapTab:StartMoving()
-			end
+			if BattlefieldMinimapOptions and BattlefieldMinimapOptions.locked then return end
+
+			BattlefieldMinimapTab._moved = true
+			BattlefieldMinimapTab:StartMoving()
 		end
 	end)
 
@@ -72,4 +74,4 @@ local function LoadSkin()
 	end)
 end
 
-S:AddCallbackForAddon("Blizzard_BattlefieldMinimap", "BattlefieldMinimap", LoadSkin)
+S:AddCallbackForAddon("Blizzard_BattlefieldMinimap", "Skin_Blizzard_BattlefieldMinimap", LoadSkin)

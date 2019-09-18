@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
@@ -6,10 +6,9 @@ local _G = _G
 local select = select
 local find, gsub = string.find, string.gsub
 --WoW API / Variables
-local hooksecurefunc = hooksecurefunc
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.gossip ~= true then return end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.gossip then return end
 
 	ItemTextScrollFrame:StripTextures()
 	GossipFrameGreetingPanel:StripTextures()
@@ -76,4 +75,4 @@ local function LoadSkin()
 	end)
 end
 
-S:AddCallback("Gossip", LoadSkin)
+S:AddCallback("Skin_Gossip", LoadSkin)

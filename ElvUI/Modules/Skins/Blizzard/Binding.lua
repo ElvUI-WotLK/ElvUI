@@ -1,11 +1,11 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
 --WoW API / Variables
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.binding ~= true then return; end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.binding then return end
 
 	KeyBindingFrame:CreateBackdrop("Transparent")
 	KeyBindingFrame.backdrop:Point("TOPLEFT", 2, 0)
@@ -30,9 +30,10 @@ local function LoadSkin()
 	S:HandleButton(KeyBindingFrameDefaultButton)
 	S:HandleButton(KeyBindingFrameCancelButton)
 	S:HandleButton(KeyBindingFrameOkayButton)
-	KeyBindingFrameOkayButton:Point("RIGHT", KeyBindingFrameCancelButton, "LEFT", -3, 0)
 	S:HandleButton(KeyBindingFrameUnbindButton)
+
+	KeyBindingFrameOkayButton:Point("RIGHT", KeyBindingFrameCancelButton, "LEFT", -3, 0)
 	KeyBindingFrameUnbindButton:Point("RIGHT", KeyBindingFrameOkayButton, "LEFT", -3, 0)
 end
 
-S:AddCallbackForAddon("Blizzard_BindingUI", "Binding", LoadSkin)
+S:AddCallbackForAddon("Blizzard_BindingUI", "Skin_Blizzard_BindingUI", LoadSkin)

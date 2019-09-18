@@ -1,13 +1,17 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
+local _G = _G
+local unpack = unpack
+local ceil, fmod = math.ceil, math.fmod
 --WoW API / Variables
-local CreateFrame = CreateFrame
-local hooksecurefunc = hooksecurefunc
+local GetCurrentGuildBankTab = GetCurrentGuildBankTab
+local GetGuildBankItemLink = GetGuildBankItemLink
+local GetItemQualityColor = GetItemQualityColor
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.gbank ~= true then return end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.gbank then return end
 
 	GuildBankFrame:StripTextures()
 	GuildBankFrame:CreateBackdrop("Transparent")
@@ -102,36 +106,36 @@ local function LoadSkin()
 	end
 
 	for i = 1, 4 do
-		local tab = _G["GuildBankFrameTab"..i]
-
-		S:HandleTab(tab)
+		S:HandleTab(_G["GuildBankFrameTab"..i])
 	end
 
 	hooksecurefunc("GuildBankFrame_Update", function()
 		if GuildBankFrame.mode ~= "bank" then return end
 
 		local tab = GetCurrentGuildBankTab()
-		local button, index, column, link, quality, r, g, b
+		local _, index, column, link, quality
+
 		for i = 1, MAX_GUILDBANK_SLOTS_PER_TAB do
-			index = mod(i, NUM_SLOTS_PER_GUILDBANK_GROUP)
+			index = fmod(i, NUM_SLOTS_PER_GUILDBANK_GROUP)
+
 			if index == 0 then
 				index = NUM_SLOTS_PER_GUILDBANK_GROUP
 			end
-			column = ceil((i - 0.5) / NUM_SLOTS_PER_GUILDBANK_GROUP)
-			button = _G["GuildBankColumn"..column.."Button"..index]
 
+			column = ceil((i - 0.5) / NUM_SLOTS_PER_GUILDBANK_GROUP)
 			link = GetGuildBankItemLink(tab, i)
+
 			if link then
-				quality = select(3, GetItemInfo(link))
+				_, _, quality = GetItemInfo(link)
+
 				if quality and quality > 1 then
-					r, g, b = GetItemQualityColor(quality)
+					_G["GuildBankColumn"..column.."Button"..index]:SetBackdropBorderColor(GetItemQualityColor(quality))
 				else
-					r, g, b = unpack(E.media.bordercolor)
+					_G["GuildBankColumn"..column.."Button"..index]:SetBackdropBorderColor(unpack(E.media.bordercolor))
 				end
 			else
-				r, g, b = unpack(E.media.bordercolor)
+				_G["GuildBankColumn"..column.."Button"..index]:SetBackdropBorderColor(unpack(E.media.bordercolor))
 			end
-			button:SetBackdropBorderColor(r, g, b)
 		end
 	end)
 
@@ -173,4 +177,4 @@ local function LoadSkin()
 	GuildBankColumn7Button8:Point("TOPLEFT", GuildBankColumn7Button1, "TOPRIGHT", 6, 0)
 end
 
-S:AddCallbackForAddon("Blizzard_GuildBankUI", "GuildBank", LoadSkin)
+S:AddCallbackForAddon("Blizzard_GuildBankUI", "Skin_Blizzard_GuildBankUI", LoadSkin)

@@ -1,21 +1,38 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
 local _G = _G
+local select = select
 --WoW API / Variables
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.help ~= true then return; end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.help then return end
 
 	local helpFrameButtons = {
-		"GMTalkOpenTicket", "GMTalkCancel",
-		"ReportIssueOpenTicket", "ReportIssueCancel",
-		"LagLoot", "LagAuctionHouse", "LagMail", "LagChat", "LagMovement", "LagSpell", "LagCancel",
-		"StuckStuck", "StuckOpenTicket", "StuckCancel",
-		"OpenTicketCancel", "OpenTicketSubmit",
-		"ViewResponseCancel", "ViewResponseMoreHelp", "ViewResponseIssueResolved",
-		"WelcomeGMTalk", "WelcomeReportIssue", "WelcomeStuck", "WelcomeCancel"
+		"GMTalkOpenTicket",
+		"GMTalkCancel",
+		"ReportIssueOpenTicket",
+		"ReportIssueCancel",
+		"LagLoot",
+		"LagAuctionHouse",
+		"LagMail",
+		"LagChat",
+		"LagMovement",
+		"LagSpell",
+		"LagCancel",
+		"StuckStuck",
+		"StuckOpenTicket",
+		"StuckCancel",
+		"OpenTicketCancel",
+		"OpenTicketSubmit",
+		"ViewResponseCancel",
+		"ViewResponseMoreHelp",
+		"ViewResponseIssueResolved",
+		"WelcomeGMTalk",
+		"WelcomeReportIssue",
+		"WelcomeStuck",
+		"WelcomeCancel"
 	}
 
 	HelpFrame:StripTextures()
@@ -26,8 +43,7 @@ local function LoadSkin()
 	S:HandleCloseButton(HelpFrameCloseButton)
 
 	for i = 1, #helpFrameButtons do
-		local button = _G["HelpFrame"..helpFrameButtons[i]]
-		S:HandleButton(button)
+		S:HandleButton(_G["HelpFrame"..helpFrameButtons[i]])
 	end
 
 	HelpFrameOpenTicketDivider:StripTextures()
@@ -87,4 +103,4 @@ local function LoadSkin()
 	S:HandleButton(KnowledgeBaseFrameCancel)
 end
 
-S:AddCallback("Help", LoadSkin)
+S:AddCallback("Skin_Help", LoadSkin)

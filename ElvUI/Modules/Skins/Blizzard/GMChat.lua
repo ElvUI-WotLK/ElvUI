@@ -1,13 +1,12 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
 --WoW API / Variables
+local IsShiftKeyDown = IsShiftKeyDown
 
 local function LoadChatSkin()
-	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.gmchat then return; end
-
-	local LSM = LibStub("LibSharedMedia-3.0")
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.gmchat then return end
 
 	GMChatFrame:StripTextures()
 	GMChatFrame:CreateBackdrop("Transparent")
@@ -24,7 +23,7 @@ local function LoadChatSkin()
 	GMChatTab.backdrop:Point("BOTTOMRIGHT", 2, 2)
 
 	GMChatTabText:Point("LEFT", GMChatTab, 17, 2)
-	GMChatTabText:FontTemplate(LSM:Fetch("font", E.db.chat.tabFont), E.db.chat.tabFontSize, E.db.chat.tabFontOutline)
+	GMChatTabText:FontTemplate(E.LSM:Fetch("font", E.db.chat.tabFont), E.db.chat.tabFontSize, E.db.chat.tabFontOutline)
 
 	GMChatTabText:SetTextColor(unpack(E.media.rgbvaluecolor))
 
@@ -65,7 +64,7 @@ local function LoadChatSkin()
 	GMChatStatusFramePulse:Point("BOTTOMRIGHT", 25, -19)
 
 	GMChatStatusFrame:HookScript("OnShow", function(self)
-		if (TicketStatusFrame and TicketStatusFrame:IsShown()) then
+		if TicketStatusFrame and TicketStatusFrame:IsShown() then
 			self:Point("TOPLEFT", TicketStatusFrame, "BOTTOMLEFT", 0, 1)
 		else
 			self:SetAllPoints(TicketStatusFrame)
@@ -101,7 +100,7 @@ local function LoadSurveySkin()
 	S:HandleButton(GMSurveySubmitButton)
 
 	for i = 1, 7 do
-		local frame = _G["GMSurveyQuestion"..i ]
+		local frame = _G["GMSurveyQuestion"..i]
 		frame:StripTextures()
 		frame:SetTemplate("Transparent")
 	end
@@ -110,5 +109,5 @@ local function LoadSurveySkin()
 	GMSurveyCommentFrame:SetTemplate("Transparent")
 end
 
-S:AddCallbackForAddon("Blizzard_GMChatUI", "GMChatFrame", LoadChatSkin)
-S:AddCallbackForAddon("Blizzard_GMSurveyUI", "GMSurveyFrame", LoadSurveySkin)
+S:AddCallbackForAddon("Blizzard_GMChatUI", "Skin_Blizzard_GMChatUI", LoadChatSkin)
+S:AddCallbackForAddon("Blizzard_GMSurveyUI", "Skin_Blizzard_GMSurveyUI", LoadSurveySkin)

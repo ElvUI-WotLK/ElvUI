@@ -1,16 +1,17 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
 local _G = _G
 local unpack = unpack
 --WoW API / Variables
-local TalentFrame_LoadUI = TalentFrame_LoadUI
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.talent ~= true then return; end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.talent then return end
 
-	if not PlayerTalentFrame then TalentFrame_LoadUI() end
+	if not PlayerTalentFrame then
+		TalentFrame_LoadUI()
+	end
 
 	GlyphFrame:StripTextures()
 	GlyphFrame:CreateBackdrop()
@@ -60,4 +61,4 @@ local function LoadSkin()
 	end)
 end
 
-S:AddCallbackForAddon("Blizzard_GlyphUI", "Glyph", LoadSkin)
+S:AddCallbackForAddon("Blizzard_GlyphUI", "Skin_Blizzard_GlyphUI", LoadSkin)

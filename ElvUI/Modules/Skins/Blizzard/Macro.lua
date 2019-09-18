@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
@@ -7,7 +7,7 @@ local unpack = unpack
 --WoW API / Variables
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.macro ~= true then return end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.macro then return end
 
 	local MacroFrame = _G["MacroFrame"]
 	MacroFrame:StripTextures()
@@ -16,21 +16,22 @@ local function LoadSkin()
 	MacroFrame.backdrop:Point("BOTTOMRIGHT", -36, 65)
 
 	for i = 1, 2 do
-		local Tab = _G["MacroFrameTab"..i]
-		Tab:StripTextures()
-		S:HandleButton(Tab)
+		local tab = _G["MacroFrameTab"..i]
+		tab:StripTextures()
+		S:HandleButton(tab)
 
-		Tab:Height(22)
-		Tab:ClearAllPoints()
+		tab:Height(22)
+		tab:ClearAllPoints()
 
 		if i == 1 then
-			Tab:Point("TOPLEFT", MacroFrame, "TOPLEFT", 22, -50)
-			Tab:Width(125)
+			tab:Point("TOPLEFT", MacroFrame, "TOPLEFT", 22, -50)
+			tab:Width(125)
 		elseif i == 2 then
-			Tab:Point("TOPRIGHT", MacroFrame, "TOPRIGHT", -66, -50)
-			Tab:Width(168)
+			tab:Point("TOPRIGHT", MacroFrame, "TOPRIGHT", -66, -50)
+			tab:Width(168)
 		end
-		Tab.SetWidth = E.noop
+
+		tab.SetWidth = E.noop
 	end
 
 	S:HandleButton(MacroDeleteButton)
@@ -106,4 +107,4 @@ local function LoadSkin()
 	MacroPopupFrame:Point("TOPLEFT", MacroFrame, "TOPRIGHT", -30, -11)
 end
 
-S:AddCallbackForAddon("Blizzard_MacroUI", "Macro", LoadSkin)
+S:AddCallbackForAddon("Blizzard_MacroUI", "Skin_Blizzard_MacroUI", LoadSkin)

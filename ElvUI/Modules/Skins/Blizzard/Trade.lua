@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
@@ -11,7 +11,7 @@ local GetTradePlayerItemLink = GetTradePlayerItemLink
 local GetTradeTargetItemLink = GetTradeTargetItemLink
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.trade ~= true then return; end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.trade then return end
 
 	TradeFrame:StripTextures(true)
 	TradeFrame:CreateBackdrop("Transparent")
@@ -91,11 +91,14 @@ local function LoadSkin()
 
 	hooksecurefunc("TradeFrame_UpdatePlayerItem", function(id)
 		local tradeItemButton = _G["TradePlayerItem"..id.."ItemButton"]
-		local tradeItemName = _G["TradePlayerItem"..id.."Name"]
 		local link = GetTradePlayerItemLink(id)
+
 		if link then
+			local tradeItemName = _G["TradePlayerItem"..id.."Name"]
 			local quality = select(3, GetItemInfo(link))
+
 			tradeItemName:SetTextColor(GetItemQualityColor(quality))
+
 			if quality then
 				tradeItemButton:SetBackdropBorderColor(GetItemQualityColor(quality))
 			else
@@ -108,11 +111,14 @@ local function LoadSkin()
 
 	hooksecurefunc("TradeFrame_UpdateTargetItem", function(id)
 		local tradeItemButton = _G["TradeRecipientItem"..id.."ItemButton"]
-		local tradeItemName = _G["TradeRecipientItem"..id.."Name"]
 		local link = GetTradeTargetItemLink(id)
+
 		if link then
+			local tradeItemName = _G["TradeRecipientItem"..id.."Name"]
 			local quality = select(3, GetItemInfo(link))
+
 			tradeItemName:SetTextColor(GetItemQualityColor(quality))
+
 			if quality then
 				tradeItemButton:SetBackdropBorderColor(GetItemQualityColor(quality))
 			else
@@ -124,4 +130,4 @@ local function LoadSkin()
 	end)
 end
 
-S:AddCallback("Trade", LoadSkin)
+S:AddCallback("Skin_Trade", LoadSkin)

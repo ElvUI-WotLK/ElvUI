@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
@@ -15,7 +15,7 @@ local GetTradeSkillReagentItemLink = GetTradeSkillReagentItemLink
 local hooksecurefunc = hooksecurefunc
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.tradeskill ~= true then return; end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.tradeskill then return end
 
 	TRADE_SKILLS_DISPLAYED = 25
 
@@ -221,34 +221,42 @@ local function LoadSkin()
 		end
 
 		local skillLink = GetTradeSkillItemLink(id)
+		local r, g, b
+
 		if skillLink then
 			local quality = select(3, GetItemInfo(skillLink))
+
 			if quality then
-				TradeSkillSkillIcon:SetBackdropBorderColor(GetItemQualityColor(quality))
-				TradeSkillSkillName:SetTextColor(GetItemQualityColor(quality))
+				r, g, b = GetItemQualityColor(quality)
+
+				TradeSkillSkillIcon:SetBackdropBorderColor(r, g, b)
+				TradeSkillSkillName:SetTextColor(r, g, b)
 			else
 				TradeSkillSkillIcon:SetBackdropBorderColor(unpack(E.media.bordercolor))
 				TradeSkillSkillName:SetTextColor(1, 1, 1)
 			end
 		end
 
-		local numReagents = GetTradeSkillNumReagents(id)
-		for i = 1, numReagents, 1 do
+		for i = 1, GetTradeSkillNumReagents(id) do
 			local _, _, reagentCount, playerReagentCount = GetTradeSkillReagentInfo(id, i)
 			local reagentLink = GetTradeSkillReagentItemLink(id, i)
-			local reagent = _G["TradeSkillReagent"..i]
-			local icon = _G["TradeSkillReagent"..i.."IconTexture"]
-			local name = _G["TradeSkillReagent"..i.."Name"]
 
 			if reagentLink then
+				local reagent = _G["TradeSkillReagent"..i]
+				local icon = _G["TradeSkillReagent"..i.."IconTexture"]
 				local quality = select(3, GetItemInfo(reagentLink))
+
 				if quality then
-					icon.backdrop:SetBackdropBorderColor(GetItemQualityColor(quality))
-					reagent:SetBackdropBorderColor(GetItemQualityColor(quality))
+					local name = _G["TradeSkillReagent"..i.."Name"]
+					r, g, b = GetItemQualityColor(quality)
+
+					icon.backdrop:SetBackdropBorderColor(r, g, b)
+					reagent:SetBackdropBorderColor(r, g, b)
+
 					if playerReagentCount < reagentCount then
 						name:SetTextColor(0.5, 0.5, 0.5)
 					else
-						name:SetTextColor(GetItemQualityColor(quality))
+						name:SetTextColor(r, g, b)
 					end
 				else
 					reagent:SetBackdropBorderColor(unpack(E.media.bordercolor))
@@ -259,4 +267,4 @@ local function LoadSkin()
 	end)
 end
 
-S:AddCallbackForAddon("Blizzard_TradeSkillUI", "TradeSkill", LoadSkin)
+S:AddCallbackForAddon("Blizzard_TradeSkillUI", "Skin_Blizzard_TradeSkillUI", LoadSkin)

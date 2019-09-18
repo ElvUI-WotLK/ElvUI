@@ -1,13 +1,13 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
 local _G = _G
 --WoW API / Variables
-local MAX_ARENA_TEAMS = MAX_ARENA_TEAMS
+local CanQueueForWintergrasp = CanQueueForWintergrasp
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.pvp ~= true then return; end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.pvp then return end
 
 	BattlefieldFrame:StripTextures(true)
 	BattlefieldFrame:CreateBackdrop("Transparent")
@@ -99,4 +99,4 @@ local function LoadSkin()
 	end
 end
 
-S:AddCallback("PvP", LoadSkin)
+S:AddCallback("Skin_PvP", LoadSkin)

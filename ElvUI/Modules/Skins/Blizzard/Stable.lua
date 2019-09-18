@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
@@ -9,7 +9,7 @@ local HasPetUI = HasPetUI
 local UnitExists = UnitExists
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.stable ~= true then return; end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.stable then return end
 
 	PetStableFrame:StripTextures()
 	PetStableFramePortrait:Kill()
@@ -36,11 +36,12 @@ local function LoadSkin()
 	PetStablePetInfo:Size(24, 24)
 
 	hooksecurefunc("PetStable_Update", function()
-		local happiness = GetPetHappiness()
 		local hasPetUI, isHunterPet = HasPetUI()
-		if UnitExists("pet") and hasPetUI and not isHunterPet then return; end
+		if hasPetUI and not isHunterPet and UnitExists("pet") then return end
 
+		local happiness = GetPetHappiness()
 		local texture = PetStablePetInfo:GetRegions()
+
 		if happiness == 1 then
 			texture:SetTexCoord(0.41, 0.53, 0.06, 0.30)
 		elseif happiness == 2 then
@@ -51,4 +52,4 @@ local function LoadSkin()
 	end)
 end
 
-S:AddCallback("Stable", LoadSkin)
+S:AddCallback("Skin_Stable", LoadSkin)

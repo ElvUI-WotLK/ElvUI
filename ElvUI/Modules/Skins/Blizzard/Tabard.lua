@@ -1,11 +1,11 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
 --WoW API / Variables
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.tabard ~= true then return; end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.tabard then return end
 
 	TabardFrame:StripTextures()
 	TabardFramePortrait:Kill()
@@ -38,17 +38,20 @@ local function LoadSkin()
 
 	TabardCharacterModelRotateLeftButton:Point("BOTTOMLEFT", 4, 4)
 	TabardCharacterModelRotateRightButton:Point("TOPLEFT", TabardCharacterModelRotateLeftButton, "TOPRIGHT", 4, 0)
-	hooksecurefunc(TabardCharacterModelRotateLeftButton, "SetPoint", function(self, point, _, _, xOffset, yOffset)
-		if point ~= "BOTTOMLEFT" or xOffset ~= 4 or yOffset ~= 4 then
-			self:Point("BOTTOMLEFT", 4, 4)
-		end
+
+	hooksecurefunc(TabardCharacterModelRotateLeftButton, "SetPoint", function(self)
+		if self._blocked then return end
+		self._blocked = true
+		self:Point("BOTTOMLEFT", 4, 4)
+		self._blocked = nil
 	end)
 
-	hooksecurefunc(TabardCharacterModelRotateRightButton, "SetPoint", function(self, point, _, _, xOffset, yOffset)
-		if point ~= "TOPLEFT" or xOffset ~= 4 or yOffset ~= 0 then
-			self:Point("TOPLEFT", TabardCharacterModelRotateLeftButton, "TOPRIGHT", 4, 0)
-		end
+	hooksecurefunc(TabardCharacterModelRotateRightButton, "SetPoint", function(self)
+		if self._blocked then return end
+		self._blocked = true
+		self:Point("TOPLEFT", TabardCharacterModelRotateLeftButton, "TOPRIGHT", 4, 0)
+		self._blocked = nil
 	end)
 end
 
-S:AddCallback("Tabard", LoadSkin)
+S:AddCallback("Skin_Tabard", LoadSkin)

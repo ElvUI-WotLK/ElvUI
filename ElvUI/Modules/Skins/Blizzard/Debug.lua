@@ -1,13 +1,15 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
+local unpack = unpack
 --WoW API / Variables
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.debug ~= true then return end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.debug then return end
 
 	ScriptErrorsFrame:SetParent(E.UIParent)
+	ScriptErrorsFrame:StripTextures()
 	ScriptErrorsFrame:SetTemplate("Transparent")
 	S:HandleScrollBar(ScriptErrorsFrameScrollFrameScrollBar)
 	S:HandleCloseButton(ScriptErrorsFrameClose)
@@ -16,26 +18,9 @@ local function LoadSkin()
 	ScriptErrorsFrameScrollFrame.backdrop:Point("BOTTOMRIGHT", 0, -3)
 	ScriptErrorsFrameScrollFrame:SetFrameLevel(ScriptErrorsFrameScrollFrame:GetFrameLevel() + 2)
 
+	EventTraceFrame:StripTextures()
 	EventTraceFrame:SetTemplate("Transparent")
 	S:HandleSliderFrame(EventTraceFrameScroll)
-
-	local texs = {
-		"TopLeft",
-		"TopRight",
-		"Top",
-		"BottomLeft",
-		"BottomRight",
-		"Bottom",
-		"Left",
-		"Right",
-		"TitleBG",
-		"DialogBG",
-	}
-
-	for i = 1, #texs do
-		_G["ScriptErrorsFrame"..texs[i]]:SetTexture(nil)
-		_G["EventTraceFrame"..texs[i]]:SetTexture(nil)
-	end
 
 	for i = 1, ScriptErrorsFrame:GetNumChildren() do
 		local child = select(i, ScriptErrorsFrame:GetChildren())
@@ -46,12 +31,14 @@ local function LoadSkin()
 
 	FrameStackTooltip:HookScript("OnShow", function(self)
 		local noscalemult = E.mult * GetCVar("uiScale")
+
 		self:SetBackdrop({
 			bgFile = E.media.blankTex,
 			edgeFile = E.media.blankTex,
 			tile = false, tileSize = 0, edgeSize = noscalemult,
-			insets = { left = -noscalemult, right = -noscalemult, top = -noscalemult, bottom = -noscalemult}
-		});
+			insets = {left = -noscalemult, right = -noscalemult, top = -noscalemult, bottom = -noscalemult}
+		})
+
 		self:SetBackdropColor(unpack(E.media.backdropfadecolor))
 		self:SetBackdropBorderColor(unpack(E.media.bordercolor))
 	end)
@@ -63,4 +50,4 @@ local function LoadSkin()
 	S:HandleCloseButton(EventTraceFrameCloseButton)
 end
 
-S:AddCallbackForAddon("Blizzard_DebugTools", "SkinDebugTools", LoadSkin)
+S:AddCallbackForAddon("Blizzard_DebugTools", "Skin_Blizzard_DebugTools", LoadSkin)

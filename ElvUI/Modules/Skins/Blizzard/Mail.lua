@@ -1,22 +1,22 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
 local _G = _G
 local unpack, select = unpack, select
 --WoW API / Variables
-local hooksecurefunc = hooksecurefunc
 local GetInboxHeaderInfo = GetInboxHeaderInfo
 local GetInboxItemLink = GetInboxItemLink
 local GetItemInfo = GetItemInfo
-local GetSendMailItem = GetSendMailItem
 local GetItemQualityColor = GetItemQualityColor
+local GetSendMailItem = GetSendMailItem
+
 local INBOXITEMS_TO_DISPLAY = INBOXITEMS_TO_DISPLAY
 local ATTACHMENTS_MAX_SEND = ATTACHMENTS_MAX_SEND
 local ATTACHMENTS_MAX_RECEIVE = ATTACHMENTS_MAX_RECEIVE
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.mail ~= true then return end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.mail then return end
 
 	-- Inbox Frame
 	MailFrame:StripTextures(true)
@@ -62,19 +62,20 @@ local function LoadSkin()
 
 	hooksecurefunc("InboxFrame_Update", function()
 		local numItems = GetInboxNumItems()
-		local index = ((InboxFrame.pageNum - 1) * INBOXITEMS_TO_DISPLAY) + 1
+		local index = (InboxFrame.pageNum - 1) * INBOXITEMS_TO_DISPLAY
 
 		for i = 1, INBOXITEMS_TO_DISPLAY do
-			local button = _G["MailItem"..i.."Button"]
+			index = index + 1
 
 			if index <= numItems then
+				local button = _G["MailItem"..i.."Button"]
 				local packageIcon, _, _, _, _, _, _, _, _, _, _, _, isGM = GetInboxHeaderInfo(index)
 
 				if packageIcon and not isGM then
-					local ItemLink = GetInboxItemLink(index, 1)
+					local itemLink = GetInboxItemLink(index, 1)
 
-					if ItemLink then
-						local quality = select(3, GetItemInfo(ItemLink))
+					if itemLink then
+						local quality = select(3, GetItemInfo(itemLink))
 
 						if quality then
 							button.backdrop:SetBackdropBorderColor(GetItemQualityColor(quality))
@@ -87,11 +88,7 @@ local function LoadSkin()
 				else
 					button.backdrop:SetBackdropBorderColor(unpack(E.media.bordercolor))
 				end
-			else
-				button.backdrop:SetBackdropBorderColor(unpack(E.media.bordercolor))
 			end
-
-			index = index + 1
 		end
 	end)
 
@@ -127,7 +124,6 @@ local function LoadSkin()
 	hooksecurefunc("SendMailFrame_Update", function()
 		for i = 1, ATTACHMENTS_MAX_SEND do
 			local button = _G["SendMailAttachment"..i]
-			local icon = button:GetNormalTexture()
 			local name = GetSendMailItem(i)
 
 			if not button.skinned then
@@ -139,6 +135,7 @@ local function LoadSkin()
 			end
 
 			if name then
+				local icon = button:GetNormalTexture()
 				local quality = select(3, GetItemInfo(name))
 
 				if quality then
@@ -212,11 +209,11 @@ local function LoadSkin()
 
 	hooksecurefunc("OpenMailFrame_UpdateButtonPositions", function()
 		for i = 1, ATTACHMENTS_MAX_RECEIVE do
-			local ItemLink = GetInboxItemLink(InboxFrame.openMailID, i)
+			local itemLink = GetInboxItemLink(InboxFrame.openMailID, i)
 			local button = _G["OpenMailAttachmentButton"..i]
 
-			if ItemLink then
-				local quality = select(3, GetItemInfo(ItemLink))
+			if itemLink then
+				local quality = select(3, GetItemInfo(itemLink))
 
 				if quality then
 					button:SetBackdropBorderColor(GetItemQualityColor(quality))
@@ -274,4 +271,4 @@ local function LoadSkin()
 	OpenMailMoneyButtonCount:SetDrawLayer("OVERLAY")
 end
 
-S:AddCallback("Mail", LoadSkin)
+S:AddCallback("Skin_Mail", LoadSkin)

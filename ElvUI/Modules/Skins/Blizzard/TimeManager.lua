@@ -1,11 +1,11 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
 --WoW API / Variables
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.timemanager ~= true then return; end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.timemanager then return end
 
 	TimeManagerFrame:Size(190, 240)
 	TimeManagerFrame:StripTextures()
@@ -77,9 +77,10 @@ local function LoadSkin()
 	local function SetPauseTexture()
 		StopwatchPlayPauseButton:SetNormalTexture("Interface\\AddOns\\ElvUI\\media\\textures\\pause")
 	end
+
 	hooksecurefunc("Stopwatch_Play", SetPauseTexture)
 	hooksecurefunc("Stopwatch_Pause", SetPlayTexture)
 	hooksecurefunc("Stopwatch_Clear", SetPlayTexture)
 end
 
-S:AddCallbackForAddon("Blizzard_TimeManager", "TimeManager", LoadSkin)
+S:AddCallbackForAddon("Blizzard_TimeManager", "Skin_Blizzard_TimeManager", LoadSkin)

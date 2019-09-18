@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
@@ -7,7 +7,7 @@ local select = select
 --WoW API / Variables
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.arenaregistrar ~= true then return; end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.arenaregistrar then return end
 
 	ArenaRegistrarFrame:CreateBackdrop("Transparent")
 	ArenaRegistrarFrame.backdrop:Point("TOPLEFT", 14, -18)
@@ -50,15 +50,10 @@ local function LoadSkin()
 
 	PVPBannerFrameCustomizationFrame:StripTextures()
 
-	local customization, customizationLeft, customizationRight
 	for i = 1, 2 do
-		customization = _G["PVPBannerFrameCustomization"..i]
-		customizationLeft = _G["PVPBannerFrameCustomization"..i.."LeftButton"]
-		customizationRight = _G["PVPBannerFrameCustomization"..i.."RightButton"]
-
-		customization:StripTextures()
-		S:HandleNextPrevButton(customizationLeft)
-		S:HandleNextPrevButton(customizationRight)
+		_G["PVPBannerFrameCustomization"..i]:StripTextures()
+		S:HandleNextPrevButton(_G["PVPBannerFrameCustomization"..i.."LeftButton"])
+		S:HandleNextPrevButton(_G["PVPBannerFrameCustomization"..i.."RightButton"])
 	end
 
 	local pickerButton
@@ -78,4 +73,4 @@ local function LoadSkin()
 	S:HandleCloseButton(PVPBannerFrameCloseButton)
 end
 
-S:AddCallback("ArenaRegistrar", LoadSkin)
+S:AddCallback("Skin_ArenaRegistrar", LoadSkin)

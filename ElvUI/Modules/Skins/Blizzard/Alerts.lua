@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
@@ -9,10 +9,11 @@ local match = string.match
 --WoW API / Variables
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.alertframes ~= true then return end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.alertframes then return end
 
 	S:RawHook("AchievementAlertFrame_GetAlertFrame", function()
 		local frame = S.hooks.AchievementAlertFrame_GetAlertFrame()
+
 		if frame and not frame.isSkinned then
 			local name = frame:GetName()
 
@@ -66,4 +67,4 @@ local function LoadSkin()
 	frame.glowFrame:DisableDrawLayer("OVERLAY")
 end
 
-S:AddCallback("Alerts", LoadSkin)
+S:AddCallback("Skin_Alerts", LoadSkin)

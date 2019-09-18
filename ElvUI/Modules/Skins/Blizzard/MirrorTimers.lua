@@ -1,25 +1,24 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
 --WoW API / Variables
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.mirrorTimers ~= true then return; end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.mirrorTimers then return end
 
 	local function MirrorTimer_OnUpdate(frame, elapsed)
 		if frame.paused then return end
 
 		if frame.timeSinceUpdate >= 0.3 then
-			local minutes = frame.value / 60
-			local seconds = frame.value % 60
 			local text = frame.label:GetText()
 
 			if frame.value > 0 then
-				frame.TimerText:SetFormattedText("%s (%d:%02d)", text, minutes, seconds)
+				frame.TimerText:SetFormattedText("%s (%d:%02d)", text, frame.value / 60, frame.value % 60)
 			else
 				frame.TimerText:SetFormattedText("%s (0:00)", text)
 			end
+
 			frame.timeSinceUpdate = 0
 		else
 			frame.timeSinceUpdate = frame.timeSinceUpdate + elapsed
@@ -40,10 +39,10 @@ local function LoadSkin()
 		statusBar:Size(222, 18)
 		text:Hide()
 
-		local TimerText = mirrorTimer:CreateFontString(nil, "OVERLAY")
-		TimerText:FontTemplate()
-		TimerText:Point("CENTER", statusBar, "CENTER", 0, 0)
-		mirrorTimer.TimerText = TimerText
+		local timerText = mirrorTimer:CreateFontString(nil, "OVERLAY")
+		timerText:FontTemplate()
+		timerText:Point("CENTER", statusBar, "CENTER", 0, 0)
+		mirrorTimer.TimerText = timerText
 
 		mirrorTimer.timeSinceUpdate = 0.3
 		mirrorTimer:HookScript("OnUpdate", MirrorTimer_OnUpdate)
@@ -52,4 +51,4 @@ local function LoadSkin()
 	end
 end
 
-S:AddCallback("MirrorTimers", LoadSkin)
+S:AddCallback("Skin_MirrorTimers", LoadSkin)

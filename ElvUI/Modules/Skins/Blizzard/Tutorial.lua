@@ -1,11 +1,11 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
 --WoW API / Variables
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.tutorial ~= true then return end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.tutorial then return end
 
 	for i = 1, TutorialFrame:GetNumChildren() do
 		local child = select(i, TutorialFrame:GetChildren())
@@ -15,19 +15,19 @@ local function LoadSkin()
 		end
 	end
 
-	local tutorialbutton = TutorialFrameAlertButton
-	local tutorialbuttonIcon = TutorialFrameAlertButton:GetNormalTexture()
+	local TutorialFrameAlertButton = TutorialFrameAlertButton
+	local TutorialFrameAlertButtonIcon = TutorialFrameAlertButton:GetNormalTexture()
 
-	tutorialbutton:StripTextures()
-	tutorialbutton:CreateBackdrop("Default", true)
-	tutorialbutton:SetWidth(50)
-	tutorialbutton:SetHeight(50)
+	TutorialFrameAlertButton:StripTextures()
+	TutorialFrameAlertButton:CreateBackdrop("Default", true)
+	TutorialFrameAlertButton:SetWidth(50)
+	TutorialFrameAlertButton:SetHeight(50)
 
-	tutorialbuttonIcon:SetTexture("INTERFACE\\ICONS\\INV_Letter_18")
-	tutorialbuttonIcon:ClearAllPoints()
-	tutorialbuttonIcon:SetPoint("TOPLEFT", TutorialFrameAlertButton, "TOPLEFT", 5, -5)
-	tutorialbuttonIcon:SetPoint("BOTTOMRIGHT", TutorialFrameAlertButton, "BOTTOMRIGHT", -5, 5)
-	tutorialbuttonIcon:SetTexCoord(unpack(E.TexCoords))
+	TutorialFrameAlertButtonIcon:SetTexture("INTERFACE\\ICONS\\INV_Letter_18")
+	TutorialFrameAlertButtonIcon:ClearAllPoints()
+	TutorialFrameAlertButtonIcon:SetPoint("TOPLEFT", TutorialFrameAlertButton, "TOPLEFT", 5, -5)
+	TutorialFrameAlertButtonIcon:SetPoint("BOTTOMRIGHT", TutorialFrameAlertButton, "BOTTOMRIGHT", -5, 5)
+	TutorialFrameAlertButtonIcon:SetTexCoord(unpack(E.TexCoords))
 
 	TutorialFrame:StripTextures()
 	TutorialFrame:SetTemplate("Transparent")
@@ -47,4 +47,4 @@ local function LoadSkin()
 	TutorialFrameCallOut:Kill()
 end
 
-S:AddCallback("Tutorial", LoadSkin)
+S:AddCallback("Skin_Tutorial", LoadSkin)

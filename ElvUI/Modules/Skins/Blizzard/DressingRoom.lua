@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
@@ -6,7 +6,7 @@ local S = E:GetModule("Skins")
 local SetDressUpBackground = SetDressUpBackground
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.dressingroom ~= true then return; end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.dressingroom then return end
 
 	DressUpFrame:StripTextures()
 	DressUpFrame:CreateBackdrop("Transparent")
@@ -37,4 +37,4 @@ local function LoadSkin()
 	DressUpModel.backdrop:SetOutside(DressUpBackgroundTopLeft, nil, nil, DressUpModel)
 end
 
-S:AddCallback("DressingRoom", LoadSkin)
+S:AddCallback("Skin_DressingRoom", LoadSkin)
