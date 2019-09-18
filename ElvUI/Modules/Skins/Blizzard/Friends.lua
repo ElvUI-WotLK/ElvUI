@@ -1,19 +1,18 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
 local _G = _G
 local unpack = unpack
 --WoW API / Variables
-local hooksecurefunc = hooksecurefunc
-local GetWhoInfo = GetWhoInfo
 local GetGuildRosterInfo = GetGuildRosterInfo
+local GetNumWhoResults = GetNumWhoResults
+local GetWhoInfo = GetWhoInfo
 local GUILDMEMBERS_TO_DISPLAY = GUILDMEMBERS_TO_DISPLAY
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS
-local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.friends ~= true then return end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.friends then return end
 
 	-- Friends Frame
 	FriendsFrame:StripTextures(true)
@@ -35,14 +34,14 @@ local function LoadSkin()
 
 	-- Friends List Frame
 	for i = 1, 2 do
-		local Tab = _G["FriendsTabHeaderTab"..i]
-		Tab:StripTextures()
-		Tab:CreateBackdrop("Default", true)
-		Tab.backdrop:Point("TOPLEFT", 3, -7)
-		Tab.backdrop:Point("BOTTOMRIGHT", -2, -1)
+		local tab = _G["FriendsTabHeaderTab"..i]
+		tab:StripTextures()
+		tab:CreateBackdrop("Default", true)
+		tab.backdrop:Point("TOPLEFT", 3, -7)
+		tab.backdrop:Point("BOTTOMRIGHT", -2, -1)
 
-		Tab:HookScript("OnEnter", S.SetModifiedBackdrop)
-		Tab:HookScript("OnLeave", S.SetOriginalBackdrop)
+		tab:HookScript("OnEnter", S.SetModifiedBackdrop)
+		tab:HookScript("OnLeave", S.SetOriginalBackdrop)
 	end
 
 	for i = 1, 11 do
@@ -76,32 +75,40 @@ local function LoadSkin()
 	WhoFrameColumnHeader2:SetPoint("LEFT", WhoFrameColumnHeader1, "RIGHT", -2, -0)
 
 	for i = 1, 4 do
-		_G["WhoFrameColumnHeader"..i]:StripTextures()
-		_G["WhoFrameColumnHeader"..i]:StyleButton()
+		local header = _G["WhoFrameColumnHeader"..i]
+		header:StripTextures()
+		header:StyleButton()
 	end
 
 	S:HandleDropDownBox(WhoFrameDropDown)
 
-	for i = 1, 17 do
-		local button = _G["WhoFrameButton"..i]
+	do
+		local button, level, name, class
 
-		button.icon = button:CreateTexture("$parentIcon", "ARTWORK")
-		button.icon:Point("LEFT", 45, 0)
-		button.icon:Size(15)
-		button.icon:SetTexture("Interface\\WorldStateFrame\\Icons-Classes")
+		for i = 1, 17 do
+			button = _G["WhoFrameButton"..i]
+			level = _G["WhoFrameButton"..i.."Level"]
+			name = _G["WhoFrameButton"..i.."Name"]
+			class = _G["WhoFrameButton"..i.."Class"]
 
-		button:CreateBackdrop("Default", true)
-		button.backdrop:SetAllPoints(button.icon)
-		S:HandleButtonHighlight(button)
+			button.icon = button:CreateTexture("$parentIcon", "ARTWORK")
+			button.icon:Point("LEFT", 45, 0)
+			button.icon:Size(15)
+			button.icon:SetTexture("Interface\\WorldStateFrame\\Icons-Classes")
 
-		_G["WhoFrameButton"..i.."Level"]:ClearAllPoints()
-		_G["WhoFrameButton"..i.."Level"]:SetPoint("TOPLEFT", 11, -1)
+			button:CreateBackdrop("Default", true)
+			button.backdrop:SetAllPoints(button.icon)
+			S:HandleButtonHighlight(button)
 
-		_G["WhoFrameButton"..i.."Name"]:SetSize(100, 14)
-		_G["WhoFrameButton"..i.."Name"]:ClearAllPoints()
-		_G["WhoFrameButton"..i.."Name"]:SetPoint("LEFT", 85, 0)
+			level:ClearAllPoints()
+			level:SetPoint("TOPLEFT", 11, -1)
 
-		_G["WhoFrameButton"..i.."Class"]:Hide()
+			name:SetSize(100, 14)
+			name:ClearAllPoints()
+			name:SetPoint("LEFT", 85, 0)
+
+			class:Hide()
+		end
 	end
 
 	WhoListScrollFrame:StripTextures()
@@ -120,10 +127,15 @@ local function LoadSkin()
 	S:HandleButton(WhoFrameGroupInviteButton)
 
 	hooksecurefunc("WhoList_Update", function()
-		local _, level
-		local button, buttonText, classTextColor, classFileName, levelTextColor
+		local numWhos = GetNumWhoResults()
+		if numWhos == 0 then return end
 
-		for i = 1, WHOS_TO_DISPLAY, 1 do
+		numWhos = numWhos > WHOS_TO_DISPLAY and WHOS_TO_DISPLAY or numWhos
+
+		local _, level, classFileName
+		local button, buttonText, classTextColor, levelTextColor
+
+		for i = 1, numWhos do
 			button = _G["WhoFrameButton"..i]
 			_, _, level, _, _, _, classFileName = GetWhoInfo(button.whoIndex)
 
@@ -163,40 +175,50 @@ local function LoadSkin()
 	GuildFrameColumnHeader2:SetPoint("LEFT", GuildFrameColumnHeader1, "RIGHT", -2, -0)
 	WhoFrameColumn_SetWidth(GuildFrameColumnHeader2, 127)
 
-	for i = 1, GUILDMEMBERS_TO_DISPLAY do
-		local button = _G["GuildFrameButton"..i]
-		local statusButton = _G["GuildFrameGuildStatusButton"..i]
+	do
+		local button, level, name, class, statusButton, statusName
 
-		button.icon = button:CreateTexture("$parentIcon", "ARTWORK")
-		button.icon:Point("LEFT", 48, 0)
-		button.icon:Size(15)
-		button.icon:SetTexture("Interface\\WorldStateFrame\\Icons-Classes")
+		for i = 1, GUILDMEMBERS_TO_DISPLAY do
+			button = _G["GuildFrameButton"..i]
+			level = _G["GuildFrameButton"..i.."Level"]
+			name = _G["GuildFrameButton"..i.."Name"]
+			class = _G["GuildFrameButton"..i.."Class"]
+			statusButton = _G["GuildFrameGuildStatusButton"..i]
+			statusName = _G["GuildFrameGuildStatusButton"..i.."Name"]
 
-		button:CreateBackdrop("Default", true)
-		button.backdrop:SetAllPoints(button.icon)
+			button.icon = button:CreateTexture("$parentIcon", "ARTWORK")
+			button.icon:Point("LEFT", 48, 0)
+			button.icon:Size(15)
+			button.icon:SetTexture("Interface\\WorldStateFrame\\Icons-Classes")
 
-		S:HandleButtonHighlight(button)
-		S:HandleButtonHighlight(statusButton)
+			button:CreateBackdrop("Default", true)
+			button.backdrop:SetAllPoints(button.icon)
 
-		_G["GuildFrameButton"..i.."Level"]:ClearAllPoints()
-		_G["GuildFrameButton"..i.."Level"]:SetPoint("TOPLEFT", 10, -1)
+			S:HandleButtonHighlight(button)
+			S:HandleButtonHighlight(statusButton)
 
-		_G["GuildFrameButton"..i.."Name"]:SetSize(100, 14)
-		_G["GuildFrameButton"..i.."Name"]:ClearAllPoints()
-		_G["GuildFrameButton"..i.."Name"]:SetPoint("LEFT", 85, 0)
+			level:ClearAllPoints()
+			level:SetPoint("TOPLEFT", 10, -1)
 
-		_G["GuildFrameButton"..i.."Class"]:Hide()
+			name:SetSize(100, 14)
+			name:ClearAllPoints()
+			name:SetPoint("LEFT", 85, 0)
 
-		_G["GuildFrameGuildStatusButton"..i.."Name"]:ClearAllPoints()
-		_G["GuildFrameGuildStatusButton"..i.."Name"]:SetPoint("LEFT", 10, 0)
+			class:Hide()
+
+			statusName:ClearAllPoints()
+			statusName:SetPoint("LEFT", 10, 0)
+		end
 	end
 
 	hooksecurefunc("GuildStatus_Update", function()
-		local _, level, online, classFileName
-		local button, buttonText, classTextColor, levelTextColor
+		local _, online, classFileName
+		local button, classTextColor
 
 		if FriendsFrame.playerStatusFrame then
-			for i = 1, GUILDMEMBERS_TO_DISPLAY, 1 do
+			local level, buttonText, levelTextColor
+
+			for i = 1, GUILDMEMBERS_TO_DISPLAY do
 				button = _G["GuildFrameButton"..i]
 				_, _, _, level, _, _, _, _, online, _, classFileName = GetGuildRosterInfo(button.guildIndex)
 				if classFileName then
@@ -212,7 +234,7 @@ local function LoadSkin()
 				end
 			end
 		else
-			for i = 1, GUILDMEMBERS_TO_DISPLAY, 1 do
+			for i = 1, GUILDMEMBERS_TO_DISPLAY do
 				button = _G["GuildFrameGuildStatusButton"..i]
 				_, _, _, _, _, _, _, _, online, _, classFileName = GetGuildRosterInfo(button.guildIndex)
 				if classFileName then
@@ -231,10 +253,13 @@ local function LoadSkin()
 	S:HandleCheckBox(GuildFrameLFGButton)
 
 	for i = 1, 4 do
-		_G["GuildFrameColumnHeader"..i]:StripTextures()
-		_G["GuildFrameColumnHeader"..i]:StyleButton()
-		_G["GuildFrameGuildStatusColumnHeader"..i]:StripTextures()
-		_G["GuildFrameGuildStatusColumnHeader"..i]:StyleButton()
+		local header = _G["GuildFrameColumnHeader"..i]
+		header:StripTextures()
+		header:StyleButton()
+
+		header = _G["GuildFrameGuildStatusColumnHeader"..i]
+		header:StripTextures()
+		header:StyleButton()
 	end
 
 	GuildListScrollFrame:StripTextures()
@@ -381,10 +406,11 @@ local function LoadSkin()
 	S:HandleScrollBar(ChannelListScrollFrameScrollBar)
 
 	for i = 1, MAX_DISPLAY_CHANNEL_BUTTONS do
-		_G["ChannelButton"..i]:StripTextures()
-		_G["ChannelButton"..i.."Collapsed"]:SetTextColor(1, 1, 1)
+		local button = _G["ChannelButton"..i]
+		button:StripTextures()
+		S:HandleButtonHighlight(button)
 
-		S:HandleButtonHighlight(_G["ChannelButton"..i])
+		_G["ChannelButton"..i.."Collapsed"]:SetTextColor(1, 1, 1)
 	end
 
 	for i = 1, 22 do
@@ -425,4 +451,4 @@ local function LoadSkin()
 	S:HandleButton(RaidInfoCancelButton)
 end
 
-S:AddCallback("Friends", LoadSkin)
+S:AddCallback("Skin_Friends", LoadSkin)

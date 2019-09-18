@@ -1,12 +1,13 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
 local _G = _G
 --WoW API / Variables
+local InCombatLockdown = InCombatLockdown
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.worldmap ~= true then return end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.worldmap then return end
 
 	local WorldMapFrame = _G.WorldMapFrame
 	WorldMapFrame:DisableDrawLayer("BACKGROUND")
@@ -109,22 +110,24 @@ local function LoadSkin()
 	end
 
 	local function LargeSkin()
-		if not InCombatLockdown() then
-			WorldMapFrame:EnableMouse(false)
-			WorldMapFrame:EnableKeyboard(false)
-		elseif not WorldMapFrame:IsEventRegistered("PLAYER_REGEN_ENABLED") then
-			WorldMapFrame:RegisterEvent("PLAYER_REGEN_ENABLED", function(self)
-				self:EnableMouse(false)
-				self:EnableKeyboard(false)
-				self:UnregisterEvent("PLAYER_REGEN_ENABLED")
-			end)
+		if not E.private.worldmap.enable or (E.private.worldmap.enable and not E.global.general.smallerWorldMap) then
+			if not InCombatLockdown() then
+				WorldMapFrame:EnableMouse(false)
+				WorldMapFrame:EnableKeyboard(false)
+			elseif not WorldMapFrame:IsEventRegistered("PLAYER_REGEN_ENABLED") then
+				WorldMapFrame:RegisterEvent("PLAYER_REGEN_ENABLED", function(self)
+					self:EnableMouse(false)
+					self:EnableKeyboard(false)
+					self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+				end)
+			end
 		end
 
 		WorldMapFrame.backdrop:Point("TOPLEFT", WorldMapDetailFrame, "TOPLEFT", -13, 70)
 	end
 
 	local function QuestSkin()
-		WorldMapFrame.backdrop:Point("TOPLEFT", WorldMapDetailFrame, "TOPLEFT", -14, 69)
+		WorldMapFrame.backdrop:Point("TOPLEFT", WorldMapDetailFrame, "TOPLEFT", -14, 70)
 	end
 
 	local function FixSkin()
@@ -137,9 +140,13 @@ local function LoadSkin()
 		end
 	end
 
-	ShowUIPanel(WorldMapFrame)
-	FixSkin()
-	HideUIPanel(WorldMapFrame)
+	if not E.private.worldmap.enable then
+		ShowUIPanel(WorldMapFrame)
+		FixSkin()
+		HideUIPanel(WorldMapFrame)
+	else
+		FixSkin()
+	end
 
 	hooksecurefunc("WorldMapFrame_SetQuestMapView", QuestSkin)
 	hooksecurefunc("WorldMapFrame_SetFullMapView", LargeSkin)
@@ -148,4 +155,4 @@ local function LoadSkin()
 	hooksecurefunc("WorldMapFrame_ToggleAdvanced", FixSkin)
 end
 
-S:AddCallback("SkinWorldMap", LoadSkin)
+S:AddCallback("Skin_WorldMap", LoadSkin)

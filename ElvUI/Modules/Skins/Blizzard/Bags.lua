@@ -1,32 +1,27 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
 local _G = _G
+local select = select
 local unpack = unpack
 --WoW API / Variables
-local CreateFrame = CreateFrame
+local ContainerIDToInventoryID = ContainerIDToInventoryID
 local GetContainerItemLink = GetContainerItemLink
 local GetContainerItemQuestInfo = GetContainerItemQuestInfo
 local GetContainerNumFreeSlots = GetContainerNumFreeSlots
+local GetInventoryItemLink = GetInventoryItemLink
 local GetItemInfo = GetItemInfo
 local GetItemQualityColor = GetItemQualityColor
-local hooksecurefunc = hooksecurefunc
-local BACKPACK_TOOLTIP = BACKPACK_TOOLTIP
-local BANK_CONTAINER = BANK_CONTAINER
-local MAX_CONTAINER_ITEMS = MAX_CONTAINER_ITEMS
-local MAX_WATCHED_TOKENS = MAX_WATCHED_TOKENS
-local NUM_BANKBAGSLOTS = NUM_BANKBAGSLOTS
-local NUM_BANKGENERIC_SLOTS = NUM_BANKGENERIC_SLOTS
-local NUM_CONTAINER_FRAMES = NUM_CONTAINER_FRAMES
+local GetInventoryItemID = GetInventoryItemID
 
-local bagIconCache = {}
+local BANK_CONTAINER = BANK_CONTAINER
 
 local function LoadSkin()
 	if E.private.bags.enable then return end
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.bags ~= true then return end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.bags then return end
 
-	local ProfessionColors = {
+	local professionColors = {
 		[0x0001] = {E.db.bags.colors.profession.quiver.r, E.db.bags.colors.profession.quiver.g, E.db.bags.colors.profession.quiver.b},
 		[0x0002] = {E.db.bags.colors.profession.ammoPouch.r, E.db.bags.colors.profession.ammoPouch.g, E.db.bags.colors.profession.ammoPouch.b},
 		[0x0004] = {E.db.bags.colors.profession.soulBag.r, E.db.bags.colors.profession.soulBag.g, E.db.bags.colors.profession.soulBag.b},
@@ -39,13 +34,13 @@ local function LoadSkin()
 		[0x0400] = {E.db.bags.colors.profession.mining.r, E.db.bags.colors.profession.mining.g, E.db.bags.colors.profession.mining.b},
 	}
 
-	local QuestColors = {
+	local questColors = {
 		["questStarter"] = {E.db.bags.colors.items.questStarter.r, E.db.bags.colors.items.questStarter.g, E.db.bags.colors.items.questStarter.b},
 		["questItem"] =	{E.db.bags.colors.items.questItem.r, E.db.bags.colors.items.questItem.g, E.db.bags.colors.items.questItem.b}
 	}
 
 	-- ContainerFrame
-	for i = 1, NUM_CONTAINER_FRAMES, 1 do
+	for i = 1, NUM_CONTAINER_FRAMES do
 		local frame = _G["ContainerFrame"..i]
 		local closeButton = _G["ContainerFrame"..i.."CloseButton"]
 
@@ -56,11 +51,11 @@ local function LoadSkin()
 
 		S:HandleCloseButton(closeButton)
 
-		for k = 1, MAX_CONTAINER_ITEMS, 1 do
-			local item = _G["ContainerFrame"..i.."Item"..k]
-			local icon = _G["ContainerFrame"..i.."Item"..k.."IconTexture"]
-			local questIcon = _G["ContainerFrame"..i.."Item"..k.."IconQuestTexture"]
-			local cooldown = _G["ContainerFrame"..i.."Item"..k.."Cooldown"]
+		for j = 1, MAX_CONTAINER_ITEMS do
+			local item = _G["ContainerFrame"..i.."Item"..j]
+			local icon = _G["ContainerFrame"..i.."Item"..j.."IconTexture"]
+			local questIcon = _G["ContainerFrame"..i.."Item"..j.."IconQuestTexture"]
+			local cooldown = _G["ContainerFrame"..i.."Item"..j.."Cooldown"]
 
 			item:SetNormalTexture(nil)
 			item:SetTemplate("Default", true)
@@ -92,67 +87,71 @@ local function LoadSkin()
 		token.icon:Size(16)
 	end
 
-	local function BagIcon(container, texture)
-		local portraitButton = _G[container:GetName().."PortraitButton"]
+	local function setBagIcon(frame, texture)
+		if not frame.BagIcon then
+			local portraitButton = _G[frame:GetName().."PortraitButton"]
 
-		if portraitButton then
 			portraitButton:CreateBackdrop()
 			portraitButton:Size(32)
 			portraitButton:Point("TOPLEFT", 12, -7)
 			portraitButton:StyleButton(nil, true)
 			portraitButton.hover:SetAllPoints()
 
-			if not container.BagIcon then
-				container.BagIcon = portraitButton:CreateTexture()
-				container.BagIcon:SetTexCoord(unpack(E.TexCoords))
-				container.BagIcon:SetAllPoints()
-			end
-
-			container.BagIcon:SetTexture(texture)
+			frame.BagIcon = portraitButton:CreateTexture()
+			frame.BagIcon:SetTexCoord(unpack(E.TexCoords))
+			frame.BagIcon:SetAllPoints()
 		end
+
+		frame.BagIcon:SetTexture(texture)
 	end
 
+	local bagIconCache = {
+		[-2] = "Interface\\ContainerFrame\\KeyRing-Bag-Icon",
+		[0] = "Interface\\Buttons\\Button-Backpack-Up"
+	}
+
+	hooksecurefunc("ContainerFrame_GenerateFrame", function(frame)
+		local id = frame:GetID()
+
+		if id > 0 then
+			local itemID = GetInventoryItemID("player", ContainerIDToInventoryID(id))
+
+			if not bagIconCache[itemID] then
+				bagIconCache[itemID] = select(10, GetItemInfo(itemID))
+			end
+
+			setBagIcon(frame, bagIconCache[itemID])
+		else
+			setBagIcon(frame, bagIconCache[id])
+		end
+	end)
+
 	hooksecurefunc("ContainerFrame_Update", function(frame)
+		local frameName = frame:GetName()
 		local id = frame:GetID()
 		local _, bagType = GetContainerNumFreeSlots(id)
-		local frameName = frame:GetName()
-		local title = _G[frameName.."Name"]
+		local item, questIcon, link
 
-		if title and title.GetText then
-			local name = title:GetText()
-			if bagIconCache[name] then
-				BagIcon(frame, bagIconCache[name])
-			else
-				if name == BACKPACK_TOOLTIP then
-					bagIconCache[name] = MainMenuBarBackpackButtonIconTexture:GetTexture()
-				else
-					bagIconCache[name] = select(10, GetItemInfo(name))
-				end
-
-				BagIcon(frame, bagIconCache[name])
-			end
-		end
-
-		for i = 1, frame.size, 1 do
-			local item = _G[frameName.."Item"..i]
-			local questIcon = _G[frameName.."Item"..i.."IconQuestTexture"]
-			local link = GetContainerItemLink(id, item:GetID())
+		for i = 1, frame.size do
+			item = _G[frameName.."Item"..i]
+			questIcon = _G[frameName.."Item"..i.."IconQuestTexture"]
+			link = GetContainerItemLink(id, item:GetID())
 
 			questIcon:Hide()
 
-			if ProfessionColors[bagType] then
-				item:SetBackdropBorderColor(unpack(ProfessionColors[bagType]))
+			if professionColors[bagType] then
+				item:SetBackdropBorderColor(unpack(professionColors[bagType]))
 				item.ignoreBorderColors = true
 			elseif link then
 				local isQuestItem, questId, isActive = GetContainerItemQuestInfo(id, item:GetID())
 				local _, _, quality = GetItemInfo(link)
 
 				if questId and not isActive then
-					item:SetBackdropBorderColor(unpack(QuestColors.questStarter))
+					item:SetBackdropBorderColor(unpack(questColors.questStarter))
 					item.ignoreBorderColors = true
 					questIcon:Show()
 				elseif questId or isQuestItem then
-					item:SetBackdropBorderColor(unpack(QuestColors.questItem))
+					item:SetBackdropBorderColor(unpack(questColors.questItem))
 					item.ignoreBorderColors = true
 				elseif quality then
 					item:SetBackdropBorderColor(GetItemQualityColor(quality))
@@ -176,7 +175,7 @@ local function LoadSkin()
 
 	S:HandleCloseButton(BankCloseButton)
 
-	for i = 1, NUM_BANKGENERIC_SLOTS, 1 do
+	for i = 1, NUM_BANKGENERIC_SLOTS do
 		local button = _G["BankFrameItem"..i]
 		local icon = _G["BankFrameItem"..i.."IconTexture"]
 		local quest = _G["BankFrameItem"..i.."IconQuestTexture"]
@@ -203,7 +202,7 @@ local function LoadSkin()
 	BankFrame.itemBackdrop:SetOutside(BankFrameItem1, 6, 6, BankFrameItem28)
 	BankFrame.itemBackdrop:SetFrameLevel(BankFrame:GetFrameLevel())
 
-	for i = 1, NUM_BANKBAGSLOTS, 1 do
+	for i = 1, NUM_BANKBAGSLOTS do
 		local button = _G["BankFrameBag"..i]
 		local icon = _G["BankFrameBag"..i.."IconTexture"]
 		local highlight = _G["BankFrameBag"..i.."HighlightFrameTexture"]
@@ -228,13 +227,13 @@ local function LoadSkin()
 
 	hooksecurefunc("BankFrameItemButton_Update", function(button)
 		local id = button:GetID()
-		local link, quality
-		local questTexture, isQuestItem, questId, isActive
 
 		if button.isBag then
-			link = GetInventoryItemLink("player", ContainerIDToInventoryID(id))
+			local link = GetInventoryItemLink("player", ContainerIDToInventoryID(id))
+
 			if link then
-				quality = select(3, GetItemInfo(link))
+				local quality = select(3, GetItemInfo(link))
+
 				if quality then
 					button:SetBackdropBorderColor(GetItemQualityColor(quality))
 					button.ignoreBorderColors = true
@@ -247,28 +246,36 @@ local function LoadSkin()
 				button.ignoreBorderColors = nil
 			end
 		else
-			link = GetContainerItemLink(BANK_CONTAINER, id)
-			questTexture = _G[button:GetName().."IconQuestTexture"]
+			local link = GetContainerItemLink(BANK_CONTAINER, id)
+			local questTexture = _G[button:GetName().."IconQuestTexture"]
 
-			if questTexture then questTexture:Hide() end
+			if questTexture then
+				questTexture:Hide()
+			end
 
 			if link then
-				isQuestItem, questId, isActive = GetContainerItemQuestInfo(BANK_CONTAINER, id)
-				quality = select(3, GetItemInfo(link))
+				local isQuestItem, questId, isActive = GetContainerItemQuestInfo(BANK_CONTAINER, id)
 
 				if questId and not isActive then
-					button:SetBackdropBorderColor(unpack(QuestColors.questStarter))
+					button:SetBackdropBorderColor(unpack(questColors.questStarter))
 					button.ignoreBorderColors = true
-					if questTexture then questTexture:Show() end
+
+					if questTexture then
+						questTexture:Show()
+					end
 				elseif questId or isQuestItem then
-					button:SetBackdropBorderColor(unpack(QuestColors.questItem))
-					button.ignoreBorderColors = true
-				elseif quality then
-					button:SetBackdropBorderColor(GetItemQualityColor(quality))
+					button:SetBackdropBorderColor(unpack(questColors.questItem))
 					button.ignoreBorderColors = true
 				else
-					button:SetBackdropBorderColor(unpack(E.media.bordercolor))
-					button.ignoreBorderColors = nil
+					local quality = select(3, GetItemInfo(link))
+
+					if quality then
+						button:SetBackdropBorderColor(GetItemQualityColor(quality))
+						button.ignoreBorderColors = true
+					else
+						button:SetBackdropBorderColor(unpack(E.media.bordercolor))
+						button.ignoreBorderColors = nil
+					end
 				end
 			else
 				button:SetBackdropBorderColor(unpack(E.media.bordercolor))
@@ -278,4 +285,4 @@ local function LoadSkin()
 	end)
 end
 
-S:AddCallback("SkinBags", LoadSkin)
+S:AddCallback("Skin_Bags", LoadSkin)

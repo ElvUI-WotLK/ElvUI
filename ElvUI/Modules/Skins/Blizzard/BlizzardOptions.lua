@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule("Skins")
 
 --Lua functions
@@ -7,9 +7,10 @@ local ipairs = ipairs
 local find = string.find
 --WoW API / Variables
 local InCombatLockdown = InCombatLockdown
+local hooksecurefunc = hooksecurefunc
 
 local function LoadSkin()
-	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.BlizzardOptions ~= true then return end
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.BlizzardOptions then return end
 
 	-- Game Menu Interface/Tabs
 	for i = 1, 2 do
@@ -21,294 +22,232 @@ local function LoadSkin()
 		tab.backdrop:SetTemplate("Transparent")
 		tab.backdrop:Point("TOPLEFT", 10, E.PixelMode and -4 or -6)
 		tab.backdrop:Point("BOTTOMRIGHT", -10, 1)
+
+		if i == 1 then
+			tab:ClearAllPoints()
+			tab:SetPoint("BOTTOMLEFT", InterfaceOptionsFrameCategories, "TOPLEFT", -11, -2)
+		end
 	end
 
-	InterfaceOptionsFrameTab1:ClearAllPoints()
-	InterfaceOptionsFrameTab1:SetPoint("BOTTOMLEFT", InterfaceOptionsFrameCategories, "TOPLEFT", -11, -2)
-
 	-- Game Menu Plus / Minus Buttons
-	local maxButtons = (InterfaceOptionsFrameAddOns:GetHeight() - 8) / InterfaceOptionsFrameAddOns.buttonHeight
-	for i = 1, maxButtons do
-		local buttonToggle = _G["InterfaceOptionsFrameAddOnsButton"..i.."Toggle"]
-		buttonToggle:SetNormalTexture("")
-		buttonToggle.SetNormalTexture = E.noop
-		buttonToggle:SetPushedTexture("")
-		buttonToggle.SetPushedTexture = E.noop
-		buttonToggle:SetHighlightTexture(nil)
+	for _, button in ipairs(InterfaceOptionsFrameAddOns.buttons) do
+		button.toggle:SetNormalTexture("")
+		button.toggle.SetNormalTexture = E.noop
+		button.toggle:SetPushedTexture("")
+		button.toggle.SetPushedTexture = E.noop
+		button.toggle:SetHighlightTexture(nil)
 
-		buttonToggle.Text = buttonToggle:CreateFontString(nil, "OVERLAY")
-		buttonToggle.Text:FontTemplate(nil, 22)
-		buttonToggle.Text:Point("CENTER")
-		buttonToggle.Text:SetText("+")
+		local text = button.toggle:CreateFontString(nil, "OVERLAY")
+		text:FontTemplate(nil, 22)
+		text:Point("CENTER")
+		text:SetText("+")
+		button.toggle.text = text
 
-		hooksecurefunc(buttonToggle, "SetNormalTexture", function(self, texture)
+		hooksecurefunc(button.toggle, "SetNormalTexture", function(self, texture)
 			if find(texture, "MinusButton") then
-				self.Text:SetText("-")
+				self.text:SetText("-")
 			else
-				self.Text:SetText("+")
+				self.text:SetText("+")
 			end
 		end)
 	end
 
 	-- Interface Options Frame
-	for _, frame in pairs({"InterfaceOptionsFrame", "VideoOptionsFrame", "AudioOptionsFrame"}) do
-		local Frame = _G[frame]
-
-		Frame:SetTemplate("Transparent")
-		Frame:SetClampedToScreen(true)
-		Frame:SetMovable(true)
-		Frame:EnableMouse(true)
-		Frame:RegisterForDrag("LeftButton", "RightButton")
-		Frame:SetScript("OnDragStart", function(self)
+	local frames = {
+		InterfaceOptionsFrame,
+		AudioOptionsFrame,
+		VideoOptionsFrame
+	}
+	for _, frame in ipairs(frames) do
+		frame:SetTemplate("Transparent")
+		frame:SetClampedToScreen(true)
+		frame:SetMovable(true)
+		frame:EnableMouse(true)
+		frame:RegisterForDrag("LeftButton", "RightButton")
+		frame:SetScript("OnDragStart", function(self)
 			if InCombatLockdown() then return end
 
 			self:StartMoving()
 		end)
-		Frame:SetScript("OnDragStop", function(self)
+		frame:SetScript("OnDragStop", function(self)
 			self:StopMovingOrSizing()
 		end)
 	end
 
-	S:HandleButton(VideoOptionsFrameDefaults)
-	VideoOptionsFrameDefaults:ClearAllPoints()
-	VideoOptionsFrameDefaults:SetPoint("TOPLEFT", VideoOptionsFrameCategoryFrame, "BOTTOMLEFT", -1, -5)
-
-	S:HandleButton(InterfaceOptionsFrameDefaults)
-	InterfaceOptionsFrameDefaults:ClearAllPoints()
-	InterfaceOptionsFrameDefaults:SetPoint("TOPLEFT", InterfaceOptionsFrameCategories, "BOTTOMLEFT", -1, -5)
-
-	S:HandleButton(InterfaceOptionsFrameCancel)
-	InterfaceOptionsFrameCancel:ClearAllPoints()
-	InterfaceOptionsFrameCancel:SetPoint("TOPRIGHT", InterfaceOptionsFramePanelContainer, "BOTTOMRIGHT", 0, -6)
-
-	S:HandleButton(VideoOptionsFrameApply)
-
-	S:HandleButton(VideoOptionsFrameCancel)
-	VideoOptionsFrameCancel:ClearAllPoints()
-	VideoOptionsFrameCancel:SetPoint("RIGHT", VideoOptionsFrameApply, "LEFT", -4, 0)
-
-	S:HandleButton(VideoOptionsFrameOkay)
-	VideoOptionsFrameOkay:ClearAllPoints()
-	VideoOptionsFrameOkay:SetPoint("RIGHT", VideoOptionsFrameCancel, "LEFT", -4, 0)
-
-	S:HandleButton(AudioOptionsFrameDefaults)
-	S:HandleButton(AudioOptionsFrameCancel)
-
-	S:HandleButton(AudioOptionsFrameOkay)
-	AudioOptionsFrameOkay:ClearAllPoints()
-	AudioOptionsFrameOkay:SetPoint("RIGHT", AudioOptionsFrameCancel, "LEFT", -4, 0)
-
-	S:HandleButton(InterfaceOptionsFrameOkay)
-	InterfaceOptionsFrameOkay:ClearAllPoints()
-	InterfaceOptionsFrameOkay:SetPoint("RIGHT",InterfaceOptionsFrameCancel, "LEFT", -4, 0)
-
-	local BlizzardHeader = {
-		"InterfaceOptionsFrame",
-		"AudioOptionsFrame",
-		"VideoOptionsFrame",
-	}
-
-	for i = 1, #BlizzardHeader do
-		local title = _G[BlizzardHeader[i].."Header"]
-		if title then
-			title:SetTexture("")
-			title:ClearAllPoints()
-			title:SetPoint("TOP", BlizzardHeader[i], 0, 0)
-		end
-	end
-
-	InterfaceOptionsFrameCategoriesList:StripTextures()
-	InterfaceOptionsFrameAddOnsList:StripTextures()
-
 	S:HandleScrollBar(InterfaceOptionsFrameCategoriesListScrollBar)
 	S:HandleScrollBar(InterfaceOptionsFrameAddOnsListScrollBar)
 
-	local frames = {
-		"VideoOptionsFrameCategoryFrame",
-		"VideoOptionsFramePanelContainer",
-		"VideoOptionsResolutionPanelBrightness",
+	local optionHeaders = {
+		"InterfaceOptionsFrameHeader",
+		"AudioOptionsFrameHeader",
+		"VideoOptionsFrameHeader",
+	}
+	for _, header in ipairs(optionHeaders) do
+		header = _G[header]
+		if header then
+			header:SetTexture("")
+			header:ClearAllPoints()
+			header:SetPoint("TOP", header:GetParent(), 0, 0)
+		end
+	end
+
+	local optionFrames = {
+		"InterfaceOptionsFrameCategories",
+		"InterfaceOptionsFrameAddOns",
+		"InterfaceOptionsFramePanelContainer",
+
 		"AudioOptionsFrameCategoryFrame",
 		"AudioOptionsFramePanelContainer",
-		"InterfaceOptionsFrameCategories",
-		"InterfaceOptionsFramePanelContainer",
-		"InterfaceOptionsFrameAddOns",
 		"AudioOptionsSoundPanelPlayback",
 		"AudioOptionsSoundPanelVolume",
 		"AudioOptionsSoundPanelHardware",
+
+		"VideoOptionsFrameCategoryFrame",
+		"VideoOptionsFramePanelContainer",
+		"VideoOptionsResolutionPanelBrightness",
 		"VideoOptionsEffectsPanelQuality",
 		"VideoOptionsEffectsPanelShaders",
 	}
-	for i = 1, #frames do
-		local SkinFrames = _G[frames[i]]
-		if SkinFrames then
-			SkinFrames:StripTextures()
-			SkinFrames:CreateBackdrop("Transparent")
-			if SkinFrames ~= VideoOptionsFramePanelContainer and SkinFrames ~= InterfaceOptionsFramePanelContainer then
-				SkinFrames.backdrop:Point("TOPLEFT", -1 ,0)
-				SkinFrames.backdrop:Point("BOTTOMRIGHT", 0, 1)
+	for _, frame in ipairs(optionFrames) do
+		frame = _G[frame]
+		if frame then
+			frame:StripTextures()
+			frame:CreateBackdrop("Transparent")
+
+			if frame ~= VideoOptionsFramePanelContainer and frame ~= InterfaceOptionsFramePanelContainer then
+				frame.backdrop:Point("TOPLEFT", -1 ,0)
+				frame.backdrop:Point("BOTTOMRIGHT", 0, 1)
 			else
-				SkinFrames.backdrop:Point("TOPLEFT", 0, 0)
-				SkinFrames.backdrop:Point("BOTTOMRIGHT", 0, 0)
+				frame.backdrop:Point("TOPLEFT", 0, 0)
+				frame.backdrop:Point("BOTTOMRIGHT", 0, 0)
 			end
 		end
 	end
 
-	local interfacecheckbox = {
-		"ControlsPanelStickyTargeting",
-		"ControlsPanelAutoDismount",
-		"ControlsPanelAutoClearAFK",
-		"ControlsPanelBlockTrades",
-		"ControlsPanelBlockGuildInvites",
-		"ControlsPanelLootAtMouse",
-		"ControlsPanelAutoLootCorpse",
-		"CombatPanelAttackOnAssist",
-		"CombatPanelAutoRange",
-		"CombatPanelStopAutoAttack",
-		"CombatPanelNameplateClassColors",
-		"CombatPanelAutoSelfCast",
-		"CombatPanelTargetOfTarget",
-		"CombatPanelEnemyCastBarsOnPortrait",
-		"CombatPanelEnemyCastBarsOnNameplates",
-		"DisplayPanelShowCloak",
-		"DisplayPanelShowHelm",
-		"DisplayPanelShowAggroPercentage",
-		"DisplayPanelPlayAggroSounds",
-		"DisplayPanelDetailedLootInfo",
-		"DisplayPanelShowFreeBagSpace",
-		"DisplayPanelCinematicSubtitles",
-		"DisplayPanelRotateMinimap",
-		"DisplayPanelScreenEdgeFlash",
-		"DisplayPanelShowClock",
-		"DisplayPanelColorblindMode",
-		"DisplayPanelShowItemLevel",
-		"ObjectivesPanelInstantQuestText",
-		"ObjectivesPanelAutoQuestTracking",
-		"ObjectivesPanelAutoQuestProgress",
-		"ObjectivesPanelMapQuestDifficulty",
-		"ObjectivesPanelAdvancedWorldMap",
-		"ObjectivesPanelWatchFrameWidth",
-		"SocialPanelProfanityFilter",
-		"SocialPanelSpamFilter",
-		"SocialPanelChatBubbles",
-		"SocialPanelPartyChat",
-		"SocialPanelChatHoverDelay",
-		"SocialPanelGuildMemberAlert",
-		"SocialPanelGuildRecruitment",
-		"SocialPanelChatMouseScroll",
-		"SocialPanelWholeChatWindowClickable",
-		"ActionBarsPanelLockActionBars",
-		"ActionBarsPanelSecureAbilityToggle",
-		"ActionBarsPanelAlwaysShowActionBars",
-		"ActionBarsPanelBottomLeft",
-		"ActionBarsPanelBottomRight",
-		"ActionBarsPanelRight",
-		"ActionBarsPanelRightTwo",
-		"NamesPanelMyName",
-		"NamesPanelFriendlyPlayerNames",
-		"NamesPanelFriendlyPets",
-		"NamesPanelFriendlyGuardians",
-		"NamesPanelFriendlyTotems",
-		"NamesPanelUnitNameplatesFriends",
-		"NamesPanelUnitNameplatesFriendlyGuardians",
-		"NamesPanelUnitNameplatesFriendlyPets",
-		"NamesPanelUnitNameplatesFriendlyTotems",
-		"NamesPanelGuilds",
-		"NamesPanelNPCNames",
-		"NamesPanelUnitNameplatesAllowOverlap",
-		"NamesPanelTitles",
-		"NamesPanelNonCombatCreature",
-		"NamesPanelEnemyPlayerNames",
-		"NamesPanelEnemyPets",
-		"NamesPanelEnemyGuardians",
-		"NamesPanelEnemyTotems",
-		"NamesPanelUnitNameplatesEnemyPets",
-		"NamesPanelUnitNameplatesEnemies",
-		"NamesPanelUnitNameplatesEnemyGuardians",
-		"NamesPanelUnitNameplatesEnemyTotems",
-		"CombatTextPanelTargetDamage",
-		"CombatTextPanelPeriodicDamage",
-		"CombatTextPanelPetDamage",
-		"CombatTextPanelHealing",
-		"CombatTextPanelTargetEffects",
-		"CombatTextPanelOtherTargetEffects",
-		"CombatTextPanelEnableFCT",
-		"CombatTextPanelDodgeParryMiss",
-		"CombatTextPanelDamageReduction",
-		"CombatTextPanelRepChanges",
-		"CombatTextPanelReactiveAbilities",
-		"CombatTextPanelFriendlyHealerNames",
-		"CombatTextPanelCombatState",
-		"CombatTextPanelComboPoints",
-		"CombatTextPanelLowManaHealth",
-		"CombatTextPanelEnergyGains",
-		"CombatTextPanelPeriodicEnergyGains",
-		"CombatTextPanelHonorGains",
-		"CombatTextPanelAuras",
-		"BuffsPanelBuffDurations",
-		"BuffsPanelDispellableDebuffs",
-		"BuffsPanelCastableBuffs",
-		"BuffsPanelConsolidateBuffs",
-		"BuffsPanelShowCastableDebuffs",
-		"CameraPanelFollowTerrain",
-		"CameraPanelHeadBob",
-		"CameraPanelWaterCollision",
-		"CameraPanelSmartPivot",
-		"MousePanelInvertMouse",
-		"MousePanelClickToMove",
-		"MousePanelWoWMouse",
-		"HelpPanelShowTutorials",
-		"HelpPanelLoadingScreenTips",
-		"HelpPanelEnhancedTooltips",
-		"HelpPanelBeginnerTooltips",
-		"HelpPanelShowLuaErrors",
-		"StatusTextPanelPlayer",
-		"StatusTextPanelPet",
-		"StatusTextPanelParty",
-		"StatusTextPanelTarget",
-		"StatusTextPanelPercentages",
-		"StatusTextPanelXP",
-		"UnitFramePanelPartyBackground",
-		"UnitFramePanelPartyPets",
-		"UnitFramePanelArenaEnemyFrames",
-		"UnitFramePanelArenaEnemyCastBar",
-		"UnitFramePanelArenaEnemyPets",
-		"UnitFramePanelPartyInRaid",
-		"UnitFramePanelRaidRange",
-		"UnitFramePanelFullSizeFocusFrame",
-		"FeaturesPanelPreviewTalentChanges",
-		"FeaturesPanelEquipmentManager",
-	}
-	for i = 1, #interfacecheckbox do
-		local icheckbox = _G["InterfaceOptions"..interfacecheckbox[i]]
-		if icheckbox then
-			S:HandleCheckBox(icheckbox)
-		end
-	end
+	local checkboxes = {
+		"InterfaceOptionsControlsPanelStickyTargeting",
+		"InterfaceOptionsControlsPanelAutoDismount",
+		"InterfaceOptionsControlsPanelAutoClearAFK",
+		"InterfaceOptionsControlsPanelBlockTrades",
+		"InterfaceOptionsControlsPanelLootAtMouse",
+		"InterfaceOptionsControlsPanelAutoLootCorpse",
+		"InterfaceOptionsCombatPanelAttackOnAssist",
+		"InterfaceOptionsCombatPanelAutoRange",
+		"InterfaceOptionsCombatPanelStopAutoAttack",
+		"InterfaceOptionsCombatPanelNameplateClassColors",
+		"InterfaceOptionsCombatPanelAutoSelfCast",
+		"InterfaceOptionsCombatPanelTargetOfTarget",
+		"InterfaceOptionsCombatPanelEnemyCastBarsOnPortrait",
+		"InterfaceOptionsCombatPanelEnemyCastBarsOnNameplates",
+		"InterfaceOptionsDisplayPanelShowCloak",
+		"InterfaceOptionsDisplayPanelShowHelm",
+		"InterfaceOptionsDisplayPanelShowAggroPercentage",
+		"InterfaceOptionsDisplayPanelPlayAggroSounds",
+		"InterfaceOptionsDisplayPanelDetailedLootInfo",
+		"InterfaceOptionsDisplayPanelShowFreeBagSpace",
+		"InterfaceOptionsDisplayPanelCinematicSubtitles",
+		"InterfaceOptionsDisplayPanelRotateMinimap",
+		"InterfaceOptionsDisplayPanelScreenEdgeFlash",
+		"InterfaceOptionsDisplayPanelShowClock",
+		"InterfaceOptionsDisplayPanelColorblindMode",
+		"InterfaceOptionsDisplayPanelShowItemLevel",
+		"InterfaceOptionsObjectivesPanelInstantQuestText",
+		"InterfaceOptionsObjectivesPanelAutoQuestTracking",
+		"InterfaceOptionsObjectivesPanelAutoQuestProgress",
+		"InterfaceOptionsObjectivesPanelMapQuestDifficulty",
+		"InterfaceOptionsObjectivesPanelAdvancedWorldMap",
+		"InterfaceOptionsObjectivesPanelWatchFrameWidth",
+		"InterfaceOptionsSocialPanelProfanityFilter",
+		"InterfaceOptionsSocialPanelSpamFilter",
+		"InterfaceOptionsSocialPanelChatBubbles",
+		"InterfaceOptionsSocialPanelPartyChat",
+		"InterfaceOptionsSocialPanelChatHoverDelay",
+		"InterfaceOptionsSocialPanelGuildMemberAlert",
+		"InterfaceOptionsSocialPanelGuildRecruitment",
+		"InterfaceOptionsSocialPanelChatMouseScroll",
+		"InterfaceOptionsSocialPanelWholeChatWindowClickable",
+		"InterfaceOptionsActionBarsPanelLockActionBars",
+		"InterfaceOptionsActionBarsPanelSecureAbilityToggle",
+		"InterfaceOptionsActionBarsPanelAlwaysShowActionBars",
+		"InterfaceOptionsActionBarsPanelBottomLeft",
+		"InterfaceOptionsActionBarsPanelBottomRight",
+		"InterfaceOptionsActionBarsPanelRight",
+		"InterfaceOptionsActionBarsPanelRightTwo",
+		"InterfaceOptionsNamesPanelMyName",
+		"InterfaceOptionsNamesPanelFriendlyPlayerNames",
+		"InterfaceOptionsNamesPanelFriendlyPets",
+		"InterfaceOptionsNamesPanelFriendlyGuardians",
+		"InterfaceOptionsNamesPanelFriendlyTotems",
+		"InterfaceOptionsNamesPanelUnitNameplatesFriends",
+		"InterfaceOptionsNamesPanelUnitNameplatesFriendlyGuardians",
+		"InterfaceOptionsNamesPanelUnitNameplatesFriendlyPets",
+		"InterfaceOptionsNamesPanelUnitNameplatesFriendlyTotems",
+		"InterfaceOptionsNamesPanelGuilds",
+		"InterfaceOptionsNamesPanelNPCNames",
+		"InterfaceOptionsNamesPanelUnitNameplatesAllowOverlap",
+		"InterfaceOptionsNamesPanelTitles",
+		"InterfaceOptionsNamesPanelNonCombatCreature",
+		"InterfaceOptionsNamesPanelEnemyPlayerNames",
+		"InterfaceOptionsNamesPanelEnemyPets",
+		"InterfaceOptionsNamesPanelEnemyGuardians",
+		"InterfaceOptionsNamesPanelEnemyTotems",
+		"InterfaceOptionsNamesPanelUnitNameplatesEnemyPets",
+		"InterfaceOptionsNamesPanelUnitNameplatesEnemies",
+		"InterfaceOptionsNamesPanelUnitNameplatesEnemyGuardians",
+		"InterfaceOptionsNamesPanelUnitNameplatesEnemyTotems",
+		"InterfaceOptionsCombatTextPanelTargetDamage",
+		"InterfaceOptionsCombatTextPanelPeriodicDamage",
+		"InterfaceOptionsCombatTextPanelPetDamage",
+		"InterfaceOptionsCombatTextPanelHealing",
+		"InterfaceOptionsCombatTextPanelTargetEffects",
+		"InterfaceOptionsCombatTextPanelOtherTargetEffects",
+		"InterfaceOptionsCombatTextPanelEnableFCT",
+		"InterfaceOptionsCombatTextPanelDodgeParryMiss",
+		"InterfaceOptionsCombatTextPanelDamageReduction",
+		"InterfaceOptionsCombatTextPanelRepChanges",
+		"InterfaceOptionsCombatTextPanelReactiveAbilities",
+		"InterfaceOptionsCombatTextPanelFriendlyHealerNames",
+		"InterfaceOptionsCombatTextPanelCombatState",
+		"InterfaceOptionsCombatTextPanelComboPoints",
+		"InterfaceOptionsCombatTextPanelLowManaHealth",
+		"InterfaceOptionsCombatTextPanelEnergyGains",
+		"InterfaceOptionsCombatTextPanelPeriodicEnergyGains",
+		"InterfaceOptionsCombatTextPanelHonorGains",
+		"InterfaceOptionsCombatTextPanelAuras",
+		"InterfaceOptionsBuffsPanelBuffDurations",
+		"InterfaceOptionsBuffsPanelDispellableDebuffs",
+		"InterfaceOptionsBuffsPanelCastableBuffs",
+		"InterfaceOptionsBuffsPanelConsolidateBuffs",
+		"InterfaceOptionsBuffsPanelShowCastableDebuffs",
+		"InterfaceOptionsCameraPanelFollowTerrain",
+		"InterfaceOptionsCameraPanelHeadBob",
+		"InterfaceOptionsCameraPanelWaterCollision",
+		"InterfaceOptionsCameraPanelSmartPivot",
+		"InterfaceOptionsMousePanelInvertMouse",
+		"InterfaceOptionsMousePanelClickToMove",
+		"InterfaceOptionsMousePanelWoWMouse",
+		"InterfaceOptionsHelpPanelShowTutorials",
+		"InterfaceOptionsHelpPanelLoadingScreenTips",
+		"InterfaceOptionsHelpPanelEnhancedTooltips",
+		"InterfaceOptionsHelpPanelBeginnerTooltips",
+		"InterfaceOptionsHelpPanelShowLuaErrors",
+		"InterfaceOptionsStatusTextPanelPlayer",
+		"InterfaceOptionsStatusTextPanelPet",
+		"InterfaceOptionsStatusTextPanelParty",
+		"InterfaceOptionsStatusTextPanelTarget",
+		"InterfaceOptionsStatusTextPanelPercentages",
+		"InterfaceOptionsStatusTextPanelXP",
+		"InterfaceOptionsUnitFramePanelPartyBackground",
+		"InterfaceOptionsUnitFramePanelPartyPets",
+		"InterfaceOptionsUnitFramePanelArenaEnemyFrames",
+		"InterfaceOptionsUnitFramePanelArenaEnemyCastBar",
+		"InterfaceOptionsUnitFramePanelArenaEnemyPets",
+		"InterfaceOptionsUnitFramePanelPartyInRaid",
+		"InterfaceOptionsUnitFramePanelRaidRange",
+		"InterfaceOptionsUnitFramePanelFullSizeFocusFrame",
+		"InterfaceOptionsFeaturesPanelPreviewTalentChanges",
+		"InterfaceOptionsFeaturesPanelEquipmentManager",
 
-	local interfacedropdown ={
-		"ControlsPanelAutoLootKeyDropDown",
-		"CombatPanelTOTDropDown",
-		"CombatPanelFocusCastKeyDropDown",
-		"CombatPanelSelfCastKeyDropDown",
-		"DisplayPanelAggroWarningDisplay",
-		"DisplayPanelWorldPVPObjectiveDisplay",
-		"SocialPanelChatStyle",
-		"SocialPanelTimestamps",
-		"CombatTextPanelFCTDropDown",
-		"CameraPanelStyleDropDown",
-		"MousePanelClickMoveStyleDropDown",
-		"LanguagesPanelLocaleDropDown"
-	}
-	for i = 1, #interfacedropdown do
-		local idropdown = _G["InterfaceOptions"..interfacedropdown[i]]
-		if idropdown then
-			S:HandleDropDownBox(idropdown)
-		end
-	end
-
-	S:HandleButton(InterfaceOptionsHelpPanelResetTutorials)
-
-	local optioncheckbox = {
 		"AudioOptionsSoundPanelEnableSound",
 		"AudioOptionsSoundPanelSoundEffects",
 		"AudioOptionsSoundPanelErrorSpeech",
@@ -322,6 +261,7 @@ local function LoadSkin()
 		"AudioOptionsSoundPanelHRTF",
 		"AudioOptionsSoundPanelEnableDSPs",
 		"AudioOptionsSoundPanelUseHardware",
+
 		"VideoOptionsResolutionPanelVSync",
 		"VideoOptionsResolutionPanelTripleBuffer",
 		"VideoOptionsResolutionPanelHardwareCursor",
@@ -336,27 +276,26 @@ local function LoadSkin()
 		"VideoOptionsEffectsPanelDeathEffect",
 		"VideoOptionsEffectsPanelProjectedTextures",
 	}
-	for i = 1, #optioncheckbox do
-		local ocheckbox = _G[optioncheckbox[i]]
-		if ocheckbox then
-			S:HandleCheckBox(ocheckbox)
-		end
-	end
-
-	local optiondropdown = {
-		"VideoOptionsResolutionPanelResolutionDropDown",
-		"VideoOptionsResolutionPanelRefreshDropDown",
-		"VideoOptionsResolutionPanelMultiSampleDropDown",
-		"AudioOptionsSoundPanelHardwareDropDown",
-	}
-	for i = 1, #optiondropdown do
-		local odropdown = _G[optiondropdown[i]]
-		if odropdown then
-			S:HandleDropDownBox(odropdown, i == 3 and 195 or 165)
+	for _, checkbox in ipairs(checkboxes) do
+		checkbox = _G[checkbox]
+		if checkbox then
+			S:HandleCheckBox(checkbox)
 		end
 	end
 
 	local sliders = {
+		"InterfaceOptionsCameraPanelMaxDistanceSlider",
+		"InterfaceOptionsCameraPanelFollowSpeedSlider",
+		"InterfaceOptionsMousePanelMouseLookSpeedSlider",
+		"InterfaceOptionsMousePanelMouseSensitivitySlider",
+
+		"AudioOptionsSoundPanelSoundQuality",
+		"AudioOptionsSoundPanelSoundChannels",
+		"AudioOptionsSoundPanelMasterVolume",
+		"AudioOptionsSoundPanelSoundVolume",
+		"AudioOptionsSoundPanelMusicVolume",
+		"AudioOptionsSoundPanelAmbienceVolume",
+
 		"VideoOptionsResolutionPanelUIScaleSlider",
 		"VideoOptionsEffectsPanelQualitySlider",
 		"VideoOptionsEffectsPanelViewDistance",
@@ -371,21 +310,81 @@ local function LoadSkin()
 		"VideoOptionsEffectsPanelWeatherIntensity",
 		"VideoOptionsEffectsPanelPlayerTexture",
 		"VideoOptionsResolutionPanelGammaSlider",
-		"AudioOptionsSoundPanelSoundQuality",
-		"AudioOptionsSoundPanelSoundChannels",
-		"AudioOptionsSoundPanelMasterVolume",
-		"AudioOptionsSoundPanelSoundVolume",
-		"AudioOptionsSoundPanelMusicVolume",
-		"AudioOptionsSoundPanelAmbienceVolume",
-		"InterfaceOptionsCameraPanelMaxDistanceSlider",
-		"InterfaceOptionsCameraPanelFollowSpeedSlider",
-		"InterfaceOptionsMousePanelMouseLookSpeedSlider",
-		"InterfaceOptionsMousePanelMouseSensitivitySlider",
 	}
-
-	for _, slider in pairs(sliders) do
+	for _, slider in ipairs(sliders) do
 		S:HandleSliderFrame(_G[slider])
 	end
+
+	local buttons = {
+		"InterfaceOptionsFrameDefaults",
+		"InterfaceOptionsFrameOkay",
+		"InterfaceOptionsFrameCancel",
+		"InterfaceOptionsHelpPanelResetTutorials",
+
+		"AudioOptionsFrameDefaults",
+		"AudioOptionsFrameOkay",
+		"AudioOptionsFrameCancel",
+
+		"VideoOptionsFrameDefaults",
+		"VideoOptionsFrameOkay",
+		"VideoOptionsFrameCancel",
+		"VideoOptionsFrameApply",
+	}
+	for _, button in ipairs(buttons) do
+		S:HandleButton(_G[button])
+	end
+
+	local dropdowns ={
+		"InterfaceOptionsControlsPanelAutoLootKeyDropDown",
+		"InterfaceOptionsCombatPanelTOTDropDown",
+		"InterfaceOptionsCombatPanelFocusCastKeyDropDown",
+		"InterfaceOptionsCombatPanelSelfCastKeyDropDown",
+		"InterfaceOptionsDisplayPanelAggroWarningDisplay",
+		"InterfaceOptionsDisplayPanelWorldPVPObjectiveDisplay",
+		"InterfaceOptionsSocialPanelChatStyle",
+		"InterfaceOptionsSocialPanelTimestamps",
+		"InterfaceOptionsCombatTextPanelFCTDropDown",
+		"InterfaceOptionsCameraPanelStyleDropDown",
+		"InterfaceOptionsMousePanelClickMoveStyleDropDown",
+		"InterfaceOptionsLanguagesPanelLocaleDropDown",
+
+		"AudioOptionsSoundPanelHardwareDropDown",
+
+		"VideoOptionsResolutionPanelResolutionDropDown",
+		"VideoOptionsResolutionPanelRefreshDropDown",
+	}
+	for _, dropdown in ipairs(dropdowns) do
+		dropdown = _G[dropdown]
+		if dropdown then
+			S:HandleDropDownBox(dropdown)
+		end
+	end
+
+	S:HandleDropDownBox(VideoOptionsResolutionPanelMultiSampleDropDown, 195)
+
+	VideoOptionsFrameDefaults:ClearAllPoints()
+	VideoOptionsFrameDefaults:SetPoint("TOPLEFT", VideoOptionsFrameCategoryFrame, "BOTTOMLEFT", -1, -5)
+
+	InterfaceOptionsFrameDefaults:ClearAllPoints()
+	InterfaceOptionsFrameDefaults:SetPoint("TOPLEFT", InterfaceOptionsFrameCategories, "BOTTOMLEFT", -1, -5)
+
+	InterfaceOptionsFrameCancel:ClearAllPoints()
+	InterfaceOptionsFrameCancel:SetPoint("TOPRIGHT", InterfaceOptionsFramePanelContainer, "BOTTOMRIGHT", 0, -6)
+
+	VideoOptionsFrameCancel:ClearAllPoints()
+	VideoOptionsFrameCancel:SetPoint("RIGHT", VideoOptionsFrameApply, "LEFT", -4, 0)
+
+	VideoOptionsFrameOkay:ClearAllPoints()
+	VideoOptionsFrameOkay:SetPoint("RIGHT", VideoOptionsFrameCancel, "LEFT", -4, 0)
+
+	AudioOptionsFrameOkay:ClearAllPoints()
+	AudioOptionsFrameOkay:SetPoint("RIGHT", AudioOptionsFrameCancel, "LEFT", -4, 0)
+
+	InterfaceOptionsFrameOkay:ClearAllPoints()
+	InterfaceOptionsFrameOkay:SetPoint("RIGHT",InterfaceOptionsFrameCancel, "LEFT", -4, 0)
+
+	InterfaceOptionsFrameCategoriesList:StripTextures()
+	InterfaceOptionsFrameAddOnsList:StripTextures()
 
 	-- Mac Menu
 	if IsMacClient() then
@@ -480,12 +479,11 @@ local function LoadSkin()
 	ChatConfigCombatSettingsFiltersScrollFrameScrollBarBorder:Kill()
 
 	S:HandleButton(ChatConfigCombatSettingsFiltersDeleteButton)
-	ChatConfigCombatSettingsFiltersDeleteButton:Point("TOPRIGHT", ChatConfigCombatSettingsFilters, "BOTTOMRIGHT", 0, -1)
-
 	S:HandleButton(ChatConfigCombatSettingsFiltersAddFilterButton)
-	ChatConfigCombatSettingsFiltersAddFilterButton:Point("RIGHT", ChatConfigCombatSettingsFiltersDeleteButton, "LEFT", -1, 0)
-
 	S:HandleButton(ChatConfigCombatSettingsFiltersCopyFilterButton)
+
+	ChatConfigCombatSettingsFiltersDeleteButton:Point("TOPRIGHT", ChatConfigCombatSettingsFilters, "BOTTOMRIGHT", 0, -1)
+	ChatConfigCombatSettingsFiltersAddFilterButton:Point("RIGHT", ChatConfigCombatSettingsFiltersDeleteButton, "LEFT", -1, 0)
 	ChatConfigCombatSettingsFiltersCopyFilterButton:Point("RIGHT", ChatConfigCombatSettingsFiltersAddFilterButton, "LEFT", -1, 0)
 
 	S:HandleNextPrevButton(ChatConfigMoveFilterUpButton)
@@ -510,7 +508,7 @@ local function LoadSkin()
 
 	S:HandleButton(CombatConfigSettingsSaveButton)
 
-	local combatConfigCheck = {
+	local combatCheckboxes = {
 		"CombatConfigColorsHighlightingLine",
 		"CombatConfigColorsHighlightingAbility",
 		"CombatConfigColorsHighlightingDamage",
@@ -533,9 +531,8 @@ local function LoadSkin()
 		"CombatConfigSettingsParty",
 		"CombatConfigSettingsRaid"
 	}
-
-	for i = 1, #combatConfigCheck do
-		S:HandleCheckBox(_G[combatConfigCheck[i]])
+	for i = 1, #combatCheckboxes do
+		S:HandleCheckBox(_G[combatCheckboxes[i]])
 	end
 
 	for i = 1, 5 do
@@ -551,75 +548,66 @@ local function LoadSkin()
 	end
 
 	S:HandleButton(ChatConfigFrameDefaultButton)
+	S:HandleButton(CombatLogDefaultButton)
+	S:HandleButton(ChatConfigFrameCancelButton)
+	S:HandleButton(ChatConfigFrameOkayButton)
+
 	ChatConfigFrameDefaultButton:Point("BOTTOMLEFT", 12, 8)
 	ChatConfigFrameDefaultButton:Width(125)
 
-	S:HandleButton(CombatLogDefaultButton)
-
-	S:HandleButton(ChatConfigFrameCancelButton)
 	ChatConfigFrameCancelButton:Point("BOTTOMRIGHT", -11, 8)
-
-	S:HandleButton(ChatConfigFrameOkayButton)
 
 	S:HandleColorSwatch(CombatConfigColorsColorizeSpellNamesColorSwatch)
 	S:HandleColorSwatch(CombatConfigColorsColorizeDamageNumberColorSwatch)
 
-	S:SecureHook("ChatConfig_CreateCheckboxes", function(frame, checkBoxTable, checkBoxTemplate)
+	hooksecurefunc("ChatConfig_CreateCheckboxes", function(frame, checkBoxTable, checkBoxTemplate)
+		frame:SetTemplate("Transparent")
+
 		local checkBoxNameString = frame:GetName().."CheckBox"
-		if checkBoxTemplate == "ChatConfigCheckBoxTemplate" then
-			frame:SetTemplate("Transparent")
-			for index in ipairs(checkBoxTable) do
-				local checkBoxName = checkBoxNameString..index
-				local checkbox = _G[checkBoxName]
-				if not checkbox.backdrop then
-					checkbox:StripTextures()
-					checkbox:CreateBackdrop()
-					checkbox.backdrop:Point("TOPLEFT", 3, -1)
-					checkbox.backdrop:Point("BOTTOMRIGHT", -3, 1)
-					checkbox.backdrop:SetFrameLevel(checkbox:GetParent():GetFrameLevel() + 1)
+		local checkBoxName, checkbox
 
-					S:HandleCheckBox(_G[checkBoxName.."Check"])
-				end
-			end
-		elseif checkBoxTemplate == "ChatConfigCheckBoxWithSwatchTemplate" or checkBoxTemplate == "ChatConfigCheckBoxWithSwatchAndClassColorTemplate" then
-			frame:SetTemplate("Transparent")
-			for index in ipairs(checkBoxTable) do
-				local checkBoxName = checkBoxNameString..index
-				local checkbox = _G[checkBoxName]
-				local colorSwatch = _G[checkBoxName.."ColorSwatch"]
+		for index in ipairs(checkBoxTable) do
+			checkBoxName = checkBoxNameString..index
+			checkbox = _G[checkBoxName]
 
-				if not checkbox.backdrop then
-					checkbox:StripTextures()
-					checkbox:CreateBackdrop()
-					checkbox.backdrop:Point("TOPLEFT", 3, -1)
-					checkbox.backdrop:Point("BOTTOMRIGHT", -3, 1)
-					checkbox.backdrop:SetFrameLevel(checkbox:GetParent():GetFrameLevel() + 1)
+			if not checkbox.backdrop then
+				checkbox:StripTextures()
+				checkbox:CreateBackdrop()
+				checkbox.backdrop:Point("TOPLEFT", 3, -1)
+				checkbox.backdrop:Point("BOTTOMRIGHT", -3, 1)
+				checkbox.backdrop:SetFrameLevel(checkbox:GetParent():GetFrameLevel() + 1)
 
-					S:HandleCheckBox(_G[checkBoxName.."Check"])
+				S:HandleCheckBox(_G[checkBoxName.."Check"])
 
+				if checkBoxTemplate == "ChatConfigCheckBoxWithSwatchTemplate" or checkBoxTemplate == "ChatConfigCheckBoxWithSwatchAndClassColorTemplate" then
 					if checkBoxTemplate == "ChatConfigCheckBoxWithSwatchAndClassColorTemplate" then
 						S:HandleCheckBox(_G[checkBoxName.."ColorClasses"])
 					end
 
-					S:HandleColorSwatch(colorSwatch)
+					S:HandleColorSwatch(_G[checkBoxName.."ColorSwatch"])
 				end
 			end
 		end
 	end)
 
-	S:SecureHook("ChatConfig_CreateTieredCheckboxes", function(frame, checkBoxTable)
+	hooksecurefunc("ChatConfig_CreateTieredCheckboxes", function(frame, checkBoxTable)
 		local checkBoxNameString = frame:GetName().."CheckBox"
+		local checkBoxName
+
 		for index, value in ipairs(checkBoxTable) do
-			local checkBoxName = checkBoxNameString..index
+			checkBoxName = checkBoxNameString..index
 
 			if _G[checkBoxName] then
 				S:HandleCheckBox(_G[checkBoxName])
+
 				if value.subTypes then
-					local subCheckBoxNameString = checkBoxName.."_"
-					for k, _ in ipairs(value.subTypes) do
-						local subCheckBoxName = subCheckBoxNameString..k
-						if _G[subCheckBoxName] then
-							S:HandleCheckBox(_G[subCheckBoxNameString..k])
+					local subCheckBox
+
+					for i in ipairs(value.subTypes) do
+						subCheckBox = _G[checkBoxName.."_"..i]
+
+						if subCheckBox then
+							S:HandleCheckBox(subCheckBox)
 						end
 					end
 				end
@@ -627,14 +615,14 @@ local function LoadSkin()
 		end
 	end)
 
-	S:SecureHook("ChatConfig_CreateColorSwatches", function(frame, swatchTable)
+	hooksecurefunc("ChatConfig_CreateColorSwatches", function(frame, swatchTable)
 		frame:SetTemplate("Transparent")
+
 		local nameString = frame:GetName().."Swatch"
+		local swatch
 
 		for index in ipairs(swatchTable) do
-			local swatchName = nameString..index
-			local swatch = _G[swatchName]
-			local colorSwatch = _G[swatchName.."ColorSwatch"]
+			swatch = _G[nameString..index]
 
 			if not swatch.backdrop then
 				swatch:StripTextures()
@@ -643,10 +631,10 @@ local function LoadSkin()
 				swatch.backdrop:Point("BOTTOMRIGHT", -3, 1)
 				swatch.backdrop:SetFrameLevel(swatch:GetParent():GetFrameLevel() + 1)
 
-				S:HandleColorSwatch(colorSwatch)
+				S:HandleColorSwatch(_G[nameString..index.."ColorSwatch"])
 			end
 		end
 	end)
 end
 
-S:AddCallback("SkinBlizzard", LoadSkin)
+S:AddCallback("Skin_BlizzardOptions", LoadSkin)
