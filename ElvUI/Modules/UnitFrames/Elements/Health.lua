@@ -212,7 +212,7 @@ function UF:Configure_HealthBar(frame)
 	UF:Configure_FrameGlow(frame)
 
 	if frame:IsElementEnabled("Health") then
-	    frame.Health:ForceUpdate()
+		frame.Health:ForceUpdate()
 	end
 end
 

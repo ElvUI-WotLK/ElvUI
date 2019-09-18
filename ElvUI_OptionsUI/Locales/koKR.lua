@@ -1346,7 +1346,7 @@ L["You do not need to use 'Is Casting Anything' or 'Is Channeling Anything' for 
 L["You may not remove a spell from a default filter that is not customly added. Setting spell to false instead."] = "기본 필터에 설정된 기본 주문들은 삭제할 수 없습니다. 대신 비활성화는 가능합니다."
 L["You must be targeting a player."] = "유저를 대상으로 잡은 후에 시도해야 합니다."
 L["You need to hold this modifier down in order to blacklist an aura by right-clicking the icon. Set to None to disable the blacklist functionality."] = true
-L["You still have ElvUI_Config installed.  ElvUI_Config has been renamed to ElvUI_OptionsUI, please remove it."] = true
+L["You still have ElvUI_Config installed. ElvUI_Config has been renamed to ElvUI_OptionsUI, please remove it."] = true
 L["Your Auras First"] = "자기 주문 우선"
 L["Zone Ability"] = "특수능력 버튼"
 L["Zone Name"] = true

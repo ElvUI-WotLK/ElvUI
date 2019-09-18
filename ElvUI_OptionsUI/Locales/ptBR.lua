@@ -1348,7 +1348,7 @@ L["You do not need to use 'Is Casting Anything' or 'Is Channeling Anything' for 
 L["You may not remove a spell from a default filter that is not customly added. Setting spell to false instead."] = "Você não pode remover um feitiço de um filtro padrão que não seja um feitiço personalizado. Em vez disso definindo feitiço para falso."
 L["You must be targeting a player."] = "É necessário ter um jogador como alvo."
 L["You need to hold this modifier down in order to blacklist an aura by right-clicking the icon. Set to None to disable the blacklist functionality."] = true
-L["You still have ElvUI_Config installed.  ElvUI_Config has been renamed to ElvUI_OptionsUI, please remove it."] = true
+L["You still have ElvUI_Config installed. ElvUI_Config has been renamed to ElvUI_OptionsUI, please remove it."] = true
 L["Your Auras First"] = "Suas auras primeiro"
 L["Zone Ability"] = true
 L["Zone Name"] = true

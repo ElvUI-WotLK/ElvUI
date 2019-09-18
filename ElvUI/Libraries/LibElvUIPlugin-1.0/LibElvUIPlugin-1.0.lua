@@ -4,7 +4,7 @@ if not lib then return end
 -- GLOBALS: ElvUI
 
 --[[----------------------------
-Plugin Table Format:  (for reference only).
+Plugin Table Format: (for reference only).
 	{
 		name		- name of the plugin
 		callback	- callback to call when ElvUI_OptionsUI is loaded
@@ -52,7 +52,7 @@ lib.index = 0
 
 local MSG_OUTDATED = "Your version of %s %s is out of date (latest is version %s). You can download the latest version from https://github.com/ElvUI-WotLK/ElvUI/"
 local HDR_CONFIG = "Plugins"
-local HDR_INFORMATION = "LibElvUIPlugin-1.0.%d - Plugins Loaded  (Green means you have current version, Red means out of date)"
+local HDR_INFORMATION = "LibElvUIPlugin-1.0.%d - Plugins Loaded (Green means you have current version, Red means out of date)"
 local INFO_BY = "by"
 local INFO_VERSION = "Version:"
 local INFO_NEW = "Newest:"

@@ -184,7 +184,7 @@ function E:UIFrameFade_OnUpdate(elapsed)
 				frame:SetAlpha(info.endAlpha)
 
 				-- If there is a fadeHoldTime then wait until its passed to continue on
-				if info.fadeHoldTime and info.fadeHoldTime > 0  then
+				if info.fadeHoldTime and info.fadeHoldTime > 0 then
 					info.fadeHoldTime = info.fadeHoldTime - elapsed
 				else
 					-- Complete the fade and call the finished function if there is one

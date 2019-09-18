@@ -680,7 +680,7 @@ L["Load Distance"] = "Distance de chargement"
 L["Local Time"] = "Heure Locale"
 L["Location Text"] = "Texte de localisation"
 L["Lock Positions"] = "Verrouiller les positions"
-L["Log Taints"] = "Journal  des corruptions"
+L["Log Taints"] = "Journal des corruptions"
 L["Log the main chat frames history. So when you reloadui or log in and out you see the history from your last session."] = "Active la fenêtre principale de l'historique de discussion. Ainsi quand vous rechargez l'interface ou effectuez une connexion / déconnexion, vous voyez l'historique de la dernière session"
 L["Login Message"] = "Message de connexion"
 L["Loot Frames"] = "Fenêtre de butin"
@@ -1124,7 +1124,7 @@ L["Tank"] = true
 L["Tapped"] = "Collé"
 L["Target Indicator Color"] = "Couleur de l'indicateur de la cible"
 L["Target Info"] = "Info de la cible"
-L["Target On Mouse-Down"] =  "Cibler lors d'un appui sur le clic (et non pas en relachant le clic)"
+L["Target On Mouse-Down"] = "Cibler lors d'un appui sur le clic (et non pas en relachant le clic)"
 L["Target units on mouse down rather than mouse up. \n\n|cffFF0000Warning: If you are using the addon 'Clique' you may have to adjust your clique settings when changing this."] = "Cible les unités avec un appui sur le clic souris plutôt qu'au relâchement du clic. \n\n|cffFF0000Attention: Si vous utilisez l'addon 'Clique' vous devrez peut-être ajuster vos paramètres de clic lors du changement de celui-ci."
 L["Target"] = true
 L["Target, Quest, Combat"] = true
@@ -1140,7 +1140,7 @@ L["Text Format"] = "Format du texte"
 L["Text Position"] = "Position du texte"
 L["Text Threshold"] = "Seuil du texte"
 L["Text Toggle On NPC"] = "Afficher le texte des PNJ"
-L["Text xOffset"] =  "Décalage de l'axe X du texte"
+L["Text xOffset"] = "Décalage de l'axe X du texte"
 L["Text yOffset"] = "Décalage de l'axe Y du texte"
 L["Text"] = "Texte"
 L["Texture"] = true
@@ -1209,7 +1209,7 @@ L["Threshold before text turns red and is in decimal form. Set to -1 for it to n
 L["Threshold before the icon will fade out and back in. Set to -1 to disable."] = true
 L["Ticks"] = "Ticks"
 L["Tiers"] = true
-L["Time Remaining Reverse"] =  "Temps restant inversé"
+L["Time Remaining Reverse"] = "Temps restant inversé"
 L["Time Remaining"] = "Temps restant"
 L["Time To Hold"] = true
 L["Time xOffset"] = "Décalage X du temps"
@@ -1346,7 +1346,7 @@ L["You do not need to use 'Is Casting Anything' or 'Is Channeling Anything' for 
 L["You may not remove a spell from a default filter that is not customly added. Setting spell to false instead."] = "Vous ne pouvez pas supprimer un sort du filtre qui est par défaut.configurer le sort en 'désactivé'."
 L["You must be targeting a player."] = "Vous devez cibler un joueur."
 L["You need to hold this modifier down in order to blacklist an aura by right-clicking the icon. Set to None to disable the blacklist functionality."] = "Vous devez maintenir le modifieur enfoncé pour retirer une aura en cliquant du droit sur l'icône. Sélectionnez Aucun pour désactiver la liste noire."
-L["You still have ElvUI_Config installed.  ElvUI_Config has been renamed to ElvUI_OptionsUI, please remove it."] = true
+L["You still have ElvUI_Config installed. ElvUI_Config has been renamed to ElvUI_OptionsUI, please remove it."] = true
 L["Your Auras First"] = "Vos Auras en premier"
 L["Zone Ability"] = "Zone d'abilité"
 L["Zone Name"] = true
@@ -1423,7 +1423,7 @@ Formats de la Vie / des Ressources:
 'percent' - Quantité en pourcentage
 'current-max' - Quantité actuelle maximale, n'affichera seulement la quantité maximale si la quantité actuelle est égale au maximum.
 'current-percent' - Quantité actuelle suivie par quantité en pourcentage, n'affichera seulement la quantité maximale si la quantité actuelle est égale au maximum
-'current-max-percent' -  Quantité actuelle, quantité maximale, suivie par quantité en pourcentage, n'affichera seulement la quantité maximale si la quantité actuelle est égale au maximum
+'current-max-percent' - Quantité actuelle, quantité maximale, suivie par quantité en pourcentage, n'affichera seulement la quantité maximale si la quantité actuelle est égale au maximum
 'deficit' - Affiche la valeur du déficit, n'affichera rien si il n'y a pas de déficit
 
 Format des Noms:

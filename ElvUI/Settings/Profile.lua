@@ -1266,7 +1266,7 @@ P.unitframe = {
 				xOffset = 0,
 				yOffset = 8
 			},
-			cutaway =  {
+			cutaway = {
 				health = {
 					enabled = false,
 					fadeOutTime = 0.6,
@@ -1476,7 +1476,7 @@ P.unitframe = {
 				onMouseOver = true,
 				outOfRange = true
 			},
-			cutaway =  {
+			cutaway = {
 				health = {
 					enabled = false,
 					fadeOutTime = 0.6,
@@ -1601,7 +1601,7 @@ P.unitframe = {
 				xOffset = 0,
 				yOffset = 8
 			},
-			cutaway =  {
+			cutaway = {
 				health = {
 					enabled = false,
 					fadeOutTime = 0.6,
@@ -1725,7 +1725,7 @@ P.unitframe = {
 				xOffset = 0,
 				yOffset = 8
 			},
-			cutaway =  {
+			cutaway = {
 				health = {
 					enabled = false,
 					fadeOutTime = 0.6,
@@ -1901,7 +1901,7 @@ P.unitframe = {
 				onMouseOver = true,
 				outOfRange = true
 			},
-			cutaway =  {
+			cutaway = {
 				health = {
 					enabled = false,
 					fadeOutTime = 0.6,
@@ -2025,7 +2025,7 @@ P.unitframe = {
 				xOffset = 0,
 				yOffset = 8
 			},
-			cutaway =  {
+			cutaway = {
 				health = {
 					enabled = false,
 					fadeOutTime = 0.6,
@@ -2192,7 +2192,7 @@ P.unitframe = {
 					frameLevel = 1
 				}
 			},
-			cutaway =  {
+			cutaway = {
 				health = {
 					enabled = false,
 					fadeOutTime = 0.6,
@@ -2308,7 +2308,7 @@ P.unitframe = {
 				xOffset = 0,
 				yOffset = 0
 			},
-			cutaway =  {
+			cutaway = {
 				health = {
 					enabled = false,
 					fadeOutTime = 0.6,
@@ -2460,7 +2460,7 @@ P.unitframe = {
 				xOffset = 0,
 				yOffset = 8
 			},
-			cutaway =  {
+			cutaway = {
 				health = {
 					enabled = false,
 					fadeOutTime = 0.6,
@@ -2614,7 +2614,7 @@ P.unitframe = {
 				xOffset = 1,
 				yOffset = 0
 			},
-			cutaway =  {
+			cutaway = {
 				health = {
 					enabled = false,
 					fadeOutTime = 0.6,
@@ -2886,7 +2886,7 @@ P.unitframe = {
 				xOffset = 0,
 				yOffset = 0
 			},
-			cutaway =  {
+			cutaway = {
 				health = {
 					enabled = false,
 					fadeOutTime = 0.6,
@@ -3083,7 +3083,7 @@ P.unitframe = {
 				xOffset = 0,
 				yOffset = 0
 			},
-			cutaway =  {
+			cutaway = {
 				health = {
 					enabled = false,
 					fadeOutTime = 0.6,
@@ -3280,7 +3280,7 @@ P.unitframe = {
 				xOffset = 0,
 				yOffset = 0
 			},
-			cutaway =  {
+			cutaway = {
 				health = {
 					enabled = false,
 					fadeOutTime = 0.6,
@@ -3434,7 +3434,7 @@ P.unitframe = {
 				xOffset = 0,
 				yOffset = 8
 			},
-			cutaway =  {
+			cutaway = {
 				health = {
 					enabled = false,
 					fadeOutTime = 0.6,
@@ -3582,7 +3582,7 @@ P.unitframe = {
 					yOffset = 8
 				}
 			},
-			cutaway =  {
+			cutaway = {
 				health = {
 					enabled = false,
 					fadeOutTime = 0.6,
@@ -3730,7 +3730,7 @@ P.unitframe = {
 					yOffset = 8
 				}
 			},
-			cutaway =  {
+			cutaway = {
 				health = {
 					enabled = false,
 					fadeOutTime = 0.6,

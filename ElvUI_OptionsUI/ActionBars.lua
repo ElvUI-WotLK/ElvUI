@@ -282,7 +282,7 @@ local function BuildABConfig()
 								name = L["Stack Text Y-Offset"],
 								min = -10, max = 10, step = 1
 							},
-							hotkeyTextPosition  = {
+							hotkeyTextPosition = {
 								order = 4,
 								type = "select",
 								name = L["Keybind Text Position"],

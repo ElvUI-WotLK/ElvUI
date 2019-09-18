@@ -178,7 +178,7 @@ function AB:SetupMicroBar()
 
 	MicroButtonPortrait:SetInside(CharacterMicroButton.backdrop)
 
-	if E.myfaction == "Alliance"  then
+	if E.myfaction == "Alliance" then
 		PVPMicroButtonTexture:SetTexCoord(0.545, 0.935, 0.070, 0.940)
 	else
 		PVPMicroButtonTexture:SetTexCoord(0.100, 0.475, 0.070, 0.940)

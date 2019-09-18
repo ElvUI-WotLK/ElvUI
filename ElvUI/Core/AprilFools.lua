@@ -1,8 +1,8 @@
 --[[
 	Collection of previous april fools pranks
 
-	Harlem Shake: 		Try it out with the command /harlemshake
-	Hello Kitty: 		Try it out with the command /hellokitty (pay attention to the popups, read what it says)
+	Harlem Shake:		Try it out with the command /harlemshake
+	Hello Kitty:		Try it out with the command /hellokitty (pay attention to the popups, read what it says)
 ]]
 
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB

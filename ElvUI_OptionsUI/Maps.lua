@@ -165,18 +165,18 @@ E.Options.args.maps = {
 							name = L["Location Text"]
 						},
 						locationText = {
-						    order = 2,
-						    type = "select",
-						    name = L["Location Text"],
-						    desc = L["Change settings for the display of the location text that is on the minimap."],
-						    get = function(info) return E.db.general.minimap.locationText end,
-						    set = function(info, value) E.db.general.minimap.locationText = value MM:UpdateSettings() MM:Update_ZoneText() end,
-						    values = {
-						        ["MOUSEOVER"] = L["Minimap Mouseover"],
-						        ["SHOW"] = L["Always Display"],
-						        ["HIDE"] = L["HIDE"]
-						    },
-						    disabled = function() return not E.private.general.minimap.enable end
+							order = 2,
+							type = "select",
+							name = L["Location Text"],
+							desc = L["Change settings for the display of the location text that is on the minimap."],
+							get = function(info) return E.db.general.minimap.locationText end,
+							set = function(info, value) E.db.general.minimap.locationText = value MM:UpdateSettings() MM:Update_ZoneText() end,
+							values = {
+								["MOUSEOVER"] = L["Minimap Mouseover"],
+								["SHOW"] = L["Always Display"],
+								["HIDE"] = L["HIDE"]
+							},
+							disabled = function() return not E.private.general.minimap.enable end
 						},
 						spacer = {
 							order = 3,

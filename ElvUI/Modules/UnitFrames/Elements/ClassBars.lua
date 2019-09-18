@@ -29,13 +29,13 @@ function UF:Configure_ClassBar(frame)
 	elseif (self.thinBorders or E.PixelMode) and frame.CLASSBAR_HEIGHT > 0 and frame.CLASSBAR_HEIGHT < 3 then --A height of 3 means 2px for borders and just 1px for the actual power statusbar
 		frame.CLASSBAR_HEIGHT = 3
 		if db.classbar then db.classbar.height = 3 end
-		UF.ToggleResourceBar(bars)  --Trigger update to health if needed
+		UF.ToggleResourceBar(bars) --Trigger update to health if needed
 	elseif (not frame.CLASSBAR_DETACHED and frame.CLASSBAR_HEIGHT > 30) then
 		frame.CLASSBAR_HEIGHT = 10
 		if db.classbar then db.classbar.height = 10 end
 		--Override visibility if Classbar is Additional Power in order to fix a bug when Auto Hide is enabled, height is higher than 30 and it goes from detached to not detached
 		local overrideVisibility = frame.ClassBar == "AdditionalPower"
-		UF.ToggleResourceBar(bars, overrideVisibility)  --Trigger update to health if needed
+		UF.ToggleResourceBar(bars, overrideVisibility) --Trigger update to health if needed
 	end
 
 	--We don't want to modify the original frame.CLASSBAR_WIDTH value, as it bugs out when the classbar gains more buttons

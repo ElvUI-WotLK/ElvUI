@@ -577,7 +577,7 @@ G.unitframe.ChannelTicks = {
 	[SpellName(755)] = 10,	-- Health Funnel
 	[SpellName(1949)] = 15,	-- Hellfire
 	-- Druid
-	[SpellName(44203)] = 4,	 -- Tranquility
+	[SpellName(44203)] = 4,	-- Tranquility
 	[SpellName(16914)] = 10, -- Hurricane
 	-- Priest
 	[SpellName(15407)] = 3,	-- Mind Flay

@@ -187,7 +187,7 @@ do
 				usage, calls = GetFunctionCPUUsage(mod[newFunc], true)
 				diff = usage - oldUsage
 				if showall and (calls > minCalls) then
-					E:Print("Name("..name..")  Calls("..calls..") Diff("..(diff > 0 and format("%.3f", diff) or 0)..")")
+					E:Print("Name("..name..") Calls("..calls..") Diff("..(diff > 0 and format("%.3f", diff) or 0)..")")
 				end
 				if (diff > greatestDiff) and calls > minCalls then
 					greatestName, greatestUsage, greatestCalls, greatestDiff = name, usage, calls, diff

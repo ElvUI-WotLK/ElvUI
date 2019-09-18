@@ -560,7 +560,7 @@ function E:FilterTableFromBlacklist(cleanTable, blacklistTable)
 		E:Print("Bad argument #1 to 'FilterTableFromBlacklist' (table expected)")
 		return
 	end
-	if type(blacklistTable) ~=  "table" then
+	if type(blacklistTable) ~= "table" then
 		E:Print("Bad argument #2 to 'FilterTableFromBlacklist' (table expected)")
 		return
 	end
@@ -712,7 +712,7 @@ do	--Split string by multi-character delimiter (the strsplit / string.split func
 		assert(type (delim) == "string" and strlen(delim) > 0, "bad delimiter")
 
 		local start = 1
-		twipe(splitTable)  -- results table
+		twipe(splitTable) -- results table
 
 		-- find each instance of a string followed by the delimiter
 		while true do

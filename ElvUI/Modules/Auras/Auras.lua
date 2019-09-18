@@ -62,8 +62,8 @@ local IS_HORIZONTAL_GROWTH = {
 }
 
 local enchantableSlots = {
-  [1] = 16,
-  [2] = 17
+	[1] = 16,
+	[2] = 17
 }
 
 local weaponEnchantTime = {}

@@ -49,7 +49,7 @@ function UF:UpdateOverridePvP(event, unit)
 	elseif factionGroup and UnitIsPVP(unit) then
 		element:SetTexture(E.Media.Textures.PvPIcons)
 
-		if factionGroup == "Alliance"  then
+		if factionGroup == "Alliance" then
 			element:SetTexCoord(0.545, 0.935, 0.070, 0.940)
 		else
 			element:SetTexCoord(0.100, 0.475, 0.070, 0.940)

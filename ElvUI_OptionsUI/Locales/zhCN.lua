@@ -1257,7 +1257,7 @@ L["You do not need to use 'Is Casting Anything' or 'Is Channeling Anything' for 
 L["You may not remove a spell from a default filter that is not customly added. Setting spell to false instead."] = "你不能移除一个内建技能, 仅能停用此技能."
 L["You must be targeting a player."] = "你必须以一名玩家为目标"
 L["You need to hold this modifier down in order to blacklist an aura by right-clicking the icon. Set to None to disable the blacklist functionality."] = "按住设置按键+右键单击会把该玩家加入黑名单,设置无则关闭该功能!"
-L["You still have ElvUI_Config installed.  ElvUI_Config has been renamed to ElvUI_OptionsUI, please remove it."] = true
+L["You still have ElvUI_Config installed. ElvUI_Config has been renamed to ElvUI_OptionsUI, please remove it."] = true
 L["Your Auras First"] = "自身光环优先"
 
 ----------------------------------
