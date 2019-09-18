@@ -5,7 +5,6 @@ local S = E:GetModule("Skins")
 local _G = _G
 local unpack = unpack
 --WoW API / Variables
-local UnitIsUnit = UnitIsUnit
 
 local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.misc ~= true then return end
@@ -142,12 +141,6 @@ local function LoadSkin()
 	ReadyCheckFrameText:SetTextColor(1, 1, 1)
 
 	ReadyCheckListenerFrame:SetAlpha(0)
-
-	ReadyCheckFrame:HookScript("OnShow", function(self) -- bug fix, don't show it if initiator
-		if UnitIsUnit("player", self.initiator) then
-			self:Hide()
-		end
-	end)
 
 	-- Coin PickUp Frame
 	CoinPickupFrame:StripTextures()

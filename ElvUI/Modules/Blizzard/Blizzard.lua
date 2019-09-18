@@ -6,6 +6,7 @@ local B = E:GetModule("Blizzard")
 local ChatEdit_ChooseBoxForSend = ChatEdit_ChooseBoxForSend
 local GetTradeSkillListLink = GetTradeSkillListLink
 local Minimap_SetPing = Minimap_SetPing
+local UnitIsUnit = UnitIsUnit
 local MINIMAPPING_FADE_TIMER = MINIMAPPING_FADE_TIMER
 
 function B:ADDON_LOADED(_, addon)
@@ -65,6 +66,12 @@ function B:Initialize()
 		end
 		if questFrame >= scrollFrame then
 			QuestLogDetailScrollFrame:SetFrameLevel(questFrame + 1)
+		end
+	end)
+
+	ReadyCheckFrame:HookScript("OnShow", function(self)
+		if UnitIsUnit("player", self.initiator) then
+			self:Hide()
 		end
 	end)
 
