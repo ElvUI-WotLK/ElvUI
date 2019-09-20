@@ -32,6 +32,8 @@ function UF:Configure_GPS(frame)
 		GPS.outOfRange = frame.db.GPSArrow.outOfRange
 
 		GPS:Point("CENTER", frame, "CENTER", frame.db.GPSArrow.xOffset, frame.db.GPSArrow.yOffset)
+
+		GPS.UpdateState(frame)
 	else
 		if frame:IsElementEnabled("GPS") then
 			frame:DisableElement("GPS")
