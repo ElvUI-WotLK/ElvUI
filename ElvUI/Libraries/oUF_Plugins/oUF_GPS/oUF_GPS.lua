@@ -6,7 +6,7 @@ local atan2, cos, sin = math.atan2, math.cos, math.sin
 local tremove = table.remove
 
 local sqrt2 = math.sqrt(2)
-local pi2 = 3.1415926535898 / 2
+local pi2 = math.pi / 2
 
 local GetPlayerFacing = GetPlayerFacing
 local GetPlayerMapPosition = GetPlayerMapPosition

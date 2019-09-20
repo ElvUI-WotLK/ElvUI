@@ -130,7 +130,7 @@ local function formatTime(s)
 	elseif s > 60 then
 		return format("%dm", s / 60)
 	else
-		return s
+		return format("%d", s)
 	end
 end
 
