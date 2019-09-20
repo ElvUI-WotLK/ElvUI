@@ -27,8 +27,10 @@ local function LoadSkin()
 	LootFrame:StripTextures()
 
 	LootFrame:CreateBackdrop("Transparent")
-	LootFrame.backdrop:Point("TOPLEFT", 14, -14)
-	LootFrame.backdrop:Point("BOTTOMRIGHT", -75, 5)
+	LootFrame.backdrop:Point("TOPLEFT", 14, -54)
+	LootFrame.backdrop:Point("BOTTOMRIGHT", -77, 5)
+
+	LootFrame:SetHitRectInsets(14, 77, 54, 5)
 
 	LootFramePortraitOverlay:SetParent(E.HiddenFrame)
 
@@ -54,7 +56,7 @@ local function LoadSkin()
 	end)
 
 	S:HandleCloseButton(LootCloseButton)
-	LootCloseButton:Point("CENTER", LootFrame, "TOPRIGHT", -87, -26)
+	LootCloseButton:Point("CENTER", LootFrame, "TOPRIGHT", -88, -65)
 
 	for i = 1, LootFrame:GetNumRegions() do
 		local region = select(i, LootFrame:GetRegions())
