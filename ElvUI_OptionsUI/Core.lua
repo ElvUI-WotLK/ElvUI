@@ -6,7 +6,7 @@ Engine[1] = {}
 Engine[2] = E.Libs.ACL:GetLocale("ElvUI", E.global.general.locale or "enUS")
 local C, L = Engine[1], Engine[2]
 
-local format, sort, tinsert = format, sort, tinsert
+local format = string.format
 
 C.Values = {
 	FontFlags = {
@@ -44,7 +44,7 @@ E.Options.args = {
 	ElvUI_Header = {
 		order = 1,
 		type = "header",
-		name = L["Version"]..format(": |cff99ff33%s|r", E.version),
+		name = format("%s: |cff99ff33%s|r", L["Version"], E.version),
 		width = "full"
 	},
 	RepositionWindow = {
@@ -112,52 +112,6 @@ E.Options.args = {
 	}
 }
 
-local DONATOR_STRING = ""
-local DEVELOPER_STRING = ""
-local TESTER_STRING = ""
-local LINE_BREAK = "\n"
-local DONATORS = {
-	"Dandruff",
-	"Tobur/Tarilya",
-	"Netu",
-	"Alluren",
-	"Thorgnir",
-	"Emalal",
-	"Bendmeova",
-	"Curl",
-	"Zarac",
-	"Emmo",
-	"Oz",
-	"Hawké",
-	"Aynya",
-	"Tahira",
-	"Karsten Lumbye Thomsen",
-	"Thomas B. aka Pitschiqüü",
-	"Sea Garnet",
-	"Paul Storry",
-	"Azagar",
-	"Archury",
-	"Donhorn",
-	"Woodson Harmon",
-	"Phoenyx",
-	"Feat",
-	"Konungr",
-	"Leyrin",
-	"Dragonsys",
-	"Tkalec",
-	"Paavi",
-	"Giorgio",
-	"Bearscantank",
-	"Eidolic",
-	"Cosmo",
-	"Adorno",
-	"Domoaligato",
-	"Smorg",
-	"Pyrokee",
-	"Portable",
-	"Ithilyn"
-}
-
 local DEVELOPERS = {
 	"Tukz",
 	"Haste",
@@ -170,63 +124,49 @@ local DEVELOPERS = {
 	"|cFF8866ccSimpy|r",
 	"|cFF0070DEAzilroka|r"
 }
-
 local TESTERS = {
-	"Tukui Community",
-	"|cffF76ADBSarah|r - For Sarahing",
-	"Affinity",
-	"Modarch",
-	"Bladesdruid",
-	"Tirain",
-	"Phima",
-	"Veiled",
-	"Repooc",
-	"Darth Predator",
-	"Alex",
-	"Nidra",
-	"Kurhyus",
-	"BuG",
-	"Yachanay",
-	"Catok"
+}
+local DONATORS = {
 }
 
-local function SortList(a, b)
-	return a < b
-end
+do
+	local DEVELOPER_STRING
+	local TESTER_STRING
+	local DONATOR_STRING
 
-sort(DONATORS, SortList)
-sort(DEVELOPERS, SortList)
-sort(TESTERS, SortList)
+	if #DEVELOPERS > 0 then
+		table.sort(DEVELOPERS)
+		DEVELOPER_STRING = table.concat(DEVELOPERS, "\n")
+	end
+	if #TESTERS > 0 then
+		table.sort(TESTERS)
+		TESTER_STRING = table.concat(TESTERS, "\n")
+	end
+	if #DONATORS > 0 then
+		table.sort(DONATORS)
+		DONATOR_STRING = table.concat(DONATORS, "\n")
+	end
 
-for _, name in pairs(DONATORS) do
-	tinsert(E.CreditsList, name)
-	DONATOR_STRING = DONATOR_STRING..LINE_BREAK..name
-end
-for _, name in pairs(DEVELOPERS) do
-	tinsert(E.CreditsList, name)
-	DEVELOPER_STRING = DEVELOPER_STRING..LINE_BREAK..name
-end
-for _, name in pairs(TESTERS) do
-	tinsert(E.CreditsList, name)
-	TESTER_STRING = TESTER_STRING..LINE_BREAK..name
-end
+	local CREDITS_STRING = format("%s%s%s%s",
+		L["ELVUI_CREDITS"],
+		(DEVELOPER_STRING and format("\n\n     %s\n%s", L["Coding:"], DEVELOPER_STRING) or ""),
+		(TESTER_STRING and format("\n\n     %s\n%s", L["Testing:"], TESTER_STRING) or ""),
+		(DONATOR_STRING and format("\n\n     %s\n%s", L["Donations:"], DONATOR_STRING) or "")
+	)
 
-E.Options.args.credits = {
-	order = -1,
-	type = "group",
-	name = L["Credits"],
-	args = {
-		text = {
-			order = 1,
-			type = "description",
-			name =
-				L["ELVUI_CREDITS"].."\n\n" ..
-				L["Coding:"]..DEVELOPER_STRING.."\n\n" ..
-				L["Testing:"]..TESTER_STRING.."\n\n" ..
-				L["Donations:"]..DONATOR_STRING
+	E.Options.args.credits = {
+		order = -1,
+		type = "group",
+		name = L["Credits"],
+		args = {
+			text = {
+				order = 1,
+				type = "description",
+				name = CREDITS_STRING
+			}
 		}
 	}
-}
+end
 
 local profileTypeItems = {
 	["profile"] = L["Profile"],
