@@ -3,7 +3,7 @@
 	Revision: $Revision: 91 $
 	Author(s): DathRarhek (Polleke) (polleke@gmail.com)
 	Documentation: http://www.wowace.com/index.php/LibResComm-1.0
-	SVN:  svn://svn.wowace.com/wow/librescomm-1-0/mainline/trunk
+	SVN: svn://svn.wowace.com/wow/librescomm-1-0/mainline/trunk
 	Description: Keeps track of resurrection spells cast in the raid group
 	Dependencies: LibStub, CallbackHandler-1.0
 ]]
@@ -361,13 +361,13 @@ function lib:start()
 	end
 
 	local resNoTimer = StaticPopupDialogs["RESURRECT_NO_TIMER"].OnShow
-	StaticPopupDialogs["RESURRECT_NO_TIMER"].OnShow =  function(...)
+	StaticPopupDialogs["RESURRECT_NO_TIMER"].OnShow = function(...)
 		lib:popupFuncRessed()
 		resNoTimer(...)
 	end
 
 	local death = StaticPopupDialogs["DEATH"].OnShow
-	StaticPopupDialogs["DEATH"].OnShow =  function(...)
+	StaticPopupDialogs["DEATH"].OnShow = function(...)
 		lib:popupFuncCanRes()
 		death(...)
 	end

@@ -20,9 +20,14 @@ This is a modified version by Elv for ElvUI
 ------------------------------------------------------------------------------------]]
 
 local MAJOR, MINOR = "LibSimpleSticky-1.0", 2
-local StickyFrames, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
+local StickyFrames = LibStub:NewLibrary(MAJOR, MINOR)
 
 if not StickyFrames then return end
+
+local twipe = table.wipe
+
+local GetCursorPosition = GetCursorPosition
+local IsShiftKeyDown = IsShiftKeyDown
 
 --[[---------------------------------------------------------------------------------
   Class declaration, along with a temporary table to hold any existing OnUpdate
@@ -34,7 +39,6 @@ StickyFrames.rangeX = 15
 StickyFrames.rangeY = 15
 StickyFrames.sticky = StickyFrames.sticky or {}
 
-local twipe = table.wipe
 local groupBlacklist = {}
 
 local function isGroupPoint(frame, frame2)
@@ -142,7 +146,6 @@ function StickyFrames:GetUpdateFunc(frame, frameList, xoffset, yoffset, left, to
 	return function()
 		local x,y = GetCursorPosition()
 		local s = frame:GetEffectiveScale()
-		local sticky = nil
 
 		x,y = x/s,y/s
 
@@ -181,8 +184,8 @@ function StickyFrames:SnapFrame(frameA, frameB, left, top, right, bottom)
 	local sA, sB = frameA:GetEffectiveScale(), frameB:GetEffectiveScale()
 	local xA, yA = frameA:GetCenter()
 	local xB, yB = frameB:GetCenter()
-	local hA, hB = frameA:GetHeight() / 2, ((frameB:GetHeight() * sB) / sA) / 2
-	local wA, wB = frameA:GetWidth() / 2, ((frameB:GetWidth() * sB) / sA) / 2
+	local hA = frameA:GetHeight() / 2
+	local wA = frameA:GetWidth() / 2
 
 	local newX, newY = xA, yA
 
@@ -194,9 +197,6 @@ function StickyFrames:SnapFrame(frameA, frameB, left, top, right, bottom)
 	-- Lets translate B's coords into A's scale
 	if not xB or not yB or not sB or not sA or not sB then return end
 	xB, yB = (xB*sB) / sA, (yB*sB) / sA
-
-	local stickyAx, stickyAy = wA * 0.75, hA * 0.75
-	local stickyBx, stickyBy = wB * 0.75, hB * 0.75
 
 	-- Grab the edges of each frame, for easier comparison
 

@@ -10,11 +10,15 @@ assert(oUF, "oUF_Cutaway was unable to locate oUF install.")
 ]]
 -- GLOBALS: ElvUI
 
-local hooksecurefunc = hooksecurefunc
-local UnitHealthMax = UnitHealthMax
-local UnitPowerMax = UnitPowerMax
-local UnitIsTapDenied = UnitIsTapDenied
+local max = math.max
+
 local UnitGUID = UnitGUID
+local UnitHealthMax = UnitHealthMax
+local UnitIsTapped = UnitIsTapped
+local UnitIsTappedByAllThreatList = UnitIsTappedByAllThreatList
+local UnitIsTappedByPlayer = UnitIsTappedByPlayer
+local UnitPowerMax = UnitPowerMax
+local hooksecurefunc = hooksecurefunc
 
 local E -- placeholder
 
@@ -88,7 +92,7 @@ end
 local function Health_PreUpdate(self, unit)
 	local element = self.__owner.Cutaway.Health
 	local maxV = UnitHealthMax(unit)
-	if Shared_UpdateCheckReturn(self, element, PRE, maxV) or (UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit)) then return end
+	if Shared_UpdateCheckReturn(self, element, PRE, maxV) or (UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) and not UnitIsTappedByAllThreatList(unit)) then return end
 
 	Shared_PreUpdate(self, element, unit)
 end

@@ -13,7 +13,7 @@ local select = select
 local tonumber = tonumber
 local bit_band = bit.band
 local math_floor = math.floor
-local split, sub = string.split, string.sub
+local sub = string.sub
 local table_insert, table_remove = table.insert, table.remove
 
 local UnitAura = UnitAura
@@ -1135,7 +1135,7 @@ do
 end
 
 do
-	local _, debuffType
+	local debuffType
 	--Return the debuff type of a spell.
 	function lib:GetDebuffType(spellID)
 		if self.spellDuration[spellID] then

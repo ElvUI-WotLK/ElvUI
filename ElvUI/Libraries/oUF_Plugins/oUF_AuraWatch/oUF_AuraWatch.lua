@@ -112,11 +112,17 @@ Here is an example of how to set oUF_AW up:
 
 local _, ns = ...
 local oUF = oUF or ns.oUF
-assert(oUF, "oUF_AuraWatch cannot find an instance of oUF. If your oUF is embedded into a layout, it may not be embedded properly.")
+assert(oUF, "oUF_AuraWatch was unable to locate oUF install")
+
+local next = next
+local pairs = pairs
 
 local CreateFrame = CreateFrame
 local GetSpellInfo = GetSpellInfo
-local UnitBuff, UnitDebuff, UnitGUID = UnitBuff, UnitDebuff, UnitGUID
+local GetTime = GetTime
+local UnitAura = UnitAura
+local UnitGUID = UnitGUID
+
 local GUIDs = {}
 
 local PLAYER_UNITS = {
@@ -129,9 +135,9 @@ local setupGUID
 do
 	local cache = setmetatable({}, {__type = "k"})
 
-	local frame = CreateFrame"Frame"
+	local frame = CreateFrame("Frame")
 	frame:SetScript("OnEvent", function(self, event)
-		for k,t in pairs(GUIDs) do
+		for k, t in pairs(GUIDs) do
 			GUIDs[k] = nil
 			for a in pairs(t) do
 				t[a] = nil
@@ -139,8 +145,8 @@ do
 			cache[t] = true
 		end
 	end)
-	frame:RegisterEvent"PLAYER_REGEN_ENABLED"
-	frame:RegisterEvent"PLAYER_ENTERING_WORLD"
+	frame:RegisterEvent("PLAYER_REGEN_ENABLED")
+	frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 
 	function setupGUID(guid)
 		local t = next(cache)
@@ -153,14 +159,14 @@ do
 	end
 end
 
-local day, hour, minute, second = 86400, 3600, 60, 1
+local DAY, HOUR, MINUTE = 86400, 3600, 60
 local function formatTime(s, threshold)
-	if s >= day then
-		return format("%dd", ceil(s / hour))
-	elseif s >= hour then
-		return format("%dh", ceil(s / hour))
-	elseif s >= minute then
-		return format("%dm", ceil(s / minute))
+	if s >= DAY then
+		return format("%dd", ceil(s / HOUR))
+	elseif s >= HOUR then
+		return format("%dh", ceil(s / HOUR))
+	elseif s >= MINUTE then
+		return format("%dm", ceil(s / MINUTE))
 	elseif s >= threshold then
 		return floor(s)
 	end
@@ -170,7 +176,8 @@ end
 
 local function updateText(self, elapsed)
 	if self.timeLeft then
-		self.elapsed = (self.elapsed or 0) + elapsed
+		self.elapsed = self.elapsed + elapsed
+
 		if self.elapsed >= 0.1 then
 			if not self.first then
 				self.timeLeft = self.timeLeft - self.elapsed
@@ -178,10 +185,10 @@ local function updateText(self, elapsed)
 				self.timeLeft = self.timeLeft - GetTime()
 				self.first = false
 			end
+
 			if self.timeLeft > 0 then
-				if ((self.timeLeft <= self.textThreshold) or self.textThreshold == -1) then
-					local time = formatTime(self.timeLeft, self.decimalThreshold or 5)
-					self.text:SetText(time)
+				if self.timeLeft <= self.textThreshold or self.textThreshold == -1 then
+					self.text:SetText(formatTime(self.timeLeft, self.decimalThreshold or 5))
 				else
 					self.text:SetText("")
 				end
@@ -189,17 +196,16 @@ local function updateText(self, elapsed)
 				self.text:SetText("")
 				self:SetScript("OnUpdate", nil)
 			end
+
 			self.elapsed = 0
 		end
 	end
 end
 
-
 local function resetIcon(icon, frame, count, duration, remaining)
 	if icon.onlyShowMissing then
 		icon:Hide()
 	else
-		icon:Show()
 		if icon.cd then
 			if duration and duration > 0 and icon.style ~= "NONE" then
 				icon.cd:SetCooldown(remaining - duration, duration)
@@ -211,17 +217,21 @@ local function resetIcon(icon, frame, count, duration, remaining)
 
 		if icon.displayText then
 			icon.timeLeft = remaining
-			icon.first = true;
+			icon.first = true
+			icon.elapsed = 0
 			icon:SetScript("OnUpdate", updateText)
 		end
 
 		if icon.count then
-			icon.count:SetText((count > 1 and count))
+			icon.count:SetText(count > 1 and count)
 		end
+
 		if icon.overlay then
 			icon.overlay:Hide()
 		end
+
 		icon:SetAlpha(icon.presentAlpha)
+		icon:Show()
 	end
 end
 
@@ -229,28 +239,38 @@ local function expireIcon(icon, frame)
 	if icon.onlyShowPresent then
 		icon:Hide()
 	else
-		if (icon.cd) then icon.cd:Hide() end
-		if (icon.count) then icon.count:SetText() end
-		icon:SetAlpha(icon.missingAlpha)
+		if icon.cd then
+			icon.cd:Hide()
+		end
+
+		if icon.count then
+			icon.count:SetText()
+		end
+
 		if icon.overlay then
 			icon.overlay:Show()
 		end
+
+		icon:SetAlpha(icon.missingAlpha)
 		icon:Show()
 	end
 end
 
 local found = {}
-local function Update(frame, event, unit)
-	if frame.unit ~= unit or not unit then return end
-	local watch = frame.AuraWatch
-	local index, icons = 1, watch.watched
-	local _, name, texture, count, duration, remaining, caster, key, icon, spellID
-	local filter = "HELPFUL"
+local function Update(self, event, unit)
+	if not unit or self.unit ~= unit then return end
+
 	local guid = UnitGUID(unit)
 	if not guid then return end
-	if not GUIDs[guid] then setupGUID(guid) end
 
-	for key, icon in pairs(icons) do
+	if not GUIDs[guid] then
+		setupGUID(guid)
+	end
+
+	local element = self.AuraWatch
+	local icons = element.watched
+
+	for _, icon in pairs(icons) do
 		if not icon.onlyShowMissing then
 			icon:Hide()
 		else
@@ -258,8 +278,13 @@ local function Update(frame, event, unit)
 		end
 	end
 
+	local filter, index = "HELPFUL", 1
+	local _, name, texture, count, duration, remaining, caster, spellID
+	local key, icon
+
 	while true do
 		name, _, texture, count, _, duration, remaining, caster, _, _, spellID = UnitAura(unit, index, filter)
+
 		if not name then
 			if filter == "HELPFUL" then
 				filter = "HARMFUL"
@@ -268,25 +293,27 @@ local function Update(frame, event, unit)
 				break
 			end
 		else
-			if watch.strictMatching then
+			if element.strictMatching then
 				key = spellID
 			else
 				key = name..texture
 			end
+
 			icon = icons[key]
 
 			if icon and (icon.anyUnit or (caster and icon.fromUnits and icon.fromUnits[caster])) then
-				resetIcon(icon, watch, count, duration, remaining)
+				resetIcon(icon, element, count, duration, remaining)
 				GUIDs[guid][key] = true
 				found[key] = true
 			end
+
 			index = index + 1
 		end
 	end
 
-	for key in pairs(GUIDs[guid]) do
-		if icons[key] and not found[key] then
-			expireIcon(icons[key], watch)
+	for icon in pairs(GUIDs[guid]) do
+		if icons[icon] and not found[icon] then
+			expireIcon(icons[icon], element)
 		end
 	end
 
@@ -296,19 +323,18 @@ local function Update(frame, event, unit)
 end
 
 local function setupIcons(self)
+	local element = self.AuraWatch
+	local icons = element.icons
 
-	local watch = self.AuraWatch
-	local icons = watch.icons
-	watch.watched = {}
+	element.watched = {}
 
-	for _,icon in pairs(icons) do
-
+	for _, icon in pairs(icons) do
 		local name, _, image = GetSpellInfo(icon.spellID)
 
 		if name then
 			icon.name = name
 
-			if not icon.cd and not (watch.hideCooldown or icon.hideCooldown) then
+			if not icon.cd and not (element.hideCooldown or icon.hideCooldown) then
 				local cd = CreateFrame("Cooldown", nil, icon, "CooldownFrameTemplate")
 				cd:SetAllPoints(icon)
 				icon.cd = cd
@@ -319,6 +345,7 @@ local function setupIcons(self)
 				tex:SetAllPoints(icon)
 				tex:SetTexture(image)
 				icon.icon = tex
+
 				if not icon.overlay then
 					local overlay = icon:CreateTexture(nil, "OVERLAY")
 					overlay:SetTexture"Interface\\Buttons\\UI-Debuff-Overlays"
@@ -329,7 +356,7 @@ local function setupIcons(self)
 				end
 			end
 
-			if not icon.count and not (watch.hideCount or icon.hideCount) then
+			if not icon.count and not (element.hideCount or icon.hideCount) then
 				local count = icon:CreateFontString(nil, "OVERLAY")
 				count:SetFontObject(NumberFontNormal)
 				count:SetPoint("BOTTOMRIGHT", icon, "BOTTOMRIGHT", -1, 0)
@@ -337,31 +364,33 @@ local function setupIcons(self)
 			end
 
 			if icon.onlyShowMissing == nil then
-				icon.onlyShowMissing = watch.onlyShowMissing
+				icon.onlyShowMissing = element.onlyShowMissing
 			end
 			if icon.onlyShowPresent == nil then
-				icon.onlyShowPresent = watch.onlyShowPresent
+				icon.onlyShowPresent = element.onlyShowPresent
 			end
 			if icon.presentAlpha == nil then
-				icon.presentAlpha = watch.presentAlpha
+				icon.presentAlpha = element.presentAlpha
 			end
 			if icon.missingAlpha == nil then
-				icon.missingAlpha = watch.missingAlpha
+				icon.missingAlpha = element.missingAlpha
 			end
 			if icon.fromUnits == nil then
-				icon.fromUnits = watch.fromUnits or PLAYER_UNITS
+				icon.fromUnits = element.fromUnits or PLAYER_UNITS
 			end
 			if icon.anyUnit == nil then
-				icon.anyUnit = watch.anyUnit
+				icon.anyUnit = element.anyUnit
 			end
 
-			if watch.strictMatching then
-				watch.watched[icon.spellID] = icon
+			if element.strictMatching then
+				element.watched[icon.spellID] = icon
 			else
-				watch.watched[name..image] = icon
+				element.watched[name..image] = icon
 			end
 
-			if watch.PostCreateIcon then watch:PostCreateIcon(icon, icon.spellID, name, self) end
+			if element.PostCreateIcon then
+				element:PostCreateIcon(icon, icon.spellID, name, self)
+			end
 		else
 			print("oUF_AuraWatch error: no spell with "..tostring(icon.spellID).." spell ID exists")
 		end
@@ -369,22 +398,27 @@ local function setupIcons(self)
 end
 
 local function Enable(self)
-	if self.AuraWatch then
-		self.AuraWatch.Update = setupIcons
+	local element = self.AuraWatch
+
+	if element then
+		element.Update = setupIcons
 		self:RegisterEvent("UNIT_AURA", Update)
 		setupIcons(self)
+
 		return true
-	else
-		return false
 	end
 end
 
 local function Disable(self)
-	if self.AuraWatch then
+	local element = self.AuraWatch
+
+	if element then
 		self:UnregisterEvent("UNIT_AURA", Update)
-		for _,icon in pairs(self.AuraWatch.icons) do
+
+		for _, icon in pairs(element.icons) do
 			icon:Hide()
 		end
 	end
 end
+
 oUF:AddElement("AuraWatch", Update, Enable, Disable)

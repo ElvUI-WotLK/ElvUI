@@ -21,19 +21,13 @@ assert(oUF, "oUF_ResComm was unable to locate oUF install")
 local LRC = LibStub("LibResComm-1.0")
 
 local ipairs = ipairs
+local next = next
 
 local UnitIsDead = UnitIsDead
 local UnitIsGhost = UnitIsGhost
 local UnitName = UnitName
 
 local enabledUF, enabled = {}
-local function tsize(t)
-	local i = 0
-	for _ in pairs(t) do
-		i = i + 1
-	end
-	return i
-end
 
 local function Update(self, event, unit, succeeded)
 	if not enabledUF[self] then return end
@@ -111,7 +105,7 @@ local function ResComm_Update(event, ...)
 end
 
 local function ToggleCallbacks(toggle)
-	if toggle and not enabled and tsize(enabledUF) > 0 then
+	if toggle and not enabled and not next(enabledUF) then
 		LRC.RegisterCallback("oUF_ResComm", "ResComm_CanRes", ResComm_Update)
 		LRC.RegisterCallback("oUF_ResComm", "ResComm_Ressed", ResComm_Update)
 		LRC.RegisterCallback("oUF_ResComm", "ResComm_ResExpired", ResComm_Update)
@@ -119,7 +113,7 @@ local function ToggleCallbacks(toggle)
 		LRC.RegisterCallback("oUF_ResComm", "ResComm_ResEnd", ResComm_Update)
 
 		enabled = true
-	elseif not toggle and enabled and tsize(enabledUF) == 0 then
+	elseif not toggle and enabled and not next(enabledUF) then
 		LRC.UnregisterCallback("oUF_ResComm", "ResComm_CanRes")
 		LRC.UnregisterCallback("oUF_ResComm", "ResComm_Ressed")
 		LRC.UnregisterCallback("oUF_ResComm", "ResComm_ResExpired")
@@ -132,6 +126,7 @@ end
 
 local function Enable(self)
 	local element = self.ResurrectIndicator
+
 	if element then
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate
@@ -151,6 +146,7 @@ end
 
 local function Disable(self)
 	local element = self.ResurrectIndicator
+
 	if element then
 		element:Hide()
 

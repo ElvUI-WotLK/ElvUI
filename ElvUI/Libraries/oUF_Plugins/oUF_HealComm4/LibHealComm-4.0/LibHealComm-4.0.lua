@@ -336,7 +336,7 @@ local function clearPendingHeals()
 	for casterGUID, spells in pairs(pendingHeals) do
 		for _, pending in pairs(spells) do
 			if( pending.bitType ) then
- 				table.wipe(tempPlayerList)
+				table.wipe(tempPlayerList)
 				for i=#(pending), 1, -5 do table.insert(tempPlayerList, pending[i - 4]) end
 
 				if( #(tempPlayerList) > 0 ) then
@@ -464,8 +464,8 @@ local function filterData(spells, filterGUID, bitFlag, time, ignoreGUID)
 							if( not pending.hasVariableTicks ) then
 								healAmount = healAmount + (amount * stack) * math.min(ticks, ticksLeft)
 							else
-								for i=1, math.min(ticks, #(amount)) do
-									healAmount = healAmount + (amount[i] * stack)
+								for j=1, math.min(ticks, #(amount)) do
+									healAmount = healAmount + (amount[j] * stack)
 								end
 							end
 						end
@@ -2331,10 +2331,11 @@ HealComm.UNIT_SPELLCAST_CHANNEL_START = HealComm.UNIT_SPELLCAST_START
 
 function HealComm:UNIT_SPELLCAST_SUCCEEDED(unit, spellName, spellRank, id)
 	if( unit ~= "player" or not spellData[spellName] or id ~= castID or id == 0 ) then return end
-	castID = nil
+	local nameID = spellName .. spellRank
 
-	parseHealEnd(playerGUID, nil, "name", self.spellToID[spellName .. spellRank], false)
-	sendMessage(string.format("S::%d:0", self.spellToID[spellName .. spellRank] or 0))
+	castID = nil
+	parseHealEnd(playerGUID, nil, "name", self.spellToID[nameID], false)
+	sendMessage(string.format("S::%d:0", self.spellToID[nameID] or 0))
 end
 
 function HealComm:UNIT_SPELLCAST_STOP(unit, spellName, spellRank, id)
@@ -2342,8 +2343,8 @@ function HealComm:UNIT_SPELLCAST_STOP(unit, spellName, spellRank, id)
 	local nameID = spellName .. spellRank
 
 	castID = nil
-	parseHealEnd(playerGUID, nil, "name", self.spellToID[spellName .. spellRank], true)
-	sendMessage(string.format("S::%d:1", self.spellToID[spellName .. spellRank] or 0))
+	parseHealEnd(playerGUID, nil, "name", self.spellToID[nameID], true)
+	sendMessage(string.format("S::%d:1", self.spellToID[nameID] or 0))
 end
 
 function HealComm:UNIT_SPELLCAST_CHANNEL_STOP(unit, spellName, spellRank, id)
@@ -2601,8 +2602,8 @@ function HealComm:PARTY_MEMBERS_CHANGED()
 	for i=1, MAX_PARTY_MEMBERS do
 		local unit = "party" .. i
 		if( UnitExists(unit) ) then
-			local lastGroup = guidToGroup[guid]
 			local guid = UnitGUID(unit)
+			local lastGroup = guidToGroup[guid]
 			guidToUnit[guid] = unit
 			guidToGroup[guid] = 0
 
@@ -2632,8 +2633,8 @@ function HealComm:RAID_ROSTER_UPDATE()
 	for i=1, MAX_RAID_MEMBERS do
 		local unit = "raid" .. i
 		if( UnitExists(unit) ) then
-			local lastGroup = guidToGroup[guid]
 			local guid = UnitGUID(unit)
+			local lastGroup = guidToGroup[guid]
 			guidToUnit[guid] = unit
 			guidToGroup[guid] = select(3, GetRaidRosterInfo(i))
 
