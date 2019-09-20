@@ -683,12 +683,16 @@ function AB:DisableBlizzard()
 
 	MultiBarBottomLeft:SetParent(UIHider)
 	MultiBarBottomLeft.Show = E.noop
+	MultiBarBottomLeft.Hide = E.noop
 	MultiBarBottomRight:SetParent(UIHider)
+	MultiBarBottomRight.Hide = E.noop
 	MultiBarBottomRight.Show = E.noop
 	MultiBarLeft:SetParent(UIHider)
 	MultiBarLeft.Show = E.noop
+	MultiBarLeft.Hide = E.noop
 	MultiBarRight:SetParent(UIHider)
 	MultiBarRight.Show = E.noop
+	MultiBarRight.Hide = E.noop
 
 	-- Hide MultiBar Buttons, but keep the bars alive
 	for i = 1, 12 do
