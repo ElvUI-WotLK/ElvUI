@@ -70,32 +70,32 @@ local function SetAnchors(self)
 end
 
 local function CreateAuraBar(self, anchor)
-	local auraBarParent = self.AuraBars
+	local element = self.AuraBars
 
-	local frame = CreateFrame("Frame", nil, auraBarParent)
-	frame:Height(auraBarParent.auraBarHeight or 20)
-	frame:Width((auraBarParent.auraBarWidth or auraBarParent:GetWidth()) - (frame:GetHeight() + (auraBarParent.gap or 0)))
+	local frame = CreateFrame("Frame", nil, element)
+	frame:Height(element.auraBarHeight or 20)
+	frame:Width((element.auraBarWidth or element:GetWidth()) - (frame:GetHeight() + (element.gap or 0)))
 	frame.anchor = anchor
 
 	-- the main bar
 	local statusBar = CreateFrame("StatusBar", nil, frame)
-	statusBar:SetStatusBarTexture(auraBarParent.auraBarTexture or [[Interface\TargetingFrame\UI-StatusBar]])
-	statusBar:SetAlpha(auraBarParent.fgalpha or 1)
+	statusBar:SetStatusBarTexture(element.auraBarTexture or [[Interface\TargetingFrame\UI-StatusBar]])
+	statusBar:SetAlpha(element.fgalpha or 1)
 	statusBar:SetAllPoints(frame)
 
 	frame.statusBar = statusBar
 
-	if auraBarParent.down then
-		if auraBarParent == anchor then -- Root frame so indent for icon
-			frame:SetPoint("TOPLEFT", anchor, "TOPLEFT", (frame:GetHeight() + (auraBarParent.gap or 0)), -1)
+	if element.down then
+		if element == anchor then -- Root frame so indent for icon
+			frame:SetPoint("TOPLEFT", anchor, "TOPLEFT", (frame:GetHeight() + (element.gap or 0)), -1)
 		else
-			frame:SetPoint("TOPLEFT", anchor, "BOTTOMLEFT", 0, (-auraBarParent.spacing or 0))
+			frame:SetPoint("TOPLEFT", anchor, "BOTTOMLEFT", 0, (-element.spacing or 0))
 		end
 	else
-		if auraBarParent == anchor then -- Root frame so indent for icon
-			frame:SetPoint("BOTTOMLEFT", anchor, "BOTTOMLEFT", (frame:GetHeight() + (auraBarParent.gap or 0)), 1)
+		if element == anchor then -- Root frame so indent for icon
+			frame:SetPoint("BOTTOMLEFT", anchor, "BOTTOMLEFT", (frame:GetHeight() + (element.gap or 0)), 1)
 		else
-			frame:SetPoint("BOTTOMLEFT", anchor, "TOPLEFT", 0, (auraBarParent.spacing or 0))
+			frame:SetPoint("BOTTOMLEFT", anchor, "TOPLEFT", 0, (element.spacing or 0))
 		end
 	end
 
@@ -108,7 +108,7 @@ local function CreateAuraBar(self, anchor)
 
 	statusBar.iconHolder = CreateFrame("Button", nil, statusBar)
 	statusBar.iconHolder:Size(frame:GetHeight())
-	statusBar.iconHolder:SetPoint("BOTTOMRIGHT", frame, "BOTTOMLEFT", -auraBarParent.gap, 0)
+	statusBar.iconHolder:SetPoint("BOTTOMRIGHT", frame, "BOTTOMLEFT", -element.gap, 0)
 	statusBar.iconHolder.__unit = self.unit
 	statusBar.iconHolder:SetScript("OnEnter", OnEnter)
 	statusBar.iconHolder:SetScript("OnLeave", OnLeave)
@@ -119,21 +119,21 @@ local function CreateAuraBar(self, anchor)
 	statusBar.icon:SetAllPoints()
 
 	statusBar.spelltime = statusBar:CreateFontString(nil, "ARTWORK")
-	if auraBarParent.spellTimeObject then
-		statusBar.spelltime:SetFontObject(auraBarParent.spellTimeObject)
+	if element.spellTimeObject then
+		statusBar.spelltime:SetFontObject(element.spellTimeObject)
 	else
-		statusBar.spelltime:SetFont(auraBarParent.spellTimeFont or [[Fonts\FRIZQT__.TTF]], auraBarParent.spellTimeSize or 10)
+		statusBar.spelltime:SetFont(element.spellTimeFont or [[Fonts\FRIZQT__.TTF]], element.spellTimeSize or 10)
 	end
-	statusBar.spelltime:SetTextColor(1 ,1, 1)
+	statusBar.spelltime:SetTextColor(1, 1, 1)
 	statusBar.spelltime:SetJustifyH"RIGHT"
 	statusBar.spelltime:SetJustifyV"CENTER"
 	statusBar.spelltime:SetPoint"RIGHT"
 
 	statusBar.spellname = statusBar:CreateFontString(nil, "ARTWORK")
-	if auraBarParent.spellNameObject then
-		statusBar.spellname:SetFontObject(auraBarParent.spellNameObject)
+	if element.spellNameObject then
+		statusBar.spellname:SetFontObject(element.spellNameObject)
 	else
-		statusBar.spellname:SetFont(auraBarParent.spellNameFont or [[Fonts\FRIZQT__.TTF]], auraBarParent.spellNameSize or 10)
+		statusBar.spellname:SetFont(element.spellNameFont or [[Fonts\FRIZQT__.TTF]], element.spellNameSize or 10)
 	end
 	statusBar.spellname:SetTextColor(1, 1, 1)
 	statusBar.spellname:SetJustifyH"LEFT"
@@ -141,8 +141,8 @@ local function CreateAuraBar(self, anchor)
 	statusBar.spellname:SetPoint"LEFT"
 	statusBar.spellname:SetPoint("RIGHT", statusBar.spelltime, "LEFT")
 
-	if auraBarParent.PostCreateBar then
-		auraBarParent.PostCreateBar(frame)
+	if element.PostCreateBar then
+		element.PostCreateBar(frame)
 	end
 
 	return frame
