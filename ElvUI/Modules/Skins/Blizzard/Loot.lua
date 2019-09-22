@@ -30,6 +30,7 @@ local function LoadSkin()
 	LootFrame.backdrop:Point("TOPLEFT", 14, -54)
 	LootFrame.backdrop:Point("BOTTOMRIGHT", -77, 5)
 
+	LootFrame:SetClampRectInsets(14, -77, -54, 5)
 	LootFrame:SetHitRectInsets(14, 77, 54, 5)
 
 	LootFramePortraitOverlay:SetParent(E.HiddenFrame)
@@ -70,6 +71,8 @@ local function LoadSkin()
 	LootFrame.Title:ClearAllPoints()
 	LootFrame.Title:Point("TOPLEFT", LootFrame.backdrop, "TOPLEFT", 4, -4)
 	LootFrame.Title:SetJustifyH("LEFT")
+	LootFrame.Title:SetWordWrap(false)
+	LootFrame.Title:SetWidth(142)
 
 	LootFrame:HookScript("OnShow", function(self)
 		if IsFishingLoot() then
