@@ -348,7 +348,7 @@ local function setupIcons(self)
 
 				if not icon.overlay then
 					local overlay = icon:CreateTexture(nil, "OVERLAY")
-					overlay:SetTexture"Interface\\Buttons\\UI-Debuff-Overlays"
+					overlay:SetTexture("Interface\\Buttons\\UI-Debuff-Overlays")
 					overlay:SetAllPoints(icon)
 					overlay:SetTexCoord(.296875, .5703125, 0, .515625)
 					overlay:SetVertexColor(1, 0, 0)
