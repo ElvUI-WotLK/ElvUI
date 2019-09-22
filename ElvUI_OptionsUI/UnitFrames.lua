@@ -414,7 +414,7 @@ local function GetOptionsTable_AuraBars(updateFunc, groupName)
 	return config
 end
 
-local function GetOptionsTable_Auras(auraType, isGroupFrame, updateFunc, groupName, numUnits)
+local function GetOptionsTable_Auras(auraType, updateFunc, groupName, numUnits)
 	local config = {
 		order = auraType == "buffs" and 500 or 600,
 		type = "group",
@@ -602,15 +602,6 @@ local function GetOptionsTable_Auras(auraType, isGroupFrame, updateFunc, groupNa
 				local smartAuraPosition = E.db.unitframe.units[groupName].smartAuraPosition
 				return (smartAuraPosition and (smartAuraPosition == "DEBUFFS_ON_BUFFS" or smartAuraPosition == "FLUID_DEBUFFS_ON_BUFFS"))
 			end
-		}
-	end
-
-	if isGroupFrame then
-		config.args.countFontSize = {
-			order = 10,
-			type = "range",
-			name = L["Count Font Size"],
-			min = 6, max = 22, step = 1
 		}
 	end
 
@@ -3786,8 +3777,8 @@ E.Options.args.unitframe.args.player = {
 		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, "player"),
 		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUF, "player"),
 		fader = GetOptionsTable_Fader(UF.CreateAndUpdateUF, "player"),
-		buffs = GetOptionsTable_Auras("buffs", false, UF.CreateAndUpdateUF, "player"),
-		debuffs = GetOptionsTable_Auras("debuffs", false, UF.CreateAndUpdateUF, "player"),
+		buffs = GetOptionsTable_Auras("buffs", UF.CreateAndUpdateUF, "player"),
+		debuffs = GetOptionsTable_Auras("debuffs", UF.CreateAndUpdateUF, "player"),
 		castbar = GetOptionsTable_Castbar(true, UF.CreateAndUpdateUF, "player"),
 		aurabar = GetOptionsTable_AuraBars(UF.CreateAndUpdateUF, "player"),
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUF, "player"),
@@ -4409,8 +4400,8 @@ E.Options.args.unitframe.args.target = {
 		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, "target"),
 		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUF, "target"),
 		fader = GetOptionsTable_Fader(UF.CreateAndUpdateUF, "target"),
-		buffs = GetOptionsTable_Auras("buffs", false, UF.CreateAndUpdateUF, "target"),
-		debuffs = GetOptionsTable_Auras("debuffs", false, UF.CreateAndUpdateUF, "target"),
+		buffs = GetOptionsTable_Auras("buffs", UF.CreateAndUpdateUF, "target"),
+		debuffs = GetOptionsTable_Auras("debuffs", UF.CreateAndUpdateUF, "target"),
 		castbar = GetOptionsTable_Castbar(false, UF.CreateAndUpdateUF, "target"),
 		aurabar = GetOptionsTable_AuraBars(UF.CreateAndUpdateUF, "target"),
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUF, "target"),
@@ -4756,8 +4747,8 @@ E.Options.args.unitframe.args.targettarget = {
 		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, "targettarget"),
 		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUF, "targettarget"),
 		fader = GetOptionsTable_Fader(UF.CreateAndUpdateUF, "targettarget"),
-		buffs = GetOptionsTable_Auras("buffs", false, UF.CreateAndUpdateUF, "targettarget"),
-		debuffs = GetOptionsTable_Auras("debuffs", false, UF.CreateAndUpdateUF, "targettarget"),
+		buffs = GetOptionsTable_Auras("buffs", UF.CreateAndUpdateUF, "targettarget"),
+		debuffs = GetOptionsTable_Auras("debuffs", UF.CreateAndUpdateUF, "targettarget"),
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUF, "targettarget"),
 		cutaway = GetOptionsTable_Cutaway(UF.CreateAndUpdateUF, "targettarget")
 	}
@@ -4878,8 +4869,8 @@ E.Options.args.unitframe.args.targettargettarget = {
 		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, "targettargettarget"),
 		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUF, "targettargettarget"),
 		fader = GetOptionsTable_Fader(UF.CreateAndUpdateUF, "targettargettarget"),
-		buffs = GetOptionsTable_Auras("buffs", false, UF.CreateAndUpdateUF, "targettargettarget"),
-		debuffs = GetOptionsTable_Auras("debuffs", false, UF.CreateAndUpdateUF, "targettargettarget"),
+		buffs = GetOptionsTable_Auras("buffs", UF.CreateAndUpdateUF, "targettargettarget"),
+		debuffs = GetOptionsTable_Auras("debuffs", UF.CreateAndUpdateUF, "targettargettarget"),
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUF, "targettargettarget"),
 		cutaway = GetOptionsTable_Cutaway(UF.CreateAndUpdateUF, "targettargettarget")
 	}
@@ -5001,8 +4992,8 @@ E.Options.args.unitframe.args.focus = {
 		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, "focus"),
 		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUF, "focus"),
 		fader = GetOptionsTable_Fader(UF.CreateAndUpdateUF, "focus"),
-		buffs = GetOptionsTable_Auras("buffs", false, UF.CreateAndUpdateUF, "focus"),
-		debuffs = GetOptionsTable_Auras("debuffs", false, UF.CreateAndUpdateUF, "focus"),
+		buffs = GetOptionsTable_Auras("buffs", UF.CreateAndUpdateUF, "focus"),
+		debuffs = GetOptionsTable_Auras("debuffs", UF.CreateAndUpdateUF, "focus"),
 		castbar = GetOptionsTable_Castbar(false, UF.CreateAndUpdateUF, "focus"),
 		aurabar = GetOptionsTable_AuraBars(UF.CreateAndUpdateUF, "focus"),
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUF, "focus"),
@@ -5126,8 +5117,8 @@ E.Options.args.unitframe.args.focustarget = {
 		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, "focustarget"),
 		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUF, "focustarget"),
 		fader = GetOptionsTable_Fader(UF.CreateAndUpdateUF, "focustarget"),
-		buffs = GetOptionsTable_Auras("buffs", false, UF.CreateAndUpdateUF, "focustarget"),
-		debuffs = GetOptionsTable_Auras("debuffs", false, UF.CreateAndUpdateUF, "focustarget"),
+		buffs = GetOptionsTable_Auras("buffs", UF.CreateAndUpdateUF, "focustarget"),
+		debuffs = GetOptionsTable_Auras("debuffs", UF.CreateAndUpdateUF, "focustarget"),
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUF, "focustarget"),
 		cutaway = GetOptionsTable_Cutaway(UF.CreateAndUpdateUF, "focustarget")
 	}
@@ -5281,8 +5272,8 @@ E.Options.args.unitframe.args.pet = {
 		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, "pet"),
 		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUF, "pet"),
 		fader = GetOptionsTable_Fader(UF.CreateAndUpdateUF, "pet"),
-		buffs = GetOptionsTable_Auras("buffs", false, UF.CreateAndUpdateUF, "pet"),
-		debuffs = GetOptionsTable_Auras("debuffs", false, UF.CreateAndUpdateUF, "pet"),
+		buffs = GetOptionsTable_Auras("buffs", UF.CreateAndUpdateUF, "pet"),
+		debuffs = GetOptionsTable_Auras("debuffs", UF.CreateAndUpdateUF, "pet"),
 		castbar = GetOptionsTable_Castbar(false, UF.CreateAndUpdateUF, "pet"),
 		aurabar = GetOptionsTable_AuraBars(UF.CreateAndUpdateUF, "pet"),
 		cutaway = GetOptionsTable_Cutaway(UF.CreateAndUpdateUF, "pet"),
@@ -5435,8 +5426,8 @@ E.Options.args.unitframe.args.pettarget = {
 		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, "pettarget"),
 		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUF, "pettarget"),
 		fader = GetOptionsTable_Fader(UF.CreateAndUpdateUF, "pettarget"),
-		buffs = GetOptionsTable_Auras("buffs", false, UF.CreateAndUpdateUF, "pettarget"),
-		debuffs = GetOptionsTable_Auras("debuffs", false, UF.CreateAndUpdateUF, "pettarget"),
+		buffs = GetOptionsTable_Auras("buffs", UF.CreateAndUpdateUF, "pettarget"),
+		debuffs = GetOptionsTable_Auras("debuffs", UF.CreateAndUpdateUF, "pettarget"),
 		cutaway = GetOptionsTable_Cutaway(UF.CreateAndUpdateUF, "pettarget")
 	}
 }
@@ -5576,8 +5567,8 @@ E.Options.args.unitframe.args.boss = {
 		name = GetOptionsTable_Name(UF.CreateAndUpdateUFGroup, "boss", MAX_BOSS_FRAMES),
 		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUFGroup, "boss", MAX_BOSS_FRAMES),
 		fader = GetOptionsTable_Fader(UF.CreateAndUpdateUFGroup, "boss", MAX_BOSS_FRAMES),
-		buffs = GetOptionsTable_Auras("buffs", false, UF.CreateAndUpdateUFGroup, "boss", MAX_BOSS_FRAMES),
-		debuffs = GetOptionsTable_Auras("debuffs", false, UF.CreateAndUpdateUFGroup, "boss", MAX_BOSS_FRAMES),
+		buffs = GetOptionsTable_Auras("buffs", UF.CreateAndUpdateUFGroup, "boss", MAX_BOSS_FRAMES),
+		debuffs = GetOptionsTable_Auras("debuffs", UF.CreateAndUpdateUFGroup, "boss", MAX_BOSS_FRAMES),
 		castbar = GetOptionsTable_Castbar(false, UF.CreateAndUpdateUFGroup, "boss", MAX_BOSS_FRAMES),
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateUFGroup, "boss", MAX_BOSS_FRAMES),
 		cutaway = GetOptionsTable_Cutaway(UF.CreateAndUpdateUFGroup, "boss", MAX_BOSS_FRAMES)
@@ -5770,8 +5761,8 @@ E.Options.args.unitframe.args.arena = {
 		name = GetOptionsTable_Name(UF.CreateAndUpdateUFGroup, "arena", 5),
 		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUFGroup, "arena", 5),
 		fader = GetOptionsTable_Fader(UF.CreateAndUpdateUFGroup, "arena", 5),
-		buffs = GetOptionsTable_Auras("buffs", false, UF.CreateAndUpdateUFGroup, "arena", 5),
-		debuffs = GetOptionsTable_Auras("debuffs", false, UF.CreateAndUpdateUFGroup, "arena", 5),
+		buffs = GetOptionsTable_Auras("buffs", UF.CreateAndUpdateUFGroup, "arena", 5),
+		debuffs = GetOptionsTable_Auras("debuffs", UF.CreateAndUpdateUFGroup, "arena", 5),
 		castbar = GetOptionsTable_Castbar(false, UF.CreateAndUpdateUFGroup, "arena", 5),
 		cutaway = GetOptionsTable_Cutaway(UF.CreateAndUpdateUFGroup, "arena", 5)
 	}
@@ -6179,8 +6170,8 @@ E.Options.args.unitframe.args.party = {
 		name = GetOptionsTable_Name(UF.CreateAndUpdateHeaderGroup, "party"),
 		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateHeaderGroup, "party"),
 		fader = GetOptionsTable_Fader(UF.CreateAndUpdateHeaderGroup, "party"),
-		buffs = GetOptionsTable_Auras("buffs", true, UF.CreateAndUpdateHeaderGroup, "party"),
-		debuffs = GetOptionsTable_Auras("debuffs", true, UF.CreateAndUpdateHeaderGroup, "party"),
+		buffs = GetOptionsTable_Auras("buffs", UF.CreateAndUpdateHeaderGroup, "party"),
+		debuffs = GetOptionsTable_Auras("debuffs", UF.CreateAndUpdateHeaderGroup, "party"),
 		rdebuffs = GetOptionsTable_RaidDebuff(UF.CreateAndUpdateHeaderGroup, "party"),
 		castbar = GetOptionsTable_Castbar(false, UF.CreateAndUpdateHeaderGroup, "party", 5),
 		petsGroup = {
@@ -6624,8 +6615,8 @@ E.Options.args.unitframe.args.raid = {
 		name = GetOptionsTable_Name(UF.CreateAndUpdateHeaderGroup, "raid"),
 		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateHeaderGroup, "raid"),
 		fader = GetOptionsTable_Fader(UF.CreateAndUpdateHeaderGroup, "raid"),
-		buffs = GetOptionsTable_Auras("buffs", true, UF.CreateAndUpdateHeaderGroup, "raid"),
-		debuffs = GetOptionsTable_Auras("debuffs", true, UF.CreateAndUpdateHeaderGroup, "raid"),
+		buffs = GetOptionsTable_Auras("buffs", UF.CreateAndUpdateHeaderGroup, "raid"),
+		debuffs = GetOptionsTable_Auras("debuffs", UF.CreateAndUpdateHeaderGroup, "raid"),
 		buffIndicator = {
 			order = 600,
 			type = "group",
@@ -6974,8 +6965,8 @@ E.Options.args.unitframe.args.raid40 = {
 		name = GetOptionsTable_Name(UF.CreateAndUpdateHeaderGroup, "raid40"),
 		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateHeaderGroup, "raid40"),
 		fader = GetOptionsTable_Fader(UF.CreateAndUpdateHeaderGroup, "raid40"),
-		buffs = GetOptionsTable_Auras("buffs", true, UF.CreateAndUpdateHeaderGroup, "raid40"),
-		debuffs = GetOptionsTable_Auras("debuffs", true, UF.CreateAndUpdateHeaderGroup, "raid40"),
+		buffs = GetOptionsTable_Auras("buffs", UF.CreateAndUpdateHeaderGroup, "raid40"),
+		debuffs = GetOptionsTable_Auras("debuffs", UF.CreateAndUpdateHeaderGroup, "raid40"),
 		buffIndicator = {
 			order = 600,
 			type = "group",
@@ -7301,8 +7292,8 @@ E.Options.args.unitframe.args.raidpet = {
 		name = GetOptionsTable_Name(UF.CreateAndUpdateHeaderGroup, "raidpet"),
 		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateHeaderGroup, "raidpet"),
 		fader = GetOptionsTable_Fader(UF.CreateAndUpdateHeaderGroup, "raidpet"),
-		buffs = GetOptionsTable_Auras("buffs", true, UF.CreateAndUpdateHeaderGroup, "raidpet"),
-		debuffs = GetOptionsTable_Auras("debuffs", true, UF.CreateAndUpdateHeaderGroup, "raidpet"),
+		buffs = GetOptionsTable_Auras("buffs", UF.CreateAndUpdateHeaderGroup, "raidpet"),
+		debuffs = GetOptionsTable_Auras("debuffs", UF.CreateAndUpdateHeaderGroup, "raidpet"),
 		rdebuffs = GetOptionsTable_RaidDebuff(UF.CreateAndUpdateHeaderGroup, "raidpet"),
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateHeaderGroup, "raidpet"),
 		cutaway = GetOptionsTable_Cutaway(UF.CreateAndUpdateHeaderGroup, "raidpet"),
@@ -7473,8 +7464,8 @@ E.Options.args.unitframe.args.tank = {
 		},
 		name = GetOptionsTable_Name(UF.CreateAndUpdateHeaderGroup, "tank"),
 		fader = GetOptionsTable_Fader(UF.CreateAndUpdateHeaderGroup, "tank"),
-		buffs = GetOptionsTable_Auras("buffs", true, UF.CreateAndUpdateHeaderGroup, "tank"),
-		debuffs = GetOptionsTable_Auras("debuffs", true, UF.CreateAndUpdateHeaderGroup, "tank"),
+		buffs = GetOptionsTable_Auras("buffs", UF.CreateAndUpdateHeaderGroup, "tank"),
+		debuffs = GetOptionsTable_Auras("debuffs", UF.CreateAndUpdateHeaderGroup, "tank"),
 		rdebuffs = GetOptionsTable_RaidDebuff(UF.CreateAndUpdateHeaderGroup, "tank"),
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateHeaderGroup, "tank"),
 		cutaway = GetOptionsTable_Cutaway(UF.CreateAndUpdateHeaderGroup, "tank"),
@@ -7661,8 +7652,8 @@ E.Options.args.unitframe.args.assist = {
 		},
 		name = GetOptionsTable_Name(UF.CreateAndUpdateHeaderGroup, "assist"),
 		fader = GetOptionsTable_Fader(UF.CreateAndUpdateHeaderGroup, "assist"),
-		buffs = GetOptionsTable_Auras("buffs", true, UF.CreateAndUpdateHeaderGroup, "assist"),
-		debuffs = GetOptionsTable_Auras("debuffs", true, UF.CreateAndUpdateHeaderGroup, "assist"),
+		buffs = GetOptionsTable_Auras("buffs", UF.CreateAndUpdateHeaderGroup, "assist"),
+		debuffs = GetOptionsTable_Auras("debuffs", UF.CreateAndUpdateHeaderGroup, "assist"),
 		rdebuffs = GetOptionsTable_RaidDebuff(UF.CreateAndUpdateHeaderGroup, "assist"),
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateHeaderGroup, "assist"),
 		cutaway = GetOptionsTable_Cutaway(UF.CreateAndUpdateHeaderGroup, "assist"),
