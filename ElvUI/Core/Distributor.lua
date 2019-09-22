@@ -21,6 +21,12 @@ local REPLY_PREFIX = "ELVUI_REPLY"
 local TRANSFER_PREFIX = "ELVUI_TRANSFER"
 local TRANSFER_COMPLETE_PREFIX = "ELVUI_COMPLETE"
 
+local ACECOMMPREFIXES = {
+	[TRANSFER_PREFIX.."\001"] = true,
+	[TRANSFER_PREFIX.."\002"] = true,
+	[TRANSFER_PREFIX.."\003"] = true,
+}
+
 -- The active downloads
 local Downloads = {}
 local Uploads = {}
@@ -58,6 +64,8 @@ function D:Distribute(target, otherServer, isGlobal)
 
 	if not data or not profileKey then return end
 
+	data = E:RemoveTableDuplicates(data, isGlobal and G or P)
+
 	local serialData = self:Serialize(data)
 	local length = len(serialData)
 	local message = format("%s:%d:%s", profileKey, length, target)
@@ -85,7 +93,7 @@ function D:Distribute(target, otherServer, isGlobal)
 end
 
 function D:CHAT_MSG_ADDON(_, prefix, message, _, sender)
-	if prefix ~= TRANSFER_PREFIX or not Downloads[sender] then return end
+	if not ACECOMMPREFIXES[prefix] or not Downloads[sender] then return end
 
 	local cur = len(message)
 	local max = Downloads[sender].length
@@ -96,6 +104,14 @@ function D:CHAT_MSG_ADDON(_, prefix, message, _, sender)
 	end
 
 	self.statusBar:SetValue(Downloads[sender].current)
+end
+
+function D:UpdateSendProgress(sentBytes, totalBytes)
+	self.statusBar:SetValue(sentBytes)
+
+	if sentBytes == totalBytes then
+		E:StaticPopupSpecial_Hide(self.statusBar)
+	end
 end
 
 function D:OnCommReceived(prefix, msg, dist, sender)
@@ -149,8 +165,13 @@ function D:OnCommReceived(prefix, msg, dist, sender)
 
 		local profileKey, response = split(":", msg)
 		if response == "YES" then
+			self.statusBar:SetMinMaxValues(0, len(Uploads[profileKey].serialData))
+			self.statusBar:SetValue(0)
+			self.statusBar.text:SetFormattedText(L["Data To: %s"], sender)
+			E:StaticPopupSpecial_Show(self.statusBar)
+
 			self:RegisterComm(TRANSFER_COMPLETE_PREFIX)
-			self:SendCommMessage(TRANSFER_PREFIX, Uploads[profileKey].serialData, dist, Uploads[profileKey].target)
+			self:SendCommMessage(TRANSFER_PREFIX, Uploads[profileKey].serialData, dist, Uploads[profileKey].target, "BULK", self.UpdateSendProgress, self)
 			Uploads[profileKey] = nil
 		else
 			E:StaticPopup_Show("DISTRIBUTOR_REQUEST_DENIED")
@@ -184,6 +205,7 @@ function D:OnCommReceived(prefix, msg, dist, sender)
 							E.Libs.AceAddon:GetAddon("ElvUI").data:SetProfile(popup.editBox:GetText())
 							E:UpdateAll(true)
 							Downloads[sender] = nil
+							E:StaticPopup_Show("CONFIG_RL")
 						end,
 						OnShow = function(popup) popup.editBox:SetText(profileKey) popup.editBox:SetFocus() end,
 						timeout = 0,
