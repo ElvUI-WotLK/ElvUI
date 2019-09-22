@@ -173,11 +173,17 @@ function M:CheckMovement()
 	if GetUnitSpeed("player") ~= 0 then
 		if WorldMapPositioningGuide:IsMouseOver() then
 			WorldMapFrame:SetAlpha(1)
+			WorldMapBlobFrame:SetFillAlpha(128)
+			WorldMapBlobFrame:SetBorderAlpha(192)
 		else
 			WorldMapFrame:SetAlpha(E.global.general.mapAlphaWhenMoving)
+			WorldMapBlobFrame:SetFillAlpha(128 * E.global.general.mapAlphaWhenMoving)
+			WorldMapBlobFrame:SetBorderAlpha(192 * E.global.general.mapAlphaWhenMoving)
 		end
 	else
 		WorldMapFrame:SetAlpha(1)
+		WorldMapBlobFrame:SetFillAlpha(128)
+		WorldMapBlobFrame:SetBorderAlpha(192)
 	end
 end
 
