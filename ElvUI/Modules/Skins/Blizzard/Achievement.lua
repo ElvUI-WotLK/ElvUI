@@ -17,7 +17,8 @@ local function LoadSkin(preSkin)
 	local function skinAchievement(achievement, biggerIcon)
 		if achievement.isSkinned then return end
 
-		achievement:StripTextures(true)
+		_G[achievement:GetName().."Background"]:Kill()
+		achievement:StripTextures()
 		achievement:SetTemplate("Default", true)
 		achievement.icon:SetTemplate()
 		achievement.icon:SetSize(biggerIcon and 54 or 36, biggerIcon and 54 or 36)
