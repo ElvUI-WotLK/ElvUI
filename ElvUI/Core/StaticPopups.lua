@@ -465,6 +465,13 @@ E.PopupDialogs.SCRIPT_PROFILE = {
 	hideOnEscape = false
 }
 
+E.PopupDialogs.ELVUI_CONFIG_FOUND = {
+    text = L["You still have ElvUI_Config installed. ElvUI_Config has been renamed to ElvUI_OptionsUI, please remove it."],
+    button1 = ACCEPT,
+    whileDead = 1,
+    hideOnEscape = false
+}
+
 local MAX_STATIC_POPUPS = 4
 function E:StaticPopup_OnShow()
 	PlaySound("igMainMenuOpen")

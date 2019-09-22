@@ -482,3 +482,10 @@ E.Options.args.profiles.plugins.ElvUI = {
 		end
 	}
 }
+
+for i = 1, GetNumAddOns() do
+	local name, _, _, loadable, reason = GetAddOnInfo(i)
+	if name == "ElvUI_Config" and (loadable or (not loadable and reason == "DEMAND_LOADED")) then
+		E:StaticPopup_Show("ELVUI_CONFIG_FOUND")
+	end
+end
