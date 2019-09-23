@@ -105,7 +105,7 @@ local function ResComm_Update(event, ...)
 end
 
 local function ToggleCallbacks(toggle)
-	if toggle and not enabled and not next(enabledUF) then
+	if toggle and not enabled and next(enabledUF) then
 		LRC.RegisterCallback("oUF_ResComm", "ResComm_CanRes", ResComm_Update)
 		LRC.RegisterCallback("oUF_ResComm", "ResComm_Ressed", ResComm_Update)
 		LRC.RegisterCallback("oUF_ResComm", "ResComm_ResExpired", ResComm_Update)
