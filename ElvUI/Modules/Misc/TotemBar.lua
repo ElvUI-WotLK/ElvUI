@@ -140,7 +140,7 @@ function TOTEMS:Initialize()
 		frame:StyleButton()
 		frame.ignoreBorderColors = true
 		frame:Hide()
-		
+
 		frame.UpdateTooltip = UpdateTooltip
 
 		frame:RegisterForClicks("RightButtonUp")
