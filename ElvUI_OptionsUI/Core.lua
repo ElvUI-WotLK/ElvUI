@@ -483,9 +483,9 @@ E.Options.args.profiles.plugins.ElvUI = {
 	}
 }
 
-for i = 1, GetNumAddOns() do
-	local name, _, _, loadable, reason = GetAddOnInfo(i)
-	if name == "ElvUI_Config" and (loadable or (not loadable and reason == "DEMAND_LOADED")) then
+do
+	local _, _, enabled = GetAddOnInfo("ElvUI_Config")
+	if enabled then
 		E:StaticPopup_Show("ELVUI_CONFIG_FOUND")
 	end
 end
