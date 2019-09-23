@@ -4,53 +4,56 @@ local TOTEMS = E:GetModule("Totems")
 --Lua functions
 local unpack = unpack
 --WoW API / Variables
-local CreateFrame = CreateFrame
-local GetTotemInfo = GetTotemInfo
 local CooldownFrame_SetTimer = CooldownFrame_SetTimer
+local CreateFrame = CreateFrame
+local DestroyTotem = DestroyTotem
+local GetTotemInfo = GetTotemInfo
+
 local MAX_TOTEMS = MAX_TOTEMS
+local TOTEM_PRIORITIES = TOTEM_PRIORITIES
 
 local SLOT_BORDER_COLORS = {
-	[FIRE_TOTEM_SLOT]	= {r = 0.23, g = 0.45, b = 0.13},	-- [1]
-	[EARTH_TOTEM_SLOT]	= {r = 0.58, g = 0.23, b = 0.10},	-- [2]
+	[EARTH_TOTEM_SLOT]	= {r = 0.23, g = 0.45, b = 0.13},	-- [2]
+	[FIRE_TOTEM_SLOT]	= {r = 0.58, g = 0.23, b = 0.10},	-- [1]
 	[WATER_TOTEM_SLOT]	= {r = 0.19, g = 0.48, b = 0.60},	-- [3]
 	[AIR_TOTEM_SLOT]	= {r = 0.42, g = 0.18, b = 0.74}	-- [4]
 }
 
-local totemFrames = {
-	TotemFrameTotem1,
-	TotemFrameTotem2,
-	TotemFrameTotem3,
-	TotemFrameTotem4
-}
-
-function TOTEMS:Update()
-	local _, startTime, duration, icon
-
+function TOTEMS:UpdateAllTotems()
 	for i = 1, MAX_TOTEMS do
-		if totemFrames[i].slot ~= 0 then
-			_, _, startTime, duration, icon = GetTotemInfo(totemFrames[i].slot)
+		self:UpdateTotem(nil, i)
+	end
+end
 
-			self.bar[i]:Show()
-			self.bar[i].iconTexture:SetTexture(icon)
+function TOTEMS:UpdateTotem(event, slot)
+	local slotID = TOTEM_PRIORITIES[slot]
+	local _, _, startTime, duration, icon = GetTotemInfo(slot)
 
-			CooldownFrame_SetTimer(self.bar[i].cooldown, startTime, duration, 1)
+	if icon ~= "" then
+		local color = SLOT_BORDER_COLORS[slot]
+		self.bar[slotID].iconTexture:SetTexture(icon)
+		self.bar[slotID]:SetBackdropBorderColor(color.r, color.g, color.b)
 
-			local color = SLOT_BORDER_COLORS[self.bar[i]:GetID()]
-			self.bar[i]:SetBackdropBorderColor(color.r, color.g, color.b)
-			self.bar[i].ignoreBorderColors = true
-		else
-			self.bar[i]:Hide()
-		end
+		CooldownFrame_SetTimer(self.bar[slotID].cooldown, startTime, duration, 1)
+
+		self.bar[slotID]:Show()
+	else
+		self.bar[slotID]:Hide()
 	end
 end
 
 function TOTEMS:ToggleEnable()
-	if self.db.enable then
-		self.bar:Show()
-		self:RegisterEvent("PLAYER_TOTEM_UPDATE", "Update")
-		self:RegisterEvent("PLAYER_ENTERING_WORLD", "Update")
-		self:Update()
-		E:EnableMover("TotemBarMover")
+	if E.db.general.totems.enable then
+		if self.Initialized then
+			self.bar:Show()
+			self:RegisterEvent("PLAYER_TOTEM_UPDATE", "UpdateTotem")
+			self:RegisterEvent("PLAYER_ENTERING_WORLD", "UpdateAllTotems")
+			self:UpdateAllTotems()
+			E:EnableMover("TotemBarMover")
+		elseif E.myclass == "SHAMAN" then
+			self:Initialize()
+			self:UpdateAllTotems()
+		end
 	elseif self.Initialized then
 		self.bar:Hide()
 		self:UnregisterEvent("PLAYER_TOTEM_UPDATE")
@@ -98,16 +101,31 @@ function TOTEMS:PositionAndSize()
 
 	if self.db.growthDirection == "HORIZONTAL" then
 		self.bar:Width(self.db.size*(MAX_TOTEMS) + self.db.spacing*(MAX_TOTEMS) + self.db.spacing)
-		self.bar:Height(self.db.size + self.db.spacing*2)
+		self.bar:Height(self.db.size + self.db.spacing * 2)
 	else
 		self.bar:Height(self.db.size*(MAX_TOTEMS) + self.db.spacing*(MAX_TOTEMS) + self.db.spacing)
-		self.bar:Width(self.db.size + self.db.spacing*2)
+		self.bar:Width(self.db.size + self.db.spacing * 2)
 	end
-	self:Update()
+end
+
+local function Button_OnClick(self)
+	DestroyTotem(self.slot)
+end
+local function Button_OnEnter(self)
+	GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT")
+	self:UpdateTooltip()
+end
+local function Button_OnLeave(self)
+	GameTooltip:Hide()
+end
+local function UpdateTooltip(self)
+	if GameTooltip:IsOwned(self) then
+		GameTooltip:SetTotem(self.slot)
+	end
 end
 
 function TOTEMS:Initialize()
-	if E.myclass ~= "SHAMAN" then return end
+	if not E.db.general.totems.enable or E.myclass ~= "SHAMAN" then return end
 
 	self.db = E.db.general.totems
 
@@ -117,10 +135,18 @@ function TOTEMS:Initialize()
 
 	for i = 1, MAX_TOTEMS do
 		local frame = CreateFrame("Button", "$parentTotem"..i, bar)
-		frame:SetID(i)
+		frame.slot = TOTEM_PRIORITIES[i]
 		frame:SetTemplate("Default")
 		frame:StyleButton()
+		frame.ignoreBorderColors = true
 		frame:Hide()
+		
+		frame.UpdateTooltip = UpdateTooltip
+
+		frame:RegisterForClicks("RightButtonUp")
+		frame:SetScript("OnClick", Button_OnClick)
+		frame:SetScript("OnEnter", Button_OnEnter)
+		frame:SetScript("OnLeave", Button_OnLeave)
 
 		frame.holder = CreateFrame("Frame", nil, frame)
 		frame.holder:SetAlpha(0)
@@ -138,12 +164,14 @@ function TOTEMS:Initialize()
 		self.bar[i] = frame
 	end
 
+	self.Initialized = true
+
 	self:PositionAndSize()
 
 	E:CreateMover(bar, "TotemBarMover", TUTORIAL_TITLE47, nil, nil, nil, nil, nil, "general,totems")
-	self:ToggleEnable()
 
-	self.Initialized = true
+	self:RegisterEvent("PLAYER_TOTEM_UPDATE", "UpdateTotem")
+	self:RegisterEvent("PLAYER_ENTERING_WORLD", "UpdateAllTotems")
 end
 
 local function InitializeCallback()
