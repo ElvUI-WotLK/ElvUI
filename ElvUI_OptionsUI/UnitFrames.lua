@@ -2377,18 +2377,18 @@ E.Options.args.unitframe = {
 			func = function() ACD:SelectGroup("ElvUI", "cooldown", "unitframe") end,
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
-		spacer2 = {
-			order = 8,
-			type = "description",
-			name = " "
-		},
 		colorsShortcut = {
-			order = 9,
+			order = 8,
 			type = "execute",
 			name = L["COLORS"],
 			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "unitframe", "generalOptionsGroup", "allColorsGroup") end,
 			disabled = function() return not E.UnitFrames.Initialized end,
+		},
+		spacer2 = {
+			order = 9,
+			type = "description",
+			name = " "
 		},
 		blizzardShortcut = {
 			order = 10,
@@ -2406,13 +2406,8 @@ E.Options.args.unitframe = {
 			func = function() ACD:SelectGroup("ElvUI", "unitframe", "player") end,
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
-		spacer3 = {
-			order = 12,
-			type = "description",
-			name = " "
-		},
 		targetShortcut = {
-			order = 13,
+			order = 12,
 			type = "execute",
 			name = L["TARGET"],
 			buttonElvUI = true,
@@ -2420,12 +2415,17 @@ E.Options.args.unitframe = {
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
 		targettargetShortcut = {
-			order = 14,
+			order = 13,
 			type = "execute",
 			name = L["TargetTarget"],
 			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "unitframe", "targettarget") end,
 			disabled = function() return not E.UnitFrames.Initialized end
+		},
+		spacer3 = {
+			order = 14,
+			type = "description",
+			name = " "
 		},
 		targettargettargetShortcut = {
 			order = 15,
@@ -2435,13 +2435,8 @@ E.Options.args.unitframe = {
 			func = function() ACD:SelectGroup("ElvUI", "unitframe", "targettargettarget") end,
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
-		spacer4 = {
-			order = 16,
-			type = "description",
-			name = " "
-		},
 		focusShortcut = {
-			order = 17,
+			order = 16,
 			type = "execute",
 			name = L["Focus"],
 			buttonElvUI = true,
@@ -2449,7 +2444,7 @@ E.Options.args.unitframe = {
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
 		focustargetShortcut = {
-			order = 18,
+			order = 17,
 			type = "execute",
 			name = L["FocusTarget"],
 			buttonElvUI = true,
@@ -2457,20 +2452,20 @@ E.Options.args.unitframe = {
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
 		petShortcut = {
-			order = 19,
+			order = 18,
 			type = "execute",
 			name = L["PET"],
 			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "unitframe", "pet") end,
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
-		spacer5 = {
-			order = 20,
+		spacer4 = {
+			order = 19,
 			type = "description",
 			name = " "
 		},
 		pettargetShortcut = {
-			order = 21,
+			order = 20,
 			type = "execute",
 			name = L["PetTarget"],
 			buttonElvUI = true,
@@ -2478,7 +2473,7 @@ E.Options.args.unitframe = {
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
 		arenaShortcut = {
-			order = 22,
+			order = 21,
 			type = "execute",
 			name = L["ARENA"],
 			buttonElvUI = true,
@@ -2486,11 +2481,19 @@ E.Options.args.unitframe = {
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
 		bossShortcut = {
-			order = 23,
+			order = 22,
 			type = "execute",
 			name = L["BOSS"],
 			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "unitframe", "boss") end,
+			disabled = function() return not E.UnitFrames.Initialized end
+		},
+		partyShortcut = {
+			order = 23,
+			type = "execute",
+			name = L["PARTY"],
+			buttonElvUI = true,
+			func = function() ACD:SelectGroup("ElvUI", "unitframe", "party") end,
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
 		spacer6 = {
@@ -2498,16 +2501,8 @@ E.Options.args.unitframe = {
 			type = "description",
 			name = " "
 		},
-		partyShortcut = {
-			order = 25,
-			type = "execute",
-			name = L["PARTY"],
-			buttonElvUI = true,
-			func = function() ACD:SelectGroup("ElvUI", "unitframe", "party") end,
-			disabled = function() return not E.UnitFrames.Initialized end
-		},
 		raidShortcut = {
-			order = 26,
+			order = 25,
 			type = "execute",
 			name = L["RAID"],
 			buttonElvUI = true,
@@ -2515,17 +2510,12 @@ E.Options.args.unitframe = {
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
 		raid40Shortcut = {
-			order = 27,
+			order = 26,
 			type = "execute",
 			name = L["Raid-40"],
 			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "unitframe", "raid40") end,
 			disabled = function() return not E.UnitFrames.Initialized end
-		},
-		spacer7 = {
-			order = 28,
-			type = "description",
-			name = " "
 		},
 		raidpetShortcut = {
 			order = 29,
@@ -2543,8 +2533,13 @@ E.Options.args.unitframe = {
 			func = function() ACD:SelectGroup("ElvUI", "unitframe", "assist") end,
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
-		tankShortcut = {
+		spacer7 = {
 			order = 31,
+			type = "description",
+			name = " "
+		},
+		tankShortcut = {
+			order = 32,
 			type = "execute",
 			name = L["TANK"],
 			buttonElvUI = true,
@@ -2552,7 +2547,7 @@ E.Options.args.unitframe = {
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
 		generalOptionsGroup = {
-			order = 32,
+			order = 33,
 			type = "group",
 			name = L["General Options"],
 			childGroups = "tab",
