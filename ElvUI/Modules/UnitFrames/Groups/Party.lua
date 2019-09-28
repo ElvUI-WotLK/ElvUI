@@ -6,6 +6,7 @@ assert(ElvUF, "ElvUI was unable to locate oUF.")
 
 --Lua functions
 local _G = _G
+local format = string.format
 --WoW API / Variables
 local CreateFrame = CreateFrame
 local GetInstanceInfo = GetInstanceInfo
@@ -77,6 +78,16 @@ function UF:Construct_PartyFrames()
 	UF:Update_FontStrings()
 
 	UF:Update_PartyFrames(self, UF.db.units.party)
+
+	if self.isChild and InCombatLockdown() then
+		local childDB = self.childType == "target" and self.db.targetsGroup or self.db.petsGroup
+
+		if childDB.enable then
+			self:SetAttribute("initial-anchor", format("%s,%s,%d,%d", E.InversePoints[childDB.anchorPoint], childDB.anchorPoint, childDB.xOffset, childDB.yOffset))
+		else
+			return self
+		end
+	end
 
 	self:SetAttribute("initial-width", self.UNIT_WIDTH)
 	self:SetAttribute("initial-height", self.UNIT_HEIGHT)

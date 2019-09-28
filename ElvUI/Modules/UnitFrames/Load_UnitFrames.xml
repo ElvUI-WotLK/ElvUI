@@ -2,13 +2,6 @@
 	<Button name="ELVUI_UNITTARGET" inherits="SecureUnitButtonTemplate" virtual="true">
 		<Frames>
 			<Button name="$parentTarget" inherits="SecureUnitButtonTemplate">
-				<Anchors>
-					<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$parent">
-						<Offset>
-							<AbsDimension x="7" y="0"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
 				<Attributes>
 					<Attribute name="unitsuffix" type="string" value="target"/>
 					<Attribute name="useparent-unit" type="boolean" value="true"/>
@@ -22,13 +15,6 @@
 	<Button name="ELVUI_UNITPET" inherits="SecureUnitButtonTemplate" virtual="true">
 		<Frames>
 			<Button name="$parentPet" inherits="SecureUnitButtonTemplate">
-				<Anchors>
-					<Anchor point="BOTTOM" relativePoint="TOP" relativeTo="$parent">
-						<Offset>
-							<AbsDimension x="0" y="1"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
 				<Attributes>
 					<Attribute name="unitsuffix" type="string" value="pet"/>
 					<Attribute name="useparent-unit" type="boolean" value="true"/>
