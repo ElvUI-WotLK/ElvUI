@@ -171,7 +171,7 @@ function B:LoadBagBar()
 
 	ElvUIKeyRing:SetScript("OnClick", function() if CursorHasItem() then PutKeyInKeyRing() else ToggleKeyRing() end end)
 	ElvUIKeyRing:SetScript("OnReceiveDrag", function() if CursorHasItem() then PutKeyInKeyRing() end end)
-	ElvUIKeyRing:SetScript("OnEnter", function(self) GameTooltip:SetOwner(btn, "ANCHOR_LEFT") GameTooltip:SetText(KEYRING, 1, 1, 1) OnEnter() end)
+	ElvUIKeyRing:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "ANCHOR_LEFT") GameTooltip:SetText(KEYRING, 1, 1, 1) OnEnter() end)
 	ElvUIKeyRing:SetScript("OnLeave",function() GameTooltip:Hide() OnLeave() end)
 
 	tinsert(ElvUIBags.buttons, ElvUIKeyRing)
