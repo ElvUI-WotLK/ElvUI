@@ -12,7 +12,6 @@ local PutKeyInKeyRing = PutKeyInKeyRing
 local RegisterStateDriver = RegisterStateDriver
 local ToggleKeyRing = ToggleKeyRing
 
-local HIGHLIGHT_FONT_COLOR = HIGHLIGHT_FONT_COLOR
 local KEYRING = KEYRING
 local NUM_BAG_FRAMES = NUM_BAG_FRAMES
 

@@ -120,7 +120,6 @@ function AddOn:OnInitialize()
 	self.db = tcopy(self.DF.profile, true)
 	self.global = tcopy(self.DF.global, true)
 
-	local ElvDB = ElvDB
 	if ElvDB then
 		if ElvDB.global then
 			self:CopyTable(self.global, ElvDB.global)
@@ -138,7 +137,6 @@ function AddOn:OnInitialize()
 
 	self.private = tcopy(self.privateVars.profile, true)
 
-	local ElvPrivateDB = ElvPrivateDB
 	if ElvPrivateDB then
 		local profileKey
 		if ElvPrivateDB.profileKeys then
@@ -239,13 +237,12 @@ end
 function AddOn:ResetProfile()
 	local profileKey
 
-	local ElvPrivateDB = ElvPrivateDB
 	if ElvPrivateDB.profileKeys then
 		profileKey = ElvPrivateDB.profileKeys[self.myname.." - "..self.myrealm]
-	end
 
-	if profileKey and ElvPrivateDB.profiles and ElvPrivateDB.profiles[profileKey] then
-		ElvPrivateDB.profiles[profileKey] = nil
+		if profileKey and ElvPrivateDB.profiles and ElvPrivateDB.profiles[profileKey] then
+			ElvPrivateDB.profiles[profileKey] = nil
+		end
 	end
 
 	ElvCharacterDB = nil
