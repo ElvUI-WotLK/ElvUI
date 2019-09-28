@@ -15,7 +15,8 @@ local IsInInstance = IsInInstance
 function DT:Initialize()
 	--if E.db.datatexts.enable ~= true then return end
 	self.Initialized = true
-	self.tooltip = CreateFrame("GameTooltip", "DatatextTooltip", E.UIParent, "GameTooltipTemplate")
+	self.tooltip = CreateFrame("GameTooltip", "DatatextTooltip", nil, "GameTooltipTemplate")
+	self.tooltip:SetParent(E.UIParent)
 	TT:HookScript(self.tooltip, "OnShow", "SetStyle")
 
 	-- Ignore header font size on DatatextTooltip
