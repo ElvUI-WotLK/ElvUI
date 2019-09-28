@@ -253,7 +253,7 @@ function AddOn:ResetProfile()
 end
 
 function AddOn:OnProfileReset()
-	self:StaticPopup_Show("RESET_PROFILE_PROMPT")
+	AddOn:StaticPopup_Show("RESET_PROFILE_PROMPT")
 end
 
 function AddOn:ResetConfigSettings()
