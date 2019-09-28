@@ -120,7 +120,9 @@ local function BuildDataTable(total)
 
 		if connected then
 			className = E:UnlocalizedClassName(class) or ""
-			dataTable[i] = {name, level, className, area, connected, onlineStatus[status], note}
+			status = onlineStatus[status] or ""
+
+			dataTable[i] = {name, level, className, area, connected, status, note}
 		end
 	end
 
@@ -264,7 +266,7 @@ local function OnEvent(self, event, message)
 
 	-- special handler to detect friend coming online or going offline
 	if event == "CHAT_MSG_SYSTEM" then
-		if not (find(message, friendOnlineString) and find(message, friendOfflineString)) then return end
+		if not (find(message, friendOnlineString) or find(message, friendOfflineString)) then return end
 	end
 
 	local _, onlineFriends = GetNumFriends()
