@@ -25,15 +25,28 @@ local function LoadSkin()
 	S:HandleItemButton(_G["PetStableCurrentPet"], true)
 	_G["PetStableCurrentPetIconTexture"]:SetDrawLayer("OVERLAY")
 
-	for i = 1, NUM_PET_STABLE_SLOTS do
-		S:HandleItemButton(_G["PetStableStabledPet"..i], true)
-		_G["PetStableStabledPet"..i.."IconTexture"]:SetDrawLayer("OVERLAY")
-	end
-
 	PetStablePetInfo:GetRegions():SetTexCoord(0.04, 0.15, 0.06, 0.30)
 	PetStablePetInfo:SetFrameLevel(PetModelFrame:GetFrameLevel() + 2)
 	PetStablePetInfo:CreateBackdrop("Default")
 	PetStablePetInfo:Size(24, 24)
+
+	local function UpdateSlot(self, r, g, b)
+		if g ~= 1 then
+			self:SetTexture(.8, .2, .2, .3)
+		else
+			self:SetTexture(0, 0, 0, 0)
+		end
+	end
+
+	for i = 1, NUM_PET_STABLE_SLOTS do
+		S:HandleItemButton(_G["PetStableStabledPet"..i], true)
+		_G["PetStableStabledPet"..i.."IconTexture"]:SetDrawLayer("OVERLAY")
+
+		local bg = _G["PetStableStabledPet"..i.."Background"]
+		bg:SetDrawLayer("BORDER")
+		bg:SetInside()
+		hooksecurefunc(bg, "SetVertexColor", UpdateSlot)
+	end
 
 	hooksecurefunc("PetStable_Update", function()
 		local hasPetUI, isHunterPet = HasPetUI()
