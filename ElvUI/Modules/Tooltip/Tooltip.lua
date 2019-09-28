@@ -525,7 +525,7 @@ function TT:GameTooltip_OnTooltipSetItem(tt)
 
 	if left or right then
 		tt:AddLine(" ")
-		tt:AddDoubleLine(left or "", right or "")
+		tt:AddDoubleLine(left or " ", right or " ")
 	end
 	if bankCount then
 		tt:AddDoubleLine(" ", bankCount)
