@@ -312,7 +312,7 @@ function E:GetTimeInfo(s, threshhold, hhmm, mmss)
 			return s/MINUTE, 5, 0.51, s%MINUTE
 		else
 			local minutes = floor((s/MINUTE)+.5)
-			if hhmm and s < (hhmm * MINUTE) then
+			if hhmm and s < (hhmm * MINUTE) and 60 < minutes then
 				return s/HOUR, 6, minutes > 1 and (s - (minutes*MINUTE - HALFMINUTEISH)) or (s - MINUTEISH), minutes%MINUTE
 			else
 				return ceil(s / MINUTE), 2, minutes > 1 and (s - (minutes*MINUTE - HALFMINUTEISH)) or (s - MINUTEISH)
@@ -321,12 +321,14 @@ function E:GetTimeInfo(s, threshhold, hhmm, mmss)
 	elseif s < DAY then
 		if mmss and s < mmss then
 			return s/MINUTE, 5, 0.51, s%MINUTE
-		elseif hhmm and s < (hhmm * MINUTE) then
-			local minutes = floor((s/MINUTE)+.5)
-			return s/HOUR, 6, minutes > 1 and (s - (minutes*MINUTE - HALFMINUTEISH)) or (s - MINUTEISH), minutes%MINUTE
 		else
-			local hours = floor((s/HOUR)+.5)
-			return ceil(s / HOUR), 1, hours > 1 and (s - (hours*HOUR - HALFHOURISH)) or (s - HOURISH)
+			local minutes = floor((s/MINUTE)+.5)
+			if hhmm and s < (hhmm * MINUTE) and 60 < minutes then
+				return s/HOUR, 6, minutes > 1 and (s - (minutes*MINUTE - HALFMINUTEISH)) or (s - MINUTEISH), minutes%MINUTE
+			else
+				local hours = floor((s/HOUR)+.5)
+				return ceil(s / HOUR), 1, hours > 1 and (s - (hours*HOUR - HALFHOURISH)) or (s - HOURISH)
+			end
 		end
 	else
 		local days = floor((s/DAY)+.5)
