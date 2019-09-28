@@ -59,7 +59,7 @@ local function OnEnter(self)
 	end
 
 	DT.tooltip:AddLine(text, 1, 1, 1)
-	DT.tooltip:AddLine(tooltip, nil, nil, nil, true)
+	DT.tooltip:AddLine(tooltip, nil, nil, nil, 1)
 
 	DT.tooltip:Show()
 end

@@ -424,7 +424,7 @@ function TT:GameTooltip_OnTooltipSetUnit(tt)
 
 			local numList = #targetList
 			if numList > 0 then
-				tt:AddLine(format("%s (|cffffffff%d|r): %s", L["Targeted By:"], numList, tconcat(targetList, ", ")), nil, nil, nil, true)
+				tt:AddLine(format("%s (|cffffffff%d|r): %s", L["Targeted By:"], numList, tconcat(targetList, ", ")), nil, nil, nil, 1)
 				twipe(targetList)
 			end
 		end

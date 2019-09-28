@@ -44,7 +44,7 @@ local function OnEnter(self)
 		local petSpellDmgBonus = ComputePetBonus("PET_BONUS_RAP_TO_SPELLDMG", apower)
 
 		DT.tooltip:AddDoubleLine(RANGED_ATTACK_POWER, apower, 1, 1, 1, 1, 1, 1)
-		DT.tooltip:AddLine(format(RANGED_ATTACK_POWER_TOOLTIP, max(0, apower) / ATTACK_POWER_MAGIC_NUMBER), nil, nil, nil, true)
+		DT.tooltip:AddLine(format(RANGED_ATTACK_POWER_TOOLTIP, max(0, apower) / ATTACK_POWER_MAGIC_NUMBER), nil, nil, nil, 1)
 
 		if petAPBonus > 0 then
 			DT.tooltip:AddLine(format(PET_BONUS_TOOLTIP_RANGED_ATTACK_POWER, petAPBonus), nil, nil, nil)
@@ -55,7 +55,7 @@ local function OnEnter(self)
 		end
 	else
 		DT.tooltip:AddDoubleLine(MELEE_ATTACK_POWER, apower, 1, 1, 1, 1, 1, 1)
-		DT.tooltip:AddLine(format(MELEE_ATTACK_POWER_TOOLTIP, max(0, apower) / ATTACK_POWER_MAGIC_NUMBER), nil, nil, nil, true)
+		DT.tooltip:AddLine(format(MELEE_ATTACK_POWER_TOOLTIP, max(0, apower) / ATTACK_POWER_MAGIC_NUMBER), nil, nil, nil, 1)
 	end
 
 	DT.tooltip:Show()
