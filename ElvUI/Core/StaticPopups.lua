@@ -395,6 +395,7 @@ E.PopupDialogs.RESET_PROFILE_PROMPT = {
 	button2 = NO,
 	hideOnEscape = 1,
 	OnAccept = function() E:ResetProfile() end,
+	whileDead = 1,
 }
 
 E.PopupDialogs.APPLY_FONT_WARNING = {
