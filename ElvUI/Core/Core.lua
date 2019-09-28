@@ -1209,6 +1209,7 @@ function E:Initialize()
 	self.data = E.Libs.AceDB:New("ElvDB", self.DF)
 	self.data.RegisterCallback(self, "OnProfileChanged", "UpdateAll")
 	self.data.RegisterCallback(self, "OnProfileCopied", "UpdateAll")
+	self.data._ResetProfile = self.data.ResetProfile
 	self.data.ResetProfile = self.OnProfileReset
 	self.charSettings = E.Libs.AceDB:New("ElvPrivateDB", self.privateVars)
 	E.Libs.DualSpec:EnhanceDatabase(self.data, "ElvUI")

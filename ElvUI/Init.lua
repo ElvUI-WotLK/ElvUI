@@ -249,6 +249,7 @@ function AddOn:ResetProfile()
 	end
 
 	ElvCharacterDB = nil
+	self.data:_ResetProfile()
 	ReloadUI()
 end
 
