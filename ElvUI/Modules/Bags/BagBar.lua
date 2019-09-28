@@ -133,7 +133,7 @@ function B:LoadBagBar()
 	ElvUIBags:SetScript("OnLeave", OnLeave)
 
 	MainMenuBarBackpackButton:SetParent(ElvUIBags)
-	MainMenuBarBackpackButton.SetParent = E.dummy
+	MainMenuBarBackpackButton.SetParent = E.noop
 	MainMenuBarBackpackButton:ClearAllPoints()
 
 	MainMenuBarBackpackButtonCount:FontTemplate(nil, 10)
@@ -149,7 +149,7 @@ function B:LoadBagBar()
 	for i = 0, NUM_BAG_FRAMES - 1 do
 		local b = _G["CharacterBag"..i.."Slot"]
 		b:SetParent(ElvUIBags)
-		b.SetParent = E.dummy
+		b.SetParent = E.noop
 		b:HookScript("OnEnter", OnEnter)
 		b:HookScript("OnLeave", OnLeave)
 
@@ -162,7 +162,7 @@ function B:LoadBagBar()
 	ElvUIKeyRing:SetTemplate()
 	ElvUIKeyRing:StyleButton(true)
 	ElvUIKeyRing:SetParent(ElvUIBags)
-	ElvUIKeyRing.SetParent = E.dummy
+	ElvUIKeyRing.SetParent = E.noop
 	ElvUIKeyRing:RegisterForClicks("anyUp")
 
 	_G[ElvUIKeyRing:GetName().."IconTexture"]:SetTexture("Interface\\ContainerFrame\\KeyRing-Bag-Icon")
@@ -171,11 +171,8 @@ function B:LoadBagBar()
 
 	ElvUIKeyRing:SetScript("OnClick", function() if CursorHasItem() then PutKeyInKeyRing() else ToggleKeyRing() end end)
 	ElvUIKeyRing:SetScript("OnReceiveDrag", function() if CursorHasItem() then PutKeyInKeyRing() end end)
-	ElvUIKeyRing:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "ANCHOR_LEFT") local color = HIGHLIGHT_FONT_COLOR GameTooltip:SetText(KEYRING, color.r, color.g, color.b) GameTooltip:AddLine() end)
-	ElvUIKeyRing:SetScript("OnLeave", function() GameTooltip:Hide() end)
-
-	ElvUIKeyRing:HookScript("OnEnter", OnEnter)
-	ElvUIKeyRing:HookScript("OnLeave", OnLeave)
+	ElvUIKeyRing:SetScript("OnEnter", function(self) GameTooltip:SetOwner(btn, "ANCHOR_LEFT") GameTooltip:SetText(KEYRING, 1, 1, 1) OnEnter() end)
+	ElvUIKeyRing:SetScript("OnLeave",function() GameTooltip:Hide() OnLeave() end)
 
 	tinsert(ElvUIBags.buttons, ElvUIKeyRing)
 
