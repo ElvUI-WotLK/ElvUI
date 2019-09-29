@@ -2,9 +2,11 @@ local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateD
 local DT = E:GetModule("DataTexts")
 
 --Lua functions
+local date = date
 local next = next
 local time = time
-local format, gsub, join, utf8sub = string.format, string.gsub, string.join, string.utf8sub
+local tonumber = tonumber
+local find, format, gsub, join, utf8sub = string.find, string.format, string.gsub, string.join, string.utf8sub
 local tinsert, wipe = table.insert, table.wipe
 --WoW API / Variables
 local GetGameTime = GetGameTime
@@ -16,6 +18,8 @@ local SecondsToTime = SecondsToTime
 local QUEUE_TIME_UNAVAILABLE = QUEUE_TIME_UNAVAILABLE
 local TIMEMANAGER_TOOLTIP_REALMTIME = TIMEMANAGER_TOOLTIP_REALMTIME
 local WINTERGRASP_IN_PROGRESS = WINTERGRASP_IN_PROGRESS
+local TIMEMANAGER_AM = TIMEMANAGER_AM
+local TIMEMANAGER_PM = TIMEMANAGER_PM
 
 local timeDisplayFormat = ""
 local dateDisplayFormat = ""
@@ -24,6 +28,7 @@ local lockoutInfoFormat = "%s%s %s |cffaaaaaa(%s)"
 local lockoutColorExtended, lockoutColorNormal = {r = 0.3, g = 1, b = 0.3}, {r = .8, g = .8, b = .8}
 local lockedInstances = {raids = {}, dungeons = {}}
 local collectedInstanceImages
+local timeFormat, showAMPM
 
 local locale = GetLocale()
 local krcntw = locale == "koKR" or locale == "zhCN" or locale == "zhTW"
@@ -33,6 +38,38 @@ local difficultyTag = { -- Normal, Normal, Heroic, Heroic
 	(krcntw and PLAYER_DIFFICULTY2) or utf8sub(PLAYER_DIFFICULTY2, 1, 1), -- H
 	(krcntw and PLAYER_DIFFICULTY2) or utf8sub(PLAYER_DIFFICULTY2, 1, 1), -- H
 }
+
+local function getRealmTimeDiff()
+	local hours, minutes = GetGameTime()
+	local localTime = date("*t")
+
+	local diffHours = localTime.hour - hours
+	local diffMinutes = localTime.min - minutes
+
+	return (diffHours * 60 + diffMinutes) * 60
+end
+
+local realmDiffSeconds = getRealmTimeDiff()
+
+local function GetCurrentDate(formatString)
+	if timeFormat ~= E.db.datatexts.timeFormat then
+		timeFormat = E.db.datatexts.timeFormat
+		showAMPM = find(E.db.datatexts.timeFormat, "%%p") ~= nil
+	end
+
+	if showAMPM then
+		local localizedAMPM = tonumber(date("%H")) >= 12 and TIMEMANAGER_PM or TIMEMANAGER_AM
+
+		formatString = gsub(formatString, "^%%p", localizedAMPM)
+		formatString = gsub(formatString, "([^%%])%%p", "%1"..localizedAMPM)
+	end
+
+	if realmDiffSeconds ~= 0 and E.db.datatexts.realmtime then
+		return date(formatString, time() -realmDiffSeconds)
+	else
+		return date(formatString)
+	end
+end
 
 local instanceIconByName = {}
 local function GetInstanceImages(...)
@@ -161,7 +198,7 @@ local function OnUpdate(self, elapsed)
 		E:StopFlash(self)
 	end
 
-	self.text:SetText(gsub(gsub(BetterDate(E.db.datatexts.timeFormat.." "..E.db.datatexts.dateFormat, time()), ":", timeDisplayFormat), "%s", dateDisplayFormat))
+	self.text:SetText(gsub(gsub(GetCurrentDate(E.db.datatexts.timeFormat.." "..E.db.datatexts.dateFormat), ":", timeDisplayFormat), "%s", dateDisplayFormat))
 end
 
 local function ValueColorUpdate(hex)

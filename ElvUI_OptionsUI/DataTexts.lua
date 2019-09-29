@@ -335,6 +335,12 @@ E.Options.args.datatexts = {
 						["%m.%d.%y "] = "MM.DD.YY",
 						["%y.%m.%d "] = "YY.MM.DD"
 					}
+				},
+				realmtime = {
+					order = 4,
+					type = "toggle",
+					name = L["Realm Time"],
+					desc = L["Displayed server time."]
 				}
 			}
 		},
