@@ -25,16 +25,14 @@ local lockoutColorExtended, lockoutColorNormal = {r = 0.3, g = 1, b = 0.3}, {r =
 local lockedInstances = {raids = {}, dungeons = {}}
 local collectedInstanceImages
 
-local function OnClick(_, btn)
-	if btn == "RightButton" then
-		if not IsAddOnLoaded("Blizzard_TimeManager") then
-			LoadAddOn("Blizzard_TimeManager")
-		end
-		TimeManagerClockButton_OnClick(TimeManagerClockButton)
-	else
-		GameTimeFrame:Click()
-	end
-end
+local locale = GetLocale()
+local krcntw = locale == "koKR" or locale == "zhCN" or locale == "zhTW"
+local difficultyTag = { -- Normal, Normal, Heroic, Heroic
+	(krcntw and PLAYER_DIFFICULTY1) or utf8sub(PLAYER_DIFFICULTY1, 1, 1), -- N
+	(krcntw and PLAYER_DIFFICULTY1) or utf8sub(PLAYER_DIFFICULTY1, 1, 1), -- N
+	(krcntw and PLAYER_DIFFICULTY2) or utf8sub(PLAYER_DIFFICULTY2, 1, 1), -- H
+	(krcntw and PLAYER_DIFFICULTY2) or utf8sub(PLAYER_DIFFICULTY2, 1, 1), -- H
+}
 
 local instanceIconByName = {}
 local function GetInstanceImages(...)
@@ -50,14 +48,16 @@ local function GetInstanceImages(...)
 	end
 end
 
-local locale = GetLocale()
-local krcntw = locale == "koKR" or locale == "zhCN" or locale == "zhTW"
-local difficultyTag = { -- Normal, Normal, Heroic, Heroic
-	(krcntw and PLAYER_DIFFICULTY1) or utf8sub(PLAYER_DIFFICULTY1, 1, 1), -- N
-	(krcntw and PLAYER_DIFFICULTY1) or utf8sub(PLAYER_DIFFICULTY1, 1, 1), -- N
-	(krcntw and PLAYER_DIFFICULTY2) or utf8sub(PLAYER_DIFFICULTY2, 1, 1), -- H
-	(krcntw and PLAYER_DIFFICULTY2) or utf8sub(PLAYER_DIFFICULTY2, 1, 1), -- H
-}
+local function OnClick(_, btn)
+	if btn == "RightButton" then
+		if not IsAddOnLoaded("Blizzard_TimeManager") then
+			LoadAddOn("Blizzard_TimeManager")
+		end
+		TimeManagerClockButton_OnClick(TimeManagerClockButton)
+	else
+		GameTimeFrame:Click()
+	end
+end
 
 local function OnEnter(self)
 	DT:SetupTooltip(self)
