@@ -110,6 +110,14 @@ local function LoadSkin()
 	end)
 
 	-- WatchFrame POI Buttons
+	local function poi_OnEnter(self)
+		self.bg:SetBackdropBorderColor(unpack(E.media.rgbvaluecolor))
+	end
+
+	local function poi_OnLeave(self)
+		self.bg:SetBackdropBorderColor(unpack(E.media.bordercolor))
+	end
+
 	hooksecurefunc("QuestPOI_DisplayButton", function(parentName, buttonType, buttonIndex)
 		local poiButton = _G[format("poi%s%s_%d", parentName, buttonType, buttonIndex)]
 
@@ -129,12 +137,8 @@ local function LoadSkin()
 				poiButton.bg:Point("BOTTOMRIGHT", -6, 6)
 				poiButton.bg:SetFrameLevel(poiButton.bg:GetFrameLevel() - 1)
 
-				poiButton:HookScript("OnEnter", function(self)
-					self.bg:SetBackdropBorderColor(unpack(E.media.rgbvaluecolor))
-				end)
-				poiButton:HookScript("OnLeave", function(self)
-					self.bg:SetBackdropBorderColor(unpack(E.media.bordercolor))
-				end)
+				poiButton:HookScript("OnEnter", poi_OnEnter)
+				poiButton:HookScript("OnLeave", poi_OnLeave)
 
 				poiButton.isSkinned = true
 			end
