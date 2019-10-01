@@ -136,8 +136,8 @@ end
 
 local function MultiUpdate(...)
 	for i = 1, select("#", ...) do
-		for i = 1, #enabledUF do
-			local frame = enabledUF[i]
+		for j = 1, #enabledUF do
+			local frame = enabledUF[j]
 
 			if frame.unit and frame:IsVisible() and UnitGUID(frame.unit) == select(i, ...) then
 				Path(frame)
