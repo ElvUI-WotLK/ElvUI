@@ -15,16 +15,16 @@ local GetSavedInstanceInfo = GetSavedInstanceInfo
 local GetWintergraspWaitTime = GetWintergraspWaitTime
 local IsInInstance = IsInInstance
 local SecondsToTime = SecondsToTime
+
 local QUEUE_TIME_UNAVAILABLE = QUEUE_TIME_UNAVAILABLE
+local TIMEMANAGER_AM = TIMEMANAGER_AM
+local TIMEMANAGER_PM = TIMEMANAGER_PM
 local TIMEMANAGER_TOOLTIP_LOCALTIME = TIMEMANAGER_TOOLTIP_LOCALTIME
 local TIMEMANAGER_TOOLTIP_REALMTIME = TIMEMANAGER_TOOLTIP_REALMTIME
 local WINTERGRASP_IN_PROGRESS = WINTERGRASP_IN_PROGRESS
-local TIMEMANAGER_AM = TIMEMANAGER_AM
-local TIMEMANAGER_PM = TIMEMANAGER_PM
 
 local timeDisplayFormat = ""
 local dateDisplayFormat = ""
-local europeDisplayFormat_nocolor = join("", "%02d", ":|r%02d")
 local lockoutInfoFormat = "%s%s %s |cffaaaaaa(%s)"
 local lockoutColorExtended, lockoutColorNormal = {r = 0.3, g = 1, b = 0.3}, {r = .8, g = .8, b = .8}
 local lockedInstances = {raids = {}, dungeons = {}}
@@ -40,18 +40,14 @@ local difficultyTag = { -- Normal, Normal, Heroic, Heroic
 	(krcntw and PLAYER_DIFFICULTY2) or utf8sub(PLAYER_DIFFICULTY2, 1, 1), -- H
 }
 
-local function getRealmTimeDiff(noDiff)
+local function getRealmTimeDiff()
 	local hours, minutes = GetGameTime()
 	local localTime = date("*t")
 
-	if not noDiff then
-		local diffHours = localTime.hour - hours
-		local diffMinutes = localTime.min - minutes
+	local diffHours = localTime.hour - hours
+	local diffMinutes = localTime.min - minutes
 
-		return (diffHours * 60 + diffMinutes) * 60
-	else
-		return localTime.hour, localTime.min
-	end
+	return (diffHours * 60 + diffMinutes) * 60
 end
 
 local realmDiffSeconds = getRealmTimeDiff()
@@ -181,14 +177,13 @@ local function OnEnter(self)
 		end
 	end
 
-	if DT.tooltip:NumLines() > 0 then
-		DT.tooltip:AddLine(" ")
+	DT.tooltip:AddLine(" ")
+
+	if E.db.datatexts.realmTime then
+		DT.tooltip:AddDoubleLine(TIMEMANAGER_TOOLTIP_LOCALTIME, date("%H:%M"), 1, 1, 1, lockoutColorNormal.r, lockoutColorNormal.g, lockoutColorNormal.b)
+	else
+		DT.tooltip:AddDoubleLine(TIMEMANAGER_TOOLTIP_REALMTIME, format("%02d:%02d", GetGameTime()), 1, 1, 1, lockoutColorNormal.r, lockoutColorNormal.g, lockoutColorNormal.b)
 	end
-
-	local timeType = E.db.datatexts.realmTime and TIMEMANAGER_TOOLTIP_LOCALTIME or TIMEMANAGER_TOOLTIP_REALMTIME
-	local timeString = E.db.datatexts.realmTime and format(europeDisplayFormat_nocolor, getRealmTimeDiff(true)) or format(europeDisplayFormat_nocolor, GetGameTime())
-
-	DT.tooltip:AddDoubleLine(timeType, timeString, 1, 1, 1, lockoutColorNormal.r, lockoutColorNormal.g, lockoutColorNormal.b)
 
 	DT.tooltip:Show()
 end
