@@ -833,7 +833,7 @@ P.datatexts = {
 	goldFormat = "BLIZZARD",
 	goldCoins = true,
 	---Time
-	realmtime = false,
+	realmTime = false,
 	timeFormat = "%I:%M",
 	dateFormat = "",
 	---Friends

@@ -336,7 +336,7 @@ E.Options.args.datatexts = {
 						["%y.%m.%d "] = "YY.MM.DD"
 					}
 				},
-				realmtime = {
+				realmTime = {
 					order = 4,
 					type = "toggle",
 					name = L["Realm Time"],

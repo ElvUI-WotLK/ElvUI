@@ -39,14 +39,18 @@ local difficultyTag = { -- Normal, Normal, Heroic, Heroic
 	(krcntw and PLAYER_DIFFICULTY2) or utf8sub(PLAYER_DIFFICULTY2, 1, 1), -- H
 }
 
-local function getRealmTimeDiff()
+local function getRealmTimeDiff(noDiff)
 	local hours, minutes = GetGameTime()
 	local localTime = date("*t")
 
-	local diffHours = localTime.hour - hours
-	local diffMinutes = localTime.min - minutes
+	if not noDiff then
+		local diffHours = localTime.hour - hours
+		local diffMinutes = localTime.min - minutes
 
-	return (diffHours * 60 + diffMinutes) * 60
+		return (diffHours * 60 + diffMinutes) * 60
+	else
+		return localTime.hour, localTime.min
+	end
 end
 
 local realmDiffSeconds = getRealmTimeDiff()
@@ -64,7 +68,7 @@ local function GetCurrentDate(formatString)
 		formatString = gsub(formatString, "([^%%])%%p", "%1"..localizedAMPM)
 	end
 
-	if realmDiffSeconds ~= 0 and E.db.datatexts.realmtime then
+	if realmDiffSeconds ~= 0 and E.db.datatexts.realmTime then
 		return date(formatString, time() -realmDiffSeconds)
 	else
 		return date(formatString)
@@ -176,8 +180,14 @@ local function OnEnter(self)
 		end
 	end
 
-	DT.tooltip:AddLine(" ")
-	DT.tooltip:AddDoubleLine(TIMEMANAGER_TOOLTIP_REALMTIME, format(europeDisplayFormat_nocolor, GetGameTime()), 1, 1, 1, lockoutColorNormal.r, lockoutColorNormal.g, lockoutColorNormal.b)
+	if DT.tooltip:NumLines() > 0 then
+		DT.tooltip:AddLine(" ")
+	end
+
+	local timeType = E.db.datatexts.realmTime and TIMEMANAGER_TOOLTIP_LOCALTIME or TIMEMANAGER_TOOLTIP_REALMTIME
+	local timeString = E.db.datatexts.realmTime and format(europeDisplayFormat_nocolor, getRealmTimeDiff(true)) or format(europeDisplayFormat_nocolor, GetGameTime())
+
+	DT.tooltip:AddDoubleLine(timeType, timeString, 1, 1, 1, lockoutColorNormal.r, lockoutColorNormal.g, lockoutColorNormal.b)
 
 	DT.tooltip:Show()
 end
