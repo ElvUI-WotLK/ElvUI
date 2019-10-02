@@ -3,8 +3,6 @@ local RU = E:GetModule("RaidUtility")
 local S = E:GetModule("Skins")
 
 --Lua functions
-local _G = _G
-local unpack, pairs = unpack, pairs
 local find = string.find
 --WoW API / Variables
 local CreateFrame = CreateFrame
