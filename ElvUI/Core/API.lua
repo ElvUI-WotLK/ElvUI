@@ -347,7 +347,7 @@ function E:LoadAPI()
 	self:RegisterEvent("UNIT_EXITED_VEHICLE", "ExitVehicleShowFrames")
 	self:RegisterEvent("UI_SCALE_CHANGED", "PixelScaleChanged")
 
-	if not strfind(date(), "04/01/") then
+	if date("%d%m") ~= "0104" then
 		E.global.aprilFools = nil
 	end
 
