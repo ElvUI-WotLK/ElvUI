@@ -30,6 +30,7 @@ local lockoutColorExtended, lockoutColorNormal = {r = 0.3, g = 1, b = 0.3}, {r =
 local lockedInstances = {raids = {}, dungeons = {}}
 local collectedInstanceImages
 local timeFormat, showAMPM
+local realmDiffSeconds
 
 local locale = GetLocale()
 local krcntw = locale == "koKR" or locale == "zhCN" or locale == "zhTW"
@@ -49,8 +50,6 @@ local function getRealmTimeDiff()
 
 	return (diffHours * 60 + diffMinutes) * 60
 end
-
-local realmDiffSeconds = getRealmTimeDiff()
 
 local function GetCurrentDate(formatString)
 	if timeFormat ~= E.db.datatexts.timeFormat then
@@ -83,6 +82,12 @@ local function GetInstanceImages(...)
 			instanceIconByName[title] = texture
 		end
 		argn = argn + 4
+	end
+end
+
+local function OnEvent()
+	if not realmDiffSeconds then
+		realmDiffSeconds = getRealmTimeDiff()
 	end
 end
 
@@ -217,4 +222,4 @@ local function ValueColorUpdate(hex)
 end
 E.valueColorUpdateFuncs[ValueColorUpdate] = true
 
-DT:RegisterDatatext("Time", nil, nil, OnUpdate, OnClick, OnEnter)
+DT:RegisterDatatext("Time", nil, OnEvent, OnUpdate, OnClick, OnEnter)
