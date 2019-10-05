@@ -314,8 +314,6 @@ P.nameplates = {
 		badColor = {r = 0.78, g = 0.25, b = 0.25},
 		goodTransition = {r = 218/255, g = 197/255, b = 92/255},
 		badTransition = {r = 235/255, g = 163/255, b = 40/255},
-		beingTankedByTankColor = {r = 0.8, g = 0.1, b = 1},
-		beingTankedByTank = true,
 		goodScale = 0.8,
 		badScale = 1.2,
 		useThreatColor = true

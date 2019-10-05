@@ -6,13 +6,14 @@ local NP = E:GetModule("NamePlates")
 
 function NP:UpdateElement_HealerIcon(frame)
 	local icon = frame.HealerIcon
-	icon:ClearAllPoints()
-	if frame.HealthBar:IsShown() then
-		icon:SetPoint("RIGHT", frame.HealthBar, "LEFT", -6, 0)
-	else
-		icon:SetPoint("BOTTOM", frame.Name, "TOP", 0, 3)
-	end
-	if self.Healers[frame.UnitName] and frame.UnitType == "ENEMY_PLAYER" then
+	if frame.UnitType == "ENEMY_PLAYER" and self.Healers[frame.UnitName] then
+		icon:ClearAllPoints()
+		if frame.HealthBar:IsShown() then
+			icon:SetPoint("RIGHT", frame.HealthBar, "LEFT", -6, 0)
+		else
+			icon:SetPoint("BOTTOM", frame.Name, "TOP", 0, 3)
+		end
+
 		icon:Show()
 	else
 		icon:Hide()

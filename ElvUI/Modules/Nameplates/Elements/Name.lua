@@ -84,7 +84,7 @@ function NP:ConstructElement_Name(frame)
 	name:SetFont(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline)
 	name:SetWordWrap(false)
 
-	local g = frame:CreateTexture(nil, "BACKGROUND", nil, -5)
+	local g = frame:CreateTexture(nil, "BACKGROUND")
 	g:SetTexture(E.Media.Textures.Spark)
 	g:Hide()
 	g:SetPoint("TOPLEFT", name, -20, 8)

@@ -6,37 +6,27 @@ local LSM = E.Libs.LSM
 --WoW API / Variables
 
 function NP:UpdateElement_Highlight(frame)
-	if frame:IsShown() and frame.isMouseover and (frame.NameOnlyChanged or (not self.db.units[frame.UnitType].healthbar.enable and self.db.units[frame.UnitType].showName)) and not frame.isTarget then
+	if frame.isMouseover and (frame.NameOnlyChanged or (not self.db.units[frame.UnitType].healthbar.enable and self.db.units[frame.UnitType].showName)) and not frame.isTarget then
 		frame.Name.NameOnlyGlow:Show()
-		frame.Highlight:Show()
-	elseif frame:IsShown() and frame.isMouseover and (not frame.NameOnlyChanged or self.db.units[frame.UnitType].healthbar.enable) and not frame.isTarget then
-		frame.Highlight.texture:ClearAllPoints()
-		frame.Highlight.texture:SetPoint("TOPLEFT", frame.HealthBar, "TOPLEFT")
-		frame.Highlight.texture:SetPoint("BOTTOMRIGHT", frame.HealthBar:GetStatusBarTexture(), "BOTTOMRIGHT")
-		frame.Highlight.texture:Show()
-		frame.Highlight:Show()
+		frame.HealthBar.Highlight:Show()
+	elseif frame.isMouseover and (not frame.NameOnlyChanged or self.db.units[frame.UnitType].healthbar.enable) and not frame.isTarget then
+		frame.HealthBar.Highlight:ClearAllPoints()
+		frame.HealthBar.Highlight:SetPoint("TOPLEFT", frame.HealthBar, "TOPLEFT")
+		frame.HealthBar.Highlight:SetPoint("BOTTOMRIGHT", frame.HealthBar:GetStatusBarTexture(), "BOTTOMRIGHT")
+		frame.HealthBar.Highlight:Show()
 	else
 		frame.Name.NameOnlyGlow:Hide()
-		frame.Highlight.texture:Hide()
-		frame.Highlight:Hide()
+		frame.HealthBar.Highlight:Hide()
 	end
 end
 
 function NP:ConfigureElement_Highlight(frame)
 	if not self.db.units[frame.UnitType].healthbar.enable then return end
-	frame.Highlight.texture:SetTexture(LSM:Fetch("statusbar", self.db.statusbar))
+	frame.HealthBar.Highlight:SetTexture(LSM:Fetch("statusbar", self.db.statusbar))
 end
 
 function NP:ConstructElement_Highlight(frame)
-	local f = CreateFrame("Frame", nil, frame)
-	f.texture = frame.HealthBar:CreateTexture("$parentHighlight", "ARTWORK")
-	f.texture:SetVertexColor(1, 1, 1, 0.3)
-	f.texture:Hide()
-
-	f:HookScript("OnHide", function()
-		frame.Name.NameOnlyGlow:Hide()
-		frame.Highlight.texture:Hide()
-	end)
-
-	return f
+	frame.HealthBar.Highlight = frame.HealthBar:CreateTexture("$parentHighlight", "OVERLAY")
+	frame.HealthBar.Highlight:SetVertexColor(1, 1, 1, 0.3)
+	frame.HealthBar.Highlight:Hide()
 end

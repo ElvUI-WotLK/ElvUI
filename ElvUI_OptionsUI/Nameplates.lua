@@ -3190,52 +3190,34 @@ E.Options.args.nameplate = {
 							min = 0.3, max = 2, step = 0.01,
 							isPercent = true
 						},
-						beingTankedByTank = {
-							order = 5,
-							type = "toggle",
-							name = L["Color Tanked"],
-							desc = L["Use Tanked Color when a nameplate is being effectively tanked by another tank."],
-							get = function(info) return E.db.nameplates.threat[info[#info]] end,
-							set = function(info, value) E.db.nameplates.threat[info[#info]] = value end,
-							disabled = function() return not E.db.nameplates.threat.useThreatColor end,
-							hidden = true
-						},
-						beingTankedByTankColor = {
-							order = 6,
-							type = "color",
-							name = L["Tanked Color"],
-							hasAlpha = false,
-							disabled = function() return (not E.db.nameplates.threat.beingTankedByTank or not E.db.nameplates.threat.useThreatColor) end,
-							hidden = true
-						},
 						spacer = {
-							order = 7,
+							order = 5,
 							type = "description",
 							name = ""
 						},
 						goodColor = {
-							order = 8,
+							order = 6,
 							type = "color",
 							name = L["Good Color"],
 							hasAlpha = false,
 							disabled = function() return not E.db.nameplates.threat.useThreatColor end
 						},
 						badColor = {
-							order = 9,
+							order = 7,
 							type = "color",
 							name = L["Bad Color"],
 							hasAlpha = false,
 							disabled = function() return not E.db.nameplates.threat.useThreatColor end
 						},
 						goodTransition = {
-							order = 10,
+							order = 8,
 							type = "color",
 							name = L["Good Transition Color"],
 							hasAlpha = false,
 							disabled = function() return not E.db.nameplates.threat.useThreatColor end
 						},
 						badTransition = {
-							order = 11,
+							order = 9,
 							type = "color",
 							name = L["Bad Transition Color"],
 							hasAlpha = false,

@@ -53,22 +53,11 @@ function NP:UpdateElement_HealthColor(frame)
 				scale = 1
 			else
 				if E.Role == "Tank" then
-					--Check if it is being tanked by an offtank.
-					--if self.db.threat.beingTankedByTank then
-					--	r, g, b = self.db.threat.beingTankedByTankColor.r, self.db.threat.beingTankedByTankColor.g, self.db.threat.beingTankedByTankColor.b
-					--	scale = self.db.threat.goodScale
-					--else
-						r, g, b = self.db.threat.badColor.r, self.db.threat.badColor.g, self.db.threat.badColor.b
-						scale = self.db.threat.badScale
-					--end
+					r, g, b = self.db.threat.badColor.r, self.db.threat.badColor.g, self.db.threat.badColor.b
+					scale = self.db.threat.badScale
 				else
-					--if self.db.threat.beingTankedByTank then
-					--	r, g, b = self.db.threat.beingTankedByTankColor.r, self.db.threat.beingTankedByTankColor.g, self.db.threat.beingTankedByTankColor.b
-					--	scale = self.db.threat.goodScale
-					--else
-						r, g, b = self.db.threat.goodColor.r, self.db.threat.goodColor.g, self.db.threat.goodColor.b
-						scale = self.db.threat.goodScale
-					--end
+					r, g, b = self.db.threat.goodColor.r, self.db.threat.goodColor.g, self.db.threat.goodColor.b
+					scale = self.db.threat.goodScale
 				end
 			end
 		end
@@ -92,6 +81,7 @@ function NP:UpdateElement_HealthColor(frame)
 	if r ~= frame.HealthBar.r or g ~= frame.HealthBar.g or b ~= frame.HealthBar.b then
 		if not frame.HealthColorChanged then
 			frame.HealthBar:SetStatusBarColor(r, g, b)
+
 			if frame.HealthColorChangeCallbacks then
 				for _, cb in ipairs(frame.HealthColorChangeCallbacks) do
 					cb(self, frame, r, g, b)
