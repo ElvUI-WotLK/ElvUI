@@ -17,6 +17,7 @@ function DT:Initialize()
 	self.Initialized = true
 	self.tooltip = CreateFrame("GameTooltip", "DatatextTooltip", nil, "GameTooltipTemplate")
 	self.tooltip:SetParent(E.UIParent)
+	self.tooltip:SetFrameStrata("TOOLTIP")
 	TT:HookScript(self.tooltip, "OnShow", "SetStyle")
 
 	-- Ignore header font size on DatatextTooltip
