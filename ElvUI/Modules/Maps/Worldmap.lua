@@ -9,9 +9,9 @@ local GetCVarBool = GetCVarBool
 local GetCursorPosition = GetCursorPosition
 local GetPlayerMapPosition = GetPlayerMapPosition
 local InCombatLockdown = InCombatLockdown
+
 local PLAYER = PLAYER
 local MOUSE_LABEL = MOUSE_LABEL
-local WORLDMAP_POI_FRAMELEVEL = WORLDMAP_POI_FRAMELEVEL
 
 local INVERTED_POINTS = {
 	["TOPLEFT"] = "BOTTOMLEFT",
@@ -52,6 +52,14 @@ function M:PLAYER_REGEN_ENABLED()
 	end
 end
 
+local function BloobFrameHide()
+	M.blobWasVisible = nil
+end
+
+local function BloobFrameShow()
+	M.blobWasVisible = true
+end
+
 function M:PLAYER_REGEN_DISABLED()
 	WorldMapFrameSizeUpButton:Disable()
 	WorldMapFrameSizeDownButton:Disable()
@@ -66,8 +74,8 @@ function M:PLAYER_REGEN_DISABLED()
 	WorldMapBlobFrame:ClearAllPoints()
 	WorldMapBlobFrame:SetPoint("TOP", UIParent, "BOTTOM")
 	WorldMapBlobFrame:Hide()
-	WorldMapBlobFrame.Hide = function() M.blobWasVisible = nil end
-	WorldMapBlobFrame.Show = function() M.blobWasVisible = true end
+	WorldMapBlobFrame.Hide = BloobFrameHide
+	WorldMapBlobFrame.Show = BloobFrameShow
 	self.blobNewScale = nil
 end
 
@@ -80,20 +88,10 @@ local function UpdateCoords(self, elapsed)
 	local x, y = GetPlayerMapPosition("player")
 
 	if self.playerCoords.x ~= x and self.playerCoords.y ~= y then
-		local adjustedX, adjustedY
-
-		if x then
-			adjustedX = E:Round(100 * x, 2)
-			adjustedY = E:Round(100 * y, 2)
-		else
-			adjustedX = 0
-			adjustedY = 0
-		end
-
-		if adjustedX ~= 0 and adjustedY ~= 0 then
+		if x ~= 0 and y ~= 0 then
 			self.playerCoords.x = x
 			self.playerCoords.y = y
-			self.playerCoords:SetFormattedText("%s:   %.2f, %.2f", PLAYER, adjustedX, adjustedY)
+			self.playerCoords:SetFormattedText("%s:   %.2f, %.2f", PLAYER, x * 100, y * 100)
 		else
 			self.playerCoords.x = nil
 			self.playerCoords.y = nil
@@ -106,19 +104,15 @@ local function UpdateCoords(self, elapsed)
 
 		if self.mouseCoords.x ~= curX and self.mouseCoords.y ~= curY then
 			local scale = WorldMapDetailFrame:GetEffectiveScale()
-			local width = WorldMapDetailFrame:GetWidth()
-			local height = WorldMapDetailFrame:GetHeight()
+			local width, height = WorldMapDetailFrame:GetSize()
 			local centerX, centerY = WorldMapDetailFrame:GetCenter()
-			local adjustedX = (curX / scale - (centerX - (width / 2))) / width
-			local adjustedY = (centerY + (height / 2) - curY / scale) / height
+			local adjustedX = (curX / scale - (centerX - (width * 0.5))) / width
+			local adjustedY = (centerY + (height * 0.5) - curY / scale) / height
 
 			if adjustedX >= 0 and adjustedY >= 0 and adjustedX <= 1 and adjustedY <= 1 then
-				adjustedX = E:Round(100 * adjustedX, 2)
-				adjustedY = E:Round(100 * adjustedY, 2)
-
 				self.mouseCoords.x = curX
 				self.mouseCoords.y = curY
-				self.mouseCoords:SetFormattedText("%s:  %.2f, %.2f", MOUSE_LABEL, adjustedX, adjustedY)
+				self.mouseCoords:SetFormattedText("%s:  %.2f, %.2f", MOUSE_LABEL, adjustedX * 100, adjustedY * 100)
 			else
 				self.mouseCoords.x = nil
 				self.mouseCoords.y = nil
@@ -212,9 +206,9 @@ function M:Initialize()
 			self.blobNewScale = scale
 		end)
 
-		DropDownList1:HookScript("OnShow", function()
-			if DropDownList1:GetScale() ~= UIParent:GetScale() then
-				DropDownList1:SetScale(UIParent:GetScale())
+		DropDownList1:HookScript("OnShow", function(self)
+			if self:GetScale() ~= UIParent:GetScale() then
+				self:SetScale(UIParent:GetScale())
 			end
 		end)
 
