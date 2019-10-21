@@ -1255,4 +1255,8 @@ function E:Initialize()
 		if Chat.Initialized then msg = select(2, Chat:FindURL("CHAT_MSG_DUMMY", msg)) end
 		print(msg)
 	end
+
+	if not GetCVar("scriptProfile") == "1" then
+		collectgarbage("collect")
+	end
 end
