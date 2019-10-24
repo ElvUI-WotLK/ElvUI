@@ -178,3 +178,35 @@ The only purpose of ElvUI-WotLK is to improve the backported version of ElvUI an
 
 ### Могли бы вы портировать "ИмяАддона" на WotLK?
 Единственная цель ElvUI-WotLK заключается в улучшении портированной версии ElvUI и его плагинов.
+
+
+## FAQ  中文:
+
+### 我想要报告一个问题，我需要做什么？
+确保你正在使用的是最新版本的[ElvUI]。(https://github.com/ElvUI-WotLK/ElvUI/releases/latest)
+<br />
+请尽可能清楚的描述你所遇到的问题。
+<br />
+如果你遇到的是关于图形方面的问题，请用一些截图来说明它。
+<br />
+你在做什么事情的时候这个问题发生了？
+<br />
+向我们说明如何可以复现这个问题。
+<br />
+你提供的信息越多，我们也可以更好更快的帮助你解决问题。
+
+### 我想要你们为ELvUI增加一个功能，我应该怎么做？
+本资料库的创建是为了复制源生的**ElvUI**功能。
+<br />
+如果你想要请求一个新的功能，将你的请求发布在[ElvUI_Enhanced](https://github.com/ElvUI-WotLK/ElvUI_Enhanced/issues)
+<br />
+如果你想要请求对现有**ElvUI**的功能进行修改，那么将你的请求发布在[ElvUI_CustomTweaks](https://github.com/ElvUI-WotLK/ElvUI_CustomTweaks/issues)
+
+### 我对现有的ElvUI_"插件名称"有一些建议/问题，我应该怎么做？
+在[ElvUI](https://github.com/ElvUI-WotLK)中“插件名称”资料库中的问题跟踪器中创建一个问题。
+
+### ElvUI跟“插件名称”有冲突。
+在提交表单之前确保你使用的是适用在魔兽世界·巫妖王之怒中的最新版本的“插件名称”。
+
+### 可以将“插件名称”移植到魔兽世界·巫妖王之怒中吗？
+ElvUI-WotLK的唯一目的是改进的ElvUI移植版本和它的子插件。
