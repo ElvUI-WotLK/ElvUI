@@ -182,7 +182,7 @@ The only purpose of ElvUI-WotLK is to improve the backported version of ElvUI an
 
 ## FAQ  中文:
 
-### 我想要报告一个问题，我需要做什么？I would like to report a bug. What i need to do?
+### 我想要报告一个问题，我需要做什么？
 确保你正在使用的是最新版本的[ElvUI]。(https://github.com/ElvUI-WotLK/ElvUI/releases/latest)
 <br />
 请尽可能清楚的描述你所遇到的问题。
