@@ -80,16 +80,17 @@ function S:Ace3_RegisterAsWidget(widget)
 	local TYPE = widget.type
 	if TYPE == "MultiLineEditBox" then
 		local frame = widget.frame
-		local scrollBG = widget.scrollBG or select(2, frame:GetChildren())
+		local scrollBG = widget.scrollBG or select(2, frame:GetChildren()) or frame:GetChildren()
+		local scrollBar = widget.scrollBar or _G[widget.scrollframe:GetName().."ScrollBar"]
 
 		if not scrollBG.template then
 			scrollBG:SetTemplate()
 		end
 
 		S:HandleButton(widget.button)
-		S:HandleScrollBar(widget.scrollBar)
-		widget.scrollBar:Point("RIGHT", frame, "RIGHT", 0 -4)
-		scrollBG:Point("TOPRIGHT", widget.scrollBar, "TOPLEFT", -2, 19)
+		S:HandleScrollBar(scrollBar)
+		scrollBar:Point("RIGHT", frame, "RIGHT", 0 -4)
+		scrollBG:Point("TOPRIGHT", scrollBar, "TOPLEFT", -2, 19)
 		scrollBG:Point("BOTTOMLEFT", widget.button, "TOPLEFT")
 		widget.scrollFrame:Point("BOTTOMRIGHT", scrollBG, "BOTTOMRIGHT", -4, 8)
 	elseif TYPE == "CheckBox" then
