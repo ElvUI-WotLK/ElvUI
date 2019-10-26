@@ -26,7 +26,7 @@ local function LoadSkin()
 
 	QuestLogFrame:StripTextures()
 	QuestLogFrame:CreateBackdrop("Transparent")
-	QuestLogFrame.backdrop:Point("TOPLEFT", 10, -12)
+	QuestLogFrame.backdrop:Point("TOPLEFT", 11, -12)
 	QuestLogFrame.backdrop:Point("BOTTOMRIGHT", -1, 8)
 
 	QuestLogCount:StripTextures()
@@ -116,6 +116,7 @@ local function LoadSkin()
 	S:HandleButton(QuestLogFramePushQuestButton)
 	QuestLogFramePushQuestButton:Point("LEFT", QuestLogFrameAbandonButton, "RIGHT", 2, 0)
 	QuestLogFramePushQuestButton:Point("RIGHT", QuestLogFrameTrackButton, "LEFT", -2, 0)
+	QuestLogFrameTrackButton:Point("RIGHT", 0, 1)
 
 	local function questObjectiveText()
 		local numObjectives = GetNumQuestLeaderBoards()
@@ -216,8 +217,8 @@ local function LoadSkin()
 	QuestLogDetailFrame:Height(490)
 	QuestLogDetailFrame:StripTextures()
 	QuestLogDetailFrame:CreateBackdrop("Transparent")
-	QuestLogDetailFrame.backdrop:Point("TOPLEFT", 10, -12)
-	QuestLogDetailFrame.backdrop:Point("BOTTOMRIGHT", -1, 1)
+	QuestLogDetailFrame.backdrop:Point("TOPLEFT", 11, -12)
+	QuestLogDetailFrame.backdrop:Point("BOTTOMRIGHT", 2, 1)
 
 	QuestLogDetailScrollFrame:StripTextures()
 
@@ -249,7 +250,7 @@ local function LoadSkin()
 			QuestLogDetailScrollFrame:CreateBackdrop("Transparent")
 		end
 		QuestLogDetailScrollFrame.backdrop:Point("BOTTOMRIGHT", 0, -2)
-		QuestLogDetailScrollFrame:Height(375)
+		QuestLogDetailScrollFrame:Size(302, 375)
 
 		QuestLogFrameShowMapButton:Point("TOPRIGHT", -33, -35)
 
@@ -259,8 +260,8 @@ local function LoadSkin()
 	QuestLogSkillHighlight:SetTexture(E.Media.Textures.Highlight)
 	QuestLogSkillHighlight:SetAlpha(0.35)
 
-	S:HandleCloseButton(QuestLogDetailFrameCloseButton)
-	S:HandleCloseButton(QuestLogFrameCloseButton)
+	S:HandleCloseButton(QuestLogDetailFrameCloseButton, QuestLogDetailFrame.backdrop)
+	S:HandleCloseButton(QuestLogFrameCloseButton, QuestLogFrame.backdrop)
 
 	EmptyQuestLogFrame:StripTextures()
 
@@ -274,19 +275,21 @@ local function LoadSkin()
 	-- Quest Frame
 	QuestFrame:StripTextures(true)
 	QuestFrame:CreateBackdrop("Transparent")
-	QuestFrame.backdrop:Point("TOPLEFT", 15, -11)
-	QuestFrame.backdrop:Point("BOTTOMRIGHT", -20, 0)
-	QuestFrame:Width(374)
+	QuestFrame.backdrop:Point("TOPLEFT", 11, -12)
+	QuestFrame.backdrop:Point("BOTTOMRIGHT", -32, 0)
+
+	QuestFrameNpcNameText:ClearAllPoints()
+	QuestFrameNpcNameText:Point("TOP", -6, -17)
 
 	QuestFrameDetailPanel:StripTextures(true)
 	QuestDetailScrollFrame:StripTextures(true)
-	QuestDetailScrollFrame:Height(403)
+	QuestDetailScrollFrame:Height(402)
 	QuestDetailScrollChildFrame:StripTextures(true)
 	QuestRewardScrollFrame:StripTextures(true)
-	QuestRewardScrollFrame:Height(403)
+	QuestRewardScrollFrame:Height(402)
 	QuestRewardScrollChildFrame:StripTextures(true)
 	QuestFrameProgressPanel:StripTextures(true)
-	QuestProgressScrollFrame:Height(403)
+	QuestProgressScrollFrame:Height(402)
 	QuestFrameRewardPanel:StripTextures(true)
 
 	S:HandleButton(QuestFrameAcceptButton, true)

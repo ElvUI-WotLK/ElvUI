@@ -37,10 +37,10 @@ local function LoadSkin()
 
 	HelpFrame:StripTextures()
 	HelpFrame:CreateBackdrop("Transparent")
-	HelpFrame.backdrop:Point("TOPLEFT", 6, -6)
+	HelpFrame.backdrop:Point("TOPLEFT", 6, 0)
 	HelpFrame.backdrop:Point("BOTTOMRIGHT", -45, 14)
 
-	S:HandleCloseButton(HelpFrameCloseButton)
+	S:HandleCloseButton(HelpFrameCloseButton, HelpFrame.backdrop)
 
 	for i = 1, #helpFrameButtons do
 		S:HandleButton(_G["HelpFrame"..helpFrameButtons[i]])

@@ -16,8 +16,11 @@ local function LoadSkin()
 	local MerchantFrame = _G.MerchantFrame
 	MerchantFrame:StripTextures(true)
 	MerchantFrame:CreateBackdrop("Transparent")
-	MerchantFrame.backdrop:Point("TOPLEFT", 10, -11)
-	MerchantFrame.backdrop:Point("BOTTOMRIGHT", -28, 60)
+	MerchantFrame.backdrop:Point("TOPLEFT", 11, -12)
+	MerchantFrame.backdrop:Point("BOTTOMRIGHT", -32, 60)
+
+	MerchantNameText:ClearAllPoints()
+	MerchantNameText:Point("TOP", MerchantFrame, "TOP", -6, -22)
 
 	MerchantFrame:EnableMouseWheel(true)
 	MerchantFrame:SetScript("OnMouseWheel", function(_, value)
@@ -33,6 +36,8 @@ local function LoadSkin()
 	end)
 
 	S:HandleCloseButton(MerchantFrameCloseButton, MerchantFrame.backdrop)
+
+	MerchantItem1:SetPoint("TOPLEFT", 21, -80)
 
 	for i = 1, 12 do
 		local item = _G["MerchantItem"..i]
@@ -95,11 +100,12 @@ local function LoadSkin()
 	MerchantRepairAllIcon:SetTexCoord(0.34, 0.1, 0.34, 0.535, 0.535, 0.1, 0.535, 0.535)
 	MerchantRepairAllIcon:SetInside()
 
+	MerchantBuyBackItem:Width(150)
 	MerchantBuyBackItem:StripTextures(true)
 	MerchantBuyBackItem:CreateBackdrop("Transparent")
-	MerchantBuyBackItem.backdrop:Point("TOPLEFT", -6, 6)
-	MerchantBuyBackItem.backdrop:Point("BOTTOMRIGHT", 6, -6)
-	MerchantBuyBackItem:Point("TOPLEFT", MerchantItem10, "BOTTOMLEFT", 0, -48)
+	MerchantBuyBackItem.backdrop:Point("TOPLEFT", -4, 4)
+	MerchantBuyBackItem.backdrop:Point("BOTTOMRIGHT", 0, -4)
+	MerchantBuyBackItem:Point("TOPLEFT", MerchantItem10, "BOTTOMLEFT", 3, -53)
 
 	MerchantBuyBackItemItemButton:StripTextures()
 	MerchantBuyBackItemItemButton:SetTemplate("Default", true)

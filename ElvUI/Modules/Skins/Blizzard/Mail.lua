@@ -21,9 +21,10 @@ local function LoadSkin()
 	-- Inbox Frame
 	MailFrame:StripTextures(true)
 	MailFrame:CreateBackdrop("Transparent")
-	MailFrame.backdrop:Point("TOPLEFT", 16, -12)
-	MailFrame.backdrop:Point("BOTTOMRIGHT", -38, 74)
+	MailFrame.backdrop:Point("TOPLEFT", 11, -12)
+	MailFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 	MailFrame:EnableMouseWheel(true)
+
 	MailFrame:SetScript("OnMouseWheel", function(_, value)
 		if value > 0 then
 			if InboxPrevPageButton:IsEnabled() == 1 then
@@ -100,13 +101,13 @@ local function LoadSkin()
 
 	S:HandleNextPrevButton(InboxPrevPageButton, nil, nil, true)
 	InboxPrevPageButton:Size(32)
-	InboxPrevPageButton:Point("CENTER", InboxFrame, "BOTTOMLEFT", 44, 104)
 
 	S:HandleNextPrevButton(InboxNextPageButton, nil, nil, true)
 	InboxNextPageButton:Size(32)
-	InboxNextPageButton:Point("CENTER", InboxFrame, "BOTTOMLEFT", 328, 104)
 
 	S:HandleCloseButton(InboxCloseButton, MailFrame.backdrop)
+
+	MailFrameTab1:Point("BOTTOMLEFT", MailFrame, 24, 46)
 
 	for i = 1, 2 do
 		local tab = _G["MailFrameTab"..i]
@@ -185,9 +186,9 @@ local function LoadSkin()
 	-- Open Mail Frame
 	OpenMailFrame:StripTextures(true)
 	OpenMailFrame:CreateBackdrop("Transparent")
-	OpenMailFrame.backdrop:Point("TOPLEFT", 12, -12)
-	OpenMailFrame.backdrop:Point("BOTTOMRIGHT", -34, 74)
-	OpenMailFrame:Point("TOPLEFT", InboxFrame, "TOPRIGHT", -49, 0)
+	OpenMailFrame.backdrop:Point("TOPLEFT", 11, -12)
+	OpenMailFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
+	OpenMailFrame:Point("TOPLEFT", InboxFrame, "TOPRIGHT", -44, 0)
 
 	for i = 1, ATTACHMENTS_MAX_SEND do
 		local button = _G["OpenMailAttachmentButton"..i]

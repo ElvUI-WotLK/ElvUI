@@ -9,15 +9,19 @@ local function LoadSkin()
 
 	GuildRegistrarFrame:StripTextures(true)
 	GuildRegistrarFrame:CreateBackdrop("Transparent")
-	GuildRegistrarFrame.backdrop:Point("TOPLEFT", 12, -17)
-	GuildRegistrarFrame.backdrop:Point("BOTTOMRIGHT", -28, 65)
+	GuildRegistrarFrame.backdrop:Point("TOPLEFT", 11, -12)
+	GuildRegistrarFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
 	GuildRegistrarGreetingFrame:StripTextures()
+
+	GuildRegistrarFrameGoodbyeButton:Point("BOTTOMRIGHT", -39, 81)
+	GuildRegistrarFrameCancelButton:Point("BOTTOMRIGHT", -39, 81)
+	GuildRegistrarFramePurchaseButton:Point("BOTTOMLEFT", 21, 81)
 
 	S:HandleButton(GuildRegistrarFrameGoodbyeButton)
 	S:HandleButton(GuildRegistrarFrameCancelButton)
 	S:HandleButton(GuildRegistrarFramePurchaseButton)
-	S:HandleCloseButton(GuildRegistrarFrameCloseButton)
+	S:HandleCloseButton(GuildRegistrarFrameCloseButton, GuildRegistrarFrame.backdrop)
 	S:HandleEditBox(GuildRegistrarFrameEditBox)
 
 	for i = 1, GuildRegistrarFrameEditBox:GetNumRegions() do

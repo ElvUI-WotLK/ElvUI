@@ -102,7 +102,7 @@ local function LoadSkin()
 			WorldMapLevelDropDown:ClearAllPoints()
 			WorldMapLevelDropDown:Point("TOPRIGHT", WorldMapPositioningGuide, "TOPRIGHT", -420, -24)
 		else
-			WorldMapFrame.backdrop:Point("TOPLEFT", 14, -12)
+			WorldMapFrame.backdrop:Point("TOPLEFT", 11, -12)
 
 			WorldMapLevelDropDown:ClearAllPoints()
 			WorldMapLevelDropDown:Point("TOPRIGHT", WorldMapPositioningGuide, "TOPRIGHT", -440, -38)

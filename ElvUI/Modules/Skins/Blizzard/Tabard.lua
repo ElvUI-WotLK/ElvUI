@@ -7,17 +7,20 @@ local S = E:GetModule("Skins")
 local function LoadSkin()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.tabard then return end
 
-	TabardFrame:StripTextures()
 	TabardFramePortrait:Kill()
+
+	TabardFrame:StripTextures()
 	TabardFrame:CreateBackdrop("Transparent")
-	TabardFrame.backdrop:Point("TOPLEFT", 10, -12)
-	TabardFrame.backdrop:Point("BOTTOMRIGHT", -32, 74)
+	TabardFrame.backdrop:Point("TOPLEFT", 11, -12)
+	TabardFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
+
 	TabardModel:CreateBackdrop("Default")
 	S:HandleButton(TabardFrameCancelButton)
 	S:HandleButton(TabardFrameAcceptButton)
-	S:HandleCloseButton(TabardFrameCloseButton)
+	S:HandleCloseButton(TabardFrameCloseButton, TabardFrame.backdrop)
 	S:HandleRotateButton(TabardCharacterModelRotateLeftButton)
 	S:HandleRotateButton(TabardCharacterModelRotateRightButton)
+
 	TabardFrameCostFrame:StripTextures()
 	TabardFrameCustomizationFrame:StripTextures()
 

@@ -9,14 +9,14 @@ local function LoadSkin()
 
 	PetitionFrame:StripTextures(true)
 	PetitionFrame:CreateBackdrop("Transparent")
-	PetitionFrame.backdrop:Point("TOPLEFT", 12, -17)
-	PetitionFrame.backdrop:Point("BOTTOMRIGHT", -28, 65)
+	PetitionFrame.backdrop:Point("TOPLEFT", 11, -12)
+	PetitionFrame.backdrop:Point("BOTTOMRIGHT", -32, 66)
 
 	S:HandleButton(PetitionFrameSignButton)
 	S:HandleButton(PetitionFrameRequestButton)
 	S:HandleButton(PetitionFrameRenameButton)
 	S:HandleButton(PetitionFrameCancelButton)
-	S:HandleCloseButton(PetitionFrameCloseButton)
+	S:HandleCloseButton(PetitionFrameCloseButton, PetitionFrame.backdrop)
 
 	PetitionFrameCharterTitle:SetTextColor(1, 1, 0)
 	PetitionFrameCharterName:SetTextColor(1, 1, 1)

@@ -11,10 +11,10 @@ local function LoadSkin()
 
 	PlayerTalentFrame:StripTextures(true)
 	PlayerTalentFrame:CreateBackdrop("Transparent")
-	PlayerTalentFrame.backdrop:Point("TOPLEFT", 13, -12)
-	PlayerTalentFrame.backdrop:Point("BOTTOMRIGHT", -31, 76)
+	PlayerTalentFrame.backdrop:Point("TOPLEFT", 11, -12)
+	PlayerTalentFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
-	S:HandleCloseButton(PlayerTalentFrameCloseButton)
+	S:HandleCloseButton(PlayerTalentFrameCloseButton, PlayerTalentFrame.backdrop)
 
 	PlayerTalentFrameStatusFrame:StripTextures()
 	PlayerTalentFrameStatusFrame:Point("TOPLEFT", PlayerTalentFrame, "TOPLEFT", 57, -40)

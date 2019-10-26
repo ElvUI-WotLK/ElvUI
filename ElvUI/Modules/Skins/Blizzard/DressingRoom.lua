@@ -10,8 +10,8 @@ local function LoadSkin()
 
 	DressUpFrame:StripTextures()
 	DressUpFrame:CreateBackdrop("Transparent")
-	DressUpFrame.backdrop:Point("TOPLEFT", 10, -12)
-	DressUpFrame.backdrop:Point("BOTTOMRIGHT", -33, 73)
+	DressUpFrame.backdrop:Point("TOPLEFT", 11, -12)
+	DressUpFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
 	DressUpFramePortrait:Kill()
 
@@ -21,7 +21,7 @@ local function LoadSkin()
 	DressUpBackgroundBotLeft:SetDesaturated(true)
 	DressUpBackgroundBotRight:SetDesaturated(true)
 
-	S:HandleCloseButton(DressUpFrameCloseButton)
+	S:HandleCloseButton(DressUpFrameCloseButton, DressUpFrame.backdrop)
 
 	S:HandleRotateButton(DressUpModelRotateLeftButton)
 	DressUpModelRotateLeftButton:Point("TOPLEFT", DressUpFrame, 25, -79)
@@ -29,7 +29,7 @@ local function LoadSkin()
 	DressUpModelRotateRightButton:Point("TOPLEFT", DressUpModelRotateLeftButton, "TOPRIGHT", 3, 0)
 
 	S:HandleButton(DressUpFrameCancelButton)
-	DressUpFrameCancelButton:Point("CENTER", DressUpFrame, "TOPLEFT", 306, -423)
+	DressUpFrameCancelButton:Point("CENTER", DressUpFrame, "TOPLEFT", 300, -422)
 	S:HandleButton(DressUpFrameResetButton)
 	DressUpFrameResetButton:Point("RIGHT", DressUpFrameCancelButton, "LEFT", -3, 0)
 

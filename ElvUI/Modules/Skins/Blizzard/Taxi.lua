@@ -11,11 +11,11 @@ local function LoadSkin()
 
 	TaxiFrame:CreateBackdrop("Transparent")
 	TaxiFrame.backdrop:Point("TOPLEFT", 11, -12)
-	TaxiFrame.backdrop:Point("BOTTOMRIGHT", -34, 75)
+	TaxiFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
 	TaxiPortrait:Kill()
 
-	S:HandleCloseButton(TaxiCloseButton)
+	S:HandleCloseButton(TaxiCloseButton, TaxiFrame.backdrop)
 
 	TaxiRouteMap:CreateBackdrop("Default")
 end

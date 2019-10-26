@@ -13,18 +13,20 @@ local GetItemQualityColor = GetItemQualityColor
 local function LoadSkin()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.gbank then return end
 
+	GuildBankFrame:Width(654)
 	GuildBankFrame:StripTextures()
 	GuildBankFrame:CreateBackdrop("Transparent")
-	GuildBankFrame.backdrop:Point("TOPLEFT", 8, -11)
-	GuildBankFrame.backdrop:Point("BOTTOMRIGHT", 0, 6)
-	GuildBankFrame:Width(654)
+	GuildBankFrame.backdrop:Point("TOPLEFT", 11, -12)
+	GuildBankFrame.backdrop:Point("BOTTOMRIGHT", 0, 8)
+
+	GuildBankFrameTab1:Point("BOTTOMLEFT", GuildBankFrame, 19, -22)
 
 	GuildBankEmblemFrame:StripTextures(true)
 
 	for i = 1, GuildBankFrame:GetNumChildren() do
 		local child = select(i, GuildBankFrame:GetChildren())
 		if child.GetPushedTexture and child:GetPushedTexture() and not child:GetName() then
-			S:HandleCloseButton(child)
+			S:HandleCloseButton(child, GuildBankFrame.backdrop)
 		end
 	end
 

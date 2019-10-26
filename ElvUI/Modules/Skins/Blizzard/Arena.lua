@@ -11,7 +11,7 @@ local function LoadSkin()
 
 	ArenaFrame:CreateBackdrop("Transparent")
 	ArenaFrame.backdrop:Point("TOPLEFT", 11, -12)
-	ArenaFrame.backdrop:Point("BOTTOMRIGHT", -34, 74)
+	ArenaFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
 	ArenaFrameNameHeader:SetPoint("TOPLEFT", 28, -55)
 	ArenaFrameZoneDescription:SetTextColor(1, 1, 1)
@@ -21,7 +21,7 @@ local function LoadSkin()
 	S:HandleButton(ArenaFrameGroupJoinButton)
 	ArenaFrameGroupJoinButton:SetPoint("RIGHT", ArenaFrameJoinButton, "LEFT", -2, 0)
 
-	S:HandleCloseButton(ArenaFrameCloseButton)
+	S:HandleCloseButton(ArenaFrameCloseButton, ArenaFrame.backdrop)
 end
 
 S:AddCallback("Skin_Arena", LoadSkin)

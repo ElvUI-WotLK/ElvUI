@@ -14,10 +14,10 @@ local function LoadSkin()
 
 	InspectFrame:StripTextures(true)
 	InspectFrame:CreateBackdrop("Transparent")
-	InspectFrame.backdrop:Point("TOPLEFT", 10, -12)
-	InspectFrame.backdrop:Point("BOTTOMRIGHT", -31, 75)
+	InspectFrame.backdrop:Point("TOPLEFT", 11, -12)
+	InspectFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
-	S:HandleCloseButton(InspectFrameCloseButton)
+	S:HandleCloseButton(InspectFrameCloseButton, InspectFrame.backdrop)
 
 	for i = 1, 3 do
 		S:HandleTab(_G["InspectFrameTab"..i])
@@ -100,7 +100,7 @@ local function LoadSkin()
 
 	InspectTalentFrame:StripTextures()
 
-	S:HandleCloseButton(InspectTalentFrameCloseButton)
+	S:HandleCloseButton(InspectTalentFrameCloseButton, InspectFrame.backdrop)
 
 	for i = 1, MAX_TALENT_TABS do
 		local headerTab = _G["InspectTalentFrameTab"..i]

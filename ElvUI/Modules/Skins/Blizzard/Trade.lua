@@ -15,8 +15,8 @@ local function LoadSkin()
 
 	TradeFrame:StripTextures(true)
 	TradeFrame:CreateBackdrop("Transparent")
-	TradeFrame.backdrop:Point("TOPLEFT", 14, -4)
-	TradeFrame.backdrop:Point("BOTTOMRIGHT", -20, 48)
+	TradeFrame.backdrop:Point("TOPLEFT", 11, -12)
+	TradeFrame.backdrop:Point("BOTTOMRIGHT", -21, 49)
 
 	S:HandleCloseButton(TradeFrameCloseButton, TradeFrame.backdrop)
 

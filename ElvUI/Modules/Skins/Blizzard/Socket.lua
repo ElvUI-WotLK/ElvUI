@@ -14,11 +14,11 @@ local function LoadSkin()
 	ItemSocketingFrame:StripTextures()
 	ItemSocketingFrame:CreateBackdrop("Transparent")
 	ItemSocketingFrame.backdrop:Point("TOPLEFT", 11, -12)
-	ItemSocketingFrame.backdrop:Point("BOTTOMRIGHT", -4, 27)
+	ItemSocketingFrame.backdrop:Point("BOTTOMRIGHT", -2, 31)
 
 	ItemSocketingFramePortrait:Kill()
 
-	S:HandleCloseButton(ItemSocketingCloseButton)
+	S:HandleCloseButton(ItemSocketingCloseButton, ItemSocketingFrame.backdrop)
 
 	ItemSocketingScrollFrame:StripTextures()
 	ItemSocketingScrollFrame:CreateBackdrop("Transparent")
@@ -50,6 +50,7 @@ local function LoadSkin()
 		end
 	end)
 
+	ItemSocketingSocketButton:Point("BOTTOMRIGHT", -6, 35)
 	S:HandleButton(ItemSocketingSocketButton)
 end
 

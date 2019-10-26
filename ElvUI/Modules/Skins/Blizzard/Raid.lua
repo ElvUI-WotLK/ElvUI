@@ -25,6 +25,8 @@ local function LoadSkin()
 		object:StripTextures()
 	end
 
+	RaidFrameRaidBrowserButton:Point("TOPLEFT", RaidFrame, 45, -33)
+
 	S:HandleButton(RaidFrameRaidBrowserButton)
 	S:HandleButton(RaidFrameReadyCheckButton)
 	S:HandleButton(RaidFrameRaidInfoButton)
@@ -56,7 +58,7 @@ local function LoadSkin()
 
 			button:ClearAllPoints()
 			if index == 1 then
-				button:Point("TOPLEFT", RaidFrame, "TOPRIGHT", -34, -37)
+				button:Point("TOPLEFT", RaidFrame, "TOPRIGHT", -33, -37)
 			elseif index == 11 then
 				button:Point("TOP", prevButton, "BOTTOM", 0, -20)
 			else
@@ -78,7 +80,7 @@ local function LoadSkin()
 			else
 				coords = CLASS_ICON_TCOORDS[CLASS_SORT_ORDER[index]]
 				icon:SetTexture("Interface\\WorldStateFrame\\Icons-Classes")
-				icon:SetTexCoord(coords[1] + 0.015, coords[2] - 0.02, coords[3] + 0.018, coords[4] - 0.02)
+				icon:SetTexCoord(coords[1] + 0.02, coords[2] - 0.02, coords[3] + 0.02, coords[4] - 0.02)
 			end
 
 			count:FontTemplate(nil, 12, "OUTLINE")

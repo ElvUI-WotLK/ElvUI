@@ -125,15 +125,15 @@ local function LoadSkin()
 
 	LFDQueueFrame:StripTextures(true)
 	LFDQueueFrame:CreateBackdrop("Transparent")
-	LFDQueueFrame.backdrop:Point("TOPLEFT", 10, -11)
-	LFDQueueFrame.backdrop:Point("BOTTOMRIGHT", -1, 0)
+	LFDQueueFrame.backdrop:Point("TOPLEFT", 11, -12)
+	LFDQueueFrame.backdrop:Point("BOTTOMRIGHT", -3, 4)
 
 	LFDParentFramePortrait:Kill()
 
 	for i = 1, LFDParentFrame:GetNumChildren() do
 		local child = select(i, LFDParentFrame:GetChildren())
 		if child.GetPushedTexture and child:GetPushedTexture() and not child:GetName() then
-			S:HandleCloseButton(child)
+			S:HandleCloseButton(child, LFDQueueFrame.backdrop)
 		end
 	end
 

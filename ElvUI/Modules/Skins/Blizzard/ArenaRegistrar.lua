@@ -10,18 +10,19 @@ local function LoadSkin()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.arenaregistrar then return end
 
 	ArenaRegistrarFrame:CreateBackdrop("Transparent")
-	ArenaRegistrarFrame.backdrop:Point("TOPLEFT", 14, -18)
-	ArenaRegistrarFrame.backdrop:Point("BOTTOMRIGHT", -30, 67)
+	ArenaRegistrarFrame.backdrop:Point("TOPLEFT", 11, -12)
+	ArenaRegistrarFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
 	ArenaRegistrarFrame:StripTextures(true)
 
-	S:HandleCloseButton(ArenaRegistrarFrameCloseButton)
+	S:HandleCloseButton(ArenaRegistrarFrameCloseButton, ArenaRegistrarFrame.backdrop)
 
 	ArenaRegistrarGreetingFrame:StripTextures()
 
 	select(1, ArenaRegistrarGreetingFrame:GetRegions()):SetTextColor(1, 1, 1)
 	RegistrationText:SetTextColor(1, 1, 1)
 
+	ArenaRegistrarFrameGoodbyeButton:Point("BOTTOMRIGHT", -39, 81)
 	S:HandleButton(ArenaRegistrarFrameGoodbyeButton)
 
 	local registrarButton
@@ -32,6 +33,8 @@ local function LoadSkin()
 
 	ArenaRegistrarPurchaseText:SetTextColor(1, 1, 1)
 
+	ArenaRegistrarFrameCancelButton:Point("BOTTOMRIGHT", -39, 81)
+	ArenaRegistrarFramePurchaseButton:Point("BOTTOMLEFT", 21, 81)
 	S:HandleButton(ArenaRegistrarFrameCancelButton)
 	S:HandleButton(ArenaRegistrarFramePurchaseButton)
 
@@ -41,8 +44,8 @@ local function LoadSkin()
 	ArenaRegistrarFrameEditBox:Height(18)
 
 	PVPBannerFrame:CreateBackdrop("Transparent")
-	PVPBannerFrame.backdrop:Point("TOPLEFT", 10, -12)
-	PVPBannerFrame.backdrop:Point("BOTTOMRIGHT", -33, 73)
+	PVPBannerFrame.backdrop:Point("TOPLEFT", 11, -12)
+	PVPBannerFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
 	PVPBannerFrame:StripTextures()
 
@@ -69,8 +72,9 @@ local function LoadSkin()
 
 	S:HandleButton(PVPBannerFrameAcceptButton)
 	S:HandleButton(PVPBannerFrameCancelButton)
+	S:HandleButton((select(4, PVPBannerFrame:GetChildren())))
 
-	S:HandleCloseButton(PVPBannerFrameCloseButton)
+	S:HandleCloseButton(PVPBannerFrameCloseButton, PVPBannerFrame.backdrop)
 end
 
 S:AddCallback("Skin_ArenaRegistrar", LoadSkin)

@@ -14,8 +14,8 @@ local function LoadSkin()
 
 	SpellBookFrame:StripTextures(true)
 	SpellBookFrame:CreateBackdrop("Transparent")
-	SpellBookFrame.backdrop:Point("TOPLEFT", 10, -12)
-	SpellBookFrame.backdrop:Point("BOTTOMRIGHT", -31, 75)
+	SpellBookFrame.backdrop:Point("TOPLEFT", 11, -12)
+	SpellBookFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
 --[[
 	SpellBookFrame:EnableMouseWheel(true)
@@ -47,14 +47,14 @@ local function LoadSkin()
 
 		S:HandleTab(tab)
 
-		tab.backdrop:Point("TOPLEFT", 14, E.PixelMode and -17 or -19)
+		tab.backdrop:Point("TOPLEFT", 14, E.PixelMode and -16 or -18)
 		tab.backdrop:Point("BOTTOMRIGHT", -14, 19)
 	end
 
 	S:HandleNextPrevButton(SpellBookPrevPageButton, nil, nil, true)
 	S:HandleNextPrevButton(SpellBookNextPageButton, nil, nil, true)
 
-	S:HandleCloseButton(SpellBookCloseButton)
+	S:HandleCloseButton(SpellBookCloseButton, SpellBookFrame.backdrop)
 
 	S:HandleCheckBox(ShowAllSpellRanksCheckBox)
 

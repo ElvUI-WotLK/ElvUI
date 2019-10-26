@@ -11,8 +11,8 @@ local function LoadSkin()
 
 	BattlefieldFrame:StripTextures(true)
 	BattlefieldFrame:CreateBackdrop("Transparent")
-	BattlefieldFrame.backdrop:Point("TOPLEFT", 10, -12)
-	BattlefieldFrame.backdrop:Point("BOTTOMRIGHT", -32, 73)
+	BattlefieldFrame.backdrop:Point("TOPLEFT", 11, -12)
+	BattlefieldFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
 	BattlefieldFrameInfoScrollFrameChildFrameDescription:SetTextColor(1, 1, 1)
 	BattlefieldFrameInfoScrollFrameChildFrameRewardsInfoDescription:SetTextColor(1, 1, 1)
@@ -22,7 +22,7 @@ local function LoadSkin()
 	BattlefieldFrameGroupJoinButton:Point("RIGHT", BattlefieldFrameJoinButton, "LEFT", -2, 0)
 	S:HandleButton(BattlefieldFrameGroupJoinButton)
 
-	S:HandleCloseButton(BattlefieldFrameCloseButton)
+	S:HandleCloseButton(BattlefieldFrameCloseButton, BattlefieldFrame.backdrop)
 
 	for i = 1, 5 do
 		S:HandleButtonHighlight(_G["BattlegroundType"..i])
@@ -61,10 +61,10 @@ local function LoadSkin()
 	S:HandleButton(PVPBattlegroundFrameGroupJoinButton)
 
 	PVPParentFrame:CreateBackdrop("Transparent")
-	PVPParentFrame.backdrop:Point("TOPLEFT", 12, -13)
-	PVPParentFrame.backdrop:Point("BOTTOMRIGHT", -30, 76)
+	PVPParentFrame.backdrop:Point("TOPLEFT", 11, -12)
+	PVPParentFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
-	S:HandleCloseButton(PVPParentFrameCloseButton)
+	S:HandleCloseButton(PVPParentFrameCloseButton, PVPParentFrame.backdrop)
 
 	PVPFrame:StripTextures(true)
 

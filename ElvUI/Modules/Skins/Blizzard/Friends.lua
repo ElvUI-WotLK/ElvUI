@@ -17,10 +17,10 @@ local function LoadSkin()
 	-- Friends Frame
 	FriendsFrame:StripTextures(true)
 	FriendsFrame:CreateBackdrop("Transparent")
-	FriendsFrame.backdrop:Point("TOPLEFT", 10, -12)
-	FriendsFrame.backdrop:Point("BOTTOMRIGHT", -33, 76)
+	FriendsFrame.backdrop:Point("TOPLEFT", 11, -12)
+	FriendsFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
-	S:HandleCloseButton(FriendsFrameCloseButton)
+	S:HandleCloseButton(FriendsFrameCloseButton, FriendsFrame.backdrop)
 
 	S:HandleDropDownBox(FriendsFrameStatusDropDown, 70)
 	FriendsFrameStatusDropDown:Point("TOPLEFT", FriendsListFrame, "TOPLEFT", 13, -44)
@@ -50,12 +50,27 @@ local function LoadSkin()
 		_G["FriendsFrameFriendsScrollFrameButton"..i.."SummonButton"]:StyleButton()
 	end
 
+	FriendsFrameFriendsScrollFrame:Point("TOPLEFT", FriendsFrame, 19, -98)
 	S:HandleScrollBar(FriendsFrameFriendsScrollFrameScrollBar)
+
+	FriendsFrameAddFriendButton:Point("BOTTOMLEFT", FriendsFrame, 16, 82)
+	FriendsFrameAddFriendButton:Height(22)
+
+	FriendsFrameSendMessageButton:Point("BOTTOMRIGHT", FriendsFrame, -40, 82)
+	FriendsFrameSendMessageButton:Height(22)
 
 	S:HandleButton(FriendsFrameAddFriendButton, true)
 	S:HandleButton(FriendsFrameSendMessageButton, true)
 
 	-- Ignore List Frame
+	S:HandleScrollBar(FriendsFrameIgnoreScrollFrameScrollBar)
+
+	FriendsFrameIgnorePlayerButton:Point("BOTTOMLEFT", FriendsFrame, 17, 82)
+	FriendsFrameIgnorePlayerButton:Height(22)
+
+	FriendsFrameUnsquelchButton:Point("BOTTOMRIGHT", FriendsFrame, -40, 82)
+	FriendsFrameUnsquelchButton:Height(22)
+
 	S:HandleButton(FriendsFrameIgnorePlayerButton, true)
 	S:HandleButton(FriendsFrameUnsquelchButton, true)
 

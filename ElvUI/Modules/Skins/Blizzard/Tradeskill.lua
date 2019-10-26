@@ -19,19 +19,19 @@ local function LoadSkin()
 
 	TRADE_SKILLS_DISPLAYED = 25
 
-	local TradeSkillFrame = _G.TradeSkillFrame
+	local TradeSkillFrame = TradeSkillFrame
 	TradeSkillFrame:StripTextures(true)
 	TradeSkillFrame:SetAttribute("UIPanelLayout-width", E:Scale(710))
 	TradeSkillFrame:SetAttribute("UIPanelLayout-height", E:Scale(508))
 	TradeSkillFrame:Size(710, 508)
 
 	TradeSkillFrame:CreateBackdrop("Transparent")
-	TradeSkillFrame.backdrop:Point("TOPLEFT", 10, -12)
+	TradeSkillFrame.backdrop:Point("TOPLEFT", 11, -12)
 	TradeSkillFrame.backdrop:Point("BOTTOMRIGHT", -34, 0)
 
 	TradeSkillFrame.bg1 = CreateFrame("Frame", nil, TradeSkillFrame)
 	TradeSkillFrame.bg1:SetTemplate("Transparent")
-	TradeSkillFrame.bg1:Point("TOPLEFT", 14, -92)
+	TradeSkillFrame.bg1:Point("TOPLEFT", 15, -92)
 	TradeSkillFrame.bg1:Point("BOTTOMRIGHT", -367, 4)
 	TradeSkillFrame.bg1:SetFrameLevel(TradeSkillFrame.bg1:GetFrameLevel() - 1)
 
@@ -209,7 +209,7 @@ local function LoadSkin()
 	S:HandleEditBox(TradeSkillInputBox)
 	S:HandleNextPrevButton(TradeSkillIncrementButton)
 
-	S:HandleCloseButton(TradeSkillFrameCloseButton)
+	S:HandleCloseButton(TradeSkillFrameCloseButton, TradeSkillFrame.backdrop)
 
 	hooksecurefunc("TradeSkillFrame_SetSelection", function(id)
 		if TradeSkillSkillIcon:GetNormalTexture() then

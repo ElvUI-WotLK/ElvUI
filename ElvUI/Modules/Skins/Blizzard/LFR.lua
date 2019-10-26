@@ -12,8 +12,8 @@ local function LoadSkin()
 
 	LFRParentFrame:StripTextures()
 	LFRParentFrame:CreateBackdrop("Transparent")
-	LFRParentFrame.backdrop:Point("TOPLEFT", 10, -11)
-	LFRParentFrame.backdrop:Point("BOTTOMRIGHT", -1, 5)
+	LFRParentFrame.backdrop:Point("TOPLEFT", 11, -12)
+	LFRParentFrame.backdrop:Point("BOTTOMRIGHT", -3, 4)
 
 	LFRQueueFrame:StripTextures()
 	LFRBrowseFrame:StripTextures()
@@ -33,7 +33,7 @@ local function LoadSkin()
 	for i = 1, LFRParentFrame:GetNumChildren() do
 		local child = select(i, LFRParentFrame:GetChildren())
 		if child.GetPushedTexture and child:GetPushedTexture() and not child:GetName() then
-			S:HandleCloseButton(child)
+			S:HandleCloseButton(child, LFRParentFrame.backdrop)
 		end
 	end
 

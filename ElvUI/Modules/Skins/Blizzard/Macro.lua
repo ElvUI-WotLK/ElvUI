@@ -12,8 +12,8 @@ local function LoadSkin()
 	local MacroFrame = _G["MacroFrame"]
 	MacroFrame:StripTextures()
 	MacroFrame:CreateBackdrop("Transparent")
-	MacroFrame.backdrop:Point("TOPLEFT", 14, -11)
-	MacroFrame.backdrop:Point("BOTTOMRIGHT", -36, 65)
+	MacroFrame.backdrop:Point("TOPLEFT", 11, -12)
+	MacroFrame.backdrop:Point("BOTTOMRIGHT", -32, 61)
 
 	for i = 1, 2 do
 		local tab = _G["MacroFrameTab"..i]
@@ -38,7 +38,7 @@ local function LoadSkin()
 	MacroDeleteButton:Point("BOTTOMLEFT", 22, 69)
 
 	S:HandleButton(MacroExitButton)
-	MacroExitButton:Point("CENTER", MacroFrame, "TOPLEFT", 299, -432)
+	MacroExitButton:Point("CENTER", MacroFrame, "TOPLEFT", 300, -432)
 
 	S:HandleButton(MacroNewButton)
 	MacroNewButton:Point("CENTER", MacroFrame, "TOPLEFT", 216, -432)
@@ -61,17 +61,17 @@ local function LoadSkin()
 
 	S:HandleScrollBar(MacroButtonScrollFrameScrollBar)
 	MacroButtonScrollFrameScrollBar:ClearAllPoints()
-	MacroButtonScrollFrameScrollBar:Point("TOPRIGHT", MacroButtonScrollFrame, "TOPRIGHT", 21, -17)
+	MacroButtonScrollFrameScrollBar:Point("TOPRIGHT", MacroButtonScrollFrame, "TOPRIGHT", 22, -17)
 	MacroButtonScrollFrameScrollBar:Point("BOTTOMRIGHT", MacroButtonScrollFrame, "BOTTOMRIGHT", 0, 17)
 
 	S:HandleScrollBar(MacroFrameScrollFrameScrollBar)
 	MacroFrameScrollFrameScrollBar:ClearAllPoints()
-	MacroFrameScrollFrameScrollBar:Point("TOPRIGHT", MacroFrameScrollFrame, "TOPRIGHT", 25, -16)
+	MacroFrameScrollFrameScrollBar:Point("TOPRIGHT", MacroFrameScrollFrame, "TOPRIGHT", 26, -16)
 	MacroFrameScrollFrameScrollBar:Point("BOTTOMRIGHT", MacroFrameScrollFrame, "BOTTOMRIGHT", 0, 17)
 
 	S:HandleScrollBar(MacroPopupScrollFrameScrollBar)
 	MacroPopupScrollFrameScrollBar:ClearAllPoints()
-	MacroPopupScrollFrameScrollBar:Point("TOPRIGHT", MacroPopupScrollFrame, "TOPRIGHT", 23, -16)
+	MacroPopupScrollFrameScrollBar:Point("TOPRIGHT", MacroPopupScrollFrame, "TOPRIGHT", 24, -16)
 	MacroPopupScrollFrameScrollBar:Point("BOTTOMRIGHT", MacroPopupScrollFrame, "BOTTOMRIGHT", 0, 22)
 
 	MacroFrameSelectedMacroButton:StripTextures()
