@@ -3,7 +3,8 @@ local M = E:GetModule("Misc")
 local Bags = E:GetModule("Bags")
 
 --Lua functions
-local format, gsub = string.format, string.gsub
+local ipairs = ipairs
+local format = string.format
 --WoW API / Variables
 local AcceptGroup = AcceptGroup
 local CanGuildBankRepair = CanGuildBankRepair
@@ -27,12 +28,12 @@ local IsInInstance = IsInInstance
 local IsShiftKeyDown = IsShiftKeyDown
 local LeaveParty = LeaveParty
 local RaidNotice_AddMessage = RaidNotice_AddMessage
-local ShowFriends = ShowFriends
-local StaticPopup_Hide = StaticPopup_Hide
 local RepairAllItems = RepairAllItems
 local SendChatMessage = SendChatMessage
+local ShowFriends = ShowFriends
+local ShowRepairCursor = ShowRepairCursor
+local StaticPopup_Hide = StaticPopup_Hide
 local UninviteUnit = UninviteUnit
-local UnitInRaid = UnitInRaid
 local UnitGUID = UnitGUID
 local UnitName = UnitName
 local ERR_NOT_ENOUGH_MONEY = ERR_NOT_ENOUGH_MONEY
@@ -167,8 +168,10 @@ end
 function M:DisbandRaidGroup()
 	if InCombatLockdown() then return end -- Prevent user error in combat
 
-	if UnitInRaid("player") then
-		for i = 1, GetNumRaidMembers() do
+	local numRaid = GetNumRaidMembers()
+
+	if numRaid > 0 then
+		for i = 1, numRaid do
 			local name, _, _, _, _, _, _, online = GetRaidRosterInfo(i)
 			if online and name ~= E.myname then
 				UninviteUnit(name)
@@ -219,48 +222,46 @@ function M:PVPMessageEnhancement(_, msg)
 	end
 end
 
-local hideStatic = false
 function M:AutoInvite(event, leaderName)
 	if not E.db.general.autoAcceptInvite then return end
 
-	if event == "PARTY_INVITE_REQUEST" then
-		if MiniMapLFGFrame:IsShown() then return end -- Prevent losing que inside LFD if someone invites you to group
-		if GetNumPartyMembers() > 0 or GetNumRaidMembers() > 0 then return end
-		hideStatic = true
+	if MiniMapLFGFrame:IsShown() then return end
+	if GetNumPartyMembers() > 0 or GetNumRaidMembers() > 0 then return end
 
-		-- Update Guild and Friendlist
-		local numFriends = GetNumFriends()
-		if numFriends > 0 then ShowFriends() end
-		if IsInGuild() then GuildRoster() end
-		local inGroup = false
+	local numFriends = GetNumFriends()
 
-		for friendIndex = 1, numFriends do
-			local friendName = gsub(GetFriendInfo(friendIndex), "-.*", "")
-			if friendName == leaderName then
+	if numFriends > 0 then
+		ShowFriends()
+
+		for i = 1, numFriends do
+			if GetFriendInfo(i) == leaderName then
 				AcceptGroup()
-				inGroup = true
-				break
+				StaticPopup_Hide("PARTY_INVITE")
+				return
 			end
 		end
+	end
 
-		if not inGroup then
-			for guildIndex = 1, GetNumGuildMembers(true) do
-				local guildMemberName = gsub(GetGuildRosterInfo(guildIndex), "-.*", "")
-				if guildMemberName == leaderName then
-					AcceptGroup()
-					break
-				end
-			end
+	if not IsInGuild() then return end
+
+	GuildRoster()
+
+	for i = 1, GetNumGuildMembers() do
+		if GetGuildRosterInfo(i) == leaderName then
+			AcceptGroup()
+			StaticPopup_Hide("PARTY_INVITE")
+			return
 		end
-	elseif event == "PARTY_MEMBERS_CHANGED" and hideStatic == true then
-		StaticPopup_Hide("PARTY_INVITE")
-		hideStatic = false
 	end
 end
 
-function M:ForceCVars()
-	if not GetCVarBool("lockActionBars") and E.private.actionbar.enable then
+function M:ForceCVars(event)
+	if not GetCVarBool("lockActionBars") then
 		SetCVar("lockActionBars", 1)
+	end
+
+	if event == "PLAYER_ENTERING_WORLD" then
+		self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 	end
 end
 
@@ -278,10 +279,12 @@ function M:Initialize()
 	self:RegisterEvent("CHAT_MSG_BG_SYSTEM_ALLIANCE", "PVPMessageEnhancement")
 	self:RegisterEvent("CHAT_MSG_BG_SYSTEM_NEUTRAL", "PVPMessageEnhancement")
 	self:RegisterEvent("PARTY_INVITE_REQUEST", "AutoInvite")
-	self:RegisterEvent("PARTY_MEMBERS_CHANGED", "AutoInvite")
-	self:RegisterEvent("CVAR_UPDATE", "ForceCVars")
-	self:RegisterEvent("PLAYER_ENTERING_WORLD", "ForceCVars")
 	self:RegisterEvent("MERCHANT_SHOW")
+
+	if E.private.actionbar.enable then
+		self:RegisterEvent("CVAR_UPDATE", "ForceCVars")
+		self:RegisterEvent("PLAYER_ENTERING_WORLD", "ForceCVars")
+	end
 
 	self.Initialized = true
 end
