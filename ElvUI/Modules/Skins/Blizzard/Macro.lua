@@ -15,6 +15,8 @@ local function LoadSkin()
 	MacroFrame.backdrop:Point("TOPLEFT", 11, -12)
 	MacroFrame.backdrop:Point("BOTTOMRIGHT", -32, 61)
 
+	S:SetUIPanelWindowInfo(MacroFrame, "width")
+
 	for i = 1, 2 do
 		local tab = _G["MacroFrameTab"..i]
 		tab:StripTextures()

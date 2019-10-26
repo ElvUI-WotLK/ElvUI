@@ -18,6 +18,8 @@ local function LoadSkin()
 	TradeFrame.backdrop:Point("TOPLEFT", 11, -12)
 	TradeFrame.backdrop:Point("BOTTOMRIGHT", -21, 49)
 
+	S:SetUIPanelWindowInfo(TradeFrame, "width")
+
 	S:HandleCloseButton(TradeFrameCloseButton, TradeFrame.backdrop)
 
 	S:HandleButton(TradeFrameTradeButton)

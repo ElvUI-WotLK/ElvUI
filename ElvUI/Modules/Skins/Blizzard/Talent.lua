@@ -14,6 +14,30 @@ local function LoadSkin()
 	PlayerTalentFrame.backdrop:Point("TOPLEFT", 11, -12)
 	PlayerTalentFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
+	do
+		local offset
+
+		local talentGroups = GetNumTalentGroups(false, false)
+		local petTalentGroups = GetNumTalentGroups(false, true)
+
+		if talentGroups + petTalentGroups > 1 then
+			S:SetUIPanelWindowInfo(PlayerTalentFrame, "width", nil, 32)
+			offset = true
+		else
+			S:SetUIPanelWindowInfo(PlayerTalentFrame, "width")
+		end
+
+		hooksecurefunc("PlayerTalentFrame_UpdateSpecs", function(_, numTalentGroups, _, numPetTalentGroups)
+			if offset and numTalentGroups + numPetTalentGroups <= 1 then
+				S:SetUIPanelWindowInfo(PlayerTalentFrame, "width")
+				offset = nil
+			elseif not offset and numTalentGroups + numPetTalentGroups > 1 then
+				S:SetUIPanelWindowInfo(PlayerTalentFrame, "width", nil, 32)
+				offset = true
+			end
+		end)
+	end
+
 	S:HandleCloseButton(PlayerTalentFrameCloseButton, PlayerTalentFrame.backdrop)
 
 	PlayerTalentFrameStatusFrame:StripTextures()

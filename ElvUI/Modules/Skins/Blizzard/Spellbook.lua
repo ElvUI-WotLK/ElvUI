@@ -17,6 +17,8 @@ local function LoadSkin()
 	SpellBookFrame.backdrop:Point("TOPLEFT", 11, -12)
 	SpellBookFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
+	S:SetUIPanelWindowInfo(SpellBookFrame, "width", nil, 32)
+
 --[[
 	SpellBookFrame:EnableMouseWheel(true)
 	SpellBookFrame:SetScript("OnMouseWheel", function(_, value)

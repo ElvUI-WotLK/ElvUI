@@ -11,13 +11,13 @@ local hooksecurefunc = hooksecurefunc
 local function LoadSkin()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.trainer then return end
 
-	ClassTrainerFrame:SetAttribute("UIPanelLayout-width", E:Scale(710))
-	ClassTrainerFrame:SetAttribute("UIPanelLayout-height", E:Scale(470))
 	ClassTrainerFrame:Size(710, 470)
 	ClassTrainerFrame:StripTextures(true)
 	ClassTrainerFrame:CreateBackdrop("Transparent")
 	ClassTrainerFrame.backdrop:Point("TOPLEFT", 11, -12)
 	ClassTrainerFrame.backdrop:Point("BOTTOMRIGHT", -31, 70)
+
+	S:SetUIPanelWindowInfo(ClassTrainerFrame, "width")
 
 	ClassTrainerListScrollFrame:StripTextures()
 	ClassTrainerListScrollFrame:Size(300)

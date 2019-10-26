@@ -13,6 +13,8 @@ local function LoadSkin()
 	DressUpFrame.backdrop:Point("TOPLEFT", 11, -12)
 	DressUpFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
+	S:SetUIPanelWindowInfo(DressUpFrame, "width")
+
 	DressUpFramePortrait:Kill()
 
 	SetDressUpBackground()

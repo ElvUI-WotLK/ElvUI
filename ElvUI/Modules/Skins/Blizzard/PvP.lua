@@ -14,6 +14,8 @@ local function LoadSkin()
 	BattlefieldFrame.backdrop:Point("TOPLEFT", 11, -12)
 	BattlefieldFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
+	S:SetUIPanelWindowInfo(BattlefieldFrame, "width")
+
 	BattlefieldFrameInfoScrollFrameChildFrameDescription:SetTextColor(1, 1, 1)
 	BattlefieldFrameInfoScrollFrameChildFrameRewardsInfoDescription:SetTextColor(1, 1, 1)
 
@@ -63,6 +65,8 @@ local function LoadSkin()
 	PVPParentFrame:CreateBackdrop("Transparent")
 	PVPParentFrame.backdrop:Point("TOPLEFT", 11, -12)
 	PVPParentFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
+
+	S:SetUIPanelWindowInfo(PVPParentFrame, "width")
 
 	S:HandleCloseButton(PVPParentFrameCloseButton, PVPParentFrame.backdrop)
 

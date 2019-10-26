@@ -13,6 +13,8 @@ local function LoadSkin()
 	TaxiFrame.backdrop:Point("TOPLEFT", 11, -12)
 	TaxiFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
+	S:SetUIPanelWindowInfo(TaxiFrame, "width")
+
 	TaxiPortrait:Kill()
 
 	S:HandleCloseButton(TaxiCloseButton, TaxiFrame.backdrop)

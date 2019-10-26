@@ -13,6 +13,8 @@ local function LoadSkin()
 	ArenaFrame.backdrop:Point("TOPLEFT", 11, -12)
 	ArenaFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
+	S:SetUIPanelWindowInfo(ArenaFrame, "width")
+
 	ArenaFrameNameHeader:SetPoint("TOPLEFT", 28, -55)
 	ArenaFrameZoneDescription:SetTextColor(1, 1, 1)
 

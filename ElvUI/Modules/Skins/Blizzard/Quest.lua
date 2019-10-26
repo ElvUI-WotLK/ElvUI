@@ -29,6 +29,8 @@ local function LoadSkin()
 	QuestLogFrame.backdrop:Point("TOPLEFT", 11, -12)
 	QuestLogFrame.backdrop:Point("BOTTOMRIGHT", -1, 8)
 
+	S:SetUIPanelWindowInfo(QuestLogFrame, "width")
+
 	QuestLogCount:StripTextures()
 	QuestLogCount:SetTemplate("Transparent")
 
@@ -220,6 +222,8 @@ local function LoadSkin()
 	QuestLogDetailFrame.backdrop:Point("TOPLEFT", 11, -12)
 	QuestLogDetailFrame.backdrop:Point("BOTTOMRIGHT", 2, 1)
 
+	S:SetUIPanelWindowInfo(QuestLogDetailFrame, "width")
+
 	QuestLogDetailScrollFrame:StripTextures()
 
 	QuestLogFrame:HookScript("OnShow", function()
@@ -277,6 +281,8 @@ local function LoadSkin()
 	QuestFrame:CreateBackdrop("Transparent")
 	QuestFrame.backdrop:Point("TOPLEFT", 11, -12)
 	QuestFrame.backdrop:Point("BOTTOMRIGHT", -32, 0)
+
+	S:SetUIPanelWindowInfo(QuestFrame, "width")
 
 	QuestFrameNpcNameText:ClearAllPoints()
 	QuestFrameNpcNameText:Point("TOP", -6, -17)

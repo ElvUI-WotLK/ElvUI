@@ -16,6 +16,11 @@ local function LoadSkin()
 	CalendarFrame.backdrop:Point("TOPLEFT", 3, -7)
 	CalendarFrame.backdrop:Point("BOTTOMRIGHT", -2, -4)
 
+	S:SecureHook("Calendar_Show", function()
+		S:SetUIPanelWindowInfo(CalendarFrame, "width", nil, -7)
+		S:Unhook("Calendar_Show")
+	end)
+
 --	CalendarFrameModalOverlay:SetAllPoints(CalendarFrame.backdrop)
 --	CalendarFrameModalOverlay:SetFrameStrata("DIALOG")
 

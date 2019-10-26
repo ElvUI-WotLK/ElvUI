@@ -17,6 +17,8 @@ local function LoadSkin()
 	PetStableFrame.backdrop:Point("TOPLEFT", 11, -12)
 	PetStableFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
+	S:SetUIPanelWindowInfo(PetStableFrame, "width")
+
 	S:HandleButton(PetStablePurchaseButton)
 	S:HandleCloseButton(PetStableFrameCloseButton, PetStableFrame.backdrop)
 	S:HandleRotateButton(PetStableModelRotateRightButton)

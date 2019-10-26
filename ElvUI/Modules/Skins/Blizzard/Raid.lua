@@ -8,6 +8,15 @@ local unpack = unpack
 --WoW API / Variables
 
 local function LoadSkin()
+	if E.private.skins.blizzard.enable and E.private.skins.blizzard.friends then
+		RaidClassButton1:HookScript("OnShow", function()
+			S:SetUIPanelWindowInfo(FriendsFrame, "width", nil, 21)
+		end)
+		RaidClassButton1:HookScript("OnHide", function()
+			S:SetUIPanelWindowInfo(FriendsFrame, "width")
+		end)
+	end
+
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.raid then return end
 
 	local StripAllTextures = {

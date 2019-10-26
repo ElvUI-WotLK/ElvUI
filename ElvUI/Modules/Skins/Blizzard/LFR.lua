@@ -15,6 +15,8 @@ local function LoadSkin()
 	LFRParentFrame.backdrop:Point("TOPLEFT", 11, -12)
 	LFRParentFrame.backdrop:Point("BOTTOMRIGHT", -3, 4)
 
+	S:SetUIPanelWindowInfo(LFRParentFrame, "width", 341)
+
 	LFRQueueFrame:StripTextures()
 	LFRBrowseFrame:StripTextures()
 

@@ -19,6 +19,8 @@ local function LoadSkin()
 	MerchantFrame.backdrop:Point("TOPLEFT", 11, -12)
 	MerchantFrame.backdrop:Point("BOTTOMRIGHT", -32, 60)
 
+	S:SetUIPanelWindowInfo(MerchantFrame, "width")
+
 	MerchantNameText:ClearAllPoints()
 	MerchantNameText:Point("TOP", MerchantFrame, "TOP", -6, -22)
 

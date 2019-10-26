@@ -17,6 +17,8 @@ local function LoadSkin()
 	InspectFrame.backdrop:Point("TOPLEFT", 11, -12)
 	InspectFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
+	S:SetUIPanelWindowInfo(InspectFrame, "width")
+
 	S:HandleCloseButton(InspectFrameCloseButton, InspectFrame.backdrop)
 
 	for i = 1, 3 do

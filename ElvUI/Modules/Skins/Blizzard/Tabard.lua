@@ -14,7 +14,10 @@ local function LoadSkin()
 	TabardFrame.backdrop:Point("TOPLEFT", 11, -12)
 	TabardFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
+	S:SetUIPanelWindowInfo(TabardFrame, "width")
+
 	TabardModel:CreateBackdrop("Default")
+
 	S:HandleButton(TabardFrameCancelButton)
 	S:HandleButton(TabardFrameAcceptButton)
 	S:HandleCloseButton(TabardFrameCloseButton, TabardFrame.backdrop)

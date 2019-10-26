@@ -1,5 +1,6 @@
 local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local M = E:GetModule("WorldMap")
+local S = E:GetModule("Skins")
 
 --Lua functions
 local find = string.find
@@ -155,6 +156,8 @@ function M:ToggleMapFramerate()
 		WorldMapFrame:SetScale(1)
 		WorldMapFrame:EnableKeyboard(false)
 		WorldMapFrame:EnableMouse(false)
+	else
+		S:SetUIPanelWindowInfo(WorldMapFrame, "width", 591)
 	end
 end
 
@@ -194,7 +197,9 @@ function M:Initialize()
 		WorldMapFrame:SetParent(UIParent)
 		WorldMapFrame.SetParent = E.noop
 
-		if not GetCVarBool("miniWorldMap") then
+		if GetCVarBool("miniWorldMap") then
+			S:SetUIPanelWindowInfo(WorldMapFrame, "width", 591)
+		else
 			ShowUIPanel(WorldMapFrame)
 			self:ToggleMapFramerate()
 			HideUIPanel(WorldMapFrame)

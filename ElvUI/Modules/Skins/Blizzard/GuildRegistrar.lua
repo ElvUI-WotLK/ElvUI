@@ -12,6 +12,8 @@ local function LoadSkin()
 	GuildRegistrarFrame.backdrop:Point("TOPLEFT", 11, -12)
 	GuildRegistrarFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
+	S:SetUIPanelWindowInfo(GuildRegistrarFrame, "width")
+
 	GuildRegistrarGreetingFrame:StripTextures()
 
 	GuildRegistrarFrameGoodbyeButton:Point("BOTTOMRIGHT", -39, 81)

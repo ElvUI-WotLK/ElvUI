@@ -27,6 +27,8 @@ local function LoadSkin()
 	CharacterFrame.backdrop:Point("TOPLEFT", 11, -12)
 	CharacterFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
+	S:SetUIPanelWindowInfo(CharacterFrame, "width")
+
 	S:HandleCloseButton(CharacterFrameCloseButton, CharacterFrame.backdrop)
 	CharacterFrameCloseButton:Point("CENTER", CharacterFrame, "TOPRIGHT", -45, -25)
 

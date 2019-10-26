@@ -128,6 +128,8 @@ local function LoadSkin()
 	LFDQueueFrame.backdrop:Point("TOPLEFT", 11, -12)
 	LFDQueueFrame.backdrop:Point("BOTTOMRIGHT", -3, 4)
 
+	S:SetUIPanelWindowInfo(LFDParentFrame, "width", 341)
+
 	LFDParentFramePortrait:Kill()
 
 	for i = 1, LFDParentFrame:GetNumChildren() do

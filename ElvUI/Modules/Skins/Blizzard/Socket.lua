@@ -16,6 +16,8 @@ local function LoadSkin()
 	ItemSocketingFrame.backdrop:Point("TOPLEFT", 11, -12)
 	ItemSocketingFrame.backdrop:Point("BOTTOMRIGHT", -2, 31)
 
+	S:SetUIPanelWindowInfo(ItemSocketingFrame, "width")
+
 	ItemSocketingFramePortrait:Kill()
 
 	S:HandleCloseButton(ItemSocketingCloseButton, ItemSocketingFrame.backdrop)

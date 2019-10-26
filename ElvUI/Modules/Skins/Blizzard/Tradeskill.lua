@@ -21,13 +21,13 @@ local function LoadSkin()
 
 	local TradeSkillFrame = TradeSkillFrame
 	TradeSkillFrame:StripTextures(true)
-	TradeSkillFrame:SetAttribute("UIPanelLayout-width", E:Scale(710))
-	TradeSkillFrame:SetAttribute("UIPanelLayout-height", E:Scale(508))
 	TradeSkillFrame:Size(710, 508)
 
 	TradeSkillFrame:CreateBackdrop("Transparent")
 	TradeSkillFrame.backdrop:Point("TOPLEFT", 11, -12)
 	TradeSkillFrame.backdrop:Point("BOTTOMRIGHT", -34, 0)
+
+	S:SetUIPanelWindowInfo(TradeSkillFrame, "width")
 
 	TradeSkillFrame.bg1 = CreateFrame("Frame", nil, TradeSkillFrame)
 	TradeSkillFrame.bg1:SetTemplate("Transparent")

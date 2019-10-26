@@ -18,6 +18,8 @@ local function LoadSkin()
 	ItemTextFrame.backdrop:Point("TOPLEFT", 11, -12)
 	ItemTextFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
+	S:SetUIPanelWindowInfo(ItemTextFrame, "width")
+
 	ItemTextPageText:SetTextColor(1, 1, 1)
 	ItemTextPageText.SetTextColor = E.noop
 
@@ -30,6 +32,8 @@ local function LoadSkin()
 	GossipFrame:CreateBackdrop("Transparent")
 	GossipFrame.backdrop:Point("TOPLEFT", 11, -12)
 	GossipFrame.backdrop:Point("BOTTOMRIGHT", -32, 0)
+
+	S:SetUIPanelWindowInfo(GossipFrame, "width")
 
 	GossipFrameNpcNameText:ClearAllPoints()
 	GossipFrameNpcNameText:Point("TOP", GossipFrame, "TOP", -6, -17)

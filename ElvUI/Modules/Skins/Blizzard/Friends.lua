@@ -20,6 +20,8 @@ local function LoadSkin()
 	FriendsFrame.backdrop:Point("TOPLEFT", 11, -12)
 	FriendsFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
+	S:SetUIPanelWindowInfo(FriendsFrame, "width")
+
 	S:HandleCloseButton(FriendsFrameCloseButton, FriendsFrame.backdrop)
 
 	S:HandleDropDownBox(FriendsFrameStatusDropDown, 70)

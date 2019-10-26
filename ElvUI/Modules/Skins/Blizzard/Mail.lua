@@ -23,6 +23,9 @@ local function LoadSkin()
 	MailFrame:CreateBackdrop("Transparent")
 	MailFrame.backdrop:Point("TOPLEFT", 11, -12)
 	MailFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
+
+	S:SetUIPanelWindowInfo(MailFrame, "width")
+
 	MailFrame:EnableMouseWheel(true)
 
 	MailFrame:SetScript("OnMouseWheel", function(_, value)

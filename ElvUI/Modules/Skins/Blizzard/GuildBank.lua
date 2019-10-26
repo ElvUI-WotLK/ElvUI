@@ -19,6 +19,8 @@ local function LoadSkin()
 	GuildBankFrame.backdrop:Point("TOPLEFT", 11, -12)
 	GuildBankFrame.backdrop:Point("BOTTOMRIGHT", 0, 8)
 
+	S:SetUIPanelWindowInfo(GuildBankFrame, "width", 645, 32)
+
 	GuildBankFrameTab1:Point("BOTTOMLEFT", GuildBankFrame, 19, -22)
 
 	GuildBankEmblemFrame:StripTextures(true)
