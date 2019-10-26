@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local M = E:GetModule("Misc")
 local Bags = E:GetModule("Bags")
 
@@ -35,49 +35,67 @@ local UninviteUnit = UninviteUnit
 local UnitInRaid = UnitInRaid
 local UnitGUID = UnitGUID
 local UnitName = UnitName
-local UIErrorsFrame = UIErrorsFrame
 local ERR_NOT_ENOUGH_MONEY = ERR_NOT_ENOUGH_MONEY
 local ERR_GUILD_NOT_ENOUGH_MONEY = ERR_GUILD_NOT_ENOUGH_MONEY
 local MAX_PARTY_MEMBERS = MAX_PARTY_MEMBERS
 
-local interruptMsg = INTERRUPTED.." %s's \124cff71d5ff\124Hspell:%d\124h[%s]\124h\124r!"
 
-function M:ErrorFrameToggle(event)
-	if not E.db.general.hideErrorFrame then return end
+do
+	local function EventHandler(_, event)
+		if event == "PLAYER_REGEN_DISABLED" then
+			UIErrorsFrame:UnregisterEvent("UI_ERROR_MESSAGE")
+		else
+			UIErrorsFrame:RegisterEvent("UI_ERROR_MESSAGE")
+		end
+	end
 
-	if event == "PLAYER_REGEN_DISABLED" then
-		UIErrorsFrame:UnregisterEvent("UI_ERROR_MESSAGE")
-	else
-		UIErrorsFrame:RegisterEvent("UI_ERROR_MESSAGE")
+	function M:ToggleErrorHandling()
+		if E.db.general.hideErrorFrame then
+			self:RegisterEvent("PLAYER_REGEN_ENABLED", EventHandler)
+			self:RegisterEvent("PLAYER_REGEN_DISABLED", EventHandler)
+		else
+			self:UnregisterEvent("PLAYER_REGEN_ENABLED", EventHandler)
+			self:UnregisterEvent("PLAYER_REGEN_DISABLED", EventHandler)
+		end
 	end
 end
 
-function M:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, sourceGUID, _, _, _, destName, _, _, _, _, spellID, spellName)
-	if E.db.general.interruptAnnounce == "NONE" then return end
-	if not (event == "SPELL_INTERRUPT" and (sourceGUID == E.myguid or sourceGUID == UnitGUID("pet"))) then return end
+do
+	local interruptMsg = INTERRUPTED.." %s's \124cff71d5ff\124Hspell:%d\124h[%s]\124h\124r!"
 
-	if E.db.general.interruptAnnounce == "SAY" then
-		SendChatMessage(format(interruptMsg, destName, spellID, spellName), "SAY")
-	elseif E.db.general.interruptAnnounce == "EMOTE" then
-		SendChatMessage(format(interruptMsg, destName, spellID, spellName), "EMOTE")
-	else
-		local party, raid = GetNumPartyMembers(), GetNumRaidMembers()
-		local _, instanceType = IsInInstance()
-		local battleground = instanceType == "pvp"
+	function M:ToggleInterruptAnnounce()
+		if E.db.general.interruptAnnounce == "NONE" then
+			self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+		else
+			self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+		end
+	end
 
-		if E.db.general.interruptAnnounce == "PARTY" then
-			if party > 0 then
-				SendChatMessage(format(interruptMsg, destName, spellID, spellName), battleground and "BATTLEGROUND" or "PARTY")
-			end
-		elseif E.db.general.interruptAnnounce == "RAID" then
-			if raid > 0 then
-				SendChatMessage(format(interruptMsg, destName, spellID, spellName), battleground and "BATTLEGROUND" or "RAID")
-			elseif party > 0 then
-				SendChatMessage(format(interruptMsg, destName, spellID, spellName), battleground and "BATTLEGROUND" or "PARTY")
-			end
-		elseif E.db.general.interruptAnnounce == "RAID_ONLY" then
-			if raid > 0 then
-				SendChatMessage(format(interruptMsg, destName, spellID, spellName), battleground and "BATTLEGROUND" or "RAID")
+	function M:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, sourceGUID, _, _, _, destName, _, _, _, _, spellID, spellName)
+		if not (event == "SPELL_INTERRUPT" and (sourceGUID == E.myguid or sourceGUID == UnitGUID("pet"))) then return end
+
+		if E.db.general.interruptAnnounce == "SAY" then
+			SendChatMessage(format(interruptMsg, destName, spellID, spellName), "SAY")
+		elseif E.db.general.interruptAnnounce == "EMOTE" then
+			SendChatMessage(format(interruptMsg, destName, spellID, spellName), "EMOTE")
+		else
+			local _, instanceType = IsInInstance()
+			local battleground = instanceType == "pvp"
+
+			if E.db.general.interruptAnnounce == "PARTY" then
+				if GetNumPartyMembers() > 0 then
+					SendChatMessage(format(interruptMsg, destName, spellID, spellName), battleground and "BATTLEGROUND" or "PARTY")
+				end
+			elseif E.db.general.interruptAnnounce == "RAID" then
+				if GetNumRaidMembers() > 0 then
+					SendChatMessage(format(interruptMsg, destName, spellID, spellName), battleground and "BATTLEGROUND" or "RAID")
+				elseif GetNumPartyMembers() > 0 then
+					SendChatMessage(format(interruptMsg, destName, spellID, spellName), battleground and "BATTLEGROUND" or "PARTY")
+				end
+			elseif E.db.general.interruptAnnounce == "RAID_ONLY" then
+				if GetNumRaidMembers() > 0 then
+					SendChatMessage(format(interruptMsg, destName, spellID, spellName), battleground and "BATTLEGROUND" or "RAID")
+				end
 			end
 		end
 	end
@@ -167,32 +185,28 @@ function M:DisbandRaidGroup()
 	LeaveParty()
 end
 
-function M:CheckMovement()
-	if not WorldMapFrame:IsShown() then return end
+do
+	function M:CheckMovement()
+		if not WorldMapFrame:IsShown() then return end
 
-	if GetUnitSpeed("player") ~= 0 then
-		if WorldMapPositioningGuide:IsMouseOver() then
-			WorldMapFrame:SetAlpha(1)
-			WorldMapBlobFrame:SetFillAlpha(128)
-			WorldMapBlobFrame:SetBorderAlpha(192)
-		else
+		if GetUnitSpeed("player") ~= 0 and not WorldMapPositioningGuide:IsMouseOver() then
 			WorldMapFrame:SetAlpha(E.global.general.mapAlphaWhenMoving)
 			WorldMapBlobFrame:SetFillAlpha(128 * E.global.general.mapAlphaWhenMoving)
 			WorldMapBlobFrame:SetBorderAlpha(192 * E.global.general.mapAlphaWhenMoving)
+		else
+			WorldMapFrame:SetAlpha(1)
+			WorldMapBlobFrame:SetFillAlpha(128)
+			WorldMapBlobFrame:SetBorderAlpha(192)
 		end
-	else
-		WorldMapFrame:SetAlpha(1)
-		WorldMapBlobFrame:SetFillAlpha(128)
-		WorldMapBlobFrame:SetBorderAlpha(192)
 	end
-end
 
-function M:UpdateMapAlpha()
-	if (E.global.general.mapAlphaWhenMoving >= 1) and self.MovingTimer then
-		self:CancelTimer(self.MovingTimer)
-		self.MovingTimer = nil
-	elseif (E.global.general.mapAlphaWhenMoving < 1) and not self.MovingTimer then
-		self.MovingTimer = self:ScheduleRepeatingTimer("CheckMovement", 0.1)
+	function M:ToggleMapAlpha()
+		if self.MovingTimer and E.global.general.mapAlphaWhenMoving >= 1 then
+			self:CancelTimer(self.MovingTimer)
+			self.MovingTimer = nil
+		elseif not self.MovingTimer and E.global.general.mapAlphaWhenMoving < 1 then
+			self.MovingTimer = self:ScheduleRepeatingTimer("CheckMovement", 0.2)
+		end
 	end
 end
 
@@ -251,15 +265,15 @@ function M:ForceCVars()
 end
 
 function M:Initialize()
-	self.Initialized = true
 	self:LoadRaidMarker()
 	self:LoadLoot()
 	self:LoadLootRoll()
 	self:LoadChatBubbles()
-	self:RegisterEvent("MERCHANT_SHOW")
-	self:RegisterEvent("PLAYER_REGEN_DISABLED", "ErrorFrameToggle")
-	self:RegisterEvent("PLAYER_REGEN_ENABLED", "ErrorFrameToggle")
-	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+
+	self:ToggleErrorHandling()
+	self:ToggleInterruptAnnounce()
+	self:ToggleMapAlpha()
+
 	self:RegisterEvent("CHAT_MSG_BG_SYSTEM_HORDE", "PVPMessageEnhancement")
 	self:RegisterEvent("CHAT_MSG_BG_SYSTEM_ALLIANCE", "PVPMessageEnhancement")
 	self:RegisterEvent("CHAT_MSG_BG_SYSTEM_NEUTRAL", "PVPMessageEnhancement")
@@ -267,10 +281,9 @@ function M:Initialize()
 	self:RegisterEvent("PARTY_MEMBERS_CHANGED", "AutoInvite")
 	self:RegisterEvent("CVAR_UPDATE", "ForceCVars")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", "ForceCVars")
+	self:RegisterEvent("MERCHANT_SHOW")
 
-	if E.global.general.mapAlphaWhenMoving < 1 then
-		self.MovingTimer = self:ScheduleRepeatingTimer("CheckMovement", 0.1)
-	end
+	self.Initialized = true
 end
 
 local function InitializeCallback()
