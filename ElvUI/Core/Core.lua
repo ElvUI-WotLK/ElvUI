@@ -38,11 +38,11 @@ local twipe, tinsert, tremove, next = table.wipe, tinsert, tremove, next
 local format, find, match, strrep, strlen, sub, gsub, strjoin = string.format, string.find, string.match, strrep, strlen, string.sub, string.gsub, strjoin
 --WoW API / Variables
 local CreateFrame = CreateFrame
+local GetAddOnInfo = GetAddOnInfo
 local GetCVar = GetCVar
 local GetNumPartyMembers = GetNumPartyMembers
 local GetNumRaidMembers = GetNumRaidMembers
 local InCombatLockdown = InCombatLockdown
-local IsAddOnLoaded = IsAddOnLoaded
 local IsInGuild = IsInGuild
 local IsInInstance = IsInInstance
 local SendAddonMessage = SendAddonMessage
@@ -475,15 +475,41 @@ function E:IncompatibleAddOn(addon, module)
 	E:StaticPopup_Show("INCOMPATIBLE_ADDON", addon, module)
 end
 
+function E:IsAddOnEnabled(addon)
+	local _, _, _, enabled, _, reason = GetAddOnInfo(addon)
+	if reason ~= "MISSED" and enabled then
+		return true
+	end
+end
+
 function E:CheckIncompatible()
 	if E.global.ignoreIncompatible then return end
 
-	if IsAddOnLoaded("Prat-3.0") and E.private.chat.enable then E:IncompatibleAddOn("Prat-3.0", "Chat") end
-	if IsAddOnLoaded("Chatter") and E.private.chat.enable then E:IncompatibleAddOn("Chatter", "Chat") end
-	if IsAddOnLoaded("TidyPlates") and E.private.nameplates.enable then E:IncompatibleAddOn("TidyPlates", "NamePlates") end
-	if IsAddOnLoaded("Aloft") and E.private.nameplates.enable then E:IncompatibleAddOn("Aloft", "NamePlates") end
-	if IsAddOnLoaded("Healers-Have-To-Die") and E.private.nameplates.enable then E:IncompatibleAddOn("Healers-Have-To-Die", "NamePlates") end
-	if IsAddOnLoaded("Mapster") and E.private.worldmap.enable then E:IncompatibleAddOn("Mapster", "WorldMap") end
+	if E.private.chat.enable then
+		if self:IsAddOnEnabled("Prat-3.0") then
+			self:IncompatibleAddOn("Prat-3.0", "Chat")
+		elseif self:IsAddOnEnabled("Chatter") then
+			self:IncompatibleAddOn("Chatter", "Chat")
+		end
+	end
+
+	if E.private.nameplates.enable then
+		if self:IsAddOnEnabled("Aloft") then
+			self:IncompatibleAddOn("Aloft", "NamePlates")
+		elseif self:IsAddOnEnabled("Healers-Have-To-Die") then
+			self:IncompatibleAddOn("Healers-Have-To-Die", "NamePlates")
+		elseif self:IsAddOnEnabled("TidyPlates") then
+			self:IncompatibleAddOn("TidyPlates", "NamePlates")
+		end
+	end
+
+	if E.private.tooltip.enable and self:IsAddOnEnabled("TipTac") then
+		self:IncompatibleAddOn("TipTac", "Tooltip")
+	end
+
+	if E.private.worldmap.enable and self:IsAddOnEnabled("Mapster") then
+		self:IncompatibleAddOn("Mapster", "WorldMap")
+	end
 end
 
 function E:CopyTable(currentTable, defaultTable)
