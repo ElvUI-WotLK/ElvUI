@@ -7,9 +7,9 @@ local Search = E.Libs.ItemSearch
 --Lua functions
 local _G = _G
 local type, ipairs, pairs, unpack, select, assert, pcall = type, ipairs, pairs, unpack, select, assert, pcall
-local tinsert, tremove, twipe, tmaxn = tinsert, tremove, wipe, table.maxn
 local floor, ceil, abs = math.floor, math.ceil, math.abs
 local format, sub, gsub = string.format, string.sub, string.gsub
+local tinsert, tremove, twipe = table.insert, table.remove, table.wipe
 --WoW API / Variables
 local BankFrameItemButton_Update = BankFrameItemButton_Update
 local BankFrameItemButton_UpdateLocked = BankFrameItemButton_UpdateLocked
@@ -250,13 +250,16 @@ function B:SetGuildBankSearch(query)
 end
 
 function B:UpdateItemLevelDisplay()
-	if E.private.bags.enable ~= true then return end
+	if not E.private.bags.enable then return end
+
+	local font = E.Libs.LSM:Fetch("font", E.db.bags.itemLevelFont)
+
 	for _, bagFrame in pairs(B.BagFrames) do
 		for _, bagID in ipairs(bagFrame.BagIDs) do
 			for slotID = 1, GetContainerNumSlots(bagID) do
 				local slot = bagFrame.Bags[bagID][slotID]
 				if slot and slot.itemLevel then
-					slot.itemLevel:FontTemplate(E.Libs.LSM:Fetch("font", E.db.bags.itemLevelFont), E.db.bags.itemLevelFontSize, E.db.bags.itemLevelFontOutline)
+					slot.itemLevel:FontTemplate(font, E.db.bags.itemLevelFontSize, E.db.bags.itemLevelFontOutline)
 				end
 			end
 		end
@@ -266,7 +269,9 @@ function B:UpdateItemLevelDisplay()
 end
 
 function B:UpdateCountDisplay()
-	if E.private.bags.enable ~= true then return end
+	if not E.private.bags.enable then return end
+
+	local font = E.Libs.LSM:Fetch("font", E.db.bags.countFont)
 	local color = E.db.bags.countFontColor
 
 	for _, bagFrame in pairs(B.BagFrames) do
@@ -274,7 +279,7 @@ function B:UpdateCountDisplay()
 			for slotID = 1, GetContainerNumSlots(bagID) do
 				local slot = bagFrame.Bags[bagID][slotID]
 				if slot and slot.Count then
-					slot.Count:FontTemplate(E.Libs.LSM:Fetch("font", E.db.bags.countFont), E.db.bags.countFontSize, E.db.bags.countFontOutline)
+					slot.Count:FontTemplate(font, E.db.bags.countFontSize, E.db.bags.countFontOutline)
 					slot.Count:SetTextColor(color.r, color.g, color.b)
 				end
 			end
@@ -288,7 +293,7 @@ function B:UpdateCountDisplay()
 		for i = 1, GetKeyRingSize() do
 			local slot = _G["ElvUIKeyFrameItem"..i]
 			if slot then
-				slot.Count:FontTemplate(E.Libs.LSM:Fetch("font", E.db.bags.countFont), E.db.bags.countFontSize, E.db.bags.countFontOutline)
+				slot.Count:FontTemplate(font, E.db.bags.countFontSize, E.db.bags.countFontOutline)
 				slot.Count:SetTextColor(color.r, color.g, color.b)
 				B:UpdateKeySlot(i)
 			end
@@ -297,7 +302,7 @@ function B:UpdateCountDisplay()
 end
 
 function B:UpdateAllBagSlots()
-	if E.private.bags.enable ~= true then return end
+	if not E.private.bags.enable then return end
 
 	for _, bagFrame in pairs(B.BagFrames) do
 		B:UpdateAllSlots(bagFrame)
@@ -482,8 +487,7 @@ end
 function B:SetSlotAlphaForBag(f)
 	for _, bagID in ipairs(f.BagIDs) do
 		if f.Bags[bagID] then
-			local numSlots = GetContainerNumSlots(bagID)
-			for slotID = 1, numSlots do
+			for slotID = 1, GetContainerNumSlots(bagID) do
 				if f.Bags[bagID][slotID] then
 					if bagID == self.id then
 						f.Bags[bagID][slotID]:SetAlpha(1)
@@ -499,8 +503,7 @@ end
 function B:ResetSlotAlphaForBags(f)
 	for _, bagID in ipairs(f.BagIDs) do
 		if f.Bags[bagID] then
-			local numSlots = GetContainerNumSlots(bagID)
-			for slotID = 1, numSlots do
+			for slotID = 1, GetContainerNumSlots(bagID) do
 				if f.Bags[bagID][slotID] then
 					f.Bags[bagID][slotID]:SetAlpha(1)
 				end
@@ -510,7 +513,7 @@ function B:ResetSlotAlphaForBags(f)
 end
 
 function B:Layout(isBank)
-	if E.private.bags.enable ~= true then return end
+	if not E.private.bags.enable then return end
 
 	local f = B:GetContainerFrame(isBank)
 	if not f then return end
@@ -1043,14 +1046,15 @@ function B:GetGraysValue()
 	for bag = 0, 4 do
 		for slot = 1, GetContainerNumSlots(bag) do
 			local itemID = GetContainerItemID(bag, slot)
+
 			if itemID then
 				local _, _, rarity, _, _, iType, _, _, _, _, itemPrice = GetItemInfo(itemID)
-				if itemPrice then
+
+				if (rarity and rarity == 0) and (iType and iType ~= "Quest") and (itemPrice and itemPrice > 0) then
 					local stackCount = select(2, GetContainerItemInfo(bag, slot)) or 1
 					local stackPrice = itemPrice * stackCount
-					if (rarity and rarity == 0) and (iType and iType ~= "Quest") and (stackPrice > 0) then
-						value = value + stackPrice
-					end
+
+					value = value + stackPrice
 				end
 			end
 		end
@@ -1060,39 +1064,49 @@ function B:GetGraysValue()
 end
 
 function B:VendorGrays(delete)
-	if B.SellFrame:IsShown() then return end
-	if (not _G.MerchantFrame or not _G.MerchantFrame:IsShown()) and not delete then
+	if self.SellFrame:IsShown() then return end
+
+	if not delete and not MerchantFrame:IsShown() then
 		E:Print(L["You must be at a vendor."])
 		return
 	end
 
-	for bag = 0, 4, 1 do
-		for slot = 1, GetContainerNumSlots(bag), 1 do
+	if not B.SellFrame.Info then
+		B.SellFrame.Info = {
+			itemList = {}
+		}
+	elseif #B.SellFrame.Info.itemList > 0 then
+		twipe(B.SellFrame.Info.itemList)
+	end
+
+	for bag = 0, 4 do
+		for slot = 1, GetContainerNumSlots(bag) do
 			local itemID = GetContainerItemID(bag, slot)
+
 			if itemID then
 				local _, link, rarity, _, _, iType, _, _, _, _, itemPrice = GetItemInfo(itemID)
 
-				if (rarity and rarity == 0) and (iType and iType ~= "Quest") and (itemPrice and itemPrice > 0) then
-					tinsert(B.SellFrame.Info.itemList, {bag, slot, itemPrice, link})
+				if (rarity and rarity == 0) and (iType and iType ~= "Quest") and (delete or (itemPrice and itemPrice > 0)) then
+					tinsert(B.SellFrame.Info.itemList, {bag, slot, itemPrice or 0, link})
 				end
 			end
 		end
 	end
 
-	if not B.SellFrame.Info.itemList then return end
-	if tmaxn(B.SellFrame.Info.itemList) < 1 then return end
+	if #B.SellFrame.Info.itemList == 0 then return end
 
 	--Resetting stuff
 	B.SellFrame.Info.delete = delete or false
-	B.SellFrame.Info.ProgressTimer = 0
+	B.SellFrame.Info.SellTimer = 0
 	B.SellFrame.Info.SellInterval = E.db.bags.vendorGrays.interval
-	B.SellFrame.Info.ProgressMax = tmaxn(B.SellFrame.Info.itemList)
+	B.SellFrame.Info.ProgressMax = #B.SellFrame.Info.itemList
+	B.SellFrame.Info.ProgressTimer = (B.SellFrame.Info.ProgressMax - 1) * B.SellFrame.Info.SellInterval
 	B.SellFrame.Info.goldGained = 0
 	B.SellFrame.Info.itemsSold = 0
 
 	B.SellFrame.statusbar:SetValue(0)
 	B.SellFrame.statusbar:SetMinMaxValues(0, B.SellFrame.Info.ProgressMax)
-	B.SellFrame.statusbar.ValueText:SetText("0 / "..B.SellFrame.Info.ProgressMax)
+	B.SellFrame.statusbar.ValueText:SetFormattedText("0 / %d", B.SellFrame.Info.ProgressMax)
 
 	--Time to sell
 	B.SellFrame:Show()
@@ -1103,7 +1117,7 @@ function B:VendorGrayCheck()
 
 	if value == 0 then
 		E:Print(L["No gray items to delete."])
-	elseif not MerchantFrame or not MerchantFrame:IsShown() then
+	elseif not MerchantFrame:IsShown() then
 		E.PopupDialogs.DELETE_GRAYS.Money = value
 		E:StaticPopup_Show("DELETE_GRAYS")
 	else
@@ -1121,7 +1135,7 @@ function B:ContructContainerFrame(name, isBank)
 	f:RegisterEvent("BAG_UPDATE_COOLDOWN") -- Has to be on both frames
 	f.events = isBank and {"PLAYERBANKSLOTS_CHANGED"} or {"ITEM_LOCK_CHANGED", "ITEM_UNLOCKED", "QUEST_ACCEPTED", "QUEST_REMOVED", "QUEST_LOG_UPDATE"}
 
-	for _, event in pairs(f.events) do
+	for _, event in ipairs(f.events) do
 		f:RegisterEvent(event)
 	end
 
@@ -1322,7 +1336,9 @@ function B:ContructContainerFrame(name, isBank)
 		f.sortButton:SetScript("OnLeave", GameTooltip_Hide)
 		f.sortButton:SetScript("OnClick", function()
 			f:UnregisterAllEvents() --Unregister to prevent unnecessary updates
-			if not f.registerUpdate then B:SortingFadeBags(f, true) end
+			if not f.registerUpdate then
+				B:SortingFadeBags(f, true)
+			end
 			B:CommandDecorator(B.SortBags, "bags")()
 		end)
 		if E.db.bags.disableBagSort then
@@ -1410,7 +1426,7 @@ function B:ContructContainerFrame(name, isBank)
 		f.currencyButton:Height(22)
 
 		for i = 1, MAX_WATCHED_TOKENS do
-			f.currencyButton[i] = CreateFrame("Button", f:GetName().."CurrencyButton"..i, f.currencyButton)
+			f.currencyButton[i] = CreateFrame("Button", name.."CurrencyButton"..i, f.currencyButton)
 			f.currencyButton[i]:Size(16)
 			f.currencyButton[i]:SetTemplate()
 			f.currencyButton[i]:SetID(i)
@@ -1446,7 +1462,7 @@ function B:ContructContainerFrame(name, isBank)
 		end)
 	end
 
-	tinsert(UISpecialFrames, f:GetName()) --Keep an eye on this for taints..
+	tinsert(UISpecialFrames, f:GetName())
 	tinsert(B.BagFrames, f)
 	return f
 end
@@ -1647,55 +1663,71 @@ end
 
 function B:MERCHANT_CLOSED()
 	B.SellFrame:Hide()
-
-	twipe(B.SellFrame.Info.itemList)
-	B.SellFrame.Info.delete = false
-	B.SellFrame.Info.ProgressTimer = 0
-	B.SellFrame.Info.SellInterval = E.db.bags.vendorGrays.interval
-	B.SellFrame.Info.ProgressMax = 0
-	B.SellFrame.Info.goldGained = 0
-	B.SellFrame.Info.itemsSold = 0
 end
 
 function B:ProgressQuickVendor()
-	local item = B.SellFrame.Info.itemList[1]
-	if not item then return nil, true end --No more to sell
+	local info = B.SellFrame.Info
+
+	local item = info.itemList[1]
+	if not item then return end
+
 	local bag, slot, itemPrice, link = unpack(item)
 
 	local stackPrice = 0
-	if B.SellFrame.Info.delete then
+	if info.delete then
 		PickupContainerItem(bag, slot)
 		DeleteCursorItem()
 	else
 		local stackCount = select(2, GetContainerItemInfo(bag, slot)) or 1
-		stackPrice = (itemPrice or 0) * stackCount
-		if E.db.bags.vendorGrays.details and link then
+		stackPrice = itemPrice * stackCount
+
+		if link and E.db.bags.vendorGrays.details then
 			E:Print(format("%s|cFF00DDDDx%d|r %s", link, stackCount, B:FormatMoney(stackPrice)))
 		end
+
 		UseContainerItem(bag, slot)
 	end
 
-	tremove(B.SellFrame.Info.itemList, 1)
+	tremove(info.itemList, 1)
 
-	return stackPrice
+	return stackPrice, #info.itemList == 0
 end
 
+local timer = 0
 function B:VendorGreys_OnUpdate(elapsed)
-	B.SellFrame.Info.ProgressTimer = B.SellFrame.Info.ProgressTimer - elapsed
-	if B.SellFrame.Info.ProgressTimer > 0 then return end
-	B.SellFrame.Info.ProgressTimer = B.SellFrame.Info.SellInterval
+	local info = B.SellFrame.Info
 
-	local goldGained, lastItem = B:ProgressQuickVendor()
-	if goldGained then
-		B.SellFrame.Info.goldGained = B.SellFrame.Info.goldGained + goldGained
-		B.SellFrame.Info.itemsSold = B.SellFrame.Info.itemsSold + 1
-		B.SellFrame.statusbar:SetValue(B.SellFrame.Info.itemsSold)
-		local timeLeft = (B.SellFrame.Info.ProgressMax - B.SellFrame.Info.itemsSold)*B.SellFrame.Info.SellInterval
-		B.SellFrame.statusbar.ValueText:SetText(B.SellFrame.Info.itemsSold.." / "..B.SellFrame.Info.ProgressMax.." ( "..timeLeft.."s )")
-	elseif lastItem then
-		B.SellFrame:Hide()
-		if B.SellFrame.Info.goldGained > 0 then
-			E:Print(format(L["Vendored gray items for: %s"], B:FormatMoney(B.SellFrame.Info.goldGained)))
+	info.SellTimer = info.SellTimer - elapsed
+
+	if info.SellTimer <= 0 then
+		info.SellTimer = info.SellInterval
+
+		local goldGained, lastItem = B:ProgressQuickVendor()
+		if lastItem then
+			B.SellFrame:Hide()
+			info.goldGained = info.goldGained + goldGained
+			timer = 0
+
+			if info.goldGained > 0 then
+				E:Print(format(L["Vendored gray items for: %s"], B:FormatMoney(info.goldGained)))
+			end
+		elseif goldGained then
+			info.goldGained = info.goldGained + goldGained
+			info.itemsSold = info.itemsSold + 1
+			info.ProgressTimer = info.ProgressTimer - timer - elapsed
+			timer = 0
+
+			B.SellFrame.statusbar:SetValue(B.SellFrame.Info.itemsSold)
+			B.SellFrame.statusbar.ValueText:SetFormattedText("%d / %d ( %.1fs )", info.itemsSold, info.ProgressMax, info.ProgressTimer + 0.05)
+		end
+	else
+		timer = timer + elapsed
+
+		if timer >= 0.033 then
+			info.ProgressTimer = info.ProgressTimer - timer
+			timer = 0
+
+			B.SellFrame.statusbar.ValueText:SetFormattedText("%d / %d ( %.1fs )", info.itemsSold, info.ProgressMax, info.ProgressTimer + 0.05)
 		end
 	end
 end
@@ -1719,7 +1751,7 @@ function B:CreateSellFrame()
 	B.SellFrame.statusbar:SetStatusBarColor(1, 0, 0)
 	B.SellFrame.statusbar:CreateBackdrop("Transparent")
 
-	B.SellFrame.statusbar.anim = _G.CreateAnimationGroup(B.SellFrame.statusbar)
+	B.SellFrame.statusbar.anim = CreateAnimationGroup(B.SellFrame.statusbar)
 	B.SellFrame.statusbar.anim.progress = B.SellFrame.statusbar.anim:CreateAnimation("Progress")
 	B.SellFrame.statusbar.anim.progress:SetEasing("Out")
 	B.SellFrame.statusbar.anim.progress:SetDuration(0.3)
@@ -1728,16 +1760,6 @@ function B:CreateSellFrame()
 	B.SellFrame.statusbar.ValueText:FontTemplate(nil, 12, "OUTLINE")
 	B.SellFrame.statusbar.ValueText:Point("CENTER", B.SellFrame.statusbar)
 	B.SellFrame.statusbar.ValueText:SetText("0 / 0 ( 0s )")
-
-	B.SellFrame.Info = {
-		delete = false,
-		ProgressTimer = 0,
-		SellInterval = E.db.bags.vendorGrays.interval,
-		ProgressMax = 0,
-		goldGained = 0,
-		itemsSold = 0,
-		itemList = {}
-	}
 
 	B.SellFrame:SetScript("OnUpdate", B.VendorGreys_OnUpdate)
 
