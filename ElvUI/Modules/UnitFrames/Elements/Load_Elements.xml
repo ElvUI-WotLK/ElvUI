@@ -9,6 +9,7 @@
 	<Script file="CustomText.lua"/>
 	<Script file="Cutaway.lua"/>
 	<Script file="DebuffHighlight.lua"/>
+	<Script file="FrameGlow.lua"/>
 	<Script file="GPS.lua"/>
 	<Script file="Happiness.lua"/>
 	<Script file="HealComm.lua"/>
@@ -27,7 +28,6 @@
 	<Script file="RestingIndicator.lua"/>
 	<Script file="ResurrectionIcon.lua"/>
 	<Script file="RoleIcons.lua"/>
-	<Script file="Frameglow.lua"/>
 	<Script file="Threat.lua"/>
 	<Script file="Trinket.lua"/>
 </Ui>
