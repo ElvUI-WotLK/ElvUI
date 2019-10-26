@@ -388,13 +388,17 @@ function TT:GameTooltip_OnTooltipSetUnit(tt)
 
 	self:RemoveTrashLines(tt)
 
-	if not isShiftKeyDown and not isControlKeyDown then
+	if not isShiftKeyDown and not isControlKeyDown and self.db.targetInfo then
 		local unitTarget = unit.."target"
-		if self.db.targetInfo and unit ~= "player" and UnitExists(unitTarget) then
+		if unit ~= "player" and UnitExists(unitTarget) then
 			local targetColor
 			if UnitIsPlayer(unitTarget) and not UnitHasVehicleUI(unitTarget) then
 				local _, class = UnitClass(unitTarget)
 				targetColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class]
+
+				if not targetColor then
+					targetColor = RAID_CLASS_COLORS.PRIEST
+				end
 			else
 				targetColor = E.db.tooltip.useCustomFactionColors and E.db.tooltip.factionColors[UnitReaction(unitTarget, "player")] or FACTION_BAR_COLORS[UnitReaction(unitTarget, "player")]
 			end
@@ -406,7 +410,7 @@ function TT:GameTooltip_OnTooltipSetUnit(tt)
 		local numRaid = GetNumRaidMembers()
 		local inRaid = numRaid > 0
 
-		if self.db.targetInfo and (inRaid or numParty > 0) then
+		if inRaid or numParty > 0 then
 			for i = 1, (inRaid and numRaid or numParty) do
 				local groupUnit = (inRaid and "raid"..i or "party"..i)
 
