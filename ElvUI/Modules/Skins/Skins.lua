@@ -434,7 +434,7 @@ function S:HandleCloseButton(f, point)
 	end
 
 	if point then
-		f:Point("TOPRIGHT", point, "TOPRIGHT", 2, 2)
+		f:Point("TOPRIGHT", point, "TOPRIGHT", 2, 3)
 	end
 end
 
