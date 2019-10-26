@@ -7,7 +7,7 @@ local Skins = E:GetModule("Skins")
 
 --Lua functions
 local _G = _G
-local pairs, type, unpack, assert = pairs, type, unpack, assert
+local pairs, ipairs, type, unpack, assert = pairs, ipairs, type, unpack, assert
 local tremove, tContains, tinsert, wipe = tremove, tContains, tinsert, wipe
 local strlower, format = strlower, format
 --WoW API / Variables
@@ -174,19 +174,20 @@ E.PopupDialogs.INCOMPATIBLE_ADDON = {
 		E:StaticPopup_Show("DISABLE_INCOMPATIBLE_ADDON")
 	end,
 	whileDead = 1,
-	hideOnEscape = false
+	hideOnEscape = false,
+	noCancelOnReuse = true
 }
 
 E.PopupDialogs.UISCALE_CHANGE = {
 	text = L["The UI Scale has been changed, if you would like to preview the change press the preview button. It is recommended that you reload your User Interface for the best appearance."],
 	OnAccept = function() ReloadUI() end,
-	OnCancel = E.noop,
 	button1 = ACCEPT,
 	button2 = CANCEL,
 	button3 = L["Preview Changes"],
 	OnAlt = function() E:PixelScaleChanged("UISCALE_CHANGE") end,
 	whileDead = 1,
-	hideOnEscape = false
+	hideOnEscape = false,
+	noCancelOnReuse = true
 }
 
 E.PopupDialogs.CONFIG_RL = {
@@ -438,7 +439,6 @@ E.PopupDialogs.APPLY_FONT_WARNING = {
 
 		E:UpdateAll(true)
 	end,
-	OnCancel = function() E:StaticPopup_Hide("APPLY_FONT_WARNING") end,
 	button1 = YES,
 	button2 = CANCEL,
 	whileDead = 1,
@@ -460,7 +460,6 @@ E.PopupDialogs.SCRIPT_PROFILE = {
 		SetCVar("scriptProfile", 0)
 		ReloadUI()
 	end,
-	OnCancel = E.noop,
 	showAlert = 1,
 	whileDead = 1,
 	hideOnEscape = false
@@ -507,7 +506,7 @@ end
 
 function E:StaticPopup_EscapePressed()
 	local closed = nil
-	for _, frame in pairs(E.StaticPopup_DisplayedFrames) do
+	for _, frame in ipairs(E.StaticPopup_DisplayedFrames) do
 		if frame:IsShown() and frame.hideOnEscape then
 			local standardDialog = E.PopupDialogs[frame.which]
 			if standardDialog then
@@ -534,7 +533,7 @@ end
 function E:StaticPopup_CollapseTable()
 	local displayedFrames = E.StaticPopup_DisplayedFrames
 	local index = #displayedFrames
-	while((index >= 1) and (not displayedFrames[index]:IsShown())) do
+	while (index >= 1) and (not displayedFrames[index]:IsShown()) do
 		tremove(displayedFrames, index)
 		index = index - 1
 	end
@@ -590,7 +589,7 @@ function E:StaticPopup_OnKeyDown(key)
 			local frameName = self:GetName()
 			local button
 			local i = 1
-			while(true) do
+			while true do
 				button = _G[frameName.."Button"..i]
 				if button then
 					if button:IsShown() then
@@ -743,7 +742,7 @@ function E:StaticPopup_FindVisible(which, data)
 	if not info then
 		return nil
 	end
-	for index = 1, MAX_STATIC_POPUPS, 1 do
+	for index = 1, MAX_STATIC_POPUPS do
 		local frame = _G["ElvUI_StaticPopup"..index]
 		if frame and frame:IsShown() and (frame.which == which) and (not info.multiple or (frame.data == data)) then
 			return frame
@@ -809,14 +808,14 @@ function E:StaticPopup_Show(which, text_arg1, text_arg2, data)
 		return nil
 	end
 
-	if UnitIsDeadOrGhost("player") and not info.whileDead then
+	if not info.whileDead and UnitIsDeadOrGhost("player") then
 		if info.OnCancel then
 			info.OnCancel()
 		end
 		return nil
 	end
 
-	if InCinematic() and not info.interruptCinematic then
+	if not info.interruptCinematic and InCinematic() then
 		if info.OnCancel then
 			info.OnCancel()
 		end
@@ -824,7 +823,7 @@ function E:StaticPopup_Show(which, text_arg1, text_arg2, data)
 	end
 
 	if info.cancels then
-		for index = 1, MAX_STATIC_POPUPS, 1 do
+		for index = 1, MAX_STATIC_POPUPS do
 			local frame = _G["ElvUI_StaticPopup"..index]
 			if frame:IsShown() and (frame.which == info.cancels) then
 				frame:Hide()
@@ -1077,7 +1076,7 @@ function E:StaticPopup_Show(which, text_arg1, text_arg2, data)
 end
 
 function E:StaticPopup_Hide(which, data)
-	for index = 1, MAX_STATIC_POPUPS, 1 do
+	for index = 1, MAX_STATIC_POPUPS do
 		local dialog = _G["ElvUI_StaticPopup"..index]
 		if (dialog.which == which) and (not data or (data == dialog.data)) then
 			dialog:Hide()
