@@ -1,11 +1,14 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 
 --Lua functions
-local tinsert, tremove, next, wipe, ipairs = tinsert, tremove, next, wipe, ipairs
-local select, tonumber, type, unpack = select, tonumber, type, unpack
-local modf, ceil, floor, abs, mod = math.modf, math.ceil, math.floor, math.abs, mod
-local byte, format, strsub, strupper, gsub, gmatch, utf8sub = string.byte, format, strsub, strupper, gsub, gmatch, string.utf8sub
-local tostring, pairs = tostring, pairs
+local pairs, ipairs = pairs, ipairs
+local next, select, type, unpack = next, select, type, unpack
+local tonumber, tostring = tonumber, tostring
+local abs, ceil, floor, fmod, modf = math.abs, math.ceil, math.floor, math.fmod, math.modf
+local byte, format, gmatch, gsub, strupper, strsub = string.byte, string.format, string.gmatch, string.gsub, strupper, strsub
+local utf8sub = string.utf8sub
+local tinsert, tremove, wipe = table.insert, table.remove, table.wipe
+
 --WoW API / Variables
 local CreateFrame = CreateFrame
 local GetScreenWidth, GetScreenHeight = GetScreenWidth, GetScreenHeight
@@ -238,34 +241,58 @@ function E:AbbreviateString(str, allUpper)
 	return newString
 end
 
-function E:WaitFunc(elapse)
+function E:WaitFunc(elapsed)
+	local total = #E.WaitTable
 	local i = 1
-	while i <= #E.WaitTable do
-		local data = E.WaitTable[i]
-		if data[1] > elapse then
-			data[1], i = data[1] - elapse, i + 1
-		else
-			tremove(E.WaitTable, i)
-			data[2](unpack(data[3]))
 
-			if #E.WaitTable == 0 then
-				E.WaitFrame:Hide()
+	while i <= total do
+		local data = E.WaitTable[i]
+
+		if data[1] > elapsed then
+			data[1] = data[1] - elapsed
+			i = i + 1
+		else
+			if data[3] then
+				if data[3] > 1 then
+					data[2](unpack(data[4], 1, data[3]))
+				else
+					data[2](data[4])
+				end
+			else
+				data[2]()
+			end
+
+			tremove(E.WaitTable, i)
+			total = total - 1
+
+			if total == 0 then
+				self:Hide()
 			end
 		end
 	end
 end
 
 E.WaitTable = {}
-E.WaitFrame = CreateFrame("Frame", "ElvUI_WaitFrame", _G.UIParent)
+E.WaitFrame = CreateFrame("Frame", "ElvUI_WaitFrame", UIParent)
 E.WaitFrame:SetScript("OnUpdate", E.WaitFunc)
 
 --Add time before calling a function
 function E:Delay(delay, func, ...)
-	if type(delay) ~= "number" or type(func) ~= "function" then
-		return false
+	if type(delay) ~= "number" then
+		error(format("Bad argument #1 to 'Delay' (number expected, got %s)", delay ~= nil and type(delay) or "no value"), 2)
+	elseif type(func) ~= "function" then
+		error(format("Bad argument #2 to 'Delay' (function expected, got %s)", func ~= nil and type(func) or "no value"), 2)
 	end
 
-	tinsert(E.WaitTable,{delay,func,{...}})
+	local argCount = select("#", ...)
+
+	tinsert(E.WaitTable, {
+		delay,
+		func,
+		argCount > 0 and argCount,
+		argCount == 1 and (...) or argCount > 1 and {...}
+	})
+
 	E.WaitFrame:Show()
 
 	return true
@@ -348,8 +375,8 @@ function E:FormatMoney(amount, style, textonly)
 
 	local value = abs(amount)
 	local gold = floor(value / 10000)
-	local silver = floor(mod(value / 100, 100))
-	local copper = floor(mod(value, 100))
+	local silver = floor(fmod(value / 100, 100))
+	local copper = floor(fmod(value, 100))
 
 	if not style or style == "SMART" then
 		local str = ""
