@@ -11,6 +11,11 @@ max_string_line_length = false
 max_comment_line_length = false
 
 exclude_files = {
+	"./.git",
+	"./.github",
+	"./.install",
+	"./.lua",
+	"./.luarocks",
 	"**/Libraries",
 }
 
