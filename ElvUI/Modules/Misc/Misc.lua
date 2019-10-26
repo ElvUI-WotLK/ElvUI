@@ -11,8 +11,10 @@ local CanGuildBankRepair = CanGuildBankRepair
 local CanMerchantRepair = CanMerchantRepair
 local GetCVarBool, SetCVar = GetCVarBool, SetCVar
 local GetFriendInfo = GetFriendInfo
+local GetGuildBankMoney = GetGuildBankMoney
 local GetGuildBankWithdrawMoney = GetGuildBankWithdrawMoney
 local GetGuildRosterInfo = GetGuildRosterInfo
+local GetMoney = GetMoney
 local GetNumFriends = GetNumFriends
 local GetNumGuildMembers = GetNumGuildMembers
 local GetNumPartyMembers = GetNumPartyMembers
@@ -22,11 +24,13 @@ local GetRaidRosterInfo = GetRaidRosterInfo
 local GetRepairAllCost = GetRepairAllCost
 local GetUnitSpeed = GetUnitSpeed
 local GuildRoster = GuildRoster
+local HideRepairCursor = HideRepairCursor
 local InCombatLockdown = InCombatLockdown
 local IsInGuild = IsInGuild
 local IsInInstance = IsInInstance
 local IsShiftKeyDown = IsShiftKeyDown
 local LeaveParty = LeaveParty
+local PickupInventoryItem = PickupInventoryItem
 local RaidNotice_AddMessage = RaidNotice_AddMessage
 local RepairAllItems = RepairAllItems
 local SendChatMessage = SendChatMessage
@@ -36,10 +40,8 @@ local StaticPopup_Hide = StaticPopup_Hide
 local UninviteUnit = UninviteUnit
 local UnitGUID = UnitGUID
 local UnitName = UnitName
-local ERR_NOT_ENOUGH_MONEY = ERR_NOT_ENOUGH_MONEY
-local ERR_GUILD_NOT_ENOUGH_MONEY = ERR_GUILD_NOT_ENOUGH_MONEY
-local MAX_PARTY_MEMBERS = MAX_PARTY_MEMBERS
 
+local MAX_PARTY_MEMBERS = MAX_PARTY_MEMBERS
 
 do
 	local function EventHandler(_, event)
@@ -102,67 +104,101 @@ do
 	end
 end
 
-do -- Auto Repair Functions
-	local STATUS, TYPE, COST, POSS
-	function M:AttemptAutoRepair(playerOverride)
-		STATUS, TYPE, COST, POSS = "", E.db.general.autoRepair, GetRepairAllCost()
+do
+	local repairInventoryPriority = {
+		16,	-- MainHandSlot
+		17,	-- SecondaryHandSlot
+		18,	-- RangedSlot
+		1,	-- HeadSlot
+		5,	-- ChestSlot
+		7,	-- LegsSlot
+		3,	-- ShoulderSlot
+		10,	-- HandsSlot
+		6,	-- WaistSlot
+		8,	-- FeetSlot
+		9,	-- WristSlot
+	}
 
-		if POSS and COST > 0 then
-			--This check evaluates to true even if the guild bank has 0 gold, so we add an override
-			if TYPE == "GUILD" and (playerOverride or (not CanGuildBankRepair() or COST > GetGuildBankWithdrawMoney())) then
-				TYPE = "PLAYER"
+	local function RepairInventoryByPriority(playerMoney)
+		local money = playerMoney
+
+		ShowRepairCursor()
+
+		for _, slotID in ipairs(repairInventoryPriority) do
+			local hasItem, _, repairCost = GameTooltip:SetInventoryItem("player", slotID)
+
+			if hasItem and repairCost > 0 and repairCost <= money then
+				PickupInventoryItem(slotID)
+				money = money - repairCost
 			end
-
-			RepairAllItems(TYPE == "GUILD")
-
-			--Delay this a bit so we have time to catch the outcome of first repair attempt
-			E:Delay(0.5, M.AutoRepairOutput)
 		end
+
+		HideRepairCursor()
+		GameTooltip:Hide()
+
+		return playerMoney - money
 	end
 
-	function M:AutoRepairOutput()
-		if TYPE == "GUILD" then
-			if STATUS == "GUILD_REPAIR_FAILED" then
-				M:AttemptAutoRepair(true) --Try using player money instead
+	function M:AutoRepair(repairMode)
+		if not CanMerchantRepair() or IsShiftKeyDown() then return end
+
+		local repairAllCost, canRepair = GetRepairAllCost()
+		if not canRepair or repairAllCost <= 0 then return end
+
+		if repairMode == "GUILD" then
+			if not CanGuildBankRepair() then
+				repairMode = "PLAYER"
 			else
-				E:Print(L["Your items have been repaired using guild bank funds for: "]..E:FormatMoney(COST, "SMART", true)) --Amount, style, textOnly
+				local guildWithdrawMoney = GetGuildBankWithdrawMoney()
+				local guildMoney = GetGuildBankMoney()
+				local availableGuildMoney
+
+				if guildWithdrawMoney == -1 or guildMoney < guildWithdrawMoney then
+					availableGuildMoney = guildMoney
+				else
+					availableGuildMoney = guildWithdrawMoney
+				end
+
+				if repairAllCost > availableGuildMoney then
+					repairMode = "PLAYER"
+				end
 			end
-		elseif TYPE == "PLAYER" then
-			if STATUS == "PLAYER_REPAIR_FAILED" then
-				E:Print(L["You don't have enough money to repair."])
+		end
+
+		if repairMode == "GUILD" then
+			RepairAllItems(true)
+
+			E:Print(L["Your items have been repaired using guild bank funds for: "] .. E:FormatMoney(repairAllCost, "SMART", true))
+		else
+			local playerMoney = GetMoney()
+
+			if playerMoney > repairAllCost then
+				RepairAllItems()
+
+				E:Print(L["Your items have been repaired for: "] .. E:FormatMoney(repairAllCost, "SMART", true))
 			else
-				E:Print(L["Your items have been repaired for: "]..E:FormatMoney(COST, "SMART", true)) --Amount, style, textOnly
+				local spent = RepairInventoryByPriority(playerMoney)
+
+				if spent > 0 then
+					E:Print(L["Your items have been repaired for: "] .. E:FormatMoney(spent, "SMART", true))
+					E:Print(L["You don't have enough money to repair all items."])
+				else
+					E:Print(L["You don't have enough money to repair."])
+				end
 			end
 		end
 	end
-
-	function M:UI_ERROR_MESSAGE(_, messageType)
-		if messageType == ERR_GUILD_NOT_ENOUGH_MONEY then
-			STATUS = "GUILD_REPAIR_FAILED"
-		elseif messageType == ERR_NOT_ENOUGH_MONEY then
-			STATUS = "PLAYER_REPAIR_FAILED"
-		end
-	end
-end
-
-function M:MERCHANT_CLOSED()
-	self:UnregisterEvent("UI_ERROR_MESSAGE")
-	self:UnregisterEvent("UPDATE_INVENTORY_DURABILITY")
-	self:UnregisterEvent("MERCHANT_CLOSED")
 end
 
 function M:MERCHANT_SHOW()
-	if E.db.bags.vendorGrays.enable then E:Delay(0.5, Bags.VendorGrays, Bags) end
+	if E.db.bags.vendorGrays.enable then
+		Bags:VendorGrays()
+	end
 
-	if E.db.general.autoRepair == "NONE" or IsShiftKeyDown() or not CanMerchantRepair() then return end
-
-	--Prepare to catch "not enough money" messages
-	self:RegisterEvent("UI_ERROR_MESSAGE")
-
-	--Use this to unregister events afterwards
-	self:RegisterEvent("MERCHANT_CLOSED")
-
-	M:AttemptAutoRepair()
+	local repairMode = E.db.general.autoRepair
+	if repairMode ~= "NONE" then
+		self:AutoRepair(repairMode)
+	end
 end
 
 function M:DisbandRaidGroup()
