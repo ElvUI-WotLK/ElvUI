@@ -44,14 +44,8 @@ DT.PointLocation = {
 	[3] = "right"
 }
 
-local hasEnteredWorld = false
 function DT:PLAYER_ENTERING_WORLD()
-	hasEnteredWorld = true
 	self:LoadDataTexts()
-end
-
-local function LoadDataTextsDelayed()
-	E.Delay(0.5, function() DT:LoadDataTexts() end)
 end
 
 local LDBHex = "|cffFFFFFF"
@@ -110,11 +104,6 @@ function DT:SetupObjectLDB(name, obj)
 	--Update config if it has been loaded
 	if DT.PanelLayoutOptions then
 		DT:PanelLayoutOptions()
-	end
-
-	--Force an update for objects that are created after we log in.
-	if hasEnteredWorld then
-		LoadDataTextsDelayed() --Has to be delayed in order to properly pick up initial text
 	end
 end
 
