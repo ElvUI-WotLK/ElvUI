@@ -1,9 +1,62 @@
 local major = "LibHealComm-4.0"
-local minor = 66
+local minor = 67
 assert(LibStub, string.format("%s requires LibStub.", major))
 
 local HealComm = LibStub:NewLibrary(major, minor)
 if( not HealComm ) then return end
+
+local pairs = pairs
+local rawget, rawset = rawget, rawset
+local select = select
+local setmetatable = setmetatable
+local tonumber = tonumber
+local type = type
+local unpack = unpack
+local band, bor = bit.band, bit.bor
+local ceil, floor, max, min = math.ceil, math.floor, math.max, math.min
+local byte, char, format, gsub, len, match, split = string.byte, string.char, string.format, string.gsub, string.len, string.match, string.split
+local tconcat, tinsert, tremove, twipe = table.concat, table.insert, table.remove, table.wipe
+
+local GetGlyphSocketInfo = GetGlyphSocketInfo
+local GetInventoryItemLink = GetInventoryItemLink
+local GetNumGlyphSockets = GetNumGlyphSockets
+local GetNumPartyMembers = GetNumPartyMembers
+local GetNumRaidMembers = GetNumRaidMembers
+local GetNumSpellTabs = GetNumSpellTabs
+local GetNumTalentTabs = GetNumTalentTabs
+local GetNumTalents = GetNumTalents
+local GetRaidRosterInfo = GetRaidRosterInfo
+local GetSpellBonusHealing = GetSpellBonusHealing
+local GetSpellCritChance = GetSpellCritChance
+local GetSpellInfo = GetSpellInfo
+local GetSpellName = GetSpellName
+local GetSpellTabInfo = GetSpellTabInfo
+local GetTalentInfo = GetTalentInfo
+local GetTime = GetTime
+local GetZonePVPInfo = GetZonePVPInfo
+local InCombatLockdown = InCombatLockdown
+local IsEquippedItem = IsEquippedItem
+local IsInInstance = IsInInstance
+local IsSpellInRange = IsSpellInRange
+local SpellIsTargeting = SpellIsTargeting
+local UnitAura = UnitAura
+local UnitBuff = UnitBuff
+local UnitCanAssist = UnitCanAssist
+local UnitCastingInfo = UnitCastingInfo
+local UnitChannelInfo = UnitChannelInfo
+local UnitExists = UnitExists
+local UnitGUID = UnitGUID
+local UnitHasVehicleUI = UnitHasVehicleUI
+local UnitIsCharmed = UnitIsCharmed
+local UnitIsVisible = UnitIsVisible
+local UnitLevel = UnitLevel
+local UnitName = UnitName
+local UnitPlayerControlled = UnitPlayerControlled
+
+local BOOKTYPE_SPELL = BOOKTYPE_SPELL
+local MAX_PARTY_MEMBERS = MAX_PARTY_MEMBERS
+local MAX_PLAYER_LEVEL = MAX_PLAYER_LEVEL
+local MAX_RAID_MEMBERS = MAX_RAID_MEMBERS
 
 -- API CONSTANTS
 local ALL_DATA = 0x0f
@@ -12,9 +65,9 @@ local CHANNEL_HEALS = 0x02
 local HOT_HEALS = 0x04
 local ABSORB_SHIELDS = 0x08
 local BOMB_HEALS = 0x10
-local ALL_HEALS = bit.bor(DIRECT_HEALS, CHANNEL_HEALS, HOT_HEALS, BOMB_HEALS)
-local CASTED_HEALS = bit.bor(DIRECT_HEALS, CHANNEL_HEALS)
-local OVERTIME_HEALS = bit.bor(HOT_HEALS, CHANNEL_HEALS)
+local ALL_HEALS = bor(DIRECT_HEALS, CHANNEL_HEALS, HOT_HEALS, BOMB_HEALS)
+local CASTED_HEALS = bor(DIRECT_HEALS, CHANNEL_HEALS)
+local OVERTIME_HEALS = bor(HOT_HEALS, CHANNEL_HEALS)
 
 HealComm.ALL_HEALS, HealComm.CHANNEL_HEALS, HealComm.DIRECT_HEALS, HealComm.HOT_HEALS, HealComm.CASTED_HEALS, HealComm.ABSORB_SHIELDS, HealComm.ALL_DATA, HealComm.BOMB_HEALS = ALL_HEALS, CHANNEL_HEALS, DIRECT_HEALS, HOT_HEALS, CASTED_HEALS, ABSORB_SHIELDS, ALL_DATA, BOMB_HEALS
 
@@ -57,24 +110,24 @@ if( not HealComm.compressGUID or not HealComm.fixedCompress ) then
 	local map = {[58] = "\254\250", [64] = "\254\251",  [44] = "\254\252", [255] = "\254\253", [0] = "\255", [254] = "\254\249"}
 	local function guidCompressHelper(x)
 	   local a = tonumber(x, 16)
-	   return map[a] or string.char(a)
+	   return map[a] or char(a)
 	end
 
 	local dfmt = "0x%02X%02X%02X%02X%02X%02X%02X%02X"
 	local function unescape(str)
-		str = string.gsub(str, "\255", "\000")
-		str = string.gsub(str, "\254\250", "\058")
-		str = string.gsub(str, "\254\251", "\064")
-		str = string.gsub(str, "\254\252", "\044")
-		str = string.gsub(str, "\254\253", "\255")
-		return string.gsub(str, "\254\249", "\254")
+		str = gsub(str, "\255", "\000")
+		str = gsub(str, "\254\250", "\058")
+		str = gsub(str, "\254\251", "\064")
+		str = gsub(str, "\254\252", "\044")
+		str = gsub(str, "\254\253", "\255")
+		return gsub(str, "\254\249", "\254")
 	end
 
 	HealComm.fixedCompress = true
 	HealComm.compressGUID = setmetatable({}, {
 		__index = function(tbl, guid)
-			local cguid = string.match(guid, "0x(.*)")
-			local str = string.gsub(cguid, "(%x%x)", guidCompressHelper)
+			local cguid = match(guid, "0x(.*)")
+			local str = gsub(cguid, "(%x%x)", guidCompressHelper)
 
 			rawset(tbl, guid, str)
 			return str
@@ -84,14 +137,14 @@ if( not HealComm.compressGUID or not HealComm.fixedCompress ) then
 		__index = function(tbl, str)
 			if( not str ) then return nil end
 			local usc = unescape(str)
-			local a, b, c, d, e, f, g, h = string.byte(usc, 1, 8)
+			local a, b, c, d, e, f, g, h = byte(usc, 1, 8)
 
 			-- Failed to decompress, silently exit
 			if( not a or not b or not c or not d or not e or not f or not g or not h ) then
 				return ""
 			end
 
-			local guid = string.format(dfmt, a, b, c, d, e, f, g, h)
+			local guid = format(dfmt, a, b, c, d, e, f, g, h)
 
 			rawset(tbl, str, guid)
 			return guid
@@ -104,12 +157,12 @@ local compressGUID, decompressGUID = HealComm.compressGUID, HealComm.decompressG
 if( not HealComm.tableCache ) then
 	HealComm.tableCache = setmetatable({}, {__mode = "k"})
 	function HealComm:RetrieveTable()
-		return table.remove(HealComm.tableCache, 1) or {}
+		return tremove(HealComm.tableCache, 1) or {}
 	end
 
 	function HealComm:DeleteTable(tbl)
-		table.wipe(tbl)
-		table.insert(HealComm.tableCache, tbl)
+		twipe(tbl)
+		tinsert(HealComm.tableCache, tbl)
 	end
 end
 
@@ -128,7 +181,7 @@ end
 if( not HealComm.rankNumbers ) then
 	HealComm.rankNumbers = setmetatable({}, {
 		__index = function(tbl, index)
-			local number = tonumber(string.match(index, "(%d+)")) or 1
+			local number = tonumber(match(index, "(%d+)")) or 1
 
 			rawset(tbl, index, number)
 			return number
@@ -208,11 +261,11 @@ local function updateRecord(pending, guid, amount, stack, endTime, ticksLeft)
 		pending[id + 4] = ticksLeft or 0
 	else
 		pending[guid] = #(pending) + 1
-		table.insert(pending, guid)
-		table.insert(pending, amount)
-		table.insert(pending, stack)
-		table.insert(pending, endTime or 0)
-		table.insert(pending, ticksLeft or 0)
+		tinsert(pending, guid)
+		tinsert(pending, amount)
+		tinsert(pending, stack)
+		tinsert(pending, endTime or 0)
+		tinsert(pending, ticksLeft or 0)
 
 		if( pending.bitType == HOT_HEALS ) then
 			activeHots[guid] = (activeHots[guid] or 0) + 1
@@ -234,11 +287,11 @@ local function removeRecord(pending, guid)
 	if( not id ) then return nil end
 
 	-- ticksLeft, endTime, stack, amount, guid
-	table.remove(pending, id + 4)
-	table.remove(pending, id + 3)
-	table.remove(pending, id + 2)
-	local amount = table.remove(pending, id + 1)
-	table.remove(pending, id)
+	tremove(pending, id + 4)
+	tremove(pending, id + 3)
+	tremove(pending, id + 2)
+	local amount = tremove(pending, id + 1)
+	tremove(pending, id)
 	pending[guid] = nil
 
 	-- Release the table
@@ -265,11 +318,11 @@ local function removeRecordList(pending, inc, comp, ...)
 
 		local id = pending[guid]
 		-- ticksLeft, endTime, stack, amount, guid
-		table.remove(pending, id + 4)
-		table.remove(pending, id + 3)
-		table.remove(pending, id + 2)
-		local amount = table.remove(pending, id + 1)
-		table.remove(pending, id)
+		tremove(pending, id + 4)
+		tremove(pending, id + 3)
+		tremove(pending, id + 2)
+		local amount = tremove(pending, id + 1)
+		tremove(pending, id)
 		pending[guid] = nil
 
 		-- Release the table
@@ -291,11 +344,11 @@ local function removeAllRecords(guid)
 				local id = pending[guid]
 
 				-- ticksLeft, endTime, stack, amount, guid
-				table.remove(pending, id + 4)
-				table.remove(pending, id + 3)
-				table.remove(pending, id + 2)
-				local amount = table.remove(pending, id + 1)
-				table.remove(pending, id)
+				tremove(pending, id + 4)
+				tremove(pending, id + 3)
+				tremove(pending, id + 2)
+				local amount = tremove(pending, id + 1)
+				tremove(pending, id)
 				pending[guid] = nil
 
 				-- Release the table
@@ -310,7 +363,7 @@ local function removeAllRecords(guid)
 						end
 					end
 				else
-					table.wipe(pending)
+					twipe(pending)
 				end
 
 				changed = true
@@ -336,12 +389,12 @@ local function clearPendingHeals()
 	for casterGUID, spells in pairs(pendingHeals) do
 		for _, pending in pairs(spells) do
 			if( pending.bitType ) then
-				table.wipe(tempPlayerList)
-				for i=#(pending), 1, -5 do table.insert(tempPlayerList, pending[i - 4]) end
+				twipe(tempPlayerList)
+				for i=#(pending), 1, -5 do tinsert(tempPlayerList, pending[i - 4]) end
 
 				if( #(tempPlayerList) > 0 ) then
 					local spellID, bitType = pending.spellID, pending.bitType
-					table.wipe(pending)
+					twipe(pending)
 
 					HealComm.callbacks:Fire("HealComm_HealStopped", casterGUID, spellID, bitType, true, unpack(tempPlayerList))
 				end
@@ -387,7 +440,7 @@ function HealComm:GetNextHealAmount(guid, bitFlag, time, ignoreGUID)
 	for casterGUID, spells in pairs(pendingHeals) do
 		if( not ignoreGUID or ignoreGUID ~= casterGUID ) then
 			for _, pending in pairs(spells) do
-				if( pending.bitType and bit.band(pending.bitType, bitFlag) > 0 ) then
+				if( pending.bitType and band(pending.bitType, bitFlag) > 0 ) then
 					for i=1, #(pending), 5 do
 						local guid = pending[i]
 						local amount = pending[i + 1]
@@ -428,7 +481,7 @@ local function filterData(spells, filterGUID, bitFlag, time, ignoreGUID)
 	local currentTime = GetTime()
 
 	for _, pending in pairs(spells) do
-		if( pending.bitType and bit.band(pending.bitType, bitFlag) > 0 ) then
+		if( pending.bitType and band(pending.bitType, bitFlag) > 0 ) then
 			for i=1, #(pending), 5 do
 				local guid = pending[i]
 				if( guid == filterGUID or ignoreGUID ) then
@@ -454,7 +507,7 @@ local function filterData(spells, filterGUID, bitFlag, time, ignoreGUID)
 						else
 							local secondsLeft = endTime - currentTime
 							local bandSeconds = time - currentTime
-							local ticks = math.floor(math.min(bandSeconds, secondsLeft) / pending.tickInterval)
+							local ticks = floor(min(bandSeconds, secondsLeft) / pending.tickInterval)
 							local nextTickIn = secondsLeft % pending.tickInterval
 							local fractionalBand = bandSeconds % pending.tickInterval
 							if( nextTickIn > 0 and nextTickIn < fractionalBand ) then
@@ -462,9 +515,9 @@ local function filterData(spells, filterGUID, bitFlag, time, ignoreGUID)
 							end
 
 							if( not pending.hasVariableTicks ) then
-								healAmount = healAmount + (amount * stack) * math.min(ticks, ticksLeft)
+								healAmount = healAmount + (amount * stack) * min(ticks, ticksLeft)
 							else
-								for j=1, math.min(ticks, #(amount)) do
+								for j=1, min(ticks, #(amount)) do
 									healAmount = healAmount + (amount[j] * stack)
 								end
 							end
@@ -532,7 +585,7 @@ local function calculateGeneralAmount(level, amount, spellPower, spModifier, hea
 	local penalty = level > 20 and 1 or (1 - ((20 - level) * 0.0375))
 
 	-- Apply further downranking penalities
-	spellPower = spellPower * (penalty * math.min(1, math.max(0, 1 - (playerLevel - level - 11) * 0.05)))
+	spellPower = spellPower * (penalty * min(1, max(0, 1 - (playerLevel - level - 11) * 0.05)))
 
 	-- Apply zone modifier
 	healModifier = healModifier * HealComm.zoneHealModifier
@@ -547,7 +600,7 @@ local function calculateSpellPower(level, spellPower)
 	local penalty = level > 20 and 1 or (1 - ((20 - level) * 0.0375))
 
 	-- Apply further downranking penalities
-	return spellPower * (penalty * math.min(1, math.max(0, 1 - (playerLevel - level - 11) * 0.05)))
+	return spellPower * (penalty * min(1, max(0, 1 - (playerLevel - level - 11) * 0.05)))
 end
 
 -- Yes silly function, just cleaner to look at
@@ -693,7 +746,7 @@ if( playerClass == "DRUID" ) then
 
 				return targets, healAmount
 			elseif( hasVariableTicks ) then
-				healAmount = table.concat(healAmount, "@")
+				healAmount = tconcat(healAmount, "@")
 			end
 
 			return compressGUID[guid], healAmount
@@ -777,7 +830,7 @@ if( playerClass == "DRUID" ) then
 				end
 
 				local bombSpell = bombSpellPower * (hotData[spellName].dhCoeff * 1.88)
-				bombAmount = math.ceil(calculateGeneralAmount(hotData[spellName].levels[rank], hotData[spellName].bomb[rank], bombSpell, spModifier, healModifier + talentData[GiftofNature].current))
+				bombAmount = ceil(calculateGeneralAmount(hotData[spellName].levels[rank], hotData[spellName].bomb[rank], bombSpell, spModifier, healModifier + talentData[GiftofNature].current))
 
 				-- Figure out the hot tick healing
 				spellPower = spellPower * (hotData[spellName].coeff * (1 + talentData[EmpoweredRejuv].current))
@@ -806,18 +859,18 @@ if( playerClass == "DRUID" ) then
 				healAmount = healAmount / hotData[spellName].ticks
 				healModifier = healModifier * HealComm.zoneHealModifier
 
-				table.wipe(wgTicks)
+				twipe(wgTicks)
 				local tickModifier = equippedSetCache["T10 Resto"] >= 2 and 0.70 or 1
 				local tickAmount = healAmount / hotData[spellName].ticks
 				for i=1, hotData[spellName].ticks do
-					table.insert(wgTicks, math.ceil(healModifier * ((healAmount + tickAmount * (3 - (i - 1) * tickModifier)) + (spellPower * spModifier))))
+					tinsert(wgTicks, ceil(healModifier * ((healAmount + tickAmount * (3 - (i - 1) * tickModifier)) + (spellPower * spModifier))))
 				end
 
 				return HOT_HEALS, wgTicks, hotData[spellName].ticks, hotData[spellName].interval, nil, true
 			end
 
 			healAmount = calculateGeneralAmount(hotData[spellName].levels[rank], healAmount, spellPower, spModifier, healModifier)
-			return HOT_HEALS, math.ceil(healAmount), totalTicks, hotData[spellName].interval, bombAmount
+			return HOT_HEALS, ceil(healAmount), totalTicks, hotData[spellName].interval, bombAmount
 		end
 
 		-- Calcualte direct and channeled heals
@@ -909,10 +962,10 @@ if( playerClass == "DRUID" ) then
 			end
 
 			if( spellData[spellName].ticks ) then
-				return CHANNEL_HEALS, math.ceil(healAmount), spellData[spellName].ticks, spellData[spellName].ticks
+				return CHANNEL_HEALS, ceil(healAmount), spellData[spellName].ticks, spellData[spellName].ticks
 			end
 
-			return DIRECT_HEALS, math.ceil(healAmount)
+			return DIRECT_HEALS, ceil(healAmount)
 		end
 	end
 end
@@ -991,9 +1044,9 @@ if( playerClass == "PALADIN" ) then
 		-- Check for beacon when figuring out who to heal
 		GetHealTargets = function(bitType, guid, healAmount, spellName, hasVariableTicks)
 			if( activeBeaconGUID and activeBeaconGUID ~= guid and guidToUnit[activeBeaconGUID] and UnitIsVisible(guidToUnit[activeBeaconGUID]) ) then
-				return string.format("%s,%s", compressGUID[guid], compressGUID[activeBeaconGUID]), healAmount
+				return format("%s,%s", compressGUID[guid], compressGUID[activeBeaconGUID]), healAmount
 			elseif( hasVariableTicks ) then
-				healAmount = table.concat(healAmount, "@")
+				healAmount = tconcat(healAmount, "@")
 			end
 
 			return compressGUID[guid], healAmount
@@ -1041,7 +1094,7 @@ if( playerClass == "PALADIN" ) then
 				healAmount = healAmount * (1.50 * (1 + talentData[TouchedbytheLight].current))
 			end
 
-			return DIRECT_HEALS, math.ceil(healAmount)
+			return DIRECT_HEALS, ceil(healAmount)
 		end
 	end
 end
@@ -1124,7 +1177,7 @@ if( playerClass == "PRIEST" ) then
 		-- Check for beacon when figuring out who to heal
 		GetHealTargets = function(bitType, guid, healAmount, spellName, hasVariableTicks)
 			if( spellName == BindingHeal ) then
-				return string.format("%s,%s", compressGUID[guid], compressGUID[playerGUID]), healAmount
+				return format("%s,%s", compressGUID[guid], compressGUID[playerGUID]), healAmount
 			elseif( spellName == PrayerofHealing ) then
 				local targets = compressGUID[guid]
 				local group = guidToGroup[guid]
@@ -1138,7 +1191,7 @@ if( playerClass == "PRIEST" ) then
 
 				return targets, healAmount
 			elseif( hasVariableTicks ) then
-				healAmount = table.concat(healAmount, "@")
+				healAmount = tconcat(healAmount, "@")
 			end
 
 			return compressGUID[guid], healAmount
@@ -1180,7 +1233,7 @@ if( playerClass == "PRIEST" ) then
 			end
 
 			healAmount = calculateGeneralAmount(hotData[spellName].levels[rank], healAmount, spellPower, spModifier, healModifier)
-			return HOT_HEALS, math.ceil(healAmount), totalTicks, hotData[spellName].interval
+			return HOT_HEALS, ceil(healAmount), totalTicks, hotData[spellName].interval
 		end
 
 		-- If only every other class was as easy as Paladins
@@ -1235,10 +1288,10 @@ if( playerClass == "PRIEST" ) then
 
 			-- Penance ticks 3 times, the player will see all 3 ticks, everyone else should only see the last 2
 			if( spellName == Penance ) then
-				return CHANNEL_HEALS, math.ceil(healAmount), 2, 3
+				return CHANNEL_HEALS, ceil(healAmount), 2, 3
 			end
 
-			return DIRECT_HEALS, math.ceil(healAmount)
+			return DIRECT_HEALS, ceil(healAmount)
 		end
 	end
 end
@@ -1317,9 +1370,9 @@ if( playerClass == "SHAMAN" ) then
 		GetHealTargets = function(bitType, guid, healAmount, spellName, hasVariableTicks)
 			-- Glyph of Healing Wave, heals you for 20% of your heal when you heal someone else
 			if( glyphCache[55440] and guid ~= playerGUID and spellName == HealingWave ) then
-				return string.format("%s,%d,%s,%d", compressGUID[guid], healAmount, compressGUID[playerGUID], healAmount *  0.20), -1
+				return format("%s,%d,%s,%d", compressGUID[guid], healAmount, compressGUID[playerGUID], healAmount *  0.20), -1
 			elseif( hasVariableTicks ) then
-				healAmount = table.concat(healAmount, "@")
+				healAmount = tconcat(healAmount, "@")
 			end
 
 			return compressGUID[guid], healAmount
@@ -1423,7 +1476,7 @@ if( playerClass == "SHAMAN" ) then
 			end
 
 			-- Apply the final modifier of any MS or self heal increasing effects
-			return DIRECT_HEALS, math.ceil(healAmount)
+			return DIRECT_HEALS, ceil(healAmount)
 		end
 	end
 end
@@ -1432,7 +1485,7 @@ local function getName(spellID)
 	local name = GetSpellInfo(spellID)
 	--[===[@debug@
 	if( not name ) then
-		print(string.format("%s-r%s: Failed to find spellID %d", major, minor, spellID))
+		print(format("%s-r%s: Failed to find spellID %d", major, minor, spellID))
 	end
 	--@end-debug@]===]
 	return name or ""
@@ -1557,7 +1610,7 @@ local healingModifiers, currentModifiers = HealComm.healingModifiers, HealComm.c
 local distribution
 local CTL = ChatThrottleLib
 local function sendMessage(msg)
-	if( distribution and string.len(msg) <= 240 ) then
+	if( distribution and len(msg) <= 240 ) then
 		CTL:SendAddonMessage("BULK", COMM_PREFIX, msg, distribution)
 	end
 end
@@ -1618,7 +1671,7 @@ function HealComm:ZONE_CHANGED_NEW_AREA()
 
 		updateDistributionChannel()
 		clearPendingHeals()
-		table.wipe(activeHots)
+		twipe(activeHots)
 	end
 
 	instanceType = type
@@ -1662,15 +1715,15 @@ function HealComm:UNIT_AURA(unit)
 		if( not name ) then break end
 
 		if( healingModifiers[spellID] ) then
-			decrease = math.min(decrease, healingModifiers[spellID])
+			decrease = min(decrease, healingModifiers[spellID])
 		elseif( healingModifiers[name] ) then
-			decrease = math.min(decrease, healingModifiers[name])
+			decrease = min(decrease, healingModifiers[name])
 		elseif( healingStackMods[name] ) then
-			decrease = math.min(decrease, healingStackMods[name](name, rank, icon, stack))
+			decrease = min(decrease, healingStackMods[name](name, rank, icon, stack))
 		end
 
 		if( unit == "player" and selfModifiers[spellID] ) then
-			playerDecrease = math.min(playerDecrease, selfModifiers[spellID])
+			playerDecrease = min(playerDecrease, selfModifiers[spellID])
 		end
 
 		id = id + 1
@@ -1687,7 +1740,7 @@ function HealComm:UNIT_AURA(unit)
 		end
 	end
 
-	table.wipe(alreadyAdded)
+	twipe(alreadyAdded)
 
 	if( unit == "player" ) then
 		playerHealModifier = playerIncrease * playerDecrease
@@ -1724,7 +1777,7 @@ HealComm.GLYPH_UPDATED = HealComm.GlyphsUpdated
 -- Invalidate he average cache to recalculate for spells that increase in power due to leveling up (but not training new ranks)
 function HealComm:PLAYER_LEVEL_UP(level)
 	for spell, average in pairs(averageHeal) do
-		table.wipe(average)
+		twipe(average)
 
 		average.spell = spell
 	end
@@ -1763,7 +1816,7 @@ function HealComm:PLAYER_EQUIPMENT_CHANGED()
 
 	-- Check relic
 	local relic = GetInventoryItemLink("player", RANGED_SLOT)
-	playerCurrentRelic = relic and tonumber(string.match(relic, "item:(%d+):")) or nil
+	playerCurrentRelic = relic and tonumber(match(relic, "item:(%d+):")) or nil
 end
 
 -- COMM CODE
@@ -1778,26 +1831,26 @@ end
 
 -- Direct heal started
 local function loadHealList(pending, amount, stack, endTime, ticksLeft, ...)
-	table.wipe(tempPlayerList)
+	twipe(tempPlayerList)
 
 	-- For the sake of consistency, even a heal doesn't have multiple end times like a hot, it'll be treated as such in the DB
 	if( amount ~= -1 and amount ~= "-1" ) then
-		amount = not pending.hasVariableTicks and amount or loadHealAmount(string.split("@", amount))
+		amount = not pending.hasVariableTicks and amount or loadHealAmount(split("@", amount))
 
 		for i=1, select("#", ...) do
 			local guid = select(i, ...)
 			if( guid ) then
 				updateRecord(pending, decompressGUID[guid], amount, stack, endTime, ticksLeft)
-				table.insert(tempPlayerList, decompressGUID[guid])
+				tinsert(tempPlayerList, decompressGUID[guid])
 			end
 		end
 	else
 		for i=1, select("#", ...), 2 do
 			local guid = select(i, ...)
-			local amount = not pending.hasVariableTicks and tonumber((select(i + 1, ...))) or loadHealAmount(string.split("@", amount))
+			local amount = not pending.hasVariableTicks and tonumber((select(i + 1, ...))) or loadHealAmount(split("@", amount))
 			if( guid and amount ) then
 				updateRecord(pending, decompressGUID[guid], amount, stack, endTime, ticksLeft)
-				table.insert(tempPlayerList, decompressGUID[guid])
+				tinsert(tempPlayerList, decompressGUID[guid])
 			end
 		end
 	end
@@ -1815,7 +1868,7 @@ local function parseDirectHeal(casterGUID, spellID, amount, ...)
 	pendingHeals[casterGUID][spellName] = pendingHeals[casterGUID][spellName] or {}
 
 	local pending = pendingHeals[casterGUID][spellName]
-	table.wipe(pending)
+	twipe(pending)
 	pending.endTime = endTime / 1000
 	pending.spellID = spellID
 	pending.bitType = DIRECT_HEALS
@@ -1841,17 +1894,17 @@ local function parseChannelHeal(casterGUID, spellID, amount, totalTicks, ...)
 
 	local inc = amount == -1 and 2 or 1
 	local pending = pendingHeals[casterGUID][spellName]
-	table.wipe(pending)
+	twipe(pending)
 	pending.startTime = startTime / 1000
 	pending.endTime = endTime / 1000
-	pending.duration = math.max(pending.duration or 0, pending.endTime - pending.startTime)
+	pending.duration = max(pending.duration or 0, pending.endTime - pending.startTime)
 	pending.totalTicks = totalTicks
 	pending.tickInterval = (pending.endTime - pending.startTime) / totalTicks
 	pending.spellID = spellID
 	pending.isMultiTarget = (select("#", ...) / inc) > 1
 	pending.bitType = CHANNEL_HEALS
 
-	loadHealList(pending, amount, 1, 0, math.ceil(pending.duration / pending.tickInterval), ...)
+	loadHealList(pending, amount, 1, 0, ceil(pending.duration / pending.tickInterval), ...)
 
 	HealComm.callbacks:Fire("HealComm_HealStarted", casterGUID, spellID, pending.bitType, pending.endTime, unpack(tempPlayerList))
 end
@@ -1904,7 +1957,7 @@ local function parseHotHeal(casterGUID, wasUpdated, spellID, tickAmount, totalTi
 	pending.bitType = HOT_HEALS
 
 	-- As you can't rely on a hot being the absolutely only one up, have to apply the total amount now :<
-	local ticksLeft = math.ceil((endTime - GetTime()) / pending.tickInterval)
+	local ticksLeft = ceil((endTime - GetTime()) / pending.tickInterval)
 	loadHealList(pending, tickAmount, stack, endTime, ticksLeft, ...)
 
 	if( not wasUpdated ) then
@@ -1951,18 +2004,18 @@ local function parseHealEnd(casterGUID, pending, checkField, spellID, interrupte
 	end
 	if( not pending or not pending.bitType ) then return end
 
-	table.wipe(tempPlayerList)
+	twipe(tempPlayerList)
 
 	if( select("#", ...) == 0 ) then
 		for i=#(pending), 1, -5 do
-			table.insert(tempPlayerList, pending[i - 4])
+			tinsert(tempPlayerList, pending[i - 4])
 			removeRecord(pending, pending[i - 4])
 		end
 	else
 		for i=1, select("#", ...) do
 			local guid = decompressGUID[select(i, ...)]
 
-			table.insert(tempPlayerList, guid)
+			tinsert(tempPlayerList, guid)
 			removeRecord(pending, guid)
 		end
 	end
@@ -1978,7 +2031,7 @@ local function parseHealEnd(casterGUID, pending, checkField, spellID, interrupte
 
 	local bitType = pending.bitType
 	-- Clear data if we're done
-	if( #(pending) == 0 ) then table.wipe(pending) end
+	if( #(pending) == 0 ) then twipe(pending) end
 
 	HealComm.callbacks:Fire("HealComm_HealStopped", casterGUID, spellID, bitType, interrupted, unpack(tempPlayerList))
 end
@@ -2004,9 +2057,9 @@ local function parseHealDelayed(casterGUID, startTime, endTime, spellName)
 		return
 	end
 
-	table.wipe(tempPlayerList)
+	twipe(tempPlayerList)
 	for i=1, #(pending), 5 do
-		table.insert(tempPlayerList, pending[i])
+		tinsert(tempPlayerList, pending[i])
 	end
 
 	HealComm.callbacks:Fire("HealComm_HealDelayed", casterGUID, pending.spellID, pending.bitType, pending.endTime, unpack(tempPlayerList))
@@ -2018,7 +2071,7 @@ end
 function HealComm:CHAT_MSG_ADDON(prefix, message, channel, sender)
 	if( prefix ~= COMM_PREFIX or channel ~= distribution or sender == playerName ) then return end
 
-	local commType, extraArg, spellID, arg1, arg2, arg3, arg4, arg5, arg6 = string.split(":", message)
+	local commType, extraArg, spellID, arg1, arg2, arg3, arg4, arg5, arg6 = split(":", message)
 	local casterGUID = UnitGUID(sender)
 	spellID = tonumber(spellID)
 
@@ -2026,37 +2079,37 @@ function HealComm:CHAT_MSG_ADDON(prefix, message, channel, sender)
 
 	-- New direct heal - D:<extra>:<spellID>:<amount>:target1,target2...
 	if( commType == "D" and arg1 and arg2 ) then
-		parseDirectHeal(casterGUID, spellID, tonumber(arg1), string.split(",", arg2))
+		parseDirectHeal(casterGUID, spellID, tonumber(arg1), split(",", arg2))
 	-- New channel heal - C:<extra>:<spellID>:<amount>:<totalTicks>:target1,target2...
 	elseif( commType == "C" and arg1 and arg3 ) then
-		parseChannelHeal(casterGUID, spellID, tonumber(arg1), tonumber(arg2), string.split(",", arg3))
+		parseChannelHeal(casterGUID, spellID, tonumber(arg1), tonumber(arg2), split(",", arg3))
 	-- New hot with a "bomb" component - B:<totalTicks>:<spellID>:<bombAmount>:target1,target2:<amount>:<isMulti>:<tickInterval>:target1,target2...
 	elseif( commType == "B" and arg1 and arg6 ) then
-		parseHotHeal(casterGUID, false, spellID, tonumber(arg3), tonumber(extraArg), tonumber(arg5), string.split(",", arg6))
-		parseHotBomb(casterGUID, false, spellID, tonumber(arg1), string.split(",", arg2))
+		parseHotHeal(casterGUID, false, spellID, tonumber(arg3), tonumber(extraArg), tonumber(arg5), split(",", arg6))
+		parseHotBomb(casterGUID, false, spellID, tonumber(arg1), split(",", arg2))
 	-- New hot - H:<totalTicks>:<spellID>:<amount>:<isMulti>:<tickInterval>:target1,target2...
 	elseif( commType == "H" and arg1 and arg4 ) then
-		parseHotHeal(casterGUID, false, spellID, tonumber(arg1), tonumber(extraArg), tonumber(arg3), string.split(",", arg4))
+		parseHotHeal(casterGUID, false, spellID, tonumber(arg1), tonumber(extraArg), tonumber(arg3), split(",", arg4))
 	-- New updated heal somehow before ending - U:<totalTicks>:<spellID>:<amount>:<tickInterval>:target1,target2...
 	elseif( commType == "U" and arg1 and arg3 ) then
-		parseHotHeal(casterGUID, true, spellID, tonumber(arg1), tonumber(extraArg), tonumber(arg2), string.split(",", arg3))
+		parseHotHeal(casterGUID, true, spellID, tonumber(arg1), tonumber(extraArg), tonumber(arg2), split(",", arg3))
 	-- New variable tick hot - VH::<spellID>:<amount>:<isMulti>:<tickInterval>:target1,target2...
 	elseif( commType == "VH" and arg1 and arg4 ) then
-		parseHotHeal(casterGUID, false, spellID, arg1, tonumber(arg3), nil, string.split(",", arg4))
+		parseHotHeal(casterGUID, false, spellID, arg1, tonumber(arg3), nil, split(",", arg4))
 	-- New updated variable tick hot - U::<spellID>:amount1@amount2@amount3:<tickTotal>:target1,target2...
 	elseif( commType == "VU" and arg1 and arg3 ) then
-		parseHotHeal(casterGUID, true, spellID, arg1, tonumber(arg2), nil, string.split(",", arg3))
+		parseHotHeal(casterGUID, true, spellID, arg1, tonumber(arg2), nil, split(",", arg3))
 	-- New updated bomb hot - UB:<totalTicks>:<spellID>:<bombAmount>:target1,target2:<amount>:<tickInterval>:target1,target2...
 	elseif( commType == "UB" and arg1 and arg5 ) then
-		parseHotHeal(casterGUID, true, spellID, tonumber(arg3), tonumber(extraArg), tonumber(arg4), string.split(",", arg5))
-		parseHotBomb(casterGUID, true, spellID, tonumber(arg1), string.split(",", arg2))
+		parseHotHeal(casterGUID, true, spellID, tonumber(arg3), tonumber(extraArg), tonumber(arg4), split(",", arg5))
+		parseHotBomb(casterGUID, true, spellID, tonumber(arg1), split(",", arg2))
 	-- Heal stopped - S:<extra>:<spellID>:<ended early: 0/1>:target1,target2...
 	elseif( commType == "S" or commType == "HS" ) then
 		local interrupted = arg1 == "1" and true or false
 		local type = commType == "HS" and "id" or "name"
 
 		if( arg2 and arg2 ~= "" ) then
-			parseHealEnd(casterGUID, nil, type, spellID, interrupted, string.split(",", arg2))
+			parseHealEnd(casterGUID, nil, type, spellID, interrupted, split(",", arg2))
 		else
 			parseHealEnd(casterGUID, nil, type, spellID, interrupted)
 		end
@@ -2082,7 +2135,7 @@ HealComm.bucketFrame:SetScript("OnUpdate", function(self, elapsed)
 				if( data.timeout <= 0 ) then
 					-- This shouldn't happen, on the offhand chance it does then don't bother sending an event
 					if( #(data) == 0 or not data.spellID or not data.spellName ) then
-						table.wipe(data)
+						twipe(data)
 					-- We're doing a bucket for a tick heal like Tranquility or Wild Growth
 					elseif( data.type == "tick" ) then
 						local pending = pendingHeals[casterGUID] and ( pendingHeals[casterGUID][data.spellID] or pendingHeals[casterGUID][data.spellName] )
@@ -2091,22 +2144,22 @@ HealComm.bucketFrame:SetScript("OnUpdate", function(self, elapsed)
 							HealComm.callbacks:Fire("HealComm_HealUpdated", casterGUID, pending.spellID, pending.bitType, endTime, unpack(data))
 						end
 
-						table.wipe(data)
+						twipe(data)
 					-- We're doing a bucket for a cast thats a multi-target heal like Wild Growth or Prayer of Healing
 					elseif( data.type == "heal" ) then
 						local type, amount, totalTicks, tickInterval, _, hasVariableTicks = CalculateHotHealing(data[1], data.spellID)
 						if( type ) then
-							local targets, amount = GetHealTargets(type, data[1], hasVariableTicks and amount or math.max(amount, 0), data.spellName, data, hasVariableTicks)
-							parseHotHeal(playerGUID, false, data.spellID, amount, totalTicks, tickInterval, string.split(",", targets))
+							local targets, amount = GetHealTargets(type, data[1], hasVariableTicks and amount or max(amount, 0), data.spellName, data, hasVariableTicks)
+							parseHotHeal(playerGUID, false, data.spellID, amount, totalTicks, tickInterval, split(",", targets))
 
 							if( not hasVariableTicks ) then
-								sendMessage(string.format("H:%d:%d:%d::%d:%s", totalTicks, data.spellID, amount, tickInterval, targets))
+								sendMessage(format("H:%d:%d:%d::%d:%s", totalTicks, data.spellID, amount, tickInterval, targets))
 							else
-								sendMessage(string.format("VH::%d:%s::%d:%s", data.spellID, amount, totalTicks, targets))
+								sendMessage(format("VH::%d:%s::%d:%s", data.spellID, amount, totalTicks, targets))
 							end
 						end
 
-						table.wipe(data)
+						twipe(data)
 					end
 				else
 					totalLeft = totalLeft + 1
@@ -2131,7 +2184,7 @@ if( isHealerClass ) then
 end
 
 local COMBATLOG_OBJECT_AFFILIATION_MINE = COMBATLOG_OBJECT_AFFILIATION_MINE
-local CAN_HEAL = bit.bor(COMBATLOG_OBJECT_REACTION_FRIENDLY, COMBATLOG_OBJECT_REACTION_NEUTRAL)
+local CAN_HEAL = bor(COMBATLOG_OBJECT_REACTION_FRIENDLY, COMBATLOG_OBJECT_REACTION_NEUTRAL)
 function HealComm:COMBAT_LOG_EVENT_UNFILTERED(timestamp, eventType, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags, ...)
 	if( not eventRegistered[eventType] ) then return end
 
@@ -2140,11 +2193,11 @@ function HealComm:COMBAT_LOG_EVENT_UNFILTERED(timestamp, eventType, sourceGUID, 
 	if( eventType == "SPELL_HEAL" or eventType == "SPELL_PERIODIC_HEAL" ) then
 		local spellID, spellName, spellSchool = ...
 		local pending = sourceGUID and pendingHeals[sourceGUID] and (pendingHeals[sourceGUID][spellID] or pendingHeals[sourceGUID][spellName])
-		if( pending and pending[destGUID] and pending.bitType and bit.band(pending.bitType, OVERTIME_HEALS) > 0 ) then
+		if( pending and pending[destGUID] and pending.bitType and band(pending.bitType, OVERTIME_HEALS) > 0 ) then
 			local amount, stack, endTime, ticksLeft = getRecord(pending, destGUID)
 			ticksLeft = ticksLeft - 1
 			endTime = GetTime() + pending.tickInterval * ticksLeft
-			if( pending.hasVariableTicks ) then table.remove(amount, 1) end
+			if( pending.hasVariableTicks ) then tremove(amount, 1) end
 
 			updateRecord(pending, destGUID, amount, stack, endTime, ticksLeft)
 
@@ -2159,7 +2212,7 @@ function HealComm:COMBAT_LOG_EVENT_UNFILTERED(timestamp, eventType, sourceGUID, 
 					spellBucket.spellName = spellName
 					spellBucket.spellID = spellID
 					spellBucket[destGUID] = true
-					table.insert(spellBucket, destGUID)
+					tinsert(spellBucket, destGUID)
 
 					self.bucketFrame:Show()
 				end
@@ -2169,7 +2222,7 @@ function HealComm:COMBAT_LOG_EVENT_UNFILTERED(timestamp, eventType, sourceGUID, 
 		end
 
 	-- New hot was applied
-	elseif( ( eventType == "SPELL_AURA_APPLIED" or eventType == "SPELL_AURA_REFRESH" or eventType == "SPELL_AURA_APPLIED_DOSE" ) and bit.band(sourceFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) == COMBATLOG_OBJECT_AFFILIATION_MINE ) then
+	elseif( ( eventType == "SPELL_AURA_APPLIED" or eventType == "SPELL_AURA_REFRESH" or eventType == "SPELL_AURA_APPLIED_DOSE" ) and band(sourceFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) == COMBATLOG_OBJECT_AFFILIATION_MINE ) then
 		local spellID, spellName, spellSchool, auraType = ...
 		if( hotData[spellName] ) then
 			-- Multi target heal so put it in the bucket
@@ -2185,7 +2238,7 @@ function HealComm:COMBAT_LOG_EVENT_UNFILTERED(timestamp, eventType, sourceGUID, 
 					spellBucket.spellName = spellName
 					spellBucket.spellID = spellID
 					spellBucket[destGUID] = true
-					table.insert(spellBucket, destGUID)
+					tinsert(spellBucket, destGUID)
 
 					self.bucketFrame:Show()
 				end
@@ -2195,24 +2248,24 @@ function HealComm:COMBAT_LOG_EVENT_UNFILTERED(timestamp, eventType, sourceGUID, 
 			-- Single target so we can just send it off now thankfully
 			local type, amount, totalTicks, tickInterval, bombAmount, hasVariableTicks = CalculateHotHealing(destGUID, spellID)
 			if( type ) then
-				local targets, amount = GetHealTargets(type, destGUID, hasVariableTicks and amount or math.max(amount, 0), spellName, hasVariableTicks)
-				parseHotHeal(sourceGUID, false, spellID, amount, totalTicks, tickInterval, string.split(",", targets))
+				local targets, amount = GetHealTargets(type, destGUID, hasVariableTicks and amount or max(amount, 0), spellName, hasVariableTicks)
+				parseHotHeal(sourceGUID, false, spellID, amount, totalTicks, tickInterval, split(",", targets))
 
 				-- Hot with a bomb!
 				if( bombAmount ) then
-					local bombTargets, bombAmount = GetHealTargets(BOMB_HEALS, destGUID, math.max(bombAmount, 0), spellName)
-					parseHotBomb(sourceGUID, false, spellID, bombAmount, string.split(",", bombTargets))
-					sendMessage(string.format("B:%d:%d:%d:%s:%d::%d:%s", totalTicks, spellID, bombAmount, bombTargets, amount, tickInterval, targets))
+					local bombTargets, bombAmount = GetHealTargets(BOMB_HEALS, destGUID, max(bombAmount, 0), spellName)
+					parseHotBomb(sourceGUID, false, spellID, bombAmount, split(",", bombTargets))
+					sendMessage(format("B:%d:%d:%d:%s:%d::%d:%s", totalTicks, spellID, bombAmount, bombTargets, amount, tickInterval, targets))
 				elseif( hasVariableTicks ) then
-					sendMessage(string.format("VH::%d:%s::%d:%s", spellID, amount, totalTicks, targets))
+					sendMessage(format("VH::%d:%s::%d:%s", spellID, amount, totalTicks, targets))
 				-- Normal hot, nothing fancy
 				else
-					sendMessage(string.format("H:%d:%d:%d::%d:%s", totalTicks, spellID, amount, tickInterval, targets))
+					sendMessage(format("H:%d:%d:%d::%d:%s", totalTicks, spellID, amount, tickInterval, targets))
 				end
 			end
 		end
 	-- Single stack of a hot was removed, this only applies when going from 2 -> 1, when it goes from 1 -> 0 it fires SPELL_AURA_REMOVED
-	elseif( eventType == "SPELL_AURA_REMOVED_DOSE" and bit.band(sourceFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) == COMBATLOG_OBJECT_AFFILIATION_MINE ) then
+	elseif( eventType == "SPELL_AURA_REMOVED_DOSE" and band(sourceFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) == COMBATLOG_OBJECT_AFFILIATION_MINE ) then
 		local spellID, spellName, spellSchool, auraType, stacks = ...
 		local pending = sourceGUID and pendingHeals[sourceGUID] and pendingHeals[sourceGUID][spellID]
 		if( pending and pending.bitType ) then
@@ -2227,16 +2280,16 @@ function HealComm:COMBAT_LOG_EVENT_UNFILTERED(timestamp, eventType, sourceGUID, 
 					if( bombAmount ) then
 						parseHotBomb(sourceGUID, true, spellID, bombAmount, compressGUID[destGUID])
 
-						sendMessage(string.format("UB:%s:%d:%d:%s:%d:%d:%s", pending.totalTicks, spellID, bombAmount, compressGUID[destGUID], amount, pending.tickInterval, compressGUID[destGUID]))
+						sendMessage(format("UB:%s:%d:%d:%s:%d:%d:%s", pending.totalTicks, spellID, bombAmount, compressGUID[destGUID], amount, pending.tickInterval, compressGUID[destGUID]))
 						return
 					end
 				end
 
 				-- Failed to find any sort of bomb-y info we needed or it doesn't have a bomb anyway
 				if( pending.hasVariableTicks ) then
-					sendMessage(string.format("VU::%d:%s:%d:%s", spellID, amount, pending.totalTicks, compressGUID[destGUID]))
+					sendMessage(format("VU::%d:%s:%d:%s", spellID, amount, pending.totalTicks, compressGUID[destGUID]))
 				else
-					sendMessage(string.format("U:%s:%d:%d:%d:%s", spellID, amount, pending.totalTicks, pending.tickInterval, compressGUID[destGUID]))
+					sendMessage(format("U:%s:%d:%d:%d:%s", spellID, amount, pending.totalTicks, pending.tickInterval, compressGUID[destGUID]))
 				end
 			end
 		end
@@ -2246,9 +2299,9 @@ function HealComm:COMBAT_LOG_EVENT_UNFILTERED(timestamp, eventType, sourceGUID, 
 		local spellID, spellName, spellSchool, auraType = ...
 
 		-- Hot faded that we cast
-		if( hotData[spellName] and bit.band(sourceFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) == COMBATLOG_OBJECT_AFFILIATION_MINE ) then
+		if( hotData[spellName] and band(sourceFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) == COMBATLOG_OBJECT_AFFILIATION_MINE ) then
 			parseHealEnd(sourceGUID, nil, "id", spellID, false, compressGUID[destGUID])
-			sendMessage(string.format("HS::%d::%s", spellID, compressGUID[destGUID]))
+			sendMessage(format("HS::%d::%s", spellID, compressGUID[destGUID]))
 		end
 	end
 end
@@ -2281,7 +2334,7 @@ end
 function HealComm:UNIT_SPELLCAST_SENT(unit, spellName, spellRank, castOn)
 	if( unit ~= "player" or not spellData[spellName] or not averageHeal[spellName][spellRank] ) then return end
 
-	castTarget = string.gsub(castOn, "(.-)%-(.*)$", "%1")
+	castTarget = gsub(castOn, "(.-)%-(.*)$", "%1")
 	lastSentID = spellName .. spellRank
 
 	-- Self cast is off which means it's possible to have a spell waiting for a target.
@@ -2316,14 +2369,14 @@ function HealComm:UNIT_SPELLCAST_START(unit, spellName, spellRank, id)
 
 	-- Figure out who we are healing and for how much
 	local type, amount, ticks, localTicks = CalculateHealing(castGUID, spellName, spellRank)
-	local targets, amount = GetHealTargets(type, castGUID, math.max(amount, 0), spellName)
+	local targets, amount = GetHealTargets(type, castGUID, max(amount, 0), spellName)
 
 	if( type == DIRECT_HEALS ) then
-		parseDirectHeal(playerGUID, self.spellToID[nameID], amount, string.split(",", targets))
-		sendMessage(string.format("D::%d:%d:%s", self.spellToID[nameID] or 0, amount or "", targets))
+		parseDirectHeal(playerGUID, self.spellToID[nameID], amount, split(",", targets))
+		sendMessage(format("D::%d:%d:%s", self.spellToID[nameID] or 0, amount or "", targets))
 	elseif( type == CHANNEL_HEALS ) then
-		parseChannelHeal(playerGUID, self.spellToID[nameID], amount, localTicks, string.split(",", targets))
-		sendMessage(string.format("C::%d:%d:%s:%s", self.spellToID[nameID] or 0, amount, ticks, targets))
+		parseChannelHeal(playerGUID, self.spellToID[nameID], amount, localTicks, split(",", targets))
+		sendMessage(format("C::%d:%d:%s:%s", self.spellToID[nameID] or 0, amount, ticks, targets))
 	end
 end
 
@@ -2335,7 +2388,7 @@ function HealComm:UNIT_SPELLCAST_SUCCEEDED(unit, spellName, spellRank, id)
 
 	castID = nil
 	parseHealEnd(playerGUID, nil, "name", self.spellToID[nameID], false)
-	sendMessage(string.format("S::%d:0", self.spellToID[nameID] or 0))
+	sendMessage(format("S::%d:0", self.spellToID[nameID] or 0))
 end
 
 function HealComm:UNIT_SPELLCAST_STOP(unit, spellName, spellRank, id)
@@ -2344,7 +2397,7 @@ function HealComm:UNIT_SPELLCAST_STOP(unit, spellName, spellRank, id)
 
 	castID = nil
 	parseHealEnd(playerGUID, nil, "name", self.spellToID[nameID], true)
-	sendMessage(string.format("S::%d:1", self.spellToID[nameID] or 0))
+	sendMessage(format("S::%d:1", self.spellToID[nameID] or 0))
 end
 
 function HealComm:UNIT_SPELLCAST_CHANNEL_STOP(unit, spellName, spellRank, id)
@@ -2353,7 +2406,7 @@ function HealComm:UNIT_SPELLCAST_CHANNEL_STOP(unit, spellName, spellRank, id)
 
 	castID = nil
 	parseHealEnd(playerGUID, nil, "name", self.spellToID[nameID], false)
-	sendMessage(string.format("S::%d:0", self.spellToID[nameID] or 0))
+	sendMessage(format("S::%d:0", self.spellToID[nameID] or 0))
 end
 
 -- Cast didn't go through, recheck any charge data if necessary
@@ -2537,9 +2590,9 @@ local wasInParty, wasInRaid
 local function clearGUIDData()
 	clearPendingHeals()
 
-	table.wipe(compressGUID)
-	table.wipe(decompressGUID)
-	table.wipe(activePets)
+	twipe(compressGUID)
+	twipe(decompressGUID)
+	twipe(activePets)
 
 	playerGUID = playerGUID or UnitGUID("player")
 	HealComm.guidToUnit = {[playerGUID] = "player"}
@@ -2659,11 +2712,11 @@ end
 function HealComm:OnInitialize()
 	-- If another instance already loaded then the tables should be wiped to prevent old data from persisting
 	-- in case of a spell being removed later on, only can happen if a newer LoD version is loaded
-	table.wipe(spellData)
-	table.wipe(hotData)
-	table.wipe(itemSetsData)
-	table.wipe(talentData)
-	table.wipe(averageHeal)
+	twipe(spellData)
+	twipe(hotData)
+	twipe(itemSetsData)
+	twipe(talentData)
+	twipe(averageHeal)
 
 	-- Load all of the classes formulas and such
 	LoadClassData()
