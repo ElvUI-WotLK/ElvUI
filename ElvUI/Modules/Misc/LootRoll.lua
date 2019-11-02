@@ -188,6 +188,7 @@ end
 
 function M:CreateRollFrame()
 	local frame = CreateFrame("Frame", nil, E.UIParent)
+	frame:SetFrameStrata("DIALOG")
 	frame:Size(FRAME_WIDTH, FRAME_HEIGHT)
 	frame:SetTemplate("Default")
 	frame:SetScript("OnEvent", OnEvent)
