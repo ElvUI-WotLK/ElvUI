@@ -172,7 +172,7 @@ do
 		else
 			local playerMoney = GetMoney()
 
-			if playerMoney > repairAllCost then
+			if playerMoney >= repairAllCost then
 				RepairAllItems()
 
 				E:Print(L["Your items have been repaired for: "] .. E:FormatMoney(repairAllCost, "SMART", true))
@@ -192,7 +192,11 @@ end
 
 function M:MERCHANT_SHOW()
 	if E.db.bags.vendorGrays.enable then
-		Bags:VendorGrays()
+		local itemCount = Bags:GetGraysInfo()
+
+		if itemCount > 0 then
+			Bags:VendorGrays()
+		end
 	end
 
 	local repairMode = E.db.general.autoRepair
