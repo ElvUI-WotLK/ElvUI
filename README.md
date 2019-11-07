@@ -14,12 +14,27 @@ This UI will arrange your interface to be more flexible and practical.
 
 ## Screenshots:
 
-<img src="https://cloud.githubusercontent.com/assets/590348/22867052/f8d570ba-f190-11e6-9e4c-aee3adc16154.jpg" align="right" width="48.5%">
-<img src="https://cloud.githubusercontent.com/assets/590348/22867049/f8d43506-f190-11e6-9a1c-019a9a190fd7.jpg" width="48.5%">
-<img src="https://cloud.githubusercontent.com/assets/590348/22867050/f8d4f662-f190-11e6-9acd-fc83d7827bc0.jpg" align="right" width="48.5%">
-<img src="https://cloud.githubusercontent.com/assets/590348/22944322/5d95a2b0-f301-11e6-81e3-52d1d619c850.jpg" width="48.5%">
-<img src="https://user-images.githubusercontent.com/19589902/30231616-62e40f32-94f4-11e7-9712-a32f19719cd8.jpg" align="right" width="48.5%">
-<img src="https://user-images.githubusercontent.com/19589902/30231617-62e74594-94f4-11e7-96e5-65d81991dcf1.jpg" width="48.5%">
+<a href="https://cloud.githubusercontent.com/assets/590348/22867052/f8d570ba-f190-11e6-9e4c-aee3adc16154.jpg">
+<img src="https://user-images.githubusercontent.com/590348/68385406-bc90f880-016a-11ea-934f-16e4a920a149.jpg" align="right" width="48.5%">
+</a>
+<a href="https://cloud.githubusercontent.com/assets/590348/22867049/f8d43506-f190-11e6-9a1c-019a9a190fd7.jpg">
+<img src="https://user-images.githubusercontent.com/590348/68385404-bc90f880-016a-11ea-97bc-c9765d4ac0f3.jpg" width="48.5%">
+</a>
+
+<a href="https://cloud.githubusercontent.com/assets/590348/22867050/f8d4f662-f190-11e6-9acd-fc83d7827bc0.jpg">
+<img src="https://user-images.githubusercontent.com/590348/68385408-bc90f880-016a-11ea-8b94-ed6f0070aaa3.jpg" align="right" width="48.5%">
+</a>
+<a href="https://cloud.githubusercontent.com/assets/590348/22944322/5d95a2b0-f301-11e6-81e3-52d1d619c850.jpg">
+<img src="https://user-images.githubusercontent.com/590348/68385407-bc90f880-016a-11ea-87f0-66265cb7b5e1.jpg" width="48.5%">
+</a>
+
+<a href="https://user-images.githubusercontent.com/19589902/30231616-62e40f32-94f4-11e7-9712-a32f19719cd8.jpg">
+<img src="https://user-images.githubusercontent.com/590348/68385411-bd298f00-016a-11ea-8512-fccf37e6024a.jpg" align="right" width="48.5%">
+</a>
+<a href="https://user-images.githubusercontent.com/19589902/30231617-62e74594-94f4-11e7-96e5-65d81991dcf1.jpg">
+<img src="https://user-images.githubusercontent.com/590348/68385409-bd298f00-016a-11ea-82ba-d80277aa14f4.jpg" width="48.5%">
+</a>
+
 
 ## Installation:
 
