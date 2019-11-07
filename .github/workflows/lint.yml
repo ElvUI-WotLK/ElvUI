@@ -1,0 +1,74 @@
+name: lint
+
+on:
+  push:
+    paths:
+      - '.github/workflows/**.yml'
+      - '**.lua'
+  pull_request:
+    paths:
+      - '**.lua'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    env:
+      LUA_VERSION: 5.1.5
+      LUAROCKS_VERSION: 2.4.2
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Cache Lua
+      uses: actions/cache@v1
+      id: luacache
+      with:
+        path: .lua
+        key: ${{ runner.os }}-lua-${{ env.LUA_VERSION }}
+        restore-keys: |
+          ${{ runner.os }}-lua-${{ env.LUA_VERSION }}
+
+    - name: Cache LuaRocks
+      uses: actions/cache@v1
+      id: luarockscache
+      with:
+        path: .luarocks
+        key: ${{ runner.os }}-luarocks-${{ env.LUAROCKS_VERSION }}
+        restore-keys: |
+          ${{ runner.os }}-luarocks-${{ env.LUAROCKS_VERSION }}
+
+    - name: Install Lua
+      if: steps.luacache.outputs.cache-hit != 'true'
+      run: |
+        sudo apt-get install libreadline-dev libncurses-dev
+        wget https://www.lua.org/ftp/lua-${{ env.LUA_VERSION }}.tar.gz -O - | tar -xzf -
+        cd lua-${{ env.LUA_VERSION }}
+        make linux
+        make -j INSTALL_TOP=$GITHUB_WORKSPACE/.lua install
+        rm -rf $GITHUB_WORKSPACE/lua-${{ env.LUA_VERSION }}
+
+    - name: Install LuaRocks and Luacheck
+      if: steps.luarockscache.outputs.cache-hit != 'true'
+      run: |
+        wget https://luarocks.org/releases/luarocks-${{ env.LUAROCKS_VERSION }}.tar.gz -O - | tar -xzf -
+        cd luarocks-${{ env.LUAROCKS_VERSION }}
+        ./configure --with-lua-bin=$GITHUB_WORKSPACE/.lua/bin --prefix=$GITHUB_WORKSPACE/.luarocks
+        make build
+        make install
+        PATH=$PATH:$GITHUB_WORKSPACE/.luarocks/bin
+        luarocks install luacheck
+        luarocks install lanes
+        rm -rf $GITHUB_WORKSPACE/luarocks-${{ env.LUAROCKS_VERSION }}
+
+    - name: Luacheck
+      run: .luarocks/bin/luacheck . -q
+
+    - name: Notify on Failure
+      if: failure()
+      env:
+        BUILD_STATUS: ${{ job.status }}
+        DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        DISCORD_WEBHOOK_SCRIPT: ${{ secrets.DISCORD_WEBHOOK_SCRIPT }}
+      run: curl -s $DISCORD_WEBHOOK_SCRIPT | bash
