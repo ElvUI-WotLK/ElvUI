@@ -1,9 +1,8 @@
 name: lint
 
 on:
-  push:
+  pull_request:
     paths:
-      - '.github/workflows/**.yml'
       - '**.lua'
 
 jobs:
