@@ -65,6 +65,8 @@ E.wowbuild = tonumber(E.wowbuild)
 E.resolution = GetCVar("gxResolution")
 E.screenwidth, E.screenheight = tonumber(match(E.resolution, "(%d+)x+%d")), tonumber(match(E.resolution, "%d+x(%d+)"))
 E.isMacClient = IsMacClient()
+E.NewSign = "|TInterface\\OptionsFrame\\UI-OptionsFrame-NewFeatureIcon:14:14|t"
+E.InfoColor = "|cfffe7b2c"
 
 --Tables
 E.media = {}
