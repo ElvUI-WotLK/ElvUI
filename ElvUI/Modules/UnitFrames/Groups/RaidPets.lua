@@ -42,10 +42,9 @@ function UF:Construct_RaidpetFrames()
 
 	UF:Update_StatusBars()
 	UF:Update_FontStrings()
-	UF:Update_RaidpetFrames(self, E.db.unitframe.units.raidpet)
 
-	self:SetAttribute("initial-width", self.UNIT_WIDTH)
-	self:SetAttribute("initial-height", self.UNIT_HEIGHT)
+	self.db = UF.db.units.raidpet
+	self.PostCreate = UF.Update_RaidpetFrames
 
 	return self
 end
@@ -91,6 +90,7 @@ function UF:Update_RaidpetHeader(header, db)
 end
 
 function UF:Update_RaidpetFrames(frame, db)
+	db = frame.db or db
 	frame.db = db
 
 	frame.Portrait = frame.Portrait or (db.portrait.style == "2D" and frame.Portrait2D or frame.Portrait3D)
@@ -133,6 +133,9 @@ function UF:Update_RaidpetFrames(frame, db)
 
 	if not InCombatLockdown() then
 		frame:Size(frame.UNIT_WIDTH, frame.UNIT_HEIGHT)
+	else
+		frame:SetAttribute("initial-width", frame.UNIT_WIDTH)
+		frame:SetAttribute("initial-height", frame.UNIT_HEIGHT)
 	end
 
 	--Health

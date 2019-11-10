@@ -45,10 +45,8 @@ function UF:Construct_TankFrames()
 
 	self.originalParent = self:GetParent()
 
-	UF:Update_TankFrames(self, E.db.unitframe.units.tank)
-
-	self:SetAttribute("initial-width", self.UNIT_WIDTH)
-	self:SetAttribute("initial-height", self.UNIT_HEIGHT)
+	self.db = UF.db.units.tank
+	self.PostCreate = UF.Update_TankFrames
 
 	return self
 end
@@ -75,7 +73,12 @@ function UF:Update_TankHeader(header, db)
 end
 
 function UF:Update_TankFrames(frame, db)
-	frame.db = db
+	if not db then
+		db = frame.db
+	else
+		frame.db = db
+	end
+
 	frame.colors = ElvUF.colors
 	frame:RegisterForClicks(self.db.targetOnMouseDown and "AnyDown" or "AnyUp")
 
@@ -131,9 +134,20 @@ function UF:Update_TankFrames(frame, db)
 				UnregisterUnitWatch(frame)
 				frame:SetParent(E.HiddenFrame)
 			end
+		else
+			if childDB.enable then
+				frame:SetAttribute("initial-anchor", format("%s,%s,%d,%d", E.InversePoints[childDB.anchorPoint], childDB.anchorPoint, childDB.xOffset, childDB.yOffset))
+				frame:SetAttribute("initial-width", frame.UNIT_WIDTH)
+				frame:SetAttribute("initial-height", frame.UNIT_HEIGHT)
+			end
 		end
-	elseif not InCombatLockdown() then
-		frame:Size(frame.UNIT_WIDTH, frame.UNIT_HEIGHT)
+	else
+		if not InCombatLockdown() then
+			frame:Size(frame.UNIT_WIDTH, frame.UNIT_HEIGHT)
+		else
+			frame:SetAttribute("initial-width", frame.UNIT_WIDTH)
+			frame:SetAttribute("initial-height", frame.UNIT_HEIGHT)
+		end
 	end
 
 	--Health

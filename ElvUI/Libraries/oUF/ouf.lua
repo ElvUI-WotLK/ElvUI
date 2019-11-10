@@ -430,6 +430,12 @@ local function initObject(unit, style, styleFunc, header, ...)
 			func(object)
 		end
 
+		-- ElvUI block
+		if object.PostCreate then
+			object:PostCreate(object)
+		end
+		-- end block
+
 		-- Make Clique kinda happy
 		_G.ClickCastFrames = ClickCastFrames or {}
 		ClickCastFrames[object] = true
