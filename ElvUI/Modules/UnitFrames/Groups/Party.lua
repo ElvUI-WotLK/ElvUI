@@ -281,7 +281,7 @@ function UF:Update_PartyFrames(frame, db)
 	--Cutaway
 	UF:Configure_Cutaway(frame)
 
-	frame:UpdateAllElements("ElvUI_UpdateAllElements")
+	frame:UpdateAllElements("ForceUpdate")
 end
 
 UF.headerstoload.party = {nil, "ELVUI_UNITPET, ELVUI_UNITTARGET"}

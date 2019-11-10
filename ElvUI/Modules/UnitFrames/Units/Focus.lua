@@ -131,7 +131,7 @@ function UF:Update_FocusFrame(frame, db)
 	--Debuff Highlight
 	UF:Configure_DebuffHighlight(frame)
 
-	frame:UpdateAllElements("ElvUI_UpdateAllElements")
+	frame:UpdateAllElements("ForceUpdate")
 end
 
 tinsert(UF.unitstoload, "focus")

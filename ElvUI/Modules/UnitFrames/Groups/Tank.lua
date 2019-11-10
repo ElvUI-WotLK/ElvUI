@@ -183,7 +183,7 @@ function UF:Update_TankFrames(frame, db)
 		UF:UpdateAuraWatch(frame)
 	end
 
-	frame:UpdateAllElements("ElvUI_UpdateAllElements")
+	frame:UpdateAllElements("ForceUpdate")
 end
 
 UF.headerstoload.tank = {"MAINTANK", "ELVUI_UNITTARGET"}

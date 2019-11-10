@@ -183,7 +183,7 @@ function UF:Update_AssistFrames(frame, db)
 		UF:UpdateAuraWatch(frame)
 	end
 
-	frame:UpdateAllElements("ElvUI_UpdateAllElements")
+	frame:UpdateAllElements("ForceUpdate")
 end
 
 UF.headerstoload.assist = {"MAINASSIST", "ELVUI_UNITTARGET"}
