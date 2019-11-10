@@ -130,8 +130,11 @@ function UF:PartySmartVisibility(event)
 end
 
 function UF:Update_PartyFrames(frame, db)
-	db = frame.db or db
-	frame.db = db
+	if not db then
+		db = frame.db
+	else
+		frame.db = db
+	end
 
 	frame.Portrait = frame.Portrait or (db.portrait.style == "2D" and frame.Portrait2D or frame.Portrait3D)
 	frame.colors = ElvUF.colors
