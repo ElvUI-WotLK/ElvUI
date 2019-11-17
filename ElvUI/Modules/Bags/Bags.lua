@@ -1659,6 +1659,8 @@ function B:ProgressQuickVendor()
 		if link and info.details then
 			E:Print(format("%s|cFF00DDDDx%d|r %s", link, stackCount, B:FormatMoney(itemPrice)))
 		end
+
+		E.callbacks:Fire("VendorGreys_ItemSold", itemPrice)
 	end
 
 	tremove(info.itemList, 1)

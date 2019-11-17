@@ -139,7 +139,11 @@ do
 		return playerMoney - money
 	end
 
-	function M:AutoRepair(repairMode)
+	local function FullRepairMessage(repairAllCost)
+		E:Print(format("%s%s", L["Your items have been repaired for: "], E:FormatMoney(repairAllCost, "SMART", true)))
+	end
+
+	function M:AutoRepair(repairMode, greyValue)
 		if not CanMerchantRepair() or IsShiftKeyDown() then return end
 
 		local repairAllCost, canRepair = GetRepairAllCost()
@@ -168,19 +172,24 @@ do
 		if repairMode == "GUILD" then
 			RepairAllItems(true)
 
-			E:Print(L["Your items have been repaired using guild bank funds for: "] .. E:FormatMoney(repairAllCost, "SMART", true))
+			E:Print(format("%s%s", L["Your items have been repaired using guild bank funds for: "], E:FormatMoney(repairAllCost, "SMART", true)))
 		else
 			local playerMoney = GetMoney()
 
 			if playerMoney >= repairAllCost then
 				RepairAllItems()
+				FullRepairMessage(repairAllCost)
+			elseif greyValue and playerMoney + greyValue >= repairAllCost then
+				self.playerMoney = playerMoney
+				self.repairAllCost = repairAllCost
 
-				E:Print(L["Your items have been repaired for: "] .. E:FormatMoney(repairAllCost, "SMART", true))
+				self:RegisterEvent("MERCHANT_CLOSED")
+				E.RegisterCallback(M, "VendorGreys_ItemSold")
 			else
 				local spent = RepairInventoryByPriority(playerMoney)
 
 				if spent > 0 then
-					E:Print(L["Your items have been repaired for: "] .. E:FormatMoney(spent, "SMART", true))
+					E:Print(format("%s%s", L["Your items have been repaired for: "], E:FormatMoney(spent, "SMART", true)))
 					E:Print(L["You don't have enough money to repair all items."])
 				else
 					E:Print(L["You don't have enough money to repair."])
@@ -188,11 +197,46 @@ do
 			end
 		end
 	end
+
+	function M:VendorGreys_ItemSold(_, moneyGained)
+		self.playerMoney = self.playerMoney + moneyGained
+
+		if self.playerMoney >= self.repairAllCost then
+			if self.playerMoney > GetMoney() then
+				self:RegisterEvent("PLAYER_MONEY")
+				E.UnregisterCallback(M, "VendorGreys_ItemSold")
+			else
+				RepairAllItems()
+				FullRepairMessage(self.repairAllCost)
+			end
+		end
+	end
+
+	function M:PLAYER_MONEY()
+		if self.playerMoney <= GetMoney() then
+			RepairAllItems()
+			FullRepairMessage(self.repairAllCost)
+
+			self:MERCHANT_CLOSED()
+		end
+	end
+
+	function M:MERCHANT_CLOSED()
+		self.playerMoney = nil
+		self.repairAllCost = nil
+
+		self:UnregisterEvent("PLAYER_MONEY")
+		self:UnregisterEvent("MERCHANT_CLOSED")
+		E.UnregisterCallback(M, "VendorGreys_ItemSold")
+	end
 end
 
 function M:MERCHANT_SHOW()
+	local greyValue
+
 	if E.db.bags.vendorGrays.enable then
-		local itemCount = Bags:GetGraysInfo()
+		local itemCount
+		itemCount, greyValue = Bags:GetGraysInfo()
 
 		if itemCount > 0 then
 			Bags:VendorGrays()
@@ -201,7 +245,7 @@ function M:MERCHANT_SHOW()
 
 	local repairMode = E.db.general.autoRepair
 	if repairMode ~= "NONE" then
-		self:AutoRepair(repairMode)
+		self:AutoRepair(repairMode, greyValue)
 	end
 end
 
