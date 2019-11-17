@@ -97,7 +97,8 @@ function E:Cooldown_StopTimer(cd)
 end
 
 function E:CreateCooldownTimer(parent)
-	local timer = CreateFrame("Frame", nil, parent)
+	local timer = CreateFrame("Frame", parent:GetName() and "$parentTimer" or nil, parent)
+	timer:SetFrameLevel(parent:GetFrameLevel() + 1)
 	timer:Hide()
 	timer:SetAllPoints()
 	timer.parent = parent
