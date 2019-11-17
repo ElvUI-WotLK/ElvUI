@@ -235,7 +235,7 @@ end
 
 do
 	local targetID
-	function lib.frame:UNIT_TARGET(unitID)
+	function lib.frame:UNIT_TARGET(_, unitID)
 		if not UnitIsUnit(unitID, "player") then
 			targetID = unitID.."target"
 			ResetUnitAuras(targetID)
@@ -245,7 +245,7 @@ do
 	end
 end
 
-function lib.frame:UNIT_AURA(unitID)
+function lib.frame:UNIT_AURA(_, unitID)
 	ResetUnitAuras(unitID)
 	CheckUnitAuras(unitID, "HELPFUL")
 	CheckUnitAuras(unitID, "HARMFUL")
