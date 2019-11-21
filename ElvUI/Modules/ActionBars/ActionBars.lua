@@ -15,7 +15,6 @@ local UnitCastingInfo = UnitCastingInfo
 local UnitChannelInfo = UnitChannelInfo
 local UnitAffectingCombat = UnitAffectingCombat
 local UnitExists = UnitExists
-local VehicleExit = VehicleExit
 local PetDismiss = PetDismiss
 local CanExitVehicle = CanExitVehicle
 local InCombatLockdown = InCombatLockdown
@@ -104,7 +103,6 @@ function AB:PositionAndSizeBar(barName)
 	local bar = self.handledBars[barName]
 
 	bar.db = self.db[barName]
-	bar.db.position = nil --Depreciated
 
 	if visibility and match(visibility, "[\n\r]") then
 		visibility = gsub(visibility, "[\n\r]","")
@@ -326,63 +324,48 @@ function AB:PLAYER_REGEN_ENABLED()
 	self:UnregisterEvent("PLAYER_REGEN_ENABLED")
 end
 
-local vehicle_CallOnEvent -- so we can call the local function inside of itself
 local function Vehicle_OnEvent(self, event)
-	if event == "PLAYER_REGEN_ENABLED" then
-		self:UnregisterEvent(event)
-	elseif InCombatLockdown() then
-		self:RegisterEvent("PLAYER_REGEN_ENABLED", vehicle_CallOnEvent)
-		return
-	end
-
 	if CanExitVehicle() and not E.db.general.minimap.icons.vehicleLeave.hide then
 		self:Show()
-		self:GetNormalTexture():SetVertexColor(1, 1, 1)
-		self:EnableMouse(true)
 	else
 		self:Hide()
 	end
 end
-vehicle_CallOnEvent = Vehicle_OnEvent
-
-local function Vehicle_OnClick()
-	VehicleExit()
-end
 
 function AB:UpdateVehicleLeave()
-	local button = LeaveVehicleButton
-	if not button then return end
+	if not self.vehicle then return end
 
-	local pos = E.db.general.minimap.icons.vehicleLeave.position or "BOTTOMLEFT"
-	local scale = 26 * (E.db.general.minimap.icons.vehicleLeave.scale or 1)
-	button:ClearAllPoints()
-	button:Point(pos, Minimap, pos, E.db.general.minimap.icons.vehicleLeave.xOffset or 2, E.db.general.minimap.icons.vehicleLeave.yOffset or 2)
-	button:Size(scale, scale)
+	local pos = E.db.general.minimap.icons.vehicleLeave.position
+
+	self.vehicle:ClearAllPoints()
+	self.vehicle:Point(pos, Minimap, pos, E.db.general.minimap.icons.vehicleLeave.xOffset, E.db.general.minimap.icons.vehicleLeave.yOffset)
+	self.vehicle:Size(26 * E.db.general.minimap.icons.vehicleLeave.scale)
+
+	Vehicle_OnEvent(self.vehicle)
 end
 
 function AB:CreateVehicleLeave()
-	local vehicle = CreateFrame("Button", "LeaveVehicleButton", E.UIParent)
-	vehicle:Size(26)
+	local vehicle = CreateFrame("Button", "ElvUI_LeaveVehicleButton", E.UIParent)
+	vehicle:Hide()
 	vehicle:SetFrameStrata("HIGH")
-	vehicle:Point("BOTTOMLEFT", Minimap, "BOTTOMLEFT", 2, 2)
 	vehicle:SetNormalTexture(E.Media.Textures.ExitVehicle)
 	vehicle:SetPushedTexture(E.Media.Textures.ExitVehicle)
 	vehicle:SetHighlightTexture(E.Media.Textures.ExitVehicle)
 	vehicle:SetTemplate()
+	vehicle:EnableMouse(true)
 	vehicle:RegisterForClicks("AnyUp")
 
-	vehicle:SetScript("OnClick", Vehicle_OnClick)
+	vehicle:SetScript("OnClick", VehicleExit)
+	vehicle:SetScript("OnEvent", Vehicle_OnEvent)
 	vehicle:RegisterEvent("PLAYER_ENTERING_WORLD")
 	vehicle:RegisterEvent("UPDATE_BONUS_ACTIONBAR")
 	vehicle:RegisterEvent("UPDATE_MULTI_CAST_ACTIONBAR")
 	vehicle:RegisterEvent("UNIT_ENTERED_VEHICLE")
 	vehicle:RegisterEvent("UNIT_EXITED_VEHICLE")
 	vehicle:RegisterEvent("VEHICLE_UPDATE")
-	vehicle:SetScript("OnEvent", Vehicle_OnEvent)
 
+	self.vehicle = vehicle
 	self:UpdateVehicleLeave()
-
-	vehicle:Hide()
 end
 
 function AB:ReassignBindings(event)
