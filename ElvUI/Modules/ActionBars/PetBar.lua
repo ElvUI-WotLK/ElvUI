@@ -106,7 +106,6 @@ function AB:PositionAndSizeBarPet()
 	local visibility = self.db.barPet.visibility
 
 	bar.db = self.db.barPet
-	bar.db.position = nil --Depreciated
 
 	if visibility and string.match(visibility, "[\n\r]") then
 		visibility = string.gsub(visibility, "[\n\r]","")

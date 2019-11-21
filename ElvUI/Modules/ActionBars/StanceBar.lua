@@ -114,7 +114,6 @@ function AB:PositionAndSizeBarShapeShift()
 		E:UpdatePositionOverride(bar.mover:GetName())
 	end
 	bar.db = self.db.stanceBar
-	bar.db.position = nil --Depreciated
 	bar.mouseover = self.db.stanceBar.mouseover
 
 	if bar.LastButton and numButtons > bar.LastButton then

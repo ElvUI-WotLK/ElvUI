@@ -77,13 +77,11 @@ function UF:UpdateAuraWatch(frame, petOverride, db)
 	if frame.unit == "pet" and not petOverride then
 		local petWatch = E.global.unitframe.buffwatch.PET or {}
 		for _, value in pairs(petWatch) do
-			if value.style == "text" then value.style = "NONE" end --depreciated
 			tinsert(buffs, value)
 		end
 	else
 		local buffWatch = not db.profileSpecific and (E.global.unitframe.buffwatch[E.myclass] or {}) or (E.db.unitframe.filters.buffwatch or {})
 		for _, value in pairs(buffWatch) do
-			if value.style == "text" then value.style = "NONE" end --depreciated
 			tinsert(buffs, value)
 		end
 	end
