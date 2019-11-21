@@ -27,7 +27,7 @@ local function styleAlwaysUpFrame(id)
 		frame:ClearAllPoints()
 		frame:Point("CENTER", pvpHolder, "CENTER", 0, 5)
 		frame.SetPoint = E.noop
-	end	
+	end
 end
 
 local function repositionCaptureBar(id)
