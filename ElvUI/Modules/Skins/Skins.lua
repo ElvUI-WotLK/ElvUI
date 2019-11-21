@@ -173,6 +173,8 @@ function S:HandleTab(tab, noBackdrop)
 		tab:CreateBackdrop()
 		tab.backdrop:Point("TOPLEFT", 10, E.PixelMode and -1 or -3)
 		tab.backdrop:Point("BOTTOMRIGHT", -10, 3)
+
+		tab:SetHitRectInsets(10, 10, E.PixelMode and 1 or 3, 3)
 	end
 end
 
