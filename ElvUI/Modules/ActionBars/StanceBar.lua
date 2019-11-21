@@ -68,7 +68,6 @@ function AB:StyleShapeShift()
 			end
 
 			if isActive then
-				ShapeshiftBarFrame.lastSelected = button:GetID()
 				button:GetCheckedTexture():SetTexture(1, 1, 1, 0.5)
 
 				if numForms == 1 and (E.myclass ~= "WARRIOR" and E.myclass ~= "DEATHKNIGHT") then
