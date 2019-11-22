@@ -366,6 +366,7 @@ local function initObject(unit, style, styleFunc, header, ...)
 		end
 
 		if(not (suffix == 'target' or objectUnit and objectUnit:match('target'))) then
+			object:RegisterEvent('UNIT_ENTERING_VEHICLE', updateActiveUnit)
 			object:RegisterEvent('UNIT_ENTERED_VEHICLE', updateActiveUnit)
 			object:RegisterEvent('UNIT_EXITING_VEHICLE', updateActiveUnit)
 			object:RegisterEvent('PLAYER_ENTERING_WORLD', updateActiveUnit)
