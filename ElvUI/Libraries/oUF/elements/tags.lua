@@ -387,16 +387,8 @@ local tagStrings = {
 		local pType, pToken, altR, altG, altB = UnitPowerType(u)
 		local t = _COLORS.power[pToken]
 
-		if(not t) then
-			if(altR) then
-				if(altR > 1 or altG > 1 or altB > 1) then
-					return Hex(altR / 255, altG / 255, altB / 255)
-				else
-					return Hex(altR, altG, altB)
-				end
-			else
-				return Hex(_COLORS.power[pType])
-			end
+		if not t then		
+			return Hex(altR, altG, altB)	
 		end
 
 		return Hex(t)
