@@ -479,7 +479,7 @@ end
 
 function E:IsAddOnEnabled(addon)
 	local _, _, _, enabled, _, reason = GetAddOnInfo(addon)
-	if reason ~= "MISSED" and enabled then
+	if reason ~= "MISSING" and enabled then
 		return true
 	end
 end
