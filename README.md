@@ -45,6 +45,8 @@ This UI will arrange your interface to be more flexible and practical.
 5. Restart WoW
 
 ## Plugins:
+[ElvUI_Enhanced](https://github.com/ElvUI-WotLK/ElvUI_Enhanced)
+<br />
 [ElvUI_AddOnSkins](https://github.com/ElvUI-WotLK/ElvUI_AddOnSkins)
 <br />
 [ElvUI_AuraBarsMovers](https://github.com/ElvUI-WotLK/ElvUI_AuraBarsMovers)
@@ -53,23 +55,25 @@ This UI will arrange your interface to be more flexible and practical.
 <br />
 [ElvUI_CastBarOverlay](https://github.com/ElvUI-WotLK/ElvUI_CastBarOverlay)
 <br />
+[ElvUI_ChannelAlerts](https://github.com/ElvUI-WotLK/ElvUI_ChannelAlerts)
+<br />
+[ElvUI_CustomTags](https://github.com/ElvUI-WotLK/ElvUI_CustomTags)
+<br />
 [ElvUI_CustomTweaks](https://github.com/ElvUI-WotLK/ElvUI_CustomTweaks)
 <br />
+[ElvUI_DTBars2](https://github.com/ElvUI-WotLK/ElvUI_DTBars2)
+<br />
 [ElvUI_DataTextColors](https://github.com/ElvUI-WotLK/ElvUI_DataTextColors)
-<br />
-[ElvUI_DataTextBarCreator](https://github.com/ElvUI-WotLK/ElvUI_DataTextBarCreator)
-<br />
-[ElvUI_Enhanced](https://github.com/ElvUI-WotLK/ElvUI_Enhanced)
 <br />
 [ElvUI_EnhancedFriendsList](https://github.com/ElvUI-WotLK/ElvUI_EnhancedFriendsList)
 <br />
 [ElvUI_ExtraActionBars](https://github.com/ElvUI-WotLK/ElvUI_ExtraActionBars)
 <br />
+[ElvUI_FogOfWar](https://github.com/ElvUI-WotLK/ElvUI_FogOfWar)
+<br />
 [ElvUI_LocPlus](https://github.com/ElvUI-WotLK/ElvUI_LocPlus)
 <br />
 [ElvUI_MicrobarEnhancement](https://github.com/ElvUI-WotLK/ElvUI_MicrobarEnhancement)
-<br />
-[ElvUI_MinimapButtons](https://github.com/ElvUI-WotLK/ElvUI_MinimapButtons)
 <br />
 [ElvUI_RaidMarkers](https://github.com/ElvUI-WotLK/ElvUI_RaidMarkers)
 <br />
