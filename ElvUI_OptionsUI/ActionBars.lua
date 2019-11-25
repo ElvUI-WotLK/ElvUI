@@ -330,13 +330,13 @@ local function BuildABConfig()
 			}
 		}
 	}
-	if E.myclass == "SHAMAN" then
+--	if E.myclass == "SHAMAN" then
 		group.barTotem = {
 			order = 2,
 			type = "group",
 			name = L["TUTORIAL_TITLE47"],
 			guiInline = false,
-			disabled = function() return not E.ActionBars.Initialized or not E.myclass == "SHAMAN" end,
+			disabled = function() return not E.ActionBars.Initialized end,
 			get = function(info) return E.db.actionbar.barTotem[info[#info]] end,
 			set = function(info, value) E.db.actionbar.barTotem[info[#info]] = value AB:PositionAndSizeBarTotem() end,
 			args = {
@@ -432,7 +432,7 @@ local function BuildABConfig()
 				}
 			}
 		}
-	end
+--	end
 	group.barPet = {
 		order = 3,
 		type = "group",
@@ -1091,7 +1091,8 @@ E.Options.args.actionbar = {
 			name = L["TUTORIAL_TITLE47"],
 			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "actionbar", "barTotem") end,
-			disabled = function() return not E.ActionBars.Initialized or E.myclass ~= "SHAMAN" end
+		--	disabled = function() return not E.ActionBars.Initialized or E.myclass ~= "SHAMAN" end
+			disabled = function() return not E.ActionBars.Initialized end
 		},
 		microbarShortcut = {
 			order = 11,

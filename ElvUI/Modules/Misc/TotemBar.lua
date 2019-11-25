@@ -50,7 +50,8 @@ function TOTEMS:ToggleEnable()
 			self:RegisterEvent("PLAYER_ENTERING_WORLD", "UpdateAllTotems")
 			self:UpdateAllTotems()
 			E:EnableMover("TotemBarMover")
-		elseif E.myclass == "SHAMAN" then
+	--	elseif E.myclass == "SHAMAN" then
+		else
 			self:Initialize()
 			self:UpdateAllTotems()
 		end
@@ -125,7 +126,8 @@ local function UpdateTooltip(self)
 end
 
 function TOTEMS:Initialize()
-	if not E.db.general.totems.enable or E.myclass ~= "SHAMAN" then return end
+--	if not E.db.general.totems.enable or E.myclass ~= "SHAMAN" then return end
+	if not E.db.general.totems.enable then return end
 
 	self.db = E.db.general.totems
 

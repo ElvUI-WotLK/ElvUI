@@ -9,7 +9,7 @@ local gsub, match = string.gsub, string.match
 local InCombatLockdown = InCombatLockdown
 local RegisterStateDriver = RegisterStateDriver
 
-if E.myclass ~= "SHAMAN" then return end
+--if E.myclass ~= "SHAMAN" then return end
 
 local bar = CreateFrame("Frame", "ElvUI_BarTotem", E.UIParent, "SecureHandlerStateTemplate")
 bar:SetFrameStrata("LOW")
