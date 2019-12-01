@@ -548,22 +548,20 @@ function TT:GameTooltip_ShowStatusBar(tt)
 end
 
 function TT:CheckBackdropColor(tt)
-	if not tt:IsShown() then return end
-
-	local r, g, b = tt:GetBackdropColor()
-	if r and g and b then
-		r, g, b = E:Round(r, 1), E:Round(g, 1), E:Round(b, 1)
-
-		local red, green, blue = unpack(E.media.backdropfadecolor)
-		if r ~= red or g ~= green or b ~= blue then
-			tt:SetBackdropColor(red, green, blue, self.db.colorAlpha)
-		end
+	if tt:GetAnchorType() == "ANCHOR_CURSOR" then
+		local r, g, b = unpack(E.media.backdropfadecolor, 1, 3)
+		tt:SetBackdropColor(r, g, b, self.db.colorAlpha)
 	end
 end
 
 function TT:SetStyle(tt)
-	tt:SetTemplate("Transparent", nil, true) --ignore updates
-	local r, g, b = tt:GetBackdropColor()
+	if not tt.template then
+		tt:SetTemplate("Transparent")
+	else
+		tt:SetBackdropBorderColor(unpack(E.media.bordercolor, 1, 3))
+	end
+
+	local r, g, b = unpack(E.media.backdropfadecolor, 1, 3)
 	tt:SetBackdropColor(r, g, b, self.db.colorAlpha)
 end
 
