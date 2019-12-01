@@ -745,6 +745,10 @@ function NP:OnUpdate()
 		end
 
 		frame.isTarget = hasTarget and frame.alpha == 1
+
+        if frame.UnitReaction ~= NP:GetUnitInfo(frame) then
+            NP:UpdateAllFrame(frame)
+        end
 	end
 end
 
@@ -897,10 +901,6 @@ function NP:SPELL_UPDATE_COOLDOWN(...)
 	NP:ForEachVisiblePlate("UpdateElement_Filters", "SPELL_UPDATE_COOLDOWN")
 end
 
-function NP:UNIT_FACTION()
-	self:ForEachVisiblePlate("UpdateAllFrame")
-end
-
 function NP:UpdateFonts(plate)
 	--if not plate then return end
 	--
@@ -1020,8 +1020,6 @@ function NP:Initialize()
 	self:RegisterEvent("PLAYER_LOGOUT", NP.StyleFilterClearDefaults)
 	self:RegisterEvent("PLAYER_TARGET_CHANGED")
 	self:RegisterEvent("SPELL_UPDATE_COOLDOWN")
-
-	self:RegisterEvent("UNIT_FACTION")
 
 	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
 	-- Arena & Arena Pets
