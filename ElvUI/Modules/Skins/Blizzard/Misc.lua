@@ -181,25 +181,44 @@ local function LoadSkin()
 	ChannelPulloutCloseButton:Size(32)
 
 	-- Dropdown Menu
-	hooksecurefunc("UIDropDownMenu_InitializeHelper", function()
-		for i = 1, UIDROPDOWNMENU_MAXLEVELS do
-			local dropBackdrop = _G["DropDownList"..i.."Backdrop"]
-			local dropMenuBackdrop = _G["DropDownList"..i.."MenuBackdrop"]
+	local menuLevel = 0
+	local maxButtons = 0
 
-			dropBackdrop:SetTemplate("Transparent")
-			dropMenuBackdrop:SetTemplate("Transparent")
+	local function skinDropdownMenu()
+		local updateButtons = maxButtons < UIDROPDOWNMENU_MAXBUTTONS
 
-			for j = 1, UIDROPDOWNMENU_MAXBUTTONS do
-				local button = _G["DropDownList"..i.."Button"..j]
-				local highlight = _G["DropDownList"..i.."Button"..j.."Highlight"]
-				local colorSwatch = _G["DropDownList"..i.."Button"..j.."ColorSwatch"]
+		if updateButtons or menuLevel < UIDROPDOWNMENU_MAXLEVELS then
+			for i = 1, UIDROPDOWNMENU_MAXLEVELS do
+				local frame = _G["DropDownList"..i]
 
-				button:SetFrameLevel(dropBackdrop:GetFrameLevel() + 1)
-				highlight:SetTexture(1, 1, 1, 0.3)
-				S:HandleColorSwatch(colorSwatch, 14)
+				if not frame.isSkinned then
+					_G["DropDownList"..i.."Backdrop"]:SetTemplate("Transparent")
+					_G["DropDownList"..i.."MenuBackdrop"]:SetTemplate("Transparent")
+
+					if updateButtons then
+						for j = 1, UIDROPDOWNMENU_MAXBUTTONS do
+							local button = _G["DropDownList"..i.."Button"..j]
+
+							if not button.isSkinned then
+								_G["DropDownList"..i.."Button"..j.."Highlight"]:SetTexture(1, 1, 1, 0.3)
+								S:HandleColorSwatch(_G["DropDownList"..i.."Button"..j.."ColorSwatch"], 14)
+
+								button.isSkinned = true
+							end
+						end
+					end
+
+					frame.isSkinned = true
+				end
 			end
+
+			menuLevel = UIDROPDOWNMENU_MAXLEVELS
+			maxButtons = UIDROPDOWNMENU_MAXBUTTONS
 		end
-	end)
+	end
+
+	skinDropdownMenu()
+	hooksecurefunc("UIDropDownMenu_InitializeHelper", skinDropdownMenu)
 
 	-- Chat Menu
 	local chatMenus = {
