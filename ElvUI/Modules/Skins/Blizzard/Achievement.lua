@@ -140,6 +140,13 @@ local function LoadSkin(preSkin)
 		end
 	end
 
+	AchievementFrameHeader:SetSize(450, 39)
+
+	AchievementFrameHeaderShield:SetParent(AchievementFrameHeader)
+	AchievementFrameHeaderShield.Show = nil
+	AchievementFrameHeaderShield:Show()
+	AchievementFrameHeaderShield:SetTexture("Interface\\AchievementFrame\\UI-Achievement-TinyShield")
+
 	AchievementFrame:CreateBackdrop("Transparent")
 	AchievementFrame.backdrop:Point("TOPLEFT", 0, 6)
 	AchievementFrame.backdrop:Point("BOTTOMRIGHT")
