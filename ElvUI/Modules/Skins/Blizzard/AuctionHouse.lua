@@ -17,8 +17,12 @@ local function LoadSkin()
 
 	AuctionFrame:StripTextures(true)
 	AuctionFrame:CreateBackdrop("Transparent")
-	AuctionFrame.backdrop:Point("TOPLEFT", 10, 0)
+	AuctionFrame.backdrop:Point("TOPLEFT", 12, 0)
 	AuctionFrame.backdrop:Point("BOTTOMRIGHT", 0, 0)
+
+	S:SetUIPanelWindowInfo(AuctionFrame, "xoffset", -1)
+	S:SetUIPanelWindowInfo(AuctionFrame, "yoffset", -12)
+--	S:SetUIPanelWindowInfo(AuctionFrame, "width", 821)
 
 	local buttons = {
 		BrowseSearchButton,

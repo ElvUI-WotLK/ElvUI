@@ -140,6 +140,17 @@ local function LoadSkin(preSkin)
 		end
 	end
 
+	local AchievementFrame = AchievementFrame
+
+	local function updatePanelInfo()
+		S:SetUIPanelWindowInfo(AchievementFrame, "xoffset", 11)
+		S:SetUIPanelWindowInfo(AchievementFrame, "width", nil, -11)
+	end
+
+	AchievementFrame:HookScript("OnShow", updatePanelInfo)
+	AchievementFrameComparison:HookScript("OnShow", updatePanelInfo)
+	AchievementFrameComparison:HookScript("OnHide", updatePanelInfo)
+
 	AchievementFrameHeader:SetSize(450, 39)
 
 	AchievementFrameHeaderShield:SetParent(AchievementFrameHeader)

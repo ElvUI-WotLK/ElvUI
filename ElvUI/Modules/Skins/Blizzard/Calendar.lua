@@ -17,6 +17,7 @@ local function LoadSkin()
 	CalendarFrame.backdrop:Point("BOTTOMRIGHT", -2, -4)
 
 	S:SecureHook("Calendar_Show", function()
+		S:SetUIPanelWindowInfo(CalendarFrame, "xoffset", 8)
 		S:SetUIPanelWindowInfo(CalendarFrame, "width", nil, -7)
 		S:Unhook("Calendar_Show")
 	end)
