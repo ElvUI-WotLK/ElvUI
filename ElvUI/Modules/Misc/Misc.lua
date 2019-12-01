@@ -44,7 +44,7 @@ local UnitName = UnitName
 local MAX_PARTY_MEMBERS = MAX_PARTY_MEMBERS
 
 do
-	local function EventHandler(_, event)
+	local function EventHandler(event)
 		if event == "PLAYER_REGEN_DISABLED" then
 			UIErrorsFrame:UnregisterEvent("UI_ERROR_MESSAGE")
 		else
