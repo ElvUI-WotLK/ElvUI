@@ -358,6 +358,8 @@ function S:HandleCheckBox(frame, noBackdrop, noReplaceTextures, forceSaturation)
 end
 
 function S:HandleColorSwatch(frame, size)
+	if frame.isSkinned then return end
+
 	frame:StripTextures()
 	frame:CreateBackdrop("Default")
 	frame.backdrop:SetFrameLevel(frame:GetFrameLevel())
@@ -366,9 +368,12 @@ function S:HandleColorSwatch(frame, size)
 		frame:Size(size)
 	end
 
-	frame:GetNormalTexture():SetTexture(E.media.blankTex)
-	frame:GetNormalTexture():ClearAllPoints()
-	frame:GetNormalTexture():SetInside(frame.backdrop)
+	local normalTexture = frame:GetNormalTexture()
+	normalTexture:SetTexture(E.media.blankTex)
+	normalTexture:ClearAllPoints()
+	normalTexture:SetInside(frame.backdrop)
+
+	frame.isSkinned = true
 end
 
 function S:HandleIcon(icon, parent)
