@@ -51,14 +51,14 @@ function S:HandleButton(button, strip, isDeclineButton, useCreateBackdrop, noSet
 		local middle = _G[buttonName.."Middle"]
 		local right = _G[buttonName.."Right"]
 
-		if left then left:Kill() end
-		if middle then middle:Kill() end
-		if right then right:Kill() end
+		if left then left:SetAlpha(0) end
+		if middle then middle:SetAlpha(0) end
+		if right then right:SetAlpha(0) end
 	end
 
-	if button.Left then button.Left:Kill() end
-	if button.Middle then button.Middle:Kill() end
-	if button.Right then button.Right:Kill() end
+	if button.Left then button.Left:SetAlpha(0) end
+	if button.Middle then button.Middle:SetAlpha(0) end
+	if button.Right then button.Right:SetAlpha(0) end
 
 	if button.SetNormalTexture then button:SetNormalTexture("") end
 	if button.SetHighlightTexture then button:SetHighlightTexture("") end
