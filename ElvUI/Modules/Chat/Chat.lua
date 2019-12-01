@@ -17,6 +17,7 @@ local ChatEdit_ChooseBoxForSend = ChatEdit_ChooseBoxForSend
 local ChatEdit_ParseText = ChatEdit_ParseText
 local ChatEdit_SetLastTellTarget = ChatEdit_SetLastTellTarget
 local ChatFrame_ConfigEventHandler = ChatFrame_ConfigEventHandler
+local ChatFrame_GetMessageEventFilters = ChatFrame_GetMessageEventFilters
 local ChatFrame_SendTell = ChatFrame_SendTell
 local ChatFrame_SystemEventHandler = ChatFrame_SystemEventHandler
 local ChatHistory_GetAccessID = ChatHistory_GetAccessID
@@ -28,15 +29,16 @@ local FCF_GetCurrentChatFrame = FCF_GetCurrentChatFrame
 local FCF_SavePositionAndDimensions = FCF_SavePositionAndDimensions
 local FCF_StartAlertFlash = FCF_StartAlertFlash
 local FloatingChatFrame_OnEvent = FloatingChatFrame_OnEvent
+local GMChatFrame_IsGM = GMChatFrame_IsGM
 local GetChannelName = GetChannelName
 local GetGuildRosterMOTD = GetGuildRosterMOTD
+local GetLocale = GetLocale
 local GetMouseFocus = GetMouseFocus
 local GetNumPartyMembers = GetNumPartyMembers
 local GetNumRaidMembers = GetNumRaidMembers
 local GetPlayerInfoByGUID = GetPlayerInfoByGUID
 local GetTime = GetTime
-local GMChatFrame_IsGM = GMChatFrame_IsGM
-local hooksecurefunc = hooksecurefunc
+local HasLFGRestrictions = HasLFGRestrictions
 local InCombatLockdown = InCombatLockdown
 local IsAltKeyDown = IsAltKeyDown
 local IsInInstance = IsInInstance
@@ -48,7 +50,10 @@ local ScrollFrameTemplate_OnMouseWheel = ScrollFrameTemplate_OnMouseWheel
 local ShowUIPanel, HideUIPanel = ShowUIPanel, HideUIPanel
 local StaticPopup_Visible = StaticPopup_Visible
 local ToggleFrame = ToggleFrame
+local UnitIsSameServer = UnitIsSameServer
 local UnitName = UnitName
+local hooksecurefunc = hooksecurefunc
+
 local AFK = AFK
 local CHAT_BN_CONVERSATION_GET_LINK = CHAT_BN_CONVERSATION_GET_LINK
 local CHAT_FILTERED = CHAT_FILTERED
@@ -180,13 +185,22 @@ function CH:GetGroupDistribution()
 end
 
 function CH:InsertEmotions(msg)
-	for word in gmatch(msg, "%s-%S+%s*") do
-		word = strtrim(word)
+	for word in gmatch(msg, "%s-(%S+)%s*") do
 		local pattern = gsub(word, "([%(%)%.%%%+%-%*%?%[%^%$])", "%%%1")
 		local emoji = CH.Smileys[pattern]
-		if emoji and strmatch(msg, "[%s%p]-"..pattern.."[%s%p]*") then
-			local base64 = E.Libs.Base64:Encode(word) -- btw keep `|h|cFFffffff|r|h` as it is
-			msg = gsub(msg, "([%s%p]-)"..pattern.."([%s%p]*)", (base64 and ("%1|Helvmoji:%%"..base64.."|h|cFFffffff|r|h") or "%1")..emoji.."%2")
+
+		if emoji then
+			pattern = format("%s%s%s", "([%s%p]-)", pattern, "([%s%p]*)")
+
+			if strmatch(msg, pattern) then
+				local base64 = E.Libs.Base64:Encode(word)
+
+				if base64 then
+					msg = gsub(msg, pattern, format("%s%s%s%s%s", "%1|Helvmoji:%%", base64, "|h|cFFffffff|r|h", emoji, "%2"))
+				else
+					msg = gsub(msg, pattern, format("%s%s%s", "%1", emoji, "%2"))
+				end
+			end
 		end
 	end
 
@@ -194,22 +208,27 @@ function CH:InsertEmotions(msg)
 end
 
 function CH:GetSmileyReplacementText(msg)
-	if not msg or not self.db.emotionIcons or find(msg, "/run") or find(msg, "/dump") or find(msg, "/script") then return msg end
-	local outstr = ""
+	if not msg or not self.db.emotionIcons or find(msg, "/run") or find(msg, "/dump") or find(msg, "/script") then
+		return msg
+	end
+
 	local origlen = strlen(msg)
 	local startpos = 1
-	local endpos, _
+	local outstr = ""
+	local _, pos, endpos
 
-	while(startpos <= origlen) do
-		local pos = find(msg,"|H",startpos,true)
+	while startpos <= origlen do
+		pos = find(msg, "|H", startpos, true)
 		endpos = pos or origlen
-		outstr = outstr..CH:InsertEmotions(strsub(msg,startpos,endpos)) --run replacement on this bit
+		outstr = outstr .. CH:InsertEmotions(strsub(msg, startpos, endpos)) --run replacement on this bit
 		startpos = endpos + 1
-		if pos ~= nil then
-			_, endpos = find(msg,"|h.-|h",startpos)
+
+		if pos then
+			_, endpos = find(msg, "|h.-|h", startpos)
 			endpos = endpos or origlen
+
 			if startpos < endpos then
-				outstr = outstr..strsub(msg,startpos,endpos) --don't run replacement on this bit
+				outstr = outstr .. strsub(msg, startpos, endpos) --don't run replacement on this bit
 				startpos = endpos + 1
 			end
 		end
@@ -390,14 +409,9 @@ function CH:StyleChat(frame)
 end
 
 function CH:AddMessage(msg, infoR, infoG, infoB, infoID, accessID, typeID, isHistory, historyTime)
-	local historyTimestamp --we need to extend the arguments on AddMessage so we can properly handle times without overriding
-	if isHistory == "ElvUI_ChatHistory" then historyTimestamp = historyTime end
+	if CH.db.timeStampFormat ~= "NONE" then
+		local timeStamp = BetterDate(CH.db.timeStampFormat, isHistory == "ElvUI_ChatHistory" and historyTime or time())
 
-	if (CH.db.timeStampFormat and CH.db.timeStampFormat ~= "NONE" ) then
-		local timeStamp = BetterDate(CH.db.timeStampFormat, historyTimestamp or time())
-		timeStamp = gsub(timeStamp, " ", "")
-		timeStamp = gsub(timeStamp, "AM", " AM")
-		timeStamp = gsub(timeStamp, "PM", " PM")
 		if CH.db.useCustomTimeColor then
 			local color = CH.db.customTimeColor
 			local hexColor = E:RGBToHex(color.r, color.g, color.b)
@@ -747,7 +761,7 @@ function CH:ScrollToBottom(frame)
 	self:CancelTimer(frame.ScrollTimer, true)
 end
 
-function CH.PrintURL(url)
+function CH:PrintURL(url)
 	return "|cFFFFFFFF[|Hurl:"..url.."|h"..url.."|h]|r "
 end
 
@@ -756,16 +770,13 @@ local tempURLsCount = 0
 local function tempReplaceURL(url)
 	tempURLsCount = tempURLsCount + 1
 	local id = "|Hurl:"..tempURLsCount.."|h"
-	tempURLs[id] = CH.PrintURL(url)
+	tempURLs[id] = CH:PrintURL(url)
 	return id
 end
 
 function CH:FindURL(event, msg, author, ...)
-	if (event == "CHAT_MSG_WHISPER" or event == "CHAT_MSG_BN_WHISPER") and (CH.db.whisperSound ~= "None") and not CH.SoundTimer then
-		if (CH.db.noAlertInCombat and not InCombatLockdown()) or not CH.db.noAlertInCombat then
-			PlaySoundFile(LSM:Fetch("sound", CH.db.whisperSound), "Master")
-		end
-
+	if not CH.SoundTimer and (event == "CHAT_MSG_WHISPER" or event == "CHAT_MSG_BN_WHISPER") and (CH.db.whisperSound ~= "None") and (not CH.db.noAlertInCombat or not InCombatLockdown()) then
+		PlaySoundFile(LSM:Fetch("sound", CH.db.whisperSound), "Master")
 		CH.SoundTimer = E:Delay(1, CH.ThrottleSound)
 	end
 
@@ -814,14 +825,16 @@ end
 
 function CH:SetChatEditBoxMessage(message)
 	local ChatFrameEditBox = ChatEdit_ChooseBoxForSend()
-	local editBoxShown = ChatFrameEditBox:IsShown()
 	local editBoxText = ChatFrameEditBox:GetText()
-	if not editBoxShown then
+
+	if not ChatFrameEditBox:IsShown() then
 		ChatEdit_ActivateChat(ChatFrameEditBox)
 	end
+
 	if editBoxText and editBoxText ~= "" then
 		ChatFrameEditBox:SetText("")
 	end
+
 	ChatFrameEditBox:Insert(message)
 	ChatFrameEditBox:HighlightText()
 end
@@ -1299,7 +1312,7 @@ end
 function CH:ChatThrottleHandler(_, arg1, arg2)
 	if arg2 ~= "" then
 		local message = PrepareMessage(arg2, arg1)
-		if msgList[message] == nil then
+		if not msgList[message] then
 			msgList[message] = true
 			msgCount[message] = 1
 			msgTime[message] = time()
@@ -1310,11 +1323,15 @@ function CH:ChatThrottleHandler(_, arg1, arg2)
 end
 
 function CH:CHAT_MSG_CHANNEL(event, message, author, ...)
-	local blockFlag = false
 	local msg = PrepareMessage(author, message)
 
 	-- ignore player messages
-	if author == UnitName("player") then return CH.FindURL(self, event, message, author, ...) end
+	if author == E.myname then
+		return CH:FindURL(event, message, author, ...)
+	end
+
+	local blockFlag
+
 	if msgList[msg] and CH.db.throttleInterval ~= 0 then
 		if (time() - msgTime[msg]) <= CH.db.throttleInterval then
 			blockFlag = true
@@ -1328,18 +1345,24 @@ function CH:CHAT_MSG_CHANNEL(event, message, author, ...)
 			msgTime[msg] = time()
 		end
 
-		return CH.FindURL(self, event, message, author, ...)
+		return CH:FindURL(event, message, author, ...)
 	end
 end
 
 function CH:CHAT_MSG_YELL(event, message, author, ...)
-	local blockFlag = false
 	local msg = PrepareMessage(author, message)
 
-	if msg == nil then return CH.FindURL(self, event, message, author, ...) end
+	if not msg then
+		return CH:FindURL(event, message, author, ...)
+	end
+
+	local blockFlag
 
 	-- ignore player messages
-	if author == UnitName("player") then return CH.FindURL(self, event, message, author, ...) end
+	if author == E.myname then
+		return CH:FindURL(event, message, author, ...)
+	end
+
 	if msgList[msg] and msgCount[msg] > 1 and CH.db.throttleInterval ~= 0 then
 		if (time() - msgTime[msg]) <= CH.db.throttleInterval then
 			blockFlag = true
@@ -1353,12 +1376,12 @@ function CH:CHAT_MSG_YELL(event, message, author, ...)
 			msgTime[msg] = time()
 		end
 
-		return CH.FindURL(self, event, message, author, ...)
+		return CH:FindURL(event, message, author, ...)
 	end
 end
 
 function CH:CHAT_MSG_SAY(event, message, author, ...)
-	return CH.FindURL(self, event, message, author, ...)
+	return CH:FindURL(event, message, author, ...)
 end
 
 function CH:ThrottleSound()
@@ -1367,69 +1390,67 @@ end
 
 local protectLinks = {}
 function CH:CheckKeyword(message, author)
-	for hyperLink in gmatch(message, "|%x+|H.-|h.-|h|r") do
-		protectLinks[hyperLink]=gsub(hyperLink,"%s","|s")
-		for keyword in pairs(CH.Keywords) do
-			if hyperLink == keyword then
-				if (self.db.keywordSound ~= "None") and not self.SoundTimer then
-					if (self.db.noAlertInCombat and not InCombatLockdown()) or not self.db.noAlertInCombat then
-						PlaySoundFile(LSM:Fetch("sound", self.db.keywordSound), "Master")
-					end
+	local canPlaySound = (self.db.keywordSound ~= "None" and (not self.db.noAlertInCombat or not InCombatLockdown()))
 
+	for hyperLink in gmatch(message, "|%x+|H.-|h.-|h|r") do
+		protectLinks[hyperLink] = gsub(hyperLink, "%s", "|s")
+		message = gsub(message, gsub(hyperLink, "([%(%)%.%%%+%-%*%?%[%^%$])", "%%%1"), protectLinks[hyperLink])
+
+		if canPlaySound and not self.SoundTimer then
+			for keyword in pairs(CH.Keywords) do
+				if hyperLink == keyword then
+					PlaySoundFile(LSM:Fetch("sound", self.db.keywordSound), "Master")
 					self.SoundTimer = E:Delay(1, CH.ThrottleSound)
+					break
 				end
 			end
 		end
 	end
 
-	for hyperLink, tempLink in pairs(protectLinks) do
-		message = gsub(message, gsub(hyperLink, "([%(%)%.%%%+%-%*%?%[%^%$])", "%%%1"), tempLink)
-	end
-
 	local rebuiltString
 	local isFirstWord = true
+	local protectLinksNext = next(protectLinks)
+
 	for word in gmatch(message, "%s-%S+%s*") do
-		if not next(protectLinks) or not protectLinks[gsub(gsub(word,"%s",""),"|s"," ")] then
+		if not protectLinksNext or not protectLinks[gsub(gsub(word, "%s", ""), "|s", " ")] then
 			local tempWord = gsub(word, "[%s%p]", "")
 			local lowerCaseWord = strlower(tempWord)
 
 			for keyword in pairs(CH.Keywords) do
 				if lowerCaseWord == strlower(keyword) then
 					word = gsub(word, tempWord, format("%s%s|r", E.media.hexvaluecolor, tempWord))
-					if (author ~= UnitName("player")) and (self.db.keywordSound ~= "None") and not self.SoundTimer then
-						if (self.db.noAlertInCombat and not InCombatLockdown()) or not self.db.noAlertInCombat then
-							PlaySoundFile(LSM:Fetch("sound", self.db.keywordSound), "Master")
-						end
 
+					if canPlaySound and not self.SoundTimer and author ~= E.myname then
+						PlaySoundFile(LSM:Fetch("sound", self.db.keywordSound), "Master")
 						self.SoundTimer = E:Delay(1, CH.ThrottleSound)
 					end
 				end
 			end
 
 			if self.db.classColorMentionsChat then
-				tempWord = gsub(word,"^[%s%p]-([^%s%p]+)([%-]?[^%s%p]-)[%s%p]*$","%1%2")
+				tempWord = gsub(word, "^[%s%p]-([^%s%p]+)([%-]?[^%s%p]-)[%s%p]*$", "%1%2")
 				lowerCaseWord = strlower(tempWord)
 
 				local classMatch = CH.ClassNames[lowerCaseWord]
 				local wordMatch = classMatch and lowerCaseWord
 
 				if wordMatch and not E.global.chat.classColorMentionExcludedNames[wordMatch] then
-					local classColorTable = _G.CUSTOM_CLASS_COLORS and _G.CUSTOM_CLASS_COLORS[classMatch] or _G.RAID_CLASS_COLORS[classMatch]
-					word = gsub(word, gsub(tempWord, "%-","%%-"), format("\124cff%.2x%.2x%.2x%s\124r", classColorTable.r*255, classColorTable.g*255, classColorTable.b*255, tempWord))
+					local classColorTable = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[classMatch] or RAID_CLASS_COLORS[classMatch]
+					word = gsub(word, gsub(tempWord, "%-", "%%-"), format("\124cff%.2x%.2x%.2x%s\124r", classColorTable.r*255, classColorTable.g*255, classColorTable.b*255, tempWord))
 				end
 			end
 		end
 
 		if isFirstWord then
 			rebuiltString = word
-			isFirstWord = false
+			isFirstWord = nil
 		else
 			rebuiltString = rebuiltString..word
 		end
 	end
 
 	for hyperLink, tempLink in pairs(protectLinks) do
-		rebuiltString = gsub(rebuiltString, gsub(tempLink, "([%(%)%.%%%+%-%*%?%[%^%$])","%%%1"), hyperLink)
+		rebuiltString = gsub(rebuiltString, gsub(tempLink, "([%(%)%.%%%+%-%*%?%[%^%$])", "%%%1"), hyperLink)
 		protectLinks[hyperLink] = nil
 	end
 
@@ -1541,25 +1562,40 @@ end
 
 tremove(ChatTypeGroup.GUILD, 2)
 function CH:DelayGuildMOTD()
-	local delay, checks, chat = 0, 0
-	local delayFrame = CreateFrame("Frame")
 	tinsert(ChatTypeGroup.GUILD, 2, "GUILD_MOTD")
-	delayFrame:SetScript("OnUpdate", function(df, elapsed)
+
+	local registerGuildEvents = function(msg)
+		local chat
+		for _, frame in ipairs(CHAT_FRAMES) do
+			chat = _G[frame]
+			if chat and chat:IsEventRegistered("CHAT_MSG_GUILD") then
+				if msg then
+					CH:ChatFrame_SystemEventHandler(chat, "GUILD_MOTD", msg)
+				end
+				chat:RegisterEvent("GUILD_MOTD")
+			end
+		end
+	end
+
+	if not IsInGuild() then
+		registerGuildEvents()
+		return
+	end
+
+	local delay, checks = 0, 0
+	CreateFrame("Frame"):SetScript("OnUpdate", function(df, elapsed)
 		delay = delay + elapsed
 		if delay < 5 then return end
+
 		local msg = GetGuildRosterMOTD()
-		if msg and strlen(msg) > 0 then
-			for _, frame in ipairs(CHAT_FRAMES) do
-				chat = _G[frame]
-				if chat and chat:IsEventRegistered("CHAT_MSG_GUILD") then
-					CH:ChatFrame_SystemEventHandler(chat, "GUILD_MOTD", msg)
-					chat:RegisterEvent("GUILD_MOTD")
-				end
-			end
+
+		if msg and msg ~= "" then
+			registerGuildEvents(msg)
 			df:SetScript("OnUpdate", nil)
 		else -- 5 seconds can be too fast for the API response. let's try once every 5 seconds (max 5 checks).
 			delay, checks = 0, checks + 1
 			if checks >= 5 then
+				registerGuildEvents()
 				df:SetScript("OnUpdate", nil)
 			end
 		end
@@ -1677,10 +1713,10 @@ function CH:DefaultSmileys()
 	CH:AddSmiley(":stuck_out_tongue:", E:TextureString(E.Media.ChatEmojis.StuckOutTongue,x))
 	CH:AddSmiley(":stuck_out_tongue_closed_eyes:", E:TextureString(E.Media.ChatEmojis.StuckOutTongueClosedEyes,x))
 
-	-- Darth"s keys
+	-- Darth's keys
 	CH:AddSmiley(":meaw:", E:TextureString(E.Media.ChatEmojis.Meaw,x))
 
-	-- Simpy"s keys
+	-- Simpy's keys
 	CH:AddSmiley(">:%(", E:TextureString(E.Media.ChatEmojis.Rage,x))
 	CH:AddSmiley(":%$", E:TextureString(E.Media.ChatEmojis.Blush,x))
 	CH:AddSmiley("<\\3", E:TextureString(E.Media.ChatEmojis.BrokenHeart,x))

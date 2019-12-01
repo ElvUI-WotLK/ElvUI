@@ -1219,6 +1219,10 @@ function E:DBConversions()
 
 		E.db.unitframe.colors.healthmultiplier = nil
 	end
+
+	if sub(E.db.chat.timeStampFormat, -1) == " " then
+		E.db.chat.timeStampFormat = sub(E.db.chat.timeStampFormat, 1, -2)
+	end
 end
 
 function E:RefreshModulesDB()
