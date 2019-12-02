@@ -261,6 +261,8 @@ function E:WaitFunc(elapsed)
 			data[1] = data[1] - elapsed
 			i = i + 1
 		else
+			tremove(E.WaitTable, i)
+
 			if data[3] then
 				if data[3] > 1 then
 					data[2](unpack(data[4], 1, data[3]))
@@ -271,13 +273,12 @@ function E:WaitFunc(elapsed)
 				data[2]()
 			end
 
-			tremove(E.WaitTable, i)
 			total = total - 1
-
-			if total == 0 then
-				self:Hide()
-			end
 		end
+	end
+
+	if total == 0 then
+		self:Hide()
 	end
 end
 
