@@ -65,8 +65,8 @@ function NP:LibAuraInfo_AURA_CLEAR(event, destGUID)
 	self:UpdateElement_AurasByGUID(destGUID, event)
 end
 
-function NP:RemoveAuraFromGUID(event, destGUID)
-	--self:UpdateElement_AurasByGUID(destGUID, event)
+function NP:LibAuraInfo_UNIT_AURA(event, destGUID)
+	self:UpdateElement_AurasByGUID(destGUID, event)
 end
 
 function NP:UpdateTime(elapsed)
@@ -187,7 +187,7 @@ function NP:UpdateElement_AuraIcons(frame, guid, filter, limit, isDebuff)
 end
 
 function NP:UpdateElement_Auras(frame)
-	if not frame.HealthBar:IsShown() then return end
+	if not frame.Health:IsShown() then return end
 
 	local guid = frame.guid
 
@@ -213,17 +213,17 @@ function NP:UpdateElement_Auras(frame)
 		local numBuffs = db.numAuras
 		buffs.visibleBuffs = NP:UpdateElement_AuraIcons(buffs, guid, buffs.filter or "HELPFUL", numBuffs)
 
-		local mult = floor(NP.db.units[frame.UnitType].healthbar.width / db.size) < db.numAuras
-		buffs:Size(NP.db.units[frame.UnitType].healthbar.width, (mult and 2 or 1) * db.size)
+		local mult = floor(NP.db.units[frame.UnitType].health.width / db.size) < db.numAuras
+		buffs:Size(NP.db.units[frame.UnitType].health.width, (mult and 2 or 1) * db.size)
 		buffs:ClearAllPoints()
-		buffs:Point(positionValues[db.anchorPoint], frame.HealthBar, positionValues2[db.anchorPoint], db.xOffset, db.yOffset)
+		buffs:Point(positionValues[db.anchorPoint], frame.Health, positionValues2[db.anchorPoint], db.xOffset, db.yOffset)
 
 		if #buffs > buffs.anchoredIcons then
 			local size = db.size + db.spacing
 			local anchor = E.InversePoints[db.anchorPoint]
 			local growthx = (db.growthX == "LEFT" and -1) or 1
 			local growthy = (db.growthY == "DOWN" and -1) or 1
-			local cols = floor(NP.db.units[frame.UnitType].healthbar.width / size + 0.5)
+			local cols = floor(NP.db.units[frame.UnitType].health.width / size + 0.5)
 
 			for i = buffs.anchoredIcons + 1, #buffs do
 				local button = buffs[i]
@@ -286,17 +286,17 @@ function NP:UpdateElement_Auras(frame)
 		local numBuffs = db.numAuras
 		debuffs.visibleDeuffs = NP:UpdateElement_AuraIcons(debuffs, guid, debuffs.filter or "HARMFUL", numBuffs, true)
 
-		local mult = floor(NP.db.units[frame.UnitType].healthbar.width / db.size) < db.numAuras
-		debuffs:Size(NP.db.units[frame.UnitType].healthbar.width, (mult and 2 or 1) * db.size)
+		local mult = floor(NP.db.units[frame.UnitType].health.width / db.size) < db.numAuras
+		debuffs:Size(NP.db.units[frame.UnitType].health.width, (mult and 2 or 1) * db.size)
 		debuffs:ClearAllPoints()
-		debuffs:Point(positionValues[db.anchorPoint], frame.Buffs or frame.HealthBar, positionValues2[db.anchorPoint], db.xOffset, db.yOffset)
+		debuffs:Point(positionValues[db.anchorPoint], frame.Buffs or frame.Health, positionValues2[db.anchorPoint], db.xOffset, db.yOffset)
 
 		if #debuffs > debuffs.anchoredIcons then
 			local size = db.size + db.spacing
 			local anchor = E.InversePoints[db.anchorPoint]
 			local growthx = (db.growthX == "LEFT" and -1) or 1
 			local growthy = (db.growthY == "DOWN" and -1) or 1
-			local cols = floor(NP.db.units[frame.UnitType].healthbar.width / size + 0.5)
+			local cols = floor(NP.db.units[frame.UnitType].health.width / size + 0.5)
 
 			for i = debuffs.anchoredIcons + 1, #debuffs do
 				local button = debuffs[i]

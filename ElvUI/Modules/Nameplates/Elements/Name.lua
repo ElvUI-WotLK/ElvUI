@@ -7,16 +7,28 @@ local LSM = E.Libs.LSM
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS
 local UNKNOWN = UNKNOWN
 
-function NP:UpdateElement_Name(frame, triggered)
+function NP:Update_Name(frame, triggered)
 	if not triggered then
-		if not self.db.units[frame.UnitType].showName then return end
+		if not self.db.units[frame.UnitType].name.enable then return end
 	end
 
-	frame.Name:SetText(frame.UnitName or UNKNOWN)
+	local name = frame.Name
+	name:SetText(frame.UnitName or UNKNOWN)
+
+	if not triggered then
+		name:ClearAllPoints()
+		if self.db.units[frame.UnitType].health.enable or (self.db.alwaysShowTargetHealth and frame.isTarget) then
+			name:SetJustifyH("LEFT")
+			name:SetPoint("BOTTOMLEFT", frame.Health, "TOPLEFT", 0, E.Border*2)
+			name:SetPoint("BOTTOMRIGHT", frame.Level, "BOTTOMLEFT")
+		else
+			name:SetJustifyH("CENTER")
+			name:SetPoint("TOP", frame)
+		end
+	end
 
 	local r, g, b = 1, 1, 1
 	local class = frame.UnitClass
-	local reactionType = frame.UnitReaction
 
 	local classColor, useClassColor
 	if class then
@@ -26,18 +38,20 @@ function NP:UpdateElement_Name(frame, triggered)
 
 	if useClassColor and (frame.UnitType == "FRIENDLY_PLAYER" or frame.UnitType == "ENEMY_PLAYER") then
 		r, g, b = classColor.r, classColor.g, classColor.b
-	elseif triggered or (not self.db.units[frame.UnitType].healthbar.enable and not frame.isTarget) then
+	elseif triggered or (not self.db.units[frame.UnitType].health.enable and not frame.isTarget) then
+		local reactionType = frame.UnitReaction
 		if reactionType then
+			local db = self.db.colors
 			if reactionType == 4 then
-				r, g, b = self.db.reactions.neutral.r, self.db.reactions.neutral.g, self.db.reactions.neutral.b
+				r, g, b = db.reactions.neutral.r, db.reactions.neutral.g, db.reactions.neutral.b
 			elseif reactionType > 4 then
 				if frame.UnitType == "FRIENDLY_PLAYER" then
-					r, g, b = NP.db.reactions.friendlyPlayer.r, NP.db.reactions.friendlyPlayer.g, NP.db.reactions.friendlyPlayer.b
+					r, g, b = db.reactions.friendlyPlayer.r, db.reactions.friendlyPlayer.g, db.reactions.friendlyPlayer.b
 				else
-					r, g, b = NP.db.reactions.good.r, NP.db.reactions.good.g, NP.db.reactions.good.b
+					r, g, b = db.reactions.good.r, db.reactions.good.g, db.reactions.good.b
 				end
 			else
-				r, g, b = self.db.reactions.bad.r, self.db.reactions.bad.g, self.db.reactions.bad.b
+				r, g, b = db.reactions.bad.r, db.reactions.bad.g, db.reactions.bad.b
 			end
 		end
 	end
@@ -48,40 +62,27 @@ function NP:UpdateElement_Name(frame, triggered)
 	end
 
 	if triggered or (r ~= frame.Name.r or g ~= frame.Name.g or b ~= frame.Name.b) then
-		frame.Name:SetTextColor(r, g, b)
+		name:SetTextColor(r, g, b)
 		if not triggered then
 			frame.Name.r, frame.Name.g, frame.Name.b = r, g, b
 		end
 	end
 
 	if self.db.nameColoredGlow then
-		frame.Name.NameOnlyGlow:SetVertexColor(r - 0.1, g - 0.1, b - 0.1, 1)
+		name.NameOnlyGlow:SetVertexColor(r - 0.1, g - 0.1, b - 0.1, 1)
 	else
-		frame.Name.NameOnlyGlow:SetVertexColor(self.db.glowColor.r, self.db.glowColor.g, self.db.glowColor.b, self.db.glowColor.a)
+		name.NameOnlyGlow:SetVertexColor(self.db.colors.glowColor.r, self.db.colors.glowColor.g, self.db.colors.glowColor.b, self.db.colors.glowColor.a)
 	end
 end
 
-function NP:ConfigureElement_Name(frame)
-	local name = frame.Name
-
-	name:SetJustifyH("LEFT")
-	name:SetJustifyV("BOTTOM")
-	name:ClearAllPoints()
-	if self.db.units[frame.UnitType].healthbar.enable or (self.db.alwaysShowTargetHealth and frame.isTarget) then
-		name:SetJustifyH("LEFT")
-		name:SetPoint("BOTTOMLEFT", frame.HealthBar, "TOPLEFT", 0, E.Border*2)
-		name:SetPoint("BOTTOMRIGHT", frame.Level, "BOTTOMLEFT")
-	else
-		name:SetJustifyH("CENTER")
-		name:SetPoint("TOP", frame)
-	end
-
-	name:SetFont(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline)
+function NP:Configure_Name(frame)
+	local db = self.db.units[frame.UnitType].name
+	frame.Name:FontTemplate(LSM:Fetch("font", db.font), db.fontSize, db.fontOutline)
 end
 
-function NP:ConstructElement_Name(frame)
+function NP:Construct_Name(frame)
 	local name = frame:CreateFontString(nil, "OVERLAY")
-	name:SetFont(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline)
+	name:SetJustifyV("BOTTOM")
 	name:SetWordWrap(false)
 
 	local g = frame:CreateTexture(nil, "BACKGROUND")

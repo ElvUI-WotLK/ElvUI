@@ -18,7 +18,7 @@ end
 function NP:CutawayHealthValueChangeCallback(frame, health, maxHealth)
 	if self.db.cutawayHealth then
 		frame.CutawayHealth:SetMinMaxValues(0, maxHealth)
-		local oldValue = frame.HealthBar:GetValue()
+		local oldValue = frame.Health:GetValue()
 		local change = oldValue - health
 		if change > 0 and not frame.CutawayHealth.isPlaying then
 			local cutawayHealth = frame.CutawayHealth
@@ -48,7 +48,7 @@ function NP:CutawayHealthColorChangeCallback(frame, r, g, b)
 end
 
 function NP:ConstructElement_CutawayHealth(parent)
-	local healthBar = parent.HealthBar
+	local healthBar = parent.Health
 
 	local cutawayHealth = CreateFrame("StatusBar", "$parentCutawayHealth", healthBar)
 	cutawayHealth:SetAllPoints()
