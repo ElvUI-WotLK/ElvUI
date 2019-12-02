@@ -100,16 +100,16 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 	if HealthColorChanged then
 		frame.StyleChanged = true
 		frame.HealthColorChanged = true
-		frame.HealthBar:SetStatusBarColor(actions.color.healthColor.r, actions.color.healthColor.g, actions.color.healthColor.b, actions.color.healthColor.a)
+		frame.Health:SetStatusBarColor(actions.color.healthColor.r, actions.color.healthColor.g, actions.color.healthColor.b, actions.color.healthColor.a)
 		frame.CutawayHealth:SetStatusBarColor(actions.color.healthColor.r * 1.5, actions.color.healthColor.g * 1.5, actions.color.healthColor.b * 1.5, actions.color.healthColor.a)
 	end
 	if BorderChanged then --Lets lock this to the values we want (needed for when the media border color changes)
 		frame.StyleChanged = true
 		frame.BorderChanged = true
-		frame.HealthBar.bordertop:SetTexture(actions.color.borderColor.r, actions.color.borderColor.g, actions.color.borderColor.b, actions.color.borderColor.a)
-		frame.HealthBar.borderbottom:SetTexture(actions.color.borderColor.r, actions.color.borderColor.g, actions.color.borderColor.b, actions.color.borderColor.a)
-		frame.HealthBar.borderleft:SetTexture(actions.color.borderColor.r, actions.color.borderColor.g, actions.color.borderColor.b, actions.color.borderColor.a)
-		frame.HealthBar.borderright:SetTexture(actions.color.borderColor.r, actions.color.borderColor.g, actions.color.borderColor.b, actions.color.borderColor.a)
+		frame.Health.bordertop:SetTexture(actions.color.borderColor.r, actions.color.borderColor.g, actions.color.borderColor.b, actions.color.borderColor.a)
+		frame.Health.borderbottom:SetTexture(actions.color.borderColor.r, actions.color.borderColor.g, actions.color.borderColor.b, actions.color.borderColor.a)
+		frame.Health.borderleft:SetTexture(actions.color.borderColor.r, actions.color.borderColor.g, actions.color.borderColor.b, actions.color.borderColor.a)
+		frame.Health.borderright:SetTexture(actions.color.borderColor.r, actions.color.borderColor.g, actions.color.borderColor.b, actions.color.borderColor.a)
 	end
 	if FlashingHealth then
 		frame.StyleChanged = true
@@ -126,8 +126,8 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 		frame.StyleChanged = true
 		frame.TextureChanged = true
 		local tex = LSM:Fetch("statusbar", actions.texture.texture)
-		frame.HealthBar.Highlight:SetTexture(tex)
-		frame.HealthBar:SetStatusBarTexture(tex)
+		frame.Health.Highlight:SetTexture(tex)
+		frame.Health:SetStatusBarTexture(tex)
 		if FlashingHealth then
 			frame.FlashTexture:SetTexture(tex)
 		end
@@ -145,7 +145,7 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 	if AlphaChanged then
 		frame.StyleChanged = true
 		frame.AlphaChanged = true
-		frame:SetAlpha(actions.alpha / 100)
+		mod:PlateFade(frame, mod.db.fadeIn and 1 or 0, frame:GetAlpha(), actions.alpha / 100)
 	end
 	if NameColorChanged then
 		frame.StyleChanged = true
@@ -163,18 +163,18 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 		frame.NameOnlyChanged = true
 		--hide the bars
 		if frame.CastBar:IsShown() then frame.CastBar:Hide() end
-		if frame.HealthBar:IsShown() then frame.HealthBar:Hide() end
+		if frame.Health:IsShown() then frame.Health:Hide() end
 		--hide the target indicator
-		mod:UpdateElement_Glow(frame)
+		mod:Configure_Glow(frame)
 		--position the name and update its color
 		frame.Name:ClearAllPoints()
 		frame.Name:SetJustifyH("CENTER")
-		frame.Name:SetPoint("TOP", frame, "CENTER")
+		frame.Name:SetPoint("TOP", frame)
 		frame.Level:ClearAllPoints()
 		frame.Level:SetPoint("LEFT", frame.Name, "RIGHT")
 		frame.Level:SetJustifyH("LEFT")
 		if not NameColorChanged then
-			mod:UpdateElement_Name(frame, true)
+			mod:Update_Name(frame, true)
 		end
 	end
 end
@@ -183,6 +183,7 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 	frame.StyleChanged = nil
 	if VisibilityChanged then
 		frame.VisibilityChanged = nil
+		mod:PlateFade(frame, mod.db.fadeIn and 1 or 0, 0, 1) -- fade those back in so it looks clean
 		frame:Show()
 	end
 	if FrameLevelChanged then
@@ -190,16 +191,16 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 	end
 	if HealthColorChanged then
 		frame.HealthColorChanged = nil
-		frame.HealthBar:SetStatusBarColor(frame.HealthBar.r, frame.HealthBar.g, frame.HealthBar.b)
-		frame.CutawayHealth:SetStatusBarColor(frame.HealthBar.r * 1.5, frame.HealthBar.g * 1.5, frame.HealthBar.b * 1.5, 1)
+		frame.Health:SetStatusBarColor(frame.Health.r, frame.Health.g, frame.Health.b)
+		frame.CutawayHealth:SetStatusBarColor(frame.Health.r * 1.5, frame.Health.g * 1.5, frame.Health.b * 1.5, 1)
 	end
 	if BorderChanged then
 		frame.BorderChanged = nil
 		local r, g, b = unpack(E.media.bordercolor)
-		frame.HealthBar.bordertop:SetTexture(r, g, b)
-		frame.HealthBar.borderbottom:SetTexture(r, g, b)
-		frame.HealthBar.borderleft:SetTexture(r, g, b)
-		frame.HealthBar.borderright:SetTexture(r, g, b)
+		frame.Health.bordertop:SetTexture(r, g, b)
+		frame.Health.borderbottom:SetTexture(r, g, b)
+		frame.Health.borderleft:SetTexture(r, g, b)
+		frame.Health.borderright:SetTexture(r, g, b)
 	end
 	if FlashingHealth then
 		frame.FlashingHealth = nil
@@ -209,8 +210,8 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 	if TextureChanged then
 		frame.TextureChanged = nil
 		local tex = LSM:Fetch("statusbar", mod.db.statusbar)
-		frame.HealthBar.Highlight:SetTexture(tex)
-		frame.HealthBar:SetStatusBarTexture(tex)
+		frame.Health.Highlight:SetTexture(tex)
+		frame.Health:SetStatusBarTexture(tex)
 	end
 	if ScaleChanged then
 		frame.ScaleChanged = nil
@@ -223,11 +224,7 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 	end
 	if AlphaChanged then
 		frame.AlphaChanged = nil
-		if frame.isTarget then
-			frame:SetAlpha(1)
-		else
-			frame:SetAlpha(1 - mod.db.nonTargetTransparency)
-		end
+		mod:PlateFade(frame, mod.db.fadeIn and 1 or 0, (frame.FadeObject and frame.FadeObject.endAlpha) or 0.5, 1)
 	end
 	if NameColorChanged then
 		frame.NameColorChanged = nil
@@ -236,14 +233,15 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 	if NameOnlyChanged then
 		frame.NameOnlyChanged = nil
 		frame.TopLevelFrame = nil --We can safely clear this here because it is set upon `UpdateElement_Auras` if needed
-		if mod.db.units[frame.UnitType].healthbar.enable or (frame.isTarget and mod.db.alwaysShowTargetHealth) then
-			frame.HealthBar:Show()
-			mod:UpdateElement_Glow(frame)
+		if mod.db.units[frame.UnitType].health.enable or (frame.isTarget and mod.db.alwaysShowTargetHealth) then
+			frame.Health:Show()
+			mod:Configure_Glow(frame)
 		end
-		if mod.db.units[frame.UnitType].showName then
-			mod:ConfigureElement_Level(frame)
-			mod:ConfigureElement_Name(frame)
-			mod:UpdateElement_Name(frame)
+		if mod.db.units[frame.UnitType].name.enable then
+			frame.Name:ClearAllPoints()
+			frame.Level:ClearAllPoints()
+			mod:Update_Level(frame)
+			mod:Update_Name(frame)
 		else
 			frame.Name:SetText()
 		end
@@ -281,6 +279,11 @@ function mod:StyleFilterConditionCheck(frame, filter, trigger)
 		local underPowerThreshold = trigger.underPowerThreshold and (trigger.underPowerThreshold ~= 0) and (trigger.underPowerThreshold > percPower)
 		local overPowerThreshold = trigger.overPowerThreshold and (trigger.overPowerThreshold ~= 0) and (trigger.overPowerThreshold < percPower)
 		if underPowerThreshold or overPowerThreshold then passed = true else return end
+	end
+
+	-- Require Target
+	if trigger.requireTarget then
+		if UnitExists("target") then passed = true else return end
 	end
 
 	-- Unit Combat
@@ -410,12 +413,12 @@ function mod:StyleFilterConditionCheck(frame, filter, trigger)
 end
 
 function mod:StyleFilterPass(frame, actions)
-	local healthBarEnabled = (frame.UnitType and mod.db.units[frame.UnitType].healthbar.enable) or (frame.isTarget and mod.db.alwaysShowTargetHealth)
-	local healthBarShown = healthBarEnabled and frame.HealthBar:IsShown()
+	local healthBarEnabled = (frame.UnitType and mod.db.units[frame.UnitType].health.enable) or (frame.isTarget and mod.db.alwaysShowTargetHealth)
+	local healthBarShown = healthBarEnabled and frame.Health:IsShown()
 
 	mod:StyleFilterSetChanges(frame, actions,
 		(healthBarShown and actions.color and actions.color.health), --HealthColorChanged
-		(healthBarShown and actions.color and actions.color.border and frame.HealthBar.backdrop), --BorderChanged
+		(healthBarShown and actions.color and actions.color.border and frame.Health.backdrop), --BorderChanged
 		(healthBarShown and actions.flash and actions.flash.enable and frame.FlashTexture), --FlashingHealth
 		(healthBarShown and actions.texture and actions.texture.enable), --TextureChanged
 		(healthBarShown and actions.scale and actions.scale ~= 1), --ScaleChanged

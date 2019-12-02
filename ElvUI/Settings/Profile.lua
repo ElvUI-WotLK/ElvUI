@@ -258,35 +258,65 @@ P.bags = {
 --NamePlate
 P.nameplates = {
 	statusbar = "ElvUI Norm",
+	smoothbars = false,
+	clickThrough = {
+		friendly = false,
+		enemy = false,
+	},
+	plateSize ={
+		friendlyWidth = 150,
+		friendlyHeight = 30,
+		enemyWidth = 150,
+		enemyHeight = 30,
+	},
 	font = "PT Sans Narrow",
 	fontSize = 11,
 	fontOutline = "OUTLINE",
-	healthFont = "PT Sans Narrow",
-	healthFontSize = 11,
-	healthFontOutline = "OUTLINE",
-	durationFont = "PT Sans Narrow",
-	durationFontSize = 10,
-	durationFontOutline = "OUTLINE",
-	durationPosition = "CENTER",
-	stackFont = "PT Sans Narrow",
-	stackFontSize = 8,
-	stackFontOutline = "OUTLINE",
+
 	useTargetScale = true,
 	targetScale = 1.15,
 	nonTargetTransparency = 0.40,
+
 	motionType = "OVERLAP",
+
 	lowHealthThreshold = 0.4,
+
 	showFriendlyCombat = "DISABLED",
 	showEnemyCombat = "DISABLED",
-	targetGlow = "style2",
-	glowColor = {r = 77/255, g = 179/255, b = 255/255, a = 1},
+
 	nameColoredGlow = false,
+
 	cutawayHealth = false,
 	cutawayHealthLength = 0.3,
 	cutawayHealthFadeOutTime = 0.6,
+
 	alwaysShowTargetHealth = true,
-	castColor = {r = 1, g = 208/255, b = 0},
-	castNoInterruptColor = {r = 0.78, g = 0.25, b = 0.25},
+
+	colors = {
+		glowColor = {r = 1, g = 1, b = 1, a = 1},
+		castColor = {r = 1, g = 0.81, b = 0},
+		castNoInterruptColor = {r = 0.78, g = 0.25, b = 0.25},
+		castbarDesaturate = true,
+		reactions = {
+			friendlyPlayer = {r = 0.31, g = 0.45, b = 0.63},
+			good = {r = .29,  g = .68, b = .30},
+			neutral = {r = .85, g = .77, b = .36},
+			bad = {r = 0.78, g = 0.25, b = 0.25},
+		},
+		threat = {
+			goodColor = {r = 75/255, g = 175/255, b = 76/255},
+			badColor = {r = 0.78, g = 0.25, b = 0.25},
+			goodTransition = {r = 218/255, g = 197/255, b = 92/255},
+			badTransition = {r = 235/255, g = 163/255, b = 40/255},
+		},
+		comboPoints = {
+			[1] = {r = .69, g = .31, b = .31},
+			[2] = {r = .69, g = .31, b = .31},
+			[3] = {r = .65, g = .63, b = .35},
+			[4] = {r = .65, g = .63, b = .35},
+			[5] = {r = .33, g = .59, b = .33}
+		}
+	},
 	cooldown = {
 		override = true,
 		reverse = false,
@@ -317,29 +347,11 @@ P.nameplates = {
 			fontSize = 18
 		}
 	},
-	reactions = {
-		friendlyPlayer = {r = 0.31, g = 0.45, b = 0.63},
-		good = {r = 75/255, g = 175/255, b = 76/255},
-		neutral = {r = 218/255, g = 197/255, b = 92/255},
-		bad = {r = 0.78, g = 0.25, b = 0.25},
-	},
+	fadeIn = true,
 	threat = {
-		goodColor = {r = 75/255, g = 175/255, b = 76/255},
-		badColor = {r = 0.78, g = 0.25, b = 0.25},
-		goodTransition = {r = 218/255, g = 197/255, b = 92/255},
-		badTransition = {r = 235/255, g = 163/255, b = 40/255},
 		goodScale = 0.8,
 		badScale = 1.2,
 		useThreatColor = true
-	},
-	comboBar = {
-		colors = {
-			[1] = {r = 0.69, g = 0.31, b = 0.31},
-			[2] = {r = 0.69, g = 0.31, b = 0.31},
-			[3] = {r = 0.65, g = 0.63, b = 0.35},
-			[4] = {r = 0.65, g = 0.63, b = 0.35},
-			[5] = {r = 0.33, g = 0.59, b = 0.33}
-		}
 	},
 	filters = {
 		Boss = {
@@ -348,9 +360,26 @@ P.nameplates = {
 			}
 		}
 	},
+	filters = {
+		ElvUI_Boss = {triggers = {enable = false}},
+		ElvUI_Target = {triggers = {enable = true}},
+		ElvUI_NonTarget = {triggers = {enable = true}},
+	},
 	units = {
+		TARGET = {
+			enable = true,
+			glowStyle = "style4",
+			comboPoints = {
+				enable = true,
+				width = 8,
+				height = 4,
+				spacing = 5,
+				xOffset = 0,
+				yOffset = 0
+			},
+		},
 		FRIENDLY_PLAYER = {
-			healthbar = {
+			health = {
 				enable = false,
 				height = 10,
 				width = 150,
@@ -358,21 +387,49 @@ P.nameplates = {
 				text = {
 					enable = false,
 					format = "CURRENT",
+					position = "CENTER",
+					parent = "Health",
+					xOffset = 0,
+					yOffset = 0,
+					font = "PT Sans Narrow",
+					fontOutline = "OUTLINE",
+					fontSize = 11,
 				},
 				useClassColor = true,
 			},
-			showName = true,
-			showLevel = false,
+			name = {
+				enable = true,
+				useClassColor = true,
+				font = "PT Sans Narrow",
+				fontOutline = "OUTLINE",
+				fontSize = 11
+			},
+			level = {
+				enable = false,
+				font = "PT Sans Narrow",
+				fontOutline = "OUTLINE",
+				fontSize = 11
+			},
 			castbar = {
 				enable = true,
+				width = 150,
 				height = 8,
-				offset = 1,
 				hideSpellName = false,
 				hideTime = false,
+				textPosition = "BELOW",
 				castTimeFormat = "CURRENT",
 				channelTimeFormat = "CURRENT",
 				timeToHold = 0,
-				iconPosition = "RIGHT"
+				iconPosition = "RIGHT",
+				iconSize = 20,
+				iconOffsetX = 2,
+				iconOffsetY = 0,
+				showIcon = true,
+				xOffset = 0,
+				yOffset = -2,
+				font = "PT Sans Narrow",
+				fontSize = 11,
+				fontOutline = "OUTLINE"
 			},
 			buffs = {
 				enable = true,
@@ -426,36 +483,61 @@ P.nameplates = {
 					maxDuration = 0,
 					priority = "Blacklist,blockNoDuration,Personal,CCDebuffs" --NamePlate FriendlyPlayer Debuffs
 				},
-			},
-			name = {
-				useClassColor = true
 			}
 		},
 		ENEMY_PLAYER = {
 			markHealers = true,
-			healthbar = {
+			health = {
 				enable = true,
 				height = 10,
 				width = 150,
 				glowStyle = "TARGET_THREAT",
 				text = {
 					enable = false,
-					format = "CURRENT"
+					format = "CURRENT",
+					position = "CENTER",
+					parent = "Health",
+					xOffset = 0,
+					yOffset = 0,
+					font = "PT Sans Narrow",
+					fontOutline = "OUTLINE",
+					fontSize = 11
 				},
 				useClassColor = true
 			},
-			showName = true,
-			showLevel = true,
+			name = {
+				enable = true,
+				useClassColor = true,
+				font = "PT Sans Narrow",
+				fontOutline = "OUTLINE",
+				fontSize = 11
+			},
+			level = {
+				enable = true,
+				font = "PT Sans Narrow",
+				fontOutline = "OUTLINE",
+				fontSize = 11
+			},
 			castbar = {
 				enable = true,
+				width = 150,
 				height = 8,
-				offset = 1,
 				hideSpellName = false,
 				hideTime = false,
+				textPosition = "BELOW",
 				castTimeFormat = "CURRENT",
 				channelTimeFormat = "CURRENT",
 				timeToHold = 0,
-				iconPosition = "RIGHT"
+				iconPosition = "RIGHT",
+				iconSize = 20,
+				iconOffsetX = 2,
+				iconOffsetY = 0,
+				showIcon = true,
+				xOffset = 0,
+				yOffset = -2,
+				font = "PT Sans Narrow",
+				fontSize = 11,
+				fontOutline = "OUTLINE"
 			},
 			comboPoints = {
 				enable = true,
@@ -518,34 +600,58 @@ P.nameplates = {
 					maxDuration = 0,
 					priority = "Blacklist,blockNoDuration,Personal,CCDebuffs,RaidDebuffs" --NamePlate EnemyPlayer Debuffs
 				},
-			},
-			name = {
-				useClassColor = true
 			}
 		},
 		FRIENDLY_NPC = {
-			healthbar = {
+			health = {
 				enable = false,
 				height = 10,
 				width = 150,
 				glowStyle = "TARGET_THREAT",
 				text = {
 					enable = false,
-					format = "CURRENT"
+					format = "CURRENT",
+					position = "CENTER",
+					parent = "Health",
+					xOffset = 0,
+					yOffset = 0,
+					font = "PT Sans Narrow",
+					fontOutline = "OUTLINE",
+					fontSize = 11
 				}
 			},
-			showName = true,
-			showLevel = true,
+			name = {
+				enable = true,
+				font = "PT Sans Narrow",
+				fontOutline = "OUTLINE",
+				fontSize = 11
+			},
+			level = {
+				enable = true,
+				font = "PT Sans Narrow",
+				fontOutline = "OUTLINE",
+				fontSize = 11
+			},
 			castbar = {
 				enable = true,
+				width = 150,
 				height = 8,
-				offset = 1,
 				hideSpellName = false,
 				hideTime = false,
+				textPosition = "BELOW",
 				castTimeFormat = "CURRENT",
 				channelTimeFormat = "CURRENT",
 				timeToHold = 0,
-				iconPosition = "RIGHT"
+				iconPosition = "RIGHT",
+				iconSize = 20,
+				iconOffsetX = 2,
+				iconOffsetY = 0,
+				showIcon = true,
+				xOffset = 0,
+				yOffset = -2,
+				font = "PT Sans Narrow",
+				fontSize = 11,
+				fontOutline = "OUTLINE"
 			},
 			buffs = {
 				enable = true,
@@ -610,28 +716,55 @@ P.nameplates = {
 			}
 		},
 		ENEMY_NPC = {
-			healthbar = {
+			health = {
 				enable = true,
 				height = 10,
 				width = 150,
 				glowStyle = "TARGET_THREAT",
 				text = {
 					enable = false,
-					format = "CURRENT"
+					format = "CURRENT",
+					position = "CENTER",
+					parent = "Health",
+					xOffset = 0,
+					yOffset = 0,
+					font = "PT Sans Narrow",
+					fontOutline = "OUTLINE",
+					fontSize = 11
 				}
 			},
-			showName = true,
-			showLevel = true,
+			name = {
+				enable = true,
+				font = "PT Sans Narrow",
+				fontOutline = "OUTLINE",
+				fontSize = 11
+			},
+			level = {
+				enable = true,
+				font = "PT Sans Narrow",
+				fontOutline = "OUTLINE",
+				fontSize = 11
+			},
 			castbar = {
 				enable = true,
+				width = 150,
 				height = 8,
-				offset = 1,
 				hideSpellName = false,
 				hideTime = false,
+				textPosition = "BELOW",
 				castTimeFormat = "CURRENT",
 				channelTimeFormat = "CURRENT",
 				timeToHold = 0,
-				iconPosition = "RIGHT"
+				iconPosition = "RIGHT",
+				iconSize = 20,
+				iconOffsetX = 2,
+				iconOffsetY = 0,
+				showIcon = true,
+				xOffset = 0,
+				yOffset = -2,
+				font = "PT Sans Narrow",
+				fontSize = 11,
+				fontOutline = "OUTLINE"
 			},
 			comboPoints = {
 				enable = true,

@@ -3,23 +3,23 @@ local NP = E:GetModule("NamePlates")
 local LSM = E.Libs.LSM
 
 --Lua functions
-local unpack = unpack
 --WoW API / Variables
+local CreateFrame = CreateFrame
 local GetComboPoints = GetComboPoints
 local MAX_COMBO_POINTS = MAX_COMBO_POINTS
 
-function NP:UpdateElement_CPoints(frame)
-	if not frame.UnitType then return end
+function NP:Update_CPoints(frame)
 	if frame.UnitType == "FRIENDLY_PLAYER" or frame.UnitType == "FRIENDLY_NPC" then return end
-	if self.db.units[frame.UnitType].comboPoints.enable ~= true then return end
+	if not self.db.units.TARGET.comboPoints.enable then return end
 
 	local numPoints
-	if UnitExists("target") and frame.isTarget then
+	if frame.isTarget then
 		numPoints = GetComboPoints("player", "target")
 	end
 
 	if numPoints and numPoints > 0 then
 		frame.CPoints:Show()
+
 		for i = 1, MAX_COMBO_POINTS do
 			if i <= numPoints then
 				frame.CPoints[i]:Show()
@@ -32,49 +32,86 @@ function NP:UpdateElement_CPoints(frame)
 	end
 end
 
-function NP:ConfigureElement_CPoints(frame)
-	if not frame.UnitType then return end
+function NP:Configure_CPointsScale(frame, scale, noPlayAnimation)
 	if frame.UnitType == "FRIENDLY_PLAYER" or frame.UnitType == "FRIENDLY_NPC" then return end
+	local db = self.db.units.TARGET.comboPoints
+	if not db.enable then return end
 
-	local comboPoints = frame.CPoints
-	local healthShown = self.db.units[frame.UnitType].healthbar.enable or (frame.isTarget and self.db.alwaysShowTargetHealth)
-
-	comboPoints:ClearAllPoints()
-	if healthShown then
-		comboPoints:Point("CENTER", frame.HealthBar, "BOTTOM", self.db.units[frame.UnitType].comboPoints.xOffset, self.db.units[frame.UnitType].comboPoints.yOffset)
+	if noPlayAnimation then
+		frame.CPoints:SetWidth(((db.width * 5) + (db.spacing * 4)) * scale)
+		frame.CPoints:SetHeight(db.height * scale)
 	else
-		comboPoints:Point("CENTER", frame, "TOP", self.db.units[frame.UnitType].comboPoints.xOffset, self.db.units[frame.UnitType].comboPoints.yOffset)
-	end
-
-	local width, height
-	for i = 1, MAX_COMBO_POINTS do
-		comboPoints[i]:SetStatusBarTexture(LSM:Fetch("statusbar", self.db.statusbar))
-		comboPoints[i]:SetStatusBarColor(unpack(E:GetColorTable(self.db.comboBar.colors[i])))
-
-		if i == 3 then
-			comboPoints[i]:Point("CENTER", comboPoints, "CENTER")
-		elseif i == 1 or i == 2 then
-			comboPoints[i]:Point("RIGHT", comboPoints[i + 1], "LEFT", -self.db.units[frame.UnitType].comboPoints.spacing, 0)
-		else
-			comboPoints[i]:Point("LEFT", comboPoints[i - 1], "RIGHT", self.db.units[frame.UnitType].comboPoints.spacing, 0)
+		if frame.CPoints.scale:IsPlaying() then
+			frame.CPoints.scale:Stop()
 		end
 
-		width = self.db.units[frame.UnitType].comboPoints.width
-		height = self.db.units[frame.UnitType].comboPoints.height
-
-		comboPoints[i]:Width(healthShown and width * (frame.ThreatScale or 1) * (self.db.useTargetScale and self.db.targetScale or 1) or width)
-		comboPoints[i]:Height(healthShown and height * (frame.ThreatScale or 1) * (self.db.useTargetScale and self.db.targetScale or 1) or height)
+		frame.CPoints.scale.width:SetChange(((db.width * 5) + (db.spacing * 4)) * scale)
+		frame.CPoints.scale.height:SetChange(db.height * scale)
+		frame.CPoints.scale:Play()
 	end
 end
 
-function NP:ConstructElement_CPoints(parent)
-	local comboBar = CreateFrame("Frame", "$parentComboPoints", parent)
-	comboBar:SetSize(68, 1)
-	comboBar:Hide()
+function NP:Configure_CPoints(frame, configuring)
+	if frame.UnitType == "FRIENDLY_PLAYER" or frame.UnitType == "FRIENDLY_NPC" then return end
+	local db = self.db.units.TARGET.comboPoints
+	if not db.enable then return end
+
+	local comboBar = frame.CPoints
+	local healthShown = self.db.units[frame.UnitType].health.enable or (frame.isTarget and self.db.alwaysShowTargetHealth)
+
+	comboBar:ClearAllPoints()
+	if healthShown then
+		comboBar:Point("CENTER", frame.Health, "BOTTOM", db.xOffset, db.yOffset)
+	else
+		comboBar:Point("CENTER", frame, "TOP", db.xOffset, db.yOffset)
+	end
 
 	for i = 1, MAX_COMBO_POINTS do
-		comboBar[i] = CreateFrame("StatusBar", comboBar:GetName().."ComboPoint"..i, comboBar)
+		local comboPoint = comboBar[i]
+		comboPoint.backdrop:SetTexture(LSM:Fetch("statusbar", self.db.statusbar))
+		local color = self.db.colors.comboPoints[i]
+		comboPoint.backdrop:SetVertexColor(color.r, color.g, color.b)
 
+		comboPoint:SetWidth(db.width)
+
+		comboPoint:ClearAllPoints()
+		if i == 1 then
+			comboPoint:SetPoint("TOPLEFT")
+			comboPoint:SetPoint("BOTTOMLEFT")
+		else
+			comboPoint:SetPoint("TOPLEFT", comboBar[i - 1], "TOPRIGHT", db.spacing, 0)
+			comboPoint:SetPoint("BOTTOMLEFT", comboBar[i - 1], "BOTTOMRIGHT")
+		end
+	end
+
+	comboBar.spacing = db.spacing * (MAX_COMBO_POINTS - 1)
+
+	if configuring then
+		self:Configure_CPointsScale(frame, frame.currentScale or 1, configuring)
+	end
+end
+
+local function CPoints_OnSizeChanged(self, width)
+	width = width - self.spacing
+	for i = 1, MAX_COMBO_POINTS do
+		self[i]:SetWidth(width * 0.2)
+	end
+end
+
+function NP:Construct_CPoints(parent)
+	local comboBar = CreateFrame("Frame", "$parentComboPoints", parent)
+	comboBar:Hide()
+
+	comboBar.scale = CreateAnimationGroup(comboBar)
+	comboBar.scale.width = comboBar.scale:CreateAnimation("Width")
+	comboBar.scale.width:SetDuration(0.2)
+	comboBar.scale.height = comboBar.scale:CreateAnimation("Height")
+	comboBar.scale.height:SetDuration(0.2)
+
+	comboBar:SetScript("OnSizeChanged", CPoints_OnSizeChanged)
+
+	for i = 1, MAX_COMBO_POINTS do
+		comboBar[i] = CreateFrame("Frame", "$parentComboPoint"..i, comboBar)
 		self:StyleFrame(comboBar[i])
 	end
 

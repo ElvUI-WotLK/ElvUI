@@ -411,36 +411,37 @@ local function UpdateFilterGroup()
 					order = 5,
 					type = "group",
 					name = L["Targeting"],
-					disabled = function() return not (E.db.nameplates and E.db.nameplates.filters and E.db.nameplates.filters[selectedNameplateFilter] and E.db.nameplates.filters[selectedNameplateFilter].triggers and E.db.nameplates.filters[selectedNameplateFilter].triggers.enable) end,
+					get = function(info)
+						return E.global.nameplates.filters[selectedNameplateFilter].triggers[info[#info]]
+					end,
+					set = function(info, value)
+						E.global.nameplates.filters[selectedNameplateFilter].triggers[info[#info]] = value
+						NP:ConfigureAll()
+					end,
+					disabled = function()
+						return not (E.db.nameplates and E.db.nameplates.filters and E.db.nameplates.filters[selectedNameplateFilter]
+						and E.db.nameplates.filters[selectedNameplateFilter].triggers
+						and E.db.nameplates.filters[selectedNameplateFilter].triggers.enable)
+					end,
 					args = {
 						isTarget = {
 							order = 1,
 							type = "toggle",
 							name = L["Is Targeted"],
-							desc = L["If enabled then the filter will only activate when you are targeting the unit."],
-							disabled = function() return not (E.db.nameplates and E.db.nameplates.filters and E.db.nameplates.filters[selectedNameplateFilter] and E.db.nameplates.filters[selectedNameplateFilter].triggers and E.db.nameplates.filters[selectedNameplateFilter].triggers.enable) end,
-							get = function(info)
-								return E.global.nameplates.filters[selectedNameplateFilter].triggers.isTarget
-							end,
-							set = function(info, value)
-								E.global.nameplates.filters[selectedNameplateFilter].triggers.isTarget = value
-								NP:ConfigureAll()
-							end
+							desc = L["If enabled then the filter will only activate when you are targeting the unit."]
 						},
 						notTarget = {
 							order = 2,
 							type = "toggle",
 							name = L["Not Targeted"],
-							desc = L["If enabled then the filter will only activate when you are not targeting the unit."],
-							disabled = function() return not (E.db.nameplates and E.db.nameplates.filters and E.db.nameplates.filters[selectedNameplateFilter] and E.db.nameplates.filters[selectedNameplateFilter].triggers and E.db.nameplates.filters[selectedNameplateFilter].triggers.enable) end,
-							get = function(info)
-								return E.global.nameplates.filters[selectedNameplateFilter].triggers.notTarget
-							end,
-							set = function(info, value)
-								E.global.nameplates.filters[selectedNameplateFilter].triggers.notTarget = value
-								NP:ConfigureAll()
-							end
-						}
+							desc = L["If enabled then the filter will only activate when you are not targeting the unit."]
+						},
+						requireTarget = {
+							order = 3,
+							type = "toggle",
+							name = L["Require Target"],
+							desc = L["If enabled then the filter will only activate when you have a target."]
+						},
 					}
 				},
 				casting = {
@@ -1636,8 +1637,8 @@ local function GetUnitSettings(unit, name)
 				order = 1,
 				type = "group",
 				name = L["HEALTH"],
-				get = function(info) return E.db.nameplates.units[unit].healthbar[info[#info]] end,
-				set = function(info, value) E.db.nameplates.units[unit].healthbar[info[#info]] = value NP:ConfigureAll() end,
+				get = function(info) return E.db.nameplates.units[unit].health[info[#info]] end,
+				set = function(info, value) E.db.nameplates.units[unit].health[info[#info]] = value NP:ConfigureAll() end,
 				args = {
 					header = {
 						order = 1,
@@ -1666,8 +1667,13 @@ local function GetUnitSettings(unit, name)
 						type = "group",
 						name = L["Text"],
 						guiInline = true,
-						get = function(info) return E.db.nameplates.units[unit].healthbar.text[info[#info]] end,
-						set = function(info, value) E.db.nameplates.units[unit].healthbar.text[info[#info]] = value NP:ConfigureAll() end,
+						get = function(info)
+							return E.db.nameplates.units[unit].health.text[info[#info]]
+						end,
+						set = function(info, value)
+							E.db.nameplates.units[unit].health.text[info[#info]] = value
+							NP:ConfigureAll()
+						end,
 						args = {
 							enable = {
 								order = 1,
@@ -1686,6 +1692,74 @@ local function GetUnitSettings(unit, name)
 									["PERCENT"] = L["Percent"],
 									["DEFICIT"] = L["Deficit"]
 								}
+							},
+							position = {
+								order = 3,
+								type = "select",
+								name = L["Position"],
+								values = {
+									["CENTER"] = "CENTER",
+									["TOPLEFT"] = "TOPLEFT",
+									["BOTTOMLEFT"] = "BOTTOMLEFT",
+									["TOPRIGHT"] = "TOPRIGHT",
+									["BOTTOMRIGHT"] = "BOTTOMRIGHT"
+								}
+							},
+							parent = {
+								order = 4,
+								type = "select",
+								name = L["Parent"],
+								values = {
+									["Nameplate"] = L["Nameplate"],
+									["Health"] = L["Health"]
+								}
+							},
+							xOffset = {
+								order = 5,
+								type = "range",
+								name = L["X-Offset"],
+								min = -100, max = 100, step = 1
+							},
+							yOffset = {
+								order = 6,
+								type = "range",
+								name = L["Y-Offset"],
+								min = -100, max = 100, step = 1
+							},
+							fontGroup = {
+								type = "group",
+								order = 7,
+								name = L["Fonts"],
+								guiInline = true,
+								get = function(info)
+									return E.db.nameplates.units[unit].health.text[info[#info]]
+								end,
+								set = function(info, value)
+									E.db.nameplates.units[unit].health.text[info[#info]] = value
+									NP:ConfigureAll()
+								end,
+								args = {
+									font = {
+										order = 1,
+										type = "select",
+										name = L["Font"],
+										dialogControl = "LSM30_Font",
+										values = AceGUIWidgetLSMlists.font
+									},
+									fontSize = {
+										order = 2,
+										name = L["FONT_SIZE"],
+										type = "range",
+										min = 4, max = 32, step = 1
+									},
+									fontOutline = {
+										order = 3,
+										type = "select",
+										name = L["Font Outline"],
+										desc = L["Set the font outline."],
+										values = C.Values.FontFlags
+									}
+								}
 							}
 						}
 					}
@@ -1696,74 +1770,186 @@ local function GetUnitSettings(unit, name)
 				type = "group",
 				name = L["Cast Bar"],
 				get = function(info) return E.db.nameplates.units[unit].castbar[info[#info]] end,
-				set = function(info, value) E.db.nameplates.units[unit].castbar[info[#info]] = value NP:ConfigureAll() end,
+				set = function(info, value) E.db.nameplates.units[unit].castbar[info[#info]] = value; NP:ConfigureAll() end,
 				args = {
 					header = {
-						order = 1,
+						order = 0,
 						type = "header",
 						name = L["Cast Bar"]
 					},
 					enable = {
-						order = 2,
+						order = 1,
 						type = "toggle",
 						name = L["Enable"]
 					},
-					hideSpellName = {
-						order = 3,
-						type = "toggle",
-						name = L["Hide Spell Name"]
-					},
-					hideTime = {
-						order = 4,
-						type = "toggle",
-						name = L["Hide Time"]
-					},
-					height = {
-						order = 5,
-						type = "range",
-						name = L["Height"],
-						min = 4, max = 20, step = 1
-					},
-					offset = {
-						order = 6,
-						type = "range",
-						name = L["Offset"],
-						min = 0, max = 15, step = 1
-					},
 					timeToHold = {
-						order = 7,
+						order = 2,
 						type = "range",
 						name = L["Time To Hold"],
 						desc = L["How many seconds the castbar should stay visible after the cast failed or was interrupted."],
 						min = 0, max = 4, step = 0.1
 					},
-					castTimeFormat = {
+					width = {
+						order = 3,
+						type = "range",
+						name = L["Width"],
+						min = 50, max = 250, step = 1
+					},
+					height = {
+						order = 4,
+						type = "range",
+						name = L["Height"],
+						min = 4, max = 20, step = 1
+					},
+					xOffset = {
+						order = 5,
+						type = "range",
+						name = L["X-Offset"],
+						min = -100, max = 100, step = 1
+					},
+					yOffset = {
+						order = 6,
+						type = "range",
+						name = L["Y-Offset"],
+						min = -100, max = 100, step = 1
+					},
+					textGroup = {
+						order = 7,
+						type = "group",
+						name = L["Text"],
+						get = function(info)
+							return E.db.nameplates.units[unit].castbar[info[#info]]
+						end,
+						set = function(info, value)
+							E.db.nameplates.units[unit].castbar[info[#info]] = value
+							NP:ConfigureAll()
+						end,
+						guiInline = true,
+						args = {
+							hideSpellName = {
+								order = 1,
+								type = "toggle",
+								name = L["Hide Spell Name"]
+							},
+							hideTime = {
+								order = 2,
+								type = "toggle",
+								name = L["Hide Time"]
+							},
+							textPosition = {
+								order = 3,
+								type = "select",
+								name = L["Text Position"],
+								values = {
+									["ONBAR"] = L["Cast Bar"],
+									["ABOVE"] = L["Above"],
+									["BELOW"] = L["Below"]
+								}
+							},
+							castTimeFormat = {
+								order = 4,
+								type = "select",
+								name = L["Cast Time Format"],
+								values = {
+									["CURRENT"] = L["Current"],
+									["CURRENTMAX"] = L["Current / Max"],
+									["REMAINING"] = L["Remaining"],
+									["REMAININGMAX"] = L["Remaining / Max"]
+								}
+							},
+							channelTimeFormat = {
+								order = 5,
+								type = "select",
+								name = L["Channel Time Format"],
+								values = {
+									["CURRENT"] = L["Current"],
+									["CURRENT_MAX"] = L["Current / Max"],
+									["REMAINING"] = L["Remaining"],
+									["REMAININGMAX"] = L["Remaining / Max"]
+								}
+							}
+						}
+					},
+					iconGroup = {
 						order = 8,
-						type = "select",
-						name = L["Cast Time Format"],
-						values = {
-							["CURRENT"] = L["Current"],
-							["CURRENT_MAX"] = L["Current / Max"],
-							["REMAINING"] = L["Remaining"]
+						name = L["Icon"],
+						type = "group",
+						get = function(info)
+							return E.db.nameplates.units[unit].castbar[info[#info]]
+						end,
+						set = function(info, value)
+							E.db.nameplates.units[unit].castbar[info[#info]] = value
+							NP:ConfigureAll()
+						end,
+						guiInline = true,
+						args = {
+							showIcon = {
+								order = 11,
+								type = "toggle",
+								name = L["Show Icon"]
+							},
+							iconPosition = {
+								order = 12,
+								type = "select",
+								name = L["Icon Position"],
+								values = {
+									["LEFT"] = L["Left"],
+									["RIGHT"] = L["Right"]
+								}
+							},
+							iconSize = {
+								order = 13,
+								name = L["Icon Size"],
+								type = "range",
+								min = 4, max = 40, step = 1
+							},
+							iconOffsetX = {
+								order = 14,
+								name = L["X-Offset"],
+								type = "range",
+								min = -100, max = 100, step = 1
+							},
+							iconOffsetY = {
+								order = 15,
+								name = L["Y-Offset"],
+								type = "range",
+								min = -100, max = 100, step = 1
+							}
 						}
 					},
-					channelTimeFormat = {
-						order = 9,
-						type = "select",
-						name = L["Channel Time Format"],
-						values = {
-							["CURRENT"] = L["Current"],
-							["CURRENT_MAX"] = L["Current / Max"],
-							["REMAINING"] = L["Remaining"]
-						}
-					},
-					iconPosition = {
-						order = 10,
-						type = "select",
-						name = L["Icon Position"],
-						values = {
-							["LEFT"] = L["Left"],
-							["RIGHT"] = L["Right"]
+					fontGroup = {
+						type = "group",
+						order = 30,
+						name = L["Font"],
+						guiInline = true,
+						get = function(info)
+							return E.db.nameplates.units[unit].castbar[info[#info]]
+						end,
+						set = function(info, value)
+							E.db.nameplates.units[unit].castbar[info[#info]] = value
+							NP:ConfigureAll()
+						end,
+						args = {
+							font = {
+								order = 1,
+								type = "select",
+								name = L["Font"],
+								dialogControl = "LSM30_Font",
+								values = AceGUIWidgetLSMlists.font
+							},
+							fontSize = {
+								order = 2,
+								name = L["FONT_SIZE"],
+								type = "range",
+								min = 4, max = 60, step = 1
+							},
+							fontOutline = {
+								order = 3,
+								type = "select",
+								name = L["Font Outline"],
+								desc = L["Set the font outline."],
+								values = C.Values.FontFlags
+							}
 						}
 					}
 				}
@@ -2446,41 +2632,119 @@ local function GetUnitSettings(unit, name)
 			},
 			levelGroup = {
 				order = 5,
-				type = "group",
 				name = L["LEVEL"],
+				type = "group",
+				get = function(info)
+					return E.db.nameplates.units[unit].level[info[#info]]
+				end,
+				set = function(info, value)
+					E.db.nameplates.units[unit].level[info[#info]] = value
+					NP:ConfigureAll()
+				end,
 				args = {
 					header = {
-						order = 1,
+						order = 0,
 						type = "header",
 						name = L["LEVEL"]
 					},
 					enable = {
-						order = 2,
+						order = 1,
 						type = "toggle",
-						name = L["Enable"],
-						get = function(info) return E.db.nameplates.units[unit].showLevel end,
-						set = function(info, value) E.db.nameplates.units[unit].showLevel = value NP:ConfigureAll() end
+						name = L["Enable"]
+					},
+					fontGroup = {
+						type = "group",
+						order = 2,
+						name = L["Fonts"],
+						guiInline = true,
+						get = function(info)
+							return E.db.nameplates.units[unit].level[info[#info]]
+						end,
+						set = function(info, value)
+							E.db.nameplates.units[unit].level[info[#info]] = value
+							NP:ConfigureAll()
+						end,
+						args = {
+							font = {
+								order = 1,
+								type = "select",
+								name = L["Font"],
+								dialogControl = "LSM30_Font",
+								values = AceGUIWidgetLSMlists.font
+							},
+							fontSize = {
+								order = 2,
+								name = L["FONT_SIZE"],
+								type = "range",
+								min = 4, max = 32, step = 1
+							},
+							fontOutline = {
+								order = 3,
+								type = "select",
+								name = L["Font Outline"],
+								desc = L["Set the font outline."],
+								values = C.Values.FontFlags
+							}
+						}
 					}
 				}
 			},
 			nameGroup = {
 				order = 6,
 				type = "group",
-				name = L["NAME"],
-				get = function(info) return E.db.nameplates.units[unit].name[info[#info]] end,
-				set = function(info, value) E.db.nameplates.units[unit].name[info[#info]] = value NP:ConfigureAll() end,
+				name = L["Name"],
+				get = function(info)
+					return E.db.nameplates.units[unit].name[info[#info]]
+				end,
+				set = function(info, value)
+					E.db.nameplates.units[unit].name[info[#info]] = value
+					NP:ConfigureAll()
+				end,
 				args = {
 					header = {
-						order = 1,
+						order = 0,
 						type = "header",
-						name = L["NAME"]
+						name = L["Name"]
 					},
 					enable = {
-						order = 2,
+						order = 1,
 						type = "toggle",
-						name = L["Enable"],
-						get = function(info) return E.db.nameplates.units[unit].showName end,
-						set = function(info, value) E.db.nameplates.units[unit].showName = value NP:ConfigureAll() end
+						name = L["Enable"]
+					},
+					fontGroup = {
+						type = "group",
+						order = 7,
+						name = L["Fonts"],
+						guiInline = true,
+						get = function(info)
+							return E.db.nameplates.units[unit].name[info[#info]]
+						end,
+						set = function(info, value)
+							E.db.nameplates.units[unit].name[info[#info]] = value
+							NP:ConfigureAll()
+						end,
+						args = {
+							font = {
+								order = 1,
+								type = "select",
+								name = L["Font"],
+								dialogControl = "LSM30_Font",
+								values = AceGUIWidgetLSMlists.font
+							},
+							fontSize = {
+								order = 2,
+								name = L["FONT_SIZE"],
+								type = "range",
+								min = 4, max = 32, step = 1
+							},
+							fontOutline = {
+								order = 3,
+								type = "select",
+								name = L["Font Outline"],
+								desc = L["Set the font outline."],
+								values = C.Values.FontFlags
+							}
+						}
 					}
 				}
 			}
@@ -2506,60 +2770,6 @@ local function GetUnitSettings(unit, name)
 						type = "toggle",
 						name = L["Enable"],
 						desc = L["Display a healer icon over known healers inside battlegrounds or arenas."]
-					}
-				}
-			}
-			group.args.comboPoints = {
-				order = 8,
-				type = "group",
-				name = L["COMBO_POINTS"],
-				get = function(info) return E.db.nameplates.units.ENEMY_PLAYER.comboPoints[info[#info]] end,
-				set = function(info, value) E.db.nameplates.units.ENEMY_PLAYER.comboPoints[info[#info]] = value NP:UNIT_COMBO_POINTS() NP:ConfigureAll() end,
-				args = {
-					header = {
-						order = 1,
-						type = "header",
-						name = L["COMBO_POINTS"]
-					},
-					enable = {
-						order = 2,
-						type = "toggle",
-						name = L["Enable"]
-					},
-					width = {
-						order = 3,
-						type = "range",
-						name = L["Width"],
-						min = 4, max = 30, step = 1,
-						disabled = function() return not E.db.nameplates.units.ENEMY_PLAYER.comboPoints.enable end
-					},
-					height = {
-						order = 4,
-						type = "range",
-						name = L["Height"],
-						min = 4, max = 30, step = 1,
-						disabled = function() return not E.db.nameplates.units.ENEMY_PLAYER.comboPoints.enable end
-					},
-					spacing = {
-						order = 5,
-						type = "range",
-						name = L["Spacing"],
-						min = 3, max = 20, step = 1,
-						disabled = function() return not E.db.nameplates.units.ENEMY_PLAYER.comboPoints.enable end
-					},
-					xOffset = {
-						order = 6,
-						type = "range",
-						name = L["X-Offset"],
-						min = -100, max = 100, step = 1,
-						disabled = function() return not E.db.nameplates.units.ENEMY_PLAYER.comboPoints.enable end
-					},
-					yOffset = {
-						order = 7,
-						type = "range",
-						name = L["Y-Offset"],
-						min = -100, max = 100, step = 1,
-						disabled = function() return not E.db.nameplates.units.ENEMY_PLAYER.comboPoints.enable end
 					}
 				}
 			}
@@ -2633,65 +2843,9 @@ local function GetUnitSettings(unit, name)
 				}
 			}
 		}
-		if unit == "ENEMY_NPC" then
-			group.args.comboPoints = {
-				order = 8,
-				type = "group",
-				name = L["COMBO_POINTS"],
-				get = function(info) return E.db.nameplates.units.ENEMY_NPC.comboPoints[info[#info]] end,
-				set = function(info, value) E.db.nameplates.units.ENEMY_NPC.comboPoints[info[#info]] = value NP:UNIT_COMBO_POINTS() NP:ConfigureAll() end,
-				args = {
-					header = {
-						order = 1,
-						type = "header",
-						name = L["COMBO_POINTS"]
-					},
-					enable = {
-						order = 2,
-						type = "toggle",
-						name = L["Enable"]
-					},
-					width = {
-						order = 3,
-						type = "range",
-						name = L["Width"],
-						min = 4, max = 30, step = 1,
-						disabled = function() return not E.db.nameplates.units.ENEMY_NPC.comboPoints.enable end
-					},
-					height = {
-						order = 4,
-						type = "range",
-						name = L["Height"],
-						min = 4, max = 30, step = 1,
-						disabled = function() return not E.db.nameplates.units.ENEMY_NPC.comboPoints.enable end
-					},
-					spacing = {
-						order = 5,
-						type = "range",
-						name = L["Spacing"],
-						min = 3, max = 20, step = 1,
-						disabled = function() return not E.db.nameplates.units.ENEMY_NPC.comboPoints.enable end
-					},
-					xOffset = {
-						order = 6,
-						type = "range",
-						name = L["X-Offset"],
-						min = -100, max = 100, step = 1,
-						disabled = function() return not E.db.nameplates.units.ENEMY_NPC.comboPoints.enable end
-					},
-					yOffset = {
-						order = 7,
-						type = "range",
-						name = L["Y-Offset"],
-						min = -100, max = 100, step = 1,
-						disabled = function() return not E.db.nameplates.units.ENEMY_NPC.comboPoints.enable end
-					}
-				}
-			}
-		end
 	end
 
-	ORDER = ORDER + 100
+	ORDER = ORDER + 2
 	return group
 end
 
@@ -2767,14 +2921,6 @@ E.Options.args.nameplate = {
 			name = L["Cast Bar"],
 			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "nameplate", "generalGroup", "castGroup") end,
-			disabled = function() return not E.NamePlates.Initialized end
-		},
-		comboBarShortcut = {
-			order = 11,
-			type = "execute",
-			name = L["COMBO_POINTS"],
-			buttonElvUI = true,
-			func = function() ACD:SelectGroup("ElvUI", "nameplate", "generalGroup", "comboBar") end,
 			disabled = function() return not E.NamePlates.Initialized end
 		},
 		reactionShortcut = {
@@ -2854,6 +3000,13 @@ E.Options.args.nameplate = {
 					order = 1,
 					type = "group",
 					name = L["General"],
+					get = function(info)
+						return E.db.nameplates[info[#info]]
+					end,
+					set = function(info, value)
+						E.db.nameplates[info[#info]] = value
+						NP:ConfigureAll()
+					end,
 					args = {
 						header = {
 							order = 1,
@@ -2929,221 +3082,303 @@ E.Options.args.nameplate = {
 							name = L["Name Colored Glow"],
 							desc = L["Use the Name Color of the unit for the Name Glow."]
 						},
-						targetedNamePlate = {
+						spacer1 = {
 							order = 9,
+							type = "description",
+							name = " ",
+							width = "full"
+						},
+						fadeIn = {
+							order = 10,
+							type = "toggle",
+							name = L["Alpha Fading"]
+						},
+						smoothbars = {
+							type = "toggle",
+							order = 11,
+							name = L["Smooth Bars"],
+							desc = L["Bars will transition smoothly."],
+							set = function(info, value)
+								E.db.nameplates[info[#info]] = value
+								NP:ConfigureAll()
+							end
+						},
+						clickThrough = {
+							order = 51,
 							type = "group",
-							guiInline = true,
-							name = L["Targeted Nameplate"],
-							get = function(info) return E.db.nameplates[info[#info]] end,
-							set = function(info, value) E.db.nameplates[info[#info]] = value NP:ConfigureAll() end,
+							childGroups = "tabs",
+							name = L["Click Through"],
+							get = function(info)
+								return E.db.nameplates.clickThrough[info[#info]]
+							end,
+							set = function(info, value)
+								E.db.nameplates.clickThrough[info[#info]] = value
+								NP:ConfigureAll()
+							end,
 							args = {
-								useTargetScale = {
-									order = 1,
-									type = "toggle",
-									name = L["Use Target Scale"],
-									desc = L["Enable/Disable the scaling of targetted nameplates."]
-								},
-								targetScale = {
+								friendly = {
 									order = 2,
-									type = "range",
-									isPercent = true,
-									name = L["Target Scale"],
-									desc = L["Scale of the nameplate that is targetted."],
-									min = 0.3, max = 2, step = 0.01,
-									disabled = function() return E.db.nameplates.useTargetScale ~= true end
+									type = "toggle",
+									name = L["Friendly"],
 								},
-								nonTargetTransparency = {
+								enemy = {
 									order = 3,
-									type = "range",
-									isPercent = true,
-									name = L["Non-Target Alpha"],
-									min = 0, max = 1, step = 0.01
-								},
-								spacer1 = {
-									order = 4,
-									type = "description",
-									name = " "
-								},
-								glowColor = {
-									order = 5,
-									type = "color",
-									name = L["Target Indicator Color"],
-									hasAlpha = true,
+									type = "toggle",
+									name = L["Enemy"]
+								}
+							}
+						},
+						clickableRange = {
+							order = 52,
+							type = "group",
+							childGroups = "tabs",
+							name = L["Clickable Size"],
+							args = {
+								friendly = {
+									order = 1,
+									type = "group",
+									guiInline = true,
+									name = L["Friendly"],
 									get = function(info)
-										local t = E.db.nameplates.glowColor
-										local d = P.nameplates.glowColor
-										return t.r, t.g, t.b, t.a, d.r, d.g, d.b, d.a
+										return E.db.nameplates.plateSize[info[#info]]
 									end,
-									set = function(info, r, g, b, a)
-										local t = E.db.nameplates.glowColor
-										t.r, t.g, t.b, t.a = r, g, b, a
+									set = function(info, value)
+										E.db.nameplates.plateSize[info[#info]] = value
 										NP:ConfigureAll()
-									end
-								},
-								targetGlow = {
-									order = 6,
-									type = "select",
-									name = L["Target/Low Health Indicator"],
-									customWidth = 225,
-									get = function(info) return E.db.nameplates.targetGlow end,
-									set = function(info, value) E.db.nameplates.targetGlow = value NP:ConfigureAll() end,
-									values = {
-										["none"] = L["NONE"],
-										["style1"] = L["Border Glow"],
-										["style2"] = L["Background Glow"],
-										["style3"] = L["Top Arrow"],
-										["style4"] = L["Side Arrows"],
-										["style5"] = L["Border Glow"].." + "..L["Top Arrow"],
-										["style6"] = L["Background Glow"].." + "..L["Top Arrow"],
-										["style7"] = L["Border Glow"].." + "..L["Side Arrows"],
-										["style8"] = L["Background Glow"].." + "..L["Side Arrows"]
+									end,
+									args = {
+										friendlyWidth = {
+											order = 1,
+											type = "range",
+											name = L["Clickable Width / Width"],
+											desc = L["Change the width and controls how big of an area on the screen will accept clicks to target unit."],
+											min = 50,
+											max = 250,
+											step = 1
+										},
+										friendlyHeight = {
+											order = 2,
+											type = "range",
+											name = L["Clickable Height"],
+											desc = L["Controls how big of an area on the screen will accept clicks to target unit."],
+											min = 10,
+											max = 75,
+											step = 1
+										}
 									}
 								},
-								alwaysShowTargetHealth = {
-									order = 7,
-									type = "toggle",
-									name = L["Always Show Target Health"],
-									customWidth = 200
+								enemy = {
+									order = 2,
+									type = "group",
+									guiInline = true,
+									name = L["Enemy"],
+									get = function(info)
+										return E.db.nameplates.plateSize[info[#info]]
+									end,
+									set = function(info, value)
+										E.db.nameplates.plateSize[info[#info]] = value
+										NP:ConfigureAll()
+									end,
+									args = {
+										enemyWidth = {
+											order = 1,
+											type = "range",
+											name = L["Clickable Width / Width"],
+											desc = L["Change the width and controls how big of an area on the screen will accept clicks to target unit."],
+											min = 50,
+											max = 250,
+											step = 1
+										},
+										enemyHeight = {
+											order = 2,
+											type = "range",
+											name = L["Clickable Height"],
+											desc = L["Controls how big of an area on the screen will accept clicks to target unit."],
+											min = 10,
+											max = 75,
+											step = 1
+										}
+									}
 								}
 							}
 						}
 					}
 				},
-				fontGroup = {
+				colorsGroup = {
 					order = 2,
 					type = "group",
-					name = L["Fonts"],
+					name = L["COLORS"],
 					args = {
-						header = {
+						general = {
 							order = 1,
-							type = "header",
-							name = L["Fonts"]
+							type = "group",
+							name = L["General"],
+							guiInline = true,
+							get = function(info)
+								local t = E.db.nameplates.colors[info[#info]]
+								local d = P.nameplates.colors[info[#info]]
+								return t.r, t.g, t.b, t.a, d.r, d.g, d.b, d.a
+							end,
+							set = function(info, r, g, b, a)
+								local t = E.db.nameplates.colors[info[#info]]
+								t.r, t.g, t.b, t.a = r, g, b, a
+								NP:ConfigureAll()
+							end,
+							args = {
+								glowColor = {
+									name = L["Target Indicator Color"],
+									type = "color",
+									order = 5,
+									hasAlpha = true
+								}
+							}
 						},
-						name = {
+						threat = {
 							order = 2,
 							type = "group",
-							name = L["Default Font"],
+							name = L["Threat"],
 							guiInline = true,
+							get = function(info)
+								local t = E.db.nameplates.colors.threat[info[#info]]
+								local d = P.nameplates.colors.threat[info[#info]]
+								return t.r, t.g, t.b, t.a, d.r, d.g, d.b, d.a
+							end,
+							set = function(info, r, g, b, a)
+								local t = E.db.nameplates.colors.threat[info[#info]]
+								t.r, t.g, t.b, t.a = r, g, b, a
+								NP:ConfigureAll()
+							end,
 							args = {
-								font = {
+								goodColor = {
+									type = "color",
 									order = 1,
-									type = "select", dialogControl = "LSM30_Font",
-									name = L["Font"],
-									values = AceGUIWidgetLSMlists.font
+									name = L["Good Color"],
+									hasAlpha = false,
+									disabled = function()
+										return not E.db.nameplates.threat.useThreatColor
+									end
 								},
-								fontSize = {
+								goodTransition = {
+									type = "color",
 									order = 2,
-									type = "range",
-									name = L["FONT_SIZE"],
-									min = 4, max = 23, step = 1
+									name = L["Good Transition Color"],
+									hasAlpha = false,
+									disabled = function()
+										return not E.db.nameplates.threat.useThreatColor
+									end
 								},
-								fontOutline = {
+								badTransition = {
+									name = L["Bad Transition Color"],
 									order = 3,
-									type = "select",
-									name = L["Font Outline"],
-									desc = L["Set the font outline."],
-									values = C.Values.FontFlags
-								}
+									type = "color",
+									hasAlpha = false,
+									disabled = function()
+										return not E.db.nameplates.threat.useThreatColor
+									end
+								},
+								badColor = {
+									name = L["Bad Color"],
+									order = 4,
+									type = "color",
+									hasAlpha = false,
+									disabled = function()
+										return not E.db.nameplates.threat.useThreatColor
+									end
+								},
 							}
 						},
-						health = {
+						castGroup = {
 							order = 3,
 							type = "group",
-							name = L["HEALTH"],
+							name = L["Cast Bar"],
 							guiInline = true,
+							get = function(info)
+								local t = E.db.nameplates.colors[info[#info]]
+								local d = P.nameplates.colors[info[#info]]
+								return t.r, t.g, t.b, t.a, d.r, d.g, d.b
+							end,
+							set = function(info, r, g, b)
+								local t = E.db.nameplates.colors[info[#info]]
+								t.r, t.g, t.b = r, g, b
+								NP:ConfigureAll()
+							end,
 							args = {
-								healthFont = {
+								castColor = {
+									type = "color",
 									order = 1,
-									type = "select", dialogControl = "LSM30_Font",
-									name = L["Font"],
-									values = AceGUIWidgetLSMlists.font
+									name = L["Cast Color"],
+									hasAlpha = false
 								},
-								healthFontSize = {
+								castNoInterruptColor = {
+									name = L["Cast No Interrupt Color"],
 									order = 2,
-									name = L["FONT_SIZE"],
-									type = "range",
-									min = 4, max = 36, step = 1
+									type = "color",
+									hasAlpha = false
 								},
-								healthFontOutline = {
+								castbarDesaturate = {
+									type = "toggle",
+									name = L["Desaturated Icon"],
+									desc = L["Show the castbar icon desaturated if a spell is not interruptible."],
 									order = 3,
-									type = "select",
-									name = L["Font Outline"],
-									desc = L["Set the font outline."],
-									values = C.Values.FontFlags
+									get = function(info)
+										return E.db.nameplates.colors[info[#info]]
+									end,
+									set = function(info, value)
+										E.db.nameplates.colors[info[#info]] = value
+										NP:ConfigureAll()
+									end
 								}
 							}
 						},
-						duration = {
+						reactions = {
 							order = 4,
 							type = "group",
-							name = L["Duration"],
+							name = L["Reaction Colors"],
 							guiInline = true,
+							get = function(info)
+								local t = E.db.nameplates.colors.reactions[info[#info]]
+								local d = P.nameplates.colors.reactions[info[#info]]
+								return t.r, t.g, t.b, t.a, d.r, d.g, d.b
+							end,
+							set = function(info, r, g, b)
+								local t = E.db.nameplates.colors.reactions[info[#info]]
+								t.r, t.g, t.b = r, g, b
+								NP:ConfigureAll()
+							end,
 							args = {
-								durationFont = {
+								friendlyPlayer = {
 									order = 1,
-									type = "select", dialogControl = "LSM30_Font",
-									name = L["Font"],
-									values = AceGUIWidgetLSMlists.font,
-									set = function(info, value) E.db.nameplates[info[#info]] = value NP:UpdatePlateFonts() end
+									type = "color",
+									name = L["FRIENDLY_PLAYER"],
+									hasAlpha = false
 								},
-								durationFontSize = {
+								bad = {
 									order = 2,
-									name = L["FONT_SIZE"],
-									type = "range",
-									min = 4, max = 20, step = 1,
-									set = function(info, value) E.db.nameplates[info[#info]] = value NP:UpdatePlateFonts() end
+									type = "color",
+									name = L["ENEMY"],
+									hasAlpha = false
 								},
-								durationFontOutline = {
+								neutral = {
 									order = 3,
-									type = "select",
-									name = L["Font Outline"],
-									desc = L["Set the font outline."],
-									values = C.Values.FontFlags,
-									set = function(info, value) E.db.nameplates[info[#info]] = value NP:UpdatePlateFonts() end
+									type = "color",
+									name = L["Neutral"],
+									hasAlpha = false
 								},
-								durationPosition = {
+								good = {
 									order = 4,
-									type = "select",
-									name = L["Position"],
-									values = {
-										["CENTER"] = L["Center"],
-										["TOPLEFT"] = "TOPLEFT",
-										["BOTTOMLEFT"] = "BOTTOMLEFT",
-										["TOPRIGHT"] = "TOPRIGHT"
-									}
+									type = "color",
+									name = L["FRIENDLY_NPC"],
+									hasAlpha = false
 								}
 							}
 						},
-						stacks = {
+						comboPoints = {
 							order = 5,
 							type = "group",
-							name = L["Stack Counter"],
+							name = L["COMBO_POINTS"],
 							guiInline = true,
-							args = {
-								stackFont = {
-									order = 1,
-									type = "select", dialogControl = "LSM30_Font",
-									name = L["Font"],
-									values = AceGUIWidgetLSMlists.font,
-									set = function(info, value) E.db.nameplates[info[#info]] = value NP:UpdatePlateFonts() end
-								},
-								stackFontSize = {
-									order = 2,
-									type = "range",
-									name = L["FONT_SIZE"],
-									min = 4, max = 20, step = 1,
-									set = function(info, value) E.db.nameplates[info[#info]] = value NP:UpdatePlateFonts() end
-								},
-								stackFontOutline = {
-									order = 3,
-									type = "select",
-									name = L["Font Outline"],
-									desc = L["Set the font outline."],
-									values = C.Values.FontFlags,
-									set = function(info, value) E.db.nameplates[info[#info]] = value NP:UpdatePlateFonts() end
-								}
-							}
-						}
+							args = {}
+						},
 					}
 				},
 				threatGroup = {
@@ -3190,132 +3425,6 @@ E.Options.args.nameplate = {
 							min = 0.3, max = 2, step = 0.01,
 							isPercent = true
 						},
-						spacer = {
-							order = 5,
-							type = "description",
-							name = ""
-						},
-						goodColor = {
-							order = 6,
-							type = "color",
-							name = L["Good Color"],
-							hasAlpha = false,
-							disabled = function() return not E.db.nameplates.threat.useThreatColor end
-						},
-						badColor = {
-							order = 7,
-							type = "color",
-							name = L["Bad Color"],
-							hasAlpha = false,
-							disabled = function() return not E.db.nameplates.threat.useThreatColor end
-						},
-						goodTransition = {
-							order = 8,
-							type = "color",
-							name = L["Good Transition Color"],
-							hasAlpha = false,
-							disabled = function() return not E.db.nameplates.threat.useThreatColor end
-						},
-						badTransition = {
-							order = 9,
-							type = "color",
-							name = L["Bad Transition Color"],
-							hasAlpha = false,
-							disabled = function() return not E.db.nameplates.threat.useThreatColor end
-						}
-					}
-				},
-				castGroup = {
-					order = 6,
-					type = "group",
-					name = L["Cast Bar"],
-					get = function(info)
-						local t = E.db.nameplates[info[#info]]
-						local d = P.nameplates[info[#info]]
-						return t.r, t.g, t.b, t.a, d.r, d.g, d.b
-					end,
-					set = function(info, r, g, b)
-						local t = E.db.nameplates[info[#info]]
-						t.r, t.g, t.b = r, g, b
-						NP:ForEachPlate("ConfigureElement_CastBar")
-					end,
-					args = {
-						header = {
-							order = 1,
-							type = "header",
-							name = L["Cast Bar"]
-						},
-						castColor = {
-							order = 2,
-							type = "color",
-							name = L["Cast Color"],
-							hasAlpha = false
-						},
-						castNoInterruptColor = {
-							order = 3,
-							type = "color",
-							name = L["Cast No Interrupt Color"],
-							hasAlpha = false
-						}
-					}
-				},
-				reactions = {
-					order = 7,
-					type = "group",
-					name = L["Reaction Colors"],
-					get = function(info)
-						local t = E.db.nameplates.reactions[info[#info]]
-						local d = P.nameplates.reactions[info[#info]]
-						return t.r, t.g, t.b, t.a, d.r, d.g, d.b
-					end,
-					set = function(info, r, g, b)
-						local t = E.db.nameplates.reactions[info[#info]]
-						t.r, t.g, t.b = r, g, b
-						NP:ForEachPlate("UpdateElement_HealthColor", true)
-						NP:ForEachPlate("UpdateElement_Name", true)
-					end,
-					args = {
-						header = {
-							order = 1,
-							type = "header",
-							name = L["Reaction Colors"]
-						},
-						friendlyPlayer = {
-							order = 2,
-							type = "color",
-							name = L["FRIENDLY_PLAYER"],
-							hasAlpha = false
-						},
-						good = {
-							order = 3,
-							type = "color",
-							name = L["FRIENDLY_NPC"],
-							hasAlpha = false
-						},
-						neutral = {
-							order = 4,
-							type = "color",
-							name = L["Neutral"],
-							hasAlpha = false
-						},
-						bad = {
-							order = 5,
-							type = "color",
-							name = L["ENEMY"],
-							hasAlpha = false
-						}
-					}
-				},
-				comboBar = {
-					order = 8,
-					type = "group",
-					name = L["COMBO_POINTS"],
-					args = {
-						header = {
-							order = 1,
-							type = "header",
-							name = L["COMBO_POINTS"]
-						}
 					}
 				},
 				cutawayHealth = {
@@ -3363,6 +3472,148 @@ E.Options.args.nameplate = {
 		friendlyNPCGroup = GetUnitSettings("FRIENDLY_NPC", L["FRIENDLY_NPC"]),
 		enemyPlayerGroup = GetUnitSettings("ENEMY_PLAYER", L["ENEMY_PLAYER"]),
 		enemyNPCGroup = GetUnitSettings("ENEMY_NPC", L["ENEMY_NPC"]),
+		targetGroup = {
+			order = 200,
+			type = "group",
+			name = L["TARGET"],
+			get = function(info)
+				return E.db.nameplates.units.TARGET[info[#info]]
+			end,
+			set = function(info, value)
+				E.db.nameplates.units.TARGET[info[#info]] = value
+				NP:ConfigureAll()
+			end,
+			disabled = function()
+				return not E.NamePlates.Initialized
+			end,
+			args = {
+				useTargetScale = {
+					order = 1,
+					type = "toggle",
+					name = L["Use Target Scale"],
+					desc = L["Enable/Disable the scaling of targetted nameplates."],
+					get = function(info) return E.db.nameplates.useTargetScale end,
+					set = function(info, value)
+						E.db.nameplates.useTargetScale = value
+						NP:ConfigureAll()
+					end
+				},
+				targetScale = {
+					order = 2,
+					type = "range",
+					isPercent = true,
+					name = L["Target Scale"],
+					desc = L["Scale of the nameplate that is targetted."],
+					min = 0.3, max = 2, step = 0.01,
+					get = function(info) return E.db.nameplates.targetScale end,
+					set = function(info, value)
+						E.db.nameplates.targetScale = value
+						NP:ConfigureAll()
+					end,
+					disabled = function() return E.db.nameplates.useTargetScale ~= true end
+				},
+				nonTargetTransparency = {
+					order = 3,
+					type = "range",
+					isPercent = true,
+					name = L["Non-Target Alpha"],
+					min = 0, max = 1, step = 0.01,
+					get = function(info) return E.db.nameplates.nonTargetTransparency end,
+					set = function(info, value)
+						E.db.nameplates.nonTargetTransparency = value
+						NP:ConfigureAll()
+					end
+				},
+				spacer1 = {
+					order = 4,
+					type = "description",
+					name = " "
+				},
+				glowStyle = {
+					order = 5,
+					type = "select",
+					name = L["Target/Low Health Indicator"],
+					customWidth = 225,
+					values = {
+						["none"] = L["NONE"],
+						["style1"] = L["Border Glow"],
+						["style2"] = L["Background Glow"],
+						["style3"] = L["Top Arrow"],
+						["style4"] = L["Side Arrows"],
+						["style5"] = L["Border Glow"].." + "..L["Top Arrow"],
+						["style6"] = L["Background Glow"].." + "..L["Top Arrow"],
+						["style7"] = L["Border Glow"].." + "..L["Side Arrows"],
+						["style8"] = L["Background Glow"].." + "..L["Side Arrows"]
+					}
+				},
+				alwaysShowTargetHealth = {
+					order = 7,
+					type = "toggle",
+					name = L["Always Show Target Health"],
+					get = function(info) return E.db.nameplates.alwaysShowTargetHealth end,
+					set = function(info, value)
+						E.db.nameplates.alwaysShowTargetHealth = value
+						NP:ConfigureAll()
+					end,
+					customWidth = 200
+				},
+				comboPointsGroup = {
+					order = 8,
+					type = "group",
+					name = L["COMBO_POINTS"],
+					guiInline = true,
+					get = function(info)
+						return E.db.nameplates.units.TARGET.comboPoints[info[#info]]
+					end,
+					set = function(info, value)
+						E.db.nameplates.units.TARGET.comboPoints[info[#info]] = value
+						NP:ConfigureAll()
+					end,
+					args = {
+						enable = {
+							order = 1,
+							type = "toggle",
+							name = L["Enable"]
+						},
+						width = {
+							order = 2,
+							type = "range",
+							name = L["Width"],
+							min = 4, max = 30, step = 1,
+							disabled = function() return not E.db.nameplates.units.TARGET.comboPoints.enable end
+						},
+						height = {
+							order = 3,
+							type = "range",
+							name = L["Height"],
+							min = 4, max = 30, step = 1,
+							disabled = function() return not E.db.nameplates.units.TARGET.comboPoints.enable end
+						},
+						spacing = {
+							order = 4,
+							type = "range",
+							name = L["Spacing"],
+							min = 3, max = 20, step = 1,
+							disabled = function() return not E.db.nameplates.units.TARGET.comboPoints.enable end
+						},
+						xOffset = {
+							order = 5,
+							type = "range",
+							name = L["X-Offset"],
+							min = -100, max = 100, step = 1,
+							disabled = function() return not E.db.nameplates.units.TARGET.comboPoints.enable end
+						},
+						yOffset = {
+							order = 6,
+							type = "range",
+							name = L["Y-Offset"],
+							min = -100, max = 100, step = 1,
+							disabled = function() return not E.db.nameplates.units.TARGET.comboPoints.enable end
+						}
+					}
+				}
+			}
+		},
 		filters = {
 			order = -99,
 			type = "group",
@@ -3436,19 +3687,18 @@ E.Options.args.nameplate = {
 }
 
 for i = 1, 5 do
-	E.Options.args.nameplate.args.generalGroup.args.comboBar.args["combo"..i] = {
-		order = i + 2,
+	E.Options.args.nameplate.args.generalGroup.args.colorsGroup.args.comboPoints.args["COMBO_POINTS" .. i] = {
 		type = "color",
-		name = L["Combo Point"].." #"..i,
+		order = i,
+		name = L["COMBO_POINTS"] .. " #" .. i,
 		get = function(info)
-			local t = E.db.nameplates.comboBar.colors[i]
-			local d = P.nameplates.comboBar.colors[i]
+			local t = E.db.nameplates.colors.comboPoints[i]
+			local d = P.nameplates.colors.comboPoints[i]
 			return t.r, t.g, t.b, t.a, d.r, d.g, d.b
 		end,
 		set = function(info, r, g, b)
-			local t = E.db.nameplates.comboBar.colors[i]
+			local t = E.db.nameplates.colors.comboPoints[i]
 			t.r, t.g, t.b = r, g, b
-			NP:UNIT_COMBO_POINTS()
 			NP:ConfigureAll()
 		end
 	}

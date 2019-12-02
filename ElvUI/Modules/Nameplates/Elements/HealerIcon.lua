@@ -4,12 +4,12 @@ local NP = E:GetModule("NamePlates")
 --Lua functions
 --WoW API / Variables
 
-function NP:UpdateElement_HealerIcon(frame)
+function NP:Update_HealerIcon(frame)
 	local icon = frame.HealerIcon
 	if frame.UnitType == "ENEMY_PLAYER" and self.Healers[frame.UnitName] then
 		icon:ClearAllPoints()
-		if frame.HealthBar:IsShown() then
-			icon:SetPoint("RIGHT", frame.HealthBar, "LEFT", -6, 0)
+		if frame.Health:IsShown() then
+			icon:SetPoint("RIGHT", frame.Health, "LEFT", -6, 0)
 		else
 			icon:SetPoint("BOTTOM", frame.Name, "TOP", 0, 3)
 		end
@@ -20,9 +20,9 @@ function NP:UpdateElement_HealerIcon(frame)
 	end
 end
 
-function NP:ConstructElement_HealerIcon(frame)
+function NP:Construct_HealerIcon(frame)
 	local texture = frame:CreateTexture(nil, "OVERLAY")
-	texture:SetPoint("RIGHT", frame.HealthBar, "LEFT", -6, 0)
+	texture:SetPoint("RIGHT", frame.Health, "LEFT", -6, 0)
 	texture:SetSize(40, 40)
 	texture:SetTexture(E.Media.Textures.Healer)
 	texture:Hide()
