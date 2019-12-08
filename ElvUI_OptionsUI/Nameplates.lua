@@ -16,7 +16,15 @@ local positionValues = {
 	BOTTOMRIGHT = "BOTTOMRIGHT"
 }
 
+local raidTargetIcon = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_%s:0|t %s"
 local selectedNameplateFilter
+
+local totemsColor = {
+	["fire"] = "|cffff8f8f",
+	["earth"] = "|cffffb31f",
+	["water"] = "|cff2b76ff",
+	["air"] = "|cffb8d1ff"
+}
 
 local carryFilterFrom, carryFilterTo
 
@@ -294,6 +302,47 @@ local function UpdateStyleLists()
 					end
 				}
 			end
+		end
+	end
+
+	if E.global.nameplates.filters[selectedNameplateFilter] and E.global.nameplates.filters[selectedNameplateFilter].triggers.totems then
+		for totemSchool in pairs(G.nameplates.totemTypes) do
+			local titemSchoolLoc, order
+
+			if totemSchool == "fire" then
+				titemSchoolLoc, order = BINDING_NAME_MULTICASTACTIONBUTTON10, 51
+			elseif totemSchool == "earth" then
+				titemSchoolLoc, order = BINDING_NAME_MULTICASTACTIONBUTTON1, 50
+			elseif totemSchool == "water" then
+				titemSchoolLoc, order = BINDING_NAME_MULTICASTACTIONBUTTON11, 52
+			elseif totemSchool == "air" then
+				titemSchoolLoc, order = BINDING_NAME_MULTICASTACTIONBUTTON12, 53
+			end
+
+			E.Options.args.nameplate.args.filters.args.triggers.args.totems.args[totemSchool] = {
+				order = order,
+				type = "group",
+				name = totemsColor[totemSchool]..titemSchoolLoc,
+				guiInline = true,
+				disabled = function() return not E.global.nameplates.filters[selectedNameplateFilter].triggers.totems.enable end,
+				args = {}
+			}
+		end
+
+		for totem, data in pairs(NP.TriggerConditions.totems) do
+			E.Options.args.nameplate.args.filters.args.triggers.args.totems.args[data[2]].args[totem] = {
+				textWidth = true,
+				order = -1,
+				type = "toggle",
+				name = data[1],
+				get = function(info)
+					return E.global.nameplates.filters[selectedNameplateFilter].triggers and E.global.nameplates.filters[selectedNameplateFilter].triggers.totems and E.global.nameplates.filters[selectedNameplateFilter].triggers.totems[totem]
+				end,
+				set = function(info, value)
+					E.global.nameplates.filters[selectedNameplateFilter].triggers.totems[totem] = value
+					NP:ConfigureAll()
+				end
+			}
 		end
 	end
 end
@@ -1316,6 +1365,92 @@ local function UpdateFilterGroup()
 							end
 						}
 					}
+				},
+				raidTarget = {
+					order = 27,
+					type = "group",
+					name = L["BINDING_HEADER_RAID_TARGET"],
+					get = function(info)
+						return E.global.nameplates.filters[selectedNameplateFilter].triggers.raidTarget[info[#info]]
+					end,
+					set = function(info, value)
+						E.global.nameplates.filters[selectedNameplateFilter].triggers.raidTarget[info[#info]] = value
+						NP:ConfigureAll()
+					end,
+					disabled = function()
+						return not (E.db.nameplates and E.db.nameplates.filters and E.db.nameplates.filters[selectedNameplateFilter] and
+							E.db.nameplates.filters[selectedNameplateFilter].triggers and
+							E.db.nameplates.filters[selectedNameplateFilter].triggers.enable)
+					end,
+					args = {
+						types = {
+							name = "",
+							type = "group",
+							guiInline = true,
+							order = 2,
+							args = {
+								star = {
+									type = "toggle",
+									order = 1,
+									name = format(raidTargetIcon, 1, L["RAID_TARGET_1"])
+								},
+								circle = {
+									type = "toggle",
+									order = 2,
+									name = format(raidTargetIcon, 2, L["RAID_TARGET_2"])
+								},
+								diamond = {
+									type = "toggle",
+									order = 3,
+									name = format(raidTargetIcon, 3, L["RAID_TARGET_3"])
+								},
+								triangle = {
+									type = "toggle",
+									order = 4,
+									name = format(raidTargetIcon, 4, L["RAID_TARGET_4"])
+								},
+								moon = {
+									type = "toggle",
+									order = 5,
+									name = format(raidTargetIcon, 5, L["RAID_TARGET_5"])
+								},
+								square = {
+									type = "toggle",
+									order = 6,
+									name = format(raidTargetIcon, 6, L["RAID_TARGET_6"])
+								},
+								cross = {
+									type = "toggle",
+									order = 7,
+									name = format(raidTargetIcon, 7, L["RAID_TARGET_7"])
+								},
+								skull = {
+									type = "toggle",
+									order = 8,
+									name = format(raidTargetIcon, 8, L["RAID_TARGET_8"])
+								}
+							}
+						}
+					}
+				},
+				totems = {
+					order = 28,
+					type = "group",
+					name = L["Totem"],
+					args = {
+						enable = {
+							order = 0,
+							type = "toggle",
+							name = L["Enable"],
+							get = function(info)
+								return E.global.nameplates.filters[selectedNameplateFilter].triggers.totems and E.global.nameplates.filters[selectedNameplateFilter].triggers.totems.enable
+							end,
+							set = function(info, value)
+								E.global.nameplates.filters[selectedNameplateFilter].triggers.totems.enable = value
+								NP:ConfigureAll()
+							end
+						}
+					}
 				}
 			}
 		}
@@ -1350,13 +1485,28 @@ local function UpdateFilterGroup()
 					end,
 					disabled = function() return E.global.nameplates.filters[selectedNameplateFilter].actions.hide end
 				},
-				spacer1 = {
+				iconOnly = {
 					order = 3,
+					type = "toggle",
+					name = L["Icon Only"],
+					get = function(info)
+						return E.global.nameplates.filters[selectedNameplateFilter].actions.iconOnly
+					end,
+					set = function(info, value)
+						E.global.nameplates.filters[selectedNameplateFilter].actions.iconOnly = value
+						NP:ConfigureAll()
+					end,
+					disabled = function()
+						return E.global.nameplates.filters[selectedNameplateFilter].actions.hide or not E.global.nameplates.filters[selectedNameplateFilter].triggers.totems.enable
+					end
+				},
+				spacer1 = {
+					order = 4,
 					type = "description",
 					name = " "
 				},
 				scale = {
-					order = 4,
+					order = 5,
 					type = "range",
 					name = L["Scale"],
 					disabled = function() return E.global.nameplates.filters[selectedNameplateFilter].actions.hide end,
@@ -1370,7 +1520,7 @@ local function UpdateFilterGroup()
 					min = 0.35, max = 1.5, step = 0.01
 				},
 				alpha = {
-					order = 5,
+					order = 6,
 					type = "range",
 					name = L["Alpha"],
 					disabled = function() return E.global.nameplates.filters[selectedNameplateFilter].actions.hide end,
@@ -1384,7 +1534,7 @@ local function UpdateFilterGroup()
 					min = -1, max = 100, step = 1
 				},
 				frameLevel = {
-					order = 6,
+					order = 7,
 					name = L["Frame Level"],
 					desc = L["NAMEPLATE_FRAMELEVEL_DESC"],
 					type = "range",
@@ -2840,6 +2990,64 @@ local function GetUnitSettings(unit, name)
 					name = L["Y-Offset"],
 					min = -100, max = 100, step = 1,
 					disabled = function() return not E.db.nameplates.units[unit].eliteIcon.enable end
+				}
+			}
+		}
+		group.args.iconFrame = {
+			order = 8,
+			type = "group",
+			name = L["Icon Frame"],
+			get = function(info) return E.db.nameplates.units[unit].iconFrame[info[#info]] end,
+			set = function(info, value) E.db.nameplates.units[unit].iconFrame[info[#info]] = value NP:ConfigureAll() end,
+			args = {
+				header = {
+					order = 1,
+					type = "header",
+					name = L["Icon Frame"]
+				},
+				enable = {
+					order = 2,
+					type = "toggle",
+					name = L["Enable"]
+				},
+				size = {
+					order = 3,
+					type = "range",
+					name = L["Size"],
+					min = 8, max = 48, step = 1,
+				},
+				position = {
+					order = 4,
+					type = "select",
+					name = L["Position"],
+					values = {
+						["CENTER"] = "CENTER",
+						["TOPLEFT"] = "TOPLEFT",
+						["BOTTOMLEFT"] = "BOTTOMLEFT",
+						["TOPRIGHT"] = "TOPRIGHT",
+						["BOTTOMRIGHT"] = "BOTTOMRIGHT"
+					}
+				},
+				parent = {
+					order = 5,
+					type = "select",
+					name = L["Parent"],
+					values = {
+						["Nameplate"] = L["Nameplate"],
+						["Health"] = L["Health"]
+					}
+				},
+				xOffset = {
+					order = 6,
+					name = L["X-Offset"],
+					type = "range",
+					min = -100, max = 100, step = 1
+				},
+				yOffset = {
+					order = 7,
+					name = L["Y-Offset"],
+					type = "range",
+					min = -100, max = 100, step = 1
 				}
 			}
 		}

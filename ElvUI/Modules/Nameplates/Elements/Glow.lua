@@ -51,7 +51,7 @@ function NP:Update_Glow(frame)
 			r, g, b = 1, 1, 0
 		end
 
-		local healthIsShown = (not frame.NameOnlyChanged and self.db.units[frame.UnitType].health.enable) or (frame.isTarget and not frame.NameOnlyChanged and self.db.alwaysShowTargetHealth)
+		local healthIsShown = frame.Health:IsShown()
 		if not healthIsShown and (glowStyle ~= "style2" and glowStyle ~= "style6" and glowStyle ~= "style8") then
 			glowStyle = "style2"
 		end
@@ -99,21 +99,35 @@ function NP:Configure_Glow(frame)
 	local glowStyle = self.db.units.TARGET.glowStyle
 
 	if glowStyle ~= "none" then
-		local healthIsShown = (not frame.NameOnlyChanged and self.db.units[frame.UnitType].health.enable) or (frame.isTarget and not frame.NameOnlyChanged and self.db.alwaysShowTargetHealth)
+		local healthIsShown = frame.Health:IsShown()
 		local color = self.db.colors.glowColor
 
 		if not healthIsShown and (glowStyle ~= "style2" and glowStyle ~= "style6" and glowStyle ~= "style8") then
 			glowStyle = "style2"
 		else
 			if glowStyle == "style3" or glowStyle == "style5" or glowStyle == "style6" then
-				frame.TopIndicator:SetPoint("BOTTOM", frame.Health, "TOP", 0, -6)
+				frame.TopIndicator:ClearAllPoints()
+
+				if healthIsShown then
+					frame.TopIndicator:SetPoint("BOTTOM", frame.Health, "TOP", 0, 6)
+				else
+					frame.TopIndicator:SetPoint("BOTTOM", frame.Name, "TOP", 0, 8)
+				end
 
 				frame.TopIndicator:SetVertexColor(color.r, color.g, color.b)
 			end
 
 			if glowStyle == "style4" or glowStyle == "style7" or glowStyle == "style8" then
-				frame.LeftIndicator:SetPoint("LEFT", frame.Health, "RIGHT", -3, 0)
-				frame.RightIndicator:SetPoint("RIGHT", frame.Health, "LEFT", 3, 0)
+				frame.LeftIndicator:ClearAllPoints()
+				frame.RightIndicator:ClearAllPoints()
+
+				if healthIsShown then
+					frame.LeftIndicator:SetPoint("LEFT", frame.Health, "RIGHT", -3, 0)
+					frame.RightIndicator:SetPoint("RIGHT", frame.Health, "LEFT", 3, 0)
+				else
+					frame.LeftIndicator:SetPoint("LEFT", frame.Name, "RIGHT", 20, 0)
+					frame.RightIndicator:SetPoint("RIGHT", frame.Name, "LEFT", -20, 0)
+				end
 
 				frame.LeftIndicator:SetVertexColor(color.r, color.g, color.b)
 				frame.RightIndicator:SetVertexColor(color.r, color.g, color.b)
