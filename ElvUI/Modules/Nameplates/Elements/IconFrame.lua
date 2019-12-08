@@ -4,21 +4,26 @@ local NP = E:GetModule("NamePlates")
 --Lua functions
 --WoW API / Variables
 
-function NP:Update_IconFrame(frame)
+function NP:Update_IconFrame(frame, triggered)
 	local db = self.db.units[frame.UnitType].iconFrame
 	if not db then return end
 
-	if db.enable or frame.IconOnlyChanged then
+	if (db and db.enable) or frame.IconOnlyChanged then
 		local icon = G.nameplates.totemList[frame.UnitName]
 		if icon then
 			local icon2 = NP.TriggerConditions.totems[icon][3]
 			if icon2 then
 				frame.IconFrame.texture:SetTexture(icon2)
 				frame.IconFrame:Show()
-			else
-				frame.IconFrame:Hide()
+				
+				if triggered then
+					frame.IconFrame:ClearAllPoints()
+					frame.IconFrame:SetPoint("TOP", frame)
+				end
 			end
 		end
+	else
+		frame.IconFrame:Hide()
 	end
 end
 
