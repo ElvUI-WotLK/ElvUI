@@ -8,18 +8,21 @@ function NP:Update_IconFrame(frame, triggered)
 	local db = self.db.units[frame.UnitType].iconFrame
 	if not db then return end
 
-	if (db and db.enable) or frame.IconOnlyChanged then
-		local icon = G.nameplates.totemList[frame.UnitName]
+	if (db and db.enable) or (frame.IconOnlyChanged or frame.IconChanged) then
+		local totem, unit, icon = self.Totems[frame.UnitName], self.UniqueUnits[frame.UnitName]
+		if totem then
+			icon = NP.TriggerConditions.totems[totem][3]
+		elseif unit then
+			icon = NP.TriggerConditions.uniqueUnits[unit][3]
+		end
+
 		if icon then
-			local icon2 = NP.TriggerConditions.totems[icon][3]
-			if icon2 then
-				frame.IconFrame.texture:SetTexture(icon2)
-				frame.IconFrame:Show()
-				
-				if triggered then
-					frame.IconFrame:ClearAllPoints()
-					frame.IconFrame:SetPoint("TOP", frame)
-				end
+			frame.IconFrame.texture:SetTexture(icon)
+			frame.IconFrame:Show()
+
+			if triggered then
+				frame.IconFrame:ClearAllPoints()
+				frame.IconFrame:SetPoint("TOP", frame)
 			end
 		end
 	else
@@ -29,7 +32,7 @@ end
 
 function NP:Configure_IconFrame(frame)
 	local db = self.db.units[frame.UnitType].iconFrame
-	if db and db.enable then
+	if db and db.enable or frame.IconChanged then
 		frame.IconFrame:SetSize(db.size, db.size)
 		frame.IconFrame:ClearAllPoints()
 		frame.IconFrame:SetPoint(E.InversePoints[db.position], db.parent == "Nameplate" and frame or frame[db.parent], db.position, db.xOffset, db.yOffset)
