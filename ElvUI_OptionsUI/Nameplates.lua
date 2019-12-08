@@ -347,6 +347,43 @@ local function UpdateStyleLists()
 			}
 		end
 	end
+
+	if E.global.nameplates.filters[selectedNameplateFilter] and E.global.nameplates.filters[selectedNameplateFilter].triggers.uniqueUnits then
+		for unitType in pairs(G.nameplates.uniqueUnitTypes) do
+			local name, order
+
+			if unitType == "pvp" then
+				name, order = "PvP", 50
+			elseif unitType == "pve" then
+				name, order = "PvE", 51
+			end
+
+			E.Options.args.nameplate.args.filters.args.triggers.args.uniqueUnits.args[unitType] = {
+				order = order,
+				type = "group",
+				name = name,
+				guiInline = true,
+				disabled = function() return not E.global.nameplates.filters[selectedNameplateFilter].triggers.uniqueUnits.enable end,
+				args = {}
+			}
+		end
+
+		for unit, data in pairs(NP.TriggerConditions.uniqueUnits) do
+			E.Options.args.nameplate.args.filters.args.triggers.args.uniqueUnits.args[data[2]].args[unit] = {
+				textWidth = true,
+				order = -1,
+				type = "toggle",
+				name = data[1],
+				get = function(info)
+					return E.global.nameplates.filters[selectedNameplateFilter].triggers and E.global.nameplates.filters[selectedNameplateFilter].triggers.uniqueUnits and E.global.nameplates.filters[selectedNameplateFilter].triggers.uniqueUnits[unit]
+				end,
+				set = function(info, value)
+					E.global.nameplates.filters[selectedNameplateFilter].triggers.uniqueUnits[unit] = value
+					NP:ConfigureAll()
+				end
+			}
+		end
+	end
 end
 
 local function UpdateFilterGroup()
@@ -1465,6 +1502,37 @@ local function UpdateFilterGroup()
 							end
 						}
 					}
+				},
+				uniqueUnits = {
+					order = 28,
+					type = "group",
+					name = L["Unique Units"],
+					get = function(info)
+						return E.global.nameplates.filters[selectedNameplateFilter].triggers.uniqueUnits[info[#info]]
+					end,
+					set = function(info, value)
+						E.global.nameplates.filters[selectedNameplateFilter].triggers.uniqueUnits[info[#info]] = value
+						NP:ConfigureAll()
+					end,
+					disabled = function()
+						return not (E.db.nameplates and E.db.nameplates.filters and E.db.nameplates.filters[selectedNameplateFilter] and
+							E.db.nameplates.filters[selectedNameplateFilter].triggers and
+							E.db.nameplates.filters[selectedNameplateFilter].triggers.enable)
+					end,
+					args = {
+						enable = {
+							order = 0,
+							type = "toggle",
+							name = L["Enable"],
+							get = function(info)
+								return E.global.nameplates.filters[selectedNameplateFilter].triggers.uniqueUnits and E.global.nameplates.filters[selectedNameplateFilter].triggers.uniqueUnits.enable
+							end,
+							set = function(info, value)
+								E.global.nameplates.filters[selectedNameplateFilter].triggers.uniqueUnits.enable = value
+								NP:ConfigureAll()
+							end
+						}
+					}
 				}
 			}
 		}
@@ -1499,6 +1567,21 @@ local function UpdateFilterGroup()
 					end,
 					disabled = function() return E.global.nameplates.filters[selectedNameplateFilter].actions.hide end
 				},
+				icon = {
+					order = 3,
+					type = "toggle",
+					name = L["Icon"],
+					get = function(info)
+						return E.global.nameplates.filters[selectedNameplateFilter].actions.icon
+					end,
+					set = function(info, value)
+						E.global.nameplates.filters[selectedNameplateFilter].actions.icon = value
+						NP:ConfigureAll()
+					end,
+					disabled = function()
+						return E.global.nameplates.filters[selectedNameplateFilter].actions.hide or not (E.global.nameplates.filters[selectedNameplateFilter].triggers.totems.enable or E.global.nameplates.filters[selectedNameplateFilter].triggers.uniqueUnits.enable)
+					end
+				},
 				iconOnly = {
 					order = 3,
 					type = "toggle",
@@ -1511,7 +1594,7 @@ local function UpdateFilterGroup()
 						NP:ConfigureAll()
 					end,
 					disabled = function()
-						return E.global.nameplates.filters[selectedNameplateFilter].actions.hide or not E.global.nameplates.filters[selectedNameplateFilter].triggers.totems.enable
+						return E.global.nameplates.filters[selectedNameplateFilter].actions.hide or not (E.global.nameplates.filters[selectedNameplateFilter].triggers.totems.enable or E.global.nameplates.filters[selectedNameplateFilter].triggers.uniqueUnits.enable)
 					end
 				},
 				spacer1 = {

@@ -128,6 +128,10 @@ E.StyleFilterDefaults = {
 			w1 = true, w2 = true, w3 = true, w4 = true, w5 = true,
 			o1 = true
 		},
+		uniqueUnits = {
+			enable = false,
+			u1 = true, u2 = true
+		},
 		inCombat = false,
 		outOfCombat = false
 	},
@@ -151,6 +155,7 @@ E.StyleFilterDefaults = {
 		},
 		hide = false,
 		nameOnly = false,
+		icon = false,
 		iconOnly = false,
 		scale = 1.0,
 		alpha = -1

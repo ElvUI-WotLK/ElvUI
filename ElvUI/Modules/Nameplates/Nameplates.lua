@@ -52,6 +52,9 @@ NP.FRIENDLY_NPC = {}
 
 NP.ResizeQueue = {}
 
+NP.Totems = {}
+NP.UniqueUnits = {}
+
 function NP:CheckBGHealers()
 	local name, _, classToken, damageDone, healingDone
 	for i = 1, GetNumBattlefieldScores() do

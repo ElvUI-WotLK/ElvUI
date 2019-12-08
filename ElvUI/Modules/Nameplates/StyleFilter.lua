@@ -37,7 +37,8 @@ mod.TriggerConditions = {
 		[14] = "normal",
 		[15] = "heroic",
 	},
-	totems = {}
+	totems = {},
+	uniqueUnits = {}
 }
 
 local totemTypes = {
@@ -169,10 +170,27 @@ local totemRanks = {
 	" X"
 }
 
-G.nameplates.totemList = {}
+local uniqueUnitTypes = {
+	pvp = {
+		[34433] = "u1", -- Shadow Fiend
+	},
+	pve = {
+		[72052] = "u2", -- Kinetic Bomb
+	}
+}
 
-for totemSchool, totemList in pairs(totemTypes) do
-	for spellID, totemID in pairs(totemList) do
+G.nameplates.uniqueUnitTypes = uniqueUnitTypes
+
+for unitType, units in pairs(uniqueUnitTypes) do
+	for spellID, unit in pairs(units) do
+		local name, _, texture = GetSpellInfo(spellID)
+		mod.TriggerConditions.uniqueUnits[unit] = {name, unitType, texture}
+		mod.UniqueUnits[name] = unit
+	end
+end
+
+for totemSchool, totems in pairs(totemTypes) do
+	for spellID, totemID in pairs(totems) do
 		local totemName, rank, texture = GetSpellInfo(spellID)
 
 		if not mod.TriggerConditions.totems[totemID] then
@@ -187,7 +205,7 @@ for totemSchool, totemList in pairs(totemTypes) do
 			totemName = totemName
 		end
 
-		G.nameplates.totemList[totemName] = totemID
+		mod.Totems[totemName] = totemID
 	end
 end
 
@@ -241,7 +259,7 @@ function mod:StyleFilterCooldownCheck(names, mustHaveAll)
 	end
 end
 
-function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderChanged, FlashingHealth, TextureChanged, ScaleChanged, FrameLevelChanged, AlphaChanged, NameColorChanged, NameOnlyChanged, VisibilityChanged, IconOnlyChanged)
+function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderChanged, FlashingHealth, TextureChanged, ScaleChanged, FrameLevelChanged, AlphaChanged, NameColorChanged, NameOnlyChanged, VisibilityChanged, IconChanged, IconOnlyChanged)
 	if VisibilityChanged then
 		frame.StyleChanged = true
 		frame.VisibilityChanged = true
@@ -332,6 +350,12 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 			mod:Update_Name(frame, true)
 		end
 	end
+	if IconChanged then
+		frame.StyleChanged = true
+		frame.IconChanged = true
+		mod:Configure_IconFrame(frame)
+		mod:Update_IconFrame(frame)
+	end
 	if IconOnlyChanged then
 		frame.StyleChanged = true
 		frame.IconOnlyChanged = true
@@ -342,7 +366,7 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 	end
 end
 
-function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, FlashingHealth, TextureChanged, ScaleChanged, FrameLevelChanged, AlphaChanged, NameColorChanged, NameOnlyChanged, VisibilityChanged, IconOnlyChanged)
+function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, FlashingHealth, TextureChanged, ScaleChanged, FrameLevelChanged, AlphaChanged, NameColorChanged, NameOnlyChanged, VisibilityChanged, IconChanged, IconOnlyChanged)
 	frame.StyleChanged = nil
 	if VisibilityChanged then
 		frame.VisibilityChanged = nil
@@ -408,6 +432,10 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 		else
 			frame.Name:SetText()
 		end
+	end
+	if IconChanged then
+		frame.IconChanged = nil
+		frame.IconFrame:Hide()
 	end
 	if IconOnlyChanged then
 		frame.IconOnlyChanged = nil
@@ -576,8 +604,14 @@ function mod:StyleFilterConditionCheck(frame, filter, trigger)
 
 	-- Totems
 	if frame.UnitName and trigger.totems.enable then
-		local totem = G.nameplates.totemList[frame.UnitName]
+		local totem = mod.Totems[frame.UnitName]
 		if trigger.totems[totem] then passed = true else return end
+	end
+
+	-- Unique Units
+	if frame.UnitName and trigger.uniqueUnits.enable then
+		local unit = mod.UniqueUnits[frame.UnitName]
+		if trigger.uniqueUnits[unit] then passed = true else return end
 	end
 
 	-- Plugin Callback
@@ -611,13 +645,14 @@ function mod:StyleFilterPass(frame, actions)
 		(actions.color and actions.color.name), --NameColorChanged
 		(actions.nameOnly), --NameOnlyChanged
 		(actions.hide), --VisibilityChanged
+		(actions.icon), --IconChanged
 		(actions.iconOnly) --IconOnlyChanged
 	)
 end
 
 function mod:StyleFilterClear(frame)
 	if frame and frame.StyleChanged then
-		mod:StyleFilterClearChanges(frame, frame.HealthColorChanged, frame.BorderChanged, frame.FlashingHealth, frame.TextureChanged, frame.ScaleChanged, frame.FrameLevelChanged, frame.AlphaChanged, frame.NameColorChanged, frame.NameOnlyChanged, frame.VisibilityChanged, frame.IconOnlyChanged)
+		mod:StyleFilterClearChanges(frame, frame.HealthColorChanged, frame.BorderChanged, frame.FlashingHealth, frame.TextureChanged, frame.ScaleChanged, frame.FrameLevelChanged, frame.AlphaChanged, frame.NameColorChanged, frame.NameOnlyChanged, frame.VisibilityChanged, frame.IconChanged, frame.IconOnlyChanged)
 	end
 end
 
