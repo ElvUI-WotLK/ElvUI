@@ -24,6 +24,8 @@ function NP:Update_IconFrame(frame, triggered)
 				frame.IconFrame:ClearAllPoints()
 				frame.IconFrame:SetPoint("TOP", frame)
 			end
+		else
+			frame.IconFrame:Hide()
 		end
 	else
 		frame.IconFrame:Hide()
