@@ -332,7 +332,7 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 	if IconOnlyChanged then
 		frame.StyleChanged = true
 		frame.IconOnlyChanged = true
-		NP:Update_IconFrame(frame)
+		mod:Update_IconFrame(frame, true)
 		if frame.Health:IsShown() then frame.Health:Hide() end
 		frame.Level:Hide()
 		frame.Name:Hide()
@@ -408,7 +408,9 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 	end
 	if IconOnlyChanged then
 		frame.IconOnlyChanged = nil
-		frame.IconFrame:Hide()
+		if mod.db.units[frame.UnitType].iconFrame and mod.db.units[frame.UnitType].iconFrame.enable then
+			mod:Configure_IconFrame(frame)
+		end
 		if mod.db.units[frame.UnitType].health.enable or (frame.isTarget and mod.db.alwaysShowTargetHealth) then
 			frame.Health:Show()
 		end

@@ -1437,6 +1437,18 @@ local function UpdateFilterGroup()
 					order = 28,
 					type = "group",
 					name = L["Totem"],
+					get = function(info)
+						return E.global.nameplates.filters[selectedNameplateFilter].triggers.totems[info[#info]]
+					end,
+					set = function(info, value)
+						E.global.nameplates.filters[selectedNameplateFilter].triggers.totems[info[#info]] = value
+						NP:ConfigureAll()
+					end,
+					disabled = function()
+						return not (E.db.nameplates and E.db.nameplates.filters and E.db.nameplates.filters[selectedNameplateFilter] and
+							E.db.nameplates.filters[selectedNameplateFilter].triggers and
+							E.db.nameplates.filters[selectedNameplateFilter].triggers.enable)
+					end,
 					args = {
 						enable = {
 							order = 0,
