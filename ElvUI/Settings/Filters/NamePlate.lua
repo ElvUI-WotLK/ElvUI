@@ -87,6 +87,7 @@ E.StyleFilterDefaults = {
 		},
 		instanceType = {
 			none = false,
+			sanctuary = false,
 			party = false,
 			raid = false,
 			arena = false,

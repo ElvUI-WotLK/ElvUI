@@ -522,6 +522,8 @@ function mod:StyleFilterConditionCheck(frame, filter, trigger)
 				end
 			end
 		else return end
+	elseif trigger.instanceType.sanctuary then
+		if UnitIsPVPSanctuary("player") then passed = true else return end
 	end
 
 	-- Level
