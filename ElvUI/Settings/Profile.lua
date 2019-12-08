@@ -354,16 +354,8 @@ P.nameplates = {
 		useThreatColor = true
 	},
 	filters = {
-		Boss = {
-			triggers = {
-				enable = false,
-			}
-		}
-	},
-	filters = {
 		ElvUI_Boss = {triggers = {enable = false}},
-		ElvUI_Target = {triggers = {enable = true}},
-		ElvUI_NonTarget = {triggers = {enable = true}},
+		ElvUI_Totem = {triggers = {enable = true}}
 	},
 	units = {
 		TARGET = {
@@ -713,6 +705,14 @@ P.nameplates = {
 				position = "RIGHT",
 				xOffset = 10,
 				yOffset = 0
+			},
+			iconFrame = {
+				enable = false,
+				size = 24,
+				parent = "Nameplate",
+				position = "CENTER",
+				xOffset = 0,
+				yOffset = 42
 			}
 		},
 		ENEMY_NPC = {
@@ -832,6 +832,14 @@ P.nameplates = {
 				position = "RIGHT",
 				xOffset = 10,
 				yOffset = 0
+			},
+			iconFrame = {
+				enable = false,
+				size = 24,
+				parent = "Nameplate",
+				position = "CENTER",
+				xOffset = 0,
+				yOffset = 42
 			}
 		}
 	}

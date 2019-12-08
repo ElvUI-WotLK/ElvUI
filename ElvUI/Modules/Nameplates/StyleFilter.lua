@@ -5,6 +5,7 @@ local LSM = E.Libs.LSM
 --Lua functions
 local ipairs, next, pairs, rawget, rawset, select, setmetatable, tonumber, type, unpack, tostring = ipairs, next, pairs, rawget, rawset, select, setmetatable, tonumber, type, unpack, tostring
 local tinsert, sort, twipe = table.insert, table.sort, table.wipe
+local match = string.match
 --WoW API / Variables
 local GetInstanceInfo = GetInstanceInfo
 local GetSpellCooldown = GetSpellCooldown
@@ -35,8 +36,159 @@ mod.TriggerConditions = {
 		-- raids
 		[14] = "normal",
 		[15] = "heroic",
+	},
+	totems = {}
+}
+
+local totemTypes = {
+	air = { -- Air Totems
+		[8177] = "a1",	-- Grounding Totem
+		[10595] = "a2",	-- Nature Resistance Totem I
+		[10600] = "a2",	-- Nature Resistance Totem II
+		[10601] = "a2",	-- Nature Resistance Totem III
+		[25574] = "a2",	-- Nature Resistance Totem IV
+		[58746] = "a2",	-- Nature Resistance Totem V
+		[58749] = "a2",	-- Nature Resistance Totem VI
+		[6495] = "a3",	-- Sentry Totem
+		[8512] = "a4",	-- Windfury Totem
+		[3738] = "a5",	-- Wrath of Air Totem
+	},
+	earth = { -- Earth Totems
+		[2062] = "e1",	-- Earth Elemental Totem
+		[2484] = "e2",	-- Earthbind Totem
+		[5730] = "e3",	-- Stoneclaw Totem I
+		[6390] = "e3",	-- Stoneclaw Totem II
+		[6391] = "e3",	-- Stoneclaw Totem III
+		[6392] = "e3",	-- Stoneclaw Totem IV
+		[10427] = "e3",	-- Stoneclaw Totem V
+		[10428] = "e3",	-- Stoneclaw Totem VI
+		[25525] = "e3",	-- Stoneclaw Totem VII
+		[58580] = "e3",	-- Stoneclaw Totem VIII
+		[58581] = "e3",	-- Stoneclaw Totem IX
+		[58582] = "e3",	-- Stoneclaw Totem X
+		[8071] = "e4",	-- Stoneskin Totem I -- Faction Champs
+		[8154] = "e4",	-- Stoneskin Totem II
+		[8155] = "e4",	-- Stoneskin Totem III
+		[10406] = "e4",	-- Stoneskin Totem IV
+		[10407] = "e4",	-- Stoneskin Totem V
+		[10408] = "e4",	-- Stoneskin Totem VI
+		[25508] = "e4",	-- Stoneskin Totem VII
+		[25509] = "e4",	-- Stoneskin Totem VIII
+		[58751] = "e4",	-- Stoneskin Totem IX
+		[58753] = "e4",	-- Stoneskin Totem X
+		[8075] = "e5",	-- Strength of Earth Totem I -- Faction Champs
+		[8160] = "e5",	-- Strength of Earth Totem II
+		[8161] = "e5",	-- Strength of Earth Totem III
+		[10442] = "e5",	-- Strength of Earth Totem IV
+		[25361] = "e5",	-- Strength of Earth Totem V
+		[25528] = "e5",	-- Strength of Earth Totem VI
+		[57622] = "e5",	-- Strength of Earth Totem VII
+		[58643] = "e5",	-- Strength of Earth Totem VIII
+		[8143] = "e6",	-- Tremor Totem
+	},
+	fire = { -- Fire Totems
+		[2894] = "f1",	-- Fire Elemental Totem
+		[8227] = "f2",	-- Flametongue Totem I -- Faction Champs
+		[8249] = "f2",	-- Flametongue Totem II
+		[10526] = "f2",	-- Flametongue Totem III
+		[16387] = "f2",	-- Flametongue Totem IV
+		[25557] = "f2",	-- Flametongue Totem V
+		[58649] = "f2",	-- Flametongue Totem VI
+		[58652] = "f2",	-- Flametongue Totem VII
+		[58656] = "f2",	-- Flametongue Totem VIII
+		[8181] = "f3",	-- Frost Resistance Totem I
+		[10478] = "f3",	-- Frost Resistance Totem II
+		[10479] = "f3",	-- Frost Resistance Totem III
+		[25560] = "f3",	-- Frost Resistance Totem IV
+		[58741] = "f3",	-- Frost Resistance Totem V
+		[58745] = "f3",	-- Frost Resistance Totem VI
+		[8190] = "f4",	-- Magma Totem I
+		[10585] = "f4",	-- Magma Totem II
+		[10586] = "f4",	-- Magma Totem III
+		[10587] = "f4",	-- Magma Totem IV
+		[25552] = "f4",	-- Magma Totem V
+		[58731] = "f4",	-- Magma Totem VI
+		[58734] = "f4",	-- Magma Totem VII
+		[3599] = "f5",	-- Searing Totem I -- Faction Champs
+		[6363] = "f5",	-- Searing Totem II
+		[6364] = "f5",	-- Searing Totem III
+		[6365] = "f5",	-- Searing Totem IV
+		[10437] = "f5",	-- Searing Totem V
+		[10438] = "f5",	-- Searing Totem VI
+		[25533] = "f5",	-- Searing Totem VII
+		[58699] = "f5",	-- Searing Totem VIII
+		[58703] = "f5",	-- Searing Totem IX
+		[58704] = "f5",	-- Searing Totem X
+		[30706] = "f6",	-- Totem of Wrath I
+		[57720] = "f6",	-- Totem of Wrath II
+		[57721] = "f6",	-- Totem of Wrath III
+		[57722] = "f6",	-- Totem of Wrath IV
+	},
+	water = { -- Water Totems
+		[8170] = "w1",	-- Cleansing Totem
+		[8184] = "w2",	-- Fire Resistance Totem I
+		[10537] = "w2",	-- Fire Resistance Totem II
+		[10538] = "w2",	-- Fire Resistance Totem III
+		[25563] = "w2",	-- Fire Resistance Totem IV
+		[58737] = "w2",	-- Fire Resistance Totem V
+		[58739] = "w2",	-- Fire Resistance Totem VI
+		[5394] = "w3",	-- Healing Stream Totem I -- Faction Champs
+		[6375] = "w3",	-- Healing Stream Totem II
+		[6377] = "w3",	-- Healing Stream Totem III
+		[10462] = "w3",	-- Healing Stream Totem IV
+		[10463] = "w3",	-- Healing Stream Totem V
+		[25567] = "w3",	-- Healing Stream Totem VI
+		[58755] = "w3",	-- Healing Stream Totem VII
+		[58756] = "w3",	-- Healing Stream Totem VIII
+		[58757] = "w3",	-- Healing Stream Totem IX
+		[5675] = "w4",	-- Mana Spring Totem I
+		[10495] = "w4",	-- Mana Spring Totem II
+		[10496] = "w4",	-- Mana Spring Totem III
+		[10497] = "w4",	-- Mana Spring Totem IV
+		[25570] = "w4",	-- Mana Spring Totem V
+		[58771] = "w4",	-- Mana Spring Totem VI
+		[58773] = "w4",	-- Mana Spring Totem VII
+		[58774] = "w4",	-- Mana Spring Totem VIII
+		[16190] = "w5" 	-- Mana Tide Totem
 	}
 }
+
+local totemRanks = {
+	"",
+	" II",
+	" III",
+	" IV",
+	" V",
+	" VI",
+	" VII",
+	" VIII",
+	" IX",
+	" X"
+}
+
+G.nameplates.totemList = {}
+
+for totemSchool, totemList in pairs(totemTypes) do
+	for spellID, totemID in pairs(totemList) do
+		local totemName, rank, texture = GetSpellInfo(spellID)
+
+		if not mod.TriggerConditions.totems[totemID] then
+			mod.TriggerConditions.totems[totemID] = {totemName, totemSchool, texture}
+		end
+
+		rank = totemRanks[tonumber(match(rank, ("%d+")))]
+
+		if rank then
+			totemName = totemName..rank
+		else
+			totemName = totemName
+		end
+
+		G.nameplates.totemList[totemName] = totemID
+	end
+end
+
+G.nameplates.totemTypes = totemTypes
 
 function mod:StyleFilterAuraCheck(names, icons, mustHaveAll, missing, minTimeLeft, maxTimeLeft)
 	local total, count = 0, 0
@@ -86,7 +238,7 @@ function mod:StyleFilterCooldownCheck(names, mustHaveAll)
 	end
 end
 
-function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderChanged, FlashingHealth, TextureChanged, ScaleChanged, FrameLevelChanged, AlphaChanged, NameColorChanged, NameOnlyChanged, VisibilityChanged)
+function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderChanged, FlashingHealth, TextureChanged, ScaleChanged, FrameLevelChanged, AlphaChanged, NameColorChanged, NameOnlyChanged, VisibilityChanged, IconOnlyChanged)
 	if VisibilityChanged then
 		frame.StyleChanged = true
 		frame.VisibilityChanged = true
@@ -177,9 +329,17 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 			mod:Update_Name(frame, true)
 		end
 	end
+	if IconOnlyChanged then
+		frame.StyleChanged = true
+		frame.IconOnlyChanged = true
+		NP:Update_IconFrame(frame)
+		if frame.Health:IsShown() then frame.Health:Hide() end
+		frame.Level:Hide()
+		frame.Name:Hide()
+	end
 end
 
-function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, FlashingHealth, TextureChanged, ScaleChanged, FrameLevelChanged, AlphaChanged, NameColorChanged, NameOnlyChanged, VisibilityChanged)
+function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, FlashingHealth, TextureChanged, ScaleChanged, FrameLevelChanged, AlphaChanged, NameColorChanged, NameOnlyChanged, VisibilityChanged, IconOnlyChanged)
 	frame.StyleChanged = nil
 	if VisibilityChanged then
 		frame.VisibilityChanged = nil
@@ -244,6 +404,19 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 			mod:Update_Name(frame)
 		else
 			frame.Name:SetText()
+		end
+	end
+	if IconOnlyChanged then
+		frame.IconOnlyChanged = nil
+		frame.IconFrame:Hide()
+		if mod.db.units[frame.UnitType].health.enable or (frame.isTarget and mod.db.alwaysShowTargetHealth) then
+			frame.Health:Show()
+		end
+		if mod.db.units[frame.UnitType].name.level then
+			frame.Level:Show()
+		end
+		if mod.db.units[frame.UnitType].name.enable then
+			frame.Name:Show()
 		end
 	end
 end
@@ -396,6 +569,12 @@ function mod:StyleFilterConditionCheck(frame, filter, trigger)
 		end
 	end
 
+	-- Totems
+	if frame.UnitName and trigger.totems.enable then
+		local totem = G.nameplates.totemList[frame.UnitName]
+		if trigger.totems[totem] then passed = true else return end
+	end
+
 	-- Plugin Callback
 	if mod.StyleFilterCustomChecks then
 		for _, customCheck in pairs(mod.StyleFilterCustomChecks) do
@@ -426,13 +605,14 @@ function mod:StyleFilterPass(frame, actions)
 		(actions.alpha and actions.alpha ~= -1), --AlphaChanged
 		(actions.color and actions.color.name), --NameColorChanged
 		(actions.nameOnly), --NameOnlyChanged
-		(actions.hide) --VisibilityChanged
+		(actions.hide), --VisibilityChanged
+		(actions.iconOnly) --IconOnlyChanged
 	)
 end
 
 function mod:StyleFilterClear(frame)
 	if frame and frame.StyleChanged then
-		mod:StyleFilterClearChanges(frame, frame.HealthColorChanged, frame.BorderChanged, frame.FlashingHealth, frame.TextureChanged, frame.ScaleChanged, frame.FrameLevelChanged, frame.AlphaChanged, frame.NameColorChanged, frame.NameOnlyChanged, frame.VisibilityChanged)
+		mod:StyleFilterClearChanges(frame, frame.HealthColorChanged, frame.BorderChanged, frame.FlashingHealth, frame.TextureChanged, frame.ScaleChanged, frame.FrameLevelChanged, frame.AlphaChanged, frame.NameColorChanged, frame.NameOnlyChanged, frame.VisibilityChanged, frame.IconOnlyChanged)
 	end
 end
 
@@ -477,7 +657,7 @@ function mod:StyleFilterConfigure()
 				end
 
 				-- real events
-				mod.StyleFilterTriggerEvents.PLAYER_TARGET_CHANGED = 1
+				mod.StyleFilterTriggerEvents.PLAYER_TARGET_CHANGED = true
 
 				if t.healthThreshold then
 					mod.StyleFilterTriggerEvents.UNIT_HEALTH = 1
@@ -536,18 +716,19 @@ function mod:StyleFilterConfigure()
 	end
 end
 
-function mod:UpdateElement_Filters(frame, event)
-	if not mod.StyleFilterTriggerEvents[event] then return end
-
-	--[[if mod.StyleFilterTriggerEvents[event] == true then
+function mod:StyleFilterUpdate(frame, event)
+	local hasEvent = mod.StyleFilterTriggerEvents[event]
+	if not hasEvent then
+		return
+	elseif hasEvent == true then -- skip on 1 or 0
 		if not frame.StyleFilterWaitTime then
 			frame.StyleFilterWaitTime = GetTime()
 		elseif GetTime() > (frame.StyleFilterWaitTime + 0.1) then
 			frame.StyleFilterWaitTime = nil
 		else
-			return --block calls faster than 0.1 second
+			return -- block calls faster than 0.1 second
 		end
-	end]]
+	end
 
 	mod:StyleFilterClear(frame)
 

@@ -352,7 +352,7 @@ function NP:UpdateElement_Auras(frame)
 		end
 	end
 
-	NP:UpdateElement_Filters(frame, "UNIT_AURA")
+	self:StyleFilterUpdate(frame, "UNIT_AURA")
 end
 
 function NP:UpdateElement_AurasByGUID(guid, event)

@@ -16,32 +16,17 @@ G.nameplates.filters = {
 			}
 		},
 		actions = {
-			usePortrait = true,
 			scale = 1.15
 		}
 	},
-	ElvUI_Target = {
+	ElvUI_Totem = {
 		triggers = {
-			isTarget = true
-		},
-		actions = {
-			scale = 1.2
-		}
-	},
-	ElvUI_NonTarget = {
-		triggers = {
-			notTarget = true,
-			requireTarget = true,
-			nameplateType = {
-				enable = true,
-				friendlyPlayer = true,
-				friendlyNPC = true,
-				enemyPlayer = true,
-				enemyNPC = true
+			totems = {
+				enable = true
 			}
 		},
 		actions = {
-			alpha = 30
+			iconOnly = true
 		}
 	}
 }
@@ -65,6 +50,16 @@ E.StyleFilterDefaults = {
 			tank = false,
 			healer = false,
 			damager = false
+		},
+		raidTarget = {
+			star = false,
+			circle = false,
+			diamond = false,
+			triangle = false,
+			moon = false,
+			square = false,
+			cross = false,
+			skull = false
 		},
 		curlevel = 0,
 		maxlevel = 0,
@@ -125,6 +120,13 @@ E.StyleFilterDefaults = {
 			minTimeLeft = 0,
 			maxTimeLeft = 0
 		},
+		totems = {
+			enable = false,
+			a1 = true, a2 = true, a3 = true, a4 = true, a5 = true,
+			e1 = true, e2 = true, e3 = true, e4 = true, e5 = true, e6 = true,
+			f1 = true, f2 = true, f3 = true, f4 = true, f5 = true, f6 = true,
+			w1 = true, w2 = true, w3 = true, w4 = true, w5 = true
+		},
 		inCombat = false,
 		outOfCombat = false
 	},
@@ -148,6 +150,7 @@ E.StyleFilterDefaults = {
 		},
 		hide = false,
 		nameOnly = false,
+		iconOnly = false,
 		scale = 1.0,
 		alpha = -1
 	}

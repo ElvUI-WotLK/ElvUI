@@ -334,6 +334,7 @@ function NP:OnShow(isConfig, dontHideHighlight)
 
 		NP:Configure_Glow(frame)
 		NP:Configure_Elite(frame)
+		NP:Configure_IconFrame(frame)
 	end
 
 	frame.CutawayHealth:Hide()
@@ -343,14 +344,14 @@ function NP:OnShow(isConfig, dontHideHighlight)
 
 	NP:SetSize(self)
 
-	if NP.db.fadeIn and not dontHideHighlight then
-		NP:PlateFade(frame, 1, 0, 1)
+	if not frame.isAlphaChanged and not dontHideHighlight then
+		NP:PlateFade(frame, NP.db.fadeIn and 1 or 0, 0, 1)
 	end
 
 	frame:Show()
 
-	NP:UpdateElement_Filters(frame, "NAME_PLATE_UNIT_ADDED")
-	NP:ForEachVisiblePlate("ResetNameplateFrameLevel") --keep this after `UpdateElement_Filters`
+	NP:StyleFilterUpdate(frame, "NAME_PLATE_UNIT_ADDED")
+	NP:ForEachVisiblePlate("ResetNameplateFrameLevel") --keep this after `StyleFilterUpdate`
 end
 
 function NP:OnHide(isConfig, dontHideHighlight)
@@ -401,6 +402,7 @@ function NP:OnHide(isConfig, dontHideHighlight)
 	frame.Name.NameOnlyGlow:Hide()
 	frame.Elite:Hide()
 	frame.CPoints:Hide()
+	frame.IconFrame:Hide()
 	frame:Hide()
 	frame.isTarget = nil
 	frame.isTargetChanged = false
@@ -482,11 +484,13 @@ function NP:UpdateElement_All(frame, noTargetFrame, filterIgnore)
 		self:Update_Highlight(frame)
 		self:Update_Glow(frame)
 
-		NP:SetTargetFrame(frame)
+		self:SetTargetFrame(frame)
 	end
 
+	self:Update_IconFrame(frame)
+
 	if not filterIgnore then
-		NP:UpdateElement_Filters(frame, "UpdateElement_All")
+		self:StyleFilterUpdate(frame, "UpdateElement_All")
 	end
 end
 
@@ -536,6 +540,7 @@ function NP:OnCreated(frame)
 	unitFrame.Debuffs = self:ConstructElement_Auras(unitFrame, "Debuffs")
 	unitFrame.HealerIcon = self:Construct_HealerIcon(unitFrame)
 	unitFrame.CPoints = self:Construct_CPoints(unitFrame)
+	unitFrame.IconFrame = self:Construct_IconFrame(unitFrame)
 	self:Construct_Glow(unitFrame)
 
 	self:QueueObject(Health)
@@ -652,12 +657,16 @@ function NP:PlateFade(nameplate, timeToFade, startAlpha, endAlpha)
 	end
 end
 
-function NP:CheckTarget(frame)
+function NP:SetTargetFrame(frame)
 	if hasTarget and frame.alpha == 1 then
 		if not frame.isTarget then
 			frame.isTarget = true
 
 			self:SetPlateFrameLevel(frame, self:GetPlateFrameLevel(frame), true)
+
+			if self.db.useTargetScale then
+				self:SetFrameScale(frame, (frame.ThreatScale or 1) * self.db.targetScale)
+			end
 
 			if not frame.isGroupUnit then
 				frame.unit = "target"
@@ -665,43 +674,91 @@ function NP:CheckTarget(frame)
 
 				self:RegisterEvents(frame)
 			end
-			
-			self:UpdateElement_All(frame)
 
-			frame.isAlphaChanged = true
-			self:UpdateElement_Filters(frame, "PLAYER_TARGET_CHANGED")
+			self:UpdateElement_Auras(frame)
+
+			if not self.db.units[frame.UnitType].health.enable and self.db.alwaysShowTargetHealth then
+				frame.Health.r, frame.Health.g, frame.Health.b = nil, nil, nil
+
+				self:Configure_HealthBar(frame)
+				self:Configure_CastBar(frame)
+
+				self:Configure_Elite(frame)
+				self:Configure_CPoints(frame)
+
+				self:RegisterEvents(frame)
+
+				self:UpdateElement_All(frame, true)
+
+				self:Configure_Glow(frame)
+			end
+
+			NP:PlateFade(frame, NP.db.fadeIn and 1 or 0, frame:GetAlpha(), 1)
+
+			self:Update_Highlight(frame)
+			self:Update_Glow(frame)
+			self:Update_CPoints(frame)
+			self:StyleFilterUpdate(frame, "PLAYER_TARGET_CHANGED")
+			self:ForEachVisiblePlate("ResetNameplateFrameLevel") --keep this after `StyleFilterUpdate`
 		end
 	elseif frame.isTarget then
 		frame.isTarget = nil
 
 		self:SetPlateFrameLevel(frame, self:GetPlateFrameLevel(frame))
 
+		if self.db.useTargetScale then
+			self:SetFrameScale(frame, (frame.ThreatScale or 1))
+		end
+
 		if not frame.isGroupUnit then
 			frame.unit = nil
 
 			if frame.isEventsRegistered then
 				self:UnregisterAllEvents(frame)
+				self:Update_CastBar(frame)
 			end
 		end
 
-		self:UpdateElement_All(frame)
+		if not self.db.units[frame.UnitType].health.enable then
+			self:UpdateAllFrame(frame, nil, true)
+		else
+			self:Update_Glow(frame)
+		end
 
-		frame.isAlphaChanged = nil
-		self:UpdateElement_Filters(frame, "PLAYER_TARGET_CHANGED")
+		self:Update_CPoints(frame)
+
+		if not frame.AlphaChanged then
+			if hasTarget then
+				NP:PlateFade(frame, NP.db.fadeIn and 1 or 0, frame:GetAlpha(), self.db.nonTargetTransparency)
+			else
+				NP:PlateFade(frame, NP.db.fadeIn and 1 or 0, frame:GetAlpha(), 1)
+			end
+		end
+
+		self:StyleFilterUpdate(frame, "PLAYER_TARGET_CHANGED")
+		self:ForEachVisiblePlate("ResetNameplateFrameLevel") --keep this after `StyleFilterUpdate`
 	else
-		if hasTarget and frame.isAlphaChanged then
-			frame.isAlphaChanged = nil
-
-			self:UpdateElement_Filters(frame, "PLAYER_TARGET_CHANGED")
-		elseif not hasTarget and not frame.isAlphaChanged then
+		if hasTarget and not frame.isAlphaChanged then
 			frame.isAlphaChanged = true
 
-			self:UpdateElement_Filters(frame, "PLAYER_TARGET_CHANGED")
+			if not frame.AlphaChanged then
+				NP:PlateFade(frame, NP.db.fadeIn and 1 or 0, frame:GetAlpha(), self.db.nonTargetTransparency)
+			end
+
+			self:StyleFilterUpdate(frame, "PLAYER_TARGET_CHANGED")
+		elseif not hasTarget and frame.isAlphaChanged then
+			frame.isAlphaChanged = nil
+
+			if not frame.AlphaChanged then
+				NP:PlateFade(frame, NP.db.fadeIn and 1 or 0, frame:GetAlpha(), 1)
+			end
+
+			self:StyleFilterUpdate(frame, "PLAYER_TARGET_CHANGED")
 		end
 	end
 end
 
-function NP:CheckMouseover(frame)
+function NP:SetMouseoverFrame(frame)
 	if frame.oldHighlight:IsShown() then
 		if not frame.isMouseover then
 			frame.isMouseover = true
@@ -746,126 +803,10 @@ local function findNewPlate(num)
 	numChildren = num
 end
 
-function NP:SetTargetFrame(frame)
-	if frame.isTarget then
-		if not frame.isTargetChanged then
-			frame.isTargetChanged = true
-
-			self:SetPlateFrameLevel(frame, self:GetPlateFrameLevel(frame), true)
-
-			if self.db.useTargetScale then
-				self:SetFrameScale(frame, (frame.ThreatScale or 1) * self.db.targetScale)
-			end
-
-			if not frame.isGroupUnit then
-				frame.unit = "target"
-				frame.guid = UnitGUID("target")
-
-				self:RegisterEvents(frame)
-			end
-
-			self:UpdateElement_Auras(frame)
-
-			if not self.db.units[frame.UnitType].health.enable and self.db.alwaysShowTargetHealth then
-				frame.Health.r, frame.Health.g, frame.Health.b = nil, nil, nil
-
-				self:Configure_HealthBar(frame)
-				self:Configure_CastBar(frame)
-
-				self:Configure_Glow(frame)
-
-				self:Configure_Elite(frame)
-				self:Configure_CPoints(frame)
-
-				self:RegisterEvents(frame)
-
-				self:UpdateElement_All(frame, true)
-			end
-
-			if hasTarget then
-				frame:SetAlpha(1)
-			end
-
-			self:Update_Highlight(frame)
-			self:Update_Glow(frame)
-			self:Update_CPoints(frame)
-			self:UpdateElement_Filters(frame, "PLAYER_TARGET_CHANGED")
-			self:ForEachVisiblePlate("ResetNameplateFrameLevel") --keep this after `UpdateElement_Filters`
-		end
-	elseif frame.isTargetChanged then
-		frame.isTargetChanged = false
-
-		self:SetPlateFrameLevel(frame, self:GetPlateFrameLevel(frame))
-
-		if self.db.useTargetScale then
-			self:SetFrameScale(frame, (frame.ThreatScale or 1))
-		end
-
-		if not frame.isGroupUnit then
-			frame.unit = nil
-
-			if frame.isEventsRegistered then
-				self:UnregisterAllEvents(frame)
-				self:Update_CastBar(frame)
-			end
-		end
-
-		if not self.db.units[frame.UnitType].health.enable then
-			self:UpdateAllFrame(frame)
-		else
-			self:Update_Glow(frame)
-		end
-
-		if not frame.AlphaChanged then
-			if hasTarget then
-				frame:SetAlpha(self.db.nonTargetTransparency)
-			else
-				frame:SetAlpha(1)
-			end
-		end
-
-		self:Update_CPoints(frame)
-
-		self:UpdateElement_Filters(frame, "PLAYER_TARGET_CHANGED")
-		self:ForEachVisiblePlate("ResetNameplateFrameLevel") --keep this after `UpdateElement_Filters`
-	elseif frame.oldHighlight:IsShown() and not frame.isMouseover then
-		frame.isMouseover = true
-
-		self:Update_Highlight(frame)
-
-		if not frame.isGroupUnit then
-			frame.unit = "mouseover"
-			frame.guid = UnitGUID("mouseover")
-
-			self:Update_CastBar(frame, nil, frame.unit)
-		end
-
-		self:UpdateElement_Auras(frame)
-	elseif frame.isMouseover then
-		frame.isMouseover = nil
-
-		self:Update_Highlight(frame)
-
-		if not frame.isGroupUnit then
-			frame.unit = nil
-
-			self:Update_CastBar(frame)
-		end
-	else
-		if not frame.AlphaChanged then
-			if hasTarget then
-				frame:SetAlpha(self.db.nonTargetTransparency)
-			else
-				frame:SetAlpha(1)
-			end
-		end
-	end
-end
-
 function NP:OnUpdate()
 	findNewPlate(WorldGetNumChildren(WorldFrame))
 
-	for frame, alpha in pairs(NP.VisiblePlates) do
+	for frame in pairs(NP.VisiblePlates) do
 		if hasTarget then
 			frame.alpha = frame:GetParent():GetAlpha()
 			frame:GetParent():SetAlpha(1)
@@ -873,8 +814,8 @@ function NP:OnUpdate()
 			frame.alpha = 1
 		end
 
-		NP:CheckTarget(frame, alpha)
-		NP:CheckMouseover(frame)
+		NP:SetTargetFrame(frame)
+		NP:SetMouseoverFrame(frame)
 
         if frame.UnitReaction ~= NP:GetUnitInfo(frame) then
             NP:UpdateAllFrame(frame)
@@ -1015,7 +956,7 @@ function NP:PLAYER_REGEN_DISABLED()
 		SetCVar("nameplateShowEnemies", 0)
 	end
 
-	NP:ForEachVisiblePlate("UpdateElement_Filters", "PLAYER_REGEN_DISABLED")
+	NP:ForEachVisiblePlate("StyleFilterUpdate", "PLAYER_REGEN_DISABLED")
 end
 
 function NP:PLAYER_REGEN_ENABLED()
@@ -1037,11 +978,11 @@ function NP:PLAYER_REGEN_ENABLED()
 		SetCVar("nameplateShowEnemies", 1)
 	end
 
-	NP:ForEachVisiblePlate("UpdateElement_Filters", "PLAYER_REGEN_ENABLED")
+	NP:ForEachVisiblePlate("StyleFilterUpdate", "PLAYER_REGEN_ENABLED")
 end
 
 function NP:SPELL_UPDATE_COOLDOWN(...)
-	NP:ForEachVisiblePlate("UpdateElement_Filters", "SPELL_UPDATE_COOLDOWN")
+	NP:ForEachVisiblePlate("StyleFilterUpdate", "SPELL_UPDATE_COOLDOWN")
 end
 
 function NP:CacheArenaUnits()
@@ -1145,8 +1086,6 @@ function NP:Initialize()
 	LAI.RegisterCallback(self, "LibAuraInfo_AURA_CLEAR")
 	LAI.RegisterCallback(self, "LibAuraInfo_UNIT_AURA")
 	self:RegisterEvent("UNIT_COMBO_POINTS")
-
---	self:ScheduleRepeatingTimer("ForEachVisiblePlate", 0.15, "SetTargetFrame")
 end
 
 local function InitializeCallback()

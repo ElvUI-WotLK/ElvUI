@@ -12,7 +12,7 @@ function NP:Update_HealthOnValueChanged()
 	NP:Update_Health(frame)
 	NP:Update_HealthColor(frame)
 	NP:Update_Glow(frame)
-	NP:UpdateElement_Filters(frame, "UNIT_HEALTH")
+	NP:StyleFilterUpdate(frame, "UNIT_HEALTH")
 end
 
 function NP:Update_HealthColor(frame)

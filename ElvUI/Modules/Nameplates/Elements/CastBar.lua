@@ -26,7 +26,7 @@ function NP:Update_CastBarOnUpdate(elapsed)
 			resetAttributes(self)
 			self:SetValue(self.maxValue, "casting")
 			self:Hide()
-			NP:UpdateElement_Filters(self:GetParent(), "FAKE_Casting")
+			NP:StyleFilterUpdate(self:GetParent(), "FAKE_Casting")
 			return
 		end
 		self:SetValue(self.value)
@@ -48,7 +48,7 @@ function NP:Update_CastBarOnUpdate(elapsed)
 		if self.value <= 0 then
 			resetAttributes(self)
 			self:Hide()
-			NP:UpdateElement_Filters(self:GetParent(), "FAKE_Casting")
+			NP:StyleFilterUpdate(self:GetParent(), "FAKE_Casting")
 			return
 		end
 		self:SetValue(self.value)
@@ -65,7 +65,7 @@ function NP:Update_CastBarOnUpdate(elapsed)
 	else
 		resetAttributes(self)
 		self:Hide()
-		NP:UpdateElement_Filters(self:GetParent(), "FAKE_Casting")
+		NP:StyleFilterUpdate(self:GetParent(), "FAKE_Casting")
 	end
 end
 
@@ -186,7 +186,7 @@ function NP:Update_CastBar(frame, event, unit)
 		end
 	end
 
-	self:UpdateElement_Filters(frame, "FAKE_Casting")
+	self:StyleFilterUpdate(frame, "FAKE_Casting")
 end
 
 function NP:Configure_CastBarScale(frame, scale, noPlayAnimation)
