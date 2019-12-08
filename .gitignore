@@ -1,1 +1,7 @@
 .luacheckcache
+.github/
+.editorconfig
+.gitattributes
+.luacheckrc
+.travis.yml
+.gitignore
