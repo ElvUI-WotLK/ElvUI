@@ -125,7 +125,8 @@ E.StyleFilterDefaults = {
 			a1 = true, a2 = true, a3 = true, a4 = true, a5 = true,
 			e1 = true, e2 = true, e3 = true, e4 = true, e5 = true, e6 = true,
 			f1 = true, f2 = true, f3 = true, f4 = true, f5 = true, f6 = true,
-			w1 = true, w2 = true, w3 = true, w4 = true, w5 = true
+			w1 = true, w2 = true, w3 = true, w4 = true, w5 = true,
+			o1 = true
 		},
 		inCombat = false,
 		outOfCombat = false

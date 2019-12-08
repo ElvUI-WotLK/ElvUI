@@ -317,12 +317,14 @@ local function UpdateStyleLists()
 				titemSchoolLoc, order = BINDING_NAME_MULTICASTACTIONBUTTON11, 52
 			elseif totemSchool == "air" then
 				titemSchoolLoc, order = BINDING_NAME_MULTICASTACTIONBUTTON12, 53
+			elseif totemSchool == "other" then
+				titemSchoolLoc, order = OTHER, 54
 			end
 
 			E.Options.args.nameplate.args.filters.args.triggers.args.totems.args[totemSchool] = {
 				order = order,
 				type = "group",
-				name = totemsColor[totemSchool]..titemSchoolLoc,
+				name = (totemsColor[totemSchool] or "")..titemSchoolLoc,
 				guiInline = true,
 				disabled = function() return not E.global.nameplates.filters[selectedNameplateFilter].triggers.totems.enable end,
 				args = {}
