@@ -1353,6 +1353,18 @@ local function UpdateFilterGroup()
 								NP:ConfigureAll()
 							end
 						},
+						sanctuary = {
+							order = 1,
+							type = "toggle",
+							name = L["Sanctuary"],
+							get = function(info)
+								return E.global.nameplates.filters[selectedNameplateFilter].triggers.instanceType.sanctuary
+							end,
+							set = function(info, value)
+								E.global.nameplates.filters[selectedNameplateFilter].triggers.instanceType.sanctuary = value
+								NP:ConfigureAll()
+							end
+						},
 						party = {
 							order = 2,
 							type = "toggle",
