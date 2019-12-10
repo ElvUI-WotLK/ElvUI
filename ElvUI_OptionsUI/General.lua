@@ -595,6 +595,7 @@ E.Options.args.general = {
 					type = "toggle",
 					name = L["LOOT"],
 					desc = L["Enable/Disable the loot frame."],
+					get = function(info) return E.private.general[info[#info]] end,
 					set = function(info, value)
 						E.private.general[info[#info]] = value
 						E:StaticPopup_Show("PRIVATE_RL")
@@ -605,6 +606,7 @@ E.Options.args.general = {
 					type = "toggle",
 					name = L["Loot Roll"],
 					desc = L["Enable/Disable the loot roll frame."],
+					get = function(info) return E.private.general[info[#info]] end,
 					set = function(info, value)
 						E.private.general[info[#info]] = value
 						E:StaticPopup_Show("PRIVATE_RL")
@@ -631,6 +633,7 @@ E.Options.args.general = {
 					type = "toggle",
 					name = L["RAID_CONTROL"],
 					desc = L["Enables the ElvUI Raid Control panel."],
+					get = function(info) return E.private.general[info[#info]] end,
 					set = function(info, value)
 						E.private.general[info[#info]] = value
 						E:StaticPopup_Show("PRIVATE_RL")
