@@ -1870,8 +1870,16 @@ local function GetUnitSettings(unit, name)
 		set = function(info, value) E.db.nameplates.units[unit][info[#info]] = value NP:ConfigureAll() end,
 		disabled = function() return not E.NamePlates.Initialized end,
 		args = {
-			copySettings = {
+			showTestFrame = {
 				order = -10,
+				name = L["Show/Hide Test Frame"],
+				type = "execute",
+				func = function(info)
+					NP:TogleTestFrame(unit)
+				end
+			},
+			copySettings = {
+				order = -9,
 				type = "select",
 				name = L["Copy Settings From"],
 				desc = L["Copy settings from another unit."],
@@ -1883,7 +1891,7 @@ local function GetUnitSettings(unit, name)
 				end
 			},
 			defaultSettings = {
-				order = -9,
+				order = -8,
 				type = "execute",
 				name = L["Default Settings"],
 				desc = L["Set Settings to Default"],
