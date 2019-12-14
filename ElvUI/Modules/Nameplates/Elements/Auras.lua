@@ -147,15 +147,9 @@ function NP:SetAura(frame, guid, index, filter, isDebuff, visible)
 			if isDebuff then
 				local color = (debuffType and DebuffTypeColor[debuffType]) or DebuffTypeColor.none
 				if button.name and (button.name == unstableAffliction or button.name == vampiricTouch) and E.myclass ~= "WARLOCK" then
-					button.bordertop:SetTexture(0.05, 0.85, 0.94)
-					button.borderbottom:SetTexture(0.05, 0.85, 0.94)
-					button.borderleft:SetTexture(0.05, 0.85, 0.94)
-					button.borderright:SetTexture(0.05, 0.85, 0.94)
+					self:StyleFrameColor(button, 0.05, 0.85, 0.94)
 				else
-					button.bordertop:SetTexture(color.r * 0.6, color.g * 0.6, color.b * 0.6)
-					button.borderbottom:SetTexture(color.r * 0.6, color.g * 0.6, color.b * 0.6)
-					button.borderleft:SetTexture(color.r * 0.6, color.g * 0.6, color.b * 0.6)
-					button.borderright:SetTexture(color.r * 0.6, color.g * 0.6, color.b * 0.6)
+					self:StyleFrameColor(button, color.r * 0.6, color.g * 0.6, color.b * 0.6)
 				end
 			end
 
