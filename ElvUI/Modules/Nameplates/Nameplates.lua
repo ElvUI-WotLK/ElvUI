@@ -23,13 +23,13 @@ local SetCVar = SetCVar
 local UnitClass = UnitClass
 local UnitExists = UnitExists
 local UnitGUID = UnitGUID
-local UnitHealth = UnitHealth
 local UnitHealthMax = UnitHealthMax
 local UnitIsPlayer = UnitIsPlayer
 local UnitName = UnitName
 local WorldFrame = WorldFrame
 local WorldGetChildren = WorldFrame.GetChildren
 local WorldGetNumChildren = WorldFrame.GetNumChildren
+
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS
 
 local numChildren, hasTarget = 0
@@ -207,6 +207,13 @@ function NP:StyleFrame(parent, noBackdrop, point)
 		point.borderright.backdrop:SetWidth(noscalemult * 3)
 		point.borderright.backdrop:SetTexture(0, 0, 0)
 	end
+end
+
+function NP:StyleFrameColor(frame, r, g, b)
+	frame.bordertop:SetTexture(r, g, b)
+	frame.borderbottom:SetTexture(r, g, b)
+	frame.borderleft:SetTexture(r, g, b)
+	frame.borderright:SetTexture(r, g, b)
 end
 
 function NP:GetUnitByName(frame, unitType)
@@ -1061,9 +1068,12 @@ function NP:TogleTestFrame(unitType)
 			unitFrame.oldHealthBar:SetStatusBarColor(color.r, color.g, color.b)
 		end
 
-		local minHelath, maxHealth = UnitHealth("player"), UnitHealthMax("player")
+		local maxHealth = UnitHealthMax("player")
 		unitFrame.oldHealthBar:SetMinMaxValues(0, maxHealth)
 		unitFrame.oldHealthBar:SetValue(random(1, maxHealth))
+
+		unitFrame.oldName:SetText(E.myname)
+		unitFrame.oldLevel:SetText(E.mylevel)
 
 		ElvNP_Test:Show()
 		NP:ConfigureAll()
@@ -1088,28 +1098,25 @@ function NP:Initialize()
 
 	self:UpdateCVars()
 
-	local ElvNP_Test = CreateFrame("Frame", "ElvNP_Test")
+	local ElvNP_Test = CreateFrame("Button", "ElvNP_Test")
 	ElvNP_Test:Point("BOTTOM", UIParent, "BOTTOM", 0, 250)
+	ElvNP_Test:SetMovable(true)
+	ElvNP_Test:RegisterForDrag("LeftButton", "RightButton")
+	ElvNP_Test:SetScript("OnDragStart", function() ElvNP_Test:StartMoving() end)
+	ElvNP_Test:SetScript("OnDragStop", function() ElvNP_Test:StopMovingOrSizing() end)
 
-	local ElvNP_Test_Health = CreateFrame("StatusBar", nil, ElvNP_Test)
-	ElvNP_Test_Health:SetMinMaxValues(0, 2)
-	ElvNP_Test_Health:SetValue(1)
-
+	CreateFrame("StatusBar", nil, ElvNP_Test)
 	CreateFrame("StatusBar", nil, ElvNP_Test)
 
 	for i = 1, 11 do
 		if i == 7 or i == 8 then
-			local text = ElvNP_Test:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-			if i == 7 then
-				text:SetText(E.myname)
-			else
-				text:SetText(E.mylevel)
-			end
+			ElvNP_Test:CreateFontString(nil, "OVERLAY", "GameFontNormal"):SetText("Empty")
 		else
 			ElvNP_Test:CreateTexture()
 		end
 	end
 
+	self:StyleFrame(ElvNP_Test, true)
 	NP:OnCreated(ElvNP_Test)
 	ElvNP_Test:Hide()
 
