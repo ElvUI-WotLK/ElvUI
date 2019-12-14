@@ -8,7 +8,7 @@ local _G = _G
 local pcall = pcall
 local type = type
 local select, unpack, pairs, next, tonumber = select, unpack, pairs, next, tonumber
-local floor = math.floor
+local floor, random = math.floor, math.random
 local format, gsub, match, split = string.format, string.gsub, string.match, string.split
 local twipe = table.wipe
 --WoW API / Variables
@@ -17,11 +17,15 @@ local GetBattlefieldScore = GetBattlefieldScore
 local GetNumBattlefieldScores = GetNumBattlefieldScores
 local GetNumPartyMembers, GetNumRaidMembers = GetNumPartyMembers, GetNumRaidMembers
 local GetPlayerInfoByGUID = GetPlayerInfoByGUID
+local InCombatLockdown = InCombatLockdown
 local IsInInstance = IsInInstance
 local SetCVar = SetCVar
 local UnitClass = UnitClass
 local UnitExists = UnitExists
 local UnitGUID = UnitGUID
+local UnitHealth = UnitHealth
+local UnitHealthMax = UnitHealthMax
+local UnitIsPlayer = UnitIsPlayer
 local UnitName = UnitName
 local WorldFrame = WorldFrame
 local WorldGetChildren = WorldFrame.GetChildren
@@ -271,7 +275,6 @@ end
 
 function NP:GetUnitInfo(frame)
 	local r, g, b = frame.oldHealthBar:GetStatusBarColor()
-
 	if r < 0.01 then
 		if b < 0.01 and g > 0.99 then
 			return 5, "FRIENDLY_NPC"
@@ -1044,6 +1047,31 @@ function NP:CacheGroupPetUnits()
 	end
 end
 
+function NP:TogleTestFrame(unitType)
+	local unitFrame = ElvNP_Test.UnitFrame
+	if not ElvNP_Test:IsShown() or unitFrame.UnitType ~= unitType then
+		if unitType == "ENEMY_NPC" then
+			unitFrame.oldHealthBar:SetStatusBarColor(1, 0, 0)
+		elseif unitType == "FRIENDLY_NPC" then
+			unitFrame.oldHealthBar:SetStatusBarColor(0, 1, 0)
+		elseif unitType == "FRIENDLY_PLAYER" then
+			unitFrame.oldHealthBar:SetStatusBarColor(0, 0, 1)
+		else
+			local color = RAID_CLASS_COLORS[E.myclass]
+			unitFrame.oldHealthBar:SetStatusBarColor(color.r, color.g, color.b)
+		end
+
+		local minHelath, maxHealth = UnitHealth("player"), UnitHealthMax("player")
+		unitFrame.oldHealthBar:SetMinMaxValues(0, maxHealth)
+		unitFrame.oldHealthBar:SetValue(random(1, maxHealth))
+
+		ElvNP_Test:Show()
+		NP:ConfigureAll()
+	else
+		ElvNP_Test:Hide()
+	end
+end
+
 function NP:Initialize()
 	self.db = E.db.nameplates
 
@@ -1059,6 +1087,31 @@ function NP:Initialize()
 	self.levelStep = 2
 
 	self:UpdateCVars()
+
+	local ElvNP_Test = CreateFrame("Frame", "ElvNP_Test")
+	ElvNP_Test:Point("BOTTOM", UIParent, "BOTTOM", 0, 250)
+
+	local ElvNP_Test_Health = CreateFrame("StatusBar", nil, ElvNP_Test)
+	ElvNP_Test_Health:SetMinMaxValues(0, 2)
+	ElvNP_Test_Health:SetValue(1)
+
+	CreateFrame("StatusBar", nil, ElvNP_Test)
+
+	for i = 1, 11 do
+		if i == 7 or i == 8 then
+			local text = ElvNP_Test:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+			if i == 7 then
+				text:SetText(E.myname)
+			else
+				text:SetText(E.mylevel)
+			end
+		else
+			ElvNP_Test:CreateTexture()
+		end
+	end
+
+	NP:OnCreated(ElvNP_Test)
+	ElvNP_Test:Hide()
 
 	self.Frame = CreateFrame("Frame"):SetScript("OnUpdate", self.OnUpdate)
 
