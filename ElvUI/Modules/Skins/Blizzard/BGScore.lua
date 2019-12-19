@@ -12,22 +12,17 @@ local RAID_CLASS_COLORS = RAID_CLASS_COLORS
 local function LoadSkin()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.bgscore then return end
 
+	WorldStateScoreFrame:StripTextures()
 	WorldStateScoreFrame:CreateBackdrop("Transparent")
 	WorldStateScoreFrame.backdrop:Point("TOPLEFT", 10, -15)
 	WorldStateScoreFrame.backdrop:Point("BOTTOMRIGHT", -113, 67)
 
-	WorldStateScoreFrame:StripTextures()
+	WorldStateScoreFrame:EnableMouse(true)
+
+	S:HandleCloseButton(WorldStateScoreFrameCloseButton, WorldStateScoreFrame.backdrop)
 
 	WorldStateScoreScrollFrame:StripTextures()
 	S:HandleScrollBar(WorldStateScoreScrollFrameScrollBar)
-
-	for i = 1, 3 do
-		S:HandleTab(_G["WorldStateScoreFrameTab"..i])
-		_G["WorldStateScoreFrameTab"..i.."Text"]:Point("CENTER", 0, 2)
-	end
-
-	S:HandleButton(WorldStateScoreFrameLeaveButton)
-	S:HandleCloseButton(WorldStateScoreFrameCloseButton)
 
 	WorldStateScoreFrameKB:StyleButton()
 	WorldStateScoreFrameDeaths:StyleButton()
@@ -39,6 +34,19 @@ local function LoadSkin()
 	WorldStateScoreFrameClass:StyleButton()
 	WorldStateScoreFrameTeam:StyleButton()
 --	WorldStateScoreFrameRatingChange:StyleButton()
+
+	S:HandleButton(WorldStateScoreFrameLeaveButton)
+
+	for i = 1, 3 do
+		S:HandleTab(_G["WorldStateScoreFrameTab"..i])
+		_G["WorldStateScoreFrameTab"..i.."Text"]:Point("CENTER", 0, 2)
+	end
+
+	WorldStateScoreFrameTab2:Point("LEFT", WorldStateScoreFrameTab1, "RIGHT", -15, 0)
+	WorldStateScoreFrameTab3:Point("LEFT", WorldStateScoreFrameTab2, "RIGHT", -15, 0)
+
+	WorldStateScoreScrollFrameScrollBar:Point("TOPLEFT", WorldStateScoreScrollFrame, "TOPRIGHT", 9, -20)
+	WorldStateScoreScrollFrameScrollBar:Point("BOTTOMLEFT", WorldStateScoreScrollFrame, "BOTTOMRIGHT", 9, 37)
 
 	for i = 1, 5 do
 		_G["WorldStateScoreColumn"..i]:StyleButton()
