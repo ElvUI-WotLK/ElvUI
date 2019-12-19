@@ -41,13 +41,7 @@ local function LoadSkin(preSkin)
 
 		if achievement.description then
 			achievement.description:SetTextColor(.6, .6, .6)
-
-			hooksecurefunc(achievement.description, "SetTextColor", function(self)
-				if self._blocked then return end
-				self._blocked = true
-				self:SetTextColor(.6, .6, .6)
-				self._blocked = nil
-			end)
+			achievement.description.SetTextColor = E.noop
 		end
 
 		if achievement.hiddenDescription then
@@ -106,9 +100,8 @@ local function LoadSkin(preSkin)
 
 	local frames = {
 		"AchievementFrame",
-		"AchievementFrameCategories",
+	--	"AchievementFrameCategories",
 		"AchievementFrameSummary",
-		"AchievementFrameHeader",
 		"AchievementFrameSummaryCategoriesHeader",
 		"AchievementFrameSummaryAchievementsHeader",
 		"AchievementFrameStatsBG",
@@ -140,10 +133,17 @@ local function LoadSkin(preSkin)
 		end
 	end
 
-	local AchievementFrame = AchievementFrame
+	local function updatePanelInfo(self)
+		if self == AchievementFrameComparison then
+			if AchievementFrame.isComparison then
+				AchievementFrame:Width(863)
+			else
+				AchievementFrame:Width(737)
+			end
+		end
 
-	local function updatePanelInfo()
-		S:SetUIPanelWindowInfo(AchievementFrame, "xoffset", 11)
+		S:SetUIPanelWindowInfo(AchievementFrame, "xoffset", 11, nil, true)
+		S:SetUIPanelWindowInfo(AchievementFrame, "yoffset", -12, nil, true)
 		S:SetUIPanelWindowInfo(AchievementFrame, "width", nil, -11)
 	end
 
@@ -151,31 +151,9 @@ local function LoadSkin(preSkin)
 	AchievementFrameComparison:HookScript("OnShow", updatePanelInfo)
 	AchievementFrameComparison:HookScript("OnHide", updatePanelInfo)
 
-	AchievementFrameHeader:SetSize(450, 39)
-
-	AchievementFrameHeaderShield:SetParent(AchievementFrameHeader)
-	AchievementFrameHeaderShield.Show = nil
-	AchievementFrameHeaderShield:Show()
-	AchievementFrameHeaderShield:SetTexture("Interface\\AchievementFrame\\UI-Achievement-TinyShield")
-
-	AchievementFrame:CreateBackdrop("Transparent")
-	AchievementFrame.backdrop:Point("TOPLEFT", 0, 6)
-	AchievementFrame.backdrop:Point("BOTTOMRIGHT")
-	AchievementFrameHeaderTitle:ClearAllPoints()
-	AchievementFrameHeaderTitle:Point("TOPLEFT", AchievementFrame.backdrop, "TOPLEFT", -30, -8)
-	AchievementFrameHeaderPoints:ClearAllPoints()
-	AchievementFrameHeaderPoints:Point("LEFT", AchievementFrameHeaderTitle, "RIGHT", 2, 0)
-
-	AchievementFrameCategoriesContainer:CreateBackdrop("Default")
-	AchievementFrameCategoriesContainer.backdrop:Point("TOPLEFT", 0, 4)
-	AchievementFrameCategoriesContainer.backdrop:Point("BOTTOMRIGHT", -2, -3)
-	AchievementFrameAchievementsContainer:CreateBackdrop("Transparent")
-	AchievementFrameAchievementsContainer.backdrop:Point("TOPLEFT", -2, 2)
-	AchievementFrameAchievementsContainer.backdrop:Point("BOTTOMRIGHT", -2, -3)
-
 	S:HandleCloseButton(AchievementFrameCloseButton, AchievementFrame.backdrop)
+
 	S:HandleDropDownBox(AchievementFrameFilterDropDown)
-	AchievementFrameFilterDropDown:Point("TOPRIGHT", AchievementFrame, "TOPRIGHT", -44, 5)
 
 	S:HandleScrollBar(AchievementFrameCategoriesContainerScrollBar, 5)
 	S:HandleScrollBar(AchievementFrameAchievementsContainerScrollBar, 5)
@@ -183,9 +161,187 @@ local function LoadSkin(preSkin)
 	S:HandleScrollBar(AchievementFrameComparisonContainerScrollBar, 5)
 	S:HandleScrollBar(AchievementFrameComparisonStatsContainerScrollBar, 5)
 
-	for i = 1, 2 do
-		S:HandleTab(_G["AchievementFrameTab"..i])
+	AchievementFrameHeaderTitle:SetParent(AchievementFrame)
+	AchievementFrameHeaderTitle:ClearAllPoints()
+	AchievementFrameHeaderTitle:Point("TOPLEFT", AchievementFrame, "TOPLEFT", -29, -9)
+
+	AchievementFrameHeaderPoints:SetParent(AchievementFrame)
+	AchievementFrameHeaderPoints:ClearAllPoints()
+	AchievementFrameHeaderPoints:Point("LEFT", AchievementFrameHeaderTitle, "RIGHT", 2, 0)
+
+	AchievementFrameHeaderShield:SetParent(AchievementFrame)
+
+	AchievementFrameHeader:Hide()
+	AchievementFrameHeader.Show = E.noop
+
+	AchievementFrame:Size(737, 485)
+	AchievementFrame:SetTemplate("Transparent")
+
+	AchievementFrameFilterDropDown:Point("TOPRIGHT", AchievementFrame, "TOPRIGHT", -21, -5)
+
+	AchievementFrameCategories:SetTemplate("Default")
+	AchievementFrameCategories:Point("TOPLEFT", 8, -35)
+	AchievementFrameCategories:Point("BOTTOMLEFT", 21, 8)
+
+	AchievementFrameCategoriesContainerScrollBar:Point("TOPLEFT", AchievementFrameCategoriesContainer, "TOPRIGHT", 2, -11)
+	AchievementFrameCategoriesContainerScrollBar:Point("BOTTOMLEFT", AchievementFrameCategoriesContainer, "BOTTOMRIGHT", 2, 11)
+
+	AchievementFrameSummaryAchievements:Point("TOPLEFT", 5, -10)
+	AchievementFrameSummaryAchievements:Point("TOPRIGHT", -5, -30)
+
+	AchievementFrameAchievements:SetTemplate("Transparent")
+
+	AchievementFrameAchievementsContainer:Point("TOPLEFT", 2, -2)
+	AchievementFrameAchievementsContainer:Point("BOTTOMRIGHT", -2, 4)
+
+	AchievementFrameAchievementsContainerScrollBar:Point("TOPLEFT", AchievementFrameAchievementsContainer, "TOPRIGHT", 4, -14)
+	AchievementFrameAchievementsContainerScrollBar:Point("BOTTOMLEFT", AchievementFrameAchievementsContainer, "BOTTOMRIGHT", 4, 12)
+
+	AchievementFrameStats:SetTemplate("Transparent")
+
+	AchievementFrameStatsContainerScrollBar:Point("TOPLEFT", AchievementFrameStatsContainer, "TOPRIGHT", 2, -13)
+	AchievementFrameStatsContainerScrollBar:Point("BOTTOMLEFT", AchievementFrameStatsContainer, "BOTTOMRIGHT", 2, 11)
+
+	AchievementFrameComparison:SetTemplate("Transparent")
+
+	AchievementFrameComparisonHeader:Point("BOTTOMRIGHT", AchievementFrameComparison, "TOPRIGHT", 50, -1)
+
+	AchievementFrameComparison:Point("TOPLEFT", AchievementFrameCategories, "TOPRIGHT", 3, 0)
+
+	AchievementFrameComparisonSummary:Height(30)
+	AchievementFrameComparisonSummary:Point("TOPLEFT", 4, -2)
+
+	AchievementFrameComparisonContainer:Point("TOPLEFT", AchievementFrameComparisonSummary, "BOTTOMLEFT", 0, -3)
+
+	AchievementFrameComparisonContainerScrollBar:Point("TOPLEFT", AchievementFrameComparisonSummary, "TOPRIGHT", 8, -14)
+	AchievementFrameComparisonContainerScrollBar:Point("BOTTOMLEFT", AchievementFrameComparisonContainer, "BOTTOMRIGHT", 8, 11)
+
+	AchievementFrameComparisonStatsContainer:Point("TOPLEFT", 5, -3)
+
+	AchievementFrameComparisonStatsContainerScrollBar:Point("TOPLEFT", AchievementFrameComparisonStatsContainer, "TOPRIGHT", 2, -13)
+	AchievementFrameComparisonStatsContainerScrollBar:Point("BOTTOMLEFT", AchievementFrameComparisonStatsContainer, "BOTTOMRIGHT", 2, 11)
+
+	AchievementFrameAchievementsContainerScrollBar.Show = function(self)
+		AchievementFrameAchievements:SetWidth(500)
+		for _, button in ipairs(AchievementFrameAchievements.buttons) do
+			button:SetWidth(496)
+		end
+		getmetatable(self).__index.Show(self)
 	end
+
+	AchievementFrameAchievementsContainerScrollBar.Hide = function(self)
+		AchievementFrameAchievements:SetWidth(521)
+		for _, button in ipairs(AchievementFrameAchievements.buttons) do
+			button:SetWidth(517)
+		end
+		getmetatable(self).__index.Hide(self)
+	end
+
+	AchievementFrameStatsContainerScrollBar.Show = function(self)
+		AchievementFrameStats:SetWidth(500)
+		for _, button in ipairs(AchievementFrameStats.buttons) do
+			button:SetWidth(494)
+		end
+		getmetatable(self).__index.Show(self)
+	end
+
+	AchievementFrameStatsContainerScrollBar.Hide = function(self)
+		AchievementFrameStats:SetWidth(521)
+		for _, button in ipairs(AchievementFrameStats.buttons) do
+			button:SetWidth(515)
+		end
+		getmetatable(self).__index.Hide(self)
+	end
+
+--[[
+	AchievementFrameComparisonContainerScrollBar.Show = function(self)
+		AchievementFrameComparison:SetWidth(626)
+		AchievementFrameComparisonSummaryPlayer:SetWidth(498)
+		for _, button in ipairs(AchievementFrameComparisonContainer.buttons) do
+			button:SetWidth(616)
+			button.player:SetWidth(498)
+		end
+		getmetatable(self).__index.Show(self)
+	end
+]]
+
+	AchievementFrameComparisonContainerScrollBar.Hide = function(self)
+		AchievementFrameComparison:SetWidth(647)
+		AchievementFrameComparisonSummaryPlayer:SetWidth(519)
+		for _, button in ipairs(AchievementFrameComparisonContainer.buttons) do
+			button:SetWidth(637)
+			button.player:SetWidth(519)
+		end
+		getmetatable(self).__index.Hide(self)
+	end
+
+--[[
+	AchievementFrameComparisonStatsContainerScrollBar.Show = function(self)
+		AchievementFrameComparison:SetWidth(626)
+		for _, button in ipairs(AchievementFrameComparisonStatsContainer.buttons) do
+			button:SetWidth(616)
+		end
+		getmetatable(self).__index.Show(self)
+	end
+]]
+
+	AchievementFrameComparisonStatsContainerScrollBar.Hide = function(self)
+		AchievementFrameComparison:SetWidth(647)
+		for _, button in ipairs(AchievementFrameComparisonStatsContainer.buttons) do
+			button:SetWidth(637)
+		end
+		getmetatable(self).__index.Hide(self)
+	end
+
+	local function categoriesContainerScripts()
+		AchievementFrameCategoriesContainerScrollBar.Show = function(self)
+			ACHIEVEMENTUI_CATEGORIESWIDTH = 176
+
+			AchievementFrameCategories:SetWidth(176)
+			AchievementFrameCategoriesContainer:GetScrollChild():SetWidth(176)
+
+			AchievementFrameAchievements:SetPoint("TOPLEFT", "$parentCategories", "TOPRIGHT", 24, 0)
+			AchievementFrameStats:SetPoint("TOPLEFT", "$parentCategories", "TOPRIGHT", 24, 0)
+			AchievementFrameComparison:SetPoint("TOPLEFT", "$parentCategories", "TOPRIGHT", 24, 0)
+
+			for _, button in ipairs(AchievementFrameCategoriesContainer.buttons) do
+				AchievementFrameCategories_DisplayButton(button, button.element)
+			end
+			getmetatable(self).__index.Show(self)
+		end
+
+		AchievementFrameCategoriesContainerScrollBar.Hide = function(self)
+			ACHIEVEMENTUI_CATEGORIESWIDTH = 197
+
+			AchievementFrameCategories:SetWidth(197)
+			AchievementFrameCategoriesContainer:GetScrollChild():SetWidth(197)
+
+			AchievementFrameAchievements:SetPoint("TOPLEFT", "$parentCategories", "TOPRIGHT", 3, 0)
+			AchievementFrameStats:SetPoint("TOPLEFT", "$parentCategories", "TOPRIGHT", 3, 0)
+			AchievementFrameComparison:SetPoint("TOPLEFT", "$parentCategories", "TOPRIGHT", 3, 0)
+
+			for _, button in ipairs(AchievementFrameCategoriesContainer.buttons) do
+				AchievementFrameCategories_DisplayButton(button, button.element)
+			end
+			getmetatable(self).__index.Hide(self)
+		end
+	end
+
+	if AchievementFrameCategoriesContainer.update then
+		categoriesContainerScripts()
+	else
+		AchievementFrameCategories:HookScript("OnEvent", categoriesContainerScripts)
+	end
+
+	for i = 1, 2 do
+		local tab = _G["AchievementFrameTab"..i]
+		S:HandleTab(tab)
+		tab.text:SetPoint("CENTER", 0, 2)
+		tab.text.SetPoint = E.noop
+	end
+
+	AchievementFrameTab1:Point("BOTTOMLEFT", AchievementFrame, "BOTTOMLEFT", 0, -30)
+	AchievementFrameTab2:Point("LEFT", AchievementFrameTab1, "RIGHT", -15, 0)
 
 	local sbcR, sbcG, sbcB = 4/255, 179/255, 30/255
 
@@ -219,7 +375,6 @@ local function LoadSkin(preSkin)
 	skinStatusBar(AchievementFrameComparisonSummaryFriendStatusBar)
 	AchievementFrameComparisonSummaryFriendStatusBar.text:ClearAllPoints()
 	AchievementFrameComparisonSummaryFriendStatusBar.text:Point("CENTER")
-	AchievementFrameComparisonHeader:Point("BOTTOMRIGHT", AchievementFrameComparison, "TOPRIGHT", 45, -20)
 
 	for i = 1, 8 do
 		local frame = _G["AchievementFrameSummaryCategoriesCategory"..i]
@@ -233,6 +388,22 @@ local function LoadSkin(preSkin)
 
 		middle:SetTexture(1, 1, 1, 0.3)
 		middle:SetAllPoints(frame)
+	end
+
+	for i = 1, 20 do
+		_G["AchievementFrameStatsContainerButton"..i]:StyleButton()
+		_G["AchievementFrameStatsContainerButton"..i.."BG"]:SetTexture(1, 1, 1, 0.2)
+		_G["AchievementFrameStatsContainerButton"..i.."HeaderLeft"]:Kill()
+		_G["AchievementFrameStatsContainerButton"..i.."HeaderRight"]:Kill()
+		_G["AchievementFrameStatsContainerButton"..i.."HeaderMiddle"]:Kill()
+
+		local frame = _G["AchievementFrameComparisonStatsContainerButton"..i]
+		frame:StripTextures()
+		frame:StyleButton()
+		_G["AchievementFrameComparisonStatsContainerButton"..i.."BG"]:SetTexture(1, 1, 1, 0.2)
+		_G["AchievementFrameComparisonStatsContainerButton"..i.."HeaderLeft"]:Kill()
+		_G["AchievementFrameComparisonStatsContainerButton"..i.."HeaderRight"]:Kill()
+		_G["AchievementFrameComparisonStatsContainerButton"..i.."HeaderMiddle"]:Kill()
 	end
 
 	hooksecurefunc("AchievementFrameSummary_UpdateAchievements", function()
@@ -253,22 +424,6 @@ local function LoadSkin(preSkin)
 			frame:SetBackdropBorderColor(unpack(E.media.bordercolor))
 		end
 	end)
-
-	for i = 1, 20 do
-		_G["AchievementFrameStatsContainerButton"..i]:StyleButton()
-		_G["AchievementFrameStatsContainerButton"..i.."BG"]:SetTexture(1, 1, 1, 0.2)
-		_G["AchievementFrameStatsContainerButton"..i.."HeaderLeft"]:Kill()
-		_G["AchievementFrameStatsContainerButton"..i.."HeaderRight"]:Kill()
-		_G["AchievementFrameStatsContainerButton"..i.."HeaderMiddle"]:Kill()
-
-		local frame = _G["AchievementFrameComparisonStatsContainerButton"..i]
-		frame:StripTextures()
-		frame:StyleButton()
-		_G["AchievementFrameComparisonStatsContainerButton"..i.."BG"]:SetTexture(1, 1, 1, 0.2)
-		_G["AchievementFrameComparisonStatsContainerButton"..i.."HeaderLeft"]:Kill()
-		_G["AchievementFrameComparisonStatsContainerButton"..i.."HeaderRight"]:Kill()
-		_G["AchievementFrameComparisonStatsContainerButton"..i.."HeaderMiddle"]:Kill()
-	end
 
 	hooksecurefunc("AchievementButton_GetProgressBar", function(index)
 		local frame = _G["AchievementFrameProgressBar"..index]
