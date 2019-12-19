@@ -122,8 +122,6 @@ local function LoadSkin()
 	local pfButtonSubFrames = {"HealthBar", "ManaBar", "Target", "TargetTarget"}
 
 	hooksecurefunc("RaidPullout_Update", function(pullOutFrame)
-		local inCombat = InCombatLockdown()
-
 		for _, pfButton in ipairs(pullOutFrame.buttons) do
 			if not pfButton.backdrop then
 				local pfBName = pfButton:GetName()
