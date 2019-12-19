@@ -426,11 +426,7 @@ function S:Ace3_RegisterAsContainer(widget)
 				tab.backdrop:Point("TOPLEFT", 10, -3)
 				tab.backdrop:Point("BOTTOMRIGHT", -10, 0)
 
-				hooksecurefunc(tab, "SetPoint", function(fr, a, b, c, d, e, f)
-					if f ~= "ignore" and a == "TOPLEFT" then
-						fr:SetPoint(a, b, c, d, e + 2, "ignore")
-					end
-				end)
+				tab:SetHitRectInsets(10, 10, 3, 0)
 
 				return tab
 			end
