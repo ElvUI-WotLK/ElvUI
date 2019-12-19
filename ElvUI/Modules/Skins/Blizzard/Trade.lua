@@ -83,9 +83,6 @@ local function LoadSkin()
 	TradeHighlightRecipientEnchantBottom:SetTexture(0, 1, 0, 0.2)
 	TradeHighlightRecipientEnchantMiddle:SetTexture(0, 1, 0, 0.2)
 
-	TradeHighlightPlayer:Point("TOPLEFT", 23, -100)
-	TradeHighlightRecipient:Point("TOPLEFT", 192, -100)
-
 	TradeHighlightPlayer:SetFrameStrata("HIGH")
 	TradeHighlightRecipient:SetFrameStrata("HIGH")
 	TradeHighlightPlayerEnchant:SetFrameStrata("HIGH")
@@ -130,6 +127,21 @@ local function LoadSkin()
 			tradeItemButton:SetBackdropBorderColor(unpack(E.media.bordercolor))
 		end
 	end)
+
+	TradePlayerInputMoneyFrame:Point("TOPLEFT", 26, -53)
+	TradeRecipientMoneyFrame:Point("TOPRIGHT", -40, -58)
+
+	TradePlayerItem1:Point("TOPLEFT", 23, -94)
+	TradeRecipientItem1:Point("TOPLEFT", 196, -94)
+
+	TradeHighlightPlayer:Height(263)
+	TradeHighlightRecipient:Height(263)
+	TradeHighlightPlayer:Point("TOPLEFT", 20, -91)
+	TradeHighlightRecipient:Point("TOPLEFT", 193, -91)
+
+	TradeFramePlayerEnchantText:Point("TOPLEFT", 26, -364)
+
+	TradeFrameTradeButton:Point("BOTTOMRIGHT", -113, 61)
 end
 
 S:AddCallback("Skin_Trade", LoadSkin)

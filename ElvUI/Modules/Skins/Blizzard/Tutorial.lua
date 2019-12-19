@@ -7,18 +7,14 @@ local S = E:GetModule("Skins")
 local function LoadSkin()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.tutorial then return end
 
-	local TutorialFrameAlertButton = TutorialFrameAlertButton
-	local TutorialFrameAlertButtonIcon = TutorialFrameAlertButton:GetNormalTexture()
-
 	TutorialFrameAlertButton:StripTextures()
 	TutorialFrameAlertButton:CreateBackdrop("Default", true)
-	TutorialFrameAlertButton:SetWidth(50)
-	TutorialFrameAlertButton:SetHeight(50)
+	TutorialFrameAlertButton:Size(50)
 
+	local TutorialFrameAlertButtonIcon = TutorialFrameAlertButton:GetNormalTexture()
 	TutorialFrameAlertButtonIcon:SetTexture("INTERFACE\\ICONS\\INV_Letter_18")
-	TutorialFrameAlertButtonIcon:ClearAllPoints()
-	TutorialFrameAlertButtonIcon:SetPoint("TOPLEFT", TutorialFrameAlertButton, "TOPLEFT", 5, -5)
-	TutorialFrameAlertButtonIcon:SetPoint("BOTTOMRIGHT", TutorialFrameAlertButton, "BOTTOMRIGHT", -5, 5)
+	TutorialFrameAlertButtonIcon:Point("TOPLEFT", 5, -5)
+	TutorialFrameAlertButtonIcon:Point("BOTTOMRIGHT", -5, 5)
 	TutorialFrameAlertButtonIcon:SetTexCoord(unpack(E.TexCoords))
 
 	TutorialFrameBackground:Hide()
