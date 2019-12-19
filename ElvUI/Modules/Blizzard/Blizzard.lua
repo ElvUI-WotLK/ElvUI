@@ -39,6 +39,10 @@ function B:Initialize()
 	self:RegisterEvent("ADDON_LOADED")
 	self:RegisterEvent("ZONE_CHANGED_NEW_AREA", SetMapToCurrentZone)
 
+	KBArticle_BeginLoading = E.noop
+	KBSetup_BeginLoading = E.noop
+	KnowledgeBaseFrame_OnEvent(nil, "KNOWLEDGE_BASE_SETUP_LOAD_FAILURE")
+
 	if GetLocale() == "deDE" then
 		DAY_ONELETTER_ABBR = "%d d"
 		MINUTE_ONELETTER_ABBR = "%d m"
