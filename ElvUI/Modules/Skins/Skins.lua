@@ -80,25 +80,22 @@ function S:HandleButton(button, strip, isDeclineButton, useCreateBackdrop, noSet
 end
 
 function S:HandleButtonHighlight(frame, r, g, b)
-	if frame.SetHighlightTexture then
-		frame:SetHighlightTexture("")
-	end
-
 	if not r then r = 0.9 end
 	if not g then g = 0.9 end
 	if not b then b = 0.9 end
 
-	local leftGrad = frame:CreateTexture(nil, "HIGHLIGHT")
-	leftGrad:Size(frame:GetWidth() * 0.5, frame:GetHeight() * 0.95)
-	leftGrad:Point("LEFT", frame, "CENTER")
-	leftGrad:SetTexture(E.media.blankTex)
-	leftGrad:SetGradientAlpha("Horizontal", r, g, b, 0.35, r, g, b, 0)
+	if frame.SetHighlightTexture then
+		frame:SetHighlightTexture(E.Media.Textures.Highlight)
+		frame:GetHighlightTexture():SetVertexColor(r, g, b, 0.35)
+		return
+	elseif not frame.HighlightTexture then
+		local highlightTexture = frame:CreateTexture(nil, "HIGHLIGHT")
+		highlightTexture:SetAllPoints(frame)
+		frame.HighlightTexture = highlightTexture
+	end
 
-	local rightGrad = frame:CreateTexture(nil, "HIGHLIGHT")
-	rightGrad:Size(frame:GetWidth() * 0.5, frame:GetHeight() * 0.95)
-	rightGrad:Point("RIGHT", frame, "CENTER")
-	rightGrad:SetTexture(E.media.blankTex)
-	rightGrad:SetGradientAlpha("Horizontal", r, g, b, 0, r, g, b, 0.35)
+	frame.HighlightTexture:SetTexture(E.Media.Textures.Highlight)
+	frame.HighlightTexture:SetVertexColor(r, g, b, 0.35)
 end
 
 local function GrabScrollBarElement(frame, element)
@@ -496,7 +493,7 @@ function S:HandleIconSelectionFrame(frame, numIcons, buttonNameTemplate, frameNa
 
 	frame:CreateBackdrop("Transparent")
 	frame.backdrop:Point("TOPLEFT", frame, "TOPLEFT", 10, -12)
-	frame.backdrop:Point("BOTTOMRIGHT", cancelButton, "BOTTOMRIGHT", 5, -5)
+	frame.backdrop:Point("BOTTOMRIGHT", cancelButton, "BOTTOMRIGHT", 8, -8)
 
 	S:HandleButton(okayButton)
 	S:HandleButton(cancelButton)
