@@ -374,15 +374,12 @@ function NP:OnHide(isConfig, dontHideHighlight)
 	frame.unit = nil
 	frame.isGroupUnit = nil
 
-	if frame.Buffs.visibleBuffs then
-		for i = 1, frame.Buffs.visibleBuffs do
-			frame.Buffs[i]:Hide()
-		end
+	for i = 1, #frame.Buffs do
+		frame.Buffs[i]:Hide()
 	end
-	if frame.Debuffs.visibleDeuffs then
-		for i = 1, frame.Debuffs.visibleDeuffs do
-			frame.Debuffs[i]:Hide()
-		end
+
+	for i = 1, #frame.Debuffs do
+		frame.Debuffs[i]:Hide()
 	end
 
 	if isConfig then
@@ -1072,8 +1069,10 @@ function NP:TogleTestFrame(unitType)
 		unitFrame.oldHealthBar:SetMinMaxValues(0, maxHealth)
 		unitFrame.oldHealthBar:SetValue(random(1, maxHealth))
 
-		unitFrame.oldName:SetText(E.myname)
+		unitFrame.oldName:SetText(L[unitType])
 		unitFrame.oldLevel:SetText(E.mylevel)
+		unitFrame.Buffs.forceShow = true
+		unitFrame.Debuffs.forceShow = true
 
 		ElvNP_Test:Show()
 		NP:ConfigureAll()
