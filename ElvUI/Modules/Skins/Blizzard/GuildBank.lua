@@ -20,6 +20,7 @@ local function LoadSkin()
 
 	S:HookScript(GuildBankFrame, "OnShow", function(self)
 		S:SetUIPanelWindowInfo(self, "width", nil, 35)
+		S:SetBackdropHitRect(self)
 		S:Unhook(self, "OnShow")
 	end)
 
@@ -161,6 +162,7 @@ local function LoadSkin()
 
 	-- Popup
 	S:HandleIconSelectionFrame(GuildBankPopupFrame, NUM_GUILDBANK_ICONS_SHOWN, "GuildBankPopupButton", "GuildBankPopup")
+	S:SetBackdropHitRect(GuildBankPopupFrame)
 
 	S:HandleScrollBar(GuildBankPopupScrollFrameScrollBar)
 

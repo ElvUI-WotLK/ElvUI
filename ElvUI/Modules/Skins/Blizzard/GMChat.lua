@@ -89,6 +89,7 @@ local function LoadSurveySkin()
 	GMSurveyFrame.backdrop:Point("BOTTOMRIGHT", -49, 10)
 
 	GMSurveyFrame:EnableMouse(true)
+	S:SetBackdropHitRect(GMSurveyFrame)
 
 	GMSurveyHeader:StripTextures()
 	S:HandleCloseButton(GMSurveyCloseButton, GMSurveyFrame.backdrop)

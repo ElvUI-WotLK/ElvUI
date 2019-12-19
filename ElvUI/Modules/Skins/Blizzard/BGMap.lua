@@ -16,6 +16,8 @@ local function LoadSkin()
 	BattlefieldMinimap:CreateBackdrop("Default")
 	BattlefieldMinimap.backdrop:Point("BOTTOMRIGHT", E.Border - E:Scale(6), -(E.Border - E:Scale(4)))
 
+	S:SetBackdropHitRect(BattlefieldMinimap, nil, true)
+
 	S:HandleCloseButton(BattlefieldMinimapCloseButton, BattlefieldMinimap.backdrop)
 	BattlefieldMinimapCloseButton:SetFrameLevel(BattlefieldMinimap:GetFrameLevel() + 5)
 

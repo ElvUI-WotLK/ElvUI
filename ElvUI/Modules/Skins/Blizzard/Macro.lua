@@ -15,6 +15,7 @@ local function LoadSkin()
 	MacroFrame.backdrop:Point("BOTTOMRIGHT", -32, 61)
 
 	S:SetUIPanelWindowInfo(MacroFrame, "width")
+	S:SetBackdropHitRect(MacroFrame)
 
 	S:HandleCloseButton(MacroFrameCloseButton, MacroFrame.backdrop)
 
@@ -101,6 +102,7 @@ local function LoadSkin()
 	MacroNewButton:Point("CENTER", MacroFrame, "TOPLEFT", 221, -432)
 
 	-- Popup frame
+	S:SetBackdropHitRect(MacroPopupFrame)
 	MacroPopupFrame:Point("TOPLEFT", MacroFrame, "TOPRIGHT", -43, 0)
 
 	MacroPopupScrollFrame:SetTemplate("Transparent")

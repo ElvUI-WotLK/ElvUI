@@ -32,6 +32,7 @@ local function LoadSkin()
 	TradeSkillFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
 	S:SetUIPanelWindowInfo(TradeSkillFrame, "width")
+	S:SetBackdropHitRect(TradeSkillFrame)
 
 	S:HandleCloseButton(TradeSkillFrameCloseButton, TradeSkillFrame.backdrop)
 

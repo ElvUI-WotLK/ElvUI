@@ -14,6 +14,8 @@ local function LoadSkin()
 	PlayerTalentFrame.backdrop:Point("TOPLEFT", 11, -12)
 	PlayerTalentFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
+	S:SetBackdropHitRect(PlayerTalentFrame)
+
 	do
 		local offset
 

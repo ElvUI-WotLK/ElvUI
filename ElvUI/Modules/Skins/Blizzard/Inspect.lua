@@ -19,6 +19,10 @@ local function LoadSkin()
 
 	S:SetUIPanelWindowInfo(InspectFrame, "width")
 
+	S:SetBackdropHitRect(InspectFrame)
+	S:SetBackdropHitRect(InspectPVPFrame, InspectFrame.backdrop)
+	S:SetBackdropHitRect(InspectTalentFrame, InspectFrame.backdrop)
+
 	InspectPVPFrameHonor:SetHitRectInsets(0, 120, 0, 0)
 	InspectPVPFrameArena:SetHitRectInsets(0, 120, 0, 0)
 
@@ -105,6 +109,7 @@ local function LoadSkin()
 		frame.backdrop:Point("TOPLEFT", 9, -6)
 		frame.backdrop:Point("BOTTOMRIGHT", -24, -5)
 	--	_G["InspectPVPTeam"..i.."StandardBar"]:Kill()
+		S:SetBackdropHitRect(frame)
 	end
 
 	InspectTalentFrame:StripTextures()

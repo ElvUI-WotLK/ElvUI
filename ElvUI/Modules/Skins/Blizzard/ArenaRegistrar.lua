@@ -15,6 +15,7 @@ local function LoadSkin()
 	ArenaRegistrarFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
 	S:SetUIPanelWindowInfo(ArenaRegistrarFrame, "width")
+	S:SetBackdropHitRect(ArenaRegistrarFrame)
 
 	S:HandleCloseButton(ArenaRegistrarFrameCloseButton, ArenaRegistrarFrame.backdrop)
 
@@ -50,6 +51,7 @@ local function LoadSkin()
 	PVPBannerFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
 	S:SetUIPanelWindowInfo(PVPBannerFrame, "width")
+	S:SetBackdropHitRect(PVPBannerFrame)
 
 	S:HandleCloseButton(PVPBannerFrameCloseButton, PVPBannerFrame.backdrop)
 

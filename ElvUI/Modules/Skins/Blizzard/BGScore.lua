@@ -18,6 +18,7 @@ local function LoadSkin()
 	WorldStateScoreFrame.backdrop:Point("BOTTOMRIGHT", -113, 67)
 
 	WorldStateScoreFrame:EnableMouse(true)
+	S:SetBackdropHitRect(WorldStateScoreFrame)
 
 	S:HandleCloseButton(WorldStateScoreFrameCloseButton, WorldStateScoreFrame.backdrop)
 

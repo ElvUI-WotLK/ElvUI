@@ -17,6 +17,7 @@ local function LoadSkin()
 	ClassTrainerFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
 	S:SetUIPanelWindowInfo(ClassTrainerFrame, "width")
+	S:SetBackdropHitRect(ClassTrainerFrame)
 
 	S:HandleCloseButton(ClassTrainerFrameCloseButton, ClassTrainerFrame.backdrop)
 

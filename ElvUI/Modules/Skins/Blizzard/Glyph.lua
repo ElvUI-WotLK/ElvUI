@@ -19,6 +19,11 @@ local function LoadSkin()
 	GlyphFrameBackground:Point("TOPLEFT", 20, -59)
 	GlyphFrameBackground:CreateBackdrop()
 
+	S:HookScript(GlyphFrame, "OnShow", function(self)
+		S:SetBackdropHitRect(self, PlayerTalentFrame.backdrop)
+		S:Unhook(self, "OnShow")
+	end)
+
 	GlyphFrameBackground:SetTexture("Interface\\Spellbook\\UI-GlyphFrame")
 	GlyphFrameGlow:SetTexture("Interface\\Spellbook\\UI-GlyphFrame-Glow")
 	GlyphFrameGlow:SetParent(GlyphFrameBackground.backdrop)

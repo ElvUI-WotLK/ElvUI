@@ -23,6 +23,8 @@ local function LoadSkin()
 		tab.backdrop:Point("TOPLEFT", 10, E.PixelMode and -4 or -6)
 		tab.backdrop:Point("BOTTOMRIGHT", -10, 1)
 
+		S:SetBackdropHitRect(tab)
+
 		if i == 1 then
 			tab:Point("BOTTOMLEFT", InterfaceOptionsFrameCategories, "TOPLEFT", -11, -2)
 		end

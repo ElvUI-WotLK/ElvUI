@@ -14,6 +14,7 @@ local function LoadSkin()
 	TaxiFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
 	S:SetUIPanelWindowInfo(TaxiFrame, "width")
+	S:SetBackdropHitRect(TaxiFrame)
 
 	TaxiPortrait:Kill()
 

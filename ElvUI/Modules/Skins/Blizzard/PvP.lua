@@ -14,6 +14,9 @@ local function LoadSkin()
 	PVPParentFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
 	S:SetUIPanelWindowInfo(PVPParentFrame, "width")
+	S:SetBackdropHitRect(PVPParentFrame)
+	S:SetBackdropHitRect(PVPFrame, PVPParentFrame.backdrop)
+	S:SetBackdropHitRect(PVPBattlegroundFrame, PVPParentFrame.backdrop)
 
 	S:HandleCloseButton(PVPParentFrameCloseButton, PVPParentFrame.backdrop)
 
@@ -28,6 +31,7 @@ local function LoadSkin()
 		pvpTeam:CreateBackdrop("Default")
 		pvpTeam.backdrop:Point("TOPLEFT", 9, -4)
 		pvpTeam.backdrop:Point("BOTTOMRIGHT", -24, 3)
+		S:SetBackdropHitRect(pvpTeam)
 
 		pvpTeam:HookScript("OnEnter", S.SetModifiedBackdrop)
 		pvpTeam:HookScript("OnLeave", S.SetOriginalBackdrop)
@@ -113,6 +117,7 @@ local function LoadSkin()
 	BattlefieldFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
 	S:SetUIPanelWindowInfo(BattlefieldFrame, "width")
+	S:SetBackdropHitRect(BattlefieldFrame)
 
 	S:HandleCloseButton(BattlefieldFrameCloseButton, BattlefieldFrame.backdrop)
 

@@ -13,6 +13,7 @@ local function LoadSkin()
 	GuildRegistrarFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
 	S:SetUIPanelWindowInfo(GuildRegistrarFrame, "width")
+	S:SetBackdropHitRect(GuildRegistrarFrame)
 
 	S:HandleCloseButton(GuildRegistrarFrameCloseButton, GuildRegistrarFrame.backdrop)
 

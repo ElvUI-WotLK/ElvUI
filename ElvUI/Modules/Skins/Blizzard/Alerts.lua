@@ -23,6 +23,8 @@ local function LoadSkin()
 			frame.backdrop:Point("TOPLEFT", frame, 0, -6)
 			frame.backdrop:Point("BOTTOMRIGHT", frame, 0, 6)
 
+			S:SetBackdropHitRect(frame)
+
 			_G[name.."Background"]:SetTexture(nil)
 			_G[name.."Unlocked"]:SetTextColor(1, 1, 1)
 
@@ -54,6 +56,8 @@ local function LoadSkin()
 	frame:CreateBackdrop("Transparent")
 	frame.backdrop:Point("TOPLEFT", frame, 0, -6)
 	frame.backdrop:Point("BOTTOMRIGHT", frame, 0, 6)
+
+	S:SetBackdropHitRect(frame)
 
 	frame.dungeonTexture:ClearAllPoints()
 	frame.dungeonTexture:Point("LEFT", frame, 13, 0)

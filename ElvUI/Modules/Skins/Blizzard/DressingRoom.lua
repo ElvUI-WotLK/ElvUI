@@ -13,6 +13,7 @@ local function LoadSkin()
 	DressUpFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
 	S:SetUIPanelWindowInfo(DressUpFrame, "width")
+	S:SetBackdropHitRect(DressUpFrame)
 
 	DressUpFramePortrait:Kill()
 

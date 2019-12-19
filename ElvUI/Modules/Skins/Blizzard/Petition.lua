@@ -13,6 +13,7 @@ local function LoadSkin()
 	PetitionFrame.backdrop:Point("BOTTOMRIGHT", -32, 66)
 
 	S:SetUIPanelWindowInfo(PetitionFrame, "width")
+	S:SetBackdropHitRect(PetitionFrame)
 
 	S:HandleButton(PetitionFrameSignButton)
 	S:HandleButton(PetitionFrameRequestButton)

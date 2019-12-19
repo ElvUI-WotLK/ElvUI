@@ -20,6 +20,7 @@ local function LoadSkin()
 	MerchantFrame.backdrop:Point("BOTTOMRIGHT", -32, 60)
 
 	S:SetUIPanelWindowInfo(MerchantFrame, "width")
+	S:SetBackdropHitRect(MerchantFrame)
 
 	MerchantFrame:EnableMouseWheel(true)
 	MerchantFrame:SetScript("OnMouseWheel", function(_, value)
