@@ -41,8 +41,10 @@ function D:ModifyErrorFrame()
 		self:HighlightText(0, 0)
 	end)
 
-	ScriptErrorsFrame:SetSize(500, 300)
-	ScriptErrorsFrameScrollFrame:SetSize(ScriptErrorsFrame:GetWidth() - 45, ScriptErrorsFrame:GetHeight() - 71)
+	ScriptErrorsFrame:Size(500, 300)
+	ScriptErrorsFrameScrollFrame:Size(ScriptErrorsFrame:GetWidth() - 45, ScriptErrorsFrame:GetHeight() - 71)
+
+	ScriptErrorsFrameScrollFrameText:Width(ScriptErrorsFrameScrollFrame:GetWidth())
 
 	local BUTTON_WIDTH = 75
 	local BUTTON_HEIGHT = 24
@@ -50,7 +52,7 @@ function D:ModifyErrorFrame()
 
 	-- Add a first button
 	local firstButton = CreateFrame("Button", nil, ScriptErrorsFrame, "UIPanelButtonTemplate")
-	firstButton:SetPoint("BOTTOM", ScriptErrorsFrame, "BOTTOM", -((BUTTON_WIDTH + BUTTON_WIDTH/2) + (BUTTON_SPACING * 4)), 8)
+	firstButton:SetPoint("BOTTOM", -((BUTTON_WIDTH + BUTTON_WIDTH/2) + (BUTTON_SPACING * 4)), 8)
 	firstButton:SetText("First")
 	firstButton:SetHeight(BUTTON_HEIGHT)
 	firstButton:SetWidth(BUTTON_WIDTH)
@@ -83,11 +85,11 @@ function D:ModifyErrorFrame()
 	ScriptErrorsFrame.next:SetHeight(BUTTON_HEIGHT)
 
 	ScriptErrorsFrame.close:ClearAllPoints()
-	ScriptErrorsFrame.close:SetPoint("BOTTOMRIGHT", ScriptErrorsFrame, "BOTTOMRIGHT", -8, 8)
+	ScriptErrorsFrame.close:SetPoint("BOTTOMRIGHT", -8, 8)
 	ScriptErrorsFrame.close:SetSize(75, BUTTON_HEIGHT)
 
 	ScriptErrorsFrame.indexLabel:ClearAllPoints()
-	ScriptErrorsFrame.indexLabel:SetPoint("BOTTOMLEFT", ScriptErrorsFrame, "BOTTOMLEFT", -6, 8)
+	ScriptErrorsFrame.indexLabel:SetPoint("BOTTOMLEFT", 0, 12)
 end
 
 function D:ScriptErrorsFrame_UpdateButtons()
