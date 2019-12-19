@@ -10,9 +10,52 @@ local find, gsub = string.find, string.gsub
 local function LoadSkin()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.gossip then return end
 
-	ItemTextScrollFrame:StripTextures()
+	-- Gossip
+	GossipFramePortrait:Kill()
 	GossipFrameGreetingPanel:StripTextures()
 
+	GossipFrame:CreateBackdrop("Transparent")
+	GossipFrame.backdrop:Point("TOPLEFT", 11, -12)
+	GossipFrame.backdrop:Point("BOTTOMRIGHT", -32, 0)
+
+	S:SetUIPanelWindowInfo(GossipFrame, "width")
+
+	GossipGreetingText:SetTextColor(1, 1, 1)
+
+	S:HandleCloseButton(GossipFrameCloseButton, GossipFrame.backdrop)
+
+	S:HandleScrollBar(GossipGreetingScrollFrameScrollBar, 5)
+	S:HandleButton(GossipFrameGreetingGoodbyeButton)
+
+	for i = 1, NUMGOSSIPBUTTONS do
+		local button = _G["GossipTitleButton"..i]
+		S:HandleButtonHighlight(button)
+		select(3, button:GetRegions()):SetTextColor(1, 1, 1)
+	end
+
+	GossipFrameNpcNameText:ClearAllPoints()
+	GossipFrameNpcNameText:Point("TOP", GossipFrame, "TOP", -6, -15)
+
+	GossipGreetingScrollFrame:Size(304, 402)
+	GossipGreetingScrollFrame:Point("TOPLEFT", GossipFrame, "TOPLEFT", 19, -73)
+
+	GossipGreetingScrollFrameScrollBar:Point("TOPLEFT", GossipGreetingScrollFrame, "TOPRIGHT", 4, -18)
+	GossipGreetingScrollFrameScrollBar:Point("BOTTOMLEFT", GossipGreetingScrollFrame, "BOTTOMRIGHT", 4, 18)
+
+	GossipFrameGreetingGoodbyeButton:Point("BOTTOMRIGHT", -40, 8)
+
+	hooksecurefunc("GossipFrameUpdate", function()
+		for i = 1, GossipFrame.buttonIndex do
+			local button = _G["GossipTitleButton"..i]
+
+			if button:GetText() and find(button:GetText(), "|cff000000") then
+				button:SetText(gsub(button:GetText(), "|cff000000", "|cffFFFF00"))
+			end
+		end
+	end)
+
+	-- ItemText
+	ItemTextScrollFrame:StripTextures()
 	ItemTextFrame:StripTextures(true)
 	ItemTextFrame:CreateBackdrop("Transparent")
 	ItemTextFrame.backdrop:Point("TOPLEFT", 11, -12)
@@ -25,58 +68,26 @@ local function LoadSkin()
 
 	S:HandleCloseButton(ItemTextCloseButton, ItemTextFrame.backdrop)
 
-	GossipFramePortrait:Kill()
-
-	GossipGreetingText:SetTextColor(1, 1, 1)
-
-	GossipFrame:CreateBackdrop("Transparent")
-	GossipFrame.backdrop:Point("TOPLEFT", 11, -12)
-	GossipFrame.backdrop:Point("BOTTOMRIGHT", -32, 0)
-
-	S:SetUIPanelWindowInfo(GossipFrame, "width")
-
-	GossipFrameNpcNameText:ClearAllPoints()
-	GossipFrameNpcNameText:Point("TOP", GossipFrame, "TOP", -6, -17)
-
-	GossipGreetingScrollFrame:Height(402)
-
-	S:HandleButton(GossipFrameGreetingGoodbyeButton)
-	GossipFrameGreetingGoodbyeButton:Point("BOTTOMRIGHT", -37, 4)
-
 	S:HandleNextPrevButton(ItemTextPrevPageButton)
-	ItemTextPrevPageButton:Point("CENTER", ItemTextFrame, "TOPLEFT", 45, -60)
-
 	S:HandleNextPrevButton(ItemTextNextPageButton)
-	ItemTextNextPageButton:Point("CENTER", ItemTextFrame, "TOPRIGHT", -80, -60)
+
+	S:HandleScrollBar(ItemTextScrollFrameScrollBar)
+
+	ItemTextTitleText:Point("CENTER", -15, 230)
 
 	ItemTextCurrentPage:Point("TOP", -15, -52)
 
-	S:HandleScrollBar(ItemTextScrollFrameScrollBar)
-	S:HandleScrollBar(GossipGreetingScrollFrameScrollBar, 5)
+	ItemTextPrevPageButton:Point("CENTER", ItemTextFrame, "TOPLEFT", 100, -58)
+	ItemTextNextPageButton:Point("CENTER", ItemTextFrame, "TOPRIGHT", -130, -58)
 
-	S:HandleCloseButton(GossipFrameCloseButton, GossipFrame.backdrop)
-	GossipFrameCloseButton:Point("CENTER", GossipFrame, "TOPRIGHT", -44, -25)
+	ItemTextPrevPageButton:GetRegions():Point("LEFT", ItemTextPrevPageButton, "RIGHT", 3, 0)
+	ItemTextNextPageButton:GetRegions():Point("RIGHT", ItemTextNextPageButton, "LEFT", -3, 0)
 
-	for i = 1, NUMGOSSIPBUTTONS do
-		local button = _G["GossipTitleButton"..i]
-		local obj = select(3, button:GetRegions())
+	ItemTextScrollFrame:Width(283)
+	ItemTextScrollFrame:Point("TOPRIGHT", -61, -73)
 
-		S:HandleButtonHighlight(button)
-
-		obj:SetTextColor(1, 1, 1)
-	end
-
-	hooksecurefunc("GossipFrameUpdate", function()
-		for i = 1, NUMGOSSIPBUTTONS do
-			local button = _G["GossipTitleButton"..i]
-
-			if button:GetFontString() then
-				if button:GetFontString():GetText() and find(button:GetFontString():GetText(), "|cff000000") then
-					button:GetFontString():SetText(gsub(button:GetFontString():GetText(), "|cff000000", "|cffFFFF00"))
-				end
-			end
-		end
-	end)
+	ItemTextScrollFrameScrollBar:Point("TOPLEFT", ItemTextScrollFrame, "TOPRIGHT", 4, -18)
+	ItemTextScrollFrameScrollBar:Point("BOTTOMLEFT", ItemTextScrollFrame, "BOTTOMRIGHT", 4, 18)
 end
 
 S:AddCallback("Skin_Gossip", LoadSkin)
