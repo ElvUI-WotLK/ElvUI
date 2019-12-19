@@ -20,8 +20,8 @@ local function LoadSkin()
 			frame:DisableDrawLayer("OVERLAY")
 
 			frame:CreateBackdrop("Transparent")
-			frame.backdrop:Point("TOPLEFT", frame, "TOPLEFT", -2, -6)
-			frame.backdrop:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -2, 6)
+			frame.backdrop:Point("TOPLEFT", frame, 0, -6)
+			frame.backdrop:Point("BOTTOMRIGHT", frame, 0, 6)
 
 			_G[name.."Background"]:SetTexture(nil)
 			_G[name.."Unlocked"]:SetTextColor(1, 1, 1)
@@ -31,7 +31,7 @@ local function LoadSkin()
 			icon:DisableDrawLayer("OVERLAY")
 
 			icon.texture:ClearAllPoints()
-			icon.texture:Point("LEFT", frame, 7, 0)
+			icon.texture:Point("LEFT", frame, 13, 0)
 			icon.texture:SetTexCoord(unpack(E.TexCoords))
 
 			icon:CreateBackdrop("Default")
@@ -52,11 +52,12 @@ local function LoadSkin()
 	frame:DisableDrawLayer("OVERLAY")
 
 	frame:CreateBackdrop("Transparent")
-	frame.backdrop:Point("TOPLEFT", frame, "TOPLEFT", -2, -6)
-	frame.backdrop:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -2, 6)
+	frame.backdrop:Point("TOPLEFT", frame, 0, -6)
+	frame.backdrop:Point("BOTTOMRIGHT", frame, 0, 6)
 
 	frame.dungeonTexture:ClearAllPoints()
-	frame.dungeonTexture:Point("LEFT", frame, 7, 0)
+	frame.dungeonTexture:Point("LEFT", frame, 13, 0)
+	frame.dungeonTexture:Size(42)
 	frame.dungeonTexture:SetTexCoord(unpack(E.TexCoords))
 
 	frame.dungeonTexture.backdrop = CreateFrame("Frame", "$parentDungeonTextureBackground", frame)

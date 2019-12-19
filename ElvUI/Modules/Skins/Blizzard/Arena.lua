@@ -15,15 +15,23 @@ local function LoadSkin()
 
 	S:SetUIPanelWindowInfo(ArenaFrame, "width")
 
-	ArenaFrameNameHeader:SetPoint("TOPLEFT", 28, -55)
+	S:HandleCloseButton(ArenaFrameCloseButton, ArenaFrame.backdrop)
+
+	S:HandleButton(ArenaFrameGroupJoinButton)
+	S:HandleButton(ArenaFrameJoinButton)
+	S:HandleButton(ArenaFrameCancelButton)
+
 	ArenaFrameZoneDescription:SetTextColor(1, 1, 1)
 
-	S:HandleButton(ArenaFrameCancelButton)
-	S:HandleButton(ArenaFrameJoinButton)
-	S:HandleButton(ArenaFrameGroupJoinButton)
-	ArenaFrameGroupJoinButton:SetPoint("RIGHT", ArenaFrameJoinButton, "LEFT", -2, 0)
+	ArenaFrameNameHeader:Point("TOPLEFT", 28, -55)
 
-	S:HandleCloseButton(ArenaFrameCloseButton, ArenaFrame.backdrop)
+	ArenaZone1:Point("TOPLEFT", 24, -79)
+
+	ArenaFrameGroupJoinButton:Width(127)
+
+	ArenaFrameCancelButton:Point("CENTER", ArenaFrame, "TOPLEFT", 302, -417)
+	ArenaFrameJoinButton:Point("RIGHT", ArenaFrameCancelButton, "LEFT", -3, 0)
+	ArenaFrameGroupJoinButton:Point("RIGHT", ArenaFrameJoinButton, "LEFT", -3, 0)
 end
 
 S:AddCallback("Skin_Arena", LoadSkin)
