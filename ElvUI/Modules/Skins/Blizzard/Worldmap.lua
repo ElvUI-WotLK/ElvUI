@@ -2,21 +2,20 @@ local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateD
 local S = E:GetModule("Skins")
 
 --Lua functions
-local _G = _G
 --WoW API / Variables
 local InCombatLockdown = InCombatLockdown
 
 local function LoadSkin()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.worldmap then return end
 
-	local WorldMapFrame = _G.WorldMapFrame
 	WorldMapFrame:DisableDrawLayer("BACKGROUND")
 	WorldMapFrame:DisableDrawLayer("ARTWORK")
 	WorldMapFrame:DisableDrawLayer("OVERLAY")
-	WorldMapFrameTitle:SetDrawLayer("BORDER")
 	WorldMapFrame:CreateBackdrop("Transparent")
 	WorldMapFrame.backdrop:Point("TOPRIGHT", WorldMapFrameCloseButton, -3, 0)
 	WorldMapFrame.backdrop:Point("BOTTOMRIGHT", WorldMapTrackQuest, 0, -3)
+
+	WorldMapFrameTitle:SetDrawLayer("BORDER")
 
 	WorldMapDetailFrame:CreateBackdrop()
 	WorldMapDetailFrame.backdrop:Point("TOPLEFT", -2, 2)
