@@ -9,59 +9,6 @@ local CanQueueForWintergrasp = CanQueueForWintergrasp
 local function LoadSkin()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.pvp then return end
 
-	BattlefieldFrame:StripTextures(true)
-	BattlefieldFrame:CreateBackdrop("Transparent")
-	BattlefieldFrame.backdrop:Point("TOPLEFT", 11, -12)
-	BattlefieldFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
-
-	S:SetUIPanelWindowInfo(BattlefieldFrame, "width")
-
-	BattlefieldFrameInfoScrollFrameChildFrameDescription:SetTextColor(1, 1, 1)
-	BattlefieldFrameInfoScrollFrameChildFrameRewardsInfoDescription:SetTextColor(1, 1, 1)
-
-	S:HandleButton(BattlefieldFrameCancelButton)
-	S:HandleButton(BattlefieldFrameJoinButton)
-	BattlefieldFrameGroupJoinButton:Point("RIGHT", BattlefieldFrameJoinButton, "LEFT", -2, 0)
-	S:HandleButton(BattlefieldFrameGroupJoinButton)
-
-	S:HandleCloseButton(BattlefieldFrameCloseButton, BattlefieldFrame.backdrop)
-
-	for i = 1, 5 do
-		S:HandleButtonHighlight(_G["BattlegroundType"..i])
-	end
-
-	PVPBattlegroundFrame:StripTextures(true)
-
-	WintergraspTimer:SetSize(24, 24)
-	WintergraspTimer:SetTemplate("Default")
-
-	WintergraspTimer.texture:SetDrawLayer("ARTWORK")
-	WintergraspTimer.texture:SetInside()
-
-	WintergraspTimer:HookScript("OnUpdate", function(self)
-		local canQueue = CanQueueForWintergrasp()
-		if canQueue then
-			self.texture:SetTexCoord(0.2, 0.8, 0.6, 0.9)
-		else
-			self.texture:SetTexCoord(0.2, 0.8, 0.1, 0.4)
-		end
-	end)
-
-	PVPBattlegroundFrameTypeScrollFrame:StripTextures()
-	S:HandleScrollBar(PVPBattlegroundFrameTypeScrollFrameScrollBar)
-
-	S:HandleButton(PVPBattlegroundFrameCancelButton)
-
-	PVPBattlegroundFrameInfoScrollFrame:StripTextures()
-	S:HandleScrollBar(PVPBattlegroundFrameInfoScrollFrameScrollBar)
-
-	PVPBattlegroundFrameInfoScrollFrameChildFrameDescription:SetTextColor(1, 1, 1)
-	PVPBattlegroundFrameInfoScrollFrameChildFrameRewardsInfo.description:SetTextColor(1, 1, 1)
-
-	S:HandleButton(PVPBattlegroundFrameJoinButton)
-	PVPBattlegroundFrameGroupJoinButton:Point("RIGHT", PVPBattlegroundFrameJoinButton, "LEFT", -2, 0)
-	S:HandleButton(PVPBattlegroundFrameGroupJoinButton)
-
 	PVPParentFrame:CreateBackdrop("Transparent")
 	PVPParentFrame.backdrop:Point("TOPLEFT", 11, -12)
 	PVPParentFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
@@ -69,6 +16,9 @@ local function LoadSkin()
 	S:SetUIPanelWindowInfo(PVPParentFrame, "width")
 
 	S:HandleCloseButton(PVPParentFrameCloseButton, PVPParentFrame.backdrop)
+
+	S:HandleTab(PVPParentFrameTab1)
+	S:HandleTab(PVPParentFrameTab2)
 
 	PVPFrame:StripTextures(true)
 
@@ -85,22 +35,105 @@ local function LoadSkin()
 		_G["PVPTeam"..i.."Highlight"]:Kill()
 	end
 
+	-- PVP Team Details
 	PVPTeamDetails:StripTextures()
 	PVPTeamDetails:SetTemplate("Transparent")
+	PVPTeamDetails:Point("TOPLEFT", PVPFrame, "TOPRIGHT", -33, -81)
 
-	S:HandleCloseButton(PVPTeamDetailsCloseButton)
+	S:HandleCloseButton(PVPTeamDetailsCloseButton, PVPTeamDetails)
 
 	for i = 1, 5 do
 		_G["PVPTeamDetailsFrameColumnHeader"..i]:StripTextures()
 	end
 
-	S:HandleButton(PVPTeamDetailsAddTeamMember)
+	for i = 1, MAX_ARENA_TEAM_MEMBERS do
+		S:HandleButtonHighlight(_G["PVPTeamDetailsButton"..i])
+	end
 
+	S:HandleButton(PVPTeamDetailsAddTeamMember)
 	S:HandleNextPrevButton(PVPTeamDetailsToggleButton)
 
-	for i = 1, 2 do
-		S:HandleTab(_G["PVPParentFrameTab"..i])
+	PVPTeamDetailsAddTeamMember:Point("TOPLEFT", PVPTeamDetailsButton10, "BOTTOMLEFT", 5, -8)
+	PVPTeamDetailsToggleButton:Point("BOTTOMRIGHT", -20, 25)
+
+	-- PVP Battleground Frame
+	PVPBattlegroundFrame:StripTextures(true)
+
+	PVPBattlegroundFrameTypeScrollFrame:StripTextures()
+	S:HandleScrollBar(PVPBattlegroundFrameTypeScrollFrameScrollBar)
+
+	PVPBattlegroundFrameInfoScrollFrame:StripTextures()
+	S:HandleScrollBar(PVPBattlegroundFrameInfoScrollFrameScrollBar)
+
+	S:HandleButton(PVPBattlegroundFrameGroupJoinButton)
+	S:HandleButton(PVPBattlegroundFrameJoinButton)
+	S:HandleButton(PVPBattlegroundFrameCancelButton)
+
+	for i = 1, 5 do
+		S:HandleButtonHighlight(_G["BattlegroundType"..i])
 	end
+
+	PVPBattlegroundFrameInfoScrollFrameChildFrameDescription:SetTextColor(1, 1, 1)
+	PVPBattlegroundFrameInfoScrollFrameChildFrameRewardsInfo.description:SetTextColor(1, 1, 1)
+
+	PVPBattlegroundFrameTypeScrollFrameScrollBar:Point("TOPLEFT", PVPBattlegroundFrameTypeScrollFrame, "TOPRIGHT", 7, -18)
+	PVPBattlegroundFrameTypeScrollFrameScrollBar:Point("BOTTOMLEFT", PVPBattlegroundFrameTypeScrollFrame, "BOTTOMRIGHT", 7, 18)
+
+	PVPBattlegroundFrameInfoScrollFrame:Point("BOTTOMLEFT", 20, 114)
+
+	PVPBattlegroundFrameInfoScrollFrameScrollBar:Point("TOPLEFT", PVPBattlegroundFrameInfoScrollFrame, "TOPRIGHT", 7, -23)
+	PVPBattlegroundFrameInfoScrollFrameScrollBar:Point("BOTTOMLEFT", PVPBattlegroundFrameInfoScrollFrame, "BOTTOMRIGHT", 7, 18)
+
+	PVPBattlegroundFrameGroupJoinButton:Width(127)
+	PVPBattlegroundFrameCancelButton:Point("CENTER", PVPBattlegroundFrame, "TOPLEFT", 300, -416)
+	PVPBattlegroundFrameJoinButton:Point("RIGHT", PVPBattlegroundFrameCancelButton, "LEFT", -3, 0)
+	PVPBattlegroundFrameGroupJoinButton:Point("RIGHT", PVPBattlegroundFrameJoinButton, "LEFT", -3, 0)
+
+	WintergraspTimer:Size(24)
+	WintergraspTimer:SetTemplate("Default")
+	WintergraspTimer:Point("RIGHT", PVPBattlegroundFrame, "TOPRIGHT", -42, -58)
+
+	WintergraspTimer.texture:SetDrawLayer("ARTWORK")
+	WintergraspTimer.texture:SetInside()
+
+	WintergraspTimer:HookScript("OnUpdate", function(self)
+		if CanQueueForWintergrasp() then
+			-- texWidth, texHeight, cropWidth, cropHeight, offsetX, offsetY = 32, 64, 20, 20, 6, 38
+			self.texture:SetTexCoord(0.1875, 0.8125, 0.59375, 0.90625)
+		else
+			-- texWidth, texHeight, cropWidth, cropHeight, offsetX, offsetY = 32, 64, 20, 20, 6, 6
+			self.texture:SetTexCoord(0.1875, 0.8125, 0.09375, 0.40625)
+		end
+	end)
+
+	-- Battlefield Frame
+	BattlefieldFrame:StripTextures(true)
+	BattlefieldFrame:CreateBackdrop("Transparent")
+	BattlefieldFrame.backdrop:Point("TOPLEFT", 11, -12)
+	BattlefieldFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
+
+	S:SetUIPanelWindowInfo(BattlefieldFrame, "width")
+
+	S:HandleCloseButton(BattlefieldFrameCloseButton, BattlefieldFrame.backdrop)
+
+	S:HandleScrollBar(BattlefieldFrameInfoScrollFrameScrollBar)
+
+	BattlefieldFrameInfoScrollFrameChildFrameDescription:SetTextColor(1, 1, 1)
+	BattlefieldFrameInfoScrollFrameChildFrameRewardsInfoDescription:SetTextColor(1, 1, 1)
+
+	S:HandleButton(BattlefieldFrameGroupJoinButton)
+	S:HandleButton(BattlefieldFrameJoinButton)
+	S:HandleButton(BattlefieldFrameCancelButton)
+
+	BattlefieldFrameInfoScrollFrame:Point("BOTTOMLEFT", 19, 113)
+
+	BattlefieldFrameInfoScrollFrameScrollBar:Point("TOPLEFT", BattlefieldFrameInfoScrollFrame, "TOPRIGHT", 10, -18)
+	BattlefieldFrameInfoScrollFrameScrollBar:Point("BOTTOMLEFT", BattlefieldFrameInfoScrollFrame, "BOTTOMRIGHT", 10, 18)
+
+	BattlefieldFrameGroupJoinButton:Width(127)
+	BattlefieldFrameGroupJoinButton:Point("RIGHT", BattlefieldFrameJoinButton, "LEFT", -3, 0)
+	BattlefieldFrameJoinButton:Point("RIGHT", BattlefieldFrameCancelButton, "LEFT", -3, 0)
+	BattlefieldFrameCancelButton:Point("CENTER", BattlefieldFrame, "TOPLEFT", 302, -417)
 end
 
 S:AddCallback("Skin_PvP", LoadSkin)

@@ -38,7 +38,7 @@ local function LoadSkin()
 
 	S:HandleButton(RaidFrameRaidBrowserButton)
 	S:HandleButton(RaidFrameReadyCheckButton)
-	S:HandleButton(RaidFrameRaidInfoButton)
+--	S:HandleButton(RaidFrameRaidInfoButton)		-- skinned in Friends.lua
 
 	for i = 1, MAX_RAID_GROUPS * 5 do
 		S:HandleButton(_G["RaidGroupButton"..i], true)
@@ -67,11 +67,11 @@ local function LoadSkin()
 
 			button:ClearAllPoints()
 			if index == 1 then
-				button:Point("TOPLEFT", RaidFrame, "TOPRIGHT", -33, -37)
+				button:Point("TOPLEFT", RaidFrame, "TOPRIGHT", -33, -44)
 			elseif index == 11 then
-				button:Point("TOP", prevButton, "BOTTOM", 0, -20)
+				button:Point("TOP", prevButton, "BOTTOM", 0, -25)
 			else
-				button:Point("TOP", prevButton, "BOTTOM", 0, -6)
+				button:Point("TOP", prevButton, "BOTTOM", 0, -5)
 			end
 			prevButton = button
 
@@ -96,54 +96,58 @@ local function LoadSkin()
 		end
 	end
 
-	local function skinPulloutFrames()
-		local rp
-		for i = 1, NUM_RAID_PULLOUT_FRAMES do
-			rp = _G["RaidPullout"..i]
-			if not rp.backdrop then
-				_G["RaidPullout"..i.."MenuBackdrop"]:SetBackdrop(nil)
-				rp:CreateBackdrop("Transparent")
-				rp.backdrop:Point("TOPLEFT", 9, -17)
-				rp.backdrop:Point("BOTTOMRIGHT", -7, 10)
-			end
-		end
-	end
+	hooksecurefunc("RaidPulloutButton_OnDragStart", function(frame)
+		if InCombatLockdown() then return end
 
-	hooksecurefunc("RaidPullout_GetFrame", function()
-		skinPulloutFrames()
+		local scale = GetScreenHeightScale()
+		local cursorX, cursorY = GetCursorPosition()
+		frame:SetPoint("TOP", nil, "BOTTOMLEFT", cursorX * scale, cursorY * scale)
 	end)
 
+	local nSkinned = 0
+	hooksecurefunc("RaidPullout_GetFrame", function()
+		if nSkinned < NUM_RAID_PULLOUT_FRAMES then
+			nSkinned = NUM_RAID_PULLOUT_FRAMES
+
+			local pfButton = _G["RaidPullout"..nSkinned]
+			pfButton:CreateBackdrop("Transparent")
+			pfButton.backdrop:Point("TOPLEFT", 9, -17)
+			pfButton.backdrop:Point("BOTTOMRIGHT", -7, 7)
+
+			_G["RaidPullout"..nSkinned.."MenuBackdrop"]:SetBackdrop(nil)
+		end
+	end)
+
+	local MAX_RAID_AURAS = MAX_RAID_AURAS
+	local pfButtonSubFrames = {"HealthBar", "ManaBar", "Target", "TargetTarget"}
+
 	hooksecurefunc("RaidPullout_Update", function(pullOutFrame)
-		local pfName = pullOutFrame:GetName()
-		local pfBName, pfBObj, pfTot
+		local inCombat = InCombatLockdown()
 
-		for i = 1, pullOutFrame.numPulloutButtons do
-			pfBName = pfName.."Button"..i
-			pfBObj = _G[pfBName]
-			pfTot = _G[pfBName.."TargetTargetFrame"]
+		for _, pfButton in ipairs(pullOutFrame.buttons) do
+			if not pfButton.backdrop then
+				local pfBName = pfButton:GetName()
+				local pfTot = _G[pfBName.."TargetTargetFrame"]
 
-			if not pfBObj.backdrop then
-				local sBar
-
-				for _, v in ipairs({"HealthBar", "ManaBar", "Target", "TargetTarget"}) do
-					sBar = _G[pfBName..v]
+				for _, sName in ipairs(pfButtonSubFrames) do
+					local sBar = _G[pfBName..sName]
 					sBar:StripTextures()
 					sBar:SetStatusBarTexture(E.media.normTex)
 				end
 
-				_G[pfBName.."ManaBar"]:Point("TOP", "$parentHealthBar", "BOTTOM", 0, 0)
-				_G[pfBName.."Target"]:Point("TOP", "$parentManaBar", "BOTTOM", 0, -1)
+				pfButton:CreateBackdrop("Default")
+				pfButton.backdrop:Point("TOPLEFT", E.PixelMode and 0 or -1, -(E.PixelMode and 10 or 9))
+				pfButton.backdrop:Point("BOTTOMRIGHT", E.PixelMode and 0 or 1, E.PixelMode and -2 or 0)
 
-				pfBObj:CreateBackdrop("Default")
-				pfBObj.backdrop:Point("TOPLEFT", E.PixelMode and 0 or -1, -(E.PixelMode and 10 or 9))
-				pfBObj.backdrop:Point("BOTTOMRIGHT", E.PixelMode and 0 or 1, E.PixelMode and 1 or 0)
-			end
-
-			if not pfTot.backdrop then
 				pfTot:StripTextures()
 				pfTot:CreateBackdrop("Default")
 				pfTot.backdrop:Point("TOPLEFT", E.PixelMode and 10 or 9, -(E.PixelMode and 15 or 14))
 				pfTot.backdrop:Point("BOTTOMRIGHT", -(E.PixelMode and 10 or 9), E.PixelMode and 8 or 7)
+
+				for i = 1, MAX_RAID_AURAS do
+					S:HandleIcon(_G[pfBName.."Aura"..i.."Icon"])
+					_G[pfBName.."Aura"..i.."Border"]:Hide()
+				end
 			end
 		end
 	end)
