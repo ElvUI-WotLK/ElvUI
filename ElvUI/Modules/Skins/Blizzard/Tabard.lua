@@ -13,6 +13,7 @@ local function LoadSkin()
 	TabardFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
 	S:SetUIPanelWindowInfo(TabardFrame, "width")
+	S:SetBackdropHitRect(TabardFrame)
 
 	S:HandleCloseButton(TabardFrameCloseButton, TabardFrame.backdrop)
 

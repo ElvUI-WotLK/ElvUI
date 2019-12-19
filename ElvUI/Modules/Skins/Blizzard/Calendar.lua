@@ -21,6 +21,7 @@ local function LoadSkin()
 		S:SetUIPanelWindowInfo(CalendarFrame, "xoffset", 8, nil, true)
 		S:SetUIPanelWindowInfo(CalendarFrame, "yoffset", -5, nil, true)
 		S:SetUIPanelWindowInfo(CalendarFrame, "width", nil, -8)
+		S:SetBackdropHitRect(CalendarFrame)
 		S:Unhook("Calendar_Show")
 	end)
 

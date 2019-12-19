@@ -35,6 +35,14 @@ local function LoadSkin()
 
 	S:SetUIPanelWindowInfo(CharacterFrame, "width")
 
+	S:SetBackdropHitRect(PaperDollFrame, CharacterFrame.backdrop)
+	S:SetBackdropHitRect(PetPaperDollFrame, CharacterFrame.backdrop)
+	S:SetBackdropHitRect(PetPaperDollFrameCompanionFrame, CharacterFrame.backdrop)
+	S:SetBackdropHitRect(PetPaperDollFramePetFrame, CharacterFrame.backdrop)
+	S:SetBackdropHitRect(ReputationFrame, CharacterFrame.backdrop)
+	S:SetBackdropHitRect(SkillFrame, CharacterFrame.backdrop)
+	S:SetBackdropHitRect(TokenFrame, CharacterFrame.backdrop)
+
 	S:HandleCloseButton(CharacterFrameCloseButton, CharacterFrame.backdrop)
 
 	PaperDollFrame:StripTextures(true)
@@ -301,6 +309,8 @@ local function LoadSkin()
 	GearManagerDialog.backdrop:Point("TOPLEFT", 5, -2)
 	GearManagerDialog.backdrop:Point("BOTTOMRIGHT", -3, 4)
 
+	S:SetBackdropHitRect(GearManagerDialog)
+
 	S:HandleCloseButton(GearManagerDialogClose, GearManagerDialog.backdrop)
 
 	for i, button in ipairs(GearManagerDialog.buttons) do
@@ -331,6 +341,8 @@ local function LoadSkin()
 	GearManagerDialogPopup:CreateBackdrop("Transparent")
 	GearManagerDialogPopup.backdrop:Point("TOPLEFT", 5, -10)
 	GearManagerDialogPopup.backdrop:Point("BOTTOMRIGHT", -39, 8)
+
+	S:SetBackdropHitRect(GearManagerDialogPopup)
 
 	GearManagerDialogPopupScrollFrame:StripTextures()
 	S:HandleScrollBar(GearManagerDialogPopupScrollFrameScrollBar)
@@ -388,6 +400,7 @@ local function LoadSkin()
 		tab:CreateBackdrop("Default", true)
 		tab.backdrop:Point("TOPLEFT", 3, -7)
 		tab.backdrop:Point("BOTTOMRIGHT", -2, -1)
+		S:SetBackdropHitRect(tab)
 
 		tab:HookScript("OnEnter", S.SetModifiedBackdrop)
 		tab:HookScript("OnLeave", S.SetOriginalBackdrop)

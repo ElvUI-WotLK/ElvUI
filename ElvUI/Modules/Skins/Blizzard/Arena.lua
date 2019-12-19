@@ -14,6 +14,7 @@ local function LoadSkin()
 	ArenaFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
 	S:SetUIPanelWindowInfo(ArenaFrame, "width")
+	S:SetBackdropHitRect(ArenaFrame)
 
 	S:HandleCloseButton(ArenaFrameCloseButton, ArenaFrame.backdrop)
 

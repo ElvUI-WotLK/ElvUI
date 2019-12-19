@@ -49,6 +49,11 @@ local function LoadSkin()
 		frame.backdrop:Point("TOPLEFT", 9, -4)
 		frame.backdrop:Point("BOTTOMRIGHT", -4, 1)
 
+		S:HookScript(frame, "OnShow", function(self)
+			S:SetBackdropHitRect(self)
+			S:Unhook(self, "OnShow")
+		end)
+
 		S:HandleCloseButton(closeButton, frame.backdrop)
 
 		for j = 1, MAX_CONTAINER_ITEMS do
@@ -172,6 +177,8 @@ local function LoadSkin()
 	BankFrame:CreateBackdrop("Transparent")
 	BankFrame.backdrop:Point("TOPLEFT", 11, -12)
 	BankFrame.backdrop:Point("BOTTOMRIGHT", -26, 76)
+
+	S:SetBackdropHitRect(BankFrame)
 
 	S:HandleCloseButton(BankCloseButton)
 

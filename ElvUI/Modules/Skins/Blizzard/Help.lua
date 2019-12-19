@@ -14,6 +14,8 @@ local function LoadSkin()
 	HelpFrame.backdrop:Point("TOPLEFT", 6, 0)
 	HelpFrame.backdrop:Point("BOTTOMRIGHT", -45, 14)
 
+	S:SetBackdropHitRect(HelpFrame)
+
 	S:HandleCloseButton(HelpFrameCloseButton, HelpFrame.backdrop)
 
 	local helpFrameButtons = {

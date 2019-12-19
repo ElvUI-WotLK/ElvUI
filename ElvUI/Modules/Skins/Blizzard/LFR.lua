@@ -17,6 +17,7 @@ local function LoadSkin()
 
 	S:HookScript(LFRParentFrame, "OnShow", function(self)
 		S:SetUIPanelWindowInfo(self, "width")
+		S:SetBackdropHitRect(self)
 		S:Unhook(self, "OnShow")
 	end)
 

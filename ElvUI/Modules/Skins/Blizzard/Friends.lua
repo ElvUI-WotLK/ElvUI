@@ -26,6 +26,7 @@ local function LoadSkin()
 	FriendsFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
 	S:SetUIPanelWindowInfo(FriendsFrame, "width")
+	S:SetBackdropHitRect(FriendsFrame)
 
 	S:HandleCloseButton(FriendsFrameCloseButton, FriendsFrame.backdrop)
 
@@ -110,6 +111,7 @@ local function LoadSkin()
 
 	-- Who Frame
 	S:HandleDropDownBox(WhoFrameDropDown)
+	S:SetBackdropHitRect(WhoFrameDropDown)
 
 	for i = 1, 4 do
 		local header = _G["WhoFrameColumnHeader"..i]
@@ -379,6 +381,8 @@ local function LoadSkin()
 	GuildInfoFrame.backdrop:Point("TOPLEFT", 4, -6)
 	GuildInfoFrame.backdrop:Point("BOTTOMRIGHT", -2, 0)
 
+	S:SetBackdropHitRect(GuildInfoFrame)
+
 	S:HandleCloseButton(GuildInfoCloseButton, GuildInfoFrame.backdrop)
 
 	GuildInfoTextBackground:SetTemplate("Default")
@@ -409,6 +413,8 @@ local function LoadSkin()
 	GuildEventLogFrame.backdrop:Point("TOPLEFT", 4, -6)
 	GuildEventLogFrame.backdrop:Point("BOTTOMRIGHT", -1, 5)
 
+	S:SetBackdropHitRect(GuildEventLogFrame)
+
 	S:HandleCloseButton(GuildEventLogCloseButton, GuildEventLogFrame.backdrop)
 
 	GuildEventFrame:SetTemplate("Default")
@@ -430,6 +436,8 @@ local function LoadSkin()
 	GuildControlPopupFrame:CreateBackdrop("Transparent")
 	GuildControlPopupFrame.backdrop:Point("TOPLEFT", 4, -6)
 	GuildControlPopupFrame.backdrop:Point("BOTTOMRIGHT", -27, 27)
+
+	S:SetBackdropHitRect(GuildControlPopupFrame)
 
 	S:HandleDropDownBox(GuildControlPopupFrameDropDown, 185)
 	GuildControlPopupFrameDropDownButton:Size(16)

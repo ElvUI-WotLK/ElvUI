@@ -16,6 +16,7 @@ local function LoadSkin()
 	ItemSocketingFrame.backdrop:Point("BOTTOMRIGHT", -2, 31)
 
 	S:SetUIPanelWindowInfo(ItemSocketingFrame, "width")
+	S:SetBackdropHitRect(ItemSocketingFrame)
 
 	ItemSocketingFramePortrait:Kill()
 

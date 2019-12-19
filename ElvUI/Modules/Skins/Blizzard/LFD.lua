@@ -22,6 +22,7 @@ local function LoadSkin()
 
 	S:HookScript(LFDParentFrame, "OnShow", function(self)
 		S:SetUIPanelWindowInfo(self, "width", 341)
+		S:SetBackdropHitRect(self, LFDQueueFrame.backdrop)
 		S:Unhook(self, "OnShow")
 	end)
 

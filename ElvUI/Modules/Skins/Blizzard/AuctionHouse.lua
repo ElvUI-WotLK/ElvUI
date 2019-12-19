@@ -22,6 +22,7 @@ local function LoadSkin()
 		S:SetUIPanelWindowInfo(self, "xoffset", -1, nil, true)
 		S:SetUIPanelWindowInfo(self, "yoffset", -12, nil, true)
 		S:SetUIPanelWindowInfo(self, "width", nil, 1)
+		S:SetBackdropHitRect(self)
 		S:Unhook(self, "OnShow")
 	end)
 

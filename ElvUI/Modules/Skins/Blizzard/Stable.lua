@@ -18,6 +18,7 @@ local function LoadSkin()
 	PetStableFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
 	S:SetUIPanelWindowInfo(PetStableFrame, "width")
+	S:SetBackdropHitRect(PetStableFrame)
 
 	S:HandleCloseButton(PetStableFrameCloseButton, PetStableFrame.backdrop)
 

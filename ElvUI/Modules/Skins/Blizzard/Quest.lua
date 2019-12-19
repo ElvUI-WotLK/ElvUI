@@ -30,6 +30,7 @@ local function LoadSkin()
 	QuestLogFrame.backdrop:Point("BOTTOMRIGHT", -1, 11)
 
 	S:SetUIPanelWindowInfo(QuestLogFrame, "width")
+	S:SetBackdropHitRect(QuestLogFrame)
 
 	S:HandleCloseButton(QuestLogFrameCloseButton, QuestLogFrame.backdrop)
 
@@ -137,6 +138,7 @@ local function LoadSkin()
 
 	S:SetUIPanelWindowInfo(QuestLogDetailFrame, "height", nil, nil, true)
 	S:SetUIPanelWindowInfo(QuestLogDetailFrame, "width")
+	S:SetBackdropHitRect(QuestLogDetailFrame)
 
 	S:HandleCloseButton(QuestLogDetailFrameCloseButton, QuestLogDetailFrame.backdrop)
 
@@ -161,6 +163,7 @@ local function LoadSkin()
 	QuestFrame.backdrop:Point("BOTTOMRIGHT", -32, 0)
 
 	S:SetUIPanelWindowInfo(QuestFrame, "width")
+	S:SetBackdropHitRect(QuestFrame)
 
 	S:HandleCloseButton(QuestFrameCloseButton, QuestFrame.backdrop)
 

@@ -19,6 +19,7 @@ local function LoadSkin()
 	GossipFrame.backdrop:Point("BOTTOMRIGHT", -32, 0)
 
 	S:SetUIPanelWindowInfo(GossipFrame, "width")
+	S:SetBackdropHitRect(GossipFrame)
 
 	GossipGreetingText:SetTextColor(1, 1, 1)
 
@@ -62,6 +63,7 @@ local function LoadSkin()
 	ItemTextFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
 	S:SetUIPanelWindowInfo(ItemTextFrame, "width")
+	S:SetBackdropHitRect(ItemTextFrame)
 
 	ItemTextPageText:SetTextColor(1, 1, 1)
 	ItemTextPageText.SetTextColor = E.noop

@@ -11,6 +11,8 @@ local function LoadSkin()
 	BarberShopFrame.backdrop:Point("TOPLEFT", 44, -70)
 	BarberShopFrame.backdrop:Point("BOTTOMRIGHT", -38, 42)
 
+	S:SetBackdropHitRect(BarberShopFrame)
+
 	BarberShopFrameBackground:Kill()
 
 	for i = 1, 4 do

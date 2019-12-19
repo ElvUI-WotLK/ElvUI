@@ -12,6 +12,8 @@ local function LoadSkin()
 	KeyBindingFrame.backdrop:Point("TOPLEFT", 2, 0)
 	KeyBindingFrame.backdrop:Point("BOTTOMRIGHT", -42, 13)
 
+	S:SetBackdropHitRect(KeyBindingFrame)
+
 	local bindingKey1, bindingKey2
 	for i = 1, KEY_BINDINGS_DISPLAYED do
 		bindingKey1 = _G["KeyBindingFrameBinding"..i.."Key1Button"]

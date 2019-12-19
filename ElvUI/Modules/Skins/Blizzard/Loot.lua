@@ -30,6 +30,8 @@ local function LoadSkin()
 	LootFrame.backdrop:Point("TOPLEFT", 16, -54)
 	LootFrame.backdrop:Point("BOTTOMRIGHT", -77, 8)
 
+	S:SetBackdropHitRect(LootFrame, nil, true)
+
 	LootFramePortraitOverlay:SetParent(E.HiddenFrame)
 
 	S:HandleNextPrevButton(LootFrameUpButton)
