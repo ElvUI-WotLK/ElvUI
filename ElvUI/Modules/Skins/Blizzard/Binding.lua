@@ -7,11 +7,10 @@ local S = E:GetModule("Skins")
 local function LoadSkin()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.binding then return end
 
+	KeyBindingFrame:StripTextures()
 	KeyBindingFrame:CreateBackdrop("Transparent")
 	KeyBindingFrame.backdrop:Point("TOPLEFT", 2, 0)
-	KeyBindingFrame.backdrop:Point("BOTTOMRIGHT", -42, 12)
-
-	KeyBindingFrame:StripTextures()
+	KeyBindingFrame.backdrop:Point("BOTTOMRIGHT", -42, 13)
 
 	local bindingKey1, bindingKey2
 	for i = 1, KEY_BINDINGS_DISPLAYED do

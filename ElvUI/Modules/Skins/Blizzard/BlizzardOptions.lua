@@ -24,8 +24,7 @@ local function LoadSkin()
 		tab.backdrop:Point("BOTTOMRIGHT", -10, 1)
 
 		if i == 1 then
-			tab:ClearAllPoints()
-			tab:SetPoint("BOTTOMLEFT", InterfaceOptionsFrameCategories, "TOPLEFT", -11, -2)
+			tab:Point("BOTTOMLEFT", InterfaceOptionsFrameCategories, "TOPLEFT", -11, -2)
 		end
 	end
 
@@ -39,7 +38,7 @@ local function LoadSkin()
 
 		local text = button.toggle:CreateFontString(nil, "OVERLAY")
 		text:FontTemplate(nil, 22)
-		text:Point("CENTER")
+		text:SetPoint("CENTER")
 		text:SetText("+")
 		button.toggle.text = text
 
@@ -74,21 +73,14 @@ local function LoadSkin()
 		end)
 	end
 
-	S:HandleScrollBar(InterfaceOptionsFrameCategoriesListScrollBar)
-	S:HandleScrollBar(InterfaceOptionsFrameAddOnsListScrollBar)
-
 	local optionHeaders = {
-		"InterfaceOptionsFrameHeader",
-		"AudioOptionsFrameHeader",
-		"VideoOptionsFrameHeader",
+		InterfaceOptionsFrameHeader,
+		AudioOptionsFrameHeader,
+		VideoOptionsFrameHeader,
 	}
 	for _, header in ipairs(optionHeaders) do
-		header = _G[header]
-		if header then
-			header:SetTexture("")
-			header:ClearAllPoints()
-			header:SetPoint("TOP", header:GetParent(), 0, 0)
-		end
+		header:SetTexture("")
+		header:SetPoint("TOP", 0, 0)
 	end
 
 	local optionFrames = {
@@ -99,8 +91,8 @@ local function LoadSkin()
 		"AudioOptionsFrameCategoryFrame",
 		"AudioOptionsFramePanelContainer",
 		"AudioOptionsSoundPanelPlayback",
-		"AudioOptionsSoundPanelVolume",
 		"AudioOptionsSoundPanelHardware",
+		"AudioOptionsSoundPanelVolume",
 
 		"VideoOptionsFrameCategoryFrame",
 		"VideoOptionsFramePanelContainer",
@@ -114,12 +106,12 @@ local function LoadSkin()
 			frame:StripTextures()
 			frame:CreateBackdrop("Transparent")
 
-			if frame ~= VideoOptionsFramePanelContainer and frame ~= InterfaceOptionsFramePanelContainer then
-				frame.backdrop:Point("TOPLEFT", -1 ,0)
-				frame.backdrop:Point("BOTTOMRIGHT", 0, 1)
-			else
+			if frame == VideoOptionsFramePanelContainer or frame == InterfaceOptionsFramePanelContainer then
 				frame.backdrop:Point("TOPLEFT", 0, 0)
 				frame.backdrop:Point("BOTTOMRIGHT", 0, 0)
+			else
+				frame.backdrop:Point("TOPLEFT", -1 ,0)
+				frame.backdrop:Point("BOTTOMRIGHT", 0, 1)
 			end
 		end
 	end
@@ -334,7 +326,7 @@ local function LoadSkin()
 		S:HandleButton(_G[button])
 	end
 
-	local dropdowns ={
+	local dropdowns = {
 		"InterfaceOptionsControlsPanelAutoLootKeyDropDown",
 		"InterfaceOptionsCombatPanelTOTDropDown",
 		"InterfaceOptionsCombatPanelFocusCastKeyDropDown",
@@ -360,31 +352,28 @@ local function LoadSkin()
 		end
 	end
 
-	S:HandleDropDownBox(VideoOptionsResolutionPanelMultiSampleDropDown, 195)
-
-	VideoOptionsFrameDefaults:ClearAllPoints()
-	VideoOptionsFrameDefaults:SetPoint("TOPLEFT", VideoOptionsFrameCategoryFrame, "BOTTOMLEFT", -1, -5)
-
-	InterfaceOptionsFrameDefaults:ClearAllPoints()
-	InterfaceOptionsFrameDefaults:SetPoint("TOPLEFT", InterfaceOptionsFrameCategories, "BOTTOMLEFT", -1, -5)
-
-	InterfaceOptionsFrameCancel:ClearAllPoints()
-	InterfaceOptionsFrameCancel:SetPoint("TOPRIGHT", InterfaceOptionsFramePanelContainer, "BOTTOMRIGHT", 0, -6)
-
-	VideoOptionsFrameCancel:ClearAllPoints()
-	VideoOptionsFrameCancel:SetPoint("RIGHT", VideoOptionsFrameApply, "LEFT", -4, 0)
-
-	VideoOptionsFrameOkay:ClearAllPoints()
-	VideoOptionsFrameOkay:SetPoint("RIGHT", VideoOptionsFrameCancel, "LEFT", -4, 0)
-
-	AudioOptionsFrameOkay:ClearAllPoints()
-	AudioOptionsFrameOkay:SetPoint("RIGHT", AudioOptionsFrameCancel, "LEFT", -4, 0)
-
-	InterfaceOptionsFrameOkay:ClearAllPoints()
-	InterfaceOptionsFrameOkay:SetPoint("RIGHT",InterfaceOptionsFrameCancel, "LEFT", -4, 0)
-
 	InterfaceOptionsFrameCategoriesList:StripTextures()
 	InterfaceOptionsFrameAddOnsList:StripTextures()
+
+	S:HandleScrollBar(InterfaceOptionsFrameCategoriesListScrollBar)
+	S:HandleScrollBar(InterfaceOptionsFrameAddOnsListScrollBar)
+
+	S:HandleDropDownBox(VideoOptionsResolutionPanelMultiSampleDropDown, 195)
+
+	VideoOptionsFrameDefaults:Point("BOTTOMLEFT", 21, 16)
+	VideoOptionsFrameApply:Point("BOTTOMRIGHT", -22, 16)
+	VideoOptionsFrameCancel:Point("BOTTOMRIGHT", VideoOptionsFrameApply, "BOTTOMLEFT", -3, 0)
+	VideoOptionsFrameOkay:Point("BOTTOMRIGHT", VideoOptionsFrameCancel, "BOTTOMLEFT", -3, 0)
+
+	AudioOptionsFrameDefaults:Point("BOTTOMLEFT", 21, 16)
+	AudioOptionsFrameCancel:Point("BOTTOMRIGHT", -22, 16)
+	AudioOptionsFrameOkay:Point("BOTTOMRIGHT", AudioOptionsFrameCancel, "BOTTOMLEFT", -3, 0)
+
+	InterfaceOptionsFrameDefaults:Point("BOTTOMLEFT", 21, 16)
+	InterfaceOptionsFrameCancel:Point("BOTTOMRIGHT", -22, 16)
+	InterfaceOptionsFrameOkay:Point("BOTTOMRIGHT", InterfaceOptionsFrameCancel, "BOTTOMLEFT", -3, 0)
+
+	VideoOptionsResolutionPanelBrightnessGrayScale:SetTexture("Interface\\OptionsFrame\\21stepgrayscale")
 
 	-- Mac Menu
 	if IsMacClient() then
@@ -393,8 +382,7 @@ local function LoadSkin()
 		-- Skin main frame and reposition the header
 		MacOptionsFrame:SetTemplate("Default", true)
 		MacOptionsFrameHeader:SetTexture("")
-		MacOptionsFrameHeader:ClearAllPoints()
-		MacOptionsFrameHeader:SetPoint("TOP", MacOptionsFrame, 0, 0)
+		MacOptionsFrameHeader:SetPoint("TOP", 0, 0)
 
 		S:HandleDropDownBox(MacOptionsFrameResolutionDropDown)
 		S:HandleDropDownBox(MacOptionsFrameFramerateDropDown)
@@ -406,47 +394,38 @@ local function LoadSkin()
 			S:HandleCheckBox(_G["MacOptionsFrameCheckButton"..i])
 		end
 
-		--Skin internal frames
+		-- Skin internal frames
 		MacOptionsFrameMovieRecording:SetTemplate("Default", true)
 		MacOptionsITunesRemote:SetTemplate("Default", true)
 
-		--Skin buttons
+		-- Skin buttons
 		S:HandleButton(MacOptionsFrameCancel)
 		S:HandleButton(MacOptionsFrameOkay)
 		S:HandleButton(MacOptionsButtonKeybindings)
 		S:HandleButton(MacOptionsFrameDefaults)
 		S:HandleButton(MacOptionsButtonCompress)
 
-		--Reposition and resize buttons
-		local tPoint, tRTo, tRP, _, tY = MacOptionsButtonCompress:GetPoint()
-		MacOptionsButtonCompress:SetWidth(136)
-		MacOptionsButtonCompress:ClearAllPoints()
-		MacOptionsButtonCompress:Point(tPoint, tRTo, tRP, 4, tY)
+		-- Reposition and resize buttons
+		MacOptionsButtonCompress:Width(136)
+		MacOptionsButtonCompress:Point("TOPLEFT", MacOptionsFrameCheckButton6, "BOTTOMLEFT", 4, -1)
 
-		MacOptionsFrameCancel:SetWidth(96)
-		MacOptionsFrameCancel:SetHeight(22)
-		tPoint, tRTo, tRP, _, tY = MacOptionsFrameCancel:GetPoint()
-		MacOptionsFrameCancel:ClearAllPoints()
-		MacOptionsFrameCancel:Point(tPoint, tRTo, tRP, -14, tY)
+		MacOptionsFrameCancel:Size(96, 22)
+		MacOptionsFrameCancel:Point("BOTTOMRIGHT", -14, 16)
 
 		MacOptionsFrameOkay:ClearAllPoints()
-		MacOptionsFrameOkay:SetWidth(96)
-		MacOptionsFrameOkay:SetHeight(22)
-		MacOptionsFrameOkay:Point("LEFT",MacOptionsFrameCancel, -99, 0)
+		MacOptionsFrameOkay:Size(96, 22)
+		MacOptionsFrameOkay:Point("LEFT", MacOptionsFrameCancel, -99, 0)
 
 		MacOptionsButtonKeybindings:ClearAllPoints()
-		MacOptionsButtonKeybindings:SetWidth(96)
-		MacOptionsButtonKeybindings:SetHeight(22)
-		MacOptionsButtonKeybindings:Point("LEFT",MacOptionsFrameOkay, -99, 0)
+		MacOptionsButtonKeybindings:Size(96, 22)
+		MacOptionsButtonKeybindings:Point("LEFT", MacOptionsFrameOkay, -99, 0)
 
-		MacOptionsFrameDefaults:SetWidth(96)
-		MacOptionsFrameDefaults:SetHeight(22)
+		MacOptionsFrameDefaults:Size(96, 22)
 
 		MacOptionsCompressFrame:SetTemplate("Default", true)
 
 		MacOptionsCompressFrameHeader:SetTexture("")
-		MacOptionsCompressFrameHeader:ClearAllPoints()
-		MacOptionsCompressFrameHeader:SetPoint("TOP", MacOptionsCompressFrame, 0, 0)
+		MacOptionsCompressFrameHeader:SetPoint("TOP", 0, 0)
 
 		S:HandleButton(MacOptionsCompressFrameDelete)
 		S:HandleButton(MacOptionsCompressFrameSkip)
@@ -455,8 +434,7 @@ local function LoadSkin()
 		MacOptionsCancelFrame:SetTemplate("Default", true)
 
 		MacOptionsCancelFrameHeader:SetTexture("")
-		MacOptionsCancelFrameHeader:ClearAllPoints()
-		MacOptionsCancelFrameHeader:SetPoint("TOP", MacOptionsCancelFrame, 0, 0)
+		MacOptionsCancelFrameHeader:SetPoint("TOP", 0, 0)
 
 		S:HandleButton(MacOptionsCancelFrameNo)
 		S:HandleButton(MacOptionsCancelFrameYes)
@@ -552,10 +530,10 @@ local function LoadSkin()
 	S:HandleButton(ChatConfigFrameCancelButton)
 	S:HandleButton(ChatConfigFrameOkayButton)
 
-	ChatConfigFrameDefaultButton:Point("BOTTOMLEFT", 12, 8)
 	ChatConfigFrameDefaultButton:Width(125)
+	ChatConfigFrameDefaultButton:Point("BOTTOMLEFT", 12, 8)
 
-	ChatConfigFrameCancelButton:Point("BOTTOMRIGHT", -11, 8)
+	ChatConfigFrameCancelButton:Point("BOTTOMRIGHT", -1, 8)
 
 	S:HandleColorSwatch(CombatConfigColorsColorizeSpellNamesColorSwatch)
 	S:HandleColorSwatch(CombatConfigColorsColorizeDamageNumberColorSwatch)

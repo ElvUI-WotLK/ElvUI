@@ -3,7 +3,6 @@ local S = E:GetModule("Skins")
 
 --Lua functions
 --WoW API / Variables
-local SetDressUpBackground = SetDressUpBackground
 
 local function LoadSkin()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.dressingroom then return end
@@ -26,17 +25,27 @@ local function LoadSkin()
 	S:HandleCloseButton(DressUpFrameCloseButton, DressUpFrame.backdrop)
 
 	S:HandleRotateButton(DressUpModelRotateLeftButton)
-	DressUpModelRotateLeftButton:Point("TOPLEFT", DressUpFrame, 25, -79)
 	S:HandleRotateButton(DressUpModelRotateRightButton)
-	DressUpModelRotateRightButton:Point("TOPLEFT", DressUpModelRotateLeftButton, "TOPRIGHT", 3, 0)
 
 	S:HandleButton(DressUpFrameCancelButton)
-	DressUpFrameCancelButton:Point("CENTER", DressUpFrame, "TOPLEFT", 300, -422)
 	S:HandleButton(DressUpFrameResetButton)
-	DressUpFrameResetButton:Point("RIGHT", DressUpFrameCancelButton, "LEFT", -3, 0)
 
 	DressUpModel:CreateBackdrop("Default")
-	DressUpModel.backdrop:SetOutside(DressUpBackgroundTopLeft, nil, nil, DressUpModel)
+	DressUpModel.backdrop:SetOutside(DressUpModel)
+
+	DressUpFrameDescriptionText:Point("CENTER", DressUpFrameTitleText, "BOTTOM", 10, -18)
+
+	DressUpModelRotateLeftButton:Point("TOPLEFT", DressUpFrame, 29, -76)
+	DressUpModelRotateRightButton:Point("TOPLEFT", DressUpModelRotateLeftButton, "TOPRIGHT", 3, 0)
+
+	DressUpModel:Size(323, 331)
+	DressUpModel:ClearAllPoints()
+	DressUpModel:Point("TOPLEFT", 20, -67)
+
+	DressUpBackgroundTopLeft:Point("TOPLEFT", 23, -67)
+
+	DressUpFrameCancelButton:Point("CENTER", DressUpFrame, "TOPLEFT", 304, -417)
+	DressUpFrameResetButton:Point("RIGHT", DressUpFrameCancelButton, "LEFT", -3, 0)
 end
 
 S:AddCallback("Skin_DressingRoom", LoadSkin)
