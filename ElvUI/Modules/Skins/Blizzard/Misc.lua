@@ -14,28 +14,26 @@ local function LoadSkin()
 	GameMenuFrame:StripTextures()
 	GameMenuFrame:CreateBackdrop("Transparent")
 
-	GameMenuFrameHeader:ClearAllPoints()
-	GameMenuFrameHeader:Point("TOP", GameMenuFrame, 0, 7)
+	GameMenuFrameHeader:Point("TOP", 0, 7)
 
 	local menuButtons = {
-		"GameMenuButtonOptions",
-		"GameMenuButtonUIOptions",
-		"GameMenuButtonKeybindings",
-		"GameMenuButtonMacros",
-		"GameMenuButtonSoundOptions",
-		"GameMenuButtonLogout",
-		"GameMenuButtonQuit",
-		"GameMenuButtonContinue",
+		GameMenuButtonOptions,
+		GameMenuButtonSoundOptions,
+		GameMenuButtonUIOptions,
+	--	GameMenuButtonMacOptions,
+		GameMenuButtonKeybindings,
+		GameMenuButtonMacros,
+	--	GameMenuButtonRatings,
+		GameMenuButtonLogout,
+		GameMenuButtonQuit,
+		GameMenuButtonContinue,
+
+		ElvUI_MenuButton
 	}
 
 	for i = 1, #menuButtons do
-		local button = _G[menuButtons[i]]
-		if button then
-			S:HandleButton(button)
-		end
+		S:HandleButton(menuButtons[i])
 	end
-
-	S:HandleButton(ElvUI_MenuButton)
 
 	-- Static Popups
 	for i = 1, 4 do
@@ -68,7 +66,7 @@ local function LoadSkin()
 		end
 
 		closeButton:StripTextures()
-		S:HandleCloseButton(closeButton)
+		S:HandleCloseButton(closeButton, staticPopup)
 
 		itemFrame:GetNormalTexture():Kill()
 		itemFrame:SetTemplate()
@@ -115,9 +113,10 @@ local function LoadSkin()
 	BNToastFrameCloseButton:Size(32)
 	BNToastFrameCloseButton:Point("TOPRIGHT", "BNToastFrame", 4, 4)
 
-	S:HandleCloseButton(BNToastFrameCloseButton)
+	S:HandleCloseButton(BNToastFrameCloseButton, BNToastFrame)
 
 	-- Ready Check Frame
+	ReadyCheckFrame:EnableMouse(true)
 	ReadyCheckFrame:SetTemplate("Transparent")
 
 	S:HandleButton(ReadyCheckFrameYesButton)
@@ -128,11 +127,10 @@ local function LoadSkin()
 	S:HandleButton(ReadyCheckFrameNoButton)
 	ReadyCheckFrameNoButton:SetParent(ReadyCheckFrame)
 	ReadyCheckFrameNoButton:ClearAllPoints()
-	ReadyCheckFrameNoButton:Point("TOPLEFT", ReadyCheckFrame, "CENTER", 3, -5)
+	ReadyCheckFrameNoButton:Point("TOPLEFT", ReadyCheckFrame, "CENTER", 4, -5)
 
 	ReadyCheckFrameText:SetParent(ReadyCheckFrame)
-	ReadyCheckFrameText:ClearAllPoints()
-	ReadyCheckFrameText:SetPoint("TOP", 0, -15)
+	ReadyCheckFrameText:Point("TOP", 0, -15)
 	ReadyCheckFrameText:SetTextColor(1, 1, 1)
 
 	ReadyCheckListenerFrame:SetAlpha(0)
@@ -154,10 +152,10 @@ local function LoadSkin()
 	StackSplitFrame:SetFrameStrata("DIALOG")
 
 	StackSplitFrame.bg1 = CreateFrame("Frame", nil, StackSplitFrame)
+	StackSplitFrame.bg1:SetFrameLevel(StackSplitFrame.bg1:GetFrameLevel() - 1)
 	StackSplitFrame.bg1:SetTemplate("Transparent")
 	StackSplitFrame.bg1:Point("TOPLEFT", 10, -15)
 	StackSplitFrame.bg1:Point("BOTTOMRIGHT", -10, 55)
-	StackSplitFrame.bg1:SetFrameLevel(StackSplitFrame.bg1:GetFrameLevel() - 1)
 
 	S:HandleButton(StackSplitOkayButton)
 	S:HandleButton(StackSplitCancelButton)
@@ -177,7 +175,7 @@ local function LoadSkin()
 	ChannelPulloutTab:Size(107, 26)
 	ChannelPulloutTabText:Point("LEFT", ChannelPulloutTabLeft, "RIGHT", 0, 4)
 
-	S:HandleCloseButton(ChannelPulloutCloseButton)
+	S:HandleCloseButton(ChannelPulloutCloseButton, ChannelPullout)
 	ChannelPulloutCloseButton:Size(32)
 
 	-- Dropdown Menu

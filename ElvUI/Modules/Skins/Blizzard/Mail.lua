@@ -96,11 +96,8 @@ local function LoadSkin()
 		end
 	end)
 
-	InboxTitleText:ClearAllPoints()
-	InboxTitleText:Point("TOP", InboxFrame, "TOP", 0, -18)
-
-	SendMailTitleText:ClearAllPoints()
-	SendMailTitleText:Point("TOP", SendMailFrame, "TOP", 0, -18)
+	InboxTitleText:Point("CENTER", 0, 231)
+	SendMailTitleText:Point("CENTER", 0, 231)
 
 	S:HandleNextPrevButton(InboxPrevPageButton, nil, nil, true)
 	InboxPrevPageButton:Size(32)
@@ -110,20 +107,19 @@ local function LoadSkin()
 
 	S:HandleCloseButton(InboxCloseButton, MailFrame.backdrop)
 
-	MailFrameTab1:Point("BOTTOMLEFT", MailFrame, 24, 46)
-
 	for i = 1, 2 do
 		local tab = _G["MailFrameTab"..i]
-
 		tab:StripTextures()
 		S:HandleTab(tab)
 	end
+
+	MailFrameTab1:Point("BOTTOMLEFT", MailFrame, 11, 46)
+	MailFrameTab2:Point("LEFT", MailFrameTab1, "RIGHT", -15, 0)
 
 	-- Send Mail Frame
 	SendMailFrame:StripTextures()
 
 	SendMailScrollFrame:StripTextures(true)
-	SendMailScrollFrame:SetTemplate("Default")
 
 	hooksecurefunc("SendMailFrame_Update", function()
 		for i = 1, ATTACHMENTS_MAX_SEND do
@@ -156,35 +152,50 @@ local function LoadSkin()
 		end
 	end)
 
-	SendMailBodyEditBox:SetTextColor(1, 1, 1)
-
 	S:HandleScrollBar(SendMailScrollFrameScrollBar)
-	SendMailScrollFrameScrollBar:ClearAllPoints()
-	SendMailScrollFrameScrollBar:Point("TOPRIGHT", SendMailScrollFrame, "TOPRIGHT", 20, -18)
-	SendMailScrollFrameScrollBar:Point("BOTTOMRIGHT", SendMailScrollFrame, "BOTTOMRIGHT", 0, 18)
 
 	S:HandleEditBox(SendMailNameEditBox)
-	SendMailNameEditBox:Height(18)
-
 	S:HandleEditBox(SendMailSubjectEditBox)
-	SendMailSubjectEditBox:Point("TOPLEFT", SendMailNameEditBox, "BOTTOMLEFT", 0, -10)
-	SendMailSubjectEditBox:Size(211, 18)
-
 	S:HandleEditBox(SendMailMoneyGold)
 	S:HandleEditBox(SendMailMoneySilver)
 	S:HandleEditBox(SendMailMoneyCopper)
 
 	S:HandleButton(SendMailMailButton)
-	SendMailMailButton:Point("RIGHT", SendMailCancelButton, "LEFT", -2, 0)
-
 	S:HandleButton(SendMailCancelButton)
-	SendMailCancelButton:Point("BOTTOMRIGHT", -45, 80)
-
-	SendMailMoneyFrame:Point("BOTTOMLEFT", 170, 84)
 
 	for i = 1, 5 do
 		_G["AutoCompleteButton"..i]:StyleButton()
 	end
+
+	SendMailScrollFrame:CreateBackdrop()
+	SendMailScrollFrame.backdrop:Point("TOPLEFT", 0, 5)
+	SendMailScrollFrame.backdrop:Point("BOTTOMRIGHT", 0, -5)
+
+	SendMailScrollFrameScrollBar:Point("TOPLEFT", SendMailScrollFrame, "TOPRIGHT", 4, -13)
+	SendMailScrollFrameScrollBar:Point("BOTTOMLEFT", SendMailScrollFrame, "BOTTOMRIGHT", 4, 13)
+
+	SendMailBodyEditBox:SetTextColor(1, 1, 1)
+	SendMailBodyEditBox:Width(291)
+	SendMailBodyEditBox:Point("TOPLEFT", 5, -5)
+
+	SendMailScrollFrame:Width(304)
+	SendMailScrollFrame:Point("TOPLEFT", 19, -97)
+
+	SendMailNameEditBox:Height(18)
+	SendMailNameEditBox:Point("TOPLEFT", 75, -43)
+
+	SendMailSubjectEditBox:Size(247, 18)
+	SendMailSubjectEditBox:Point("TOPLEFT", SendMailNameEditBox, "BOTTOMLEFT", 0, -5)
+
+	SendMailCostMoneyFrame:Point("TOPRIGHT", -27, -45)
+
+	SendMailMoneyText:Point("TOPLEFT", 0, 3)
+	SendMailMoney:Point("TOPLEFT", SendMailMoneyText, "BOTTOMLEFT", 2, -3)
+
+	SendMailMoneyFrame:Point("BOTTOMRIGHT", SendMailFrame, "BOTTOMLEFT", 164, 88)
+	SendMailMailButton:Point("RIGHT", SendMailCancelButton, "LEFT", -3, 0)
+
+	SendMailCancelButton:Point("BOTTOMRIGHT", -40, 84)
 
 	-- Open Mail Frame
 	OpenMailFrame:StripTextures(true)
@@ -235,11 +246,7 @@ local function LoadSkin()
 	S:HandleButton(OpenMailReportSpamButton)
 
 	S:HandleButton(OpenMailReplyButton)
-	OpenMailReplyButton:Point("RIGHT", OpenMailDeleteButton, "LEFT", -2, 0)
-
 	S:HandleButton(OpenMailDeleteButton)
-	OpenMailDeleteButton:Point("RIGHT", OpenMailCancelButton, "LEFT", -2, 0)
-
 	S:HandleButton(OpenMailCancelButton)
 
 	OpenMailScrollFrame:StripTextures(true)
@@ -273,6 +280,22 @@ local function LoadSkin()
 	OpenMailMoneyButtonIconTexture:SetInside()
 
 	OpenMailMoneyButtonCount:SetDrawLayer("OVERLAY")
+
+	OpenMailScrollFrame:Width(304)
+	OpenMailScrollFrame:Point("TOPLEFT", 19, -92)
+
+	OpenMailScrollFrameScrollBar:Point("TOPLEFT", OpenMailScrollFrame, "TOPRIGHT", 4, -18)
+	OpenMailScrollFrameScrollBar:Point("BOTTOMLEFT", OpenMailScrollFrame, "BOTTOMRIGHT", 4, 18)
+
+	OpenMailSenderLabel:Point("TOPRIGHT", OpenMailFrame, "TOPLEFT", 85, -45)
+	OpenMailSubjectLabel:Point("TOPRIGHT", OpenMailFrame, "TOPLEFT", 85, -65)
+	OpenMailSender:Point("LEFT", OpenMailSenderLabel, "RIGHT", 5, -1)
+	OpenMailSubject:Point("TOPLEFT", OpenMailSubjectLabel, "TOPRIGHT", 5, -1)
+
+	OpenMailReportSpamButton:Point("TOPRIGHT", -40, -43)
+	OpenMailCancelButton:Point("BOTTOMRIGHT", -40, 84)
+	OpenMailDeleteButton:Point("RIGHT", OpenMailCancelButton, "LEFT", -3, 0)
+	OpenMailReplyButton:Point("RIGHT", OpenMailDeleteButton, "LEFT", -3, 0)
 end
 
 S:AddCallback("Skin_Mail", LoadSkin)
