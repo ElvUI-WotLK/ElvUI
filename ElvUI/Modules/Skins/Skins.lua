@@ -4,6 +4,7 @@ local S = E:GetModule("Skins")
 --Lua functions
 local _G = _G
 local unpack, pairs, ipairs, select, type = unpack, pairs, ipairs, select, type
+local floor = math.floor
 local strfind, format, lower = strfind, string.format, string.lower
 --WoW API / Variables
 local IsAddOnLoaded = IsAddOnLoaded
@@ -650,6 +651,52 @@ function S:SetUIPanelWindowInfo(frame, name, value, offset, igroneUpdate)
 	end
 end
 
+function S:SetBackdropHitRect(frame, backdrop, clampRect)
+	if not frame then return end
+
+	backdrop = backdrop or frame.backdrop
+	if not backdrop then return end
+
+	local left = frame:GetLeft()
+	local bleft = backdrop:GetLeft()
+
+	if not left or not bleft then
+		print(frame, frame:GetName(), "SetBackdropHitRect NO POS", left, bleft)
+		E:Delay(0.1, S.SetBackdropHitRect, S, frame, backdrop, clampRect)
+		return
+	end
+
+	left = floor(left + 0.5)
+	local right = floor(frame:GetRight() + 0.5)
+	local top = floor(frame:GetTop() + 0.5)
+	local bottom = floor(frame:GetBottom() + 0.5)
+
+	bleft = floor(bleft + 0.5)
+	local bright = floor(backdrop:GetRight() + 0.5)
+	local btop = floor(backdrop:GetTop() + 0.5)
+	local bbottom = floor(backdrop:GetBottom() + 0.5)
+
+	left = bleft - left
+	right = right - bright
+	top = top - btop
+	bottom = bbottom - bottom
+
+	if not frame:CanChangeAttribute() then
+		self.hitRectQueue[frame] = {left, right, top, bottom, clampRect}
+
+		if not self.inCombat then
+			self.inCombat = true
+			S:RegisterEvent("PLAYER_REGEN_ENABLED")
+		end
+	else
+		frame:SetHitRectInsets(left, right, top, bottom)
+
+		if clampRect then
+			frame:SetClampRectInsets(left, -right, -top, bottom)
+		end
+	end
+end
+
 function S:PLAYER_REGEN_ENABLED()
 	self.inCombat = nil
 	self:UnregisterEvent("PLAYER_REGEN_ENABLED")
@@ -657,6 +704,16 @@ function S:PLAYER_REGEN_ENABLED()
 	for frameInfo, info in pairs(self.uiPanelQueue) do
 		SetPanelWindowInfo(info[1], info[2], info[3], info[4])
 		self.uiPanelQueue[frameInfo] = nil
+	end
+
+	for frame, info in pairs(self.hitRectQueue) do
+		frame:SetHitRectInsets(info[1], info[2], info[3], info[4])
+
+		if info[5] then
+			frame:SetClampRectInsets(info[1], info[2], info[3], info[4])
+		end
+
+		self.hitRectQueue[frame] = nil
 	end
 end
 
@@ -734,8 +791,11 @@ end
 
 function S:Initialize()
 	self.Initialized = true
+
 	self.db = E.private.skins
+
 	self.uiPanelQueue = {}
+	self.hitRectQueue = {}
 
 	S:SkinAce3()
 
