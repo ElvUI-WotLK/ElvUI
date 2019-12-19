@@ -5,9 +5,9 @@ local S = E:GetModule("Skins")
 local _G = _G
 local ipairs, unpack = ipairs, unpack
 --WoW API / Variables
-local CreateFrame = CreateFrame
 local GetAuctionSellItemInfo = GetAuctionSellItemInfo
 local GetItemQualityColor = GetItemQualityColor
+local PlaySound = PlaySound
 local hooksecurefunc = hooksecurefunc
 
 local function LoadSkin()
@@ -18,9 +18,12 @@ local function LoadSkin()
 	AuctionFrame.backdrop:Point("TOPLEFT", 12, 0)
 	AuctionFrame.backdrop:Point("BOTTOMRIGHT", 0, 0)
 
-	S:SetUIPanelWindowInfo(AuctionFrame, "xoffset", -1)
-	S:SetUIPanelWindowInfo(AuctionFrame, "yoffset", -12)
---	S:SetUIPanelWindowInfo(AuctionFrame, "width", 821)
+	S:HookScript(AuctionFrame, "OnShow", function(self)
+		S:SetUIPanelWindowInfo(self, "xoffset", -1, nil, true)
+		S:SetUIPanelWindowInfo(self, "yoffset", -12, nil, true)
+		S:SetUIPanelWindowInfo(self, "width", nil, 1)
+		S:Unhook(self, "OnShow")
+	end)
 
 	local buttons = {
 		BrowseSearchButton,
@@ -101,10 +104,13 @@ local function LoadSkin()
 
 		if i == 1 then
 			tab:ClearAllPoints()
-			tab:Point("BOTTOMLEFT", AuctionFrame, "BOTTOMLEFT", 20, -30)
+			tab:Point("BOTTOMLEFT", AuctionFrame, "BOTTOMLEFT", 12, -30)
 			tab.SetPoint = E.noop
 		end
 	end
+
+	AuctionFrameTab2:Point("TOPLEFT", AuctionFrameTab1, "TOPRIGHT", -15, 0)
+	AuctionFrameTab3:Point("TOPLEFT", AuctionFrameTab2, "TOPRIGHT", -15, 0)
 
 	for i = 1, NUM_FILTERS_TO_DISPLAY do
 		local tab = _G["AuctionFilterButton"..i]
@@ -158,6 +164,7 @@ local function LoadSkin()
 	BrowseLevelText:Point("BOTTOMLEFT", AuctionFrameBrowse, "TOPLEFT", 200, -40)
 	BrowseMaxLevel:Point("LEFT", BrowseMinLevel, "RIGHT", 8, 0)
 
+	BrowseBidText:Point("RIGHT", BrowseBidPrice, "LEFT", -11, 0)
 	BrowseBidPrice:Point("BOTTOM", 25, 10)
 
 	-- Bid Frame
@@ -193,6 +200,9 @@ local function LoadSkin()
 
 	AuctionsCloseButton:Point("BOTTOMRIGHT", 66, 6)
 	AuctionsCancelAuctionButton:Point("RIGHT", AuctionsCloseButton, "LEFT", -4, 0)
+
+	AuctionsCreateAuctionButton:Width(181)
+	AuctionsCreateAuctionButton:Point("BOTTOMLEFT", AuctionFrameAuctions, "BOTTOMLEFT", 26, 39)
 
 	AuctionsStackSizeEntry.backdrop:SetAllPoints()
 	AuctionsNumStacksEntry.backdrop:SetAllPoints()
@@ -307,7 +317,7 @@ local function LoadSkin()
 		frame.RightBackground:SetFrameLevel(frame:GetFrameLevel() - 1)
 	end
 
-	AuctionFrameAuctions.LeftBackground:Point("TOPLEFT", 15, -72)
+	AuctionFrameAuctions.LeftBackground:Point("TOPLEFT", 20, -72)
 	AuctionFrameAuctions.LeftBackground:Point("BOTTOMRIGHT", -545, 34)
 
 	AuctionFrameAuctions.RightBackground:Point("TOPLEFT", AuctionFrameAuctions.LeftBackground, "TOPRIGHT", 3, 0)
@@ -321,33 +331,50 @@ local function LoadSkin()
 
 	AuctionFrameBid.Background = CreateFrame("Frame", nil, AuctionFrameBid)
 	AuctionFrameBid.Background:SetTemplate("Transparent")
-	AuctionFrameBid.Background:Point("TOPLEFT", 22, -72)
+	AuctionFrameBid.Background:Point("TOPLEFT", 20, -72)
 	AuctionFrameBid.Background:Point("BOTTOMRIGHT", 66, 34)
 	AuctionFrameBid.Background:SetFrameLevel(AuctionFrameBid:GetFrameLevel() - 1)
 
 	-- DressUpFrame
 	AuctionDressUpFrame:StripTextures()
-	AuctionDressUpFrame:CreateBackdrop("Transparent")
-	AuctionDressUpFrame.backdrop:Point("TOPLEFT", 0, 10)
-	AuctionDressUpFrame.backdrop:Point("BOTTOMRIGHT", -5, 3)
-	AuctionDressUpFrame:Point("TOPLEFT", AuctionFrame, "TOPRIGHT", 1, -28)
+
+	S:HandleCloseButton(AuctionDressUpFrameCloseButton, AuctionDressUpFrame)
 
 	AuctionDressUpModel:CreateBackdrop()
-	AuctionDressUpModel.backdrop:SetOutside(AuctionDressUpBackgroundTop, nil, nil, AuctionDressUpBackgroundBot)
+	AuctionDressUpModel.backdrop:SetOutside(AuctionDressUpModel)
 
 	SetAuctionDressUpBackground()
 	AuctionDressUpBackgroundTop:SetDesaturated(true)
 	AuctionDressUpBackgroundBot:SetDesaturated(true)
 
 	S:HandleRotateButton(AuctionDressUpModelRotateLeftButton)
-	AuctionDressUpModelRotateLeftButton:Point("TOPLEFT", AuctionDressUpFrame, 8, -17)
-
 	S:HandleRotateButton(AuctionDressUpModelRotateRightButton)
-	AuctionDressUpModelRotateRightButton:Point("TOPLEFT", AuctionDressUpModelRotateLeftButton, "TOPRIGHT", 3, 0)
 
 	S:HandleButton(AuctionDressUpFrameResetButton)
 
-	S:HandleCloseButton(AuctionDressUpFrameCloseButton, AuctionDressUpFrame.backdrop)
+	AuctionDressUpFrame:SetTemplate("Transparent")
+	AuctionDressUpFrame:Size(189, 401)
+	AuctionDressUpFrame:Point("TOPLEFT", AuctionFrame, "TOPRIGHT", -1, 0)
+
+	AuctionDressUpModel:Size(171, 365)
+	AuctionDressUpModel:Point("BOTTOM", AuctionDressUpFrame, "BOTTOM", 0, 9)
+
+	AuctionDressUpBackgroundTop:Point("TOPLEFT", AuctionDressUpFrame, "TOPLEFT", 9, -27)
+
+	AuctionDressUpModelRotateLeftButton:Point("TOPLEFT", AuctionDressUpFrame, "TOPLEFT", 12, -30)
+	AuctionDressUpModelRotateRightButton:Point("TOPLEFT", AuctionDressUpModelRotateLeftButton, "TOPRIGHT", 3, 0)
+
+	AuctionDressUpFrameResetButton:Point("BOTTOM", AuctionDressUpModel, "BOTTOM", 0, 7)
+
+	AuctionDressUpFrame:SetScript("OnShow", function()
+		S:SetUIPanelWindowInfo(AuctionFrame, "width", nil, 189)
+		PlaySound("igCharacterInfoOpen")
+	end)
+
+	AuctionDressUpFrame:SetScript("OnHide", function()
+		S:SetUIPanelWindowInfo(AuctionFrame, "width", nil, 1)
+		PlaySound("igCharacterInfoClose")
+	end)
 end
 
 S:AddCallbackForAddon("Blizzard_AuctionUI", "Skin_Blizzard_AuctionUI", LoadSkin)
