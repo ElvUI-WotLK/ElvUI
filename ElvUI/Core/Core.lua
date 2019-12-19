@@ -1223,6 +1223,10 @@ function E:DBConversions()
 	if sub(E.db.chat.timeStampFormat, -1) == " " then
 		E.db.chat.timeStampFormat = sub(E.db.chat.timeStampFormat, 1, -2)
 	end
+
+	if E.private.skins.blizzard.greeting ~= nil then
+		E.private.skins.blizzard.greeting = nil
+	end
 end
 
 function E:RefreshModulesDB()
