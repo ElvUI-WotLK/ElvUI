@@ -32,6 +32,8 @@ local function LoadSkin()
 
 	PetitionFrameInstructions:SetTextColor(1, 1, 1)
 
+	PetitionFrameRequestButton:Point("BOTTOMLEFT", 19, 74)
+	PetitionFrameCancelButton:Point("BOTTOMRIGHT", -40, 74)
 	PetitionFrameRenameButton:Point("LEFT", PetitionFrameRequestButton, "RIGHT", 3, 0)
 	PetitionFrameRenameButton:Point("RIGHT", PetitionFrameCancelButton, "LEFT", -3, 0)
 end
