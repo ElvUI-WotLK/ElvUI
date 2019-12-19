@@ -19,7 +19,6 @@
 	<Script file="Glyph.lua"/>
 	<Script file="GMChat.lua"/>
 	<Script file="Gossip.lua"/>
-	<Script file="Greeting.lua"/>
 	<Script file="GuildRegistrar.lua"/>
 	<Script file="Help.lua"/>
 	<Script file="Inspect.lua"/>
