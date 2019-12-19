@@ -8,7 +8,7 @@ local TT = E:GetModule("Tooltip")
 local function LoadSkin()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.tooltip then return end
 
-	S:HandleCloseButton(ItemRefCloseButton)
+	S:HandleCloseButton(ItemRefCloseButton, ItemRefTooltip)
 
 	local tooltips = {
 		GameTooltip,
