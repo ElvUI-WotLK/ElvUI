@@ -5,9 +5,7 @@ local S = E:GetModule("Skins")
 local _G = _G
 local unpack, pairs, ipairs, select, type = unpack, pairs, ipairs, select, type
 local strfind, format, lower = strfind, string.format, string.lower
-local twipe = table.wipe
 --WoW API / Variables
-local InCombatLockdown = InCombatLockdown
 local IsAddOnLoaded = IsAddOnLoaded
 local hooksecurefunc = hooksecurefunc
 
@@ -629,11 +627,11 @@ function S:SetUIPanelWindowInfo(frame, name, value, offset, igroneUpdate)
 		value = E:Scale(value or (frame.backdrop and frame.backdrop:GetWidth() or frame:GetWidth())) + (offset or 0) + UI_PANEL_OFFSET
 	end
 
-	if self.inCombat or InCombatLockdown() then
+	if not frame:CanChangeAttribute() then
 		local frameInfo = format("%s-%s", frameName, name)
 
 		if self.uiPanelQueue[frameInfo] then
-			if name == "width" and frame.__uiPanelWidth and frame.__uiPanelWidth == value then
+			if name == "width" and frame.__uiPanelWidth == value then
 				self.uiPanelQueue[frameInfo] = nil
 			else
 				self.uiPanelQueue[frameInfo][3] = value
@@ -654,13 +652,12 @@ end
 
 function S:PLAYER_REGEN_ENABLED()
 	self.inCombat = nil
-	S:UnregisterEvent("PLAYER_REGEN_ENABLED")
+	self:UnregisterEvent("PLAYER_REGEN_ENABLED")
 
-	for _, info in pairs(self.uiPanelQueue) do
+	for frameInfo, info in pairs(self.uiPanelQueue) do
 		SetPanelWindowInfo(info[1], info[2], info[3], info[4])
+		self.uiPanelQueue[frameInfo] = nil
 	end
-
-	twipe(self.uiPanelQueue)
 end
 
 --Add callback for skin that relies on another addon.
