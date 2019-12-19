@@ -15,7 +15,7 @@ local GetTime = GetTime
 --local UnitGUID = UnitGUID
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS
 
-local VISIBLE, HIDDEN = 1, 0
+local CREATED, VISIBLE, HIDDEN = 2, 1, 0
 
 local positionValues = {
 	TOPLEFT = "BOTTOM",
@@ -104,6 +104,15 @@ local unstableAffliction = GetSpellInfo(30108)
 local vampiricTouch = GetSpellInfo(34914)
 function NP:SetAura(frame, guid, index, filter, isDebuff, visible)
 	local isAura, name, texture, count, debuffType, duration, expiration, caster, spellID = LAI:GUIDAura(guid, index, filter)
+
+	if frame.forceShow or frame.forceCreate then
+		spellID = 47540
+		name, _, texture = GetSpellInfo(spellID)
+		if frame.forceShow then
+			isAura, count, debuffType, duration, expiration = true, 5, "Magic", 0, 60
+		end
+	end
+
 	if isAura then
 		local position = visible + 1
 		local button = frame[position] or NP:Construct_AuraIcon(frame, position)
@@ -112,7 +121,11 @@ function NP:SetAura(frame, guid, index, filter, isDebuff, visible)
 		button.filter = filter
 		button.isDebuff = isDebuff
 
-		local filterCheck = NP:AuraFilter(guid, button, name, texture, count, debuffType, duration, expiration, caster, spellID)
+		local filterCheck = not frame.forceCreate
+		if not (frame.forceShow or frame.forceCreate) then
+			filterCheck = NP:AuraFilter(guid, button, name, texture, count, debuffType, duration, expiration, caster, spellID)
+		end
+
 		if filterCheck then
 			if button.icon then button.icon:SetTexture(texture) end
 			if button.count then button.count:SetText(count > 1 and count) end
@@ -154,6 +167,10 @@ function NP:SetAura(frame, guid, index, filter, isDebuff, visible)
 			end
 
 			return VISIBLE
+		elseif frame.forceCreate then
+			button:Hide()
+
+			return CREATED
 		else
 			return HIDDEN
 		end
@@ -161,7 +178,7 @@ function NP:SetAura(frame, guid, index, filter, isDebuff, visible)
 end
 
 function NP:UpdateElement_AuraIcons(frame, guid, filter, limit, isDebuff)
-	local index, visible, hidden = 1, 0, 0
+	local index, visible, hidden, created = 1, 0, 0, 0
 	while visible < limit do
 		local result = NP:SetAura(frame, guid, index, filter, isDebuff, visible)
 		if not result then
@@ -170,9 +187,14 @@ function NP:UpdateElement_AuraIcons(frame, guid, filter, limit, isDebuff)
 			hidden = hidden + 1
 		elseif result == VISIBLE then
 			visible = visible + 1
+		elseif result == CREATED then
+			visible = visible + 1
+			created = created + 1
 		end
 		index = index + 1
 	end
+
+	visible = visible - created
 
 	for i = visible + 1, #frame do
 		frame[i]:Hide()
@@ -195,7 +217,7 @@ function NP:UpdateElement_Auras(frame)
 
 		if guid then
 			frame.guid = guid
-		else
+		elseif not frame.Buffs.forceShow then
 			return
 		end
 	end
@@ -366,6 +388,7 @@ function NP:UpdateElement_AurasByGUID(guid, event)
 			end
 		end
 	end
+
 	local frame = self:SearchForFrame(guid, raidIcon, destName)
 	if frame then
 		frame.guid = guid
