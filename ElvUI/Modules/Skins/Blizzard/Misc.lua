@@ -32,7 +32,10 @@ local function LoadSkin()
 	}
 
 	for i = 1, #menuButtons do
-		S:HandleButton(menuButtons[i])
+		local button = menuButtons[i]
+		if button then
+			S:HandleButton(menuButtons[i])
+		end
 	end
 
 	-- Static Popups
