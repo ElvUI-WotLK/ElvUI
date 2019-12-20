@@ -8,6 +8,8 @@ local floor = math.floor
 local strfind, format, lower = strfind, string.format, string.lower
 --WoW API / Variables
 local IsAddOnLoaded = IsAddOnLoaded
+local UIPanelWindows = UIPanelWindows
+local UpdateUIPanelPositions = UpdateUIPanelPositions
 local hooksecurefunc = hooksecurefunc
 
 S.allowBypass = {}
@@ -607,11 +609,7 @@ function S:ADDON_LOADED(_, addon)
 end
 
 local function SetPanelWindowInfo(frame, name, value, igroneUpdate)
-	frame:SetAttribute("UIPanelLayout-"..name, value)
-
-	if name == "width" then
-		frame.__uiPanelWidth = value
-	end
+	frame:SetAttribute(name, value)
 
 	if not igroneUpdate and frame:IsShown() then
 		UpdateUIPanelPositions(frame)
@@ -624,34 +622,38 @@ function S:SetUIPanelWindowInfo(frame, name, value, offset, igroneUpdate)
 	local frameName = frame and frame.GetName and frame:GetName()
 	if not (frameName and UIPanelWindows[frameName]) then return end
 
-	if name == "width" then
+	name = "UIPanelLayout-"..name
+
+	if name == "UIPanelLayout-width" then
 		value = E:Scale(value or (frame.backdrop and frame.backdrop:GetWidth() or frame:GetWidth())) + (offset or 0) + UI_PANEL_OFFSET
 	end
+
+	local valueChanged = frame:GetAttribute(name) ~= value
 
 	if not frame:CanChangeAttribute() then
 		local frameInfo = format("%s-%s", frameName, name)
 
 		if self.uiPanelQueue[frameInfo] then
-			if name == "width" and frame.__uiPanelWidth == value then
-				self.uiPanelQueue[frameInfo] = nil
+			if not valueChanged then
+				self.uiPanelQueue[frameInfo][3] = nil
 			else
 				self.uiPanelQueue[frameInfo][3] = value
 				self.uiPanelQueue[frameInfo][4] = igroneUpdate
 			end
-		else
+		elseif valueChanged then
 			self.uiPanelQueue[frameInfo] = {frame, name, value, igroneUpdate}
-		end
 
-		if not self.inCombat then
-			self.inCombat = true
-			S:RegisterEvent("PLAYER_REGEN_ENABLED")
+			if not self.inCombat then
+				self.inCombat = true
+				S:RegisterEvent("PLAYER_REGEN_ENABLED")
+			end
 		end
-	else
+	elseif valueChanged then
 		SetPanelWindowInfo(frame, name, value, igroneUpdate)
 	end
 end
 
-function S:SetBackdropHitRect(frame, backdrop, clampRect)
+function S:SetBackdropHitRect(frame, backdrop, clampRect, attempt)
 	if not frame then return end
 
 	backdrop = backdrop or frame.backdrop
@@ -661,8 +663,10 @@ function S:SetBackdropHitRect(frame, backdrop, clampRect)
 	local bleft = backdrop:GetLeft()
 
 	if not left or not bleft then
-		print(frame, frame:GetName(), "SetBackdropHitRect NO POS", left, bleft)
-		E:Delay(0.1, S.SetBackdropHitRect, S, frame, backdrop, clampRect)
+		if attempt ~= 10 then
+			E:Delay(0.1, S.SetBackdropHitRect, S, frame, backdrop, clampRect, attempt and attempt + 1 or 1)
+		end
+
 		return
 	end
 
@@ -702,7 +706,9 @@ function S:PLAYER_REGEN_ENABLED()
 	self:UnregisterEvent("PLAYER_REGEN_ENABLED")
 
 	for frameInfo, info in pairs(self.uiPanelQueue) do
-		SetPanelWindowInfo(info[1], info[2], info[3], info[4])
+		if info[3] then
+			SetPanelWindowInfo(info[1], info[2], info[3], info[4])
+		end
 		self.uiPanelQueue[frameInfo] = nil
 	end
 
