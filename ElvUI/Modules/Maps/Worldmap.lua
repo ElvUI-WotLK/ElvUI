@@ -9,10 +9,10 @@ local CreateFrame = CreateFrame
 local GetCVarBool = GetCVarBool
 local GetCursorPosition = GetCursorPosition
 local GetPlayerMapPosition = GetPlayerMapPosition
-local InCombatLockdown = InCombatLockdown
 
-local PLAYER = PLAYER
 local MOUSE_LABEL = MOUSE_LABEL
+local PLAYER = PLAYER
+local WORLDMAP_SETTINGS = WORLDMAP_SETTINGS
 
 local INVERTED_POINTS = {
 	["TOPLEFT"] = "BOTTOMLEFT",
@@ -23,36 +23,6 @@ local INVERTED_POINTS = {
 	["BOTTOM"] = "TOP"
 }
 
-function M:PLAYER_REGEN_ENABLED()
-	WorldMapFrameSizeUpButton:Enable()
-	WorldMapFrameSizeDownButton:Enable()
-
-	WorldMapQuestShowObjectives:Enable()
-
-	WorldMapBlobFrame:SetParent(WorldMapFrame)
-	WorldMapBlobFrame:ClearAllPoints()
-	WorldMapBlobFrame:SetPoint("TOPLEFT", WorldMapDetailFrame)
-	WorldMapBlobFrame:SetScale(self.blobNewScale or WORLDMAP_SETTINGS.size)
-	WorldMapBlobFrame.Hide = nil
-	WorldMapBlobFrame.Show = nil
-
-	if self.blobWasVisible then
-		WorldMapBlobFrame:Show()
-	end
-
-	if WorldMapQuestScrollChildFrame.selected then
-		WorldMapBlobFrame:DrawQuestBlob(WorldMapQuestScrollChildFrame.selected.questId, false)
-	end
-
-	if self.blobWasVisible then
-		WorldMapBlobFrame_CalculateHitTranslations()
-
-		if WorldMapQuestScrollChildFrame.selected and not WorldMapQuestScrollChildFrame.selected.completed then
-			WorldMapBlobFrame:DrawQuestBlob(WorldMapQuestScrollChildFrame.selected.questId, true)
-		end
-	end
-end
-
 local function BloobFrameHide()
 	M.blobWasVisible = nil
 end
@@ -61,14 +31,39 @@ local function BloobFrameShow()
 	M.blobWasVisible = true
 end
 
-function M:PLAYER_REGEN_DISABLED()
-	WorldMapFrameSizeUpButton:Disable()
-	WorldMapFrameSizeDownButton:Disable()
+function M:PLAYER_REGEN_ENABLED()
+	WorldMapBlobFrame.SetFrameLevel = nil
+	WorldMapBlobFrame.SetScale = nil
+	WorldMapBlobFrame.Hide = nil
+	WorldMapBlobFrame.Show = nil
 
-	if not GetCVarBool("miniWorldMap") then
-		WorldMapQuestShowObjectives:Disable()
+	local frameLevel = WorldMapDetailFrame:GetFrameLevel() + 1
+
+	WorldMapBlobFrame:SetParent(WorldMapFrame)
+	WorldMapBlobFrame:ClearAllPoints()
+	WorldMapBlobFrame:SetPoint("TOPLEFT", WorldMapDetailFrame)
+	WorldMapBlobFrame:SetScale(self.blobNewScale or WORLDMAP_SETTINGS.size)
+	WorldMapBlobFrame:SetFrameLevel(frameLevel)
+	WorldMapBlobFrame:SetFrameLevel(frameLevel)	-- called twice to set frame level above the default limit (256)
+
+	if self.blobWasVisible then
+		WorldMapBlobFrame:Show()
 	end
 
+	if WORLDMAP_SETTINGS.selectedQuest then
+		WorldMapBlobFrame:DrawQuestBlob(WORLDMAP_SETTINGS.selectedQuest.questId, false)
+	end
+
+	if self.blobWasVisible then
+		WorldMapBlobFrame_CalculateHitTranslations()
+
+		if WORLDMAP_SETTINGS.selectedQuest and not WORLDMAP_SETTINGS.selectedQuest.completed then
+			WorldMapBlobFrame:DrawQuestBlob(WORLDMAP_SETTINGS.selectedQuest.questId, true)
+		end
+	end
+end
+
+function M:PLAYER_REGEN_DISABLED()
 	self.blobWasVisible = WorldMapFrame:IsShown() and WorldMapBlobFrame:IsShown()
 
 	WorldMapBlobFrame:SetParent(nil)
@@ -77,6 +72,9 @@ function M:PLAYER_REGEN_DISABLED()
 	WorldMapBlobFrame:Hide()
 	WorldMapBlobFrame.Hide = BloobFrameHide
 	WorldMapBlobFrame.Show = BloobFrameShow
+	WorldMapBlobFrame.SetFrameLevel = E.noop
+	WorldMapBlobFrame.SetScale = E.noop
+
 	self.blobNewScale = nil
 end
 
@@ -88,8 +86,8 @@ local function UpdateCoords(self, elapsed)
 
 	local x, y = GetPlayerMapPosition("player")
 
-	if self.playerCoords.x ~= x and self.playerCoords.y ~= y then
-		if x ~= 0 and y ~= 0 then
+	if self.playerCoords.x ~= x or self.playerCoords.y ~= y then
+		if x ~= 0 or y ~= 0 then
 			self.playerCoords.x = x
 			self.playerCoords.y = y
 			self.playerCoords:SetFormattedText("%s:   %.2f, %.2f", PLAYER, x * 100, y * 100)
@@ -103,7 +101,7 @@ local function UpdateCoords(self, elapsed)
 	if WorldMapDetailFrame:IsMouseOver() then
 		local curX, curY = GetCursorPosition()
 
-		if self.mouseCoords.x ~= curX and self.mouseCoords.y ~= curY then
+		if self.mouseCoords.x ~= curX or self.mouseCoords.y ~= curY then
 			local scale = WorldMapDetailFrame:GetEffectiveScale()
 			local width, height = WorldMapDetailFrame:GetSize()
 			local centerX, centerY = WorldMapDetailFrame:GetCenter()
@@ -147,8 +145,6 @@ function M:PositionCoords()
 end
 
 function M:ToggleMapFramerate()
-	if InCombatLockdown() then return end
-
 	if WORLDMAP_SETTINGS.size == WORLDMAP_FULLMAP_SIZE or WORLDMAP_SETTINGS.size == WORLDMAP_QUESTLIST_SIZE then
 		WorldMapFrame:SetAttribute("UIPanelLayout-area", "center")
 		WorldMapFrame:SetAttribute("UIPanelLayout-allowOtherPanels", true)
