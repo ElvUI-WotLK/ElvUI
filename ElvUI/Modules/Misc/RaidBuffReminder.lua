@@ -4,7 +4,6 @@ local LSM = E.Libs.LSM
 
 --Lua functions
 local ipairs, unpack = ipairs, unpack
-local format = string.format
 --WoW API / Variables
 local CooldownFrame_SetTimer = CooldownFrame_SetTimer
 local CreateFrame = CreateFrame
