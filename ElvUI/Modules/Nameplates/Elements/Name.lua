@@ -80,6 +80,13 @@ function NP:Configure_Name(frame)
 	frame.Name:FontTemplate(LSM:Fetch("font", db.font), db.fontSize, db.fontOutline)
 end
 
+function NP:Configure_NameOnlyGlow(frame)
+	local name = frame.Name
+	name.NameOnlyGlow:ClearAllPoints()
+	name.NameOnlyGlow:SetPoint("TOPLEFT", frame.IconOnlyChanged and frame.IconFrame or name, -20, 8)
+	name.NameOnlyGlow:SetPoint("BOTTOMRIGHT", frame.IconOnlyChanged and frame.IconFrame or name, 20, -8)
+end
+
 function NP:Construct_Name(frame)
 	local name = frame:CreateFontString(nil, "OVERLAY")
 	name:SetJustifyV("BOTTOM")

@@ -20,8 +20,6 @@ function NP:Update_IconFrame(frame, triggered)
 			frame.IconFrame.texture:SetTexture(icon)
 			frame.IconFrame:Show()
 
-			self:StyleFrameColor(frame.IconFrame, frame.oldHealthBar:GetStatusBarColor())
-
 			if triggered then
 				frame.IconFrame:ClearAllPoints()
 				frame.IconFrame:SetPoint("TOP", frame)
