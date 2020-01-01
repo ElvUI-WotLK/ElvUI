@@ -38,7 +38,7 @@ local function group(order, db, label)
 				name = L["Reverse Toggle"],
 				desc = L["Reverse Toggle will enable Cooldown Text on this module when the global setting is disabled and disable them when the global setting is enabled."],
 				get = function(info) return (profile(db))[info[#info]] end,
-				set = function(info, value) (profile(db))[info[#info]] = value E:UpdateCooldownSettings(db) end
+				set = function(info, value) (profile(db))[info[#info]] = value; E:UpdateCooldownSettings(db) end
 			},
 			secondsGroup = {
 				order = 5,
@@ -46,8 +46,7 @@ local function group(order, db, label)
 				name = L["Text Threshold"],
 				guiInline = true,
 				get = function(info) return (profile(db))[info[#info]] end,
-				set = function(info, value) (profile(db))[info[#info]] = value E:UpdateCooldownSettings(db) end,
-				disabled = function() return not (profile(db)).checkSeconds end,
+				set = function(info, value) (profile(db))[info[#info]] = value; E:UpdateCooldownSettings(db) end,
 				args = {
 					checkSeconds = {
 						order = 1,
@@ -61,21 +60,26 @@ local function group(order, db, label)
 						type = "range",
 						name = L["Low Threshold"],
 						desc = L["Threshold before text turns red and is in decimal form. Set to -1 for it to never turn red"],
-						min = -1, max = 20, step = 1
+						min = -1, max = 20, step = 1,
+						disabled = function() return not (profile(db)).override end,
+						get = function(info) return (profile(db))[info[#info]] end,
+						set = function(info, value) (profile(db))[info[#info]] = value; E:UpdateCooldownSettings(db) end,
 					},
 					mmssThreshold = {
 						order = 3,
 						type = "range",
 						name = L["MM:SS Threshold"],
 						desc = L["Threshold (in seconds) before text is shown in the MM:SS format. Set to -1 to never change to this format."],
-						min = -1, max = 10800, step = 1
+						min = -1, max = 10800, step = 1,
+						disabled = function() return not (profile(db)).checkSeconds end
 					},
 					hhmmThreshold = {
 						order = 4,
 						type = "range",
 						name = L["HH:MM Threshold"],
 						desc = L["Threshold (in minutes) before text is shown in the HH:MM format. Set to -1 to never change to this format."],
-						min = -1, max = 1440, step = 1
+						min = -1, max = 1440, step = 1,
+						disabled = function() return not (profile(db)).checkSeconds end
 					}
 				}
 			},
@@ -91,7 +95,7 @@ local function group(order, db, label)
 						name = L["Enable"],
 						desc = L["This will override the global cooldown settings."],
 						get = function(info) return (profile(db))[info[#info]] end,
-						set = function(info, value) (profile(db))[info[#info]] = value E:UpdateCooldownSettings(db) end,
+						set = function(info, value) (profile(db))[info[#info]] = value; E:UpdateCooldownSettings(db) end,
 					},
 					spacer1 = {
 						order = 2,
@@ -103,48 +107,113 @@ local function group(order, db, label)
 						type = "color",
 						name = L["Expiring"],
 						desc = L["Color when the text is about to expire"],
-						disabled = function() return not (profile(db)).override end
+						disabled = function() return not (profile(db)).override end,
 					},
 					secondsColor = {
 						order = 4,
 						type = "color",
 						name = L["Seconds"],
 						desc = L["Color when the text is in the seconds format."],
-						disabled = function() return not (profile(db)).override end
+						disabled = function() return not (profile(db)).override end,
 					},
 					minutesColor = {
 						order = 5,
 						type = "color",
 						name = L["Minutes"],
 						desc = L["Color when the text is in the minutes format."],
-						disabled = function() return not (profile(db)).override end
+						disabled = function() return not (profile(db)).override end,
 					},
 					hoursColor = {
 						order = 6,
 						type = "color",
 						name = L["Hours"],
 						desc = L["Color when the text is in the hours format."],
-						disabled = function() return not (profile(db)).override end
+						disabled = function() return not (profile(db)).override end,
 					},
 					daysColor = {
 						order = 7,
 						type = "color",
 						name = L["Days"],
 						desc = L["Color when the text is in the days format."],
-						disabled = function() return not (profile(db)).override end
+						disabled = function() return not (profile(db)).override end,
 					},
 					mmssColor = {
 						order = 8,
 						type = "color",
 						name = L["MM:SS"],
-						disabled = function() return not (profile(db)).override end
+						disabled = function() return not (profile(db)).override end,
 					},
 					hhmmColor = {
 						order = 9,
 						type = "color",
 						name = L["HH:MM"],
-						disabled = function() return not (profile(db)).override end
-					}
+						disabled = function() return not (profile(db)).override end,
+					},
+					spacer3 = {
+						order = 10,
+						type = "header",
+						name = L["Time Indicator Colors"]
+					},
+					useIndicatorColor = {
+						order = 11,
+						type = "toggle",
+						name = L["Use Indicator Color"],
+						get = function(info) return (profile(db))[info[#info]] end,
+						set = function(info, value) (profile(db))[info[#info]] = value; E:UpdateCooldownSettings(db) end,
+						disabled = function() return not (profile(db)).override end,
+					},
+					spacer4 = {
+						order = 12,
+						type = "description",
+						name = " "
+					},
+					expireIndicator = {
+						order = 13,
+						type = "color",
+						name = L["Expiring"],
+						desc = L["Color when the text is about to expire"],
+						disabled = function() return not (profile(db)).override end,
+					},
+					secondsIndicator = {
+						order = 14,
+						type = "color",
+						name = L["Seconds"],
+						desc = L["Color when the text is in the seconds format."],
+						disabled = function() return not (profile(db)).override end,
+					},
+					minutesIndicator = {
+						order = 15,
+						type = "color",
+						name = L["Minutes"],
+						desc = L["Color when the text is in the minutes format."],
+						disabled = function() return not (profile(db)).override end,
+					},
+					hoursIndicator = {
+						order = 16,
+						type = "color",
+						name = L["Hours"],
+						desc = L["Color when the text is in the hours format."],
+						disabled = function() return not (profile(db)).override end,
+					},
+					daysIndicator = {
+						order = 17,
+						type = "color",
+						name = L["Days"],
+						desc = L["Color when the text is in the days format."],
+						disabled = function() return not (profile(db)).override end,
+					},
+					hhmmColorIndicator = {
+						order = 18,
+						type = "color",
+						name = L["MM:SS"],
+						disabled = function() return not (profile(db)).override end,
+					},
+					mmssColorIndicator = {
+						order = 19,
+						type = "color",
+						name = L["HH:MM"],
+						disabled = function() return not (profile(db)).override end,
+					},
 				}
 			},
 			fontGroup = {
@@ -153,7 +222,7 @@ local function group(order, db, label)
 				name = L["Fonts"],
 				guiInline = true,
 				get = function(info) return (profile(db)).fonts[info[#info]] end,
-				set = function(info, value) (profile(db)).fonts[info[#info]] = value E:UpdateCooldownSettings(db) end,
+				set = function(info, value) (profile(db)).fonts[info[#info]] = value; E:UpdateCooldownSettings(db) end,
 				disabled = function() return not (profile(db)).fonts.enable end,
 				args = {
 					enable = {
@@ -195,6 +264,7 @@ local function group(order, db, label)
 	if db == "global" then
 		-- clean up the main one
 		E.Options.args.cooldown.args[db].args.reverse = nil
+		E.Options.args.cooldown.args[db].args.secondsGroup.args.threshold.disabled = nil
 		E.Options.args.cooldown.args[db].args.colorGroup.args.override = nil
 		E.Options.args.cooldown.args[db].args.colorGroup.args.spacer1 = nil
 
@@ -212,6 +282,9 @@ local function group(order, db, label)
 	if db == "auras" or db == "nameplates" then
 		-- even though the top auras can support hiding the text don't allow this to be a setting to prevent confusion
 		E.Options.args.cooldown.args[db].args.reverse = nil
+
+		-- this is basically creates a second way to change font, we only really need one
+		E.Options.args.cooldown.args[db].args.fontGroup = nil
 	end
 end
 
@@ -220,7 +293,7 @@ E.Options.args.cooldown = {
 	name = L["Cooldown Text"],
 	childGroups = "tab",
 	get = function(info) return E.db.cooldown[info[#info]] end,
-	set = function(info, value) E.db.cooldown[info[#info]] = value E:UpdateCooldownSettings("global") end,
+	set = function(info, value) E.db.cooldown[info[#info]] = value; E:UpdateCooldownSettings("global") end,
 	args = {
 		intro = {
 			order = 1,

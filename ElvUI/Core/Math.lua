@@ -313,23 +313,40 @@ function E:StringTitle(str)
 end
 
 E.TimeThreshold = 3
-E.TimeColors = { -- aura time colors for days, hours, minutes, seconds, fadetimer
-	[0] = "|cffeeeeee",
-	[1] = "|cffeeeeee",
-	[2] = "|cffeeeeee",
-	[3] = "|cffeeeeee",
-	[4] = "|cfffe0000",
+
+E.TimeColors = { --aura time colors
+	[0] = "|cffeeeeee", --days
+	[1] = "|cffeeeeee", --hours
+	[2] = "|cffeeeeee", --minutes
+	[3] = "|cffeeeeee", --seconds
+	[4] = "|cfffe0000", --expire (fade timer)
 	[5] = "|cff909090", --mmss
 	[6] = "|cff707070", --hhmm
 }
-E.TimeFormats = { -- short and long aura time formats
-	[0] = {"%dd", "%dd"},
-	[1] = {"%dh", "%dh"},
-	[2] = {"%dm", "%dm"},
-	[3] = {"%ds", "%d"},
-	[4] = {"%.1fs", "%.1f"},
-	[5] = {"%d:%02d", "%d:%02d"}, --mmss
-	[6] = {"%d:%02d", "%d:%02d"}, --hhmm
+
+E.TimeFormats = { -- short / indicator color
+	[0] = {"%dd", "%d%sd|r"},
+	[1] = {"%dh", "%d%sh|r"},
+	[2] = {"%dm", "%d%sm|r"},
+	[3] = {"%ds", "%d%ss|r"},
+	[4] = {"%.1fs", "%.1f%ss|r"},
+	[5] = {"%d:%02d", "%d%s:|r%02d"}, --mmss
+	[6] = {"%d:%02d", "%d%s:|r%02d"}, --hhmm
+}
+
+for _, x in pairs(E.TimeFormats) do
+	x[3] = gsub(x[1], "s$", "") -- 1 without seconds
+	x[4] = gsub(x[2], "%%ss", "%%s") -- 2 without seconds
+end
+
+E.TimeIndicatorColors = {
+	[0] = "|cff00b3ff",
+	[1] = "|cff00b3ff",
+	[2] = "|cff00b3ff",
+	[3] = "|cff00b3ff",
+	[4] = "|cff00b3ff",
+	[5] = "|cff00b3ff",
+	[6] = "|cff00b3ff",
 }
 
 local DAY, HOUR, MINUTE = 86400, 3600, 60 --used for calculating aura time text
