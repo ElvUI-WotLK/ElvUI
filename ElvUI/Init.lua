@@ -112,6 +112,10 @@ do
 	end
 end
 
+do
+	DisableAddOn("ElvUI_VisualAuraTimers")
+end
+
 function AddOn:OnInitialize()
 	if not ElvCharacterDB then
 		ElvCharacterDB = {}
