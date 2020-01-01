@@ -96,18 +96,14 @@ RB.MeleeSpell6Buffs = {
 }
 
 function RB:CheckFilterForActiveBuff(filter)
-	local spellName, name, texture, duration, expirationTime
-
 	for _, spell in ipairs(filter) do
-		spellName = GetSpellInfo(spell)
-		name, _, texture, _, _, duration, expirationTime = UnitAura("player", spellName)
+		local spellName = GetSpellInfo(spell)
+		local name, _, texture, _, _, duration, expirationTime = UnitAura("player", spellName)
 
 		if name then
-			return true, texture, duration, expirationTime
+			return texture, duration, expirationTime
 		end
 	end
-
-	return false, texture, duration, expirationTime
 end
 
 function RB:UpdateReminderTime(elapsed)
@@ -137,15 +133,14 @@ function RB:UpdateReminder(event, unit)
 	if event == "UNIT_AURA" and unit ~= "player" then return end
 
 	for i = 1, 6 do
-		local hasBuff, texture, duration, expirationTime = self:CheckFilterForActiveBuff(self["Spell"..i.."Buffs"])
+		local texture, duration, expirationTime = self:CheckFilterForActiveBuff(self["Spell"..i.."Buffs"])
 		local button = self.frame[i]
-		local reverseStyle = E.db.general.reminder.reverse
 
-		if hasBuff then
+		if texture then
 			button.t:SetTexture(texture)
 
 			if (duration == 0 and expirationTime == 0) or E.db.general.reminder.durations ~= true then
-				button.t:SetAlpha(reverseStyle == true and 1 or 0.3)
+				button.t:SetAlpha(E.db.general.reminder.reverse and 1 or 0.3)
 				button:SetScript("OnUpdate", nil)
 				button.timer:SetText(nil)
 				CooldownFrame_SetTimer(button.cd, 0, 0, 0)
@@ -154,12 +149,12 @@ function RB:UpdateReminder(event, unit)
 				button.nextUpdate = 0
 				button.t:SetAlpha(1)
 				CooldownFrame_SetTimer(button.cd, expirationTime - duration, duration, 1)
-				button.cd:SetReverse(reverseStyle == true and true or false)
+				button.cd:SetReverse(E.db.general.reminder.reverse)
 				button:SetScript("OnUpdate", self.UpdateReminderTime)
 			end
 		else
 			CooldownFrame_SetTimer(button.cd, 0, 0, 0)
-			button.t:SetAlpha(reverseStyle == true and 0.3 or 1)
+			button.t:SetAlpha(E.db.general.reminder.reverse and 0.3 or 1)
 			button:SetScript("OnUpdate", nil)
 			button.timer:SetText(nil)
 			button.t:SetTexture(self.DefaultIcons[i])
@@ -230,8 +225,7 @@ function RB:UpdateSettings(isCallback)
 			button.cd:SetAlpha(0)
 		end
 
-		local font = LSM:Fetch("font", E.db.general.reminder.font)
-		button.timer:FontTemplate(font, E.db.general.reminder.fontSize, E.db.general.reminder.fontOutline)
+		button.timer:FontTemplate(LSM:Fetch("font", E.db.general.reminder.font), E.db.general.reminder.fontSize, E.db.general.reminder.fontOutline)
 	end
 
 	if not isCallback then
