@@ -365,6 +365,9 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 		frame.Name:Hide()
 		mod:Configure_Glow(frame)
 		mod:Configure_NameOnlyGlow(frame)
+		if not NameColorChanged then
+			mod:Update_Name(frame, true)
+		end
 	end
 end
 
@@ -453,6 +456,10 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 		end
 		if mod.db.units[frame.UnitType].name.enable then
 			frame.Name:Show()
+			frame.Name:ClearAllPoints()
+			frame.Level:ClearAllPoints()
+			mod:Update_Level(frame)
+			mod:Update_Name(frame)
 		end
 		mod:Configure_NameOnlyGlow(frame)
 	end
