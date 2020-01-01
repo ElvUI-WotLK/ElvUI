@@ -305,7 +305,9 @@ end
 function NP:OnShow(isConfig, dontHideHighlight)
 	local frame = self.UnitFrame
 
-	NP.VisiblePlates[frame] = 1
+	if self:IsShown() then
+		NP.VisiblePlates[frame] = 1
+	end
 
 	frame.UnitName = gsub(frame.oldName:GetText(), FSPAT, "")
 	local reaction, unitType = NP:GetUnitInfo(frame)
@@ -452,7 +454,6 @@ function NP:ConfigureAll()
 
 	NP:StyleFilterConfigure()
 	NP:ForEachPlate("UpdateAllFrame", true)
-	NP.VisiblePlates[ElvNP_Test.UnitFrame] = nil
 	NP:UpdateCVars()
 end
 
@@ -837,7 +838,7 @@ function NP:OnUpdate()
         end
 
 		local status = NP:UnitDetailedThreatSituation(frame)
-		if frame.ThreatStatus ~= status then
+		if status and frame.ThreatStatus ~= status then
 			NP:Update_HealthColor(frame)
 
 			frame.ThreatStatus = status
