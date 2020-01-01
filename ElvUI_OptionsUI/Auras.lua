@@ -197,8 +197,89 @@ E.Options.args.auras = {
 					name = L["Count yOffset"],
 					min = -60, max = 60, step = 1
 				},
-				lbf = {
+				statusBar = {
 					order = 9,
+					type = "group",
+					name = L["Statusbar"],
+					guiInline = true,
+					get = function(info) return E.db.auras[info[#info]] end,
+					set = function(info, value) E.db.auras[info[#info]] = value; A:UpdateHeader(ElvUIPlayerBuffs); A:UpdateHeader(ElvUIPlayerDebuffs) end,
+					args = {
+						barShow = {
+							order = 0,
+							type = "toggle",
+							name = L["Enable"],
+						},
+						barNoDuration = {
+							order = 0,
+							type = "toggle",
+							name = L["No Duration"],
+						},
+						barTexture = {
+							order = 3,
+							type = "select", dialogControl = "LSM30_Statusbar",
+							name = L["Texture"],
+							values = _G.AceGUIWidgetLSMlists.statusbar,
+						},
+						barColor = {
+							type = "color",
+							order = 4,
+							name = L.COLOR,
+							hasAlpha = false,
+							disabled = function() return not E.db.auras.barShow or (E.db.auras.barColorGradient or not E.db.auras.barShow) end,
+							get = function(info)
+								local t = E.db.auras.barColor
+								local d = P.auras.barColor
+								return t.r, t.g, t.b, t.a, d.r, d.g, d.b, d.a
+							end,
+							set = function(info, r, g, b)
+								local t = E.db.auras.barColor
+								t.r, t.g, t.b = r, g, b
+							end,
+						},
+						barColorGradient = {
+							order = 5,
+							type = "toggle",
+							name = L["Color by Value"],
+							disabled = function() return not E.db.auras.barShow end,
+						},
+						barWidth = {
+							order = 6,
+							type = "range",
+							name = L["Width"],
+							min = 1, max = 10, step = 1,
+							disabled = function() return not E.db.auras.barShow end,
+						},
+						barHeight = {
+							order = 7,
+							type = "range",
+							name = L["Height"],
+							min = 1, max = 10, step = 1,
+							disabled = function() return not E.db.auras.barShow end,
+						},
+						barSpacing = {
+							order = 8,
+							type = "range",
+							name = L["Spacing"],
+							min = -10, max = 10, step = 1,
+							disabled = function() return not E.db.auras.barShow end,
+						},
+						barPosition = {
+							order = 9,
+							type = "select",
+							name = L["Position"],
+							disabled = function() return not E.db.auras.barShow end,
+							values = {
+								["TOP"] = L["Top"],
+								["BOTTOM"] = L["Bottom"],
+								["LEFT"] = L["Left"],
+								["RIGHT"] = L["Right"],
+							},
+						},
+					},
+				},
+				lbf = {
+					order = 10,
 					type = "group",
 					guiInline = true,
 					name = L["LBF Support"],
