@@ -125,9 +125,13 @@ function RB:UpdateReminderTime(elapsed)
 		return
 	end
 
-	local timervalue, formatid
-	timervalue, formatid, self.nextUpdate = E:GetTimeInfo(self.expiration, 4)
-	self.timer:SetFormattedText(format("%s%s|r", E.TimeColors[formatid], E.TimeFormats[formatid][1]), timervalue)
+	local value, id, nextUpdate, remainder = E:GetTimeInfo(self.expiration, 4)
+	self.nextUpdate = nextUpdate
+
+	local style = E.TimeFormats[id]
+	if style then
+		self.timer:SetFormattedText(style[1], value, remainder)
+	end
 end
 
 function RB:UpdateReminder(event, unit)
