@@ -149,8 +149,9 @@ function NP:Configure_Glow(frame)
 				frame.Spark:SetPoint("TOPLEFT", frame.Health, -(size * 2), size)
 				frame.Spark:SetPoint("BOTTOMRIGHT", frame.Health, (size * 2), -size)
 			else
-				frame.Spark:SetPoint("TOPLEFT", frame.Name, -20, 8)
-				frame.Spark:SetPoint("BOTTOMRIGHT", frame.Name, 20, -8)
+				local nameIsShown = frame.Name:IsShown()
+				frame.Spark:SetPoint("TOPLEFT", nameIsShown and frame.Name or frame.IconFrame, -20, 8)
+				frame.Spark:SetPoint("BOTTOMRIGHT", nameIsShown and frame.Name or frame.IconFrame, 20, -8)
 			end
 
 			frame.Spark:SetVertexColor(color.r, color.g, color.b)

@@ -2280,8 +2280,16 @@ local function GetUnitSettings(unit, name)
 						desc = L["What point to anchor to the frame you set to attach to."],
 						values = positionValues
 					},
-					growthX = {
+					attachTo = {
 						order = 8,
+						type = "select",
+						name = L["Attach To"],
+						values = {
+							["FRAME"] = L["Nameplate"]
+						}
+					},
+					growthX = {
+						order = 9,
 						type = "select",
 						name = L["Growth X-Direction"],
 						values = {
@@ -2290,7 +2298,7 @@ local function GetUnitSettings(unit, name)
 						}
 					},
 					growthY = {
-						order = 9,
+						order = 10,
 						type = "select",
 						name = L["Growth Y-Direction"],
 						values = {
@@ -2299,7 +2307,7 @@ local function GetUnitSettings(unit, name)
 						}
 					},
 					cooldownOrientation = {
-						order = 10,
+						order = 11,
 						type = "select",
 						name = L["Cooldown Orientation"],
 						values = {
@@ -2308,12 +2316,12 @@ local function GetUnitSettings(unit, name)
 						}
 					},
 					reverseCooldown = {
-						order = 11,
+						order = 12,
 						type = "toggle",
 						name = L["Reverse Cooldown"],
 					},
 					stacks = {
-						order = 12,
+						order = 13,
 						type = "group",
 						name = L["Stack Counter"],
 						guiInline = true,
@@ -2364,7 +2372,7 @@ local function GetUnitSettings(unit, name)
 						}
 					},
 					duration = {
-						order = 13,
+						order = 14,
 						type = "group",
 						name = L["Duration"],
 						guiInline = true,
@@ -2376,20 +2384,20 @@ local function GetUnitSettings(unit, name)
 							NP:ConfigureAll()
 						end,
 						args = {
-							countFont = {
+							durationFont = {
 								order = 1,
 								type = "select",
 								name = L["Font"],
 								dialogControl = "LSM30_Font",
 								values = AceGUIWidgetLSMlists.font
 							},
-							countFontSize = {
+							durationFontSize = {
 								order = 2,
 								type = "range",
 								name = L["FONT_SIZE"],
 								min = 4, max = 20, step = 1 -- max 20 cause otherwise it looks weird
 							},
-							countFontOutline = {
+							durationFontOutline = {
 								order = 3,
 								type = "select",
 								name = L["Font Outline"],
@@ -2415,7 +2423,7 @@ local function GetUnitSettings(unit, name)
 						}
 					},
 					filtersGroup = {
-						order = 14,
+						order = 15,
 						name = L["FILTERS"],
 						type = "group",
 						guiInline = true,
@@ -2618,8 +2626,17 @@ local function GetUnitSettings(unit, name)
 						desc = L["What point to anchor to the frame you set to attach to."],
 						values = positionValues
 					},
-					growthX = {
+					attachTo = {
 						order = 8,
+						type = "select",
+						name = L["Attach To"],
+						values = {
+							["FRAME"] = L["Nameplate"],
+							["BUFFS"] = L["Buffs"],
+						}
+					},
+					growthX = {
+						order = 9,
 						type = "select",
 						name = L["Growth X-Direction"],
 						values = {
@@ -2628,7 +2645,7 @@ local function GetUnitSettings(unit, name)
 						}
 					},
 					growthY = {
-						order = 9,
+						order = 10,
 						type = "select",
 						name = L["Growth Y-Direction"],
 						values = {
@@ -2637,7 +2654,7 @@ local function GetUnitSettings(unit, name)
 						}
 					},
 					cooldownOrientation = {
-						order = 10,
+						order = 11,
 						type = "select",
 						name = L["Cooldown Orientation"],
 						values = {
@@ -2646,12 +2663,12 @@ local function GetUnitSettings(unit, name)
 						}
 					},
 					reverseCooldown = {
-						order = 11,
+						order = 12,
 						type = "toggle",
 						name = L["Reverse Cooldown"],
 					},
 					stacks = {
-						order = 12,
+						order = 13,
 						type = "group",
 						name = L["Stack Counter"],
 						guiInline = true,
@@ -2702,7 +2719,7 @@ local function GetUnitSettings(unit, name)
 						}
 					},
 					duration = {
-						order = 13,
+						order = 14,
 						type = "group",
 						name = L["Duration"],
 						guiInline = true,
@@ -2714,20 +2731,20 @@ local function GetUnitSettings(unit, name)
 							NP:ConfigureAll()
 						end,
 						args = {
-							countFont = {
+							durationFont = {
 								order = 1,
 								type = "select",
 								name = L["Font"],
 								dialogControl = "LSM30_Font",
 								values = AceGUIWidgetLSMlists.font
 							},
-							countFontSize = {
+							durationFontSize = {
 								order = 2,
 								type = "range",
 								name = L["FONT_SIZE"],
 								min = 4, max = 20, step = 1 -- max 20 cause otherwise it looks weird
 							},
-							countFontOutline = {
+							durationFontOutline = {
 								order = 3,
 								type = "select",
 								name = L["Font Outline"],
@@ -2753,7 +2770,7 @@ local function GetUnitSettings(unit, name)
 						}
 					},
 					filtersGroup = {
-						order = 14,
+						order = 15,
 						type = "group",
 						name = L["FILTERS"],
 						get = function(info)
