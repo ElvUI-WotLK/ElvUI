@@ -434,6 +434,7 @@ function NP:OnHide(isConfig, dontHideHighlight)
 	frame.alpha = nil
 	frame.isAlphaChanged = nil
 	frame.RaidIconType = nil
+	frame.ThreatScale = nil
 	frame.ThreatStatus = nil
 
 	if not dontHideHighlight then
@@ -840,9 +841,9 @@ function NP:OnUpdate()
 
 		local status = NP:UnitDetailedThreatSituation(frame)
 		if frame.ThreatStatus ~= status then
-			NP:Update_HealthColor(frame)
-
 			frame.ThreatStatus = status
+
+			NP:Update_HealthColor(frame)
 		end
 	end
 end
