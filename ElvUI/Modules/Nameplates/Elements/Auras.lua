@@ -78,6 +78,12 @@ function NP:UpdateTime(elapsed)
 		return
 	end
 
+	if self.timeLeft < 0 then
+		self:SetScript("OnUpdate", nil)
+		self:Hide()
+		return
+	end
+
 	local value, id, nextUpdate, remainder = E:GetTimeInfo(self.timeLeft, self.threshold, self.hhmmThreshold, self.mmssThreshold)
 	self.nextUpdate = nextUpdate
 
@@ -261,6 +267,7 @@ function NP:UpdateElement_AuraIcons(frame, guid, filter, limit, isDebuff)
 
 	for i = visible + 1, #frame do
 		frame[i].timeLeft = nil
+		frame[i]:SetScript("OnUpdate", nil)
 		frame[i]:Hide()
 	end
 	return visible
