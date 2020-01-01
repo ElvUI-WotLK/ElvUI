@@ -374,15 +374,16 @@ function NP:OnHide(isConfig, dontHideHighlight)
 	frame.unit = nil
 	frame.isGroupUnit = nil
 
-	if frame.Buffs.visibleBuffs then
-		for i = 1, frame.Buffs.visibleBuffs do
-			frame.Buffs[i]:Hide()
-		end
+	for i = 1, #frame.Buffs do
+		frame.Buffs[i]:SetScript("OnUpdate", nil)
+		frame.Buffs[i].timeLeft = nil
+		frame.Buffs[i]:Hide()
 	end
-	if frame.Debuffs.visibleDeuffs then
-		for i = 1, frame.Debuffs.visibleDeuffs do
-			frame.Debuffs[i]:Hide()
-		end
+
+	for i = 1, #frame.Debuffs do
+		frame.Debuffs[i]:SetScript("OnUpdate", nil)
+		frame.Debuffs[i].timeLeft = nil
+		frame.Debuffs[i]:Hide()
 	end
 
 	if isConfig then
@@ -827,8 +828,8 @@ function NP:OnUpdate()
 			frame.alpha = 1
 		end
 
-		NP:SetTargetFrame(frame)
 		NP:SetMouseoverFrame(frame)
+		NP:SetTargetFrame(frame)
 
         if frame.UnitReaction ~= NP:GetUnitInfo(frame) then
             NP:UpdateAllFrame(frame)
@@ -1072,11 +1073,16 @@ function NP:TogleTestFrame(unitType)
 		unitFrame.oldHealthBar:SetMinMaxValues(0, maxHealth)
 		unitFrame.oldHealthBar:SetValue(random(1, maxHealth))
 
-		unitFrame.oldName:SetText(E.myname)
+		unitFrame.oldName:SetText(L[unitType])
 		unitFrame.oldLevel:SetText(E.mylevel)
+		unitFrame.Buffs.forceShow = true
+		unitFrame.Debuffs.forceShow = true
 
-		ElvNP_Test:Show()
-		NP:ConfigureAll()
+		if not ElvNP_Test:IsShown() then
+			ElvNP_Test:Show()
+		end
+
+		self:UpdateAllFrame(unitFrame, true, true)
 	else
 		ElvNP_Test:Hide()
 	end
@@ -1112,7 +1118,7 @@ function NP:Initialize()
 		if i == 7 or i == 8 then
 			ElvNP_Test:CreateFontString(nil, "OVERLAY", "GameFontNormal"):SetText("Empty")
 		else
-			ElvNP_Test:CreateTexture()
+			ElvNP_Test:CreateTexture():Hide()
 		end
 	end
 

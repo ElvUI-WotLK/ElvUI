@@ -38,11 +38,6 @@ function NP:Update_CastBarOnUpdate(elapsed)
 		else --REMAINING
 			self.Time:SetFormattedText("%.1f", (self.maxValue - self.value))
 		end
-
-		if self.Spark then
-			local sparkPosition = (self.value / self.maxValue) * self:GetWidth()
-			self.Spark:SetPoint("CENTER", self, "LEFT", sparkPosition, 0)
-		end
 	elseif self.channeling then
 		self.value = self.value - elapsed
 		if self.value <= 0 then
@@ -232,6 +227,9 @@ function NP:Configure_CastBar(frame, configuring)
 	castBar.Time:ClearAllPoints()
 	castBar.Name:ClearAllPoints()
 
+	castBar.Spark:SetPoint("CENTER", castBar:GetStatusBarTexture(), "RIGHT", 0, 0)
+	castBar.Spark:SetHeight(db.height * 2)
+
 	if db.textPosition == "BELOW" then
 		castBar.Time:SetPoint("TOPRIGHT", castBar, "BOTTOMRIGHT")
 		castBar.Name:SetPoint("TOPLEFT", castBar, "BOTTOMLEFT")
@@ -289,6 +287,8 @@ function NP:Construct_CastBar(parent)
 	frame.Spark:SetTexture([[Interface\CastingBar\UI-CastingBar-Spark]])
 	frame.Spark:SetBlendMode("ADD")
 	frame.Spark:SetSize(15, 15)
+
+	frame.holdTime = 0
 
 	frame.scale = CreateAnimationGroup(frame)
 	frame.scale.width = frame.scale:CreateAnimation("Width")

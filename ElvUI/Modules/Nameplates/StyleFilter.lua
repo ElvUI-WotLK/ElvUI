@@ -363,6 +363,7 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 		if frame.Health:IsShown() then frame.Health:Hide() end
 		frame.Level:Hide()
 		frame.Name:Hide()
+		mod:Configure_Glow(frame)
 	end
 end
 
@@ -444,6 +445,7 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 		end
 		if mod.db.units[frame.UnitType].health.enable or (frame.isTarget and mod.db.alwaysShowTargetHealth) then
 			frame.Health:Show()
+			mod:Configure_Glow(frame)
 		end
 		if mod.db.units[frame.UnitType].name.level then
 			frame.Level:Show()
@@ -607,13 +609,13 @@ function mod:StyleFilterConditionCheck(frame, filter, trigger)
 	-- Totems
 	if frame.UnitName and trigger.totems.enable then
 		local totem = mod.Totems[frame.UnitName]
-		if trigger.totems[totem] then passed = true else return end
+		if totem then if trigger.totems[totem] then passed = true else return end end
 	end
 
 	-- Unique Units
 	if frame.UnitName and trigger.uniqueUnits.enable then
 		local unit = mod.UniqueUnits[frame.UnitName]
-		if trigger.uniqueUnits[unit] then passed = true else return end
+		if unit then if trigger.uniqueUnits[unit] then passed = true else return end end
 	end
 
 	-- Plugin Callback

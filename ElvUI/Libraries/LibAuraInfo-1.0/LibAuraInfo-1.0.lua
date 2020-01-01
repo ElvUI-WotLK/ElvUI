@@ -178,6 +178,8 @@ do
 			i = i + 1
 			srcGUID = nil
 		end
+
+		lib.callbacks:Fire("LibAuraInfo_UNIT_AURA", dstGUID)
 	end
 end
 
