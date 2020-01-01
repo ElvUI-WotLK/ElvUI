@@ -7,7 +7,6 @@ local LBF = E.Libs.LBF
 local _G = _G
 local unpack, pairs, ipairs, next, type = unpack, pairs, ipairs, next, type
 local floor, min, max, huge = math.floor, math.min, math.max, math.huge
-local format = string.format
 local wipe, tinsert, tsort, tremove = table.wipe, table.insert, table.sort, table.remove
 --WoW API / Variables
 local CreateFrame = CreateFrame
