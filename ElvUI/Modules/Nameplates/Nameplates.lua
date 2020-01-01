@@ -452,6 +452,7 @@ function NP:ConfigureAll()
 
 	NP:StyleFilterConfigure()
 	NP:ForEachPlate("UpdateAllFrame", true)
+	NP.VisiblePlates[ElvNP_Test.UnitFrame] = nil
 	NP:UpdateCVars()
 end
 
@@ -1123,7 +1124,7 @@ function NP:Initialize()
 	end
 
 	self:StyleFrame(ElvNP_Test, true)
-	NP:OnCreated(ElvNP_Test)
+	self:OnCreated(ElvNP_Test)
 	ElvNP_Test:Hide()
 
 	self.Frame = CreateFrame("Frame"):SetScript("OnUpdate", self.OnUpdate)
