@@ -245,16 +245,17 @@ function NP:Configure_CastBar(frame, configuring)
 		self:Configure_CastBarScale(frame, frame.currentScale or 1, configuring)
 	end
 
+	castBar.Name:FontTemplate(LSM:Fetch("font", db.font), db.fontSize, db.fontOutline)
+	castBar.Time:FontTemplate(LSM:Fetch("font", db.font), db.fontSize, db.fontOutline)
+
 	if db.hideSpellName then
 		castBar.Name:Hide()
 	else
-		castBar.Name:FontTemplate(LSM:Fetch("font", db.font), db.fontSize, db.fontOutline)
 		castBar.Name:Show()
 	end
 	if db.hideTime then
 		castBar.Time:Hide()
 	else
-		castBar.Time:FontTemplate(LSM:Fetch("font", db.font), db.fontSize, db.fontOutline)
 		castBar.Time:Show()
 	end
 
