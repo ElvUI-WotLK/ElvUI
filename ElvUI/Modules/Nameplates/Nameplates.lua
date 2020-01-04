@@ -359,8 +359,10 @@ function NP:OnShow(isConfig, dontHideHighlight)
 
 	NP:SetSize(self)
 
-	if not frame.isAlphaChanged and not dontHideHighlight then
-		NP:PlateFade(frame, NP.db.fadeIn and 1 or 0, 0, 1)
+	if not frame.isAlphaChanged then
+		if not dontHideHighlight then
+			NP:PlateFade(frame, NP.db.fadeIn and 1 or 0, 0, 1)
+		end
 	end
 
 	frame:Show()
@@ -455,7 +457,7 @@ function NP:ConfigureAll()
 	if not E.private.nameplates.enable then return end
 
 	NP:StyleFilterConfigure()
-	NP:ForEachPlate("UpdateAllFrame", true)
+	NP:ForEachPlate("UpdateAllFrame", true, true)
 	NP:UpdateCVars()
 end
 
@@ -836,7 +838,7 @@ function NP:OnUpdate()
 		NP:SetTargetFrame(frame)
 
         if frame.UnitReaction ~= NP:GetUnitInfo(frame) then
-            NP:UpdateAllFrame(frame)
+            NP:UpdateAllFrame(frame, nil, true)
         end
 
 		local status = NP:UnitDetailedThreatSituation(frame)
@@ -948,7 +950,7 @@ function NP:UPDATE_MOUSEOVER_UNIT()
 				local guid = UnitGUID("mouseover")
 				if NP.GUIDByName[name] ~= guid then
 					NP.GUIDByName[name] = guid
-					NP:UpdateAllFrame(frame, nil, true)
+					NP.OnShow(frame:GetParent(), nil, true)
 				end
 			end
 		end
