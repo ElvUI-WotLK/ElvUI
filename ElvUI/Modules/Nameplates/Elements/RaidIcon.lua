@@ -5,11 +5,15 @@ local NP = E:GetModule("NamePlates")
 --WoW API / Variables
 
 function NP:Update_RaidIcon(frame)
+	local db = self.db.units[frame.UnitType].raidTargetIndicator
 	local icon = frame.RaidIcon
+
+	icon:SetSize(db.size, db.size)
+
 	icon:ClearAllPoints()
 	if frame.Health:IsShown() then
-		icon:SetPoint("RIGHT", frame.Health, "LEFT", -6, 0)
+		icon:SetPoint(E.InversePoints[db.position], frame.Health, db.position, db.xOffset, db.yOffset)
 	else
-		icon:SetPoint("BOTTOM", frame.Name, "TOP", 0, 3)
+		icon:SetPoint("BOTTOM", frame, "TOP", 0, 15)
 	end
 end

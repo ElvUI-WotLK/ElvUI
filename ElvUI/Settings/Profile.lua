@@ -477,6 +477,12 @@ P.nameplates = {
 					maxDuration = 0,
 					priority = "Blacklist,blockNoDuration,Personal,CCDebuffs" --NamePlate FriendlyPlayer Debuffs
 				},
+			},
+			raidTargetIndicator = {
+				size = 24,
+				position = "LEFT",
+				xOffset = -4,
+				yOffset = 0
 			}
 		},
 		ENEMY_PLAYER = {
@@ -596,7 +602,13 @@ P.nameplates = {
 					maxDuration = 0,
 					priority = "Blacklist,blockNoDuration,Personal,CCDebuffs,RaidDebuffs" --NamePlate EnemyPlayer Debuffs
 				},
-			}
+			},
+			raidTargetIndicator = {
+				size = 24,
+				position = "LEFT",
+				xOffset = -4,
+				yOffset = 0
+			},
 		},
 		FRIENDLY_NPC = {
 			health = {
@@ -710,6 +722,12 @@ P.nameplates = {
 				size = 15,
 				position = "RIGHT",
 				xOffset = 10,
+				yOffset = 0
+			},
+			raidTargetIndicator = {
+				size = 24,
+				position = "LEFT",
+				xOffset = -4,
 				yOffset = 0
 			},
 			iconFrame = {
@@ -839,6 +857,12 @@ P.nameplates = {
 				size = 15,
 				position = "RIGHT",
 				xOffset = 10,
+				yOffset = 0
+			},
+			raidTargetIndicator = {
+				size = 24,
+				position = "LEFT",
+				xOffset = -4,
 				yOffset = 0
 			},
 			iconFrame = {

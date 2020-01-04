@@ -1081,6 +1081,9 @@ function NP:TogleTestFrame(unitType)
 		unitFrame.oldLevel:SetText(E.mylevel)
 		unitFrame.Buffs.forceShow = true
 		unitFrame.Debuffs.forceShow = true
+		unitFrame.RaidIcon:SetTexture([[Interface\TargetingFrame\UI-RaidTargetingIcons]])
+		SetRaidTargetIconTexture(unitFrame.RaidIcon, random(1, 8))
+		unitFrame.RaidIcon:Show()
 
 		if not ElvNP_Test:IsShown() then
 			ElvNP_Test:Show()
