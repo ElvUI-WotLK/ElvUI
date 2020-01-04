@@ -213,7 +213,7 @@ function NP:Update_AurasPosition(frame, db)
 			button.count:Point(point, right and -1 or 1, bottom and 1 or -1)
 		end
 
-		button.text:FontTemplate(LSM:Fetch("font", db.durationFont), db.durationFontSize, db.durationOutline)
+		button.text:FontTemplate(LSM:Fetch("font", db.durationFont), db.durationFontSize, db.durationFontOutline)
 
 		button.text:ClearAllPoints()
 		point = db.durationPosition
@@ -385,7 +385,7 @@ function NP:Construct_AuraIcon(parent, index)
 		tinsert(E.RegisteredCooldowns.nameplates, button)
 	end
 
-	button.text:FontTemplate(LSM:Fetch("font", db.durationFont), db.durationFontSize, db.durationOutline)
+	button.text:FontTemplate(LSM:Fetch("font", db.durationFont), db.durationFontSize, db.durationFontOutline)
 
 	NP:Update_CooldownOptions(button)
 
