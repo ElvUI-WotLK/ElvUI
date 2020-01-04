@@ -8,7 +8,7 @@ local select, unpack, pairs = select, unpack, pairs
 local band = bit.band
 local tinsert = table.insert
 local floor = math.floor
-local find, split = string.find, string.split
+local split = string.split
 --WoW API / Variables
 local CreateFrame = CreateFrame
 local GetSpellInfo = GetSpellInfo
