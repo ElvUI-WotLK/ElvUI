@@ -180,9 +180,9 @@ end
 function NP:Update_AurasPosition(frame, db)
 	local unitFrame = frame:GetParent()
 	local mult = floor(NP.db.units[unitFrame.UnitType].health.width / db.size) < db.numAuras
-	frame:Size(NP.db.units[unitFrame.UnitType].health.width, (mult and 2 or 1) * db.size)
+	frame:SetSize(NP.db.units[unitFrame.UnitType].health.width, (mult and 2 or 1) * db.size)
 	frame:ClearAllPoints()
-	frame:Point(positionValues[db.anchorPoint], db.attachTo == "BUFFS" and unitFrame.Buffs or unitFrame, positionValues2[db.anchorPoint], db.xOffset, db.yOffset)
+	frame:SetPoint(positionValues[db.anchorPoint], db.attachTo == "BUFFS" and unitFrame.Buffs or unitFrame, positionValues2[db.anchorPoint], db.xOffset, db.yOffset)
 
 	local size = db.size + db.spacing
 	local anchor = E.InversePoints[db.anchorPoint]
@@ -197,32 +197,15 @@ function NP:Update_AurasPosition(frame, db)
 		local col = (i - 1) % cols
 		local row = floor((i - 1) / cols)
 
-		button:Size(db.size)
+		button:SetSize(db.size, db.size)
 		button:ClearAllPoints()
-		button:Point(anchor, frame, anchor, col * size * growthx, row * size * growthy)
+		button:SetPoint(anchor, frame, anchor, col * size * growthx, row * size * growthy)
 
 		button.count:FontTemplate(LSM:Fetch("font", db.countFont), db.countFontSize, db.countFontOutline)
-
-		button.count:ClearAllPoints()
-		local point = db.countPosition
-		if point == "CENTER" then
-			button.count:Point(point, 1, 0)
-		else
-			local bottom, right = find(point, "BOTTOM"), find(point, "RIGHT")
-			button.count:SetJustifyH(right and "RIGHT" or "LEFT")
-			button.count:Point(point, right and -1 or 1, bottom and 1 or -1)
-		end
+		button.count:SetPoint(db.countPosition, db.countXOffset, db.countYOffset)
 
 		button.text:FontTemplate(LSM:Fetch("font", db.durationFont), db.durationFontSize, db.durationFontOutline)
-
-		button.text:ClearAllPoints()
-		point = db.durationPosition
-		if point == "CENTER" then
-			button.text:Point(point, 1, 0)
-		else
-			local bottom, right = find(point, "BOTTOM"), find(point, "RIGHT")
-			button.text:Point(point, right and -1 or 1, bottom and 1 or -1)
-		end
+		button.text:SetPoint(db.durationPosition, db.durationXOffset, db.durationYOffset)
 
 		button:SetOrientation(db.cooldownOrientation)
 
@@ -367,13 +350,10 @@ function NP:Construct_AuraIcon(parent, index)
 	button.icon:SetAllPoints()
 
 	button.count = button:CreateFontString(nil, "OVERLAY")
-	button.count:ClearAllPoints()
-	button.count:Point("BOTTOMRIGHT", 1, 1)
 	button.count:SetJustifyH("RIGHT")
 	button.count:FontTemplate(LSM:Fetch("font", db.countFont), db.countFontSize, db.countFontOutline)
 
 	button.text = button:CreateFontString(nil, "OVERLAY")
-	button.text:Point("TOP", button, "BOTTOM", 1, 0)
 
 	-- support cooldown override
 	if not button.isRegisteredCooldown then
@@ -401,8 +381,8 @@ end
 function NP:ConstructElement_Auras(frame, auraType)
 	local auras = CreateFrame("Frame", "$parent"..auraType, frame)
 	auras:Show()
-	auras:Size(150, 27)
-	auras:Point("TOP", 0, 22)
+	auras:SetSize(150, 27)
+	auras:SetPoint("TOP", 0, 22)
 	auras.anchoredIcons = 0
 	auras.type = string.lower(auraType)
 

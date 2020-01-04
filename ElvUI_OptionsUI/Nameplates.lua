@@ -2368,6 +2368,18 @@ local function GetUnitSettings(unit, name)
 									["RIGHT"] = "RIGHT",
 									["TOPRIGHT"] = "TOPRIGHT"
 								}
+							},
+							countXOffset = {
+								order = 5,
+								name = L["X-Offset"],
+								type = "range",
+								min = -100, max = 100, step = 1
+							},
+							countYOffset = {
+								order = 6,
+								name = L["Y-Offset"],
+								type = "range",
+								min = -100, max = 100, step = 1
 							}
 						}
 					},
@@ -2419,6 +2431,18 @@ local function GetUnitSettings(unit, name)
 									["RIGHT"] = "RIGHT",
 									["TOPRIGHT"] = "TOPRIGHT"
 								}
+							},
+							durationXOffset = {
+								order = 5,
+								name = L["X-Offset"],
+								type = "range",
+								min = -100, max = 100, step = 1
+							},
+							durationYOffset = {
+								order = 6,
+								name = L["Y-Offset"],
+								type = "range",
+								min = -100, max = 100, step = 1
 							}
 						}
 					},
@@ -2715,6 +2739,18 @@ local function GetUnitSettings(unit, name)
 									["RIGHT"] = "RIGHT",
 									["TOPRIGHT"] = "TOPRIGHT"
 								}
+							},
+							countXOffset = {
+								order = 5,
+								name = L["X-Offset"],
+								type = "range",
+								min = -100, max = 100, step = 1
+							},
+							countYOffset = {
+								order = 6,
+								name = L["Y-Offset"],
+								type = "range",
+								min = -100, max = 100, step = 1
 							}
 						}
 					},
@@ -2766,6 +2802,18 @@ local function GetUnitSettings(unit, name)
 									["RIGHT"] = "RIGHT",
 									["TOPRIGHT"] = "TOPRIGHT"
 								}
+							},
+							durationXOffset = {
+								order = 5,
+								name = L["X-Offset"],
+								type = "range",
+								min = -100, max = 100, step = 1
+							},
+							durationYOffset = {
+								order = 6,
+								name = L["Y-Offset"],
+								type = "range",
+								min = -100, max = 100, step = 1
 							}
 						}
 					},
@@ -3050,13 +3098,13 @@ local function GetUnitSettings(unit, name)
 						name = L["Raid Icon"]
 					},
 					size = {
-						order = 3,
+						order = 1,
 						type = "range",
 						name = L["Size"],
 						min = 12, max = 64, step = 1
 					},
 					position = {
-						order = 4,
+						order = 2,
 						type = "select",
 						name = L["Icon Position"],
 						values = {
@@ -3068,13 +3116,13 @@ local function GetUnitSettings(unit, name)
 						}
 					},
 					xOffset = {
-						order = 5,
+						order = 3,
 						name = L["X-Offset"],
 						type = "range",
 						min = -100, max = 100, step = 1
 					},
 					yOffset = {
-						order = 6,
+						order = 4,
 						name = L["Y-Offset"],
 						type = "range",
 						min = -100, max = 100, step = 1
