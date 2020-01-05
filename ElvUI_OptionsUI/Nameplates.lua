@@ -10,10 +10,12 @@ local format, match, gsub, strsplit = string.format, string.match, string.gsub, 
 local GetSpellInfo = GetSpellInfo
 
 local positionValues = {
-	TOPLEFT = "TOPLEFT",
-	TOPRIGHT = "TOPRIGHT",
 	BOTTOMLEFT = "BOTTOMLEFT",
-	BOTTOMRIGHT = "BOTTOMRIGHT"
+	BOTTOMRIGHT = "BOTTOMRIGHT",
+	LEFT = "LEFT",
+	RIGHT = "RIGHT",
+	TOPLEFT = "TOPLEFT",
+	TOPRIGHT = "TOPRIGHT"
 }
 
 local raidTargetIcon = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_%s:0|t %s"
