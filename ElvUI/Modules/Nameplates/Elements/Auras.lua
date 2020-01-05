@@ -179,21 +179,17 @@ end
 
 function NP:Update_AurasPosition(frame, db)
 	local unitFrame = frame:GetParent()
-	local mult = floor(NP.db.units[unitFrame.UnitType].health.width / db.size) < db.numAuras
-	frame:SetSize(NP.db.units[unitFrame.UnitType].health.width, (mult and 2 or 1) * db.size)
-	frame:ClearAllPoints()
-	frame:SetPoint(positionValues[db.anchorPoint], db.attachTo == "BUFFS" and unitFrame.Buffs or unitFrame, positionValues2[db.anchorPoint], db.xOffset, db.yOffset)
 
 	local size = db.size + db.spacing
 	local anchor = E.InversePoints[db.anchorPoint]
 	local growthx = (db.growthX == "LEFT" and -1) or 1
 	local growthy = (db.growthY == "DOWN" and -1) or 1
-	local cols = floor(NP.db.units[unitFrame.UnitType].health.width / size + 0.5)
+	local cols = db.perrow
 
 	for i = frame.anchoredIcons + 1, #frame do
 		local button = frame[i]
-
 		if not button then break end
+
 		local col = (i - 1) % cols
 		local row = floor((i - 1) / cols)
 
@@ -279,7 +275,7 @@ function NP:UpdateElement_Auras(frame)
 	local db = NP.db.units[frame.UnitType].buffs
 	if db.enable then
 		local buffs = frame.Buffs
-		buffs.visibleBuffs = NP:UpdateElement_AuraIcons(buffs, guid, buffs.filter or "HELPFUL", db.numAuras)
+		buffs.visibleBuffs = NP:UpdateElement_AuraIcons(buffs, guid, buffs.filter or "HELPFUL", db.perrow * db.numrows)
 
 		if #buffs > buffs.anchoredIcons then
 			self:Update_AurasPosition(buffs, db)
@@ -291,7 +287,7 @@ function NP:UpdateElement_Auras(frame)
 	db = NP.db.units[frame.UnitType].debuffs
 	if db.enable then
 		local debuffs = frame.Debuffs
-		debuffs.visibleDebuffs = NP:UpdateElement_AuraIcons(debuffs, guid, debuffs.filter or "HARMFUL", db.numAuras, true)
+		debuffs.visibleDebuffs = NP:UpdateElement_AuraIcons(debuffs, guid, debuffs.filter or "HARMFUL", db.perrow * db.numrows, true)
 
 		if #debuffs > debuffs.anchoredIcons then
 			self:Update_AurasPosition(debuffs, db)
@@ -376,6 +372,16 @@ end
 
 function NP:Update_CooldownOptions(button)
 	E:Cooldown_Options(button, self.db.cooldown, button)
+end
+
+function NP:Configure_Auras(frame, auraType)
+	local auras = frame[auraType]
+	local db = self.db.units[frame.UnitType][auras.type]
+
+	auras:SetWidth(db.perrow * db.size + ((db.perrow - 1) * db.spacing))
+	auras:SetHeight(db.numrows * db.size + ((db.numrows - 1) * db.spacing))
+	auras:ClearAllPoints()
+	auras:SetPoint(positionValues[db.anchorPoint], db.attachTo == "BUFFS" and frame.Buffs or frame.Health, positionValues2[db.anchorPoint], db.xOffset, db.yOffset)
 end
 
 function NP:ConstructElement_Auras(frame, auraType)

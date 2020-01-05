@@ -338,17 +338,17 @@ function NP:OnShow(isConfig, dontHideHighlight)
 		NP:Configure_Level(frame)
 		NP:Configure_Name(frame)
 
+		NP:Configure_Auras(frame, "Buffs")
+		NP:Configure_Auras(frame, "Debuffs")
+
 		if NP.db.units[unitType].health.enable or NP.db.alwaysShowTargetHealth then
 			NP:Configure_HealthBar(frame, true)
 			NP:Configure_CastBar(frame, true)
-
-			if isConfig then
-				NP:Configure_Highlight(frame)
-			end
 		end
 
 		NP:Configure_Glow(frame)
 		NP:Configure_Elite(frame)
+		NP:Configure_Highlight(frame)
 		NP:Configure_IconFrame(frame)
 	end
 

@@ -2243,45 +2243,51 @@ local function GetUnitSettings(unit, name)
 						type = "toggle",
 						name = L["Enable"]
 					},
-					numAuras = {
+					perrow = {
 						order = 2,
 						type = "range",
-						name = L["# Displayed Auras"],
-						min = 1, max = 12, step = 1
+						name = L["Per Row"],
+						min = 1, max = 20, step = 1,
+					},
+					numrows = {
+						order = 3,
+						type = "range",
+						name = L["Num Rows"],
+						min = 1, max = 10, step = 1
 					},
 					size = {
-						order = 3,
+						order = 4,
 						type = "range",
 						name = L["Icon Size"],
 						min = 6, max = 60, step = 1
 					},
 					spacing = {
-						order = 4,
+						order = 5,
 						type = "range",
 						name = L["Spacing"],
 						min = 0, max = 60, step = 1
 					},
 					xOffset = {
-						order = 5,
+						order = 6,
 						type = "range",
 						name = L["X-Offset"],
 						min = -100, max = 100, step = 1
 					},
 					yOffset = {
-						order = 6,
+						order = 7,
 						type = "range",
 						name = L["Y-Offset"],
 						min = -100, max = 100, step = 1
 					},
 					anchorPoint = {
-						order = 7,
+						order = 8,
 						type = "select",
 						name = L["Anchor Point"],
 						desc = L["What point to anchor to the frame you set to attach to."],
 						values = positionValues
 					},
 					attachTo = {
-						order = 8,
+						order = 9,
 						type = "select",
 						name = L["Attach To"],
 						values = {
@@ -2289,7 +2295,7 @@ local function GetUnitSettings(unit, name)
 						}
 					},
 					growthX = {
-						order = 9,
+						order = 10,
 						type = "select",
 						name = L["Growth X-Direction"],
 						values = {
@@ -2298,7 +2304,7 @@ local function GetUnitSettings(unit, name)
 						}
 					},
 					growthY = {
-						order = 10,
+						order = 11,
 						type = "select",
 						name = L["Growth Y-Direction"],
 						values = {
@@ -2307,7 +2313,7 @@ local function GetUnitSettings(unit, name)
 						}
 					},
 					cooldownOrientation = {
-						order = 11,
+						order = 12,
 						type = "select",
 						name = L["Cooldown Orientation"],
 						values = {
@@ -2316,12 +2322,12 @@ local function GetUnitSettings(unit, name)
 						}
 					},
 					reverseCooldown = {
-						order = 12,
+						order = 13,
 						type = "toggle",
 						name = L["Reverse Cooldown"],
 					},
 					stacks = {
-						order = 13,
+						order = 14,
 						type = "group",
 						name = L["Stack Counter"],
 						guiInline = true,
@@ -2384,7 +2390,7 @@ local function GetUnitSettings(unit, name)
 						}
 					},
 					duration = {
-						order = 14,
+						order = 15,
 						type = "group",
 						name = L["Duration"],
 						guiInline = true,
@@ -2447,7 +2453,7 @@ local function GetUnitSettings(unit, name)
 						}
 					},
 					filtersGroup = {
-						order = 15,
+						order = 16,
 						name = L["FILTERS"],
 						type = "group",
 						guiInline = true,
@@ -2613,45 +2619,51 @@ local function GetUnitSettings(unit, name)
 						type = "toggle",
 						name = L["Enable"]
 					},
-					numAuras = {
+					perrow = {
 						order = 2,
 						type = "range",
-						name = L["# Displayed Auras"],
-						min = 1, max = 12, step = 1
+						name = L["Per Row"],
+						min = 1, max = 20, step = 1,
+					},
+					numrows = {
+						order = 3,
+						type = "range",
+						name = L["Num Rows"],
+						min = 1, max = 10, step = 1
 					},
 					size = {
-						order = 3,
+						order = 4,
 						type = "range",
 						name = L["Icon Size"],
 						min = 6, max = 60, step = 1
 					},
 					spacing = {
-						order = 4,
+						order = 5,
 						type = "range",
 						name = L["Spacing"],
 						min = 0, max = 60, step = 1
 					},
 					xOffset = {
-						order = 5,
+						order = 6,
 						type = "range",
 						name = L["X-Offset"],
 						min = -100, max = 100, step = 1
 					},
 					yOffset = {
-						order = 6,
+						order = 7,
 						type = "range",
 						name = L["Y-Offset"],
 						min = -100, max = 100, step = 1
 					},
 					anchorPoint = {
-						order = 7,
+						order = 8,
 						type = "select",
 						name = L["Anchor Point"],
 						desc = L["What point to anchor to the frame you set to attach to."],
 						values = positionValues
 					},
 					attachTo = {
-						order = 8,
+						order = 9,
 						type = "select",
 						name = L["Attach To"],
 						values = {
@@ -2660,7 +2672,7 @@ local function GetUnitSettings(unit, name)
 						}
 					},
 					growthX = {
-						order = 9,
+						order = 10,
 						type = "select",
 						name = L["Growth X-Direction"],
 						values = {
@@ -2669,7 +2681,7 @@ local function GetUnitSettings(unit, name)
 						}
 					},
 					growthY = {
-						order = 10,
+						order = 11,
 						type = "select",
 						name = L["Growth Y-Direction"],
 						values = {
@@ -2678,7 +2690,7 @@ local function GetUnitSettings(unit, name)
 						}
 					},
 					cooldownOrientation = {
-						order = 11,
+						order = 12,
 						type = "select",
 						name = L["Cooldown Orientation"],
 						values = {
@@ -2687,12 +2699,12 @@ local function GetUnitSettings(unit, name)
 						}
 					},
 					reverseCooldown = {
-						order = 12,
+						order = 13,
 						type = "toggle",
 						name = L["Reverse Cooldown"],
 					},
 					stacks = {
-						order = 13,
+						order = 14,
 						type = "group",
 						name = L["Stack Counter"],
 						guiInline = true,
@@ -2755,7 +2767,7 @@ local function GetUnitSettings(unit, name)
 						}
 					},
 					duration = {
-						order = 14,
+						order = 15,
 						type = "group",
 						name = L["Duration"],
 						guiInline = true,
@@ -2818,7 +2830,7 @@ local function GetUnitSettings(unit, name)
 						}
 					},
 					filtersGroup = {
-						order = 15,
+						order = 16,
 						type = "group",
 						name = L["FILTERS"],
 						get = function(info)
