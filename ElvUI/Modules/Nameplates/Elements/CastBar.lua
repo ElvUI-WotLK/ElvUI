@@ -20,41 +20,73 @@ local function resetAttributes(self)
 end
 
 function NP:Update_CastBarOnUpdate(elapsed)
-	if self.casting then
-		self.value = self.value + elapsed
-		if self.value >= self.maxValue then
-			resetAttributes(self)
-			self:SetValue(self.maxValue, "casting")
-			self:Hide()
-			NP:StyleFilterUpdate(self:GetParent(), "FAKE_Casting")
-			return
+	if self.casting or self.channeling then
+		local isCasting = self.casting
+		if isCasting then
+			self.value = self.value + elapsed
+			if self.value >= self.max then
+				resetAttributes(self)
+				self:Hide()
+				NP:StyleFilterUpdate(self:GetParent(), "FAKE_Casting")
+				return
+			end
+		else
+			self.value = self.value - elapsed
+			if self.value <= 0 then
+				resetAttributes(self)
+				self:Hide()
+				NP:StyleFilterUpdate(self:GetParent(), "FAKE_Casting")
+				return
+			end
 		end
-		self:SetValue(self.value)
 
-		if self.castTimeFormat == "CURRENT" then
-			self.Time:SetFormattedText("%.1f", self.value)
-		elseif self.castTimeFormat == "CURRENT_MAX" then
-			self.Time:SetFormattedText("%.1f / %.1f", self.value, self.maxValue)
-		else --REMAINING
-			self.Time:SetFormattedText("%.1f", (self.maxValue - self.value))
+		if self.delay ~= 0 then
+			if self.channeling then
+				if self.channelTimeFormat == "CURRENT" then
+					self.Time:SetFormattedText("%.1f |cffaf5050%.1f|r", abs(self.value - self.max), self.delay)
+				elseif self.channelTimeFormat == "CURRENTMAX" then
+					self.Time:SetFormattedText("%.1f / %.1f |cffaf5050%.1f|r", self.value, self.max, self.delay)
+				elseif self.channelTimeFormat == "REMAINING" then
+					self.Time:SetFormattedText("%.1f |cffaf5050%.1f|r", self.value, self.delay)
+				elseif self.channelTimeFormat == "REMAININGMAX" then
+					self.Time:SetFormattedText("%.1f / %.1f |cffaf5050%.1f|r", abs(self.value - self.max), self.max, self.delay)
+				end
+			else
+				if self.castTimeFormat == "CURRENT" then
+					self.Time:SetFormattedText("%.1f |cffaf5050%s %.1f|r", self.value, "+", self.delay)
+				elseif self.castTimeFormat == "CURRENTMAX" then
+					self.Time:SetFormattedText("%.1f / %.1f |cffaf5050%s %.1f|r", self.value, self.max, "+", self.delay)
+				elseif self.castTimeFormat == "REMAINING" then
+					self.Time:SetFormattedText("%.1f |cffaf5050%s %.1f|r", abs(self.value - self.max), "+", self.delay)
+				elseif self.castTimeFormat == "REMAININGMAX" then
+					self.Time:SetFormattedText("%.1f / %.1f |cffaf5050%s %.1f|r", abs(self.value - self.max), self.max, "+", self.delay)
+				end
+			end
+		else
+			if self.channeling then
+				if self.channelTimeFormat == "CURRENT" then
+					self.Time:SetFormattedText("%.1f", abs(self.value - self.max))
+				elseif self.channelTimeFormat == "CURRENTMAX" then
+					self.Time:SetFormattedText("%.1f / %.1f", abs(self.value - self.max), self.max)
+				elseif self.channelTimeFormat == "REMAINING" then
+					self.Time:SetFormattedText("%.1f", self.value)
+				elseif self.channelTimeFormat == "REMAININGMAX" then
+					self.Time:SetFormattedText("%.1f / %.1f", self.value, self.max)
+				end
+			else
+				if self.castTimeFormat == "CURRENT" then
+					self.Time:SetFormattedText("%.1f", self.value)
+				elseif self.castTimeFormat == "CURRENTMAX" then
+					self.Time:SetFormattedText("%.1f / %.1f", self.value, self.max)
+				elseif self.castTimeFormat == "REMAINING" then
+					self.Time:SetFormattedText("%.1f", abs(self.value - self.max))
+				elseif self.castTimeFormat == "REMAININGMAX" then
+					self.Time:SetFormattedText("%.1f / %.1f", abs(self.value - self.max), self.max)
+				end
+			end
 		end
-	elseif self.channeling then
-		self.value = self.value - elapsed
-		if self.value <= 0 then
-			resetAttributes(self)
-			self:Hide()
-			NP:StyleFilterUpdate(self:GetParent(), "FAKE_Casting")
-			return
-		end
+		
 		self:SetValue(self.value)
-
-		if self.channelTimeFormat == "CURRENT" then
-			self.Time:SetFormattedText("%.1f", (self.maxValue - self.value))
-		elseif self.channelTimeFormat == "CURRENT_MAX" then
-			self.Time:SetFormattedText("%.1f / %.1f", (self.maxValue - self.value), self.maxValue)
-		else --REMAINING
-			self.Time:SetFormattedText("%.1f", self.value)
-		end
 	elseif self.holdTime > 0 then
 		self.holdTime = self.holdTime - elapsed
 	else
@@ -99,7 +131,9 @@ function NP:Update_CastBar(frame, event, unit)
 		endTime = endTime / 1000
 		startTime = startTime / 1000
 
-		castBar.maxValue = endTime - startTime
+		castBar.max = endTime - startTime
+		castBar.startTime = startTime
+		castBar.delay = 0
 		castBar.casting = event == "UNIT_SPELLCAST_START"
 		castBar.channeling = event == "UNIT_SPELLCAST_CHANNEL_START"
 		castBar.notInterruptible = notInterruptible
@@ -112,7 +146,7 @@ function NP:Update_CastBar(frame, event, unit)
 			castBar.value = endTime - GetTime()
 		end
 
-		castBar:SetMinMaxValues(0, castBar.maxValue)
+		castBar:SetMinMaxValues(0, castBar.max)
 		castBar:SetValue(castBar.value)
 
 		castBar.Icon.texture:SetTexture(texture)
@@ -133,7 +167,7 @@ function NP:Update_CastBar(frame, event, unit)
 			castBar.holdTime = self.db.units[frame.UnitType].castbar.timeToHold --How long the castbar should stay visible after being interrupted, in seconds
 
 			resetAttributes(castBar)
-			castBar:SetValue(castBar.maxValue)
+			castBar:SetValue(castBar.max)
 		end
 	elseif event == "UNIT_SPELLCAST_DELAYED" or event == "UNIT_SPELLCAST_CHANNEL_UPDATE" then
 		if frame:IsShown() then
@@ -153,17 +187,24 @@ function NP:Update_CastBar(frame, event, unit)
 			endTime = endTime / 1000
 			startTime = startTime / 1000
 
+			local delta
 			if castBar.casting then
+				delta = startTime - castBar.startTime
 				castBar.value = GetTime() - startTime
-			elseif castBar.channeling then
-				castBar.value = endTime - GetTime()
 			else
-				resetAttributes(castBar)
+				delta = castBar.startTime - startTime
+				castBar.value = endTime - GetTime()
+			end
+
+			if delta < 0 then
+				delta = 0
 			end
 
 			castBar.Name:SetText(name)
-			castBar.maxValue = endTime - startTime
-			castBar:SetMinMaxValues(0, castBar.maxValue)
+			castBar.max = endTime - startTime
+			castBar.startTime = startTime
+			castBar.delay = element.delay + delta
+			castBar:SetMinMaxValues(0, castBar.max)
 			castBar:SetValue(castBar.value)
 		end
 	elseif event == "UNIT_SPELLCAST_INTERRUPTIBLE" or event == "UNIT_SPELLCAST_NOT_INTERRUPTIBLE" then
