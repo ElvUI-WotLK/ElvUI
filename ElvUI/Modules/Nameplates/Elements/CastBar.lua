@@ -44,23 +44,23 @@ function NP:Update_CastBarOnUpdate(elapsed)
 		if self.delay ~= 0 then
 			if self.channeling then
 				if self.channelTimeFormat == "CURRENT" then
-					self.Time:SetFormattedText("%.1f |cffaf5050%.1f|r", abs(self.value - self.max), self.delay)
+					self.Time:SetFormattedText("%.1f |cffaf5050%.2f|r", abs(self.value - self.max), self.delay)
 				elseif self.channelTimeFormat == "CURRENTMAX" then
-					self.Time:SetFormattedText("%.1f / %.1f |cffaf5050%.1f|r", abs(self.value - self.max), self.max, self.delay)
+					self.Time:SetFormattedText("%.1f / %.2f |cffaf5050%.2f|r", abs(self.value - self.max), self.max, self.delay)
 				elseif self.channelTimeFormat == "REMAINING" then
-					self.Time:SetFormattedText("%.1f |cffaf5050%.1f|r", self.value, self.delay)
+					self.Time:SetFormattedText("%.1f |cffaf5050%.2f|r", self.value, self.delay)
 				elseif self.channelTimeFormat == "REMAININGMAX" then
-					self.Time:SetFormattedText("%.1f / %.1f |cffaf5050%.1f|r", self.value, self.max, self.max, self.delay)
+					self.Time:SetFormattedText("%.1f / %.2f |cffaf5050%.2f|r", self.value, self.max, self.max, self.delay)
 				end
 			else
 				if self.castTimeFormat == "CURRENT" then
-					self.Time:SetFormattedText("%.1f |cffaf5050%s %.1f|r", self.value, "+", self.delay)
+					self.Time:SetFormattedText("%.1f |cffaf5050%s %.2f|r", self.value, "+", self.delay)
 				elseif self.castTimeFormat == "CURRENTMAX" then
-					self.Time:SetFormattedText("%.1f / %.1f |cffaf5050%s %.1f|r", self.value, self.max, "+", self.delay)
+					self.Time:SetFormattedText("%.1f / %.2f |cffaf5050%s %.2f|r", self.value, self.max, "+", self.delay)
 				elseif self.castTimeFormat == "REMAINING" then
-					self.Time:SetFormattedText("%.1f |cffaf5050%s %.1f|r", abs(self.value - self.max), "+", self.delay)
+					self.Time:SetFormattedText("%.1f |cffaf5050%s %.2f|r", abs(self.value - self.max), "+", self.delay)
 				elseif self.castTimeFormat == "REMAININGMAX" then
-					self.Time:SetFormattedText("%.1f / %.1f |cffaf5050%s %.1f|r", abs(self.value - self.max), self.max, "+", self.delay)
+					self.Time:SetFormattedText("%.1f / %.2f |cffaf5050%s %.2f|r", abs(self.value - self.max), self.max, "+", self.delay)
 				end
 			end
 		else
@@ -68,21 +68,21 @@ function NP:Update_CastBarOnUpdate(elapsed)
 				if self.channelTimeFormat == "CURRENT" then
 					self.Time:SetFormattedText("%.1f", abs(self.value - self.max))
 				elseif self.channelTimeFormat == "CURRENTMAX" then
-					self.Time:SetFormattedText("%.1f / %.1f", abs(self.value - self.max), self.max)
+					self.Time:SetFormattedText("%.1f / %.2f", abs(self.value - self.max), self.max)
 				elseif self.channelTimeFormat == "REMAINING" then
 					self.Time:SetFormattedText("%.1f", self.value)
 				elseif self.channelTimeFormat == "REMAININGMAX" then
-					self.Time:SetFormattedText("%.1f / %.1f", self.value, self.max)
+					self.Time:SetFormattedText("%.1f / %.2f", self.value, self.max)
 				end
 			else
 				if self.castTimeFormat == "CURRENT" then
 					self.Time:SetFormattedText("%.1f", self.value)
 				elseif self.castTimeFormat == "CURRENTMAX" then
-					self.Time:SetFormattedText("%.1f / %.1f", self.value, self.max)
+					self.Time:SetFormattedText("%.1f / %.2f", self.value, self.max)
 				elseif self.castTimeFormat == "REMAINING" then
 					self.Time:SetFormattedText("%.1f", abs(self.value - self.max))
 				elseif self.castTimeFormat == "REMAININGMAX" then
-					self.Time:SetFormattedText("%.1f / %.1f", abs(self.value - self.max), self.max)
+					self.Time:SetFormattedText("%.1f / %.2f", abs(self.value - self.max), self.max)
 				end
 			end
 		end
