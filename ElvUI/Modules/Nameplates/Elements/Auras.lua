@@ -178,8 +178,6 @@ function NP:SetAura(frame, guid, index, filter, isDebuff, visible)
 end
 
 function NP:Update_AurasPosition(frame, db)
-	local unitFrame = frame:GetParent()
-
 	local size = db.size + db.spacing
 	local anchor = E.InversePoints[db.anchorPoint]
 	local growthx = (db.growthX == "LEFT" and -1) or 1
