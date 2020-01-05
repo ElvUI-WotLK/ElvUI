@@ -265,11 +265,11 @@ function UF:CustomCastDelayText(duration)
 		if db == "CURRENT" then
 			self.Time:SetFormattedText("%.1f |cffaf5050%.1f|r", abs(duration - self.max), self.delay)
 		elseif db == "CURRENTMAX" then
-			self.Time:SetFormattedText("%.1f / %.1f |cffaf5050%.1f|r", duration, self.max, self.delay)
+			self.Time:SetFormattedText("%.1f / %.1f |cffaf5050%.1f|r", abs(duration - self.max), self.max, self.delay)
 		elseif db == "REMAINING" then
 			self.Time:SetFormattedText("%.1f |cffaf5050%.1f|r", duration, self.delay)
 		elseif db == "REMAININGMAX" then
-			self.Time:SetFormattedText("%.1f / %.1f |cffaf5050%.1f|r", abs(duration - self.max), self.max, self.delay)
+			self.Time:SetFormattedText("%.1f / %.1f |cffaf5050%.1f|r", duration, self.max, self.delay)
 		end
 	else
 		if db == "CURRENT" then

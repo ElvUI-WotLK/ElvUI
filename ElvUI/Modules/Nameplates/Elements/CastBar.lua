@@ -4,6 +4,7 @@ local LSM = E.Libs.LSM
 
 --Lua functions
 local unpack = unpack
+local abs = math.abs
 --WoW API / Variables
 local CreateFrame = CreateFrame
 local GetTime = GetTime
@@ -45,11 +46,11 @@ function NP:Update_CastBarOnUpdate(elapsed)
 				if self.channelTimeFormat == "CURRENT" then
 					self.Time:SetFormattedText("%.1f |cffaf5050%.1f|r", abs(self.value - self.max), self.delay)
 				elseif self.channelTimeFormat == "CURRENTMAX" then
-					self.Time:SetFormattedText("%.1f / %.1f |cffaf5050%.1f|r", self.value, self.max, self.delay)
+					self.Time:SetFormattedText("%.1f / %.1f |cffaf5050%.1f|r", abs(self.value - self.max), self.max, self.delay)
 				elseif self.channelTimeFormat == "REMAINING" then
 					self.Time:SetFormattedText("%.1f |cffaf5050%.1f|r", self.value, self.delay)
 				elseif self.channelTimeFormat == "REMAININGMAX" then
-					self.Time:SetFormattedText("%.1f / %.1f |cffaf5050%.1f|r", abs(self.value - self.max), self.max, self.delay)
+					self.Time:SetFormattedText("%.1f / %.1f |cffaf5050%.1f|r", self.value, self.max, self.max, self.delay)
 				end
 			else
 				if self.castTimeFormat == "CURRENT" then
