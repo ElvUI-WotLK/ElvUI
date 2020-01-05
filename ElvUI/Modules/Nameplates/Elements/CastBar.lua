@@ -85,7 +85,7 @@ function NP:Update_CastBarOnUpdate(elapsed)
 				end
 			end
 		end
-		
+
 		self:SetValue(self.value)
 	elseif self.holdTime > 0 then
 		self.holdTime = self.holdTime - elapsed
@@ -203,7 +203,7 @@ function NP:Update_CastBar(frame, event, unit)
 			castBar.Name:SetText(name)
 			castBar.max = endTime - startTime
 			castBar.startTime = startTime
-			castBar.delay = element.delay + delta
+			castBar.delay = castBar.delay + delta
 			castBar:SetMinMaxValues(0, castBar.max)
 			castBar:SetValue(castBar.value)
 		end
