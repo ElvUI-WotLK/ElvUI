@@ -2130,7 +2130,7 @@ local function GetUnitSettings(unit, name)
 								name = L["Channel Time Format"],
 								values = {
 									["CURRENT"] = L["Current"],
-									["CURRENT_MAX"] = L["Current / Max"],
+									["CURRENTMAX"] = L["Current / Max"],
 									["REMAINING"] = L["Remaining"],
 									["REMAININGMAX"] = L["Remaining / Max"]
 								}
