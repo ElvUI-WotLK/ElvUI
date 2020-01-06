@@ -243,7 +243,7 @@ local function Chat_OnEvent(self, event, arg1, arg2, arg3, arg4, arg5, arg6, arg
 	local accessID = ChatHistory_GetAccessID(chatGroup, chatTarget)
 	local typeID = ChatHistory_GetAccessID(chatType, chatTarget)
 
-	if CH.db.shortChannels then
+	if E.db.chat.shortChannels then
 		body = gsub(body, "|Hchannel:(.-)|h%[(.-)%]|h", CH.ShortChannel)
 		body = gsub(body, "^(.-|h) "..L["whispers"], "%1")
 		body = gsub(body, "<"..AFK..">", "[|cffFF0000"..AFK.."|r] ")
