@@ -158,6 +158,7 @@ function A:CreateIcon(button)
 
 	button.statusBar = CreateFrame("StatusBar", "$parentStatusBar", button)
 	button.statusBar:Hide()
+	button.statusBar:SetStatusBarTexture(LSM:Fetch("statusbar", self.db.barTexture))
 	button.statusBar:CreateBackdrop()
 	E:SetSmoothing(button.statusBar)
 
@@ -313,6 +314,12 @@ function A:ConfigureAuras(header, auraTable, weaponPosition)
 			button.statusBar:Hide()
 		end
 
+		if self.db.showDuration then
+			button.text:Show()
+		else
+			button.text:Hide()
+		end
+
 		if buffInfo.filter == "HARMFUL" then
 			local color = DebuffTypeColor[buffInfo.dispelType or ""]
 			button:SetBackdropBorderColor(color.r, color.g, color.b)
@@ -413,7 +420,7 @@ function A:ConfigureAuras(header, auraTable, weaponPosition)
 		button.statusBar:Height((isOnLeft or isOnRight) and iconSize or (self.db.barHeight + (E.PixelMode and 0 or 2)))
 		button.statusBar:ClearAllPoints()
 		button.statusBar:Point(E.InversePoints[pos], button, pos, (isOnTop or isOnBottom) and 0 or ((isOnLeft and -((E.PixelMode and 1 or 3) + spacing)) or ((E.PixelMode and 1 or 3) + spacing)), (isOnLeft or isOnRight) and 0 or ((isOnTop and ((E.PixelMode and 1 or 3) + spacing) or -((E.PixelMode and 1 or 3) + spacing))))
-		button.statusBar:SetStatusBarTexture(E.Libs.LSM:Fetch("statusbar", self.db.barTexture))
+		button.statusBar:SetStatusBarTexture(LSM:Fetch("statusbar", self.db.barTexture))
 		if isOnLeft or isOnRight then
 			button.statusBar:SetOrientation("VERTICAL")
 		else

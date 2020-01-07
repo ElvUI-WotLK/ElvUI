@@ -160,45 +160,50 @@ E.Options.args.auras = {
 					desc = L["Threshold before the icon will fade out and back in. Set to -1 to disable."],
 					min = -1, max = 30, step = 1
 				},
-				font = {
+				showDuration = {
 					order = 3,
+					type = "toggle",
+					name = L["Duration Enable"]
+				},
+				font = {
+					order = 4,
 					type = "select", dialogControl = "LSM30_Font",
 					name = L["Font"],
 					values = AceGUIWidgetLSMlists.font
 				},
 				fontOutline = {
-					order = 4,
+					order = 5,
 					type = "select",
 					name = L["Font Outline"],
 					desc = L["Set the font outline."],
 					values = C.Values.FontFlags
 				},
 				timeXOffset = {
-					order = 5,
+					order = 6,
 					type = "range",
 					name = L["Time xOffset"],
 					min = -60, max = 60, step = 1
 				},
 				timeYOffset = {
-					order = 6,
+					order = 7,
 					type = "range",
 					name = L["Time yOffset"],
 					min = -60, max = 60, step = 1
 				},
 				countXOffset = {
-					order = 7,
+					order = 8,
 					type = "range",
 					name = L["Count xOffset"],
 					min = -60, max = 60, step = 1
 				},
 				countYOffset = {
-					order = 8,
+					order = 9,
 					type = "range",
 					name = L["Count yOffset"],
 					min = -60, max = 60, step = 1
 				},
 				statusBar = {
-					order = 9,
+					order = 10,
 					type = "group",
 					name = L["Statusbar"],
 					guiInline = true,
@@ -206,12 +211,12 @@ E.Options.args.auras = {
 					set = function(info, value) E.db.auras[info[#info]] = value; A:UpdateHeader(ElvUIPlayerBuffs); A:UpdateHeader(ElvUIPlayerDebuffs) end,
 					args = {
 						barShow = {
-							order = 0,
+							order = 1,
 							type = "toggle",
 							name = L["Enable"],
 						},
 						barNoDuration = {
-							order = 0,
+							order = 2,
 							type = "toggle",
 							name = L["No Duration"],
 						},
@@ -279,7 +284,7 @@ E.Options.args.auras = {
 					},
 				},
 				lbf = {
-					order = 10,
+					order = 11,
 					type = "group",
 					guiInline = true,
 					name = L["LBF Support"],
