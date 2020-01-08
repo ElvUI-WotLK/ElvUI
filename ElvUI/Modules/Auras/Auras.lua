@@ -352,9 +352,15 @@ function A:ConfigureAuras(header, auraTable, weaponPosition)
 					local quality = GetInventoryItemQuality("player", index)
 					button.texture:SetTexture(GetInventoryItemTexture("player", index))
 
+					local r, g, b
 					if quality then
-						button:SetBackdropBorderColor(GetItemQualityColor(quality))
+						r, g, b = GetItemQualityColor(quality)
+					else
+						r, g, b = unpack(E.media.bordercolor)
 					end
+
+					button:SetBackdropBorderColor(r, g, b)
+					button.statusBar.backdrop:SetBackdropBorderColor(r, g, b)
 
 					local duration = 600
 					local expirationTime = weaponEnchantTime[weapon]
@@ -369,6 +375,22 @@ function A:ConfigureAuras(header, auraTable, weaponPosition)
 						A:SetAuraTime(button, expirationTime, duration)
 					else
 						A:ClearAuraTime(button)
+					end
+
+					if (self.db.barShow and duration > 0) or (self.db.barShow and self.db.barNoDuration and duration == 0) then
+						button.statusBar:Show()
+
+						if not button.timeLeft or not self.db.barColorGradient then
+							button.statusBar:SetStatusBarColor(self.db.barColor.r, self.db.barColor.g, self.db.barColor.b)
+						end
+					else
+						button.statusBar:Hide()
+					end
+
+					if self.db.showDuration then
+						button.text:Show()
+					else
+						button.text:Hide()
 					end
 
 					if weaponPosition == 0 then
