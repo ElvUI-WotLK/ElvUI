@@ -349,18 +349,9 @@ function A:ConfigureAuras(header, auraTable, weaponPosition)
 
 					button:SetID(weapon)
 					local index = enchantableSlots[weapon]
-					local quality = GetInventoryItemQuality("player", index)
 					button.texture:SetTexture(GetInventoryItemTexture("player", index))
 
-					local r, g, b
-					if quality then
-						r, g, b = GetItemQualityColor(quality)
-					else
-						r, g, b = unpack(E.media.bordercolor)
-					end
-
-					button:SetBackdropBorderColor(r, g, b)
-					button.statusBar.backdrop:SetBackdropBorderColor(r, g, b)
+					button:SetBackdropBorderColor(GetItemQualityColor(GetInventoryItemQuality("player", index) or 1))
 
 					local duration = 600
 					local expirationTime = weaponEnchantTime[weapon]
