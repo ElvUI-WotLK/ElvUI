@@ -147,8 +147,8 @@ function LO:SetDataPanelStyle()
 	local miniStyle = E.db.datatexts.panelTransparency and "Transparent" or "Default"
 	local panelStyle = (not E.db.datatexts.panelBackdrop) and "NoBackdrop" or miniStyle
 
-	local miniGlossTex = (not miniStyle and true) or nil
 	local panelGlossTex = (panelStyle and true) or nil
+	local miniGlossTex = (miniStyle and nil) or true
 
 	LeftChatDataPanel:SetTemplate(panelStyle, panelGlossTex)
 	LeftChatToggleButton:SetTemplate(panelStyle, panelGlossTex)

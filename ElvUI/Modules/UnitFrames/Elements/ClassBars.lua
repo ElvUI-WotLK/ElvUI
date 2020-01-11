@@ -311,8 +311,6 @@ function UF:Construct_AdditionalPowerBar(frame)
 	additionalPower:SetStatusBarTexture(E.media.blankTex)
 	UF.statusbars[additionalPower] = true
 
-	--additionalPower:SetFrameLevel(additionalPower:GetFrameLevel() + 1)
-
 	additionalPower.colorPower = true
 
 	additionalPower:CreateBackdrop(nil, nil, nil, self.thinBorders, true)
