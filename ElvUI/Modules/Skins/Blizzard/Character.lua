@@ -84,6 +84,8 @@ local function LoadSkin()
 	S:HandleRotateButton(CharacterModelFrameRotateLeftButton)
 	S:HandleRotateButton(CharacterModelFrameRotateRightButton)
 
+	PlayerStatFrameLeftDropDown:Point("BOTTOMLEFT", PlayerStatLeftTop, "TOPLEFT", -19, -8)
+
 	S:HandleDropDownBox(PlayerStatFrameLeftDropDown, 140, "down")
 	S:HandleDropDownBox(PlayerStatFrameRightDropDown, 140, "down")
 
@@ -106,16 +108,16 @@ local function LoadSkin()
 	PlayerTitlePickerFrame:Point("TOPLEFT", PlayerTitleFrame, "BOTTOMLEFT", 14, 26)
 
 	CharacterModelFrame:Size(237, 217)
-	CharacterModelFrame:Point("TOPLEFT", 63, -77)
+	CharacterModelFrame:Point("TOPLEFT", 63, -76)
 
 	CharacterModelFrameRotateLeftButton:Point("TOPLEFT", 4, -4)
 	CharacterModelFrameRotateRightButton:Point("TOPLEFT", CharacterModelFrameRotateLeftButton, "TOPRIGHT", 3, 0)
 
 	CharacterResistanceFrame:Point("TOPRIGHT", PaperDollFrame, "TOPLEFT", 300, -81)
 
-	CharacterHeadSlot:Point("TOPLEFT", 19, -77)
-	CharacterHandsSlot:Point("TOPLEFT", 307, -77)
-	CharacterMainHandSlot:Point("TOPLEFT", PaperDollFrame, "BOTTOMLEFT", 110, 129)
+	CharacterHeadSlot:Point("TOPLEFT", 19, -76)
+	CharacterHandsSlot:Point("TOPLEFT", 307, -76)
+	CharacterMainHandSlot:Point("TOPLEFT", PaperDollFrame, "BOTTOMLEFT", 110, 131)
 
 	CharacterAttributesFrame:Point("TOPLEFT", 66, -292)
 
@@ -377,6 +379,10 @@ local function LoadSkin()
 	local text1, text2 = select(5, GearManagerDialogPopup:GetRegions())
 	text1:Point("TOPLEFT", 24, -19)
 	text2:Point("TOPLEFT", 24, -63)
+
+	if GetLocale() == "ruRU" then
+		text1:SetText(string.utf8sub(GEARSETS_POPUP_TEXT, 0, -7) .. "):")
+	end
 
 	GearManagerDialogPopupEditBox:Point("TOPLEFT", 24, -36)
 

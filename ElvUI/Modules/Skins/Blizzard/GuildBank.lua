@@ -128,7 +128,8 @@ local function LoadSkin()
 		end
 	end)
 
-	GuildBankLimitLabel:Point("CENTER", GuildBankTabLimitBackground, "CENTER", -40, 1)
+	GuildBankLimitLabel:ClearAllPoints()
+	GuildBankLimitLabel:Point("BOTTOMLEFT", GuildBankMoneyLimitLabel, "TOPLEFT", -1, 11)
 
 	GuildBankFrameDepositButton:Point("BOTTOMRIGHT", -8, 36)
 	GuildBankFrameWithdrawButton:Point("RIGHT", GuildBankFrameDepositButton, "LEFT", -3, 0)

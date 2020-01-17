@@ -375,6 +375,8 @@ local function LoadSkin()
 	GuildMemberRemoveButton:Point("BOTTOMLEFT", 7, 7)
 	GuildMemberGroupInviteButton:SetPoint("LEFT", GuildMemberRemoveButton, "RIGHT", 6, 0)
 
+	GUILD_DETAIL_NORM_HEIGHT = 203 -- orig 195
+
 	-- Info Frame
 	GuildInfoFrame:StripTextures()
 	GuildInfoFrame:CreateBackdrop("Transparent")

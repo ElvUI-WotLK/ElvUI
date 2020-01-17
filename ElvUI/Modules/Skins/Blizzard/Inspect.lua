@@ -151,12 +151,12 @@ local function LoadSkin()
 		end
 	end
 
-	InspectHeadSlot:Point("TOPLEFT", 19, -77)
-	InspectHandsSlot:Point("TOPLEFT", 307, -77)
-	InspectMainHandSlot:Point("TOPLEFT", InspectPaperDollFrame, "BOTTOMLEFT", 121, 129)
+	InspectHeadSlot:Point("TOPLEFT", 19, -76)
+	InspectHandsSlot:Point("TOPLEFT", 307, -76)
+	InspectMainHandSlot:Point("TOPLEFT", InspectPaperDollFrame, "BOTTOMLEFT", 121, 131)
 
 	InspectModelFrame:Size(237, 324)
-	InspectModelFrame:Point("TOPLEFT", 63, -77)
+	InspectModelFrame:Point("TOPLEFT", 63, -76)
 
 	InspectModelRotateLeftButton:Point("TOPLEFT", 4, -4)
 
