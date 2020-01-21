@@ -503,8 +503,7 @@ local function LoadSkin()
 		button:StyleButton(nil, true)
 		button:SetTemplate("Default", true)
 
-		iconDisabled:SetTexture(nil)
-		button.SetDisabledTexture = E.noop
+		iconDisabled:SetAlpha(0)
 
 		activeTexture:SetInside(button)
 		activeTexture:SetTexture(1, 1, 1, .15)
