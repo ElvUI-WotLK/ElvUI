@@ -133,7 +133,7 @@ function UF:Configure_ClassBar(frame)
 			bars.Holder.mover:SetAlpha(0)
 		end
 	elseif frame.CLASSBAR_DETACHED then
-		if frame.USE_MINI_CLASSBAR and not (frame.MAX_CLASS_BAR == 1 or frame.ClassBar == "AdditionalPower" or frame.ClassBar == "EclipseBar") then
+		if frame.USE_MINI_CLASSBAR and not (frame.MAX_CLASS_BAR == 1 or frame.ClassBar == "AdditionalPower") then
 			local widthMult = UF.classMaxResourceBar[E.myclass] - 1
 			if db.classbar.orientation == "HORIZONTAL" then
 				bars.Holder:Size(db.classbar.detachedWidth + (db.classbar.spacing * widthMult) - (widthMult * 5), db.classbar.height)

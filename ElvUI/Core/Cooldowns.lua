@@ -136,7 +136,6 @@ function E:Cooldown_Options(timer, db, parent)
 	timer.textColors = icolors or (E.db.cooldown.useIndicatorColor and E.TimeIndicatorColors)
 	timer.hhmmThreshold = hhmm or (E.db.cooldown.checkSeconds and E.db.cooldown.hhmmThreshold)
 	timer.mmssThreshold = mmss or (E.db.cooldown.checkSeconds and E.db.cooldown.mmssThreshold)
-	timer.hideBlizzard = db.hideBlizzard or E.db.cooldown.hideBlizzard
 
 	if db.reverse ~= nil then
 		timer.reverseToggle = (E.db.cooldown.enable and not db.reverse) or (db.reverse and not E.db.cooldown.enable)

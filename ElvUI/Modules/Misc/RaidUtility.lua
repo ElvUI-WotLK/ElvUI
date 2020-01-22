@@ -173,11 +173,11 @@ function RU:Initialize()
 			DoReadyCheck()
 		end
 	end)
-	ReadyCheckButton:SetScript("OnEvent", function(self)
+	ReadyCheckButton:SetScript("OnEvent", function(btn)
 		if not (IsRaidLeader("player") or IsRaidOfficer("player")) then
-			self:Disable()
+			btn:Disable()
 		else
-			self:Enable()
+			btn:Enable()
 		end
 	end)
 	ReadyCheckButton:RegisterEvent("RAID_ROSTER_UPDATE")
