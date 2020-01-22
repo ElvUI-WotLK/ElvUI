@@ -10,10 +10,19 @@ local SetCVar = SetCVar
 local GameTooltip = _G.GameTooltip
 
 local points = {
-	["TOPLEFT"] = "TOPLEFT",
-	["TOPRIGHT"] = "TOPRIGHT",
-	["BOTTOMLEFT"] = "BOTTOMLEFT",
-	["BOTTOMRIGHT"] = "BOTTOMRIGHT"
+	TOPLEFT = L["Top Left"],
+	TOPRIGHT = L["Top Right"],
+	BOTTOMLEFT = L["Bottom Left"],
+	BOTTOMRIGHT = L["Bottom Right"]
+}
+
+local textPoints = {
+	TOP = L["Top"],
+	BOTTOM = L["Bottom"],
+	TOPLEFT = L["Top Left"],
+	TOPRIGHT = L["Top Right"],
+	BOTTOMLEFT = L["Bottom Left"],
+	BOTTOMRIGHT = L["Bottom Right"]
 }
 
 local ACD = E.Libs.AceConfigDialog
@@ -36,7 +45,7 @@ local function BuildABConfig()
 				type = "execute",
 				name = L["Keybind Mode"],
 				func = function() AB:ActivateBindMode() E:ToggleOptionsUI() GameTooltip:Hide() end,
-				disabled = function() return not E.private.actionbar.enable end,
+				disabled = function() return not E.private.actionbar.enable end
 			},
 			spacer = {
 				order = 3,
@@ -55,7 +64,7 @@ local function BuildABConfig()
 				type = "toggle",
 				name = L["Keybind Text"],
 				desc = L["Display bind names on action buttons."],
-				disabled = function() return not E.private.actionbar.enable end,
+				disabled = function() return not E.private.actionbar.enable end
 			},
 			useRangeColorText = {
 				order = 6,
@@ -110,7 +119,7 @@ local function BuildABConfig()
 				name = L["Transparent Backdrops"],
 				set = function(info, value)
 					E.db.actionbar.transparentBackdrops = value
-					E:StaticPopup_Show("PRIVATE_RL")
+					E:StaticPopup_Show("CONFIG_RL")
 				end
 			},
 			transparentButtons = {
@@ -119,7 +128,7 @@ local function BuildABConfig()
 				name = L["Transparent Buttons"],
 				set = function(info, value)
 					E.db.actionbar.transparentButtons = value
-					E:StaticPopup_Show("PRIVATE_RL")
+					E:StaticPopup_Show("CONFIG_RL")
 				end
 			},
 			movementModifier = {
@@ -261,14 +270,7 @@ local function BuildABConfig()
 								order = 1,
 								type = "select",
 								name = L["Stack Text Position"],
-								values = {
-									["BOTTOMRIGHT"] = "BOTTOMRIGHT",
-									["BOTTOMLEFT"] = "BOTTOMLEFT",
-									["TOPRIGHT"] = "TOPRIGHT",
-									["TOPLEFT"] = "TOPLEFT",
-									["BOTTOM"] = "BOTTOM",
-									["TOP"] = "TOP"
-								}
+								values = textPoints
 							},
 							countTextXOffset = {
 								order = 2,
@@ -286,14 +288,7 @@ local function BuildABConfig()
 								order = 4,
 								type = "select",
 								name = L["Keybind Text Position"],
-								values = {
-									["BOTTOMRIGHT"] = "BOTTOMRIGHT",
-									["BOTTOMLEFT"] = "BOTTOMLEFT",
-									["TOPRIGHT"] = "TOPRIGHT",
-									["TOPLEFT"] = "TOPLEFT",
-									["BOTTOM"] = "BOTTOM",
-									["TOP"] = "TOP"
-								}
+								values = textPoints
 							},
 							hotkeyTextXOffset = {
 								order = 5,
@@ -636,14 +631,7 @@ local function BuildABConfig()
 				type = "select",
 				name = L["Anchor Point"],
 				desc = L["The first button anchors itself to this point on the bar."],
-				values = {
-					["TOPLEFT"] = "TOPLEFT",
-					["TOPRIGHT"] = "TOPRIGHT",
-					["BOTTOMLEFT"] = "BOTTOMLEFT",
-					["BOTTOMRIGHT"] = "BOTTOMRIGHT",
-					["BOTTOM"] = "BOTTOM",
-					["TOP"] = "TOP"
-				},
+				values = textPoints,
 				disabled = function() return not E.db.actionbar.stanceBar.enabled end
 			},
 			buttons = {
@@ -1021,6 +1009,7 @@ local function BuildABConfig()
 	end
 end
 
+local shamanOrder = E.myclass ~= "SHAMAN" and 1 or 0
 E.Options.args.actionbar = {
 	type = "group",
 	name = L["ActionBars"],
@@ -1086,15 +1075,16 @@ E.Options.args.actionbar = {
 			name = " "
 		},
 		totemBarShortcut = {
-			order = 10,
+			order = E.myclass ~= "SHAMAN" and 21 or 10,
 			type = "execute",
 			name = L["TUTORIAL_TITLE47"],
 			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "actionbar", "barTotem") end,
-			disabled = function() return not E.ActionBars.Initialized or E.myclass ~= "SHAMAN" end
+			disabled = function() return not E.ActionBars.Initialized end,
+			hidden = E.myclass ~= "SHAMAN" and true or false
 		},
 		microbarShortcut = {
-			order = 11,
+			order = 11 - shamanOrder,
 			type = "execute",
 			name = L["Micro Bar"],
 			buttonElvUI = true,
@@ -1102,7 +1092,7 @@ E.Options.args.actionbar = {
 			disabled = function() return not E.ActionBars.Initialized end
 		},
 		bar1Shortcut = {
-			order = 12,
+			order = 13 - shamanOrder,
 			type = "execute",
 			name = L["Bar "]..1,
 			buttonElvUI = true,
@@ -1110,7 +1100,7 @@ E.Options.args.actionbar = {
 			disabled = function() return not E.ActionBars.Initialized end
 		},
 		bar2Shortcut = {
-			order = 13,
+			order = 14 - (shamanOrder + shamanOrder),
 			type = "execute",
 			name = L["Bar "]..2,
 			buttonElvUI = true,
@@ -1118,12 +1108,12 @@ E.Options.args.actionbar = {
 			disabled = function() return not E.ActionBars.Initialized end
 		},
 		spacer3 = {
-			order = 14,
+			order = 15,
 			type = "description",
 			name = " "
 		},
 		bar3Shortcut = {
-			order = 15,
+			order = 16 - (shamanOrder + shamanOrder),
 			type = "execute",
 			name = L["Bar "]..3,
 			buttonElvUI = true,
@@ -1131,7 +1121,7 @@ E.Options.args.actionbar = {
 			disabled = function() return not E.ActionBars.Initialized end
 		},
 		bar4Shortcut = {
-			order = 16,
+			order = 17 - shamanOrder,
 			type = "execute",
 			name = L["Bar "]..4,
 			buttonElvUI = true,
@@ -1139,7 +1129,7 @@ E.Options.args.actionbar = {
 			disabled = function() return not E.ActionBars.Initialized end
 		},
 		bar5Shortcut = {
-			order = 17,
+			order = 18 - shamanOrder,
 			type = "execute",
 			name = L["Bar "]..5,
 			buttonElvUI = true,
@@ -1147,7 +1137,7 @@ E.Options.args.actionbar = {
 			disabled = function() return not E.ActionBars.Initialized end
 		},
 		bar6Shortcut = {
-			order = 18,
+			order = 19 - (shamanOrder + shamanOrder),
 			type = "execute",
 			name = L["Bar "]..6,
 			buttonElvUI = true,
