@@ -1137,7 +1137,7 @@ E.Options.args.actionbar = {
 			disabled = function() return not E.ActionBars.Initialized end
 		},
 		bar6Shortcut = {
-			order = 19 - (shamanOrder + shamanOrder),
+			order = 19 - shamanOrder,
 			type = "execute",
 			name = L["Bar "]..6,
 			buttonElvUI = true,
