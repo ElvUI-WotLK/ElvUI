@@ -404,8 +404,8 @@ local function LoadSkin()
 		local tab = _G["PetPaperDollFrameTab"..i]
 		tab:StripTextures()
 		tab:CreateBackdrop("Default", true)
-		tab.backdrop:Point("TOPLEFT", 3, -7)
-		tab.backdrop:Point("BOTTOMRIGHT", -2, -1)
+		tab.backdrop:Point("TOPLEFT", 2, -7)
+		tab.backdrop:Point("BOTTOMRIGHT", -1, -1)
 		S:SetBackdropHitRect(tab)
 
 		tab:HookScript("OnEnter", S.SetModifiedBackdrop)

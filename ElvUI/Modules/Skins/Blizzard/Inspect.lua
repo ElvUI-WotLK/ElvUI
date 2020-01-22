@@ -121,15 +121,15 @@ local function LoadSkin()
 
 		headerTab:StripTextures()
 		headerTab:CreateBackdrop("Default", true)
-		headerTab.backdrop:Point("TOPLEFT", 3, -7)
-		headerTab.backdrop:Point("BOTTOMRIGHT", 2, -1)
+		headerTab.backdrop:Point("TOPLEFT", 2, -7)
+		headerTab.backdrop:Point("BOTTOMRIGHT", 1, -1)
+		S:SetBackdropHitRect(headerTab)
 
-		headerTab:Width(101)
+		headerTab:Width(i == 2 and 101 or 102)
 		headerTab.SetWidth = E.noop
 
 		headerTab:HookScript("OnEnter", S.SetModifiedBackdrop)
 		headerTab:HookScript("OnLeave", S.SetOriginalBackdrop)
-		headerTab:SetHitRectInsets(1, 0, 7, -1)
 	end
 
 	for i = 1, MAX_NUM_TALENTS do
