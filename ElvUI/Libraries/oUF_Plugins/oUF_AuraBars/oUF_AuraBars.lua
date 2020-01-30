@@ -233,7 +233,10 @@ local function Update(self, event, unit)
 			auras[lastAuraIndex].shouldConsolidate = shouldConsolidate
 		end
 	else
-		for i = 1, 40 do
+		local i = 0
+		while lastAuraIndex <= element.maxBars do
+			i = i + 1
+
 			local name, rank, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, shouldConsolidate, spellID = UnitAura(unit, i, helpOrHarm)
 			if not name then break end
 
@@ -259,14 +262,6 @@ local function Update(self, event, unit)
 
 	if element.sort and not element.forceShow then
 		tsort(auras, type(element.sort) == "function" and element.sort or sortByTime)
-	end
-
-	for i = 1, #auras do
-		if i > element.maxBars then
-			tremove(auras, i)
-		else
-			lastAuraIndex = i
-		end
 	end
 
 	-- Show and configure bars for buffs/debuffs.
