@@ -79,8 +79,8 @@ function B:Initialize()
 		end
 	end)
 
-	WORLDMAP_POI_FRAMELEVEL = 300
-	WorldMapFrame:SetToplevel(true)
+--	WORLDMAP_POI_FRAMELEVEL = 300
+--	WorldMapFrame:SetToplevel(true)
 end
 
 local function InitializeCallback()
