@@ -127,7 +127,7 @@ do
 		for _, slotID in ipairs(repairInventoryPriority) do
 			local hasItem, _, repairCost = GameTooltip:SetInventoryItem("player", slotID)
 
-			if hasItem and repairCost > 0 and repairCost <= money then
+			if hasItem and repairCost and repairCost > 0 and repairCost <= money then
 				PickupInventoryItem(slotID)
 				money = money - repairCost
 			end
