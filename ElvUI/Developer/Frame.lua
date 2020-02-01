@@ -224,6 +224,19 @@ SlashCmdList.REGLIST = function(frame)
 	updateCopyChat()
 end
 
+SLASH_CHILDLIST1 = "/childlist"
+SlashCmdList.CHILDLIST = function(frame)
+	frame = getObject(frame)
+	if not frame then return end
+
+	for i = 1, frame:GetNumChildren() do
+		local obj = select(i, frame:GetChildren())
+		printNoTimestamp(i, obj:GetObjectType(), obj:GetName(), obj:GetFrameStrata(), obj:GetFrameLevel())
+	end
+
+	updateCopyChat()
+end
+
 SLASH_GETPOINT1 = "/getpoint"
 SlashCmdList.GETPOINT = function(frame)
 	frame = getObject(frame)
