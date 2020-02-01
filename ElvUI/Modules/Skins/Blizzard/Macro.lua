@@ -12,7 +12,7 @@ local function LoadSkin()
 	MacroFrame:StripTextures()
 	MacroFrame:CreateBackdrop("Transparent")
 	MacroFrame.backdrop:Point("TOPLEFT", 11, -12)
-	MacroFrame.backdrop:Point("BOTTOMRIGHT", -32, 61)
+	MacroFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
 	S:SetUIPanelWindowInfo(MacroFrame, "width")
 	S:SetBackdropHitRect(MacroFrame)
@@ -75,8 +75,6 @@ local function LoadSkin()
 		end
 	end
 
-	S:HandleIconSelectionFrame(MacroPopupFrame, NUM_MACRO_ICONS_SHOWN, "MacroPopupButton", "MacroPopup")
-
 	MacroButtonScrollFrame:Size(302, 142)
 	MacroButtonScrollFrame:Point("TOPLEFT", 20, -76)
 
@@ -87,7 +85,11 @@ local function LoadSkin()
 
 	MacroEditButton:Point("TOPLEFT", MacroFrameSelectedMacroBackground, "TOPLEFT", 60, -28)
 
+	MacroFrameTextBackground:Point("TOPLEFT", 18, -290)
+
 	MacroFrameText:Width(297)
+
+	MacroFrameSelectedMacroBackground:Point("TOPLEFT", 16, -213)
 
 	MacroFrameScrollFrame:Size(300, 81)
 	MacroFrameScrollFrame:Point("TOPLEFT", MacroFrameSelectedMacroBackground, "BOTTOMLEFT", 5, -20)
@@ -95,13 +97,15 @@ local function LoadSkin()
 	MacroFrameScrollFrameScrollBar:Point("TOPLEFT", MacroFrameScrollFrame, "TOPRIGHT", 6, -14)
 	MacroFrameScrollFrameScrollBar:Point("BOTTOMLEFT", MacroFrameScrollFrame, "BOTTOMRIGHT", 6, 14)
 
-	MacroFrameCharLimitText:Point("BOTTOM", -15, 98)
+	MacroFrameCharLimitText:Point("BOTTOM", -15, 113)
 
-	MacroDeleteButton:Point("BOTTOMLEFT", 19, 69)
-	MacroExitButton:Point("CENTER", MacroFrame, "TOPLEFT", 304, -432)
-	MacroNewButton:Point("CENTER", MacroFrame, "TOPLEFT", 221, -432)
+	MacroDeleteButton:Point("BOTTOMLEFT", 19, 84)
+	MacroExitButton:Point("CENTER", MacroFrame, "TOPLEFT", 304, -417)
+	MacroNewButton:Point("CENTER", MacroFrame, "TOPLEFT", 221, -417)
 
 	-- Popup frame
+	S:HandleIconSelectionFrame(MacroPopupFrame, NUM_MACRO_ICONS_SHOWN, "MacroPopupButton", "MacroPopup")
+
 	S:SetBackdropHitRect(MacroPopupFrame)
 	MacroPopupFrame:Point("TOPLEFT", MacroFrame, "TOPRIGHT", -43, 0)
 
