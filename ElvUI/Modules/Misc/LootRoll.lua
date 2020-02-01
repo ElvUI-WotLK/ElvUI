@@ -26,7 +26,6 @@ local RAID_CLASS_COLORS = RAID_CLASS_COLORS
 local ROLL_DISENCHANT = ROLL_DISENCHANT
 
 local pos = "TOP"
-local cancelled_rolls = {}
 local FRAME_WIDTH, FRAME_HEIGHT = 328, 28
 M.RollBars = {}
 
@@ -144,8 +143,7 @@ local function LootClick(frame)
 	end
 end
 
-local function OnEvent(frame, _, rollID)
-	cancelled_rolls[rollID] = true
+local function CANCEL_LOOT_ROLL(frame, _, rollID)
 	if frame.rollID ~= rollID then return end
 
 	frame.rollID = nil
@@ -191,7 +189,7 @@ function M:CreateRollFrame()
 	frame:SetFrameStrata("DIALOG")
 	frame:Size(FRAME_WIDTH, FRAME_HEIGHT)
 	frame:SetTemplate("Default")
-	frame:SetScript("OnEvent", OnEvent)
+	frame:SetScript("OnEvent", CANCEL_LOOT_ROLL)
 	frame:RegisterEvent("CANCEL_LOOT_ROLL")
 	frame:Hide()
 
@@ -280,8 +278,6 @@ local function GetFrame()
 end
 
 function M:START_LOOT_ROLL(_, rollID, time)
-	if cancelled_rolls[rollID] then return end
-
 	local f = GetFrame()
 	f.rollID = rollID
 	f.time = time
