@@ -113,7 +113,10 @@ do
 end
 
 do
+	DisableAddOn("ElvUI_EverySecondCounts")
+	DisableAddOn("ElvUI_FogOfWar")
 	DisableAddOn("ElvUI_VisualAuraTimers")
+	DisableAddOn("ElvUI_MinimapButtons")
 end
 
 function AddOn:OnInitialize()
