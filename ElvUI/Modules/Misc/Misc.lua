@@ -185,7 +185,7 @@ do
 
 				self:RegisterEvent("MERCHANT_CLOSED")
 				E.RegisterCallback(M, "VendorGreys_ItemSold")
-			else
+			elseif playerMoney > 0 then
 				local spent = RepairInventoryByPriority(playerMoney)
 
 				if spent > 0 then
@@ -194,6 +194,8 @@ do
 				else
 					E:Print(L["You don't have enough money to repair."])
 				end
+			else
+				E:Print(L["You don't have enough money to repair."])
 			end
 		end
 	end
@@ -245,7 +247,7 @@ function M:MERCHANT_SHOW()
 
 	local repairMode = E.db.general.autoRepair
 	if repairMode ~= "NONE" then
-		self:AutoRepair(repairMode, greyValue)
+		E:Delay(0.03, self.AutoRepair, self, repairMode, greyValue)
 	end
 end
 
