@@ -69,8 +69,6 @@ This UI will arrange your interface to be more flexible and practical.
 <br />
 [ElvUI_ExtraActionBars](https://github.com/ElvUI-WotLK/ElvUI_ExtraActionBars)
 <br />
-[ElvUI_FogOfWar](https://github.com/ElvUI-WotLK/ElvUI_FogOfWar)
-<br />
 [ElvUI_LocPlus](https://github.com/ElvUI-WotLK/ElvUI_LocPlus)
 <br />
 [ElvUI_MicrobarEnhancement](https://github.com/ElvUI-WotLK/ElvUI_MicrobarEnhancement)
@@ -78,8 +76,6 @@ This UI will arrange your interface to be more flexible and practical.
 [ElvUI_RaidMarkers](https://github.com/ElvUI-WotLK/ElvUI_RaidMarkers)
 <br />
 [ElvUI_SwingBar](https://github.com/ElvUI-WotLK/ElvUI_SwingBar)
-<br />
-[ElvUI_VisualAuraTimers](https://github.com/ElvUI-WotLK/ElvUI_VisualAuraTimers)
 <br />
 [ElvUI_VisualProcs](https://github.com/ElvUI-WotLK/ElvUI_VisualProcs)
 <br />
