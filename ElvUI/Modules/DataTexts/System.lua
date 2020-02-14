@@ -7,21 +7,24 @@ local floor = math.floor
 local format = string.format
 local tinsert, sort = table.insert, table.sort
 --WoW API / Variables
+local CopyTable = CopyTable
 local GetAddOnCPUUsage = GetAddOnCPUUsage
 local GetAddOnInfo = GetAddOnInfo
 local GetAddOnMemoryUsage = GetAddOnMemoryUsage
-local GetCVar = GetCVar
 local GetFramerate = GetFramerate
 local GetNetStats = GetNetStats
 local GetNumAddOns = GetNumAddOns
 local HideUIPanel = HideUIPanel
 local IsAddOnLoaded = IsAddOnLoaded
+local IsModifierKeyDown = IsModifierKeyDown
 local IsShiftKeyDown = IsShiftKeyDown
 local PlaySound = PlaySound
 local ResetCPUUsage = ResetCPUUsage
 local ShowUIPanel = ShowUIPanel
 local UpdateAddOnCPUUsage = UpdateAddOnCPUUsage
 local UpdateAddOnMemoryUsage = UpdateAddOnMemoryUsage
+
+local cpuProfiling = GetCVar("scriptProfile") == "1"
 
 local int = 5 -- initial delay
 local statusColors = {
@@ -46,11 +49,19 @@ local function OnEvent(self, event, addonName)
 	if event == "ADDON_LOADED" then
 		if lodTable[addonName] then
 			tinsert(memoryTable, lodTable[addonName])
-			tinsert(cpuTable, lodTable[addonName])
+
+			if cpuProfiling then
+				tinsert(cpuTable, CopyTable(lodTable[addonName]))
+			end
+
 			lodTable[addonName] = nil
 		elseif disabledTable[addonName] then
 			tinsert(memoryTable, disabledTable[addonName])
-			tinsert(cpuTable, disabledTable[addonName])
+
+			if cpuProfiling then
+				tinsert(cpuTable, CopyTable(disabledTable[addonName]))
+			end
+
 			disabledTable[addonName] = nil
 		end
 	elseif not initialized and (event == "PLAYER_ENTERING_WORLD" or event == "ELVUI_FORCE_RUN") then
@@ -61,7 +72,10 @@ local function OnEvent(self, event, addonName)
 
 			if IsAddOnLoaded(i) then
 				tinsert(memoryTable, {i, title, 0})
-				tinsert(cpuTable, {i, title, 0})
+
+				if cpuProfiling then
+					tinsert(cpuTable, {i, title, 0})
+				end
 			elseif loadable then
 				lodTable[name] = {i, title, 0}
 			elseif not enabled then
@@ -152,7 +166,6 @@ local function OnEnter(self)
 
 	local totalMemory = UpdateMemory()
 	local _, _, homeLatency = GetNetStats()
-	local cpuProfiling = GetCVar("scriptProfile") == "1"
 
 	DT.tooltip:AddDoubleLine(L["Home Latency:"], format(homeLatencyString, homeLatency), 0.69, 0.31, 0.31, 0.84, 0.75, 0.65)
 	DT.tooltip:AddDoubleLine(L["Total Memory:"], formatMem(totalMemory), 0.69, 0.31, 0.31, 0.84, 0.75, 0.65)
