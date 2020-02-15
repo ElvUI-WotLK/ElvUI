@@ -10,6 +10,8 @@ local GetSocketTypes = GetSocketTypes
 local function LoadSkin()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.socket then return end
 
+	ITEM_SOCKETING_DESCRIPTION_MIN_WIDTH = 278
+
 	ItemSocketingFrame:StripTextures()
 	ItemSocketingFrame:CreateBackdrop("Transparent")
 	ItemSocketingFrame.backdrop:Point("TOPLEFT", 11, -12)
@@ -22,13 +24,19 @@ local function LoadSkin()
 
 	S:HandleCloseButton(ItemSocketingCloseButton, ItemSocketingFrame.backdrop)
 
+	ItemSocketingScrollFrame:Height(270)
+	ItemSocketingScrollFrame:Point("TOPLEFT", 20, -77)
 	ItemSocketingScrollFrame:StripTextures()
 	ItemSocketingScrollFrame:CreateBackdrop("Transparent")
 	ItemSocketingScrollFrame.backdrop:Point("BOTTOMRIGHT", 3, -1)
 
 	S:HandleScrollBar(ItemSocketingScrollFrameScrollBar, 2)
 
+	ItemSocketingScrollFrameScrollBar:Point("TOPLEFT", ItemSocketingScrollFrame, "TOPRIGHT", 7, -18)
+	ItemSocketingScrollFrameScrollBar:Point("BOTTOMLEFT", ItemSocketingScrollFrame, "BOTTOMRIGHT", 7, 20)
+
 	S:HandleButton(ItemSocketingSocketButton)
+	ItemSocketingSocketButton:Point("BOTTOMRIGHT", -10, 39)
 
 	for i = 1, MAX_NUM_SOCKETS do
 		local button = _G["ItemSocketingSocket"..i]
@@ -50,20 +58,31 @@ local function LoadSkin()
 	local GEM_TYPE_INFO = GEM_TYPE_INFO
 
 	hooksecurefunc("ItemSocketingFrame_Update", function()
-		for i = 1, GetNumSockets() do
+		local numSockets = GetNumSockets()
+
+		for i = 1, numSockets do
 			local button = _G["ItemSocketingSocket"..i]
 			local color = GEM_TYPE_INFO[GetSocketTypes(i)]
 			button:SetBackdropColor(color.r, color.g, color.b, 0.15)
 			button:SetBackdropBorderColor(color.r, color.g, color.b)
+		end
 
-			if i == 1 then
-				local p1, a, p2, x = button:GetPoint()
-				button:Point(p1, a, p2, x, 71)
-			end
+		if numSockets == 3 then
+			ItemSocketingSocket1:SetPoint("BOTTOM", ItemSocketingFrame, "BOTTOM", -80, 70)
+		elseif numSockets == 2 then
+			ItemSocketingSocket1:SetPoint("BOTTOM", ItemSocketingFrame, "BOTTOM", -36, 70)
+		else
+			ItemSocketingSocket1:SetPoint("BOTTOM", ItemSocketingFrame, "BOTTOM", 0, 70)
 		end
 	end)
 
-	ItemSocketingSocketButton:Point("BOTTOMRIGHT", -10, 39)
+	hooksecurefunc(ItemSocketingScrollFrame, "SetWidth", function(self, width)
+		if width == 269 then
+			ItemSocketingScrollFrame:Width(300)
+		elseif width == 297 then
+			ItemSocketingScrollFrame:Width(321)
+		end
+	end)
 end
 
 S:AddCallbackForAddon("Blizzard_ItemSocketingUI", "Skin_Blizzard_ItemSocketingUI", LoadSkin)
