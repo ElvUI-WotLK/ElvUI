@@ -24,16 +24,16 @@ local function LoadSkin()
 
 	S:HandleCloseButton(ItemSocketingCloseButton, ItemSocketingFrame.backdrop)
 
-	ItemSocketingScrollFrame:Height(270)
+	ItemSocketingScrollFrame:Height(269)
 	ItemSocketingScrollFrame:Point("TOPLEFT", 20, -77)
 	ItemSocketingScrollFrame:StripTextures()
 	ItemSocketingScrollFrame:CreateBackdrop("Transparent")
-	ItemSocketingScrollFrame.backdrop:Point("BOTTOMRIGHT", 3, -1)
+	ItemSocketingScrollFrame.backdrop:Point("BOTTOMRIGHT", 3, -2)
 
 	S:HandleScrollBar(ItemSocketingScrollFrameScrollBar, 2)
 
 	ItemSocketingScrollFrameScrollBar:Point("TOPLEFT", ItemSocketingScrollFrame, "TOPRIGHT", 7, -18)
-	ItemSocketingScrollFrameScrollBar:Point("BOTTOMLEFT", ItemSocketingScrollFrame, "BOTTOMRIGHT", 7, 20)
+	ItemSocketingScrollFrameScrollBar:Point("BOTTOMLEFT", ItemSocketingScrollFrame, "BOTTOMRIGHT", 7, 19)
 
 	S:HandleButton(ItemSocketingSocketButton)
 	ItemSocketingSocketButton:Point("BOTTOMRIGHT", -10, 39)
@@ -43,6 +43,7 @@ local function LoadSkin()
 		local bracket = _G["ItemSocketingSocket"..i.."BracketFrame"]
 		local bg = _G["ItemSocketingSocket"..i.."Background"]
 		local icon = _G["ItemSocketingSocket"..i.."IconTexture"]
+		local shine = _G["ItemSocketingSocket"..i.."Shine"]
 
 		button:StripTextures()
 		button:StyleButton(false)
@@ -53,6 +54,9 @@ local function LoadSkin()
 
 		icon:SetTexCoord(unpack(E.TexCoords))
 		icon:SetInside()
+
+		shine:Point("CENTER")
+		shine:Size(40)
 	end
 
 	local GEM_TYPE_INFO = GEM_TYPE_INFO
@@ -68,19 +72,19 @@ local function LoadSkin()
 		end
 
 		if numSockets == 3 then
-			ItemSocketingSocket1:SetPoint("BOTTOM", ItemSocketingFrame, "BOTTOM", -80, 70)
+			ItemSocketingSocket1:SetPoint("BOTTOM", -80, 70)
 		elseif numSockets == 2 then
-			ItemSocketingSocket1:SetPoint("BOTTOM", ItemSocketingFrame, "BOTTOM", -36, 70)
+			ItemSocketingSocket1:SetPoint("BOTTOM", -36, 70)
 		else
-			ItemSocketingSocket1:SetPoint("BOTTOM", ItemSocketingFrame, "BOTTOM", 0, 70)
+			ItemSocketingSocket1:SetPoint("BOTTOM", 0, 70)
 		end
 	end)
 
 	hooksecurefunc(ItemSocketingScrollFrame, "SetWidth", function(self, width)
 		if width == 269 then
-			ItemSocketingScrollFrame:Width(300)
+			self:Width(300)
 		elseif width == 297 then
-			ItemSocketingScrollFrame:Width(321)
+			self:Width(321)
 		end
 	end)
 end
