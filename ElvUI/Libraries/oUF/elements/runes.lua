@@ -50,11 +50,9 @@ local floor = math.floor
 local GetRuneCooldown = GetRuneCooldown
 local GetRuneType = GetRuneType
 local GetTime = GetTime
-local IsUsableSpell = IsUsableSpell
 local UnitHasVehicleUI = UnitHasVehicleUI
 
 local runemap = {1, 2, 5, 6, 3, 4}
-local BLOOD_OF_THE_NORTH = GetSpellInfo(54637)
 
 local VisibilityPath
 
@@ -69,9 +67,6 @@ local function UpdateType(self, event, runeID, alt)
 	local rune = element[runemap[runeID]]
 	local runeType = GetRuneType(runeID) or alt
 
-	if IsUsableSpell(BLOOD_OF_THE_NORTH) and runeType == 1 then
-		runeType = 4
-	end
 	if not runeType then return end
 
 	local color = self.colors.runes[runeType]
