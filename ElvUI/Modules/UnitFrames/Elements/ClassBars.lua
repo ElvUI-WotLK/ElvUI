@@ -258,14 +258,16 @@ function UF:Construct_DeathKnightResourceBar(frame)
 
 		runes[i]:CreateBackdrop(nil, nil, nil, self.thinBorders, true)
 		runes[i].backdrop:SetParent(runes)
+		runes[i].backdrop:SetFrameLevel(runes[i]:GetFrameLevel() - 1)
 
 		runes[i].bg = runes[i]:CreateTexture(nil, "BORDER")
 		runes[i].bg:SetAllPoints()
 		runes[i].bg:SetTexture(E.media.blankTex)
 		runes[i].bg:SetParent(runes[i].backdrop)
+		runes[i].bg.multiplier = 0.35
 	end
 
-	runes.PostUpdate = UF.PostUpdateRunes
+	runes.PostUpdateType = UF.PostUpdateRuneType
 	runes.PostUpdateVisibility = UF.PostVisibilityRunes
 
 	runes:SetScript("OnShow", ToggleResourceBar)
@@ -274,16 +276,11 @@ function UF:Construct_DeathKnightResourceBar(frame)
 	return runes
 end
 
-function UF:PostUpdateRunes()
-	for i = 1, #self do
-		local custom_backdrop = UF.db.colors.customclasspowerbackdrop and UF.db.colors.classpower_backdrop
+function UF:PostUpdateRuneType(rune)
+	local custom_backdrop = UF.db.colors.customclasspowerbackdrop and UF.db.colors.classpower_backdrop
 
-		if custom_backdrop then
-			self[i].bg:SetVertexColor(custom_backdrop.r, custom_backdrop.g, custom_backdrop.b)
-		else
-			local r, g, b = self[i]:GetStatusBarColor()
-			self[i].bg:SetVertexColor(r * 0.35, g * 0.35, b * 0.35)
-		end
+	if custom_backdrop then
+		rune.bg:SetVertexColor(custom_backdrop.r, custom_backdrop.g, custom_backdrop.b)
 	end
 end
 
