@@ -182,6 +182,7 @@ local function LoadSkin()
 	ChannelPulloutCloseButton:Size(32)
 
 	-- Dropdown Menu
+	local checkBoxSkin = E.private.skins.dropdownCheckBoxSkin
 	local menuLevel = 0
 	local maxButtons = 0
 
@@ -201,7 +202,17 @@ local function LoadSkin()
 							local button = _G["DropDownList"..i.."Button"..j]
 
 							if not button.isSkinned then
-								_G["DropDownList"..i.."Button"..j.."Highlight"]:SetTexture(1, 1, 1, 0.3)
+								S:HandleButtonHighlight(_G["DropDownList"..i.."Button"..j.."Highlight"])
+
+								if checkBoxSkin then
+									local check = _G["DropDownList"..i.."Button"..j.."Check"]
+									check:Size(12)
+									check:Point("LEFT", 1, 0)
+									check:CreateBackdrop()
+									check:SetTexture(E.media.normTex)
+									check:SetVertexColor(1, 0.82, 0, 0.8)
+								end
+
 								S:HandleColorSwatch(_G["DropDownList"..i.."Button"..j.."ColorSwatch"], 14)
 
 								button.isSkinned = true

@@ -52,6 +52,7 @@ V.skins = {
 		enable = true
 	},
 	checkBoxSkin = true,
+	dropdownCheckBoxSkin = false,
 	parchmentRemover = {
 		enable = false,
 	},
