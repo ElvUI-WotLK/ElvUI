@@ -5,7 +5,7 @@ local S = E:GetModule("Skins")
 local _G = _G
 local unpack, pairs, ipairs, select, type = unpack, pairs, ipairs, select, type
 local floor = math.floor
-local strfind, format, lower = strfind, string.format, string.lower
+local find, format, lower = string.find, string.format, string.lower
 --WoW API / Variables
 local IsAddOnLoaded = IsAddOnLoaded
 local UIPanelWindows = UIPanelWindows
@@ -16,7 +16,6 @@ S.allowBypass = {}
 S.addonCallbacks = {}
 S.nonAddonCallbacks = {["CallPriority"] = {}}
 
--- Depends on the arrow texture to be up by default.
 S.ArrowRotation = {
 	["up"] = 0,
 	["down"] = 3.14,
@@ -80,28 +79,35 @@ function S:HandleButton(button, strip, isDeclineButton, useCreateBackdrop, noSet
 	button.isSkinned = true
 end
 
-function S:HandleButtonHighlight(frame, r, g, b)
+function S:HandleButtonHighlight(frame, r, g, b, a)
 	if not r then r = 0.9 end
 	if not g then g = 0.9 end
 	if not b then b = 0.9 end
+	if not a then a = 0.35 end
+
+	local highlightTexture
 
 	if frame.SetHighlightTexture then
-		frame:SetHighlightTexture(E.Media.Textures.Highlight)
-		frame:GetHighlightTexture():SetVertexColor(r, g, b, 0.35)
-		return
-	elseif not frame.HighlightTexture then
-		local highlightTexture = frame:CreateTexture(nil, "HIGHLIGHT")
+		highlightTexture = frame:GetHighlightTexture()
+		highlightTexture:SetAllPoints(frame)
+	elseif frame.SetTexture then
+		highlightTexture = frame
+		frame:SetAllPoints(frame:GetParent())
+	elseif frame.HighlightTexture then
+		highlightTexture = frame.HighlightTexture
+	else
+		highlightTexture = frame:CreateTexture(nil, "HIGHLIGHT")
 		highlightTexture:SetAllPoints(frame)
 		frame.HighlightTexture = highlightTexture
 	end
 
-	frame.HighlightTexture:SetTexture(E.Media.Textures.Highlight)
-	frame.HighlightTexture:SetVertexColor(r, g, b, 0.35)
+	highlightTexture:SetTexture(E.Media.Textures.Highlight)
+	highlightTexture:SetVertexColor(r, g, b, a)
 end
 
 local function GrabScrollBarElement(frame, element)
 	local FrameName = frame:GetName()
-	return frame[element] or FrameName and (_G[FrameName..element] or strfind(FrameName, element)) or nil
+	return frame[element] or FrameName and (_G[FrameName..element] or find(FrameName, element)) or nil
 end
 
 function S:HandleScrollBar(frame, thumbTrimY, thumbTrimX)
@@ -211,7 +217,7 @@ function S:HandleEditBox(frame)
 		if _G[EditBoxName.."Right"] then _G[EditBoxName.."Right"]:SetAlpha(0) end
 		if _G[EditBoxName.."Mid"] then _G[EditBoxName.."Mid"]:SetAlpha(0) end
 
-		if strfind(EditBoxName, "Silver") or strfind(EditBoxName, "Copper") then
+		if find(EditBoxName, "Silver") or find(EditBoxName, "Copper") then
 			frame.backdrop:Point("BOTTOMRIGHT", -12, -2)
 		end
 	end
@@ -445,9 +451,11 @@ function S:HandleCloseButton(f, point)
 	end
 end
 
+local sliderOnDisable = function(self) self:GetThumbTexture():SetVertexColor(0.6, 0.6, 0.6, 0.8) end
+local sliderOnEnable = function(self) self:GetThumbTexture():SetVertexColor(1, 0.82, 0, 0.8) end
+
 function S:HandleSliderFrame(frame)
 	local orientation = frame:GetOrientation()
-	local SIZE = 12
 
 	frame:StripTextures()
 	frame:SetTemplate()
@@ -455,25 +463,21 @@ function S:HandleSliderFrame(frame)
 
 	local thumb = frame:GetThumbTexture()
 	thumb:SetVertexColor(1, 0.82, 0, 0.8)
-	thumb:Size(SIZE - 2, SIZE - 2)
+	thumb:Size(10)
 
-	frame:HookScript("OnDisable", function(slider)
-		slider:GetThumbTexture():SetVertexColor(0.6, 0.6, 0.6, 0.8)
-	end)
-	frame:HookScript("OnEnable", function(slider)
-		slider:GetThumbTexture():SetVertexColor(1, 0.82, 0, 0.8)
-	end)
+	frame:HookScript("OnDisable", sliderOnDisable)
+	frame:HookScript("OnEnable", sliderOnEnable)
 
 	if orientation == "VERTICAL" then
-		frame:Width(SIZE)
+		frame:Width(12)
 	else
-		frame:Height(SIZE)
+		frame:Height(12)
 
 		for i = 1, frame:GetNumRegions() do
 			local region = select(i, frame:GetRegions())
 			if region and region:IsObjectType("FontString") then
 				local point, anchor, anchorPoint, x, y = region:GetPoint()
-				if strfind(anchorPoint, "BOTTOM") then
+				if find(anchorPoint, "BOTTOM") then
 					region:Point(point, anchor, anchorPoint, x, y - 4)
 				end
 			end
@@ -519,11 +523,11 @@ function S:HandleNextPrevButton(btn, arrowDir, color, noBackdrop, stipTexts)
 		local ButtonName = btn:GetName() and lower(btn:GetName())
 
 		if ButtonName then
-			if (strfind(ButtonName, "left") or strfind(ButtonName, "prev") or strfind(ButtonName, "decrement")) then
+			if (find(ButtonName, "left") or find(ButtonName, "prev") or find(ButtonName, "decrement")) then
 				arrowDir = "left"
-			elseif (strfind(ButtonName, "right") or strfind(ButtonName, "next") or strfind(ButtonName, "increment")) then
+			elseif (find(ButtonName, "right") or find(ButtonName, "next") or find(ButtonName, "increment")) then
 				arrowDir = "right"
-			elseif (strfind(ButtonName, "scrollup") or strfind(ButtonName, "upbutton") or strfind(ButtonName, "top") or strfind(ButtonName, "promote")) then
+			elseif (find(ButtonName, "scrollup") or find(ButtonName, "upbutton") or find(ButtonName, "top") or find(ButtonName, "promote")) then
 				arrowDir = "up"
 			end
 		end
