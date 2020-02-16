@@ -10,7 +10,7 @@ local function LoadSkin()
 	PetitionFrame:StripTextures(true)
 	PetitionFrame:CreateBackdrop("Transparent")
 	PetitionFrame.backdrop:Point("TOPLEFT", 11, -12)
-	PetitionFrame.backdrop:Point("BOTTOMRIGHT", -32, 66)
+	PetitionFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
 	S:SetUIPanelWindowInfo(PetitionFrame, "width")
 	S:SetBackdropHitRect(PetitionFrame)
@@ -33,8 +33,8 @@ local function LoadSkin()
 
 	PetitionFrameInstructions:SetTextColor(1, 1, 1)
 
-	PetitionFrameRequestButton:Point("BOTTOMLEFT", 19, 74)
-	PetitionFrameCancelButton:Point("BOTTOMRIGHT", -40, 74)
+	PetitionFrameRequestButton:Point("BOTTOMLEFT", 19, 84)
+	PetitionFrameCancelButton:Point("BOTTOMRIGHT", -40, 84)
 	PetitionFrameRenameButton:Point("LEFT", PetitionFrameRequestButton, "RIGHT", 3, 0)
 	PetitionFrameRenameButton:Point("RIGHT", PetitionFrameCancelButton, "LEFT", -3, 0)
 end

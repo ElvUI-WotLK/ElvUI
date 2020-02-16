@@ -802,6 +802,8 @@ local function LoadSkin()
 
 	S:HandleCheckBox(TokenFramePopupInactiveCheckBox)
 	S:HandleCheckBox(TokenFramePopupBackpackCheckBox)
+
+	TokenFramePopup:Point("TOPLEFT", TokenFrame, "TOPRIGHT", -33, -12)
 end
 
 S:AddCallback("Skin_Character", LoadSkin)

@@ -17,7 +17,7 @@ local function LoadSkin()
 	MerchantFrame:StripTextures(true)
 	MerchantFrame:CreateBackdrop("Transparent")
 	MerchantFrame.backdrop:Point("TOPLEFT", 11, -12)
-	MerchantFrame.backdrop:Point("BOTTOMRIGHT", -32, 60)
+	MerchantFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
 	S:SetUIPanelWindowInfo(MerchantFrame, "width")
 	S:SetBackdropHitRect(MerchantFrame)
@@ -123,7 +123,12 @@ local function LoadSkin()
 
 	MerchantNameText:Point("TOP", -6, -22)
 
-	MerchantItem1:SetPoint("TOPLEFT", 21, -70)
+	MerchantItem1:SetPoint("TOPLEFT", 21, -54)
+
+	MerchantPrevPageButton:Point("CENTER", MerchantFrame, "BOTTOMLEFT", 37, 172)
+	MerchantNextPageButton:Point("CENTER", MerchantFrame, "BOTTOMLEFT", 324, 172)
+
+	MerchantPageText:Point("BOTTOM", -14, 166)
 
 	MerchantBuyBackItem:Point("TOPLEFT", MerchantItem10, "BOTTOMLEFT", 0, -39)
 
@@ -131,19 +136,19 @@ local function LoadSkin()
 	MerchantRepairItemButton:Point("RIGHT", MerchantRepairAllButton, "LEFT", -5, 0)
 	MerchantRepairItemButton.SetPoint = E.noop
 
-	MerchantMoneyFrame:Point("BOTTOMRIGHT", -30, 70)
+	MerchantMoneyFrame:Point("BOTTOMRIGHT", -30, 86)
 
-	MerchantFrameTab1:Point("CENTER", MerchantFrame, "BOTTOMLEFT", 54, 46)
+	MerchantFrameTab1:Point("CENTER", MerchantFrame, "BOTTOMLEFT", 54, 62)
 	MerchantFrameTab2:Point("LEFT", MerchantFrameTab1, "RIGHT", -15, 0)
 
 	hooksecurefunc(MerchantRepairAllButton, "Show", function(self)
 		-- CanMerchantRepair && CanGuildBankRepair
 		if self:GetWidth() == 32 then
-			MerchantRepairText:SetPoint("CENTER", MerchantFrame, "BOTTOMLEFT", 94, 135)
-			MerchantRepairAllButton:Point("BOTTOMRIGHT", MerchantFrame, "BOTTOMLEFT", 111, 89)
+			MerchantRepairText:SetPoint("CENTER", MerchantFrame, "BOTTOMLEFT", 94, 151)
+			MerchantRepairAllButton:Point("BOTTOMRIGHT", MerchantFrame, "BOTTOMLEFT", 111, 105)
 		else
-			MerchantRepairText:SetPoint("BOTTOMLEFT", MerchantFrame, "BOTTOMLEFT", 26, 109)
-			MerchantRepairAllButton:Point("BOTTOMRIGHT", MerchantFrame, "BOTTOMLEFT", 172, 97)
+			MerchantRepairText:SetPoint("BOTTOMLEFT", MerchantFrame, "BOTTOMLEFT", 26, 125)
+			MerchantRepairAllButton:Point("BOTTOMRIGHT", MerchantFrame, "BOTTOMLEFT", 172, 113)
 		end
 	end)
 
