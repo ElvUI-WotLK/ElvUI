@@ -1679,6 +1679,8 @@ end
 
 local alreadyAdded = {}
 function HealComm:UNIT_AURA(unit)
+	if not unit then return end
+
 	local guid = UnitGUID(unit)
 	if( not guidToUnit[guid] ) then return end
 	local increase, decrease, playerIncrease, playerDecrease = 1, 1, 1, 1

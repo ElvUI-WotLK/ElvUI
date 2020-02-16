@@ -81,6 +81,25 @@ function B:Initialize()
 
 --	WORLDMAP_POI_FRAMELEVEL = 300
 --	WorldMapFrame:SetToplevel(true)
+
+	do
+		local originalFunc = LFDQueueFrameRandomCooldownFrame_OnEvent
+		local originalScript = LFDQueueFrameCooldownFrame:GetScript("OnEvent")
+
+		LFDQueueFrameRandomCooldownFrame_OnEvent = function(self, event, unit, ...)
+			if event == "UNIT_AURA" and not unit then return end
+			originalFunc(self, event, unit, ...)
+		end
+
+		if originalFunc == originalScript then
+			LFDQueueFrameCooldownFrame:SetScript("OnEvent", LFDQueueFrameRandomCooldownFrame_OnEvent)
+		else
+			LFDQueueFrameCooldownFrame:SetScript("OnEvent", function(self, event, unit, ...)
+				if event == "UNIT_AURA" and not unit then return end
+				originalScript(self, event, unit, ...)
+			end)
+		end
+	end
 end
 
 local function InitializeCallback()
