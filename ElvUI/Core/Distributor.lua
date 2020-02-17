@@ -4,8 +4,12 @@ local LibCompress = E.Libs.Compress
 local LibBase64 = E.Libs.Base64
 
 --Lua functions
-local tonumber, type, gsub, pcall, loadstring = tonumber, type, gsub, pcall, loadstring
-local len, format, split, find = string.len, string.format, string.split, string.find
+local loadstring = loadstring
+local pcall = pcall
+local setfenv = setfenv
+local tonumber = tonumber
+local type = type
+local format, gsub, len, split, sub = string.format, string.gsub, string.len, string.split, string.sub
 --WoW API / Variables
 local CreateFrame = CreateFrame
 local GetNumRaidMembers, UnitInRaid = GetNumRaidMembers, UnitInRaid
@@ -378,7 +382,7 @@ function D:GetImportStringType(dataString)
 
 	if LibBase64:IsBase64(dataString) then
 		stringType = "Base64"
-	elseif find(dataString, "{") then --Basic check to weed out obviously wrong strings
+	elseif sub(dataString, 1, 1) == "{" then --Basic check to weed out obviously wrong strings
 		stringType = "Table"
 	end
 
@@ -432,12 +436,21 @@ function D:Decode(dataString)
 		profileDataAsString = gsub(profileDataAsString, "\124\124", "\124") --Remove escape pipe characters
 		profileType, profileKey = E:SplitString(profileInfo, "::")
 
-		local profileMessage
-		local profileToTable = loadstring(format("%s %s", "return", profileDataAsString))
-		if profileToTable then profileMessage, profileData = pcall(profileToTable) end
+		local func, err = loadstring(format("%s %s", "return", profileDataAsString))
 
-		if not profileData or type(profileData) ~= "table" then
-			E:Print("Error converting lua string to table:", profileMessage)
+		if func then
+			setfenv(func, {}) -- execute code in an empty environment
+			local success, res = pcall(func)
+
+			if success then
+				profileData = res
+			else
+				err = res
+			end
+		end
+
+		if err then
+			E:Print("Error converting lua string to table:", err)
 			return
 		end
 	end
