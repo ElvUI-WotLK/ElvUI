@@ -184,11 +184,33 @@ function RU:Initialize()
 	ReadyCheckButton:RegisterEvent("PARTY_MEMBERS_CHANGED")
 	ReadyCheckButton:RegisterEvent("PLAYER_ENTERING_WORLD")
 
-	self:CreateUtilButton("RaidControlButton", RaidUtilityPanel, nil, DisbandRaidButton:GetWidth(), 18, "TOPLEFT", ReadyCheckButton, "BOTTOMLEFT", 0, -5, L["Raid Menu"], nil)
+	self:CreateUtilButton("RaidControlButton", RaidUtilityPanel, nil, MainTankButton:GetWidth(), 18, "TOPLEFT", ReadyCheckButton, "BOTTOMLEFT", 0, -5, L["Raid Menu"], nil)
 	RaidControlButton:SetScript("OnMouseUp", function()
 		if InCombatLockdown() then E:Print(ERR_NOT_IN_COMBAT) return end
 		ToggleFriendsFrame(5)
 	end)
+
+	self:CreateUtilButton("ConvertRaidButton", RaidUtilityPanel, nil, MainAssistButton:GetWidth(), 18, "TOPRIGHT", ReadyCheckButton, "BOTTOMRIGHT", 0, -5, CONVERT_TO_RAID, nil)
+	ConvertRaidButton:SetScript("OnMouseUp", function()
+		if CheckRaidStatus() then
+			ConvertToRaid()
+			SetLootMethod("master", "player")
+		end
+	end)
+	ConvertRaidButton:SetScript("OnEvent", function(btn)
+		if GetNumRaidMembers() == 0 and GetNumPartyMembers() > 0 and IsPartyLeader() then
+			if not btn:IsShown() then
+				RaidControlButton:Width(MainAssistButton:GetWidth())
+				btn:Show()
+			end
+		elseif btn:IsShown() then
+			RaidControlButton:Width(DisbandRaidButton:GetWidth())
+			btn:Hide()
+		end
+	end)
+	ConvertRaidButton:RegisterEvent("RAID_ROSTER_UPDATE")
+	ConvertRaidButton:RegisterEvent("PARTY_MEMBERS_CHANGED")
+	ConvertRaidButton:RegisterEvent("PLAYER_ENTERING_WORLD")
 
 	--Automatically show/hide the frame if we have RaidLeader or RaidOfficer
 	self:RegisterEvent("RAID_ROSTER_UPDATE", "ToggleRaidUtil")
