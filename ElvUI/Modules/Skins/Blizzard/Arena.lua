@@ -22,6 +22,10 @@ local function LoadSkin()
 	S:HandleButton(ArenaFrameJoinButton)
 	S:HandleButton(ArenaFrameCancelButton)
 
+	for i = 1, MAX_ARENA_BATTLES do
+		S:HandleButtonHighlight(_G["ArenaZone"..i])
+	end
+
 	ArenaFrameZoneDescription:SetTextColor(1, 1, 1)
 
 	ArenaFrameNameHeader:Point("TOPLEFT", 28, -55)

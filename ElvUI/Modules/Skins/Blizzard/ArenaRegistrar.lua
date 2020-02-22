@@ -25,8 +25,10 @@ local function LoadSkin()
 	RegistrationText:SetTextColor(1, 1, 1)
 	ArenaRegistrarPurchaseText:SetTextColor(1, 1, 1)
 
-	for i = 1, MAX_TEAM_BORDERS do
-		select(3, _G["ArenaRegistrarButton"..i]:GetRegions()):SetTextColor(1, 1, 1)
+	for i = 1, 6 do
+		local button = _G["ArenaRegistrarButton"..i]
+		S:HandleButtonHighlight(button)
+		select(3, button:GetRegions()):SetTextColor(1, 1, 1)
 	end
 
 	S:HandleButton(ArenaRegistrarFrameGoodbyeButton)

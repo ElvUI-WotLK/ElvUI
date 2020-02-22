@@ -643,6 +643,10 @@ local function LoadSkin()
 	RaidInfoScrollFrameScrollBar:Point("TOPLEFT", RaidInfoScrollFrame, "TOPRIGHT", 3, -15)
 	RaidInfoScrollFrameScrollBar:Point("BOTTOMLEFT", RaidInfoScrollFrame, "BOTTOMRIGHT", 3, 14)
 
+	for _, button in ipairs(RaidInfoScrollFrame.buttons) do
+		S:HandleButtonHighlight(button)
+	end
+
 	RaidInfoExtendButton:Point("BOTTOMLEFT", 8, 8)
 	RaidInfoCancelButton:Point("BOTTOMRIGHT", -8, 8)
 

@@ -356,6 +356,20 @@ local function LoadSkin()
 	S:HandleScrollBar(CalendarCreateEventDescriptionScrollFrameScrollBar)
 	S:HandleScrollBar(CalendarCreateEventInviteListScrollFrameScrollBar)
 	S:HandleScrollBar(CalendarViewEventDescriptionScrollFrameScrollBar)
+
+	if CalendarCreateEventInviteListScrollFrame.buttons then
+		for _, button in ipairs(CalendarCreateEventInviteListScrollFrame.buttons) do
+			S:HandleButtonHighlight(button)
+		end
+	else
+		CalendarCreateEventInviteList:HookScript("OnEvent", function(self, event)
+			if event == "ADDON_LOADED" then
+				for _, button in ipairs(self.scrollFrame.buttons) do
+					S:HandleButtonHighlight(button)
+				end
+			end
+		end)
+	end
 end
 
 S:AddCallbackForAddon("Blizzard_Calendar", "Skin_Blizzard_Calendar", LoadSkin)

@@ -19,6 +19,10 @@ local function LoadSkin()
 
 	GuildRegistrarGreetingFrame:StripTextures()
 
+	for i = 1, 2 do
+		S:HandleButtonHighlight(_G["GuildRegistrarButton"..i])
+	end
+
 	S:HandleButton(GuildRegistrarFrameGoodbyeButton)
 	S:HandleButton(GuildRegistrarFrameCancelButton)
 	S:HandleButton(GuildRegistrarFramePurchaseButton)
