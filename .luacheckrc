@@ -64,6 +64,7 @@ globals = {
 	"ColorPPDefault",
 	"ColorPPOldColorSwatch",
 	"ColorPPPaste",
+	"ConvertRaidButton",
 	"CoordsHolder",
 	"CopyChatFrame",
 	"CopyChatFrameEditBox",
