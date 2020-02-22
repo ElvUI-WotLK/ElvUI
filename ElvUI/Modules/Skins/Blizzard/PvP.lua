@@ -83,7 +83,7 @@ local function LoadSkin()
 	PVPBattlegroundFrameTypeScrollFrameScrollBar:Point("TOPLEFT", PVPBattlegroundFrameTypeScrollFrame, "TOPRIGHT", 7, -18)
 	PVPBattlegroundFrameTypeScrollFrameScrollBar:Point("BOTTOMLEFT", PVPBattlegroundFrameTypeScrollFrame, "BOTTOMRIGHT", 7, 18)
 
-	PVPBattlegroundFrameInfoScrollFrame:Point("BOTTOMLEFT", 20, 114)
+	PVPBattlegroundFrameInfoScrollFrame:Point("BOTTOMLEFT", 19, 114)
 
 	PVPBattlegroundFrameInfoScrollFrameScrollBar:Point("TOPLEFT", PVPBattlegroundFrameInfoScrollFrame, "TOPRIGHT", 7, -23)
 	PVPBattlegroundFrameInfoScrollFrameScrollBar:Point("BOTTOMLEFT", PVPBattlegroundFrameInfoScrollFrame, "BOTTOMRIGHT", 7, 18)
@@ -121,6 +121,8 @@ local function LoadSkin()
 
 	S:HandleCloseButton(BattlefieldFrameCloseButton, BattlefieldFrame.backdrop)
 
+	BattlefieldListScrollFrame:StripTextures()
+	S:HandleScrollBar(BattlefieldListScrollFrameScrollBar)
 	S:HandleScrollBar(BattlefieldFrameInfoScrollFrameScrollBar)
 
 	BattlefieldFrameInfoScrollFrameChildFrameDescription:SetTextColor(1, 1, 1)
@@ -130,7 +132,18 @@ local function LoadSkin()
 	S:HandleButton(BattlefieldFrameJoinButton)
 	S:HandleButton(BattlefieldFrameCancelButton)
 
-	BattlefieldFrameInfoScrollFrame:Point("BOTTOMLEFT", 19, 113)
+	for i = 1, BATTLEFIELD_ZONES_DISPLAYED do
+		S:HandleButtonHighlight(_G["BattlefieldZone"..i])
+	end
+
+	BattlefieldFrameNameHeader:Point("TOPLEFT", 73, -57)
+
+	BattlefieldZone1:Point("TOPLEFT", 25, -80)
+
+	BattlefieldListScrollFrameScrollBar:Point("TOPLEFT", BattlefieldListScrollFrame, "TOPRIGHT", 10, -22)
+	BattlefieldListScrollFrameScrollBar:Point("BOTTOMLEFT", BattlefieldListScrollFrame, "BOTTOMRIGHT", 10, 22)
+
+	BattlefieldFrameInfoScrollFrame:Point("BOTTOMLEFT", 21, 113)
 
 	BattlefieldFrameInfoScrollFrameScrollBar:Point("TOPLEFT", BattlefieldFrameInfoScrollFrame, "TOPRIGHT", 10, -18)
 	BattlefieldFrameInfoScrollFrameScrollBar:Point("BOTTOMLEFT", BattlefieldFrameInfoScrollFrame, "BOTTOMRIGHT", 10, 18)
