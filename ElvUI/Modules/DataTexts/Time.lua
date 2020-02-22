@@ -29,8 +29,9 @@ local lockoutInfoFormat = "%s%s %s |cffaaaaaa(%s)"
 local lockoutColorExtended, lockoutColorNormal = {r = 0.3, g = 1, b = 0.3}, {r = .8, g = .8, b = .8}
 local lockedInstances = {raids = {}, dungeons = {}}
 local collectedInstanceImages
-local timeFormat, showAMPM
+local timeFormat, showAMPM, showSecs
 local realmDiffSeconds
+local enteredFrame, fullUpdate
 
 local locale = GetLocale()
 local krcntw = locale == "koKR" or locale == "zhCN" or locale == "zhTW"
@@ -51,10 +52,11 @@ local function getRealmTimeDiff()
 	return (diffHours * 60 + diffMinutes) * 60
 end
 
-local function GetCurrentDate(formatString)
+local function GetCurrentDate(formatString, forceLocalTime, forceRealmTime)
 	if timeFormat ~= E.db.datatexts.timeFormat then
 		timeFormat = E.db.datatexts.timeFormat
 		showAMPM = find(E.db.datatexts.timeFormat, "%%p") ~= nil
+		showSecs = find(E.db.datatexts.timeFormat, "%%S") ~= nil
 	end
 
 	if showAMPM then
@@ -64,7 +66,7 @@ local function GetCurrentDate(formatString)
 		formatString = gsub(formatString, "([^%%])%%p", "%1"..localizedAMPM)
 	end
 
-	if realmDiffSeconds ~= 0 and E.db.datatexts.realmTime then
+	if realmDiffSeconds ~= 0 and (E.db.datatexts.realmTime or forceRealmTime) and not forceLocalTime then
 		return date(formatString, time() -realmDiffSeconds)
 	else
 		return date(formatString)
@@ -85,7 +87,14 @@ local function GetInstanceImages(...)
 	end
 end
 
-local function OnEvent()
+local function OnEvent(self, event)
+	if event == "UPDATE_INSTANCE_INFO" then
+		if enteredFrame then
+			fullUpdate = true
+		end
+		return
+	end
+
 	if not realmDiffSeconds then
 		realmDiffSeconds = getRealmTimeDiff()
 	end
@@ -103,6 +112,8 @@ local function OnClick(_, btn)
 end
 
 local function OnEnter(self)
+	enteredFrame = true
+
 	DT:SetupTooltip(self)
 
 	RequestRaidInfo()
@@ -185,12 +196,25 @@ local function OnEnter(self)
 	DT.tooltip:AddLine(" ")
 
 	if E.db.datatexts.realmTime then
-		DT.tooltip:AddDoubleLine(TIMEMANAGER_TOOLTIP_LOCALTIME, date("%H:%M"), 1, 1, 1, lockoutColorNormal.r, lockoutColorNormal.g, lockoutColorNormal.b)
+		DT.tooltip:AddDoubleLine(TIMEMANAGER_TOOLTIP_LOCALTIME, GetCurrentDate(E.db.datatexts.timeFormat, true), 1, 1, 1, lockoutColorNormal.r, lockoutColorNormal.g, lockoutColorNormal.b)
 	else
-		DT.tooltip:AddDoubleLine(TIMEMANAGER_TOOLTIP_REALMTIME, format("%02d:%02d", GetGameTime()), 1, 1, 1, lockoutColorNormal.r, lockoutColorNormal.g, lockoutColorNormal.b)
+		DT.tooltip:AddDoubleLine(TIMEMANAGER_TOOLTIP_REALMTIME, GetCurrentDate(E.db.datatexts.timeFormat, nil, true), 1, 1, 1, lockoutColorNormal.r, lockoutColorNormal.g, lockoutColorNormal.b)
 	end
 
 	DT.tooltip:Show()
+end
+
+local function OnLeave()
+	enteredFrame = nil
+	DT.tooltip:Hide()
+end
+
+local function updateTooltipTime()
+	if E.db.datatexts.realmTime then
+		_G["DatatextTooltipTextRight" .. DT.tooltip:NumLines()]:SetText(GetCurrentDate(E.db.datatexts.timeFormat, true))
+	else
+		_G["DatatextTooltipTextRight" .. DT.tooltip:NumLines()]:SetText(GetCurrentDate(E.db.datatexts.timeFormat, nil, true))
+	end
 end
 
 local lastPanel
@@ -210,6 +234,15 @@ local function OnUpdate(self, elapsed)
 	end
 
 	self.text:SetText(gsub(gsub(GetCurrentDate(E.db.datatexts.timeFormat.." "..E.db.datatexts.dateFormat), ":", timeDisplayFormat), "%s", dateDisplayFormat))
+
+	if enteredFrame then
+		if fullUpdate then
+			fullUpdate = nil
+			OnEnter(self)
+		elseif showSecs then
+			updateTooltipTime()
+		end
+	end
 end
 
 local function ValueColorUpdate(hex)
@@ -222,4 +255,4 @@ local function ValueColorUpdate(hex)
 end
 E.valueColorUpdateFuncs[ValueColorUpdate] = true
 
-DT:RegisterDatatext("Time", nil, OnEvent, OnUpdate, OnClick, OnEnter)
+DT:RegisterDatatext("Time", {"UPDATE_INSTANCE_INFO"}, OnEvent, OnUpdate, OnClick, OnEnter, OnLeave)
