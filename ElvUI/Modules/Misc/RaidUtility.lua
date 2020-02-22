@@ -27,15 +27,6 @@ local function CheckRaidStatus()
 	end
 end
 
-local function CheckPartyStatus()
-	local inInstance, instanceType = IsInInstance()
-	if (IsPartyLeader() and GetNumPartyMembers() > 0) and not (inInstance and (instanceType == "pvp" or instanceType == "arena")) then
-		return true
-	else
-		return false
-	end
-end
-
 -- Function to create buttons in this module
 function RU:CreateUtilButton(name, parent, template, width, height, point, relativeto, point2, xOfs, yOfs, text, texture)
 	local button = CreateFrame("Button", name, parent, template)
