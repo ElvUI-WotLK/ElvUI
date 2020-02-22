@@ -27,6 +27,15 @@ local function CheckRaidStatus()
 	end
 end
 
+local function CheckPartyStatus()
+	local inInstance, instanceType = IsInInstance()
+	if (IsPartyLeader() and GetNumPartyMembers() > 0) and not (inInstance and (instanceType == "pvp" or instanceType == "arena")) then
+		return true
+	else
+		return false
+	end
+end
+
 -- Function to create buttons in this module
 function RU:CreateUtilButton(name, parent, template, width, height, point, relativeto, point2, xOfs, yOfs, text, texture)
 	local button = CreateFrame("Button", name, parent, template)
@@ -184,10 +193,18 @@ function RU:Initialize()
 	ReadyCheckButton:RegisterEvent("PARTY_MEMBERS_CHANGED")
 	ReadyCheckButton:RegisterEvent("PLAYER_ENTERING_WORLD")
 
-	self:CreateUtilButton("RaidControlButton", RaidUtilityPanel, nil, DisbandRaidButton:GetWidth(), 18, "TOPLEFT", ReadyCheckButton, "BOTTOMLEFT", 0, -5, L["Raid Menu"], nil)
+	self:CreateUtilButton("RaidControlButton", RaidUtilityPanel, nil, MainTankButton:GetWidth(), 18, "TOPLEFT", ReadyCheckButton, "BOTTOMLEFT", 0, -5, L["Raid Menu"], nil)
 	RaidControlButton:SetScript("OnMouseUp", function()
 		if InCombatLockdown() then E:Print(ERR_NOT_IN_COMBAT) return end
 		ToggleFriendsFrame(5)
+	end)
+
+	self:CreateUtilButton("ConvertRaidButton", RaidUtilityPanel, "SecureActionButtonTemplate", MainAssistButton:GetWidth(), 18, "TOPRIGHT", ReadyCheckButton, "BOTTOMRIGHT", 0, -5, L["Convert to Raid"], nil)
+	ConvertRaidButton:SetScript("OnMouseUp", function()
+		if CheckRaidStatus() then
+			ConvertToRaid();
+			SetLootMethod("master", "player")
+		end
 	end)
 
 	--Automatically show/hide the frame if we have RaidLeader or RaidOfficer
