@@ -199,7 +199,7 @@ function RU:Initialize()
 		ToggleFriendsFrame(5)
 	end)
 
-	self:CreateUtilButton("ConvertRaidButton", RaidUtilityPanel, "SecureActionButtonTemplate", MainAssistButton:GetWidth(), 18, "TOPRIGHT", ReadyCheckButton, "BOTTOMRIGHT", 0, -5, L["Convert to Raid"], nil)
+	self:CreateUtilButton("ConvertRaidButton", RaidUtilityPanel, nil, MainAssistButton:GetWidth(), 18, "TOPRIGHT", ReadyCheckButton, "BOTTOMRIGHT", 0, -5, L["Convert To Raid"], nil)
 	ConvertRaidButton:SetScript("OnMouseUp", function()
 		if CheckRaidStatus() then
 			ConvertToRaid();
