@@ -505,14 +505,8 @@ function mod:StyleFilterConditionCheck(frame, filter, trigger)
 
 	-- Player Combat
 	if trigger.inCombat or trigger.outOfCombat then
-		local inCombat = UnitAffectingCombat('player')
-		if (trigger.inCombat and inCombat) or (trigger.outOfCombat and not inCombat) then passed = true else return end
-	end
-
-	-- Unit Combat
-	if trigger.inCombatUnit or trigger.outOfCombatUnit then
 		local inCombat = UnitAffectingCombat("player")
-		if (trigger.inCombatUnit and inCombat) or (trigger.outOfCombatUnit and not inCombat) then passed = true else return end
+		if (trigger.inCombat and inCombat) or (trigger.outOfCombat and not inCombat) then passed = true else return end
 	end
 
 	-- Player Target
@@ -739,7 +733,7 @@ function mod:StyleFilterConfigure()
 							break
 				end end end
 
-				if t.inCombat or t.outOfCombat or t.inCombatUnit or t.outOfCombatUnit then
+				if t.inCombat or t.outOfCombat then
 					mod.StyleFilterTriggerEvents.PLAYER_REGEN_DISABLED = true
 					mod.StyleFilterTriggerEvents.PLAYER_REGEN_ENABLED = true
 				end
