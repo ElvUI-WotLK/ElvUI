@@ -503,6 +503,12 @@ function mod:StyleFilterConditionCheck(frame, filter, trigger)
 		if UnitExists("target") then passed = true else return end
 	end
 
+	-- Player Combat
+	if trigger.inCombat or trigger.outOfCombat then
+		local inCombat = UnitAffectingCombat('player')
+		if (trigger.inCombat and inCombat) or (trigger.outOfCombat and not inCombat) then passed = true else return end
+	end
+
 	-- Unit Combat
 	if trigger.inCombatUnit or trigger.outOfCombatUnit then
 		local inCombat = UnitAffectingCombat("player")
