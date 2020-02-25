@@ -3057,6 +3057,11 @@ local function GetUnitSettings(unit, name)
 						type = "toggle",
 						name = L["Enable"]
 					},
+					abbrev = {
+						order = 2,
+						type = "toggle",
+						name = L["Abbreviation"]
+					},
 					fontGroup = {
 						type = "group",
 						order = 7,
