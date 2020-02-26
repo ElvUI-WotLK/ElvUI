@@ -160,8 +160,6 @@ local function OnClick(_, btn)
 end
 
 local function OnEnter(self)
-	enteredFrame = true
-
 	DT:SetupTooltip(self)
 
 	local totalMemory = UpdateMemory()
@@ -201,6 +199,7 @@ local function OnEnter(self)
 
 	DT.tooltip:AddLine(L["(Modifer Click) Collect Garbage"])
 	DT.tooltip:Show()
+	enteredFrame = true
 end
 
 local function OnLeave()

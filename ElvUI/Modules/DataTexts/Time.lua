@@ -2,8 +2,10 @@ local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateD
 local DT = E:GetModule("DataTexts")
 
 --Lua functions
+local _G = _G
 local date = date
 local next = next
+local select = select
 local time = time
 local tonumber = tonumber
 local find, format, gsub, join, utf8sub = string.find, string.format, string.gsub, string.join, string.utf8sub
@@ -14,6 +16,7 @@ local GetNumSavedInstances = GetNumSavedInstances
 local GetSavedInstanceInfo = GetSavedInstanceInfo
 local GetWintergraspWaitTime = GetWintergraspWaitTime
 local IsInInstance = IsInInstance
+local RequestRaidInfo = RequestRaidInfo
 local SecondsToTime = SecondsToTime
 
 local QUEUE_TIME_UNAVAILABLE = QUEUE_TIME_UNAVAILABLE
@@ -28,10 +31,10 @@ local dateDisplayFormat = ""
 local lockoutInfoFormat = "%s%s %s |cffaaaaaa(%s)"
 local lockoutColorExtended, lockoutColorNormal = {r = 0.3, g = 1, b = 0.3}, {r = .8, g = .8, b = .8}
 local lockedInstances = {raids = {}, dungeons = {}}
-local collectedInstanceImages
-local timeFormat, showAMPM, showSecs
-local realmDiffSeconds
+local timeFormat, realmDiffSeconds, showAMPM, showSecs
 local enteredFrame, fullUpdate
+local instanceIconByName
+local numSavedInstances = 0
 
 local locale = GetLocale()
 local krcntw = locale == "koKR" or locale == "zhCN" or locale == "zhTW"
@@ -67,13 +70,12 @@ local function GetCurrentDate(formatString, forceLocalTime, forceRealmTime)
 	end
 
 	if realmDiffSeconds ~= 0 and (E.db.datatexts.realmTime or forceRealmTime) and not forceLocalTime then
-		return date(formatString, time() -realmDiffSeconds)
+		return date(formatString, time() - realmDiffSeconds)
 	else
 		return date(formatString)
 	end
 end
 
-local instanceIconByName = {}
 local function GetInstanceImages(...)
 	local numTextures = select("#", ...) / 4
 
@@ -89,14 +91,25 @@ end
 
 local function OnEvent(self, event)
 	if event == "UPDATE_INSTANCE_INFO" then
-		if enteredFrame then
-			fullUpdate = true
+		local num = GetNumSavedInstances()
+
+		if num ~= numSavedInstances then
+			numSavedInstances = num or 0
+
+			if enteredFrame then
+				fullUpdate = true
+			end
 		end
+
 		return
 	end
 
 	if not realmDiffSeconds then
 		realmDiffSeconds = getRealmTimeDiff()
+
+		if realmDiffSeconds < 900 then
+			realmDiffSeconds = 0
+		end
 	end
 end
 
@@ -111,17 +124,17 @@ local function OnClick(_, btn)
 	end
 end
 
-local function OnEnter(self)
-	enteredFrame = true
-
+local function OnEnter(self, skipRequest)
 	DT:SetupTooltip(self)
 
-	RequestRaidInfo()
+	if not skipRequest then
+		RequestRaidInfo()
+	end
 
-	if not collectedInstanceImages then
+	if not instanceIconByName then
+		instanceIconByName = {}
 		GetInstanceImages(CalendarEventGetTextures(1))
 		GetInstanceImages(CalendarEventGetTextures(2))
-		collectedInstanceImages = true
 	end
 
 	local wgtime = GetWintergraspWaitTime()
@@ -136,60 +149,63 @@ local function OnEnter(self)
 
 	DT.tooltip:AddDoubleLine(L["Wintergrasp"], wgtime, 1, 1, 1, lockoutColorNormal.r, lockoutColorNormal.g, lockoutColorNormal.b)
 
-	wipe(lockedInstances.raids)
-	wipe(lockedInstances.dungeons)
+	if numSavedInstances > 0 then
+		wipe(lockedInstances.raids)
+		wipe(lockedInstances.dungeons)
 
-	local name, reset, difficulty, locked, extended, isRaid, maxPlayers
-	local difficultyLetter, buttonImg, lockoutColor, info
+		local name, reset, difficulty, locked, extended, isRaid, maxPlayers, difficultyLetter, buttonImg
 
-	for i = 1, GetNumSavedInstances() do
-		name, _, reset, difficulty, locked, extended, _, isRaid, maxPlayers = GetSavedInstanceInfo(i)
+		for i = 1, numSavedInstances do
+			name, _, reset, difficulty, locked, extended, _, isRaid, maxPlayers = GetSavedInstanceInfo(i)
 
-		if name and (locked or extended) then
-			difficultyLetter = difficultyTag[not isRaid and (difficulty == 2 and 3 or 1) or difficulty]
-			buttonImg = format("|T%s%s:22:22:0:0:96:96:0:64:0:64|t ", "Interface\\LFGFrame\\LFGIcon-", instanceIconByName[name] or "Raid")
+			if name and (locked or extended) then
+				difficultyLetter = difficultyTag[not isRaid and (difficulty == 2 and 3 or 1) or difficulty]
+				buttonImg = format("|T%s%s:22:22:0:0:96:96:0:64:0:64|t ", "Interface\\LFGFrame\\LFGIcon-", instanceIconByName[name] or "Raid")
 
-			if isRaid then
-				tinsert(lockedInstances.raids, {name, reset, extended, maxPlayers, difficultyLetter, buttonImg})
-			elseif difficulty == 2 then
-				tinsert(lockedInstances.dungeons, {name, reset, extended, maxPlayers, difficultyLetter, buttonImg})
+				if isRaid then
+					tinsert(lockedInstances.raids, {name, reset, extended, maxPlayers, difficultyLetter, buttonImg})
+				elseif difficulty == 2 then
+					tinsert(lockedInstances.dungeons, {name, reset, extended, maxPlayers, difficultyLetter, buttonImg})
+				end
 			end
 		end
-	end
 
-	if next(lockedInstances.raids) then
-		DT.tooltip:AddLine(" ")
-		DT.tooltip:AddLine(L["Saved Raid(s)"])
+		local lockoutColor, info
 
-		for i = 1, #lockedInstances.raids do
-			info = lockedInstances.raids[i]
+		if next(lockedInstances.raids) then
+			DT.tooltip:AddLine(" ")
+			DT.tooltip:AddLine(L["Saved Raid(s)"])
 
-			lockoutColor = info[3] and lockoutColorExtended or lockoutColorNormal
+			for i = 1, #lockedInstances.raids do
+				info = lockedInstances.raids[i]
 
-			DT.tooltip:AddDoubleLine(
-				format(lockoutInfoFormat, info[6], info[4], info[5], info[1]),
-				SecondsToTime(info[2], false, nil, 3),
-				1, 1, 1,
-				lockoutColor.r, lockoutColor.g, lockoutColor.b
-			)
+				lockoutColor = info[3] and lockoutColorExtended or lockoutColorNormal
+
+				DT.tooltip:AddDoubleLine(
+					format(lockoutInfoFormat, info[6], info[4], info[5], info[1]),
+					SecondsToTime(info[2], false, nil, 3),
+					1, 1, 1,
+					lockoutColor.r, lockoutColor.g, lockoutColor.b
+				)
+			end
 		end
-	end
 
-	if next(lockedInstances.dungeons) then
-		DT.tooltip:AddLine(" ")
-		DT.tooltip:AddLine(L["Saved Dungeon(s)"])
+		if next(lockedInstances.dungeons) then
+			DT.tooltip:AddLine(" ")
+			DT.tooltip:AddLine(L["Saved Dungeon(s)"])
 
-		for i = 1, #lockedInstances.dungeons do
-			info = lockedInstances.dungeons[i]
+			for i = 1, #lockedInstances.dungeons do
+				info = lockedInstances.dungeons[i]
 
-			lockoutColor = info[3] and lockoutColorExtended or lockoutColorNormal
+				lockoutColor = info[3] and lockoutColorExtended or lockoutColorNormal
 
-			DT.tooltip:AddDoubleLine(
-				format(lockoutInfoFormat, info[6], info[4], info[5], info[1]),
-				SecondsToTime(info[2], false, nil, 3),
-				1, 1, 1,
-				lockoutColor.r, lockoutColor.g, lockoutColor.b
-			)
+				DT.tooltip:AddDoubleLine(
+					format(lockoutInfoFormat, info[6], info[4], info[5], info[1]),
+					SecondsToTime(info[2], false, nil, 3),
+					1, 1, 1,
+					lockoutColor.r, lockoutColor.g, lockoutColor.b
+				)
+			end
 		end
 	end
 
@@ -202,6 +218,7 @@ local function OnEnter(self)
 	end
 
 	DT.tooltip:Show()
+	enteredFrame = true
 end
 
 local function OnLeave()
@@ -238,7 +255,7 @@ local function OnUpdate(self, elapsed)
 	if enteredFrame then
 		if fullUpdate then
 			fullUpdate = nil
-			OnEnter(self)
+			OnEnter(self, true)
 		elseif showSecs then
 			updateTooltipTime()
 		end
