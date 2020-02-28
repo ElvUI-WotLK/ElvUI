@@ -19,16 +19,6 @@ Target Glow Style Option Variables
 	style8 - Background + Side Arrows
 ]]
 
-local function GlowStyle(style)
-	if style == "style1" then
-		style = "style2"
-	elseif style == "style5" then
-		style = "style6"
-	elseif style == "style7" then
-		style = "style8"
-	end
-end
-
 function NP:Update_Glow(frame)
 	local showIndicator
 
@@ -61,36 +51,40 @@ function NP:Update_Glow(frame)
 			r, g, b = 1, 1, 0
 		end
 
+		frame.TopIndicator:SetVertexColor(r, g, b)
+		frame.LeftIndicator:SetVertexColor(r, g, b)
+		frame.RightIndicator:SetVertexColor(r, g, b)
+		frame.Shadow:SetBackdropBorderColor(r, g, b)
+		frame.Spark:SetVertexColor(r, g, b)
+
 		local healthIsShown = frame.Health:IsShown()
 		if not healthIsShown then
-			GlowStyle(glowStyle)
+			if glowStyle == "style1" then
+				glowStyle = "style2"
+			elseif glowStyle == "style5" then
+				glowStyle = "style6"
+			elseif glowStyle == "style7" then
+				glowStyle = "style8"
+			end
 		end
 
 		if glowStyle == "style3" or glowStyle == "style5" or glowStyle == "style6" then
 			frame.LeftIndicator:Hide()
 			frame.RightIndicator:Hide()
 			frame.TopIndicator:Show()
-
-			frame.TopIndicator:SetVertexColor(r, g, b)
 		elseif glowStyle == "style4" or glowStyle == "style7" or glowStyle == "style8" then
 			frame.TopIndicator:Hide()
 			frame.LeftIndicator:Show()
 			frame.RightIndicator:Show()
-
-			frame.LeftIndicator:SetVertexColor(r, g, b)
-			frame.RightIndicator:SetVertexColor(r, g, b)
 		end
 
 		if glowStyle == "style1" or glowStyle == "style5" or glowStyle == "style7" then
 			frame.Spark:Hide()
 			frame.Shadow:Show()
 
-			frame.Shadow:SetBackdropBorderColor(r, g, b)
 		elseif glowStyle == "style2" or glowStyle == "style6" or glowStyle == "style8" then
 			frame.Shadow:Hide()
 			frame.Spark:Show()
-
-			frame.Spark:SetVertexColor(r, g, b)
 		end
 	else
 		frame.TopIndicator:Hide()
@@ -109,23 +103,32 @@ function NP:Configure_Glow(frame)
 		local color = self.db.colors.glowColor
 
 		if not healthIsShown then
-			GlowStyle(glowStyle)
+			if glowStyle == "style1" then
+				glowStyle = "style2"
+			elseif glowStyle == "style5" then
+				glowStyle = "style6"
+			elseif glowStyle == "style7" then
+				glowStyle = "style8"
+			end
 		end
+
+		frame.LeftIndicator:SetVertexColor(color.r, color.g, color.b)
+		frame.RightIndicator:SetVertexColor(color.r, color.g, color.b)
+		frame.TopIndicator:SetVertexColor(color.r, color.g, color.b)
+		frame.Shadow:SetBackdropBorderColor(color.r, color.g, color.b)
+		frame.Shadow:SetAlpha(color.a)
+		frame.Spark:SetVertexColor(color.r, color.g, color.b)
 
 		if glowStyle == "style3" or glowStyle == "style5" or glowStyle == "style6" then
 			frame.TopIndicator:ClearAllPoints()
-
 			if healthIsShown then
 				frame.TopIndicator:SetPoint("BOTTOM", frame.Health, "TOP", 0, 6)
 			else
 				frame.TopIndicator:SetPoint("BOTTOM", frame.Name, "TOP", 0, 8)
 			end
-
-			frame.TopIndicator:SetVertexColor(color.r, color.g, color.b)
 		elseif glowStyle == "style4" or glowStyle == "style7" or glowStyle == "style8" then
 			frame.LeftIndicator:ClearAllPoints()
 			frame.RightIndicator:ClearAllPoints()
-
 			if healthIsShown then
 				frame.LeftIndicator:SetPoint("LEFT", frame.Health, "RIGHT", -3, 0)
 				frame.RightIndicator:SetPoint("RIGHT", frame.Health, "LEFT", 3, 0)
@@ -133,19 +136,12 @@ function NP:Configure_Glow(frame)
 				frame.LeftIndicator:SetPoint("LEFT", frame.Name, "RIGHT", 20, 0)
 				frame.RightIndicator:SetPoint("RIGHT", frame.Name, "LEFT", -20, 0)
 			end
-
-			frame.LeftIndicator:SetVertexColor(color.r, color.g, color.b)
-			frame.RightIndicator:SetVertexColor(color.r, color.g, color.b)
 		end
 
 		if glowStyle == "style1" or glowStyle == "style5" or glowStyle == "style7" then
 			frame.Shadow:SetOutside(frame.Health, E:Scale(E.PixelMode and 6 or 8), E:Scale(E.PixelMode and 6 or 8))
-
-			frame.Shadow:SetBackdropBorderColor(color.r, color.g, color.b)
-			frame.Shadow:SetAlpha(color.a)
 		elseif glowStyle == "style2" or glowStyle == "style6" or glowStyle == "style8" then
 			frame.Spark:ClearAllPoints()
-
 			if healthIsShown then
 				local size = E.Border + 14
 				frame.Spark:SetPoint("TOPLEFT", frame.Health, -(size * 2), size)
@@ -155,8 +151,6 @@ function NP:Configure_Glow(frame)
 				frame.Spark:SetPoint("TOPLEFT", nameIsShown and frame.Name or frame.IconFrame, -20, 8)
 				frame.Spark:SetPoint("BOTTOMRIGHT", nameIsShown and frame.Name or frame.IconFrame, 20, -8)
 			end
-
-			frame.Spark:SetVertexColor(color.r, color.g, color.b)
 		end
 	end
 end
