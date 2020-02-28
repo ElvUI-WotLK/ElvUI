@@ -39,6 +39,18 @@ function NP:Update_Glow(frame)
 	end
 
 	local glowStyle = self.db.units.TARGET.glowStyle
+	local healthIsShown = frame.Health:IsShown()
+
+	if not healthIsShown then
+		if glowStyle == "style1" then
+			glowStyle = "none"
+		elseif glowStyle == "style5" then
+			glowStyle = "style3"
+		elseif glowStyle == "style7" then
+			glowStyle = "style4"
+		end
+	end
+
 	if showIndicator and glowStyle ~= "none" then
 		local r, g, b
 
@@ -57,17 +69,6 @@ function NP:Update_Glow(frame)
 		frame.Shadow:SetBackdropBorderColor(r, g, b)
 		frame.Spark:SetVertexColor(r, g, b)
 
-		local healthIsShown = frame.Health:IsShown()
-		if not healthIsShown then
-			if glowStyle == "style1" then
-				glowStyle = "style2"
-			elseif glowStyle == "style5" then
-				glowStyle = "style6"
-			elseif glowStyle == "style7" then
-				glowStyle = "style8"
-			end
-		end
-
 		if glowStyle == "style3" or glowStyle == "style5" or glowStyle == "style6" then
 			frame.LeftIndicator:Hide()
 			frame.RightIndicator:Hide()
@@ -81,7 +82,6 @@ function NP:Update_Glow(frame)
 		if glowStyle == "style1" or glowStyle == "style5" or glowStyle == "style7" then
 			frame.Spark:Hide()
 			frame.Shadow:Show()
-
 		elseif glowStyle == "style2" or glowStyle == "style6" or glowStyle == "style8" then
 			frame.Shadow:Hide()
 			frame.Spark:Show()
@@ -97,20 +97,20 @@ end
 
 function NP:Configure_Glow(frame)
 	local glowStyle = self.db.units.TARGET.glowStyle
+	local healthIsShown = frame.Health:IsShown()
+
+	if not healthIsShown then
+		if glowStyle == "style1" then
+			glowStyle = "none"
+		elseif glowStyle == "style5" then
+			glowStyle = "style3"
+		elseif glowStyle == "style7" then
+			glowStyle = "style4"
+		end
+	end
 
 	if glowStyle ~= "none" then
-		local healthIsShown = frame.Health:IsShown()
 		local color = self.db.colors.glowColor
-
-		if not healthIsShown then
-			if glowStyle == "style1" then
-				glowStyle = "style2"
-			elseif glowStyle == "style5" then
-				glowStyle = "style6"
-			elseif glowStyle == "style7" then
-				glowStyle = "style8"
-			end
-		end
 
 		frame.LeftIndicator:SetVertexColor(color.r, color.g, color.b)
 		frame.RightIndicator:SetVertexColor(color.r, color.g, color.b)
