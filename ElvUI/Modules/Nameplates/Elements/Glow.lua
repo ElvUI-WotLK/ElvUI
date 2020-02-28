@@ -19,6 +19,16 @@ Target Glow Style Option Variables
 	style8 - Background + Side Arrows
 ]]
 
+local function GlowStyle(style)
+	if style == "style1" then
+		style = "style2"
+	elseif style == "style5" then
+		style = "style6"
+	elseif style == "style7" then
+		style = "style8"
+	end
+end
+
 function NP:Update_Glow(frame)
 	local showIndicator
 
@@ -53,44 +63,34 @@ function NP:Update_Glow(frame)
 
 		local healthIsShown = frame.Health:IsShown()
 		if not healthIsShown then
-			if glowStyle == "style1" then
-				glowStyle = "style2"
-			elseif glowStyle == "style5" then
-				glowStyle = "style6"
-			elseif glowStyle == "style7" then
-				glowStyle = "style8"
-			end
+			GlowStyle(glowStyle)
 		end
 
 		if glowStyle == "style3" or glowStyle == "style5" or glowStyle == "style6" then
-			frame.TopIndicator:SetVertexColor(r, g, b)
-			frame.TopIndicator:Show()
-		else
-			frame.TopIndicator:Hide()
-		end
-
-		if glowStyle == "style4" or glowStyle == "style7" or glowStyle == "style8" then
-			frame.LeftIndicator:SetVertexColor(r, g, b)
-			frame.RightIndicator:SetVertexColor(r, g, b)
-			frame.LeftIndicator:Show()
-			frame.RightIndicator:Show()
-		else
 			frame.LeftIndicator:Hide()
 			frame.RightIndicator:Hide()
+			frame.TopIndicator:Show()
+
+			frame.TopIndicator:SetVertexColor(r, g, b)
+		elseif glowStyle == "style4" or glowStyle == "style7" or glowStyle == "style8" then
+			frame.TopIndicator:Hide()
+			frame.LeftIndicator:Show()
+			frame.RightIndicator:Show()
+
+			frame.LeftIndicator:SetVertexColor(r, g, b)
+			frame.RightIndicator:SetVertexColor(r, g, b)
 		end
 
 		if glowStyle == "style1" or glowStyle == "style5" or glowStyle == "style7" then
-			frame.Shadow:SetBackdropBorderColor(r, g, b)
-			frame.Shadow:Show()
-		else
-			frame.Shadow:Hide()
-		end
-
-		if glowStyle == "style2" or glowStyle == "style6" or glowStyle == "style8" then
-			frame.Spark:SetVertexColor(r, g, b)
-			frame.Spark:Show()
-		else
 			frame.Spark:Hide()
+			frame.Shadow:Show()
+
+			frame.Shadow:SetBackdropBorderColor(r, g, b)
+		elseif glowStyle == "style2" or glowStyle == "style6" or glowStyle == "style8" then
+			frame.Shadow:Hide()
+			frame.Spark:Show()
+
+			frame.Spark:SetVertexColor(r, g, b)
 		end
 	else
 		frame.TopIndicator:Hide()
@@ -109,13 +109,7 @@ function NP:Configure_Glow(frame)
 		local color = self.db.colors.glowColor
 
 		if not healthIsShown then
-			if glowStyle == "style1" then
-				glowStyle = "style2"
-			elseif glowStyle == "style5" then
-				glowStyle = "style6"
-			elseif glowStyle == "style7" then
-				glowStyle = "style8"
-			end
+			GlowStyle(glowStyle)
 		end
 
 		if glowStyle == "style3" or glowStyle == "style5" or glowStyle == "style6" then
