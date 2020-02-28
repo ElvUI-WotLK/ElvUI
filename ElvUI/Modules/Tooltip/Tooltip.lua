@@ -521,20 +521,17 @@ function TT:GameTooltip_OnTooltipSetItem(tt)
 	if self.db.itemCount == "BAGS_ONLY" then
 		right = format("|cFFCA3C3C%s|r %d", L["Count"], num)
 	elseif self.db.itemCount == "BANK_ONLY" then
-		bankCount = format("|cFFCA3C3C%s|r %d", L["Bank"], (numall - num))
+		right = format("|cFFCA3C3C%s|r %d", L["Bank"], (numall - num))
 	elseif self.db.itemCount == "BOTH" then
 		right = format("|cFFCA3C3C%s|r %d", L["Count"], num)
 		bankCount = format("|cFFCA3C3C%s|r %d", L["Bank"], (numall - num))
+		right = right .. " " .. bankCount
 	end
 
 	if left or right then
-		tt:AddLine(" ")
 		tt:AddDoubleLine(left or " ", right or " ")
 	end
-	if bankCount then
-		tt:AddDoubleLine(" ", bankCount)
-	end
-
+	
 	tt.itemCleared = true
 end
 
