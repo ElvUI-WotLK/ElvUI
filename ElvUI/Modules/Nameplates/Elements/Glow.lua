@@ -52,8 +52,14 @@ function NP:Update_Glow(frame)
 		end
 
 		local healthIsShown = frame.Health:IsShown()
-		if not healthIsShown and (glowStyle ~= "style2" and glowStyle ~= "style6" and glowStyle ~= "style8") then
-			glowStyle = "style2"
+		if not healthIsShown then
+			if glowStyle == "style1" then
+				glowStyle = "style2"
+			elseif glowStyle == "style5" then
+				glowStyle = "style6"
+			elseif glowStyle == "style7" then
+				glowStyle = "style8"
+			end
 		end
 
 		if glowStyle == "style3" or glowStyle == "style5" or glowStyle == "style6" then
@@ -102,46 +108,48 @@ function NP:Configure_Glow(frame)
 		local healthIsShown = frame.Health:IsShown()
 		local color = self.db.colors.glowColor
 
-		if not healthIsShown and (glowStyle ~= "style2" and glowStyle ~= "style6" and glowStyle ~= "style8") then
-			glowStyle = "style2"
-		else
-			if glowStyle == "style3" or glowStyle == "style5" or glowStyle == "style6" then
-				frame.TopIndicator:ClearAllPoints()
-
-				if healthIsShown then
-					frame.TopIndicator:SetPoint("BOTTOM", frame.Health, "TOP", 0, 6)
-				else
-					frame.TopIndicator:SetPoint("BOTTOM", frame.Name, "TOP", 0, 8)
-				end
-
-				frame.TopIndicator:SetVertexColor(color.r, color.g, color.b)
-			end
-
-			if glowStyle == "style4" or glowStyle == "style7" or glowStyle == "style8" then
-				frame.LeftIndicator:ClearAllPoints()
-				frame.RightIndicator:ClearAllPoints()
-
-				if healthIsShown then
-					frame.LeftIndicator:SetPoint("LEFT", frame.Health, "RIGHT", -3, 0)
-					frame.RightIndicator:SetPoint("RIGHT", frame.Health, "LEFT", 3, 0)
-				else
-					frame.LeftIndicator:SetPoint("LEFT", frame.Name, "RIGHT", 20, 0)
-					frame.RightIndicator:SetPoint("RIGHT", frame.Name, "LEFT", -20, 0)
-				end
-
-				frame.LeftIndicator:SetVertexColor(color.r, color.g, color.b)
-				frame.RightIndicator:SetVertexColor(color.r, color.g, color.b)
-			end
-
-			if glowStyle == "style1" or glowStyle == "style5" or glowStyle == "style7" then
-				frame.Shadow:SetOutside(frame.Health, E:Scale(E.PixelMode and 6 or 8), E:Scale(E.PixelMode and 6 or 8))
-
-				frame.Shadow:SetBackdropBorderColor(color.r, color.g, color.b)
-				frame.Shadow:SetAlpha(color.a)
+		if not healthIsShown then
+			if glowStyle == "style1" then
+				glowStyle = "style2"
+			elseif glowStyle == "style5" then
+				glowStyle = "style6"
+			elseif glowStyle == "style7" then
+				glowStyle = "style8"
 			end
 		end
 
-		if glowStyle == "style2" or glowStyle == "style6" or glowStyle == "style8" then
+		if glowStyle == "style3" or glowStyle == "style5" or glowStyle == "style6" then
+			frame.TopIndicator:ClearAllPoints()
+
+			if healthIsShown then
+				frame.TopIndicator:SetPoint("BOTTOM", frame.Health, "TOP", 0, 6)
+			else
+				frame.TopIndicator:SetPoint("BOTTOM", frame.Name, "TOP", 0, 8)
+			end
+
+			frame.TopIndicator:SetVertexColor(color.r, color.g, color.b)
+		elseif glowStyle == "style4" or glowStyle == "style7" or glowStyle == "style8" then
+			frame.LeftIndicator:ClearAllPoints()
+			frame.RightIndicator:ClearAllPoints()
+
+			if healthIsShown then
+				frame.LeftIndicator:SetPoint("LEFT", frame.Health, "RIGHT", -3, 0)
+				frame.RightIndicator:SetPoint("RIGHT", frame.Health, "LEFT", 3, 0)
+			else
+				frame.LeftIndicator:SetPoint("LEFT", frame.Name, "RIGHT", 20, 0)
+				frame.RightIndicator:SetPoint("RIGHT", frame.Name, "LEFT", -20, 0)
+			end
+
+			frame.LeftIndicator:SetVertexColor(color.r, color.g, color.b)
+			frame.RightIndicator:SetVertexColor(color.r, color.g, color.b)
+		end
+
+		if glowStyle == "style1" or glowStyle == "style5" or glowStyle == "style7" then
+			frame.Shadow:SetOutside(frame.Health, E:Scale(E.PixelMode and 6 or 8), E:Scale(E.PixelMode and 6 or 8))
+
+			frame.Shadow:SetBackdropBorderColor(color.r, color.g, color.b)
+			frame.Shadow:SetAlpha(color.a)
+		elseif glowStyle == "style2" or glowStyle == "style6" or glowStyle == "style8" then
 			frame.Spark:ClearAllPoints()
 
 			if healthIsShown then
