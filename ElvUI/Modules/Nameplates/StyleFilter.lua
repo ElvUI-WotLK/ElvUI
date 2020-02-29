@@ -339,6 +339,7 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 		if frame.Health:IsShown() then frame.Health:Hide() end
 		--hide the target indicator
 		mod:Configure_Glow(frame)
+		mod:Update_Glow(frame)
 		--position the name and update its color
 		frame.Name:ClearAllPoints()
 		frame.Name:SetJustifyH("CENTER")
@@ -364,6 +365,7 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 		frame.Level:Hide()
 		frame.Name:Hide()
 		mod:Configure_Glow(frame)
+		mod:Update_Glow(frame)
 		mod:Configure_NameOnlyGlow(frame)
 		if not NameColorChanged then
 			mod:Update_Name(frame, true)
@@ -428,6 +430,7 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 		if mod.db.units[frame.UnitType].health.enable or (frame.isTarget and mod.db.alwaysShowTargetHealth) then
 			frame.Health:Show()
 			mod:Configure_Glow(frame)
+			mod:Update_Glow(frame)
 		end
 		if mod.db.units[frame.UnitType].name.enable then
 			frame.Name:ClearAllPoints()
@@ -450,6 +453,7 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 		if mod.db.units[frame.UnitType].health.enable or (frame.isTarget and mod.db.alwaysShowTargetHealth) then
 			frame.Health:Show()
 			mod:Configure_Glow(frame)
+			mod:Update_Glow(frame)
 		end
 		if mod.db.units[frame.UnitType].name.level then
 			frame.Level:Show()
