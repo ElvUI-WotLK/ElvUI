@@ -114,11 +114,12 @@ function NP:Configure_Glow(frame)
 
 	if glowStyle ~= "none" then
 		local color = self.db.colors.glowColor
+		local r, g, b, a = color.r, color.g, color.b, color.a
 
 		-- Indicators
-		frame.LeftIndicator:SetVertexColor(color.r, color.g, color.b)
-		frame.RightIndicator:SetVertexColor(color.r, color.g, color.b)
-		frame.TopIndicator:SetVertexColor(color.r, color.g, color.b)
+		frame.LeftIndicator:SetVertexColor(r, g, b)
+		frame.RightIndicator:SetVertexColor(r, g, b)
+		frame.TopIndicator:SetVertexColor(r, g, b)
 
 		if glowStyle == "style3" or glowStyle == "style5" or glowStyle == "style6" then
 			frame.TopIndicator:ClearAllPoints()
@@ -140,9 +141,9 @@ function NP:Configure_Glow(frame)
 		end
 
 		-- Spark / Shadow
-		frame.Shadow:SetBackdropBorderColor(color.r, color.g, color.b)
-		frame.Shadow:SetAlpha(color.a)
-		frame.Spark:SetVertexColor(color.r, color.g, color.b)
+		frame.Shadow:SetBackdropBorderColor(r, g, b)
+		frame.Shadow:SetAlpha(a)
+		frame.Spark:SetVertexColor(r, g, b, a)
 
 		if glowStyle == "style1" or glowStyle == "style5" or glowStyle == "style7" then
 			frame.Shadow:SetOutside(frame.Health, E:Scale(E.PixelMode and 6 or 8), E:Scale(E.PixelMode and 6 or 8))
