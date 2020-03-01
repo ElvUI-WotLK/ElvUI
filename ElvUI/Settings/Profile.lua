@@ -285,6 +285,7 @@ P.nameplates = {
 	showEnemyCombat = "DISABLED",
 
 	nameColoredGlow = false,
+	highlight = true,
 
 	cutawayHealth = false,
 	cutawayHealthLength = 0.3,

@@ -502,6 +502,7 @@ L["Hides the red error text at the top of the screen while in combat."] = "Den r
 L["Horizontal Spacing"] = "Horizontaler Abstand"
 L["Horizontal"] = "Horizontal"
 L["Hours"] = "Stunden"
+L["Hover Highlight"] = true
 L["Hover"] = "Mouseover"
 L["How far away the portrait is from the camera."] = "Entfernung der Kamera vom Portrait."
 L["How long the cutaway health will take to fade out."] = "Wie lange das animierte Leben braucht um auszublenden."

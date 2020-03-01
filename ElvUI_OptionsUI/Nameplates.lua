@@ -3534,32 +3534,32 @@ E.Options.args.nameplate = {
 								E:StaticPopup_Show("RESET_NP_AF") --reset nameplate aurafilters
 							end
 						},
-						nameColoredGlow = {
-							order = 8,
-							type = "toggle",
-							name = L["Name Colored Glow"],
-							desc = L["Use the Name Color of the unit for the Name Glow."]
-						},
-						spacer1 = {
-							order = 9,
-							type = "description",
-							name = " ",
-							width = "full"
-						},
 						fadeIn = {
-							order = 10,
+							order = 8,
 							type = "toggle",
 							name = L["Alpha Fading"]
 						},
 						smoothbars = {
+							order = 9,
 							type = "toggle",
-							order = 11,
 							name = L["Smooth Bars"],
 							desc = L["Bars will transition smoothly."],
 							set = function(info, value)
 								E.db.nameplates[info[#info]] = value
 								NP:ConfigureAll()
 							end
+						},
+						highlight = {
+							order = 10,
+							type = "toggle",
+							name = L["Hover Highlight"]
+						},
+						nameColoredGlow = {
+							order = 11,
+							type = "toggle",
+							name = L["Name Colored Glow"],
+							desc = L["Use the Name Color of the unit for the Name Glow."],
+							disabled = function() return not E.db.nameplates.highlight end
 						},
 						clickThrough = {
 							order = 51,

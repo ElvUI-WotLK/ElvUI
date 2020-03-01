@@ -511,6 +511,7 @@ L["Hides the red error text at the top of the screen while in combat."] = "战�
 L["Horizontal Spacing"] = "水平间隔"
 L["Horizontal"] = "水平"
 L["Hours"] = "时"
+L["Hover Highlight"] = true
 L["Hover"] = "鼠标指向"
 L["How far away the portrait is from the camera."] = "人像和镜头间有多远"
 L["How long the cutaway health will take to fade out."] = "血量变化高亮淡出过程所需的时间"
