@@ -366,7 +366,6 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 		frame.Name:Hide()
 		mod:Configure_Glow(frame)
 		mod:Update_Glow(frame)
-		mod:Configure_IconOnlyGlow(frame)
 		mod:Configure_NameOnlyGlow(frame)
 		if not NameColorChanged then
 			mod:Update_Name(frame, true)
@@ -466,7 +465,6 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 			mod:Update_Level(frame)
 			mod:Update_Name(frame)
 		end
-		mod:Configure_IconOnlyGlow(frame)
 		mod:Configure_NameOnlyGlow(frame)
 	end
 end

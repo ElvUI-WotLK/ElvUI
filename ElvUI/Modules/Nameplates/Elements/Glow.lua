@@ -121,17 +121,16 @@ function NP:Configure_Glow(frame)
 		frame.RightIndicator:SetVertexColor(r, g, b)
 		frame.TopIndicator:SetVertexColor(r, g, b)
 
-		frame.TopIndicator:ClearAllPoints()
-		frame.LeftIndicator:ClearAllPoints()
-		frame.RightIndicator:ClearAllPoints()
-
 		if glowStyle == "style3" or glowStyle == "style5" or glowStyle == "style6" then
+			frame.TopIndicator:ClearAllPoints()
 			if healthIsShown then
 				frame.TopIndicator:SetPoint("BOTTOM", frame.Health, "TOP", 0, 6)
 			else
 				frame.TopIndicator:SetPoint("BOTTOM", frame.Name, "TOP", 0, 8)
 			end
 		elseif glowStyle == "style4" or glowStyle == "style7" or glowStyle == "style8" then
+			frame.LeftIndicator:ClearAllPoints()
+			frame.RightIndicator:ClearAllPoints()
 			if healthIsShown then
 				frame.LeftIndicator:SetPoint("LEFT", frame.Health, "RIGHT", -3, 0)
 				frame.RightIndicator:SetPoint("RIGHT", frame.Health, "LEFT", 3, 0)
@@ -144,13 +143,12 @@ function NP:Configure_Glow(frame)
 		-- Spark / Shadow
 		frame.Shadow:SetBackdropBorderColor(r, g, b)
 		frame.Shadow:SetAlpha(a)
-
 		frame.Spark:SetVertexColor(r, g, b, a)
-		frame.Spark:ClearAllPoints()
 
 		if glowStyle == "style1" or glowStyle == "style5" or glowStyle == "style7" then
 			frame.Shadow:SetOutside(frame.Health, E:Scale(E.PixelMode and 6 or 8), E:Scale(E.PixelMode and 6 or 8))
 		elseif glowStyle == "style2" or glowStyle == "style6" or glowStyle == "style8" then
+			frame.Spark:ClearAllPoints()
 			if healthIsShown then
 				local size = E.Border + 14
 				frame.Spark:SetPoint("TOPLEFT", frame.Health, -(size * 2), size)
