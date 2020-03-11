@@ -34,6 +34,24 @@ function NP:Update_IconFrame(frame, triggered)
 	end
 end
 
+function NP:Configure_IconOnlyGlow(frame)
+	local glowStyle = self.db.units.TARGET.glowStyle
+
+	frame.Shadow:Hide()
+	frame.Spark:Hide()
+
+	frame.TopIndicator:ClearAllPoints()
+	frame.LeftIndicator:ClearAllPoints()
+	frame.RightIndicator:ClearAllPoints()
+
+	if glowStyle == "style3" or glowStyle == "style5" or glowStyle == "style6" then
+		frame.TopIndicator:SetPoint("BOTTOM", frame.IconFrame, "TOP", -1, 6)
+	elseif glowStyle == "style4" or glowStyle == "style7" or glowStyle == "style8" then
+		frame.LeftIndicator:SetPoint("LEFT", frame.IconFrame, "RIGHT", -3, 0)
+		frame.RightIndicator:SetPoint("RIGHT", frame.IconFrame, "LEFT", 3, 0)
+	end
+end
+
 function NP:Configure_IconFrame(frame)
 	local db = self.db.units[frame.UnitType].iconFrame
 	if db and db.enable or frame.IconChanged then
