@@ -207,7 +207,7 @@ L["Color health by threat status."] = "以威脅值顯示生命."
 L["Color Keybind Text when Out of Range, instead of the button."] = "在超出射程時給按鍵文字上色, 而不是整個技能圖示。"
 L["Color Keybind Text"] = "按鍵文字上色"
 L["Color of the actionbutton when not usable."] = "無法使用的技能快捷鍵顏色."
-L["Color of the actionbutton when out of power (Mana, Rage, Focus)."] = true
+L["Color of the actionbutton when out of power (Mana, Rage)."] = true
 L["Color of the actionbutton when out of range."] = "超出施放範圍的技能快捷鍵顏色."
 L["Color of the actionbutton when usable."] = "可使用的技能快捷鍵顏色."
 L["Color Override"] = "顏色覆蓋"
@@ -242,7 +242,7 @@ L["Cooldowns"] = "冷卻"
 L["Copy From"] = "複製自"
 L["Copy settings from another unit."] = "從其他框架中複製設置"
 L["Copy Settings From"] = "複製設置"
-L["Core |cfffe7b2cElvUI|r options."] = "核心 |cfffe7b2cElvUI|r 選項"
+L["Core |cff1784d1E|r|cffe5e3e3lvUI|r options."] = "核心 |cff1784d1E|r|cffe5e3e3lvUI|r 選項"
 L["Count Font Size"] = "計數字體尺寸"
 L["Count xOffset"] = "層數X軸偏移"
 L["Count yOffset"] = "層數Y軸偏移"
@@ -256,7 +256,7 @@ L["Current - Max"] = "目前值 - 最大值"
 L["Current - Percent (Remaining)"] = "當前值 - 百分百(剩餘)"
 L["Current - Percent"] = "目前值 - 百分比"
 L["Current - Remaining"] = "當前值 - 剩餘值"
-L["Current / Max - Percent"] = "當前 / 最大 - 百分比"
+L["Current - Max | Percent"] = "當前 - 最大 | 百分比"
 L["Current / Max"] = "目前/最大值"
 L["Current Level"] = "當前等級"
 L["Current"] = "目前值"
@@ -1169,8 +1169,7 @@ L[ [=[This works like a macro, you can run different situations to get the actio
 
 L[ [=[This works like a macro, you can run different situations to get the actionbar to show/hide differently.
  Example: '[combat] show;hide']=] ] = [=[此功能與巨集概念類似, 可根據不同情境, 切換顯示/隱藏快捷列。
-例如：'[combat] show;hide']=]
-
+ 例如：'[combat] show;hide']=]
 
 L[ [=[Specify a filename located inside the World of Warcraft directory. Textures folder that you wish to have set as a panel background.
 

@@ -202,7 +202,7 @@ L["Color health by threat status."] = true
 L["Color Keybind Text when Out of Range, instead of the button."] = true
 L["Color Keybind Text"] = true
 L["Color of the actionbutton when not usable."] = true
-L["Color of the actionbutton when out of power (Mana, Rage, Focus)."] = "Cor do botão de ação quando sem poder (Mana, Raiva, Foco)."
+L["Color of the actionbutton when out of power (Mana, Rage)."] = "Cor do botão de ação quando sem poder (Mana, Raiva)."
 L["Color of the actionbutton when out of range."] = "Cor do botão de ação quando fora de alcance."
 L["Color of the actionbutton when usable."] = true
 L["Color Override"] = true
@@ -237,7 +237,7 @@ L["Cooldowns"] = true
 L["Copy From"] = "Copiar de"
 L["Copy settings from another unit."] = true
 L["Copy Settings From"] = true
-L["Core |cfffe7b2cElvUI|r options."] = true
+L["Core |cff1784d1E|r|cffe5e3e3lvUI|r options."] = true
 L["Count Font Size"] = "Tamanho da Fonte do Contador"
 L["Count xOffset"] = true
 L["Count yOffset"] = true
@@ -251,7 +251,7 @@ L["Current - Max"] = "Atual - Máximo"
 L["Current - Percent (Remaining)"] = true
 L["Current - Percent"] = "Atual - Porcentagem"
 L["Current - Remaining"] = true
-L["Current / Max - Percent"] = true
+L["Current - Max | Percent"] = true
 L["Current / Max"] = "Atual / Máximo"
 L["Current Level"] = true
 L["Current"] = "Atual"
@@ -1134,15 +1134,15 @@ Formato de Nomes:
 'name:medium' - Nome restringido a 15 caracteres
 'name:long' - Nome restringido a 20 caracteres
 
-Para desactivar deixe o espaço em branco, se precisar de mais informações visite o site http://www.tukui.org]=]
+Para desactivar deixe o espaço em branco, se precisar de mais informações visite o site https://www.tukui.org/forum/viewtopic.php?t=6]=]
 
 L[ [=[This works like a macro, you can run different situations to get the actionbar to page differently.
-Example: '[combat] 2;']=] ] = [=[Isto funciona como uma macro, você pode executar várias situações para que a barra de ação pagine de forma diferente.
-Exemplo: '[combat] 2;']=]
+ Example: '[combat] 2;']=] ] = [=[Isto funciona como uma macro, você pode executar várias situações para que a barra de ação pagine de forma diferente.
+ Exemplo: '[combat] 2;']=]
 
 L[ [=[This works like a macro, you can run different situations to get the actionbar to show/hide differently.
-Example: '[combat] show;hide']=] ] = [=[Isto funciona como uma macro, você pode executar várias situações para mostrar/ocultar a barra de ação de forma diferente.
-Exemplo: '[combat] show;hide']=]
+ Example: '[combat] show;hide']=] ] = [=[Isto funciona como uma macro, você pode executar várias situações para mostrar/ocultar a barra de ação de forma diferente.
+ Exemplo: '[combat] show;hide']=]
 
 L[ [=[Specify a filename located inside the World of Warcraft directory. Textures folder that you wish to have set as a panel background.
 

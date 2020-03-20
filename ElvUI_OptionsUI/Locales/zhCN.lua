@@ -207,7 +207,7 @@ L["Color health by threat status."] = "按仇恨状态显示血量"
 L["Color Keybind Text when Out of Range, instead of the button."] = "当你超过射程时对键位文字着色而不是对按钮着色"
 L["Color Keybind Text"] = "键位文字着色"
 L["Color of the actionbutton when not usable."] = "动作条按键不可用时的颜色"
-L["Color of the actionbutton when out of power (Mana, Rage, Focus)."] = true
+L["Color of the actionbutton when out of power (Mana, Rage)."] = true
 L["Color of the actionbutton when out of range."] = "当超出距离时动作条按键的颜色"
 L["Color of the actionbutton when usable."] = "动作条按键可用时的颜色"
 L["Color Override"] = "颜色覆盖"
@@ -242,7 +242,7 @@ L["Cooldowns"] = "冷却"
 L["Copy From"] = "复制自"
 L["Copy settings from another unit."] = "从其他框架中复制设置"
 L["Copy Settings From"] = "复制设置"
-L["Core |cfffe7b2cElvUI|r options."] = "核心|cfffe7b2cElvUI|r配置"
+L["Core |cff1784d1E|r|cffe5e3e3lvUI|r options."] = "核心|cff1784d1E|r|cffe5e3e3lvUI|r配置"
 L["Count Font Size"] = "计数字体尺寸"
 L["Count xOffset"] = "计数X偏移"
 L["Count yOffset"] = "计数Y偏移"
@@ -256,7 +256,7 @@ L["Current - Max"] = "当前值 - 最大值"
 L["Current - Percent (Remaining)"] = "当前值 - 百分比(剩余)"
 L["Current - Percent"] = "当前值 - 百分比"
 L["Current - Remaining"] = "当前值 - 剩余值"
-L["Current / Max - Percent"] = "当前值 / 最大值 - 百分比"
+L["Current - Max | Percent"] = "当前值 - 最大值 | 百分比"
 L["Current / Max"] = "当前值 / 最大值"
 L["Current Level"] = "当前等级"
 L["Current"] = "当前值"
@@ -1166,7 +1166,6 @@ Please Note:
 Example: Interface\AddOns\ElvUI\Media\Textures\Copy
 
 Or for most users it would be easier to simply put a tga file into your WoW folder, then type the name of the file here.]=] ] = [=[若要设定聊天框背景, 请你指定位于WoW目录下的「Textures」文件夹中的材质文件名.
-
 
 请注意：
 - 图片尺寸建议为256x128

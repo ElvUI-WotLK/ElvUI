@@ -201,7 +201,7 @@ L["Color health by threat status."] = true
 L["Color Keybind Text when Out of Range, instead of the button."] = "사정거리에서 벗어났을때 버튼 대신 단축키 글씨의 색상을 변경합니다."
 L["Color Keybind Text"] = "단축키 글씨만 채색"
 L["Color of the actionbutton when not usable."] = "사용이 불가능할 경우 아이콘에 이 색상이 덧칠됩니다."
-L["Color of the actionbutton when out of power (Mana, Rage, Focus)."] = true
+L["Color of the actionbutton when out of power (Mana, Rage)."] = true
 L["Color of the actionbutton when out of range."] = "대상이 버튼에 배치된 행동에 필요한 사정거리보다 밖에 있으면 아이콘에 이 색상이 덧칠됩니다."
 L["Color of the actionbutton when usable."] = "사용 가능할 경우 아이콘이 이 색상으로 덧칠됩니다."
 L["Color Override"] = true
@@ -236,7 +236,7 @@ L["Cooldowns"] = "재사용 대기시간"
 L["Copy From"] = "복사해오기"
 L["Copy settings from another unit."] = "다른 부분에서 설정을 복사하여 가져옵니다."
 L["Copy Settings From"] = "설정 복사해서 가져오기"
-L["Core |cfffe7b2cElvUI|r options."] = true
+L["Core |cff1784d1E|r|cffe5e3e3lvUI|r options."] = true
 L["Count Font Size"] = "중첩수 글꼴 크기"
 L["Count xOffset"] = "중첩수 x 좌표"
 L["Count yOffset"] = "중첩수 y 좌표"
@@ -250,7 +250,7 @@ L["Current - Max"] = "현재값 - 최대값"
 L["Current - Percent (Remaining)"] = "현재값 - 백분율(남은값)"
 L["Current - Percent"] = "현재값 - %"
 L["Current - Remaining"] = "현재값 - 남은값"
-L["Current / Max - Percent"] = true
+L["Current - Max | Percent"] = true
 L["Current / Max"] = "현재값 / 최대값"
 L["Current Level"] = true
 L["Current"] = "현재값"
@@ -1143,35 +1143,25 @@ L["SEARCH_SYNTAX_DESC"] = [=[
 
 L["TEXT_FORMAT_DESC"] = [=[글자가 표시되는 형식을 변경할 수 있습니다.
 
-
 |cff2eb7e4< 예시 >|r
 [namecolor][name] [difficultycolor][smartlevel] [shortclassification]
-
 [healthcolor][health:current-max]
-
 [powercolor][power:current]
-
 
 |cff2eb7e4< health(생명력) / power(자원) 형식 >|r
 |cffceff00current|r : 현재 수치
-
 |cffceff00percent|r : 현재 양을 %로 표시
-
 |cffceff00current-max|r : [현재 수치]-[최대값]
-
 |cffceff00current-percent|r : [현재 수치]-[%]
-
 |cffceff00current-max-percent|r : [현재 수치]-[최대값]-[%]
-
 |cffceff00deficit|r : 손실치만 표시하며 현재 수치가 최대치이면 표시하지 않음
-
 
 |cff2eb7e4< name(이름) 형식 >|r
 |cffceff00name:short|r : 최대 10글자
 |cffceff00name:medium|r : 최대 15글자
 |cffceff00name:long|r : 최대 20글자
 
-표시하고 싶지 않으면 빈칸으로 두면 되며, 자세한 정보는 |cff2eb7e4www.tukui.org|r 에서 확인하세요.]=]
+표시하고 싶지 않으면 빈칸으로 두면 되며, 자세한 정보는 |cff2eb7e4https://www.tukui.org/forum/viewtopic.php?t=6|r 에서 확인하세요.]=]
 
 L[ [=[This works like a macro, you can run different situations to get the actionbar to page differently.
  Example: '[combat] 2;']=] ] = [=[이곳에 작성한 조건(예를 들어 전투여부)에 따라 이 행동단축바의 페이지를 자동으로 전환시킬 수 있습니다.
@@ -1203,7 +1193,7 @@ Example: Interface\AddOns\ElvUI\Media\Textures\Copy
 Or for most users it would be easier to simply put a tga file into your WoW folder, then type the name of the file here.]=] ] = [=[패널 배경에 그림을 입히고 싶으면 위치와 파일명를 이곳에 입력해야 합니다.
 
 |cff2eb7e4< 예시 >|r
-|cffceff00Interface/AddOns/ElvUI/media/textures/|cff2eb7e4TestImage|r
+|cffceff00Interface/AddOns/ElvUI/Media/Textures/|cff2eb7e4TestImage|r
 - 위의 주소로 된 texture 폴더 안 TestImage.tga 그림을 불러옴
 - 위의 주소는 \ 대신 / 를 사용한 것. 직접 적을 땐 반드시 \ 로 주소구분
 

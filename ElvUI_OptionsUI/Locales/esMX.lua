@@ -201,7 +201,7 @@ L["Color health by threat status."] = true
 L["Color Keybind Text when Out of Range, instead of the button."] = true
 L["Color Keybind Text"] = true
 L["Color of the actionbutton when not usable."] = true
-L["Color of the actionbutton when out of power (Mana, Rage, Focus)."] = "Color del botón cuando no tengas poder (Mana, Ira, Enfoque)"
+L["Color of the actionbutton when out of power (Mana, Rage)."] = "Color del botón cuando no tengas poder (Mana, Ira)."
 L["Color of the actionbutton when out of range."] = "Color del botón cuando el objetivo esté fuera de rango"
 L["Color of the actionbutton when usable."] = true
 L["Color Override"] = true
@@ -236,7 +236,7 @@ L["Cooldowns"] = true
 L["Copy From"] = "Copiar Desde"
 L["Copy settings from another unit."] = true
 L["Copy Settings From"] = true
-L["Core |cfffe7b2cElvUI|r options."] = true
+L["Core |cff1784d1E|r|cffe5e3e3lvUI|r options."] = true
 L["Count Font Size"] = "Tamaño de Fuente del Contador"
 L["Count xOffset"] = true
 L["Count yOffset"] = true
@@ -250,7 +250,7 @@ L["Current - Max"] = "Actual - Máximo"
 L["Current - Percent (Remaining)"] = true
 L["Current - Percent"] = "Actual - Porcentaje"
 L["Current - Remaining"] = true
-L["Current / Max - Percent"] = true
+L["Current - Max | Percent"] = true
 L["Current / Max"] = "Actual / Máximo"
 L["Current Level"] = true
 L["Current"] = "Actual"
@@ -1132,7 +1132,7 @@ Formatos de Nombre:
 'name:medium' - Nombre restringido a 15 caracteres
 'name:long' - Nombre restringido a 20 caracteres
 
-Para desactivarlo dejar el campo en blanco, si necesitas más información visita http://www.tukui.org]=]
+Para desactivarlo dejar el campo en blanco, si necesitas más información visita https://www.tukui.org/forum/viewtopic.php?t=6]=]
 
 L[ [=[This works like a macro, you can run different situations to get the actionbar to page differently.
  Example: '[combat] 2;']=] ] = [=[Esto funciona como una macro. Puedes ejecutar diferentes situaciones para paginar la barra de acción de forma diferente.
