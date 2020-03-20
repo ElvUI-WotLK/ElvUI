@@ -361,7 +361,7 @@ for i = 1, 8 do
 		order = i,
 		type = "color",
 		hasAlpha = false,
-		name = L["FACTION_STANDING_LABEL"..i],
+		name = _G["FACTION_STANDING_LABEL"..i],
 		disabled = function() return not E.Tooltip.Initialized or not E.db.tooltip.useCustomFactionColors end,
 	}
 end

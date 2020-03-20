@@ -1300,7 +1300,7 @@ local function UpdateFilterGroup()
 								hostile = {
 									order = 1,
 									type = "toggle",
-									name = L["FACTION_STANDING_LABEL2"],
+									name = FACTION_STANDING_LABEL2,
 									get = function(info)
 										return E.global.nameplates.filters[selectedNameplateFilter].triggers.reactionType.hostile
 									end,
@@ -1312,7 +1312,7 @@ local function UpdateFilterGroup()
 								neutral = {
 									order = 2,
 									type = "toggle",
-									name = L["FACTION_STANDING_LABEL4"],
+									name = FACTION_STANDING_LABEL4,
 									get = function(info)
 										return E.global.nameplates.filters[selectedNameplateFilter].triggers.reactionType.neutral
 									end,
@@ -1324,7 +1324,7 @@ local function UpdateFilterGroup()
 								friendly = {
 									order = 3,
 									type = "toggle",
-									name = L["FACTION_STANDING_LABEL5"],
+									name = FACTION_STANDING_LABEL5,
 									get = function(info)
 										return E.global.nameplates.filters[selectedNameplateFilter].triggers.reactionType.friendly
 									end,
@@ -1445,42 +1445,42 @@ local function UpdateFilterGroup()
 								star = {
 									type = "toggle",
 									order = 1,
-									name = format(raidTargetIcon, 1, L["RAID_TARGET_1"])
+									name = format(raidTargetIcon, 1, RAID_TARGET_1)
 								},
 								circle = {
 									type = "toggle",
 									order = 2,
-									name = format(raidTargetIcon, 2, L["RAID_TARGET_2"])
+									name = format(raidTargetIcon, 2, RAID_TARGET_2)
 								},
 								diamond = {
 									type = "toggle",
 									order = 3,
-									name = format(raidTargetIcon, 3, L["RAID_TARGET_3"])
+									name = format(raidTargetIcon, 3, RAID_TARGET_3)
 								},
 								triangle = {
 									type = "toggle",
 									order = 4,
-									name = format(raidTargetIcon, 4, L["RAID_TARGET_4"])
+									name = format(raidTargetIcon, 4, RAID_TARGET_4)
 								},
 								moon = {
 									type = "toggle",
 									order = 5,
-									name = format(raidTargetIcon, 5, L["RAID_TARGET_5"])
+									name = format(raidTargetIcon, 5, RAID_TARGET_5)
 								},
 								square = {
 									type = "toggle",
 									order = 6,
-									name = format(raidTargetIcon, 6, L["RAID_TARGET_6"])
+									name = format(raidTargetIcon, 6, RAID_TARGET_6)
 								},
 								cross = {
 									type = "toggle",
 									order = 7,
-									name = format(raidTargetIcon, 7, L["RAID_TARGET_7"])
+									name = format(raidTargetIcon, 7, RAID_TARGET_7)
 								},
 								skull = {
 									type = "toggle",
 									order = 8,
-									name = format(raidTargetIcon, 8, L["RAID_TARGET_8"])
+									name = format(raidTargetIcon, 8, RAID_TARGET_8)
 								}
 							}
 						}
