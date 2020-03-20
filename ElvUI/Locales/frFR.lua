@@ -298,6 +298,21 @@ L["Your items have been repaired using guild bank funds for: "] = "Votre équipe
 L["Your profile was successfully recieved by the player."] = "Votre profil a été reçu avec succès par le joueur."
 L["|cFFE30000Lua error recieved. You can view the error message when you exit combat."] = "|cFFE30000Erreur Lua reçue. Vous pouvez voir ce message d'erreur quand vous sortirez de combat."
 
+L["BoE"] = true
+L["Data To: %s"] = true
+L["Export Now"] = true
+L["General"] = true
+L["Hit"] = true
+L["If you have an icon or aurabar that you don't want to display simply hold down shift and right click the icon for it to disapear."] = true
+L["Import Now"] = true
+L["Must be in group with the player if he isn't on the same server as you."] = true
+L["On screen positions for different elements."] = true
+L["You are going to copy settings for |cffD3CF00\"%s\"|r from your current |cff4beb2c\"%s\"|r profile to |cff4beb2c\"%s\"|r profile. Are you sure?"] = true
+L["You are going to copy settings for |cffD3CF00\"%s\"|r from |cff4beb2c\"%s\"|r profile to your current |cff4beb2c\"%s\"|r profile. Are you sure?"] = true
+L["You cannot copy settings from the same unit."] = true
+L["You don't have enough money to repair all items."] = true
+L["You still have ElvUI_Config installed. ElvUI_Config has been renamed to ElvUI_OptionsUI, please remove it."] = true
+
 ----------------------------------
 L["RED_ENABLE"] = "|cFFff3333Activer|r"
 L["GREEN_ENABLE"] = "|cFF33ff33Activer|r"

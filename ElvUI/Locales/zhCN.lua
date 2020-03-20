@@ -293,6 +293,26 @@ L["Your items have been repaired using guild bank funds for: "] = "物品已使�
 L["Your profile was successfully recieved by the player."] = "你的配置文件已被其他玩家成功接收."
 L["|cFFE30000Lua error recieved. You can view the error message when you exit combat."] = "|cFFE30000LUA错误已接收, 你可以在脱离战斗后检查.|r"
 
+L["BoE"] = true
+L["Data To: %s"] = true
+L["Export Now"] = true
+L["FocusTarget Frame"] = true
+L["General"] = true
+L["Hit"] = true
+L["If you have an icon or aurabar that you don't want to display simply hold down shift and right click the icon for it to disapear."] = true
+L["Import Now"] = true
+L["Must be in group with the player if he isn't on the same server as you."] = true
+L["On screen positions for different elements."] = true
+L["PetTarget Frame"] = true
+L["Raid Frames"] = true
+L["Raid Pet Frames"] = true
+L["Raid-40 Frames"] = true
+L["You are going to copy settings for |cffD3CF00\"%s\"|r from your current |cff4beb2c\"%s\"|r profile to |cff4beb2c\"%s\"|r profile. Are you sure?"] = true
+L["You are going to copy settings for |cffD3CF00\"%s\"|r from |cff4beb2c\"%s\"|r profile to your current |cff4beb2c\"%s\"|r profile. Are you sure?"] = true
+L["You cannot copy settings from the same unit."] = true
+L["You don't have enough money to repair all items."] = true
+L["You still have ElvUI_Config installed. ElvUI_Config has been renamed to ElvUI_OptionsUI, please remove it."] = true
+
 ----------------------------------
 L["RED_ENABLE"] = "|cFFff3333启用|r"
 L["GREEN_ENABLE"] = "|cFF33ff33启用|r"
