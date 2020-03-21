@@ -13,25 +13,25 @@ This UI will arrange your interface to be more flexible and practical.
 
 ## Screenshots:
 
-<a href="https://cloud.githubusercontent.com/assets/590348/22867052/f8d570ba-f190-11e6-9e4c-aee3adc16154.jpg">
-<img src="https://user-images.githubusercontent.com/590348/68385406-bc90f880-016a-11ea-934f-16e4a920a149.jpg" align="right" width="48.5%">
+<a href="https://user-images.githubusercontent.com/590348/77227057-4d9ec400-6b8e-11ea-8672-29789434b9fe.jpg">
+<img src="https://user-images.githubusercontent.com/590348/77227055-4bd50080-6b8e-11ea-975e-a68784d34327.jpg" align="right" width="48.5%">
 </a>
-<a href="https://cloud.githubusercontent.com/assets/590348/22867049/f8d43506-f190-11e6-9a1c-019a9a190fd7.jpg">
-<img src="https://user-images.githubusercontent.com/590348/68385404-bc90f880-016a-11ea-97bc-c9765d4ac0f3.jpg" width="48.5%">
-</a>
-
-<a href="https://cloud.githubusercontent.com/assets/590348/22867050/f8d4f662-f190-11e6-9acd-fc83d7827bc0.jpg">
-<img src="https://user-images.githubusercontent.com/590348/68385408-bc90f880-016a-11ea-8b94-ed6f0070aaa3.jpg" align="right" width="48.5%">
-</a>
-<a href="https://cloud.githubusercontent.com/assets/590348/22944322/5d95a2b0-f301-11e6-81e3-52d1d619c850.jpg">
-<img src="https://user-images.githubusercontent.com/590348/68385407-bc90f880-016a-11ea-87f0-66265cb7b5e1.jpg" width="48.5%">
+<a href="https://user-images.githubusercontent.com/590348/77227304-65774780-6b90-11ea-9f64-432786d2a597.jpg">
+<img src="https://user-images.githubusercontent.com/590348/77227077-98b8d700-6b8e-11ea-9822-f30103eca56b.jpg" width="48.5%">
 </a>
 
-<a href="https://user-images.githubusercontent.com/19589902/30231616-62e40f32-94f4-11e7-9712-a32f19719cd8.jpg">
-<img src="https://user-images.githubusercontent.com/590348/68385411-bd298f00-016a-11ea-8512-fccf37e6024a.jpg" align="right" width="48.5%">
+<a href="https://user-images.githubusercontent.com/590348/77227091-bc7c1d00-6b8e-11ea-8c4f-29029a0b750a.jpg">
+<img src="https://user-images.githubusercontent.com/590348/77227094-bdad4a00-6b8e-11ea-91a6-d134d7f01d8d.jpg" align="right" width="48.5%">
 </a>
-<a href="https://user-images.githubusercontent.com/19589902/30231617-62e74594-94f4-11e7-96e5-65d81991dcf1.jpg">
-<img src="https://user-images.githubusercontent.com/590348/68385409-bd298f00-016a-11ea-82ba-d80277aa14f4.jpg" width="48.5%">
+<a href="https://user-images.githubusercontent.com/590348/77227309-74f69080-6b90-11ea-9aa1-95c760340e9d.jpg">
+<img src="https://user-images.githubusercontent.com/590348/77227311-76c05400-6b90-11ea-8704-dfb0cfd1dd3c.jpg" width="48.5%">
+</a>
+
+<a href="https://user-images.githubusercontent.com/590348/77227322-9192c880-6b90-11ea-9944-b9ae42e19431.jpg">
+<img src="https://user-images.githubusercontent.com/590348/77227324-935c8c00-6b90-11ea-88ad-96f05a23b3f6.jpg" align="right" width="48.5%">
+</a>
+<a href="https://user-images.githubusercontent.com/590348/77227328-a53e2f00-6b90-11ea-8dd4-a8d7287185e8.jpg">
+<img src="https://user-images.githubusercontent.com/590348/77227329-a707f280-6b90-11ea-9395-3bbc665a3593.jpg" width="48.5%">
 </a>
 
 
