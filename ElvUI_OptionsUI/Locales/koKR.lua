@@ -765,6 +765,7 @@ L["Pick Up Action Key"] = true
 L["Player Frame Aura Bars"] = true
 L["Player Health"] = "플레이어 생명력"
 L["Player Out of Combat"] = "플레이어 전투 종료"
+L["Player Target"] = true
 L["Player Titles"] = "칭호 표시"
 L["Player in Combat"] = "플레이어 전투중"
 L["Player"] = "플레이어"

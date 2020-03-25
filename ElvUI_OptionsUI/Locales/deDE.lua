@@ -762,6 +762,7 @@ L["Pick Up Action Key"] = true
 L["Player Frame Aura Bars"] = "Spielerfenster Aurenleiste"
 L["Player Health"] = "Spieler Gesundheit"
 L["Player Out of Combat"] = "Spieler nicht im Kampf"
+L["Player Target"] = "Spieler Ziel"
 L["Player Titles"] = "Spielertitel"
 L["Player in Combat"] = "Spieler im Kampf"
 L["Player"] = "Spieler"

@@ -765,6 +765,7 @@ L["Pick Up Action Key"] = true
 L["Player Frame Aura Bars"] = true
 L["Player Health"] = true
 L["Player Out of Combat"] = true
+L["Player Target"] = true
 L["Player Titles"] = "Títulos de Jugador"
 L["Player in Combat"] = true
 L["Player"] = "Player"

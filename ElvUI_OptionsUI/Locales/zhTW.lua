@@ -762,6 +762,7 @@ L["Pick Up Action Key"] = true
 L["Player Frame Aura Bars"] = "玩家框架光環條"
 L["Player Health"] = "玩家血量"
 L["Player Out of Combat"] = "玩家戰鬥外"
+L["Player Target"] = "玩家目標"
 L["Player Titles"] = "玩家稱號"
 L["Player in Combat"] = "玩家戰鬥中"
 L["Player"] = "玩家"

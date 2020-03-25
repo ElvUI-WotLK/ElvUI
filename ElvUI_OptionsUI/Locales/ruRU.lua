@@ -762,6 +762,7 @@ L["Pick Up Action Key"] = true
 L["Player Frame Aura Bars"] = "Полосы аур рамки игрока"
 L["Player Health"] = "Здоровье игрока"
 L["Player Out of Combat"] = "Игрок вне боя"
+L["Player Target"] = "Цель игрока"
 L["Player Titles"] = "Звания игроков"
 L["Player in Combat"] = "Игрок в бою"
 L["Player"] = "Игрок"
