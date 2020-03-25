@@ -32,7 +32,6 @@ local FloatingChatFrame_OnEvent = FloatingChatFrame_OnEvent
 local GMChatFrame_IsGM = GMChatFrame_IsGM
 local GetChannelName = GetChannelName
 local GetGuildRosterMOTD = GetGuildRosterMOTD
-local GetLocale = GetLocale
 local GetMouseFocus = GetMouseFocus
 local GetNumPartyMembers = GetNumPartyMembers
 local GetNumRaidMembers = GetNumRaidMembers
@@ -1172,9 +1171,6 @@ function CH:ChatFrame_MessageEventHandler(frame, event, arg1, arg2, arg3, arg4, 
 				end
 			else
 				if not showLink or strlen(arg2) == 0 then
-					if find(arg1, "% ") and GetLocale() == "ruRU" then
-						arg1 = gsub(arg1, "%%", "%%s")
-					end
 					body = format(_G["CHAT_"..chatType.."_GET"]..arg1, pflag..arg2, arg2)
 				else
 					if chatType == "EMOTE" then
