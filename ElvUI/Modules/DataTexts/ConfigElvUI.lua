@@ -19,15 +19,16 @@ local lastPanel
 local function OnEvent(self, event)
 	lastPanel = self
 
-	if event == "PLAYER_ENTERING_WORLD" then
+	if not plugins and event == "PLAYER_ENTERING_WORLD" then
 		for i = 1, GetNumAddOns() do
-			local _, title, _, enabled = GetAddOnInfo(i)
-			if enabled and find(title, E.title) and title ~= E.title then
+			local name, title, _, enabled = GetAddOnInfo(i)
+			if enabled and find(name, "ElvUI") and name ~= "ElvUI" then
 				plugins = plugins or {}
-				local version = GetAddOnMetadata(i, "version")
-				plugins[title] = version
+				plugins[title] = GetAddOnMetadata(i, "version")
 			end
 		end
+
+		self:UnregisterEvent(event)
 	end
 
 	self.text:SetFormattedText(displayString, configText)
@@ -38,9 +39,11 @@ local function OnEnter(self)
 
 	DT.tooltip:AddDoubleLine(L["Left Click:"], L["Toggle Configuration"], 1, 1, 1)
 	DT.tooltip:AddDoubleLine(L["Hold Shift + Right Click:"], L["Reload UI"], 1, 1, 1)
+
 	if plugins then
 		DT.tooltip:AddLine(" ")
 		DT.tooltip:AddDoubleLine("Plugins:", "Version:")
+
 		for plugin, version in pairs(plugins) do
 			DT.tooltip:AddDoubleLine(plugin, version, 1, 1, 1, 1, 1, 1)
 		end
