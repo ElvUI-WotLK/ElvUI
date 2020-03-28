@@ -49,23 +49,12 @@ local menuList = {
 	func = function() ToggleFrame(LFRParentFrame) end},
 	{text = MAINMENU_BUTTON,
 	func = function()
-		if not GameMenuFrame:IsShown() then
-			if VideoOptionsFrame:IsShown() then
-				VideoOptionsFrameCancel:Click()
-			elseif AudioOptionsFrame:IsShown() then
-				AudioOptionsFrameCancel:Click()
-			elseif InterfaceOptionsFrame:IsShown() then
-				InterfaceOptionsFrameCancel:Click()
-			end
-
-			CloseMenus()
-			CloseAllWindows()
-			PlaySound("igMainMenuOpen")
-			ShowUIPanel(GameMenuFrame)
-		else
+		if GameMenuFrame:IsShown() then
 			PlaySound("igMainMenuQuit")
 			HideUIPanel(GameMenuFrame)
-			MainMenuMicroButton_SetNormal()
+		else
+			PlaySound("igMainMenuOpen")
+			ShowUIPanel(GameMenuFrame)
 		end
 	end},
 	{text = HELP_BUTTON,
