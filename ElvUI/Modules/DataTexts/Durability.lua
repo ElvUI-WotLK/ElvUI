@@ -2,7 +2,7 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 local DT = E:GetModule("DataTexts")
 
 --Lua functions
-local pairs = pairs
+local ipairs = ipairs
 local format, join = string.format, string.join
 --WoW API / Variables
 local GetInventoryItemDurability = GetInventoryItemDurability
@@ -12,37 +12,54 @@ local DURABILITY = DURABILITY
 
 local displayString = ""
 local tooltipString = "%d%%"
-local totalDurability = 0
-local current, max, lastPanel
+local lastPanel
+local totalDurability, current, maxDur
 local invDurability = {}
+
 local slots = {
-	["RangedSlot"] = L["Ranged"],
-	["SecondaryHandSlot"] = L["Offhand"],
-	["MainHandSlot"] = L["Main Hand"],
-	["FeetSlot"] = L["Feet"],
-	["LegsSlot"] = L["Legs"],
-	["HandsSlot"] = L["Hands"],
-	["WristSlot"] = L["Wrist"],
-	["WaistSlot"] = L["Waist"],
-	["ChestSlot"] = L["Chest"],
-	["ShoulderSlot"] = L["Shoulder"],
+	"HeadSlot",
+	"ShoulderSlot",
+	"ChestSlot",
+	"WristSlot",
+	"HandsSlot",
+	"WaistSlot",
+	"LegsSlot",
+	"FeetSlot",
+	"MainHandSlot",
+	"SecondaryHandSlot",
+	"RangedSlot",
+}
+
+local slotsLocales = {
 	["HeadSlot"] = L["Head"],
+	["ShoulderSlot"] = L["Shoulder"],
+	["ChestSlot"] = L["Chest"],
+	["WristSlot"] = L["Wrist"],
+	["HandsSlot"] = L["Hands"],
+	["WaistSlot"] = L["Waist"],
+	["LegsSlot"] = L["Legs"],
+	["FeetSlot"] = L["Feet"],
+	["MainHandSlot"] = L["Main Hand"],
+	["SecondaryHandSlot"] = L["Offhand"],
+	["RangedSlot"] = L["Ranged"],
 }
 
 local function OnEvent(self)
 	lastPanel = self
 	totalDurability = 100
 
-	for sType, value in pairs(slots) do
+	for _, sType in ipairs(slots) do
 		local slot = GetInventorySlotInfo(sType)
-		current, max = GetInventoryItemDurability(slot)
+		current, maxDur = GetInventoryItemDurability(slot)
 
 		if current then
-			invDurability[value] = (current / max) * 100
+			invDurability[sType] = (current / maxDur) * 100
 
-			if ((current / max) * 100) < totalDurability then
-				totalDurability = (current / max) * 100
+			if invDurability[sType] < totalDurability then
+				totalDurability = invDurability[sType]
 			end
+		else
+			invDurability[sType] = nil
 		end
 	end
 
@@ -56,8 +73,10 @@ end
 local function OnEnter(self)
 	DT:SetupTooltip(self)
 
-	for slot, durability in pairs(invDurability) do
-		DT.tooltip:AddDoubleLine(slot, format(tooltipString, durability), 1, 1, 1, E:ColorGradient(durability * 0.01, 1, 0, 0, 1, 1, 0, 0, 1, 0))
+	for _, sType in ipairs(slots) do
+		if invDurability[sType] then
+			DT.tooltip:AddDoubleLine(slotsLocales[sType], format(tooltipString, invDurability[sType]), 1, 1, 1, E:ColorGradient(invDurability[sType] * 0.01, 1, 0, 0, 1, 1, 0, 0, 1, 0))
+		end
 	end
 
 	DT.tooltip:Show()
