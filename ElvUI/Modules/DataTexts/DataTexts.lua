@@ -14,7 +14,10 @@ local IsInInstance = IsInInstance
 
 function DT:Initialize()
 	--if E.db.datatexts.enable ~= true then return end
+
 	self.Initialized = true
+	self.db = E.db.datatexts
+
 	self.tooltip = CreateFrame("GameTooltip", "DatatextTooltip", nil, "GameTooltipTemplate")
 	self.tooltip:SetParent(E.UIParent)
 	self.tooltip:SetFrameStrata("TOOLTIP")
@@ -45,7 +48,15 @@ DT.PointLocation = {
 }
 
 function DT:PLAYER_ENTERING_WORLD()
-	self:LoadDataTexts()
+	local inInstance, instanceType = IsInInstance()
+	self.isInPVP = inInstance and instanceType == "pvp"
+
+	if (not self.isInPVP and self.ShowingBGStats)
+	or (self.isInPVP and not self.ShowingBGStats and self.db.battleground)
+	then
+		self:LoadDataTexts()
+		self.ShowingBGStats = not self.ShowingBGStats
+	end
 end
 
 local LDBHex = "|cffFFFFFF"
@@ -223,23 +234,18 @@ function DT:AssignPanelToDataText(panel, data)
 end
 
 function DT:LoadDataTexts()
-	self.db = E.db.datatexts
-	for _, _ in LDB:DataObjectIterator() do
-		LDB:UnregisterAllCallbacks(self)
-	end
+	LDB:UnregisterAllCallbacks(self)
 
 	local fontTemplate = LSM:Fetch("font", self.db.font)
-	local inInstance, instanceType = IsInInstance()
-	local isInPVP = inInstance and (instanceType == "pvp")
-	local pointIndex, isBGPanel, enableBGPanel
+	local enableBGPanel = self.isInPVP and not self.ForceHideBGStats and self.db.battleground
+	local pointIndex, showBGPanel
 
 	if ElvConfigToggle then
 		ElvConfigToggle.text:FontTemplate(fontTemplate, self.db.fontSize, self.db.fontOutline)
 	end
 
 	for panelName, panel in pairs(DT.RegisteredPanels) do
-		isBGPanel = isInPVP and (panelName == "LeftChatDataPanel" or panelName == "RightChatDataPanel")
-		enableBGPanel = isBGPanel and (not DT.ForceHideBGStats and E.db.datatexts.battleground)
+		showBGPanel = enableBGPanel and (panelName == "LeftChatDataPanel" or panelName == "RightChatDataPanel")
 
 		--Restore Panels
 		for i = 1, panel.numPoints do
@@ -254,21 +260,14 @@ function DT:LoadDataTexts()
 			panel.dataPanels[pointIndex].text:SetText(nil)
 			panel.dataPanels[pointIndex].pointIndex = pointIndex
 
-			if enableBGPanel then
+			if showBGPanel then
 				panel.dataPanels[pointIndex]:RegisterEvent("UPDATE_BATTLEFIELD_SCORE")
-				panel.dataPanels[pointIndex]:RegisterEvent("PLAYER_REGEN_ENABLED")
 				panel.dataPanels[pointIndex]:SetScript("OnEvent", DT.UPDATE_BATTLEFIELD_SCORE)
 				panel.dataPanels[pointIndex]:SetScript("OnEnter", DT.BattlegroundStats)
 				panel.dataPanels[pointIndex]:SetScript("OnLeave", DT.Data_OnLeave)
 				panel.dataPanels[pointIndex]:SetScript("OnClick", DT.HideBattlegroundTexts)
 				DT.UPDATE_BATTLEFIELD_SCORE(panel.dataPanels[pointIndex])
-				DT.ShowingBGStats = true
 			else
-				-- we aren't showing BGStats anymore
-				if (isBGPanel or not isInPVP) and DT.ShowingBGStats then
-					DT.ShowingBGStats = nil
-				end
-
 				--Register Panel to Datatext
 				for name, data in pairs(DT.RegisteredDataTexts) do
 					for option, value in pairs(self.db.panels) do
