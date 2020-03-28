@@ -25,19 +25,17 @@ local displayModifierString = ""
 local lastPanel
 
 local function OnEvent(self)
+	lastPanel = self
+
 	if E.Role == "Caster"then
 		critRating = GetSpellCritChance(2)
+	elseif E.myclass == "HUNTER" then
+		critRating = GetRangedCritChance()
 	else
-		if E.myclass == "HUNTER" then
-			critRating = GetRangedCritChance()
-		else
-			critRating = GetCritChance()
-		end
+		critRating = GetCritChance()
 	end
 
 	self.text:SetFormattedText(displayModifierString, critRating)
-
-	lastPanel = self
 end
 
 local function OnEnter(self)
