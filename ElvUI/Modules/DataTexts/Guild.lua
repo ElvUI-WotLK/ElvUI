@@ -275,9 +275,9 @@ local function OnEnter(self, _, noUpdate)
 end
 
 local eventHandlers = {
-	["PLAYER_ENTERING_WORLD"] = function(self)
+	["ELVUI_FORCE_RUN"] = function(self)
 		guildMotD = GetGuildRosterMOTD()
-		self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+		GuildRoster()
 	end,
 	["GUILD_MOTD"] = function(_, message)
 		guildMotD = message
@@ -301,7 +301,6 @@ local eventHandlers = {
 		end
 	end,
 	["PLAYER_GUILD_UPDATE"] = GuildRoster,
-	["ELVUI_FORCE_RUN"] = GuildRoster,
 	["ELVUI_COLOR_UPDATE"] = E.noop,
 }
 
@@ -327,4 +326,4 @@ local function ValueColorUpdate(hex)
 end
 E.valueColorUpdateFuncs[ValueColorUpdate] = true
 
-DT:RegisterDatatext("Guild", {"PLAYER_ENTERING_WORLD", "CHAT_MSG_SYSTEM", "GUILD_ROSTER_UPDATE", "PLAYER_GUILD_UPDATE", "GUILD_MOTD"}, OnEvent, nil, OnClick, OnEnter, nil, GUILD)
+DT:RegisterDatatext("Guild", {"CHAT_MSG_SYSTEM", "GUILD_ROSTER_UPDATE", "PLAYER_GUILD_UPDATE", "GUILD_MOTD"}, OnEvent, nil, OnClick, OnEnter, nil, GUILD)
