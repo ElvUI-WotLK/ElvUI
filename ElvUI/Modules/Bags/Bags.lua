@@ -1787,7 +1787,7 @@ function B:Initialize()
 
 	if not E.private.bags.enable then
 		-- Set a different default anchor
-		BagFrameHolder:Point("BOTTOMRIGHT", RightChatPanel, "BOTTOMRIGHT", -(E.Border*2), 22 + E.Border*4 - E.Spacing*2)
+		BagFrameHolder:Point("BOTTOMRIGHT", RightChatPanel, "BOTTOMRIGHT", E.PixelMode and 1 or -E.Border, 22 + E.Border*4 - E.Spacing*2)
 		E:CreateMover(BagFrameHolder, "ElvUIBagMover", L["Bag Mover"], nil, nil, B.PostBagMove, nil, nil, "bags,general")
 
 		B:SecureHook("updateContainerFrameAnchors")
