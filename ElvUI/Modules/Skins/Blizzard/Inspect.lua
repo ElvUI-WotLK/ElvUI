@@ -71,28 +71,32 @@ local function LoadSkin()
 		icon:SetInside()
 	end
 
-	local function styleButton(button)
-		if button.hasItem then
-			local itemID = GetInventoryItemID(InspectFrame.unit, button:GetID())
-			if itemID then
-				local _, _, quality = GetItemInfo(itemID)
-
-				if not quality then
-					E:Delay(0.1, function()
-						if InspectFrame.unit then
-							styleButton(button)
-						end
-					end)
-
-					return
-				elseif quality then
-					button.backdrop:SetBackdropBorderColor(GetItemQualityColor(quality))
-					return
-				end
+	local styleButton
+	do
+		local function awaitCache(button)
+			if InspectFrame.unit then
+				styleButton(button)
 			end
 		end
 
-		button.backdrop:SetBackdropBorderColor(unpack(E.media.bordercolor))
+		styleButton = function(button)
+			if button.hasItem then
+				local itemID = GetInventoryItemID(InspectFrame.unit, button:GetID())
+				if itemID then
+					local _, _, quality = GetItemInfo(itemID)
+
+					if not quality then
+						E:Delay(0.1, awaitCache, button)
+						return
+					elseif quality then
+						button.backdrop:SetBackdropBorderColor(GetItemQualityColor(quality))
+						return
+					end
+				end
+			end
+
+			button.backdrop:SetBackdropBorderColor(unpack(E.media.bordercolor))
+		end
 	end
 
 	hooksecurefunc("InspectPaperDollItemSlotButton_Update", styleButton)
