@@ -105,6 +105,7 @@ E.HealingClasses = {
 
 E.ClassRole = {
 	PALADIN = {
+		[0] = "Melee",
 		[1] = "Caster",
 		[2] = "Tank",
 		[3] = "Melee"
@@ -112,12 +113,14 @@ E.ClassRole = {
 	PRIEST = "Caster",
 	WARLOCK = "Caster",
 	WARRIOR = {
+		[0] = "Melee",
 		[1] = "Melee",
 		[2] = "Melee",
 		[3] = "Tank"
 	},
 	HUNTER = "Melee",
 	SHAMAN = {
+		[0] = "Caster",
 		[1] = "Caster",
 		[2] = "Melee",
 		[3] = "Caster"
@@ -125,11 +128,13 @@ E.ClassRole = {
 	ROGUE = "Melee",
 	MAGE = "Caster",
 	DEATHKNIGHT = {
+		[0] = "Melee",
 		[1] = "Tank",
 		[2] = "Melee",
 		[3] = "Melee"
 	},
 	DRUID = {
+		[0] = "Caster",
 		[1] = "Caster",
 		[2] = "Melee",
 		[3] = "Caster"
