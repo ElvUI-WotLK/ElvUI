@@ -277,7 +277,7 @@ function E:WaitFunc(elapsed)
 		end
 	end
 
-	if total == 0 then
+	if #E.WaitTable == 0 then
 		self:Hide()
 	end
 end
