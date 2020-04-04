@@ -23,11 +23,11 @@ local INVERTED_POINTS = {
 	["BOTTOM"] = "TOP"
 }
 
-local function BloobFrameHide()
+local function BlobFrameHide()
 	M.blobWasVisible = nil
 end
 
-local function BloobFrameShow()
+local function BlobFrameShow()
 	M.blobWasVisible = true
 end
 
@@ -70,8 +70,8 @@ function M:PLAYER_REGEN_DISABLED()
 	WorldMapBlobFrame:ClearAllPoints()
 	WorldMapBlobFrame:SetPoint("TOP", UIParent, "BOTTOM")
 	WorldMapBlobFrame:Hide()
-	WorldMapBlobFrame.Hide = BloobFrameHide
-	WorldMapBlobFrame.Show = BloobFrameShow
+	WorldMapBlobFrame.Hide = BlobFrameHide
+	WorldMapBlobFrame.Show = BlobFrameShow
 	WorldMapBlobFrame.SetFrameLevel = E.noop
 	WorldMapBlobFrame.SetScale = E.noop
 
