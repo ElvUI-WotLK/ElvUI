@@ -31,17 +31,17 @@ local slots = {
 }
 
 local slotsLocales = {
-	["HeadSlot"] = L["Head"],
-	["ShoulderSlot"] = L["Shoulder"],
-	["ChestSlot"] = L["Chest"],
-	["WristSlot"] = L["Wrist"],
-	["HandsSlot"] = L["Hands"],
-	["WaistSlot"] = L["Waist"],
-	["LegsSlot"] = L["Legs"],
-	["FeetSlot"] = L["Feet"],
-	["MainHandSlot"] = L["Main Hand"],
-	["SecondaryHandSlot"] = L["Offhand"],
-	["RangedSlot"] = L["Ranged"],
+	["HeadSlot"] = HEADSLOT,
+	["ShoulderSlot"] = SHOULDERSLOT,
+	["ChestSlot"] = CHESTSLOT,
+	["WristSlot"] = WRISTSLOT,
+	["HandsSlot"] = HANDSSLOT,
+	["WaistSlot"] = WAISTSLOT,
+	["LegsSlot"] = LEGSSLOT,
+	["FeetSlot"] = FEETSLOT,
+	["MainHandSlot"] = MAINHANDSLOT,
+	["SecondaryHandSlot"] = SECONDARYHANDSLOT,
+	["RangedSlot"] = RANGEDSLOT,
 }
 
 local function OnEvent(self)
