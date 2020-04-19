@@ -304,6 +304,7 @@ end
 
 function NP:OnShow(isConfig, dontHideHighlight)
 	local frame = self.UnitFrame
+	NP:CheckRaidIcon(frame)
 
 	if self:IsShown() then
 		NP.VisiblePlates[frame] = 1
@@ -1005,6 +1006,13 @@ function NP:SPELL_UPDATE_COOLDOWN(...)
 	NP:ForEachVisiblePlate("StyleFilterUpdate", "SPELL_UPDATE_COOLDOWN")
 end
 
+function NP:RAID_TARGET_UPDATE()
+	for frame in pairs(self.VisiblePlates) do
+		NP:CheckRaidIcon(frame)
+		NP:StyleFilterUpdate(frame, "RAID_TARGET_UPDATE")
+	end
+end
+
 function NP:CacheArenaUnits()
 	twipe(self.ENEMY_PLAYER)
 	twipe(self.ENEMY_NPC)
@@ -1143,6 +1151,7 @@ function NP:Initialize()
 	self:RegisterEvent("PLAYER_LOGOUT", self.StyleFilterClearDefaults)
 	self:RegisterEvent("PLAYER_TARGET_CHANGED")
 	self:RegisterEvent("SPELL_UPDATE_COOLDOWN")
+	self:RegisterEvent("RAID_TARGET_UPDATE")
 
 	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
 	-- Arena & Arena Pets

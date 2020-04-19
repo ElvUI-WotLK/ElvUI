@@ -18,6 +18,16 @@ local UnitPower = UnitPower
 local UnitPowerMax = UnitPowerMax
 
 mod.TriggerConditions = {
+	raidTargets = {
+		STAR = "star",
+		CIRCLE = "circle",
+		DIAMOND = "diamond",
+		TRIANGLE = "triangle",
+		MOON = "moon",
+		SQUARE = "square",
+		CROSS = "cross",
+		SKULL = "skull",
+	},
 	frameTypes = {
 		["FRIENDLY_PLAYER"] = "friendlyPlayer",
 		["FRIENDLY_NPC"] = "friendlyNPC",
@@ -566,6 +576,11 @@ function mod:StyleFilterConditionCheck(frame, filter, trigger)
 		if ((reaction == 1 or reaction == 2 or reaction == 3) and trigger.reactionType.hostile) or (reaction == 4 and trigger.reactionType.neutral) or (reaction == 5 and trigger.reactionType.friendly) then passed = true else return end
 	end
 
+	-- Raid Target
+	if trigger.raidTarget.star or trigger.raidTarget.circle or trigger.raidTarget.diamond or trigger.raidTarget.triangle or trigger.raidTarget.moon or trigger.raidTarget.square or trigger.raidTarget.cross or trigger.raidTarget.skull then
+		if trigger.raidTarget[mod.TriggerConditions.raidTargets[frame.RaidIconType]] then passed = true else return end
+	end
+
 	-- Casting
 	if trigger.casting then
 		local b, c = frame.CastBar, trigger.casting
@@ -713,6 +728,10 @@ function mod:StyleFilterConfigure()
 					or (t.casting.isCasting or t.casting.isChanneling or t.casting.notCasting or t.casting.notChanneling) then
 						mod.StyleFilterTriggerEvents.FAKE_Casting = 0
 					end
+				end
+
+				if t.raidTarget and (t.raidTarget.star or t.raidTarget.circle or t.raidTarget.diamond or t.raidTarget.triangle or t.raidTarget.moon or t.raidTarget.square or t.raidTarget.cross or t.raidTarget.skull) then
+					mod.StyleFilterTriggerEvents.RAID_TARGET_UPDATE = 1
 				end
 
 				-- real events
