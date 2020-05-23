@@ -575,7 +575,7 @@ ElvUF.Tags.Methods["class"] = function(unit)
 	return UnitClass(unit)
 end
 
-ElvUF.Tags.Events["specialization"] = "UNIT_NAME_UPDATE ACTIVE_TALENT_GROUP_CHANGED PLAYER_TALENT_UPDATE UNIT_PORTRAIT_UPDATE"
+ElvUF.Tags.Events["specialization"] = "UNIT_NAME_UPDATE PLAYER_TARGET_CHANGED ACTIVE_TALENT_GROUP_CHANGED PLAYER_TALENT_UPDATE INSPECT_TALENT_READY UNIT_PORTRAIT_UPDATE"
 ElvUF.Tags.Methods["specialization"] = function(unit)
 	if (UnitIsPlayer(unit)) then
 		local GUID = UnitGUID(unit)
@@ -583,6 +583,12 @@ ElvUF.Tags.Methods["specialization"] = function(unit)
 			local _, specName = E:GetTalentSpecInfo()
 
 			return specName
+		else
+			if CanInspect(unit) then
+				local _, specName = E:GetTalentSpecInfo(true)
+
+				return specName
+			end
 		end
 	end
 end
