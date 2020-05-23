@@ -42,11 +42,10 @@ E.Options.args.tagGroup = {
 	},
 }
 
-
 for Tag in next, E.oUF.Tags.Methods do
 	if not E.TagInfo[Tag] then
-		E.TagInfo[Tag] = {category = "Miscellanous", description = ""}
-		--E:Print("['"..Tag.."'] = { category = 'Miscellanous', description = '' }")
+		E.TagInfo[Tag] = {category = "Miscellaneous", description = ""}
+		--E:Print("['"..Tag.."'] = { category = 'Miscellaneous', description = '' }")
 	end
 
 	if not E.Options.args.tagGroup.args[E.TagInfo[Tag].category] then
