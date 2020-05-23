@@ -577,14 +577,14 @@ end
 
 ElvUF.Tags.Events["specialization"] = "UNIT_NAME_UPDATE ACTIVE_TALENT_GROUP_CHANGED PLAYER_TALENT_UPDATE UNIT_PORTRAIT_UPDATE"
 ElvUF.Tags.Methods["specialization"] = function(unit)
-	local _, name
 	if (UnitIsPlayer(unit)) then
-		_, name = E:GetTalentSpecInfo()
-	else
-		_, name = E:GetTalentSpecInfo(true)
-	end
+		local GUID = UnitGUID(unit)
+		if GUID == E.myguid then
+			local _, specName = E:GetTalentSpecInfo()
 
-	return name
+			return specName
+		end
+	end
 end
 
 ElvUF.Tags.Events["name:title"] = "UNIT_NAME_UPDATE"
