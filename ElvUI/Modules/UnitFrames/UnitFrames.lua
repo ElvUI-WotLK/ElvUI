@@ -607,7 +607,11 @@ function UF.groupPrototype:Configure_Groups(frame)
 			if not group.isForced then
 				group:SetAttribute("maxColumns", db.raidWideSorting and numGroups or 1)
 				group:SetAttribute("unitsPerColumn", db.raidWideSorting and (db.groupsPerRowCol * 5) or 5)
-				UF.headerGroupBy[db.groupBy](group)
+				if UF.headerGroupBy[db.groupBy] then
+					UF.headerGroupBy[db.groupBy](group)
+				else
+					UF.headerGroupBy["GROUP"](group)
+				end
 				group:SetAttribute("sortDir", db.sortDir)
 				group:SetAttribute("showPlayer", db.showPlayer)
 			end
