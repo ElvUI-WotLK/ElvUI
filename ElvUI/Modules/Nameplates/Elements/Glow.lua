@@ -71,11 +71,17 @@ function NP:Update_Glow(frame)
 		if glowStyle == "style3" or glowStyle == "style5" or glowStyle == "style6" then
 			frame.LeftIndicator:Hide()
 			frame.RightIndicator:Hide()
-			frame.TopIndicator:Show()
+
+			if healthIsShown then
+				frame.TopIndicator:Show()
+			end
 		elseif glowStyle == "style4" or glowStyle == "style7" or glowStyle == "style8" then
 			frame.TopIndicator:Hide()
-			frame.LeftIndicator:Show()
-			frame.RightIndicator:Show()
+
+			if healthIsShown then
+				frame.LeftIndicator:Show()
+				frame.RightIndicator:Show()
+			end
 		end
 
 		-- Spark / Shadow
