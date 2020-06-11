@@ -3,7 +3,6 @@ local C, L = unpack(select(2, ...))
 local WM = E:GetModule("WorldMap")
 local MM = E:GetModule("Minimap")
 local AB = E:GetModule("ActionBars")
-local Misc = E:GetModule("Misc")
 
 E.Options.args.maps = {
 	type = "group",
@@ -32,7 +31,6 @@ E.Options.args.maps = {
 					type = "group",
 					name = L["General"],
 					guiInline = true,
-					disabled = function() return not WM.Initialized end,
 					args = {
 						smallerWorldMap = {
 							order = 1,
@@ -40,16 +38,25 @@ E.Options.args.maps = {
 							name = L["Smaller World Map"],
 							desc = L["Make the world map smaller."],
 							get = function(info) return E.global.general.smallerWorldMap end,
-							set = function(info, value) E.global.general.smallerWorldMap = value E:StaticPopup_Show("GLOBAL_RL") end
+							set = function(info, value) E.global.general.smallerWorldMap = value E:StaticPopup_Show("GLOBAL_RL") end,
+							disabled = function() return not WM.Initialized end
+						},
+						fadeMapWhenMoving = {
+							order = 2,
+							type = "toggle",
+							name = L["MAP_FADE_TEXT"],
+							get = function(info) return E.global.general.fadeMapWhenMoving end,
+							set = function(info, value) E.global.general.fadeMapWhenMoving = value WM:UpdateMapAlpha() end
 						},
 						mapAlphaWhenMoving = {
-							order = 2,
+							order = 3,
 							type = "range",
 							name = L["Map Opacity When Moving"],
 							isPercent = true,
 							min = 0, max = 1, step = 0.01,
 							get = function(info) return E.global.general.mapAlphaWhenMoving end,
-							set = function(info, value) E.global.general.mapAlphaWhenMoving = value Misc:UpdateMapAlpha() end
+							set = function(info, value) E.global.general.mapAlphaWhenMoving = value WM:UpdateMapAlpha() end,
+							disabled = function() return not E.global.general.fadeMapWhenMoving end
 						}
 					}
 				},

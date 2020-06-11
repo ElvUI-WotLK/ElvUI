@@ -9,6 +9,7 @@ local CreateFrame = CreateFrame
 local GetCVarBool = GetCVarBool
 local GetCursorPosition = GetCursorPosition
 local GetPlayerMapPosition = GetPlayerMapPosition
+local GetUnitSpeed = GetUnitSpeed
 
 local MOUSE_LABEL = MOUSE_LABEL
 local PLAYER = PLAYER
@@ -157,7 +158,53 @@ function M:ToggleMapFramerate()
 	end
 end
 
+function M:CheckMovement()
+	if not WorldMapFrame:IsShown() then return end
+
+	if GetUnitSpeed("player") ~= 0 then
+		if WorldMapPositioningGuide:IsMouseOver() then
+			WorldMapFrame:SetAlpha(1)
+			WorldMapBlobFrame:SetFillAlpha(128)
+			WorldMapBlobFrame:SetBorderAlpha(192)
+		else
+			WorldMapFrame:SetAlpha(E.global.general.mapAlphaWhenMoving)
+			WorldMapBlobFrame:SetFillAlpha(128 * E.global.general.mapAlphaWhenMoving)
+			WorldMapBlobFrame:SetBorderAlpha(192 * E.global.general.mapAlphaWhenMoving)
+		end
+	else
+		WorldMapFrame:SetAlpha(1)
+		WorldMapBlobFrame:SetFillAlpha(128)
+		WorldMapBlobFrame:SetBorderAlpha(192)
+	end
+end
+
+function M:UpdateMapAlpha()
+	local db = E.global.general
+
+	if db.fadeMapWhenMoving then
+		if (db.mapAlphaWhenMoving >= 1) and self.MovingTimer then
+			self:CancelTimer(self.MovingTimer)
+			self.MovingTimer = nil
+		elseif (db.mapAlphaWhenMoving < 1) and not self.MovingTimer then
+			self.MovingTimer = self:ScheduleRepeatingTimer("CheckMovement", 0.2)
+		end
+	else
+		if self.MovingTimer then
+			self:CancelTimer(self.MovingTimer)
+			self.MovingTimer = nil
+		end
+
+		if GetUnitSpeed("player") ~= 0 and not WorldMapPositioningGuide:IsMouseOver() then
+			WorldMapFrame:SetAlpha(1)
+			WorldMapBlobFrame:SetFillAlpha(128)
+			WorldMapBlobFrame:SetBorderAlpha(192)
+		end
+	end
+end
+
 function M:Initialize()
+	M:UpdateMapAlpha()
+
 	if not E.private.worldmap.enable then return end
 
 	if E.global.general.WorldMapCoordinates.enable then
@@ -166,13 +213,13 @@ function M:Initialize()
 		coordsHolder:SetFrameStrata(WorldMapDetailFrame:GetFrameStrata())
 
 		coordsHolder.playerCoords = coordsHolder:CreateFontString(nil, "OVERLAY")
-		coordsHolder.playerCoords:SetTextColor(1, 1 ,0)
+		coordsHolder.playerCoords:SetTextColor(1, 1, 0)
 		coordsHolder.playerCoords:SetFontObject(NumberFontNormal)
 		coordsHolder.playerCoords:SetPoint("BOTTOMLEFT", WorldMapDetailFrame, "BOTTOMLEFT", 5, 5)
 		coordsHolder.playerCoords:SetText(PLAYER..":   0, 0")
 
 		coordsHolder.mouseCoords = coordsHolder:CreateFontString(nil, "OVERLAY")
-		coordsHolder.mouseCoords:SetTextColor(1, 1 ,0)
+		coordsHolder.mouseCoords:SetTextColor(1, 1, 0)
 		coordsHolder.mouseCoords:SetFontObject(NumberFontNormal)
 		coordsHolder.mouseCoords:SetPoint("BOTTOMLEFT", coordsHolder.playerCoords, "TOPLEFT", 0, 5)
 

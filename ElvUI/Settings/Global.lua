@@ -9,6 +9,7 @@ G.general = {
 	eyefinity = false,
 	ignoreScalePopup = false,
 	smallerWorldMap = true,
+	fadeMapWhenMoving = true,
 	mapAlphaWhenMoving = 0.35,
 	AceGUI = {
 		width = 1000,

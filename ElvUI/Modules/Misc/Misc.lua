@@ -22,7 +22,6 @@ local GetNumRaidMembers = GetNumRaidMembers
 local GetPartyMember = GetPartyMember
 local GetRaidRosterInfo = GetRaidRosterInfo
 local GetRepairAllCost = GetRepairAllCost
-local GetUnitSpeed = GetUnitSpeed
 local GuildRoster = GuildRoster
 local HideRepairCursor = HideRepairCursor
 local InCombatLockdown = InCombatLockdown
@@ -274,31 +273,6 @@ function M:DisbandRaidGroup()
 	LeaveParty()
 end
 
-do
-	function M:CheckMovement()
-		if not WorldMapFrame:IsShown() then return end
-
-		if GetUnitSpeed("player") ~= 0 and not WorldMapPositioningGuide:IsMouseOver() then
-			WorldMapFrame:SetAlpha(E.global.general.mapAlphaWhenMoving)
-			WorldMapBlobFrame:SetFillAlpha(128 * E.global.general.mapAlphaWhenMoving)
-			WorldMapBlobFrame:SetBorderAlpha(192 * E.global.general.mapAlphaWhenMoving)
-		else
-			WorldMapFrame:SetAlpha(1)
-			WorldMapBlobFrame:SetFillAlpha(128)
-			WorldMapBlobFrame:SetBorderAlpha(192)
-		end
-	end
-
-	function M:ToggleMapAlpha()
-		if self.MovingTimer and E.global.general.mapAlphaWhenMoving >= 1 then
-			self:CancelTimer(self.MovingTimer)
-			self.MovingTimer = nil
-		elseif not self.MovingTimer and E.global.general.mapAlphaWhenMoving < 1 then
-			self.MovingTimer = self:ScheduleRepeatingTimer("CheckMovement", 0.2)
-		end
-	end
-end
-
 function M:PVPMessageEnhancement(_, msg)
 	if not E.db.general.enhancedPvpMessages then return end
 
@@ -359,7 +333,6 @@ function M:Initialize()
 
 	self:ToggleErrorHandling()
 	self:ToggleInterruptAnnounce()
-	self:ToggleMapAlpha()
 
 	self:RegisterEvent("CHAT_MSG_BG_SYSTEM_HORDE", "PVPMessageEnhancement")
 	self:RegisterEvent("CHAT_MSG_BG_SYSTEM_ALLIANCE", "PVPMessageEnhancement")
