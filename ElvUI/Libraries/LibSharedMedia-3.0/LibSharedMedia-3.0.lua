@@ -118,8 +118,11 @@ elseif locale == "zhTW" then
 elseif locale == "ruRU" then
 	LOCALE_MASK = lib.LOCALE_BIT_ruRU
 --
-	SML_MT_font["Arial Narrow"]						= [[Fonts\ARIALN.TTF]]
-	SML_MT_font["Nimrod MT"]						= [[Fonts\NIM_____.ttf]]
+	SML_MT_font["Arial Narrow"]			= [[Fonts\ARIALN.TTF]]
+	SML_MT_font["Friz Quadrata TT"]		= [[Fonts\FRIZQT__.TTF]]
+	SML_MT_font["Morpheus"]				= [[Fonts\MORPHEUS.TTF]]
+	SML_MT_font["Nimrod MT"]			= [[Fonts\NIM_____.ttf]]
+	SML_MT_font["Skurri"]				= [[Fonts\SKURRI.TTF]]
 --
 	lib.DefaultMedia.font = "Arial Narrow"
 --
