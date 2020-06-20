@@ -40,6 +40,7 @@ end
 
 local specChecked
 local function CheckSpec(self, event, levels)
+	if event == "SPELL_UPDATE_USABLE" then self:UnregisterEvent(event) end
 	if event == "CHARACTER_POINTS_CHANGED" and levels > 0 then return end
 
 	if not event then
@@ -113,6 +114,7 @@ local function Enable(object)
 	if playerClass == "SHAMAN" then
 		object:RegisterEvent("PLAYER_TALENT_UPDATE", CheckSpec)
 		object:RegisterEvent("CHARACTER_POINTS_CHANGED", CheckSpec)
+		object:RegisterEvent("SPELL_UPDATE_USABLE", CheckSpec)
 		CheckSpec()
 	end
 
@@ -125,6 +127,7 @@ local function Disable(object)
 	if playerClass == "SHAMAN" then
 		object:UnregisterEvent("PLAYER_TALENT_UPDATE", CheckSpec)
 		object:UnregisterEvent("CHARACTER_POINTS_CHANGED", CheckSpec)
+		object:UnregisterEvent("SPELL_UPDATE_USABLE", CheckSpec)
 	end
 
 	if object.DBHGlow then
