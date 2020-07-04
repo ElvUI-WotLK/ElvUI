@@ -1051,7 +1051,14 @@ end
 
 function NP:CacheGroupPetUnits()
 	twipe(self.FRIENDLY_NPC)
+	twipe(self.ENEMY_NPC)
 
+	for i = 1, 5 do
+		if UnitExists("arenapet"..i) then
+			local unit = format("arenapet%d", i)
+			self.ENEMY_NPC[UnitName(unit)] = unit
+		end
+	end
 	if GetNumRaidMembers() > 0 then
 		for i = 1, 40 do
 			if UnitExists("raidpet"..i) then
