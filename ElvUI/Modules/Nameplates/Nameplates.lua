@@ -32,7 +32,7 @@ local WorldGetNumChildren = WorldFrame.GetNumChildren
 
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS
 
-local numChildren, hasTarget = 0
+local lastChildern, numChildren, hasTarget = 0, 0
 local OVERLAY = [=[Interface\TargetingFrame\UI-TargetingFrame-Flash]=]
 local FSPAT = "%s*"..(gsub(gsub(_G.FOREIGN_SERVER_LABEL, "^%s", ""), "[%*()]", "%%%1")).."$"
 
@@ -808,24 +808,22 @@ function NP:SetMouseoverFrame(frame)
 	end
 end
 
-local function findNewPlate(num)
-	if num == numChildren then return end
-
-	for i = numChildren + 1, num do
-		local frame = select(i, WorldGetChildren(WorldFrame))
-		if not NP.CreatedPlates[frame] then
-			local region = frame:GetRegions()
-			if region and region:GetObjectType() == "Texture" and region:GetTexture() == OVERLAY then
-				NP:OnCreated(frame)
-			end
+local function findNewPlate(...)
+	for i = lastChildern + 1, numChildren do
+		local frame = select(i, ...)
+		local region = frame:GetRegions()
+		if region and region:GetObjectType() == "Texture" and region:GetTexture() == OVERLAY and not NP.CreatedPlates[frame] then
+			NP:OnCreated(frame)
 		end
 	end
-
-	numChildren = num
 end
 
 function NP:OnUpdate()
-	findNewPlate(WorldGetNumChildren(WorldFrame))
+	numChildren = WorldGetNumChildren(WorldFrame)
+	if lastChildern ~= numChildren then
+		findNewPlate(WorldGetChildren(WorldFrame))
+		lastChildern = numChildren
+	end
 
 	for frame in pairs(NP.VisiblePlates) do
 		if hasTarget then

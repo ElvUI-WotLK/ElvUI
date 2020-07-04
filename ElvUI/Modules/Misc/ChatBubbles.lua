@@ -9,6 +9,7 @@ local format, gmatch, gsub, lower, match = string.format, string.gmatch, string.
 local GetPlayerInfoByGUID = GetPlayerInfoByGUID
 local WorldFrame = WorldFrame
 local WorldGetChildren = WorldFrame.GetChildren
+local WorldGetNumChildren = WorldFrame.GetNumChildren
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS
 
 --Message caches
@@ -209,9 +210,8 @@ function M:SkinBubble(frame)
 end
 
 function M:IsChatBubble(frame)
-	local region
 	for i = 1, frame:GetNumRegions() do
-		region = select(i, frame:GetRegions())
+		local region = select(i, frame:GetRegions())
 		if region.GetTexture and region:GetTexture() and region:GetTexture() == [[Interface\Tooltips\ChatBubble-Background]] then
 			return true
 		end
@@ -225,22 +225,14 @@ local function ChatBubble_OnEvent(self, event, msg, sender, _, _, _, _, _, _, _,
 	messageToSender[msg] = sender
 end
 
-local numChildren = 0
+local lastChildern, numChildren = 0, 0
 local function findChatBubbles(...)
-	local argc = select("#", ...)
-	if argc == numChildren then return end
-
-	local frame
-	for i = numChildren + 1, argc do
-		frame = select(i, ...)
-		if M:IsChatBubble(frame) then
-			if not frame.isSkinnedElvUI then
-				M:SkinBubble(frame)
-			end
+	for i = lastChildern + 1, numChildren do
+		local frame = select(i, ...)
+		if not frame.isSkinnedElvUI and M:IsChatBubble(frame) then
+			M:SkinBubble(frame)
 		end
 	end
-
-	numChildren = argc
 end
 
 local function ChatBubble_OnUpdate(self, elapsed)
@@ -248,7 +240,11 @@ local function ChatBubble_OnUpdate(self, elapsed)
 	if self.lastupdate < .1 then return end
 	self.lastupdate = 0
 
-	findChatBubbles(WorldGetChildren(WorldFrame))
+	numChildren = WorldGetNumChildren(WorldFrame)
+	if lastChildern ~= numChildren then
+		findChatBubbles(WorldGetChildren(WorldFrame))
+		lastChildern = numChildren
+	end
 end
 
 function M:LoadChatBubbles()
