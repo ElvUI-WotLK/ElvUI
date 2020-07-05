@@ -905,6 +905,7 @@ function E:UpdateAll(ignoreInstall)
 
 	if E.private.general.minimap.enable then
 		Minimap:UpdateSettings()
+		ReminderBuffs:UpdateSettings()
 	end
 
 	if E.private.nameplates.enable then
@@ -919,8 +920,6 @@ function E:UpdateAll(ignoreInstall)
 		Totems:ToggleEnable()
 		Totems:PositionAndSize()
 	end
-
-	ReminderBuffs:UpdateSettings()
 
 	if E.private.unitframe.enable then
 		UnitFrames:Update_AllFrames()
