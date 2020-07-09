@@ -186,7 +186,6 @@ E.Options.args.chat = {
 							type = "execute",
 							name = L["Reset History"],
 							func = function() CH:ResetHistory() end,
-							buttonElvUI = true,
 							disabled = function() return not E.db.chat.chatHistory end
 						},
 						historySize = {
