@@ -11,92 +11,92 @@ local GetAchievementNumCriteria = GetAchievementNumCriteria
 local GetAchievementCriteriaInfo = GetAchievementCriteriaInfo
 local CRITERIA_TYPE_ACHIEVEMENT = CRITERIA_TYPE_ACHIEVEMENT
 
-local function LoadSkin(preSkin)
+local function skinAchievement(achievement, biggerIcon)
+	if achievement.isSkinned then return end
+
+	_G[achievement:GetName().."Background"]:Kill()
+	achievement:StripTextures()
+	achievement:SetTemplate("Default", true)
+	achievement.icon:SetTemplate()
+	achievement.icon:SetSize(biggerIcon and 54 or 36, biggerIcon and 54 or 36)
+	achievement.icon:ClearAllPoints()
+	achievement.icon:Point("TOPLEFT", 8, -8)
+	achievement.icon.bling:Kill()
+	achievement.icon.frame:Kill()
+	achievement.icon.texture:SetTexCoord(unpack(E.TexCoords))
+	achievement.icon.texture:SetInside()
+
+	if achievement.highlight then
+		achievement.highlight:StripTextures()
+		achievement:HookScript("OnEnter", S.SetModifiedBackdrop)
+		achievement:HookScript("OnLeave", S.SetOriginalBackdrop)
+	end
+
+	if achievement.label then
+		achievement.label:SetTextColor(1, 1, 1)
+	end
+
+	if achievement.description then
+		achievement.description:SetTextColor(.6, .6, .6)
+		achievement.description.SetTextColor = E.noop
+	end
+
+	if achievement.hiddenDescription then
+		achievement.hiddenDescription:SetTextColor(1, 1, 1)
+	end
+
+	if achievement.tracked then
+		S:HandleCheckBox(achievement.tracked, true)
+		achievement.tracked:Size(14, 14)
+		achievement.tracked:ClearAllPoints()
+		achievement.tracked:Point("TOPLEFT", achievement.icon, "BOTTOMLEFT", 0, -2)
+	end
+
+	hooksecurefunc(achievement, "Saturate", function(self)
+		self:SetBackdropBorderColor(unpack(E.media.bordercolor))
+	end)
+	hooksecurefunc(achievement, "Desaturate", function(self)
+		self:SetBackdropBorderColor(unpack(E.media.bordercolor))
+	end)
+
+	achievement.isSkinned = true
+end
+
+local function LoadSkin()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.achievement then return end
 
-	local function skinAchievement(achievement, biggerIcon)
-		if achievement.isSkinned then return end
-
-		_G[achievement:GetName().."Background"]:Kill()
-		achievement:StripTextures()
-		achievement:SetTemplate("Default", true)
-		achievement.icon:SetTemplate()
-		achievement.icon:SetSize(biggerIcon and 54 or 36, biggerIcon and 54 or 36)
-		achievement.icon:ClearAllPoints()
-		achievement.icon:Point("TOPLEFT", 8, -8)
-		achievement.icon.bling:Kill()
-		achievement.icon.frame:Kill()
-		achievement.icon.texture:SetTexCoord(unpack(E.TexCoords))
-		achievement.icon.texture:SetInside()
-
-		if achievement.highlight then
-			achievement.highlight:StripTextures()
-			achievement:HookScript("OnEnter", S.SetModifiedBackdrop)
-			achievement:HookScript("OnLeave", S.SetOriginalBackdrop)
-		end
-
-		if achievement.label then
-			achievement.label:SetTextColor(1, 1, 1)
-		end
-
-		if achievement.description then
-			achievement.description:SetTextColor(.6, .6, .6)
-			achievement.description.SetTextColor = E.noop
-		end
-
-		if achievement.hiddenDescription then
-			achievement.hiddenDescription:SetTextColor(1, 1, 1)
-		end
-
-		if achievement.tracked then
-			S:HandleCheckBox(achievement.tracked, true)
-			achievement.tracked:Size(14, 14)
-			achievement.tracked:ClearAllPoints()
-			achievement.tracked:Point("TOPLEFT", achievement.icon, "BOTTOMLEFT", 0, -2)
-		end
-
-		hooksecurefunc(achievement, "Saturate", function(self)
-			self:SetBackdropBorderColor(unpack(E.media.bordercolor))
-		end)
-		hooksecurefunc(achievement, "Desaturate", function(self)
-			self:SetBackdropBorderColor(unpack(E.media.bordercolor))
-		end)
-
-		achievement.isSkinned = true
-	end
-
-	if preSkin then
-		hooksecurefunc("HybridScrollFrame_CreateButtons", function(frame, template)
-			if template == "AchievementCategoryTemplate" then
-				for _, button in ipairs(frame.buttons) do
-					if not button.isSkinned then
-						button:StripTextures(true)
-						button:StyleButton()
-						button.isSkinned = true
-					end
-				end
-			elseif template == "AchievementTemplate" then
-				for _, achievement in ipairs(frame.buttons) do
-					skinAchievement(achievement, true)
-				end
-			elseif template == "ComparisonTemplate" then
-				for _, achievement in ipairs(frame.buttons) do
-					skinAchievement(achievement.player)
-					skinAchievement(achievement.friend)
-				end
-			elseif template == "StatTemplate" then
-				for _, stats in ipairs(frame.buttons) do
-					if not stats.isSkinned then
-					--	stats:StripTextures(true)
-						stats:StyleButton()
-						stats.isSkinned = true
-					end
+	hooksecurefunc("HybridScrollFrame_CreateButtons", function(frame, template)
+		if template == "AchievementCategoryTemplate" then
+			for _, button in ipairs(frame.buttons) do
+				if not button.isSkinned then
+					button:StripTextures(true)
+					button:StyleButton()
+					button.isSkinned = true
 				end
 			end
-		end)
+		elseif template == "AchievementTemplate" then
+			for _, achievement in ipairs(frame.buttons) do
+				skinAchievement(achievement, true)
+			end
+		elseif template == "ComparisonTemplate" then
+			for _, achievement in ipairs(frame.buttons) do
+				skinAchievement(achievement.player)
+				skinAchievement(achievement.friend)
+			end
+		elseif template == "StatTemplate" then
+			for _, stats in ipairs(frame.buttons) do
+				if not stats.isSkinned then
+				--	stats:StripTextures(true)
+					stats:StyleButton()
+					stats.isSkinned = true
+				end
+			end
+		end
+	end)
+end)
 
-		if not IsAddOnLoaded("Blizzard_AchievementUI") then return end
-	end
+local function LoadAchievementUISkin()
+	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.achievement then return end
 
 	local frames = {
 		"AchievementFrame",
@@ -537,7 +537,7 @@ local function LoadSkin(preSkin)
 			end
 		end
 	end)
-end
+end)
 
-S:AddCallback("Skin_AchievementUI_HybridScrollButton", function() LoadSkin(true) end)
-S:AddCallbackForAddon("Blizzard_AchievementUI", "Skin_Blizzard_AchievementUI", LoadSkin)
+S:AddCallback("Skin_AchievementUI_HybridScrollButton", LoadSkin)
+S:AddCallbackForAddon("Blizzard_AchievementUI", "Skin_Blizzard_AchievementUI", LoadAchievementUISkin)

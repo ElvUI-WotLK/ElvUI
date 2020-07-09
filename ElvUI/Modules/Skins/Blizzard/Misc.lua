@@ -186,6 +186,14 @@ local function LoadSkin()
 	local menuLevel = 0
 	local maxButtons = 0
 
+	local function dropDownButtonShow(self)
+		if self.notCheckable then
+			self.check.backdrop:Hide()
+		else
+			self.check.backdrop:Show()
+		end
+	end
+
 	local function skinDropdownMenu()
 		local updateButtons = maxButtons < UIDROPDOWNMENU_MAXBUTTONS
 
@@ -196,31 +204,34 @@ local function LoadSkin()
 				if not frame.isSkinned then
 					_G["DropDownList"..i.."Backdrop"]:SetTemplate("Transparent")
 					_G["DropDownList"..i.."MenuBackdrop"]:SetTemplate("Transparent")
+					
+					frame.isSkinned = true
+				end
 
-					if updateButtons then
-						for j = 1, UIDROPDOWNMENU_MAXBUTTONS do
-							local button = _G["DropDownList"..i.."Button"..j]
+				if updateButtons then
+					for j = 1, UIDROPDOWNMENU_MAXBUTTONS do
+						local button = _G["DropDownList"..i.."Button"..j]
 
-							if not button.isSkinned then
-								S:HandleButtonHighlight(_G["DropDownList"..i.."Button"..j.."Highlight"])
+						if not button.isSkinned then
+							S:HandleButtonHighlight(_G["DropDownList"..i.."Button"..j.."Highlight"])
 
-								if checkBoxSkin then
-									local check = _G["DropDownList"..i.."Button"..j.."Check"]
-									check:Size(12)
-									check:Point("LEFT", 1, 0)
-									check:CreateBackdrop()
-									check:SetTexture(E.media.normTex)
-									check:SetVertexColor(1, 0.82, 0, 0.8)
-								end
+							if checkBoxSkin then
+								local check = _G["DropDownList"..i.."Button"..j.."Check"]
+								check:Size(12)
+								check:Point("LEFT", 1, 0)
+								check:CreateBackdrop()
+								check:SetTexture(E.media.normTex)
+								check:SetVertexColor(1, 0.82, 0, 0.8)
 
-								S:HandleColorSwatch(_G["DropDownList"..i.."Button"..j.."ColorSwatch"], 14)
-
-								button.isSkinned = true
+								button.check = check
+								hooksecurefunc(button, "Show", dropDownButtonShow)
 							end
+
+							S:HandleColorSwatch(_G["DropDownList"..i.."Button"..j.."ColorSwatch"], 14)
+
+							button.isSkinned = true
 						end
 					end
-
-					frame.isSkinned = true
 				end
 			end
 
