@@ -57,7 +57,6 @@ local istable={["table"]=true,   _="table"}
 local ismethodtable={["table"]=true,["string"]=true,["function"]=true,   _="methodname, funcref or table"}
 local optstring={["nil"]=true,["string"]=true, _="string"}
 local optstringfunc={["nil"]=true,["string"]=true,["function"]=true, _="string or funcref"}
-local optstringnumberfunc={["nil"]=true,["string"]=true,["number"]=true,["function"]=true, _="string, number or funcref"}
 local optnumber={["nil"]=true,["number"]=true, _="number"}
 local optnumberfunc={["nil"]=true,["number"]=true,["function"]=true,_="number"} -- added by ElvUI for range
 local optmethodfalse={["nil"]=true,["string"]=true,["function"]=true,["boolean"]={[false]=true},  _="methodname, funcref or false"}
@@ -76,7 +75,7 @@ local basekeys={
 	descStyle=optstring,
 	order=optmethodnumber,
 	validate=optmethodfalse,
-	validatePopup=optbool,
+	validatePopup=optbool, --ElvUI
 	confirm=optmethodbool,
 	confirmText=optstring,
 	disabled=optmethodbool,
@@ -96,8 +95,6 @@ local basekeys={
 	-- below here were created by ElvUI --
 	customWidth=optnumber,
 	textWidth=optmethodbool,
-	sliderElvUI=optmethodbool,
-	buttonElvUI=optmethodbool,
 	sortByValue=optmethodbool,
 	dragdrop=optmethodbool,
 		dragOnEnter=optmethodfalse,
@@ -163,12 +160,12 @@ local typedkeys={
 	tristate={
 	},
 	range={
-		min=optnumberfunc,
-		softMin=optnumberfunc,
-		max=optnumberfunc,
-		softMax=optnumberfunc,
+		min=optnumberfunc, --ElvUI
+		softMin=optnumberfunc, --ElvUI
+		max=optnumberfunc, --ElvUI
+		softMax=optnumberfunc, --ElvUI
 		step=optnumber,
-		bigStep=optnumberfunc,
+		bigStep=optnumberfunc, --ElvUI
 		isPercent=optbool,
 		control=optstring,
 		dialogControl=optstring,

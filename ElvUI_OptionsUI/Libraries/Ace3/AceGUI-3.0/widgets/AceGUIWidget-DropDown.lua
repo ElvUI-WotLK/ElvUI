@@ -356,7 +356,7 @@ end
 
 do
 	local widgetType = "Dropdown"
-	local widgetVersion = 34
+	local widgetVersion = 35
 
 	--[[ Static data ]]--
 
@@ -465,6 +465,7 @@ do
 		self:SetWidth(200)
 		self:SetLabel()
 		self:SetPulloutWidth(nil)
+		self.list = {}
 	end
 
 	-- exported, AceGUI callback
@@ -535,9 +536,7 @@ do
 
 	-- exported
 	local function SetValue(self, value)
-		if self.list then
-			self:SetText(self.list[value] or "")
-		end
+		self:SetText(self.list[value] or "")
 		self.value = value
 	end
 
@@ -615,7 +614,7 @@ do
 	end
 
 	local function SetList(self, list, order, itemType, sortByValue)
-		self.list = list
+		self.list = list or {}
 		self.pullout:Clear()
 		self.hasClose = nil
 		if not list then return end
@@ -655,10 +654,8 @@ do
 
 	-- exported
 	local function AddItem(self, value, text, itemType)
-		if self.list then
-			self.list[value] = text
-			AddListItem(self, value, text, itemType)
-		end
+		self.list[value] = text
+		AddListItem(self, value, text, itemType)
 	end
 
 	-- exported
