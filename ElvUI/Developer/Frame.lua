@@ -6,7 +6,7 @@ local print = print
 local select = select
 local tostring = tostring
 local type = type
-local find, format = string.find, string.format
+local find, format, match = string.find, string.format, string.match
 local tconcat = table.concat
 --WoW API / Variables
 local FrameStackTooltip_Toggle = FrameStackTooltip_Toggle
@@ -54,13 +54,33 @@ local function getObject(objName)
 	else
 		obj = _G[objName]
 
-		if not obj and find(objName, "[%.()%[%]'\"]") then
-			local success, ret = pcall(loadstring("return " .. objName))
-			if success then
-				ret = ret == "string" and _G[ret] or ret
+		if not obj then
+			local pass
 
-				if type(ret) == "table" and ret.GetName then
-					obj = ret
+			if find(objName, "^[%.:]([A-z0-9_]+)") then
+				local _obj = GetMouseFocus()
+
+				if _obj and _obj ~= WorldFrame then
+					local res = match(objName, "^[%.:]([A-z0-9_]+)")
+
+					if res and _obj[res] and _obj:GetName() then
+						objName = format("%s%s", _obj:GetName(), objName)
+					end
+
+					pass = true
+				end
+			elseif find(objName, "[%.()%[%]'\"]") then
+				pass = true
+			end
+
+			if pass then
+				local success, ret = pcall(loadstring(format("return %s", objName)))
+				if success then
+					ret = ret == "string" and _G[ret] or ret
+
+					if type(ret) == "table" and ret.GetName then
+						obj = ret
+					end
 				end
 			end
 		end
@@ -199,7 +219,7 @@ end
 SLASH_TEXLIST1 = "/texlist"
 SlashCmdList.TEXLIST = function(frame)
 	frame = getObject(frame)
-	if not frame then return end
+	if not (frame and frame.GetNumRegions) then return end
 
 	for i = 1, frame:GetNumRegions() do
 		local region = select(i, frame:GetRegions())
@@ -214,7 +234,7 @@ end
 SLASH_REGLIST1 = "/reglist"
 SlashCmdList.REGLIST = function(frame)
 	frame = getObject(frame)
-	if not frame then return end
+	if not (frame and frame.GetNumRegions) then return end
 
 	for i = 1, frame:GetNumRegions() do
 		local region = select(i, frame:GetRegions())
@@ -227,7 +247,7 @@ end
 SLASH_CHILDLIST1 = "/childlist"
 SlashCmdList.CHILDLIST = function(frame)
 	frame = getObject(frame)
-	if not frame then return end
+	if not (frame and frame.GetNumChildren) then return end
 
 	for i = 1, frame:GetNumChildren() do
 		local obj = select(i, frame:GetChildren())
