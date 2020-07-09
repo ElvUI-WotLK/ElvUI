@@ -117,6 +117,7 @@ do
 	DisableAddOn("ElvUI_FogOfWar")
 	DisableAddOn("ElvUI_VisualAuraTimers")
 	DisableAddOn("ElvUI_MinimapButtons")
+	DisableAddOn("ElvUI_ChannelAlerts")
 end
 
 function AddOn:OnInitialize()

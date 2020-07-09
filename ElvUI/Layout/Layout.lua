@@ -137,7 +137,7 @@ end
 
 function LO:SetChatTabStyle()
 	local tabStyle = (E.db.chat.panelTabTransparency and "Transparent") or "Default"
-	local glossTex = (not tabStyle and true) or nil
+	local glossTex = E.db.chat.panelTabTransparency and nil or true
 
 	LeftChatTab:SetTemplate(tabStyle, glossTex)
 	RightChatTab:SetTemplate(tabStyle, glossTex)
