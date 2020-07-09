@@ -204,7 +204,7 @@ S:AddCallback("Skin_Misc", function()
 				if not frame.isSkinned then
 					_G["DropDownList"..i.."Backdrop"]:SetTemplate("Transparent")
 					_G["DropDownList"..i.."MenuBackdrop"]:SetTemplate("Transparent")
-					
+
 					frame.isSkinned = true
 				end
 
