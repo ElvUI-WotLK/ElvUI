@@ -9,7 +9,7 @@ local unpack = unpack
 --local BOOKTYPE_SPELL = BOOKTYPE_SPELL
 local MAX_SKILLLINE_TABS = MAX_SKILLLINE_TABS
 
-local function LoadSkin()
+S:AddCallback("Skin_Spellbook", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.spellbook then return end
 
 	SpellBookFrame:StripTextures(true)
@@ -98,6 +98,4 @@ local function LoadSkin()
 	SpellBookSkillLineTab1:Point("TOPLEFT", SpellBookFrame, "TOPRIGHT", -33, -65)
 
 	SpellBookPageText:SetTextColor(1, 1, 1)
-end
-
-S:AddCallback("Skin_Spellbook", LoadSkin)
+end)

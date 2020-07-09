@@ -6,7 +6,7 @@ local _G = _G
 local unpack = unpack
 --WoW API / Variables
 
-local function LoadSkin()
+S:AddCallbackForAddon("Blizzard_GlyphUI", "Skin_Blizzard_GlyphUI", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.talent then return end
 
 	if not PlayerTalentFrame then
@@ -97,6 +97,4 @@ local function LoadSkin()
 			sparkle.animGroup.translate:SetOffset(animation.xStop - animation.xStart, animation.yStop - animation.yStart)
 		end)
 	end
-end
-
-S:AddCallbackForAddon("Blizzard_GlyphUI", "Skin_Blizzard_GlyphUI", LoadSkin)
+end)

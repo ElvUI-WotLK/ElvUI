@@ -6,7 +6,7 @@ local _G = _G
 --WoW API / Variables
 local CanQueueForWintergrasp = CanQueueForWintergrasp
 
-local function LoadSkin()
+S:AddCallback("Skin_PvP", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.pvp then return end
 
 	PVPParentFrame:CreateBackdrop("Transparent")
@@ -152,6 +152,4 @@ local function LoadSkin()
 	BattlefieldFrameGroupJoinButton:Point("RIGHT", BattlefieldFrameJoinButton, "LEFT", -3, 0)
 	BattlefieldFrameJoinButton:Point("RIGHT", BattlefieldFrameCancelButton, "LEFT", -3, 0)
 	BattlefieldFrameCancelButton:Point("CENTER", BattlefieldFrame, "TOPLEFT", 302, -417)
-end
-
-S:AddCallback("Skin_PvP", LoadSkin)
+end)

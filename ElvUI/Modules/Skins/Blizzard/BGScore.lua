@@ -9,7 +9,7 @@ local GetBattlefieldScore = GetBattlefieldScore
 local IsActiveBattlefieldArena = IsActiveBattlefieldArena
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS
 
-local function LoadSkin()
+S:AddCallback("Skin_WorldStateScore", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.bgscore then return end
 
 	WorldStateScoreFrame:StripTextures()
@@ -99,6 +99,4 @@ local function LoadSkin()
 			end
 		end
 	end)
-end
-
-S:AddCallback("Skin_WorldStateScore", LoadSkin)
+end)

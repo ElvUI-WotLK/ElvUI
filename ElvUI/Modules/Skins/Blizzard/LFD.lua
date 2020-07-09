@@ -12,7 +12,7 @@ local GetLFGDungeonRewardLink = GetLFGDungeonRewardLink
 local GetLFGDungeonRewards = GetLFGDungeonRewards
 local hooksecurefunc = hooksecurefunc
 
-local function LoadSkin()
+S:AddCallback("Skin_LFD", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.lfd then return end
 
 	LFDQueueFrame:StripTextures(true)
@@ -246,6 +246,4 @@ local function LoadSkin()
 			button.texture:SetTexture(texturePath)
 		end
 	end)
-end
-
-S:AddCallback("Skin_LFD", LoadSkin)
+end)

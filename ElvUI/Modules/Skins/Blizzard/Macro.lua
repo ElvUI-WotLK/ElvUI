@@ -6,7 +6,7 @@ local _G = _G
 local unpack = unpack
 --WoW API / Variables
 
-local function LoadSkin()
+S:AddCallbackForAddon("Blizzard_MacroUI", "Skin_Blizzard_MacroUI", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.macro then return end
 
 	MacroFrame:StripTextures()
@@ -128,6 +128,4 @@ local function LoadSkin()
 	MacroPopupScrollFrameScrollBar:Point("BOTTOMLEFT", MacroPopupScrollFrame, "BOTTOMRIGHT", 4, 18)
 
 	MacroPopupOkayButton:Point("RIGHT", MacroPopupCancelButton, "LEFT", -3, 0)
-end
-
-S:AddCallbackForAddon("Blizzard_MacroUI", "Skin_Blizzard_MacroUI", LoadSkin)
+end)

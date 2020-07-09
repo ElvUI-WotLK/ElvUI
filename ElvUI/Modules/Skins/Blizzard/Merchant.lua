@@ -10,7 +10,7 @@ local GetItemInfo = GetItemInfo
 local GetItemQualityColor = GetItemQualityColor
 local GetMerchantNumItems = GetMerchantNumItems
 
-local function LoadSkin()
+S:AddCallback("Skin_Merchant", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.merchant then return end
 
 	local MerchantFrame = _G.MerchantFrame
@@ -234,6 +234,4 @@ local function LoadSkin()
 		MerchantItem7:SetPoint("TOPLEFT", "MerchantItem5", "BOTTOMLEFT", 0, -15)
 		MerchantItem9:SetPoint("TOPLEFT", "MerchantItem7", "BOTTOMLEFT", 0, -15)
 	end)
-end
-
-S:AddCallback("Skin_Merchant", LoadSkin)
+end)

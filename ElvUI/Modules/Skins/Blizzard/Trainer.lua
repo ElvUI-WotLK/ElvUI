@@ -8,7 +8,7 @@ local find = string.find
 --WoW API / Variables
 local hooksecurefunc = hooksecurefunc
 
-local function LoadSkin()
+S:AddCallbackForAddon("Blizzard_TrainerUI", "Skin_Blizzard_TrainerUI", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.trainer then return end
 
 	ClassTrainerFrame:StripTextures(true)
@@ -133,6 +133,4 @@ local function LoadSkin()
 			ClassTrainerSkillIcon:SetTemplate("Default")
 		end
 	end)
-end
-
-S:AddCallbackForAddon("Blizzard_TrainerUI", "Skin_Blizzard_TrainerUI", LoadSkin)
+end)

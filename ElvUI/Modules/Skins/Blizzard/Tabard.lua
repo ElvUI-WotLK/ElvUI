@@ -4,7 +4,7 @@ local S = E:GetModule("Skins")
 --Lua functions
 --WoW API / Variables
 
-local function LoadSkin()
+S:AddCallback("Skin_Tabard", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.tabard then return end
 
 	TabardFrame:StripTextures()
@@ -56,6 +56,4 @@ local function LoadSkin()
 	TabardFrameAcceptButton:Point("CENTER", TabardFrame, "TOPLEFT", 221, -417)
 
 	TabardModel:SetModelScale(1.25)
-end
-
-S:AddCallback("Skin_Tabard", LoadSkin)
+end)

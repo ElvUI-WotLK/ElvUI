@@ -6,7 +6,7 @@ local _G = _G
 local select = select
 --WoW API / Variables
 
-local function LoadSkin()
+S:AddCallback("Skin_ArenaRegistrar", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.arenaregistrar then return end
 
 	ArenaRegistrarFrame:StripTextures(true)
@@ -84,6 +84,4 @@ local function LoadSkin()
 
 	PVPBannerFrameCancelButton2:Point("CENTER", PVPBannerFrame, "TOPLEFT", 304, -417)
 	PVPBannerFrameAcceptButton:Point("CENTER", PVPBannerFrame, "TOPLEFT", 221, -417)
-end
-
-S:AddCallback("Skin_ArenaRegistrar", LoadSkin)
+end)

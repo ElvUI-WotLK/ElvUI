@@ -6,7 +6,7 @@ local _G = _G
 local select = select
 --WoW API / Variables
 
-local function LoadSkin()
+S:AddCallback("Skin_Help", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.help then return end
 
 	HelpFrame:StripTextures()
@@ -141,6 +141,4 @@ local function LoadSkin()
 	HelpFrameViewResponseIssueResolved:Point("LEFT", HelpFrameViewResponseMoreHelp, "RIGHT", 3, 0)
 	HelpFrameViewResponseCancel:Height(21)
 	HelpFrameViewResponseCancel:Point("BOTTOMRIGHT", -53, 22)
-end
-
-S:AddCallback("Skin_Help", LoadSkin)
+end)

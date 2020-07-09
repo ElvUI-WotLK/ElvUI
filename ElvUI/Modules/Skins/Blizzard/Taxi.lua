@@ -4,7 +4,7 @@ local S = E:GetModule("Skins")
 --Lua functions
 --WoW API / Variables
 
-local function LoadSkin()
+S:AddCallback("Skin_Taxi", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.taxi then return end
 
 	TaxiFrame:StripTextures()
@@ -33,6 +33,4 @@ local function LoadSkin()
 
 	TaxiMap:Point("TOP", -11, -48)
 	TaxiRouteMap:Point("TOP", -11, -48)
-end
-
-S:AddCallback("Skin_Taxi", LoadSkin)
+end)

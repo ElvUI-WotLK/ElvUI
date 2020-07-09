@@ -24,7 +24,7 @@ local NUM_COMPANIONS_PER_PAGE = NUM_COMPANIONS_PER_PAGE
 local NUM_FACTIONS_DISPLAYED = NUM_FACTIONS_DISPLAYED
 local NUM_GEARSET_ICONS_PER_ROW = NUM_GEARSET_ICONS_PER_ROW
 
-local function LoadSkin()
+S:AddCallback("Skin_Character", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.character then return end
 
 	-- CharacterFrame
@@ -804,6 +804,4 @@ local function LoadSkin()
 	S:HandleCheckBox(TokenFramePopupBackpackCheckBox)
 
 	TokenFramePopup:Point("TOPLEFT", TokenFrame, "TOPRIGHT", -33, -12)
-end
-
-S:AddCallback("Skin_Character", LoadSkin)
+end)

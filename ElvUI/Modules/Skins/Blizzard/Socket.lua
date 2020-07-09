@@ -7,7 +7,7 @@ local _G = _G
 local GetNumSockets = GetNumSockets
 local GetSocketTypes = GetSocketTypes
 
-local function LoadSkin()
+S:AddCallbackForAddon("Blizzard_ItemSocketingUI", "Skin_Blizzard_ItemSocketingUI", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.socket then return end
 
 	ITEM_SOCKETING_DESCRIPTION_MIN_WIDTH = 278
@@ -87,6 +87,4 @@ local function LoadSkin()
 			self:Width(321)
 		end
 	end)
-end
-
-S:AddCallbackForAddon("Blizzard_ItemSocketingUI", "Skin_Blizzard_ItemSocketingUI", LoadSkin)
+end)

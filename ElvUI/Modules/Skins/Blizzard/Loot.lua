@@ -19,7 +19,7 @@ local ITEMS = ITEMS
 local LOOT = LOOT
 local LOOTFRAME_NUMBUTTONS = LOOTFRAME_NUMBUTTONS
 
-local function LoadSkin()
+S:AddCallback("Skin_Loot", function()
 	if E.private.general.loot then return end
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.loot then return end
 
@@ -137,9 +137,9 @@ local function LoadSkin()
 			end
 		end
 	end)
-end
+end)
 
-local function LoadRollSkin()
+S:AddCallback("Skin_LootRoll", function()
 	if E.private.general.lootRoll then return end
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.lootRoll then return end
 
@@ -195,7 +195,4 @@ local function LoadRollSkin()
 
 		frame:HookScript("OnShow", OnShow)
 	end
-end
-
-S:AddCallback("Skin_Loot", LoadSkin)
-S:AddCallback("Skin_LootRoll", LoadRollSkin)
+end)

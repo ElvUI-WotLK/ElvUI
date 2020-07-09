@@ -5,7 +5,7 @@ local S = E:GetModule("Skins")
 --WoW API / Variables
 local IsShiftKeyDown = IsShiftKeyDown
 
-local function LoadChatSkin()
+S:AddCallbackForAddon("Blizzard_GMChatUI", "Skin_Blizzard_GMChatUI", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.gmchat then return end
 
 	GMChatFrame:StripTextures()
@@ -78,9 +78,9 @@ local function LoadChatSkin()
 	TicketStatusFrame:HookScript("OnHide", function(self)
 		GMChatStatusFrame:SetAllPoints(self)
 	end)
-end
+end)
 
-local function LoadSurveySkin()
+S:AddCallbackForAddon("Blizzard_GMSurveyUI", "Skin_Blizzard_GMSurveyUI", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.gmchat then return end
 
 	GMSurveyFrame:StripTextures()
@@ -115,7 +115,4 @@ local function LoadSurveySkin()
 	GMSurveySubmitButton:Height(22)
 	GMSurveySubmitButton:Point("BOTTOMRIGHT", -57, 18)
 	GMSurveyCancelButton:Point("BOTTOMLEFT", 19, 18)
-end
-
-S:AddCallbackForAddon("Blizzard_GMChatUI", "Skin_Blizzard_GMChatUI", LoadChatSkin)
-S:AddCallbackForAddon("Blizzard_GMSurveyUI", "Skin_Blizzard_GMSurveyUI", LoadSurveySkin)
+end)

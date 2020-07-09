@@ -4,7 +4,7 @@ local S = E:GetModule("Skins")
 --Lua functions
 --WoW API / Variables
 
-local function LoadSkin()
+S:AddCallbackForAddon("Blizzard_TimeManager", "Skin_Blizzard_TimeManager", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.timemanager then return end
 
 	TimeManagerFrame:StripTextures()
@@ -97,6 +97,4 @@ local function LoadSkin()
 	hooksecurefunc("Stopwatch_Play", SetPauseTexture)
 	hooksecurefunc("Stopwatch_Pause", SetPlayTexture)
 	hooksecurefunc("Stopwatch_Clear", SetPlayTexture)
-end
-
-S:AddCallbackForAddon("Blizzard_TimeManager", "Skin_Blizzard_TimeManager", LoadSkin)
+end)

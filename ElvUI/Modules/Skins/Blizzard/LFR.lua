@@ -7,7 +7,7 @@ local find = string.find
 --WoW API / Variables
 local hooksecurefunc = hooksecurefunc
 
-local function LoadSkin()
+S:AddCallback("Skin_LFR", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.lfr then return end
 
 	LFRParentFrame:StripTextures()
@@ -98,6 +98,4 @@ local function LoadSkin()
 	LFRBrowseFrameRefreshButton:Point("LEFT", LFRBrowseFrameInviteButton, "RIGHT", 4, 0)
 
 	LFRParentFrameTab1:Point("BOTTOMLEFT", 11, -26)
-end
-
-S:AddCallback("Skin_LFR", LoadSkin)
+end)

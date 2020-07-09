@@ -7,7 +7,7 @@ local ipairs = ipairs
 local unpack = unpack
 --WoW API / Variables
 
-local function LoadSkin()
+S:AddCallbackForAddon("Blizzard_RaidUI", "Skin_Blizzard_RaidUI", function()
 	if E.private.skins.blizzard.enable and E.private.skins.blizzard.friends then
 		RaidClassButton1:HookScript("OnShow", function()
 			S:SetUIPanelWindowInfo(FriendsFrame, "width", nil, 21)
@@ -149,6 +149,4 @@ local function LoadSkin()
 			end
 		end
 	end)
-end
-
-S:AddCallbackForAddon("Blizzard_RaidUI", "Skin_Blizzard_RaidUI", LoadSkin)
+end)

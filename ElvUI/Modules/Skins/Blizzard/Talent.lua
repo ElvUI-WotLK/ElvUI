@@ -6,7 +6,7 @@ local _G = _G
 local unpack = unpack
 --WoW API / Variables
 
-local function LoadSkin()
+S:AddCallbackForAddon("Blizzard_TalentUI", "Skin_Blizzard_TalentUI", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.talent then return end
 
 	PlayerTalentFrame:StripTextures(true)
@@ -112,6 +112,4 @@ local function LoadSkin()
 	PlayerTalentFrameLearnButton:Point("RIGHT", PlayerTalentFrameResetButton, "LEFT", -3, 0)
 
 	PlayerTalentFrameTab1:Point("BOTTOMLEFT", 11, 46)
-end
-
-S:AddCallbackForAddon("Blizzard_TalentUI", "Skin_Blizzard_TalentUI", LoadSkin)
+end)

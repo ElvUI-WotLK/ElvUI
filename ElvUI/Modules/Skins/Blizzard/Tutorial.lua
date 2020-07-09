@@ -4,7 +4,7 @@ local S = E:GetModule("Skins")
 --Lua functions
 --WoW API / Variables
 
-local function LoadSkin()
+S:AddCallback("Skin_Tutorial", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.tutorial then return end
 
 	TutorialFrameAlertButton:StripTextures()
@@ -41,6 +41,4 @@ local function LoadSkin()
 	S:HandleButton(TutorialFrameOkayButton)
 
 	TutorialFrameCallOut:Kill()
-end
-
-S:AddCallback("Skin_Tutorial", LoadSkin)
+end)

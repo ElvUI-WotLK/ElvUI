@@ -62,7 +62,7 @@ local function skinAchievement(achievement, biggerIcon)
 	achievement.isSkinned = true
 end
 
-local function LoadSkin()
+S:AddCallback("Skin_AchievementUI_HybridScrollButton", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.achievement then return end
 
 	hooksecurefunc("HybridScrollFrame_CreateButtons", function(frame, template)
@@ -95,7 +95,7 @@ local function LoadSkin()
 	end)
 end)
 
-local function LoadAchievementUISkin()
+S:AddCallbackForAddon("Blizzard_AchievementUI", "Skin_Blizzard_AchievementUI", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.achievement then return end
 
 	local frames = {
@@ -538,6 +538,3 @@ local function LoadAchievementUISkin()
 		end
 	end)
 end)
-
-S:AddCallback("Skin_AchievementUI_HybridScrollButton", LoadSkin)
-S:AddCallbackForAddon("Blizzard_AchievementUI", "Skin_Blizzard_AchievementUI", LoadAchievementUISkin)

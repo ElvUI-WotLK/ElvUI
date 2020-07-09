@@ -9,7 +9,7 @@ local find = string.find
 local InCombatLockdown = InCombatLockdown
 local hooksecurefunc = hooksecurefunc
 
-local function LoadSkin()
+S:AddCallback("Skin_BlizzardOptions", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.BlizzardOptions then return end
 
 	-- Game Menu Interface/Tabs
@@ -112,7 +112,7 @@ local function LoadSkin()
 				frame.backdrop:Point("TOPLEFT", 0, 0)
 				frame.backdrop:Point("BOTTOMRIGHT", 0, 0)
 			else
-				frame.backdrop:Point("TOPLEFT", -1 ,0)
+				frame.backdrop:Point("TOPLEFT", -1, 0)
 				frame.backdrop:Point("BOTTOMRIGHT", 0, 1)
 			end
 		end
@@ -615,6 +615,4 @@ local function LoadSkin()
 			end
 		end
 	end)
-end
-
-S:AddCallback("Skin_BlizzardOptions", LoadSkin)
+end)

@@ -16,7 +16,7 @@ local GUILDMEMBERS_TO_DISPLAY = GUILDMEMBERS_TO_DISPLAY
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS
 local WHOS_TO_DISPLAY = WHOS_TO_DISPLAY
 
-local function LoadSkin()
+S:AddCallback("Skin_Friends", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.friends then return end
 
 	-- Friends Frame
@@ -683,6 +683,4 @@ local function LoadSkin()
 	end)
 
 	RaidInfoScrollFrameScrollBar:GetScript("OnHide")(RaidInfoScrollFrameScrollBar)
-end
-
-S:AddCallback("Skin_Friends", LoadSkin)
+end)

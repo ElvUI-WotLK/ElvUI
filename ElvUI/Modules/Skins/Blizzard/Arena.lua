@@ -4,7 +4,7 @@ local S = E:GetModule("Skins")
 --Lua functions
 --WoW API / Variables
 
-local function LoadSkin()
+S:AddCallback("Skin_Arena", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.arena then return end
 
 	ArenaFrame:StripTextures()
@@ -37,6 +37,4 @@ local function LoadSkin()
 	ArenaFrameCancelButton:Point("CENTER", ArenaFrame, "TOPLEFT", 302, -417)
 	ArenaFrameJoinButton:Point("RIGHT", ArenaFrameCancelButton, "LEFT", -3, 0)
 	ArenaFrameGroupJoinButton:Point("RIGHT", ArenaFrameJoinButton, "LEFT", -3, 0)
-end
-
-S:AddCallback("Skin_Arena", LoadSkin)
+end)

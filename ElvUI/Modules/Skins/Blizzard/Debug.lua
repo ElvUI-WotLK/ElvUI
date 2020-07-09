@@ -5,7 +5,7 @@ local S = E:GetModule("Skins")
 local unpack = unpack
 --WoW API / Variables
 
-local function LoadSkin()
+S:AddCallbackForAddon("Blizzard_DebugTools", "Skin_Blizzard_DebugTools", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.debug then return end
 
 	ScriptErrorsFrame:SetParent(E.UIParent)
@@ -57,6 +57,4 @@ local function LoadSkin()
 	end)
 
 	S:HandleCloseButton(EventTraceFrameCloseButton, EventTraceFrame)
-end
-
-S:AddCallbackForAddon("Blizzard_DebugTools", "Skin_Blizzard_DebugTools", LoadSkin)
+end)

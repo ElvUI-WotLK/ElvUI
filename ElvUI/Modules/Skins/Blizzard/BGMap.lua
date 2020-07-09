@@ -4,7 +4,7 @@ local S = E:GetModule("Skins")
 --Lua functions
 --WoW API / Variables
 
-local function LoadSkin()
+S:AddCallbackForAddon("Blizzard_BattlefieldMinimap", "Skin_Blizzard_BattlefieldMinimap", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.bgmap then return end
 
 	BattlefieldMinimapCorner:Kill()
@@ -72,6 +72,4 @@ local function LoadSkin()
 			oldAlpha = nil
 		end
 	end)
-end
-
-S:AddCallbackForAddon("Blizzard_BattlefieldMinimap", "Skin_Blizzard_BattlefieldMinimap", LoadSkin)
+end)

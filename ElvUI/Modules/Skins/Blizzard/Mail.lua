@@ -15,7 +15,7 @@ local INBOXITEMS_TO_DISPLAY = INBOXITEMS_TO_DISPLAY
 local ATTACHMENTS_MAX_SEND = ATTACHMENTS_MAX_SEND
 local ATTACHMENTS_MAX_RECEIVE = ATTACHMENTS_MAX_RECEIVE
 
-local function LoadSkin()
+S:AddCallback("Skin_Mail", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.mail then return end
 
 	-- Inbox Frame
@@ -298,6 +298,4 @@ local function LoadSkin()
 	OpenMailCancelButton:Point("BOTTOMRIGHT", -40, 84)
 	OpenMailDeleteButton:Point("RIGHT", OpenMailCancelButton, "LEFT", -3, 0)
 	OpenMailReplyButton:Point("RIGHT", OpenMailDeleteButton, "LEFT", -3, 0)
-end
-
-S:AddCallback("Skin_Mail", LoadSkin)
+end)

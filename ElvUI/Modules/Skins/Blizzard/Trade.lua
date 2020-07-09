@@ -10,7 +10,7 @@ local GetItemQualityColor = GetItemQualityColor
 local GetTradePlayerItemLink = GetTradePlayerItemLink
 local GetTradeTargetItemLink = GetTradeTargetItemLink
 
-local function LoadSkin()
+S:AddCallback("Skin_Trade", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.trade then return end
 
 	TradeFrame:StripTextures(true)
@@ -143,6 +143,4 @@ local function LoadSkin()
 	TradeFramePlayerEnchantText:Point("TOPLEFT", 26, -364)
 
 	TradeFrameTradeButton:Point("BOTTOMRIGHT", -113, 61)
-end
-
-S:AddCallback("Skin_Trade", LoadSkin)
+end)

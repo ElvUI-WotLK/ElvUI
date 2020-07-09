@@ -9,7 +9,7 @@ local GetCurrentGuildBankTab = GetCurrentGuildBankTab
 local GetGuildBankItemLink = GetGuildBankItemLink
 local GetItemQualityColor = GetItemQualityColor
 
-local function LoadSkin()
+S:AddCallbackForAddon("Blizzard_GuildBankUI", "Skin_Blizzard_GuildBankUI", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.gbank then return end
 
 	GuildBankFrame:Width(639)
@@ -211,6 +211,4 @@ local function LoadSkin()
 	GuildBankColumn5Button8:Point("TOPLEFT", GuildBankColumn5Button1, "TOPRIGHT", 6, 0)
 	GuildBankColumn6Button8:Point("TOPLEFT", GuildBankColumn6Button1, "TOPRIGHT", 6, 0)
 	GuildBankColumn7Button8:Point("TOPLEFT", GuildBankColumn7Button1, "TOPRIGHT", 6, 0)
-end
-
-S:AddCallbackForAddon("Blizzard_GuildBankUI", "Skin_Blizzard_GuildBankUI", LoadSkin)
+end)

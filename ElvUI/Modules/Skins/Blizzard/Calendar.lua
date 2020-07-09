@@ -9,7 +9,7 @@ local fmod = math.fmod
 local hooksecurefunc = hooksecurefunc
 local CLASS_SORT_ORDER = CLASS_SORT_ORDER
 
-local function LoadSkin()
+S:AddCallbackForAddon("Blizzard_Calendar", "Skin_Blizzard_Calendar", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.calendar then return end
 
 	CalendarFrame:StripTextures()
@@ -370,6 +370,4 @@ local function LoadSkin()
 			end
 		end)
 	end
-end
-
-S:AddCallbackForAddon("Blizzard_Calendar", "Skin_Blizzard_Calendar", LoadSkin)
+end)

@@ -4,7 +4,7 @@ local S = E:GetModule("Skins")
 --Lua functions
 --WoW API / Variables
 
-local function LoadSkin()
+S:AddCallback("Skin_DressingRoom", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.dressingroom then return end
 
 	DressUpFrame:StripTextures()
@@ -47,6 +47,4 @@ local function LoadSkin()
 
 	DressUpFrameCancelButton:Point("CENTER", DressUpFrame, "TOPLEFT", 304, -417)
 	DressUpFrameResetButton:Point("RIGHT", DressUpFrameCancelButton, "LEFT", -3, 0)
-end
-
-S:AddCallback("Skin_DressingRoom", LoadSkin)
+end)

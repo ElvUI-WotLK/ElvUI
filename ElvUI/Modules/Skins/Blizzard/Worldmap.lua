@@ -5,7 +5,7 @@ local S = E:GetModule("Skins")
 --WoW API / Variables
 local InCombatLockdown = InCombatLockdown
 
-local function LoadSkin()
+S:AddCallback("Skin_WorldMap", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.worldmap then return end
 
 	WorldMapFrame:DisableDrawLayer("BACKGROUND")
@@ -152,6 +152,4 @@ local function LoadSkin()
 	hooksecurefunc("WorldMapFrame_SetMiniMode", SmallSkin)
 	hooksecurefunc("ToggleMapFramerate", FixSkin)
 	hooksecurefunc("WorldMapFrame_ToggleAdvanced", FixSkin)
-end
-
-S:AddCallback("Skin_WorldMap", LoadSkin)
+end)

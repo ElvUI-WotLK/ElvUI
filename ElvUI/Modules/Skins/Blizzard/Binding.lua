@@ -4,7 +4,7 @@ local S = E:GetModule("Skins")
 --Lua functions
 --WoW API / Variables
 
-local function LoadSkin()
+S:AddCallbackForAddon("Blizzard_BindingUI", "Skin_Blizzard_BindingUI", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.binding then return end
 
 	KeyBindingFrame:StripTextures()
@@ -35,6 +35,4 @@ local function LoadSkin()
 
 	KeyBindingFrameOkayButton:Point("RIGHT", KeyBindingFrameCancelButton, "LEFT", -3, 0)
 	KeyBindingFrameUnbindButton:Point("RIGHT", KeyBindingFrameOkayButton, "LEFT", -3, 0)
-end
-
-S:AddCallbackForAddon("Blizzard_BindingUI", "Skin_Blizzard_BindingUI", LoadSkin)
+end)

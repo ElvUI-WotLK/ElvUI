@@ -21,7 +21,7 @@ local GetQuestMoneyToGet = GetQuestMoneyToGet
 local MAX_NUM_ITEMS = MAX_NUM_ITEMS
 local MAX_REPUTATIONS = MAX_REPUTATIONS
 
-local function LoadSkin()
+S:AddCallback("Skin_Quest", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.quest then return end
 
 	QuestLogFrame:StripTextures()
@@ -434,6 +434,4 @@ local function LoadSkin()
 			end
 		end
 	end)
-end
-
-S:AddCallback("Skin_Quest", LoadSkin)
+end)

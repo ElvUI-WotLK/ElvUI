@@ -7,7 +7,7 @@ local select = select
 local find, gsub = string.find, string.gsub
 --WoW API / Variables
 
-local function LoadSkin()
+S:AddCallback("Skin_Gossip", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.gossip then return end
 
 	-- Gossip
@@ -90,6 +90,4 @@ local function LoadSkin()
 
 	ItemTextScrollFrameScrollBar:Point("TOPLEFT", ItemTextScrollFrame, "TOPRIGHT", 4, -18)
 	ItemTextScrollFrameScrollBar:Point("BOTTOMLEFT", ItemTextScrollFrame, "BOTTOMRIGHT", 4, 18)
-end
-
-S:AddCallback("Skin_Gossip", LoadSkin)
+end)

@@ -4,7 +4,7 @@ local S = E:GetModule("Skins")
 --Lua functions
 --WoW API / Variables
 
-local function LoadSkin()
+S:AddCallback("Skin_GuildRegistrar", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.guildregistrar then return end
 
 	GuildRegistrarFrame:StripTextures(true)
@@ -43,6 +43,4 @@ local function LoadSkin()
 	GuildRegistrarFrameGoodbyeButton:Point("BOTTOMRIGHT", -40, 84)
 	GuildRegistrarFrameCancelButton:Point("BOTTOMRIGHT", -40, 84)
 	GuildRegistrarFramePurchaseButton:Point("BOTTOMLEFT", 19, 84)
-end
-
-S:AddCallback("Skin_GuildRegistrar", LoadSkin)
+end)

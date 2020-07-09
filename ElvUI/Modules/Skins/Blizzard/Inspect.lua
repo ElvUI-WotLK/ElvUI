@@ -9,7 +9,7 @@ local GetInventoryItemID = GetInventoryItemID
 local GetItemInfo = GetItemInfo
 local GetItemQualityColor = GetItemQualityColor
 
-local function LoadSkin()
+S:AddCallbackForAddon("Blizzard_InspectUI", "Skin_Blizzard_InspectUI", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.inspect then return end
 
 	InspectFrame:StripTextures(true)
@@ -187,6 +187,4 @@ local function LoadSkin()
 	S:HandleScrollBar(InspectTalentFrameScrollFrameScrollBar)
 	InspectTalentFrameScrollFrameScrollBar:Point("TOPLEFT", InspectTalentFrameScrollFrame, "TOPRIGHT", 9, -17)
 	InspectTalentFrameScrollFrameScrollBar:Point("BOTTOMLEFT", InspectTalentFrameScrollFrame, "BOTTOMRIGHT", 9, 14)
-end
-
-S:AddCallbackForAddon("Blizzard_InspectUI", "Skin_Blizzard_InspectUI", LoadSkin)
+end)

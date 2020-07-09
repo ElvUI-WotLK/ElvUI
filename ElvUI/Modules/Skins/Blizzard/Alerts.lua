@@ -8,7 +8,7 @@ local tonumber = tonumber
 local match = string.match
 --WoW API / Variables
 
-local function LoadSkin()
+S:AddCallback("Skin_Alerts", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.alertframes then return end
 
 	S:RawHook("AchievementAlertFrame_GetAlertFrame", function()
@@ -70,6 +70,4 @@ local function LoadSkin()
 	frame.dungeonTexture.backdrop:SetFrameLevel(0)
 
 	frame.glowFrame:DisableDrawLayer("OVERLAY")
-end
-
-S:AddCallback("Skin_Alerts", LoadSkin)
+end)

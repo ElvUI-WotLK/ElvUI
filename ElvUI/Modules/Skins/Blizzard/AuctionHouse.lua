@@ -10,7 +10,7 @@ local GetItemQualityColor = GetItemQualityColor
 local PlaySound = PlaySound
 local hooksecurefunc = hooksecurefunc
 
-local function LoadSkin()
+S:AddCallbackForAddon("Blizzard_AuctionUI", "Skin_Blizzard_AuctionUI", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.auctionhouse then return end
 
 	AuctionFrame:StripTextures(true)
@@ -376,6 +376,4 @@ local function LoadSkin()
 		S:SetUIPanelWindowInfo(AuctionFrame, "width", nil, 1)
 		PlaySound("igCharacterInfoClose")
 	end)
-end
-
-S:AddCallbackForAddon("Blizzard_AuctionUI", "Skin_Blizzard_AuctionUI", LoadSkin)
+end)

@@ -7,7 +7,7 @@ local type = type
 local unpack = unpack
 --WoW API / Variables
 
-local function LoadSkin()
+S:AddCallback("Skin_Misc", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.misc then return end
 
 	-- ESC/Menu Buttons
@@ -298,6 +298,4 @@ local function LoadSkin()
 			end
 		end
 	end
-end
-
-S:AddCallback("Skin_Misc", LoadSkin)
+end)
