@@ -48,4 +48,5 @@
 	<Script file="Tutorial.lua"/>
 	<Script file="WatchFrame.lua"/>
 	<Script file="Worldmap.lua"/>
+	<Script file="WorldStateFrame.lua"/>
 </Ui>

@@ -297,6 +297,11 @@ E.Options.args.skins = {
 					type = "toggle",
 					name = L["WORLD_MAP"],
 					desc = L["TOGGLESKIN_DESC"]
+				},
+				WorldStateFrame = {
+					type = "toggle",
+					name = L["World State Frame"],
+					desc = L["TOGGLESKIN_DESC"]
 				}
 			}
 		}

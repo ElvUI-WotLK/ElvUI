@@ -108,7 +108,8 @@ V.skins = {
 		tutorial = true,
 		watchframe = true,
 		worldmap = true,
-		mirrorTimers = true
+		mirrorTimers = true,
+		WorldStateFrame = true
 	}
 }
 
