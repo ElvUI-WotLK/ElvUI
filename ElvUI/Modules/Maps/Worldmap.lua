@@ -161,16 +161,10 @@ end
 function M:CheckMovement()
 	if not WorldMapFrame:IsShown() then return end
 
-	if GetUnitSpeed("player") ~= 0 then
-		if WorldMapPositioningGuide:IsMouseOver() then
-			WorldMapFrame:SetAlpha(1)
-			WorldMapBlobFrame:SetFillAlpha(128)
-			WorldMapBlobFrame:SetBorderAlpha(192)
-		else
-			WorldMapFrame:SetAlpha(E.global.general.mapAlphaWhenMoving)
-			WorldMapBlobFrame:SetFillAlpha(128 * E.global.general.mapAlphaWhenMoving)
-			WorldMapBlobFrame:SetBorderAlpha(192 * E.global.general.mapAlphaWhenMoving)
-		end
+	if GetUnitSpeed("player") ~= 0 and not WorldMapPositioningGuide:IsMouseOver() then
+		WorldMapFrame:SetAlpha(E.global.general.mapAlphaWhenMoving)
+		WorldMapBlobFrame:SetFillAlpha(128 * E.global.general.mapAlphaWhenMoving)
+		WorldMapBlobFrame:SetBorderAlpha(192 * E.global.general.mapAlphaWhenMoving)
 	else
 		WorldMapFrame:SetAlpha(1)
 		WorldMapBlobFrame:SetFillAlpha(128)
@@ -179,26 +173,15 @@ function M:CheckMovement()
 end
 
 function M:UpdateMapAlpha()
-	local db = E.global.general
+	if (not E.global.general.fadeMapWhenMoving or E.global.general.mapAlphaWhenMoving >= 1) and self.MovingTimer then
+		self:CancelTimer(self.MovingTimer)
+		self.MovingTimer = nil
 
-	if db.fadeMapWhenMoving then
-		if (db.mapAlphaWhenMoving >= 1) and self.MovingTimer then
-			self:CancelTimer(self.MovingTimer)
-			self.MovingTimer = nil
-		elseif (db.mapAlphaWhenMoving < 1) and not self.MovingTimer then
-			self.MovingTimer = self:ScheduleRepeatingTimer("CheckMovement", 0.2)
-		end
-	else
-		if self.MovingTimer then
-			self:CancelTimer(self.MovingTimer)
-			self.MovingTimer = nil
-		end
-
-		if GetUnitSpeed("player") ~= 0 and not WorldMapPositioningGuide:IsMouseOver() then
-			WorldMapFrame:SetAlpha(1)
-			WorldMapBlobFrame:SetFillAlpha(128)
-			WorldMapBlobFrame:SetBorderAlpha(192)
-		end
+		WorldMapFrame:SetAlpha(1)
+		WorldMapBlobFrame:SetFillAlpha(128)
+		WorldMapBlobFrame:SetBorderAlpha(192)
+	elseif E.global.general.fadeMapWhenMoving and E.global.general.mapAlphaWhenMoving < 1 and not self.MovingTimer then
+		self.MovingTimer = self:ScheduleRepeatingTimer("CheckMovement", 0.2)
 	end
 end
 
