@@ -273,7 +273,7 @@ function E:UpdateCooldownOverride(module)
 					if font and parent.auraType then
 						local fontSize = db[parent.auraType] and db[parent.auraType].durationFontSize
 						if fontSize then
-							cd.text:FontTemplate(font , fontSize, db.fontOutline)
+							cd.text:FontTemplate(font, fontSize, db.fontOutline)
 						end
 					end
 				end

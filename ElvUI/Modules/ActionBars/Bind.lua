@@ -101,7 +101,7 @@ function AB:BindListener(key)
 		SetBinding(keybind, bind.spellmacro.." "..bind.button.name)
 	end
 
-	E:Print(format("%s%s%s." , keybind, L[" |cff00ff00bound to |r"], bind.button.name))
+	E:Print(format("%s%s%s.", keybind, L[" |cff00ff00bound to |r"], bind.button.name))
 	self:BindUpdate(bind.button, bind.spellmacro)
 
 	if bind.spellmacro ~= "MACRO" then

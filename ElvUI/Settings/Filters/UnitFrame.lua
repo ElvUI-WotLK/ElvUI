@@ -516,7 +516,7 @@ end
 G.unitframe.buffwatch = {
 	PRIEST = {
 		[6788] = ClassBuff(6788, "TOPLEFT", {1, 0, 0}, true),				-- Weakened Soul
-		[10060] = ClassBuff(10060 , "RIGHT", {0.89, 0.09, 0.05}),			-- Power Infusion
+		[10060] = ClassBuff(10060, "RIGHT", {0.89, 0.09, 0.05}),			-- Power Infusion
 		[48066] = ClassBuff(48066, "BOTTOMRIGHT", {0.81, 0.85, 0.1}, true), -- Power Word: Shield
 		[48068] = ClassBuff(48068, "BOTTOMLEFT", {0.4, 0.7, 0.2}),			-- Renew
 		[48111] = ClassBuff(48111, "TOPRIGHT", {0.2, 0.7, 0.2}),			-- Prayer of Mending
