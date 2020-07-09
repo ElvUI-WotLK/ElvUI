@@ -674,7 +674,7 @@ E.Options.args.general = {
 						["PARTY"] = L["Party Only"],
 						["RAID"] = L["Party / Raid"],
 						["RAID_ONLY"] = L["Raid Only"],
-						["EMOTE"] = L["CHAT_MSG_EMOTE"]
+						["EMOTE"] = L["EMOTE"]
 					},
 					set = function(info, value)
 						E.db.general[info[#info]] = value
