@@ -48,7 +48,6 @@ local IsShiftKeyDown = IsShiftKeyDown
 local PlaySound = PlaySound
 local PlaySoundFile = PlaySoundFile
 local ScrollFrameTemplate_OnMouseWheel = ScrollFrameTemplate_OnMouseWheel
-local ShowUIPanel, HideUIPanel = ShowUIPanel, HideUIPanel
 local StaticPopup_Visible = StaticPopup_Visible
 local ToggleFrame = ToggleFrame
 local UnitIsSameServer = UnitIsSameServer
@@ -317,9 +316,9 @@ function CH:StyleChat(frame)
 	local function OnTextChanged(editBox)
 		local text = editBox:GetText()
 		local len = strlen(text)
+		local MIN_REPEAT_CHARACTERS = CH.db.numAllowedCombatRepeat
 
-		if InCombatLockdown() then
-			local MIN_REPEAT_CHARACTERS = CH.db.numAllowedCombatRepeat
+		if MIN_REPEAT_CHARACTERS ~= 0 and InCombatLockdown() then
 			if len > MIN_REPEAT_CHARACTERS then
 				local repeatChar = true
 				for i = 1, MIN_REPEAT_CHARACTERS do
@@ -368,24 +367,23 @@ function CH:StyleChat(frame)
 	editbox:HookScript("OnTextChanged", OnTextChanged)
 	self:SecureHook(editbox, "AddHistoryLine", "ChatEdit_AddHistory")
 
+	editbox:Hide()
+
 	editbox:HookScript("OnEditFocusGained", function(editBox)
-		editBox:Show()
 		if not LeftChatPanel:IsShown() then
 			LeftChatPanel.editboxforced = true
 			LeftChatToggleButton:GetScript("OnEnter")(LeftChatToggleButton)
+			editBox:Show()
 		end
 	end)
-
 	editbox:HookScript("OnEditFocusLost", function(editBox)
 		if LeftChatPanel.editboxforced then
 			LeftChatPanel.editboxforced = nil
-
 			if LeftChatPanel:IsShown() then
 				LeftChatToggleButton:GetScript("OnLeave")(LeftChatToggleButton)
+				editBox:Hide()
 			end
 		end
-
-		editBox:Hide()
 	end)
 
 	for _, text in ipairs(ElvCharacterDB.ChatEditHistory) do
@@ -657,6 +655,11 @@ function CH:UpdateChatTabs()
 			end
 		end
 	end
+end
+
+function CH:RefreshToggleButtons()
+	LeftChatToggleButton:SetAlpha(E.db.LeftChatPanelFaded and E.db.chat.fadeChatToggles and 0 or 1)
+	RightChatToggleButton:SetAlpha(E.db.RightChatPanelFaded and E.db.chat.fadeChatToggles and 0 or 1)
 end
 
 function CH:PositionChat(override)

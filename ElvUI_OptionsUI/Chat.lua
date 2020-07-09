@@ -22,8 +22,8 @@ E.Options.args.chat = {
 			order = 2,
 			type = "toggle",
 			name = L["Enable"],
-			get = function() return E.private.chat.enable end,
-			set = function(_, value) E.private.chat.enable = value E:StaticPopup_Show("PRIVATE_RL") end
+			get = function(info) return E.private.chat.enable end,
+			set = function(info, value) E.private.chat.enable = value E:StaticPopup_Show("PRIVATE_RL") end
 		},
 		general = {
 			order = 3,
@@ -70,7 +70,7 @@ E.Options.args.chat = {
 					type = "toggle",
 					name = L["Fade Undocked Tabs"],
 					desc = L["Fades the text on chat tabs that are not docked at the left or right chat panel."],
-					set = function(self, value)
+					set = function(info, value)
 						E.db.chat.fadeUndockedTabs = value
 						CH:UpdateChatTabs()
 					end
@@ -80,7 +80,7 @@ E.Options.args.chat = {
 					type = "toggle",
 					name = L["Fade Tabs No Backdrop"],
 					desc = L["Fades the text on chat tabs that are docked in a panel where the backdrop is disabled."],
-					set = function(self, value)
+					set = function(info, value)
 						E.db.chat.fadeTabsNoBackdrop = value
 						CH:UpdateChatTabs()
 					end
@@ -90,25 +90,41 @@ E.Options.args.chat = {
 					type = "toggle",
 					name = L["Use Alt Key"],
 					desc = L["Require holding the Alt key down to move cursor or cycle through messages in the editbox."],
-					set = function(self, value)
+					set = function(info, value)
 						E.db.chat.useAltKey = value
 						CH:UpdateSettings()
 					end
 				},
-				spacer = {
+				fadeChatToggles = {
 					order = 9,
+					type = "toggle",
+					name = L["Fade Chat Toggles"],
+					desc = L["Fades the buttons that toggle chat windows when that window has been toggled off."],
+					set = function(info, value)
+						E.db.chat.fadeChatToggles = value
+						CH:RefreshToggleButtons()
+					end
+				},
+				spacer = {
+					order = 10,
 					type = "description",
 					name = ""
 				},
 				numAllowedCombatRepeat = {
-					order = 10,
+					order = 11,
 					type = "range",
 					name = L["Allowed Combat Repeat"],
-					desc = L["Number of repeat characters while in combat before the chat editbox is automatically closed."],
-					min = 2, max = 10, step = 1
+					desc = L["Number of repeat characters while in combat before the chat editbox is automatically closed. Set to 0 to disable."],
+					min = 0, max = 10, step = 1,
+					set = function(info, value)
+						if value == 1 then
+							value = 0
+						end
+						E.db.chat[info[#info]] = value
+					end
 				},
 				throttleInterval = {
-					order = 11,
+					order = 12,
 					type = "range",
 					name = L["Spam Interval"],
 					desc = L["Prevent the same messages from displaying in chat more than once within this set amount of seconds, set to zero to disable."],
@@ -121,40 +137,40 @@ E.Options.args.chat = {
 					end
 				},
 				scrollDownInterval = {
-					order = 12,
+					order = 13,
 					type = "range",
 					name = L["Scroll Interval"],
 					desc = L["Number of time in seconds to scroll down to the bottom of the chat window if you are not scrolled down completely."],
 					min = 0, max = 120, step = 5
 				},
 				numScrollMessages = {
-					order = 13,
+					order = 14,
 					type = "range",
 					name = L["Scroll Messages"],
 					desc = L["Number of messages you scroll for each step."],
 					min = 1, max = 10, step = 1,
 				},
 				maxLines = {
-					order = 14,
+					order = 15,
 					type = "range",
 					name = L["Max Lines"],
 					min = 10, max = 5000, step = 1,
 					set = function(info, value) E.db.chat[info[#info]] = value CH:SetupChat() end
 				},
 				editboxHistorySize = {
-					order = 15,
+					order = 16,
 					type = "range",
 					name = L["Editbox History Size"],
 					min = 5, max = 50, step = 1
 				},
 				resetHistory = {
-					order = 16,
+					order = 17,
 					type = "execute",
 					name = L["Reset Editbox History"],
 					func = function() CH:ResetEditboxHistory() end
 				},
 				historyGroup = {
-					order = 17,
+					order = 18,
 					type = "group",
 					name = L["History"],
 					set = function(info, value) E.db.chat[info[#info]] = value end,
@@ -207,7 +223,7 @@ E.Options.args.chat = {
 					}
 				},
 				fadingGroup = {
-					order = 18,
+					order = 19,
 					type = "group",
 					name = L["Text Fade"],
 					disabled = function() return not E.Chat.Initialized end,
@@ -230,7 +246,7 @@ E.Options.args.chat = {
 					}
 				},
 				fontGroup = {
-					order = 19,
+					order = 20,
 					type = "group",
 					name = L["Fonts"],
 					set = function(info, value) E.db.chat[info[#info]] = value CH:SetupChat() end,
@@ -276,7 +292,7 @@ E.Options.args.chat = {
 					}
 				},
 				alerts = {
-					order = 20,
+					order = 21,
 					type = "group",
 					name = L["Alerts"],
 					disabled = function() return not E.Chat.Initialized end,
@@ -358,7 +374,7 @@ E.Options.args.chat = {
 					}
 				},
 				timestampGroup = {
-					order = 21,
+					order = 22,
 					type = "group",
 					name = L["TIMESTAMPS_LABEL"],
 					args = {
@@ -391,18 +407,18 @@ E.Options.args.chat = {
 							desc = L["OPTION_TOOLTIP_TIMESTAMPS"],
 							values = {
 								["NONE"] = L["NONE"],
-								["%I:%M "] = "03:27",
-								["%I:%M:%S "] = "03:27:32",
-								["%I:%M %p "] = "03:27 PM",
-								["%I:%M:%S %p "] = "03:27:32 PM",
-								["%H:%M "] = "15:27",
-								["%H:%M:%S "] =	"15:27:32"
+								["%I:%M"] = "03:27",
+								["%I:%M:%S"] = "03:27:32",
+								["%I:%M %p"] = "03:27 PM",
+								["%I:%M:%S %p"] = "03:27:32 PM",
+								["%H:%M"] = "15:27",
+								["%H:%M:%S"] =	"15:27:32"
 							}
 						}
 					}
 				},
 				classColorMentionGroup = {
-					order = 22,
+					order = 23,
 					type = "group",
 					name = L["Class Color Mentions"],
 					args = {
@@ -463,7 +479,7 @@ E.Options.args.chat = {
 					desc = L["Attempt to lock the left and right chat frame positions. Disabling this option will allow you to move the main chat frame anywhere you wish."],
 					set = function(info, value)
 						E.db.chat[info[#info]] = value
-						if value == true then
+						if value then
 							CH:PositionChat(true)
 						end
 					end
