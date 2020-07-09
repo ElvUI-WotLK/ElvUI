@@ -77,7 +77,6 @@ local function UpdateFilterGroup()
 					type = "execute",
 					name = L["Remove Spell"],
 					desc = L["Remove a spell from the filter. Use the spell ID if you see the ID as part of the spell name in the filter."],
-					buttonElvUI = true,
 					func = function()
 						local value = selectedSpell:match(" %((%d+)%)$") or selectedSpell
 						if tonumber(value) then value = tonumber(value) end
@@ -146,7 +145,6 @@ local function UpdateFilterGroup()
 				resetFilter = {
 					order = 2,
 					type = "execute",
-					buttonElvUI = true,
 					name = L["Reset Filter"],
 					desc = L["This will reset the contents of this filter back to default. Any spell you have added to this filter will be removed."],
 					disabled = function() return not FilterResetState[selectedFilter] end,
@@ -248,7 +246,6 @@ local function UpdateFilterGroup()
 					type = "execute",
 					name = L["Remove Spell"],
 					desc = L["Remove a spell from the filter. Use the spell ID if you see the ID as part of the spell name in the filter."],
-					buttonElvUI = true,
 					func = function()
 						local value = selectedSpell:match(" %((%d+)%)$") or selectedSpell
 						if tonumber(value) then value = tonumber(value) end
@@ -327,7 +324,6 @@ local function UpdateFilterGroup()
 				resetFilter = {
 					order = 2,
 					type = "execute",
-					buttonElvUI = true,
 					name = L["Reset Filter"],
 					desc = L["This will reset the contents of this filter back to default. Any spell you have added to this filter will be removed."],
 					disabled = function() return not FilterResetState[selectedFilter] end,
@@ -428,7 +424,6 @@ local function UpdateFilterGroup()
 					type = "execute",
 					name = L["Remove SpellID"],
 					desc = L["Remove a spell from the filter."],
-					buttonElvUI = true,
 					func = function()
 						if G.unitframe.buffwatch.PET[selectedSpell] then
 							E.global.unitframe.buffwatch.PET[selectedSpell].enabled = false
@@ -497,7 +492,6 @@ local function UpdateFilterGroup()
 				resetFilter = {
 					order = 2,
 					type = "execute",
-					buttonElvUI = true,
 					name = L["Reset Filter"],
 					desc = L["This will reset the contents of this filter back to default. Any spell you have added to this filter will be removed."],
 					disabled = function() return not FilterResetState[selectedFilter] end,
@@ -676,7 +670,6 @@ local function UpdateFilterGroup()
 					type = "execute",
 					name = L["Remove SpellID"],
 					desc = L["Remove a spell from the filter."],
-					buttonElvUI = true,
 					func = function()
 						if G.unitframe.buffwatch[E.myclass][selectedSpell] then
 							E.global.unitframe.buffwatch[E.myclass][selectedSpell].enabled = false
@@ -748,7 +741,6 @@ local function UpdateFilterGroup()
 				resetFilter = {
 					order = 2,
 					type = "execute",
-					buttonElvUI = true,
 					name = L["Reset Filter"],
 					desc = L["This will reset the contents of this filter back to default. Any spell you have added to this filter will be removed."],
 					disabled = function() return not FilterResetState[selectedFilter] end,
@@ -932,7 +924,6 @@ local function UpdateFilterGroup()
 					type = "execute",
 					name = L["Remove SpellID"],
 					desc = L["Remove a spell from the filter."],
-					buttonElvUI = true,
 					func = function()
 						if P.unitframe.filters.buffwatch[selectedSpell] then
 							E.db.unitframe.filters.buffwatch[selectedSpell].enabled = false
@@ -1003,7 +994,6 @@ local function UpdateFilterGroup()
 				resetFilter = {
 					order = 2,
 					type = "execute",
-					buttonElvUI = true,
 					name = L["Reset Filter"],
 					desc = L["This will reset the contents of this filter back to default. Any spell you have added to this filter will be removed."],
 					disabled = function() return not FilterResetState[selectedFilter] end,
@@ -1195,7 +1185,6 @@ local function UpdateFilterGroup()
 					type = "execute",
 					name = L["Remove Spell"],
 					desc = L["Remove a spell from the filter. Use the spell ID if you see the ID as part of the spell name in the filter."],
-					buttonElvUI = true,
 					func = function()
 						local value = selectedSpell:match(" %((%d+)%)$") or selectedSpell
 						if tonumber(value) then value = tonumber(value) end
@@ -1294,7 +1283,6 @@ local function UpdateFilterGroup()
 					resetFilter = {
 						order = 2,
 						type = "execute",
-						buttonElvUI = true,
 						name = L["Reset Filter"],
 						desc = L["This will reset the contents of this filter back to default. Any spell you have added to this filter will be removed."],
 						disabled = function() return not FilterResetState[selectedFilter] end,
@@ -1452,7 +1440,6 @@ E.Options.args.filters = {
 			type = "execute",
 			name = L["Delete Filter"],
 			desc = L["Delete a created filter, you cannot delete pre-existing filters, only custom ones."],
-			buttonElvUI = true,
 			func = function()
 				E.global.unitframe.aurafilters[selectedFilter] = nil
 				removePriority(selectedFilter) --This will wipe a filter from the new aura system profile settings.

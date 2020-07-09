@@ -3340,7 +3340,6 @@ E.Options.args.nameplate = {
 			order = 5,
 			type = "execute",
 			name = L["General"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "nameplate", "generalGroup", "general") end,
 			disabled = function() return not E.NamePlates.Initialized end
 		},
@@ -3348,7 +3347,6 @@ E.Options.args.nameplate = {
 			order = 6,
 			type = "execute",
 			name = L["Fonts"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "nameplate", "generalGroup", "fontGroup") end,
 			disabled = function() return not E.NamePlates.Initialized end
 		},
@@ -3356,7 +3354,6 @@ E.Options.args.nameplate = {
 			order = 7,
 			type = "execute",
 			name = L["Cooldowns"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "cooldown", "nameplates") end,
 			disabled = function() return not E.NamePlates.Initialized end
 		},
@@ -3364,7 +3361,6 @@ E.Options.args.nameplate = {
 			order = 8,
 			type = "execute",
 			name = L["Threat"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "nameplate", "generalGroup", "threatGroup") end,
 			disabled = function() return not E.NamePlates.Initialized end
 		},
@@ -3377,7 +3373,6 @@ E.Options.args.nameplate = {
 			order = 10,
 			type = "execute",
 			name = L["Cast Bar"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "nameplate", "generalGroup", "castGroup") end,
 			disabled = function() return not E.NamePlates.Initialized end
 		},
@@ -3385,7 +3380,6 @@ E.Options.args.nameplate = {
 			order = 12,
 			type = "execute",
 			name = L["Reaction Colors"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "nameplate", "generalGroup", "reactions") end,
 			disabled = function() return not E.NamePlates.Initialized end
 		},
@@ -3393,7 +3387,6 @@ E.Options.args.nameplate = {
 			order = 13,
 			type = "execute",
 			name = L["Cutaway Bars"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "nameplate", "generalGroup", "cutawayHealth") end,
 			disabled = function() return not E.NamePlates.Initialized end
 		},
@@ -3406,7 +3399,6 @@ E.Options.args.nameplate = {
 			order = 15,
 			type = "execute",
 			name = L["FRIENDLY_PLAYER"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "nameplate", "friendlyPlayerGroup") end,
 			disabled = function() return not E.NamePlates.Initialized end
 		},
@@ -3414,7 +3406,6 @@ E.Options.args.nameplate = {
 			order = 16,
 			type = "execute",
 			name = L["FRIENDLY_NPC"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "nameplate", "friendlyNPCGroup") end,
 			disabled = function() return not E.NamePlates.Initialized end
 		},
@@ -3422,7 +3413,6 @@ E.Options.args.nameplate = {
 			order = 17,
 			type = "execute",
 			name = L["ENEMY_PLAYER"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "nameplate", "enemyPlayerGroup") end,
 			disabled = function() return not E.NamePlates.Initialized end
 		},
@@ -3430,7 +3420,6 @@ E.Options.args.nameplate = {
 			order = 18,
 			type = "execute",
 			name = L["ENEMY_NPC"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "nameplate", "enemyNPCGroup") end,
 			disabled = function() return not E.NamePlates.Initialized end
 		},
@@ -3443,7 +3432,6 @@ E.Options.args.nameplate = {
 			order = 20,
 			type = "execute",
 			name = L["Style Filter"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "nameplate", "filters") end,
 			disabled = function() return not E.NamePlates.Initialized end
 		},
@@ -4124,7 +4112,6 @@ E.Options.args.nameplate = {
 					type = "execute",
 					name = L["Delete Filter"],
 					desc = L["Delete a created filter, you cannot delete pre-existing filters, only custom ones."],
-					buttonElvUI = true,
 					func = function()
 						for profile in pairs(E.data.profiles) do
 							if E.data.profiles[profile].nameplates and E.data.profiles[profile].nameplates.filters and E.data.profiles[profile].nameplates.filters[selectedNameplateFilter] then

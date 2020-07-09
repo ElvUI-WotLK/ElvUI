@@ -540,7 +540,6 @@ local function GetOptionsTable_Auras(auraType, updateFunc, groupName, numUnits)
 						order = 1,
 						type = "execute",
 						name = L["Cooldowns"],
-						buttonElvUI = true,
 						func = function() ACD:SelectGroup("ElvUI", "cooldown", "unitframe") end,
 					},
 					durationPosition = {
@@ -1933,7 +1932,6 @@ local function GetOptionsTable_HealPrediction(updateFunc, groupName, numGroup)
 				order = 3,
 				type = "execute",
 				name = L["COLORS"],
-				buttonElvUI = true,
 				func = function() ACD:SelectGroup("ElvUI", "unitframe", "generalOptionsGroup", "allColorsGroup", "healPrediction") end,
 				disabled = function() return not E.UnitFrames.Initialized end
 			}
@@ -2357,7 +2355,6 @@ E.Options.args.unitframe = {
 			order = 5,
 			type = "execute",
 			name = L["General"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "unitframe", "generalOptionsGroup", "generalGroup") end,
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
@@ -2365,7 +2362,6 @@ E.Options.args.unitframe = {
 			order = 6,
 			type = "execute",
 			name = L["Frame Glow"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "unitframe", "generalOptionsGroup", "frameGlowGroup") end,
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
@@ -2373,7 +2369,6 @@ E.Options.args.unitframe = {
 			order = 7,
 			type = "execute",
 			name = L["Cooldowns"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "cooldown", "unitframe") end,
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
@@ -2381,7 +2376,6 @@ E.Options.args.unitframe = {
 			order = 8,
 			type = "execute",
 			name = L["COLORS"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "unitframe", "generalOptionsGroup", "allColorsGroup") end,
 			disabled = function() return not E.UnitFrames.Initialized end,
 		},
@@ -2394,7 +2388,6 @@ E.Options.args.unitframe = {
 			order = 10,
 			type = "execute",
 			name = L["Disabled Blizzard Frames"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "unitframe", "generalOptionsGroup", "disabledBlizzardFrames") end,
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
@@ -2402,7 +2395,6 @@ E.Options.args.unitframe = {
 			order = 11,
 			type = "execute",
 			name = L["Player"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "unitframe", "player") end,
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
@@ -2410,7 +2402,6 @@ E.Options.args.unitframe = {
 			order = 12,
 			type = "execute",
 			name = L["TARGET"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "unitframe", "target") end,
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
@@ -2418,7 +2409,6 @@ E.Options.args.unitframe = {
 			order = 13,
 			type = "execute",
 			name = L["TargetTarget"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "unitframe", "targettarget") end,
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
@@ -2431,7 +2421,6 @@ E.Options.args.unitframe = {
 			order = 15,
 			type = "execute",
 			name = L["TargetTargetTarget"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "unitframe", "targettargettarget") end,
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
@@ -2439,7 +2428,6 @@ E.Options.args.unitframe = {
 			order = 16,
 			type = "execute",
 			name = L["Focus"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "unitframe", "focus") end,
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
@@ -2447,7 +2435,6 @@ E.Options.args.unitframe = {
 			order = 17,
 			type = "execute",
 			name = L["FocusTarget"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "unitframe", "focustarget") end,
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
@@ -2455,7 +2442,6 @@ E.Options.args.unitframe = {
 			order = 18,
 			type = "execute",
 			name = L["PET"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "unitframe", "pet") end,
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
@@ -2468,7 +2454,6 @@ E.Options.args.unitframe = {
 			order = 20,
 			type = "execute",
 			name = L["PetTarget"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "unitframe", "pettarget") end,
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
@@ -2476,7 +2461,6 @@ E.Options.args.unitframe = {
 			order = 21,
 			type = "execute",
 			name = L["ARENA"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "unitframe", "arena") end,
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
@@ -2484,7 +2468,6 @@ E.Options.args.unitframe = {
 			order = 22,
 			type = "execute",
 			name = L["BOSS"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "unitframe", "boss") end,
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
@@ -2492,7 +2475,6 @@ E.Options.args.unitframe = {
 			order = 23,
 			type = "execute",
 			name = L["PARTY"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "unitframe", "party") end,
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
@@ -2505,7 +2487,6 @@ E.Options.args.unitframe = {
 			order = 25,
 			type = "execute",
 			name = L["RAID"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "unitframe", "raid") end,
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
@@ -2513,7 +2494,6 @@ E.Options.args.unitframe = {
 			order = 26,
 			type = "execute",
 			name = L["Raid-40"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "unitframe", "raid40") end,
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
@@ -2521,7 +2501,6 @@ E.Options.args.unitframe = {
 			order = 29,
 			type = "execute",
 			name = L["Raid Pet"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "unitframe", "raidpet") end,
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
@@ -2529,7 +2508,6 @@ E.Options.args.unitframe = {
 			order = 30,
 			type = "execute",
 			name = L["Assist"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "unitframe", "assist") end,
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
@@ -2542,7 +2520,6 @@ E.Options.args.unitframe = {
 			order = 32,
 			type = "execute",
 			name = L["TANK"],
-			buttonElvUI = true,
 			func = function() ACD:SelectGroup("ElvUI", "unitframe", "tank") end,
 			disabled = function() return not E.UnitFrames.Initialized end
 		},
