@@ -327,6 +327,8 @@ function AddOn:ToggleOptionsUI(msg)
 		return
 	end
 
+	if UnitExists("target") then return end
+
 	if not IsAddOnLoaded("ElvUI_OptionsUI") then
 		local noConfig
 		local _, _, _, _, reason = GetAddOnInfo("ElvUI_OptionsUI")
