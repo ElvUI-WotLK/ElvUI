@@ -1222,8 +1222,9 @@ function CH:ChatFrame_MessageEventHandler(frame, event, arg1, arg2, arg3, arg4, 
 			local accessID = ChatHistory_GetAccessID(chatGroup, chatTarget)
 			local typeID = ChatHistory_GetAccessID(infoType, chatTarget)
 
+
 			if not historySavedName and arg2 ~= E.myname and not CH.SoundTimer and (not CH.db.noAlertInCombat or not InCombatLockdown()) then
-				local channels = find(chatType, "WHISPER") and "WHISPER" or find(chatType, "BATTLEGROUND") and "BATTLEGROUND" or find(chatType, "PARTY") and "PARTY" or find(chatType, "RAID") and "RAID" or chatType
+				local channels = not find(event, "_INFORM") and find(chatType, "WHISPER") and "WHISPER" or find(chatType, "BATTLEGROUND") and "BATTLEGROUND" or find(chatType, "PARTY") and "PARTY" or find(chatType, "RAID") and "RAID" or chatType
 				local alertType = CH.db.channelAlerts[channels]
 
 				if alertType and alertType ~= "None" then
