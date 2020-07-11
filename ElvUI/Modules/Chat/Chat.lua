@@ -435,7 +435,7 @@ function CH:StyleChat(frame)
 	frame.styled = true
 end
 
-function CH:AddMessage(msg, infoR, infoG, infoB, infoID, accessID, typeID, isHistory, historyTime)
+function CH:AddMessage(msg, infoR, infoG, infoB, infoID, accessID, typeID, extraData, isHistory, historyTime)
 	if CH.db.timeStampFormat ~= "NONE" then
 		local timeStamp = BetterDate(CH.db.timeStampFormat, isHistory == "ElvUI_ChatHistory" and historyTime or time())
 
@@ -448,7 +448,7 @@ function CH:AddMessage(msg, infoR, infoG, infoB, infoID, accessID, typeID, isHis
 		end
 	end
 
-	self.OldAddMessage(self, msg, infoR, infoG, infoB, infoID, accessID, typeID)
+	self.OldAddMessage(self, msg, infoR, infoG, infoB, infoID, accessID, typeID, extraData)
 end
 
 function CH:UpdateSettings()
@@ -1074,28 +1074,28 @@ function CH:ChatFrame_MessageEventHandler(frame, event, arg1, arg2, arg3, arg4, 
 
 		if chatType == "SYSTEM" or chatType == "SKILL" or chatType == "LOOT" or chatType == "MONEY"
 		or chatType == "OPENING" or chatType == "TRADESKILLS" or chatType == "PET_INFO" or chatType == "TARGETICONS" then
-			frame:AddMessage(arg1, info.r, info.g, info.b, info.id, nil, nil, isHistory, historyTime)
+			frame:AddMessage(arg1, info.r, info.g, info.b, info.id, false, nil, nil, isHistory, historyTime)
 		elseif strsub(chatType,1,7) == "COMBAT_" then
-			frame:AddMessage(arg1, info.r, info.g, info.b, info.id, nil, nil, isHistory, historyTime)
+			frame:AddMessage(arg1, info.r, info.g, info.b, info.id, false, nil, nil, isHistory, historyTime)
 		elseif strsub(chatType,1,6) == "SPELL_" then
-			frame:AddMessage(arg1, info.r, info.g, info.b, info.id, nil, nil, isHistory, historyTime)
+			frame:AddMessage(arg1, info.r, info.g, info.b, info.id, false, nil, nil, isHistory, historyTime)
 		elseif strsub(chatType,1,10) == "BG_SYSTEM_" then
-			frame:AddMessage(arg1, info.r, info.g, info.b, info.id, nil, nil, isHistory, historyTime)
+			frame:AddMessage(arg1, info.r, info.g, info.b, info.id, false, nil, nil, isHistory, historyTime)
 		elseif strsub(chatType,1,11) == "ACHIEVEMENT" then
-			frame:AddMessage(format(arg1, "|Hplayer:"..arg2.."|h".."["..coloredName.."]".."|h"), info.r, info.g, info.b, info.id, nil, nil, isHistory, historyTime)
+			frame:AddMessage(format(arg1, "|Hplayer:"..arg2.."|h".."["..coloredName.."]".."|h"), info.r, info.g, info.b, info.id, false, nil, nil, isHistory, historyTime)
 		elseif strsub(chatType,1,18) == "GUILD_ACHIEVEMENT" then
-			frame:AddMessage(format(arg1, "|Hplayer:"..arg2.."|h".."["..coloredName.."]".."|h"), info.r, info.g, info.b, info.id, nil, nil, isHistory, historyTime)
+			frame:AddMessage(format(arg1, "|Hplayer:"..arg2.."|h".."["..coloredName.."]".."|h"), info.r, info.g, info.b, info.id, false, nil, nil, isHistory, historyTime)
 		elseif chatType == "IGNORED" then
-			frame:AddMessage(format(CHAT_IGNORED, arg2), info.r, info.g, info.b, info.id, nil, nil, isHistory, historyTime)
+			frame:AddMessage(format(CHAT_IGNORED, arg2), info.r, info.g, info.b, info.id, false, nil, nil, isHistory, historyTime)
 		elseif chatType == "FILTERED" then
-			frame:AddMessage(format(CHAT_FILTERED, arg2), info.r, info.g, info.b, info.id, nil, nil, isHistory, historyTime)
+			frame:AddMessage(format(CHAT_FILTERED, arg2), info.r, info.g, info.b, info.id, false, nil, nil, isHistory, historyTime)
 		elseif chatType == "RESTRICTED" then
-			frame:AddMessage(CHAT_RESTRICTED, info.r, info.g, info.b, info.id, nil, nil, isHistory, historyTime)
+			frame:AddMessage(CHAT_RESTRICTED, info.r, info.g, info.b, info.id, false, nil, nil, isHistory, historyTime)
 		elseif chatType == "CHANNEL_LIST" then
 			if channelLength > 0 then
-				frame:AddMessage(format(_G["CHAT_"..chatType.."_GET"]..arg1, tonumber(arg8), arg4), info.r, info.g, info.b, info.id, nil, nil, isHistory, historyTime)
+				frame:AddMessage(format(_G["CHAT_"..chatType.."_GET"]..arg1, tonumber(arg8), arg4), info.r, info.g, info.b, info.id, false, nil, nil, isHistory, historyTime)
 			else
-				frame:AddMessage(arg1, info.r, info.g, info.b, info.id, nil, nil, isHistory, historyTime)
+				frame:AddMessage(arg1, info.r, info.g, info.b, info.id, false, nil, nil, isHistory, historyTime)
 			end
 		elseif chatType == "CHANNEL_NOTICE_USER" then
 			local globalstring = _G["CHAT_"..arg1.."_NOTICE_BN"]
@@ -1105,11 +1105,11 @@ function CH:ChatFrame_MessageEventHandler(frame, event, arg1, arg2, arg3, arg4, 
 
 			if strlen(arg5) > 0 then
 				-- TWO users in this notice (E.G. x kicked y)
-				frame:AddMessage(format(globalstring, arg8, arg4, arg2, arg5), info.r, info.g, info.b, info.id, nil, nil, isHistory, historyTime)
+				frame:AddMessage(format(globalstring, arg8, arg4, arg2, arg5), info.r, info.g, info.b, info.id, false, nil, nil, isHistory, historyTime)
 			elseif arg1 == "INVITE" then
-				frame:AddMessage(format(globalstring, arg4, arg2), info.r, info.g, info.b, info.id, nil, nil, isHistory, historyTime)
+				frame:AddMessage(format(globalstring, arg4, arg2), info.r, info.g, info.b, info.id, false, nil, nil, isHistory, historyTime)
 			else
-				frame:AddMessage(format(globalstring, arg8, arg4, arg2), info.r, info.g, info.b, info.id, nil, nil, isHistory, historyTime)
+				frame:AddMessage(format(globalstring, arg8, arg4, arg2), info.r, info.g, info.b, info.id, false, nil, nil, isHistory, historyTime)
 			end
 		elseif chatType == "CHANNEL_NOTICE" then
 			if arg1 == "NOT_IN_LFG" then return end
@@ -1123,7 +1123,7 @@ function CH:ChatFrame_MessageEventHandler(frame, event, arg1, arg2, arg3, arg4, 
 
 			local accessID = ChatHistory_GetAccessID(Chat_GetChatCategory(chatType), arg8)
 			local typeID = ChatHistory_GetAccessID(infoType, arg8)
-			frame:AddMessage(format(globalstring, arg8, arg4), info.r, info.g, info.b, info.id, accessID, typeID, isHistory, historyTime)
+			frame:AddMessage(format(globalstring, arg8, arg4), info.r, info.g, info.b, info.id, false, accessID, typeID, isHistory, historyTime)
 		else
 			local body
 
@@ -1232,7 +1232,7 @@ function CH:ChatFrame_MessageEventHandler(frame, event, arg1, arg2, arg3, arg4, 
 				CH.SoundTimer = E:Delay(1, CH.ThrottleSound)
 			end
 
-			frame:AddMessage(body, info.r, info.g, info.b, info.id, accessID, typeID, isHistory, historyTime)
+			frame:AddMessage(body, info.r, info.g, info.b, info.id, false, accessID, typeID, isHistory, historyTime)
 		end
 
 		if not historySavedName and (chatType == "WHISPER" or chatType == "BN_WHISPER") then
