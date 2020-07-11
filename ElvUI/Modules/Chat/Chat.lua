@@ -29,6 +29,7 @@ local FCFManager_ShouldSuppressMessage = FCFManager_ShouldSuppressMessage
 local FCFTab_UpdateAlpha = FCFTab_UpdateAlpha
 local FCF_GetCurrentChatFrame = FCF_GetCurrentChatFrame
 local FCF_SavePositionAndDimensions = FCF_SavePositionAndDimensions
+local FCF_SetLocked = FCF_SetLocked
 local FCF_StartAlertFlash = FCF_StartAlertFlash
 local FloatingChatFrame_OnEvent = FloatingChatFrame_OnEvent
 local GMChatFrame_IsGM = GMChatFrame_IsGM
@@ -1273,6 +1274,19 @@ local function FloatingChatFrameOnEvent(...)
 	CH:FloatingChatFrame_OnEvent(...)
 end
 
+function CH:UpdateDockState()
+	if self.db.lockPositions then
+		FCF_SetLocked(ChatFrame1, 1)
+		GeneralDockManager:SetParent(LeftChatPanel)
+		GeneralDockManagerOverflowButton:ClearAllPoints()
+		GeneralDockManagerOverflowButton:Point("BOTTOMRIGHT", LeftChatTab, "BOTTOMRIGHT", -2, 2)
+	else
+		GeneralDockManager:SetParent(UIParent)
+		GeneralDockManagerOverflowButton:ClearAllPoints()
+		GeneralDockManagerOverflowButton:Point("BOTTOMRIGHT", GeneralDockManager, 0, -1)
+	end
+end
+
 function CH:SetupChat()
 	if not E.private.chat.enable then return end
 
@@ -1318,7 +1332,7 @@ function CH:SetupChat()
 
 	self:ToggleHyperlink(self.db.hyperlinkHover)
 
-	GeneralDockManager:SetParent(LeftChatPanel)
+	self:UpdateDockState()
 	self:PositionChat(true)
 
 	if not self.HookSecured then
