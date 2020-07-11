@@ -54,8 +54,6 @@ This UI will arrange your interface to be more flexible and practical.
 <br />
 [ElvUI_CastBarOverlay](https://github.com/ElvUI-WotLK/ElvUI_CastBarOverlay)
 <br />
-[ElvUI_ChannelAlerts](https://github.com/ElvUI-WotLK/ElvUI_ChannelAlerts)
-<br />
 [ElvUI_CustomTags](https://github.com/ElvUI-WotLK/ElvUI_CustomTags)
 <br />
 [ElvUI_CustomTweaks](https://github.com/ElvUI-WotLK/ElvUI_CustomTweaks)
@@ -92,16 +90,16 @@ This UI will arrange your interface to be more flexible and practical.
     /harlemshake      Enables Harlem Shake april fools joke. (DO THE HARLEM SHAKE!)
     /egrid            Toggles visibility of the grid for helping placement of thirdparty addons.
     /farmmode         Toggles the Minimap Farmmode.
-    /in               The input of how many seconds you want a command to fire. 
+    /in               The input of how many seconds you want a command to fire.
                           usage: /in <seconds> <command>
                           example: /in 1.5 /say hi
-    /enable           Enable an Addon. 
+    /enable           Enable an Addon.
                           usage: /enable <addon>
                           example: /enable AtlasLoot
     /disable          Disable an Addon.
                           usage: /disable <addon>
                           example: /disable AtlasLoot
-    
+
     ---------------------------------------------------------------------------------------------------------------
     -- Development ------------------------------------------------------------------------------------------------
     ---------------------------------------------------------------------------------------------------------------
@@ -115,10 +113,10 @@ This UI will arrange your interface to be more flexible and practical.
                           example: /frame WorldFrame
     /framelist        Dumps frame level information with children and parents. Also places info into copy box.
     /framestack       Toggles dynamic mouseover frame displaying frame name and level information.
-    /resetui          If no argument is provided it will reset all frames to their default positions. 
-                      If an argument is provided it will reset only that frame. 
+    /resetui          If no argument is provided it will reset all frames to their default positions.
+                      If an argument is provided it will reset only that frame.
                           example: /resetui uf (resets all unitframes)
-                  
+
 
 ## Languages:
 
