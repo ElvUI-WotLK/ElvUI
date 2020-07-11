@@ -38,14 +38,12 @@ local GetMouseFocus = GetMouseFocus
 local GetNumPartyMembers = GetNumPartyMembers
 local GetNumRaidMembers = GetNumRaidMembers
 local GetPlayerInfoByGUID = GetPlayerInfoByGUID
-local GetTime = GetTime
 local HasLFGRestrictions = HasLFGRestrictions
 local InCombatLockdown = InCombatLockdown
 local IsAltKeyDown = IsAltKeyDown
 local IsInInstance = IsInInstance
 local IsMouseButtonDown = IsMouseButtonDown
 local IsShiftKeyDown = IsShiftKeyDown
-local PlaySound = PlaySound
 local PlaySoundFile = PlaySoundFile
 local ScrollFrameTemplate_OnMouseWheel = ScrollFrameTemplate_OnMouseWheel
 local StaticPopup_Visible = StaticPopup_Visible
@@ -61,7 +59,6 @@ local CHAT_FRAMES = CHAT_FRAMES
 local CHAT_IGNORED = CHAT_IGNORED
 local CHAT_OPTIONS = CHAT_OPTIONS
 local CHAT_RESTRICTED = CHAT_RESTRICTED
-local CHAT_TELL_ALERT_TIME = CHAT_TELL_ALERT_TIME
 local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS
 local DEFAULT_CHAT_FRAME = DEFAULT_CHAT_FRAME
 local DND = DND
@@ -1222,28 +1219,17 @@ function CH:ChatFrame_MessageEventHandler(frame, event, arg1, arg2, arg3, arg4, 
 			local accessID = ChatHistory_GetAccessID(chatGroup, chatTarget)
 			local typeID = ChatHistory_GetAccessID(infoType, chatTarget)
 
-
-			if not historySavedName and arg2 ~= E.myname and not CH.SoundTimer and (not CH.db.noAlertInCombat or not InCombatLockdown()) then
-				local channels = not find(event, "_INFORM") and find(chatType, "WHISPER") and "WHISPER" or find(chatType, "BATTLEGROUND") and "BATTLEGROUND" or find(chatType, "PARTY") and "PARTY" or find(chatType, "RAID") and "RAID" or chatType
-				local alertType = CH.db.channelAlerts[channels]
-
-				if alertType and alertType ~= "None" then
-					PlaySoundFile(LSM:Fetch("sound", alertType), "Master")
-					CH.SoundTimer = E:Delay(1, CH.ThrottleSound)
-				end
+			local alertType = not historySavedName and not CH.SoundTimer and not strfind(event, "_INFORM") and CH.db.channelAlerts[historyTypes[event]]
+			if alertType and alertType ~= "None" and arg2 ~= E.myname and (not CH.db.noAlertInCombat or not InCombatLockdown()) then
+				PlaySoundFile(LSM:Fetch("sound", alertType), "Master")
+				CH.SoundTimer = E:Delay(1, CH.ThrottleSound)
 			end
 
 			frame:AddMessage(body, info.r, info.g, info.b, info.id, accessID, typeID, isHistory, historyTime)
 		end
 
 		if not historySavedName and (chatType == "WHISPER" or chatType == "BN_WHISPER") then
-			--BN_WHISPER FIXME
 			ChatEdit_SetLastTellTarget(arg2)
-			if frame.tellTimer and (GetTime() > frame.tellTimer) then
-				PlaySound("TellMessage")
-			end
-			frame.tellTimer = GetTime() + CHAT_TELL_ALERT_TIME
-			--FCF_FlashTab(frame)
 		end
 
 		if not historySavedName and (not frame:IsShown()) then
@@ -1584,7 +1570,6 @@ function CH:DisplayChatHistory()
 	local data = ElvCharacterDB.ChatHistoryLog
 	if not next(data) then return end
 
-	CH.SoundTimer = true
 	for _, chat in ipairs(CHAT_FRAMES) do
 		for _, d in ipairs(data) do
 			if type(d) == "table" then
@@ -1596,7 +1581,6 @@ function CH:DisplayChatHistory()
 			end
 		end
 	end
-	CH.SoundTimer = nil
 end
 
 tremove(ChatTypeGroup.GUILD, 2)
