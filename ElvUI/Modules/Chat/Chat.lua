@@ -288,6 +288,11 @@ function CH:StyleChat(frame)
 		_G[tab:GetName()..texName.."Right"]:SetTexture(nil)
 	end
 
+	tab:SetHitRectInsets(0, 0, 11, 1)
+
+	tab.glow:Point("BOTTOMLEFT", 8, 2)
+	tab.glow:Point("BOTTOMRIGHT", -8, 2)
+
 	hooksecurefunc(tab, "SetAlpha", function(t, alpha)
 		if alpha ~= 1 and (not t.isDocked or GeneralDockManager.selected:GetID() == t:GetID()) then
 			t:SetAlpha(1)
@@ -306,6 +311,8 @@ function CH:StyleChat(frame)
 	end)
 
 	if tab.conversationIcon then
+		tab.text:Point("LEFT", tab.leftTexture, "RIGHT", 10, -5)
+
 		tab.conversationIcon:ClearAllPoints()
 		tab.conversationIcon:Point("RIGHT", tab.text, "LEFT", -1, 0)
 	end
@@ -582,17 +589,16 @@ end
 function CH:UpdateAnchors()
 	for _, frameName in ipairs(CHAT_FRAMES) do
 		local frame = _G[frameName.."EditBox"]
-		if not frame then break end
-		local noBackdrop = (self.db.panelBackdrop == "HIDEBOTH" or self.db.panelBackdrop == "RIGHT")
+
 		frame:ClearAllPoints()
 		if not E.db.datatexts.leftChatPanel and self.db.editBoxPosition == "BELOW_CHAT" then
-			frame:Point("TOPLEFT", ChatFrame1, "BOTTOMLEFT", noBackdrop and -1 or -4, noBackdrop and -1 or -4)
-			frame:Point("BOTTOMRIGHT", ChatFrame1, "BOTTOMRIGHT", noBackdrop and 10 or 7, -LeftChatTab:GetHeight()-(noBackdrop and 1 or 4))
+			frame:Point("TOPLEFT", ChatFrame1, "BOTTOMLEFT", -4, -4)
+			frame:Point("BOTTOMRIGHT", ChatFrame1, "BOTTOMRIGHT", 7, -LeftChatTab:GetHeight() - 4)
 		elseif self.db.editBoxPosition == "BELOW_CHAT" then
 			frame:SetAllPoints(LeftChatDataPanel)
 		else
-			frame:Point("BOTTOMLEFT", ChatFrame1, "TOPLEFT", noBackdrop and -1 or -1, noBackdrop and 1 or 4)
-			frame:Point("TOPRIGHT", ChatFrame1, "TOPRIGHT", noBackdrop and 10 or 4, LeftChatTab:GetHeight()+(noBackdrop and 1 or 4))
+			frame:Point("BOTTOMLEFT", ChatFrame1, "TOPLEFT", -1, 3)
+			frame:Point("TOPRIGHT", ChatFrame1, "TOPRIGHT", 4, LeftChatTab:GetHeight() + 3)
 		end
 	end
 
@@ -694,10 +700,10 @@ function CH:PositionChat(override)
 			chat:ClearAllPoints()
 
 			if E.db.datatexts.rightChatPanel then
-				chat:Point("BOTTOMLEFT", RightChatDataPanel, "TOPLEFT", 1, 3)
+				chat:Point("BOTTOMLEFT", RightChatDataPanel, "TOPLEFT", 1, 4)
 			else
 				BASE_OFFSET = BASE_OFFSET - 24
-				chat:Point("BOTTOMLEFT", RightChatDataPanel, "BOTTOMLEFT", 1, 1)
+				chat:Point("BOTTOMLEFT", RightChatDataPanel, "BOTTOMLEFT", 1, 2)
 			end
 			if id ~= 2 then
 				chat:Size((self.db.separateSizes and self.db.panelWidthRight or self.db.panelWidth) - 11, (self.db.separateSizes and self.db.panelHeightRight or self.db.panelHeight) - BASE_OFFSET)
@@ -729,10 +735,10 @@ function CH:PositionChat(override)
 			if id ~= 2 and not (id > NUM_CHAT_WINDOWS) then
 				chat:ClearAllPoints()
 				if E.db.datatexts.leftChatPanel then
-					chat:Point("BOTTOMLEFT", LeftChatToggleButton, "TOPLEFT", 1, 3)
+					chat:Point("BOTTOMLEFT", LeftChatToggleButton, "TOPLEFT", 1, 4)
 				else
 					BASE_OFFSET = BASE_OFFSET - 24
-					chat:Point("BOTTOMLEFT", LeftChatToggleButton, "BOTTOMLEFT", 1, 1)
+					chat:Point("BOTTOMLEFT", LeftChatToggleButton, "BOTTOMLEFT", 1, 2)
 				end
 				chat:Size(self.db.panelWidth - 11, (self.db.panelHeight - BASE_OFFSET))
 
@@ -1950,12 +1956,11 @@ function CH:Initialize()
 		end
 	end)
 
-	GeneralDockManagerOverflowButton:ClearAllPoints()
-	GeneralDockManagerOverflowButton:Point("BOTTOMRIGHT", LeftChatTab, "BOTTOMRIGHT", -2, 2)
+	GeneralDockManagerOverflowButton:Size(17)
 	GeneralDockManagerOverflowButtonList:SetTemplate("Transparent")
 	hooksecurefunc(GeneralDockManagerScrollFrame, "SetPoint", function(self, point, anchor, attachTo, x, y)
 		if anchor == GeneralDockManagerOverflowButton and x == 0 and y == 0 then
-			self:Point(point, anchor, attachTo, -2, -6)
+			self:Point(point, anchor, attachTo, -2, -4)
 		end
 	end)
 
