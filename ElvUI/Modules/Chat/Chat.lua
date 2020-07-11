@@ -1226,10 +1226,14 @@ function CH:ChatFrame_MessageEventHandler(frame, event, arg1, arg2, arg3, arg4, 
 			local accessID = ChatHistory_GetAccessID(chatGroup, chatTarget)
 			local typeID = ChatHistory_GetAccessID(infoType, chatTarget)
 
-			local alertType = not historySavedName and not CH.SoundTimer and not strfind(event, "_INFORM") and CH.db.channelAlerts[historyTypes[event]]
-			if alertType and alertType ~= "None" and arg2 ~= E.myname and (not CH.db.noAlertInCombat or not InCombatLockdown()) then
-				PlaySoundFile(LSM:Fetch("sound", alertType), "Master")
-				CH.SoundTimer = E:Delay(1, CH.ThrottleSound)
+			if not historySavedName and arg2 ~= E.myname and not CH.SoundTimer and (not CH.db.noAlertInCombat or not InCombatLockdown()) then
+				local channels = chatGroup ~= "WHISPER" and chatGroup or (chatType == "WHISPER" or chatType == "BN_WHISPER") and "WHISPER"
+				local alertType = CH.db.channelAlerts[channels]
+
+				if alertType and alertType ~= "None" then
+					PlaySoundFile(LSM:Fetch("sound", alertType), "Master")
+					CH.SoundTimer = E:Delay(1, CH.ThrottleSound)
+				end
 			end
 
 			frame:AddMessage(body, info.r, info.g, info.b, info.id, false, accessID, typeID, isHistory, historyTime)
@@ -1302,8 +1306,11 @@ function CH:SetupChat()
 		else
 			frame:SetShadowColor(0, 0, 0, 1)
 		end
+
+		if self.db.maxLines ~= frame:GetMaxLines() then
+			frame:SetMaxLines(self.db.maxLines)
+		end
 		frame:SetTimeVisible(self.db.inactivityTimer)
-		frame:SetMaxLines(self.db.maxLines)
 		frame:SetShadowOffset(E.mult, -E.mult)
 		frame:SetFading(self.db.fade)
 
