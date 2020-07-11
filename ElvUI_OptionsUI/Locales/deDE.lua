@@ -1158,6 +1158,7 @@ L["Will attempt to sell another item in set interval after previous one was sold
 L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."] = "Zeigt Stärkungszauber auf der Position der Schwächungszauber, wenn kein Schwächungszauber aktiv ist und vice versa."
 L["Word Wrap"] = "Zeilenumbruch"
 L["World Map Coordinates"] = "Weltkarten Koordinaten"
+L["World State Frame"] = true
 L["Wrap After"] = "Neue Reihe/Spalte beginnen"
 L["X-Offset"] = "X-Versatz"
 L["Y-Offset"] = "Y-Versatz"

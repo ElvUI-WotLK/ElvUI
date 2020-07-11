@@ -1163,6 +1163,7 @@ L["Will attempt to sell another item in set interval after previous one was sold
 L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."] = "Voir les améliorations avec les affaiblissements quand il n'y a pas d'affaiblissement actif, et vice versa."
 L["Word Wrap"] = "Césure des mots"
 L["World Map Coordinates"] = "Coordonnées de la carte du Monde"
+L["World State Frame"] = true
 L["Wrap After"] = "Retour à la ligne après"
 L["X-Offset"] = "Décalage de l'axe X"
 L["Y-Offset"] = "Décalage de l'axe Y"

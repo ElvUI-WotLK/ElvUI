@@ -1158,6 +1158,7 @@ L["Will attempt to sell another item in set interval after previous one was sold
 L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."] = "При отсутствии дебаффов, будет показывать баффы на их месте или наоборот."
 L["Word Wrap"] = "Перенос слов"
 L["World Map Coordinates"] = "Координаты карты мира"
+L["World State Frame"] = true
 L["Wrap After"] = "Размер ряда"
 L["X-Offset"] = "Отступ по X"
 L["Y-Offset"] = "Отступ по Y"

@@ -1161,6 +1161,7 @@ L["Will attempt to sell another item in set interval after previous one was sold
 L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."] = true
 L["Word Wrap"] = true
 L["World Map Coordinates"] = "세계 지도 좌표"
+L["World State Frame"] = true
 L["Wrap After"] = "한 줄에 표시할 오라 수"
 L["X-Offset"] = "X 좌표"
 L["Y-Offset"] = "Y 좌표"

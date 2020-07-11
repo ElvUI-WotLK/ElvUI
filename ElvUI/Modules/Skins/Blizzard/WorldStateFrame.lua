@@ -33,7 +33,7 @@ S:AddCallback("Skin_WorldStateFrame", function()
 		leftBar:SetVertexColor(0, .44, .87)
 
 		bar.leftBarIcon = bar:CreateTexture("$parentLeftBarIcon", "ARTWORK")
-		bar.leftBarIcon:SetTexture("Interface\\AddOns\\ElvUI_AddOnSkins\\media\\alliance")
+		bar.leftBarIcon:SetTexture("Interface\\AddOns\\ElvUI\\Media\\Textures\\Alliance-Logo-Small")
 		bar.leftBarIcon:SetPoint("RIGHT", bar, "LEFT", 0, 0)
 		bar.leftBarIcon:SetSize(32, 32)
 
@@ -44,7 +44,7 @@ S:AddCallback("Skin_WorldStateFrame", function()
 		rightBar:SetVertexColor(.77, .12, .23)
 
 		bar.rightBarIcon = bar:CreateTexture("$parentRightBarIcon", "ARTWORK")
-		bar.rightBarIcon:SetTexture("Interface\\AddOns\\ElvUI_AddOnSkins\\media\\horde")
+		bar.rightBarIcon:SetTexture("Interface\\AddOns\\ElvUI\\Media\\Textures\\Horde-Logo-Small")
 		bar.rightBarIcon:SetPoint("LEFT", bar, "RIGHT", 0, 0)
 		bar.rightBarIcon:Size(32, 32)
 

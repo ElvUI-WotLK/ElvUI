@@ -1161,6 +1161,7 @@ L["Will attempt to sell another item in set interval after previous one was sold
 L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."] = true
 L["Word Wrap"] = "Ajuste de Línea"
 L["World Map Coordinates"] = "Coordenadas del Mapa Mundial"
+L["World State Frame"] = true
 L["Wrap After"] = "Auras por Fila/Columna"
 L["X-Offset"] = "DesplazamientoX"
 L["Y-Offset"] = "DesplazamientoY"

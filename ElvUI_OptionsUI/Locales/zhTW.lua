@@ -1158,6 +1158,7 @@ L["Will attempt to sell another item in set interval after previous one was sold
 L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."] = "如果沒有debuff則把buff顯示在debuff位置"
 L["Word Wrap"] = "自動換行"
 L["World Map Coordinates"] = "世界地圖坐標"
+L["World State Frame"] = true
 L["Wrap After"] = "每行光環數"
 L["X-Offset"] = "X軸偏移"
 L["Y-Offset"] = "Y軸偏移"
