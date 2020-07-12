@@ -297,6 +297,7 @@ P.nameplates = {
 		glowColor = {r = 1, g = 1, b = 1, a = 1},
 		castColor = {r = 1, g = 0.81, b = 0},
 		castNoInterruptColor = {r = 0.78, g = 0.25, b = 0.25},
+		castInterruptedColor = {r = 0.30, g = 0.30, b = 0.30},
 		castbarDesaturate = true,
 		reactions = {
 			friendlyPlayer = {r = 0.31, g = 0.45, b = 0.63},

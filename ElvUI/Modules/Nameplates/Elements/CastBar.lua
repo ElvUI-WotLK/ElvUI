@@ -139,6 +139,7 @@ function NP:Update_CastBar(frame, event, unit)
 		castBar.channeling = event == "UNIT_SPELLCAST_CHANNEL_START"
 		castBar.notInterruptible = notInterruptible
 		castBar.holdTime = 0
+		castBar.interrupted = nil
 		castBar.spellName = name
 
 		if castBar.casting then
@@ -166,6 +167,7 @@ function NP:Update_CastBar(frame, event, unit)
 			castBar.Name:SetText(event == "UNIT_SPELLCAST_FAILED" and FAILED or INTERRUPTED)
 
 			castBar.holdTime = self.db.units[frame.UnitType].castbar.timeToHold --How long the castbar should stay visible after being interrupted, in seconds
+			castBar.interrupted = true
 
 			resetAttributes(castBar)
 			castBar:SetValue(castBar.max)
@@ -213,7 +215,11 @@ function NP:Update_CastBar(frame, event, unit)
 	end
 
 	if not castBar.notInterruptible then
-		castBar:SetStatusBarColor(self.db.colors.castColor.r, self.db.colors.castColor.g, self.db.colors.castColor.b)
+		if castBar.interrupted then
+			castBar:SetStatusBarColor(self.db.colors.castInterruptedColor.r, self.db.colors.castInterruptedColor.g, self.db.colors.castInterruptedColor.b)
+		else
+			castBar:SetStatusBarColor(self.db.colors.castColor.r, self.db.colors.castColor.g, self.db.colors.castColor.b)
+		end
 		castBar.Icon.texture:SetDesaturated(false)
 	else
 		castBar:SetStatusBarColor(self.db.colors.castNoInterruptColor.r, self.db.colors.castNoInterruptColor.g, self.db.colors.castNoInterruptColor.b)
@@ -332,6 +338,7 @@ function NP:Construct_CastBar(parent)
 	frame.Spark:SetSize(15, 15)
 
 	frame.holdTime = 0
+	frame.interrupted = nil
 
 	frame.scale = CreateAnimationGroup(frame)
 	frame.scale.width = frame.scale:CreateAnimation("Width")

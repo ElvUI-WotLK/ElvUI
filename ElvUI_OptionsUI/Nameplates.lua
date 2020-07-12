@@ -3750,22 +3750,28 @@ E.Options.args.nameplate = {
 							end,
 							args = {
 								castColor = {
-									type = "color",
 									order = 1,
+									type = "color",
 									name = L["Cast Color"],
 									hasAlpha = false
 								},
 								castNoInterruptColor = {
-									name = L["Cast No Interrupt Color"],
 									order = 2,
 									type = "color",
+									name = L["Cast No Interrupt Color"],
+									hasAlpha = false
+								},
+								castInterruptedColor = {
+									order = 3,
+									type = "color",
+									name = L["INTERRUPTED"],
 									hasAlpha = false
 								},
 								castbarDesaturate = {
+									order = 4,
 									type = "toggle",
 									name = L["Desaturated Icon"],
 									desc = L["Show the castbar icon desaturated if a spell is not interruptible."],
-									order = 3,
 									get = function(info)
 										return E.db.nameplates.colors[info[#info]]
 									end,
