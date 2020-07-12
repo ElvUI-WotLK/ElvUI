@@ -414,6 +414,9 @@ function NP:OnHide(isConfig, dontHideHighlight)
 	frame.Health.r, frame.Health.g, frame.Health.b = nil, nil, nil
 	frame.Health:Hide()
 	frame.CastBar:Hide()
+	frame.CastBar.casting = nil
+	frame.CastBar.channeling = nil
+	frame.CastBar.notInterruptible = nil
 	frame.CastBar.spellName = nil
 	frame.Level:SetText()
 	frame.Name.r, frame.Name.g, frame.Name.b = nil, nil, nil
