@@ -15,6 +15,7 @@ local InCombatLockdown = InCombatLockdown
 local IsShiftKeyDown = IsShiftKeyDown
 local IsControlKeyDown = IsControlKeyDown
 local IsAltKeyDown = IsAltKeyDown
+local IsModifierKeyDown = IsModifierKeyDown
 local GetInventoryItemLink = GetInventoryItemLink
 local GetInventorySlotInfo = GetInventorySlotInfo
 local UnitExists = UnitExists
@@ -609,6 +610,8 @@ function TT:GameTooltip_OnTooltipSetSpell(tt)
 end
 
 function TT:SetItemRef(link)
+	if IsModifierKeyDown() then return end
+
 	if self.db.spellID and (find(link, "^spell:") or find(link, "^item:")) then
 		ItemRefTooltip:AddLine(format("|cFFCA3C3C%s|r %d", ID, tonumber(match(link, "(%d+)"))))
 		ItemRefTooltip:Show()
