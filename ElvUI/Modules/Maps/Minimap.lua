@@ -21,44 +21,105 @@ local InCombatLockdown = InCombatLockdown
 
 local menuFrame = CreateFrame("Frame", "MinimapRightClickMenu", E.UIParent, "UIDropDownMenuTemplate")
 local menuList = {
-	{text = CHARACTER_BUTTON,
-	func = function() ToggleCharacter("PaperDollFrame") end},
-	{text = SPELLBOOK_ABILITIES_BUTTON,
-	func = function() ToggleFrame(SpellBookFrame) end},
-	{text = TALENTS_BUTTON,
-	func = ToggleTalentFrame},
-	{text = ACHIEVEMENT_BUTTON,
-	func = ToggleAchievementFrame},
-	{text = QUESTLOG_BUTTON,
-	func = function() ToggleFrame(QuestLogFrame) end},
-	{text = SOCIAL_BUTTON,
-	func = function() ToggleFriendsFrame(1) end},
-	{text = L["Calendar"],
-	func = function() GameTimeFrame:Click() end},
-	{text = L["Farm Mode"],
-	func = FarmMode},
-	{text = BATTLEFIELD_MINIMAP,
-	func = ToggleBattlefieldMinimap},
-	{text = TIMEMANAGER_TITLE,
-	func = ToggleTimeManager},
-	{text = PLAYER_V_PLAYER,
-	func = function() ToggleFrame(PVPParentFrame) end},
-	{text = LFG_TITLE,
-	func = function() ToggleFrame(LFDParentFrame) end},
-	{text = LOOKING_FOR_RAID,
-	func = function() ToggleFrame(LFRParentFrame) end},
-	{text = MAINMENU_BUTTON,
-	func = function()
-		if GameMenuFrame:IsShown() then
-			PlaySound("igMainMenuQuit")
-			HideUIPanel(GameMenuFrame)
-		else
-			PlaySound("igMainMenuOpen")
-			ShowUIPanel(GameMenuFrame)
+	{
+		text = CHARACTER_BUTTON,
+		notCheckable = 1,
+		func = function()
+			ToggleCharacter("PaperDollFrame")
 		end
-	end},
-	{text = HELP_BUTTON,
-	func = ToggleHelpFrame}
+	},
+	{
+		text = SPELLBOOK_ABILITIES_BUTTON,
+		notCheckable = 1,
+		func = function()
+			ToggleFrame(SpellBookFrame)
+		end
+	},
+	{
+		text = TALENTS_BUTTON,
+		notCheckable = 1,
+		func = ToggleTalentFrame
+	},
+	{
+		text = ACHIEVEMENT_BUTTON,
+		notCheckable = 1,
+		func = ToggleAchievementFrame
+	},
+	{
+		text = QUESTLOG_BUTTON,
+		notCheckable = 1,
+		func = function()
+			ToggleFrame(QuestLogFrame)
+		end
+	},
+	{
+		text = SOCIAL_BUTTON,
+		notCheckable = 1,
+		func = function()
+			ToggleFriendsFrame(1)
+		end
+	},
+	{
+		text = L["Calendar"],
+		notCheckable = 1,
+		func = function()
+			GameTimeFrame:Click()
+		end
+	},
+	{
+		text = L["Farm Mode"],
+		notCheckable = 1,
+		func = FarmMode
+	},
+	{
+		text = BATTLEFIELD_MINIMAP,
+		notCheckable = 1,
+		func = ToggleBattlefieldMinimap
+	},
+	{
+		text = TIMEMANAGER_TITLE,
+		notCheckable = 1,
+		func = ToggleTimeManager
+	},
+	{
+		text = PLAYER_V_PLAYER,
+		notCheckable = 1,
+		func = function()
+			ToggleFrame(PVPParentFrame)
+		end
+	},
+	{
+		text = LFG_TITLE,
+		notCheckable = 1,
+		func = function()
+			ToggleFrame(LFDParentFrame)
+		end
+	},
+	{
+		text = LOOKING_FOR_RAID,
+		notCheckable = 1,
+		func = function()
+			ToggleFrame(LFRParentFrame)
+		end
+	},
+	{
+		text = MAINMENU_BUTTON,
+		notCheckable = 1,
+		func = function()
+			if GameMenuFrame:IsShown() then
+				PlaySound("igMainMenuQuit")
+				HideUIPanel(GameMenuFrame)
+			else
+				PlaySound("igMainMenuOpen")
+				ShowUIPanel(GameMenuFrame)
+			end
+		end
+	},
+	{
+		text = HELP_BUTTON,
+		notCheckable = 1,
+		func = ToggleHelpFrame
+	}
 }
 
 function M:GetLocTextColor()
