@@ -323,6 +323,7 @@ S:AddCallbackForAddon("Blizzard_Calendar", "Skin_Blizzard_Calendar", function()
 	CalendarViewEventInviteList:SetTemplate("Transparent")
 	CalendarViewEventInviteListSection:StripTextures()
 
+	S:HandleScrollBar(CalendarViewEventDescriptionScrollFrameScrollBar)
 	S:HandleScrollBar(CalendarViewEventInviteListScrollFrameScrollBar)
 
 	CalendarViewEventFrameModalOverlay:SetAllPoints(CalendarViewEventFrame)
@@ -349,13 +350,22 @@ S:AddCallbackForAddon("Blizzard_Calendar", "Skin_Blizzard_Calendar", function()
 	CalendarEventPickerTitleFrame:StripTextures()
 
 	CalendarEventPickerFrame:SetTemplate("Transparent")
+	CalendarEventPickerFrame:SetFrameLevel(CalendarFrameModalOverlay:GetFrameLevel() + 10)
 
 	S:HandleScrollBar(CalendarEventPickerScrollBar)
 	S:HandleButton(CalendarEventPickerCloseButton, true)
 
+	CalendarEventPickerScrollFrame:Width(253)
+	CalendarEventPickerScrollFrame:Point("TOPLEFT", 8, -22)
+
+	CalendarEventPickerScrollBar:Point("TOPLEFT", CalendarEventPickerScrollFrame, "TOPRIGHT", 3, -19)
+	CalendarEventPickerScrollBar:Point("BOTTOMLEFT", CalendarEventPickerScrollFrame, "BOTTOMRIGHT", 3, 17)
+
+	CalendarEventPickerCloseButton:Point("BOTTOMRIGHT", -8, 8)
+
+	-- Create Event
 	S:HandleScrollBar(CalendarCreateEventDescriptionScrollFrameScrollBar)
 	S:HandleScrollBar(CalendarCreateEventInviteListScrollFrameScrollBar)
-	S:HandleScrollBar(CalendarViewEventDescriptionScrollFrameScrollBar)
 
 	if CalendarCreateEventInviteListScrollFrame.buttons then
 		for _, button in ipairs(CalendarCreateEventInviteListScrollFrame.buttons) do

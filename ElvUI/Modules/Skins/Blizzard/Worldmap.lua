@@ -42,6 +42,7 @@ S:AddCallback("Skin_WorldMap", function()
 	WorldMapQuestRewardScrollFrame.backdrop:SetFrameLevel(WorldMapQuestRewardScrollFrame:GetFrameLevel())
 
 	WorldMapQuestRewardScrollChildFrame:SetScale(1)
+	WorldMapQuestRewardScrollFrameTrack:SetTexture()
 
 	WorldMapQuestScrollFrame:CreateBackdrop("Transparent")
 	WorldMapQuestScrollFrame.backdrop:Point("TOPLEFT", 0, 2)
