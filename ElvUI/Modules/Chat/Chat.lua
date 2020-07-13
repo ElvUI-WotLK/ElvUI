@@ -1574,6 +1574,7 @@ function CH:DisplayChatHistory()
 	local data = ElvCharacterDB.ChatHistoryLog
 	if not next(data) then return end
 
+	CH.SoundTimer = true
 	for _, frameName in ipairs(CHAT_FRAMES) do
 		for _, d in ipairs(data) do
 			if type(d) == "table" then
@@ -1585,6 +1586,7 @@ function CH:DisplayChatHistory()
 			end
 		end
 	end
+	CH.SoundTimer = nil
 end
 
 tremove(ChatTypeGroup.GUILD, 2)
