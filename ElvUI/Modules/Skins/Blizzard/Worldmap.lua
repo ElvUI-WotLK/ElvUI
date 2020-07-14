@@ -56,8 +56,17 @@ S:AddCallback("Skin_WorldMap", function()
 	WorldMapQuestHighlightBar:SetAlpha(0.35)
 
 	S:HandleScrollBar(WorldMapQuestScrollFrameScrollBar)
-	S:HandleScrollBar(WorldMapQuestDetailScrollFrameScrollBar, 4)
-	S:HandleScrollBar(WorldMapQuestRewardScrollFrameScrollBar, 4)
+	S:HandleScrollBar(WorldMapQuestDetailScrollFrameScrollBar)
+	S:HandleScrollBar(WorldMapQuestRewardScrollFrameScrollBar)
+
+	WorldMapQuestScrollFrameScrollBar:Point("TOPLEFT", WorldMapQuestScrollFrame, "TOPRIGHT", 7, -17)
+	WorldMapQuestScrollFrameScrollBar:Point("BOTTOMLEFT", WorldMapQuestScrollFrame, "BOTTOMRIGHT", 7, 16)
+
+	WorldMapQuestDetailScrollFrameScrollBar:Point("TOPLEFT", WorldMapQuestDetailScrollFrame, "TOPRIGHT", 5, -17)
+	WorldMapQuestDetailScrollFrameScrollBar:Point("BOTTOMLEFT", WorldMapQuestDetailScrollFrame, "BOTTOMRIGHT", 5, 15)
+
+	WorldMapQuestRewardScrollFrameScrollBar:Point("TOPLEFT", WorldMapQuestRewardScrollFrame, "TOPRIGHT", 4, -17)
+	WorldMapQuestRewardScrollFrameScrollBar:Point("BOTTOMLEFT", WorldMapQuestRewardScrollFrame, "BOTTOMRIGHT", 4, 15)
 
 	S:HandleCloseButton(WorldMapFrameCloseButton)
 

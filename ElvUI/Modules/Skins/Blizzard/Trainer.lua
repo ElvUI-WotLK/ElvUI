@@ -94,8 +94,8 @@ S:AddCallbackForAddon("Blizzard_TrainerUI", "Skin_Blizzard_TrainerUI", function(
 	ClassTrainerListScrollFrame.SetHeight = E.noop
 	ClassTrainerListScrollFrame:Point("TOPRIGHT", -61, -88)
 
-	ClassTrainerListScrollFrameScrollBar:Point("TOPLEFT", ClassTrainerListScrollFrame, "TOPRIGHT", 4, -18)
-	ClassTrainerListScrollFrameScrollBar:Point("BOTTOMLEFT", ClassTrainerListScrollFrame, "BOTTOMRIGHT", 4, 18)
+	ClassTrainerListScrollFrameScrollBar:Point("TOPLEFT", ClassTrainerListScrollFrame, "TOPRIGHT", 3, -19)
+	ClassTrainerListScrollFrameScrollBar:Point("BOTTOMLEFT", ClassTrainerListScrollFrame, "BOTTOMRIGHT", 3, 19)
 
 	ClassTrainerDetailScrollFrame:Size(304, 140)
 	ClassTrainerDetailScrollFrame.SetHeight = E.noop
@@ -104,8 +104,8 @@ S:AddCallbackForAddon("Blizzard_TrainerUI", "Skin_Blizzard_TrainerUI", function(
 	ClassTrainerDetailScrollChildFrame:Width(304)
 	ClassTrainerSkillName:Width(300)
 
-	ClassTrainerDetailScrollFrameScrollBar:Point("TOPLEFT", ClassTrainerDetailScrollFrame, "TOPRIGHT", 4, -18)
-	ClassTrainerDetailScrollFrameScrollBar:Point("BOTTOMLEFT", ClassTrainerDetailScrollFrame, "BOTTOMRIGHT", 4, 18)
+	ClassTrainerDetailScrollFrameScrollBar:Point("TOPLEFT", ClassTrainerDetailScrollFrame, "TOPRIGHT", 3, -19)
+	ClassTrainerDetailScrollFrameScrollBar:Point("BOTTOMLEFT", ClassTrainerDetailScrollFrame, "BOTTOMRIGHT", 3, 19)
 
 	ClassTrainerMoneyFrame:Point("BOTTOMRIGHT", ClassTrainerFrame, "BOTTOMLEFT", 180, 88)
 

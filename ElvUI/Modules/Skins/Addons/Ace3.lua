@@ -89,9 +89,7 @@ function S:Ace3_RegisterAsWidget(widget)
 
 		S:HandleButton(widget.button)
 		S:HandleScrollBar(scrollBar)
-		scrollBar:Point("RIGHT", frame, "RIGHT", 0 -4)
-		scrollBG:Point("TOPRIGHT", scrollBar, "TOPLEFT", -2, 19)
-		scrollBG:Point("BOTTOMLEFT", widget.button, "TOPLEFT")
+		scrollBG:Point("TOPRIGHT", scrollBar, "TOPLEFT", -3, 19)
 		widget.scrollFrame:Point("BOTTOMRIGHT", scrollBG, "BOTTOMRIGHT", -4, 8)
 	elseif TYPE == "CheckBox" then
 		local check = widget.check
@@ -356,6 +354,8 @@ function S:Ace3_RegisterAsContainer(widget)
 	local TYPE = widget.type
 	if TYPE == "ScrollFrame" then
 		S:HandleScrollBar(widget.scrollbar)
+		widget.scrollbar:Point("TOPLEFT", widget.scrollframe, "TOPRIGHT", 8, -16)
+		widget.scrollbar:Point("BOTTOMLEFT", widget.scrollframe, "BOTTOMRIGHT", 8, 16)
 	elseif TYPE == "InlineGroup" or TYPE == "TreeGroup" or TYPE == "TabGroup" or TYPE == "Frame" or TYPE == "DropdownGroup" or TYPE == "Window" then
 		local frame = widget.content:GetParent()
 		if TYPE == "Frame" then
@@ -434,6 +434,8 @@ function S:Ace3_RegisterAsContainer(widget)
 
 		if widget.scrollbar then
 			S:HandleScrollBar(widget.scrollbar)
+			widget.scrollbar:Point("TOPRIGHT", -4, -23)
+			widget.scrollbar:Point("BOTTOMRIGHT", -4, 23)
 		end
 	elseif TYPE == "SimpleGroup" then
 		local frame = widget.content:GetParent()

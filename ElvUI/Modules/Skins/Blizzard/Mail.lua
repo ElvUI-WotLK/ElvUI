@@ -173,8 +173,8 @@ S:AddCallback("Skin_Mail", function()
 	SendMailScrollFrame.backdrop:Point("TOPLEFT", 0, 5)
 	SendMailScrollFrame.backdrop:Point("BOTTOMRIGHT", 0, -5)
 
-	SendMailScrollFrameScrollBar:Point("TOPLEFT", SendMailScrollFrame, "TOPRIGHT", 4, -13)
-	SendMailScrollFrameScrollBar:Point("BOTTOMLEFT", SendMailScrollFrame, "BOTTOMRIGHT", 4, 13)
+	SendMailScrollFrameScrollBar:Point("TOPLEFT", SendMailScrollFrame, "TOPRIGHT", 3, -14)
+	SendMailScrollFrameScrollBar:Point("BOTTOMLEFT", SendMailScrollFrame, "BOTTOMRIGHT", 3, 14)
 
 	SendMailBodyEditBox:SetTextColor(1, 1, 1)
 	SendMailBodyEditBox:Width(291)
@@ -286,8 +286,8 @@ S:AddCallback("Skin_Mail", function()
 	OpenMailScrollFrame:Width(304)
 	OpenMailScrollFrame:Point("TOPLEFT", 19, -92)
 
-	OpenMailScrollFrameScrollBar:Point("TOPLEFT", OpenMailScrollFrame, "TOPRIGHT", 4, -18)
-	OpenMailScrollFrameScrollBar:Point("BOTTOMLEFT", OpenMailScrollFrame, "BOTTOMRIGHT", 4, 18)
+	OpenMailScrollFrameScrollBar:Point("TOPLEFT", OpenMailScrollFrame, "TOPRIGHT", 3, -19)
+	OpenMailScrollFrameScrollBar:Point("BOTTOMLEFT", OpenMailScrollFrame, "BOTTOMRIGHT", 3, 19)
 
 	OpenMailSenderLabel:Point("TOPRIGHT", OpenMailFrame, "TOPLEFT", 85, -45)
 	OpenMailSubjectLabel:Point("TOPRIGHT", OpenMailFrame, "TOPLEFT", 85, -65)

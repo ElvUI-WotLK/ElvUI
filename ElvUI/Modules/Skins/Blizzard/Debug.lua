@@ -16,16 +16,16 @@ S:AddCallbackForAddon("Blizzard_DebugTools", "Skin_Blizzard_DebugTools", functio
 	S:HandleCloseButton(ScriptErrorsFrameClose, ScriptErrorsFrame)
 
 	ScriptErrorsFrameScrollFrameText:FontTemplate(nil, 13)
-	ScriptErrorsFrameScrollFrameText:Width(462)
+	ScriptErrorsFrameScrollFrameText:Width(461)
 
 	ScriptErrorsFrameScrollFrame:CreateBackdrop("Default")
 	ScriptErrorsFrameScrollFrame.backdrop:Point("BOTTOMRIGHT", 1, -2)
 	ScriptErrorsFrameScrollFrame:SetFrameLevel(ScriptErrorsFrameScrollFrame:GetFrameLevel() + 2)
-	ScriptErrorsFrameScrollFrame:Width(462)
+	ScriptErrorsFrameScrollFrame:Width(461)
 	ScriptErrorsFrameScrollFrame:Point("TOPLEFT", 9, -30)
 
-	ScriptErrorsFrameScrollFrameScrollBar:Point("TOPLEFT", ScriptErrorsFrameScrollFrame, "TOPRIGHT", 4, -17)
-	ScriptErrorsFrameScrollFrameScrollBar:Point("BOTTOMLEFT", ScriptErrorsFrameScrollFrame, "BOTTOMRIGHT", 4, 16)
+	ScriptErrorsFrameScrollFrameScrollBar:Point("TOPLEFT", ScriptErrorsFrameScrollFrame, "TOPRIGHT", 4, -18)
+	ScriptErrorsFrameScrollFrameScrollBar:Point("BOTTOMLEFT", ScriptErrorsFrameScrollFrame, "BOTTOMRIGHT", 4, 17)
 
 	EventTraceFrame:StripTextures()
 	EventTraceFrame:SetTemplate("Transparent")

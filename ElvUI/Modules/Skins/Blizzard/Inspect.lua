@@ -185,6 +185,6 @@ S:AddCallbackForAddon("Blizzard_InspectUI", "Skin_Blizzard_InspectUI", function(
 	InspectTalentFrameScrollFrame:Point("TOPRIGHT", -66, -77)
 
 	S:HandleScrollBar(InspectTalentFrameScrollFrameScrollBar)
-	InspectTalentFrameScrollFrameScrollBar:Point("TOPLEFT", InspectTalentFrameScrollFrame, "TOPRIGHT", 9, -17)
-	InspectTalentFrameScrollFrameScrollBar:Point("BOTTOMLEFT", InspectTalentFrameScrollFrame, "BOTTOMRIGHT", 9, 14)
+	InspectTalentFrameScrollFrameScrollBar:Point("TOPLEFT", InspectTalentFrameScrollFrame, "TOPRIGHT", 8, -18)
+	InspectTalentFrameScrollFrameScrollBar:Point("BOTTOMLEFT", InspectTalentFrameScrollFrame, "BOTTOMRIGHT", 8, 15)
 end)

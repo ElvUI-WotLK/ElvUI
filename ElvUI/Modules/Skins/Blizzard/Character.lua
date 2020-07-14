@@ -76,6 +76,9 @@ S:AddCallback("Skin_Character", function()
 
 	S:HandleScrollBar(PlayerTitlePickerScrollFrameScrollBar)
 
+	PlayerTitlePickerScrollFrameScrollBar:Point("TOPLEFT", PlayerTitlePickerScrollFrame, "TOPRIGHT", 1, -14)
+	PlayerTitlePickerScrollFrameScrollBar:Point("BOTTOMLEFT", PlayerTitlePickerScrollFrame, "BOTTOMRIGHT", 1, 15)
+
 	for _, button in ipairs(PlayerTitlePickerScrollFrame.buttons) do
 		button.text:FontTemplate()
 		S:HandleButtonHighlight(button)
@@ -391,8 +394,8 @@ S:AddCallback("Skin_Character", function()
 	GearManagerDialogPopupScrollFrame:SetTemplate("Transparent")
 	GearManagerDialogPopupScrollFrame:Size(216, 130)
 	GearManagerDialogPopupScrollFrame:Point("TOPRIGHT", -68, -79)
-	GearManagerDialogPopupScrollFrameScrollBar:Point("TOPLEFT", GearManagerDialogPopupScrollFrame, "TOPRIGHT", 4, -18)
-	GearManagerDialogPopupScrollFrameScrollBar:Point("BOTTOMLEFT", GearManagerDialogPopupScrollFrame, "BOTTOMRIGHT", 4, 18)
+	GearManagerDialogPopupScrollFrameScrollBar:Point("TOPLEFT", GearManagerDialogPopupScrollFrame, "TOPRIGHT", 3, -19)
+	GearManagerDialogPopupScrollFrameScrollBar:Point("BOTTOMLEFT", GearManagerDialogPopupScrollFrame, "BOTTOMRIGHT", 3, 19)
 
 	GearManagerDialogPopupOkay:Point("BOTTOMRIGHT", GearManagerDialogPopupCancel, "BOTTOMLEFT", -3, 0)
 	GearManagerDialogPopupCancel:Point("BOTTOMRIGHT", -47, 16)
@@ -582,8 +585,8 @@ S:AddCallback("Skin_Character", function()
 
 	ReputationListScrollFrame:Width(304)
 	ReputationListScrollFrame:Point("TOPRIGHT", -61, -74)
-	ReputationListScrollFrameScrollBar:Point("TOPLEFT", ReputationListScrollFrame, "TOPRIGHT", 4, -18)
-	ReputationListScrollFrameScrollBar:Point("BOTTOMLEFT", ReputationListScrollFrame, "BOTTOMRIGHT", 4, 18)
+	ReputationListScrollFrameScrollBar:Point("TOPLEFT", ReputationListScrollFrame, "TOPRIGHT", 3, -19)
+	ReputationListScrollFrameScrollBar:Point("BOTTOMLEFT", ReputationListScrollFrame, "BOTTOMRIGHT", 3, 19)
 
 	ReputationListScrollFrame:SetScript("OnShow", function()
 		ReputationBar1:Point("TOPRIGHT", -75, -81)
@@ -679,14 +682,14 @@ S:AddCallback("Skin_Character", function()
 	SkillListScrollFrame:Width(304)
 	SkillListScrollFrame:Point("TOPRIGHT", -61, -74)
 
-	SkillListScrollFrameScrollBar:Point("TOPLEFT", SkillListScrollFrame, "TOPRIGHT", 4, -18)
-	SkillListScrollFrameScrollBar:Point("BOTTOMLEFT", SkillListScrollFrame, "BOTTOMRIGHT", 4, 18)
+	SkillListScrollFrameScrollBar:Point("TOPLEFT", SkillListScrollFrame, "TOPRIGHT", 3, -19)
+	SkillListScrollFrameScrollBar:Point("BOTTOMLEFT", SkillListScrollFrame, "BOTTOMRIGHT", 3, 19)
 
 	SkillDetailScrollFrame:Size(304, 98)
 	SkillDetailScrollFrame:Point("TOPLEFT", SkillListScrollFrame, "BOTTOMLEFT", 0, -7)
 
-	SkillDetailScrollFrameScrollBar:Point("TOPLEFT", SkillDetailScrollFrame, "TOPRIGHT", 4, -18)
-	SkillDetailScrollFrameScrollBar:Point("BOTTOMLEFT", SkillDetailScrollFrame, "BOTTOMRIGHT", 4, 18)
+	SkillDetailScrollFrameScrollBar:Point("TOPLEFT", SkillDetailScrollFrame, "TOPRIGHT", 3, -19)
+	SkillDetailScrollFrameScrollBar:Point("BOTTOMLEFT", SkillDetailScrollFrame, "BOTTOMRIGHT", 3, 19)
 
 	SkillFrameCancelButton:Point("CENTER", SkillFrame, "TOPLEFT", 304, -417)
 
@@ -702,8 +705,8 @@ S:AddCallback("Skin_Character", function()
 	TokenFrameContainer:Size(304, 360)
 	TokenFrameContainer:Point("TOPLEFT", 19, -39)
 
-	TokenFrameContainerScrollBar:Point("TOPLEFT", TokenFrameContainer, "TOPRIGHT", 2, -16)
-	TokenFrameContainerScrollBar:Point("BOTTOMLEFT", TokenFrameContainer, "BOTTOMRIGHT", 2, 16)
+	TokenFrameContainerScrollBar:Point("TOPLEFT", TokenFrameContainer, "TOPRIGHT", 3, -19)
+	TokenFrameContainerScrollBar:Point("BOTTOMLEFT", TokenFrameContainer, "BOTTOMRIGHT", 3, 19)
 
 	TokenFrameMoneyFrame:Point("BOTTOMRIGHT", -115, 88)
 

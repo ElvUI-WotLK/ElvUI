@@ -76,8 +76,8 @@ S:AddCallback("Skin_Friends", function()
 	FriendsFrameFriendsScrollFrame:Width(304)
 	FriendsFrameFriendsScrollFrame:Point("TOPLEFT", FriendsFrame, 19, -92)
 
-	FriendsFrameFriendsScrollFrameScrollBar:Point("TOPRIGHT", FriendsFrame, "TOPRIGHT", -42, -110)
-	FriendsFrameFriendsScrollFrameScrollBar:Point("BOTTOMLEFT", FriendsFrameFriendsScrollFrame, "BOTTOMRIGHT", 4, 18)
+	FriendsFrameFriendsScrollFrameScrollBar:Point("TOPRIGHT", FriendsFrame, "TOPRIGHT", -40, -111)
+	FriendsFrameFriendsScrollFrameScrollBar:Point("BOTTOMLEFT", FriendsFrameFriendsScrollFrame, "BOTTOMRIGHT", 3, 19)
 
 	FriendsFrameAddFriendButton:Height(22)
 	FriendsFrameAddFriendButton:Point("BOTTOMLEFT", FriendsFrame, 19, 84)
@@ -100,8 +100,8 @@ S:AddCallback("Skin_Friends", function()
 	FriendsFrameIgnoreScrollFrame:Width(304)
 	FriendsFrameIgnoreScrollFrame:Point("TOPRIGHT", FriendsFrame, "TOPRIGHT", -61, -92)
 
-	FriendsFrameIgnoreScrollFrameScrollBar:Point("TOPLEFT", FriendsFrameIgnoreScrollFrame, "TOPRIGHT", 4, -18)
-	FriendsFrameIgnoreScrollFrameScrollBar:Point("BOTTOMLEFT", FriendsFrameIgnoreScrollFrame, "BOTTOMRIGHT", 4, 18)
+	FriendsFrameIgnoreScrollFrameScrollBar:Point("TOPLEFT", FriendsFrameIgnoreScrollFrame, "TOPRIGHT", 3, -19)
+	FriendsFrameIgnoreScrollFrameScrollBar:Point("BOTTOMLEFT", FriendsFrameIgnoreScrollFrame, "BOTTOMRIGHT", 3, 21)
 
 	FriendsFrameIgnorePlayerButton:Height(22)
 	FriendsFrameIgnorePlayerButton:Point("BOTTOMLEFT", FriendsFrame, 19, 84)
@@ -172,8 +172,8 @@ S:AddCallback("Skin_Friends", function()
 	WhoListScrollFrame:Size(304, 284)
 	WhoListScrollFrame:Point("TOPRIGHT", FriendsFrame, "TOPRIGHT", -61, -71)
 
-	WhoListScrollFrameScrollBar:Point("TOPLEFT", WhoListScrollFrame, "TOPRIGHT", 4, -18)
-	WhoListScrollFrameScrollBar:Point("BOTTOMLEFT", WhoListScrollFrame, "BOTTOMRIGHT", 4, 18)
+	WhoListScrollFrameScrollBar:Point("TOPLEFT", WhoListScrollFrame, "TOPRIGHT", 3, -19)
+	WhoListScrollFrameScrollBar:Point("BOTTOMLEFT", WhoListScrollFrame, "BOTTOMRIGHT", 3, 19)
 
 	WhoFrameTotals:Point("BOTTOM", -10, 137)
 
@@ -300,8 +300,8 @@ S:AddCallback("Skin_Friends", function()
 	GuildListScrollFrame:Size(304, 220)
 	GuildListScrollFrame:Point("TOPRIGHT", -61, -89)
 
-	GuildListScrollFrameScrollBar:Point("TOPLEFT", GuildListScrollFrame, "TOPRIGHT", 4, -18)
-	GuildListScrollFrameScrollBar:Point("BOTTOMLEFT", GuildListScrollFrame, "BOTTOMRIGHT", 4, 18)
+	GuildListScrollFrameScrollBar:Point("TOPLEFT", GuildListScrollFrame, "TOPRIGHT", 3, -19)
+	GuildListScrollFrameScrollBar:Point("BOTTOMLEFT", GuildListScrollFrame, "BOTTOMRIGHT", 3, 19)
 
 	GuildFrameTotals:Point("BOTTOM", GuildFrame, "LEFT", 82, -77)
 
@@ -402,8 +402,8 @@ S:AddCallback("Skin_Friends", function()
 	GuildInfoFrameScrollFrame:Width(252)
 	GuildInfoFrameScrollFrame:Point("TOPLEFT", 2, -5)
 
-	GuildInfoFrameScrollFrameScrollBar:Point("TOPLEFT", GuildInfoFrameScrollFrame, "TOPRIGHT", 4, -13)
-	GuildInfoFrameScrollFrameScrollBar:Point("BOTTOMLEFT", GuildInfoFrameScrollFrame, "BOTTOMRIGHT", 4, 13)
+	GuildInfoFrameScrollFrameScrollBar:Point("TOPLEFT", GuildInfoFrameScrollFrame, "TOPRIGHT", 3, -14)
+	GuildInfoFrameScrollFrameScrollBar:Point("BOTTOMLEFT", GuildInfoFrameScrollFrame, "BOTTOMRIGHT", 3, 14)
 
 	GuildInfoSaveButton:Point("BOTTOMLEFT", 104, 8)
 	GuildInfoCancelButton:Point("LEFT", GuildInfoSaveButton, "RIGHT", 3, 0)
@@ -430,8 +430,8 @@ S:AddCallback("Skin_Friends", function()
 	GuildEventLogScrollFrame:Size(347, 353)
 	GuildEventLogScrollFrame:Point("TOPRIGHT", -3, -4)
 
-	GuildEventLogScrollFrameScrollBar:Point("TOPLEFT", GuildEventLogScrollFrame, "TOPRIGHT", 7, -14)
-	GuildEventLogScrollFrameScrollBar:Point("BOTTOMLEFT", GuildEventLogScrollFrame, "BOTTOMRIGHT", 7, 14)
+	GuildEventLogScrollFrameScrollBar:Point("TOPLEFT", GuildEventLogScrollFrame, "TOPRIGHT", 6, -15)
+	GuildEventLogScrollFrameScrollBar:Point("BOTTOMLEFT", GuildEventLogScrollFrame, "BOTTOMRIGHT", 6, 15)
 
 	-- Control Frame
 	GuildControlPopupFrame:StripTextures()
@@ -554,8 +554,8 @@ S:AddCallback("Skin_Friends", function()
 	ChannelListScrollFrame:Size(161, 381)
 	ChannelListScrollFrame:Point("TOPLEFT", 19, -47)
 
-	ChannelListScrollFrameScrollBar:Point("TOPLEFT", ChannelListScrollFrame, "TOPRIGHT", 4, -18)
-	ChannelListScrollFrameScrollBar:Point("BOTTOMLEFT", ChannelListScrollFrame, "BOTTOMRIGHT", 4, 18)
+	ChannelListScrollFrameScrollBar:Point("TOPLEFT", ChannelListScrollFrame, "TOPRIGHT", 3, -19)
+	ChannelListScrollFrameScrollBar:Point("BOTTOMLEFT", ChannelListScrollFrame, "BOTTOMRIGHT", 3, 19)
 
 	ChannelRoster:Point("TOPLEFT", ChannelFrame, "TOP", 126, -70)
 	ChannelRoster.SetPoint = E.noop
@@ -566,8 +566,8 @@ S:AddCallback("Skin_Friends", function()
 	ChannelRosterScrollFrame:Size(138, 352)
 	ChannelRosterScrollFrame:Point("TOPRIGHT", ChannelFrame, "TOPRIGHT", -32, -47)
 
-	ChannelRosterScrollFrameScrollBar:Point("TOPLEFT", ChannelRosterScrollFrame, "TOPRIGHT", 4, -18)
-	ChannelRosterScrollFrameScrollBar:Point("BOTTOMLEFT", ChannelRosterScrollFrame, "BOTTOMRIGHT", 4, 18)
+	ChannelRosterScrollFrameScrollBar:Point("TOPLEFT", ChannelRosterScrollFrame, "TOPRIGHT", 3, -19)
+	ChannelRosterScrollFrameScrollBar:Point("BOTTOMLEFT", ChannelRosterScrollFrame, "BOTTOMRIGHT", 3, 19)
 
 	ChannelFrameNewButton:Point("BOTTOMRIGHT", -11, 84)
 
@@ -640,8 +640,8 @@ S:AddCallback("Skin_Friends", function()
 	RaidInfoScrollFrame:Height(182)
 	RaidInfoScrollFrame:Point("TOPLEFT", 9, -31)
 
-	RaidInfoScrollFrameScrollBar:Point("TOPLEFT", RaidInfoScrollFrame, "TOPRIGHT", 3, -15)
-	RaidInfoScrollFrameScrollBar:Point("BOTTOMLEFT", RaidInfoScrollFrame, "BOTTOMRIGHT", 3, 14)
+	RaidInfoScrollFrameScrollBar:Point("TOPLEFT", RaidInfoScrollFrame, "TOPRIGHT", 4, -18)
+	RaidInfoScrollFrameScrollBar:Point("BOTTOMLEFT", RaidInfoScrollFrame, "BOTTOMRIGHT", 4, 17)
 
 	for _, button in ipairs(RaidInfoScrollFrame.buttons) do
 		S:HandleButtonHighlight(button)

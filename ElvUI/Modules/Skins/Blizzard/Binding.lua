@@ -33,6 +33,9 @@ S:AddCallbackForAddon("Blizzard_BindingUI", "Skin_Blizzard_BindingUI", function(
 	S:HandleButton(KeyBindingFrameOkayButton)
 	S:HandleButton(KeyBindingFrameUnbindButton)
 
+	KeyBindingFrameScrollFrameScrollBar:Point("TOPLEFT", KeyBindingFrameScrollFrame, "TOPRIGHT", 10, -19)
+	KeyBindingFrameScrollFrameScrollBar:Point("BOTTOMLEFT", KeyBindingFrameScrollFrame, "BOTTOMRIGHT", 10, 19)
+
 	KeyBindingFrameOkayButton:Point("RIGHT", KeyBindingFrameCancelButton, "LEFT", -3, 0)
 	KeyBindingFrameUnbindButton:Point("RIGHT", KeyBindingFrameOkayButton, "LEFT", -3, 0)
 end)

@@ -109,8 +109,8 @@ S:AddCallbackForAddon("Blizzard_GMSurveyUI", "Skin_Blizzard_GMSurveyUI", functio
 	GMSurveyCommentFrame:StripTextures()
 	GMSurveyCommentFrame:SetTemplate("Transparent")
 
-	GMSurveyScrollFrameScrollBar:Point("TOPLEFT", GMSurveyScrollFrame, "TOPRIGHT", 6, -18)
-	GMSurveyScrollFrameScrollBar:Point("BOTTOMLEFT", GMSurveyScrollFrame, "BOTTOMRIGHT", 6, 17)
+	GMSurveyScrollFrameScrollBar:Point("TOPLEFT", GMSurveyScrollFrame, "TOPRIGHT", 5, -19)
+	GMSurveyScrollFrameScrollBar:Point("BOTTOMLEFT", GMSurveyScrollFrame, "BOTTOMRIGHT", 5, 18)
 
 	GMSurveySubmitButton:Height(22)
 	GMSurveySubmitButton:Point("BOTTOMRIGHT", -57, 18)

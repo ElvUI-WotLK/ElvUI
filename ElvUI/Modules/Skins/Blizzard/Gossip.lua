@@ -25,7 +25,7 @@ S:AddCallback("Skin_Gossip", function()
 
 	S:HandleCloseButton(GossipFrameCloseButton, GossipFrame.backdrop)
 
-	S:HandleScrollBar(GossipGreetingScrollFrameScrollBar, 5)
+	S:HandleScrollBar(GossipGreetingScrollFrameScrollBar)
 	S:HandleButton(GossipFrameGreetingGoodbyeButton)
 
 	for i = 1, NUMGOSSIPBUTTONS do
@@ -40,8 +40,8 @@ S:AddCallback("Skin_Gossip", function()
 	GossipGreetingScrollFrame:Size(304, 402)
 	GossipGreetingScrollFrame:Point("TOPLEFT", GossipFrame, "TOPLEFT", 19, -73)
 
-	GossipGreetingScrollFrameScrollBar:Point("TOPLEFT", GossipGreetingScrollFrame, "TOPRIGHT", 4, -18)
-	GossipGreetingScrollFrameScrollBar:Point("BOTTOMLEFT", GossipGreetingScrollFrame, "BOTTOMRIGHT", 4, 18)
+	GossipGreetingScrollFrameScrollBar:Point("TOPLEFT", GossipGreetingScrollFrame, "TOPRIGHT", 3, -19)
+	GossipGreetingScrollFrameScrollBar:Point("BOTTOMLEFT", GossipGreetingScrollFrame, "BOTTOMRIGHT", 3, 19)
 
 	GossipFrameGreetingGoodbyeButton:Point("BOTTOMRIGHT", -40, 8)
 
@@ -88,6 +88,6 @@ S:AddCallback("Skin_Gossip", function()
 	ItemTextScrollFrame:Width(283)
 	ItemTextScrollFrame:Point("TOPRIGHT", -61, -73)
 
-	ItemTextScrollFrameScrollBar:Point("TOPLEFT", ItemTextScrollFrame, "TOPRIGHT", 4, -18)
-	ItemTextScrollFrameScrollBar:Point("BOTTOMLEFT", ItemTextScrollFrame, "BOTTOMRIGHT", 4, 18)
+	ItemTextScrollFrameScrollBar:Point("TOPLEFT", ItemTextScrollFrame, "TOPRIGHT", 3, -19)
+	ItemTextScrollFrameScrollBar:Point("BOTTOMLEFT", ItemTextScrollFrame, "BOTTOMRIGHT", 3, 19)
 end)
