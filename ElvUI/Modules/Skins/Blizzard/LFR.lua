@@ -83,6 +83,9 @@ S:AddCallback("Skin_LFR", function()
 		end)
 	end
 
+	LFRQueueFrameSpecificListScrollFrameScrollBar:Point("TOPLEFT", LFRQueueFrameSpecificListScrollFrame, "TOPRIGHT", 5, -17)
+	LFRQueueFrameSpecificListScrollFrameScrollBar:Point("BOTTOMLEFT", LFRQueueFrameSpecificListScrollFrame, "BOTTOMRIGHT", 5, 17)
+
 	LFRQueueFrameNoLFRWhileLFD:Size(325, 271)
 	LFRQueueFrameNoLFRWhileLFD:Point("BOTTOMRIGHT", -11, 41)
 

@@ -146,16 +146,16 @@ S:AddCallbackForAddon("Blizzard_GuildBankUI", "Skin_Blizzard_GuildBankUI", funct
 	GuildBankTransactionsScrollFrame:Size(591, 318)
 	GuildBankTransactionsScrollFrame:Point("TOPRIGHT", GuildBankFrame, "TOPRIGHT", -29, -64)
 
-	GuildBankTransactionsScrollFrameScrollBar:Point("TOPLEFT", GuildBankTransactionsScrollFrame, "TOPRIGHT", 4, -18)
-	GuildBankTransactionsScrollFrameScrollBar:Point("BOTTOMLEFT", GuildBankTransactionsScrollFrame, "BOTTOMRIGHT", 4, 18)
+	GuildBankTransactionsScrollFrameScrollBar:Point("TOPLEFT", GuildBankTransactionsScrollFrame, "TOPRIGHT", 3, -19)
+	GuildBankTransactionsScrollFrameScrollBar:Point("BOTTOMLEFT", GuildBankTransactionsScrollFrame, "BOTTOMRIGHT", 3, 19)
 
 	-- Info tab
 	GuildBankInfo:Point("TOPLEFT", 26, -72)
 
 	GuildBankInfoScrollFrame:Size(575, 302)
 
-	GuildBankInfoScrollFrameScrollBar:Point("TOPLEFT", GuildBankInfoScrollFrame, "TOPRIGHT", 13, -10)
-	GuildBankInfoScrollFrameScrollBar:Point("BOTTOMLEFT", GuildBankInfoScrollFrame, "BOTTOMRIGHT", 13, 10)
+	GuildBankInfoScrollFrameScrollBar:Point("TOPLEFT", GuildBankInfoScrollFrame, "TOPRIGHT", 12, -11)
+	GuildBankInfoScrollFrameScrollBar:Point("BOTTOMLEFT", GuildBankInfoScrollFrame, "BOTTOMRIGHT", 12, 11)
 
 	GuildBankTabInfoEditBox:Width(575)
 
@@ -180,8 +180,8 @@ S:AddCallbackForAddon("Blizzard_GuildBankUI", "Skin_Blizzard_GuildBankUI", funct
 	GuildBankPopupScrollFrame.backdrop:Point("BOTTOMRIGHT", -19, 5)
 	GuildBankPopupScrollFrame:Point("TOPRIGHT", -30, -66)
 
-	GuildBankPopupScrollFrameScrollBar:Point("TOPLEFT", GuildBankPopupScrollFrame, "TOPRIGHT", -15, -28)
-	GuildBankPopupScrollFrameScrollBar:Point("BOTTOMLEFT", GuildBankPopupScrollFrame, "BOTTOMRIGHT", -15, 23)
+	GuildBankPopupScrollFrameScrollBar:Point("TOPLEFT", GuildBankPopupScrollFrame, "TOPRIGHT", -16, -29)
+	GuildBankPopupScrollFrameScrollBar:Point("BOTTOMLEFT", GuildBankPopupScrollFrame, "BOTTOMRIGHT", -16, 24)
 
 	GuildBankPopupButton1:Point("TOPLEFT", 24, -82)
 

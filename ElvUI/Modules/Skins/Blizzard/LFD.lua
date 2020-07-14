@@ -75,6 +75,12 @@ S:AddCallback("Skin_LFD", function()
 
 	S:HandleButton(LFDQueueFrameNoLFDWhileLFRLeaveQueueButton)
 
+	LFDQueueFrameRandomScrollFrameScrollBar:Point("TOPLEFT", LFDQueueFrameRandomScrollFrame, "TOPRIGHT", 5, -22)
+	LFDQueueFrameRandomScrollFrameScrollBar:Point("BOTTOMLEFT", LFDQueueFrameRandomScrollFrame, "BOTTOMRIGHT", 5, 19)
+
+	LFDQueueFrameSpecificListScrollFrameScrollBar:Point("TOPLEFT", LFDQueueFrameSpecificListScrollFrame, "TOPRIGHT", 5, -17)
+	LFDQueueFrameSpecificListScrollFrameScrollBar:Point("BOTTOMLEFT", LFDQueueFrameSpecificListScrollFrame, "BOTTOMRIGHT", 5, 17)
+
 	LFDQueueFrameFindGroupButton:Point("BOTTOMLEFT", 19, 12)
 	LFDQueueFrameCancelButton:Point("BOTTOMRIGHT", -11, 12)
 

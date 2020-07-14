@@ -78,8 +78,8 @@ S:AddCallbackForAddon("Blizzard_MacroUI", "Skin_Blizzard_MacroUI", function()
 	MacroButtonScrollFrame:Size(302, 142)
 	MacroButtonScrollFrame:Point("TOPLEFT", 20, -76)
 
-	MacroButtonScrollFrameScrollBar:Point("TOPLEFT", MacroButtonScrollFrame, "TOPRIGHT", 5, -17)
-	MacroButtonScrollFrameScrollBar:Point("BOTTOMLEFT", MacroButtonScrollFrame, "BOTTOMRIGHT", 5, 17)
+	MacroButtonScrollFrameScrollBar:Point("TOPLEFT", MacroButtonScrollFrame, "TOPRIGHT", 4, -18)
+	MacroButtonScrollFrameScrollBar:Point("BOTTOMLEFT", MacroButtonScrollFrame, "BOTTOMRIGHT", 4, 18)
 
 	MacroButton1:Point("TOPLEFT", 10, -7)
 
@@ -94,8 +94,8 @@ S:AddCallbackForAddon("Blizzard_MacroUI", "Skin_Blizzard_MacroUI", function()
 	MacroFrameScrollFrame:Size(300, 81)
 	MacroFrameScrollFrame:Point("TOPLEFT", MacroFrameSelectedMacroBackground, "BOTTOMLEFT", 5, -20)
 
-	MacroFrameScrollFrameScrollBar:Point("TOPLEFT", MacroFrameScrollFrame, "TOPRIGHT", 6, -14)
-	MacroFrameScrollFrameScrollBar:Point("BOTTOMLEFT", MacroFrameScrollFrame, "BOTTOMRIGHT", 6, 14)
+	MacroFrameScrollFrameScrollBar:Point("TOPLEFT", MacroFrameScrollFrame, "TOPRIGHT", 5, -15)
+	MacroFrameScrollFrameScrollBar:Point("BOTTOMLEFT", MacroFrameScrollFrame, "BOTTOMRIGHT", 5, 15)
 
 	MacroFrameCharLimitText:Point("BOTTOM", -15, 113)
 
@@ -124,8 +124,8 @@ S:AddCallbackForAddon("Blizzard_MacroUI", "Skin_Blizzard_MacroUI", function()
 	MacroPopupScrollFrame:Size(247, 180)
 	MacroPopupScrollFrame:Point("TOPRIGHT", -32, -76)
 
-	MacroPopupScrollFrameScrollBar:Point("TOPLEFT", MacroPopupScrollFrame, "TOPRIGHT", 4, -18)
-	MacroPopupScrollFrameScrollBar:Point("BOTTOMLEFT", MacroPopupScrollFrame, "BOTTOMRIGHT", 4, 18)
+	MacroPopupScrollFrameScrollBar:Point("TOPLEFT", MacroPopupScrollFrame, "TOPRIGHT", 3, -19)
+	MacroPopupScrollFrameScrollBar:Point("BOTTOMLEFT", MacroPopupScrollFrame, "BOTTOMRIGHT", 3, 19)
 
 	MacroPopupOkayButton:Point("RIGHT", MacroPopupCancelButton, "LEFT", -3, 0)
 end)

@@ -30,10 +30,10 @@ S:AddCallbackForAddon("Blizzard_ItemSocketingUI", "Skin_Blizzard_ItemSocketingUI
 	ItemSocketingScrollFrame:CreateBackdrop("Transparent")
 	ItemSocketingScrollFrame.backdrop:Point("BOTTOMRIGHT", 3, -2)
 
-	S:HandleScrollBar(ItemSocketingScrollFrameScrollBar, 2)
+	S:HandleScrollBar(ItemSocketingScrollFrameScrollBar)
 
-	ItemSocketingScrollFrameScrollBar:Point("TOPLEFT", ItemSocketingScrollFrame, "TOPRIGHT", 7, -18)
-	ItemSocketingScrollFrameScrollBar:Point("BOTTOMLEFT", ItemSocketingScrollFrame, "BOTTOMRIGHT", 7, 19)
+	ItemSocketingScrollFrameScrollBar:Point("TOPLEFT", ItemSocketingScrollFrame, "TOPRIGHT", 6, -18)
+	ItemSocketingScrollFrameScrollBar:Point("BOTTOMLEFT", ItemSocketingScrollFrame, "BOTTOMRIGHT", 6, 17)
 
 	S:HandleButton(ItemSocketingSocketButton)
 	ItemSocketingSocketButton:Point("BOTTOMRIGHT", -10, 39)

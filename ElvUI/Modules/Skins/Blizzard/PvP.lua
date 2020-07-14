@@ -80,13 +80,13 @@ S:AddCallback("Skin_PvP", function()
 	PVPBattlegroundFrameInfoScrollFrameChildFrameDescription:SetTextColor(1, 1, 1)
 	PVPBattlegroundFrameInfoScrollFrameChildFrameRewardsInfo.description:SetTextColor(1, 1, 1)
 
-	PVPBattlegroundFrameTypeScrollFrameScrollBar:Point("TOPLEFT", PVPBattlegroundFrameTypeScrollFrame, "TOPRIGHT", 7, -18)
-	PVPBattlegroundFrameTypeScrollFrameScrollBar:Point("BOTTOMLEFT", PVPBattlegroundFrameTypeScrollFrame, "BOTTOMRIGHT", 7, 18)
+	PVPBattlegroundFrameTypeScrollFrameScrollBar:Point("TOPLEFT", PVPBattlegroundFrameTypeScrollFrame, "TOPRIGHT", 6, -19)
+	PVPBattlegroundFrameTypeScrollFrameScrollBar:Point("BOTTOMLEFT", PVPBattlegroundFrameTypeScrollFrame, "BOTTOMRIGHT", 6, 19)
 
 	PVPBattlegroundFrameInfoScrollFrame:Point("BOTTOMLEFT", 19, 114)
 
-	PVPBattlegroundFrameInfoScrollFrameScrollBar:Point("TOPLEFT", PVPBattlegroundFrameInfoScrollFrame, "TOPRIGHT", 7, -23)
-	PVPBattlegroundFrameInfoScrollFrameScrollBar:Point("BOTTOMLEFT", PVPBattlegroundFrameInfoScrollFrame, "BOTTOMRIGHT", 7, 18)
+	PVPBattlegroundFrameInfoScrollFrameScrollBar:Point("TOPLEFT", PVPBattlegroundFrameInfoScrollFrame, "TOPRIGHT", 7, -24)
+	PVPBattlegroundFrameInfoScrollFrameScrollBar:Point("BOTTOMLEFT", PVPBattlegroundFrameInfoScrollFrame, "BOTTOMRIGHT", 7, 19)
 
 	PVPBattlegroundFrameGroupJoinButton:Width(127)
 	PVPBattlegroundFrameCancelButton:Point("CENTER", PVPBattlegroundFrame, "TOPLEFT", 300, -416)
@@ -140,13 +140,13 @@ S:AddCallback("Skin_PvP", function()
 
 	BattlefieldZone1:Point("TOPLEFT", 25, -80)
 
-	BattlefieldListScrollFrameScrollBar:Point("TOPLEFT", BattlefieldListScrollFrame, "TOPRIGHT", 10, -22)
-	BattlefieldListScrollFrameScrollBar:Point("BOTTOMLEFT", BattlefieldListScrollFrame, "BOTTOMRIGHT", 10, 22)
+	BattlefieldListScrollFrameScrollBar:Point("TOPLEFT", BattlefieldListScrollFrame, "TOPRIGHT", 9, -23)
+	BattlefieldListScrollFrameScrollBar:Point("BOTTOMLEFT", BattlefieldListScrollFrame, "BOTTOMRIGHT", 9, 23)
 
 	BattlefieldFrameInfoScrollFrame:Point("BOTTOMLEFT", 21, 113)
 
-	BattlefieldFrameInfoScrollFrameScrollBar:Point("TOPLEFT", BattlefieldFrameInfoScrollFrame, "TOPRIGHT", 10, -18)
-	BattlefieldFrameInfoScrollFrameScrollBar:Point("BOTTOMLEFT", BattlefieldFrameInfoScrollFrame, "BOTTOMRIGHT", 10, 18)
+	BattlefieldFrameInfoScrollFrameScrollBar:Point("TOPLEFT", BattlefieldFrameInfoScrollFrame, "TOPRIGHT", 7, -20)
+	BattlefieldFrameInfoScrollFrameScrollBar:Point("BOTTOMLEFT", BattlefieldFrameInfoScrollFrame, "BOTTOMRIGHT", 7, 19)
 
 	BattlefieldFrameGroupJoinButton:Width(127)
 	BattlefieldFrameGroupJoinButton:Point("RIGHT", BattlefieldFrameJoinButton, "LEFT", -3, 0)
