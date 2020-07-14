@@ -517,14 +517,14 @@ function CH:GetLines(frame)
 end
 
 function CH:CopyChat(frame)
-	if not CopyChatFrame:IsShown() then
+	if not self.copyChatFrame:IsShown() then
 		local lineCount = self:GetLines(frame)
 		local text = tconcat(copyLines, "\n", 1, lineCount)
 
-		CopyChatFrameEditBox:SetText(text)
-		CopyChatFrame:Show()
+		self.copyChatFrame.editBox:SetText(text)
+		self.copyChatFrame:Show()
 	else
-		CopyChatFrame:Hide()
+		self.copyChatFrame:Hide()
 	end
 end
 
@@ -1797,77 +1797,87 @@ end
 
 function CH:BuildCopyChatFrame()
 	local frame = CreateFrame("Frame", "CopyChatFrame", E.UIParent)
-	tinsert(UISpecialFrames, "CopyChatFrame")
+	frame:Hide()
 	frame:SetTemplate("Transparent")
 	frame:Size(700, 200)
 	frame:Point("BOTTOM", E.UIParent, "BOTTOM", 0, 3)
-	frame:Hide()
-	frame:SetMovable(true)
+	frame:SetFrameStrata("DIALOG")
 	frame:EnableMouse(true)
+	frame:SetMovable(true)
 	frame:SetResizable(true)
 	frame:SetMinResize(350, 100)
-	frame:SetScript("OnMouseDown", function(copyChat, button)
-		if button == "LeftButton" and not copyChat.isMoving then
-			copyChat:StartMoving()
-			copyChat.isMoving = true
-		elseif button == "RightButton" and not copyChat.isSizing then
-			copyChat:StartSizing()
-			copyChat.isSizing = true
-		end
-	end)
-	frame:SetScript("OnMouseUp", function(copyChat, button)
-		if button == "LeftButton" and copyChat.isMoving then
-			copyChat:StopMovingOrSizing()
-			copyChat.isMoving = false
-		elseif button == "RightButton" and copyChat.isSizing then
-			copyChat:StopMovingOrSizing()
-			copyChat.isSizing = false
-		end
-	end)
-	frame:SetScript("OnHide", function(copyChat)
-		if copyChat.isMoving or copyChat.isSizing then
-			copyChat:StopMovingOrSizing()
-			copyChat.isMoving = false
-			copyChat.isSizing = false
-		end
-	end)
-	frame:SetFrameStrata("DIALOG")
+	tinsert(UISpecialFrames, "CopyChatFrame")
+	self.copyChatFrame = frame
 
-	local scrollArea = CreateFrame("ScrollFrame", "CopyChatScrollFrame", frame, "UIPanelScrollFrameTemplate")
-	scrollArea:Point("TOPLEFT", frame, "TOPLEFT", 8, -30)
-	scrollArea:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -30, 8)
-	Skins:HandleScrollBar(CopyChatScrollFrameScrollBar)
-	scrollArea:SetScript("OnSizeChanged", function(scroll)
-		CopyChatFrameEditBox:Width(scroll:GetWidth())
-		CopyChatFrameEditBox:Height(scroll:GetHeight())
-	end)
-	scrollArea:HookScript("OnVerticalScroll", function(scroll, offset)
-		CopyChatFrameEditBox:SetHitRectInsets(0, 0, offset, (CopyChatFrameEditBox:GetHeight() - offset - scroll:GetHeight()))
-	end)
+	local scrollFrame = CreateFrame("ScrollFrame", "$parentScrollFrame", frame, "UIPanelScrollFrameTemplate")
+	scrollFrame:Point("TOPLEFT", frame, "TOPLEFT", 8, -30)
+	scrollFrame:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -29, 8)
+	frame.scrollFrame = scrollFrame
 
-	local editBox = CreateFrame("EditBox", "CopyChatFrameEditBox", frame)
+	scrollFrame.scrollBar = CopyChatFrameScrollFrameScrollBar
+	Skins:HandleScrollBar(scrollFrame.scrollBar)
+	scrollFrame.scrollBar:Point("TOPLEFT", scrollFrame, "TOPRIGHT", 3, -19)
+	scrollFrame.scrollBar:Point("BOTTOMLEFT", scrollFrame, "BOTTOMRIGHT", 3, 19)
+
+	local editBox = CreateFrame("EditBox", "$parentEditBox", frame)
+	editBox:Size(scrollFrame:GetWidth(), 200)
+	editBox:SetFontObject(ChatFontNormal)
+	editBox:SetAutoFocus(false)
 	editBox:SetMultiLine(true)
 	editBox:SetMaxLetters(99999)
-	editBox:EnableMouse(true)
-	editBox:SetAutoFocus(false)
-	editBox:SetFontObject(ChatFontNormal)
-	editBox:Width(scrollArea:GetWidth())
-	editBox:Height(200)
-	editBox:SetScript("OnEscapePressed", function() CopyChatFrame:Hide() end)
-	scrollArea:SetScrollChild(editBox)
-	editBox:SetScript("OnTextChanged", function(_, userInput)
-		if userInput then return end
-		local _, max = CopyChatScrollFrameScrollBar:GetMinMaxValues()
-		for _ = 1, max do
-			ScrollFrameTemplate_OnMouseWheel(CopyChatScrollFrame, -1)
+	scrollFrame:SetScrollChild(editBox)
+	frame.editBox = editBox
+
+	local closeButton = CreateFrame("Button", "$parentCloseButton", frame, "UIPanelCloseButton")
+	closeButton:Point("TOPRIGHT", -1, 1)
+	closeButton:SetFrameLevel(closeButton:GetFrameLevel() + 1)
+	Skins:HandleCloseButton(closeButton)
+	frame.closeButton = closeButton
+
+	frame:SetScript("OnMouseDown", function(f, button)
+		if button == "LeftButton" and not f.isMoving then
+			f:StartMoving()
+			f.isMoving = true
+		elseif button == "RightButton" and not f.isSizing then
+			f:StartSizing()
+			f.isSizing = true
+		end
+	end)
+	frame:SetScript("OnMouseUp", function(f, button)
+		if button == "LeftButton" and f.isMoving then
+			f:StopMovingOrSizing()
+			f.isMoving = nil
+		elseif button == "RightButton" and f.isSizing then
+			f:StopMovingOrSizing()
+			f.isSizing = nil
+		end
+	end)
+	frame:SetScript("OnHide", function(f)
+		if f.isMoving or f.isSizing then
+			f:StopMovingOrSizing()
+			f.isMoving = nil
+			f.isSizing = nil
 		end
 	end)
 
-	local close = CreateFrame("Button", "CopyChatFrameCloseButton", frame, "UIPanelCloseButton")
-	close:Point("TOPRIGHT")
-	close:SetFrameLevel(close:GetFrameLevel() + 1)
-	close:EnableMouse(true)
-	Skins:HandleCloseButton(close)
+	scrollFrame:SetScript("OnSizeChanged", function(f)
+		editBox:Size(f:GetSize())
+	end)
+	scrollFrame:HookScript("OnVerticalScroll", function(f, offset)
+		editBox:SetHitRectInsets(0, 0, offset, (editBox:GetHeight() - offset - f:GetHeight()))
+	end)
+
+	editBox:SetScript("OnTextChanged", function(_, userInput)
+		if userInput then return end
+
+		local _, max = scrollFrame.scrollBar:GetMinMaxValues()
+		for _ = 1, max do
+			ScrollFrameTemplate_OnMouseWheel(scrollFrame, -1)
+		end
+	end)
+	editBox:SetScript("OnEscapePressed", function()
+		frame:Hide()
+	end)
 end
 
 CH.TabStyles = {
