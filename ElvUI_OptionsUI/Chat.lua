@@ -6,6 +6,8 @@ local Layout = E:GetModule("Layout")
 
 local gsub, strlower = string.gsub, string.lower
 
+local tabSelectorTable = {}
+
 E.Options.args.chat = {
 	type = "group",
 	name = L["Chat"],
@@ -221,8 +223,90 @@ E.Options.args.chat = {
 						}
 					}
 				},
-				fadingGroup = {
+				tabSelection = {
 					order = 19,
+					type = "group",
+					name = L["Tab Selector"],
+					set = function(info, value)
+						E.db.chat[info[#info]] = value
+						CH:UpdateChatTabColors()
+					end,
+					args = {
+						tabSelectedTextEnabled = {
+							order = 1,
+							type = "toggle",
+							name = L["Colorize Selected Text"]
+						},
+						tabSelectedTextColor = {
+							order = 2,
+							type = "color",
+							hasAlpha = false,
+							name = L["Selected Text Color"],
+							disabled = function() return not E.db.chat.tabSelectedTextEnabled end,
+							get = function(info)
+								local t = E.db.chat.tabSelectedTextColor
+								local d = P.chat.tabSelectedTextColor
+								return t.r, t.g, t.b, t.a, d.r, d.g, d.b
+							end,
+							set = function(info, r, g, b)
+								local t = E.db.chat.tabSelectedTextColor
+								t.r, t.g, t.b = r, g, b
+								CH:UpdateChatTabColors()
+							end
+						},
+						spacer = {
+							order = 3,
+							type = "description",
+							name = ""
+						},
+						tabSelector = {
+							order = 4,
+							type = 'select',
+							name = L["Selector Style"],
+							values = function()
+								wipe(tabSelectorTable)
+
+								for key, value in pairs(CH.TabStyles) do
+									if key == "NONE" then
+										tabSelectorTable[key] = L[key]
+									else
+										local color = E.db.chat.tabSelectorColor
+										local hexColor = E:RGBToHex(color.r, color.g, color.b)
+										local selectedColor = E.media.hexvaluecolor
+
+										if E.db.chat.tabSelectedTextEnabled then
+											color = E.db.chat.tabSelectedTextColor
+											selectedColor = E:RGBToHex(color.r, color.g, color.b)
+										end
+
+										tabSelectorTable[key] = format(value, hexColor, format("%sName|r", selectedColor), hexColor)
+									end
+								end
+
+								return tabSelectorTable
+							end
+						},
+						tabSelectorColor = {
+							order = 5,
+							type = "color",
+							hasAlpha = false,
+							name = L["Selector Color"],
+							disabled = function() return E.db.chat.tabSelector == "NONE" end,
+							get = function(info)
+								local t = E.db.chat.tabSelectorColor
+								local d = P.chat.tabSelectorColor
+								return t.r, t.g, t.b, t.a, d.r, d.g, d.b
+							end,
+							set = function(info, r, g, b)
+								local t = E.db.chat.tabSelectorColor
+								t.r, t.g, t.b = r, g, b
+								E:UpdateMedia()
+							end
+						}
+					}
+				},
+				fadingGroup = {
+					order = 20,
 					type = "group",
 					name = L["Text Fade"],
 					disabled = function() return not E.Chat.Initialized end,
@@ -239,13 +323,13 @@ E.Options.args.chat = {
 							type = "range",
 							name = L["Inactivity Timer"],
 							desc = L["Controls how many seconds of inactivity has to pass before chat is faded."],
-							disabled = function() return not CH.db.fade end,
+							disabled = function() return not E.db.chat.fade end,
 							min = 5, softMax = 120, step = 1
 						}
 					}
 				},
 				fontGroup = {
-					order = 20,
+					order = 21,
 					type = "group",
 					name = L["Fonts"],
 					set = function(info, value) E.db.chat[info[#info]] = value CH:SetupChat() end,
@@ -291,7 +375,7 @@ E.Options.args.chat = {
 					}
 				},
 				alerts = {
-					order = 21,
+					order = 22,
 					type = "group",
 					name = L["Alerts"],
 					disabled = function() return not E.Chat.Initialized end,
@@ -373,7 +457,7 @@ E.Options.args.chat = {
 					}
 				},
 				timestampGroup = {
-					order = 22,
+					order = 23,
 					type = "group",
 					name = L["TIMESTAMPS_LABEL"],
 					args = {
@@ -417,7 +501,7 @@ E.Options.args.chat = {
 					}
 				},
 				classColorMentionGroup = {
-					order = 23,
+					order = 24,
 					type = "group",
 					name = L["Class Color Mentions"],
 					args = {

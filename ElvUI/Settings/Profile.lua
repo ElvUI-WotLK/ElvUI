@@ -1033,6 +1033,10 @@ P.chat = {
 		YELL = true,
 		EMOTE = true
 	},
+	tabSelector = "NONE",
+	tabSelectedTextEnabled = false,
+	tabSelectedTextColor = {r = 1, g = 1, b = 1},
+	tabSelectorColor = {r = 0.3, g = 1, b = 0.3},
 	timeStampFormat = "NONE",
 	keywords = "ElvUI",
 	separateSizes = false,

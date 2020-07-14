@@ -302,13 +302,6 @@ function CH:StyleChat(frame)
 	end)
 
 	tab.text = _G[name.."TabText"]
-	tab.text:SetTextColor(unpack(E.media.rgbvaluecolor))
-	hooksecurefunc(tab.text, "SetTextColor", function(tt, r, g, b)
-		local rR, gG, bB = unpack(E.media.rgbvaluecolor)
-		if r ~= rR or g ~= gG or b ~= bB then
-			tt:SetTextColor(rR, gG, bB)
-		end
-	end)
 
 	if tab.conversationIcon then
 		tab.text:Point("LEFT", tab.leftTexture, "RIGHT", 10, -5)
@@ -753,12 +746,13 @@ function CH:Panels_ColorUpdate()
 	RightChatPanel.backdrop:SetBackdropColor(panelColor.r, panelColor.g, panelColor.b, panelColor.a)
 end
 
-local function UpdateChatTabColor(_, r, g, b)
-	for id = 1, #CHAT_FRAMES do
-		_G["ChatFrame"..id.."TabText"]:SetTextColor(r, g, b)
+function CH:UpdateChatTabColors()
+	for _, frameName in ipairs(CHAT_FRAMES) do
+		local tab = _G[format("%sTab", frameName)]
+		CH:FCFTab_UpdateColors(tab, tab.selected)
 	end
 end
-E.valueColorUpdateFuncs[UpdateChatTabColor] = true
+E.valueColorUpdateFuncs[CH.UpdateChatTabColors] = true
 
 function CH:ScrollToBottom(frame)
 	frame:ScrollToBottom()
@@ -1876,6 +1870,49 @@ function CH:BuildCopyChatFrame()
 	Skins:HandleCloseButton(close)
 end
 
+CH.TabStyles = {
+	NONE	= "%s",
+	ARROW	= "%s>|r%s%s<|r",
+	ARROW1	= "%s>|r %s %s<|r",
+	ARROW2	= "%s<|r%s%s>|r",
+	ARROW3	= "%s<|r %s %s>|r",
+	BOX		= "%s[|r%s%s]|r",
+	BOX1	= "%s[|r %s %s]|r",
+	CURLY	= "%s{|r%s%s}|r",
+	CURLY1	= "%s{|r %s %s}|r",
+	CURVE	= "%s(|r%s%s)|r",
+	CURVE1	= "%s(|r %s %s)|r"
+}
+
+function CH:FCFTab_UpdateColors(tab, selected)
+	local chat = _G[format("ChatFrame%s", tab:GetID())]
+
+	tab.selected = selected
+
+	if selected and chat.isDocked then
+		if self.db.tabSelector ~= "NONE" then
+			local color = self.db.tabSelectorColor
+			local hexColor = E:RGBToHex(color.r, color.g, color.b)
+			tab:SetFormattedText(self.TabStyles[self.db.tabSelector] or self.TabStyles.ARROW1, hexColor, chat.name, hexColor)
+			tab.textReformatted = true
+		elseif tab.textReformatted then
+			tab:SetText(chat.name)
+			tab.textReformatted = nil
+		end
+
+		if self.db.tabSelectedTextEnabled then
+			local color = self.db.tabSelectedTextColor
+			tab:GetFontString():SetTextColor(color.r, color.g, color.b)
+			return
+		end
+	elseif tab.textReformatted then
+		tab:SetText(chat.name)
+		tab.textReformatted = nil
+	end
+
+	tab:GetFontString():SetTextColor(unpack(E.media.rgbvaluecolor))
+end
+
 function CH:ResetEditboxHistory()
 	wipe(ElvCharacterDB.ChatEditHistory)
 end
@@ -1907,6 +1944,7 @@ function CH:Initialize()
 
 	self:SecureHook("ChatEdit_OnEnterPressed")
 	self:SecureHook("FCF_SetWindowAlpha")
+	self:SecureHook("FCFTab_UpdateColors")
 	self:SecureHook("FCF_SetChatWindowFontSize", "SetChatFont")
 	self:SecureHook("FCF_SavePositionAndDimensions", "ON_FCF_SavePositionAndDimensions")
 	self:RegisterEvent("UPDATE_CHAT_WINDOWS", "SetupChat")
