@@ -378,6 +378,7 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 		frame.Name:Hide()
 		mod:Configure_Glow(frame)
 		mod:Update_Glow(frame)
+		mod:Update_RaidIcon(frame)
 		mod:Configure_IconOnlyGlow(frame)
 		mod:Configure_NameOnlyGlow(frame)
 	end
@@ -444,8 +445,6 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 		end
 		if mod.db.units[frame.UnitType].name.enable then
 			frame.Name:ClearAllPoints()
-			frame.Level:ClearAllPoints()
-			mod:Update_Level(frame)
 			mod:Update_Name(frame)
 		else
 			frame.Name:SetText()
@@ -483,6 +482,7 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 			frame.Level:ClearAllPoints()
 			mod:Update_Level(frame)
 		end
+		mod:Update_RaidIcon(frame)
 	end
 end
 
