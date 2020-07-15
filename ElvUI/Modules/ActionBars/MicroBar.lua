@@ -26,7 +26,7 @@ local function onEnter(button)
 		E:UIFrameFadeIn(ElvUI_MicroBar, 0.2, ElvUI_MicroBar:GetAlpha(), AB.db.microbar.alpha)
 	end
 
-	if button and button.backdrop then
+	if button and button ~= ElvUI_MicroBar and button.backdrop then
 		button.backdrop:SetBackdropBorderColor(unpack(E.media.rgbvaluecolor))
 	end
 end
@@ -36,7 +36,7 @@ local function onLeave(button)
 		E:UIFrameFadeOut(ElvUI_MicroBar, 0.2, ElvUI_MicroBar:GetAlpha(), 0)
 	end
 
-	if button and button.backdrop then
+	if button and button ~= ElvUI_MicroBar and button.backdrop then
 		button.backdrop:SetBackdropBorderColor(unpack(E.media.bordercolor))
 	end
 end
