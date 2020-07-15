@@ -347,8 +347,6 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 		--hide the bars
 		if frame.CastBar:IsShown() then frame.CastBar:Hide() end
 		if frame.Health:IsShown() then frame.Health:Hide() end
-		--hide the level
-		if frame.Level:IsShown() then frame.Level:Hide() end
 		--hide the target indicator
 		mod:Configure_Glow(frame)
 		mod:Update_Glow(frame)
@@ -444,12 +442,10 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 			mod:Update_Glow(frame)
 		end
 		if mod.db.units[frame.UnitType].name.enable then
+			frame.Level:Show()
 			frame.Name:ClearAllPoints()
-			if mod.db.units[frame.UnitType].level.enable then
-				frame.Level:Show()
-				frame.Level:ClearAllPoints()
-				mod:Update_Level(frame)
-			end
+			frame.Level:ClearAllPoints()
+			mod:Update_Level(frame)
 			mod:Update_Name(frame)
 		else
 			frame.Name:SetText()
@@ -472,12 +468,10 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 		end
 		if mod.db.units[frame.UnitType].name.enable then
 			frame.Name:Show()
+			frame.Level:Show()
 			frame.Name:ClearAllPoints()
-			if mod.db.units[frame.UnitType].level.enable then
-				frame.Level:Show()
-				frame.Level:ClearAllPoints()
-				mod:Update_Level(frame)
-			end
+			frame.Level:ClearAllPoints()
+			mod:Update_Level(frame)
 			mod:Update_Name(frame)
 		else
 			frame.Name:SetText()
