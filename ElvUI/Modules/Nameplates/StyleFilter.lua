@@ -445,14 +445,14 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 		end
 		if mod.db.units[frame.UnitType].name.enable then
 			frame.Name:ClearAllPoints()
+			if mod.db.units[frame.UnitType].level.enable then
+				frame.Level:Show()
+				frame.Level:ClearAllPoints()
+				mod:Update_Level(frame)
+			end
 			mod:Update_Name(frame)
 		else
 			frame.Name:SetText()
-		end
-		if mod.db.units[frame.UnitType].level.enable then
-			frame.Level:Show()
-			frame.Level:ClearAllPoints()
-			mod:Update_Level(frame)
 		end
 	end
 	if IconChanged then
@@ -473,14 +473,14 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 		if mod.db.units[frame.UnitType].name.enable then
 			frame.Name:Show()
 			frame.Name:ClearAllPoints()
+			if mod.db.units[frame.UnitType].level.enable then
+				frame.Level:Show()
+				frame.Level:ClearAllPoints()
+				mod:Update_Level(frame)
+			end
 			mod:Update_Name(frame)
 		else
 			frame.Name:SetText()
-		end
-		if mod.db.units[frame.UnitType].level.enable then
-			frame.Level:Show()
-			frame.Level:ClearAllPoints()
-			mod:Update_Level(frame)
 		end
 		mod:Update_RaidIcon(frame)
 	end
