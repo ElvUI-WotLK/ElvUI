@@ -380,9 +380,6 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 		mod:Update_Glow(frame)
 		mod:Configure_IconOnlyGlow(frame)
 		mod:Configure_NameOnlyGlow(frame)
-		if not NameColorChanged then
-			mod:Update_Name(frame, true)
-		end
 	end
 end
 
@@ -445,9 +442,6 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 			mod:Configure_Glow(frame)
 			mod:Update_Glow(frame)
 		end
-		if mod.db.units[frame.UnitType].level then
-			frame.Level:Show()
-		end
 		if mod.db.units[frame.UnitType].name.enable then
 			frame.Name:ClearAllPoints()
 			frame.Level:ClearAllPoints()
@@ -456,6 +450,11 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 		else
 			frame.Name:SetText()
 		end
+		if mod.db.units[frame.UnitType].level.enable then
+			frame.Level:Show()
+			frame.Level:ClearAllPoints()
+			mod:Update_Level(frame)
+		end
 	end
 	if IconChanged then
 		frame.IconChanged = nil
@@ -463,6 +462,7 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 	end
 	if IconOnlyChanged then
 		frame.IconOnlyChanged = nil
+		mod:Update_IconFrame(frame)
 		if mod.db.units[frame.UnitType].iconFrame and mod.db.units[frame.UnitType].iconFrame.enable then
 			mod:Configure_IconFrame(frame)
 		end
@@ -471,18 +471,18 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 			mod:Configure_Glow(frame)
 			mod:Update_Glow(frame)
 		end
-		if mod.db.units[frame.UnitType].name.level then
-			frame.Level:Show()
-		end
 		if mod.db.units[frame.UnitType].name.enable then
 			frame.Name:Show()
 			frame.Name:ClearAllPoints()
+			mod:Update_Name(frame)
+		else
+			frame.Name:SetText()
+		end
+		if mod.db.units[frame.UnitType].level.enable then
+			frame.Level:Show()
 			frame.Level:ClearAllPoints()
 			mod:Update_Level(frame)
-			mod:Update_Name(frame)
 		end
-		mod:Configure_IconOnlyGlow(frame)
-		mod:Configure_NameOnlyGlow(frame)
 	end
 end
 
