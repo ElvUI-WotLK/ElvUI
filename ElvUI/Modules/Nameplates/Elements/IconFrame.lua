@@ -54,12 +54,15 @@ end
 
 function NP:Configure_IconFrame(frame)
 	local db = self.db.units[frame.UnitType].iconFrame
-	if db and db.enable or frame.IconChanged then
-		frame.IconFrame:SetSize(db.size, db.size)
-		frame.IconFrame:ClearAllPoints()
-		frame.IconFrame:SetPoint(E.InversePoints[db.position], db.parent == "Nameplate" and frame or frame[db.parent], db.position, db.xOffset, db.yOffset)
-	else
-		frame.IconFrame:Hide()
+
+	if db then
+		if db.enable or frame.IconChanged then
+			frame.IconFrame:SetSize(db.size, db.size)
+			frame.IconFrame:ClearAllPoints()
+			frame.IconFrame:SetPoint(E.InversePoints[db.position], db.parent == "Nameplate" and frame or frame[db.parent], db.position, db.xOffset, db.yOffset)
+		else
+			frame.IconFrame:Hide()
+		end
 	end
 end
 
