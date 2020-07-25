@@ -105,37 +105,65 @@ function S:HandleButtonHighlight(frame, r, g, b, a)
 	highlightTexture:SetVertexColor(r, g, b, a)
 end
 
-function S:HandleScrollBar(frame)
+function S:HandleScrollBar(frame, horizontal)
 	if frame.backdrop then return end
 
 	local parent = frame:GetParent()
 	local frameName = frame:GetName()
 
-	local scrollUpButton = parent.scrollUp or _G[format("%s%s", frameName, "ScrollUpButton")] or _G[format("%s%s", frameName, "UpButton")] or _G[format("%s%s", frameName, "ScrollUp")]
-	local scrollDownButton = parent.scrollDown or _G[format("%s%s", frameName, "ScrollDownButton")] or _G[format("%s%s", frameName, "DownButton")] or _G[format("%s%s", frameName, "ScrollDown")]
+	local scrollUpButton, scrollDownButton
 	local thumb = frame.thumbTexture or frame.GetThumbTexture and frame:GetThumbTexture() or _G[format("%s%s", frameName, "ThumbTexture")]
 
+	if not horizontal then
+		scrollUpButton = parent.scrollUp or _G[format("%s%s", frameName, "ScrollUpButton")] or _G[format("%s%s", frameName, "UpButton")] or _G[format("%s%s", frameName, "ScrollUp")]
+		scrollDownButton = parent.scrollDown or _G[format("%s%s", frameName, "ScrollDownButton")] or _G[format("%s%s", frameName, "DownButton")] or _G[format("%s%s", frameName, "ScrollDown")]
+	else
+		scrollUpButton = _G[format("%s%s", frameName, "ScrollLeftButton")] or _G[format("%s%s", frameName, "LeftButton")] or _G[format("%s%s", frameName, "ScrollLeft")]
+		scrollDownButton = _G[format("%s%s", frameName, "ScrollRightButton")] or _G[format("%s%s", frameName, "RightButton")] or _G[format("%s%s", frameName, "ScrollRight")]
+	end
+
+	if not horizontal then
+		frame:Width(18)
+	else
+		frame:Height(18)
+	end
+
+	local frameLevel = frame:GetFrameLevel()
 	frame:StripTextures()
-	frame:Width(18)
 	frame:CreateBackdrop()
 	frame.backdrop:SetAllPoints()
-	frame.backdrop:SetFrameLevel(frame.backdrop:GetFrameLevel() + 1)
+	frame.backdrop:SetFrameLevel(frameLevel)
 
 	if scrollUpButton then
-		scrollUpButton:Point("BOTTOM", frame, "TOP", 0, 1)
-		S:HandleNextPrevButton(scrollUpButton, "up")
+		if not horizontal then
+			scrollUpButton:Point("BOTTOM", frame, "TOP", 0, 1)
+			S:HandleNextPrevButton(scrollUpButton, "up")
+		else
+			scrollUpButton:Point("RIGHT", frame, "LEFT", -1, 0)
+			S:HandleNextPrevButton(scrollUpButton, "left")
+		end
 	end
 
 	if scrollDownButton then
-		scrollDownButton:Point("TOP", frame, "BOTTOM", 0, -1)
-		S:HandleNextPrevButton(scrollDownButton, "down")
+		if not horizontal then
+			scrollDownButton:Point("TOP", frame, "BOTTOM", 0, -1)
+			S:HandleNextPrevButton(scrollDownButton, "down")
+		else
+			scrollDownButton:Point("LEFT", frame, "RIGHT", 1, 0)
+			S:HandleNextPrevButton(scrollDownButton, "right")
+		end
 	end
 
 	if thumb and not thumb.backdrop then
-		thumb:Size(18, 22)
+		if not horizontal then
+			thumb:Size(18, 22)
+		else
+			thumb:Size(22, 18)
+		end
+
 		thumb:SetTexture()
 		thumb:CreateBackdrop(nil, true, true)
-		thumb.backdrop:SetFrameLevel(thumb.backdrop:GetFrameLevel() + 2)
+		thumb.backdrop:SetFrameLevel(frameLevel + 1)
 		thumb.backdrop:SetBackdropColor(0.6, 0.6, 0.6)
 
 		thumb.backdrop:Point("TOPLEFT", thumb, "TOPLEFT", 2, -2)
