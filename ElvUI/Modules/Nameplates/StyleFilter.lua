@@ -477,6 +477,8 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 			frame.Name:SetText()
 		end
 		mod:Update_RaidIcon(frame)
+		mod:Configure_IconOnlyGlow(frame)
+		mod:Configure_NameOnlyGlow(frame)
 	end
 end
 
