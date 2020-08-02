@@ -26,8 +26,7 @@ S:AddCallbackForAddon("Blizzard_GlyphUI", "Skin_Blizzard_GlyphUI", function()
 
 	GlyphFrameBackground:SetTexture("Interface\\Spellbook\\UI-GlyphFrame")
 	GlyphFrameGlow:SetTexture("Interface\\Spellbook\\UI-GlyphFrame-Glow")
-	GlyphFrameGlow:SetParent(GlyphFrameBackground.backdrop)
-	GlyphFrameGlow:SetInside(GlyphFrameBackground.backdrop)
+	GlyphFrameGlow:SetAllPoints(GlyphFrameBackground)
 
 	-- texWidth, texHeight, cropWidth, cropHeight, offsetX, offsetY = 512, 512, 315, 340, 21, 72
 	GlyphFrameBackground:SetTexCoord(0.041015625, 0.65625, 0.140625, 0.8046875)
@@ -45,9 +44,11 @@ S:AddCallbackForAddon("Blizzard_GlyphUI", "Skin_Blizzard_GlyphUI", function()
 		{"BOTTOMLEFT", 7, 70}
 	}
 
+	local glyphFrameLevel = GlyphFrame:GetFrameLevel() + 1
 	for i = 1, 6 do
 		local frame = _G["GlyphFrameGlyph"..i]
 		frame:SetParent(GlyphFrameBackground.backdrop)
+		frame:SetFrameLevel(glyphFrameLevel)
 		frame:SetScale(glyphBGScale)
 		frame:Point(unpack(glyphPositions[i]))
 	end
