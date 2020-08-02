@@ -1,6 +1,5 @@
 local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local M = E:GetModule("WorldMap")
-local S = E:GetModule("Skins")
 
 --Lua functions
 local find = string.find
@@ -131,15 +130,12 @@ function M:PositionCoords()
 
 	local db = E.global.general.WorldMapCoordinates
 	local position = db.position
-	local xOffset = db.xOffset
-	local yOffset = db.yOffset
 
-	local x, y = 5, 5
-	if find(position, "RIGHT") then x = -5 end
-	if find(position, "TOP") then y = -5 end
+	local x = find(position, "RIGHT") and -5 or 5
+	local y = find(position, "TOP") and -5 or 5
 
 	self.coordsHolder.playerCoords:ClearAllPoints()
-	self.coordsHolder.playerCoords:Point(position, WorldMapDetailFrame, position, x + xOffset, y + yOffset)
+	self.coordsHolder.playerCoords:Point(position, WorldMapDetailFrame, position, x + db.xOffset, y + db.yOffset)
 
 	self.coordsHolder.mouseCoords:ClearAllPoints()
 	self.coordsHolder.mouseCoords:Point(position, self.coordsHolder.playerCoords, INVERTED_POINTS[position], 0, y)
@@ -151,10 +147,6 @@ function M:ToggleMapFramerate()
 		WorldMapFrame:SetAttribute("UIPanelLayout-allowOtherPanels", true)
 
 		WorldMapFrame:SetScale(1)
-		WorldMapFrame:EnableKeyboard(false)
-		WorldMapFrame:EnableMouse(false)
-	else
-		S:SetUIPanelWindowInfo(WorldMapFrame, "width", 591)
 	end
 end
 
@@ -186,7 +178,7 @@ function M:UpdateMapAlpha()
 end
 
 function M:Initialize()
-	M:UpdateMapAlpha()
+	self:UpdateMapAlpha()
 
 	if not E.private.worldmap.enable then return end
 
@@ -199,7 +191,7 @@ function M:Initialize()
 		coordsHolder.playerCoords:SetTextColor(1, 1, 0)
 		coordsHolder.playerCoords:SetFontObject(NumberFontNormal)
 		coordsHolder.playerCoords:SetPoint("BOTTOMLEFT", WorldMapDetailFrame, "BOTTOMLEFT", 5, 5)
-		coordsHolder.playerCoords:SetText(PLAYER..":   0, 0")
+		coordsHolder.playerCoords:SetFormattedText("%s:   0, 0", PLAYER)
 
 		coordsHolder.mouseCoords = coordsHolder:CreateFontString(nil, "OVERLAY")
 		coordsHolder.mouseCoords:SetTextColor(1, 1, 0)
@@ -217,21 +209,25 @@ function M:Initialize()
 		self:RegisterEvent("PLAYER_REGEN_DISABLED")
 	end
 
+	WorldMapFrame:EnableMouse(false)
+	WorldMapFrame.EnableMouse = E.noop
+
 	if E.global.general.smallerWorldMap then
 		BlackoutWorld:SetTexture(nil)
 
 		WorldMapFrame:SetParent(UIParent)
 		WorldMapFrame.SetParent = E.noop
 
-		if GetCVarBool("miniWorldMap") then
-			S:SetUIPanelWindowInfo(WorldMapFrame, "width", 591)
-		else
+		WorldMapFrame:EnableKeyboard(false)
+		WorldMapFrame.EnableKeyboard = E.noop
+
+		if not GetCVarBool("miniWorldMap") then
 			ShowUIPanel(WorldMapFrame)
 			self:ToggleMapFramerate()
 			HideUIPanel(WorldMapFrame)
 		end
 
-		M:SecureHook("ToggleMapFramerate")
+		self:SecureHook("ToggleMapFramerate")
 
 		hooksecurefunc(WorldMapDetailFrame, "SetScale", function(_, scale)
 			self.blobNewScale = scale
