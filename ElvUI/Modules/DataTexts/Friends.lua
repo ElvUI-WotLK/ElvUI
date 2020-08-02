@@ -36,8 +36,8 @@ local afkStatusString = format("<%s>", AFK)
 local dndStatusString = format("<%s>", DND)
 
 local inGroupStamp = "|cffaaaaaa*|r"
-local friendOnlineString = select(2, string.split(" ", ERR_FRIEND_ONLINE_SS, 2))
-local friendOfflineString = select(2, string.split(" ", ERR_FRIEND_OFFLINE_S, 2))
+local friendOnlineString = string.gsub(ERR_FRIEND_ONLINE_SS, ".+|h", "")
+local friendOfflineString = string.gsub(ERR_FRIEND_OFFLINE_S, "%%s", "")
 
 local onlineStatusString = "|cffFFFFFF[|r|cff%s%s|r|cffFFFFFF]|r"
 local onlineStatus = {
