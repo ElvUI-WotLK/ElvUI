@@ -301,7 +301,7 @@ P.nameplates = {
 		castbarDesaturate = true,
 		reactions = {
 			friendlyPlayer = {r = 0.31, g = 0.45, b = 0.63},
-			good = {r = .29,  g = .68, b = .30},
+			good = {r = .29, g = .68, b = .30},
 			neutral = {r = .85, g = .77, b = .36},
 			bad = {r = 0.78, g = 0.25, b = 0.25},
 		},

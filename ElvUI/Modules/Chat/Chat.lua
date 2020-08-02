@@ -123,7 +123,7 @@ local historyTypes = { -- the events set on the chats are still in FindURL_Event
 	CHAT_MSG_CHANNEL = "CHANNEL",
 	CHAT_MSG_SAY = "SAY",
 	CHAT_MSG_YELL = "YELL",
-	CHAT_MSG_EMOTE = "EMOTE"  -- this never worked, check it sometime.
+	CHAT_MSG_EMOTE = "EMOTE" -- this never worked, check it sometime.
 }
 
 function CH:RemoveSmiley(key)

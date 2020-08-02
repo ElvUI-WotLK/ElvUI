@@ -251,17 +251,17 @@ local function Chat_OnEvent(self, event, arg1, arg2, arg3, arg4, arg5, arg6, arg
 		body = gsub(body, "%[BN_CONVERSATION:", "%[".."")
 	end
 
-    if CH.db.timeStampFormat ~= "NONE" then
-        local timeStamp = BetterDate(CH.db.timeStampFormat, time())
+	if CH.db.timeStampFormat ~= "NONE" then
+		local timeStamp = BetterDate(CH.db.timeStampFormat, time())
 
-        if CH.db.useCustomTimeColor then
-            local color = CH.db.customTimeColor
-            local hexColor = E:RGBToHex(color.r, color.g, color.b)
-            body = format("%s[%s]|r %s", hexColor, timeStamp, body)
-        else
-            body = format("[%s] %s", timeStamp, body)
-        end
-    end
+		if CH.db.useCustomTimeColor then
+			local color = CH.db.customTimeColor
+			local hexColor = E:RGBToHex(color.r, color.g, color.b)
+			body = format("%s[%s]|r %s", hexColor, timeStamp, body)
+		else
+			body = format("[%s] %s", timeStamp, body)
+		end
+	end
 
 	self:AddMessage(body, info.r, info.g, info.b, info.id, false, accessID, typeID)
 end

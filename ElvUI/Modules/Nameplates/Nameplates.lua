@@ -839,9 +839,9 @@ function NP:OnUpdate()
 		NP:SetMouseoverFrame(frame)
 		NP:SetTargetFrame(frame)
 
-        if frame.UnitReaction ~= NP:GetUnitInfo(frame) then
-            NP:UpdateAllFrame(frame, nil, true)
-        end
+		if frame.UnitReaction ~= NP:GetUnitInfo(frame) then
+			NP:UpdateAllFrame(frame, nil, true)
+		end
 
 		local status = NP:UnitDetailedThreatSituation(frame)
 		if frame.ThreatStatus ~= status then
