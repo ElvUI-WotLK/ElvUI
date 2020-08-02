@@ -61,7 +61,7 @@ S:AddCallback("Skin_Quest", function()
 	QuestLogSkillHighlight:SetTexture(E.Media.Textures.Highlight)
 	QuestLogSkillHighlight:SetAlpha(0.35)
 
-	S:HandleScrollBar(QuestLogScrollFrameScrollBar, 5)
+	S:HandleScrollBar(QuestLogScrollFrameScrollBar)
 	S:HandleScrollBar(QuestLogDetailScrollFrameScrollBar)
 	S:HandleScrollBar(QuestDetailScrollFrameScrollBar)
 	S:HandleScrollBar(QuestProgressScrollFrameScrollBar)
@@ -77,8 +77,8 @@ S:AddCallback("Skin_Quest", function()
 
 	QuestLogScrollFrame:Point("TOPLEFT", 19, -62)
 
-	QuestLogScrollFrameScrollBar:Point("TOPLEFT", QuestLogScrollFrame, "TOPRIGHT", 2, -14)
-	QuestLogScrollFrameScrollBar:Point("BOTTOMLEFT", QuestLogScrollFrame, "BOTTOMRIGHT", 2, 14)
+	QuestLogScrollFrameScrollBar:Point("TOPLEFT", QuestLogScrollFrame, "TOPRIGHT", 3, -17)
+	QuestLogScrollFrameScrollBar:Point("BOTTOMLEFT", QuestLogScrollFrame, "BOTTOMRIGHT", 3, 17)
 
 	QuestLogDetailScrollFrame:Width(304)
 	QuestLogDetailScrollFrame.Hide = E.noop
@@ -104,8 +104,8 @@ S:AddCallback("Skin_Quest", function()
 		QuestLogDetailScrollFrame:Height(336)
 		QuestLogDetailScrollFrame:Point("TOPRIGHT", -30, -61)
 
-		QuestLogDetailScrollFrameScrollBar:Point("TOPLEFT", QuestLogDetailScrollFrame, "TOPRIGHT", 4, -17)
-		QuestLogDetailScrollFrameScrollBar:Point("BOTTOMLEFT", QuestLogDetailScrollFrame, "BOTTOMRIGHT", 4, 16)
+		QuestLogDetailScrollFrameScrollBar:Point("TOPLEFT", QuestLogDetailScrollFrame, "TOPRIGHT", 3, -18)
+		QuestLogDetailScrollFrameScrollBar:Point("BOTTOMLEFT", QuestLogDetailScrollFrame, "BOTTOMRIGHT", 3, 17)
 
 		QuestLogControlPanel:SetPoint("BOTTOMLEFT", 18, 15)
 	end)
@@ -150,8 +150,8 @@ S:AddCallback("Skin_Quest", function()
 		QuestLogDetailScrollFrame:Height(402)
 		QuestLogDetailScrollFrame:Point("TOPLEFT", 19, -73)
 
-		QuestLogDetailScrollFrameScrollBar:Point("TOPLEFT", QuestLogDetailScrollFrame, "TOPRIGHT", 4, -18)
-		QuestLogDetailScrollFrameScrollBar:Point("BOTTOMLEFT", QuestLogDetailScrollFrame, "BOTTOMRIGHT", 4, 18)
+		QuestLogDetailScrollFrameScrollBar:Point("TOPLEFT", QuestLogDetailScrollFrame, "TOPRIGHT", 3, -19)
+		QuestLogDetailScrollFrameScrollBar:Point("BOTTOMLEFT", QuestLogDetailScrollFrame, "BOTTOMRIGHT", 3, 19)
 
 		QuestLogFrameShowMapButton:Point("TOPRIGHT", -27, -34)
 	end)
@@ -193,14 +193,14 @@ S:AddCallback("Skin_Quest", function()
 	QuestRewardScrollFrame:Point("TOPLEFT", QuestFrame, "TOPLEFT", 19, -73)
 	QuestProgressScrollFrame:Point("TOPLEFT", QuestFrame, "TOPLEFT", 19, -73)
 
-	QuestDetailScrollFrameScrollBar:Point("TOPLEFT", QuestDetailScrollFrame, "TOPRIGHT", 4, -18)
-	QuestDetailScrollFrameScrollBar:Point("BOTTOMLEFT", QuestDetailScrollFrame, "BOTTOMRIGHT", 4, 18)
+	QuestDetailScrollFrameScrollBar:Point("TOPLEFT", QuestDetailScrollFrame, "TOPRIGHT", 3, -19)
+	QuestDetailScrollFrameScrollBar:Point("BOTTOMLEFT", QuestDetailScrollFrame, "BOTTOMRIGHT", 3, 19)
 
-	QuestRewardScrollFrameScrollBar:Point("TOPLEFT", QuestRewardScrollFrame, "TOPRIGHT", 4, -18)
-	QuestRewardScrollFrameScrollBar:Point("BOTTOMLEFT", QuestRewardScrollFrame, "BOTTOMRIGHT", 4, 18)
+	QuestRewardScrollFrameScrollBar:Point("TOPLEFT", QuestRewardScrollFrame, "TOPRIGHT", 3, -19)
+	QuestRewardScrollFrameScrollBar:Point("BOTTOMLEFT", QuestRewardScrollFrame, "BOTTOMRIGHT", 3, 19)
 
-	QuestProgressScrollFrameScrollBar:Point("TOPLEFT", QuestProgressScrollFrame, "TOPRIGHT", 4, -18)
-	QuestProgressScrollFrameScrollBar:Point("BOTTOMLEFT", QuestProgressScrollFrame, "BOTTOMRIGHT", 4, 18)
+	QuestProgressScrollFrameScrollBar:Point("TOPLEFT", QuestProgressScrollFrame, "TOPRIGHT", 3, -19)
+	QuestProgressScrollFrameScrollBar:Point("BOTTOMLEFT", QuestProgressScrollFrame, "BOTTOMRIGHT", 3, 19)
 
 	QuestFrameAcceptButton:Point("BOTTOMLEFT", 19, 8)
 	QuestFrameCompleteButton:Point("BOTTOMLEFT", 19, 8)
@@ -227,8 +227,8 @@ S:AddCallback("Skin_Quest", function()
 	QuestGreetingScrollFrame:Size(304, 402)
 	QuestGreetingScrollFrame:Point("TOPLEFT", GossipFrame, "TOPLEFT", 19, -73)
 
-	QuestGreetingScrollFrameScrollBar:Point("TOPLEFT", QuestGreetingScrollFrame, "TOPRIGHT", 4, -18)
-	QuestGreetingScrollFrameScrollBar:Point("BOTTOMLEFT", QuestGreetingScrollFrame, "BOTTOMRIGHT", 4, 18)
+	QuestGreetingScrollFrameScrollBar:Point("TOPLEFT", QuestGreetingScrollFrame, "TOPRIGHT", 3, -19)
+	QuestGreetingScrollFrameScrollBar:Point("BOTTOMLEFT", QuestGreetingScrollFrame, "BOTTOMRIGHT", 3, 19)
 
 	QuestFrameGreetingGoodbyeButton:Point("BOTTOMRIGHT", -40, 8)
 

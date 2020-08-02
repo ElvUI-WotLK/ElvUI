@@ -360,6 +360,12 @@ S:AddCallback("Skin_BlizzardOptions", function()
 	S:HandleScrollBar(InterfaceOptionsFrameCategoriesListScrollBar)
 	S:HandleScrollBar(InterfaceOptionsFrameAddOnsListScrollBar)
 
+	InterfaceOptionsFrameCategoriesListScrollBar:Point("TOPRIGHT", 0, -20)
+	InterfaceOptionsFrameCategoriesListScrollBar:Point("BOTTOMLEFT", 6, 19)
+
+	InterfaceOptionsFrameAddOnsListScrollBar:Point("TOPRIGHT", 1, -18)
+	InterfaceOptionsFrameAddOnsListScrollBar:Point("BOTTOMLEFT", 7, 19)
+
 	S:HandleDropDownBox(VideoOptionsResolutionPanelMultiSampleDropDown, 195)
 
 	VideoOptionsFrameDefaults:Point("BOTTOMLEFT", 21, 16)

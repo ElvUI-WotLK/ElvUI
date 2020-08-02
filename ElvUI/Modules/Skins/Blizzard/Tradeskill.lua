@@ -165,16 +165,16 @@ S:AddCallbackForAddon("Blizzard_TradeSkillUI", "Skin_Blizzard_TradeSkillUI", fun
 	TradeSkillListScrollFrame.Hide = E.noop
 	TradeSkillListScrollFrame:Show()
 
-	TradeSkillListScrollFrameScrollBar:Point("TOPLEFT", TradeSkillListScrollFrame, "TOPRIGHT", 4, -18)
-	TradeSkillListScrollFrameScrollBar:Point("BOTTOMLEFT", TradeSkillListScrollFrame, "BOTTOMRIGHT", 4, 18)
+	TradeSkillListScrollFrameScrollBar:Point("TOPLEFT", TradeSkillListScrollFrame, "TOPRIGHT", 3, -19)
+	TradeSkillListScrollFrameScrollBar:Point("BOTTOMLEFT", TradeSkillListScrollFrame, "BOTTOMRIGHT", 3, 19)
 
 	TradeSkillDetailScrollFrame:Size(304, 311)
 	TradeSkillDetailScrollFrame:Point("TOPLEFT", 348, -88)
 
 	TradeSkillDetailScrollChildFrame:Size(304, 310)
 
-	TradeSkillDetailScrollFrameScrollBar:Point("TOPLEFT", TradeSkillDetailScrollFrame, "TOPRIGHT", 4, -18)
-	TradeSkillDetailScrollFrameScrollBar:Point("BOTTOMLEFT", TradeSkillDetailScrollFrame, "BOTTOMRIGHT", 4, 18)
+	TradeSkillDetailScrollFrameScrollBar:Point("TOPLEFT", TradeSkillDetailScrollFrame, "TOPRIGHT", 3, -19)
+	TradeSkillDetailScrollFrameScrollBar:Point("BOTTOMLEFT", TradeSkillDetailScrollFrame, "BOTTOMRIGHT", 3, 19)
 
 	TradeSkillSkillIcon:Size(47)
 	TradeSkillSkillIcon:Point("TOPLEFT", 10, -9)

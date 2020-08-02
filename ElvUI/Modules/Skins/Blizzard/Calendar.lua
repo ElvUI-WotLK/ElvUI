@@ -245,8 +245,8 @@ S:AddCallbackForAddon("Blizzard_Calendar", "Skin_Blizzard_Calendar", function()
 
 	CalendarTexturePickerScrollFrame:Point("TOPLEFT", 10, -20)
 
-	CalendarTexturePickerScrollBar:Point("TOPLEFT", CalendarTexturePickerScrollFrame, "TOPRIGHT", 4, -14)
-	CalendarTexturePickerScrollBar:Point("BOTTOMLEFT", CalendarTexturePickerScrollFrame, "BOTTOMRIGHT", 4, 12)
+	CalendarTexturePickerScrollBar:Point("TOPLEFT", CalendarTexturePickerScrollFrame, "TOPRIGHT", 5, -17)
+	CalendarTexturePickerScrollBar:Point("BOTTOMLEFT", CalendarTexturePickerScrollFrame, "BOTTOMRIGHT", 5, 15)
 
 	CalendarTexturePickerCancelButton:Point("BOTTOMRIGHT", -8, 8)
 
@@ -341,6 +341,12 @@ S:AddCallbackForAddon("Blizzard_Calendar", "Skin_Blizzard_Calendar", function()
 	CalendarViewEventDescriptionContainer:Size(294, 68)
 	CalendarViewEventDescriptionContainer:Point("TOPLEFT", 13, -94)
 
+	CalendarViewEventDescriptionScrollFrameScrollBar:Point("TOPLEFT", CalendarViewEventDescriptionScrollFrame, "TOPRIGHT", 4, -15)
+	CalendarViewEventDescriptionScrollFrameScrollBar:Point("BOTTOMLEFT", CalendarViewEventDescriptionScrollFrame, "BOTTOMRIGHT", 4, 15)
+
+	CalendarViewEventInviteListScrollFrameScrollBar:Point("TOPLEFT", CalendarViewEventInviteListScrollFrame, "TOPRIGHT", 7, -16)
+	CalendarViewEventInviteListScrollFrameScrollBar:Point("BOTTOMLEFT", CalendarViewEventInviteListScrollFrame, "BOTTOMRIGHT", 7, 16)
+
 	CalendarViewEventIcon:Point("TOPLEFT", 14, -26)
 
 	CalendarViewEventInviteListSection:Point("TOPLEFT", 0, -177)
@@ -366,6 +372,12 @@ S:AddCallbackForAddon("Blizzard_Calendar", "Skin_Blizzard_Calendar", function()
 	-- Create Event
 	S:HandleScrollBar(CalendarCreateEventDescriptionScrollFrameScrollBar)
 	S:HandleScrollBar(CalendarCreateEventInviteListScrollFrameScrollBar)
+
+	CalendarCreateEventDescriptionScrollFrameScrollBar:Point("TOPLEFT", CalendarCreateEventDescriptionScrollFrame, "TOPRIGHT", 4, -15)
+	CalendarCreateEventDescriptionScrollFrameScrollBar:Point("BOTTOMLEFT", CalendarCreateEventDescriptionScrollFrame, "BOTTOMRIGHT", 4, 15)
+
+	CalendarCreateEventInviteListScrollFrameScrollBar:Point("TOPLEFT", CalendarCreateEventInviteListScrollFrame, "TOPRIGHT", 7, -16)
+	CalendarCreateEventInviteListScrollFrameScrollBar:Point("BOTTOMLEFT", CalendarCreateEventInviteListScrollFrame, "BOTTOMRIGHT", 7, 16)
 
 	if CalendarCreateEventInviteListScrollFrame.buttons then
 		for _, button in ipairs(CalendarCreateEventInviteListScrollFrame.buttons) do

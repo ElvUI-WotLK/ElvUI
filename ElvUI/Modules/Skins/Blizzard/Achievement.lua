@@ -155,11 +155,11 @@ S:AddCallbackForAddon("Blizzard_AchievementUI", "Skin_Blizzard_AchievementUI", f
 
 	S:HandleDropDownBox(AchievementFrameFilterDropDown)
 
-	S:HandleScrollBar(AchievementFrameCategoriesContainerScrollBar, 5)
-	S:HandleScrollBar(AchievementFrameAchievementsContainerScrollBar, 5)
-	S:HandleScrollBar(AchievementFrameStatsContainerScrollBar, 5)
-	S:HandleScrollBar(AchievementFrameComparisonContainerScrollBar, 5)
-	S:HandleScrollBar(AchievementFrameComparisonStatsContainerScrollBar, 5)
+	S:HandleScrollBar(AchievementFrameCategoriesContainerScrollBar)
+	S:HandleScrollBar(AchievementFrameAchievementsContainerScrollBar)
+	S:HandleScrollBar(AchievementFrameStatsContainerScrollBar)
+	S:HandleScrollBar(AchievementFrameComparisonContainerScrollBar)
+	S:HandleScrollBar(AchievementFrameComparisonStatsContainerScrollBar)
 
 	AchievementFrameHeaderTitle:SetParent(AchievementFrame)
 	AchievementFrameHeaderTitle:ClearAllPoints()
@@ -183,8 +183,8 @@ S:AddCallbackForAddon("Blizzard_AchievementUI", "Skin_Blizzard_AchievementUI", f
 	AchievementFrameCategories:Point("TOPLEFT", 8, -35)
 	AchievementFrameCategories:Point("BOTTOMLEFT", 21, 8)
 
-	AchievementFrameCategoriesContainerScrollBar:Point("TOPLEFT", AchievementFrameCategoriesContainer, "TOPRIGHT", 2, -11)
-	AchievementFrameCategoriesContainerScrollBar:Point("BOTTOMLEFT", AchievementFrameCategoriesContainer, "BOTTOMRIGHT", 2, 11)
+	AchievementFrameCategoriesContainerScrollBar:Point("TOPLEFT", AchievementFrameCategoriesContainer, "TOPRIGHT", 3, -14)
+	AchievementFrameCategoriesContainerScrollBar:Point("BOTTOMLEFT", AchievementFrameCategoriesContainer, "BOTTOMRIGHT", 3, 14)
 
 	AchievementFrameSummaryAchievements:Point("TOPLEFT", 5, -10)
 	AchievementFrameSummaryAchievements:Point("TOPRIGHT", -5, -30)
@@ -194,13 +194,13 @@ S:AddCallbackForAddon("Blizzard_AchievementUI", "Skin_Blizzard_AchievementUI", f
 	AchievementFrameAchievementsContainer:Point("TOPLEFT", 2, -2)
 	AchievementFrameAchievementsContainer:Point("BOTTOMRIGHT", -2, 4)
 
-	AchievementFrameAchievementsContainerScrollBar:Point("TOPLEFT", AchievementFrameAchievementsContainer, "TOPRIGHT", 4, -14)
-	AchievementFrameAchievementsContainerScrollBar:Point("BOTTOMLEFT", AchievementFrameAchievementsContainer, "BOTTOMRIGHT", 4, 12)
+	AchievementFrameAchievementsContainerScrollBar:Point("TOPLEFT", AchievementFrameAchievementsContainer, "TOPRIGHT", 5, -17)
+	AchievementFrameAchievementsContainerScrollBar:Point("BOTTOMLEFT", AchievementFrameAchievementsContainer, "BOTTOMRIGHT", 5, 15)
 
 	AchievementFrameStats:SetTemplate("Transparent")
 
-	AchievementFrameStatsContainerScrollBar:Point("TOPLEFT", AchievementFrameStatsContainer, "TOPRIGHT", 2, -13)
-	AchievementFrameStatsContainerScrollBar:Point("BOTTOMLEFT", AchievementFrameStatsContainer, "BOTTOMRIGHT", 2, 11)
+	AchievementFrameStatsContainerScrollBar:Point("TOPLEFT", AchievementFrameStatsContainer, "TOPRIGHT", 3, -16)
+	AchievementFrameStatsContainerScrollBar:Point("BOTTOMLEFT", AchievementFrameStatsContainer, "BOTTOMRIGHT", 3, 14)
 
 	AchievementFrameComparison:SetTemplate("Transparent")
 
@@ -213,13 +213,13 @@ S:AddCallbackForAddon("Blizzard_AchievementUI", "Skin_Blizzard_AchievementUI", f
 
 	AchievementFrameComparisonContainer:Point("TOPLEFT", AchievementFrameComparisonSummary, "BOTTOMLEFT", 0, -3)
 
-	AchievementFrameComparisonContainerScrollBar:Point("TOPLEFT", AchievementFrameComparisonSummary, "TOPRIGHT", 8, -14)
-	AchievementFrameComparisonContainerScrollBar:Point("BOTTOMLEFT", AchievementFrameComparisonContainer, "BOTTOMRIGHT", 8, 11)
+	AchievementFrameComparisonContainerScrollBar:Point("TOPLEFT", AchievementFrameComparisonSummary, "TOPRIGHT", 9, -17)
+	AchievementFrameComparisonContainerScrollBar:Point("BOTTOMLEFT", AchievementFrameComparisonContainer, "BOTTOMRIGHT", 9, 14)
 
 	AchievementFrameComparisonStatsContainer:Point("TOPLEFT", 5, -3)
 
-	AchievementFrameComparisonStatsContainerScrollBar:Point("TOPLEFT", AchievementFrameComparisonStatsContainer, "TOPRIGHT", 2, -13)
-	AchievementFrameComparisonStatsContainerScrollBar:Point("BOTTOMLEFT", AchievementFrameComparisonStatsContainer, "BOTTOMRIGHT", 2, 11)
+	AchievementFrameComparisonStatsContainerScrollBar:Point("TOPLEFT", AchievementFrameComparisonStatsContainer, "TOPRIGHT", 3, -16)
+	AchievementFrameComparisonStatsContainerScrollBar:Point("BOTTOMLEFT", AchievementFrameComparisonStatsContainer, "BOTTOMRIGHT", 3, 14)
 
 	AchievementFrameAchievementsContainerScrollBar.Show = function(self)
 		AchievementFrameAchievements:SetWidth(500)

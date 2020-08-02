@@ -136,11 +136,13 @@ S:AddCallbackForAddon("Blizzard_AuctionUI", "Skin_Blizzard_AuctionUI", function(
 	BrowseFilterScrollFrame:StripTextures()
 
 	S:HandleScrollBar(BrowseFilterScrollFrameScrollBar)
+	BrowseFilterScrollFrameScrollBar:Point("TOPLEFT", BrowseFilterScrollFrame, "TOPRIGHT", 5, -19)
+	BrowseFilterScrollFrameScrollBar:Point("BOTTOMLEFT", BrowseFilterScrollFrame, "BOTTOMRIGHT", 5, 18)
 
 	S:HandleScrollBar(BrowseScrollFrameScrollBar)
 	BrowseScrollFrameScrollBar:ClearAllPoints()
-	BrowseScrollFrameScrollBar:Point("TOPRIGHT", BrowseScrollFrame, "TOPRIGHT", 24, -18)
-	BrowseScrollFrameScrollBar:Point("BOTTOMRIGHT", BrowseScrollFrame, "BOTTOMRIGHT", 0, 18)
+	BrowseScrollFrameScrollBar:Point("TOPRIGHT", BrowseScrollFrame, "TOPRIGHT", 25, -19)
+	BrowseScrollFrameScrollBar:Point("BOTTOMRIGHT", BrowseScrollFrame, "BOTTOMRIGHT", 0, 19)
 
 	S:HandleNextPrevButton(BrowsePrevPageButton, nil, nil, true)
 	BrowsePrevPageButton:Point("TOPLEFT", 640, -50)
@@ -185,8 +187,8 @@ S:AddCallbackForAddon("Blizzard_AuctionUI", "Skin_Blizzard_AuctionUI", function(
 
 	S:HandleScrollBar(BidScrollFrameScrollBar)
 	BidScrollFrameScrollBar:ClearAllPoints()
-	BidScrollFrameScrollBar:Point("TOPRIGHT", BidScrollFrame, "TOPRIGHT", 23, -18)
-	BidScrollFrameScrollBar:Point("BOTTOMRIGHT", BidScrollFrame, "BOTTOMRIGHT", 0, 16)
+	BidScrollFrameScrollBar:Point("TOPRIGHT", BidScrollFrame, "TOPRIGHT", 24, -19)
+	BidScrollFrameScrollBar:Point("BOTTOMRIGHT", BidScrollFrame, "BOTTOMRIGHT", 0, 17)
 
 	-- Auctions Frame
 	AuctionsTitle:ClearAllPoints()
@@ -196,8 +198,8 @@ S:AddCallbackForAddon("Blizzard_AuctionUI", "Skin_Blizzard_AuctionUI", function(
 
 	S:HandleScrollBar(AuctionsScrollFrameScrollBar)
 	AuctionsScrollFrameScrollBar:ClearAllPoints()
-	AuctionsScrollFrameScrollBar:Point("TOPRIGHT", AuctionsScrollFrame, "TOPRIGHT", 23, -20)
-	AuctionsScrollFrameScrollBar:Point("BOTTOMRIGHT", AuctionsScrollFrame, "BOTTOMRIGHT", 0, 18)
+	AuctionsScrollFrameScrollBar:Point("TOPRIGHT", AuctionsScrollFrame, "TOPRIGHT", 24, -21)
+	AuctionsScrollFrameScrollBar:Point("BOTTOMRIGHT", AuctionsScrollFrame, "BOTTOMRIGHT", 0, 19)
 
 	AuctionsCloseButton:Point("BOTTOMRIGHT", 66, 6)
 	AuctionsCancelAuctionButton:Point("RIGHT", AuctionsCloseButton, "LEFT", -4, 0)
