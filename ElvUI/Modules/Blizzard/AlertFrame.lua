@@ -25,10 +25,9 @@ function E:PostAlertMove()
 		AlertFrameMover:SetText(AlertFrameMover.textString.." [Grow Up]")
 	end
 
-	local rollBars = Misc.RollBars
 	if E.private.general.lootRoll then
 		local lastframe, lastShownFrame
-		for i, frame in pairs(rollBars) do
+		for i, frame in pairs(Misc.RollBars) do
 			frame:ClearAllPoints()
 			if i ~= 1 then
 				if POSITION == "TOP" then
@@ -128,8 +127,7 @@ end
 
 function B:AlertMovers()
 	local AlertFrameHolder = CreateFrame("Frame", "AlertFrameHolder", E.UIParent)
-	AlertFrameHolder:Width(250)
-	AlertFrameHolder:Height(20)
+	AlertFrameHolder:Size(250, 20)
 	AlertFrameHolder:Point("TOP", E.UIParent, "TOP", 0, -18)
 
 	self:SecureHook("AlertFrame_FixAnchors", E.PostAlertMove)

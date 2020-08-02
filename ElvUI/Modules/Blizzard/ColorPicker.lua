@@ -7,7 +7,7 @@ local B = E:GetModule("Blizzard")
 local S = E:GetModule("Skins")
 
 --Lua functions
-local format, strlen, strjoin, gsub = format, strlen, strjoin, gsub
+local strlen, strjoin, gsub = strlen, strjoin, gsub
 local tonumber, floor, strsub, wipe = tonumber, floor, strsub, wipe
 --WoW API / Variables
 local CreateFrame = CreateFrame
@@ -83,7 +83,7 @@ local function UpdateColorTexts(r, g, b, box)
 	-- we want those /255 values
 	r, g, b = r*255, g*255, b*255
 
-	ColorPPBoxH:SetText(format("%.2x%.2x%.2x", r, g, b))
+	ColorPPBoxH:SetFormattedText("%.2x%.2x%.2x", r, g, b)
 	ColorPPBoxR:SetText(r)
 	ColorPPBoxG:SetText(g)
 	ColorPPBoxB:SetText(b)
