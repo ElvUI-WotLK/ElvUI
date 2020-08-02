@@ -83,7 +83,7 @@ local function UpdateColorTexts(r, g, b, box)
 	-- we want those /255 values
 	r, g, b = r*255, g*255, b*255
 
-	ColorPPBoxH:SetFormattedText("%.2x%.2x%.2x", r, g, b)
+	ColorPPBoxH:SetText(format("%.2x%.2x%.2x", r, g, b))
 	ColorPPBoxR:SetText(r)
 	ColorPPBoxG:SetText(g)
 	ColorPPBoxB:SetText(b)
