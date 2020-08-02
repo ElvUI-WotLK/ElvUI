@@ -246,10 +246,6 @@ local function statusbarOnUpdate(self)
 	end
 
 	self:SetValue(timeLeft)
-
-	if t > 1000000000 then
-		self.parent:Hide()
-	end
 end
 
 function M:CreateRollFrame()
