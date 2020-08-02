@@ -361,10 +361,14 @@ function CH:StyleChat(frame)
 	editbox:SetTemplate(nil, true)
 	editbox:SetAltArrowKeyMode(CH.db.useAltKey)
 	editbox:SetAllPoints(LeftChatDataPanel)
+	editbox:Hide()
+
+	for _, text in ipairs(ElvCharacterDB.ChatEditHistory) do
+		editbox:AddHistoryLine(text)
+	end
+
 	editbox:HookScript("OnTextChanged", OnTextChanged)
 	self:SecureHook(editbox, "AddHistoryLine", "ChatEdit_AddHistory")
-
-	editbox:Hide()
 
 	editbox:HookScript("OnEditFocusGained", function(editBox)
 		if not LeftChatPanel:IsShown() then
@@ -382,10 +386,6 @@ function CH:StyleChat(frame)
 			end
 		end
 	end)
-
-	for _, text in ipairs(ElvCharacterDB.ChatEditHistory) do
-		editbox:AddHistoryLine(text)
-	end
 
 	language:Height(22)
 	language:StripTextures()
