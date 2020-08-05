@@ -348,10 +348,9 @@ function NP:OnShow(isConfig, dontHideHighlight)
 	if unit then
 		frame.unit = unit
 		frame.isGroupUnit = true
-	end
-
-	if unitType ~= "ENEMY_NPC" then
-		frame.guid = unit and UnitGUID(unit) or NP:GetGUIDByName(frame.UnitName, unitType)
+		frame.guid = UnitGUID(unit)
+	else
+		frame.guid = NP:GetGUIDByName(frame.UnitName, unitType)
 	end
 
 	frame.UnitClass = NP:UnitClass(frame, unitType)
@@ -890,7 +889,7 @@ end
 
 function NP:SearchNameplateByGUID(guid)
 	for frame in pairs(self.VisiblePlates) do
-		if frame and frame:IsShown() and frame.guid == guid then
+		if frame.guid == guid then
 			return frame
 		end
 	end
@@ -900,7 +899,7 @@ function NP:SearchNameplateByName(sourceName)
 	if not sourceName then return end
 	local SearchFor = split("-", sourceName)
 	for frame in pairs(self.VisiblePlates) do
-		if frame and frame:IsShown() and frame.UnitName == SearchFor and RAID_CLASS_COLORS[frame.UnitClass] then
+		if frame.UnitName == SearchFor and RAID_CLASS_COLORS[frame.UnitClass] then
 			return frame
 		end
 	end
@@ -909,7 +908,7 @@ end
 function NP:SearchNameplateByIconName(raidIcon)
 	for frame in pairs(self.VisiblePlates) do
 		self:CheckRaidIcon(frame)
-		if frame and frame:IsShown() and frame.RaidIcon:IsShown() and (frame.RaidIconType == raidIcon) then
+		if frame.RaidIcon:IsShown() and (frame.RaidIconType == raidIcon) then
 			return frame
 		end
 	end
@@ -974,17 +973,14 @@ end
 function NP:UPDATE_MOUSEOVER_UNIT()
 	if not UnitIsUnit("mouseover", "player") and UnitIsPlayer("mouseover") then
 		local name = UnitName("mouseover")
-		local unitType = NP:GetUnitTypeFromUnit("mouseover")
-		for frame in pairs(NP.VisiblePlates) do
+		local guid = UnitGUID("mouseover")
+		local unitType = self:GetUnitTypeFromUnit("mouseover")
+		for frame in pairs(self.VisiblePlates) do
 			if frame.UnitName == name and frame.UnitType == unitType then
-				local guid = UnitGUID("mouseover")
 				if not self.GUIDList[guid] then
 					self.GUIDList[guid] = {name = name, unitType = frame.UnitType}
-					NP.OnShow(frame:GetParent(), nil, true)
-				elseif self.GUIDList[guid].name ~= name or self.GUIDList[guid].unitType ~= unitType then
-					self.GUIDList[guid].name = name
-					self.GUIDList[guid].unitType = unitType
-					NP.OnShow(frame:GetParent(), nil, true)
+					self.OnShow(frame:GetParent(), nil, true)
+					break
 				end
 			end
 		end

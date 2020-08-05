@@ -260,7 +260,6 @@ function NP:UpdateElement_Auras(frame)
 	if not frame.Health:IsShown() then return end
 
 	local guid = frame.guid
-
 	if not guid then
 		if RAID_CLASS_COLORS[frame.UnitClass] then
 			guid = self:GetGUIDByName(frame.UnitName, frame.UnitType)
@@ -320,11 +319,9 @@ function NP:UpdateElement_AurasByGUID(guid, event)
 		end
 	end
 
-	local frame = self:SearchForFrame(guid, raidIcon, destName)
+	local frame = self:SearchForFrame(guid, raidIcon)
 	if frame then
-		frame.guid = guid
-
-		if not self.GUIDList[guid] then
+		if frame.UnitType ~= "ENEMY_NPC" and not self.GUIDList[guid] then
 			self.GUIDList[guid] = {name = destName, unitType = frame.UnitType}
 		end
 
