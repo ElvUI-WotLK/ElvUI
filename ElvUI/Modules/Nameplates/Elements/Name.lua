@@ -27,13 +27,30 @@ local function abbrev(name)
 	return name
 end
 
-function NP:Update_Name(frame, triggered)
-	if not triggered then
-		if not self.db.units[frame.UnitType].name.enable then return end
-	end
+local function tryArenaNumber(frame)
+        local name = nil
+        if IsActiveBattlefieldArena() and UnitIsPlayer(frame.unit) then
+                for i=1,5 do
+                        if UnitIsUnit(frame.unit, "arena"..i) then
+                                name = i
+                                break
+                        end
+                end
+        end
+        return name
+end
 
-	local name = frame.Name
-	local nameText = frame.UnitName or UNKNOWN
+function NP:Update_Name(frame, triggered)
+        local name = frame.Name
+        local nameText = frame.UnitName or UNKNOWN
+        local arenaNumber = tryArenaNumber(frame)
+
+        if arenaNumber then
+                nameText = arenaNumber
+        elseif not triggered then
+                if not self.db.units[frame.UnitType].name.enable then return end
+        end
+
 	name:SetText(self.db.units[frame.UnitType].name.abbrev and abbrev(nameText) or nameText)
 
 	if not triggered then
