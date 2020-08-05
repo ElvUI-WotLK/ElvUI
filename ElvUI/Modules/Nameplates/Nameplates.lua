@@ -979,7 +979,7 @@ function NP:UPDATE_MOUSEOVER_UNIT()
 			if frame.UnitName == name and frame.UnitType == unitType then
 				local guid = UnitGUID("mouseover")
 				if not self.GUIDList[guid] then
-					self.GUIDList[guid] = {name = destName, unitType = frame.UnitType}
+					self.GUIDList[guid] = {name = name, unitType = frame.UnitType}
 					NP.OnShow(frame:GetParent(), nil, true)
 				elseif self.GUIDList[guid].name ~= name or self.GUIDList[guid].unitType ~= unitType then
 					self.GUIDList[guid].name = name
