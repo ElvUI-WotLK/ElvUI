@@ -263,8 +263,7 @@ function NP:UpdateElement_Auras(frame)
 
 	if not guid then
 		if RAID_CLASS_COLORS[frame.UnitClass] then
-			local name = frame.UnitName
-			guid = self.GUIDByName[name]
+			guid = self:GetGUIDByName(frame.UnitName, frame.UnitType)
 		elseif frame.RaidIcon:IsShown() then
 			guid = ByRaidIcon[frame.RaidIconType]
 		end
@@ -324,7 +323,11 @@ function NP:UpdateElement_AurasByGUID(guid, event)
 	local frame = self:SearchForFrame(guid, raidIcon, destName)
 	if frame then
 		frame.guid = guid
-		self.GUIDByName[destName] = guid
+
+		if not self.GUIDList[guid] then
+			self.GUIDList[guid] = {name = destName, unitType = frame.UnitType}
+		end
+
 		self:UpdateElement_Auras(frame)
 	end
 end

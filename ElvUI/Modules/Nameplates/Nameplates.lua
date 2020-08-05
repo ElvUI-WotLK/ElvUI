@@ -47,7 +47,7 @@ NP.CreatedPlates = {}
 NP.VisiblePlates = {}
 NP.Healers = {}
 
-NP.GUIDByName = {}
+NP.GUIDList = {}
 
 NP.ENEMY_PLAYER = {}
 NP.FRIENDLY_PLAYER = {}
@@ -224,7 +224,10 @@ function NP:GetUnitByName(frame, unitType)
 end
 
 function NP:GetUnitClassByGUID(frame, guid)
-	if not guid then guid = self.GUIDByName[frame.UnitName] end
+	if not guid then
+		guid = self:GetGUIDByName(frame.UnitName, frame.UnitType)
+	end
+
 	if guid then
 		local _, _, class = pcall(GetPlayerInfoByGUID, guid)
 		return class
@@ -302,6 +305,29 @@ function NP:GetUnitInfo(frame)
 	return 3, "ENEMY_PLAYER"
 end
 
+function NP:GetUnitTypeFromUnit(unit)
+	local reaction = UnitReaction("player", unit)
+	local isPlayer = UnitIsPlayer(unit)
+
+	if isPlayer and UnitIsFriend("player", unit) and reaction and reaction >= 5 then
+		return "FRIENDLY_PLAYER"
+	elseif not isPlayer and (reaction and reaction >= 5) or UnitFactionGroup(unit) == "Neutral" then
+		return "FRIENDLY_NPC"
+	elseif not isPlayer and (reaction and reaction <= 4) then
+		return "ENEMY_NPC"
+	else
+		return "ENEMY_PLAYER"
+	end
+end
+
+function NP:GetGUIDByName(name, unitType)
+	for guid, info in pairs(self.GUIDList) do
+		if info.name == name and info.unitType == unitType then
+			return guid
+		end
+	end
+end
+
 function NP:OnShow(isConfig, dontHideHighlight)
 	local frame = self.UnitFrame
 	NP:CheckRaidIcon(frame)
@@ -318,13 +344,10 @@ function NP:OnShow(isConfig, dontHideHighlight)
 	if unit then
 		frame.unit = unit
 		frame.isGroupUnit = true
+	end
 
-		local guid = NP.GUIDByName[frame.UnitName] or UnitGUID(unit)
-		if guid then
-			frame.guid = guid
-		end
-	elseif unitType ~= "ENEMY_NPC" then
-		frame.guid = NP.GUIDByName[frame.UnitName]
+	if unitType ~= "ENEMY_NPC" then
+		frame.guid = unit and UnitGUID(unit) or NP:GetGUIDByName(frame.UnitName, unitType)
 	end
 
 	frame.UnitClass = NP:UnitClass(frame, unitType)
@@ -945,13 +968,18 @@ function NP:PLAYER_TARGET_CHANGED()
 end
 
 function NP:UPDATE_MOUSEOVER_UNIT()
-	if UnitIsPlayer("mouseover")then
+	if not UnitIsUnit("mouseover", "player") and UnitIsPlayer("mouseover") then
 		local name = UnitName("mouseover")
+		local unitType = NP:GetUnitTypeFromUnit("mouseover")
 		for frame in pairs(NP.VisiblePlates) do
-			if frame.UnitName == name then
+			if frame.UnitName == name and frame.UnitType == unitType then
 				local guid = UnitGUID("mouseover")
-				if NP.GUIDByName[name] ~= guid then
-					NP.GUIDByName[name] = guid
+				if not self.GUIDList[guid] then
+					self.GUIDList[guid] = {name = destName, unitType = frame.UnitType}
+					NP.OnShow(frame:GetParent(), nil, true)
+				elseif self.GUIDList[guid].name ~= name or self.GUIDList[guid].unitType ~= unitType then
+					self.GUIDList[guid].name = name
+					self.GUIDList[guid].unitType = unitType
 					NP.OnShow(frame:GetParent(), nil, true)
 				end
 			end
