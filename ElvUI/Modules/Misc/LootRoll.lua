@@ -334,7 +334,6 @@ function M:CreateRollFrame()
 	itemName:FontTemplate(nil, nil, "OUTLINE")
 	itemName:Point("LEFT", frame.bindText, "RIGHT", 1, 0)
 	itemName:Point("RIGHT", frame, "RIGHT", -5, 0)
-	itemName:Size(200, 10)
 	itemName:SetJustifyH("LEFT")
 	frame.itemName = itemName
 
