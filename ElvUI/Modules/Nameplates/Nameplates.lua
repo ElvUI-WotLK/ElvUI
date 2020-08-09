@@ -245,14 +245,13 @@ end
 
 function NP:UnitClass(frame, unitType)
 	if unitType == "FRIENDLY_PLAYER" then
-		local unit = self[unitType][frame.UnitName]
-		if unit then
-			local _, class = UnitClass(unit)
+		if frame.unit then
+			local _, class = UnitClass(frame.unit)
 			if class then
 				return class
 			end
 		else
-			return NP:GetUnitClassByGUID(frame)
+			return NP:GetUnitClassByGUID(frame, frame.guid)
 		end
 	elseif unitType == "ENEMY_PLAYER" then
 		local _, g = frame.oldHealthBar:GetStatusBarColor()
@@ -342,6 +341,8 @@ function NP:OnShow(isConfig, dontHideHighlight)
 
 	frame.UnitName = gsub(frame.oldName:GetText(), FSPAT, "")
 	local reaction, unitType = NP:GetUnitInfo(frame)
+	local oldUnitType = frame.UnitType
+	frame.UnitType = unitType
 	frame.UnitReaction = reaction
 
 	local unit = NP:GetUnitByName(frame, unitType)
@@ -355,9 +356,7 @@ function NP:OnShow(isConfig, dontHideHighlight)
 
 	frame.UnitClass = NP:UnitClass(frame, unitType)
 
-	if unitType ~= frame.UnitType or isConfig then
-		frame.UnitType = unitType
-
+	if unitType ~= oldUnitType or isConfig then
 		NP:Update_HealthBar(frame)
 
 		NP:Configure_CPoints(frame, true)
