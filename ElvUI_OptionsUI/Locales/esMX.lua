@@ -567,6 +567,7 @@ L["If enabled then the filter will only activate if the unit is not casting or c
 L["If enabled then the filter will only activate when you are in combat."] = true
 L["If enabled then the filter will only activate when you are not targeting the unit."] = true
 L["If enabled then the filter will only activate when you are out of combat."] = true
+L["If enabled then the filter will only activate when you are resting at an Inn."] = true
 L["If enabled then the filter will only activate when you are targeting the unit."] = true
 L["If enabled then the filter will only activate when you have a target."] = true
 L["If not set to 0 then override the size of the aura icon to this."] = "Si no está a 0 entonces sobrescribe el tamaño del icono del aura con este."
@@ -772,6 +773,7 @@ L["Player Out of Combat"] = true
 L["Player Target"] = true
 L["Player Titles"] = "Títulos de Jugador"
 L["Player in Combat"] = true
+L["Player is Resting"] = true
 L["Player"] = "Player"
 L["Plugin"] = true
 L["Poison Effect"] = true

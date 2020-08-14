@@ -565,6 +565,7 @@ L["If enabled then the filter will only activate if the unit is not casting or c
 L["If enabled then the filter will only activate when you are in combat."] = "启用后过滤器仅在你在战斗中的时候激活."
 L["If enabled then the filter will only activate when you are not targeting the unit."] = "启用后过滤器仅对非当前目标激活."
 L["If enabled then the filter will only activate when you are out of combat."] = "启用后过滤器仅在你不在战斗中的时候激活."
+L["If enabled then the filter will only activate when you are resting at an Inn."] = "启用后过滤器仅在你在休息区的时候激活."
 L["If enabled then the filter will only activate when you are targeting the unit."] = "启用后过滤器仅对当前目标激活."
 L["If enabled then the filter will only activate when you have a target."] = true
 L["If not set to 0 then override the size of the aura icon to this."] = "如果不为0, 此值将覆盖光环图标的尺寸"
@@ -769,6 +770,7 @@ L["Player Out of Combat"] = "玩家不在战斗中"
 L["Player Target"] = "玩家目标"
 L["Player Titles"] = "玩家头衔"
 L["Player in Combat"] = "玩家在战斗中"
+L["Player is Resting"] = "玩家在休息区中"
 L["Player"] = "玩家"
 L["Plugin"] = "插件"
 L["Poison Effect"] = true

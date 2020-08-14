@@ -565,6 +565,7 @@ L["If enabled then the filter will only activate if the unit is not casting or c
 L["If enabled then the filter will only activate when you are in combat."] = "Если включено, фильтр будет активирован только когда вы в бою."
 L["If enabled then the filter will only activate when you are not targeting the unit."] = "Если включено, фильтр будет активирован только когда юнит не является вашей целью."
 L["If enabled then the filter will only activate when you are out of combat."] = "Если включено, фильтр будет активирован только когда вы вне боя."
+L["If enabled then the filter will only activate when you are resting at an Inn."] = "Если включено, то фильтр будет активирован, когда вы отдыхаете."
 L["If enabled then the filter will only activate when you are targeting the unit."] = "Если включено, фильтр будет активирован только когда юнит является вашей целью."
 L["If enabled then the filter will only activate when you have a target."] = true
 L["If not set to 0 then override the size of the aura icon to this."] = "Если установлено не на 0, то устанавливать размер иконок аур на заданное число."
@@ -769,6 +770,7 @@ L["Player Out of Combat"] = "Игрок вне боя"
 L["Player Target"] = "Цель игрока"
 L["Player Titles"] = "Звания игроков"
 L["Player in Combat"] = "Игрок в бою"
+L["Player is Resting"] = "Игрок отдыхает"
 L["Player"] = "Игрок"
 L["Plugin"] = "Плагин"
 L["Poison Effect"] = true

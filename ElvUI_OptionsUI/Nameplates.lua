@@ -683,7 +683,25 @@ local function UpdateFilterGroup()
 								E.global.nameplates.filters[selectedNameplateFilter].triggers.outOfCombat = value
 								NP:ConfigureAll()
 							end
-						}
+						},
+						spacer1 = {
+							order = 3,
+							type = "description",
+							name = " "
+						},
+						isResting = {
+							order = 4,
+							type = "toggle",
+							name = L["Player is Resting"],
+							desc = L["If enabled then the filter will only activate when you are resting at an Inn."],
+							get = function(info)
+								return E.global.nameplates.filters[selectedNameplateFilter].triggers.isResting
+							end,
+							set = function(info, value)
+								E.global.nameplates.filters[selectedNameplateFilter].triggers.isResting = value
+								NP:ConfigureAll()
+							end	
+						},
 					}
 				},
 				role = {
