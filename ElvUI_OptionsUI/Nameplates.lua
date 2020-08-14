@@ -700,7 +700,7 @@ local function UpdateFilterGroup()
 							set = function(info, value)
 								E.global.nameplates.filters[selectedNameplateFilter].triggers.isResting = value
 								NP:ConfigureAll()
-							end	
+							end
 						},
 					}
 				},
