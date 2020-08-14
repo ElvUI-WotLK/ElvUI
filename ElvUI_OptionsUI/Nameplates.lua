@@ -1859,7 +1859,7 @@ local ORDER = 100
 local function GetUnitSettings(unit, name)
 	local copyValues = {}
 	for x, y in pairs(NP.db.units) do
-		if type(y) == "table" and x ~= unit then
+		if type(y) == "table" and (x ~= unit) and (x ~= "TARGET") then
 			copyValues[x] = L[x]
 		end
 	end
