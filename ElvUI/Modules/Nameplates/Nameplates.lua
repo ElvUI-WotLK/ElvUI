@@ -1030,6 +1030,31 @@ function NP:PLAYER_REGEN_ENABLED()
 	NP:ForEachVisiblePlate("StyleFilterUpdate", "PLAYER_REGEN_ENABLED")
 end
 
+function NP:UNIT_HEALTH(_, unit)
+	if unit ~= "player" then return end
+	NP:ForEachVisiblePlate("StyleFilterUpdate", "UNIT_HEALTH")
+end
+
+function NP:UNIT_MANA(_, unit)
+	if unit ~= "player" then return end
+	NP:ForEachVisiblePlate("StyleFilterUpdate", "UNIT_MANA")
+end
+
+function NP:UNIT_ENERGY(_, unit)
+	if unit ~= "player" then return end
+	NP:ForEachVisiblePlate("StyleFilterUpdate", "UNIT_ENERGY")
+end
+
+function NP:UNIT_FOCUS(_, unit)
+	if unit ~= "player" then return end
+	NP:ForEachVisiblePlate("StyleFilterUpdate", "UNIT_FOCUS")
+end
+
+function NP:UNIT_RAGE(_, unit)
+	if unit ~= "player" then return end
+	NP:ForEachVisiblePlate("StyleFilterUpdate", "UNIT_RAGE")
+end
+
 function NP:SPELL_UPDATE_COOLDOWN(...)
 	NP:ForEachVisiblePlate("StyleFilterUpdate", "SPELL_UPDATE_COOLDOWN")
 end
@@ -1187,8 +1212,14 @@ function NP:Initialize()
 	self:RegisterEvent("PLAYER_TARGET_CHANGED")
 	self:RegisterEvent("SPELL_UPDATE_COOLDOWN")
 	self:RegisterEvent("RAID_TARGET_UPDATE")
-
 	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
+	self:RegisterEvent("UNIT_COMBO_POINTS")
+	self:RegisterEvent("UNIT_HEALTH")
+	self:RegisterEvent("UNIT_MANA")
+	self:RegisterEvent("UNIT_ENERGY")
+	self:RegisterEvent("UNIT_FOCUS")
+	self:RegisterEvent("UNIT_RAGE")
+
 	-- Arena & Arena Pets
 	self:CacheArenaUnits()
 	self:RegisterEvent("ARENA_OPPONENT_UPDATE", "CacheArenaUnits")
@@ -1207,7 +1238,6 @@ function NP:Initialize()
 	LAI.RegisterCallback(self, "LibAuraInfo_AURA_APPLIED_DOSE")
 	LAI.RegisterCallback(self, "LibAuraInfo_AURA_CLEAR")
 	LAI.RegisterCallback(self, "LibAuraInfo_UNIT_AURA")
-	self:RegisterEvent("UNIT_COMBO_POINTS")
 end
 
 local function InitializeCallback()
