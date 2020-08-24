@@ -147,7 +147,7 @@ function E:IsDispellableByMe(debuffType)
 end
 
 do
-	--local Masque = E.Libs.Masque
+	local LBF = E.Libs.LBF
 	local LBFGroupToTableElement = {
 		["ActionBars"] = "actionbar",
 		["Auras"] = "auras"
