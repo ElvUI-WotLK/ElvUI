@@ -307,6 +307,71 @@ function E:ExitVehicleShowFrames(_, unit)
 	end
 end
 
+E.CreatedSpinnerFrames = {}
+
+function E:CreateSpinnerFrame()
+	local frame = CreateFrame("Frame")
+	frame:Size(48)
+	frame:Hide()
+
+	frame.Framing = frame:CreateTexture()
+	frame.Framing:SetTexture(E.Media.Textures.StreamFrame)
+	frame.Framing:SetAllPoints()
+
+	frame.Circle = frame:CreateTexture(nil, "BORDER")
+	frame.Circle:SetTexture(E.Media.Textures.StreamCircle)
+	frame.Circle:SetVertexColor(1, .82, 0)
+	frame.Circle:SetAllPoints()
+
+	frame.Circle.Anim = frame.Circle:CreateAnimationGroup()
+	frame.Circle.Anim:SetLooping("REPEAT")
+	frame.Circle.Anim.Rotation = frame.Circle.Anim:CreateAnimation("Rotation")
+	frame.Circle.Anim.Rotation:SetDuration(1)
+	frame.Circle.Anim.Rotation:SetDegrees(-360)
+
+	frame.Spark = frame:CreateTexture(nil, "OVERLAY")
+	frame.Spark:SetTexture(E.Media.Textures.StreamSpark)
+	frame.Spark:SetAllPoints()
+
+	frame.Spark.Anim = frame.Spark:CreateAnimationGroup()
+	frame.Spark.Anim:SetLooping("REPEAT")
+	frame.Spark.Anim.Rotation = frame.Spark.Anim:CreateAnimation("Rotation")
+	frame.Spark.Anim.Rotation:SetDuration(1)
+	frame.Spark.Anim.Rotation:SetDegrees(-360)
+
+	return frame
+end
+
+function E:StartSpinnerFrame(parent)
+	if parent.SpinnerFrame then return end
+
+	local id = #self.CreatedSpinnerFrames
+	local frame = self.CreatedSpinnerFrames[id] or self:CreateSpinnerFrame()
+	self.CreatedSpinnerFrames[id] = nil
+
+	frame:SetParent(parent)
+	frame:SetFrameLevel(parent:GetFrameLevel() + 10)
+	frame:SetPoint("CENTER")
+
+	frame:Show()
+	frame.Circle.Anim.Rotation:Play()
+	frame.Spark.Anim.Rotation:Play()
+
+	parent.SpinnerFrame = frame
+end
+
+function E:StopSpinnerFrame(parent)
+	if not parent.SpinnerFrame then return end
+
+	local frame = parent.SpinnerFrame
+	frame:Hide()
+	frame.Circle.Anim:Stop()
+	frame.Spark.Anim:Stop()
+
+	self.CreatedSpinnerFrames[#self.CreatedSpinnerFrames + 1] = parent.SpinnerFrame
+	parent.SpinnerFrame = nil
+end
+
 function E:RequestBGInfo()
 	RequestBattlefieldScoreData()
 end
