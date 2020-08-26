@@ -5,6 +5,7 @@ local _G = _G
 local wipe, date = wipe, date
 local format, select, type, ipairs, pairs = format, select, type, ipairs, pairs
 local strmatch, strfind, tonumber, tostring = strmatch, strfind, tonumber, tostring
+local tinsert, tremove = table.insert, table.remove
 --WoW API / Variables
 local GetActiveTalentGroup = GetActiveTalentGroup
 local GetCVarBool = GetCVarBool
@@ -345,9 +346,7 @@ end
 function E:StartSpinnerFrame(parent)
 	if parent.SpinnerFrame then return end
 
-	local id = #self.CreatedSpinnerFrames
-	local frame = self.CreatedSpinnerFrames[id] or self:CreateSpinnerFrame()
-	self.CreatedSpinnerFrames[id] = nil
+	local frame = #self.CreatedSpinnerFrames > 0 and tremove(self.CreatedSpinnerFrames) or self:CreateSpinnerFrame()
 
 	frame:SetParent(parent)
 	frame:SetFrameLevel(parent:GetFrameLevel() + 10)
@@ -368,8 +367,8 @@ function E:StopSpinnerFrame(parent)
 	frame.Circle.Anim:Stop()
 	frame.Spark.Anim:Stop()
 
-	self.CreatedSpinnerFrames[#self.CreatedSpinnerFrames + 1] = parent.SpinnerFrame
 	parent.SpinnerFrame = nil
+	tinsert(self.CreatedSpinnerFrames, frame)
 end
 
 function E:RequestBGInfo()
