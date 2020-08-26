@@ -312,17 +312,23 @@ E.CreatedSpinnerFrames = {}
 
 function E:CreateSpinnerFrame()
 	local frame = CreateFrame("Frame")
-	frame:Size(48)
+	frame:EnableMouse(true)
 	frame:Hide()
 
+	frame.Background = frame:CreateTexture(nil, "BACKGROUND")
+	frame.Background:SetTexture(0, 0, 0, 0.5)
+	frame.Background:SetAllPoints()
+
 	frame.Framing = frame:CreateTexture()
+	frame.Framing:Size(48)
 	frame.Framing:SetTexture(E.Media.Textures.StreamFrame)
-	frame.Framing:SetAllPoints()
+	frame.Framing:SetPoint("CENTER")
 
 	frame.Circle = frame:CreateTexture(nil, "BORDER")
+	frame.Circle:Size(48)
 	frame.Circle:SetTexture(E.Media.Textures.StreamCircle)
 	frame.Circle:SetVertexColor(1, .82, 0)
-	frame.Circle:SetAllPoints()
+	frame.Circle:SetPoint("CENTER")
 
 	frame.Circle.Anim = frame.Circle:CreateAnimationGroup()
 	frame.Circle.Anim:SetLooping("REPEAT")
@@ -331,8 +337,9 @@ function E:CreateSpinnerFrame()
 	frame.Circle.Anim.Rotation:SetDegrees(-360)
 
 	frame.Spark = frame:CreateTexture(nil, "OVERLAY")
+	frame.Spark:Size(48)
 	frame.Spark:SetTexture(E.Media.Textures.StreamSpark)
-	frame.Spark:SetAllPoints()
+	frame.Spark:SetPoint("CENTER")
 
 	frame.Spark.Anim = frame.Spark:CreateAnimationGroup()
 	frame.Spark.Anim:SetLooping("REPEAT")
@@ -343,14 +350,20 @@ function E:CreateSpinnerFrame()
 	return frame
 end
 
-function E:StartSpinnerFrame(parent)
+function E:StartSpinnerFrame(parent, left, top, right, bottom)
 	if parent.SpinnerFrame then return end
 
 	local frame = #self.CreatedSpinnerFrames > 0 and tremove(self.CreatedSpinnerFrames) or self:CreateSpinnerFrame()
 
 	frame:SetParent(parent)
 	frame:SetFrameLevel(parent:GetFrameLevel() + 10)
-	frame:SetPoint("CENTER")
+	frame:ClearAllPoints()
+	if top or bottom or left or right then
+		frame:Point("TOPLEFT", left or 0, -top or 0)
+		frame:Point("BOTTOMRIGHT", -right or 0, bottom or 0)
+	else
+		frame:SetAllPoints()
+	end
 
 	frame:Show()
 	frame.Circle.Anim.Rotation:Play()
