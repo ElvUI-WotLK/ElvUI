@@ -697,6 +697,8 @@ function B:RegisterUpdateDelayed()
 
 			bagFrame.registerUpdate = nil
 			shouldUpdateFade = true -- we should refresh the bag search after sorting
+
+			E:StopSpinnerFrame(bagFrame.holderFrame)
 		end
 	end
 

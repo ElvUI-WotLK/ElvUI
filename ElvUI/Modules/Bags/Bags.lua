@@ -1197,6 +1197,8 @@ function B:ContructContainerFrame(name, isBank)
 				B:SortingFadeBags(f, true)
 			end
 			B:CommandDecorator(B.SortBags, "bank")()
+
+			E:StartSpinnerFrame(f.holderFrame)
 		end)
 		if E.db.bags.disableBankSort then
 			f.sortButton:Disable()
@@ -1320,6 +1322,8 @@ function B:ContructContainerFrame(name, isBank)
 				B:SortingFadeBags(f, true)
 			end
 			B:CommandDecorator(B.SortBags, "bags")()
+
+			E:StartSpinnerFrame(f.holderFrame)
 		end)
 		if E.db.bags.disableBagSort then
 			f.sortButton:Disable()
