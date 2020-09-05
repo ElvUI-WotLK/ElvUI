@@ -161,6 +161,7 @@ function AddOn:OnInitialize()
 	self.PixelMode = self.twoPixelsPlease or self.private.general.pixelPerfect -- keep this over `UIScale`
 	self:UIScale(true)
 	self:UpdateMedia()
+	self:CheckRole()
 
 	self:RegisterEvent("UPDATE_FLOATING_CHAT_WINDOWS", "PixelScaleChanged")
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")

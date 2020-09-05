@@ -108,7 +108,7 @@ function E:GetTalentSpecInfo(isInspect)
 	return specIdx, specName, specIcon
 end
 
-function E:CheckRole()
+function E:CheckRole(event)
 	local talentTree = self:GetTalentSpecInfo()
 	local role
 
@@ -138,6 +138,10 @@ function E:CheckRole()
 		else
 			self.DispelClasses[self.myclass].Curse = false
 		end
+	end
+
+	if event == "SPELL_UPDATE_USABLE" then
+		self:UnregisterEvent(event)
 	end
 end
 
@@ -392,8 +396,6 @@ function E:PLAYER_ENTERING_WORLD()
 	if not self.MediaUpdated then
 		self:UpdateMedia()
 		self.MediaUpdated = true
-	else
-		self:ScheduleTimer("CheckRole", 0.01)
 	end
 
 	local _, instanceType = IsInInstance()
@@ -411,15 +413,14 @@ function E:PLAYER_LEVEL_UP(_, level)
 end
 
 function E:LoadAPI()
-	self:ScheduleTimer("CheckRole", 0.01)
-
 	self:RegisterEvent("PLAYER_LEVEL_UP")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
+	self:RegisterEvent("SPELL_UPDATE_USABLE", "CheckRole")
 	self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", "CheckRole")
 	self:RegisterEvent("PLAYER_TALENT_UPDATE", "CheckRole")
-	self:RegisterEvent("CHARACTER_POINTS_CHANGED", "CheckRole")
-	self:RegisterEvent("UNIT_INVENTORY_CHANGED", "CheckRole")
-	self:RegisterEvent("UPDATE_BONUS_ACTIONBAR", "CheckRole")
+--	self:RegisterEvent("CHARACTER_POINTS_CHANGED", "CheckRole")
+--	self:RegisterEvent("UNIT_INVENTORY_CHANGED", "CheckRole")
+--	self:RegisterEvent("UPDATE_BONUS_ACTIONBAR", "CheckRole")
 	self:RegisterEvent("UNIT_ENTERED_VEHICLE", "EnterVehicleHideFrames")
 	self:RegisterEvent("UNIT_EXITED_VEHICLE", "ExitVehicleShowFrames")
 	self:RegisterEvent("UI_SCALE_CHANGED", "PixelScaleChanged")
