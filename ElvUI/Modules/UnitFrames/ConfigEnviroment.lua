@@ -246,9 +246,9 @@ function UF:HeaderConfig(header, configMode)
 
 				group:Update()
 			else
-				for key in pairs(attributeBlacklist) do
-					group:SetAttribute(key, true)
-				end
+				group:SetAttribute("showSolo", true)
+				group:SetAttribute("showParty", true)
+				group:SetAttribute("showRaid", group.groupName ~= "party" and true or false)
 
 				UF:UnshowChildUnits(group, group:GetChildren())
 				group:SetAttribute("startingIndex", 1)
