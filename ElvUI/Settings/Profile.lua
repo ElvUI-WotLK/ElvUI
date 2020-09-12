@@ -3325,7 +3325,7 @@ P.unitframe = {
 				}
 			},
 			roleIcon = {
-				enable = true,
+				enable = false,
 				position = "TOPRIGHT",
 				attachTo = "Health",
 				xOffset = 0,
