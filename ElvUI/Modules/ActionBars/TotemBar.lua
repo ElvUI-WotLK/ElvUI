@@ -247,7 +247,6 @@ function AB:UpdateTotemBindings()
 		local hotKey = _G["MultiCastActionButton"..i.."HotKey"]
 
 		hotKey:SetTextColor(color.r, color.g, color.b, alpha)
-		hotKey.SetVertexColor = E.noop
 		hotKey:FontTemplate(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline)
 		self:FixKeybindText(_G["MultiCastActionButton"..i])
 	end
@@ -351,6 +350,8 @@ function AB:CreateTotemBar()
 		normal:SetTexture(nil)
 		normal:Hide()
 		normal:SetAlpha(0)
+
+		_G["MultiCastActionButton"..i.."HotKey"].SetVertexColor = E.noop
 
 		E:RegisterCooldown(cooldown)
 
