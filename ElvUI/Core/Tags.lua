@@ -113,7 +113,7 @@ for textFormat in pairs(E.GetFormattedTextStyles) do
 		end
 	end
 
-	ElvUF.Tags.Events[format("health:%s-nostatus", tagTextFormat)] = "UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH"
+	ElvUF.Tags.Events[format("health:%s-nostatus", tagTextFormat)] = "UNIT_HEALTH UNIT_MAXHEALTH"
 	ElvUF.Tags.Methods[format("health:%s-nostatus", tagTextFormat)] = function(unit)
 		return E:GetFormattedText(textFormat, UnitHealth(unit), UnitHealthMax(unit))
 	end
@@ -172,7 +172,7 @@ for textFormat, length in pairs({veryshort = 5, short = 10, medium = 15, long = 
 		return name ~= nil and E:ShortenString(name, length) or nil
 	end
 
-	ElvUF.Tags.Events[format("name:%s:status", textFormat)] = "UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED UNIT_HEALTH_FREQUENT"
+	ElvUF.Tags.Events[format("name:%s:status", textFormat)] = "UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED UNIT_HEALTH"
 	ElvUF.Tags.Methods[format("name:%s:status", textFormat)] = function(unit)
 		local status = UnitIsDead(unit) and L["Dead"] or UnitIsGhost(unit) and L["Ghost"] or not UnitIsConnected(unit) and L["Offline"]
 		local name = UnitName(unit)
