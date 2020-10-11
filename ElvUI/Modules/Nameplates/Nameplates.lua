@@ -739,13 +739,13 @@ function NP:SetTargetFrame(frame)
 
 				self:UpdateElement_All(frame, true)
 
-				self:Configure_Glow(frame)
+--				self:Configure_Glow(frame)
 			end
 
 			NP:PlateFade(frame, NP.db.fadeIn and 1 or 0, frame:GetAlpha(), 1)
 
 			self:Update_Highlight(frame)
-			self:Update_Glow(frame)
+--			self:Update_Glow(frame)
 			self:Update_CPoints(frame)
 			self:StyleFilterUpdate(frame, "PLAYER_TARGET_CHANGED")
 			self:ForEachVisiblePlate("ResetNameplateFrameLevel") --keep this after `StyleFilterUpdate`
@@ -770,8 +770,8 @@ function NP:SetTargetFrame(frame)
 
 		if not self.db.units[frame.UnitType].health.enable then
 			self:UpdateAllFrame(frame, nil, true)
-		else
-			self:Update_Glow(frame)
+--		else
+--			self:Update_Glow(frame)
 		end
 
 		self:Update_CPoints(frame)
@@ -805,6 +805,9 @@ function NP:SetTargetFrame(frame)
 			self:StyleFilterUpdate(frame, "PLAYER_TARGET_CHANGED")
 		end
 	end
+
+	self:Configure_Glow(frame)
+	self:Update_Glow(frame)
 end
 
 function NP:SetMouseoverFrame(frame)
