@@ -113,7 +113,7 @@ function NP:Update_CastBar(frame, event, unit)
 	end
 
 	if self.db.units[frame.UnitType].castbar.enable ~= true then return end
-	if self.db.units[frame.UnitType].health.enable ~= true and not (frame.isTarget and self.db.alwaysShowTargetHealth) then return end --Bug
+	if not frame.Health:IsShown() then return end
 
 	if event == "UNIT_SPELLCAST_START" or event == "UNIT_SPELLCAST_CHANNEL_START" then
 		local name, _, _, texture, startTime, endTime, _, _, notInterruptible = UnitCastingInfo(unit)
