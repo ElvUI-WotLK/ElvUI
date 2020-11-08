@@ -354,9 +354,12 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 		frame.Name:ClearAllPoints()
 		frame.Name:SetJustifyH("CENTER")
 		frame.Name:SetPoint("TOP", frame)
-		frame.Level:ClearAllPoints()
-		frame.Level:SetPoint("LEFT", frame.Name, "RIGHT")
-		frame.Level:SetJustifyH("LEFT")
+		if mod.db.units[frame.UnitType].level.enable then
+			frame.Level:ClearAllPoints()
+			frame.Level:SetPoint("LEFT", frame.Name, "RIGHT")
+			frame.Level:SetJustifyH("LEFT")
+			frame.Level:SetFormattedText(" [%s]", mod:UnitLevel(frame))
+		end
 		if not NameColorChanged then
 			mod:Update_Name(frame, true)
 		end
@@ -440,14 +443,16 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 			mod:Configure_Glow(frame)
 			mod:Update_Glow(frame)
 		end
+		frame.Name:ClearAllPoints()
+		frame.Level:ClearAllPoints()
 		if mod.db.units[frame.UnitType].name.enable then
-			frame.Level:Show()
-			frame.Name:ClearAllPoints()
-			frame.Level:ClearAllPoints()
-			mod:Update_Level(frame)
 			mod:Update_Name(frame)
+			frame.Name:SetTextColor(frame.Name.r, frame.Name.g, frame.Name.b)
 		else
 			frame.Name:SetText()
+		end
+		if mod.db.units[frame.UnitType].level.enable then
+			mod:Update_Level(frame)
 		end
 	end
 	if IconChanged then
@@ -465,13 +470,16 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 			mod:Configure_Glow(frame)
 			mod:Update_Glow(frame)
 		end
+		frame.Name:ClearAllPoints()
+		frame.Level:ClearAllPoints()
 		if mod.db.units[frame.UnitType].name.enable then
-			frame.Name:ClearAllPoints()
-			frame.Level:ClearAllPoints()
-			mod:Update_Level(frame)
 			mod:Update_Name(frame)
+			frame.Name:SetTextColor(frame.Name.r, frame.Name.g, frame.Name.b)
 		else
 			frame.Name:SetText()
+		end
+		if mod.db.units[frame.UnitType].level.enable then
+			mod:Update_Level(frame)
 		end
 		mod:Update_RaidIcon(frame)
 		mod:Configure_NameOnlyGlow(frame)
