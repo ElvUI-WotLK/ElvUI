@@ -1056,6 +1056,10 @@ function NP:SPELL_UPDATE_COOLDOWN(...)
 	NP:ForEachVisiblePlate("StyleFilterUpdate", "SPELL_UPDATE_COOLDOWN")
 end
 
+function NP:PLAYER_UPDATE_RESTING()
+	NP:ForEachVisiblePlate("StyleFilterUpdate", "PLAYER_UPDATE_RESTING")
+end
+
 function NP:RAID_TARGET_UPDATE()
 	for frame in pairs(self.VisiblePlates) do
 		NP:CheckRaidIcon(frame)
@@ -1207,6 +1211,7 @@ function NP:Initialize()
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
 	self:RegisterEvent("PLAYER_LOGOUT", self.StyleFilterClearDefaults)
 	self:RegisterEvent("PLAYER_TARGET_CHANGED")
+	self:RegisterEvent("PLAYER_UPDATE_RESTING")
 	self:RegisterEvent("SPELL_UPDATE_COOLDOWN")
 	self:RegisterEvent("RAID_TARGET_UPDATE")
 	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
