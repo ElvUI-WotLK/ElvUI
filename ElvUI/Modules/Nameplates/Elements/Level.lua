@@ -20,11 +20,10 @@ function NP:Update_Level(frame)
 	else
 		if self.db.units[frame.UnitType].name.enable then
 			level:SetPoint("LEFT", frame.Name, "RIGHT")
-			level:SetJustifyH("LEFT")
 		else
 			level:SetPoint("TOPLEFT", frame, "TOPRIGHT", -38, 0)
-			level:SetJustifyH("LEFT")
 		end
+		level:SetJustifyH("LEFT")
 		level:SetFormattedText(" [%s]", levelText)
 	end
 	level:SetTextColor(r, g, b)
