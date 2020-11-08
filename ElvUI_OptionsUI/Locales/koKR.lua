@@ -567,6 +567,7 @@ L["If enabled then the filter will only activate if the unit is not casting or c
 L["If enabled then the filter will only activate when you are in combat."] = "활성화하면 자신이 전투 중일때만 필터가 작동합니다."
 L["If enabled then the filter will only activate when you are not targeting the unit."] = "활성화하면 자신이 유닛을 대상으로 잡고 있지 않을 때만 필터가 작동합니다."
 L["If enabled then the filter will only activate when you are out of combat."] = "활성화하면 자신이 비전투 중일때만 필터가 작동합니다."
+L["If enabled then the filter will only activate when you are resting at an Inn."] = true
 L["If enabled then the filter will only activate when you are targeting the unit."] = "활성화하면 자신이 유닛을 대상으로 잡고 있을 때만 필터가 작동합니다."
 L["If enabled then the filter will only activate when you have a target."] = true
 L["If not set to 0 then override the size of the aura icon to this."] = "아이콘의 가로세로 길이를 결정합니다.|n|n이 값이 0이면 아이콘이 유닛프레임의 가로길이에 한 줄에 표시할 갯수만큼 들어갈 정도의 크기가 됩니다."
@@ -772,6 +773,7 @@ L["Player Out of Combat"] = "플레이어 전투 종료"
 L["Player Target"] = true
 L["Player Titles"] = "칭호 표시"
 L["Player in Combat"] = "플레이어 전투중"
+L["Player is Resting"] = true
 L["Player"] = "플레이어"
 L["Plugin"] = "플러그인"
 L["Poison Effect"] = true
