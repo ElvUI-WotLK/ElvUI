@@ -655,7 +655,7 @@ local function UpdateFilterGroup()
 				combat = {
 					order = 7,
 					type = "group",
-					name = L["COMBAT"],
+					name = L["Unit Conditions"],
 					disabled = function() return not (E.db.nameplates and E.db.nameplates.filters and E.db.nameplates.filters[selectedNameplateFilter] and E.db.nameplates.filters[selectedNameplateFilter].triggers and E.db.nameplates.filters[selectedNameplateFilter].triggers.enable) end,
 					args = {
 						inCombat = {
@@ -684,13 +684,8 @@ local function UpdateFilterGroup()
 								NP:ConfigureAll()
 							end
 						},
-						spacer1 = {
-							order = 3,
-							type = "description",
-							name = " "
-						},
 						isResting = {
-							order = 4,
+							order = 3,
 							type = "toggle",
 							name = L["Player is Resting"],
 							desc = L["If enabled then the filter will only activate when you are resting at an Inn."],
@@ -701,7 +696,7 @@ local function UpdateFilterGroup()
 								E.global.nameplates.filters[selectedNameplateFilter].triggers.isResting = value
 								NP:ConfigureAll()
 							end
-						},
+						}
 					}
 				},
 				role = {

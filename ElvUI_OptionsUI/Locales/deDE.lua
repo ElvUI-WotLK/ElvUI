@@ -1109,6 +1109,7 @@ L["Under Health Threshold"] = "Unter Gesundheit Schwellenwert"
 L["Under Power Threshold"] = "Unter dem Kraft Schwellenwert"
 L["Uniform Threshold"] = "Einheitlicher Schwellenwert"
 L["Unique Units"] = true
+L["Unit Conditions"] = "Einheit Konditionen"
 L["Unit Prefix Style"] = "Einheit Präfix Stil"
 L["Unit Target"] = "Einheit Ziel"
 L["Unit Type"] = "Einheiten Typ"

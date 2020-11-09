@@ -1109,6 +1109,7 @@ L["Under Health Threshold"] = "低於血量閾值"
 L["Under Power Threshold"] = "低於能量閾值"
 L["Uniform Threshold"] = "統一閾值"
 L["Unique Units"] = true
+L["Unit Conditions"] = "單位條件"
 L["Unit Prefix Style"] = "單位縮寫"
 L["Unit Target"] = "單位目標"
 L["Unit Type"] = "單位類型"
