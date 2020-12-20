@@ -1241,6 +1241,7 @@ P.unitframe = {
 		invertClasspower = false,
 		castColor = {r = 0.31, g = 0.31, b = 0.31},
 		castNoInterrupt = {r = 0.78, g = 0.25, b = 0.25},
+		castInterruptedColor = {r = 0.30, g = 0.30, b = 0.30},
 		castClassColor = false,
 		castReactionColor = false,
 		health = {r = 0.31, g = 0.31, b = 0.31},
