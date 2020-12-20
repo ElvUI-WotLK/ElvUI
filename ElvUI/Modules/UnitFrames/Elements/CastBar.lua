@@ -38,6 +38,7 @@ function UF:Construct_Castbar(frame, moverName)
 	castbar.PostCastStart = self.PostCastStart
 	castbar.PostCastStop = self.PostCastStop
 	castbar.PostCastInterruptible = self.PostCastInterruptible
+	castbar.PostCastFail = UF.PostCastFail
 	castbar:SetClampedToScreen(true)
 	castbar:CreateBackdrop(nil, nil, nil, self.thinBorders, true)
 
@@ -394,6 +395,10 @@ function UF:PostCastStart(unit)
 		if t then r, g, b = t[1], t[2], t[3] end
 	end
 
+	if self.SafeZone then
+		self.SafeZone:Show()
+	end
+
 	self:SetStatusBarColor(r, g, b)
 end
 
@@ -401,6 +406,17 @@ function UF:PostCastStop(unit)
 	if self.hadTicks and unit == "player" then
 		UF:HideTicks()
 		self.hadTicks = false
+	end
+end
+
+function UF:PostCastFail()
+	local db = self:GetParent().db
+	local customColor = db and db.castbar and db.castbar.customColor
+	local color = (customColor and customColor.enable and customColor.colorInterrupted) or UF.db.colors.castInterruptedColor
+	self:SetStatusBarColor(color.r, color.g, color.b)
+
+	if self.SafeZone then
+		self.SafeZone:Hide()
 	end
 end
 

@@ -3194,7 +3194,12 @@ E.Options.args.unitframe = {
 									order = 11,
 									type = "color",
 									name = L["Non-Interruptable"]
-								}
+								},
+								castInterruptedColor = {
+									name = L["Interrupted"],
+									order = 12,
+									type = 'color',
+								},
 							}
 						},
 						auraBars = {
