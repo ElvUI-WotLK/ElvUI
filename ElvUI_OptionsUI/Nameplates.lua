@@ -4011,6 +4011,17 @@ E.Options.args.nameplate = {
 						["style8"] = L["Background Glow"].." + "..L["Side Arrows"]
 					}
 				},
+				arrow = {
+					order = 6,
+					type = "select",
+					sortByValue = true,
+					name = L["Arrow Texture"],
+					values = {
+						ArrowUp = E:TextureString(E.Media.Textures.ArrowUp, ':14:14'),
+						Arrow1 = E:TextureString(E.Media.Textures.Arrow1, ':14:14'),
+						Arrow2 = E:TextureString(E.Media.Textures.Arrow2, ':14:14')
+					},
+				},
 				alwaysShowTargetHealth = {
 					order = 7,
 					type = "toggle",
