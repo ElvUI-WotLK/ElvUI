@@ -355,10 +355,13 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 		frame.Name:ClearAllPoints()
 		frame.Name:SetJustifyH("CENTER")
 		frame.Name:SetPoint("TOP", frame)
-		frame.Level:ClearAllPoints()
-		frame.Level:SetPoint("LEFT", frame.Name, "RIGHT")
-		frame.Level:SetJustifyH("LEFT")
-		if not NameColorChanged then
+		if mod.db.units[frame.UnitType].level.enable then
+			frame.Level:ClearAllPoints()
+			frame.Level:SetPoint("LEFT", frame.Name, "RIGHT")
+			frame.Level:SetJustifyH("LEFT")
+			frame.Level:SetFormattedText(" [%s]", mod:UnitLevel(frame))
+		end
+		if not NameColorChanged or not IconOnlyChanged then
 			mod:Update_Name(frame, true)
 		end
 	end
@@ -372,13 +375,13 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 		frame.StyleChanged = true
 		frame.IconOnlyChanged = true
 		mod:Update_IconFrame(frame, true)
+		if frame.CastBar:IsShown() then frame.CastBar:Hide() end
 		if frame.Health:IsShown() then frame.Health:Hide() end
-		frame.Level:Hide()
-		frame.Name:Hide()
+		frame.Level:SetText()
+		frame.Name:SetText()
 		mod:Configure_Glow(frame)
 		mod:Update_Glow(frame)
 		mod:Update_RaidIcon(frame)
-		mod:Configure_IconOnlyGlow(frame)
 		mod:Configure_NameOnlyGlow(frame)
 	end
 end
@@ -442,14 +445,16 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 			mod:Configure_Glow(frame)
 			mod:Update_Glow(frame)
 		end
+		frame.Name:ClearAllPoints()
+		frame.Level:ClearAllPoints()
 		if mod.db.units[frame.UnitType].name.enable then
-			frame.Level:Show()
-			frame.Name:ClearAllPoints()
-			frame.Level:ClearAllPoints()
-			mod:Update_Level(frame)
 			mod:Update_Name(frame)
+			frame.Name:SetTextColor(frame.Name.r, frame.Name.g, frame.Name.b)
 		else
 			frame.Name:SetText()
+		end
+		if mod.db.units[frame.UnitType].level.enable then
+			mod:Update_Level(frame)
 		end
 	end
 	if IconChanged then
@@ -467,18 +472,18 @@ function mod:StyleFilterClearChanges(frame, HealthColorChanged, BorderChanged, F
 			mod:Configure_Glow(frame)
 			mod:Update_Glow(frame)
 		end
+		frame.Name:ClearAllPoints()
+		frame.Level:ClearAllPoints()
 		if mod.db.units[frame.UnitType].name.enable then
-			frame.Name:Show()
-			frame.Level:Show()
-			frame.Name:ClearAllPoints()
-			frame.Level:ClearAllPoints()
-			mod:Update_Level(frame)
 			mod:Update_Name(frame)
+			frame.Name:SetTextColor(frame.Name.r, frame.Name.g, frame.Name.b)
 		else
 			frame.Name:SetText()
 		end
+		if mod.db.units[frame.UnitType].level.enable then
+			mod:Update_Level(frame)
+		end
 		mod:Update_RaidIcon(frame)
-		mod:Configure_IconOnlyGlow(frame)
 		mod:Configure_NameOnlyGlow(frame)
 	end
 end

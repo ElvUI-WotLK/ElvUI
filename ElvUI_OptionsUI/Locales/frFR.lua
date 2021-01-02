@@ -1114,6 +1114,7 @@ L["Under Health Threshold"] = true
 L["Under Power Threshold"] = true
 L["Uniform Threshold"] = "Déclencheur identique"
 L["Unique Units"] = true
+L["Unit Conditions"] = true
 L["Unit Prefix Style"] = "Style des préfixes d'unités"
 L["Unit Target"] = true
 L["Unit Type"] = true

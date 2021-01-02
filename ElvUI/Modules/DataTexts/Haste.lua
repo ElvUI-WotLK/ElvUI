@@ -22,8 +22,12 @@ local hasteRating
 local displayNumberString = ""
 local lastPanel
 
-local function OnEvent(self)
+local function OnEvent(self, event)
 	lastPanel = self
+
+	if event == "SPELL_UPDATE_USABLE" then
+		self:UnregisterEvent(event)
+	end
 
 	if E.Role == "Caster" then
 		hasteRating = GetCombatRating(CR_HASTE_SPELL)
@@ -73,4 +77,4 @@ local function ValueColorUpdate(hex)
 end
 E.valueColorUpdateFuncs[ValueColorUpdate] = true
 
-DT:RegisterDatatext("Haste", {"ACTIVE_TALENT_GROUP_CHANGED", "PLAYER_TALENT_UPDATE", "UNIT_ATTACK_SPEED", "UNIT_SPELL_HASTE"}, OnEvent, nil, nil, OnEnter, nil, SPELL_HASTE)
+DT:RegisterDatatext("Haste", {"SPELL_UPDATE_USABLE", "ACTIVE_TALENT_GROUP_CHANGED", "PLAYER_TALENT_UPDATE", "UNIT_ATTACK_SPEED", "UNIT_SPELL_HASTE"}, OnEvent, nil, nil, OnEnter, nil, SPELL_HASTE)

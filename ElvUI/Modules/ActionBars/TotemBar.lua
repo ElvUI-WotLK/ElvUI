@@ -1,5 +1,6 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local AB = E:GetModule("ActionBars")
+local LSM = E.Libs.LSM
 
 --Lua functions
 local _G = _G
@@ -230,6 +231,27 @@ function AB:PositionAndSizeBarTotem()
 	MultiCastFlyoutFrameOpenButton:Width(size)
 end
 
+function AB:UpdateTotemBindings()
+	local color = self.db.fontColor
+	local alpha = self.db.hotkeytext and 1 or 0
+
+	MultiCastSummonSpellButtonHotKey:SetTextColor(color.r, color.g, color.b, alpha)
+	MultiCastSummonSpellButtonHotKey:FontTemplate(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline)
+	self:FixKeybindText(MultiCastSummonSpellButton)
+
+	MultiCastRecallSpellButtonHotKey:SetTextColor(color.r, color.g, color.b, alpha)
+	MultiCastRecallSpellButtonHotKey:FontTemplate(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline)
+	self:FixKeybindText(MultiCastRecallSpellButton)
+
+	for i = 1, 12 do
+		local hotKey = _G["MultiCastActionButton"..i.."HotKey"]
+
+		hotKey:SetTextColor(color.r, color.g, color.b, alpha)
+		hotKey:FontTemplate(LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline)
+		self:FixKeybindText(_G["MultiCastActionButton"..i])
+	end
+end
+
 function AB:CreateTotemBar()
 	bar:Point("BOTTOM", E.UIParent, "BOTTOM", 0, 250)
 	bar.buttons = {}
@@ -329,6 +351,8 @@ function AB:CreateTotemBar()
 		normal:Hide()
 		normal:SetAlpha(0)
 
+		_G["MultiCastActionButton"..i.."HotKey"].SetVertexColor = E.noop
+
 		E:RegisterCooldown(cooldown)
 
 		bar.buttons[button] = true
@@ -338,6 +362,8 @@ function AB:CreateTotemBar()
 		button:HookScript("OnEnter", AB.TotemOnEnter)
 		button:HookScript("OnLeave", AB.TotemOnLeave)
 	end
+
+	self:UpdateTotemBindings()
 
 	self:SecureHook("MultiCastFlyoutFrameOpenButton_Show")
 	self:SecureHook("MultiCastActionButton_Update")

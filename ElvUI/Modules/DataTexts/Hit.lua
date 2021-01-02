@@ -14,8 +14,12 @@ local hitRatingBonus
 local displayString = ""
 local lastPanel
 
-local function OnEvent(self)
+local function OnEvent(self, event)
 	lastPanel = self
+
+	if event == "SPELL_UPDATE_USABLE" then
+		self:UnregisterEvent(event)
+	end
 
 	if E.Role == "Caster" then
 		hitRatingBonus = GetCombatRatingBonus(CR_HIT_SPELL)
@@ -37,4 +41,4 @@ local function ValueColorUpdate(hex)
 end
 E.valueColorUpdateFuncs[ValueColorUpdate] = true
 
-DT:RegisterDatatext("Hit", {"ACTIVE_TALENT_GROUP_CHANGED", "PLAYER_TALENT_UPDATE", "COMBAT_RATING_UPDATE"}, OnEvent, nil, nil, nil, nil, STAT_HIT_CHANCE)
+DT:RegisterDatatext("Hit", {"SPELL_UPDATE_USABLE", "ACTIVE_TALENT_GROUP_CHANGED", "PLAYER_TALENT_UPDATE", "COMBAT_RATING_UPDATE"}, OnEvent, nil, nil, nil, nil, STAT_HIT_CHANCE)

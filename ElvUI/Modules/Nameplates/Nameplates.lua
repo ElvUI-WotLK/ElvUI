@@ -731,21 +731,17 @@ function NP:SetTargetFrame(frame)
 
 				self:Configure_HealthBar(frame)
 				self:Configure_CastBar(frame)
-
 				self:Configure_Elite(frame)
 				self:Configure_CPoints(frame)
 
 				self:RegisterEvents(frame)
 
 				self:UpdateElement_All(frame, true)
-
-				self:Configure_Glow(frame)
 			end
 
 			NP:PlateFade(frame, NP.db.fadeIn and 1 or 0, frame:GetAlpha(), 1)
 
 			self:Update_Highlight(frame)
-			self:Update_Glow(frame)
 			self:Update_CPoints(frame)
 			self:StyleFilterUpdate(frame, "PLAYER_TARGET_CHANGED")
 			self:ForEachVisiblePlate("ResetNameplateFrameLevel") --keep this after `StyleFilterUpdate`
@@ -770,8 +766,6 @@ function NP:SetTargetFrame(frame)
 
 		if not self.db.units[frame.UnitType].health.enable then
 			self:UpdateAllFrame(frame, nil, true)
-		else
-			self:Update_Glow(frame)
 		end
 
 		self:Update_CPoints(frame)
@@ -805,6 +799,9 @@ function NP:SetTargetFrame(frame)
 			self:StyleFilterUpdate(frame, "PLAYER_TARGET_CHANGED")
 		end
 	end
+
+	self:Configure_Glow(frame)
+	self:Update_Glow(frame)
 end
 
 function NP:SetMouseoverFrame(frame)
@@ -1030,8 +1027,37 @@ function NP:PLAYER_REGEN_ENABLED()
 	NP:ForEachVisiblePlate("StyleFilterUpdate", "PLAYER_REGEN_ENABLED")
 end
 
+function NP:UNIT_HEALTH(_, unit)
+	if unit ~= "player" then return end
+	NP:ForEachVisiblePlate("StyleFilterUpdate", "UNIT_HEALTH")
+end
+
+function NP:UNIT_MANA(_, unit)
+	if unit ~= "player" then return end
+	NP:ForEachVisiblePlate("StyleFilterUpdate", "UNIT_MANA")
+end
+
+function NP:UNIT_ENERGY(_, unit)
+	if unit ~= "player" then return end
+	NP:ForEachVisiblePlate("StyleFilterUpdate", "UNIT_ENERGY")
+end
+
+function NP:UNIT_FOCUS(_, unit)
+	if unit ~= "player" then return end
+	NP:ForEachVisiblePlate("StyleFilterUpdate", "UNIT_FOCUS")
+end
+
+function NP:UNIT_RAGE(_, unit)
+	if unit ~= "player" then return end
+	NP:ForEachVisiblePlate("StyleFilterUpdate", "UNIT_RAGE")
+end
+
 function NP:SPELL_UPDATE_COOLDOWN(...)
 	NP:ForEachVisiblePlate("StyleFilterUpdate", "SPELL_UPDATE_COOLDOWN")
+end
+
+function NP:PLAYER_UPDATE_RESTING()
+	NP:ForEachVisiblePlate("StyleFilterUpdate", "PLAYER_UPDATE_RESTING")
 end
 
 function NP:RAID_TARGET_UPDATE()
@@ -1185,10 +1211,17 @@ function NP:Initialize()
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
 	self:RegisterEvent("PLAYER_LOGOUT", self.StyleFilterClearDefaults)
 	self:RegisterEvent("PLAYER_TARGET_CHANGED")
+	self:RegisterEvent("PLAYER_UPDATE_RESTING")
 	self:RegisterEvent("SPELL_UPDATE_COOLDOWN")
 	self:RegisterEvent("RAID_TARGET_UPDATE")
-
 	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
+	self:RegisterEvent("UNIT_COMBO_POINTS")
+	self:RegisterEvent("UNIT_HEALTH")
+	self:RegisterEvent("UNIT_MANA")
+	self:RegisterEvent("UNIT_ENERGY")
+	self:RegisterEvent("UNIT_FOCUS")
+	self:RegisterEvent("UNIT_RAGE")
+
 	-- Arena & Arena Pets
 	self:CacheArenaUnits()
 	self:RegisterEvent("ARENA_OPPONENT_UPDATE", "CacheArenaUnits")
@@ -1207,7 +1240,6 @@ function NP:Initialize()
 	LAI.RegisterCallback(self, "LibAuraInfo_AURA_APPLIED_DOSE")
 	LAI.RegisterCallback(self, "LibAuraInfo_AURA_CLEAR")
 	LAI.RegisterCallback(self, "LibAuraInfo_UNIT_AURA")
-	self:RegisterEvent("UNIT_COMBO_POINTS")
 end
 
 local function InitializeCallback()

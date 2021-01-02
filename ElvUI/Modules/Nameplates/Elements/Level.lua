@@ -13,17 +13,17 @@ function NP:Update_Level(frame)
 	local level = frame.Level
 	level:ClearAllPoints()
 
-	if self.db.units[frame.UnitType].health.enable or (frame.isTarget and self.db.alwaysShowTargetHealth) then
+	if frame.Health:IsShown() then
 		level:SetJustifyH("RIGHT")
 		level:SetPoint("BOTTOMRIGHT", frame.Health, "TOPRIGHT", 0, E.Border*2)
-	else
-		level:SetPoint("LEFT", frame.Name, "RIGHT")
-		level:SetJustifyH("LEFT")
-	end
-
-	if self.db.units[frame.UnitType].health.enable or frame.isTarget then
 		level:SetText(levelText)
 	else
+		if self.db.units[frame.UnitType].name.enable then
+			level:SetPoint("LEFT", frame.Name, "RIGHT")
+		else
+			level:SetPoint("TOPLEFT", frame, "TOPRIGHT", -38, 0)
+		end
+		level:SetJustifyH("LEFT")
 		level:SetFormattedText(" [%s]", levelText)
 	end
 	level:SetTextColor(r, g, b)

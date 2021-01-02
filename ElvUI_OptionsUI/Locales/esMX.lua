@@ -1112,6 +1112,7 @@ L["Under Health Threshold"] = "Por debajo del umbral de salud"
 L["Under Power Threshold"] = "Por debajo del umbral de potencia"
 L["Uniform Threshold"] = true
 L["Unique Units"] = true
+L["Unit Conditions"] = true
 L["Unit Prefix Style"] = true
 L["Unit Target"] = true
 L["Unit Type"] = true

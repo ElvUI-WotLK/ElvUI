@@ -713,7 +713,7 @@ function UF.groupPrototype:AdjustVisibility(frame)
 					UF:UnshowChildUnits(group, group:GetChildren())
 					group:SetAttribute("startingIndex", 1)
 				else
-					group:Reset()
+					group:Reset(frame.groupName)
 				end
 			end
 		end
@@ -751,14 +751,14 @@ function UF.headerPrototype:Update()
 	end
 end
 
-function UF.headerPrototype:Reset()
+function UF.headerPrototype:Reset(group)
 	self:Hide()
 
 	self:SetAttribute("showPlayer", true)
 
 	self:SetAttribute("showSolo", true)
 	self:SetAttribute("showParty", true)
-	self:SetAttribute("showRaid", true)
+	self:SetAttribute("showRaid", group ~= "party" and true or false)
 
 	self:SetAttribute("columnSpacing", nil)
 	self:SetAttribute("columnAnchorPoint", nil)
@@ -783,7 +783,7 @@ function UF:CreateHeader(parent, groupFilter, overrideName, template, groupName,
 	local header = ElvUF:SpawnHeader(overrideName, headerTemplate, nil,
 			"groupFilter", groupFilter,
 			"showParty", true,
-			"showRaid", group == "party" and false or true,
+			"showRaid", group ~= "party" and true or false,
 			"showSolo", true,
 			template and "template", template)
 

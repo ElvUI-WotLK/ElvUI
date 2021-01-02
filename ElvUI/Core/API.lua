@@ -5,6 +5,7 @@ local _G = _G
 local wipe, date = wipe, date
 local format, select, type, ipairs, pairs = format, select, type, ipairs, pairs
 local strmatch, strfind, tonumber, tostring = strmatch, strfind, tonumber, tostring
+local tinsert, tremove = table.insert, table.remove
 --WoW API / Variables
 local GetActiveTalentGroup = GetActiveTalentGroup
 local GetCVarBool = GetCVarBool
@@ -107,7 +108,7 @@ function E:GetTalentSpecInfo(isInspect)
 	return specIdx, specName, specIcon
 end
 
-function E:CheckRole()
+function E:CheckRole(event)
 	local talentTree = self:GetTalentSpecInfo()
 	local role
 
@@ -138,6 +139,10 @@ function E:CheckRole()
 			self.DispelClasses[self.myclass].Curse = false
 		end
 	end
+
+	if event == "SPELL_UPDATE_USABLE" then
+		self:UnregisterEvent(event)
+	end
 end
 
 function E:IsDispellableByMe(debuffType)
@@ -147,7 +152,7 @@ function E:IsDispellableByMe(debuffType)
 end
 
 do
-	--local Masque = E.Libs.Masque
+	local LBF = E.Libs.LBF
 	local LBFGroupToTableElement = {
 		["ActionBars"] = "actionbar",
 		["Auras"] = "auras"
@@ -307,6 +312,82 @@ function E:ExitVehicleShowFrames(_, unit)
 	end
 end
 
+E.CreatedSpinnerFrames = {}
+
+function E:CreateSpinnerFrame()
+	local frame = CreateFrame("Frame")
+	frame:EnableMouse(true)
+	frame:Hide()
+
+	frame.Background = frame:CreateTexture(nil, "BACKGROUND")
+	frame.Background:SetTexture(0, 0, 0, 0.5)
+	frame.Background:SetAllPoints()
+
+	frame.Framing = frame:CreateTexture()
+	frame.Framing:Size(48)
+	frame.Framing:SetTexture(E.Media.Textures.StreamFrame)
+	frame.Framing:SetPoint("CENTER")
+
+	frame.Circle = frame:CreateTexture(nil, "BORDER")
+	frame.Circle:Size(48)
+	frame.Circle:SetTexture(E.Media.Textures.StreamCircle)
+	frame.Circle:SetVertexColor(1, .82, 0)
+	frame.Circle:SetPoint("CENTER")
+
+	frame.Circle.Anim = frame.Circle:CreateAnimationGroup()
+	frame.Circle.Anim:SetLooping("REPEAT")
+	frame.Circle.Anim.Rotation = frame.Circle.Anim:CreateAnimation("Rotation")
+	frame.Circle.Anim.Rotation:SetDuration(1)
+	frame.Circle.Anim.Rotation:SetDegrees(-360)
+
+	frame.Spark = frame:CreateTexture(nil, "OVERLAY")
+	frame.Spark:Size(48)
+	frame.Spark:SetTexture(E.Media.Textures.StreamSpark)
+	frame.Spark:SetPoint("CENTER")
+
+	frame.Spark.Anim = frame.Spark:CreateAnimationGroup()
+	frame.Spark.Anim:SetLooping("REPEAT")
+	frame.Spark.Anim.Rotation = frame.Spark.Anim:CreateAnimation("Rotation")
+	frame.Spark.Anim.Rotation:SetDuration(1)
+	frame.Spark.Anim.Rotation:SetDegrees(-360)
+
+	return frame
+end
+
+function E:StartSpinnerFrame(parent, left, top, right, bottom)
+	if parent.SpinnerFrame then return end
+
+	local frame = #self.CreatedSpinnerFrames > 0 and tremove(self.CreatedSpinnerFrames) or self:CreateSpinnerFrame()
+
+	frame:SetParent(parent)
+	frame:SetFrameLevel(parent:GetFrameLevel() + 10)
+	frame:ClearAllPoints()
+	if top or bottom or left or right then
+		frame:Point("TOPLEFT", left or 0, -top or 0)
+		frame:Point("BOTTOMRIGHT", -right or 0, bottom or 0)
+	else
+		frame:SetAllPoints()
+	end
+
+	frame:Show()
+	frame.Circle.Anim.Rotation:Play()
+	frame.Spark.Anim.Rotation:Play()
+
+	parent.SpinnerFrame = frame
+end
+
+function E:StopSpinnerFrame(parent)
+	if not parent.SpinnerFrame then return end
+
+	local frame = parent.SpinnerFrame
+	frame:Hide()
+	frame.Circle.Anim:Stop()
+	frame.Spark.Anim:Stop()
+
+	parent.SpinnerFrame = nil
+	tinsert(self.CreatedSpinnerFrames, frame)
+end
+
 function E:RequestBGInfo()
 	RequestBattlefieldScoreData()
 end
@@ -315,8 +396,6 @@ function E:PLAYER_ENTERING_WORLD()
 	if not self.MediaUpdated then
 		self:UpdateMedia()
 		self.MediaUpdated = true
-	else
-		self:ScheduleTimer("CheckRole", 0.01)
 	end
 
 	local _, instanceType = IsInInstance()
@@ -334,15 +413,14 @@ function E:PLAYER_LEVEL_UP(_, level)
 end
 
 function E:LoadAPI()
-	self:ScheduleTimer("CheckRole", 0.01)
-
 	self:RegisterEvent("PLAYER_LEVEL_UP")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
+	self:RegisterEvent("SPELL_UPDATE_USABLE", "CheckRole")
 	self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", "CheckRole")
 	self:RegisterEvent("PLAYER_TALENT_UPDATE", "CheckRole")
-	self:RegisterEvent("CHARACTER_POINTS_CHANGED", "CheckRole")
-	self:RegisterEvent("UNIT_INVENTORY_CHANGED", "CheckRole")
-	self:RegisterEvent("UPDATE_BONUS_ACTIONBAR", "CheckRole")
+--	self:RegisterEvent("CHARACTER_POINTS_CHANGED", "CheckRole")
+--	self:RegisterEvent("UNIT_INVENTORY_CHANGED", "CheckRole")
+--	self:RegisterEvent("UPDATE_BONUS_ACTIONBAR", "CheckRole")
 	self:RegisterEvent("UNIT_ENTERED_VEHICLE", "EnterVehicleHideFrames")
 	self:RegisterEvent("UNIT_EXITED_VEHICLE", "ExitVehicleShowFrames")
 	self:RegisterEvent("UI_SCALE_CHANGED", "PixelScaleChanged")

@@ -1112,6 +1112,7 @@ L["Under Health Threshold"] = true
 L["Under Power Threshold"] = true
 L["Uniform Threshold"] = true
 L["Unique Units"] = true
+L["Unit Conditions"] = true
 L["Unit Prefix Style"] = "단위 축약 방식"
 L["Unit Target"] = true
 L["Unit Type"] = "유닛 종류"

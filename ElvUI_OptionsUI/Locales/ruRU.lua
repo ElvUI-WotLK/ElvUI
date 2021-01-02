@@ -1109,6 +1109,7 @@ L["Under Health Threshold"] = "Менее значения здоровья"
 L["Under Power Threshold"] = "Менее значения ресурса"
 L["Uniform Threshold"] = "Граница убывания"
 L["Unique Units"] = true
+L["Unit Conditions"] = "Условия юнита"
 L["Unit Prefix Style"] = "Стиль сокращений"
 L["Unit Target"] = "Цель юнита"
 L["Unit Type"] = "Тип юнита"

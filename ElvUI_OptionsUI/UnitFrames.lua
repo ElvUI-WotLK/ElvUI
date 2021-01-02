@@ -6645,6 +6645,75 @@ E.Options.args.unitframe.args.raid = {
 				}
 			}
 		},
+		roleIcon = {
+			order = 700,
+			type = "group",
+			name = L["Role Icon"],
+			get = function(info) return E.db.unitframe.units.raid.roleIcon[info[#info]] end,
+			set = function(info, value) E.db.unitframe.units.raid.roleIcon[info[#info]] = value UF:CreateAndUpdateHeaderGroup("raid") end,
+			args = {
+				header = {
+					order = 1,
+					type = "header",
+					name = L["Role Icon"]
+				},
+				enable = {
+					order = 2,
+					type = "toggle",
+					name = L["Enable"]
+				},
+				position = {
+					order = 3,
+					type = "select",
+					name = L["Position"],
+					values = positionValues
+				},
+				attachTo = {
+					order = 4,
+					type = "select",
+					name = L["Attach To"],
+					values = attachToValues
+				},
+				xOffset = {
+					order = 5,
+					type = "range",
+					name = L["X-Offset"],
+					min = -300, max = 300, step = 1
+				},
+				yOffset = {
+					order = 6,
+					type = "range",
+					name = L["Y-Offset"],
+					min = -300, max = 300, step = 1
+				},
+				size = {
+					order = 7,
+					type = "range",
+					name = L["Size"],
+					min = 4, max = 100, step = 1
+				},
+				tank = {
+					order = 8,
+					type = "toggle",
+					name = L["Show For Tanks"]
+				},
+				healer = {
+					order = 9,
+					type = "toggle",
+					name = L["Show For Healers"]
+				},
+				damager = {
+					order = 10,
+					type = "toggle",
+					name = L["Show For DPS"],
+				},
+				combatHide = {
+					order = 11,
+					type = "toggle",
+					name = L["Hide In Combat"]
+				}
+			}
+		},
 		raidRoleIcons = {
 			order = 750,
 			type = "group",

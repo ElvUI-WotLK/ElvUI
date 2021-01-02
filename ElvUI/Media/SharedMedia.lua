@@ -129,6 +129,10 @@ E.Media = {
 		SkullIcon = M..[[Textures\SkullIcon.tga]],
 		Smooth = M..[[Textures\Smooth.tga]],
 		Spark = M..[[Textures\Spark.tga]],
+		StreamBackground = M..[[Textures\StreamBackground]],
+		StreamCircle = M..[[Textures\StreamCircle]],
+		StreamFrame = M..[[Textures\StreamFrame]],
+		StreamSpark = M..[[Textures\StreamSpark]],
 		Tank = M..[[Textures\Tank.tga]],
 		ExitVehicle = M..[[Textures\ExitVehicle.tga]]
 	}

@@ -3325,6 +3325,18 @@ P.unitframe = {
 					color = {r = 1, g = 0.9, b = 0, a = 1}
 				}
 			},
+			roleIcon = {
+				enable = false,
+				position = "TOPRIGHT",
+				attachTo = "Health",
+				xOffset = 0,
+				yOffset = 0,
+				size = 15,
+				tank = true,
+				healer = true,
+				damager = true,
+				combatHide = false
+			},
 			raidRoleIcons = {
 				enable = true,
 				position = "TOPLEFT"
