@@ -377,6 +377,7 @@ P.nameplates = {
 		TARGET = {
 			enable = true,
 			glowStyle = "style4",
+			arrow = "Arrow1",
 			comboPoints = {
 				enable = true,
 				width = 8,

@@ -203,10 +203,10 @@ function NP:Construct_Glow(frame)
 	end
 
 	frame.Spark:SetTexture(E.Media.Textures.Spark)
-	frame.TopIndicator:SetTexture(E.Media.Textures.ArrowUp)
+	frame.TopIndicator:SetTexture(E.Media.Textures[NP.db.units.TARGET.arrow])
 	frame.TopIndicator:SetRotation(3.14)
-	frame.LeftIndicator:SetTexture(E.Media.Textures.ArrowUp)
+	frame.LeftIndicator:SetTexture(E.Media.Textures[NP.db.units.TARGET.arrow])
 	frame.LeftIndicator:SetRotation(1.57)
-	frame.RightIndicator:SetTexture(E.Media.Textures.ArrowUp)
+	frame.RightIndicator:SetTexture(E.Media.Textures[NP.db.units.TARGET.arrow])
 	frame.RightIndicator:SetRotation(-1.57)
 end
