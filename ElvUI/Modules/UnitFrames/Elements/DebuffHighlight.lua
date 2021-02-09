@@ -37,6 +37,7 @@ function UF:Configure_DebuffHighlight(frame)
 		frame:EnableElement("DebuffHighlight")
 
 		frame.DebuffHighlight:SetBlendMode(UF.db.colors.debuffHighlight.blendMode)
+		frame.DebuffHighlight:SetAllPoints(frame.Health:GetStatusBarTexture())
 		frame.DebuffHighlightFilterTable = E.global.unitframe.DebuffHighlightColors
 
 		if E.db.unitframe.debuffHighlighting == "GLOW" then
