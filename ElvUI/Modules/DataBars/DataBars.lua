@@ -7,7 +7,7 @@ local GetExpansionLevel = GetExpansionLevel
 local MAX_PLAYER_LEVEL_TABLE = MAX_PLAYER_LEVEL_TABLE
 
 function mod:OnLeave()
-	if (self == ElvUI_ExperienceBar and mod.db.experience.mouseover) or (self == ElvUI_ReputationBar and mod.db.reputation.mouseover) then
+	if (self == ElvUI_ExperienceBar and mod.db.experience.mouseover) or (self == ElvUI_PetExperienceBar and mod.db.petExperience.mouseover) or (self == ElvUI_ReputationBar and mod.db.reputation.mouseover) then
 		E:UIFrameFadeOut(self, 1, self:GetAlpha(), 0)
 	end
 	GameTooltip:Hide()
@@ -36,6 +36,7 @@ end
 
 function mod:UpdateDataBarDimensions()
 	self:UpdateExperienceDimensions()
+	self:UpdatePetExperienceDimensions()
 	self:UpdateReputationDimensions()
 end
 
@@ -52,6 +53,7 @@ function mod:Initialize()
 	self.db = E.db.databars
 
 	self:LoadExperienceBar()
+	self:LoadPetExperienceBar()
 	self:LoadReputationBar()
 	self:RegisterEvent("PLAYER_LEVEL_UP")
 end

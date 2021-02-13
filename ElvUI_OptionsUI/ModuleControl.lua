@@ -142,6 +142,13 @@ local function CreateDatatbarsConfig()
 		get = function(info) return E.global.profileCopy.databars[info[#info]] end,
 		set = function(info, value) E.global.profileCopy.databars[info[#info]] = value end
 	}
+	config.args.petExperience = {
+		order = 2,
+		type = "toggle",
+		name = L["Pet Experience"],
+		get = function(info) return E.global.profileCopy.databars[info[#info]] end,
+		set = function(info, value) E.global.profileCopy.databars[info[#info]] = value end
+	}
 	config.args.reputation = {
 		order = 3,
 		type = "toggle",
