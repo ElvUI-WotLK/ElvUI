@@ -40,11 +40,12 @@ function NP:Update_Name(frame, triggered)
 		name:ClearAllPoints()
 		if self.db.units[frame.UnitType].health.enable or (self.db.alwaysShowTargetHealth and frame.isTarget) then
 			name:SetJustifyH("LEFT")
-			name:SetPoint("BOTTOMLEFT", frame.Health, "TOPLEFT", 0, E.Border*2)
-			name:SetPoint("BOTTOMRIGHT", frame.Level, "BOTTOMLEFT")
+			name:SetPoint(E.InversePoints[self.db.units[frame.UnitType].name.position], self.db.units[frame.UnitType].name.parent == "Nameplate" and frame or frame[self.db.units[frame.UnitType].name.parent], self.db.units[frame.UnitType].name.position, self.db.units[frame.UnitType].name.xOffset, self.db.units[frame.UnitType].name.yOffset)
+			name:SetParent(frame.Health)
 		else
 			name:SetJustifyH("CENTER")
 			name:SetPoint("TOP", frame)
+			name:SetParent(frame)
 		end
 	end
 

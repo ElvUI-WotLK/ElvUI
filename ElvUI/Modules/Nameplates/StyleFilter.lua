@@ -355,6 +355,7 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 		frame.Name:ClearAllPoints()
 		frame.Name:SetJustifyH("CENTER")
 		frame.Name:SetPoint("TOP", frame)
+		frame.Name:SetParent(frame)
 		if mod.db.units[frame.UnitType].level.enable then
 			frame.Level:ClearAllPoints()
 			frame.Level:SetPoint("LEFT", frame.Name, "RIGHT")
