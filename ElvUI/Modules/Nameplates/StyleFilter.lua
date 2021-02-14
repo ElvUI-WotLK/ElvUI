@@ -360,6 +360,7 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 			frame.Level:ClearAllPoints()
 			frame.Level:SetPoint("LEFT", frame.Name, "RIGHT")
 			frame.Level:SetJustifyH("LEFT")
+			frame.Level:SetParent(frame)
 			frame.Level:SetFormattedText(" [%s]", mod:UnitLevel(frame))
 		end
 		if not NameColorChanged or not IconOnlyChanged then

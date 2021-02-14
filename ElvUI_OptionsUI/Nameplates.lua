@@ -3011,9 +3011,46 @@ local function GetUnitSettings(unit, name)
 						type = "toggle",
 						name = L["Enable"]
 					},
+					position = {
+						order = 2,
+						type = "select",
+						name = L["Position"],
+						values = {
+							["CENTER"] = "CENTER",
+							["TOPLEFT"] = "TOPLEFT",
+							["BOTTOMLEFT"] = "BOTTOMLEFT",
+							["TOPRIGHT"] = "TOPRIGHT",
+							["BOTTOMRIGHT"] = "BOTTOMRIGHT"
+						}
+					},
+					parent = {
+						order = 3,
+						type = "select",
+						name = L["Parent"],
+						values = {
+							["Nameplate"] = L["Nameplate"],
+							["Health"] = L["Health"]
+						}
+					},
+					xOffset = {
+						order = 4,
+						name = L["X-Offset"],
+						type = "range",
+						min = -100,
+						max = 100,
+						step = 1
+					},
+					yOffset = {
+						order = 5,
+						name = L["Y-Offset"],
+						type = "range",
+						min = -100,
+						max = 100,
+						step = 1
+					},
 					fontGroup = {
 						type = "group",
-						order = 2,
+						order = 6,
 						name = L["Fonts"],
 						guiInline = true,
 						get = function(info)
