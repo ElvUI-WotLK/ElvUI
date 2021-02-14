@@ -3016,11 +3016,15 @@ local function GetUnitSettings(unit, name)
 						type = "select",
 						name = L["Position"],
 						values = {
+							["TOP"] = "TOP",
+							["LEFT"] = "LEFT",
+							["BOTTOM"] = "BOTTOM",
 							["CENTER"] = "CENTER",
 							["TOPLEFT"] = "TOPLEFT",
 							["BOTTOMLEFT"] = "BOTTOMLEFT",
-							["TOPRIGHT"] = "TOPRIGHT",
-							["BOTTOMRIGHT"] = "BOTTOMRIGHT"
+							["BOTTOMRIGHT"] = "BOTTOMRIGHT",
+							["RIGHT"] = "RIGHT",
+							["TOPRIGHT"] = "TOPRIGHT"
 						}
 					},
 					parent = {
@@ -3117,11 +3121,15 @@ local function GetUnitSettings(unit, name)
 						type = "select",
 						name = L["Position"],
 						values = {
+							["TOP"] = "TOP",
+							["LEFT"] = "LEFT",
+							["BOTTOM"] = "BOTTOM",
 							["CENTER"] = "CENTER",
 							["TOPLEFT"] = "TOPLEFT",
 							["BOTTOMLEFT"] = "BOTTOMLEFT",
-							["TOPRIGHT"] = "TOPRIGHT",
-							["BOTTOMRIGHT"] = "BOTTOMRIGHT"
+							["BOTTOMRIGHT"] = "BOTTOMRIGHT",
+							["RIGHT"] = "RIGHT",
+							["TOPRIGHT"] = "TOPRIGHT"
 						}
 					},
 					parent = {
