@@ -4019,11 +4019,34 @@ E.Options.args.nameplate = {
 					values = {
 						ArrowUp = E:TextureString(E.Media.Textures.ArrowUp, ':14:14'),
 						Arrow1 = E:TextureString(E.Media.Textures.Arrow1, ':14:14'),
-						Arrow2 = E:TextureString(E.Media.Textures.Arrow2, ':14:14')
+						Arrow2 = E:TextureString(E.Media.Textures.Arrow2, ':14:14'),
+						Arrow3 = E:TextureString(E.Media.Textures.Arrow3, ':14:14'),
+						RLArrow = E:TextureString(E.Media.Textures.RLArrow, ':14:14')
 					},
 				},
-				alwaysShowTargetHealth = {
+				arrowScale = {
 					order = 7,
+					type = 'range',
+					name = L["Arrow Scale"],
+					min = 1,
+					max = 20,
+					step = 1,
+					isPercent = false
+				},
+				arrowxOffset = {
+					order = 8,
+					type = "range",
+					name = L["Arrow X-Offset"],
+					min = -20, max = 20, step = 1
+				},
+				arrowyOffset = {
+					order = 9,
+					type = "range",
+					name = L["Arrow Y-Offset"],
+					min = -20, max = 20, step = 1
+				},
+				alwaysShowTargetHealth = {
+					order = 10,
 					type = "toggle",
 					name = L["Always Show Target Health"],
 					get = function(info) return E.db.nameplates.alwaysShowTargetHealth end,
@@ -4034,7 +4057,7 @@ E.Options.args.nameplate = {
 					customWidth = 200
 				},
 				comboPointsGroup = {
-					order = 8,
+					order = 11,
 					type = "group",
 					name = L["COMBO_POINTS"],
 					guiInline = true,
