@@ -131,20 +131,22 @@ function NP:Configure_Glow(frame)
 
 	if glowStyle ~= "none" then
 		local color = self.db.colors.glowColor
-		local arrowScale = NP.db.units.TARGET.arrowScale
-		local arrowxOffset, arrowyOffset = NP.db.units.TARGET.arrowxOffset, NP.db.units.TARGET.arrowyOffset
+		local arrowSize = NP.db.units.TARGET.arrowSize
+		local arrowXOffset, arrowYOffset = NP.db.units.TARGET.arrowXOffset, NP.db.units.TARGET.arrowYOffset
 		local r, g, b, a = color.r, color.g, color.b, color.a
 
 		-- Indicators
-		frame.LeftIndicator:SetVertexColor(r, g, b)
-		frame.LeftIndicator:SetSize(arrowScale, arrowScale)
-		frame.TopIndicator:SetTexture(E.Media.Textures[NP.db.units.TARGET.arrow])
-		frame.RightIndicator:SetVertexColor(r, g, b)
-		frame.RightIndicator:SetSize(arrowScale, arrowScale)
 		frame.LeftIndicator:SetTexture(E.Media.Textures[NP.db.units.TARGET.arrow])
-		frame.TopIndicator:SetVertexColor(r, g, b)
+		frame.LeftIndicator:SetVertexColor(r, g, b)
+		frame.LeftIndicator:SetSize(arrowSize, arrowSize)
+
 		frame.RightIndicator:SetTexture(E.Media.Textures[NP.db.units.TARGET.arrow])
-		frame.TopIndicator:SetSize(arrowScale, arrowScale)
+		frame.RightIndicator:SetVertexColor(r, g, b)
+		frame.RightIndicator:SetSize(arrowSize, arrowSize)
+
+		frame.TopIndicator:SetTexture(E.Media.Textures[NP.db.units.TARGET.arrow])
+		frame.TopIndicator:SetVertexColor(r, g, b)
+		frame.TopIndicator:SetSize(arrowSize, arrowSize)
 
 		frame.TopIndicator:ClearAllPoints()
 		frame.LeftIndicator:ClearAllPoints()
@@ -152,25 +154,25 @@ function NP:Configure_Glow(frame)
 
 		if glowStyle == "style3" or glowStyle == "style5" or glowStyle == "style6" then
 			if frame.IconOnlyChanged then
-				frame.TopIndicator:SetPoint("BOTTOM", frame.IconFrame, "TOP", arrowxOffset, arrowyOffset)
+				frame.TopIndicator:SetPoint("BOTTOM", frame.IconFrame, "TOP", arrowXOffset, arrowYOffset)
 			else
 				if healthIsShown then
-					frame.TopIndicator:SetPoint("BOTTOM", frame.Health, "TOP", arrowxOffset, arrowyOffset)
+					frame.TopIndicator:SetPoint("BOTTOM", frame.Health, "TOP", arrowXOffset, arrowYOffset)
 				else
-					frame.TopIndicator:SetPoint("BOTTOM", frame.Name, "TOP", arrowxOffset, arrowyOffset)
+					frame.TopIndicator:SetPoint("BOTTOM", frame.Name, "TOP", arrowXOffset, arrowYOffset)
 				end
 			end
 		elseif glowStyle == "style4" or glowStyle == "style7" or glowStyle == "style8" then
 			if frame.IconOnlyChanged then
-				frame.LeftIndicator:SetPoint("LEFT", frame.IconFrame, "RIGHT", arrowxOffset, arrowyOffset)
-				frame.RightIndicator:SetPoint("RIGHT", frame.IconFrame, "LEFT", -arrowxOffset, arrowyOffset)
+				frame.LeftIndicator:SetPoint("LEFT", frame.IconFrame, "RIGHT", arrowXOffset, arrowYOffset)
+				frame.RightIndicator:SetPoint("RIGHT", frame.IconFrame, "LEFT", -arrowXOffset, arrowYOffset)
 			else
 				if healthIsShown then
-					frame.LeftIndicator:SetPoint("LEFT", frame.Health, "RIGHT", arrowxOffset, arrowyOffset)
-					frame.RightIndicator:SetPoint("RIGHT", frame.Health, "LEFT", -arrowxOffset, arrowyOffset)
+					frame.LeftIndicator:SetPoint("LEFT", frame.Health, "RIGHT", arrowXOffset, arrowYOffset)
+					frame.RightIndicator:SetPoint("RIGHT", frame.Health, "LEFT", -arrowXOffset, arrowYOffset)
 				else
-					frame.LeftIndicator:SetPoint("LEFT", frame.Name, "RIGHT", arrowxOffset, arrowyOffset)
-					frame.RightIndicator:SetPoint("RIGHT", frame.Name, "LEFT", -arrowxOffset, arrowyOffset)
+					frame.LeftIndicator:SetPoint("LEFT", frame.Name, "RIGHT", arrowXOffset, arrowYOffset)
+					frame.RightIndicator:SetPoint("RIGHT", frame.Name, "LEFT", -arrowXOffset, arrowYOffset)
 				end
 			end
 		end
