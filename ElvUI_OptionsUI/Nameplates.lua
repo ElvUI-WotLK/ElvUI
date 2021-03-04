@@ -4024,22 +4024,22 @@ E.Options.args.nameplate = {
 						RLArrow = E:TextureString(E.Media.Textures.RLArrow, ':14:14')
 					},
 				},
-				arrowScale = {
+				arrowSize = {
 					order = 7,
 					type = 'range',
-					name = L["Arrow Scale"],
+					name = L["Arrow Size"],
 					min = 1,
 					max = 20,
 					step = 1,
 					isPercent = false
 				},
-				arrowxOffset = {
+				arrowXOffset = {
 					order = 8,
 					type = "range",
 					name = L["Arrow X-Offset"],
 					min = -20, max = 20, step = 1
 				},
-				arrowyOffset = {
+				arrowYOffset = {
 					order = 9,
 					type = "range",
 					name = L["Arrow Y-Offset"],
