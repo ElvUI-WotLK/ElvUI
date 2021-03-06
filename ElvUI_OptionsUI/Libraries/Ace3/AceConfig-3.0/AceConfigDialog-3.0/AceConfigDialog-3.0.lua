@@ -1420,16 +1420,22 @@ local function FeedOptions(appName, options,container,rootframe,path,group,inlin
 								check:SetCallback("OnValueChanged",ActivateMultiControl)
 								InjectInfo(check, options, v, path, rootframe, appName)
 								control:AddChild(check)
-								if width == "double" then
-									check:SetWidth(width_multiplier * 2)
-								elseif width == "half" then
-									check:SetWidth(width_multiplier / 2)
-								elseif (type(width) == "number") then
-									control:SetWidth(width_multiplier * width)
-								elseif width == "full" then
-									check.width = "fill"
+
+								local customWidth = control.customWidth or GetOptionsMemberValue("customWidth",v,options,path,appName)
+								if customWidth then
+									check:SetWidth(customWidth)
 								else
-									check:SetWidth(width_multiplier)
+									if width == "double" then
+										check:SetWidth(width_multiplier * 2)
+									elseif width == "half" then
+										check:SetWidth(width_multiplier / 2)
+									elseif (type(width) == "number") then
+										control:SetWidth(width_multiplier * width)
+									elseif width == "full" then
+										check.width = "fill"
+									else
+										check:SetWidth(width_multiplier)
+									end
 								end
 							end
 						end

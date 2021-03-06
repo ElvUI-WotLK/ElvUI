@@ -136,15 +136,15 @@ function NP:Configure_Glow(frame)
 		local r, g, b, a = color.r, color.g, color.b, color.a
 
 		-- Indicators
-		frame.LeftIndicator:SetTexture(E.Media.Textures[NP.db.units.TARGET.arrow])
+		frame.LeftIndicator:SetTexture(E.Media.Arrows[NP.db.units.TARGET.arrow])
 		frame.LeftIndicator:SetVertexColor(r, g, b)
 		frame.LeftIndicator:SetSize(arrowSize, arrowSize)
 
-		frame.RightIndicator:SetTexture(E.Media.Textures[NP.db.units.TARGET.arrow])
+		frame.RightIndicator:SetTexture(E.Media.Arrows[NP.db.units.TARGET.arrow])
 		frame.RightIndicator:SetVertexColor(r, g, b)
 		frame.RightIndicator:SetSize(arrowSize, arrowSize)
 
-		frame.TopIndicator:SetTexture(E.Media.Textures[NP.db.units.TARGET.arrow])
+		frame.TopIndicator:SetTexture(E.Media.Arrows[NP.db.units.TARGET.arrow])
 		frame.TopIndicator:SetVertexColor(r, g, b)
 		frame.TopIndicator:SetSize(arrowSize, arrowSize)
 
@@ -213,10 +213,10 @@ function NP:Construct_Glow(frame)
 	end
 
 	frame.Spark:SetTexture(E.Media.Textures.Spark)
-	frame.TopIndicator:SetTexture(E.Media.Textures[NP.db.units.TARGET.arrow])
+	frame.TopIndicator:SetTexture(E.Media.Arrows[NP.db.units.TARGET.arrow])
 	frame.TopIndicator:SetTexCoord(1, 1, 1, 0, 0, 1, 0, 0) -- Rotates texture 180 degress (Up arrow to face down)
-	frame.LeftIndicator:SetTexture(E.Media.Textures[NP.db.units.TARGET.arrow])
+	frame.LeftIndicator:SetTexture(E.Media.Arrows[NP.db.units.TARGET.arrow])
 	frame.LeftIndicator:SetTexCoord(1, 0, 0, 0, 1, 1, 0, 1) -- Rotates texture 90 degrees clockwise (Up arrow to face right)
-	frame.RightIndicator:SetTexture(E.Media.Textures[NP.db.units.TARGET.arrow])
+	frame.RightIndicator:SetTexture(E.Media.Arrows[NP.db.units.TARGET.arrow])
 	frame.RightIndicator:SetTexCoord(1, 1, 0, 1, 1, 0, 0, 0) -- Flips texture horizontally (Right facing arrow to face left)
 end
