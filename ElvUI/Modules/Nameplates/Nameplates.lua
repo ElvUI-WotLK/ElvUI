@@ -53,6 +53,8 @@ NP.Healers = {}
 
 NP.GUIDList = {}
 
+NP.UnitByName = {}
+NP.NameByUnit = {}
 NP.ENEMY_PLAYER = {}
 NP.FRIENDLY_PLAYER = {}
 NP.ENEMY_NPC = {}
@@ -221,7 +223,7 @@ function NP:StyleFrameColor(frame, r, g, b)
 end
 
 function NP:GetUnitByName(frame, unitType)
-	local unit = self[unitType][frame.UnitName]
+	local unit = self.UnitByName[frame.UnitName] or self[unitType][frame.UnitName]
 	if unit then
 		return unit
 	end
@@ -339,7 +341,7 @@ function NP:OnShow(isConfig, dontHideHighlight)
 		NP.VisiblePlates[frame] = 1
 	end
 
-	frame.UnitName = gsub(frame.oldName:GetText(), FSPAT, "")
+	frame.UnitName = gsub(frame.oldName:GetText() or "", FSPAT, "")
 	local reaction, unitType = NP:GetUnitInfo(frame)
 	local oldUnitType = frame.UnitType
 	frame.UnitType = unitType
@@ -983,6 +985,39 @@ function NP:UPDATE_MOUSEOVER_UNIT()
 	end
 end
 
+function NP:PLAYER_FOCUS_CHANGED()
+	local unitName
+
+	if UnitIsPlayer("focus") and not UnitIsUnit("focus", "player") then
+		local name = UnitName("focus")
+		local guid = UnitGUID("mouseover")
+		local unitType = self:GetUnitTypeFromUnit("mouseover")
+
+		self.UnitByName[name] = "focus"
+		self.NameByUnit.focus = name
+
+		if not self.GUIDList[guid] then
+			self.GUIDList[guid] = {name = name, unitType = frame.UnitType}
+		end
+
+		unitName = name
+	elseif self.NameByUnit.focus then
+		self.UnitByName[self.NameByUnit.focus] = nil
+		unitName = self.NameByUnit.focus
+		self.NameByUnit.focus = nil
+	end
+
+	if not unitName then
+		return
+	end
+
+	for frame in pairs(self.VisiblePlates) do
+		if frame.UnitName == unitName then
+			self:UpdateAllFrame(frame, nil, true)
+		end
+	end
+end
+
 function NP:UNIT_COMBO_POINTS(_, unit)
 	if unit == "player" or unit == "vehicle" then
 		self:ForEachVisiblePlate("Update_CPoints")
@@ -1211,6 +1246,7 @@ function NP:Initialize()
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
 	self:RegisterEvent("PLAYER_LOGOUT", self.StyleFilterClearDefaults)
 	self:RegisterEvent("PLAYER_TARGET_CHANGED")
+	self:RegisterEvent("PLAYER_FOCUS_CHANGED")
 	self:RegisterEvent("PLAYER_UPDATE_RESTING")
 	self:RegisterEvent("SPELL_UPDATE_COOLDOWN")
 	self:RegisterEvent("RAID_TARGET_UPDATE")
