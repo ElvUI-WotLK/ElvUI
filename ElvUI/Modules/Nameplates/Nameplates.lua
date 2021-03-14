@@ -1237,6 +1237,13 @@ function NP:Initialize()
 
 	self:StyleFrame(ElvNP_Test, true)
 	self:OnCreated(ElvNP_Test)
+	local castbar = ElvNP_Test.UnitFrame.CastBar
+	castbar.Hide = castbar.Show
+	castbar:Show()
+	castbar.Name:SetText("Casting")
+	castbar.Time:SetText("3.1")
+	castbar.Icon.texture:SetTexture([[Interface\Icons\Spell_Holy_Penance]])
+	castbar:SetStatusBarColor(self.db.colors.castColor.r, self.db.colors.castColor.g, self.db.colors.castColor.b)
 	ElvNP_Test:Hide()
 
 	self.Frame = CreateFrame("Frame"):SetScript("OnUpdate", self.OnUpdate)
