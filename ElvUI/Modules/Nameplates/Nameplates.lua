@@ -1237,6 +1237,7 @@ function NP:Initialize()
 	self:StyleFrame(ElvNP_Test, true)
 	self:OnCreated(ElvNP_Test)
 	local castbar = ElvNP_Test.UnitFrame.CastBar
+	castbar:SetParent(ElvNP_Test.UnitFrame.Health)
 	castbar.Hide = castbar.Show
 	castbar:Show()
 	castbar.Name:SetText("Casting")
