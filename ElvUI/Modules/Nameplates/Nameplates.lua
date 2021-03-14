@@ -990,14 +990,13 @@ function NP:PLAYER_FOCUS_CHANGED()
 
 	if UnitIsPlayer("focus") and not UnitIsUnit("focus", "player") then
 		local name = UnitName("focus")
-		local guid = UnitGUID("mouseover")
-		local unitType = self:GetUnitTypeFromUnit("mouseover")
+		local guid = UnitGUID("focus")
 
 		self.UnitByName[name] = "focus"
 		self.NameByUnit.focus = name
 
 		if not self.GUIDList[guid] then
-			self.GUIDList[guid] = {name = name, unitType = frame.UnitType}
+			self.GUIDList[guid] = {name = name, unitType = self:GetUnitTypeFromUnit("focus")}
 		end
 
 		unitName = name
