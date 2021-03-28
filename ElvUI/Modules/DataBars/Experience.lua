@@ -119,8 +119,11 @@ function mod:ExperienceBar_OnEnter()
 	GameTooltip:Show()
 end
 
-function mod:ExperienceBar_OnClick()
-
+function mod:ExperienceBar_OnClick(button)
+	if not XPRM then return end
+	if button == "RightButton" then
+		ToggleDropDownMenu(1, nil, XPRM, "cursor")
+	end
 end
 
 function mod:UpdateExperienceDimensions()
@@ -162,6 +165,7 @@ end
 
 function mod:LoadExperienceBar()
 	self.expBar = self:CreateBar("ElvUI_ExperienceBar", self.ExperienceBar_OnEnter, self.ExperienceBar_OnClick, "LEFT", LeftChatPanel, "RIGHT", -E.Border + E.Spacing*3, 0)
+    self.expBar:HookScript("OnMouseUp", self.ExperienceBar_OnClick)
 	self.expBar.statusBar:SetStatusBarColor(0, 0.4, 1, .8)
 	self.expBar.rested = CreateFrame("StatusBar", nil, self.expBar)
 	self.expBar.rested:SetInside()
