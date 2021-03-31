@@ -538,7 +538,7 @@ function TT:GameTooltip_OnTooltipSetItem(tt)
 	end
 
 	if count or bankCount then
-		if not itemID and not itemLvl then 
+		if not itemID and not itemLvl then
 			tt:AddLine(" ")
 		end
 		tt:AddDoubleLine(count or " ", bankCount or " ")
