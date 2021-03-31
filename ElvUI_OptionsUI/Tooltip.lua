@@ -93,8 +93,8 @@ E.Options.args.tooltip = {
 				spellID = {
 					order = 10,
 					type = "toggle",
-					name = L["Spell/Item IDs"],
-					desc = L["Display the spell or item ID when mousing over a spell or item tooltip."]
+					name = L["Spell IDs"],
+					desc = L["Display the spell when mousing over a spell."]
 				},
 				npcID = {
 					order = 11,
@@ -102,8 +102,20 @@ E.Options.args.tooltip = {
 					name = L["NPC IDs"],
 					desc = L["Display the npc ID when mousing over a npc tooltip."],
 				},
-				itemCount = {
+				itemDetails = {
 					order = 12,
+					type = "select",
+					name = L["Item Details"],
+					desc = L["Display Item ID or Item Level"],
+					values = {
+						["ID_ONLY"] = L["Item ID"],
+						["ILVL_ONLY"] = L["Item Level"],
+						["BOTH"] = L["Both"],
+						["NONE"] = L["NONE"]
+					}
+				},
+				itemCount = {
+					order = 13,
 					type = "select",
 					name = L["Item Count"],
 					desc = L["Display how many of a certain item you have in your possession."],
@@ -115,7 +127,7 @@ E.Options.args.tooltip = {
 					}
 				},
 				colorAlpha = {
-					order = 13,
+					order = 14,
 					type = "range",
 					name = L["OPACITY"],
 					isPercent = true,
