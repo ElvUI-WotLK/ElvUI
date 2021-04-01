@@ -517,10 +517,10 @@ function TT:GameTooltip_OnTooltipSetItem(tt)
 	if self.db.itemDetails == "ID_ONLY" then
 		itemID = format("|cFFCA3C3C%s|r %d", ID, tonumber(match(link, ":(%d+)")))
 	elseif self.db.itemDetails == "ILVL_ONLY" then
-		itemLvl = format("|cFFCA3C3C%s|r %d", "iLvl", select(4, GetItemInfo(link)))
+		itemLvl = format("|cFFCA3C3C%s|r %d", "iLvl", select(4, GetItemInfo(link)) or 0)
 	elseif self.db.itemDetails == "BOTH" then
 		itemID = format("|cFFCA3C3C%s|r %d", ID, tonumber(match(link, ":(%d+)")))
-		itemLvl = format("|cFFCA3C3C%s|r %d", "iLvl", select(4, GetItemInfo(link)))
+		itemLvl = format("|cFFCA3C3C%s|r %d", "iLvl", select(4, GetItemInfo(link)) or 0)
 	end
 
 	if self.db.itemCount == "BAGS_ONLY" then
