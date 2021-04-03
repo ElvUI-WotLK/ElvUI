@@ -121,7 +121,14 @@ P.databars = {
 		orientation = "VERTICAL",
 		hideAtMaxLevel = true,
 		hideInVehicle = false,
-		hideInCombat = false
+		hideInCombat = false,
+		questXP = {
+			color = {r = 0, g = 1, b = 0},
+			tooltip = true,
+			questCurrentZoneOnly = false,
+			questCompletedOnly = false,
+			showBubbles = false
+		}
 	},
 	petExperience = {
 		enable = true,

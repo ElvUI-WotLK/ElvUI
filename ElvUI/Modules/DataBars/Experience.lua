@@ -24,7 +24,7 @@ function mod:GetXP(unit)
 	end
 end
 
-function mod:UpdateExperience(event)
+function mod:ExperienceBar_Update(event)
 	if not mod.db.experience.enable then return end
 
 	local bar = self.expBar
@@ -95,6 +95,51 @@ function mod:UpdateExperience(event)
 
 		bar.text:SetText(text)
 	end
+
+	if self.db.experience.questXP.showBubbles then
+		bar.bubbles:Show()
+	else
+		bar.bubbles:Hide()
+	end
+
+	local currentXP = UnitXP("player")
+	local maxXP = UnitXPMax("player")
+	local currentQuestXPTotal = self:ExperienceBar_QuestXP()
+
+	bar.questBar:SetMinMaxValues(0, maxXP)
+	bar.questBar:SetValue(min(currentXP + currentQuestXPTotal, UnitXPMax("player")))
+
+	if currentXP + currentQuestXPTotal >= maxXP then
+		bar.questBar:SetStatusBarColor(0/255, 255/255, 0/255, 0.5)
+	else
+		local color = self.db.experience.questXP.color
+		bar.questBar:SetStatusBarColor(color.r, color.g, color.b, color.a)
+	end
+
+
+	bar.bubbles:SetWidth(bar:GetWidth() - 4)
+	bar.bubbles:SetHeight(bar:GetHeight() - 8)
+end
+
+function mod:ExperienceBar_QuestXP()
+    local completedOnly = self.db.experience.questXP.questCompletedOnly
+    local zoneOnly = self.db.experience.questXP.questCurrentZoneOnly
+    local zoneText = GetZoneText()
+    local totalExp = 0
+    local locationName
+
+    for questIndex = 1, GetNumQuestLogEntries() do
+		SelectQuestLogEntry(questIndex)
+        local title, _, _, _, isHeader, _, isComplete, _, questID = GetQuestLogTitle(questIndex)
+
+        if isHeader then
+            locationName = title
+        elseif (not completedOnly or isComplete) and (not zoneOnly or locationName == zoneText) then
+            totalExp = totalExp + GetQuestLogRewardXP(questID)
+        end
+    end
+
+    return totalExp
 end
 
 function mod:ExperienceBar_OnEnter()
@@ -116,6 +161,10 @@ function mod:ExperienceBar_OnEnter()
 		GameTooltip:AddDoubleLine(L["Rested:"], format("+%d (%d%%)", rested, rested / max * 100), 1, 1, 1)
 	end
 
+	if mod.db.experience.questXP.tooltip then
+		GameTooltip:AddDoubleLine("Quest Log XP:", mod:ExperienceBar_QuestXP(), 1, 1, 1)
+	end
+
 	GameTooltip:Show()
 end
 
@@ -126,38 +175,49 @@ function mod:ExperienceBar_OnClick(button)
 	end
 end
 
-function mod:UpdateExperienceDimensions()
-	self.expBar:Width(self.db.experience.width)
-	self.expBar:Height(self.db.experience.height)
+function mod:ExperienceBar_UpdateDimensions()
+	local bar = self.expBar
+	bar:Width(self.db.experience.width)
+	bar:Height(self.db.experience.height)
 
-	self.expBar.text:FontTemplate(LSM:Fetch("font", self.db.experience.font), self.db.experience.textSize, self.db.experience.fontOutline)
-	self.expBar.rested:SetOrientation(self.db.experience.orientation)
+	bar.text:FontTemplate(LSM:Fetch("font", self.db.experience.font), self.db.experience.textSize, self.db.experience.fontOutline)
+	bar.rested:SetOrientation(self.db.experience.orientation)
 
-	self.expBar.statusBar:SetOrientation(self.db.experience.orientation)
+	bar.statusBar:SetOrientation(self.db.experience.orientation)
+
+	bar.questBar:SetOrientation(E.db.databars.experience.orientation)
 
 	if self.db.experience.mouseover then
-		self.expBar:SetAlpha(0)
+		bar:SetAlpha(0)
 	else
-		self.expBar:SetAlpha(1)
+		bar:SetAlpha(1)
 	end
 end
 
-function mod:EnableDisable_ExperienceBar()
+function mod:ExperienceBar_Toggle()
 	local maxLevel = MAX_PLAYER_LEVEL_TABLE[GetExpansionLevel()]
 	if (UnitLevel("player") ~= maxLevel or not self.db.experience.hideAtMaxLevel) and self.db.experience.enable then
-		self:RegisterEvent("PLAYER_XP_UPDATE", "UpdateExperience")
-		self:RegisterEvent("DISABLE_XP_GAIN", "UpdateExperience")
-		self:RegisterEvent("ENABLE_XP_GAIN", "UpdateExperience")
-		self:RegisterEvent("UPDATE_EXHAUSTION", "UpdateExperience")
+		self:RegisterEvent("PLAYER_XP_UPDATE", "ExperienceBar_Update")
+		self:RegisterEvent("DISABLE_XP_GAIN", "ExperienceBar_Update")
+		self:RegisterEvent("ENABLE_XP_GAIN", "ExperienceBar_Update")
+		self:RegisterEvent("UPDATE_EXHAUSTION", "ExperienceBar_Update")
+		self:RegisterEvent("QUEST_LOG_UPDATE", "ExperienceBar_QuestXP")
+		self:RegisterEvent("ZONE_CHANGED", "ExperienceBar_QuestXP")
+		self:RegisterEvent("ZONE_CHANGED_NEW_AREA", "ExperienceBar_QuestXP")
 		self:UnregisterEvent("UPDATE_EXPANSION_LEVEL")
-		self:UpdateExperience()
+
+		self:ExperienceBar_Update()
 		E:EnableMover(self.expBar.mover:GetName())
 	else
 		self:UnregisterEvent("PLAYER_XP_UPDATE")
 		self:UnregisterEvent("DISABLE_XP_GAIN")
 		self:UnregisterEvent("ENABLE_XP_GAIN")
 		self:UnregisterEvent("UPDATE_EXHAUSTION")
-		self:RegisterEvent("UPDATE_EXPANSION_LEVEL", "EnableDisable_ExperienceBar")
+		self:UnregisterEvent("QUEST_LOG_UPDATE")
+		self:UnregisterEvent("ZONE_CHANGED")
+		self:UnregisterEvent("ZONE_CHANGED_NEW_AREA")
+		self:RegisterEvent("UPDATE_EXPANSION_LEVEL", "ExperienceBar_Toggle")
+
 		self.expBar:Hide()
 		E:DisableMover(self.expBar.mover:GetName())
 	end
@@ -165,22 +225,63 @@ end
 
 function mod:LoadExperienceBar()
 	self.expBar = self:CreateBar("ElvUI_ExperienceBar", self.ExperienceBar_OnEnter, self.ExperienceBar_OnClick, "LEFT", LeftChatPanel, "RIGHT", -E.Border + E.Spacing*3, 0)
-    self.expBar:HookScript("OnMouseUp", self.ExperienceBar_OnClick)
-	self.expBar.statusBar:SetStatusBarColor(0, 0.4, 1, .8)
-	self.expBar.rested = CreateFrame("StatusBar", nil, self.expBar)
-	self.expBar.rested:SetInside()
-	self.expBar.rested:SetStatusBarTexture(E.media.normTex)
-	E:RegisterStatusBar(self.expBar.rested)
-	self.expBar.rested:SetStatusBarColor(1, 0, 1, 0.2)
+	local bar = self.expBar
+	bar:HookScript("OnMouseUp", self.ExperienceBar_OnClick)
 
-	self.expBar.eventFrame = CreateFrame("Frame")
-	self.expBar.eventFrame:Hide()
-	self.expBar.eventFrame:RegisterEvent("PLAYER_REGEN_DISABLED")
-	self.expBar.eventFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
-	self.expBar.eventFrame:SetScript("OnEvent", function(_, event) mod:UpdateExperience(event) end)
+	bar.statusBar:SetStatusBarColor(0, 0.4, 1, .8)
+	bar.statusBar:SetFrameLevel(4)
 
-	self:UpdateExperienceDimensions()
+	bar.rested = CreateFrame("StatusBar", "ElvUI_ExperienceBar_Rested", bar)
+	bar.rested:SetInside()
+	bar.rested:SetStatusBarTexture(E.media.normTex)
+	E:RegisterStatusBar(bar.rested)
+	bar.rested:SetStatusBarColor(1, 0, 1, 0.2)
+	bar.rested:SetFrameLevel(2)
+	bar.rested.statusBar = bar.rested:GetStatusBarTexture()
+	bar.rested.statusBar:SetDrawLayer("ARTWORK", 2)
 
-	E:CreateMover(self.expBar, "ExperienceBarMover", L["Experience Bar"], nil, nil, nil, nil, nil, "databars,experience")
-	self:EnableDisable_ExperienceBar()
+	bar.questBar = CreateFrame("StatusBar", "ElvUI_ExperienceBar_Quest", bar)
+	bar.questBar:SetInside()
+	bar.questBar:SetStatusBarTexture(E.media.normTex)
+	E:RegisterStatusBar(bar.questBar)
+	bar.questBar:SetStatusBarColor(unpack(self.db.experience.questXP.color))
+	bar.questBar:SetFrameLevel(3)
+	bar.questBar.statusBar = bar.questBar:GetStatusBarTexture()
+	bar.questBar.statusBar:SetDrawLayer("ARTWORK", 3)
+
+	bar.eventFrame = CreateFrame("Frame")
+	bar.eventFrame:Hide()
+	bar.eventFrame:RegisterEvent("PLAYER_REGEN_DISABLED")
+	bar.eventFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
+	bar.eventFrame:SetScript("OnEvent", function(_, event)
+		mod:ExperienceBar_Update(event)
+	end)
+
+	bar.questBar.eventFrame = CreateFrame("Frame")
+	bar.questBar.eventFrame:Hide()
+	bar.questBar.eventFrame:RegisterEvent("QUEST_LOG_UPDATE")
+	bar.questBar.eventFrame:RegisterEvent("PLAYER_XP_UPDATE")
+	bar.questBar.eventFrame:RegisterEvent("UPDATE_EXHAUSTION")
+	bar.questBar.eventFrame:RegisterEvent("QUEST_LOG_UPDATE")
+	bar.questBar.eventFrame:RegisterEvent("ZONE_CHANGED")
+	bar.questBar.eventFrame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+	bar.questBar.eventFrame:RegisterEvent("UNIT_PORTRAIT_UPDATE")
+	bar.questBar.eventFrame:SetScript("OnEvent", function(self, event)
+		mod:ExperienceBar_Update(event)
+	end)
+
+	bar.bubbles = CreateFrame("StatusBar", nil, bar)
+	bar.bubbles:SetStatusBarTexture("Interface\\AddOns\\ElvUI\\media\\textures\\Bubbles")
+	bar.bubbles:SetPoint("CENTER", bar, "CENTER", 0, 0)
+	bar.bubbles:SetWidth(bar:GetWidth() - 4)
+	bar.bubbles:SetHeight(bar:GetHeight() - 8)
+	bar.bubbles:SetInside()
+	-- XXX: Blizz tiling breakage.
+	bar.bubbles:GetStatusBarTexture():SetHorizTile(false)
+	bar.bubbles:SetFrameLevel(bar:GetFrameLevel() + 4)
+
+	self:ExperienceBar_UpdateDimensions()
+
+	E:CreateMover(bar, "ExperienceBarMover", L["Experience Bar"], nil, nil, nil, nil, nil, "databars,experience")
+	self:ExperienceBar_Toggle()
 end
