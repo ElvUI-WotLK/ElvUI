@@ -44,10 +44,31 @@ function mod:ExperienceBar_Update(event)
 		end
 
 		local cur, max = self:GetXP("player")
+		local total = self:ExperienceBar_QuestXP()
 		if max <= 0 then max = 1 end
+
 		bar.statusBar:SetMinMaxValues(0, max)
 		bar.statusBar:SetValue(cur - 1 >= 0 and cur - 1 or 0)
 		bar.statusBar:SetValue(cur)
+
+		bar.questBar:SetMinMaxValues(0, max)
+		bar.questBar:SetValue(min(cur + total, max))
+
+		if cur + total >= max then
+			bar.questBar:SetStatusBarColor(0/255, 255/255, 0/255, 0.5)
+		else
+			local color = self.db.experience.questXP.color
+			bar.questBar:SetStatusBarColor(color.r, color.g, color.b, color.a)
+		end
+
+		bar.bubbles:SetWidth(bar:GetWidth() - 4)
+		bar.bubbles:SetHeight(bar:GetHeight() - 8)
+
+		if self.db.experience.questXP.showBubbles then
+			bar.bubbles:Show()
+		else
+			bar.bubbles:Hide()
+		end
 
 		local rested = GetXPExhaustion()
 		local text = ""
@@ -95,30 +116,6 @@ function mod:ExperienceBar_Update(event)
 
 		bar.text:SetText(text)
 	end
-
-	if self.db.experience.questXP.showBubbles then
-		bar.bubbles:Show()
-	else
-		bar.bubbles:Hide()
-	end
-
-	local currentXP = UnitXP("player")
-	local maxXP = UnitXPMax("player")
-	local currentQuestXPTotal = self:ExperienceBar_QuestXP()
-
-	bar.questBar:SetMinMaxValues(0, maxXP)
-	bar.questBar:SetValue(min(currentXP + currentQuestXPTotal, UnitXPMax("player")))
-
-	if currentXP + currentQuestXPTotal >= maxXP then
-		bar.questBar:SetStatusBarColor(0/255, 255/255, 0/255, 0.5)
-	else
-		local color = self.db.experience.questXP.color
-		bar.questBar:SetStatusBarColor(color.r, color.g, color.b, color.a)
-	end
-
-
-	bar.bubbles:SetWidth(bar:GetWidth() - 4)
-	bar.bubbles:SetHeight(bar:GetHeight() - 8)
 end
 
 function mod:ExperienceBar_QuestXP()
