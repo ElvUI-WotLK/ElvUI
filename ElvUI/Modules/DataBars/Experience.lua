@@ -119,6 +119,7 @@ function mod:ExperienceBar_Update(event)
 end
 
 function mod:ExperienceBar_QuestXP()
+    local lastQuestLogID = GetQuestLogSelection()
     local completedOnly = self.db.experience.questXP.questCompletedOnly
     local zoneOnly = self.db.experience.questXP.questCurrentZoneOnly
     local zoneText = GetZoneText()
@@ -126,7 +127,7 @@ function mod:ExperienceBar_QuestXP()
     local locationName
 
     for questIndex = 1, GetNumQuestLogEntries() do
-		SelectQuestLogEntry(questIndex)
+        SelectQuestLogEntry(questIndex)
         local title, _, _, _, isHeader, _, isComplete, _, questID = GetQuestLogTitle(questIndex)
 
         if isHeader then
@@ -135,6 +136,8 @@ function mod:ExperienceBar_QuestXP()
             totalExp = totalExp + GetQuestLogRewardXP(questID)
         end
     end
+
+    SelectQuestLogEntry(lastQuestLogID)
 
     return totalExp
 end
