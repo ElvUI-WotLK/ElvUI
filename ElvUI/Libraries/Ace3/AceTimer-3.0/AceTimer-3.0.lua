@@ -191,7 +191,7 @@ end
 function AceTimer:TimeLeft(id)
 	local timer = activeTimers[id]
 	if not timer then
-		return 0
+		return
 	else
 		return timer.ends - GetTime()
 	end
