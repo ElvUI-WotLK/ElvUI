@@ -28,7 +28,7 @@ local UnitPowerType = UnitPowerType
 local E -- ElvUI engine defined in ClearTimers
 local MIN_ALPHA, MAX_ALPHA = .35, 1
 local onRangeObjects, onRangeFrame = {}
-local PowerTypesFull = {MANA = true, FOCUS = true, ENERGY = true}
+local PowerTypesFull = {MANA = true, ENERGY = true}
 
 local function ClearTimers(element)
 	if not E then E = _G.ElvUI[1] end
@@ -228,10 +228,13 @@ local options = {
 	},
 	Power = {
 		enable = function(self)
-			self:RegisterEvent('UNIT_POWER_UPDATE', Update)
-			self:RegisterEvent('UNIT_MAXPOWER', Update)
+			self:RegisterEvent('UNIT_MANA', Update)
+			self:RegisterEvent('UNIT_MAXMANA', Update)
+			self:RegisterEvent('UNIT_ENERGY', Update)
+			self:RegisterEvent('UNIT_MAXENERGY', Update)
+
 		end,
-		events = {'UNIT_POWER_UPDATE','UNIT_MAXPOWER'}
+		events = {'UNIT_MANA','UNIT_MAXMANA','UNIT_ENERGY','UNIT_MAXENERGY'}
 	},
 	Vehicle = {
 		enable = function(self)
