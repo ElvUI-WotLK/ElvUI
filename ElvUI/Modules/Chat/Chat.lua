@@ -1433,7 +1433,7 @@ function CH:CheckKeyword(message, author)
 				end
 			end
 
-			if self.db.classColorMentionsChat then
+			if self.db.classColorMentionsChat and string.len(word) > 2 then
 				tempWord = gsub(word, "^[%s%p]-([^%s%p]+)([%-]?[^%s%p]-)[%s%p]*$", "%1%2")
 				lowerCaseWord = strlower(tempWord)
 
