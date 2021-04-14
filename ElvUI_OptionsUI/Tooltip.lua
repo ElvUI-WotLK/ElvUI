@@ -94,19 +94,19 @@ E.Options.args.tooltip = {
 					order = 10,
 					type = "toggle",
 					name = L["Spell IDs"],
-					desc = L["Display the spell when mousing over a spell."]
+					desc = L["Display the spell id when mousing over a spell tooltip."]
 				},
 				npcID = {
 					order = 11,
 					type = "toggle",
 					name = L["NPC IDs"],
-					desc = L["Display the npc ID when mousing over a npc tooltip."],
+					desc = L["Display the npc id when mousing over a npc."],
 				},
 				itemDetails = {
 					order = 12,
 					type = "select",
 					name = L["Item Details"],
-					desc = L["Display Item ID or Item Level"],
+					desc = L["Display the item id and/or item level."],
 					values = {
 						["ID_ONLY"] = L["Item ID"],
 						["ILVL_ONLY"] = L["Item Level"],
