@@ -694,6 +694,8 @@ function TT:Initialize()
 
 	if not E.private.tooltip.enable then return end
 
+	SetCVar("showItemLevel", 0)
+
 	GameTooltip.StatusBar = GameTooltipStatusBar
 	GameTooltip.StatusBar:Height(self.db.healthBar.height)
 	GameTooltip.StatusBar:SetScript("OnValueChanged", nil)
