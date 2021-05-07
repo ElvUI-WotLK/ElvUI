@@ -50,9 +50,11 @@ function M:UpdateBubbleBorder()
 				classMatch = CH.ClassNames[lowerCaseWord]
 				wordMatch = classMatch and lowerCaseWord
 
-				if wordMatch and not E.global.chat.classColorMentionExcludedNames[wordMatch] then
-					classColorTable = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[classMatch] or RAID_CLASS_COLORS[classMatch]
-					word = gsub(word, gsub(tempWord, "%-", "%%-"), format("\124cff%.2x%.2x%.2x%s\124r", classColorTable.r*255, classColorTable.g*255, classColorTable.b*255, tempWord))
+				if string.len(lowerCaseWord) > 2 then 
+					if wordMatch and not E.global.chat.classColorMentionExcludedNames[wordMatch] then
+						classColorTable = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[classMatch] or RAID_CLASS_COLORS[classMatch]
+						word = gsub(word, gsub(tempWord, "%-", "%%-"), format("\124cff%.2x%.2x%.2x%s\124r", classColorTable.r*255, classColorTable.g*255, classColorTable.b*255, tempWord))
+					end
 				end
 
 				if not isFirstWord then
