@@ -4,17 +4,18 @@ local AB = E:GetModule("ActionBars")
 
 --Lua functions
 local tonumber, type = tonumber, type
-local format, lower, match, split = string.format, string.lower, string.match, string.split
+local format, lower, match, split, wipe, next = string.format, string.lower, string.match, string.split, wipe, next
 --WoW API / Variables
 local InCombatLockdown = InCombatLockdown
 local UIFrameFadeOut, UIFrameFadeIn = UIFrameFadeOut, UIFrameFadeIn
-local EnableAddOn, DisableAllAddOns = EnableAddOn, DisableAllAddOns
+local EnableAddOn, DisableAddOn = EnableAddOn, DisableAddOn
 local SetCVar = SetCVar
 local ReloadUI = ReloadUI
 local debugprofilestop = debugprofilestop
 local UpdateAddOnCPUUsage, GetAddOnCPUUsage = UpdateAddOnCPUUsage, GetAddOnCPUUsage
 local ResetCPUUsage = ResetCPUUsage
 local GetAddOnInfo = GetAddOnInfo
+local GetNumAddOns = GetNumAddOns
 local GetCVarBool = GetCVarBool
 local ERR_NOT_IN_COMBAT = ERR_NOT_IN_COMBAT
 
@@ -31,16 +32,32 @@ function E:Grid(msg)
 end
 
 function E:LuaError(msg)
-	msg = lower(msg)
-	if msg == "on" then
-		DisableAllAddOns()
-		EnableAddOn("ElvUI")
-		EnableAddOn("ElvUI_OptionsUI")
+	local switch = lower(msg)
+	if switch == "on" or switch == "1" then
+		for i=1, GetNumAddOns() do
+			local name = GetAddOnInfo(i)
+			if name ~= "ElvUI" and name ~= "ElvUI_OptionsUI" and E:IsAddOnEnabled(name) then
+				DisableAddOn(name, E.myname)
+				ElvDB.LuaErrorDisabledAddOns[name] = i
+			end
+		end
+
 		SetCVar("scriptErrors", 1)
 		ReloadUI()
-	elseif msg == "off" then
-		SetCVar("scriptErrors", 0)
-		E:Print("Lua errors off.")
+	elseif switch == "off" or switch == "0" then
+		if switch == "off" then
+			SetCVar("scriptErrors", 0)
+			E:Print("Lua errors off.")
+		end
+
+		if next(ElvDB.LuaErrorDisabledAddOns) then
+			for name in pairs(ElvDB.LuaErrorDisabledAddOns) do
+				EnableAddOn(name, E.myname)
+			end
+
+			wipe(ElvDB.LuaErrorDisabledAddOns)
+			ReloadUI()
+		end
 	else
 		E:Print("/luaerror on - /luaerror off")
 	end
