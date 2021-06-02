@@ -145,9 +145,9 @@ function TT:GameTooltip_SetDefaultAnchor(tt, parent)
 
 	local _, anchor = tt:GetPoint()
 
-	if anchor == nil or (ElvUI_ContainerFrame and anchor == ElvUI_ContainerFrame) or anchor == RightChatPanel or anchor == TooltipMover or anchor == _G.UIParent or anchor == E.UIParent then
+	if anchor == nil or (ElvUI_ContainerFrame and anchor == ElvUI_ContainerFrame) or anchor == RightChatPanel or anchor == ElvTooltipMover or anchor == _G.UIParent or anchor == E.UIParent then
 		tt:ClearAllPoints()
-		if not E:HasMoverBeenMoved("TooltipMover") then
+		if not E:HasMoverBeenMoved("ElvTooltipMover") then
 			if ElvUI_ContainerFrame and ElvUI_ContainerFrame:IsShown() then
 				tt:Point("BOTTOMRIGHT", ElvUI_ContainerFrame, "TOPRIGHT", 0, 18)
 			elseif RightChatPanel:GetAlpha() == 1 and RightChatPanel:IsShown() then
@@ -156,15 +156,15 @@ function TT:GameTooltip_SetDefaultAnchor(tt, parent)
 				tt:Point("BOTTOMRIGHT", RightChatPanel, "BOTTOMRIGHT", 0, 18)
 			end
 		else
-			local point = E:GetScreenQuadrant(TooltipMover)
+			local point = E:GetScreenQuadrant(ElvTooltipMover)
 			if point == "TOPLEFT" then
-				tt:Point("TOPLEFT", TooltipMover, "BOTTOMLEFT")
+				tt:Point("TOPLEFT", ElvTooltipMover, "BOTTOMLEFT")
 			elseif point == "TOPRIGHT" then
-				tt:Point("TOPRIGHT", TooltipMover, "BOTTOMRIGHT")
+				tt:Point("TOPRIGHT", ElvTooltipMover, "BOTTOMRIGHT")
 			elseif point == "BOTTOMLEFT" or point == "LEFT" then
-				tt:Point("BOTTOMLEFT", TooltipMover, "TOPLEFT")
+				tt:Point("BOTTOMLEFT", ElvTooltipMover, "TOPLEFT")
 			else
-				tt:Point("BOTTOMRIGHT", TooltipMover, "TOPRIGHT")
+				tt:Point("BOTTOMRIGHT", ElvTooltipMover, "TOPRIGHT")
 			end
 		end
 	end
@@ -707,7 +707,7 @@ function TT:Initialize()
 	GameTooltipAnchor:Point("BOTTOMRIGHT", RightChatToggleButton, "BOTTOMRIGHT")
 	GameTooltipAnchor:Size(130, 20)
 	GameTooltipAnchor:SetFrameLevel(GameTooltipAnchor:GetFrameLevel() + 400)
-	E:CreateMover(GameTooltipAnchor, "TooltipMover", L["Tooltip"], nil, nil, nil, nil, nil, "tooltip,general")
+	E:CreateMover(GameTooltipAnchor, "ElvTooltipMover", L["Tooltip"], nil, nil, nil, nil, nil, "tooltip,general")
 
 	self:SecureHook(ItemRefTooltip, "SetHyperlink")
 	self:SecureHook("GameTooltip_SetDefaultAnchor")
