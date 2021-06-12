@@ -3277,7 +3277,7 @@ local function GetUnitSettings(unit, name)
 					order = 3,
 					type = "range",
 					name = L["Size"],
-					min = 8, max = 48, step = 1,
+					min = 8, max = 60, step = 1,
 				},
 				position = {
 					order = 4,

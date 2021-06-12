@@ -374,7 +374,8 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 	if IconOnlyChanged then
 		frame.StyleChanged = true
 		frame.IconOnlyChanged = true
-		mod:Update_IconFrame(frame, true)
+		mod:Configure_IconFrame(frame, true)
+		mod:Update_IconFrame(frame)
 		if frame.CastBar:IsShown() then frame.CastBar:Hide() end
 		if frame.Health:IsShown() then frame.Health:Hide() end
 		frame.Level:SetText()

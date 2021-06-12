@@ -4,11 +4,11 @@ local NP = E:GetModule("NamePlates")
 --Lua functions
 --WoW API / Variables
 
-function NP:Update_IconFrame(frame, triggered)
+function NP:Update_IconFrame(frame)
 	local db = self.db.units[frame.UnitType].iconFrame
 	if not db then return end
 
-	if (db and db.enable) or (frame.IconOnlyChanged or frame.IconChanged) then
+	if db.enable or (frame.IconOnlyChanged or frame.IconChanged) then
 		local totem, unit, icon = self.Totems[frame.UnitName], self.UniqueUnits[frame.UnitName]
 		if totem then
 			icon = NP.TriggerConditions.totems[totem][3]
@@ -21,11 +21,6 @@ function NP:Update_IconFrame(frame, triggered)
 			frame.IconFrame:Show()
 
 			self:StyleFrameColor(frame.IconFrame, frame.oldHealthBar:GetStatusBarColor())
-
-			if triggered then
-				frame.IconFrame:ClearAllPoints()
-				frame.IconFrame:SetPoint("TOP", frame)
-			end
 		else
 			frame.IconFrame:Hide()
 		end
@@ -34,17 +29,21 @@ function NP:Update_IconFrame(frame, triggered)
 	end
 end
 
-function NP:Configure_IconFrame(frame)
+function NP:Configure_IconFrame(frame, triggered)
 	local db = self.db.units[frame.UnitType].iconFrame
+	if not db then return end
 
-	if db then
-		if db.enable or frame.IconChanged then
-			frame.IconFrame:SetSize(db.size, db.size)
-			frame.IconFrame:ClearAllPoints()
-			frame.IconFrame:SetPoint(E.InversePoints[db.position], db.parent == "Nameplate" and frame or frame[db.parent], db.position, db.xOffset, db.yOffset)
+	if db.enable or (frame.IconOnlyChanged or frame.IconChanged) then
+		frame.IconFrame:SetSize(db.size, db.size)
+		frame.IconFrame:ClearAllPoints()
+
+		if triggered then
+			frame.IconFrame:SetPoint("TOP", frame)
 		else
-			frame.IconFrame:Hide()
+			frame.IconFrame:SetPoint(E.InversePoints[db.position], db.parent == "Nameplate" and frame or frame[db.parent], db.position, db.xOffset, db.yOffset)
 		end
+	else
+		frame.IconFrame:Hide()
 	end
 end
 
