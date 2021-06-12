@@ -35,7 +35,7 @@ function mod:CreateBar(name, onEnter, onClick, ...)
 end
 
 function mod:UpdateDataBarDimensions()
-	self:UpdateExperienceDimensions()
+	self:ExperienceBar_UpdateDimensions()
 	self:UpdatePetExperienceDimensions()
 	self:UpdateReputationDimensions()
 end
@@ -43,7 +43,7 @@ end
 function mod:PLAYER_LEVEL_UP(level)
 	local maxLevel = MAX_PLAYER_LEVEL_TABLE[GetExpansionLevel()]
 	if (level ~= maxLevel or not self.db.experience.hideAtMaxLevel) and self.db.experience.enable then
-		self:UpdateExperience("PLAYER_LEVEL_UP", level)
+		self:ExperienceBar_Update("PLAYER_LEVEL_UP", level)
 	else
 		self.expBar:Hide()
 	end

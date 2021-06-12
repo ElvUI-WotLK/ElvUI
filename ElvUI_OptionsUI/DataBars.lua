@@ -24,7 +24,7 @@ E.Options.args.databars = {
 			type = "group",
 			name = L["XPBAR_LABEL"],
 			get = function(info) return mod.db.experience[info[#info]] end,
-			set = function(info, value) mod.db.experience[info[#info]] = value mod:UpdateExperienceDimensions() end,
+			set = function(info, value) mod.db.experience[info[#info]] = value mod:ExperienceBar_UpdateDimensions() end,
 			args = {
 				header = {
 					order = 1,
@@ -35,7 +35,7 @@ E.Options.args.databars = {
 					order = 2,
 					type = "toggle",
 					name = L["Enable"],
-					set = function(info, value) mod.db.experience[info[#info]] = value mod:EnableDisable_ExperienceBar() end
+					set = function(info, value) mod.db.experience[info[#info]] = value mod:ExperienceBar_Toggle() end
 				},
 				mouseover = {
 					order = 3,
@@ -46,19 +46,19 @@ E.Options.args.databars = {
 					order = 4,
 					type = "toggle",
 					name = L["Hide At Max Level"],
-					set = function(info, value) mod.db.experience[info[#info]] = value mod:UpdateExperience() end
+					set = function(info, value) mod.db.experience[info[#info]] = value mod:ExperienceBar_Update() end
 				},
 				hideInVehicle = {
 					order = 5,
 					type = "toggle",
 					name = L["Hide In Vehicle"],
-					set = function(info, value) mod.db.experience[info[#info]] = value mod:UpdateExperience() end
+					set = function(info, value) mod.db.experience[info[#info]] = value mod:ExperienceBar_Update() end
 				},
 				hideInCombat = {
 					order = 6,
 					type = "toggle",
 					name = L["Hide In Combat"],
-					set = function(info, value) mod.db.experience[info[#info]] = value mod:UpdateExperience() end
+					set = function(info, value) mod.db.experience[info[#info]] = value mod:ExperienceBar_Update() end
 				},
 				spacer = {
 					order = 7,
@@ -120,7 +120,57 @@ E.Options.args.databars = {
 						CURREM = L["Current - Remaining"],
 						CURPERCREM = L["Current - Percent (Remaining)"],
 					},
-					set = function(info, value) mod.db.experience[info[#info]] = value mod:UpdateExperience() end
+					set = function(info, value) mod.db.experience[info[#info]] = value mod:ExperienceBar_Update() end
+				},
+				questXP = {
+					order = 15,
+					type = "group",
+					name = L["Quest XP"],
+					guiInline = true,
+					args = {
+						color = {
+							order = 1,
+							type = "color",
+							name = L["Quest XP Color"],
+							get = function(info)
+								local t = mod.db.experience.questXP.color
+								return t.r, t.g, t.b, t.a, 102/255, 136/255, 255/255, 1
+							end,
+							set = function(info, r, g, b, a)
+								local t = mod.db.experience.questXP.color
+								t.r, t.g, t.b, t.a = r, g, b, a
+								mod:ExperienceBar_Update()
+							end
+						},
+						showBubbles = {
+							order = 2,
+							type = "toggle",
+							name = L["Show Bubbles"],
+							get = function(info) return mod.db.experience.questXP.showBubbles end,
+							set = function(info, value) mod.db.experience.questXP.showBubbles = value mod:ExperienceBar_Update() end
+						},
+						questCurrentZoneOnly = {
+							order = 3,
+							type = "toggle",
+							name = L["Quests in Current Zone Only"],
+							get = function(info) return mod.db.experience.questXP.questCurrentZoneOnly end,
+							set = function(info, value) mod.db.experience.questXP.questCurrentZoneOnly = value mod:ExperienceBar_Update() end
+						},
+						questCompletedOnly = {
+							order = 4,
+							type = "toggle",
+							name = L["Completed Quests Only"],
+							get = function(info) return mod.db.experience.questXP.questCompletedOnly end,
+							set = function(info, value) mod.db.experience.questXP.questCompletedOnly = value mod:ExperienceBar_Update() end
+						},
+						tooltip = {
+							order = 5,
+							type = "toggle",
+							name = L["Add Quest XP to Tooltip"],
+							get = function(info) return mod.db.experience.questXP.tooltip end,
+							set = function(info, value) mod.db.experience.questXP.tooltip = value mod:ExperienceBar_Update(value) end
+						}
+					}
 				}
 			}
 		},

@@ -897,7 +897,7 @@ function E:UpdateAll(ignoreInstall)
 		Chat:UpdateAnchors()
 	end
 
-	DataBars:EnableDisable_ExperienceBar()
+	DataBars:ExperienceBar_Toggle()
 	DataBars:EnableDisable_ReputationBar()
 	DataBars:UpdateDataBarDimensions()
 
@@ -1230,6 +1230,13 @@ function E:DBConversions()
 
 	if E.private.skins.blizzard.greeting ~= nil then
 		E.private.skins.blizzard.greeting = nil
+	end
+
+	--Rename GameTooltip Mover
+	if E.db.movers and E.db.movers.TooltipMover then
+		E.db.movers.ElvTooltipMover = E.db.movers.TooltipMover
+
+		E.db.movers.TooltipMover = nil
 	end
 end
 
