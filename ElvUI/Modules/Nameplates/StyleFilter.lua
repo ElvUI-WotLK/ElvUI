@@ -365,13 +365,13 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 			mod:Update_Name(frame, true)
 		end
 	end
-	if IconChanged then
+	if IconChanged and (mod.Totems[frame.UnitName] or mod.UniqueUnits[frame.UnitName]) then
 		frame.StyleChanged = true
 		frame.IconChanged = true
 		mod:Configure_IconFrame(frame)
 		mod:Update_IconFrame(frame)
 	end
-	if IconOnlyChanged then
+	if IconOnlyChanged and (mod.Totems[frame.UnitName] or mod.UniqueUnits[frame.UnitName]) then
 		frame.StyleChanged = true
 		frame.IconOnlyChanged = true
 		mod:Configure_IconFrame(frame, true)
