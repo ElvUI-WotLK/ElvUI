@@ -132,6 +132,7 @@ globals = {
 	-- frames created via CreateFrame
 	"AchievementFrameMiniAchievement1",
 	"DeclensionFrame",
+	"DeclensionFrameSet",
 	"DeclensionFrameCancelButton",
 	"DeclensionFrameOkayButton",
 	"DeclensionFrameSetNext",
