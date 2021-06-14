@@ -122,12 +122,12 @@ P.databars = {
 		hideAtMaxLevel = true,
 		hideInVehicle = false,
 		hideInCombat = false,
+		showBubbles = false,
 		questXP = {
-			color = {r = 0, g = 1, b = 0},
+			color = {r = 0, g = 1, b = 0, a = 0.4},
 			tooltip = true,
 			questCurrentZoneOnly = false,
-			questCompletedOnly = false,
-			showBubbles = false
+			questCompletedOnly = false
 		}
 	},
 	petExperience = {
@@ -142,7 +142,8 @@ P.databars = {
 		orientation = "VERTICAL",
 		hideAtMaxLevel = true,
 		hideInVehicle = false,
-		hideInCombat = false
+		hideInCombat = false,
+		showBubbles = false
 	},
 	reputation = {
 		enable = false,
@@ -155,7 +156,8 @@ P.databars = {
 		mouseover = false,
 		orientation = "VERTICAL",
 		hideInVehicle = false,
-		hideInCombat = false
+		hideInCombat = false,
+		showBubbles = false
 	}
 }
 

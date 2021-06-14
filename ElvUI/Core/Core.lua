@@ -898,7 +898,7 @@ function E:UpdateAll(ignoreInstall)
 	end
 
 	DataBars:ExperienceBar_Toggle()
-	DataBars:EnableDisable_ReputationBar()
+	DataBars:ReputationBar_Toggle()
 	DataBars:UpdateDataBarDimensions()
 
 	DataTexts:LoadDataTexts()
@@ -1239,6 +1239,10 @@ function E:DBConversions()
 		if E.db.movers and E.db.movers.TooltipMover then
 			E.db.movers.ElvTooltipMover = E.db.movers.TooltipMover
 			E.db.movers.TooltipMover = nil
+		end
+
+		if E.db.databars.experience.questXP and E.db.databars.experience.questXP.showBubbles then
+			E.db.databars.experience.showBubbles = true
 		end
 	end
 end
