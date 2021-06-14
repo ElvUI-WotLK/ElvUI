@@ -1109,134 +1109,137 @@ end
 
 --DATABASE CONVERSIONS
 function E:DBConversions()
-	--Fix issue where UIScale was incorrectly stored as string
-	E.global.general.UIScale = tonumber(E.global.general.UIScale)
+	do -- <= 6.07
+		--Fix issue where UIScale was incorrectly stored as string
+		E.global.general.UIScale = tonumber(E.global.general.UIScale)
 
-	--Not sure how this one happens, but prevent it in any case
-	if E.global.general.UIScale <= 0 then
-		E.global.general.UIScale = G.general.UIScale
-	end
-
-	if gameLocale and E.global.general.locale == "auto" then
-		E.global.general.locale = gameLocale
-	end
-
-	--Combat & Resting Icon options update
-	if E.db.unitframe.units.player.combatIcon ~= nil then
-		E.db.unitframe.units.player.CombatIcon.enable = E.db.unitframe.units.player.combatIcon
-		E.db.unitframe.units.player.combatIcon = nil
-	end
-	if E.db.unitframe.units.player.restIcon ~= nil then
-		E.db.unitframe.units.player.RestIcon.enable = E.db.unitframe.units.player.restIcon
-		E.db.unitframe.units.player.restIcon = nil
-	end
-
-	-- [Fader] Combat Fade options for Player
-	if E.db.unitframe.units.player.combatfade ~= nil then
-		local enabled = E.db.unitframe.units.player.combatfade
-		E.db.unitframe.units.player.fader.enable = enabled
-
-		if enabled then -- use the old min alpha too
-			E.db.unitframe.units.player.fader.minAlpha = 0
+		--Not sure how this one happens, but prevent it in any case
+		if E.global.general.UIScale <= 0 then
+			E.global.general.UIScale = G.general.UIScale
 		end
 
-		E.db.unitframe.units.player.combatfade = nil
-	end
-
-	-- [Fader] Range check options for Units
-	do
-		local outsideAlpha
-		if E.db.unitframe.OORAlpha ~= nil then
-			outsideAlpha = E.db.unitframe.OORAlpha
-			E.db.unitframe.OORAlpha = nil
+		if gameLocale and E.global.general.locale == "auto" then
+			E.global.general.locale = gameLocale
 		end
 
-		local rangeCheckUnits = {"target", "targettarget", "targettargettarget", "focus", "focustarget", "pet", "pettarget", "boss", "arena", "party", "raid", "raid40", "raidpet", "tank", "assist"}
-		for _, unit in pairs(rangeCheckUnits) do
-			if E.db.unitframe.units[unit].rangeCheck ~= nil then
-				local enabled = E.db.unitframe.units[unit].rangeCheck
-				E.db.unitframe.units[unit].fader.enable = enabled
-				E.db.unitframe.units[unit].fader.range = enabled
+		--Combat & Resting Icon options update
+		if E.db.unitframe.units.player.combatIcon ~= nil then
+			E.db.unitframe.units.player.CombatIcon.enable = E.db.unitframe.units.player.combatIcon
+			E.db.unitframe.units.player.combatIcon = nil
+		end
+		if E.db.unitframe.units.player.restIcon ~= nil then
+			E.db.unitframe.units.player.RestIcon.enable = E.db.unitframe.units.player.restIcon
+			E.db.unitframe.units.player.restIcon = nil
+		end
 
-				if outsideAlpha then
-					E.db.unitframe.units[unit].fader.minAlpha = outsideAlpha
+		-- [Fader] Combat Fade options for Player
+		if E.db.unitframe.units.player.combatfade ~= nil then
+			local enabled = E.db.unitframe.units.player.combatfade
+			E.db.unitframe.units.player.fader.enable = enabled
+
+			if enabled then -- use the old min alpha too
+				E.db.unitframe.units.player.fader.minAlpha = 0
+			end
+
+			E.db.unitframe.units.player.combatfade = nil
+		end
+
+		-- [Fader] Range check options for Units
+		do
+			local outsideAlpha
+			if E.db.unitframe.OORAlpha ~= nil then
+				outsideAlpha = E.db.unitframe.OORAlpha
+				E.db.unitframe.OORAlpha = nil
+			end
+
+			local rangeCheckUnits = {"target", "targettarget", "targettargettarget", "focus", "focustarget", "pet", "pettarget", "boss", "arena", "party", "raid", "raid40", "raidpet", "tank", "assist"}
+			for _, unit in pairs(rangeCheckUnits) do
+				if E.db.unitframe.units[unit].rangeCheck ~= nil then
+					local enabled = E.db.unitframe.units[unit].rangeCheck
+					E.db.unitframe.units[unit].fader.enable = enabled
+					E.db.unitframe.units[unit].fader.range = enabled
+
+					if outsideAlpha then
+						E.db.unitframe.units[unit].fader.minAlpha = outsideAlpha
+					end
+
+					E.db.unitframe.units[unit].rangeCheck = nil
 				end
-
-				E.db.unitframe.units[unit].rangeCheck = nil
 			end
 		end
-	end
 
-	--Convert old "Buffs and Debuffs" font size option to individual options
-	if E.db.auras.fontSize then
-		local fontSize = E.db.auras.fontSize
-		E.db.auras.buffs.countFontSize = fontSize
-		E.db.auras.buffs.durationFontSize = fontSize
-		E.db.auras.debuffs.countFontSize = fontSize
-		E.db.auras.debuffs.durationFontSize = fontSize
-		E.db.auras.fontSize = nil
-	end
+		--Convert old "Buffs and Debuffs" font size option to individual options
+		if E.db.auras.fontSize then
+			local fontSize = E.db.auras.fontSize
+			E.db.auras.buffs.countFontSize = fontSize
+			E.db.auras.buffs.durationFontSize = fontSize
+			E.db.auras.debuffs.countFontSize = fontSize
+			E.db.auras.debuffs.durationFontSize = fontSize
+			E.db.auras.fontSize = nil
+		end
 
-	--Convert old private cooldown setting to profile setting
-	if E.private.cooldown and (E.private.cooldown.enable ~= nil) then
-		E.db.cooldown.enable = E.private.cooldown.enable
-		E.private.cooldown.enable = nil
-		E.private.cooldown = nil
-	end
+		--Convert old private cooldown setting to profile setting
+		if E.private.cooldown and (E.private.cooldown.enable ~= nil) then
+			E.db.cooldown.enable = E.private.cooldown.enable
+			E.private.cooldown.enable = nil
+			E.private.cooldown = nil
+		end
 
-	if not E.db.chat.panelColorConverted then
-		local color = E.db.general.backdropfadecolor
-		E.db.chat.panelColor = {r = color.r, g = color.g, b = color.b, a = color.a}
-		E.db.chat.panelColorConverted = true
-	end
+		if not E.db.chat.panelColorConverted then
+			local color = E.db.general.backdropfadecolor
+			E.db.chat.panelColor = {r = color.r, g = color.g, b = color.b, a = color.a}
+			E.db.chat.panelColorConverted = true
+		end
 
-	--Convert cropIcon to tristate
-	local cropIcon = E.db.general.cropIcon
-	if type(cropIcon) == "boolean" then
-		E.db.general.cropIcon = (cropIcon and 2) or 0
-	end
+		--Convert cropIcon to tristate
+		local cropIcon = E.db.general.cropIcon
+		if type(cropIcon) == "boolean" then
+			E.db.general.cropIcon = (cropIcon and 2) or 0
+		end
 
-	--Vendor Greys option is now in bags table
-	if E.db.general.vendorGrays then
-		E.db.bags.vendorGrays.enable = E.db.general.vendorGrays
-		E.db.general.vendorGrays = nil
-		E.db.general.vendorGraysDetails = nil
-	end
+		--Vendor Greys option is now in bags table
+		if E.db.general.vendorGrays then
+			E.db.bags.vendorGrays.enable = E.db.general.vendorGrays
+			E.db.general.vendorGrays = nil
+			E.db.general.vendorGraysDetails = nil
+		end
 
-	--Heal Prediction is now a table instead of a bool
-	local healPredictionUnits = {"player", "target", "focus", "pet", "arena", "party", "raid", "raid40", "raidpet"}
-	for _, unit in pairs(healPredictionUnits) do
-		if type(E.db.unitframe.units[unit].healPrediction) ~= "table" then
-			local enabled = E.db.unitframe.units[unit].healPrediction
-			E.db.unitframe.units[unit].healPrediction = {}
-			E.db.unitframe.units[unit].healPrediction.enable = enabled
+		--Heal Prediction is now a table instead of a bool
+		local healPredictionUnits = {"player", "target", "focus", "pet", "arena", "party", "raid", "raid40", "raidpet"}
+		for _, unit in pairs(healPredictionUnits) do
+			if type(E.db.unitframe.units[unit].healPrediction) ~= "table" then
+				local enabled = E.db.unitframe.units[unit].healPrediction
+				E.db.unitframe.units[unit].healPrediction = {}
+				E.db.unitframe.units[unit].healPrediction.enable = enabled
+			end
+		end
+
+		--Health Backdrop Multiplier
+		if E.db.unitframe.colors.healthmultiplier ~= nil then
+			if E.db.unitframe.colors.healthmultiplier > 0.75 then
+				E.db.unitframe.colors.healthMultiplier = 0.75
+			else
+				E.db.unitframe.colors.healthMultiplier = E.db.unitframe.colors.healthmultiplier
+			end
+
+			E.db.unitframe.colors.healthmultiplier = nil
+		end
+
+		if sub(E.db.chat.timeStampFormat, -1) == " " then
+			E.db.chat.timeStampFormat = sub(E.db.chat.timeStampFormat, 1, -2)
+		end
+
+		if E.private.skins.blizzard.greeting ~= nil then
+			E.private.skins.blizzard.greeting = nil
 		end
 	end
 
-	--Health Backdrop Multiplier
-	if E.db.unitframe.colors.healthmultiplier ~= nil then
-		if E.db.unitframe.colors.healthmultiplier > 0.75 then
-			E.db.unitframe.colors.healthMultiplier = 0.75
-		else
-			E.db.unitframe.colors.healthMultiplier = E.db.unitframe.colors.healthmultiplier
+	do -- <= 6.08
+		--Rename GameTooltip Mover
+		if E.db.movers and E.db.movers.TooltipMover then
+			E.db.movers.ElvTooltipMover = E.db.movers.TooltipMover
+			E.db.movers.TooltipMover = nil
 		end
-
-		E.db.unitframe.colors.healthmultiplier = nil
-	end
-
-	if sub(E.db.chat.timeStampFormat, -1) == " " then
-		E.db.chat.timeStampFormat = sub(E.db.chat.timeStampFormat, 1, -2)
-	end
-
-	if E.private.skins.blizzard.greeting ~= nil then
-		E.private.skins.blizzard.greeting = nil
-	end
-
-	--Rename GameTooltip Mover
-	if E.db.movers and E.db.movers.TooltipMover then
-		E.db.movers.ElvTooltipMover = E.db.movers.TooltipMover
-
-		E.db.movers.TooltipMover = nil
 	end
 end
 
