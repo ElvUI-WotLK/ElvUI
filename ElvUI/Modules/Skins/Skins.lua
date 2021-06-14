@@ -764,9 +764,9 @@ end
 
 local UI_PANEL_OFFSET = 7
 
-function S:SetUIPanelWindowInfo(frame, name, value, offset, igroneUpdate)
+function S:SetUIPanelWindowInfo(frame, name, value, offset, igroneUpdate, anyPanel)
 	local frameName = frame and frame.GetName and frame:GetName()
-	if not (frameName and UIPanelWindows[frameName]) then return end
+	if not (frameName and (anyPanel or UIPanelWindows[frameName])) then return end
 
 	name = "UIPanelLayout-"..name
 
