@@ -3,7 +3,7 @@ local LSM = E.Libs.LSM
 
 --Lua functions
 local _G = _G
-local unpack, type, select, getmetatable, assert = unpack, type, select, getmetatable, assert
+local unpack, type, select, getmetatable = unpack, type, select, getmetatable
 --WoW API / Variables
 local CreateFrame = CreateFrame
 
@@ -12,7 +12,7 @@ local function GetTemplate(template, isUnitFrameElement)
 	backdropa = 1
 
 	if template == "ClassColor" then
-		local color = _G.CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass]
+		local color = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass]
 		borderr, borderg, borderb = color.r, color.g, color.b
 		backdropr, backdropg, backdropb = unpack(E.media.backdropcolor)
 	elseif template == "Transparent" then
@@ -25,29 +25,30 @@ local function GetTemplate(template, isUnitFrameElement)
 end
 
 local function Size(frame, width, height)
-	assert(width)
 	frame:SetSize(E:Scale(width), E:Scale(height or width))
 end
 
 local function Width(frame, width)
-	assert(width)
 	frame:SetWidth(E:Scale(width))
 end
 
 local function Height(frame, height)
-	assert(height)
 	frame:SetHeight(E:Scale(height))
 end
 
 local function Point(obj, arg1, arg2, arg3, arg4, arg5)
-	if arg2 == nil then arg2 = obj:GetParent() end
+	if type(arg5) == "number" then
+		arg5 = E:Scale(arg5)
+		arg4 = E:Scale(arg4)
+	elseif type(arg4) == "number" then
+		arg4 = E:Scale(arg4)
+		arg3 = E:Scale(arg3)
+	elseif type(arg3) == "number" then
+		arg3 = E:Scale(arg3)
+		arg2 = E:Scale(arg2)
+	end
 
-	if type(arg2) == "number" then arg2 = E:Scale(arg2) end
-	if type(arg3) == "number" then arg3 = E:Scale(arg3) end
-	if type(arg4) == "number" then arg4 = E:Scale(arg4) end
-	if type(arg5) == "number" then arg5 = E:Scale(arg5) end
-
-	obj:SetPoint(arg1, arg2, arg3, arg4, arg5)
+	obj:SetPoint(arg1, arg2 or obj:GetParent(), arg3, arg4, arg5)
 end
 
 local function SetOutside(obj, anchor, xOffset, yOffset, anchor2)
@@ -55,7 +56,6 @@ local function SetOutside(obj, anchor, xOffset, yOffset, anchor2)
 	yOffset = yOffset or E.Border
 	anchor = anchor or obj:GetParent()
 
-	assert(anchor)
 	if obj:GetPoint() then
 		obj:ClearAllPoints()
 	end
@@ -69,7 +69,6 @@ local function SetInside(obj, anchor, xOffset, yOffset, anchor2)
 	yOffset = yOffset or E.Border
 	anchor = anchor or obj:GetParent()
 
-	assert(anchor)
 	if obj:GetPoint() then
 		obj:ClearAllPoints()
 	end
