@@ -133,8 +133,8 @@ function M:SkinBubble(frame)
 			frame.backdrop:SetTexture(unpack(E.media.backdropfadecolor))
 
 			frame.bordertop = frame:CreateTexture(nil, "ARTWORK")
-			frame.bordertop:SetPoint("TOPLEFT", frame, "TOPLEFT", -mult2, mult2)
-			frame.bordertop:SetPoint("TOPRIGHT", frame, "TOPRIGHT", mult2, mult2)
+			frame.bordertop:SetPoint("TOPLEFT", -mult2, mult2)
+			frame.bordertop:SetPoint("TOPRIGHT", mult2, mult2)
 			frame.bordertop:SetHeight(mult)
 			frame.bordertop:SetTexture(r, g, b)
 
@@ -145,8 +145,8 @@ function M:SkinBubble(frame)
 			frame.bordertop.backdrop:SetTexture(0, 0, 0)
 
 			frame.borderbottom = frame:CreateTexture(nil, "ARTWORK")
-			frame.borderbottom:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", -mult2, -mult2)
-			frame.borderbottom:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", mult2, -mult2)
+			frame.borderbottom:SetPoint("BOTTOMLEFT", -mult2, -mult2)
+			frame.borderbottom:SetPoint("BOTTOMRIGHT", mult2, -mult2)
 			frame.borderbottom:SetHeight(mult)
 			frame.borderbottom:SetTexture(r, g, b)
 
@@ -157,8 +157,8 @@ function M:SkinBubble(frame)
 			frame.borderbottom.backdrop:SetTexture(0, 0, 0)
 
 			frame.borderleft = frame:CreateTexture(nil, "ARTWORK")
-			frame.borderleft:SetPoint("TOPLEFT", frame, "TOPLEFT", -mult2, mult2)
-			frame.borderleft:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", mult2, -mult2)
+			frame.borderleft:SetPoint("TOPLEFT", -mult2, mult2)
+			frame.borderleft:SetPoint("BOTTOMLEFT", mult2, -mult2)
 			frame.borderleft:SetWidth(mult)
 			frame.borderleft:SetTexture(r, g, b)
 
@@ -169,8 +169,8 @@ function M:SkinBubble(frame)
 			frame.borderleft.backdrop:SetTexture(0, 0, 0)
 
 			frame.borderright = frame:CreateTexture(nil, "ARTWORK")
-			frame.borderright:SetPoint("TOPRIGHT", frame, "TOPRIGHT", mult2, mult2)
-			frame.borderright:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -mult2, -mult2)
+			frame.borderright:SetPoint("TOPRIGHT", mult2, mult2)
+			frame.borderright:SetPoint("BOTTOMRIGHT", -mult2, -mult2)
 			frame.borderright:SetWidth(mult)
 			frame.borderright:SetTexture(r, g, b)
 

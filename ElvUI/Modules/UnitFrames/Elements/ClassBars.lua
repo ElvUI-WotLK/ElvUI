@@ -123,7 +123,7 @@ function UF:Configure_ClassBar(frame)
 
 	if frame.USE_MINI_CLASSBAR and not frame.CLASSBAR_DETACHED then
 		bars:ClearAllPoints()
-		bars:Point("CENTER", frame.Health.backdrop, "TOP", 0, 0)
+		bars:SetPoint("CENTER", frame.Health.backdrop, "TOP", 0, 0)
 
 		bars:SetParent(frame)
 		bars:SetFrameLevel(50) --RaisedElementParent uses 100, we want it lower than this

@@ -91,8 +91,8 @@ S:AddCallback("Skin_BlizzardOptions", function()
 			frame:CreateBackdrop("Transparent")
 
 			if frame == VideoOptionsFramePanelContainer or frame == InterfaceOptionsFramePanelContainer then
-				frame.backdrop:Point("TOPLEFT", 0, 0)
-				frame.backdrop:Point("BOTTOMRIGHT", 0, 0)
+				frame.backdrop:SetPoint("TOPLEFT", 0, 0)
+				frame.backdrop:SetPoint("BOTTOMRIGHT", 0, 0)
 			else
 				frame.backdrop:Point("TOPLEFT", -1, 0)
 				frame.backdrop:Point("BOTTOMRIGHT", 0, 1)

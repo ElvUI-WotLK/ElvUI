@@ -163,7 +163,7 @@ function UF:Configure_Castbar(frame)
 
 		if db.castbar.spark then
 			castbar.Spark = castbar.Spark_
-			castbar.Spark:Point("CENTER", castbar:GetStatusBarTexture(), "RIGHT", 0, 0)
+			castbar.Spark:SetPoint("CENTER", castbar:GetStatusBarTexture(), "RIGHT", 0, 0)
 			castbar.Spark:Height(db.castbar.height * 2)
 		elseif castbar.Spark then
 			castbar.Spark:Hide()

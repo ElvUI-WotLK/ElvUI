@@ -15,7 +15,7 @@ local function styleAlwaysUpFrame(id)
 	local dynamic = _G["AlwaysUpFrame"..id.."DynamicIconButton"]
 
 	text:ClearAllPoints()
-	text:Point("CENTER", frame, "CENTER", 0, 0)
+	text:SetPoint("CENTER", frame, "CENTER", 0, 0)
 
 	icon:ClearAllPoints()
 	icon:Point("CENTER", text, "LEFT", -10, -9)

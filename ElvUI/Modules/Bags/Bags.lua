@@ -1710,7 +1710,7 @@ end
 function B:CreateSellFrame()
 	B.SellFrame = CreateFrame("Frame", "ElvUIVendorGraysFrame", E.UIParent)
 	B.SellFrame:Size(200, 40)
-	B.SellFrame:Point("CENTER", E.UIParent)
+	B.SellFrame:SetPoint("CENTER")
 	B.SellFrame:CreateBackdrop("Transparent")
 	B.SellFrame:SetAlpha(E.db.bags.vendorGrays.progressBar and 1 or 0)
 	B.SellFrame:Hide()
@@ -1729,7 +1729,7 @@ function B:CreateSellFrame()
 
 	B.SellFrame.statusbar.ValueText = B.SellFrame.statusbar:CreateFontString(nil, "OVERLAY")
 	B.SellFrame.statusbar.ValueText:FontTemplate(nil, 12, "OUTLINE")
-	B.SellFrame.statusbar.ValueText:Point("CENTER", B.SellFrame.statusbar)
+	B.SellFrame.statusbar.ValueText:SetPoint("CENTER")
 	B.SellFrame.statusbar.ValueText:SetText("0 / 0 ( 0s )")
 
 	B.SellFrame.Info = {

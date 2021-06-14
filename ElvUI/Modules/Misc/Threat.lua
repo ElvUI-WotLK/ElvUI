@@ -162,7 +162,7 @@ function THREAT:Initialize()
 
 	self.bar.text = self.bar:CreateFontString(nil, "OVERLAY")
 	self.bar.text:FontTemplate(nil, self.db.textSize)
-	self.bar.text:Point("CENTER", self.bar, "CENTER")
+	self.bar.text:SetPoint("CENTER")
 
 	self.list = {}
 

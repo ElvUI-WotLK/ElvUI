@@ -202,7 +202,7 @@ function E:CreateStatusFrame()
 	--Title logo
 	StatusFrame.TitleLogoFrame = CreateFrame("Frame", nil, StatusFrame)
 	StatusFrame.TitleLogoFrame:Size(128, 64)
-	StatusFrame.TitleLogoFrame:Point("CENTER", StatusFrame, "TOP", 0, 0)
+	StatusFrame.TitleLogoFrame:SetPoint("CENTER", StatusFrame, "TOP", 0, 0)
 	StatusFrame.TitleLogoFrame.Texture = StatusFrame.TitleLogoFrame:CreateTexture(nil, "ARTWORK")
 	StatusFrame.TitleLogoFrame.Texture:SetTexture(E.Media.Textures.Logo)
 	StatusFrame.TitleLogoFrame.Texture:SetAllPoints()
@@ -225,7 +225,7 @@ function E:CreateStatusFrame()
 	StatusFrame.Section3.Content = CreateContentLines(7, StatusFrame.Section3, StatusFrame.Section3.Header)
 	StatusFrame.Section4.Content = CreateFrame("Frame", nil, StatusFrame.Section4)
 	StatusFrame.Section4.Content:Size(240, 25)
-	StatusFrame.Section4.Content:Point("TOP", StatusFrame.Section4.Header, "BOTTOM", 0, 0)
+	StatusFrame.Section4.Content:SetPoint("TOP", StatusFrame.Section4.Header, "BOTTOM", 0, 0)
 
 	--Content lines
 	StatusFrame.Section1.Content.Line1.Text:SetFormattedText("Version of ElvUI: |cff4beb2c%s|r", E.version)

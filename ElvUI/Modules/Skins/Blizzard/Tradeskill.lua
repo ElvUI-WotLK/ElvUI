@@ -21,7 +21,7 @@ S:AddCallbackForAddon("Blizzard_TradeSkillUI", "Skin_Blizzard_TradeSkillUI", fun
 	TRADE_SKILLS_DISPLAYED = SKILLS_DISPLAYED
 
 	for i = 9, SKILLS_DISPLAYED do
-		CreateFrame("Button", "TradeSkillSkill"..i, TradeSkillFrame, "TradeSkillSkillButtonTemplate"):Point("TOPLEFT", _G["TradeSkillSkill"..i - 1], "BOTTOMLEFT")
+		CreateFrame("Button", "TradeSkillSkill"..i, TradeSkillFrame, "TradeSkillSkillButtonTemplate"):SetPoint("TOPLEFT", _G["TradeSkillSkill"..i - 1], "BOTTOMLEFT")
 	end
 
 	TradeSkillFrame:StripTextures(true)

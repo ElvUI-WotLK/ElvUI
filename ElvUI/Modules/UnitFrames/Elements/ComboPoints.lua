@@ -165,7 +165,7 @@ function UF:Configure_ComboPoints(frame)
 
 	if frame.USE_MINI_CLASSBAR and not frame.CLASSBAR_DETACHED then
 		ComboPoints:ClearAllPoints()
-		ComboPoints:Point("CENTER", frame.Health.backdrop, "TOP", 0, 0)
+		ComboPoints:SetPoint("CENTER", frame.Health.backdrop, "TOP", 0, 0)
 
 		ComboPoints:SetParent(frame)
 		ComboPoints:SetFrameLevel(50) --RaisedElementParent uses 100, we want it lower than this

@@ -374,7 +374,7 @@ S:AddCallbackForAddon("Blizzard_AchievementUI", "Skin_Blizzard_AchievementUI", f
 	skinStatusBar(AchievementFrameComparisonSummaryPlayerStatusBar)
 	skinStatusBar(AchievementFrameComparisonSummaryFriendStatusBar)
 	AchievementFrameComparisonSummaryFriendStatusBar.text:ClearAllPoints()
-	AchievementFrameComparisonSummaryFriendStatusBar.text:Point("CENTER")
+	AchievementFrameComparisonSummaryFriendStatusBar.text:SetPoint("CENTER")
 
 	for i = 1, 8 do
 		local frame = _G["AchievementFrameSummaryCategoriesCategory"..i]

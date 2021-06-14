@@ -116,7 +116,7 @@ local function createSlot(id)
 
 	local iconFrame = CreateFrame("Frame", nil, frame)
 	iconFrame:Size(iconSize - 2)
-	iconFrame:Point("RIGHT", frame)
+	iconFrame:SetPoint("RIGHT", frame)
 	iconFrame:SetTemplate("Default")
 	frame.iconFrame = iconFrame
 	E.frames[iconFrame] = nil
@@ -135,16 +135,16 @@ local function createSlot(id)
 
 	local name = frame:CreateFontString(nil, "OVERLAY")
 	name:SetJustifyH("LEFT")
-	name:Point("LEFT", frame)
-	name:Point("RIGHT", icon, "LEFT")
+	name:SetPoint("LEFT", frame)
+	name:SetPoint("RIGHT", icon, "LEFT")
 	name:SetNonSpaceWrap(true)
 	name:FontTemplate(nil, nil, "OUTLINE")
 	frame.name = name
 
 	local drop = frame:CreateTexture(nil, "ARTWORK")
 	drop:SetTexture(1, 1, 1, 0.15)
-	drop:Point("LEFT", icon, "RIGHT", 0, 0)
-	drop:Point("RIGHT", frame)
+	drop:SetPoint("LEFT", icon, "RIGHT", 0, 0)
+	drop:SetPoint("RIGHT", frame)
 	drop:SetAllPoints(frame)
 	frame.drop = drop
 
@@ -212,7 +212,7 @@ function M:LOOT_OPENED(_, autoLoot)
 		E:DisableMover("LootFrameMover")
 	else
 		lootFrame:ClearAllPoints()
-		lootFrame:Point("TOPLEFT", lootFrameHolder, "TOPLEFT")
+		lootFrame:SetPoint("TOPLEFT", lootFrameHolder, "TOPLEFT")
 		E:EnableMover("LootFrameMover")
 	end
 

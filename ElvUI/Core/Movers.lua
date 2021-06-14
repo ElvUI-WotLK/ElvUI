@@ -239,7 +239,7 @@ local function CreateMover(parent, name, text, overlay, snapOffset, postdrag, sh
 	parent.mover = f
 
 	parent:ClearAllPoints()
-	parent:Point(point, f, 0, 0)
+	parent:SetPoint(point, f, 0, 0)
 
 	if postdrag ~= nil and type(postdrag) == "function" then
 		f:RegisterEvent("PLAYER_ENTERING_WORLD")

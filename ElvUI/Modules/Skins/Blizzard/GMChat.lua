@@ -58,7 +58,7 @@ S:AddCallbackForAddon("Blizzard_GMChatUI", "Skin_Blizzard_GMChatUI", function()
 	statusFrame:StripTextures()
 	statusFrame:CreateBackdrop("Transparent")
 	statusFrame.backdrop:Point("TOPLEFT", 0, 1)
-	statusFrame.backdrop:Point("BOTTOMRIGHT", 0, 0)
+	statusFrame.backdrop:SetPoint("BOTTOMRIGHT", 0, 0)
 
 	GMChatStatusFramePulse:SetTexture("Interface\\GMChatFrame\\UI-GMStatusFrame-Pulse")
 	GMChatStatusFramePulse:Point("TOPLEFT", -25, 21)

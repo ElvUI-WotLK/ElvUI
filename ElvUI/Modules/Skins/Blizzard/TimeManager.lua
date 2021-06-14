@@ -63,7 +63,7 @@ S:AddCallbackForAddon("Blizzard_TimeManager", "Skin_Blizzard_TimeManager", funct
 	-- StopwatchFrame
 	StopwatchFrame:CreateBackdrop("Transparent")
 	StopwatchFrame.backdrop:Point("TOPLEFT", 0, -20)
-	StopwatchFrame.backdrop:Point("BOTTOMRIGHT", 0, 0)
+	StopwatchFrame.backdrop:SetPoint("BOTTOMRIGHT", 0, 0)
 
 	StopwatchFrame:StripTextures()
 	StopwatchTabFrame:StripTextures()

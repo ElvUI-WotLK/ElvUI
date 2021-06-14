@@ -175,7 +175,7 @@ S:AddCallback("Skin_Character", function()
 
 			popout.icon = popout:CreateTexture(nil, "ARTWORK")
 			popout.icon:Size(24)
-			popout.icon:Point("CENTER")
+			popout.icon:SetPoint("CENTER")
 			popout.icon:SetTexture(E.Media.Textures.ArrowUp)
 
 			if slotFrame.verticalFlyout then

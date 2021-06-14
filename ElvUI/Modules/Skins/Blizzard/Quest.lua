@@ -72,7 +72,7 @@ S:AddCallback("Skin_Quest", function()
 	QuestLogCount.SetPoint = E.noop
 
 	QuestLogFrameShowMapButton.text:ClearAllPoints()
-	QuestLogFrameShowMapButton.text:Point("CENTER")
+	QuestLogFrameShowMapButton.text:SetPoint("CENTER")
 	QuestLogFrameShowMapButton:Size(QuestLogFrameShowMapButton.text:GetWidth() + 32, 32)
 
 	QuestLogScrollFrame:Point("TOPLEFT", 19, -62)

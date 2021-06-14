@@ -691,7 +691,7 @@ function TT:Initialize()
 	GameTooltip.StatusBar:Height(self.db.healthBar.height)
 	GameTooltip.StatusBar:SetScript("OnValueChanged", nil)
 	GameTooltip.StatusBar.text = GameTooltip.StatusBar:CreateFontString(nil, "OVERLAY")
-	GameTooltip.StatusBar.text:Point("CENTER", GameTooltip.StatusBar, 0, 0)
+	GameTooltip.StatusBar.text:SetPoint("CENTER")
 	GameTooltip.StatusBar.text:FontTemplate(E.Libs.LSM:Fetch("font", self.db.healthBar.font), self.db.healthBar.fontSize, self.db.healthBar.fontOutline)
 
 	--Tooltip Fonts

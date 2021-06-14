@@ -407,7 +407,7 @@ function S:Ace3_RegisterAsContainer(widget)
 					if button then
 						button.highlight:SetTexture(E.Media.Textures.Highlight)
 						button.highlight:SetVertexColor(1, 0.82, 0, 0.35)
-						button.highlight:Point("TOPLEFT", 0, 0)
+						button.highlight:SetPoint("TOPLEFT", 0, 0)
 						button.highlight:Point("BOTTOMRIGHT", 0, 1)
 
 						button.toggle:SetHighlightTexture("")
