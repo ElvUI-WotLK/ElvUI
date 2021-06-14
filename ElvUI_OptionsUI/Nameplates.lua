@@ -4013,7 +4013,7 @@ E.Options.args.nameplate = {
 				},
 				arrowSize = {
 					order = 6,
-					type = 'range',
+					type = "range",
 					name = L["Arrow Size"],
 					min = 1,
 					max = 50,
@@ -4101,7 +4101,7 @@ E.Options.args.nameplate = {
 				arrows = {
 					order = 11,
 					name = L["Arrow Texture"],
-					type = 'multiselect',
+					type = "multiselect",
 					customWidth = 80,
 					get = function(info, key)
 						return E.db.nameplates.units.TARGET.arrow == key
@@ -4190,7 +4190,7 @@ do -- target arrow textures
 	E.Options.args.nameplate.args.targetGroup.args.arrows.values = arrows
 
 	for key, arrow in pairs(E.Media.Arrows) do
-		arrows[key] = E:TextureString(arrow, ':45:45')
+		arrows[key] = E:TextureString(arrow, ":45:45")
 	end
 end
 

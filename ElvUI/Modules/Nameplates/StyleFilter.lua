@@ -161,7 +161,7 @@ local totemTypes = {
 		[58771] = "w4",	-- Mana Spring Totem VI
 		[58773] = "w4",	-- Mana Spring Totem VII
 		[58774] = "w4",	-- Mana Spring Totem VIII
-		[16190] = "w5" 	-- Mana Tide Totem
+		[16190] = "w5"	-- Mana Tide Totem
 	},
 	other = {
 		[724] = "o1"	-- Lightwell
