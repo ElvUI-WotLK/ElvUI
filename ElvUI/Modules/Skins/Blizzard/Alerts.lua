@@ -41,7 +41,7 @@ S:AddCallback("Skin_Alerts", function()
 
 			frame.isSkinned = true
 
-			if tonumber(match(name, ".+(%d+)")) == MAX_ACHIEVEMENT_ALERTS then
+			if tonumber(match(name, "(%d+)$")) == MAX_ACHIEVEMENT_ALERTS then
 				S:Unhook("AchievementAlertFrame_GetAlertFrame")
 			end
 		end

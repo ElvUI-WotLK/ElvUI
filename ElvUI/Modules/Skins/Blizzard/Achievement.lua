@@ -3,6 +3,7 @@ local S = E:GetModule("Skins")
 
 --Lua functions
 local _G = _G
+local getmetatable = getmetatable
 local ipairs = ipairs
 local unpack = unpack
 --WoW API / Variables
@@ -11,6 +12,9 @@ local GetAchievementNumCriteria = GetAchievementNumCriteria
 local GetAchievementCriteriaInfo = GetAchievementCriteriaInfo
 local CRITERIA_TYPE_ACHIEVEMENT = CRITERIA_TYPE_ACHIEVEMENT
 
+local achievementSaturate = function(self)
+	self:SetBackdropBorderColor(unpack(E.media.bordercolor))
+end
 local function skinAchievement(achievement, biggerIcon)
 	if achievement.isSkinned then return end
 
@@ -18,11 +22,11 @@ local function skinAchievement(achievement, biggerIcon)
 	achievement:StripTextures()
 	achievement:SetTemplate("Default", true)
 	achievement.icon:SetTemplate()
-	achievement.icon:SetSize(biggerIcon and 54 or 36, biggerIcon and 54 or 36)
+	achievement.icon:Size(biggerIcon and 54 or 36)
 	achievement.icon:ClearAllPoints()
-	achievement.icon:Point("TOPLEFT", 8, -8)
-	achievement.icon.bling:Kill()
-	achievement.icon.frame:Kill()
+	achievement.icon:Point("TOPLEFT", biggerIcon and 8 or 6, biggerIcon and -7 or -6)
+	achievement.icon.bling:SetTexture()
+	achievement.icon.frame:SetTexture()
 	achievement.icon.texture:SetTexCoord(unpack(E.TexCoords))
 	achievement.icon.texture:SetInside()
 
@@ -47,17 +51,13 @@ local function skinAchievement(achievement, biggerIcon)
 
 	if achievement.tracked then
 		S:HandleCheckBox(achievement.tracked, true)
-		achievement.tracked:Size(14, 14)
+		achievement.tracked:Size(14)
 		achievement.tracked:ClearAllPoints()
 		achievement.tracked:Point("TOPLEFT", achievement.icon, "BOTTOMLEFT", 0, -2)
 	end
 
-	hooksecurefunc(achievement, "Saturate", function(self)
-		self:SetBackdropBorderColor(unpack(E.media.bordercolor))
-	end)
-	hooksecurefunc(achievement, "Desaturate", function(self)
-		self:SetBackdropBorderColor(unpack(E.media.bordercolor))
-	end)
+	hooksecurefunc(achievement, "Saturate", achievementSaturate)
+	hooksecurefunc(achievement, "Desaturate", achievementSaturate)
 
 	achievement.isSkinned = true
 end
@@ -163,7 +163,7 @@ S:AddCallbackForAddon("Blizzard_AchievementUI", "Skin_Blizzard_AchievementUI", f
 
 	AchievementFrameHeaderTitle:SetParent(AchievementFrame)
 	AchievementFrameHeaderTitle:ClearAllPoints()
-	AchievementFrameHeaderTitle:Point("TOPLEFT", AchievementFrame, "TOPLEFT", -29, -9)
+	AchievementFrameHeaderTitle:Point("TOPLEFT", -29, -9)
 
 	AchievementFrameHeaderPoints:SetParent(AchievementFrame)
 	AchievementFrameHeaderPoints:ClearAllPoints()
@@ -416,7 +416,6 @@ S:AddCallbackForAddon("Blizzard_AchievementUI", "Skin_Blizzard_AchievementUI", f
 
 			if i ~= 1 then
 				prevFrame = _G["AchievementFrameSummaryAchievement"..(i-1)]
-				frame:ClearAllPoints()
 				frame:Point("TOPLEFT", prevFrame, "BOTTOMLEFT", 0, -1)
 				frame:Point("TOPRIGHT", prevFrame, "BOTTOMRIGHT", 0, 1)
 			end
@@ -430,22 +429,19 @@ S:AddCallbackForAddon("Blizzard_AchievementUI", "Skin_Blizzard_AchievementUI", f
 
 		if frame and not frame.skinned then
 			frame:StripTextures()
+			frame:SetTemplate("Default")
+			frame:Height(frame:GetHeight() + (E.Border + E.Spacing))
 			frame:SetStatusBarTexture(E.media.normTex)
-			E:RegisterStatusBar(frame)
 			frame:SetStatusBarColor(sbcR, sbcG, sbcB)
 			frame:GetStatusBarTexture():SetInside()
-			frame:Height(frame:GetHeight() + (E.Border + E.Spacing))
-			frame:SetTemplate("Default")
+			E:RegisterStatusBar(frame)
 
-			frame.text:ClearAllPoints()
-			frame.text:Point("CENTER", frame, "CENTER", 0, -1)
+			frame.text:Point("CENTER", 0, -1)
 			frame.text:SetJustifyH("CENTER")
 
 			if index > 1 then
-				frame:ClearAllPoints()
 				frame:Point("TOP", _G["AchievementFrameProgressBar"..index-1], "BOTTOM", 0, -5)
 				frame.SetPoint = E.noop
-				frame.ClearAllPoints = E.noop
 			end
 
 			frame.skinned = true
@@ -514,13 +510,12 @@ S:AddCallbackForAddon("Blizzard_AchievementUI", "Skin_Blizzard_AchievementUI", f
 				mini:SetBackdropColor(0, 0, 0, 0)
 				mini:Size(32)
 
-				local prevFrame = _G["AchievementFrameMiniAchievement"..i - 1]
 				if i == 1 then
 					mini:Point("TOPLEFT", 6, -4)
 				elseif i == 7 then
 					mini:Point("TOPLEFT", AchievementFrameMiniAchievement1, "BOTTOMLEFT", 0, -20)
 				else
-					mini:Point("TOPLEFT", prevFrame, "TOPRIGHT", 10, 0)
+					mini:Point("TOPLEFT", _G["AchievementFrameMiniAchievement"..i - 1], "TOPRIGHT", 10, 0)
 				end
 				mini.SetPoint = E.noop
 
