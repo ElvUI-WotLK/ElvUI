@@ -7,7 +7,6 @@ local getmetatable = getmetatable
 local ipairs = ipairs
 local select = select
 local unpack = unpack
-local find = string.find
 --WoW API / Variables
 local GetCurrencyListInfo = GetCurrencyListInfo
 local GetInventoryItemQuality = GetInventoryItemQuality

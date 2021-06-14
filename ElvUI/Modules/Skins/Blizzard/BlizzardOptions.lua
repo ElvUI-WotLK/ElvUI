@@ -4,7 +4,6 @@ local S = E:GetModule("Skins")
 --Lua functions
 local _G = _G
 local ipairs = ipairs
-local find = string.find
 --WoW API / Variables
 local InCombatLockdown = InCombatLockdown
 local hooksecurefunc = hooksecurefunc

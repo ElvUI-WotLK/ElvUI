@@ -3,9 +3,7 @@ local S = E:GetModule("Skins")
 
 --Lua functions
 local _G = _G
-local find = string.find
 --WoW API / Variables
-local hooksecurefunc = hooksecurefunc
 
 S:AddCallback("Skin_LFR", function()
 	if not E.private.skins.blizzard.enable or not E.private.skins.blizzard.lfr then return end
