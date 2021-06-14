@@ -178,9 +178,13 @@ S:AddCallback("Skin_Bags", function()
 	BankFrame.backdrop:Point("TOPLEFT", 11, -12)
 	BankFrame.backdrop:Point("BOTTOMRIGHT", -26, 76)
 
-	S:SetBackdropHitRect(BankFrame)
+	S:HookScript(BankFrame, "OnShow", function(self)
+		S:SetUIPanelWindowInfo(self, "width")
+		S:SetBackdropHitRect(self)
+		S:Unhook(self, "OnShow")
+	end)
 
-	S:HandleCloseButton(BankCloseButton)
+	S:HandleCloseButton(BankCloseButton, BankFrame.backdrop)
 
 	BankFrameItem1:Point("TOPLEFT", 39, -73)
 
@@ -233,6 +237,7 @@ S:AddCallback("Skin_Bags", function()
 	BankFrame.bagBackdrop:SetFrameLevel(BankFrame:GetFrameLevel())
 
 	S:HandleButton(BankFramePurchaseButton)
+	BankFramePurchaseButton:Point("RIGHT", -4, -10)
 
 	hooksecurefunc("BankFrameItemButton_Update", function(button)
 		local id = button:GetID()

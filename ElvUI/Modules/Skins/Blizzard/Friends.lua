@@ -642,6 +642,7 @@ S:AddCallback("Skin_Friends", function()
 	-- Raid Info Frame
 	RaidInfoFrame:StripTextures(true)
 	RaidInfoFrame:SetTemplate("Transparent")
+	RaidInfoFrame:Size(341, 246)
 
 	RaidInfoInstanceLabel:StripTextures()
 	RaidInfoIDLabel:StripTextures()
@@ -659,13 +660,14 @@ S:AddCallback("Skin_Friends", function()
 	RaidInfoScrollFrame.backdrop:Point("TOPLEFT", -1, 1)
 	RaidInfoScrollFrame.backdrop:Point("BOTTOMRIGHT", 1, -2)
 
-	RaidInfoScrollFrame:Height(182)
+	RaidInfoScrollFrame:Height(178)
 	RaidInfoScrollFrame:Point("TOPLEFT", 9, -31)
 
 	RaidInfoScrollFrameScrollBar:Point("TOPLEFT", RaidInfoScrollFrame, "TOPRIGHT", 4, -18)
 	RaidInfoScrollFrameScrollBar:Point("BOTTOMLEFT", RaidInfoScrollFrame, "BOTTOMRIGHT", 4, 17)
 
 	for _, button in ipairs(RaidInfoScrollFrame.buttons) do
+		button.reset:Width(115)
 		S:HandleButtonHighlight(button)
 	end
 
@@ -674,9 +676,9 @@ S:AddCallback("Skin_Friends", function()
 
 	RaidInfoFrame:SetScript("OnShow", function(self)
 		if GetNumRaidMembers() > 0 then
-			self:Point("TOPLEFT", "RaidFrame", "TOPRIGHT", -5, -12)
+			self:Point("TOPLEFT", RaidFrame, "TOPRIGHT", -4, -12)
 		else
-			self:Point("TOPLEFT", "RaidFrame", "TOPRIGHT", -33, -12)
+			self:Point("TOPLEFT", RaidFrame, "TOPRIGHT", -33, -12)
 		end
 
 		PlaySound("UChatScrollButton")
@@ -684,23 +686,23 @@ S:AddCallback("Skin_Friends", function()
 
 	RaidInfoScrollFrameScrollBar:SetScript("OnShow", function(self)
 		local parent = self:GetParent()
-		parent:Width(306)
-		RaidInfoInstanceLabel:Width(153)
+		parent:Width(302)
+		RaidInfoInstanceLabel:Width(164)
 
 		for _, frame in ipairs(parent.buttons) do
-			frame:Width(296)
-			frame.name:Width(141)
+			frame:Width(297)
+			frame.name:Width(171)
 		end
 	end)
 
 	RaidInfoScrollFrameScrollBar:SetScript("OnHide", function(self)
 		local parent = self:GetParent()
-		parent:Width(327)
-		RaidInfoInstanceLabel:Width(173)
+		parent:Width(323)
+		RaidInfoInstanceLabel:Width(184)
 
 		for _, frame in ipairs(parent.buttons) do
-			frame:Width(317)
-			frame.name:Width(162)
+			frame:Width(318)
+			frame.name:Width(192)
 		end
 	end)
 

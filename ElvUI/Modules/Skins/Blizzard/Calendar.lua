@@ -87,10 +87,19 @@ S:AddCallbackForAddon("Blizzard_Calendar", "Skin_Blizzard_Calendar", function()
 		_G["CalendarContextMenuButton"..i]:StyleButton()
 	end
 
+	local eventTextureSetTexCoord = function(self, left, right, top, bottom)
+		if not self._blocked and left == 0 and right == 1 and top == 0 and bottom == 1 then
+			self._blocked = true
+			self:SetTexCoord(unpack(E.TexCoords))
+			self._blocked = nil
+		end
+	end
+
 	for i = 1, 42 do
 		local button = _G["CalendarDayButton"..i]
 		local eventTexture = _G["CalendarDayButton"..i.."EventTexture"]
 		local overlayFrame = _G["CalendarDayButton"..i.."OverlayFrame"]
+
 		button:SetFrameLevel(button:GetFrameLevel() + 1)
 		button:Size(91 - E.Border)
 		button:SetTemplate("Default", nil, true)
@@ -99,26 +108,17 @@ S:AddCallbackForAddon("Blizzard_Calendar", "Skin_Blizzard_Calendar", function()
 		button:GetNormalTexture():SetDrawLayer("BACKGROUND")
 		button:GetHighlightTexture():SetInside()
 		button:GetHighlightTexture():SetTexture(1, 1, 1, 0.3)
-		eventTexture:SetInside()
+
 		overlayFrame:SetInside()
-
-		hooksecurefunc(eventTexture, "SetTexCoord", function(self, left, right, top, bottom)
-			if left == 0 and right == 1 and top == 0 and bottom == 1 then
-				if self._blocked then return end
-
-				self._blocked = true
-				self:SetTexCoord(unpack(E.TexCoords))
-				self._blocked = nil
-			end
-		end)
+		eventTexture:SetInside()
+		hooksecurefunc(eventTexture, "SetTexCoord", eventTextureSetTexCoord)
 
 		for j = 1, 4 do
-			local EventButton = _G["CalendarDayButton"..i.."EventButton"..j]
-			EventButton:StripTextures()
-			EventButton:StyleButton()
+			local eventButton = _G["CalendarDayButton"..i.."EventButton"..j]
+			eventButton:StripTextures()
+			eventButton:StyleButton()
 		end
 
-		button:ClearAllPoints()
 		if i == 1 then
 			button:SetPoint("TOPLEFT", CalendarWeekday1Background, "BOTTOMLEFT", 0, 0)
 		elseif fmod(i, 7) == 1 then
