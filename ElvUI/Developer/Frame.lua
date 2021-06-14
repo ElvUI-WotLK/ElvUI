@@ -86,30 +86,28 @@ local function getObject(objName)
 		end
 	end
 
-	if obj then
-		return obj ~= WorldFrame and obj or nil
-	else
+	if not obj then
 		printNoTimestamp(format("Object |cffFFD100%s|r not found!", objName))
+	elseif not obj.GetParent then
+		printNoTimestamp(format("Object |cffFFD100%s|r doesn't have Widget API!", objName))
+	else
+		return obj ~= WorldFrame and obj or nil
 	end
 end
 
 local FrameStackHighlight = CreateFrame("Frame", "FrameStackHighlight")
 FrameStackHighlight:SetFrameStrata("TOOLTIP")
-FrameStackHighlight.t = FrameStackHighlight:CreateTexture(nil, "BORDER")
+FrameStackHighlight.t = FrameStackHighlight:CreateTexture("$parentTexture", "BORDER")
 FrameStackHighlight.t:SetAllPoints()
 FrameStackHighlight.t:SetTexture(0, 1, 0, 0.5)
 
-local FrameStackHitRectHighlight = CreateFrame("Frame", "FrameStackHitRectHighlight")
-FrameStackHitRectHighlight:SetFrameStrata("TOOLTIP")
-FrameStackHitRectHighlight.t = FrameStackHitRectHighlight:CreateTexture(nil, "ARTWORK")
-FrameStackHitRectHighlight.t:SetAllPoints()
-FrameStackHitRectHighlight.t:SetTexture(0, 0, 1, 0.5)
-FrameStackHitRectHighlight.t:SetBlendMode("ADD")
+local FrameStackHighlightHitRect = FrameStackHighlight:CreateTexture("$parentHitRectTexture", "ARTWORK")
+FrameStackHighlightHitRect:SetTexture(0, 0, 1, 0.5)
+FrameStackHighlightHitRect:SetBlendMode("ADD")
 
 hooksecurefunc("FrameStackTooltip_Toggle", function()
 	if not FrameStackTooltip:IsVisible() then
 		FrameStackHighlight:Hide()
-		FrameStackHitRectHighlight:Hide()
 	end
 end)
 
@@ -129,16 +127,15 @@ FrameStackTooltip:HookScript("OnUpdate", function(_, elapsed)
 			local l, r, t, b = highlightFrame:GetHitRectInsets()
 			if l ~= 0 or r ~= 0 or t ~= 0 or b ~= 0 then
 				local scale = highlightFrame:GetEffectiveScale()
-				FrameStackHitRectHighlight:ClearAllPoints()
-				FrameStackHitRectHighlight:SetPoint("TOPLEFT", highlightFrame, l * scale, -t * scale)
-				FrameStackHitRectHighlight:SetPoint("BOTTOMRIGHT", highlightFrame, -r * scale, b * scale)
-				FrameStackHitRectHighlight:Show()
+				FrameStackHighlightHitRect:ClearAllPoints()
+				FrameStackHighlightHitRect:SetPoint("TOPLEFT", highlightFrame, l * scale, -t * scale)
+				FrameStackHighlightHitRect:SetPoint("BOTTOMRIGHT", highlightFrame, -r * scale, b * scale)
+				FrameStackHighlightHitRect:Show()
 			else
-				FrameStackHitRectHighlight:Hide()
+				FrameStackHighlightHitRect:Hide()
 			end
 		else
 			FrameStackHighlight:Hide()
-			FrameStackHitRectHighlight:Hide()
 		end
 	end
 end)
@@ -219,7 +216,7 @@ end
 SLASH_TEXLIST1 = "/texlist"
 SlashCmdList.TEXLIST = function(frame)
 	frame = getObject(frame)
-	if not (frame and frame.GetNumRegions) then return end
+	if not frame then return end
 
 	for i = 1, frame:GetNumRegions() do
 		local region = select(i, frame:GetRegions())
@@ -234,7 +231,7 @@ end
 SLASH_REGLIST1 = "/reglist"
 SlashCmdList.REGLIST = function(frame)
 	frame = getObject(frame)
-	if not (frame and frame.GetNumRegions) then return end
+	if not frame then return end
 
 	for i = 1, frame:GetNumRegions() do
 		local region = select(i, frame:GetRegions())
@@ -247,7 +244,7 @@ end
 SLASH_CHILDLIST1 = "/childlist"
 SlashCmdList.CHILDLIST = function(frame)
 	frame = getObject(frame)
-	if not (frame and frame.GetNumChildren) then return end
+	if not frame then return end
 
 	for i = 1, frame:GetNumChildren() do
 		local obj = select(i, frame:GetChildren())
