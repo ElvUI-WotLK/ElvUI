@@ -263,6 +263,7 @@ function S:HandleEditBox(frame)
 	end
 end
 
+local dropdownArrowColor = {1, 0.8, 0}
 function S:HandleDropDownBox(frame, width, direction)
 	if frame.backdrop then return end
 
@@ -286,19 +287,20 @@ function S:HandleDropDownBox(frame, width, direction)
 	end
 
 	if button then
-		S:HandleNextPrevButton(button, direction or nil, {1, 0.8, 0})
+		S:HandleNextPrevButton(button, direction or nil, dropdownArrowColor)
 		button:ClearAllPoints()
 		button:Point("RIGHT", frame, "RIGHT", -10, 3)
 		button:Size(16, 16)
 	end
 end
 
+local statusBarColor = {0.01, 0.39, 0.1}
 function S:HandleStatusBar(frame, color)
 	frame:SetFrameLevel(frame:GetFrameLevel() + 1)
 	frame:StripTextures()
 	frame:CreateBackdrop("Transparent")
 	frame:SetStatusBarTexture(E.media.normTex)
-	frame:SetStatusBarColor(unpack(color or {.01, .39, .1}))
+	frame:SetStatusBarColor(unpack(color or statusBarColor))
 	E:RegisterStatusBar(frame)
 end
 
@@ -554,6 +556,7 @@ function S:HandleIconSelectionFrame(frame, numIcons, buttonNameTemplate, frameNa
 	end
 end
 
+local defaultArrowColor = {1, 1, 1}
 function S:HandleNextPrevButton(btn, arrowDir, color, noBackdrop, stipTexts)
 	if btn.isSkinned then return end
 
@@ -612,7 +615,7 @@ function S:HandleNextPrevButton(btn, arrowDir, color, noBackdrop, stipTexts)
 	Pushed:SetRotation(S.ArrowRotation[arrowDir])
 	Disabled:SetRotation(S.ArrowRotation[arrowDir])
 
-	Normal:SetVertexColor(unpack(color or {1, 1, 1}))
+	Normal:SetVertexColor(unpack(color or defaultArrowColor))
 
 	btn.isSkinned = true
 end
