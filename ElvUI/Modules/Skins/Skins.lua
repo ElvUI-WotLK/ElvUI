@@ -626,6 +626,106 @@ function S:SetNextPrevButtonDirection(frame, arrowDir)
 	frame:GetPushedTexture():SetRotation(direction)
 end
 
+local function collapseSetNormalTexture_Text(self, texture)
+	if texture then
+		if find(texture, "MinusButton", 1, true) or find(texture, "ZoomOutButton", 1, true) then
+			self.collapseText:SetText("-")
+			return
+		elseif find(texture, "PlusButton", 1, true) or find(texture, "ZoomInButton", 1, true) then
+			self.collapseText:SetText("+")
+			return
+		end
+	end
+	self.collapseText:SetText("")
+end
+local function collapseSetNormalTexture_Texture(self, texture)
+	if texture then
+		if find(texture, "MinusButton", 1, true) or find(texture, "ZoomOutButton", 1, true) then
+			self:GetNormalTexture():SetTexture(E.Media.Textures.Minus)
+			self:GetPushedTexture():SetTexture(E.Media.Textures.Minus)
+			self:GetDisabledTexture():SetTexture(E.Media.Textures.Minus)
+			return
+		elseif find(texture, "PlusButton", 1, true) or find(texture, "ZoomInButton", 1, true) then
+			self:GetNormalTexture():SetTexture(E.Media.Textures.Plus)
+			self:GetPushedTexture():SetTexture(E.Media.Textures.Plus)
+			self:GetDisabledTexture():SetTexture(E.Media.Textures.Plus)
+			return
+		end
+	end
+	self:GetNormalTexture():SetTexture(0, 0, 0, 0)
+	self:GetPushedTexture():SetTexture(0, 0, 0, 0)
+	self:GetDisabledTexture():SetTexture(0, 0, 0, 0)
+end
+function S:HandleCollapseExpandButton(button, defaultState, useFontString, xOffset, yOffset)
+	if button.isSkinned then return end
+
+	if defaultState == "auto" then
+		local texture = button:GetNormalTexture():GetTexture()
+		if find(texture, "MinusButton", 1, true) or find(texture, "ZoomOutButton", 1, true) then
+			defaultState = "-"
+		elseif find(texture, "PlusButton", 1, true) or find(texture, "ZoomInButton", 1, true) then
+			defaultState = "+"
+		end
+	end
+
+	button:SetNormalTexture("")
+	button:SetPushedTexture("")
+	button:SetHighlightTexture("")
+	button:SetDisabledTexture("")
+
+	button.SetPushedTexture = E.noop
+	button.SetHighlightTexture = E.noop
+	button.SetDisabledTexture = E.noop
+
+	if useFontString then
+		button.collapseText = button:CreateFontString(nil, "OVERLAY")
+		button.collapseText:FontTemplate(nil, 22)
+		button.collapseText:Point("LEFT", xOffset or 5, yOffset or 0)
+		button.collapseText:SetText("")
+
+		if defaultState == "+" then
+			button.collapseText:SetText("+")
+		elseif defaultState == "-" then
+			button.collapseText:SetText("-")
+		end
+
+		button.SetNormalTexture = collapseSetNormalTexture_Text
+	else
+		local normalTexture = button:GetNormalTexture()
+		normalTexture:Size(16)
+		normalTexture:ClearAllPoints()
+		normalTexture:Point("LEFT", xOffset or 3, yOffset or 0)
+		normalTexture.SetPoint = E.noop
+
+		local pushedTexture = button:GetPushedTexture()
+		pushedTexture:Size(16)
+		pushedTexture:ClearAllPoints()
+		pushedTexture:Point("LEFT", xOffset or 3, yOffset or 0)
+		pushedTexture.SetPoint = E.noop
+
+		local disabledTexture = button:GetDisabledTexture()
+		disabledTexture:Size(16)
+		disabledTexture:ClearAllPoints()
+		disabledTexture:Point("LEFT", xOffset or 3, yOffset or 0)
+		disabledTexture.SetPoint = E.noop
+		disabledTexture:SetVertexColor(0.6, 0.6, 0.6)
+
+		if defaultState == "+" then
+			normalTexture:SetTexture(E.Media.Textures.Plus)
+			pushedTexture:SetTexture(E.Media.Textures.Plus)
+			disabledTexture:SetTexture(E.Media.Textures.Plus)
+		elseif defaultState == "-" then
+			normalTexture:SetTexture(E.Media.Textures.Minus)
+			pushedTexture:SetTexture(E.Media.Textures.Minus)
+			disabledTexture:SetTexture(E.Media.Textures.Minus)
+		end
+
+		button.SetNormalTexture = collapseSetNormalTexture_Texture
+	end
+
+	button.isSkinned = true
+end
+
 function S:ADDON_LOADED(_, addon)
 	S:SkinAce3()
 
