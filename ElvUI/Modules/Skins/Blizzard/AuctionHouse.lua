@@ -15,16 +15,18 @@ S:AddCallbackForAddon("Blizzard_AuctionUI", "Skin_Blizzard_AuctionUI", function(
 
 	AuctionFrame:StripTextures(true)
 	AuctionFrame:CreateBackdrop("Transparent")
-	AuctionFrame.backdrop:Point("TOPLEFT", 12, 0)
-	AuctionFrame.backdrop:Point("BOTTOMRIGHT", 0, 0)
+	AuctionFrame.backdrop:Point("TOPLEFT", 11, 0)
+	AuctionFrame.backdrop:Point("BOTTOMRIGHT", 0, 23)
 
 	S:HookScript(AuctionFrame, "OnShow", function(self)
-		S:SetUIPanelWindowInfo(self, "xoffset", -1, nil, true)
+		S:SetUIPanelWindowInfo(self, "xoffset", 0, nil, true)
 		S:SetUIPanelWindowInfo(self, "yoffset", -12, nil, true)
-		S:SetUIPanelWindowInfo(self, "width", nil, 1)
+		S:SetUIPanelWindowInfo(self, "width")
 		S:SetBackdropHitRect(self)
 		S:Unhook(self, "OnShow")
 	end)
+
+	S:HandleCloseButton(AuctionFrameCloseButton, AuctionFrame.backdrop)
 
 	local buttons = {
 		BrowseSearchButton,
@@ -104,115 +106,274 @@ S:AddCallbackForAddon("Blizzard_AuctionUI", "Skin_Blizzard_AuctionUI", function(
 		S:HandleTab(tab)
 
 		if i == 1 then
-			tab:ClearAllPoints()
-			tab:Point("BOTTOMLEFT", AuctionFrame, "BOTTOMLEFT", 12, -30)
+			tab:Point("TOPLEFT", AuctionFrame, "BOTTOMLEFT", 12, 25)
 			tab.SetPoint = E.noop
+		else
+			tab:Point("TOPLEFT", _G["AuctionFrameTab"..(i - 1)], "TOPRIGHT", -15, 0)
 		end
 	end
 
-	AuctionFrameTab2:Point("TOPLEFT", AuctionFrameTab1, "TOPRIGHT", -15, 0)
-	AuctionFrameTab3:Point("TOPLEFT", AuctionFrameTab2, "TOPRIGHT", -15, 0)
-
 	for i = 1, NUM_FILTERS_TO_DISPLAY do
 		local tab = _G["AuctionFilterButton"..i]
-
 		tab:StripTextures()
 
-		tab:SetHighlightTexture(E.Media.Textures.Highlight)
-		tab:GetHighlightTexture():SetInside()
-		tab:GetHighlightTexture():SetAlpha(0.35)
+		local highlight = tab:GetHighlightTexture()
+		highlight:SetTexture(E.Media.Textures.Highlight)
+		highlight:SetInside()
+		highlight:SetVertexColor(0.9, 0.9, 0.9, 0.35)
 	end
 
-	S:HandleCloseButton(AuctionFrameCloseButton, AuctionFrame.backdrop)
+	local frames = {
+		["Browse"] = 8,		-- NUM_BROWSE_TO_DISPLAY
+		["Auctions"] = 9,	-- NUM_AUCTIONS_TO_DISPLAY
+		["Bid"] = 9			-- NUM_BIDS_TO_DISPLAY
+	}
+	local function itemNameSetVertexColor(self, r, g, b)
+		self.parent.highlight:SetVertexColor(r, g, b, 0.35)
+		self.parent.itemButton:SetBackdropBorderColor(r, g, b)
+	end
+	local function itemNameHide(self)
+		self.parent.itemButton:SetBackdropBorderColor(unpack(E.media.bordercolor))
+	end
+	for frameName, numButtons in pairs(frames) do
+		for i = 1, numButtons do
+			local button = _G[frameName.."Button"..i]
+			local name = _G[frameName.."Button"..i.."Name"]
+			local itemButton = _G[frameName.."Button"..i.."Item"]
+			local itemTexture = _G[frameName.."Button"..i.."ItemIconTexture"]
+			local highlight = _G[frameName.."Button"..i.."Highlight"]
 
-	AuctionFrameMoneyFrame:Point("BOTTOMRIGHT", AuctionFrame, "BOTTOMLEFT", 181, 11)
+			button:StripTextures()
+
+			highlight:SetTexture(E.Media.Textures.Highlight)
+			highlight:SetInside()
+
+			itemButton:SetTemplate()
+			itemButton:StyleButton()
+			itemButton:GetNormalTexture():SetTexture("")
+			itemButton:Point("TOPLEFT", 0, -1)
+			itemButton:Size(34)
+
+			itemTexture:SetTexCoord(unpack(E.TexCoords))
+			itemTexture:SetInside()
+
+			button.highlight = highlight
+			button.itemButton = itemButton
+			name.parent = button
+
+			hooksecurefunc(name, "SetVertexColor", itemNameSetVertexColor)
+			hooksecurefunc(name, "Hide", itemNameHide)
+		end
+	end
+
+	-- Custom Backdrops
+	local function createBackdrop(parent)
+		local background = CreateFrame("Frame", nil, parent)
+		background:SetTemplate("Transparent")
+		background:SetFrameLevel(parent:GetFrameLevel() - 1)
+		return background
+	end
+
+	AuctionFrameBrowse.LeftBackground = createBackdrop(AuctionFrameBrowse)
+	AuctionFrameBrowse.LeftBackground:Point("TOPLEFT", 19, -86)
+	AuctionFrameBrowse.LeftBackground:Point("BOTTOMRIGHT", -574, 60)
+
+	AuctionFrameBrowse.RightBackground = createBackdrop(AuctionFrameBrowse)
+	AuctionFrameBrowse.RightBackground:Point("TOPLEFT", 187, -86)
+	AuctionFrameBrowse.RightBackground:Point("BOTTOMRIGHT", 66, 60)
+
+	AuctionFrameBid.Background = createBackdrop(AuctionFrameBid)
+	AuctionFrameBid.Background:Point("TOPLEFT", 19, -49)
+	AuctionFrameBid.Background:Point("BOTTOMRIGHT", 66, 60)
+
+	AuctionFrameAuctions.LeftBackground = createBackdrop(AuctionFrameAuctions)
+	AuctionFrameAuctions.LeftBackground:Point("TOPLEFT", 19, -49)
+	AuctionFrameAuctions.LeftBackground:Point("BOTTOMRIGHT", -546, 60)
+
+	AuctionFrameAuctions.RightBackground = createBackdrop(AuctionFrameAuctions)
+	AuctionFrameAuctions.RightBackground:Point("TOPLEFT", 215, -49)
+	AuctionFrameAuctions.RightBackground:Point("BOTTOMRIGHT", 66, 60)
+
+	AuctionFrameMoneyFrame:Point("BOTTOMRIGHT", AuctionFrame, "BOTTOMLEFT", 181, 37)
 
 	-- Browse Frame
 	BrowseTitle:ClearAllPoints()
 	BrowseTitle:Point("TOP", AuctionFrame, "TOP", 0, -5)
 
-	BrowseScrollFrame:StripTextures()
+	BrowseNameText:Point("TOPLEFT", 25, -19)
+	BrowseName:Size(163, 18)
+	BrowseName:Point("TOPLEFT", BrowseNameText, "BOTTOMLEFT", -5, -4)
+
+	BrowseResetButton:Point("TOPLEFT", 104, -59)
+
+	BrowseLevelText:Point("BOTTOMLEFT", AuctionFrameBrowse, "TOPLEFT", 233, -31)
+	BrowseMinLevel:Point("TOPLEFT", BrowseLevelText, "BOTTOMLEFT", 0, -6)
+	BrowseLevelHyphen:Point("LEFT", BrowseMinLevel, "RIGHT", 2, 1)
+	BrowseMaxLevel:Point("LEFT", BrowseMinLevel, "RIGHT", 12, 0)
+
+	S:HandleDropDownBox(BrowseDropDown, 155)
+
+	BrowseSearchButton:Point("TOPRIGHT", 15, -34)
+
+	S:HandleNextPrevButton(BrowsePrevPageButton, "left", nil, true)
+	BrowsePrevPageButton:Size(32)
+	BrowsePrevPageButton:Point("TOPLEFT", 636, -28)
+	BrowsePrevPageButton:SetHitRectInsets(6, 6, 6, 6)
+	BrowsePrevPageButton:GetRegions():Point("LEFT", BrowsePrevPageButton, "RIGHT", -5, 0)
+
+	S:HandleNextPrevButton(BrowseNextPageButton, "right", nil, true)
+	BrowseNextPageButton:Size(32)
+	BrowseNextPageButton:Point("TOPRIGHT", 72, -28)
+	BrowseNextPageButton:SetHitRectInsets(6, 6, 6, 6)
+	BrowseNextPageButton:GetRegions():Point("RIGHT", BrowseNextPageButton, "LEFT", 5, 0)
 
 	BrowseFilterScrollFrame:StripTextures()
+	BrowseFilterScrollFrame:Size(144, 301)
+	BrowseFilterScrollFrame:Point("TOPRIGHT", AuctionFrameBrowse, "TOPLEFT", 163, -86)
+
+	AuctionFilterButton1:Point("TOPLEFT", 23, -87)
 
 	S:HandleScrollBar(BrowseFilterScrollFrameScrollBar)
-	BrowseFilterScrollFrameScrollBar:Point("TOPLEFT", BrowseFilterScrollFrame, "TOPRIGHT", 5, -19)
-	BrowseFilterScrollFrameScrollBar:Point("BOTTOMLEFT", BrowseFilterScrollFrame, "BOTTOMRIGHT", 5, 18)
+	BrowseFilterScrollFrameScrollBar:Point("TOPLEFT", BrowseFilterScrollFrame, "TOPRIGHT", 3, -19)
+	BrowseFilterScrollFrameScrollBar:Point("BOTTOMLEFT", BrowseFilterScrollFrame, "BOTTOMRIGHT", 3, 19)
+
+	BrowseQualitySort:Point("TOPLEFT", 186, -67)
+	BrowseCurrentBidSort:Width(209)
+
+	BrowseScrollFrame:StripTextures()
+	BrowseScrollFrame:Size(616, 301)
+	BrowseScrollFrame:Point("TOPRIGHT", 45, -86)
+
+	BrowseButton1:Point("TOPLEFT", 191, -89)
+	BrowseSearchCountText:Point("BOTTOM", 80, 75)
 
 	S:HandleScrollBar(BrowseScrollFrameScrollBar)
-	BrowseScrollFrameScrollBar:ClearAllPoints()
-	BrowseScrollFrameScrollBar:Point("TOPRIGHT", BrowseScrollFrame, "TOPRIGHT", 25, -19)
-	BrowseScrollFrameScrollBar:Point("BOTTOMRIGHT", BrowseScrollFrame, "BOTTOMRIGHT", 0, 19)
+	BrowseScrollFrameScrollBar:Point("TOPLEFT", BrowseScrollFrame, "TOPRIGHT", 3, -19)
+	BrowseScrollFrameScrollBar:Point("BOTTOMLEFT", BrowseScrollFrame, "BOTTOMRIGHT", 3, 19)
 
-	S:HandleNextPrevButton(BrowsePrevPageButton, nil, nil, true)
-	BrowsePrevPageButton:Point("TOPLEFT", 640, -50)
-	BrowsePrevPageButton:Size(32)
-	BrowsePrevPageButton:SetHitRectInsets(6, 6, 6, 6)
+	BrowseBidPrice:Point("BOTTOM", 50, 34)
+	BrowseBidText:Point("RIGHT", BrowseBidPrice, "LEFT", -12, -1)
 
-	S:HandleNextPrevButton(BrowseNextPageButton, nil, nil, true)
-	BrowseNextPageButton:Point("TOPRIGHT", 60, -50)
-	BrowseNextPageButton:Size(32)
-	BrowseNextPageButton:SetHitRectInsets(6, 6, 6, 6)
+	BrowseCloseButton:Point("BOTTOMRIGHT", 66, 31)
+	BrowseBuyoutButton:Point("RIGHT", BrowseCloseButton, "LEFT", -5, 0)
+	BrowseBidButton:Point("RIGHT", BrowseBuyoutButton, "LEFT", -5, 0)
 
-	BrowseCloseButton:Point("BOTTOMRIGHT", 66, 6)
-	BrowseBuyoutButton:Point("RIGHT", BrowseCloseButton, "LEFT", -4, 0)
-	BrowseBidButton:Point("RIGHT", BrowseBuyoutButton, "LEFT", -4, 0)
-	BrowseResetButton:Point("TOPLEFT", 20, -74)
-	BrowseSearchButton:Point("TOPRIGHT", 10, -30)
+	hooksecurefunc("AuctionFrameFilters_UpdateClasses", function()
+		local scrollShown = #OPEN_FILTER_LIST > NUM_FILTERS_TO_DISPLAY
 
-	BrowseNameText:Point("TOPLEFT", 18, -30)
-	BrowseName:Point("TOPLEFT", BrowseNameText, "BOTTOMLEFT", 3, -3)
-	BrowseName:Size(140, 18)
+		if scrollShown then
+			AuctionFrameBrowse.LeftBackground:Point("BOTTOMRIGHT", -595, 60)
+		else
+			AuctionFrameBrowse.LeftBackground:Point("BOTTOMRIGHT", -574, 60)
 
-	BrowseLevelText:Point("BOTTOMLEFT", AuctionFrameBrowse, "TOPLEFT", 200, -40)
-	BrowseMaxLevel:Point("LEFT", BrowseMinLevel, "RIGHT", 8, 0)
+			for i = 1, NUM_FILTERS_TO_DISPLAY do
+				_G["AuctionFilterButton"..i]:Width(157)
+			end
+		end
+	end)
 
-	BrowseBidText:Point("RIGHT", BrowseBidPrice, "LEFT", -11, 0)
-	BrowseBidPrice:Point("BOTTOM", 25, 10)
+	hooksecurefunc("AuctionFrameBrowse_Update", function()
+		local scrollShown = BrowseScrollFrame:IsShown()
+
+		for i = 1, NUM_BROWSE_TO_DISPLAY do
+			_G["BrowseButton"..i]:Width(scrollShown and 608 or 629)
+		end
+
+		BrowseCurrentBidSort:Width(scrollShown and 188 or 209)
+		AuctionFrameBrowse.RightBackground:Point("BOTTOMRIGHT", scrollShown and 45 or 66, 60)
+	end)
 
 	-- Bid Frame
 	BidTitle:ClearAllPoints()
 	BidTitle:Point("TOP", AuctionFrame, "TOP", 0, -5)
 
+	BidQualitySort:Width(238)
+	BidQualitySort:Point("TOPLEFT", 18, -30)
+	BidBidSort:Width(179)
+
 	BidScrollFrame:StripTextures()
+	BidScrollFrame:Size(784, 338)
+	BidScrollFrame:Point("TOPRIGHT", 45, -49)
 
-	BidBidText:ClearAllPoints()
-	BidBidText:Point("RIGHT", BidBidButton, "LEFT", -270, 2)
-
-	BidCloseButton:Point("BOTTOMRIGHT", 66, 6)
-	BidBuyoutButton:Point("RIGHT", BidCloseButton, "LEFT", -4, 0)
-	BidBidButton:Point("RIGHT", BidBuyoutButton, "LEFT", -4, 0)
-
-	BidBidPrice:Point("BOTTOM", 25, 10)
+	BidButton1:Point("TOPLEFT", 23, -52)
 
 	S:HandleScrollBar(BidScrollFrameScrollBar)
-	BidScrollFrameScrollBar:ClearAllPoints()
-	BidScrollFrameScrollBar:Point("TOPRIGHT", BidScrollFrame, "TOPRIGHT", 24, -19)
-	BidScrollFrameScrollBar:Point("BOTTOMRIGHT", BidScrollFrame, "BOTTOMRIGHT", 0, 17)
+	BidScrollFrameScrollBar:Point("TOPLEFT", BidScrollFrame, "TOPRIGHT", 3, -19)
+	BidScrollFrameScrollBar:Point("BOTTOMLEFT", BidScrollFrame, "BOTTOMRIGHT", 3, 19)
+
+	BidBidPrice:Point("BOTTOM", 50, 34)
+	BidBidText:Point("BOTTOMRIGHT", AuctionFrameBid, "BOTTOM", -50, 36)
+
+	BidCloseButton:Point("BOTTOMRIGHT", 66, 31)
+	BidBuyoutButton:Point("RIGHT", BidCloseButton, "LEFT", -5, 0)
+	BidBidButton:Point("RIGHT", BidBuyoutButton, "LEFT", -5, 0)
+
+	hooksecurefunc("AuctionFrameBid_Update", function()
+		local scrollShown = BidScrollFrame:IsShown()
+
+		for i = 1, NUM_BIDS_TO_DISPLAY do
+			_G["BidButton"..i]:Width(scrollShown and 776 or 797)
+		end
+
+		BidBidSort:Width(scrollShown and 158 or 179)
+		AuctionFrameBid.Background:Point("BOTTOMRIGHT", scrollShown and 45 or 66, 60)
+	end)
 
 	-- Auctions Frame
 	AuctionsTitle:ClearAllPoints()
 	AuctionsTitle:Point("TOP", AuctionFrame, "TOP", 0, -5)
 
-	AuctionsScrollFrame:StripTextures()
+	AuctionsTabText:Point("TOP", AuctionFrameAuctions, "TOPLEFT", 115, -32)
 
-	S:HandleScrollBar(AuctionsScrollFrameScrollBar)
-	AuctionsScrollFrameScrollBar:ClearAllPoints()
-	AuctionsScrollFrameScrollBar:Point("TOPRIGHT", AuctionsScrollFrame, "TOPRIGHT", 24, -21)
-	AuctionsScrollFrameScrollBar:Point("BOTTOMRIGHT", AuctionsScrollFrame, "BOTTOMRIGHT", 0, 19)
+	AuctionsBlockFrame:Size(191, 336)
+	AuctionsBlockFrame:Point("TOPLEFT", 20, -50)
 
-	AuctionsCloseButton:Point("BOTTOMRIGHT", 66, 6)
-	AuctionsCancelAuctionButton:Point("RIGHT", AuctionsCloseButton, "LEFT", -4, 0)
-
-	AuctionsCreateAuctionButton:Width(181)
-	AuctionsCreateAuctionButton:Point("BOTTOMLEFT", AuctionFrameAuctions, "BOTTOMLEFT", 26, 39)
-
-	AuctionsStackSizeEntry.backdrop:SetAllPoints()
-	AuctionsNumStacksEntry.backdrop:SetAllPoints()
+	AuctionsItemText:Point("TOPLEFT", 25, -56)
 
 	AuctionsItemButton:StripTextures()
 	AuctionsItemButton:SetTemplate("Default", true)
-	AuctionsItemButton:StyleButton()
+	AuctionsItemButton:StyleButton(nil, true)
+	AuctionsItemButton:Point("TOPLEFT", 30, -71)
+
+	AuctionsStackSizeEntry.backdrop:SetAllPoints()
+	AuctionsStackSizeEntry:Point("TOPLEFT", 34, -128)
+	select(9, AuctionsStackSizeEntry:GetRegions()):Point("BOTTOMLEFT", AuctionsStackSizeEntry, "TOPLEFT", -8, 2)
+
+	AuctionsNumStacksEntry.backdrop:SetAllPoints()
+	AuctionsNumStacksEntry:Point("TOPLEFT", AuctionsStackSizeEntry, "BOTTOMLEFT", 0, -19)
+	select(9, AuctionsNumStacksEntry:GetRegions()):Point("BOTTOMLEFT", AuctionsNumStacksEntry, "TOPLEFT", -9, 2)
+
+	S:HandleDropDownBox(PriceDropDown)
+	PriceDropDown:Point("TOPRIGHT", AuctionFrameAuctions, "TOPLEFT", 216, -193)
+	select(5, PriceDropDown:GetRegions()):Point("LEFT", PriceDropDown, "RIGHT", -190, 3)
+
+	StartPrice:Point("BOTTOMLEFT", 35, 191)
+	BuyoutPrice:Point("BOTTOMLEFT", 35, 151)
+
+	S:HandleDropDownBox(DurationDropDown)
+	DurationDropDown:Point("BOTTOMRIGHT", AuctionFrameAuctions, "BOTTOMLEFT", 216, 109)
+	select(5, DurationDropDown:GetRegions()):Point("LEFT", DurationDropDown, "RIGHT", -190, 3)
+
+	AuctionsDepositText:Point("LEFT", AuctionFrameAuctions, "BOTTOMLEFT", 26, 103)
+
+	AuctionsCreateAuctionButton:Width(185)
+	AuctionsCreateAuctionButton:Point("BOTTOMLEFT", 23, 64)
+
+	AuctionsQualitySort:Point("TOPLEFT", 214, -30)
+	AuctionsBidSort:Width(224)
+
+	AuctionsScrollFrame:StripTextures()
+	AuctionsScrollFrame:Size(588, 338)
+	AuctionsScrollFrame:Point("TOPRIGHT", 45, -49)
+
+	AuctionsButton1:Point("TOPLEFT", 219, -52)
+
+	S:HandleScrollBar(AuctionsScrollFrameScrollBar)
+	AuctionsScrollFrameScrollBar:Point("TOPLEFT", AuctionsScrollFrame, "TOPRIGHT", 3, -19)
+	AuctionsScrollFrameScrollBar:Point("BOTTOMLEFT", AuctionsScrollFrame, "BOTTOMRIGHT", 3, 19)
+
+	AuctionsCloseButton:Point("BOTTOMRIGHT", 66, 31)
+	AuctionsCancelAuctionButton:Point("RIGHT", AuctionsCloseButton, "LEFT", -5, 0)
 
 	AuctionsItemButton:HookScript("OnEvent", function(self, event)
 		local normalTexture = self:GetNormalTexture()
@@ -233,112 +394,18 @@ S:AddCallbackForAddon("Blizzard_AuctionUI", "Skin_Blizzard_AuctionUI", function(
 		end
 	end)
 
-	S:HandleDropDownBox(BrowseDropDown, 155)
-	BrowseDropDown:Point("TOPLEFT", BrowseLevelText, "BOTTOMRIGHT", -5, 0)
-	S:HandleDropDownBox(PriceDropDown)
-	S:HandleDropDownBox(DurationDropDown)
+	hooksecurefunc("AuctionFrameAuctions_Update", function()
+		local scrollShown = AuctionsScrollFrame:IsShown()
 
-	-- Progress Frame
-	AuctionProgressFrame:StripTextures()
-	AuctionProgressFrame:SetTemplate("Transparent")
-
-	S:HandleButton(AuctionProgressFrameCancelButton)
-	AuctionProgressFrameCancelButton:SetHitRectInsets(0, 0, 0, 0)
-	AuctionProgressFrameCancelButton:GetNormalTexture():SetTexture(E.Media.Textures.Close)
-	AuctionProgressFrameCancelButton:GetNormalTexture():SetInside()
-	AuctionProgressFrameCancelButton:Size(28)
-	AuctionProgressFrameCancelButton:Point("LEFT", AuctionProgressBar, "RIGHT", 8, 0)
-
-	AuctionProgressBarIcon.backdrop = CreateFrame("Frame", nil, AuctionProgressBarIcon:GetParent())
-	AuctionProgressBarIcon.backdrop:SetTemplate("Default")
-	AuctionProgressBarIcon.backdrop:SetOutside(AuctionProgressBarIcon)
-
-	AuctionProgressBarIcon:SetTexCoord(unpack(E.TexCoords))
-	AuctionProgressBarIcon:SetParent(AuctionProgressBarIcon.backdrop)
-
-	AuctionProgressBarText:ClearAllPoints()
-	AuctionProgressBarText:SetPoint("CENTER")
-
-	AuctionProgressBar:StripTextures()
-	AuctionProgressBar:CreateBackdrop("Default")
-	AuctionProgressBar:SetStatusBarTexture(E.media.normTex)
-	AuctionProgressBar:SetStatusBarColor(1, 1, 0)
-
-	local frames = {
-		["Browse"] = 8,		-- NUM_BROWSE_TO_DISPLAY
-		["Auctions"] = 9,	-- NUM_AUCTIONS_TO_DISPLAY
-		["Bid"] = 9			-- NUM_BIDS_TO_DISPLAY
-	}
-
-	for frameName, numButtons in pairs(frames) do
-		for i = 1, numButtons do
-			local button = _G[frameName.."Button"..i]
-			local itemButton = _G[frameName.."Button"..i.."Item"]
-			local name = _G[frameName.."Button"..i.."Name"]
-
-			if button then
-				button:StripTextures()
-
-				local highlight = _G[frameName.."Button"..i.."Highlight"]
-				highlight:SetTexture(E.Media.Textures.Highlight)
-				highlight:SetInside()
-
-				hooksecurefunc(name, "SetVertexColor", function(_, r, g, b)
-					highlight:SetVertexColor(r, g, b, 0.35)
-				end)
-			end
-
-			if itemButton then
-				itemButton:SetTemplate()
-				itemButton:StyleButton()
-				itemButton:GetNormalTexture():SetTexture("")
-				itemButton:Point("TOPLEFT", 0, -1)
-				itemButton:Size(34)
-
-				local texture = _G[frameName.."Button"..i.."ItemIconTexture"]
-				texture:SetTexCoord(unpack(E.TexCoords))
-				texture:SetInside()
-
-				hooksecurefunc(name, "SetVertexColor", function(_, r, g, b)
-					itemButton:SetBackdropBorderColor(r, g, b)
-				end)
-				hooksecurefunc(name, "Hide", function()
-					itemButton:SetBackdropBorderColor(unpack(E.media.bordercolor))
-				end)
-			end
+		for i = 1, NUM_AUCTIONS_TO_DISPLAY do
+			_G["AuctionsButton"..i]:Width(scrollShown and 580 or 601)
 		end
-	end
 
-	-- Custom Backdrops
-	for _, frame in ipairs({AuctionFrameBrowse, AuctionFrameAuctions}) do
-		frame.LeftBackground = CreateFrame("Frame", nil, frame)
-		frame.LeftBackground:SetTemplate("Transparent")
-		frame.LeftBackground:SetFrameLevel(frame:GetFrameLevel() - 1)
+		AuctionsBidSort:Width(scrollShown and 203 or 224)
+		AuctionFrameAuctions.RightBackground:Point("BOTTOMRIGHT", scrollShown and 45 or 66, 60)
+	end)
 
-		frame.RightBackground = CreateFrame("Frame", nil, frame)
-		frame.RightBackground:SetTemplate("Transparent")
-		frame.RightBackground:SetFrameLevel(frame:GetFrameLevel() - 1)
-	end
-
-	AuctionFrameAuctions.LeftBackground:Point("TOPLEFT", 20, -72)
-	AuctionFrameAuctions.LeftBackground:Point("BOTTOMRIGHT", -545, 34)
-
-	AuctionFrameAuctions.RightBackground:Point("TOPLEFT", AuctionFrameAuctions.LeftBackground, "TOPRIGHT", 3, 0)
-	AuctionFrameAuctions.RightBackground:Point("BOTTOMRIGHT", AuctionFrame, -8, 34)
-
-	AuctionFrameBrowse.LeftBackground:Point("TOPLEFT", 20, -103)
-	AuctionFrameBrowse.LeftBackground:Point("BOTTOMRIGHT", -575, 34)
-
-	AuctionFrameBrowse.RightBackground:Point("TOPLEFT", AuctionFrameBrowse.LeftBackground, "TOPRIGHT", 4, 0)
-	AuctionFrameBrowse.RightBackground:Point("BOTTOMRIGHT", AuctionFrame, "BOTTOMRIGHT", -8, 34)
-
-	AuctionFrameBid.Background = CreateFrame("Frame", nil, AuctionFrameBid)
-	AuctionFrameBid.Background:SetTemplate("Transparent")
-	AuctionFrameBid.Background:Point("TOPLEFT", 20, -72)
-	AuctionFrameBid.Background:Point("BOTTOMRIGHT", 66, 34)
-	AuctionFrameBid.Background:SetFrameLevel(AuctionFrameBid:GetFrameLevel() - 1)
-
-	-- DressUpFrame
+	-- DressUp Frame
 	AuctionDressUpFrame:StripTextures()
 
 	S:HandleCloseButton(AuctionDressUpFrameCloseButton, AuctionDressUpFrame)
@@ -370,12 +437,53 @@ S:AddCallbackForAddon("Blizzard_AuctionUI", "Skin_Blizzard_AuctionUI", function(
 	AuctionDressUpFrameResetButton:Point("BOTTOM", AuctionDressUpModel, "BOTTOM", 0, 7)
 
 	AuctionDressUpFrame:SetScript("OnShow", function()
-		S:SetUIPanelWindowInfo(AuctionFrame, "width", nil, 189)
+		S:SetUIPanelWindowInfo(AuctionFrame, "width", nil, 188)
 		PlaySound("igCharacterInfoOpen")
 	end)
 
 	AuctionDressUpFrame:SetScript("OnHide", function()
-		S:SetUIPanelWindowInfo(AuctionFrame, "width", nil, 1)
+		S:SetUIPanelWindowInfo(AuctionFrame, "width")
 		PlaySound("igCharacterInfoClose")
 	end)
+
+	-- Progress Frame
+	AuctionProgressFrame:StripTextures()
+	AuctionProgressFrame:SetTemplate("Transparent")
+
+	S:HandleStatusBar(AuctionProgressBar, {1, 0.7, 0})
+	AuctionProgressBar:Size(190, 18)
+	AuctionProgressBar:Point("CENTER", 5, 0)
+
+	AuctionProgressBarText:ClearAllPoints()
+	AuctionProgressBarText:SetPoint("CENTER")
+
+	S:HandleCloseButton(AuctionProgressFrameCancelButton)
+	AuctionProgressFrameCancelButton.Texture:Size(26)
+	AuctionProgressFrameCancelButton:Point("LEFT", AuctionProgressBar, "RIGHT", 8, 0)
+	AuctionProgressFrameCancelButton:SetHitRectInsets(4, 3, 4, 3)
+
+	AuctionProgressBarIcon:CreateBackdrop("Default")
+	AuctionProgressBarIcon:Size(38)
+	AuctionProgressBarIcon:Point("RIGHT", AuctionProgressBar, "LEFT", -9, 0)
+	AuctionProgressBarIcon:SetTexCoord(unpack(E.TexCoords))
+
+	-- Localization specific adjustments
+	local locale = GetLocale()
+	if locale == "deDE" then
+		BrowseResetButton:Width(80)
+
+		AuctionDressUpFrameResetButton:Width(80)
+	elseif locale == "frFR" then
+		BrowseMinLevel:Width(25)
+		BrowseMaxLevel:Width(25)
+		BrowseDropDown:Point("TOPLEFT", BrowseLevelText, "BOTTOMRIGHT", 10, -1)
+	elseif locale == "koKR" then
+		BrowseDropDown:Point("TOPLEFT", BrowseLevelText, "BOTTOMRIGHT", 10, -1)
+	elseif locale == "zhTW" then
+		BrowseDropDown:Point("TOPLEFT", BrowseLevelText, "BOTTOMRIGHT", -5, 4)
+		BrowseDropDownName:Point("BOTTOMLEFT", BrowseDropDown, "TOPLEFT", 20, -3)
+
+		BidDurationSort:Width(79)
+	--	BidBidSort:Width(168)
+	end
 end)
