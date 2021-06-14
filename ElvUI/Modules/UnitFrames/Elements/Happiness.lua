@@ -57,10 +57,8 @@ function UF:Configure_Happiness(frame)
 				HappinessIndicator.backdrop:Point("TOPRIGHT", frame.Health, "TOPRIGHT", frame.HAPPINESS_WIDTH, frame.BORDER)
 			end
 		end
-	else
-		if frame:IsElementEnabled("HappinessIndicator") then
-			frame:DisableElement("HappinessIndicator")
-		end
+	elseif frame:IsElementEnabled("HappinessIndicator") then
+		frame:DisableElement("HappinessIndicator")
 	end
 end
 
@@ -78,9 +76,10 @@ function UF:HappinessOverride(event, unit)
 
 	local _, hunterPet = HasPetUI()
 	local happiness, damagePercentage = GetPetHappiness()
-	local value, r, g, b
 
 	if hunterPet and happiness then
+		local value, r, g, b
+
 		if damagePercentage == 75 then
 			value = 33
 			r, g, b = 0.8, 0.2, 0.1
@@ -106,11 +105,7 @@ function UF:HappinessOverride(event, unit)
 	end
 
 	local isShown = element:IsShown()
-	local stateChanged
-
-	if (self.HAPPINESS_SHOWN and not isShown) or (not self.HAPPINESS_SHOWN and isShown) then
-		stateChanged = true
-	end
+	local stateChanged = (self.HAPPINESS_SHOWN and not isShown) or (not self.HAPPINESS_SHOWN and isShown)
 
 	self.HAPPINESS_SHOWN = isShown
 

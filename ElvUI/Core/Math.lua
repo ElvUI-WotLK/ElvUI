@@ -309,7 +309,7 @@ function E:Delay(delay, func, ...)
 end
 
 function E:StringTitle(str)
-	return gsub(str, "(.)", strupper, 1)
+	return gsub(str, "^%l", strupper, 1)
 end
 
 E.TimeThreshold = 3

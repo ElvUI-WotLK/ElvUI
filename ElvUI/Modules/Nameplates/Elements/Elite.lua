@@ -32,16 +32,10 @@ function NP:Configure_Elite(frame)
 
 	local icon = frame.Elite
 
+	icon:SetParent(frame.Health:IsShown() and frame.Health or frame)
 	icon:Size(db.size)
 	icon:ClearAllPoints()
-
-	if frame.Health:IsShown() then
-		icon:SetParent(frame.Health)
-		icon:Point(db.position, frame.Health, db.position, db.xOffset, db.yOffset)
-	else
-		icon:SetParent(frame)
-		icon:Point(db.position, frame, db.position, db.xOffset, db.yOffset)
-	end
+	icon:Point(db.position, db.xOffset, db.yOffset)
 end
 
 function NP:Construct_Elite(frame)

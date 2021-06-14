@@ -265,8 +265,8 @@ local function OnEvent(self, event, message)
 	lastPanel = self
 
 	-- special handler to detect friend coming online or going offline
-	if event == "CHAT_MSG_SYSTEM" then
-		if not (find(message, friendOnlineString) or find(message, friendOfflineString)) then return end
+	if event == "CHAT_MSG_SYSTEM" and not (find(message, friendOnlineString) or find(message, friendOfflineString)) then
+		return
 	end
 
 	local _, onlineFriends = GetNumFriends()
