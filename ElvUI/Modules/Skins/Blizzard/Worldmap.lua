@@ -82,8 +82,6 @@ S:AddCallback("Skin_WorldMap", function()
 	S:HandleNextPrevButton(WorldMapFrameSizeDownButton, "down", nil, true)
 	WorldMapFrameSizeDownButton:Size(26)
 
-	WorldMapFrameSizeUpButton:ClearAllPoints()
-	WorldMapFrameSizeUpButton:Point("RIGHT", WorldMapFrameCloseButton, "LEFT", 4, 0)
 	WorldMapFrameSizeUpButton:GetHighlightTexture():Kill()
 	S:HandleNextPrevButton(WorldMapFrameSizeUpButton, "up", nil, true)
 	WorldMapFrameSizeUpButton:Size(26)

@@ -135,16 +135,16 @@ S:AddCallbackForAddon("Blizzard_TradeSkillUI", "Skin_Blizzard_TradeSkillUI", fun
 
 	TradeSkillSkill1:Point("TOPLEFT", 25, -90)
 
-	TradeSkillListScrollFrame:Size(305, 340)
-	TradeSkillListScrollFrame:Point("TOPRIGHT", -389, -88)
+	TradeSkillListScrollFrame:Size(304, 340)
+	TradeSkillListScrollFrame:Point("TOPRIGHT", -390, -88)
 	TradeSkillListScrollFrame.Hide = E.noop
 	TradeSkillListScrollFrame:Show()
 
 	TradeSkillListScrollFrameScrollBar:Point("TOPLEFT", TradeSkillListScrollFrame, "TOPRIGHT", 3, -19)
 	TradeSkillListScrollFrameScrollBar:Point("BOTTOMLEFT", TradeSkillListScrollFrame, "BOTTOMRIGHT", 3, 19)
 
-	TradeSkillDetailScrollFrame:Size(304, 311)
-	TradeSkillDetailScrollFrame:Point("TOPLEFT", 348, -88)
+	TradeSkillDetailScrollFrame:Size(305, 311)
+	TradeSkillDetailScrollFrame:Point("TOPLEFT", 347, -88)
 
 	TradeSkillDetailScrollChildFrame:Size(304, 310)
 
@@ -170,6 +170,8 @@ S:AddCallbackForAddon("Blizzard_TradeSkillUI", "Skin_Blizzard_TradeSkillUI", fun
 
 	TradeSkillCancelButton:Point("CENTER", TradeSkillFrame, "TOPLEFT", 633, -417)
 	TradeSkillCreateButton:Point("CENTER", TradeSkillFrame, "TOPLEFT", 550, -417)
+
+	TradeSkillCreateAllButton:Width(79)
 	TradeSkillCreateAllButton:Point("RIGHT", TradeSkillCreateButton, "LEFT", -82, 0)
 	TradeSkillIncrementButton:Point("RIGHT", TradeSkillCreateButton, "LEFT", -4, 0)
 	TradeSkillDecrementButton:Point("LEFT", TradeSkillCreateAllButton, "RIGHT", 4, 0)

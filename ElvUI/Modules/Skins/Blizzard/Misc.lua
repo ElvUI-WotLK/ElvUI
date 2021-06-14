@@ -110,12 +110,15 @@ S:AddCallback("Skin_Misc", function()
 	AutoCompleteBox:SetTemplate("Transparent")
 	ConsolidatedBuffsTooltip:SetTemplate("Transparent")
 
+	-- Basic Script Errors
+	BasicScriptErrors:SetScale(E.global.general.UIScale)
+	BasicScriptErrors:SetTemplate("Transparent")
+	S:HandleButton(BasicScriptErrorsButton)
+
 	-- BNToast Frame
 	BNToastFrame:SetTemplate("Transparent")
 
 	BNToastFrameCloseButton:Size(32)
-	BNToastFrameCloseButton:Point("TOPRIGHT", "BNToastFrame", 4, 4)
-
 	S:HandleCloseButton(BNToastFrameCloseButton, BNToastFrame)
 
 	-- Ready Check Frame
@@ -147,7 +150,7 @@ S:AddCallback("Skin_Misc", function()
 
 	-- Zone Text Frame
 	ZoneTextFrame:ClearAllPoints()
-	ZoneTextFrame:Point("TOP", UIParent, 0, -128)
+	ZoneTextFrame:Point("TOP", 0, -128)
 
 	-- Stack Split Frame
 	StackSplitFrame:SetTemplate("Transparent")
@@ -251,51 +254,54 @@ S:AddCallback("Skin_Misc", function()
 		"VoiceMacroMenu",
 	}
 
+	ChatMenu:ClearAllPoints()
+	ChatMenu:Point("BOTTOMLEFT", ChatFrame1, "TOPLEFT", 0, 30)
+	ChatMenu.ClearAllPoints = E.noop
+	ChatMenu.SetPoint = E.noop
+
+	local chatMenuOnShow = function(self)
+		self:SetBackdropBorderColor(unpack(E.media.bordercolor))
+		self:SetBackdropColor(unpack(E.media.backdropfadecolor))
+	end
+
 	for i = 1, #chatMenus do
-		if chatMenus[i] == "ChatMenu" then
-			_G[chatMenus[i]]:HookScript("OnShow", function(self)
-				self:SetTemplate("Transparent")
-				self:SetBackdropColor(unpack(E.media.backdropfadecolor))
-				self:ClearAllPoints()
-				self:Point("BOTTOMLEFT", ChatFrame1, "TOPLEFT", 0, 30)
-			end)
-		else
-			_G[chatMenus[i]]:HookScript("OnShow", function(self)
-				self:SetTemplate("Transparent")
-				self:SetBackdropColor(unpack(E.media.backdropfadecolor))
-			end)
+		local frame = _G[chatMenus[i]]
+		frame:SetTemplate("Transparent")
+		frame:HookScript("OnShow", chatMenuOnShow)
+
+		for j = 1, 32 do
+			_G[chatMenus[i].."Button"..j]:StyleButton()
 		end
 	end
 
-	for i = 1, 32 do
-		_G["ChatMenuButton"..i]:StyleButton()
-		_G["EmoteMenuButton"..i]:StyleButton()
-		_G["LanguageMenuButton"..i]:StyleButton()
-		_G["VoiceMacroMenuButton"..i]:StyleButton()
-	end
-
+	-- Localization specific frames
 	local locale = GetLocale()
 	if locale == "koKR" then
 		S:HandleButton(GameMenuButtonRatings)
 
+		-- RatingMenuFrame
 		RatingMenuFrame:SetTemplate("Transparent")
-		RatingMenuFrameHeader:Kill()
+		RatingMenuFrameHeader:SetTexture()
 		S:HandleButton(RatingMenuButtonOkay)
+
+		RatingMenuButtonOkay:Point("BOTTOMRIGHT", -8, 8)
 	elseif locale == "ruRU" then
 		-- Declension Frame
 		DeclensionFrame:SetTemplate("Transparent")
 
-		S:HandleNextPrevButton(DeclensionFrameSetPrev)
-		S:HandleNextPrevButton(DeclensionFrameSetNext)
+		S:HandleNextPrevButton(DeclensionFrameSetPrev, "left")
+		S:HandleNextPrevButton(DeclensionFrameSetNext, "right")
 		S:HandleButton(DeclensionFrameOkayButton)
 		S:HandleButton(DeclensionFrameCancelButton)
 
-		for i = 1, RUSSIAN_DECLENSION_PATTERNS do
-			local editBox = _G["DeclensionFrameDeclension"..i.."Edit"]
-			if editBox then
-				editBox:StripTextures()
-				S:HandleEditBox(editBox)
+		DeclensionFrameSet:Point("BOTTOM", 0, 40)
+		DeclensionFrameOkayButton:Point("RIGHT", DeclensionFrame, "BOTTOM", -3, 19)
+		DeclensionFrameCancelButton:Point("LEFT", DeclensionFrame, "BOTTOM", 3, 19)
+
+		hooksecurefunc("DeclensionFrame_Update", function()
+			for i = 1, RUSSIAN_DECLENSION_PATTERNS do
+				_G["DeclensionFrameDeclension"..i.."Edit"]:SetTemplate("Default")
 			end
-		end
+		end)
 	end
 end)

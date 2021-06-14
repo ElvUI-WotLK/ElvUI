@@ -33,10 +33,12 @@ S:AddCallback("Skin_Tutorial", function()
 	S:HandleNextPrevButton(TutorialFrameNextButton)
 	TutorialFrameNextButton:Point("BOTTOMRIGHT", -132, 7)
 	TutorialFrameNextButton:Size(22)
+	TutorialFrameNextButton:GetRegions():Point("RIGHT", TutorialFrameNextButton, "LEFT", -5, 0)
 
 	S:HandleNextPrevButton(TutorialFramePrevButton)
 	TutorialFramePrevButton:Point("BOTTOMLEFT", 30, 7)
 	TutorialFramePrevButton:Size(22)
+	TutorialFramePrevButton:GetRegions():Point("LEFT", TutorialFramePrevButton, "RIGHT", 3, 0)
 
 	S:HandleButton(TutorialFrameOkayButton)
 
