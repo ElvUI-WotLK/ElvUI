@@ -170,7 +170,6 @@ function S:Ace3_RegisterAsWidget(widget)
 	elseif TYPE == "Dropdown" then
 		local frame = widget.dropdown
 		local button = widget.button
-		local button_cover = widget.button_cover
 		local text = widget.text
 		frame:StripTextures()
 
@@ -196,11 +195,6 @@ function S:Ace3_RegisterAsWidget(widget)
 		text:Point("RIGHT", button, "LEFT", -3, 0)
 		text:Point("LEFT", frame.backdrop, "LEFT", 2, 0)
 		text:SetParent(frame.backdrop)
-
-		button:HookScript("OnClick", S.Ace3_SkinDropdownPullout)
-		if button_cover then
-			button_cover:HookScript("OnClick", S.Ace3_SkinDropdownPullout)
-		end
 	elseif TYPE == "LSM30_Font" or TYPE == "LSM30_Sound" or TYPE == "LSM30_Border" or TYPE == "LSM30_Background" or TYPE == "LSM30_Statusbar" then
 		local frame = widget.frame
 		local button = frame.dropButton
@@ -342,6 +336,19 @@ function S:Ace3_RegisterAsWidget(widget)
 		end
 	elseif TYPE == "Icon" then
 		widget.frame:StripTextures()
+	elseif TYPE == "Dropdown-Pullout" then
+		local pullout = widget
+		if pullout.frame then
+			pullout.frame:SetTemplate(nil, true)
+		else
+			pullout:SetTemplate(nil, true)
+		end
+
+		if pullout.slider then
+			pullout.slider:SetTemplate()
+			pullout.slider:SetThumbTexture(E.Media.Textures.White8x8)
+			pullout.slider:GetThumbTexture():SetVertexColor(1, .82, 0, 0.8)
+		end
 	end
 
 	return oldRegisterAsWidget(self, widget)
