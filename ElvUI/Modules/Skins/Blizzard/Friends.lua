@@ -5,6 +5,7 @@ local S = E:GetModule("Skins")
 local _G = _G
 local ipairs = ipairs
 local unpack = unpack
+local floor = math.floor
 --WoW API / Variables
 local GetGuildRosterInfo = GetGuildRosterInfo
 local GetNumRaidMembers = GetNumRaidMembers
@@ -351,6 +352,27 @@ S:AddCallback("Skin_Friends", function()
 				end
 			end
 		end
+	end)
+
+	GuildControlPopupFrame:SetScript("OnShow", function(self) -- fix error in case frame opened before GUILD_ROSTER_UPDATE event; fix taint; adjust UIPanel spacing
+		if not self.rank then
+			self.rank = GuildControlGetRankName(1)
+			UIDropDownMenu_SetSelectedID(GuildControlPopupFrameDropDown, 1)
+			UIDropDownMenu_SetText(GuildControlPopupFrameDropDown, self.rank)
+		end
+
+		FriendsFrame.guildControlShow = 1
+		GuildControlPopupAcceptButton:Disable()
+		GuildControlPopupframe_Update()
+
+		S:SetUIPanelWindowInfo(FriendsFrame, "width", nil, floor(self.backdrop:GetWidth() + 0.5) - 1)
+	end)
+
+	GuildControlPopupFrame:SetScript("OnHide", function(self)
+		FriendsFrame.guildControlShow = 0
+		self.goldChanged = nil
+
+		S:SetUIPanelWindowInfo(FriendsFrame, "width")
 	end)
 
 	-- Member Detail Frame
