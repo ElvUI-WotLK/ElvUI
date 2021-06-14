@@ -94,7 +94,7 @@ S:AddCallbackForAddon("Blizzard_GlyphUI", "Skin_Blizzard_GlyphUI", function()
 			local sparkle = _G["GlyphFrameSparkle"..slotID]
 			local animation = slotAnimations[slotID]
 
-			sparkle:SetPoint("CENTER", GlyphFrame, animation.point, animation.xStart, animation.yStart)
+			sparkle:SetPoint(animation.point, animation.xStart, animation.yStart)
 			sparkle.animGroup.translate:SetOffset(animation.xStop - animation.xStart, animation.yStop - animation.yStart)
 		end)
 	end

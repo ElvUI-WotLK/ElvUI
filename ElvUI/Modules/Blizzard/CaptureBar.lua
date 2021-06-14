@@ -48,7 +48,7 @@ end
 
 function B:PositionCaptureBar()
 	pvpHolder:Size(30, 70)
-	pvpHolder:Point("TOP", E.UIParent, "TOP", 0, -4)
+	pvpHolder:Point("TOP", 0, -4)
 
 	hooksecurefunc("WorldStateAlwaysUpFrame_Update", B.WorldStateAlwaysUpFrame_Update)
 	hooksecurefunc(ExtendedUI["CAPTUREPOINT"], "create", repositionCaptureBar)

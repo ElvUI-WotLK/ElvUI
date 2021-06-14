@@ -186,7 +186,7 @@ end
 function M:CreateFarmModeMap()
 	local fm = CreateFrame("Minimap", "FarmModeMap", E.UIParent)
 	fm:Size(E.db.farmSize)
-	fm:Point("TOP", E.UIParent, "TOP", 0, -120)
+	fm:Point("TOP", 0, -120)
 	fm:SetClampedToScreen(true)
 	fm:CreateBackdrop("Default")
 	fm:EnableMouseWheel(true)
@@ -466,7 +466,7 @@ function M:Initialize()
 
 	Minimap.location = Minimap:CreateFontString(nil, "OVERLAY")
 	Minimap.location:FontTemplate(nil, nil, "OUTLINE")
-	Minimap.location:Point("TOP", Minimap, "TOP", 0, -2)
+	Minimap.location:Point("TOP", 0, -2)
 	Minimap.location:SetJustifyH("CENTER")
 	Minimap.location:SetJustifyV("MIDDLE")
 	if E.db.general.minimap.locationText ~= "SHOW" or not E.private.general.minimap.enable then

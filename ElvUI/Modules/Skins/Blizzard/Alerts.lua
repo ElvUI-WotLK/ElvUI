@@ -20,8 +20,8 @@ S:AddCallback("Skin_Alerts", function()
 			frame:DisableDrawLayer("OVERLAY")
 
 			frame:CreateBackdrop("Transparent")
-			frame.backdrop:Point("TOPLEFT", frame, 0, -6)
-			frame.backdrop:Point("BOTTOMRIGHT", frame, 0, 6)
+			frame.backdrop:Point("TOPLEFT", 0, -6)
+			frame.backdrop:Point("BOTTOMRIGHT", 0, 6)
 
 			S:SetBackdropHitRect(frame)
 
@@ -54,13 +54,13 @@ S:AddCallback("Skin_Alerts", function()
 	frame:DisableDrawLayer("OVERLAY")
 
 	frame:CreateBackdrop("Transparent")
-	frame.backdrop:Point("TOPLEFT", frame, 0, -6)
-	frame.backdrop:Point("BOTTOMRIGHT", frame, 0, 6)
+	frame.backdrop:Point("TOPLEFT", 0, -6)
+	frame.backdrop:Point("BOTTOMRIGHT", 0, 6)
 
 	S:SetBackdropHitRect(frame)
 
 	frame.dungeonTexture:ClearAllPoints()
-	frame.dungeonTexture:Point("LEFT", frame, 13, 0)
+	frame.dungeonTexture:Point("LEFT", 13, 0)
 	frame.dungeonTexture:Size(42)
 	frame.dungeonTexture:SetTexCoord(unpack(E.TexCoords))
 

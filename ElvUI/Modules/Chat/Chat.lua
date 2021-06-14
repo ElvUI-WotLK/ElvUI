@@ -276,8 +276,8 @@ function CH:StyleChat(frame)
 	local charCount = editbox:CreateFontString()
 	charCount:FontTemplate()
 	charCount:SetTextColor(190, 190, 190, 0.4)
-	charCount:Point("TOPRIGHT", editbox, "TOPRIGHT", -5, 0)
-	charCount:Point("BOTTOMRIGHT", editbox, "BOTTOMRIGHT", -5, 0)
+	charCount:Point("TOPRIGHT", -5, 0)
+	charCount:Point("BOTTOMRIGHT", -5, 0)
 	charCount:SetJustifyH("CENTER")
 	charCount:Width(40)
 	editbox.characterCount = charCount
@@ -1800,7 +1800,7 @@ function CH:BuildCopyChatFrame()
 	frame:Hide()
 	frame:SetTemplate("Transparent")
 	frame:Size(700, 200)
-	frame:Point("BOTTOM", E.UIParent, "BOTTOM", 0, 3)
+	frame:Point("BOTTOM", 0, 3)
 	frame:SetFrameStrata("DIALOG")
 	frame:EnableMouse(true)
 	frame:SetMovable(true)
@@ -1810,8 +1810,8 @@ function CH:BuildCopyChatFrame()
 	self.copyChatFrame = frame
 
 	local scrollFrame = CreateFrame("ScrollFrame", "$parentScrollFrame", frame, "UIPanelScrollFrameTemplate")
-	scrollFrame:Point("TOPLEFT", frame, "TOPLEFT", 8, -30)
-	scrollFrame:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -29, 8)
+	scrollFrame:Point("TOPLEFT", 8, -30)
+	scrollFrame:Point("BOTTOMRIGHT", -29, 8)
 	frame.scrollFrame = scrollFrame
 
 	scrollFrame.scrollBar = CopyChatFrameScrollFrameScrollBar
@@ -2024,7 +2024,7 @@ function CH:Initialize()
 
 	Skins:HandleNextPrevButton(CombatLogQuickButtonFrame_CustomAdditionalFilterButton)
 	CombatLogQuickButtonFrame_CustomAdditionalFilterButton:Size(22)
-	CombatLogQuickButtonFrame_CustomAdditionalFilterButton:Point("TOPRIGHT", CombatLogQuickButtonFrame_Custom, "TOPRIGHT", 3, -1)
+	CombatLogQuickButtonFrame_CustomAdditionalFilterButton:Point("TOPRIGHT", 3, -1)
 	CombatLogQuickButtonFrame_CustomAdditionalFilterButton:SetHitRectInsets(0, 0, 0, 0)
 end
 
