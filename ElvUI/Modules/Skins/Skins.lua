@@ -414,7 +414,6 @@ function S:HandleColorSwatch(frame, size)
 
 	local normalTexture = frame:GetNormalTexture()
 	normalTexture:SetTexture(E.media.blankTex)
-	normalTexture:ClearAllPoints()
 	normalTexture:SetInside(frame.backdrop)
 
 	frame.isSkinned = true

@@ -276,7 +276,6 @@ S:AddCallback("Skin_Character", function()
 			frame:SetTemplate("Default")
 
 			if i ~= 1 then
-				frame:ClearAllPoints()
 				frame:Point("TOP", _G[frameName..i-1], "BOTTOM", 0, -(E.Border + E.Spacing))
 			end
 

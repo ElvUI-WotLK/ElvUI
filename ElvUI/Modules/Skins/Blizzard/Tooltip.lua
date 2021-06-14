@@ -34,7 +34,6 @@ S:AddCallback("Skin_Tooltip", function()
 	GameTooltipStatusBar:SetStatusBarTexture(E.media.normTex)
 	E:RegisterStatusBar(GameTooltipStatusBar)
 	GameTooltipStatusBar:CreateBackdrop("Transparent")
-	GameTooltipStatusBar:ClearAllPoints()
 	GameTooltipStatusBar:Point("TOPLEFT", GameTooltip, "BOTTOMLEFT", E.Border, -(E.Spacing * 3))
 	GameTooltipStatusBar:Point("TOPRIGHT", GameTooltip, "BOTTOMRIGHT", -E.Border, -(E.Spacing * 3))
 

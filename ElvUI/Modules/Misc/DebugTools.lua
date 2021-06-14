@@ -39,9 +39,9 @@ function D:ModifyErrorFrame()
 	end)
 
 	ScriptErrorsFrame:Size(500, 300)
-	ScriptErrorsFrameScrollFrame:Size(ScriptErrorsFrame:GetWidth() - 45, ScriptErrorsFrame:GetHeight() - 71)
+	ScriptErrorsFrameScrollFrame:Size(455, 229)
 
-	ScriptErrorsFrameScrollFrameText:Width(ScriptErrorsFrameScrollFrame:GetWidth())
+	ScriptErrorsFrameScrollFrameText:Width(455)
 
 	local BUTTON_WIDTH = 75
 	local BUTTON_HEIGHT = 24
