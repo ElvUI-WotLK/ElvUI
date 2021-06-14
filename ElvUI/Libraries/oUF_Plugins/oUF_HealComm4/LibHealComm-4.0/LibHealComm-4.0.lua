@@ -642,7 +642,7 @@ end
 	**NOTE** Any GUID returned from GetHealTargets must be compressed through a call to compressGUID[guid]
 ]]
 
-local CalculateHealing, GetHealTargets, AuraHandler, CalculateHotHealing, ResetChargeData, LoadClassData
+local CalculateHealing, GetHealTargets, AuraHandler, CalculateHotHealing, ResetChargeData, LoadClassData, LoadRaceData
 
 -- DRUIDS
 -- All data is accurate as of 3.2.2 (build 10392)
@@ -1477,6 +1477,123 @@ if( playerClass == "SHAMAN" ) then
 
 			-- Apply the final modifier of any MS or self heal increasing effects
 			return DIRECT_HEALS, ceil(healAmount)
+		end
+	end
+end
+
+if( select(2, UnitRace("player")) == "Draenei") or true then
+	local GetSpellBonusDamage = GetSpellBonusDamage
+	local UnitAttackPower = UnitAttackPower
+	local UnitRangedAttackPower = UnitRangedAttackPower
+
+	LoadRaceData = function()
+		local naaruClassSpells = {
+			[28880] = "WARRIOR",
+			[59542] = "PALADIN",
+			[59543] = "HUNTER",
+			[59544] = "PRIEST",
+			[59545] = "DEATHKNIGHT",
+			[59547] = "SHAMAN",
+			[59548] = "MAGE",
+		}
+		local naaruSpellID, naaruSpellName
+
+		for spellID, class in pairs(naaruClassSpells) do
+			if playerClass == class then
+				naaruSpellID = spellID
+				naaruSpellName = GetSpellInfo(spellID)
+			end
+		end
+
+		if not (naaruSpellID and naaruSpellName) then return end
+
+		hotData[naaruSpellName] = {interval = 3, ticks = 5}
+
+		local FocusedPower, BlessedResilience
+		local Divinity, DivineIllumination
+
+		if playerClass == "PRIEST" then
+			FocusedPower = GetSpellInfo(33190)
+			BlessedResilience = GetSpellInfo(33142)
+		elseif playerClass == "PALADIN" then
+			Divinity = GetSpellInfo(63646)
+			DivineIllumination = GetSpellInfo(31842)
+		end
+
+		local CalculateHotHealing_Naaru = function(guid, spellID)
+			local healAmount = playerLevel * 15 + 35
+			local spellPower, spellModifier
+
+			if playerClass == "MAGE" or playerClass == "PRIEST" then
+				spellPower = GetSpellBonusDamage(2)
+				spellModifier = 1.885
+			elseif playerClass == "PALADIN" or playerClass == "SHAMAN" then
+				local apBase, apPosBuff, apNegBuff = UnitAttackPower("player")
+				local meleeAttackPower = apBase + apPosBuff + apNegBuff
+				local holySpellPower = GetSpellBonusDamage(2)
+
+				if (meleeAttackPower * 1.1) > (holySpellPower * 1.885) then
+					spellPower = meleeAttackPower
+					spellModifier = 1.1
+				else
+					spellPower = holySpellPower
+					spellModifier = 1.885
+				end
+			else
+				local apBase, apPosBuff, apNegBuff = UnitAttackPower("player")
+				local meleeAttackPower = apBase + apPosBuff + apNegBuff
+
+				local rapBase, rapPosBuff, rapNegBuff = UnitRangedAttackPower("player")
+				local rangedAttackPower = rapBase + rapPosBuff + rapNegBuff
+
+				spellModifier = 1.1
+
+				if (meleeAttackPower * spellModifier) > (rangedAttackPower * spellModifier) then
+					spellPower = meleeAttackPower
+				else
+					spellPower = rangedAttackPower
+				end
+			end
+
+			local healModifier = playerHealModifier
+
+			if playerClass == "PRIEST" then
+				healAmount = healAmount * (1 + talentData[FocusedPower].current)
+				healAmount = healAmount * (1 + talentData[BlessedResilience].current)
+			elseif playerClass == "PALADIN" then
+				if talentData[Divinity].current > 0 then
+					healModifier = healModifier + talentData[Divinity].current
+					healAmount = healAmount * (1 + talentData[Divinity].current)
+				end
+
+				if equippedSetCache["T10 Holy"] >= 2 and unitHasAura("player", DivineIllumination) then
+					healAmount = healAmount * 1.35
+				end
+			end
+
+			healAmount = calculateGeneralAmount(playerLevel, healAmount, spellPower, spellModifier, healModifier)
+			healAmount = floor(healAmount / hotData[naaruSpellName].ticks)
+
+			return HOT_HEALS, healAmount, hotData[naaruSpellName].ticks, hotData[naaruSpellName].interval
+		end
+
+		if CalculateHotHealing then
+			local CalculateHotHealing_Orig = CalculateHotHealing
+			function CalculateHotHealing(guid, spellID)
+				if naaruClassSpells[spellID] then
+					return CalculateHotHealing_Naaru(guid, spellID)
+				else
+					return CalculateHotHealing_Orig(guid, spellID)
+				end
+			end
+		else
+			CalculateHotHealing = CalculateHotHealing_Naaru
+		end
+
+		if not GetHealTargets then
+			GetHealTargets = function(bitType, guid, healAmount, spellName, hasVariableTicks)
+				return compressGUID[guid], healAmount
+			end
 		end
 	end
 end
@@ -2820,6 +2937,12 @@ function HealComm:PLAYER_LOGIN()
 
 	if( isHealerClass ) then
 		self:OnInitialize()
+		LoadRaceData()
+	elseif LoadRaceData then
+		twipe(hotData)
+		eventRegistered["SPELL_AURA_APPLIED"] = true
+		self.eventFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+		LoadRaceData()
 	end
 
 	self.eventFrame:UnregisterEvent("PLAYER_LOGIN")
