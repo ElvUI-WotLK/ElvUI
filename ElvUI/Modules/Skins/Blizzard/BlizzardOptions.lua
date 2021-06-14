@@ -32,25 +32,7 @@ S:AddCallback("Skin_BlizzardOptions", function()
 
 	-- Game Menu Plus / Minus Buttons
 	for _, button in ipairs(InterfaceOptionsFrameAddOns.buttons) do
-		button.toggle:SetNormalTexture("")
-		button.toggle.SetNormalTexture = E.noop
-		button.toggle:SetPushedTexture("")
-		button.toggle.SetPushedTexture = E.noop
-		button.toggle:SetHighlightTexture(nil)
-
-		local text = button.toggle:CreateFontString(nil, "OVERLAY")
-		text:FontTemplate(nil, 22)
-		text:SetPoint("CENTER")
-		text:SetText("+")
-		button.toggle.text = text
-
-		hooksecurefunc(button.toggle, "SetNormalTexture", function(self, texture)
-			if find(texture, "MinusButton") then
-				self.text:SetText("-")
-			else
-				self.text:SetText("+")
-			end
-		end)
+		S:HandleCollapseExpandButton(button.toggle, "+", nil, 0)
 	end
 
 	-- Interface Options Frame

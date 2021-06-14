@@ -612,24 +612,13 @@ S:AddCallback("Skin_Character", function()
 
 	SkillFrameExpandButtonFrame:StripTextures()
 
-	SkillFrameCollapseAllButton:SetNormalTexture(E.Media.Textures.Plus)
-	SkillFrameCollapseAllButton.SetNormalTexture = E.noop
-	SkillFrameCollapseAllButton:GetNormalTexture():Size(16)
-	SkillFrameCollapseAllButton:SetHighlightTexture(nil)
-
-	hooksecurefunc(SkillFrameCollapseAllButton, "SetNormalTexture", function(self, texture)
-		if find(texture, "MinusButton") then
-			SkillFrameCollapseAllButton:GetNormalTexture():SetTexture(E.Media.Textures.Minus)
-		else
-			SkillFrameCollapseAllButton:GetNormalTexture():SetTexture(E.Media.Textures.Plus)
-		end
-	end)
+	S:HandleCollapseExpandButton(SkillFrameCollapseAllButton, "+")
 
 	for i = 1, SKILLS_TO_DISPLAY do
 		local statusBar = _G["SkillRankFrame"..i]
 		local statusBarBorder = _G["SkillRankFrame"..i.."Border"]
 		local statusBarBackground = _G["SkillRankFrame"..i.."Background"]
-		local skillTypeLabelText = _G["SkillTypeLabel"..i]
+		local skillTypeLabel = _G["SkillTypeLabel"..i]
 
 		statusBar:Width(276)
 		statusBar:CreateBackdrop("Default")
@@ -639,18 +628,7 @@ S:AddCallback("Skin_Character", function()
 		statusBarBorder:StripTextures()
 		statusBarBackground:SetTexture(nil)
 
-		skillTypeLabelText:SetNormalTexture(E.Media.Textures.Plus)
-		skillTypeLabelText.SetNormalTexture = E.noop
-		skillTypeLabelText:GetNormalTexture():Size(16)
-		skillTypeLabelText:SetHighlightTexture(nil)
-
-		hooksecurefunc(skillTypeLabelText, "SetNormalTexture", function(self, texture)
-			if find(texture, "MinusButton") then
-				self:GetNormalTexture():SetTexture(E.Media.Textures.Minus)
-			else
-				self:GetNormalTexture():SetTexture(E.Media.Textures.Plus)
-			end
-		end)
+		S:HandleCollapseExpandButton(skillTypeLabel, "+")
 	end
 
 	SkillDetailStatusBar:StripTextures()

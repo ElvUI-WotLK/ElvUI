@@ -52,41 +52,16 @@ S:AddCallbackForAddon("Blizzard_TradeSkillUI", "Skin_Blizzard_TradeSkillUI", fun
 
 	TradeSkillExpandButtonFrame:StripTextures()
 
-	TradeSkillCollapseAllButton:SetNormalTexture(E.Media.Textures.Plus)
-	TradeSkillCollapseAllButton.SetNormalTexture = E.noop
-	TradeSkillCollapseAllButton:GetNormalTexture():Point("LEFT", 3, 2)
-	TradeSkillCollapseAllButton:GetNormalTexture():Size(16)
-
-	TradeSkillCollapseAllButton:SetHighlightTexture("")
-	TradeSkillCollapseAllButton.SetHighlightTexture = E.noop
-
-	TradeSkillCollapseAllButton:SetDisabledTexture(E.Media.Textures.Plus)
-	TradeSkillCollapseAllButton.SetDisabledTexture = E.noop
-	TradeSkillCollapseAllButton:GetDisabledTexture():Point("LEFT", 3, 2)
-	TradeSkillCollapseAllButton:GetDisabledTexture():Size(16)
-	TradeSkillCollapseAllButton:GetDisabledTexture():SetDesaturated(true)
+	S:HandleCollapseExpandButton(TradeSkillCollapseAllButton, "+")
 
 	for i = 1, SKILLS_DISPLAYED do
 		local skillButton = _G["TradeSkillSkill"..i]
 		local skillButtonHighlight = _G["TradeSkillSkill"..i.."Highlight"]
 
-		skillButton:SetNormalTexture(E.Media.Textures.Plus)
-		skillButton.SetNormalTexture = E.noop
-		skillButton:GetNormalTexture():Size(13)
-		skillButton:GetNormalTexture():Point("LEFT", 2, 1)
+		S:HandleCollapseExpandButton(skillButton, "+", nil, nil, 1)
 
 		skillButtonHighlight:SetTexture("")
 		skillButtonHighlight.SetTexture = E.noop
-
-		hooksecurefunc(skillButton, "SetNormalTexture", function(self, texture)
-			if find(texture, "MinusButton") then
-				self:GetNormalTexture():SetTexture(E.Media.Textures.Minus)
-			elseif find(texture, "PlusButton") then
-				self:GetNormalTexture():SetTexture(E.Media.Textures.Plus)
-			else
-				self:GetNormalTexture():SetTexture("")
-			end
-		end)
 	end
 
 	TradeSkillListScrollFrame:StripTextures()
@@ -198,14 +173,6 @@ S:AddCallbackForAddon("Blizzard_TradeSkillUI", "Skin_Blizzard_TradeSkillUI", fun
 	TradeSkillCreateAllButton:Point("RIGHT", TradeSkillCreateButton, "LEFT", -82, 0)
 	TradeSkillIncrementButton:Point("RIGHT", TradeSkillCreateButton, "LEFT", -4, 0)
 	TradeSkillDecrementButton:Point("LEFT", TradeSkillCreateAllButton, "RIGHT", 4, 0)
-
-	hooksecurefunc(TradeSkillCollapseAllButton, "SetNormalTexture", function(self, texture)
-		if find(texture, "MinusButton") then
-			self:GetNormalTexture():SetTexture(E.Media.Textures.Minus)
-		else
-			self:GetNormalTexture():SetTexture(E.Media.Textures.Plus)
-		end
-	end)
 
 	hooksecurefunc("TradeSkillFrame_SetSelection", function(id)
 		if TradeSkillSkillIcon:GetNormalTexture() then

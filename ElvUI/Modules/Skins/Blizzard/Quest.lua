@@ -111,22 +111,7 @@ S:AddCallback("Skin_Quest", function()
 	end)
 
 	for _, questLogTitle in ipairs(QuestLogScrollFrame.buttons) do
-		questLogTitle:SetNormalTexture(E.Media.Textures.Plus)
-		questLogTitle.SetNormalTexture = E.noop
-		questLogTitle:GetNormalTexture():Size(16)
-		questLogTitle:GetNormalTexture():Point("LEFT", 5, 0)
-		questLogTitle:SetHighlightTexture("")
-		questLogTitle.SetHighlightTexture = E.noop
-
-		hooksecurefunc(questLogTitle, "SetNormalTexture", function(self, texture)
-			if find(texture, "MinusButton") then
-				self:GetNormalTexture():SetTexture(E.Media.Textures.Minus)
-			elseif find(texture, "PlusButton") then
-				self:GetNormalTexture():SetTexture(E.Media.Textures.Plus)
-			else
-				self:GetNormalTexture():SetTexture(0, 0, 0, 0)
-			end
-		end)
+		S:HandleCollapseExpandButton(questLogTitle, "+")
 	end
 
 	-- QuestLog Detail Frame
