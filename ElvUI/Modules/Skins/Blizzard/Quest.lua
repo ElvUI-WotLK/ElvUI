@@ -99,7 +99,7 @@ S:AddCallback("Skin_Quest", function()
 	QuestLogFrame:HookScript("OnShow", function()
 		QuestLogDetailScrollFrame.backdrop:Show()
 
-		QuestLogFrameShowMapButton:Point("TOPRIGHT", -30, -24)
+		QuestLogFrameShowMapButton:Point("TOPRIGHT", -30, -23)
 
 		QuestLogDetailScrollFrame:Height(336)
 		QuestLogDetailScrollFrame:Point("TOPRIGHT", -30, -61)
@@ -222,8 +222,9 @@ S:AddCallback("Skin_Quest", function()
 			local button = _G["QuestTitleButton"..i]
 
 			if button:GetFontString() then
-				if button:GetText() and find(button:GetText(), "|cff000000") then
-					button:SetText(gsub(button:GetText(), "|cff000000", "|cffFFFF00"))
+				local text = button:GetText()
+				if text and find(text, "|cff000000") then
+					button:SetText(gsub(text, "|cff000000", "|cffFFFF00"))
 				end
 			end
 		end
@@ -261,10 +262,8 @@ S:AddCallback("Skin_Quest", function()
 		end
 	end
 
-	local function questQualityColors(frame, text, link, quality)
-		if link and not quality then
-			quality = select(3, GetItemInfo(link))
-		end
+	local function questQualityColors(frame, text, link)
+		local quality = link and select(3, GetItemInfo(link))
 
 		if quality then
 			local r, g, b = GetItemQualityColor(quality)

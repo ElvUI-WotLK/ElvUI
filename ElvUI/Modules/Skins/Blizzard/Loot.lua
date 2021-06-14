@@ -63,15 +63,16 @@ S:AddCallback("Skin_Loot", function()
 		if region:GetObjectType() == "FontString" then
 			if region:GetText() == ITEMS then
 				LootFrame.Title = region
+				break
 			end
 		end
 	end
 
 	LootFrame.Title:ClearAllPoints()
 	LootFrame.Title:Point("TOPLEFT", LootFrame.backdrop, "TOPLEFT", 4, -4)
+	LootFrame.Title:Width(142)
 	LootFrame.Title:SetJustifyH("LEFT")
 	LootFrame.Title:SetWordWrap(false)
-	LootFrame.Title:SetWidth(142)
 
 	LootFrame:HookScript("OnShow", function(self)
 		if IsFishingLoot() then

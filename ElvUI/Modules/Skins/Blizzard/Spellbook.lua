@@ -17,7 +17,7 @@ S:AddCallback("Skin_Spellbook", function()
 	SpellBookFrame.backdrop:Point("TOPLEFT", 11, -12)
 	SpellBookFrame.backdrop:Point("BOTTOMRIGHT", -32, 76)
 
-	S:SetUIPanelWindowInfo(SpellBookFrame, "width", nil, 32)
+	S:SetUIPanelWindowInfo(SpellBookFrame, "width", nil, 31)
 	S:SetBackdropHitRect(SpellBookFrame)
 
 --[[
