@@ -212,7 +212,8 @@ S:AddCallback("Skin_Character", function()
 	end
 
 	hooksecurefunc(CharacterAmmoSlotIconTexture, "SetTexture", function(self, texture)
-		updateSlotFrame(self:GetParent(), nil, 0, texture ~= "Interface\\PaperDoll\\UI-PaperDoll-Slot-Ranged")
+		local parent = self:GetParent()
+		updateSlotFrame(parent, nil, 0, texture ~= parent.backgroundTextureName)
 	end)
 
 	local f = CreateFrame("Frame")
