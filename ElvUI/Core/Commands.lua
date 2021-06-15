@@ -3,9 +3,8 @@ local DT = E:GetModule("DataTexts")
 local AB = E:GetModule("ActionBars")
 
 --Lua functions
-local next, tonumber, type = next, tonumber, type
+local tonumber, type = tonumber, type
 local format, lower, match, split = string.format, string.lower, string.match, string.split
-local wipe = table.wipe
 --WoW API / Variables
 local InCombatLockdown = InCombatLockdown
 local UIFrameFadeOut, UIFrameFadeIn = UIFrameFadeOut, UIFrameFadeIn
@@ -41,7 +40,7 @@ function E:LuaError(msg)
 			local name, _, _, enabled = GetAddOnInfo(i)
 			if enabled and name ~= "ElvUI" and name ~= "ElvUI_OptionsUI" then
 				disabledList[#disabledList + 1] = name
-				DisableAddOn(name, E.myname)
+				DisableAddOn(name)
 			end
 		end
 
@@ -58,7 +57,7 @@ function E:LuaError(msg)
 
 		if ElvCharacterDB.LuaErrorDisabledAddOns then
 			for _, addonName in ipairs(ElvCharacterDB.LuaErrorDisabledAddOns) do
-				EnableAddOn(addonName, E.myname)
+				EnableAddOn(addonName)
 			end
 
 			ElvCharacterDB.LuaErrorDisabledAddOns = nil
