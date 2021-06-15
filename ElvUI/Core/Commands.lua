@@ -3,8 +3,9 @@ local DT = E:GetModule("DataTexts")
 local AB = E:GetModule("ActionBars")
 
 --Lua functions
-local tonumber, type = tonumber, type
-local format, lower, match, split, wipe, next = string.format, string.lower, string.match, string.split, wipe, next
+local next, tonumber, type = next, tonumber, type
+local format, lower, match, split = string.format, string.lower, string.match, string.split
+local wipe = table.wipe
 --WoW API / Variables
 local InCombatLockdown = InCombatLockdown
 local UIFrameFadeOut, UIFrameFadeIn = UIFrameFadeOut, UIFrameFadeIn
@@ -32,31 +33,38 @@ function E:Grid(msg)
 end
 
 function E:LuaError(msg)
-	local switch = lower(msg)
-	if switch == "on" or switch == "1" then
-		for i=1, GetNumAddOns() do
-			local name = GetAddOnInfo(i)
-			if name ~= "ElvUI" and name ~= "ElvUI_OptionsUI" and E:IsAddOnEnabled(name) then
+	msg = lower(msg)
+	if msg == "on" or msg == "1" then
+		local disabledList = {}
+
+		for i = 1, GetNumAddOns() do
+			local name, _, _, enabled = GetAddOnInfo(i)
+			if enabled and name ~= "ElvUI" and name ~= "ElvUI_OptionsUI" then
+				disabledList[#disabledList + 1] = name
 				DisableAddOn(name, E.myname)
-				ElvDB.LuaErrorDisabledAddOns[name] = i
 			end
+		end
+
+		if #disabledList > 0 then
+			ElvCharacterDB.LuaErrorDisabledAddOns = disabledList
 		end
 
 		SetCVar("scriptErrors", 1)
 		ReloadUI()
-	elseif switch == "off" or switch == "0" then
-		if switch == "off" then
+	elseif msg == "off" or msg == "0" then
+		if msg == "off" then
 			SetCVar("scriptErrors", 0)
-			E:Print("Lua errors off.")
 		end
 
-		if next(ElvDB.LuaErrorDisabledAddOns) then
-			for name in pairs(ElvDB.LuaErrorDisabledAddOns) do
-				EnableAddOn(name, E.myname)
+		if ElvCharacterDB.LuaErrorDisabledAddOns then
+			for _, addonName in ipairs(ElvCharacterDB.LuaErrorDisabledAddOns) do
+				EnableAddOn(addonName, E.myname)
 			end
 
-			wipe(ElvDB.LuaErrorDisabledAddOns)
+			ElvCharacterDB.LuaErrorDisabledAddOns = nil
 			ReloadUI()
+		else
+			E:Print("Lua errors off.")
 		end
 	else
 		E:Print("/luaerror on - /luaerror off")

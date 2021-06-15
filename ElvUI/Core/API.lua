@@ -393,10 +393,6 @@ function E:RequestBGInfo()
 end
 
 function E:PLAYER_ENTERING_WORLD()
-	if not ElvDB.LuaErrorDisabledAddOns then
-		ElvDB.LuaErrorDisabledAddOns = {}
-	end
-
 	if not self.MediaUpdated then
 		self:UpdateMedia()
 		self.MediaUpdated = true
