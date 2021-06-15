@@ -104,8 +104,8 @@ This UI will arrange your interface to be more flexible and practical.
     -- Development ------------------------------------------------------------------------------------------------
     ---------------------------------------------------------------------------------------------------------------
     /etrace           Toggles events window.
-    /luaerror on      Enable luaerrors.
-    /luaerror off     Disable luaerrors.
+    /luaerror on      Enable luaerrors and disable all AddOns except ElvUI.
+    /luaerror off     Disable luaerrors and re-enable all AddOns disabled within that session.
     /cpuimpact        Toggles calculations of CPU Impact. Type /cpuimpact to get results when you are ready.
     /cpuusage         Calculates and dumps CPU usage differences (module: all, showall: false, minCalls: 15, delay: 5).
     /frame            Command to grab frame information when mouseing over a frame or when inputting the name.
