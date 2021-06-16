@@ -203,7 +203,7 @@ function M:SkinBubble(frame)
 	end
 
 	frame:HookScript("OnShow", M.UpdateBubbleBorder)
-	frame:SetFrameStrata("DIALOG")
+	frame:SetFrameStrata("BACKGROUND")
 	M.UpdateBubbleBorder(frame)
 
 	frame.isSkinnedElvUI = true
