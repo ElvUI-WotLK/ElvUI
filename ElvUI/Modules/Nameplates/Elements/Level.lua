@@ -15,7 +15,8 @@ function NP:Update_Level(frame)
 
 	if frame.Health:IsShown() then
 		level:SetJustifyH("RIGHT")
-		level:SetPoint("BOTTOMRIGHT", frame.Health, "TOPRIGHT", 0, E.Border*2)
+		level:SetPoint(E.InversePoints[self.db.units[frame.UnitType].level.position], self.db.units[frame.UnitType].level.parent == "Nameplate" and frame or frame[self.db.units[frame.UnitType].level.parent], self.db.units[frame.UnitType].level.position, self.db.units[frame.UnitType].level.xOffset, self.db.units[frame.UnitType].level.yOffset)
+		level:SetParent(frame.Health)
 		level:SetText(levelText)
 	else
 		if self.db.units[frame.UnitType].name.enable then
@@ -23,6 +24,7 @@ function NP:Update_Level(frame)
 		else
 			level:SetPoint("TOPLEFT", frame, "TOPRIGHT", -38, 0)
 		end
+		level:SetParent(frame)
 		level:SetJustifyH("LEFT")
 		level:SetFormattedText(" [%s]", levelText)
 	end

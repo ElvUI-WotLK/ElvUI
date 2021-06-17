@@ -355,10 +355,12 @@ function mod:StyleFilterSetChanges(frame, actions, HealthColorChanged, BorderCha
 		frame.Name:ClearAllPoints()
 		frame.Name:SetJustifyH("CENTER")
 		frame.Name:SetPoint("TOP", frame)
+		frame.Name:SetParent(frame)
 		if mod.db.units[frame.UnitType].level.enable then
 			frame.Level:ClearAllPoints()
 			frame.Level:SetPoint("LEFT", frame.Name, "RIGHT")
 			frame.Level:SetJustifyH("LEFT")
+			frame.Level:SetParent(frame)
 			frame.Level:SetFormattedText(" [%s]", mod:UnitLevel(frame))
 		end
 		if not NameColorChanged or not IconOnlyChanged then
