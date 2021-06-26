@@ -102,6 +102,8 @@ function NP:Update_HealthColor(frame)
 end
 
 function NP:Update_Health(frame)
+	if not frame.Health:IsShown() then return end
+
 	local health = frame.oldHealthBar:GetValue()
 	local _, maxHealth = frame.oldHealthBar:GetMinMaxValues()
 	frame.Health:SetMinMaxValues(0, maxHealth)
