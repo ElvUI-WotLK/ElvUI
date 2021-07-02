@@ -534,8 +534,17 @@ E.Options.args.chat = {
 								E.global.chat.classColorMentionExcludedNames[strlower(value)] = value
 							end
 						},
-						classColorMentionExcludedNames = {
+						classColorMentionLetterThreshold = {
 							order = 4,
+							type = "range",
+							name = L["Minimum name length"],
+							desc = L["Only class color names longer than this many letters."],
+							min = 0, max = 12, step = 1,
+							get = function(info) return E.db.chat.classColorMentionLetterThreshold end,
+							set = function(info, value) E.db.chat.classColorMentionLetterThreshold = value end,
+						},
+						classColorMentionExcludedNames = {
+							order = 5,
 							type = "multiselect",
 							name = L["Excluded Names"],
 							values = function() return E.global.chat.classColorMentionExcludedNames end,
