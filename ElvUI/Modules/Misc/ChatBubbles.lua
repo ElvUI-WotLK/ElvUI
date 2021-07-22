@@ -10,11 +10,20 @@ local GetPlayerInfoByGUID = GetPlayerInfoByGUID
 local WorldFrame = WorldFrame
 local WorldGetChildren = WorldFrame.GetChildren
 local WorldGetNumChildren = WorldFrame.GetNumChildren
+local ICON_LIST = ICON_LIST
+local ICON_TAG_LIST = ICON_TAG_LIST
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS
 
 --Message caches
 local messageToGUID = {}
 local messageToSender = {}
+
+local function replaceIconTags(value)
+	value = lower(value)
+	if ICON_TAG_LIST[value] and ICON_LIST[ICON_TAG_LIST[value]] then
+		return format("%s0|t", ICON_LIST[ICON_TAG_LIST[value]])
+	end
+end
 
 function M:UpdateBubbleBorder()
 	if not self.text then return end
@@ -39,9 +48,11 @@ function M:UpdateBubbleBorder()
 		end
 	end
 
+	local rebuiltString
+
 	if E.private.chat.enable and E.private.general.classColorMentionsSpeech then
 		if text and match(text, "%s-%S+%s*") then
-			local classColorTable, lowerCaseWord, isFirstWord, rebuiltString, tempWord, wordMatch, classMatch
+			local classColorTable, lowerCaseWord, isFirstWord, tempWord, wordMatch, classMatch
 
 			for word in gmatch(text, "%s-%S+%s*") do
 				tempWord = gsub(word, "^[%s%p]-([^%s%p]+)([%-]?[^%s%p]-)[%s%p]*$", "%1%2")
@@ -62,11 +73,15 @@ function M:UpdateBubbleBorder()
 					rebuiltString = format("%s%s", rebuiltString, word)
 				end
 			end
-
-			if rebuiltString then
-				self.text:SetText(rebuiltString)
-			end
 		end
+	end
+
+	if text then
+		rebuiltString = gsub(rebuiltString or text, "{([^}]+)}", replaceIconTags)
+	end
+
+	if rebuiltString then
+		self.text:SetText(rebuiltString)
 	end
 end
 
