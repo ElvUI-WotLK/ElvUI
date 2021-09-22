@@ -240,8 +240,12 @@ function UF:PostUpdateHealthColor(unit, r, g, b)
 			cur = parent.forcedHealth or cur
 			max = (cur > max and cur * 2) or max
 		end
-
-		newr, newg, newb = ElvUF:ColorGradient(cur, max, 1, 0, 0, 1, 1, 0, r, g, b)
+		
+		if colors.customNPChealth and not UnitIsPlayer(unit) then
+			newr, newg, newb = ElvUF:ColorGradient(cur, max, 1, 0, 0, 1, 1, 0, colors.npc_health_pick.r, colors.npc_health_pick.g, colors.npc_health_pick.b)
+		else
+			newr, newg, newb = ElvUF:ColorGradient(cur, max, 1, 0, 0, 1, 1, 0, r, g, b)
+		end
 		self:SetStatusBarColor(newr, newg, newb)
 	end
 
