@@ -2909,15 +2909,15 @@ E.Options.args.unitframe = {
 								customNPChealth = {
 									order = 8,
 									type = "toggle",
-									name = L["Custom NPC Healthbar"],
-									desc = L["Toggle a different healthbar for NPCs."],
+									name = L["Custom NPC Health"],
+									desc = L["Use a different healthbar color for NPCs."],
 									get = function(info) return E.db.unitframe.colors[info[#info]] end,
 									set = function(info, value) E.db.unitframe.colors[info[#info]] = value UF:Update_AllFrames() end
 								},
 								npc_health_pick = {
 									order = 9,
 									type = "color",
-									name = L["NPC Healthbar"],
+									name = L["NPC Health"],
 									disabled = function() return not E.db.unitframe.colors.customNPChealth end
 								},
 								spacer2 = {
