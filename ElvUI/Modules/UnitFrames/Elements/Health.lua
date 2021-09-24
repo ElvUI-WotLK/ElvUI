@@ -245,7 +245,7 @@ function UF:PostUpdateHealthColor(unit, r, g, b)
 		self:SetStatusBarColor(newr, newg, newb)
 	end
 	
-	if colors.customNPChealth and not UnitIsPlayer(unit) and not UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) then
+	if colors.customNPChealth and not UnitIsPlayer(unit) and not (UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit)) then
 		local cur, max = self.cur or 1, self.max or 100
 		newr, newg, newb = ElvUF:ColorGradient(cur, max, 1, 0, 0, 1, 1, 0, colors.npc_health_pick.r, colors.npc_health_pick.g, colors.npc_health_pick.b)
 		self:SetStatusBarColor(newr, newg, newb)
