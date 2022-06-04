@@ -728,6 +728,51 @@ function S:HandleCollapseExpandButton(button, defaultState, useFontString, xOffs
 	button.isSkinned = true
 end
 
+do -- Handle collapse like retail (including UIPanelButtonTemplate2)
+	local function UpdateCollapseTexture(button, texture)
+		local tex = button:GetNormalTexture()
+		if strfind(texture, "Plus") or strfind(texture, "Closed") then
+			tex:SetTexture(E.Media.Textures.PlusButton)
+		elseif strfind(texture, "Minus") or strfind(texture, "Open") then
+			tex:SetTexture(E.Media.Textures.MinusButton)
+		end
+	end
+
+	local function UpdatePushedTexture(button)
+		button:GetPushedTexture():SetTexture("")
+	end
+
+	local function syncPushTexture(button, _, skip)
+		if not skip then
+			local normal = button:GetNormalTexture():GetTexture()
+			button:SetPushedTexture(normal, true)
+		end
+	end
+
+	function S:HandleCollapseTexture(button, syncPushed)
+		if syncPushed then -- not needed always
+			hooksecurefunc(button, "SetPushedTexture", syncPushTexture)
+			syncPushTexture(button)
+		else
+			button:SetPushedTexture("")
+			hooksecurefunc(button, "SetPushedTexture", UpdatePushedTexture) -- make it permanent
+		end
+
+		hooksecurefunc(button, 'SetNormalTexture', UpdateCollapseTexture)
+		UpdateCollapseTexture(button, button:GetNormalTexture():GetTexture())
+
+		-- Find the button textures that is still present
+		for i = 1, 3 do
+			local region = select(i, button:GetRegions())
+			if region and region:IsObjectType("Texture") and region:GetTexture() then -- region:GetTexture() nil check so strfind doesn't error
+				if strfind(region:GetTexture(), "Up") then
+					region:Kill() -- Remove the button backdrop texture for good
+				end
+			end
+		end
+	end
+end
+
 function S:ADDON_LOADED(_, addon)
 	S:SkinAce3()
 
