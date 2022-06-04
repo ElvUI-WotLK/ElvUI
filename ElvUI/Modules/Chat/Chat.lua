@@ -617,7 +617,7 @@ function CH:UpdateChatTabs()
 		local chat = _G[frameName]
 		local tab = _G[format("%sTab", frameName)]
 
-		if chat:IsShown() and not (id > NUM_CHAT_WINDOWS) and (id == self.RightChatWindowID) then
+		if chat:IsShown() and (id <= NUM_CHAT_WINDOWS) and (id == self.RightChatWindowID) then
 			if self.db.panelBackdrop == "HIDEBOTH" or self.db.panelBackdrop == "LEFT" then
 				CH:SetupChatTabs(tab, fadeTabsNoBackdrop and true or false)
 			else
@@ -666,7 +666,7 @@ function CH:PositionChat(override)
 		tab.isDocked = chat.isDocked
 		tab.owner = chat
 
-		if chat:IsShown() and not (id > NUM_CHAT_WINDOWS) and id == self.RightChatWindowID then
+		if chat:IsShown() and (id <= NUM_CHAT_WINDOWS) and id == self.RightChatWindowID then
 			chat:ClearAllPoints()
 
 			if E.db.datatexts.rightChatPanel then
@@ -702,7 +702,7 @@ function CH:PositionChat(override)
 			chat:SetParent(UIParent)
 			CH:SetupChatTabs(tab, fadeUndockedTabs and true or false)
 		else
-			if id ~= 2 and not (id > NUM_CHAT_WINDOWS) then
+			if id ~= 2 and (id <= NUM_CHAT_WINDOWS) then
 				chat:ClearAllPoints()
 				if E.db.datatexts.leftChatPanel then
 					chat:Point("BOTTOMLEFT", LeftChatToggleButton, "TOPLEFT", 1, 4)

@@ -892,7 +892,7 @@ end
 LAB.RegisterCallback(AB, "OnButtonUpdate", AB.LAB_ButtonUpdate)
 
 local function OnCooldownUpdate(_, button, start, duration)
-	if not button._state_type == "action" then return end
+	if button._state_type ~= "action" then return end
 
 	if duration and duration > 1.5 then
 		button.saturationLocked = true --Lock any new actions that are created after we activated desaturation option

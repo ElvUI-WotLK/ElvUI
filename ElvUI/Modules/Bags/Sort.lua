@@ -476,7 +476,7 @@ function B.Stack(sourceBags, targetBags, canMove)
 		if itemID and targetItems[itemID] and canMove(itemID, bag, slot) then
 			for i = #targetSlots, 1, -1 do
 				local targetedSlot = targetSlots[i]
-				if bagIDs[sourceSlot] and bagIDs[targetedSlot] == itemID and targetedSlot ~= sourceSlot and not (bagStacks[targetedSlot] == bagMaxStacks[targetedSlot]) and not sourceUsed[targetedSlot] then
+				if bagIDs[sourceSlot] and bagIDs[targetedSlot] == itemID and targetedSlot ~= sourceSlot and (bagStacks[targetedSlot] ~= bagMaxStacks[targetedSlot]) and not sourceUsed[targetedSlot] then
 					B:AddMove(sourceSlot, targetedSlot)
 					sourceUsed[sourceSlot] = true
 
