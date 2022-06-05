@@ -218,6 +218,10 @@ function M:CreateFarmModeMap()
 			LibStub("AceAddon-3.0"):GetAddon("Routes"):ReparentMinimap(fm)
 		end
 
+		if IsAddOnLoaded("GatherMate") then
+			LibStub("AceAddon-3.0"):GetAddon("GatherMate"):GetModule("Display"):ReparentMinimapPins(fm)
+		end
+
 		if IsAddOnLoaded("GatherMate2") then
 			LibStub("AceAddon-3.0"):GetAddon("GatherMate2"):GetModule("Display"):ReparentMinimapPins(fm)
 		end
@@ -237,6 +241,10 @@ function M:CreateFarmModeMap()
 
 		if IsAddOnLoaded("Routes") then
 			LibStub("AceAddon-3.0"):GetAddon("Routes"):ReparentMinimap(Minimap)
+		end
+
+		if IsAddOnLoaded("GatherMate") then
+			LibStub("AceAddon-3.0"):GetAddon("GatherMate"):GetModule("Display"):ReparentMinimapPins(Minimap)
 		end
 
 		if IsAddOnLoaded("GatherMate2") then
