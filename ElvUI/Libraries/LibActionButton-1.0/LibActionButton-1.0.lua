@@ -838,29 +838,39 @@ function UpdateGrid(self)
 end
 
 function UpdateRange(self, force) -- Sezz: moved from OnUpdate
-	local inRange = self:IsInRange()
-	local oldRange = self.outOfRange
-	self.outOfRange = (inRange == false)
-	if force or (oldRange ~= self.outOfRange) then
-		if self.config.outOfRangeColoring == "button" then
-			UpdateUsable(self)
-		elseif self.config.outOfRangeColoring == "hotkey" then
-			local hotkey = self.hotkey
-			if hotkey:GetText() == RANGE_INDICATOR then
-				if inRange == false then
-					hotkey:Show()
-				else
-					hotkey:Hide()
-				end
-			end
+  local inRange = self:IsInRange()
 
-			if inRange == false then
-				hotkey:SetVertexColor(unpack(self.config.colors.range))
-			else
-				hotkey:SetVertexColor(unpack(self.config.colors.usable))
-			end
+  local oldRange = self.outOfRange
+  local canAttack = self.canAttack
+
+  self.outOfRange = (inRange == false)
+  self.canAttack = (inRange ~= nil)
+
+  if force or (oldRange ~= self.outOfRange) or (canAttack ~= self.canAttack) then
+	if self.config.outOfRangeColoring == "hotkey" then
+	  local hotkey = self.hotkey
+	  if hotkey:GetText() == RANGE_INDICATOR then
+		if self.canAttack then
+		  hotkey:Show()
+		else
+		  hotkey:Hide()
 		end
+	  end
 	end
+  end
+
+  if force or (oldRange ~= self.outOfRange) then
+	if self.config.outOfRangeColoring == "button" then
+	  UpdateUsable(self)
+	elseif self.config.outOfRangeColoring == "hotkey" then
+	  local hotkey = self.hotkey
+	  if self.outOfRange then
+		hotkey:SetVertexColor(unpack(self.config.colors.range))
+	  else
+		hotkey:SetVertexColor(unpack(self.config.colors.usable))
+	  end
+	end
+  end
 end
 
 -----------------------------------------------------------
@@ -1127,20 +1137,25 @@ function UpdateTooltip(self)
 end
 
 function UpdateHotkeys(self)
-	local key = self:GetHotkey()
-	if not key or key == "" or self.config.hideElements.hotkey then
-		self.hotkey:SetText(RANGE_INDICATOR)
-		self.hotkey:SetPoint("TOPRIGHT", 0, -3);
-		self.hotkey:Hide()
+  local key = self:GetHotkey()
+  if not key or key == "" or self.config.hideElements.hotkey then
+	self.hotkey:SetText(RANGE_INDICATOR)
+	self.hotkey:SetPoint("TOPRIGHT", 0, -3);
+	local inRange = self:IsInRange()
+	if inRange ~= nil then
+	  self.hotkey:Show();
 	else
-		self.hotkey:SetText(key)
-		self.hotkey:SetPoint("TOPRIGHT", 0, -3);
-		self.hotkey:Show()
+	  self.hotkey:Hide()
 	end
+  else
+	self.hotkey:SetText(key)
+	self.hotkey:SetPoint("TOPRIGHT", 0, -3);
+	self.hotkey:Show()
+  end
 
-	if self.postKeybind then
-		self.postKeybind(nil, self)
-	end
+  if self.postKeybind then
+	self.postKeybind(nil, self)
+  end
 end
 
 function UpdateRangeTimer()
