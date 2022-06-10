@@ -569,6 +569,11 @@ function AB:StyleButton(button, noBackdrop, useMasque)
 		end
 	end
 
+    local text = hotkey:GetText()
+    if text == RANGE_INDICATOR then
+	  hotkey:FontTemplate(LSM:Fetch("font", "Fonts\NIM_____.ttf"), hotkey.fontSize, hotkey.fontStyle)
+    end
+
 	self:FixKeybindText(button)
 
 	if not button.useMasque then
