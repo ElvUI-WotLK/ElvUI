@@ -1072,7 +1072,7 @@ L["Threshold (in minutes) before text is shown in the HH:MM format. Set to -1 to
 L["Threshold (in seconds) before text is shown in the MM:SS format. Set to -1 to never change to this format."] = "Schwellenwert (in Sekunden) bevor der Text in MM:SS Format angezeigt wird. Setze auf -1 um niemals das Format zu ändern."
 L["Threshold before text goes into decimal form. Set to -1 to disable decimals."] = "Schwellenwert bevor der Text in die Dezimalform wechselt. Auf -1 setzen, um Dezimalstellen zu deaktivieren."
 L["Threshold before text turns red and is in decimal form. Set to -1 for it to never turn red"] = "CD-Schwelle bevor der Text rot wird. Setze diesen Wert auf -1, wenn er nie rot werden soll"
-L["Threshold before the icon will fade out and back in. Set to -1 to disable."] = "Schwelle bevor das Symbol ausblendend und wieder einblendet. Setze auf -1 um zu deaktivieren."
+L["Threshold before the icon will fade out and back in. Set to -1 to disable."] = "Schwelle bevor der Text rot wird und Dezimalstellen angezeigt werden. Setze diesen Wert auf -1, wenn er nie rot werden soll."
 L["Ticks"] = "Ticks"
 L["Time Format"] = "Zeit-Format"
 L["Time Indicator Colors"] = "Zeit Indikator Farben"
