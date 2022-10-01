@@ -1310,7 +1310,7 @@ function E:Initialize()
 		print(msg)
 	end
 
-	if not GetCVar("scriptProfile") == "1" then
+	if GetCVar("scriptProfile") ~= "1" then
 		collectgarbage("collect")
 	end
 end

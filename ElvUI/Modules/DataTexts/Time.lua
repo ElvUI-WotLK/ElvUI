@@ -155,7 +155,7 @@ local function OnEnter(self, skipRequest)
 
 	local wgtime = GetWintergraspWaitTime()
 	local _, instanceType = IsInInstance()
-	if not instanceType == "none" then
+	if instanceType ~= "none" then
 		wgtime = QUEUE_TIME_UNAVAILABLE
 	elseif wgtime == nil then
 		wgtime = WINTERGRASP_IN_PROGRESS
