@@ -142,6 +142,7 @@ do
 			if not name then break end
 
 			duration = Round(duration)
+			unitCaster = unitCaster or 'none'
 
 			if not lib.spellDuration[spellID] then
 				lib.spellDuration[spellID] = duration
