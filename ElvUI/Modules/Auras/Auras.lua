@@ -184,7 +184,7 @@ function A:CreateIcon(button)
 	button:SetScript("OnLeave", OnLeave)
 	button:SetScript("OnClick", OnClick)
 
-	if self.LBFGroup and E.private.auras.lbf.enable then
+	if (self.LBFGroup or self.MSQGroup) and E.private.auras.lbf.enable then
 		local ButtonData = {
 			Icon = button.texture,
 			Flash = nil,
@@ -197,7 +197,7 @@ function A:CreateIcon(button)
 			Highlight = button.highlight
 		}
 
-		self.LBFGroup:AddButton(button, ButtonData)
+		(self.LBFGroup or self.MSQGroup):AddButton(button, ButtonData)
 	else
 		button:SetTemplate("Default")
 	end
@@ -576,6 +576,8 @@ function A:UpdateHeader(header)
 
 	if self.LBFGroup then
 		self.LBFGroup:Skin(E.private.auras.lbf.skin)
+	elseif self.MSQGroup then
+		self.MSQGroup:ReSkin()
 	end
 end
 
@@ -615,6 +617,8 @@ function A:Initialize()
 
 	if LBF then
 		self.LBFGroup = LBF and LBF:Group("ElvUI", "Auras")
+	elseif E.Masque then
+		self.MSQGroup = E.Masque:Group("ElvUI", "Auras")
 	end
 
 	self.BuffFrame = self:CreateAuraHeader("HELPFUL")

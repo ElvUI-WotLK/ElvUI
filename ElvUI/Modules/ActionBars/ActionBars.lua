@@ -209,7 +209,7 @@ function AB:PositionAndSizeBar(barName)
 			button:Show()
 		end
 
-		self:StyleButton(button, nil, self.LBFGroup and E.private.actionbar.lbf.enable and true or nil)
+		self:StyleButton(button, nil, (self.LBFGroup or self.MSQGroup) and E.private.actionbar.lbf.enable and true or nil)
 	end
 
 	if bar.db.enabled or not bar.initialized then
@@ -239,6 +239,8 @@ function AB:PositionAndSizeBar(barName)
 
 	if self.LBFGroup and E.private.actionbar.lbf.enable then
 		self.LBFGroup:Skin(E.private.actionbar.lbf.skin)
+	elseif self.MSQGroup and E.private.actionbar.lbf.enable then
+		self.MSQGroup:ReSkin()
 	end
 end
 
@@ -270,8 +272,8 @@ function AB:CreateBar(id)
 			bar.buttons[i]:SetState(11, "custom", AB.customExitButton)
 		end
 
-		if self.LBFGroup and E.private.actionbar.lbf.enable then
-			self.LBFGroup:AddButton(bar.buttons[i])
+		if (self.LBFGroup or self.MSQGroup) and E.private.actionbar.lbf.enable then
+			(self.LBFGroup or self.MSQGroup):AddButton(bar.buttons[i])
 		end
 
 		self:HookScript(bar.buttons[i], "OnEnter", "Button_OnEnter")
@@ -966,6 +968,7 @@ function AB:Initialize()
 	self.Initialized = true
 
 	self.LBFGroup = LBF and LBF:Group("ElvUI", "ActionBars")
+	self.MSQGroup = E.Masque and E.Masque:Group("ElvUI", "ActionBars")
 
 	self.fadeParent = CreateFrame("Frame", "Elv_ABFade", UIParent)
 	self.fadeParent:SetAlpha(1 - self.db.globalFadeAlpha)
