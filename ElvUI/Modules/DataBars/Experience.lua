@@ -18,6 +18,8 @@ local UnitLevel = UnitLevel
 local UnitXP = UnitXP
 local UnitXPMax = UnitXPMax
 
+-- GLOBALS: CreateFrame, GameTooltip, LeftChatPanel, ToggleDropDownMenu, XPRM
+
 local function getQuestXP(completedOnly, zoneOnly)
 	local lastQuestLogID = GetQuestLogSelection()
 	local zoneText = GetZoneText()
@@ -126,7 +128,7 @@ function mod:ExperienceBar_Update(event)
 	end
 end
 
-function mod:ExperienceBar_OnEnter()
+function mod.ExperienceBar_OnEnter(self)
 	if mod.db.experience.mouseover then
 		E:UIFrameFadeIn(self, 0.4, self:GetAlpha(), 1)
 	end
@@ -155,7 +157,7 @@ function mod:ExperienceBar_OnEnter()
 	GameTooltip:Show()
 end
 
-function mod:ExperienceBar_OnClick(button)
+function mod.ExperienceBar_OnClick(self, button)
 	if XPRM then -- Warmane exp rates
 		if button == "RightButton" then
 			ToggleDropDownMenu(1, nil, XPRM, "cursor")
@@ -232,12 +234,14 @@ function mod:ExperienceBar_QuestXPToggle(event)
 		self.questXPEnabled = true
 
 		self.expBar.eventFrame:RegisterEvent("QUEST_LOG_UPDATE")
+		self.expBar.eventFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 		self.expBar.eventFrame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 
 		self:ExperienceBar_QuestXPUpdate(event)
 	elseif self.questXPEnabled and (self.expDisabled or not self.db.experience.questXP.enable) then
 		self.questXPEnabled = false
 		self.expBar.eventFrame:UnregisterEvent("QUEST_LOG_UPDATE")
+		self.expBar.eventFrame:UnregisterEvent("PLAYER_ENTERING_WORLD")
 		self.expBar.eventFrame:UnregisterEvent("ZONE_CHANGED_NEW_AREA")
 
 		self.expBar.questBar:Hide()
@@ -248,13 +252,13 @@ function mod:ExperienceBar_Load()
 	self.expBar = self:CreateBar("ElvUI_ExperienceBar", self.ExperienceBar_OnEnter, self.ExperienceBar_OnClick, "LEFT", LeftChatPanel, "RIGHT", -E.Border + E.Spacing*3, 0)
 	self.expBar:RegisterForClicks("RightButtonUp")
 	self.expBar.statusBar:SetFrameLevel(4)
-	self.expBar.statusBar:SetStatusBarColor(0, 0.4, 1, 0.8)
+	self.expBar.statusBar:SetStatusBarColor(0, 0.4, 1, 1)
 
 	self.expBar.rested = CreateFrame("StatusBar", "$parent_Rested", self.expBar)
 	self.expBar.rested:SetFrameLevel(3)
 	self.expBar.rested:SetInside()
 	self.expBar.rested:SetStatusBarTexture(E.media.normTex)
-	self.expBar.rested:SetStatusBarColor(1, 0, 1, 0.2)
+	self.expBar.rested:SetStatusBarColor(0.5, 0, 0.5, 0.8)
 	E:RegisterStatusBar(self.expBar.rested)
 
 	self.expBar.questBar = CreateFrame("StatusBar", "$parent_Quest", self.expBar)
@@ -266,45 +270,59 @@ function mod:ExperienceBar_Load()
 
 	self.expBar.eventFrame = CreateFrame("Frame")
 	self.expBar.eventFrame:Hide()
-	self.expBar.eventFrame:SetScript("OnEvent", function(_, event, arg1)
+	self.expBar.eventFrame:SetScript("OnEvent", function(this, event, arg1)
 		if event == "PLAYER_LEVEL_UP" then
 			self.playerLevel = arg1
+			self.forceUpdateQuestXP = true
+		elseif event == "PLAYER_XP_UPDATE" then
+			self:ExperienceBar_Update(event)
+
+			if self.forceUpdateQuestXP and self.questXPEnabled and self.db.experience.questXP.enable then
+				self.forceUpdateQuestXP = nil
+				self:ExperienceBar_QuestXPUpdate(event)
+			end
 		elseif event == "PLAYER_REGEN_DISABLED" then
 			self.inCombatLockdown = true
+
+			if self.db.experience.hideInCombat then
+				self:ExperienceBar_Update(event)
+			end
 		elseif event == "PLAYER_REGEN_ENABLED" then
 			self.inCombatLockdown = false
+
+			if self.db.experience.hideInCombat then
+				self:ExperienceBar_Update(event)
+			end
 		elseif event == "ENABLE_XP_GAIN" then
 			self.expDisabled = false
 
-			self.expBar.eventFrame:RegisterEvent("PLAYER_LEVEL_UP")
-			self.expBar.eventFrame:RegisterEvent("PLAYER_XP_UPDATE")
-			self.expBar.eventFrame:RegisterEvent("UPDATE_EXHAUSTION")
-			self.expBar.eventFrame:RegisterEvent("PLAYER_REGEN_DISABLED")
-			self.expBar.eventFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
+			this:RegisterEvent("PLAYER_LEVEL_UP")
+			this:RegisterEvent("PLAYER_XP_UPDATE")
+			this:RegisterEvent("UPDATE_EXHAUSTION")
+			this:RegisterEvent("PLAYER_REGEN_DISABLED")
+			this:RegisterEvent("PLAYER_REGEN_ENABLED")
 
 			self:ExperienceBar_Update(event)
 			self:ExperienceBar_QuestXPToggle(event)
-			return
 		elseif event == "DISABLE_XP_GAIN" then
 			self.expDisabled = true
 
-			self.expBar.eventFrame:UnregisterEvent("PLAYER_LEVEL_UP")
-			self.expBar.eventFrame:UnregisterEvent("PLAYER_XP_UPDATE")
-			self.expBar.eventFrame:UnregisterEvent("UPDATE_EXHAUSTION")
-			self.expBar.eventFrame:UnregisterEvent("PLAYER_REGEN_DISABLED")
-			self.expBar.eventFrame:UnregisterEvent("PLAYER_REGEN_ENABLED")
+			this:UnregisterEvent("PLAYER_LEVEL_UP")
+			this:UnregisterEvent("PLAYER_XP_UPDATE")
+			this:UnregisterEvent("UPDATE_EXHAUSTION")
+			this:UnregisterEvent("PLAYER_REGEN_DISABLED")
+			this:UnregisterEvent("PLAYER_REGEN_ENABLED")
 
 			self:ExperienceBar_Update(event)
 			self:ExperienceBar_QuestXPToggle(event)
-			return
 		elseif event == "QUEST_LOG_UPDATE"
 		or event == "ZONE_CHANGED_NEW_AREA"
 		then
 			self:ExperienceBar_QuestXPUpdate(event)
-			return
+		elseif event == "PLAYER_ENTERING_WORLD" then
+			this:UnregisterEvent(event)
+			self:ExperienceBar_QuestXPUpdate(event)
 		end
-
-		self:ExperienceBar_Update(event)
 	end)
 
 	self:ExperienceBar_UpdateDimensions()
