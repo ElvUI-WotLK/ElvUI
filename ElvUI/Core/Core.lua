@@ -1234,7 +1234,7 @@ function E:DBConversions()
 		end
 	end
 
-	do -- <= 6.08
+	do -- <= 6.09
 		--Rename GameTooltip Mover
 		if E.db.movers and E.db.movers.TooltipMover then
 			E.db.movers.ElvTooltipMover = E.db.movers.TooltipMover
