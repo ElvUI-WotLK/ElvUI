@@ -159,6 +159,7 @@ function THREAT:Initialize()
 	self.bar:SetMinMaxValues(0, 100)
 	self.bar:SetStatusBarTexture(E.media.normTex)
 	E:RegisterStatusBar(self.bar)
+	E:SetSmoothing(self.bar, 1)
 
 	self.bar.text = self.bar:CreateFontString(nil, "OVERLAY")
 	self.bar.text:FontTemplate(nil, self.db.textSize)
