@@ -246,7 +246,7 @@ function E:SetupLayout(layout, noDataReset, noDisplayMsg)
 		E.db.chat.separateSizes = false
 		E.db.chat.panelHeight = 236
 		E.db.chat.panelWidth = 472
-		E.db.chat.tapFontSize = 10
+		E.db.chat.tabFontSize = 12
 		--DataBars
 		E.db.databars.experience.height = 10
 		E.db.databars.experience.orientation = "HORIZONTAL"
