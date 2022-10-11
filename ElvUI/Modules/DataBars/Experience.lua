@@ -251,11 +251,11 @@ end
 function mod:ExperienceBar_Load()
 	self.expBar = self:CreateBar("ElvUI_ExperienceBar", self.ExperienceBar_OnEnter, self.ExperienceBar_OnClick, "LEFT", LeftChatPanel, "RIGHT", -E.Border + E.Spacing*3, 0)
 	self.expBar:RegisterForClicks("RightButtonUp")
-	self.expBar.statusBar:SetFrameLevel(4)
+	self.expBar.statusBar:SetFrameLevel(3)
 	self.expBar.statusBar:SetStatusBarColor(0, 0.4, 1, 1)
 
 	self.expBar.rested = CreateFrame("StatusBar", "$parent_Rested", self.expBar)
-	self.expBar.rested:SetFrameLevel(3)
+	self.expBar.rested:SetFrameLevel(1)
 	self.expBar.rested:SetInside()
 	self.expBar.rested:SetStatusBarTexture(E.media.normTex)
 	self.expBar.rested:SetStatusBarColor(0.5, 0, 0.5, 0.8)
