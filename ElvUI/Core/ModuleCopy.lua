@@ -119,7 +119,7 @@ function MC:CreateMoversConfigGroup()
 		config[moverName] = {
 			order = 1,
 			type = "toggle",
-			name = data.text,
+			name = data.mover.textString,
 			get = function(info) return E.global.profileCopy.movers[moverName] end,
 			set = function(info, value) E.global.profileCopy.movers[moverName] = value end
 		}
@@ -129,7 +129,7 @@ function MC:CreateMoversConfigGroup()
 		config[moverName] = {
 			order = 1,
 			type = "toggle",
-			name = data.text,
+			name = data.mover.textString,
 			get = function(info) return E.global.profileCopy.movers[moverName] end,
 			set = function(info, value) E.global.profileCopy.movers[moverName] = value end
 		}

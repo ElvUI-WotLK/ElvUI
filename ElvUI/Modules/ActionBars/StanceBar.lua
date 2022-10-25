@@ -4,7 +4,7 @@ local AB = E:GetModule("ActionBars")
 --Lua functions
 local _G = _G
 local ceil = math.ceil
-local format, gsub, match = string.format, string.gsub, string.match
+local find, format, gsub, match = string.find, string.format, string.gsub, string.match
 --WoW API / Variables
 local CooldownFrame_SetTimer = CooldownFrame_SetTimer
 local CreateFrame = CreateFrame
@@ -109,11 +109,25 @@ function AB:PositionAndSizeBarShapeShift()
 	local point = self.db.stanceBar.point
 	local widthMult = self.db.stanceBar.widthMult
 	local heightMult = self.db.stanceBar.heightMult
-	if bar.mover then
-		bar.mover.positionOverride = point
-		E:UpdatePositionOverride(bar.mover:GetName())
+
+	--Now that we have set positionOverride for mover, convert "TOP" or "BOTTOM" to anchor points we can use
+	local position = E:GetScreenQuadrant(bar)
+	if find(position, "LEFT") or position == "TOP" or position == "BOTTOM" then
+		if point == "TOP" then
+			point = "TOPLEFT"
+		elseif point == "BOTTOM" then
+			point = "BOTTOMLEFT"
+		end
+	else
+		if point == "TOP" then
+			point = "TOPRIGHT"
+		elseif point == "BOTTOM" then
+			point = "BOTTOMRIGHT"
+		end
 	end
+
 	bar.db = self.db.stanceBar
+	bar.db.position = nil --Depreciated
 	bar.mouseover = self.db.stanceBar.mouseover
 
 	if bar.LastButton and numButtons > bar.LastButton then
