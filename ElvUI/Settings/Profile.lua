@@ -4134,35 +4134,39 @@ P.actionbar = {
 	fontSize = 10,
 	fontOutline = "MONOCHROMEOUTLINE",
 	fontColor = {r = 1, g = 1, b = 1},
+
 	macrotext = false,
 	hotkeytext = true,
+
 	hotkeyTextPosition = "TOPRIGHT",
 	hotkeyTextXOffset = 0,
 	hotkeyTextYOffset = -3,
+
 	countTextPosition = "BOTTOMRIGHT",
 	countTextXOffset = 0,
 	countTextYOffset = 2,
+
 	keyDown = true,
 	movementModifier = "SHIFT",
 	transparentBackdrops = false,
 	transparentButtons = false,
 	globalFadeAlpha = 0,
 	lockActionBars = true,
-	addNewSpells = false,
 	rightClickSelfCast = false,
 	desaturateOnCooldown = false,
+
 	equippedItem = false,
 	equippedItemColor = {r = 0.4, g = 1.0, b = 0.4},
+
 	useRangeColorText = false,
 	noRangeColor = {r = 0.8, g = 0.1, b = 0.1},
 	noPowerColor = {r = 0.5, g = 0.5, b = 1},
 	usableColor = {r = 1, g = 1, b = 1},
 	notUsableColor = {r = 0.4, g = 0.4, b = 0.4},
-	flashAnimation = false,
+
 	cooldown = {
-		threshold = 4,
-		override = false,
-		reverse = false,
+		override = true,
+		threshold = 3,
 		expiringColor = {r = 1, g = 0, b = 0},
 		secondsColor = {r = 1, g = 1, b = 1},
 		minutesColor = {r = 1, g = 1, b = 1},
@@ -4175,11 +4179,13 @@ P.actionbar = {
 		daysIndicator = {r = 1, g = 1, b = 1},
 		hhmmColorIndicator = {r = 1, g = 1, b = 1},
 		mmssColorIndicator = {r = 1, g = 1, b = 1},
+
 		checkSeconds = false,
-		hhmmColor = {r = 1, g = 1, b = 1},
-		mmssColor = {r = 1, g = 1, b = 1},
+		hhmmColor = {r = 0.43, g = 0.43, b = 0.43},
+		mmssColor = {r = 0.56, g = 0.56, b = 0.56},
 		hhmmThreshold = -1,
 		mmssThreshold = -1,
+
 		fonts = {
 			enable = false,
 			font = "PT Sans Narrow",
@@ -4196,10 +4202,122 @@ P.actionbar = {
 		alpha = 1,
 		visibility = "show"
 	},
+	bar1 = {
+		enabled = true,
+		buttons = 12,
+		mouseover = false,
+		buttonsPerRow = 12,
+		point = "BOTTOMLEFT",
+		backdrop = false,
+		heightMult = 1,
+		widthMult = 1,
+		buttonsize = 32,
+		buttonspacing = 2,
+		backdropSpacing = 2,
+		alpha = 1,
+		inheritGlobalFade = false,
+		showGrid = true,
+		paging = {
+			DRUID = "[bonusbar:1,nostealth] 7; [bonusbar:1,stealth] 8; [bonusbar:2] 8; [bonusbar:3] 9; [bonusbar:4] 10;",
+			WARRIOR = "[bonusbar:1] 7; [bonusbar:2] 8; [bonusbar:3] 9;",
+			PRIEST = "[bonusbar:1] 7;",
+			ROGUE = "[bonusbar:1] 7; [form:3] 7;"
+		},
+		visibility = ""
+	},
+	bar2 = {
+		enabled = false,
+		mouseover = false,
+		buttons = 12,
+		buttonsPerRow = 12,
+		point = "BOTTOMLEFT",
+		backdrop = false,
+		heightMult = 1,
+		widthMult = 1,
+		buttonsize = 32,
+		buttonspacing = 2,
+		backdropSpacing = 2,
+		alpha = 1,
+		inheritGlobalFade = false,
+		showGrid = true,
+		paging = {},
+		visibility = "[vehicleui] hide;show"
+	},
+	bar3 = {
+		enabled = true,
+		mouseover = false,
+		buttons = 6,
+		buttonsPerRow = 6,
+		point = "BOTTOMLEFT",
+		backdrop = false,
+		heightMult = 1,
+		widthMult = 1,
+		buttonsize = 32,
+		buttonspacing = 2,
+		backdropSpacing = 2,
+		alpha = 1,
+		inheritGlobalFade = false,
+		showGrid = true,
+		paging = {},
+		visibility = "[vehicleui] hide;show"
+	},
+	bar4 = {
+		enabled = true,
+		mouseover = false,
+		buttons = 12,
+		buttonsPerRow = 1,
+		point = "TOPRIGHT",
+		backdrop = true,
+		heightMult = 1,
+		widthMult = 1,
+		buttonsize = 32,
+		buttonspacing = 2,
+		backdropSpacing = 2,
+		alpha = 1,
+		inheritGlobalFade = false,
+		showGrid = true,
+		paging = {},
+		visibility = "[vehicleui] hide;show"
+	},
+	bar5 = {
+		enabled = true,
+		mouseover = false,
+		buttons = 6,
+		buttonsPerRow = 6,
+		point = "BOTTOMLEFT",
+		backdrop = false,
+		heightMult = 1,
+		widthMult = 1,
+		buttonsize = 32,
+		buttonspacing = 2,
+		backdropSpacing = 2,
+		alpha = 1,
+		inheritGlobalFade = false,
+		showGrid = true,
+		paging = {},
+		visibility = "[vehicleui] hide;show"
+	},
+	bar6 = {
+		enabled = false,
+		mouseover = false,
+		buttons = 12,
+		buttonsPerRow = 12,
+		point = "BOTTOMLEFT",
+		backdrop = false,
+		heightMult = 1,
+		widthMult = 1,
+		buttonsize = 32,
+		buttonspacing = 2,
+		backdropSpacing = 2,
+		alpha = 1,
+		inheritGlobalFade = false,
+		showGrid = true,
+		paging = {},
+		visibility = "[vehicleui] hide;show"
+	},
 	barPet = {
 		enabled = true,
 		mouseover = false,
-		clickThrough = false,
 		buttons = NUM_PET_ACTION_SLOTS,
 		buttonsPerRow = 1,
 		point = "TOPRIGHT",
@@ -4217,7 +4335,6 @@ P.actionbar = {
 		enabled = true,
 		style = "darkenInactive",
 		mouseover = false,
-		clickThrough = false,
 		buttonsPerRow = NUM_SHAPESHIFT_SLOTS,
 		buttons = NUM_SHAPESHIFT_SLOTS,
 		point = "TOPLEFT",
@@ -4229,7 +4346,6 @@ P.actionbar = {
 		backdropSpacing = 2,
 		alpha = 1,
 		inheritGlobalFade = false,
-		usePositionOverride = true,
 		visibility = "[vehicleui] hide;show"
 	},
 	barTotem = {
@@ -4241,52 +4357,8 @@ P.actionbar = {
 		flyoutSpacing = 2,
 		alpha = 1,
 		visibility = "[vehicleui] hide;show"
-	},
-	extraActionButton = {
-		alpha = 1,
-		scale = 1,
-		inheritGlobalFade = false
 	}
 }
-for i = 1, 10 do
-	P.actionbar["bar"..i] = {
-		enabled = false,
-		mouseover = false,
-		clickThrough = false,
-		buttons = 12,
-		buttonsPerRow = 12,
-		point = "BOTTOMLEFT",
-		backdrop = false,
-		heightMult = 1,
-		widthMult = 1,
-		buttonsize = 32,
-		buttonspacing = 2,
-		backdropSpacing = 2,
-		alpha = 1,
-		inheritGlobalFade = false,
-		showGrid = true,
-		flyoutDirection = "AUTOMATIC",
-		paging = {},
-		visibility = "[vehicleui] hide; show"
-	}
-end
-P.actionbar.bar1.enabled = true
-P.actionbar.bar1.visibility = ""
-P.actionbar.bar1.paging = {
-	DRUID = "[bonusbar:1,nostealth] 7; [bonusbar:1,stealth] 8; [bonusbar:2] 8; [bonusbar:3] 9; [bonusbar:4] 10;",
-	WARRIOR = "[bonusbar:1] 7; [bonusbar:2] 8; [bonusbar:3] 9;",
-	PRIEST = "[bonusbar:1] 7;",
-	ROGUE = "[bonusbar:1] 7; [form:3] 7;"
-}
-P.actionbar.bar3.enabled = true
-P.actionbar.bar3.buttons = 6
-P.actionbar.bar3.buttonsPerRow = 6
-P.actionbar.bar4.enabled = true
-P.actionbar.bar4.point = "TOPRIGHT"
-
-P.actionbar.bar5.enabled = true
-P.actionbar.bar5.buttons = 6
-P.actionbar.bar5.buttonsPerRow = 6
 
 --Mover positions that are set inside the installation process. ALL is used still to prevent people from getting pissed off
 --This allows movers positions to be reset to whatever profile is being used
