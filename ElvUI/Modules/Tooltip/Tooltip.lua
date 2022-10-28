@@ -512,27 +512,36 @@ function TT:GameTooltip_OnTooltipSetItem(tt)
 
 	local num = GetItemCount(link)
 	local numall = GetItemCount(link, true)
-	local left, right, bankCount
+	local itemID, itemLvl, count, bankCount
 
-	if self.db.spellID then
-		left = format("|cFFCA3C3C%s|r %d", ID, tonumber(match(link, ":(%d+)")))
+	if self.db.itemDetails == "ID_ONLY" then
+		itemID = format("|cFFCA3C3C%s|r %d", ID, tonumber(match(link, ":(%d+)")))
+	elseif self.db.itemDetails == "ILVL_ONLY" then
+		itemLvl = format("|cFFCA3C3C%s|r %d", "iLvl", select(4, GetItemInfo(link)) or 0)
+	elseif self.db.itemDetails == "BOTH" then
+		itemID = format("|cFFCA3C3C%s|r %d", ID, tonumber(match(link, ":(%d+)")))
+		itemLvl = format("|cFFCA3C3C%s|r %d", "iLvl", select(4, GetItemInfo(link)) or 0)
 	end
 
 	if self.db.itemCount == "BAGS_ONLY" then
-		right = format("|cFFCA3C3C%s|r %d", L["Count"], num)
+		count = format("|cFFCA3C3C%s|r %d", L["Count"], num)
 	elseif self.db.itemCount == "BANK_ONLY" then
 		bankCount = format("|cFFCA3C3C%s|r %d", L["Bank"], (numall - num))
 	elseif self.db.itemCount == "BOTH" then
-		right = format("|cFFCA3C3C%s|r %d", L["Count"], num)
+		count = format("|cFFCA3C3C%s|r %d", L["Count"], num)
 		bankCount = format("|cFFCA3C3C%s|r %d", L["Bank"], (numall - num))
 	end
 
-	if left or right then
+	if itemID or itemLvl then
 		tt:AddLine(" ")
-		tt:AddDoubleLine(left or " ", right or " ")
+		tt:AddDoubleLine(itemID or " ", itemLvl or " ")
 	end
-	if bankCount then
-		tt:AddDoubleLine(" ", bankCount)
+
+	if count or bankCount then
+		if not itemID and not itemLvl then
+			tt:AddLine(" ")
+		end
+		tt:AddDoubleLine(count or " ", bankCount or " ")
 	end
 
 	tt.itemCleared = true
@@ -685,7 +694,7 @@ function TT:Initialize()
 
 	if not E.private.tooltip.enable then return end
 
-	SetCVar("showItemLevel", 1)
+	SetCVar("showItemLevel", 0)
 
 	GameTooltip.StatusBar = GameTooltipStatusBar
 	GameTooltip.StatusBar:Height(self.db.healthBar.height)

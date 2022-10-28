@@ -612,6 +612,7 @@ L["Item Count Font"] = true
 L["Item Count"] = true
 L["Item Level Threshold"] = true
 L["Item Level"] = true
+L["Item ID"] = true
 L["JustifyH"] = true
 L["Key Down"] = true
 L["Keybind Mode"] = true
