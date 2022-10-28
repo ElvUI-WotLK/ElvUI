@@ -158,6 +158,71 @@ local function createSlot(id)
 	return frame
 end
 
+local function updateSlot(i, m, w)
+	local slot = lootFrame.slots[i] or createSlot(i)
+	local texture, item, quantity, quality, _, isQuestItem, questId, isActive = GetLootSlotInfo(i)
+	local color = ITEM_QUALITY_COLORS[quality]
+
+	if texture and find(texture, "INV_Misc_Coin") then
+		item = gsub(item, "\n", ", ")
+	end
+
+	if quantity and (quantity > 1) then
+		slot.count:SetText(quantity)
+		slot.count:Show()
+	else
+		slot.count:Hide()
+	end
+
+	if quality and (quality > 1) then
+		slot.drop:SetVertexColor(color.r, color.g, color.b)
+		slot.drop:Show()
+	else
+		slot.drop:Hide()
+	end
+
+	slot.quality = quality
+	slot.name:SetText(item)
+	if color then
+		slot.name:SetTextColor(color.r, color.g, color.b)
+	end
+	slot.icon:SetTexture(texture)
+
+	if quality then
+		m = max(m or 0, quality)
+	end
+	w = max(w or 0, slot.name:GetStringWidth())
+
+	local questTexture = slot.questTexture
+	if questId and not isActive then
+		questTexture:SetTexture(TEXTURE_ITEM_QUEST_BANG)
+		questTexture:Show()
+	elseif questId or isQuestItem then
+		questTexture:SetTexture(TEXTURE_ITEM_QUEST_BORDER)
+		questTexture:Show()
+	else
+		questTexture:Hide()
+	end
+
+	-- Check for FasterLooting scripts or w/e (if bag is full)
+	if texture then
+		slot:Enable()
+		slot:Show()
+	end
+
+	if GetMouseFocus() == slot then
+		OnEnter(slot);
+	end
+
+	return m, w
+end
+
+function M:LOOT_SLOT_CHANGED(_, slot)
+	if not lootFrame:IsShown() then return end
+
+	updateSlot(slot)
+end
+
 function M:LOOT_SLOT_CLEARED(_, slot)
 	if not lootFrame:IsShown() then return end
 
@@ -219,56 +284,7 @@ function M:LOOT_OPENED(_, autoLoot)
 	local m, w, t = 0, 0, lootFrame.title:GetStringWidth()
 	if items > 0 then
 		for i = 1, items do
-			local slot = lootFrame.slots[i] or createSlot(i)
-			local texture, item, quantity, quality, _, isQuestItem, questId, isActive = GetLootSlotInfo(i)
-			local color = ITEM_QUALITY_COLORS[quality]
-
-			if texture and find(texture, "INV_Misc_Coin") then
-				item = gsub(item, "\n", ", ")
-			end
-
-			if quantity and (quantity > 1) then
-				slot.count:SetText(quantity)
-				slot.count:Show()
-			else
-				slot.count:Hide()
-			end
-
-			if quality and (quality > 1) then
-				slot.drop:SetVertexColor(color.r, color.g, color.b)
-				slot.drop:Show()
-			else
-				slot.drop:Hide()
-			end
-
-			slot.quality = quality
-			slot.name:SetText(item)
-			if color then
-				slot.name:SetTextColor(color.r, color.g, color.b)
-			end
-			slot.icon:SetTexture(texture)
-
-			if quality then
-				m = max(m, quality)
-			end
-			w = max(w, slot.name:GetStringWidth())
-
-			local questTexture = slot.questTexture
-			if questId and not isActive then
-				questTexture:SetTexture(TEXTURE_ITEM_QUEST_BANG)
-				questTexture:Show()
-			elseif questId or isQuestItem then
-				questTexture:SetTexture(TEXTURE_ITEM_QUEST_BORDER)
-				questTexture:Show()
-			else
-				questTexture:Hide()
-			end
-
-			-- Check for FasterLooting scripts or w/e (if bag is full)
-			if texture then
-				slot:Enable()
-				slot:Show()
-			end
+			m, w = updateSlot(i, m, w);
 		end
 	else
 		local slot = lootFrame.slots[1] or createSlot(1)
@@ -322,6 +338,7 @@ function M:LoadLoot()
 	E.frames[lootFrame] = nil
 
 	self:RegisterEvent("LOOT_OPENED")
+	self:RegisterEvent("LOOT_SLOT_CHANGED")
 	self:RegisterEvent("LOOT_SLOT_CLEARED")
 	self:RegisterEvent("LOOT_CLOSED")
 	self:RegisterEvent("OPEN_MASTER_LOOT_LIST")
