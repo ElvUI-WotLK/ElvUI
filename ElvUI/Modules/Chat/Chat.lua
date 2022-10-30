@@ -1440,7 +1440,7 @@ function CH:CheckKeyword(message, author)
 				local classMatch = CH.ClassNames[lowerCaseWord]
 				local wordMatch = classMatch and lowerCaseWord
 
-				if wordMatch and not E.global.chat.classColorMentionExcludedNames[wordMatch] then
+				if wordMatch and (E.db.chat.classColorMentionLetterThreshold == nil or strlen(lowerCaseWord) > E.db.chat.classColorMentionLetterThreshold) and not E.global.chat.classColorMentionExcludedNames[wordMatch] then
 					local classColorTable = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[classMatch] or RAID_CLASS_COLORS[classMatch]
 					word = gsub(word, gsub(tempWord, "%-", "%%-"), format("\124cff%.2x%.2x%.2x%s\124r", classColorTable.r*255, classColorTable.g*255, classColorTable.b*255, tempWord))
 				end
