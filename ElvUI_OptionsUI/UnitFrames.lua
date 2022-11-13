@@ -2906,19 +2906,19 @@ E.Options.args.unitframe = {
 									name = " ",
 									width = "full"
 								},
-								customhealthbackdrop = {
+								customNPChealth = {
 									order = 8,
 									type = "toggle",
-									name = L["Custom Backdrop"],
-									desc = L["Use the custom backdrop color instead of a multiple of the main color."],
+									name = L["Custom NPC Health"],
+									desc = L["Use a different healthbar color for NPCs."],
 									get = function(info) return E.db.unitframe.colors[info[#info]] end,
 									set = function(info, value) E.db.unitframe.colors[info[#info]] = value UF:Update_AllFrames() end
 								},
-								health_backdrop = {
+								npc_health_pick = {
 									order = 9,
 									type = "color",
-									name = L["Health Backdrop"],
-									disabled = function() return not E.db.unitframe.colors.customhealthbackdrop end
+									name = L["NPC Health"],
+									disabled = function() return not E.db.unitframe.colors.customNPChealth end
 								},
 								spacer2 = {
 									order = 10,
@@ -2926,20 +2926,19 @@ E.Options.args.unitframe = {
 									name = " ",
 									width = "full"
 								},
-								useDeadBackdrop = {
+								customhealthbackdrop = {
 									order = 11,
 									type = "toggle",
-									name = L["Use Dead Backdrop"],
+									name = L["Custom Backdrop"],
+									desc = L["Use the custom backdrop color instead of a multiple of the main color."],
 									get = function(info) return E.db.unitframe.colors[info[#info]] end,
 									set = function(info, value) E.db.unitframe.colors[info[#info]] = value UF:Update_AllFrames() end
 								},
-								health_backdrop_dead = {
+								health_backdrop = {
 									order = 12,
 									type = "color",
-									name = L["Custom Dead Backdrop"],
-									desc = L["Use this backdrop color for units that are dead or ghosts."],
-									customWidth = 250,
-									disabled = function() return not E.db.unitframe.colors.useDeadBackdrop end
+									name = L["Health Backdrop"],
+									disabled = function() return not E.db.unitframe.colors.customhealthbackdrop end
 								},
 								spacer3 = {
 									order = 13,
@@ -2947,8 +2946,29 @@ E.Options.args.unitframe = {
 									name = " ",
 									width = "full"
 								},
-								classbackdrop = {
+								useDeadBackdrop = {
 									order = 14,
+									type = "toggle",
+									name = L["Use Dead Backdrop"],
+									get = function(info) return E.db.unitframe.colors[info[#info]] end,
+									set = function(info, value) E.db.unitframe.colors[info[#info]] = value UF:Update_AllFrames() end
+								},
+								health_backdrop_dead = {
+									order = 15,
+									type = "color",
+									name = L["Custom Dead Backdrop"],
+									desc = L["Use this backdrop color for units that are dead or ghosts."],
+									customWidth = 250,
+									disabled = function() return not E.db.unitframe.colors.useDeadBackdrop end
+								},
+								spacer4 = {
+									order = 16,
+									type = "description",
+									name = " ",
+									width = "full"
+								},
+								classbackdrop = {
+									order = 17,
 									type = "toggle",
 									name = L["Class Backdrop"],
 									desc = L["Color the health backdrop by class or reaction."],
@@ -2957,7 +2977,7 @@ E.Options.args.unitframe = {
 									disabled = function() return E.db.unitframe.colors.customhealthbackdrop end
 								},
 								healthMultiplier = {
-									order = 15,
+									order = 18,
 									type = "range",
 									name = L["Health Backdrop Multiplier"],
 									min = 0, softMax = 0.75, max = 1, step = .01,
@@ -2965,24 +2985,24 @@ E.Options.args.unitframe = {
 									set = function(info, value) E.db.unitframe.colors[info[#info]] = value UF:Update_AllFrames() end,
 									disabled = function() return E.db.unitframe.colors.customhealthbackdrop end
 								},
-								spacer4 = {
-									order = 16,
+								spacer5 = {
+									order = 19,
 									type = "description",
 									name = " ",
 									width = "full"
 								},
 								tapped = {
-									order = 17,
+									order = 20,
 									type = "color",
 									name = L["Tapped"]
 								},
 								health = {
-									order = 18,
+									order = 21,
 									type = "color",
 									name = L["HEALTH"]
 								},
 								disconnected = {
-									order = 19,
+									order = 22,
 									type = "color",
 									name = L["Disconnected"]
 								}
