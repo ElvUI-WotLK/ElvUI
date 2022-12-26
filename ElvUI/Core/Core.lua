@@ -1240,10 +1240,6 @@ function E:DBConversions()
 			E.db.movers.ElvTooltipMover = E.db.movers.TooltipMover
 			E.db.movers.TooltipMover = nil
 		end
-
-		if E.db.databars.experience.questXP and E.db.databars.experience.questXP.showBubbles then
-			E.db.databars.experience.showBubbles = true
-		end
 	end
 end
 
