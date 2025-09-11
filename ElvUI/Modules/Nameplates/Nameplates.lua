@@ -1238,12 +1238,36 @@ function NP:Initialize()
 	self:OnCreated(ElvNP_Test)
 	local castbar = ElvNP_Test.UnitFrame.CastBar
 	castbar:SetParent(ElvNP_Test.UnitFrame.Health)
-	castbar.Hide = castbar.Show
-	castbar:Show()
-	castbar.Name:SetText("Casting")
-	castbar.Time:SetText("3.1")
-	castbar.Icon.texture:SetTexture([[Interface\Icons\Spell_Holy_Penance]])
-	castbar:SetStatusBarColor(self.db.colors.castColor.r, self.db.colors.castColor.g, self.db.colors.castColor.b)
+
+	-- Only display and manipulate the test castbar if any castbar is enabled in settings.
+	-- This avoids triggering "Font not set" when fonts haven't been configured yet and castbars are disabled.
+	local unitsDB = self.db and self.db.units
+	local anyCastbarEnabled = unitsDB and (
+		(unitsDB.ENEMY_PLAYER and unitsDB.ENEMY_PLAYER.castbar and unitsDB.ENEMY_PLAYER.castbar.enable) or
+		(unitsDB.ENEMY_NPC and unitsDB.ENEMY_NPC.castbar and unitsDB.ENEMY_NPC.castbar.enable) or
+		(unitsDB.FRIENDLY_PLAYER and unitsDB.FRIENDLY_PLAYER.castbar and unitsDB.FRIENDLY_PLAYER.castbar.enable) or
+		(unitsDB.FRIENDLY_NPC and unitsDB.FRIENDLY_NPC.castbar and unitsDB.FRIENDLY_NPC.castbar.enable)
+	) or false
+
+	if anyCastbarEnabled then
+		castbar.Hide = castbar.Show
+		castbar:Show()
+
+		-- Ensure a font exists before SetText to prevent "Font not set" during Initialize
+		if castbar.Name and not select(1, castbar.Name:GetFont()) then
+			castbar.Name:SetFontObject(GameFontNormal)
+		end
+		if castbar.Time and not select(1, castbar.Time:GetFont()) then
+			castbar.Time:SetFontObject(GameFontNormal)
+		end
+
+		if castbar.Name then castbar.Name:SetText("Casting") end
+		if castbar.Time then castbar.Time:SetText("3.1") end
+		if castbar.Icon and castbar.Icon.texture then
+			castbar.Icon.texture:SetTexture([[Interface\Icons\Spell_Holy_Penance]])
+		end
+		castbar:SetStatusBarColor(self.db.colors.castColor.r, self.db.colors.castColor.g, self.db.colors.castColor.b)
+	end
 	ElvNP_Test:Hide()
 
 	self.Frame = CreateFrame("Frame"):SetScript("OnUpdate", self.OnUpdate)
