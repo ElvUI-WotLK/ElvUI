@@ -14,6 +14,7 @@ local ReloadUI = ReloadUI
 local debugprofilestop = debugprofilestop
 local UpdateAddOnCPUUsage, GetAddOnCPUUsage = UpdateAddOnCPUUsage, GetAddOnCPUUsage
 local ResetCPUUsage = ResetCPUUsage
+local GetFunctionCPUUsage = GetFunctionCPUUsage
 local GetAddOnInfo = GetAddOnInfo
 local GetNumAddOns = GetNumAddOns
 local GetCVarBool = GetCVarBool
@@ -217,6 +218,54 @@ function E:GetCPUImpact()
 	end
 end
 
+local dispatcherProfilingArmed = false
+
+local function PrintEventSubscriberUsage()
+	local subscribers = E:GetEventDispatcherSubscribers()
+	for event, list in pairs(subscribers) do
+		for i = 1, #list do
+			local entry = list[i]
+			local usage = GetFunctionCPUUsage(entry.callback, false)
+			E:Print(format("EventDispatcher %s (%s): %.3fms", event, tostring(entry.owner), usage or 0))
+		end
+	end
+end
+
+local function PrintThrottleUsage()
+	local groups = E:GetThrottleGroups()
+	for interval, group in pairs(groups) do
+		for i = 1, #group.callbacks do
+			local usage = GetFunctionCPUUsage(group.callbacks[i], false)
+			E:Print(format("Throttle %.3fs callback #%d: %.3fms", interval, i, usage or 0))
+		end
+	end
+end
+
+function E:CPUDispatcherCommand(msg)
+	msg = lower(msg or "")
+
+	if msg == "on" then
+		SetCVar("scriptProfile", 1)
+		ResetCPUUsage()
+		dispatcherProfilingArmed = true
+		E:Print("EventDispatcher/Throttle CPU profiling enabled. Use /edcpu report to see accumulated usage, /edcpu off to disable.")
+	elseif msg == "off" then
+		SetCVar("scriptProfile", 0)
+		dispatcherProfilingArmed = false
+		E:Print("EventDispatcher/Throttle CPU profiling disabled.")
+	elseif msg == "report" then
+		if not dispatcherProfilingArmed or not GetCVarBool("scriptProfile") then
+			E:Print("For `/edcpu report` to work, run `/edcpu on` first.")
+			return
+		end
+
+		PrintEventSubscriberUsage()
+		PrintThrottleUsage()
+	else
+		E:Print("/edcpu on - /edcpu off - /edcpu report")
+	end
+end
+
 local BLIZZARD_ADDONS = {
 	"Blizzard_AchievementUI",
 	"Blizzard_ArenaUI",
@@ -266,6 +315,12 @@ function E:LoadCommands()
 	-- Example3: /cpuusage UnitFrames nil 50 25
 	-- Note: showall, delay, and minCalls will default if not set
 	-- arg1 can be "all" this will scan all registered modules!
+
+	self:RegisterChatCommand("edcpu", "CPUDispatcherCommand")
+	-- args: on, off, report
+	-- Profiles Core/EventDispatcher.lua subscribers and Core/Throttle.lua
+	-- callbacks via native GetFunctionCPUUsage. Requires scriptProfile CVar,
+	-- which `/edcpu on` sets automatically.
 
 	self:RegisterChatCommand("bgstats", "BGStats")
 	self:RegisterChatCommand("hellokitty", "HelloKittyToggle")
