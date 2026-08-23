@@ -984,7 +984,7 @@ function AB:Initialize()
 	self.fadeParent:RegisterEvent("UNIT_SPELLCAST_STOP")
 	self.fadeParent:RegisterEvent("UNIT_SPELLCAST_CHANNEL_START")
 	self.fadeParent:RegisterEvent("UNIT_SPELLCAST_CHANNEL_STOP")
-	self.fadeParent:RegisterEvent("UNIT_HEALTH")
+	E:SubscribeEvent("UNIT_HEALTH", self.fadeParent, self.FadeParent_OnEvent)
 	self.fadeParent:RegisterEvent("PLAYER_FOCUS_CHANGED")
 	self.fadeParent:SetScript("OnEvent", self.FadeParent_OnEvent)
 
