@@ -845,7 +845,7 @@ local function findNewPlate(...)
 	end
 end
 
-function NP:OnUpdate()
+function NP:ThrottledTick()
 	numChildren = WorldGetNumChildren(WorldFrame)
 	if lastChildern ~= numChildren then
 		findNewPlate(WorldGetChildren(WorldFrame))
@@ -859,9 +859,6 @@ function NP:OnUpdate()
 		else
 			frame.alpha = 1
 		end
-
-		NP:SetMouseoverFrame(frame)
-		NP:SetTargetFrame(frame)
 
 		if frame.UnitReaction ~= NP:GetUnitInfo(frame) then
 			NP:UpdateAllFrame(frame, nil, true)
@@ -966,9 +963,17 @@ end
 
 function NP:PLAYER_TARGET_CHANGED()
 	hasTarget = UnitExists("target") == 1
+
+	for frame in pairs(NP.VisiblePlates) do
+		NP:SetTargetFrame(frame)
+	end
 end
 
 function NP:UPDATE_MOUSEOVER_UNIT()
+	for frame in pairs(NP.VisiblePlates) do
+		NP:SetMouseoverFrame(frame)
+	end
+
 	if not UnitIsUnit("mouseover", "player") and UnitIsPlayer("mouseover") then
 		local name = UnitName("mouseover")
 		local guid = UnitGUID("mouseover")
@@ -1246,7 +1251,7 @@ function NP:Initialize()
 	castbar:SetStatusBarColor(self.db.colors.castColor.r, self.db.colors.castColor.g, self.db.colors.castColor.b)
 	ElvNP_Test:Hide()
 
-	self.Frame = CreateFrame("Frame"):SetScript("OnUpdate", self.OnUpdate)
+	E:AddThrottledCallback(0.1, NP.ThrottledTick)
 
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
