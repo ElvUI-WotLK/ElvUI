@@ -59,8 +59,6 @@ local UnitHealthMax = UnitHealthMax
 
 local HealComm = LibStub("LibHealComm-4.0")
 
-local E -- ElvUI engine, resolved lazily in Enable/Disable (loads before Init.lua)
-
 local enabledUF, enabled = {}
 
 local function Update(self)
@@ -185,9 +183,7 @@ local function Enable(self)
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate
 
-		if not E then E = _G.ElvUI[1] end
-
-		E:SubscribeEvent("UNIT_HEALTH", self, Path)
+		self:RegisterEvent("UNIT_HEALTH", Path)
 		self:RegisterEvent("UNIT_MAXHEALTH", Path)
 
 		if not element.maxOverflow then
@@ -221,9 +217,7 @@ local function Disable(self)
 			element.otherBar:Hide()
 		end
 
-		if not E then E = _G.ElvUI[1] end
-
-		E:UnsubscribeEvent("UNIT_HEALTH", self)
+		self:UnregisterEvent("UNIT_HEALTH", Path)
 		self:UnregisterEvent("UNIT_MAXHEALTH", Path)
 
 		for i = 1, #enabledUF do

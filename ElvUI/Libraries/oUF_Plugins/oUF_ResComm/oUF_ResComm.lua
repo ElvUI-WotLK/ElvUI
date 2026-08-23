@@ -30,8 +30,6 @@ local LRC = LibStub("LibResComm-1.0")
 
 local tremove = table.remove
 
-local E -- ElvUI engine, resolved lazily in Enable/Disable (loads before Init.lua)
-
 local UnitIsDead = UnitIsDead
 local UnitIsGhost = UnitIsGhost
 local UnitName = UnitName
@@ -139,12 +137,10 @@ local function Enable(self)
 	local element = self.ResurrectIndicator
 
 	if element then
-		if not E then E = _G.ElvUI[1] end
-
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate
 
-		E:SubscribeEvent("UNIT_HEALTH", self, Path)
+		self:RegisterEvent("UNIT_HEALTH", Path)
 
 		if element:IsObjectType("Texture") and not element:GetTexture() then
 			element:SetTexture([[Interface\Icons\Spell_Holy_Resurrection]])
@@ -163,9 +159,7 @@ local function Disable(self)
 	if element then
 		element:Hide()
 
-		if not E then E = _G.ElvUI[1] end
-
-		E:UnsubscribeEvent("UNIT_HEALTH", self)
+		self:UnregisterEvent("UNIT_HEALTH", Path)
 
 		for i = 1, #enabledUF do
 			if enabledUF[i] == self then
