@@ -218,8 +218,6 @@ function E:GetCPUImpact()
 	end
 end
 
-local dispatcherProfilingArmed = false
-
 local function PrintEventSubscriberUsage()
 	local subscribers = E:GetEventDispatcherSubscribers()
 	for event, list in pairs(subscribers) do
@@ -247,15 +245,13 @@ function E:CPUDispatcherCommand(msg)
 	if msg == "on" then
 		SetCVar("scriptProfile", 1)
 		ResetCPUUsage()
-		dispatcherProfilingArmed = true
-		E:Print("EventDispatcher/Throttle CPU profiling enabled. Use /edcpu report to see accumulated usage, /edcpu off to disable.")
+		E:Print("Script profiling CVar set. Type `/reload` for it to take effect, then play for a bit and use /edcpu report. Disable after testing with /edcpu off then /reload.")
 	elseif msg == "off" then
 		SetCVar("scriptProfile", 0)
-		dispatcherProfilingArmed = false
-		E:Print("EventDispatcher/Throttle CPU profiling disabled.")
+		E:Print("EventDispatcher/Throttle CPU profiling disabled. Type `/reload` for it to take effect.")
 	elseif msg == "report" then
-		if not dispatcherProfilingArmed or not GetCVarBool("scriptProfile") then
-			E:Print("For `/edcpu report` to work, run `/edcpu on` first.")
+		if not GetCVarBool("scriptProfile") then
+			E:Print("For `/edcpu report` to work, run `/edcpu on`, then `/reload`, then play for a bit.")
 			return
 		end
 

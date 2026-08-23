@@ -15,7 +15,9 @@ local function OnEvent(_, event, ...)
 
 	for i = 1, #list do
 		local entry = list[i]
-		entry.callback(entry.owner, event, ...)
+		if entry then
+			entry.callback(entry.owner, event, ...)
+		end
 	end
 end
 

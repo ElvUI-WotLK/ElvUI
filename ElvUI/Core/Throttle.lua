@@ -18,7 +18,10 @@ local function OnUpdate(self, elapsed)
 
 		local callbacks = group.callbacks
 		for i = 1, #callbacks do
-			callbacks[i](dt)
+			local callback = callbacks[i]
+			if callback then
+				callback(dt)
+			end
 		end
 	end
 end
@@ -33,8 +36,10 @@ function E:AddThrottledCallback(interval, callback)
 		group = {interval = interval, elapsed = 0, callbacks = {}, frame = frame}
 		frame.throttleGroup = group
 		throttleGroups[interval] = group
+	end
 
-		frame:SetScript("OnUpdate", OnUpdate)
+	if #group.callbacks == 0 then
+		group.frame:SetScript("OnUpdate", OnUpdate)
 	end
 
 	tinsert(group.callbacks, callback)
@@ -53,7 +58,7 @@ function E:RemoveThrottledCallback(interval, callback)
 
 	if #callbacks == 0 then
 		group.frame:SetScript("OnUpdate", nil)
-		throttleGroups[interval] = nil
+		group.elapsed = 0
 	end
 end
 
