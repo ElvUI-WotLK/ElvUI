@@ -860,6 +860,9 @@ function NP:ThrottledTick()
 			frame.alpha = 1
 		end
 
+		NP:SetMouseoverFrame(frame)
+		NP:SetTargetFrame(frame)
+
 		if frame.UnitReaction ~= NP:GetUnitInfo(frame) then
 			NP:UpdateAllFrame(frame, nil, true)
 		end
@@ -963,17 +966,9 @@ end
 
 function NP:PLAYER_TARGET_CHANGED()
 	hasTarget = UnitExists("target") == 1
-
-	for frame in pairs(NP.VisiblePlates) do
-		NP:SetTargetFrame(frame)
-	end
 end
 
 function NP:UPDATE_MOUSEOVER_UNIT()
-	for frame in pairs(NP.VisiblePlates) do
-		NP:SetMouseoverFrame(frame)
-	end
-
 	if not UnitIsUnit("mouseover", "player") and UnitIsPlayer("mouseover") then
 		local name = UnitName("mouseover")
 		local guid = UnitGUID("mouseover")
@@ -1205,6 +1200,9 @@ function NP:TogleTestFrame(unitType)
 	end
 end
 
+-- Poll rate for ThrottledTick (new-plate discovery, alpha upkeep, threat checks): 10 ticks/sec.
+local NAMEPLATE_TICK_INTERVAL = 0.1
+
 function NP:Initialize()
 	self.db = E.db.nameplates
 
@@ -1251,7 +1249,9 @@ function NP:Initialize()
 	castbar:SetStatusBarColor(self.db.colors.castColor.r, self.db.colors.castColor.g, self.db.colors.castColor.b)
 	ElvNP_Test:Hide()
 
-	E:AddThrottledCallback(0.1, NP.ThrottledTick)
+	-- Idempotent: remove before add so a second Initialize() call can't double-register the tick.
+	E:RemoveThrottledCallback(NAMEPLATE_TICK_INTERVAL, NP.ThrottledTick)
+	E:AddThrottledCallback(NAMEPLATE_TICK_INTERVAL, NP.ThrottledTick)
 
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
