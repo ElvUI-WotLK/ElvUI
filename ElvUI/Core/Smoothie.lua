@@ -6,6 +6,7 @@ local tonumber, assert = tonumber, assert
 local activeObjects = {}
 local handledObjects = {}
 local TARGET_FPS = 60
+local TICK_INTERVAL = 1 / TARGET_FPS
 local AMOUNT = 0.33
 
 local function lerp(startValue, endValue, amount)
@@ -33,8 +34,7 @@ local function isCloseEnough(new, target, range)
 	return true
 end
 
-local frame = CreateFrame("Frame")
-local function onUpdate(_, elapsed)
+local function onUpdate(elapsed)
 	for object, target in next, activeObjects do
 		local new = lerp(object._value, target, clamp(AMOUNT * elapsed * TARGET_FPS))
 		if isCloseEnough(new, target, object._max - object._min) then
@@ -98,8 +98,8 @@ local function SmoothBar(bar)
 		bar.SetMinMaxValues = bar_SetSmoothedMinMaxValues
 	end
 
-	if not frame:GetScript("OnUpdate") then
-		frame:SetScript("OnUpdate", onUpdate)
+	if not next(handledObjects) then
+		E:AddThrottledCallback(TICK_INTERVAL, onUpdate)
 	end
 
 	handledObjects[bar] = true
@@ -125,7 +125,7 @@ local function DesmoothBar(bar)
 	end
 
 	if not next(handledObjects) then
-		frame:SetScript("OnUpdate", nil)
+		E:RemoveThrottledCallback(TICK_INTERVAL, onUpdate)
 	end
 end
 
